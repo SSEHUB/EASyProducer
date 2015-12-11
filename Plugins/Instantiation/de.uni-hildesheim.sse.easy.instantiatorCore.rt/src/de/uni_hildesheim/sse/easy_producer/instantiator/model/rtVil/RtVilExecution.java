@@ -103,17 +103,17 @@ public class RtVilExecution extends BuildlangExecution implements IRtVilVisitor 
                 ReasoningResult rResult = ReasonerFrontend.getInstance().propagate(easyConfig.getProject(), 
                     easyConfig, REASONER_CONFIGURATION, ProgressObserver.NO_OBSERVER);
                 evaluator.reasoningHook.postReasoning(currentScript, concept, valueAccess, cfg);
+                EASyLogger logger = EASyLoggerFactory.INSTANCE.getLogger(RtVilExecution.class, Bundle.ID);
                 int errorCount = 0;
                 for (int m = 0; m < rResult.getMessageCount(); m++) {
                     Message msg = rResult.getMessage(m);
-                    EASyLogger logger = EASyLoggerFactory.INSTANCE.getLogger(RtVilExecution.class, Bundle.ID);
                     de.uni_hildesheim.sse.utils.messages.Status status = evaluator.reasoningHook.analyze(
                         currentScript, concept, valueAccess, msg);
                     if (null != status) {
                         switch (status) {
                         case UNSUPPORTED:
                         case ERROR:
-                            //errorCount++; // TODO enable again
+                            errorCount++;
                             logger.error(toText(msg));
                             break;
                         case INFO:
@@ -130,6 +130,7 @@ public class RtVilExecution extends BuildlangExecution implements IRtVilVisitor 
                 }
                 boolean ok = (0 == errorCount);
                 evaluator.getTracer().trace("Reasoner execution: " + ok);
+                logger.warn("Reasoner execution: " + ok);                
                 result = ok;
             }
             return result;
