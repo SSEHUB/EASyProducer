@@ -92,6 +92,17 @@ public class RewriteContext {
     }
     
     /**
+     * Checks whether elements of the given {@link ContainableModelElement} was removed.
+     * @param type A class, visited by {@link de.uni_hildesheim.sse.model.varModel.IModelVisitor}.
+     * @return <tt>true</tt> if at least one element of this class was removed.
+     */
+    public boolean hasRemovedElementsOfType(Class<? extends ContainableModelElement> type) {
+        Set<ContainableModelElement> removedElementList = removedElements.get(type);
+        
+        return null != removedElementList && !removedElementList.isEmpty();
+    }
+    
+    /**
      * Returns whether elements were removed during the last iteration.
      * @return <tt>true</tt> if at least one element was removed, <tt>false</tt> otherwise.
      */
