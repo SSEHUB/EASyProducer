@@ -33,9 +33,7 @@ import de.uni_hildesheim.sse.varModel.datytypes.EnumTest;
 import de.uni_hildesheim.sse.varModel.datytypes.OperationTest;
 import de.uni_hildesheim.sse.varModel.datytypes.ReferenceTest;
 import de.uni_hildesheim.sse.varModel.datytypes.SequenceTestTMP;
-import de.uni_hildesheim.sse.varModel.filter.ConstraintSeparatorTest;
-import de.uni_hildesheim.sse.varModel.filter.FreezeBlockFinderTest;
-import de.uni_hildesheim.sse.varModel.filter.FrozenElementsFinderTest;
+import de.uni_hildesheim.sse.varModel.filter.AllFilterTests;
 import de.uni_hildesheim.sse.varModel.management.ProjectTest;
 import de.uni_hildesheim.sse.varModel.management.VarModelListenerTest;
 import de.uni_hildesheim.sse.varModel.management.VarModelTest;
@@ -98,11 +96,9 @@ import de.uni_hildesheim.sse.varModel.versioning.ImportValidationTest;
     VersionTest.class,
     VersionedProjectInfosTest.class,
     ReferenceValueTest.class,
-    FreezeBlockFinderTest.class,
-    FrozenElementsFinderTest.class,
     ProjectInterfaceTest.class,
-    ConstraintSeparatorTest.class,
     ParenthesisTest.class,
+    AllFilterTests.class,
     //CompoundVariableTest (part of AllTestsForConfModel) must be executed after VarModelTest
     AllTestsForConfModel.class,
     CommentTest.class,

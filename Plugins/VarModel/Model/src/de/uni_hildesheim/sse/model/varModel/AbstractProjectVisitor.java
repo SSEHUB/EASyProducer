@@ -65,11 +65,11 @@ public abstract class AbstractProjectVisitor implements IModelVisitor {
             boolean importedProject = originProject != project;
             
             // Visit imports.
-            if (FilterType.ALL == filterType || FilterType.ONLY_IMPORTS == filterType) {
-                for (int i = 0; i < project.getImportsCount(); i++) {
-                    project.getImport(i).accept(this);
-                }
+            //if (FilterType.ALL == filterType || FilterType.ONLY_IMPORTS == filterType) {
+            for (int i = 0; i < project.getImportsCount(); i++) {
+                project.getImport(i).accept(this);
             }
+            //}
             
             // Visit current project.
             boolean anyProject = FilterType.ALL == filterType;

@@ -23,6 +23,11 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import de.uni_hildesheim.sse.Bundle;
+import de.uni_hildesheim.sse.model.cst.CSTSemanticException;
+import de.uni_hildesheim.sse.model.cst.ConstantValue;
+import de.uni_hildesheim.sse.model.cst.ConstraintSyntaxTree;
+import de.uni_hildesheim.sse.model.cst.OCLFeatureCall;
 import de.uni_hildesheim.sse.model.varModel.AbstractProjectVisitor;
 import de.uni_hildesheim.sse.model.varModel.AbstractVariable;
 import de.uni_hildesheim.sse.model.varModel.Attribute;
@@ -33,6 +38,7 @@ import de.uni_hildesheim.sse.model.varModel.Constraint;
 import de.uni_hildesheim.sse.model.varModel.ContainableModelElement;
 import de.uni_hildesheim.sse.model.varModel.DecisionVariableDeclaration;
 import de.uni_hildesheim.sse.model.varModel.FreezeBlock;
+import de.uni_hildesheim.sse.model.varModel.IFreezable;
 import de.uni_hildesheim.sse.model.varModel.ModelElement;
 import de.uni_hildesheim.sse.model.varModel.OperationDefinition;
 import de.uni_hildesheim.sse.model.varModel.PartialEvaluationBlock;
@@ -43,12 +49,15 @@ import de.uni_hildesheim.sse.model.varModel.datatypes.Compound;
 import de.uni_hildesheim.sse.model.varModel.datatypes.DerivedDatatype;
 import de.uni_hildesheim.sse.model.varModel.datatypes.Enum;
 import de.uni_hildesheim.sse.model.varModel.datatypes.EnumLiteral;
+import de.uni_hildesheim.sse.model.varModel.datatypes.OclKeyWords;
 import de.uni_hildesheim.sse.model.varModel.datatypes.OrderedEnum;
 import de.uni_hildesheim.sse.model.varModel.datatypes.Reference;
 import de.uni_hildesheim.sse.model.varModel.datatypes.Sequence;
 import de.uni_hildesheim.sse.model.varModel.datatypes.Set;
 import de.uni_hildesheim.sse.model.varModel.filter.DeclrationInConstraintFinder;
 import de.uni_hildesheim.sse.model.varModel.filter.FilterType;
+import de.uni_hildesheim.sse.model.varModel.rewrite.modifier.IModelCopyModifier;
+import de.uni_hildesheim.sse.utils.logger.EASyLoggerFactory;
 import de.uni_hildesheim.sse.utils.modelManagement.ModelManagementException;
 
 /**
@@ -120,7 +129,8 @@ public class ProjectCopyVisitor extends AbstractProjectVisitor {
 
     @Override
     public void visitConstraint(Constraint constraint) {
-        DeclrationInConstraintFinder finder = new DeclrationInConstraintFinder(constraint.getConsSyntax());
+        ConstraintSyntaxTree cst = constraint.getConsSyntax();
+        DeclrationInConstraintFinder finder = new DeclrationInConstraintFinder(cst);
         java.util.Set<AbstractVariable> usedDeclarations = finder.getDeclarations();
         Iterator<AbstractVariable> variablesItr = usedDeclarations.iterator();
         boolean allDeclarationsarePresent = true;
@@ -129,6 +139,23 @@ public class ProjectCopyVisitor extends AbstractProjectVisitor {
         }
         
         if (allDeclarationsarePresent) {
+            if (cst instanceof OCLFeatureCall && OclKeyWords.ASSIGNMENT.equals(((OCLFeatureCall) cst).getOperation())) {
+                OCLFeatureCall call = (OCLFeatureCall) cst;
+                ConstraintSyntaxTree param = call.getParameter(0);
+                if (param instanceof ConstantValue) {
+                    ValueCopy copy = new ValueCopy(context, ((ConstantValue) param).getConstantValue());
+                    if (copy.valuesOmitted()) {
+                        call = new OCLFeatureCall(call.getOperand(), call.getOperation(),
+                            new ConstantValue(copy.getValue()));
+                        constraint = new Constraint(constraint.getParent());
+                        try {
+                            constraint.setConsSyntax(call);
+                        } catch (CSTSemanticException e) {
+                            EASyLoggerFactory.INSTANCE.getLogger(ProjectCopyVisitor.class, Bundle.ID).exception(e);
+                        }
+                    }
+                }
+            }
             createCopy(constraint);
         } else {
             context.elementWasRemoved(constraint);
@@ -137,7 +164,39 @@ public class ProjectCopyVisitor extends AbstractProjectVisitor {
 
     @Override
     public void visitFreezeBlock(FreezeBlock freeze) {
-        createCopy(freeze);
+        if (context.hasRemovedElementsOfType(DecisionVariableDeclaration.class)) {
+            boolean removedElementsFound = false;
+            ArrayList<IFreezable> copiedElements = new ArrayList<IFreezable>();
+            for (int i = 0, n = freeze.getFreezableCount(); i < n; i++) {
+                IFreezable frozenElement = freeze.getFreezable(i);
+                if (frozenElement instanceof DecisionVariableDeclaration) {
+                    DecisionVariableDeclaration frozenElementDecl = (DecisionVariableDeclaration) frozenElement;
+                    
+                    // Filter removed elements
+                    if (!context.elementWasRemoved(frozenElementDecl)) {
+                        copiedElements.add(frozenElement);
+                    } else {
+                        removedElementsFound = true;
+                    }
+                }
+            }
+            
+            if (copiedElements.isEmpty()) {
+                // No more elements to freeze, remove complete freeze block
+                context.removeElement(freeze);
+                freeze = null;
+            } else if (removedElementsFound) {
+                // Create copy with filtered elements
+                freeze = new FreezeBlock(copiedElements.toArray(new IFreezable[0]), freeze.getIter(),
+                    freeze.getSelector(), (Project) freeze.getParent());                
+            }
+            // else: Nothing do do, process original block
+            
+        }
+        
+        if (null != freeze) { 
+            createCopy(freeze);
+        }
     }
 
     @Override

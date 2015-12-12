@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package de.uni_hildesheim.sse.model.varModel.rewrite;
+package de.uni_hildesheim.sse.model.varModel.rewrite.modifier;
 
 import java.util.Iterator;
 import java.util.Set;
@@ -31,6 +31,7 @@ import de.uni_hildesheim.sse.model.varModel.datatypes.ConstraintType;
 import de.uni_hildesheim.sse.model.varModel.filter.DeclrationInConstraintFinder;
 import de.uni_hildesheim.sse.model.varModel.filter.FilterType;
 import de.uni_hildesheim.sse.model.varModel.filter.FrozenElementsFinder;
+import de.uni_hildesheim.sse.model.varModel.rewrite.RewriteContext;
 import de.uni_hildesheim.sse.model.varModel.values.ConstraintValue;
 
 /**

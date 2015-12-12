@@ -8,6 +8,7 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.Iterator;
@@ -369,6 +370,11 @@ public class JavaFileArtifact extends FileArtifact implements IJavaParent {
             sourcePath = sourcePath.replaceAll("//", "/");
         }
         String[] sources = {sourcePath};
+//        String[] newClasspath = new String[classpath.length + sources.length];
+//        System.arraycopy(classpath, 0, newClasspath, 0, classpath.length);
+//        System.arraycopy(sources, 0, newClasspath, classpath.length - 1, sources.length);
+//        logger.warn("CLASSPATH: " + Arrays.toString(sources));
+//        logger.warn("NEW CLASSPATH: " + Arrays.toString(newClasspath));
         parser.setEnvironment(classpath, sources, new String[] {"UTF-8" }, true);
         // Create AST
         unitNode = (CompilationUnit) parser.createAST(null);

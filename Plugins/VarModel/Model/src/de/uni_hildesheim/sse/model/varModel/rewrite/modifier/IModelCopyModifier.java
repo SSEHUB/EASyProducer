@@ -13,13 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package de.uni_hildesheim.sse.model.varModel.rewrite;
+package de.uni_hildesheim.sse.model.varModel.rewrite.modifier;
 
 import de.uni_hildesheim.sse.model.varModel.ContainableModelElement;
+import de.uni_hildesheim.sse.model.varModel.rewrite.RewriteContext;
 
 /**
  * Optional Rule how to handle elements of a {@link de.uni_hildesheim.sse.model.varModel.Project}, while creating a
- * copy using the {@link ProjectCopyVisitor}.
+ * copy using the {@link de.uni_hildesheim.sse.model.varModel.rewrite.ProjectCopyVisitor}.
  * @param <M> Type of {@link ContainableModelElement}s, which shall be handled by this class.
  * @author El-Sharkawy
  *
@@ -35,7 +36,8 @@ public interface IModelCopyModifier<M extends ContainableModelElement> {
     /**
      * Specification how to handle {@link ContainableModelElement}s. 
      * @param element A {@link ContainableModelElement} which may be modified by this class.
-     * @param context Knowledge of the current translation, comes from the {@link ProjectCopyVisitor}.
+     * @param context Knowledge of the current translation, comes from the
+     * {@link de.uni_hildesheim.sse.model.varModel.rewrite.ProjectCopyVisitor}.
      * @return The modified element. Maybe the same instance as passed as parameter (if nothing should be changed) or
      * <tt>null</tt> if the element should be deleted.
      */
