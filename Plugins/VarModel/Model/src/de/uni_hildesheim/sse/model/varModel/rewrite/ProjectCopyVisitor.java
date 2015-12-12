@@ -138,13 +138,15 @@ public class ProjectCopyVisitor extends AbstractProjectVisitor {
             allDeclarationsarePresent = !context.elementWasRemoved(variablesItr.next());
         }
         
+        // Remove constraint, if constraint used removed declarations
         if (allDeclarationsarePresent) {
             if (cst instanceof OCLFeatureCall && OclKeyWords.ASSIGNMENT.equals(((OCLFeatureCall) cst).getOperation())) {
                 OCLFeatureCall call = (OCLFeatureCall) cst;
                 ConstraintSyntaxTree param = call.getParameter(0);
                 if (param instanceof ConstantValue) {
                     ValueCopy copy = new ValueCopy(context, ((ConstantValue) param).getConstantValue());
-                    if (copy.valuesOmitted()) {
+                    if (copy.valuesOmitted() && null != copy.getValue()) {
+                        // Filtered Value was created
                         call = new OCLFeatureCall(call.getOperand(), call.getOperation(),
                             new ConstantValue(copy.getValue()));
                         constraint = new Constraint(constraint.getParent());
@@ -153,10 +155,17 @@ public class ProjectCopyVisitor extends AbstractProjectVisitor {
                         } catch (CSTSemanticException e) {
                             EASyLoggerFactory.INSTANCE.getLogger(ProjectCopyVisitor.class, Bundle.ID).exception(e);
                         }
+                    } else if (copy.valuesOmitted() && null == copy.getValue()) {
+                        // Value was completely filtered -> remove assignment constraint
+                        context.elementWasRemoved(constraint);
+                        constraint = null;
                     }
+                    // Else: Constraint is as it was before -> process it
                 }
             }
-            createCopy(constraint);
+            if (null != constraint) {
+                createCopy(constraint);
+            }
         } else {
             context.elementWasRemoved(constraint);
         }

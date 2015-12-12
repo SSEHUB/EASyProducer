@@ -47,7 +47,12 @@ import de.uni_hildesheim.sse.utils.logger.EASyLoggerFactory;
  */
 class ValueCopy implements IValueVisitor {
     
-    private Value value;
+    /**
+     * Stores the current visited value.
+     * Maybe the same instance or a copied/filtered version.
+     * Maybe null if the current value shall be filtered out.
+     */
+    private Value copiedValue;
     private boolean valuesOmmited;
     private RewriteContext context;
     
@@ -64,10 +69,10 @@ class ValueCopy implements IValueVisitor {
     
     /**
      * Returns the filtered and copied value.
-     * @return Maybe the same instance if filtering was not needed.
+     * @return Maybe the same instance if filtering was not needed. Maybe <tt>null</tt> if complete value was filtered.
      */
     Value getValue() {
-        return value;
+        return copiedValue;
     }
     
     /**
@@ -106,26 +111,26 @@ class ValueCopy implements IValueVisitor {
             Value nestedValue = value.getNestedValue(slotName);
             if (null != nestedValue) {
                 nestedValue.accept(this);
-                if (null != this.value) {
+                if (null != this.copiedValue) {
                     copiedValues.add(slotName);
-                    copiedValues.add(this.value);
+                    copiedValues.add(this.copiedValue);
                 }
             }
         }
         if (!valuesOmmited) {
-            this.value = value;
+            this.copiedValue = value;
         } else if (!copiedValues.isEmpty() && valuesOmmited) {
             try {
-                this.value = ValueFactory.createValue(cType, copiedValues.toArray());
+                this.copiedValue = ValueFactory.createValue(cType, copiedValues.toArray());
             } catch (ValueDoesNotMatchTypeException e) {
-                this.value = value;
+                this.copiedValue = value;
                 EASyLoggerFactory.INSTANCE.getLogger(ValueCopy.class, Bundle.ID).exception(e);
             }
         } else if (copiedValues.isEmpty()) {
             try {
-                this.value = ValueFactory.createValue(cType, (Object[]) null);
+                this.copiedValue = ValueFactory.createValue(cType, (Object[]) null);
             } catch (ValueDoesNotMatchTypeException e) {
-                this.value = value;
+                this.copiedValue = value;
                 EASyLoggerFactory.INSTANCE.getLogger(ValueCopy.class, Bundle.ID).exception(e);
             }
         }
@@ -136,24 +141,24 @@ class ValueCopy implements IValueVisitor {
         List<Value> copiedValues = new ArrayList<Value>();
         for (int i = 0, n = value.getElementSize(); i < n; i++) {
             value.getElement(i).accept(this);
-            if (null != this.value) {
-                copiedValues.add(value);
+            if (null != this.copiedValue) {
+                copiedValues.add(this.copiedValue);
             }
         }
         if (!valuesOmmited) {
-            this.value = value;
+            this.copiedValue = value;
         } else if (!copiedValues.isEmpty() && valuesOmmited) {
             try {
-                this.value = ValueFactory.createValue(value.getType(), copiedValues.toArray());
+                this.copiedValue = ValueFactory.createValue(value.getType(), copiedValues.toArray());
             } catch (ValueDoesNotMatchTypeException e) {
-                this.value = value;
+                this.copiedValue = value;
                 EASyLoggerFactory.INSTANCE.getLogger(ValueCopy.class, Bundle.ID).exception(e);
             }
         } else if (copiedValues.isEmpty()) {
             try {
-                this.value = ValueFactory.createValue(value.getType(), (Object[]) null);
+                this.copiedValue = ValueFactory.createValue(value.getType(), (Object[]) null);
             } catch (ValueDoesNotMatchTypeException e) {
-                this.value = value;
+                this.copiedValue = value;
                 EASyLoggerFactory.INSTANCE.getLogger(ValueCopy.class, Bundle.ID).exception(e);
             }
         }
@@ -181,10 +186,10 @@ class ValueCopy implements IValueVisitor {
     public void visitReferenceValue(ReferenceValue referenceValue) {
         AbstractVariable referencedDecl = referenceValue.getValue();
         if (context.elementWasRemoved(referencedDecl)) {
-            this.value = null;
+            this.copiedValue = null;
             valuesOmmited = true;
         } else {
-            this.value = referenceValue;
+            this.copiedValue = referenceValue;
         }
     }
 

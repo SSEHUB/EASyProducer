@@ -33,8 +33,11 @@ import de.uni_hildesheim.sse.model.varModel.Project;
 import de.uni_hildesheim.sse.model.varModel.ProjectImport;
 import de.uni_hildesheim.sse.model.varModel.datatypes.ConstraintType;
 import de.uni_hildesheim.sse.model.varModel.datatypes.DerivedDatatype;
+import de.uni_hildesheim.sse.model.varModel.datatypes.IDatatype;
 import de.uni_hildesheim.sse.model.varModel.datatypes.IntegerType;
 import de.uni_hildesheim.sse.model.varModel.datatypes.OclKeyWords;
+import de.uni_hildesheim.sse.model.varModel.datatypes.Reference;
+import de.uni_hildesheim.sse.model.varModel.datatypes.Sequence;
 import de.uni_hildesheim.sse.model.varModel.filter.FilterType;
 import de.uni_hildesheim.sse.model.varModel.rewrite.ProjectCopyVisitor;
 import de.uni_hildesheim.sse.model.varModel.rewrite.modifier.DeclarationNameFilter;
@@ -42,6 +45,8 @@ import de.uni_hildesheim.sse.model.varModel.rewrite.modifier.FrozenConstraintVar
 import de.uni_hildesheim.sse.model.varModel.rewrite.modifier.FrozenConstraintsFilter;
 import de.uni_hildesheim.sse.model.varModel.rewrite.modifier.FrozenTypeDefResolver;
 import de.uni_hildesheim.sse.model.varModel.rewrite.modifier.ModelElementFilter;
+import de.uni_hildesheim.sse.model.varModel.values.ContainerValue;
+import de.uni_hildesheim.sse.model.varModel.values.Value;
 import de.uni_hildesheim.sse.model.varModel.values.ValueDoesNotMatchTypeException;
 import de.uni_hildesheim.sse.model.varModel.values.ValueFactory;
 import de.uni_hildesheim.sse.persistency.StringProvider;
@@ -57,16 +62,16 @@ import de.uni_hildesheim.sse.varModel.testSupport.ProjectTestUtilities;
 public class ProjectCopyVisitorTest {
     
     /**
-     * Tests whether of Declarations based on their names work.
+     * Tests whether filtering of declarations based on their names work.
      * @throws ValueDoesNotMatchTypeException Must not occur, otherwise the {@link ValueFactory} or
      * {@link de.uni_hildesheim.sse.model.varModel.AbstractVariable#setValue(String)} are broken.
      * @throws CSTSemanticException Must not occur, otherwise
      * {@link Constraint#setConsSyntax(de.uni_hildesheim.sse.model.cst.ConstraintSyntaxTree)} is broken.
      */
     @Test
-    public void testDeclarationBasedOnNames() throws ValueDoesNotMatchTypeException, CSTSemanticException {
-        // Create original project with one declaration and one comment
-        Project p = new Project("testProject");
+    public void testFilterDeclarationBasedOnNames() throws ValueDoesNotMatchTypeException, CSTSemanticException {
+     // Create original project with two declaration and two assignments
+        Project p = new Project("testProjectDeclarationFilter");
         DecisionVariableDeclaration declA = new DecisionVariableDeclaration("declarationA", IntegerType.TYPE, p);
         p.add(declA);
         DecisionVariableDeclaration declB = new DecisionVariableDeclaration("declarationB", IntegerType.TYPE, p);
@@ -92,7 +97,7 @@ public class ProjectCopyVisitorTest {
         Project copy = copynator.getCopyiedProject();
         
         // Copied project should contain the declaration, but not the comment
-        ProjectTestUtilities.validateProject(copy, true);
+        ProjectTestUtilities.validateProject(copy);
         assertProjectContainment(copy, declA, true, 2);
         assertProjectContainment(copy, declB, false, 2);
         assertProjectContainment(copy, assignmentA, true, 2);
@@ -105,7 +110,7 @@ public class ProjectCopyVisitorTest {
     @Test
     public void testOmmitComments() {
         // Create original project with one declaration and one comment
-        Project p = new Project("testProject");
+        Project p = new Project("testProjectComment");
         DecisionVariableDeclaration decl = new DecisionVariableDeclaration("aDeclaration", IntegerType.TYPE, p);
         p.add(decl);
         Comment cmt = new Comment("    //A comment\n", p);
@@ -126,6 +131,58 @@ public class ProjectCopyVisitorTest {
     }
     
     /**
+     * Tests whether container values of refernces will be filtered correctly.
+     * @throws ValueDoesNotMatchTypeException Must not occur, otherwise the {@link ValueFactory} or
+     * {@link de.uni_hildesheim.sse.model.varModel.AbstractVariable#setValue(String)} are broken.
+     * @throws CSTSemanticException Must not occur, otherwise
+     * {@link Constraint#setConsSyntax(de.uni_hildesheim.sse.model.cst.ConstraintSyntaxTree)} is broken.
+     */
+    @Test
+    public void testFilterReferneceValueFromContainer() throws ValueDoesNotMatchTypeException, CSTSemanticException {
+        // Create original project with two declaration and a set of pointers
+        Project p = new Project("testProjectRefValues");
+        IDatatype basisType = IntegerType.TYPE;
+        DecisionVariableDeclaration declA = new DecisionVariableDeclaration("declarationA", basisType, p);
+        p.add(declA);
+        DecisionVariableDeclaration declB = new DecisionVariableDeclaration("declarationB", basisType, p);
+        p.add(declB);
+        Reference refType = new Reference("refType", basisType, p);
+        Sequence seqType = new Sequence("seqType", refType, p);
+        DecisionVariableDeclaration seqDecl = new DecisionVariableDeclaration("sequence", seqType, p);
+        p.add(seqDecl);
+        // Create ContainerValue pointing to both declarations
+        Value refValueA = ValueFactory.createValue(refType, declA);
+        Value refValueB = ValueFactory.createValue(refType, declB);
+        Value containerValue = ValueFactory.createValue(seqType, new Object[] {refValueA, refValueB});
+        Constraint assignment = new Constraint(p);
+        OCLFeatureCall cst = new OCLFeatureCall(new Variable(seqDecl), OclKeyWords.ASSIGNMENT,
+            new ConstantValue(containerValue));
+        assignment.setConsSyntax(cst);
+        p.add(assignment);
+        // Project should be valid
+        ProjectTestUtilities.validateProject(p);
+        
+        // Create copy while omitting the comment
+        ProjectCopyVisitor copynator = new ProjectCopyVisitor(p, FilterType.NO_IMPORTS);
+        copynator.addModelCopyModifier(new DeclarationNameFilter(new String[] {declA.getName(), seqDecl.getName()}));
+        p.accept(copynator);
+        Project copy = copynator.getCopyiedProject();
+        
+        // Copied project should contain the declaration, but not the comment
+        ProjectTestUtilities.validateProject(copy, true);
+        assertProjectContainment(copy, declA, true, 3);
+        assertProjectContainment(copy, seqDecl, true, 3);
+        assertProjectContainment(copy, declB, false, 3);
+        Constraint copiedAssignment = (Constraint) copy.getElement(2);
+        OCLFeatureCall copiedCall = (OCLFeatureCall) copiedAssignment.getConsSyntax();
+        ConstantValue copiedValueCST = (ConstantValue) copiedCall.getParameter(0);
+        ContainerValue copiedValue = (ContainerValue) copiedValueCST.getConstantValue();
+        Assert.assertEquals("Error: Copied value has not the expected number of elements. ", 1,
+            copiedValue.getElementSize());
+        Assert.assertEquals(refValueA, copiedValue.getElement(0));
+    }
+    
+    /**
      * Tests whether filtering of constraints which contain only frozen variables work.
      * @throws ValueDoesNotMatchTypeException Must not occur, otherwise the {@link ValueFactory} or
      * {@link de.uni_hildesheim.sse.model.varModel.AbstractVariable#setValue(String)} are broken.
@@ -135,7 +192,7 @@ public class ProjectCopyVisitorTest {
     @Test
     public void testOmmitFrozenConstraint() throws ValueDoesNotMatchTypeException, CSTSemanticException {
         // Create original project with two declarations, 2 constraints, and freeze one of these variables
-        Project p = new Project("testProject");
+        Project p = new Project("testProjectFrozenConstraint");
         DecisionVariableDeclaration declA = new DecisionVariableDeclaration("varA", IntegerType.TYPE, p);
         declA.setValue(10);
         p.add(declA);
@@ -219,7 +276,7 @@ public class ProjectCopyVisitorTest {
         DecisionVariableDeclaration decl = new DecisionVariableDeclaration("intA", IntegerType.TYPE, importedProject);
         importedProject.add(decl);
         // Create main project with the import
-        Project p = new Project("mainTestProject");
+        Project p = new Project("mainTestProjectPerserveImports");
         p.addImport(pImport1);
         Constraint constraint = new Constraint(p);
         OCLFeatureCall comparison = new OCLFeatureCall(new Variable(decl), OclKeyWords.GREATER,
@@ -248,7 +305,7 @@ public class ProjectCopyVisitorTest {
     @Test
     public void testResolveFrozenTypeDefs() throws ValueDoesNotMatchTypeException, CSTSemanticException {
         // Create original project with a typedef and a frozen declaration.
-        Project p = new Project("testProject");
+        Project p = new Project("testProjectTypeDefs");
         ConstantValue zero = new ConstantValue(ValueFactory.createValue(IntegerType.TYPE, 0));
         // Create first typeDef with declaration and freeze it
         DerivedDatatype dType1 = new DerivedDatatype("posInteger1", IntegerType.TYPE, p);
@@ -416,7 +473,7 @@ public class ProjectCopyVisitorTest {
     @Test
     public void testOmmitFrozenConstraintVariables() throws ValueDoesNotMatchTypeException, CSTSemanticException {
         // Create original project with one declaration and one comment
-        Project p = new Project("testProject");
+        Project p = new Project("testProjectConstraintVar");
         DecisionVariableDeclaration intDecl = new DecisionVariableDeclaration("intA", IntegerType.TYPE, p);
         p.add(intDecl);
         DecisionVariableDeclaration constVar = new DecisionVariableDeclaration("constVar", ConstraintType.TYPE, p);
@@ -432,7 +489,7 @@ public class ProjectCopyVisitorTest {
         // Freeze all, but one constraint
         p.add(new FreezeBlock(new IFreezable[] {intDecl, constVar}, null, null, p));
         // Project should be valid
-        ProjectTestUtilities.validateProject(p, true);
+        ProjectTestUtilities.validateProject(p);
         Configuration config = new Configuration(p);
         
         // Create copy while omitting the comment
@@ -442,7 +499,7 @@ public class ProjectCopyVisitorTest {
         Project copy = copynator.getCopyiedProject();
         
         // Copied project should contain the declaration, freezeblock, and unfrozen constraint
-        ProjectTestUtilities.validateProject(copy, true);
+        ProjectTestUtilities.validateProject(copy);
         assertProjectContainment(copy, intDecl, true, 3);
         assertProjectContainment(copy, constVar2, true, 3);
         assertProjectContainment(copy, constVar, false, 3);
