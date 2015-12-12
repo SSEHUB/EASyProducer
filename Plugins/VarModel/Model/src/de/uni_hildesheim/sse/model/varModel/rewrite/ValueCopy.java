@@ -92,14 +92,13 @@ class ValueCopy implements IValueVisitor {
 
     @Override
     public void visitEnumValue(EnumValue value) {
-        // TODO Auto-generated method stub
-        
+        // Check whether literals can be filtered (Currently not the case).
+        this.copiedValue = value;        
     }
 
     @Override
     public void visitStringValue(StringValue value) {
-        // TODO Auto-generated method stub
-        
+        this.copiedValue = value;
     }
 
     @Override
@@ -166,20 +165,17 @@ class ValueCopy implements IValueVisitor {
 
     @Override
     public void visitIntValue(IntValue value) {
-        // TODO Auto-generated method stub
-        
+        this.copiedValue = value;
     }
 
     @Override
     public void visitRealValue(RealValue value) {
-        // TODO Auto-generated method stub
-        
+        this.copiedValue = value;
     }
 
     @Override
     public void visitBooleanValue(BooleanValue value) {
-        // TODO Auto-generated method stub
-        
+        this.copiedValue = value;
     }
 
     @Override
@@ -195,22 +191,18 @@ class ValueCopy implements IValueVisitor {
 
     @Override
     public void visitMetaTypeValue(MetaTypeValue value) {
-        // TODO Auto-generated method stub
-        
+        // TODO: Check whether meta values can be filtered.
+        this.copiedValue = value;
     }
 
     @Override
     public void visitNullValue(NullValue value) {
-        // TODO Auto-generated method stub
-        
+        this.copiedValue = value;
     }
 
     @Override
     public void visitVersionValue(VersionValue value) {
-        // TODO Auto-generated method stub
-        
+        this.copiedValue = value;
     }
-    
-    
 
 }
