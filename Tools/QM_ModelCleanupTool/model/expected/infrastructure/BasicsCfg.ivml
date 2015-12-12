@@ -1,65 +1,33 @@
 project BasicsCfg {
 
-	import Basics;
-	FieldType IntegerType;
-	FieldType LongType;
-	FieldType StringType;
-	FieldType BooleanType;
-	FieldType FloatType;
-	FieldType DoubleType;
-	FieldType RealType;
-	FieldType ObjectType;
-	FieldType StringListType;
-	FieldType IFExpertListType;
-	FieldType IFTimeIntervalType;
-	FieldType StatusType;
-	FieldType IFEdgeListType;
-	FieldType IFEventListType;
-	types = {
-		refBy(IntegerType), refBy(LongType), refBy(StringType), refBy(BooleanType), refBy(FloatType), refBy(DoubleType), refBy(RealType), refBy(ObjectType)
-	};
-	types.bindingTime = BindingTime.compile;
-	IntegerType = FieldType {
-		name = "INTEGER", 
-		class = "int"
-	};
-	LongType = FieldType {
-		name = "LONG", 
-		class = "long"
-	};
-	StringType = FieldType {
-		name = "STRING", 
-		class = "String"
-	};
-	BooleanType = FieldType {
-		name = "BOOLEAN", 
-		class = "boolean"
-	};
-	FloatType = FieldType {
-		name = "Float", 
-		class = "float"
-	};
-	DoubleType = FieldType {
-		name = "Double", 
-		class = "double"
-	};
-	RealType = FieldType {
-		name = "REAL", 
-		class = "double"
-	};
-	ObjectType = FieldType {
-		name = "OBJECT", 
-		class = "Object"
-	};
-	freeze {
-		types;
-		IntegerType;
-		LongType;
-		StringType;
-		BooleanType;
-		FloatType;
-		DoubleType;
-		RealType;
-		ObjectType;
-	} but (f|f.bindingTime >= BindingTime.runtimeMon)
+    import Basics;
+    FieldType IntegerType;
+    FieldType LongType;
+    FieldType StringType;
+    FieldType BooleanType;
+    FieldType FloatType;
+    FieldType DoubleType;
+    FieldType RealType;
+    FieldType ObjectType;
+    types = {refBy(IntegerType), refBy(LongType), refBy(StringType), refBy(BooleanType), refBy(FloatType), refBy(DoubleType), refBy(RealType), refBy(ObjectType)};
+    types.bindingTime = BindingTime.compile;
+    IntegerType = {name = "INTEGER", class = "int"};
+    LongType = {name = "LONG", class = "long"};
+    StringType = {name = "STRING", class = "String"};
+    BooleanType = {name = "BOOLEAN", class = "boolean"};
+    FloatType = {name = "Float", class = "float"};
+    DoubleType = {name = "Double", class = "double"};
+    RealType = {name = "REAL", class = "double"};
+    ObjectType = {name = "OBJECT", class = "Object"};
+    freeze {
+        types;
+        IntegerType;
+        LongType;
+        StringType;
+        BooleanType;
+        FloatType;
+        DoubleType;
+        RealType;
+        ObjectType;
+    } but (f|BasicsCfg::f.bindingTime >= BindingTime.runtimeMon)
 }

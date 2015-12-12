@@ -29,6 +29,9 @@ import org.apache.tools.ant.Task;
 import de.uni_hildesheim.sse.model.management.VarModel;
 import de.uni_hildesheim.sse.model.varModel.Project;
 import de.uni_hildesheim.sse.model.varModel.ProjectImport;
+import de.uni_hildesheim.sse.model.varModel.filter.FilterType;
+import de.uni_hildesheim.sse.model.varModel.rewrite.ProjectCopyVisitor;
+import de.uni_hildesheim.sse.model.varModel.rewrite.modifier.DeclarationNameFilter;
 import de.uni_hildesheim.sse.utils.modelManagement.ModelManagementException;
 import de.uni_hildesheim.sse.utils.progress.ProgressObserver;
 
@@ -41,6 +44,7 @@ import de.uni_hildesheim.sse.utils.progress.ProgressObserver;
 public class ModelCopy extends Task {
     
     private static final String CONFIG_FILE_EXTENSION = "cfg.ivml";
+    private static final String BASICS_CONFIG = "BasicsCfg";
     private static final String REMOVEABLE_CONFIG_EXTENSION = "^.*_\\p{Digit}*" + CONFIG_FILE_EXTENSION + "$";
     
     private File sourceFolder;
@@ -123,7 +127,7 @@ public class ModelCopy extends Task {
     }
 
     /**
-     * Copies are IVML model. Configs will be cleaned.
+     * Copies the IVML model. Configs will be cleaned.
      * @param relativeFileName The path inside {@link #sourceFolder}.
      * @param destFolder The destination folder where to save the copy.
      * @throws ModelManagementException If IVML files could not be parsed
@@ -141,17 +145,26 @@ public class ModelCopy extends Task {
             
             String projectName = relativeFileName.substring(lastSeparator + 1, lastDot);
             Project p = ProjectUtilities.loadProject(projectName);
-            List<ProjectImport> imports = new ArrayList<ProjectImport>();
-            for (int i = 0; i < p.getImportsCount(); i++) {
-                ProjectImport projectImport = p.getImport(i);
-                String importName = projectImport.getName().toLowerCase();
-                if (!(importName + ".ivml").matches(REMOVEABLE_CONFIG_EXTENSION)) {
-                    imports.add(projectImport);
+            
+            if (BASICS_CONFIG.equals(p.getName())) {
+                ProjectCopyVisitor rewriter = new ProjectCopyVisitor(p, FilterType.NO_IMPORTS);
+                rewriter.addModelCopyModifier(new DeclarationNameFilter(new String[] {"IntegerType", "LongType",
+                    "StringType", "BooleanType", "FloatType", "DoubleType", "RealType", "ObjectType"}));
+                p.accept(rewriter);
+                p = rewriter.getCopyiedProject();
+            } else {
+                List<ProjectImport> imports = new ArrayList<ProjectImport>();
+                for (int i = 0; i < p.getImportsCount(); i++) {
+                    ProjectImport projectImport = p.getImport(i);
+                    String importName = projectImport.getName().toLowerCase();
+                    if (!(importName + ".ivml").matches(REMOVEABLE_CONFIG_EXTENSION)) {
+                        imports.add(projectImport);
+                    }
                 }
-            }
-            p.clear();
-            for (int i = 0; i < imports.size(); i++) {
-                p.addImport(imports.get(i));
+                p.clear();
+                for (int i = 0; i < imports.size(); i++) {
+                    p.addImport(imports.get(i));
+                }
             }
             ProjectUtilities.saveProject(destFolder, p);
         } else {
