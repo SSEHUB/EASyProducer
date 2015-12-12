@@ -580,14 +580,19 @@ public abstract class RuntimeEnvironment implements IRuntimeEnvironment, IRestri
             object = null;
         }
         if (null != object) {
-            boolean compatible = var.getType().isInstance(object);
+            TypeDescriptor<?> varType = var.getType();
+            boolean compatible = varType.isInstance(object);
             if (!compatible) {
                 if (object instanceof DecisionVariable) {
-                    IDatatype dType = Reference.dereference(
-                        ((DecisionVariable) object).getVariable().getDeclaration().getType());
+                    DecisionVariable decVar = (DecisionVariable) object;
+                    IDatatype dType = Reference.dereference(decVar.getVariable().getDeclaration().getType());
                     TypeDescriptor<?> td = getTypeRegistry().getType(dType);
                     if (null != td) {
-                        compatible = var.getType().isAssignableFrom(td);
+                        compatible = varType.isAssignableFrom(td);
+                    }
+                    // late evaluation of "primitives"
+                    if (compatible) {
+                        object = evaluatePrimitives(object, decVar, varType);
                     }
                 }
             }
@@ -611,6 +616,25 @@ public abstract class RuntimeEnvironment implements IRuntimeEnvironment, IRestri
                     + " to " + var.getName() + " of type " + var.getType().getVilName(), 
                     VilException.ID_RUNTIME_TYPE);
             }
+        }
+        return object;
+    }
+    
+    /**
+     * Evaluates <code>decVar</code> to its primitive value according to <code>varType</code>. Late evaluation.
+     * 
+     * @param object the evaluated value so far
+     * @param decVar the decision variable
+     * @param varType the variable type
+     * @return <code>object</code> or the evaluated value
+     */
+    private Object evaluatePrimitives(Object object, DecisionVariable decVar, TypeDescriptor<?> varType) {
+        if (TypeRegistry.integerType().isSame(varType)) {
+            object = decVar.getIntegerValue();
+        } else if (TypeRegistry.realType().isSame(varType)) {
+            object = decVar.getRealValue();
+        } else if (TypeRegistry.booleanType().isSame(varType)) {
+            object = decVar.getBooleanValue();
         }
         return object;
     }

@@ -1,0 +1,12 @@
+project null1 {
+
+    compound Alg {
+        Integer value;
+    }
+    
+    Alg algo = {value = null};
+    
+    freeze {
+        algo;
+    }
+}

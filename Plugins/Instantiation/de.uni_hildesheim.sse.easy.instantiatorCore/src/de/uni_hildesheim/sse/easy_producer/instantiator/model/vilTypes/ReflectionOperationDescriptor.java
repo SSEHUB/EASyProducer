@@ -210,7 +210,7 @@ public class ReflectionOperationDescriptor extends OperationDescriptor implement
         } else {
             CompatibilityResult comp = isCompatible(null, callArgs);
             if (CompatibilityResult.INCOMPATIBLE == comp) {
-                throwIncompatibleParameter(args);
+                result = tryEvaluateEquality(args, callArgs);
             } else if (CompatibilityResult.ARG_EVALUATION_FAILED == comp) {
                 result = null; // cannot evaluate
             } else {
@@ -231,6 +231,49 @@ public class ReflectionOperationDescriptor extends OperationDescriptor implement
                             VilException.ID_EXECUTION_ERROR);
                     }
                 }
+            }
+        }
+        return result;
+    }
+
+    /**
+     * Nullifies <code>value</code>, i.e., checks whether it is an IVML null value and turns it into <b>null</b>.
+     * 
+     * @param value the value to check
+     * @return <code>value</code> or <b>null</b>
+     */
+    private static Object nullify(Object value) {
+        Object result;
+        if (value instanceof NullValueType) {
+            result = null;
+        } else {
+            result = value;
+        }
+        return result;
+    }
+    
+    /**
+     * Tries to evaluate equality/unequality if the actual parameters are incompatible for a regular call. This
+     * allows evaluating null comparisons against primitive types (decision variables declare a specific operation
+     * for that).
+     * 
+     * @param args the original call arguments
+     * @param callArgs the actual call arguments prepared for a reflective call
+     * @return the evaluation result
+     * @throws VilException in case that the arguments are still considered incompatible
+     */
+    private Object tryEvaluateEquality(Object[] args, Object[] callArgs) throws VilException {
+        Object result = null;
+        if (callArgs.length == 2 && OperationType.INFIX == getOperationType()) {
+            Object arg0 = nullify(callArgs[0]);
+            Object arg1 = nullify(callArgs[1]);
+            String name = getName();
+            if (Constants.UNEQUALITY.equals(name) || Constants.UNEQUALITY_ALIAS.equals(name)) {
+                result = arg0 != arg1;
+            } else if (Constants.EQUALITY.equals(name)) {
+                result = arg0 == arg1;
+            } else {
+                throwIncompatibleParameter(args);
             }
         }
         return result;
@@ -266,10 +309,8 @@ public class ReflectionOperationDescriptor extends OperationDescriptor implement
             boolean parCompatible = par[p].isAssignableFrom(cls) // instances match?
                 || REFLECTION_EQUALITIES.get(par[p]) == cls // basic types match?
                 || (par[p] == Class.class && params[p] instanceof Class); // parameter is class
-            if (!parCompatible) { 
+            if (!parCompatible) {
                 cannotEvaluate &= params[p] == null;
-            } else if (NullValueType.class.equals(par[p])) { // consider IVML null
-                cannotEvaluate = false;
             }
             compatible &= parCompatible;
         }

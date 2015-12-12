@@ -1,0 +1,24 @@
+@advice(null1)
+template null1(Configuration config, FileArtifact target) {
+
+    def main(Configuration config, FileArtifact target) {
+        null1 cfg = config;
+        Integer value = cfg.algo.value;
+        if (value != 1) {
+            'not 1'
+        } else {
+            'else'
+        }
+        if (value != null) {
+            'not null'
+        } else {
+            'null'
+        }
+        if (value == null) {
+            'null'
+        } else {
+            'not null'
+        }
+    }
+
+}

@@ -1147,6 +1147,16 @@ public class ExecutionTests extends AbstractTest {
     public void testSort() throws IOException {
         assertEqualWithIvml("sort", "SortModel");
     }
+    
+    /**
+     * Tests IVML null values.
+     * 
+     * @throws IOException should not occur
+     */
+    @Test
+    public void testNull1() throws IOException {
+        assertEqualWithIvml("null1", "null1");
+    }
 
     /**
      * Tests a dispatch on a supertype.

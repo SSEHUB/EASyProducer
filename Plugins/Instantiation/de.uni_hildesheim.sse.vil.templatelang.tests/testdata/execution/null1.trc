@@ -1,0 +1,9 @@
+-> main(Configuration, FileArtifact) with (<config>, test.texts)
+    cfg <- <config>
+    value <- null1::Alg::value
+    -> !=(Integer, Integer) with (null, 1) = null
+    visit else-branch
+    -> !=(Integer, Integer) with (null, null) = false
+    visit else-branch
+    -> ==(Integer, Integer) with (null, null) = true
+    visit if-branch
