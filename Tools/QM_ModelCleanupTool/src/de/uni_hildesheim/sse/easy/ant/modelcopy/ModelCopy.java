@@ -25,6 +25,8 @@ import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.Task;
 
 import de.uni_hildesheim.sse.model.management.VarModel;
+import de.uni_hildesheim.sse.model.validation.IvmlValidationVisitor;
+import de.uni_hildesheim.sse.model.validation.ValidationMessage;
 import de.uni_hildesheim.sse.model.varModel.Constraint;
 import de.uni_hildesheim.sse.model.varModel.FreezeBlock;
 import de.uni_hildesheim.sse.model.varModel.Project;
@@ -177,6 +179,7 @@ public class ModelCopy extends Task {
         System.out.println("Destination folder: " + destinationFolder.getAbsolutePath());
         System.out.println("Main model: " + mainProject);
         
+        // Setup
         boolean createFolder = false;
         if (destinationFolder.exists() && allowDestDeletion) {
             try {
@@ -194,6 +197,8 @@ public class ModelCopy extends Task {
             throw new BuildException("Destination folder \"" + destinationFolder.getAbsolutePath()
                 + "\" could not be created.");
         }
+        
+        // Copy and filter
         try {
             copy();
         } catch (Exception e) {
@@ -214,6 +219,33 @@ public class ModelCopy extends Task {
                 throw new BuildException("Unspecified error during copying models from \""
                     + sourceFolder.getAbsolutePath() + "\" to \"" + destinationFolder.getAbsolutePath() + "\". Cause: " + e.getMessage());
             }
+        }
+        
+        // Validate result
+        try {
+            VarModel.INSTANCE.locations().removeLocation(sourceFolder, ProgressObserver.NO_OBSERVER);
+            VarModel.INSTANCE.locations().addLocation(destinationFolder, ProgressObserver.NO_OBSERVER);
+            Project copiedProject = ProjectUtilities.loadProject(mainProject);
+            
+            IvmlValidationVisitor validator = new IvmlValidationVisitor();
+            copiedProject.accept(validator);
+            if (validator.getErrorCount() > 0) {
+                StringBuffer errMsg = new StringBuffer("Project \"");
+                errMsg.append(mainProject);
+                errMsg.append("\" was copied, but the result contains inconsitencies:");
+                for (int i = 0; i < validator.getMessageCount(); i++) {
+                    ValidationMessage msg = validator.getMessage(i);
+                    errMsg.append("\n - ");
+                    errMsg.append(msg.getStatus().name());
+                    errMsg.append(": ");
+                    errMsg.append(msg.getDescription());
+                }
+                throw new BuildException(errMsg.toString());
+            }
+        } catch (ModelManagementException e) {
+            throw new BuildException("Copied Project contains errors: " + e.getMessage());
+        } catch (IOException e) {
+            throw new BuildException("Copied Project contains IO errors: " + e.getMessage());
         }
     }
 }
