@@ -191,60 +191,77 @@ public class ProjectRewriteVisitor extends AbstractProjectVisitor {
 
     @Override
     public void visitFreezeBlock(FreezeBlock freeze) {
-        if (context.hasRemovedElementsOfType(DecisionVariableDeclaration.class)) {
-            boolean removedElementsFound = false;
-            ArrayList<IFreezable> copiedElements = new ArrayList<IFreezable>();
-            for (int i = 0, n = freeze.getFreezableCount(); i < n; i++) {
-                IFreezable frozenElement = freeze.getFreezable(i);
-                if (frozenElement instanceof DecisionVariableDeclaration) {
-                    DecisionVariableDeclaration frozenElementDecl = (DecisionVariableDeclaration) frozenElement;
-                    
-                    // Filter removed elements
-                    if (!context.elementWasRemoved(frozenElementDecl)) {
-                        copiedElements.add(frozenElement);
-                    } else {
-                        removedElementsFound = true;
-                    }
+        // Determine which elements of the block still exist.
+        ArrayList<IFreezable> copiedElements = new ArrayList<IFreezable>();
+        for (int i = 0, n = freeze.getFreezableCount(); i < n; i++) {
+            IFreezable frozenElement = freeze.getFreezable(i);
+            if (frozenElement instanceof DecisionVariableDeclaration) {
+                DecisionVariableDeclaration frozenElementDecl = (DecisionVariableDeclaration) frozenElement;
+                
+                // Filter removed elements
+                if (!context.elementWasRemoved(frozenElementDecl)) {
+                    copiedElements.add(frozenElement);
                 }
             }
+        }
+        
+        if (copiedElements.isEmpty()) {
+            // No more elements to freeze, remove complete freeze block
+            context.removeElement(freeze);
+            freeze = null;
+        } else {
+            DecisionVariableDeclaration orginalIterator = freeze.getIter();
+            ConstraintSyntaxTree selectorCST = freeze.getSelector();
+            IFreezable[] frozenElements = copiedElements.toArray(new IFreezable[0]);
             
-            if (copiedElements.isEmpty()) {
-                // No more elements to freeze, remove complete freeze block
-                context.removeElement(freeze);
-                freeze = null;
-            } else if (removedElementsFound) {
-                // Create copy with filtered elements
-                DecisionVariableDeclaration orginalIterator = freeze.getIter();
-                DecisionVariableDeclaration copiedIterator = (null == orginalIterator) ? null
-                    : new DecisionVariableDeclaration(orginalIterator.getName(), orginalIterator.getType(),
-                        orginalIterator.getParent());
-                
-                // Replace iterator in selector constraint.
-                ConstraintSyntaxTree copiedSelector = null;
-                if (null != freeze.getSelector()) {
-                    Map<AbstractVariable, AbstractVariable> declMapping = new HashMap<AbstractVariable,
-                        AbstractVariable>();
-                    declMapping.put(orginalIterator, copiedIterator);
-                    CopyVisitor cstCopier = new CopyVisitor(declMapping);
-                    freeze.getSelector().accept(cstCopier);
-                    copiedSelector = cstCopier.getResult();
-                    try {
-                        // Needed for setting the correct operation
-                        copiedSelector.inferDatatype();
-                    } catch (CSTSemanticException e) {
-                        EASyLoggerFactory.INSTANCE.getLogger(ProjectRewriteVisitor.class, Bundle.ID).exception(e);
-                    }
-                }
-                
-                freeze = new FreezeBlock(copiedElements.toArray(new IFreezable[0]), copiedIterator, copiedSelector,
-                    (Project) freeze.getParent());                
-            }
-            // else: Nothing do do, process original block
+            /* 
+             * Create copy with filtered elements.
+             * Even if no elements where filtered, the block must be recreated to adjust the selector.
+             * Otherwise the selector maybe invalid (or not parseable at all)
+             */
+            freeze = adaptFreezeBlock(frozenElements, orginalIterator, selectorCST, (Project) freeze.getParent());
         }
         
         if (null != freeze) { 
             createCopy(freeze);
         }
+    }
+
+    /**
+     * Creates a copy of a freezeblock with an adjusted selector.
+     * @param frozenElements The frozen elements to be added to the freezeblock.
+     * @param orginalIterator The iterator of the original freezeblock (maybe <tt>null</tt> if none was specified).
+     * @param selectorCST The selector constraint of the original freezeblock (maybe <tt>null</tt>
+     *     if none was specified).
+     * @param parent The parent project of the freezeblock.
+     * @return The copied freezeblock.
+     */
+    private FreezeBlock adaptFreezeBlock(IFreezable[] frozenElements, DecisionVariableDeclaration orginalIterator,
+        ConstraintSyntaxTree selectorCST, Project parent) {
+        
+        DecisionVariableDeclaration copiedIterator = (null == orginalIterator) ? null
+            : new DecisionVariableDeclaration(orginalIterator.getName(), orginalIterator.getType(),
+                orginalIterator.getParent());
+        
+        // Replace iterator in selector constraint.
+        ConstraintSyntaxTree copiedSelector = null;
+        if (null != selectorCST) {
+            Map<AbstractVariable, AbstractVariable> declMapping = new HashMap<AbstractVariable,
+                AbstractVariable>();
+            declMapping.put(orginalIterator, copiedIterator);
+            CopyVisitor cstCopier = new CopyVisitor(declMapping);
+            selectorCST.accept(cstCopier);
+            copiedSelector = cstCopier.getResult();
+            try {
+                // Needed for setting the correct operation
+                copiedSelector.inferDatatype();
+            } catch (CSTSemanticException e) {
+                EASyLoggerFactory.INSTANCE.getLogger(ProjectRewriteVisitor.class, Bundle.ID).exception(e);
+            }
+        }
+        
+        // Copied Freezeblock with corrected selector
+        return new FreezeBlock(frozenElements, copiedIterator, copiedSelector, context.getTranslatedProject(parent));
     }
 
     @Override

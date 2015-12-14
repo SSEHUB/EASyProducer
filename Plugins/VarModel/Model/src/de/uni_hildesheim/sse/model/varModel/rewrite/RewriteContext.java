@@ -61,7 +61,11 @@ public class RewriteContext {
      * @return The translated equivalent of the current Translation process, maybe <tt>null</tt> in case of errors.
      */
     public Project getTranslatedProject(Project originalProject) {
-        return translatedProjects.get(originalProject);
+        Project newParent = translatedProjects.get(originalProject);
+        if (null == newParent) {
+            newParent = originalProject;
+        }
+        return newParent;
     }
     
     /**
