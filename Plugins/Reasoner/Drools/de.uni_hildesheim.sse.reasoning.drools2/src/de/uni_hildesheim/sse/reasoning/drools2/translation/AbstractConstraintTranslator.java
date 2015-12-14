@@ -2,6 +2,7 @@ package de.uni_hildesheim.sse.reasoning.drools2.translation;
 
 import java.io.Writer;
 
+import de.uni_hildesheim.sse.model.cst.AttributeVariable;
 import de.uni_hildesheim.sse.model.cst.CSTSemanticException;
 import de.uni_hildesheim.sse.model.cst.Comment;
 import de.uni_hildesheim.sse.model.cst.CompoundAccess;
@@ -509,6 +510,12 @@ public class AbstractConstraintTranslator extends AbstractModelTranslator implem
      */
     private boolean appendGet(boolean isAssignmentOperand, boolean isPropagationPosition) {
         return isAssignmentOperand && isPropagationPosition;
+    }
+
+    @Override
+    public void visitAnnotationVariable(AttributeVariable variable) {
+        // TODO Check whether specific method is needed
+        visitVariable(variable);
     }
 
 }
