@@ -1,5 +1,5 @@
 -> main(Project, Configuration, Project) with (<project>, <config>, <project>)
-    -> +(String, String) with (, /noDir) = /noDir
+    -> +(String, Any) with (, /noDir) = /noDir
     newClasspath <- /noDir
     classpath <- {, /noDir, test}
     -> setSettings(Project, ProjectSettings, Any) with (<project>, CLASSPATH, {, /noDir, test})
