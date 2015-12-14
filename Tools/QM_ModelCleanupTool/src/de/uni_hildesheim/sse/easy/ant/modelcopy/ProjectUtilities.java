@@ -64,9 +64,6 @@ public class ProjectUtilities {
 
         // Parse IVML File
         List<ModelInfo<Project>> infos = VarModel.INSTANCE.availableModels().getModelInfo(projectName);
-        if (null != infos && !infos.isEmpty()) {
-            
-        }
         
         // Parse IVML File
         Project project = null;
