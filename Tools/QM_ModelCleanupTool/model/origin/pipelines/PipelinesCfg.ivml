@@ -1,6 +1,7 @@
 project PipelinesCfg {
 
-	import PriorityPipCfg;
+	import Basics;
+    import PriorityPipCfg;
 	import PipelineVar_1Cfg;
 	import PipelineVar_2Cfg;
 	import PipelineVar_3Cfg;

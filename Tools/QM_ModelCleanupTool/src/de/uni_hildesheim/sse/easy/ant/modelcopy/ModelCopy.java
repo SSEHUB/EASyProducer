@@ -34,7 +34,7 @@ import de.uni_hildesheim.sse.model.varModel.FreezeBlock;
 import de.uni_hildesheim.sse.model.varModel.Project;
 import de.uni_hildesheim.sse.model.varModel.ProjectImport;
 import de.uni_hildesheim.sse.model.varModel.filter.FilterType;
-import de.uni_hildesheim.sse.model.varModel.rewrite.ProjectCopyVisitor;
+import de.uni_hildesheim.sse.model.varModel.rewrite.ProjectRewriteVisitor;
 import de.uni_hildesheim.sse.model.varModel.rewrite.modifier.DeclarationNameFilter;
 import de.uni_hildesheim.sse.model.varModel.rewrite.modifier.ImportNameFilter;
 import de.uni_hildesheim.sse.model.varModel.rewrite.modifier.ModelElementFilter;
@@ -52,7 +52,7 @@ public class ModelCopy extends Task {
     private static final String CONFIG_FILE_EXTENSION = "cfg.ivml";
     private static final String BASICS_CONFIG = "BasicsCfg";
     private static final String PIPELINES_CONFIG = "PipelinesCfg";
-    private static final String REMOVEABLE_CONFIG_EXTENSION = "^.*_\\p{Digit}*" + CONFIG_FILE_EXTENSION + "$";
+    private static final String REMOVEABLE_CONFIG_EXTENSION = "^.*(_\\p{Digit}*|prioritypip)" + CONFIG_FILE_EXTENSION + "$";
     
     private File sourceFolder;
     private File destinationFolder;
@@ -156,7 +156,7 @@ public class ModelCopy extends Task {
             if (BASICS_CONFIG.equals(p.getName())) {
                 // Clear Basics Config
                 System.out.println("Filter: " + p.getName());
-                ProjectCopyVisitor rewriter = new ProjectCopyVisitor(p, FilterType.NO_IMPORTS);
+                ProjectRewriteVisitor rewriter = new ProjectRewriteVisitor(p, FilterType.NO_IMPORTS);
                 rewriter.addModelCopyModifier(new DeclarationNameFilter(new String[] {"IntegerType", "LongType",
                     "StringType", "BooleanType", "FloatType", "DoubleType", "RealType", "ObjectType"}));
                 p.accept(rewriter);
@@ -164,8 +164,8 @@ public class ModelCopy extends Task {
             } else if (PIPELINES_CONFIG.equals(p.getName())) {
                 // Clear Pipelines Config
                 System.out.println("Filter: " + p.getName());
-                ProjectCopyVisitor rewriter = new ProjectCopyVisitor(p, FilterType.NO_IMPORTS);
-                rewriter.addImportModifier(new ImportNameFilter(new String[] {"PriorityPipCfg"}));
+                ProjectRewriteVisitor rewriter = new ProjectRewriteVisitor(p, FilterType.NO_IMPORTS);
+                rewriter.addImportModifier(new ImportNameFilter(new String[] {"Basics"}));
                 rewriter.addModelCopyModifier(new ModelElementFilter(Constraint.class));
                 rewriter.addModelCopyModifier(new ModelElementFilter(FreezeBlock.class));
                 p.accept(rewriter);

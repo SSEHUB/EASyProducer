@@ -1,5 +1,5 @@
 project PipelinesCfg {
 
-    import PriorityPipCfg;
+    import Basics;
     annotate BindingTime bindingTime = BindingTime.compile to PipelinesCfg;
 }
