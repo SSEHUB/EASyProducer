@@ -20,6 +20,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Stack;
 
+import de.uni_hildesheim.sse.model.cst.AttributeVariable;
 import de.uni_hildesheim.sse.model.cst.CompoundAccess;
 import de.uni_hildesheim.sse.model.cst.CompoundInitializer;
 import de.uni_hildesheim.sse.model.cst.ConstantValue;
@@ -682,6 +683,12 @@ public class IvmlValidationVisitor extends AbstractVisitor
     @Override
     public void visitSelf(Self self) {
         // TODO type != null
+    }
+    
+    @Override
+    public void visitAnnotationVariable(AttributeVariable variable) {
+        // TODO check whether a specific method is needed
+        visitVariable(variable);
     }
 
 }

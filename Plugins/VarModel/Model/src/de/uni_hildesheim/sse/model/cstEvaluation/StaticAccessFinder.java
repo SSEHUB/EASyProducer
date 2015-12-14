@@ -4,6 +4,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
 
+import de.uni_hildesheim.sse.model.cst.AttributeVariable;
 import de.uni_hildesheim.sse.model.cst.Comment;
 import de.uni_hildesheim.sse.model.cst.CompoundAccess;
 import de.uni_hildesheim.sse.model.cst.CompoundInitializer;
@@ -182,4 +183,9 @@ public class StaticAccessFinder implements IConstraintTreeVisitor {
         this.self = self;
     }
 
+    @Override
+    public void visitAnnotationVariable(AttributeVariable variable) {
+        // TODO check whether a specific method is needed
+        visitVariable(variable);
+    }
 }

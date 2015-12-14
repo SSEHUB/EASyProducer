@@ -1,5 +1,6 @@
 package de.uni_hildesheim.sse.model.varModel;
 
+import de.uni_hildesheim.sse.model.cst.AttributeVariable;
 import de.uni_hildesheim.sse.model.cst.CSTSemanticException;
 import de.uni_hildesheim.sse.model.cst.Comment;
 import de.uni_hildesheim.sse.model.cst.CompoundAccess;
@@ -122,4 +123,9 @@ public class ExpressionVersionRestrictionValidator implements IConstraintTreeVis
         // ok as not allowed
     }
 
+    @Override
+    public void visitAnnotationVariable(AttributeVariable variable) {
+        // TODO check whether a specific method is needed
+        visitVariable(variable);
+    }
 }

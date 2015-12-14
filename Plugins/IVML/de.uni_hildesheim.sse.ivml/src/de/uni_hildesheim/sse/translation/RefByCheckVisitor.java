@@ -15,6 +15,7 @@
  */
 package de.uni_hildesheim.sse.translation;
 
+import de.uni_hildesheim.sse.model.cst.AttributeVariable;
 import de.uni_hildesheim.sse.model.cst.Comment;
 import de.uni_hildesheim.sse.model.cst.CompoundAccess;
 import de.uni_hildesheim.sse.model.cst.CompoundInitializer;
@@ -68,6 +69,12 @@ public class RefByCheckVisitor implements IConstraintTreeVisitor {
     @Override
     public void visitVariable(Variable variable) {
         canBeDereferenced = true;
+    }
+    
+    @Override
+    public void visitAnnotationVariable(AttributeVariable variable) {
+        // TODO check whether a specific method is needed
+        visitVariable(variable);
     }
 
     @Override

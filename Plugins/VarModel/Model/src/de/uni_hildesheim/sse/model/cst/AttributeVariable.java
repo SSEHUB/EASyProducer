@@ -73,4 +73,9 @@ public class AttributeVariable extends Variable {
     public String toString() {
         return qualifier != null ? qualifier.toString() + "." + super.toString() : super.toString();
     }
+    
+    @Override
+    public void accept(IConstraintTreeVisitor visitor) {
+        visitor.visitAnnotationVariable(this);
+    }
 }

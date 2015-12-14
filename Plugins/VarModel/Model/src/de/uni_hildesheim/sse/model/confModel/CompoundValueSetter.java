@@ -18,6 +18,7 @@ package de.uni_hildesheim.sse.model.confModel;
 import java.util.ArrayList;
 import java.util.Map;
 
+import de.uni_hildesheim.sse.model.cst.AttributeVariable;
 import de.uni_hildesheim.sse.model.cst.Comment;
 import de.uni_hildesheim.sse.model.cst.CompoundAccess;
 import de.uni_hildesheim.sse.model.cst.CompoundInitializer;
@@ -153,6 +154,12 @@ public class CompoundValueSetter implements IConstraintTreeVisitor {
     @Override
     public void visitSelf(Self self) {
         // only considered in reasoning
+    }
+
+    @Override
+    public void visitAnnotationVariable(AttributeVariable variable) {
+        // TODO check whether a specific method is needed
+        visitVariable(variable);
     }
 
 }

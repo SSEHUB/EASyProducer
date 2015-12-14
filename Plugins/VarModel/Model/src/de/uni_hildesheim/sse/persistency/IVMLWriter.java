@@ -23,6 +23,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Stack;
 
+import de.uni_hildesheim.sse.model.cst.AttributeVariable;
 import de.uni_hildesheim.sse.model.cst.CSTSemanticException;
 import de.uni_hildesheim.sse.model.cst.CompoundAccess;
 import de.uni_hildesheim.sse.model.cst.CompoundInitializer;
@@ -933,6 +934,12 @@ public class IVMLWriter extends AbstractVarModelWriter {
         } else {
             appendOutput(var.getName());
         }
+    }
+    
+    @Override
+    public void visitAnnotationVariable(AttributeVariable variable) {
+        // TODO check whether a specific method is needed
+        visitVariable(variable);
     }
 
     @Override

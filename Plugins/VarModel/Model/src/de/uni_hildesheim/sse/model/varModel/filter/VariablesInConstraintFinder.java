@@ -22,6 +22,7 @@ import de.uni_hildesheim.sse.model.confModel.AssignmentState;
 import de.uni_hildesheim.sse.model.confModel.Configuration;
 import de.uni_hildesheim.sse.model.confModel.IAssignmentState;
 import de.uni_hildesheim.sse.model.confModel.IDecisionVariable;
+import de.uni_hildesheim.sse.model.cst.AttributeVariable;
 import de.uni_hildesheim.sse.model.cst.CSTSemanticException;
 import de.uni_hildesheim.sse.model.cst.CompoundAccess;
 import de.uni_hildesheim.sse.model.cst.ConstraintSyntaxTree;
@@ -73,6 +74,12 @@ public class VariablesInConstraintFinder extends AbstractVariableInConstraintFin
     @Override
     public void visitVariable(Variable variable) {
         addVariable(variable.getVariable());
+    }
+    
+    @Override
+    public void visitAnnotationVariable(AttributeVariable variable) {
+        variable.getQualifier().accept(this);
+        visitVariable(variable);
     }
 
     /**

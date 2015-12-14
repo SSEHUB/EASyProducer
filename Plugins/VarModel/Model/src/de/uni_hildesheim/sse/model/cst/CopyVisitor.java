@@ -19,6 +19,7 @@ import java.util.Map;
 
 import de.uni_hildesheim.sse.Bundle;
 import de.uni_hildesheim.sse.model.varModel.AbstractVariable;
+import de.uni_hildesheim.sse.model.varModel.Attribute;
 import de.uni_hildesheim.sse.model.varModel.DecisionVariableDeclaration;
 import de.uni_hildesheim.sse.utils.logger.EASyLoggerFactory;
 import de.uni_hildesheim.sse.utils.modelManagement.IVariable;
@@ -278,6 +279,21 @@ public class CopyVisitor implements IConstraintTreeVisitor {
     @Override
     public void visitSelf(Self self) {
         result = self; // no replacement needed
+    }
+
+    @Override
+    public void visitAnnotationVariable(AttributeVariable variable) {
+        variable.getQualifier().accept(this);
+        ConstraintSyntaxTree qualifier = result;       
+        
+        ConstraintSyntaxTree var = null;
+        if (null != replacer) {
+            var = replacer.mapLeaf(variable);
+        }
+        if (null == var) {
+            var = new AttributeVariable(qualifier, (Attribute) mapVariable(variable.getVariable()));
+        }
+        result = var;
     }
 
 }

@@ -20,6 +20,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Stack;
 
+import de.uni_hildesheim.sse.model.cst.AttributeVariable;
 import de.uni_hildesheim.sse.model.cst.CompoundAccess;
 import de.uni_hildesheim.sse.model.cst.CompoundInitializer;
 import de.uni_hildesheim.sse.model.cst.ConstantValue;
@@ -377,6 +378,12 @@ public class PrefixSearchVisitor extends AbstractVisitor implements IConstraintT
     public void visitVariable(Variable variable) {
         // collected above in tree or model
         //variable.getVariable().accept(this); // varDecl avoids adding duplicates
+    }
+    
+    @Override
+    public void visitAnnotationVariable(AttributeVariable variable) {
+        // TODO check whether a specific method is needed
+        visitVariable(variable);
     }
 
     @Override

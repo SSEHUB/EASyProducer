@@ -195,4 +195,10 @@ public class ValidationVisitor implements IConstraintTreeVisitor {
     public void visitSelf(Self self) {
     }
 
+    @Override
+    public void visitAnnotationVariable(AttributeVariable variable) {
+        // TODO check whether a specific method is needed
+        visitVariable(variable);
+    }
+
 }

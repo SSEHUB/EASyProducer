@@ -18,6 +18,7 @@ package de.uni_hildesheim.sse.model.varModel.filter;
 import java.util.HashSet;
 import java.util.Set;
 
+import de.uni_hildesheim.sse.model.cst.AttributeVariable;
 import de.uni_hildesheim.sse.model.cst.CSTSemanticException;
 import de.uni_hildesheim.sse.model.cst.CompoundAccess;
 import de.uni_hildesheim.sse.model.cst.ConstantValue;
@@ -75,6 +76,11 @@ public class DeclrationInConstraintFinder extends AbstractVariableInConstraintFi
         declarations.add(variable.getVariable());
     }
 
+    @Override
+    public void visitAnnotationVariable(AttributeVariable variable) {
+        variable.getQualifier().accept(this);
+        visitVariable(variable);
+    }
 
     @Override
     public void visitLet(Let let) {

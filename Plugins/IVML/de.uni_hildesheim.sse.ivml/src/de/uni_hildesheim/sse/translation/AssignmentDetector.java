@@ -1,5 +1,6 @@
 package de.uni_hildesheim.sse.translation;
 
+import de.uni_hildesheim.sse.model.cst.AttributeVariable;
 import de.uni_hildesheim.sse.model.cst.Comment;
 import de.uni_hildesheim.sse.model.cst.CompoundAccess;
 import de.uni_hildesheim.sse.model.cst.CompoundInitializer;
@@ -73,6 +74,12 @@ public class AssignmentDetector implements IConstraintTreeVisitor {
     @Override
     public void visitVariable(Variable variable) {
         // nothing to do
+    }
+    
+    @Override
+    public void visitAnnotationVariable(AttributeVariable variable) {
+        // TODO check whether a specific method is needed
+        visitVariable(variable);
     }
 
     /**

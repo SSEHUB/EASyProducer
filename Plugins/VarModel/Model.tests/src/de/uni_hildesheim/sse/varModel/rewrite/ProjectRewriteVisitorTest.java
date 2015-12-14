@@ -15,27 +15,37 @@
  */
 package de.uni_hildesheim.sse.varModel.rewrite;
 
+import java.io.IOException;
+import java.io.StringWriter;
+
 import org.junit.Assert;
 import org.junit.Test;
 
 import de.uni_hildesheim.sse.model.confModel.Configuration;
+import de.uni_hildesheim.sse.model.cst.AttributeVariable;
 import de.uni_hildesheim.sse.model.cst.CSTSemanticException;
 import de.uni_hildesheim.sse.model.cst.ConstantValue;
+import de.uni_hildesheim.sse.model.cst.ConstraintSyntaxTree;
 import de.uni_hildesheim.sse.model.cst.OCLFeatureCall;
 import de.uni_hildesheim.sse.model.cst.Variable;
+import de.uni_hildesheim.sse.model.varModel.Attribute;
 import de.uni_hildesheim.sse.model.varModel.Comment;
 import de.uni_hildesheim.sse.model.varModel.Constraint;
 import de.uni_hildesheim.sse.model.varModel.ContainableModelElement;
 import de.uni_hildesheim.sse.model.varModel.DecisionVariableDeclaration;
 import de.uni_hildesheim.sse.model.varModel.FreezeBlock;
 import de.uni_hildesheim.sse.model.varModel.IFreezable;
+import de.uni_hildesheim.sse.model.varModel.IvmlKeyWords;
 import de.uni_hildesheim.sse.model.varModel.Project;
 import de.uni_hildesheim.sse.model.varModel.ProjectImport;
+import de.uni_hildesheim.sse.model.varModel.datatypes.AnyType;
 import de.uni_hildesheim.sse.model.varModel.datatypes.ConstraintType;
 import de.uni_hildesheim.sse.model.varModel.datatypes.DerivedDatatype;
+import de.uni_hildesheim.sse.model.varModel.datatypes.EnumLiteral;
 import de.uni_hildesheim.sse.model.varModel.datatypes.IDatatype;
 import de.uni_hildesheim.sse.model.varModel.datatypes.IntegerType;
 import de.uni_hildesheim.sse.model.varModel.datatypes.OclKeyWords;
+import de.uni_hildesheim.sse.model.varModel.datatypes.OrderedEnum;
 import de.uni_hildesheim.sse.model.varModel.datatypes.Reference;
 import de.uni_hildesheim.sse.model.varModel.datatypes.Sequence;
 import de.uni_hildesheim.sse.model.varModel.filter.FilterType;
@@ -49,6 +59,7 @@ import de.uni_hildesheim.sse.model.varModel.values.ContainerValue;
 import de.uni_hildesheim.sse.model.varModel.values.Value;
 import de.uni_hildesheim.sse.model.varModel.values.ValueDoesNotMatchTypeException;
 import de.uni_hildesheim.sse.model.varModel.values.ValueFactory;
+import de.uni_hildesheim.sse.persistency.IVMLWriter;
 import de.uni_hildesheim.sse.persistency.StringProvider;
 import de.uni_hildesheim.sse.utils.modelManagement.ModelManagementException;
 import de.uni_hildesheim.sse.varModel.testSupport.ProjectTestUtilities;
@@ -70,7 +81,7 @@ public class ProjectRewriteVisitorTest {
      */
     @Test
     public void testFilterDeclarationBasedOnNames() throws ValueDoesNotMatchTypeException, CSTSemanticException {
-     // Create original project with two declaration and two assignments
+        // Create original project with two declaration and two assignments
         Project p = new Project("testProjectDeclarationFilter");
         DecisionVariableDeclaration declA = new DecisionVariableDeclaration("declarationA", IntegerType.TYPE, p);
         p.add(declA);
@@ -169,7 +180,7 @@ public class ProjectRewriteVisitorTest {
         Project copy = copynator.getCopyiedProject();
         
         // Copied project should contain the declaration, but not the comment
-        ProjectTestUtilities.validateProject(copy, true);
+        ProjectTestUtilities.validateProject(copy);
         assertProjectContainment(copy, declA, true, 3);
         assertProjectContainment(copy, seqDecl, true, 3);
         assertProjectContainment(copy, declB, false, 3);
@@ -503,6 +514,62 @@ public class ProjectRewriteVisitorTest {
         assertProjectContainment(copy, intDecl, true, 3);
         assertProjectContainment(copy, constVar2, true, 3);
         assertProjectContainment(copy, constVar, false, 3);
+    }
+    
+    /**
+     * Tests that the but condition of a FreezeBlock is created correctly after filtering declarations.
+     * @throws ValueDoesNotMatchTypeException Must not occur, otherwise the {@link ValueFactory} or
+     * {@link de.uni_hildesheim.sse.model.varModel.AbstractVariable#setValue(String)} are broken.
+     */
+    @Test
+    public void testRewritingOfFreezeBlockSelector() throws ValueDoesNotMatchTypeException {
+        // Create original project with two declaration, an annotation and a FreezeBlock
+        Project p = new Project("testProjectFreezeBlockSelector");
+        OrderedEnum btType = new OrderedEnum("BindingTime", p);
+        btType.add(new EnumLiteral("Compiletime", 1, btType));
+        btType.add(new EnumLiteral("runtime", 2, btType));
+        p.add(btType);
+        Attribute attr = new Attribute("bindingTime", btType, p, p);
+        p.add(attr);
+        DecisionVariableDeclaration declA = new DecisionVariableDeclaration("declarationA", IntegerType.TYPE, p);
+        declA.setValue(42);
+        p.add(declA);
+        DecisionVariableDeclaration declB = new DecisionVariableDeclaration("declarationB", IntegerType.TYPE, p);
+        p.add(declB);
+        declB.setValue(21);
+        // Freeze one declaration
+        DecisionVariableDeclaration itr = new DecisionVariableDeclaration("itr", AnyType.TYPE, null);
+        AttributeVariable itrVar = new AttributeVariable(new Variable(itr), attr);
+        ConstantValue btValue =  new ConstantValue(ValueFactory.createValue(btType, btType.getLiteral(1)));
+        ConstraintSyntaxTree selectorCST = new OCLFeatureCall(itrVar, OclKeyWords.GREATER_EQUALS, btValue);
+        FreezeBlock block = new FreezeBlock(new IFreezable[] {declA, declB}, itr , selectorCST, p);
+        p.add(block);
+        
+        // Project should be valid
+        ProjectTestUtilities.validateProject(p);
+
+        // Filter one declaration
+        ProjectRewriteVisitor rewriter = new ProjectRewriteVisitor(p, FilterType.ALL);
+        rewriter.addModelCopyModifier(new DeclarationNameFilter(new String[] {declA.getName()}));
+        p.accept(rewriter);
+        Project copy = rewriter.getCopyiedProject();
+        
+        ProjectTestUtilities.validateProject(copy);
+        assertProjectContainment(copy, declA, true, 4);
+        assertProjectContainment(copy, declB, false, 4);
+        StringWriter sWriter = new StringWriter();
+        IVMLWriter iWriter = new IVMLWriter(sWriter);
+        copy.getElement(3).accept(iWriter);
+        try {
+            iWriter.flush();
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        String freezeAsString = sWriter.toString();
+        System.out.println(freezeAsString);
+        Assert.assertFalse(freezeAsString.contains(p.getName() + IvmlKeyWords.NAMESPACE_SEPARATOR + itr.getName()));
+        Assert.assertTrue(freezeAsString.contains(itr.getName() + IvmlKeyWords.ATTRIBUTE_ACCESS + attr.getName()));
     }
 
     /**

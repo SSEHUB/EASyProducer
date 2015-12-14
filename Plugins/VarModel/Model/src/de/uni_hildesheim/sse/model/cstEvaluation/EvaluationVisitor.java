@@ -30,6 +30,7 @@ import de.uni_hildesheim.sse.model.confModel.ConfigurationException;
 import de.uni_hildesheim.sse.model.confModel.IAssignmentState;
 import de.uni_hildesheim.sse.model.confModel.IConfiguration;
 import de.uni_hildesheim.sse.model.confModel.IDecisionVariable;
+import de.uni_hildesheim.sse.model.cst.AttributeVariable;
 import de.uni_hildesheim.sse.model.cst.CSTSemanticException;
 import de.uni_hildesheim.sse.model.cst.Comment;
 import de.uni_hildesheim.sse.model.cst.CompoundAccess;
@@ -1703,6 +1704,12 @@ public class EvaluationVisitor implements IConstraintTreeVisitor {
     protected IAssignmentState getTargetState(IDecisionVariable var) {
         IAssignmentState returnState = assignmentState;        
         return returnState;
+    }
+
+    @Override
+    public void visitAnnotationVariable(AttributeVariable variable) {
+        // TODO check whether a specific method is needed
+        visitVariable(variable);
     }
     
 }

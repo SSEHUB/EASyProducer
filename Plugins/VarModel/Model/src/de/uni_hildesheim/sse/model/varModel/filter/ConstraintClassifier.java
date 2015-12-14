@@ -15,6 +15,7 @@
  */
 package de.uni_hildesheim.sse.model.varModel.filter;
 
+import de.uni_hildesheim.sse.model.cst.AttributeVariable;
 import de.uni_hildesheim.sse.model.cst.Comment;
 import de.uni_hildesheim.sse.model.cst.CompoundAccess;
 import de.uni_hildesheim.sse.model.cst.CompoundInitializer;
@@ -109,6 +110,12 @@ class ConstraintClassifier implements IConstraintTreeVisitor {
             //stop here
             isAssingmentConstraint = false;
         }
+    }
+    
+    @Override
+    public void visitAnnotationVariable(AttributeVariable variable) {
+        // TODO check whether a specific method is needed
+        visitVariable(variable);
     }
 
     @Override

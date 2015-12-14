@@ -197,4 +197,10 @@ public class DebugConstraintTreeVisitor implements IConstraintTreeVisitor {
         print("self");
     }
 
+    @Override
+    public void visitAnnotationVariable(AttributeVariable variable) {
+        print("Annotation \"" + StringProvider.toIvmlString(variable.getVariable()) + "\" of ");
+        variable.getQualifier().accept(this);
+    }
+
 }

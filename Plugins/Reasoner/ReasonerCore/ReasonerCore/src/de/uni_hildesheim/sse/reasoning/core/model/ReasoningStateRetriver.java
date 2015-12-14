@@ -1,5 +1,6 @@
 package de.uni_hildesheim.sse.reasoning.core.model;
 
+import de.uni_hildesheim.sse.model.cst.AttributeVariable;
 import de.uni_hildesheim.sse.model.cst.CompoundAccess;
 import de.uni_hildesheim.sse.model.cst.CompoundInitializer;
 import de.uni_hildesheim.sse.model.cst.ConstantValue;
@@ -169,6 +170,12 @@ class ReasoningStateRetriver extends AbstractProjectVisitor implements IConstrai
     @Override
     public void visitVariable(Variable variable) {
         variable.getVariable().accept(this);
+    }
+    
+    @Override
+    public void visitAnnotationVariable(AttributeVariable variable) {
+        // TODO check whether a specific method is needed
+        visitVariable(variable);
     }
 
     @Override

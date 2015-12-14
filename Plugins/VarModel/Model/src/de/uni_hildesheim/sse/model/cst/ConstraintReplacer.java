@@ -264,4 +264,10 @@ public class ConstraintReplacer implements IConstraintTreeVisitor {
         copiedConstraint = self; // no replacement needed
     }
 
+    @Override
+    public void visitAnnotationVariable(AttributeVariable variable) {
+        // TODO Check whether a specific method is needed
+        visitVariable(variable);
+    }
+
 }

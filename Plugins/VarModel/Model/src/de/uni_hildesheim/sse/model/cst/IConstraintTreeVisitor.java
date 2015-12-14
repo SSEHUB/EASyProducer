@@ -35,6 +35,13 @@ public interface IConstraintTreeVisitor {
      * @param variable the variable which should be visited
      */
     public void visitVariable(Variable variable);
+    
+    /**
+     * Visits a {@link AttributeVariable}.
+     * 
+     * @param variable the attribute variable which should be visited
+     */
+    public void visitAnnotationVariable(AttributeVariable variable);
 
     /**
      * Visits a parenthesis.

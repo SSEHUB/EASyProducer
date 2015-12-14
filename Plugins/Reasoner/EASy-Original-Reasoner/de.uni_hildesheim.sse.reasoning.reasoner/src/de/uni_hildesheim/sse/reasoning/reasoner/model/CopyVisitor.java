@@ -17,7 +17,7 @@ package de.uni_hildesheim.sse.reasoning.reasoner.model;
 
 import java.util.Map;
 
-import de.uni_hildesheim.sse.model.confModel.CompoundVariable;
+import de.uni_hildesheim.sse.model.cst.AttributeVariable;
 import de.uni_hildesheim.sse.model.cst.CSTSemanticException;
 import de.uni_hildesheim.sse.model.cst.Comment;
 import de.uni_hildesheim.sse.model.cst.CompoundAccess;
@@ -142,6 +142,12 @@ public class CopyVisitor implements IConstraintTreeVisitor {
 //            result = new Variable(mapVariable(variable.getVariable()));
             result = variable;
         }
+    }
+    
+    @Override
+    public void visitAnnotationVariable(AttributeVariable variable) {
+        variable.getQualifier().accept(this);
+        visitVariable(variable);
     }
 
     @Override

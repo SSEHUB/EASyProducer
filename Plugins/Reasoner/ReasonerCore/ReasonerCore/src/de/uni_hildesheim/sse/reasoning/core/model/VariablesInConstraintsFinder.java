@@ -4,6 +4,7 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
+import de.uni_hildesheim.sse.model.cst.AttributeVariable;
 import de.uni_hildesheim.sse.model.cst.Comment;
 import de.uni_hildesheim.sse.model.cst.CompoundAccess;
 import de.uni_hildesheim.sse.model.cst.CompoundInitializer;
@@ -68,6 +69,12 @@ class VariablesInConstraintsFinder implements IConstraintTreeVisitor {
     public void visitVariable(Variable variable) {
         AbstractVariable wrappedDeclaration = variable.getVariable();
         variables.add(wrappedDeclaration);
+    }
+    
+    @Override
+    public void visitAnnotationVariable(AttributeVariable variable) {
+        variable.getQualifier().accept(this);
+        visitVariable(variable);
     }
 
     @Override

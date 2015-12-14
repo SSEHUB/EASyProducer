@@ -1,6 +1,7 @@
 package de.uni_hildesheim.sse.reasoning.reasoner.model;
 
 import de.uni_hildesheim.sse.model.confModel.Configuration;
+import de.uni_hildesheim.sse.model.cst.AttributeVariable;
 import de.uni_hildesheim.sse.model.cst.Comment;
 import de.uni_hildesheim.sse.model.cst.CompoundAccess;
 import de.uni_hildesheim.sse.model.cst.CompoundInitializer;
@@ -16,7 +17,6 @@ import de.uni_hildesheim.sse.model.cst.Parenthesis;
 import de.uni_hildesheim.sse.model.cst.Self;
 import de.uni_hildesheim.sse.model.cst.UnresolvedExpression;
 import de.uni_hildesheim.sse.model.cst.Variable;
-import de.uni_hildesheim.sse.model.varModel.datatypes.OclKeyWords;
 
 /**
  * A visitor to retrieve constraints from collections.
@@ -132,6 +132,12 @@ public class NestedVariableFinder implements IConstraintTreeVisitor {
     public void visitSelf(Self self) {
         // TODO Auto-generated method stub
         
+    }
+
+    @Override
+    public void visitAnnotationVariable(AttributeVariable variable) {
+        // TODO check whether a specific method is needed
+        visitVariable(variable);
     }
 
    
