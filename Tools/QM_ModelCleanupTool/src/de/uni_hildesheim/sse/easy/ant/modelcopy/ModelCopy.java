@@ -17,7 +17,9 @@ package de.uni_hildesheim.sse.easy.ant.modelcopy;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.filefilter.TrueFileFilter;
@@ -30,6 +32,7 @@ import de.uni_hildesheim.sse.model.validation.ValidationMessage;
 import de.uni_hildesheim.sse.model.varModel.Constraint;
 import de.uni_hildesheim.sse.model.varModel.FreezeBlock;
 import de.uni_hildesheim.sse.model.varModel.Project;
+import de.uni_hildesheim.sse.model.varModel.ProjectImport;
 import de.uni_hildesheim.sse.model.varModel.filter.FilterType;
 import de.uni_hildesheim.sse.model.varModel.rewrite.ProjectCopyVisitor;
 import de.uni_hildesheim.sse.model.varModel.rewrite.modifier.DeclarationNameFilter;
@@ -151,6 +154,7 @@ public class ModelCopy extends Task {
             Project p = ProjectUtilities.loadProject(projectName);
             
             if (BASICS_CONFIG.equals(p.getName())) {
+                // Clear Basics Config
                 System.out.println("Filter: " + p.getName());
                 ProjectCopyVisitor rewriter = new ProjectCopyVisitor(p, FilterType.NO_IMPORTS);
                 rewriter.addModelCopyModifier(new DeclarationNameFilter(new String[] {"IntegerType", "LongType",
@@ -158,6 +162,7 @@ public class ModelCopy extends Task {
                 p.accept(rewriter);
                 p = rewriter.getCopyiedProject();
             } else if (PIPELINES_CONFIG.equals(p.getName())) {
+                // Clear Pipelines Config
                 System.out.println("Filter: " + p.getName());
                 ProjectCopyVisitor rewriter = new ProjectCopyVisitor(p, FilterType.NO_IMPORTS);
                 rewriter.addImportModifier(new ImportNameFilter(new String[] {"PriorityPipCfg"}));
@@ -165,6 +170,20 @@ public class ModelCopy extends Task {
                 rewriter.addModelCopyModifier(new ModelElementFilter(FreezeBlock.class));
                 p.accept(rewriter);
                 p = rewriter.getCopyiedProject();
+            } else {
+                // Clear all other configs
+                List<ProjectImport> imports = new ArrayList<ProjectImport>();
+                for (int i = 0; i < p.getImportsCount(); i++) {
+                    ProjectImport projectImport = p.getImport(i);
+                    String importName = projectImport.getName().toLowerCase();
+                    if (!(importName + ".ivml").matches(REMOVEABLE_CONFIG_EXTENSION)) {
+                        imports.add(projectImport);
+                    }
+                }
+                p.clear();
+                for (int i = 0; i < imports.size(); i++) {
+                    p.addImport(imports.get(i));
+                }
             }
             ProjectUtilities.saveProject(destFolder, p);
         } else {
