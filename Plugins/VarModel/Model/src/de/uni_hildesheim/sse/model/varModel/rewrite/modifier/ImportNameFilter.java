@@ -18,25 +18,24 @@ package de.uni_hildesheim.sse.model.varModel.rewrite.modifier;
 import java.util.HashSet;
 import java.util.Set;
 
-import de.uni_hildesheim.sse.model.varModel.ContainableModelElement;
-import de.uni_hildesheim.sse.model.varModel.DecisionVariableDeclaration;
+import de.uni_hildesheim.sse.model.varModel.ProjectImport;
 import de.uni_hildesheim.sse.model.varModel.rewrite.RewriteContext;
 
 /**
- * Filters {@link DecisionVariableDeclaration}s based on their names.
+ * Filters {@link ProjectImport}s based on their names.
  * @author El-Sharkawy
  *
  */
-public class DeclarationNameFilter implements IModelElementFilter<DecisionVariableDeclaration> {
+public class ImportNameFilter implements IProjectImportFilter {
     
-    private Set<String> declarationNames;
+    private Set<String> projectNames;
     private boolean blacklist;
     
     /**
      * Default constructor for a whitelist based filtering.
      * @param allowedNames A whitelist of allowed names, others will be deleted.
      */
-    public DeclarationNameFilter(String[] allowedNames) {
+    public ImportNameFilter(String[] allowedNames) {
         this(allowedNames, false);
     }
     
@@ -47,22 +46,17 @@ public class DeclarationNameFilter implements IModelElementFilter<DecisionVariab
      * (blacklist filtering), <tt>false</tt> the given names will be kept and all others will be filtered out (whitelist
      * filtering).
      */
-    public DeclarationNameFilter(String[] declarationNames, boolean blacklist) {
+    public ImportNameFilter(String[] declarationNames, boolean blacklist) {
         this.blacklist = blacklist;
-        this.declarationNames = new HashSet<String>();
+        this.projectNames = new HashSet<String>();
         for (int i = 0; i < declarationNames.length; i++) {
-            this.declarationNames.add(declarationNames[i]);
+            this.projectNames.add(declarationNames[i]);
         }
     }
 
     @Override
-    public Class<? extends ContainableModelElement> getModifyingModelClass() {
-        return DecisionVariableDeclaration.class;
-    }
-
-    @Override
-    public ContainableModelElement handleModelElement(ContainableModelElement element, RewriteContext context) {
-        if (!declarationNames.contains(element.getName()) ^ blacklist) {
+    public ProjectImport handleImport(ProjectImport element, RewriteContext context) {
+        if (!projectNames.contains(element.getName()) ^ blacklist) {
             element = null;
         }
         

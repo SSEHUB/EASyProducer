@@ -93,13 +93,20 @@ public abstract class AbstractProjectVisitor implements IModelVisitor {
     
     /**
      * Resets the knowledge if a this visitor should be used for a second iteration.
+     * Both parameters are only optional (if <tt>null</tt> the original value will be kept).
      * @param originProject The starting project, should be the project from the constructor call.
+     * @param filterType Specifies whether project imports shall be considered or not.
      */
-    protected void clear(Project originProject) {
+    protected void clear(Project originProject, FilterType filterType) {
         done.clear();
         // Reset original project only if explicitly specified.
         if (null != originProject) {
             this.originProject = originProject;
+        }
+        
+        // Reset original filterType only if explicitly specified.
+        if (null != filterType) {
+            this.filterType = filterType;
         }
     }
 }

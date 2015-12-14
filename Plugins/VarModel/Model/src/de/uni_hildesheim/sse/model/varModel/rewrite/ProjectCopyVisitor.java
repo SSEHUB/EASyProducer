@@ -56,7 +56,8 @@ import de.uni_hildesheim.sse.model.varModel.datatypes.Sequence;
 import de.uni_hildesheim.sse.model.varModel.datatypes.Set;
 import de.uni_hildesheim.sse.model.varModel.filter.DeclrationInConstraintFinder;
 import de.uni_hildesheim.sse.model.varModel.filter.FilterType;
-import de.uni_hildesheim.sse.model.varModel.rewrite.modifier.IModelCopyModifier;
+import de.uni_hildesheim.sse.model.varModel.rewrite.modifier.IModelElementFilter;
+import de.uni_hildesheim.sse.model.varModel.rewrite.modifier.IProjectImportFilter;
 import de.uni_hildesheim.sse.utils.logger.EASyLoggerFactory;
 import de.uni_hildesheim.sse.utils.modelManagement.ModelManagementException;
 
@@ -69,7 +70,8 @@ import de.uni_hildesheim.sse.utils.modelManagement.ModelManagementException;
  */
 public class ProjectCopyVisitor extends AbstractProjectVisitor {
 
-    private Map<Class<? extends ModelElement>, List<IModelCopyModifier<?>>> modifiers;
+    private Map<Class<? extends ModelElement>, List<IModelElementFilter<?>>> modifiers;
+    private List<IProjectImportFilter> importModifiers;
     private Project currentProject;
     private Deque<Project> parentProjects;
     private RewriteContext context;
@@ -81,23 +83,24 @@ public class ProjectCopyVisitor extends AbstractProjectVisitor {
      */
     public ProjectCopyVisitor(Project originProject, FilterType filterType) {
         super(originProject, filterType);
-        modifiers = new HashMap<Class<? extends ModelElement>, List<IModelCopyModifier<?>>>();
+        modifiers = new HashMap<Class<? extends ModelElement>, List<IModelElementFilter<?>>>();
+        importModifiers = new ArrayList<IProjectImportFilter>();
         parentProjects = new ArrayDeque<Project>();
         context = new RewriteContext();
     }
 
     /**
-     * Adds a new {@link IModelCopyModifier} to this {@link ProjectCopyVisitor}. If none was specified for a given
-     * {@link ContainableModelElement} type, these kind of elements will be copied. If a {@link IModelCopyModifier} was
-     * specified the modifier will be applied to each element of the same type. Multiple {@link IModelCopyModifier} may
+     * Adds a new {@link IModelElementFilter} to this {@link ProjectCopyVisitor}. If none was specified for a given
+     * {@link ContainableModelElement} type, these kind of elements will be copied. If a {@link IModelElementFilter} was
+     * specified the modifier will be applied to each element of the same type. Multiple {@link IModelElementFilter} may
      * be specified for the same {@link ContainableModelElement} type.
      * @param modifier A IModelCopyModifier for a given {@link ContainableModelElement} class,
      *     must not be <tt>null</tt>.
      */
-    public void addModelCopyModifier(IModelCopyModifier<? extends ModelElement> modifier) {
-        List<IModelCopyModifier<?>> modifierList = modifiers.get(modifier.getModifyingModelClass());
+    public void addModelCopyModifier(IModelElementFilter<? extends ModelElement> modifier) {
+        List<IModelElementFilter<?>> modifierList = modifiers.get(modifier.getModifyingModelClass());
         if (null == modifierList) {
-            modifierList = new ArrayList<IModelCopyModifier<?>>();
+            modifierList = new ArrayList<IModelElementFilter<?>>();
             modifiers.put(modifier.getModifyingModelClass(), modifierList);
         }
         modifierList.add(modifier);
@@ -280,16 +283,16 @@ public class ProjectCopyVisitor extends AbstractProjectVisitor {
 
     /**
      * Method for copying/modifying the original {@link ContainableModelElement} into the copied {@link Project} while
-     * using the {@link IModelCopyModifier}. If none is specified for the given element, the element will be copied
+     * using the {@link IModelElementFilter}. If none is specified for the given element, the element will be copied
      * without any modification.
      * @param original A {@link ContainableModelElement} of the {@link #currentProject} to be copied (and modified).
      */
     private void createCopy(ContainableModelElement original) {
         ContainableModelElement copy = original;
-        List<IModelCopyModifier<?>> modifierList = modifiers.get(original.getClass());
+        List<IModelElementFilter<?>> modifierList = modifiers.get(original.getClass());
         if (null != modifierList) {
             for (int i = 0, n = modifierList.size(); i < n && null != copy; i++) {
-                IModelCopyModifier<?> currentModifier = (IModelCopyModifier<?>) modifierList.get(i);
+                IModelElementFilter<?> currentModifier = (IModelElementFilter<?>) modifierList.get(i);
                 copy = currentModifier.handleModelElement(copy, context);
             }
         }
@@ -327,36 +330,57 @@ public class ProjectCopyVisitor extends AbstractProjectVisitor {
              * Elements where removed start filtering again, maybe there exist some elements pointing
              * to the removed elements.
              */
-            Project tmpProject = currentProject;
-            context.clear();
-            currentProject = new Project(project.getName());
-            clear(tmpProject);
-            context.storeTranslatedProject(tmpProject, currentProject);
-            super.visitProject(tmpProject);
+            revisit(project);
         }
+    }
+
+    /**
+     * Starts a new visitation to clean up inconsistent data.
+     * @param project The original project which was used to start the whole visitation process.
+     */
+    private void revisit(Project project) {
+        Project tmpProject = currentProject;
+        context.clear();
+        currentProject = new Project(project.getName());
+        clear(tmpProject, FilterType.ALL);
+        context.storeTranslatedProject(tmpProject, currentProject);
+        
+        // Stop modification, clean up inconsistent data.
+        modifiers.clear();
+        importModifiers.clear();
+        
+        super.visitProject(tmpProject);
     }
     
     @Override
     public void visitProjectImport(ProjectImport pImport) {
-        parentProjects.addFirst(currentProject);
-        
-        ProjectImport copiedImport = new ProjectImport(pImport.getName(), pImport.getInterfaceName(),
-            pImport.isConflict(), false, pImport.getVersionRestriction());
-        
-        if (null != parentProjects.peekFirst()) {
-            parentProjects.peekFirst().addImport(copiedImport);
+        ProjectImport copy = pImport;
+        for (int i = 0, n = importModifiers.size(); i < n && null != copy; i++) {
+            IProjectImportFilter currentModifier = importModifiers.get(i);
+            copy = currentModifier.handleImport(copy, context);
         }
-        
-        super.visitProjectImport(pImport);
-        try {
-            copiedImport.setResolved(currentProject);
-        } catch (ModelManagementException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-        // In case of a ProjectImport, switch back to original project after visiting the import
-        if (null != parentProjects.peekFirst()) {
-            currentProject = parentProjects.removeFirst();
+
+        if (null != copy) {
+            // TODO check whether copy or pImport should be used inside this if
+            parentProjects.addFirst(currentProject);
+            
+            ProjectImport copiedImport = new ProjectImport(copy.getName(), copy.getInterfaceName(),
+                copy.isConflict(), false, copy.getVersionRestriction());
+            
+            if (null != parentProjects.peekFirst()) {
+                parentProjects.peekFirst().addImport(copiedImport);
+            }
+            
+            super.visitProjectImport(copy);
+            try {
+                copiedImport.setResolved(currentProject);
+            } catch (ModelManagementException e) {
+                EASyLoggerFactory.INSTANCE.getLogger(ProjectCopyVisitor.class, Bundle.ID).exception(e);
+            }
+            // In case of a ProjectImport, switch back to original project after visiting the import
+            if (null != parentProjects.peekFirst()) {
+                currentProject = parentProjects.removeFirst();
+            }
         }
     }
 }

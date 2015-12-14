@@ -15,32 +15,25 @@
  */
 package de.uni_hildesheim.sse.model.varModel.rewrite.modifier;
 
-import de.uni_hildesheim.sse.model.varModel.ContainableModelElement;
+import de.uni_hildesheim.sse.model.varModel.ProjectImport;
 import de.uni_hildesheim.sse.model.varModel.rewrite.RewriteContext;
 
 /**
- * Optional Rule how to handle elements of a {@link de.uni_hildesheim.sse.model.varModel.Project}, while creating a
+ * Optional Rule how to handle {@link de.uni_hildesheim.sse.model.varModel.ProjectImport}s, while creating a
  * copy using the {@link de.uni_hildesheim.sse.model.varModel.rewrite.ProjectCopyVisitor}.
- * @param <M> Type of {@link ContainableModelElement}s, which shall be handled by this class.
  * @author El-Sharkawy
  *
  */
-public interface IModelCopyModifier<M extends ContainableModelElement> {
+public interface IProjectImportFilter {
     
     /**
-     * Specification for which kind of classes this may be applied to.
-     * @return The {@link ContainableModelElement}s which shall be modified by this class.
-     */
-    public Class<? extends ContainableModelElement> getModifyingModelClass();
-    
-    /**
-     * Specification how to handle {@link ContainableModelElement}s. 
-     * @param element A {@link ContainableModelElement} which may be modified by this class.
+     * Specification how to handle {@link ProjectImport}s. 
+     * @param pImport A {@link ProjectImport} which may be modified by this class.
      * @param context Knowledge of the current translation, comes from the
      * {@link de.uni_hildesheim.sse.model.varModel.rewrite.ProjectCopyVisitor}.
      * @return The modified element. Maybe the same instance as passed as parameter (if nothing should be changed) or
      * <tt>null</tt> if the element should be deleted.
      */
-    public ContainableModelElement handleModelElement(ContainableModelElement element, RewriteContext context);
+    public ProjectImport handleImport(ProjectImport pImport, RewriteContext context);
 
 }

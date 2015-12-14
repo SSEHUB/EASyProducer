@@ -28,7 +28,7 @@ import de.uni_hildesheim.sse.model.varModel.ContainableModelElement;
  *
  * @param <M> Type of {@link ContainableModelElement}s, which shall be handled by this class.
  */
-public abstract class AbstractFrozenChecker<M extends ContainableModelElement> implements IModelCopyModifier<M> {
+public abstract class AbstractFrozenChecker<M extends ContainableModelElement> implements IModelElementFilter<M> {
 
     private Configuration config;
     
