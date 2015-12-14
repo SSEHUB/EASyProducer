@@ -105,6 +105,14 @@ public class ProjectCopyVisitor extends AbstractProjectVisitor {
         }
         modifierList.add(modifier);
     }
+    
+    /**
+     * Adds a new modifier for filtering {@link ProjectImport}s. 
+     * @param modifier A modifier for filtering {@link ProjectImport}s.
+     */
+    public void addImportModifier(IProjectImportFilter modifier) {
+        importModifiers.add(modifier);
+    }
 
     /**
      * Returns the copied and modified {@link Project} after the visiting method of the project was called.
