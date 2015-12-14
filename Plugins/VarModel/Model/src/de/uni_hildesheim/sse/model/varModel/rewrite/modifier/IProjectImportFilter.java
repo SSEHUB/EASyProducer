@@ -20,7 +20,7 @@ import de.uni_hildesheim.sse.model.varModel.rewrite.RewriteContext;
 
 /**
  * Optional Rule how to handle {@link de.uni_hildesheim.sse.model.varModel.ProjectImport}s, while creating a
- * copy using the {@link de.uni_hildesheim.sse.model.varModel.rewrite.ProjectCopyVisitor}.
+ * copy using the {@link de.uni_hildesheim.sse.model.varModel.rewrite.ProjectRewriteVisitor}.
  * @author El-Sharkawy
  *
  */
@@ -30,7 +30,7 @@ public interface IProjectImportFilter {
      * Specification how to handle {@link ProjectImport}s. 
      * @param pImport A {@link ProjectImport} which may be modified by this class.
      * @param context Knowledge of the current translation, comes from the
-     * {@link de.uni_hildesheim.sse.model.varModel.rewrite.ProjectCopyVisitor}.
+     * {@link de.uni_hildesheim.sse.model.varModel.rewrite.ProjectRewriteVisitor}.
      * @return The modified element. Maybe the same instance as passed as parameter (if nothing should be changed) or
      * <tt>null</tt> if the element should be deleted.
      */

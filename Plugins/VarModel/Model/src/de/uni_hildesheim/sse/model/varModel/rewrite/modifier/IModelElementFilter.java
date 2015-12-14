@@ -20,7 +20,7 @@ import de.uni_hildesheim.sse.model.varModel.rewrite.RewriteContext;
 
 /**
  * Optional Rule how to handle elements of a {@link de.uni_hildesheim.sse.model.varModel.Project}, while creating a
- * copy using the {@link de.uni_hildesheim.sse.model.varModel.rewrite.ProjectCopyVisitor}.
+ * copy using the {@link de.uni_hildesheim.sse.model.varModel.rewrite.ProjectRewriteVisitor}.
  * @param <M> Type of {@link ContainableModelElement}s, which shall be handled by this class.
  * @author El-Sharkawy
  *
@@ -37,7 +37,7 @@ public interface IModelElementFilter<M extends ContainableModelElement> {
      * Specification how to handle {@link ContainableModelElement}s. 
      * @param element A {@link ContainableModelElement} which may be modified by this class.
      * @param context Knowledge of the current translation, comes from the
-     * {@link de.uni_hildesheim.sse.model.varModel.rewrite.ProjectCopyVisitor}.
+     * {@link de.uni_hildesheim.sse.model.varModel.rewrite.ProjectRewriteVisitor}.
      * @return The modified element. Maybe the same instance as passed as parameter (if nothing should be changed) or
      * <tt>null</tt> if the element should be deleted.
      */

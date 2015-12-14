@@ -38,7 +38,7 @@ import de.uni_hildesheim.sse.varModel.management.ProjectTest;
 import de.uni_hildesheim.sse.varModel.management.VarModelListenerTest;
 import de.uni_hildesheim.sse.varModel.management.VarModelTest;
 import de.uni_hildesheim.sse.varModel.management.VersionedProjectInfosTest;
-import de.uni_hildesheim.sse.varModel.rewrite.ProjectCopyVisitorTest;
+import de.uni_hildesheim.sse.varModel.rewrite.ProjectRewriteVisitorTest;
 import de.uni_hildesheim.sse.varModel.values.CompoundValueTest;
 import de.uni_hildesheim.sse.varModel.values.DerivedDatatypeValueTest;
 import de.uni_hildesheim.sse.varModel.values.IntValueTest;
@@ -110,7 +110,7 @@ import de.uni_hildesheim.sse.varModel.versioning.ImportValidationTest;
     IvmlValidationVisitorTest.class,
     TypeMapperTests.class,
     CstEvaluationTests.class,
-    ProjectCopyVisitorTest.class
+    ProjectRewriteVisitorTest.class
     })
 public class AllTests {
 

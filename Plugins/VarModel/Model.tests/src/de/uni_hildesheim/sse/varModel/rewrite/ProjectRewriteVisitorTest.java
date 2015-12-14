@@ -39,7 +39,7 @@ import de.uni_hildesheim.sse.model.varModel.datatypes.OclKeyWords;
 import de.uni_hildesheim.sse.model.varModel.datatypes.Reference;
 import de.uni_hildesheim.sse.model.varModel.datatypes.Sequence;
 import de.uni_hildesheim.sse.model.varModel.filter.FilterType;
-import de.uni_hildesheim.sse.model.varModel.rewrite.ProjectCopyVisitor;
+import de.uni_hildesheim.sse.model.varModel.rewrite.ProjectRewriteVisitor;
 import de.uni_hildesheim.sse.model.varModel.rewrite.modifier.DeclarationNameFilter;
 import de.uni_hildesheim.sse.model.varModel.rewrite.modifier.FrozenConstraintVarFilter;
 import de.uni_hildesheim.sse.model.varModel.rewrite.modifier.FrozenConstraintsFilter;
@@ -54,12 +54,12 @@ import de.uni_hildesheim.sse.utils.modelManagement.ModelManagementException;
 import de.uni_hildesheim.sse.varModel.testSupport.ProjectTestUtilities;
 
 /**
- * Tests the {@link ProjectCopyVisitor} and especially whether the specified elements can be filtered without removing
- * the other elements.
+ * Tests the {@link ProjectRewriteVisitor} and especially whether the specified elements
+ * can be filtered without removing the other elements.
  * @author El-Sharkawy
  *
  */
-public class ProjectCopyVisitorTest {
+public class ProjectRewriteVisitorTest {
     
     /**
      * Tests whether filtering of declarations based on their names work.
@@ -91,7 +91,7 @@ public class ProjectCopyVisitorTest {
         ProjectTestUtilities.validateProject(p);
         
         // Create copy while omitting the comment
-        ProjectCopyVisitor copynator = new ProjectCopyVisitor(p, FilterType.NO_IMPORTS);
+        ProjectRewriteVisitor copynator = new ProjectRewriteVisitor(p, FilterType.NO_IMPORTS);
         copynator.addModelCopyModifier(new DeclarationNameFilter(new String[] {declA.getName()}));
         p.accept(copynator);
         Project copy = copynator.getCopyiedProject();
@@ -119,7 +119,7 @@ public class ProjectCopyVisitorTest {
         ProjectTestUtilities.validateProject(p);
         
         // Create copy while omitting the comment
-        ProjectCopyVisitor copynator = new ProjectCopyVisitor(p, FilterType.NO_IMPORTS);
+        ProjectRewriteVisitor copynator = new ProjectRewriteVisitor(p, FilterType.NO_IMPORTS);
         copynator.addModelCopyModifier(new ModelElementFilter(Comment.class));
         p.accept(copynator);
         Project copy = copynator.getCopyiedProject();
@@ -163,7 +163,7 @@ public class ProjectCopyVisitorTest {
         ProjectTestUtilities.validateProject(p);
         
         // Create copy while omitting the comment
-        ProjectCopyVisitor copynator = new ProjectCopyVisitor(p, FilterType.NO_IMPORTS);
+        ProjectRewriteVisitor copynator = new ProjectRewriteVisitor(p, FilterType.NO_IMPORTS);
         copynator.addModelCopyModifier(new DeclarationNameFilter(new String[] {declA.getName(), seqDecl.getName()}));
         p.accept(copynator);
         Project copy = copynator.getCopyiedProject();
@@ -215,7 +215,7 @@ public class ProjectCopyVisitorTest {
         Configuration config = new Configuration(p);
         
         // Create copy while omitting "frozen" constraints
-        ProjectCopyVisitor copynator = new ProjectCopyVisitor(p, FilterType.NO_IMPORTS);
+        ProjectRewriteVisitor copynator = new ProjectRewriteVisitor(p, FilterType.NO_IMPORTS);
         FrozenConstraintsFilter ommiter = new FrozenConstraintsFilter(config);
         copynator.addModelCopyModifier(ommiter);
         p.accept(copynator);
@@ -248,7 +248,7 @@ public class ProjectCopyVisitorTest {
         p.addImport(pImport1);
         ProjectTestUtilities.validateProject(p);
         
-        ProjectCopyVisitor copynator = new ProjectCopyVisitor(p, FilterType.ALL);
+        ProjectRewriteVisitor copynator = new ProjectRewriteVisitor(p, FilterType.ALL);
         p.accept(copynator);
         Project copy = copynator.getCopyiedProject();
         // Test main Project and its import
@@ -286,7 +286,7 @@ public class ProjectCopyVisitorTest {
         ProjectTestUtilities.validateProject(p);
         
         // Create copy
-        ProjectCopyVisitor copynator = new ProjectCopyVisitor(p, FilterType.ALL);
+        ProjectRewriteVisitor copynator = new ProjectRewriteVisitor(p, FilterType.ALL);
         p.accept(copynator);
         Project copy = copynator.getCopyiedProject();
         ProjectTestUtilities.validateProject(copy);
@@ -336,7 +336,7 @@ public class ProjectCopyVisitorTest {
         Configuration config = new Configuration(p);
         
         // Create copy
-        ProjectCopyVisitor copynator = new ProjectCopyVisitor(p, FilterType.ALL);
+        ProjectRewriteVisitor copynator = new ProjectRewriteVisitor(p, FilterType.ALL);
         copynator.addModelCopyModifier(new FrozenTypeDefResolver(config));
         p.accept(copynator);
         Project copy = copynator.getCopyiedProject();
@@ -391,7 +391,7 @@ public class ProjectCopyVisitorTest {
         Configuration config = new Configuration(p);
         
         // Create copy
-        ProjectCopyVisitor copynator = new ProjectCopyVisitor(p, FilterType.ALL);
+        ProjectRewriteVisitor copynator = new ProjectRewriteVisitor(p, FilterType.ALL);
         copynator.addModelCopyModifier(new FrozenTypeDefResolver(config));
         p.accept(copynator);
         Project copy = copynator.getCopyiedProject();
@@ -493,7 +493,7 @@ public class ProjectCopyVisitorTest {
         Configuration config = new Configuration(p);
         
         // Create copy while omitting the comment
-        ProjectCopyVisitor copynator = new ProjectCopyVisitor(p, FilterType.NO_IMPORTS);
+        ProjectRewriteVisitor copynator = new ProjectRewriteVisitor(p, FilterType.NO_IMPORTS);
         copynator.addModelCopyModifier(new FrozenConstraintVarFilter(config));
         p.accept(copynator);
         Project copy = copynator.getCopyiedProject();

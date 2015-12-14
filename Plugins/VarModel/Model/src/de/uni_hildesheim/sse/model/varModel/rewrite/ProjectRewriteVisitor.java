@@ -27,6 +27,7 @@ import de.uni_hildesheim.sse.Bundle;
 import de.uni_hildesheim.sse.model.cst.CSTSemanticException;
 import de.uni_hildesheim.sse.model.cst.ConstantValue;
 import de.uni_hildesheim.sse.model.cst.ConstraintSyntaxTree;
+import de.uni_hildesheim.sse.model.cst.CopyVisitor;
 import de.uni_hildesheim.sse.model.cst.OCLFeatureCall;
 import de.uni_hildesheim.sse.model.varModel.AbstractProjectVisitor;
 import de.uni_hildesheim.sse.model.varModel.AbstractVariable;
@@ -68,7 +69,7 @@ import de.uni_hildesheim.sse.utils.modelManagement.ModelManagementException;
  * @author El-Sharkawy
  *
  */
-public class ProjectCopyVisitor extends AbstractProjectVisitor {
+public class ProjectRewriteVisitor extends AbstractProjectVisitor {
 
     private Map<Class<? extends ModelElement>, List<IModelElementFilter<?>>> modifiers;
     private List<IProjectImportFilter> importModifiers;
@@ -81,7 +82,7 @@ public class ProjectCopyVisitor extends AbstractProjectVisitor {
      * @param originProject The project where the visiting shall start
      * @param filterType Specifies whether project imports shall be considered or not.
      */
-    public ProjectCopyVisitor(Project originProject, FilterType filterType) {
+    public ProjectRewriteVisitor(Project originProject, FilterType filterType) {
         super(originProject, filterType);
         modifiers = new HashMap<Class<? extends ModelElement>, List<IModelElementFilter<?>>>();
         importModifiers = new ArrayList<IProjectImportFilter>();
@@ -90,7 +91,7 @@ public class ProjectCopyVisitor extends AbstractProjectVisitor {
     }
 
     /**
-     * Adds a new {@link IModelElementFilter} to this {@link ProjectCopyVisitor}. If none was specified for a given
+     * Adds a new {@link IModelElementFilter} to this {@link ProjectRewriteVisitor}. If none was specified for a given
      * {@link ContainableModelElement} type, these kind of elements will be copied. If a {@link IModelElementFilter} was
      * specified the modifier will be applied to each element of the same type. Multiple {@link IModelElementFilter} may
      * be specified for the same {@link ContainableModelElement} type.
@@ -164,7 +165,7 @@ public class ProjectCopyVisitor extends AbstractProjectVisitor {
                         try {
                             constraint.setConsSyntax(call);
                         } catch (CSTSemanticException e) {
-                            EASyLoggerFactory.INSTANCE.getLogger(ProjectCopyVisitor.class, Bundle.ID).exception(e);
+                            EASyLoggerFactory.INSTANCE.getLogger(ProjectRewriteVisitor.class, Bundle.ID).exception(e);
                         }
                     } else if (copy.valuesOmitted() && null == copy.getValue()) {
                         // Value was completely filtered -> remove assignment constraint
@@ -207,11 +208,26 @@ public class ProjectCopyVisitor extends AbstractProjectVisitor {
                 freeze = null;
             } else if (removedElementsFound) {
                 // Create copy with filtered elements
-                freeze = new FreezeBlock(copiedElements.toArray(new IFreezable[0]), freeze.getIter(),
-                    freeze.getSelector(), (Project) freeze.getParent());                
+                DecisionVariableDeclaration orginalIterator = freeze.getIter();
+                DecisionVariableDeclaration copiedIterator = (null == orginalIterator) ? null
+                    : new DecisionVariableDeclaration(orginalIterator.getName(), orginalIterator.getType(),
+                        orginalIterator.getParent());
+                
+                // Replace iterator in selector constraint.
+                ConstraintSyntaxTree copiedSelector = null;
+                if (null != freeze.getSelector()) {
+                    Map<AbstractVariable, AbstractVariable> declMapping = new HashMap<AbstractVariable,
+                        AbstractVariable>();
+                    declMapping.put(orginalIterator, copiedIterator);
+                    CopyVisitor cstCopier = new CopyVisitor(declMapping);
+                    freeze.getSelector().accept(cstCopier);
+                    copiedSelector = cstCopier.getResult();
+                }
+                
+                freeze = new FreezeBlock(copiedElements.toArray(new IFreezable[0]), copiedIterator, copiedSelector,
+                    (Project) freeze.getParent());                
             }
             // else: Nothing do do, process original block
-            
         }
         
         if (null != freeze) { 
@@ -383,7 +399,7 @@ public class ProjectCopyVisitor extends AbstractProjectVisitor {
             try {
                 copiedImport.setResolved(currentProject);
             } catch (ModelManagementException e) {
-                EASyLoggerFactory.INSTANCE.getLogger(ProjectCopyVisitor.class, Bundle.ID).exception(e);
+                EASyLoggerFactory.INSTANCE.getLogger(ProjectRewriteVisitor.class, Bundle.ID).exception(e);
             }
             // In case of a ProjectImport, switch back to original project after visiting the import
             if (null != parentProjects.peekFirst()) {
