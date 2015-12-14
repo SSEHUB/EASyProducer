@@ -29,5 +29,5 @@ project BasicsCfg {
         DoubleType;
         RealType;
         ObjectType;
-    } but (f|BasicsCfg::f.bindingTime >= BindingTime.runtimeMon)
+    } but (f|f.bindingTime >= BindingTime.runtimeMon)
 }
