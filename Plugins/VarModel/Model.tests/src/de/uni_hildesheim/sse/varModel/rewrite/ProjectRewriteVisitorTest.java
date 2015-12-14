@@ -567,9 +567,10 @@ public class ProjectRewriteVisitorTest {
             e.printStackTrace();
         }
         String freezeAsString = sWriter.toString();
-        System.out.println(freezeAsString);
-        Assert.assertFalse(freezeAsString.contains(p.getName() + IvmlKeyWords.NAMESPACE_SEPARATOR + itr.getName()));
-        Assert.assertTrue(freezeAsString.contains(itr.getName() + IvmlKeyWords.ATTRIBUTE_ACCESS + attr.getName()));
+        Assert.assertTrue("Annotation access in freeze block selector not handled correctly.",
+            freezeAsString.contains(itr.getName() + IvmlKeyWords.ATTRIBUTE_ACCESS + attr.getName()));
+        Assert.assertFalse("Invalid qualified name introduced to annotation access in freeze block selector.",
+            freezeAsString.contains(p.getName() + IvmlKeyWords.NAMESPACE_SEPARATOR + itr.getName()));
     }
 
     /**
