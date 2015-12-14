@@ -5,5 +5,5 @@
     va <- templates/test.vtl
 -> main(Configuration, FileArtifact) with (<config>, test1.txt)
     -> vilTemplateProcessor(VtlFileArtifact, Configuration, Artifact) with (templates/test.vtl, <config>, test1.txt, {}) = {test1.txt}
--> +(String, String) with (test::pString, myTable) = test::pStringmyTable
+-> +(String, Any) with (test::pString, myTable) = test::pStringmyTable
     -> vilTemplateProcessor(String, Configuration, Artifact) with (/init.sql, <config>, init1.sql, {}) = {init1.sql}

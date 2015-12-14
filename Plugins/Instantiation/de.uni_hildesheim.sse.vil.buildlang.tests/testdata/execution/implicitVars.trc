@@ -1,4 +1,4 @@
--> +(String, String) with (, /Test.vtl) = Test.vtl
+-> +(String, Any) with (, /Test.vtl) = Test.vtl
 path <- Test.vtl
 -> isEmpty(Collection) with (OTHERPROJECTS) = true
 empty <- true
