@@ -149,12 +149,14 @@ public class ModelCopy extends Task {
             Project p = ProjectUtilities.loadProject(projectName);
             
             if (BASICS_CONFIG.equals(p.getName())) {
+                System.out.println("Filter: " + p.getName());
                 ProjectCopyVisitor rewriter = new ProjectCopyVisitor(p, FilterType.NO_IMPORTS);
                 rewriter.addModelCopyModifier(new DeclarationNameFilter(new String[] {"IntegerType", "LongType",
                     "StringType", "BooleanType", "FloatType", "DoubleType", "RealType", "ObjectType"}));
                 p.accept(rewriter);
                 p = rewriter.getCopyiedProject();
             } else if (PIPELINES_CONFIG.equals(p.getName())) {
+                System.out.println("Filter: " + p.getName());
                 ProjectCopyVisitor rewriter = new ProjectCopyVisitor(p, FilterType.NO_IMPORTS);
                 rewriter.addImportModifier(new ImportNameFilter(new String[] {"PriorityPipCfg"}));
                 rewriter.addModelCopyModifier(new ModelElementFilter(Constraint.class));
