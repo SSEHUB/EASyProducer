@@ -3,6 +3,7 @@ package de.uni_hildesheim.sse.reasoning.drools;
 import java.util.ArrayList;
 import java.util.List;
 
+import de.uni_hildesheim.sse.model.cst.AttributeVariable;
 import de.uni_hildesheim.sse.model.cst.CSTSemanticException;
 import de.uni_hildesheim.sse.model.cst.CompoundAccess;
 import de.uni_hildesheim.sse.model.cst.CompoundInitializer;
@@ -299,10 +300,12 @@ public class DroolsImpliesEvaluator implements IConstraintTreeVisitor, IValueVis
         } 
     }
 
-
+    @Override
+    public void visitAnnotationVariable(AttributeVariable variable) {
+        // TODO check whether specific method is needed
+        visitVariable(variable);
+    }
     
-
-
     /**
      * Private method to write the constraint logic.
      * Note: the param name can be extracted from variable, but here it is being passed
@@ -1035,6 +1038,12 @@ public class DroolsImpliesEvaluator implements IConstraintTreeVisitor, IValueVis
                 
                 
             }
+        }
+
+        @Override
+        public void visitAnnotationVariable(AttributeVariable variable) {
+            // TODO check whether specific method is needed
+            visitVariable(variable);
         }
         
         /**

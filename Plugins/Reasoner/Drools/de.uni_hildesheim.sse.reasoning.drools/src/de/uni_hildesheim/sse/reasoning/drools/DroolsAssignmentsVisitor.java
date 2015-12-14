@@ -3,6 +3,7 @@ package de.uni_hildesheim.sse.reasoning.drools;
 import java.util.ArrayList;
 import java.util.List;
 
+import de.uni_hildesheim.sse.model.cst.AttributeVariable;
 import de.uni_hildesheim.sse.model.cst.CSTSemanticException;
 import de.uni_hildesheim.sse.model.cst.Comment;
 import de.uni_hildesheim.sse.model.cst.CompoundAccess;
@@ -452,6 +453,12 @@ public class DroolsAssignmentsVisitor implements IConstraintTreeVisitor, IValueV
         }
         
     }
+    
+    @Override
+    public void visitAnnotationVariable(AttributeVariable variable) {
+        // TODO check whether specific method is needed
+        visitVariable(variable);
+    }
 
     /**
      * Processing variable whose parent is a compound.
@@ -869,6 +876,12 @@ public class DroolsAssignmentsVisitor implements IConstraintTreeVisitor, IValueV
                 cHead += getDroolsType(variable.getVariable().getType());
                 
             }
+        }
+        
+        @Override
+        public void visitAnnotationVariable(AttributeVariable variable) {
+            // TODO check whether specific method is needed
+            visitVariable(variable);
         }
         
         /**

@@ -3,6 +3,7 @@ package de.uni_hildesheim.sse.reasoning.drools;
 import java.util.ArrayList;
 import java.util.List;
 
+import de.uni_hildesheim.sse.model.cst.AttributeVariable;
 import de.uni_hildesheim.sse.model.cst.CSTSemanticException;
 import de.uni_hildesheim.sse.model.cst.CompoundAccess;
 import de.uni_hildesheim.sse.model.cst.CompoundInitializer;
@@ -775,6 +776,12 @@ public class DroolsConstraintVisitor implements
             }
         }
     }
+    
+    @Override
+    public void visitAnnotationVariable(AttributeVariable variable) {
+        // TODO check whether specific method is needed
+        visitVariable(variable);
+    }
 
     /**
      * Method to process the variable being modified and related scenarios.
@@ -1438,6 +1445,12 @@ public class DroolsConstraintVisitor implements
                 
                 
             }
+        }
+        
+        @Override
+        public void visitAnnotationVariable(AttributeVariable variable) {
+            // TODO check whether specific method is needed
+            visitVariable(variable);
         }
         
         /**

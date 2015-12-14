@@ -4,6 +4,7 @@ package de.uni_hildesheim.sse.reasoning.drools;
 import java.util.ArrayList;
 import java.util.List;
 
+import de.uni_hildesheim.sse.model.cst.AttributeVariable;
 import de.uni_hildesheim.sse.model.cst.Comment;
 import de.uni_hildesheim.sse.model.cst.CompoundAccess;
 import de.uni_hildesheim.sse.model.cst.CompoundInitializer;
@@ -104,6 +105,12 @@ public class ConstraintChecker implements IConstraintTreeVisitor {
             operators.add(currentOperation);
             totalVariables++;
         }
+    }
+    
+    @Override
+    public void visitAnnotationVariable(AttributeVariable variable) {
+        // TODO check whether specific method is needed
+        visitVariable(variable);
     }
 
     @Override

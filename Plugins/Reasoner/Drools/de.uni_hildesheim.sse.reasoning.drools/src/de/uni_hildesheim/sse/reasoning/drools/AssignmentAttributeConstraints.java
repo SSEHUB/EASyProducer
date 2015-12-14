@@ -3,6 +3,7 @@ package de.uni_hildesheim.sse.reasoning.drools;
 import java.util.ArrayList;
 import java.util.List;
 
+import de.uni_hildesheim.sse.model.cst.AttributeVariable;
 import de.uni_hildesheim.sse.model.cst.CSTSemanticException;
 import de.uni_hildesheim.sse.model.cst.Comment;
 import de.uni_hildesheim.sse.model.cst.CompoundAccess;
@@ -379,6 +380,12 @@ public class AssignmentAttributeConstraints implements IConstraintTreeVisitor, I
             }
         }
         
+        @Override
+        public void visitAnnotationVariable(AttributeVariable variable) {
+            // TODO check whether specific method is needed
+            visitVariable(variable);
+        }
+        
         /**
          * Private method to get the drools type.
          * @param type Type.
@@ -598,6 +605,12 @@ public class AssignmentAttributeConstraints implements IConstraintTreeVisitor, I
     @Override
     public void visitSelf(Self self) {
         // TODO Auto-generated method stub
+    }
+
+    @Override
+    public void visitAnnotationVariable(AttributeVariable variable) {
+        // TODO check whether specific method is needed
+        visitVariable(variable);
     }
 
 }

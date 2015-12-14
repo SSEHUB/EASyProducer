@@ -13,6 +13,7 @@ import de.uni_hildesheim.sse.model.confModel.AssignmentState;
 import de.uni_hildesheim.sse.model.confModel.Configuration;
 import de.uni_hildesheim.sse.model.confModel.IConfigurationVisitor;
 import de.uni_hildesheim.sse.model.confModel.IDecisionVariable;
+import de.uni_hildesheim.sse.model.cst.AttributeVariable;
 import de.uni_hildesheim.sse.model.cst.CSTSemanticException;
 import de.uni_hildesheim.sse.model.cst.CompoundAccess;
 import de.uni_hildesheim.sse.model.cst.CompoundInitializer;
@@ -1201,6 +1202,13 @@ public class DroolsVisitor implements IModelVisitor,
         compoundAccessSlot = variable.getVariable().getName() + compoundAccessSlot;
         
     }
+    
+    @Override
+    public void visitAnnotationVariable(AttributeVariable variable) {
+        // TODO check whether specific method is needed
+        visitVariable(variable);
+    }
+    
     @Override
     public void visitParenthesis(Parenthesis parenthesis) {
         // TODO Auto-generated method stub
