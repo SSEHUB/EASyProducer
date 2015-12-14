@@ -161,6 +161,12 @@ public class ProjectRewriteVisitor extends AbstractProjectVisitor {
                         // Filtered Value was created
                         call = new OCLFeatureCall(call.getOperand(), call.getOperation(),
                             new ConstantValue(copy.getValue()));
+                        try {
+                            // Needed for setting the correct operation
+                            call.inferDatatype();
+                        } catch (CSTSemanticException e1) {
+                            EASyLoggerFactory.INSTANCE.getLogger(ProjectRewriteVisitor.class, Bundle.ID).exception(e1);
+                        }
                         constraint = new Constraint(constraint.getParent());
                         try {
                             constraint.setConsSyntax(call);
@@ -222,6 +228,12 @@ public class ProjectRewriteVisitor extends AbstractProjectVisitor {
                     CopyVisitor cstCopier = new CopyVisitor(declMapping);
                     freeze.getSelector().accept(cstCopier);
                     copiedSelector = cstCopier.getResult();
+                    try {
+                        // Needed for setting the correct operation
+                        copiedSelector.inferDatatype();
+                    } catch (CSTSemanticException e) {
+                        EASyLoggerFactory.INSTANCE.getLogger(ProjectRewriteVisitor.class, Bundle.ID).exception(e);
+                    }
                 }
                 
                 freeze = new FreezeBlock(copiedElements.toArray(new IFreezable[0]), copiedIterator, copiedSelector,
