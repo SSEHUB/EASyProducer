@@ -40,6 +40,7 @@ import de.uni_hildesheim.sse.model.varModel.ContainableModelElement;
 import de.uni_hildesheim.sse.model.varModel.DecisionVariableDeclaration;
 import de.uni_hildesheim.sse.model.varModel.FreezeBlock;
 import de.uni_hildesheim.sse.model.varModel.IFreezable;
+import de.uni_hildesheim.sse.model.varModel.IModelElement;
 import de.uni_hildesheim.sse.model.varModel.ModelElement;
 import de.uni_hildesheim.sse.model.varModel.OperationDefinition;
 import de.uni_hildesheim.sse.model.varModel.PartialEvaluationBlock;
@@ -239,9 +240,19 @@ public class ProjectRewriteVisitor extends AbstractProjectVisitor {
     private FreezeBlock adaptFreezeBlock(IFreezable[] frozenElements, DecisionVariableDeclaration orginalIterator,
         ConstraintSyntaxTree selectorCST, Project parent) {
         
-        DecisionVariableDeclaration copiedIterator = (null == orginalIterator) ? null
-            : new DecisionVariableDeclaration(orginalIterator.getName(), orginalIterator.getType(),
-                orginalIterator.getParent());
+        DecisionVariableDeclaration copiedIterator = null;
+        
+        if (null != orginalIterator) {
+            IModelElement originalParent = orginalIterator.getParent();
+            IModelElement copiedParent = originalParent;
+            
+            if (null != originalParent && originalParent instanceof Project) {
+                copiedParent = context.getTranslatedProject((Project) originalParent);
+            }
+            
+            copiedIterator = new DecisionVariableDeclaration(orginalIterator.getName(), orginalIterator.getType(),
+                copiedParent);
+        }
         
         // Replace iterator in selector constraint.
         ConstraintSyntaxTree copiedSelector = null;
