@@ -24,7 +24,7 @@ import de.uni_hildesheim.sse.model.varModel.ContainableModelElement;
 import de.uni_hildesheim.sse.model.varModel.Project;
 
 /**
- * Used as part of {@link ProjectCopyVisitor} to store translated Objects.
+ * Used as part of {@link ProjectRewriteVisitor} to store translated Objects.
  * @author El-Sharkawy
  *
  */

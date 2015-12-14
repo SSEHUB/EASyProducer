@@ -19,12 +19,12 @@ import de.uni_hildesheim.sse.model.varModel.ContainableModelElement;
 import de.uni_hildesheim.sse.model.varModel.rewrite.RewriteContext;
 
 /**
- * A {@link IModelCopyModifier} to specify that a certain sub class of {@link ContainableModelElement} should be
+ * A {@link IModelElementFilter} to specify that a certain sub class of {@link ContainableModelElement} should be
  * generally omitted.
  * @author El-Sharkawy
  *
  */
-public class ModelElementFilter implements IModelCopyModifier<ContainableModelElement> {
+public class ModelElementFilter implements IModelElementFilter<ContainableModelElement> {
 
     private Class<? extends ContainableModelElement> ommitingClass;
     

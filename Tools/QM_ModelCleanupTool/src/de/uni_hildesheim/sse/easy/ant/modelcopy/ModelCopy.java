@@ -27,8 +27,17 @@ import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.Task;
 
 import de.uni_hildesheim.sse.model.management.VarModel;
+import de.uni_hildesheim.sse.model.validation.IvmlValidationVisitor;
+import de.uni_hildesheim.sse.model.validation.ValidationMessage;
+import de.uni_hildesheim.sse.model.varModel.Constraint;
+import de.uni_hildesheim.sse.model.varModel.FreezeBlock;
 import de.uni_hildesheim.sse.model.varModel.Project;
 import de.uni_hildesheim.sse.model.varModel.ProjectImport;
+import de.uni_hildesheim.sse.model.varModel.filter.FilterType;
+import de.uni_hildesheim.sse.model.varModel.rewrite.ProjectCopyVisitor;
+import de.uni_hildesheim.sse.model.varModel.rewrite.modifier.DeclarationNameFilter;
+import de.uni_hildesheim.sse.model.varModel.rewrite.modifier.ImportNameFilter;
+import de.uni_hildesheim.sse.model.varModel.rewrite.modifier.ModelElementFilter;
 import de.uni_hildesheim.sse.utils.modelManagement.ModelManagementException;
 import de.uni_hildesheim.sse.utils.progress.ProgressObserver;
 
@@ -41,6 +50,8 @@ import de.uni_hildesheim.sse.utils.progress.ProgressObserver;
 public class ModelCopy extends Task {
     
     private static final String CONFIG_FILE_EXTENSION = "cfg.ivml";
+    private static final String BASICS_CONFIG = "BasicsCfg";
+    private static final String PIPELINES_CONFIG = "PipelinesCfg";
     private static final String REMOVEABLE_CONFIG_EXTENSION = "^.*_\\p{Digit}*" + CONFIG_FILE_EXTENSION + "$";
     
     private File sourceFolder;
@@ -123,7 +134,7 @@ public class ModelCopy extends Task {
     }
 
     /**
-     * Copies are IVML model. Configs will be cleaned.
+     * Copies the IVML model. Configs will be cleaned.
      * @param relativeFileName The path inside {@link #sourceFolder}.
      * @param destFolder The destination folder where to save the copy.
      * @throws ModelManagementException If IVML files could not be parsed
@@ -141,17 +152,38 @@ public class ModelCopy extends Task {
             
             String projectName = relativeFileName.substring(lastSeparator + 1, lastDot);
             Project p = ProjectUtilities.loadProject(projectName);
-            List<ProjectImport> imports = new ArrayList<ProjectImport>();
-            for (int i = 0; i < p.getImportsCount(); i++) {
-                ProjectImport projectImport = p.getImport(i);
-                String importName = projectImport.getName().toLowerCase();
-                if (!(importName + ".ivml").matches(REMOVEABLE_CONFIG_EXTENSION)) {
-                    imports.add(projectImport);
+            
+            if (BASICS_CONFIG.equals(p.getName())) {
+                // Clear Basics Config
+                System.out.println("Filter: " + p.getName());
+                ProjectCopyVisitor rewriter = new ProjectCopyVisitor(p, FilterType.NO_IMPORTS);
+                rewriter.addModelCopyModifier(new DeclarationNameFilter(new String[] {"IntegerType", "LongType",
+                    "StringType", "BooleanType", "FloatType", "DoubleType", "RealType", "ObjectType"}));
+                p.accept(rewriter);
+                p = rewriter.getCopyiedProject();
+            } else if (PIPELINES_CONFIG.equals(p.getName())) {
+                // Clear Pipelines Config
+                System.out.println("Filter: " + p.getName());
+                ProjectCopyVisitor rewriter = new ProjectCopyVisitor(p, FilterType.NO_IMPORTS);
+                rewriter.addImportModifier(new ImportNameFilter(new String[] {"PriorityPipCfg"}));
+                rewriter.addModelCopyModifier(new ModelElementFilter(Constraint.class));
+                rewriter.addModelCopyModifier(new ModelElementFilter(FreezeBlock.class));
+                p.accept(rewriter);
+                p = rewriter.getCopyiedProject();
+            } else {
+                // Clear all other configs
+                List<ProjectImport> imports = new ArrayList<ProjectImport>();
+                for (int i = 0; i < p.getImportsCount(); i++) {
+                    ProjectImport projectImport = p.getImport(i);
+                    String importName = projectImport.getName().toLowerCase();
+                    if (!(importName + ".ivml").matches(REMOVEABLE_CONFIG_EXTENSION)) {
+                        imports.add(projectImport);
+                    }
                 }
-            }
-            p.clear();
-            for (int i = 0; i < imports.size(); i++) {
-                p.addImport(imports.get(i));
+                p.clear();
+                for (int i = 0; i < imports.size(); i++) {
+                    p.addImport(imports.get(i));
+                }
             }
             ProjectUtilities.saveProject(destFolder, p);
         } else {
@@ -166,6 +198,7 @@ public class ModelCopy extends Task {
         System.out.println("Destination folder: " + destinationFolder.getAbsolutePath());
         System.out.println("Main model: " + mainProject);
         
+        // Setup
         boolean createFolder = false;
         if (destinationFolder.exists() && allowDestDeletion) {
             try {
@@ -183,6 +216,8 @@ public class ModelCopy extends Task {
             throw new BuildException("Destination folder \"" + destinationFolder.getAbsolutePath()
                 + "\" could not be created.");
         }
+        
+        // Copy and filter
         try {
             copy();
         } catch (Exception e) {
@@ -203,6 +238,33 @@ public class ModelCopy extends Task {
                 throw new BuildException("Unspecified error during copying models from \""
                     + sourceFolder.getAbsolutePath() + "\" to \"" + destinationFolder.getAbsolutePath() + "\". Cause: " + e.getMessage());
             }
+        }
+        
+        // Validate result
+        try {
+            VarModel.INSTANCE.locations().removeLocation(sourceFolder, ProgressObserver.NO_OBSERVER);
+            VarModel.INSTANCE.locations().addLocation(destinationFolder, ProgressObserver.NO_OBSERVER);
+            Project copiedProject = ProjectUtilities.loadProject(mainProject);
+            
+            IvmlValidationVisitor validator = new IvmlValidationVisitor();
+            copiedProject.accept(validator);
+            if (validator.getErrorCount() > 0) {
+                StringBuffer errMsg = new StringBuffer("Project \"");
+                errMsg.append(mainProject);
+                errMsg.append("\" was copied, but the result contains inconsitencies:");
+                for (int i = 0; i < validator.getMessageCount(); i++) {
+                    ValidationMessage msg = validator.getMessage(i);
+                    errMsg.append("\n - ");
+                    errMsg.append(msg.getStatus().name());
+                    errMsg.append(": ");
+                    errMsg.append(msg.getDescription());
+                }
+                throw new BuildException(errMsg.toString());
+            }
+        } catch (ModelManagementException e) {
+            throw new BuildException("Copied Project contains errors: " + e.getMessage());
+        } catch (IOException e) {
+            throw new BuildException("Copied Project contains IO errors: " + e.getMessage());
         }
     }
 }

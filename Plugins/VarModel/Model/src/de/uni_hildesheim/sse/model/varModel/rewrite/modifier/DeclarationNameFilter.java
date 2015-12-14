@@ -27,18 +27,31 @@ import de.uni_hildesheim.sse.model.varModel.rewrite.RewriteContext;
  * @author El-Sharkawy
  *
  */
-public class DeclarationNameFilter implements IModelCopyModifier<DecisionVariableDeclaration> {
+public class DeclarationNameFilter implements IModelElementFilter<DecisionVariableDeclaration> {
     
-    private Set<String> whitelist;
+    private Set<String> declarationNames;
+    private boolean blacklist;
     
     /**
-     * Default constructor of this class.
+     * Default constructor for a whitelist based filtering.
      * @param allowedNames A whitelist of allowed names, others will be deleted.
      */
     public DeclarationNameFilter(String[] allowedNames) {
-        whitelist = new HashSet<String>();
-        for (int i = 0; i < allowedNames.length; i++) {
-            whitelist.add(allowedNames[i]);
+        this(allowedNames, false);
+    }
+    
+    /**
+     * Constructor which can be used for white or black list based filtering.
+     * @param declarationNames Names which shall be filtered.
+     * @param blacklist <tt>true</tt> the given names will be filtered out and all others will be kept
+     * (blacklist filtering), <tt>false</tt> the given names will be kept and all others will be filtered out (whitelist
+     * filtering).
+     */
+    public DeclarationNameFilter(String[] declarationNames, boolean blacklist) {
+        this.blacklist = blacklist;
+        this.declarationNames = new HashSet<String>();
+        for (int i = 0; i < declarationNames.length; i++) {
+            this.declarationNames.add(declarationNames[i]);
         }
     }
 
@@ -49,7 +62,7 @@ public class DeclarationNameFilter implements IModelCopyModifier<DecisionVariabl
 
     @Override
     public ContainableModelElement handleModelElement(ContainableModelElement element, RewriteContext context) {
-        if (!whitelist.contains(element.getName())) {
+        if (!declarationNames.contains(element.getName()) ^ blacklist) {
             element = null;
         }
         

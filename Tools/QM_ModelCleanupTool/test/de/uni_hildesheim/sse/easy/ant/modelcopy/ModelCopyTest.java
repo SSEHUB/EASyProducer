@@ -20,44 +20,77 @@ import java.io.IOException;
 
 import org.apache.commons.io.FileUtils;
 import org.junit.Assert;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
-import de.uni_hildesheim.sse.easy.ant.modelcopy.ModelCopy;
-
 /**
- * Tests the {@link ModelCopy} class.
+ * Tests the {@link ModelCopy} class based on the QualiMaster model.
  * @author El-Sharkawy
  *
  */
 public class ModelCopyTest {
-
-    @Test
-    public void test() throws IOException {
-        // Input for testing
-        File destFolder = new File("model/copy");
-        File orgFolder = new File("model/origin");
-        String mainProject = "QM";
-
+    
+    // Input for testing
+    private final static File DESTINATION_FOLDER = new File("model/copy");
+    private final static File ORIGINAL_FOLDER = new File("model/origin");
+    private final static File COMPARISON_FOLDER = new File("model/expected");
+    private final static String MAIN_PROJECT = "QM";
+    
+    /**
+     * Copies the QualiMaster model and test precondition. The methods tests whether specific files are copied
+     * correctly. 
+     */
+    @BeforeClass
+    public static void setUpBeforeClass() {
         // Test precondition: Dest folder does not exist, org folder does exist 
-        if (destFolder.exists()) {
-            FileUtils.deleteDirectory(destFolder);
+        if (DESTINATION_FOLDER.exists()) {
+            try {
+                FileUtils.deleteDirectory(DESTINATION_FOLDER);
+            } catch (IOException e) {
+                Assert.fail("Could not cleanup destination directory \"" + DESTINATION_FOLDER.getAbsolutePath() + "\":"
+                    + e.getMessage());
+            }
         }
-        Assert.assertFalse("Destination folder \"" + destFolder.getAbsolutePath()
-            + "\"exists and could not be deleted.", destFolder.exists());
-        Assert.assertTrue("Original folder \"" + orgFolder.getAbsolutePath() + "\"does not exist.", orgFolder.exists());
-             
-        ModelCopy copy = new ModelCopy(orgFolder.getAbsolutePath(), destFolder.getAbsolutePath(), mainProject);
-        copy.execute();
+        Assert.assertFalse("Destination folder \"" + DESTINATION_FOLDER.getAbsolutePath()
+        + "\"exists and could not be deleted.", DESTINATION_FOLDER.exists());
+        Assert.assertTrue("Original folder \"" + ORIGINAL_FOLDER.getAbsolutePath() + "\"does not exist.", ORIGINAL_FOLDER.exists());
         
-        // Testing one sample:
+        ModelCopy copy = new ModelCopy(ORIGINAL_FOLDER.getAbsolutePath(), DESTINATION_FOLDER.getAbsolutePath(), MAIN_PROJECT);
+        copy.execute();        
+    }
+
+    /**
+     * Exact test that the PipliesCfg is filtered correctly.
+     * @throws IOException If the files could not be read.
+     */
+    @Test
+    public void testPipelinesCfg() throws IOException {      
         String sampleFile = "pipelines/PipelinesCfg.ivml";
-        File copiedFile = new File(destFolder, sampleFile);
-        File orgFile = new File(orgFolder, sampleFile);
-        Assert.assertTrue("Original file \"" + orgFile.getAbsolutePath() + "\" was deleted.", orgFile.exists());
+        File copiedFile = new File(DESTINATION_FOLDER, sampleFile);
+        File expectedFile = new File(COMPARISON_FOLDER, sampleFile);
+        Assert.assertTrue("Expected file \"" + expectedFile.getAbsolutePath() + "\" does not exist.",
+            expectedFile.exists());
         Assert.assertTrue("File \"" + copiedFile.getAbsolutePath() + "\" was not created.", copiedFile.exists());
-        String orgContents = FileUtils.readFileToString(orgFile).replace("\r", "").trim();
+        String expectedContents = FileUtils.readFileToString(expectedFile).replace("\r", "").trim();
         String copiedContents = FileUtils.readFileToString(copiedFile).replace("\r", "").trim();
-        Assert.assertNotEquals("Configuration file was not filtered", orgContents, copiedContents);
+        Assert.assertEquals("Configuration file was not filtered correctly.", expectedContents, copiedContents);
+    }
+    
+    /**
+     * Exact test that BasicCfg is filtered correctly.
+     * @throws IOException If the files could not be read.
+     */
+    @Test
+    public void testBasicCfg() throws IOException {
+        String sampleFile = "infrastructure/BasicsCfg.ivml";
+        File copiedFile = new File(DESTINATION_FOLDER, sampleFile);
+        File expectedFile = new File(COMPARISON_FOLDER, sampleFile);
+        Assert.assertTrue("Expected file \"" + expectedFile.getAbsolutePath() + "\" does not exist.",
+            expectedFile.exists());
+        Assert.assertTrue("File \"" + copiedFile.getAbsolutePath() + "\" was not created.", copiedFile.exists());
+        String expectedContents = FileUtils.readFileToString(expectedFile).replace("\r", "").trim();
+        String copiedContents = FileUtils.readFileToString(copiedFile).replace("\r", "").trim();
+        Assert.assertEquals("Configuration file was not filtered correctly.", expectedContents, copiedContents);
     }
 
 }

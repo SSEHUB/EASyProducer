@@ -26,7 +26,7 @@ import de.uni_hildesheim.sse.model.varModel.filter.DeclrationInConstraintFinder;
 import de.uni_hildesheim.sse.model.varModel.rewrite.RewriteContext;
 
 /**
- * A {@link IModelCopyModifier} to filter constraints, containing only frozen variables and constants.
+ * A {@link IModelElementFilter} to filter constraints, containing only frozen variables and constants.
  * @author El-Sharkawy
  *
  */
