@@ -1,4 +1,4 @@
 -> main(Configuration, Artifact) with (<config>, test.texts)
     test <- hello
     -> myMap(String) with (hello)
-        -> +(String, String) with (test , hello) = test hello
+        -> +(String, Any) with (test , hello) = test hello

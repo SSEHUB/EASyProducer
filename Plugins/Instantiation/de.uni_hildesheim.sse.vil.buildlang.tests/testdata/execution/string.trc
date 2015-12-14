@@ -1,7 +1,7 @@
 s1 <- test
 -> length(String) with (test) = 4
 i1 <- 4
--> +(String, String) with (test,  again) = test again
+-> +(String, Any) with (test,  again) = test again
 s2 <- test again
 -> ==(String, String) with (test, test again) = false
 b1 <- false

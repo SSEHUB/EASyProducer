@@ -18,18 +18,19 @@ public class PseudoString implements IVilType {
      * Represents the string concatenation operation.
      * 
      * @param s1 the first String to be considered
-     * @param s2 the second String to be considered
+     * @param s2 the second String (as object)to be considered
      * @return s1 + s2
      */
     @OperationMeta(name = Constants.ADDITION, opType = OperationType.INFIX)
-    public static String concat(String s1, String s2) {
+    public static String concat(String s1, Object s2) {
         String result;
+        String s2Tmp = null == s2 ? null : s2.toString();
         if (null == s1) {
-            result = s2;
+            result = s2Tmp;
         } else if (null == s2) {
             result = s1;
         } else {
-            result = s1 + s2;
+            result = s1 + s2Tmp;
         }
         return result;
     }

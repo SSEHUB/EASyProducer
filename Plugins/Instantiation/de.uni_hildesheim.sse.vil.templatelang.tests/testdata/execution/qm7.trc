@@ -13,25 +13,25 @@
                     inTuples <- {qm7::Family::input [0]}
                     outTuples <- {qm7::Family::output [0]}
                     name <- normalize
-                    -> +(String, String) with (normalize, input) = normalizeinput
+                    -> +(String, Any) with (normalize, input) = normalizeinput
                     -> processTuples(Tuples, mapOf(String, Tuple), String) with ({qm7::Family::input [0]}, {}, normalizeinput)
                         count <- 0
                         for t {
                             t <- qm7::Family::input [0]
                             -> +(Integer, Integer) with (0, 1) = 1
                             count <- 1
-                            -> +(String, String) with (normalizeinput, 1) = normalizeinput1
+                            -> +(String, Any) with (normalizeinput, 1) = normalizeinput1
                             name <- normalizeinput1
                             -> add(Map, String, Tuple) with ({{normalizeinput1, qm7::Family::input [0]}}, normalizeinput1, qm7::Family::input [0])
                         }
-                    -> +(String, String) with (normalize, output) = normalizeoutput
+                    -> +(String, Any) with (normalize, output) = normalizeoutput
                     -> processTuples(Tuples, mapOf(String, Tuple), String) with ({qm7::Family::output [0]}, {{normalizeinput1, qm7::Family::input [0]}}, normalizeoutput)
                         count <- 0
                         for t {
                             t <- qm7::Family::output [0]
                             -> +(Integer, Integer) with (0, 1) = 1
                             count <- 1
-                            -> +(String, String) with (normalizeoutput, 1) = normalizeoutput1
+                            -> +(String, Any) with (normalizeoutput, 1) = normalizeoutput1
                             name <- normalizeoutput1
                             -> add(Map, String, Tuple) with ({{normalizeinput1, qm7::Family::input [0]}, {normalizeoutput1, qm7::Family::output [0]}}, normalizeoutput1, qm7::Family::output [0])
                         }
@@ -45,25 +45,25 @@
                             inTuples <- {qm7::Family::input [0]}
                             outTuples <- {qm7::Family::output [0]}
                             name <- process
-                            -> +(String, String) with (process, input) = processinput
+                            -> +(String, Any) with (process, input) = processinput
                             -> processTuples(Tuples, mapOf(String, Tuple), String) with ({qm7::Family::input [0]}, {{normalizeinput1, qm7::Family::input [0]}, {normalizeoutput1, qm7::Family::output [0]}}, processinput)
                                 count <- 0
                                 for t {
                                     t <- qm7::Family::input [0]
                                     -> +(Integer, Integer) with (0, 1) = 1
                                     count <- 1
-                                    -> +(String, String) with (processinput, 1) = processinput1
+                                    -> +(String, Any) with (processinput, 1) = processinput1
                                     name <- processinput1
                                     -> add(Map, String, Tuple) with ({{normalizeinput1, qm7::Family::input [0]}, {normalizeoutput1, qm7::Family::output [0]}, {processinput1, qm7::Family::input [0]}}, processinput1, qm7::Family::input [0])
                                 }
-                            -> +(String, String) with (process, output) = processoutput
+                            -> +(String, Any) with (process, output) = processoutput
                             -> processTuples(Tuples, mapOf(String, Tuple), String) with ({qm7::Family::output [0]}, {{normalizeinput1, qm7::Family::input [0]}, {normalizeoutput1, qm7::Family::output [0]}, {processinput1, qm7::Family::input [0]}}, processoutput)
                                 count <- 0
                                 for t {
                                     t <- qm7::Family::output [0]
                                     -> +(Integer, Integer) with (0, 1) = 1
                                     count <- 1
-                                    -> +(String, String) with (processoutput, 1) = processoutput1
+                                    -> +(String, Any) with (processoutput, 1) = processoutput1
                                     name <- processoutput1
                                     -> add(Map, String, Tuple) with ({{normalizeinput1, qm7::Family::input [0]}, {normalizeoutput1, qm7::Family::output [0]}, {processinput1, qm7::Family::input [0]}, {processoutput1, qm7::Family::output [0]}}, processoutput1, qm7::Family::output [0])
                                 }
