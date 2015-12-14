@@ -60,20 +60,20 @@ public class ModelCopyTest {
     }
 
     /**
-     * Heuristic test whether the PipliesCfg was copied and filtered.
+     * Exact test that the PipliesCfg is filtered correctly.
      * @throws IOException If the files could not be read.
      */
     @Test
     public void testPipelinesCfg() throws IOException {      
-        // Testing one sample:
         String sampleFile = "pipelines/PipelinesCfg.ivml";
         File copiedFile = new File(DESTINATION_FOLDER, sampleFile);
-        File orgFile = new File(ORIGINAL_FOLDER, sampleFile);
-        Assert.assertTrue("Original file \"" + orgFile.getAbsolutePath() + "\" was deleted.", orgFile.exists());
+        File expectedFile = new File(COMPARISON_FOLDER, sampleFile);
+        Assert.assertTrue("Expected file \"" + expectedFile.getAbsolutePath() + "\" does not exist.",
+            expectedFile.exists());
         Assert.assertTrue("File \"" + copiedFile.getAbsolutePath() + "\" was not created.", copiedFile.exists());
-        String orgContents = FileUtils.readFileToString(orgFile).replace("\r", "").trim();
+        String expectedContents = FileUtils.readFileToString(expectedFile).replace("\r", "").trim();
         String copiedContents = FileUtils.readFileToString(copiedFile).replace("\r", "").trim();
-        Assert.assertNotEquals("Configuration file was not filtered", orgContents, copiedContents);
+        Assert.assertEquals("Configuration file was not filtered correctly.", expectedContents, copiedContents);
     }
     
     /**

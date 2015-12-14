@@ -17,9 +17,7 @@ package de.uni_hildesheim.sse.easy.ant.modelcopy;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.filefilter.TrueFileFilter;
@@ -27,11 +25,14 @@ import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.Task;
 
 import de.uni_hildesheim.sse.model.management.VarModel;
+import de.uni_hildesheim.sse.model.varModel.Constraint;
+import de.uni_hildesheim.sse.model.varModel.FreezeBlock;
 import de.uni_hildesheim.sse.model.varModel.Project;
-import de.uni_hildesheim.sse.model.varModel.ProjectImport;
 import de.uni_hildesheim.sse.model.varModel.filter.FilterType;
 import de.uni_hildesheim.sse.model.varModel.rewrite.ProjectCopyVisitor;
 import de.uni_hildesheim.sse.model.varModel.rewrite.modifier.DeclarationNameFilter;
+import de.uni_hildesheim.sse.model.varModel.rewrite.modifier.ImportNameFilter;
+import de.uni_hildesheim.sse.model.varModel.rewrite.modifier.ModelElementFilter;
 import de.uni_hildesheim.sse.utils.modelManagement.ModelManagementException;
 import de.uni_hildesheim.sse.utils.progress.ProgressObserver;
 
@@ -45,6 +46,7 @@ public class ModelCopy extends Task {
     
     private static final String CONFIG_FILE_EXTENSION = "cfg.ivml";
     private static final String BASICS_CONFIG = "BasicsCfg";
+    private static final String PIPELINES_CONFIG = "PipelinesCfg";
     private static final String REMOVEABLE_CONFIG_EXTENSION = "^.*_\\p{Digit}*" + CONFIG_FILE_EXTENSION + "$";
     
     private File sourceFolder;
@@ -152,19 +154,13 @@ public class ModelCopy extends Task {
                     "StringType", "BooleanType", "FloatType", "DoubleType", "RealType", "ObjectType"}));
                 p.accept(rewriter);
                 p = rewriter.getCopyiedProject();
-            } else {
-                List<ProjectImport> imports = new ArrayList<ProjectImport>();
-                for (int i = 0; i < p.getImportsCount(); i++) {
-                    ProjectImport projectImport = p.getImport(i);
-                    String importName = projectImport.getName().toLowerCase();
-                    if (!(importName + ".ivml").matches(REMOVEABLE_CONFIG_EXTENSION)) {
-                        imports.add(projectImport);
-                    }
-                }
-                p.clear();
-                for (int i = 0; i < imports.size(); i++) {
-                    p.addImport(imports.get(i));
-                }
+            } else if (PIPELINES_CONFIG.equals(p.getName())) {
+                ProjectCopyVisitor rewriter = new ProjectCopyVisitor(p, FilterType.NO_IMPORTS);
+                rewriter.addImportModifier(new ImportNameFilter(new String[] {"PriorityPipCfg"}));
+                rewriter.addModelCopyModifier(new ModelElementFilter(Constraint.class));
+                rewriter.addModelCopyModifier(new ModelElementFilter(FreezeBlock.class));
+                p.accept(rewriter);
+                p = rewriter.getCopyiedProject();
             }
             ProjectUtilities.saveProject(destFolder, p);
         } else {
