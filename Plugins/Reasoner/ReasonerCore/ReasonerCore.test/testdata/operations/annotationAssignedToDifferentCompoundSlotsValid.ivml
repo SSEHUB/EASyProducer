@@ -1,0 +1,19 @@
+project annotationAssignedToDifferentCompoundSlotsValid {
+
+    // Annotation for complete project	
+	enum BindingTime {compiletime, runtime};
+	annotate BindingTime bindingTime to annotationAssignedToDifferentCompoundSlotsValid;
+
+    // Compound, each slot has a different annotation value
+	compound Dimension {
+	  assign(bindingTime = BindingTime.compiletime) to { 
+        Integer width;
+    }
+	  assign(bindingTime = BindingTime.runtime) to { 
+        Integer heigth;
+    }
+	}
+
+    // Create instance (needed for reasoning)
+	Dimension dim;
+}

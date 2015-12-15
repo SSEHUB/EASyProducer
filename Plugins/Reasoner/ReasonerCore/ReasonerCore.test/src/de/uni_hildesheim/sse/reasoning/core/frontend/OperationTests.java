@@ -1151,4 +1151,14 @@ public abstract class OperationTests extends AbstractReasonerFrontendTest {
         performOpCheck("valueValidation22.ivml", true);
     }
     
+// ----------------------------------- Annotations -----------------------
+    
+    /**
+     * Tests whether different slots of a compound can be assigned to different annotations.
+     * @throws IOException in case of problems reading a model
+     */
+    @Test
+    public void testAnnotationsToDifferenCompoundSlotsValid() throws IOException {
+        performOpCheck("annotationAssignedToDifferentCompoundSlotsValid.ivml", true);
+    }
 }
