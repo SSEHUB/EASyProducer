@@ -445,6 +445,15 @@ public class ProjectRewriteVisitor extends AbstractProjectVisitor {
             if (null != parentProjects.peekFirst()) {
                 currentProject = parentProjects.removeFirst();
             }
+        } else {
+            // Collect removed elements
+            // TODO SE: Check behavior if two imports contain similiar elements but only one is removed.
+            Project removedProject = pImport.getResolved();
+            if (null != removedProject) {
+                DeletedElementsCollector collector = new DeletedElementsCollector(removedProject, FilterType.ALL,
+                    context);
+                removedProject.accept(collector);
+            }
         }
     }
 }
