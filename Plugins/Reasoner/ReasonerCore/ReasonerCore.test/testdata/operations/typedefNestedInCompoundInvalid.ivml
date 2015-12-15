@@ -1,0 +1,12 @@
+project typedefNestedInCompoundInvalid {
+
+  typedef PositiveInteger Integer with (PositiveInteger > 0);
+  compound Dimension {
+    PositiveInteger width;
+    PositiveInteger height;
+  }
+  
+  Dimension dim;
+
+  dim = {width = 0, height = 1200};
+}

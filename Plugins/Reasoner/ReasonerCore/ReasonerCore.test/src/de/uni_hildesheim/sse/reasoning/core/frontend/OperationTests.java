@@ -783,15 +783,97 @@ public abstract class OperationTests extends AbstractReasonerFrontendTest {
     public void testSequenceOperationsIsValid() throws IOException {
         performOpCheck("sequence.ivml", true);
     }
+
+ // ----------------------------------- Typedefs -----------------------
     
     /**
-     * Tests SequenceOf operations.
+     * Tests simple typedef operations (valid).
      * 
      * @throws IOException in case of problems reading a model
      */
     @Test
     public void testTypedefValid() throws IOException {
         performOpCheck("typedef.ivml", true);
+    }
+    
+    /**
+     * Tests typedef using another typedef (valid).
+     * 
+     * @throws IOException in case of problems reading a model
+     */
+    @Test
+    public void testTypedefOfTypedefValid() throws IOException {
+        performOpCheck("typedefOfTypedefValid.ivml", true);
+    }
+    
+    /**
+     * Tests typedef using another typedef (invalid).
+     * 
+     * @throws IOException in case of problems reading a model
+     */
+    @Test
+    public void testTypedefOfTypedefInvalid() throws IOException {
+        performOpCheck("typedefOfTypedefInvalid.ivml", false);
+    }
+    
+    /**
+     * Tests typedef nested inside a compound (valid).
+     * 
+     * @throws IOException in case of problems reading a model
+     */
+    @Test
+    public void testTypedefNestedInCompoundValid() throws IOException {
+        performOpCheck("typedefNestedInCompoundValid.ivml", true);
+    }
+    
+    /**
+     * Tests typedef nested inside a compound (invalid).
+     * 
+     * @throws IOException in case of problems reading a model
+     */
+    @Test
+    public void testTypedefNestedInCompoundInvalid() throws IOException {
+        performOpCheck("typedefNestedInCompoundInvalid.ivml", false);
+    }
+    
+    /**
+     * Tests typedef nested inside a set (valid).
+     * 
+     * @throws IOException in case of problems reading a model
+     */
+    @Test
+    public void testTypedefNestedInSetValid() throws IOException {
+        performOpCheck("typedefNestedInSetValid.ivml", true);
+    }
+    
+    /**
+     * Tests typedef nested inside a set (invalid).
+     * 
+     * @throws IOException in case of problems reading a model
+     */
+    @Test
+    public void testTypedefNestedInSetInvalid() throws IOException {
+        performOpCheck("typedefNestedInSetInvalid.ivml", false);
+    }
+    
+    /**
+     * Tests typedef nested inside a sequence (valid).
+     * 
+     * @throws IOException in case of problems reading a model
+     */
+    @Test
+    public void testTypedefNestedInSequenceValid() throws IOException {
+        performOpCheck("typedefNestedInSequenceValid.ivml", true);
+    }
+    
+    /**
+     * Tests typedef nested inside a sequence (invalid).
+     * 
+     * @throws IOException in case of problems reading a model
+     */
+    @Test
+    public void testTypedefNestedInSequenceInvalid() throws IOException {
+        performOpCheck("typedefNestedInSequenceInvalid.ivml", false);
     }
     
 // ----------------------------------- Value validation -----------------------

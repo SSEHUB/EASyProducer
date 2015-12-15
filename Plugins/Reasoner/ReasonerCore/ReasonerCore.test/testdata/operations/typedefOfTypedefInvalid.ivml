@@ -1,0 +1,11 @@
+project typedefOfTypedefInvalid {
+
+  typedef PositiveInteger Integer with (PositiveInteger > 0);
+  typedef PortNumber PositiveInteger with (PortNumber <= 65535);
+   
+  PositiveInteger posInt;
+  PortNumber port;
+ 
+  posInt = 2;
+  port = -1;
+}
