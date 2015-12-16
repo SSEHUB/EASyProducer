@@ -2,8 +2,6 @@ project PipelinesCfg {
 
 	import Basics;
     import Pipelines;
-	import FamiliesCfg;
-	import DataManagementCfg;
     import PriorityPipCfg;
 	import PipelineVar_1Cfg;
 	import PipelineVar_2Cfg;
