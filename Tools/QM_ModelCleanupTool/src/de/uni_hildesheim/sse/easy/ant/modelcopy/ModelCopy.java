@@ -36,7 +36,6 @@ import de.uni_hildesheim.sse.model.varModel.filter.FilterType;
 import de.uni_hildesheim.sse.model.varModel.rewrite.ProjectRewriteVisitor;
 import de.uni_hildesheim.sse.model.varModel.rewrite.modifier.DeclarationNameFilter;
 import de.uni_hildesheim.sse.model.varModel.rewrite.modifier.ImportNameFilter;
-import de.uni_hildesheim.sse.model.varModel.rewrite.modifier.ImportRegExNameFilter;
 import de.uni_hildesheim.sse.model.varModel.rewrite.modifier.ModelElementFilter;
 import de.uni_hildesheim.sse.utils.modelManagement.ModelManagementException;
 import de.uni_hildesheim.sse.utils.progress.ProgressObserver;
@@ -65,11 +64,14 @@ public class ModelCopy extends Task {
     private String mainProject;
     private boolean allowDestDeletion;
     
+    private ProjectRewriteVisitor rewriter;
+    
     /**
      * Constructor for the ant task.
      */
     public ModelCopy() {
         allowDestDeletion = false; // Only allowed during tests.
+        rewriter = null;
     }
     
     /**
@@ -84,6 +86,7 @@ public class ModelCopy extends Task {
         destinationFolder = new File(cpyfolder);
         this.mainProject = mainProject;
         allowDestDeletion = true;
+        rewriter = null;
     }
     
     /**
@@ -162,14 +165,14 @@ public class ModelCopy extends Task {
             
             if (BASICS_CONFIG.equals(p.getName())) {
                 // Clear Basics Config
-                ProjectRewriteVisitor rewriter = new ProjectRewriteVisitor(p, FilterType.NO_IMPORTS);
+                clearRewriter(p, FilterType.NO_IMPORTS);
                 rewriter.addModelCopyModifier(new DeclarationNameFilter(new String[] {"IntegerType", "LongType",
                     "StringType", "BooleanType", "FloatType", "DoubleType", "RealType", "ObjectType"}));
                 p.accept(rewriter);
                 p = rewriter.getCopyiedProject();
             } else if (PIPELINES_CONFIG.equals(p.getName())) {
                 // Clear Pipelines Config
-                ProjectRewriteVisitor rewriter = new ProjectRewriteVisitor(p, FilterType.NO_IMPORTS);
+                clearRewriter(p, FilterType.NO_IMPORTS);
                 rewriter.addImportModifier(new ImportNameFilter(new String[] {"Basics", "Pipelines", "FamiliesCfg",
                     "DataManagementCfg"}));
                 p.accept(rewriter);
@@ -184,9 +187,10 @@ public class ModelCopy extends Task {
                 p = processDefaultConfig(p);
             } else if (RECONFIGURABLE_HW_CONFIG.equals(p.getName())) {
                 p = processDefaultConfig(p);
-            } else if (INFRASTRUCTURE_CONFIG.equals(p.getName())) {
-                p = processDefaultConfig(p);
-                // FIXME SE: Remove already removed elements.
+//            } else if (INFRASTRUCTURE_CONFIG.equals(p.getName())) {
+//                p = processDefaultConfig(p);
+//                
+                // FIXME SE: Do not remove to much inside InfrastructureCfg
             } else {
                 // Clear all other configs
                 List<ProjectImport> imports = new ArrayList<ProjectImport>();
@@ -209,11 +213,19 @@ public class ModelCopy extends Task {
     }
 
     private Project processDefaultConfig(Project p) {
-        ProjectRewriteVisitor rewriter = new ProjectRewriteVisitor(p, FilterType.NO_IMPORTS);
+        clearRewriter(p, FilterType.NO_IMPORTS);
         rewriter.addModelCopyModifier(new ModelElementFilter(DecisionVariableDeclaration.class));
         p.accept(rewriter);
         p = rewriter.getCopyiedProject();
         return p;
+    }
+    
+    private void clearRewriter(Project project, FilterType filterType) {
+        if (null == rewriter) {
+            rewriter = new ProjectRewriteVisitor(project, filterType);
+        } else {
+            rewriter.reset(project, filterType);
+        }
     }
     
     @Override
