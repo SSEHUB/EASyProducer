@@ -1,0 +1,8 @@
+project HardwareCfg {
+
+    import Hardware;
+    machines = {};
+    freeze {
+        machines;
+    } but (f|f.bindingTime >= BindingTime.runtimeMon)
+}

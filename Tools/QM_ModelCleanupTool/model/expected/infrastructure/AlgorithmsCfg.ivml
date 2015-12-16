@@ -1,0 +1,12 @@
+project AlgorithmsCfg {
+
+    import ReconfigurableHardware;
+    import ReconfigurableHardwareCfg;
+    import Algorithms;
+    import BasicsCfg;
+    algorithms = {};
+    algorithms.bindingTime = BindingTime.compile;
+    freeze {
+        algorithms;
+    } but (f|f.bindingTime >= BindingTime.runtimeMon)
+}

@@ -29,12 +29,15 @@ import org.apache.tools.ant.Task;
 import de.uni_hildesheim.sse.model.management.VarModel;
 import de.uni_hildesheim.sse.model.validation.IvmlValidationVisitor;
 import de.uni_hildesheim.sse.model.validation.ValidationMessage;
+import de.uni_hildesheim.sse.model.varModel.DecisionVariableDeclaration;
 import de.uni_hildesheim.sse.model.varModel.Project;
 import de.uni_hildesheim.sse.model.varModel.ProjectImport;
 import de.uni_hildesheim.sse.model.varModel.filter.FilterType;
 import de.uni_hildesheim.sse.model.varModel.rewrite.ProjectRewriteVisitor;
 import de.uni_hildesheim.sse.model.varModel.rewrite.modifier.DeclarationNameFilter;
 import de.uni_hildesheim.sse.model.varModel.rewrite.modifier.ImportNameFilter;
+import de.uni_hildesheim.sse.model.varModel.rewrite.modifier.ImportRegExNameFilter;
+import de.uni_hildesheim.sse.model.varModel.rewrite.modifier.ModelElementFilter;
 import de.uni_hildesheim.sse.utils.modelManagement.ModelManagementException;
 import de.uni_hildesheim.sse.utils.progress.ProgressObserver;
 
@@ -49,6 +52,12 @@ public class ModelCopy extends Task {
     private static final String CONFIG_FILE_EXTENSION = "cfg.ivml";
     private static final String BASICS_CONFIG = "BasicsCfg";
     private static final String PIPELINES_CONFIG = "PipelinesCfg";
+    private static final String ALGORITHMS_CONFIG = "AlgorithmsCfg";
+    private static final String DATAMGT_CONFIG = "DataManagementCfg";
+    private static final String FAMILIES_CONFIG = "FamiliesCfg";
+    private static final String HARDWARE_CONFIG = "HardwareCfg";
+    private static final String INFRASTRUCTURE_CONFIG = "InfrastructureCfg";
+    private static final String RECONFIGURABLE_HW_CONFIG = "ReconfigurableHardwareCfg";
     private static final String REMOVEABLE_CONFIG_EXTENSION = "^.*(_\\p{Digit}*|prioritypip)" + CONFIG_FILE_EXTENSION + "$";
     
     private File sourceFolder;
@@ -163,10 +172,21 @@ public class ModelCopy extends Task {
                 ProjectRewriteVisitor rewriter = new ProjectRewriteVisitor(p, FilterType.NO_IMPORTS);
                 rewriter.addImportModifier(new ImportNameFilter(new String[] {"Basics", "Pipelines", "FamiliesCfg",
                     "DataManagementCfg"}));
-//                rewriter.addModelCopyModifier(new ModelElementFilter(Constraint.class));
-//                rewriter.addModelCopyModifier(new ModelElementFilter(FreezeBlock.class));
                 p.accept(rewriter);
                 p = rewriter.getCopyiedProject();
+            } else if (ALGORITHMS_CONFIG.equals(p.getName())) {
+                p = processDefaultConfig(p);
+            } else if (DATAMGT_CONFIG.equals(p.getName())) {
+                p = processDefaultConfig(p);
+            } else if (FAMILIES_CONFIG.equals(p.getName())) {
+                p = processDefaultConfig(p);
+            } else if (HARDWARE_CONFIG.equals(p.getName())) {
+                p = processDefaultConfig(p);
+            } else if (RECONFIGURABLE_HW_CONFIG.equals(p.getName())) {
+                p = processDefaultConfig(p);
+            } else if (INFRASTRUCTURE_CONFIG.equals(p.getName())) {
+                p = processDefaultConfig(p);
+                // FIXME SE: Remove already removed elements.
             } else {
                 // Clear all other configs
                 List<ProjectImport> imports = new ArrayList<ProjectImport>();
@@ -186,6 +206,14 @@ public class ModelCopy extends Task {
         } else {
             System.out.println("Ommiting: " + relativeFileName);
         }
+    }
+
+    private Project processDefaultConfig(Project p) {
+        ProjectRewriteVisitor rewriter = new ProjectRewriteVisitor(p, FilterType.NO_IMPORTS);
+        rewriter.addModelCopyModifier(new ModelElementFilter(DecisionVariableDeclaration.class));
+        p.accept(rewriter);
+        p = rewriter.getCopyiedProject();
+        return p;
     }
     
     @Override

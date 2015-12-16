@@ -1,0 +1,8 @@
+project ReconfigurableHardwareCfg {
+
+    import ReconfigurableHardware;
+	clusters = {};
+	freeze {
+		clusters;
+	} but (f|f.bindingTime >= BindingTime.runtimeMon)
+}

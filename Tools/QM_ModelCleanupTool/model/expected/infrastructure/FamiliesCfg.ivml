@@ -1,0 +1,12 @@
+project FamiliesCfg {
+
+    import ReconfigurableHardware;
+    import Families;
+    import AlgorithmsCfg;
+    import BasicsCfg;
+    families = {};
+    families.bindingTime = BindingTime.compile;
+    freeze {
+        families;
+    } but (f|f.bindingTime >= BindingTime.runtimeMon)
+}

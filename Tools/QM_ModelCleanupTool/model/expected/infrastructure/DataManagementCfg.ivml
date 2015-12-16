@@ -1,0 +1,16 @@
+project DataManagementCfg {
+
+    import DataManagement;
+    import BasicsCfg;
+    dataSources = {};
+    dataSources.bindingTime = BindingTime.compile;
+    dataSinks = {};
+    dataSinks.bindingTime = BindingTime.compile;
+    persistentDataElements = {};
+    persistentDataElements.bindingTime = BindingTime.compile;
+    freeze {
+        dataSources;
+        dataSinks;
+        persistentDataElements;
+    } but (f|f.bindingTime >= BindingTime.runtimeMon)
+}
