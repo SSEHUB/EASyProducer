@@ -132,12 +132,12 @@ public class ProjectRewriteVisitor extends AbstractProjectVisitor {
     
     @Override
     public void visitDecisionVariableDeclaration(DecisionVariableDeclaration decl) {
-        createCopy(decl);
+        addCopiedElement(filter(decl));
     }
 
     @Override
     public void visitAttribute(Attribute attribute) {
-        createCopy(attribute);
+        addCopiedElement(filter(attribute));
     }
 
     @Override
@@ -183,7 +183,7 @@ public class ProjectRewriteVisitor extends AbstractProjectVisitor {
                 }
             }
             if (null != constraint) {
-                createCopy(constraint);
+                addCopiedElement(filter(constraint));
             }
         } else {
             context.elementWasRemoved(constraint);
@@ -192,39 +192,44 @@ public class ProjectRewriteVisitor extends AbstractProjectVisitor {
 
     @Override
     public void visitFreezeBlock(FreezeBlock freeze) {
-        // Determine which elements of the block still exist.
-        ArrayList<IFreezable> copiedElements = new ArrayList<IFreezable>();
-        for (int i = 0, n = freeze.getFreezableCount(); i < n; i++) {
-            IFreezable frozenElement = freeze.getFreezable(i);
-            if (frozenElement instanceof DecisionVariableDeclaration) {
-                DecisionVariableDeclaration frozenElementDecl = (DecisionVariableDeclaration) frozenElement;
-                
-                // Filter removed elements
-                if (!context.elementWasRemoved(frozenElementDecl)) {
-                    copiedElements.add(frozenElement);
+        // First check whether the freezeblock shall be filtered
+        FreezeBlock copiedfreeze = (FreezeBlock) filter(freeze);
+        
+        if (null != copiedfreeze) {
+            // Determine which elements of the block still exist.
+            ArrayList<IFreezable> copiedElements = new ArrayList<IFreezable>();
+            for (int i = 0, n = copiedfreeze.getFreezableCount(); i < n; i++) {
+                IFreezable frozenElement = copiedfreeze.getFreezable(i);
+                if (frozenElement instanceof DecisionVariableDeclaration) {
+                    DecisionVariableDeclaration frozenElementDecl = (DecisionVariableDeclaration) frozenElement;
+                    
+                    // Filter removed elements
+                    if (!context.elementWasRemoved(frozenElementDecl)) {
+                        copiedElements.add(frozenElement);
+                    }
                 }
+            }
+            
+            if (copiedElements.isEmpty()) {
+                // No more elements to freeze, remove complete freeze block
+                context.removeElement(freeze);
+            } else {
+                DecisionVariableDeclaration orginalIterator = copiedfreeze.getIter();
+                ConstraintSyntaxTree selectorCST = copiedfreeze.getSelector();
+                IFreezable[] frozenElements = copiedElements.toArray(new IFreezable[0]);
+                
+                /* 
+                 * Create copy with filtered elements.
+                 * Even if no elements where filtered, the block must be recreated to adjust the selector.
+                 * Otherwise the selector maybe invalid (or not parseable at all)
+                 */
+                copiedfreeze = adaptFreezeBlock(frozenElements, orginalIterator, selectorCST,
+                    (Project) freeze.getParent());
             }
         }
         
-        if (copiedElements.isEmpty()) {
-            // No more elements to freeze, remove complete freeze block
-            context.removeElement(freeze);
-            freeze = null;
-        } else {
-            DecisionVariableDeclaration orginalIterator = freeze.getIter();
-            ConstraintSyntaxTree selectorCST = freeze.getSelector();
-            IFreezable[] frozenElements = copiedElements.toArray(new IFreezable[0]);
-            
-            /* 
-             * Create copy with filtered elements.
-             * Even if no elements where filtered, the block must be recreated to adjust the selector.
-             * Otherwise the selector maybe invalid (or not parseable at all)
-             */
-            freeze = adaptFreezeBlock(frozenElements, orginalIterator, selectorCST, (Project) freeze.getParent());
-        }
-        
-        if (null != freeze) { 
-            createCopy(freeze);
+        if (null != copiedfreeze) { 
+            addCopiedElement(copiedfreeze);
         }
     }
 
@@ -277,81 +282,87 @@ public class ProjectRewriteVisitor extends AbstractProjectVisitor {
 
     @Override
     public void visitOperationDefinition(OperationDefinition opdef) {
-        createCopy(opdef);
+        addCopiedElement(filter(opdef));
     }
 
     @Override
     public void visitPartialEvaluationBlock(PartialEvaluationBlock block) {
-        createCopy(block);
+        addCopiedElement(filter(block));
     }
 
     @Override
     public void visitProjectInterface(ProjectInterface iface) {
-        createCopy(iface);
+        addCopiedElement(filter(iface));
     }
 
     @Override
     public void visitComment(Comment comment) {
-        createCopy(comment);
+        addCopiedElement(filter(comment));
     }
 
     @Override
     public void visitAttributeAssignment(AttributeAssignment assignment) {
-        createCopy(assignment);
+        addCopiedElement(filter(assignment));
     }
 
     @Override
     public void visitCompoundAccessStatement(CompoundAccessStatement access) {
-        createCopy(access);
+        addCopiedElement(filter(access));
     }
 
     @Override
     public void visitEnum(Enum eenum) {
-        createCopy(eenum);
+        addCopiedElement(filter(eenum));
     }
 
     @Override
     public void visitOrderedEnum(OrderedEnum eenum) {
-        createCopy(eenum);
+        addCopiedElement(filter(eenum));
     }
 
     @Override
     public void visitCompound(Compound compound) {
-        createCopy(compound);
+        addCopiedElement(filter(compound));
     }
 
     @Override
     public void visitDerivedDatatype(DerivedDatatype datatype) {
-        createCopy(datatype);
+        addCopiedElement(filter(datatype));
     }
 
     @Override
     public void visitEnumLiteral(EnumLiteral literal) {
-        // TODO
+        // Not needed
     }
 
     @Override
     public void visitReference(Reference reference) {
-        createCopy(reference);
+        addCopiedElement(filter(reference));
     }
 
     @Override
     public void visitSequence(Sequence sequence) {
-        createCopy(sequence);
+        addCopiedElement(filter(sequence));
     }
 
     @Override
     public void visitSet(Set set) {
-        createCopy(set);
+        addCopiedElement(filter(set));
     }
 
     /**
-     * Method for copying/modifying the original {@link ContainableModelElement} into the copied {@link Project} while
-     * using the {@link IModelElementFilter}. If none is specified for the given element, the element will be copied
-     * without any modification.
-     * @param original A {@link ContainableModelElement} of the {@link #currentProject} to be copied (and modified).
+     * Method for filtering (and modifying) the original {@link ContainableModelElement} 
+     * using the {@link IModelElementFilter}. If none is specified for the given element type, the element will be
+     * returned without any modification.
+     * The returned element must be added to the {@link #currentProject} through the
+     * {@link #addCopiedElement(ContainableModelElement)} method. This methods are splitted into two methods,
+     * to enable further processing between the filtering and the add method,
+     * i.e., adapting to the {@link #currentProject}.
+     * @param original A {@link ContainableModelElement} of the {@link #currentProject} to be filtered (and modified).
+     * @return The modified instance (maybe the same instance) or <tt>null</tt> if it was completely filtered.
+     * @see #addCopiedElement(ContainableModelElement)
      */
-    private void createCopy(ContainableModelElement original) {
+    private ContainableModelElement filter(ContainableModelElement original) {
         ContainableModelElement copy = original;
         List<IModelElementFilter<?>> modifierList = modifiers.get(original.getClass());
         if (null != modifierList) {
@@ -361,6 +372,20 @@ public class ProjectRewriteVisitor extends AbstractProjectVisitor {
             }
         }
         
+        if (null == copy) {
+            // Mark that the element was completely removed.
+            context.removeElement(original);
+        }
+        
+        return copy;
+    }
+    
+    /**
+     * Adds a modified and filtered element to the {@link #currentProject}, part of the
+     * {@link #filter(ContainableModelElement)} method.
+     * @param copy The copied instance, maybe <tt>null</tt> if filtered completely.
+     */
+    private void addCopiedElement(ContainableModelElement copy) {
         if (null != copy) {
             /*
              * Parent must be adjusted to the new parent, otherwise the resulting project would not be valid.
@@ -369,9 +394,6 @@ public class ProjectRewriteVisitor extends AbstractProjectVisitor {
              */
             copy.setParent(currentProject);
             currentProject.add(copy);
-        } else {
-            // Mark that the element was completely removed.
-            context.removeElement(original);
         }
     }
     
@@ -389,12 +411,15 @@ public class ProjectRewriteVisitor extends AbstractProjectVisitor {
         context.storeTranslatedProject(project, currentProject);
         super.visitProject(project);
         
-        if (project == getStartingProject() && context.elementesWereRemoved()) {
-            /*
-             * Elements where removed start filtering again, maybe there exist some elements pointing
-             * to the removed elements.
-             */
-            revisit(project);
+        if (project == getStartingProject()) {
+            context.removeElementsOfRemovedImports();
+            if (context.elementesWereRemoved()) {
+                /*
+                 * Elements where removed start filtering again, maybe there exist some elements pointing
+                 * to the removed elements.
+                 */
+                revisit(project);
+            }
         }
     }
 
@@ -447,7 +472,7 @@ public class ProjectRewriteVisitor extends AbstractProjectVisitor {
             }
         } else {
             // Collect removed elements
-            // TODO SE: Check behavior if two imports contain similiar elements but only one is removed.
+            // TODO SE: Check behavior if two imports contain similar elements but only one is removed.
             Project removedProject = pImport.getResolved();
             if (null != removedProject) {
                 DeletedElementsCollector collector = new DeletedElementsCollector(removedProject, FilterType.ALL,

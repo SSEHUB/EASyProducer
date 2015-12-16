@@ -54,6 +54,7 @@ import de.uni_hildesheim.sse.model.varModel.rewrite.modifier.DeclarationNameFilt
 import de.uni_hildesheim.sse.model.varModel.rewrite.modifier.FrozenConstraintVarFilter;
 import de.uni_hildesheim.sse.model.varModel.rewrite.modifier.FrozenConstraintsFilter;
 import de.uni_hildesheim.sse.model.varModel.rewrite.modifier.FrozenTypeDefResolver;
+import de.uni_hildesheim.sse.model.varModel.rewrite.modifier.ImportRegExNameFilter;
 import de.uni_hildesheim.sse.model.varModel.rewrite.modifier.ModelElementFilter;
 import de.uni_hildesheim.sse.model.varModel.values.ContainerValue;
 import de.uni_hildesheim.sse.model.varModel.values.Value;
@@ -267,6 +268,7 @@ public class ProjectRewriteVisitorTest {
         // Test first import
         assertProjectImport(importedProject1, importedCopy);
     }
+    
     /**
      * Tests whether imports will be copied correctly.
      * @throws ModelManagementException Must not occur,
@@ -305,6 +307,70 @@ public class ProjectRewriteVisitorTest {
         Project importedCopy = assertProjectImport(p, copy);
         assertProjectContainment(copy, constraint, true, 1);
         assertProjectContainment(importedCopy, decl, true, 1);
+    }
+    
+    /**
+     * Tests whether elements declared inside a removed import are also resolved correctly outside of the import.
+     * @throws ModelManagementException Must not occur,
+     * otherwise is the {@link ProjectImport#setResolved(Project)} broken.
+     * @throws ValueDoesNotMatchTypeException Must not occur, otherwise the {@link ValueFactory} or
+     * {@link de.uni_hildesheim.sse.model.varModel.AbstractVariable#setValue(String)} are broken.
+     * @throws CSTSemanticException Must not occur, otherwise
+     * {@link Constraint#setConsSyntax(de.uni_hildesheim.sse.model.cst.ConstraintSyntaxTree)} is broken.
+     */
+    @Test
+    public void testRemoveLinksToElementsOfRemovedImports() throws ValueDoesNotMatchTypeException, CSTSemanticException,
+        ModelManagementException {
+        
+        // Create first imported project with a declaration
+        Project importedProject = new Project("importedProject");
+        ProjectImport pImport1 = new ProjectImport(importedProject.getName());
+        pImport1.setResolved(importedProject);
+        DecisionVariableDeclaration declImported = new DecisionVariableDeclaration("declImported", IntegerType.TYPE,
+            importedProject);
+        importedProject.add(declImported);
+        
+        // Create main project with the import, a declaration and two constraints (one using to imported element)
+        Project p = new Project("mainTestProjectResolveImports");
+        p.addImport(pImport1);
+        DecisionVariableDeclaration declTop = new DecisionVariableDeclaration("declTop", IntegerType.TYPE, p);
+        p.add(declTop);
+        
+        // Constraint using the imported declaration (should be removed together with import)
+        Constraint constraintToBeRemoved = new Constraint(p);
+        Variable varTop = new Variable(declTop);
+        Variable varImported = new Variable(declImported);
+        OCLFeatureCall comparison1 = new OCLFeatureCall(varTop, OclKeyWords.GREATER, varImported);
+        constraintToBeRemoved.setConsSyntax(comparison1);
+        p.add(constraintToBeRemoved);
+        
+        // Constraint using only declaration of top project (should not be removed)
+        Constraint constraintToBeKept = new Constraint(p);
+        OCLFeatureCall comparison2 = new OCLFeatureCall(varTop, OclKeyWords.GREATER,
+            new ConstantValue(ValueFactory.createValue(declTop.getType(), 42)));
+        constraintToBeKept.setConsSyntax(comparison2);
+        p.add(constraintToBeKept);
+        
+        // Cycling import: Elements of the main project must not be removed
+        ProjectImport cyclingImport = new ProjectImport(p.getName());
+        cyclingImport.setResolved(p);
+        importedProject.addImport(cyclingImport);
+        
+        // Original project should be valid before using it for testing
+        ProjectTestUtilities.validateProject(p);
+        
+        // Create copy
+        ProjectRewriteVisitor rewriter = new ProjectRewriteVisitor(p, FilterType.ALL);
+        rewriter.addImportModifier(new ImportRegExNameFilter("^Not a valid name to filter all Imports$", true));
+        p.accept(rewriter);
+        Project copy = rewriter.getCopyiedProject();
+        ProjectTestUtilities.validateProject(copy);
+        
+        // Test main Project and its import
+        Assert.assertEquals("Error: Copied project must not contain any imports.", 0, copy.getImportsCount());
+        assertProjectContainment(copy, declTop, true, 2);
+        assertProjectContainment(copy, constraintToBeKept, true, 2);
+        assertProjectContainment(copy, constraintToBeRemoved, false, 2);
     }
     
     /**

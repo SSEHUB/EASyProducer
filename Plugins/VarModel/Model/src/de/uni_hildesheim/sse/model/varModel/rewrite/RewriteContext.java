@@ -15,13 +15,16 @@
  */
 package de.uni_hildesheim.sse.model.varModel.rewrite;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
 import de.uni_hildesheim.sse.model.varModel.ContainableModelElement;
 import de.uni_hildesheim.sse.model.varModel.Project;
+import de.uni_hildesheim.sse.utils.modelManagement.Version;
 
 /**
  * Used as part of {@link ProjectRewriteVisitor} to store translated Objects.
@@ -31,7 +34,17 @@ import de.uni_hildesheim.sse.model.varModel.Project;
 public class RewriteContext {
     
     private Map<Project, Project> translatedProjects;
+    /**
+     * Set of identifiers (name + version) of projects which will be kept. Needed for removal of elements, which belong
+     * to a removed import. A string is used instead of projects to simplify comparison if references change...
+     */
+    private Set<String> projectQualifier;
     private Map<Class<?>, Set<ContainableModelElement>> removedElements;
+    /**
+     * Elements of a removed import. As long as it is unclear whether another project is till importing this project,
+     * the elements cannot be removed. At the end of visitation, this map can be used to cleanup the main project.
+     */
+    private Map<String, List<ContainableModelElement>> elementsOfRemovedImports;
     private boolean elementsWereRemoved;
     
     /**
@@ -40,6 +53,8 @@ public class RewriteContext {
     protected RewriteContext() {
         translatedProjects = new HashMap<Project, Project>();
         removedElements = new HashMap<Class<?>, Set<ContainableModelElement>>();
+        elementsOfRemovedImports = new HashMap<String, List<ContainableModelElement>>();
+        projectQualifier = new HashSet<String>();
         elementsWereRemoved = false;
     }
 
@@ -49,9 +64,24 @@ public class RewriteContext {
      * @param translatedProject The translated copy of the first parameter.
      */
     void storeTranslatedProject(Project oldProject, Project translatedProject) {
+        // Project will be translated -> it will be kept
+        String qName = generateQualifiedName(oldProject);
+        projectQualifier.add(qName);
+        
+        // Store relation between original and copy
         translatedProjects.put(oldProject, translatedProject);
-        // Also store reference to itself (if already translated project is returned somewhere.
+        // Also store reference to itself (if already translated project is returned somewhere).
         translatedProjects.put(translatedProject, translatedProject);
+    }
+
+    /**
+     * Returns the qualified name of a project as unique identifier for comparison whether the project was deleted.
+     * @param project The project for which the qualified name shall be generated.
+     * @return projectName[+Version].
+     */
+    private String generateQualifiedName(Project project) {
+        Version v = project.getVersion();
+        return (null == v) ? project.getName() : project.getName() + "+" + v.getVersion();
     }
     
     /**
@@ -119,5 +149,49 @@ public class RewriteContext {
      */
     void clear() {
         elementsWereRemoved = false;
+        elementsOfRemovedImports.clear();
+    }
+    
+    /**
+     * Tests whether the project is still part of the main project (via an import).
+     * @param project The project to test
+     * @return <tt>true</tt>project is still part of the main project, <b><tt>false</tt></b> it is unclear.
+     */
+    public boolean projectWasNotRemoved(Project project) {
+        String qName = generateQualifiedName(project);
+        return projectQualifier.contains(qName);
+    }
+    
+    /**
+     * Marks an element of an imported project for removal if the related
+     * {@link de.uni_hildesheim.sse.model.varModel.ProjectImport} was deleted.
+     * @param declaringProject The project were the element was created.
+     * @param nestedElement The element itself.
+     */
+    void markForImportRemoval(Project declaringProject, ContainableModelElement nestedElement) {
+        String qName = generateQualifiedName(declaringProject);
+        List<ContainableModelElement> elementsOfProject = elementsOfRemovedImports.get(qName);
+        if (null == elementsOfProject) {
+            elementsOfProject = new ArrayList<ContainableModelElement>();
+            elementsOfRemovedImports.put(qName, elementsOfProject);
+        }
+        elementsOfProject.add(nestedElement);
+    }
+    
+    /**
+     * Removes elements of removed {@link de.uni_hildesheim.sse.model.varModel.ProjectImport},
+     * must be called after the {@link ProjectRewriteVisitor} is finished with a complete visitation iteration
+     * and before {@link #clear()}.
+     */
+    void removeElementsOfRemovedImports() {
+        for (String qName : elementsOfRemovedImports.keySet()) {
+            List<ContainableModelElement> elementsOfProject = elementsOfRemovedImports.get(qName);
+            // Import was removed, if qualifier is not registered after complete visitation
+            if (!projectQualifier.contains(qName) && null != elementsOfProject) {
+                for (int i = 0, n = elementsOfProject.size(); i < n; i++) {
+                    removeElement(elementsOfProject.get(i));
+                }
+            }
+        }
     }
 }

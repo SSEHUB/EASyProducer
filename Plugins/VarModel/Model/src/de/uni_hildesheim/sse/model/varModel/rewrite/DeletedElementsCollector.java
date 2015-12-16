@@ -15,6 +15,9 @@
  */
 package de.uni_hildesheim.sse.model.varModel.rewrite;
 
+import java.util.ArrayDeque;
+import java.util.Deque;
+
 import de.uni_hildesheim.sse.model.varModel.AbstractProjectVisitor;
 import de.uni_hildesheim.sse.model.varModel.Attribute;
 import de.uni_hildesheim.sse.model.varModel.AttributeAssignment;
@@ -26,6 +29,7 @@ import de.uni_hildesheim.sse.model.varModel.FreezeBlock;
 import de.uni_hildesheim.sse.model.varModel.OperationDefinition;
 import de.uni_hildesheim.sse.model.varModel.PartialEvaluationBlock;
 import de.uni_hildesheim.sse.model.varModel.Project;
+import de.uni_hildesheim.sse.model.varModel.ProjectImport;
 import de.uni_hildesheim.sse.model.varModel.ProjectInterface;
 import de.uni_hildesheim.sse.model.varModel.datatypes.Compound;
 import de.uni_hildesheim.sse.model.varModel.datatypes.DerivedDatatype;
@@ -45,6 +49,7 @@ import de.uni_hildesheim.sse.model.varModel.filter.FilterType;
 class DeletedElementsCollector extends AbstractProjectVisitor {
 
     private RewriteContext context;
+    private Deque<Project> parentProjects;
     
     /**
      * Single constructor of this class.
@@ -55,51 +60,53 @@ class DeletedElementsCollector extends AbstractProjectVisitor {
     DeletedElementsCollector(Project originProject, FilterType filterType, RewriteContext context) {
         super(originProject, filterType);
         this.context = context;
+        parentProjects = new ArrayDeque<Project>();
+        parentProjects.addFirst(originProject);
     }
 
     @Override
     public void visitDecisionVariableDeclaration(DecisionVariableDeclaration decl) {
-        context.elementWasRemoved(decl);
+        context.markForImportRemoval(parentProjects.peekFirst(), decl);
     }
 
     @Override
     public void visitAttribute(Attribute attribute) {
-        context.elementWasRemoved(attribute);
+        context.markForImportRemoval(parentProjects.peekFirst(), attribute);
     }
 
     @Override
     public void visitConstraint(Constraint constraint) {
-        context.elementWasRemoved(constraint);
+        context.markForImportRemoval(parentProjects.peekFirst(), constraint);
     }
 
     @Override
     public void visitFreezeBlock(FreezeBlock freeze) {
-        context.elementWasRemoved(freeze);
+        context.markForImportRemoval(parentProjects.peekFirst(), freeze);
     }
 
     @Override
     public void visitOperationDefinition(OperationDefinition opdef) {
-        context.elementWasRemoved(opdef);
+        context.markForImportRemoval(parentProjects.peekFirst(), opdef);
     }
 
     @Override
     public void visitPartialEvaluationBlock(PartialEvaluationBlock block) {
-        context.elementWasRemoved(block);
+        context.markForImportRemoval(parentProjects.peekFirst(), block);
     }
 
     @Override
     public void visitProjectInterface(ProjectInterface iface) {
-        context.elementWasRemoved(iface);
+        context.markForImportRemoval(parentProjects.peekFirst(), iface);
     }
 
     @Override
     public void visitComment(Comment comment) {
-        context.elementWasRemoved(comment);
+        context.markForImportRemoval(parentProjects.peekFirst(), comment);
     }
 
     @Override
     public void visitAttributeAssignment(AttributeAssignment assignment) {
-        context.elementWasRemoved(assignment);
+        context.markForImportRemoval(parentProjects.peekFirst(), assignment);
         for (int i = 0; i < assignment.getDeclarationCount(); i++) {
             assignment.getDeclaration(i).accept(this);
         }
@@ -107,46 +114,66 @@ class DeletedElementsCollector extends AbstractProjectVisitor {
 
     @Override
     public void visitCompoundAccessStatement(CompoundAccessStatement access) {
-        context.elementWasRemoved(access);
+        context.markForImportRemoval(parentProjects.peekFirst(), access);
     }
 
     @Override
     public void visitEnum(Enum eenum) {
-        context.elementWasRemoved(eenum);
+        context.markForImportRemoval(parentProjects.peekFirst(), eenum);
     }
 
     @Override
     public void visitOrderedEnum(OrderedEnum eenum) {
-        context.elementWasRemoved(eenum);
+        context.markForImportRemoval(parentProjects.peekFirst(), eenum);
     }
 
     @Override
     public void visitCompound(Compound compound) {
-        context.elementWasRemoved(compound);
+        context.markForImportRemoval(parentProjects.peekFirst(), compound);
     }
 
     @Override
     public void visitDerivedDatatype(DerivedDatatype datatype) {
-        context.elementWasRemoved(datatype);
+        context.markForImportRemoval(parentProjects.peekFirst(), datatype);
     }
 
     @Override
     public void visitEnumLiteral(EnumLiteral literal) {
-        // Bot needed
+        // Not needed
     }
 
     @Override
     public void visitReference(Reference reference) {
-        context.elementWasRemoved(reference);
+        context.markForImportRemoval(parentProjects.peekFirst(), reference);
     }
 
     @Override
     public void visitSequence(Sequence sequence) {
-        context.elementWasRemoved(sequence);
+        context.markForImportRemoval(parentProjects.peekFirst(), sequence);
     }
 
     @Override
     public void visitSet(Set set) {
-        context.elementWasRemoved(set);
+        context.markForImportRemoval(parentProjects.peekFirst(), set);
+    }
+    
+    @Override
+    public void visitProject(Project project) {
+        boolean projectIsStillPart = context.projectWasNotRemoved(project);
+        
+        // Visit this project only if it was maybe deleted.
+        if (!projectIsStillPart) {
+            super.visitProject(project);
+        }
+    }
+    
+    @Override
+    public void visitProjectImport(ProjectImport pImport) {
+        Project resolved = pImport.getResolved();
+        if (null != resolved) {
+            parentProjects.addFirst(resolved);
+            super.visitProjectImport(pImport);
+            parentProjects.removeFirst();
+        }
     }
 }
