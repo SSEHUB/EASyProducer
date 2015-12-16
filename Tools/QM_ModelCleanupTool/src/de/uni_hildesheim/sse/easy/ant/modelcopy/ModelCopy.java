@@ -29,15 +29,12 @@ import org.apache.tools.ant.Task;
 import de.uni_hildesheim.sse.model.management.VarModel;
 import de.uni_hildesheim.sse.model.validation.IvmlValidationVisitor;
 import de.uni_hildesheim.sse.model.validation.ValidationMessage;
-import de.uni_hildesheim.sse.model.varModel.Constraint;
-import de.uni_hildesheim.sse.model.varModel.FreezeBlock;
 import de.uni_hildesheim.sse.model.varModel.Project;
 import de.uni_hildesheim.sse.model.varModel.ProjectImport;
 import de.uni_hildesheim.sse.model.varModel.filter.FilterType;
 import de.uni_hildesheim.sse.model.varModel.rewrite.ProjectRewriteVisitor;
 import de.uni_hildesheim.sse.model.varModel.rewrite.modifier.DeclarationNameFilter;
 import de.uni_hildesheim.sse.model.varModel.rewrite.modifier.ImportNameFilter;
-import de.uni_hildesheim.sse.model.varModel.rewrite.modifier.ModelElementFilter;
 import de.uni_hildesheim.sse.utils.modelManagement.ModelManagementException;
 import de.uni_hildesheim.sse.utils.progress.ProgressObserver;
 
@@ -152,10 +149,10 @@ public class ModelCopy extends Task {
             
             String projectName = relativeFileName.substring(lastSeparator + 1, lastDot);
             Project p = ProjectUtilities.loadProject(projectName);
+            System.out.println("Filter: " + projectName);
             
             if (BASICS_CONFIG.equals(p.getName())) {
                 // Clear Basics Config
-                System.out.println("Filter: " + p.getName());
                 ProjectRewriteVisitor rewriter = new ProjectRewriteVisitor(p, FilterType.NO_IMPORTS);
                 rewriter.addModelCopyModifier(new DeclarationNameFilter(new String[] {"IntegerType", "LongType",
                     "StringType", "BooleanType", "FloatType", "DoubleType", "RealType", "ObjectType"}));
@@ -163,11 +160,11 @@ public class ModelCopy extends Task {
                 p = rewriter.getCopyiedProject();
             } else if (PIPELINES_CONFIG.equals(p.getName())) {
                 // Clear Pipelines Config
-                System.out.println("Filter: " + p.getName());
                 ProjectRewriteVisitor rewriter = new ProjectRewriteVisitor(p, FilterType.NO_IMPORTS);
-                rewriter.addImportModifier(new ImportNameFilter(new String[] {"Basics"}));
-                rewriter.addModelCopyModifier(new ModelElementFilter(Constraint.class));
-                rewriter.addModelCopyModifier(new ModelElementFilter(FreezeBlock.class));
+                rewriter.addImportModifier(new ImportNameFilter(new String[] {"Basics", "Pipelines", "FamiliesCfg",
+                    "DataManagementCfg"}));
+//                rewriter.addModelCopyModifier(new ModelElementFilter(Constraint.class));
+//                rewriter.addModelCopyModifier(new ModelElementFilter(FreezeBlock.class));
                 p.accept(rewriter);
                 p = rewriter.getCopyiedProject();
             } else {

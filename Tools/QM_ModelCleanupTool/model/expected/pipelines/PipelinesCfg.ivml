@@ -1,5 +1,12 @@
 project PipelinesCfg {
 
     import Basics;
+    import Pipelines;
+    import FamiliesCfg;
+    import DataManagementCfg;
     annotate BindingTime bindingTime = BindingTime.compile to PipelinesCfg;
+    pipelines = {};
+    freeze {
+        pipelines;
+    } but (f|f.bindingTime >= BindingTime.runtimeMon)
 }
