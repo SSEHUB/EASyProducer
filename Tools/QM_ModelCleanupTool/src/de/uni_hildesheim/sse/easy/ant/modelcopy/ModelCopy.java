@@ -37,6 +37,8 @@ import de.uni_hildesheim.sse.model.varModel.rewrite.ProjectRewriteVisitor;
 import de.uni_hildesheim.sse.model.varModel.rewrite.modifier.DeclarationNameFilter;
 import de.uni_hildesheim.sse.model.varModel.rewrite.modifier.ImportNameFilter;
 import de.uni_hildesheim.sse.model.varModel.rewrite.modifier.ModelElementFilter;
+import de.uni_hildesheim.sse.reasoning.core.impl.ReasonerRegistry;
+import de.uni_hildesheim.sse.reasoning.reasoner.Reasoner;
 import de.uni_hildesheim.sse.utils.modelManagement.ModelManagementException;
 import de.uni_hildesheim.sse.utils.progress.ProgressObserver;
 
@@ -70,6 +72,7 @@ public class ModelCopy extends Task {
      * Constructor for the ant task.
      */
     public ModelCopy() {
+        ReasonerRegistry.getInstance().register(new Reasoner());
         allowDestDeletion = false; // Only allowed during tests.
         rewriter = null;
     }
@@ -82,6 +85,7 @@ public class ModelCopy extends Task {
      * @throws Exception
      */
     public ModelCopy(String orgFolder, String cpyfolder, String mainProject) {
+        ReasonerRegistry.getInstance().register(new Reasoner());
         sourceFolder = new File(orgFolder);
         destinationFolder = new File(cpyfolder);
         this.mainProject = mainProject;
