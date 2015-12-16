@@ -90,6 +90,20 @@ public class ProjectRewriteVisitor extends AbstractProjectVisitor {
         parentProjects = new ArrayDeque<Project>();
         context = new RewriteContext();
     }
+    
+    /**
+     * Resets the {@link ProjectRewriteVisitor} to use it for a new visitation.
+     * This will keep the internal knowledge and, thus, enable the removal of removed elements in other projects. 
+     * @param originProject The project where the visiting shall start
+     * @param filterType Specifies whether project imports shall be considered or not.
+     */
+    public void reset(Project originProject, FilterType filterType) {
+        modifiers.clear();
+        importModifiers.clear();
+        parentProjects.clear();
+        super.clear(originProject, filterType);
+        context.newRun();
+    }
 
     /**
      * Adds a new {@link IModelElementFilter} to this {@link ProjectRewriteVisitor}. If none was specified for a given

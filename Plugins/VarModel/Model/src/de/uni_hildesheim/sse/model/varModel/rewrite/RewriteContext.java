@@ -153,6 +153,15 @@ public class RewriteContext {
     }
     
     /**
+     * Resets the internal <b>temporary</b> knowledge if anew project should be filtered based on the knowledge of a
+     * previous filtering.
+     */
+    void newRun() {
+        clear();
+        elementsWereRemoved = true;
+    }
+    
+    /**
      * Tests whether the project is still part of the main project (via an import).
      * @param project The project to test
      * @return <tt>true</tt>project is still part of the main project, <b><tt>false</tt></b> it is unclear.
