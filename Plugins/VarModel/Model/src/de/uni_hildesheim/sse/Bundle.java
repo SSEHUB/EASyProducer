@@ -15,6 +15,9 @@
  */
 package de.uni_hildesheim.sse;
 
+import de.uni_hildesheim.sse.utils.logger.EASyLoggerFactory;
+import de.uni_hildesheim.sse.utils.logger.EASyLoggerFactory.EASyLogger;
+
 /**
  * Stores data about the containing OSGi bundle (static bundle without activator).
  * 
@@ -26,5 +29,14 @@ public class Bundle {
      * Stores the bundle ID.
      */
     public static final String ID = "de.uni_hildesheim.sse.varModel";
+    
+    /**
+     * Helper method for getting an Logger for a Class of this bundle.
+     * @param clazz The class of this bundle for which the logger should be returned for.
+     * @return The logger instance.
+     */
+    public static EASyLogger getLogger(Class<?> clazz) {
+        return EASyLoggerFactory.INSTANCE.getLogger(clazz, ID);
+    }
 
 }

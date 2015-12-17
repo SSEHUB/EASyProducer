@@ -120,4 +120,12 @@ public interface IDecisionVariable extends IConfigurationElement, IConfiguration
      *     <tt>false</tt> otherwise.
      */
     public boolean hasNullValue();
+    
+    /**
+     * Removes all (nested) values which are in state {@link AssignmentState#DERIVED}, i.e., all values which are
+     * propagated bay the reasoner. This will keep all user assigned {@link AssignmentState#ASSIGNED} and frozen
+     * {@link AssignmentState#FROZEN} values.
+     * @return <tt>true</tt> if there was a change, <tt>false</tt> if the variable keeps unchanged.
+     */
+    public boolean removeDerivedValues();
 }

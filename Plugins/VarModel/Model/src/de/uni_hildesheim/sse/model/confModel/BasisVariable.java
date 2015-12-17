@@ -15,6 +15,7 @@
  */
 package de.uni_hildesheim.sse.model.confModel;
 
+import de.uni_hildesheim.sse.Bundle;
 import de.uni_hildesheim.sse.model.varModel.AbstractVariable;
 import de.uni_hildesheim.sse.model.varModel.values.Value;
 
@@ -69,4 +70,19 @@ class BasisVariable extends DecisionVariable {
         // Not supported by this class.
     }
 
+    @Override
+    public boolean removeDerivedValues() {
+        boolean changed = false;
+        if (AssignmentState.DERIVED == getState()) {
+            try {
+                setValue(null, AssignmentState.UNDEFINED);
+                changed = true;
+            } catch (ConfigurationException e) {
+                // Should not be possible to get an exception here.
+                Bundle.getLogger(BasisVariable.class).exception(e);
+            }
+        }
+        
+        return changed;
+    }
 }

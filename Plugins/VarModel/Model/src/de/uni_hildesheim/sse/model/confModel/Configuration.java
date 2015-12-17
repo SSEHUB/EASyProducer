@@ -820,6 +820,23 @@ public class Configuration implements IConfigurationVisitable, IProjectListener,
             out.println(var.getDeclaration().getName() + " = " + var.getValue());
         }
     }
+    
+    /**
+     * Removes all by a reasoner propagated values from the configuration to clean it up.
+     */
+    public void removeDerivedValues() {
+        boolean changed = false;
+        for (IDecisionVariable variable : decisions.values()) {
+            changed &= variable.removeDerivedValues();
+        }
+        
+        if (changed) {
+            // Inform with each change would be more precise, but should also more complex
+            for (int i = 0, n = listeners.size(); i < n; i++) {
+                listeners.get(i).configurationRefreshed(this);
+            }
+        }
+    }
 
     /**
      * Reduces the underlying {@link Project} and removes elements which are not needed for a runtime reasoning,
@@ -832,12 +849,12 @@ public class Configuration implements IConfigurationVisitable, IProjectListener,
      */
     public void prune() {
         VarModel.INSTANCE.events().removeModelListener(project, this);
-        ProjectRewriteVisitor copynator = new ProjectRewriteVisitor(project, FilterType.ALL);
-        copynator.addModelCopyModifier(new ModelElementFilter(Comment.class));
-        copynator.addModelCopyModifier(new FrozenConstraintsFilter(this));
-        copynator.addModelCopyModifier(new FrozenTypeDefResolver(this));
-        copynator.addModelCopyModifier(new FrozenConstraintVarFilter(this));
-        project.accept(copynator);
-        project = copynator.getCopyiedProject();
+        ProjectRewriteVisitor rewriter = new ProjectRewriteVisitor(project, FilterType.ALL);
+        rewriter.addModelCopyModifier(new ModelElementFilter(Comment.class));
+        rewriter.addModelCopyModifier(new FrozenConstraintsFilter(this));
+        rewriter.addModelCopyModifier(new FrozenTypeDefResolver(this));
+        rewriter.addModelCopyModifier(new FrozenConstraintVarFilter(this));
+        project.accept(rewriter);
+        project = rewriter.getCopyiedProject();
     }
 }

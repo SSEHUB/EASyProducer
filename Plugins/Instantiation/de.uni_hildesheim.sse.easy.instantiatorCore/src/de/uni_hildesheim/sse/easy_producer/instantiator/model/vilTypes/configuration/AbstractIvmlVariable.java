@@ -279,7 +279,12 @@ public abstract class AbstractIvmlVariable extends IvmlElement {
         public boolean hasNullValue() {
             return value == null || NullValue.INSTANCE == value;
         }
-        
+
+        @Override
+        public boolean removeDerivedValues() {
+            // TODO SE: Unclear whether it's needed here.
+            return false;
+        }
     }
     
     /**

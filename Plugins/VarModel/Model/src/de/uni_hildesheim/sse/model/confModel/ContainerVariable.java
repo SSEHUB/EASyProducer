@@ -18,6 +18,7 @@ package de.uni_hildesheim.sse.model.confModel;
 import java.util.ArrayList;
 import java.util.List;
 
+import de.uni_hildesheim.sse.Bundle;
 import de.uni_hildesheim.sse.model.varModel.AbstractVariable;
 import de.uni_hildesheim.sse.model.varModel.DecisionVariableDeclaration;
 import de.uni_hildesheim.sse.model.varModel.datatypes.Container;
@@ -242,12 +243,10 @@ public abstract class ContainerVariable extends StructuredVariable {
                 super.setValue(newValue, AssignmentState.ASSIGNED);
             } catch (ValueDoesNotMatchTypeException e) {
                 // Should not occur
-                // TODO SE: Integrate Logging
-                e.printStackTrace();
+                Bundle.getLogger(ContainerValue.class).exception(e);
             } catch (ConfigurationException e) {
                 // Should not occur
-                // TODO SE: Integrate Logging
-                e.printStackTrace();
+                Bundle.getLogger(ContainerValue.class).exception(e);
             }
         }
         
@@ -286,5 +285,55 @@ public abstract class ContainerVariable extends StructuredVariable {
             }
             nestedElements.add(var);
         }
+    }
+    
+    @Override
+    public boolean removeDerivedValues() {
+        boolean changed = false;
+        
+        // First remove all variables which are completely in state Derived
+        IAssignmentState oldState = getState();
+        ArrayList<IDecisionVariable> copiedValues = new ArrayList<IDecisionVariable>();
+        for (int i = 0, n = nestedElements.size(); i < n; i++) {
+            if (AssignmentState.DERIVED != nestedElements.get(i).getState()) {
+                copiedValues.add(nestedElements.get(i));
+            }
+        }
+        // Copy only if there was a change
+        if (copiedValues.isEmpty()) {
+            // Remove complete value
+            try {
+                setValue(null, AssignmentState.UNDEFINED);
+                changed = true;
+            } catch (ConfigurationException e) {
+                // Should not be possible
+                Bundle.getLogger(ContainerValue.class).exception(e);
+            }
+        } else if (copiedValues.size() < nestedElements.size()) {
+            // Set new (smaller) value
+            // Change the indexes inside the ConfigurationProvider to retrieve the correct sub values
+            for (int i = 0; i < copiedValues.size(); i++) {
+                ((DecisionVariable) copiedValues.get(i)).setIndex(i);
+            }
+            Value newValue;
+            try {
+                newValue = ValueFactory.createValue(getDeclaration().getType(), copiedValues.toArray());
+                super.setValue(newValue, oldState);
+            } catch (ValueDoesNotMatchTypeException e) {
+                Bundle.getLogger(ContainerValue.class).exception(e);
+            } catch (ConfigurationException e) {
+                Bundle.getLogger(ContainerValue.class).exception(e);
+            }
+            changed = true;
+        }
+        
+        // Second remove values inside nested elements
+        if (!nestedElements.isEmpty()) {
+            for (int i = 0, n = nestedElements.size(); i < n; i++) {
+                changed &= nestedElements.get(i).removeDerivedValues();
+            }
+        }
+        
+        return changed;
     }
 }

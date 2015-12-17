@@ -83,21 +83,6 @@ public class CompoundVariable extends StructuredVariable {
                     state = AssignmentState.UNDEFINED;
                 }                
             }
-//            if (ownStateAllowed()) {
-//                // A (partial) assigned compound should be assigned       
-//                state = AssignmentState.UNDEFINED;
-//                for (IDecisionVariable nestedVar : nestedElements.values()) {
-//                    if (AssignmentState.ASSIGNED == nestedVar.getState()) {
-//                        state = AssignmentState.ASSIGNED;
-//                        break;
-//                    }
-//                }
-//            } else {
-//                CompoundValue cmpValue = (CompoundValue) getValue();
-//                if (null == cmpValue || !cmpValue.isFullyConfigured()) {
-//                    state = AssignmentState.UNDEFINED;
-//                }
-//            }
         }
         
         return state;
@@ -222,5 +207,18 @@ public class CompoundVariable extends StructuredVariable {
         }
         
         return value;
+    }
+
+    @Override
+    public boolean removeDerivedValues() {
+        boolean changed = false;
+        for (IDecisionVariable var : nestedElements.values()) {
+            if (AssignmentState.DERIVED == var.getState()) {
+                var.removeDerivedValues();
+                changed = true;
+            }
+        }
+        
+        return changed;
     }
 }

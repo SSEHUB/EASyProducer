@@ -261,4 +261,9 @@ public class LocalDecisionVariable implements IDecisionVariable {
         return NullValue.INSTANCE == value;
     }
 
+    @Override
+    public boolean removeDerivedValues() {
+        // Should not be needed here.
+        return false;
+    }
 }
