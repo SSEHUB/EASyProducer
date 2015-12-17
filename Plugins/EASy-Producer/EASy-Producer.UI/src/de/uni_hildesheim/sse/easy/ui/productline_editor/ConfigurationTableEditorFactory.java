@@ -31,6 +31,8 @@ import de.uni_hildesheim.sse.model.varModel.Project;
 import de.uni_hildesheim.sse.model.varModel.datatypes.Container;
 import de.uni_hildesheim.sse.model.varModel.datatypes.IDatatype;
 import de.uni_hildesheim.sse.model.varModel.datatypes.Reference;
+import de.uni_hildesheim.sse.model.varModel.values.Value;
+import de.uni_hildesheim.sse.model.varModel.values.ValueDoesNotMatchTypeException;
 import de.uni_hildesheim.sse.utils.logger.EASyLoggerFactory;
 import de.uni_hildesheim.sse.utils.modelManagement.IModelListener;
 
@@ -398,6 +400,131 @@ public class ConfigurationTableEditorFactory implements IConfigurationEditorCrea
         
     }
     
+    /**
+     * Implements a delegating GuiVariable for externally created editors, so that they
+     * can be handled like EASy variables.
+     * 
+     * @author Holger Eichelberger
+     */
+    private static class DelegatingGuiVariable extends GUIVariable implements GUIEditor {
+
+        private Control control;
+        private CellEditor cellEditor;
+        private IOverridingEditor overridingEditor;
+        
+        /**
+         * Creates an instance.
+         * 
+         * @param variable The {@link IDecisionVariable} represented by this GUIVariable
+         * @param parentConfig The {@link GUIConfiguration} holding this GUIVariable
+         * @param control the external editor control, shall be instanceof {@link IOverridingEditor}
+         */
+        private DelegatingGuiVariable(IDecisionVariable variable, GUIConfiguration parentConfig, Control control) {
+            super(variable, parentConfig, null);
+            this.control = setOverridingEditor(control);
+        }
+        
+        /**
+         * Creates an instance.
+         * 
+         * @param variable The {@link IDecisionVariable} represented by this GUIVariable
+         * @param parentConfig The {@link GUIConfiguration} holding this GUIVariable
+         * @param cellEditor the external editor control, shall be instanceof {@link IOverridingEditor}
+         */
+        private DelegatingGuiVariable(IDecisionVariable variable, GUIConfiguration parentConfig, 
+            CellEditor cellEditor) {
+            super(variable, parentConfig, null);
+            this.cellEditor = setOverridingEditor(cellEditor);
+        }
+        
+        /**
+         * Defines the overriding editor.
+         * 
+         * @param <T> the editor type
+         * @param editor the editor instance
+         * @return <code>editor</code>
+         */
+        private <T> T setOverridingEditor(T editor) {
+            if (editor instanceof IOverridingEditor) {
+                this.overridingEditor = (IOverridingEditor) editor;    
+            }
+            return editor;
+        }
+        
+        @Override
+        public CellEditor getCellEditor() {
+            return cellEditor;
+        }
+
+        @Override
+        public GUIEditor getEditor() {
+            return this;
+        }
+
+        @Override
+        public Object getValue() {
+            Object result;
+            if (null != overridingEditor) {
+                result = overridingEditor.getValue();
+            } else {
+                result = null;
+            }
+            return result;
+        }
+
+        @Override
+        protected Value getValueAssignment(Object value) throws ValueDoesNotMatchTypeException {
+            Value result;
+            if (null != overridingEditor) {
+                result = overridingEditor.getValueAssignment(value);
+            } else {
+                result = null;
+            }
+            return result;
+        }
+
+        @Override
+        public String getValueText() {
+            String result;
+            if (null != overridingEditor) {
+                result = overridingEditor.getValueText();
+            } else {
+                result = null;
+            }
+            return result;
+        }
+
+        @Override
+        public Control getControl() {
+            Control result;
+            if (null != control) {
+                result = control;
+            } else if (null != cellEditor) {
+                result = cellEditor.getControl();
+            } else {
+                result = null;
+            }
+            return result;
+        }
+
+        @Override
+        public boolean isPseudoEditor() {
+            return false;
+        }
+
+        @Override
+        public void refreshContents() {
+            if (control instanceof IOverridingEditor) {
+                ((IOverridingEditor) control).refreshContents();
+            } else {
+                Control ctrl = getControl();
+                if (null != ctrl) {
+                    ctrl.redraw();
+                }
+            }
+        }
+        
+    }
 
     /**
      * Creates a configuration instance holding UI configuration elements without parameters. The returned instance may
@@ -438,6 +565,10 @@ public class ConfigurationTableEditorFactory implements IConfigurationEditorCrea
         if (null == result) {
             result = createEditor(config, variable, CREATORS.get(IvmlDatatypeVisitor.getQualifiedType(decl.getType())));
         }
+        if (result instanceof IOverridingEditor) {
+            DelegatingGuiVariable dVar = new DelegatingGuiVariable(variable, config.getConfiguration(), result);
+            config.add(dVar, dVar);
+        }
         if (null == result) {
             GUIVariable var = GUIValueFactory.createVariable(variable, config.getParent().getContentPane(), 
                 config.getConfiguration(), null);
@@ -464,6 +595,10 @@ public class ConfigurationTableEditorFactory implements IConfigurationEditorCrea
         if (null == result) {
             result = createCellEditor(config, variable, CREATORS.get(
                 IvmlDatatypeVisitor.getQualifiedType(decl.getType())));
+        }
+        if (result instanceof IOverridingEditor) {
+            DelegatingGuiVariable dVar = new DelegatingGuiVariable(variable, config.getConfiguration(), result);
+            config.add(dVar, dVar);
         }
         if (null == result) {
             GUIVariable var = GUIValueFactory.createVariable(variable, config.getParent().getContentPane(), 
