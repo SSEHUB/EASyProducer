@@ -30,6 +30,8 @@ import org.junit.runners.Suite.SuiteClasses;
 @SuiteClasses({
     // Instantiator Core
     test.AllTests.class,
+    // Buildlang
+    test.de.uni_hildesheim.sse.vil.buildlang.AllTests.class,
     // XML serializer
     de.uni_hildesheim.sse.persistency.xml.AllTests.class
     })
