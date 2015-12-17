@@ -342,7 +342,6 @@ public class JavaFileArtifact extends FileArtifact implements IJavaParent {
         ASTParser parser = ASTParser.newParser(AST.JLS4);
         parser.setSource(data);
         parser.setKind(ASTParser.K_COMPILATION_UNIT);
-        // Set options to resolve bindings
         parser.setBindingsRecovery(true);
         parser.setResolveBindings(true);
         Hashtable<String, String> options = JavaCore.getOptions();
@@ -370,15 +369,40 @@ public class JavaFileArtifact extends FileArtifact implements IJavaParent {
             sourcePath = sourcePath.replaceAll("//", "/");
         }
         String[] sources = {sourcePath};
-//        String[] newClasspath = new String[classpath.length + sources.length];
-//        System.arraycopy(classpath, 0, newClasspath, 0, classpath.length);
-//        System.arraycopy(sources, 0, newClasspath, classpath.length - 1, sources.length);
-//        logger.warn("CLASSPATH: " + Arrays.toString(sources));
-//        logger.warn("NEW CLASSPATH: " + Arrays.toString(newClasspath));
+        // Check  if sources contains jar files if so delete them and put them into classpath variable
+        List<String> tmpClasspath = new ArrayList<String>(Arrays.asList(classpath));
+        List<String> tmpSources = new ArrayList<String>(Arrays.asList(sources));
+        Iterator<String> iter = tmpSources.iterator();
+        while (iter.hasNext()) {
+            String str = iter.next();
+            if (str.endsWith(".jar")) {
+                tmpClasspath.add(str);
+//                iter.remove();
+            }
+        }
+        classpath = tmpClasspath.toArray(classpath);
+        sources = tmpSources.toArray(sources); 
         parser.setEnvironment(classpath, sources, new String[] {"UTF-8" }, true);
-        // Create AST
         unitNode = (CompilationUnit) parser.createAST(null);
-        // Check for problems but only if the classpath was set via VIL
+        printWarnings(isClasspathFromScript);
+        unitNode.accept(new ASTVisitor() {
+            public boolean visit(TypeDeclaration typeDeclaration) {
+                // The below code is used to check if it is not a top-level class
+                if (typeDeclaration.isPackageMemberTypeDeclaration()) {
+                    classList.add(new JavaClass(typeDeclaration, JavaFileArtifact.this));
+                }
+                return true;
+            }
+        });
+        unitNode.recordModifications();
+    }
+
+    /**
+     * Check for problems but only if the classpath was set via VIL.
+     * 
+     * @param isClasspathFromScript flag that indicates if the classpath was set via VIL
+     */
+    private void printWarnings(boolean isClasspathFromScript) {
         if (isClasspathFromScript) {
             IProblem[] problems = unitNode.getProblems();
             if (problems != null && problems.length > 0) {
@@ -389,17 +413,6 @@ public class JavaFileArtifact extends FileArtifact implements IJavaParent {
                 }
             }
         }
-        unitNode.accept(new ASTVisitor() {
-            public boolean visit(TypeDeclaration typeDeclaration) {
-                // The below code is used to check if it is not a top-level
-                // class
-                if (typeDeclaration.isPackageMemberTypeDeclaration()) {
-                    classList.add(new JavaClass(typeDeclaration, JavaFileArtifact.this));
-                }
-                return true;
-            }
-        });
-        unitNode.recordModifications();
     }
     
     /**
