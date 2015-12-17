@@ -39,10 +39,8 @@
 	
 	<!-- Compile all files without test classes -->
 	<target name="compile" depends="init">
-	    <!-- -->
-	    <echo message="${libs.adaptation.events.core}"/>
-	    <echo message="${toString:includes}"/>
-        <!-- -->
+	    <!--echo message="${libs.adaptation.events.core}"/>
+	    <echo message="${toString:includes}"/-->
 		<javac srcdir="${src.dir}" debug="true" destdir="${build.classes.dir}" includeAntRuntime="no" failonerror="true" source="${javacSource}" target="${javacTarget}" encoding="${javac.encoding}">
 			<classpath refid="includes" />
 		</javac>
