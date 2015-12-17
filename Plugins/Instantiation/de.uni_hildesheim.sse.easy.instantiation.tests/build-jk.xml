@@ -18,6 +18,7 @@
     <pathelement path="${libs.ivml}"/>
     <!-- Instantiation -->
     <pathelement path="${libs.instantiator.core}"/>
+    <pathelement path="${libs.instantiatorCore.tests}"/>
     <pathelement path="${libs.template.core}"/>
     <pathelement path="${libs.vil.core}"/>
     <pathelement path="${libs.instantiator.java}"/>
