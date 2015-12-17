@@ -219,7 +219,7 @@
 	<target name="coreTest" depends="copy.to.eclipse">
 		<property name="eclipse-home" value="${test.eclipse.path}"/>
 		<!-- Instantiator Core, Buildlang, and Serializer --> 
-        <ant target="core-test" antfile="plugins/${test.eclipse.testFW.dir}/library.xml" dir="${test.eclipse.path}">
+        <!--ant target="core-test" antfile="plugins/${test.eclipse.testFW.dir}/library.xml" dir="${test.eclipse.path}">
 		  <property name="data-dir" value="${test.eclipse.workspace.dir}"/>
 		  <property name="plugin-name" value="de.uni_hildesheim.sse.easy.instantiation.tests"/>
 		  <property name="classname" value="de.uni_hildesheim.sse.easy.instantiation.tests.AllTests"/>
@@ -228,9 +228,9 @@
 		  <property name="ws" value="${test.eclipse.ws}"/>
 		  <property name="arch" value="${test.eclipse.arch}"/>
 		  <property name="timeout" value="480000"/>
-		</ant>
+		</ant-->
         <!-- Serializer Test -->
-		<!--ant target="core-test" antfile="plugins/${test.eclipse.testFW.dir}/library.xml" dir="${test.eclipse.path}">
+		<ant target="core-test" antfile="plugins/${test.eclipse.testFW.dir}/library.xml" dir="${test.eclipse.path}">
           <property name="data-dir" value="${test.eclipse.workspace.dir}"/>
           <property name="plugin-name" value="${test.plugin.instantiation.serializer}"/>
           <property name="classname" value="${test.suite.instantiation.serializer}"/>
@@ -239,9 +239,9 @@
 		  <property name="ws" value="${test.eclipse.ws}"/>
 		  <property name="arch" value="${test.eclipse.arch}"/>
           <property name="timeout" value="480000"/>
-        </ant-->
+        </ant>
         <!-- Instantiator Core test -->
-        <!--ant target="core-test" antfile="plugins/${test.eclipse.testFW.dir}/library.xml" dir="${test.eclipse.path}">
+        <ant target="core-test" antfile="plugins/${test.eclipse.testFW.dir}/library.xml" dir="${test.eclipse.path}">
 		  <property name="data-dir" value="${test.eclipse.workspace.dir}"/>
 		  <property name="plugin-name" value="${test.plugin.instantiation}"/>
 		  <property name="classname" value="${test.suite.instantiation}"/>
@@ -250,9 +250,9 @@
 		  <property name="ws" value="${test.eclipse.ws}"/>
 		  <property name="arch" value="${test.eclipse.arch}"/>
 		  <property name="timeout" value="240000"/>
-		</ant-->
+		</ant>
         <!-- buildlang test -->
-        <!--ant target="core-test" antfile="plugins/${test.eclipse.testFW.dir}/library.xml" dir="${test.eclipse.path}">
+        <ant target="core-test" antfile="plugins/${test.eclipse.testFW.dir}/library.xml" dir="${test.eclipse.path}">
 		  <property name="data-dir" value="${test.eclipse.workspace.dir}"/>
 		  <property name="plugin-name" value="${test.plugin.vil}"/>
 		  <property name="classname" value="${test.suite.vil}"/>
@@ -261,7 +261,7 @@
 		  <property name="ws" value="${test.eclipse.ws}"/>
 		  <property name="arch" value="${test.eclipse.arch}"/>
 		  <property name="timeout" value="240000"/>
-		</ant-->
+		</ant>
         <!-- templatelang test -->
         <ant target="core-test" antfile="plugins/${test.eclipse.testFW.dir}/library.xml" dir="${test.eclipse.path}">
 		  <property name="data-dir" value="${test.eclipse.workspace.dir}"/>
