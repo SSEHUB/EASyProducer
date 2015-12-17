@@ -17,7 +17,10 @@
     <!-- IVML -->
     <pathelement path="${libs.ivml}"/>
     <!-- Instantiation -->
-    <pathelement path="${libs.instantiator.core}"/>
+		<fileset dir="${home.base.dir}/${projects.instantiation.dir}">
+      <include name="**/${build.jar.dir}/*.jar" />
+    </fileset>
+		<!--pathelement path="${libs.instantiator.core}"/>
     <pathelement path="${libs.instantiatorCore.tests}"/>
     <pathelement path="${libs.template.core}"/>
     <pathelement path="${libs.vil.core}"/>
@@ -26,7 +29,7 @@
     <pathelement path="${libs.vil.expressions.core}"/>
     <pathelement path="${libs.instantiator.maven}"/>
     <pathelement path="${libs.instantiator.serializer}"/>
-    <pathelement path="${libs.instantiator.serializer.test}"/>
+    <pathelement path="${libs.instantiator.serializer.test}"/-->
     <!-- Reasoner -->
     <pathelement path="${libs.reasonerCore}"/>
     <pathelement path="${libs.sseReasoner}"/>
