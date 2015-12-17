@@ -342,7 +342,6 @@ public class JavaFileArtifact extends FileArtifact implements IJavaParent {
         ASTParser parser = ASTParser.newParser(AST.JLS4);
         parser.setSource(data);
         parser.setKind(ASTParser.K_COMPILATION_UNIT);
-        // Set options to resolve bindings
         parser.setBindingsRecovery(true);
         parser.setResolveBindings(true);
         Hashtable<String, String> options = JavaCore.getOptions();
@@ -373,16 +372,17 @@ public class JavaFileArtifact extends FileArtifact implements IJavaParent {
         // Check  if sources contains jar files if so delete them and put them into classpath variable
         List<String> tmpClasspath = new ArrayList<String>(Arrays.asList(classpath));
         List<String> tmpSources = new ArrayList<String>(Arrays.asList(sources));
-        for (String string : tmpSources) {
-            if (string.endsWith(".jar")) {
-                tmpClasspath.add(string);
-                tmpSources.remove(string);
+        Iterator<String> iter = tmpSources.iterator();
+        while (iter.hasNext()) {
+            String str = iter.next();
+            if (str.endsWith(".jar")) {
+                tmpClasspath.add(str);
+                iter.remove();
             }
         }
         classpath = tmpClasspath.toArray(classpath);
         sources = tmpSources.toArray(sources);
         parser.setEnvironment(classpath, sources, new String[] {"UTF-8" }, true);
-        // Create AST
         unitNode = (CompilationUnit) parser.createAST(null);
         // Check for problems but only if the classpath was set via VIL
         if (isClasspathFromScript) {
