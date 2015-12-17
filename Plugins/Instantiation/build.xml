@@ -163,7 +163,12 @@
         <echo>################################################</echo>
         <echo>###   Compiling AspectJ Instantiator Tests   ###</echo>
         <echo>################################################</echo>
-        <ant dir="${home.instantiator.aspectj.test.dir}" antfile="${build.script.name}" />        
+        <ant dir="${home.instantiator.aspectj.test.dir}" antfile="${build.script.name}" />
+        
+        <echo>#################################################</echo>
+        <echo>###   Compiling Complete Instantiator Tests   ###</echo>
+        <echo>#################################################</echo>
+        <ant dir="de.uni_hildesheim.sse.easy.instantiation.tests" antfile="${build.script.name}" />
 	</target>
 	
 	<target name="prepareTestEclipse" if="${unzipNewEclipse}">
@@ -213,8 +218,19 @@
 	
 	<target name="coreTest" depends="copy.to.eclipse">
 		<property name="eclipse-home" value="${test.eclipse.path}"/>
-		<!-- Serializer Test -->
-		<ant target="core-test" antfile="plugins/${test.eclipse.testFW.dir}/library.xml" dir="${test.eclipse.path}">
+		<!-- Instantiator Core and Serializer --> 
+        <ant target="core-test" antfile="plugins/${test.eclipse.testFW.dir}/library.xml" dir="${test.eclipse.path}">
+		  <property name="data-dir" value="${test.eclipse.workspace.dir}"/>
+		  <property name="plugin-name" value="de.uni_hildesheim.sse.easy.instantiation.tests"/>
+		  <property name="classname" value="de.uni_hildesheim.sse.easy.instantiation.tests.AllTests"/>
+		  <property name="extraVMargs" value="-Dinstantiation.serializer.testdata.home=${home.instantiator.serializer.test.dir}/testdata -DinstantiatorCore.testdata.home=${home.instantiatorCore.tests.dir}/testdata -javaagent:${jacoco.path}/jacocoagent.jar=append=true,destfile=${basedir}/${coverage.results.dir}/${ant.project.name}.exec" />
+		  <property name="os" value="${test.eclipse.os}"/>
+		  <property name="ws" value="${test.eclipse.ws}"/>
+		  <property name="arch" value="${test.eclipse.arch}"/>
+		  <property name="timeout" value="480000"/>
+		</ant>
+        <!-- Serializer Test -->
+		<!--ant target="core-test" antfile="plugins/${test.eclipse.testFW.dir}/library.xml" dir="${test.eclipse.path}">
           <property name="data-dir" value="${test.eclipse.workspace.dir}"/>
           <property name="plugin-name" value="${test.plugin.instantiation.serializer}"/>
           <property name="classname" value="${test.suite.instantiation.serializer}"/>
@@ -223,9 +239,9 @@
 		  <property name="ws" value="${test.eclipse.ws}"/>
 		  <property name="arch" value="${test.eclipse.arch}"/>
           <property name="timeout" value="480000"/>
-        </ant>
+        </ant-->
         <!-- Instantiator Core test -->
-        <ant target="core-test" antfile="plugins/${test.eclipse.testFW.dir}/library.xml" dir="${test.eclipse.path}">
+        <!--ant target="core-test" antfile="plugins/${test.eclipse.testFW.dir}/library.xml" dir="${test.eclipse.path}">
 		  <property name="data-dir" value="${test.eclipse.workspace.dir}"/>
 		  <property name="plugin-name" value="${test.plugin.instantiation}"/>
 		  <property name="classname" value="${test.suite.instantiation}"/>
@@ -234,7 +250,7 @@
 		  <property name="ws" value="${test.eclipse.ws}"/>
 		  <property name="arch" value="${test.eclipse.arch}"/>
 		  <property name="timeout" value="240000"/>
-		</ant>
+		</ant-->
         <!-- buildlang test -->
         <ant target="core-test" antfile="plugins/${test.eclipse.testFW.dir}/library.xml" dir="${test.eclipse.path}">
 		  <property name="data-dir" value="${test.eclipse.workspace.dir}"/>

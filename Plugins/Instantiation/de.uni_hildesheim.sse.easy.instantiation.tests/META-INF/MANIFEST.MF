@@ -1,0 +1,10 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: All Instnatiation Tests
+Bundle-SymbolicName: de.uni_hildesheim.sse.easy.instantiation.tests
+Bundle-Version: 1.0.0
+Bundle-Vendor: Uni Hildesheim, SSE
+Bundle-RequiredExecutionEnvironment: JavaSE-1.7
+Require-Bundle: org.junit,
+ Model.persistency.Test;bundle-version="1.0.0",
+ de.uni-hildesheim.sse.easy.instantiatorCore.tests;bundle-version="0.0.2"
