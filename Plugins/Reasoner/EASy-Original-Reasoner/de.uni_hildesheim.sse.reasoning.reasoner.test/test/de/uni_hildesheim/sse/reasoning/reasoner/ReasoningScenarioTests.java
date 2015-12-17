@@ -225,11 +225,19 @@ public class ReasoningScenarioTests extends de.uni_hildesheim.sse.reasoning.Abst
     }
     
     /**
-     * Tests compound internal constraints.
+     * Tests annotation assignment.
      */
     @Test    
-    public void attributeTest() {
-        reasoningTest("AttributeTest.ivml", 0);
+    public void annotationInitialTest() {
+        reasoningTest("AnnotationInitialTest.ivml", 0);
+    }
+    
+    /**
+     * Tests annotations in compound.
+     */
+    @Test    
+    public void annotationAssignedToDifferentCompoundSlotsValid() {
+        reasoningTest("AnnotationAssignedToDifferentCompoundSlotsValid.ivml", 0);
     }
     
     /**

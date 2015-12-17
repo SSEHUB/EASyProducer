@@ -118,6 +118,12 @@ public class Reasoner implements IReasoner {
         if (null == result) {
             result = new Configuration(project, false);
         }
+//        if (rConfig.isFreshConfiguration()) {
+//            result = new Configuration(project, false);
+//        } else {
+//            result = cfg;
+//        }        
         return result;
-    }
+    }   
+    
 }

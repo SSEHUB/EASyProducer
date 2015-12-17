@@ -551,6 +551,10 @@ public class Resolver {
             resolveDefaultValueForDeclaration(nestedDecl, cmpVar.getNestedVariable(nestedDecl.getName()),
                 cmpAccess);
         }
+        // Nested attribute assignments handling
+        for (int x = 0; x < cmpType.getAssignmentCount(); x++) {
+            processAttributeAssignments(cmpType.getAssignment(x), null,  cmpAccess);
+        }
         for (int i = 0; i < thisCompoundConstraints.size(); i++) {
             ConstraintSyntaxTree oneConstraint = thisCompoundConstraints.get(i).getConsSyntax();
             oneConstraint = copyVisitor(oneConstraint, null);
@@ -560,9 +564,6 @@ public class Resolver {
             } catch (CSTSemanticException e) {
                 LOGGER.exception(e);
             }               
-        }
-        for (int i = 0; i < cmpType.getAssignmentCount(); i++) {
-            processAttributeAssignments(cmpType.getAssignment(i), null,  cmpAccess);
         }
     }  
     
@@ -817,6 +818,7 @@ public class Resolver {
                 nestAssignment = hostAssignment;              
             } 
             for (int y = 0; y < nestAssignment.getElementCount(); y++) {
+//                System.out.println("cmpAccess3: " + StringProvider.toIvmlString(compound));
                 processElement(hostAssignment.getAssignmentData(i),
                     nestAssignment.getElement(y), compound);
                 if (Compound.TYPE.isAssignableFrom(nestAssignment.getElement(y).getType())) {                    
@@ -827,8 +829,12 @@ public class Resolver {
                         if (compound == null) {
                             cmpAccess = new CompoundAccess(new Variable(nestAssignment.getElement(y)), 
                                 cmp.getDeclaration(j).getName());                   
+//                            System.out.println("cmpAccess1: " + StringProvider.toIvmlString(cmpAccess));
                         } else {
+//                            infoLogger.info("Nested: " + cmp.getDeclaration(j));
                             cmpAccess = new CompoundAccess(compound, cmp.getDeclaration(j).getName());
+//                            System.out.println("cmpAccess2: " + StringProvider.toIvmlString(cmpAccess));
+
                         }
                         try {
                             cmpAccess.inferDatatype();
@@ -841,7 +847,7 @@ public class Resolver {
                 }
             }
             for (int z = 0; z < nestAssignment.getAssignmentCount(); z++) {
-//                    infoLogger.info("Nested attribute assignment: " 
+//                infoLogger.info("Nested attribute assignment: " 
 //                        + StringProvider.toIvmlString(hostAssignment.getAssignment(i)));
                 processAttributeAssignments(hostAssignment, nestAssignment.getAssignment(z), compound);
             }
@@ -859,8 +865,11 @@ public class Resolver {
         String attributeName = assignment.getName();
 //        infoLogger.info("Element: " 
 //              + StringProvider.toIvmlString(element));
-//        infoLogger.info(element.getAttribute(attributeName));
+//        infoLogger.info("Attribute: " + StringProvider.toIvmlString(element.getAttribute(attributeName)));
         ConstraintSyntaxTree cst = null;
+        //fix for annotations in compounds
+        compound = null;
+        compound = varMap.get(element);
         if (compound == null) {                      
             cst = new OCLFeatureCall(
                 new AttributeVariable(new Variable(element), (Attribute) element.getAttribute(attributeName)),
