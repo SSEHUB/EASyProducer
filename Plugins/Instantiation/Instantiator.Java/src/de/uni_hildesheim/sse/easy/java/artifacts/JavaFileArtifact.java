@@ -377,24 +377,14 @@ public class JavaFileArtifact extends FileArtifact implements IJavaParent {
             String str = iter.next();
             if (str.endsWith(".jar")) {
                 tmpClasspath.add(str);
-                iter.remove();
+//                iter.remove();
             }
         }
         classpath = tmpClasspath.toArray(classpath);
-        sources = tmpSources.toArray(sources);
+        sources = tmpSources.toArray(sources); 
         parser.setEnvironment(classpath, sources, new String[] {"UTF-8" }, true);
         unitNode = (CompilationUnit) parser.createAST(null);
-        // Check for problems but only if the classpath was set via VIL
-        if (isClasspathFromScript) {
-            IProblem[] problems = unitNode.getProblems();
-            if (problems != null && problems.length > 0) {
-                logger.warn("Got " + problems.length + " problems compiling the source file: " 
-                    + file.getAbsolutePath());
-                for (IProblem problem : problems) {
-                    logger.warn(problem.getMessage());
-                }
-            }
-        }
+        printWarnings(isClasspathFromScript);
         unitNode.accept(new ASTVisitor() {
             public boolean visit(TypeDeclaration typeDeclaration) {
                 // The below code is used to check if it is not a top-level class
@@ -405,6 +395,24 @@ public class JavaFileArtifact extends FileArtifact implements IJavaParent {
             }
         });
         unitNode.recordModifications();
+    }
+
+    /**
+     * Check for problems but only if the classpath was set via VIL.
+     * 
+     * @param isClasspathFromScript flag that indicates if the classpath was set via VIL
+     */
+    private void printWarnings(boolean isClasspathFromScript) {
+        if (isClasspathFromScript) {
+            IProblem[] problems = unitNode.getProblems();
+            if (problems != null && problems.length > 0) {
+                logger.warn("Got " + problems.length + " problems compiling the source file: " 
+                    + file.getAbsolutePath());
+                for (IProblem problem : problems) {
+                    logger.warn(problem.getMessage());
+                }
+            }
+        }
     }
     
     /**
