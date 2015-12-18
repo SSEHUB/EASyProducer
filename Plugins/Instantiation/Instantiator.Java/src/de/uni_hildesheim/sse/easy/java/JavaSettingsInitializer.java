@@ -1,11 +1,9 @@
 package de.uni_hildesheim.sse.easy.java;
 
 import java.io.File;
+import java.util.HashSet;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
-
-import org.apache.commons.io.FileUtils;
 
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.artifactModel.Path;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.artifactModel.ProjectSettings;
@@ -52,15 +50,15 @@ public class JavaSettingsInitializer implements ISettingsInitializer {
      *            classpath object
      * @return classpath as string
      */
-    public static String determineClasspath(Object classpath) {
+    public static String[] determineClasspath(Object classpath) {
         // In case the classpath is set via VIL
-        String result = null;
+        String[] result = null;
         if (null != classpath) {
             if (classpath instanceof String) {
-                result = String.valueOf(classpath);
+                result = normalizePath(new String[] {String.valueOf(classpath)});
             } else if (classpath instanceof Set<?>) {
                 Set<?> classpathSet = (Set<?>) classpath;
-                String tmpClasspath = "";
+                HashSet<String> tmpClasspath = new HashSet<String>();
                 int parameterCount = classpathSet.getGenericParameterCount();
                 TypeDescriptor<?> typeDescriptorSet = classpathSet.getGenericParameterType(parameterCount - 1);
                 TypeDescriptor<?> typeDescriptorParameter = typeDescriptorSet
@@ -72,56 +70,57 @@ public class JavaSettingsInitializer implements ISettingsInitializer {
                         String string = (String) iterator.next();
                         File file = new File(string);
                         if (file.exists()) {
-                            // TODO: Do we need this? extremely slow
-                            // tmpClasspath = scanForJars(tmpClasspath, file);
-                            tmpClasspath += string + File.pathSeparatorChar;
+                            tmpClasspath.add(normalizePath(file.getAbsolutePath()));
                         }
                     } else if (typeDescriptorParameter.isSame(TypeRegistry.DEFAULT.findType(Path.class))) {
                         // Path
                         Path path = (Path) iterator.next();
                         if (path.exists()) {
-                            // TODO: Do we need this? extremely slow
-                            // tmpClasspath = scanForJars(tmpClasspath,
-                            // path.getAbsolutePath());
-                            tmpClasspath += path.getAbsolutePath().getAbsolutePath() + File.pathSeparatorChar;
+                            tmpClasspath.add(normalizePath(path.getAbsolutePath().getAbsolutePath()));
                         }
                     } else {
                         // fallback: do nothing
                         iterator.next();
                     }
                 }
-                result = tmpClasspath;
+                String[] tmpResult = new String[tmpClasspath.size()];
+                result = tmpClasspath.toArray(tmpResult);
             }
         } else {
             // Get the classpath from eclipse
-            String systemClasspath = JAVA_CLASSPATH;
+            String[] systemClasspath = normalizePath(JAVA_CLASSPATH.split(File.pathSeparator));
             result = systemClasspath;
         }
         return result;
     }
-
+    
     /**
-     * Collect all jars inside the directory and add them to the classpath.
+     * Converts a path to unix file pattern.
      * 
-     * @param tmpClasspath
-     *            the currently classpath
-     * @param file
-     *            directory to be scanned.
-     * @return classpath containing all jars
+     * WARNING: The JDT/AST parser expects a "/" as separator!
+     * 
+     * @param allPaths array containing all path elements
+     * @return array with converted path elements
      */
-    private static String scanForJars(String tmpClasspath, File file) {
-        if (file.isDirectory()) {
-            // Scan for jars assuming the directory is the
-            // root dir
-            String[] extensions = new String[] {"jar" };
-            List<File> jars = (List<File>) FileUtils.listFiles(file, extensions, true);
-            if (null != jars && jars.size() > 0) {
-                for (File file2 : jars) {
-                    tmpClasspath += file2.getAbsolutePath() + File.pathSeparator;
-                }
-            }
+    private static String[] normalizePath(String [] allPaths) {
+        for (int i = 0; i < allPaths.length; i++) {
+            allPaths[i] = normalizePath(allPaths[i]);
         }
-        return tmpClasspath;
+        return allPaths;
+    }
+    
+    /**
+     * Converts a path to unix file pattern.
+     * 
+     * WARNING: The JDT/AST parser expects a "/" as separator!
+     * 
+     * @param string path as string
+     * @return converted path
+     */
+    private static String normalizePath(String string) {
+        String result = string;
+        result = result.replace("\\", "/");
+        return result;
     }
 
     // @Override

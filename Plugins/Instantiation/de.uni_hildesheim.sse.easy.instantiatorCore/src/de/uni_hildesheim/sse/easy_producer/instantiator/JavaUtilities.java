@@ -184,10 +184,13 @@ public class JavaUtilities {
      * @return String array containing all libs
      */
     private static String[] determineJREClassPath() {
-        String result = System.getProperty("java.class.path");
+        String tmpClasspath = System.getProperty("java.class.path");
+        // Replace the backslash. This needs to be done because the JDT parser will not work when not done.
+        tmpClasspath = tmpClasspath.replace("\\", "/");
+        String[] result = tmpClasspath.split(File.pathSeparator);
         if (null == result) {
-            result = JDK_PATH + "lib/rt.jar";
+            result = new String[] {JDK_PATH + "lib/rt.jar"};
         }
-        return new String[] {result};
+        return result;
     }
 }

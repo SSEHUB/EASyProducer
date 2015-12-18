@@ -11,7 +11,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Hashtable;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -51,8 +50,6 @@ import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.Conversio
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.Invisible;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.OperationMeta;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.Set;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeDescriptor;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeRegistry;
 import de.uni_hildesheim.sse.utils.logger.EASyLoggerFactory;
 import de.uni_hildesheim.sse.utils.logger.EASyLoggerFactory.EASyLogger;
 
@@ -350,7 +347,7 @@ public class JavaFileArtifact extends FileArtifact implements IJavaParent {
         String unitName = FilenameUtils.getBaseName(file.getName());
         parser.setUnitName(unitName);
         String[] classpath = JavaUtilities.JRE_CLASS_PATH;
-        String sourcePath;
+        String [] sourcePath;
         boolean isClasspathFromScript = false;
         if (null != getArtifactModel()) {
             Object classPathFromScript = getArtifactModel().getSettings(JavaSettings.CLASSPATH);
@@ -364,25 +361,20 @@ public class JavaFileArtifact extends FileArtifact implements IJavaParent {
         } else {
             sourcePath = JavaSettingsInitializer.determineClasspath(null);
         }
-        // WORKAROUND! FIX IT!
-        if (sourcePath.contains("//")) {
-            sourcePath = sourcePath.replaceAll("//", "/");
-        }
-        String[] sources = {sourcePath};
+        String[] sources = sourcePath;
         // Check  if sources contains jar files if so delete them and put them into classpath variable
         List<String> tmpClasspath = new ArrayList<String>(Arrays.asList(classpath));
         List<String> tmpSources = new ArrayList<String>(Arrays.asList(sources));
-        Iterator<String> iter = tmpSources.iterator();
-        while (iter.hasNext()) {
-            String str = iter.next();
-            if (str.endsWith(".jar")) {
-                tmpClasspath.add(str);
-//                iter.remove();
+        List<String> sourceFiles = new ArrayList<String>();
+        for (String string : tmpSources) {
+            if (!string.endsWith(".jar")) {
+                sourceFiles.add(string);
             }
         }
-        classpath = tmpClasspath.toArray(classpath);
-        sources = tmpSources.toArray(sources); 
-        parser.setEnvironment(classpath, sources, new String[] {"UTF-8" }, true);
+        tmpSources = sourceFiles;
+        String[] cp = tmpClasspath.toArray(new String[tmpClasspath.size()]);
+        String[] src = tmpSources.toArray(new String[tmpSources.size()]); 
+        parser.setEnvironment(cp, src, null, true);
         unitNode = (CompilationUnit) parser.createAST(null);
         printWarnings(isClasspathFromScript);
         unitNode.accept(new ASTVisitor() {
