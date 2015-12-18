@@ -363,19 +363,25 @@ public class JavaFileArtifact extends FileArtifact implements IJavaParent {
         }
         String[] sources = sourcePath;
         // Check  if sources contains jar files if so delete them and put them into classpath variable
-        List<String> tmpClasspath = Arrays.asList(classpath);
-        List<String> tmpSources = Arrays.asList(sources);
+        List<String> tmpClasspath = new ArrayList<String>(Arrays.asList(classpath));
+        List<String> tmpSources = new ArrayList<String>(Arrays.asList(sources));
         List<String> sourceFiles = new ArrayList<String>();
+        List<String> jarFiles = new ArrayList<String>();
         for (String string : tmpSources) {
             if (!string.endsWith(".jar")) {
                 sourceFiles.add(string);
+            } else if (string.endsWith(".jar")) {
+                jarFiles.add(string);
             }
         }
         tmpSources = sourceFiles;
+        tmpClasspath.addAll(jarFiles);
+//        logger.warn("src: " + tmpSources);
+//        logger.warn("cp" +  tmpClasspath);
         String[] cp = tmpClasspath.toArray(new String[tmpClasspath.size()]);
         String[] src = tmpSources.toArray(new String[tmpSources.size()]); 
-        logger.debug(Arrays.toString(cp));
-        logger.debug(Arrays.toString(src));
+//        logger.warn(Arrays.toString(cp));
+//        logger.warn(Arrays.toString(src));
         parser.setEnvironment(cp, src, null, true);
         unitNode = (CompilationUnit) parser.createAST(null);
         printWarnings(isClasspathFromScript);
