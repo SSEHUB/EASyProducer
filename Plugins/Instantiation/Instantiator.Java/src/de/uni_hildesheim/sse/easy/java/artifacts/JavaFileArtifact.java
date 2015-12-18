@@ -376,12 +376,12 @@ public class JavaFileArtifact extends FileArtifact implements IJavaParent {
         }
         tmpSources = sourceFiles;
         tmpClasspath.addAll(jarFiles);
-//        logger.warn("src: " + tmpSources);
-//        logger.warn("cp" +  tmpClasspath);
+        logger.warn("src: " + tmpSources);
+        logger.warn("cp" +  tmpClasspath);
         String[] cp = tmpClasspath.toArray(new String[tmpClasspath.size()]);
         String[] src = tmpSources.toArray(new String[tmpSources.size()]); 
-//        logger.warn(Arrays.toString(cp));
-//        logger.warn(Arrays.toString(src));
+        logger.warn(Arrays.toString(cp));
+        logger.warn(Arrays.toString(src));
         parser.setEnvironment(cp, src, null, true);
         unitNode = (CompilationUnit) parser.createAST(null);
         printWarnings(isClasspathFromScript);
