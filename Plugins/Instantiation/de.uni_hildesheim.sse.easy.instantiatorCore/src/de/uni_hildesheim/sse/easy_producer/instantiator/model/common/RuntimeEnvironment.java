@@ -23,6 +23,7 @@ import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.configura
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.configuration.DecisionVariable;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.configuration.IvmlElement;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.configuration.IvmlTypes;
+import de.uni_hildesheim.sse.model.varModel.datatypes.DerivedDatatype;
 import de.uni_hildesheim.sse.model.varModel.datatypes.IDatatype;
 import de.uni_hildesheim.sse.model.varModel.datatypes.Reference;
 import de.uni_hildesheim.sse.model.varModel.values.NullValue;
@@ -586,6 +587,7 @@ public abstract class RuntimeEnvironment implements IRuntimeEnvironment, IRestri
                 if (object instanceof DecisionVariable) {
                     DecisionVariable decVar = (DecisionVariable) object;
                     IDatatype dType = Reference.dereference(decVar.getVariable().getDeclaration().getType());
+                    dType = DerivedDatatype.resolveToBasis(dType);
                     TypeDescriptor<?> td = getTypeRegistry().getType(dType);
                     if (null != td) {
                         compatible = varType.isAssignableFrom(td);

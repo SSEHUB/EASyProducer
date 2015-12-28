@@ -1,0 +1,10 @@
+project qm9 {
+    
+    typedef UrlString String;
+
+    UrlString url = "aaa";
+    
+    freeze {
+        url;
+    }
+}

@@ -863,6 +863,25 @@ public class ExecutionTests extends AbstractExecutionTest<Script> {
     }
 
     /**
+     * Tests some VTL cases (passing IVML instances of convertible types, contributed by QualiMaster).
+     * 
+     * @throws IOException should not occur
+     */
+    @Test
+    public void testVtl3() throws IOException {
+        assertSelfInstantiate("vtl3", "main", "vtl3", new SelfInstantiationAsserterAdapter() {
+
+            @Override
+            public void assertIn(File base) {
+                File file = new File(base, "test3.txt");
+                File expected = new File(base, "templates/vtl3.vtl.expected");
+                assertFileEqualitySafe(file, expected);
+            }
+
+        });
+    }
+
+    /**
      * Tests whether files are copied recursively if a file pattern was used. 
      * @throws IOException should not occur
      */

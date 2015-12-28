@@ -1,0 +1,5 @@
+-> main(Configuration, FileArtifact) with (<config>, test.texts)
+    cfg <- <config>
+    -> pt(String) with (aaa)
+    url <- aaa
+    -> pt(String) with (aaa)

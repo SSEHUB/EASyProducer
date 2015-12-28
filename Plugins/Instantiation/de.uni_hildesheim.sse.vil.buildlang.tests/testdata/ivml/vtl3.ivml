@@ -1,0 +1,10 @@
+project vtl3 {
+    
+    typedef UrlString String;
+
+    UrlString url = "aaa";
+    
+    freeze {
+        url;
+    }
+}

@@ -1,0 +1,8 @@
+-> main(Project, Project, Configuration) with (<project>, <project>, <config>)
+    cfg <- <config>
+    fa <- templates/vtl3.vtl
+-> main(Configuration, FileArtifact, String) with (<config>, test3.txt, aaa)
+    -> vilTemplateProcessor(VtlFileArtifact, Configuration, Artifact) with (templates/vtl3.vtl, <config>, test3.txt, {{url, aaa}}) = {test3.txt}
+    url <- aaa
+-> main(Configuration, FileArtifact, String) with (<config>, test3.txt, aaa)
+    -> vilTemplateProcessor(VtlFileArtifact, Configuration, Artifact) with (templates/vtl3.vtl, <config>, test3.txt, {{url, aaa}}) = {test3.txt}

@@ -1,0 +1,12 @@
+@advice(vtl3)
+vilScript vtl3 (Project source, Project target, Configuration config) {
+
+    main(Project source, Project target, Configuration config) = : {
+        vtl3 cfg = config;
+        FileArtifact fa = "$source/templates/vtl3.vtl";
+        vilTemplateProcessor(fa, config, "$target/test3.txt", url=cfg.url);
+        String url = cfg.url;
+        vilTemplateProcessor(fa, config, "$target/test3.txt", url=url);
+    }
+
+}

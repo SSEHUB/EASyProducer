@@ -1,0 +1,15 @@
+@advice(qm9)
+template qm9(Configuration config, FileArtifact target) {
+
+    def main(Configuration config, FileArtifact target) {
+        qm9 cfg = config;
+        pt(cfg.url);
+        String url = cfg.url;
+        pt(url);
+    }
+
+    def pt(String text) {
+        '$text'
+    }
+
+}

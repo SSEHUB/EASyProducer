@@ -1137,6 +1137,16 @@ public class ExecutionTests extends AbstractTest {
     public void testQm8() throws IOException {
         assertEqualWithIvml("qm8", "qm8");
     }
+    
+    /**
+     * Tests typedef-basetype compliance (contributed by QualiMaster).
+     * 
+     * @throws IOException should not occur
+     */
+    @Test
+    public void testQm9() throws IOException {
+        assertEqualWithIvml("qm9", "qm9");
+    }
 
     /**
      * Tests sorting IVML elements via expression.
