@@ -485,6 +485,16 @@ public class AdvancedTests extends AbstractTest {
     }
 
     /**
+     * Tests constraint variables in compounds via configuration (QM).
+     * 
+     * @throws IOException should not occur
+     */
+    @Test
+    public void testConstraintVariables2() throws IOException {
+        assertEqual(createFile("constraintVar2"), "constraintVar2", "0");
+    }
+    
+    /**
      * Tests enumeration imports. This case was contributed by Jacek Serafinski (NDL).
      * 
      * @throws IOException should not occur

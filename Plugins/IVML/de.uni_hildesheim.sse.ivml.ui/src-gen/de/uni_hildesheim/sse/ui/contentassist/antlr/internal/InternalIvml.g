@@ -14430,8 +14430,8 @@ rule__ExpressionListEntry__ValueAssignment_1_0
     }
 :
 (
-{ before(grammarAccess.getExpressionListEntryAccess().getValueLogicalExpressionParserRuleCall_1_0_0()); }
-	ruleLogicalExpression{ after(grammarAccess.getExpressionListEntryAccess().getValueLogicalExpressionParserRuleCall_1_0_0()); }
+{ before(grammarAccess.getExpressionListEntryAccess().getValueImplicationExpressionParserRuleCall_1_0_0()); }
+	ruleImplicationExpression{ after(grammarAccess.getExpressionListEntryAccess().getValueImplicationExpressionParserRuleCall_1_0_0()); }
 )
 
 ;

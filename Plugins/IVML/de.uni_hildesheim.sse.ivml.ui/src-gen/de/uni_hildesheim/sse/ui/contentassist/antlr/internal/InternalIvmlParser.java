@@ -42245,28 +42245,28 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
 
 
     // $ANTLR start "rule__ExpressionListEntry__ValueAssignment_1_0"
-    // InternalIvml.g:14427:1: rule__ExpressionListEntry__ValueAssignment_1_0 : ( ruleLogicalExpression ) ;
+    // InternalIvml.g:14427:1: rule__ExpressionListEntry__ValueAssignment_1_0 : ( ruleImplicationExpression ) ;
     public final void rule__ExpressionListEntry__ValueAssignment_1_0() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // InternalIvml.g:14431:1: ( ( ruleLogicalExpression ) )
-            // InternalIvml.g:14432:1: ( ruleLogicalExpression )
+            // InternalIvml.g:14431:1: ( ( ruleImplicationExpression ) )
+            // InternalIvml.g:14432:1: ( ruleImplicationExpression )
             {
-            // InternalIvml.g:14432:1: ( ruleLogicalExpression )
-            // InternalIvml.g:14433:1: ruleLogicalExpression
+            // InternalIvml.g:14432:1: ( ruleImplicationExpression )
+            // InternalIvml.g:14433:1: ruleImplicationExpression
             {
             if ( state.backtracking==0 ) {
-               before(grammarAccess.getExpressionListEntryAccess().getValueLogicalExpressionParserRuleCall_1_0_0()); 
+               before(grammarAccess.getExpressionListEntryAccess().getValueImplicationExpressionParserRuleCall_1_0_0()); 
             }
             pushFollow(FOLLOW_2);
-            ruleLogicalExpression();
+            ruleImplicationExpression();
 
             state._fsp--;
             if (state.failed) return ;
             if ( state.backtracking==0 ) {
-               after(grammarAccess.getExpressionListEntryAccess().getValueLogicalExpressionParserRuleCall_1_0_0()); 
+               after(grammarAccess.getExpressionListEntryAccess().getValueImplicationExpressionParserRuleCall_1_0_0()); 
             }
 
             }
@@ -42558,6 +42558,21 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
     }
     // $ANTLR end synpred57_InternalIvml
 
+    // $ANTLR start synpred119_InternalIvml
+    public final void synpred119_InternalIvml_fragment() throws RecognitionException {   
+        // InternalIvml.g:11204:2: ( rule__ExpressionListEntry__Group_0__0 )
+        // InternalIvml.g:11204:2: rule__ExpressionListEntry__Group_0__0
+        {
+        pushFollow(FOLLOW_2);
+        rule__ExpressionListEntry__Group_0__0();
+
+        state._fsp--;
+        if (state.failed) return ;
+
+        }
+    }
+    // $ANTLR end synpred119_InternalIvml
+
     // Delegated rules
 
     public final boolean synpred57_InternalIvml() {
@@ -42565,6 +42580,20 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
         int start = input.mark();
         try {
             synpred57_InternalIvml_fragment(); // can never throw exception
+        } catch (RecognitionException re) {
+            System.err.println("impossible: "+re);
+        }
+        boolean success = !state.failed;
+        input.rewind(start);
+        state.backtracking--;
+        state.failed=false;
+        return success;
+    }
+    public final boolean synpred119_InternalIvml() {
+        state.backtracking++;
+        int start = input.mark();
+        try {
+            synpred119_InternalIvml_fragment(); // can never throw exception
         } catch (RecognitionException re) {
             System.err.println("impossible: "+re);
         }
@@ -42765,16 +42794,16 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
     static final String[] dfa_24s = {
             "\1\2\1\3\1\4\2\1\5\uffff\2\1\17\uffff\1\1\2\uffff\1\1\1\5\1\uffff\1\6\7\uffff\1\1\24\uffff\2\1\11\uffff\2\1",
             "",
-            "\20\1\3\uffff\1\6\1\uffff\1\1\1\uffff\1\1\3\uffff\3\1\4\uffff\1\1\4\uffff\1\7\3\uffff\5\1\2\uffff\3\1",
-            "\20\1\3\uffff\1\6\1\uffff\1\1\1\uffff\1\1\3\uffff\3\1\4\uffff\1\1\4\uffff\1\7\3\uffff\5\1\2\uffff\3\1",
-            "\20\1\3\uffff\1\6\1\uffff\1\1\1\uffff\1\1\3\uffff\3\1\4\uffff\1\1\4\uffff\1\7\3\uffff\5\1\2\uffff\3\1",
-            "\20\1\3\uffff\1\6\1\uffff\1\1\1\uffff\1\1\3\uffff\3\1\4\uffff\1\1\4\uffff\1\7\3\uffff\5\1\2\uffff\3\1",
+            "\20\1\3\uffff\1\6\2\1\1\uffff\1\1\3\uffff\3\1\4\uffff\1\1\4\uffff\1\7\3\uffff\5\1\2\uffff\3\1",
+            "\20\1\3\uffff\1\6\2\1\1\uffff\1\1\3\uffff\3\1\4\uffff\1\1\4\uffff\1\7\3\uffff\5\1\2\uffff\3\1",
+            "\20\1\3\uffff\1\6\2\1\1\uffff\1\1\3\uffff\3\1\4\uffff\1\1\4\uffff\1\7\3\uffff\5\1\2\uffff\3\1",
+            "\20\1\3\uffff\1\6\2\1\1\uffff\1\1\3\uffff\3\1\4\uffff\1\1\4\uffff\1\7\3\uffff\5\1\2\uffff\3\1",
             "",
             "\1\10\1\11\1\12\34\uffff\1\13",
-            "\20\1\3\uffff\1\6\1\uffff\1\1\1\uffff\1\1\4\uffff\2\1\4\uffff\1\1\4\uffff\1\14\3\uffff\5\1\2\uffff\3\1",
-            "\20\1\3\uffff\1\6\1\uffff\1\1\1\uffff\1\1\4\uffff\2\1\4\uffff\1\1\4\uffff\1\14\3\uffff\5\1\2\uffff\3\1",
-            "\20\1\3\uffff\1\6\1\uffff\1\1\1\uffff\1\1\4\uffff\2\1\4\uffff\1\1\4\uffff\1\14\3\uffff\5\1\2\uffff\3\1",
-            "\20\1\3\uffff\1\6\1\uffff\1\1\1\uffff\1\1\4\uffff\2\1\4\uffff\1\1\4\uffff\1\14\3\uffff\5\1\2\uffff\3\1",
+            "\20\1\3\uffff\1\6\2\1\1\uffff\1\1\4\uffff\2\1\4\uffff\1\1\4\uffff\1\14\3\uffff\5\1\2\uffff\3\1",
+            "\20\1\3\uffff\1\6\2\1\1\uffff\1\1\4\uffff\2\1\4\uffff\1\1\4\uffff\1\14\3\uffff\5\1\2\uffff\3\1",
+            "\20\1\3\uffff\1\6\2\1\1\uffff\1\1\4\uffff\2\1\4\uffff\1\1\4\uffff\1\14\3\uffff\5\1\2\uffff\3\1",
+            "\20\1\3\uffff\1\6\2\1\1\uffff\1\1\4\uffff\2\1\4\uffff\1\1\4\uffff\1\14\3\uffff\5\1\2\uffff\3\1",
             "\1\10\1\11\1\12\34\uffff\1\13"
     };
 
@@ -42839,26 +42868,24 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
             return "2566:1: rule__EqualityExpressionPart__Alternatives_1 : ( ( ( rule__EqualityExpressionPart__ExAssignment_1_0 ) ) | ( ( rule__EqualityExpressionPart__CollectionAssignment_1_1 ) ) );";
         }
     }
-    static final String dfa_27s = "\1\4\1\uffff\4\24\1\uffff\1\4\4\24\1\4";
-    static final String dfa_28s = "\1\116\1\uffff\4\100\1\uffff\1\43\4\100\1\43";
-    static final String[] dfa_29s = {
+    static final String dfa_27s = "\1\116\1\uffff\4\100\1\uffff\1\43\4\100\1\43";
+    static final String[] dfa_28s = {
             "\1\2\1\3\1\4\2\1\5\uffff\2\1\17\uffff\1\1\2\uffff\1\1\1\5\1\uffff\1\6\7\uffff\1\1\24\uffff\2\1\11\uffff\2\1",
             "",
-            "\16\1\3\uffff\1\6\1\1\2\uffff\1\1\3\uffff\1\1\13\uffff\1\7\4\uffff\3\1",
-            "\16\1\3\uffff\1\6\1\1\2\uffff\1\1\3\uffff\1\1\13\uffff\1\7\4\uffff\3\1",
-            "\16\1\3\uffff\1\6\1\1\2\uffff\1\1\3\uffff\1\1\13\uffff\1\7\4\uffff\3\1",
-            "\16\1\3\uffff\1\6\1\1\2\uffff\1\1\3\uffff\1\1\13\uffff\1\7\4\uffff\3\1",
+            "\1\1\4\uffff\20\1\3\uffff\1\6\1\1\2\uffff\1\1\3\uffff\1\1\13\uffff\1\7\4\uffff\3\1",
+            "\1\1\4\uffff\20\1\3\uffff\1\6\1\1\2\uffff\1\1\3\uffff\1\1\13\uffff\1\7\4\uffff\3\1",
+            "\1\1\4\uffff\20\1\3\uffff\1\6\1\1\2\uffff\1\1\3\uffff\1\1\13\uffff\1\7\4\uffff\3\1",
+            "\1\1\4\uffff\20\1\3\uffff\1\6\1\1\2\uffff\1\1\3\uffff\1\1\13\uffff\1\7\4\uffff\3\1",
             "",
             "\1\10\1\11\1\12\34\uffff\1\13",
-            "\16\1\3\uffff\1\6\1\1\2\uffff\1\1\17\uffff\1\14\4\uffff\3\1",
-            "\16\1\3\uffff\1\6\1\1\2\uffff\1\1\17\uffff\1\14\4\uffff\3\1",
-            "\16\1\3\uffff\1\6\1\1\2\uffff\1\1\17\uffff\1\14\4\uffff\3\1",
-            "\16\1\3\uffff\1\6\1\1\2\uffff\1\1\17\uffff\1\14\4\uffff\3\1",
+            "\1\1\4\uffff\20\1\3\uffff\1\6\1\1\2\uffff\1\1\17\uffff\1\14\4\uffff\3\1",
+            "\1\1\4\uffff\20\1\3\uffff\1\6\1\1\2\uffff\1\1\17\uffff\1\14\4\uffff\3\1",
+            "\1\1\4\uffff\20\1\3\uffff\1\6\1\1\2\uffff\1\1\17\uffff\1\14\4\uffff\3\1",
+            "\1\1\4\uffff\20\1\3\uffff\1\6\1\1\2\uffff\1\1\17\uffff\1\14\4\uffff\3\1",
             "\1\10\1\11\1\12\34\uffff\1\13"
     };
     static final char[] dfa_27 = DFA.unpackEncodedStringToUnsignedChars(dfa_27s);
-    static final char[] dfa_28 = DFA.unpackEncodedStringToUnsignedChars(dfa_28s);
-    static final short[][] dfa_29 = unpackEncodedStringArray(dfa_29s);
+    static final short[][] dfa_28 = unpackEncodedStringArray(dfa_28s);
 
     class DFA25 extends DFA {
 
@@ -42867,60 +42894,135 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
             this.decisionNumber = 25;
             this.eot = dfa_18;
             this.eof = dfa_19;
-            this.min = dfa_27;
-            this.max = dfa_28;
+            this.min = dfa_25;
+            this.max = dfa_27;
             this.accept = dfa_22;
             this.special = dfa_23;
-            this.transition = dfa_29;
+            this.transition = dfa_28;
         }
         public String getDescription() {
             return "2826:1: rule__ExpressionListEntry__Alternatives_1 : ( ( ( rule__ExpressionListEntry__ValueAssignment_1_0 ) ) | ( ( rule__ExpressionListEntry__CollectionAssignment_1_1 ) ) );";
         }
     }
-    static final String dfa_30s = "\14\uffff";
-    static final String dfa_31s = "\1\uffff\4\5\3\uffff\4\5";
-    static final String dfa_32s = "\1\4\4\15\1\uffff\1\4\1\uffff\4\15";
-    static final String dfa_33s = "\1\116\4\100\1\uffff\1\43\1\uffff\4\100";
-    static final String dfa_34s = "\5\uffff\1\2\1\uffff\1\1\4\uffff";
-    static final String dfa_35s = "\14\uffff}>";
-    static final String[] dfa_36s = {
+    static final String dfa_29s = "\22\uffff";
+    static final String dfa_30s = "\1\4\4\0\15\uffff";
+    static final String dfa_31s = "\1\116\4\0\15\uffff";
+    static final String dfa_32s = "\5\uffff\1\2\13\uffff\1\1";
+    static final String dfa_33s = "\1\uffff\1\0\1\1\1\2\1\3\15\uffff}>";
+    static final String[] dfa_34s = {
             "\1\1\1\2\1\3\2\5\5\uffff\2\5\17\uffff\1\5\2\uffff\1\5\1\4\1\uffff\1\5\7\uffff\1\5\24\uffff\2\5\11\uffff\2\5",
-            "\1\7\6\uffff\16\5\3\uffff\2\5\2\uffff\1\5\3\uffff\1\5\13\uffff\1\5\4\uffff\1\6\2\5",
-            "\1\7\6\uffff\16\5\3\uffff\2\5\2\uffff\1\5\3\uffff\1\5\13\uffff\1\5\4\uffff\1\6\2\5",
-            "\1\7\6\uffff\16\5\3\uffff\2\5\2\uffff\1\5\3\uffff\1\5\13\uffff\1\5\4\uffff\1\6\2\5",
-            "\1\7\6\uffff\16\5\3\uffff\2\5\2\uffff\1\5\3\uffff\1\5\13\uffff\1\5\4\uffff\1\6\2\5",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
             "",
-            "\1\10\1\11\1\12\34\uffff\1\13",
             "",
-            "\1\7\6\uffff\16\5\4\uffff\1\5\2\uffff\1\5\3\uffff\1\5\20\uffff\3\5",
-            "\1\7\6\uffff\16\5\4\uffff\1\5\2\uffff\1\5\3\uffff\1\5\20\uffff\3\5",
-            "\1\7\6\uffff\16\5\4\uffff\1\5\2\uffff\1\5\3\uffff\1\5\20\uffff\3\5",
-            "\1\7\6\uffff\16\5\4\uffff\1\5\2\uffff\1\5\3\uffff\1\5\20\uffff\3\5"
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            ""
     };
 
-    static final short[] dfa_30 = DFA.unpackEncodedString(dfa_30s);
-    static final short[] dfa_31 = DFA.unpackEncodedString(dfa_31s);
-    static final char[] dfa_32 = DFA.unpackEncodedStringToUnsignedChars(dfa_32s);
-    static final char[] dfa_33 = DFA.unpackEncodedStringToUnsignedChars(dfa_33s);
-    static final short[] dfa_34 = DFA.unpackEncodedString(dfa_34s);
-    static final short[] dfa_35 = DFA.unpackEncodedString(dfa_35s);
-    static final short[][] dfa_36 = unpackEncodedStringArray(dfa_36s);
+    static final short[] dfa_29 = DFA.unpackEncodedString(dfa_29s);
+    static final char[] dfa_30 = DFA.unpackEncodedStringToUnsignedChars(dfa_30s);
+    static final char[] dfa_31 = DFA.unpackEncodedStringToUnsignedChars(dfa_31s);
+    static final short[] dfa_32 = DFA.unpackEncodedString(dfa_32s);
+    static final short[] dfa_33 = DFA.unpackEncodedString(dfa_33s);
+    static final short[][] dfa_34 = unpackEncodedStringArray(dfa_34s);
 
     class DFA90 extends DFA {
 
         public DFA90(BaseRecognizer recognizer) {
             this.recognizer = recognizer;
             this.decisionNumber = 90;
-            this.eot = dfa_30;
-            this.eof = dfa_31;
-            this.min = dfa_32;
-            this.max = dfa_33;
-            this.accept = dfa_34;
-            this.special = dfa_35;
-            this.transition = dfa_36;
+            this.eot = dfa_29;
+            this.eof = dfa_29;
+            this.min = dfa_30;
+            this.max = dfa_31;
+            this.accept = dfa_32;
+            this.special = dfa_33;
+            this.transition = dfa_34;
         }
         public String getDescription() {
             return "11204:1: ( rule__ExpressionListEntry__Group_0__0 )?";
+        }
+        public int specialStateTransition(int s, IntStream _input) throws NoViableAltException {
+            TokenStream input = (TokenStream)_input;
+        	int _s = s;
+            switch ( s ) {
+                    case 0 : 
+                        int LA90_1 = input.LA(1);
+
+                         
+                        int index90_1 = input.index();
+                        input.rewind();
+                        s = -1;
+                        if ( (synpred119_InternalIvml()) ) {s = 17;}
+
+                        else if ( (true) ) {s = 5;}
+
+                         
+                        input.seek(index90_1);
+                        if ( s>=0 ) return s;
+                        break;
+                    case 1 : 
+                        int LA90_2 = input.LA(1);
+
+                         
+                        int index90_2 = input.index();
+                        input.rewind();
+                        s = -1;
+                        if ( (synpred119_InternalIvml()) ) {s = 17;}
+
+                        else if ( (true) ) {s = 5;}
+
+                         
+                        input.seek(index90_2);
+                        if ( s>=0 ) return s;
+                        break;
+                    case 2 : 
+                        int LA90_3 = input.LA(1);
+
+                         
+                        int index90_3 = input.index();
+                        input.rewind();
+                        s = -1;
+                        if ( (synpred119_InternalIvml()) ) {s = 17;}
+
+                        else if ( (true) ) {s = 5;}
+
+                         
+                        input.seek(index90_3);
+                        if ( s>=0 ) return s;
+                        break;
+                    case 3 : 
+                        int LA90_4 = input.LA(1);
+
+                         
+                        int index90_4 = input.index();
+                        input.rewind();
+                        s = -1;
+                        if ( (synpred119_InternalIvml()) ) {s = 17;}
+
+                        else if ( (true) ) {s = 5;}
+
+                         
+                        input.seek(index90_4);
+                        if ( s>=0 ) return s;
+                        break;
+            }
+            if (state.backtracking>0) {state.failed=true; return -1;}
+            NoViableAltException nvae =
+                new NoViableAltException(getDescription(), 90, _s, input);
+            error(nvae);
+            throw nvae;
         }
     }
  

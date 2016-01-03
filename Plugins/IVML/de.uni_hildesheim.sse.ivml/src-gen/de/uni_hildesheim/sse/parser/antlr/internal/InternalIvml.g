@@ -5346,9 +5346,9 @@ ruleExpressionListEntry returns [EObject current=null]
 )?((
 (
 		{ 
-	        newCompositeNode(grammarAccess.getExpressionListEntryAccess().getValueLogicalExpressionParserRuleCall_1_0_0()); 
+	        newCompositeNode(grammarAccess.getExpressionListEntryAccess().getValueImplicationExpressionParserRuleCall_1_0_0()); 
 	    }
-		lv_value_4_0=ruleLogicalExpression		{
+		lv_value_4_0=ruleImplicationExpression		{
 	        if ($current==null) {
 	            $current = createModelElementForParent(grammarAccess.getExpressionListEntryRule());
 	        }
@@ -5356,7 +5356,7 @@ ruleExpressionListEntry returns [EObject current=null]
        			$current, 
        			"value",
         		lv_value_4_0, 
-        		"de.uni_hildesheim.sse.Ivml.LogicalExpression");
+        		"de.uni_hildesheim.sse.Ivml.ImplicationExpression");
 	        afterParserOrEnumRuleCall();
 	    }
 

@@ -1,0 +1,13 @@
+project constraintVar2 {
+
+    version v0;
+    compound Cmp {
+        Integer i;
+        Integer j;
+        Constraint c1 = i > 0;
+        Constraint c2 = isDefined(i);
+    }
+
+    Cmp c;
+    c = {i = 0, c1 = i > 0 implies j = 5, c2 = isDefined(i)};
+}

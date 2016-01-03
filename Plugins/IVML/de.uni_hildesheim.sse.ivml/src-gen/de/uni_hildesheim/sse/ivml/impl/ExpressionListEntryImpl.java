@@ -4,8 +4,8 @@ package de.uni_hildesheim.sse.ivml.impl;
 
 import de.uni_hildesheim.sse.ivml.CollectionInitializer;
 import de.uni_hildesheim.sse.ivml.ExpressionListEntry;
+import de.uni_hildesheim.sse.ivml.ImplicationExpression;
 import de.uni_hildesheim.sse.ivml.IvmlPackage;
-import de.uni_hildesheim.sse.ivml.LogicalExpression;
 
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.NotificationChain;
@@ -82,7 +82,7 @@ public class ExpressionListEntryImpl extends MinimalEObjectImpl.Container implem
    * @generated
    * @ordered
    */
-  protected LogicalExpression value;
+  protected ImplicationExpression value;
 
   /**
    * The cached value of the '{@link #getCollection() <em>Collection</em>}' containment reference.
@@ -166,7 +166,7 @@ public class ExpressionListEntryImpl extends MinimalEObjectImpl.Container implem
    * <!-- end-user-doc -->
    * @generated
    */
-  public LogicalExpression getValue()
+  public ImplicationExpression getValue()
   {
     return value;
   }
@@ -176,9 +176,9 @@ public class ExpressionListEntryImpl extends MinimalEObjectImpl.Container implem
    * <!-- end-user-doc -->
    * @generated
    */
-  public NotificationChain basicSetValue(LogicalExpression newValue, NotificationChain msgs)
+  public NotificationChain basicSetValue(ImplicationExpression newValue, NotificationChain msgs)
   {
-    LogicalExpression oldValue = value;
+    ImplicationExpression oldValue = value;
     value = newValue;
     if (eNotificationRequired())
     {
@@ -193,7 +193,7 @@ public class ExpressionListEntryImpl extends MinimalEObjectImpl.Container implem
    * <!-- end-user-doc -->
    * @generated
    */
-  public void setValue(LogicalExpression newValue)
+  public void setValue(ImplicationExpression newValue)
   {
     if (newValue != value)
     {
@@ -314,7 +314,7 @@ public class ExpressionListEntryImpl extends MinimalEObjectImpl.Container implem
         setAttrib((String)newValue);
         return;
       case IvmlPackage.EXPRESSION_LIST_ENTRY__VALUE:
-        setValue((LogicalExpression)newValue);
+        setValue((ImplicationExpression)newValue);
         return;
       case IvmlPackage.EXPRESSION_LIST_ENTRY__COLLECTION:
         setCollection((CollectionInitializer)newValue);
@@ -340,7 +340,7 @@ public class ExpressionListEntryImpl extends MinimalEObjectImpl.Container implem
         setAttrib(ATTRIB_EDEFAULT);
         return;
       case IvmlPackage.EXPRESSION_LIST_ENTRY__VALUE:
-        setValue((LogicalExpression)null);
+        setValue((ImplicationExpression)null);
         return;
       case IvmlPackage.EXPRESSION_LIST_ENTRY__COLLECTION:
         setCollection((CollectionInitializer)null);

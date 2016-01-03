@@ -3004,15 +3004,15 @@ public class IvmlGrammarAccess extends AbstractGrammarElementFinder {
 		private final Keyword cEqualsSignKeyword_0_2 = (Keyword)cGroup_0.eContents().get(2);
 		private final Alternatives cAlternatives_1 = (Alternatives)cGroup.eContents().get(1);
 		private final Assignment cValueAssignment_1_0 = (Assignment)cAlternatives_1.eContents().get(0);
-		private final RuleCall cValueLogicalExpressionParserRuleCall_1_0_0 = (RuleCall)cValueAssignment_1_0.eContents().get(0);
+		private final RuleCall cValueImplicationExpressionParserRuleCall_1_0_0 = (RuleCall)cValueAssignment_1_0.eContents().get(0);
 		private final Assignment cCollectionAssignment_1_1 = (Assignment)cAlternatives_1.eContents().get(1);
 		private final RuleCall cCollectionCollectionInitializerParserRuleCall_1_1_0 = (RuleCall)cCollectionAssignment_1_1.eContents().get(0);
 		
 		//ExpressionListEntry:
-		//	(name=Identifier ('.' attrib=Identifier)? '=')? (value=LogicalExpression | collection=CollectionInitializer);
+		//	(name=Identifier ('.' attrib=Identifier)? '=')? (value=ImplicationExpression | collection=CollectionInitializer);
 		@Override public ParserRule getRule() { return rule; }
 
-		//(name=Identifier ('.' attrib=Identifier)? '=')? (value=LogicalExpression | collection=CollectionInitializer)
+		//(name=Identifier ('.' attrib=Identifier)? '=')? (value=ImplicationExpression | collection=CollectionInitializer)
 		public Group getGroup() { return cGroup; }
 
 		//(name=Identifier ('.' attrib=Identifier)? '=')?
@@ -3039,14 +3039,14 @@ public class IvmlGrammarAccess extends AbstractGrammarElementFinder {
 		//'='
 		public Keyword getEqualsSignKeyword_0_2() { return cEqualsSignKeyword_0_2; }
 
-		//(value=LogicalExpression | collection=CollectionInitializer)
+		//(value=ImplicationExpression | collection=CollectionInitializer)
 		public Alternatives getAlternatives_1() { return cAlternatives_1; }
 
-		//value=LogicalExpression
+		//value=ImplicationExpression
 		public Assignment getValueAssignment_1_0() { return cValueAssignment_1_0; }
 
-		//LogicalExpression
-		public RuleCall getValueLogicalExpressionParserRuleCall_1_0_0() { return cValueLogicalExpressionParserRuleCall_1_0_0; }
+		//ImplicationExpression
+		public RuleCall getValueImplicationExpressionParserRuleCall_1_0_0() { return cValueImplicationExpressionParserRuleCall_1_0_0; }
 
 		//collection=CollectionInitializer
 		public Assignment getCollectionAssignment_1_1() { return cCollectionAssignment_1_1; }
@@ -4088,7 +4088,7 @@ public class IvmlGrammarAccess extends AbstractGrammarElementFinder {
 	}
 
 	//ExpressionListEntry:
-	//	(name=Identifier ('.' attrib=Identifier)? '=')? (value=LogicalExpression | collection=CollectionInitializer);
+	//	(name=Identifier ('.' attrib=Identifier)? '=')? (value=ImplicationExpression | collection=CollectionInitializer);
 	public ExpressionListEntryElements getExpressionListEntryAccess() {
 		return pExpressionListEntry;
 	}

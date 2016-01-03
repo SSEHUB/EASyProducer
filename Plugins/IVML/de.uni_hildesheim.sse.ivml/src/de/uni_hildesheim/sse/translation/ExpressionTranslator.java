@@ -1266,7 +1266,7 @@ public class ExpressionTranslator extends de.uni_hildesheim.sse.dslCore.translat
                 }
             }
             if (null != entry.getValue()) {
-                exprs[e] = processLogicalExpression(entry.getValue(), context, parent);
+                exprs[e] = processImplicationExpression(entry.getValue(), context, parent);
                 exprs[e].inferDatatype();
             }
             if (null != entry.getCollection()) {
@@ -1321,7 +1321,7 @@ public class ExpressionTranslator extends de.uni_hildesheim.sse.dslCore.translat
         for (int e = 0; e < entryCount; e++) {
             ExpressionListEntry entry = entryList.get(e);
             if (null != entry.getValue()) {
-                exprs[e] = processLogicalExpression(entry.getValue(), context, parent);
+                exprs[e] = processImplicationExpression(entry.getValue(), context, parent);
                 if (null != exprs[e]) {
                     exprs[e].inferDatatype();
                 }

@@ -503,7 +503,7 @@ ExpressionListOrRange:	// adjust values to Expressions
 	
 ExpressionListEntry:
 	(name=Identifier ('.' attrib=Identifier)? '=')? // for compound initialization (IVML extension to OCL)
-	(value=LogicalExpression | collection=CollectionInitializer)
+	(value=ImplicationExpression | collection=CollectionInitializer)
 	;	
 
 Literal:	

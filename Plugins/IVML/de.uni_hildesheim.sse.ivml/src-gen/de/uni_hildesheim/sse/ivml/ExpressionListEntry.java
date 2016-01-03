@@ -86,12 +86,12 @@ public interface ExpressionListEntry extends EObject
    * </p>
    * <!-- end-user-doc -->
    * @return the value of the '<em>Value</em>' containment reference.
-   * @see #setValue(LogicalExpression)
+   * @see #setValue(ImplicationExpression)
    * @see de.uni_hildesheim.sse.ivml.IvmlPackage#getExpressionListEntry_Value()
    * @model containment="true"
    * @generated
    */
-  LogicalExpression getValue();
+  ImplicationExpression getValue();
 
   /**
    * Sets the value of the '{@link de.uni_hildesheim.sse.ivml.ExpressionListEntry#getValue <em>Value</em>}' containment reference.
@@ -101,7 +101,7 @@ public interface ExpressionListEntry extends EObject
    * @see #getValue()
    * @generated
    */
-  void setValue(LogicalExpression value);
+  void setValue(ImplicationExpression value);
 
   /**
    * Returns the value of the '<em><b>Collection</b></em>' containment reference.

@@ -571,7 +571,7 @@ public abstract class AbstractIvmlSemanticSequencer extends AbstractDelegatingSe
 	 *     ExpressionListEntry returns ExpressionListEntry
 	 *
 	 * Constraint:
-	 *     ((name=Identifier attrib=Identifier?)? (value=LogicalExpression | collection=CollectionInitializer))
+	 *     ((name=Identifier attrib=Identifier?)? (value=ImplicationExpression | collection=CollectionInitializer))
 	 */
 	protected void sequence_ExpressionListEntry(ISerializationContext context, ExpressionListEntry semanticObject) {
 		genericSequencer.createSequence(context, semanticObject);

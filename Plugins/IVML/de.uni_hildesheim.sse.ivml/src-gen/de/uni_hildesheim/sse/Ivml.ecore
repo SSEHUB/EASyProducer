@@ -372,7 +372,7 @@
   <eClassifiers xsi:type="ecore:EClass" name="ExpressionListEntry">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="attrib" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="value" eType="#//LogicalExpression"
+    <eStructuralFeatures xsi:type="ecore:EReference" name="value" eType="#//ImplicationExpression"
         containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="collection" eType="#//CollectionInitializer"
         containment="true"/>
