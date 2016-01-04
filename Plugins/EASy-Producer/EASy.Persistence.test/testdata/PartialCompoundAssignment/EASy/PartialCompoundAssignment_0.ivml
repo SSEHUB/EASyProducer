@@ -1,0 +1,11 @@
+project PartialCompoundAssignment {
+
+	version v0;
+  compound Dimension {
+    Integer width;
+    Integer height;
+  }
+  
+  Dimension dim = {width = 1920, height = 1080};
+  dim = {width = 1900};
+}

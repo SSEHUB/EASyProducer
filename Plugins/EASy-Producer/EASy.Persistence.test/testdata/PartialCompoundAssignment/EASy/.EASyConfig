@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ProductLineProject id="063582ad-64de-4943-b37b-206070587555" name="PartialCompoundAssignment" version="0" location="PartialCompoundAssignment">
+	<predecessors>
+	</predecessors>
+	<successors>
+	</successors>
+	<settings>
+	</settings>
+	<reasoners>
+	</reasoners>
+	<instantiators>
+	</instantiators>
+</ProductLineProject>

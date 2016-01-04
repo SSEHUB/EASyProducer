@@ -154,6 +154,13 @@ public class PLPInfoTest extends AbstractPLPInfoTest {
     private static final File TEST_MULTI_INSTANTIATION
         = new File(AllTests.TESTDATA_DIR_COPY, "MultiInstantiation");
     
+    /**
+     * Project for testing partial re-assignment of compounds.
+     * Test will test correct initialization of the configuration.
+     */
+    private static final File TEST_PARTIAL_COMPOUND_ASSIGNMENT
+        = new File(AllTests.TESTDATA_DIR_ORIGINS, "PartialCompoundAssignment");
+    
     private static Set<PLPInfo> loadedInfos = new HashSet<PLPInfo>();
     
     /**
@@ -531,6 +538,53 @@ public class PLPInfoTest extends AbstractPLPInfoTest {
         Assert.assertNotNull(varB.getValue());
         Assert.assertEquals(AssignmentState.DERIVED, varB.getState());
         Assert.assertEquals(new Integer(6), varB.getValue().getValue());
+    }
+    
+    /**
+     * Tests the possibility to re-assign only some, but not all, values of a compound.
+     * The loaded project has an IVML file as follows:
+     * <pre>
+     * compound Dimension {
+     *   Integer width;
+     *   Integer height;
+     * }
+     * 
+     * Dimension dim = {width = 1920, height = 1080};
+     * dim = {width = 1900};
+     * </pre>
+     * EASy should set the values for the compound as follows: {width = 1900, height=1080}.
+     * @throws PersistenceException Must not occur, otherwise the config files inside the toplevel location are corrupt.
+     */
+    @Test
+    public void testPartialCompoundAssignment() throws PersistenceException {
+        // Load project
+        PLPInfo plp = loadPLPInfo(TEST_PARTIAL_COMPOUND_ASSIGNMENT);
+        Configuration config = plp.getConfiguration();
+        Assert.assertEquals(1, config.getDecisionCount());
+        
+        Iterator<IDecisionVariable> itr = config.iterator();
+        IDecisionVariable cmpVar = itr.next();
+        
+        // Test that the compound has a value
+        Assert.assertNotNull(cmpVar.getValue());
+        Assert.assertTrue(cmpVar.getValue().isConfigured());
+        Assert.assertEquals(AssignmentState.ASSIGNED, cmpVar.getState());
+        Assert.assertEquals(2, cmpVar.getNestedElementsCount());
+        // Test correct value as described in JavaDoc.
+        IDecisionVariable widthSlot = null;
+        IDecisionVariable heightSlot = null;
+        for (int i = 0; i < cmpVar.getNestedElementsCount(); i++) {
+            IDecisionVariable nestedVar = cmpVar.getNestedElement(i);
+            if ("width".equals(nestedVar.getDeclaration().getName())) {
+                widthSlot = nestedVar;
+            } else if ("height".equals(nestedVar.getDeclaration().getName())) {
+                heightSlot = nestedVar;
+            }
+        }
+        Assert.assertNotNull(widthSlot);
+        Assert.assertNotNull(heightSlot);
+        Assert.assertEquals(1900, widthSlot.getValue().getValue());
+        Assert.assertEquals(1080, heightSlot.getValue().getValue());
     }
     
     /**
