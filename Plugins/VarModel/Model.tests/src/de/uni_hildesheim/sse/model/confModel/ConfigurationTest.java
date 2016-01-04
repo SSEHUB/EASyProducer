@@ -24,6 +24,7 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
+import de.uni_hildesheim.sse.model.cst.ConstantValue;
 import de.uni_hildesheim.sse.model.cst.OCLFeatureCall;
 import de.uni_hildesheim.sse.model.cst.Variable;
 import de.uni_hildesheim.sse.model.management.VarModel;
@@ -37,14 +38,15 @@ import de.uni_hildesheim.sse.model.varModel.Project;
 import de.uni_hildesheim.sse.model.varModel.ProjectImport;
 import de.uni_hildesheim.sse.model.varModel.ProjectInterface;
 import de.uni_hildesheim.sse.model.varModel.datatypes.Compound;
+import de.uni_hildesheim.sse.model.varModel.datatypes.Enum;
 import de.uni_hildesheim.sse.model.varModel.datatypes.IntegerType;
 import de.uni_hildesheim.sse.model.varModel.filter.ConstraintFinder;
 import de.uni_hildesheim.sse.model.varModel.filter.FilterType;
 import de.uni_hildesheim.sse.model.varModel.filter.FreezeBlockFinder;
+import de.uni_hildesheim.sse.model.varModel.values.CompoundValue;
 import de.uni_hildesheim.sse.model.varModel.values.Value;
 import de.uni_hildesheim.sse.model.varModel.values.ValueDoesNotMatchTypeException;
 import de.uni_hildesheim.sse.model.varModel.values.ValueFactory;
-import de.uni_hildesheim.sse.model.varModel.datatypes.Enum;
 import de.uni_hildesheim.sse.utils.modelManagement.ModelManagementException;
 import de.uni_hildesheim.sse.varModel.testSupport.ProjectTestUtilities;
 
@@ -297,6 +299,65 @@ public class ConfigurationTest {
         Assert.assertEquals(1, freezeBlock.getFreezableCount());
         IFreezable frozenVar = freezeBlock.getFreezable(0);
         Assert.assertEquals(intFrozen.getName(), frozenVar.getName());
+    }
+    
+    /**
+     * Tests whether only user assigned slots of a compound will be saved inside the configuration.
+     * @throws ConfigurationException 
+     * @throws ValueDoesNotMatchTypeException Must not occur otherwise implementation of default values for compounds
+     * has been changed.
+     */
+    @Test
+    public void testSaveUserContentOnlyForCompounds() throws ConfigurationException, ValueDoesNotMatchTypeException {
+        
+        // Create project with a compound, one slot will be re-assigned by the user
+        Compound dimType = new Compound("Dimension", project);
+        project.add(dimType);
+        DecisionVariableDeclaration widthDecl = new DecisionVariableDeclaration("width", IntegerType.TYPE, dimType);
+        dimType.add(widthDecl);
+        DecisionVariableDeclaration heightDecl = new DecisionVariableDeclaration("height", IntegerType.TYPE, dimType);
+        dimType.add(heightDecl);
+        DecisionVariableDeclaration cmpDecl = new DecisionVariableDeclaration("dimension", dimType, project);
+        cmpDecl.setValue(new Object[] {"width", 1920, "height", 1080});
+        project.add(cmpDecl);        
+        
+        // Verify project for testing and update configuration
+        ProjectTestUtilities.validateProject(project);
+        configuration.refresh();
+        
+        // Reassign one slot by the user
+        IDecisionVariable cmpVar = configuration.getDecision(cmpDecl);
+        IDecisionVariable widthSlot = null;
+        IDecisionVariable heightSlot = null;
+        for (int i = 0; i < cmpVar.getNestedElementsCount(); i++) {
+            IDecisionVariable nestedVar = cmpVar.getNestedElement(i);
+            if (widthDecl.getName().equals(nestedVar.getDeclaration().getName())) {
+                widthSlot = nestedVar;
+            } else if (heightDecl.getName().equals(nestedVar.getDeclaration().getName())) {
+                heightSlot = nestedVar;
+            }
+        }
+        Assert.assertNotNull(widthSlot);
+        Assert.assertNotNull(heightSlot);
+        widthSlot.setValue(ValueFactory.createValue(widthDecl.getType(), 1900), AssignmentState.ASSIGNED);
+        
+        // Save configuration into new project (easier for testing)
+        Project confInNewProject = configuration.toProject(true);
+        ProjectTestUtilities.validateProject(confInNewProject);
+        
+        // Saved configuration should only contain one assignment with one slot value (new value for width);
+        Assert.assertEquals(1, confInNewProject.getElementCount());
+        Constraint savedAssignment = (Constraint) confInNewProject.getElement(0);
+        OCLFeatureCall savedSyntax = (OCLFeatureCall) savedAssignment.getConsSyntax();
+        ConstantValue savedSlotAssignments = (ConstantValue) savedSyntax.getParameter(0);
+        CompoundValue cmpValue = (CompoundValue) savedSlotAssignments.getConstantValue();
+        
+        // Verify value
+        Value widthValue = cmpValue.getNestedValue(widthDecl.getName());
+        Assert.assertNotNull(widthValue);
+        Assert.assertEquals(1900, widthValue.getValue());
+        Value heightValue = cmpValue.getNestedValue(heightDecl.getName());
+        Assert.assertNull(heightValue);
     }
      
     /**

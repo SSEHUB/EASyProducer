@@ -46,6 +46,7 @@ import de.uni_hildesheim.sse.model.varModel.filter.ConstraintSeparator;
 import de.uni_hildesheim.sse.model.varModel.filter.FilterType;
 import de.uni_hildesheim.sse.model.varModel.filter.FreezeBlockFinder;
 import de.uni_hildesheim.sse.model.varModel.filter.FrozenElementsFinder;
+import de.uni_hildesheim.sse.model.varModel.values.CompoundValue;
 import de.uni_hildesheim.sse.model.varModel.values.StringValue;
 import de.uni_hildesheim.sse.model.varModel.values.Value;
 import de.uni_hildesheim.sse.model.varModel.values.ValueDoesNotMatchTypeException;
@@ -264,7 +265,7 @@ public class ConfigurationSaver {
     protected ConstraintSyntaxTree createAssignmentConstraint(Project dstProject, AbstractVariable decl, 
         IDecisionVariable var, Value value) {
         return new OCLFeatureCall(deriveOperand(decl, var), 
-            OclKeyWords.ASSIGNMENT, new ConstantValue(toSaveableValue(value)));
+            OclKeyWords.ASSIGNMENT, new ConstantValue(toSaveableValue(var, value)));
     }
     
     /**
@@ -311,7 +312,7 @@ public class ConfigurationSaver {
         AbstractVariable decl, IDecisionVariable var, Value value) {
         int code = 0;
         
-        if (null != value & AssignmentState.UNDEFINED != var.getState() && AssignmentState.DEFAULT != var.getState()) {
+        if (null != value && AssignmentState.UNDEFINED != var.getState() && AssignmentState.DEFAULT != var.getState()) {
             // If only user input should be stored, than also ignore Derived states.
             if (!onlyUserInput || AssignmentState.DERIVED != var.getState()) {
                 
@@ -367,22 +368,50 @@ public class ConfigurationSaver {
      * Should only be called inside the
      * {@link #processAssignment(Project, StringBuilder, AbstractVariable, IDecisionVariable, Value)}
      * method.
+     * @param var The variable which belongs to the corresponding value (as t holds the states, which are needed for
+     * filtering irrelevant values).
      * @param value The value which should be saved.
      * @return the value where all problematic characters are escaped.
      */
-    protected static Value toSaveableValue(Value value) {
-        if (null != value.getValue() && value instanceof StringValue) {
-            StringValue sValue = (StringValue) value;
-            String tmpValue = sValue.getValue();
-            // Replace \ with \\
-            tmpValue = tmpValue.replaceAll("\\\\", "\\\\\\\\");
-            // Replace " with \"
-            tmpValue = tmpValue.replaceAll("\\\"", "\\\\\"");
-            try {
-                value = ValueFactory.createValue(StringType.TYPE, tmpValue);
-            } catch (ValueDoesNotMatchTypeException e) {
-                // This exception should not occur.
-                e.printStackTrace();
+    protected Value toSaveableValue(IDecisionVariable var, Value value) {
+        if (null != value.getValue()) {
+            if (value instanceof StringValue) {
+                StringValue sValue = (StringValue) value;
+                String tmpValue = sValue.getValue();
+                // Replace \ with \\
+                tmpValue = tmpValue.replaceAll("\\\\", "\\\\\\\\");
+                // Replace " with \"
+                tmpValue = tmpValue.replaceAll("\\\"", "\\\\\"");
+                try {
+                    value = ValueFactory.createValue(StringType.TYPE, tmpValue);
+                } catch (ValueDoesNotMatchTypeException e) {
+                    // This exception should not occur.
+                    Bundle.getLogger(ConfigurationSaver.class).exception(e);
+                }
+            } else if (value instanceof CompoundValue) {
+                // Filter compound value/variable for user defined states and save only them
+                CompoundValue cmpValue = (CompoundValue) value;
+                ArrayList<Object> slotsNValues = new ArrayList<Object>();
+                for (int i = 0, n = var.getNestedElementsCount(); i < n; i++) {
+                    IDecisionVariable nestedVar = var.getNestedElement(i);
+                    IAssignmentState nestedState = nestedVar.getState();
+                    if (AssignmentState.UNDEFINED != nestedState
+                        && (!onlyUserInput || (AssignmentState.DERIVED != nestedState
+                        && AssignmentState.DEFAULT != nestedState))) {
+                        
+                        // Slot name
+                        String slotName = nestedVar.getDeclaration().getName();
+                        slotsNValues.add(slotName);
+                        // Slot value (recursive call)
+                        slotsNValues.add(toSaveableValue(nestedVar, cmpValue.getNestedValue(slotName)));
+                    }
+                }
+                try {
+                    value = ValueFactory.createValue(var.getDeclaration().getType(), slotsNValues.toArray());
+                } catch (ValueDoesNotMatchTypeException e) {
+                    // This exception should not occur.
+                    Bundle.getLogger(ConfigurationSaver.class).exception(e);
+                }
             }
         }
         
