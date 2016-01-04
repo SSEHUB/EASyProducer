@@ -34,3 +34,14 @@ Installation
 -------------
 EASy-Producer can be installed from the [official update site](http://projects.sse.uni-hildesheim.de/easy/ "EASy-Producer update site") hosted at the University of Hildesheim, Germany.
 
+Build Status
+------------------
+- Features ![Build Status of Features](http://jenkins.sse.uni-hildesheim.de/buildStatus/icon?job=EASy-Features)
+- Nightly-UpdateSite ![Build Status of Nightly-UpdateSite](http://jenkins.sse.uni-hildesheim.de/buildStatus/icon?job=EASy-Nightly-UpdateSite)
+- EASy-Producer ![Build Status of EASy-Producer](http://jenkins.sse.uni-hildesheim.de/buildStatus/icon?job=EASy-Producer)
+- Instantiation ![Build Status of Instantiation](http://jenkins.sse.uni-hildesheim.de/buildStatus/icon?job=Instantiation)
+- SSE-Reasoner ![Build Status of SSE-Reasoner](http://jenkins.sse.uni-hildesheim.de/buildStatus/icon?job=SSEreasoner)
+- Reasoner Core ![Build Status of Reasoner Core](http://jenkins.sse.uni-hildesheim.de/buildStatus/icon?job=ReasonerCore)
+- IVML-Parser ![Build Status of IVML-Parser](http://jenkins.sse.uni-hildesheim.de/buildStatus/icon?job=IVML)
+- Variability Model ![Build Status of Variability Model](http://jenkins.sse.uni-hildesheim.de/buildStatus/icon?job=VarModel)
+- Standalone ![Build Status of Standalone](http://jenkins.sse.uni-hildesheim.de/buildStatus/icon?job=Standalone)
