@@ -374,7 +374,7 @@ public class ConfigurationSaver {
      * @return the value where all problematic characters are escaped.
      */
     protected Value toSaveableValue(IDecisionVariable var, Value value) {
-        if (null != value.getValue()) {
+        if (null != value && null != value.getValue()) {
             if (value instanceof StringValue) {
                 StringValue sValue = (StringValue) value;
                 String tmpValue = sValue.getValue();

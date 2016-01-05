@@ -359,6 +359,69 @@ public class ConfigurationTest {
         Value heightValue = cmpValue.getNestedValue(heightDecl.getName());
         Assert.assertNull(heightValue);
     }
+    
+    /**
+     * Tests whether partially configured compounds (containing slots with null values) can be saved.
+     * Bug detected on 05.01.2016.
+     * @throws ConfigurationException 
+     * @throws ValueDoesNotMatchTypeException Must not occur otherwise implementation of default values for compounds
+     * has been changed.
+     */
+    @Test
+    public void testSavePartialCompounds() throws ConfigurationException, ValueDoesNotMatchTypeException {
+        
+        // Create project with a compound and a nested compound, one nested slot will must be undefined
+        Compound dimType2 = new Compound("Dimension2D", project);
+        project.add(dimType2);
+        DecisionVariableDeclaration widthDecl = new DecisionVariableDeclaration("width", IntegerType.TYPE, dimType2);
+        dimType2.add(widthDecl);
+        DecisionVariableDeclaration heightDecl = new DecisionVariableDeclaration("height", IntegerType.TYPE, dimType2);
+        dimType2.add(heightDecl);
+        Compound dimType3 = new Compound("Dimension3D", project);
+        project.add(dimType3);
+        DecisionVariableDeclaration depthDecl = new DecisionVariableDeclaration("depth", IntegerType.TYPE, dimType3);
+        dimType3.add(depthDecl);
+        DecisionVariableDeclaration dim2DSlotDecl = new DecisionVariableDeclaration("dim2DSlot", dimType2, dimType3);
+        dimType3.add(dim2DSlotDecl);
+        dim2DSlotDecl.setValue(new Object[] {"width", 2});     
+        DecisionVariableDeclaration cmpDecl = new DecisionVariableDeclaration("dimension3D", dimType3, project);
+        project.add(cmpDecl);        
+        
+        // Verify project for testing and update configuration
+        ProjectTestUtilities.validateProject(project);
+        configuration.refresh();
+        
+        // Set manually a value for top slot by the user
+        IDecisionVariable cmpVar = configuration.getDecision(cmpDecl);
+        IDecisionVariable depthSlot = cmpVar.getNestedElement(0);
+        depthSlot.setValue(ValueFactory.createValue(depthDecl.getType(), 1), AssignmentState.ASSIGNED);
+        // Freeze complete nested compound to force that the complete declaration is considered
+        // while saving the configuration.
+        cmpVar.freeze(dim2DSlotDecl.getName());
+        
+        // Save configuration into new project (easier for testing)
+        Project confInNewProject = configuration.toProject(true);
+        ProjectTestUtilities.validateProject(confInNewProject);
+        
+        // Saved configuration should only contain one assignment with one slot value (new value for width);
+        Assert.assertEquals(1, confInNewProject.getElementCount());
+        Constraint savedAssignment = (Constraint) confInNewProject.getElement(0);
+        OCLFeatureCall savedSyntax = (OCLFeatureCall) savedAssignment.getConsSyntax();
+        ConstantValue savedSlotAssignments = (ConstantValue) savedSyntax.getParameter(0);
+        CompoundValue cmpValue = (CompoundValue) savedSlotAssignments.getConstantValue();
+        
+        // Verify value
+        Value depthValue = cmpValue.getNestedValue(depthDecl.getName());
+        Assert.assertNotNull(depthValue);
+        Assert.assertEquals(1, depthValue.getValue());
+        CompoundValue dim2DSlotValue = (CompoundValue) cmpValue.getNestedValue(dim2DSlotDecl.getName());
+        Assert.assertNotNull(dim2DSlotValue);
+        Value widthValue = dim2DSlotValue.getNestedValue(widthDecl.getName());
+        Value heightValue = dim2DSlotValue.getNestedValue(heightDecl.getName());
+        Assert.assertNotNull(widthValue);
+        Assert.assertEquals(2, widthValue.getValue());
+        Assert.assertNull(heightValue);
+    }
      
     /**
      * Tests whether attributes are handled correctly inside the configuration.
