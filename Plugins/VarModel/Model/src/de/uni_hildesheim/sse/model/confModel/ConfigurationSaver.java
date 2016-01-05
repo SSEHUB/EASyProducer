@@ -396,8 +396,8 @@ public class ConfigurationSaver {
                     IDecisionVariable nestedVar = var.getNestedElement(i);
                     IAssignmentState nestedState = nestedVar.getState();
                     if (AssignmentState.UNDEFINED != nestedState
-                        && (!onlyUserInput || (AssignmentState.DERIVED != nestedState
-                        && AssignmentState.DEFAULT != nestedState))) {
+                        && isSavingEnabled(srcConfiguration.getProject(), nestedVar)
+                        && checkState(nestedState)) {
                         
                         // Slot name
                         String slotName = nestedVar.getDeclaration().getName();
@@ -416,6 +416,15 @@ public class ConfigurationSaver {
         }
         
         return value;
+    }
+
+    /**
+     * Checks whether the sate (of a variable) should be saved.
+     * @param state The sate of the current variable to be saved.
+     * @return <tt>true</tt> if the sate should be saved, <tt>false</tt> otherwise.
+     */
+    private boolean checkState(IAssignmentState state) {
+        return !onlyUserInput || (AssignmentState.DERIVED != state && AssignmentState.DEFAULT != state);
     }
     
     /**
