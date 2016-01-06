@@ -70,5 +70,16 @@ public class ConstraintType extends BasisDatatype {
         // enable boolean assignments as constraints are handled as Boolean expressions
         return super.isAssignableFrom(type) || BooleanType.TYPE.equals(type);
     }
-    
+
+    /**
+     * Returns whether <code>type</code> is a constraint. This method is required
+     * as constraints are assignable to Boolean.
+     * 
+     * @param type the type
+     * @return <code>true</code> in case of a constraint <code>false</code> else
+     */
+    public static boolean isConstraint(IDatatype type) {
+        return (type == ConstraintType.TYPE || type instanceof ConstraintType);
+    }
+
 }
