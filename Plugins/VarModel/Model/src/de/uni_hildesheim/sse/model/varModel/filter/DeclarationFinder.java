@@ -28,6 +28,7 @@ import de.uni_hildesheim.sse.model.varModel.CompoundAccessStatement;
 import de.uni_hildesheim.sse.model.varModel.DecisionVariableDeclaration;
 import de.uni_hildesheim.sse.model.varModel.Project;
 import de.uni_hildesheim.sse.model.varModel.ProjectImport;
+import de.uni_hildesheim.sse.model.varModel.datatypes.Compound;
 import de.uni_hildesheim.sse.model.varModel.datatypes.IDatatype;
 import de.uni_hildesheim.sse.model.varModel.datatypes.IResolutionScope;
 import de.uni_hildesheim.sse.utils.logger.EASyLoggerFactory;
@@ -47,6 +48,7 @@ public class DeclarationFinder extends AbstractDeclarationFinder {
     private List<AbstractVariable> allDeclarations;
     private IDatatype type;
     private Stack<Set<AbstractVariable>> interfaces;
+    private boolean onlyToplevel;
     
     /**
      * Specifies which kind of found declarations shall by returned.
@@ -59,18 +61,32 @@ public class DeclarationFinder extends AbstractDeclarationFinder {
     
     /**
      * Constructor for specifying whether search results should be filtered regarding the specified
-     * {@link IDatatype}.
+     * {@link IDatatype}. Will only find toplevel declarations.
      * @param project The project where all DecisionVariableDeclarations should be found.
      * @param filterType Specifies whether project imports shall be considered or not.
      * @param type If type is not <tt>null</tt> only declarations matching the specified type will be found
      */
     public DeclarationFinder(Project project, FilterType filterType, IDatatype type) {
+        this(project, filterType, type, true);
+    }
+    
+    /**
+     * Constructor for specifying whether search results should be filtered regarding the specified
+     * {@link IDatatype} and whether only toplevel variables should be retrieved.
+     * @param project The project where all DecisionVariableDeclarations should be found.
+     * @param filterType Specifies whether project imports shall be considered or not.
+     * @param type If type is not <tt>null</tt> only declarations matching the specified type will be found
+     * @param onlyToplevel <tt>true</tt> only toplevel declarations will be found,
+     * <tt>false</tt> will also consider declarations inside compounds.
+     */
+    public DeclarationFinder(Project project, FilterType filterType, IDatatype type, boolean onlyToplevel) {
         super(project, filterType);
         visibleDeclarations = new ArrayList<AbstractVariable>();
         hiddenDeclarations = new ArrayList<AbstractVariable>();
         allDeclarations = new ArrayList<AbstractVariable>();
         this.type = type;
         interfaces = new Stack<Set<AbstractVariable>>();
+        this.onlyToplevel = onlyToplevel;
         project.accept(this);
     }
     
@@ -191,6 +207,15 @@ public class DeclarationFinder extends AbstractDeclarationFinder {
     @Override
     public void visitCompoundAccessStatement(CompoundAccessStatement access) {
         // this is no declaration
+    }
+    
+    @Override
+    public void visitCompound(Compound compound) {
+        if (!onlyToplevel) {
+            for (int i = 0, n = compound.getDeclarationCount(); i < n; i++) {
+                compound.getDeclaration(i).accept(this);
+            }
+        }
     }
     
 }

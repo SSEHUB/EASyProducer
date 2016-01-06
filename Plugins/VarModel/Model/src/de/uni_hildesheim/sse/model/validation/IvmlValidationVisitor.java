@@ -559,7 +559,14 @@ public class IvmlValidationVisitor extends AbstractVisitor
 
     @Override
     public void visitOclFeatureCall(OCLFeatureCall call) {
-        // TODO check
+        if (null == call.getResolvedOperation()) {
+            addError("Operation of OclFeatureCall could not be resolved.", call,
+                ValidationMessage.UNRESOLVED_OPERATION);
+        }
+        call.getOperand().accept(this);
+        for (int i = 0, n = call.getParameterCount(); i < n; i++) {
+            call.getParameter(i).accept(this);
+        }
     }
 
     @Override

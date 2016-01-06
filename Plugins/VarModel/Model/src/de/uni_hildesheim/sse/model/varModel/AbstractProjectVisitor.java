@@ -92,6 +92,14 @@ public abstract class AbstractProjectVisitor implements IModelVisitor {
     }
     
     /**
+     * Returns the {@link FilterType}, which is currently used.
+     * @return The starting point of the visitation.
+     */
+    protected FilterType getFilterType() {
+        return filterType;
+    }
+    
+    /**
      * Resets the knowledge if a this visitor should be used for a second iteration.
      * Both parameters are only optional (if <tt>null</tt> the original value will be kept).
      * @param originProject The starting project, should be the project from the constructor call.

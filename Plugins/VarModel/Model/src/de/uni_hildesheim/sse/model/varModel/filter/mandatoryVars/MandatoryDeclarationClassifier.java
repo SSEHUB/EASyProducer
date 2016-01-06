@@ -1,0 +1,386 @@
+/*
+ * Copyright 2009-2016 University of Hildesheim, Software Systems Engineering
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * 
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package de.uni_hildesheim.sse.model.varModel.filter.mandatoryVars;
+
+import java.util.List;
+
+import de.uni_hildesheim.sse.model.confModel.Configuration;
+import de.uni_hildesheim.sse.model.confModel.IConfigurationElement;
+import de.uni_hildesheim.sse.model.confModel.IDecisionVariable;
+import de.uni_hildesheim.sse.model.cst.AttributeVariable;
+import de.uni_hildesheim.sse.model.cst.CompoundAccess;
+import de.uni_hildesheim.sse.model.cst.CompoundInitializer;
+import de.uni_hildesheim.sse.model.cst.ConstantValue;
+import de.uni_hildesheim.sse.model.cst.ConstraintSyntaxTree;
+import de.uni_hildesheim.sse.model.cst.ContainerInitializer;
+import de.uni_hildesheim.sse.model.cst.ContainerOperationCall;
+import de.uni_hildesheim.sse.model.cst.IConstraintTreeVisitor;
+import de.uni_hildesheim.sse.model.cst.IfThen;
+import de.uni_hildesheim.sse.model.cst.Let;
+import de.uni_hildesheim.sse.model.cst.OCLFeatureCall;
+import de.uni_hildesheim.sse.model.cst.Parenthesis;
+import de.uni_hildesheim.sse.model.cst.Self;
+import de.uni_hildesheim.sse.model.cst.UnresolvedExpression;
+import de.uni_hildesheim.sse.model.cst.Variable;
+import de.uni_hildesheim.sse.model.varModel.AbstractProjectVisitor;
+import de.uni_hildesheim.sse.model.varModel.AbstractVariable;
+import de.uni_hildesheim.sse.model.varModel.Attribute;
+import de.uni_hildesheim.sse.model.varModel.AttributeAssignment;
+import de.uni_hildesheim.sse.model.varModel.Comment;
+import de.uni_hildesheim.sse.model.varModel.CompoundAccessStatement;
+import de.uni_hildesheim.sse.model.varModel.Constraint;
+import de.uni_hildesheim.sse.model.varModel.DecisionVariableDeclaration;
+import de.uni_hildesheim.sse.model.varModel.FreezeBlock;
+import de.uni_hildesheim.sse.model.varModel.IModelElement;
+import de.uni_hildesheim.sse.model.varModel.OperationDefinition;
+import de.uni_hildesheim.sse.model.varModel.PartialEvaluationBlock;
+import de.uni_hildesheim.sse.model.varModel.Project;
+import de.uni_hildesheim.sse.model.varModel.ProjectInterface;
+import de.uni_hildesheim.sse.model.varModel.datatypes.Compound;
+import de.uni_hildesheim.sse.model.varModel.datatypes.DerivedDatatype;
+import de.uni_hildesheim.sse.model.varModel.datatypes.Enum;
+import de.uni_hildesheim.sse.model.varModel.datatypes.EnumLiteral;
+import de.uni_hildesheim.sse.model.varModel.datatypes.IDatatype;
+import de.uni_hildesheim.sse.model.varModel.datatypes.OclKeyWords;
+import de.uni_hildesheim.sse.model.varModel.datatypes.Operation;
+import de.uni_hildesheim.sse.model.varModel.datatypes.OrderedEnum;
+import de.uni_hildesheim.sse.model.varModel.datatypes.Reference;
+import de.uni_hildesheim.sse.model.varModel.datatypes.Sequence;
+import de.uni_hildesheim.sse.model.varModel.datatypes.Set;
+import de.uni_hildesheim.sse.model.varModel.filter.DeclarationFinder;
+import de.uni_hildesheim.sse.model.varModel.filter.DeclarationFinder.VisibilityType;
+import de.uni_hildesheim.sse.model.varModel.filter.FilterType;
+
+/**
+ * Heuristic classifier, which determines whether the variables of a {@link Configuration}
+ * should be changed by the user or not.
+ * @author El-Sharkawy
+ */
+public class MandatoryDeclarationClassifier extends AbstractProjectVisitor implements IConstraintTreeVisitor {
+  
+    private VariableContainer varContainer;
+    private Context context;
+    
+    /**
+     * Initializes, but not start, this classifier.
+     * @param config The current configuration, which should be checked.
+     * @param filterType Specifies whether project imports shall be considered or not.
+     */
+    public MandatoryDeclarationClassifier(Configuration config, FilterType filterType) {
+        super(config.getProject(), filterType);
+        varContainer = new VariableContainer(config);
+        context = new Context();
+    }
+    
+    /**
+     * Returns the information which variables are mandatory (should be changed by the user).
+     * @return The {@link VariableContainer} can be queried for mandatory variables.
+     */
+    public VariableContainer getImportances() {
+        return varContainer;
+    }
+
+    @Override
+    public void visitDecisionVariableDeclaration(DecisionVariableDeclaration decl) {
+        // Not needed
+    }
+
+    @Override
+    public void visitAttribute(Attribute attribute) {
+        // TODO Auto-generated method stub
+        
+    }
+
+    @Override
+    public void visitConstraint(Constraint constraint) {
+        context.clear();
+        ConstraintSyntaxTree syntax = constraint.getConsSyntax();
+        IModelElement parent = constraint.getParent();
+        if (null != syntax) {
+            if (parent instanceof Project) {
+                syntax.accept(this);
+            } else if (parent instanceof Compound) {
+                // Find all instances of this compound an use them as parent variable
+                List<AbstractVariable> cmpDeclarations = getDeclarationsByType((Compound) parent);
+                for (int i = 0, n = cmpDeclarations.size(); i < n; i++) {
+                    context.clear();
+                    IDecisionVariable instance = varContainer.getVariable(cmpDeclarations.get(i));
+                    if (null != instance) {
+                        context.addParent(instance);
+                        syntax.accept(this);
+                        if (context.elementsWereFound()) {
+                            // Nested elements of instance are mandatory -> instance is also mandatory
+                            setImportanceOfParent(instance, Importance.MANDATORY);
+                        }
+                    }
+                }
+            }
+        }
+    }
+    
+    /**
+     * Recursive method to set the {@link Importance} of a variable and especially its parents. 
+     * @param variable The variable to set.
+     * @param importance The importance for the variable and its parents.
+     */
+    private void setImportanceOfParent(IDecisionVariable variable, Importance importance) {
+        varContainer.setImportance(variable, importance);
+        IConfigurationElement parent = variable.getParent();
+        if (parent instanceof IDecisionVariable) {
+            setImportanceOfParent((IDecisionVariable) parent, importance);
+        }
+    }
+    
+    /**
+     * Find all declarations for the given {@link IDatatype}, also not top level declarations.
+     * @param type Only declarations matching the specified type will be found
+     * @return All declarations which are assignable to the given type.
+     */
+    private List<AbstractVariable> getDeclarationsByType(IDatatype type) {
+        DeclarationFinder finder = new DeclarationFinder(getStartingProject(), getFilterType(), type, false);
+        
+        return finder.getVariableDeclarations(VisibilityType.ALL);
+    }
+
+
+    @Override
+    public void visitFreezeBlock(FreezeBlock freeze) {
+        // TODO Auto-generated method stub
+        
+    }
+
+    @Override
+    public void visitOperationDefinition(OperationDefinition opdef) {
+        // TODO Auto-generated method stub
+        
+    }
+
+    @Override
+    public void visitPartialEvaluationBlock(PartialEvaluationBlock block) {
+        // TODO Auto-generated method stub
+        
+    }
+
+    @Override
+    public void visitProjectInterface(ProjectInterface iface) {
+        // TODO Auto-generated method stub
+        
+    }
+
+    @Override
+    public void visitComment(Comment comment) {
+        // Not needed
+    }
+
+    @Override
+    public void visitAttributeAssignment(AttributeAssignment assignment) {
+        // TODO Auto-generated method stub
+        
+    }
+
+    @Override
+    public void visitCompoundAccessStatement(CompoundAccessStatement access) {
+        // TODO Auto-generated method stub
+        
+    }
+
+    @Override
+    public void visitEnum(Enum eenum) {
+        // TODO Auto-generated method stub
+        
+    }
+
+    @Override
+    public void visitOrderedEnum(OrderedEnum eenum) {
+        // TODO Auto-generated method stub
+        
+    }
+
+    @Override
+    public void visitCompound(Compound compound) {
+        // Compounds can contain constraints -> visit all of them
+        Compound parent = compound.getRefines();
+        if (null != parent) {
+            visitCompound(parent);
+        }
+        for (int i = 0, n = compound.getConstraintsCount(); i < n; i++) {
+            visitConstraint(compound.getConstraint(i));
+        }
+    }
+
+    @Override
+    public void visitDerivedDatatype(DerivedDatatype datatype) {
+        // TODO Auto-generated method stub
+        
+    }
+
+    @Override
+    public void visitEnumLiteral(EnumLiteral literal) {
+        // TODO Auto-generated method stub
+        
+    }
+
+    @Override
+    public void visitReference(Reference reference) {
+        // TODO Auto-generated method stub
+        
+    }
+
+    @Override
+    public void visitSequence(Sequence sequence) {
+        // TODO Auto-generated method stub
+        
+    }
+
+    @Override
+    public void visitSet(Set set) {
+        // TODO Auto-generated method stub
+        
+    }
+
+    @Override
+    public void visitConstantValue(ConstantValue value) {
+        // TODO Auto-generated method stub
+        
+    }
+
+    @Override
+    public void visitVariable(Variable variable) {
+        AbstractVariable decl = variable.getVariable();
+        IDecisionVariable iVariable = (!context.hasParent()) ? varContainer.getVariable(decl) : getSlotOfCompound(decl);
+        if (null != iVariable) {
+            context.elementFound();
+            varContainer.setImportance(iVariable, Importance.MANDATORY);
+            if (context.depth() > 0) {
+                // Add compound to parent list
+                context.addParent(iVariable);
+            }
+        }
+    }
+
+    @Override
+    public void visitAnnotationVariable(AttributeVariable variable) {
+        // TODO Auto-generated method stub
+        
+    }
+
+    @Override
+    public void visitParenthesis(Parenthesis parenthesis) {
+        // TODO Auto-generated method stub
+        
+    }
+
+    @Override
+    public void visitComment(de.uni_hildesheim.sse.model.cst.Comment comment) {
+        // TODO Auto-generated method stub
+        
+    }
+
+    @Override
+    public void visitOclFeatureCall(OCLFeatureCall call) {
+        // TODO consider special cases, like implies
+        String op = call.getOperation();
+        if (!OclKeyWords.ASSIGNMENT.equals(op)) {
+            call.getOperand().accept(this);
+            for (int i = 0; i < call.getParameterCount(); i++) {
+                call.getParameter(i).accept(this);
+            }
+        }
+    }
+
+    @Override
+    public void visitLet(Let let) {
+        // TODO Auto-generated method stub
+        
+    }
+
+    @Override
+    public void visitIfThen(IfThen ifThen) {
+        // TODO Auto-generated method stub
+        
+    }
+
+    @Override
+    public void visitContainerOperationCall(ContainerOperationCall call) {
+        // TODO Auto-generated method stub
+        
+    }
+
+    @Override
+    public void visitCompoundAccess(CompoundAccess access) {
+        context.compoundDown();
+        access.getCompoundExpression().accept(this);
+        AbstractVariable slotDecl = access.getResolvedSlot();
+        if (null != slotDecl && context.hasParent()) {
+            IDecisionVariable nestedVar = getSlotOfCompound(access.getResolvedSlot());
+            if (null != nestedVar) {
+                context.elementFound();
+                varContainer.setImportance(nestedVar, Importance.MANDATORY);
+                if (context.depth() > 1) {
+                    context.addParent(nestedVar);
+                }
+            }
+        }
+        context.compoundUp();
+        if (0 == context.depth()) {
+            context.clear();
+        }
+    }
+    
+    /**
+     * Retrieves the {@link IDecisionVariable} instance for the given declaration for the compound which was
+     * visited before.
+     * @param slotDeclaration The declaration of a slot inside a compound.
+     * @return The related {@link IDecisionVariable} instance.
+     */
+    private IDecisionVariable getSlotOfCompound(AbstractVariable slotDeclaration) {
+        IDecisionVariable slotVar = null;
+        IDecisionVariable parentVar = context.getParent();
+        for (int i = 0, n = parentVar.getNestedElementsCount(); i < n && null == slotVar; i++) {
+            IDecisionVariable nestedVar = parentVar.getNestedElement(i);
+            if (nestedVar.getDeclaration().equals(slotDeclaration)) {
+                slotVar = nestedVar;
+            }
+        }
+        
+        return slotVar;
+    }
+    
+    @Override
+    public void visitUnresolvedExpression(UnresolvedExpression expression) {
+        // TODO Auto-generated method stub
+        
+    }
+
+    @Override
+    public void visitCompoundInitializer(CompoundInitializer initializer) {
+        // TODO Auto-generated method stub
+        
+    }
+
+    @Override
+    public void visitContainerInitializer(ContainerInitializer initializer) {
+        // TODO Auto-generated method stub
+        
+    }
+
+    @Override
+    public void visitSelf(Self self) {
+        // TODO Auto-generated method stub
+        
+    }
+
+}

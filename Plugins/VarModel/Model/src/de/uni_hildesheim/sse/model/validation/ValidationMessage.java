@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2013 University of Hildesheim, Software Systems Engineering
+ * Copyright 2009-2016 University of Hildesheim, Software Systems Engineering
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -70,6 +70,13 @@ public class ValidationMessage extends Message {
      * {@link de.uni_hildesheim.sse.model.varModel.AbstractVariable}.
      */
     public static final int MISSING_CUSTOM_DATATYPE = 10808;
+    
+    /**
+     * Denotes a missing/unspecified operation used inside an {@link de.uni_hildesheim.sse.model.cst.OCLFeatureCall}.
+     * The operation was not resolved, probably because
+     * {@link de.uni_hildesheim.sse.model.cst.OCLFeatureCall#inferDatatype()} was not called.
+     */
+    public static final int UNRESOLVED_OPERATION = 10809;
     
     /**
      * Stores the type of the message (see constants above).

@@ -16,6 +16,7 @@ import de.uni_hildesheim.sse.model.cstEvaluation.CstEvaluationTests;
 import de.uni_hildesheim.sse.model.validation.IvmlIdentifierCheckTest;
 import de.uni_hildesheim.sse.model.validation.IvmlValidationVisitorTest;
 import de.uni_hildesheim.sse.model.varModel.datatypes.TypeMapperTests;
+import de.uni_hildesheim.sse.model.varModel.filter.mandatoryVars.MandatoryDeclarationClassifierTest;
 import de.uni_hildesheim.sse.persistency.IVMLWriterTest;
 import de.uni_hildesheim.sse.varModel.ContainableModelElementListTest;
 import de.uni_hildesheim.sse.varModel.FreezeBlockTest;
@@ -110,7 +111,8 @@ import de.uni_hildesheim.sse.varModel.versioning.ImportValidationTest;
     IvmlValidationVisitorTest.class,
     TypeMapperTests.class,
     CstEvaluationTests.class,
-    ProjectRewriteVisitorTest.class
+    ProjectRewriteVisitorTest.class,
+    MandatoryDeclarationClassifierTest.class
     })
 public class AllTests {
 
