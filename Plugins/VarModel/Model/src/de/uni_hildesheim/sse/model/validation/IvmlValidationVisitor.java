@@ -563,7 +563,9 @@ public class IvmlValidationVisitor extends AbstractVisitor
             addError("Operation of OclFeatureCall could not be resolved.", call,
                 ValidationMessage.UNRESOLVED_OPERATION);
         }
-        call.getOperand().accept(this);
+        if (null != call.getOperand()) {
+            call.getOperand().accept(this);
+        } // then call.getAccessor() shall be given!
         for (int i = 0, n = call.getParameterCount(); i < n; i++) {
             call.getParameter(i).accept(this);
         }
