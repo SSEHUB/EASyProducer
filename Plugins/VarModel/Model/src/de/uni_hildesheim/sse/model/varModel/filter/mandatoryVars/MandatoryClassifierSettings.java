@@ -28,12 +28,20 @@ public class MandatoryClassifierSettings {
      * <tt>false</tt>: Variables with default values should be (re-)assigned by the user, if used in a constraint. 
      */
     private boolean considerDefaultValues;
+    
+    /**
+     * Consider enumeration variables as mandatory, even if they don't have a default value.
+     * <tt>true</tt>: Enumerations are mandatory, as they enforce to select exact one value. 
+     * <tt>false</tt>: Enumerations are not mandatory, as all other variables (default)
+     */
+    private boolean considerEnumerationsAsMandatory;
 
     /**
      * Creates default settings.
      */
     public MandatoryClassifierSettings() {
         considerDefaultValues = true;
+        considerEnumerationsAsMandatory = false;
     }
     
     /**
@@ -54,5 +62,26 @@ public class MandatoryClassifierSettings {
      */
     public void setDefaultValueConsideration(boolean considerDefaultValues) {
         this.considerDefaultValues = considerDefaultValues;
+    }
+    
+    /**
+     * Returns whether enumumeration variables shall be treaten as mandatory variables.
+     * @return
+     *   <tt>true</tt>: Enumerations are mandatory, as they enforce to select exact one value. 
+     *   <tt>false</tt>: Enumerations are not mandatory, as all other variables
+     */
+    boolean treatEnumsAsMandatory() {
+        return considerEnumerationsAsMandatory;
+    }
+    
+    /**
+     * Specification, whether enumeration variables shall be considered as mandatory as exactly one value should
+     * be selected.
+     * @param considerEnumerationsAsMandatory
+     *   <tt>true</tt>: Enumerations are mandatory, as they enforce to select exact one value. 
+     *   <tt>false</tt>: Enumerations are not mandatory, as all other variables
+     */
+    public void setTreatEnumsAsMandatory(boolean considerEnumerationsAsMandatory) {
+        this.considerEnumerationsAsMandatory = considerEnumerationsAsMandatory;
     }
 }

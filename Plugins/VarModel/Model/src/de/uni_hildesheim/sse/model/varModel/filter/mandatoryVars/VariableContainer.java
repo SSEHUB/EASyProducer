@@ -16,8 +16,10 @@
 package de.uni_hildesheim.sse.model.varModel.filter.mandatoryVars;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.Set;
 
 import de.uni_hildesheim.sse.model.confModel.Configuration;
 import de.uni_hildesheim.sse.model.confModel.IDecisionVariable;
@@ -32,7 +34,7 @@ public class VariableContainer {
     
     private Map<IDecisionVariable, VariableImportance> toplevelVariables;
     private Map<IDecisionVariable, VariableImportance> allVariables;
-    private Map<AbstractVariable, IDecisionVariable> allVariablesByDeclaration;
+    private Map<AbstractVariable, Set<IDecisionVariable>> allVariablesByDeclaration;
     
     /**
      * Single constructor for this class, initializes all variables in state {@link Importance#UNCLAER}.
@@ -42,7 +44,7 @@ public class VariableContainer {
     VariableContainer(Configuration config, MandatoryClassifierSettings settings) {
         toplevelVariables = new HashMap<IDecisionVariable, VariableImportance>();
         allVariables = new HashMap<IDecisionVariable, VariableImportance>();
-        allVariablesByDeclaration = new HashMap<AbstractVariable, IDecisionVariable>();
+        allVariablesByDeclaration = new HashMap<AbstractVariable, Set<IDecisionVariable>>();
         Iterator<IDecisionVariable> varItr = config.iterator();
         while (varItr.hasNext()) {
             IDecisionVariable topVar = varItr.next();
@@ -62,8 +64,19 @@ public class VariableContainer {
      * @param importance The newly created {@link VariableImportance} for the {@link IDecisionVariable}.
      */
     private void initNestedVariables(IDecisionVariable variable, VariableImportance importance) {
-        allVariablesByDeclaration.put(variable.getDeclaration(), variable);
+        // All variables for declaration
+        AbstractVariable decl = variable.getDeclaration();
+        Set<IDecisionVariable> instances = allVariablesByDeclaration.get(decl);
+        if (null == instances) {
+            instances = new HashSet<IDecisionVariable>();
+            allVariablesByDeclaration.put(decl, instances);
+        }
+        instances.add(variable);
+        
+        // All top level
         allVariables.put(variable, importance);
+        
+        // Find nested elements in recursive method
         if (Compound.TYPE.isAssignableFrom(variable.getDeclaration().getType())) {
             for (int i = 0; i < variable.getNestedElementsCount(); i++) {
                 IDecisionVariable nestedVariable = variable.getNestedElement(i);
@@ -78,10 +91,10 @@ public class VariableContainer {
     
     /**
      * Similar to {@link Configuration#getDecision(AbstractVariable)}, but not only restricted to toplevel variables.
-     * @param declaration The declaration for which the configuration instance should be returned.
-     * @return The {@link IDecisionVariable} for the given declaration.
+     * @param declaration The declaration for which the configuration instances should be returned.
+     * @return All instances ({@link IDecisionVariable}) for the given declaration.
      */
-    IDecisionVariable getVariable(AbstractVariable declaration) {
+    Set<IDecisionVariable> getVariable(AbstractVariable declaration) {
         return allVariablesByDeclaration.get(declaration);
     }
     

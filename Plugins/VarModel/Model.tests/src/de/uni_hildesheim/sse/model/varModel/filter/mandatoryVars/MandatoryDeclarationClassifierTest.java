@@ -395,7 +395,7 @@ public class MandatoryDeclarationClassifierTest {
         project.accept(finder);
         VariableContainer importances = finder.getImportances();
         
-        // Test correct behavior: declC is not mandatory
+        // Test correct behavior
         assertVariable(config.getDecision(declA), true, importances);
         assertVariable(config.getDecision(declB), true, importances);
         assertVariable(config.getDecision(declC), false, importances);
@@ -409,7 +409,7 @@ public class MandatoryDeclarationClassifierTest {
     @Test
     public void testTypeDefsAreConsidered() throws CSTSemanticException {
         Project project = new Project("testTypeDefsAreConsidered");
-        DerivedDatatype posIntType = new DerivedDatatype("positiveInteger", IntegerType.TYPE, project);
+        DerivedDatatype posIntType = new DerivedDatatype("PositiveInteger", IntegerType.TYPE, project);
         Constraint derivedTypeConstraint = new Constraint(posIntType);
         OCLFeatureCall comparison = new OCLFeatureCall(new Variable(posIntType.getTypeDeclaration()),
             OclKeyWords.GREATER, ZERO);
@@ -420,7 +420,7 @@ public class MandatoryDeclarationClassifierTest {
         project.add(posIntDecl);
         
         // Create configuration out of valid project
-        ProjectTestUtilities.validateProject(project, true);
+        ProjectTestUtilities.validateProject(project);
         Configuration config = new Configuration(project);
         
         // Check importance
@@ -428,8 +428,69 @@ public class MandatoryDeclarationClassifierTest {
         project.accept(finder);
         VariableContainer importances = finder.getImportances();
         
-        // Test correct behavior: declC is not mandatory
+        // Test correct behavior
         assertVariable(config.getDecision(posIntDecl), true, importances);
+    }
+    
+    /**
+     * Combination of {@link #testAliasesAreNotConsidered()} and {@link #testTypeDefsAreConsidered()} as this is tricky.
+     * @throws CSTSemanticException Must not occur, otherwise {@link Constraint}s are broken.
+     */
+    @Test
+    public void testTypeDefsAreConsideredAliasesNot() throws CSTSemanticException {
+        Project project = new Project("testTypeDefsAreConsideredAliasesNot");
+        DerivedDatatype posIntType = new DerivedDatatype("PositiveInteger", IntegerType.TYPE, project);
+        Constraint derivedTypeConstraint = new Constraint(posIntType);
+        OCLFeatureCall comparison = new OCLFeatureCall(new Variable(posIntType.getTypeDeclaration()),
+                OclKeyWords.GREATER, ZERO);
+        derivedTypeConstraint.setConsSyntax(comparison);
+        posIntType.setConstraints(new Constraint[] {derivedTypeConstraint});
+        project.add(posIntType);
+        DecisionVariableDeclaration posIntDecl = new DecisionVariableDeclaration("posInt", posIntType, project);
+        project.add(posIntDecl);
+        DerivedDatatype aliasType = new DerivedDatatype("Alias", IntegerType.TYPE, project);
+        project.add(aliasType);
+        DecisionVariableDeclaration aliasDecl = new DecisionVariableDeclaration("aliasInt", aliasType, project);
+        project.add(aliasDecl);
+        
+        // Create configuration out of valid project
+        ProjectTestUtilities.validateProject(project);
+        Configuration config = new Configuration(project);
+        
+        // Check importance
+        MandatoryDeclarationClassifier finder = new MandatoryDeclarationClassifier(config, FilterType.ALL);
+        project.accept(finder);
+        VariableContainer importances = finder.getImportances();
+        
+        // Test correct behavior
+        assertVariable(config.getDecision(posIntDecl), true, importances);
+        assertVariable(config.getDecision(aliasDecl), false, importances);
+    }
+    
+    /**
+     * Tests whether instances of typedefs ({@link DerivedDatatype}) are <b>not</b> considered if they do not contain
+     * a constraint, i.e., are only an alias.
+     * @throws CSTSemanticException Must not occur, otherwise {@link Constraint}s are broken.
+     */
+    @Test
+    public void testAliasesAreNotConsidered() throws CSTSemanticException {
+        Project project = new Project("testAliasesAreNotConsidered");
+        DerivedDatatype aliasType = new DerivedDatatype("Alias", IntegerType.TYPE, project);
+        project.add(aliasType);
+        DecisionVariableDeclaration aliasDecl = new DecisionVariableDeclaration("aliasInt", aliasType, project);
+        project.add(aliasDecl);
+        
+        // Create configuration out of valid project
+        ProjectTestUtilities.validateProject(project);
+        Configuration config = new Configuration(project);
+        
+        // Check importance
+        MandatoryDeclarationClassifier finder = new MandatoryDeclarationClassifier(config, FilterType.ALL);
+        project.accept(finder);
+        VariableContainer importances = finder.getImportances();
+        
+        // Test correct behavior: alias is not mandatory
+        assertVariable(config.getDecision(aliasDecl), false, importances);
     }
 
     /**

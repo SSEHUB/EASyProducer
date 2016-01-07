@@ -15,7 +15,10 @@
  */
 package de.uni_hildesheim.sse.model.varModel.filter.mandatoryVars;
 
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import de.uni_hildesheim.sse.model.confModel.Configuration;
 import de.uni_hildesheim.sse.model.confModel.IConfigurationElement;
@@ -92,6 +95,7 @@ public class MandatoryDeclarationClassifier extends AbstractProjectVisitor imple
     private VariableContainer varContainer;
     private Context context;
     private MandatoryClassifierSettings settings;
+    private Map<IDatatype, List<AbstractVariable>> declarationsByType;
     
     /**
      * Initializes, but not start, this classifier.
@@ -112,6 +116,7 @@ public class MandatoryDeclarationClassifier extends AbstractProjectVisitor imple
         MandatoryClassifierSettings settings) {
         
         super(config.getProject(), filterType);
+        declarationsByType = new HashMap<IDatatype, List<AbstractVariable>>();
         this.settings = settings;
         varContainer = new VariableContainer(config, this.settings);
         context = new Context();
@@ -157,13 +162,17 @@ public class MandatoryDeclarationClassifier extends AbstractProjectVisitor imple
                 List<AbstractVariable> cmpDeclarations = getDeclarationsByType((Compound) parent);
                 for (int i = 0, n = cmpDeclarations.size(); i < n; i++) {
                     context.clear();
-                    IDecisionVariable instance = varContainer.getVariable(cmpDeclarations.get(i));
-                    if (null != instance) {
-                        context.addParent(instance);
-                        syntax.accept(this);
-                        if (context.elementsWereFound()) {
-                            // Nested elements of instance are mandatory -> instance is also mandatory
-                            setImportanceOfParent(instance, Importance.MANDATORY);
+                    java.util.Set<IDecisionVariable> instances = varContainer.getVariable(cmpDeclarations.get(i));
+                    if (null != instances) {
+                        Iterator<IDecisionVariable> varItr = instances.iterator();
+                        while (varItr.hasNext()) {
+                            IDecisionVariable instance = varItr.next();
+                            context.addParent(instance);
+                            syntax.accept(this);
+                            if (context.elementsWereFound()) {
+                                // Nested elements of instance are mandatory -> instance is also mandatory
+                                setImportanceOfParent(instance, Importance.MANDATORY);
+                            }
                         }
                     }
                 }
@@ -190,9 +199,23 @@ public class MandatoryDeclarationClassifier extends AbstractProjectVisitor imple
      * @return All declarations which are assignable to the given type.
      */
     private List<AbstractVariable> getDeclarationsByType(IDatatype type) {
-        DeclarationFinder finder = new DeclarationFinder(getStartingProject(), getFilterType(), type, false);
+        List<AbstractVariable> declarations = declarationsByType.get(type);
+        if (null == declarations) {
+            DeclarationFinder finder = new DeclarationFinder(getStartingProject(), getFilterType(), type, false);
+            declarations = finder.getVariableDeclarations(VisibilityType.ALL);
+            
+            // Consider isAssignableFrom: This is used in finder, but not desired here...
+            for (int i = declarations.size() - 1; i > 0; i--) {
+                if (declarations.get(i).getType() != type) {
+                    declarations.remove(i);
+                }
+            }
+            
+            declarationsByType.put(type, declarations);
+        }
         
-        return finder.getVariableDeclarations(VisibilityType.ALL);
+        
+        return declarations;
     }
 
 
@@ -239,15 +262,38 @@ public class MandatoryDeclarationClassifier extends AbstractProjectVisitor imple
 
     @Override
     public void visitEnum(Enum eenum) {
-        // TODO Auto-generated method stub
-        
+        if (settings.treatEnumsAsMandatory()) {
+            List<AbstractVariable> variables = getDeclarationsByType(eenum);
+            for (int i = 0, n = variables.size(); i < n; i++) {
+                setImportanceForAllInstancesOfDeclaration(variables.get(i), Importance.MANDATORY);
+            }
+        }
     }
 
     @Override
     public void visitOrderedEnum(OrderedEnum eenum) {
-        // TODO Auto-generated method stub
-        
+        visitEnum(eenum);
     }
+
+    /**
+     * Changes the {@link VariableImportance} for all {@link IDecisionVariable} of the given {@link AbstractVariable}.
+     * @param decl A (nested) declaration for which all instances shall be changed.
+     * @param importance The new {@link Importance} to set.
+     */
+    private void setImportanceForAllInstancesOfDeclaration(AbstractVariable decl, Importance importance) {
+        java.util.Set<IDecisionVariable> instances = varContainer.getVariable(decl);
+        if (null != instances) {
+            Iterator<IDecisionVariable> varItr = instances.iterator();
+            while (varItr.hasNext()) {
+                IDecisionVariable variable = varItr.next();
+                varContainer.setImportance(variable, importance);
+            }
+        } else {
+            // For debugging/testing
+            System.out.println(decl);
+        }
+    }
+
 
     @Override
     public void visitCompound(Compound compound) {
@@ -269,8 +315,7 @@ public class MandatoryDeclarationClassifier extends AbstractProjectVisitor imple
         if (nConstraints > 0) {
             List<AbstractVariable> variables = getDeclarationsByType(datatype);
             for (int i = 0, n = variables.size(); i < n; i++) {
-                IDecisionVariable var = varContainer.getVariable(variables.get(i));
-                varContainer.setImportance(var, Importance.MANDATORY);
+                setImportanceForAllInstancesOfDeclaration(variables.get(i), Importance.MANDATORY);
             }
         }
         
@@ -317,14 +362,29 @@ public class MandatoryDeclarationClassifier extends AbstractProjectVisitor imple
     @Override
     public void visitVariable(Variable variable) {
         AbstractVariable decl = variable.getVariable();
-        IDecisionVariable iVariable = (!context.hasParent()) ? varContainer.getVariable(decl) : getSlotOfCompound(decl);
-        if (null != iVariable) {
-            context.elementFound();
-            varContainer.setImportance(iVariable, Importance.MANDATORY);
-            if (context.depth() > 0) {
-                // Add compound to parent list
-                context.addParent(iVariable);
+        if (context.hasParent()) {
+            IDecisionVariable iVariable = getSlotOfCompound(decl);
+            if (null != iVariable) {
+                visitVariable(iVariable);
             }
+        } else {
+            java.util.Set<IDecisionVariable> instances = varContainer.getVariable(decl);
+            Iterator<IDecisionVariable> varItr = instances.iterator();
+            while (varItr.hasNext()) {
+                visitVariable(varItr.next()); 
+            }
+        }
+    }
+     /**
+      * Part of {@link #visitVariable(Variable)}.
+      * @param iVariable An instances for the visited variable.
+      */
+    private void visitVariable(IDecisionVariable iVariable) {
+        context.elementFound();
+        varContainer.setImportance(iVariable, Importance.MANDATORY);
+        if (context.depth() > 0) {
+            // Add compound to parent list
+            context.addParent(iVariable);
         }
     }
 
