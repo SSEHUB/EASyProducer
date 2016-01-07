@@ -29,6 +29,8 @@ import de.uni_hildesheim.sse.model.varModel.Constraint;
 import de.uni_hildesheim.sse.model.varModel.DecisionVariableDeclaration;
 import de.uni_hildesheim.sse.model.varModel.Project;
 import de.uni_hildesheim.sse.model.varModel.datatypes.Compound;
+import de.uni_hildesheim.sse.model.varModel.datatypes.ConstraintType;
+import de.uni_hildesheim.sse.model.varModel.datatypes.DerivedDatatype;
 import de.uni_hildesheim.sse.model.varModel.datatypes.IntegerType;
 import de.uni_hildesheim.sse.model.varModel.datatypes.OclKeyWords;
 import de.uni_hildesheim.sse.model.varModel.filter.FilterType;
@@ -88,7 +90,7 @@ public class MandatoryDeclarationClassifierTest {
      */
     @Test
     public void testFindOnlyConstrainedVariablesSimple() throws CSTSemanticException {
-        // Create Project, with 3 declarations, 2 are used in a constrained, one is optional
+        // Create Project with 3 declarations, 2 are used in a constrained, one is optional
         Project project = new Project("testFindOnlyConstrainedVariablesSimple");
         DecisionVariableDeclaration declA = new DecisionVariableDeclaration("intA", IntegerType.TYPE, project);
         DecisionVariableDeclaration declB = new DecisionVariableDeclaration("intB", IntegerType.TYPE, project);
@@ -361,6 +363,69 @@ public class MandatoryDeclarationClassifierTest {
         assertVariable(nestedCompoundVar, true, importances);
         assertVariable(slotWidth, true, importances);
         assertVariable(slotHeight, false, importances);
+    }
+    
+    /**
+     * Tests whether constraints of constraint variables will be considered.
+     * @throws ValueDoesNotMatchTypeException Must not occur, otherwise {@link ConstraintType}s are broken.
+     * @throws CSTSemanticException Must not occur, otherwise {@link ConstraintType}s are broken.
+     */
+    @Test
+    public void testConstraintVariablesAreConsidered() throws ValueDoesNotMatchTypeException, CSTSemanticException {
+        // Create Project with 3 declarations and a constraint variable using 2 of them
+        Project project = new Project("testConstraintVariablesAreConsidered");
+        DecisionVariableDeclaration declA = new DecisionVariableDeclaration("intA", IntegerType.TYPE, project);
+        DecisionVariableDeclaration declB = new DecisionVariableDeclaration("intB", IntegerType.TYPE, project);
+        DecisionVariableDeclaration declC = new DecisionVariableDeclaration("intC", IntegerType.TYPE, project);
+        project.add(declA);
+        project.add(declB);
+        project.add(declC);
+        DecisionVariableDeclaration declConstraint = new DecisionVariableDeclaration("constraint", ConstraintType.TYPE,
+            project);
+        OCLFeatureCall compCall = new OCLFeatureCall(new Variable(declA), OclKeyWords.GREATER, new Variable(declB));
+        declConstraint.setValue(compCall);
+        project.add(declConstraint);
+        
+        // Create configuration out of valid project
+        ProjectTestUtilities.validateProject(project);
+        Configuration config = new Configuration(project);
+        
+        // Check importance
+        MandatoryDeclarationClassifier finder = new MandatoryDeclarationClassifier(config, FilterType.ALL);
+        project.accept(finder);
+        VariableContainer importances = finder.getImportances();
+        
+        // Test correct behavior: declC is not mandatory
+        assertVariable(config.getDecision(declA), true, importances);
+        assertVariable(config.getDecision(declB), true, importances);
+        assertVariable(config.getDecision(declC), false, importances);
+        assertVariable(config.getDecision(declConstraint), false, importances);
+    }
+    
+    @Test
+    public void testTypeDefsAreConsidered() throws CSTSemanticException {
+        Project project = new Project("testTypeDefsAreConsidered");
+        DerivedDatatype posIntType = new DerivedDatatype("positiveInteger", IntegerType.TYPE, project);
+        Constraint derivedTypeConstraint = new Constraint(posIntType);
+        OCLFeatureCall comparison = new OCLFeatureCall(new Variable(posIntType.getTypeDeclaration()),
+            OclKeyWords.GREATER, ZERO);
+        derivedTypeConstraint.setConsSyntax(comparison);
+        posIntType.setConstraints(new Constraint[] {derivedTypeConstraint});
+        project.add(posIntType);
+        DecisionVariableDeclaration posIntDecl = new DecisionVariableDeclaration("posInt", posIntType, project);
+        project.add(posIntDecl);
+        
+        // Create configuration out of valid project
+        ProjectTestUtilities.validateProject(project, true);
+        Configuration config = new Configuration(project);
+        
+        // Check importance
+        MandatoryDeclarationClassifier finder = new MandatoryDeclarationClassifier(config, FilterType.ALL);
+        project.accept(finder);
+        VariableContainer importances = finder.getImportances();
+        
+        // Test correct behavior: declC is not mandatory
+        assertVariable(config.getDecision(posIntDecl), true, importances);
     }
 
     /**
