@@ -50,12 +50,12 @@ import de.uni_hildesheim.sse.model.varModel.PartialEvaluationBlock;
 import de.uni_hildesheim.sse.model.varModel.Project;
 import de.uni_hildesheim.sse.model.varModel.ProjectInterface;
 import de.uni_hildesheim.sse.model.varModel.datatypes.Compound;
+import de.uni_hildesheim.sse.model.varModel.datatypes.ConstraintType;
 import de.uni_hildesheim.sse.model.varModel.datatypes.DerivedDatatype;
 import de.uni_hildesheim.sse.model.varModel.datatypes.Enum;
 import de.uni_hildesheim.sse.model.varModel.datatypes.EnumLiteral;
 import de.uni_hildesheim.sse.model.varModel.datatypes.IDatatype;
 import de.uni_hildesheim.sse.model.varModel.datatypes.OclKeyWords;
-import de.uni_hildesheim.sse.model.varModel.datatypes.Operation;
 import de.uni_hildesheim.sse.model.varModel.datatypes.OrderedEnum;
 import de.uni_hildesheim.sse.model.varModel.datatypes.Reference;
 import de.uni_hildesheim.sse.model.varModel.datatypes.Sequence;
@@ -67,12 +67,31 @@ import de.uni_hildesheim.sse.model.varModel.filter.FilterType;
 /**
  * Heuristic classifier, which determines whether the variables of a {@link Configuration}
  * should be changed by the user or not.
+ * 
+ * How to use:
+ * <ol>
+ *   <li>Call constructor with configuration</li>
+ *   <li>Visit project of configuration</li>
+ *   <li>Call {@link #getImportances()}</li>
+ *   <li>For each {@link IDecisionVariable} (even nested variables), the {@link VariableContainer} can be asked
+ *   whether the variable is mandatory</li>
+ * </ol>
+ * 
+ * For instance:<br/>
+ * <code>
+ *   IDecisionVariable variable ... // Variable to be tested
+ *   MandatoryDeclarationClassifier finder = new MandatoryDeclarationClassifier(config, FilterType.ALL);<br/>
+ *   project.accept(finder);<br/>
+ *   VariableContainer importances = finder.getImportances();<br/>
+ *   boolean isMandatory = importances.isMandatory(variable); // Result for variable
+ * </code>
  * @author El-Sharkawy
  */
 public class MandatoryDeclarationClassifier extends AbstractProjectVisitor implements IConstraintTreeVisitor {
   
     private VariableContainer varContainer;
     private Context context;
+    private MandatoryClassifierSettings settings;
     
     /**
      * Initializes, but not start, this classifier.
@@ -80,22 +99,43 @@ public class MandatoryDeclarationClassifier extends AbstractProjectVisitor imple
      * @param filterType Specifies whether project imports shall be considered or not.
      */
     public MandatoryDeclarationClassifier(Configuration config, FilterType filterType) {
+        this(config, filterType, new MandatoryClassifierSettings());
+    }
+    
+    /**
+     * Initializes, but not start, this classifier.
+     * @param config The current configuration, which should be checked.
+     * @param filterType Specifies whether project imports shall be considered or not.
+     * @param settings Optional settings.
+     */
+    public MandatoryDeclarationClassifier(Configuration config, FilterType filterType,
+        MandatoryClassifierSettings settings) {
+        
         super(config.getProject(), filterType);
-        varContainer = new VariableContainer(config);
+        this.settings = settings;
+        varContainer = new VariableContainer(config, this.settings);
         context = new Context();
     }
     
     /**
      * Returns the information which variables are mandatory (should be changed by the user).
+     * Must be called after the visitation of the main project:
+     * <code>configuration.getProject().accept(this)</code>.
      * @return The {@link VariableContainer} can be queried for mandatory variables.
      */
     public VariableContainer getImportances() {
+        varContainer.finish();
         return varContainer;
     }
 
     @Override
     public void visitDecisionVariableDeclaration(DecisionVariableDeclaration decl) {
-        // Not needed
+        // Constraint variables may contain constraints which must be visited
+        IDatatype type = decl.getType();
+        ConstraintSyntaxTree constraint = decl.getDefaultValue();
+        if (ConstraintType.isConstraint(type) && null != constraint) {
+            constraint.accept(this);
+        }
     }
 
     @Override
@@ -223,7 +263,24 @@ public class MandatoryDeclarationClassifier extends AbstractProjectVisitor imple
 
     @Override
     public void visitDerivedDatatype(DerivedDatatype datatype) {
-        // TODO Auto-generated method stub
+        int nConstraints = datatype.getConstraintCount();
+        
+        // Set all instances of typeDef to mandatory
+        if (nConstraints > 0) {
+            List<AbstractVariable> variables = getDeclarationsByType(datatype);
+            for (int i = 0, n = variables.size(); i < n; i++) {
+                IDecisionVariable var = varContainer.getVariable(variables.get(i));
+                varContainer.setImportance(var, Importance.MANDATORY);
+            }
+        }
+        
+        // Visit all constraints, as they could also include other variables
+        for (int i = 0; i < nConstraints; i++) {
+            Constraint constraint = datatype.getConstraint(i);
+            if (null != constraint) {
+                visitConstraint(constraint);
+            }
+        }
         
     }
 
@@ -292,7 +349,9 @@ public class MandatoryDeclarationClassifier extends AbstractProjectVisitor imple
     @Override
     public void visitOclFeatureCall(OCLFeatureCall call) {
         // TODO consider special cases, like implies
+        // TODO consider re-assignments of constraint variables
         String op = call.getOperation();
+        // Most assignments should not be considered
         if (!OclKeyWords.ASSIGNMENT.equals(op)) {
             call.getOperand().accept(this);
             for (int i = 0; i < call.getParameterCount(); i++) {

@@ -37,8 +37,9 @@ public class VariableContainer {
     /**
      * Single constructor for this class, initializes all variables in state {@link Importance#UNCLAER}.
      * @param config The {@link Configuration}, for which the states are calculated.
+     * @param settings Specification whether default values should be threaten as not mandatory.
      */
-    VariableContainer(Configuration config) {
+    VariableContainer(Configuration config, MandatoryClassifierSettings settings) {
         toplevelVariables = new HashMap<IDecisionVariable, VariableImportance>();
         allVariables = new HashMap<IDecisionVariable, VariableImportance>();
         allVariablesByDeclaration = new HashMap<AbstractVariable, IDecisionVariable>();
@@ -46,7 +47,7 @@ public class VariableContainer {
         while (varItr.hasNext()) {
             IDecisionVariable topVar = varItr.next();
             VariableImportance importance = new VariableImportance(topVar);
-            if (null != topVar.getDeclaration().getDefaultValue()) {
+            if (null != topVar.getDeclaration().getDefaultValue() && settings.considerDefaultValues()) {
                 importance.setImportance(Importance.OPTIONAL);
             }
             toplevelVariables.put(topVar, importance);
@@ -94,6 +95,15 @@ public class VariableContainer {
         if (null != varImportance) {
             varImportance.setImportance(importance);
         }
+    }
+    
+    /**
+     * Should be called after the visitation process to free memory of data which is no longer needed.
+     */
+    void finish() {
+        // Clear all data which is not longer needed after the complete data structure has been built.
+        allVariablesByDeclaration = null;
+        toplevelVariables = null;
     }
     
     /**

@@ -54,4 +54,9 @@ class VariableImportance {
     boolean isMandatory() {
         return Importance.MANDATORY == importance;
     }
+    
+    @Override
+    public String toString() {
+        return var.getDeclaration().getName() + " (" + importance.name() + ")";
+    }
 }
