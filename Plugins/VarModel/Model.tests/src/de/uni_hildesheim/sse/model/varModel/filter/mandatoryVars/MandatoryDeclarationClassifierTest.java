@@ -402,6 +402,10 @@ public class MandatoryDeclarationClassifierTest {
         assertVariable(config.getDecision(declConstraint), false, importances);
     }
     
+    /**
+     * Tests whether instances of typedefs ({@link DerivedDatatype}) are considered.
+     * @throws CSTSemanticException Must not occur, otherwise {@link Constraint}s are broken.
+     */
     @Test
     public void testTypeDefsAreConsidered() throws CSTSemanticException {
         Project project = new Project("testTypeDefsAreConsidered");
