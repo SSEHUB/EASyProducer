@@ -128,4 +128,12 @@ public interface IDecisionVariable extends IConfigurationElement, IConfiguration
      * @return <tt>true</tt> if there was a change, <tt>false</tt> if the variable keeps unchanged.
      */
     public boolean removeDerivedValues();
+    
+    /**
+     * Returns the qualified name of the declaration instance.
+     * This is build as follows:<br/>
+     * <tt>&lt;Project name&gt; :: [&lt;Parent name&gt;.]* &lt;Declaration name&gt;</tt>
+     * @return The qualified and unique name of the variable.
+     */
+    public String getQualifiedName();
 }

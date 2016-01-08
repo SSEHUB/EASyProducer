@@ -266,4 +266,9 @@ public class LocalDecisionVariable implements IDecisionVariable {
         // Should not be needed here.
         return false;
     }
+
+    @Override
+    public String getQualifiedName() {
+        return getDeclaration().getQualifiedName();
+    }
 }

@@ -285,6 +285,11 @@ public abstract class AbstractIvmlVariable extends IvmlElement {
             // TODO SE: Unclear whether it's needed here.
             return false;
         }
+        
+        @Override
+        public String getQualifiedName() {
+            return getDeclaration().getQualifiedName();
+        }
     }
     
     /**

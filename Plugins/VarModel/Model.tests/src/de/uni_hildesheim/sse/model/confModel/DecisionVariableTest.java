@@ -10,6 +10,7 @@ import de.uni_hildesheim.sse.model.cst.OCLFeatureCall;
 import de.uni_hildesheim.sse.model.cst.Variable;
 import de.uni_hildesheim.sse.model.varModel.Constraint;
 import de.uni_hildesheim.sse.model.varModel.DecisionVariableDeclaration;
+import de.uni_hildesheim.sse.model.varModel.IvmlKeyWords;
 import de.uni_hildesheim.sse.model.varModel.Project;
 import de.uni_hildesheim.sse.model.varModel.datatypes.Compound;
 import de.uni_hildesheim.sse.model.varModel.datatypes.DerivedDatatype;
@@ -160,5 +161,46 @@ public class DecisionVariableTest {
             }
         }
         Assert.assertEquals("Error: More or less variables were tested than expected.", noOfVariables, noOfIterations);
+    }
+    
+    /**
+     * Tests the {@link IDecisionVariable#getQualifiedName()} method.
+     * Contrary to {@link de.uni_hildesheim.sse.model.varModel.ContainableModelElement#getQualifiedName()} this method
+     * should also return unique names for nested {@link IDecisionVariable}s, e.g., nested inside a Compound.
+     */
+    @Test
+    public void testQualifiedNames() {
+        Compound dimType = new Compound("Dimension", project);
+        project.add(dimType);
+        DecisionVariableDeclaration declWidth = new DecisionVariableDeclaration("width", IntegerType.TYPE, dimType);
+        DecisionVariableDeclaration declHeight = new DecisionVariableDeclaration("height", IntegerType.TYPE, dimType);
+        dimType.add(declWidth);
+        dimType.add(declHeight);
+        DecisionVariableDeclaration dimDecl1 = new DecisionVariableDeclaration("dimension1", dimType, project);
+        project.add(dimDecl1);
+        DecisionVariableDeclaration dimDecl2 = new DecisionVariableDeclaration("dimension2", dimType, project);
+        project.add(dimDecl2);
+        
+        ProjectTestUtilities.validateProject(project, true);
+        config.refresh();
+        
+        IDecisionVariable cmpVar1 = config.getDecision(dimDecl1);
+        IDecisionVariable cmpVar2 = config.getDecision(dimDecl2);
+        
+        // Test (unique) qualified names of all 6 variables.
+        Assert.assertEquals(dimDecl1.getQualifiedName(), cmpVar1.getQualifiedName());
+        Assert.assertEquals(dimDecl1.getQualifiedName() + IvmlKeyWords.COMPOUND_ACCESS + declWidth.getName(),
+            cmpVar1.getNestedElement(0).getQualifiedName());
+        Assert.assertEquals(dimDecl1.getQualifiedName() + IvmlKeyWords.COMPOUND_ACCESS + declHeight.getName(),
+            cmpVar1.getNestedElement(1).getQualifiedName());
+        Assert.assertEquals(dimDecl2.getQualifiedName(), cmpVar2.getQualifiedName());
+        Assert.assertEquals(dimDecl2.getQualifiedName() + IvmlKeyWords.COMPOUND_ACCESS + declWidth.getName(),
+            cmpVar2.getNestedElement(0).getQualifiedName());
+        Assert.assertEquals(dimDecl2.getQualifiedName() + IvmlKeyWords.COMPOUND_ACCESS + declHeight.getName(),
+            cmpVar2.getNestedElement(1).getQualifiedName());
+        Assert.assertNotEquals(cmpVar1.getNestedElement(0).getQualifiedName(),
+            cmpVar2.getNestedElement(0).getQualifiedName());
+        Assert.assertNotEquals(cmpVar1.getNestedElement(1).getQualifiedName(),
+            cmpVar2.getNestedElement(1).getQualifiedName());
     }
 }
