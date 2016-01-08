@@ -28,7 +28,6 @@ import de.uni_hildesheim.sse.model.varModel.AttributeAssignment;
 import de.uni_hildesheim.sse.model.varModel.DecisionVariableDeclaration;
 import de.uni_hildesheim.sse.model.varModel.IAttributeAccess;
 import de.uni_hildesheim.sse.model.varModel.IModelElement;
-import de.uni_hildesheim.sse.model.varModel.IvmlKeyWords;
 import de.uni_hildesheim.sse.model.varModel.datatypes.OclKeyWords;
 import de.uni_hildesheim.sse.model.varModel.values.NullValue;
 import de.uni_hildesheim.sse.model.varModel.values.Value;
@@ -355,8 +354,7 @@ abstract class DecisionVariable implements IDecisionVariable {
     
     @Override
     public String getQualifiedName() {
-        return isNested() ? ((IDecisionVariable) getParent()).getQualifiedName()
-            + IvmlKeyWords.COMPOUND_ACCESS + getDeclaration().getName()
+        return isNested() ? ((IDecisionVariable) getParent()).getQualifiedName() + "::" + getDeclaration().getName()
             : getDeclaration().getQualifiedName();
     }
 }

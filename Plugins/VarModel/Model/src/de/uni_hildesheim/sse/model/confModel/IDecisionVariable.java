@@ -132,7 +132,7 @@ public interface IDecisionVariable extends IConfigurationElement, IConfiguration
     /**
      * Returns the qualified name of the declaration instance.
      * This is build as follows:<br/>
-     * <tt>&lt;Project name&gt; :: [&lt;Parent name&gt;.]* &lt;Declaration name&gt;</tt>
+     * <tt>&lt;Project name&gt; :: [&lt;Parent name&gt;::]* &lt;Declaration name&gt;</tt>
      * @return The qualified and unique name of the variable.
      */
     public String getQualifiedName();

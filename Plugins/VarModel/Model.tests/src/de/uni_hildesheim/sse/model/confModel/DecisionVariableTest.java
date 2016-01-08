@@ -10,7 +10,6 @@ import de.uni_hildesheim.sse.model.cst.OCLFeatureCall;
 import de.uni_hildesheim.sse.model.cst.Variable;
 import de.uni_hildesheim.sse.model.varModel.Constraint;
 import de.uni_hildesheim.sse.model.varModel.DecisionVariableDeclaration;
-import de.uni_hildesheim.sse.model.varModel.IvmlKeyWords;
 import de.uni_hildesheim.sse.model.varModel.Project;
 import de.uni_hildesheim.sse.model.varModel.datatypes.Compound;
 import de.uni_hildesheim.sse.model.varModel.datatypes.DerivedDatatype;
@@ -189,14 +188,14 @@ public class DecisionVariableTest {
         
         // Test (unique) qualified names of all 6 variables.
         Assert.assertEquals(dimDecl1.getQualifiedName(), cmpVar1.getQualifiedName());
-        Assert.assertEquals(dimDecl1.getQualifiedName() + IvmlKeyWords.COMPOUND_ACCESS + declWidth.getName(),
+        Assert.assertEquals(dimDecl1.getQualifiedName() + "::" + declWidth.getName(),
             cmpVar1.getNestedElement(0).getQualifiedName());
-        Assert.assertEquals(dimDecl1.getQualifiedName() + IvmlKeyWords.COMPOUND_ACCESS + declHeight.getName(),
+        Assert.assertEquals(dimDecl1.getQualifiedName() + "::" + declHeight.getName(),
             cmpVar1.getNestedElement(1).getQualifiedName());
         Assert.assertEquals(dimDecl2.getQualifiedName(), cmpVar2.getQualifiedName());
-        Assert.assertEquals(dimDecl2.getQualifiedName() + IvmlKeyWords.COMPOUND_ACCESS + declWidth.getName(),
+        Assert.assertEquals(dimDecl2.getQualifiedName() + "::" + declWidth.getName(),
             cmpVar2.getNestedElement(0).getQualifiedName());
-        Assert.assertEquals(dimDecl2.getQualifiedName() + IvmlKeyWords.COMPOUND_ACCESS + declHeight.getName(),
+        Assert.assertEquals(dimDecl2.getQualifiedName() + "::" + declHeight.getName(),
             cmpVar2.getNestedElement(1).getQualifiedName());
         Assert.assertNotEquals(cmpVar1.getNestedElement(0).getQualifiedName(),
             cmpVar2.getNestedElement(0).getQualifiedName());

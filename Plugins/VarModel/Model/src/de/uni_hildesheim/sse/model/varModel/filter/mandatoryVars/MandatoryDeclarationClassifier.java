@@ -16,12 +16,10 @@
 package de.uni_hildesheim.sse.model.varModel.filter.mandatoryVars;
 
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
 import de.uni_hildesheim.sse.model.confModel.Configuration;
-import de.uni_hildesheim.sse.model.confModel.IConfigurationElement;
 import de.uni_hildesheim.sse.model.confModel.IDecisionVariable;
 import de.uni_hildesheim.sse.model.cst.AttributeVariable;
 import de.uni_hildesheim.sse.model.cst.CompoundAccess;
@@ -76,8 +74,8 @@ import de.uni_hildesheim.sse.model.varModel.filter.FilterType;
  *   <li>Call constructor with configuration</li>
  *   <li>Visit project of configuration</li>
  *   <li>Call {@link #getImportances()}</li>
- *   <li>For each {@link IDecisionVariable} (even nested variables), the {@link VariableContainer} can be asked
- *   whether the variable is mandatory</li>
+ *   <li>For each {@link de.uni_hildesheim.sse.model.confModel.IDecisionVariable} (even nested variables),
+ *   the {@link VariableContainer} can be asked whether the variable is mandatory</li>
  * </ol>
  * 
  * For instance:<br/>
@@ -129,7 +127,6 @@ public class MandatoryDeclarationClassifier extends AbstractProjectVisitor imple
      * @return The {@link VariableContainer} can be queried for mandatory variables.
      */
     public VariableContainer getImportances() {
-        varContainer.finish();
         return varContainer;
     }
 
@@ -158,38 +155,14 @@ public class MandatoryDeclarationClassifier extends AbstractProjectVisitor imple
             if (parent instanceof Project) {
                 syntax.accept(this);
             } else if (parent instanceof Compound) {
-                // Find all instances of this compound an use them as parent variable
-                List<AbstractVariable> cmpDeclarations = getDeclarationsByType((Compound) parent);
-                for (int i = 0, n = cmpDeclarations.size(); i < n; i++) {
-                    context.clear();
-                    java.util.Set<IDecisionVariable> instances = varContainer.getVariable(cmpDeclarations.get(i));
-                    if (null != instances) {
-                        Iterator<IDecisionVariable> varItr = instances.iterator();
-                        while (varItr.hasNext()) {
-                            IDecisionVariable instance = varItr.next();
-                            context.addParent(instance);
-                            syntax.accept(this);
-                            if (context.elementsWereFound()) {
-                                // Nested elements of instance are mandatory -> instance is also mandatory
-                                setImportanceOfParent(instance, Importance.MANDATORY);
-                            }
-                        }
-                    }
+                Compound cType = (Compound) parent;
+                context.addParent(cType.getQualifiedName());
+                syntax.accept(this);
+                if (context.elementsWereFound()) {
+                    // Nested elements of instance are mandatory -> instance is also mandatory
+                    varContainer.setImportance(cType.getQualifiedName(), Importance.MANDATORY);
                 }
             }
-        }
-    }
-    
-    /**
-     * Recursive method to set the {@link Importance} of a variable and especially its parents. 
-     * @param variable The variable to set.
-     * @param importance The importance for the variable and its parents.
-     */
-    private void setImportanceOfParent(IDecisionVariable variable, Importance importance) {
-        varContainer.setImportance(variable, importance);
-        IConfigurationElement parent = variable.getParent();
-        if (parent instanceof IDecisionVariable) {
-            setImportanceOfParent((IDecisionVariable) parent, importance);
         }
     }
     
@@ -276,22 +249,12 @@ public class MandatoryDeclarationClassifier extends AbstractProjectVisitor imple
     }
 
     /**
-     * Changes the {@link VariableImportance} for all {@link IDecisionVariable} of the given {@link AbstractVariable}.
+     * Changes the {@link VariableImportance} for all instances of the given {@link AbstractVariable}.
      * @param decl A (nested) declaration for which all instances shall be changed.
      * @param importance The new {@link Importance} to set.
      */
     private void setImportanceForAllInstancesOfDeclaration(AbstractVariable decl, Importance importance) {
-        java.util.Set<IDecisionVariable> instances = varContainer.getVariable(decl);
-        if (null != instances) {
-            Iterator<IDecisionVariable> varItr = instances.iterator();
-            while (varItr.hasNext()) {
-                IDecisionVariable variable = varItr.next();
-                varContainer.setImportance(variable, importance);
-            }
-        } else {
-            // For debugging/testing
-            System.out.println(decl);
-        }
+        varContainer.setImportance(decl.getQualifiedName(), importance);
     }
 
 
@@ -362,31 +325,27 @@ public class MandatoryDeclarationClassifier extends AbstractProjectVisitor imple
     @Override
     public void visitVariable(Variable variable) {
         AbstractVariable decl = variable.getVariable();
-        if (context.hasParent()) {
-            IDecisionVariable iVariable = getSlotOfCompound(decl);
-            if (null != iVariable) {
-                visitVariable(iVariable);
-            }
-        } else {
-            java.util.Set<IDecisionVariable> instances = varContainer.getVariable(decl);
-            Iterator<IDecisionVariable> varItr = instances.iterator();
-            while (varItr.hasNext()) {
-                visitVariable(varItr.next()); 
+        if (!settings.considerDefaultValues() || null == decl.getDefaultValue()) {
+            String qName = context.hasParent() ? getSlotOfCompound(decl) : decl.getQualifiedName();
+            context.elementFound();
+            varContainer.setImportance(qName, Importance.MANDATORY);
+            if (context.depth() > 0) {
+                context.addParent(qName);
             }
         }
     }
-     /**
-      * Part of {@link #visitVariable(Variable)}.
-      * @param iVariable An instances for the visited variable.
-      */
-    private void visitVariable(IDecisionVariable iVariable) {
-        context.elementFound();
-        varContainer.setImportance(iVariable, Importance.MANDATORY);
-        if (context.depth() > 0) {
-            // Add compound to parent list
-            context.addParent(iVariable);
-        }
-    }
+//     /**
+//      * Part of {@link #visitVariable(Variable)}.
+//      * @param iVariable An instances for the visited variable.
+//      */
+//    private void visitVariable(IDecisionVariable iVariable) {
+//        context.elementFound();
+//        varContainer.setImportance(iVariable, Importance.MANDATORY);
+//        if (context.depth() > 0) {
+//            // Add compound to parent list
+//            context.addParent(iVariable);
+//        }
+//    }
 
     @Override
     public void visitAnnotationVariable(AttributeVariable variable) {
@@ -444,7 +403,7 @@ public class MandatoryDeclarationClassifier extends AbstractProjectVisitor imple
         access.getCompoundExpression().accept(this);
         AbstractVariable slotDecl = access.getResolvedSlot();
         if (null != slotDecl && context.hasParent()) {
-            IDecisionVariable nestedVar = getSlotOfCompound(access.getResolvedSlot());
+            String nestedVar = getSlotOfCompound(access.getResolvedSlot());
             if (null != nestedVar) {
                 context.elementFound();
                 varContainer.setImportance(nestedVar, Importance.MANDATORY);
@@ -465,17 +424,13 @@ public class MandatoryDeclarationClassifier extends AbstractProjectVisitor imple
      * @param slotDeclaration The declaration of a slot inside a compound.
      * @return The related {@link IDecisionVariable} instance.
      */
-    private IDecisionVariable getSlotOfCompound(AbstractVariable slotDeclaration) {
-        IDecisionVariable slotVar = null;
-        IDecisionVariable parentVar = context.getParent();
-        for (int i = 0, n = parentVar.getNestedElementsCount(); i < n && null == slotVar; i++) {
-            IDecisionVariable nestedVar = parentVar.getNestedElement(i);
-            if (nestedVar.getDeclaration().equals(slotDeclaration)) {
-                slotVar = nestedVar;
-            }
+    private String getSlotOfCompound(AbstractVariable slotDeclaration) {
+        String qName = null;
+        String pName = context.getParent();
+        if (null != pName) {
+            qName = pName + "::" + slotDeclaration.getName();
         }
-        
-        return slotVar;
+        return qName;
     }
     
     @Override

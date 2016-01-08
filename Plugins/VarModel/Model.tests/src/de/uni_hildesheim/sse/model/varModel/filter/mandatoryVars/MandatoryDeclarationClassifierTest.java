@@ -307,7 +307,7 @@ public class MandatoryDeclarationClassifierTest {
                 slotHeight = nestedVar;
             }
         }
-        assertVariable(compoundVar, true, importances);
+//        assertVariable(compoundVar, true, importances);
         assertVariable(slotWidth, true, importances);
         assertVariable(slotHeight, false, importances);
     }
@@ -359,8 +359,8 @@ public class MandatoryDeclarationClassifierTest {
                 slotHeight = nestedVar;
             }
         }
-        assertVariable(compoundVar, true, importances);
-        assertVariable(nestedCompoundVar, true, importances);
+//        assertVariable(compoundVar, true, importances);
+//        assertVariable(nestedCompoundVar, true, importances);
         assertVariable(slotWidth, true, importances);
         assertVariable(slotHeight, false, importances);
     }

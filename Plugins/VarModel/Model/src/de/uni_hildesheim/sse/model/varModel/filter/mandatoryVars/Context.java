@@ -25,7 +25,7 @@ import de.uni_hildesheim.sse.model.confModel.IDecisionVariable;
  * @author El-Sharkawy
  */
 class Context {
-    private Deque<IDecisionVariable> currentParents;
+    private Deque<String> currentParents;
     private int depth;
     private boolean elementsFound;
     
@@ -34,7 +34,7 @@ class Context {
      */
     Context() {
         depth = 0;
-        currentParents = new ArrayDeque<IDecisionVariable>();
+        currentParents = new ArrayDeque<String>();
         elementsFound = false;
     }
 
@@ -87,7 +87,7 @@ class Context {
      * @see #hasParent()
      * @see #addParent(IDecisionVariable)
      */
-    IDecisionVariable getParent() {
+    String getParent() {
         return currentParents.peekFirst();
     }
     
@@ -97,7 +97,7 @@ class Context {
      * @see #getParent()
      * @see #hasParent()
      */
-    void addParent(IDecisionVariable parent) {
+    void addParent(String parent) {
         currentParents.addFirst(parent);
     }
     
