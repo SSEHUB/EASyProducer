@@ -354,8 +354,7 @@ public class MandatoryDeclarationClassifier extends AbstractProjectVisitor imple
 
     @Override
     public void visitParenthesis(Parenthesis parenthesis) {
-        // TODO Auto-generated method stub
-        
+        parenthesis.getExpr().accept(this);
     }
 
     @Override
@@ -369,9 +368,10 @@ public class MandatoryDeclarationClassifier extends AbstractProjectVisitor imple
         // TODO consider special cases, like implies
         // TODO consider re-assignments of constraint variables
         String op = call.getOperation();
+        ConstraintSyntaxTree operand = call.getOperand();
         // Most assignments should not be considered
-        if (!OclKeyWords.ASSIGNMENT.equals(op)) {
-            call.getOperand().accept(this);
+        if (!OclKeyWords.ASSIGNMENT.equals(op) && null != operand) {
+            operand.accept(this);
             for (int i = 0; i < call.getParameterCount(); i++) {
                 call.getParameter(i).accept(this);
             }
