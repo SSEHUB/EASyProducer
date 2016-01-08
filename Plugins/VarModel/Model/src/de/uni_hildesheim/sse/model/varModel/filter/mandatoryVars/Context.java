@@ -18,8 +18,6 @@ package de.uni_hildesheim.sse.model.varModel.filter.mandatoryVars;
 import java.util.ArrayDeque;
 import java.util.Deque;
 
-import de.uni_hildesheim.sse.model.confModel.IDecisionVariable;
-
 /**
  * Stores knowledge about the current constraint visitation (the context of earlier elements).
  * @author El-Sharkawy
@@ -72,10 +70,11 @@ class Context {
     }
     
     /**
-     * Returns whether currently a {@link IDecisionVariable} as parent is stored for the current visitation.
+     * Returns whether currently a qualified name for a
+     * {@link de.uni_hildesheim.sse.model.confModel.IDecisionVariable} as parent is stored for the current visitation.
      * @return <tt>true</tt> a parent exists for the current visited variable.
      * @see #getParent()
-     * @see #addParent(IDecisionVariable)
+     * @see #addParent(String)
      */
     boolean hasParent() {
         return !currentParents.isEmpty();
@@ -85,7 +84,7 @@ class Context {
      * Returns the current visited parent of the current variable.
      * @return The parent.
      * @see #hasParent()
-     * @see #addParent(IDecisionVariable)
+     * @see #addParent(String)
      */
     String getParent() {
         return currentParents.peekFirst();

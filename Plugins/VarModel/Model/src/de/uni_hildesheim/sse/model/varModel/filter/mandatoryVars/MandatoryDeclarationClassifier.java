@@ -20,7 +20,6 @@ import java.util.List;
 import java.util.Map;
 
 import de.uni_hildesheim.sse.model.confModel.Configuration;
-import de.uni_hildesheim.sse.model.confModel.IDecisionVariable;
 import de.uni_hildesheim.sse.model.cst.AttributeVariable;
 import de.uni_hildesheim.sse.model.cst.CompoundAccess;
 import de.uni_hildesheim.sse.model.cst.CompoundInitializer;
@@ -419,10 +418,10 @@ public class MandatoryDeclarationClassifier extends AbstractProjectVisitor imple
     }
     
     /**
-     * Retrieves the {@link IDecisionVariable} instance for the given declaration for the compound which was
+     * Retrieves the instance for the given declaration for the compound which was
      * visited before.
      * @param slotDeclaration The declaration of a slot inside a compound.
-     * @return The related {@link IDecisionVariable} instance.
+     * @return The related qualified name for the instance.
      */
     private String getSlotOfCompound(AbstractVariable slotDeclaration) {
         String qName = null;
