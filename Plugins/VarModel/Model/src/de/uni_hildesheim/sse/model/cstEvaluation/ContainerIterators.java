@@ -186,7 +186,7 @@ class ContainerIterators {
             Map<Object, Object> data) throws ValueDoesNotMatchTypeException {
             Value cVal = result.getValue();
             if (cVal instanceof ContainerValue) {
-                ((ContainerValue) result.getValue()).addElement(value.getValue());
+                ((ContainerValue) cVal).addElement(value.getValue());
             }
             return false;
         }
