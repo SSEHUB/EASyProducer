@@ -91,7 +91,7 @@ public class AttributeAssignment extends ContainableModelElement implements IDec
     }
     
     /**
-     * Creates a new comment element.
+     * Creates a new attribute assignment.
      * 
      * @param parent the model element, in which this specific one is embedded
      */
