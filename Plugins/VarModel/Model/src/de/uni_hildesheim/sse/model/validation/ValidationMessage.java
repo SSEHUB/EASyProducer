@@ -79,6 +79,11 @@ public class ValidationMessage extends Message {
     public static final int UNRESOLVED_OPERATION = 10809;
     
     /**
+     * Denotes that an annotation is pointing to an element, which was not annotated by this annotation.
+     */
+    public static final int UNRESOLVED_ANNOTATION = 10810;
+    
+    /**
      * Stores the type of the message (see constants above).
      */
     private int code;

@@ -16,20 +16,42 @@
 package de.uni_hildesheim.sse.model.confModel;
 
 import java.util.ArrayList;
+import java.util.Deque;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import de.uni_hildesheim.sse.Bundle;
 import de.uni_hildesheim.sse.model.cst.ConstraintSyntaxTree;
 import de.uni_hildesheim.sse.model.cstEvaluation.EvaluationVisitor;
 import de.uni_hildesheim.sse.model.varModel.AbstractVariable;
+import de.uni_hildesheim.sse.model.varModel.Attribute;
+import de.uni_hildesheim.sse.model.varModel.AttributeAssignment;
+import de.uni_hildesheim.sse.model.varModel.AttributeAssignment.Assignment;
+import de.uni_hildesheim.sse.model.varModel.Comment;
+import de.uni_hildesheim.sse.model.varModel.CompoundAccessStatement;
 import de.uni_hildesheim.sse.model.varModel.Constraint;
+import de.uni_hildesheim.sse.model.varModel.DecisionVariableDeclaration;
+import de.uni_hildesheim.sse.model.varModel.FreezeBlock;
+import de.uni_hildesheim.sse.model.varModel.IModelVisitor;
+import de.uni_hildesheim.sse.model.varModel.OperationDefinition;
+import de.uni_hildesheim.sse.model.varModel.PartialEvaluationBlock;
 import de.uni_hildesheim.sse.model.varModel.Project;
+import de.uni_hildesheim.sse.model.varModel.ProjectImport;
+import de.uni_hildesheim.sse.model.varModel.ProjectInterface;
 import de.uni_hildesheim.sse.model.varModel.datatypes.BooleanType;
 import de.uni_hildesheim.sse.model.varModel.datatypes.Compound;
 import de.uni_hildesheim.sse.model.varModel.datatypes.ConstraintType;
+import de.uni_hildesheim.sse.model.varModel.datatypes.DerivedDatatype;
+import de.uni_hildesheim.sse.model.varModel.datatypes.Enum;
+import de.uni_hildesheim.sse.model.varModel.datatypes.EnumLiteral;
 import de.uni_hildesheim.sse.model.varModel.datatypes.IDatatype;
+import de.uni_hildesheim.sse.model.varModel.datatypes.OrderedEnum;
+import de.uni_hildesheim.sse.model.varModel.datatypes.Reference;
+import de.uni_hildesheim.sse.model.varModel.datatypes.Sequence;
+import de.uni_hildesheim.sse.model.varModel.filter.AnnotationAssignmentFinder;
 import de.uni_hildesheim.sse.model.varModel.filter.ConstraintFinder;
 import de.uni_hildesheim.sse.model.varModel.filter.DeclarationFinder;
 import de.uni_hildesheim.sse.model.varModel.filter.DeclarationFinder.VisibilityType;
@@ -70,6 +92,143 @@ public class AssignmentResolver {
     private int iterationLoops;
     
     /**
+     * Part of the {@link AssignmentResolver#resolveAnnotationAssignments(AttributeAssignment, Map)} for recursive
+     * resolving assignment values of annotation assignment blocks. 
+     * @author El-Sharkawy
+     *
+     */
+    private class AssignBlockVisitor implements IModelVisitor {
+        
+        private Map<String, Value> annotationAssignments;
+        
+        /**
+         * Sole constructor of this class.
+         * @param annotationAssignments A tuple of (<annotation name>, <value>) for the current annotation block.
+     * If a nested block is found, these values must be copied into a new map as nested blocks can have other values
+     * and also further elements can be found after a block was visited.
+         */
+        private AssignBlockVisitor(Map<String, Value> annotationAssignments) {
+            this.annotationAssignments = annotationAssignments;
+        }
+
+        @Override
+        public void visitSet(de.uni_hildesheim.sse.model.varModel.datatypes.Set set) {
+            // Nothing to do
+        }
+        
+        @Override
+        public void visitSequence(Sequence sequence) {
+            // Nothing to do
+        }
+        
+        @Override
+        public void visitReference(Reference reference) {
+            // Nothing to do
+        }
+        
+        @Override
+        public void visitOrderedEnum(OrderedEnum eenum) {
+            // Nothing to do
+        }
+        
+        @Override
+        public void visitEnumLiteral(EnumLiteral literal) {
+            // Nothing to do
+        }
+        
+        @Override
+        public void visitEnum(Enum eenum) {
+            // Nothing to do
+        }
+        
+        @Override
+        public void visitDerivedDatatype(DerivedDatatype datatype) {
+            // Nothing to do
+        }
+        
+        @Override
+        public void visitCompound(Compound compound) {
+            compound.accept(this);
+        }
+        
+        @Override
+        public void visitProjectInterface(ProjectInterface iface) {
+            // Nothing to do
+        }
+        
+        @Override
+        public void visitProjectImport(ProjectImport pImport) {
+            // Nothing to do
+        }
+        
+        @Override
+        public void visitProject(Project project) {
+            // Nothing to do
+        }
+        
+        @Override
+        public void visitPartialEvaluationBlock(PartialEvaluationBlock block) {
+            // Nothing to do
+        }
+        
+        @Override
+        public void visitOperationDefinition(OperationDefinition opdef) {
+            // Nothing to do
+        }
+        
+        @Override
+        public void visitFreezeBlock(FreezeBlock freeze) {
+            // Nothing to do
+        }
+        
+        @Override
+        public void visitDecisionVariableDeclaration(DecisionVariableDeclaration decl) {
+            IDecisionVariable variable = config.getDecision(decl);
+            if (null != variable) {
+                for (int i = 0, n = variable.getAttributesCount(); i < n; i++) {
+                    IDecisionVariable annotation = variable.getAttribute(i);
+                    Value annotationValue = annotationAssignments.get(annotation.getDeclaration().getName());
+                    if (null != annotationValue) {
+                        try {
+                            annotation.setValue(annotationValue, AssignmentState.ASSIGNED);
+                        } catch (ConfigurationException e) {
+                            Bundle.getLogger(AssignmentResolver.class).exception(e);
+                        }
+                    }
+                }
+            }
+        }
+        
+        @Override
+        public void visitConstraint(Constraint constraint) {
+            // Nothing to do
+        }
+        
+        @Override
+        public void visitCompoundAccessStatement(CompoundAccessStatement access) {
+            // Nothing to do
+        }
+        
+        @Override
+        public void visitComment(Comment comment) {
+            // Nothing to do
+        }
+        
+        @Override
+        public void visitAttributeAssignment(AttributeAssignment assignment) {
+            Map<String, Value> nestedAssignments = new HashMap<String, Value>();
+            nestedAssignments.putAll(annotationAssignments);
+            AssignmentResolver.this.resolveAnnotationAssignments(assignment, nestedAssignments);
+        }
+        
+        @Override
+        public void visitAttribute(Attribute attribute) {
+            // Nothing to do
+        }
+        
+    }
+    
+    /**
      * Sole constructor for this class. Will not start resolving values,
      * this must be done via calling the {@link #resolve()} method.
      * @param config The configuration for which assignments shall be resolved.
@@ -106,14 +265,66 @@ public class AssignmentResolver {
             evaluator.setDispatchScope(project);
             resolveDefaultValues(project);
             resolveAssignments(project);
+            // Annotation default values are already handles while the IDecisionVariable is created
+            resolveAnnotationAssignments(project);
             // TODO do incremental freezing in here -> required by interfaces with propagation constraints
+        }
+    }
+
+    /**
+     * Sets the (re-)assigned annotation values for all annotation of all variables for the current {@link Project}.
+     * @param project The current project for which annotation assignments shall be resolved.
+     */
+    private void resolveAnnotationAssignments(Project project) {
+        AnnotationAssignmentFinder finder = new AnnotationAssignmentFinder(project, FilterType.NO_IMPORTS);
+        List<AttributeAssignment> assignmentBlocks = finder.getAssignmentBlocks();
+        
+        for (int i = 0, n = assignmentBlocks.size(); i < n; i++) {
+            // Assign values top down (as they can be overwritten in this way)
+            // TODO handle not solveable assignments (is this supported?)            
+            AttributeAssignment assignBlock = assignmentBlocks.get(i);
+            Map<String, Value> annotationAssignments = new HashMap<String, Value>();
+
+            resolveAnnotationAssignments(assignBlock, annotationAssignments);
+        }
+    }
+
+    /**
+     * Recursive method for resolving annotation assignments (part of {@link #resolveAnnotationAssignments(Project)}.
+     * @param assignBlock The current visited assignment block.
+     * @param annotationAssignments A tuple of (<annotation name>, <value>) for the current annotation block.
+     * If a nested block is found, these values must be copied into a new map as nested blocks can have other values
+     * and also further elements can be found after a block was visited.
+     */
+    private void resolveAnnotationAssignments(AttributeAssignment assignBlock,
+        final Map<String, Value> annotationAssignments) {
+        
+        // Collect all annotation value assignments before setting them to nested variables
+        for (int i = 0, n = assignBlock.getAssignmentDataCount(); i < n; i++) {
+            Assignment assignment = assignBlock.getAssignmentData(i);
+            String annotationName = assignment.getName();
+            ConstraintSyntaxTree constraint = assignment.getExpression();
+            
+            evaluator.init(config, AssignmentState.DEFAULT, false, null);
+            evaluator.visit(constraint);
+            Value value = evaluator.getResult();
+            if (null != value) {
+                annotationAssignments.put(annotationName, value);
+            }
+            evaluator.clear();
+        }
+        
+        // Set value for all nested elements (until the next assignment block occurs)
+        for (int i = 0, n = assignBlock.getElementCount(); i < n; i++) {
+            // TODO performance optimization
+            assignBlock.getElement(i).accept(new AssignBlockVisitor(annotationAssignments));
         }
     }
 
     /**
      * Part of the {@link #resolve()} method.
      * Resolves default values of variable declarations.
-     * @param project Project The current project for which assignments shall be resolved.
+     * @param project The current project for which assignments shall be resolved.
      */
     protected void resolveDefaultValues(Project project) {
         DeclarationFinder finder = new DeclarationFinder(project, FilterType.NO_IMPORTS, null);

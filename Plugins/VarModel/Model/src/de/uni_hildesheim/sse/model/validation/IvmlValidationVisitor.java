@@ -45,6 +45,7 @@ import de.uni_hildesheim.sse.model.varModel.Constraint;
 import de.uni_hildesheim.sse.model.varModel.ContainableModelElement;
 import de.uni_hildesheim.sse.model.varModel.DecisionVariableDeclaration;
 import de.uni_hildesheim.sse.model.varModel.FreezeBlock;
+import de.uni_hildesheim.sse.model.varModel.IAttributableElement;
 import de.uni_hildesheim.sse.model.varModel.IFreezable;
 import de.uni_hildesheim.sse.model.varModel.IModelElement;
 import de.uni_hildesheim.sse.model.varModel.IPartialEvaluable;
@@ -412,6 +413,20 @@ public class IvmlValidationVisitor extends AbstractVisitor
         checkNameIdentifier(attribute.getName(), attribute);
         // Check presence of custom data types
         checkDeclaration(attribute);
+
+        // Check whether annotated element has this annotation (could happen if wrong add method was used)
+        IAttributableElement annotatedElement = attribute.getElement();
+        if (null != annotatedElement) {
+            boolean annotationFound = attribute == annotatedElement.getAttribute(attribute.getName());
+            if (!annotationFound) {
+                addError(annotatedElement.getClass().getSimpleName() + " \"" + annotatedElement.getName()
+                    + "\" was not annotated by " + attribute.getName(),
+                    annotatedElement, ValidationMessage.UNRESOLVED_ANNOTATION);
+            }
+        } else {
+            addError("Annotated element of " + attribute.getName() + " is <null>",
+                attribute, ValidationMessage.ELEMENT_IS_NULL);
+        }
     }
 
     @Override
