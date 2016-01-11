@@ -27,7 +27,7 @@ import org.junit.runners.Suite.SuiteClasses;
 @RunWith(Suite.class)
 @SuiteClasses({ AssignmentResolverTest.class, CombinationsTest.class, CompoundVariableTest.class,
         ConfigurationTest.class, ConfigurationTest2.class, DecisionVariableTest.class, DerivedVeriableTest.class,
-        SetVariableTest.class })
+        SetVariableTest.class, FreezeTest.class })
 public class AllTestsForConfModel {
 
 }

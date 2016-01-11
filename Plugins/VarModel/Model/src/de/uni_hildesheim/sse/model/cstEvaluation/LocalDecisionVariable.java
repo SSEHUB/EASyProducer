@@ -214,18 +214,20 @@ public class LocalDecisionVariable implements IDecisionVariable {
                 CompoundValue cValue = (CompoundValue) tmp;
                 Compound type = (Compound) cValue.getType();
                 DecisionVariableDeclaration slotDecl = type.getElement(slotName);
-                Value slotValue = cValue.getNestedValue(slotName);
-                if (!Reference.TYPE.isAssignableFrom(slotDecl.getType())) { // don't dereference references
-                    slotValue = dereference(conf, slotValue);
-                }
-                LocalDecisionVariable var = new LocalDecisionVariable(slotDecl, conf, null);
-                if (null != slotValue) {
-                    try {
-                        var.setValue(slotValue, AssignmentState.ASSIGNED);
-                    } catch (ConfigurationException e) {
+                if (null != slotDecl) {
+                    Value slotValue = cValue.getNestedValue(slotName);
+                    if (!Reference.TYPE.isAssignableFrom(slotDecl.getType())) { // don't dereference references
+                        slotValue = dereference(conf, slotValue);
                     }
+                    LocalDecisionVariable var = new LocalDecisionVariable(slotDecl, conf, null);
+                    if (null != slotValue) {
+                        try {
+                            var.setValue(slotValue, AssignmentState.ASSIGNED);
+                        } catch (ConfigurationException e) {
+                        }
+                    }
+                    result = var;
                 }
-                result = var;
             } 
         }
         return result;
