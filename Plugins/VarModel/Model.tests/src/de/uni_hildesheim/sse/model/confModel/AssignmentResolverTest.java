@@ -24,15 +24,11 @@ import de.uni_hildesheim.sse.model.cst.ConstantValue;
 import de.uni_hildesheim.sse.model.cst.ConstraintSyntaxTree;
 import de.uni_hildesheim.sse.model.cst.OCLFeatureCall;
 import de.uni_hildesheim.sse.model.cst.Variable;
-import de.uni_hildesheim.sse.model.varModel.Attribute;
-import de.uni_hildesheim.sse.model.varModel.AttributeAssignment;
-import de.uni_hildesheim.sse.model.varModel.AttributeAssignment.Assignment;
 import de.uni_hildesheim.sse.model.varModel.Constraint;
 import de.uni_hildesheim.sse.model.varModel.DecisionVariableDeclaration;
 import de.uni_hildesheim.sse.model.varModel.Project;
 import de.uni_hildesheim.sse.model.varModel.ProjectImport;
 import de.uni_hildesheim.sse.model.varModel.datatypes.Compound;
-import de.uni_hildesheim.sse.model.varModel.datatypes.Enum;
 import de.uni_hildesheim.sse.model.varModel.datatypes.IntegerType;
 import de.uni_hildesheim.sse.model.varModel.datatypes.OclKeyWords;
 import de.uni_hildesheim.sse.model.varModel.values.CompoundValue;
@@ -599,62 +595,5 @@ public class AssignmentResolverTest {
         Assert.assertNotNull(iVarC);
         Assert.assertEquals(33, iVarC.getValue().getValue());
         Assert.assertSame(AssignmentState.DEFAULT, iVarC.getState());
-    }
-    
-    /**
-     * Tests the correct assignment of annotations.
-     * @throws ValueDoesNotMatchTypeException Must not occur otherwise there is a failure inside the
-     * {@link ValueFactory}.
-     * @throws CSTSemanticException Must not occur otherwise there is a failure inside the constraint syntax trees.
-     */
-    @Test
-    public void testAssignProjectAnnotation() throws ValueDoesNotMatchTypeException, CSTSemanticException {
-        // Creates a project with an annotation of the complete project
-        Project project = new Project("testAssignProjectAnnotation");
-        Enum btType = new Enum("Bindingtime", project, "compile_time", "run_time");
-        project.add(btType);
-        Attribute btDecl = new Attribute("bindingtime", btType, project, project);
-        Value compileValue = ValueFactory.createValue(btType, btType.getLiteral(0));
-        ConstantValue constValCompiletime = new ConstantValue(compileValue);
-        btDecl.setValue(constValCompiletime);
-        project.add(btDecl);
-        project.attribute(btDecl);
-        DecisionVariableDeclaration declA = new DecisionVariableDeclaration("intA", IntegerType.TYPE, project);
-        project.add(declA);
-        // Overwrite default annotation of second declaration
-        AttributeAssignment assignBlock = new AttributeAssignment(project);
-        Value runValue = ValueFactory.createValue(btType, btType.getLiteral(1));
-        ConstantValue constValRuntime = new ConstantValue(runValue);
-        Assignment assign = new Assignment(btDecl.getName(), OclKeyWords.ASSIGNMENT, constValRuntime);
-        assignBlock.add(assign);
-        DecisionVariableDeclaration declB = new DecisionVariableDeclaration("intB", IntegerType.TYPE, assignBlock);
-        assignBlock.add(declB);
-        project.add(assignBlock);
-        
-        ProjectTestUtilities.validateProject(project);
-        Configuration config = new Configuration(project, true);
-        
-        // Test correct behavior:
-        // intA.bindingtime = compile_time
-        // intB.bindingtime = run_time
-        assertAnnotationValue(compileValue, config.getDecision(declA));
-        assertAnnotationValue(runValue, config.getDecision(declB));
-    }
-
-    /**
-     * Tests whether the annotations of an {@link IDecisionVariable} has the expected values.
-     * @param expectedValue The expected value of the given annotation.
-     * @param variable A variable for which its first annotation shall be tested.
-     */
-    private void assertAnnotationValue(Value expectedValue, IDecisionVariable variable) {
-        // Annotation for the given variable
-        Assert.assertEquals(1, variable.getAttributesCount());
-        IDecisionVariable annotationVariable = variable.getAttribute(0);
-        Assert.assertNotNull("Error: Variable \"" + variable.getDeclaration().getName() + "\" has no annotation." ,
-            annotationVariable);
-        Assert.assertNotNull("Error: Variable \"" + variable.getDeclaration().getName() + "\" has no annotation value."
-            , annotationVariable.getValue());
-        Assert.assertEquals("Error: Variable \"" + variable.getDeclaration().getName()
-            + "\" has wrong annotation value.", expectedValue, annotationVariable.getValue());
     }
 }

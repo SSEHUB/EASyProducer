@@ -46,14 +46,18 @@ import de.uni_hildesheim.sse.model.varModel.datatypes.Set;
 public class AnnotationAssignmentFinder extends AbstractProjectVisitor {
 
     private List<AttributeAssignment> assignmentBlocks;
+    private boolean onlyToplevel;
     
     /**
      * Single constructor for this class.
      * @param originProject The project where the visiting shall start
      * @param filterType Specifies whether project imports shall be considered or not.
+     * @param onlyToplevel <tt>true</tt> Only non nested assignment blocks will be found,
+     * <tt>false</tt> all assignment blocks will be found.
      */
-    public AnnotationAssignmentFinder(Project originProject, FilterType filterType) {
+    public AnnotationAssignmentFinder(Project originProject, FilterType filterType, boolean onlyToplevel) {
         super(originProject, filterType);
+        this.onlyToplevel = onlyToplevel;
         assignmentBlocks = new ArrayList<AttributeAssignment>();
         originProject.accept(this);
     }
@@ -128,9 +132,11 @@ public class AnnotationAssignmentFinder extends AbstractProjectVisitor {
 
     @Override
     public void visitCompound(Compound compound) {
-        for (int i = 0; i < compound.getAssignmentCount(); i++) {
-            assignmentBlocks.add(compound.getAssignment(i));
-        }        
+        if (!onlyToplevel) {
+            for (int i = 0; i < compound.getAssignmentCount(); i++) {
+                assignmentBlocks.add(compound.getAssignment(i));
+            }
+        }
     }
 
     @Override

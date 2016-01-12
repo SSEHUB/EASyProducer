@@ -16,9 +16,9 @@
 package de.uni_hildesheim.sse.model.confModel;
 
 import java.util.ArrayList;
-import java.util.Deque;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -35,6 +35,7 @@ import de.uni_hildesheim.sse.model.varModel.CompoundAccessStatement;
 import de.uni_hildesheim.sse.model.varModel.Constraint;
 import de.uni_hildesheim.sse.model.varModel.DecisionVariableDeclaration;
 import de.uni_hildesheim.sse.model.varModel.FreezeBlock;
+import de.uni_hildesheim.sse.model.varModel.IModelElement;
 import de.uni_hildesheim.sse.model.varModel.IModelVisitor;
 import de.uni_hildesheim.sse.model.varModel.OperationDefinition;
 import de.uni_hildesheim.sse.model.varModel.PartialEvaluationBlock;
@@ -92,6 +93,12 @@ public class AssignmentResolver {
     private int iterationLoops;
     
     /**
+     * Temporary list of all instances per data type. Should reduce retrieval if nested {@link IDecisionVariable}s for
+     * a {@link IDatatype} (e.g. a {@link Compound}) shall be found. Needed for resolving values for nested elements.
+     */
+    private Map<IDatatype, List<IDecisionVariable>> instancesPerType;
+    
+    /**
      * Part of the {@link AssignmentResolver#resolveAnnotationAssignments(AttributeAssignment, Map)} for recursive
      * resolving assignment values of annotation assignment blocks. 
      * @author El-Sharkawy
@@ -100,17 +107,24 @@ public class AssignmentResolver {
     private class AssignBlockVisitor implements IModelVisitor {
         
         private Map<String, Value> annotationAssignments;
+        private List<IDecisionVariable> parents;
+        private boolean visitNestedElements;
         
         /**
          * Sole constructor of this class.
          * @param annotationAssignments A tuple of (<annotation name>, <value>) for the current annotation block.
-     * If a nested block is found, these values must be copied into a new map as nested blocks can have other values
-     * and also further elements can be found after a block was visited.
+         * If a nested block is found, these values must be copied into a new map as nested blocks can have other values
+         * and also further elements can be found after a block was visited.
+         * @param parents A list of {@link IDecisionVariable}s which shall currently be treated as parents for
+         * retrieving (nested) {@link IDecisionVariable}s during visitation. Can be empty or <tt>null</tt>
+         * if the current parent is the whole project.
          */
-        private AssignBlockVisitor(Map<String, Value> annotationAssignments) {
+        private AssignBlockVisitor(Map<String, Value> annotationAssignments, List<IDecisionVariable> parents) {
             this.annotationAssignments = annotationAssignments;
+            this.parents = parents;
+            visitNestedElements = null != parents && !parents.isEmpty();
         }
-
+        
         @Override
         public void visitSet(de.uni_hildesheim.sse.model.varModel.datatypes.Set set) {
             // Nothing to do
@@ -148,7 +162,15 @@ public class AssignmentResolver {
         
         @Override
         public void visitCompound(Compound compound) {
+            List<IDecisionVariable> oldParents = parents;
+            boolean oldVisitState = visitNestedElements;
+            visitNestedElements = true;
+            parents = AssignmentResolver.this.getInstancesForType(compound);
+            
             compound.accept(this);
+            
+            visitNestedElements = oldVisitState;
+            parents = oldParents;
         }
         
         @Override
@@ -183,7 +205,28 @@ public class AssignmentResolver {
         
         @Override
         public void visitDecisionVariableDeclaration(DecisionVariableDeclaration decl) {
-            IDecisionVariable variable = config.getDecision(decl);
+            if (!visitNestedElements) {
+                IDecisionVariable variable = config.getDecision(decl);
+                assignAnnotationValuesToVariable(variable);
+            } else {
+                for (int i = 0, n = parents.size(); i < n; i++) {
+                    IDecisionVariable parentVar = parents.get(i);
+                    for (int j = 0, m = parentVar.getNestedElementsCount(); j < m; j++) {
+                        IDecisionVariable nestedVar = parentVar.getNestedElement(j);
+                        if (decl == nestedVar.getDeclaration()) {
+                            assignAnnotationValuesToVariable(nestedVar);
+                        }
+                    }
+                }
+            }
+        }
+
+        /**
+         * Part of {@link #visitDecisionVariableDeclaration(DecisionVariableDeclaration)}: Assigns all gathered
+         * annotation values to the given {@link IDecisionVariable}.
+         * @param variable The {@link IDecisionVariable} for which the values shall be configured.
+         */
+        private void assignAnnotationValuesToVariable(IDecisionVariable variable) {
             if (null != variable) {
                 for (int i = 0, n = variable.getAttributesCount(); i < n; i++) {
                     IDecisionVariable annotation = variable.getAttribute(i);
@@ -218,7 +261,7 @@ public class AssignmentResolver {
         public void visitAttributeAssignment(AttributeAssignment assignment) {
             Map<String, Value> nestedAssignments = new HashMap<String, Value>();
             nestedAssignments.putAll(annotationAssignments);
-            AssignmentResolver.this.resolveAnnotationAssignments(assignment, nestedAssignments);
+            AssignmentResolver.this.resolveAnnotationAssignments(assignment, nestedAssignments, parents);
         }
         
         @Override
@@ -237,6 +280,51 @@ public class AssignmentResolver {
         this.config = config;
         evaluator = createEvaluationVisitor();
         iterationLoops = 5;
+        instancesPerType = new HashMap<IDatatype, List<IDecisionVariable>>();
+        // Handle top level variables with iterator
+        Iterator<IDecisionVariable> varItr = config.iterator();
+        while (varItr.hasNext()) {
+            IDecisionVariable variable = varItr.next();
+            IDatatype type = variable.getDeclaration().getType();
+            List<IDecisionVariable> instances = instancesPerType.get(type);
+            if (null == instances) {
+                instances = new ArrayList<IDecisionVariable>();
+                instancesPerType.put(type, instances);
+            }
+            instances.add(variable);
+            
+            findInstancesOfNestedVariavbles(variable);
+        }
+    }
+    
+    /**
+     * Recursive method to collect all nested {@link IDecisionVariable}.
+     * Part of the constructor.
+     * @param variable A already collected variable, may containing nested variables (must not be <tt>null</tt>.
+     */
+    private void findInstancesOfNestedVariavbles(IDecisionVariable variable) {
+        for (int i = 0, n = variable.getNestedElementsCount(); i < n; i++) {
+            IDecisionVariable nestedVar = variable.getNestedElement(i);
+            IDatatype type = nestedVar.getDeclaration().getType();
+            List<IDecisionVariable> instances = instancesPerType.get(type);
+            if (null == instances) {
+                instances = new ArrayList<IDecisionVariable>();
+                instancesPerType.put(type, instances);
+            }
+            instances.add(variable);
+            
+            findInstancesOfNestedVariavbles(nestedVar);
+        }
+    }
+    
+    /**
+     * Returns a list of all (nested) {@link IDecisionVariable}s for the given type.
+     * @param type The type for which the {@link IDecisionVariable}s shall be returned.
+     * Will <b>not</b> consider {@link IDatatype#isAssignableFrom(IDatatype)}.
+     * @return The list of instances or <tt>null</tt> if no instance exist for the specified type.
+     */
+    protected List<IDecisionVariable> getInstancesForType(IDatatype type) {
+        return instancesPerType.get(type);
     }
     
     /**
@@ -276,16 +364,23 @@ public class AssignmentResolver {
      * @param project The current project for which annotation assignments shall be resolved.
      */
     private void resolveAnnotationAssignments(Project project) {
-        AnnotationAssignmentFinder finder = new AnnotationAssignmentFinder(project, FilterType.NO_IMPORTS);
+        AnnotationAssignmentFinder finder = new AnnotationAssignmentFinder(project, FilterType.NO_IMPORTS, false);
         List<AttributeAssignment> assignmentBlocks = finder.getAssignmentBlocks();
         
         for (int i = 0, n = assignmentBlocks.size(); i < n; i++) {
             // Assign values top down (as they can be overwritten in this way)
-            // TODO handle not solveable assignments (is this supported?)            
+            // TODO handle not solveable assignments, like >, >=, <, <= (is this supported?)            
             AttributeAssignment assignBlock = assignmentBlocks.get(i);
             Map<String, Value> annotationAssignments = new HashMap<String, Value>();
-
-            resolveAnnotationAssignments(assignBlock, annotationAssignments);
+            IModelElement parent = assignBlock.getParent();
+            List<IDecisionVariable> parents = null;
+            if (parent instanceof Project) {
+                parents = new ArrayList<IDecisionVariable>();
+            } else if (parent instanceof IDatatype) {
+                parents = instancesPerType.get((IDatatype) parent);
+            }
+            
+            resolveAnnotationAssignments(assignBlock, annotationAssignments, parents);
         }
     }
 
@@ -295,9 +390,12 @@ public class AssignmentResolver {
      * @param annotationAssignments A tuple of (<annotation name>, <value>) for the current annotation block.
      * If a nested block is found, these values must be copied into a new map as nested blocks can have other values
      * and also further elements can be found after a block was visited.
+     * @param parents A list of {@link IDecisionVariable}s which shall currently be treated as parents for
+     * retrieving (nested) {@link IDecisionVariable}s during visitation. Can be empty or <tt>null</tt>
+     * if the current parent is the whole project.
      */
     private void resolveAnnotationAssignments(AttributeAssignment assignBlock,
-        final Map<String, Value> annotationAssignments) {
+        final Map<String, Value> annotationAssignments, List<IDecisionVariable> parents) {
         
         // Collect all annotation value assignments before setting them to nested variables
         for (int i = 0, n = assignBlock.getAssignmentDataCount(); i < n; i++) {
@@ -316,8 +414,8 @@ public class AssignmentResolver {
         
         // Set value for all nested elements (until the next assignment block occurs)
         for (int i = 0, n = assignBlock.getElementCount(); i < n; i++) {
-            // TODO performance optimization
-            assignBlock.getElement(i).accept(new AssignBlockVisitor(annotationAssignments));
+            // TODO performance optimization (Do not create every time a new constructor, but only a new map
+            assignBlock.getElement(i).accept(new AssignBlockVisitor(annotationAssignments, parents));
         }
     }
 
@@ -466,7 +564,7 @@ public class AssignmentResolver {
     
     /**
      * Fills the stack of imported {@link Project}s.
-     * The innermost import will be on top of the stack ({@link Deque}). The main {@link Project} of the
+     * The innermost import will be on top of the stack ({@link List}). The main {@link Project} of the
      * {@link Configuration} will be on bottom. No project will be listed multiple times.
      * @param projects The list of all included projects, which are used inside the configuration.
      */

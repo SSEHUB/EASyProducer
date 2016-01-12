@@ -1,20 +1,29 @@
+/*
+ * Copyright 2009-2016 University of Hildesheim, Software Systems Engineering
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * 
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package test.de.uni_hildesheim.sse;
 
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 import org.junit.runners.Suite.SuiteClasses;
 
-import de.uni_hildesheim.sse.cst.CommentTest;
-import de.uni_hildesheim.sse.cst.ConstraintReplacerTest;
-import de.uni_hildesheim.sse.cst.ContainerOperationCallTest;
-import de.uni_hildesheim.sse.cst.OCLFeatureCallTest;
-import de.uni_hildesheim.sse.cst.ParenthesisTest;
-import de.uni_hildesheim.sse.logger.EASyLoggerFactoryTest;
-import de.uni_hildesheim.sse.logger.JavaLoggerTest;
+import de.uni_hildesheim.sse.cst.AllCSTTests;
+import de.uni_hildesheim.sse.logger.AllLoggerTests;
 import de.uni_hildesheim.sse.model.confModel.AllTestsForConfModel;
 import de.uni_hildesheim.sse.model.cstEvaluation.CstEvaluationTests;
-import de.uni_hildesheim.sse.model.validation.IvmlIdentifierCheckTest;
-import de.uni_hildesheim.sse.model.validation.IvmlValidationVisitorTest;
+import de.uni_hildesheim.sse.model.validation.AllValidationTests;
 import de.uni_hildesheim.sse.model.varModel.datatypes.TypeMapperTests;
 import de.uni_hildesheim.sse.model.varModel.filter.mandatoryVars.MandatoryDeclarationClassifierTest;
 import de.uni_hildesheim.sse.persistency.IVMLWriterTest;
@@ -25,20 +34,9 @@ import de.uni_hildesheim.sse.varModel.PartialEvaluationBlockTest;
 import de.uni_hildesheim.sse.varModel.ProjectInfoTest;
 import de.uni_hildesheim.sse.varModel.ProjectInterfaceTest;
 import de.uni_hildesheim.sse.varModel.VersionTest;
-import de.uni_hildesheim.sse.varModel.datytypes.AttributeTest;
-import de.uni_hildesheim.sse.varModel.datytypes.BasisDatatypeTest;
-import de.uni_hildesheim.sse.varModel.datytypes.CompoundTest;
-import de.uni_hildesheim.sse.varModel.datytypes.ContainerTest;
-import de.uni_hildesheim.sse.varModel.datytypes.DerivedDatatypeTest;
-import de.uni_hildesheim.sse.varModel.datytypes.EnumTest;
-import de.uni_hildesheim.sse.varModel.datytypes.OperationTest;
-import de.uni_hildesheim.sse.varModel.datytypes.ReferenceTest;
-import de.uni_hildesheim.sse.varModel.datytypes.SequenceTestTMP;
+import de.uni_hildesheim.sse.varModel.datytypes.AllDatatypeTests;
 import de.uni_hildesheim.sse.varModel.filter.AllFilterTests;
-import de.uni_hildesheim.sse.varModel.management.ProjectTest;
-import de.uni_hildesheim.sse.varModel.management.VarModelListenerTest;
-import de.uni_hildesheim.sse.varModel.management.VarModelTest;
-import de.uni_hildesheim.sse.varModel.management.VersionedProjectInfosTest;
+import de.uni_hildesheim.sse.varModel.management.AllManagementTests;
 import de.uni_hildesheim.sse.varModel.rewrite.ProjectRewriteVisitorTest;
 import de.uni_hildesheim.sse.varModel.values.CompoundValueTest;
 import de.uni_hildesheim.sse.varModel.values.DerivedDatatypeValueTest;
@@ -62,26 +60,16 @@ import de.uni_hildesheim.sse.varModel.versioning.ImportValidationTest;
 @RunWith(Suite.class)
 // TODO restructure into sub-test-suites and reference them here (done for cstEvaluation)
 @SuiteClasses({
-    ConstraintReplacerTest.class,
-    ContainerOperationCallTest.class,
-    OCLFeatureCallTest.class,
+    AllCSTTests.class,
+    AllLoggerTests.class,
     IVMLWriterTest.class,
     ContainableModelElementListTest.class,
-    AttributeTest.class,
-    BasisDatatypeTest.class,
-    CompoundTest.class,
-    ContainerTest.class,
-    DerivedDatatypeTest.class,
-    EnumTest.class,
-    OperationTest.class,
-    ReferenceTest.class,
-    SequenceTestTMP.class,
+    AllDatatypeTests.class,
     FreezeBlockTest.class,
     MessageTest.class,
     PartialEvaluationBlockTest.class,
     ProjectInfoTest.class,
     ProjectInterfaceTest.class,
-    ProjectTest.class,
     CompoundValueTest.class,
     DerivedDatatypeValueTest.class,
     IntValueTest.class,
@@ -91,24 +79,15 @@ import de.uni_hildesheim.sse.varModel.versioning.ImportValidationTest;
     StringValueTest.class,
     NullValueTest.class,
     ValueFactoryTest.class,
-    // VarModelTest must be executed before VarModelListenerTest
-    VarModelTest.class,
-    VarModelListenerTest.class,
+    AllManagementTests.class,
     VersionTest.class,
-    VersionedProjectInfosTest.class,
     ReferenceValueTest.class,
-    ProjectInterfaceTest.class,
-    ParenthesisTest.class,
     AllFilterTests.class,
-    //CompoundVariableTest (part of AllTestsForConfModel) must be executed after VarModelTest
+    //CompoundVariableTest (part of AllTestsForConfModel) must be executed after VarModelTest (AllManagementTests)
     AllTestsForConfModel.class,
-    CommentTest.class,
     ImportValidationTest.class,
 //    IVMLValidationVisitorTest.class,
-    EASyLoggerFactoryTest.class,
-    JavaLoggerTest.class,
-    IvmlIdentifierCheckTest.class,
-    IvmlValidationVisitorTest.class,
+    AllValidationTests.class,
     TypeMapperTests.class,
     CstEvaluationTests.class,
     ProjectRewriteVisitorTest.class,
