@@ -410,7 +410,8 @@ public abstract class AbstractIvmlVariable extends IvmlElement {
             }
         } else {
             EASyLoggerFactory.INSTANCE.getLogger(getClass(), Bundle.ID).error(
-                "setting a new value is not possible as variable " + getName() + " is frozen");
+                "setting " + value + " as new value is not possible as variable " 
+                    + de.uni_hildesheim.sse.model.confModel.Configuration.getInstanceName(variable) + " is frozen");
         }
     }
 
