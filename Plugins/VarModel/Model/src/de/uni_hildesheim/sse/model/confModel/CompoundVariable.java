@@ -21,6 +21,7 @@ import java.util.Map;
 import java.util.Set;
 
 import de.uni_hildesheim.sse.model.varModel.AbstractVariable;
+import de.uni_hildesheim.sse.model.varModel.AttributeAssignment;
 import de.uni_hildesheim.sse.model.varModel.datatypes.Compound;
 import de.uni_hildesheim.sse.model.varModel.datatypes.DerivedDatatype;
 import de.uni_hildesheim.sse.model.varModel.values.CompoundValue;
@@ -58,14 +59,44 @@ public class CompoundVariable extends StructuredVariable {
         
         Compound cmpType = (Compound) DerivedDatatype.resolveToBasis(varDeclaration.getType());
         for (int i = 0; i < cmpType.getInheritedElementCount(); i++) {
-            AbstractVariable nestedItem = cmpType.getInheritedElement(i);
-            VariableCreator creator = new VariableCreator(nestedItem, this, isVisible);
-            try {
-                nestedElements.put(nestedItem.getName(), creator.getVariable(false));
-            } catch (ConfigurationException e) {
-                // Should not occur
-                e.printStackTrace();
-            }
+            createNestedElement(cmpType.getInheritedElement(i), isVisible);
+        }
+        /*        
+        // TODO check whether relevant/problematic, inserted while debugging 
+        for (int a = 0; a < cmpType.getAssignmentCount(); a++) {
+            addNestedElements(cmpType.getAssignment(a), isVisible);
+        }*/
+    }
+    
+    /**
+     * Adds nested elements due to attribute assignments.
+     * 
+     * @param assng the assignment
+     * @param isVisible specifies whether the parent variable is exported by an interface or not
+     */
+    @SuppressWarnings("unused") // see constructor
+    private void addNestedElements(AttributeAssignment assng, boolean isVisible) {
+        for (int e = 0; e < assng.getElementCount(); e++) {
+            createNestedElement(assng.getElement(e), isVisible);
+        }
+        for (int a = 0; a < assng.getAssignmentCount(); a++) {
+            addNestedElements(assng.getAssignment(a), isVisible);
+        }
+    }
+
+    /**
+     * Creates a nested element due to its declaration.
+     * 
+     * @param decl the variable declaration
+     * @param isVisible specifies whether the parent variable is exported by an interface or not
+     */
+    private void createNestedElement(AbstractVariable decl, boolean isVisible) {
+        VariableCreator creator = new VariableCreator(decl, this, isVisible);
+        try {
+            nestedElements.put(decl.getName(), creator.getVariable(false));
+        } catch (ConfigurationException e) {
+            // Should not occur
+            e.printStackTrace();
         }
     }
     

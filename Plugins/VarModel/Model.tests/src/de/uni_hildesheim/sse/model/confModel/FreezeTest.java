@@ -17,7 +17,6 @@ package de.uni_hildesheim.sse.model.confModel;
 
 import org.junit.Test;
 import org.junit.Assert;
-import org.junit.Ignore;
 
 import de.uni_hildesheim.sse.model.cst.AttributeVariable;
 import de.uni_hildesheim.sse.model.cst.CSTSemanticException;
@@ -57,7 +56,6 @@ public class FreezeTest {
      * @throws CSTSemanticException shall not occur
      */
     @Test
-    @Ignore("->Sascha")
     public void freezeCompoundTest() throws ValueDoesNotMatchTypeException, CSTSemanticException {
         Project prj = new Project("test");
 
@@ -68,6 +66,7 @@ public class FreezeTest {
         prj.add(bindingTime);
         
         Attribute attr = new Attribute("binding", bindingTime, prj, prj);
+        prj.attribute(attr);
         prj.add(attr);
         
         Compound param = new Compound("IntParameter", prj);
@@ -100,10 +99,12 @@ public class FreezeTest {
         Assert.assertNotNull(myParamVar);
         IDecisionVariable myParamVarDeflt = findNested(myParamVar, "defaultValue");
         Assert.assertNotNull(myParamVarDeflt);
+        Assert.assertEquals(1, myParamVarDeflt.getAttributesCount());
         IDecisionVariable myParamVarValue = findNested(myParamVar, "value");
         Assert.assertNotNull(myParamVarValue);
-        
-        cfg.freezeValues(prj, FilterType.NO_IMPORTS);
+        Assert.assertEquals(1, myParamVarValue.getAttributesCount());
+
+        cfg.freezeValues(prj, FilterType.NO_IMPORTS); // no effect
         
         Assert.assertEquals(AssignmentState.FROZEN, myParamVarDeflt.getState());
         Assert.assertNotEquals(AssignmentState.FROZEN, myParamVarValue.getState());
@@ -122,7 +123,7 @@ public class FreezeTest {
         for (int n = 0; null == result && n < var.getNestedElementsCount(); n++) {
             IDecisionVariable decVar = var.getNestedElement(n);
             if (decVar.getDeclaration().getName().equals(name)) {
-                result = var;
+                result = decVar;
             }
         }
         return result;

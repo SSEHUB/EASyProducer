@@ -311,8 +311,7 @@ public class AssignmentResolver {
                 instances = new ArrayList<IDecisionVariable>();
                 instancesPerType.put(type, instances);
             }
-            instances.add(variable);
-            
+            instances.add(nestedVar);
             findInstancesOfNestedVariavbles(nestedVar);
         }
     }
@@ -366,10 +365,9 @@ public class AssignmentResolver {
     private void resolveAnnotationAssignments(Project project) {
         AnnotationAssignmentFinder finder = new AnnotationAssignmentFinder(project, FilterType.NO_IMPORTS, false);
         List<AttributeAssignment> assignmentBlocks = finder.getAssignmentBlocks();
-        
         for (int i = 0, n = assignmentBlocks.size(); i < n; i++) {
             // Assign values top down (as they can be overwritten in this way)
-            // TODO handle not solveable assignments, like >, >=, <, <= (is this supported?)            
+            // TODO handle not solveable assignments, like >, >=, <, <= (is this supported?) // TODO no, see syntax
             AttributeAssignment assignBlock = assignmentBlocks.get(i);
             Map<String, Value> annotationAssignments = new HashMap<String, Value>();
             IModelElement parent = assignBlock.getParent();
@@ -379,7 +377,6 @@ public class AssignmentResolver {
             } else if (parent instanceof IDatatype) {
                 parents = instancesPerType.get((IDatatype) parent);
             }
-            
             resolveAnnotationAssignments(assignBlock, annotationAssignments, parents);
         }
     }

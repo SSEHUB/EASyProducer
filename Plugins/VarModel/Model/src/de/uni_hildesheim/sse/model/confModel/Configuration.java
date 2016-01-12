@@ -213,7 +213,6 @@ public class Configuration implements IConfigurationVisitable, IProjectListener,
             VarModel.INSTANCE.events().notifyModelProcessing(info, true, Type.INITIALIZING);
 
             VarModel.INSTANCE.resolveImports(project, null, null);
-            
             //Loop adding the declarations to a list
             createVariables();            
             
