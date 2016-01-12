@@ -21,6 +21,7 @@ import org.junit.runners.Suite.SuiteClasses;
 
 import de.uni_hildesheim.sse.cst.AllCSTTests;
 import de.uni_hildesheim.sse.logger.AllLoggerTests;
+//github.com/SSEHUB/EASyProducer.git
 import de.uni_hildesheim.sse.model.confModel.AllTestsForConfModel;
 import de.uni_hildesheim.sse.model.cstEvaluation.CstEvaluationTests;
 import de.uni_hildesheim.sse.model.validation.AllValidationTests;
@@ -69,7 +70,6 @@ import de.uni_hildesheim.sse.varModel.versioning.ImportValidationTest;
     MessageTest.class,
     PartialEvaluationBlockTest.class,
     ProjectInfoTest.class,
-    ProjectInterfaceTest.class,
     CompoundValueTest.class,
     DerivedDatatypeValueTest.class,
     IntValueTest.class,
@@ -82,6 +82,7 @@ import de.uni_hildesheim.sse.varModel.versioning.ImportValidationTest;
     AllManagementTests.class,
     VersionTest.class,
     ReferenceValueTest.class,
+    ProjectInterfaceTest.class,
     AllFilterTests.class,
     //CompoundVariableTest (part of AllTestsForConfModel) must be executed after VarModelTest (AllManagementTests)
     AllTestsForConfModel.class,
