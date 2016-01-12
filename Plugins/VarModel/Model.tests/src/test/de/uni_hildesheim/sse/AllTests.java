@@ -4,17 +4,12 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 import org.junit.runners.Suite.SuiteClasses;
 
-import de.uni_hildesheim.sse.cst.CommentTest;
-import de.uni_hildesheim.sse.cst.ConstraintReplacerTest;
-import de.uni_hildesheim.sse.cst.ContainerOperationCallTest;
-import de.uni_hildesheim.sse.cst.OCLFeatureCallTest;
-import de.uni_hildesheim.sse.cst.ParenthesisTest;
+import de.uni_hildesheim.sse.cst.AllCSTTests;
 import de.uni_hildesheim.sse.logger.EASyLoggerFactoryTest;
 import de.uni_hildesheim.sse.logger.JavaLoggerTest;
 import de.uni_hildesheim.sse.model.confModel.AllTestsForConfModel;
 import de.uni_hildesheim.sse.model.cstEvaluation.CstEvaluationTests;
-import de.uni_hildesheim.sse.model.validation.IvmlIdentifierCheckTest;
-import de.uni_hildesheim.sse.model.validation.IvmlValidationVisitorTest;
+import de.uni_hildesheim.sse.model.validation.AllValidationTests;
 import de.uni_hildesheim.sse.model.varModel.datatypes.TypeMapperTests;
 import de.uni_hildesheim.sse.model.varModel.filter.mandatoryVars.MandatoryDeclarationClassifierTest;
 import de.uni_hildesheim.sse.persistency.IVMLWriterTest;
@@ -62,9 +57,7 @@ import de.uni_hildesheim.sse.varModel.versioning.ImportValidationTest;
 @RunWith(Suite.class)
 // TODO restructure into sub-test-suites and reference them here (done for cstEvaluation)
 @SuiteClasses({
-    ConstraintReplacerTest.class,
-    ContainerOperationCallTest.class,
-    OCLFeatureCallTest.class,
+    AllCSTTests.class,
     IVMLWriterTest.class,
     ContainableModelElementListTest.class,
     AttributeTest.class,
@@ -98,17 +91,14 @@ import de.uni_hildesheim.sse.varModel.versioning.ImportValidationTest;
     VersionedProjectInfosTest.class,
     ReferenceValueTest.class,
     ProjectInterfaceTest.class,
-    ParenthesisTest.class,
     AllFilterTests.class,
     //CompoundVariableTest (part of AllTestsForConfModel) must be executed after VarModelTest
     AllTestsForConfModel.class,
-    CommentTest.class,
     ImportValidationTest.class,
 //    IVMLValidationVisitorTest.class,
     EASyLoggerFactoryTest.class,
     JavaLoggerTest.class,
-    IvmlIdentifierCheckTest.class,
-    IvmlValidationVisitorTest.class,
+    AllValidationTests.class,
     TypeMapperTests.class,
     CstEvaluationTests.class,
     ProjectRewriteVisitorTest.class,

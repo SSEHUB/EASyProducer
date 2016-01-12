@@ -13,29 +13,24 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package de.uni_hildesheim.sse.model.confModel;
+package de.uni_hildesheim.sse.cst;
 
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 import org.junit.runners.Suite.SuiteClasses;
 
 /**
- * Sub Test Suite to load all tests related to the Configuration and {@link IDecisionVariable}s. 
+ * Sub Test Suite to load all tests related to constraint syntax trees (structural tests, not evaluation). 
  * @author El-Sharkawy
  *
  */
 @RunWith(Suite.class)
 @SuiteClasses({
-    AssignmentResolverTest.class,
-    AssignmentResolverAnnotationTest.class,
-    CombinationsTest.class,
-    CompoundVariableTest.class,
-    ConfigurationTest.class,
-    ConfigurationTest2.class,
-    DecisionVariableTest.class,
-    DerivedVeriableTest.class,
-    SetVariableTest.class,
-    FreezeTest.class })
-public class AllTestsForConfModel {
+    CommentTest.class,
+    ConstraintReplacerTest.class,
+    ContainerOperationCallTest.class,
+    OCLFeatureCallTest.class,
+    ParenthesisTest.class})
+public class AllCSTTests {
 
 }

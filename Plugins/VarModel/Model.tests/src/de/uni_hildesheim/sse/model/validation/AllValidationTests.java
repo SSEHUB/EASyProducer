@@ -13,29 +13,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package de.uni_hildesheim.sse.model.confModel;
+package de.uni_hildesheim.sse.model.validation;
 
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 import org.junit.runners.Suite.SuiteClasses;
 
 /**
- * Sub Test Suite to load all tests related to the Configuration and {@link IDecisionVariable}s. 
+ * Sub Test Suite to load all tests related to (partial-) project validation. 
  * @author El-Sharkawy
  *
  */
 @RunWith(Suite.class)
 @SuiteClasses({
-    AssignmentResolverTest.class,
-    AssignmentResolverAnnotationTest.class,
-    CombinationsTest.class,
-    CompoundVariableTest.class,
-    ConfigurationTest.class,
-    ConfigurationTest2.class,
-    DecisionVariableTest.class,
-    DerivedVeriableTest.class,
-    SetVariableTest.class,
-    FreezeTest.class })
-public class AllTestsForConfModel {
+    IvmlIdentifierCheckTest.class,
+    IvmlValidationVisitorTest.class})
+public class AllValidationTests {
 
 }
