@@ -596,6 +596,7 @@ public class ProjectRewriteVisitorTest {
         btType.add(new EnumLiteral("runtime", 2, btType));
         p.add(btType);
         Attribute attr = new Attribute("bindingTime", btType, p, p);
+        p.attribute(attr);
         p.add(attr);
         DecisionVariableDeclaration declA = new DecisionVariableDeclaration("declarationA", IntegerType.TYPE, p);
         declA.setValue(42);

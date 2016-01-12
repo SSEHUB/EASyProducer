@@ -55,6 +55,7 @@ public class DatatypeFinderTest {
         project.add(attributeType);
         Attribute attribute = new Attribute("attr", attributeType, project, project);
         project.add(attribute);
+        project.attribute(attribute);
         
         // Create custom datatypes
         oEnumType = new OrderedEnum("orderedEnumType", project);
