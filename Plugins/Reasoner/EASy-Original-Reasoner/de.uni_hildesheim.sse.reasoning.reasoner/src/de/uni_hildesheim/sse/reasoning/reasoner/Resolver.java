@@ -863,35 +863,38 @@ public class Resolver {
     private void processElement(Assignment assignment, DecisionVariableDeclaration element,
         CompoundAccess compound) {
         String attributeName = assignment.getName();
-//        infoLogger.info("Element: " 
-//              + StringProvider.toIvmlString(element));
-//        infoLogger.info("Attribute: " + StringProvider.toIvmlString(element.getAttribute(attributeName)));
-        ConstraintSyntaxTree cst = null;
-        //fix for annotations in compounds
-        compound = null;
-        compound = varMap.get(element);
-        if (compound == null) {                      
-            cst = new OCLFeatureCall(
-                new AttributeVariable(new Variable(element), (Attribute) element.getAttribute(attributeName)),
+        Attribute attrib = (Attribute) element.getAttribute(attributeName);
+        if (null != attrib) {
+    //        infoLogger.info("Element: " 
+    //              + StringProvider.toIvmlString(element));
+    //        infoLogger.info("Attribute: " + StringProvider.toIvmlString(element.getAttribute(attributeName)));
+            ConstraintSyntaxTree cst = null;
+            //fix for annotations in compounds
+            compound = null;
+            compound = varMap.get(element);
+            if (compound == null) {                      
+                cst = new OCLFeatureCall(
+                    new AttributeVariable(new Variable(element), attrib),
+                        OclKeyWords.ASSIGNMENT, assignment.getExpression());
+            } else {
+    //            infoLogger.info("Compound: " + StringProvider.toIvmlString(compound));
+                cst = new OCLFeatureCall(new AttributeVariable(compound, attrib),
                     OclKeyWords.ASSIGNMENT, assignment.getExpression());
-        } else {
-//            infoLogger.info("Compound: " + StringProvider.toIvmlString(compound));
-            cst = new OCLFeatureCall(new AttributeVariable(compound, (Attribute) element.getAttribute(attributeName)),
-                OclKeyWords.ASSIGNMENT, assignment.getExpression());
+            }
+            try {
+                cst.inferDatatype();
+            } catch (CSTSemanticException e) {
+                LOGGER.exception(e);
+            }
+            Constraint constraint = new Constraint(project);
+            try {
+                constraint.setConsSyntax(cst);
+                assignedAttributeConstraints.add(constraint);
+    //            infoLogger.info("Attribute constraint: " + StringProvider.toIvmlString(cst));
+            } catch (CSTSemanticException e) {
+                LOGGER.exception(e);
+            }
         }
-        try {
-            cst.inferDatatype();
-        } catch (CSTSemanticException e) {
-            LOGGER.exception(e);
-        }
-        Constraint constraint = new Constraint(project);
-        try {
-            constraint.setConsSyntax(cst);
-            assignedAttributeConstraints.add(constraint);
-//            infoLogger.info("Attribute constraint: " + StringProvider.toIvmlString(cst));
-        } catch (CSTSemanticException e) {
-            LOGGER.exception(e);
-        }        
     }
 
    

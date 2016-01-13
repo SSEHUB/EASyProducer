@@ -97,6 +97,7 @@ public class FreezeTest {
         Configuration cfg = new Configuration(prj);
         IDecisionVariable myParamVar = cfg.getDecision(myParam);
         Assert.assertNotNull(myParamVar);
+        Assert.assertEquals(1, myParamVar.getAttributesCount());
         IDecisionVariable myParamVarDeflt = findNested(myParamVar, "defaultValue");
         Assert.assertNotNull(myParamVarDeflt);
         Assert.assertEquals(1, myParamVarDeflt.getAttributesCount());
@@ -108,7 +109,7 @@ public class FreezeTest {
         
         Assert.assertEquals(AssignmentState.FROZEN, myParamVarDeflt.getState());
         Assert.assertNotEquals(AssignmentState.FROZEN, myParamVarValue.getState());
-        //Assert.assertNotEquals(AssignmentState.FROZEN, myParamVar.getState());
+        //Assert.assertNotEquals(AssignmentState.FROZEN, myParamVar.getState()); // state unclear
     }
     
     /**

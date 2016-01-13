@@ -23,20 +23,33 @@ import de.uni_hildesheim.sse.model.confModel.AssignmentState;
 import de.uni_hildesheim.sse.model.confModel.Configuration;
 import de.uni_hildesheim.sse.model.confModel.ConfigurationException;
 import de.uni_hildesheim.sse.model.confModel.IDecisionVariable;
+import de.uni_hildesheim.sse.model.cst.AttributeVariable;
 import de.uni_hildesheim.sse.model.cst.CSTSemanticException;
 import de.uni_hildesheim.sse.model.cst.ConstantValue;
+import de.uni_hildesheim.sse.model.cst.ConstraintSyntaxTree;
 import de.uni_hildesheim.sse.model.cst.OCLFeatureCall;
 import de.uni_hildesheim.sse.model.cst.Variable;
+import de.uni_hildesheim.sse.model.varModel.Attribute;
+import de.uni_hildesheim.sse.model.varModel.AttributeAssignment;
 import de.uni_hildesheim.sse.model.varModel.Constraint;
 import de.uni_hildesheim.sse.model.varModel.DecisionVariableDeclaration;
+import de.uni_hildesheim.sse.model.varModel.FreezeBlock;
+import de.uni_hildesheim.sse.model.varModel.IFreezable;
 import de.uni_hildesheim.sse.model.varModel.Project;
+import de.uni_hildesheim.sse.model.varModel.AttributeAssignment.Assignment;
 import de.uni_hildesheim.sse.model.varModel.datatypes.BooleanType;
+import de.uni_hildesheim.sse.model.varModel.datatypes.Compound;
 import de.uni_hildesheim.sse.model.varModel.datatypes.Enum;
+import de.uni_hildesheim.sse.model.varModel.datatypes.EnumLiteral;
+import de.uni_hildesheim.sse.model.varModel.datatypes.FreezeVariableType;
+import de.uni_hildesheim.sse.model.varModel.datatypes.IntegerType;
 import de.uni_hildesheim.sse.model.varModel.datatypes.OclKeyWords;
+import de.uni_hildesheim.sse.model.varModel.datatypes.OrderedEnum;
 import de.uni_hildesheim.sse.model.varModel.values.BooleanValue;
 import de.uni_hildesheim.sse.model.varModel.values.Value;
 import de.uni_hildesheim.sse.model.varModel.values.ValueDoesNotMatchTypeException;
 import de.uni_hildesheim.sse.model.varModel.values.ValueFactory;
+import de.uni_hildesheim.sse.persistency.StringProvider;
 import de.uni_hildesheim.sse.reasoning.core.reasoner.ReasonerConfiguration;
 import de.uni_hildesheim.sse.utils.progress.ProgressObserver;
 import de.uni_hildesheim.sse.varModel.testSupport.ProjectTestUtilities;
@@ -111,6 +124,103 @@ public class CodedTests {
         
         // Output of the configuration
         ProjectTestUtilities.validateProject(config.toProject(true, false), true);
+    }
+
+    /**
+     * Tests freezing.
+     * 
+     * @throws ValueDoesNotMatchTypeException shall not occur
+     * @throws CSTSemanticException shall not occur
+     */
+    @Test
+    public void freezeCompoundTest() throws ValueDoesNotMatchTypeException, CSTSemanticException {
+        //testFreezing(false); // TODO ENABLE, currently fails without runtime mode
+        testFreezing(true);
+    }
+
+    /**
+     * Creates a project for freezing and checks the frozen states.
+     * 
+     * @param runtimeMode whether the test shall happen in runtime reasoning mode
+     * @throws ValueDoesNotMatchTypeException shall not occur
+     * @throws CSTSemanticException shall not occur
+     */
+    private void testFreezing(boolean runtimeMode) throws ValueDoesNotMatchTypeException, CSTSemanticException {
+        Project prj = new Project("test");
+
+        Enum bindingTime = new OrderedEnum("BindingTime", prj);
+        bindingTime.add(new EnumLiteral("compile", 1, bindingTime));
+        bindingTime.add(new EnumLiteral("monitor", 2, bindingTime));
+        bindingTime.add(new EnumLiteral("enact", 3, bindingTime));
+        prj.add(bindingTime);
+        
+        Attribute attr = new Attribute("binding", bindingTime, prj, prj);
+        attr.setValue(ValueFactory.createValue(bindingTime, "compile"));
+        prj.attribute(attr);
+        prj.add(attr);
+        
+        Compound param = new Compound("IntParameter", prj);
+        param.add(new DecisionVariableDeclaration("defaultValue", IntegerType.TYPE, param));
+        AttributeAssignment assng = new AttributeAssignment(param);
+        assng.add(new Assignment("binding", "=", new ConstantValue(ValueFactory.createValue(bindingTime, "enact"))));
+        assng.add(new DecisionVariableDeclaration("value", IntegerType.TYPE, param));
+        param.add(assng);
+        prj.add(param);
+        
+        DecisionVariableDeclaration myParam = new DecisionVariableDeclaration("myParam", param, prj);
+        prj.add(myParam);
+        
+        IFreezable[] freezables = new IFreezable[1];
+        freezables[0] = myParam;
+        FreezeVariableType iterType = new FreezeVariableType(freezables, prj);
+        DecisionVariableDeclaration freezeIter = new DecisionVariableDeclaration("b", iterType, prj);
+        Variable iterEx = new AttributeVariable(new Variable(freezeIter), iterType.getAttribute("binding"));
+        ConstraintSyntaxTree selector = new OCLFeatureCall(iterEx, ">=", 
+            new ConstantValue(ValueFactory.createValue(bindingTime, "monitor")));
+        selector.inferDatatype();
+        FreezeBlock freeze = new FreezeBlock(freezables, freezeIter, selector, prj);
+        prj.add(freeze);
+        
+        // debugging
+        System.out.println(StringProvider.toIvmlString(prj));
+        
+        Configuration cfg = new Configuration(prj);
+        IDecisionVariable myParamVar = cfg.getDecision(myParam);
+        Assert.assertNotNull(myParamVar);
+        IDecisionVariable myParamVarDeflt = findNested(myParamVar, "defaultValue");
+        Assert.assertNotNull(myParamVarDeflt);
+        Assert.assertEquals(1, myParamVarDeflt.getAttributesCount());
+        IDecisionVariable myParamVarValue = findNested(myParamVar, "value");
+        Assert.assertNotNull(myParamVarValue);
+        Assert.assertEquals(1, myParamVarValue.getAttributesCount());
+
+        ReasonerConfiguration rConfig = new ReasonerConfiguration();
+        rConfig.setRuntimeMode(runtimeMode);
+        // Perform reasoning
+        Engine engine = new Engine(prj, cfg, rConfig, ProgressObserver.NO_OBSERVER);
+        engine.reason();
+        
+        Assert.assertEquals(AssignmentState.FROZEN, myParamVarDeflt.getState());
+        Assert.assertNotEquals(AssignmentState.FROZEN, myParamVarValue.getState());
+        //Assert.assertNotEquals(AssignmentState.FROZEN, myParamVar.getState());
+    }
+    
+    /**
+     * Finds a nested variable.
+     * 
+     * @param var the parent variable
+     * @param name the name of the variable
+     * @return the nested variable (may be <b>null</b>)
+     */
+    private IDecisionVariable findNested(IDecisionVariable var, String name) {
+        IDecisionVariable result = null;
+        for (int n = 0; null == result && n < var.getNestedElementsCount(); n++) {
+            IDecisionVariable decVar = var.getNestedElement(n);
+            if (decVar.getDeclaration().getName().equals(name)) {
+                result = decVar;
+            }
+        }
+        return result;
     }
 
 }
