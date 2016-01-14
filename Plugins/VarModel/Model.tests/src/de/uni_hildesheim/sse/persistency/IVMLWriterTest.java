@@ -19,6 +19,7 @@ import de.uni_hildesheim.sse.model.cst.ConstraintSyntaxTree;
 import de.uni_hildesheim.sse.model.cst.OCLFeatureCall;
 import de.uni_hildesheim.sse.model.cst.Variable;
 import de.uni_hildesheim.sse.model.varModel.Attribute;
+import de.uni_hildesheim.sse.model.varModel.AttributeAssignment;
 import de.uni_hildesheim.sse.model.varModel.Constraint;
 import de.uni_hildesheim.sse.model.varModel.DecisionVariableDeclaration;
 import de.uni_hildesheim.sse.model.varModel.ExpressionVersionRestriction;
@@ -28,6 +29,7 @@ import de.uni_hildesheim.sse.model.varModel.IvmlKeyWords;
 import de.uni_hildesheim.sse.model.varModel.Project;
 import de.uni_hildesheim.sse.model.varModel.ProjectImport;
 import de.uni_hildesheim.sse.model.varModel.ProjectInterface;
+import de.uni_hildesheim.sse.model.varModel.AttributeAssignment.Assignment;
 import de.uni_hildesheim.sse.model.varModel.datatypes.BooleanType;
 import de.uni_hildesheim.sse.model.varModel.datatypes.Compound;
 import de.uni_hildesheim.sse.model.varModel.datatypes.Container;
@@ -599,8 +601,6 @@ public class IVMLWriterTest {
         DecisionVariableDeclaration[] decs = new DecisionVariableDeclaration[2];
         decs[0] = dec1;
         decs[1] = dec2;
-        //String[] but = new String[1];
-        //but[0] = "Kla*";
         
         FreezeVariableType type = new FreezeVariableType(decs, pro);
         DecisionVariableDeclaration var = new DecisionVariableDeclaration("v", type, pro);
@@ -621,6 +621,64 @@ public class IVMLWriterTest {
         expected += "        Klaus;\r\n";
         expected += "    } but (v|matches(name(v), \"Kla*\"))\r\n";
         expected += "}\r\n";
+        
+        writer.flush();
+        Assert.assertEquals(expected, strWriter.toString());
+    }
+    
+    /**
+     * Tests whether writing freeze block succeeds, including a but based on an annotation.
+     * @throws IOException shall not happen, otherwise {@link IVMLWriter#flush()} is broken
+     * @throws ValueDoesNotMatchTypeException shall not happen - otherwise failure
+     * @throws CSTSemanticException shall not happen - otherwise failure
+     */
+    @Test
+    public void writingFreezeBlockButAnnotation() throws IOException, ValueDoesNotMatchTypeException,
+        CSTSemanticException {
+        
+        Enum btType = new Enum("BT", pro, "run", "compile");
+        pro.add(btType);
+        Attribute btDecl = new Attribute("bindingTime", btType, pro, pro);
+        Value btVal = ValueFactory.createValue(btType, btType.getLiteral(0));
+        btDecl.setValue(btVal);
+        pro.attribute(btDecl);
+        pro.add(btDecl);
+        DecisionVariableDeclaration dec1 = new DecisionVariableDeclaration("strA", StringType.TYPE, pro);
+        pro.add(dec1);
+        ConstantValue constValRuntime = new ConstantValue(ValueFactory.createValue(btType, btType.getLiteral(1)));
+        AttributeAssignment assignBlock = new AttributeAssignment(pro);
+        Assignment assign = new Assignment(btDecl.getName(), OclKeyWords.ASSIGNMENT, constValRuntime);
+        assignBlock.add(assign);
+        DecisionVariableDeclaration dec2 = new DecisionVariableDeclaration("strB", StringType.TYPE, assignBlock);
+        assignBlock.add(dec2);
+        pro.add(assignBlock);
+        DecisionVariableDeclaration[] decs = new DecisionVariableDeclaration[2];
+        decs[0] = dec1;
+        decs[1] = dec2;
+        
+        FreezeVariableType type = new FreezeVariableType(decs, pro);
+        DecisionVariableDeclaration var = new DecisionVariableDeclaration("d", type, pro);
+        AttributeVariable annotationAccess = new AttributeVariable(new Variable(var), btDecl);
+        ConstraintSyntaxTree selector = new OCLFeatureCall(annotationAccess, OclKeyWords.EQUALS, constValRuntime);
+        selector.inferDatatype();
+        
+        FreezeBlock fb = new FreezeBlock(decs, var, selector, pro);
+        pro.add(fb);
+        ProjectTestUtilities.validateProject(pro, true);
+        pro.accept(writer);
+        
+        String expected = "project Name {" + IvmlKeyWords.LINEFEED + IvmlKeyWords.LINEFEED
+            + "    enum BT {run, compile};" + IvmlKeyWords.LINEFEED
+            + "    annotate BT bindingTime = BT.run to Name;" + IvmlKeyWords.LINEFEED
+            + "    String strA;" + IvmlKeyWords.LINEFEED
+            + "    assign (bindingTime = BT.compile) to {" + IvmlKeyWords.LINEFEED
+            + "        String strB;" + IvmlKeyWords.LINEFEED
+            + "    }" + IvmlKeyWords.LINEFEED
+            + "    freeze {" + IvmlKeyWords.LINEFEED
+            + "        strA;" + IvmlKeyWords.LINEFEED
+            + "        strB;" + IvmlKeyWords.LINEFEED
+            + "    } but (d|d.bindingTime == BT.compile)" + IvmlKeyWords.LINEFEED
+            + "}" + IvmlKeyWords.LINEFEED;
         
         writer.flush();
         Assert.assertEquals(expected, strWriter.toString());
@@ -873,7 +931,6 @@ public class IVMLWriterTest {
             + firstAttrValue + "\";";
         String assignmentStr2 = intA.getName() + "." + attributeDef2.getName() + " " + OclKeyWords.ASSIGNMENT 
             + " \"" + assignedValue.getValue().toString() + "\";";
-        System.out.println(savedResult);
         Assert.assertEquals("Error: value of attribute \"" + firstAttribute.getDeclaration().getName() + "\" was saved"
             + " but its state is \"" + firstAttribute.getState() + "\"", changeStates,
             savedResult.contains(assignmentStr1));
