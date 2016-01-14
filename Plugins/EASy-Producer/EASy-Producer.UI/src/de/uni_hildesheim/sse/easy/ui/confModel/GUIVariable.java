@@ -462,4 +462,12 @@ public abstract class GUIVariable implements IGUIConfigurableElement, Comparable
         return null != variable ? variable.getDeclaration().getName() : "null";
     }
     
+    /**
+     * Returns whether the variable has any annotations.
+     * @return <tt>true</tt> The variable has at least one annotation, <tt>false</tt> the variable has no annotations.
+     */
+    public boolean isAnnotated() {
+        return null != variable ? variable.getAttributesCount() > 0 : false;
+    }
+    
 }

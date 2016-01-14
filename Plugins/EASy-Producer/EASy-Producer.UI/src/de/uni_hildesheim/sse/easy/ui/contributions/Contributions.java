@@ -48,7 +48,13 @@ public abstract class Contributions {
         /**
          * The selection list for copy mechanisms.
          */
-        COPY_MECHANISMS(true, null);
+        COPY_MECHANISMS(true, null),
+        
+        /**
+         * The Configuration editor offers a view to see the current annotation values for
+         * a selected IDecisionVariable.
+         */
+        ANNOTATIONS_VIEW(true, null);
         
         /**
          * Stores the default behavior if no contribution is present.

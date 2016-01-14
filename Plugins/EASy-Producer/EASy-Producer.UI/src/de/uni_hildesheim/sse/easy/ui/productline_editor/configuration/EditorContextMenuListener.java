@@ -20,7 +20,7 @@ public class EditorContextMenuListener implements SelectionListener {
      *
      */
     static enum Action {
-        SET_NULL, REMOVE_VALUE;
+        SET_NULL, REMOVE_VALUE, ANNOTATION_VIEW;
     }
     
     private StructuredViewer viewer;
@@ -47,6 +47,10 @@ public class EditorContextMenuListener implements SelectionListener {
             break;
         case REMOVE_VALUE:
             var.setEmptyValue();
+            break;
+        case ANNOTATION_VIEW:
+            AnnotationsViewDialog annotationsView = new AnnotationsViewDialog(viewer.getControl().getShell(), var);
+            annotationsView.open();
             break;
         default:
             // DO nothing

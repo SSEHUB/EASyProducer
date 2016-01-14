@@ -16,6 +16,7 @@ import org.eclipse.swt.widgets.Tree;
 import de.uni_hildesheim.sse.easy.ui.confModel.GUIConfiguration;
 import de.uni_hildesheim.sse.easy.ui.confModel.GUIVariable;
 import de.uni_hildesheim.sse.easy.ui.confModel.IGUIConfigChangeListener;
+import de.uni_hildesheim.sse.easy.ui.contributions.Contributions;
 import de.uni_hildesheim.sse.easy.ui.productline_editor.IEASyEditorPage;
 import de.uni_hildesheim.sse.easy.ui.productline_editor.configuration.EditorContextMenuListener.Action;
 import de.uni_hildesheim.sse.model.confModel.Configuration;
@@ -167,6 +168,12 @@ public class ConfigurationTableEditor extends TreeViewer implements IGUIConfigCh
                 // (Re-) build menu (unfortunately there is no setVisible method) 
                 IStructuredSelection selection = (IStructuredSelection) getSelection();
                 GUIVariable var = (GUIVariable) selection.getFirstElement();
+                if (Contributions.UIElement.ANNOTATIONS_VIEW.getEnabled() && var.isAnnotated()) {
+                    final MenuItem annotationMenu = new MenuItem(menu, SWT.PUSH);
+                    annotationMenu.setText("show Annotations");
+                    annotationMenu.addSelectionListener(new EditorContextMenuListener(ConfigurationTableEditor.this,
+                        Action.ANNOTATION_VIEW));
+                }
                 if (var.hasValue()) {
                     final MenuItem removeValues = new MenuItem(menu, SWT.PUSH);
                     removeValues.setText("remove value"); 
