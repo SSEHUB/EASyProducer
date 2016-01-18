@@ -351,9 +351,13 @@ public class AssignmentResolver {
             Project project = projects.get(p);
             evaluator.setDispatchScope(project);
             resolveDefaultValues(project);
-            resolveAssignments(project);
-            // Annotation default values are already handles while the IDecisionVariable is created
+            /* Annotation default values are already handles while the IDecisionVariable is created
+             * However, assignment blocks can also be treated as default values, as they can be overwritten
+             * with classical assignment constraints.The later one is handled inside the resolveAssignments
+             * methods. For this reason, resolveAnnotationAssignments must be handled before resolveAssignments
+             */
             resolveAnnotationAssignments(project);
+            resolveAssignments(project);
             // TODO do incremental freezing in here -> required by interfaces with propagation constraints
         }
     }

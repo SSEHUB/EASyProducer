@@ -18,11 +18,17 @@ package de.uni_hildesheim.sse.model.confModel;
 import org.junit.Assert;
 import org.junit.Test;
 
+import de.uni_hildesheim.sse.model.cst.AttributeVariable;
 import de.uni_hildesheim.sse.model.cst.CSTSemanticException;
+import de.uni_hildesheim.sse.model.cst.CompoundAccess;
 import de.uni_hildesheim.sse.model.cst.ConstantValue;
+import de.uni_hildesheim.sse.model.cst.OCLFeatureCall;
+import de.uni_hildesheim.sse.model.cst.Variable;
+import de.uni_hildesheim.sse.model.varModel.AbstractVariable;
 import de.uni_hildesheim.sse.model.varModel.Attribute;
 import de.uni_hildesheim.sse.model.varModel.AttributeAssignment;
 import de.uni_hildesheim.sse.model.varModel.AttributeAssignment.Assignment;
+import de.uni_hildesheim.sse.model.varModel.Constraint;
 import de.uni_hildesheim.sse.model.varModel.DecisionVariableDeclaration;
 import de.uni_hildesheim.sse.model.varModel.Project;
 import de.uni_hildesheim.sse.model.varModel.datatypes.Compound;
@@ -141,6 +147,106 @@ public class AssignmentResolverAnnotationTest {
         assertAnnotationValue(compileValue, widthVar);
         assertAnnotationValue(runValue, heightVar);
     }
+    
+    /**
+     * Tests whether assignment blocks and assignment statements are considered correctly.
+     * A (re-)assigned value should overwrite the value from the assignment block.
+     * @throws ValueDoesNotMatchTypeException Must not occur otherwise there is a failure inside the
+     * {@link ValueFactory}.
+     * @throws CSTSemanticException Must not occur otherwise there is a failure inside the constraint syntax trees.
+     */
+    @Test
+    public void testAssignmentBlockAndAssignmentStatements() throws ValueDoesNotMatchTypeException,
+        CSTSemanticException {
+        
+        Project project = new Project("testAssignmentBlockAndAssignmentStatements");
+        // Annotation for project
+        Enum btType = new Enum("Bindingtime", project, "compile_time", "run_time");
+        project.add(btType);
+        Attribute btDecl = new Attribute("bindingtime", btType, project, project);
+        Value compileValue = ValueFactory.createValue(btType, btType.getLiteral(0));
+        ConstantValue constValCompiletime = new ConstantValue(compileValue);
+        btDecl.setValue(constValCompiletime);
+        project.attribute(btDecl);
+        project.add(btDecl);
+        Compound cType = new Compound("Dimension", project);
+        DecisionVariableDeclaration widthDecl = new DecisionVariableDeclaration("width", IntegerType.TYPE, cType);
+        cType.add(widthDecl);
+        // Overwrite default annotation of second declaration
+        AttributeAssignment assignBlock = new AttributeAssignment(cType);
+        Value runValue = ValueFactory.createValue(btType, btType.getLiteral(1));
+        ConstantValue constValRuntime = new ConstantValue(runValue);
+        Assignment assign = new Assignment(btDecl.getName(), OclKeyWords.ASSIGNMENT, constValRuntime);
+        assignBlock.add(assign);
+        DecisionVariableDeclaration heightDecl = new DecisionVariableDeclaration("height", IntegerType.TYPE,
+                assignBlock);
+        assignBlock.add(heightDecl);
+        cType.add(assignBlock);
+        project.add(cType);
+        DecisionVariableDeclaration dimDecl1 = new DecisionVariableDeclaration("dimension1", cType, project);
+        project.add(dimDecl1);
+        DecisionVariableDeclaration dimDecl2 = new DecisionVariableDeclaration("dimension2", cType, project);
+        project.add(dimDecl2);
+        // Re assign value for second instance
+        Constraint reassignment = new Constraint(project);
+        AttributeVariable annotationVar = new AttributeVariable(new CompoundAccess(new Variable(dimDecl2),
+            heightDecl.getName()), btDecl);
+        OCLFeatureCall call = new OCLFeatureCall(annotationVar, OclKeyWords.ASSIGNMENT, constValCompiletime);
+        reassignment.setConsSyntax(call);
+        project.add(reassignment);
+        
+        ProjectTestUtilities.validateProject(project);
+        Configuration config = new Configuration(project, true);
+        
+        // Test correct behavior:
+        // dimension1 = compile_time
+        // dimension1.width = compile_time
+        // dimension1.height = run_time
+        // dimension2 = compile_time
+        // dimension2.width = compile_time
+        // --> dimension2.height = compile_time <--
+        IDecisionVariable dimVar1 = config.getDecision(dimDecl1);
+        IDecisionVariable[] slots = getSlotsOfDimensionVariable(dimVar1, widthDecl, heightDecl);
+        IDecisionVariable widthVar = slots[0];
+        IDecisionVariable heightVar = slots[1];
+        assertAnnotationValue(compileValue, dimVar1);
+        assertAnnotationValue(compileValue, widthVar);
+        assertAnnotationValue(runValue, heightVar);
+        
+        IDecisionVariable dimVar2 = config.getDecision(dimDecl2);
+        slots = getSlotsOfDimensionVariable(dimVar2, widthDecl, heightDecl);
+        widthVar = slots[0];
+        heightVar = slots[1];
+        assertAnnotationValue(compileValue, dimVar2);
+        assertAnnotationValue(compileValue, widthVar);
+        assertAnnotationValue(compileValue, heightVar);
+    }
+
+    /**
+     * Extracts the slot {@link IDecisionVariable}s for the {@link IDecisionVariable} instance of the dimension
+     * compound used in the examples here. Will retrieve the correct slots independent of the implementation
+     * of compounds.
+     * @param dimVar1 A compound instance for which the slots shall be retrieved.
+     * @param delcarations The declarations of directed nested slots, must not be <tt>null</tt>.
+     * @return The {@link IDecisionVariable} instances of the slots, in the same order as passed to this method.
+     */
+    private IDecisionVariable[] getSlotsOfDimensionVariable(IDecisionVariable dimVar1, 
+        AbstractVariable... delcarations) {
+        
+        IDecisionVariable[] slotVars = new IDecisionVariable[delcarations.length];
+        for (int i = 0; i < dimVar1.getNestedElementsCount(); i++) {
+            IDecisionVariable nestedVar = dimVar1.getNestedElement(i);
+            boolean found = false;
+            for (int j = 0; j < slotVars.length && !found; j++) {
+                if (delcarations[j] == nestedVar.getDeclaration()) {
+                    slotVars[j] = nestedVar;
+                    found = true;
+                }
+            }
+        }
+        
+        return slotVars;
+    }
 
     /**
      * Tests whether the annotations of an {@link IDecisionVariable} has the expected values.
@@ -153,11 +259,11 @@ public class AssignmentResolverAnnotationTest {
         // Annotation for the given variable
         Assert.assertEquals(1, variable.getAttributesCount());
         IDecisionVariable annotationVariable = variable.getAttribute(0);
-        Assert.assertNotNull("Error: Variable \"" + variable.getDeclaration().getName() + "\" has no annotation." ,
+        Assert.assertNotNull("Error: Variable \"" + variable.getQualifiedName() + "\" has no annotation." ,
             annotationVariable);
-        Assert.assertNotNull("Error: Variable \"" + variable.getDeclaration().getName() + "\" has no annotation value."
+        Assert.assertNotNull("Error: Variable \"" + variable.getQualifiedName() + "\" has no annotation value."
             , annotationVariable.getValue());
-        Assert.assertEquals("Error: Variable \"" + variable.getDeclaration().getName()
+        Assert.assertEquals("Error: Variable \"" + variable.getQualifiedName()
             + "\" has wrong annotation value.", expectedValue, annotationVariable.getValue());
     }
 }
