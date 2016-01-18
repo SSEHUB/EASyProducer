@@ -87,9 +87,7 @@ public class IvmlConfigurationFieldDescriptor extends AbstractIvmlFieldDescripto
     
     @Override
     public void setValue(Object owner, Object value) throws VilException {
-        if (null == owner) {
-            throw new VilException("field " + getName() + " is not static", VilException.ID_RUNTIME);
-        } else {
+        if (null != owner) {
             if (Utils.isCompatible(owner, Configuration.class) != CompatibilityResult.COMPATIBLE) {
                 throw new VilException("incompatible arguments", VilException.ID_TYPE_INCOMPATIBILITY);
             }

@@ -73,9 +73,7 @@ public class IvmlAnnotationFieldDescriptor extends AbstractIvmlFieldDescriptor {
     
     @Override
     public void setValue(Object owner, Object value) throws VilException {
-        if (null == owner) {
-            throw new VilException("field " + getName() + " is not static", VilException.ID_RUNTIME);
-        } else {
+        if (null != owner) {
             IvmlElement elt;
             if (CompatibilityResult.COMPATIBLE == Utils.isCompatible(owner, DecisionVariable.class)) {
                 elt = ((DecisionVariable) owner).getAttribute(getName());
