@@ -23,7 +23,6 @@ import de.uni_hildesheim.sse.model.varModel.values.ValueFactory;
 class ComboboxGUIVariable extends GUIVariable {
     private ComboItem[] values;
     private IDatatype type;
-    private Composite parent;
     
     /**
      * Elements of this combo box. These elements are 2-tuples:
@@ -79,14 +78,13 @@ class ComboboxGUIVariable extends GUIVariable {
         IGUIConfigurableElement confParent) {
         
         super(variable, confParent.getConfiguration(),
-            confParent.getConfiguration() == confParent ? null : (GUIVariable) confParent);
+            confParent.getConfiguration() == confParent ? null : (GUIVariable) confParent, parent);
         this.type = type;
         if (null != values) {
             this.values = values;
         } else {
             this.values = new ComboItem[] {new ComboItem("", null)};
         }
-        this.parent = parent;
         
         String[] items = new String[this.values.length];
         for (int i = 0; i < items.length; i++) {
@@ -107,8 +105,19 @@ class ComboboxGUIVariable extends GUIVariable {
         return items;
     }
     
+//    @Override
+//    public CellEditor getCellEditor() {
+//        CellEditor result;
+//        if (GUIValueFactory.createUpdatableCellEditors()) {
+//            result = new ComboboxGUICellEditor(getComposite(), createItems(), this);
+//        } else {
+//            result = new ComboBoxCellEditor(getComposite(), createItems());
+//        }
+//        return result;
+//    }
+    
     @Override
-    public CellEditor getCellEditor() {
+    public CellEditor getCellEditor(Composite parent) {
         CellEditor result;
         if (GUIValueFactory.createUpdatableCellEditors()) {
             result = new ComboboxGUICellEditor(parent, createItems(), this);
@@ -120,7 +129,7 @@ class ComboboxGUIVariable extends GUIVariable {
     
     @Override
     public GUIEditor getEditor() {
-        Combo combo = new Combo(parent, SWT.SINGLE | SWT.BORDER);
+        Combo combo = new Combo(getComposite(), SWT.SINGLE | SWT.BORDER);
         combo.setItems(createItems());
         combo.setText(getValueText());
         return new ComboGUIEditor(combo, this);

@@ -17,20 +17,18 @@ package de.uni_hildesheim.sse.easy.ui.productline_editor.configuration;
 
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.IDialogConstants;
+import org.eclipse.jface.viewers.TreeViewer;
+import org.eclipse.jface.viewers.TreeViewerColumn;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Shell;
-import org.eclipse.swt.widgets.Table;
-import org.eclipse.swt.widgets.TableColumn;
-import org.eclipse.swt.widgets.TableItem;
+import org.eclipse.swt.widgets.Tree;
 
 import de.uni_hildesheim.sse.easy.ui.confModel.GUIVariable;
 import de.uni_hildesheim.sse.model.confModel.IDecisionVariable;
-import de.uni_hildesheim.sse.model.varModel.values.NullValue;
-import de.uni_hildesheim.sse.model.varModel.values.Value;
 
 /**
  * Displays the current annotation values for a given {@link de.uni_hildesheim.sse.model.confModel.IDecisionVariable}.
@@ -40,7 +38,7 @@ import de.uni_hildesheim.sse.model.varModel.values.Value;
 public class AnnotationsViewDialog extends Dialog {
 
     private GUIVariable variable;
-
+    
     /**
      * Single constructor for this class.
      * @param parentShell the parent shell, or <code>null</code> to create a top-level shell
@@ -57,36 +55,65 @@ public class AnnotationsViewDialog extends Dialog {
         container.setLayout(new GridLayout(1, true));
         IDecisionVariable nestedVar = variable.getVariable();
         if (null != nestedVar) {
-            Table table = new Table(container, SWT.FULL_SELECTION | SWT.BORDER | SWT.V_SCROLL | SWT.H_SCROLL);
-            table.setHeaderVisible(true);
+//            String[] titles = {"Annotation", "Value"};
+            TreeViewer viewer = new TreeViewer(container, SWT.FULL_SELECTION | SWT.BORDER | SWT.V_SCROLL
+                | SWT.H_SCROLL);
+            viewer.setUseHashlookup(true);
+            final Tree table = viewer.getTree();
             table.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
-            String[] titles = {"Annotation", "Value"};
-            for (int i = 0; i < titles.length; i++) {
-                TableColumn column = new TableColumn(table, SWT.NULL);
-                column.setText(titles[i]);
-            }
+            table.setHeaderVisible(true);
+            table.setLinesVisible(true); 
 
-            for (int i = 0; i < nestedVar.getAttributesCount(); i++) {
-                IDecisionVariable annotation = nestedVar.getAttribute(i);
-                Value value = annotation.getValue();
-                TableItem item = new TableItem(table, SWT.NULL);
-                item.setText(annotation.getDeclaration().getName());
-                item.setText(0, annotation.getDeclaration().getName());
-                String valueTxt = (null != value && NullValue.INSTANCE != value) ? value.getValue().toString()
-                    : "<null>";
-                item.setText(1, valueTxt);
-            }
-
-            for (int i = 0; i < titles.length; i++) {
-                table.getColumn(i).pack();
-            }
+//            viewer.setColumnProperties(titles);
+            viewer.setContentProvider(new AnnotationViewContentProvider());
+            viewer.setInput(variable);
+            TreeViewerColumn column1 = new TreeViewerColumn(viewer, SWT.NONE);
+            column1.getColumn().setText("Annotation");
+            column1.getColumn().setWidth(150);
+            column1.setLabelProvider(new ConfigurationLabelProvider(variable.getConfiguration()));
+            
+            TreeViewerColumn column2 = new TreeViewerColumn(viewer, SWT.NONE);
+            column2.getColumn().setText("Value");
+            column2.getColumn().setWidth(125);
+            column2.setEditingSupport(new ConfigurationCellEditor(viewer, ColumnType.VALUE));
+            column2.setLabelProvider(new ConfigurationLabelProvider(variable.getConfiguration()));
+            System.out.println(viewer.getTree().getColumnCount());
+//            table.update();
+//            table.redraw();
+            viewer.refresh();
+            
+//            Table table = new Table(container, SWT.FULL_SELECTION | SWT.BORDER | SWT.V_SCROLL | SWT.H_SCROLL);
+//            table.setHeaderVisible(true);
+//            table.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
+//            String[] titles = {"Annotation", "Value"};
+//            for (int i = 0; i < titles.length; i++) {
+//                TableColumn column = new TableColumn(table, SWT.NULL);
+//                column.setText(titles[i]);
+//            }
+//
+//            for (int i = 0; i < nestedVar.getAttributesCount(); i++) {
+//                IDecisionVariable annotation = nestedVar.getAttribute(i);
+//                Value value = annotation.getValue();
+//                TableItem item = new TableItem(table, SWT.NULL);
+//                item.setText(annotation.getDeclaration().getName());
+//                item.setText(0, annotation.getDeclaration().getName());
+//                String valueTxt = (null != value && NullValue.INSTANCE != value) ? value.getValue().toString()
+//                    : "<null>";
+//                item.setText(1, valueTxt);
+//            }
+//
+//            for (int i = 0; i < titles.length; i++) {
+//                table.getColumn(i).pack();
+//            }
         }
         return container;
     }
 
+    
     @Override
     protected void configureShell(Shell newShell) {
         super.configureShell(newShell);
+        newShell.setSize(300, 200);
         newShell.setText("Annotations for " + variable.getName());
     }
     
