@@ -1,6 +1,7 @@
 package de.uni_hildesheim.sse.easy.ui.confModel;
 
 import org.eclipse.jface.viewers.CellEditor;
+import org.eclipse.swt.widgets.Composite;
 
 import de.uni_hildesheim.sse.easy.ui.productline_editor.EasyProducerDialog;
 import de.uni_hildesheim.sse.model.confModel.AllFreezeSelector;
@@ -31,6 +32,7 @@ public abstract class GUIVariable implements IGUIConfigurableElement, Comparable
     private String errorMsg;
     
     private GUIHistory history;
+    private Composite composite;
     
     /**
      * The parent holding this variable. Can be <tt>null</tt> in case of top level elements.
@@ -43,8 +45,11 @@ public abstract class GUIVariable implements IGUIConfigurableElement, Comparable
      * @param parentConfig The {@link GUIConfiguration} holding this GUIVariable
      * @param parent The parent GUIVariable holding this variable. Can be <tt>null</tt> if and only if this variable
      * is a top level variable stored inside the configuration.
+     * @param composite The controlling composite, needed for the creation of editors.
      */
-    protected GUIVariable(IDecisionVariable variable, GUIConfiguration parentConfig, GUIVariable parent) {
+    protected GUIVariable(IDecisionVariable variable, GUIConfiguration parentConfig, GUIVariable parent,
+        Composite composite) {
+        
         //assignments = new AssignmentHistory(this);
         this.parentConfig = parentConfig;
         this.variable = variable;
@@ -53,6 +58,15 @@ public abstract class GUIVariable implements IGUIConfigurableElement, Comparable
         TooltipCreator creator = new TooltipCreator(variable);
         tooltip = creator.getTooltip();
         history = new GUIHistory();
+        this.composite = composite;
+    }
+    
+    /**
+     * Returns the GUI component where this variable and its editors are displayed.
+     * @return The holding GUI component.
+     */
+    public final Composite getComposite() {
+        return composite;
     }
     
     /**
@@ -102,11 +116,16 @@ public abstract class GUIVariable implements IGUIConfigurableElement, Comparable
         return variable.getNestedDepth();
     }
     
+//    public CellEditor getCellEditor() {
+//        return getCellEditor(getComposite());
+//    }
+    
     /**
      * Returns a {@link CellEditor} for a table.
+     * @param parent The GUI component where this {@link GUIVariable} and, thus, its editor are displayed. 
      * @return {@link CellEditor} to configure the enclosed {@link IDecisionVariable}
      */
-    public abstract CellEditor getCellEditor();
+    public abstract CellEditor getCellEditor(Composite parent);
     
     /**
      * Returns the (non-cell) editor for this variable. The editor shall be ready to use,

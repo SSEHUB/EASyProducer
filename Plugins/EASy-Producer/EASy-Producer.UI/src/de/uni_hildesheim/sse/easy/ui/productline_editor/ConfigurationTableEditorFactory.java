@@ -420,7 +420,7 @@ public class ConfigurationTableEditorFactory implements IConfigurationEditorCrea
          * @param control the external editor control, shall be instanceof {@link IOverridingEditor}
          */
         private DelegatingGuiVariable(IDecisionVariable variable, GUIConfiguration parentConfig, Control control) {
-            super(variable, parentConfig, null);
+            super(variable, parentConfig, null, null);
             this.control = setOverridingEditor(control);
         }
         
@@ -433,7 +433,7 @@ public class ConfigurationTableEditorFactory implements IConfigurationEditorCrea
          */
         private DelegatingGuiVariable(IDecisionVariable variable, GUIConfiguration parentConfig, 
             CellEditor cellEditor) {
-            super(variable, parentConfig, null);
+            super(variable, parentConfig, null, null);
             this.cellEditor = setOverridingEditor(cellEditor);
         }
         
@@ -452,7 +452,7 @@ public class ConfigurationTableEditorFactory implements IConfigurationEditorCrea
         }
         
         @Override
-        public CellEditor getCellEditor() {
+        public CellEditor getCellEditor(Composite parent) {
             return cellEditor;
         }
 
@@ -603,7 +603,7 @@ public class ConfigurationTableEditorFactory implements IConfigurationEditorCrea
         if (null == result) {
             GUIVariable var = GUIValueFactory.createVariable(variable, config.getParent().getContentPane(), 
                 config.getConfiguration(), null);
-            result = var.getCellEditor();
+            result = var.getCellEditor(config.getParent().getContentPane());
         }
         return result;
     }

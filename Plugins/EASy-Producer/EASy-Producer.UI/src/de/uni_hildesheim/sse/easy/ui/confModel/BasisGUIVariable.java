@@ -20,7 +20,6 @@ import de.uni_hildesheim.sse.model.varModel.values.ValueFactory;
  *
  */
 class BasisGUIVariable extends GUIVariable {
-    private Composite parent;
     
     /**
      * Sole constructor for this class.
@@ -31,12 +30,11 @@ class BasisGUIVariable extends GUIVariable {
      * is a top level variable stored inside the configuration.
      */
     BasisGUIVariable(IDecisionVariable variable, Composite parent, GUIConfiguration config, GUIVariable varParent) {
-        super(variable, config, varParent);
-        this.parent = parent;
+        super(variable, config, varParent, parent);
     }
 
     @Override
-    public CellEditor getCellEditor() {
+    public CellEditor getCellEditor(Composite parent) {
         CellEditor result;
         if (GUIValueFactory.createUpdatableCellEditors()) {
             result = new TextGUICellEditor(parent, this);
@@ -48,7 +46,7 @@ class BasisGUIVariable extends GUIVariable {
     
     @Override
     public GUIEditor getEditor() {
-        Text result = new Text(parent, SWT.SINGLE | SWT.BORDER);
+        Text result = new Text(getComposite(), SWT.SINGLE | SWT.BORDER);
         result.setText(getValueText());
         return new TextGUIEditor(result);
     }

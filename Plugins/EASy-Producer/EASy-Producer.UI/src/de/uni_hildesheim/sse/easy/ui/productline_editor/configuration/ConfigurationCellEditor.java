@@ -63,7 +63,7 @@ public class ConfigurationCellEditor extends EditingSupport {
         
         switch (columnType) {
         case VALUE:
-            result = configItem.getCellEditor();
+            result = configItem.getCellEditor(viewer.getTree());
             break;
         case FREEZE:
             result = new CheckboxCellEditor(viewer.getTree());

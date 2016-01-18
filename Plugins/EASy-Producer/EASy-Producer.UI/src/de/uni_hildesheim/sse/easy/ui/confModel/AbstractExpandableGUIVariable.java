@@ -26,11 +26,6 @@ abstract class AbstractExpandableGUIVariable extends GUIVariable {
     private List<GUIVariable> nested;
     
     /**
-     * Needed for the nested elements.
-     */
-    private Composite composite;
-    
-    /**
      * Sole constructor for this class.
      * @param variable The {@link IDecisionVariable} represented by this GUIVariable
      * @param parent The controlling composite, needed for the creation of CellEditors
@@ -41,19 +36,9 @@ abstract class AbstractExpandableGUIVariable extends GUIVariable {
     protected AbstractExpandableGUIVariable(IDecisionVariable variable, Composite parent,
         GUIConfiguration parentConfig, GUIVariable varParent) {
         
-        super(variable, parentConfig, varParent);
-        composite = parent;
+        super(variable, parentConfig, varParent, parent);
         nested = new ArrayList<GUIVariable>(variable.getNestedElementsCount());
         createNestedVariables();
-    }
-    
-    /**
-     * Getter for Composite of class.
-     * 
-     * @return composite the composite
-     */
-    protected Composite getComposite() {
-        return composite;
     }
     
     @Override
@@ -74,14 +59,14 @@ abstract class AbstractExpandableGUIVariable extends GUIVariable {
             if (ConstraintType.TYPE != nestedType) {
                 nested.add(GUIValueFactory.createVariable(
                     nestedVariable,
-                    composite,
+                    getComposite(),
                     getConfiguration(), this));
             }
         }        
     }
     
     @Override
-    public final CellEditor getCellEditor() {
+    public final CellEditor getCellEditor(Composite parent) {
         // Only the nested elements have CellEditors not the parent.
         return null;
     }
@@ -89,7 +74,7 @@ abstract class AbstractExpandableGUIVariable extends GUIVariable {
     @Override
     public GUIEditor getEditor() {
         // basically, shall not be shown anywhere but also shall indicate that
-        Label label = new Label(composite, SWT.NONE);
+        Label label = new Label(getComposite(), SWT.NONE);
         label.setText(getValueText());
         return new LabelGUIEditor(label);
     }
