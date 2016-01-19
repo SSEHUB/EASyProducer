@@ -228,17 +228,29 @@ public class BasicDecisionVariableContainer extends ModelElement implements IDec
     }
     
     /**
-     * Removes the specified constraint from this container (if it exists).
-     * @param constraint The constraint to remove. If <tt>null</tt> nothing will happen.
-     * @return <tt>true</tt> if the constraint was part of this container and was removed successfully.
+     * Removes the specified model element from this container (if it exists).
+     * @param element The {@link Constraint}, {@link DecisionVariableDeclaration}, or {@link AttributeAssignment}
+     * to remove. If <tt>null</tt> nothing will happen.
+     * @return <tt>true</tt> if the model element was part of this container and was removed successfully.
      */
-    public boolean removeConstraint(Constraint constraint) {
+    public boolean removeModelElement(ContainableModelElement element) {
         boolean found = false;
-        if (null != constraint) {
-            if (null != constraints) {
-                found = constraints.remove(constraint);
+        if (null != element) {
+            if (element instanceof Constraint) {
+                found = constraints.remove(element);
+            } else if (element instanceof DecisionVariableDeclaration) {
+                found = elements.remove(element);
+                if (found) {
+                    // Force update
+                    allDeclarations = null;
+                }
+            } else if (element instanceof AttributeAssignment) {
+                found = assignments.remove(element);
             }
-            found |= modelElements.remove(constraint);
+            
+            if (found) {
+                found |= modelElements.remove(element);
+            }
         }
         
         return found;

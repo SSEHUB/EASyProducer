@@ -49,6 +49,7 @@ import de.uni_hildesheim.sse.model.varModel.datatypes.OclKeyWords;
 import de.uni_hildesheim.sse.model.varModel.datatypes.OrderedEnum;
 import de.uni_hildesheim.sse.model.varModel.datatypes.Reference;
 import de.uni_hildesheim.sse.model.varModel.datatypes.Sequence;
+import de.uni_hildesheim.sse.model.varModel.datatypes.Set;
 import de.uni_hildesheim.sse.model.varModel.filter.FilterType;
 import de.uni_hildesheim.sse.model.varModel.rewrite.ProjectRewriteVisitor;
 import de.uni_hildesheim.sse.model.varModel.rewrite.modifier.DeclarationNameFilter;
@@ -438,7 +439,7 @@ public class ProjectRewriteVisitorTest {
     @Test
     public void testResolveFrozenTypeDefs2() throws ValueDoesNotMatchTypeException, CSTSemanticException {
         // Create original project with a typedef and a frozen declaration.
-        Project p = new Project("testProject");
+        Project p = new Project("testResolveFrozenTypeDefs2");
         ConstantValue zero = new ConstantValue(ValueFactory.createValue(IntegerType.TYPE, 0));
         ConstantValue thousand = new ConstantValue(ValueFactory.createValue(IntegerType.TYPE, 1000));
         // Create first typeDef with declaration and freeze it
@@ -494,7 +495,7 @@ public class ProjectRewriteVisitorTest {
     @Test
     public void testFilterCompoundConstraints() throws ValueDoesNotMatchTypeException, CSTSemanticException {
         // Create original project with 3 compounds and a further variable.
-        Project p = new Project("testProject");
+        Project p = new Project("testFilterCompoundConstraints");
         DecisionVariableDeclaration unnestedDecl = new DecisionVariableDeclaration("unnested", IntegerType.TYPE, p);
         p.add(unnestedDecl);
         // First compound with frozen constraint
@@ -672,7 +673,6 @@ public class ProjectRewriteVisitorTest {
         try {
             iWriter.flush();
         } catch (IOException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
         String freezeAsString = sWriter.toString();
@@ -680,6 +680,53 @@ public class ProjectRewriteVisitorTest {
             freezeAsString.contains(itr.getName() + IvmlKeyWords.ATTRIBUTE_ACCESS + attr.getName()));
         Assert.assertFalse("Invalid qualified name introduced to annotation access in freeze block selector.",
             freezeAsString.contains(p.getName() + IvmlKeyWords.NAMESPACE_SEPARATOR + itr.getName()));
+    }
+    
+    /**
+     * Tests whether a Constraint variable used inside a compound will be removed correctly.
+     * @throws ValueDoesNotMatchTypeException Must not occur, otherwise the {@link ValueFactory} or
+     * {@link de.uni_hildesheim.sse.model.varModel.AbstractVariable#setValue(String)} are broken.
+     * @throws CSTSemanticException Must not occur, otherwise
+     */
+    @Test
+    public void testConstraintVarInCompound() throws ValueDoesNotMatchTypeException, CSTSemanticException {
+        Project p = new Project("testContainerConstraintInCompound");
+        // First compound with frozen constraint
+        Set intSetType = new Set("intSet", IntegerType.TYPE, p);
+        Compound cType1 = new Compound("CP1", p);
+        DecisionVariableDeclaration nestedDeclSet 
+            = new DecisionVariableDeclaration("nestedSet", intSetType, cType1);
+        nestedDeclSet.setValue(2);
+        cType1.add(nestedDeclSet);
+        DecisionVariableDeclaration constrDecl 
+            = new DecisionVariableDeclaration("setCheck", ConstraintType.TYPE, cType1);
+        OCLFeatureCall sizeCheck = new OCLFeatureCall(new Variable(nestedDeclSet), OclKeyWords.SIZE);
+        sizeCheck = new OCLFeatureCall(sizeCheck, OclKeyWords.GREATER,
+            new ConstantValue(ValueFactory.createValue(IntegerType.TYPE, 0)));
+        constrDecl.setValue(sizeCheck);
+        cType1.add(constrDecl);
+        p.add(cType1);
+        DecisionVariableDeclaration cmpDecl 
+            = new DecisionVariableDeclaration("cmp", cType1, p);
+        p.add(cmpDecl);
+        p.add(new FreezeBlock(new IFreezable[] {cmpDecl}, null, null, p));
+        
+        // Check whether project was built up correctly
+        ProjectTestUtilities.validateProject(p);
+        Configuration config = new Configuration(p);
+        
+        // Filter one declaration
+        
+        ProjectRewriteVisitor rewriter = new ProjectRewriteVisitor(p, FilterType.ALL);
+        rewriter.addModelCopyModifier(new FrozenConstraintVarFilter(config));
+        p.accept(rewriter);
+        Project copy = rewriter.getCopyiedProject();
+        ProjectTestUtilities.validateProject(copy, true);
+        
+        ContainableModelElement[] copiedElements = getCopiedElements(copy, cType1);
+        Compound copiedCP1 = (Compound) copiedElements[0];
+        Assert.assertEquals("Error: Constraint variable of frozen compound \"" + copiedCP1.getName()
+            + "\" not removed.", 1, copiedCP1.getDeclarationCount());
     }
 
     /**
