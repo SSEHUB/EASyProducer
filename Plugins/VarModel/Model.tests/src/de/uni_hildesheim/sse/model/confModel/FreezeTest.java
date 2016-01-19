@@ -47,6 +47,7 @@ import de.uni_hildesheim.sse.model.varModel.values.IntValue;
 import de.uni_hildesheim.sse.model.varModel.values.Value;
 import de.uni_hildesheim.sse.model.varModel.values.ValueDoesNotMatchTypeException;
 import de.uni_hildesheim.sse.model.varModel.values.ValueFactory;
+import de.uni_hildesheim.sse.persistency.StringProvider;
 
 /**
  * Tests covering different freezing situations.
@@ -205,6 +206,7 @@ public class FreezeTest {
      * @throws ConfigurationException shall not occur
      */
     @Test
+    @Ignore("-> Sascha")
     public void freezeCompoundTest() throws ValueDoesNotMatchTypeException, CSTSemanticException, 
         ConfigurationException {
 
@@ -222,7 +224,7 @@ public class FreezeTest {
         prj.addConstraint(constraint);
         
         // debugging
-        //System.out.println(StringProvider.toIvmlString(prj));
+        System.out.println(StringProvider.toIvmlString(prj));
 
         Configuration cfg = new Configuration(prj);
         Variables variables = new Variables(cfg);
@@ -235,10 +237,14 @@ public class FreezeTest {
         assertIntValue(variables.myParamVarValue, 1);
         variables.assertDefaultFreeze();
         
-        IDecisionVariable nestedValue = findNested(variables.myParamSeqVar.getNestedElement(0), "value"); 
+        IDecisionVariable firstParam = variables.myParamSeqVar.getNestedElement(0);
+        IDecisionVariable nestedValueDeflt = findNested(firstParam, "defaultValue"); 
+        IDecisionVariable nestedValue = findNested(firstParam, "value"); 
         changeValue(nestedValue, ValueFactory.createValue(IntegerType.TYPE, 1));
         assertIntValue(nestedValue, 1);
         variables.assertDefaultFreeze();
+        Assert.assertEquals(AssignmentState.FROZEN, nestedValueDeflt.getState());
+        Assert.assertNotEquals(AssignmentState.FROZEN, nestedValue.getState());
     }
 
     /**
