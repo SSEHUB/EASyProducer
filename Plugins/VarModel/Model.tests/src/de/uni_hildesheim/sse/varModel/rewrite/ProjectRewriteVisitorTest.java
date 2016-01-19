@@ -39,6 +39,7 @@ import de.uni_hildesheim.sse.model.varModel.IvmlKeyWords;
 import de.uni_hildesheim.sse.model.varModel.Project;
 import de.uni_hildesheim.sse.model.varModel.ProjectImport;
 import de.uni_hildesheim.sse.model.varModel.datatypes.AnyType;
+import de.uni_hildesheim.sse.model.varModel.datatypes.Compound;
 import de.uni_hildesheim.sse.model.varModel.datatypes.ConstraintType;
 import de.uni_hildesheim.sse.model.varModel.datatypes.DerivedDatatype;
 import de.uni_hildesheim.sse.model.varModel.datatypes.EnumLiteral;
@@ -51,6 +52,7 @@ import de.uni_hildesheim.sse.model.varModel.datatypes.Sequence;
 import de.uni_hildesheim.sse.model.varModel.filter.FilterType;
 import de.uni_hildesheim.sse.model.varModel.rewrite.ProjectRewriteVisitor;
 import de.uni_hildesheim.sse.model.varModel.rewrite.modifier.DeclarationNameFilter;
+import de.uni_hildesheim.sse.model.varModel.rewrite.modifier.FrozenCompoundConstraintsOmitter;
 import de.uni_hildesheim.sse.model.varModel.rewrite.modifier.FrozenConstraintVarFilter;
 import de.uni_hildesheim.sse.model.varModel.rewrite.modifier.FrozenConstraintsFilter;
 import de.uni_hildesheim.sse.model.varModel.rewrite.modifier.FrozenTypeDefResolver;
@@ -482,64 +484,104 @@ public class ProjectRewriteVisitorTest {
             copiedType2.getConstraintCount());
     }
     
-//    @Test
-//    public void testFilterCompoundConstraints() throws ValueDoesNotMatchTypeException, CSTSemanticException {
-//        // Create original project with 3 compounds and a further variable.
-//        Project p = new Project("testProject");
-//        DecisionVariableDeclaration unnestedDecl = new DecisionVariableDeclaration("unnested", IntegerType.TYPE, p);
-//        p.add(unnestedDecl);
-//        // First compound with frozen constraint
-//        Compound cType1 = new Compound("CP1", p);
-//        DecisionVariableDeclaration nestedDeclA 
-//        = new DecisionVariableDeclaration("nestedA", IntegerType.TYPE, cType1);
-//        nestedDeclA.setValue(2);
-//        cType1.add(nestedDeclA);
-//        DecisionVariableDeclaration nestedDeclB
-//        = new DecisionVariableDeclaration("nestedB", IntegerType.TYPE, cType1);
-//        nestedDeclB.setValue(3);
-//        cType1.add(nestedDeclB);
-//        Constraint constraint1 = new Constraint(cType1);
-//        OCLFeatureCall comparinson1 = new OCLFeatureCall(new Variable(nestedDeclA), OclKeyWords.LESS,
-//            new Variable(nestedDeclB));
-//        constraint1.setConsSyntax(comparinson1);
-//        cType1.addConstraint(constraint1);
-//        p.add(cType1);
-//        // Second compound, refinement of CP1 does contain only a (frozen declaration)
-//        Compound cType2 = new Compound("CP2", p, cType1);
-//        DecisionVariableDeclaration nestedDeclC
-//        = new DecisionVariableDeclaration("nestedC", IntegerType.TYPE, cType2);
-//        nestedDeclC.setValue(5);
-//        cType2.add(nestedDeclC);
-//        p.add(cType2);
-//        // Third compound, refinement of CP2, contains unfrozen constraint
-//        Compound cType3 = new Compound("CP3", p, cType2);
-//        Constraint constraint2 = new Constraint(cType3);
-//        OCLFeatureCall comparinson2 = new OCLFeatureCall(new Variable(nestedDeclC), OclKeyWords.LESS,
-//            new Variable(unnestedDecl));
-//        constraint2.setConsSyntax(comparinson2);
-//        cType3.addConstraint(constraint2);
-//        p.add(cType3);
-//        // Create three instances
-//        DecisionVariableDeclaration cmp1 = new DecisionVariableDeclaration("cmp1", cType1, p);
-//        DecisionVariableDeclaration cmp2 = new DecisionVariableDeclaration("cmp2", cType2, p);
-//        DecisionVariableDeclaration cmp3 = new DecisionVariableDeclaration("cmp3", cType3, p);
-//        p.add(cmp1);
-//        p.add(cmp2);
-//        p.add(cmp3);
-//        // Freeze compounds
-//        p.add(new FreezeBlock(new IFreezable[] {cmp1, cmp2, cmp3}, null, null, p));
-//        
-//        // Project should be valid
-//        ProjectTestUtilities.validateProject(p, true);
-//        Configuration config = new Configuration(p);
-//        
-//        ProjectCopyVisitor copynator = new ProjectCopyVisitor(p, FilterType.ALL);
-//        copynator.addModelCopyModifier(new FrozenConstraintsOmitter(config));
-//        p.accept(copynator);
-//        Project copy = copynator.getCopyiedProject();
-//        
-//        ProjectTestUtilities.validateProject(copy, true);
-//    }
+    /**
+     * Tests whether compounds with frozen constraints are reduced correctly (constraints containing only frozen
+     * elements shall be removed from compound).
+     * @throws ValueDoesNotMatchTypeException Must not occur, otherwise the {@link ValueFactory} or
+     * {@link de.uni_hildesheim.sse.model.varModel.AbstractVariable#setValue(String)} are broken.
+     * @throws CSTSemanticException Must not occur, otherwise
+     */
+    @Test
+    public void testFilterCompoundConstraints() throws ValueDoesNotMatchTypeException, CSTSemanticException {
+        // Create original project with 3 compounds and a further variable.
+        Project p = new Project("testProject");
+        DecisionVariableDeclaration unnestedDecl = new DecisionVariableDeclaration("unnested", IntegerType.TYPE, p);
+        p.add(unnestedDecl);
+        // First compound with frozen constraint
+        Compound cType1 = new Compound("CP1", p);
+        DecisionVariableDeclaration nestedDeclA 
+            = new DecisionVariableDeclaration("nestedA", IntegerType.TYPE, cType1);
+        nestedDeclA.setValue(2);
+        cType1.add(nestedDeclA);
+        DecisionVariableDeclaration nestedDeclB
+            = new DecisionVariableDeclaration("nestedB", IntegerType.TYPE, cType1);
+        nestedDeclB.setValue(3);
+        cType1.add(nestedDeclB);
+        Constraint constraint1 = new Constraint(cType1);
+        OCLFeatureCall comparinson1 = new OCLFeatureCall(new Variable(nestedDeclA), OclKeyWords.LESS,
+            new Variable(nestedDeclB));
+        constraint1.setConsSyntax(comparinson1);
+        cType1.addConstraint(constraint1);
+        p.add(cType1);
+        // Second compound, refinement of CP1 does contain only a (frozen declaration)
+        Compound cType2 = new Compound("CP2", p, cType1);
+        DecisionVariableDeclaration nestedDeclC
+            = new DecisionVariableDeclaration("nestedC", IntegerType.TYPE, cType2);
+        nestedDeclC.setValue(5);
+        cType2.add(nestedDeclC);
+        p.add(cType2);
+        // Third compound, refinement of CP2, contains unfrozen constraint
+        Compound cType3 = new Compound("CP3", p, cType2);
+        Constraint constraint2 = new Constraint(cType3);
+        OCLFeatureCall comparinson2 = new OCLFeatureCall(new Variable(nestedDeclC), OclKeyWords.LESS,
+            new Variable(unnestedDecl));
+        constraint2.setConsSyntax(comparinson2);
+        cType3.addConstraint(constraint2);
+        p.add(cType3);
+        // Create three instances
+        DecisionVariableDeclaration cmp1 = new DecisionVariableDeclaration("cmp1", cType1, p);
+        DecisionVariableDeclaration cmp2 = new DecisionVariableDeclaration("cmp2", cType2, p);
+        DecisionVariableDeclaration cmp3 = new DecisionVariableDeclaration("cmp3", cType3, p);
+        p.add(cmp1);
+        p.add(cmp2);
+        p.add(cmp3);
+        // Freeze compounds
+        p.add(new FreezeBlock(new IFreezable[] {cmp1, cmp2, cmp3}, null, null, p));
+        
+        // Project should be valid
+        ProjectTestUtilities.validateProject(p);
+        Configuration config = new Configuration(p);
+        
+        ProjectRewriteVisitor rewriter = new ProjectRewriteVisitor(p, FilterType.ALL);
+        rewriter.addModelCopyModifier(new FrozenCompoundConstraintsOmitter(config));
+        p.accept(rewriter);
+        Project copy = rewriter.getCopyiedProject();
+        
+        //ProjectTestUtilities.validateProject(copy, true);
+        ContainableModelElement[] copiedElements = getCopiedElements(copy, cType1, cType2, cType3);
+        Compound copiedCP1 = (Compound) copiedElements[0];
+        Compound copiedCP2 = (Compound) copiedElements[1];
+        Compound copiedCP3 = (Compound) copiedElements[2];
+        Assert.assertEquals("Error: Constraints of frozen compound \"" + copiedCP1.getName() + "\" not removed.", 0,
+            copiedCP1.getConstraintsCount());
+        Assert.assertEquals("Error: Constraints added to compound \"" + copiedCP2.getName() + "\".", 0,
+            copiedCP2.getConstraintsCount());
+        Assert.assertEquals("Error: Constraints of unfrozen compound \"" + copiedCP3.getName() + "\" removed.", 1,
+            copiedCP3.getConstraintsCount());
+    }
+    
+    /**
+     * Searches for the copied elements inside the given projects and returns them in the same order as the passed
+     * originals.
+     * @param project The project for which the copied elements shall be returned.
+     * @param originals The originals for which the copied elements shall be returned.
+     * @return The elements of the given project with the same name as the specified orignals, in the same order.
+     */
+    private ContainableModelElement[] getCopiedElements(Project project, ContainableModelElement... originals) {
+        ContainableModelElement[] copiedElements = new ContainableModelElement[originals.length];
+        for (int i = 0; i < project.getElementCount(); i++) {
+            ContainableModelElement copiedElement = project.getElement(i);
+            boolean found = false;
+            for (int j = 0; j < originals.length && !found; j++) {
+                if (originals[j].getName().equals(copiedElement.getName())) {
+                    copiedElements[j] = copiedElement;
+                    found = true;
+                }
+            }
+        }
+        
+        return copiedElements;
+    }
     
     /**
      * Tests whether filtering of frozen constraint variables works.

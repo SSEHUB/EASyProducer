@@ -394,5 +394,14 @@ public class Compound extends StructuredDatatype implements IResolutionScope, ID
     public void addConstraint(Constraint constraint) {
         addConstraint(constraint, false);
     }
+    
+    /**
+     * Removes the specified constraint from this compound (if it exists).
+     * @param constraint The constraint to remove. If <tt>null</tt> nothing will happen.
+     * @return <tt>true</tt> if the constraint was part of this compound and was removed successfully.
+     */
+    public boolean removeConstraint(Constraint constraint) {
+        return container.removeConstraint(constraint);
+    }
 
 }

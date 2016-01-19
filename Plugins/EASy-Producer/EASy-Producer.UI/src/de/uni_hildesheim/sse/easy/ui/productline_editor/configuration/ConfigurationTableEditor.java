@@ -286,13 +286,13 @@ public class ConfigurationTableEditor extends TreeViewer implements IGUIConfigCh
 
     @Override
     public void stateChanged(Configuration config, IDecisionVariable changedVariable) {
-        // Dirty, please do not commit this
-        
-        execOnParent(new Runnable() {
-            @Override
-            public void run() {
-                refresh();
-            }
-        }, true);
+//        // Dirty, please do not commit this
+//        
+//        execOnParent(new Runnable() {
+//            @Override
+//            public void run() {
+//                refresh();
+//            }
+//        }, true);
     }
 }
