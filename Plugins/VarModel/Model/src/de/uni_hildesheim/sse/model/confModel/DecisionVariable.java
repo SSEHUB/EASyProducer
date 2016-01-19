@@ -232,7 +232,7 @@ abstract class DecisionVariable implements IDecisionVariable {
     @Override
     public IAssignmentState getState() {
         IAssignmentState state = configProvider.getState();
-        Debug.trace(this, "-> " + state.toString());
+        //Debug.trace(this, "-> " + state);
         return state;
     }
 
@@ -244,7 +244,7 @@ abstract class DecisionVariable implements IDecisionVariable {
     @Override
     public void freeze(IFreezeSelector selector) {
         if (null == selector || selector.shallFreeze(this)) {
-            Debug.trace(this);
+            //Debug.trace(this);
             configProvider.freeze();
             for (int a = 0; a < getAttributesCount(); a++) {
                 getAttribute(a).freeze(selector);
@@ -349,7 +349,7 @@ abstract class DecisionVariable implements IDecisionVariable {
      * @param state The state of the parent, which should the nested variable also have.
      */
     void setState(IAssignmentState state) {
-        Debug.trace(this, "set state rec " + state);
+        //Debug.trace(this, "set state rec " + state);
         configProvider.setState(state);
         for (int i = 0, n = getNestedElementsCount(); i < n; i++) {
             ((DecisionVariable) getNestedElement(i)).setState(state);
