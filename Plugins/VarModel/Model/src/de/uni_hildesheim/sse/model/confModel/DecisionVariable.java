@@ -349,6 +349,7 @@ abstract class DecisionVariable implements IDecisionVariable {
      * @param state The state of the parent, which should the nested variable also have.
      */
     void setState(IAssignmentState state) {
+        Debug.trace(this, "set state rec " + state);
         configProvider.setState(state);
         for (int i = 0, n = getNestedElementsCount(); i < n; i++) {
             ((DecisionVariable) getNestedElement(i)).setState(state);

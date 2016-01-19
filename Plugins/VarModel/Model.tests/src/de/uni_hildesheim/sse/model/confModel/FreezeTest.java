@@ -16,7 +16,10 @@
 package de.uni_hildesheim.sse.model.confModel;
 
 import org.junit.Test;
+import org.junit.After;
 import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Ignore;
 
 import de.uni_hildesheim.sse.model.cst.AttributeVariable;
 import de.uni_hildesheim.sse.model.cst.CSTSemanticException;
@@ -27,6 +30,7 @@ import de.uni_hildesheim.sse.model.cst.Variable;
 import de.uni_hildesheim.sse.model.varModel.Attribute;
 import de.uni_hildesheim.sse.model.varModel.AttributeAssignment;
 import de.uni_hildesheim.sse.model.varModel.AttributeAssignment.Assignment;
+import de.uni_hildesheim.sse.model.varModel.Constraint;
 import de.uni_hildesheim.sse.model.varModel.DecisionVariableDeclaration;
 import de.uni_hildesheim.sse.model.varModel.FreezeBlock;
 import de.uni_hildesheim.sse.model.varModel.IFreezable;
@@ -37,10 +41,12 @@ import de.uni_hildesheim.sse.model.varModel.datatypes.EnumLiteral;
 import de.uni_hildesheim.sse.model.varModel.datatypes.FreezeVariableType;
 import de.uni_hildesheim.sse.model.varModel.datatypes.IntegerType;
 import de.uni_hildesheim.sse.model.varModel.datatypes.OrderedEnum;
+import de.uni_hildesheim.sse.model.varModel.datatypes.Sequence;
 import de.uni_hildesheim.sse.model.varModel.filter.FilterType;
+import de.uni_hildesheim.sse.model.varModel.values.IntValue;
+import de.uni_hildesheim.sse.model.varModel.values.Value;
 import de.uni_hildesheim.sse.model.varModel.values.ValueDoesNotMatchTypeException;
 import de.uni_hildesheim.sse.model.varModel.values.ValueFactory;
-import de.uni_hildesheim.sse.persistency.StringProvider;
 
 /**
  * Tests covering different freezing situations.
@@ -49,15 +55,20 @@ import de.uni_hildesheim.sse.persistency.StringProvider;
  */
 public class FreezeTest {
     
+    private Project prj;
+    private Compound param;
+    private DecisionVariableDeclaration myParam;
+    private DecisionVariableDeclaration myParamSeq;
+    
     /**
-     * Freezes a compound with unfreezeable.
+     * Executed before a single test.
      * 
-     * @throws ValueDoesNotMatchTypeException shall not occur
      * @throws CSTSemanticException shall not occur
+     * @throws ValueDoesNotMatchTypeException shall not occur 
      */
-    @Test
-    public void freezeCompoundTest() throws ValueDoesNotMatchTypeException, CSTSemanticException {
-        Project prj = new Project("test");
+    @Before
+    public void setUp() throws CSTSemanticException, ValueDoesNotMatchTypeException  {
+        prj = new Project("test");
 
         Enum bindingTime = new OrderedEnum("BindingTime", prj);
         bindingTime.add(new EnumLiteral("compile", 1, bindingTime));
@@ -69,7 +80,7 @@ public class FreezeTest {
         prj.attribute(attr);
         prj.add(attr);
         
-        Compound param = new Compound("IntParameter", prj);
+        param = new Compound("IntParameter", prj);
         param.add(new DecisionVariableDeclaration("defaultValue", IntegerType.TYPE, param));
         AttributeAssignment assng = new AttributeAssignment(param);
         assng.add(new Assignment("binding", "=", new ConstantValue(ValueFactory.createValue(bindingTime, "enact"))));
@@ -77,11 +88,16 @@ public class FreezeTest {
         param.add(assng);
         prj.add(param);
         
-        DecisionVariableDeclaration myParam = new DecisionVariableDeclaration("myParam", param, prj);
+        myParam = new DecisionVariableDeclaration("myParam", param, prj);
         prj.add(myParam);
         
-        IFreezable[] freezables = new IFreezable[1];
+        Sequence paramSeq = new Sequence("", param, prj);
+        myParamSeq = new DecisionVariableDeclaration("myParamSeq", paramSeq, prj);
+        prj.add(myParamSeq);
+        
+        IFreezable[] freezables = new IFreezable[2];
         freezables[0] = myParam;
+        freezables[1] = myParamSeq;
         FreezeVariableType iterType = new FreezeVariableType(freezables, prj);
         DecisionVariableDeclaration freezeIter = new DecisionVariableDeclaration("b", iterType, prj);
         Variable iterEx = new AttributeVariable(new Variable(freezeIter), iterType.getAttribute("binding"));
@@ -90,26 +106,167 @@ public class FreezeTest {
         selector.inferDatatype();
         FreezeBlock freeze = new FreezeBlock(freezables, freezeIter, selector, prj);
         prj.add(freeze);
+    }
+    
+    /**
+     * Executed after a single test.
+     */
+    @After
+    public void tearDown() {
+        prj = null;
+        param = null;
+        myParam = null;
+        myParamSeq = null;
+    }
+    
+    /**
+     * Stores the relevant variables for the test.
+     * 
+     * @author Holger Eichelberger
+     */
+    private class Variables {
+
+        private IDecisionVariable myParamVar;
+        private IDecisionVariable myParamVarDeflt;
+        private IDecisionVariable myParamVarValue;
+        private IDecisionVariable myParamSeqVar;
+
+        /**
+         * Obtains the relevant variables.
+         * 
+         * @param cfg the configuration to obtain the variables from
+         */
+        private Variables(Configuration cfg) {
+            myParamVar = cfg.getDecision(myParam);
+            myParamVarDeflt = findNested(myParamVar, "defaultValue");
+            myParamVarValue = findNested(myParamVar, "value");
+            myParamSeqVar = cfg.getDecision(myParamSeq);
+        }
+        
+        /**
+         * Asserts default freezes according to the variability model.
+         */
+        private void assertDefaultFreeze() {
+            Assert.assertEquals(AssignmentState.FROZEN, myParamVarDeflt.getState());
+            Assert.assertNotEquals(AssignmentState.FROZEN, myParamVarValue.getState());
+            Assert.assertEquals(AssignmentState.FROZEN, myParamVar.getState());
+            Assert.assertEquals(AssignmentState.FROZEN, myParamSeqVar.getState());
+        }
+        
+        /**
+         * Asserts attribute structures and freeze states.
+         */
+        private void assertAttributes() {
+            Assert.assertNotNull(myParamVar);
+            Assert.assertEquals(1, myParamVar.getAttributesCount());
+            Assert.assertNotNull(myParamVarDeflt);
+            Assert.assertEquals(1, myParamVarDeflt.getAttributesCount());
+            Assert.assertNotNull(myParamVarValue);
+            Assert.assertEquals(1, myParamVarValue.getAttributesCount());
+            Assert.assertNotNull(myParamSeqVar);
+            Assert.assertEquals(1, myParamSeqVar.getAttributesCount());
+        }
+
+    }
+    
+    /**
+     * Freezes a compound with excluded slot and no explicit value.
+     * 
+     * @throws ValueDoesNotMatchTypeException shall not occur
+     * @throws CSTSemanticException shall not occur
+     * @throws ConfigurationException shall not occur
+     */
+    @Test
+    @Ignore("-> Sascha")
+    public void freezeUndefinedCompoundTest() throws ValueDoesNotMatchTypeException, CSTSemanticException, 
+        ConfigurationException {
         
         // debugging
-        System.out.println(StringProvider.toIvmlString(prj));
+        //System.out.println(StringProvider.toIvmlString(prj));
         
         Configuration cfg = new Configuration(prj);
-        IDecisionVariable myParamVar = cfg.getDecision(myParam);
-        Assert.assertNotNull(myParamVar);
-        Assert.assertEquals(1, myParamVar.getAttributesCount());
-        IDecisionVariable myParamVarDeflt = findNested(myParamVar, "defaultValue");
-        Assert.assertNotNull(myParamVarDeflt);
-        Assert.assertEquals(1, myParamVarDeflt.getAttributesCount());
-        IDecisionVariable myParamVarValue = findNested(myParamVar, "value");
-        Assert.assertNotNull(myParamVarValue);
-        Assert.assertEquals(1, myParamVarValue.getAttributesCount());
 
-        cfg.freezeValues(prj, FilterType.NO_IMPORTS); // no effect
+        Variables variables = new Variables(cfg);
+        variables.assertAttributes();
+        variables.assertDefaultFreeze();
+
+        cfg.freezeValues(prj, FilterType.NO_IMPORTS); // no effect -> configuration
         
-        Assert.assertEquals(AssignmentState.FROZEN, myParamVarDeflt.getState());
-        Assert.assertNotEquals(AssignmentState.FROZEN, myParamVarValue.getState());
-        //Assert.assertNotEquals(AssignmentState.FROZEN, myParamVar.getState()); // state unclear
+        changeValue(variables.myParamVarValue, ValueFactory.createValue(IntegerType.TYPE, 1));
+        Assert.assertNotEquals(AssignmentState.FROZEN, variables.myParamVarValue.getState());
+        assertIntValue(variables.myParamVarValue, 1);
+    }
+    
+    /**
+     * Freezes a compound with excluded slot and no value and changes the value of the unfrozen slot later ("runtime").
+     * 
+     * @throws ValueDoesNotMatchTypeException shall not occur
+     * @throws CSTSemanticException shall not occur
+     * @throws ConfigurationException shall not occur
+     */
+    @Test
+    public void freezeCompoundTest() throws ValueDoesNotMatchTypeException, CSTSemanticException, 
+        ConfigurationException {
+
+        OCLFeatureCall assignment = new OCLFeatureCall(new Variable(myParam), "=", 
+             new ConstantValue(ValueFactory.createValue(myParam.getType(), new Object[]{"defaultValue", 1})));
+        assignment.inferDatatype();
+        Constraint constraint = new Constraint(assignment, prj);
+        prj.addConstraint(constraint);
+        
+        Value tmp = ValueFactory.createValue(myParam.getType(), new Object[]{"defaultValue", 2});
+        assignment = new OCLFeatureCall(new Variable(myParamSeq), "=", 
+            new ConstantValue(ValueFactory.createValue(myParamSeq.getType(), new Object[]{tmp})));
+        assignment.inferDatatype();
+        constraint = new Constraint(assignment, prj);
+        prj.addConstraint(constraint);
+        
+        // debugging
+        //System.out.println(StringProvider.toIvmlString(prj));
+
+        Configuration cfg = new Configuration(prj);
+        Variables variables = new Variables(cfg);
+        
+        Assert.assertNotNull(variables.myParamVar.getValue());
+        Assert.assertNotNull(variables.myParamVarDeflt.getValue());
+        Assert.assertNull(variables.myParamVarValue.getValue());
+
+        changeValue(variables.myParamVarValue, ValueFactory.createValue(IntegerType.TYPE, 1));
+        assertIntValue(variables.myParamVarValue, 1);
+        variables.assertDefaultFreeze();
+        
+        IDecisionVariable nestedValue = findNested(variables.myParamSeqVar.getNestedElement(0), "value"); 
+        changeValue(nestedValue, ValueFactory.createValue(IntegerType.TYPE, 1));
+        assertIntValue(nestedValue, 1);
+        variables.assertDefaultFreeze();
+    }
+
+    /**
+     * Asserts an int value on <code>actual</code>.
+     * 
+     * @param actual the variable
+     * @param expected the expected value
+     */
+    private void assertIntValue(IDecisionVariable actual, int expected) {
+        Value value = actual.getValue();
+        Assert.assertNotNull(value);
+        Assert.assertTrue(value instanceof IntValue);
+        Assert.assertEquals(expected, ((IntValue) value).getValue().intValue());
+    }
+    
+    /**
+     * Changes a value as done in VIL.
+     * 
+     * @param toChange the variable to change
+     * @param val the new value
+     * @throws ConfigurationException in case of type conflicts
+     */
+    private void changeValue(IDecisionVariable toChange, Value val) throws ConfigurationException {
+        IAssignmentState varState = toChange.getState();
+        if (AssignmentState.UNDEFINED == varState) {
+            varState = AssignmentState.ASSIGNED;
+        }
+        toChange.setValue(val, varState);
     }
     
     /**
