@@ -46,6 +46,7 @@ import de.uni_hildesheim.sse.model.varModel.datatypes.TypeQueries;
 import de.uni_hildesheim.sse.model.varModel.filter.DeclarationFinder;
 import de.uni_hildesheim.sse.model.varModel.filter.DeclarationFinder.VisibilityType;
 import de.uni_hildesheim.sse.model.varModel.rewrite.ProjectRewriteVisitor;
+import de.uni_hildesheim.sse.model.varModel.rewrite.modifier.FrozenCompoundConstraintsOmitter;
 import de.uni_hildesheim.sse.model.varModel.rewrite.modifier.FrozenConstraintVarFilter;
 import de.uni_hildesheim.sse.model.varModel.rewrite.modifier.FrozenConstraintsFilter;
 import de.uni_hildesheim.sse.model.varModel.rewrite.modifier.FrozenTypeDefResolver;
@@ -853,6 +854,7 @@ public class Configuration implements IConfigurationVisitable, IProjectListener,
         rewriter.addModelCopyModifier(new FrozenConstraintsFilter(this));
         rewriter.addModelCopyModifier(new FrozenTypeDefResolver(this));
         rewriter.addModelCopyModifier(new FrozenConstraintVarFilter(this));
+        rewriter.addModelCopyModifier(new FrozenCompoundConstraintsOmitter(this));
         project.accept(rewriter);
         project = rewriter.getCopyiedProject();
     }

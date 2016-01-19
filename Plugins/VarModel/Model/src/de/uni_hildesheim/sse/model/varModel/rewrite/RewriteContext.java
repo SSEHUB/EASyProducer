@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2015 University of Hildesheim, Software Systems Engineering
+ * Copyright 2009-2016 University of Hildesheim, Software Systems Engineering
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,8 +22,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import de.uni_hildesheim.sse.model.confModel.Configuration;
+import de.uni_hildesheim.sse.model.confModel.IDecisionVariable;
+import de.uni_hildesheim.sse.model.varModel.AbstractVariable;
 import de.uni_hildesheim.sse.model.varModel.ContainableModelElement;
 import de.uni_hildesheim.sse.model.varModel.Project;
+import de.uni_hildesheim.sse.model.varModel.datatypes.IDatatype;
 import de.uni_hildesheim.sse.utils.modelManagement.Version;
 
 /**
@@ -46,6 +50,7 @@ public class RewriteContext {
      */
     private Map<String, List<ContainableModelElement>> elementsOfRemovedImports;
     private boolean elementsWereRemoved;
+    private VariableLookUpTable variablesTable;
     
     /**
      * Avoid instantiation from outside.
@@ -56,6 +61,7 @@ public class RewriteContext {
         elementsOfRemovedImports = new HashMap<String, List<ContainableModelElement>>();
         projectQualifier = new HashSet<String>();
         elementsWereRemoved = false;
+        variablesTable = new VariableLookUpTable();
     }
 
     /**
@@ -202,5 +208,32 @@ public class RewriteContext {
                 }
             }
         }
+    }
+    
+    /**
+     * Returns the set of instances of the given {@link IDatatype}.
+     * @param config The configuration which is used to retrieve all {@link IDecisionVariable}s.
+     * @param type The <b>exact</b> {@link IDatatype} for which the instances shall be returned,
+     * will <b>not</b> consider {@link IDatatype#isAssignableFrom(IDatatype)}.
+     * @return The instances for the given type or <tt>null</tt> if no instances exist.
+     */
+    public Set<IDecisionVariable> getInstancesForType(Configuration config, IDatatype type) {
+        // Init will only be called the first time
+        variablesTable.init(config);
+        return variablesTable.getInstancesForType(type);
+    }
+    
+    /**
+     * Returns the set of instances of the given {@link AbstractVariable} declaration.
+     * @param config The configuration which is used to retrieve all {@link IDecisionVariable}s.
+     * @param declaration The declaration for which the instances shall be returned.
+     * If the declaration is nested inside a compound which was multiple times instantiated, this single declaration
+     * could return multiple {@link IDecisionVariable}s.
+     * @return The instances for the given declaration or <tt>null</tt> if no instances exist.
+     */
+    public Set<IDecisionVariable> getInstancesForDeclaration(Configuration config, AbstractVariable declaration) {
+        // Init will only be called the first time
+        variablesTable.init(config);
+        return variablesTable.getInstancesForDeclaration(declaration);
     }
 }

@@ -227,4 +227,20 @@ public class BasicDecisionVariableContainer extends ModelElement implements IDec
         return allDeclarations.get(index);
     }
     
+    /**
+     * Removes the specified constraint from this container (if it exists).
+     * @param constraint The constraint to remove. If <tt>null</tt> nothing will happen.
+     * @return <tt>true</tt> if the constraint was part of this container and was removed successfully.
+     */
+    public boolean removeConstraint(Constraint constraint) {
+        boolean found = false;
+        if (null != constraint) {
+            if (null != constraints) {
+                found = constraints.remove(constraint);
+            }
+            found |= modelElements.remove(constraint);
+        }
+        
+        return found;
+    }
 }

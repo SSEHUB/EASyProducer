@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2015 University of Hildesheim, Software Systems Engineering
+ * Copyright 2009-2016 University of Hildesheim, Software Systems Engineering
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,12 +15,18 @@
  */
 package de.uni_hildesheim.sse.model.varModel.rewrite.modifier;
 
+import java.util.Iterator;
+import java.util.Set;
+
 import de.uni_hildesheim.sse.model.confModel.AssignmentState;
 import de.uni_hildesheim.sse.model.confModel.Configuration;
 import de.uni_hildesheim.sse.model.confModel.IAssignmentState;
 import de.uni_hildesheim.sse.model.confModel.IDecisionVariable;
+import de.uni_hildesheim.sse.model.cst.ConstraintSyntaxTree;
 import de.uni_hildesheim.sse.model.varModel.AbstractVariable;
 import de.uni_hildesheim.sse.model.varModel.ContainableModelElement;
+import de.uni_hildesheim.sse.model.varModel.filter.DeclrationInConstraintFinder;
+import de.uni_hildesheim.sse.model.varModel.rewrite.RewriteContext;
 
 /**
  * Super class for Filters which should remove elements based on already frozen variables.
@@ -65,5 +71,52 @@ public abstract class AbstractFrozenChecker<M extends ContainableModelElement> i
      */
     protected IDecisionVariable getVariable(AbstractVariable declaration) {
         return config.getDecision(declaration);
+    }
+    
+    /**
+     * Getter for the configuration (passed to the constructor).
+     * @return The currently used configuration.
+     */
+    protected Configuration getConfioguration() {
+        return config;
+    }
+
+    /**
+     * Checks whether the given constraint contains only constant values or frozen variables.
+     * @param constraint The constraint to check.
+     * @param context Knowledge of the current translation, comes from the
+     * {@link de.uni_hildesheim.sse.model.varModel.rewrite.ProjectRewriteVisitor}
+     * @return <tt>true</tt> if the constraint contains only frozen/constant elements or is <tt>null</tt>,
+     * <tt>false</tt> if it contain at least one open variable.
+     */
+    protected boolean constraintIsFrozen(ConstraintSyntaxTree constraint, RewriteContext context) {
+        boolean allFrozen = true;
+        if (null != constraint) {
+            DeclrationInConstraintFinder finder = new DeclrationInConstraintFinder(constraint);
+            Set<AbstractVariable> usedDeclarations = finder.getDeclarations();
+            Iterator<AbstractVariable> declItr = usedDeclarations.iterator();
+            while (declItr.hasNext() && allFrozen) {
+                allFrozen = allInstancesAreFrozen(declItr.next(), context);
+            }
+        }
+        return allFrozen;
+    }
+
+    /**
+     * Checks whether all instances of the given declaration are already frozen.
+     * @param declaration The declaration to check (if it is nested, it can have multiple instances).
+     * @param context Knowledge of the current translation, comes from the
+     * {@link de.uni_hildesheim.sse.model.varModel.rewrite.ProjectRewriteVisitor}
+     * @return <tt>true</tt> if all instances are frozen or if it has no instances, <ttfalse</tt> otherwise.
+     */
+    protected boolean allInstancesAreFrozen(AbstractVariable declaration, RewriteContext context) {
+        boolean allFrozen = true;
+        Set<IDecisionVariable> instances = context.getInstancesForDeclaration(config, declaration);
+        Iterator<IDecisionVariable> varItr = instances.iterator();
+        while (varItr.hasNext() && allFrozen) {
+            IDecisionVariable usedInstance = varItr.next();
+            allFrozen = (AssignmentState.FROZEN == usedInstance.getState());
+        }
+        return allFrozen;
     }
 }
