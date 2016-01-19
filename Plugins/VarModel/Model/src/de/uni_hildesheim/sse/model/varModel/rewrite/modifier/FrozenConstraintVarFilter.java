@@ -18,21 +18,16 @@ package de.uni_hildesheim.sse.model.varModel.rewrite.modifier;
 import java.util.Iterator;
 import java.util.Set;
 
+import de.uni_hildesheim.sse.model.confModel.AssignmentState;
 import de.uni_hildesheim.sse.model.confModel.Configuration;
 import de.uni_hildesheim.sse.model.confModel.IDecisionVariable;
-import de.uni_hildesheim.sse.model.varModel.AbstractVariable;
 import de.uni_hildesheim.sse.model.varModel.ContainableModelElement;
 import de.uni_hildesheim.sse.model.varModel.DecisionVariableDeclaration;
-import de.uni_hildesheim.sse.model.varModel.FreezeBlock;
-import de.uni_hildesheim.sse.model.varModel.IFreezable;
-import de.uni_hildesheim.sse.model.varModel.IModelElement;
-import de.uni_hildesheim.sse.model.varModel.Project;
 import de.uni_hildesheim.sse.model.varModel.datatypes.ConstraintType;
-import de.uni_hildesheim.sse.model.varModel.filter.DeclrationInConstraintFinder;
-import de.uni_hildesheim.sse.model.varModel.filter.FilterType;
-import de.uni_hildesheim.sse.model.varModel.filter.FrozenElementsFinder;
 import de.uni_hildesheim.sse.model.varModel.rewrite.RewriteContext;
+import de.uni_hildesheim.sse.model.varModel.values.BooleanValue;
 import de.uni_hildesheim.sse.model.varModel.values.ConstraintValue;
+import de.uni_hildesheim.sse.model.varModel.values.Value;
 
 /**
  * Removes frozen {@link ConstraintType} variables if they are only pointing to frozen variable.
@@ -41,8 +36,6 @@ import de.uni_hildesheim.sse.model.varModel.values.ConstraintValue;
  */
 public class FrozenConstraintVarFilter extends AbstractFrozenChecker<DecisionVariableDeclaration> {
 
-    private Project project;
-    
     /**
      * Default constructor of this class.
      * @param config A already initialized {@link Configuration}, needed for checking whether an arbitrary variable is
@@ -50,7 +43,6 @@ public class FrozenConstraintVarFilter extends AbstractFrozenChecker<DecisionVar
      */
     public FrozenConstraintVarFilter(Configuration config) {
         super(config);
-        project = config.getProject();
     }
 
     @Override
@@ -61,44 +53,30 @@ public class FrozenConstraintVarFilter extends AbstractFrozenChecker<DecisionVar
     @Override
     public ContainableModelElement handleModelElement(ContainableModelElement element, RewriteContext context) {
         DecisionVariableDeclaration declaration = (DecisionVariableDeclaration) element;
-        if (declaration.getType() == ConstraintType.TYPE && isFrozen(declaration)) {
-            boolean allDeclarationsAreFrozen = true;
-
-            IDecisionVariable constraintVar = getVariable(declaration);
-            ConstraintValue constraintValue = (ConstraintValue) constraintVar.getValue();
-            DeclrationInConstraintFinder finder = new DeclrationInConstraintFinder(constraintValue.getValue());
-            Set<AbstractVariable> usedDeclarations = finder.getDeclarations();
-            Iterator<AbstractVariable> itr = usedDeclarations.iterator();
-            while (itr.hasNext() && allDeclarationsAreFrozen) {
-                allDeclarationsAreFrozen = isFrozen(itr.next());
-            }
-                    
-            if (allDeclarationsAreFrozen) {
-                FrozenElementsFinder freezeBlockFinder = new FrozenElementsFinder(project, FilterType.ALL);
-                FreezeBlock block = freezeBlockFinder.getFreezeBlock(declaration);
-                if (null != block) {
-                    IFreezable[] filteredFreezeables = new IFreezable[block.getFreezableCount() - 1];
-                    for (int i = 0, n = block.getFreezableCount(), pos = 0; i < n; i++) {
-                        IFreezable frozenElement = block.getFreezable(i);
-                        if (!declaration.getName().equals(frozenElement.getName())) {
-                            filteredFreezeables[pos] = frozenElement;
-                            pos++;
+        if (declaration.getType() == ConstraintType.TYPE) {
+            Set<IDecisionVariable> instances = context.getInstancesForDeclaration(getConfioguration(), declaration);
+            boolean allFrozen = true;
+            if (instances != null && !instances.isEmpty()) {
+                Iterator<IDecisionVariable> varItr = instances.iterator();
+                while (varItr.hasNext() && allFrozen) {
+                    IDecisionVariable constraintVar = varItr.next();
+                    allFrozen = (constraintVar.getState() == AssignmentState.FROZEN);
+                    if (allFrozen) {
+                        Value value = constraintVar.getValue();
+                        if (value instanceof ConstraintValue) {
+                            ConstraintValue constraintValue = (ConstraintValue) value;
+                            allFrozen = constraintIsFrozen(constraintValue.getValue(), context);
+                        } else if (!(value instanceof BooleanValue)) {
+                            // Unknown situation -> abort
+                            allFrozen = false;
                         }
-                    }
-                    IModelElement parent = block.getParent(); 
-                    if (parent instanceof Project) {
-                        /*
-                         * TODO SE: Check whether Freezeblock can also be contained in other ModelElements
-                         * (I don't think so)
-                         */
-                        FreezeBlock clonedBlock = new FreezeBlock(filteredFreezeables, block.getIter(),
-                            block.getSelector(), parent);
-                        Project parentAsProject = (Project) parent;
-                        parentAsProject.removeElement(block);
-                        parentAsProject.add(clonedBlock);
+                        // If BooleanValue, value is constant -> keep allFrozen state
                     }
                 }
-                
+            }
+            // Else: allFrozen = true
+            
+            if (allFrozen) {
                 declaration = null;
             }
         }

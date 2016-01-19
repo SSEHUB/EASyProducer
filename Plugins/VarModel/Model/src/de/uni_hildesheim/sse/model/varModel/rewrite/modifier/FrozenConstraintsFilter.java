@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2015 University of Hildesheim, Software Systems Engineering
+ * Copyright 2009-2016 University of Hildesheim, Software Systems Engineering
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,18 +15,17 @@
  */
 package de.uni_hildesheim.sse.model.varModel.rewrite.modifier;
 
-import java.util.Iterator;
-import java.util.Set;
-
 import de.uni_hildesheim.sse.model.confModel.Configuration;
-import de.uni_hildesheim.sse.model.varModel.AbstractVariable;
+import de.uni_hildesheim.sse.model.cst.ConstraintSyntaxTree;
+import de.uni_hildesheim.sse.model.cst.OCLFeatureCall;
 import de.uni_hildesheim.sse.model.varModel.Constraint;
 import de.uni_hildesheim.sse.model.varModel.ContainableModelElement;
-import de.uni_hildesheim.sse.model.varModel.filter.DeclrationInConstraintFinder;
+import de.uni_hildesheim.sse.model.varModel.datatypes.OclKeyWords;
 import de.uni_hildesheim.sse.model.varModel.rewrite.RewriteContext;
 
 /**
  * A {@link IModelElementFilter} to filter constraints, containing only frozen variables and constants.
+ * Assignment constraints won't be filtered (to keepm the frozen configuration).
  * @author El-Sharkawy
  *
  */
@@ -48,20 +47,17 @@ public class FrozenConstraintsFilter extends AbstractFrozenChecker<Constraint> {
     @Override
     public ContainableModelElement handleModelElement(ContainableModelElement element, RewriteContext context) {
         Constraint constraint = (Constraint) element;
-        DeclrationInConstraintFinder finder = new DeclrationInConstraintFinder(constraint.getConsSyntax());
-        Set<AbstractVariable> vars = finder.getDeclarations();
-        boolean containsOnlyFrozen = vars.isEmpty();
-        
-        if (!containsOnlyFrozen) {
-            containsOnlyFrozen = true;
-            Iterator<AbstractVariable> itr = vars.iterator();
-            while (containsOnlyFrozen && itr.hasNext()) {
-                AbstractVariable declaration = itr.next();
-                containsOnlyFrozen = isFrozen(declaration);
+        ConstraintSyntaxTree cst = constraint.getConsSyntax();
+        if (null != cst) {
+            if (!(cst instanceof OCLFeatureCall
+                && OclKeyWords.ASSIGNMENT.equals(((OCLFeatureCall) cst).getOperation()))
+                && constraintIsFrozen(cst, context)) {
+                
+                // Constraint must not be an assignment and should only contain frozen elements or constant values
+                constraint = null;
             }
-        }
-        
-        if (containsOnlyFrozen) {
+        } else {
+            // Empty constraint will be filtered
             constraint = null;
         }
         return constraint;

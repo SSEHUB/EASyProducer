@@ -20,7 +20,6 @@ import java.util.Set;
 
 import de.uni_hildesheim.sse.model.confModel.AssignmentState;
 import de.uni_hildesheim.sse.model.confModel.Configuration;
-import de.uni_hildesheim.sse.model.confModel.IAssignmentState;
 import de.uni_hildesheim.sse.model.confModel.IDecisionVariable;
 import de.uni_hildesheim.sse.model.cst.ConstraintSyntaxTree;
 import de.uni_hildesheim.sse.model.varModel.AbstractVariable;
@@ -45,22 +44,6 @@ public abstract class AbstractFrozenChecker<M extends ContainableModelElement> i
      */
     protected AbstractFrozenChecker(Configuration config) {
         this.config = config;
-    }
-
-    /**
-     * Checks whether the given declaration is already frozen.
-     * @param declaration A declaration to test.
-     * @return <tt>true</tt> if the declaration is clearly frozen, <tt>false</tt> otherwise.
-     */
-    protected boolean isFrozen(AbstractVariable declaration) {
-        boolean isFrozen = false;
-        IDecisionVariable configVar = config.getDecision(declaration);
-        if (null != configVar && null != configVar.getState()) {
-            IAssignmentState state = configVar.getState();
-            isFrozen = AssignmentState.FROZEN == state;
-        }
-
-        return isFrozen;
     }
     
     /**
@@ -112,10 +95,12 @@ public abstract class AbstractFrozenChecker<M extends ContainableModelElement> i
     protected boolean allInstancesAreFrozen(AbstractVariable declaration, RewriteContext context) {
         boolean allFrozen = true;
         Set<IDecisionVariable> instances = context.getInstancesForDeclaration(config, declaration);
-        Iterator<IDecisionVariable> varItr = instances.iterator();
-        while (varItr.hasNext() && allFrozen) {
-            IDecisionVariable usedInstance = varItr.next();
-            allFrozen = (AssignmentState.FROZEN == usedInstance.getState());
+        if (null != instances) {
+            Iterator<IDecisionVariable> varItr = instances.iterator();
+            while (varItr.hasNext() && allFrozen) {
+                IDecisionVariable usedInstance = varItr.next();
+                allFrozen = (AssignmentState.FROZEN == usedInstance.getState());
+            }
         }
         return allFrozen;
     }

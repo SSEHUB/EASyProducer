@@ -336,7 +336,24 @@ public class ProjectRewriteVisitor extends AbstractProjectVisitor {
 
     @Override
     public void visitCompound(Compound compound) {
-        addCopiedElement(filter(compound));
+        compound = (Compound) filter(compound);
+        if (null != compound) {
+            boolean somethingFiltered = false;
+            // Iterating down avoid IndexOutOfBoundsExceptions
+            for (int i = compound.getModelElementCount() - 1; i >= 0; i--) {
+                ContainableModelElement elemBefore = compound.getModelElement(i);
+                ContainableModelElement elemAfter = filter(elemBefore);
+                if (null == elemAfter) {
+                    somethingFiltered = true;
+                    compound.removeConstraint(elemBefore);
+                }
+            }
+            
+            if (somethingFiltered) {
+                context.elementesWereRemoved();
+            }
+        }
+        addCopiedElement(compound);
     }
 
     @Override

@@ -15,20 +15,16 @@
  */
 package de.uni_hildesheim.sse.model.varModel.rewrite.modifier;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.Iterator;
+import java.util.Set;
 
+import de.uni_hildesheim.sse.model.confModel.AssignmentState;
 import de.uni_hildesheim.sse.model.confModel.Configuration;
-import de.uni_hildesheim.sse.model.varModel.AbstractVariable;
+import de.uni_hildesheim.sse.model.confModel.IDecisionVariable;
+import de.uni_hildesheim.sse.model.varModel.Constraint;
 import de.uni_hildesheim.sse.model.varModel.ContainableModelElement;
 import de.uni_hildesheim.sse.model.varModel.datatypes.DerivedDatatype;
-import de.uni_hildesheim.sse.model.varModel.datatypes.IDatatype;
-import de.uni_hildesheim.sse.model.varModel.filter.DeclarationFinder;
-import de.uni_hildesheim.sse.model.varModel.filter.DeclarationFinder.VisibilityType;
 import de.uni_hildesheim.sse.model.varModel.rewrite.RewriteContext;
-import de.uni_hildesheim.sse.model.varModel.filter.FilterType;
 
 /**
  * Checks whether all instances of a given {@link DerivedDatatype} are frozen and will remove all constraints,
@@ -38,42 +34,12 @@ import de.uni_hildesheim.sse.model.varModel.filter.FilterType;
  */
 public class FrozenTypeDefResolver extends AbstractFrozenChecker<DerivedDatatype> {
 
-    private Map<IDatatype, List<AbstractVariable>> allTypeDefDeclarations;
-
     /**
      * Default constructor of this class.
      * @param config A already initialized {@link Configuration}.
      */
     public FrozenTypeDefResolver(Configuration config) {
         super(config);
-        allTypeDefDeclarations = new HashMap<IDatatype, List<AbstractVariable>>();
-       
-        DeclarationFinder declFinder = new DeclarationFinder(config.getProject(), FilterType.ALL, DerivedDatatype.TYPE);
-        List<AbstractVariable> tmpList = declFinder.getVariableDeclarations(VisibilityType.ALL);
-        for (int i = 0, n = tmpList.size(); i < n; i++) {
-            AbstractVariable decl = tmpList.get(i);
-            IDatatype dType = decl.getType();
-            storeDeclaration(decl, dType);
-        }
-    }
-
-    /**
-     * Recursive function to store all (derived) instances of a given datatpe.
-     * @param decl A declaration to store
-     * @param type The type it belongs to (recusrive function will also find super classes).
-     */
-    private void storeDeclaration(AbstractVariable decl, IDatatype type) {
-        if (type instanceof DerivedDatatype) {
-            List<AbstractVariable> declList = allTypeDefDeclarations.get(type);
-            if (null == declList) {
-                declList = new ArrayList<AbstractVariable>();
-                allTypeDefDeclarations.put(type, declList);
-            }
-            declList.add(decl);
-            
-            IDatatype basisType = ((DerivedDatatype) type).getBasisType();
-            storeDeclaration(decl, basisType);
-        }
     }
     
     @Override
@@ -84,27 +50,27 @@ public class FrozenTypeDefResolver extends AbstractFrozenChecker<DerivedDatatype
     @Override
     public ContainableModelElement handleModelElement(ContainableModelElement element, RewriteContext context) {
         DerivedDatatype dType = (DerivedDatatype) element;
-        if (typeDefIsFrozen(dType)) {
+        boolean allFrozen = true;
+        
+        // 1st: Check whether all instances are frozen
+        Set<IDecisionVariable> instances = context.getInstancesForType(getConfioguration(), dType);
+        if (null != instances && !instances.isEmpty()) {
+            Iterator<IDecisionVariable> varItr = instances.iterator();
+            while (varItr.hasNext() && allFrozen) {
+                IDecisionVariable usedInstance = varItr.next();
+                allFrozen = (AssignmentState.FROZEN == usedInstance.getState());
+            }
+        } // Else: allFrozen = true
+        
+        // 2nd: ChecK whether variables of used Typedef are frozen
+        for (int i = 0, n = dType.getConstraintCount(); i < n && allFrozen; i++) {
+            Constraint constraint = dType.getConstraint(i);
+            allFrozen = constraintIsFrozen(constraint.getConsSyntax(), context);
+        }
+        
+        if (allFrozen) {
             dType.setConstraints(null);
         }
         return dType;
-    }
-
-    /**
-     * Checks whether all instances of the given type are frozen (or if no instance exist).
-     * @param type A {@link DerivedDatatype} to test.
-     * @return <tt>true</tt> if all instances are frozen or if no instance exist, <tt>false</tt>otherwise.
-     */
-    private boolean typeDefIsFrozen(IDatatype type) {
-        boolean isFrozen = true;
-        List<AbstractVariable> allDeclarations = allTypeDefDeclarations.get(type);
-        if (null != allDeclarations) {
-            for (int i = 0, n = allDeclarations.size(); i < n && isFrozen; i++) {
-                AbstractVariable declaration = allDeclarations.get(i);
-                isFrozen = isFrozen(declaration);
-            }
-        }
-        
-        return isFrozen;
     }
 }
