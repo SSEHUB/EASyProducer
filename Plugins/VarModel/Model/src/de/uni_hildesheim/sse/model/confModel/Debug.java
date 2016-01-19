@@ -15,6 +15,8 @@
  */
 package de.uni_hildesheim.sse.model.confModel;
 
+import java.io.PrintStream;
+
 /**
  * Preliminary class for tracing illegal variable operations. Will be removed soon.
  * 
@@ -22,15 +24,15 @@ package de.uni_hildesheim.sse.model.confModel;
  */
 public class Debug {
 
-    private static boolean enable = false;
+    private static PrintStream out = null;
 
     /**
      * Enables or disables tracing.
      * 
-     * @param doEnable whether tracing shall be disabled
+     * @param stream the stream to use (may be <b>null</b>)
      */
-    public static void enable(boolean doEnable) {
-        enable = doEnable;
+    public static void setStream(PrintStream stream) {
+        out = stream;
     }
 
     /**
@@ -49,9 +51,9 @@ public class Debug {
      * @param text the text to be logged
      */
     public static void trace(IDecisionVariable var, String text) {
-        if (enable) {
+        if (null != out) {
             Throwable t = new Throwable(Configuration.getInstanceName(var) + (null != text ? text : ""));
-            t.printStackTrace(System.out);
+            t.printStackTrace(out);
         }
     }
 
@@ -61,9 +63,20 @@ public class Debug {
      * @param text the text to be logged
      */
     public static void trace(String text) {
-        if (enable) {
+        if (null != out) {
             Throwable t = new Throwable(text);
-            t.printStackTrace(System.out);
+            t.printStackTrace(out);
+        }
+    }
+
+    /**
+     * Logs a given text.
+     * 
+     * @param text the text
+     */
+    public static void log(String text) {
+        if (null != out) {
+            out.println(text);
         }
     }
 
