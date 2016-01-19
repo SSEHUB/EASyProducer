@@ -25,7 +25,9 @@ import de.uni_hildesheim.sse.model.varModel.ContainableModelElement;
 import de.uni_hildesheim.sse.model.varModel.DecisionVariableDeclaration;
 import de.uni_hildesheim.sse.model.varModel.datatypes.ConstraintType;
 import de.uni_hildesheim.sse.model.varModel.rewrite.RewriteContext;
+import de.uni_hildesheim.sse.model.varModel.values.BooleanValue;
 import de.uni_hildesheim.sse.model.varModel.values.ConstraintValue;
+import de.uni_hildesheim.sse.model.varModel.values.Value;
 
 /**
  * Removes frozen {@link ConstraintType} variables if they are only pointing to frozen variable.
@@ -60,8 +62,15 @@ public class FrozenConstraintVarFilter extends AbstractFrozenChecker<DecisionVar
                     IDecisionVariable constraintVar = varItr.next();
                     allFrozen = (constraintVar.getState() == AssignmentState.FROZEN);
                     if (allFrozen) {
-                        ConstraintValue constraintValue = (ConstraintValue) constraintVar.getValue();
-                        allFrozen = constraintIsFrozen(constraintValue.getValue(), context); 
+                        Value value = constraintVar.getValue();
+                        if (value instanceof ConstraintValue) {
+                            ConstraintValue constraintValue = (ConstraintValue) value;
+                            allFrozen = constraintIsFrozen(constraintValue.getValue(), context);
+                        } else if (!(value instanceof BooleanValue)) {
+                            // Unknown situation -> abort
+                            allFrozen = false;
+                        }
+                        // If BooleanValue, value is constant -> keep allFrozen state
                     }
                 }
             }

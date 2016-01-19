@@ -16,12 +16,16 @@
 package de.uni_hildesheim.sse.model.varModel.rewrite.modifier;
 
 import de.uni_hildesheim.sse.model.confModel.Configuration;
+import de.uni_hildesheim.sse.model.cst.ConstraintSyntaxTree;
+import de.uni_hildesheim.sse.model.cst.OCLFeatureCall;
 import de.uni_hildesheim.sse.model.varModel.Constraint;
 import de.uni_hildesheim.sse.model.varModel.ContainableModelElement;
+import de.uni_hildesheim.sse.model.varModel.datatypes.OclKeyWords;
 import de.uni_hildesheim.sse.model.varModel.rewrite.RewriteContext;
 
 /**
  * A {@link IModelElementFilter} to filter constraints, containing only frozen variables and constants.
+ * Assignment constraints won't be filtered (to keepm the frozen configuration).
  * @author El-Sharkawy
  *
  */
@@ -43,7 +47,17 @@ public class FrozenConstraintsFilter extends AbstractFrozenChecker<Constraint> {
     @Override
     public ContainableModelElement handleModelElement(ContainableModelElement element, RewriteContext context) {
         Constraint constraint = (Constraint) element;
-        if (constraintIsFrozen(constraint.getConsSyntax(), context)) {
+        ConstraintSyntaxTree cst = constraint.getConsSyntax();
+        if (null != cst) {
+            if (!(cst instanceof OCLFeatureCall
+                && OclKeyWords.ASSIGNMENT.equals(((OCLFeatureCall) cst).getOperation()))
+                && constraintIsFrozen(cst, context)) {
+                
+                // Constraint must not be an assignment and should only contain frozen elements or constant values
+                constraint = null;
+            }
+        } else {
+            // Empty constraint will be filtered
             constraint = null;
         }
         return constraint;

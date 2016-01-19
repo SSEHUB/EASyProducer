@@ -339,7 +339,8 @@ public class ProjectRewriteVisitor extends AbstractProjectVisitor {
         compound = (Compound) filter(compound);
         if (null != compound) {
             boolean somethingFiltered = false;
-            for (int i = 0, n = compound.getModelElementCount(); i < n; i++) {
+            // Iterating down avoid IndexOutOfBoundsExceptions
+            for (int i = compound.getModelElementCount() - 1; i >= 0; i--) {
                 ContainableModelElement elemBefore = compound.getModelElement(i);
                 ContainableModelElement elemAfter = filter(elemBefore);
                 if (null == elemAfter) {
