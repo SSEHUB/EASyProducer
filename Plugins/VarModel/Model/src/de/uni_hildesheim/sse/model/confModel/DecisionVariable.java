@@ -231,7 +231,9 @@ abstract class DecisionVariable implements IDecisionVariable {
 
     @Override
     public IAssignmentState getState() {
-        return configProvider.getState();
+        IAssignmentState state = configProvider.getState();
+        Debug.trace(this, "-> " + state.toString());
+        return state;
     }
 
     @Override
@@ -242,6 +244,7 @@ abstract class DecisionVariable implements IDecisionVariable {
     @Override
     public void freeze(IFreezeSelector selector) {
         if (null == selector || selector.shallFreeze(this)) {
+            Debug.trace(this);
             configProvider.freeze();
             for (int a = 0; a < getAttributesCount(); a++) {
                 getAttribute(a).freeze(selector);

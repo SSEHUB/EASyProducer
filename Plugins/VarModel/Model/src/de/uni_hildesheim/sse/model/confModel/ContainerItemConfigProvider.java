@@ -85,6 +85,7 @@ class ContainerItemConfigProvider extends NestedVarConfigProvider {
 
     @Override
     protected IAssignmentState getState() {
+        Debug.trace("provider via parent " + getParent().ownStateAllowed());
         return getParent().getState();
     }
 

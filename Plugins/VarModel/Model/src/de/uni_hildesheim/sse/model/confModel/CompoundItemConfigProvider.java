@@ -78,6 +78,7 @@ class CompoundItemConfigProvider extends NestedVarConfigProvider {
     @Override
     protected IAssignmentState getState() {
         IAssignmentState state = this.state;
+        Debug.trace("compProvider " + this.state + " " + getParent().ownStateAllowed() + " " + getValue());
         // Handle special situations
         if (!getParent().ownStateAllowed()) { 
             if (getParent().getState() == AssignmentState.FROZEN && null != getValue()) {
