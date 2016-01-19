@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2015 University of Hildesheim, Software Systems Engineering
+ * Copyright 2009-2016 University of Hildesheim, Software Systems Engineering
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,14 +15,9 @@
  */
 package de.uni_hildesheim.sse.model.varModel.rewrite.modifier;
 
-import java.util.Iterator;
-import java.util.Set;
-
 import de.uni_hildesheim.sse.model.confModel.Configuration;
-import de.uni_hildesheim.sse.model.varModel.AbstractVariable;
 import de.uni_hildesheim.sse.model.varModel.Constraint;
 import de.uni_hildesheim.sse.model.varModel.ContainableModelElement;
-import de.uni_hildesheim.sse.model.varModel.filter.DeclrationInConstraintFinder;
 import de.uni_hildesheim.sse.model.varModel.rewrite.RewriteContext;
 
 /**
@@ -48,20 +43,7 @@ public class FrozenConstraintsFilter extends AbstractFrozenChecker<Constraint> {
     @Override
     public ContainableModelElement handleModelElement(ContainableModelElement element, RewriteContext context) {
         Constraint constraint = (Constraint) element;
-        DeclrationInConstraintFinder finder = new DeclrationInConstraintFinder(constraint.getConsSyntax());
-        Set<AbstractVariable> vars = finder.getDeclarations();
-        boolean containsOnlyFrozen = vars.isEmpty();
-        
-        if (!containsOnlyFrozen) {
-            containsOnlyFrozen = true;
-            Iterator<AbstractVariable> itr = vars.iterator();
-            while (containsOnlyFrozen && itr.hasNext()) {
-                AbstractVariable declaration = itr.next();
-                containsOnlyFrozen = isFrozen(declaration);
-            }
-        }
-        
-        if (containsOnlyFrozen) {
+        if (constraintIsFrozen(constraint.getConsSyntax(), context)) {
             constraint = null;
         }
         return constraint;
