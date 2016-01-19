@@ -52,7 +52,8 @@ public class FrozenCompoundConstraintsOmitter extends AbstractFrozenChecker<Comp
         if (nConstraints > 0) {
             Set<IDecisionVariable> instances = context.getInstancesForType(getConfioguration(), cType);
             boolean cmpNeverInstantiated = instances.isEmpty();
-            for (int i = 0; i < nConstraints; i++) {
+            // Avoid IndexOutOfBoundsException through iteration/deletion in reversed order
+            for (int i = nConstraints - 1; i >= 0; i--) {
                 Constraint internalConstraint = cType.getConstraint(i);
                 if (cmpNeverInstantiated) {
                     // If compound is never used remove all constraints
