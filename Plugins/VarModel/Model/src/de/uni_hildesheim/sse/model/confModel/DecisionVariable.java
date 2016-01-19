@@ -232,7 +232,7 @@ abstract class DecisionVariable implements IDecisionVariable {
     @Override
     public IAssignmentState getState() {
         IAssignmentState state = configProvider.getState();
-        Debug.trace(this, "-> " + state.toString());
+        Debug.trace(this, "-> " + state);
         return state;
     }
 
