@@ -24,6 +24,7 @@ import java.util.Set;
 import de.uni_hildesheim.sse.model.confModel.Configuration;
 import de.uni_hildesheim.sse.model.confModel.IDecisionVariable;
 import de.uni_hildesheim.sse.model.varModel.AbstractVariable;
+import de.uni_hildesheim.sse.model.varModel.ContainableModelElement;
 import de.uni_hildesheim.sse.model.varModel.datatypes.Compound;
 import de.uni_hildesheim.sse.model.varModel.datatypes.DerivedDatatype;
 import de.uni_hildesheim.sse.model.varModel.datatypes.IDatatype;
@@ -46,6 +47,11 @@ class VariableLookUpTable {
     private Map<IDatatype, Set<IDecisionVariable>> instancesPerType;
     private Map<AbstractVariable, Set<IDecisionVariable>> instancesPerDeclaration;
     
+    private Map<AbstractVariable, Set<ContainableModelElement>> constraintOccurrences;
+    
+    
+    private Set<AbstractVariable> definedDeclarations;
+    
     /**
      * Single constructor for this class.
      */
@@ -53,6 +59,8 @@ class VariableLookUpTable {
         initialized = false;
         instancesPerType = new HashMap<IDatatype, Set<IDecisionVariable>>();
         instancesPerDeclaration = new HashMap<AbstractVariable, Set<IDecisionVariable>>();
+        definedDeclarations = new HashSet<AbstractVariable>();
+        constraintOccurrences = new HashMap<AbstractVariable, Set<ContainableModelElement>>();
     }
     
     /**
@@ -108,17 +116,21 @@ class VariableLookUpTable {
      * @param type The type of the variable.
      */
     private void addVariable(IDecisionVariable variable, IDatatype type) {
-        if (null != type) {
-            // Add the variable to its declaration
-            AbstractVariable declaration = variable.getDeclaration();
-            Set<IDecisionVariable> instances = instancesPerDeclaration.get(declaration);
-            if (null == instances) {
-                instances = new HashSet<IDecisionVariable>();
-                instancesPerDeclaration.put(declaration, instances);
-            }
-            instances.add(variable);
-            
-            // Add the variable to its specified type
+        AbstractVariable declaration = variable.getDeclaration();
+
+        // Add the declaration to known declarations
+        definedDeclarations.add(declaration);
+        
+        // Add the variable to its declaration
+        Set<IDecisionVariable> instances = instancesPerDeclaration.get(declaration);
+        if (null == instances) {
+            instances = new HashSet<IDecisionVariable>();
+            instancesPerDeclaration.put(declaration, instances);
+        }
+        instances.add(variable);
+
+        // Add the variable to its specified type
+        if (null != type) {            
             instances = instancesPerType.get(type);
             if (null == instances) {
                 instances = new HashSet<IDecisionVariable>();
@@ -159,5 +171,33 @@ class VariableLookUpTable {
      */
     Set<IDecisionVariable> getInstancesForDeclaration(AbstractVariable declaration) {
         return instancesPerDeclaration.get(declaration);
+    }
+    
+    /**
+     * Checks whether the declaration is known or whether the declaration is a local declaration used as
+     * an iterator of a constraint.
+     * Needs that this {@link VariableLookUpTable} was already initialized with a {@link Configuration}.
+     * @param declaration The declaration to check.
+     * @return <tt>true</tt> if the declaration is used for a {@link IDecisionVariable} of the configuration or
+     * if this table was not initialized with a {@link Configuration}, <tt>false</tt> otherwise.
+     */
+    boolean declarationKnown(AbstractVariable declaration) {
+        return initialized ? definedDeclarations.contains(declaration) : true;
+    }
+    
+    /**
+     * Stores that the given constraint declaration was used inside the referring element.
+     * @param constraintDecl A constraint declaration used inside the second parameter.
+     * @param referringElement An element which may use a constraint declaration as part of its own definition, e.g.,
+     * another constraint declaration, a {@link de.uni_hildesheim.sse.model.varModel.Constraint} or a
+     * {@link de.uni_hildesheim.sse.model.varModel.OperationDefinition}.
+     */
+    void putConstraintOccurrence(AbstractVariable constraintDecl, ContainableModelElement referringElement) {
+        Set<ContainableModelElement> occurrences = constraintOccurrences.get(constraintDecl);
+        if (null == occurrences) {
+            occurrences = new HashSet<ContainableModelElement>();
+            constraintOccurrences.put(constraintDecl, occurrences);
+        }
+        occurrences.add(referringElement);
     }
 }

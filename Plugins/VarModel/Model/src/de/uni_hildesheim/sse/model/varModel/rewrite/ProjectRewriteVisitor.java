@@ -66,7 +66,31 @@ import de.uni_hildesheim.sse.utils.modelManagement.ModelManagementException;
 /**
  * Visitor for creating a (modified) copy of a given project.
  * This can be used to create copies for specific demands, e.g., a {@link Project} without constraints containing
- * frozen variables.
+ * frozen variables.<br/><br/>
+ * <b>Usage</b>
+ * <ol>
+ *   <li>Create visitor for the desired {@link Project} and specify whether imported projects shall also
+ *   be rewritten (cf. {@link FilterType})</li>
+ *   <li>Add desired {@link IModelElementFilter} and {@link ProjectImport} filters</li>
+ *   <li>Call {@link Project#accept(de.uni_hildesheim.sse.model.varModel.IModelVisitor)}</li>
+ *   <li>{@link #getCopyiedProject()} will return the rewritten {@link Project}. However the original
+ *   project will be affected through this visitation and should not be saved.</li>
+ * </ol>
+ * 
+ * <b>For instance:</b>
+ * <pre><code>
+ * Project project = ...
+ * Configuration config = new Configuration(project); // Needed for some filter
+ * ProjectRewriteVisitor rewriter = new ProjectRewriteVisitor(project, FilterType.ALL);
+ * rewriter.addModelCopyModifier(new ModelElementFilter(Comment.class));
+ * rewriter.addModelCopyModifier(new FrozenConstraintsFilter(config));
+ * rewriter.addModelCopyModifier(new FrozenTypeDefResolver(config));
+ * rewriter.addModelCopyModifier(new FrozenConstraintVarFilter(config));
+ * rewriter.addModelCopyModifier(new FrozenCompoundConstraintsOmitter(config));
+ * project.accept(rewriter);
+ * Project filteredCopy = rewriter.getCopyiedProject();
+ * </code></pre>
+ * 
  * @author El-Sharkawy
  *
  */
@@ -146,7 +170,37 @@ public class ProjectRewriteVisitor extends AbstractProjectVisitor {
     
     @Override
     public void visitDecisionVariableDeclaration(DecisionVariableDeclaration decl) {
-        addCopiedElement(filter(decl));
+        DecisionVariableDeclaration copiedDecl = (DecisionVariableDeclaration) filter(decl);
+        if (null != copiedDecl && null != copiedDecl.getDefaultValue()) {
+            adaptParentOfIteratorVariables(copiedDecl.getDefaultValue());
+        }
+        addCopiedElement(copiedDecl);
+    }
+
+    /**
+     * Changes the parent of iterator variables inside the given constraint.
+     * This must be done in a separate method, as the declaration is not part of visited projects.
+     * For instance this will change variables like <code>v</code> in:
+     * <code>sequenceVar->forAll(v|v>0);</code>
+     * For this method, the {@link VariableLookUpTable} must already be initialized with a
+     * {@link de.uni_hildesheim.sse.model.confModel.Configuration}.
+     * @param cst The constraint to change.
+     */
+    private void adaptParentOfIteratorVariables(ConstraintSyntaxTree cst) {
+        // Local iterator variables must be adapted to new parent
+        DeclrationInConstraintFinder finder = new DeclrationInConstraintFinder(cst);
+        java.util.Set<AbstractVariable> delcarations = finder.getDeclarations();
+        for (AbstractVariable declaration : delcarations) {
+            if (!context.declarationKnown(declaration)) {
+                IModelElement oldParent = declaration.getParent();
+                if (oldParent instanceof Project) {
+                    Project newParent = context.getTranslatedProject((Project) oldParent);
+                    if (newParent != oldParent) {
+                        declaration.setParent(newParent);
+                    }
+                }
+            }
+        }
     }
 
     @Override
