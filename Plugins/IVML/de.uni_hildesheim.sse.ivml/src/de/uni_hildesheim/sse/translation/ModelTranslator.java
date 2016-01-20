@@ -241,8 +241,8 @@ public class ModelTranslator extends de.uni_hildesheim.sse.dslCore.translation.M
         processDefinitions(splitRes.getTypedefs(), splitRes.getVarDecls(), splitRes.getAttrAssignments(), 
             context, true);
         if (null != splitRes.getAttrs()) {
-            for (AnnotateTo attribute : splitRes.getAttrs()) {
-                processAttribute(attribute, context);
+            for (AnnotateTo annotation : splitRes.getAttrs()) {
+                processAnnotation(annotation, context);
             }
         }
         if (null != splitRes.getOpdefs()) {
@@ -1014,18 +1014,18 @@ public class ModelTranslator extends de.uni_hildesheim.sse.dslCore.translation.M
     }
 
     /**
-     * Processes an attribute. In case of success, the attribute will be
+     * Processes an annotation. In case of success, the annotation will be
      * applied.
      * 
-     * @param attribute the interface to be processed
+     * @param annotation the interface to be processed
      * @param context the type context to be considered
      */
-    protected void processAttribute(AnnotateTo attribute, TypeContext context) {
-        if (null != attribute.getNames()) { // incomplete parsing
+    protected void processAnnotation(AnnotateTo annotation, TypeContext context) {
+        if (null != annotation.getNames()) { // incomplete parsing
             Attribute initial = null;
-            for (String name : attribute.getNames()) {
+            for (String name : annotation.getNames()) {
                 if (null != name) {
-                    Attribute tmp = processAttribute(attribute, name, context, initial);
+                    Attribute tmp = processAnnotation(annotation, name, context, initial);
                     if (null == initial) {
                         initial = tmp;
                     }
@@ -1035,16 +1035,16 @@ public class ModelTranslator extends de.uni_hildesheim.sse.dslCore.translation.M
     }
     
     /**
-     * Processes the attribution of <code>name</code>. In case of success, the attribute will be
+     * Processes the annotation of <code>name</code>. In case of success, the annotation will be
      * applied.
      * 
-     * @param attribute the interface to be processed
-     * @param name the name of the attribute
+     * @param annotation the annotation to be processed
+     * @param name the name of the annotated element
      * @param context the type context to be considered
      * @param initial the initial attribute created in series
      * @return the created attribute or <b>null</b>
      */
-    protected Attribute processAttribute(AnnotateTo attribute, String name, TypeContext context, Attribute initial) {
+    protected Attribute processAnnotation(AnnotateTo annotation, String name, TypeContext context, Attribute initial) {
         Attribute attr = null;
         IAttributableElement elt = null;
         try {
@@ -1053,26 +1053,26 @@ public class ModelTranslator extends de.uni_hildesheim.sse.dslCore.translation.M
                 if (context.getProject().getName().equals(name)) {
                     elt = context.getProject().getVariable();
                 } else {
-                    error("cannot find '" + name + '"', attribute, IvmlPackage.Literals.ANNOTATE_TO__NAMES,
+                    error("cannot find '" + name + '"', annotation, IvmlPackage.Literals.ANNOTATE_TO__NAMES,
                         ErrorCodes.UNKNOWN_ELEMENT);
                 }
             } else if (var instanceof Attribute) {
-                error("cannot annotate annotations", attribute, IvmlPackage.Literals.ANNOTATE_TO__NAMES,
+                error("cannot annotate annotations", annotation, IvmlPackage.Literals.ANNOTATE_TO__NAMES,
                     ErrorCodes.ATTRIBUTION);
             } else {
                 elt = (DecisionVariableDeclaration) var;
             }
         } catch (IvmlException e) {
-            error(e, attribute, IvmlPackage.Literals.ANNOTATE_TO__NAMES);
+            error(e, annotation, IvmlPackage.Literals.ANNOTATE_TO__NAMES);
         }
         if (null != elt) {
             try {
-                IDatatype type = context.resolveType(attribute.getAnnotationType());
-                VariableDeclarationPart vDecl = attribute.getAnnotationDecl();
-                Comment comment = handleBasicComment(attribute, context);
+                IDatatype type = context.resolveType(annotation.getAnnotationType());
+                VariableDeclarationPart vDecl = annotation.getAnnotationDecl();
+                Comment comment = handleBasicComment(annotation, context);
                 if (vDecl.getName().startsWith("e") || vDecl.getName().startsWith("v")) {
                     error("annotation name '" + vDecl.getName() + "' must not start with 'v' or 'e'"
-                        + elt.getName() + "'", attribute, IvmlPackage.Literals.ANNOTATE_TO__NAMES,
+                        + elt.getName() + "'", annotation, IvmlPackage.Literals.ANNOTATE_TO__NAMES,
                         ErrorCodes.ATTRIBUTION);
                 }
                 expressionTranslator.warnDiscouragedNames(vDecl.getName(), vDecl, 
@@ -1080,18 +1080,20 @@ public class ModelTranslator extends de.uni_hildesheim.sse.dslCore.translation.M
                 attr = new Attribute(vDecl.getName(), type, context.getProject(), elt);
                 if (null != vDecl.getDefault()) {
                     try {
-                        attr.setValue(expressionTranslator.processExpression(vDecl.getDefault(),
-                            context, context.getProject()));
+                        expressionTranslator.initLevel();
+                        ConstraintSyntaxTree deflt = expressionTranslator.processExpression(type, vDecl.getDefault(),
+                            context, context.getProject());
+                        attr.setValue(deflt);
                     } catch (IvmlException e) {
                         error(e, vDecl, IvmlPackage.Literals.VARIABLE_DECLARATION_PART__DEFAULT);
                     }
                 }
                 if (!elt.attribute(attr)) {
                     error("annotation '" + attr.getName() + "' is defined multiple times on '"
-                        + elt.getName() + "'", attribute, IvmlPackage.Literals.ANNOTATE_TO__NAMES,
+                        + elt.getName() + "'", annotation, IvmlPackage.Literals.ANNOTATE_TO__NAMES,
                         ErrorCodes.ATTRIBUTION);
                 }
-                context.addToProject(attribute, comment, attr);
+                context.addToProject(annotation, comment, attr);
                 if (null != initial) {
                     initial.addSeries(attr);
                 }
@@ -1099,9 +1101,9 @@ public class ModelTranslator extends de.uni_hildesheim.sse.dslCore.translation.M
                 error(e);
             }
         }
-        if (attribute.getSname().equals("attribute")) {
+        if (annotation.getSname().equals("attribute")) {
             warning("The keyword 'attribute' is deprecated. For future compatibility please use 'annotate' instead.", 
-                attribute, IvmlPackage.Literals.ANNOTATE_TO__SNAME, ErrorCodes.ATTRIBUTION);
+                annotation, IvmlPackage.Literals.ANNOTATE_TO__SNAME, ErrorCodes.ATTRIBUTION);
         }
         return attr;
     }
