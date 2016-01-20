@@ -33,9 +33,10 @@ public class SetVariable extends ContainerVariable {
      * <li><tt>true</tt>: The variable is exported by an interface or there is no interface</li>.
      * <li><tt>false</tt>: There is an interface which does not export this variable</li>.
      * </ul>
+     * @param isAttribute whether this variable represents (a part of) an attribute or a variable
      */
-    public SetVariable(AbstractVariable varDecl, IConfigurationElement parent, boolean isVisible) {
-        super(parent, varDecl, isVisible);
+    public SetVariable(AbstractVariable varDecl, IConfigurationElement parent, boolean isVisible, boolean isAttribute) {
+        super(parent, varDecl, isVisible, isAttribute);
     }
 
     @Override

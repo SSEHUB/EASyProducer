@@ -5,7 +5,9 @@ import java.io.IOException;
 import java.util.List;
 
 import org.junit.Test;
+import org.junit.Assert;
 
+import de.uni_hildesheim.sse.model.confModel.Configuration;
 import de.uni_hildesheim.sse.model.varModel.Project;
 import de.uni_hildesheim.sse.model.varModel.values.ValueDoesNotMatchTypeException;
 import de.uni_hildesheim.sse.translation.ErrorCodes;
@@ -154,14 +156,35 @@ public class AdditionalTests extends AbstractTest {
     }
     
     /**
-     * Tests a compound annotation (contributed by Sascha El-Sharkawy, QM).
+     * Tests a compound annotation on a variable (contributed by Sascha El-Sharkawy, QM).
      * 
      * @throws IOException should not occur
      */
     @Test
     public void testCompoundAnnotation() throws IOException {
         List<Project> projects = assertEqual(createFile("compoundAnnotation"), null, null);
-        System.out.println(projects);
+        if (1 == projects.size()) { // there shall be only one
+            Configuration cfg = new Configuration(projects.get(0));
+            Assert.assertTrue(cfg.getDecisionCount() > 0);
+        } else {
+            Assert.fail("more/less projects than expected: " + projects.size());
+        }
+    }  
+
+    /**
+     * Tests a compound annotation on a project (contributed by Sascha El-Sharkawy, QM).
+     * 
+     * @throws IOException should not occur
+     */
+    @Test
+    public void testCompoundAnnotation2() throws IOException {
+        List<Project> projects = assertEqual(createFile("compoundAnnotation2"), null, null);
+        if (1 == projects.size()) { // there shall be only one
+            Configuration cfg = new Configuration(projects.get(0));
+            Assert.assertTrue(cfg.getDecisionCount() > 0);
+        } else {
+            Assert.fail("more/less projects than expected: " + projects.size());
+        }
     }  
 
 }

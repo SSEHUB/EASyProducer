@@ -308,7 +308,7 @@ public class Configuration implements IConfigurationVisitable, IProjectListener,
      * @throws ConfigurationException in case that creating the variable failed
      */
     private IDecisionVariable createDecision(AbstractVariable decl, boolean visible) throws ConfigurationException {
-        VariableCreator creator = new VariableCreator(decl, this, visible);
+        VariableCreator creator = new VariableCreator(decl, this, visible, false);
         IDecisionVariable variable = creator.getVariable();
         addDecision(variable);
         if (null != allInstances) {
@@ -572,7 +572,7 @@ public class Configuration implements IConfigurationVisitable, IProjectListener,
      */
     protected void addAttributeDecision(Attribute attribute, Value value, IAssignmentState state) 
         throws ConfigurationException {
-        VariableCreator creator = new VariableCreator(attribute, this, true);
+        VariableCreator creator = new VariableCreator(attribute, this, true, false);
         IDecisionVariable var = creator.getVariable();
         var.setValue(value, state);
         decisions.put(attribute, var);

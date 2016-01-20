@@ -44,9 +44,11 @@ class BasisVariable extends DecisionVariable {
      * <li><tt>true</tt>: The variable is exported by an interface or there is no interface</li>.
      * <li><tt>false</tt>: There is an interface which does not export this variable</li>.
      * </ul>
+     * @param isAttribute whether this variable represents (a part of) an attribute or a variable
      */
-    protected BasisVariable(IConfigurationElement parent, AbstractVariable varDeclaration, boolean isVisible) {
-        super(parent, varDeclaration, isVisible);
+    protected BasisVariable(IConfigurationElement parent, AbstractVariable varDeclaration, boolean isVisible, 
+        boolean isAttribute) {
+        super(parent, varDeclaration, isVisible, isAttribute);
     }
 
     @Override

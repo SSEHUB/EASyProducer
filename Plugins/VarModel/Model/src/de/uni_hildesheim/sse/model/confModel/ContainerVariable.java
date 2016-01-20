@@ -54,9 +54,11 @@ public abstract class ContainerVariable extends StructuredVariable {
      * <li><tt>true</tt>: The variable is exported by an interface or there is no interface</li>.
      * <li><tt>false</tt>: There is an interface which does not export this variable</li>.
      * </ul>
+     * @param isAttribute whether this variable represents (a part of) an attribute or a variable
      */
-    protected ContainerVariable(IConfigurationElement parent, AbstractVariable varDeclaration, boolean isVisible) {
-        super(parent, varDeclaration, isVisible);
+    protected ContainerVariable(IConfigurationElement parent, AbstractVariable varDeclaration, boolean isVisible, 
+        boolean isAttribute) {
+        super(parent, varDeclaration, isVisible, isAttribute);
         if (null == nestedElements) {
             nestedElements = new ArrayList<IDecisionVariable>();
         }
@@ -101,7 +103,7 @@ public abstract class ContainerVariable extends StructuredVariable {
         for (int i = 0; null != conValue && i < conValue.getElementSize(); i++) {
             String name = getElementName(i);
             DecisionVariableDeclaration decl = new DecisionVariableDeclaration(name, type, getDeclaration());
-            VariableCreator creator = new VariableCreator(decl, this, isVisible());
+            VariableCreator creator = new VariableCreator(decl, this, isVisible(), false);
             IDecisionVariable var = creator.getVariable();
             var.setValue(conValue.getElement(i), state);
             nestedElements.add(var);
@@ -125,7 +127,7 @@ public abstract class ContainerVariable extends StructuredVariable {
                     String name = getElementName(i);
                     IDatatype eltType = conValue.getElement(i).getType(); // enable heterogenous polymorphic coll.
                     DecisionVariableDeclaration decl = new DecisionVariableDeclaration(name, eltType, getDeclaration());
-                    VariableCreator creator = new VariableCreator(decl, this, isVisible());
+                    VariableCreator creator = new VariableCreator(decl, this, isVisible(), false);
                     try {
                         IDecisionVariable var = creator.getVariable();
                         addNestedElement(var);
@@ -204,7 +206,7 @@ public abstract class ContainerVariable extends StructuredVariable {
         try {
             String name = getElementName(elementPos);
             DecisionVariableDeclaration decl = new DecisionVariableDeclaration(name, type, getDeclaration());
-            VariableCreator creator = new VariableCreator(decl, this, isVisible());
+            VariableCreator creator = new VariableCreator(decl, this, isVisible(), false);
             result = creator.getVariable(false);
             addNestedElement(result);
             Value nullValue = ValueFactory.createValue(type, (Object[]) null);
