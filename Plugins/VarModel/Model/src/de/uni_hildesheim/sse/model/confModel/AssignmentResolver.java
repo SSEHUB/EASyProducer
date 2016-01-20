@@ -519,17 +519,19 @@ public class AssignmentResolver {
         while (!constraints.isEmpty() && remainingSteps > 0) {
             for (Constraint constraint : constraints) {
                 ConstraintSyntaxTree cst = constraint.getConsSyntax();
-                evaluator.init(config, AssignmentState.ASSIGNED, false, null);
-                evaluator.visit(cst);
-                // Check whether the constraint could be resolved
-                if (null == evaluator.getResult()) {
-                    unresolvedConstraints.add(constraint);
-                } else if (evaluator.constraintFailed()) {
-                    // Check whether the constraint was violated
-                    conflictingConstraint(constraint);
+                if (null != cst) {
+                    evaluator.init(config, AssignmentState.ASSIGNED, false, null);
+                    evaluator.visit(cst);
+                    // Check whether the constraint could be resolved
+                    if (null == evaluator.getResult()) {
+                        unresolvedConstraints.add(constraint);
+                    } else if (evaluator.constraintFailed()) {
+                        // Check whether the constraint was violated
+                        conflictingConstraint(constraint);
+                    }
+                    
+                    evaluator.clear();
                 }
-                
-                evaluator.clear();
             }
             int openConstraints = unresolvedConstraints.size();
             if (nConstraintsInLastIteration != openConstraints) {
