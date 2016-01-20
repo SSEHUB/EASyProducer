@@ -37,6 +37,8 @@ class ContainerItemConfigProvider extends NestedVarConfigProvider {
      * this index is used to retrieve the correct sub value of the parent {@link ContainerVariable}.
      */
     private int index;
+    
+    private IAssignmentState state;
 
     /**
      * Sole constructor for creating a {@link VariableConfigProvider} for nested elements of a container.
@@ -85,7 +87,7 @@ class ContainerItemConfigProvider extends NestedVarConfigProvider {
 
     @Override
     protected IAssignmentState getState() {
-        return getParent().getState();
+        return state;
     }
 
     @Override
@@ -120,5 +122,13 @@ class ContainerItemConfigProvider extends NestedVarConfigProvider {
     @Override
     protected void setHistoryValue(Value value, IAssignmentState state) throws ConfigurationException {
         // Function not needed here        
+    }
+
+    @Override
+    protected void freeze(IFreezeSelector selector) {
+        IDecisionVariable thisVariable = getParent().getNestedElement(index);
+        if (selector.shallFreeze(thisVariable)) {
+            state = AssignmentState.FROZEN;
+        }
     }
 }

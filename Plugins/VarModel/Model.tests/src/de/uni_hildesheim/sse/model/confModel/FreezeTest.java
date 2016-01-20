@@ -15,11 +15,11 @@
  */
 package de.uni_hildesheim.sse.model.confModel;
 
-import org.junit.Test;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Ignore;
+import org.junit.Test;
 
 import de.uni_hildesheim.sse.model.cst.AttributeVariable;
 import de.uni_hildesheim.sse.model.cst.CSTSemanticException;
@@ -47,7 +47,7 @@ import de.uni_hildesheim.sse.model.varModel.values.IntValue;
 import de.uni_hildesheim.sse.model.varModel.values.Value;
 import de.uni_hildesheim.sse.model.varModel.values.ValueDoesNotMatchTypeException;
 import de.uni_hildesheim.sse.model.varModel.values.ValueFactory;
-import de.uni_hildesheim.sse.persistency.StringProvider;
+import de.uni_hildesheim.sse.varModel.testSupport.ProjectTestUtilities;
 
 /**
  * Tests covering different freezing situations.
@@ -85,7 +85,7 @@ public class FreezeTest {
         param.add(new DecisionVariableDeclaration("defaultValue", IntegerType.TYPE, param));
         AttributeAssignment assng = new AttributeAssignment(param);
         assng.add(new Assignment("binding", "=", new ConstantValue(ValueFactory.createValue(bindingTime, "enact"))));
-        assng.add(new DecisionVariableDeclaration("value", IntegerType.TYPE, param));
+        assng.add(new DecisionVariableDeclaration("value", IntegerType.TYPE, assng));
         param.add(assng);
         prj.add(param);
         
@@ -178,12 +178,12 @@ public class FreezeTest {
      * @throws ConfigurationException shall not occur
      */
     @Test
-    @Ignore("-> Sascha")
+//    @Ignore("-> Sascha")
     public void freezeUndefinedCompoundTest() throws ValueDoesNotMatchTypeException, CSTSemanticException, 
         ConfigurationException {
         
         // debugging
-        //System.out.println(StringProvider.toIvmlString(prj));
+        ProjectTestUtilities.validateProject(prj, true);
         
         Configuration cfg = new Configuration(prj);
 
@@ -206,7 +206,7 @@ public class FreezeTest {
      * @throws ConfigurationException shall not occur
      */
     @Test
-    @Ignore("-> Sascha")
+//    @Ignore("-> Sascha")
     public void freezeCompoundTest() throws ValueDoesNotMatchTypeException, CSTSemanticException, 
         ConfigurationException {
 
@@ -224,7 +224,7 @@ public class FreezeTest {
         prj.addConstraint(constraint);
         
         // debugging
-        System.out.println(StringProvider.toIvmlString(prj));
+        ProjectTestUtilities.validateProject(prj, true);
 
         Configuration cfg = new Configuration(prj);
         Variables variables = new Variables(cfg);

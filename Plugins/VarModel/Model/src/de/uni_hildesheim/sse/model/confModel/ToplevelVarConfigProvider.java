@@ -74,6 +74,10 @@ class ToplevelVarConfigProvider extends VariableConfigProvider {
     protected void setValue(Value value, IAssignmentState state) throws ConfigurationException {
         if (this.state != AssignmentState.FROZEN) {
             assignValue(value, state, false);
+        } else if (null == this.value && this.state == AssignmentState.FROZEN && null != value
+            && !value.isConfigured()) {
+            // Allow lazy initialization of empty value
+            this.value = value;
         } else {
             throw new ConfigurationException(getConfiguration(), 
                 "decision '" + getDeclaration().getName() 
@@ -245,5 +249,10 @@ class ToplevelVarConfigProvider extends VariableConfigProvider {
         }
         value = conValue;
         return value;
+    }
+
+    @Override
+    protected void freeze(IFreezeSelector selector) {
+        freeze();
     }
 }

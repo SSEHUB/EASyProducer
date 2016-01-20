@@ -151,13 +151,21 @@ public abstract class ContainerVariable extends StructuredVariable {
     }
 
     @Override
+    public void freeze(IFreezeSelector selector) {
+        super.freeze(selector);
+        for (IDecisionVariable var : nestedElements) {
+            var.freeze(selector);
+        }
+    }
+    
+    @Override
     public void freeze(String nestedElement) {
         // Not supported by this class
     }
 
     @Override
     boolean allowsNestedStates() {
-        return false;
+        return true;
     }
 
     /**
@@ -256,13 +264,31 @@ public abstract class ContainerVariable extends StructuredVariable {
     @Override
     public IAssignmentState getState() {
         IAssignmentState state = super.getState();
-
-        if (state == AssignmentState.UNDEFINED && nestedElements.size() > 0) {
-            state = AssignmentState.ASSIGNED;
+        
+        // check whether the whole container was frozen already
+        if (state != AssignmentState.FROZEN && ownStateAllowed()) {
+            if (getValue() != NullValue.INSTANCE) {
+                if (getValue() == null || null == getValue().getValue()) {                
+                    state = AssignmentState.UNDEFINED;
+                } else if (state == AssignmentState.UNDEFINED && nestedElements.size() > 0) {
+                    state = AssignmentState.ASSIGNED;
+                }
+            }
         }
-
+        
         return state;
     }
+    
+//    @Override
+//    public IAssignmentState getState() {
+//        IAssignmentState state = super.getState();
+//
+//        if (state == AssignmentState.UNDEFINED && nestedElements.size() > 0) {
+//            state = AssignmentState.ASSIGNED;
+//        }
+//
+//        return state;
+//    }
 
     /**
      * Adds a nested {@link IDecisionVariable} to this {@link ContainerVariable}.

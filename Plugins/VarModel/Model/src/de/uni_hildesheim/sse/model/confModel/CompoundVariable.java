@@ -15,13 +15,19 @@
  */
 package de.uni_hildesheim.sse.model.confModel;
 
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Set;
 
+import de.uni_hildesheim.sse.Bundle;
+import de.uni_hildesheim.sse.model.cst.ConstraintSyntaxTree;
+import de.uni_hildesheim.sse.model.cstEvaluation.EvaluationVisitor;
 import de.uni_hildesheim.sse.model.varModel.AbstractVariable;
 import de.uni_hildesheim.sse.model.varModel.AttributeAssignment;
+import de.uni_hildesheim.sse.model.varModel.AttributeAssignment.Assignment;
+import de.uni_hildesheim.sse.model.varModel.DecisionVariableDeclaration;
 import de.uni_hildesheim.sse.model.varModel.datatypes.Compound;
 import de.uni_hildesheim.sse.model.varModel.datatypes.DerivedDatatype;
 import de.uni_hildesheim.sse.model.varModel.values.CompoundValue;
@@ -36,6 +42,9 @@ import de.uni_hildesheim.sse.model.varModel.values.ValueFactory;
  *
  */
 public class CompoundVariable extends StructuredVariable {
+    
+    private Compound cType;
+    
     private Map<String, IDecisionVariable> nestedElements;
     
     /**
@@ -57,32 +66,67 @@ public class CompoundVariable extends StructuredVariable {
         // this is only for the base type - in case of a more specific type, missing nestedElements will be
         // created upon setting the value
         
-        Compound cmpType = (Compound) DerivedDatatype.resolveToBasis(varDeclaration.getType());
-        for (int i = 0; i < cmpType.getInheritedElementCount(); i++) {
-            createNestedElement(cmpType.getInheritedElement(i), isVisible);
+        cType = (Compound) DerivedDatatype.resolveToBasis(varDeclaration.getType());
+        for (int i = 0; i < cType.getInheritedElementCount(); i++) {
+            createNestedElement(cType.getInheritedElement(i), isVisible);
         }
-        /*        
-        // TODO check whether relevant/problematic, inserted while debugging 
-        for (int a = 0; a < cmpType.getAssignmentCount(); a++) {
-            addNestedElements(cmpType.getAssignment(a), isVisible);
-        }*/
+
+        // Dirty: Initialize "static" assign blocks for newly created nested variable
+        // TODO consider nested assign blocks
+        for (int a = 0; a < cType.getAssignmentCount(); a++) {
+            AttributeAssignment assignBlock = cType.getAssignment(a);
+            Map<String, Value> annotationValues = new HashMap<String, Value>();
+            
+            // Find annotation values
+            for (int i = 0, n = assignBlock.getAssignmentDataCount(); i < n; i++) {
+                Assignment annotationAssignment = assignBlock.getAssignmentData(i);
+                ConstraintSyntaxTree assignmentCST = annotationAssignment.getExpression();
+                EvaluationVisitor evalVisitor = new EvaluationVisitor();
+                evalVisitor.init(getConfiguration(), null, false, null);
+                assignmentCST.accept(evalVisitor);
+                Value annotationValue = evalVisitor.getResult();
+                if (null != annotationValue) {
+                    annotationValues.put(annotationAssignment.getName(), annotationValue);
+                }
+            }
+            
+            // Find variables for which the values must be applies
+            for (int i = 0, n = assignBlock.getDeclarationCount(); i < n; i++) {
+                DecisionVariableDeclaration nestedDeclaration = assignBlock.getDeclaration(i);
+                IDecisionVariable nestedVariable = getNestedVariable(nestedDeclaration.getName());
+                if (null != nestedVariable) {
+                    for (int j = 0, m = nestedVariable.getAttributesCount(); j < m; j++) {
+                        IDecisionVariable annotation = nestedVariable.getAttribute(j);
+                        Value annotationValue = annotationValues.get(annotation.getDeclaration().getName());
+                        if (null != annotationValue) {
+                            try {
+                                annotation.setValue(annotationValue, AssignmentState.DEFAULT);
+                            } catch (ConfigurationException e) {
+                                // Should not occur
+                                Bundle.getLogger(CompoundVariable.class).exception(e);
+                            }
+                        }
+                    }
+                }
+            }
+        }
     }
     
-    /**
-     * Adds nested elements due to attribute assignments.
-     * 
-     * @param assng the assignment
-     * @param isVisible specifies whether the parent variable is exported by an interface or not
-     */
-    @SuppressWarnings("unused") // see constructor
-    private void addNestedElements(AttributeAssignment assng, boolean isVisible) {
-        for (int e = 0; e < assng.getElementCount(); e++) {
-            createNestedElement(assng.getElement(e), isVisible);
-        }
-        for (int a = 0; a < assng.getAssignmentCount(); a++) {
-            addNestedElements(assng.getAssignment(a), isVisible);
-        }
-    }
+//    /**
+//     * Adds nested elements due to attribute assignments.
+//     * 
+//     * @param assng the assignment
+//     * @param isVisible specifies whether the parent variable is exported by an interface or not
+//     */
+//    @SuppressWarnings("unused") // see constructor
+//    private void addNestedElements(AttributeAssignment assng, boolean isVisible) {
+//        for (int e = 0; e < assng.getElementCount(); e++) {
+//            createNestedElement(assng.getElement(e), isVisible);
+//        }
+//        for (int a = 0; a < assng.getAssignmentCount(); a++) {
+//            addNestedElements(assng.getAssignment(a), isVisible);
+//        }
+//    }
 
     /**
      * Creates a nested element due to its declaration.
@@ -93,7 +137,8 @@ public class CompoundVariable extends StructuredVariable {
     private void createNestedElement(AbstractVariable decl, boolean isVisible) {
         VariableCreator creator = new VariableCreator(decl, this, isVisible);
         try {
-            nestedElements.put(decl.getName(), creator.getVariable(false));
+            IDecisionVariable nestedVar = creator.getVariable(false);
+            nestedElements.put(decl.getName(), nestedVar);
         } catch (ConfigurationException e) {
             // Should not occur
             e.printStackTrace();

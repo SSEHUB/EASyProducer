@@ -65,6 +65,12 @@ abstract class VariableConfigProvider {
     
     /**
      * Causes to freeze the current value.
+     * @param selector determines which parts shall be frozen
+     */
+    protected abstract void freeze(IFreezeSelector selector);
+    
+    /**
+     * Causes to freeze the current value.
      */
     protected final void freeze() {
         // freeze shall also work on partially configured elements! If not configured, then VIL has to handle that.

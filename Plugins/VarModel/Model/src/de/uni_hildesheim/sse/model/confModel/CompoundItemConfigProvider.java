@@ -114,4 +114,11 @@ class CompoundItemConfigProvider extends NestedVarConfigProvider {
         // Function not needed here
     }
 
+    @Override
+    protected void freeze(IFreezeSelector selector) {
+        IDecisionVariable thisVariable = getParent().getNestedVariable(slotName);
+        if (selector.shallFreeze(thisVariable)) {
+            freeze();
+        }
+    }
 }
