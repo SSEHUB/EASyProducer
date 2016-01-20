@@ -1,0 +1,11 @@
+project compoundAnnotation {
+
+    version v0;
+    compound Developer {
+        String firstName;
+        String lastName;
+    }
+
+    Integer intA;
+    annotate Developer developer = {firstName = "John", lastName = "Doe"} to intA;
+}

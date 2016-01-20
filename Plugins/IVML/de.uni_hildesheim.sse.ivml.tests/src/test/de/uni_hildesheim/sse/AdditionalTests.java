@@ -2,9 +2,11 @@ package test.de.uni_hildesheim.sse;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
 
 import org.junit.Test;
 
+import de.uni_hildesheim.sse.model.varModel.Project;
 import de.uni_hildesheim.sse.model.varModel.values.ValueDoesNotMatchTypeException;
 import de.uni_hildesheim.sse.translation.ErrorCodes;
 
@@ -149,6 +151,17 @@ public class AdditionalTests extends AbstractTest {
     @Test
     public void testWarning3() throws IOException {
         assertEqual(createFile("warning3"), null, null, ErrorCodes.WARNING_USAGE);
-    }   
+    }
+    
+    /**
+     * Tests a compound annotation (contributed by Sascha El-Sharkawy, QM).
+     * 
+     * @throws IOException should not occur
+     */
+    @Test
+    public void testCompoundAnnotation() throws IOException {
+        List<Project> projects = assertEqual(createFile("compoundAnnotation"), null, null);
+        System.out.println(projects);
+    }  
 
 }
