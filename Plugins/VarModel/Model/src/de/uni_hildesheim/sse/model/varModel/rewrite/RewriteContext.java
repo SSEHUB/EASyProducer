@@ -37,7 +37,17 @@ import de.uni_hildesheim.sse.utils.modelManagement.Version;
  */
 public class RewriteContext {
     
+    /**
+     * Tuple (oldProject, replacement).
+     */
     private Map<Project, Project> translatedProjects;
+    
+    /**
+     * Inverse mapping to {@link #translatedProjects}.
+     * Tuple (replacement, oldProject).
+     */
+    private Map<Project, Project> translatedProjectsInverse;
+    
     /**
      * Set of identifiers (name + version) of projects which will be kept. Needed for removal of elements, which belong
      * to a removed import. A string is used instead of projects to simplify comparison if references change...
@@ -57,6 +67,7 @@ public class RewriteContext {
      */
     protected RewriteContext() {
         translatedProjects = new HashMap<Project, Project>();
+        translatedProjectsInverse = new HashMap<Project, Project>();
         removedElements = new HashMap<Class<?>, Set<ContainableModelElement>>();
         elementsOfRemovedImports = new HashMap<String, List<ContainableModelElement>>();
         projectQualifier = new HashSet<String>();
@@ -74,10 +85,20 @@ public class RewriteContext {
         String qName = generateQualifiedName(oldProject);
         projectQualifier.add(qName);
         
+        // Consider multiple runs of the rewriter in this case the old project may already be an replacement for
+        // another oldProject -> sore also this change.
+        Project preOldProject = translatedProjectsInverse.get(oldProject);
+        while (null != preOldProject) {
+            translatedProjects.put(preOldProject, translatedProject);
+            preOldProject = translatedProjectsInverse.get(preOldProject);
+        }
+        
         // Store relation between original and copy
         translatedProjects.put(oldProject, translatedProject);
         // Also store reference to itself (if already translated project is returned somewhere).
         translatedProjects.put(translatedProject, translatedProject);
+        // Create history for old projects (needed for the loop above)
+        translatedProjectsInverse.put(translatedProject, oldProject);
     }
 
     /**
@@ -235,5 +256,17 @@ public class RewriteContext {
         // Init will only be called the first time
         variablesTable.init(config);
         return variablesTable.getInstancesForDeclaration(declaration);
+    }
+    
+    /**
+     * Checks whether the declaration is known or whether the declaration is a local declaration used as
+     * an iterator of a constraint.
+     * Needs that the internal {@link VariableLookUpTable} was already initialized with a {@link Configuration}.
+     * @param declaration The declaration to check.
+     * @return <tt>true</tt> if the declaration is used for a {@link IDecisionVariable} of the configuration or
+     * if the internal table was not initialized with a {@link Configuration}, <tt>false</tt> otherwise.
+     */
+    boolean declarationKnown(AbstractVariable declaration) {
+        return variablesTable.declarationKnown(declaration);
     }
 }

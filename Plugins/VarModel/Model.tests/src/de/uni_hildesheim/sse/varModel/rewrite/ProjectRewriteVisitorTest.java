@@ -26,6 +26,7 @@ import de.uni_hildesheim.sse.model.cst.AttributeVariable;
 import de.uni_hildesheim.sse.model.cst.CSTSemanticException;
 import de.uni_hildesheim.sse.model.cst.ConstantValue;
 import de.uni_hildesheim.sse.model.cst.ConstraintSyntaxTree;
+import de.uni_hildesheim.sse.model.cst.ContainerOperationCall;
 import de.uni_hildesheim.sse.model.cst.OCLFeatureCall;
 import de.uni_hildesheim.sse.model.cst.Variable;
 import de.uni_hildesheim.sse.model.varModel.Attribute;
@@ -715,18 +716,69 @@ public class ProjectRewriteVisitorTest {
         ProjectTestUtilities.validateProject(p);
         Configuration config = new Configuration(p);
         
-        // Filter one declaration
-        
+        // Filter the constraint
         ProjectRewriteVisitor rewriter = new ProjectRewriteVisitor(p, FilterType.ALL);
         rewriter.addModelCopyModifier(new FrozenConstraintVarFilter(config));
         p.accept(rewriter);
         Project copy = rewriter.getCopyiedProject();
-        ProjectTestUtilities.validateProject(copy, true);
+        ProjectTestUtilities.validateProject(copy);
         
         ContainableModelElement[] copiedElements = getCopiedElements(copy, cType1);
         Compound copiedCP1 = (Compound) copiedElements[0];
         Assert.assertEquals("Error: Constraint variable of frozen compound \"" + copiedCP1.getName()
             + "\" not removed.", 1, copiedCP1.getDeclarationCount());
+    }
+    
+    /**
+     * Tests whether an iteration variable of a container operation is translated correctly (no qualified names should
+     * be introduced).
+     * @throws ValueDoesNotMatchTypeException Must not occur, otherwise the {@link ValueFactory} or
+     * {@link de.uni_hildesheim.sse.model.varModel.AbstractVariable#setValue(String)} are broken.
+     * @throws CSTSemanticException Must not occur, otherwise
+     * @throws IOException Must not occur, otherwise {@link IVMLWriter#flush()} is not working.
+     */
+    @Test
+    public void testIterationVariables() throws ValueDoesNotMatchTypeException, CSTSemanticException, IOException {
+        Project p = new Project("testIterationVariables");
+        Set intSetType = new Set("intSet", IntegerType.TYPE, p);
+        DecisionVariableDeclaration setDecl = new DecisionVariableDeclaration("setVar", intSetType, p);
+        setDecl.setValue(1, 2, 3);
+        p.add(setDecl);
+        Constraint constraint = new Constraint(p);
+        ConstantValue zero = new ConstantValue(ValueFactory.createValue(IntegerType.TYPE, 0));
+        DecisionVariableDeclaration iVarDecl = new DecisionVariableDeclaration("i", IntegerType.TYPE, p);
+        Variable iVar = new Variable(iVarDecl);
+        Variable setVar = new Variable(setDecl);
+        OCLFeatureCall greater = new OCLFeatureCall(iVar, OclKeyWords.GREATER, zero);
+        ContainerOperationCall forAllInSet = new ContainerOperationCall(setVar, OclKeyWords.FOR_ALL, greater, iVarDecl);
+        constraint.setConsSyntax(forAllInSet);
+        p.add(constraint);
+        DecisionVariableDeclaration constVarDecl = new DecisionVariableDeclaration("constraintVar", ConstraintType.TYPE,
+            p);
+        p.add(constVarDecl);
+        constVarDecl.setValue(forAllInSet);
+        Comment comment = new Comment("    // Some text to be filtered\n", p);
+        p.add(comment);
+        
+        // Check whether project was built up correctly
+        ProjectTestUtilities.validateProject(p, true);
+        Configuration config = new Configuration(p);
+        
+        // Filter nothing (test whether iterator variable is copied correctly)
+        ProjectRewriteVisitor rewriter = new ProjectRewriteVisitor(p, FilterType.ALL);
+        rewriter.addModelCopyModifier(new FrozenConstraintsFilter(config));
+        rewriter.addModelCopyModifier(new FrozenConstraintVarFilter(config));
+        rewriter.addModelCopyModifier(new ModelElementFilter(Comment.class));
+        p.accept(rewriter);
+        Project copy = rewriter.getCopyiedProject();
+        
+        ProjectTestUtilities.validateProject(copy, true);
+        Assert.assertNotSame(p, copy);
+        StringWriter sWriter = new StringWriter();
+        IVMLWriter iWriter = new IVMLWriter(sWriter);
+        copy.accept(iWriter);
+        iWriter.flush();
+        Assert.assertFalse(sWriter.toString().contains(IvmlKeyWords.NAMESPACE_SEPARATOR));
     }
 
     /**

@@ -41,7 +41,6 @@ import de.uni_hildesheim.sse.utils.logger.EASyLoggerFactory;
 
 /**
  * Filters a given {@link Value} and creates a copy without filtered elements.
- * FIXME SE: This implementation is for testing and not finished!
  * @author El-Sharkawy
  *
  */
