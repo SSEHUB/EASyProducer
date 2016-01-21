@@ -1,0 +1,23 @@
+-> pass(Project, Configuration, Project, ParameterAdaptationEvent) with (<project>, <config>, <project>, <ParameterAdaptationEvent>)
+    -> tPass(QM2, ParameterAdaptationEvent) with (<config>, <ParameterAdaptationEvent>)
+        -> parameter(ParameterAdaptationEvent) with (<ParameterAdaptationEvent>) = delay
+        -> ==(IvmlElement, Any) with (QM2::Parameter::name, delay) = true
+        -> select(Set, ExpressionEvaluator) with ({QM2::Source::parameters {0}}, <evaluator>) = {QM2::Source::parameters {0}}
+        params <- {QM2::Source::parameters {0}}
+        -> projectSingle(Set) with ({QM2::Source::parameters {0}}) = QM2::Source::parameters {0}
+        param <- QM2::Source::parameters {0}
+        -> value(ParameterAdaptationEvent) with (<ParameterAdaptationEvent>) = 50
+        -> setParameter(IntegerParameter, Integer) with (QM2::Source::parameters {0}, 50)
+            param.value <- 50
+        Reasoner execution: true
+    -> enact(Project, Configuration, Project) with (<project>, <config>, <project>)
+        -> selectChangedWithContext(Configuration) with (<config>) = <config>
+        qm <- <config>
+        -> <>(IvmlElement, Any) with (QM2::refSource, null) = true
+        visit if-branch
+        map {
+            map: p <- QM2::Source::parameters {0}
+            -> enact(IntegerParameter) with (QM2::Source::parameters {0})
+                -> create(String, String, String, Any) with (pip, elt, delay, 50) = <ParameterChangeCommand>
+                cmd <- <ParameterChangeCommand>
+        }

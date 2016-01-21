@@ -1,0 +1,4 @@
+-> main(Project, Project, Configuration) with (<project>, <project>, <config>)
+    cfg <- <config>
+    -> create(String) with (null) = null
+    creator <- null

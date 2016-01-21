@@ -163,6 +163,8 @@ public class Register {
             types.add(TimeBehavior.class);
             types.add(ResourceUsage.class);
             types.add(FrozenSystemState.class);
+            types.add(ParameterAdaptationEvent.class);
+            types.add(ParameterChangeCommand.class);
             try {
                 RtVilTypeRegistry.registerRtTypes(types);
             } catch (VilException e) {

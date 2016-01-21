@@ -1,0 +1,35 @@
+project QM3 {
+
+    enum BindingTime {compile = 0, startup = 1, runtime = 2};
+    annotate BindingTime bindingTime = BindingTime.compile to QM3;
+
+    typedef NonEmptyString String with (NonEmptyString.size() > 0);
+
+    compound HwNode {
+        NonEmptyString name;        
+        assign(bindingTime = BindingTime.runtime) to {
+            Real bandwidth;
+        }
+    }
+    
+    compound MPCCNode refines HwNode{
+        NonEmptyString host; // possibly needed to direct network stream to
+    } 
+
+    sequenceOf(refTo(HwNode)) clusters;
+
+    MPCCNode cluster1;
+    MPCCNode cluster2;
+    cluster1 = MPCCNode {
+        name = "olynthos1",
+        host = "192.168.1.11"
+    };
+    
+    cluster2 = MPCCNode {
+        name = "olynthos2",
+        host = "192.168.1.12"
+    };
+
+    clusters = {refBy(cluster1), refBy(cluster2)};
+    
+}

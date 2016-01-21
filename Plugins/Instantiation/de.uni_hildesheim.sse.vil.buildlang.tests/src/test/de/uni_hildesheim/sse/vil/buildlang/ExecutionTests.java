@@ -902,4 +902,15 @@ public class ExecutionTests extends AbstractExecutionTest<Script> {
 
             });
     }
+
+    /**
+     * Tests some VTL cases (passing IVML instances).
+     * 
+     * @throws IOException should not occur
+     */
+    @Test
+    public void nullTest() throws IOException {
+        assertSelfInstantiate("nullTest", "main", "nullTest", null);
+    }
+
 }

@@ -1,0 +1,74 @@
+@advice(QM2)
+rtVilScript param (Project source, Configuration config, Project target, IAdaptationEvent event) {
+
+    strategy main(Project source, Configuration config, Project target, IAdaptationEvent event) = {
+        objective true;
+        breakdown {
+            tactic t1();
+        }
+    }
+
+    strategy pass(Project source, Configuration config, Project target, ParameterAdaptationEvent event) = {
+        objective true;
+        breakdown {
+            tactic tPass(config, event);
+        }
+    }
+
+    tactic t1() = {
+    }
+
+    tactic tPass(QM2 cfg, ParameterAdaptationEvent event) = {
+        setOf(Parameter) params = cfg.refSource.parameters->select(Parameter p|p.name == event.parameter());
+        Parameter param = params.projectSingle();
+        setParameter(param, event.value());
+    }
+
+    setParameter(Parameter param, Any value) = : {
+    }
+
+    setParameter(IntegerParameter param, Integer value) = : {
+        param.value = value;
+    }
+
+    setParameter(RealParameter param, Real value) = : {
+        param.value = value;
+    }
+
+    setParameter(StringParameter param, String value) = : {
+        param.value = value;
+    }
+
+    setParameter(BooleanParameter param, Boolean value) = : {
+        param.value = value;
+    }
+
+    enact(Project source, Configuration config, Project target) = : {
+        QM2 qm = config.selectChangedWithContext();
+        if (qm.refSource <> null) {
+            map (Parameter p : qm.refSource.parameters) {
+                enact(p);
+            };
+        }
+    }
+
+    enact(Parameter param) = : {
+    }
+
+    enact(IntegerParameter param) = : {
+        ParameterChangeCommand cmd = new ParameterChangeCommand("pip", "elt", param.name, param.value);
+    }
+
+    enact(RealParameter param) = : {
+        ParameterChangeCommand cmd = new ParameterChangeCommand("pip", "elt", param.name, param.value);
+    }
+
+    enact(StringParameter param) = : {
+        ParameterChangeCommand cmd = new ParameterChangeCommand("pip", "elt", param.name, param.value);
+    }
+
+    enact(BooleanParameter param) = : {
+        ParameterChangeCommand cmd = new ParameterChangeCommand("pip", "elt", param.name, param.value);
+    }
+
+}

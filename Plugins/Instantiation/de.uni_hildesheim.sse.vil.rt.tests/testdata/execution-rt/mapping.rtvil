@@ -1,0 +1,28 @@
+import enact;
+
+@advice(QM3)
+rtVilScript mapping (Project source, Configuration config, Project target) {
+
+    strategy main(Project source, Configuration config, Project target) = {
+        objective true;
+        breakdown {
+            tactic t(config);
+        }
+    }
+    
+    tactic t(Configuration config) = {
+        QM3 qm = config;
+        map(HwNode n : qm.clusters) {
+            bindValues(n);
+        };
+    }
+
+    bindValues(HwNode node) = {
+        node.bandwidth = 0;
+    }
+
+    bindValues(MPCCNode node) = {
+        node.bandwidth = 0;
+    }
+
+}

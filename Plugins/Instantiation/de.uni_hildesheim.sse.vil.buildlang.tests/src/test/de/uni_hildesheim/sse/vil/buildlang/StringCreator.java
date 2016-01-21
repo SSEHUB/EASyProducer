@@ -31,11 +31,21 @@ import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.Operation
 public class StringCreator implements IVilType, IStringValueProvider {
     
     /**
-     * The VIL constructor.
+     * A VIL constructor.
      * 
      * @return a StringCreator instance
      */
     public static StringCreator create() {
+        return new StringCreator();
+    }
+
+    /**
+     * A VIL constructor.
+     * 
+     * @param string ignored (just for testing, no semantics)
+     * @return a StringCreator instance
+     */
+    public static StringCreator create(String string) {
         return new StringCreator();
     }
     

@@ -1,0 +1,9 @@
+@advice(nullTest)
+vilScript nullTest (Project source, Project target, Configuration config) {
+
+    main(Project source, Project target, Configuration config) = : {
+        nullTest cfg = config;
+        StringCreator creator = new StringCreator(cfg.c1.iVal);
+    }
+
+}

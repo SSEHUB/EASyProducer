@@ -1,0 +1,61 @@
+project QM2 {
+
+    enum BindingTime {compile = 0, startup = 1, runtime = 2};
+    annotate BindingTime bindingTime = BindingTime.compile to QM2;
+
+    typedef Parameters setOf(Parameter);
+    compound Parameter {
+        String name;        
+    }
+    
+    compound IntegerParameter refines Parameter {
+        Integer defaultValue;
+        assign(bindingTime = BindingTime.runtime) to {
+            Integer value;
+        }
+    }
+    
+    compound StringParameter refines Parameter {
+        String defaultValue;
+        assign(bindingTime = BindingTime.runtime) to {
+            String value;
+        }
+    }
+
+    compound RealParameter refines Parameter {
+        Real defaultValue;
+        assign(bindingTime = BindingTime.runtime) to {
+            Real value;
+        }
+    }
+
+    compound BooleanParameter refines Parameter {
+        Boolean defaultValue;
+        assign(bindingTime = BindingTime.runtime) to {
+            Boolean value; 
+        }
+    }
+    
+    compound LongParameter refines Parameter {
+        Real defaultValue;
+        assign(bindingTime = BindingTime.runtime) to {
+            Real value;
+        }
+    }
+    
+    compound Source {
+        Parameters parameters;
+    }
+    
+    Source mySource = {
+        parameters = {IntegerParameter{name="delay", defaultValue=0}}
+    };
+    
+    refTo(Source) refSource = refBy(mySource);
+    
+    freeze {
+        mySource;
+        refSource;
+    } but (f|f.bindingTime >= BindingTime.runtime)
+    
+}

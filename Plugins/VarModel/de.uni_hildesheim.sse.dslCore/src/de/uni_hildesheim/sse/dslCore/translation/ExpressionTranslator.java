@@ -68,7 +68,7 @@ public abstract class ExpressionTranslator extends MessageReceiver {
      *            the diagnostic to be added
      */
     public void error(Diagnostic diagnostic) {
-        error(diagnostic.getMessage(), null, null, ErrorCodes.FROM_PARSER);
+        error(diagnostic.getMessage() + " in line " + diagnostic.getLine(), null, null, ErrorCodes.FROM_PARSER);
     }
 
 }

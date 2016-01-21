@@ -1,0 +1,14 @@
+project nullTest {
+  version v0;
+  
+  compound TestCompound {
+      Integer iVal;
+  }
+  
+  TestCompound c1;
+  
+  freeze {
+    c1;
+  };
+  
+}

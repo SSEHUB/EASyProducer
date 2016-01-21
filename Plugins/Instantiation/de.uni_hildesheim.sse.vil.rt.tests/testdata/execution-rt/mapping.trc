@@ -1,0 +1,13 @@
+-> main(Project, Configuration, Project) with (<project>, <config>, <project>)
+    -> t(Configuration) with (<config>)
+        qm <- <config>
+        map {
+            map: n <- QM3::clusters [0]
+            -> bindValues(MPCCNode) with (QM3::clusters [0])
+                node.bandwidth <- 0
+            map: n <- QM3::clusters [1]
+            -> bindValues(MPCCNode) with (QM3::clusters [1])
+                node.bandwidth <- 0
+        }
+        Reasoner execution: true
+    -> enact(Project, Configuration, Project) with (<project>, <config>, <project>)

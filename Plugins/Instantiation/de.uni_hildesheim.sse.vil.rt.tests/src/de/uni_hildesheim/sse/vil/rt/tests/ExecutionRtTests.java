@@ -37,13 +37,17 @@ import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.configura
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.configuration.NoVariableFilter;
 import de.uni_hildesheim.sse.model.management.VarModel;
 import de.uni_hildesheim.sse.model.varModel.Project;
+import de.uni_hildesheim.sse.reasoning.core.frontend.ReasonerFrontend;
+import de.uni_hildesheim.sse.reasoning.core.reasoner.ReasonerConfiguration;
 import de.uni_hildesheim.sse.utils.messages.AbstractException;
 import de.uni_hildesheim.sse.utils.modelManagement.ModelInfo;
 import de.uni_hildesheim.sse.utils.modelManagement.ModelManagementException;
+import de.uni_hildesheim.sse.utils.progress.ProgressObserver;
 import de.uni_hildesheim.sse.vil.rt.tests.types.AlgorithmChangeCommand;
 import de.uni_hildesheim.sse.vil.rt.tests.types.CommandCollector;
 import de.uni_hildesheim.sse.vil.rt.tests.types.CommandSequence;
 import de.uni_hildesheim.sse.vil.rt.tests.types.LifecycleEvent;
+import de.uni_hildesheim.sse.vil.rt.tests.types.ParameterAdaptationEvent;
 import de.uni_hildesheim.sse.vil.rt.tests.types.RegularAdaptationEvent;
 import de.uni_hildesheim.sse.vil.rt.tests.types.StartupAdaptationEvent;
 
@@ -272,6 +276,72 @@ public class ExecutionRtTests extends AbstractRtTest {
         Assert.assertEquals("pip", algC.getPipeline());
         Assert.assertEquals("famelt1", algC.getElement());
         Assert.assertEquals("alg1", algC.getAlgorithm()); // see rtvil + ivml
+    }
+
+    /**
+     * Tests a QM-like pipeline startup with value mapping.
+     * 
+     * @throws IOException should not occur
+     */
+    @Test
+    public void testParameter() throws IOException {
+        final String name = "parameter";
+        File modelFile = createFile(name);
+        CommandCollector.clear();
+        Configuration cfg = getIvmlConfiguration("QM2", NoVariableFilter.INSTANCE);
+        ReasonerConfiguration rCfg = new ReasonerConfiguration();
+        rCfg.setRuntimeMode(true);
+        ReasonerFrontend.getInstance().check(cfg.getConfiguration().getProject(), cfg.getConfiguration(), rCfg, 
+             ProgressObserver.NO_OBSERVER);
+        
+        URI uri = URI.createFileURI(modelFile.getAbsolutePath());
+        TranslationResult<Script> result = getTestConfigurer().parse(uri);
+        if (true) {
+            if (result.getErrorCount() > 0) {
+                for (int r = 0; r < result.getMessageCount(); r++) {
+                    System.out.println(result.getMessage(r).getDescription());        
+                }
+            }
+        }
+        
+        Map<String, Object> param = createParameterMap(null, null, cfg);
+        param.put("event", new ParameterAdaptationEvent<Integer>("pipeline", "element", "delay", 50));
+        EqualitySetup setup = new EqualitySetup(modelFile, name, null, createTraceFile(name), param);
+        setup.setEnableEquals(false);
+        assertEqual(setup);
+    }
+
+    /**
+     * Tests a QM-like pipeline startup with value mapping.
+     * 
+     * @throws IOException should not occur
+     */
+    @Test
+    public void testMapping() throws IOException {
+        final String name = "mapping";
+        File modelFile = createFile(name);
+        CommandCollector.clear();
+        Configuration cfg = getIvmlConfiguration("QM3", NoVariableFilter.INSTANCE);
+        ReasonerConfiguration rCfg = new ReasonerConfiguration();
+        rCfg.setRuntimeMode(true);
+        ReasonerFrontend.getInstance().check(cfg.getConfiguration().getProject(), cfg.getConfiguration(), rCfg, 
+             ProgressObserver.NO_OBSERVER);
+        
+        URI uri = URI.createFileURI(modelFile.getAbsolutePath());
+        TranslationResult<Script> result = getTestConfigurer().parse(uri);
+        if (true) {
+            if (result.getErrorCount() > 0) {
+                for (int r = 0; r < result.getMessageCount(); r++) {
+                    System.out.println(result.getMessage(r).getDescription());        
+                }
+            }
+        }
+        
+        Map<String, Object> param = createParameterMap(null, null, cfg);
+        param.put("event", new ParameterAdaptationEvent<Integer>("pipeline", "element", "delay", 50));
+        EqualitySetup setup = new EqualitySetup(modelFile, name, null, createTraceFile(name), param);
+        setup.setEnableEquals(false);
+        assertEqual(setup);
     }
 
     /**
