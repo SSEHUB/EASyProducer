@@ -27,6 +27,7 @@ import de.uni_hildesheim.sse.model.cstEvaluation.EvaluationVisitor;
 import de.uni_hildesheim.sse.model.varModel.AbstractVariable;
 import de.uni_hildesheim.sse.model.varModel.AttributeAssignment;
 import de.uni_hildesheim.sse.model.varModel.AttributeAssignment.Assignment;
+import de.uni_hildesheim.sse.model.varModel.ContainableModelElement;
 import de.uni_hildesheim.sse.model.varModel.DecisionVariableDeclaration;
 import de.uni_hildesheim.sse.model.varModel.datatypes.Compound;
 import de.uni_hildesheim.sse.model.varModel.datatypes.DerivedDatatype;
@@ -42,8 +43,6 @@ import de.uni_hildesheim.sse.model.varModel.values.ValueFactory;
  *
  */
 public class CompoundVariable extends StructuredVariable {
-    
-    private Compound cType;
     
     private Map<String, IDecisionVariable> nestedElements;
     
@@ -66,33 +65,63 @@ public class CompoundVariable extends StructuredVariable {
         // this is only for the base type - in case of a more specific type, missing nestedElements will be
         // created upon setting the value
         
-        cType = (Compound) DerivedDatatype.resolveToBasis(varDeclaration.getType());
+        Compound cType = (Compound) DerivedDatatype.resolveToBasis(varDeclaration.getType());
         for (int i = 0; i < cType.getInheritedElementCount(); i++) {
             createNestedElement(cType.getInheritedElement(i), isVisible);
         }
 
         // Dirty: Initialize "static" assign blocks for newly created nested variable
         // TODO consider nested assign blocks
+        resolveAssignBlocks(cType);
+    }
+
+    /**
+     * Recursive part of the constructor to resolve annotation assignment blocks of (parent/this) compound.
+     * @param cType The currently analyzed compound
+     * (should be called the (refined) compound type of this variable instance).
+     */
+    private void resolveAssignBlocks(Compound cType) {
+        // Top-Down to allow overriding in refined compounds -> Start with parent
+        Compound parentCompoundType = cType.getRefines();
+        if (null != parentCompoundType) {
+            resolveAssignBlocks(parentCompoundType);
+        }
+        
+        // Resolve values for all top level assign blocks inside this compound,
+        // recursive method will automatically include nested assign blocks
         for (int a = 0; a < cType.getAssignmentCount(); a++) {
             AttributeAssignment assignBlock = cType.getAssignment(a);
-            Map<String, Value> annotationValues = new HashMap<String, Value>();
-            
-            // Find annotation values
-            for (int i = 0, n = assignBlock.getAssignmentDataCount(); i < n; i++) {
-                Assignment annotationAssignment = assignBlock.getAssignmentData(i);
-                ConstraintSyntaxTree assignmentCST = annotationAssignment.getExpression();
-                EvaluationVisitor evalVisitor = new EvaluationVisitor();
-                evalVisitor.init(getConfiguration(), null, false, null);
-                assignmentCST.accept(evalVisitor);
-                Value annotationValue = evalVisitor.getResult();
-                if (null != annotationValue) {
-                    annotationValues.put(annotationAssignment.getName(), annotationValue);
-                }
+            resolveAssignBlocks(assignBlock, new HashMap<String, Value>());
+        }
+    }
+
+    /**
+     * Second recursive part of {@link #resolveAssignBlocks(Compound)}, find (nested assign blocks) inside the
+     * currently visited compound and set values to the associated {@link IDecisionVariable}s.
+     * @param assignBlock The currently visited assign block (start with assign blocks directly nested inside the
+     * compound).
+     * @param annotationValues Mapping of (annotation name, value). Start with an empty map and copy values into a new
+     * map for each recursive call.
+     */
+    private void resolveAssignBlocks(AttributeAssignment assignBlock, Map<String, Value> annotationValues) {
+        // Find annotation values
+        for (int i = 0, n = assignBlock.getAssignmentDataCount(); i < n; i++) {
+            Assignment annotationAssignment = assignBlock.getAssignmentData(i);
+            ConstraintSyntaxTree assignmentCST = annotationAssignment.getExpression();
+            EvaluationVisitor evalVisitor = new EvaluationVisitor();
+            evalVisitor.init(getConfiguration(), null, false, null);
+            assignmentCST.accept(evalVisitor);
+            Value annotationValue = evalVisitor.getResult();
+            if (null != annotationValue) {
+                annotationValues.put(annotationAssignment.getName(), annotationValue);
             }
-            
-            // Find variables for which the values must be applies
-            for (int i = 0, n = assignBlock.getDeclarationCount(); i < n; i++) {
-                DecisionVariableDeclaration nestedDeclaration = assignBlock.getDeclaration(i);
+        }
+        
+        // Find variables for which the values must be applied
+        for (int i = 0, n = assignBlock.getModelElementCount(); i < n; i++) {
+            ContainableModelElement element = assignBlock.getModelElement(i);
+            if (element instanceof DecisionVariableDeclaration) {
+                DecisionVariableDeclaration nestedDeclaration = (DecisionVariableDeclaration) element;
                 IDecisionVariable nestedVariable = getNestedVariable(nestedDeclaration.getName());
                 if (null != nestedVariable) {
                     for (int j = 0, m = nestedVariable.getAttributesCount(); j < m; j++) {
@@ -107,7 +136,10 @@ public class CompoundVariable extends StructuredVariable {
                             }
                         }
                     }
-                }
+                }                    
+            } else if (element instanceof AttributeAssignment) {
+                AttributeAssignment nestedAssignBlock = (AttributeAssignment) element;
+                resolveAssignBlocks(nestedAssignBlock, new HashMap<String, Value>(annotationValues));
             }
         }
     }
