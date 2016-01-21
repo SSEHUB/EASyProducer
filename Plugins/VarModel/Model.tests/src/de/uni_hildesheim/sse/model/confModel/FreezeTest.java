@@ -18,7 +18,6 @@ package de.uni_hildesheim.sse.model.confModel;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import de.uni_hildesheim.sse.model.cst.AttributeVariable;
@@ -40,6 +39,7 @@ import de.uni_hildesheim.sse.model.varModel.datatypes.Enum;
 import de.uni_hildesheim.sse.model.varModel.datatypes.EnumLiteral;
 import de.uni_hildesheim.sse.model.varModel.datatypes.FreezeVariableType;
 import de.uni_hildesheim.sse.model.varModel.datatypes.IntegerType;
+import de.uni_hildesheim.sse.model.varModel.datatypes.OclKeyWords;
 import de.uni_hildesheim.sse.model.varModel.datatypes.OrderedEnum;
 import de.uni_hildesheim.sse.model.varModel.datatypes.Sequence;
 import de.uni_hildesheim.sse.model.varModel.filter.FilterType;
@@ -53,13 +53,16 @@ import de.uni_hildesheim.sse.varModel.testSupport.ProjectTestUtilities;
  * Tests covering different freezing situations.
  * 
  * @author Holger Eichelberger
+ * @author El-Sharkawy
  */
 public class FreezeTest {
     
     private Project prj;
     private Compound param;
+    private Compound refinedCType;
     private DecisionVariableDeclaration myParam;
     private DecisionVariableDeclaration myParamSeq;
+    private DecisionVariableDeclaration refCmpDecl;
     
     /**
      * Executed before a single test.
@@ -69,41 +72,64 @@ public class FreezeTest {
      */
     @Before
     public void setUp() throws CSTSemanticException, ValueDoesNotMatchTypeException  {
-        prj = new Project("test");
+        prj = new Project("FreezeTest");
 
+        // Annotation
         Enum bindingTime = new OrderedEnum("BindingTime", prj);
         bindingTime.add(new EnumLiteral("compile", 1, bindingTime));
-        bindingTime.add(new EnumLiteral("monitor", 2, bindingTime));
-        bindingTime.add(new EnumLiteral("enact", 3, bindingTime));
-        prj.add(bindingTime);
-        
+        bindingTime.add(new EnumLiteral("link", 2, bindingTime));
+        bindingTime.add(new EnumLiteral("monitor", 3, bindingTime));
+        bindingTime.add(new EnumLiteral("enact", 4, bindingTime));
+        prj.add(bindingTime);    
         Attribute attr = new Attribute("binding", bindingTime, prj, prj);
         prj.attribute(attr);
         prj.add(attr);
         
+        // Basis compound
         param = new Compound("IntParameter", prj);
         param.add(new DecisionVariableDeclaration("defaultValue", IntegerType.TYPE, param));
         AttributeAssignment assng = new AttributeAssignment(param);
-        assng.add(new Assignment("binding", "=", new ConstantValue(ValueFactory.createValue(bindingTime, "enact"))));
+        assng.add(new Assignment(attr.getName(), OclKeyWords.ASSIGNMENT,
+            new ConstantValue(ValueFactory.createValue(bindingTime, bindingTime.getLiteral(3)))));
         assng.add(new DecisionVariableDeclaration("value", IntegerType.TYPE, assng));
         param.add(assng);
         prj.add(param);
-        
         myParam = new DecisionVariableDeclaration("myParam", param, prj);
         prj.add(myParam);
-        
+
+        // Sequence of basis compound
         Sequence paramSeq = new Sequence("", param, prj);
         myParamSeq = new DecisionVariableDeclaration("myParamSeq", paramSeq, prj);
         prj.add(myParamSeq);
         
-        IFreezable[] freezables = new IFreezable[2];
+        // Refined Compound
+        refinedCType = new Compound("refinedCP", prj, param);
+        AttributeAssignment assng2 = new AttributeAssignment(refinedCType);
+        assng2.add(new Assignment(attr.getName(), OclKeyWords.ASSIGNMENT,
+                new ConstantValue(ValueFactory.createValue(bindingTime, bindingTime.getLiteral(2)))));
+        DecisionVariableDeclaration refinedValue1 = new DecisionVariableDeclaration("rVal1", IntegerType.TYPE, assng2);
+        assng2.add(refinedValue1);
+        AttributeAssignment assng3 = new AttributeAssignment(assng2);
+        assng3.add(new Assignment(attr.getName(), OclKeyWords.ASSIGNMENT,
+                new ConstantValue(ValueFactory.createValue(bindingTime, bindingTime.getLiteral(1)))));
+        DecisionVariableDeclaration refinedValue2 = new DecisionVariableDeclaration("rVal2", IntegerType.TYPE, assng3);
+        assng3.add(refinedValue2);
+        assng2.add(assng3);
+        refinedCType.add(assng2);
+        prj.add(refinedCType);
+        refCmpDecl = new DecisionVariableDeclaration("refinedCmp", refinedCType, prj);
+        prj.add(refCmpDecl);
+        
+        // Freeze
+        IFreezable[] freezables = new IFreezable[3];
         freezables[0] = myParam;
         freezables[1] = myParamSeq;
+        freezables[2] = refCmpDecl;
         FreezeVariableType iterType = new FreezeVariableType(freezables, prj);
         DecisionVariableDeclaration freezeIter = new DecisionVariableDeclaration("b", iterType, prj);
-        Variable iterEx = new AttributeVariable(new Variable(freezeIter), iterType.getAttribute("binding"));
-        ConstraintSyntaxTree selector = new OCLFeatureCall(iterEx, ">=", 
-            new ConstantValue(ValueFactory.createValue(bindingTime, "monitor")));
+        Variable iterEx = new AttributeVariable(new Variable(freezeIter), iterType.getAttribute(attr.getName()));
+        ConstraintSyntaxTree selector = new OCLFeatureCall(iterEx, OclKeyWords.GREATER_EQUALS, 
+            new ConstantValue(ValueFactory.createValue(bindingTime, bindingTime.getLiteral(2))));
         selector.inferDatatype();
         FreezeBlock freeze = new FreezeBlock(freezables, freezeIter, selector, prj);
         prj.add(freeze);
@@ -124,6 +150,7 @@ public class FreezeTest {
      * Stores the relevant variables for the test.
      * 
      * @author Holger Eichelberger
+     * @author El-Sharkawy
      */
     private class Variables {
 
@@ -131,6 +158,11 @@ public class FreezeTest {
         private IDecisionVariable myParamVarDeflt;
         private IDecisionVariable myParamVarValue;
         private IDecisionVariable myParamSeqVar;
+        private IDecisionVariable refCmpVar;
+        private IDecisionVariable refCmpVarValue;
+        private IDecisionVariable refCmpVarDeflValue;
+        private IDecisionVariable refCmpVarRef1Value;
+        private IDecisionVariable refCmpVarRef2Value;
 
         /**
          * Obtains the relevant variables.
@@ -142,10 +174,18 @@ public class FreezeTest {
             myParamVarDeflt = findNested(myParamVar, "defaultValue");
             myParamVarValue = findNested(myParamVar, "value");
             myParamSeqVar = cfg.getDecision(myParamSeq);
+
+            // Refined compound
+            refCmpVar = cfg.getDecision(refCmpDecl);
+            refCmpVarValue = findNested(refCmpVar, "value");
+            refCmpVarDeflValue = findNested(refCmpVar, "defaultValue");
+            refCmpVarRef1Value = findNested(refCmpVar, "rVal1");
+            refCmpVarRef2Value = findNested(refCmpVar, "rVal2");
         }
         
         /**
          * Asserts default freezes according to the variability model.
+         * To be atomic, this tests <b>not</b> the refined compound.
          */
         private void assertDefaultFreeze() {
             Assert.assertEquals(AssignmentState.FROZEN, myParamVarDeflt.getState());
@@ -155,7 +195,7 @@ public class FreezeTest {
         }
         
         /**
-         * Asserts attribute structures and freeze states.
+         * Asserts annotation structures.
          */
         private void assertAttributes() {
             Assert.assertNotNull(myParamVar);
@@ -166,8 +206,50 @@ public class FreezeTest {
             Assert.assertEquals(1, myParamVarValue.getAttributesCount());
             Assert.assertNotNull(myParamSeqVar);
             Assert.assertEquals(1, myParamSeqVar.getAttributesCount());
+            
+            // Refined compound
+            Assert.assertNotNull(refCmpVar);
+            Assert.assertEquals(1, refCmpVar.getAttributesCount());
+            Assert.assertNotNull(refCmpVarValue);
+            Assert.assertEquals(1, refCmpVarValue.getAttributesCount());
+            Assert.assertNotNull(refCmpVarDeflValue);
+            Assert.assertEquals(1, refCmpVarDeflValue.getAttributesCount());
+            Assert.assertNotNull(refCmpVarRef1Value);
+            Assert.assertEquals(1, refCmpVarRef1Value.getAttributesCount());
+            Assert.assertNotNull(refCmpVarRef2Value);
+            Assert.assertEquals(1, refCmpVarRef2Value.getAttributesCount());
         }
 
+    }
+    
+
+    /**
+     * Tests whether attribute assignments of parent compounds are considered in refined compounds.
+     * Tests also whether nested assign blocks inside other assign blocks are considered correctly.
+     */
+    @Test
+    public void freezeRefinedCompoundTest() {
+        // validate project for testing
+        ProjectTestUtilities.validateProject(prj, true);
+        Configuration config = new Configuration(prj);
+        
+        Variables variables = new Variables(config);
+        variables.assertAttributes();
+        variables.assertDefaultFreeze();
+        
+        // Test refined compound
+        Assert.assertEquals(AssignmentState.FROZEN, variables.refCmpVar.getState());
+        Assert.assertEquals(AssignmentState.FROZEN, variables.refCmpVarDeflValue.getState());
+        Assert.assertNotEquals(AssignmentState.FROZEN, variables.refCmpVarValue.getState());
+        Assert.assertNotEquals(AssignmentState.FROZEN, variables.refCmpVarRef1Value.getState());
+        Assert.assertEquals(AssignmentState.FROZEN, variables.refCmpVarRef2Value.getState());
+        // Since the inner assert block switches the frozen state back to default, we must test the annotation itself
+        IDecisionVariable annotation = variables.refCmpVarRef2Value.getAttribute(0);
+        Assert.assertNotNull(annotation);
+        Assert.assertEquals("binding", annotation.getDeclaration().getName());
+        Value annotationValue = annotation.getValue();
+        Assert.assertNotNull(annotationValue);
+        Assert.assertEquals("link", annotationValue.getValue().toString());
     }
     
     /**
@@ -178,13 +260,11 @@ public class FreezeTest {
      * @throws ConfigurationException shall not occur
      */
     @Test
-//    @Ignore("-> Sascha")
     public void freezeUndefinedCompoundTest() throws ValueDoesNotMatchTypeException, CSTSemanticException, 
         ConfigurationException {
         
         // debugging
-        ProjectTestUtilities.validateProject(prj, true);
-        
+        ProjectTestUtilities.validateProject(prj);
         Configuration cfg = new Configuration(prj);
 
         Variables variables = new Variables(cfg);
@@ -206,7 +286,6 @@ public class FreezeTest {
      * @throws ConfigurationException shall not occur
      */
     @Test
-//    @Ignore("-> Sascha")
     public void freezeCompoundTest() throws ValueDoesNotMatchTypeException, CSTSemanticException, 
         ConfigurationException {
 
@@ -224,7 +303,7 @@ public class FreezeTest {
         prj.addConstraint(constraint);
         
         // debugging
-        ProjectTestUtilities.validateProject(prj, true);
+        ProjectTestUtilities.validateProject(prj);
 
         Configuration cfg = new Configuration(prj);
         Variables variables = new Variables(cfg);
