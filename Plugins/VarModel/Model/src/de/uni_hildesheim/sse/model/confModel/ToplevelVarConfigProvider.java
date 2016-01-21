@@ -241,7 +241,7 @@ class ToplevelVarConfigProvider extends VariableConfigProvider {
             DecisionVariableDeclaration nestedDecl = new DecisionVariableDeclaration(nestedName,
                 type, relatedVariable.getDeclaration());
             VariableCreator creator = new VariableCreator(nestedDecl, relatedVariable,
-                relatedVariable.isVisible());
+                relatedVariable.isVisible(), false);
             IDecisionVariable nestedVar = creator.getVariable();
             container.addNestedElement(nestedVar);
             Value nesValue = conValue.getElement(i);

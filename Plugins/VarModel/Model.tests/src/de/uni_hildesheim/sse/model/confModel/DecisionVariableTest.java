@@ -64,7 +64,7 @@ public class DecisionVariableTest {
         //Create DecisionVariable
         DecisionVariableDeclaration videoBitrate = new DecisionVariableDeclaration("videoBitrate", bitrate, project);
         Value val = ValueFactory.createValue(bitrate, "5");
-        VariableCreator creator = new VariableCreator(videoBitrate, config, true);
+        VariableCreator creator = new VariableCreator(videoBitrate, config, true, false);
         IDecisionVariable decVar = creator.getVariable();
         Assert.assertNotNull(decVar);
         Assert.assertSame(videoBitrate, decVar.getDeclaration());

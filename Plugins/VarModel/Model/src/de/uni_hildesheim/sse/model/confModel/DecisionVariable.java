@@ -59,18 +59,21 @@ abstract class DecisionVariable implements IDecisionVariable {
      * <li><tt>true</tt>: The variable is exported by an interface or there is no interface</li>.
      * <li><tt>false</tt>: There is an interface which does not export this variable</li>.
      * </ul>
+     * @param isAttribute whether this variable represents (a part of) an attribute or a variable
      */
-    protected DecisionVariable(IConfigurationElement parent, AbstractVariable varDeclaration, boolean isVisible) {
+    protected DecisionVariable(IConfigurationElement parent, AbstractVariable varDeclaration, boolean isVisible, 
+        boolean isAttribute) {
         attributes = new IDecisionVariable[0];
         this.declaration = varDeclaration;
         this.parent = parent;
         this.isVisible = isVisible;
         configProvider = VariableConfigProviderFactory.createDelegate(this);
-        try {
-            initializeAttributes(varDeclaration);
-        } catch (ConfigurationException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+        if (!isAttribute) {
+            try {
+                initializeAttributes(varDeclaration);
+            } catch (ConfigurationException e) {
+                e.printStackTrace();
+            }
         }
     }
 
@@ -152,7 +155,7 @@ abstract class DecisionVariable implements IDecisionVariable {
             Attribute attr = access.getAttribute(a);
             String key = attr.getName();
             if (!map.containsKey(key)) {
-                VariableCreator creator = new VariableCreator(attr, this, isVisible);
+                VariableCreator creator = new VariableCreator(attr, this, isVisible, true);
                 IDecisionVariable var = creator.getVariable();
                 if (values.containsKey(key)) {
                     var.setValue(values.get(key), AssignmentState.DERIVED);

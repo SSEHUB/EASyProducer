@@ -48,6 +48,7 @@ public class VariableCreator implements IDatatypeVisitor {
     private AbstractVariable varDecl;
     private ConfigurationException configExcetion;
     private boolean isVisible;
+    private boolean isAttribute;
 
     /**
      * Sole constructor for this class.
@@ -59,13 +60,17 @@ public class VariableCreator implements IDatatypeVisitor {
      * <li><tt>true</tt>: The variable is exported by an interface or there is no interface</li>.
      * <li><tt>false</tt>: There is an interface which does not export this variable</li>.
      * </ul>
+     * @param isAttribute whether a variable represents (as part of) an attribute or an usual variable 
+     *     shall be created
      */
-    public VariableCreator(AbstractVariable varDecl, IConfigurationElement parent, boolean isVisible) {
+    public VariableCreator(AbstractVariable varDecl, IConfigurationElement parent, boolean isVisible, 
+        boolean isAttribute) {
         variable = null;
         this.configExcetion = null;
         this.varDecl = varDecl;
         this.parent = parent;
         this.isVisible = isVisible;
+        this.isAttribute = isAttribute;
         varDecl.getType().accept(this);
     }
     
@@ -124,57 +129,57 @@ public class VariableCreator implements IDatatypeVisitor {
 
     @Override
     public void visitSet(Set set) {
-        variable = new SetVariable(varDecl, parent, isVisible);
+        variable = new SetVariable(varDecl, parent, isVisible, isAttribute);
     }
 
     @Override
     public void visitSequence(Sequence sequence) {
-        variable = new SequenceVariable(varDecl, parent, isVisible);
+        variable = new SequenceVariable(varDecl, parent, isVisible, isAttribute);
     }
 
     @Override
     public void visitReference(Reference reference) {
-        variable = new BasisVariable(parent, varDecl, isVisible);
+        variable = new BasisVariable(parent, varDecl, isVisible, isAttribute);
     }
 
     @Override
     public void visitBooleanType(BooleanType type) {
-        variable = new BasisVariable(parent, varDecl, isVisible);
+        variable = new BasisVariable(parent, varDecl, isVisible, isAttribute);
     }
 
     @Override
     public void visitStringType(StringType type) {
-        variable = new BasisVariable(parent, varDecl, isVisible);
+        variable = new BasisVariable(parent, varDecl, isVisible, isAttribute);
     }
     
     @Override
     public void visitConstraintType(ConstraintType type) {
-        variable = new BasisVariable(parent, varDecl, isVisible);
+        variable = new BasisVariable(parent, varDecl, isVisible, isAttribute);
     }
 
     @Override
     public void visitIntegerType(IntegerType type) {
-        variable = new BasisVariable(parent, varDecl, isVisible);
+        variable = new BasisVariable(parent, varDecl, isVisible, isAttribute);
     }
 
     @Override
     public void visitRealType(RealType type) {
-        variable = new BasisVariable(parent, varDecl, isVisible);
+        variable = new BasisVariable(parent, varDecl, isVisible, isAttribute);
     }
 
     @Override
     public void visitCompoundType(Compound compound) {
-        variable = new CompoundVariable(parent, varDecl, isVisible);
+        variable = new CompoundVariable(parent, varDecl, isVisible, isAttribute);
     }
 
     @Override
     public void visitEnumType(Enum enumType) {
-        variable = new BasisVariable(parent, varDecl, isVisible);
+        variable = new BasisVariable(parent, varDecl, isVisible, isAttribute);
     }
 
     @Override
     public void visitOrderedEnumType(OrderedEnum enumType) {
-        variable = new BasisVariable(parent, varDecl, isVisible);
+        variable = new BasisVariable(parent, varDecl, isVisible, isAttribute);
     }
 
     @Override

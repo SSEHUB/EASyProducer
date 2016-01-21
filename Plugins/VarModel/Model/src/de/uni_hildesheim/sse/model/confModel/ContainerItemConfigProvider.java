@@ -79,7 +79,7 @@ class ContainerItemConfigProvider extends NestedVarConfigProvider {
             type = ((Container) type).getContainedType();
             DecisionVariableDeclaration nestedDecl = new DecisionVariableDeclaration(nestedName,
                 type, parent.getDeclaration());
-            VariableCreator creator = new VariableCreator(nestedDecl, parent, parent.isVisible());
+            VariableCreator creator = new VariableCreator(nestedDecl, parent, parent.isVisible(), false);
             IDecisionVariable nestedVar = creator.getVariable(false);
             parent.addNestedElement(nestedVar);
         }

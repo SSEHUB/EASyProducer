@@ -56,9 +56,11 @@ public class CompoundVariable extends StructuredVariable {
      * <li><tt>true</tt>: The variable is exported by an interface or there is no interface</li>.
      * <li><tt>false</tt>: There is an interface which does not export this variable</li>.
      * </ul>
+     * @param isAttribute whether this variable represents (a part of) an attribute or a variable
      */
-    CompoundVariable(IConfigurationElement parent, AbstractVariable varDeclaration, boolean isVisible) {
-        super(parent, varDeclaration, isVisible);
+    CompoundVariable(IConfigurationElement parent, AbstractVariable varDeclaration, boolean isVisible, 
+        boolean isAttribute) {
+        super(parent, varDeclaration, isVisible, isAttribute);
         if (null == nestedElements) {
             nestedElements = new LinkedHashMap<String, IDecisionVariable>();
         }
@@ -67,7 +69,7 @@ public class CompoundVariable extends StructuredVariable {
         
         Compound cType = (Compound) DerivedDatatype.resolveToBasis(varDeclaration.getType());
         for (int i = 0; i < cType.getInheritedElementCount(); i++) {
-            createNestedElement(cType.getInheritedElement(i), isVisible);
+            createNestedElement(cType.getInheritedElement(i), isVisible, isAttribute);
         }
 
         // Dirty: Initialize "static" assign blocks for newly created nested variable
@@ -165,9 +167,10 @@ public class CompoundVariable extends StructuredVariable {
      * 
      * @param decl the variable declaration
      * @param isVisible specifies whether the parent variable is exported by an interface or not
+     * @param isAttribute whether this variable represents (a part of) an attribute or a variable
      */
-    private void createNestedElement(AbstractVariable decl, boolean isVisible) {
-        VariableCreator creator = new VariableCreator(decl, this, isVisible);
+    private void createNestedElement(AbstractVariable decl, boolean isVisible, boolean isAttribute) {
+        VariableCreator creator = new VariableCreator(decl, this, isVisible, isAttribute);
         try {
             IDecisionVariable nestedVar = creator.getVariable(false);
             nestedElements.put(decl.getName(), nestedVar);
@@ -234,7 +237,7 @@ public class CompoundVariable extends StructuredVariable {
                     AbstractVariable nestedItem = vType.getInheritedElement(i);
                     String name = nestedItem.getName();
                     if (!nestedElements.containsKey(name)) { // may already exist as assigned before
-                        VariableCreator creator = new VariableCreator(nestedItem, this, isVisible());
+                        VariableCreator creator = new VariableCreator(nestedItem, this, isVisible(), false);
                         try {
                             nestedElements.put(name, creator.getVariable(false));
                         } catch (ConfigurationException e) {
