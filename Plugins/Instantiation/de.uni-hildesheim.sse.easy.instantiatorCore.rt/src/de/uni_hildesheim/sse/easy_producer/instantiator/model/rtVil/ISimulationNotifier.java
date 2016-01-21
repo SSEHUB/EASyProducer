@@ -32,5 +32,13 @@ public interface ISimulationNotifier {
      * @param args the operation call arguments
      */
     public void notifyOperationCall(OperationDescriptor operation, Object[] args);
+    
+    /**
+     * Returns whether the ongoing simulation shall be rolled back or whether changes
+     * to the model shall be kept.
+     * 
+     * @return <code>true</code> for roll back, <code>false</code> else
+     */
+    public boolean doRollbackSimulation();
 
 }

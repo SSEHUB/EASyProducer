@@ -399,7 +399,7 @@ public class RtVilExecution extends BuildlangExecution implements IRtVilVisitor 
             } catch (VilException e) {
                 exc = e;
             }
-            if (null != RtVilStorage.getSimulationNotifier()) {
+            if (doSimulationRollback()) {
                 // allow reuse of configuration - get rid of all changes
                 for (int i = 0; i < script.getParameterCount(); i++) {
                     if (clearCfg(script.getParameter(i))) {
@@ -416,6 +416,16 @@ public class RtVilExecution extends BuildlangExecution implements IRtVilVisitor 
             result = new RuleExecutionResult(Status.SUCCESS, new RuleExecutionContext(dummy, getRuntimeEnvironment()));
         }
         return result;
+    }
+    
+    /**
+     * Returns whether we are in a simulation and shall roll back the configuration changes.
+     * 
+     * @return <code>true</code> for roll back, <code>false</code> else
+     */
+    private boolean doSimulationRollback() {
+        ISimulationNotifier notifier = RtVilStorage.getSimulationNotifier();
+        return null != notifier ? notifier.doRollbackSimulation() : false; 
     }
     
     /**

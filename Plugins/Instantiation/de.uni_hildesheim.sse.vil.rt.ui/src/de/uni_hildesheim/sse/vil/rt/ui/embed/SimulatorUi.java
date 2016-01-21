@@ -424,4 +424,9 @@ public class SimulatorUi implements ISimulationNotifier {
         // just ignore..
     }
 
+    @Override
+    public boolean doRollbackSimulation() {
+        return true;
+    }
+
 }

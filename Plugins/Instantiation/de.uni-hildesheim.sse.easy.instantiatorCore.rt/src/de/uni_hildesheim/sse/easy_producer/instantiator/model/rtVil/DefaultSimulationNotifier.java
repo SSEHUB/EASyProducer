@@ -18,7 +18,8 @@ package de.uni_hildesheim.sse.easy_producer.instantiator.model.rtVil;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.OperationDescriptor;
 
 /**
- * Provides a default implementation of an empty (no action) simulation notifier.
+ * Provides a default implementation of an empty (no action) simulation notifier and 
+ * a configuration rollback at the end of execution.
  * 
  * @author Holger Eichelberger
  */
@@ -34,6 +35,11 @@ public class DefaultSimulationNotifier implements ISimulationNotifier {
     
     @Override
     public void notifyOperationCall(OperationDescriptor operation, Object[] args) {
+    }
+
+    @Override
+    public boolean doRollbackSimulation() {
+        return true;
     }
 
 }

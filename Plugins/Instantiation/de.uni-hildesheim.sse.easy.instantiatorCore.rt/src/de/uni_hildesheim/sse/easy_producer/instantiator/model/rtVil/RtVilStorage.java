@@ -61,9 +61,12 @@ public abstract class RtVilStorage {
      * Provides a hint to the execution whether the runtime execution happens in a simulation environment.
      * 
      * @param notifier the notifier instance or <b>null</b> in case of no notification
+     * @return the simulation notifier before executing this method
      */
-    public static final void setSimulationNotifier(ISimulationNotifier notifier) {
+    public static final ISimulationNotifier setSimulationNotifier(ISimulationNotifier notifier) {
+        ISimulationNotifier old = simulationNotifier;
         simulationNotifier = notifier;
+        return old;
     }
     
     /**
