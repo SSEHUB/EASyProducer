@@ -121,6 +121,7 @@ public class DefaultImportResolver<M extends IModel> extends ImportResolver<M> {
                     checkImportCycles(imp.getResolved(), messages, done);
                 }
             }
+            done.remove(model);
         }
     }
     

@@ -1,0 +1,7 @@
+vilScript utils (Project source, Project target, Configuration config) {
+
+    Integer util() = : {
+        1;
+    }
+
+}

@@ -1,0 +1,11 @@
+import utils;
+import enactment;
+
+vilScript importTest6 (Project source, Project target, Configuration config) {
+
+    main() = : {
+        util();
+        enactment();
+    }
+
+}

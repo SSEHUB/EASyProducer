@@ -251,6 +251,16 @@ public class BasicTests extends AbstractBasicTest<Script> {
     public void testImport5() throws IOException {
         assertEqual("import5", "importTest5", VilException.ID_CANNOT_RESOLVE);
     }
+    
+    /**
+     * Tests failing protected import.
+     * 
+     * @throws IOException should not occur
+     */
+    @Test
+    public void testImport6() throws IOException {
+        assertEqual("import6", "importTest6");
+    }
 
     /**
      * Tests some very basic rules.
