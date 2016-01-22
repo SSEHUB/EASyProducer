@@ -1,0 +1,58 @@
+project Copy {
+
+    enum BindingTime {compile, runtime};
+    annotate BindingTime bindingTime = BindingTime.compile to Copy;
+
+    compound DataSource {
+        String name;
+    }
+
+    compound Algorithm {
+        String name;
+    }
+    
+    compound Family {
+        String name;
+        setOf(refTo(Algorithm)) members;
+    }
+
+    // pipeline
+
+    compound Source {
+        String name;
+        refTo(DataSource) source;
+        assign (bindingTime = BindingTime.runtime) to {
+            refTo(DataSource) actual;
+            sequenceOf(refTo(DataSource)) available;
+        }
+    }
+
+    compound FamilyElement {
+        String name;
+        refTo(Family) family;
+        assign (bindingTime = BindingTime.runtime) to {
+            refTo(Algorithm) actual;
+            sequenceOf(refTo(Algorithm)) available;
+        }
+    }
+
+    // variables
+
+    DataSource ds1 = {name="ds1"};    
+    Algorithm alg1 = {name="alg1"};    
+    Algorithm alg2 = {name="alg2"};
+    Family fam1 = {name="fam1", members={refBy(alg1), refBy(alg2)}};
+    
+    Source src1 = {name="src1", source=refBy(ds1)};
+    FamilyElement fe1 = {name="fe1", family=refBy(fam1)};
+    
+    freeze {
+        ds1;
+        alg1;
+        alg2;
+        fam1;
+        src1;
+        fe1;
+    } but (v | v.bindingTime == BindingTime.runtime);
+    
+}

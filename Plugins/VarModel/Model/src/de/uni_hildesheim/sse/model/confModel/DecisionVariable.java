@@ -231,6 +231,11 @@ abstract class DecisionVariable implements IDecisionVariable {
     public void setValue(Value value, IAssignmentState state) throws ConfigurationException {
         configProvider.setValue(value, state);
     }
+    
+    @Override
+    public IDecisionVariable getNestedElement(String name) {
+        return Configuration.getNestedElement(this, name);
+    }
 
     @Override
     public IAssignmentState getState() {

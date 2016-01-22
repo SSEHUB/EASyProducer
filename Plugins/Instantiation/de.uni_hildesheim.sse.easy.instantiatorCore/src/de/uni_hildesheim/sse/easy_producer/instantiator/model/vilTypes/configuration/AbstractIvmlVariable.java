@@ -250,6 +250,12 @@ public abstract class AbstractIvmlVariable extends IvmlElement {
             return nested[index];
         }
 
+
+        @Override
+        public IDecisionVariable getNestedElement(String name) {
+            return de.uni_hildesheim.sse.model.confModel.Configuration.getNestedElement(this, name);
+        }
+
         @Override
         public int getAttributesCount() {
             return parent.getAttributesCount();

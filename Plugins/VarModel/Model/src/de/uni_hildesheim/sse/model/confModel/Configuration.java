@@ -858,4 +858,42 @@ public class Configuration implements IConfigurationVisitable, IProjectListener,
         project.accept(rewriter);
         project = rewriter.getCopyiedProject();
     }
+    
+    /**
+     * Returns an element for <code>base</code> specified by its name. This method is not recursive!
+     * 
+     * @param base the base variable to search on (may be <b>null</b>)
+     * @param name the name of the nested element
+     * @return the nested element (may be <b>null</b> if not found or <code>base</code> is <b>null</b>)
+     */
+    public static IDecisionVariable getNestedElement(IDecisionVariable base, String name) {
+        IDecisionVariable result = null;
+        if (null != base) {
+            for (int n = 0, c = base.getNestedElementsCount(); null == result && n < c; n++) {
+                IDecisionVariable nested = base.getNestedElement(n);
+                if (name.equals(nested.getDeclaration().getName())) {
+                    result = nested;
+                }
+            }
+        }
+        return result;        
+    }
+    
+    /**
+     * Dereferences a value.
+     * 
+     * @param conf the configuration access
+     * @param value the value to be dereferenced
+     * @return the dereferenced value
+     */
+    public static Value dereference(IConfiguration conf, Value value) {
+        while (value instanceof ReferenceValue) {
+            IDecisionVariable var = conf.getDecision(((ReferenceValue) value).getValue());
+            if (null != var) {
+                value = var.getValue();
+            }
+        }
+        return value;
+    }    
+
 }

@@ -208,6 +208,11 @@ public class CompoundVariable extends StructuredVariable {
     public IDecisionVariable getNestedElement(int index) {
         return (IDecisionVariable) nestedElements.values().toArray()[index];
     }
+    
+    @Override
+    public IDecisionVariable getNestedElement(String name) {
+        return nestedElements.get(name);
+    }
 
     @Override
     public void setValue(Value value, IAssignmentState state, IConfigurationElement nested)
