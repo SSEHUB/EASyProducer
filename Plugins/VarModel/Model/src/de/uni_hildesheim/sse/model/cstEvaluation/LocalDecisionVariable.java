@@ -33,7 +33,6 @@ import de.uni_hildesheim.sse.model.varModel.datatypes.Reference;
 import de.uni_hildesheim.sse.model.varModel.values.CompoundValue;
 import de.uni_hildesheim.sse.model.varModel.values.ContainerValue;
 import de.uni_hildesheim.sse.model.varModel.values.NullValue;
-import de.uni_hildesheim.sse.model.varModel.values.ReferenceValue;
 import de.uni_hildesheim.sse.model.varModel.values.Value;
 
 /**
@@ -147,23 +146,6 @@ public class LocalDecisionVariable implements IDecisionVariable {
         }
         return result;
     }
-    
-    /**
-     * Dereferences a value.
-     * 
-     * @param conf the configuration access
-     * @param value the value to be dereferenced
-     * @return the dereferenced value
-     */
-    static Value dereference(IConfiguration conf, Value value) {
-        while (value instanceof ReferenceValue) {
-            IDecisionVariable var = conf.getDecision(((ReferenceValue) value).getValue());
-            if (null != var) {
-                value = var.getValue();
-            }
-        }
-        return value;
-    }
 
     @Override
     public IDecisionVariable getNestedElement(int index) {
@@ -209,7 +191,7 @@ public class LocalDecisionVariable implements IDecisionVariable {
         if (parent instanceof CompoundVariable) {
             result = ((CompoundVariable) parent).getNestedVariable(slotName);
         } else {
-            Value tmp = dereference(conf, value);
+            Value tmp = Configuration.dereference(conf, value);
             if (tmp instanceof CompoundValue) { // not available for Container
                 CompoundValue cValue = (CompoundValue) tmp;
                 Compound type = (Compound) cValue.getType();
@@ -217,7 +199,7 @@ public class LocalDecisionVariable implements IDecisionVariable {
                 if (null != slotDecl) {
                     Value slotValue = cValue.getNestedValue(slotName);
                     if (!Reference.TYPE.isAssignableFrom(slotDecl.getType())) { // don't dereference references
-                        slotValue = dereference(conf, slotValue);
+                        slotValue = Configuration.dereference(conf, slotValue);
                     }
                     LocalDecisionVariable var = new LocalDecisionVariable(slotDecl, conf, null);
                     if (null != slotValue) {
@@ -231,6 +213,11 @@ public class LocalDecisionVariable implements IDecisionVariable {
             } 
         }
         return result;
+    }
+
+    @Override
+    public IDecisionVariable getNestedElement(String name) {
+        return Configuration.getNestedElement(this, name);
     }
 
     @Override
@@ -273,4 +260,5 @@ public class LocalDecisionVariable implements IDecisionVariable {
     public String getQualifiedName() {
         return getDeclaration().getQualifiedName();
     }
+
 }

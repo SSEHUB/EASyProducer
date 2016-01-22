@@ -17,9 +17,20 @@ package de.uni_hildesheim.sse.vil.rt.tests;
 
 import test.de.uni_hildesheim.sse.vil.buildlang.AbstractExecutionTest;
 import test.de.uni_hildesheim.sse.vil.buildlang.ITestConfigurer;
+
+import java.util.List;
+
+import org.junit.Assert;
+
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.rtVil.Script;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.configuration.Configuration;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.configuration.IVariableFilter;
+import de.uni_hildesheim.sse.model.management.VarModel;
+import de.uni_hildesheim.sse.model.varModel.Project;
 import de.uni_hildesheim.sse.reasoning.core.frontend.ReasonerFrontend;
 import de.uni_hildesheim.sse.reasoning.reasoner.Reasoner;
+import de.uni_hildesheim.sse.utils.modelManagement.ModelInfo;
+import de.uni_hildesheim.sse.utils.modelManagement.ModelManagementException;
 
 /**
  * An abstract basic rt-VIL test.
@@ -48,6 +59,33 @@ public abstract class AbstractRtTest extends AbstractExecutionTest<Script> {
     @Override
     protected ITestConfigurer<Script> createTestConfigurer() {
         return new RtVilTestConfigurer();
+    }
+
+    /**
+     * Returns the default configuration for the given variability model.
+     * 
+     * @param varModelName the name of the variability model
+     * @param filter the variable filter to apply (use 
+     *   {@link de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.configuration.NoVariableFilter#INSTANCE}
+     *   for runtime)
+     * @return the default configuration
+     */
+    protected static Configuration getIvmlConfiguration(String varModelName, IVariableFilter filter) {
+        List<ModelInfo<Project>> infos = VarModel.INSTANCE.availableModels().getModelInfo(varModelName);
+        Assert.assertNotNull("IVML model '" + varModelName + "' not found", infos);
+        Assert.assertEquals("IVML model '" + varModelName + "' ambiguous (" + infos.size() + "models found)", 
+            1, infos.size());
+        ModelInfo<Project> info = infos.get(0);
+        Project varModel = null;
+        try {
+            varModel = VarModel.INSTANCE.load(info);
+        } catch (ModelManagementException e) {
+            Assert.fail("unexpected exception: " + e.getMessage());
+        }
+        Assert.assertNotNull("IVML model '" + varModelName + "' not loaded", varModel);
+        de.uni_hildesheim.sse.model.confModel.Configuration cfg 
+            = new de.uni_hildesheim.sse.model.confModel.Configuration(varModel);
+        return new Configuration(cfg , filter);
     }
 
 }

@@ -76,6 +76,14 @@ public interface IDecisionVariable extends IConfigurationElement, IConfiguration
     public IDecisionVariable getNestedElement(int index);
     
     /**
+     * Returns an element specified by its name.
+     * 
+     * @param name the name of the nested element
+     * @return the nested element (may be <b>null</b>)
+     */
+    public IDecisionVariable getNestedElement(String name);
+    
+    /**
      * Returns the number of attributes.
      * 
      * @return the number of attributes
