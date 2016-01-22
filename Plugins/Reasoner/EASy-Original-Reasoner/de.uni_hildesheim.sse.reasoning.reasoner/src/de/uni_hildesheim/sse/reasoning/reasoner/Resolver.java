@@ -320,12 +320,8 @@ public class Resolver {
         IDatatype type = decl.getType();
         // Comment out if internal constraints come from the model
         if (type instanceof DerivedDatatype) {
-            InternalConstraint[] typeConstraints = createInternalConstraints(decl, type);
-            if (typeConstraints != null) {
-                for (InternalConstraint internalConstraint : typeConstraints) {
-                    internalConstraints.add(internalConstraint);                    
-                }
-            } 
+            DerivedDatatype dType = (DerivedDatatype) type;
+            analyseDerivedDatatype(decl, dType); 
         }
         ConstraintSyntaxTree defaultValue = decl.getDefaultValue();
         // Attribute handling
@@ -371,21 +367,36 @@ public class Resolver {
             }                
         }
     }
+
+    /**
+     * MEthod for analyzing {@link DerivedDatatype}s and extracting internal constraints.
+     * @param decl VariableDeclaration of <code>DerivedDatatype</code>
+     * @param dType type of <code>DerivedDatatype</code>
+     */
+    private void analyseDerivedDatatype(AbstractVariable decl, DerivedDatatype dType) {
+        InternalConstraint[] typeConstraints = createInternalConstraints(decl, dType);
+        if (typeConstraints != null) {
+            for (InternalConstraint internalConstraint : typeConstraints) {
+                internalConstraints.add(internalConstraint);                    
+            }
+        }
+        if (dType.getBasisType() instanceof DerivedDatatype) {
+            analyseDerivedDatatype(decl, (DerivedDatatype) dType.getBasisType());
+        }        
+    }
     
     /**
      * Creates constraints related to variable declaration. This method is needed for <code>DerivedDatatypes</code>. 
      * @param declaration VariableDeclaration of <code>DerivedDatatype</code>
-     * @param type type of <code>DerivedDatatype</code>
+     * @param dType type of <code>DerivedDatatype</code>
      * @return <code>null</code> if this datatype is not <code>DerivedDatatype</code> or if this 
      * <code>DerivedDatatype</code> has no constraints, otherwise the adapted constraints of the 
      * <code>DerivedDatatype</code> for this VariableDeclaration
      */
-    private InternalConstraint[] createInternalConstraints(AbstractVariable declaration, IDatatype type) {
+    private InternalConstraint[] createInternalConstraints(AbstractVariable declaration, DerivedDatatype dType) {
         InternalConstraint[] constraintInstances = null;
-        DerivedDatatype dType = (DerivedDatatype) type;
         if (dType.getConstraintCount() > 0 && dType.getTypeDeclaration() != declaration) {
-            constraintInstances = new InternalConstraint[dType.getConstraintCount()];
-            
+            constraintInstances = new InternalConstraint[dType.getConstraintCount()];            
             //Copy and replace each instance of the internal declaration with the given instance
             for (int i = 0; i < dType.getConstraintCount(); i++) {
                 ConstraintSyntaxTree oneConstraint = dType.getConstraint(i).getConsSyntax();
@@ -400,7 +411,7 @@ public class Resolver {
                     LOGGER.exception(e);
                 }
             }
-        }
+        }        
         return constraintInstances;
     }
 

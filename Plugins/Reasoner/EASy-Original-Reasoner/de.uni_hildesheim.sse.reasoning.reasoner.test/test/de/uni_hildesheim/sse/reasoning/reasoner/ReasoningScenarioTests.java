@@ -274,6 +274,14 @@ public class ReasoningScenarioTests extends de.uni_hildesheim.sse.reasoning.Abst
     }
     
     /**
+     * Inherited internal constraint test.
+     */
+    @Test
+    public void internalConstraintInheritedTest() {
+        reasoningTest("internalConstraintInheritedTest.ivml", 1);
+    }
+    
+    /**
      * String pattern test with internal constraint.
      */
     @Test
