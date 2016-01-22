@@ -38,6 +38,8 @@ import de.uni_hildesheim.sse.model.varModel.values.ContainerValue;
 import de.uni_hildesheim.sse.model.varModel.values.Value;
 import de.uni_hildesheim.sse.model.varModel.values.ValueDoesNotMatchTypeException;
 import de.uni_hildesheim.sse.model.varModel.values.ValueFactory;
+import de.uni_hildesheim.sse.utils.logger.EASyLoggerFactory;
+import de.uni_hildesheim.sse.utils.logger.EASyLoggerFactory.EASyLogger;
 
 /**
  * Copies specified variable values, i.e., single variables to a single variable or a compatible container or a 
@@ -68,12 +70,12 @@ public class VariableValueCopier {
         /**
          * Creates a copy specification.
          * 
-         * @param type the source type
+         * @param type the source type (may be <b>null</b> then the spec is ignored)
          * @param sourceVariableName the source variable name, may be given in compound access style for 
-         *   nested variables
+         *   nested variables (may be <b>null</b> then the spec is ignored)
          * @param targetVariableNames the target variable names, may be given in compound access style for 
          *   nested variables; the first one receives the copy, the other one references to the copy if they are
-         *   reference variables
+         *   reference variables (may be <b>null</b> then the spec is ignored)
          */
         public CopySpec(Compound type, String sourceVariableName, String... targetVariableNames) {
             this.type = type;
@@ -107,17 +109,23 @@ public class VariableValueCopier {
         public String[] getTargetVariableNames() {
             return targetVariableNames;
         }
+        
+        /**
+         * Returns whether this instance is valid.
+         * 
+         * @return <code>true</code> for valid, <code>false</code> else
+         */
+        public boolean isValid() {
+            return null != type && null != sourceVariableName && null != targetVariableNames;
+        }
     }
-
-    // PipelineSource::source -> PipelineSource::available
-    // PipelineSink::sink -> PipelineSink::available
-    // PipelineFamilyElement::family::members -> PipelineFamilyElement::available
 
     /**
      * Creates an instance for copying with state {@link AssignmentState#ASSIGNED}.
      *  
      * @param namePrefix the name prefix for new variables.
-     * @param copySpecs the copy specifications to take into account
+     * @param copySpecs the copy specifications to take into account, individual specs may be <b>null</b> but will 
+     *     be ignored then 
      */
     public VariableValueCopier(String namePrefix, CopySpec... copySpecs) {
         this(namePrefix, AssignmentState.ASSIGNED, copySpecs);
@@ -135,13 +143,30 @@ public class VariableValueCopier {
         this.newState = null == newState ? AssignmentState.ASSIGNED : newState;
         for (int c = 0; c < copySpecs.length; c++) {
             CopySpec spec = copySpecs[c];
-            Map<String, CopySpec> map = specs.get(spec.getType());
-            if (null == map) {
-                map = new HashMap<String, CopySpec>();
-                specs.put(spec.getType(), map);
+            if (null != spec) {
+                if (spec.isValid()) {
+                    Map<String, CopySpec> map = specs.get(spec.getType());
+                    if (null == map) {
+                        map = new HashMap<String, CopySpec>();
+                        specs.put(spec.getType(), map);
+                    }
+                    map.put(spec.getSourceVariableName(), spec);
+                } else {
+                    getLogger().warn("no type/source/target given for spec " + c + ". Ignoring.");
+                }
+            } else {
+                getLogger().warn("no type/source/target given for spec " + c + ". Ignoring.");
             }
-            map.put(spec.getSourceVariableName(), spec);
         }
+    }
+    
+    /**
+     * Returns the logger of this class.
+     * 
+     * @return the logger
+     */
+    protected EASyLogger getLogger() {
+        return EASyLoggerFactory.INSTANCE.getLogger(getClass(), Bundle.ID);
     }
     
     /**
