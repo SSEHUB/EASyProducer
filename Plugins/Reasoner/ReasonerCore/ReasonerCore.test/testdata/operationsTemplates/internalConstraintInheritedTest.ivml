@@ -1,0 +1,8 @@
+project internalConstraintInheritedTest {
+
+    typedef PositiveInteger Integer with (PositiveInteger > 0);
+    typedef SpringInteger PositiveInteger with (SpringInteger < 15);
+
+    SpringInteger springIntFalse = -1;    
+    
+}
