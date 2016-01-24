@@ -518,24 +518,29 @@ public class VariableValueCopier {
                 + source.getDeclaration().getName() + "_" + count++, source.getDeclaration().getType(), prj);
             prj.add(decl);
             IDecisionVariable var = cfg.createDecision(decl);
-            var.setValue(value, newState);
-            if (null != freezeProvider) {
-                IFreezable[] freezables = new IFreezable[1];
-                freezables[0] = decl;
-                FreezeVariableType iterType = new FreezeVariableType(freezables, prj);
-                DecisionVariableDeclaration freezeIter 
-                    = new DecisionVariableDeclaration(freezeProvider.getFreezeVariableName(), iterType, prj);
-                ConstraintSyntaxTree selector = freezeProvider.createButExpression(freezeIter);
-                selector.inferDatatype();
-                FreezeBlock freeze = new FreezeBlock(freezables, freezeIter, selector, prj);
-                prj.add(freeze);
-                
-                FreezeEvaluator evaluator = new FreezeEvaluator(cfg);
-                evaluator.setFreeze(freeze);
-                var.freeze(evaluator);
+            if (null != var) {
+                var.setValue(value, newState);
+                if (null != freezeProvider) {
+                    IFreezable[] freezables = new IFreezable[1];
+                    freezables[0] = decl;
+                    FreezeVariableType iterType = new FreezeVariableType(freezables, prj);
+                    DecisionVariableDeclaration freezeIter 
+                        = new DecisionVariableDeclaration(freezeProvider.getFreezeVariableName(), iterType, prj);
+                    ConstraintSyntaxTree selector = freezeProvider.createButExpression(freezeIter);
+                    selector.inferDatatype();
+                    FreezeBlock freeze = new FreezeBlock(freezables, freezeIter, selector, prj);
+                    prj.add(freeze);
+                    
+                    FreezeEvaluator evaluator = new FreezeEvaluator(cfg);
+                    evaluator.setFreeze(freeze);
+                    var.freeze(evaluator);
+                }
+                result = ValueFactory.createValue(targetType, decl);
+                target.setValue(result, newState);
+            } else {
+                getLogger().error("Cannot create decision variable for " + decl.getName());
+                result = null;
             }
-            result = ValueFactory.createValue(targetType, decl);
-            target.setValue(result, newState);
         } else {
             target.setValue(value, newState);
             result = value;

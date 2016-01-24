@@ -283,8 +283,7 @@ public class Configuration implements IConfigurationVisitable, IProjectListener,
     }
 
     /**
-     * Creates a visible decision in this configuration. The declaration must be (indirectly) member of
-     * the project represented by this configuration and not created before.
+     * Creates a visible decision in this configuration. The declaration must be on top-level and not created before.
      * 
      * @param decl the declaration to create the decision for
      * @return the created decision variable, may be <b>null</b> if the conditions are not met
@@ -293,7 +292,7 @@ public class Configuration implements IConfigurationVisitable, IProjectListener,
     public IDecisionVariable createDecision(AbstractVariable decl) throws ConfigurationException {
         // we need dynamic modification capabilities!
         IDecisionVariable result = null;
-        if (project == decl.getTopLevelParent() && null == getDecision(decl)) {
+        if (decl.getParent() instanceof Project && null == getDecision(decl)) {
             result = createDecision(decl, true);
         }
         return result;
