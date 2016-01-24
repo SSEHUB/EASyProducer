@@ -17,9 +17,11 @@ package de.uni_hildesheim.sse.easy_producer.instantiator.model.rtVil;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import de.uni_hildesheim.sse.model.confModel.AssignmentState;
 import de.uni_hildesheim.sse.model.confModel.Configuration;
@@ -141,15 +143,54 @@ public class VariableValueCopier {
         public String getFreezeVariableName() {
             return name;
         }
+        
+        /**
+         * Finds a declaration for the attribute <code>name</code> in <code>prj</code> or it's imports.
+         * 
+         * @param prj the project to search for
+         * @param name the name of the attribute
+         * @param done the already processed projects (cycle detection)
+         * @return the found attribute (may be <b>null</b>)
+         */
+        private Attribute findAttribute(Project prj, String name, Set<Project> done) {
+            Attribute result = null;
+            if (!done.contains(prj)) {
+                done.add(prj);
+                result = prj.getAttribute(name);
+                for (int i = 0; null == result && i < prj.getImportsCount(); i++) {
+                    Project p = prj.getImport(i).getResolved();
+                    if (null != p) {
+                        result = findAttribute(p, name, done);
+                    }
+                }
+            }
+            return result;
+        }
 
         @Override
         public ConstraintSyntaxTree createButExpression(DecisionVariableDeclaration freezeIter) 
             throws CSTSemanticException, ValueDoesNotMatchTypeException {
+            ConstraintSyntaxTree selector = null;
             FreezeVariableType iterType = (FreezeVariableType) freezeIter.getType();
-            Variable iterEx = new AttributeVariable(new Variable(freezeIter), 
-                iterType.getAttribute(annotation.getName()));
-            ConstraintSyntaxTree selector = new OCLFeatureCall(iterEx, operation, 
-                new ConstantValue(ValueFactory.createValue(annotation.getType(), literal)));
+            IModelElement par = iterType.getTopLevelParent();
+            String annotationName = annotation.getName();
+            Attribute attr;
+            if (annotation.getParent() == par) {
+                attr = annotation;
+            } else {
+                attr = iterType.getAttribute(annotation.getName());
+            }
+            while (null == attr && par instanceof Project) {
+                attr = findAttribute((Project) par, annotationName, new HashSet<Project>());
+            }
+            if (null != attr) {
+                Variable iterEx = new AttributeVariable(new Variable(freezeIter), attr);
+                selector = new OCLFeatureCall(iterEx, operation, 
+                    new ConstantValue(ValueFactory.createValue(annotation.getType(), literal)));
+            } else {
+                EASyLoggerFactory.INSTANCE.getLogger(getClass(), Bundle.ID).error("cannot create freeze selector as "
+                    + "annotation " + annotationName + " cannot be found");
+            }
             return selector;
         }
         
