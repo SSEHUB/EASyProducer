@@ -1,19 +1,35 @@
 project Copy {
 
-    enum BindingTime {compile, runtime};
+    enum BindingTime {compile=0, runtime=1};
     annotate BindingTime bindingTime = BindingTime.compile to Copy;
 
+    compound Parameter {
+        String name;        
+    }
+
+    compound IntegerParameter refines Parameter {
+        Integer defaultValue;
+        assign(bindingTime = BindingTime.runtime) to {
+            Integer value;
+        }
+    }
+    
+    typedef Parameters setOf(Parameter) with (Parameters->collect(p|p.name).size() == Parameters.size());
+    
     compound DataSource {
         String name;
+        Parameters parameters;
     }
 
     compound Algorithm {
         String name;
+        Parameters parameters;
     }
     
     compound Family {
         String name;
         setOf(refTo(Algorithm)) members;
+        Parameters parameters;
     }
 
     // pipeline
@@ -38,10 +54,10 @@ project Copy {
 
     // variables
 
-    DataSource ds1 = {name="ds1"};    
-    Algorithm alg1 = {name="alg1"};    
-    Algorithm alg2 = {name="alg2"};
-    Family fam1 = {name="fam1", members={refBy(alg1), refBy(alg2)}};
+    DataSource ds1 = {name="ds1", parameters={IntegerParameter{name="sourceDelay", defaultValue=50}}};    
+    Algorithm alg1 = {name="alg1", parameters={IntegerParameter{name="algDelay", defaultValue=60}}};    
+    Algorithm alg2 = {name="alg2", parameters={IntegerParameter{name="algDelay", defaultValue=60}}};
+    Family fam1 = {name="fam1", members={refBy(alg1), refBy(alg2)}, parameters={IntegerParameter{name="algDelay"}}};
     
     Source src1 = {name="src1", source=refBy(ds1)};
     FamilyElement fe1 = {name="fe1", family=refBy(fam1)};

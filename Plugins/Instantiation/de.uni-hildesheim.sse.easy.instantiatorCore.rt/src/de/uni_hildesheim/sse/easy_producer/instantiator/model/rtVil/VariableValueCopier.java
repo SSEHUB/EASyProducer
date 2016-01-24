@@ -27,12 +27,26 @@ import de.uni_hildesheim.sse.model.confModel.ConfigurationException;
 import de.uni_hildesheim.sse.model.confModel.ContainerVariable;
 import de.uni_hildesheim.sse.model.confModel.IAssignmentState;
 import de.uni_hildesheim.sse.model.confModel.IDecisionVariable;
+import de.uni_hildesheim.sse.model.cst.AttributeVariable;
+import de.uni_hildesheim.sse.model.cst.CSTSemanticException;
+import de.uni_hildesheim.sse.model.cst.ConstantValue;
+import de.uni_hildesheim.sse.model.cst.ConstraintSyntaxTree;
+import de.uni_hildesheim.sse.model.cst.OCLFeatureCall;
+import de.uni_hildesheim.sse.model.cst.Variable;
+import de.uni_hildesheim.sse.model.cstEvaluation.FreezeEvaluator;
+import de.uni_hildesheim.sse.model.varModel.Attribute;
 import de.uni_hildesheim.sse.model.varModel.DecisionVariableDeclaration;
+import de.uni_hildesheim.sse.model.varModel.FreezeBlock;
+import de.uni_hildesheim.sse.model.varModel.IFreezable;
+import de.uni_hildesheim.sse.model.varModel.IModelElement;
 import de.uni_hildesheim.sse.model.varModel.IvmlKeyWords;
 import de.uni_hildesheim.sse.model.varModel.Project;
 import de.uni_hildesheim.sse.model.varModel.datatypes.Compound;
 import de.uni_hildesheim.sse.model.varModel.datatypes.Container;
+import de.uni_hildesheim.sse.model.varModel.datatypes.EnumLiteral;
+import de.uni_hildesheim.sse.model.varModel.datatypes.FreezeVariableType;
 import de.uni_hildesheim.sse.model.varModel.datatypes.IDatatype;
+import de.uni_hildesheim.sse.model.varModel.datatypes.OclKeyWords;
 import de.uni_hildesheim.sse.model.varModel.datatypes.Reference;
 import de.uni_hildesheim.sse.model.varModel.values.ContainerValue;
 import de.uni_hildesheim.sse.model.varModel.values.Value;
@@ -55,6 +69,91 @@ public class VariableValueCopier {
     private String namePrefix;
     private int count;
     private IAssignmentState newState;
+
+    /**
+     * An interface providing information to create freeze blocks for new variables.
+     * @author Holger Eichelberger
+     *
+     */
+    public interface IFreezeProvider {
+        
+        /**
+         * The name of the freeze variable.
+         * 
+         * @return the name
+         */
+        public String getFreezeVariableName();
+        
+        /**
+         * Creates the freeze-but expression.
+         * 
+         * @param freezeIter the freeze iterator variable (of type {@link FreezeVariableType})
+         * @return the but-expression
+         * @throws CSTSemanticException in case that the but-expression was not constructed correctly
+         * @throws ValueDoesNotMatchTypeException in case that creating values fails
+         */
+        public ConstraintSyntaxTree createButExpression(DecisionVariableDeclaration freezeIter) 
+            throws CSTSemanticException, ValueDoesNotMatchTypeException;
+        
+    }
+    
+    /**
+     * A default freeze provider for but-expressions based on attributes of type enum.
+     * 
+     * @author Holger Eichelberger
+     */
+    public static class EnumAttributeFreezeProvider implements IFreezeProvider {
+
+        private String name;
+        private String operation;
+        private Attribute annotation;
+        private EnumLiteral literal;
+        
+        /**
+         * Creates a but-freeze provider for expressions of the form <i><code>name</code> | 
+         *     <code>name</code>.<code>annotation</code> == <code>literal</code></i>
+         *     
+         * @param name the name of the freeze variable
+         * @param annotation the annotation on <code>name</code> (providing annotation name and type)
+         * @param literal the literal to test for
+         */
+        public EnumAttributeFreezeProvider(String name, Attribute annotation, EnumLiteral literal) {
+            this(name, annotation, OclKeyWords.EQUALS, literal);
+        }
+
+        /**
+         * Creates a but-freeze provider for expressions of the form <i><code>name</code> | 
+         *     <code>name</code>.<code>annotation</code> <code>operation</code> <code>literal</code></i>
+         *     
+         * @param name the name of the freeze variable
+         * @param annotation the annotation on <code>name</code> (providing annotation name and type)
+         * @param operation the operation to be applied
+         * @param literal the literal to test for
+         */
+        public EnumAttributeFreezeProvider(String name, Attribute annotation, String operation, EnumLiteral literal) {
+            this.name = name;
+            this.operation = operation;
+            this.annotation = annotation;
+            this.literal = literal;
+        }
+
+        @Override
+        public String getFreezeVariableName() {
+            return name;
+        }
+
+        @Override
+        public ConstraintSyntaxTree createButExpression(DecisionVariableDeclaration freezeIter) 
+            throws CSTSemanticException, ValueDoesNotMatchTypeException {
+            FreezeVariableType iterType = (FreezeVariableType) freezeIter.getType();
+            Variable iterEx = new AttributeVariable(new Variable(freezeIter), 
+                iterType.getAttribute(annotation.getName()));
+            ConstraintSyntaxTree selector = new OCLFeatureCall(iterEx, operation, 
+                new ConstantValue(ValueFactory.createValue(annotation.getType(), literal)));
+            return selector;
+        }
+        
+    }
     
     /**
      * Defines a copy specification.
@@ -65,6 +164,7 @@ public class VariableValueCopier {
         
         private Compound type;
         private String sourceVariableName;
+        private IFreezeProvider freezeProvider;
         private String[] targetVariableNames;
         
         /**
@@ -78,11 +178,28 @@ public class VariableValueCopier {
          *   reference variables (may be <b>null</b> then the spec is ignored)
          */
         public CopySpec(Compound type, String sourceVariableName, String... targetVariableNames) {
+            this(type, sourceVariableName, null, targetVariableNames);
+        }
+
+        /**
+         * Creates a copy specification.
+         * 
+         * @param type the source type (may be <b>null</b> then the spec is ignored)
+         * @param sourceVariableName the source variable name, may be given in compound access style for 
+         *   nested variables (may be <b>null</b> then the spec is ignored)
+         * @param freezeProvider describes how new variables shall be frozen (may be <b>null</b> for no freezing)
+         * @param targetVariableNames the target variable names, may be given in compound access style for 
+         *   nested variables; the first one receives the copy, the other one references to the copy if they are
+         *   reference variables (may be <b>null</b> then the spec is ignored)
+         */
+        public CopySpec(Compound type, String sourceVariableName, IFreezeProvider freezeProvider, 
+            String... targetVariableNames) {
             this.type = type;
             this.sourceVariableName = sourceVariableName;
+            this.freezeProvider = freezeProvider;
             this.targetVariableNames = targetVariableNames;
         }
-        
+
         /**
          * Returns the source type.
          * 
@@ -99,6 +216,15 @@ public class VariableValueCopier {
          */
         public String getSourceVariableName() {
             return sourceVariableName;
+        }
+        
+        /**
+         * The freeze provider.
+         * 
+         * @return the freeze provider, may be <b>null</b> for no freezing
+         */
+        public IFreezeProvider getFreezeProvider() {
+            return freezeProvider;
         }
 
         /**
@@ -175,8 +301,10 @@ public class VariableValueCopier {
      * @param config the configuration to process
      * @throws ConfigurationException in case that the configuration is not possible 
      * @throws ValueDoesNotMatchTypeException in case that value types do not match
+     * @throws CSTSemanticException in case that expressions such as freeze-buts are not correctly constructed
      */
-    public void process(Configuration config) throws ConfigurationException, ValueDoesNotMatchTypeException {
+    public void process(Configuration config) throws ConfigurationException, ValueDoesNotMatchTypeException, 
+        CSTSemanticException {
         Iterator<IDecisionVariable> iter = config.iterator();
         List<IDecisionVariable> tmp = new ArrayList<IDecisionVariable>(config.getDecisionCount());
         while (iter.hasNext()) { // concurrent modification
@@ -200,9 +328,11 @@ public class VariableValueCopier {
      * @param fieldSpecs the field specifications for <code>base</code>
      * @throws ConfigurationException in case that the configuration is not possible 
      * @throws ValueDoesNotMatchTypeException in case that value types do not match
+     * @throws CSTSemanticException in case that expressions such as freeze-buts are not correctly constructed
      */
     private void process(IDecisionVariable variable, IDecisionVariable base, String prefix, 
-        Map<String, CopySpec> fieldSpecs) throws ConfigurationException, ValueDoesNotMatchTypeException {
+        Map<String, CopySpec> fieldSpecs) throws ConfigurationException, ValueDoesNotMatchTypeException, 
+        CSTSemanticException {
         for (int n = 0; n < variable.getNestedElementsCount(); n++) {
             IDecisionVariable nested = variable.getNestedElement(n);
             String name = nested.getDeclaration().getName();
@@ -215,7 +345,7 @@ public class VariableValueCopier {
                 if (names.length >= 1) {
                     IDecisionVariable target = findVariable(base, names[0]);
                     if (null != target) {
-                        Value value = copy(nested, target);
+                        Value value = copy(nested, target, spec.getFreezeProvider());
                         handleFurther(base, names, value);
                     }
                 }
@@ -223,7 +353,6 @@ public class VariableValueCopier {
             process(Configuration.dereference(nested), base, name, fieldSpecs);
         }
     }
-    
 
     /**
      * Assigns <code>value</code> to the further variables on <code>base</code> given in <code>names</code> at index
@@ -256,7 +385,6 @@ public class VariableValueCopier {
             }
         }
     }
-    
     
     /**
      * Finds a variable via its (qualified access) name.
@@ -294,12 +422,15 @@ public class VariableValueCopier {
      * 
      * @param source the source variable to copy from
      * @param target the target variable to copy to
+     * @param freezeProvider optional freeze provider to be applied to new variables (may be <b>null</b> for no 
+     *     freezing)
      * @return the first value set (may be <b>null</b>)
      * @throws ConfigurationException in case that the configuration is not possible 
      * @throws ValueDoesNotMatchTypeException in case that value types do not match
+     * @throws CSTSemanticException in case that expressions such as freeze-buts are not correctly constructed
      */
-    private Value copy(IDecisionVariable source, IDecisionVariable target) 
-        throws ConfigurationException, ValueDoesNotMatchTypeException {
+    private Value copy(IDecisionVariable source, IDecisionVariable target, IFreezeProvider freezeProvider) 
+        throws ConfigurationException, ValueDoesNotMatchTypeException, CSTSemanticException {
         Value result = null;
         source = Configuration.dereference(source);
         target = Configuration.dereference(target);
@@ -310,20 +441,21 @@ public class VariableValueCopier {
                 ContainerVariable cVar = ensureContainerVariable((ContainerVariable) target);
                 for (int n = 0; n < source.getNestedElementsCount(); n++) {
                     IDecisionVariable nestedVar = cVar.addNestedElement();
-                    result = keepFirst(result, copySingleVariable(source.getNestedElement(n), nestedVar));
+                    result = keepFirst(result, 
+                        copySingleVariable(source.getNestedElement(n), nestedVar, freezeProvider));
                 }
             } else {
                 ContainerVariable sVar = (ContainerVariable) source;
                 if (sVar.getNestedElementsCount() > 0) {
-                    result = keepFirst(result, copySingleVariable(sVar.getNestedElement(0), target));
+                    result = keepFirst(result, copySingleVariable(sVar.getNestedElement(0), target, freezeProvider));
                 }
             }
         } else {
             if (Container.TYPE.isAssignableFrom(targetType)) {
                 ContainerVariable cVar = ensureContainerVariable((ContainerVariable) target);
-                result = keepFirst(result, copySingleVariable(source, cVar.addNestedElement()));
+                result = keepFirst(result, copySingleVariable(source, cVar.addNestedElement(), freezeProvider));
             } else {
-                result = keepFirst(result, copySingleVariable(source, target));
+                result = keepFirst(result, copySingleVariable(source, target, freezeProvider));
             }
         }
         return result;
@@ -362,12 +494,15 @@ public class VariableValueCopier {
      * 
      * @param source the source variable
      * @param target the target variable (may be a nested variable, e.g., of a collection)
+     * @param freezeProvider optional freeze provider to be applied to new variables (may be <b>null</b> for no 
+     *     freezing)
      * @return the actual value set
      * @throws ConfigurationException in case that the configuration is not possible 
      * @throws ValueDoesNotMatchTypeException in case that value types do not match
+     * @throws CSTSemanticException in case that expressions such as freeze-buts are not correctly constructed
      */
-    private Value copySingleVariable(IDecisionVariable source, IDecisionVariable target) 
-        throws ConfigurationException, ValueDoesNotMatchTypeException {
+    private Value copySingleVariable(IDecisionVariable source, IDecisionVariable target, IFreezeProvider freezeProvider)
+        throws ConfigurationException, ValueDoesNotMatchTypeException, CSTSemanticException {
         Value result;
         source = Configuration.dereference(source);
         Value value = source.getValue().clone();
@@ -375,11 +510,30 @@ public class VariableValueCopier {
         if (Reference.TYPE.isAssignableFrom(targetType)) {
             Configuration cfg = source.getConfiguration();
             Project prj = cfg.getProject();
+            IModelElement topParent = source.getDeclaration().getTopLevelParent(); // create as close as possible to src
+            if (topParent instanceof Project) {
+                prj = (Project) topParent;
+            }
             DecisionVariableDeclaration decl = new DecisionVariableDeclaration(namePrefix + "_" 
                 + source.getDeclaration().getName() + "_" + count++, source.getDeclaration().getType(), prj);
             prj.add(decl);
             IDecisionVariable var = cfg.createDecision(decl);
             var.setValue(value, newState);
+            if (null != freezeProvider) {
+                IFreezable[] freezables = new IFreezable[1];
+                freezables[0] = decl;
+                FreezeVariableType iterType = new FreezeVariableType(freezables, prj);
+                DecisionVariableDeclaration freezeIter 
+                    = new DecisionVariableDeclaration(freezeProvider.getFreezeVariableName(), iterType, prj);
+                ConstraintSyntaxTree selector = freezeProvider.createButExpression(freezeIter);
+                selector.inferDatatype();
+                FreezeBlock freeze = new FreezeBlock(freezables, freezeIter, selector, prj);
+                prj.add(freeze);
+                
+                FreezeEvaluator evaluator = new FreezeEvaluator(cfg);
+                evaluator.setFreeze(freeze);
+                var.freeze(evaluator);
+            }
             result = ValueFactory.createValue(targetType, decl);
             target.setValue(result, newState);
         } else {
