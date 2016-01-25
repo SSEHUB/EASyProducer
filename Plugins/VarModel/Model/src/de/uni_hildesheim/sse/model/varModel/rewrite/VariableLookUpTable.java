@@ -45,10 +45,38 @@ class VariableLookUpTable {
      * Contains toplevel and nested variables as well as annotations.
      */
     private Map<IDatatype, Set<IDecisionVariable>> instancesPerType;
+    
+    /**
+     * List of instances for a given declaration.
+     * Is used to speed up {@link Configuration} based
+     * {@link de.uni_hildesheim.sse.model.varModel.rewrite.modifier.IModelElementFilter}.
+     * Contains toplevel and nested variables as well as annotations.
+     */
     private Map<AbstractVariable, Set<IDecisionVariable>> instancesPerDeclaration;
     
-    private Map<AbstractVariable, Set<ContainableModelElement>> constraintOccurrences;
+    /**
+     * List model elements, reusing a constraint variable (declaration).
+     * A tuple in form of (Constraint Variable declaration,  Set of reusing elements).
+     * For instance:
+     * <code>
+     * Constraint cVar = ...;
+     * def Boolean func(Integer intVar) = cVar && ...;
+     * </code>
+     */
+    private Map<AbstractVariable, Set<ContainableModelElement>> constraintReusers;
     
+    /**
+     * List model elements, calling a constraint variable (declaration).
+     * A tuple in form of (Calling element  Set of called constraint variables).
+     * Inverse to {@link #constraintReusers}
+     * For instance:
+     * <code>
+     * Constraint cVar = func(aVariable);
+     * def Boolean func(Integer intVar) = intVar > 10;
+     * </code>
+     * @see #constraintReusers
+     */
+    private Map<ContainableModelElement, Set<AbstractVariable>> calledByConstraintVars;
     
     private Set<AbstractVariable> definedDeclarations;
     
@@ -60,7 +88,8 @@ class VariableLookUpTable {
         instancesPerType = new HashMap<IDatatype, Set<IDecisionVariable>>();
         instancesPerDeclaration = new HashMap<AbstractVariable, Set<IDecisionVariable>>();
         definedDeclarations = new HashSet<AbstractVariable>();
-        constraintOccurrences = new HashMap<AbstractVariable, Set<ContainableModelElement>>();
+        constraintReusers = new HashMap<AbstractVariable, Set<ContainableModelElement>>();
+        calledByConstraintVars = new HashMap<ContainableModelElement, Set<AbstractVariable>>();
     }
     
     /**
@@ -193,10 +222,10 @@ class VariableLookUpTable {
      * {@link de.uni_hildesheim.sse.model.varModel.OperationDefinition}.
      */
     void putConstraintOccurrence(AbstractVariable constraintDecl, ContainableModelElement referringElement) {
-        Set<ContainableModelElement> occurrences = constraintOccurrences.get(constraintDecl);
+        Set<ContainableModelElement> occurrences = constraintReusers.get(constraintDecl);
         if (null == occurrences) {
             occurrences = new HashSet<ContainableModelElement>();
-            constraintOccurrences.put(constraintDecl, occurrences);
+            constraintReusers.put(constraintDecl, occurrences);
         }
         occurrences.add(referringElement);
     }

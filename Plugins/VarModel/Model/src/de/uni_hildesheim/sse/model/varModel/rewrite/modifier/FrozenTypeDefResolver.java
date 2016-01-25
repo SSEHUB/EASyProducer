@@ -53,7 +53,7 @@ public class FrozenTypeDefResolver extends AbstractFrozenChecker<DerivedDatatype
         boolean allFrozen = true;
         
         // 1st: Check whether all instances are frozen
-        Set<IDecisionVariable> instances = context.getInstancesForType(getConfioguration(), dType);
+        Set<IDecisionVariable> instances = context.getInstancesForType(getConfiguration(), dType);
         if (null != instances && !instances.isEmpty()) {
             Iterator<IDecisionVariable> varItr = instances.iterator();
             while (varItr.hasNext() && allFrozen) {

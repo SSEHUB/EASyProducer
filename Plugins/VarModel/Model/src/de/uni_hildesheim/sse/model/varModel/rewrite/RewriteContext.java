@@ -74,6 +74,14 @@ public class RewriteContext {
         elementsWereRemoved = false;
         variablesTable = new VariableLookUpTable();
     }
+    
+    /**
+     * Getter for the {@link VariableLookUpTable}, for initialization inside the visitor.
+     * @return The (empty) {@link VariableLookUpTable}.
+     */
+    VariableLookUpTable getLookUpTable() {
+        return variablesTable;
+    }
 
     /**
      * Stores a translated equivalent of the given Project.
@@ -239,8 +247,6 @@ public class RewriteContext {
      * @return The instances for the given type or <tt>null</tt> if no instances exist.
      */
     public Set<IDecisionVariable> getInstancesForType(Configuration config, IDatatype type) {
-        // Init will only be called the first time
-        variablesTable.init(config);
         return variablesTable.getInstancesForType(type);
     }
     
@@ -253,8 +259,6 @@ public class RewriteContext {
      * @return The instances for the given declaration or <tt>null</tt> if no instances exist.
      */
     public Set<IDecisionVariable> getInstancesForDeclaration(Configuration config, AbstractVariable declaration) {
-        // Init will only be called the first time
-        variablesTable.init(config);
         return variablesTable.getInstancesForDeclaration(declaration);
     }
     

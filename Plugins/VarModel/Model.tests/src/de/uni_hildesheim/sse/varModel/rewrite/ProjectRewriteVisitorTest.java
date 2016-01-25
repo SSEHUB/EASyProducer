@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2015 University of Hildesheim, Software Systems Engineering
+ * Copyright 2009-2016 University of Hildesheim, Software Systems Engineering
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,6 +24,7 @@ import org.junit.Test;
 import de.uni_hildesheim.sse.model.confModel.Configuration;
 import de.uni_hildesheim.sse.model.cst.AttributeVariable;
 import de.uni_hildesheim.sse.model.cst.CSTSemanticException;
+import de.uni_hildesheim.sse.model.cst.CompoundAccess;
 import de.uni_hildesheim.sse.model.cst.ConstantValue;
 import de.uni_hildesheim.sse.model.cst.ConstraintSyntaxTree;
 import de.uni_hildesheim.sse.model.cst.ContainerOperationCall;
@@ -37,11 +38,14 @@ import de.uni_hildesheim.sse.model.varModel.DecisionVariableDeclaration;
 import de.uni_hildesheim.sse.model.varModel.FreezeBlock;
 import de.uni_hildesheim.sse.model.varModel.IFreezable;
 import de.uni_hildesheim.sse.model.varModel.IvmlKeyWords;
+import de.uni_hildesheim.sse.model.varModel.OperationDefinition;
 import de.uni_hildesheim.sse.model.varModel.Project;
 import de.uni_hildesheim.sse.model.varModel.ProjectImport;
 import de.uni_hildesheim.sse.model.varModel.datatypes.AnyType;
+import de.uni_hildesheim.sse.model.varModel.datatypes.BooleanType;
 import de.uni_hildesheim.sse.model.varModel.datatypes.Compound;
 import de.uni_hildesheim.sse.model.varModel.datatypes.ConstraintType;
+import de.uni_hildesheim.sse.model.varModel.datatypes.CustomOperation;
 import de.uni_hildesheim.sse.model.varModel.datatypes.DerivedDatatype;
 import de.uni_hildesheim.sse.model.varModel.datatypes.EnumLiteral;
 import de.uni_hildesheim.sse.model.varModel.datatypes.IDatatype;
@@ -76,6 +80,28 @@ import de.uni_hildesheim.sse.varModel.testSupport.ProjectTestUtilities;
  *
  */
 public class ProjectRewriteVisitorTest {
+    
+    private static final ConstantValue ZERO;
+    private static final ConstantValue THOUSAND;
+    
+    static {
+        ConstantValue zero = null;
+        try {
+            zero = new ConstantValue(ValueFactory.createValue(IntegerType.TYPE, 0));
+        } catch (ValueDoesNotMatchTypeException e) {
+            Assert.fail("Could not initialize \"Zero\" as a " + ConstantValue.class.getSimpleName());
+        }
+        ZERO = zero;
+
+        ConstantValue thousand = null;
+        try {
+            thousand = new ConstantValue(ValueFactory.createValue(IntegerType.TYPE, 1000));
+        } catch (ValueDoesNotMatchTypeException e) {
+            Assert.fail("Could not initialize \"Thousand\" as a " + ConstantValue.class.getSimpleName());
+        }
+        
+        THOUSAND = thousand;
+    }
     
     /**
      * Tests whether filtering of declarations based on their names work.
@@ -387,11 +413,10 @@ public class ProjectRewriteVisitorTest {
     public void testResolveFrozenTypeDefs() throws ValueDoesNotMatchTypeException, CSTSemanticException {
         // Create original project with a typedef and a frozen declaration.
         Project p = new Project("testProjectTypeDefs");
-        ConstantValue zero = new ConstantValue(ValueFactory.createValue(IntegerType.TYPE, 0));
         // Create first typeDef with declaration and freeze it
         DerivedDatatype dType1 = new DerivedDatatype("posInteger1", IntegerType.TYPE, p);
         Variable constraintVar1 = new Variable(dType1.getTypeDeclaration());
-        OCLFeatureCall comparison1 = new OCLFeatureCall(constraintVar1, OclKeyWords.GREATER, zero);
+        OCLFeatureCall comparison1 = new OCLFeatureCall(constraintVar1, OclKeyWords.GREATER, ZERO);
         Constraint dTypeConstraint1 = new Constraint(dType1);
         dTypeConstraint1.setConsSyntax(comparison1);
         dType1.setConstraints(new Constraint[] {dTypeConstraint1});
@@ -402,7 +427,7 @@ public class ProjectRewriteVisitorTest {
         // Create second typeDef with declaration and do not freeze it
         DerivedDatatype dType2 = new DerivedDatatype("posInteger2", IntegerType.TYPE, p);
         Variable constraintVar2 = new Variable(dType2.getTypeDeclaration());
-        OCLFeatureCall comparison2 = new OCLFeatureCall(constraintVar2, OclKeyWords.GREATER, zero);
+        OCLFeatureCall comparison2 = new OCLFeatureCall(constraintVar2, OclKeyWords.GREATER, ZERO);
         Constraint dTypeConstraint2 = new Constraint(dType2);
         dTypeConstraint2.setConsSyntax(comparison2);
         dType2.setConstraints(new Constraint[] {dTypeConstraint2});
@@ -441,12 +466,10 @@ public class ProjectRewriteVisitorTest {
     public void testResolveFrozenTypeDefs2() throws ValueDoesNotMatchTypeException, CSTSemanticException {
         // Create original project with a typedef and a frozen declaration.
         Project p = new Project("testResolveFrozenTypeDefs2");
-        ConstantValue zero = new ConstantValue(ValueFactory.createValue(IntegerType.TYPE, 0));
-        ConstantValue thousand = new ConstantValue(ValueFactory.createValue(IntegerType.TYPE, 1000));
         // Create first typeDef with declaration and freeze it
         DerivedDatatype dType1 = new DerivedDatatype("posInteger1", IntegerType.TYPE, p);
         Variable constraintVar1 = new Variable(dType1.getTypeDeclaration());
-        OCLFeatureCall comparison1 = new OCLFeatureCall(constraintVar1, OclKeyWords.GREATER, zero);
+        OCLFeatureCall comparison1 = new OCLFeatureCall(constraintVar1, OclKeyWords.GREATER, ZERO);
         Constraint dTypeConstraint1 = new Constraint(dType1);
         dTypeConstraint1.setConsSyntax(comparison1);
         dType1.setConstraints(new Constraint[] {dTypeConstraint1});
@@ -457,7 +480,7 @@ public class ProjectRewriteVisitorTest {
         // Create second typeDef with declaration and do not freeze it
         DerivedDatatype dType2 = new DerivedDatatype("posInteger2", dType1, p);
         Variable constraintVar2 = new Variable(dType2.getTypeDeclaration());
-        OCLFeatureCall comparison2 = new OCLFeatureCall(constraintVar2, OclKeyWords.LESS, thousand);
+        OCLFeatureCall comparison2 = new OCLFeatureCall(constraintVar2, OclKeyWords.LESS, THOUSAND);
         Constraint dTypeConstraint2 = new Constraint(dType2);
         dTypeConstraint2.setConsSyntax(comparison2);
         dType2.setConstraints(new Constraint[] {dTypeConstraint2});
@@ -599,13 +622,12 @@ public class ProjectRewriteVisitorTest {
         p.add(intDecl);
         DecisionVariableDeclaration constVar = new DecisionVariableDeclaration("constVar", ConstraintType.TYPE, p);
         p.add(constVar);
-        ConstantValue zero = new ConstantValue(ValueFactory.createValue(IntegerType.TYPE, 0));
         Variable constraintVar = new Variable(intDecl);
-        OCLFeatureCall comparison = new OCLFeatureCall(constraintVar, OclKeyWords.GREATER, zero);
+        OCLFeatureCall comparison = new OCLFeatureCall(constraintVar, OclKeyWords.GREATER, ZERO);
         constVar.setValue(comparison);
         DecisionVariableDeclaration constVar2 = new DecisionVariableDeclaration("constVar2", ConstraintType.TYPE, p);
         p.add(constVar2);
-        OCLFeatureCall comparison2 = new OCLFeatureCall(constraintVar, OclKeyWords.GREATER, zero);
+        OCLFeatureCall comparison2 = new OCLFeatureCall(constraintVar, OclKeyWords.GREATER, ZERO);
         constVar2.setValue(comparison2);
         // Freeze all, but one constraint
         p.add(new FreezeBlock(new IFreezable[] {intDecl, constVar}, null, null, p));
@@ -745,11 +767,10 @@ public class ProjectRewriteVisitorTest {
         setDecl.setValue(1, 2, 3);
         p.add(setDecl);
         Constraint constraint = new Constraint(p);
-        ConstantValue zero = new ConstantValue(ValueFactory.createValue(IntegerType.TYPE, 0));
         DecisionVariableDeclaration iVarDecl = new DecisionVariableDeclaration("i", IntegerType.TYPE, p);
         Variable iVar = new Variable(iVarDecl);
         Variable setVar = new Variable(setDecl);
-        OCLFeatureCall greater = new OCLFeatureCall(iVar, OclKeyWords.GREATER, zero);
+        OCLFeatureCall greater = new OCLFeatureCall(iVar, OclKeyWords.GREATER, ZERO);
         ContainerOperationCall forAllInSet = new ContainerOperationCall(setVar, OclKeyWords.FOR_ALL, greater, iVarDecl);
         constraint.setConsSyntax(forAllInSet);
         p.add(constraint);
@@ -761,7 +782,7 @@ public class ProjectRewriteVisitorTest {
         p.add(comment);
         
         // Check whether project was built up correctly
-        ProjectTestUtilities.validateProject(p, true);
+        ProjectTestUtilities.validateProject(p);
         Configuration config = new Configuration(p);
         
         // Filter nothing (test whether iterator variable is copied correctly)
@@ -772,13 +793,168 @@ public class ProjectRewriteVisitorTest {
         p.accept(rewriter);
         Project copy = rewriter.getCopyiedProject();
         
-        ProjectTestUtilities.validateProject(copy, true);
+        ProjectTestUtilities.validateProject(copy);
         Assert.assertNotSame(p, copy);
         StringWriter sWriter = new StringWriter();
         IVMLWriter iWriter = new IVMLWriter(sWriter);
         copy.accept(iWriter);
         iWriter.flush();
         Assert.assertFalse(sWriter.toString().contains(IvmlKeyWords.NAMESPACE_SEPARATOR));
+    }
+    
+    /**
+     * Simple test whether Operation definitions are kept correctly or whether name space spearators are introduced.
+     * The later one occurs if the constraint is not resolved correctly.
+     * @throws ValueDoesNotMatchTypeException Must not occur, otherwise the {@link ValueFactory} or
+     * {@link de.uni_hildesheim.sse.model.varModel.AbstractVariable#setValue(String)} are broken.
+     * @throws CSTSemanticException Must not occur, otherwise
+     * @throws IOException Must not occur, otherwise {@link IVMLWriter#flush()} is not working.
+     */
+    @Test
+    public void testReusedOperationsInConstraintVar() throws ValueDoesNotMatchTypeException, CSTSemanticException,
+        IOException {
+        
+        Project p = new Project("testReusedOperationsInConstraintVar");
+        DecisionVariableDeclaration declA = new DecisionVariableDeclaration("varA", IntegerType.TYPE, p);
+        declA.setValue(10);
+        p.add(declA);
+        DecisionVariableDeclaration constDecl = new DecisionVariableDeclaration("constVar", ConstraintType.TYPE, p);
+        p.add(constDecl);
+        // A user defined operation, re-using the constraint variable
+        OperationDefinition customOp = new OperationDefinition(p);
+        DecisionVariableDeclaration paramDecl = new DecisionVariableDeclaration("dv", IntegerType.TYPE, customOp);
+        OCLFeatureCall funcCst = new OCLFeatureCall(new Variable(paramDecl), OclKeyWords.LESS, THOUSAND);
+        funcCst.inferDatatype();
+        CustomOperation functionDef = new CustomOperation(BooleanType.TYPE, "operationCheck", p.getType(), funcCst,
+            new DecisionVariableDeclaration[] {paramDecl});
+        customOp.setOperation(functionDef);
+        p.add(customOp);
+        // Second operation, re-using the first one
+        OperationDefinition customOp2 = new OperationDefinition(p);
+        DecisionVariableDeclaration paramDecl2 = new DecisionVariableDeclaration("dv", IntegerType.TYPE, customOp2);
+        OCLFeatureCall compare = new OCLFeatureCall(new Variable(paramDecl2), OclKeyWords.GREATER, ZERO);
+        OCLFeatureCall callOp1 = new OCLFeatureCall(new Variable(paramDecl2), customOp.getName(), p);
+        OCLFeatureCall funcCst2 = new OCLFeatureCall(compare, OclKeyWords.AND, callOp1);
+        CustomOperation functionDef2 = new CustomOperation(BooleanType.TYPE, "operationCheck2", p.getType(), funcCst2,
+            new DecisionVariableDeclaration[] {paramDecl2});
+        funcCst2.inferDatatype();
+        customOp2.setOperation(functionDef2);
+        p.add(customOp2);
+        
+        // Default value for constraint var + freeze
+        OCLFeatureCall comparison = new OCLFeatureCall(new Variable(declA), customOp.getName(), p);
+        comparison.inferDatatype();
+        constDecl.setValue(comparison);
+        p.add(new FreezeBlock(new IFreezable[] {declA, constDecl}, null, null, p));
+        
+        ProjectTestUtilities.validateProject(p);
+        Configuration config = new Configuration(p);
+        
+        ProjectRewriteVisitor rewriter = new ProjectRewriteVisitor(p, FilterType.ALL);
+        rewriter.addModelCopyModifier(new FrozenConstraintVarFilter(config));
+        p.accept(rewriter);
+        Project copy = rewriter.getCopyiedProject();
+        ProjectTestUtilities.validateProject(copy);
+        StringWriter sWriter = new StringWriter();
+        IVMLWriter iWriter = new IVMLWriter(sWriter);
+        copy.accept(iWriter);
+        iWriter.flush();
+        Assert.assertFalse(sWriter.toString().contains(IvmlKeyWords.NAMESPACE_SEPARATOR));
+    }
+    
+    /**
+     * Tests whether a more complex operation is resolved correctly.
+     * The operation takes a typedef of a set of a compound as input.
+     * More precisely the following project will be tested:
+     * <pre><code>
+     * project testOperationsOfTypeDefIsResolvedCorrectly {
+     *
+     *   compound Dimension {
+     *     Integer width;
+     *     Integer height;
+     *     Constraint hCheck = height > 0;
+     *   }
+     *
+     *   typedef Dimensions setOf(Dimension);
+     *   Dimensions dimensions = {{width = 1, height = 2}};
+     *   freeze {
+     *     dimensions;
+     *   }
+     *   def Boolean func(Dimensions dims) = size(dims->collect(d|d.width > 0)) > 0;
+     * }
+     * </code></pre>
+     * There should no name space saparaters be introduced.
+     * @throws ValueDoesNotMatchTypeException Must not occur, otherwise the {@link ValueFactory} or
+     * {@link de.uni_hildesheim.sse.model.varModel.AbstractVariable#setValue(String)} are broken.
+     * @throws CSTSemanticException Must not occur, otherwise
+     * @throws IOException Must not occur, otherwise {@link IVMLWriter#flush()} is not working.
+     */
+    @Test
+    public void testOperationsOfTypeDefIsResolvedCorrectly() throws ValueDoesNotMatchTypeException,
+        CSTSemanticException, IOException {
+        
+        Project p = new Project("testOperationsOfTypeDefIsResolvedCorrectly");
+        // Compound as basis type
+        Compound cType = new Compound("Dimension", p);
+        DecisionVariableDeclaration widthDecl = new DecisionVariableDeclaration("width", IntegerType.TYPE, cType);
+        DecisionVariableDeclaration heightDecl = new DecisionVariableDeclaration("height", IntegerType.TYPE, cType);
+        DecisionVariableDeclaration hCheckDecl = new DecisionVariableDeclaration("hCheck", ConstraintType.TYPE, cType);
+        cType.add(widthDecl);
+        cType.add(heightDecl);
+        cType.add(hCheckDecl);
+        OCLFeatureCall hComparison = new OCLFeatureCall(new Variable(heightDecl), OclKeyWords.GREATER, ZERO);
+        hCheckDecl.setValue(hComparison);
+        p.add(cType);
+        // Set of Compound as typedef
+        DerivedDatatype dType = new DerivedDatatype("Dimensions", new Set("", cType, p), p);
+        p.add(dType);
+        // One variable with one value
+        DecisionVariableDeclaration dimsDecl = new DecisionVariableDeclaration("dimensions", dType, p);
+        Object cmpValue = new Object[] {"width", 1, "height", 2};
+        dimsDecl.setValue(cmpValue);
+        p.add(dimsDecl);
+        // Default value for constraint dimensions + freeze
+        p.add(new FreezeBlock(new IFreezable[] {dimsDecl}, null, null, p));
+        // Custom Operation (at last position, makes test easier)
+        OperationDefinition customOp = new OperationDefinition(p);
+        DecisionVariableDeclaration paramDecl = new DecisionVariableDeclaration("dims", dType, customOp);
+        DecisionVariableDeclaration itrDecl = new DecisionVariableDeclaration("d", cType, p);
+        CompoundAccess access = new CompoundAccess(new Variable(itrDecl), widthDecl.getName());
+        OCLFeatureCall comparison = new OCLFeatureCall(access, OclKeyWords.GREATER, ZERO);
+        ContainerOperationCall containerCall = new ContainerOperationCall(new Variable(paramDecl), OclKeyWords.COLLECT,
+                comparison, itrDecl);
+        OCLFeatureCall sizeCall = new OCLFeatureCall(containerCall, OclKeyWords.SIZE, p);
+        OCLFeatureCall sizeComparison = new OCLFeatureCall(sizeCall, OclKeyWords.GREATER, ZERO);
+        sizeComparison.inferDatatype();
+        CustomOperation functionDef = new CustomOperation(BooleanType.TYPE, "func", p.getType(), sizeComparison,
+                new DecisionVariableDeclaration[] {paramDecl});
+        customOp.setOperation(functionDef);
+        p.add(customOp);
+        
+        ProjectTestUtilities.validateProject(p);
+        Configuration config = new Configuration(p);
+        StringWriter sWriter = new StringWriter();
+        IVMLWriter iWriter = new IVMLWriter(sWriter);
+        p.accept(iWriter);
+        iWriter.flush();
+        String projectAsStringExpected = sWriter.toString().replace("\r", "");
+        String[] lines = projectAsStringExpected.split("\n");
+        String expected = lines[lines.length - 2];
+        
+        ProjectRewriteVisitor rewriter = new ProjectRewriteVisitor(p, FilterType.ALL);
+        rewriter.addModelCopyModifier(new FrozenCompoundConstraintsOmitter(config));
+        p.accept(rewriter);
+        Project copy = rewriter.getCopyiedProject();
+        ProjectTestUtilities.validateProject(copy, true);
+        copy.accept(iWriter);
+        iWriter.flush();
+        String projectAsStringActual = sWriter.toString().replace("\r", "");
+        lines = projectAsStringActual.split("\n");
+        String actual = lines[lines.length - 2];
+        
+        Assert.assertFalse(projectAsStringExpected.contains(IvmlKeyWords.NAMESPACE_SEPARATOR));
+        Assert.assertEquals(expected, actual);
+        Assert.assertFalse(projectAsStringActual.contains(IvmlKeyWords.NAMESPACE_SEPARATOR));
     }
 
     /**

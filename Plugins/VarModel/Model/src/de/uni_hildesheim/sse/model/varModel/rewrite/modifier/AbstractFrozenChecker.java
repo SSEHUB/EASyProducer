@@ -60,7 +60,7 @@ public abstract class AbstractFrozenChecker<M extends ContainableModelElement> i
      * Getter for the configuration (passed to the constructor).
      * @return The currently used configuration.
      */
-    protected Configuration getConfioguration() {
+    public final Configuration getConfiguration() {
         return config;
     }
 

@@ -23,6 +23,7 @@ import de.uni_hildesheim.sse.model.varModel.AttributeAssignment;
 import de.uni_hildesheim.sse.model.varModel.Comment;
 import de.uni_hildesheim.sse.model.varModel.CompoundAccessStatement;
 import de.uni_hildesheim.sse.model.varModel.Constraint;
+import de.uni_hildesheim.sse.model.varModel.ContainableModelElement;
 import de.uni_hildesheim.sse.model.varModel.DecisionVariableDeclaration;
 import de.uni_hildesheim.sse.model.varModel.FreezeBlock;
 import de.uni_hildesheim.sse.model.varModel.OperationDefinition;
@@ -63,8 +64,7 @@ class InitialStructureCollector extends AbstractProjectVisitor {
 
     @Override
     public void visitDecisionVariableDeclaration(DecisionVariableDeclaration decl) {
-        // TODO Auto-generated method stub
-        
+        collectNestedConstraintVariables(decl.getDefaultValue(), decl);
     }
 
     @Override
@@ -75,8 +75,7 @@ class InitialStructureCollector extends AbstractProjectVisitor {
 
     @Override
     public void visitConstraint(Constraint constraint) {
-        // TODO Auto-generated method stub
-        
+        collectNestedConstraintVariables(constraint.getConsSyntax(), constraint);
     }
 
     @Override
@@ -89,18 +88,27 @@ class InitialStructureCollector extends AbstractProjectVisitor {
     public void visitOperationDefinition(OperationDefinition opdef) {
         if (null != opdef.getOperation()) {
             ConstraintSyntaxTree cst = opdef.getOperation().getFunction();
-            if (null != cst) {
-                DeclrationInConstraintFinder finder = new DeclrationInConstraintFinder(cst);
-                java.util.Set<AbstractVariable> usedDeclarations = finder.getDeclarations();
-                for (AbstractVariable usedDecl : usedDeclarations) {
-                    if (usedDecl.getType() == ConstraintType.TYPE) {
-                        table.putConstraintOccurrence(usedDecl, opdef);
-                    }
+            collectNestedConstraintVariables(cst, opdef);
+        }
+    }
+
+    /**
+     * Finds all nested constraint variables in the given {@link ConstraintSyntaxTree} and adds them to the
+     * {@link VariableLookUpTable}.
+     * @param cst The {@link ConstraintSyntaxTree} to analyze, should be part of <tt>element</tt>. Nothing will
+     * be done if it is <tt>null</tt>.
+     * @param element The element to add (should be the parent of <tt>cst</tt>).
+     */
+    private void collectNestedConstraintVariables(ConstraintSyntaxTree cst, ContainableModelElement element) {
+        if (null != cst) {
+            DeclrationInConstraintFinder finder = new DeclrationInConstraintFinder(cst);
+            java.util.Set<AbstractVariable> usedDeclarations = finder.getDeclarations();
+            for (AbstractVariable usedDecl : usedDeclarations) {
+                if (usedDecl.getType() == ConstraintType.TYPE) {
+                    table.putConstraintOccurrence(usedDecl, element);
                 }
             }
         }
-        
-        
     }
 
     @Override

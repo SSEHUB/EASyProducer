@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2015 University of Hildesheim, Software Systems Engineering
+ * Copyright 2009-2016 University of Hildesheim, Software Systems Engineering
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -48,6 +48,7 @@ import de.uni_hildesheim.sse.model.varModel.Project;
 import de.uni_hildesheim.sse.model.varModel.ProjectImport;
 import de.uni_hildesheim.sse.model.varModel.ProjectInterface;
 import de.uni_hildesheim.sse.model.varModel.datatypes.Compound;
+import de.uni_hildesheim.sse.model.varModel.datatypes.CustomOperation;
 import de.uni_hildesheim.sse.model.varModel.datatypes.DerivedDatatype;
 import de.uni_hildesheim.sse.model.varModel.datatypes.Enum;
 import de.uni_hildesheim.sse.model.varModel.datatypes.EnumLiteral;
@@ -58,6 +59,7 @@ import de.uni_hildesheim.sse.model.varModel.datatypes.Sequence;
 import de.uni_hildesheim.sse.model.varModel.datatypes.Set;
 import de.uni_hildesheim.sse.model.varModel.filter.DeclrationInConstraintFinder;
 import de.uni_hildesheim.sse.model.varModel.filter.FilterType;
+import de.uni_hildesheim.sse.model.varModel.rewrite.modifier.AbstractFrozenChecker;
 import de.uni_hildesheim.sse.model.varModel.rewrite.modifier.IModelElementFilter;
 import de.uni_hildesheim.sse.model.varModel.rewrite.modifier.IProjectImportFilter;
 import de.uni_hildesheim.sse.utils.logger.EASyLoggerFactory;
@@ -113,6 +115,11 @@ public class ProjectRewriteVisitor extends AbstractProjectVisitor {
         importModifiers = new ArrayList<IProjectImportFilter>();
         parentProjects = new ArrayDeque<Project>();
         context = new RewriteContext();
+        
+        // Create initial structure table, for faster lookup during rewriting
+        InitialStructureCollector initializer = new InitialStructureCollector(originProject, filterType,
+            context.getLookUpTable());
+        originProject.accept(initializer);
     }
     
     /**
@@ -144,6 +151,10 @@ public class ProjectRewriteVisitor extends AbstractProjectVisitor {
             modifiers.put(modifier.getModifyingModelClass(), modifierList);
         }
         modifierList.add(modifier);
+        
+        if (modifier instanceof AbstractFrozenChecker) {
+            context.getLookUpTable().init(((AbstractFrozenChecker<?>) modifier).getConfiguration());
+        }
     }
     
     /**
@@ -350,7 +361,34 @@ public class ProjectRewriteVisitor extends AbstractProjectVisitor {
 
     @Override
     public void visitOperationDefinition(OperationDefinition opdef) {
-        addCopiedElement(filter(opdef));
+        OperationDefinition copyDef = (OperationDefinition) filter(opdef);
+        if (null != copyDef && null != copyDef.getOperation()) {
+            CustomOperation customOp = copyDef.getOperation();
+            ConstraintSyntaxTree cst = customOp.getFunction();
+            
+            // Adapt parameter to new parent
+            DeclrationInConstraintFinder finder = new DeclrationInConstraintFinder(cst);
+            java.util.Set<AbstractVariable> delcarations = finder.getDeclarations();
+            for (AbstractVariable declaration : delcarations) {
+                if (!context.declarationKnown(declaration)) {
+                    IModelElement oldParent = declaration.getParent();
+                    if (oldParent instanceof OperationDefinition && oldParent != copyDef
+                        && copyDef.getName().equals(oldParent.getName())) {
+                        declaration.setParent(copyDef);
+                    }
+                }
+            }
+            
+            // Adapt iterator variables
+            adaptParentOfIteratorVariables(customOp.getFunction());
+//            try {
+//                cst.inferDatatype();
+//            } catch (CSTSemanticException e) {
+//                // TODO Auto-generated catch block
+//                e.printStackTrace();
+//            }
+        }
+        addCopiedElement(copyDef);
     }
 
     @Override

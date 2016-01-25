@@ -54,7 +54,7 @@ public class FrozenConstraintVarFilter extends AbstractFrozenChecker<DecisionVar
     public ContainableModelElement handleModelElement(ContainableModelElement element, RewriteContext context) {
         DecisionVariableDeclaration declaration = (DecisionVariableDeclaration) element;
         if (declaration.getType() == ConstraintType.TYPE) {
-            Set<IDecisionVariable> instances = context.getInstancesForDeclaration(getConfioguration(), declaration);
+            Set<IDecisionVariable> instances = context.getInstancesForDeclaration(getConfiguration(), declaration);
             boolean allFrozen = true;
             if (instances != null && !instances.isEmpty()) {
                 Iterator<IDecisionVariable> varItr = instances.iterator();
