@@ -5,7 +5,6 @@ import java.io.StringWriter;
 
 import org.junit.Assert;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import de.uni_hildesheim.sse.model.confModel.AssignmentState;
@@ -25,6 +24,7 @@ import de.uni_hildesheim.sse.model.varModel.AttributeAssignment;
 import de.uni_hildesheim.sse.model.varModel.AttributeAssignment.Assignment;
 import de.uni_hildesheim.sse.model.varModel.Constraint;
 import de.uni_hildesheim.sse.model.varModel.DecisionVariableDeclaration;
+import de.uni_hildesheim.sse.model.varModel.ExplicitTypeVariableDeclaration;
 import de.uni_hildesheim.sse.model.varModel.ExpressionVersionRestriction;
 import de.uni_hildesheim.sse.model.varModel.FreezeBlock;
 import de.uni_hildesheim.sse.model.varModel.IvmlException;
@@ -948,7 +948,6 @@ public class IVMLWriterTest {
      * @throws CSTSemanticException Must not occur, otherwise
      * @throws IOException Must not occur, otherwise {@link IVMLWriter#flush()} is not working.
      */
-    @Ignore()
     @Test
     public void testTypedIteratorVariablesInConstraintTest() throws ValueDoesNotMatchTypeException,
         CSTSemanticException, IOException {
@@ -964,7 +963,7 @@ public class IVMLWriterTest {
         pro.add(cmpsDecl);
         // Create Constraint
         Constraint constraint = new Constraint(pro);
-        DecisionVariableDeclaration iteratorDecl = new DecisionVariableDeclaration("c", cType, pro);
+        DecisionVariableDeclaration iteratorDecl = new ExplicitTypeVariableDeclaration("c", cType, pro);
         CompoundAccess cmpAccess = new CompoundAccess(new Variable(iteratorDecl), intDecl.getName());
         ConstantValue tenValue = new ConstantValue(ValueFactory.createValue(IntegerType.TYPE, 10));
         OCLFeatureCall innerComparison = new OCLFeatureCall(cmpAccess, OclKeyWords.GREATER, tenValue);
