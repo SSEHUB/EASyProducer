@@ -5,6 +5,7 @@ import java.io.StringWriter;
 
 import org.junit.Assert;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import de.uni_hildesheim.sse.model.confModel.AssignmentState;
@@ -16,10 +17,12 @@ import de.uni_hildesheim.sse.model.cst.CSTSemanticException;
 import de.uni_hildesheim.sse.model.cst.CompoundAccess;
 import de.uni_hildesheim.sse.model.cst.ConstantValue;
 import de.uni_hildesheim.sse.model.cst.ConstraintSyntaxTree;
+import de.uni_hildesheim.sse.model.cst.ContainerOperationCall;
 import de.uni_hildesheim.sse.model.cst.OCLFeatureCall;
 import de.uni_hildesheim.sse.model.cst.Variable;
 import de.uni_hildesheim.sse.model.varModel.Attribute;
 import de.uni_hildesheim.sse.model.varModel.AttributeAssignment;
+import de.uni_hildesheim.sse.model.varModel.AttributeAssignment.Assignment;
 import de.uni_hildesheim.sse.model.varModel.Constraint;
 import de.uni_hildesheim.sse.model.varModel.DecisionVariableDeclaration;
 import de.uni_hildesheim.sse.model.varModel.ExpressionVersionRestriction;
@@ -29,7 +32,6 @@ import de.uni_hildesheim.sse.model.varModel.IvmlKeyWords;
 import de.uni_hildesheim.sse.model.varModel.Project;
 import de.uni_hildesheim.sse.model.varModel.ProjectImport;
 import de.uni_hildesheim.sse.model.varModel.ProjectInterface;
-import de.uni_hildesheim.sse.model.varModel.AttributeAssignment.Assignment;
 import de.uni_hildesheim.sse.model.varModel.datatypes.BooleanType;
 import de.uni_hildesheim.sse.model.varModel.datatypes.Compound;
 import de.uni_hildesheim.sse.model.varModel.datatypes.Container;
@@ -939,4 +941,50 @@ public class IVMLWriterTest {
             savedResult.contains(assignmentStr2));
     }
 
+    /**
+     * Tests whether <b>typed</b> iterator variables inside a constraint saved correctly.
+     * @throws ValueDoesNotMatchTypeException Must not occur, otherwise the {@link ValueFactory} or
+     * {@link de.uni_hildesheim.sse.model.varModel.AbstractVariable#setValue(String)} are broken.
+     * @throws CSTSemanticException Must not occur, otherwise
+     * @throws IOException Must not occur, otherwise {@link IVMLWriter#flush()} is not working.
+     */
+    @Ignore()
+    @Test
+    public void testTypedIteratorVariablesInConstraintTest() throws ValueDoesNotMatchTypeException,
+        CSTSemanticException, IOException {
+        
+        // Create compound
+        Compound cType = new Compound("CP1", pro);
+        DecisionVariableDeclaration intDecl = new DecisionVariableDeclaration("intSlot", IntegerType.TYPE, cType);
+        cType.add(intDecl);
+        pro.add(cType);
+        // Create set of compound
+        Set setType = new Set("", cType, pro);
+        DecisionVariableDeclaration cmpsDecl = new DecisionVariableDeclaration("cmps", setType, pro);
+        pro.add(cmpsDecl);
+        // Create Constraint
+        Constraint constraint = new Constraint(pro);
+        DecisionVariableDeclaration iteratorDecl = new DecisionVariableDeclaration("c", cType, pro);
+        CompoundAccess cmpAccess = new CompoundAccess(new Variable(iteratorDecl), intDecl.getName());
+        ConstantValue tenValue = new ConstantValue(ValueFactory.createValue(IntegerType.TYPE, 10));
+        OCLFeatureCall innerComparison = new OCLFeatureCall(cmpAccess, OclKeyWords.GREATER, tenValue);
+        ContainerOperationCall collectCall = new ContainerOperationCall(new Variable(cmpsDecl), OclKeyWords.COLLECT,
+            innerComparison, new DecisionVariableDeclaration[] {iteratorDecl});
+        OCLFeatureCall sizeCall = new OCLFeatureCall(collectCall, OclKeyWords.SIZE);
+        OCLFeatureCall outerComparison = new OCLFeatureCall(sizeCall, OclKeyWords.GREATER, tenValue);
+        constraint.setConsSyntax(outerComparison);
+        pro.add(constraint);
+        
+        // Validate project before testing
+        ProjectTestUtilities.validateProject(pro);
+        
+        // Test: Iterator variable of constraint should be typed (with CP1)
+        StringWriter sWriter = new StringWriter();
+        IVMLWriter iWriter = new IVMLWriter(sWriter);
+        pro.accept(iWriter);
+        iWriter.flush();
+        String result = sWriter.toString().replace("\r", "");
+        String[] lines = result.split("\n");
+        Assert.assertEquals("    size(cmps->collect(CP1 c|c.intSlot > 10)) > 10;", lines[lines.length - 2]);
+    }
 }
