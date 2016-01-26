@@ -1,0 +1,10 @@
+project TypedIteratorVariablesInConstraintTest {
+
+    version v0;
+    compound CP1 {
+        Integer intSlot;
+    }
+
+    setOf(CP1) cmps;
+    size(cmps->collect(CP1 c|c.intSlot > 0)) > 10;
+}
