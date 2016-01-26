@@ -61,6 +61,7 @@ import de.uni_hildesheim.sse.model.cst.Variable;
 import de.uni_hildesheim.sse.model.varModel.AbstractVariable;
 import de.uni_hildesheim.sse.model.varModel.Attribute;
 import de.uni_hildesheim.sse.model.varModel.DecisionVariableDeclaration;
+import de.uni_hildesheim.sse.model.varModel.ExplicitTypeVariableDeclaration;
 import de.uni_hildesheim.sse.model.varModel.IModelElement;
 import de.uni_hildesheim.sse.model.varModel.IvmlDatatypeVisitor;
 import de.uni_hildesheim.sse.model.varModel.IvmlException;
@@ -681,10 +682,13 @@ public class ExpressionTranslator extends de.uni_hildesheim.sse.dslCore.translat
         Declaration declaration, List<DecisionVariableDeclaration> declarators) throws TranslatorException {
         level++;
         IDatatype type = null;
+        boolean explicitType;
         if (null != declaration.getType()) {
             // if specified, take type from declaration (may collide)
             type = context.resolveType(declaration.getType());
+            explicitType = true;
         } else {
+            explicitType = false;
             // if not specified, take type from collection
             try {
                 IDatatype collectionType = lhs.inferDatatype();
@@ -708,7 +712,12 @@ public class ExpressionTranslator extends de.uni_hildesheim.sse.dslCore.translat
         if (null != type) {
             EList<String> ids = declaration.getId();
             for (int i = 0; i < ids.size(); i++) {
-                DecisionVariableDeclaration declarator = new DecisionVariableDeclaration(ids.get(i), type, parent);
+                DecisionVariableDeclaration declarator;
+                if (0 == i && explicitType) {
+                    declarator = new ExplicitTypeVariableDeclaration(ids.get(i), type, parent);
+                } else {
+                    declarator = new DecisionVariableDeclaration(ids.get(i), type, parent);
+                }
                 if (null != valueEx) {
                     try {
                         declarator.setValue(valueEx);

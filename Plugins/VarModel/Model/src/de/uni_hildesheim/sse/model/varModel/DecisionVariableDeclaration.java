@@ -170,4 +170,14 @@ public class DecisionVariableDeclaration extends AbstractVariable
         return EASyLoggerFactory.INSTANCE.getLogger(DecisionVariableDeclaration.class, Bundle.ID);
     }
     
+    /**
+     * In case that this instance is used as a (set operation) declarator, was the type declared
+     * explicitly in the model?
+     *  
+     * @return <code>false</code> if not explicit, <code>true</code> if explicit
+     */
+    public boolean isDeclaratorTypeExplicit() {
+        return false;
+    }
+    
 }

@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.Locale;
 
 import org.junit.Assert;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import de.uni_hildesheim.sse.model.cst.CSTSemanticException;
@@ -629,7 +628,6 @@ public class AdvancedTests extends AbstractTest {
      * @throws IOException
      *             should not occur
      */
-    @Ignore()
     @Test
     public void testTypedIteratorVariablesInConstraintTest() throws IOException {
         assertEqual(createFile("TypedIteratorVariablesInConstraintTest"), "TypedIteratorVariablesInConstraintTest",

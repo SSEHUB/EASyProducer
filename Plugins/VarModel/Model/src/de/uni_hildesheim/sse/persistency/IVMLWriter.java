@@ -24,7 +24,6 @@ import java.util.List;
 import java.util.Stack;
 
 import de.uni_hildesheim.sse.model.cst.AttributeVariable;
-import de.uni_hildesheim.sse.model.cst.CSTSemanticException;
 import de.uni_hildesheim.sse.model.cst.CompoundAccess;
 import de.uni_hildesheim.sse.model.cst.CompoundInitializer;
 import de.uni_hildesheim.sse.model.cst.ConstraintSyntaxTree;
@@ -53,7 +52,6 @@ import de.uni_hildesheim.sse.model.varModel.PartialEvaluationBlock;
 import de.uni_hildesheim.sse.model.varModel.Project;
 import de.uni_hildesheim.sse.model.varModel.ProjectImport;
 import de.uni_hildesheim.sse.model.varModel.ProjectInterface;
-import de.uni_hildesheim.sse.model.varModel.datatypes.AnyType;
 import de.uni_hildesheim.sse.model.varModel.datatypes.Compound;
 import de.uni_hildesheim.sse.model.varModel.datatypes.ConstraintType;
 import de.uni_hildesheim.sse.model.varModel.datatypes.Container;
@@ -1057,26 +1055,32 @@ public class IVMLWriter extends AbstractVarModelWriter {
         appendOutput(CONTAINER_OP_ACCESS);
         appendOutput(call.getOperation());
         appendOutput(BEGINNING_PARENTHESIS);
+        /*// old syntax before IVML-VIL alignment
         IDatatype contained;
         try {
             Container cont = (Container) DerivedDatatype.resolveToBasis(call.getContainer().inferDatatype());
             contained = cont.getContainedType();
         } catch (CSTSemanticException e) {
             contained = AnyType.TYPE; // just to be safe, let's see
-        }
+        }*/
         int declCount = call.getDeclaratorsCount();
         for (int d = 0; d < declCount; d++) {
             DecisionVariableDeclaration decl = call.getDeclarator(d);
             ConstraintSyntaxTree deflt = decl.getDefaultValue();
             // this is a bit strange but matches the OCL/IVML grammar
             ConstraintSyntaxTree next = d + 1 >= declCount ? null : call.getDeclarator(d + 1).getDefaultValue();
+            if (decl.isDeclaratorTypeExplicit()) {
+                appendOutput(IvmlDatatypeVisitor.getUniqueType(decl.getType()));
+                appendOutput(WHITESPACE);
+            }
             appendOutput(decl.getName());
+            /* // old syntax before IVML-VIL alignment
             if (!decl.getType().isAssignableFrom(contained)) {
                 appendOutput(WHITESPACE);
                 appendOutput(COLON);
                 appendOutput(WHITESPACE);
                 appendOutput(IvmlDatatypeVisitor.getUniqueType(decl.getType()));
-            }
+            }*/
             if (null != deflt && deflt != next) {
                 appendOutput(WHITESPACE);
                 appendOutput(ASSIGNMENT);
