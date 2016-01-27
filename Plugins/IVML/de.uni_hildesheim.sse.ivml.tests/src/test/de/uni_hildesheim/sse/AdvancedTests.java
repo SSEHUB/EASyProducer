@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Locale;
 
 import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import de.uni_hildesheim.sse.model.cst.CSTSemanticException;
@@ -625,13 +626,22 @@ public class AdvancedTests extends AbstractTest {
     /**
      * Tests whether <b>typed</b> iterator variables inside a constraint are read and <b>saved</b> correctly.
      * 
-     * @throws IOException
-     *             should not occur
+     * @throws IOException  should not occur
      */
     @Test
-    public void testTypedIteratorVariablesInConstraintTest() throws IOException {
+    public void testTypedIteratorVariablesInConstraint() throws IOException {
         assertEqual(createFile("TypedIteratorVariablesInConstraintTest"), "TypedIteratorVariablesInConstraintTest",
             "0");
+    }
+    
+    /**
+     * Tests whether qualified names can be used inside a operation definition.
+     * @throws IOException Should not occur
+     */
+    @Ignore
+    @Test
+    public void testQualifiedNameInOperation() throws IOException {
+        assertEqual(createFile("QualifiedNameInOperation"), "QualifiedNameInOperation", "0");
     }
     
     /**
