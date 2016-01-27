@@ -399,7 +399,6 @@ public class ModelQuery {
     private static IResolutionScope getScope(IResolutionScope scope, String name) 
         throws ModelQueryException {
         IResolutionScope result = null;
-
         // determine the namespace and throw away the remainder
         String namespace;
         int pos = name.lastIndexOf(IvmlKeyWords.NAMESPACE_SEPARATOR);

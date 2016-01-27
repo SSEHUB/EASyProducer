@@ -382,14 +382,22 @@ public class TypeContext implements IResolutionScope {
      */
     public AbstractVariable findVariable(String name,
             Class<? extends AbstractVariable> type) throws ModelQueryException {
+        ModelQueryException ex = null;
         AbstractVariable result = null;
         // search contexts first, from newest to oldest
         for (int c = directContext.size() - 1; null == result && c >= 0; c--) {
-            result = ModelQuery.findVariable(directContext.get(c), name, type);
+            try {
+                result = ModelQuery.findVariable(directContext.get(c), name, type);
+            } catch (ModelQueryException e) {
+                ex = e;
+            }
         }
         if (null == result) {
             // last resort - ask the project
             result = ModelQuery.findVariable(project, name, type);
+        }
+        if (null == result && ex != null) {
+            throw ex;
         }
         return result;
     }

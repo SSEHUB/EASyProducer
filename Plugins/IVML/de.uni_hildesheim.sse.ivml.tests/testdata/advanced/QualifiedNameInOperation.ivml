@@ -1,5 +1,6 @@
 project QualifiedNameInOperation {
-    
+
     Integer var;
+    //* def Integer count() = var;
     def Integer count() = QualifiedNameInOperation::var;
 }

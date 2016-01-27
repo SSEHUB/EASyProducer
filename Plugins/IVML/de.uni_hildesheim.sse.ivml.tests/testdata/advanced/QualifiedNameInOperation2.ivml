@@ -1,0 +1,4 @@
+project QualifiedNameInOperation2 {
+    
+    Integer var;
+}

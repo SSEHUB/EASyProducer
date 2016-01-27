@@ -24,6 +24,7 @@ import de.uni_hildesheim.sse.model.cst.AttributeVariable;
 import de.uni_hildesheim.sse.model.cst.CompoundAccess;
 import de.uni_hildesheim.sse.model.cst.CompoundInitializer;
 import de.uni_hildesheim.sse.model.cst.ConstantValue;
+import de.uni_hildesheim.sse.model.cst.ConstraintSyntaxTree;
 import de.uni_hildesheim.sse.model.cst.ContainerInitializer;
 import de.uni_hildesheim.sse.model.cst.ContainerOperationCall;
 import de.uni_hildesheim.sse.model.cst.IConstraintTreeVisitor;
@@ -50,6 +51,7 @@ import de.uni_hildesheim.sse.model.varModel.Project;
 import de.uni_hildesheim.sse.model.varModel.ProjectImport;
 import de.uni_hildesheim.sse.model.varModel.ProjectInterface;
 import de.uni_hildesheim.sse.model.varModel.datatypes.Compound;
+import de.uni_hildesheim.sse.model.varModel.datatypes.CustomOperation;
 import de.uni_hildesheim.sse.model.varModel.datatypes.DerivedDatatype;
 import de.uni_hildesheim.sse.model.varModel.datatypes.Enum;
 import de.uni_hildesheim.sse.model.varModel.datatypes.EnumLiteral;
@@ -133,6 +135,10 @@ class VariableUsage implements IModelVisitor, IConstraintTreeVisitor {
     public void visitProject(Project project) {
         if (!done.contains(project)) {
             done.add(project);
+            // local variables take precedence over imports
+            for (int e = 0; e < project.getElementCount(); e++) {
+                project.getElement(e).accept(this);
+            }
             for (int i = 0; i < project.getImportsCount(); i++) {
                 ProjectImport imp = project.getImport(i);
                 String name = imp.getName();
@@ -143,9 +149,6 @@ class VariableUsage implements IModelVisitor, IConstraintTreeVisitor {
                 if (null != imp.getResolved()) {
                     imp.getResolved().accept(this);
                 }
-            }
-            for (int e = 0; e < project.getElementCount(); e++) {
-                project.getElement(e).accept(this);
             }
         }
     }
@@ -179,6 +182,13 @@ class VariableUsage implements IModelVisitor, IConstraintTreeVisitor {
 
     @Override
     public void visitOperationDefinition(OperationDefinition opdef) {
+        CustomOperation custOp = opdef.getOperation();
+        if (null != custOp) {
+            ConstraintSyntaxTree cst = custOp.getFunction();
+            if (null != cst) {
+                cst.accept(this);
+            }
+        }
     }
 
     @Override
@@ -258,7 +268,6 @@ class VariableUsage implements IModelVisitor, IConstraintTreeVisitor {
     
     @Override
     public void visitAnnotationVariable(AttributeVariable variable) {
-        // TODO check whether a specific method is needed
         visitVariable(variable);
     }
 
@@ -334,6 +343,11 @@ class VariableUsage implements IModelVisitor, IConstraintTreeVisitor {
     @Override
     public void visitSelf(Self self) {
         // does not contribute
+    }
+    
+    @Override
+    public String toString() {
+        return "VariableUsage " + mapping;
     }
 
 }

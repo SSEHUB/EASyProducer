@@ -936,7 +936,6 @@ public class IVMLWriter extends AbstractVarModelWriter {
     
     @Override
     public void visitAnnotationVariable(AttributeVariable variable) {
-        // TODO check whether a specific method is needed
         visitVariable(variable);
     }
 

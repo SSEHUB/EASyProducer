@@ -1,0 +1,6 @@
+project QualifiedNameInOperation1 {
+
+    import QualifiedNameInOperation2;
+    Integer var;
+    def Integer count() = QualifiedNameInOperation2::var;
+}

@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.Locale;
 
 import org.junit.Assert;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import de.uni_hildesheim.sse.model.cst.CSTSemanticException;
@@ -638,10 +637,18 @@ public class AdvancedTests extends AbstractTest {
      * Tests whether qualified names can be used inside a operation definition.
      * @throws IOException Should not occur
      */
-    @Ignore
     @Test
     public void testQualifiedNameInOperation() throws IOException {
-        assertEqual(createFile("QualifiedNameInOperation"), "QualifiedNameInOperation", "0");
+        assertEqual(createFile("QualifiedNameInOperation"), null, null);
+    }
+    
+    /**
+     * Tests whether qualified names can be used inside a operation definition.
+     * @throws IOException Should not occur
+     */
+    @Test
+    public void testQualifiedNameInOperation1() throws IOException {
+        assertEqual(createFile("QualifiedNameInOperation1"), null, null);
     }
     
     /**
