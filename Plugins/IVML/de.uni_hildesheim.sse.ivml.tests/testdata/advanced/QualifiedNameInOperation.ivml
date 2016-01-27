@@ -1,0 +1,5 @@
+project QualifiedNameInOperation {
+    
+    setOf(Integer) ints;
+    def Integer count() = QualifiedNameInOperation::var;
+}
