@@ -686,7 +686,7 @@ ruleStrategyDeclaration returns [EObject current=null]
        			$current, 
        			"post",
         		lv_post_18_0, 
-        		"de.uni_hildesheim.sse.VilBuildLanguage.RuleElement");
+        		"de.uni_hildesheim.sse.vil.rt.RtVil.RuleElement");
 	        afterParserOrEnumRuleCall();
 	    }
 
@@ -1226,7 +1226,7 @@ ruleTacticDeclaration returns [EObject current=null]
        			$current, 
        			"block",
         		lv_block_8_0, 
-        		"de.uni_hildesheim.sse.VilBuildLanguage.RuleElementBlock");
+        		"de.uni_hildesheim.sse.vil.rt.RtVil.RuleElementBlock");
 	        afterParserOrEnumRuleCall();
 	    }
 
@@ -1236,6 +1236,274 @@ ruleTacticDeclaration returns [EObject current=null]
     	newLeafNode(otherlv_9, grammarAccess.getTacticDeclarationAccess().getSemicolonKeyword_9());
     }
 )?)
+;
+
+
+
+
+
+// Entry rule entryRuleRuleElementBlock
+entryRuleRuleElementBlock returns [EObject current=null] 
+	:
+	{ newCompositeNode(grammarAccess.getRuleElementBlockRule()); }
+	 iv_ruleRuleElementBlock=ruleRuleElementBlock 
+	 { $current=$iv_ruleRuleElementBlock.current; } 
+	 EOF 
+;
+
+// Rule RuleElementBlock
+ruleRuleElementBlock returns [EObject current=null] 
+    @init { enterRule(); 
+    }
+    @after { leaveRule(); }:
+((
+	{ 
+	  /* */ 
+	}
+    {
+        $current = forceCreateModelElement(
+            grammarAccess.getRuleElementBlockAccess().getRuleElementBlockAction_0(),
+            $current);
+    }
+)	otherlv_1='{' 
+    {
+    	newLeafNode(otherlv_1, grammarAccess.getRuleElementBlockAccess().getLeftCurlyBracketKeyword_1());
+    }
+(
+(
+		{ 
+	        newCompositeNode(grammarAccess.getRuleElementBlockAccess().getIntentIntentDeclarationParserRuleCall_2_0()); 
+	    }
+		lv_intent_2_0=ruleIntentDeclaration		{
+	        if ($current==null) {
+	            $current = createModelElementForParent(grammarAccess.getRuleElementBlockRule());
+	        }
+       		set(
+       			$current, 
+       			"intent",
+        		lv_intent_2_0, 
+        		"de.uni_hildesheim.sse.vil.rt.RtVil.IntentDeclaration");
+	        afterParserOrEnumRuleCall();
+	    }
+
+)
+)?(
+(
+		{ 
+	        newCompositeNode(grammarAccess.getRuleElementBlockAccess().getElementsRuleElementParserRuleCall_3_0()); 
+	    }
+		lv_elements_3_0=ruleRuleElement		{
+	        if ($current==null) {
+	            $current = createModelElementForParent(grammarAccess.getRuleElementBlockRule());
+	        }
+       		add(
+       			$current, 
+       			"elements",
+        		lv_elements_3_0, 
+        		"de.uni_hildesheim.sse.vil.rt.RtVil.RuleElement");
+	        afterParserOrEnumRuleCall();
+	    }
+
+)
+)*	otherlv_4='}' 
+    {
+    	newLeafNode(otherlv_4, grammarAccess.getRuleElementBlockAccess().getRightCurlyBracketKeyword_4());
+    }
+)
+;
+
+
+
+
+
+// Entry rule entryRuleRuleElement
+entryRuleRuleElement returns [EObject current=null] 
+	:
+	{ newCompositeNode(grammarAccess.getRuleElementRule()); }
+	 iv_ruleRuleElement=ruleRuleElement 
+	 { $current=$iv_ruleRuleElement.current; } 
+	 EOF 
+;
+
+// Rule RuleElement
+ruleRuleElement returns [EObject current=null] 
+    @init { enterRule(); 
+    }
+    @after { leaveRule(); }:
+((
+(
+		{ 
+	        newCompositeNode(grammarAccess.getRuleElementAccess().getVarDeclVariableDeclarationParserRuleCall_0_0()); 
+	    }
+		lv_varDecl_0_0=ruleVariableDeclaration		{
+	        if ($current==null) {
+	            $current = createModelElementForParent(grammarAccess.getRuleElementRule());
+	        }
+       		set(
+       			$current, 
+       			"varDecl",
+        		lv_varDecl_0_0, 
+        		"de.uni_hildesheim.sse.vil.expressions.ExpressionDsl.VariableDeclaration");
+	        afterParserOrEnumRuleCall();
+	    }
+
+)
+)
+    |(
+(
+		{ 
+	        newCompositeNode(grammarAccess.getRuleElementAccess().getExprStmtExpressionStatementParserRuleCall_1_0()); 
+	    }
+		lv_exprStmt_1_0=ruleExpressionStatement		{
+	        if ($current==null) {
+	            $current = createModelElementForParent(grammarAccess.getRuleElementRule());
+	        }
+       		set(
+       			$current, 
+       			"exprStmt",
+        		lv_exprStmt_1_0, 
+        		"de.uni_hildesheim.sse.VilBuildLanguage.ExpressionStatement");
+	        afterParserOrEnumRuleCall();
+	    }
+
+)
+)
+    |(
+(
+		{ 
+	        newCompositeNode(grammarAccess.getRuleElementAccess().getFailFailStatementParserRuleCall_2_0()); 
+	    }
+		lv_fail_2_0=ruleFailStatement		{
+	        if ($current==null) {
+	            $current = createModelElementForParent(grammarAccess.getRuleElementRule());
+	        }
+       		set(
+       			$current, 
+       			"fail",
+        		lv_fail_2_0, 
+        		"de.uni_hildesheim.sse.vil.rt.RtVil.FailStatement");
+	        afterParserOrEnumRuleCall();
+	    }
+
+)
+))
+;
+
+
+
+
+
+// Entry rule entryRuleIntentDeclaration
+entryRuleIntentDeclaration returns [EObject current=null] 
+	:
+	{ newCompositeNode(grammarAccess.getIntentDeclarationRule()); }
+	 iv_ruleIntentDeclaration=ruleIntentDeclaration 
+	 { $current=$iv_ruleIntentDeclaration.current; } 
+	 EOF 
+;
+
+// Rule IntentDeclaration
+ruleIntentDeclaration returns [EObject current=null] 
+    @init { enterRule(); 
+    }
+    @after { leaveRule(); }:
+(	otherlv_0='intent' 
+    {
+    	newLeafNode(otherlv_0, grammarAccess.getIntentDeclarationAccess().getIntentKeyword_0());
+    }
+(
+(
+		{ 
+	        newCompositeNode(grammarAccess.getIntentDeclarationAccess().getExprStmtExpressionStatementParserRuleCall_1_0()); 
+	    }
+		lv_exprStmt_1_0=ruleExpressionStatement		{
+	        if ($current==null) {
+	            $current = createModelElementForParent(grammarAccess.getIntentDeclarationRule());
+	        }
+       		set(
+       			$current, 
+       			"exprStmt",
+        		lv_exprStmt_1_0, 
+        		"de.uni_hildesheim.sse.VilBuildLanguage.ExpressionStatement");
+	        afterParserOrEnumRuleCall();
+	    }
+
+)
+))
+;
+
+
+
+
+
+// Entry rule entryRuleFailStatement
+entryRuleFailStatement returns [EObject current=null] 
+	:
+	{ newCompositeNode(grammarAccess.getFailStatementRule()); }
+	 iv_ruleFailStatement=ruleFailStatement 
+	 { $current=$iv_ruleFailStatement.current; } 
+	 EOF 
+;
+
+// Rule FailStatement
+ruleFailStatement returns [EObject current=null] 
+    @init { enterRule(); 
+    }
+    @after { leaveRule(); }:
+((
+	{ 
+	  /* */ 
+	}
+    {
+        $current = forceCreateModelElement(
+            grammarAccess.getFailStatementAccess().getFailStatementAction_0(),
+            $current);
+    }
+)	otherlv_1='fail' 
+    {
+    	newLeafNode(otherlv_1, grammarAccess.getFailStatementAccess().getFailKeyword_1());
+    }
+(
+(
+		lv_reason_2_0=RULE_STRING
+		{
+			newLeafNode(lv_reason_2_0, grammarAccess.getFailStatementAccess().getReasonSTRINGTerminalRuleCall_2_0()); 
+		}
+		{
+	        if ($current==null) {
+	            $current = createModelElement(grammarAccess.getFailStatementRule());
+	        }
+       		setWithLastConsumed(
+       			$current, 
+       			"reason",
+        		lv_reason_2_0, 
+        		"de.uni_hildesheim.sse.vil.expressions.ExpressionDsl.STRING");
+	    }
+
+)
+)?(
+(
+		{ 
+	        newCompositeNode(grammarAccess.getFailStatementAccess().getCodeExpressionParserRuleCall_3_0()); 
+	    }
+		lv_code_3_0=ruleExpression		{
+	        if ($current==null) {
+	            $current = createModelElementForParent(grammarAccess.getFailStatementRule());
+	        }
+       		set(
+       			$current, 
+       			"code",
+        		lv_code_3_0, 
+        		"de.uni_hildesheim.sse.vil.expressions.ExpressionDsl.Expression");
+	        afterParserOrEnumRuleCall();
+	    }
+
+)
+)?	otherlv_4=';' 
+    {
+    	newLeafNode(otherlv_4, grammarAccess.getFailStatementAccess().getSemicolonKeyword_4());
+    }
+)
 ;
 
 
@@ -1492,7 +1760,7 @@ ruleRuleDeclaration returns [EObject current=null]
        			$current, 
        			"block",
         		lv_block_9_0, 
-        		"de.uni_hildesheim.sse.VilBuildLanguage.RuleElementBlock");
+        		"de.uni_hildesheim.sse.vil.rt.RtVil.RuleElementBlock");
 	        afterParserOrEnumRuleCall();
 	    }
 
@@ -1594,120 +1862,6 @@ ruleRuleConditions returns [EObject current=null]
 
 )
 ))*)?)
-;
-
-
-
-
-
-// Entry rule entryRuleRuleElementBlock
-entryRuleRuleElementBlock returns [EObject current=null] 
-	:
-	{ newCompositeNode(grammarAccess.getRuleElementBlockRule()); }
-	 iv_ruleRuleElementBlock=ruleRuleElementBlock 
-	 { $current=$iv_ruleRuleElementBlock.current; } 
-	 EOF 
-;
-
-// Rule RuleElementBlock
-ruleRuleElementBlock returns [EObject current=null] 
-    @init { enterRule(); 
-    }
-    @after { leaveRule(); }:
-((
-	{ 
-	  /* */ 
-	}
-    {
-        $current = forceCreateModelElement(
-            grammarAccess.getRuleElementBlockAccess().getRuleElementBlockAction_0(),
-            $current);
-    }
-)	otherlv_1='{' 
-    {
-    	newLeafNode(otherlv_1, grammarAccess.getRuleElementBlockAccess().getLeftCurlyBracketKeyword_1());
-    }
-(
-(
-		{ 
-	        newCompositeNode(grammarAccess.getRuleElementBlockAccess().getElementsRuleElementParserRuleCall_2_0()); 
-	    }
-		lv_elements_2_0=ruleRuleElement		{
-	        if ($current==null) {
-	            $current = createModelElementForParent(grammarAccess.getRuleElementBlockRule());
-	        }
-       		add(
-       			$current, 
-       			"elements",
-        		lv_elements_2_0, 
-        		"de.uni_hildesheim.sse.VilBuildLanguage.RuleElement");
-	        afterParserOrEnumRuleCall();
-	    }
-
-)
-)*	otherlv_3='}' 
-    {
-    	newLeafNode(otherlv_3, grammarAccess.getRuleElementBlockAccess().getRightCurlyBracketKeyword_3());
-    }
-)
-;
-
-
-
-
-
-// Entry rule entryRuleRuleElement
-entryRuleRuleElement returns [EObject current=null] 
-	:
-	{ newCompositeNode(grammarAccess.getRuleElementRule()); }
-	 iv_ruleRuleElement=ruleRuleElement 
-	 { $current=$iv_ruleRuleElement.current; } 
-	 EOF 
-;
-
-// Rule RuleElement
-ruleRuleElement returns [EObject current=null] 
-    @init { enterRule(); 
-    }
-    @after { leaveRule(); }:
-((
-(
-		{ 
-	        newCompositeNode(grammarAccess.getRuleElementAccess().getVarDeclVariableDeclarationParserRuleCall_0_0()); 
-	    }
-		lv_varDecl_0_0=ruleVariableDeclaration		{
-	        if ($current==null) {
-	            $current = createModelElementForParent(grammarAccess.getRuleElementRule());
-	        }
-       		set(
-       			$current, 
-       			"varDecl",
-        		lv_varDecl_0_0, 
-        		"de.uni_hildesheim.sse.vil.expressions.ExpressionDsl.VariableDeclaration");
-	        afterParserOrEnumRuleCall();
-	    }
-
-)
-)
-    |(
-(
-		{ 
-	        newCompositeNode(grammarAccess.getRuleElementAccess().getExprStmtExpressionStatementParserRuleCall_1_0()); 
-	    }
-		lv_exprStmt_1_0=ruleExpressionStatement		{
-	        if ($current==null) {
-	            $current = createModelElementForParent(grammarAccess.getRuleElementRule());
-	        }
-       		set(
-       			$current, 
-       			"exprStmt",
-        		lv_exprStmt_1_0, 
-        		"de.uni_hildesheim.sse.VilBuildLanguage.ExpressionStatement");
-	        afterParserOrEnumRuleCall();
-	    }
-
-)
-))
 ;
 
 
@@ -2322,7 +2476,7 @@ ruleMap returns [EObject current=null]
        			$current, 
        			"block",
         		lv_block_8_0, 
-        		"de.uni_hildesheim.sse.VilBuildLanguage.RuleElementBlock");
+        		"de.uni_hildesheim.sse.vil.rt.RtVil.RuleElementBlock");
 	        afterParserOrEnumRuleCall();
 	    }
 
@@ -2472,7 +2626,7 @@ ruleStatementOrBlock returns [EObject current=null]
        			$current, 
        			"block",
         		lv_block_1_0, 
-        		"de.uni_hildesheim.sse.VilBuildLanguage.RuleElementBlock");
+        		"de.uni_hildesheim.sse.vil.rt.RtVil.RuleElementBlock");
 	        afterParserOrEnumRuleCall();
 	    }
 

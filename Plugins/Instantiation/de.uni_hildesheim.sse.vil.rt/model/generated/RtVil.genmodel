@@ -55,5 +55,18 @@
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference RtVil.ecore#//TacticDeclaration/conditions"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference RtVil.ecore#//TacticDeclaration/block"/>
     </genClasses>
+    <genClasses ecoreClass="RtVil.ecore#//RuleElementBlock">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference RtVil.ecore#//RuleElementBlock/intent"/>
+    </genClasses>
+    <genClasses ecoreClass="RtVil.ecore#//RuleElement">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference RtVil.ecore#//RuleElement/fail"/>
+    </genClasses>
+    <genClasses ecoreClass="RtVil.ecore#//IntentDeclaration">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference RtVil.ecore#//IntentDeclaration/exprStmt"/>
+    </genClasses>
+    <genClasses ecoreClass="RtVil.ecore#//FailStatement">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute RtVil.ecore#//FailStatement/reason"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference RtVil.ecore#//FailStatement/code"/>
+    </genClasses>
   </genPackages>
 </genmodel:GenModel>

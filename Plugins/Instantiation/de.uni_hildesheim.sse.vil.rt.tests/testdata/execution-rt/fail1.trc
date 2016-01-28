@@ -1,0 +1,4 @@
+-> main(Project, Configuration, Project) with (<project>, <config>, <project>)
+    -> t()
+    -> t1()
+    -> enact(Project, Configuration, Project) with (<project>, <config>, <project>)

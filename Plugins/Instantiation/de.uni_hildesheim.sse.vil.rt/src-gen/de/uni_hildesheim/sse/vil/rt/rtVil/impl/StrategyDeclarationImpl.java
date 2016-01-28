@@ -8,11 +8,11 @@ import de.uni_hildesheim.sse.vil.expressions.expressionDsl.VariableDeclaration;
 
 import de.uni_hildesheim.sse.vil.rt.rtVil.BreakdownElement;
 import de.uni_hildesheim.sse.vil.rt.rtVil.RtVilPackage;
+import de.uni_hildesheim.sse.vil.rt.rtVil.RuleElement;
 import de.uni_hildesheim.sse.vil.rt.rtVil.StrategyDeclaration;
 import de.uni_hildesheim.sse.vil.rt.rtVil.WeightingStatement;
 
 import de.uni_hildesheim.sse.vilBuildLanguage.RuleConditions;
-import de.uni_hildesheim.sse.vilBuildLanguage.RuleElement;
 
 import java.util.Collection;
 

@@ -20,6 +20,8 @@ public class RuleExecutionContext {
     private Set<IArtifact> allResults;
     private Status status;
     private Object[] rhsValues;
+    private String failReason;
+    private Integer failCode;
 
     /**
      * Creates a rule execution context.
@@ -117,7 +119,7 @@ public class RuleExecutionContext {
      * @see Status#toStatus(Object)
      */
     public void setStatus(Object object) {
-        setStatus(Status.toStatus(status));
+        setStatus(Status.toStatus(object));
     }
 
     /**
@@ -145,6 +147,42 @@ public class RuleExecutionContext {
      */
     void setRhsValues(Object[] rhsValues) {
         this.rhsValues = rhsValues;
+    }
+    
+    /**
+     * Sets an optional reason for execution failure.
+     * 
+     * @param failReason the reason for failing (may be <b>null</b> for none)
+     */
+    public void setFailReason(String failReason) {
+        this.failReason = failReason;
+    }
+    
+    /**
+     * Returns the fail reason (if the execution failed).
+     * 
+     * @return the reason or <b>null</b> if unknown, not set or not failing
+     */
+    public String getFailReason() {
+        return failReason;
+    }
+    
+    /**
+     * Defines an optional failure code.
+     * 
+     * @param failCode the failure code
+     */
+    public void setFailCode(Integer failCode) {
+        this.failCode = failCode;
+    }
+    
+    /**
+     * The failure code.
+     * 
+     * @return the failure code (may be <b>null</b> if not set)
+     */
+    public Integer getFailCode() {
+        return failCode;
     }
 
 }

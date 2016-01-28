@@ -864,6 +864,7 @@ public class BuildlangExecution extends ExecutionVisitor<Script, Rule, VariableD
                     if (enableRuleElementFailed) {
                         tracer.failedAt(ruleBody.getBodyElement(e));
                         status = Status.FAIL;
+                        ruleElementFailed(elt, context);
                     }
                 } else {
                     context.add(eltVal);
@@ -881,6 +882,17 @@ public class BuildlangExecution extends ExecutionVisitor<Script, Rule, VariableD
             result = status;
         }
         return result;
+    }
+
+    /**
+     * Is called when <code>elt</code> failed in execution, e.g., to put further information about
+     * failing into the rule execution <code>context</code>.
+     *  
+     * @param elt the failing element 
+     * @param context the rule execution context
+     * @throws VilException in case that the evaluation of the failed element fails
+     */
+    protected void ruleElementFailed(IRuleElement elt, RuleExecutionContext context) throws VilException {
     }
     
     /**

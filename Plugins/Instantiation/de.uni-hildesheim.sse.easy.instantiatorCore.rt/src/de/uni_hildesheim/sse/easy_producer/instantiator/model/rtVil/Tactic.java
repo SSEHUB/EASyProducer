@@ -15,6 +15,7 @@
  */
 package de.uni_hildesheim.sse.easy_producer.instantiator.model.rtVil;
 
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.ExpressionStatement;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.IVisitor;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.Rule;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.RuleDescriptor;
@@ -30,6 +31,8 @@ import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeDescr
  */
 public class Tactic extends Rule implements IRtVilConcept {
 
+    private ExpressionStatement intent;
+    
     /**
      * Create a new tactic with the given name. As no descriptor is given,
      * call {@link #setDescriptorInformation(RuleDescriptor)} somewhen before using this rule.
@@ -72,6 +75,24 @@ public class Tactic extends Rule implements IRtVilConcept {
             result = super.accept(visitor);
         }
         return result;
+    }
+    
+    /**
+     * Defines the intent of this tactic.
+     * 
+     * @param intent the intent
+     */
+    public void setIntent(ExpressionStatement intent) {
+        this.intent = intent;
+    }
+    
+    /**
+     * Returns the intent of this tactic.
+     * 
+     * @return the intent
+     */
+    public ExpressionStatement getIntent() {
+        return intent;
     }
 
 }

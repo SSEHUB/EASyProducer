@@ -7,11 +7,15 @@ import de.uni_hildesheim.sse.vil.expressions.expressionDsl.ExpressionDslPackage;
 import de.uni_hildesheim.sse.vil.rt.rtVil.BreakdownElement;
 import de.uni_hildesheim.sse.vil.rt.rtVil.BreakdownStatement;
 import de.uni_hildesheim.sse.vil.rt.rtVil.BreakdownWithPart;
+import de.uni_hildesheim.sse.vil.rt.rtVil.FailStatement;
 import de.uni_hildesheim.sse.vil.rt.rtVil.GlobalVariableDeclaration;
 import de.uni_hildesheim.sse.vil.rt.rtVil.ImplementationUnit;
+import de.uni_hildesheim.sse.vil.rt.rtVil.IntentDeclaration;
 import de.uni_hildesheim.sse.vil.rt.rtVil.LanguageUnit;
 import de.uni_hildesheim.sse.vil.rt.rtVil.RtVilFactory;
 import de.uni_hildesheim.sse.vil.rt.rtVil.RtVilPackage;
+import de.uni_hildesheim.sse.vil.rt.rtVil.RuleElement;
+import de.uni_hildesheim.sse.vil.rt.rtVil.RuleElementBlock;
 import de.uni_hildesheim.sse.vil.rt.rtVil.StrategyDeclaration;
 import de.uni_hildesheim.sse.vil.rt.rtVil.TacticDeclaration;
 import de.uni_hildesheim.sse.vil.rt.rtVil.WeightingStatement;
@@ -103,6 +107,34 @@ public class RtVilPackageImpl extends EPackageImpl implements RtVilPackage
    * @generated
    */
   private EClass tacticDeclarationEClass = null;
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  private EClass ruleElementBlockEClass = null;
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  private EClass ruleElementEClass = null;
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  private EClass intentDeclarationEClass = null;
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  private EClass failStatementEClass = null;
 
   /**
    * Creates an instance of the model <b>Package</b>, registered with
@@ -565,6 +597,96 @@ public class RtVilPackageImpl extends EPackageImpl implements RtVilPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  public EClass getRuleElementBlock()
+  {
+    return ruleElementBlockEClass;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EReference getRuleElementBlock_Intent()
+  {
+    return (EReference)ruleElementBlockEClass.getEStructuralFeatures().get(0);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EClass getRuleElement()
+  {
+    return ruleElementEClass;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EReference getRuleElement_Fail()
+  {
+    return (EReference)ruleElementEClass.getEStructuralFeatures().get(0);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EClass getIntentDeclaration()
+  {
+    return intentDeclarationEClass;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EReference getIntentDeclaration_ExprStmt()
+  {
+    return (EReference)intentDeclarationEClass.getEStructuralFeatures().get(0);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EClass getFailStatement()
+  {
+    return failStatementEClass;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EAttribute getFailStatement_Reason()
+  {
+    return (EAttribute)failStatementEClass.getEStructuralFeatures().get(0);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EReference getFailStatement_Code()
+  {
+    return (EReference)failStatementEClass.getEStructuralFeatures().get(1);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
   public RtVilFactory getRtVilFactory()
   {
     return (RtVilFactory)getEFactoryInstance();
@@ -638,6 +760,19 @@ public class RtVilPackageImpl extends EPackageImpl implements RtVilPackage
     createEReference(tacticDeclarationEClass, TACTIC_DECLARATION__PARAM_LIST);
     createEReference(tacticDeclarationEClass, TACTIC_DECLARATION__CONDITIONS);
     createEReference(tacticDeclarationEClass, TACTIC_DECLARATION__BLOCK);
+
+    ruleElementBlockEClass = createEClass(RULE_ELEMENT_BLOCK);
+    createEReference(ruleElementBlockEClass, RULE_ELEMENT_BLOCK__INTENT);
+
+    ruleElementEClass = createEClass(RULE_ELEMENT);
+    createEReference(ruleElementEClass, RULE_ELEMENT__FAIL);
+
+    intentDeclarationEClass = createEClass(INTENT_DECLARATION);
+    createEReference(intentDeclarationEClass, INTENT_DECLARATION__EXPR_STMT);
+
+    failStatementEClass = createEClass(FAIL_STATEMENT);
+    createEAttribute(failStatementEClass, FAIL_STATEMENT__REASON);
+    createEReference(failStatementEClass, FAIL_STATEMENT__CODE);
   }
 
   /**
@@ -675,6 +810,8 @@ public class RtVilPackageImpl extends EPackageImpl implements RtVilPackage
     // Add supertypes to classes
     implementationUnitEClass.getESuperTypes().add(theVilBuildLanguagePackage.getImplementationUnit());
     languageUnitEClass.getESuperTypes().add(theVilBuildLanguagePackage.getLanguageUnit());
+    ruleElementBlockEClass.getESuperTypes().add(theVilBuildLanguagePackage.getRuleElementBlock());
+    ruleElementEClass.getESuperTypes().add(theVilBuildLanguagePackage.getRuleElement());
 
     // Initialize classes and features; add operations and parameters
     initEClass(implementationUnitEClass, ImplementationUnit.class, "ImplementationUnit", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
@@ -697,7 +834,7 @@ public class RtVilPackageImpl extends EPackageImpl implements RtVilPackage
     initEReference(getStrategyDeclaration_Objective(), theExpressionDslPackage.getExpression(), null, "objective", null, 0, 1, StrategyDeclaration.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEReference(getStrategyDeclaration_Weighting(), this.getWeightingStatement(), null, "weighting", null, 0, 1, StrategyDeclaration.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEReference(getStrategyDeclaration_Breakdown(), this.getBreakdownElement(), null, "breakdown", null, 0, -1, StrategyDeclaration.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEReference(getStrategyDeclaration_Post(), theVilBuildLanguagePackage.getRuleElement(), null, "post", null, 0, -1, StrategyDeclaration.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getStrategyDeclaration_Post(), this.getRuleElement(), null, "post", null, 0, -1, StrategyDeclaration.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     initEClass(breakdownElementEClass, BreakdownElement.class, "BreakdownElement", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
     initEReference(getBreakdownElement_VarDecl(), theExpressionDslPackage.getVariableDeclaration(), null, "varDecl", null, 0, 1, BreakdownElement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -724,7 +861,20 @@ public class RtVilPackageImpl extends EPackageImpl implements RtVilPackage
     initEAttribute(getTacticDeclaration_Name(), ecorePackage.getEString(), "name", null, 0, 1, TacticDeclaration.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEReference(getTacticDeclaration_ParamList(), theExpressionDslPackage.getParameterList(), null, "paramList", null, 0, 1, TacticDeclaration.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEReference(getTacticDeclaration_Conditions(), theVilBuildLanguagePackage.getRuleConditions(), null, "conditions", null, 0, 1, TacticDeclaration.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEReference(getTacticDeclaration_Block(), theVilBuildLanguagePackage.getRuleElementBlock(), null, "block", null, 0, 1, TacticDeclaration.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getTacticDeclaration_Block(), this.getRuleElementBlock(), null, "block", null, 0, 1, TacticDeclaration.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+    initEClass(ruleElementBlockEClass, RuleElementBlock.class, "RuleElementBlock", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+    initEReference(getRuleElementBlock_Intent(), this.getIntentDeclaration(), null, "intent", null, 0, 1, RuleElementBlock.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+    initEClass(ruleElementEClass, RuleElement.class, "RuleElement", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+    initEReference(getRuleElement_Fail(), this.getFailStatement(), null, "fail", null, 0, 1, RuleElement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+    initEClass(intentDeclarationEClass, IntentDeclaration.class, "IntentDeclaration", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+    initEReference(getIntentDeclaration_ExprStmt(), theVilBuildLanguagePackage.getExpressionStatement(), null, "exprStmt", null, 0, 1, IntentDeclaration.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+    initEClass(failStatementEClass, FailStatement.class, "FailStatement", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+    initEAttribute(getFailStatement_Reason(), ecorePackage.getEString(), "reason", null, 0, 1, FailStatement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getFailStatement_Code(), theExpressionDslPackage.getExpression(), null, "code", null, 0, 1, FailStatement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     // Create resource
     createResource(eNS_URI);

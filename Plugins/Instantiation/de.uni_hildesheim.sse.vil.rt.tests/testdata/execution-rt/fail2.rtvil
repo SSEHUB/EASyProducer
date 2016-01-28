@@ -1,0 +1,27 @@
+import enact;
+
+rtVilScript fail1 (Project source, Configuration config, Project target) {
+
+    strategy main(Project source, Configuration config, Project target) = {
+        objective true;
+        breakdown {
+            tactic t1();
+        }
+        fail;
+    }
+
+    strategy alternative(Project source, Configuration config, Project target) = {
+        objective true;
+        breakdown {
+            tactic t1();
+        }
+    }
+
+    tactic t() = {
+        fail "unknown" 1;
+    }
+
+    tactic t1() = {
+    }
+
+}

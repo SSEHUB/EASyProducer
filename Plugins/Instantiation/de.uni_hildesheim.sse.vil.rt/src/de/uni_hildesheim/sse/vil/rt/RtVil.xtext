@@ -94,3 +94,26 @@ TacticDeclaration:
     block = RuleElementBlock
     ';'?
 ;
+
+RuleElementBlock:
+    {RuleElementBlock}
+    '{'
+       intent = IntentDeclaration?
+       elements += RuleElement*
+    '}'
+;
+
+RuleElement:
+    varDecl=VariableDeclaration
+    | exprStmt=ExpressionStatement
+    | fail = FailStatement
+;
+
+IntentDeclaration:
+    'intent' exprStmt=ExpressionStatement
+;
+
+FailStatement:
+    {FailStatement}
+    'fail' reason=STRING? code=Expression? ';'
+;

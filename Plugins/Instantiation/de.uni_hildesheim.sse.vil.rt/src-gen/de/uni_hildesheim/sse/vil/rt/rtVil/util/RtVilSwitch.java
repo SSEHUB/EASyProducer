@@ -145,6 +145,36 @@ public class RtVilSwitch<T> extends Switch<T>
         if (result == null) result = defaultCase(theEObject);
         return result;
       }
+      case RtVilPackage.RULE_ELEMENT_BLOCK:
+      {
+        RuleElementBlock ruleElementBlock = (RuleElementBlock)theEObject;
+        T result = caseRuleElementBlock(ruleElementBlock);
+        if (result == null) result = caseVilBuildLanguage_RuleElementBlock(ruleElementBlock);
+        if (result == null) result = defaultCase(theEObject);
+        return result;
+      }
+      case RtVilPackage.RULE_ELEMENT:
+      {
+        RuleElement ruleElement = (RuleElement)theEObject;
+        T result = caseRuleElement(ruleElement);
+        if (result == null) result = caseVilBuildLanguage_RuleElement(ruleElement);
+        if (result == null) result = defaultCase(theEObject);
+        return result;
+      }
+      case RtVilPackage.INTENT_DECLARATION:
+      {
+        IntentDeclaration intentDeclaration = (IntentDeclaration)theEObject;
+        T result = caseIntentDeclaration(intentDeclaration);
+        if (result == null) result = defaultCase(theEObject);
+        return result;
+      }
+      case RtVilPackage.FAIL_STATEMENT:
+      {
+        FailStatement failStatement = (FailStatement)theEObject;
+        T result = caseFailStatement(failStatement);
+        if (result == null) result = defaultCase(theEObject);
+        return result;
+      }
       default: return defaultCase(theEObject);
     }
   }
@@ -310,6 +340,70 @@ public class RtVilSwitch<T> extends Switch<T>
   }
 
   /**
+   * Returns the result of interpreting the object as an instance of '<em>Rule Element Block</em>'.
+   * <!-- begin-user-doc -->
+   * This implementation returns null;
+   * returning a non-null result will terminate the switch.
+   * <!-- end-user-doc -->
+   * @param object the target of the switch.
+   * @return the result of interpreting the object as an instance of '<em>Rule Element Block</em>'.
+   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+   * @generated
+   */
+  public T caseRuleElementBlock(RuleElementBlock object)
+  {
+    return null;
+  }
+
+  /**
+   * Returns the result of interpreting the object as an instance of '<em>Rule Element</em>'.
+   * <!-- begin-user-doc -->
+   * This implementation returns null;
+   * returning a non-null result will terminate the switch.
+   * <!-- end-user-doc -->
+   * @param object the target of the switch.
+   * @return the result of interpreting the object as an instance of '<em>Rule Element</em>'.
+   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+   * @generated
+   */
+  public T caseRuleElement(RuleElement object)
+  {
+    return null;
+  }
+
+  /**
+   * Returns the result of interpreting the object as an instance of '<em>Intent Declaration</em>'.
+   * <!-- begin-user-doc -->
+   * This implementation returns null;
+   * returning a non-null result will terminate the switch.
+   * <!-- end-user-doc -->
+   * @param object the target of the switch.
+   * @return the result of interpreting the object as an instance of '<em>Intent Declaration</em>'.
+   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+   * @generated
+   */
+  public T caseIntentDeclaration(IntentDeclaration object)
+  {
+    return null;
+  }
+
+  /**
+   * Returns the result of interpreting the object as an instance of '<em>Fail Statement</em>'.
+   * <!-- begin-user-doc -->
+   * This implementation returns null;
+   * returning a non-null result will terminate the switch.
+   * <!-- end-user-doc -->
+   * @param object the target of the switch.
+   * @return the result of interpreting the object as an instance of '<em>Fail Statement</em>'.
+   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+   * @generated
+   */
+  public T caseFailStatement(FailStatement object)
+  {
+    return null;
+  }
+
+  /**
    * Returns the result of interpreting the object as an instance of '<em>Implementation Unit</em>'.
    * <!-- begin-user-doc -->
    * This implementation returns null;
@@ -353,6 +447,38 @@ public class RtVilSwitch<T> extends Switch<T>
    * @generated
    */
   public T caseVilBuildLanguage_LanguageUnit(de.uni_hildesheim.sse.vilBuildLanguage.LanguageUnit object)
+  {
+    return null;
+  }
+
+  /**
+   * Returns the result of interpreting the object as an instance of '<em>Rule Element Block</em>'.
+   * <!-- begin-user-doc -->
+   * This implementation returns null;
+   * returning a non-null result will terminate the switch.
+   * <!-- end-user-doc -->
+   * @param object the target of the switch.
+   * @return the result of interpreting the object as an instance of '<em>Rule Element Block</em>'.
+   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+   * @generated
+   */
+  public T caseVilBuildLanguage_RuleElementBlock(de.uni_hildesheim.sse.vilBuildLanguage.RuleElementBlock object)
+  {
+    return null;
+  }
+
+  /**
+   * Returns the result of interpreting the object as an instance of '<em>Rule Element</em>'.
+   * <!-- begin-user-doc -->
+   * This implementation returns null;
+   * returning a non-null result will terminate the switch.
+   * <!-- end-user-doc -->
+   * @param object the target of the switch.
+   * @return the result of interpreting the object as an instance of '<em>Rule Element</em>'.
+   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+   * @generated
+   */
+  public T caseVilBuildLanguage_RuleElement(de.uni_hildesheim.sse.vilBuildLanguage.RuleElement object)
   {
     return null;
   }

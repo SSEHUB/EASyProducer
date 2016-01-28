@@ -5,7 +5,6 @@ package de.uni_hildesheim.sse.vil.rt.rtVil;
 import de.uni_hildesheim.sse.vil.expressions.expressionDsl.ParameterList;
 
 import de.uni_hildesheim.sse.vilBuildLanguage.RuleConditions;
-import de.uni_hildesheim.sse.vilBuildLanguage.RuleElementBlock;
 
 import org.eclipse.emf.ecore.EObject;
 

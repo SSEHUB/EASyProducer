@@ -3,8 +3,6 @@ package de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions;
 import java.io.Writer;
 import java.util.Stack;
 
-import org.apache.commons.lang.StringEscapeUtils;
-
 import de.uni_hildesheim.sse.easy_producer.instantiator.Bundle;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.BuildlangWriter;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VariableDeclaration;
@@ -226,7 +224,7 @@ public class ExpressionWriter extends AbstractWriter implements IExpressionVisit
                 value = ((String) value).replaceAll("'", "\\\\'");
                 print(value);
             } else {
-                print(StringEscapeUtils.escapeJava((String) value));
+                printJavaEscaped((String) value);
             }
         } else if (value instanceof Version) {
             print("v");
