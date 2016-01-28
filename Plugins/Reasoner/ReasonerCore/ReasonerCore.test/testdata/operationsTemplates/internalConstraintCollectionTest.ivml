@@ -1,0 +1,12 @@
+project internalConstraintCollectionTest {
+
+    typedef PositiveInteger Integer with (PositiveInteger > 0);   
+    typedef SpringInteger PositiveInteger with (SpringInteger < 15);   
+    
+    setOf(SpringInteger) springValues;
+    springValues = {2, -11, 13};
+    
+    sequenceOf(SpringInteger) springValues2;
+    springValues2 = {2, -11, 13};      
+    
+}
