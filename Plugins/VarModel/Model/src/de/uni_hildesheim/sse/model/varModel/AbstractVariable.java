@@ -191,7 +191,9 @@ public abstract class AbstractVariable extends ContainableModelElement implement
                 InternalConstraint[] constraints = type.createConstraints(this);
                 if (null != constraints) {
                     Project project = (Project) getTopLevelParent();
-                    project.addInternalConstraints(constraints);
+                    if (null != project) {
+                        project.addInternalConstraints(constraints);                        
+                    }
                 }
             } catch (CSTSemanticException e) {
                 EASyLoggerFactory.INSTANCE.getLogger(AbstractVariable.class, Bundle.ID).exception(e);
