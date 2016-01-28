@@ -336,8 +336,7 @@ public class Resolver {
         }  
         collectionCompoundConstraints.addAll(collectionCompoundConstraints(decl, null));
         // Container
-        if (de.uni_hildesheim.sse.model.varModel.datatypes.Container.TYPE.isAssignableFrom(type)) {
-            System.out.println("-----------Constainer");
+        if (de.uni_hildesheim.sse.model.varModel.datatypes.Container.TYPE.isAssignableFrom(type)) {            
             collectionInternalConstraints(decl, null);
         }
         if (null != defaultValue) {
@@ -677,9 +676,8 @@ public class Resolver {
             ConstraintSyntaxTree itExpression = internalConstraint.getConsSyntax();
 //            itExpression = copyVisitor(itExpression, null);
 //            if (Descriptor.LOGGING) {
-//                LOGGER.debug("New loop constraint " + StringProvider.toIvmlString(itExpression));
+//                System.out.println("New loop constraint " + StringProvider.toIvmlString(itExpression));
 //            }
-            System.out.println("New loop constraint " + StringProvider.toIvmlString(itExpression));
             ConstraintSyntaxTree containerOp = null;
             if (topcmpAccess == null) {
                 containerOp = createContainerCall(new Variable(decl), op, itExpression, localDecl);
@@ -689,7 +687,6 @@ public class Resolver {
             try {
                 if (containerOp != null) {
                     containerOp.inferDatatype();
-                    System.out.println("New loop constraint created" + StringProvider.toIvmlString(containerOp));
                     Constraint constraint = new Constraint(containerOp, project);
                     internalConstraints.add(constraint);                    
                 }
