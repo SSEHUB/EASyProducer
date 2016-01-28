@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.Writer;
 
+import org.apache.commons.lang.StringEscapeUtils;
+
 /**
  * An abstract class for writing an object model as a textual output.
  * 
@@ -41,6 +43,15 @@ public abstract class AbstractWriter {
      */
     protected void print(String string) {
         out.print(string);
+    }
+    
+    /**
+     * Prints a Java-escaped string.
+     * 
+     * @param string the string to be printed
+     */
+    protected void printJavaEscaped(String string) {
+        print(StringEscapeUtils.escapeJava(string));        
     }
 
     /**

@@ -15,6 +15,7 @@ import de.uni_hildesheim.sse.buildLanguageTranslation.RuleInfo;
 import de.uni_hildesheim.sse.dslCore.translation.ErrorCodes;
 import de.uni_hildesheim.sse.dslCore.translation.TranslatorException;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.BuildModel;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.ExpressionStatement;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.IRuleElement;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.Imports;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.Resolver;
@@ -54,6 +55,7 @@ import de.uni_hildesheim.sse.vil.rt.rtVil.BreakdownStatement;
 import de.uni_hildesheim.sse.vil.rt.rtVil.BreakdownWithPart;
 import de.uni_hildesheim.sse.vil.rt.rtVil.GlobalVariableDeclaration;
 import de.uni_hildesheim.sse.vil.rt.rtVil.ImplementationUnit;
+import de.uni_hildesheim.sse.vil.rt.rtVil.IntentDeclaration;
 import de.uni_hildesheim.sse.vil.rt.rtVil.LanguageUnit;
 import de.uni_hildesheim.sse.vil.rt.rtVil.RtVilPackage;
 import de.uni_hildesheim.sse.vil.rt.rtVil.StrategyDeclaration;
@@ -78,6 +80,15 @@ public class ModelTranslator extends de.uni_hildesheim.sse.buildLanguageTranslat
      */
     public ModelTranslator() {
         super(new ExpressionTranslator(), new Resolver(new TypeRegistry(RtVilTypeRegistry.INSTANCE)));
+    }
+    
+    /**
+     * Returns the associated expression translator.
+     * 
+     * @return the expression translator
+     */
+    protected ExpressionTranslator getExpressionTranslator() {
+        return (ExpressionTranslator) super.getExpressionTranslator();
     }
     
     /**
@@ -242,6 +253,22 @@ public class ModelTranslator extends de.uni_hildesheim.sse.buildLanguageTranslat
         protected String getDisplayName() {
             return "tactic";
         }
+        
+        @Override
+        protected void processAdditionalRuleBodyElements(TacticDeclaration tacticDecl, Tactic tactic, 
+            Script parent, Resolver resolver) throws TranslatorException {
+            RuleElementBlock block = tacticDecl.getBlock();
+            if (block instanceof de.uni_hildesheim.sse.vil.rt.rtVil.RuleElementBlock) {
+                de.uni_hildesheim.sse.vil.rt.rtVil.RuleElementBlock rBlock = 
+                    (de.uni_hildesheim.sse.vil.rt.rtVil.RuleElementBlock) block;
+                IntentDeclaration intentDecl = rBlock.getIntent();
+                if (null != intentDecl) {
+                    ExpressionStatement stmt = getExpressionTranslator().processExpressionStatement(
+                        intentDecl.getExprStmt(), resolver);
+                    tactic.setIntent(stmt);
+                }
+            }
+        }
 
     }
     
@@ -383,7 +410,7 @@ public class ModelTranslator extends de.uni_hildesheim.sse.buildLanguageTranslat
                         RtVilPackage.Literals.STRATEGY_DECLARATION__OBJECTIVE);
                 }
             }
-            ExpressionTranslator eTranslator = (ExpressionTranslator) getExpressionTranslator();
+            ExpressionTranslator eTranslator = getExpressionTranslator();
             Map<String, TypeDescriptor<?>> tupleFields = null;
             if (null != strategyDecl.getBreakdown()) {
                 List<IRuleElement> tmp = new ArrayList<IRuleElement>();
@@ -451,7 +478,7 @@ public class ModelTranslator extends de.uni_hildesheim.sse.buildLanguageTranslat
      */
     private IRuleElement processBreakdownStatement(BreakdownStatement stmt, Script parent, Resolver resolver, 
         Map<String, TypeDescriptor<?>> tupleFields) throws TranslatorException {
-        ExpressionTranslator eTranslator = (ExpressionTranslator) getExpressionTranslator();
+        ExpressionTranslator eTranslator = getExpressionTranslator();
         String name = Utils.getQualifiedNameString(stmt.getName());
         CallArgument[] args = eTranslator.processArguments(stmt.getParam(), resolver);
         stmt.getPart();

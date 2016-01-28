@@ -103,18 +103,8 @@ public class BasicRtTests extends AbstractBasicTest<Script> { // unclear why Abs
      * @throws IOException should not occur
      */
     @Test
-    public void testFail1() throws IOException {
+    public void testTacticFail1() throws IOException {
         assertEqual("tacticFail1");
-    }
-    
-    /**
-     * Tests a failing tactic due to same signatures.
-     * 
-     * @throws IOException should not occur
-     */
-    @Test
-    public void testFail2() throws IOException {
-        assertEqual("tacticFail2", ErrorCodes.REDEFINITION);
     }
     
     /**
@@ -235,6 +225,26 @@ public class BasicRtTests extends AbstractBasicTest<Script> { // unclear why Abs
     @Test
     public void testImport2() throws IOException {
         assertEqual("import2");
+    }
+    
+    /**
+     * Tests correct syntax of the fail statement.
+     * 
+     * @throws IOException should not occur
+     */
+    @Test
+    public void testFail1() throws IOException {
+        assertEqual("fail1");
+    }
+
+    /**
+     * Tests erroneous syntax of the fail statement.
+     * 
+     * @throws IOException should not occur
+     */
+    @Test
+    public void testFail2() throws IOException {
+        assertEqual("fail2", ErrorCodes.TYPE_CONSISTENCY);
     }
 
 }

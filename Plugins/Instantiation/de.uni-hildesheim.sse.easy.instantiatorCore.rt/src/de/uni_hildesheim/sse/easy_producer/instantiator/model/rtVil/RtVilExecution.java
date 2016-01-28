@@ -13,6 +13,7 @@ import java.util.Map;
 import java.util.Set;
 
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.BuildlangExecution;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.IRuleElement;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.ITracer;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.Rule;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.RuleCallExpression;
@@ -1113,6 +1114,36 @@ public class RtVilExecution extends BuildlangExecution implements IRtVilVisitor 
             if (!succeeded) {
                 throw failure;
             }
+        }
+        return result;
+    }
+
+    @Override
+    public Object visitFailStatement(FailStatement statement) throws VilException {
+        return null; // go on in ruleElemenFailed
+    }
+
+    @Override
+    protected void ruleElementFailed(IRuleElement elt, RuleExecutionContext context) throws VilException {
+        if (elt instanceof FailStatement) {
+            FailStatement fStmt = (FailStatement) elt;
+            context.setFailReason(fStmt.getReason()); // TODO read out and log
+            if (null != fStmt.getCodeEx()) {
+                Object value = fStmt.getCodeEx().accept(this);
+                if (value instanceof Integer) {
+                    context.setFailCode((Integer) value);
+                }
+            }
+        }
+    }
+    
+    @Override
+    protected boolean mayFail(Object elt) {
+        boolean result;
+        if (elt instanceof FailStatement) {
+            result = true;
+        } else {
+            result = super.mayFail(elt);
         }
         return result;
     }

@@ -3,6 +3,7 @@ package de.uni_hildesheim.sse.easy_producer.instantiator.model.rtVil;
 import java.io.Writer;
 
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.BuildlangWriter;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.ExpressionStatement;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.IRuleBlock;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.Rule.Side;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VariableDeclaration;
@@ -108,6 +109,7 @@ public class RtVilWriter extends BuildlangWriter implements IRtVilVisitor {
     @Override
     protected void printBlockContents(IRuleBlock block) throws VilException {
         Strategy strategy = block instanceof Strategy ? (Strategy) block : null;
+        Tactic tactic = block instanceof Tactic ? (Tactic) block : null;
         if (null != strategy) {
             for (int v = 0; v < strategy.getVariableDeclarationCount(); v++) {
                 strategy.getVariableDeclaration(v).accept(this);
@@ -136,6 +138,14 @@ public class RtVilWriter extends BuildlangWriter implements IRtVilVisitor {
                 printWhitespace();
                 wf.getExpression().accept(this);
                 println(");");
+            }
+        }
+        if (null != tactic) {
+            ExpressionStatement intent = tactic.getIntent();
+            if (null != intent) {
+                print("intent");
+                printWhitespace();
+                intent.accept(this);
             }
         }
         super.printBlockContents(block);
@@ -233,6 +243,24 @@ public class RtVilWriter extends BuildlangWriter implements IRtVilVisitor {
             timeout.accept(this);
         }
         println(";");
+    }
+
+    @Override
+    public Object visitFailStatement(FailStatement statement) throws VilException {
+        printIndentation();
+        print("fail");
+        if (null != statement.getReason()) {
+            printWhitespace();
+            print("\"");
+            printJavaEscaped(statement.getReason());
+            print("\"");
+        }
+        if (null != statement.getCodeEx()) {
+            printWhitespace();
+            statement.getCodeEx().accept(this);
+        }
+        println(";");
+        return null;
     }
 
 }

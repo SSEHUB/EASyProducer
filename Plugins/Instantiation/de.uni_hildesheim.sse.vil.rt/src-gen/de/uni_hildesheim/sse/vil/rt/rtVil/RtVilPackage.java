@@ -608,6 +608,154 @@ public interface RtVilPackage extends EPackage
    */
   int TACTIC_DECLARATION_FEATURE_COUNT = 4;
 
+  /**
+   * The meta object id for the '{@link de.uni_hildesheim.sse.vil.rt.rtVil.impl.RuleElementBlockImpl <em>Rule Element Block</em>}' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see de.uni_hildesheim.sse.vil.rt.rtVil.impl.RuleElementBlockImpl
+   * @see de.uni_hildesheim.sse.vil.rt.rtVil.impl.RtVilPackageImpl#getRuleElementBlock()
+   * @generated
+   */
+  int RULE_ELEMENT_BLOCK = 10;
+
+  /**
+   * The feature id for the '<em><b>Elements</b></em>' containment reference list.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int RULE_ELEMENT_BLOCK__ELEMENTS = VilBuildLanguagePackage.RULE_ELEMENT_BLOCK__ELEMENTS;
+
+  /**
+   * The feature id for the '<em><b>Intent</b></em>' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int RULE_ELEMENT_BLOCK__INTENT = VilBuildLanguagePackage.RULE_ELEMENT_BLOCK_FEATURE_COUNT + 0;
+
+  /**
+   * The number of structural features of the '<em>Rule Element Block</em>' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int RULE_ELEMENT_BLOCK_FEATURE_COUNT = VilBuildLanguagePackage.RULE_ELEMENT_BLOCK_FEATURE_COUNT + 1;
+
+  /**
+   * The meta object id for the '{@link de.uni_hildesheim.sse.vil.rt.rtVil.impl.RuleElementImpl <em>Rule Element</em>}' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see de.uni_hildesheim.sse.vil.rt.rtVil.impl.RuleElementImpl
+   * @see de.uni_hildesheim.sse.vil.rt.rtVil.impl.RtVilPackageImpl#getRuleElement()
+   * @generated
+   */
+  int RULE_ELEMENT = 11;
+
+  /**
+   * The feature id for the '<em><b>Var Decl</b></em>' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int RULE_ELEMENT__VAR_DECL = VilBuildLanguagePackage.RULE_ELEMENT__VAR_DECL;
+
+  /**
+   * The feature id for the '<em><b>Expr Stmt</b></em>' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int RULE_ELEMENT__EXPR_STMT = VilBuildLanguagePackage.RULE_ELEMENT__EXPR_STMT;
+
+  /**
+   * The feature id for the '<em><b>Fail</b></em>' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int RULE_ELEMENT__FAIL = VilBuildLanguagePackage.RULE_ELEMENT_FEATURE_COUNT + 0;
+
+  /**
+   * The number of structural features of the '<em>Rule Element</em>' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int RULE_ELEMENT_FEATURE_COUNT = VilBuildLanguagePackage.RULE_ELEMENT_FEATURE_COUNT + 1;
+
+  /**
+   * The meta object id for the '{@link de.uni_hildesheim.sse.vil.rt.rtVil.impl.IntentDeclarationImpl <em>Intent Declaration</em>}' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see de.uni_hildesheim.sse.vil.rt.rtVil.impl.IntentDeclarationImpl
+   * @see de.uni_hildesheim.sse.vil.rt.rtVil.impl.RtVilPackageImpl#getIntentDeclaration()
+   * @generated
+   */
+  int INTENT_DECLARATION = 12;
+
+  /**
+   * The feature id for the '<em><b>Expr Stmt</b></em>' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int INTENT_DECLARATION__EXPR_STMT = 0;
+
+  /**
+   * The number of structural features of the '<em>Intent Declaration</em>' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int INTENT_DECLARATION_FEATURE_COUNT = 1;
+
+  /**
+   * The meta object id for the '{@link de.uni_hildesheim.sse.vil.rt.rtVil.impl.FailStatementImpl <em>Fail Statement</em>}' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see de.uni_hildesheim.sse.vil.rt.rtVil.impl.FailStatementImpl
+   * @see de.uni_hildesheim.sse.vil.rt.rtVil.impl.RtVilPackageImpl#getFailStatement()
+   * @generated
+   */
+  int FAIL_STATEMENT = 13;
+
+  /**
+   * The feature id for the '<em><b>Reason</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int FAIL_STATEMENT__REASON = 0;
+
+  /**
+   * The feature id for the '<em><b>Code</b></em>' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int FAIL_STATEMENT__CODE = 1;
+
+  /**
+   * The number of structural features of the '<em>Fail Statement</em>' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int FAIL_STATEMENT_FEATURE_COUNT = 2;
+
 
   /**
    * Returns the meta object for class '{@link de.uni_hildesheim.sse.vil.rt.rtVil.ImplementationUnit <em>Implementation Unit</em>}'.
@@ -1029,6 +1177,101 @@ public interface RtVilPackage extends EPackage
   EReference getTacticDeclaration_Block();
 
   /**
+   * Returns the meta object for class '{@link de.uni_hildesheim.sse.vil.rt.rtVil.RuleElementBlock <em>Rule Element Block</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for class '<em>Rule Element Block</em>'.
+   * @see de.uni_hildesheim.sse.vil.rt.rtVil.RuleElementBlock
+   * @generated
+   */
+  EClass getRuleElementBlock();
+
+  /**
+   * Returns the meta object for the containment reference '{@link de.uni_hildesheim.sse.vil.rt.rtVil.RuleElementBlock#getIntent <em>Intent</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the containment reference '<em>Intent</em>'.
+   * @see de.uni_hildesheim.sse.vil.rt.rtVil.RuleElementBlock#getIntent()
+   * @see #getRuleElementBlock()
+   * @generated
+   */
+  EReference getRuleElementBlock_Intent();
+
+  /**
+   * Returns the meta object for class '{@link de.uni_hildesheim.sse.vil.rt.rtVil.RuleElement <em>Rule Element</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for class '<em>Rule Element</em>'.
+   * @see de.uni_hildesheim.sse.vil.rt.rtVil.RuleElement
+   * @generated
+   */
+  EClass getRuleElement();
+
+  /**
+   * Returns the meta object for the containment reference '{@link de.uni_hildesheim.sse.vil.rt.rtVil.RuleElement#getFail <em>Fail</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the containment reference '<em>Fail</em>'.
+   * @see de.uni_hildesheim.sse.vil.rt.rtVil.RuleElement#getFail()
+   * @see #getRuleElement()
+   * @generated
+   */
+  EReference getRuleElement_Fail();
+
+  /**
+   * Returns the meta object for class '{@link de.uni_hildesheim.sse.vil.rt.rtVil.IntentDeclaration <em>Intent Declaration</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for class '<em>Intent Declaration</em>'.
+   * @see de.uni_hildesheim.sse.vil.rt.rtVil.IntentDeclaration
+   * @generated
+   */
+  EClass getIntentDeclaration();
+
+  /**
+   * Returns the meta object for the containment reference '{@link de.uni_hildesheim.sse.vil.rt.rtVil.IntentDeclaration#getExprStmt <em>Expr Stmt</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the containment reference '<em>Expr Stmt</em>'.
+   * @see de.uni_hildesheim.sse.vil.rt.rtVil.IntentDeclaration#getExprStmt()
+   * @see #getIntentDeclaration()
+   * @generated
+   */
+  EReference getIntentDeclaration_ExprStmt();
+
+  /**
+   * Returns the meta object for class '{@link de.uni_hildesheim.sse.vil.rt.rtVil.FailStatement <em>Fail Statement</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for class '<em>Fail Statement</em>'.
+   * @see de.uni_hildesheim.sse.vil.rt.rtVil.FailStatement
+   * @generated
+   */
+  EClass getFailStatement();
+
+  /**
+   * Returns the meta object for the attribute '{@link de.uni_hildesheim.sse.vil.rt.rtVil.FailStatement#getReason <em>Reason</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the attribute '<em>Reason</em>'.
+   * @see de.uni_hildesheim.sse.vil.rt.rtVil.FailStatement#getReason()
+   * @see #getFailStatement()
+   * @generated
+   */
+  EAttribute getFailStatement_Reason();
+
+  /**
+   * Returns the meta object for the containment reference '{@link de.uni_hildesheim.sse.vil.rt.rtVil.FailStatement#getCode <em>Code</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the containment reference '<em>Code</em>'.
+   * @see de.uni_hildesheim.sse.vil.rt.rtVil.FailStatement#getCode()
+   * @see #getFailStatement()
+   * @generated
+   */
+  EReference getFailStatement_Code();
+
+  /**
    * Returns the factory that creates the instances of the model.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -1382,6 +1625,86 @@ public interface RtVilPackage extends EPackage
      * @generated
      */
     EReference TACTIC_DECLARATION__BLOCK = eINSTANCE.getTacticDeclaration_Block();
+
+    /**
+     * The meta object literal for the '{@link de.uni_hildesheim.sse.vil.rt.rtVil.impl.RuleElementBlockImpl <em>Rule Element Block</em>}' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see de.uni_hildesheim.sse.vil.rt.rtVil.impl.RuleElementBlockImpl
+     * @see de.uni_hildesheim.sse.vil.rt.rtVil.impl.RtVilPackageImpl#getRuleElementBlock()
+     * @generated
+     */
+    EClass RULE_ELEMENT_BLOCK = eINSTANCE.getRuleElementBlock();
+
+    /**
+     * The meta object literal for the '<em><b>Intent</b></em>' containment reference feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EReference RULE_ELEMENT_BLOCK__INTENT = eINSTANCE.getRuleElementBlock_Intent();
+
+    /**
+     * The meta object literal for the '{@link de.uni_hildesheim.sse.vil.rt.rtVil.impl.RuleElementImpl <em>Rule Element</em>}' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see de.uni_hildesheim.sse.vil.rt.rtVil.impl.RuleElementImpl
+     * @see de.uni_hildesheim.sse.vil.rt.rtVil.impl.RtVilPackageImpl#getRuleElement()
+     * @generated
+     */
+    EClass RULE_ELEMENT = eINSTANCE.getRuleElement();
+
+    /**
+     * The meta object literal for the '<em><b>Fail</b></em>' containment reference feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EReference RULE_ELEMENT__FAIL = eINSTANCE.getRuleElement_Fail();
+
+    /**
+     * The meta object literal for the '{@link de.uni_hildesheim.sse.vil.rt.rtVil.impl.IntentDeclarationImpl <em>Intent Declaration</em>}' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see de.uni_hildesheim.sse.vil.rt.rtVil.impl.IntentDeclarationImpl
+     * @see de.uni_hildesheim.sse.vil.rt.rtVil.impl.RtVilPackageImpl#getIntentDeclaration()
+     * @generated
+     */
+    EClass INTENT_DECLARATION = eINSTANCE.getIntentDeclaration();
+
+    /**
+     * The meta object literal for the '<em><b>Expr Stmt</b></em>' containment reference feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EReference INTENT_DECLARATION__EXPR_STMT = eINSTANCE.getIntentDeclaration_ExprStmt();
+
+    /**
+     * The meta object literal for the '{@link de.uni_hildesheim.sse.vil.rt.rtVil.impl.FailStatementImpl <em>Fail Statement</em>}' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see de.uni_hildesheim.sse.vil.rt.rtVil.impl.FailStatementImpl
+     * @see de.uni_hildesheim.sse.vil.rt.rtVil.impl.RtVilPackageImpl#getFailStatement()
+     * @generated
+     */
+    EClass FAIL_STATEMENT = eINSTANCE.getFailStatement();
+
+    /**
+     * The meta object literal for the '<em><b>Reason</b></em>' attribute feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EAttribute FAIL_STATEMENT__REASON = eINSTANCE.getFailStatement_Reason();
+
+    /**
+     * The meta object literal for the '<em><b>Code</b></em>' containment reference feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EReference FAIL_STATEMENT__CODE = eINSTANCE.getFailStatement_Code();
 
   }
 

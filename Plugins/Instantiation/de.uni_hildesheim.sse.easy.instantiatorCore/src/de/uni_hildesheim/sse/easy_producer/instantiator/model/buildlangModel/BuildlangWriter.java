@@ -339,7 +339,6 @@ public class BuildlangWriter extends WriterVisitor<VariableDeclaration> implemen
         }
         
     }
-    
 
     /**
      * Prints the actual block contents.

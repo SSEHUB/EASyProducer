@@ -727,6 +727,153 @@ public class RtVilGrammarAccess extends AbstractGrammarElementFinder {
 		//';'?
 		public Keyword getSemicolonKeyword_9() { return cSemicolonKeyword_9; }
 	}
+
+	public class RuleElementBlockElements extends AbstractParserRuleElementFinder {
+		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "de.uni_hildesheim.sse.vil.rt.RtVil.RuleElementBlock");
+		private final Group cGroup = (Group)rule.eContents().get(1);
+		private final Action cRuleElementBlockAction_0 = (Action)cGroup.eContents().get(0);
+		private final Keyword cLeftCurlyBracketKeyword_1 = (Keyword)cGroup.eContents().get(1);
+		private final Assignment cIntentAssignment_2 = (Assignment)cGroup.eContents().get(2);
+		private final RuleCall cIntentIntentDeclarationParserRuleCall_2_0 = (RuleCall)cIntentAssignment_2.eContents().get(0);
+		private final Assignment cElementsAssignment_3 = (Assignment)cGroup.eContents().get(3);
+		private final RuleCall cElementsRuleElementParserRuleCall_3_0 = (RuleCall)cElementsAssignment_3.eContents().get(0);
+		private final Keyword cRightCurlyBracketKeyword_4 = (Keyword)cGroup.eContents().get(4);
+		
+		//RuleElementBlock:
+		//	{RuleElementBlock}
+		//	'{'
+		//	intent=IntentDeclaration?
+		//	elements+=RuleElement*
+		//	'}';
+		@Override public ParserRule getRule() { return rule; }
+
+		//{RuleElementBlock} '{' intent=IntentDeclaration? elements+=RuleElement* '}'
+		public Group getGroup() { return cGroup; }
+
+		//{RuleElementBlock}
+		public Action getRuleElementBlockAction_0() { return cRuleElementBlockAction_0; }
+
+		//'{'
+		public Keyword getLeftCurlyBracketKeyword_1() { return cLeftCurlyBracketKeyword_1; }
+
+		//intent=IntentDeclaration?
+		public Assignment getIntentAssignment_2() { return cIntentAssignment_2; }
+
+		//IntentDeclaration
+		public RuleCall getIntentIntentDeclarationParserRuleCall_2_0() { return cIntentIntentDeclarationParserRuleCall_2_0; }
+
+		//elements+=RuleElement*
+		public Assignment getElementsAssignment_3() { return cElementsAssignment_3; }
+
+		//RuleElement
+		public RuleCall getElementsRuleElementParserRuleCall_3_0() { return cElementsRuleElementParserRuleCall_3_0; }
+
+		//'}'
+		public Keyword getRightCurlyBracketKeyword_4() { return cRightCurlyBracketKeyword_4; }
+	}
+
+	public class RuleElementElements extends AbstractParserRuleElementFinder {
+		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "de.uni_hildesheim.sse.vil.rt.RtVil.RuleElement");
+		private final Alternatives cAlternatives = (Alternatives)rule.eContents().get(1);
+		private final Assignment cVarDeclAssignment_0 = (Assignment)cAlternatives.eContents().get(0);
+		private final RuleCall cVarDeclVariableDeclarationParserRuleCall_0_0 = (RuleCall)cVarDeclAssignment_0.eContents().get(0);
+		private final Assignment cExprStmtAssignment_1 = (Assignment)cAlternatives.eContents().get(1);
+		private final RuleCall cExprStmtExpressionStatementParserRuleCall_1_0 = (RuleCall)cExprStmtAssignment_1.eContents().get(0);
+		private final Assignment cFailAssignment_2 = (Assignment)cAlternatives.eContents().get(2);
+		private final RuleCall cFailFailStatementParserRuleCall_2_0 = (RuleCall)cFailAssignment_2.eContents().get(0);
+		
+		//RuleElement:
+		//	varDecl=VariableDeclaration
+		//	| exprStmt=ExpressionStatement
+		//	| fail=FailStatement;
+		@Override public ParserRule getRule() { return rule; }
+
+		//varDecl=VariableDeclaration | exprStmt=ExpressionStatement | fail=FailStatement
+		public Alternatives getAlternatives() { return cAlternatives; }
+
+		//varDecl=VariableDeclaration
+		public Assignment getVarDeclAssignment_0() { return cVarDeclAssignment_0; }
+
+		//VariableDeclaration
+		public RuleCall getVarDeclVariableDeclarationParserRuleCall_0_0() { return cVarDeclVariableDeclarationParserRuleCall_0_0; }
+
+		//exprStmt=ExpressionStatement
+		public Assignment getExprStmtAssignment_1() { return cExprStmtAssignment_1; }
+
+		//ExpressionStatement
+		public RuleCall getExprStmtExpressionStatementParserRuleCall_1_0() { return cExprStmtExpressionStatementParserRuleCall_1_0; }
+
+		//fail=FailStatement
+		public Assignment getFailAssignment_2() { return cFailAssignment_2; }
+
+		//FailStatement
+		public RuleCall getFailFailStatementParserRuleCall_2_0() { return cFailFailStatementParserRuleCall_2_0; }
+	}
+
+	public class IntentDeclarationElements extends AbstractParserRuleElementFinder {
+		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "de.uni_hildesheim.sse.vil.rt.RtVil.IntentDeclaration");
+		private final Group cGroup = (Group)rule.eContents().get(1);
+		private final Keyword cIntentKeyword_0 = (Keyword)cGroup.eContents().get(0);
+		private final Assignment cExprStmtAssignment_1 = (Assignment)cGroup.eContents().get(1);
+		private final RuleCall cExprStmtExpressionStatementParserRuleCall_1_0 = (RuleCall)cExprStmtAssignment_1.eContents().get(0);
+		
+		//IntentDeclaration:
+		//	'intent' exprStmt=ExpressionStatement;
+		@Override public ParserRule getRule() { return rule; }
+
+		//'intent' exprStmt=ExpressionStatement
+		public Group getGroup() { return cGroup; }
+
+		//'intent'
+		public Keyword getIntentKeyword_0() { return cIntentKeyword_0; }
+
+		//exprStmt=ExpressionStatement
+		public Assignment getExprStmtAssignment_1() { return cExprStmtAssignment_1; }
+
+		//ExpressionStatement
+		public RuleCall getExprStmtExpressionStatementParserRuleCall_1_0() { return cExprStmtExpressionStatementParserRuleCall_1_0; }
+	}
+
+	public class FailStatementElements extends AbstractParserRuleElementFinder {
+		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "de.uni_hildesheim.sse.vil.rt.RtVil.FailStatement");
+		private final Group cGroup = (Group)rule.eContents().get(1);
+		private final Action cFailStatementAction_0 = (Action)cGroup.eContents().get(0);
+		private final Keyword cFailKeyword_1 = (Keyword)cGroup.eContents().get(1);
+		private final Assignment cReasonAssignment_2 = (Assignment)cGroup.eContents().get(2);
+		private final RuleCall cReasonSTRINGTerminalRuleCall_2_0 = (RuleCall)cReasonAssignment_2.eContents().get(0);
+		private final Assignment cCodeAssignment_3 = (Assignment)cGroup.eContents().get(3);
+		private final RuleCall cCodeExpressionParserRuleCall_3_0 = (RuleCall)cCodeAssignment_3.eContents().get(0);
+		private final Keyword cSemicolonKeyword_4 = (Keyword)cGroup.eContents().get(4);
+		
+		//FailStatement:
+		//	{FailStatement}
+		//	'fail' reason=STRING? code=Expression? ';';
+		@Override public ParserRule getRule() { return rule; }
+
+		//{FailStatement} 'fail' reason=STRING? code=Expression? ';'
+		public Group getGroup() { return cGroup; }
+
+		//{FailStatement}
+		public Action getFailStatementAction_0() { return cFailStatementAction_0; }
+
+		//'fail'
+		public Keyword getFailKeyword_1() { return cFailKeyword_1; }
+
+		//reason=STRING?
+		public Assignment getReasonAssignment_2() { return cReasonAssignment_2; }
+
+		//STRING
+		public RuleCall getReasonSTRINGTerminalRuleCall_2_0() { return cReasonSTRINGTerminalRuleCall_2_0; }
+
+		//code=Expression?
+		public Assignment getCodeAssignment_3() { return cCodeAssignment_3; }
+
+		//Expression
+		public RuleCall getCodeExpressionParserRuleCall_3_0() { return cCodeExpressionParserRuleCall_3_0; }
+
+		//';'
+		public Keyword getSemicolonKeyword_4() { return cSemicolonKeyword_4; }
+	}
 	
 	
 	private final ImplementationUnitElements pImplementationUnit;
@@ -739,6 +886,10 @@ public class RtVilGrammarAccess extends AbstractGrammarElementFinder {
 	private final BreakdownStatementElements pBreakdownStatement;
 	private final BreakdownWithPartElements pBreakdownWithPart;
 	private final TacticDeclarationElements pTacticDeclaration;
+	private final RuleElementBlockElements pRuleElementBlock;
+	private final RuleElementElements pRuleElement;
+	private final IntentDeclarationElements pIntentDeclaration;
+	private final FailStatementElements pFailStatement;
 	
 	private final Grammar grammar;
 
@@ -763,6 +914,10 @@ public class RtVilGrammarAccess extends AbstractGrammarElementFinder {
 		this.pBreakdownStatement = new BreakdownStatementElements();
 		this.pBreakdownWithPart = new BreakdownWithPartElements();
 		this.pTacticDeclaration = new TacticDeclarationElements();
+		this.pRuleElementBlock = new RuleElementBlockElements();
+		this.pRuleElement = new RuleElementElements();
+		this.pIntentDeclaration = new IntentDeclarationElements();
+		this.pFailStatement = new FailStatementElements();
 	}
 	
 	protected Grammar internalFindGrammar(GrammarProvider grammarProvider) {
@@ -932,6 +1087,53 @@ public class RtVilGrammarAccess extends AbstractGrammarElementFinder {
 		return getTacticDeclarationAccess().getRule();
 	}
 
+	//RuleElementBlock:
+	//	{RuleElementBlock}
+	//	'{'
+	//	intent=IntentDeclaration?
+	//	elements+=RuleElement*
+	//	'}';
+	public RuleElementBlockElements getRuleElementBlockAccess() {
+		return pRuleElementBlock;
+	}
+	
+	public ParserRule getRuleElementBlockRule() {
+		return getRuleElementBlockAccess().getRule();
+	}
+
+	//RuleElement:
+	//	varDecl=VariableDeclaration
+	//	| exprStmt=ExpressionStatement
+	//	| fail=FailStatement;
+	public RuleElementElements getRuleElementAccess() {
+		return pRuleElement;
+	}
+	
+	public ParserRule getRuleElementRule() {
+		return getRuleElementAccess().getRule();
+	}
+
+	//IntentDeclaration:
+	//	'intent' exprStmt=ExpressionStatement;
+	public IntentDeclarationElements getIntentDeclarationAccess() {
+		return pIntentDeclaration;
+	}
+	
+	public ParserRule getIntentDeclarationRule() {
+		return getIntentDeclarationAccess().getRule();
+	}
+
+	//FailStatement:
+	//	{FailStatement}
+	//	'fail' reason=STRING? code=Expression? ';';
+	public FailStatementElements getFailStatementAccess() {
+		return pFailStatement;
+	}
+	
+	public ParserRule getFailStatementRule() {
+		return getFailStatementAccess().getRule();
+	}
+
 	//Require: //here fqn because this may reference a specific project (of an external project)
 	//	'requireVTL' name=STRING versionSpec=VersionSpec ';';
 	public VilBuildLanguageGrammarAccess.RequireElements getRequireAccess() {
@@ -984,7 +1186,7 @@ public class RtVilGrammarAccess extends AbstractGrammarElementFinder {
 	//	'(' paramList=ParameterList? ')'
 	//	'=')?
 	//	conditions=RuleConditions?
-	//	block=RuleElementBlock
+	//	block=super::RuleElementBlock
 	//	';'?;
 	public VilBuildLanguageGrammarAccess.RuleDeclarationElements getRuleDeclarationAccess() {
 		return gaVilBuildLanguage.getRuleDeclarationAccess();
@@ -1003,30 +1205,6 @@ public class RtVilGrammarAccess extends AbstractGrammarElementFinder {
 	
 	public ParserRule getRuleConditionsRule() {
 		return getRuleConditionsAccess().getRule();
-	}
-
-	//RuleElementBlock:
-	//	{RuleElementBlock}
-	//	'{'
-	//	elements+=RuleElement*
-	//	'}';
-	public VilBuildLanguageGrammarAccess.RuleElementBlockElements getRuleElementBlockAccess() {
-		return gaVilBuildLanguage.getRuleElementBlockAccess();
-	}
-	
-	public ParserRule getRuleElementBlockRule() {
-		return getRuleElementBlockAccess().getRule();
-	}
-
-	//RuleElement:
-	//	varDecl=VariableDeclaration
-	//	| exprStmt=ExpressionStatement;
-	public VilBuildLanguageGrammarAccess.RuleElementElements getRuleElementAccess() {
-		return gaVilBuildLanguage.getRuleElementAccess();
-	}
-	
-	public ParserRule getRuleElementRule() {
-		return getRuleElementAccess().getRule();
 	}
 
 	//RuleModifier:
@@ -1092,7 +1270,7 @@ public class RtVilGrammarAccess extends AbstractGrammarElementFinder {
 
 	//Map:
 	//	'map' '(' var+=MapVariable (',' var+=MapVariable)* separator=('=' | ':') expr=Expression ')'
-	//	block=RuleElementBlock;
+	//	block=super::RuleElementBlock;
 	public VilBuildLanguageGrammarAccess.MapElements getMapAccess() {
 		return gaVilBuildLanguage.getMapAccess();
 	}
@@ -1112,7 +1290,7 @@ public class RtVilGrammarAccess extends AbstractGrammarElementFinder {
 	}
 
 	//StatementOrBlock:
-	//	exStmt=ExpressionStatement | block=RuleElementBlock;
+	//	exStmt=ExpressionStatement | block=super::RuleElementBlock;
 	public VilBuildLanguageGrammarAccess.StatementOrBlockElements getStatementOrBlockAccess() {
 		return gaVilBuildLanguage.getStatementOrBlockAccess();
 	}

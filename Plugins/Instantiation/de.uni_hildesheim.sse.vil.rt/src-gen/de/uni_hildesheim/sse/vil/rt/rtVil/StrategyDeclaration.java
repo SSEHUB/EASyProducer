@@ -7,7 +7,6 @@ import de.uni_hildesheim.sse.vil.expressions.expressionDsl.ParameterList;
 import de.uni_hildesheim.sse.vil.expressions.expressionDsl.VariableDeclaration;
 
 import de.uni_hildesheim.sse.vilBuildLanguage.RuleConditions;
-import de.uni_hildesheim.sse.vilBuildLanguage.RuleElement;
 
 import org.eclipse.emf.common.util.EList;
 
@@ -202,7 +201,7 @@ public interface StrategyDeclaration extends EObject
 
   /**
    * Returns the value of the '<em><b>Post</b></em>' containment reference list.
-   * The list contents are of type {@link de.uni_hildesheim.sse.vilBuildLanguage.RuleElement}.
+   * The list contents are of type {@link de.uni_hildesheim.sse.vil.rt.rtVil.RuleElement}.
    * <!-- begin-user-doc -->
    * <p>
    * If the meaning of the '<em>Post</em>' containment reference list isn't clear,

@@ -74,6 +74,10 @@ public class RtVilFactoryImpl extends EFactoryImpl implements RtVilFactory
       case RtVilPackage.BREAKDOWN_STATEMENT: return createBreakdownStatement();
       case RtVilPackage.BREAKDOWN_WITH_PART: return createBreakdownWithPart();
       case RtVilPackage.TACTIC_DECLARATION: return createTacticDeclaration();
+      case RtVilPackage.RULE_ELEMENT_BLOCK: return createRuleElementBlock();
+      case RtVilPackage.RULE_ELEMENT: return createRuleElement();
+      case RtVilPackage.INTENT_DECLARATION: return createIntentDeclaration();
+      case RtVilPackage.FAIL_STATEMENT: return createFailStatement();
       default:
         throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
     }
@@ -187,6 +191,50 @@ public class RtVilFactoryImpl extends EFactoryImpl implements RtVilFactory
   {
     TacticDeclarationImpl tacticDeclaration = new TacticDeclarationImpl();
     return tacticDeclaration;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public RuleElementBlock createRuleElementBlock()
+  {
+    RuleElementBlockImpl ruleElementBlock = new RuleElementBlockImpl();
+    return ruleElementBlock;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public RuleElement createRuleElement()
+  {
+    RuleElementImpl ruleElement = new RuleElementImpl();
+    return ruleElement;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public IntentDeclaration createIntentDeclaration()
+  {
+    IntentDeclarationImpl intentDeclaration = new IntentDeclarationImpl();
+    return intentDeclaration;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public FailStatement createFailStatement()
+  {
+    FailStatementImpl failStatement = new FailStatementImpl();
+    return failStatement;
   }
 
   /**

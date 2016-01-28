@@ -125,6 +125,26 @@ public class RtVilAdapterFactory extends AdapterFactoryImpl
         return createTacticDeclarationAdapter();
       }
       @Override
+      public Adapter caseRuleElementBlock(RuleElementBlock object)
+      {
+        return createRuleElementBlockAdapter();
+      }
+      @Override
+      public Adapter caseRuleElement(RuleElement object)
+      {
+        return createRuleElementAdapter();
+      }
+      @Override
+      public Adapter caseIntentDeclaration(IntentDeclaration object)
+      {
+        return createIntentDeclarationAdapter();
+      }
+      @Override
+      public Adapter caseFailStatement(FailStatement object)
+      {
+        return createFailStatementAdapter();
+      }
+      @Override
       public Adapter caseVilBuildLanguage_ImplementationUnit(de.uni_hildesheim.sse.vilBuildLanguage.ImplementationUnit object)
       {
         return createVilBuildLanguage_ImplementationUnitAdapter();
@@ -138,6 +158,16 @@ public class RtVilAdapterFactory extends AdapterFactoryImpl
       public Adapter caseVilBuildLanguage_LanguageUnit(de.uni_hildesheim.sse.vilBuildLanguage.LanguageUnit object)
       {
         return createVilBuildLanguage_LanguageUnitAdapter();
+      }
+      @Override
+      public Adapter caseVilBuildLanguage_RuleElementBlock(de.uni_hildesheim.sse.vilBuildLanguage.RuleElementBlock object)
+      {
+        return createVilBuildLanguage_RuleElementBlockAdapter();
+      }
+      @Override
+      public Adapter caseVilBuildLanguage_RuleElement(de.uni_hildesheim.sse.vilBuildLanguage.RuleElement object)
+      {
+        return createVilBuildLanguage_RuleElementAdapter();
       }
       @Override
       public Adapter defaultCase(EObject object)
@@ -312,6 +342,66 @@ public class RtVilAdapterFactory extends AdapterFactoryImpl
   }
 
   /**
+   * Creates a new adapter for an object of class '{@link de.uni_hildesheim.sse.vil.rt.rtVil.RuleElementBlock <em>Rule Element Block</em>}'.
+   * <!-- begin-user-doc -->
+   * This default implementation returns null so that we can easily ignore cases;
+   * it's useful to ignore a case when inheritance will catch all the cases anyway.
+   * <!-- end-user-doc -->
+   * @return the new adapter.
+   * @see de.uni_hildesheim.sse.vil.rt.rtVil.RuleElementBlock
+   * @generated
+   */
+  public Adapter createRuleElementBlockAdapter()
+  {
+    return null;
+  }
+
+  /**
+   * Creates a new adapter for an object of class '{@link de.uni_hildesheim.sse.vil.rt.rtVil.RuleElement <em>Rule Element</em>}'.
+   * <!-- begin-user-doc -->
+   * This default implementation returns null so that we can easily ignore cases;
+   * it's useful to ignore a case when inheritance will catch all the cases anyway.
+   * <!-- end-user-doc -->
+   * @return the new adapter.
+   * @see de.uni_hildesheim.sse.vil.rt.rtVil.RuleElement
+   * @generated
+   */
+  public Adapter createRuleElementAdapter()
+  {
+    return null;
+  }
+
+  /**
+   * Creates a new adapter for an object of class '{@link de.uni_hildesheim.sse.vil.rt.rtVil.IntentDeclaration <em>Intent Declaration</em>}'.
+   * <!-- begin-user-doc -->
+   * This default implementation returns null so that we can easily ignore cases;
+   * it's useful to ignore a case when inheritance will catch all the cases anyway.
+   * <!-- end-user-doc -->
+   * @return the new adapter.
+   * @see de.uni_hildesheim.sse.vil.rt.rtVil.IntentDeclaration
+   * @generated
+   */
+  public Adapter createIntentDeclarationAdapter()
+  {
+    return null;
+  }
+
+  /**
+   * Creates a new adapter for an object of class '{@link de.uni_hildesheim.sse.vil.rt.rtVil.FailStatement <em>Fail Statement</em>}'.
+   * <!-- begin-user-doc -->
+   * This default implementation returns null so that we can easily ignore cases;
+   * it's useful to ignore a case when inheritance will catch all the cases anyway.
+   * <!-- end-user-doc -->
+   * @return the new adapter.
+   * @see de.uni_hildesheim.sse.vil.rt.rtVil.FailStatement
+   * @generated
+   */
+  public Adapter createFailStatementAdapter()
+  {
+    return null;
+  }
+
+  /**
    * Creates a new adapter for an object of class '{@link de.uni_hildesheim.sse.vilBuildLanguage.ImplementationUnit <em>Implementation Unit</em>}'.
    * <!-- begin-user-doc -->
    * This default implementation returns null so that we can easily ignore cases;
@@ -352,6 +442,36 @@ public class RtVilAdapterFactory extends AdapterFactoryImpl
    * @generated
    */
   public Adapter createVilBuildLanguage_LanguageUnitAdapter()
+  {
+    return null;
+  }
+
+  /**
+   * Creates a new adapter for an object of class '{@link de.uni_hildesheim.sse.vilBuildLanguage.RuleElementBlock <em>Rule Element Block</em>}'.
+   * <!-- begin-user-doc -->
+   * This default implementation returns null so that we can easily ignore cases;
+   * it's useful to ignore a case when inheritance will catch all the cases anyway.
+   * <!-- end-user-doc -->
+   * @return the new adapter.
+   * @see de.uni_hildesheim.sse.vilBuildLanguage.RuleElementBlock
+   * @generated
+   */
+  public Adapter createVilBuildLanguage_RuleElementBlockAdapter()
+  {
+    return null;
+  }
+
+  /**
+   * Creates a new adapter for an object of class '{@link de.uni_hildesheim.sse.vilBuildLanguage.RuleElement <em>Rule Element</em>}'.
+   * <!-- begin-user-doc -->
+   * This default implementation returns null so that we can easily ignore cases;
+   * it's useful to ignore a case when inheritance will catch all the cases anyway.
+   * <!-- end-user-doc -->
+   * @return the new adapter.
+   * @see de.uni_hildesheim.sse.vilBuildLanguage.RuleElement
+   * @generated
+   */
+  public Adapter createVilBuildLanguage_RuleElementAdapter()
   {
     return null;
   }

@@ -357,7 +357,27 @@ public class ExecutionRtTests extends AbstractRtTest {
     public void testWeighting2() throws IOException {
         assertEqual("weighting2");
     }
+    
+    /**
+     * Tests a failing tactic. The first tactic shall fail, the second shall succeed.
+     * 
+     * @throws IOException should not occur
+     */
+    @Test
+    public void testFail1() throws IOException {
+        assertEqual("fail1");
+    }
 
+    /**
+     * Tests a failing strategy. The first strategy shall fail, the second shall succeed.
+     * 
+     * @throws IOException should not occur
+     */
+    @Test
+    public void testFail2() throws IOException {
+        assertEqual("fail2");
+    }
+    
     /**
      * Tests simple timeout expressions (negative, possible).
      * 

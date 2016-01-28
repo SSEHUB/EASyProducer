@@ -289,7 +289,7 @@ public class ExpressionTranslator
      * @return the resolved elements
      * @throws TranslatorException in case that the translation fails due to semantic reasons
      */
-    public IRuleElement[] resolveBlock(List<RuleElement> block, Resolver resolver) {
+    public IRuleElement[] resolveBlock(List<? extends RuleElement> block, Resolver resolver) {
         IRuleElement[] result = null;
         if (null != block) {
             List<IRuleElement> tmp = new ArrayList<IRuleElement>();
@@ -299,6 +299,11 @@ public class ExpressionTranslator
                         tmp.add(processExpressionStatement(elt.getExprStmt(), resolver));
                     } else if (null != elt.getVarDecl()) {
                         tmp.add(processVariableDeclaration(elt.getVarDecl(), resolver));
+                    } else {
+                        IRuleElement rElt = resolveRuleElement(elt, resolver);
+                        if (null != rElt) {
+                            tmp.add(rElt);
+                        }
                     }
                 } catch (TranslatorException e) {
                     error(e);
@@ -310,6 +315,18 @@ public class ExpressionTranslator
             }
         }
         return result;
+    }
+    
+    /**
+     * Called if the default processing of rule elements cannot be applied.
+     * 
+     * @param elt the rule element
+     * @param resolver the resolver
+     * @return the resolved element (may be <b>null</b>, is ignored then)
+     * @throws TranslatorException in case that resolving the rule element fails for some reason
+     */
+    protected IRuleElement resolveRuleElement(RuleElement elt, Resolver resolver) throws TranslatorException {
+        return null;
     }
 
     @Override

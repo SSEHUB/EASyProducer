@@ -70,4 +70,12 @@ public interface IRtVilVisitor extends IBuildlangVisitor {
      */
     public Object visitTacticCall(TacticCall call) throws VilException;
 
+    /**
+     * Is called to visit a fail statement.
+     * 
+     * @param statement the fail statement
+     * @return the result of visiting
+     * @throws VilException in case that visiting fails
+     */
+    public Object visitFailStatement(FailStatement statement) throws VilException;
 }

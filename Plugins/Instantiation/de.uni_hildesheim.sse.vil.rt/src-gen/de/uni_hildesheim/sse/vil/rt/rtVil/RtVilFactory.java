@@ -113,6 +113,42 @@ public interface RtVilFactory extends EFactory
   TacticDeclaration createTacticDeclaration();
 
   /**
+   * Returns a new object of class '<em>Rule Element Block</em>'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return a new object of class '<em>Rule Element Block</em>'.
+   * @generated
+   */
+  RuleElementBlock createRuleElementBlock();
+
+  /**
+   * Returns a new object of class '<em>Rule Element</em>'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return a new object of class '<em>Rule Element</em>'.
+   * @generated
+   */
+  RuleElement createRuleElement();
+
+  /**
+   * Returns a new object of class '<em>Intent Declaration</em>'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return a new object of class '<em>Intent Declaration</em>'.
+   * @generated
+   */
+  IntentDeclaration createIntentDeclaration();
+
+  /**
+   * Returns a new object of class '<em>Fail Statement</em>'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return a new object of class '<em>Fail Statement</em>'.
+   * @generated
+   */
+  FailStatement createFailStatement();
+
+  /**
    * Returns the package supported by this factory.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
