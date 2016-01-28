@@ -1,0 +1,5 @@
+project AliasUsedInSet {
+
+    typedef Number Integer;
+    setOf(Number) numbers;
+}

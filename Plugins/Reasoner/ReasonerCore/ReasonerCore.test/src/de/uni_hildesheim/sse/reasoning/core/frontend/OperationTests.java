@@ -876,6 +876,16 @@ public abstract class OperationTests extends AbstractReasonerFrontendTest {
         performOpCheck("typedefNestedInSequenceInvalid.ivml", false);
     }
     
+    /**
+     * Tests whether an alias (typed without a constraint) can be used to define a compound.
+     * 
+     * @throws IOException in case of problems reading a model
+     */
+    @Test
+    public void testAliasesInContainerValid() throws IOException {
+        performOpCheck("AliasUsedInSet.ivml", true);
+    }
+    
 // ----------------------------------- Value validation -----------------------
     
     /**
