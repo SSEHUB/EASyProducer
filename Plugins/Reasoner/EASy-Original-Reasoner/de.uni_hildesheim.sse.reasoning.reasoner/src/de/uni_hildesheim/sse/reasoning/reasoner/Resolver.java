@@ -672,26 +672,29 @@ public class Resolver {
         AbstractVariable decl, CompoundAccess topcmpAccess) {  
         DecisionVariableDeclaration localDecl = new DecisionVariableDeclaration("derivedType", derivedType, null);
         InternalConstraint[] typeConstraints = createInternalConstraints(localDecl, derivedType);
-        for (InternalConstraint internalConstraint : typeConstraints) {
-            ConstraintSyntaxTree itExpression = internalConstraint.getConsSyntax();
+        if (typeConstraints != null) {
+            for (int i = 0, n = typeConstraints.length; i < n; i++) {
+                InternalConstraint internalConstraint = typeConstraints[i];
+                ConstraintSyntaxTree itExpression = internalConstraint.getConsSyntax();
 //            itExpression = copyVisitor(itExpression, null);
 //            if (Descriptor.LOGGING) {
 //                System.out.println("New loop constraint " + StringProvider.toIvmlString(itExpression));
 //            }
-            ConstraintSyntaxTree containerOp = null;
-            if (topcmpAccess == null) {
-                containerOp = createContainerCall(new Variable(decl), op, itExpression, localDecl);
-            } else {
-                containerOp = createContainerCall(topcmpAccess, op, itExpression, localDecl);
-            }            
-            try {
-                if (containerOp != null) {
-                    containerOp.inferDatatype();
-                    Constraint constraint = new Constraint(containerOp, project);
-                    internalConstraints.add(constraint);                    
-                }
-            } catch (CSTSemanticException e) {
-                LOGGER.exception(e);
+                ConstraintSyntaxTree containerOp = null;
+                if (topcmpAccess == null) {
+                    containerOp = createContainerCall(new Variable(decl), op, itExpression, localDecl);
+                } else {
+                    containerOp = createContainerCall(topcmpAccess, op, itExpression, localDecl);
+                }            
+                try {
+                    if (containerOp != null) {
+                        containerOp.inferDatatype();
+                        Constraint constraint = new Constraint(containerOp, project);
+                        internalConstraints.add(constraint);                    
+                    }
+                } catch (CSTSemanticException e) {
+                    LOGGER.exception(e);
+                }            
             }            
         }
         if (derivedType.getBasisType() instanceof DerivedDatatype) {
