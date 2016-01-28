@@ -282,6 +282,30 @@ public class ReasoningScenarioTests extends de.uni_hildesheim.sse.reasoning.Abst
     }
     
     /**
+     * Inherited internal constraint in compound test.
+     */
+    @Test
+    public void internalConstraintInheritedInCompoundTest() {
+        reasoningTest("internalConstraintInheritedInCompoundTest.ivml", 1);
+    }
+    
+    /**
+     * Collection internal constraint test.
+     */
+    @Test
+    public void internalConstraintCollectionTest() {
+        reasoningTest("internalConstraintCollectionTest.ivml", 2);
+    }
+    
+    /**
+     * Collection internal constraint in compound test.
+     */
+    @Test
+    public void internalConstraintCollectionInCompoundTest() {
+        reasoningTest("internalConstraintCollectionInCompoundTest.ivml", 2);
+    }
+    
+    /**
      * String pattern test with internal constraint.
      */
     @Test
