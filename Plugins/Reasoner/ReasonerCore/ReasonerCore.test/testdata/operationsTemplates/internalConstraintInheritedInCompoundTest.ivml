@@ -1,0 +1,11 @@
+project internalConstraintInheritedInCompoundTest {
+
+    typedef PositiveInteger Integer with (PositiveInteger > 0);
+    typedef SpringInteger PositiveInteger with (SpringInteger < 15);
+    
+    compound C {
+        SpringInteger springIntFalse = -1; 
+    }
+    
+    C cmp;    
+}

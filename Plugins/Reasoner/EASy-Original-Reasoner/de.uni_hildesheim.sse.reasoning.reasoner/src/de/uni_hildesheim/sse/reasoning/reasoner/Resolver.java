@@ -334,7 +334,12 @@ public class Resolver {
                 defaultValue = copyVisitor(defaultValue, decl);
             }
         }  
-        collectionCompoundConstraints.addAll(collectionCompoundConstraints(decl, null));        
+        collectionCompoundConstraints.addAll(collectionCompoundConstraints(decl, null));
+        // Container
+        if (de.uni_hildesheim.sse.model.varModel.datatypes.Container.TYPE.isAssignableFrom(type)) {
+            System.out.println("-----------Constainer");
+            collectionInternalConstraints(decl, null);
+        }
         if (null != defaultValue) {
             if (ConstraintType.TYPE.isAssignableFrom(type) 
                 && !(type.getType() == BooleanType.TYPE.getType())) {
@@ -631,6 +636,72 @@ public class Resolver {
             collectAllAssignmentConstraints(assng.getAssignment(a), result);
         }
     }    
+    
+    /**
+     * Method for collecting internal constraints from Collections.
+     * @param decl Collection variable
+     * @param topcmpAccess {@link CompoundAccess} might be null.
+     */
+    private void collectionInternalConstraints(AbstractVariable decl, CompoundAccess topcmpAccess) {
+        IDatatype type = decl.getType();
+        if (de.uni_hildesheim.sse.model.varModel.datatypes.Set.TYPE.isAssignableFrom(type)) {
+            de.uni_hildesheim.sse.model.varModel.datatypes.Set set 
+                = (de.uni_hildesheim.sse.model.varModel.datatypes.Set) type;
+            if (set.getContainedType() instanceof DerivedDatatype) {
+                transformCollectionInternalConstraints((DerivedDatatype) set.getContainedType(),
+                    de.uni_hildesheim.sse.model.varModel.datatypes.Set.FORALL, decl, topcmpAccess);
+            }
+        }
+        if (de.uni_hildesheim.sse.model.varModel.datatypes.Sequence.TYPE.isAssignableFrom(type)) {
+            de.uni_hildesheim.sse.model.varModel.datatypes.Sequence sequence 
+                = (de.uni_hildesheim.sse.model.varModel.datatypes.Sequence) type;
+            if (sequence.getContainedType() instanceof DerivedDatatype) {
+                transformCollectionInternalConstraints((DerivedDatatype) sequence.getContainedType(),
+                    Sequence.FORALL, decl, topcmpAccess);
+            }
+        }
+    }
+    
+    /**
+     * Method for transforming collected internal constraint from collections into cyclic constraints.
+     * @param derivedType {@link DerivedDatatype} of the Collection.
+     * @param op Cyclic operation.
+     * @param decl Collection variable.
+     * @param topcmpAccess {@link CompoundAccess}, might be null.
+     */
+    private void transformCollectionInternalConstraints(DerivedDatatype derivedType, Operation op, 
+        AbstractVariable decl, CompoundAccess topcmpAccess) {  
+        DecisionVariableDeclaration localDecl = new DecisionVariableDeclaration("derivedType", derivedType, null);
+        InternalConstraint[] typeConstraints = createInternalConstraints(localDecl, derivedType);
+        for (InternalConstraint internalConstraint : typeConstraints) {
+            ConstraintSyntaxTree itExpression = internalConstraint.getConsSyntax();
+//            itExpression = copyVisitor(itExpression, null);
+//            if (Descriptor.LOGGING) {
+//                LOGGER.debug("New loop constraint " + StringProvider.toIvmlString(itExpression));
+//            }
+            System.out.println("New loop constraint " + StringProvider.toIvmlString(itExpression));
+            ConstraintSyntaxTree containerOp = null;
+            if (topcmpAccess == null) {
+                containerOp = createContainerCall(new Variable(decl), op, itExpression, localDecl);
+            } else {
+                containerOp = createContainerCall(topcmpAccess, op, itExpression, localDecl);
+            }            
+            try {
+                if (containerOp != null) {
+                    containerOp.inferDatatype();
+                    System.out.println("New loop constraint created" + StringProvider.toIvmlString(containerOp));
+                    Constraint constraint = new Constraint(containerOp, project);
+                    internalConstraints.add(constraint);                    
+                }
+            } catch (CSTSemanticException e) {
+                LOGGER.exception(e);
+            }            
+        }
+        if (derivedType.getBasisType() instanceof DerivedDatatype) {
+            transformCollectionInternalConstraints((DerivedDatatype) derivedType.getBasisType(), 
+                op, decl, topcmpAccess);
+        }
+    }
     
     /**
      * Method for retrieving constraints from compounds initialized in collections.
@@ -1126,18 +1197,18 @@ public class Resolver {
      * @param variable Variable to be printed out.
      */
     private void printModelElement(IDecisionVariable variable) {
-        LOGGER.debug(variable.getDeclaration() 
-            + " : "
-            + variable.getState().toString()
-            + " : " 
-            + variable.getValue()
-            + " | "
-            + printAttributes(variable));
-        if (variable.getNestedElementsCount() > 0) {
-            for (int i = 0; i < variable.getNestedElementsCount(); i++) {
-                printModelElement(variable.getNestedElement(i));
-            }
-        }
+//        LOGGER.debug(variable.getDeclaration() 
+//            + " : "
+//            + variable.getState().toString()
+//            + " : " 
+//            + variable.getValue()
+//            + " | "
+//            + printAttributes(variable));
+//        if (variable.getNestedElementsCount() > 0) {
+//            for (int i = 0; i < variable.getNestedElementsCount(); i++) {
+//                printModelElement(variable.getNestedElement(i));
+//            }
+//        }
     }
     
     /**

@@ -1,8 +1,8 @@
-project typedefNestedInSequenceInvalid {
+project typedefNestedInSequenceValid {
 
   typedef PositiveInteger Integer with (PositiveInteger > 0);
   
   sequenceOf(PositiveInteger) primValues;
 
-  primValues = {2, 3, 5, 7, -11, 13, 17, 19, 23, 29, 31};
+  primValues = {2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31};
 }
