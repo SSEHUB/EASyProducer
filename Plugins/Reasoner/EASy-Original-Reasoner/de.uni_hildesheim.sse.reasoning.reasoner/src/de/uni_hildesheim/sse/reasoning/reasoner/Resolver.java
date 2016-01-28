@@ -1,7 +1,6 @@
 package de.uni_hildesheim.sse.reasoning.reasoner;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -9,8 +8,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import de.uni_hildesheim.sse.ivml.CollectionInitializer;
-import de.uni_hildesheim.sse.ivml.DerivedType;
 import de.uni_hildesheim.sse.model.confModel.AssignmentState;
 import de.uni_hildesheim.sse.model.confModel.CompoundVariable;
 import de.uni_hildesheim.sse.model.confModel.Configuration;
