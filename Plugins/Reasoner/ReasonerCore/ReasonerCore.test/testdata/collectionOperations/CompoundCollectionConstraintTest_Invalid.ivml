@@ -1,0 +1,15 @@
+project CompoundCollectionConstraintTest_Invalid {
+
+    version v0;
+	
+    compound C {
+      String name;
+    }
+    
+    setOf(C) cmps;
+    cmps = {{name="x"}, {name="xx"}, {name="xxx"}, {name="will_be_counted_1"}, {name="will_be_counted_2"}, {name="will_be_counted_3"}};
+    cmps->collect(c|c.name.size() > 3).size() == 2;
+    freeze {
+      cmps;
+    }
+}

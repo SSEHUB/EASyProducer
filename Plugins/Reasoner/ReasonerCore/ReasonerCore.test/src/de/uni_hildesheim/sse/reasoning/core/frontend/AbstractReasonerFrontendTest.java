@@ -265,7 +265,12 @@ public abstract class AbstractReasonerFrontendTest {
             if (result.hasConflict()) {
                 errorMsg = resultErrorToFailureTrace(result, project);
             }
-            Assert.assertEquals(errorMsg, !isValid, result.hasConflict());
+            if (isValid) {
+                Assert.assertFalse("Reasoner should not detect any errors, but it found some: " + errorMsg,
+                    result.hasConflict());
+            } else {
+                Assert.assertTrue("Reasoner should detect errors, but did not found any.", result.hasConflict());
+            }
         } else {
             Message warning = result.getMessage(0);
             Assert.assertEquals(Status.UNSUPPORTED, warning.getStatus());
