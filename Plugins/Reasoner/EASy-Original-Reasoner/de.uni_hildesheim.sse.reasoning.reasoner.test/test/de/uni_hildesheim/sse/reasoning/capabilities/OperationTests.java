@@ -6,7 +6,7 @@ import org.junit.BeforeClass;
 import de.uni_hildesheim.sse.reasoning.reasoner.Utils;
 
 /**
- * Configures the operation tests for Drools.
+ * Configures the operation tests for the SSE-Reasoner.
  * 
  * @author Holger Eichelberger
  * @author El-Sharkawy
