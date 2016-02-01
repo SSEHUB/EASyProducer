@@ -520,7 +520,7 @@ public class AssignmentResolver {
             for (Constraint constraint : constraints) {
                 ConstraintSyntaxTree cst = constraint.getConsSyntax();
                 if (null != cst) {
-                    evaluator.init(config, AssignmentState.ASSIGNED, false, null);
+                    evaluator.init(config, AssignmentState.DERIVED, false, null);
                     evaluator.visit(cst);
                     // Check whether the constraint could be resolved
                     if (null == evaluator.getResult()) {

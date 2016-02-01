@@ -329,7 +329,7 @@ public class CompoundVariable extends StructuredVariable {
     public boolean removeDerivedValues() {
         boolean changed = false;
         for (IDecisionVariable var : nestedElements.values()) {
-            if (AssignmentState.DERIVED == var.getState()) {
+            if (AssignmentState.ASSIGNED != var.getState()) {
                 var.removeDerivedValues();
                 changed = true;
             }

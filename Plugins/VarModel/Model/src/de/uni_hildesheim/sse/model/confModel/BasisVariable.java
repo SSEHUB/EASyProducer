@@ -75,7 +75,7 @@ class BasisVariable extends DecisionVariable {
     @Override
     public boolean removeDerivedValues() {
         boolean changed = false;
-        if (AssignmentState.DERIVED == getState()) {
+        if (AssignmentState.ASSIGNED != getState()) {
             try {
                 setValue(null, AssignmentState.UNDEFINED);
                 changed = true;
@@ -84,7 +84,13 @@ class BasisVariable extends DecisionVariable {
                 Bundle.getLogger(BasisVariable.class).exception(e);
             }
         }
-        
+        for (int i = 0; i < this.getAttributesCount(); i++) {
+            try {
+                this.getAttribute(i).setValue(null, AssignmentState.UNDEFINED);
+            } catch (ConfigurationException e) {
+                Bundle.getLogger(BasisVariable.class).exception(e);
+            }
+        }
         return changed;
     }
 }
