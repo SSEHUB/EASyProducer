@@ -4,11 +4,13 @@ project CompoundCollectionConstraintTest_Invalid {
 	
     compound C {
       String name;
+      Integer value;
     }
     
     setOf(C) cmps;
-    cmps = {{name="x"}, {name="xx"}, {name="xxx"}, {name="will_be_counted_1"}, {name="will_be_counted_2"}};
-    cmps->collect(c|c.name.size() > 3).size() == 2;
+    cmps = {{name="Variable 1", value=1}, {name="Variable 2", value=2}};
+    // Should check whether the names are unique by means of a SET over the names
+    cmps->collect(c|c.name).size() == 2;
     freeze {
       cmps;
     }
