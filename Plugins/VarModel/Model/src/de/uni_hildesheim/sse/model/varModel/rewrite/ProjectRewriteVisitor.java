@@ -380,13 +380,14 @@ public class ProjectRewriteVisitor extends AbstractProjectVisitor {
             }
             
             // Adapt iterator variables
-            adaptParentOfIteratorVariables(customOp.getFunction());
-//            try {
-//                cst.inferDatatype();
-//            } catch (CSTSemanticException e) {
-//                // TODO Auto-generated catch block
-//                e.printStackTrace();
-//            }
+            adaptParentOfIteratorVariables(cst);
+            try {
+                cst.inferDatatype();
+            } catch (CSTSemanticException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+                throw new RuntimeException(e);
+            }
         }
         addCopiedElement(copyDef);
     }

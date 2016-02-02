@@ -66,7 +66,7 @@ public class FrozenConstraintVarFilter extends AbstractFrozenChecker<DecisionVar
                         if (value instanceof ConstraintValue) {
                             ConstraintValue constraintValue = (ConstraintValue) value;
                             allFrozen = constraintIsFrozen(constraintValue.getValue(), context);
-                        } else if (!(value instanceof BooleanValue)) {
+                        } else if (null != value && !(value instanceof BooleanValue)) {
                             // Unknown situation -> abort
                             allFrozen = false;
                         }
