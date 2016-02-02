@@ -7,6 +7,7 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
+import de.uni_hildesheim.sse.model.confModel.AssignmentResolver;
 import de.uni_hildesheim.sse.model.confModel.AssignmentState;
 import de.uni_hildesheim.sse.model.confModel.Configuration;
 import de.uni_hildesheim.sse.model.confModel.ConfigurationException;
@@ -913,7 +914,7 @@ public class IVMLWriterTest {
         Assert.assertSame(AssignmentState.DEFAULT, firstAttribute.getState());
         Assert.assertNotNull(secondAttribute);
         Assert.assertEquals(assignedValue, secondAttribute.getValue());
-        Assert.assertSame(AssignmentState.ASSIGNED, secondAttribute.getState());
+        Assert.assertSame(AssignmentResolver.RESOLUTIONSTATE, secondAttribute.getState());
         
         
         if (changeStates) {
@@ -922,7 +923,7 @@ public class IVMLWriterTest {
         }
         
         // Save configuration and test whether the attribute values appear inside the saved configuration
-        Project confProject = config.toProject(true);
+        Project confProject = config.toProject(true, false);
         StringWriter sWriter = new StringWriter();
         IVMLWriter iWriter = new IVMLWriter(sWriter);
         confProject.accept(iWriter);
