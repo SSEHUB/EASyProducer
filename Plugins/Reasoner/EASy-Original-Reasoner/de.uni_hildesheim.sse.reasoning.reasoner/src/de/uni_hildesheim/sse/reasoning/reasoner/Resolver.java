@@ -1202,18 +1202,18 @@ public class Resolver {
      * @param variable Variable to be printed out.
      */
     private void printModelElement(IDecisionVariable variable) {
-//        LOGGER.debug(variable.getDeclaration() 
-//            + " : "
-//            + variable.getState().toString()
-//            + " : " 
-//            + variable.getValue()
-//            + " | "
-//            + printAttributes(variable));
-//        if (variable.getNestedElementsCount() > 0) {
-//            for (int i = 0; i < variable.getNestedElementsCount(); i++) {
-//                printModelElement(variable.getNestedElement(i));
-//            }
-//        }
+        LOGGER.debug(variable.getDeclaration() 
+            + " : "
+            + variable.getState().toString()
+            + " : " 
+            + variable.getValue()
+            + " | "
+            + printAttributes(variable));
+        if (variable.getNestedElementsCount() > 0) {
+            for (int i = 0; i < variable.getNestedElementsCount(); i++) {
+                printModelElement(variable.getNestedElement(i));
+            }
+        }
     }
     
     /**
