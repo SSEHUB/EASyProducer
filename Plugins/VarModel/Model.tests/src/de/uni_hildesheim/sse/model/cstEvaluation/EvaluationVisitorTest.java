@@ -1095,67 +1095,6 @@ public class EvaluationVisitorTest {
     }
     
     /**
-     * Tests dynamic dispatch for custom operation.
-     * 
-     * @throws ValueDoesNotMatchTypeException in case that value assignments fail (shall not occur)
-     * @throws ConfigurationException in case that initial assignment of values fail (shall not occur)
-     * @throws CSTSemanticException in case that the expressions created during this test are not 
-     *   valid (shall not occur)
-     */
-    @Test
-    public void testCustomOperationDispatch() throws ValueDoesNotMatchTypeException, ConfigurationException, 
-        CSTSemanticException {
-        
-        Project project = new Project("Test");
-
-        // compound Base {};
-        Compound cBase = new Compound("Base", project);
-        project.add(cBase);
-
-        // compound Refined refines Base {};
-        Compound cRefined = new Compound("Refined", project, cBase);
-        project.add(cRefined);
-
-        // def Integer test(Base b) = 0;
-        ConstraintSyntaxTree const0 = new ConstantValue(ValueFactory.createValue(IntegerType.TYPE, 0));
-        DecisionVariableDeclaration param1 = new DecisionVariableDeclaration("b", cBase, null);
-        DecisionVariableDeclaration[] params1 = new DecisionVariableDeclaration[1];
-        params1[0] = param1;
-        CustomOperation custOp1 = new CustomOperation(IntegerType.TYPE, "test", project.getType(), const0, params1);
-        OperationDefinition opDef1 = new OperationDefinition(project);
-        opDef1.setOperation(custOp1);
-        project.add(opDef1);
-
-        // def Integer test(Refined r) = 1;
-        ConstraintSyntaxTree const1 = new ConstantValue(ValueFactory.createValue(IntegerType.TYPE, 1));
-        DecisionVariableDeclaration param2 = new DecisionVariableDeclaration("r", cRefined, null);
-        DecisionVariableDeclaration[] params2 = new DecisionVariableDeclaration[1];
-        params2[0] = param2;
-        CustomOperation custOp2 = new CustomOperation(IntegerType.TYPE, "test", project.getType(), const1, params2);
-        OperationDefinition opDef2 = new OperationDefinition(project);
-        opDef2.setOperation(custOp2);
-        project.add(opDef2);
-
-        DecisionVariableDeclaration var = new DecisionVariableDeclaration("r", cRefined, project);
-        project.add(var);
-        
-        ConstraintSyntaxTree cst = new OCLFeatureCall(null, "test", project, new Variable(var));
-        cst.inferDatatype();
-        
-        Configuration config = new Configuration(project);
-        config.getDecision(var).setValue(ValueFactory.createValue(cRefined, (Object[]) null), AssignmentState.ASSIGNED);
-        
-        EvaluationVisitor visitor = new EvaluationVisitor();
-        visitor.init(config, AssignmentState.DEFAULT, false, null);
-        visitor.setDispatchScope(project); // this is important!
-        cst.accept(visitor);
-        Assert.assertTrue(visitor.getResult() instanceof IntValue);
-        // use the more specific one due to dynamic dispatch
-        Assert.assertEquals(1, ((IntValue) visitor.getResult()).getValue().intValue());
-        visitor.clear();
-    }
-    
-    /**
      * Tests an expression with "self".
      * 
      * @throws CSTSemanticException in case of constraint failures (shall not occur)

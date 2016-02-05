@@ -638,6 +638,67 @@ public class SequenceOperationsTest {
     }
 
     /**
+     * Tests the "Overlaps" function.
+     * 
+     * @throws ValueDoesNotMatchTypeException shall not occur
+     */
+    @Test
+    public void testOverlaps() throws ValueDoesNotMatchTypeException {
+        TestEvaluationContext context = new TestEvaluationContext();
+        IDatatype seqStringType = new Sequence("stringSeq", StringType.TYPE, null);
+        EvaluationAccessor set1 = Utils.createValue(seqStringType, context, new Object[] {"aa", "bb", "cc", "dd"});
+        EvaluationAccessor set2 = Utils.createValue(seqStringType, context, new Object[] {"aa", "ee", "ff", "gg"});
+        EvaluationAccessor set3 = Utils.createValue(seqStringType, context, new Object[] {"ee", "ff", "gg", "hh"});
+        EvaluationAccessor set4 = Utils.createValue(seqStringType, context, new Object[] {});
+
+        Utils.assertEquals(true, Utils.evaluate(Sequence.OVERLAPS, set1, set1));
+        Utils.assertEquals(true, Utils.evaluate(Sequence.OVERLAPS, set1, set2));
+        Utils.assertEquals(true, Utils.evaluate(Sequence.OVERLAPS, set2, set1));
+        Utils.assertEquals(false, Utils.evaluate(Sequence.OVERLAPS, set1, set3));
+        Utils.assertEquals(false, Utils.evaluate(Sequence.OVERLAPS, set3, set1));
+        Utils.assertEquals(true, Utils.evaluate(Sequence.OVERLAPS, set2, set3));
+        Utils.assertEquals(true, Utils.evaluate(Sequence.OVERLAPS, set3, set2));
+
+        Utils.assertEquals(false, Utils.evaluate(Sequence.OVERLAPS, set1, set4));
+        Utils.assertEquals(false, Utils.evaluate(Sequence.OVERLAPS, set4, set1));
+
+        set1.release();
+        set2.release();
+        set3.release();
+        set4.release();
+    }
+
+    /**
+     * Tests the "Subsequence" function.
+     * 
+     * @throws ValueDoesNotMatchTypeException shall not occur
+     */
+    @Test
+    public void testSubsequence() throws ValueDoesNotMatchTypeException {
+        TestEvaluationContext context = new TestEvaluationContext();
+        IDatatype seqStringType = new Sequence("stringSeq", StringType.TYPE, null);
+        EvaluationAccessor set1 = Utils.createValue(seqStringType, context, new Object[] {"aa", "bb", "cc", "dd"});
+        EvaluationAccessor set2 = Utils.createValue(seqStringType, context, new Object[] {"aa", "bb", "dd"});
+        EvaluationAccessor set3 = Utils.createValue(seqStringType, context, new Object[] {"aa", "bb", "ff"});
+        EvaluationAccessor set4 = Utils.createValue(seqStringType, context, new Object[] {"aa", "bb", "cc"});
+        EvaluationAccessor set5 = Utils.createValue(seqStringType, context, new Object[] {});
+
+        Utils.assertEquals(true, Utils.evaluate(Sequence.SUBSEQUENCE, set1, set1));
+        Utils.assertEquals(false, Utils.evaluate(Sequence.SUBSEQUENCE, set1, set2));
+        Utils.assertEquals(false, Utils.evaluate(Sequence.SUBSEQUENCE, set1, set3));
+        Utils.assertEquals(false, Utils.evaluate(Sequence.SUBSEQUENCE, set1, set4));
+        Utils.assertEquals(true, Utils.evaluate(Sequence.SUBSEQUENCE, set4, set1));
+        Utils.assertEquals(false, Utils.evaluate(Sequence.SUBSEQUENCE, set1, set5));
+        Utils.assertEquals(false, Utils.evaluate(Sequence.SUBSEQUENCE, set5, set1));
+
+        set1.release();
+        set2.release();
+        set3.release();
+        set4.release();
+        set5.release();
+    }
+
+    /**
      * Tests the "excludes" function.
      * 
      * @throws ValueDoesNotMatchTypeException shall not occur

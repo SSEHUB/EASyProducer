@@ -185,7 +185,7 @@ public class SequenceOperations {
                     int size2 = cont2.getElementSize();
                     while (i1 < size1 && i2 < size2) {
                         Value val1 = cont1.getElement(i1);
-                        Value val2 = cont1.getElement(i2);
+                        Value val2 = cont2.getElement(i2);
                         if (val1.equals(val2)) {
                             i1++;
                             i2++;
@@ -193,8 +193,7 @@ public class SequenceOperations {
                             i2++; // operand: {1, 2, 5}, argument {1, 2, 3, 5}
                         }
                     }
-                    
-                    Value resVal = BooleanValue.toBooleanValue(i1 == size1);
+                    Value resVal = BooleanValue.toBooleanValue(size1 > 0 && i1 == size1);
                     result = ConstantAccessor.POOL.getInstance().bind(resVal, operand.getContext());
                 }
             }

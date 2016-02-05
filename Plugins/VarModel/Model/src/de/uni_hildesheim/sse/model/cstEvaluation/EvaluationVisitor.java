@@ -833,7 +833,6 @@ public class EvaluationVisitor implements IConstraintTreeVisitor {
             System.arraycopy(args, 0, tmp, 1, args.length);
             args = tmp;
         } 
-        operation = dynamicDispatch(operation, args);
         if (args.length == operation.getParameterCount()) {
             LocalConfiguration cfg = new LocalConfiguration();
             context.pushLevel(cfg);
@@ -847,6 +846,7 @@ public class EvaluationVisitor implements IConstraintTreeVisitor {
                 }
                 cfg.addDecision(argument);
             }
+            operation = dynamicDispatch(operation, args);
             operation.getFunction().accept(this);
             context.popLevel();
         } else {
@@ -1070,12 +1070,13 @@ public class EvaluationVisitor implements IConstraintTreeVisitor {
             returnType = operation.getReturns();
             argTypes = new IDatatype[args.length];
             for (int a = 0, n = args.length; a < n; a++) {
-                if (args[a].getVariable() != null) {
+                Value val = args[a].getValue();
+                if (null != val) {
+                    // use actual type with precedence
+                    argTypes[a] = val.getType();
+                } else if (args[a].getVariable() != null) {
                     // Use declaration to get type if it's a variable
                     argTypes[a] = args[a].getVariable().getDeclaration().getType();
-                } else {
-                    // Use value to get type if it's a constant
-                    argTypes[a] = args[a].getValue().getType();
                 }
             }
 
@@ -1121,7 +1122,10 @@ public class EvaluationVisitor implements IConstraintTreeVisitor {
                     }
                 }
                 for (int i = 0, n = scope.getImportsCount(); bestDiff > 0 && i < n; i++) {
-                    checkForDispatch(scope);
+                    Project imp = scope.getImport(i).getResolved();
+                    if (null != imp) {
+                        checkForDispatch(imp);
+                    }
                 }
             }
         }
@@ -1202,6 +1206,9 @@ public class EvaluationVisitor implements IConstraintTreeVisitor {
                     result = diffContainer((Container) opType, (Container) paramType);
                 }
             }
+        }
+        if (result != 0 && paramType instanceof Reference) {
+            result = diff(opType, Reference.dereference(paramType));
         }
         return result;
     }
