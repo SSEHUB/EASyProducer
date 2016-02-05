@@ -278,7 +278,7 @@ public class Resolver {
 //            if (ENABLE_LOGGING) {
 //                printModelElements(config, "After defaults in scope " + project.getName());                
 //            }
-            processConstraints();
+            processConstraints(project);
             // Freezes values after each scope
             config.freezeValues(project, FilterType.NO_IMPORTS);
             // TODO do incremental freezing in here -> required by interfaces with propagation constraints
@@ -818,8 +818,10 @@ public class Resolver {
     /**
      * Part of the {@link #resolve()} method.
      * Processes all constraints.
+     * 
+     * @param dispatchScope the scope for dynamic dispatches
      */
-    private void processConstraints() { 
+    private void processConstraints(Project dispatchScope) { 
         List<Constraint> scopeConstraints = new ArrayList<Constraint>();
         if (!incremental) {
             if (defaultConstraints.size() > 0) {
@@ -880,7 +882,7 @@ public class Resolver {
         }
         clearConstraintLists();
         constraintBaseSize = constraintBase.size();
-        resolveConstraints(constraintBase);
+        resolveConstraints(constraintBase, dispatchScope);
         filterOutSimpleAssignments();
         constraintBase.clear(); 
     }
@@ -983,8 +985,9 @@ public class Resolver {
     /**
      * Method for resolving constraints.
      * @param constraints List of constraints to be resolved.
+     * @param dispatchScope the scope for dynamic dispatches
      */
-    private void resolveConstraints(List<Constraint> constraints) {
+    private void resolveConstraints(List<Constraint> constraints, Project dispatchScope) {
 //        PerformanceStatistics.addTimestamp(reasoningID);
         if (Descriptor.LOGGING) {
             printConstraints(constraintBase);            
@@ -1006,9 +1009,11 @@ public class Resolver {
                     LOGGER.debug("Resolving: " + StringProvider.toIvmlString(cst) 
                         + " : " + constraints.get(i).getTopLevelParent());                    
                 }
-                evaluator.init(config, state, false, listener);
+                // TODO check whether these four statements can be moved up / clearResult is sufficient instead of clear
+                evaluator.init(config, state, false, listener); 
                 evaluator.setResolutionListener(resolutionListener);
                 evaluator.setScopeAssignmnets(scopeAssignments);
+                evaluator.setDispatchScope(dispatchScope);
                 evaluator.visit(cst);    
                 reevaluationCounter++;
                 if (evaluator.constraintFailed()) {
