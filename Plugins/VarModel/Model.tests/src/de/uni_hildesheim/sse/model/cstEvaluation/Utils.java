@@ -25,12 +25,14 @@ import de.uni_hildesheim.sse.model.cst.Parenthesis;
 import de.uni_hildesheim.sse.model.cst.Variable;
 import de.uni_hildesheim.sse.model.varModel.DecisionVariableDeclaration;
 import de.uni_hildesheim.sse.model.varModel.IvmlKeyWords;
+import de.uni_hildesheim.sse.model.varModel.datatypes.EnumLiteral;
 import de.uni_hildesheim.sse.model.varModel.datatypes.IDatatype;
 import de.uni_hildesheim.sse.model.varModel.datatypes.MetaType;
 import de.uni_hildesheim.sse.model.varModel.datatypes.Operation;
 import de.uni_hildesheim.sse.model.varModel.datatypes.TypeQueries;
 import de.uni_hildesheim.sse.model.varModel.values.BooleanValue;
 import de.uni_hildesheim.sse.model.varModel.values.ContainerValue;
+import de.uni_hildesheim.sse.model.varModel.values.EnumValue;
 import de.uni_hildesheim.sse.model.varModel.values.IntValue;
 import de.uni_hildesheim.sse.model.varModel.values.MetaTypeValue;
 import de.uni_hildesheim.sse.model.varModel.values.NullValue;
@@ -232,6 +234,29 @@ class Utils {
     static final void assertEquals(Integer expected, Value actual) {
         if (null != expected && actual instanceof IntValue) {
             Assert.assertEquals(expected, ((IntValue) actual).getValue());
+        } else if (null == expected && null == actual) {
+            Assert.assertTrue(true); // useless, I know
+        } else {
+            Assert.fail("expected " + expected + " does not match " + actual);
+        }        
+    }
+    
+    /**
+     * Asserts equality between an expected enum value and an actual IVML value.
+     * 
+     * @param expected the expected value
+     * @param actual the actual evaluation result
+     */
+    static final void assertEquals(EnumLiteral expected, EvaluationAccessor actual) {
+        Value val;
+        if (null != actual) {
+            val = actual.getValue();
+            actual.release();
+        } else {
+            val = null;
+        }
+        if (null != expected && val instanceof EnumValue) {
+            Assert.assertEquals(expected, ((EnumValue) val).getValue());
         } else if (null == expected && null == actual) {
             Assert.assertTrue(true); // useless, I know
         } else {

@@ -86,6 +86,30 @@ public class EnumOperationsTest {
     }
     
     /**
+     * Tests the min-max functions of ordered enums.
+     * 
+     * @throws ValueDoesNotMatchTypeException shall not occur
+     */
+    @Test
+    public void testMinMax() throws ValueDoesNotMatchTypeException {
+        TestEvaluationContext context = new TestEvaluationContext();
+        EnumLiteral lit1 = ORDERED_ENUM_TYPE.getLiteral(0);
+        EnumLiteral lit2 = ORDERED_ENUM_TYPE.getLiteral(ORDERED_ENUM_TYPE.getLiteralCount() - 1);
+        EvaluationAccessor val1 = Utils.createValue(ORDERED_ENUM_TYPE, context, lit1);
+        EvaluationAccessor val2 = Utils.createValue(ORDERED_ENUM_TYPE, context, lit2);
+
+        Utils.assertEquals(lit2, Utils.evaluate(OrderedEnum.MIN, val2, val2));
+        Utils.assertEquals(lit1, Utils.evaluate(OrderedEnum.MIN, val1, val1));
+        Utils.assertEquals(lit1, Utils.evaluate(OrderedEnum.MIN, val1, val2));
+        Utils.assertEquals(lit1, Utils.evaluate(OrderedEnum.MIN, val2, val1));
+        
+        Utils.assertEquals(lit2, Utils.evaluate(OrderedEnum.MAX, val2, val2));
+        Utils.assertEquals(lit1, Utils.evaluate(OrderedEnum.MAX, val1, val1));
+        Utils.assertEquals(lit2, Utils.evaluate(OrderedEnum.MAX, val1, val2));
+        Utils.assertEquals(lit2, Utils.evaluate(OrderedEnum.MAX, val2, val1));
+    }
+    
+    /**
      * Tests the ordinals of the given enumeration type.
      * 
      * @param eType the enumeration type to be tested

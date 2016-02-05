@@ -107,6 +107,58 @@ public class EnumOperations {
     }
     
     /**
+     * Implements {@link OrderedEnum#MIN}.
+     */
+    static class MinMaxEvaluator implements IOperationEvaluator {
+
+        private boolean min;
+        
+        /**
+         * Creates a minimum/maximum evaluator.
+         * 
+         * @param min return minimum (<code>true</code>) or maximum (<code>false</code>)
+         */
+        private MinMaxEvaluator(boolean min) {
+            this.min = min;
+        }
+        
+        @Override
+        public EvaluationAccessor evaluate(EvaluationAccessor operand, EvaluationAccessor[] arguments) {
+            EvaluationAccessor result = null;
+            if (1 == arguments.length) {
+                Value opVal = operand.getValue();
+                Value aVal = arguments[0].getValue();
+                if (opVal instanceof EnumValue && aVal instanceof EnumValue && opVal.getType() == aVal.getType()) {
+                    EnumLiteral opLit = ((EnumValue) opVal).getValue();
+                    EnumLiteral aLit = ((EnumValue) aVal).getValue();
+                    EnumLiteral res;
+                    if (min) {
+                        if (opLit.getOrdinal() <= aLit.getOrdinal()) {
+                            res = opLit;
+                        } else {
+                            res = aLit;
+                        }
+                    } else {
+                        if (opLit.getOrdinal() >= aLit.getOrdinal()) {
+                            res = opLit;
+                        } else {
+                            res = aLit;
+                        }
+                    }
+                    try {
+                        Value resVal = ValueFactory.createValue(opVal.getType(), res);
+                        result = ConstantAccessor.POOL.getInstance().bind(resVal, operand.getContext());
+                    } catch (ValueDoesNotMatchTypeException e) {
+                        // result is anyway null
+                    }
+                }                
+            }
+            return result;
+        }
+        
+    };
+    
+    /**
      * Prevents external creation.
      */
     private EnumOperations() {
@@ -148,6 +200,8 @@ public class EnumOperations {
                 return e1.getOrdinal() <= e2.getOrdinal();
             }
         }), OrderedEnum.LESS_EQUALS);
+        EvaluatorRegistry.registerEvaluator(new MinMaxEvaluator(true), OrderedEnum.MIN);
+        EvaluatorRegistry.registerEvaluator(new MinMaxEvaluator(false), OrderedEnum.MAX);
     }
     
 }
