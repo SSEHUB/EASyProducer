@@ -1,0 +1,13 @@
+project ClearConfigCore {
+
+    version v0;
+    import ClearConfigBase;
+    i = 7;
+    y = -7;
+    
+//    freeze {
+//        i;
+//    }
+   
+    
+}

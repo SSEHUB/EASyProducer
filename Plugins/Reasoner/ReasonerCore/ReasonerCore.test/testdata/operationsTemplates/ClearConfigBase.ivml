@@ -1,0 +1,13 @@
+project ClearConfigBase {
+
+    annotate String bindingTime = "compile" to ClearConfigBase;
+    
+    assign(bindingTime = "runtime") to {
+        Integer i = 5;
+    }
+    Integer y = -5;
+    i = 6;      
+    y = -6; 
+   
+    
+}
