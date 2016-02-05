@@ -391,6 +391,16 @@ public class BasicTests extends AbstractTest {
     }
 
     /**
+     * Tests the syntax of operation definitions (contributed by QM).
+     * 
+     * @throws IOException should not occur
+     */
+    @Test
+    public void testOperationDefinitions() throws IOException {
+        assertEqual(createFile("opDef"), "opDef", "0");
+    }
+
+    /**
      * Tests null values.
      * 
      * @throws IOException should not occur
@@ -408,6 +418,16 @@ public class BasicTests extends AbstractTest {
     @Test
     public void testCompoundInit() throws IOException {
         assertEqual(createFile("compoundInit"), "compoundInit", "0");
+    }
+    
+    /**
+     * Tests evals in compounds (contributed by QM).
+     * 
+     * @throws IOException should not occur
+     */
+    @Test
+    public void testCompoundEval() throws IOException {
+        assertEqual(createFile("compoundEval"), "compoundEval", "0");
     }
     
     /**

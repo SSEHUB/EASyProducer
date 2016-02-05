@@ -13,6 +13,7 @@ import org.eclipse.emf.ecore.EObject;
  * The following features are supported:
  * </p>
  * <ul>
+ *   <li>{@link de.uni_hildesheim.sse.ivml.OpDefStatement#getStatic <em>Static</em>}</li>
  *   <li>{@link de.uni_hildesheim.sse.ivml.OpDefStatement#getResult <em>Result</em>}</li>
  *   <li>{@link de.uni_hildesheim.sse.ivml.OpDefStatement#getId <em>Id</em>}</li>
  *   <li>{@link de.uni_hildesheim.sse.ivml.OpDefStatement#getParam <em>Param</em>}</li>
@@ -25,6 +26,32 @@ import org.eclipse.emf.ecore.EObject;
  */
 public interface OpDefStatement extends EObject
 {
+  /**
+   * Returns the value of the '<em><b>Static</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <p>
+   * If the meaning of the '<em>Static</em>' attribute isn't clear,
+   * there really should be more of a description here...
+   * </p>
+   * <!-- end-user-doc -->
+   * @return the value of the '<em>Static</em>' attribute.
+   * @see #setStatic(String)
+   * @see de.uni_hildesheim.sse.ivml.IvmlPackage#getOpDefStatement_Static()
+   * @model
+   * @generated
+   */
+  String getStatic();
+
+  /**
+   * Sets the value of the '{@link de.uni_hildesheim.sse.ivml.OpDefStatement#getStatic <em>Static</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @param value the new value of the '<em>Static</em>' attribute.
+   * @see #getStatic()
+   * @generated
+   */
+  void setStatic(String value);
+
   /**
    * Returns the value of the '<em><b>Result</b></em>' containment reference.
    * <!-- begin-user-doc -->

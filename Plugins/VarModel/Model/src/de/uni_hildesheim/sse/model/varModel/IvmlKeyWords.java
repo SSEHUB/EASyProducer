@@ -160,6 +160,11 @@ public class IvmlKeyWords extends OclKeyWords {
     public static final String DEF = "def";
 
     /**
+     * <b>IVML Keyword:</b> Keyword for "static".
+     */
+    public static final String STATIC = "static";
+    
+    /**
      * <b>IVML Keyword:</b> Keyword for "annotate".
      */
     public static final String ATTRIBUTE = "annotate";

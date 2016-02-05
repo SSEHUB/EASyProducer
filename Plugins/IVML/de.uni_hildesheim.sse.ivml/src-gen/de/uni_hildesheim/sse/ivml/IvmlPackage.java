@@ -1230,13 +1230,22 @@ public interface IvmlPackage extends EPackage
   int OP_DEF_STATEMENT = 29;
 
   /**
+   * The feature id for the '<em><b>Static</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int OP_DEF_STATEMENT__STATIC = 0;
+
+  /**
    * The feature id for the '<em><b>Result</b></em>' containment reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int OP_DEF_STATEMENT__RESULT = 0;
+  int OP_DEF_STATEMENT__RESULT = 1;
 
   /**
    * The feature id for the '<em><b>Id</b></em>' attribute.
@@ -1245,7 +1254,7 @@ public interface IvmlPackage extends EPackage
    * @generated
    * @ordered
    */
-  int OP_DEF_STATEMENT__ID = 1;
+  int OP_DEF_STATEMENT__ID = 2;
 
   /**
    * The feature id for the '<em><b>Param</b></em>' containment reference.
@@ -1254,7 +1263,7 @@ public interface IvmlPackage extends EPackage
    * @generated
    * @ordered
    */
-  int OP_DEF_STATEMENT__PARAM = 2;
+  int OP_DEF_STATEMENT__PARAM = 3;
 
   /**
    * The feature id for the '<em><b>Impl</b></em>' containment reference.
@@ -1263,7 +1272,7 @@ public interface IvmlPackage extends EPackage
    * @generated
    * @ordered
    */
-  int OP_DEF_STATEMENT__IMPL = 3;
+  int OP_DEF_STATEMENT__IMPL = 4;
 
   /**
    * The number of structural features of the '<em>Op Def Statement</em>' class.
@@ -1272,7 +1281,7 @@ public interface IvmlPackage extends EPackage
    * @generated
    * @ordered
    */
-  int OP_DEF_STATEMENT_FEATURE_COUNT = 4;
+  int OP_DEF_STATEMENT_FEATURE_COUNT = 5;
 
   /**
    * The meta object id for the '{@link de.uni_hildesheim.sse.ivml.impl.OpDefParameterListImpl <em>Op Def Parameter List</em>}' class.
@@ -3699,6 +3708,17 @@ public interface IvmlPackage extends EPackage
   EClass getOpDefStatement();
 
   /**
+   * Returns the meta object for the attribute '{@link de.uni_hildesheim.sse.ivml.OpDefStatement#getStatic <em>Static</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the attribute '<em>Static</em>'.
+   * @see de.uni_hildesheim.sse.ivml.OpDefStatement#getStatic()
+   * @see #getOpDefStatement()
+   * @generated
+   */
+  EAttribute getOpDefStatement_Static();
+
+  /**
    * Returns the meta object for the containment reference '{@link de.uni_hildesheim.sse.ivml.OpDefStatement#getResult <em>Result</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -5839,6 +5859,14 @@ public interface IvmlPackage extends EPackage
      * @generated
      */
     EClass OP_DEF_STATEMENT = eINSTANCE.getOpDefStatement();
+
+    /**
+     * The meta object literal for the '<em><b>Static</b></em>' attribute feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EAttribute OP_DEF_STATEMENT__STATIC = eINSTANCE.getOpDefStatement_Static();
 
     /**
      * The meta object literal for the '<em><b>Result</b></em>' containment reference feature.

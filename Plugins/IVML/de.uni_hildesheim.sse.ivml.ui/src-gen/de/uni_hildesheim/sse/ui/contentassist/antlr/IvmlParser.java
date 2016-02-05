@@ -177,6 +177,7 @@ public class IvmlParser extends AbstractContentAssistParser {
 					put(grammarAccess.getTypedefCompoundAccess().getElementsAssignment_5_0(), "rule__TypedefCompound__ElementsAssignment_5_0");
 					put(grammarAccess.getTypedefCompoundAccess().getElementsAssignment_5_1(), "rule__TypedefCompound__ElementsAssignment_5_1");
 					put(grammarAccess.getTypedefCompoundAccess().getElementsAssignment_5_2(), "rule__TypedefCompound__ElementsAssignment_5_2");
+					put(grammarAccess.getTypedefCompoundAccess().getElementsAssignment_5_3(), "rule__TypedefCompound__ElementsAssignment_5_3");
 					put(grammarAccess.getAttrAssignmentAccess().getPartsAssignment_2(), "rule__AttrAssignment__PartsAssignment_2");
 					put(grammarAccess.getAttrAssignmentAccess().getPartsAssignment_3_1(), "rule__AttrAssignment__PartsAssignment_3_1");
 					put(grammarAccess.getAttrAssignmentAccess().getElementsAssignment_7_0(), "rule__AttrAssignment__ElementsAssignment_7_0");
@@ -242,10 +243,11 @@ public class IvmlParser extends AbstractContentAssistParser {
 					put(grammarAccess.getConflictStmtAccess().getNameAssignment_1(), "rule__ConflictStmt__NameAssignment_1");
 					put(grammarAccess.getConflictStmtAccess().getRestrictionAssignment_2_1(), "rule__ConflictStmt__RestrictionAssignment_2_1");
 					put(grammarAccess.getVersionStmtAccess().getVersionAssignment_1(), "rule__VersionStmt__VersionAssignment_1");
-					put(grammarAccess.getOpDefStatementAccess().getResultAssignment_1(), "rule__OpDefStatement__ResultAssignment_1");
-					put(grammarAccess.getOpDefStatementAccess().getIdAssignment_2(), "rule__OpDefStatement__IdAssignment_2");
-					put(grammarAccess.getOpDefStatementAccess().getParamAssignment_4(), "rule__OpDefStatement__ParamAssignment_4");
-					put(grammarAccess.getOpDefStatementAccess().getImplAssignment_7(), "rule__OpDefStatement__ImplAssignment_7");
+					put(grammarAccess.getOpDefStatementAccess().getStaticAssignment_1(), "rule__OpDefStatement__StaticAssignment_1");
+					put(grammarAccess.getOpDefStatementAccess().getResultAssignment_2(), "rule__OpDefStatement__ResultAssignment_2");
+					put(grammarAccess.getOpDefStatementAccess().getIdAssignment_3(), "rule__OpDefStatement__IdAssignment_3");
+					put(grammarAccess.getOpDefStatementAccess().getParamAssignment_5(), "rule__OpDefStatement__ParamAssignment_5");
+					put(grammarAccess.getOpDefStatementAccess().getImplAssignment_8(), "rule__OpDefStatement__ImplAssignment_8");
 					put(grammarAccess.getOpDefParameterListAccess().getListAssignment_1_0(), "rule__OpDefParameterList__ListAssignment_1_0");
 					put(grammarAccess.getOpDefParameterListAccess().getListAssignment_1_1_1(), "rule__OpDefParameterList__ListAssignment_1_1_1");
 					put(grammarAccess.getOpDefParameterAccess().getTypeAssignment_0(), "rule__OpDefParameter__TypeAssignment_0");

@@ -266,4 +266,9 @@ public class AttributeAssignment extends ContainableModelElement implements IDec
         return container.getDeclaration(index);
     }
 
+    @Override
+    public void add(EvaluationBlock eval) {
+        container.add(eval);
+    }
+
 }

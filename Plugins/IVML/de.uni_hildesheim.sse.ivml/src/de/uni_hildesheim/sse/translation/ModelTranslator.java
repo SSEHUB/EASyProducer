@@ -74,6 +74,7 @@ import de.uni_hildesheim.sse.model.varModel.datatypes.AnyType;
 import de.uni_hildesheim.sse.model.varModel.datatypes.BooleanType;
 import de.uni_hildesheim.sse.model.varModel.datatypes.Compound;
 import de.uni_hildesheim.sse.model.varModel.datatypes.ConstraintType;
+import de.uni_hildesheim.sse.model.varModel.datatypes.CustomDynamicOperation;
 import de.uni_hildesheim.sse.model.varModel.datatypes.CustomOperation;
 import de.uni_hildesheim.sse.model.varModel.datatypes.DerivedDatatype;
 import de.uni_hildesheim.sse.model.varModel.datatypes.EnumLiteral;
@@ -254,7 +255,7 @@ public class ModelTranslator extends de.uni_hildesheim.sse.dslCore.translation.M
         }
         if (null != splitRes.getEvals()) {
             for (Eval eval : splitRes.getEvals()) {
-                processEval(eval, context);
+                processEval(eval, context, null);
             }
         }
         if (null != splitRes.getFreezes()) {
@@ -487,6 +488,11 @@ public class ModelTranslator extends de.uni_hildesheim.sse.dslCore.translation.M
                     }
                     if (null != split.getAttrAssignments()) {
                         processAttributeAssignmentExpressions(split.getAttrAssignments(), context);
+                    }
+                    if (null != split.getEvals()) {
+                        for (Eval eval : split.getEvals()) {
+                            processEval(eval, context, compound);
+                        }
                     }
                     context.popLayer();
                     context.closeSorter(compound, tCompound.getElements());
@@ -881,8 +887,7 @@ public class ModelTranslator extends de.uni_hildesheim.sse.dslCore.translation.M
      *             in case that the processing of the <code>statement</code>
      *             must be terminated abnormally
      */
-    protected boolean processOpdef(OpDefStatement op, TypeContext context, 
-        boolean force) throws TranslatorException {
+    protected boolean processOpdef(OpDefStatement op, TypeContext context, boolean force) throws TranslatorException {
         boolean done = true;
         Project project = context.getProject();
         IDatatype resultType = context.resolveType(op.getResult());
@@ -914,7 +919,12 @@ public class ModelTranslator extends de.uni_hildesheim.sse.dslCore.translation.M
                 }
             }
             IDatatype projectType = project.getType();
-            CustomOperation operation = new CustomOperation(resultType, op.getId(), projectType, null, params);
+            CustomOperation operation;
+            if (null != op.getStatic()) {
+                operation = new CustomOperation(resultType, op.getId(), projectType, null, params);
+            } else {
+                operation = new CustomDynamicOperation(resultType, op.getId(), projectType, null, params);
+            }
             opDef.setOperation(operation);
             context.addToContext(opDef);
             project.add(opDef);
@@ -934,11 +944,8 @@ public class ModelTranslator extends de.uni_hildesheim.sse.dslCore.translation.M
                     throw new TranslatorException(e, op, IvmlPackage.Literals.OP_DEF_STATEMENT__IMPL);
                 }
                 project.remove(opDef);
-                //CustomOperation operation = new CustomOperation(resultType, op.getId(), projectType, impl, params);
-                //opDef.setOperation(operation);
                 if (findOperation(projectType, operation, false)) {
                     // does project define two similar operations?
-                    // TODO check on imported projects
                     throw new TranslatorException("operation '" + op.getId() + "' defined multiple times on project", 
                         op, IvmlPackage.Literals.OP_DEF_PARAMETER__TYPE, ErrorCodes.REDEFINITION);
                 } else if (operation.getParameterCount() > 0 
@@ -948,8 +955,7 @@ public class ModelTranslator extends de.uni_hildesheim.sse.dslCore.translation.M
                         + IvmlDatatypeVisitor.getUnqualifiedType(operation.getParameter(0)) + '"', op,
                         IvmlPackage.Literals.OP_DEF_PARAMETER__TYPE, ErrorCodes.AMBIGUITY);
                 } else {
-                    // in case of no error - add, first resovable then as model
-                    // element
+                    // in case of no error - add, first resolvable then as model element
                     project.add(opDef);
                     context.addToProject(op, comment, opDef);
                 }
@@ -1474,10 +1480,19 @@ public class ModelTranslator extends de.uni_hildesheim.sse.dslCore.translation.M
      * 
      * @param eval the evaluation block
      * @param context the context for type resolution
+     * @param compound optional compound to add the eval block to, <b>null</b> for adding it to the actual project in 
+     *     <code>context</code>
      */
-    protected void processEval(Eval eval, TypeContext context) {
+    protected void processEval(Eval eval, TypeContext context, Compound compound) {
         EvalBlockResult result = processEval(eval, context.getProject(), context);
-        context.addToProject(eval, result.comment, result.block);
+        if (null != compound) {
+            if (null != result.comment) { 
+                compound.add(result.comment);
+            }
+            compound.add(result.block);
+        } else {
+            context.addToProject(eval, result.comment, result.block);
+        }
     }
     
     /**

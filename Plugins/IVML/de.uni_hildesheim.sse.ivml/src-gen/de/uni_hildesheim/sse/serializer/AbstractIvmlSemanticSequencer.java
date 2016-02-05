@@ -895,25 +895,10 @@ public abstract class AbstractIvmlSemanticSequencer extends AbstractDelegatingSe
 	 *     OpDefStatement returns OpDefStatement
 	 *
 	 * Constraint:
-	 *     (result=Type id=Identifier param=OpDefParameterList impl=Expression)
+	 *     (static='static'? result=Type id=Identifier param=OpDefParameterList impl=Expression)
 	 */
 	protected void sequence_OpDefStatement(ISerializationContext context, OpDefStatement semanticObject) {
-		if (errorAcceptor != null) {
-			if (transientValues.isValueTransient(semanticObject, IvmlPackage.Literals.OP_DEF_STATEMENT__RESULT) == ValueTransient.YES)
-				errorAcceptor.accept(diagnosticProvider.createFeatureValueMissing(semanticObject, IvmlPackage.Literals.OP_DEF_STATEMENT__RESULT));
-			if (transientValues.isValueTransient(semanticObject, IvmlPackage.Literals.OP_DEF_STATEMENT__ID) == ValueTransient.YES)
-				errorAcceptor.accept(diagnosticProvider.createFeatureValueMissing(semanticObject, IvmlPackage.Literals.OP_DEF_STATEMENT__ID));
-			if (transientValues.isValueTransient(semanticObject, IvmlPackage.Literals.OP_DEF_STATEMENT__PARAM) == ValueTransient.YES)
-				errorAcceptor.accept(diagnosticProvider.createFeatureValueMissing(semanticObject, IvmlPackage.Literals.OP_DEF_STATEMENT__PARAM));
-			if (transientValues.isValueTransient(semanticObject, IvmlPackage.Literals.OP_DEF_STATEMENT__IMPL) == ValueTransient.YES)
-				errorAcceptor.accept(diagnosticProvider.createFeatureValueMissing(semanticObject, IvmlPackage.Literals.OP_DEF_STATEMENT__IMPL));
-		}
-		SequenceFeeder feeder = createSequencerFeeder(context, semanticObject);
-		feeder.accept(grammarAccess.getOpDefStatementAccess().getResultTypeParserRuleCall_1_0(), semanticObject.getResult());
-		feeder.accept(grammarAccess.getOpDefStatementAccess().getIdIdentifierParserRuleCall_2_0(), semanticObject.getId());
-		feeder.accept(grammarAccess.getOpDefStatementAccess().getParamOpDefParameterListParserRuleCall_4_0(), semanticObject.getParam());
-		feeder.accept(grammarAccess.getOpDefStatementAccess().getImplExpressionParserRuleCall_7_0(), semanticObject.getImpl());
-		feeder.finish();
+		genericSequencer.createSequence(context, semanticObject);
 	}
 	
 	
@@ -1059,7 +1044,7 @@ public abstract class AbstractIvmlSemanticSequencer extends AbstractDelegatingSe
 	 *         abstract='abstract'? 
 	 *         name=Identifier 
 	 *         super=Identifier? 
-	 *         (elements+=VariableDeclaration | elements+=ExpressionStatement | elements+=AttrAssignment)*
+	 *         (elements+=VariableDeclaration | elements+=ExpressionStatement | elements+=AttrAssignment | elements+=Eval)*
 	 *     )
 	 */
 	protected void sequence_TypedefCompound(ISerializationContext context, TypedefCompound semanticObject) {

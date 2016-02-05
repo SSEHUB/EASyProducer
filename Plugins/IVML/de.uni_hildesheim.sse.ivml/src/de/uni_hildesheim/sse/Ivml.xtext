@@ -80,6 +80,7 @@ TypedefCompound:
     	(elements+=VariableDeclaration 
     	    | elements+=ExpressionStatement 
     	    | elements+=AttrAssignment
+    	    | elements+=Eval
     	)*
     '}' ';'?
 	;
@@ -267,7 +268,7 @@ VersionStmt:
 //------------------------------------ OCL (excerpt) ----------------------------	
 
 OpDefStatement:
-	'def' result=Type id=Identifier 
+	'def' static='static'? result=Type id=Identifier 
 	'(' param=OpDefParameterList ')' 
 	'=' impl=Expression
 	';'

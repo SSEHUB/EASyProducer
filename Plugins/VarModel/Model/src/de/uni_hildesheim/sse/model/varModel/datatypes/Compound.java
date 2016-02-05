@@ -24,6 +24,7 @@ import de.uni_hildesheim.sse.model.varModel.Comment;
 import de.uni_hildesheim.sse.model.varModel.Constraint;
 import de.uni_hildesheim.sse.model.varModel.ContainableModelElement;
 import de.uni_hildesheim.sse.model.varModel.DecisionVariableDeclaration;
+import de.uni_hildesheim.sse.model.varModel.EvaluationBlock;
 import de.uni_hildesheim.sse.model.varModel.IConstraintHolder;
 import de.uni_hildesheim.sse.model.varModel.IDecisionVariableContainer;
 import de.uni_hildesheim.sse.model.varModel.IModelVisitor;
@@ -403,6 +404,11 @@ public class Compound extends StructuredDatatype implements IResolutionScope, ID
      */
     public boolean removeConstraint(ContainableModelElement element) {
         return container.removeModelElement(element);
+    }
+
+    @Override
+    public void add(EvaluationBlock eval) {
+        container.add(eval);
     }
 
 }

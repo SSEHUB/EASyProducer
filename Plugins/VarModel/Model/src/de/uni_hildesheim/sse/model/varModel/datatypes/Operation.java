@@ -316,6 +316,15 @@ public class Operation {
     }
     
     /**
+     * Returns whether this operation is static.
+     * 
+     * @return <code>true</code> for static, <code>false</code> else
+     */
+    public boolean isStatic() {
+        return true;
+    }
+    
+    /**
      * Returns the number of parameters of this operation.
      * 
      * @return the number of parameters

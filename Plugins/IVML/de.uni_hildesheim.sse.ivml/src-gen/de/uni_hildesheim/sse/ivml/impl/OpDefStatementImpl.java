@@ -25,6 +25,7 @@ import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
  * The following features are implemented:
  * </p>
  * <ul>
+ *   <li>{@link de.uni_hildesheim.sse.ivml.impl.OpDefStatementImpl#getStatic <em>Static</em>}</li>
  *   <li>{@link de.uni_hildesheim.sse.ivml.impl.OpDefStatementImpl#getResult <em>Result</em>}</li>
  *   <li>{@link de.uni_hildesheim.sse.ivml.impl.OpDefStatementImpl#getId <em>Id</em>}</li>
  *   <li>{@link de.uni_hildesheim.sse.ivml.impl.OpDefStatementImpl#getParam <em>Param</em>}</li>
@@ -35,6 +36,26 @@ import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
  */
 public class OpDefStatementImpl extends MinimalEObjectImpl.Container implements OpDefStatement
 {
+  /**
+   * The default value of the '{@link #getStatic() <em>Static</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #getStatic()
+   * @generated
+   * @ordered
+   */
+  protected static final String STATIC_EDEFAULT = null;
+
+  /**
+   * The cached value of the '{@link #getStatic() <em>Static</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #getStatic()
+   * @generated
+   * @ordered
+   */
+  protected String static_ = STATIC_EDEFAULT;
+
   /**
    * The cached value of the '{@link #getResult() <em>Result</em>}' containment reference.
    * <!-- begin-user-doc -->
@@ -104,6 +125,29 @@ public class OpDefStatementImpl extends MinimalEObjectImpl.Container implements 
   protected EClass eStaticClass()
   {
     return IvmlPackage.Literals.OP_DEF_STATEMENT;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public String getStatic()
+  {
+    return static_;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public void setStatic(String newStatic)
+  {
+    String oldStatic = static_;
+    static_ = newStatic;
+    if (eNotificationRequired())
+      eNotify(new ENotificationImpl(this, Notification.SET, IvmlPackage.OP_DEF_STATEMENT__STATIC, oldStatic, static_));
   }
 
   /**
@@ -303,6 +347,8 @@ public class OpDefStatementImpl extends MinimalEObjectImpl.Container implements 
   {
     switch (featureID)
     {
+      case IvmlPackage.OP_DEF_STATEMENT__STATIC:
+        return getStatic();
       case IvmlPackage.OP_DEF_STATEMENT__RESULT:
         return getResult();
       case IvmlPackage.OP_DEF_STATEMENT__ID:
@@ -325,6 +371,9 @@ public class OpDefStatementImpl extends MinimalEObjectImpl.Container implements 
   {
     switch (featureID)
     {
+      case IvmlPackage.OP_DEF_STATEMENT__STATIC:
+        setStatic((String)newValue);
+        return;
       case IvmlPackage.OP_DEF_STATEMENT__RESULT:
         setResult((Type)newValue);
         return;
@@ -351,6 +400,9 @@ public class OpDefStatementImpl extends MinimalEObjectImpl.Container implements 
   {
     switch (featureID)
     {
+      case IvmlPackage.OP_DEF_STATEMENT__STATIC:
+        setStatic(STATIC_EDEFAULT);
+        return;
       case IvmlPackage.OP_DEF_STATEMENT__RESULT:
         setResult((Type)null);
         return;
@@ -377,6 +429,8 @@ public class OpDefStatementImpl extends MinimalEObjectImpl.Container implements 
   {
     switch (featureID)
     {
+      case IvmlPackage.OP_DEF_STATEMENT__STATIC:
+        return STATIC_EDEFAULT == null ? static_ != null : !STATIC_EDEFAULT.equals(static_);
       case IvmlPackage.OP_DEF_STATEMENT__RESULT:
         return result != null;
       case IvmlPackage.OP_DEF_STATEMENT__ID:
@@ -400,7 +454,9 @@ public class OpDefStatementImpl extends MinimalEObjectImpl.Container implements 
     if (eIsProxy()) return super.toString();
 
     StringBuffer result = new StringBuffer(super.toString());
-    result.append(" (id: ");
+    result.append(" (static: ");
+    result.append(static_);
+    result.append(", id: ");
     result.append(id);
     result.append(')');
     return result.toString();
