@@ -23,8 +23,10 @@ import de.uni_hildesheim.sse.model.confModel.IDecisionVariable;
 import de.uni_hildesheim.sse.model.cst.CSTSemanticException;
 import de.uni_hildesheim.sse.model.cst.CompoundAccess;
 import de.uni_hildesheim.sse.model.cst.ConstantValue;
+import de.uni_hildesheim.sse.model.cst.ConstraintSyntaxTree;
 import de.uni_hildesheim.sse.model.cst.OCLFeatureCall;
 import de.uni_hildesheim.sse.model.cst.Variable;
+import de.uni_hildesheim.sse.model.varModel.AbstractVariable;
 import de.uni_hildesheim.sse.model.varModel.Constraint;
 import de.uni_hildesheim.sse.model.varModel.DecisionVariableDeclaration;
 import de.uni_hildesheim.sse.model.varModel.Project;
@@ -36,6 +38,7 @@ import de.uni_hildesheim.sse.model.varModel.datatypes.OclKeyWords;
 import de.uni_hildesheim.sse.model.varModel.filter.FilterType;
 import de.uni_hildesheim.sse.model.varModel.values.ValueDoesNotMatchTypeException;
 import de.uni_hildesheim.sse.model.varModel.values.ValueFactory;
+import de.uni_hildesheim.sse.persistency.StringProvider;
 import de.uni_hildesheim.sse.varModel.testSupport.ProjectTestUtilities;
 
 /**
@@ -98,10 +101,10 @@ public class MandatoryDeclarationClassifierTest {
         project.add(declA);
         project.add(declB);
         project.add(declC);
-        Constraint comparison = new Constraint(project);
-        OCLFeatureCall compCall = new OCLFeatureCall(new Variable(declA), OclKeyWords.GREATER, new Variable(declB));
-        comparison.setConsSyntax(compCall);
-        project.add(comparison);
+        Constraint isDefined = new Constraint(project);
+        OCLFeatureCall compCall = new OCLFeatureCall(isDefined(declA), OclKeyWords.AND, isDefined(declB));
+        isDefined.setConsSyntax(compCall);
+        project.add(isDefined);
         
         // Create configuration out of valid project
         ProjectTestUtilities.validateProject(project);
@@ -136,8 +139,7 @@ public class MandatoryDeclarationClassifierTest {
         project.add(dimDecl);
         Constraint comparison = new Constraint(project);
         CompoundAccess slotAccess = new CompoundAccess(new Variable(dimDecl), declWidth.getName());
-        OCLFeatureCall compCall = new OCLFeatureCall(slotAccess, OclKeyWords.GREATER, ZERO);
-        comparison.setConsSyntax(compCall);
+        comparison.setConsSyntax(isDefined(slotAccess));
         project.add(comparison);
         
         // Create configuration out of valid project
@@ -191,13 +193,14 @@ public class MandatoryDeclarationClassifierTest {
         DecisionVariableDeclaration dim3DDecl = new DecisionVariableDeclaration("dimension3D", dimType3D, project);
         project.add(dim3DDecl);
         // Constraint for nested slot
-        Constraint comparison = new Constraint(project);
+        Constraint isDefined = new Constraint(project);
         CompoundAccess slotAccess = new CompoundAccess(new Variable(dim3DDecl), dim2DDecl.getName());
         CompoundAccess slotAccess2 = new CompoundAccess(slotAccess, declWidth.getName());
         CompoundAccess slotAccess3 = new CompoundAccess(new Variable(dim3DDecl), depthDecl.getName());
-        OCLFeatureCall compCall = new OCLFeatureCall(slotAccess2, OclKeyWords.GREATER, slotAccess3);
-        comparison.setConsSyntax(compCall);
-        project.add(comparison);
+        OCLFeatureCall compCall = new OCLFeatureCall(isDefined(slotAccess2), OclKeyWords.AND,
+            isDefined(slotAccess3));
+        isDefined.setConsSyntax(compCall);
+        project.add(isDefined);
         
         // Create configuration out of valid project
         ProjectTestUtilities.validateProject(project);
@@ -247,10 +250,10 @@ public class MandatoryDeclarationClassifierTest {
         DecisionVariableDeclaration declB = new DecisionVariableDeclaration("intB", IntegerType.TYPE, project);
         project.add(declA);
         project.add(declB);
-        Constraint comparison = new Constraint(project);
-        OCLFeatureCall compCall = new OCLFeatureCall(new Variable(declA), OclKeyWords.GREATER, new Variable(declB));
-        comparison.setConsSyntax(compCall);
-        project.add(comparison);
+        Constraint isDefined = new Constraint(project);
+        OCLFeatureCall compCall = new OCLFeatureCall(isDefined(declA), OclKeyWords.AND, isDefined(declB));
+        isDefined.setConsSyntax(compCall);
+        project.add(isDefined);
         
         // Create configuration out of valid project
         ProjectTestUtilities.validateProject(project);
@@ -280,8 +283,7 @@ public class MandatoryDeclarationClassifierTest {
         dimType.add(declWidth);
         dimType.add(declHeight);
         Constraint innerConstraint = new Constraint(dimType);
-        OCLFeatureCall compCall = new OCLFeatureCall(new Variable(declWidth), OclKeyWords.GREATER, ZERO);
-        innerConstraint.setConsSyntax(compCall);
+        innerConstraint.setConsSyntax(isDefined(declWidth));
         dimType.addConstraint(innerConstraint);  
         DecisionVariableDeclaration dimDecl = new DecisionVariableDeclaration("dimension", dimType, project);
         project.add(dimDecl);
@@ -327,8 +329,7 @@ public class MandatoryDeclarationClassifierTest {
         dimType2D.add(declWidth);
         dimType2D.add(declHeight);
         Constraint innerConstraint = new Constraint(dimType2D);
-        OCLFeatureCall compCall = new OCLFeatureCall(new Variable(declWidth), OclKeyWords.GREATER, ZERO);
-        innerConstraint.setConsSyntax(compCall);
+        innerConstraint.setConsSyntax(isDefined(declWidth));
         dimType2D.addConstraint(innerConstraint);  
         Compound dimType3D = new Compound("Dimension3D", project);
         project.add(dimType3D);
@@ -382,7 +383,7 @@ public class MandatoryDeclarationClassifierTest {
         project.add(declC);
         DecisionVariableDeclaration declConstraint = new DecisionVariableDeclaration("constraint", ConstraintType.TYPE,
             project);
-        OCLFeatureCall compCall = new OCLFeatureCall(new Variable(declA), OclKeyWords.GREATER, new Variable(declB));
+        OCLFeatureCall compCall = new OCLFeatureCall(isDefined(declA), OclKeyWords.AND, isDefined(declB));
         declConstraint.setValue(compCall);
         project.add(declConstraint);
         
@@ -409,18 +410,16 @@ public class MandatoryDeclarationClassifierTest {
     @Test
     public void testTypeDefsAreConsidered() throws CSTSemanticException {
         Project project = new Project("testTypeDefsAreConsidered");
-        DerivedDatatype posIntType = new DerivedDatatype("PositiveInteger", IntegerType.TYPE, project);
+        DerivedDatatype posIntType = new DerivedDatatype("NonNullInteger", IntegerType.TYPE, project);
         Constraint derivedTypeConstraint = new Constraint(posIntType);
-        OCLFeatureCall comparison = new OCLFeatureCall(new Variable(posIntType.getTypeDeclaration()),
-            OclKeyWords.GREATER, ZERO);
-        derivedTypeConstraint.setConsSyntax(comparison);
+        derivedTypeConstraint.setConsSyntax(isDefined(posIntType.getTypeDeclaration()));
         posIntType.setConstraints(new Constraint[] {derivedTypeConstraint});
         project.add(posIntType);
         DecisionVariableDeclaration posIntDecl = new DecisionVariableDeclaration("posInt", posIntType, project);
         project.add(posIntDecl);
         
         // Create configuration out of valid project
-        ProjectTestUtilities.validateProject(project);
+        ProjectTestUtilities.validateProject(project, true);
         Configuration config = new Configuration(project);
         
         // Check importance
@@ -439,11 +438,9 @@ public class MandatoryDeclarationClassifierTest {
     @Test
     public void testTypeDefsAreConsideredAliasesNot() throws CSTSemanticException {
         Project project = new Project("testTypeDefsAreConsideredAliasesNot");
-        DerivedDatatype posIntType = new DerivedDatatype("PositiveInteger", IntegerType.TYPE, project);
+        DerivedDatatype posIntType = new DerivedDatatype("NonNullInteger", IntegerType.TYPE, project);
         Constraint derivedTypeConstraint = new Constraint(posIntType);
-        OCLFeatureCall comparison = new OCLFeatureCall(new Variable(posIntType.getTypeDeclaration()),
-                OclKeyWords.GREATER, ZERO);
-        derivedTypeConstraint.setConsSyntax(comparison);
+        derivedTypeConstraint.setConsSyntax(isDefined(posIntType.getTypeDeclaration()));
         posIntType.setConstraints(new Constraint[] {derivedTypeConstraint});
         project.add(posIntType);
         DecisionVariableDeclaration posIntDecl = new DecisionVariableDeclaration("posInt", posIntType, project);
@@ -511,4 +508,32 @@ public class MandatoryDeclarationClassifierTest {
         }
     }
 
+    /**
+     * Helper method for creating a isDefined constraint for the given variable.
+     * @param variableExpression Should point to a variable, e.g. a {@link Variable} or {@link CompoundAccess}.
+     * @return The generated isDefined constraint for the given variable. An assertion failure is created,
+     * if the sub constraint is not valid.
+     */
+    private static ConstraintSyntaxTree isDefined(ConstraintSyntaxTree variableExpression) {
+        ConstraintSyntaxTree isDefinedConstraint = new OCLFeatureCall(variableExpression, OclKeyWords.IS_DEFINED);
+        
+        try {
+            isDefinedConstraint.inferDatatype();
+        } catch (CSTSemanticException e) {
+            Assert.fail("Could not create \"" + StringProvider.toIvmlString(isDefinedConstraint) + "\", reason: "
+                + e.getMessage());
+        }
+
+        return isDefinedConstraint;
+    }
+    
+    /**
+     * Helper method for creating a isDefined constraint for the given declaration.
+     * @param declaration The declaration for which the constraint shall be created.
+     * @return The generated isDefined constraint for the given declaration. An assertion failure is created,
+     * if the sub constraint is not valid.
+     */
+    private static ConstraintSyntaxTree isDefined(AbstractVariable declaration) {
+        return isDefined(new Variable(declaration));
+    }
 }
