@@ -26,15 +26,19 @@ public class IntegerTextHandler implements IGUITextHandler {
     public String format(String text) throws NumberFormatException {
         String result = text.replaceAll("\\{", "");
         result = result.replaceAll("\\}", "");
-        String[] values = result.split(", ");
+        String[] values = result.split(",");
         ArrayList<Integer> numbers = new ArrayList<Integer>();
         if (values.length >= 1 && !values[0].equals("")) {
-            // Machine has ports
             for (String value: values) {
-                try {
-                    numbers.add(Integer.valueOf(value));                
-                } catch (NumberFormatException exp) {
-                    throw exp;
+                String[] parts = value.split("-");
+                if (2 == parts.length) {
+                    int from = Integer.parseInt(parts[0].trim());
+                    int to = Integer.parseInt(parts[1].trim());
+                    for (int i = Math.min(from, to), n = Math.max(from, to); i <= n; i++) {
+                        numbers.add(i);
+                    }
+                } else {
+                    numbers.add(Integer.valueOf(parts[0].trim()));
                 }
             }            
         }
@@ -173,4 +177,5 @@ public class IntegerTextHandler implements IGUITextHandler {
         }
         return st.toString();
     }
+    
 }
