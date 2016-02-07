@@ -83,8 +83,6 @@ import de.uni_hildesheim.sse.utils.logger.EASyLoggerFactory;
  */
 public class AssignmentResolver {
     
-    public static final IAssignmentState RESOLUTIONSTATE = AssignmentState.DERIVED; 
-    
     protected Configuration config;
     protected EvaluationVisitor evaluator;
     
@@ -522,7 +520,7 @@ public class AssignmentResolver {
             for (Constraint constraint : constraints) {
                 ConstraintSyntaxTree cst = constraint.getConsSyntax();
                 if (null != cst) {
-                    evaluator.init(config, RESOLUTIONSTATE, false, null);
+                    evaluator.init(config, config.getResolutionState(), false, null);
                     evaluator.visit(cst);
                     // Check whether the constraint could be resolved
                     if (null == evaluator.getResult()) {

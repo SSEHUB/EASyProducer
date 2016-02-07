@@ -85,7 +85,6 @@ public class Configuration implements IConfigurationVisitable, IProjectListener,
         public List<Message> initializeConfiguration(Configuration config, ProgressObserver observer) {
             AssignmentResolver resolver = new AssignmentResolver(config);
             resolver.resolve();
-            
             // TODO freezing shall be done incrementally by the Reasoner, currently freeze-state would not work
             // Assign frozen state to already frozen variables
             config.freezeValues(config.project, FilterType.ALL);
@@ -107,15 +106,31 @@ public class Configuration implements IConfigurationVisitable, IProjectListener,
     
     private Map<IDatatype, Map<IDecisionVariable, ReferenceValue>> allInstances;
     
+    private IAssignmentState resolutionState = AssignmentState.DERIVED;
+    
     /**
      * Creates a new configuration for the given project.
+     * 
      * @param project The project, where this configuration belongs to.
      * This project should already be registered at the VarModel
      * @see de.uni_hildesheim.sse.utils.modelManagement.ModelManagement
      * #updateModel(de.uni_hildesheim.sse.utils.modelManagement.IModel, java.net.URI)
      */
     public Configuration(Project project) {
-        this(project, true);
+        this(project, true, AssignmentState.DERIVED);
+    }
+
+    /**
+     * Creates a new configuration for the given project with explicit resolution state.
+     * This project should already be registered at the VarModel
+     * {@link de.uni_hildesheim.sse.utils.modelManagement.ModelManagement
+     * #updateModel(de.uni_hildesheim.sse.utils.modelManagement.IModel, java.net.URI)}.
+     * 
+     * @param project The project, where this configuration belongs to.
+     * @param resolutionState the resolution state for the assignment resolver
+     */
+    public Configuration(Project project, IAssignmentState resolutionState) {
+        this(project, true, resolutionState);
     }
 
     /**
@@ -125,6 +140,7 @@ public class Configuration implements IConfigurationVisitable, IProjectListener,
      */
     public Configuration(Configuration configuration) {
         this.project = configuration.getProject();
+        this.resolutionState = configuration.getResolutionState();
         VarModel.INSTANCE.events().addModelListener(project, this);
         listeners = new ArrayList<IConfigurationChangeListener>();
         if (null != project) {
@@ -146,18 +162,41 @@ public class Configuration implements IConfigurationVisitable, IProjectListener,
             }
         }
     }
-    
+
     /**
-     * Alternative constructor to avoid initial value assignment by {@link AssignmentResolver}.
+     * Alternative constructor to avoid initial value assignment by {@link AssignmentResolver}. If activated, the 
+     * {@link AssignmentResolver} will work with {@link AssignmentState#DERIVED}.
+     * 
      * @param project to get {@link Configuration} from.
      * @param assignValues Decision if values should be assigned by {@link AssignmentResolver}.
      */
     public Configuration(Project project, boolean assignValues) {
+        this(project, assignValues, AssignmentState.DERIVED); // following the new convention
+    }
+    
+    /**
+     * Alternative constructor to avoid initial value assignment by {@link AssignmentResolver}.
+     * 
+     * @param project to get {@link Configuration} from.
+     * @param assignValues Decision if values should be assigned by {@link AssignmentResolver}.
+     * @param resolutionState the resolution state for the assignment resolver
+     */
+    public Configuration(Project project, boolean assignValues, IAssignmentState resolutionState) {
         this.project = project;
         this.assignValues = assignValues;
+        this.resolutionState = resolutionState;
         VarModel.INSTANCE.events().addModelListener(project, this);
         listeners = new ArrayList<IConfigurationChangeListener>();
         init();
+    }
+    
+    /**
+     * Returns the assignment state to be used when assigning values in the configuration.
+     * 
+     * @return the resolution state
+     */
+    public IAssignmentState getResolutionState() {
+        return resolutionState;
     }
     
     /**
@@ -816,7 +855,21 @@ public class Configuration implements IConfigurationVisitable, IProjectListener,
         Iterator<IDecisionVariable> iter = cfg.iterator();
         while (iter.hasNext()) {
             IDecisionVariable var = iter.next();
-            out.println(var.getDeclaration().getName() + " = " + var.getValue());
+            printVariable(out, var, "");
+        }
+    }
+    
+    /**
+     * Prints a variable to <code>out</code>. [debugging]
+     * 
+     * @param out the output stream
+     * @param var the variable to print
+     * @param indent the indentation
+     */
+    private static void printVariable(PrintStream out, IDecisionVariable var, String indent) {
+        out.println(indent + var.getDeclaration().getName() + " = " + var.getValue() + " STATE " + var.getState());
+        for (int i = 0; i < var.getNestedElementsCount(); i++) {
+            printVariable(out, var.getNestedElement(i), indent + " ");
         }
     }
     
