@@ -1,11 +1,9 @@
 package de.uni_hildesheim.sse.reasoning.reasoner;
 
-
 import org.junit.Assert;
 import org.junit.Test;
 
 import de.uni_hildesheim.sse.dslCore.test.AbstractTest;
-import de.uni_hildesheim.sse.model.confModel.AssignmentResolver;
 import de.uni_hildesheim.sse.model.confModel.AssignmentState;
 import de.uni_hildesheim.sse.model.confModel.Configuration;
 import de.uni_hildesheim.sse.model.confModel.IDecisionVariable;
@@ -86,11 +84,11 @@ public class IntegrityTests extends AbstractTest<Project> {
         // Test correct assignments
         Assert.assertNotNull(iVarA);
         Assert.assertEquals(31, iVarA.getValue().getValue());
-        Assert.assertSame(AssignmentResolver.RESOLUTIONSTATE, iVarA.getState());
+        Assert.assertSame(config.getResolutionState(), iVarA.getState());
 
         Assert.assertNotNull(iVarB);
         Assert.assertEquals(37, iVarB.getValue().getValue());
-        Assert.assertSame(AssignmentResolver.RESOLUTIONSTATE, iVarB.getState());
+        Assert.assertSame(config.getResolutionState(), iVarB.getState());
         
         Assert.assertNotNull(iVarC);
         Assert.assertEquals(33, iVarC.getValue().getValue());
