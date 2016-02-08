@@ -70,6 +70,17 @@ public class BasicDecisionVariableContainer extends ModelElement implements IDec
         assignments.add(assignment);
         modelElements.add(assignment);
     }
+    
+    /**
+     * adds a nested evaluation block.
+     * 
+     * @param eval the eval block
+     */
+    public void add(EvaluationBlock eval) {
+        assert null != eval;
+        // currently no need for specialized structure
+        modelElements.add(eval);
+    }
 
     @Override
     public int getAssignmentCount() {

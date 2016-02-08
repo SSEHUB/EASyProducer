@@ -1,0 +1,18 @@
+project compoundEval {
+
+    version v0;
+    compound cmpDefinition {
+        eval {
+            cmpDefinition.a > cmpDefinition.b;
+        };
+        Integer a;
+        Integer b;
+    }
+
+    Integer f;
+    f == 5;
+    cmpDefinition cVar1;
+    cmpDefinition cVar2;
+    cVar1 = {a = 1, b = 2};
+    cVar2 = {a = 2, b = 2};
+}

@@ -134,6 +134,7 @@
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Ivml.ecore#//VersionStmt/version"/>
     </genClasses>
     <genClasses ecoreClass="Ivml.ecore#//OpDefStatement">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Ivml.ecore#//OpDefStatement/static"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Ivml.ecore#//OpDefStatement/result"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Ivml.ecore#//OpDefStatement/id"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Ivml.ecore#//OpDefStatement/param"/>

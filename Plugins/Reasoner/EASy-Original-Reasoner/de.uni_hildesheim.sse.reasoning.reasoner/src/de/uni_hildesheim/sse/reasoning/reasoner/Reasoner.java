@@ -110,7 +110,6 @@ public class Reasoner implements IReasoner {
     private Configuration createConfiguration(Project project, Configuration cfg, ReasonerConfiguration rConfig) {
         Configuration result;
         if (rConfig.isRuntimeMode() || !rConfig.isFreshConfiguration()) {
-//        if (rConfig.isRuntimeMode()) {
             result = cfg;
         } else {
             result = null;

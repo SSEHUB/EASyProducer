@@ -85,8 +85,8 @@ public class AssignmentResolverTest {
         
         // Configuration must be started with AssignmentResolver, since Reasoner is not available in this project.
         Configuration config = new Configuration(projectE, true);
-        assertVariable(config, declA, 13, AssignmentResolver.RESOLUTIONSTATE);
-        assertVariable(config, declB, 3, AssignmentResolver.RESOLUTIONSTATE);
+        assertVariable(config, declA, 13, config.getResolutionState());
+        assertVariable(config, declB, 3, config.getResolutionState());
         assertVariable(config, declC, 2, AssignmentState.DEFAULT);
         assertVariable(config, declD, 7, AssignmentState.DEFAULT);
     }
@@ -586,11 +586,11 @@ public class AssignmentResolverTest {
         // Test correct assignments
         Assert.assertNotNull(iVarA);
         Assert.assertEquals(31, iVarA.getValue().getValue());
-        Assert.assertSame(AssignmentResolver.RESOLUTIONSTATE, iVarA.getState());
+        Assert.assertSame(config.getResolutionState(), iVarA.getState());
 
         Assert.assertNotNull(iVarB);
         Assert.assertEquals(37, iVarB.getValue().getValue());
-        Assert.assertSame(AssignmentResolver.RESOLUTIONSTATE, iVarB.getState());
+        Assert.assertSame(config.getResolutionState(), iVarB.getState());
         
         Assert.assertNotNull(iVarC);
         Assert.assertEquals(33, iVarC.getValue().getValue());

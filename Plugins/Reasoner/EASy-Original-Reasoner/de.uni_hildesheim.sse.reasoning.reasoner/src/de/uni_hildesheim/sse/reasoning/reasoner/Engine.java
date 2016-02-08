@@ -94,52 +94,7 @@ public class Engine {
         this.resolver.setIncremental(reasonerConfig.isRuntimeMode());
         this.result = new ReasoningResult();
         this.infoLogger = reasonerConfig.getLogger();
-    }
-    
-//    private Configuration clearValues(Configuration cfg) {
-//        Iterator<IDecisionVariable> decisionIterator = cfg.iterator();
-//        while (decisionIterator.hasNext()) {
-//            System.out.println("!!!Check state and null all not ASSIGNED!!!");
-//            IDecisionVariable variable = decisionIterator.next();
-//            clearNonUIAssignedValues(variable);
-//        }
-//        return cfg;
-//    }
-//    
-//    private void clearNonUIAssignedValues(IDecisionVariable variable) {
-//        if (variable.getState() != AssignmentState.ASSIGNED) {
-//            clearValue(variable);
-//        }
-//        if (variable.getAttributesCount() > 0) {
-//            clearAttributeAssignments(variable);
-//        }
-//        IDatatype type = variable.getDeclaration().getType();
-//        if (Compound.TYPE.isAssignableFrom(type)) {
-//            clearNonUIAssignedValuesInCompound(variable);
-//        }
-//    }
-//    
-//    private void clearAttributeAssignments(IDecisionVariable variable) {
-//        for (int i = 0; i < variable.getAttributesCount(); i++) {
-//            clearValue(variable.getAttribute(i));
-//        }        
-//    }
-//    
-//    private void clearNonUIAssignedValuesInCompound(IDecisionVariable variable) {
-//        CompoundVariable cmpVar = (CompoundVariable) variable;        
-//        for (int i = 0, n = cmpVar.getNestedElementsCount(); i < n; i++) {
-//            clearNonUIAssignedValues(cmpVar.getNestedElement(i));
-//        }
-//    }
-//    
-//    private void clearValue(IDecisionVariable variable) {
-//        try {
-//            variable.setValue(null, AssignmentState.UNDEFINED);
-//        } catch (ConfigurationException e) {
-//            LOGGER.exception(e);
-//        }
-//    }
-
+    } 
     
     /**
      * Method for lunching reasoning.     * 

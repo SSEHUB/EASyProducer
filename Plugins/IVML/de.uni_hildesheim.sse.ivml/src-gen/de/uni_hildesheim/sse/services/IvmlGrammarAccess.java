@@ -390,18 +390,21 @@ public class IvmlGrammarAccess extends AbstractGrammarElementFinder {
 		private final RuleCall cElementsExpressionStatementParserRuleCall_5_1_0 = (RuleCall)cElementsAssignment_5_1.eContents().get(0);
 		private final Assignment cElementsAssignment_5_2 = (Assignment)cAlternatives_5.eContents().get(2);
 		private final RuleCall cElementsAttrAssignmentParserRuleCall_5_2_0 = (RuleCall)cElementsAssignment_5_2.eContents().get(0);
+		private final Assignment cElementsAssignment_5_3 = (Assignment)cAlternatives_5.eContents().get(3);
+		private final RuleCall cElementsEvalParserRuleCall_5_3_0 = (RuleCall)cElementsAssignment_5_3.eContents().get(0);
 		private final Keyword cRightCurlyBracketKeyword_6 = (Keyword)cGroup.eContents().get(6);
 		private final Keyword cSemicolonKeyword_7 = (Keyword)cGroup.eContents().get(7);
 		
 		//TypedefCompound:
 		//	abstract='abstract'? 'compound' name=Identifier ('refines' super=Identifier)? //#< Compounds
 		// '{'
-		//	(elements+=VariableDeclaration | elements+=ExpressionStatement | elements+=AttrAssignment)* '}' ';'?;
+		//	(elements+=VariableDeclaration | elements+=ExpressionStatement | elements+=AttrAssignment | elements+=Eval)* '}'
+		//	';'?;
 		@Override public ParserRule getRule() { return rule; }
 
 		//abstract='abstract'? 'compound' name=Identifier ('refines' super=Identifier)? //#< Compounds
 		// '{'
-		//(elements+=VariableDeclaration | elements+=ExpressionStatement | elements+=AttrAssignment)* '}' ';'?
+		//(elements+=VariableDeclaration | elements+=ExpressionStatement | elements+=AttrAssignment | elements+=Eval)* '}' ';'?
 		public Group getGroup() { return cGroup; }
 
 		//abstract='abstract'?
@@ -435,7 +438,7 @@ public class IvmlGrammarAccess extends AbstractGrammarElementFinder {
 		// '{'
 		public Keyword getLeftCurlyBracketKeyword_4() { return cLeftCurlyBracketKeyword_4; }
 
-		//(elements+=VariableDeclaration | elements+=ExpressionStatement | elements+=AttrAssignment)*
+		//(elements+=VariableDeclaration | elements+=ExpressionStatement | elements+=AttrAssignment | elements+=Eval)*
 		public Alternatives getAlternatives_5() { return cAlternatives_5; }
 
 		//elements+=VariableDeclaration
@@ -455,6 +458,12 @@ public class IvmlGrammarAccess extends AbstractGrammarElementFinder {
 
 		//AttrAssignment
 		public RuleCall getElementsAttrAssignmentParserRuleCall_5_2_0() { return cElementsAttrAssignmentParserRuleCall_5_2_0; }
+
+		//elements+=Eval
+		public Assignment getElementsAssignment_5_3() { return cElementsAssignment_5_3; }
+
+		//Eval
+		public RuleCall getElementsEvalParserRuleCall_5_3_0() { return cElementsEvalParserRuleCall_5_3_0; }
 
 		//'}'
 		public Keyword getRightCurlyBracketKeyword_6() { return cRightCurlyBracketKeyword_6; }
@@ -1544,66 +1553,74 @@ public class IvmlGrammarAccess extends AbstractGrammarElementFinder {
 		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "de.uni_hildesheim.sse.Ivml.OpDefStatement");
 		private final Group cGroup = (Group)rule.eContents().get(1);
 		private final Keyword cDefKeyword_0 = (Keyword)cGroup.eContents().get(0);
-		private final Assignment cResultAssignment_1 = (Assignment)cGroup.eContents().get(1);
-		private final RuleCall cResultTypeParserRuleCall_1_0 = (RuleCall)cResultAssignment_1.eContents().get(0);
-		private final Assignment cIdAssignment_2 = (Assignment)cGroup.eContents().get(2);
-		private final RuleCall cIdIdentifierParserRuleCall_2_0 = (RuleCall)cIdAssignment_2.eContents().get(0);
-		private final Keyword cLeftParenthesisKeyword_3 = (Keyword)cGroup.eContents().get(3);
-		private final Assignment cParamAssignment_4 = (Assignment)cGroup.eContents().get(4);
-		private final RuleCall cParamOpDefParameterListParserRuleCall_4_0 = (RuleCall)cParamAssignment_4.eContents().get(0);
-		private final Keyword cRightParenthesisKeyword_5 = (Keyword)cGroup.eContents().get(5);
-		private final Keyword cEqualsSignKeyword_6 = (Keyword)cGroup.eContents().get(6);
-		private final Assignment cImplAssignment_7 = (Assignment)cGroup.eContents().get(7);
-		private final RuleCall cImplExpressionParserRuleCall_7_0 = (RuleCall)cImplAssignment_7.eContents().get(0);
-		private final Keyword cSemicolonKeyword_8 = (Keyword)cGroup.eContents().get(8);
+		private final Assignment cStaticAssignment_1 = (Assignment)cGroup.eContents().get(1);
+		private final Keyword cStaticStaticKeyword_1_0 = (Keyword)cStaticAssignment_1.eContents().get(0);
+		private final Assignment cResultAssignment_2 = (Assignment)cGroup.eContents().get(2);
+		private final RuleCall cResultTypeParserRuleCall_2_0 = (RuleCall)cResultAssignment_2.eContents().get(0);
+		private final Assignment cIdAssignment_3 = (Assignment)cGroup.eContents().get(3);
+		private final RuleCall cIdIdentifierParserRuleCall_3_0 = (RuleCall)cIdAssignment_3.eContents().get(0);
+		private final Keyword cLeftParenthesisKeyword_4 = (Keyword)cGroup.eContents().get(4);
+		private final Assignment cParamAssignment_5 = (Assignment)cGroup.eContents().get(5);
+		private final RuleCall cParamOpDefParameterListParserRuleCall_5_0 = (RuleCall)cParamAssignment_5.eContents().get(0);
+		private final Keyword cRightParenthesisKeyword_6 = (Keyword)cGroup.eContents().get(6);
+		private final Keyword cEqualsSignKeyword_7 = (Keyword)cGroup.eContents().get(7);
+		private final Assignment cImplAssignment_8 = (Assignment)cGroup.eContents().get(8);
+		private final RuleCall cImplExpressionParserRuleCall_8_0 = (RuleCall)cImplAssignment_8.eContents().get(0);
+		private final Keyword cSemicolonKeyword_9 = (Keyword)cGroup.eContents().get(9);
 		
 		////#< Interfaces
 		// //------------------------------------ OCL (excerpt) ----------------------------	
 		// OpDefStatement:
-		//	'def' result=Type id=Identifier '(' param=OpDefParameterList ')' '=' impl=Expression ';';
+		//	'def' static='static'? result=Type id=Identifier '(' param=OpDefParameterList ')' '=' impl=Expression ';';
 		@Override public ParserRule getRule() { return rule; }
 
-		//'def' result=Type id=Identifier '(' param=OpDefParameterList ')' '=' impl=Expression ';'
+		//'def' static='static'? result=Type id=Identifier '(' param=OpDefParameterList ')' '=' impl=Expression ';'
 		public Group getGroup() { return cGroup; }
 
 		//'def'
 		public Keyword getDefKeyword_0() { return cDefKeyword_0; }
 
+		//static='static'?
+		public Assignment getStaticAssignment_1() { return cStaticAssignment_1; }
+
+		//'static'
+		public Keyword getStaticStaticKeyword_1_0() { return cStaticStaticKeyword_1_0; }
+
 		//result=Type
-		public Assignment getResultAssignment_1() { return cResultAssignment_1; }
+		public Assignment getResultAssignment_2() { return cResultAssignment_2; }
 
 		//Type
-		public RuleCall getResultTypeParserRuleCall_1_0() { return cResultTypeParserRuleCall_1_0; }
+		public RuleCall getResultTypeParserRuleCall_2_0() { return cResultTypeParserRuleCall_2_0; }
 
 		//id=Identifier
-		public Assignment getIdAssignment_2() { return cIdAssignment_2; }
+		public Assignment getIdAssignment_3() { return cIdAssignment_3; }
 
 		//Identifier
-		public RuleCall getIdIdentifierParserRuleCall_2_0() { return cIdIdentifierParserRuleCall_2_0; }
+		public RuleCall getIdIdentifierParserRuleCall_3_0() { return cIdIdentifierParserRuleCall_3_0; }
 
 		//'('
-		public Keyword getLeftParenthesisKeyword_3() { return cLeftParenthesisKeyword_3; }
+		public Keyword getLeftParenthesisKeyword_4() { return cLeftParenthesisKeyword_4; }
 
 		//param=OpDefParameterList
-		public Assignment getParamAssignment_4() { return cParamAssignment_4; }
+		public Assignment getParamAssignment_5() { return cParamAssignment_5; }
 
 		//OpDefParameterList
-		public RuleCall getParamOpDefParameterListParserRuleCall_4_0() { return cParamOpDefParameterListParserRuleCall_4_0; }
+		public RuleCall getParamOpDefParameterListParserRuleCall_5_0() { return cParamOpDefParameterListParserRuleCall_5_0; }
 
 		//')'
-		public Keyword getRightParenthesisKeyword_5() { return cRightParenthesisKeyword_5; }
+		public Keyword getRightParenthesisKeyword_6() { return cRightParenthesisKeyword_6; }
 
 		//'='
-		public Keyword getEqualsSignKeyword_6() { return cEqualsSignKeyword_6; }
+		public Keyword getEqualsSignKeyword_7() { return cEqualsSignKeyword_7; }
 
 		//impl=Expression
-		public Assignment getImplAssignment_7() { return cImplAssignment_7; }
+		public Assignment getImplAssignment_8() { return cImplAssignment_8; }
 
 		//Expression
-		public RuleCall getImplExpressionParserRuleCall_7_0() { return cImplExpressionParserRuleCall_7_0; }
+		public RuleCall getImplExpressionParserRuleCall_8_0() { return cImplExpressionParserRuleCall_8_0; }
 
 		//';'
-		public Keyword getSemicolonKeyword_8() { return cSemicolonKeyword_8; }
+		public Keyword getSemicolonKeyword_9() { return cSemicolonKeyword_9; }
 	}
 
 	public class OpDefParameterListElements extends AbstractParserRuleElementFinder {
@@ -3424,7 +3441,8 @@ public class IvmlGrammarAccess extends AbstractGrammarElementFinder {
 	//TypedefCompound:
 	//	abstract='abstract'? 'compound' name=Identifier ('refines' super=Identifier)? //#< Compounds
 	// '{'
-	//	(elements+=VariableDeclaration | elements+=ExpressionStatement | elements+=AttrAssignment)* '}' ';'?;
+	//	(elements+=VariableDeclaration | elements+=ExpressionStatement | elements+=AttrAssignment | elements+=Eval)* '}'
+	//	';'?;
 	public TypedefCompoundElements getTypedefCompoundAccess() {
 		return pTypedefCompound;
 	}
@@ -3673,7 +3691,7 @@ public class IvmlGrammarAccess extends AbstractGrammarElementFinder {
 	////#< Interfaces
 	// //------------------------------------ OCL (excerpt) ----------------------------	
 	// OpDefStatement:
-	//	'def' result=Type id=Identifier '(' param=OpDefParameterList ')' '=' impl=Expression ';';
+	//	'def' static='static'? result=Type id=Identifier '(' param=OpDefParameterList ')' '=' impl=Expression ';';
 	public OpDefStatementElements getOpDefStatementAccess() {
 		return pOpDefStatement;
 	}

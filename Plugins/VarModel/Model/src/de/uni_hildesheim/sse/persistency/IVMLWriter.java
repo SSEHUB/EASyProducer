@@ -712,6 +712,10 @@ public class IVMLWriter extends AbstractVarModelWriter {
         CustomOperation op = opdef.getOperation();
         appendOutput(DEF);
         appendOutput(WHITESPACE);
+        if (op.isStatic()) {
+            appendOutput(STATIC);
+            appendOutput(WHITESPACE);
+        }
         appendOutput(IvmlDatatypeVisitor.getUniqueType(op.getReturns()));
         appendOutput(WHITESPACE);
         appendOutput(opdef.getName());

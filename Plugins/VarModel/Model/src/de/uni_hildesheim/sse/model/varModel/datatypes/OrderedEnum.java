@@ -47,6 +47,8 @@ public class OrderedEnum extends Enum {
         BooleanType.TYPE, OclKeyWords.GREATER_EQUALS, TYPE, TYPE);
     public static final Operation LESS_EQUALS = Operation.createInfixOperator(
         BooleanType.TYPE, OclKeyWords.LESS_EQUALS, TYPE, TYPE);
+    public static final Operation MIN = new Operation(TYPE, OclKeyWords.MIN, TYPE, TYPE);
+    public static final Operation MAX = new Operation(TYPE, OclKeyWords.MAX, TYPE, TYPE);
     
     // checkstyle: resume declaration order check
 
@@ -56,6 +58,8 @@ public class OrderedEnum extends Enum {
         DTYPE.addOperation(GREATER_EQUALS);
         DTYPE.addOperation(LESS);        
         DTYPE.addOperation(LESS_EQUALS);
+        DTYPE.addOperation(MIN);
+        DTYPE.addOperation(MAX);
     }
     
     /**

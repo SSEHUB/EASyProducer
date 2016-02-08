@@ -359,7 +359,15 @@ public class ReasoningScenarioTests extends de.uni_hildesheim.sse.reasoning.Abst
     @Test
     public void stringCollectionEqualityTest() {
         reasoningTest("stringCollectionEqualityTest.ivml", 2);
-    }     
+    }
+    
+    /**
+     * Test for incremental reasoning and clering derived values in configuration..
+     */
+    @Test
+    public void clearConfigTest() {
+        reasoningTest("ClearConfigBase.ivml", "ClearConfigCore.ivml", 0);
+    }   
     
 
 }

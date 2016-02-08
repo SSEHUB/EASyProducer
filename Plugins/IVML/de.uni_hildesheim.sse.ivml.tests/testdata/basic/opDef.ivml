@@ -1,0 +1,6 @@
+project opDef {
+
+    version v0;
+    def Boolean myOp(Integer i) = i > 0;
+    def static Boolean myOpStatic(Integer i) = i > 0;
+}

@@ -846,7 +846,9 @@ public class EvaluationVisitor implements IConstraintTreeVisitor {
                 }
                 cfg.addDecision(argument);
             }
-            operation = dynamicDispatch(operation, args);
+            if (!operation.isStatic()) {
+                operation = dynamicDispatch(operation, args);
+            }
             operation.getFunction().accept(this);
             context.popLevel();
         } else {

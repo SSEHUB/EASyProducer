@@ -827,13 +827,32 @@ ruleTypedefCompound returns [EObject current=null]
 	    }
 
 )
-))*	otherlv_9='}' 
+)
+    |(
+(
+		{ 
+	        newCompositeNode(grammarAccess.getTypedefCompoundAccess().getElementsEvalParserRuleCall_5_3_0()); 
+	    }
+		lv_elements_9_0=ruleEval		{
+	        if ($current==null) {
+	            $current = createModelElementForParent(grammarAccess.getTypedefCompoundRule());
+	        }
+       		add(
+       			$current, 
+       			"elements",
+        		lv_elements_9_0, 
+        		"de.uni_hildesheim.sse.Ivml.Eval");
+	        afterParserOrEnumRuleCall();
+	    }
+
+)
+))*	otherlv_10='}' 
     {
-    	newLeafNode(otherlv_9, grammarAccess.getTypedefCompoundAccess().getRightCurlyBracketKeyword_6());
+    	newLeafNode(otherlv_10, grammarAccess.getTypedefCompoundAccess().getRightCurlyBracketKeyword_6());
     }
-(	otherlv_10=';' 
+(	otherlv_11=';' 
     {
-    	newLeafNode(otherlv_10, grammarAccess.getTypedefCompoundAccess().getSemicolonKeyword_7());
+    	newLeafNode(otherlv_11, grammarAccess.getTypedefCompoundAccess().getSemicolonKeyword_7());
     }
 )?)
 ;
@@ -2704,17 +2723,32 @@ ruleOpDefStatement returns [EObject current=null]
     }
 (
 (
-		{ 
-	        newCompositeNode(grammarAccess.getOpDefStatementAccess().getResultTypeParserRuleCall_1_0()); 
+		lv_static_1_0=	'static' 
+    {
+        newLeafNode(lv_static_1_0, grammarAccess.getOpDefStatementAccess().getStaticStaticKeyword_1_0());
+    }
+ 
+	    {
+	        if ($current==null) {
+	            $current = createModelElement(grammarAccess.getOpDefStatementRule());
+	        }
+       		setWithLastConsumed($current, "static", lv_static_1_0, "static");
 	    }
-		lv_result_1_0=ruleType		{
+
+)
+)?(
+(
+		{ 
+	        newCompositeNode(grammarAccess.getOpDefStatementAccess().getResultTypeParserRuleCall_2_0()); 
+	    }
+		lv_result_2_0=ruleType		{
 	        if ($current==null) {
 	            $current = createModelElementForParent(grammarAccess.getOpDefStatementRule());
 	        }
        		set(
        			$current, 
        			"result",
-        		lv_result_1_0, 
+        		lv_result_2_0, 
         		"de.uni_hildesheim.sse.Ivml.Type");
 	        afterParserOrEnumRuleCall();
 	    }
@@ -2723,72 +2757,72 @@ ruleOpDefStatement returns [EObject current=null]
 )(
 (
 		{ 
-	        newCompositeNode(grammarAccess.getOpDefStatementAccess().getIdIdentifierParserRuleCall_2_0()); 
+	        newCompositeNode(grammarAccess.getOpDefStatementAccess().getIdIdentifierParserRuleCall_3_0()); 
 	    }
-		lv_id_2_0=ruleIdentifier		{
+		lv_id_3_0=ruleIdentifier		{
 	        if ($current==null) {
 	            $current = createModelElementForParent(grammarAccess.getOpDefStatementRule());
 	        }
        		set(
        			$current, 
        			"id",
-        		lv_id_2_0, 
+        		lv_id_3_0, 
         		"de.uni_hildesheim.sse.Ivml.Identifier");
 	        afterParserOrEnumRuleCall();
 	    }
 
 )
-)	otherlv_3='(' 
+)	otherlv_4='(' 
     {
-    	newLeafNode(otherlv_3, grammarAccess.getOpDefStatementAccess().getLeftParenthesisKeyword_3());
+    	newLeafNode(otherlv_4, grammarAccess.getOpDefStatementAccess().getLeftParenthesisKeyword_4());
     }
 (
 (
 		{ 
-	        newCompositeNode(grammarAccess.getOpDefStatementAccess().getParamOpDefParameterListParserRuleCall_4_0()); 
+	        newCompositeNode(grammarAccess.getOpDefStatementAccess().getParamOpDefParameterListParserRuleCall_5_0()); 
 	    }
-		lv_param_4_0=ruleOpDefParameterList		{
+		lv_param_5_0=ruleOpDefParameterList		{
 	        if ($current==null) {
 	            $current = createModelElementForParent(grammarAccess.getOpDefStatementRule());
 	        }
        		set(
        			$current, 
        			"param",
-        		lv_param_4_0, 
+        		lv_param_5_0, 
         		"de.uni_hildesheim.sse.Ivml.OpDefParameterList");
 	        afterParserOrEnumRuleCall();
 	    }
 
 )
-)	otherlv_5=')' 
+)	otherlv_6=')' 
     {
-    	newLeafNode(otherlv_5, grammarAccess.getOpDefStatementAccess().getRightParenthesisKeyword_5());
+    	newLeafNode(otherlv_6, grammarAccess.getOpDefStatementAccess().getRightParenthesisKeyword_6());
     }
-	otherlv_6='=' 
+	otherlv_7='=' 
     {
-    	newLeafNode(otherlv_6, grammarAccess.getOpDefStatementAccess().getEqualsSignKeyword_6());
+    	newLeafNode(otherlv_7, grammarAccess.getOpDefStatementAccess().getEqualsSignKeyword_7());
     }
 (
 (
 		{ 
-	        newCompositeNode(grammarAccess.getOpDefStatementAccess().getImplExpressionParserRuleCall_7_0()); 
+	        newCompositeNode(grammarAccess.getOpDefStatementAccess().getImplExpressionParserRuleCall_8_0()); 
 	    }
-		lv_impl_7_0=ruleExpression		{
+		lv_impl_8_0=ruleExpression		{
 	        if ($current==null) {
 	            $current = createModelElementForParent(grammarAccess.getOpDefStatementRule());
 	        }
        		set(
        			$current, 
        			"impl",
-        		lv_impl_7_0, 
+        		lv_impl_8_0, 
         		"de.uni_hildesheim.sse.Ivml.Expression");
 	        afterParserOrEnumRuleCall();
 	    }
 
 )
-)	otherlv_8=';' 
+)	otherlv_9=';' 
     {
-    	newLeafNode(otherlv_8, grammarAccess.getOpDefStatementAccess().getSemicolonKeyword_8());
+    	newLeafNode(otherlv_9, grammarAccess.getOpDefStatementAccess().getSemicolonKeyword_9());
     }
 )
 ;

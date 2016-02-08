@@ -32,6 +32,13 @@ public interface IDecisionVariableContainer extends IModelElement, IContainableE
     public void add(AttributeAssignment assignment);
     
     /**
+     * adds a nested evaluation block.
+     * 
+     * @param eval the eval block
+     */
+    public void add(EvaluationBlock eval);
+    
+    /**
      * Returns the number of assignments.
      * 
      * @return the number of assignments

@@ -7,19 +7,18 @@ EASy-Producer was already successfully tested in industrial environments.
 
 Watch out for more!
 
-News
-----
-September, 10 2015: EASy-Producer completely moved to GitHub including issues and development continues here (rather than just release commits).
-
-Upcoming Release
+Upcoming Release (expected mid of February 2016)
 ----------------
 
 - EASy-examples are now available through project imports
-- Improvements for IVML (refBy on expression)
-- Improvements for VIL (switch expression, undefined variables, typedef)
+- Improvements for IVML (refBy on expression, static operation definitions, min/max for ordered enums, flatten operation, dynamic dispatch improvement, cyclic importing)
+- Improvements for VIL (switch expression, undefined variables, typedef, protected sub-templates, VTL line end formatting)
+- Improvements for rt-VIL (explicit fail)
 - Improvement of Maven-VIL integration (Linux fix, JAVA_HOME detection)
-- VIL allows deleting Java calls and methods (in progress)
-- Global VIL Java classpath settings (in progress)
+- Reasoner improvements (fixes, typedefs of typedefs, annotations)
+- Global VIL Java classpath settings
+- Filtered delete for calls / methods in Java Artifacts
+- xText 2.9.0
 
 Release History
 ---------------

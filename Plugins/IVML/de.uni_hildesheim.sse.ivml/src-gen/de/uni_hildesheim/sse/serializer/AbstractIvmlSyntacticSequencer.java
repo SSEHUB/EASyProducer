@@ -131,6 +131,7 @@ public abstract class AbstractIvmlSyntacticSequencer extends AbstractSyntacticSe
 	 *
 	 * This ambiguous syntax occurs at:
 	 *     elements+=AttrAssignment '}' (ambiguity) (rule end)
+	 *     elements+=Eval '}' (ambiguity) (rule end)
 	 *     elements+=ExpressionStatement '}' (ambiguity) (rule end)
 	 *     elements+=VariableDeclaration '}' (ambiguity) (rule end)
 	 *     name=Identifier '{' '}' (ambiguity) (rule end)
