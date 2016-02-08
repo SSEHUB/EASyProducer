@@ -20,6 +20,7 @@ import java.util.Map;
 
 import de.uni_hildesheim.sse.model.confModel.Configuration;
 import de.uni_hildesheim.sse.model.confModel.IDecisionVariable;
+import de.uni_hildesheim.sse.model.varModel.AbstractVariable;
 import de.uni_hildesheim.sse.model.varModel.IModelElement;
 import de.uni_hildesheim.sse.model.varModel.Project;
 
@@ -78,15 +79,52 @@ public class VariableContainer {
         isMandatory = Importance.MANDATORY == importance;
         
         if (!isMandatory) {
-            // Test mandatory by datatype, e.g., CP.slotName
-            IModelElement parent = variable.getDeclaration().getParent();
-            if (!(parent instanceof Project)) {
-                qName = parent.getQualifiedName() + "::" + variable.getDeclaration().getName();
-                importance = importances.get(qName);
-                isMandatory = Importance.MANDATORY == importance;
-            }
+            isMandatory = hasMandatoryTypeOrParent(variable.getDeclaration());
         }
 
+        return isMandatory;
+    }
+    
+    /**
+     * Checks whether the given {@link AbstractVariable} is mandatory.
+     * This will also consider if a declaration is multiple times instantiates,
+     * e.g., a nested declaration of a compound.
+     * @param declaration The {@link AbstractVariable} to check.
+     * @return <tt>true</tt> if the user should specify a value. This is only a heuristic value.
+     */
+    public boolean isMandatory(AbstractVariable declaration) {
+        // Attributes are not considered here
+        boolean isMandatory = false;
+        
+        // Test self, e.g., cmp.slotName
+        String qName = declaration.getQualifiedName();
+        Importance importance = importances.get(qName);
+        isMandatory = Importance.MANDATORY == importance;
+        
+        if (!isMandatory) {
+            isMandatory = hasMandatoryTypeOrParent(declaration);
+        }
+
+        return isMandatory;
+    }
+
+
+    /**
+     * Checks whether the given declaration is mandatory because of its type, or while the parent specifies that all
+     * nested elements shall be mandatory. Part of {@link #isMandatory(IDecisionVariable)}
+     * and {@link #isMandatory(AbstractVariable)}.
+     * @param declaration The declaration to check.
+     * @return <tt>true</tt> if the user should specify a value. This is only a heuristic value.
+     */
+    private boolean hasMandatoryTypeOrParent(AbstractVariable declaration) {
+        boolean isMandatory = false;
+        // Test mandatory by datatype, e.g., CP.slotName
+        IModelElement parent = declaration.getParent();
+        if (!(parent instanceof Project)) {
+            String qName = parent.getQualifiedName() + "::" + declaration.getName();
+            Importance importance = importances.get(qName);
+            isMandatory = Importance.MANDATORY == importance;
+        }
         return isMandatory;
     }
     
