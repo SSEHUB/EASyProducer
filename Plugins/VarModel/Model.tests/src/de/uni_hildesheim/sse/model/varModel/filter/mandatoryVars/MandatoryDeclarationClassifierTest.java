@@ -233,6 +233,55 @@ public class MandatoryDeclarationClassifierTest {
     }
     
     /**
+     * Tests whether constraint variables inside a compound are considered correctly.
+     * @throws ValueDoesNotMatchTypeException Must not occur, otherwise
+     * {@link DecisionVariableDeclaration#setValue(ConstraintSyntaxTree)} is broken for constraint variables
+     * (type {@link ConstraintType}).
+     * @throws CSTSemanticException Must not occur, otherwise {@link Constraint}s are broken.
+     */
+    @Test
+    public void testConstraintsInsideCompound() throws ValueDoesNotMatchTypeException, CSTSemanticException {
+        // Create compound with a nested constraint variable inside
+        Project project = new Project("testConstraintsInsideCompound");
+        Compound dimType = new Compound("Dimension", project);
+        project.add(dimType);
+        DecisionVariableDeclaration declWidth = new DecisionVariableDeclaration("width", IntegerType.TYPE, dimType);
+        DecisionVariableDeclaration declHeight = new DecisionVariableDeclaration("height", IntegerType.TYPE, dimType);
+        dimType.add(declWidth);
+        dimType.add(declHeight);
+        // create nested constraint variable inside compound
+        DecisionVariableDeclaration constDecl = new DecisionVariableDeclaration("check", ConstraintType.TYPE, dimType);
+        constDecl.setValue(isDefined(declWidth));
+        dimType.add(constDecl);
+        DecisionVariableDeclaration dimDecl = new DecisionVariableDeclaration("dimension", dimType, project);
+        project.add(dimDecl);
+        
+        // Validate project for testing and create config
+        ProjectTestUtilities.validateProject(project);
+        Configuration config = new Configuration(project);
+        // Check importance
+        MandatoryDeclarationClassifier finder = new MandatoryDeclarationClassifier(config, FilterType.ALL);
+        project.accept(finder);
+        VariableContainer importances = finder.getImportances();
+        
+        // Test correct behavior: slot height is not mandatory, all other are mandatory
+        IDecisionVariable compoundVar = config.getDecision(dimDecl);
+        IDecisionVariable slotWidth = null;
+        IDecisionVariable slotHeight = null;
+        for (int i = 0; i < compoundVar.getNestedElementsCount(); i++) {
+            IDecisionVariable nestedVar = compoundVar.getNestedElement(i);
+            if (declWidth.equals(nestedVar.getDeclaration())) {
+                slotWidth = nestedVar;
+            } else if (declHeight.equals(nestedVar.getDeclaration())) {
+                slotHeight = nestedVar;
+            }
+        }
+       // assertVariable(compoundVar, true, importances);
+        assertVariable(slotWidth, true, importances);
+        assertVariable(slotHeight, false, importances);
+    }
+    
+    /**
      * Tests that variables having a default variable are <b>not</b> classified as mandatory, even if they are
      * used inside a constraint.
      * @throws ValueDoesNotMatchTypeException Must not occur, otherwise default values of
@@ -419,7 +468,7 @@ public class MandatoryDeclarationClassifierTest {
         project.add(posIntDecl);
         
         // Create configuration out of valid project
-        ProjectTestUtilities.validateProject(project, true);
+        ProjectTestUtilities.validateProject(project);
         Configuration config = new Configuration(project);
         
         // Check importance
