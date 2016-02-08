@@ -20,7 +20,6 @@ import java.util.List;
 import java.util.Map;
 
 import de.uni_hildesheim.sse.model.confModel.Configuration;
-import de.uni_hildesheim.sse.model.confModel.IDecisionVariable;
 import de.uni_hildesheim.sse.model.cst.AttributeVariable;
 import de.uni_hildesheim.sse.model.cst.CompoundAccess;
 import de.uni_hildesheim.sse.model.cst.CompoundInitializer;
@@ -277,8 +276,13 @@ public class MandatoryDeclarationClassifier extends AbstractProjectVisitor imple
         if (null != parent) {
             visitCompound(parent);
         }
+        // Visit constraints of a compound
         for (int i = 0, n = compound.getConstraintsCount(); i < n; i++) {
             visitConstraint(compound.getConstraint(i));
+        }
+        // Visit variables of a compound (especially constraint variables are of interest).
+        for (int i = 0, end = compound.getInheritedElementCount(); i < end; i++) {
+            visitDecisionVariableDeclaration(compound.getInheritedElement(i));
         }
     }
 
