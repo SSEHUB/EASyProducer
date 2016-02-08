@@ -498,7 +498,7 @@ public class MandatoryDeclarationClassifierTest {
         project.add(posIntDecl);
         
         // Create configuration out of valid project
-        ProjectTestUtilities.validateProject(project);
+        ProjectTestUtilities.validateProject(project, true);
         Configuration config = new Configuration(project);
         
         // Check importance

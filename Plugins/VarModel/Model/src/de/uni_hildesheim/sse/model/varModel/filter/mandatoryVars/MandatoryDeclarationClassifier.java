@@ -189,8 +189,17 @@ public class MandatoryDeclarationClassifier extends AbstractProjectVisitor imple
             declarations = finder.getVariableDeclarations(VisibilityType.ALL);
             
             // Consider isAssignableFrom: This is used in finder, but not desired here...
-            for (int i = declarations.size() - 1; i > 0; i--) {
-                if (declarations.get(i).getType() != type) {
+            // Here, we only want the direct type or "inherited" types
+            for (int i = declarations.size() - 1; i >= 0; i--) {
+                IDatatype declType = declarations.get(i).getType();
+                boolean delete = declType != type;
+                
+                while (delete && declType instanceof DerivedDatatype) {
+                    declType = ((DerivedDatatype) declType).getBasisType();
+                    delete = declType != type;
+                }
+                
+                if (delete) {
                     declarations.remove(i);
                 }
             }
