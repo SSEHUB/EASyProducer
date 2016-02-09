@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2013 University of Hildesheim, Software Systems Engineering
+ * Copyright 2009-2016 University of Hildesheim, Software Systems Engineering
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,16 +14,10 @@
  * limitations under the License.
  */
 
-package de.uni_hildesheim.sse.easy.ui.project_management;
+package de.uni_hildesheim.sse.easy_producer.persistency.project_creation;
 
-import de.uni_hildesheim.sse.easy.ui.internal.Activator;
+import de.uni_hildesheim.sse.easy_producer.Activator;
 import de.uni_hildesheim.sse.easy_producer.model.ProductLineProject;
-import de.uni_hildesheim.sse.easy_producer.persistency.project_creation.EASyProjectCreatorFactory;
-import de.uni_hildesheim.sse.easy_producer.persistency.project_creation.IEASyProjectConfigurator;
-import de.uni_hildesheim.sse.easy_producer.persistency.project_creation.InvalidProjectnameException;
-import de.uni_hildesheim.sse.easy_producer.persistency.project_creation.ProjectAlreadyExistsException;
-import de.uni_hildesheim.sse.easy_producer.persistency.project_creation.ProjectCreationException;
-import de.uni_hildesheim.sse.easy_producer.persistency.project_creation.ValidProjectNameType;
 import de.uni_hildesheim.sse.utils.logger.EASyLoggerFactory;
 import de.uni_hildesheim.sse.utils.logger.EASyLoggerFactory.EASyLogger;
 
@@ -86,39 +80,30 @@ public class ProjectCreator {
      * Creates a new productline member with all necessarily files and folders. The new created project will be a
      * successor of an existing project. This method acts as a frontend for 
      * {@link #deriveNewPLP(String)}.
+     * @param configurators Optional list of configurators to configure the newly created project, maybe <tt>null</tt>.
+     *     The configurators will be applied in the ordering of the array.
      * 
-     * @see ProjectCreator#newPLP()
+     * @see ProjectCreator#newPLP(IEASyProjectConfigurator...)
      * @param predecessor On predecessor of the new project
      * @return The newly created product line project
      */
-    public ProductLineProject deriveNewMember(String predecessor) {
+    public ProductLineProject deriveNewMember(String predecessor, IEASyProjectConfigurator... configurators) {
 
         ProductLineProject plpDerive = null;        
         try {
-            plpDerive = EASyProjectCreatorFactory.createNewProject(projectname, predecessor, false,
-                new EASyJavaConfigurator());
+            plpDerive = EASyProjectCreatorFactory.createNewProject(projectname, predecessor, false, configurators);
         } catch (ProjectCreationException e) {
             LOGGER.exception(e);
         }
         
         return plpDerive;
     }
-
-    /**
-     * Creates a new product line project with all necessarily files and folders.
-     * 
-     * @see #deriveNewPLP(String)
-     * @return The newly created product line project
-     */
-    public ProductLineProject newPLP() {
-        return newPLP(new EASyJavaConfigurator());
-    }
     
     /**
      * Creates a new product line project with all necessarily files and folders.
      * @param configurators Optional list of configurators to configure the newly created project, maybe <tt>null</tt>.
      *     The configurators will be applied in the ordering of the array.
-     * @see #deriveNewPLP(String)
+     * @see #deriveNewMember(String, IEASyProjectConfigurator...)
      * @return The newly created product line project
      */
     public ProductLineProject newPLP(IEASyProjectConfigurator... configurators) {

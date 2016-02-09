@@ -42,10 +42,11 @@ import de.uni_hildesheim.sse.easy.ui.productline_editor.AbstractEASyEditorPage;
 import de.uni_hildesheim.sse.easy.ui.productline_editor.AbstractHeaderMenu;
 import de.uni_hildesheim.sse.easy.ui.productline_editor.EasyProducerDialog;
 import de.uni_hildesheim.sse.easy.ui.productline_editor.predecessorSelection.PredecessorSelectionDialog;
-import de.uni_hildesheim.sse.easy.ui.project_management.ProjectCreator;
+import de.uni_hildesheim.sse.easy.ui.project_management.EASyJavaConfigurator;
 import de.uni_hildesheim.sse.easy_producer.model.ProductLineProject;
 import de.uni_hildesheim.sse.easy_producer.persistency.project_creation.InvalidProjectnameException;
 import de.uni_hildesheim.sse.easy_producer.persistency.project_creation.ProjectAlreadyExistsException;
+import de.uni_hildesheim.sse.easy_producer.persistency.project_creation.ProjectCreator;
 import de.uni_hildesheim.sse.model.validation.IvmlIdentifierCheck;
 import de.uni_hildesheim.sse.reasoning.core.frontend.ReasonerFrontend;
 import de.uni_hildesheim.sse.reasoning.core.model.ReasoningOperation;
@@ -266,7 +267,8 @@ public class ProductLineHeaderMenu extends AbstractHeaderMenu {
         if (Window.OK == dia.getReturnCode()) {
             try {
                 ProjectCreator pc = new ProjectCreator(dia.getValue());
-                ProductLineProject newPLP = pc.deriveNewMember(getProductLineProject().getProjectID());
+                ProductLineProject newPLP = pc.deriveNewMember(getProductLineProject().getProjectID(),
+                    new EASyJavaConfigurator());
                 try {
                     GUIUtils.openProductLineEditor(newPLP);
                 } catch (PartInitException e) {
