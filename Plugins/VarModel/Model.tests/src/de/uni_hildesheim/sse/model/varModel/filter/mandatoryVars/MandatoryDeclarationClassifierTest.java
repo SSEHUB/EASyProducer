@@ -481,6 +481,70 @@ public class MandatoryDeclarationClassifierTest {
     }
     
     /**
+     * Tests whether instances of typedefs of typedefs ({@link DerivedDatatype}) are considered.
+     * @throws CSTSemanticException Must not occur, otherwise {@link Constraint}s are broken.
+     */
+    @Test
+    public void testTypeDefsOfTypeDefsAreConsidered() throws CSTSemanticException {
+        Project project = new Project("testTypeDefsOfTypeDefsAreConsidered");
+        DerivedDatatype posIntType = new DerivedDatatype("NonNullInteger", IntegerType.TYPE, project);
+        Constraint derivedTypeConstraint = new Constraint(posIntType);
+        derivedTypeConstraint.setConsSyntax(isDefined(posIntType.getTypeDeclaration()));
+        posIntType.setConstraints(new Constraint[] {derivedTypeConstraint});
+        project.add(posIntType);
+        DerivedDatatype posIntType2 = new DerivedDatatype("NonNullInteger2", posIntType, project);
+        project.add(posIntType2);
+        DecisionVariableDeclaration posIntDecl = new DecisionVariableDeclaration("posInt", posIntType2, project);
+        project.add(posIntDecl);
+        
+        // Create configuration out of valid project
+        ProjectTestUtilities.validateProject(project);
+        Configuration config = new Configuration(project);
+        
+        // Check importance
+        MandatoryDeclarationClassifier finder = new MandatoryDeclarationClassifier(config, FilterType.ALL);
+        project.accept(finder);
+        VariableContainer importances = finder.getImportances();
+        
+        // Test correct behavior
+        assertVariable(config.getDecision(posIntDecl), true, importances);
+    }
+    
+    /**
+     * Tests whether instances of typedefs ({@link DerivedDatatype}) used inside a {@link Compound} are considered.
+     * @throws CSTSemanticException Must not occur, otherwise {@link Constraint}s are broken.
+     */
+    @Test
+    public void testTypeDefsInsideCompoundAreConsidered() throws CSTSemanticException {
+        Project project = new Project("testTypeDefsInsideCompoundAreConsidered");
+        DerivedDatatype posIntType = new DerivedDatatype("NonNullInteger", IntegerType.TYPE, project);
+        Constraint derivedTypeConstraint = new Constraint(posIntType);
+        derivedTypeConstraint.setConsSyntax(isDefined(posIntType.getTypeDeclaration()));
+        posIntType.setConstraints(new Constraint[] {derivedTypeConstraint});
+        project.add(posIntType);
+        Compound cType = new Compound("CP", project);
+        DecisionVariableDeclaration posIntDecl = new DecisionVariableDeclaration("posInt", posIntType, cType);
+        cType.add(posIntDecl);
+        project.add(cType);        
+        DecisionVariableDeclaration cmpDecl = new DecisionVariableDeclaration("cmp", cType, project);
+        project.add(cmpDecl);
+        
+        // Create configuration out of valid project
+        ProjectTestUtilities.validateProject(project);
+        Configuration config = new Configuration(project);
+        
+        // Check importance
+        MandatoryDeclarationClassifier finder = new MandatoryDeclarationClassifier(config, FilterType.ALL);
+        project.accept(finder);
+        VariableContainer importances = finder.getImportances();
+        
+        // Test correct behavior
+        IDecisionVariable cmpVar = config.getDecision(cmpDecl);
+        //assertVariable(cmpVar, true, importances);
+        assertVariable(cmpVar.getNestedElement(0), true, importances);
+    }
+    
+    /**
      * Combination of {@link #testAliasesAreNotConsidered()} and {@link #testTypeDefsAreConsidered()} as this is tricky.
      * @throws CSTSemanticException Must not occur, otherwise {@link Constraint}s are broken.
      */

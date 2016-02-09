@@ -106,7 +106,7 @@ public class Configuration implements IConfigurationVisitable, IProjectListener,
     
     private Map<IDatatype, Map<IDecisionVariable, ReferenceValue>> allInstances;
     
-    private IAssignmentState resolutionState = AssignmentState.DERIVED;
+    private IAssignmentState resolutionState = AssignmentState.ASSIGNED;
     
     /**
      * Creates a new configuration for the given project.
@@ -117,7 +117,7 @@ public class Configuration implements IConfigurationVisitable, IProjectListener,
      * #updateModel(de.uni_hildesheim.sse.utils.modelManagement.IModel, java.net.URI)
      */
     public Configuration(Project project) {
-        this(project, true, AssignmentState.DERIVED);
+        this(project, true, AssignmentState.ASSIGNED);
     }
 
     /**
@@ -165,13 +165,13 @@ public class Configuration implements IConfigurationVisitable, IProjectListener,
 
     /**
      * Alternative constructor to avoid initial value assignment by {@link AssignmentResolver}. If activated, the 
-     * {@link AssignmentResolver} will work with {@link AssignmentState#DERIVED}.
+     * {@link AssignmentResolver} will work with {@link AssignmentState#ASSIGNED}.
      * 
      * @param project to get {@link Configuration} from.
      * @param assignValues Decision if values should be assigned by {@link AssignmentResolver}.
      */
     public Configuration(Project project, boolean assignValues) {
-        this(project, assignValues, AssignmentState.DERIVED); // following the new convention
+        this(project, assignValues, AssignmentState.ASSIGNED); // following the new convention
     }
     
     /**

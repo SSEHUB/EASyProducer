@@ -14,8 +14,6 @@ import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import test.AllTests;
-import test.de.uni_hildesheim.sse.easy_producer.mgmt.ResourcesMgmtTest;
 import de.uni_hildesheim.sse.easy_producer.ProjectConstants;
 import de.uni_hildesheim.sse.easy_producer.core.mgmt.PLPInfo;
 import de.uni_hildesheim.sse.easy_producer.core.mgmt.SPLsManager;
@@ -30,6 +28,8 @@ import de.uni_hildesheim.sse.easy_producer.model.ProductLineProject;
 import de.uni_hildesheim.sse.easy_producer.persistency.ResourcesMgmt;
 import de.uni_hildesheim.sse.model.confModel.AllFreezeSelector;
 import de.uni_hildesheim.sse.model.varModel.Project;
+import test.AllTests;
+import test.de.uni_hildesheim.sse.easy_producer.mgmt.ResourcesMgmtTest;
 
 /**
  * Tests the {@link EASyProjectCreatorFactory} for creating new EASy projects.
@@ -60,7 +60,7 @@ public class EASyProjectCreatorFactoryTest {
         workspace = ResourcesMgmt.INSTANCE.getWorspaceFolder();
         File[] childs = workspace.listFiles();
         for (File child : childs) {
-            if (!".metadata".equals(child.getName())) {
+            if (!".metadata".equals(child.getName()) && !ResourcesMgmtTest.LOADED_PROJECTS.contains(child.getName())) {
                 IProject project = wsRoot.getProject(child.getName());
                 try {
                     project.create(null);

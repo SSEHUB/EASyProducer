@@ -22,20 +22,12 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.xtext.ui.XtextProjectHelper;
 
-import de.uni_hildesheim.sse.easy.ui.internal.Activator;
-import de.uni_hildesheim.sse.easy_producer.EASyUtils;
-import de.uni_hildesheim.sse.easy_producer.PLPWorkspaceListener;
 import de.uni_hildesheim.sse.easy_producer.core.mgmt.SPLsManager;
-import de.uni_hildesheim.sse.easy_producer.core.persistence.PersistenceException;
 import de.uni_hildesheim.sse.easy_producer.model.ProductLineProject;
-import de.uni_hildesheim.sse.easy_producer.persistency.PersistencerFactory;
 import de.uni_hildesheim.sse.easy_producer.persistency.ResourcesMgmt;
 import de.uni_hildesheim.sse.easy_producer.persistency.eclipse.EASyNature;
 import de.uni_hildesheim.sse.easy_producer.persistency.eclipse.NatureUtils;
 import de.uni_hildesheim.sse.easy_producer.persistency.project_creation.InvalidProjectnameException;
-import de.uni_hildesheim.sse.easy_producer.persistency.project_creation.ProjectAlreadyExistsException;
-import de.uni_hildesheim.sse.utils.logger.EASyLoggerFactory;
-import de.uni_hildesheim.sse.utils.logger.EASyLoggerFactory.EASyLogger;
 
 /**
  * Utilities on Eclipse project level interferring with UI.
@@ -44,9 +36,6 @@ import de.uni_hildesheim.sse.utils.logger.EASyLoggerFactory.EASyLogger;
  * @author El-Sharkawy
  */
 public class ProjectUtils {
-    
-    private static final EASyLogger LOGGER = EASyLoggerFactory.INSTANCE.getLogger(ProjectUtils.class,
-        Activator.PLUGIN_ID);
     
     /**
      * Toggles the EASy nature of <code>project</code>.
@@ -59,25 +48,7 @@ public class ProjectUtils {
         try {
             boolean hasNature = NatureUtils.hasNature(project, EASyNature.NATURE_ID);
             if (!hasNature) {
-                IOException exc = null;
-                PLPWorkspaceListener.disableFor(project);
-                // add natures
-                if (!NatureUtils.hasNature(project, XtextProjectHelper.NATURE_ID)) {
-                    NatureUtils.addNature(project, XtextProjectHelper.NATURE_ID, null);
-                }
-                NatureUtils.addNature(project, EASyNature.NATURE_ID, null);
-                try {
-                    loadAndInitialize(project);
-                } catch (IOException e) {
-                    exc = e;
-                }
-                PLPWorkspaceListener.reenableFor(project);
-                project.refreshLocal(IProject.DEPTH_INFINITE, null);
-                if (null == exc) {
-                    PLPWorkspaceListener.addProject(project);
-                } else {
-                    throw exc;
-                }
+                ResourcesMgmt.INSTANCE.addEASyNatures(project, XtextProjectHelper.NATURE_ID, EASyNature.NATURE_ID);
             } else {
                 String projectID = ResourcesMgmt.INSTANCE.getIDfromResource(project);
                 ProductLineProject deletedPLP = (ProductLineProject) SPLsManager.INSTANCE.getPLP(projectID);
@@ -89,37 +60,6 @@ public class ProjectUtils {
             }
         } catch (CoreException e) {
             throw new IOException(e.getMessage());
-        }
-    }
-    
-    /**
-     * Loads and initializes the project.
-     * @param project the project to be loaded
-     * @throws IOException in case of loading/initialization problems
-     * @throws InvalidProjectnameException 
-     */
-    private static void loadAndInitialize(IProject project) throws IOException, InvalidProjectnameException {
-        try {
-            // try to load project completely
-            EASyUtils.loadProject(project);
-        } catch (PersistenceException e) {
-            // project exists, easy information missing
-            // easy path could also be determined via UI but I don't like UI - Niko will take care of that
-            EASyUtils.determineConfigurationPaths(project);
-            try {
-                ProjectCreator creator = new ProjectCreator(project.getName(), true);
-                ProductLineProject plp = creator.newPLP();
-                EASyUtils.initialize(project, plp);
-                plp.save();
-                // after additional models have been added, update VarModel etc.
-                PersistencerFactory.getPersistencer(plp.getProjectLocation()).update();
-            } catch (ProjectAlreadyExistsException ae) {
-                // shall not occur due to lazy creation
-                throw new IOException(ae.getMessage());
-            } catch (PersistenceException exc) {
-                // Part of the update function, should not be critical
-                LOGGER.exception(exc);
-            } 
         }
     }
 }

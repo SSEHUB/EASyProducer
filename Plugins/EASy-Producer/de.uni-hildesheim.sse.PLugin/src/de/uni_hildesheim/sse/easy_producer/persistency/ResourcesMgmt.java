@@ -1,6 +1,7 @@
 package de.uni_hildesheim.sse.easy_producer.persistency;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 
 import org.eclipse.core.resources.IProject;
@@ -10,11 +11,21 @@ import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.QualifiedName;
 
+import de.uni_hildesheim.sse.easy_producer.Activator;
+import de.uni_hildesheim.sse.easy_producer.EASyUtils;
+import de.uni_hildesheim.sse.easy_producer.PLPWorkspaceListener;
 import de.uni_hildesheim.sse.easy_producer.ProjectConstants;
 import de.uni_hildesheim.sse.easy_producer.core.mgmt.PLPInfo;
 import de.uni_hildesheim.sse.easy_producer.core.mgmt.SPLsManager;
 import de.uni_hildesheim.sse.easy_producer.core.persistence.PersistenceException;
+import de.uni_hildesheim.sse.easy_producer.model.ProductLineProject;
 import de.uni_hildesheim.sse.easy_producer.persistency.eclipse.EASyNature;
+import de.uni_hildesheim.sse.easy_producer.persistency.eclipse.NatureUtils;
+import de.uni_hildesheim.sse.easy_producer.persistency.project_creation.IEASyProjectConfigurator;
+import de.uni_hildesheim.sse.easy_producer.persistency.project_creation.InvalidProjectnameException;
+import de.uni_hildesheim.sse.easy_producer.persistency.project_creation.ProjectAlreadyExistsException;
+import de.uni_hildesheim.sse.easy_producer.persistency.project_creation.ProjectCreator;
+import de.uni_hildesheim.sse.utils.logger.EASyLoggerFactory;
 
 /**
  * Resources abstraction layer.
@@ -235,5 +246,85 @@ public class ResourcesMgmt {
             theID = persistencer.getProjectID();
         }
         return theID;
+    }
+    
+    /**
+     * Adds the EASy-Nature to an Eclipse {@link IProject}, the project does not have this nature.
+     * Will also add all another relevant information needed to work with EASy if not existent, these are:
+     * <ul>
+     *   <li>The Xtext nature to open use its editors for IVML, VIL, VTL, ...</li>
+     *   <li>EASy Folder with default configuration files:</li>
+     *   <ul>
+     *     <li>Main IVML file</li>
+     *     <li>Main VIL file</li>
+     *     <li>.EASyConfig</li>
+     *   </ul>
+     * </ul>
+     * @param project A project from the workspace.
+     * @param natures Must be the Xtext and the EASy nature (unfortunately, they are provided by UI packages).
+     * @throws CoreException If project does not exist or is not open
+     * @throws InvalidProjectnameException If the project which should be created has a non-valid name.
+     * @throws IOException In case of loading/initialization problems
+     */
+    public void addEASyNatures(IProject project, String... natures) throws CoreException, InvalidProjectnameException,
+        IOException {
+        
+        IOException exc = null;
+        PLPWorkspaceListener.disableFor(project);
+        // Add natures
+        if (null != natures) {
+            for (int i = 0; i < natures.length; i++) {
+                if (!NatureUtils.hasNature(project, natures[i])) {
+                    NatureUtils.addNature(project, natures[i], null);
+                }
+            }
+        }
+        try {
+            loadAndInitialize(project);
+        } catch (IOException e) {
+            exc = e;
+        }
+        PLPWorkspaceListener.reenableFor(project);
+        project.refreshLocal(IProject.DEPTH_INFINITE, null);
+        if (null == exc) {
+            PLPWorkspaceListener.addProject(project);
+        } else {
+            throw exc;
+        }
+    }
+    
+    /**
+     * Loads and initializes the project.
+     * @param project the project to be loaded
+     * @throws IOException in case of loading/initialization problems
+     * @throws InvalidProjectnameException  If the project which should be created has a non-valid name.
+     */
+    private void loadAndInitialize(IProject project) throws IOException, InvalidProjectnameException {
+        try {
+            // try to load project completely
+            EASyUtils.loadProject(project);
+        } catch (PersistenceException e) {
+            // project exists, easy information missing
+            // easy path could also be determined via UI but I don't like UI - Niko will take care of that
+            EASyUtils.determineConfigurationPaths(project);
+            try {
+                ProjectCreator creator = new ProjectCreator(project.getName(), true);
+                /*
+                 * IEASyProjectConfigurator = null -> Keep project configured as it is
+                 * (Xtext and EASy Nature are already added in step before).
+                 */
+                ProductLineProject plp = creator.newPLP((IEASyProjectConfigurator) null);
+                EASyUtils.initialize(project, plp);
+                plp.save();
+                // after additional models have been added, update VarModel etc.
+                PersistencerFactory.getPersistencer(plp.getProjectLocation()).update();
+            } catch (ProjectAlreadyExistsException ae) {
+                // shall not occur due to lazy creation
+                throw new IOException(ae.getMessage());
+            } catch (PersistenceException exc) {
+                // Part of the update function, should not be critical
+                EASyLoggerFactory.INSTANCE.getLogger(ResourcesMgmt.class, Activator.PLUGIN_ID).exception(exc);
+            } 
+        }
     }
 }
