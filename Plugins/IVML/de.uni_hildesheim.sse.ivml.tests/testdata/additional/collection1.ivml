@@ -1,0 +1,16 @@
+project collection1 {
+
+    version v0;
+    compound Field {
+        String name;
+    }
+
+    compound Tuple {
+        String name;
+        setOf(Field) fields;
+    }
+
+    setOf(Tuple) tuples = {{name = "t1", fields = {{name = "f1.1"}, {name = "f1.2"}}}, {name = "t2", fields = {{name = "f2.1"}, {name = "f2.2"}}}};
+    setOf(setOf(String)) fieldNames = tuples->collect(Tuple tuple|tuple.fields->collect(Field field|field.name));
+    setOf(setOf(String)) augmentedFieldNames = tuples->collect(Tuple tuple|including(tuple.fields->collect(Field field|field.name), tuple.name));
+}

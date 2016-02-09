@@ -187,4 +187,14 @@ public class AdditionalTests extends AbstractTest {
         }
     }  
 
+    /**
+     * Tests composite collection operations (contributed by QM).
+     * 
+     * @throws IOException should not occur
+     */
+    @Test
+    public void testCollection1() throws IOException {
+        assertEqual(createFile("collection1"), null, null);
+    }
+
 }
