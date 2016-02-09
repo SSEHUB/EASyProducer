@@ -19,6 +19,7 @@ package de.uni_hildesheim.sse.easy.ui.project_management;
 import de.uni_hildesheim.sse.easy.ui.internal.Activator;
 import de.uni_hildesheim.sse.easy_producer.model.ProductLineProject;
 import de.uni_hildesheim.sse.easy_producer.persistency.project_creation.EASyProjectCreatorFactory;
+import de.uni_hildesheim.sse.easy_producer.persistency.project_creation.IEASyProjectConfigurator;
 import de.uni_hildesheim.sse.easy_producer.persistency.project_creation.InvalidProjectnameException;
 import de.uni_hildesheim.sse.easy_producer.persistency.project_creation.ProjectAlreadyExistsException;
 import de.uni_hildesheim.sse.easy_producer.persistency.project_creation.ProjectCreationException;
@@ -110,9 +111,20 @@ public class ProjectCreator {
      * @return The newly created product line project
      */
     public ProductLineProject newPLP() {
+        return newPLP(new EASyJavaConfigurator());
+    }
+    
+    /**
+     * Creates a new product line project with all necessarily files and folders.
+     * @param configurators Optional list of configurators to configure the newly created project, maybe <tt>null</tt>.
+     *     The configurators will be applied in the ordering of the array.
+     * @see #deriveNewPLP(String)
+     * @return The newly created product line project
+     */
+    public ProductLineProject newPLP(IEASyProjectConfigurator... configurators) {
         ProductLineProject plp = null;        
         try {
-            plp = EASyProjectCreatorFactory.createNewProject(projectname, null, lazy, new EASyJavaConfigurator());
+            plp = EASyProjectCreatorFactory.createNewProject(projectname, null, lazy, configurators);
         } catch (ProjectCreationException e) {
             LOGGER.exception(e);
         }

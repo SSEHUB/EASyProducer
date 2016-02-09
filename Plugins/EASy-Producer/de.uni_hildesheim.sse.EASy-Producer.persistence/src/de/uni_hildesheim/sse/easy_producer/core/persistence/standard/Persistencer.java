@@ -142,7 +142,7 @@ public class Persistencer implements IPersistencer, PersistenceConstants {
         if (lazy) {
             // this part is for ScaleLog... it might make sense to check for the files in the EASy folder...
             projectOk = true;
-            if (!projectFolder.exists()) {
+            if (!configFolder.exists()) {
                 projectOk = configFolder.mkdirs();
                 if (!configFolder.equals(scriptFolder)) {
                     projectOk = scriptFolder.mkdirs();

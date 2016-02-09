@@ -32,6 +32,7 @@ import de.uni_hildesheim.sse.easy_producer.persistency.PersistencerFactory;
 import de.uni_hildesheim.sse.easy_producer.persistency.ResourcesMgmt;
 import de.uni_hildesheim.sse.easy_producer.persistency.eclipse.EASyNature;
 import de.uni_hildesheim.sse.easy_producer.persistency.eclipse.NatureUtils;
+import de.uni_hildesheim.sse.easy_producer.persistency.project_creation.IEASyProjectConfigurator;
 import de.uni_hildesheim.sse.easy_producer.persistency.project_creation.InvalidProjectnameException;
 import de.uni_hildesheim.sse.easy_producer.persistency.project_creation.ProjectAlreadyExistsException;
 import de.uni_hildesheim.sse.utils.logger.EASyLoggerFactory;
@@ -59,25 +60,7 @@ public class ProjectUtils {
         try {
             boolean hasNature = NatureUtils.hasNature(project, EASyNature.NATURE_ID);
             if (!hasNature) {
-                IOException exc = null;
-                PLPWorkspaceListener.disableFor(project);
-                // add natures
-                if (!NatureUtils.hasNature(project, XtextProjectHelper.NATURE_ID)) {
-                    NatureUtils.addNature(project, XtextProjectHelper.NATURE_ID, null);
-                }
-                NatureUtils.addNature(project, EASyNature.NATURE_ID, null);
-                try {
-                    loadAndInitialize(project);
-                } catch (IOException e) {
-                    exc = e;
-                }
-                PLPWorkspaceListener.reenableFor(project);
-                project.refreshLocal(IProject.DEPTH_INFINITE, null);
-                if (null == exc) {
-                    PLPWorkspaceListener.addProject(project);
-                } else {
-                    throw exc;
-                }
+                addEASyNature(project);
             } else {
                 String projectID = ResourcesMgmt.INSTANCE.getIDfromResource(project);
                 ProductLineProject deletedPLP = (ProductLineProject) SPLsManager.INSTANCE.getPLP(projectID);
@@ -91,12 +74,52 @@ public class ProjectUtils {
             throw new IOException(e.getMessage());
         }
     }
+
+    /**
+     * Adds the EASy-Nature to an Eclipse {@link IProject}, the project does not have this nature.
+     * Will also add all aother relevant information needed to work with EASy if not existent, these are:
+     * <ul>
+     *   <li>The Xtext nature to open use its editors for IVML, VIL, VTL, ...</li>
+     *   <li>EASy Folder with defult configuration files:</li>
+     *   <ul>
+     *     <li>Main IVML file</li>
+     *     <li>Main VIL file</li>
+     *     <li>.EASyConfig</li>
+     *   </ul>
+     * </ul>
+     * @param project A project from the workspace.
+     * @throws CoreException If project does not exist or is not open
+     * @throws InvalidProjectnameException If the project which should be created has a non-valid name.
+     * @throws IOException In case of loading/initialization problems
+     */
+    private static void addEASyNature(IProject project) throws CoreException, InvalidProjectnameException, IOException {
+        IOException exc = null;
+        PLPWorkspaceListener.disableFor(project);
+        // Add Xtext nature
+        if (!NatureUtils.hasNature(project, XtextProjectHelper.NATURE_ID)) {
+            NatureUtils.addNature(project, XtextProjectHelper.NATURE_ID, null);
+        }
+        // Add EASy-Nature
+        NatureUtils.addNature(project, EASyNature.NATURE_ID, null);
+        try {
+            loadAndInitialize(project);
+        } catch (IOException e) {
+            exc = e;
+        }
+        PLPWorkspaceListener.reenableFor(project);
+        project.refreshLocal(IProject.DEPTH_INFINITE, null);
+        if (null == exc) {
+            PLPWorkspaceListener.addProject(project);
+        } else {
+            throw exc;
+        }
+    }
     
     /**
      * Loads and initializes the project.
      * @param project the project to be loaded
      * @throws IOException in case of loading/initialization problems
-     * @throws InvalidProjectnameException 
+     * @throws InvalidProjectnameException  If the project which should be created has a non-valid name.
      */
     private static void loadAndInitialize(IProject project) throws IOException, InvalidProjectnameException {
         try {
@@ -108,7 +131,11 @@ public class ProjectUtils {
             EASyUtils.determineConfigurationPaths(project);
             try {
                 ProjectCreator creator = new ProjectCreator(project.getName(), true);
-                ProductLineProject plp = creator.newPLP();
+                /*
+                 * IEASyProjectConfigurator = null -> Keep project configured as it is
+                 * (Xtext and EASy Nature are already added in step before).
+                 */
+                ProductLineProject plp = creator.newPLP((IEASyProjectConfigurator) null);
                 EASyUtils.initialize(project, plp);
                 plp.save();
                 // after additional models have been added, update VarModel etc.
