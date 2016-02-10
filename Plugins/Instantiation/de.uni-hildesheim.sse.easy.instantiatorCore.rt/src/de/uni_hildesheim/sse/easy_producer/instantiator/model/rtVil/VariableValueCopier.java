@@ -71,6 +71,7 @@ public class VariableValueCopier {
     private String namePrefix;
     private int count;
     private IAssignmentState newState;
+    private IAssignmentListener listener;
 
     /**
      * An interface providing information to create freeze blocks for new variables.
@@ -96,6 +97,24 @@ public class VariableValueCopier {
          */
         public ConstraintSyntaxTree createButExpression(DecisionVariableDeclaration freezeIter) 
             throws CSTSemanticException, ValueDoesNotMatchTypeException;
+        
+    }
+
+    /**
+     * Optional listener interface to generically track primary value assignments.
+     * 
+     * @author Holger Eichelberger
+     */
+    public interface IAssignmentListener {
+
+        /**
+         * Notifies about assigned values.
+         * 
+         * @param target the target variable
+         * @param value the new value
+         * @param added whether value is being added to a collection or set as the single absolute value
+         */
+        public void notifyAssigned(IDecisionVariable target, Value value, boolean added);
         
     }
     
@@ -328,6 +347,15 @@ public class VariableValueCopier {
     }
     
     /**
+     * Defines the assignment listener.
+     * 
+     * @param listener the listener (may be <b>null</b> to disable notifications)
+     */
+    public void setAssignmentListener(IAssignmentListener listener) {
+        this.listener = listener;
+    }
+    
+    /**
      * Returns the logger of this class.
      * 
      * @return the logger
@@ -483,20 +511,22 @@ public class VariableValueCopier {
                 for (int n = 0; n < source.getNestedElementsCount(); n++) {
                     IDecisionVariable nestedVar = cVar.addNestedElement();
                     result = keepFirst(result, 
-                        copySingleVariable(source.getNestedElement(n), nestedVar, freezeProvider));
+                        copySingleVariable(source.getNestedElement(n), nestedVar, freezeProvider, true));
                 }
             } else {
                 ContainerVariable sVar = (ContainerVariable) source;
                 if (sVar.getNestedElementsCount() > 0) {
-                    result = keepFirst(result, copySingleVariable(sVar.getNestedElement(0), target, freezeProvider));
+                    result = keepFirst(result, 
+                        copySingleVariable(sVar.getNestedElement(0), target, freezeProvider, false));
                 }
             }
         } else {
             if (Container.TYPE.isAssignableFrom(targetType)) {
                 ContainerVariable cVar = ensureContainerVariable((ContainerVariable) target);
-                result = keepFirst(result, copySingleVariable(source, cVar.addNestedElement(), freezeProvider));
+                IDecisionVariable tgt = cVar.addNestedElement();
+                result = keepFirst(result, copySingleVariable(source, tgt, freezeProvider, true));
             } else {
-                result = keepFirst(result, copySingleVariable(source, target, freezeProvider));
+                result = keepFirst(result, copySingleVariable(source, target, freezeProvider, false));
             }
         }
         return result;
@@ -537,13 +567,14 @@ public class VariableValueCopier {
      * @param target the target variable (may be a nested variable, e.g., of a collection)
      * @param freezeProvider optional freeze provider to be applied to new variables (may be <b>null</b> for no 
      *     freezing)
+     * @param adding whether the value is being added to a collection or just set
      * @return the actual value set
      * @throws ConfigurationException in case that the configuration is not possible 
      * @throws ValueDoesNotMatchTypeException in case that value types do not match
      * @throws CSTSemanticException in case that expressions such as freeze-buts are not correctly constructed
      */
-    private Value copySingleVariable(IDecisionVariable source, IDecisionVariable target, IFreezeProvider freezeProvider)
-        throws ConfigurationException, ValueDoesNotMatchTypeException, CSTSemanticException {
+    private Value copySingleVariable(IDecisionVariable source, IDecisionVariable target, IFreezeProvider freezeProvider,
+        boolean adding) throws ConfigurationException, ValueDoesNotMatchTypeException, CSTSemanticException {
         Value result;
         source = Configuration.dereference(source);
         Value value = source.getValue().clone();
@@ -578,15 +609,30 @@ public class VariableValueCopier {
                 }
                 result = ValueFactory.createValue(targetType, decl);
                 target.setValue(result, newState);
+                notifyAssigned(target, value, adding);
             } else {
                 getLogger().error("Cannot create decision variable for " + decl.getName());
                 result = null;
             }
         } else {
             target.setValue(value, newState);
+            notifyAssigned(target, value, adding);
             result = value;
         }
         return result;
+    }
+    
+    /**
+     * Notifies about assigned values.
+     * 
+     * @param target the target variable
+     * @param value the new value
+     * @param added whether value is being added to a collection or set as the single absolute value
+     */
+    private void notifyAssigned(IDecisionVariable target, Value value, boolean added) {
+        if (null != listener) {
+            listener.notifyAssigned(target, value, added);
+        }
     }
 
 }
