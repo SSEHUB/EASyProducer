@@ -7,10 +7,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import de.uni_hildesheim.sse.model.confModel.AssignmentState;
-import de.uni_hildesheim.sse.model.confModel.CompoundVariable;
 import de.uni_hildesheim.sse.model.confModel.Configuration;
-import de.uni_hildesheim.sse.model.confModel.ConfigurationException;
 import de.uni_hildesheim.sse.model.confModel.DisplayNameProvider;
 import de.uni_hildesheim.sse.model.confModel.IDecisionVariable;
 import de.uni_hildesheim.sse.model.cst.ConstraintSyntaxTree;
@@ -18,8 +15,6 @@ import de.uni_hildesheim.sse.model.varModel.AbstractVariable;
 import de.uni_hildesheim.sse.model.varModel.Constraint;
 import de.uni_hildesheim.sse.model.varModel.ModelElement;
 import de.uni_hildesheim.sse.model.varModel.Project;
-import de.uni_hildesheim.sse.model.varModel.datatypes.Compound;
-import de.uni_hildesheim.sse.model.varModel.datatypes.IDatatype;
 import de.uni_hildesheim.sse.persistency.StringProvider;
 import de.uni_hildesheim.sse.reasoning.core.model.PerformanceStatistics;
 import de.uni_hildesheim.sse.reasoning.core.reasoner.Message;
@@ -59,6 +54,7 @@ public class Engine {
     private List<Set<AbstractVariable>> variablesInConstraints;
     private List<Set<IDecisionVariable>> problemDecisions;
     private List<ConstraintSyntaxTree> problemConstraintParts;
+    private List<Constraint> problemConstraints;
     private List<String> failedElementComments;
     private List<Project> failedElementProjects;
     private List<String> failedElementSuggestions;  
@@ -134,10 +130,10 @@ public class Engine {
         if (failedElements.problemConstraintCount() > 0) {
             initFailedLists();
             Map<Constraint, FailedElementDetails> problemConstraintMap = failedElements.getProblemConstraintMap();
-            Iterator<Constraint> problemConstraints = failedElements.getProblemConstraints();
-            while (problemConstraints.hasNext()) {   
+            Iterator<Constraint> problemIterator = failedElements.getProblemConstraints();
+            while (problemIterator.hasNext()) {   
                 this.failedConstraints++;
-                Constraint constraint = problemConstraints.next();
+                Constraint constraint = problemIterator.next();
                 failedModelElements.add(constraint);
                 FailedElementDetails failedElementDetails = problemConstraintMap.get(constraint);                
                 if (constraint.getTopLevelParent() instanceof Project) {
@@ -188,14 +184,13 @@ public class Engine {
                 variablesInConstraints.add(vars);
                 problemDecisions.add(problemVars);
                 problemConstraintParts.add(failedElementDetails.getProblemConstraintPart());
+                problemConstraints.add(failedElementDetails.getProblemConstraint());
                 failedElementLabels.add(msgText);
                 failedElementComments.add(comment);
                 failedElementSuggestions.add(suggestion);
             }
             Message problemConstraintMsg = createMessage(VIOLATED_CONSTRAINTS);
             result.addMessage(problemConstraintMsg);
-//            if (Descriptor.LOGGING) {
-//            }
             printMessage(problemConstraintMsg);                
             nullFailedLists();
         }
@@ -227,6 +222,7 @@ public class Engine {
                 vars.add(problemVariable);
                 problemDecisions.add(failedElementDetails.getProblemPoints());
                 problemConstraintParts.add(failedElementDetails.getProblemConstraintPart());
+                problemConstraints.add(failedElementDetails.getProblemConstraint());
                 variablesInConstraints.add(vars);
                 constraintVariables.add(null);
             } 
@@ -264,6 +260,7 @@ public class Engine {
         variablesInConstraints = new ArrayList<Set<AbstractVariable>>();
         problemDecisions = new ArrayList<Set<IDecisionVariable>>();
         problemConstraintParts = new ArrayList<ConstraintSyntaxTree>();
+        problemConstraints = new ArrayList<Constraint>();
         failedElementComments = new ArrayList<String>();
         failedElementProjects = new ArrayList<Project>();
         failedElementSuggestions = new ArrayList<String>();
@@ -282,6 +279,7 @@ public class Engine {
         variablesInConstraints = null;
         problemDecisions = null;
         problemConstraintParts = null;
+        problemConstraints = null;
         failedElementComments = null;
         failedElementProjects = null;
         failedElementSuggestions = null;
@@ -302,6 +300,7 @@ public class Engine {
         msg.addConstraintVariables(variablesInConstraints);
         msg.addProblemVariables(problemDecisions);
         msg.addProblemConstraintParts(problemConstraintParts);
+        msg.addProblemConstraints(problemConstraints);
         msg.addConflictingElementComments(failedElementComments);
         msg.addConflictingElementProjects(failedElementProjects);
         msg.addConflictingElementSuggestions(failedElementSuggestions);

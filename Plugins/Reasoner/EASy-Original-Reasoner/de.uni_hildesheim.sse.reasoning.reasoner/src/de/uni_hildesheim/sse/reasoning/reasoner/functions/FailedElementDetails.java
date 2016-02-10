@@ -5,6 +5,7 @@ import java.util.Set;
 
 import de.uni_hildesheim.sse.model.confModel.IDecisionVariable;
 import de.uni_hildesheim.sse.model.cst.ConstraintSyntaxTree;
+import de.uni_hildesheim.sse.model.varModel.Constraint;
 
 /**
  * Class for storing Failed elements details.
@@ -15,6 +16,7 @@ public class FailedElementDetails {
 
     private Set<IDecisionVariable> problemPoints;
     private ConstraintSyntaxTree problemConstraintPart;
+    private Constraint problemConstraint;
     
     /**
      * Main constructor.
@@ -22,6 +24,7 @@ public class FailedElementDetails {
     public FailedElementDetails() {
         problemPoints = new HashSet<IDecisionVariable>();
         problemConstraintPart = null;
+        problemConstraint = null;
     }
     
     /**
@@ -39,7 +42,15 @@ public class FailedElementDetails {
     public void setProblemConstraintPart(ConstraintSyntaxTree problemConstraintPart) {
         this.problemConstraintPart = problemConstraintPart;
     }
-    
+
+    /**
+     * Method for adding the failed Constraints {@link Constraint}.
+     * @param problemConstraint The failed constraint.
+     */
+    public void setProblemConstraint(Constraint problemConstraint) {
+        this.problemConstraint = problemConstraint;
+    }
+
     /**
      * Method for returning a set of {@link IDecisionVariable}s that may caused a constraint to fail.
      * @return problemPoints Set of {@link IDecisionVariable}s.
@@ -54,5 +65,12 @@ public class FailedElementDetails {
      */
     public ConstraintSyntaxTree getProblemConstraintPart() {
         return problemConstraintPart;
+    }
+    /**
+     * Method for returning the failed Constraint {@link Constraint}.
+     * @return The failed constraint.
+     */
+    public Constraint getProblemConstraint() {
+        return problemConstraint;
     }
 }
