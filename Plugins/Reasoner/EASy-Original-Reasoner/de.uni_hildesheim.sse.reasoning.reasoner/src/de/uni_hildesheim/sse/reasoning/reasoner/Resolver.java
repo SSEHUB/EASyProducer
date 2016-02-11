@@ -1020,8 +1020,7 @@ public class Resolver {
                 evaluator.setResolutionListener(resolutionListener);
                 evaluator.setScopeAssignmnets(scopeAssignments);
                 evaluator.setDispatchScope(dispatchScope);
-                evaluator.visit(cst);    
-                reevaluationCounter++;
+                evaluator.visit(cst); 
                 if (evaluator.constraintFailed()) {
                     conflictingConstraint(constraints.get(i));
                 } else if (evaluator.constraintFulfilled()) {
