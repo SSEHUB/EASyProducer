@@ -34,12 +34,14 @@ import de.uni_hildesheim.sse.model.varModel.AttributeAssignment;
 import de.uni_hildesheim.sse.model.varModel.AttributeAssignment.Assignment;
 import de.uni_hildesheim.sse.model.varModel.Constraint;
 import de.uni_hildesheim.sse.model.varModel.DecisionVariableDeclaration;
+import de.uni_hildesheim.sse.model.varModel.IModelElement;
 import de.uni_hildesheim.sse.model.varModel.InternalConstraint;
 import de.uni_hildesheim.sse.model.varModel.OperationDefinition;
 import de.uni_hildesheim.sse.model.varModel.Project;
 import de.uni_hildesheim.sse.model.varModel.datatypes.BooleanType;
 import de.uni_hildesheim.sse.model.varModel.datatypes.Compound;
 import de.uni_hildesheim.sse.model.varModel.datatypes.ConstraintType;
+import de.uni_hildesheim.sse.model.varModel.datatypes.Container;
 import de.uni_hildesheim.sse.model.varModel.datatypes.DerivedDatatype;
 import de.uni_hildesheim.sse.model.varModel.datatypes.IDatatype;
 import de.uni_hildesheim.sse.model.varModel.datatypes.OclKeyWords;
@@ -50,6 +52,8 @@ import de.uni_hildesheim.sse.model.varModel.filter.DeclarationFinder;
 import de.uni_hildesheim.sse.model.varModel.filter.DeclarationFinder.VisibilityType;
 import de.uni_hildesheim.sse.model.varModel.filter.FilterType;
 import de.uni_hildesheim.sse.model.varModel.filter.VariablesInConstraintFinder;
+import de.uni_hildesheim.sse.model.varModel.values.ConstraintValue;
+import de.uni_hildesheim.sse.model.varModel.values.ContainerValue;
 import de.uni_hildesheim.sse.model.varModel.values.Value;
 import de.uni_hildesheim.sse.persistency.StringProvider;
 import de.uni_hildesheim.sse.reasoning.core.model.PerformanceStatistics;
@@ -425,17 +429,18 @@ public class Resolver {
      * a {@link de.uni_hildesheim.sse.ivml.CollectionInitializer} with {@link Constraint}s.
      * @param exp expression to check.
      * @param compound false if variable is not nested.
+     * @param parent parent for temporary constraints
      */
-    private void checkCompoundInitializer(ConstraintSyntaxTree exp, Boolean compound) {
+    private void checkCompoundInitializer(ConstraintSyntaxTree exp, Boolean compound, IModelElement parent) {
 //        infoLogger.info("CompoundInitializer: " + StringProvider.toIvmlString(exp));
         CompoundInitializer compoundInit = (CompoundInitializer) exp;
         for (int i = 0; i < compoundInit.getExpressionCount(); i++) {
 //            infoLogger.info("Exp: " + StringProvider.toIvmlString(compoundInit.getExpression(i)));
             if (compoundInit.getExpression(i) instanceof ContainerInitializer) {
-                checkContainerInitializer(compoundInit.getExpression(i), compound);
+                checkContainerInitializer(compoundInit.getExpression(i), compound, parent);
             }
             if (compoundInit.getExpression(i) instanceof CompoundInitializer) {
-                checkCompoundInitializer(compoundInit.getExpression(i), compound);
+                checkCompoundInitializer(compoundInit.getExpression(i), compound, parent);
             }    
         }
     }
@@ -444,13 +449,14 @@ public class Resolver {
      * Method for checking if an expression is a {@link ContainerInitializer}.
      * @param exp expression to be checked.
      * @param compound false if variable is not nested.
+     * @param parent parent for temporary constraints
      */
-    private void checkContainerInitializer(ConstraintSyntaxTree exp, Boolean compound) {
+    private void checkContainerInitializer(ConstraintSyntaxTree exp, Boolean compound, IModelElement parent) {
 //        infoLogger.info("ContainerInitializer: " + StringProvider.toIvmlString(exp));
         ContainerInitializer containerInit = (ContainerInitializer) exp;
 //        infoLogger.info("Type: " + containerInit.getType().getContainedType());
         if (ConstraintType.TYPE.isAssignableFrom(containerInit.getType().getContainedType())) {
-            extractCollectionConstraints(containerInit, compound);                    
+            extractCollectionConstraints(containerInit, compound, parent);
         }
     }
 
@@ -458,12 +464,14 @@ public class Resolver {
      * Method for extracting collection constraints.
      * @param containerInit Container with constraints.
      * @param compound false if variable is not nested.
+     * @param parent parent for temporary constraints
      */
-    private void extractCollectionConstraints(ContainerInitializer containerInit, Boolean compound) {
+    private void extractCollectionConstraints(ContainerInitializer containerInit, Boolean compound, 
+        IModelElement parent) {
         for (int i = 0; i < containerInit.getExpressionCount(); i++) {
 //            infoLogger.info("Container expression: " 
 //                + StringProvider.toIvmlString(containerInit.getExpression(i)));
-            Constraint constraint = new Constraint(project);
+            Constraint constraint = new Constraint(parent);
             ConstraintSyntaxTree cst = containerInit.getExpression(i);
             if (compound) {
                 cst = copyVisitor(cst, null);
@@ -548,11 +556,13 @@ public class Resolver {
             varMap.put(nestedDecl, cmpAccess);
             if (ConstraintType.TYPE.isAssignableFrom(nestedType) 
                 && !(nestedType.getType() == BooleanType.TYPE.getType())) {
-                ConstraintSyntaxTree defaultValue = nestedDecl.getDefaultValue();
+
+                createConstraint(nestedDecl.getDefaultValue(), decl, nestedDecl, nestedVariable, variable);
+                /*ConstraintSyntaxTree defaultValue = nestedDecl.getDefaultValue();
                 if (defaultValue != null) {
                     defaultValue = copyVisitor(defaultValue, decl);
                     try {
-                        Constraint constraint = new Constraint(defaultValue, project);
+                        Constraint constraint = new Constraint(defaultValue, nestedDecl);
                         constraintVariables.add(constraint);
                         constraintVariableMap.put(constraint, nestedVariable);
                         if (Descriptor.LOGGING) {
@@ -562,7 +572,11 @@ public class Resolver {
                     } catch (CSTSemanticException e) {
                         LOGGER.exception(e);
                     }
-                }
+                }*/
+            } else if (Container.isContainer(nestedType, ConstraintType.TYPE)  // THIS IS JUST PRELIMINARY - QM
+                && nestedVariable.getValue() instanceof ContainerValue) {
+                checkContainerValue((ContainerValue) nestedVariable.getValue(), decl, nestedDecl, 
+                    nestedVariable, variable);
             }
             resolveDefaultValueForDeclaration(nestedDecl, cmpVar.getNestedVariable(nestedDecl.getName()),
                 cmpAccess);
@@ -582,6 +596,56 @@ public class Resolver {
             }               
         }
     }  
+
+    /**
+     * Checks a container value for nested constraints.
+     * 
+     * @param val the container value
+     * @param decl unclear - refactored from above
+     * @param parent the parent for new constraints
+     * @param nestedVariable unclear - refactored from above
+     * @param variable unclear - refactored from above
+     */
+    private void checkContainerValue(ContainerValue val, AbstractVariable decl, IModelElement parent, 
+        IDecisionVariable nestedVariable, IDecisionVariable variable) {
+        for (int n = 0; n < val.getElementSize(); n++) {
+            Value cVal = val.getElement(n);
+            if (cVal instanceof ConstraintValue) {
+                ConstraintValue constraint = (ConstraintValue) cVal;
+                createConstraint(constraint.getValue(), decl, parent, nestedVariable, variable);
+            }
+        }
+    }
+    
+    /**
+     * Creates a constraint from a constraint variable.
+     * 
+     * @param cst the constraint
+     * @param decl unclear - refactored from above
+     * @param parent the parent for new constraints
+     * @param nestedVariable unclear - refactored from above
+     * @param variable unclear - refactored from above
+     * @return the created constraint
+     */
+    private Constraint createConstraint(ConstraintSyntaxTree cst, AbstractVariable decl, IModelElement parent, 
+        IDecisionVariable nestedVariable, IDecisionVariable variable) {
+        Constraint constraint = null;
+        if (cst != null) {
+            cst = copyVisitor(cst, decl);
+            try {
+                constraint = new Constraint(cst, parent);
+                constraintVariables.add(constraint);
+                //constraintVariableMap.put(constraint, nestedVariable); // leads to exception later
+                if (Descriptor.LOGGING) {
+                    LOGGER.debug(variable.getDeclaration().getName() + " compound constraint variable " 
+                        + StringProvider.toIvmlString(cst));
+                }                    
+            } catch (CSTSemanticException e) {
+                LOGGER.exception(e);
+            }
+        }
+        return constraint;
+    }
     
     /**
      * Method for getting all constraints relevant to a {@link Compound}.
@@ -1015,7 +1079,7 @@ public class Resolver {
                 evaluator.setResolutionListener(resolutionListener);
                 evaluator.setScopeAssignmnets(scopeAssignments);
                 evaluator.setDispatchScope(dispatchScope);
-                evaluator.visit(cst);    
+                evaluator.visit(cst);
                 reevaluationCounter++;
                 if (evaluator.constraintFailed()) {
                     conflictingConstraint(constraints.get(i));
@@ -1068,10 +1132,10 @@ public class Resolver {
         ConstraintSyntaxTree cst = constraint.getConsSyntax();
         CollectionConstraintsFinder finder = new CollectionConstraintsFinder(cst);
         if (finder.isConstraintCollection()) {
-            checkContainerInitializer(finder.getExpression(), false);
+            checkContainerInitializer(finder.getExpression(), false, constraint.getParent());
         }
         if (finder.isCompoundInitializer()) {
-            checkCompoundInitializer(finder.getExpression(), true);
+            checkCompoundInitializer(finder.getExpression(), true, constraint.getParent());
         }
     }
 
