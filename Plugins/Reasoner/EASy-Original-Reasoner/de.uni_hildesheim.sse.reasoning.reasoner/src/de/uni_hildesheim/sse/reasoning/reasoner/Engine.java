@@ -16,7 +16,6 @@ import de.uni_hildesheim.sse.model.varModel.Constraint;
 import de.uni_hildesheim.sse.model.varModel.ModelElement;
 import de.uni_hildesheim.sse.model.varModel.Project;
 import de.uni_hildesheim.sse.persistency.StringProvider;
-import de.uni_hildesheim.sse.reasoning.core.model.PerformanceStatistics;
 import de.uni_hildesheim.sse.reasoning.core.reasoner.Message;
 import de.uni_hildesheim.sse.reasoning.core.reasoner.ReasonerConfiguration;
 import de.uni_hildesheim.sse.reasoning.core.reasoner.ReasonerConfiguration.IAdditionalInformationLogger;
@@ -41,7 +40,7 @@ public class Engine {
     private static final EASyLogger LOGGER
         = EASyLoggerFactory.INSTANCE.getLogger(Engine.class, Descriptor.BUNDLE_NAME);
     
-    private String reasoningID;
+//    private String reasoningID;
     
     private Resolver resolver;
     
@@ -68,7 +67,8 @@ public class Engine {
     
     private IAdditionalInformationLogger infoLogger;
     
-    private long startTime = System.currentTimeMillis();
+    private long evaluationTime;
+    private int reevaluationCount;
     
     private int failedConstraints = 0;
     private int failedAssignments = 0;
@@ -85,7 +85,7 @@ public class Engine {
         ProgressObserver observer) {
 //        cfg.removeDerivedValues();
         this.project = project;
-        this.reasoningID = PerformanceStatistics.createReasoningID(project.getName(), "Model validation");
+//        this.reasoningID = PerformanceStatistics.createReasoningID(project.getName(), "Model validation");
         this.resolver = new Resolver(project, cfg, true, reasonerConfig);
         this.resolver.setIncremental(reasonerConfig.isRuntimeMode());
         this.result = new ReasoningResult();
@@ -99,6 +99,7 @@ public class Engine {
     public ReasoningResult reason() {
 //        PerformanceStatistics.createPerformanceMeasurement(reasoningID);
 //        PerformanceStatistics.addTimestamp(reasoningID);
+        long startTime = System.currentTimeMillis();
         resolver.resolve();
 //        PerformanceStatistics.addTimestamp(reasoningID);
 //        FailedElements failedElements = FailedRules.getFailedElements(reasoningID);
@@ -107,7 +108,9 @@ public class Engine {
             constraintVariableMap = resolver.getConstraintVariableMap();
             analyzeProblemConstraints(failedElements);
             analyzeProblemVariables(failedElements);
-        } 
+        }
+        evaluationTime = System.currentTimeMillis() - startTime;
+        reevaluationCount = resolver.reevaluationCount();
 //        PerformanceStatistics.addTimestamp(reasoningID);
 //        PerformanceStatistics.getStats(reasoningID);   
 //        PerformanceStatistics.clearReasoningID(reasoningID);
@@ -115,10 +118,10 @@ public class Engine {
         infoLogger.info("Model: " + project.getName());
         infoLogger.info("Number of variables: " + resolver.variableCount());
         infoLogger.info("Number of constraints: " + resolver.constraintCount());
-        infoLogger.info("Number of reevaluations: " + resolver.reevaluationCount());
+        infoLogger.info("Number of reevaluations: " + reevaluationCount);
         infoLogger.info("Number of problem constraints: " + failedConstraints);
         infoLogger.info("Number of problem assignments: " + failedAssignments);
-        infoLogger.info("Evaluation time: " + (System.currentTimeMillis() - startTime));
+        infoLogger.info("Evaluation time: " + evaluationTime);
         return result;        
     } 
     
@@ -333,6 +336,22 @@ public class Engine {
             infoLogger.info("Failed elements constraint variable: " 
                 + msg.getNamedConstraintVariables().get(i));            
         }
-    }   
+    } 
+    
+    /**
+     * Method for getting evaluation time of the model.
+     * @return Time in milliseconds.
+     */
+    public long getEvaluationTime() {
+        return evaluationTime;
+    }
+    
+    /**
+     * Method for getting reevaluation count of the model.
+     * @return Number of reevaluations.
+     */
+    public long getReevaluationCount() {
+        return reevaluationCount;
+    }
   
 }

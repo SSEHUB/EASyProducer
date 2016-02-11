@@ -105,7 +105,6 @@ public class Resolver {
     
     private int constraintBaseSize = 0;
     private Set<Constraint> lastAdded = null;
-    private int constraintBaseIndex = 0;
     
     private Map<AbstractVariable, CompoundAccess> varMap;
     
@@ -137,7 +136,16 @@ public class Resolver {
             if (varConstraints != null) {
                 if (!varConstraints.isEmpty() && lastAdded != varConstraints) {
 //                    System.out.println("Add");
+//                    lastAdded = new HashSet<Constraint>();
                     for (Constraint varConstraint : varConstraints) {
+//                        int lastIndexOfConstraint = constraintBase.lastIndexOf(varConstraint);
+//                        System.out.println("lastIndexOfConstraint: " + lastIndexOfConstraint);
+//                        System.out.println("reevaluationCounter: " + reevaluationCounter);
+//                        System.out.println("constraintBaseSize: " + constraintBaseSize);
+//                        if (!(lastIndexOfConstraint >= reevaluationCounter) 
+//                            && (lastIndexOfConstraint < constraintBaseSize)) {
+//                            lastAdded.add(varConstraint);
+//                            }
                         constraintBase.add(varConstraint);
                         constraintBaseSize++;                        
 //                        System.out.println("Constraints added to current list: " 
@@ -146,8 +154,6 @@ public class Resolver {
                             LOGGER.debug("Constraints added to current list: " 
                                 + StringProvider.toIvmlString(varConstraint.getConsSyntax())); 
                         }
-//                        if (constraintBase.lastIndexOf(varConstraint) <= constraintBaseIndex) {
-//                        }
                     }
                     lastAdded = varConstraints;
 //                    System.out.println("---");
@@ -993,9 +999,7 @@ public class Resolver {
         if (Descriptor.LOGGING) {
             printConstraints(constraintBase);            
         }
-        constraintBaseIndex = 0;
-        for (int i = 0; i < constraints.size(); i++) {  
-            constraintBaseIndex = i;
+        for (int i = 0; i < constraints.size(); i++) {
             problemVariables.clear();
             AssignmentState state = null;
             if (constraints.get(i).isDefaultConstraint()) {
@@ -1007,10 +1011,11 @@ public class Resolver {
             ConstraintSyntaxTree cst = constraint.getConsSyntax();
             if (cst != null) { 
                 if (Descriptor.LOGGING) {
-                    LOGGER.debug("Resolving: " + StringProvider.toIvmlString(cst) 
+                    LOGGER.debug("Resolving: " + reevaluationCounter + ": " + StringProvider.toIvmlString(cst) 
                         + " : " + constraints.get(i).getTopLevelParent());                    
                 }
                 // TODO check whether these four statements can be moved up / clearResult is sufficient instead of clear
+                reevaluationCounter++;
                 evaluator.init(config, state, false, listener); 
                 evaluator.setResolutionListener(resolutionListener);
                 evaluator.setScopeAssignmnets(scopeAssignments);
@@ -1205,17 +1210,19 @@ public class Resolver {
      * @param variable Variable to be printed out.
      */
     private void printModelElement(IDecisionVariable variable) {
-        LOGGER.debug(variable.getDeclaration() 
-            + " : "
-            + variable.getState().toString()
-            + " : " 
-            + variable.getValue()
-            + " | "
-            + printAttributes(variable));
-        if (variable.getNestedElementsCount() > 0) {
-            for (int i = 0; i < variable.getNestedElementsCount(); i++) {
-                printModelElement(variable.getNestedElement(i));
-            }
+        if (variable.getState() != null) {
+            LOGGER.debug(variable.getDeclaration() 
+                + " : "
+                + variable.getState().toString()
+                + " : " 
+                + variable.getValue()
+                + " | "
+                + printAttributes(variable));
+            if (variable.getNestedElementsCount() > 0) {
+                for (int i = 0; i < variable.getNestedElementsCount(); i++) {
+                    printModelElement(variable.getNestedElement(i));
+                }
+            }            
         }
     }
     
