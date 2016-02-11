@@ -609,7 +609,7 @@ public class VariableValueCopier {
                 }
                 result = ValueFactory.createValue(targetType, decl);
                 target.setValue(result, newState);
-                notifyAssigned(target, value, adding);
+                notifyAssigned(target, result, adding);
             } else {
                 getLogger().error("Cannot create decision variable for " + decl.getName());
                 result = null;
