@@ -1,0 +1,13 @@
+project SimpleAssignments {
+
+    compound C {
+        Integer a;
+        Integer b;
+        a = b + 1;
+        b = 2;
+        a != 3;
+    }
+    
+    C cmp;  
+        
+}

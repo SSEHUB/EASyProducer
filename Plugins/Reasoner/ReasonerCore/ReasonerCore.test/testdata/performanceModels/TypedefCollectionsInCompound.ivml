@@ -1,0 +1,12 @@
+project TypedefCollectionsInCompound {
+
+    typedef PositiveInteger Integer with (PositiveInteger > 0);   
+    typedef SpringInteger PositiveInteger with (SpringInteger < 15);   
+    
+    compound C {
+        setOf(SpringInteger) springValues;
+    }
+    
+    C cmp = {springValues = {2, -11, 13}}; 
+    
+}
