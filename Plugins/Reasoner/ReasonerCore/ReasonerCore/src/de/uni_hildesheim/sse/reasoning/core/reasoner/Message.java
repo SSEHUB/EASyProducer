@@ -7,6 +7,7 @@ import java.util.Set;
 import de.uni_hildesheim.sse.model.confModel.IDecisionVariable;
 import de.uni_hildesheim.sse.model.cst.ConstraintSyntaxTree;
 import de.uni_hildesheim.sse.model.varModel.AbstractVariable;
+import de.uni_hildesheim.sse.model.varModel.Constraint;
 import de.uni_hildesheim.sse.model.varModel.ModelElement;
 import de.uni_hildesheim.sse.model.varModel.Project;
 import de.uni_hildesheim.sse.utils.messages.Status;
@@ -24,6 +25,7 @@ public class Message extends de.uni_hildesheim.sse.utils.messages.Message {
     private List<Set<AbstractVariable>> variablesInConstraints;
     private List<Set<IDecisionVariable>> problemVariables;
     private List<ConstraintSyntaxTree> problemConstraintParts;
+    private List<Constraint> problemConstraints;
     private List<String> conflictingElementComments;
     private List<Project> conflictingElementProjects;
     private List<String> conflictingElementSuggestions;
@@ -196,23 +198,46 @@ public class Message extends de.uni_hildesheim.sse.utils.messages.Message {
     
     /**
      * Method for adding a list of partial {@link ConstraintSyntaxTree}s that are involved in each failed constraint.
-     * @param variables List of variables.
+     * @param constraints List of constraint trees. The entries in this 
+     * list must correspond to {@link #addProblemConstraints(List)}.
      */
-    public void addProblemConstraintParts(List<ConstraintSyntaxTree> variables) {
+    public void addProblemConstraintParts(List<ConstraintSyntaxTree> constraints) {
         this.problemConstraintParts = new ArrayList<ConstraintSyntaxTree>();
         if (null != problemConstraintParts) {
-            this.problemConstraintParts.addAll(variables);
+            this.problemConstraintParts.addAll(constraints);
+        }
+    }
+    
+    /**
+     * Method for adding a list of {@link Constraint}s that are involved in each failed constraint. The entries in this 
+     * list must correspond to {@link #addProblemConstraintParts(List)}.
+     * @param constraints List of constraints.
+     */
+    public void addProblemConstraints(List<Constraint> constraints) {
+        this.problemConstraints = new ArrayList<Constraint>();
+        if (null != problemConstraints) {
+            this.problemConstraints.addAll(constraints);
         }
     }
     
     /**
      * Method for returning a list of partial {@link ConstraintSyntaxTree}s that are involved in each failed constraint.
-     * @return List of variables.
+     * The result must correspond to {@link #getProblemConstraints()}.
+     * @return List of constraint syntax trees.
      */
     public List<ConstraintSyntaxTree> getProblemConstraintParts() {
         return problemConstraintParts;
     }
-    
+
+    /**
+     * Method for returning a list of full {@link Constraint}s that are involved in each failed constraint.
+     * The result must correspond to {@link #getProblemConstraintParts()}.
+     * @return List of constraints.
+     */
+    public List<Constraint> getProblemConstraints() {
+        return problemConstraints;
+    }
+
     /**
      * Method for adding a list of ConstraintVariables of a failed constraint. Null if non.
      * @param constraintVariables ConstraintVariable or null.

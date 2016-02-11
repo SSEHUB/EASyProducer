@@ -28,6 +28,7 @@ import de.uni_hildesheim.sse.model.cst.OCLFeatureCall;
 import de.uni_hildesheim.sse.model.cst.Variable;
 import de.uni_hildesheim.sse.model.cstEvaluation.EvaluationAccessor;
 import de.uni_hildesheim.sse.model.cstEvaluation.EvaluationVisitor;
+import de.uni_hildesheim.sse.model.varModel.Constraint;
 import de.uni_hildesheim.sse.model.varModel.datatypes.OclKeyWords;
 import de.uni_hildesheim.sse.model.varModel.values.IntValue;
 import de.uni_hildesheim.sse.model.varModel.values.RealValue;
@@ -224,10 +225,11 @@ public abstract class AbstractAnalyzerVisitor<V> extends EvaluationVisitor {
      * Analyzes the given constraint (part) and tries to identify deviations.
      * 
      * @param config the configuration to evaluate on
-     * @param cst the constraint to be analyzed
+     * @param cst the constraint part to be analyzed
+     * @param constraint the full constraint containing <code>cst</code>, may be <b>null</b>
      * @return a violating clause in case that a deviation can be identified, <code>false</code> else
      */
-    public List<V> analyze(Configuration config, ConstraintSyntaxTree cst) {
+    public List<V> analyze(Configuration config, ConstraintSyntaxTree cst, Constraint constraint) {
         init(config, null, false, null);
         cst.accept(this);
         List<V> result = getViolatingClauses();
@@ -250,8 +252,10 @@ public abstract class AbstractAnalyzerVisitor<V> extends EvaluationVisitor {
         for (int m = 0; m < reasoningResult.getMessageCount(); m++) {
             de.uni_hildesheim.sse.reasoning.core.reasoner.Message msg = reasoningResult.getMessage(m);
             List<Set<IDecisionVariable>> probVars = msg.getProblemVariables();
-            List<ConstraintSyntaxTree> probConstraints = msg.getProblemConstraintParts();
-            if (null != probVars && probVars.size() > 0 && null != probConstraints && probConstraints.size() > 0) {
+            List<ConstraintSyntaxTree> probConstraintParts = msg.getProblemConstraintParts();
+            List<Constraint> probConstraints = msg.getProblemConstraints();
+            if (null != probVars && probVars.size() > 0 && null != probConstraintParts 
+                && probConstraintParts.size() > 0) {
                 int count = 0;
                 for (Set<IDecisionVariable> set : probVars) {
                     for (IDecisionVariable var : set) {
@@ -261,8 +265,10 @@ public abstract class AbstractAnalyzerVisitor<V> extends EvaluationVisitor {
                     }
                 }
                 if (count > 0) { // contains relevant variables
-                    for (ConstraintSyntaxTree cst : probConstraints) {
-                        List<V> clauses = analyze(config, cst);
+                    for (int c = 0; c < probConstraintParts.size(); c++) {
+                        ConstraintSyntaxTree cst = probConstraintParts.get(c);
+                        Constraint constraint = c < probConstraints.size() ? probConstraints.get(c) : null;
+                        List<V> clauses = analyze(config, cst, constraint);
                         if (null != clauses) {
                             if (null == result) {
                                 result = new ArrayList<V>();

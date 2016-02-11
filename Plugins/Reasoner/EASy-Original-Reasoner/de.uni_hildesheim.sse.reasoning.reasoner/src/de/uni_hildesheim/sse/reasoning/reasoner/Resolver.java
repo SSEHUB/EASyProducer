@@ -343,8 +343,9 @@ public class Resolver {
             if (ConstraintType.TYPE.isAssignableFrom(type) 
                 && !(type.getType() == BooleanType.TYPE.getType())) {
                 if (compound == null) {
-                    try {                        
-                        Constraint constraint = new Constraint(defaultValue, project);
+                    try {
+                        // use closest parent instead of project -> runtime analysis
+                        Constraint constraint = new Constraint(defaultValue, variable.getDeclaration());
                         constraintVariables.add(constraint);
                         constraintVariableMap.put(constraint, variable);
                         if (Descriptor.LOGGING) {
@@ -1002,9 +1003,9 @@ public class Resolver {
             } else {
                 state = AssignmentState.DERIVED;
             }
-            ConstraintSyntaxTree cst = constraints.get(i).getConsSyntax();
+            Constraint constraint = constraints.get(i);
+            ConstraintSyntaxTree cst = constraint.getConsSyntax();
             if (cst != null) { 
-//                System.out.println(StringProvider.toIvmlString(cst));
                 if (Descriptor.LOGGING) {
                     LOGGER.debug("Resolving: " + StringProvider.toIvmlString(cst) 
                         + " : " + constraints.get(i).getTopLevelParent());                    
@@ -1031,6 +1032,7 @@ public class Resolver {
                             failedelementDetails.setProblemPoints(new HashSet<IDecisionVariable>(problemVariables));
                             // due to NULL result if failed assignment
                             failedelementDetails.setProblemConstraintPart(cst);
+                            failedelementDetails.setProblemConstraint(constraint);
                             failedElements.addProblemVariable(evaluator.getMessage(j).getVariable(), 
                                 failedelementDetails);
                             if (Descriptor.LOGGING) {
@@ -1140,6 +1142,7 @@ public class Resolver {
             FailedElementDetails failedElementDetails = new FailedElementDetails();
             failedElementDetails.setProblemPoints(new HashSet<IDecisionVariable>(problemVariables));
             failedElementDetails.setProblemConstraintPart(getFailedConstraintPart());
+            failedElementDetails.setProblemConstraint(constraint);
             failedElements.addProblemConstraint(constraint, failedElementDetails);
             if (Descriptor.LOGGING) {
                 LOGGER.debug("Failed constraint: " 

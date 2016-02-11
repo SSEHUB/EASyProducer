@@ -1,16 +1,21 @@
 project collection1 {
 
     version v0;
+    typedef NonEmptyString String with (size(NonEmptyString) > 0 and isDefined(NonEmptyString));
     compound Field {
-        String name;
+        NonEmptyString name;
     }
 
+    typedef Fields sequenceOf(Field) with (hasDuplicates(Fields->collect(f|f.name)) == false);
     compound Tuple {
-        String name;
-        setOf(Field) fields;
+        NonEmptyString name;
+        Fields fields;
     }
 
-    setOf(Tuple) tuples = {{name = "t1", fields = {{name = "f1.1"}, {name = "f1.2"}}}, {name = "t2", fields = {{name = "f2.1"}, {name = "f2.2"}}}};
-    setOf(setOf(String)) fieldNames = tuples->collect(Tuple tuple|tuple.fields->collect(Field field|field.name));
-    setOf(setOf(String)) augmentedFieldNames = tuples->collect(Tuple tuple|including(tuple.fields->collect(Field field|field.name), tuple.name));
+    typedef Tuples sequenceOf(Tuple);
+    Tuples tuples = {{name = "t1", fields = {{name = "f1.1"}, {name = "f1.2"}}}, {name = "t2", fields = {{name = "f2.1"}, {name = "f2.2"}}}};
+    sequenceOf(sequenceOf(NonEmptyString)) fieldNames = tuples->collect(Tuple tuple|tuple.fields->collect(Field field|field.name));
+    sequenceOf(sequenceOf(NonEmptyString)) augmentedFieldNames = tuples->collect(Tuple tuple|append(tuple.fields->collect(Field field|field.name), tuple.name));
+    sequenceOf(sequenceOf(NonEmptyString)) augmentedFieldNames2 = collectFieldNames(tuples);
+    def static sequenceOf(sequenceOf(NonEmptyString)) collectFieldNames(Tuples tuples) = tuples->collect(Tuple tuple|append(tuple.fields->collect(Field field|field.name), tuple.name));
 }

@@ -23,6 +23,7 @@ import org.junit.Assert;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.rtVil.VariableValueCopier;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.rtVil.VariableValueCopier.CopySpec;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.rtVil.VariableValueCopier.EnumAttributeFreezeProvider;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.rtVil.VariableValueCopier.IAssignmentListener;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.rtVil.VariableValueCopier.IFreezeProvider;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.Sequence;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.configuration.ChangeHistory;
@@ -72,7 +73,7 @@ public class VariableValueCopierTest extends AbstractRtTest {
     public static void shutDown() {
         test.de.uni_hildesheim.sse.vil.buildlang.ExecutionTests.shutDown();
     }
-    
+
     /**
      * Tests the copier mechanism.
      * 
@@ -84,6 +85,51 @@ public class VariableValueCopierTest extends AbstractRtTest {
     @Test
     public void testCopier() throws ConfigurationException, ValueDoesNotMatchTypeException, ModelQueryException, 
         CSTSemanticException {
+        testCopier("myVar_", null); 
+        AssignmentListener listener = new AssignmentListener();
+        testCopier("myListVar_", listener);
+        Assert.assertEquals(3, listener.getCount());        
+    }
+    
+    /**
+     * A simple test assignment listener.
+     * 
+     * @author Holger Eichelberger
+     */
+    private static class AssignmentListener implements IAssignmentListener {
+
+        private int count;
+        
+        @Override
+        public void notifyAssigned(IDecisionVariable target, Value value, boolean added) {
+            count++;
+        }
+        
+        /**
+         * Returns the assignment count.
+         * 
+         * @return the assignment count
+         */
+        private int getCount() {
+            return count;
+        }
+        
+    }
+    
+    /**
+     * Tests the copier mechanism.
+     * 
+     * @param prefix the copy variable prefix for new variables
+     * @param listener the listener to use
+     * @return the number of primarily assigned values
+     * 
+     * @throws ConfigurationException shall not occur
+     * @throws ValueDoesNotMatchTypeException shall not occur
+     * @throws ModelQueryException shall not occur
+     * @throws CSTSemanticException shall not occur
+     */
+    private int testCopier(String prefix, IAssignmentListener listener) throws ConfigurationException, 
+        ValueDoesNotMatchTypeException, ModelQueryException, CSTSemanticException {
         Configuration configuration = getIvmlConfiguration("Copy", NoVariableFilter.INSTANCE);
         de.uni_hildesheim.sse.model.confModel.Configuration cfg = configuration.getConfiguration();
         Project prj = cfg.getProject();
@@ -101,7 +147,8 @@ public class VariableValueCopierTest extends AbstractRtTest {
             bindingTime.getLiteral(1));
         CopySpec spec1 = new CopySpec(sourceType, "source", freezeProvider, "available", "actual");
         CopySpec spec2 = new CopySpec(familyElementType, "family.members", freezeProvider, "available");
-        VariableValueCopier copier = new VariableValueCopier("myVar_", spec1, spec2);
+        VariableValueCopier copier = new VariableValueCopier(prefix, spec1, spec2);
+        copier.setAssignmentListener(listener);
         copier.process(cfg);
 
         //System.out.println(StringProvider.toIvmlString(cfg.toProject(true)));
@@ -133,6 +180,8 @@ public class VariableValueCopierTest extends AbstractRtTest {
         history.commitAll();
         Configuration chg = configuration.selectChangedWithContext();
         assertActualParamValueByVil(chg, dSrc1.getName(), 31, false);
+
+        return 3;
     }
     
     /**

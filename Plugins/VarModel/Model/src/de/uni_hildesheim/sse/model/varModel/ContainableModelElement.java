@@ -55,6 +55,19 @@ public abstract class ContainableModelElement extends ModelElement implements ID
         }
         return parent;
     }
+
+    /**
+     * Returns the containing project.
+     * 
+     * @return the contaning project (may be <b>null</b> if there is none)
+     */
+    public final Project getProject() {
+        IModelElement parent = getParent();
+        while (null != parent && !(parent instanceof Project)) {
+            parent = parent.getParent();
+        }
+        return (parent instanceof Project) ? (Project) parent : null;
+    }
     
     /**
      * Method to check whether the parent is a topLevel-element.
