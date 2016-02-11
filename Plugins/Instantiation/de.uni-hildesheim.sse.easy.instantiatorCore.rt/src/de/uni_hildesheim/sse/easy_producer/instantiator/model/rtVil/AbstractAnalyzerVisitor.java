@@ -65,7 +65,7 @@ public abstract class AbstractAnalyzerVisitor<V> extends EvaluationVisitor {
      * @param deviation the deviation from the expected value (may be negative/positive, may be <b>null</b> if unknown)
      * @param deviationPercentage the deviation in percent (may be negative/positive, may be NaN, may be <b>null</b> if 
      *     unknown)
-     * @return the violating instance
+     * @return the violating instance (may be <b>null</b> if none shall be recorded)
      */
     protected abstract V createViolationInstance(IDecisionVariable var, String operation, Double deviation, 
         Double deviationPercentage);
@@ -88,7 +88,7 @@ public abstract class AbstractAnalyzerVisitor<V> extends EvaluationVisitor {
             Set<IDecisionVariable> tmp = new HashSet<IDecisionVariable>();
             tmp.addAll(relevant);
             for (IDecisionVariable var : tmp) {
-                violating.add(createViolationInstance(var, null, null, null));
+                addViolatingInstance(createViolationInstance(var, null, null, null));
             }
         } 
         result.addAll(violating);
@@ -146,12 +146,23 @@ public abstract class AbstractAnalyzerVisitor<V> extends EvaluationVisitor {
             }
             for (int r = startIndex; r <= endIndex; r++) {
                 IDecisionVariable var = relevant.get(r);
-                violating.add(createViolationInstance(var, opName, deviation, deviationPercentage));
+                addViolatingInstance(createViolationInstance(var, opName, deviation, deviationPercentage));
             }
         }
         release(operand);
         for (int p = 0; p < parameter.length; p++) {
             release(parameter[p]);
+        }
+    }
+    
+    /**
+     * Adds a violating instance to {@link #violating}.
+     * 
+     * @param instance the instance (may be <b>null</b>, ignored then)
+     */
+    private void addViolatingInstance(V instance) {
+        if (null != instance) {
+            violating.add(instance);
         }
     }
     
