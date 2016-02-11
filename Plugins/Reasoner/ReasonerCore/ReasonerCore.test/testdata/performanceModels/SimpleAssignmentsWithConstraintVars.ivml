@@ -1,0 +1,10 @@
+project SimpleAssignmentsWithConstraintVars {
+
+    Integer a;
+    Integer b;
+    
+    Constraint c1 = a = b + 1;
+    Constraint c2 = b = 2;
+    Constraint c3 = a != 3;
+    
+}

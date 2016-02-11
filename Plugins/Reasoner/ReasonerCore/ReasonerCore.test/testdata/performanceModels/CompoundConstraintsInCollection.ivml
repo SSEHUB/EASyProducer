@@ -1,0 +1,34 @@
+project CompoundConstraintsInCollection {
+
+   enum MachineRole {Manager, Worker}; 
+    
+    compound Machine {  
+        setOf(Integer) ports;
+        MachineRole role;
+        role == MachineRole.Manager implies ports.isEmpty();
+        role == MachineRole.Worker and ports.isEmpty() implies ports == {6700, 6701, 6702, 6703};
+    
+    }
+    
+    setOf(Machine) machines;
+    
+    machines = {
+        Machine{        
+            ports={6700,6701,6702,6703},
+            role = MachineRole.Worker
+        },
+        Machine{
+            ports={6700,6701,6702,6703},
+            role = MachineRole.Worker
+        },
+        Machine{
+            ports={6700,6701,6702,6703},
+            role = MachineRole.Worker
+        },
+        Machine{ 
+            ports={6700,6701},
+            role = MachineRole.Manager
+        }
+    }; 
+    
+}
