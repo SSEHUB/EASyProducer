@@ -171,29 +171,33 @@ public class IntegerOperations {
                 int arg = ((IntValue) aValue).getValue();
                 
                 int resultOfOperation = 0;
-                boolean operationPerfomed = true;
-                switch (type) {
-                case PLUS:
-                    resultOfOperation = op + arg;
-                    break;
-                case MINUS:
-                    resultOfOperation = op - arg;
-                    break;
-                case MULTIPLICATION:
-                    resultOfOperation = op * arg;
-                    break;
-                case DIVISION:
-                    resultOfOperation = op / arg;
-                    break;
-                case MODULO:
-                    resultOfOperation = op % arg;
-                    break;
-                default:
-                    operationPerfomed = false;
-                    break;
+                boolean operationPerformed = true;
+                try {
+                    switch (type) {
+                    case PLUS:
+                        resultOfOperation = op + arg;
+                        break;
+                    case MINUS:
+                        resultOfOperation = op - arg;
+                        break;
+                    case MULTIPLICATION:
+                        resultOfOperation = op * arg;
+                        break;
+                    case DIVISION:
+                        resultOfOperation = op / arg;
+                        break;
+                    case MODULO:
+                        resultOfOperation = op % arg;
+                        break;
+                    default:
+                        operationPerformed = false;
+                        break;
+                    }
+                } catch (ArithmeticException e) {
+                    operationPerformed = false;
                 }
                 
-                if (operationPerfomed) {
+                if (operationPerformed) {
                     Value rValue;
                     try {
                         rValue = ValueFactory.createValue(IntegerType.TYPE, resultOfOperation);

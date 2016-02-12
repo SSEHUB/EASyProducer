@@ -145,6 +145,7 @@ public class IntegerOperationsTest {
         NumberOperationUtils.assertArithmeticConstraint(1, 2, operation, 0, isSymmetric, IntegerType.TYPE);
         NumberOperationUtils.assertArithmeticConstraint(501, 101, operation, 4, isSymmetric, IntegerType.TYPE);
         NumberOperationUtils.assertArithmeticConstraint(4, -1, operation, -4, isSymmetric, IntegerType.TYPE);
+        NumberOperationUtils.assertArithmeticConstraint(4, 0, operation, null, isSymmetric, IntegerType.TYPE);
         
         NumberOperationUtils.intOperationLoop(operation, isSymmetric, new IntOperation() {
             

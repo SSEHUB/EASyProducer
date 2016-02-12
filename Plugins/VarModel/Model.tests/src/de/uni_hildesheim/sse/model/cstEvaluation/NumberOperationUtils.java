@@ -310,23 +310,27 @@ class NumberOperationUtils {
         ConstraintSyntaxTree cst = createArithmeticConstraint(value1, value2, operation);
         cst.accept(evaluator);
         Value result = evaluator.getResult();
-        Assert.assertNotNull(result);
-        Assert.assertSame(result.getType(), numberType);
-        String errorMsg = "Error in " + operation + "-Operation. Expected: " 
-            + value1 + " " + operation + " " + value2 + " = " + expectedResult + ", but was : " + result.getValue();
-        Assert.assertEquals(errorMsg, expectedResult, result.getValue());
-        
-        if (symmetric) {
-            evaluator.clear();
-            evaluator.init(new Configuration(new Project("test")), null, false, null);
-            cst = createArithmeticConstraint(value2, value1, operation);
-            cst.accept(evaluator);
-            result = evaluator.getResult();
+        if (null == expectedResult) {
+            Assert.assertNull("Null expected", result);
+        } else {
             Assert.assertNotNull(result);
             Assert.assertSame(result.getType(), numberType);
-            errorMsg = "Error in " + operation + "-Operation. Expected: " 
-                + value2 + " " + operation + " " + value1 + " = " + expectedResult + ", but was : " + result.getValue();
+            String errorMsg = "Error in " + operation + "-Operation. Expected: " 
+                + value1 + " " + operation + " " + value2 + " = " + expectedResult + ", but was : " + result.getValue();
             Assert.assertEquals(errorMsg, expectedResult, result.getValue());
+            
+            if (symmetric) {
+                evaluator.clear();
+                evaluator.init(new Configuration(new Project("test")), null, false, null);
+                cst = createArithmeticConstraint(value2, value1, operation);
+                cst.accept(evaluator);
+                result = evaluator.getResult();
+                Assert.assertNotNull(result);
+                Assert.assertSame(result.getType(), numberType);
+                errorMsg = "Error in " + operation + "-Operation. Expected: " + value2 + " " + operation + " " 
+                    + value1 + " = " + expectedResult + ", but was : " + result.getValue();
+                Assert.assertEquals(errorMsg, expectedResult, result.getValue());
+            }
         }
     }
     

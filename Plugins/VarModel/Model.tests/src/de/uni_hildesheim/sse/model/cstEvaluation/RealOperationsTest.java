@@ -144,6 +144,7 @@ public class RealOperationsTest {
         NumberOperationUtils.assertArithmeticConstraint(1, 2, operation, 0.5, isSymmetric, RealType.TYPE);
         NumberOperationUtils.assertArithmeticConstraint(50.1, 10, operation, 5.01, isSymmetric, RealType.TYPE);
         NumberOperationUtils.assertArithmeticConstraint(-1, 8.0, operation, -0.125, isSymmetric, RealType.TYPE);
+        NumberOperationUtils.assertArithmeticConstraint(-1, 0, operation, null, isSymmetric, RealType.TYPE);
         
         NumberOperationUtils.realOperationLoop(operation, isSymmetric, new RealOperation() {
             
