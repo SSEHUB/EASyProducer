@@ -238,7 +238,7 @@ public class RealOperations {
                         break;
                     case DIVISION:
                         resultOfOperation = op / arg;
-                        if (Double.isInfinite(resultOfOperation)) {
+                        if (Double.isInfinite(resultOfOperation) || Double.isNaN(resultOfOperation)) {
                             operationPerformed = false;
                         }
                         break;
@@ -252,7 +252,7 @@ public class RealOperations {
                 } catch (ArithmeticException e) {
                     operationPerformed = false;
                 }
-                
+
                 if (operationPerformed) {
                     Value rValue;
                     try {
