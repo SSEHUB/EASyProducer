@@ -91,7 +91,7 @@ public abstract class OperationTests extends AbstractReasonerFrontendTest {
      */  
     @Test // Must fail div by 0
     public void testIntegerDivConstantsFail() throws IOException {
-        performOpCheck("integerDivConstantsFail.ivml", false);
+        performOpCheck("integerDivConstantsFail.ivml", true); // -> undefined
     }
     
     /**
@@ -253,7 +253,7 @@ public abstract class OperationTests extends AbstractReasonerFrontendTest {
      */
     @Test
     public void testIntegerDivVariablesFails() throws IOException {
-        performOpCheck("integerDivVariablesFail.ivml", false);
+        performOpCheck("integerDivVariablesFail.ivml", true); // -> undefined
     }
     
     /**
