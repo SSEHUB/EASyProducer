@@ -932,6 +932,20 @@ public class Configuration implements IConfigurationVisitable, IProjectListener,
     }
     
     /**
+     * Returns the top-level decision variable of <code>var</code>.
+     * 
+     * @param var the variable
+     * @return the top-level decision variable, eventually <code>var</code>, <b>null</b> if there is none
+     */
+    public static IDecisionVariable getTopLevelDecision(IDecisionVariable var) {
+        IConfigurationElement top = var;
+        while (null != top && !(top.getParent() instanceof IConfiguration)) {
+            top = top.getParent();
+        }
+        return top instanceof IDecisionVariable ? (IDecisionVariable) top : null;
+    }
+    
+    /**
      * Dereferences a value.
      * 
      * @param conf the configuration access
