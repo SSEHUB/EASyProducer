@@ -418,10 +418,17 @@ public class EvaluationVisitor implements IConstraintTreeVisitor {
      * Just for internal purposes of derived classes - get the result accessor.
      * If you use this method, you are anyway responsible for cleaning up the result properly. 
      * 
+     * @param nullify set {@link #result} to <b>null</b> and caller takes over full responsibility for releasing, 
+     *    <code>false</code> leave responsibility in this part
+     * 
      * @return the result accessor
      */
-    protected EvaluationAccessor getResultAccessor() {
-        return result;
+    protected EvaluationAccessor getResultAccessor(boolean nullify) {
+        EvaluationAccessor res = result;
+        if (nullify) {
+            result = null;
+        }
+        return res;
     }
 
     /**
@@ -926,7 +933,7 @@ public class EvaluationVisitor implements IConstraintTreeVisitor {
     }
     
     /**
-     * Encpsulates a null context (some of the model test cases.
+     * Encapsulates a null context (some of the model test cases.
      * 
      * @param op the operation to consider
      * @param allow the new state of the allow flag

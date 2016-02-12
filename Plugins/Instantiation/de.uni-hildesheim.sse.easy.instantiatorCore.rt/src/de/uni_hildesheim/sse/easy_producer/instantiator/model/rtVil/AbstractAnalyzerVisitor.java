@@ -105,12 +105,12 @@ public abstract class AbstractAnalyzerVisitor<V> extends EvaluationVisitor {
         allowUpdateRelevant = true;
         if (null != call.getOperand()) {
             call.getOperand().accept(this);
-            operand = getResultAccessor();
+            operand = getResultAccessor(true);
         }
         int opRelSize = relevant.size();
         for (int p = 0; p < call.getParameterCount(); p++) {
             call.getParameter(p).accept(this);
-            parameter[p] = getResultAccessor();
+            parameter[p] = getResultAccessor(true);
         }
         allowUpdateRelevant = false;
         ConstraintSyntaxTree[] cst = getFailedExpression();
@@ -191,7 +191,7 @@ public abstract class AbstractAnalyzerVisitor<V> extends EvaluationVisitor {
      */
     private void updateRelevant() {
         if (allowUpdateRelevant) {
-            EvaluationAccessor eval = getResultAccessor();
+            EvaluationAccessor eval = getResultAccessor(false);
             if (null != eval) {
                 IDecisionVariable var = eval.getVariable();
                 if (isRelevantVariable(var)) {
