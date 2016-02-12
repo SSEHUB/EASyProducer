@@ -1,0 +1,6 @@
+project constraintDefault {
+
+	version v0;
+	
+	Constraint c = false;
+}

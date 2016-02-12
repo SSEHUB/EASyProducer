@@ -1,0 +1,10 @@
+project constraintInCompoundAssigned {
+
+	version v0;
+	
+	compound CP {
+	   Constraint c;
+	}
+	
+	CP cmp = {c = false};
+}

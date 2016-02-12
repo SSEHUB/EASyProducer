@@ -1,0 +1,12 @@
+project constraintsInCompoundWithNoDefaultValue {
+
+	version v0;
+	
+	compound Test {
+		Constraint constraint;
+	}
+	
+	Test test = {
+		constraint = false
+	};
+}

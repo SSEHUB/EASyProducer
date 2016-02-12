@@ -1,0 +1,7 @@
+project constraintAssigned {
+
+	version v0;
+	
+	Constraint c;
+	c = false;
+}

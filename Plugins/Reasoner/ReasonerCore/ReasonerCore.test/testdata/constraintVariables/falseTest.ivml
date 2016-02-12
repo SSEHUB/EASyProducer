@@ -1,0 +1,6 @@
+project falseTest {
+
+	version v0;
+	
+	false;
+}

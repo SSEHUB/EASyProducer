@@ -1,0 +1,6 @@
+project booleanDefaultFalse {
+
+	version v0;
+	
+	Boolean b = false;
+}

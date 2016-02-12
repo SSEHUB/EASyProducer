@@ -1,0 +1,7 @@
+project booleanAssignedFalse {
+
+	version v0;
+	
+	Boolean b;
+	b = false;
+}
