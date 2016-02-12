@@ -18,6 +18,7 @@ import de.uni_hildesheim.sse.model.cst.AttributeVariable;
 import de.uni_hildesheim.sse.model.cst.CSTSemanticException;
 import de.uni_hildesheim.sse.model.cst.CompoundAccess;
 import de.uni_hildesheim.sse.model.cst.CompoundInitializer;
+import de.uni_hildesheim.sse.model.cst.ConstantValue;
 import de.uni_hildesheim.sse.model.cst.ConstraintReplacer;
 import de.uni_hildesheim.sse.model.cst.ConstraintSyntaxTree;
 import de.uni_hildesheim.sse.model.cst.ContainerInitializer;
@@ -351,7 +352,8 @@ public class Resolver {
         }
         if (null != defaultValue) {
             if (ConstraintType.TYPE.isAssignableFrom(type) 
-                && !(type.getType() == BooleanType.TYPE.getType())) {
+                && !(type.getType() == BooleanType.TYPE.getType())
+                && !(defaultValue instanceof ConstantValue)) {
                 if (compound == null) {
                     try {
                         // use closest parent instead of project -> runtime analysis
@@ -628,7 +630,7 @@ public class Resolver {
     private Constraint createConstraint(ConstraintSyntaxTree cst, AbstractVariable decl, IModelElement parent, 
         IDecisionVariable nestedVariable, IDecisionVariable variable) {
         Constraint constraint = null;
-        if (cst != null) {
+        if (cst != null && !(cst instanceof ConstantValue)) {
             cst = copyVisitor(cst, decl);
             try {
                 constraint = new Constraint(cst, parent);
@@ -1065,19 +1067,18 @@ public class Resolver {
             }
             Constraint constraint = constraints.get(i);
             ConstraintSyntaxTree cst = constraint.getConsSyntax();
-            if (cst != null) { 
+            reevaluationCounter++;
+            if (cst != null) {
                 if (Descriptor.LOGGING) {
                     LOGGER.debug("Resolving: " + reevaluationCounter + ": " + StringProvider.toIvmlString(cst) 
                         + " : " + constraints.get(i).getTopLevelParent());                    
                 }
                 // TODO check whether these four statements can be moved up / clearResult is sufficient instead of clear
-                reevaluationCounter++;
                 evaluator.init(config, state, false, listener); 
                 evaluator.setResolutionListener(resolutionListener);
                 evaluator.setScopeAssignmnets(scopeAssignments);
                 evaluator.setDispatchScope(dispatchScope);
                 evaluator.visit(cst);
-                reevaluationCounter++;
                 if (evaluator.constraintFailed()) {
                     conflictingConstraint(constraints.get(i));
                 } else if (evaluator.constraintFulfilled()) {

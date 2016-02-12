@@ -336,7 +336,7 @@ public class Engine {
             infoLogger.info("Failed elements constraint variable: " 
                 + msg.getNamedConstraintVariables().get(i));            
         }
-    } 
+    }      
     
     /**
      * Method for getting evaluation time of the model.
