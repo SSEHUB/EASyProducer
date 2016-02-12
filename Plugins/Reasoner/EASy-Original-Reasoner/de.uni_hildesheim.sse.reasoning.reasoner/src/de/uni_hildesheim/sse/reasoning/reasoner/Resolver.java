@@ -541,7 +541,7 @@ public class Resolver {
         List<Constraint> thisCompoundConstraints = new ArrayList<Constraint>(); 
         getAllCompoundConstraints(cmpType, thisCompoundConstraints, false); 
 //        compoundConstraintsMap.put(cmpType, thisCompoundConstraints);
-        CompoundVariable cmpVar = (CompoundVariable) variable;        
+        CompoundVariable cmpVar = (CompoundVariable) variable;  
         for (int i = 0, n = cmpVar.getNestedElementsCount(); i < n; i++) {
             IDecisionVariable nestedVariable = cmpVar.getNestedElement(i);
             AbstractVariable nestedDecl = nestedVariable.getDeclaration();
@@ -559,33 +559,25 @@ public class Resolver {
                 LOGGER.exception(e);
             }
             compoundConstraints.addAll(collectionCompoundConstraints(nestedDecl, cmpAccess));
-            varMap.put(nestedDecl, cmpAccess);
+            varMap.put(nestedDecl, cmpAccess); // TODO turn into local map!
             if (ConstraintType.TYPE.isAssignableFrom(nestedType) 
                 && !(nestedType.getType() == BooleanType.TYPE.getType())) {
-
                 createConstraint(nestedDecl.getDefaultValue(), decl, nestedDecl, nestedVariable, variable);
-                /*ConstraintSyntaxTree defaultValue = nestedDecl.getDefaultValue();
-                if (defaultValue != null) {
-                    defaultValue = copyVisitor(defaultValue, decl);
-                    try {
-                        Constraint constraint = new Constraint(defaultValue, nestedDecl);
-                        constraintVariables.add(constraint);
-                        constraintVariableMap.put(constraint, nestedVariable);
-                        if (Descriptor.LOGGING) {
-                            LOGGER.debug(variable.getDeclaration().getName() + " compound constraint variable " 
-                                + StringProvider.toIvmlString(defaultValue));
-                        }                    
-                    } catch (CSTSemanticException e) {
-                        LOGGER.exception(e);
-                    }
-                }*/
-            } else if (Container.isContainer(nestedType, ConstraintType.TYPE)  // THIS IS JUST PRELIMINARY - QM
+            }
+            resolveDefaultValueForDeclaration(nestedDecl, cmpVar.getNestedVariable(nestedDecl.getName()),
+                cmpAccess);
+        }
+        // required strategy: resolve compound accesses first in loop before, then constraints using them
+        // TODO check whether createConstraint shall move into next loop
+        for (int i = 0, n = cmpVar.getNestedElementsCount(); i < n; i++) {
+            IDecisionVariable nestedVariable = cmpVar.getNestedElement(i);
+            AbstractVariable nestedDecl = nestedVariable.getDeclaration();
+            IDatatype nestedType = nestedDecl.getType();
+            if (Container.isContainer(nestedType, ConstraintType.TYPE)  // THIS IS JUST PRELIMINARY - QM
                 && nestedVariable.getValue() instanceof ContainerValue) {
                 checkContainerValue((ContainerValue) nestedVariable.getValue(), decl, nestedDecl, 
                     nestedVariable, variable);
             }
-            resolveDefaultValueForDeclaration(nestedDecl, cmpVar.getNestedVariable(nestedDecl.getName()),
-                cmpAccess);
         }
         // Nested attribute assignments handling
         for (int x = 0; x < cmpType.getAssignmentCount(); x++) {
@@ -595,7 +587,7 @@ public class Resolver {
             ConstraintSyntaxTree oneConstraint = thisCompoundConstraints.get(i).getConsSyntax();
             oneConstraint = copyVisitor(oneConstraint, null);
             try {
-                Constraint constraint = new Constraint(oneConstraint, project);
+                Constraint constraint = new Constraint(oneConstraint, decl);
                 compoundConstraints.add(constraint);            
             } catch (CSTSemanticException e) {
                 LOGGER.exception(e);
