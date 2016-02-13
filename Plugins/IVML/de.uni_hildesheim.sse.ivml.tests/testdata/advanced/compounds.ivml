@@ -1,0 +1,25 @@
+project compoundOverlapping {
+
+    version v0;
+    compound T1 {
+        String name;
+    }
+
+    compound T2 {
+        String name;
+    }
+
+    compound base {
+    }
+
+    compound ref1 refines base {
+        setOf(refTo(T1)) available;
+        refTo(T1) actual = first(asSequence(available));
+    }
+
+    compound ref2 refines base {
+        setOf(refTo(T2)) available;
+        refTo(T2) actual = first(asSequence(available));
+    }
+
+}
