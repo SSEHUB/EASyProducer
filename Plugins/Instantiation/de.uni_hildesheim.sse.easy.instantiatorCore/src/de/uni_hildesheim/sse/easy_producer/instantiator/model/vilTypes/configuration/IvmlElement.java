@@ -120,6 +120,16 @@ public abstract class IvmlElement implements IVilType, IResolvable, IStringValue
     }
 
     /**
+     * Returns whether this element is valid.
+     * 
+     * @return the valid flag or <b>null</b> if this element cannot be tested
+     * @see ValidVariables#getValidFlag(AbstractIvmlVariable)
+     */
+    public Boolean isValid() {
+        return Boolean.TRUE;
+    }
+
+    /**
      * Returns whether the {@link #getValue() value} of this element is null (in the semantics
      * of IVML). This does not mean undefined!
      * 

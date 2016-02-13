@@ -1,0 +1,4 @@
+-> main(Configuration, FileArtifact) with (<config>, test.texts)
+    cfg <- <config>
+    -> isValid(DecisionVariable) with (adviceTestVM1::intVal) = true
+    -> isValid(DecisionVariable) with (adviceTestVM1::c1) = true

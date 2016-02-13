@@ -856,6 +856,16 @@ public class ExecutionTests extends AbstractTest {
     }
     
     /**
+     * Tests the basic implementation of isValid.
+     * 
+     * @throws IOException should not occur
+     */
+    @Test
+    public void testIsValid() throws IOException {
+        assertEqualWithIvml("isValid", "adviceTestVM1");
+    }
+    
+    /**
      * Tests an advice with types taken over from the variability model, here dynamic dispatch.
      * 
      * @throws IOException should not occur

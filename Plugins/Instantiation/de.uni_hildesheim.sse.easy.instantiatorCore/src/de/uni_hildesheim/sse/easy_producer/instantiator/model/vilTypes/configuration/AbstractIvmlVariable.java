@@ -375,6 +375,11 @@ public abstract class AbstractIvmlVariable extends IvmlElement {
     public boolean isConfigured() {
         return AssignmentState.UNDEFINED != origVariable.getState() && null != origVariable.getValue();
     }
+
+    @Override
+    public Boolean isValid() {
+        return ValidVariables.getValidFlag(this, Boolean.TRUE);
+    }
     
     /**
      * Returns whether this element is frozen.
