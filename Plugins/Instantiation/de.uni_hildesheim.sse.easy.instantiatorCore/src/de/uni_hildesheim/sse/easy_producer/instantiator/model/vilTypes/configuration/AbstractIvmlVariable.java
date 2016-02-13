@@ -396,7 +396,7 @@ public abstract class AbstractIvmlVariable extends IvmlElement {
         if (!isFrozen()) {
             IDecisionVariable toChange = variable;
             // if I'm a reference, I expect a variable declaration
-            boolean refVar = Reference.TYPE.isAssignableFrom(variable.getDeclaration().getType());
+            boolean refVar = Reference.TYPE.isAssignableFrom(origVariable.getDeclaration().getType());
             if (value instanceof AbstractIvmlVariable && refVar) {
                 IDecisionVariable newVar = ((AbstractIvmlVariable) value).variable; 
                 toChange = null;
@@ -431,7 +431,7 @@ public abstract class AbstractIvmlVariable extends IvmlElement {
         if (null == value) { // VIL null / undefined is handled while evaluating the field value expression
             value = NullValue.INSTANCE;
         }
-        IDatatype varType = variable.getDeclaration().getType();
+        IDatatype varType = toChange.getDeclaration().getType();
         if (TypeQueries.sameTypes(IntegerType.TYPE, varType) && value instanceof Double) {
             value = ((Double) value).intValue();
         }
@@ -453,9 +453,11 @@ public abstract class AbstractIvmlVariable extends IvmlElement {
             toChange.setValue(val, varState);
             parent.notifyValueChanged(this, oldValue);
         } catch (ConfigurationException e) {
-            EASyLoggerFactory.INSTANCE.getLogger(getClass(), Bundle.ID).error(e.getMessage());
+            EASyLoggerFactory.INSTANCE.getLogger(getClass(), Bundle.ID).error("while changing " + getName()
+                + " with value " + value + ": " + e.getMessage());
         } catch (ValueDoesNotMatchTypeException e) {
-            EASyLoggerFactory.INSTANCE.getLogger(getClass(), Bundle.ID).error(e.getMessage());
+            EASyLoggerFactory.INSTANCE.getLogger(getClass(), Bundle.ID).error("while changing " + getName()
+                + " with value " + value + ": " + e.getMessage());
         }
     }
     
