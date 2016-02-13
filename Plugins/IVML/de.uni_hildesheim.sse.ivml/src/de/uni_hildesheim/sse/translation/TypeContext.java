@@ -134,6 +134,49 @@ public class TypeContext implements IResolutionScope {
         }
         directContext.push(new ContainableModelElementList(parent));
     }
+    
+    /**
+     * Pushes the enclosing parents of <code>decVar</code>.
+     * 
+     * @param decVar the variable to push
+     * @return the number of layers pushed
+     */
+    public int pushParent(DecisionVariableDeclaration decVar) {
+        return pushParentRec(decVar);
+    }
+
+    /**
+     * Pushes the enclosing parents of <code>elt</code> in a recursive manner.
+     * 
+     * @param elt the element to push the parents for
+     * @return the number of layers pushed
+     */
+    private int pushParentRec(IModelElement elt) {
+        int result = 0;
+        if (null != elt) {
+            if (!(elt instanceof Project)) {
+                result = pushParentRec(elt.getParent());
+                if (elt instanceof Compound) {
+                    pushLayer(elt);
+                    addToContext((Compound) elt);
+                    result++;
+                }
+            } 
+        }
+        return result;
+    }
+    
+    /**
+     * Pops <code>count</code> layers.
+     * 
+     * @param count the amount of layers to pop
+     * @see #pushParent(DecisionVariableDeclaration)
+     */
+    public void popLayer(int count) {
+        for (int i = 1; i <= count; i++) {
+            popLayer();
+        }
+    }
 
     /**
      * Pop a resolution layer in case that intermediary variables shell be considered, e.g.

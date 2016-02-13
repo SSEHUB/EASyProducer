@@ -391,14 +391,14 @@ public class ModelTranslator extends de.uni_hildesheim.sse.dslCore.translation.M
             DecisionVariableDeclaration decVar = entry.getValue();
             VariableDeclarationPart part = entry.getKey();
             try {
+                int layers = context.pushParent(decVar);
                 expressionTranslator.initLevel();
                 ConstraintSyntaxTree dfltExpr = expressionTranslator.processExpression(decVar.getType(), 
                     part.getDefault(), context, decVar.getParent());
                 IDatatype dfltExprType = dfltExpr.inferDatatype();
                 String rhsError = null;
                 if (Reference.TYPE.isAssignableFrom(decVar.getType()) && AnyType.TYPE == dfltExprType 
-                    && !ConstantValue.isNull(dfltExpr)) { 
-                    // some kind of compound may be used
+                    && !ConstantValue.isNull(dfltExpr)) { // some kind of compound may be used
                     rhsError = "";
                 }
                 if (null != rhsError || !decVar.getType().isAssignableFrom(dfltExprType)) {
@@ -415,6 +415,7 @@ public class ModelTranslator extends de.uni_hildesheim.sse.dslCore.translation.M
                     expressionTranslator.errorAboutTopLevelWarning(part, 
                         IvmlPackage.Literals.VARIABLE_DECLARATION_PART__DEFAULT);
                 }
+                context.popLayer(layers);
             } catch (IvmlException e) {
                 error(e, part, IvmlPackage.Literals.VARIABLE_DECLARATION_PART__DEFAULT);
             } catch (TranslatorException e) {
