@@ -1,0 +1,7 @@
+project setOfConstraintsInCompoundWithDefaultValue {
+
+	version v0;
+	
+	setOf(Constraint) constraints = {false};
+		
+}

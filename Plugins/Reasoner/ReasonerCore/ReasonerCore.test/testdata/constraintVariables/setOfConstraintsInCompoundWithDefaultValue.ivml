@@ -1,0 +1,11 @@
+project setOfConstraintsInCompoundWithDefaultValue {
+
+	version v0;
+	
+	compound Test {
+		setOf(Constraint) constraints = {false};
+	}
+	
+	Test test;	
+	
+}

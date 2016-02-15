@@ -1,0 +1,9 @@
+project setOfConstraintsWithEmptyDefaultValue {
+
+	version v0;
+	
+	setOf(Constraint) constraints = {};
+	
+	constraints = {false};
+	
+}

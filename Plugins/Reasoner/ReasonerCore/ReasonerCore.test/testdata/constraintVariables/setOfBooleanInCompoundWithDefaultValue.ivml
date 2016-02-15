@@ -1,0 +1,11 @@
+project setOfBooleanInCompoundWithDefaultValue {
+
+	version v0;
+	
+	compound Test {
+		setOf(Boolean) booleans = {false};
+	}
+	
+	Test test;	
+	
+}

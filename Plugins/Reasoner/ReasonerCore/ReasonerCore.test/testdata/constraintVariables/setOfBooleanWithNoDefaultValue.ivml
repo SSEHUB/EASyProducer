@@ -1,0 +1,9 @@
+project setOfBooleanInCompoundWithNoDefaultValue {
+
+	version v0;
+	
+	setOf(Boolean) booleans;
+	
+	booleans = {false};
+	
+}
