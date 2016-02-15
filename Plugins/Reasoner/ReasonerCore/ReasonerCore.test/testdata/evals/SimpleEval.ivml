@@ -1,0 +1,13 @@
+project SimpleEval {
+
+	version v0;
+	
+	Integer a;
+    
+    a = 2;
+    
+    eval {
+        a = 0;
+    }   
+    
+}

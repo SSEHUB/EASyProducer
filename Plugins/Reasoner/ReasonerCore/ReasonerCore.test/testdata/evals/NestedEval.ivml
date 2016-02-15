@@ -1,0 +1,16 @@
+project NestedEval {
+
+	version v0;
+	
+	Integer a;
+    
+    a = 2;
+    
+    eval {
+        a = 0;
+        eval {
+            a = -5;
+        }
+    }   
+    
+}
