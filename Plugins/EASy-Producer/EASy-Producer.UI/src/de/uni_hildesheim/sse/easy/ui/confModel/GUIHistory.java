@@ -10,6 +10,7 @@ import de.uni_hildesheim.sse.model.varModel.datatypes.Compound;
 import de.uni_hildesheim.sse.model.varModel.datatypes.Container;
 import de.uni_hildesheim.sse.model.varModel.values.CompoundValue;
 import de.uni_hildesheim.sse.model.varModel.values.ContainerValue;
+import de.uni_hildesheim.sse.model.varModel.values.NullValue;
 import de.uni_hildesheim.sse.utils.logger.EASyLoggerFactory;
 import de.uni_hildesheim.sse.utils.logger.EASyLoggerFactory.EASyLogger;
 
@@ -39,7 +40,9 @@ public class GUIHistory {
      */
     void assignValue(IDecisionVariable variable) {
         GUIHistoryItem item = null;
-        if (variable.getDeclaration().getType() instanceof Container) {
+        if (variable.getValue() instanceof NullValue) {
+            item = new GUIHistoryItem(NullValue.INSTANCE, variable.getState(), variable, System.currentTimeMillis());
+        } else if (variable.getDeclaration().getType() instanceof Container) {
             ContainerValue copiedValue = null;
             if (variable.getValue() != null) {
                 copiedValue = (ContainerValue) variable.getValue().clone();
@@ -48,14 +51,11 @@ public class GUIHistory {
         } else if (variable.getDeclaration().getType().isAssignableFrom(Compound.TYPE)) {
             CompoundValue copiedValue = (CompoundValue) variable.getValue().clone();
             item = new GUIHistoryItem(copiedValue, variable.getState(), variable, System.currentTimeMillis());
-       
+            
             for (int i = 0; i < variable.getNestedElementsCount(); i++) {
                 IDecisionVariable nested = variable.getNestedElement(i);
                 LOGGER.debug(nested + "; " + nested.getState());
             }
-        
-        
-        
         } else {
             item = new GUIHistoryItem(variable.getValue(), variable.getState(), variable, System.currentTimeMillis());
         }
