@@ -52,8 +52,11 @@ import de.uni_hildesheim.sse.model.varModel.datatypes.Set;
 public class ConstraintFinder implements IModelVisitor {
     
     private List<Constraint> constraints;
+    private List<Constraint> evalConstraints;
     private boolean considerImports;
     private boolean excludeAssignments;
+    private boolean isEvalConstraint;
+    private boolean handleEvals;
     private List<AttributeAssignment> allAttributes;
     
     /**
@@ -72,7 +75,7 @@ public class ConstraintFinder implements IModelVisitor {
     public ConstraintFinder(Project project, boolean considerImports) {
         this(project, considerImports, false);
     }
-
+    
     /**
      * Constructor for specifying whether imported projects should be considered while finding the constraints.
      * @param project The project, where all constraints should be found.
@@ -80,19 +83,41 @@ public class ConstraintFinder implements IModelVisitor {
      * @param excludeAssignments whether top-level assignments shall be excluded
      */
     public ConstraintFinder(Project project, boolean considerImports, boolean excludeAssignments) {
+        this(project, considerImports, false, false);
+    }
+
+    /**
+     * Constructor for specifying whether imported projects should be considered while finding the constraints.
+     * @param project The project, where all constraints should be found.
+     * @param considerImports <tt>true</tt> if constraints of imported projects should also be found
+     * @param excludeAssignments whether top-level assignments shall be excluded
+     * @param handleEvals whether eval constraints should be separated from all constraints.
+     */
+    public ConstraintFinder(Project project, boolean considerImports, boolean excludeAssignments, boolean handleEvals) {
         constraints = new ArrayList<Constraint>();
+        evalConstraints = new ArrayList<Constraint>();
         this.considerImports = considerImports;
         this.excludeAssignments = excludeAssignments;
         this.allAttributes = new ArrayList<AttributeAssignment>();
+        this.handleEvals = handleEvals;
+        isEvalConstraint = false;
         project.accept(this);
     }
 
     /**
-     * Getter for returning all constraints of an ivml project.
+     * Getter for returning all constraints (except eval) of an ivml project.
      * @return A list of all constraints in the specified ivml project.
      */
     public List<Constraint> getConstraints() {
         return constraints;
+    }
+    
+    /**
+     * Getter for returning eval constraints of an ivml project.
+     * @return A list of eval constraints in the specified ivml project.
+     */
+    public List<Constraint> getEvalConstraints() {
+        return evalConstraints;
     }
     
     /**
@@ -198,7 +223,11 @@ public class ConstraintFinder implements IModelVisitor {
                 }
             }
             if (add) {
-                constraints.add(constraint);
+                if (isEvalConstraint && handleEvals) {
+                    evalConstraints.add(constraint);                    
+                } else {
+                    constraints.add(constraint);                    
+                }
             }            
         }
     }
@@ -215,9 +244,11 @@ public class ConstraintFinder implements IModelVisitor {
 
     @Override
     public void visitPartialEvaluationBlock(PartialEvaluationBlock block) {
+        isEvalConstraint = true;
         for (int i = 0; i < block.getEvaluableCount(); i++) {
             block.getEvaluable(i).accept(this);
-        }       
+        }
+        isEvalConstraint = false;
     }
 
     @Override
