@@ -1,0 +1,10 @@
+project booleanDefaultFalseInCompound {
+
+	version v0;
+	
+	compound C {
+	   Boolean b = false;
+	}
+	
+	C cmp;	
+}

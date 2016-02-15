@@ -1,0 +1,11 @@
+project booleanAssignedFalseInCompound {
+
+	version v0;
+	
+	compound C {
+	   Boolean b;
+	}
+	
+	C cmp;
+	cmp.b = false;
+}
