@@ -1,6 +1,6 @@
 import enact;
 
-rtVilScript fail1 (Project source, Configuration config, Project target) {
+rtVilScript fail2 (Project source, Configuration config, Project target) {
 
     strategy main(Project source, Configuration config, Project target) = {
         objective true;
