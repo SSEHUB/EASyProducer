@@ -456,26 +456,7 @@ public class Executor {
             Object result = script.accept(executor);
             if (result instanceof RuleExecutionResult) {
                 RuleExecutionResult rExecResult = (RuleExecutionResult) result;
-                if (RuleExecutionResult.Status.FAIL == rExecResult.getStatus()) {
-                    StringBuilder tmp = new StringBuilder("build execution failed");
-                    if (executor.getFailedCount() > 0) {
-                        tmp.append(" in rule");
-                        if (executor.getFailedCount() > 1) {
-                            tmp.append("s");
-                        }
-                        tmp.append(" ");
-                        for (int f = 0; f < executor.getFailedCount(); f++) {
-                            if (f > 0) {
-                                tmp.append(", ");
-                            }
-                            tmp.append(executor.getFailed(f).getName());
-                        }
-                    }
-                    VilException e = new VilException(tmp.toString(), 
-                        VilException.ID_RUNTIME_RULE_FAILED);
-                    tracer.traceExecutionException(e);
-                    throw e;
-                }
+                handleExecutionResult(rExecResult, tracer, executor);
             }
             Project.clearProjectDescriptorCache();
             executor.release(true);
@@ -484,6 +465,53 @@ public class Executor {
             throw e;
         }
         tracer.reset();
+    }
+    
+    /**
+     * Handles an execution result returned from <code>executor</code>.
+     * 
+     * @param result the execution result
+     * @param tracer the actual tracer instance
+     * @param executor the executor, which emitted the execution result
+     * @throws VilException can be thrown to indicate in a hard way that artifact operations or script execution failed
+     * @see #completeExecutionError(StringBuilder)
+     */
+    protected void handleExecutionResult(RuleExecutionResult result, ITracer tracer, BuildlangExecution executor) 
+        throws VilException {
+        if (RuleExecutionResult.Status.FAIL == result.getStatus()) {
+            StringBuilder tmp = new StringBuilder("build execution failed");
+            if (executor.getFailedCount() > 0) {
+                tmp.append(" in rule");
+                if (executor.getFailedCount() > 1) {
+                    tmp.append("s");
+                }
+                tmp.append(" ");
+                for (int f = 0; f < executor.getFailedCount(); f++) {
+                    if (f > 0) {
+                        tmp.append(", ");
+                    }
+                    tmp.append(executor.getFailed(f).getName());
+                }
+            }
+            completeExecutionError(tmp, result);
+            if (tmp.length() > 0) {
+                VilException e = new VilException(tmp.toString(), 
+                    VilException.ID_RUNTIME_RULE_FAILED);
+                tracer.traceExecutionException(e);
+                throw e;
+            }
+        }
+    }
+
+    /**
+     * Completes the execution error. May also completely clear the execution message
+     * to avoid causing a {@link VilException} in 
+     * {@link #handleExecutionResult(RuleExecutionResult, ITracer, BuildlangExecution)}.
+     * 
+     * @param msg the message (buffer)
+     * @param result the final rule execution result
+     */
+    protected void completeExecutionError(StringBuilder msg, RuleExecutionResult result) {
     }
     
     /**

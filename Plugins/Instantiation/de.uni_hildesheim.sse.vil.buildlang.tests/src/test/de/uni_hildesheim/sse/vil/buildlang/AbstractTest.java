@@ -19,6 +19,7 @@ import de.uni_hildesheim.sse.dslCore.translation.Message;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.BuiltIn;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.artifactModel.PathUtils;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.BuildlangExecution;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.RuleExecutionResult;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.Script;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilException;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.execution.Executor;
@@ -229,6 +230,7 @@ public abstract class AbstractTest<M extends Script> extends de.uni_hildesheim.s
      * @throws IOException problems finding or reading the model file
      */
     protected void assertEqual(EqualitySetup data, Cleaner cleaner, int... expectedErrorCodes) throws IOException {
+        BuildlangExecution exec;
         File file = data.getFile();
         if (file.exists()) {
             URI uri = URI.createFileURI(file.getAbsolutePath());
@@ -259,10 +261,9 @@ public abstract class AbstractTest<M extends Script> extends de.uni_hildesheim.s
                     Script script = result.getResult(0);
                     TracerFactory oldFactory = TracerFactory.getInstance();
                     TracerFactory.setInstance(configurer.createTestTracerFactory(trace, getBaseFolders(data)));
-                    BuildlangExecution exec = configurer.createExecutionEnvironment(
-                        TracerFactory.createBuildLanguageTracer(), getTestDataDir(), data.getStartElement(), 
-                        data.getParameter());
-                    script.accept(exec);
+                    exec = configurer.createExecutionEnvironment(TracerFactory.createBuildLanguageTracer(), 
+                        getTestDataDir(), data.getStartElement(), data.getParameter());
+                    assertFailure(data, script.accept(exec));
                     exec.release(true);
                     TracerFactory.setInstance(oldFactory);
                     String errorMsg = checkEqualsAndPrepareMessage(fileAsString, trace);
@@ -386,6 +387,26 @@ public abstract class AbstractTest<M extends Script> extends de.uni_hildesheim.s
         } catch (IllegalArgumentException e) {
             if (inputPresent) {
                 Assert.fail("unexpected exception: " + e.getMessage());
+            }
+        }
+    }
+    
+    /**
+     * Asserts explicit failures if requested by <code>data</code>.
+     * 
+     * @param data the test setup
+     * @param result the execution result
+     */
+    private static void assertFailure(EqualitySetup data, Object result) {
+        if (null != data.getExpectedFailCode() || null != data.getExpectedFailReason()) {
+            Assert.assertNotNull("explicit failure expected but no execution result", result);
+            Assert.assertTrue("expected instanceof of RuleExecutionResult", result instanceof RuleExecutionResult);
+            RuleExecutionResult rResult = (RuleExecutionResult) result;
+            if (null != data.getExpectedFailCode()) {
+                Assert.assertEquals(data.getExpectedFailCode(), rResult.getFailCode());
+            }
+            if (null != data.getExpectedFailReason()) {
+                Assert.assertEquals(data.getExpectedFailReason(), rResult.getFailReason());
             }
         }
     }

@@ -1134,6 +1134,14 @@ public class RtVilExecution extends BuildlangExecution implements IRtVilVisitor 
                     context.setFailCode((Integer) value);
                 }
             }
+            String msg = "explicit fail";
+            if (null != context.getFailReason()) {
+                msg += " message \"" + context.getFailReason() + "\"";
+            }
+            if (null != context.getFailCode()) {
+                msg += " with code " + context.getFailCode();
+            }
+            getTracer().trace(msg);
         }
     }
     

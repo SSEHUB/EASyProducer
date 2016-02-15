@@ -1,4 +1,5 @@
 -> main(Project, Configuration, Project) with (<project>, <config>, <project>)
     -> t()
+        explicit fail message "unknown"
     -> t1()
     -> enact(Project, Configuration, Project) with (<project>, <config>, <project>)

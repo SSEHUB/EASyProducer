@@ -18,7 +18,10 @@ package de.uni_hildesheim.sse.easy_producer.instantiator.model.rtVil;
 import java.io.File;
 import java.util.Map;
 
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.BuildlangExecution;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.ITracer;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.RuleExecutionResult;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilException;
 
 /**
  * A specialized executor for rt-VIL.
@@ -31,6 +34,8 @@ public class Executor extends de.uni_hildesheim.sse.easy_producer.instantiator.m
     private boolean enactment = true;
     private boolean useReasoner = true;
     private IReasoningHook reasoningHook = null;
+    private String failReason;
+    private Integer failCode;
     
     /**
      * Creates an executor with default arguments.
@@ -116,6 +121,49 @@ public class Executor extends de.uni_hildesheim.sse.easy_producer.instantiator.m
         result.setEnableEnactment(enactment);
         result.setReasoningHook(reasoningHook); // null is not a problem here
         return result;
+    }
+    
+    @Override
+    protected void handleExecutionResult(RuleExecutionResult result, ITracer tracer, BuildlangExecution executor) 
+        throws VilException {
+        if (RuleExecutionResult.Status.FAIL == result.getStatus()) {
+            failCode = result.getFailCode();
+            failReason = result.getFailReason();
+        }
+        super.handleExecutionResult(result, tracer, executor);
+    }
+
+    @Override
+    protected void completeExecutionError(StringBuilder msg, RuleExecutionResult result) {
+        if (null != failReason || null != failCode) { // already set in handleExecutionResult
+            msg.append("due to explicit fail statement");
+            if (null != failReason) {
+                msg.append(" ");
+                msg.append(failReason);
+            }
+            if (null != failCode) {
+                msg.append(" with code ");
+                msg.append(failCode);
+            }
+        }
+    }
+    
+    /**
+     * Returns the fail reason (if the execution failed).
+     * 
+     * @return the reason or <b>null</b> if unknown, not set or not failing
+     */
+    public String getFailReason() {
+        return failReason;
+    }
+    
+    /**
+     * The failure code.
+     * 
+     * @return the failure code (may be <b>null</b> if not set)
+     */
+    public Integer getFailCode() {
+        return failCode;
     }
     
 }

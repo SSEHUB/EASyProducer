@@ -67,6 +67,8 @@ public class RuleExecutionResult implements IVilType {
     private Status status;
     private List<IArtifact> result;
     private List<IArtifact> allResults;
+    private String failReason;
+    private Integer failCode;
 
     /**
      * Creates a new rule execution result.
@@ -78,6 +80,8 @@ public class RuleExecutionResult implements IVilType {
         this.status = status;
         this.result = transfer(context.resultAsCollection());
         this.allResults = transfer(context.allResultsAsCollection());
+        this.failReason = context.getFailReason();
+        this.failCode = context.getFailCode();
     }
     
     /**
@@ -163,4 +167,22 @@ public class RuleExecutionResult implements IVilType {
         status = Status.FAIL;
     }
     
+    /**
+     * Returns the fail reason (if the execution failed).
+     * 
+     * @return the reason or <b>null</b> if unknown, not set or not failing
+     */
+    public String getFailReason() {
+        return failReason;
+    }
+    
+    /**
+     * The failure code.
+     * 
+     * @return the failure code (may be <b>null</b> if not set)
+     */
+    public Integer getFailCode() {
+        return failCode;
+    }
+
 }

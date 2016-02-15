@@ -1,0 +1,3 @@
+-> main(Project, Configuration, Project) with (<project>, <config>, <project>)
+    -> t1()
+    explicit fail message "unknown" with code 127

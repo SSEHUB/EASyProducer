@@ -465,6 +465,8 @@ public abstract class AbstractTest<R extends IModel> {
         private Map<String, Object> parameter;
         private File expectedOutputFile;
         private boolean enableEquals = true;
+        private Integer expectedFailCode;
+        private String expectedFailReason;
 
         /**
          * Creates an instance with no trace output and empty parameters.
@@ -610,6 +612,42 @@ public abstract class AbstractTest<R extends IModel> {
          */
         public void setEnableEquals(boolean enableEquals) {
             this.enableEquals = enableEquals;
+        }
+        
+        /**
+         * Sets an optional reason for expected execution failure.
+         * 
+         * @param failReason the reason for failing (may be <b>null</b> for none)
+         */
+        public void setExpectedFailReason(String failReason) {
+            this.expectedFailReason = failReason;
+        }
+        
+        /**
+         * Returns the expected fail reason (if the execution failed).
+         * 
+         * @return the reason or <b>null</b> if unknown, not set or not failing
+         */
+        public String getExpectedFailReason() {
+            return expectedFailReason;
+        }
+        
+        /**
+         * Defines an optional expected failure code.
+         * 
+         * @param failCode the failure code
+         */
+        public void setExpectedFailCode(Integer failCode) {
+            this.expectedFailCode = failCode;
+        }
+        
+        /**
+         * The expected failure code.
+         * 
+         * @return the failure code (may be <b>null</b> if not set)
+         */
+        public Integer getExpectedFailCode() {
+            return expectedFailCode;
         }
         
     }

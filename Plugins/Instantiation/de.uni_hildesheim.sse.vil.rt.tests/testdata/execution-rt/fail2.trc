@@ -1,5 +1,6 @@
 -> main(Project, Configuration, Project) with (<project>, <config>, <project>)
     -> t1()
+    explicit fail
 -> alternative(Project, Configuration, Project) with (<project>, <config>, <project>)
     -> t1()
     -> enact(Project, Configuration, Project) with (<project>, <config>, <project>)
