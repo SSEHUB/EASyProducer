@@ -106,6 +106,7 @@ public class Resolver {
     private List<Constraint> collectionConstraints;
     private List<Constraint> defaultConstraints;
     private List<Constraint> internalConstraints;
+    private List<Constraint> evalConstraints;
     private boolean considerFrozenConstraints;
     
     private int constraintBaseSize = 0;
@@ -141,18 +142,18 @@ public class Resolver {
             if (varConstraints != null) {
                 if (!varConstraints.isEmpty() && lastAdded != varConstraints) {
 //                    System.out.println("Add");
-//                    lastAdded = new HashSet<Constraint>();
+                    lastAdded = new HashSet<Constraint>();
                     for (Constraint varConstraint : varConstraints) {
-//                        int lastIndexOfConstraint = constraintBase.lastIndexOf(varConstraint);
+                        int lastIndexOfConstraint = constraintBase.lastIndexOf(varConstraint);
 //                        System.out.println("lastIndexOfConstraint: " + lastIndexOfConstraint);
 //                        System.out.println("reevaluationCounter: " + reevaluationCounter);
 //                        System.out.println("constraintBaseSize: " + constraintBaseSize);
-//                        if (!(lastIndexOfConstraint >= reevaluationCounter) 
-//                            && (lastIndexOfConstraint < constraintBaseSize)) {
-//                            lastAdded.add(varConstraint);
-//                            }
-                        constraintBase.add(varConstraint);
-                        constraintBaseSize++;                        
+                        if (!(lastIndexOfConstraint >= reevaluationCounter) 
+                            && (lastIndexOfConstraint < constraintBaseSize)) {
+                            lastAdded.add(varConstraint);
+                            constraintBase.add(varConstraint);
+                            constraintBaseSize++;                        
+                            }
 //                        System.out.println("Constraints added to current list: " 
 //                            + StringProvider.toIvmlString(varConstraint.getConsSyntax()));
                         if (Descriptor.LOGGING) {
@@ -160,7 +161,7 @@ public class Resolver {
                                 + StringProvider.toIvmlString(varConstraint.getConsSyntax())); 
                         }
                     }
-                    lastAdded = varConstraints;
+//                    lastAdded = varConstraints;
 //                    System.out.println("---");
                 }
             }
@@ -222,6 +223,7 @@ public class Resolver {
         this.incremental = false;
         this.problemVariables = new HashSet<IDecisionVariable>();
         this.internalConstraints = new ArrayList<Constraint>();
+        this.evalConstraints = new ArrayList<Constraint>();
         this.considerFrozenConstraints = considerFrozenConstraints;
     } 
     
@@ -898,7 +900,8 @@ public class Resolver {
             internalConstraints = transformConstraints(internalConstraints, false);
             addAllConstraints(scopeConstraints, internalConstraints);
         }
-        ConstraintFinder finder = new ConstraintFinder(project, false);
+        ConstraintFinder finder = new ConstraintFinder(project, false, false, true);
+        addAllConstraints(scopeConstraints, finder.getEvalConstraints());
         addAllConstraints(scopeConstraints, finder.getConstraints());
         if (!incremental) {
             List<AttributeAssignment> scopeAttributes = new ArrayList<AttributeAssignment>();
