@@ -215,6 +215,7 @@ public class ReflectionOperationDescriptor extends OperationDescriptor implement
                 result = null; // cannot evaluate
             } else {
                 try {
+                    // convertVariables(callArgs); // ???
                     result = method.invoke(object, callArgs);
                     if (null == result && Void.TYPE == method.getReturnType()) {
                         result = NullValue.VALUE; // void methods otherwise cause failing of the calling rule / template

@@ -9,6 +9,7 @@ import java.util.List;
 
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilException;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.ExpressionEvaluator;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.configuration.AbstractIvmlVariable;
 
 /**
  * Represents an individual operation available to the VIL languages. Please
@@ -616,6 +617,20 @@ public abstract class OperationDescriptor implements IMetaOperation {
      */
     protected String composeExceptionMessage(Throwable ex, Object[] args) {
         return ex.getMessage() + " calling " + getSignature() + " with " + Arrays.toString(args);
+    }
+    
+    /**
+     * Converts variables to objects, e.g., for reflection calls.
+     * 
+     * @param params the parameters (may be changed as a side effect)
+     */
+    protected void convertVariables(Object[] params) {
+        final TypeDescriptor<?> any = TypeRegistry.anyType();
+        for (int p = 0, n = Math.min(getParameterCount(), params.length); p < n; p++) {
+            if (any == getParameterType(p) && (params[p] instanceof AbstractIvmlVariable)) {
+                params[p] = ((AbstractIvmlVariable) params[p]).getValue();
+            }
+        }
     }
 
 }

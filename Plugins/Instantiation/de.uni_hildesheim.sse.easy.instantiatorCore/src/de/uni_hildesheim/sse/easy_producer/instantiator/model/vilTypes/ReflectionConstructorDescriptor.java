@@ -134,6 +134,7 @@ public class ReflectionConstructorDescriptor extends OperationDescriptor impleme
     @Override
     public Object invoke(Object... args) throws VilException {
         try {
+            convertVariables(args);
             return constructor.newInstance(args);
         } catch (InstantiationException e) {
             throw new VilException(composeExceptionMessage(e, args), VilException.ID_RUNTIME);
