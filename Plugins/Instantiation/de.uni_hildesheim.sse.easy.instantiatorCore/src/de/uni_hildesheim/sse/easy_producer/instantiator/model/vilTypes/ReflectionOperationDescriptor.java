@@ -220,14 +220,14 @@ public class ReflectionOperationDescriptor extends OperationDescriptor implement
                         result = NullValue.VALUE; // void methods otherwise cause failing of the calling rule / template
                     }
                 } catch (IllegalArgumentException e) {
-                    throw new VilException(e, VilException.ID_TYPE_INCOMPATIBILITY);
+                    throw new VilException(composeExceptionMessage(e, args), VilException.ID_TYPE_INCOMPATIBILITY);
                 } catch (IllegalAccessException e) {
-                    throw new VilException(e, VilException.ID_SECURITY_ERROR);
+                    throw new VilException(composeExceptionMessage(e, args), VilException.ID_SECURITY_ERROR);
                 } catch (InvocationTargetException e) {
                     if (e.getCause() instanceof NullPointerException) {
                         result = null; // fail-termination-semantics
                     } else {
-                        throw new VilException("while executing " + getSignature() + ": " + e.getCause().getMessage(), 
+                        throw new VilException(composeExceptionMessage(e.getCause(), args), 
                             VilException.ID_EXECUTION_ERROR);
                     }
                 }

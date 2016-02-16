@@ -3,6 +3,7 @@ package de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -604,6 +605,17 @@ public abstract class OperationDescriptor implements IMetaOperation {
      */
     public boolean allowsAggregation() {
         return false;
+    }
+
+    /**
+     * Composes an execution exception message from a given (Java) exception.
+     * 
+     * @param ex the original exception
+     * @param args the call arguments
+     * @return the execution message
+     */
+    protected String composeExceptionMessage(Throwable ex, Object[] args) {
+        return ex.getMessage() + " calling " + getSignature() + " with " + Arrays.toString(args);
     }
 
 }

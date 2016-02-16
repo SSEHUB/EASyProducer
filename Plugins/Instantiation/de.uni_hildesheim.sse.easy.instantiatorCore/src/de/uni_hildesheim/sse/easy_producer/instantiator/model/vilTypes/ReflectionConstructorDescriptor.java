@@ -136,13 +136,13 @@ public class ReflectionConstructorDescriptor extends OperationDescriptor impleme
         try {
             return constructor.newInstance(args);
         } catch (InstantiationException e) {
-            throw new VilException(e, VilException.ID_RUNTIME);
+            throw new VilException(composeExceptionMessage(e, args), VilException.ID_RUNTIME);
         } catch (IllegalAccessException e) {
-            throw new VilException(e, VilException.ID_RUNTIME);
+            throw new VilException(composeExceptionMessage(e, args), VilException.ID_RUNTIME);
         } catch (IllegalArgumentException e) {
-            throw new VilException(e, VilException.ID_RUNTIME);
+            throw new VilException(composeExceptionMessage(e, args), VilException.ID_RUNTIME);
         } catch (InvocationTargetException e) {
-            throw new VilException(e, VilException.ID_RUNTIME);
+            throw new VilException(composeExceptionMessage(e, args), VilException.ID_RUNTIME);
         }
     }
 
