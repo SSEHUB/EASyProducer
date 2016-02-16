@@ -753,6 +753,9 @@ public class RtVilExecution extends BuildlangExecution implements IRtVilVisitor 
                             LOGGER.info("strategy '" + call.getResolved().getSignature() + "' failed in breakdown "
                                 + "of '" + strategy.getSignature() + "' due to a timeout of " + timeout);
                         }
+                    } else if (Status.FAIL == callResult.getStatus()) {
+                        context.setFailCode(callResult.getFailCode());
+                        context.setFailReason(callResult.getFailReason());
                     }
                 }
                 if (null == callResult) { // no breakdown rule applicable

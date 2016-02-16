@@ -392,7 +392,22 @@ public class ExecutionRtTests extends AbstractRtTest {
         setup.setExpectedFailReason("unknown");
         assertEqual(setup);
     }
-    
+
+    /**
+     * Tests a finally failing strategy.
+     * 
+     * @throws IOException should not occur
+     */
+    @Test
+    public void testFail4() throws IOException {
+        final String name = "fail4";
+        Map<String, Object> param = createParameterMap(null, null, null);
+        EqualitySetup setup = new EqualitySetup(createFile(name), name, null, createTraceFile(name), param);
+        setup.setExpectedFailCode(127);
+        setup.setExpectedFailReason("unknown");
+        assertEqual(setup);
+    }
+
     /**
      * Tests simple timeout expressions (negative, possible).
      * 
