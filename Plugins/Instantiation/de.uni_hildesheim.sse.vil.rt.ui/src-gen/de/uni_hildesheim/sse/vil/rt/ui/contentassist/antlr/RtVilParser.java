@@ -41,6 +41,7 @@ public class RtVilParser extends AbstractContentAssistParser {
 					put(grammarAccess.getBreakdownElementAccess().getAlternatives(), "rule__BreakdownElement__Alternatives");
 					put(grammarAccess.getBreakdownStatementAccess().getTypeAlternatives_0_0(), "rule__BreakdownStatement__TypeAlternatives_0_0");
 					put(grammarAccess.getRuleElementAccess().getAlternatives(), "rule__RuleElement__Alternatives");
+					put(grammarAccess.getFailStatementAccess().getAlternatives_1(), "rule__FailStatement__Alternatives_1");
 					put(grammarAccess.getScriptContentsAccess().getAlternatives_1(), "rule__ScriptContents__Alternatives_1");
 					put(grammarAccess.getExpressionStatementAccess().getAlternatives(), "rule__ExpressionStatement__Alternatives");
 					put(grammarAccess.getPrimaryExpressionAccess().getAlternatives(), "rule__PrimaryExpression__Alternatives");
@@ -80,6 +81,7 @@ public class RtVilParser extends AbstractContentAssistParser {
 					put(grammarAccess.getRuleElementBlockAccess().getGroup(), "rule__RuleElementBlock__Group__0");
 					put(grammarAccess.getIntentDeclarationAccess().getGroup(), "rule__IntentDeclaration__Group__0");
 					put(grammarAccess.getFailStatementAccess().getGroup(), "rule__FailStatement__Group__0");
+					put(grammarAccess.getFailStatementAccess().getGroup_1_0(), "rule__FailStatement__Group_1_0__0");
 					put(grammarAccess.getRequireAccess().getGroup(), "rule__Require__Group__0");
 					put(grammarAccess.getScriptParentDeclAccess().getGroup(), "rule__ScriptParentDecl__Group__0");
 					put(grammarAccess.getLoadPropertiesAccess().getGroup(), "rule__LoadProperties__Group__0");
@@ -203,8 +205,10 @@ public class RtVilParser extends AbstractContentAssistParser {
 					put(grammarAccess.getRuleElementAccess().getExprStmtAssignment_1(), "rule__RuleElement__ExprStmtAssignment_1");
 					put(grammarAccess.getRuleElementAccess().getFailAssignment_2(), "rule__RuleElement__FailAssignment_2");
 					put(grammarAccess.getIntentDeclarationAccess().getExprStmtAssignment_1(), "rule__IntentDeclaration__ExprStmtAssignment_1");
-					put(grammarAccess.getFailStatementAccess().getReasonAssignment_2(), "rule__FailStatement__ReasonAssignment_2");
-					put(grammarAccess.getFailStatementAccess().getCodeAssignment_3(), "rule__FailStatement__CodeAssignment_3");
+					put(grammarAccess.getFailStatementAccess().getNameAssignment_1_0_0(), "rule__FailStatement__NameAssignment_1_0_0");
+					put(grammarAccess.getFailStatementAccess().getReasonAssignment_1_0_1(), "rule__FailStatement__ReasonAssignment_1_0_1");
+					put(grammarAccess.getFailStatementAccess().getCodeAssignment_1_0_2(), "rule__FailStatement__CodeAssignment_1_0_2");
+					put(grammarAccess.getFailStatementAccess().getNameAssignment_1_1(), "rule__FailStatement__NameAssignment_1_1");
 					put(grammarAccess.getRequireAccess().getNameAssignment_1(), "rule__Require__NameAssignment_1");
 					put(grammarAccess.getRequireAccess().getVersionSpecAssignment_2(), "rule__Require__VersionSpecAssignment_2");
 					put(grammarAccess.getScriptParentDeclAccess().getNameAssignment_1(), "rule__ScriptParentDecl__NameAssignment_1");

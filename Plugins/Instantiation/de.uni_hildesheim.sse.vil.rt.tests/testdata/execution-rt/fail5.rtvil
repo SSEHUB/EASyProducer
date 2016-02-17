@@ -1,0 +1,38 @@
+import enact;
+
+rtVilScript fail5 (Project source, Configuration config, Project target, IAdaptationEvent event) {
+
+    strategy main(Project source, Configuration config, Project target, IAdaptationEvent event) = {
+        objective true;
+        breakdown {
+            tactic t2(source, config, target, event);
+            tactic t3(source, config, target, event);
+        }
+    }
+
+    strategy pass(Project source, Configuration config, Project target, ParameterAdaptationEvent event) = {
+        objective true;
+        breakdown {
+            tactic t1(source, config, target, event);
+        }
+    }
+
+    tactic t1(Project source, Configuration config, Project target, ParameterAdaptationEvent event) = {
+        fail "unknown" 127;
+    }
+
+    tactic t2(Project source, Configuration config, Project target, IAdaptationEvent event) = {
+        refail;
+    }
+
+    tactic t2(Project source, Configuration config, Project target, RegularAdaptationEvent event) = {
+    }
+
+    tactic t3(Project source, Configuration config, Project target, IAdaptationEvent event) = {
+        refail;
+    }
+
+    tactic t3(Project source, Configuration config, Project target, StartupAdaptationEvent event) = {
+    }
+
+}

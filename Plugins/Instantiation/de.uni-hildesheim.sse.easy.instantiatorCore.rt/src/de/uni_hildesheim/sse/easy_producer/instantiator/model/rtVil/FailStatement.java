@@ -30,6 +30,14 @@ public class FailStatement implements IRuleElement {
 
     private String reason;
     private Expression codeEx;
+    private boolean reFail = false;
+
+    /**
+     * Creates a fail statement instance.
+     */
+    public FailStatement() {
+        reFail = true;
+    }
     
     /**
      * Creates a fail statement instance.
@@ -58,6 +66,15 @@ public class FailStatement implements IRuleElement {
      */
     public Expression getCodeEx() {
         return codeEx;
+    }
+    
+    /**
+     * Return whether it is an re-fail statement.
+     * 
+     * @return <code>true</code> for re-fail, <code>false</code> else
+     */
+    public boolean isRefail() {
+        return reFail;
     }
     
     @Override

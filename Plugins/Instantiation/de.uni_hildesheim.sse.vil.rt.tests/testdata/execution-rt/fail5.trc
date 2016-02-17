@@ -1,0 +1,8 @@
+-> pass(Project, Configuration, Project, ParameterAdaptationEvent) with (<project>, <config>, <project>, <ParameterAdaptationEvent>)
+    -> t1(Project, Configuration, Project, ParameterAdaptationEvent) with (<project>, <config>, <project>, <ParameterAdaptationEvent>)
+        explicit fail message "unknown" with code 127
+-> main(Project, Configuration, Project, IAdaptationEvent) with (<project>, <config>, <project>, <ParameterAdaptationEvent>)
+    -> t2(Project, Configuration, Project, IAdaptationEvent) with (<project>, <config>, <project>, <ParameterAdaptationEvent>)
+        refail message "unknown" with code 127
+    -> t3(Project, Configuration, Project, IAdaptationEvent) with (<project>, <config>, <project>, <ParameterAdaptationEvent>)
+        refail message "unknown" with code 127

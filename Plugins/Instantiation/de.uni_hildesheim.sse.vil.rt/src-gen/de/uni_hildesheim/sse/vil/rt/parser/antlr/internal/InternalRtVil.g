@@ -1459,15 +1459,26 @@ ruleFailStatement returns [EObject current=null]
             grammarAccess.getFailStatementAccess().getFailStatementAction_0(),
             $current);
     }
-)	otherlv_1='fail' 
-    {
-    	newLeafNode(otherlv_1, grammarAccess.getFailStatementAccess().getFailKeyword_1());
-    }
+)(((
 (
+		lv_name_1_0=	'fail' 
+    {
+        newLeafNode(lv_name_1_0, grammarAccess.getFailStatementAccess().getNameFailKeyword_1_0_0_0());
+    }
+ 
+	    {
+	        if ($current==null) {
+	            $current = createModelElement(grammarAccess.getFailStatementRule());
+	        }
+       		setWithLastConsumed($current, "name", lv_name_1_0, "fail");
+	    }
+
+)
+)(
 (
 		lv_reason_2_0=RULE_STRING
 		{
-			newLeafNode(lv_reason_2_0, grammarAccess.getFailStatementAccess().getReasonSTRINGTerminalRuleCall_2_0()); 
+			newLeafNode(lv_reason_2_0, grammarAccess.getFailStatementAccess().getReasonSTRINGTerminalRuleCall_1_0_1_0()); 
 		}
 		{
 	        if ($current==null) {
@@ -1484,7 +1495,7 @@ ruleFailStatement returns [EObject current=null]
 )?(
 (
 		{ 
-	        newCompositeNode(grammarAccess.getFailStatementAccess().getCodeExpressionParserRuleCall_3_0()); 
+	        newCompositeNode(grammarAccess.getFailStatementAccess().getCodeExpressionParserRuleCall_1_0_2_0()); 
 	    }
 		lv_code_3_0=ruleExpression		{
 	        if ($current==null) {
@@ -1499,9 +1510,25 @@ ruleFailStatement returns [EObject current=null]
 	    }
 
 )
-)?	otherlv_4=';' 
+)?)
+    |(
+(
+		lv_name_4_0=	'refail' 
     {
-    	newLeafNode(otherlv_4, grammarAccess.getFailStatementAccess().getSemicolonKeyword_4());
+        newLeafNode(lv_name_4_0, grammarAccess.getFailStatementAccess().getNameRefailKeyword_1_1_0());
+    }
+ 
+	    {
+	        if ($current==null) {
+	            $current = createModelElement(grammarAccess.getFailStatementRule());
+	        }
+       		setWithLastConsumed($current, "name", lv_name_4_0, "refail");
+	    }
+
+)
+))	otherlv_5=';' 
+    {
+    	newLeafNode(otherlv_5, grammarAccess.getFailStatementAccess().getSemicolonKeyword_2());
     }
 )
 ;

@@ -248,16 +248,20 @@ public class RtVilWriter extends BuildlangWriter implements IRtVilVisitor {
     @Override
     public Object visitFailStatement(FailStatement statement) throws VilException {
         printIndentation();
-        print("fail");
-        if (null != statement.getReason()) {
-            printWhitespace();
-            print("\"");
-            printJavaEscaped(statement.getReason());
-            print("\"");
-        }
-        if (null != statement.getCodeEx()) {
-            printWhitespace();
-            statement.getCodeEx().accept(this);
+        if (statement.isRefail()) {
+            print("refail");    
+        } else {
+            print("fail");
+            if (null != statement.getReason()) {
+                printWhitespace();
+                print("\"");
+                printJavaEscaped(statement.getReason());
+                print("\"");
+            }
+            if (null != statement.getCodeEx()) {
+                printWhitespace();
+                statement.getCodeEx().accept(this);
+            }
         }
         println(";");
         return null;

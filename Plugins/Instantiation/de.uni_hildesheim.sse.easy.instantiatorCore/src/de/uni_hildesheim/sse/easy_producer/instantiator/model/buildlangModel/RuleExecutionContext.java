@@ -24,6 +24,17 @@ public class RuleExecutionContext {
     private Integer failCode;
 
     /**
+     * Defines possible fail states.
+     * 
+     * @author Holger Eichelberger
+     */
+    public enum FailState {
+        NO_FAIL,
+        FAIL,
+        REFAIL
+    }
+    
+    /**
      * Creates a rule execution context.
      * 
      * @param rule the rule being executed
@@ -184,5 +195,5 @@ public class RuleExecutionContext {
     public Integer getFailCode() {
         return failCode;
     }
-
+    
 }

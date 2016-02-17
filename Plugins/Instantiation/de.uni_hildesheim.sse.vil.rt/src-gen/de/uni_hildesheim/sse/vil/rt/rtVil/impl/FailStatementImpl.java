@@ -24,6 +24,7 @@ import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
  * The following features are implemented:
  * </p>
  * <ul>
+ *   <li>{@link de.uni_hildesheim.sse.vil.rt.rtVil.impl.FailStatementImpl#getName <em>Name</em>}</li>
  *   <li>{@link de.uni_hildesheim.sse.vil.rt.rtVil.impl.FailStatementImpl#getReason <em>Reason</em>}</li>
  *   <li>{@link de.uni_hildesheim.sse.vil.rt.rtVil.impl.FailStatementImpl#getCode <em>Code</em>}</li>
  * </ul>
@@ -32,6 +33,26 @@ import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
  */
 public class FailStatementImpl extends MinimalEObjectImpl.Container implements FailStatement
 {
+  /**
+   * The default value of the '{@link #getName() <em>Name</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #getName()
+   * @generated
+   * @ordered
+   */
+  protected static final String NAME_EDEFAULT = null;
+
+  /**
+   * The cached value of the '{@link #getName() <em>Name</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #getName()
+   * @generated
+   * @ordered
+   */
+  protected String name = NAME_EDEFAULT;
+
   /**
    * The default value of the '{@link #getReason() <em>Reason</em>}' attribute.
    * <!-- begin-user-doc -->
@@ -81,6 +102,29 @@ public class FailStatementImpl extends MinimalEObjectImpl.Container implements F
   protected EClass eStaticClass()
   {
     return RtVilPackage.Literals.FAIL_STATEMENT;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public String getName()
+  {
+    return name;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public void setName(String newName)
+  {
+    String oldName = name;
+    name = newName;
+    if (eNotificationRequired())
+      eNotify(new ENotificationImpl(this, Notification.SET, RtVilPackage.FAIL_STATEMENT__NAME, oldName, name));
   }
 
   /**
@@ -180,6 +224,8 @@ public class FailStatementImpl extends MinimalEObjectImpl.Container implements F
   {
     switch (featureID)
     {
+      case RtVilPackage.FAIL_STATEMENT__NAME:
+        return getName();
       case RtVilPackage.FAIL_STATEMENT__REASON:
         return getReason();
       case RtVilPackage.FAIL_STATEMENT__CODE:
@@ -198,6 +244,9 @@ public class FailStatementImpl extends MinimalEObjectImpl.Container implements F
   {
     switch (featureID)
     {
+      case RtVilPackage.FAIL_STATEMENT__NAME:
+        setName((String)newValue);
+        return;
       case RtVilPackage.FAIL_STATEMENT__REASON:
         setReason((String)newValue);
         return;
@@ -218,6 +267,9 @@ public class FailStatementImpl extends MinimalEObjectImpl.Container implements F
   {
     switch (featureID)
     {
+      case RtVilPackage.FAIL_STATEMENT__NAME:
+        setName(NAME_EDEFAULT);
+        return;
       case RtVilPackage.FAIL_STATEMENT__REASON:
         setReason(REASON_EDEFAULT);
         return;
@@ -238,6 +290,8 @@ public class FailStatementImpl extends MinimalEObjectImpl.Container implements F
   {
     switch (featureID)
     {
+      case RtVilPackage.FAIL_STATEMENT__NAME:
+        return NAME_EDEFAULT == null ? name != null : !NAME_EDEFAULT.equals(name);
       case RtVilPackage.FAIL_STATEMENT__REASON:
         return REASON_EDEFAULT == null ? reason != null : !REASON_EDEFAULT.equals(reason);
       case RtVilPackage.FAIL_STATEMENT__CODE:
@@ -257,7 +311,9 @@ public class FailStatementImpl extends MinimalEObjectImpl.Container implements F
     if (eIsProxy()) return super.toString();
 
     StringBuffer result = new StringBuffer(super.toString());
-    result.append(" (reason: ");
+    result.append(" (name: ");
+    result.append(name);
+    result.append(", reason: ");
     result.append(reason);
     result.append(')');
     return result.toString();

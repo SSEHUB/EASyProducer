@@ -26,26 +26,45 @@ public class ExpressionTranslator extends de.uni_hildesheim.sse.buildLanguageTra
             RuleElement rElt = (RuleElement) elt;
             FailStatement fStmt = rElt.getFail();
             if (null != fStmt) {
-                de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.Expression codeEx = null;
-                Expression expr = fStmt.getCode();
-                if (null != expr) {
-                    codeEx = processExpression(expr, resolver);
-                    if (null != codeEx) {
-                        try {
-                        if (!TypeRegistry.integerType().isAssignableFrom(codeEx.inferType())) {
-                            throw new TranslatorException("Code expression must be of type Integer", elt, 
-                                RtVilPackage.Literals.FAIL_STATEMENT__CODE, ErrorCodes.TYPE_CONSISTENCY);
-                        }
-                        } catch (VilException e) {
-                            throw new TranslatorException(e, elt, RtVilPackage.Literals.FAIL_STATEMENT__CODE);
-                        }
-                    }
+                if ("fail".equals(fStmt.getName())) {
+                    result = createFailStatement(elt, fStmt, resolver);
+                } else {
+                    result = new de.uni_hildesheim.sse.easy_producer.instantiator.model.rtVil.FailStatement();
                 }
-                result = new de.uni_hildesheim.sse.easy_producer.instantiator.model.rtVil.FailStatement(
-                    fStmt.getReason(), codeEx);
             }
         }
         return result;
+    }
+    
+    /**
+     * Creates an explicit fail statement.
+     * 
+     * @param elt the rule element
+     * @param fStmt the fail statement
+     * @param resolver the actual resolver
+     * @return the created model element
+     * @throws TranslatorException in case that translation fails
+     */
+    private de.uni_hildesheim.sse.easy_producer.instantiator.model.rtVil.FailStatement createFailStatement(
+        de.uni_hildesheim.sse.vilBuildLanguage.RuleElement elt, FailStatement fStmt, Resolver resolver) 
+        throws TranslatorException{
+        de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.Expression codeEx = null;
+        Expression expr = fStmt.getCode();
+        if (null != expr) {
+            codeEx = processExpression(expr, resolver);
+            if (null != codeEx) {
+                try {
+                if (!TypeRegistry.integerType().isAssignableFrom(codeEx.inferType())) {
+                    throw new TranslatorException("Code expression must be of type Integer", elt, 
+                        RtVilPackage.Literals.FAIL_STATEMENT__CODE, ErrorCodes.TYPE_CONSISTENCY);
+                }
+                } catch (VilException e) {
+                    throw new TranslatorException(e, elt, RtVilPackage.Literals.FAIL_STATEMENT__CODE);
+                }
+            }
+        }
+        return new de.uni_hildesheim.sse.easy_producer.instantiator.model.rtVil.FailStatement(
+            fStmt.getReason(), codeEx);        
     }
     
     // TODO intend

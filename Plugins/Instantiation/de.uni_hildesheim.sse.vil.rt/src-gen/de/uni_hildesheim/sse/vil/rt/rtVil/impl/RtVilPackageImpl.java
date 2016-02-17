@@ -667,7 +667,7 @@ public class RtVilPackageImpl extends EPackageImpl implements RtVilPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EAttribute getFailStatement_Reason()
+  public EAttribute getFailStatement_Name()
   {
     return (EAttribute)failStatementEClass.getEStructuralFeatures().get(0);
   }
@@ -677,9 +677,19 @@ public class RtVilPackageImpl extends EPackageImpl implements RtVilPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  public EAttribute getFailStatement_Reason()
+  {
+    return (EAttribute)failStatementEClass.getEStructuralFeatures().get(1);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
   public EReference getFailStatement_Code()
   {
-    return (EReference)failStatementEClass.getEStructuralFeatures().get(1);
+    return (EReference)failStatementEClass.getEStructuralFeatures().get(2);
   }
 
   /**
@@ -771,6 +781,7 @@ public class RtVilPackageImpl extends EPackageImpl implements RtVilPackage
     createEReference(intentDeclarationEClass, INTENT_DECLARATION__EXPR_STMT);
 
     failStatementEClass = createEClass(FAIL_STATEMENT);
+    createEAttribute(failStatementEClass, FAIL_STATEMENT__NAME);
     createEAttribute(failStatementEClass, FAIL_STATEMENT__REASON);
     createEReference(failStatementEClass, FAIL_STATEMENT__CODE);
   }
@@ -873,6 +884,7 @@ public class RtVilPackageImpl extends EPackageImpl implements RtVilPackage
     initEReference(getIntentDeclaration_ExprStmt(), theVilBuildLanguagePackage.getExpressionStatement(), null, "exprStmt", null, 0, 1, IntentDeclaration.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     initEClass(failStatementEClass, FailStatement.class, "FailStatement", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+    initEAttribute(getFailStatement_Name(), ecorePackage.getEString(), "name", null, 0, 1, FailStatement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEAttribute(getFailStatement_Reason(), ecorePackage.getEString(), "reason", null, 0, 1, FailStatement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEReference(getFailStatement_Code(), theExpressionDslPackage.getExpression(), null, "code", null, 0, 1, FailStatement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 

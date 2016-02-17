@@ -227,6 +227,8 @@ public class RtVilExecution extends BuildlangExecution implements IRtVilVisitor 
     private Script currentScript;
     private IRtValueAccess valueAccess;
     private IReasoningHook reasoningHook = DefaultReasoningHook.INSTANCE;
+    private String lastFailReason;
+    private Integer lastFailCode;
     
     /**
      * Creates a new execution environment for evaluating local expressions.
@@ -1153,22 +1155,38 @@ public class RtVilExecution extends BuildlangExecution implements IRtVilVisitor 
     protected void ruleElementFailed(IRuleElement elt, RuleExecutionContext context) throws VilException {
         if (elt instanceof FailStatement) {
             FailStatement fStmt = (FailStatement) elt;
-            context.setFailReason(fStmt.getReason()); // TODO read out and log
-            if (null != fStmt.getCodeEx()) {
-                Object value = fStmt.getCodeEx().accept(this);
-                if (value instanceof Integer) {
-                    context.setFailCode((Integer) value);
+            String msg;
+            if (fStmt.isRefail()) {
+                if (null != lastFailCode || null != lastFailReason) {
+                    context.setFailCode(lastFailCode);
+                    context.setFailReason(lastFailReason);
+                    msg = "refail";
+                } else {
+                    msg = null;
                 }
+            } else {
+                msg = "explicit fail";
+                context.setFailReason(fStmt.getReason());
+                if (null != fStmt.getCodeEx()) {
+                    Object value = fStmt.getCodeEx().accept(this);
+                    if (value instanceof Integer) {
+                        context.setFailCode((Integer) value);
+                    }
+                }
+                lastFailReason = context.getFailReason();
+                lastFailCode = context.getFailCode();
             }
-            String msg = "explicit fail";
-            if (null != context.getFailReason()) {
-                msg += " message \"" + context.getFailReason() + "\"";
+
+            if (null != msg) {
+                if (null != context.getFailReason()) {
+                    msg += " message \"" + context.getFailReason() + "\"";
+                }
+                if (null != context.getFailCode()) {
+                    msg += " with code " + context.getFailCode();
+                }
+                context.setStatus(Status.FAIL);
+                getTracer().trace(msg);
             }
-            if (null != context.getFailCode()) {
-                msg += " with code " + context.getFailCode();
-            }
-            context.setStatus(Status.FAIL);
-            getTracer().trace(msg);
         }
     }
     

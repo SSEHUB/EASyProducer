@@ -730,13 +730,22 @@ public interface RtVilPackage extends EPackage
   int FAIL_STATEMENT = 13;
 
   /**
+   * The feature id for the '<em><b>Name</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int FAIL_STATEMENT__NAME = 0;
+
+  /**
    * The feature id for the '<em><b>Reason</b></em>' attribute.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int FAIL_STATEMENT__REASON = 0;
+  int FAIL_STATEMENT__REASON = 1;
 
   /**
    * The feature id for the '<em><b>Code</b></em>' containment reference.
@@ -745,7 +754,7 @@ public interface RtVilPackage extends EPackage
    * @generated
    * @ordered
    */
-  int FAIL_STATEMENT__CODE = 1;
+  int FAIL_STATEMENT__CODE = 2;
 
   /**
    * The number of structural features of the '<em>Fail Statement</em>' class.
@@ -754,7 +763,7 @@ public interface RtVilPackage extends EPackage
    * @generated
    * @ordered
    */
-  int FAIL_STATEMENT_FEATURE_COUNT = 2;
+  int FAIL_STATEMENT_FEATURE_COUNT = 3;
 
 
   /**
@@ -1250,6 +1259,17 @@ public interface RtVilPackage extends EPackage
   EClass getFailStatement();
 
   /**
+   * Returns the meta object for the attribute '{@link de.uni_hildesheim.sse.vil.rt.rtVil.FailStatement#getName <em>Name</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the attribute '<em>Name</em>'.
+   * @see de.uni_hildesheim.sse.vil.rt.rtVil.FailStatement#getName()
+   * @see #getFailStatement()
+   * @generated
+   */
+  EAttribute getFailStatement_Name();
+
+  /**
    * Returns the meta object for the attribute '{@link de.uni_hildesheim.sse.vil.rt.rtVil.FailStatement#getReason <em>Reason</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -1689,6 +1709,14 @@ public interface RtVilPackage extends EPackage
      * @generated
      */
     EClass FAIL_STATEMENT = eINSTANCE.getFailStatement();
+
+    /**
+     * The meta object literal for the '<em><b>Name</b></em>' attribute feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EAttribute FAIL_STATEMENT__NAME = eINSTANCE.getFailStatement_Name();
 
     /**
      * The meta object literal for the '<em><b>Reason</b></em>' attribute feature.
