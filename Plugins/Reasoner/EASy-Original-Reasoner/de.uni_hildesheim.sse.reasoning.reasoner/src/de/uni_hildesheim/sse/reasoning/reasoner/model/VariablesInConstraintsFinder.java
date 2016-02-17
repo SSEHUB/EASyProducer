@@ -181,6 +181,7 @@ public class VariablesInConstraintsFinder implements IConstraintTreeVisitor {
         access.getCompoundExpression().accept(this);  
         try {
             access.inferDatatype();
+            variables.add(access.getResolvedSlot());
             if (access.getResolvedSlot().equals(checkedVariable)) {
                 containsVariable = true;
             }
