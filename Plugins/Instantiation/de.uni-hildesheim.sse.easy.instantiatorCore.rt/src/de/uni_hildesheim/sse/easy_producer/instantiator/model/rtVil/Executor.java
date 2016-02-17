@@ -126,11 +126,15 @@ public class Executor extends de.uni_hildesheim.sse.easy_producer.instantiator.m
     @Override
     protected void handleExecutionResult(RuleExecutionResult result, ITracer tracer, BuildlangExecution executor) 
         throws VilException {
+        boolean explicitFail = false;
         if (RuleExecutionResult.Status.FAIL == result.getStatus()) {
             failCode = result.getFailCode();
             failReason = result.getFailReason();
+            explicitFail = failCode != null || failReason != null;
         }
-        super.handleExecutionResult(result, tracer, executor);
+        if (!explicitFail) {
+            super.handleExecutionResult(result, tracer, executor);
+        }
     }
 
     @Override

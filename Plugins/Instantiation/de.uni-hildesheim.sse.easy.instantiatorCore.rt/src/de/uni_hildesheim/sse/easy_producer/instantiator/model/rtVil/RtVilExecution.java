@@ -1173,6 +1173,9 @@ public class RtVilExecution extends BuildlangExecution implements IRtVilVisitor 
                         context.setFailCode((Integer) value);
                     }
                 }
+                if (null == context.getFailCode() && null == context.getFailReason()) {
+                    context.setFailCode(-1);
+                }
                 lastFailReason = context.getFailReason();
                 lastFailCode = context.getFailCode();
             }
