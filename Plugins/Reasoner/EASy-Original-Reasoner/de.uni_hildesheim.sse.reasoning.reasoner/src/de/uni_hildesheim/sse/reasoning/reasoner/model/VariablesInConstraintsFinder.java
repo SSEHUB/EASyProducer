@@ -22,6 +22,7 @@ import de.uni_hildesheim.sse.model.cst.Self;
 import de.uni_hildesheim.sse.model.cst.UnresolvedExpression;
 import de.uni_hildesheim.sse.model.cst.Variable;
 import de.uni_hildesheim.sse.model.varModel.AbstractVariable;
+import de.uni_hildesheim.sse.model.varModel.datatypes.IDatatype;
 import de.uni_hildesheim.sse.model.varModel.datatypes.OclKeyWords;
 
 /**
@@ -68,7 +69,7 @@ public class VariablesInConstraintsFinder implements IConstraintTreeVisitor {
      * @param constraint Constraint that is visited to retrieve variables.
      */
     public VariablesInConstraintsFinder(AbstractVariable variable, ConstraintSyntaxTree constraint) {
-        variables = new HashSet<AbstractVariable>(); 
+        variables = new HashSet<AbstractVariable>();
         isSimpleAssignment = false;
         containsVariable = false;
         checkedVariable = variable;
@@ -83,7 +84,7 @@ public class VariablesInConstraintsFinder implements IConstraintTreeVisitor {
      */
     public Set<AbstractVariable> getVariables() {
         return variables;
-    }
+    } 
     
     /**
      * Method for analyzing if constraint contains specific variable.
@@ -214,8 +215,7 @@ public class VariablesInConstraintsFinder implements IConstraintTreeVisitor {
 
     @Override
     public void visitSelf(Self self) {
-        // TODO Auto-generated method stub
-        
+        // not needed
     }
 
    

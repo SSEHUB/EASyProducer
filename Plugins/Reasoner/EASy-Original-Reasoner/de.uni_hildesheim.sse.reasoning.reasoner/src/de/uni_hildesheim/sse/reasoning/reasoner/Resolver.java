@@ -92,9 +92,10 @@ public class Resolver {
     private FailedElements failedElements;
     private ScopeAssignments scopeAssignments;
     
-    private List<IDecisionVariable> allVariables;
+//    private List<IDecisionVariable> allVariables;
     
-    private Map<AbstractVariable, Set<Constraint>> constraintMap;
+//    private Map<AbstractVariable, Set<Constraint>> constraintMap;
+    private VariablesMap constraintMap;
     private Map<Compound, List<Constraint>> compoundConstraintsMap;
     private Map<Constraint, IDecisionVariable> constraintVariableMap;
     private List<Constraint> constraintBase;   
@@ -106,7 +107,6 @@ public class Resolver {
     private List<Constraint> collectionConstraints;
     private List<Constraint> defaultConstraints;
     private List<Constraint> internalConstraints;
-    private List<Constraint> evalConstraints;
     private boolean considerFrozenConstraints;
     
     private int constraintBaseSize = 0;
@@ -116,6 +116,8 @@ public class Resolver {
     
     private List<Constraint> collectionCompoundConstraints;
     private Set<IDecisionVariable> problemVariables;
+    
+    private int index;
     
     // Stats
     private int constraintCounter = 0;
@@ -138,31 +140,39 @@ public class Resolver {
                     + " Parent: " + (null == variable.getParent() ? null : variable.getParent()));                 
             }
             scopeAssignments.addAssignedVariable(variable);
-            Set<Constraint> varConstraints = constraintMap.get(variable.getDeclaration());
-            if (varConstraints != null) {
-                if (!varConstraints.isEmpty() && lastAdded != varConstraints) {
+            AbstractVariable declaration = variable.getDeclaration();
+            Set<Constraint> varConstraints = constraintMap.getRelevantConstraints(declaration);
+            if (varConstraints != null && !varConstraints.isEmpty()) {
 //                    System.out.println("Add");
-                    lastAdded = new HashSet<Constraint>();
-                    for (Constraint varConstraint : varConstraints) {
-                        int lastIndexOfConstraint = constraintBase.lastIndexOf(varConstraint);
+                for (Constraint varConstraint : varConstraints) {
+                    
+                    boolean found = false;
+                    for (int i = index + 1, end = constraintBase.size(); i < end && !found; i++) {
+                        found = (constraintBase.get(i) == varConstraint);
+                    }
+                    if (!found) { 
+                        constraintBase.add(varConstraint);
+                        constraintBaseSize++;
+                        if (declaration.getType() instanceof Container) {
+                            // find anonymous inner declarations (e.g., compound declared inside a set)
+                            for (int j = 0, nestedEnd = variable.getNestedElementsCount(); j < nestedEnd; j++) {
+                                // check whether we need to add further constraints for the nested element
+                                this.notifyChanged(variable.getNestedElement(j));
+                            }
+                        }
+                    }
+//                        int lastIndexOfConstraint = constraintBase.lastIndexOf(varConstraint);
 //                        System.out.println("lastIndexOfConstraint: " + lastIndexOfConstraint);
 //                        System.out.println("reevaluationCounter: " + reevaluationCounter);
 //                        System.out.println("constraintBaseSize: " + constraintBaseSize);
-                        if (!(lastIndexOfConstraint >= reevaluationCounter) 
-                            && (lastIndexOfConstraint < constraintBaseSize)) {
-                            lastAdded.add(varConstraint);
-                            constraintBase.add(varConstraint);
-                            constraintBaseSize++;                        
-                            }
+//                        if (!(lastIndexOfConstraint >= index) 
+//                            && (lastIndexOfConstraint < constraintBaseSize)) {
 //                        System.out.println("Constraints added to current list: " 
 //                            + StringProvider.toIvmlString(varConstraint.getConsSyntax()));
-                        if (Descriptor.LOGGING) {
-                            LOGGER.debug("Constraints added to current list: " 
-                                + StringProvider.toIvmlString(varConstraint.getConsSyntax())); 
-                        }
+                    if (Descriptor.LOGGING) {
+                        LOGGER.debug("Constraints added to current list: " 
+                            + StringProvider.toIvmlString(varConstraint.getConsSyntax())); 
                     }
-//                    lastAdded = varConstraints;
-//                    System.out.println("---");
                 }
             }
         }
@@ -204,11 +214,12 @@ public class Resolver {
         this.config = config;
 //        evaluator = createEvaluationVisitor();
         evaluator = new EvalVisitor();
-        this.allVariables = new ArrayList<IDecisionVariable>();
+        constraintMap = new VariablesMap();
+//        this.allVariables = new ArrayList<IDecisionVariable>();
         this.reasoningID = PerformanceStatistics.createReasoningID(project.getName(), "Model validation");
         this.failedElements = new FailedElements();
         this.scopeAssignments = new ScopeAssignments();
-        this.constraintMap = new HashMap<AbstractVariable, Set<Constraint>>();
+//        this.constraintMap = new HashMap<AbstractVariable, Set<Constraint>>();
         this.compoundConstraintsMap = new HashMap<Compound, List<Constraint>>();
         this.constraintVariableMap = new HashMap<Constraint, IDecisionVariable>();
         this.constraintBase = new ArrayList<Constraint>();
@@ -223,7 +234,6 @@ public class Resolver {
         this.incremental = false;
         this.problemVariables = new HashSet<IDecisionVariable>();
         this.internalConstraints = new ArrayList<Constraint>();
-        this.evalConstraints = new ArrayList<Constraint>();
         this.considerFrozenConstraints = considerFrozenConstraints;
     } 
     
@@ -287,7 +297,7 @@ public class Resolver {
             evaluator.setDispatchScope(project);
             scopeAssignments.clearScopeAssignments();
             resolveDefaultValues();
-            fillConstraintMapKeys();
+//            fillConstraintMapKeys();
 //            if (ENABLE_LOGGING) {
 //                printModelElements(config, "After defaults in scope " + project.getName());                
 //            }
@@ -300,7 +310,7 @@ public class Resolver {
                 displayFailedElements();                                
             }
         }
-        variableCounter = constraintMap.size();
+        variableCounter = constraintMap.getDeclarationSize();
 //        infoLogger.info("Constraint reevaluation count: " + reevaluationCounter);
         if (Descriptor.LOGGING) {
             printModelElements(config, "Reasoning done");
@@ -329,7 +339,7 @@ public class Resolver {
      */
     protected void resolveDefaultValueForDeclaration(AbstractVariable decl, IDecisionVariable variable,
         CompoundAccess compound) {
-        allVariables.add(variable);
+//        allVariables.add(variable);
         IDatatype type = decl.getType();
         // Comment out if internal constraints come from the model
         if (type instanceof DerivedDatatype) {
@@ -945,13 +955,13 @@ public class Resolver {
             }            
         }
         constraintCounter = constraintCounter + constraintBase.size();
-        if (unresolvedConstraints.size() > 0) {
-            constraintBase.addAll(unresolvedConstraints);
-        }
+//        if (unresolvedConstraints.size() > 0) {
+//            constraintBase.addAll(unresolvedConstraints);
+//        }
         clearConstraintLists();
         constraintBaseSize = constraintBase.size();
         resolveConstraints(constraintBase, dispatchScope);
-        filterOutSimpleAssignments();
+//        filterOutSimpleAssignments();
         constraintBase.clear(); 
     }
     
@@ -1061,6 +1071,7 @@ public class Resolver {
             printConstraints(constraintBase);            
         }
         for (int i = 0; i < constraints.size(); i++) {
+            index = i;
             problemVariables.clear();
             AssignmentState state = null;
             if (constraints.get(i).isDefaultConstraint()) {
@@ -1083,9 +1094,9 @@ public class Resolver {
                 evaluator.setDispatchScope(dispatchScope);
                 evaluator.visit(cst);
                 if (evaluator.constraintFailed()) {
-                    conflictingConstraint(constraints.get(i));
+                    conflictingConstraint(constraint);
                 } else if (evaluator.constraintFulfilled()) {
-                    fulfilledConstraint(constraints.get(i));
+                    fulfilledConstraint(constraint);
                 }
                 for (int j = 0; j < evaluator.getMessageCount(); j++) {
                     if (evaluator.getMessage(j).getVariable() != null) {
@@ -1110,7 +1121,8 @@ public class Resolver {
                 if (null != constraintVariableMap.get(constraints.get(i))) {
                     Value value = evaluator.getResult();
                     try {
-                        constraintVariableMap.get(constraints.get(i)).setValue(value, AssignmentState.DEFAULT);
+                        IDecisionVariable variable = constraintVariableMap.get(constraint);
+                        variable.setValue(value, AssignmentState.DEFAULT);
                     } catch (ConfigurationException e) {
                         LOGGER.exception(e);
                     }     
@@ -1160,24 +1172,35 @@ public class Resolver {
      * @param constraints Constraints to be checked for variables.
      */
     private void fillVariableConstraintPool(List<Constraint> constraints) {
-        for (IDecisionVariable variable : allVariables) {
-//            LOGGER.debug("--");
-//            LOGGER.debug("Creating constraint pool: " + variable.getDeclaration().getName());
-            for (Constraint constraint : constraints) { 
-                if (constraint.getConsSyntax() != null) {
-                    VariablesInConstraintsFinder varFinder 
-                        = new VariablesInConstraintsFinder(variable.getDeclaration(),
-                            constraint.getConsSyntax());                
-//                    LOGGER.debug("Constraint " + StringProvider.toIvmlString(constraint.getConsSyntax())
-//                        + "  Contains variable: " + varFinder.containsVariable()
-//                        + "  Simple Assignment: " + varFinder.isSimpleAssignment());
-                    if (varFinder.containsVariable() && !varFinder.isSimpleAssignment()) {
-                        addConstraintToConstraintMap(variable.getDeclaration(), constraint);
-//                        LOGGER.debug("Constraint added to map");
-                    }                    
-                }
+        for (Constraint constraint : constraints) { 
+            if (constraint.getConsSyntax() != null) {
+                VariablesInConstraintsFinder varFinder = new VariablesInConstraintsFinder(constraint.getConsSyntax());
+                if (!varFinder.isSimpleAssignment()) {
+                    for (AbstractVariable declaration : varFinder.getVariables()) {
+                        constraintMap.add(declaration, constraint);
+//                        addConstraintToConstraintMap(declaration, constraint);                        
+                    }
+                }                    
             }
         }
+//        for (IDecisionVariable variable : allVariables) {
+////            LOGGER.debug("--");
+////            LOGGER.debug("Creating constraint pool: " + variable.getDeclaration().getName());
+//            for (Constraint constraint : constraints) { 
+//                if (constraint.getConsSyntax() != null) {
+//                    VariablesInConstraintsFinder varFinder 
+//                    = new VariablesInConstraintsFinder(variable.getDeclaration(),
+//                        constraint.getConsSyntax());                
+////                    LOGGER.debug("Constraint " + StringProvider.toIvmlString(constraint.getConsSyntax())
+////                        + "  Contains variable: " + varFinder.containsVariable()
+////                        + "  Simple Assignment: " + varFinder.isSimpleAssignment());
+//                    if (varFinder.containsVariable() && !varFinder.isSimpleAssignment()) {
+//                        addConstraintToConstraintMap(variable.getDeclaration(), constraint);
+////                        LOGGER.debug("Constraint added to map");
+//                    }                    
+//                }
+//            }
+//        }
 //        LOGGER.debug("--");
     } 
     
@@ -1315,48 +1338,51 @@ public class Resolver {
         }        
     }
     
-    /**
-     * Method for initial filling of keys for constraint map.
-     */
-    private void fillConstraintMapKeys() {
-        for (IDecisionVariable variable : allVariables) {
-            retrieveVariable(variable);
-        }     
-    }
+//    /**
+//     * Method for initial filling of keys for constraint map.
+//     */
+//    private void fillConstraintMapKeys() {
+//        for (IDecisionVariable variable : allVariables) {
+//            retrieveVariable(variable);
+//        }     
+//    }
 
-    /**
-     * Method for analyzing variable and adding it to the variable map.
-     * @param variable {@link IDecisionVariable}.
-     */
-    private void retrieveVariable(IDecisionVariable variable) {
-        addConstraintMapKey(variable.getDeclaration());            
-//        IDatatype type = variable.getDeclaration().getType();        
-//        if (Compound.TYPE.isAssignableFrom(type)) {
-//            CompoundVariable cmpVar = (CompoundVariable) variable;
-//            for (int i = 0; i < cmpVar.getNestedElementsCount(); i++) {
-//                retrieveVariable(cmpVar.getNestedElement(i));
-//            }
+//    /**
+//     * Method for analyzing variable and adding it to the variable map.
+//     * @param variable {@link IDecisionVariable}.
+//     */
+//    private void retrieveVariable(IDecisionVariable variable) {
+//        addConstraintMapKey(variable.getDeclaration());            
+////        IDatatype type = variable.getDeclaration().getType();        
+////        if (Compound.TYPE.isAssignableFrom(type)) {
+////            CompoundVariable cmpVar = (CompoundVariable) variable;
+////            for (int i = 0; i < cmpVar.getNestedElementsCount(); i++) {
+////                retrieveVariable(cmpVar.getNestedElement(i));
+////            }
+////        }
+//    }
+    
+//    /**
+//     * Method for adding a key to a constraint map.
+//     * @param variable {@link AbstractVariable}.
+//     */
+//    private void addConstraintMapKey(AbstractVariable variable) {
+//        constraintMap.put(variable, new HashSet<Constraint>()); 
+//    }
+    
+//    /**
+//     * Method for adding a constraint to the constraint map.
+//     * @param variable Key variable.
+//     * @param constraint Constraint to be added.
+//     */
+//    private void addConstraintToConstraintMap(AbstractVariable variable, Constraint constraint) {
+//        Set<Constraint> relevantConstraints = constraintMap.get(variable);
+//        if (null == relevantConstraints) {
+//            relevantConstraints = new HashSet<Constraint>();
+//            constraintMap.put(variable, relevantConstraints);
 //        }
-    }
-    
-    /**
-     * Method for adding a key to a constraint map.
-     * @param variable {@link AbstractVariable}.
-     */
-    private void addConstraintMapKey(AbstractVariable variable) {
-        constraintMap.put(variable, new HashSet<Constraint>()); 
-    }
-    
-    /**
-     * Method for adding a constraint to the constraint map.
-     * @param variable Key variable.
-     * @param constraint Constraint to be added.
-     */
-    private void addConstraintToConstraintMap(AbstractVariable variable, Constraint constraint) {
-        Set<Constraint> relevantConstraints = constraintMap.get(variable);
-        relevantConstraints.add(constraint);
-        constraintMap.put(variable, relevantConstraints);
-    } 
+//        relevantConstraints.add(constraint);            
+//    } 
     
     /**
      * Method for transforming constraints with CopyVisitor.
