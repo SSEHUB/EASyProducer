@@ -159,6 +159,16 @@ public class ExecutionTests extends AbstractExecutionTest<Script> {
     }
     
     /**
+     * Tests a rule as function with a boolean result.
+     * 
+     * @throws IOException should not occur
+     */
+    @Test
+    public void testFunction2() throws IOException {
+        assertEqual("function2");
+    }
+    
+    /**
      * Tests alternative expressions without blocks.
      * 
      * @throws IOException should not occur

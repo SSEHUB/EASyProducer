@@ -1,0 +1,3 @@
+-> main()
+    -> doSomething(String) with (test)
+    -> doSomethingElse()

@@ -1,0 +1,15 @@
+vilScript function2 () {
+
+    main() = : {
+        doSomething("test");
+        doSomethingElse();
+    }
+
+    Boolean doSomething(String param) = : {
+        false;
+    }
+
+    doSomethingElse() = : {
+    }
+
+}
