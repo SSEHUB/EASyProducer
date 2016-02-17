@@ -18,7 +18,6 @@ package de.uni_hildesheim.sse.reasoning.qm;
 
 import java.io.File;
 
-import org.junit.Ignore;
 import org.junit.Test;
 
 /**
@@ -38,7 +37,6 @@ public class QMPipelinesTest1 extends AbstractQualiMasterTest {
     /**
      * Basic test.
      */
-    @Ignore
     @Test    
     public void coreTest() {
         reasoningTest(1);
