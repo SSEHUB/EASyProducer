@@ -26,6 +26,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import de.uni_hildesheim.sse.dslCore.TranslationResult;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.RuleExecutionResult;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilException;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.rtVil.Executor;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.rtVil.RtVILMemoryStorage;
@@ -523,6 +524,67 @@ public class ExecutionRtTests extends AbstractRtTest {
         Map<String, Object> param = createParameterMap(null, null, cfg);
         EqualitySetup setup = new EqualitySetup(createFile(name), name, null, createTraceFile(name), param);
         assertEqual(setup);
+    }
+
+    @Override
+    protected void assertExecutor(EqualitySetup data, 
+        de.uni_hildesheim.sse.easy_producer.instantiator.model.execution.Executor executor) {
+        if (executor instanceof Executor) {
+            Executor e = (Executor) executor;
+            assertFailure(data, e.getFailReason(), e.getFailCode(), null);
+        }
+    }
+
+    @Override
+    protected void assertFailure(EqualitySetup data, Object result) {
+        String actualFailReason;
+        Integer actualFailCode;
+        de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.RuleExecutionResult.Status status;
+        if (null != data.getExpectedFailCode() || null != data.getExpectedFailReason()) {
+            Assert.assertNotNull("explicit failure expected but no execution result", result);
+            Assert.assertTrue("expected instanceof of RuleExecutionResult", result instanceof RuleExecutionResult);
+            RuleExecutionResult rResult = (RuleExecutionResult) result;
+            actualFailReason = rResult.getFailReason();
+            actualFailCode = rResult.getFailCode();
+            status = rResult.getStatus();
+        } else {
+            if (result instanceof RuleExecutionResult) {
+                RuleExecutionResult rResult = (RuleExecutionResult) result;
+                status = rResult.getStatus();
+                actualFailReason = rResult.getFailReason();
+                actualFailCode = rResult.getFailCode();
+            } else {
+                status = de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.RuleExecutionResult.
+                    Status.SUCCESS; 
+                actualFailReason = null;
+                actualFailCode = null;
+            }
+        }
+        assertFailure(data, actualFailReason, actualFailCode, status);
+    }
+
+    @Override
+    protected void assertFailure(EqualitySetup data, String actualFailReason, Integer actualFailCode, 
+        de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.RuleExecutionResult.Status status) {
+        if (null != data.getExpectedFailCode() || null != data.getExpectedFailReason()) {
+            if (null != data.getExpectedFailCode()) {
+                Assert.assertEquals(data.getExpectedFailCode(), actualFailCode);
+            }
+            if (null != data.getExpectedFailReason()) {
+                Assert.assertEquals(data.getExpectedFailReason(), actualFailReason);
+            }
+            if (null != status) {
+                Assert.assertEquals(de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.
+                    RuleExecutionResult.Status.FAIL, status);
+            }
+        } else {
+            Assert.assertNull(actualFailCode);
+            Assert.assertNull(actualFailReason);
+            if (null != status) {
+                Assert.assertEquals(de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.
+                    RuleExecutionResult.Status.SUCCESS, status);
+            }
+        }
     }
 
 }

@@ -745,15 +745,15 @@ public class RtVilExecution extends BuildlangExecution implements IRtVilVisitor 
                     long startTimeStamp = System.currentTimeMillis();
                     callResult = (RuleExecutionResult) visitModelCallExpression(call);
                     long endTimeStamp = System.currentTimeMillis();
-                    if (Status.SUCCESS == callResult.getStatus() && timeout instanceof Number) {
-                        long timeoutValue = ((Number) timeout).longValue();
-                        long expectedEndTimeStamp = startTimeStamp + ((Number) timeout).longValue();
-                        if (timeoutValue > 0 && endTimeStamp > expectedEndTimeStamp) {
-                            callResult.fail();
+                    Status status = callResult.getStatus();
+                    if (Status.SUCCESS == status) {
+                        context.setFailCode(null);
+                        context.setFailReason(null);
+                        if (!validateTimeout(timeout, startTimeStamp, endTimeStamp, callResult)) {
                             LOGGER.info("strategy '" + call.getResolved().getSignature() + "' failed in breakdown "
                                 + "of '" + strategy.getSignature() + "' due to a timeout of " + timeout);
                         }
-                    } else if (Status.FAIL == callResult.getStatus()) {
+                    } else if (Status.FAIL == status) {
                         context.setFailCode(callResult.getFailCode());
                         context.setFailReason(callResult.getFailReason());
                     }
@@ -786,6 +786,29 @@ public class RtVilExecution extends BuildlangExecution implements IRtVilVisitor 
         }
         if (visited) {
             getTracer().visitedRule(strategy, getRuntimeEnvironment(), result);
+        }
+        return result;
+    }
+
+    /**
+     * Validates the timeout.
+     * 
+     * @param timeout the timeout
+     * @param startTimeStamp the start time stamp
+     * @param endTimeStamp the end time stamp
+     * @param callResult the call result
+     * @return <code>true</code> if valid or not relevant, <code>false</code> if invalid (exceeded)
+     */
+    private boolean validateTimeout(Object timeout, long startTimeStamp, long endTimeStamp, 
+        RuleExecutionResult callResult) {
+        boolean result = true;
+        if (timeout instanceof Number) {
+            long timeoutValue = ((Number) timeout).longValue();
+            long expectedEndTimeStamp = startTimeStamp + ((Number) timeout).longValue();
+            if (timeoutValue > 0 && endTimeStamp > expectedEndTimeStamp) {
+                callResult.fail();
+                result = false;
+            }
         }
         return result;
     }

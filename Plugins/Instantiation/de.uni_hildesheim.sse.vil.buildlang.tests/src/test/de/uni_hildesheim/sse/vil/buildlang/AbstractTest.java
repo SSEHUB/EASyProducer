@@ -19,7 +19,6 @@ import de.uni_hildesheim.sse.dslCore.translation.Message;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.BuiltIn;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.artifactModel.PathUtils;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.BuildlangExecution;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.RuleExecutionResult;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.Script;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilException;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.execution.Executor;
@@ -368,6 +367,8 @@ public abstract class AbstractTest<M extends Script> extends de.uni_hildesheim.s
      * @param data the test setup data, in particular the parameters and the start rule
      * @throws VilException in case that the execution fails (shall not happen but one never knows
      *     whether VIL fails runing the same script twice)
+     *     
+     * @see #assertExecutor(de.uni_hildesheim.sse.dslCore.test.AbstractTest.EqualitySetup, Executor)
      */
     protected void testExecutor(Script script, EqualitySetup data) throws VilException {
         // this may not do the same as the execution before - this would be a second instantiation
@@ -384,31 +385,42 @@ public abstract class AbstractTest<M extends Script> extends de.uni_hildesheim.s
             if (!inputPresent) {
                 Assert.fail("illegal input exception expected");
             }
+            assertExecutor(data, executor);
         } catch (IllegalArgumentException e) {
             if (inputPresent) {
                 Assert.fail("unexpected exception: " + e.getMessage());
             }
         }
     }
-    
+
     /**
      * Asserts explicit failures if requested by <code>data</code>.
      * 
      * @param data the test setup
      * @param result the execution result
      */
-    private static void assertFailure(EqualitySetup data, Object result) {
-        if (null != data.getExpectedFailCode() || null != data.getExpectedFailReason()) {
-            Assert.assertNotNull("explicit failure expected but no execution result", result);
-            Assert.assertTrue("expected instanceof of RuleExecutionResult", result instanceof RuleExecutionResult);
-            RuleExecutionResult rResult = (RuleExecutionResult) result;
-            if (null != data.getExpectedFailCode()) {
-                Assert.assertEquals(data.getExpectedFailCode(), rResult.getFailCode());
-            }
-            if (null != data.getExpectedFailReason()) {
-                Assert.assertEquals(data.getExpectedFailReason(), rResult.getFailReason());
-            }
-        }
+    protected void assertFailure(EqualitySetup data, Object result) {
+    }
+    
+    /**
+     * Asserts explicit failures if requested by <code>data</code>.
+     * 
+     * @param data the test setup
+     * @param actualFailReason the reason for failing (may be <b>null</b>)
+     * @param actualFailCode the code for failing (may be <b>null</b>)
+     * @param status the actual execution status
+     */
+    protected void assertFailure(EqualitySetup data, String actualFailReason, Integer actualFailCode, 
+        de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.RuleExecutionResult.Status status) {
+    }
+
+    /**
+     * Asserts properties of the executor after execution.
+     * 
+     * @param data the test setup data
+     * @param executor the executor
+     */
+    protected void assertExecutor(EqualitySetup data, Executor executor) {
     }
     
     /**
