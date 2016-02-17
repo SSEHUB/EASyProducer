@@ -305,6 +305,21 @@ public class ExecutionRtTests extends AbstractRtTest {
         setup.setEnableEquals(false);
         assertEqual(setup);
     }
+    
+    /**
+     * Tests addition on fields.
+     * 
+     * @throws IOException should not occur
+     */
+    @Test
+    public void testParameter2() throws IOException {
+        final String name = "parameter2";
+        Configuration cfg = getIvmlConfiguration("QM2", NoVariableFilter.INSTANCE);
+        Map<String, Object> param = createParameterMap(null, null, cfg);
+        EqualitySetup setup = new EqualitySetup(createFile(name), name, null, createTraceFile(name), param);
+        setup.setExpectedFailReason("not done");
+        assertEqual(setup);
+    }
 
     /**
      * Tests a QM-like pipeline startup with value mapping.

@@ -1,0 +1,10 @@
+-> main(Project, Configuration, Project) with (<project>, <config>, <project>)
+    -> tPass()
+        params <- {}
+        -> first(Sequence) with ({}) = null
+        param <- null
+        -> setParameter(Parameter, Any) with (null, 15)
+        done <- null
+        -> ==(Boolean, Boolean) with (null, null) = true
+        visit if-branch
+        explicit fail message "not done"

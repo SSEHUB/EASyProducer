@@ -1,0 +1,50 @@
+@advice(QM2)
+rtVilScript param2 (Project source, Configuration config, Project target) {
+
+    strategy main(Project source, Configuration config, Project target) = {
+        objective true;
+        breakdown {
+            tactic tPass();
+        }
+    }
+
+    tactic tPass() = {
+        sequenceOf(Parameter) params = {};
+        Parameter param = params.first();
+        Boolean done = setParameter(param, 15);
+        if (done == null) {
+            fail "not done";
+        } else if (!done) {
+            fail "not done";
+        }
+
+    }
+
+    Boolean setParameter(Parameter param, Any value) = : {
+        false;
+    }
+
+    Boolean setParameter(IntegerParameter param, Integer value) = : {
+        param.value = value;
+        true;
+    }
+
+    Boolean setParameter(RealParameter param, Real value) = : {
+        param.value = value;
+        true;
+    }
+
+    Boolean setParameter(StringParameter param, String value) = : {
+        param.value = value;
+        true;
+    }
+
+    Boolean setParameter(BooleanParameter param, Boolean value) = : {
+        param.value = value;
+        true;
+    }
+
+    enact(Project source, Configuration config, Project target) = : {
+    }
+
+}

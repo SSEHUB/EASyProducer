@@ -868,6 +868,9 @@ public class BuildlangExecution extends ExecutionVisitor<Script, Rule, VariableD
                     }
                 } else {
                     context.add(eltVal);
+                    if (Status.FAIL == context.getStatus()) {
+                        status = Status.FAIL;
+                    }
                 }
             }
         }
@@ -1308,6 +1311,9 @@ public class BuildlangExecution extends ExecutionVisitor<Script, Rule, VariableD
                         result = eltRes; // collect the last one
                     } else if (mayFail(elt)) {
                         failed = !checkConditionResult(eltRes, elt, ConditionTest.DONT_CARE);
+                        if (enableRuleElementFailed) {
+                            ruleElementFailed(elt, context);
+                        }
                     }
                 }
                 environment.popLevel();
@@ -1356,6 +1362,9 @@ public class BuildlangExecution extends ExecutionVisitor<Script, Rule, VariableD
                             iterResult = eltRes; // collect the last one
                         } else if (mayFail(elt)) {
                             failed = !checkConditionResult(eltRes, elt, ConditionTest.DONT_CARE);
+                            if (enableRuleElementFailed) {
+                                ruleElementFailed(elt, context);
+                            }
                         }
                     }
                     if (null != result) {

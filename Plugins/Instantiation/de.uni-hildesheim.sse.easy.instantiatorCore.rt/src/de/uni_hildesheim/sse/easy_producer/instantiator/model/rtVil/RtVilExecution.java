@@ -1146,7 +1146,7 @@ public class RtVilExecution extends BuildlangExecution implements IRtVilVisitor 
 
     @Override
     public Object visitFailStatement(FailStatement statement) throws VilException {
-        return null; // go on in ruleElemenFailed
+        return null; // go on in ruleElementFailed
     }
 
     @Override
@@ -1167,6 +1167,7 @@ public class RtVilExecution extends BuildlangExecution implements IRtVilVisitor 
             if (null != context.getFailCode()) {
                 msg += " with code " + context.getFailCode();
             }
+            context.setStatus(Status.FAIL);
             getTracer().trace(msg);
         }
     }
