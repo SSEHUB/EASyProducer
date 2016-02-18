@@ -1,0 +1,34 @@
+project QM4 {
+    
+    enum BindingTime {compile = 0, startup = 1, runtime = 2};
+    annotate BindingTime bindingTime = BindingTime.compile to QM4;
+    
+    compound HwNode {
+        String name;
+    }
+    
+    compound MPCCNode refines HwNode {
+    }
+    
+    compound Algorithm {
+        String name;
+        refTo(HwNode) hwNode;
+        assign(bindingTime = BindingTime.runtime) to {
+            refTo(HwNode) actualHwNode;
+        }
+    }
+
+    MPCCNode dfeHost = {
+        name = "dfeHost"
+    };
+    
+    Algorithm alg = {
+        name = "alg", 
+        hwNode = refBy(dfeHost)
+    };
+    
+    freeze {
+        dfeHost;
+        alg;
+    } but (f|f.bindingTime >= BindingTime.runtime)
+}

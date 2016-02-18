@@ -1,0 +1,8 @@
+-> main(Project, Configuration, Project) with (<project>, <config>, <project>)
+    -> t(Configuration) with (<config>)
+        cfg <- <config>
+        a <- QM4::alg
+        a.actualHwNode <- QM4::Algorithm::hwNode
+        -> println(Any) with (dfeHost)
+        Reasoner execution: true
+    -> enact(Project, Configuration, Project) with (<project>, <config>, <project>)

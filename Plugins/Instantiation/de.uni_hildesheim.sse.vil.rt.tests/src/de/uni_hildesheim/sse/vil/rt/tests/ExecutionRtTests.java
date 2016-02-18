@@ -353,6 +353,24 @@ public class ExecutionRtTests extends AbstractRtTest {
         setup.setEnableEquals(false);
         assertEqual(setup);
     }
+    
+    /**
+     * Tests a single reference assignment (contributed by QualiMaster).
+     * 
+     * @throws IOException should not occur
+     */
+    @Test
+    public void testReferences() throws IOException {
+        final String name = "references";
+        File modelFile = createFile(name);
+        Configuration cfg = getIvmlConfiguration("QM4", NoVariableFilter.INSTANCE);
+        
+        Map<String, Object> param = createParameterMap(null, null, cfg);
+        EqualitySetup setup = new EqualitySetup(modelFile, name, null, createTraceFile(name), param);
+        setup.setEnableEquals(false);
+        assertEqual(setup);
+    }
+
 
     /**
      * Tests a simple weighting function.

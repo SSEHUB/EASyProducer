@@ -1,0 +1,20 @@
+import enact;
+
+@advice(QM4)
+rtVilScript references (Project source, Configuration config, Project target) {
+
+    strategy main(Project source, Configuration config, Project target) = {
+        objective true;
+        breakdown {
+            tactic t(config);
+        }
+    }
+
+    tactic t(Configuration config) = {
+        QM4 cfg = config;
+        Algorithm a = cfg.alg;
+        a.actualHwNode = a.hwNode;
+        println("${a.actualHwNode.name}");
+    }
+
+}
