@@ -371,7 +371,6 @@ public class ExecutionRtTests extends AbstractRtTest {
         assertEqual(setup);
     }
 
-
     /**
      * Tests a simple weighting function.
      * 

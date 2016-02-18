@@ -4,5 +4,12 @@
         a <- QM4::alg
         a.actualHwNode <- QM4::Algorithm::hwNode
         -> println(Any) with (dfeHost)
+        -> length(String) with (alg) = 3
+        -> >(Integer, Integer) with (3, 0) = true
+        -> select(Sequence, ExpressionEvaluator) with ({QM4::algorithms [0]}, <evaluator>) = {QM4::algorithms [0]}
+        -> first(Sequence) with ({QM4::algorithms [0]}) = QM4::algorithms [0]
+        a <- QM4::algorithms [0]
+        a.actualHwNode <- QM4::Algorithm::hwNode
+        -> println(Any) with (dfeHost)
         Reasoner execution: true
     -> enact(Project, Configuration, Project) with (<project>, <config>, <project>)

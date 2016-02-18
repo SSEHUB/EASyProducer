@@ -27,8 +27,11 @@ project QM4 {
         hwNode = refBy(dfeHost)
     };
     
+    sequenceOf(refTo(Algorithm)) algorithms = {refBy(alg)};
+    
     freeze {
         dfeHost;
         alg;
+        algorithms;
     } but (f|f.bindingTime >= BindingTime.runtime)
 }

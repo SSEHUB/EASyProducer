@@ -15,6 +15,10 @@ rtVilScript references (Project source, Configuration config, Project target) {
         Algorithm a = cfg.alg;
         a.actualHwNode = a.hwNode;
         println("${a.actualHwNode.name}");
+        
+        a = cfg.algorithms->select(Algorithm a|a.name.length() > 0).first();
+        a.actualHwNode = a.hwNode;
+        println("${a.actualHwNode.name}");
     }
 
 }
