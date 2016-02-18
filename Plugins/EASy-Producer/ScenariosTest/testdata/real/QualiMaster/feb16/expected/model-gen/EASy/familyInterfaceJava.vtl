@@ -1,0 +1,125 @@
+import commonVTLMethods;
+@advice(QM)
+template familyInterfaceJava(Configuration config, FileArtifact target, Family family, String ifName) {
+
+    /*
+     * Produces the tuple type classes.
+     */
+    def produceForTuples(Tuples tuples, Boolean output, String fName, Integer indent) {
+	    String type;
+	    String typeName;
+    	String tupleName;  	
+  					    
+	    for (Tuple t : tuples){
+    		tupleName = t.name;	
+	   		if (output) {
+    			type = "${fName}${firstToUpperCase(tupleName)}Output";
+    			typeName = "output";
+    		} else {
+    			type = "${fName}${firstToUpperCase(tupleName)}Input";
+    			typeName = "input";   		
+    		}   	
+    		type = "I" + type;
+    		'/**' | indent;
+    		'* Defines the data ${typeName} interface for the {@link ${type}} algorithm (over all defined ${typeName} tuples).' | indent + 1;
+			'*/' | indent + 1;
+			String baseInterface = "Serializable";
+			if (genMultiOutputs and output) {
+				baseInterface = "Serializable, eu.qualimaster.base.algorithm.IOutputItem<$type>";
+			}
+    		'public static interface $type extends $baseInterface {' | indent;
+    		''
+    		for (Field f : t.fields) {
+    			String fname = toIdentifier("${f.name}");
+    			String mname = firstToUpperCase(fname);
+    			String ftype = fieldTypeName(f);
+    			'/**' | indent + 4;
+				'* Returns the input value for tuple field "${f.name}".' | indent + 5;
+				'* @return the tuple value' | indent + 5;
+				'*/' | indent + 5;
+    			'public ${ftype} get${mname}();' | indent + 4;
+    			''
+    			'/**' | indent + 4;
+				'* Changes the output value for tuple field "${f.name}".' | indent + 5;
+				'* @param ${fname} the field value' | indent + 5;
+				'*/' | indent + 5;
+    			'public void set${mname}(${ftype} ${fname});' | indent + 4;
+    		}
+    	
+    	'}' | indent;
+    	''	    		    	
+	    }
+    }
+ 	
+ 	/*
+ 	 * Produces the calculate methods based on input-output tuples.
+ 	 */
+    def produceForCalculate(Tuples inputTuples, Tuples outputTuples) {   	 
+    	 String inputTupleName;
+    	 String outputTupleName;
+   	   	 
+   	   	 //input tuples loop	  
+    	 for(Tuple t : inputTuples){ 
+			inputTupleName = t.name;      	        	      	 	
+    	 	String inTypeName = "I${ifName}${firstToUpperCase(inputTupleName)}Input";
+			//output tuples loop
+    	 	for(Tuple p : outputTuples){  
+			  outputTupleName = p.name;
+    	 	  String outTypeName = "I${ifName}${firstToUpperCase(outputTupleName)}Output";  	 
+    	
+    	'    /**'
+    	'     * Calculates the actual <code>result</code> for <code>input</code>.'
+    	'     *'
+    	'     * @param input the algorithm input taken from the input stream'
+    	'     * @param result the result calculated by the algorithm'
+    	'     */'
+        '    public void calculate(${inTypeName} input, ${outTypeName} result);'
+        ''
+           }
+       }
+    } 	
+
+    def main(Configuration config, FileArtifact target, Family family, String ifName) {
+    	/* think about the family interface name is better from varName or name field
+    	Family fm = family;
+    	String familyName = fm.name;
+    	familyName = "I" + familyName.firstToUpperCase();
+    	* 
+    	*/
+    	'package eu.qualimaster.families.inf;'
+    	''
+    	'import java.io.Serializable;'
+    	'import eu.qualimaster.base.algorithm.IFamily;'
+    	''
+    	'/**'
+    	' * Defines the interface for the algorithm family "${ifName}" (GEN).'
+    	' */'
+    	'public interface ${toIdentifier(ifName)} extends IFamily{'
+    	''
+    	 produceForTuples(family.input, false, ifName, 4);
+    	 produceForTuples(family.output, true, ifName, 4);
+    	 
+    	 //produce the calculate method based on multiple input and output string
+         produceForCalculate(family.input, family.output);        
+        
+        if (family.byName("parameters").variables().size()>0) {
+	        ''
+	        for (Parameter p : family.byName("parameters")) {
+	        	String paramName = p.name;
+    			String mname = firstToUpperCase(toIdentifier(paramName));
+    			String type = parameterTypeName(p);
+    		
+	        	'    /**'
+	        	'     * Sets the algorithm parameter "${paramName}".'
+	        	'     *'
+	        	'     * @param value the new value of the algorithm parameter'
+	        	'     */'
+	        	
+	        	'    public void setParameter${mname}(${parameterTypeName(p)} value);'
+	        	''
+	    	}
+    	}
+    	'}'
+    }
+    
+}

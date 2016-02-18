@@ -1,0 +1,28 @@
+<mapping>
+  <pipeline name="DynamicGraphPip" class="eu.qualimaster.DynamicGraphPip.topology.Topology">
+      <node name="FinancialDataSource" type="source">
+          <component name="PipelineVar_8_Source0" container="DynamicGraphPip" class="eu.qualimaster.DynamicGraphPip.topology.PipelineVar_8_Source0Source" receiver="true" thrift="false" tasks="1"/>
+      </node>
+      <node name="preprocessor" type="family">
+          <component name="PipelineVar_8_FamilyElement0" container="DynamicGraphPip" class="eu.qualimaster.DynamicGraphPip.topology.PipelineVar_8_FamilyElement0FamilyElement" receiver="true" thrift="false" tasks="1" alternative0 = "Preprocessor"/>
+      </node>
+      <node name="CorrelationComputation" type="family">
+          <component name="PipelineVar_8_FamilyElement1" container="DynamicGraphPip" class="eu.qualimaster.DynamicGraphPip.topology.PipelineVar_8_FamilyElement1FamilyElement" receiver="true" thrift="false" tasks="1" alternative0 = "TopoSoftwareCorrelationFinancial" alternative1 = "TopoHardwareCorrelationFinancial"/>
+      </node>
+      <node name="DynamicGraphCompilation" type="family">
+          <component name="PipelineVar_8_FamilyElement2" container="DynamicGraphPip" class="eu.qualimaster.DynamicGraphPip.topology.PipelineVar_8_FamilyElement2FamilyElement" receiver="true" thrift="false" tasks="1" alternative0 = "DynamicGraphCompilation"/>
+      </node>
+      <node name="DynamicHubComputation" type="family">
+          <component name="PipelineVar_8_FamilyElement3" container="DynamicGraphPip" class="eu.qualimaster.DynamicGraphPip.topology.PipelineVar_8_FamilyElement3FamilyElement" receiver="true" thrift="false" tasks="1" alternative0 = "TopoDynamicHubComputation"/>
+      </node>
+      <node name="DynamicGraphSink" type="sink">
+          <component name="PipelineVar_8_Sink0" container="DynamicGraphPip" class="eu.qualimaster.DynamicGraphPip.topology.PipelineVar_8_Sink0Sink" receiver="true" thrift="false" tasks="1"/>
+      </node>
+      <algorithm name="Preprocessor" implName="Preprocessor" class="eu.qualimaster.algorithms.imp.correlation.Preprocessor"/>
+      <algorithm name="TopoSoftwareCorrelationFinancial" implName="TopoSoftwareCorrelationFinancial" class="eu.qualimaster.algorithms.imp.correlation.softwaresubtopology.TopoSoftwareCorrelationFinancial"/>
+      <algorithm name="TopoHardwareCorrelationFinancial" implName="TopoHardwareCorrelationFinancial" class="eu.qualimaster.algorithms.imp.correlation.hardwaresubtopology.TopoHardwareCorrelationFinancial"/>
+      <algorithm name="DynamicGraphCompilation" implName="DynamicGraphCompilation" class="eu.qualimaster.dynamicgraph.DynamicGraphCompilation"/>
+      <algorithm name="TopoDynamicHubComputation" implName="TopoDynamicHubComputation" class="eu.qualimaster.dynamicgraph.TopoDynamicHubComputation"/>
+  </pipeline>
+
+</mapping>

@@ -1,0 +1,62 @@
+project PipelineVar_1Cfg {
+
+	import Basics;
+	import Pipelines;
+	import FamiliesCfg;
+	import DataManagementCfg;
+	annotate BindingTime bindingTime = BindingTime.compile to PipelineVar_1Cfg;
+	Pipeline PipelineVar_1;
+	Source PipelineVar_1_Source0;
+	Flow PipelineVar_1_Flow0;
+	FamilyElement PipelineVar_1_FamilyElement0;
+	Flow PipelineVar_1_Flow1;
+	Sink PipelineVar_1_Sink0;
+	PipelineVar_1_Sink0 = Sink {
+		sink = refBy(randomSink), 
+		parallelism = 1, 
+		name = "snk"
+	};
+	PipelineVar_1_Flow1 = Flow {
+		destination = refBy(PipelineVar_1_Sink0), 
+		grouping = Grouping.shuffleGrouping, 
+		name = "f2"
+	};
+	PipelineVar_1_FamilyElement0 = FamilyElement {
+		family = refBy(randomFamily), 
+		output = {
+			refBy(PipelineVar_1_Flow1)
+		}, 
+		parallelism = 1, 
+		name = "processor"
+	};
+	PipelineVar_1_Flow0 = Flow {
+		destination = refBy(PipelineVar_1_FamilyElement0), 
+		grouping = Grouping.shuffleGrouping, 
+		name = "f1"
+	};
+	PipelineVar_1_Source0 = Source {
+		output = {
+			refBy(PipelineVar_1_Flow0)
+		}, 
+		source = refBy(randomSource), 
+		parallelism = 1, 
+		name = "src"
+	};
+	PipelineVar_1 = Pipeline {
+		name = "RandomPip", 
+		sources = {
+			refBy(PipelineVar_1_Source0)
+		}, 
+		numworkers = 1, 
+		artifact = "eu.qualimaster.test:RandomPip:0.0.2-SNAPSHOT",
+		fastSerialization = false
+	};
+	freeze {
+		PipelineVar_1;
+		PipelineVar_1_Source0;
+		PipelineVar_1_Flow0;
+		PipelineVar_1_FamilyElement0;
+		PipelineVar_1_Flow1;
+		PipelineVar_1_Sink0;
+	} but (f|f.bindingTime >= BindingTime.runtimeMon)
+}

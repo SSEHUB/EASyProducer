@@ -1,0 +1,240 @@
+project HardwareCfg {
+
+	import Hardware;
+	Machine machine1;
+	Machine machine2;
+	Machine machine3;
+	Machine machine4;
+	Machine machine5;
+	Machine machine6;
+	Machine machine7;
+	Machine machine8;
+	Machine machine9;
+	Machine machine10;
+	Machine machine11;
+	Machine machine12;
+	Machine machine13;
+	Machine machine14;
+	Machine machine15;
+	Machine machine16;
+	Machine machine17;
+	Machine machine18;
+	machines = {
+		refBy(machine1), refBy(machine2), refBy(machine3), refBy(machine4), refBy(machine5), refBy(machine6), refBy(machine7), refBy(machine8), refBy(machine9), refBy(machine10), refBy(machine11), refBy(machine12), refBy(machine13), refBy(machine14), refBy(machine15), refBy(machine16), refBy(machine17), refBy(machine18)
+	};
+	machines.bindingTime = BindingTime.compile;
+	usedMachines.bindingTime = BindingTime.runtimeMon;
+	availableMachines.bindingTime = BindingTime.runtimeMon;
+	machine1 = Machine {
+		name = "snf-618466.vm.okeanos.grnet.gr", 
+		memory = 8178512, 
+		processors = 2, 
+		executors = 4, 
+		frequency = 2100, 
+		ports = {}, 
+		role = MachineRole.Manager
+	};
+	machine2 = Machine {
+		name = "snf-618463.vm.okeanos.grnet.gr", 
+		memory = 8178512, 
+		processors = 2, 
+		executors = 4, 
+		frequency = 2100, 
+		ports = {
+			6700, 6701, 6702, 6703
+		}, 
+		role = MachineRole.Worker
+	};
+	machine3 = Machine {
+		name = "snf-618464.vm.okeanos.grnet.gr", 
+		memory = 8178512, 
+		processors = 2, 
+		executors = 4, 
+		frequency = 2100, 
+		ports = {
+			6700, 6701, 6702, 6703
+		}, 
+		role = MachineRole.Worker
+	};
+	machine4 = Machine {
+		name = "snf-618465.vm.okeanos.grnet.gr", 
+		memory = 8178512, 
+		processors = 2, 
+		executors = 4, 
+		frequency = 2100, 
+		ports = {
+			6700, 6701, 6702, 6703
+		}, 
+		role = MachineRole.Worker
+	};
+	machine5 = Machine {
+		name = "snf-625826.vm.okeanos.grnet.gr", 
+		memory = 8178512, 
+		processors = 2, 
+		executors = 4, 
+		frequency = 2100, 
+		ports = {
+			6700, 6701, 6702, 6703
+		}, 
+		role = MachineRole.Worker
+	};
+	machine6 = Machine {
+		name = "snf-625827.vm.okeanos.grnet.gr", 
+		memory = 8178512, 
+		processors = 2, 
+		executors = 4, 
+		frequency = 2100, 
+		ports = {
+			6700, 6701, 6702, 6703
+		}, 
+		role = MachineRole.Worker
+	};
+	machine7 = Machine {
+		name = "snf-625828.vm.okeanos.grnet.gr", 
+		memory = 8178512, 
+		processors = 2, 
+		executors = 4, 
+		frequency = 2100, 
+		ports = {
+			6700, 6701, 6702, 6703
+		}, 
+		role = MachineRole.Worker
+	};
+	machine8 = Machine {
+		name = "snf-625829.vm.okeanos.grnet.gr", 
+		memory = 8178512, 
+		processors = 2, 
+		executors = 4, 
+		frequency = 2100, 
+		ports = {
+			6700, 6701, 6702, 6703
+		}, 
+		role = MachineRole.Worker
+	};
+	machine9 = Machine {
+		name = "snf-626254.vm.okeanos.grnet.gr", 
+		memory = 8178512, 
+		processors = 2, 
+		executors = 4, 
+		frequency = 2100, 
+		ports = {
+			6700, 6701, 6702, 6703
+		}, 
+		role = MachineRole.Worker
+	};
+	machine10 = Machine {
+		name = "snf-618454.vm.okeanos.grnet.gr", 
+		memory = 8178512, 
+		processors = 2, 
+		executors = 4, 
+		frequency = 2100, 
+		ports = {
+			6700, 6701, 6702, 6703
+		}, 
+		role = MachineRole.Worker
+	};
+	machine11 = Machine {
+		name = "nimbus1.sse.local", 
+		memory = 7918000, 
+		processors = 2, 
+		executors = 4, 
+		frequency = 1860, 
+		ports = {}, 
+		role = MachineRole.Manager
+	};
+	machine12 = Machine {
+		name = "host4.sse.local", 
+		memory = 7919000, 
+		processors = 2, 
+		executors = 4, 
+		frequency = 1860, 
+		ports = {
+			6700, 6701, 6702, 6703
+		}, 
+		role = MachineRole.Worker
+	};
+	machine13 = Machine {
+		name = "host-11.sse.local", 
+		memory = 7984000, 
+		processors = 2, 
+		executors = 4, 
+		frequency = 2200, 
+		ports = {
+			6700, 6701, 6702, 6703
+		}, 
+		role = MachineRole.Worker
+	};
+	machine14 = Machine {
+		name = "server1.sse.local", 
+		memory = 5902000, 
+		processors = 2, 
+		executors = 4, 
+		frequency = 1860, 
+		ports = {
+			6700, 6701, 6702, 6703
+		}, 
+		role = MachineRole.Worker
+	};
+	machine15 = Machine {
+		name = "host-16.sse.local", 
+		memory = 7910000, 
+		processors = 2, 
+		executors = 4, 
+		frequency = 1862, 
+		ports = {
+			6700, 6701, 6702, 6703
+		}, 
+		role = MachineRole.Worker
+	};
+	machine16 = Machine {
+		name = "host-12.sse.local", 
+		memory = 7910000, 
+		processors = 2, 
+		executors = 4, 
+		frequency = 1862, 
+		ports = {
+			6700, 6701, 6702, 6703
+		}, 
+		role = MachineRole.Worker
+	};
+	machine17 = Machine {
+		name = "host-10.sse.local", 
+		memory = 7910000, 
+		processors = 2, 
+		executors = 4, 
+		frequency = 1862, 
+		ports = {
+			6700, 6701, 6702, 6703
+		}, 
+		role = MachineRole.Worker
+	};
+	machine18 = Machine {
+		name = "host-13.sse.local", 
+		memory = 7910000, 
+		processors = 2, 
+		executors = 4, 
+		frequency = 1862, 
+		ports = {
+			6700, 6701, 6702, 6703
+		}, 
+		role = MachineRole.Worker
+	};
+	freeze {
+		machines;
+		machine1;
+		machine2;
+		machine3;
+		machine4;
+		machine5;
+		machine6;
+		machine7;
+		machine8;
+		machine9;
+		machine10;
+		machine11;
+		machine12;
+		machine13;
+		machine14;
+		machine15;
+	} but (f|f.bindingTime >= BindingTime.runtimeMon)
+}

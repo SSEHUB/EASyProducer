@@ -1,0 +1,51 @@
+<mapping>
+  <pipeline name="FocusPip" class="eu.qualimaster.FocusPip.topology.Topology">
+      <node name="TwitterDataSource" type="source">
+          <component name="PipelineVar_7_Source0" container="FocusPip" class="eu.qualimaster.FocusPip.topology.PipelineVar_7_Source0Source" receiver="true" thrift="false" tasks="1"/>
+      </node>
+      <node name="SpamDetection" type="family">
+          <component name="PipelineVar_7_FamilyElement0" container="FocusPip" class="eu.qualimaster.FocusPip.topology.PipelineVar_7_FamilyElement0FamilyElement" receiver="true" thrift="false" tasks="1" alternative0 = "SpamDetection"/>
+      </node>
+      <node name="Spam Removal" type="family">
+          <component name="PipelineVar_7_FamilyElement1" container="FocusPip" class="eu.qualimaster.FocusPip.topology.PipelineVar_7_FamilyElement1FamilyElement" receiver="true" thrift="false" tasks="1" alternative0 = "SpamRemoval"/>
+      </node>
+      <node name="StockParser" type="family">
+          <component name="PipelineVar_7_FamilyElement2" container="FocusPip" class="eu.qualimaster.FocusPip.topology.PipelineVar_7_FamilyElement2FamilyElement" receiver="true" thrift="false" tasks="1" alternative0 = "StockParser  "/>
+      </node>
+      <node name="EventDetection" type="family">
+          <component name="PipelineVar_7_FamilyElement3" container="FocusPip" class="eu.qualimaster.FocusPip.topology.PipelineVar_7_FamilyElement3FamilyElement" receiver="true" thrift="false" tasks="1" alternative0 = "EventDetectionHardThreshold"/>
+      </node>
+      <node name="KeywordAnalyzer" type="family">
+          <component name="PipelineVar_7_FamilyElement4" container="FocusPip" class="eu.qualimaster.FocusPip.topology.PipelineVar_7_FamilyElement4FamilyElement" receiver="true" thrift="false" tasks="1" alternative0 = "KeywordAnalyzer"/>
+      </node>
+      <node name="Recommendations" type="family">
+          <component name="PipelineVar_7_FamilyElement5" container="FocusPip" class="eu.qualimaster.FocusPip.topology.PipelineVar_7_FamilyElement5FamilyElement" receiver="true" thrift="false" tasks="1" alternative0 = "Recommendations"/>
+      </node>
+      <node name="FocusSink" type="sink">
+          <component name="PipelineVar_7_Sink0" container="FocusPip" class="eu.qualimaster.FocusPip.topology.PipelineVar_7_Sink0Sink" receiver="true" thrift="false" tasks="1"/>
+      </node>
+      <node name="SpringDataSource" type="source">
+          <component name="PipelineVar_7_Source1" container="FocusPip" class="eu.qualimaster.FocusPip.topology.PipelineVar_7_Source1Source" receiver="true" thrift="false" tasks="1"/>
+      </node>
+      <node name="preprocessor" type="family">
+          <component name="PipelineVar_7_FamilyElement6" container="FocusPip" class="eu.qualimaster.FocusPip.topology.PipelineVar_7_FamilyElement6FamilyElement" receiver="true" thrift="false" tasks="1" alternative0 = "Preprocessor"/>
+      </node>
+      <node name="correlation" type="family">
+          <component name="PipelineVar_7_FamilyElement7" container="FocusPip" class="eu.qualimaster.FocusPip.topology.PipelineVar_7_FamilyElement7FamilyElement" receiver="true" thrift="false" tasks="1" alternative0 = "TopoSoftwareCorrelationFinancial" alternative1 = "TopoHardwareCorrelationFinancial"/>
+      </node>
+      <node name="DynamicGraphCompilation" type="family">
+          <component name="PipelineVar_7_FamilyElement8" container="FocusPip" class="eu.qualimaster.FocusPip.topology.PipelineVar_7_FamilyElement8FamilyElement" receiver="true" thrift="false" tasks="1" alternative0 = "DynamicGraphCompilation"/>
+      </node>
+      <algorithm name="SpamDetection" implName="SpamDetectionBolt" class="eu.qualimaster.algorithms.stream.spam.SpamDetectionBolt"/>
+      <algorithm name="SpamRemoval" implName="SpamRemovalBolt" class="eu.qualimaster.algorithms.stream.spam.SpamRemovalBolt"/>
+      <algorithm name="StockParser  " implName="StockParserAlgorithm" class="eu.qualimaster.algorithms.stockParser.family.impl.StockParserAlgorithm"/>
+      <algorithm name="EventDetectionHardThreshold" implName="EventDetectionHardThresholdAlgorithm" class="eu.qualimaster.algorithms.stream.eventdetection.family.impl.EventDetectionHardThresholdAlgorithm"/>
+      <algorithm name="KeywordAnalyzer" implName="BasicKeywordAnalyzerAlgorithm" class="eu.qualimaster.algorithms.keywordAnalyzer.correlation.BasicKeywordAnalyzerAlgorithm"/>
+      <algorithm name="Recommendations" implName="RecommendationsAlgorithm" class="eu.qualimaster.algorithms.recommendations.family.impl.RecommendationsAlgorithm"/>
+      <algorithm name="Preprocessor" implName="Preprocessor" class="eu.qualimaster.algorithms.imp.correlation.Preprocessor"/>
+      <algorithm name="TopoSoftwareCorrelationFinancial" implName="TopoSoftwareCorrelationFinancial" class="eu.qualimaster.algorithms.imp.correlation.softwaresubtopology.TopoSoftwareCorrelationFinancial"/>
+      <algorithm name="TopoHardwareCorrelationFinancial" implName="TopoHardwareCorrelationFinancial" class="eu.qualimaster.algorithms.imp.correlation.hardwaresubtopology.TopoHardwareCorrelationFinancial"/>
+      <algorithm name="DynamicGraphCompilation" implName="DynamicGraphCompilation" class="eu.qualimaster.dynamicgraph.DynamicGraphCompilation"/>
+  </pipeline>
+
+</mapping>

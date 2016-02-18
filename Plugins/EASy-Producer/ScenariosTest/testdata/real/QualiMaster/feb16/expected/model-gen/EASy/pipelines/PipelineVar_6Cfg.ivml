@@ -1,0 +1,28 @@
+project PipelineVar_6Cfg {
+
+	import Basics;
+	import Pipelines;
+	import FamiliesCfg;
+	import DataManagementCfg;
+	annotate BindingTime bindingTime = BindingTime.compile to PipelineVar_6Cfg;
+	Pipeline PipelineVar_6;
+	Source PipelineVar_6_Source0;
+	Flow PipelineVar_6_Flow0;
+	FamilyElement PipelineVar_6_FamilyElement0;
+	Flow PipelineVar_6_Flow1;
+	Sink PipelineVar_6_Sink0;
+	PipelineVar_6_Sink0 = {sink = refBy(DataSinkVar_4), parallelism = 1, name = "MIsink", constraints = {}};
+	PipelineVar_6_Flow1 = {destination = refBy(PipelineVar_6_Sink0), grouping = Grouping.shuffleGrouping, name = "f2", constraints = {}};
+	PipelineVar_6_FamilyElement0 = {family = refBy(FamilyVar_24), output = {refBy(PipelineVar_6_Flow1)}, parallelism = 1, name = "MutualInform", constraints = {}};
+	PipelineVar_6_Flow0 = {destination = refBy(PipelineVar_6_FamilyElement0), grouping = Grouping.shuffleGrouping, name = "f1", constraints = {}};
+	PipelineVar_6_Source0 = {output = {refBy(PipelineVar_6_Flow0)}, source = refBy(spring), parallelism = 1, name = "FinancialDataSource", constraints = {}};
+	PipelineVar_6 = {name = "CorrelationClusteringPip", sources = {refBy(PipelineVar_6_Source0)}, numworkers = 1, artifact = "eu.qualimaster:CorrelationClusteringPip:0.0.1-SNAPSHOT", debug = false, fastSerialization = false, constraints = {}};
+	freeze {
+		PipelineVar_6;
+		PipelineVar_6_Source0;
+		PipelineVar_6_Flow0;
+		PipelineVar_6_FamilyElement0;
+		PipelineVar_6_Flow1;
+		PipelineVar_6_Sink0;
+	} but (f|f.bindingTime >= BindingTime.runtimeMon)
+}

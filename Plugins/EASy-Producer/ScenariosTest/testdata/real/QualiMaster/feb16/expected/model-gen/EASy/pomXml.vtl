@@ -1,0 +1,492 @@
+import commonVTLMethods;
+@advice(QM)
+template pomXml(Configuration config, FileArtifact target, Pipeline pipeline, String repoURL) {
+    def processElement(sequenceOf(DecisionVariable) output, setOf(String) nodes, Text text) {     	
+        for(Flow v : output) { 
+            DecisionVariable elt = v.destination;  
+			checkForPipelineNode(elt, nodes, text);          
+            processElement(elt.byName("output").variables(), nodes, text);
+        } 
+    }
+	def checkForPipelineNode(DecisionVariable elt, setOf(String) nodes, Text text) {
+		String nodeName = elt.varName();
+        String nodeClsName = elt.varName().firstToUpperCase() + elt.type();
+        if(elt.type() == "Source" and !isStringExisted(nodeName, nodes)) {               	
+	        Source src =elt;
+	        produceDependencies(src, text);
+	    }
+		if(elt.type() == "Sink" and !isStringExisted(nodeName, nodes)) {
+            Sink snk = elt;
+            produceDependencies(snk, text);
+        }
+        if(elt.type() == "FamilyElement" and !isStringExisted(nodeName, nodes)) {
+            FamilyElement fe = elt;
+            produceDependencies(fe, text);
+        }
+        nodes.add(nodeName);		
+	}
+	def produceDependencies(Source source, Text text) {
+		DataSource dataSrc = source.source;
+	   	String artifact = dataSrc.artifact;                         
+		//for source class dependencies
+        sequenceOf(String) artList = artifact.split(":");
+        if(artList.size() == 3) {                		
+	       	text.append("    <dependency>\n      <groupId>${artList[0]}</groupId>\n      <artifactId>${artList[1]}</artifactId>\n");
+	       	text.append("      <version>${artList[2]}</version>\n    </dependency>\n");                		
+        }					
+	}
+	
+	def produceDependencies(FamilyElement familyElt, Text text) {
+        Family fm = familyElt.family;
+        //added all algorithm dependencies
+        for(Algorithm alg : fm.members) {
+            String artifact = alg.artifact;
+            sequenceOf(String) artList = artifact.split(":");
+            if(artList.size() == 3) {                		
+	            text.append("    <dependency>\n      <groupId>${artList[0]}</groupId>\n      <artifactId>${artList[1]}</artifactId>\n");
+	            text.append("      <version>${artList[2]}</version>\n    </dependency>\n");                		
+            }
+        }	
+	}
+	
+	def produceDependencies(Sink snk, Text text) {
+        DataSink dataSnk = snk.sink;
+        String snkName = dataSnk.name;
+        String artifact = dataSnk.artifact;
+		//for appending sink class dependencies 
+        sequenceOf(String) artList = artifact.split(":");
+        if(artList.size() == 3) {                		
+	        text.append("    <dependency>\n      <groupId>${artList[0]}</groupId>\n      <artifactId>${artList[1]}</artifactId>\n");
+	        text.append("      <version>${artList[2]}</version>\n    </dependency>\n");                		
+        }						
+	}
+	
+	def appendPlugins(Text text) {
+		text.append("            <plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-assembly-plugin</artifactId>
+				<version>2.4</version>
+				<configuration>
+					<descriptorRefs>
+						<descriptorRef>jar-with-dependencies</descriptorRef>
+					</descriptorRefs>
+					<dependencySets>
+						<dependencySet>
+							<unpack>false</unpack>
+							<scope>runtime</scope>
+						</dependencySet>
+						<dependencySet>
+							<unpack>false</unpack>
+							<scope>provided</scope>
+						</dependencySet>
+					</dependencySets>
+					<archive>
+						<manifest>
+						</manifest>
+					</archive>
+				</configuration>
+				<executions>
+					<execution>
+						<id>make-assembly</id>
+						<phase>package</phase>
+						<goals>
+							<goal>single</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>\n");
+			text.append("            <plugin>
+				<artifactId>maven-install-plugin</artifactId>
+				<version>2.3.1</version>
+				<configuration>
+					<createChecksum>true</createChecksum>
+				</configuration>
+			</plugin>\n");
+            text.append("            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.0</version>
+                <configuration>
+                    <source>1.7</source>
+                    <target>1.7</target>
+                </configuration>              
+            </plugin>\n");
+            text.append("            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <version>2.4</version>
+                <configuration>
+                    <useDefaultManifestFile>true</useDefaultManifestFile>
+					<archive>
+						<manifest>
+							<addClasspath>true</addClasspath>
+							<mainClass>TestFramework</mainClass>
+						</manifest>
+					</archive>
+                </configuration>
+            </plugin>\n");
+            text.append("            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-source-plugin</artifactId>
+                <version>2.2.1</version>
+                <executions>
+                    <execution>
+                        <id>attach-sources</id>
+                        <phase>verify</phase>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>\n");
+            text.append("            <plugin>
+		        <groupId>org.codehaus.mojo</groupId>
+		        <artifactId>exec-maven-plugin</artifactId>
+		        <version>1.3</version>
+		        <executions>
+		          <execution>
+		            <goals>
+		              <goal>exec</goal>
+		            </goals>
+		          </execution>
+		        </executions>
+		        <configuration>
+		          <executable>java</executable>
+		          <includeProjectDependencies>true</includeProjectDependencies>
+		          <includePluginDependencies>false</includePluginDependencies>
+		          <classpathScope>compile</classpathScope>
+		          <mainClass>"+"$"+"{storm.topology}"+"</mainClass>
+		        </configuration>
+		    </plugin>\n");
+      text.append("            <plugin>
+					<groupId>org.eclipse.m2e</groupId>
+					<artifactId>lifecycle-mapping</artifactId>
+					<version>1.0.0</version>
+					<configuration>
+						<lifecycleMappingMetadata>
+							<pluginExecutions>
+								<pluginExecution>
+									<pluginExecutionFilter>
+										<groupId>org.apache.maven.plugins</groupId>
+										<artifactId>maven-dependency-plugin</artifactId>
+										<versionRange>[2.0,)</versionRange>
+										<goals>
+											<goal>copy-dependencies</goal>
+										</goals>
+									</pluginExecutionFilter>
+									<action>
+										<execute />
+									</action>
+								</pluginExecution>
+							</pluginExecutions>
+						</lifecycleMappingMetadata>
+					</configuration>
+				</plugin>\n");
+	}   
+	
+	def appendResources(Text text) {
+		text.append("        <resource>
+            <directory>"+"$"+"{basedir}/</directory>
+            <filtering>false</filtering>
+            <includes>
+            <include>mapping.xml</include>
+            </includes>
+        </resource>\n");        
+	}
+	
+	def appendDependencyManagement(Text text) {
+		text.append("<dependencyManagement>
+    <dependencies>
+        <dependency>
+            <groupId>eu.qualimaster</groupId>
+            <artifactId>InfrastructureDependencies</artifactId>
+            <version>0.2.0-SNAPSHOT</version>
+            <type>pom</type>
+            <scope>import</scope>
+        </dependency>
+        <dependency>
+            <groupId>eu.qualimaster</groupId>
+            <artifactId>PipelineDependencies</artifactId>
+            <version>0.2.0-SNAPSHOT</version>
+            <type>pom</type>
+            <scope>import</scope>
+        </dependency>            
+    </dependencies>
+</dependencyManagement>\n");
+	}
+	//only for generating a fat jar
+	def appendBasicInfrastructureDependencies(Text text) {
+		text.append("<dependency>
+      <groupId>org.apache.storm</groupId>
+      <artifactId>storm-core</artifactId>
+      <version>0.9.3</version>  
+      <scope>provided</scope> 
+    </dependency>
+    <dependency>
+      <groupId>com.github.ptgoetz</groupId>
+      <artifactId>storm-hdfs</artifactId>
+      <version>0.1.2</version>
+       
+      <exclusions>
+        <exclusion>
+          <groupId>org.slf4j</groupId>
+          <artifactId>slf4j-log4j12</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>log4j</groupId>
+          <artifactId>log4j</artifactId>
+        </exclusion>        
+      </exclusions>          
+    </dependency>    
+    <!-- Hadoop Dependencies -->
+    <dependency>
+      <groupId>org.apache.hadoop</groupId>
+      <artifactId>hadoop-client</artifactId>
+      <version>2.4.0</version>
+      
+      <exclusions>
+        <exclusion>
+          <groupId>org.slf4j</groupId>
+          <artifactId>slf4j-log4j12</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>log4j</groupId>
+          <artifactId>log4j</artifactId>
+        </exclusion>        
+      </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.hadoop</groupId>
+      <artifactId>hadoop-hdfs</artifactId>
+      <version>2.4.0</version>
+      
+      <exclusions>
+        <exclusion>
+          <groupId>org.slf4j</groupId>
+          <artifactId>slf4j-log4j12</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>log4j</groupId>
+          <artifactId>log4j</artifactId>
+        </exclusion>        
+      </exclusions>      
+    </dependency>
+    <dependency>
+      <groupId>org.apache.hadoop</groupId>
+      <artifactId>hadoop-common</artifactId>
+      <version>2.4.0</version> 
+            
+      <exclusions>
+        <exclusion>
+          <groupId>org.slf4j</groupId>
+          <artifactId>slf4j-log4j12</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>log4j</groupId>
+          <artifactId>log4j</artifactId>
+        </exclusion>        
+      </exclusions>               
+    </dependency>   
+    <!-- HBase Dependencies -->
+    <dependency>
+      <groupId>org.apache.hbase</groupId>
+      <artifactId>hbase-common</artifactId>
+      <version>0.98.6-hadoop2</version>
+      
+      <exclusions>
+        <exclusion>
+          <groupId>org.slf4j</groupId>
+          <artifactId>slf4j-log4j12</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>log4j</groupId>
+          <artifactId>log4j</artifactId>
+        </exclusion>        
+      </exclusions>      
+    </dependency>
+    <dependency>
+      <groupId>org.apache.hbase</groupId>
+      <artifactId>hbase-protocol</artifactId>
+      <version>0.98.6-hadoop2</version>
+      
+      <exclusions>
+        <exclusion>
+          <groupId>org.slf4j</groupId>
+          <artifactId>slf4j-log4j12</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>log4j</groupId>
+          <artifactId>log4j</artifactId>
+        </exclusion>        
+      </exclusions>      
+    </dependency>
+    <dependency>
+      <groupId>org.apache.hbase</groupId>
+      <artifactId>hbase-client</artifactId>
+      <version>0.98.6-hadoop2</version>
+      
+      <exclusions>
+        <exclusion>
+          <groupId>org.slf4j</groupId>
+          <artifactId>slf4j-log4j12</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>log4j</groupId>
+          <artifactId>log4j</artifactId>
+        </exclusion>        
+      </exclusions>      
+    </dependency>\n ");
+	}
+	
+	def appendQmInfrastructureDependencies(Text text) {
+		text.append("   <dependency>
+     <groupId>eu.qualimaster</groupId>
+     <artifactId>StormCommons</artifactId>
+   </dependency>\n");
+   	    text.append("   <dependency>
+     <groupId>eu.qualimaster</groupId>
+     <artifactId>PriorityPipelineInterfaces</artifactId>
+     <version>0.2.0-SNAPSHOT</version>
+   </dependency>\n");
+   		text.append("   <dependency>
+     <groupId>eu.qualimaster</groupId>
+     <artifactId>DataManagementLayer</artifactId>
+   </dependency>\n");        
+   		text.append("   <dependency>
+     <groupId>eu.qualimaster</groupId>
+     <artifactId>QualiMaster.Events</artifactId>
+   </dependency>\n");
+	}
+	
+	 def appendCommonProvidedInfraDependencies(Text text) {
+    	text.append("    <dependency>      
+      <groupId>org.apache.storm</groupId>
+      <artifactId>storm-core</artifactId>
+    </dependency>\n");
+   text.append("   <dependency>
+     <groupId>com.github.ptgoetz</groupId>
+     <artifactId>storm-hdfs</artifactId>
+   </dependency>\n");
+   text.append("   <dependency>
+     <groupId>org.apache.hadoop</groupId>
+     <artifactId>hadoop-client</artifactId>
+   </dependency>\n");
+    text.append("   <dependency>
+     <groupId>org.apache.hadoop</groupId>
+     <artifactId>hadoop-hdfs</artifactId>
+   </dependency>\n");
+   text.append("   <dependency>
+     <groupId>org.apache.hadoop</groupId>
+     <artifactId>hadoop-common</artifactId>
+   </dependency>\n");
+   text.append("   <dependency>
+     <groupId>org.apache.hbase</groupId>
+     <artifactId>hbase-common</artifactId>
+   </dependency>\n");
+   text.append("   <dependency>
+     <groupId>org.apache.hbase</groupId>
+     <artifactId>hbase-protocol</artifactId>
+   </dependency>\n");
+   text.append("   <dependency>
+     <groupId>org.apache.hbase</groupId>
+     <artifactId>hbase-client</artifactId>
+   </dependency>\n");
+    }
+	
+    def appendCommonDependencies(Text text) {
+    	text.append("    <dependency>      
+      <groupId>org.apache.storm</groupId>
+      <artifactId>storm-core</artifactId>
+    </dependency>\n");   		
+   text.append("   <dependency>
+     <groupId>com.github.ptgoetz</groupId>
+     <artifactId>storm-hdfs</artifactId>
+	 <scope>compile</scope>
+   </dependency>\n");
+   text.append("   <dependency>
+     <groupId>org.apache.hadoop</groupId>
+     <artifactId>hadoop-client</artifactId>
+	 <scope>compile</scope>
+   </dependency>\n");
+    text.append("   <dependency>
+     <groupId>org.apache.hadoop</groupId>
+     <artifactId>hadoop-hdfs</artifactId>
+	 <scope>compile</scope>
+   </dependency>\n");
+   text.append("   <dependency>
+     <groupId>org.apache.hadoop</groupId>
+     <artifactId>hadoop-common</artifactId>
+	 <scope>compile</scope>
+   </dependency>\n");
+   text.append("   <dependency>
+     <groupId>org.apache.hbase</groupId>
+     <artifactId>hbase-common</artifactId>
+	 <scope>compile</scope>
+   </dependency>\n");
+   text.append("   <dependency>
+     <groupId>org.apache.hbase</groupId>
+     <artifactId>hbase-protocol</artifactId>
+	 <scope>compile</scope>
+   </dependency>\n");
+   text.append("   <dependency>
+     <groupId>org.apache.hbase</groupId>
+     <artifactId>hbase-client</artifactId>
+	 <scope>compile</scope>
+   </dependency>\n");
+    }
+	
+	def appendRepositories(Text text, String repoURL) {
+		text.append("    <repository>\n      <id>qm.eu</id>\n      <name>qm.eu</name>\n      <url>$repoURL</url>\n    </repository>\n");
+	}
+	
+	def main(Configuration config, FileArtifact target, Pipeline pipeline, String repoURL) {
+		//createPomTemplate(target);
+		setOf(String) nodes = {};
+		Text text = target.getText();		
+		text.append("<project xmlns=\"http://maven.apache.org/POM/4.0.0\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:schemaLocation=\"http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd\">\n");		
+		text.append("  <modelVersion>4.0.0</modelVersion>\n");
+		//get the artifact
+		String artifact = pipeline.artifact;
+		sequenceOf(String) artList = artifact.split(":");
+		if(artList.size() == 3) {
+		    text.append("  <groupId>${artList[0]}</groupId>\n");
+			text.append("  <artifactId>${artList[1]}</artifactId>\n");
+			text.append("  <version>${artList[2]}</version>\n");	
+		}		
+		text.append("  <packaging>jar</packaging>\n");
+		text.append("\n");
+		text.append("  <build>\n");
+		text.append("    <sourceDirectory>"+"$"+"{basedir}/topology</sourceDirectory>\n");
+		//text.append("    <pluginManagement>\n");
+		text.append("        <plugins>\n");
+		appendPlugins(text);
+		text.append("        </plugins>\n");
+		//text.append("    </pluginManagement>\n");
+		text.append("    <resources>\n");
+		appendResources(text);
+		text.append("    </resources>\n");
+		text.append("  </build>\n");
+		text.append("\n");
+		text.append("  <repositories>\n");
+		//text.append("    <repository>\n      <id>clojars.org</id>\n      <url>http://clojars.org/repo</url>\n    </repository>\n");
+		appendRepositories(text, repoURL);
+		text.append("  </repositories>\n");
+		text.append("\n");
+		appendDependencyManagement(text);
+		text.append("  <dependencies>\n");
+//		appendBasicInfrastructureDependencies(text); //for a fat jar
+		appendQmInfrastructureDependencies(text);
+		appendCommonDependencies(text);		
+		for(DecisionVariable v : pipeline.sources) { 
+	        checkForPipelineNode(v, nodes, text);
+	        processElement(v.byName("output").variables(), nodes, text);
+	    }	
+	    for(DecisionVariable v : pipeline.connectors) {//considering the connectors from subpipeline
+			checkForPipelineNode(v, nodes, text);
+	    	processElement(v.byName("output").variables(), nodes, text);
+	    }					
+		text.append("  </dependencies>\n");
+		text.append("</project>\n");
+		target.rename("pom.xml");							
+	}
+}

@@ -1,0 +1,23 @@
+project Adaptivity {
+
+    import Basics;
+    import Observables;
+	 
+	annotate BindingTime bindingTime = BindingTime.compile to Adaptivity;
+
+    // relative importance of the quality dimensions as well as the tradeoffs to be considered for cross-pipeline adaptation
+
+    compound QualityParameterWeighting {
+    	refTo(QualityParameter) parameter;
+    	Real weight;
+    }
+
+	assign(bindingTime = BindingTime.runtimeEnact) to {
+		Integer updateFrequency = 1000; // in milliseconds
+		Constraint updateFrequencyLimit = updateFrequency == 0 or updateFrequency > 500;
+		
+		setOf(QualityParameterWeighting) pipelineImportance = null; // assumption: all weights with 1
+		setOf(QualityParameterWeighting) crossPipelineTradeoffs = null; // assumption: all weights with 1
+	}
+	
+}           

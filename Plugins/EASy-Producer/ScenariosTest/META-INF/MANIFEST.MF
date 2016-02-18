@@ -15,6 +15,7 @@ Require-Bundle: de.uni_hildesheim.sse.vil.buildlang.tests;bundle-version="0.0.1"
  de.uni_hildesheim.sse.varModel.tests;bundle-version="0.0.10",
  org.apache.commons.io;bundle-version="2.0.1",
  de.uni_hildesheim.sse.easy.instantiator.ant;bundle-version="0.2.3",
- de.uni_hildesheim.sse.easy.instantiator.aspectj;bundle-version="0.2.3"
+ de.uni_hildesheim.sse.easy.instantiator.aspectj;bundle-version="0.2.3",
+ de.uni_hildesheim.sse.easy.instantiator.maven;bundle-version="3.2.3"
 Bundle-ClassPath: .
 Export-Package: test.de.uni_hildesheim.sse.scenarios

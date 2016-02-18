@@ -1,0 +1,12 @@
+package eu.qualimaster.families.protobuf;
+option java_package = "eu.qualimaster.protos";
+option java_outer_classname = "FDynamicHubComputationProtos";
+
+message SIFDynamicHubComputationEdgeStreamInput {
+    required string edge = 1;
+}
+
+message SIFDynamicHubComputationHubStreamOutput {
+    required string hubList = 1;
+}
+

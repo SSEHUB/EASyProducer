@@ -1,0 +1,245 @@
+import commonVTLMethods;
+@advice(QM)
+template hardwareConnectionSpout(Configuration config, FileArtifact target, Family family, Algorithm algorithm) {
+	Boolean fastThread = true;
+	String fName = family.name.firstToUpperCase();
+    String ifName = "I" + fName.firstToUpperCase();
+	String tupleName;
+	String outputImpName;
+	String algName = algorithm.name;
+	MPCCNode node = algorithm.hwNode;
+	JavaPath algPath = algorithm.class;
+	String algClsName = algPath.getName();	
+	def main(Configuration config, FileArtifact target, Family family, Algorithm algorithm) {
+		'package eu.qualimaster.algorithms.${firstToUpperCase(toIdentifier(algName))};'
+		''
+		'import java.io.IOException;'
+		'import java.io.ByteArrayOutputStream;'
+		'import java.io.ByteArrayInputStream;'
+		'import java.util.Map;'
+		'import backtype.storm.spout.SpoutOutputCollector;'
+		'import backtype.storm.task.TopologyContext;'
+		'import backtype.storm.topology.OutputFieldsDeclarer;'
+		'import backtype.storm.tuple.Tuple;'
+		'import backtype.storm.tuple.Fields;'
+		'import backtype.storm.tuple.Values;'
+		'import eu.qualimaster.common.signal.BaseSignalSpout;'
+		'import eu.qualimaster.base.algorithm.HardwareTransmitter;'
+		'import eu.qualimaster.dataManagement.serialization.SerializerRegistry;'
+		'import eu.qualimaster.common.signal.ParameterChangeSignal;'	
+		'import eu.qualimaster.common.signal.ParameterChange;'	
+		'import eu.qualimaster.common.signal.ValueFormatException;'
+		'import eu.qualimaster.common.signal.SignalException;'
+		'import eu.qualimaster.families.inf.${toIdentifier(ifName)}.*;'
+		if(hwlog) {
+			'import java.io.File;'
+			'import java.io.FileNotFoundException;'
+			'import java.io.FileOutputStream;'
+			'import java.io.PrintStream;'
+			'import java.util.Calendar;'
+			'import java.io.BufferedOutputStream;'
+		}
+
+		produceImportFromOutput(family.output, fName, 0);
+		''
+		'public class HardwareConnectionSpout extends BaseSignalSpout {'
+			'final static org.apache.log4j.Logger logger = org.apache.log4j.Logger.getLogger(HardwareConnectionSpout.class);' | 4;
+			'private SpoutOutputCollector collector;' | 4;
+			'private String streamId;' | 4;
+			'private String ip;' | 4;
+			'private int port;' | 4;
+			'private int MAXDATASIZE;' | 4;
+			'private byte [] msg = null;' | 4;
+			'private int pointer;' | 4;
+			'private HardwareTransmitter hardwareConnection;' | 4;
+			'private transient ByteArrayInputStream in = null;' | 4;
+			produceOutputVariable(family.output, ifName, 4);
+			if(hwlog){
+				enableLogFile(true, "hardwareSpout");
+			}
+			if(fastThread) {
+				'private HardwareReceiver hardwareReceiver;'
+			}
+			
+			/*********************** */
+			/*******Constructor***** */
+			/*********************** */
+			'public HardwareConnectionSpout(String name, String namespace, String streamId) {' | 4;
+        		'super(name, namespace); ' | 8; 
+        		'this.streamId = streamId;' | 8;
+    		'}' | 4;
+    		''
+    		/************************* */
+    		/*******prepare method**** */
+    		/************************* */
+    		'@SuppressWarnings("rawtypes")' | 4;
+    		'public void open(Map map, TopologyContext topologyContext, SpoutOutputCollector spoutputCollector) {' | 4;
+    			'super.open(map, topologyContext, spoutputCollector);' | 8;
+    			'collector = spoutputCollector;' | 8;
+    			'ip = "${node.host}";' | 8; //replace to the ip configuration
+        		'port = 6027; //default' | 8; //replace to the port configuration
+        		'pointer = 0;' | 8;
+        		'MAXDATASIZE = 16384;' | 8;
+        		'msg = new byte[MAXDATASIZE];' | 8;
+        		produceTypesRegistration(family.output, fName, true,  8);
+        		if(hwlog) {
+        			enableLogFile(false, "hardwareSpout");
+        		}
+        		if(fastThread) {
+        			'try {' | 8;
+      					'hardwareReceiver = new HardwareReceiver();' | 12;
+    				'} catch (Exception e) {' | 8;
+      					'logger.error("", e);' | 12;
+    				'}' | 8;
+    				'Thread hardwareConnectionThread = new Thread(hardwareReceiver);' | 8;
+    				'hardwareConnectionThread.start();' | 8;
+        		}
+    		'}' | 4;
+    		''
+    		if(fastThread) {
+    			'public class HardwareReceiver implements Runnable {' | 4;
+    				'@Override' | 8;
+    				'public void run() {' | 8;
+    					'while(true) {' | 12;
+    					commonPartForFastThread(16);
+    					'}' | 12;
+    				'}' | 8;
+    			'}' | 4;
+    			''
+    		} 
+    		/************************** */
+    		/*******execute method***** */
+    		/************************** */
+    		'public void nextTuple() {' | 4;
+    		if(!fastThread) {
+    			commonPartForFastThread(8);
+        		}
+        	'}' | 4;
+        	''
+        	/********************************/
+		    /* notifyParameterChange method */  
+		    /********************************/	    
+			'@Override' | 4;
+			'public void notifyParameterChange(ParameterChangeSignal signal) {' | 4;
+			'try {' | 8;
+			'for(int i = 0; i < signal.getChangeCount(); i++) {' | 12;
+			'ParameterChange para = signal.getChange(i);' | 16;	
+			'switch (para.getName()) {' | 16;			
+				'case "port": ' | 20;
+					'logger.info("Received signal port!"); ' | 24;
+					'port = para.getIntValue();' | 24;
+					'break;' | 24;
+					'}' | 16;
+				'}' | 12;
+				'} catch (ValueFormatException e) {' | 8;
+				'e.printStackTrace();' | 12;
+				'}' | 12;
+			'}' |4;		
+		''
+			/**************************** */
+			/*********connect method***** */
+			/**************************** */
+			'private boolean connect() {' | 4;
+        		'if (null == hardwareConnection) {' | 8;
+	            	'try {' | 12;
+	                	'hardwareConnection = new HardwareTransmitter(ip, port);' | 16;
+	                	'logger.info("Created a receiver connection.");' | 16;
+	            	'} catch (IOException e) {' | 12;
+	                	'e.printStackTrace();' | 16;
+	            	'}' | 12;
+        		'}' | 8;
+        		'return null != hardwareConnection;' | 8;
+    		'}' | 4;
+    		
+    		/******************************** */
+    		/****declareOuputFields method*** */
+    		/******************************** */
+    		'public void declareOutputFields(OutputFieldsDeclarer outputFieldsDeclarer) {' | 4;
+    			'outputFieldsDeclarer.declareStream(streamId, false, new Fields("hardwareOutput"));' | 8;
+    		'}' | 4;    		   		
+		'}'
+	}
+	
+	def produceOutputVariable(Tuples tuples, String ifName, Integer indent) {
+		String outputInfName;	
+		String tupleName;	
+		for(Tuple t : tuples) {
+			tupleName = t.name;
+			//get output interface name	
+			outputInfName = 'I' + ifName + "${firstToUpperCase(tupleName)}Output"; //output interface name				
+			'private transient $outputInfName output${firstToUpperCase(tupleName)} = null;' | indent;					
+	    }
+	}
+	
+	def produceImportFromOutput(Tuples tuples, String fName, Integer indent) {
+		String ifName = "I" + fName.firstToUpperCase();
+		String tupleName;
+		'import eu.qualimaster.families.imp.${firstToUpperCase(toIdentifier(fName))}.*;'
+		for(Tuple t : tuples) {
+			tupleName = t.name;
+			String outputInfName = ifName + "${firstToUpperCase(tupleName)}Output";
+			'import eu.qualimaster.families.imp.${firstToUpperCase(toIdentifier(fName))}.$outputInfName;' | indent;
+			'import eu.qualimaster.families.inf.${firstToUpperCase(toIdentifier(ifName))}.I$outputInfName;' | indent;
+		}
+	}
+	
+	def commonPartForFastThread(Integer indent) {
+		'String str;' | indent;
+        'if (connect()) {' | indent;
+        	'try {' | indent + 4;
+        		'in = null;' | indent+8;
+        		'msg = hardwareConnection.receiveData(msg, pointer);' | indent+8;
+        		for(Tuple t : family.output) {
+					tupleName = t.name; // assume that we only have one type of Tuple in the output of the family
+					outputImpName = ifName + "${firstToUpperCase(tupleName)}Output";
+					'if(msg != null) {' | indent+8;
+        				'in = new ByteArrayInputStream(msg);' | indent+12;
+        				'in.skip(1);' | indent+12;
+        				'str = new String(msg, 0, 1);' | indent+12;
+        				'if (str.equalsIgnoreCase("d")) {' | indent+12;
+        					'if (in != null) {' | indent+16;
+        						'output${firstToUpperCase(tupleName)} = null;' | indent+20;
+                    			'output${firstToUpperCase(tupleName)} = SerializerRegistry.getSerializerSafe("$outputImpName", I$outputImpName.class).deserializeFrom(in);' | indent+20;
+                				'if(output${firstToUpperCase(tupleName)} != null) {' | indent+20;
+	                			if(hwlog) { // print the log of the data received from hardware
+									'out.println(Calendar.getInstance().getTimeInMillis() + ", Receiving data to hardware: "' | indent;
+						    		for(Field f : t.fields) {
+										 String fname = toIdentifier("${f.name}");
+						    			 String mname = firstToUpperCase(fname);
+						    	         '+ ", $mname: "+ output${firstToUpperCase(tupleName)}.get${mname}()' | indent;
+									 }
+									 ');' | indent;
+						    		'out.flush();' | indent;
+						    		'logger.info(Calendar.getInstance().getTimeInMillis() + ", Receiving data to hardware: "' | indent;
+						    		for(Field f : t.fields) {
+										 String fname = toIdentifier("${f.name}");
+						    			 String mname = firstToUpperCase(fname);
+						    	         '+ ", $mname: "+ output${firstToUpperCase(tupleName)}.get${mname}()' | indent;
+									 }
+									 ');' | indent;
+								}
+	                				'collector.emit(streamId, new Values(output${firstToUpperCase(tupleName)}));' | indent+24;
+                				'}'| indent+20;
+                			'}' | indent+16;
+                		'} else if (str.equalsIgnoreCase("f")) {' | indent+12;
+                			'/* HERE PUT THE CODE FOR THE FLUSH PROCESS */' | indent+20;
+                			'out.println("Sending the signal emit to the end bolt!");' | indent+16;
+                			'out.flush();' | indent+16;
+                			'ParameterChangeSignal paraSignal = new ParameterChangeSignal(
+				                        "$topoName", "${algClsName}EndBolt", "emit", true);' | indent+16;
+				                  'try {' | indent+16;
+				                    'sendSignal(paraSignal);' | indent+20;
+				                '} catch (SignalException e) {' | indent+16;
+				                    'e.printStackTrace();' | indent+20;
+				                '}' | indent+16;
+                		'}' | indent+12;
+                		'pointer = 1;' | indent+12;
+                		'in.read(msg, 0, in.available());' | indent+12;
+                	'}' | indent+8;			
+				}
+        	'} catch (IOException e) {' | indent+4;
+        		'System.out.println("IOException : " + e.getMessage());' | indent+8;
+        	'}' | indent+4;
+        '}' | indent;
+	}
+}

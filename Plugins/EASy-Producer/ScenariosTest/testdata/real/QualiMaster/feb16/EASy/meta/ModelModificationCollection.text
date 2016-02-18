@@ -1,0 +1,14 @@
+02-27  added the name attribute in the compound Tuple of Basics.ivm
+03-02  added the description attribute in Algorithms, Families and Pipelines.
+03-03  added an artifact attribute in Infrastructure and Pipelines.
+       added an ArtifactString in Basics
+04-22  added a Description type in Basics
+       replaced "String" of the description attribute to Description in Algorithms, Families and Pipelines.
+       added a repositoryURL attribute in Infrastructure.
+04-27  added a LongParameter in Basics.
+04-28  added a modelArtifact in Infrastructure.
+06-10  added a FieldType in Basics
+       changed the Type from Field to FieldType
+06-12  added a debug attribute to Pipeline.
+06-16  added a port attribute for MPCCNode in ReconfigurableHardware.
+

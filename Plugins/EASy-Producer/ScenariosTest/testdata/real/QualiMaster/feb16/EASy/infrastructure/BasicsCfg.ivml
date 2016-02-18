@@ -1,0 +1,114 @@
+project BasicsCfg {
+
+	import Basics;
+	FieldType IntegerType;
+	FieldType LongType;
+	FieldType StringType;
+	FieldType BooleanType;
+	FieldType FloatType;
+	FieldType DoubleType;
+	FieldType RealType;
+	FieldType ObjectType;
+	FieldType StringListType;
+	FieldType IFExpertListType;
+	FieldType IFTimeIntervalType;
+	FieldType StatusType;
+	FieldType IFEdgeListType;
+	FieldType IFEventListType;
+	types = {
+		refBy(IntegerType), refBy(LongType), refBy(StringType), refBy(BooleanType), refBy(FloatType), refBy(DoubleType), refBy(RealType), refBy(ObjectType), refBy(StringListType), refBy(IFTimeIntervalType), refBy(IFExpertListType), refBy(StatusType),
+		refBy(IFEdgeListType), refBy(IFEventListType)
+	};
+	types.bindingTime = BindingTime.compile;
+	IntegerType = FieldType {
+		name = "INTEGER", 
+		class = "int"
+	};
+	LongType = FieldType {
+		name = "LONG", 
+		class = "long"
+	};
+	StringType = FieldType {
+		name = "STRING", 
+		class = "String"
+	};
+	BooleanType = FieldType {
+		name = "BOOLEAN", 
+		class = "boolean"
+	};
+	FloatType = FieldType {
+		name = "Float", 
+		class = "float"
+	};
+	DoubleType = FieldType {
+		name = "Double", 
+		class = "double"
+	};
+	RealType = FieldType {
+		name = "REAL", 
+		class = "double"
+	};
+	ObjectType = FieldType {
+		name = "OBJECT", 
+		class = "Object"
+	};
+	StringListType = FieldType {
+		name = "STRINGLIST", 
+		class = "java.util.List<String>",
+		artifact = "",
+		serializer = "",
+		serializerArtifact = ""
+	};
+	IFExpertListType = FieldType {
+		name = "IFEXPERTLIST", 
+		class = "java.util.List<eu.qualimaster.families.datatypes.expertsearch.IFExpert>", 
+		artifact = "eu.qualimaster.families:Datatypes:0.0.1-SNAPSHOT", 
+		serializer = "", 
+		serializerArtifact = ""
+	};
+	IFTimeIntervalType = FieldType {
+		name = "IFTIMEINTERVAL", 
+		class = "eu.qualimaster.families.datatypes.common.IFTimeInterval", 
+		artifact = "eu.qualimaster.families:Datatypes:0.0.1-SNAPSHOT", 
+		serializer = "", 
+		serializerArtifact = ""
+	};
+	StatusType = FieldType {
+		name = "STATUS", 
+		class = "twitter4j.Status", 
+		artifact = "org.twitter4j:twitter4j-stream:4.0.1", 
+		serializer = "", 
+		serializerArtifact = ""
+	};
+	IFEdgeListType = FieldType {
+		name = "IFEDGETYPE",
+		class = "java.util.List<eu.qualimaster.families.datatypes.financialnetwork.IFEdge>",
+		artifact = "eu.qualimaster.families:Datatypes:0.0.1-SNAPSHOT", 
+		serializer = "", 
+		serializerArtifact = ""
+	};
+	IFEventListType = FieldType {
+		name = "IFEVENTLISTTYPE",
+		class = "java.util.List<eu.qualimaster.families.datatypes.events.IFEvent>",
+		artifact = "eu.qualimaster.families:Datatypes:0.0.1-SNAPSHOT", 
+		serializer = "", 
+		serializerArtifact = ""
+	};
+	freeze {
+		types;
+		IntegerType;
+		LongType;
+		StringType;
+		BooleanType;
+		FloatType;
+		DoubleType;
+		RealType;
+		ObjectType;
+		StringListType;
+		IFExpertListType;
+		IFTimeIntervalType;
+		StatusType;
+		IFEdgeListType;
+		IFEventListType;
+	} but (f|f.bindingTime >= BindingTime.runtimeMon)
+}

@@ -1,0 +1,176 @@
+import commonVTLMethods;
+@advice(QM)
+template familySerialization(Configuration config, FileArtifact target, Family family, String fName) {
+	def String kryoName(DecisionVariable f) {
+		// arrays would go to "Ints" etc., further Java basic types 
+		// are currently not defined in Basics and go as wrappers, boxing/unboxing 
+    	switch(fieldTypeName(f)) {
+    		"int" : "Int",
+    		"long" : "Long",
+    		"String" : "String",
+    		"boolean" : "Boolean",
+    		"float" : "Float",
+    		"double" : "Double",
+    		default : ""
+    	}
+    }
+	
+    def produceForTuples(Tuples tuples, Boolean output, Boolean implementation, String fName, Integer indent) {
+	    String type;
+	    String nestType;
+	    String infType;
+	    String infNestType;
+	    String serializerType;
+	    String typeName;
+    	String tupleName;
+    	String ifName = "I" + fName;    	
+    	for (Tuple t : tuples) {
+    		Boolean flag1 = true;
+    		Boolean flag2 = false;
+    		tupleName = t.name;
+    		tupleName = firstToUpperCase(tupleName);
+	        if (output) {
+    		    nestType = "${ifName}${tupleName}Output";
+    		    infNestType = "I${ifName}${tupleName}Output";
+    		    typeName = "output";
+    	    } else {
+    		    nestType = "${ifName}${tupleName}Input";
+    		    infNestType = "I${ifName}${tupleName}Input";
+    		    typeName = "input";   		
+    	    }
+    	    serializerType = nestType + "Serializer";
+    	    type = "${fName}.${nestType}"; // qualify inner classes
+    	    infType = "${ifName}.${infNestType}";	//qualify inner interfaces	  	    	   		   
+		    '/**' | indent;
+            '* Provides a serializer (supports both Kyro and Protobuf) for the default implementation of the data ${typeName} for the {@link ${infType}} algorithm.' | indent + 1;
+		    '*/' | indent + 1;
+    	    'public static class $serializerType extends Serializer<${type}> implements ISerializer<${infType}> {' | indent;
+    	    ''
+    	    '@Override' | indent + 4;
+    	    'public void serializeTo($infType object, OutputStream out) throws IOException {' | indent + 4;    			
+	    		for (Field f : t.fields) {	
+	    			if(isBasicType(f.type)) {
+						if(flag1){
+			    			'S$nestType tmp = S$nestType.newBuilder()' | indent + 8; 
+			    			flag1 = false; //generate once
+			    			flag2 = true;
+		    			}   			
+		    			String fname = toIdentifier("${f.name}");
+		    			String mname = firstToUpperCase(fname);		    			
+		    			'.set${mname}(object.get${mname}())' | indent + 12; 	    			
+	    			}  			   			
+	    		}
+	    		if(flag2) {
+	    			'.build();' | indent + 12;
+	    			'tmp.writeDelimitedTo(out);' | indent + 8;  
+	    			flag2 = false; //generate once
+    			}
+    			for (Field f : t.fields) {
+    				String fname = toIdentifier("${f.name}");
+    				String mname = firstToUpperCase(fname);     				  				
+    				if(!isBasicType(f.type)) {   					
+    					if(!isListType(f.type)){
+	    					'SerializerRegistry.getSerializerSafe("${f.type.name}", ${f.type.class}.class).serializeTo(object.get${mname}(), out);' | indent + 8;    					
+    					} else {
+    						String innertype = obtainInnerType(f.type.class);
+    						'SerializerRegistry.getListSerializerSafe("${f.type.name}", $innertype.class).serializeTo(object.get${mname}(), out);' | indent + 8;
+    					}
+    				}
+    			} 	    
+    	    '}' | indent + 4;
+    	    ''
+    	    
+    	    '@Override' | indent + 4;
+    	    'public $infType deserializeFrom(InputStream in) throws IOException {' | indent + 4;
+    			'$type result = new $type();' | indent + 8;
+    			flag1 = true;			
+	    		for (Field f : t.fields) {
+	    			String fname = toIdentifier("${f.name}");
+	    			String mname = firstToUpperCase(fname);
+	    			if(isBasicType(f.type)) {
+	    				if(flag1) {
+	    					'S$nestType tmp = S$nestType.parseDelimitedFrom(in);' | indent + 8; 
+	    					flag1 = false; //only generate once
+	    				} 
+	    				'result.set${mname}(tmp.get${mname}());'	| indent + 8;    			
+	    			} else {	    				
+    					if(!isListType(f.type)){
+	    					'result.set${mname}(SerializerRegistry.getSerializerSafe("${f.type.name}", ${f.type.class}.class).deserializeFrom(in));' | indent + 8;
+    					} else {
+    						String innertype = obtainInnerType(f.type.class);
+    						'result.set${mname}(SerializerRegistry.getListSerializerSafe("${f.type.name}", $innertype.class).deserializeFrom(in));' | indent + 8;
+    					}
+	    				
+	    			}	    			
+	    		} 
+    		'return result;' | indent + 8;  	    
+    	    '}' | indent + 4;
+    	    ''
+    	    
+    	    '@Override' | indent + 4;
+    	    'public void write(Kryo kryo, Output output, $type object) {' | indent + 4;
+    		for (Field f : t.fields) {
+    			String fname = toIdentifier("${f.name}");
+    			String mname = firstToUpperCase(fname);
+    			String kname = kryoName(f);
+    			if (kname == "") {
+    				'kryo.writeObject(output, object.get${mname}());' | indent + 8;
+    			} else {
+    			    'output.write${kname}(object.get${mname}());' | indent + 8;
+    			}
+    		}
+    	    
+    	    '}' | indent + 4;
+    	    ''
+    	    '@Override' | indent + 4;
+    	    'public $type read(Kryo kryo, Input input, Class<$type> type) {' | indent + 4;
+    	    '$type result = new $type();' | indent + 8;
+    		for (Field f : t.fields) {
+    			String fname = toIdentifier("${f.name}");
+    			String mname = firstToUpperCase(fname);
+    			String kname = kryoName(f);
+    			String tname = stripTemplates(fieldTypeName(f));
+    			if (kname == "") {
+    				'result.set${mname}(kryo.readObject(input, ${tname}.class));' | indent + 8;
+    			} else {
+    			    'result.set${mname}(input.read${kname}());' | indent + 8;
+    			}
+    		}
+    	    'return result;' | indent + 8;
+    	    '}' | indent + 4;
+    	   
+    	'}' | indent;
+    	''	   		   	       	
+      }
+    }
+
+    def main(Configuration config, FileArtifact target, Family family, String fName) {
+    	'package eu.qualimaster.families.imp;'
+    	''
+    	'import java.io.IOException;'
+    	'import java.io.InputStream;'
+		'import java.io.OutputStream;'
+    	'import javax.annotation.Generated;'
+    	'import com.esotericsoftware.kryo.io.Output;'
+    	'import com.esotericsoftware.kryo.io.Input;'
+    	'import com.esotericsoftware.kryo.Serializer;'
+    	'import com.esotericsoftware.kryo.Kryo;'
+    	'import eu.qualimaster.dataManagement.serialization.ISerializer;'
+    	'import eu.qualimaster.dataManagement.serialization.SerializerRegistry;'
+    	'import eu.qualimaster.families.imp.$fName;'
+    	'import eu.qualimaster.families.inf.*;'
+    	''
+    	'import eu.qualimaster.protos.${fName}Protos.*;'
+    	'/**'
+    	' * The implementation of the serializers for the algorithm family "I${fName}" (GEN).'
+    	' */'
+    	'@Generated(value="EASy-Producer")'
+    	'public class ${fName}Serializers {'
+    	''
+    	produceForTuples(family.input, false, true, fName, 4);
+    	produceForTuples(family.output, true, true, fName, 4);
+    		
+        '}'
+    }
+    
+}

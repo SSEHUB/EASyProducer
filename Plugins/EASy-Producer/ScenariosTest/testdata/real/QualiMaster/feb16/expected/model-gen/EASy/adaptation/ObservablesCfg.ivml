@@ -1,0 +1,9 @@
+project ObservablesCfg {
+
+    import Observables;
+    
+    freeze {
+    	configuredParameters;
+    } but (f|f.bindingTime >= BindingTime.runtimeMon)
+    
+}  

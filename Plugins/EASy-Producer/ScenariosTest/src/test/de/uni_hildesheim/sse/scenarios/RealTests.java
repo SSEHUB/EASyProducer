@@ -20,8 +20,11 @@ import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import de.uni_hildesheim.sse.easy.maven.Registration;
+
 /**
- * Tests for the basic language.
+ * Real use case tests. Although Maven is available, we run the tests without Maven in order to
+ * avoid external resolution issues and to allow for offline use. Thus, maven is commented out if used.
  * 
  * @author Holger Eichelberger
  * @author El-Sharkawy
@@ -44,6 +47,7 @@ public class RealTests extends AbstractScenarioTest {
     public static void startUp() {
         tests = new RealTests();
         tests.cleanTemp();
+        Registration.register();
     }
 
     /**
@@ -384,7 +388,20 @@ public class RealTests extends AbstractScenarioTest {
         File base = executeCase(names, versions, "QualiMaster/", null);
         assertFileEqualityRec(new File(base, "expected"), base);
     }
-    
+
+    /**
+     * Tests the QualiMaster model / derivation in its state at the second review (February 2016).
+     * 
+     * @throws IOException shall not occur
+     */
+    @Test
+    public void testQualiMasterFeb16() throws IOException {
+        String[] versions = {"0", "0"};
+        String[] names = {"feb16", "QM"};
+        File base = executeCase(names, versions, "QualiMaster/", null);
+        assertFileEqualityRec(new File(base, "expected"), base);
+    }
+
     /**
      * Tests the QualiMaster model / derivation for VIL field migration (March 2015).
      * 

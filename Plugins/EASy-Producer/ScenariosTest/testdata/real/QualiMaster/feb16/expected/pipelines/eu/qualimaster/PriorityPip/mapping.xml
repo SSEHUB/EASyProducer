@@ -1,0 +1,31 @@
+<mapping>
+  <pipeline name="PriorityPip" class="eu.qualimaster.PriorityPip.topology.Topology">
+      <node name="FinancialDataSource" type="source">
+          <component name="PriorityPip_Source0" container="PriorityPip" class="eu.qualimaster.PriorityPip.topology.PriorityPip_Source0Source" receiver="true" thrift="false" tasks="1"/>
+      </node>
+      <node name="FinancialCorrelation" type="family">
+          <component name="PriorityPip_FamilyElement0" container="PriorityPip" class="eu.qualimaster.PriorityPip.topology.PriorityPip_FamilyElement0FamilyElement" receiver="true" thrift="false" tasks="1" alternative0 = "TopoSoftwareCorrelationFinancial" alternative1 = "TopoHardwareCorrelationFinancial"/>
+      </node>
+      <node name="Sink" type="sink">
+          <component name="PriorityPip_Sink0" container="PriorityPip" class="eu.qualimaster.PriorityPip.topology.PriorityPip_Sink0Sink" receiver="true" thrift="false" tasks="1"/>
+      </node>
+      <node name="Preprocessor" type="family">
+          <component name="PriorityPip_FamilyElement1" container="PriorityPip" class="eu.qualimaster.PriorityPip.topology.PriorityPip_FamilyElement1FamilyElement" receiver="true" thrift="false" tasks="1" alternative0 = "Preprocessor"/>
+      </node>
+      <node name="TwitterDataSource" type="source">
+          <component name="PriorityPip_Source1" container="PriorityPip" class="eu.qualimaster.PriorityPip.topology.PriorityPip_Source1Source" receiver="true" thrift="false" tasks="1"/>
+      </node>
+      <node name="SentimentAnalysis" type="family">
+          <component name="PriorityPip_FamilyElement2" container="PriorityPip" class="eu.qualimaster.PriorityPip.topology.PriorityPip_FamilyElement2FamilyElement" receiver="true" thrift="false" tasks="1" alternative0 = "SentimentAnaylsisSentiWordNetTopology" alternative1 = "SentimentAnaylsisSVMTopology"/>
+      </node>
+      <node name="DataManagement" type="data_mgt">
+          <component name="PriorityPip_DataManagementElement0" container="PriorityPip" class="eu.qualimaster.PriorityPip.topology.PriorityPip_DataManagementElement0DataManagementElement" receiver="true" thrift="false"/>
+      </node>
+      <algorithm name="TopoSoftwareCorrelationFinancial" implName="TopoSoftwareCorrelationFinancial" class="eu.qualimaster.algorithms.imp.correlation.softwaresubtopology.TopoSoftwareCorrelationFinancial"/>
+      <algorithm name="TopoHardwareCorrelationFinancial" implName="TopoHardwareCorrelationFinancial" class="eu.qualimaster.algorithms.imp.correlation.hardwaresubtopology.TopoHardwareCorrelationFinancial"/>
+      <algorithm name="Preprocessor" implName="Preprocessor" class="eu.qualimaster.algorithms.imp.correlation.Preprocessor"/>
+      <algorithm name="SentimentAnaylsisSentiWordNetTopology" implName="SentimentAnaylsisSentiWordNetTopology" class="eu.qualimaster.algorithms.stream.sentiment.topology.impl.SentimentAnaylsisSentiWordNetTopology"/>
+      <algorithm name="SentimentAnaylsisSVMTopology" implName="SentimentAnaylsisSVMTopology" class="eu.qualimaster.algorithms.stream.sentiment.topology.impl.SentimentAnaylsisSVMTopology"/>
+  </pipeline>
+
+</mapping>

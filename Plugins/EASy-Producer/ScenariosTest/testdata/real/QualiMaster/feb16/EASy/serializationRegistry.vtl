@@ -1,0 +1,61 @@
+@advice(QM)
+template serializationRegistry(Configuration config, FileArtifact target, setOf(DecisionVariable) families) {
+
+    // needs to be translated into new advice-style of writing
+
+    def produceForTuples(DecisionVariable tuples, Boolean output, Boolean implementation, String fName, Integer indent) {
+	    String type;
+	    String serializerType;
+	    String typeName;
+    	String tupleName;
+    	String ifName = "I" + fName;
+    	for (Tuple t : tuples) {
+    		tupleName = t.name;
+    		tupleName = firstToUpperCase(tupleName);
+	        if (output) {
+    		    type = "${ifName}${tupleName}Output";
+    		    typeName = "output";
+    	    } else {
+    		    type = "${ifName}${tupleName}Input";
+    		    typeName = "input";   		
+    	    }
+    	    serializerType = "${fName}Serializers.${type}Serializer";
+    	    type = "${fName}.${type}"; // qualify inner classes
+    	    
+    	    'conf.registerSerialization(${type}.class, ${serializerType}.class);' | indent;
+      }
+    }
+
+    def main(Configuration config, FileArtifact target, setOf(DecisionVariable) families) {
+    	'package eu.qualimaster.families.imp;'
+    	''
+    	'import javax.annotation.Generated;'
+    	'import backtype.storm.Config;'
+    	''
+    	'/**'
+    	' * The registration of the generated serializers (GEN).'
+    	' */'
+    	'@Generated(value="EASy-Producer")'
+    	'public class SerializationRegistry {'
+    	''
+    	'/**'
+    	' * Registers all generated kryo serializers. To be called from a topology.'
+    	' */'
+    	'public static final void registerKryoSerializers(Config conf) {' | 4;
+    	for (Family family : families) {
+    		String fName = family.name.firstToUpperCase();
+    	    produceForTuples(family.byName("input"), false, true, fName, 8);
+    	    produceForTuples(family.byName("output"), true, true, fName, 8);
+    	}
+    	'}' |4;
+        ''    	
+    	'/**'
+    	' * Registers all generated hardware serializers. To be called from a topology.'
+    	' */'
+    	'public static final void registerHardwareSerializers() {' | 4;
+    	'}' |4;
+    	
+        '}'
+    }
+    
+}

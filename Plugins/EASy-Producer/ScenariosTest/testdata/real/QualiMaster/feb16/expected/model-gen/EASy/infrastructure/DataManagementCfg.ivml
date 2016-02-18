@@ -1,0 +1,415 @@
+project DataManagementCfg {
+
+	import DataManagement;
+	import BasicsCfg;
+	DataSource spring;
+	DataSource twitter;
+	DataSource randomSource;
+	DataSink priorSnk;
+	DataSink randomSink;
+	PersistentDataElement hBaseDataManagement;
+	DataSource DataSourceVar_4;
+	DataSource DataSourceVar_5;
+	DataSink DataSinkVar_2;
+	DataSink DataSinkVar_3;
+	DataSink DataSinkVar_4;
+	dataSources = {
+		refBy(spring), refBy(twitter), refBy(randomSource), refBy(DataSourceVar_4), refBy(DataSourceVar_5)
+	};
+	dataSources.bindingTime = BindingTime.compile;
+	dataSinks = {
+		refBy(priorSnk), refBy(randomSink), refBy(DataSinkVar_2), refBy(DataSinkVar_3), refBy(DataSinkVar_4)
+	};
+	dataSinks.bindingTime = BindingTime.compile;
+	persistentDataElements = {
+		refBy(hBaseDataManagement)
+	};
+	persistentDataElements.bindingTime = BindingTime.compile;
+	spring = DataSource {
+		input = {
+			Tuple {
+				name = "symbolList", 
+				fields = {
+					Field {
+						name = "allSymbols", 
+						type = refBy(StringListType)
+					}
+				}
+			}, Tuple {
+				name = "springStream", 
+				fields = {
+					Field {
+						name = "symbolTuple", 
+						type = refBy(StringType)
+					}
+				}
+			}
+		}, 
+		parameters = {
+			StringParameter {
+				defaultValue = "", 
+				name = "playerList"
+			}
+		}, 
+		sourceCls = "eu.qualimaster.algorithms.imp.correlation.SpringClient", 
+		name = "Spring Financial Data", 
+		description = "", 
+		artifact = "eu.qualimaster:spring-client:3.1-SNAPSHOT", 
+		storageLocation = "input/spring", 
+		strategy = DataManagementStrategy.LeastRecentlyUsed, 
+		timeLine = 1000
+	};
+	twitter = DataSource {
+		input = {
+			Tuple {
+				name = "symbolList", 
+				fields = {
+					Field {
+						name = "allSymbols", 
+						type = refBy(StringListType)
+					}
+				}
+			}, Tuple {
+				name = "twitterStream", 
+				fields = {
+					Field {
+						name = "status", 
+						type = refBy(ObjectType)
+					}
+				}
+			}
+		}, 
+		parameters = {
+			StringParameter {
+				defaultValue = "mVG7FJIMFDXrwfmVK3NTsmXJf", 
+				name = "consumerKey"
+			}, StringParameter {
+				defaultValue = "qbVQfvaSC5ywH1PcMZL2vTHnm9tQ2LRlD0JxEzZgIrzvqQMbnr", 
+				name = "consumerSecret"
+			}, StringParameter {
+				defaultValue = "2831271881-fb2wQVANZdrPiSDEhzoGniRaBvIHZVfuRPI8XtJ", 
+				name = "accessToken"
+			}, StringParameter {
+				defaultValue = "n4f2mmY0QuS95fWYOygtzYD8xzbRBiTlXt2EbYF77IIgy", 
+				name = "accessTokenSecret"
+			}, IntegerParameter {
+				defaultValue = 0, 
+				name = "queueSize"
+			}, StringParameter {
+				defaultValue = "/user/storm/resultSymbols", 
+				name = "tweetDirectory"
+			}, RealParameter {
+				defaultValue = 0.0, 
+				name = "speedFactor"
+			}, BooleanParameter {
+				defaultValue = true, 
+				name = "runLocally"
+			}, BooleanParameter {
+				defaultValue = false, 
+				name = "adjustTimeToNow"
+			}, BooleanParameter {
+				defaultValue = false, 
+				name = "realLoops"
+			}, StringParameter {
+				defaultValue = "", 
+				name = "setAdditionalKeywords"
+			}
+		}, 
+		sourceCls = "eu.qualimaster.data.stream.source.TwitterFileStreaming", 
+		name = "Twitter Stream Data", 
+		description = "", 
+		artifact = "eu.qualimaster:TwitterStreamDataSource:0.0.5-SNAPSHOT", 
+		storageLocation = "input/twitter", 
+		strategy = DataManagementStrategy.None, 
+		timeLine = 0
+	};
+	randomSource = DataSource {
+		input = {
+			Tuple {
+				name = "randomData", 
+				fields = {
+					Field {
+						name = "randomInteger", 
+						type = refBy(IntegerType)
+					}
+				}
+			}
+		}, 
+		parameters = {
+			IntegerParameter {
+				defaultValue = 0, 
+				name = "delay"
+			}
+		}, 
+		sourceCls = "eu.qualimaster.algorithms.RandomSourceAlg", 
+		name = "Random Source", 
+		artifact = "eu.qualimaster.test:RandomSourceAlg:0.0.2-SNAPSHOT", 
+		strategy = DataManagementStrategy.None
+	};
+	priorSnk = DataSink {
+		output = {
+			Tuple {
+				name = "pairwiseFinancial", 
+				fields = {
+					Field {
+						name = "pairwiseCorrelationFinancial", 
+						type = refBy(StringType), 
+						keyPart = false
+					}
+				}
+			}, Tuple {
+				name = "analyzedStream", 
+				fields = {
+					Field {
+						name = "symbolId", 
+						type = refBy(StringType), 
+						keyPart = false
+					}, Field {
+						name = "timestamp", 
+						type = refBy(LongType), 
+						keyPart = false
+					}, Field {
+						name = "value", 
+						type = refBy(RealType), 
+						keyPart = false
+					}, Field {
+						name = "volume", 
+						type = refBy(IntegerType), 
+						keyPart = false
+					}
+				}
+			}
+		}, 
+		sinkCls = "eu.qualimaster.algorithms.imp.correlation.PriorityDataSinkForFinancialAndTwitter", 
+		name = "Priority Data Sink", 
+		description = "", 
+		artifact = "eu.qualimaster:hy-priority-data-sink:3.1-SNAPSHOT", 
+		storageLocation = "output/prior", 
+		strategy = DataManagementStrategy.None, 
+		timeLine = 0
+	};
+	randomSink = DataSink {
+		output = {
+			Tuple {
+				name = "proccessedData", 
+				fields = {
+					Field {
+						name = "randomInteger", 
+						type = refBy(IntegerType)
+					}
+				}
+			}
+		}, 
+		sinkCls = "eu.qualimaster.algorithms.RandomSinkAlg", 
+		name = "Random Sink", 
+		artifact = "eu.qualimaster.test:RandomSinkAlg:0.0.2-SNAPSHOT", 
+		strategy = DataManagementStrategy.None
+	};
+	hBaseDataManagement = PersistentDataElement {
+		name = "hBase DataManagement", 
+		storageLocation = "hBase-l3s", 
+		strategy = DataManagementStrategy.FirstInFirstOut, 
+		timeLine = 0
+	};
+	DataSourceVar_4 = DataSource {
+		input = {
+			Tuple {
+				name = "analysis", 
+				fields = {
+					Field {
+						name = "status", 
+						type = refBy(ObjectType)
+					}
+				}
+			}
+		}, 
+		parameters = {
+			StringParameter {
+				defaultValue = "mVG7FJIMFDXrwfmVK3NTsmXJf", 
+				name = "consumerKey"
+			}, StringParameter {
+				defaultValue = "qbVQfvaSC5ywH1PcMZL2vTHnm9tQ2LRlD0JxEzZgIrzvqQMbnr", 
+				name = "consumerSecret"
+			}, StringParameter {
+				defaultValue = "2831271881-fb2wQVANZdrPiSDEhzoGniRaBvIHZVfuRPI8XtJ", 
+				name = "accessToken"
+			}, StringParameter {
+				defaultValue = "n4f2mmY0QuS95fWYOygtzYD8xzbRBiTlXt2EbYF77IIgy", 
+				name = "accessTokenSecret"
+			}, IntegerParameter {
+				defaultValue = 0, 
+				name = "queueSize"
+			}, StringParameter {
+				defaultValue = "/user/storm/resultSymbols", 
+				name = "tweetDirectory"
+			}, RealParameter {
+				defaultValue = 0.0, 
+				name = "speedFactor"
+			}, BooleanParameter {
+				defaultValue = false, 
+				name = "runLocally"
+			}, BooleanParameter {
+				defaultValue = true, 
+				name = "adjustTimeToNow"
+			}, BooleanParameter {
+				defaultValue = false, 
+				name = "realLoops"
+			}
+		}, 
+		sourceCls = "eu.qualimaster.data.stream.source.TwitterStreaming", 
+		name = "NewTwitterStreamDataSource", 
+		description = "", 
+		artifact = "eu.qualimaster:NewTwitterStreamDataSource:0.0.1-SNAPSHOT", 
+		storageLocation = "input/twitter", 
+		strategy = DataManagementStrategy.None, 
+		timeLine = 0
+	};
+	DataSourceVar_5 = DataSource {
+		input = {
+			Tuple {
+				name = "symbolList", 
+				fields = {
+					Field {
+						name = "allSymbols", 
+						type = refBy(StringListType)
+					}
+				}
+			}, Tuple {
+				name = "springStream", 
+				fields = {
+					Field {
+						name = "symbolTuple", 
+						type = refBy(StringType)
+					}
+				}
+			}, Tuple {
+				name = "resetWindow", 
+				fields = {
+					Field {
+						name = "windowStart", 
+						type = refBy(LongType)
+					}, Field {
+						name = "windowEnd", 
+						type = refBy(LongType), 
+						keyPart = false
+					}
+				}
+			}
+		}, 
+		sourceCls = "eu.qualimaster.algorithms.imp.correlation.WindowedSpringClient", 
+		name = "Windowed Spring Financial Data", 
+		description = "", 
+		artifact = "eu.qualimaster:windowed-spring-client:3.0-SNAPSHOT", 
+		storageLocation = "input/spring", 
+		strategy = DataManagementStrategy.LeastRecentlyUsed, 
+		timeLine = 1000
+	};
+	DataSinkVar_2 = DataSink {
+		output = {
+			Tuple {
+				name = "hubStream", 
+				fields = {
+					Field {
+						name = "hubList", 
+						type = refBy(StringType), 
+						keyPart = false
+					}
+				}
+			}
+		}, 
+		sinkCls = "eu.qualimaster.dynamicgraph.DynamicGraphSinkAlgorithm", 
+		name = "DynamicGraphSink", 
+		description = "", 
+		artifact = "eu.qualimaster:dynamic-graph-sink:0.1-SNAPSHOT", 
+		storageLocation = "output/prior", 
+		strategy = DataManagementStrategy.None, 
+		timeLine = 0
+	};
+	DataSinkVar_3 = DataSink {
+		output = {
+			Tuple {
+				name = "recommendationStream", 
+				fields = {
+					Field {
+						name = "recommendations", 
+						type = refBy(StringType), 
+						keyPart = false
+					}
+				}
+			}, Tuple {
+				name = "edgeStream", 
+				fields = {
+					Field {
+						name = "edge", 
+						type = refBy(StringType)
+					}
+				}
+			}
+		}, 
+		sinkCls = "eu.qualimaster.focus.FocusSinkAlgorithm", 
+		name = "FocusSink", 
+		description = "", 
+		artifact = "eu.qualimaster:focus-sink:0.1-SNAPSHOT", 
+		storageLocation = "output/prior", 
+		strategy = DataManagementStrategy.None, 
+		timeLine = 0
+	};
+	DataSinkVar_4 = DataSink {
+		output = {
+			Tuple {
+				name = "pairwiseFinancial", 
+				fields = {
+					Field {
+						name = "pairwiseCorrelationFinancial", 
+						type = refBy(StringType), 
+						keyPart = false
+					}
+				}
+			}, Tuple {
+				name = "analyzedStream", 
+				fields = {
+					Field {
+						name = "symbolId", 
+						type = refBy(StringType), 
+						keyPart = false
+					}, Field {
+						name = "timestamp", 
+						type = refBy(LongType), 
+						keyPart = false
+					}, Field {
+						name = "value", 
+						type = refBy(RealType), 
+						keyPart = false
+					}, Field {
+						name = "volume", 
+						type = refBy(IntegerType), 
+						keyPart = false
+					}
+				}
+			}
+		}, 
+		sinkCls = "eu.qualimaster.algorithms.imp.correlation.MIDataSinkForFinancial", 
+		name = "MI_data_Sink", 
+		description = "", 
+		artifact = "eu.qualimaster:mi-data-sink:1.1-SNAPSHOT", 
+		storageLocation = "output/prior", 
+		strategy = DataManagementStrategy.None, 
+		timeLine = 0
+	};
+	freeze {
+		dataSources;
+		dataSinks;
+		persistentDataElements;
+		spring;
+		twitter;
+		randomSource;
+		priorSnk;
+		randomSink;
+		hBaseDataManagement;
+		DataSourceVar_4;
+		DataSourceVar_5;
+		DataSinkVar_2;
+		DataSinkVar_3;
+		DataSinkVar_4;
+	} but (f|f.bindingTime >= BindingTime.runtimeMon)
+}

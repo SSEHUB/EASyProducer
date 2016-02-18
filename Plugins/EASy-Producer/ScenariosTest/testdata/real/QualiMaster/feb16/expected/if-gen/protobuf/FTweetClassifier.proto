@@ -1,0 +1,7 @@
+package eu.qualimaster.families.protobuf;
+option java_package = "eu.qualimaster.protos";
+option java_outer_classname = "FTweetClassifierProtos";
+
+
+
+

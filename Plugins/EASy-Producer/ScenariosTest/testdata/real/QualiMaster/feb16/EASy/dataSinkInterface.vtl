@@ -1,0 +1,88 @@
+import commonVTLMethods;
+@advice(QM)
+template dataSinkInterface(Configuration config, FileArtifact target, DataSink elt) {
+
+    /*
+     * Produces the tuple type interfaces.
+     */	
+	def produceForTuples(sequenceOf(Tuple) tuples, String snkName, Integer indent) {
+		Integer tuplesSize = tuples.size();
+		String inputName = "I" + snkName.firstToUpperCase();
+    	String tupleName;
+
+    		for (Tuple t : tuples) {      
+				//get the tuple name
+				tupleName = t.name;
+		        '/**' | 4;
+		        '* Define the sink data input interface.' | 4;
+		        '**/' | 4;
+		        'public static interface ${toIdentifier(inputName)}${firstToUpperCase(tupleName)}Input extends Serializable {' | 4;	    		
+    			for (Field f : t.fields) {
+    				String fname = toIdentifier("${f.name}");
+    				String mname = firstToUpperCase(fname);
+    				String ftype = fieldTypeName(f);
+    				'/**' | indent + 4;
+					'* Returns the input value for tuple field "${f.name}".' | indent + 5;
+					'* @return the tuple value' | indent + 5;
+					'*/' | indent + 5;
+    				'public ${ftype} get${mname}();' | indent + 4;
+    				''
+    				'/**' | indent + 4;
+					'* Sets the output value for tuple field "${f.name}".' | indent + 5;
+					'* @param ${fname} the field value' | indent + 5;
+					'*/' | indent + 5;
+					'public void set${mname}(${ftype} ${fname});' | indent + 4;
+    			}
+    			'}' | 4;
+    		}   		
+    		''   	
+	}
+	
+	def main(Configuration config, FileArtifact target, DataSink dataSnk){
+		String snkName =dataSnk.name;
+		snkName = snkName.firstToUpperCase();
+		String inputName = "I" + snkName;
+		'package eu.qualimaster.data.inf;'
+		''
+		'import java.io.Serializable;'
+		'import eu.qualimaster.dataManagement.sinks.IDataSink;'
+		''
+		'/**'
+		'* Define the data sink interface(GEN).'
+		'**/'
+		'public interface I${toIdentifier(snkName)} extends IDataSink {'
+		''
+		//generate the tuple type interfaces.
+		 produceForTuples(dataSnk.output, snkName, 4);		
+		''
+		String tupleName;
+		for(Tuple t : dataSnk.output){
+			tupleName = t.name;
+			'/**' | 4;
+			'* Posts a specific type of data sink.' | 4;
+			'* @param data the sink data ${toIdentifier(inputName)}${firstToUpperCase(tupleName)}Input ' | 4;
+			'**/' | 4;
+	   	    'public void postData${firstToUpperCase(tupleName)}(${toIdentifier(inputName)}${firstToUpperCase(tupleName)}Input data);' | 4;
+		}
+		
+        if (dataSnk.parameters.size()>0) {
+	        '    // data sink parameters'
+	        ''
+	        for (Parameter p : dataSnk.parameters) {
+	        	String paramName = p.name;
+    			String mname = firstToUpperCase(toIdentifier(paramName));
+    			String type = parameterTypeName(p);
+	        	'    /**'
+	        	'     * Sets the data sink parameter "${paramName}".'
+	        	'     *'
+	        	'     * @param value the new value of the data sink parameter'
+	        	'     */'
+	        	
+	        	'    public void setParameter${mname}(${parameterTypeName(p)} value);'
+	        	''
+	    	}
+    	}		
+		'}' 
+		}
+
+}

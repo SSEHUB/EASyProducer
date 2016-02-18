@@ -1,0 +1,13 @@
+ReconfigurableHardware::HwNode::name = node name|The logical name of the hardware node as used, e.g., in algorithms.
+ReconfigurableHardware::MPCCNode::host = host node address|The network name or IP address of the hardware node
+ReconfigurableHardware::MPCCNode::monitoringPort = monitoring port|The IP port used for monitoring the availability of individual hardware units.
+ReconfigurableHardware::MPCCNode::commandPort = command port|The IP port used for sending commands and algorithms to the hardware node.
+ReconfigurableHardware::HwNode::bandwidth = network bandwidth (runtime)|The network bandwidth of the hardware node (future use in adaptation).
+ReconfigurableHardware::MPCCNode::numCPUs = number of CPUs|The number of CPUs of this MPCC hardware node.
+ReconfigurableHardware::MPCCNode::numDFEs = number of DFEs|The number of DFEs of this MPCC hardware node.
+ReconfigurableHardware::MPCCNode::usedCPUs = actual used CPUs (unused)
+ReconfigurableHardware::MPCCNode::usedDFEs = actual used DFEs (runtime)
+ReconfigurableHardware::MPCCNode::availableCPUs = actual available CPUs (unused)
+ReconfigurableHardware::MPCCNode::availableDFEs = actual available DFEs (runtime)
+ReconfigurableHardware::clusters = available hardware machines for hardware execution
+ReconfigurableHardware::namesUnique = Cluster node names must be unique
