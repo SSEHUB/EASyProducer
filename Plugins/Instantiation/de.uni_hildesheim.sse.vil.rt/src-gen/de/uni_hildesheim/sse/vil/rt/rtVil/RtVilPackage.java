@@ -739,7 +739,7 @@ public interface RtVilPackage extends EPackage
   int FAIL_STATEMENT__NAME = 0;
 
   /**
-   * The feature id for the '<em><b>Reason</b></em>' attribute.
+   * The feature id for the '<em><b>Reason</b></em>' containment reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
@@ -1270,15 +1270,15 @@ public interface RtVilPackage extends EPackage
   EAttribute getFailStatement_Name();
 
   /**
-   * Returns the meta object for the attribute '{@link de.uni_hildesheim.sse.vil.rt.rtVil.FailStatement#getReason <em>Reason</em>}'.
+   * Returns the meta object for the containment reference '{@link de.uni_hildesheim.sse.vil.rt.rtVil.FailStatement#getReason <em>Reason</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return the meta object for the attribute '<em>Reason</em>'.
+   * @return the meta object for the containment reference '<em>Reason</em>'.
    * @see de.uni_hildesheim.sse.vil.rt.rtVil.FailStatement#getReason()
    * @see #getFailStatement()
    * @generated
    */
-  EAttribute getFailStatement_Reason();
+  EReference getFailStatement_Reason();
 
   /**
    * Returns the meta object for the containment reference '{@link de.uni_hildesheim.sse.vil.rt.rtVil.FailStatement#getCode <em>Code</em>}'.
@@ -1719,12 +1719,12 @@ public interface RtVilPackage extends EPackage
     EAttribute FAIL_STATEMENT__NAME = eINSTANCE.getFailStatement_Name();
 
     /**
-     * The meta object literal for the '<em><b>Reason</b></em>' attribute feature.
+     * The meta object literal for the '<em><b>Reason</b></em>' containment reference feature.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
      * @generated
      */
-    EAttribute FAIL_STATEMENT__REASON = eINSTANCE.getFailStatement_Reason();
+    EReference FAIL_STATEMENT__REASON = eINSTANCE.getFailStatement_Reason();
 
     /**
      * The meta object literal for the '<em><b>Code</b></em>' containment reference feature.

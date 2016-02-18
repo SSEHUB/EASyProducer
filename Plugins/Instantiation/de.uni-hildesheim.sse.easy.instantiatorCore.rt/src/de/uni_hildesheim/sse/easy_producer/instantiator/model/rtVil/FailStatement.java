@@ -28,7 +28,7 @@ import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.Expres
  */
 public class FailStatement implements IRuleElement {
 
-    private String reason;
+    private Expression reason;
     private Expression codeEx;
     private boolean reFail = false;
 
@@ -45,7 +45,7 @@ public class FailStatement implements IRuleElement {
      * @param reason an optional reason for failing
      * @param codeEx an optional code expression
      */
-    public FailStatement(String reason, Expression codeEx) {
+    public FailStatement(Expression reason, Expression codeEx) {
         this.reason = reason;
         this.codeEx = codeEx;
     }
@@ -53,16 +53,16 @@ public class FailStatement implements IRuleElement {
     /**
      * Returns the optional reason for failing.
      * 
-     * @return the reason for failing (may be <b>null</b>)
+     * @return the reason expression for failing - evaluates to a String (may be <b>null</b>)
      */
-    public String getReason() {
+    public Expression getReasonEx() {
         return reason;
     }
 
     /**
      * Returns the optional error code expression.
      * 
-     * @return the expression (may be <b>null</b>)
+     * @return the expression - evaluates to an Integer (may be <b>null</b>)
      */
     public Expression getCodeEx() {
         return codeEx;

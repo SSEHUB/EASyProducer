@@ -54,24 +54,14 @@ public class FailStatementImpl extends MinimalEObjectImpl.Container implements F
   protected String name = NAME_EDEFAULT;
 
   /**
-   * The default value of the '{@link #getReason() <em>Reason</em>}' attribute.
+   * The cached value of the '{@link #getReason() <em>Reason</em>}' containment reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @see #getReason()
    * @generated
    * @ordered
    */
-  protected static final String REASON_EDEFAULT = null;
-
-  /**
-   * The cached value of the '{@link #getReason() <em>Reason</em>}' attribute.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @see #getReason()
-   * @generated
-   * @ordered
-   */
-  protected String reason = REASON_EDEFAULT;
+  protected Expression reason;
 
   /**
    * The cached value of the '{@link #getCode() <em>Code</em>}' containment reference.
@@ -132,7 +122,7 @@ public class FailStatementImpl extends MinimalEObjectImpl.Container implements F
    * <!-- end-user-doc -->
    * @generated
    */
-  public String getReason()
+  public Expression getReason()
   {
     return reason;
   }
@@ -142,12 +132,37 @@ public class FailStatementImpl extends MinimalEObjectImpl.Container implements F
    * <!-- end-user-doc -->
    * @generated
    */
-  public void setReason(String newReason)
+  public NotificationChain basicSetReason(Expression newReason, NotificationChain msgs)
   {
-    String oldReason = reason;
+    Expression oldReason = reason;
     reason = newReason;
     if (eNotificationRequired())
-      eNotify(new ENotificationImpl(this, Notification.SET, RtVilPackage.FAIL_STATEMENT__REASON, oldReason, reason));
+    {
+      ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, RtVilPackage.FAIL_STATEMENT__REASON, oldReason, newReason);
+      if (msgs == null) msgs = notification; else msgs.add(notification);
+    }
+    return msgs;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public void setReason(Expression newReason)
+  {
+    if (newReason != reason)
+    {
+      NotificationChain msgs = null;
+      if (reason != null)
+        msgs = ((InternalEObject)reason).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - RtVilPackage.FAIL_STATEMENT__REASON, null, msgs);
+      if (newReason != null)
+        msgs = ((InternalEObject)newReason).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - RtVilPackage.FAIL_STATEMENT__REASON, null, msgs);
+      msgs = basicSetReason(newReason, msgs);
+      if (msgs != null) msgs.dispatch();
+    }
+    else if (eNotificationRequired())
+      eNotify(new ENotificationImpl(this, Notification.SET, RtVilPackage.FAIL_STATEMENT__REASON, newReason, newReason));
   }
 
   /**
@@ -208,6 +223,8 @@ public class FailStatementImpl extends MinimalEObjectImpl.Container implements F
   {
     switch (featureID)
     {
+      case RtVilPackage.FAIL_STATEMENT__REASON:
+        return basicSetReason(null, msgs);
       case RtVilPackage.FAIL_STATEMENT__CODE:
         return basicSetCode(null, msgs);
     }
@@ -248,7 +265,7 @@ public class FailStatementImpl extends MinimalEObjectImpl.Container implements F
         setName((String)newValue);
         return;
       case RtVilPackage.FAIL_STATEMENT__REASON:
-        setReason((String)newValue);
+        setReason((Expression)newValue);
         return;
       case RtVilPackage.FAIL_STATEMENT__CODE:
         setCode((Expression)newValue);
@@ -271,7 +288,7 @@ public class FailStatementImpl extends MinimalEObjectImpl.Container implements F
         setName(NAME_EDEFAULT);
         return;
       case RtVilPackage.FAIL_STATEMENT__REASON:
-        setReason(REASON_EDEFAULT);
+        setReason((Expression)null);
         return;
       case RtVilPackage.FAIL_STATEMENT__CODE:
         setCode((Expression)null);
@@ -293,7 +310,7 @@ public class FailStatementImpl extends MinimalEObjectImpl.Container implements F
       case RtVilPackage.FAIL_STATEMENT__NAME:
         return NAME_EDEFAULT == null ? name != null : !NAME_EDEFAULT.equals(name);
       case RtVilPackage.FAIL_STATEMENT__REASON:
-        return REASON_EDEFAULT == null ? reason != null : !REASON_EDEFAULT.equals(reason);
+        return reason != null;
       case RtVilPackage.FAIL_STATEMENT__CODE:
         return code != null;
     }
@@ -313,8 +330,6 @@ public class FailStatementImpl extends MinimalEObjectImpl.Container implements F
     StringBuffer result = new StringBuffer(super.toString());
     result.append(" (name: ");
     result.append(name);
-    result.append(", reason: ");
-    result.append(reason);
     result.append(')');
     return result.toString();
   }

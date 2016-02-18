@@ -7,7 +7,7 @@ rtVilScript fail3 (Project source, Configuration config, Project target) {
         breakdown {
             tactic t1();
         }
-        fail "unknown" 127;
+        fail "unknown" with 127;
     }
 
     tactic t1() = {

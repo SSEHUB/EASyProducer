@@ -18,7 +18,7 @@ rtVilScript fail5 (Project source, Configuration config, Project target, IAdapta
     }
 
     tactic t1(Project source, Configuration config, Project target, ParameterAdaptationEvent event) = {
-        fail "unknown" 127;
+        fail "unknown" with 127;
     }
 
     tactic t2(Project source, Configuration config, Project target, IAdaptationEvent event) = {

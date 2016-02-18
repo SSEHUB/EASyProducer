@@ -3995,11 +3995,11 @@ protected class IntentDeclaration_ExprStmtAssignment_1 extends AssignmentToken  
 /************ begin Rule FailStatement ****************
  *
  * FailStatement:
- * 	{FailStatement} (name='fail' reason=STRING? code=Expression? | name='refail') ';';
+ * 	(name='fail' reason=Expression? ('with' code=Expression)? | name='refail') ';';
  *
  **/
 
-// {FailStatement} (name='fail' reason=STRING? code=Expression? | name='refail') ';'
+// (name='fail' reason=Expression? ('with' code=Expression)? | name='refail') ';'
 protected class FailStatement_Group extends GroupToken {
 	
 	public FailStatement_Group(AbstractToken lastRuleCallOrigin, AbstractToken next, int transitionIndex, IEObjectConsumer eObjectConsumer) {
@@ -4014,30 +4014,77 @@ protected class FailStatement_Group extends GroupToken {
     @Override
 	public AbstractToken createFollower(int index, IEObjectConsumer inst) {
 		switch(index) {
-			case 0: return new FailStatement_SemicolonKeyword_2(lastRuleCallOrigin, this, 0, inst);
+			case 0: return new FailStatement_SemicolonKeyword_1(lastRuleCallOrigin, this, 0, inst);
 			default: return null;
 		}	
 	}
 
     @Override
 	public IEObjectConsumer tryConsume() {
-		if(getEObject().eClass() != grammarAccess.getFailStatementAccess().getFailStatementAction_0().getType().getClassifier())
+		if(getEObject().eClass() != grammarAccess.getFailStatementRule().getType().getClassifier())
 			return null;
 		return eObjectConsumer;
 	}
 
 }
 
-// {FailStatement}
-protected class FailStatement_FailStatementAction_0 extends ActionToken  {
+// (name='fail' reason=Expression? ('with' code=Expression)? | name='refail')
+protected class FailStatement_Alternatives_0 extends AlternativesToken {
 
-	public FailStatement_FailStatementAction_0(AbstractToken lastRuleCallOrigin, AbstractToken next, int transitionIndex, IEObjectConsumer eObjectConsumer) {
+	public FailStatement_Alternatives_0(AbstractToken lastRuleCallOrigin, AbstractToken next, int transitionIndex, IEObjectConsumer eObjectConsumer) {
 		super(lastRuleCallOrigin, next, transitionIndex, eObjectConsumer);
 	}
 	
 	@Override
-	public Action getGrammarElement() {
-		return grammarAccess.getFailStatementAccess().getFailStatementAction_0();
+	public Alternatives getGrammarElement() {
+		return grammarAccess.getFailStatementAccess().getAlternatives_0();
+	}
+
+    @Override
+	public AbstractToken createFollower(int index, IEObjectConsumer inst) {
+		switch(index) {
+			case 0: return new FailStatement_Group_0_0(lastRuleCallOrigin, this, 0, inst);
+			case 1: return new FailStatement_NameAssignment_0_1(lastRuleCallOrigin, this, 1, inst);
+			default: return null;
+		}	
+	}
+
+}
+
+// name='fail' reason=Expression? ('with' code=Expression)?
+protected class FailStatement_Group_0_0 extends GroupToken {
+	
+	public FailStatement_Group_0_0(AbstractToken lastRuleCallOrigin, AbstractToken next, int transitionIndex, IEObjectConsumer eObjectConsumer) {
+		super(lastRuleCallOrigin, next, transitionIndex, eObjectConsumer);
+	}
+	
+	@Override
+	public Group getGrammarElement() {
+		return grammarAccess.getFailStatementAccess().getGroup_0_0();
+	}
+
+    @Override
+	public AbstractToken createFollower(int index, IEObjectConsumer inst) {
+		switch(index) {
+			case 0: return new FailStatement_Group_0_0_2(lastRuleCallOrigin, this, 0, inst);
+			case 1: return new FailStatement_ReasonAssignment_0_0_1(lastRuleCallOrigin, this, 1, inst);
+			case 2: return new FailStatement_NameAssignment_0_0_0(lastRuleCallOrigin, this, 2, inst);
+			default: return null;
+		}	
+	}
+
+}
+
+// name='fail'
+protected class FailStatement_NameAssignment_0_0_0 extends AssignmentToken  {
+	
+	public FailStatement_NameAssignment_0_0_0(AbstractToken lastRuleCallOrigin, AbstractToken next, int transitionIndex, IEObjectConsumer eObjectConsumer) {
+		super(lastRuleCallOrigin, next, transitionIndex, eObjectConsumer);
+	}
+	
+	@Override
+	public Assignment getGrammarElement() {
+		return grammarAccess.getFailStatementAccess().getNameAssignment_0_0_0();
 	}
 
     @Override
@@ -4047,87 +4094,13 @@ protected class FailStatement_FailStatementAction_0 extends ActionToken  {
 		}	
 	}
 
-    @Override
-	public IEObjectConsumer tryConsume() {
-		if(!eObjectConsumer.isConsumed()) return null;
-		return eObjectConsumer;
-	}
-}
-
-// (name='fail' reason=STRING? code=Expression? | name='refail')
-protected class FailStatement_Alternatives_1 extends AlternativesToken {
-
-	public FailStatement_Alternatives_1(AbstractToken lastRuleCallOrigin, AbstractToken next, int transitionIndex, IEObjectConsumer eObjectConsumer) {
-		super(lastRuleCallOrigin, next, transitionIndex, eObjectConsumer);
-	}
-	
-	@Override
-	public Alternatives getGrammarElement() {
-		return grammarAccess.getFailStatementAccess().getAlternatives_1();
-	}
-
-    @Override
-	public AbstractToken createFollower(int index, IEObjectConsumer inst) {
-		switch(index) {
-			case 0: return new FailStatement_Group_1_0(lastRuleCallOrigin, this, 0, inst);
-			case 1: return new FailStatement_NameAssignment_1_1(lastRuleCallOrigin, this, 1, inst);
-			default: return null;
-		}	
-	}
-
-}
-
-// name='fail' reason=STRING? code=Expression?
-protected class FailStatement_Group_1_0 extends GroupToken {
-	
-	public FailStatement_Group_1_0(AbstractToken lastRuleCallOrigin, AbstractToken next, int transitionIndex, IEObjectConsumer eObjectConsumer) {
-		super(lastRuleCallOrigin, next, transitionIndex, eObjectConsumer);
-	}
-	
-	@Override
-	public Group getGrammarElement() {
-		return grammarAccess.getFailStatementAccess().getGroup_1_0();
-	}
-
-    @Override
-	public AbstractToken createFollower(int index, IEObjectConsumer inst) {
-		switch(index) {
-			case 0: return new FailStatement_CodeAssignment_1_0_2(lastRuleCallOrigin, this, 0, inst);
-			case 1: return new FailStatement_ReasonAssignment_1_0_1(lastRuleCallOrigin, this, 1, inst);
-			case 2: return new FailStatement_NameAssignment_1_0_0(lastRuleCallOrigin, this, 2, inst);
-			default: return null;
-		}	
-	}
-
-}
-
-// name='fail'
-protected class FailStatement_NameAssignment_1_0_0 extends AssignmentToken  {
-	
-	public FailStatement_NameAssignment_1_0_0(AbstractToken lastRuleCallOrigin, AbstractToken next, int transitionIndex, IEObjectConsumer eObjectConsumer) {
-		super(lastRuleCallOrigin, next, transitionIndex, eObjectConsumer);
-	}
-	
-	@Override
-	public Assignment getGrammarElement() {
-		return grammarAccess.getFailStatementAccess().getNameAssignment_1_0_0();
-	}
-
-    @Override
-	public AbstractToken createFollower(int index, IEObjectConsumer inst) {
-		switch(index) {
-			case 0: return new FailStatement_FailStatementAction_0(lastRuleCallOrigin, this, 0, inst);
-			default: return null;
-		}	
-	}
-
     @Override	
 	public IEObjectConsumer tryConsume() {
 		if((value = eObjectConsumer.getConsumable("name",true)) == null) return null;
 		IEObjectConsumer obj = eObjectConsumer.cloneAndConsume("name");
-		if(keywordSerializer.isValid(obj.getEObject(), grammarAccess.getFailStatementAccess().getNameFailKeyword_1_0_0_0(), value, null)) {
+		if(keywordSerializer.isValid(obj.getEObject(), grammarAccess.getFailStatementAccess().getNameFailKeyword_0_0_0_0(), value, null)) {
 			type = AssignmentType.KEYWORD;
-			element = grammarAccess.getFailStatementAccess().getNameFailKeyword_1_0_0_0();
+			element = grammarAccess.getFailStatementAccess().getNameFailKeyword_0_0_0_0();
 			return obj;
 		}
 		return null;
@@ -4135,22 +4108,22 @@ protected class FailStatement_NameAssignment_1_0_0 extends AssignmentToken  {
 
 }
 
-// reason=STRING?
-protected class FailStatement_ReasonAssignment_1_0_1 extends AssignmentToken  {
+// reason=Expression?
+protected class FailStatement_ReasonAssignment_0_0_1 extends AssignmentToken  {
 	
-	public FailStatement_ReasonAssignment_1_0_1(AbstractToken lastRuleCallOrigin, AbstractToken next, int transitionIndex, IEObjectConsumer eObjectConsumer) {
+	public FailStatement_ReasonAssignment_0_0_1(AbstractToken lastRuleCallOrigin, AbstractToken next, int transitionIndex, IEObjectConsumer eObjectConsumer) {
 		super(lastRuleCallOrigin, next, transitionIndex, eObjectConsumer);
 	}
 	
 	@Override
 	public Assignment getGrammarElement() {
-		return grammarAccess.getFailStatementAccess().getReasonAssignment_1_0_1();
+		return grammarAccess.getFailStatementAccess().getReasonAssignment_0_0_1();
 	}
 
     @Override
 	public AbstractToken createFollower(int index, IEObjectConsumer inst) {
 		switch(index) {
-			case 0: return new FailStatement_NameAssignment_1_0_0(lastRuleCallOrigin, this, 0, inst);
+			case 0: return new Expression_Alternatives(this, this, 0, inst);
 			default: return null;
 		}	
 	}
@@ -4159,26 +4132,83 @@ protected class FailStatement_ReasonAssignment_1_0_1 extends AssignmentToken  {
 	public IEObjectConsumer tryConsume() {
 		if((value = eObjectConsumer.getConsumable("reason",false)) == null) return null;
 		IEObjectConsumer obj = eObjectConsumer.cloneAndConsume("reason");
-		if(valueSerializer.isValid(obj.getEObject(), grammarAccess.getFailStatementAccess().getReasonSTRINGTerminalRuleCall_1_0_1_0(), value, null)) {
-			type = AssignmentType.TERMINAL_RULE_CALL;
-			element = grammarAccess.getFailStatementAccess().getReasonSTRINGTerminalRuleCall_1_0_1_0();
-			return obj;
+		if(value instanceof EObject) { // org::eclipse::xtext::impl::RuleCallImpl
+			IEObjectConsumer param = createEObjectConsumer((EObject)value);
+			if(param.isInstanceOf(grammarAccess.getExpressionRule().getType().getClassifier())) {
+				type = AssignmentType.PARSER_RULE_CALL;
+				element = grammarAccess.getFailStatementAccess().getReasonExpressionParserRuleCall_0_0_1_0(); 
+				consumed = obj;
+				return param;
+			}
 		}
 		return null;
 	}
 
+    @Override
+	public AbstractToken createFollowerAfterReturn(AbstractToken next,	int actIndex, int index, IEObjectConsumer inst) {
+		if(value == inst.getEObject() && !inst.isConsumed()) return null;
+		switch(index) {
+			case 0: return new FailStatement_NameAssignment_0_0_0(lastRuleCallOrigin, next, actIndex, consumed);
+			default: return null;
+		}	
+	}	
 }
 
-// code=Expression?
-protected class FailStatement_CodeAssignment_1_0_2 extends AssignmentToken  {
+// ('with' code=Expression)?
+protected class FailStatement_Group_0_0_2 extends GroupToken {
 	
-	public FailStatement_CodeAssignment_1_0_2(AbstractToken lastRuleCallOrigin, AbstractToken next, int transitionIndex, IEObjectConsumer eObjectConsumer) {
+	public FailStatement_Group_0_0_2(AbstractToken lastRuleCallOrigin, AbstractToken next, int transitionIndex, IEObjectConsumer eObjectConsumer) {
+		super(lastRuleCallOrigin, next, transitionIndex, eObjectConsumer);
+	}
+	
+	@Override
+	public Group getGrammarElement() {
+		return grammarAccess.getFailStatementAccess().getGroup_0_0_2();
+	}
+
+    @Override
+	public AbstractToken createFollower(int index, IEObjectConsumer inst) {
+		switch(index) {
+			case 0: return new FailStatement_CodeAssignment_0_0_2_1(lastRuleCallOrigin, this, 0, inst);
+			default: return null;
+		}	
+	}
+
+}
+
+// 'with'
+protected class FailStatement_WithKeyword_0_0_2_0 extends KeywordToken  {
+	
+	public FailStatement_WithKeyword_0_0_2_0(AbstractToken lastRuleCallOrigin, AbstractToken next, int transitionIndex, IEObjectConsumer eObjectConsumer) {
+		super(lastRuleCallOrigin, next, transitionIndex, eObjectConsumer);
+	}
+	
+	@Override
+	public Keyword getGrammarElement() {
+		return grammarAccess.getFailStatementAccess().getWithKeyword_0_0_2_0();
+	}
+
+    @Override
+	public AbstractToken createFollower(int index, IEObjectConsumer inst) {
+		switch(index) {
+			case 0: return new FailStatement_ReasonAssignment_0_0_1(lastRuleCallOrigin, this, 0, inst);
+			case 1: return new FailStatement_NameAssignment_0_0_0(lastRuleCallOrigin, this, 1, inst);
+			default: return null;
+		}	
+	}
+
+}
+
+// code=Expression
+protected class FailStatement_CodeAssignment_0_0_2_1 extends AssignmentToken  {
+	
+	public FailStatement_CodeAssignment_0_0_2_1(AbstractToken lastRuleCallOrigin, AbstractToken next, int transitionIndex, IEObjectConsumer eObjectConsumer) {
 		super(lastRuleCallOrigin, next, transitionIndex, eObjectConsumer);
 	}
 	
 	@Override
 	public Assignment getGrammarElement() {
-		return grammarAccess.getFailStatementAccess().getCodeAssignment_1_0_2();
+		return grammarAccess.getFailStatementAccess().getCodeAssignment_0_0_2_1();
 	}
 
     @Override
@@ -4197,7 +4227,7 @@ protected class FailStatement_CodeAssignment_1_0_2 extends AssignmentToken  {
 			IEObjectConsumer param = createEObjectConsumer((EObject)value);
 			if(param.isInstanceOf(grammarAccess.getExpressionRule().getType().getClassifier())) {
 				type = AssignmentType.PARSER_RULE_CALL;
-				element = grammarAccess.getFailStatementAccess().getCodeExpressionParserRuleCall_1_0_2_0(); 
+				element = grammarAccess.getFailStatementAccess().getCodeExpressionParserRuleCall_0_0_2_1_0(); 
 				consumed = obj;
 				return param;
 			}
@@ -4209,31 +4239,30 @@ protected class FailStatement_CodeAssignment_1_0_2 extends AssignmentToken  {
 	public AbstractToken createFollowerAfterReturn(AbstractToken next,	int actIndex, int index, IEObjectConsumer inst) {
 		if(value == inst.getEObject() && !inst.isConsumed()) return null;
 		switch(index) {
-			case 0: return new FailStatement_ReasonAssignment_1_0_1(lastRuleCallOrigin, next, actIndex, consumed);
-			case 1: return new FailStatement_NameAssignment_1_0_0(lastRuleCallOrigin, next, actIndex, consumed);
+			case 0: return new FailStatement_WithKeyword_0_0_2_0(lastRuleCallOrigin, next, actIndex, consumed);
 			default: return null;
 		}	
 	}	
 }
 
 
+
 // name='refail'
-protected class FailStatement_NameAssignment_1_1 extends AssignmentToken  {
+protected class FailStatement_NameAssignment_0_1 extends AssignmentToken  {
 	
-	public FailStatement_NameAssignment_1_1(AbstractToken lastRuleCallOrigin, AbstractToken next, int transitionIndex, IEObjectConsumer eObjectConsumer) {
+	public FailStatement_NameAssignment_0_1(AbstractToken lastRuleCallOrigin, AbstractToken next, int transitionIndex, IEObjectConsumer eObjectConsumer) {
 		super(lastRuleCallOrigin, next, transitionIndex, eObjectConsumer);
 	}
 	
 	@Override
 	public Assignment getGrammarElement() {
-		return grammarAccess.getFailStatementAccess().getNameAssignment_1_1();
+		return grammarAccess.getFailStatementAccess().getNameAssignment_0_1();
 	}
 
     @Override
 	public AbstractToken createFollower(int index, IEObjectConsumer inst) {
 		switch(index) {
-			case 0: return new FailStatement_FailStatementAction_0(lastRuleCallOrigin, this, 0, inst);
-			default: return null;
+			default: return lastRuleCallOrigin.createFollowerAfterReturn(this, index, index, inst);
 		}	
 	}
 
@@ -4241,9 +4270,9 @@ protected class FailStatement_NameAssignment_1_1 extends AssignmentToken  {
 	public IEObjectConsumer tryConsume() {
 		if((value = eObjectConsumer.getConsumable("name",true)) == null) return null;
 		IEObjectConsumer obj = eObjectConsumer.cloneAndConsume("name");
-		if(keywordSerializer.isValid(obj.getEObject(), grammarAccess.getFailStatementAccess().getNameRefailKeyword_1_1_0(), value, null)) {
+		if(keywordSerializer.isValid(obj.getEObject(), grammarAccess.getFailStatementAccess().getNameRefailKeyword_0_1_0(), value, null)) {
 			type = AssignmentType.KEYWORD;
-			element = grammarAccess.getFailStatementAccess().getNameRefailKeyword_1_1_0();
+			element = grammarAccess.getFailStatementAccess().getNameRefailKeyword_0_1_0();
 			return obj;
 		}
 		return null;
@@ -4253,21 +4282,21 @@ protected class FailStatement_NameAssignment_1_1 extends AssignmentToken  {
 
 
 // ';'
-protected class FailStatement_SemicolonKeyword_2 extends KeywordToken  {
+protected class FailStatement_SemicolonKeyword_1 extends KeywordToken  {
 	
-	public FailStatement_SemicolonKeyword_2(AbstractToken lastRuleCallOrigin, AbstractToken next, int transitionIndex, IEObjectConsumer eObjectConsumer) {
+	public FailStatement_SemicolonKeyword_1(AbstractToken lastRuleCallOrigin, AbstractToken next, int transitionIndex, IEObjectConsumer eObjectConsumer) {
 		super(lastRuleCallOrigin, next, transitionIndex, eObjectConsumer);
 	}
 	
 	@Override
 	public Keyword getGrammarElement() {
-		return grammarAccess.getFailStatementAccess().getSemicolonKeyword_2();
+		return grammarAccess.getFailStatementAccess().getSemicolonKeyword_1();
 	}
 
     @Override
 	public AbstractToken createFollower(int index, IEObjectConsumer inst) {
 		switch(index) {
-			case 0: return new FailStatement_Alternatives_1(lastRuleCallOrigin, this, 0, inst);
+			case 0: return new FailStatement_Alternatives_0(lastRuleCallOrigin, this, 0, inst);
 			default: return null;
 		}	
 	}

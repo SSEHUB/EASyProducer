@@ -837,61 +837,65 @@ public class RtVilGrammarAccess extends AbstractGrammarElementFinder {
 	public class FailStatementElements extends AbstractParserRuleElementFinder {
 		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "de.uni_hildesheim.sse.vil.rt.RtVil.FailStatement");
 		private final Group cGroup = (Group)rule.eContents().get(1);
-		private final Action cFailStatementAction_0 = (Action)cGroup.eContents().get(0);
-		private final Alternatives cAlternatives_1 = (Alternatives)cGroup.eContents().get(1);
-		private final Group cGroup_1_0 = (Group)cAlternatives_1.eContents().get(0);
-		private final Assignment cNameAssignment_1_0_0 = (Assignment)cGroup_1_0.eContents().get(0);
-		private final Keyword cNameFailKeyword_1_0_0_0 = (Keyword)cNameAssignment_1_0_0.eContents().get(0);
-		private final Assignment cReasonAssignment_1_0_1 = (Assignment)cGroup_1_0.eContents().get(1);
-		private final RuleCall cReasonSTRINGTerminalRuleCall_1_0_1_0 = (RuleCall)cReasonAssignment_1_0_1.eContents().get(0);
-		private final Assignment cCodeAssignment_1_0_2 = (Assignment)cGroup_1_0.eContents().get(2);
-		private final RuleCall cCodeExpressionParserRuleCall_1_0_2_0 = (RuleCall)cCodeAssignment_1_0_2.eContents().get(0);
-		private final Assignment cNameAssignment_1_1 = (Assignment)cAlternatives_1.eContents().get(1);
-		private final Keyword cNameRefailKeyword_1_1_0 = (Keyword)cNameAssignment_1_1.eContents().get(0);
-		private final Keyword cSemicolonKeyword_2 = (Keyword)cGroup.eContents().get(2);
+		private final Alternatives cAlternatives_0 = (Alternatives)cGroup.eContents().get(0);
+		private final Group cGroup_0_0 = (Group)cAlternatives_0.eContents().get(0);
+		private final Assignment cNameAssignment_0_0_0 = (Assignment)cGroup_0_0.eContents().get(0);
+		private final Keyword cNameFailKeyword_0_0_0_0 = (Keyword)cNameAssignment_0_0_0.eContents().get(0);
+		private final Assignment cReasonAssignment_0_0_1 = (Assignment)cGroup_0_0.eContents().get(1);
+		private final RuleCall cReasonExpressionParserRuleCall_0_0_1_0 = (RuleCall)cReasonAssignment_0_0_1.eContents().get(0);
+		private final Group cGroup_0_0_2 = (Group)cGroup_0_0.eContents().get(2);
+		private final Keyword cWithKeyword_0_0_2_0 = (Keyword)cGroup_0_0_2.eContents().get(0);
+		private final Assignment cCodeAssignment_0_0_2_1 = (Assignment)cGroup_0_0_2.eContents().get(1);
+		private final RuleCall cCodeExpressionParserRuleCall_0_0_2_1_0 = (RuleCall)cCodeAssignment_0_0_2_1.eContents().get(0);
+		private final Assignment cNameAssignment_0_1 = (Assignment)cAlternatives_0.eContents().get(1);
+		private final Keyword cNameRefailKeyword_0_1_0 = (Keyword)cNameAssignment_0_1.eContents().get(0);
+		private final Keyword cSemicolonKeyword_1 = (Keyword)cGroup.eContents().get(1);
 		
 		//FailStatement:
-		//	{FailStatement} (name='fail' reason=STRING? code=Expression? | name='refail') ';';
+		//	(name='fail' reason=Expression? ('with' code=Expression)? | name='refail') ';';
 		@Override public ParserRule getRule() { return rule; }
 
-		//{FailStatement} (name='fail' reason=STRING? code=Expression? | name='refail') ';'
+		//(name='fail' reason=Expression? ('with' code=Expression)? | name='refail') ';'
 		public Group getGroup() { return cGroup; }
 
-		//{FailStatement}
-		public Action getFailStatementAction_0() { return cFailStatementAction_0; }
+		//(name='fail' reason=Expression? ('with' code=Expression)? | name='refail')
+		public Alternatives getAlternatives_0() { return cAlternatives_0; }
 
-		//(name='fail' reason=STRING? code=Expression? | name='refail')
-		public Alternatives getAlternatives_1() { return cAlternatives_1; }
-
-		//name='fail' reason=STRING? code=Expression?
-		public Group getGroup_1_0() { return cGroup_1_0; }
+		//name='fail' reason=Expression? ('with' code=Expression)?
+		public Group getGroup_0_0() { return cGroup_0_0; }
 
 		//name='fail'
-		public Assignment getNameAssignment_1_0_0() { return cNameAssignment_1_0_0; }
+		public Assignment getNameAssignment_0_0_0() { return cNameAssignment_0_0_0; }
 
 		//'fail'
-		public Keyword getNameFailKeyword_1_0_0_0() { return cNameFailKeyword_1_0_0_0; }
+		public Keyword getNameFailKeyword_0_0_0_0() { return cNameFailKeyword_0_0_0_0; }
 
-		//reason=STRING?
-		public Assignment getReasonAssignment_1_0_1() { return cReasonAssignment_1_0_1; }
-
-		//STRING
-		public RuleCall getReasonSTRINGTerminalRuleCall_1_0_1_0() { return cReasonSTRINGTerminalRuleCall_1_0_1_0; }
-
-		//code=Expression?
-		public Assignment getCodeAssignment_1_0_2() { return cCodeAssignment_1_0_2; }
+		//reason=Expression?
+		public Assignment getReasonAssignment_0_0_1() { return cReasonAssignment_0_0_1; }
 
 		//Expression
-		public RuleCall getCodeExpressionParserRuleCall_1_0_2_0() { return cCodeExpressionParserRuleCall_1_0_2_0; }
+		public RuleCall getReasonExpressionParserRuleCall_0_0_1_0() { return cReasonExpressionParserRuleCall_0_0_1_0; }
+
+		//('with' code=Expression)?
+		public Group getGroup_0_0_2() { return cGroup_0_0_2; }
+
+		//'with'
+		public Keyword getWithKeyword_0_0_2_0() { return cWithKeyword_0_0_2_0; }
+
+		//code=Expression
+		public Assignment getCodeAssignment_0_0_2_1() { return cCodeAssignment_0_0_2_1; }
+
+		//Expression
+		public RuleCall getCodeExpressionParserRuleCall_0_0_2_1_0() { return cCodeExpressionParserRuleCall_0_0_2_1_0; }
 
 		//name='refail'
-		public Assignment getNameAssignment_1_1() { return cNameAssignment_1_1; }
+		public Assignment getNameAssignment_0_1() { return cNameAssignment_0_1; }
 
 		//'refail'
-		public Keyword getNameRefailKeyword_1_1_0() { return cNameRefailKeyword_1_1_0; }
+		public Keyword getNameRefailKeyword_0_1_0() { return cNameRefailKeyword_0_1_0; }
 
 		//';'
-		public Keyword getSemicolonKeyword_2() { return cSemicolonKeyword_2; }
+		public Keyword getSemicolonKeyword_1() { return cSemicolonKeyword_1; }
 	}
 	
 	
@@ -1143,7 +1147,7 @@ public class RtVilGrammarAccess extends AbstractGrammarElementFinder {
 	}
 
 	//FailStatement:
-	//	{FailStatement} (name='fail' reason=STRING? code=Expression? | name='refail') ';';
+	//	(name='fail' reason=Expression? ('with' code=Expression)? | name='refail') ';';
 	public FailStatementElements getFailStatementAccess() {
 		return pFailStatement;
 	}

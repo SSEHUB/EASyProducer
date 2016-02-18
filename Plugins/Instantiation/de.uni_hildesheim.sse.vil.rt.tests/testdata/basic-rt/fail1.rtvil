@@ -9,7 +9,7 @@ rtVilScript fail1 (Project source, Configuration config, Project target) {
             tactic t1();
             tactic t2();
         }
-        fail 1 + 1;
+        fail with 1 + 1;
     }
 
     tactic t() = {
@@ -17,7 +17,7 @@ rtVilScript fail1 (Project source, Configuration config, Project target) {
     }
 
     tactic t1() = {
-        fail "unknown" 1 + 1;
+        fail "unknown" with 1 + 1;
     }
 
     tactic t2() = {

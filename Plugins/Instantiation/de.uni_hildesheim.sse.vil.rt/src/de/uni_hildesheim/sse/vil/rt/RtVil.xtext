@@ -114,6 +114,5 @@ IntentDeclaration:
 ;
 
 FailStatement:
-    {FailStatement}
-    ((name='fail' reason=STRING? code=Expression?) | (name='refail')) ';'
+    ((name='fail' reason=Expression? ('with' code=Expression)?) | (name='refail')) ';'
 ;

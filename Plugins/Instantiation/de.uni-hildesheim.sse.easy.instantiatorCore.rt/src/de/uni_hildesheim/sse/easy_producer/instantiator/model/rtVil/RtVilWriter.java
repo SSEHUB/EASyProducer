@@ -252,13 +252,13 @@ public class RtVilWriter extends BuildlangWriter implements IRtVilVisitor {
             print("refail");    
         } else {
             print("fail");
-            if (null != statement.getReason()) {
+            if (null != statement.getReasonEx()) {
                 printWhitespace();
-                print("\"");
-                printJavaEscaped(statement.getReason());
-                print("\"");
+                statement.getReasonEx().accept(this);
             }
             if (null != statement.getCodeEx()) {
+                printWhitespace();
+                print("with");
                 printWhitespace();
                 statement.getCodeEx().accept(this);
             }

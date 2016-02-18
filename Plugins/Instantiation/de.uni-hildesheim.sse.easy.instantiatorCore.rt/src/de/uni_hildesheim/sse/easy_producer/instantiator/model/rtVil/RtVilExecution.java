@@ -1166,7 +1166,12 @@ public class RtVilExecution extends BuildlangExecution implements IRtVilVisitor 
                 }
             } else {
                 msg = "explicit fail";
-                context.setFailReason(fStmt.getReason());
+                if (null != fStmt.getReasonEx()) {
+                    Object value = fStmt.getReasonEx().accept(this);
+                    if (value instanceof String) {
+                        context.setFailReason((String) value);
+                    }
+                }
                 if (null != fStmt.getCodeEx()) {
                     Object value = fStmt.getCodeEx().accept(this);
                     if (value instanceof Integer) {

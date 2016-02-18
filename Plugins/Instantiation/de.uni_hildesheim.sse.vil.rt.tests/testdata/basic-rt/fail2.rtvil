@@ -16,7 +16,7 @@ rtVilScript fail1 (Project source, Configuration config, Project target) {
     }
 
     tactic t1() = {
-        fail "unknown" "a";
+        fail "unknown" with "a";
     }
 
 }

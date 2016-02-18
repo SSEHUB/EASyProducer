@@ -1450,52 +1450,47 @@ ruleFailStatement returns [EObject current=null]
     @init { enterRule(); 
     }
     @after { leaveRule(); }:
-((
-	{ 
-	  /* */ 
-	}
-    {
-        $current = forceCreateModelElement(
-            grammarAccess.getFailStatementAccess().getFailStatementAction_0(),
-            $current);
-    }
-)(((
+((((
 (
-		lv_name_1_0=	'fail' 
+		lv_name_0_0=	'fail' 
     {
-        newLeafNode(lv_name_1_0, grammarAccess.getFailStatementAccess().getNameFailKeyword_1_0_0_0());
+        newLeafNode(lv_name_0_0, grammarAccess.getFailStatementAccess().getNameFailKeyword_0_0_0_0());
     }
  
 	    {
 	        if ($current==null) {
 	            $current = createModelElement(grammarAccess.getFailStatementRule());
 	        }
-       		setWithLastConsumed($current, "name", lv_name_1_0, "fail");
+       		setWithLastConsumed($current, "name", lv_name_0_0, "fail");
 	    }
 
 )
 )(
 (
-		lv_reason_2_0=RULE_STRING
-		{
-			newLeafNode(lv_reason_2_0, grammarAccess.getFailStatementAccess().getReasonSTRINGTerminalRuleCall_1_0_1_0()); 
-		}
-		{
+		{ 
+	        newCompositeNode(grammarAccess.getFailStatementAccess().getReasonExpressionParserRuleCall_0_0_1_0()); 
+	    }
+		lv_reason_1_0=ruleExpression		{
 	        if ($current==null) {
-	            $current = createModelElement(grammarAccess.getFailStatementRule());
+	            $current = createModelElementForParent(grammarAccess.getFailStatementRule());
 	        }
-       		setWithLastConsumed(
+       		set(
        			$current, 
        			"reason",
-        		lv_reason_2_0, 
-        		"de.uni_hildesheim.sse.vil.expressions.ExpressionDsl.STRING");
+        		lv_reason_1_0, 
+        		"de.uni_hildesheim.sse.vil.expressions.ExpressionDsl.Expression");
+	        afterParserOrEnumRuleCall();
 	    }
 
 )
-)?(
+)?(	otherlv_2='with' 
+    {
+    	newLeafNode(otherlv_2, grammarAccess.getFailStatementAccess().getWithKeyword_0_0_2_0());
+    }
+(
 (
 		{ 
-	        newCompositeNode(grammarAccess.getFailStatementAccess().getCodeExpressionParserRuleCall_1_0_2_0()); 
+	        newCompositeNode(grammarAccess.getFailStatementAccess().getCodeExpressionParserRuleCall_0_0_2_1_0()); 
 	    }
 		lv_code_3_0=ruleExpression		{
 	        if ($current==null) {
@@ -1510,12 +1505,12 @@ ruleFailStatement returns [EObject current=null]
 	    }
 
 )
-)?)
+))?)
     |(
 (
 		lv_name_4_0=	'refail' 
     {
-        newLeafNode(lv_name_4_0, grammarAccess.getFailStatementAccess().getNameRefailKeyword_1_1_0());
+        newLeafNode(lv_name_4_0, grammarAccess.getFailStatementAccess().getNameRefailKeyword_0_1_0());
     }
  
 	    {
@@ -1528,7 +1523,7 @@ ruleFailStatement returns [EObject current=null]
 )
 ))	otherlv_5=';' 
     {
-    	newLeafNode(otherlv_5, grammarAccess.getFailStatementAccess().getSemicolonKeyword_2());
+    	newLeafNode(otherlv_5, grammarAccess.getFailStatementAccess().getSemicolonKeyword_1());
     }
 )
 ;

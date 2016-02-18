@@ -1,10 +1,14 @@
 package de.uni_hildesheim.sse.vil.rt.rtLanguageTranslation;
 
+import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.EStructuralFeature;
+
 import de.uni_hildesheim.sse.dslCore.translation.ErrorCodes;
 import de.uni_hildesheim.sse.dslCore.translation.TranslatorException;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.IRuleElement;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.Resolver;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilException;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeDescriptor;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeRegistry;
 import de.uni_hildesheim.sse.vil.expressions.expressionDsl.Expression;
 import de.uni_hildesheim.sse.vil.rt.rtVil.FailStatement;
@@ -48,23 +52,48 @@ public class ExpressionTranslator extends de.uni_hildesheim.sse.buildLanguageTra
     private de.uni_hildesheim.sse.easy_producer.instantiator.model.rtVil.FailStatement createFailStatement(
         de.uni_hildesheim.sse.vilBuildLanguage.RuleElement elt, FailStatement fStmt, Resolver resolver) 
         throws TranslatorException{
-        de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.Expression codeEx = null;
-        Expression expr = fStmt.getCode();
-        if (null != expr) {
-            codeEx = processExpression(expr, resolver);
-            if (null != codeEx) {
+System.out.println("REASON");        
+        de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.Expression reasonEx = 
+            resolveFailExpression(fStmt.getReason(), TypeRegistry.stringType(), fStmt, 
+            RtVilPackage.Literals.FAIL_STATEMENT__REASON, resolver);
+System.out.println("CODE");        
+        de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.Expression codeEx = 
+            resolveFailExpression(fStmt.getCode(), TypeRegistry.integerType(), fStmt, 
+            RtVilPackage.Literals.FAIL_STATEMENT__CODE, resolver);
+System.out.println();        
+        return new de.uni_hildesheim.sse.easy_producer.instantiator.model.rtVil.FailStatement(reasonEx, codeEx);        
+    }
+    
+    /**
+     * Resolves an expression used in a fail statement.
+     * 
+     * @param ex the expression
+     * @param requiredType the required type of the evaluated expression
+     * @param failCause the failure cause (if failing)
+     * @param failFeature the failure feature (if failing)
+     * @param resolver the resolver
+     * @return the resolved expression or <b>null</b>
+     * @throws TranslatorException in case of translation problems
+     */
+    private de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.Expression resolveFailExpression(
+        Expression ex, TypeDescriptor<?> requiredType, EObject failCause, 
+        EStructuralFeature failFeature, Resolver resolver) throws TranslatorException {
+        de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.Expression result = null;
+System.out.println(ex);        
+        if (null != ex) {
+            result = processExpression(ex, resolver);
+            if (null != result) {
                 try {
-                if (!TypeRegistry.integerType().isAssignableFrom(codeEx.inferType())) {
-                    throw new TranslatorException("Code expression must be of type Integer", elt, 
-                        RtVilPackage.Literals.FAIL_STATEMENT__CODE, ErrorCodes.TYPE_CONSISTENCY);
+                if (!requiredType.isAssignableFrom(result.inferType())) {
+                    throw new TranslatorException("Expression must be of type " + requiredType.getVilName(), failCause, 
+                        failFeature, ErrorCodes.TYPE_CONSISTENCY);
                 }
                 } catch (VilException e) {
-                    throw new TranslatorException(e, elt, RtVilPackage.Literals.FAIL_STATEMENT__CODE);
+                    throw new TranslatorException(e, failCause, failFeature);
                 }
             }
         }
-        return new de.uni_hildesheim.sse.easy_producer.instantiator.model.rtVil.FailStatement(
-            fStmt.getReason(), codeEx);        
+        return result;
     }
 
     @Override

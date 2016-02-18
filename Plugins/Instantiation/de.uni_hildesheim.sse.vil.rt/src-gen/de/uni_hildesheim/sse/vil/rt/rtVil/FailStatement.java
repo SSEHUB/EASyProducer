@@ -53,30 +53,30 @@ public interface FailStatement extends EObject
   void setName(String value);
 
   /**
-   * Returns the value of the '<em><b>Reason</b></em>' attribute.
+   * Returns the value of the '<em><b>Reason</b></em>' containment reference.
    * <!-- begin-user-doc -->
    * <p>
-   * If the meaning of the '<em>Reason</em>' attribute isn't clear,
+   * If the meaning of the '<em>Reason</em>' containment reference isn't clear,
    * there really should be more of a description here...
    * </p>
    * <!-- end-user-doc -->
-   * @return the value of the '<em>Reason</em>' attribute.
-   * @see #setReason(String)
+   * @return the value of the '<em>Reason</em>' containment reference.
+   * @see #setReason(Expression)
    * @see de.uni_hildesheim.sse.vil.rt.rtVil.RtVilPackage#getFailStatement_Reason()
-   * @model
+   * @model containment="true"
    * @generated
    */
-  String getReason();
+  Expression getReason();
 
   /**
-   * Sets the value of the '{@link de.uni_hildesheim.sse.vil.rt.rtVil.FailStatement#getReason <em>Reason</em>}' attribute.
+   * Sets the value of the '{@link de.uni_hildesheim.sse.vil.rt.rtVil.FailStatement#getReason <em>Reason</em>}' containment reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @param value the new value of the '<em>Reason</em>' attribute.
+   * @param value the new value of the '<em>Reason</em>' containment reference.
    * @see #getReason()
    * @generated
    */
-  void setReason(String value);
+  void setReason(Expression value);
 
   /**
    * Returns the value of the '<em><b>Code</b></em>' containment reference.
