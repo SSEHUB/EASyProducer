@@ -155,6 +155,8 @@ public abstract class ExpressionTranslator<I extends VariableDeclaration, R exte
      * @param resolver a resolver instance for resolving variables etc.
      * @return the expression statement
      * @throws TranslatorException in case that the translation fails due to semantic reasons
+     * 
+     * @see #cannotAssignHint()
      */
     public E processExpressionStatement(de.uni_hildesheim.sse.vil.expressions.expressionDsl.ExpressionStatement expr, 
         R resolver) throws TranslatorException {
@@ -179,8 +181,8 @@ public abstract class ExpressionTranslator<I extends VariableDeclaration, R exte
                         ExpressionDslPackage.Literals.EXPRESSION_STATEMENT__FIELD, ErrorCodes.UNKNOWN_ELEMENT);
                 }
                 if (null != fdesc && fdesc.isReadOnly()) {
-                    throw new TranslatorException("Cannot assign value to readonly field '" + fdesc.getName() + "'", 
-                        expr, ExpressionDslPackage.Literals.EXPRESSION_STATEMENT__FIELD, 
+                    throw new TranslatorException("Cannot assign value to readonly field '" + fdesc.getName() + "'." 
+                        + cannotAssignHint(), expr, ExpressionDslPackage.Literals.EXPRESSION_STATEMENT__FIELD, 
                         VilException.ID_RUNTIME_READ_WRITE);
                 }
             } else {
@@ -194,6 +196,13 @@ public abstract class ExpressionTranslator<I extends VariableDeclaration, R exte
         }
         return createExpressionStatement(result);
     }
+    
+    /**
+     * A hint if an assignment is not allowed.
+     * 
+     * @return the hint (must not be <b>null</b>)
+     */
+    protected abstract String cannotAssignHint();
 
     /**
      * Creates an expression statement.

@@ -520,4 +520,9 @@ public class ExpressionTranslator
         return BuildLangModelUtility.INSTANCE.createExpression(expression, resolver, warnings);
     }
 
+    @Override
+    protected String cannotAssignHint() {
+        return "VIL cannot assign values to configurable elements.";
+    }
+
 }

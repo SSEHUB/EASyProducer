@@ -144,4 +144,9 @@ public class ExpressionTranslator
         return new ExpressionStatement(expression);
     }
 
+    @Override
+    protected String cannotAssignHint() {
+        return "VTL cannot assign values to configurable elements.";
+    }
+
 }

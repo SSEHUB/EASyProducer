@@ -66,6 +66,11 @@ public class ExpressionTranslator extends de.uni_hildesheim.sse.buildLanguageTra
         return new de.uni_hildesheim.sse.easy_producer.instantiator.model.rtVil.FailStatement(
             fStmt.getReason(), codeEx);        
     }
+
+    @Override
+    protected String cannotAssignHint() {
+        return ""; // no hint, rt-VIL can assign values
+    }
     
     // TODO intend
     
