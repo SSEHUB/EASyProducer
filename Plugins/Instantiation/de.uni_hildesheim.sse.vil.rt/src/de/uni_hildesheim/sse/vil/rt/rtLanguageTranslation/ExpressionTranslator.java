@@ -52,15 +52,12 @@ public class ExpressionTranslator extends de.uni_hildesheim.sse.buildLanguageTra
     private de.uni_hildesheim.sse.easy_producer.instantiator.model.rtVil.FailStatement createFailStatement(
         de.uni_hildesheim.sse.vilBuildLanguage.RuleElement elt, FailStatement fStmt, Resolver resolver) 
         throws TranslatorException{
-System.out.println("REASON");        
         de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.Expression reasonEx = 
             resolveFailExpression(fStmt.getReason(), TypeRegistry.stringType(), fStmt, 
             RtVilPackage.Literals.FAIL_STATEMENT__REASON, resolver);
-System.out.println("CODE");        
         de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.Expression codeEx = 
             resolveFailExpression(fStmt.getCode(), TypeRegistry.integerType(), fStmt, 
             RtVilPackage.Literals.FAIL_STATEMENT__CODE, resolver);
-System.out.println();        
         return new de.uni_hildesheim.sse.easy_producer.instantiator.model.rtVil.FailStatement(reasonEx, codeEx);        
     }
     
@@ -79,7 +76,6 @@ System.out.println();
         Expression ex, TypeDescriptor<?> requiredType, EObject failCause, 
         EStructuralFeature failFeature, Resolver resolver) throws TranslatorException {
         de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.Expression result = null;
-System.out.println(ex);        
         if (null != ex) {
             result = processExpression(ex, resolver);
             if (null != result) {
