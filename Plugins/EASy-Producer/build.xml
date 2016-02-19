@@ -138,16 +138,17 @@
             <!-- Instantiation -->
             <fileset dir="${home.instantiatorCore.dir}/${build.jar.dir}" includes="**/*.jar" />
             <fileset dir="${home.instantiator.velocity.dir}/${build.jar.dir}" includes="**/*.jar" />
-            <!-- Instantiation Tests (needed for the scenarios) -->
-            <fileset dir="${home.vil.tests.dir}/${build.jar.dir}" includes="**/*.jar" />
-            <fileset dir="${home.template.tests.dir}/${build.jar.dir}" includes="**/*.jar" />
-            <fileset dir="${home.vil.core.dir}/${build.jar.dir}" includes="**/*.jar" />
-            <fileset dir="${home.template.core.dir}/${build.jar.dir}" includes="**/*.jar" />
-            <fileset dir="${home.vil.expressions.core.dir}/${build.jar.dir}" includes="**/*.jar" />
-            <fileset dir="${home.model.tests.dir}/${build.jar.dir}" includes="**/*.jar" />
             <fileset dir="${home.instantiator.java.dir}/${build.jar.dir}" includes="**/*.jar" />
             <fileset dir="${home.instantiator.ant.dir}/${build.jar.dir}" includes="**/*.jar" />
             <fileset dir="${home.instantiator.aspectj.dir}/${build.jar.dir}" includes="**/*.jar" />
+            <!-- Instantiation Parsers -->
+            <fileset dir="${home.vil.expressions.core.dir}/${build.jar.dir}" includes="**/*.jar" />
+            <fileset dir="${home.template.core.dir}/${build.jar.dir}" includes="**/*.jar" />
+            <fileset dir="${home.vil.core.dir}/${build.jar.dir}" includes="**/*.jar" />
+            <!-- Instantiation Tests (needed for the scenarios) -->
+            <fileset dir="${home.vil.tests.dir}/${build.jar.dir}" includes="**/*.jar" />
+            <fileset dir="${home.template.tests.dir}/${build.jar.dir}" includes="**/*.jar" />
+            <fileset dir="${home.model.tests.dir}/${build.jar.dir}" includes="**/*.jar" />
         </copy>
 	</target>
 	

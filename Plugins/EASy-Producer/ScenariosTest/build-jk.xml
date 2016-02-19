@@ -10,21 +10,28 @@
 	
 	<path id ="includes">
 		<!-- Model -->
-        <pathelement path="${libs.utils}"/>
+    <pathelement path="${libs.utils}"/>
 		<pathelement path="${libs.model}"/>
-        <pathelement path="${libs.model.tests}"/>
-		<pathelement path="${libs.dslCore}"/>       
-        <pathelement path="${libs.instantiator.core}"/>
-        <pathelement path="${libs.template.core}"/>
-        <pathelement path="${libs.vil.core}"/>
-        <pathelement path="${libs.reasonerCore}"/>
-        <pathelement path="${libs.ivml}"/>
-        <pathelement path="${libs.instantiator.java}"/>
-        <pathelement path="${libs.instantiator.ant}"/>
-        <pathelement path="${libs.instantiator.aspectj}"/>
-        <pathelement path="${libs.vil.tests}"/>
+    <pathelement path="${libs.model.tests}"/>
+  	<pathelement path="${libs.dslCore}"/>
+		
+		<!-- Reasoner -->
+    <pathelement path="${libs.reasonerCore}"/>
+    
+		<!-- Parsers -->
+    <pathelement path="${libs.ivml}"/>
+    <pathelement path="${libs.template.core}"/>
+    <pathelement path="${libs.vil.core}"/>
+		<pathelement path="${libs.vil.tests}"/>
+		
+		<!-- Instantiators -->
+		<pathelement path="${libs.instantiator.core}"/>
+    <pathelement path="${libs.instantiator.java}"/>
+    <pathelement path="${libs.instantiator.ant}"/>
+    <pathelement path="${libs.instantiator.aspectj}"/>
 		<pathelement path="${libs.instantiator.maven}"/>
-        <!-- Eclipse-Plugins -->
+    
+		<!-- Eclipse-Plugins -->
 		<fileset dir="${eclipse.plugins.dir}">
 			<include name="**/*.jar" />
 		</fileset>
