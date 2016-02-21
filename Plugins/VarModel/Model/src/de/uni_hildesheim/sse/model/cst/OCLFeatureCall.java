@@ -106,7 +106,7 @@ public class OCLFeatureCall extends ConstraintSyntaxTree {
                 if (null != operand) {
                     dfltInferDatatype();
                 } else {
-                    customInferDatatype();
+                    customInferDatatype(false);
                 }
             } else {
                 // should not happen
@@ -180,7 +180,7 @@ public class OCLFeatureCall extends ConstraintSyntaxTree {
                 op = TypeQueries.getOperation(operandType, operation, paramTypesBase);
             }
             if (null == op) {
-                op = customInferDatatype();
+                op = customInferDatatype(true);
                 if (null == op) {
                     throw new UnknownOperationException(operation, CSTSemanticException.UNKNOWN_OPERATION, 
                         operandType, paramTypes);
@@ -279,10 +279,11 @@ public class OCLFeatureCall extends ConstraintSyntaxTree {
      * Performs the infer operation for custom operations only, i.e. 
      * operand and parameter need to be mapped appropriately.
      * 
+     * @param fallback if this is a fallback resolution
      * @return the resolved operation or <b>null</b>
      * @throws CSTSemanticException in case of type resolution problems
      */
-    private Operation customInferDatatype() throws CSTSemanticException {
+    private Operation customInferDatatype(boolean fallback) throws CSTSemanticException {
         Operation op = null;
         if (null != opAccessor) {
             // map operand of feature call to first parameter
@@ -316,12 +317,16 @@ public class OCLFeatureCall extends ConstraintSyntaxTree {
                 result = getActualReturnType(op, operandType, paramTypes);
                 resolvedOperation = op;
             } else {
-                throw new UnknownOperationException(operation, CSTSemanticException.UNKNOWN_OPERATION, 
-                    fcOperandType, paramTypes);
+                if (!fallback) {
+                    throw new UnknownOperationException(operation, CSTSemanticException.UNKNOWN_OPERATION, 
+                        fcOperandType, paramTypes);
+                }
             }
         } else {
-            throw new CSTSemanticException("no custom operator accessor given for " + getOperation(), 
-                CSTSemanticException.INTERNAL);
+            if (!fallback) {
+                throw new CSTSemanticException("no custom operator accessor given for " + getOperation(), 
+                    CSTSemanticException.INTERNAL);
+            }
         }
         return op;
     }
