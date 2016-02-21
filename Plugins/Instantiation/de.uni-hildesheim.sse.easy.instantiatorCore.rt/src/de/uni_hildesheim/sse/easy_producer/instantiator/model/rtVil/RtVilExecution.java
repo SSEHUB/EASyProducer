@@ -91,6 +91,8 @@ public class RtVilExecution extends BuildlangExecution implements IRtVilVisitor 
      */
     private static final IDynamicCallFallback VALIDATE_FALLBACK = new IDynamicCallFallback() {
         
+        // checkstyle: stop exception type check
+        
         @Override
         public Object call(RtVilExecution evaluator, CallArgument... args) throws VilException {
             Object result = null;
@@ -101,10 +103,16 @@ public class RtVilExecution extends BuildlangExecution implements IRtVilVisitor 
                 IRtValueAccess valueAccess = evaluator.valueAccess;
                 evaluator.reasoningHook.preReasoning(currentScript, concept, valueAccess, cfg);
                 de.uni_hildesheim.sse.model.confModel.Configuration easyConfig = cfg.getConfiguration();
-                ReasoningResult rResult = ReasonerFrontend.getInstance().propagate(easyConfig.getProject(), 
-                    easyConfig, REASONER_CONFIGURATION, ProgressObserver.NO_OBSERVER);
-                evaluator.reasoningHook.postReasoning(currentScript, concept, valueAccess, cfg);
                 EASyLogger logger = EASyLoggerFactory.INSTANCE.getLogger(RtVilExecution.class, Bundle.ID);
+                ReasoningResult rResult = null;
+                try {
+                    rResult = ReasonerFrontend.getInstance().propagate(easyConfig.getProject(), 
+                        easyConfig, REASONER_CONFIGURATION, ProgressObserver.NO_OBSERVER);
+                } catch (Throwable t) {
+                    // pretend it is ok
+                    logger.error("Reasoning exception: " + t.getMessage() + " - going on");
+                }
+                evaluator.reasoningHook.postReasoning(currentScript, concept, valueAccess, cfg);
                 int errorCount = 0;
                 for (int m = 0; m < rResult.getMessageCount(); m++) {
                     Message msg = rResult.getMessage(m);
@@ -136,6 +144,9 @@ public class RtVilExecution extends BuildlangExecution implements IRtVilVisitor 
             }
             return result;
         }
+        
+        // checkstyle: resume exception type check
+
     };
     
     /**
