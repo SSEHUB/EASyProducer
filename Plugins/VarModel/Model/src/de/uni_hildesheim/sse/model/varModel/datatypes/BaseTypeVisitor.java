@@ -58,7 +58,7 @@ public class BaseTypeVisitor implements IDatatypeVisitor {
     /**
      * Obtains an instance from the pool.
      * 
-     * @param type the type tp be analyzed
+     * @param type the type to be analyzed
      * @return the instance, to be released by {@link #releaseInstance(BaseTypeVisitor)}
      */
     private static final synchronized BaseTypeVisitor getInstance(IDatatype type) {
@@ -88,7 +88,7 @@ public class BaseTypeVisitor implements IDatatypeVisitor {
      * @param type the type the base type shall be determined
      * @return <code>type</code> or the base type
      */
-    public static final IDatatype getBaseType(IDatatype type) {
+    public static final synchronized IDatatype getBaseType(IDatatype type) {
         BaseTypeVisitor visitor = getInstance(type);
         type.accept(visitor);
         IDatatype result = visitor.getType();
