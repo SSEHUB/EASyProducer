@@ -2,7 +2,6 @@ package de.uni_hildesheim.sse.reasoning.core.frontend;
 
 import java.io.IOException;
 
-import org.junit.Ignore;
 import org.junit.Test;
 
 /**
@@ -1179,10 +1178,9 @@ public abstract class OperationTests extends AbstractReasonerFrontendTest {
      * Reasoner should detect an error.
      * @throws IOException in case of problems reading a model
      */
-    @Ignore
     @Test
     public void testDynamicDispatchIsInvalid() throws IOException {
-        performOpCheck("DynamicDispatchIsInvalid.ivml", true);
+        performOpCheck("DynamicDispatchIsInvalid.ivml", false);
     }
     
     /**
@@ -1190,10 +1188,9 @@ public abstract class OperationTests extends AbstractReasonerFrontendTest {
      * Reasoner should <b>not</b> detect an error.
      * @throws IOException in case of problems reading a model
      */
-    @Ignore
     @Test
     public void testDynamicDispatchIsValid() throws IOException {
-        performOpCheck("DynamicDispatchIValid.ivml", true);
+        performOpCheck("DynamicDispatchIsValid.ivml", true);
     }
     
 }

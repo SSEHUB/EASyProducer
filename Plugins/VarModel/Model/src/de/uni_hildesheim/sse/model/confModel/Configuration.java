@@ -42,7 +42,6 @@ import de.uni_hildesheim.sse.model.varModel.datatypes.Compound;
 import de.uni_hildesheim.sse.model.varModel.datatypes.IDatatype;
 import de.uni_hildesheim.sse.model.varModel.datatypes.Reference;
 import de.uni_hildesheim.sse.model.varModel.datatypes.Set;
-import de.uni_hildesheim.sse.model.varModel.datatypes.TypeQueries;
 import de.uni_hildesheim.sse.model.varModel.filter.DeclarationFinder;
 import de.uni_hildesheim.sse.model.varModel.filter.DeclarationFinder.VisibilityType;
 import de.uni_hildesheim.sse.model.varModel.rewrite.ProjectRewriteVisitor;
@@ -702,7 +701,7 @@ public class Configuration implements IConfigurationVisitable, IProjectListener,
     }
 
     /**
-     * Returns all instances of the given type.
+     * Returns all instances of the given type and sub-types.
      * 
      * @param type the type to look for
      * @return all instances of <code>var</code>, may be <b>null</b> if the instances cannot be retrieved, e.g., in 
@@ -715,14 +714,23 @@ public class Configuration implements IConfigurationVisitable, IProjectListener,
         // we need references to variables here in order to allow compound access and modification of variables 
         // in self-constraints
         Map<IDecisionVariable, ReferenceValue> instances = allInstances.get(type);
+        Map<IDatatype, Reference> referenceTypes = new HashMap<IDatatype, Reference>();
         Reference rType = new Reference("", type, project);
+        referenceTypes.put(type, rType);
         if (null == instances && Compound.TYPE.isAssignableFrom(type)) { // check type restriction
             instances = new HashMap<IDecisionVariable, ReferenceValue>();
             allInstances.put(type, instances);
             for (IDecisionVariable var : decisions.values()) {
-                if (TypeQueries.sameTypes(type, var.getDeclaration().getType())) {
+                AbstractVariable decl = var.getDeclaration();
+                IDatatype varType = decl.getType();
+                if (type.isAssignableFrom(varType)) {
                     try {
-                        instances.put(var, (ReferenceValue) ValueFactory.createValue(rType, var.getDeclaration()));
+                        Reference refType = referenceTypes.get(varType);
+                        if (null == refType) {
+                            refType = new Reference("", varType, project);
+                            referenceTypes.put(varType, refType);
+                        }
+                        instances.put(var, (ReferenceValue) ValueFactory.createValue(refType, decl));
                     } catch (ValueDoesNotMatchTypeException e) {
                         e.printStackTrace();
                     }

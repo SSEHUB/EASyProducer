@@ -25,6 +25,7 @@ import de.uni_hildesheim.sse.model.confModel.IDecisionVariable;
 import de.uni_hildesheim.sse.model.varModel.AbstractVariable;
 import de.uni_hildesheim.sse.model.varModel.DecisionVariableDeclaration;
 import de.uni_hildesheim.sse.model.varModel.datatypes.Compound;
+import de.uni_hildesheim.sse.model.varModel.datatypes.CustomOperation;
 import de.uni_hildesheim.sse.model.varModel.datatypes.IDatatype;
 import de.uni_hildesheim.sse.model.varModel.datatypes.Reference;
 import de.uni_hildesheim.sse.model.varModel.datatypes.Set;
@@ -170,5 +171,27 @@ public class LocalConfiguration implements IConfiguration, IRestrictionEvaluatio
         // not relevant here as no contexts are considered and in the evaluation context this class
         // is supposed to be used as a single instance rather than a stack
     }
+
+    /**
+     * Rebinds the parameters from <code>actual</code> to <code>replacement</code>, e.g., for dynamic
+     * dispatch. As a prerequisite, <code>actual</code> and <code>replacement</code> must have the same
+     * number of parameters and compatible parameter types, i.e., <code>replacement</code> must have the 
+     * same or more specific parameter types then <code>actual</code>.
+     * 
+     * @param actual the operation for which the parameters shall be replace
+     * @param replacement the operation replacing <code>actual</code>
+     */
+    void rebind(CustomOperation actual, CustomOperation replacement) {
+        if (actual.getParameterCount() == replacement.getParameterCount()) {
+            for (int p = 0, n = actual.getParameterCount(); p < n; p++) {
+                map.put(replacement.getParameterDeclaration(p), map.remove(actual.getParameterDeclaration(p)));
+            }
+        }
+    }
     
+    @Override
+    public String toString() {
+        return map.toString();
+    }
+
 }

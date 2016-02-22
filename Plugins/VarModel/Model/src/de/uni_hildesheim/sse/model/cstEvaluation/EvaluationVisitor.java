@@ -854,7 +854,11 @@ public class EvaluationVisitor implements IConstraintTreeVisitor {
                 cfg.addDecision(argument);
             }
             if (!operation.isStatic()) {
-                operation = dynamicDispatch(operation, args);
+                CustomOperation dyn = dynamicDispatch(operation, args);
+                if (dyn != operation) { // no equals defined
+                    cfg.rebind(operation, dyn);
+                    operation = dyn;
+                }
             }
             operation.getFunction().accept(this);
             context.popLevel();
@@ -1201,11 +1205,11 @@ public class EvaluationVisitor implements IConstraintTreeVisitor {
                 result = 0; // both are equal
             } else {
                 result = 1; // actually, there is a distance
-                if (Compound.TYPE.isAssignableFrom(opType)) {
+                if (Compound.TYPE.isAssignableFrom(paramType)) {
                     // in case of compounds, also consider the distance to the refined types so that not only
                     // direct matches but also intermediary refined types can be specified
-                    Compound iter = (Compound) opType;
-                    while (null != iter && !TypeQueries.sameTypes(iter, paramType)) {
+                    Compound iter = (Compound) paramType;
+                    while (null != iter && !TypeQueries.sameTypes(iter, opType)) {
                         result++;
                         iter = iter.getRefines();
                     }
