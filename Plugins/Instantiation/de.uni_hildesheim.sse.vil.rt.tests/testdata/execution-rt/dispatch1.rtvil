@@ -1,0 +1,28 @@
+@advice(dispatch1)
+rtVilScript dispatch1 (Project source, Configuration config, Project target) {
+
+    strategy main(Project source, Configuration config, Project target) = {
+        objective true;
+        breakdown {
+            tactic t(config);
+        }
+    }
+
+    tactic t(Configuration config) = {
+        dispatch1 dp = config;
+        process(dp.rp, 11.0);
+    }
+
+    process(Parameter p, Any value) = : {
+    }
+
+    process(RealParameter p, Real value) = : {
+    }
+
+    process(IntegerParameter p, Integer value) = : {
+    }
+
+    enact(Project source, Configuration config, Project target) = : {
+    }
+
+}

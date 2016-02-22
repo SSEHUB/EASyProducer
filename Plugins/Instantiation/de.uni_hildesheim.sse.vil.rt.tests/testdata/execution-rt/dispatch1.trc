@@ -1,0 +1,5 @@
+-> main(Project, Configuration, Project) with (<project>, <config>, <project>)
+    -> t(Configuration) with (<config>)
+        dp <- <config>
+        -> process(RealParameter, Real) with (dispatch1::rp, 11.0)
+    -> enact(Project, Configuration, Project) with (<project>, <config>, <project>)

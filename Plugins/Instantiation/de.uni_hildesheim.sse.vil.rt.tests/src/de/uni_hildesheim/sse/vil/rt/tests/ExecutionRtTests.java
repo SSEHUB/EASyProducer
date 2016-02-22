@@ -561,6 +561,20 @@ public class ExecutionRtTests extends AbstractRtTest {
     }
 
     /**
+     * Tests dynamic dispatch.
+     * 
+     * @throws IOException should not occur
+     */
+    @Test
+    public void testDispatch() throws IOException {
+        final String name = "dispatch1";
+        Configuration cfg = getIvmlConfiguration("dispatch1", NoVariableFilter.INSTANCE);
+        Map<String, Object> param = createParameterMap(null, null, cfg);
+        EqualitySetup setup = new EqualitySetup(createFile(name), name, null, createTraceFile(name), param);
+        assertEqual(setup);
+    }
+    
+    /**
      * Tests default output on fields.
      * 
      * @throws IOException should not occur

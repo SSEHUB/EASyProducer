@@ -1,0 +1,25 @@
+project dispatch1 {
+  version v0;
+  
+  compound Parameter {
+      String name;
+  }
+  
+  compound IntegerParameter refines Parameter {
+  }
+  
+  compound RealParameter refines Parameter {
+  }
+  
+  compound StringParameter refines Parameter {
+  }
+
+  IntegerParameter ip = {};
+  RealParameter rp = {};
+  
+  freeze {
+    ip;
+    rp;
+  };
+  
+}
