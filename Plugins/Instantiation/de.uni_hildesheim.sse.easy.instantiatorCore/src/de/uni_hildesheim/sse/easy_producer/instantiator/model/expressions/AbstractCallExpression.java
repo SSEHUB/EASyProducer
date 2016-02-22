@@ -108,7 +108,6 @@ public abstract class AbstractCallExpression extends Expression implements IArgu
             && op.getParameterCount() == arguments.length;
     }
 
-    
     /**
      * Derives the assignable candidates from <code>operand</code>, i.e., operations which 
      * can be directly applied with identical parameters or (second step) with assignable 
@@ -117,11 +116,12 @@ public abstract class AbstractCallExpression extends Expression implements IArgu
      * @param operand the operand of the call to be resolved
      * @param name the name of the operation call to be resolved
      * @param arguments the (unnamed) arguments of the call
+     * @param allowAny allow AnyType as assignable parameter type (dynamic dispatch)
      * @return the list of candidate operations
      * @throws VilException in case of type resolution problems or in case of an ambiguous call specification
      */
-    private static List<IMetaOperation> assignableCandidates(IMetaType operand, String name, CallArgument[] arguments) 
-        throws VilException {
+    private static List<IMetaOperation> assignableCandidates(IMetaType operand, String name, CallArgument[] arguments, 
+        boolean allowAny) throws VilException {
         List<IMetaOperation> result = new ArrayList<IMetaOperation>();
         IMetaType[] argumentTypes = toTypeDescriptors(arguments);
         for (int o = 0; o < operand.getOperationsCount(); o++) {
@@ -153,10 +153,11 @@ public abstract class AbstractCallExpression extends Expression implements IArgu
                 if (isCandidate(desc, name, arguments)) {
                     boolean allAssignable = true;
                     int aCount = 0;
+                    final TypeDescriptor<?> any = TypeRegistry.anyType();
                     for (int p = 0; allAssignable && p < arguments.length; p++) {
                         IMetaType pType = desc.getParameterType(p);
                         IMetaType aType = argumentTypes[p];
-                        if (pType.isAssignableFrom(aType)) {
+                        if (pType.isAssignableFrom(aType) || (allowAny && any == pType)) {
                             if (pType != aType) {
                                 aCount++;
                             }
@@ -209,7 +210,7 @@ public abstract class AbstractCallExpression extends Expression implements IArgu
             && initExpression instanceof VarModelIdentifierExpression) {
             VarModelIdentifierExpression varModelIdEx = (VarModelIdentifierExpression) initExpression; 
             String opName = varModelIdEx.getIdentifier();
-            List<IMetaOperation> ops = assignableCandidates(operand, opName, toTypeDescriptors(pType, 1));
+            List<IMetaOperation> ops = assignableCandidates(operand, opName, toTypeDescriptors(pType, 1), false);
             if (1 == ops.size()) { // return type may also select
                 IMetaOperation functionOp = ops.get(0);
                 TypeDescriptor<?> ret = pType.getGenericParameterType(pType.getGenericParameterCount() - 1);
@@ -486,7 +487,7 @@ public abstract class AbstractCallExpression extends Expression implements IArgu
         throws VilException {
         IMetaOperation op = null;
         try {
-            op = resolveOperation(operand, name, arguments, true);
+            op = resolveOperation(operand, name, arguments, true, false);
         } catch (VilException e) {
             // operand is fixed... let's try for a conversion
             try {
@@ -501,7 +502,7 @@ public abstract class AbstractCallExpression extends Expression implements IArgu
                         IMetaType stringType = TypeRegistry.stringType();
                         IMetaOperation convOp = TypeHelper.findConversion(opType, stringType); // includes Any->String
                         if (null != convOp) {
-                            op = resolveOperation(stringType, name, arguments, true);
+                            op = resolveOperation(stringType, name, arguments, true, false);
                             if (opType == TypeRegistry.anyType()) {
                                 arguments[0].insertConversion(convOp);
                                 // ANY is assignable by itself, other conversion
@@ -590,7 +591,7 @@ public abstract class AbstractCallExpression extends Expression implements IArgu
         if (null != convOp) {
             try {
                 // may already insert conversion
-                op = resolveOperation(sndArgType, name, arguments, true);
+                op = resolveOperation(sndArgType, name, arguments, true, false);
                 // don't accidentally insert conversion twice
                 if (!op.getReturnType().isAssignableFrom(sndArgType)) { 
                     arguments[0].insertConversion(convOp);
@@ -609,16 +610,17 @@ public abstract class AbstractCallExpression extends Expression implements IArgu
      * @param name the name of the operation to be resolved
      * @param arguments the (named) arguments of the call
      * @param allowConversion whether conversion shall be allowed
+     * @param allowAny allow AnyType as assignable parameter type (dynamic dispatch)
      * @return the resolved operation
      * @throws VilException in case that no resolution can be found for various (typically type compliance) 
      *   reasons
      */
     private static IMetaOperation resolveOperation(IMetaType operand, String name, CallArgument[] arguments, 
-        boolean allowConversion) throws VilException {
+        boolean allowConversion, boolean allowAny) throws VilException {
         IMetaOperation resolved = null;
         // check for direct applicable candidates
         CallArgument[] unnamed = CallArgument.getUnnamedArguments(arguments);
-        List<IMetaOperation> candidates = assignableCandidates(operand, name, unnamed);
+        List<IMetaOperation> candidates = assignableCandidates(operand, name, unnamed, allowAny);
         if (1 == candidates.size()) {
             resolved = candidates.get(0);
         } else if (allowConversion) {
@@ -792,7 +794,7 @@ public abstract class AbstractCallExpression extends Expression implements IArgu
                 if (!allSame && !failure) {
                     try {
                         // no additional conversion while dynamic dispatch
-                        IMetaOperation op = resolveOperation(operand, operation.getName(), types, false);
+                        IMetaOperation op = resolveOperation(operand, operation.getName(), types, false, true);
                         if (cls.isInstance(op)) {
                             result = cls.cast(op);
                         }
