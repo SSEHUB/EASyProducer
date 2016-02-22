@@ -2,6 +2,7 @@ package de.uni_hildesheim.sse.reasoning.core.frontend;
 
 import java.io.IOException;
 
+import org.junit.Ignore;
 import org.junit.Test;
 
 /**
@@ -1171,4 +1172,28 @@ public abstract class OperationTests extends AbstractReasonerFrontendTest {
     public void testAnnotationsToDifferenCompoundSlotsValid() throws IOException {
         performOpCheck("annotationAssignedToDifferentCompoundSlotsValid.ivml", true);
     }
+
+    // --------------------------User defined operations -----------------------
+    /**
+     * Tests whether operations can be selected through dynamic dispatch in a complex refinement hierarchy.
+     * Reasoner should detect an error.
+     * @throws IOException in case of problems reading a model
+     */
+    @Ignore
+    @Test
+    public void testDynamicDispatchIsInvalid() throws IOException {
+        performOpCheck("DynamicDispatchIsInvalid.ivml", true);
+    }
+    
+    /**
+     * Tests whether operations can be selected through dynamic dispatch in a complex refinement hierarchy.
+     * Reasoner should <b>not</b> detect an error.
+     * @throws IOException in case of problems reading a model
+     */
+    @Ignore
+    @Test
+    public void testDynamicDispatchIsValid() throws IOException {
+        performOpCheck("DynamicDispatchIValid.ivml", true);
+    }
+    
 }

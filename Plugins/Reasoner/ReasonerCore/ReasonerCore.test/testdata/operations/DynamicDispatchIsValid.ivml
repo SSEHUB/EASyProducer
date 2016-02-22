@@ -1,0 +1,25 @@
+project DynamicDispatchTestIsValid {
+
+	version v0;
+	
+	compound GeneralCP {
+		
+	}
+	
+	compound CPInTheMiddle refines GeneralCP {
+		isCorrect(self);
+	}
+	
+	compound ChildCP refines CPInTheMiddle {
+		
+	}
+	
+	def Boolean isCorrect(GeneralCP gCmp) = false;
+	def Boolean isCorrect(CPInTheMiddle mCmp) = moreCorrectness(mCmp);
+	
+	//def Boolean moreCorrectness(GeneralCP gCmp2) = false;
+	def Boolean moreCorrectness(CPInTheMiddle mCmp2) = false;
+	def Boolean moreCorrectness(ChildCP cCmp) = true; // Should not detect an error
+	
+	ChildCP cmp;
+}
