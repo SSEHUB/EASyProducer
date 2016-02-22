@@ -1187,6 +1187,16 @@ public class ExecutionTests extends AbstractTest {
     public void testDispatch3() throws IOException {
         assertEqualWithIvml("dispatch3", "dispatch3");
     }
+    
+    /**
+     * Tests a dispatch on a supertype and multiple parameters (contributed by QM).
+     * 
+     * @throws IOException should not occur
+     */
+    @Test
+    public void testDispatch3o1() throws IOException {
+        assertEqualWithIvml("dispatch3_1", "dispatch3");
+    }
 
     /**
      * Tests nested fields on references.

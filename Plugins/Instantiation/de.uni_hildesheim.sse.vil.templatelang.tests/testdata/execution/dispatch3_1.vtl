@@ -1,0 +1,18 @@
+@advice(dispatch3)
+template dispatch3o1(Configuration config, Artifact target) {
+
+    def main(Configuration config, Artifact target) {
+        dispatch3 dp = config;
+        process(dp.fam, "", 11.0);
+    }
+
+    def process(Node node, String paramName, Any value) {
+    }
+
+    def process(ElementNode element, String paramName, Any value) {
+    }
+
+    def process(FamilyNode element, String paramName, Any value) {
+    }
+
+}

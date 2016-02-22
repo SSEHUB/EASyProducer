@@ -10,6 +10,12 @@ project dispatch3 {
   compound FamilyNode refines ElementNode {
   }
   
+  compound SourceNode refines ElementNode {
+  }
+
+  compound SinkNode refines ElementNode {
+  }
+  
   FamilyNode fam = {};
   
   freeze {

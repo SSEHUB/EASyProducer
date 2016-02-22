@@ -1,0 +1,3 @@
+-> main(Configuration, Artifact) with (<config>, test.texts)
+    dp <- <config>
+    -> process(FamilyNode, String, Any) with (dispatch3::fam, , 11.0)
