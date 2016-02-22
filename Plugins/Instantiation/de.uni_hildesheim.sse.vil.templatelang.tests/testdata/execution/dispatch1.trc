@@ -29,7 +29,7 @@
             -> name(DecisionVariable) with (test::pInt) = pInt
         dv <- test::pReal
         -> value(DecisionVariable) with (test::pReal) = 1.23
-        -> createValueAssignment(DecisionVariable, Any) with (test::pReal, 1.23)
+        -> createValueAssignment(DecisionVariable, Real) with (test::pReal, 1.23)
             -> name(DecisionVariable) with (test::pReal) = pReal
         dv <- test::pString
         -> value(DecisionVariable) with (test::pString) = Hello

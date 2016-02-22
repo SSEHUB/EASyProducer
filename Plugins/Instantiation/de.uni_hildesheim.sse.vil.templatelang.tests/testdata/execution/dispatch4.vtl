@@ -1,0 +1,18 @@
+@advice(dispatch4)
+template dispatch4(Configuration config, Artifact target) {
+
+    def main(Configuration config, Artifact target) {
+        dispatch4 dp = config;
+        process(dp.rp, 11.0);
+    }
+
+    def process(Parameter p, Any value) {
+    }
+
+    def process(RealParameter p, Real value) {
+    }
+
+    def process(IntegerParameter p, Integer value) {
+    }
+
+}

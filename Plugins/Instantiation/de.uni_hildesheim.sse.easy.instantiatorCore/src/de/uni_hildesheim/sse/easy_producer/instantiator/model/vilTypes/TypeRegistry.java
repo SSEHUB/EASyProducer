@@ -364,6 +364,9 @@ public class TypeRegistry {
             for (Class<?> eq : meta.equiv()) {
                 if (null != eq) {
                     register(eq.getName(), desc);
+                    if (!types.containsKey(eq.getSimpleName())) { // for Java resolution
+                        register(eq.getSimpleName(), desc);    
+                    }
                     String primitive = null;
                     if (Boolean.class == eq) {
                         primitive = "boolean";

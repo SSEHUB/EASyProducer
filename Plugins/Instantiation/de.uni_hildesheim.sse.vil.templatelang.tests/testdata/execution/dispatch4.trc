@@ -1,0 +1,3 @@
+-> main(Configuration, Artifact) with (<config>, test.texts)
+    dp <- <config>
+    -> process(RealParameter, Real) with (dispatch4::rp, 11.0)

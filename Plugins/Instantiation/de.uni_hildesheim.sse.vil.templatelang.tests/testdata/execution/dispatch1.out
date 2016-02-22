@@ -4,5 +4,5 @@ unknown pComp
 unknown pCompSeq
 enum pEnum val2 1
 integer pInt 0
-unknown pReal
+real pReal 1.23
 string pString Hello
