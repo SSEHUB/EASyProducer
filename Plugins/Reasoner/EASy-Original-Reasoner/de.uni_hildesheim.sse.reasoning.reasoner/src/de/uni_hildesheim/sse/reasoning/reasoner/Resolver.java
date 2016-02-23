@@ -713,6 +713,12 @@ public class Resolver {
             try {
                 constraint = new Constraint(cst, parent);
                 constraintVariables.add(constraint);
+                //after refactoring duplicate check for ConstraintVariable is needed
+                IDatatype nestedType = nestedVariable.getDeclaration().getType();
+                if (ConstraintType.TYPE.isAssignableFrom(nestedType) 
+                    && !(nestedType.getType() == BooleanType.TYPE.getType())) {
+                    constraintVariableMap.put(constraint, nestedVariable);
+                }
                 if (Descriptor.LOGGING) {
                     LOGGER.debug(variable.getDeclaration().getName() + " compound constraint variable " 
                         + StringProvider.toIvmlString(cst));
