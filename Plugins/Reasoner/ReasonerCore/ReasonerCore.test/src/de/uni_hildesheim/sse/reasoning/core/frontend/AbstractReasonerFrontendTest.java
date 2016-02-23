@@ -2,6 +2,7 @@ package de.uni_hildesheim.sse.reasoning.core.frontend;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.URL;
 import java.util.List;
 
 import org.eclipse.core.runtime.Platform;
@@ -67,6 +68,18 @@ public abstract class AbstractReasonerFrontendTest {
             if (!result.exists()) {
                 // fallback to ReasonerCore
                 result = composeDir(TestConfiguration.PLUGIN_ID, TestConfiguration.PROJECT_NAME, path);
+                
+                // Fallback if relative folders do not work
+                if (!result.exists()) {
+                    URL url = AbstractReasonerFrontendTest.class.getResource("");
+                    String basePath = url.toString();
+                    int indexOfBin = basePath.lastIndexOf("ReasonerCore");
+                    // remove scheme (file:) at the beginning and wrong plug-in folder at the end
+                    basePath = basePath.substring(6, indexOfBin);
+                    result = new File(basePath, TestConfiguration.PLUGIN_ID);
+                    result = new File(result, TESTDIR);
+                    result = new File(result, path);
+                }
             }
         } else {
             result = new File(externalLocation, path);
