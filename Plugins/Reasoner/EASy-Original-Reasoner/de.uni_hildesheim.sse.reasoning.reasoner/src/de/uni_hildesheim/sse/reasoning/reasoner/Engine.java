@@ -116,7 +116,8 @@ public class Engine {
 //        PerformanceStatistics.clearReasoningID(reasoningID);
         infoLogger.info("");
         infoLogger.info("Model: " + project.getName());
-        infoLogger.info("Number of variables: " + resolver.variableCount());
+//        infoLogger.info("Number of variables: " + resolver.variableCount());
+        infoLogger.info("Number of variables involved in constraints: " + resolver.variableInConstraintCount());
         infoLogger.info("Number of constraints: " + resolver.constraintCount());
         infoLogger.info("Number of reevaluations: " + reevaluationCount);
         infoLogger.info("Number of problem constraints: " + failedConstraints);
