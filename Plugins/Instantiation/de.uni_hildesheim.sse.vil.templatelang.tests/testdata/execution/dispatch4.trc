@@ -1,3 +1,6 @@
 -> main(Configuration, Artifact) with (<config>, test.texts)
     dp <- <config>
     -> process(RealParameter, Real) with (dispatch4::rp, 11.0)
+    -> process(IntegerParameter, Integer) with (dispatch4::ip, 11)
+    -> process(StringParameter, String) with (dispatch4::sp, aaa)
+    -> process(BooleanParameter, Boolean) with (dispatch4::bp, true)

@@ -4,6 +4,9 @@ template dispatch4(Configuration config, Artifact target) {
     def main(Configuration config, Artifact target) {
         dispatch4 dp = config;
         process(dp.rp, 11.0);
+        process(dp.ip, 11);
+        process(dp.sp, "aaa");
+        process(dp.bp, true);
     }
 
     def process(Parameter p, Any value) {
@@ -13,6 +16,12 @@ template dispatch4(Configuration config, Artifact target) {
     }
 
     def process(IntegerParameter p, Integer value) {
+    }
+
+    def process(StringParameter p, String value) {
+    }
+
+    def process(BooleanParameter p, Boolean value) {
     }
 
 }

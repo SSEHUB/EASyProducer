@@ -13,13 +13,20 @@ project dispatch4 {
   
   compound StringParameter refines Parameter {
   }
-
+  
+  compound BooleanParameter refines Parameter {
+  }
+  
   IntegerParameter ip = {};
   RealParameter rp = {};
+  StringParameter sp = {};
+  BooleanParameter bp = {};
   
   freeze {
     ip;
     rp;
+    sp;
+    bp;
   };
   
 }
