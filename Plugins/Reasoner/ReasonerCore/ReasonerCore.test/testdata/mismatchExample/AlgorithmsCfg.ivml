@@ -1,0 +1,52 @@
+project AlgorithmsCfg {
+
+	import Algorithms;
+	import BasicsCfg;
+	Algorithm mismatchedAlg;
+	algorithms = {
+		refBy(mismatchedAlg)
+  };
+	algorithms.bindingTime = BindingTime.compile;
+	mismatchedAlg = Algorithm {
+		name = "MismatchedAlg", 
+		artifact = "eu.qualimaster:MismatchedAlg:0.0.1", 
+		class = "eu.qualimaster.algorithms.impl.MismatchedAlg", 
+		input = {
+			Tuple {
+				name = "misString", 
+				fields = {
+					Field {
+						name = "symbolTuple1", 
+						type = refBy(StringType)
+					}, Field {
+						name = "volume", 
+						type = refBy(IntegerType)
+					}
+				}
+			}
+		}, 
+		output = {
+			Tuple {
+				name = "misString", 
+				fields = {
+					Field {
+						name = "streamID1", 
+						type = refBy(StringType)
+					}, Field {
+						name = "timestamp", 
+						type = refBy(IntegerType)
+					}, Field {
+						name = "quote", 
+						type = refBy(RealType)
+					}
+				}
+			}
+		}, 
+		algTopologyClass = null, 
+		successor = null
+	};
+	freeze {
+		algorithms;
+		mismatchedAlg;
+	} but (f|f.bindingTime >= BindingTime.runtimeMon)
+}

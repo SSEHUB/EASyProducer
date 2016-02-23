@@ -7,7 +7,6 @@ import java.util.Set;
 
 import de.uni_hildesheim.sse.model.varModel.AbstractVariable;
 import de.uni_hildesheim.sse.model.varModel.Constraint;
-import de.uni_hildesheim.sse.model.varModel.datatypes.IDatatype;
 
 /**
  * A holder for a map reflecting all variable and constraint relationship.

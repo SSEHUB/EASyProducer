@@ -1,0 +1,40 @@
+project PipelinesCfg {
+
+	import Basics;
+	import Pipelines;
+  import FamiliesCfg;
+  import DataManagementCfg;
+  annotate BindingTime bindingTime = BindingTime.compile to PipelinesCfg;
+  Pipeline PriorityPip;
+  Sink PriorityPip_Sink0;
+  PriorityPip_Sink0 = {sink = refBy(priorSnk), parallelism = 1, name = "Sink", constraints = {}};
+  Source PriorityPip_Source1;
+  Flow PriorityPip_Flow4;
+  FamilyElement PriorityPip_FamilyElement2;
+  Flow PriorityPip_Flow5;
+  DataManagementElement PriorityPip_DataManagementElement0;
+  Flow PriorityPip_Flow6;
+  PriorityPip_Flow6 = {destination = refBy(PriorityPip_Sink0), grouping = Grouping.shuffleGrouping, name = "f7", constraints = {}};
+  PriorityPip_DataManagementElement0 = {dataManagement = refBy(hBaseDataManagement), output = {refBy(PriorityPip_Flow6)}, parallelism = 1, name = "DataManagement", constraints = {}};
+  PriorityPip_Flow5 = {destination = refBy(PriorityPip_DataManagementElement0), grouping = Grouping.shuffleGrouping, name = "f6", constraints = {}};
+  PriorityPip_FamilyElement2 = {family = refBy(fMismatchedFamily), output = {refBy(PriorityPip_Flow5)}, parallelism = 1, name = "SentimentAnalysis", constraints = {}};
+  PriorityPip_Flow4 = {destination = refBy(PriorityPip_FamilyElement2), grouping = Grouping.shuffleGrouping, name = "f5", constraints = {}};
+  PriorityPip_Source1 = {output = {refBy(PriorityPip_Flow4)}, source = refBy(twitter), parallelism = 1, name = "TwitterDataSource", constraints = {}};
+  PriorityPip = {name = "PriorityPip", sources = {refBy(PriorityPip_Source1)}, numworkers = 1, artifact = "eu.qualimaster:PriorityPip:0.2.0-SNAPSHOT", debug = false, fastSerialization = false, constraints = {}};	
+	pipelines = {
+		refBy(PriorityPip)
+	};
+	pipelines.userVisible = true;
+	pipelines.bindingTime = BindingTime.compile;
+	freeze {
+		pipelines;
+    PriorityPip;
+    PriorityPip_Sink0;
+    PriorityPip_Source1;
+    PriorityPip_Flow4;
+    PriorityPip_FamilyElement2;
+    PriorityPip_Flow5;
+    PriorityPip_DataManagementElement0;
+    PriorityPip_Flow6;
+	} but (f|f.bindingTime >= BindingTime.runtimeMon)
+}

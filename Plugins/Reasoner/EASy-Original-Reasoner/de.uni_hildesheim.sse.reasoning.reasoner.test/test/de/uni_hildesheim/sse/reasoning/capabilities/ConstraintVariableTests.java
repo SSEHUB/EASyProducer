@@ -6,6 +6,7 @@ import java.io.File;
 import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import de.uni_hildesheim.sse.ModelUtility;
@@ -88,72 +89,116 @@ public class ConstraintVariableTests extends de.uni_hildesheim.sse.reasoning.Abs
     } 
     
     /**
-     * Tests constraints in set.
+     * Tests false constraint.
      */
+    @Ignore
+    @Test
+    public void setOfConstraintsInCompoundWithDefaultValue() {
+        reasoningTest("setOfConstraintsInCompoundWithDefaultValue.ivml", 1);
+    }
+    
+    /**
+     * Tests false constraint.
+     */
+    @Ignore
     @Test
     public void setOfConstraintsInCompoundWithNoDefaultValue() {
-        reasoningTest("setOfConstraintsInCompoundWithNoDefaultValue.ivml", 0);
+        reasoningTest("setOfConstraintsInCompoundWithNoDefaultValue.ivml", 1);
     }
     
     /**
-     * Tests constraints in set.
+     * Tests false constraint.
      */
+    @Ignore
     @Test
     public void setOfConstraintsInCompoundWithEmptyDefaultValue() {
-        reasoningTest("setOfConstraintsInCompoundWithEmptyDefaultValue.ivml", 0);
+        reasoningTest("setOfConstraintsInCompoundWithEmptyDefaultValue.ivml", 1);
     }
     
     /**
-     * Tests constraints in set.
+     * Tests false constraint.
      */
+    @Ignore
+    @Test
+    public void setOfConstraintsWithDefaultValue() {
+        reasoningTest("setOfConstraintsWithDefaultValue.ivml", 1);
+    }
+    
+    /**
+     * Tests false constraint.
+     */
+    @Ignore
+    @Test
+    public void setOfConstraintsWithNoDefaultValue() {
+        reasoningTest("setOfConstraintsWithNoDefaultValue.ivml", 1);
+    }
+    
+    /**
+     * Tests false constraint.
+     */
+    @Ignore
+    @Test
+    public void setOfConstraintsWithEmptyDefaultValue() {
+        reasoningTest("setOfConstraintsWithEmptyDefaultValue.ivml", 1);
+    }
+    
+    /**
+     * Tests false constraint.
+     */
+    @Ignore
     @Test
     public void constraintsInCompoundWithNoDefaultValue() {
-        reasoningTest("constraintsInCompoundWithNoDefaultValue.ivml", 0);
+        reasoningTest("constraintsInCompoundWithNoDefaultValue.ivml", 1);
     }
     
     
     /**
-     * Tests constraints in set.
+     * Tests false constraint.
      */
+    @Ignore
     @Test
     public void constraintDefaultTest() {
-        reasoningTest("constraintDefault.ivml", 0);
+        reasoningTest("constraintDefault.ivml", 1);
     }
     
     /**
-     * Tests constraints in set.
+     * Tests false constraint.
      */
+    @Ignore
     @Test
     public void constraintAssignedTest() {
-        reasoningTest("constraintAssigned.ivml", 0);
+        reasoningTest("constraintAssigned.ivml", 1);
     }
     
     /**
-     * Tests constraints in set.
+     * Tests false constraint.
      */
+    @Ignore
     @Test
     public void constraintInCompoundDefaultTest() {
-        reasoningTest("constraintInCompoundDefault.ivml", 0);
+        reasoningTest("constraintInCompoundDefault.ivml", 1);
     }
     
     /**
-     * Tests constraints in set.
+     * Tests false constraint.
      */
+    @Ignore
     @Test
     public void constraintInCompoundAssignedTest() {
-        reasoningTest("constraintInCompoundAssigned.ivml", 0);
+        reasoningTest("constraintInCompoundAssigned.ivml", 1);
     }
     
     /**
-     * Tests constraints in set.
+     * Tests false constraint.
      */
+    @Ignore
     @Test
     public void falseTest() {
-        reasoningTest("falseTest.ivml", 0);
+        reasoningTest("falseTest.ivml", 1);
     }
     
     /**
-     * Tests constraints in set.
+     * Tests boolean variable with value false.
      */
     @Test
     public void booleanAssignedFalse() {
@@ -161,11 +206,59 @@ public class ConstraintVariableTests extends de.uni_hildesheim.sse.reasoning.Abs
     }
     
     /**
-     * Tests constraints in set.
+     * Tests boolean variable with value false.
      */
     @Test
     public void booleanDefaultFalse() {
         reasoningTest("booleanDefaultFalse.ivml", 0);
+    }
+    
+    /**
+     * Tests boolean variable with value false.
+     */
+    @Test
+    public void booleanAssignedFalseInCompound() {
+        reasoningTest("booleanAssignedFalseInCompound.ivml", 0);
+    }
+    
+    /**
+     * Tests boolean variable with value false.
+     */
+    @Test
+    public void booleanDefaultFalseInCompound() {
+        reasoningTest("booleanDefaultFalseInCompound.ivml", 0);
+    }
+    
+    /**
+     * Tests boolean variable with value false.
+     */
+    @Test
+    public void setOfBooleanInCompoundWithDefaultValue() {
+        reasoningTest("setOfBooleanInCompoundWithDefaultValue.ivml", 0);
+    }
+    
+    /**
+     * Tests boolean variable with value false.
+     */
+    @Test
+    public void setOfBooleanInCompoundWithNoDefaultValue() {
+        reasoningTest("setOfBooleanInCompoundWithNoDefaultValue.ivml", 0);
+    }
+    
+    /**
+     * Tests boolean variable with value false.
+     */
+    @Test
+    public void setOfBooleanWithDefaultValue() {
+        reasoningTest("setOfBooleanWithDefaultValue.ivml", 0);
+    }
+    
+    /**
+     * Tests boolean variable with value false.
+     */
+    @Test
+    public void setOfBooleanWithNoDefaultValue() {
+        reasoningTest("setOfBooleanWithNoDefaultValue.ivml", 0);
     }
 
 }

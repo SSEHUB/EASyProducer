@@ -1,0 +1,71 @@
+project DataManagement {
+
+    import Basics;
+    import Observables;
+
+	annotate BindingTime bindingTime = BindingTime.compile to DataManagement;
+
+    enum DataManagementStrategy {None, FirstInFirstOut, LeastFrequentlyUsed, LeastRecentlyUsed, LeastFrequentlyRecentlyUsed};
+    
+	compound DataElement {
+	    NonEmptyString name;
+	    Description description;
+	    ArtifactString artifact;
+		NonEmptyString storageLocation;
+		DataManagementStrategy strategy;
+		OptionalNaturalNumber timeLine;
+		OptionalNaturalNumber cutoffCapacity;
+        
+		Constraint strategyAssigned = strategy.isDefined(); 
+		Constraint strategyC1 = strategy == DataManagementStrategy.LeastFrequentlyUsed or strategy == DataManagementStrategy.LeastFrequentlyRecentlyUsed implies cutoffCapacity > 0;
+		Constraint strategyC2 = strategy == DataManagementStrategy.LeastRecentlyUsed or strategy == DataManagementStrategy.LeastFrequentlyRecentlyUsed implies timeLine > 0;
+		Constraint strategyC3 = strategy == DataManagementStrategy.None or strategy == DataManagementStrategy.FirstInFirstOut implies timeLine == 0 and cutoffCapacity == 0;
+	}
+	
+	compound DataSource refines DataElement {
+		Tuples input;
+		Parameters parameters;
+		ClassString sourceCls;
+		setOf(Constraint) constraints;
+		// runtime observables
+	    assign(bindingTime = BindingTime.runtimeMon) to {
+			Velocity velocity;
+			Volume volume;
+			Volatility volatility;
+			Accuracy_Confidence accuracyConfidence;
+			Completeness completeness;
+			
+			Boolean isValid = true;
+		} 
+	}
+	
+	sequenceOf(refTo(DataSource)) dataSources;
+	
+	Constraint sourceNamesUnique = not(dataSources->collect(s|s.name).hasDuplicates());
+	
+	compound DataSink refines DataElement {		
+		Tuples output;
+		Parameters parameters;
+		ClassString sinkCls;
+		setOf(Constraint) constraints;
+		// runtime observables
+	    assign(bindingTime = BindingTime.runtimeMon) to {
+			Velocity velocity;
+			Volume volume;
+			Accuracy_Confidence accuracyConfidence;
+			//MPVolatility mpVolatility;
+			
+			Boolean isValid = true;
+		} 
+	}
+ 
+	sequenceOf(refTo(DataSink)) dataSinks;
+
+	Constraint sinkNamesUnique = not(dataSinks->collect(s|s.name).hasDuplicates());
+
+    compound PersistentDataElement refines DataElement{
+    }
+    
+    sequenceOf(refTo(PersistentDataElement)) persistentDataElements;
+	
+}

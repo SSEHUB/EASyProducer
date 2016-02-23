@@ -18,7 +18,8 @@ import org.junit.runners.Suite.SuiteClasses;
     QMFamiliesTest1.class,
     QMFamiliesTest2.class,
     QMPipelinesTest1.class,
-    QMScenarioTests.class
+    QMScenarioTests.class,
+    QMMismatchedTest.class
     })
 public class AllTests {
     

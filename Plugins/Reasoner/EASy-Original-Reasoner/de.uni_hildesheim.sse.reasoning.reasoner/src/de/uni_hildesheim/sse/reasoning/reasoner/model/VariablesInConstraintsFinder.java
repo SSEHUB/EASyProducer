@@ -23,6 +23,8 @@ import de.uni_hildesheim.sse.model.cst.UnresolvedExpression;
 import de.uni_hildesheim.sse.model.cst.Variable;
 import de.uni_hildesheim.sse.model.varModel.AbstractVariable;
 import de.uni_hildesheim.sse.model.varModel.datatypes.OclKeyWords;
+import de.uni_hildesheim.sse.model.varModel.values.ReferenceValue;
+import de.uni_hildesheim.sse.model.varModel.values.Value;
 
 /**
  * A visitor to retrieve variables from constraints.
@@ -68,7 +70,7 @@ public class VariablesInConstraintsFinder implements IConstraintTreeVisitor {
      * @param constraint Constraint that is visited to retrieve variables.
      */
     public VariablesInConstraintsFinder(AbstractVariable variable, ConstraintSyntaxTree constraint) {
-        variables = new HashSet<AbstractVariable>(); 
+        variables = new HashSet<AbstractVariable>();
         isSimpleAssignment = false;
         containsVariable = false;
         checkedVariable = variable;
@@ -83,7 +85,7 @@ public class VariablesInConstraintsFinder implements IConstraintTreeVisitor {
      */
     public Set<AbstractVariable> getVariables() {
         return variables;
-    }
+    } 
     
     /**
      * Method for analyzing if constraint contains specific variable.
@@ -103,7 +105,14 @@ public class VariablesInConstraintsFinder implements IConstraintTreeVisitor {
 
     @Override
     public void visitConstantValue(ConstantValue value) {
-        // Not needed
+        Value constValue = value.getConstantValue();
+        if (null != constValue && constValue instanceof ReferenceValue) {
+            ReferenceValue rValue = (ReferenceValue) constValue;
+            AbstractVariable referencedDecl = rValue.getValue();
+            if (null != referencedDecl) {
+                variables.add(referencedDecl);
+            }
+        }
     }
 
     @Override
@@ -180,6 +189,7 @@ public class VariablesInConstraintsFinder implements IConstraintTreeVisitor {
         access.getCompoundExpression().accept(this);  
         try {
             access.inferDatatype();
+            variables.add(access.getResolvedSlot());
             if (access.getResolvedSlot().equals(checkedVariable)) {
                 containsVariable = true;
             }
@@ -214,8 +224,7 @@ public class VariablesInConstraintsFinder implements IConstraintTreeVisitor {
 
     @Override
     public void visitSelf(Self self) {
-        // TODO Auto-generated method stub
-        
+        // not needed
     }
 
    
