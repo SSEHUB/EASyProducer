@@ -1,0 +1,9 @@
+project MismatchTest {
+
+	version v0;
+  import HardwareCfg;
+  import DataManagementCfg;     
+  import AlgorithmsCfg;
+  import FamiliesCfg; 
+  import PipelinesCfg;
+}

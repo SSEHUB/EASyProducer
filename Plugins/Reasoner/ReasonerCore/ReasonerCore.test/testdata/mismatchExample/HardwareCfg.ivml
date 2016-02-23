@@ -1,0 +1,4 @@
+project HardwareCfg {
+
+	import Hardware;
+}

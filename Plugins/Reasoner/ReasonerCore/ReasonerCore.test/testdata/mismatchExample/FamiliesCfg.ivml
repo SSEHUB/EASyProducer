@@ -1,0 +1,57 @@
+project FamiliesCfg {
+
+	import Families;
+	import AlgorithmsCfg;
+	import BasicsCfg;
+	Family fMismatchedFamily;
+	families = {
+		refBy(fMismatchedFamily)
+	};
+	families.bindingTime = BindingTime.compile;
+	fMismatchedFamily = Family {
+		name = "fMismatchedFamily", 
+		input = {
+			Tuple {
+				name = "misString", 
+				fields = {
+					Field {
+						name = "symbolTuple1", 
+						type = refBy(StringType), 
+						keyPart = false
+					}, Field {
+						name = "volume", 
+						type = refBy(IntegerType), 
+						keyPart = false
+					}
+				}
+			}
+		}, 
+		output = {
+			Tuple {
+				name = "misString", 
+				fields = {
+					Field {
+						name = "streamID1", 
+						type = refBy(StringType), 
+						keyPart = false
+					}, Field {
+						name = "timestamp", 
+						type = refBy(IntegerType), 
+						keyPart = false
+					}, Field {
+						name = "quote", 
+						type = refBy(RealType), 
+						keyPart = false
+					}
+				}
+			}
+		}, 
+		members = {
+			refBy(mismatchedAlg)
+		}
+	};
+	freeze {
+		families;
+		fMismatchedFamily;
+	} but (f|f.bindingTime >= BindingTime.runtimeMon)
+}
