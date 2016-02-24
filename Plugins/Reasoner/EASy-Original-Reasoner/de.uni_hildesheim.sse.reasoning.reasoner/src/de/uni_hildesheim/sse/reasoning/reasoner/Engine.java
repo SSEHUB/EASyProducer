@@ -332,8 +332,10 @@ public class Engine {
             infoLogger.info("Failed elements project: " + msg.getConflictProjects().get(i).getName());
             infoLogger.info("Failed elements suggestion: " + msg.getConflictSuggestions().get(i));
             infoLogger.info("Failed elements variables: " + msg.getProblemVariables().get(i));
-            infoLogger.info("Failed elements problem constraint parts: " 
-                + StringProvider.toIvmlString(msg.getProblemConstraintParts().get(i)));
+            if (msg.getProblemConstraintParts().get(i) != null) {
+                infoLogger.info("Failed elements problem constraint parts: " 
+                    + StringProvider.toIvmlString(msg.getProblemConstraintParts().get(i)));                
+            }
             infoLogger.info("Failed elements constraint variable: " 
                 + msg.getNamedConstraintVariables().get(i));            
         }

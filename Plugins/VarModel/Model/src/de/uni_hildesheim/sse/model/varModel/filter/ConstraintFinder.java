@@ -18,7 +18,6 @@ package de.uni_hildesheim.sse.model.varModel.filter;
 import java.util.ArrayList;
 import java.util.List;
 
-import de.uni_hildesheim.sse.model.cst.ConstantValue;
 import de.uni_hildesheim.sse.model.cst.ConstraintSyntaxTree;
 import de.uni_hildesheim.sse.model.cst.OCLFeatureCall;
 import de.uni_hildesheim.sse.model.varModel.Attribute;
@@ -215,20 +214,18 @@ public class ConstraintFinder implements IModelVisitor {
     public void visitConstraint(Constraint constraint) {
         boolean add = true;
         ConstraintSyntaxTree cst = constraint.getConsSyntax();
-        if (!(cst instanceof ConstantValue)) {
-            if (excludeAssignments) {
-                if (cst instanceof OCLFeatureCall) {
-                    OCLFeatureCall call = (OCLFeatureCall) cst;
-                    add = !OclKeyWords.ASSIGNMENT.equals(call.getOperation());
-                }
+        if (excludeAssignments) {
+            if (cst instanceof OCLFeatureCall) {
+                OCLFeatureCall call = (OCLFeatureCall) cst;
+                add = !OclKeyWords.ASSIGNMENT.equals(call.getOperation());
             }
-            if (add) {
-                if (isEvalConstraint && handleEvals) {
-                    evalConstraints.add(constraint);                    
-                } else {
-                    constraints.add(constraint);                    
-                }
-            }            
+        }
+        if (add) {
+            if (isEvalConstraint && handleEvals) {
+                evalConstraints.add(constraint);                    
+            } else {
+                constraints.add(constraint);                    
+            }
         }
     }
 
