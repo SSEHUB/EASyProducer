@@ -152,6 +152,10 @@
 		</copy>
 	</target>
   
+    <target name="cleanup">
+        <delete dir="${basedir}/${test.eclipse.name}"/>
+        <delete dir="${basedir}/.svn"/>
+    </target>
 	
-	<target name="all" depends="init, compile, test, storeJars"/>
+	<target name="all" depends="init, compile, test, storeJars, cleanup"/>
 </project>
