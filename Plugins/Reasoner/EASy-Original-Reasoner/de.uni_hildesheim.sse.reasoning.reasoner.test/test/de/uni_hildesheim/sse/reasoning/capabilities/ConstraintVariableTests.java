@@ -89,7 +89,7 @@ public class ConstraintVariableTests extends de.uni_hildesheim.sse.reasoning.Abs
     } 
     
     /**
-     * Tests false constraint.
+     * Tests false constraint. TODO implement assigned ConstraintVariableEvaluation
      */
     @Ignore
     @Test
@@ -98,7 +98,7 @@ public class ConstraintVariableTests extends de.uni_hildesheim.sse.reasoning.Abs
     }
     
     /**
-     * Tests false constraint.
+     * Tests false constraint. TODO implement assigned ConstraintVariableEvaluation
      */
     @Ignore
     @Test
@@ -107,7 +107,7 @@ public class ConstraintVariableTests extends de.uni_hildesheim.sse.reasoning.Abs
     }
     
     /**
-     * Tests false constraint.
+     * Tests false constraint. TODO implement assigned ConstraintVariableEvaluation
      */
     @Ignore
     @Test
@@ -116,7 +116,7 @@ public class ConstraintVariableTests extends de.uni_hildesheim.sse.reasoning.Abs
     }
     
     /**
-     * Tests false constraint.
+     * Tests false constraint. TODO implement assigned ConstraintVariableEvaluation
      */
     @Ignore
     @Test
@@ -125,7 +125,7 @@ public class ConstraintVariableTests extends de.uni_hildesheim.sse.reasoning.Abs
     }
     
     /**
-     * Tests false constraint.
+     * Tests false constraint. TODO implement assigned ConstraintVariableEvaluation
      */
     @Ignore
     @Test
@@ -134,7 +134,7 @@ public class ConstraintVariableTests extends de.uni_hildesheim.sse.reasoning.Abs
     }
     
     /**
-     * Tests false constraint.
+     * Tests false constraint. TODO implement assigned ConstraintVariableEvaluation
      */
     @Ignore
     @Test
@@ -142,27 +142,18 @@ public class ConstraintVariableTests extends de.uni_hildesheim.sse.reasoning.Abs
         reasoningTest("setOfConstraintsWithEmptyDefaultValue.ivml", 1);
     }
     
-    /**
-     * Tests false constraint.
-     */
-    @Ignore
-    @Test
-    public void constraintsInCompoundWithNoDefaultValue() {
-        reasoningTest("constraintsInCompoundWithNoDefaultValue.ivml", 1);
-    }
-    
     
     /**
      * Tests false constraint.
      */
-    @Ignore
+//    @Ignore
     @Test
     public void constraintDefaultTest() {
         reasoningTest("constraintDefault.ivml", 1);
     }
     
     /**
-     * Tests false constraint.
+     * Tests false constraint. TODO implement assigned ConstraintVariableEvaluation
      */
     @Ignore
     @Test
@@ -173,14 +164,23 @@ public class ConstraintVariableTests extends de.uni_hildesheim.sse.reasoning.Abs
     /**
      * Tests false constraint.
      */
-    @Ignore
     @Test
     public void constraintInCompoundDefaultTest() {
         reasoningTest("constraintInCompoundDefault.ivml", 1);
     }
     
     /**
-     * Tests false constraint.
+     * Tests false constraint. TODO implement assigned ConstraintVariableEvaluation
+     */
+    @Ignore
+    @Test
+    public void constraintsInCompoundWithNoDefaultValue() {
+        reasoningTest("constraintsInCompoundWithNoDefaultValue.ivml", 1);
+    }
+    
+    
+    /**
+     * Tests false constraint. TODO implement assigned ConstraintVariableEvaluation
      */
     @Ignore
     @Test
@@ -191,7 +191,7 @@ public class ConstraintVariableTests extends de.uni_hildesheim.sse.reasoning.Abs
     /**
      * Tests false constraint.
      */
-    @Ignore
+//    @Ignore
     @Test
     public void falseTest() {
         reasoningTest("falseTest.ivml", 1);
