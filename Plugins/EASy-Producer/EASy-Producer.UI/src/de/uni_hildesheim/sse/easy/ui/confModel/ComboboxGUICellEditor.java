@@ -35,7 +35,7 @@ class ComboboxGUICellEditor extends ComboBoxCellEditor implements IUpdateProvide
     }
 
     @Override
-    public void refreshContents() {
+    public void refresh() {
         String[] items = variable.refreshContents();
         if (null != items) {
             Object selected = getValue();

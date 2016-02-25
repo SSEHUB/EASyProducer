@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2015 University of Hildesheim, Software Systems Engineering
+ * Copyright 2009-2016 University of Hildesheim, Software Systems Engineering
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,7 +26,7 @@ import de.uni_hildesheim.sse.model.varModel.values.ValueDoesNotMatchTypeExceptio
  * 
  * @author Holger Eichelberger
  */
-public interface IOverridingEditor {
+public interface IOverridingEditor extends IRefreshableEditor {
 
     /**
      * Returns the value of the given {@link de.uni_hildesheim.sse.model.confModel.IDecisionVariable} so that it can 
@@ -55,9 +55,7 @@ public interface IOverridingEditor {
      */
     public abstract String getValueText();
     
-    /**
-     * Refreshes the contents of this editor.
-     */
-    public void refreshContents();
+    @Override
+    public void refresh();
     
 }

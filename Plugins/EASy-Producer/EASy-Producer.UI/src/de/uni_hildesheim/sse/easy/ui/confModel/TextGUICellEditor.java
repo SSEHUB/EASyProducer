@@ -198,7 +198,7 @@ public class TextGUICellEditor extends TextCellEditor implements IUpdateProvider
     }
 
     @Override
-    public void refreshContents() {
+    public void refresh() {
         // not relevant here, the value change is the interesting part
     }
 

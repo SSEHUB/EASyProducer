@@ -515,7 +515,7 @@ public class ConfigurationTableEditorFactory implements IConfigurationEditorCrea
         @Override
         public void refreshContents() {
             if (control instanceof IOverridingEditor) {
-                ((IOverridingEditor) control).refreshContents();
+                ((IOverridingEditor) control).refresh();
             } else {
                 Control ctrl = getControl();
                 if (null != ctrl) {

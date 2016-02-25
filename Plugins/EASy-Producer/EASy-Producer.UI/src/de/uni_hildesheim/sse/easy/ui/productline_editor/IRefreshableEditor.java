@@ -15,29 +15,16 @@
  */
 package de.uni_hildesheim.sse.easy.ui.productline_editor;
 
-import de.uni_hildesheim.sse.model.confModel.IDecisionVariable;
-
 /**
- * Supports external updates to the created editors.
- * 
- * @author Holger Eichelberger
+ *  Declares the interface of an editor, which may refresh its contents based on model changes.
+ * @author El-Sharkawy
+ *
  */
-public interface IUpdateProvider extends IRefreshableEditor {
-
-    @Override
+public interface IRefreshableEditor {
+    
+    /**
+     * Refreshes the contents of the editor.
+     */
     public void refresh();
-    
-    /**
-     * Defines the update listener. The update listener will be disposed automatically .
-     * 
-     * @param listener the update listener
-     */
-    public void setUpdateListener(IUpdateListener listener);
-    
-    /**
-     * Returns the underlying decision variable.
-     * 
-     * @return the decision variable
-     */
-    public IDecisionVariable getVariable();
+
 }
