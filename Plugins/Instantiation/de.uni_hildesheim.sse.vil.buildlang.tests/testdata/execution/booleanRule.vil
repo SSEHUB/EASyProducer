@@ -1,0 +1,21 @@
+@advice(booleanRule)
+vilScript booleanRule (Project source, Configuration config, Project target) {
+
+    Any getValue(Parameter param) = : {
+        null;
+    }
+
+    String getValue(StringParameter param) = : {
+        param.defaultValue;
+    }
+
+    Boolean getValue(BooleanParameter param) = : {
+        param.defaultValue;
+    }
+
+    main(Project source, Configuration config, Project target) = : {
+        booleanRule cfg = config;
+        cfg.bp.getValue();
+    }
+
+}

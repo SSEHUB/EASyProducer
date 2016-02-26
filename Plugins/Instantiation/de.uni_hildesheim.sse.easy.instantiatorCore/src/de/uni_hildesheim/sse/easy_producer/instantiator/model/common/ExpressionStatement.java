@@ -1,6 +1,9 @@
 package de.uni_hildesheim.sse.easy_producer.instantiator.model.common;
 
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.CallArgument;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.CallExpression;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.Expression;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.OperationDescriptor;
 
 /**
  * Represents a statement which contains just of an expression.
@@ -38,6 +41,19 @@ public class ExpressionStatement {
      */
     public Object accept(IVisitor visitor) throws VilException {
         return visitor.visitExpressionStatement(this);
+    }
+    
+    /**
+     * Changes this statement by applying a conversion operation to {@link expression}.
+     * 
+     * @param op the conversion operation
+     * @throws VilException in case that applying the conversion fails
+     */
+    public void applyConversionTo(OperationDescriptor op) throws VilException {
+        if (null != op) {
+            expression = new CallExpression(op, new CallArgument(expression));
+            expression.inferType();
+        }
     }
 
 }

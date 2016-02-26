@@ -45,6 +45,7 @@ import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.ExpressionS
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilException;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.Expression;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.templateModel.Template;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.OperationDescriptor;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeDescriptor;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeRegistry;
 import de.uni_hildesheim.sse.utils.modelManagement.IModelLoader;
@@ -413,6 +414,13 @@ public abstract class AbstractModelTranslator<M extends Script, L extends Langua
                         ExpressionStatement eStmt = (ExpressionStatement) elt;
                         try {
                             TypeDescriptor<?> exType = eStmt.getExpression().inferType();
+                            if (!rule.getReturnType().isAssignableFrom(exType)) {
+                                OperationDescriptor op = exType.findConversion(exType, rule.getReturnType());
+                                if (null != op) {
+                                    eStmt.applyConversionTo(op);
+                                    exType = eStmt.getExpression().inferType();
+                                }
+                            }
                             if (!rule.getReturnType().isAssignableFrom(exType)) {
                                 throw new TranslatorException(getDisplayName() + " return type is '" 
                                     + exType.getVilName() + "' rather than '" + rule.getReturnType().getVilName() + "'", 

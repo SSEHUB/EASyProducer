@@ -1,0 +1,21 @@
+project booleanRule {
+  version v0;
+  
+  compound Parameter {
+  }
+  
+  compound BooleanParameter refines Parameter {
+      Boolean defaultValue;
+  }
+  
+  compound StringParameter refines Parameter {
+      String defaultValue;
+  }
+  
+  BooleanParameter bp = {defaultValue = true};
+  
+  freeze {
+    bp;
+  };
+  
+}

@@ -922,5 +922,15 @@ public class ExecutionTests extends AbstractExecutionTest<Script> {
     public void nullTest() throws IOException {
         assertSelfInstantiate("nullTest", "main", "nullTest", null);
     }
+    
+    /**
+     * Tests defining a boolean rule based on a Boolean IVML element.
+     * 
+     * @throws IOException should not occur
+     */
+    @Test
+    public void testBooleanRule() throws IOException {
+        assertSelfInstantiate("booleanRule", "main", "booleanRule", null);
+    }
 
 }

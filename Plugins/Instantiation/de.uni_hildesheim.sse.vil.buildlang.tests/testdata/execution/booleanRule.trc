@@ -1,0 +1,3 @@
+-> main(Project, Configuration, Project) with (<project>, <config>, <project>)
+    cfg <- <config>
+    -> getValue(DecisionVariable) with (booleanRule::bp) = {defaultValue=true : Boolean}
