@@ -227,7 +227,7 @@ public abstract class ExecutionVisitor <M extends IResolvableModel<V>, O extends
      * 
      * @param model the model to be visited
      * @param visited the already visited models
-     * @throws VilException in case that visiting fails (cyclic inclusion)
+     * @throws VilException in case that visiting fails for some reason
      */
     @SuppressWarnings("unchecked")
     private void visitModelHeader(IResolvableModel<V> model, Set<IResolvableModel<V>> visited) 
@@ -254,9 +254,6 @@ public abstract class ExecutionVisitor <M extends IResolvableModel<V>, O extends
                 }
             }
             environment.switchContext(oldContext);
-        } else {
-            throw new VilException("cyclic inclusion at " + model.getName(), 
-                VilException.ID_RUNTIME_CYCLE);
         }
     }
 
