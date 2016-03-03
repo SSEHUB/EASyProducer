@@ -1218,4 +1218,14 @@ public class ExecutionTests extends AbstractTest {
         assertEqualWithIvml("references1", "references1");
     }
 
+    /**
+     * Tests equality of references.
+     * 
+     * @throws IOException should not occur
+     */
+    @Test
+    public void testReferences2() throws IOException {
+        assertEqualWithIvml("references2", "references2");
+    }
+
 }

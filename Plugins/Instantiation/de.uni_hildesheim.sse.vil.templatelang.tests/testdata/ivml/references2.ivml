@@ -1,0 +1,36 @@
+project references2 {
+
+    compound Alg {
+        String name;
+    }
+
+    compound Element {
+        String name;
+        refTo(Alg) alg;
+    } 
+    
+    Alg algo = {name = "alg"};
+    Alg algo1 = {name = "alg1"};
+    Element elt = {name = "elt", alg = refBy(algo)};
+    Element elt1 = {name = "elt1", alg = refBy(algo)};
+
+    refTo(Element) rElt = refBy(elt);
+    refTo(Element) rElt0 = refBy(elt);
+    refTo(Element) rElt1 = refBy(elt1);
+    refTo(Element) rElt2;
+    refTo(Element) rElt3 = null;
+    elt.alg = refBy(algo);
+    elt1.alg = refBy(algo1);
+    
+    freeze {
+        algo;
+        algo1;
+        elt;
+        elt1;
+        rElt;
+        rElt0;
+        rElt1;
+        rElt2;
+        rElt3;
+    }
+}

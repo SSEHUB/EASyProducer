@@ -1,0 +1,20 @@
+@advice(references2)
+template references2(Configuration config, Artifact target) {
+
+    def main(Configuration config, Artifact target) {
+        references2 cfg = config;
+        if (cfg.rElt2 == null) {
+            'rElt2 == null'
+        }
+        if (cfg.rElt2 <> null) {
+            'rElt2 <> null'
+        }
+        if (cfg.rElt3 == null) {
+            'rElt3 == null'
+        }
+        if (cfg.rElt == cfg.rElt0) {
+            'rElt == rElt0'
+        }
+    }
+
+}

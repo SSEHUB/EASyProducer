@@ -1,0 +1,9 @@
+-> main(Configuration, Artifact) with (<config>, test.texts)
+    cfg <- <config>
+    -> ==(IvmlElement, Any) with (references2::rElt2, null) = false
+    -> <>(IvmlElement, Any) with (references2::rElt2, null) = true
+    visit if-branch
+    -> ==(IvmlElement, Any) with (references2::rElt3, null) = true
+    visit if-branch
+    -> ==(Element, IvmlElement) with (references2::rElt, references2::rElt0) = true
+    visit if-branch
