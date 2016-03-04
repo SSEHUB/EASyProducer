@@ -1,0 +1,45 @@
+project QM5 {
+    
+    enum BindingTime {compile = 0, startup = 1, runtime = 2};
+    annotate BindingTime bindingTime = BindingTime.compile to QM5;
+    
+    compound Algorithm {
+        String name;
+    }
+    
+    compound Family {
+        String name;
+        assign (bindingTime=BindingTime.runtime) to {
+            refTo(Algorithm) actual;
+            sequenceOf(refTo(Algorithm)) available;
+        }
+    }
+    
+    
+    Algorithm alg1 = {
+        name = "alg1" 
+    };
+    
+    Algorithm alg2 = {
+        name = "alg2"
+    };
+    
+    Family fam1 = {
+        name = "fam1",
+        actual = refBy(alg1),
+        available = {refBy(alg2), refBy(alg1)}
+    };
+    
+    Family fam2 = {
+        name = "fam2",
+        actual = refBy(alg2),
+        available = {refBy(alg1), refBy(alg2)}
+    };
+    
+    freeze {
+        alg1;
+        alg2;
+        fam1;
+        fam2;
+    } but (f|f.bindingTime >= BindingTime.runtime)
+}

@@ -1,0 +1,32 @@
+-> main(Project, Configuration, Project) with (<project>, <config>, <project>)
+    -> t(Configuration) with (<config>)
+        cfg <- <config>
+        fam1 <- QM5::fam1
+        -> isEnactable(DecisionVariable) with (QM5::Family::actual)
+            -> !=(IvmlElement, Any) with (QM5::Family::actual, null) = true
+            visit if-branch
+            -> originalValue(DecisionVariable) with (QM5::Family::actual) = {name=alg1 : String}
+            -> ==(Any, Any) with ({name=alg1 : String}, null) = false
+            visit else-branch
+            -> originalValue(DecisionVariable) with (QM5::Family::actual) = {name=alg1 : String}
+            -> value(DecisionVariable) with (QM5::Family::actual) = {name=alg1 : String}
+            -> !=(Any, Any) with ({name=alg1 : String}, {name=alg1 : String}) = false
+        visit else-branch
+        -> println(Any) with (same and not enactable :))
+        -> println(Any) with (alg1)
+        -> first(Sequence) with ({QM5::Family::available [0], QM5::Family::available [1]}) = QM5::Family::available [0]
+        fam1.actual <- QM5::Family::available [0]
+        -> println(Any) with (alg2)
+        -> isEnactable(DecisionVariable) with (QM5::Family::actual)
+            -> !=(IvmlElement, Any) with (QM5::Family::actual, null) = true
+            visit if-branch
+            -> originalValue(DecisionVariable) with (QM5::Family::actual) = {name=alg1 : String}
+            -> ==(Any, Any) with ({name=alg1 : String}, null) = false
+            visit else-branch
+            -> originalValue(DecisionVariable) with (QM5::Family::actual) = {name=alg1 : String}
+            -> value(DecisionVariable) with (QM5::Family::actual) = {name=alg2 : String}
+            -> !=(Any, Any) with ({name=alg1 : String}, {name=alg2 : String}) = true
+        visit if-branch
+        -> println(Any) with (not same and enactable :))
+        Reasoner execution: true
+    -> enact(Project, Configuration, Project) with (<project>, <config>, <project>)

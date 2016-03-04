@@ -1,0 +1,43 @@
+import enact;
+
+@advice(QM5)
+rtVilScript references2 (Project source, Configuration config, Project target) {
+
+    strategy main(Project source, Configuration config, Project target) = {
+        objective true;
+        breakdown {
+            tactic t(config);
+        }
+    }
+
+    tactic t(Configuration config) = {
+        QM5 cfg = config;
+        Family fam1 = cfg.fam1;
+        if (isEnactable(fam1.actual)) {
+            println("same and enactable :o");
+        } else {
+            println("same and not enactable :)");
+        }
+println(fam1.actual.name);        
+        fam1.actual = fam1.available.first();
+println(fam1.actual.name);        
+        if (isEnactable(fam1.actual)) {
+            println("not same and enactable :)");
+        } else {
+            println("not same and not enactable :o");
+        }       
+    }
+    
+    Boolean isEnactable(DecisionVariable var) = {
+         if (var != null) {
+            if (originalValue(var) == null) {
+                false;
+            } else {
+                originalValue(var) != var.value();
+            }
+        } else {
+            false;
+        }
+    }
+    
+}

@@ -14,4 +14,28 @@ final class PseudoAny implements IVilType {
     private PseudoAny() {
     }
     
+    /**
+     * Represents the equality operation for Strings.
+     * 
+     * @param s1 the first boolean to be considered
+     * @param s2 the second boolean to be considered
+     * @return s1 == s2
+     */
+    @OperationMeta(name = Constants.EQUALITY, opType = OperationType.INFIX)
+    public static boolean equals(Object s1, Object s2) {
+        return (s1 == null && s2 == null) || (s1 != null && s1.equals(s2));
+    }
+    
+    /**
+     * Represents the unequality operation for Strings.
+     * 
+     * @param s1 the first boolean to be considered
+     * @param s2 the second boolean to be considered
+     * @return s1 != s2
+     */
+    @OperationMeta(name = {Constants.UNEQUALITY, Constants.UNEQUALITY_ALIAS }, opType = OperationType.INFIX)
+    public static boolean unequals(Object s1, Object s2) {
+        return (s1 == null && s2 == null) || (s1 != null && !s1.equals(s2));
+    }
+    
 }

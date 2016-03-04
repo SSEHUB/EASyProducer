@@ -41,7 +41,7 @@ import de.uni_hildesheim.sse.model.varModel.values.Value;
 public class ChangeHistory implements IVilType, IStringValueProvider {
 
     private Configuration configuration;
-    private CSet originalValues = new CSet();
+    private Map<IDecisionVariable, Value> originalValues = new HashMap<IDecisionVariable, Value>();
     private CSet committed = new CSet();
     private Stack<CSet> changeSetStack = new Stack<CSet>();
     private IConfigurationChangeListener changeListener = new ChangeListener();
@@ -232,7 +232,7 @@ public class ChangeHistory implements IVilType, IStringValueProvider {
      */
     @Invisible
     public Value getOriginalValue(AbstractIvmlVariable variable) {
-        Value value = originalValues.get(variable);
+        Value value = originalValues.get(variable.origVariable);
         if (null == value) {
             value = variable.getVariable().getValue();
         }
@@ -280,7 +280,7 @@ public class ChangeHistory implements IVilType, IStringValueProvider {
         if (!isSameValue(variable.getVariable().getValue(), value)) {
             CSet changeSet;
             if (!originalValues.containsKey(variable)) {
-                originalValues.put(variable, value);
+                originalValues.put(variable.origVariable, value);
             }
             if (!changeSetStack.isEmpty()) {
                 changeSet = changeSetStack.peek();

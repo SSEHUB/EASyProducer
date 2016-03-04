@@ -270,9 +270,19 @@ public class ReflectionOperationDescriptor extends OperationDescriptor implement
             Object arg1 = nullify(callArgs[1]);
             String name = getName();
             if (Constants.UNEQUALITY.equals(name) || Constants.UNEQUALITY_ALIAS.equals(name)) {
-                result = arg0 != arg1;
+                if (null == arg0) {
+                    result = arg1 != null;
+                } else {
+                    result = !arg0.equals(arg1);
+                }
+                //result = arg0 != arg1;
             } else if (Constants.EQUALITY.equals(name)) {
-                result = arg0 == arg1;
+                if (null == arg0) {
+                    result = arg1 == null;
+                } else {
+                    result = arg0.equals(arg1);
+                }
+                //result = arg0 == arg1;
             } else {
                 throwIncompatibleParameter(args);
             }

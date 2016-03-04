@@ -54,7 +54,7 @@ public class Constants {
     public static final String TYPE_ITERATOR = "Iterator";
 
     public static final String TYPE_STRING = "String";
-
+    
     public static final String TYPE_REAL = "Real";
 
     public static final String TYPE_INTEGER = "Integer";
