@@ -224,7 +224,8 @@ public class ChangeHistory implements IVilType, IStringValueProvider {
     
     /**
      * Returns the original value of a variable before any explicit change. This method
-     * is made accessible through <code>variable</code> itself.
+     * is made accessible through <code>variable</code> itself. Following the idea of VIL, reference
+     * values are transparently dereferenced.
      * 
      * @param variable the 
      * @return the original value
@@ -235,7 +236,7 @@ public class ChangeHistory implements IVilType, IStringValueProvider {
         if (null == value) {
             value = variable.getVariable().getValue();
         }
-        return value;
+        return de.uni_hildesheim.sse.model.confModel.Configuration.dereference(configuration.getConfiguration(), value);
     }
 
     /**
