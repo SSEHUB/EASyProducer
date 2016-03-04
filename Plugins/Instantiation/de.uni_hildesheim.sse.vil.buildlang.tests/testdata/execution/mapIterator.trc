@@ -1,5 +1,5 @@
 -> main()
-    -> create() with () = <StringCreator>
+    -> create StringCreator() with () = <StringCreator>
     sc <- <StringCreator>
     map {
         -> strings(StringCreator) with (<StringCreator>) = <Iterator>

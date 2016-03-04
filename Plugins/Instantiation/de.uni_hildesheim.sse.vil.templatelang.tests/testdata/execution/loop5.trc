@@ -1,5 +1,5 @@
 -> main(Configuration, Artifact) with (<config>, test.texts)
-    -> create() with () = <stringArtifact>
+    -> create StringArtifact() with () = <stringArtifact>
     a <- <stringArtifact>
     -> values(StringArtifact) with (<stringArtifact>) = <Iterator>
     for s {

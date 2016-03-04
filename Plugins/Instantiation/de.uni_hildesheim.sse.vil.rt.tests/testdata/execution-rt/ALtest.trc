@@ -1,6 +1,6 @@
 -> bindValues(Configuration, mapOf(String, Real)) with (<config>, null)
     qm <- <config>
-    -> create(Map) with (null) = <FrozenSystemState>
+    -> create FrozenSystemState(Map) with (null) = <FrozenSystemState>
     state <- <FrozenSystemState>
     map {
         map: a <- ALtest::algorithms {0}
@@ -90,11 +90,11 @@
                         map: n <- ALtest::Source::next {0}
                         -> enact(Pipeline, FamilyElement) with (ALtest::pipelines {0}, ALtest::Source::next {0})
                             family <- ALtest::FamilyElement::family
-                            -> create() with () = <CommandSequence>
+                            -> create CommandSequence() with () = <CommandSequence>
                             cmd <- <CommandSequence>
                             -> !=(IvmlElement, Any) with (ALtest::FamilyElement::actual, null) = true
                             visit if-branch
-                            -> create(String, String, String) with (pipeline, process, alg1) = <AlgorithmChangeCommand>
+                            -> create AlgorithmChangeCommand(String, String, String) with (pipeline, process, alg1) = <AlgorithmChangeCommand>
                             -> add(CommandSequence, Command) with (<CommandSequence>, <AlgorithmChangeCommand>)
                             map {
                             }

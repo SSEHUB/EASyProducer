@@ -117,7 +117,11 @@ public abstract class AbstractVilTracer
     @Override
     public void visitingCallExpression(OperationDescriptor descriptor, CallType callType, Object[] args) {
         if (TracerHelper.trace(descriptor)) {
-            String msg = "call " + descriptor.getName() + "(";
+            String msg = "call " + descriptor.getName();
+            if (descriptor.isConstructor() && null != descriptor.getReturnType()) {
+                msg += " " + descriptor.getReturnType().getVilName();
+            }
+            msg += "(";
             if (null != args) {
                 // determine optional parameter and temporarily remove implicit parameters if required
                 java.util.Map<?, ?> optionalArgsOrig = null;

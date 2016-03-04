@@ -1,6 +1,6 @@
 -> bindValues(Configuration, mapOf(String, Real)) with (<config>, null)
     qm <- <config>
-    -> create(Map) with (null) = <FrozenSystemState>
+    -> create FrozenSystemState(Map) with (null) = <FrozenSystemState>
     state <- <FrozenSystemState>
     map {
         map: a <- ALtest::algorithms {0}

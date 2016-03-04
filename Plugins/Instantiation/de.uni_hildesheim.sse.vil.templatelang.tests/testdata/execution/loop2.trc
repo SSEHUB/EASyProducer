@@ -1,5 +1,5 @@
 -> main(Configuration, Artifact) with (<config>, test.texts)
-    -> create() with () = <stringArtifact>
+    -> create StringArtifact() with () = <stringArtifact>
     a <- <stringArtifact>
     -> selectAll(StringArtifact) with (<stringArtifact>) = {0, 1, 2}
     for s {

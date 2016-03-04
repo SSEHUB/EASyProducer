@@ -1,7 +1,7 @@
 -> main(Project, Configuration, Project) with (<project>, <config>, <project>)
     -> t1()
     -> enact(Project, Configuration, Project) with (<project>, <config>, <project>)
-        -> create(String, String, String) with (a, b, c) = <AlgorithmChangeCommand>
+        -> create AlgorithmChangeCommand(String, String, String) with (a, b, c) = <AlgorithmChangeCommand>
         cmd <- <AlgorithmChangeCommand>
         m <- {}
         -> add(Map, Integer, String) with ({{1, aa}}, 1, aa)

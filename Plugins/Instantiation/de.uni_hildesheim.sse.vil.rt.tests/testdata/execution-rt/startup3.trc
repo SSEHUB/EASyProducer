@@ -49,11 +49,11 @@
                         map: n <- QM1::Source::next {0}
                         -> enact(Pipeline, FamilyElement) with (QM1::pipelines {0}, QM1::Source::next {0})
                             family <- QM1::FamilyElement::family
-                            -> create() with () = <CommandSequence>
+                            -> create CommandSequence() with () = <CommandSequence>
                             cmd <- <CommandSequence>
                             -> !=(IvmlElement, Any) with (QM1::FamilyElement::actual, null) = true
                             visit if-branch
-                            -> create(String, String, String) with (pip, famelt1, alg1) = <AlgorithmChangeCommand>
+                            -> create AlgorithmChangeCommand(String, String, String) with (pip, famelt1, alg1) = <AlgorithmChangeCommand>
                             -> add(CommandSequence, Command) with (<CommandSequence>, <AlgorithmChangeCommand>)
                             map {
                             }

@@ -4,6 +4,6 @@
     -> createRootElement(XmlFileArtifact, String) with (xml2File.xml, MyRoot) = xmlElement "MyRoot"
     -> getRootElement(XmlFileArtifact) with (xml2File.xml) = xmlElement "MyRoot"
     root <- xmlElement "MyRoot"
-    -> create(XmlElement, String) with (xmlElement "MyRoot", Hello) = xmlElement "Hello"
+    -> create XmlElement(XmlElement, String) with (xmlElement "MyRoot", Hello) = xmlElement "Hello"
     hello <- xmlElement "Hello"
-    -> create(XmlElement, String, String) with (xmlElement "Hello", attrib, value) = xmlAttribute: "attrib"
+    -> create XmlAttribute(XmlElement, String, String) with (xmlElement "Hello", attrib, value) = xmlAttribute: "attrib"

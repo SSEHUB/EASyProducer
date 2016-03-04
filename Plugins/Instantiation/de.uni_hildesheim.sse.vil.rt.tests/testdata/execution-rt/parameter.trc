@@ -18,6 +18,6 @@
         map {
             map: p <- QM2::Source::parameters {0}
             -> enact(IntegerParameter) with (QM2::Source::parameters {0})
-                -> create(String, String, String, Any) with (pip, elt, delay, 50) = <ParameterChangeCommand>
+                -> create ParameterChangeCommand(String, String, String, Any) with (pip, elt, delay, 50) = <ParameterChangeCommand>
                 cmd <- <ParameterChangeCommand>
         }

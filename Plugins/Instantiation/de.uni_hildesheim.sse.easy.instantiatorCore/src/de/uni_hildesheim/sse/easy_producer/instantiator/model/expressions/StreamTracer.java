@@ -112,6 +112,10 @@ public abstract class StreamTracer extends AbstractWriter implements ITracer {
             printIndentation();
             print("-> ");
             print(descriptor.getName());
+            if (descriptor.isConstructor() && null != descriptor.getReturnType()) {
+                print(" ");
+                print(descriptor.getReturnType().getVilName());
+            }
             print("(");
             if (null != args) {
                 for (int p = 0; p < descriptor.getParameterCount(); p++) {
