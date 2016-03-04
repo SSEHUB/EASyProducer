@@ -144,7 +144,8 @@ class ValueVisitor implements IValueVisitor {
 
     @Override
     public void visitReferenceValue(ReferenceValue referenceValue) {
-        // shall be dereferenced
+        // typed value via implicit dereferencing
+        this.value = referenceValue; 
     }
 
     @Override
