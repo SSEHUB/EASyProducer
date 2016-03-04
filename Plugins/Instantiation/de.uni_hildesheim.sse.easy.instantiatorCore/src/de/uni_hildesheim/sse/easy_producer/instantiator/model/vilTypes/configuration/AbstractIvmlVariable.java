@@ -49,18 +49,18 @@ public abstract class AbstractIvmlVariable extends IvmlElement {
     protected IDecisionVariable variable;
     protected IVariableFilter filter;
     private DecisionVariable[] nested;
-    private Configuration parent;
+    private Configuration config;
     
     /**
      * Creates a new IVML variable.
      * 
-     * @param parent the parent configuration
+     * @param cfg the parent configuration
      * @param variable the variable to be wrapped
      * @param filter the variable filter to apply
      */
-    protected AbstractIvmlVariable(Configuration parent, IDecisionVariable variable, IVariableFilter filter) {
+    protected AbstractIvmlVariable(Configuration cfg, IDecisionVariable variable, IVariableFilter filter) {
         origVariable = variable; // keep the variable before dereferencing it
-        this.parent = parent;
+        this.config = cfg;
         this.filter = filter;
         Value val = variable.getValue();
         if (val instanceof ReferenceValue) {
@@ -79,13 +79,38 @@ public abstract class AbstractIvmlVariable extends IvmlElement {
     }
     
     /**
-     * Returns the configuration parent.
+     * Returns the configuration.
      * 
-     * @return the configuration parent
+     * @return the configuration
      */
     @Invisible
-    public Configuration getParent() {
-        return parent;
+    public Configuration getConfiguration() {
+        return config;
+    }
+    
+    /**
+     * Returns whether this instances holds <code>var</code>.
+     * 
+     * @param var the variable to look for
+     * @return <code>true</code> if <code>var</code> is held by this instance, <code>false</code> else
+     */
+    @Invisible
+    public boolean isVariable(IDecisionVariable var) {
+        return origVariable == var || variable == var;
+    }
+    
+    /**
+     * Returns the parent of this variable.
+     * 
+     * @return the parent if it exists
+     */
+    public IvmlElement getParent() {
+        IvmlElement result = config;
+        IConfigurationElement elt = variable.getParent();
+        if (elt instanceof IDecisionVariable) {
+            result = config.findVariable((IDecisionVariable) elt);
+        }
+        return result;
     }
 
     @Override
@@ -97,7 +122,7 @@ public abstract class AbstractIvmlVariable extends IvmlElement {
                 for (int n = 0; n < variable.getNestedElementsCount(); n++) {
                     IDecisionVariable var = variable.getNestedElement(n);
                     if (filter.isEnabled(var)) {
-                        tmp.add(new DecisionVariable(parent, variable.getNestedElement(n), filter));
+                        tmp.add(new DecisionVariable(config, variable.getNestedElement(n), filter));
                     }
                 }
                 nested = tmp.toArray(new DecisionVariable[tmp.size()]);
@@ -108,7 +133,7 @@ public abstract class AbstractIvmlVariable extends IvmlElement {
                     nested = new DecisionVariable[cont.getElementSize()];
                     for (int n = 0; n < nested.length; n++) {
                         // FILTER???
-                        nested[n] = new DecisionVariable(parent, 
+                        nested[n] = new DecisionVariable(config, 
                             new DecVar(variable, cont.getElement(n), null), filter);
                     }
                 }
@@ -456,7 +481,7 @@ public abstract class AbstractIvmlVariable extends IvmlElement {
                 varState = AssignmentState.ASSIGNED;
             }
             toChange.setValue(val, varState);
-            parent.notifyValueChanged(this, oldValue);
+            config.notifyValueChanged(this, oldValue);
         } catch (ConfigurationException e) {
             EASyLoggerFactory.INSTANCE.getLogger(getClass(), Bundle.ID).error("while changing " + getName()
                 + " with value " + value + ": " + e.getMessage());
@@ -474,7 +499,7 @@ public abstract class AbstractIvmlVariable extends IvmlElement {
      */
     public Object getOriginalValue() {
         Object result = null;
-        Value val = parent.getChangeHistory().getOriginalValue(this);
+        Value val = config.getChangeHistory().getOriginalValue(this);
         if (null != val) {
             synchronized (VALUE_VISITOR) { // just to be sure
                 VALUE_VISITOR.clear();

@@ -27,12 +27,12 @@ public class DecisionVariable extends AbstractIvmlVariable implements IActualTyp
     /**
      * Creates a decision variable.
      * 
-     * @param parent the parent configuration variable
+     * @param cfg the parent configuration variable
      * @param variable the underlying IVML variable
      * @param filter the variable filter
      */
-    DecisionVariable(Configuration parent, IDecisionVariable variable, IVariableFilter filter) {
-        super(parent, variable, filter);
+    DecisionVariable(Configuration cfg, IDecisionVariable variable, IVariableFilter filter) {
+        super(cfg, variable, filter);
     }
     
     @Override
@@ -42,7 +42,7 @@ public class DecisionVariable extends AbstractIvmlVariable implements IActualTyp
             for (int a = 0; a < variable.getAttributesCount(); a++) {
                 IDecisionVariable attribute = variable.getAttribute(a);
                 if (filter.isEnabled(attribute)) {
-                    tmp.add(new Attribute(getParent(), attribute, filter));
+                    tmp.add(new Attribute(getConfiguration(), attribute, filter));
                 }
             }
             attributes = new Attribute[tmp.size()];

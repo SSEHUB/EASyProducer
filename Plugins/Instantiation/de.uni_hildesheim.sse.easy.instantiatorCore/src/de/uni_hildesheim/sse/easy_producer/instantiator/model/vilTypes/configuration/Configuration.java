@@ -729,4 +729,43 @@ public class Configuration extends IvmlElement implements IStringValueProvider {
         return changed;
     }
 
+    /**
+     * Searches for the VIL instance holding <code>var</code>.
+     * 
+     * @param var the variable
+     * @return the VIL instance holding <code>var</code>
+     */
+    @Invisible
+    public DecisionVariable findVariable(IDecisionVariable var) {
+        DecisionVariable result = getByName(de.uni_hildesheim.sse.model.confModel.Configuration.getInstanceName(var));
+        for (int v = 0; null == result && v < variables.length; v++) {
+            result = findVariable(var, variables[v]);
+        }
+        return result;
+    }
+    
+    /**
+     * Searches for <code>var</code> in <code>dVar</code>, i.e., whether <code>dVar</code> or 
+     * one of its contained variables holdes <code>var</code>.
+     * 
+     * @param var the variable to search for
+     * @param dVar the VIL variable wrapper to look into
+     * @return the VIL wrapper representing <code>dVar</code> or <b>null</b> if not found
+     */
+    private DecisionVariable findVariable(IDecisionVariable var, DecisionVariable dVar) {
+        DecisionVariable result = null;
+        if (dVar.isVariable(var)) {
+            result = dVar;
+        } else {
+            Sequence<DecisionVariable> vars = dVar.variables();
+            for (int v = 0; null == result && v < vars.size(); v++) {
+                DecisionVariable tmp = vars.get(v);
+                if (tmp.isVariable(var)) {
+                    result = tmp;
+                }
+            }
+        }
+        return result;
+    }
+
 }
