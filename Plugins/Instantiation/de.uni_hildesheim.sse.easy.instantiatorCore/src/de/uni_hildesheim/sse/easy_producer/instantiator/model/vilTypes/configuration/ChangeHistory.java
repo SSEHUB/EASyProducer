@@ -236,7 +236,9 @@ public class ChangeHistory implements IVilType, IStringValueProvider {
         if (null == value) {
             value = variable.getVariable().getValue();
         }
-        return de.uni_hildesheim.sse.model.confModel.Configuration.dereference(configuration.getConfiguration(), value);
+        Value result = de.uni_hildesheim.sse.model.confModel.Configuration.dereference(
+            configuration.getConfiguration(), value);
+        return result;
     }
 
     /**
@@ -280,7 +282,7 @@ public class ChangeHistory implements IVilType, IStringValueProvider {
         if (!isSameValue(variable.getVariable().getValue(), value)) {
             CSet changeSet;
             if (!originalValues.containsKey(variable)) {
-                originalValues.put(variable.origVariable, value);
+                originalValues.put(variable.origVariable, value == null ? NullValue.INSTANCE : value);
             }
             if (!changeSetStack.isEmpty()) {
                 changeSet = changeSetStack.peek();
