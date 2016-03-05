@@ -268,6 +268,8 @@ public class CompoundValue extends StructuredValue implements Cloneable {
                 throw new ValueDoesNotMatchTypeException("field " + name + " does not exist", 
                     ValueDoesNotMatchTypeException.SLOT_MISMATCH);
             }
+        } else {
+            nestedElements.put(name, null);
         }
     }
 
