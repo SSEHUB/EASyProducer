@@ -184,29 +184,37 @@ public class ConstraintSplitWriter extends IVMLWriter {
         result[2] = getAfterText();
         if (trimConstraint) {
             String cTmp = result[1];
-            int pos = 0;
-            while (pos < cTmp.length() && doTrim(cTmp.charAt(pos))) {
-                pos++;
+            int leftPos = 0;
+            while (leftPos < cTmp.length() && doTrim(cTmp.charAt(leftPos))) {
+                leftPos++;
             }
-            if (trimParenthesis && pos < cTmp.length() && '(' == cTmp.charAt(pos)) {
-                pos++;
-                addBefore = "\n";
+            int rightPos = cTmp.length();
+            while (rightPos > leftPos && doTrim(cTmp.charAt(rightPos - 1))) {
+                rightPos--;
             }
-            if (pos > 0) {
-                result[0] += cTmp.substring(0, pos) + addBefore;
-                result[1] = cTmp.substring(pos);
+            if (trimParenthesis) {
+                int leftParenPos = leftPos;
+                int rightParenPos = rightPos;
+                if (leftParenPos < cTmp.length() && '(' == cTmp.charAt(leftParenPos)) {
+                    leftParenPos++;
+                }
+                if (leftParenPos != leftPos && rightParenPos > 0 && ')' == cTmp.charAt(rightParenPos - 1)) {
+                    rightParenPos--;
+                }
+                if (leftParenPos != leftPos && rightParenPos != rightPos) {
+                    leftPos = leftParenPos;
+                    rightPos = rightParenPos;
+                    addBefore = "\n";
+                }
+            }
+            if (leftPos > 0) {
+                result[0] += cTmp.substring(0, leftPos) + addBefore;
+                result[1] = cTmp.substring(leftPos);
                 cTmp = result[1];
             }
-            pos = cTmp.length();
-            while (pos > 0 && doTrim(cTmp.charAt(pos - 1))) {
-                pos--;
-            }
-            if (trimParenthesis && pos > 0 && ')' == cTmp.charAt(pos - 1)) {
-                pos--;
-            }
-            if (pos < cTmp.length()) {
-                result[2] = cTmp.substring(pos) + result[2];
-                result[1] = cTmp.substring(0, pos);
+            if (rightPos < cTmp.length()) {
+                result[2] = cTmp.substring(rightPos) + result[2];
+                result[1] = cTmp.substring(0, rightPos);
             }
         }
         return result;
