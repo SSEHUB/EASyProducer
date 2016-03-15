@@ -211,6 +211,7 @@ public class ConstraintSplitWriter extends IVMLWriter {
                 result[0] += cTmp.substring(0, leftPos) + addBefore;
                 result[1] = cTmp.substring(leftPos);
                 cTmp = result[1];
+                rightPos -= leftPos; // correct after re-assigning
             }
             if (rightPos < cTmp.length()) {
                 result[2] = cTmp.substring(rightPos) + result[2];
