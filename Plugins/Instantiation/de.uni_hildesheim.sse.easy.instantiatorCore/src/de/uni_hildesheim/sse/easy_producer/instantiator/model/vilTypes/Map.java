@@ -1,6 +1,7 @@
 package de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.TreeMap;
 
@@ -104,6 +105,20 @@ public class Map<K, V> implements IVilGenericType, IStringValueProvider {
     @OperationMeta(useGenericParameter = 1 )
     public V get(Object key) {
         return at(key);
+    }
+    
+    /**
+     * Returns the keys of this map.
+     * 
+     * @return the keys
+     */
+    @SuppressWarnings("unchecked")
+    public Set<K> getKeys() {
+        Set<K> result = new SetSet<K>(new HashSet<K>());
+        for (Object o : map.keySet()) {
+            result.add((K) o);
+        }
+        return new UnmodifiableSet<K>(result);
     }
     
     /**
