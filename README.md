@@ -11,7 +11,7 @@ Upcoming Release (expected March 18 2016)
 
 Release History
 ---------------
-https://github.com/SSEHUB/EASyProducer/blob/master/changelog.html
+http://htmlpreview.github.io/?https://github.com/SSEHUB/EASyProducer/blob/master/changelog.html
 
 Documentation
 -------------
