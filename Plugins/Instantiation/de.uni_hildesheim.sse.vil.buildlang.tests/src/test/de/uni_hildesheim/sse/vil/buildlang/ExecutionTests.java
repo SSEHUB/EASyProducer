@@ -393,6 +393,36 @@ public class ExecutionTests extends AbstractExecutionTest<Script> {
     }
 
     /**
+     * Tests the functionality of a for loop.
+     * 
+     * @throws IOException should not occur
+     */
+    @Test
+    public void testForIterator() throws IOException {
+        assertSelfInstantiate("forIterator");
+    }
+
+    /**
+     * Tests the functionality of a while loop.
+     * 
+     * @throws IOException should not occur
+     */
+    @Test
+    public void testWhileLoop() throws IOException {
+        assertSelfInstantiate("whileLoop");
+    }
+
+    /**
+     * Tests the functionality of a while loop (not entering the loop body).
+     * 
+     * @throws IOException should not occur
+     */
+    @Test
+    public void testWhileLoop1() throws IOException {
+        assertSelfInstantiate("whileLoop1");
+    }
+
+    /**
      * Tests the functionality of a map using an iterator.
      * 
      * @throws IOException should not occur

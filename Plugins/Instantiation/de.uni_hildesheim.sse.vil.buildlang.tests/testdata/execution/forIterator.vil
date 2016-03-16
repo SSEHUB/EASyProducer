@@ -1,0 +1,10 @@
+vilScript forIterator () {
+
+    main() = : {
+        StringCreator sc = new StringCreator();
+        for(String s=sc.strings()) {
+            println(s);
+        };
+    }
+
+}

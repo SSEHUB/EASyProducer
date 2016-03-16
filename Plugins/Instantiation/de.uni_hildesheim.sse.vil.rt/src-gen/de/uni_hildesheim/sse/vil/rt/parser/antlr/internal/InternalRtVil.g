@@ -2314,28 +2314,28 @@ ruleInstantiate returns [EObject current=null]
 
 
 
-// Entry rule entryRuleMapVariable
-entryRuleMapVariable returns [EObject current=null] 
+// Entry rule entryRuleLoopVariable
+entryRuleLoopVariable returns [EObject current=null] 
 	:
-	{ newCompositeNode(grammarAccess.getMapVariableRule()); }
-	 iv_ruleMapVariable=ruleMapVariable 
-	 { $current=$iv_ruleMapVariable.current; } 
+	{ newCompositeNode(grammarAccess.getLoopVariableRule()); }
+	 iv_ruleLoopVariable=ruleLoopVariable 
+	 { $current=$iv_ruleLoopVariable.current; } 
 	 EOF 
 ;
 
-// Rule MapVariable
-ruleMapVariable returns [EObject current=null] 
+// Rule LoopVariable
+ruleLoopVariable returns [EObject current=null] 
     @init { enterRule(); 
     }
     @after { leaveRule(); }:
 ((
 (
 		{ 
-	        newCompositeNode(grammarAccess.getMapVariableAccess().getTypeTypeParserRuleCall_0_0()); 
+	        newCompositeNode(grammarAccess.getLoopVariableAccess().getTypeTypeParserRuleCall_0_0()); 
 	    }
 		lv_type_0_0=ruleType		{
 	        if ($current==null) {
-	            $current = createModelElementForParent(grammarAccess.getMapVariableRule());
+	            $current = createModelElementForParent(grammarAccess.getLoopVariableRule());
 	        }
        		set(
        			$current, 
@@ -2349,11 +2349,11 @@ ruleMapVariable returns [EObject current=null]
 )?(
 (
 		{ 
-	        newCompositeNode(grammarAccess.getMapVariableAccess().getVarIdentifierParserRuleCall_1_0()); 
+	        newCompositeNode(grammarAccess.getLoopVariableAccess().getVarIdentifierParserRuleCall_1_0()); 
 	    }
 		lv_var_1_0=ruleIdentifier		{
 	        if ($current==null) {
-	            $current = createModelElementForParent(grammarAccess.getMapVariableRule());
+	            $current = createModelElementForParent(grammarAccess.getLoopVariableRule());
 	        }
        		set(
        			$current, 
@@ -2396,9 +2396,9 @@ ruleMap returns [EObject current=null]
 (
 (
 		{ 
-	        newCompositeNode(grammarAccess.getMapAccess().getVarMapVariableParserRuleCall_2_0()); 
+	        newCompositeNode(grammarAccess.getMapAccess().getVarLoopVariableParserRuleCall_2_0()); 
 	    }
-		lv_var_2_0=ruleMapVariable		{
+		lv_var_2_0=ruleLoopVariable		{
 	        if ($current==null) {
 	            $current = createModelElementForParent(grammarAccess.getMapRule());
 	        }
@@ -2406,7 +2406,7 @@ ruleMap returns [EObject current=null]
        			$current, 
        			"var",
         		lv_var_2_0, 
-        		"de.uni_hildesheim.sse.VilBuildLanguage.MapVariable");
+        		"de.uni_hildesheim.sse.VilBuildLanguage.LoopVariable");
 	        afterParserOrEnumRuleCall();
 	    }
 
@@ -2418,9 +2418,9 @@ ruleMap returns [EObject current=null]
 (
 (
 		{ 
-	        newCompositeNode(grammarAccess.getMapAccess().getVarMapVariableParserRuleCall_3_1_0()); 
+	        newCompositeNode(grammarAccess.getMapAccess().getVarLoopVariableParserRuleCall_3_1_0()); 
 	    }
-		lv_var_4_0=ruleMapVariable		{
+		lv_var_4_0=ruleLoopVariable		{
 	        if ($current==null) {
 	            $current = createModelElementForParent(grammarAccess.getMapRule());
 	        }
@@ -2428,7 +2428,7 @@ ruleMap returns [EObject current=null]
        			$current, 
        			"var",
         		lv_var_4_0, 
-        		"de.uni_hildesheim.sse.VilBuildLanguage.MapVariable");
+        		"de.uni_hildesheim.sse.VilBuildLanguage.LoopVariable");
 	        afterParserOrEnumRuleCall();
 	    }
 
@@ -2505,6 +2505,10 @@ ruleMap returns [EObject current=null]
 )
 ))
 ;
+
+
+
+
 
 
 

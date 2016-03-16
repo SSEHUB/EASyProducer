@@ -909,16 +909,35 @@ ruleStmt returns [EObject current=null]
     |(
 (
 		{ 
-	        newCompositeNode(grammarAccess.getStmtAccess().getExprStmtExpressionStatementParserRuleCall_6_0()); 
+	        newCompositeNode(grammarAccess.getStmtAccess().getWhileWhileParserRuleCall_6_0()); 
 	    }
-		lv_exprStmt_6_0=ruleExpressionStatement		{
+		lv_while_6_0=ruleWhile		{
+	        if ($current==null) {
+	            $current = createModelElementForParent(grammarAccess.getStmtRule());
+	        }
+       		set(
+       			$current, 
+       			"while",
+        		lv_while_6_0, 
+        		"de.uni_hildesheim.sse.vil.templatelang.TemplateLang.While");
+	        afterParserOrEnumRuleCall();
+	    }
+
+)
+)
+    |(
+(
+		{ 
+	        newCompositeNode(grammarAccess.getStmtAccess().getExprStmtExpressionStatementParserRuleCall_7_0()); 
+	    }
+		lv_exprStmt_7_0=ruleExpressionStatement		{
 	        if ($current==null) {
 	            $current = createModelElementForParent(grammarAccess.getStmtRule());
 	        }
        		set(
        			$current, 
        			"exprStmt",
-        		lv_exprStmt_6_0, 
+        		lv_exprStmt_7_0, 
         		"de.uni_hildesheim.sse.vil.expressions.ExpressionDsl.ExpressionStatement");
 	        afterParserOrEnumRuleCall();
 	    }
@@ -928,16 +947,16 @@ ruleStmt returns [EObject current=null]
     |(
 (
 		{ 
-	        newCompositeNode(grammarAccess.getStmtAccess().getCtnContentParserRuleCall_7_0()); 
+	        newCompositeNode(grammarAccess.getStmtAccess().getCtnContentParserRuleCall_8_0()); 
 	    }
-		lv_ctn_7_0=ruleContent		{
+		lv_ctn_8_0=ruleContent		{
 	        if ($current==null) {
 	            $current = createModelElementForParent(grammarAccess.getStmtRule());
 	        }
        		set(
        			$current, 
        			"ctn",
-        		lv_ctn_7_0, 
+        		lv_ctn_8_0, 
         		"de.uni_hildesheim.sse.vil.templatelang.TemplateLang.Content");
 	        afterParserOrEnumRuleCall();
 	    }
@@ -1453,6 +1472,75 @@ ruleLoop returns [EObject current=null]
        			$current, 
        			"stmt",
         		lv_stmt_11_0, 
+        		"de.uni_hildesheim.sse.vil.templatelang.TemplateLang.Stmt");
+	        afterParserOrEnumRuleCall();
+	    }
+
+)
+))
+;
+
+
+
+
+
+// Entry rule entryRuleWhile
+entryRuleWhile returns [EObject current=null] 
+	:
+	{ newCompositeNode(grammarAccess.getWhileRule()); }
+	 iv_ruleWhile=ruleWhile 
+	 { $current=$iv_ruleWhile.current; } 
+	 EOF 
+;
+
+// Rule While
+ruleWhile returns [EObject current=null] 
+    @init { enterRule(); 
+    }
+    @after { leaveRule(); }:
+(	otherlv_0='while' 
+    {
+    	newLeafNode(otherlv_0, grammarAccess.getWhileAccess().getWhileKeyword_0());
+    }
+	otherlv_1='(' 
+    {
+    	newLeafNode(otherlv_1, grammarAccess.getWhileAccess().getLeftParenthesisKeyword_1());
+    }
+(
+(
+		{ 
+	        newCompositeNode(grammarAccess.getWhileAccess().getExprExpressionParserRuleCall_2_0()); 
+	    }
+		lv_expr_2_0=ruleExpression		{
+	        if ($current==null) {
+	            $current = createModelElementForParent(grammarAccess.getWhileRule());
+	        }
+       		set(
+       			$current, 
+       			"expr",
+        		lv_expr_2_0, 
+        		"de.uni_hildesheim.sse.vil.expressions.ExpressionDsl.Expression");
+	        afterParserOrEnumRuleCall();
+	    }
+
+)
+)	otherlv_3=')' 
+    {
+    	newLeafNode(otherlv_3, grammarAccess.getWhileAccess().getRightParenthesisKeyword_3());
+    }
+(
+(
+		{ 
+	        newCompositeNode(grammarAccess.getWhileAccess().getStmtStmtParserRuleCall_4_0()); 
+	    }
+		lv_stmt_4_0=ruleStmt		{
+	        if ($current==null) {
+	            $current = createModelElementForParent(grammarAccess.getWhileRule());
+	        }
+       		set(
+       			$current, 
+       			"stmt",
+        		lv_stmt_4_0, 
         		"de.uni_hildesheim.sse.vil.templatelang.TemplateLang.Stmt");
 	        afterParserOrEnumRuleCall();
 	    }

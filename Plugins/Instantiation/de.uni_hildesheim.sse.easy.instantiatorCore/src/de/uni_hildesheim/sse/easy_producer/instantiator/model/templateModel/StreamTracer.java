@@ -139,4 +139,18 @@ public class StreamTracer extends de.uni_hildesheim.sse.easy_producer.instantiat
         // due to compatibility with existing test traces
     }
 
+    @Override
+    public void visitWhileBody() {
+        printIndentation();
+        println("while body {");
+        increaseIndentation();
+    }
+
+    @Override
+    public void visitedWhileBody() {
+        decreaseIndentation();
+        printIndentation();
+        println("}");
+    }
+
 }

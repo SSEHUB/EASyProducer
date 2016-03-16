@@ -31,7 +31,7 @@ public interface Map extends EObject
 {
   /**
    * Returns the value of the '<em><b>Var</b></em>' containment reference list.
-   * The list contents are of type {@link de.uni_hildesheim.sse.vilBuildLanguage.MapVariable}.
+   * The list contents are of type {@link de.uni_hildesheim.sse.vilBuildLanguage.LoopVariable}.
    * <!-- begin-user-doc -->
    * <p>
    * If the meaning of the '<em>Var</em>' containment reference list isn't clear,
@@ -43,7 +43,7 @@ public interface Map extends EObject
    * @model containment="true"
    * @generated
    */
-  EList<MapVariable> getVar();
+  EList<LoopVariable> getVar();
 
   /**
    * Returns the value of the '<em><b>Separator</b></em>' attribute.

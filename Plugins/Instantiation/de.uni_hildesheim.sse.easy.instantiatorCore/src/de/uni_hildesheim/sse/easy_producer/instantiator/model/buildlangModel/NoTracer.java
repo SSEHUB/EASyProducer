@@ -28,15 +28,15 @@ public class NoTracer extends de.uni_hildesheim.sse.easy_producer.instantiator.m
     }
 
     @Override
-    public void visitMap(MapExpression map, RuntimeEnvironment environment) {
+    public void visitLoop(IEnumeratingLoop loop, RuntimeEnvironment environment) {
     }
 
     @Override
-    public void visitMapIteratorAssignment(VariableDeclaration var, Object value) {
+    public void visitIteratorAssignment(IEnumeratingLoop loop, VariableDeclaration var, Object value) {
     }
 
     @Override
-    public void visitedMap(MapExpression map, RuntimeEnvironment environment) {
+    public void visitedLoop(IEnumeratingLoop loop, RuntimeEnvironment environment) {
     }
 
     @Override
@@ -79,6 +79,14 @@ public class NoTracer extends de.uni_hildesheim.sse.easy_producer.instantiator.m
     
     @Override
     public void reset() {
+    }
+
+    @Override
+    public void visitWhileBody() {
+    }
+
+    @Override
+    public void visitedWhileBody() {
     }
 
 }

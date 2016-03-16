@@ -66,6 +66,9 @@
         containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="exprStmt" eType="#//ExpressionStatement"
         containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="while" eType="#//While"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="for" eType="#//For" containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="RuleModifier">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="protected" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
@@ -90,15 +93,30 @@
     <eStructuralFeatures xsi:type="ecore:EReference" name="versionSpec" eType="ecore:EClass platform:/resource/de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/ExpressionDsl.ecore#//VersionSpec"
         containment="true"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="MapVariable">
+  <eClassifiers xsi:type="ecore:EClass" name="LoopVariable">
     <eStructuralFeatures xsi:type="ecore:EReference" name="type" eType="ecore:EClass platform:/resource/de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/ExpressionDsl.ecore#//Type"
         containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="var" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Map">
-    <eStructuralFeatures xsi:type="ecore:EReference" name="var" upperBound="-1" eType="#//MapVariable"
+    <eStructuralFeatures xsi:type="ecore:EReference" name="var" upperBound="-1" eType="#//LoopVariable"
         containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="separator" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="expr" eType="ecore:EClass platform:/resource/de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/ExpressionDsl.ecore#//Expression"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="block" eType="#//RuleElementBlock"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="For">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="var" upperBound="-1" eType="#//LoopVariable"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="separator" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="expr" eType="ecore:EClass platform:/resource/de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/ExpressionDsl.ecore#//Expression"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="block" eType="#//RuleElementBlock"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="While">
     <eStructuralFeatures xsi:type="ecore:EReference" name="expr" eType="ecore:EClass platform:/resource/de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/ExpressionDsl.ecore#//Expression"
         containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="block" eType="#//RuleElementBlock"

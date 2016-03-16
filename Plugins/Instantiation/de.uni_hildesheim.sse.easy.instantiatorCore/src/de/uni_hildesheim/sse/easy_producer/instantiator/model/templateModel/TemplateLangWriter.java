@@ -360,4 +360,24 @@ public class TemplateLangWriter extends WriterVisitor<VariableDeclaration> imple
         return null;
     }
 
+    @Override
+    public Object visitWhile(WhileStatement stmt) throws VilException {
+        printIndentation();
+        print("while");
+        printWhitespace();
+        print("(");
+        stmt.getConditionExpression().accept(this);
+        print(")");
+        printWhitespace();
+        boolean printIndentation = isPrintExpressionStatementIndentation();
+        boolean isStmtBlock = stmt.getLoopStatement().isBlock();
+        setPrintExpressionStatementIndentation(isStmtBlock);
+        stmt.getLoopStatement().accept(this);
+        setPrintExpressionStatementIndentation(printIndentation);
+        if (isStmtBlock) {
+            println();
+        }
+        return null;
+    }
+
 }

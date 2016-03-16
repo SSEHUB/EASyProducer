@@ -150,4 +150,16 @@ public class ExpressionVersionRestrictionValidator
         return null;
     }
 
+    @Override
+    public Object visitWhileStatement(WhileStatement stmt) throws VilException {
+        emit("while is not allowed here", true, VilException.ID_SEMANTIC);
+        return null;
+    }
+
+    @Override
+    public Object visitForStatement(ForStatement stmt) throws VilException {
+        emit("for is not allowed here", true, VilException.ID_SEMANTIC);
+        return null;
+    }
+
 }

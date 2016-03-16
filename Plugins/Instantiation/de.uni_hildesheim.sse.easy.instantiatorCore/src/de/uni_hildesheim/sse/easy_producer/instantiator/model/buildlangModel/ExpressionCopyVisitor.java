@@ -219,4 +219,16 @@ public class ExpressionCopyVisitor extends CopyVisitor implements IVisitor {
         return new Typedef(typedef.getName(), typedef.getType());
     }
 
+    @Override
+    public Object visitWhileStatement(WhileStatement stmt) throws VilException {
+        EASyLoggerFactory.INSTANCE.getLogger(getClass(), Bundle.ID).info("while is currently not copied.");
+        return stmt; // TODO support full copy
+    }
+
+    @Override
+    public Object visitForStatement(ForStatement stmt) throws VilException {
+        EASyLoggerFactory.INSTANCE.getLogger(getClass(), Bundle.ID).info("for is currently not copied.");
+        return stmt; // TODO support full copy
+    }
+
 }

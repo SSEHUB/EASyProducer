@@ -1,0 +1,9 @@
+vilScript forInstantiator (Project source, Configuration config) {
+
+    main(Project source, Configuration config) = : {
+        for(decVar=config.variables()) {
+            vilTemplateProcessor(source.getEasyFolder() + "/JsonTemplate.vtl", config, "$source/out.txt");
+        };
+    }
+
+}

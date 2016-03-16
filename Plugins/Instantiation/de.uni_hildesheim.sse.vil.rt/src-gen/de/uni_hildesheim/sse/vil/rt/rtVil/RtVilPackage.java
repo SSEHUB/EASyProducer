@@ -674,6 +674,24 @@ public interface RtVilPackage extends EPackage
   int RULE_ELEMENT__EXPR_STMT = VilBuildLanguagePackage.RULE_ELEMENT__EXPR_STMT;
 
   /**
+   * The feature id for the '<em><b>While</b></em>' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int RULE_ELEMENT__WHILE = VilBuildLanguagePackage.RULE_ELEMENT__WHILE;
+
+  /**
+   * The feature id for the '<em><b>For</b></em>' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int RULE_ELEMENT__FOR = VilBuildLanguagePackage.RULE_ELEMENT__FOR;
+
+  /**
    * The feature id for the '<em><b>Fail</b></em>' containment reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->

@@ -37,6 +37,7 @@ import de.uni_hildesheim.sse.easy_producer.instantiator.model.templateModel.Temp
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.templateModel.TemplateLangExecution;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.templateModel.TemplateModel;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.templateModel.VariableDeclaration;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.templateModel.WhileStatement;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.IMetaType;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.OperationDescriptor;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeDescriptor;
@@ -479,6 +480,8 @@ public class ModelTranslator extends de.uni_hildesheim.sse.vil.expressions.trans
                 result = expressionTranslator.processExpressionStatement(stmt.getExprStmt(), resolver);
             } else if (null != stmt.getLoop()) {
                 result = processLoop(stmt.getLoop());
+            } else if (null != stmt.getWhile()) {
+                result = processWhile(stmt.getWhile());
             } else if (null != stmt.getMulti()) {
                 warning("multi selection is currently not supported", stmt.getMulti(), 
                     TemplateLangPackage.Literals.STMT__MULTI, 0);
@@ -519,6 +522,13 @@ public class ModelTranslator extends de.uni_hildesheim.sse.vil.expressions.trans
         }
     }
     
+    /**
+     * Processes a separator expression.
+     * 
+     * @param ex the ECore expression tree
+     * @return the VIL/VTL expression tree
+     * @throws TranslatorException in case that the translation fails
+     */
     private Expression processSeparatorExpression(PrimaryExpression ex) throws TranslatorException {
         Expression result;
         if (null != ex) {
@@ -527,6 +537,42 @@ public class ModelTranslator extends de.uni_hildesheim.sse.vil.expressions.trans
             result = null;
         }
         return result;
+    }
+
+    /**
+     * Processes a while statement.
+     * 
+     * @param loop the ECore loop representation
+     * @return the VTL while statement
+     * @throws TranslatorException in case that the translation fails
+     */
+    private WhileStatement processWhile(de.uni_hildesheim.sse.vil.templatelang.templateLang.While loop) 
+        throws TranslatorException {
+        Expression loopExpression = expressionTranslator.processExpression(loop.getExpr(), resolver);
+        TypeDescriptor<?> exprType = null;
+        try {
+            exprType = loopExpression.inferType();
+        } catch (VilException e) {
+            throw new TranslatorException(e, loop, TemplateLangPackage.Literals.LOOP__EXPR);
+        }
+        if (!TypeRegistry.booleanType().isAssignableFrom(exprType)) {
+            throw new TranslatorException("while condition must be of type Boolean rather than " 
+                + exprType.getVilName(), loop, TemplateLangPackage.Literals.WHILE__EXPR, ErrorCodes.TYPE_CONSISTENCY);
+        }
+        resolver.pushLevel();
+        ITemplateElement stmt = null;
+        try {
+            stmt = processStatement(loop.getStmt());
+        } catch (TranslatorException e) {
+            throw e;
+        } finally {
+            resolver.popLevel();
+        }
+        try {
+            return new WhileStatement(loopExpression, stmt);
+        } catch (VilException e) {
+            throw new TranslatorException(e, loop, TemplateLangPackage.Literals.WHILE__EXPR);
+        }
     }
     
     /**

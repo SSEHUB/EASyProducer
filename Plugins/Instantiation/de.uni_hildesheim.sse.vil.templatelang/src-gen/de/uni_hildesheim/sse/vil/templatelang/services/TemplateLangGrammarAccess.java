@@ -448,10 +448,12 @@ public class TemplateLangGrammarAccess extends AbstractGrammarElementFinder {
 		private final RuleCall cMultiMultiselectParserRuleCall_4_0 = (RuleCall)cMultiAssignment_4.eContents().get(0);
 		private final Assignment cLoopAssignment_5 = (Assignment)cAlternatives.eContents().get(5);
 		private final RuleCall cLoopLoopParserRuleCall_5_0 = (RuleCall)cLoopAssignment_5.eContents().get(0);
-		private final Assignment cExprStmtAssignment_6 = (Assignment)cAlternatives.eContents().get(6);
-		private final RuleCall cExprStmtExpressionStatementParserRuleCall_6_0 = (RuleCall)cExprStmtAssignment_6.eContents().get(0);
-		private final Assignment cCtnAssignment_7 = (Assignment)cAlternatives.eContents().get(7);
-		private final RuleCall cCtnContentParserRuleCall_7_0 = (RuleCall)cCtnAssignment_7.eContents().get(0);
+		private final Assignment cWhileAssignment_6 = (Assignment)cAlternatives.eContents().get(6);
+		private final RuleCall cWhileWhileParserRuleCall_6_0 = (RuleCall)cWhileAssignment_6.eContents().get(0);
+		private final Assignment cExprStmtAssignment_7 = (Assignment)cAlternatives.eContents().get(7);
+		private final RuleCall cExprStmtExpressionStatementParserRuleCall_7_0 = (RuleCall)cExprStmtAssignment_7.eContents().get(0);
+		private final Assignment cCtnAssignment_8 = (Assignment)cAlternatives.eContents().get(8);
+		private final RuleCall cCtnContentParserRuleCall_8_0 = (RuleCall)cCtnAssignment_8.eContents().get(0);
 		
 		//Stmt:
 		//	var=VariableDeclaration
@@ -460,12 +462,13 @@ public class TemplateLangGrammarAccess extends AbstractGrammarElementFinder {
 		//	| block=StmtBlock
 		//	| multi=multiselect
 		//	| loop=Loop
+		//	| while=While
 		//	| exprStmt=ExpressionStatement
 		//	| ctn=Content;
 		@Override public ParserRule getRule() { return rule; }
 
 		//var=VariableDeclaration | alt=Alternative | switch=Switch | block=StmtBlock | multi=multiselect | loop=Loop |
-		//exprStmt=ExpressionStatement | ctn=Content
+		//while=While | exprStmt=ExpressionStatement | ctn=Content
 		public Alternatives getAlternatives() { return cAlternatives; }
 
 		//var=VariableDeclaration
@@ -504,17 +507,23 @@ public class TemplateLangGrammarAccess extends AbstractGrammarElementFinder {
 		//Loop
 		public RuleCall getLoopLoopParserRuleCall_5_0() { return cLoopLoopParserRuleCall_5_0; }
 
+		//while=While
+		public Assignment getWhileAssignment_6() { return cWhileAssignment_6; }
+
+		//While
+		public RuleCall getWhileWhileParserRuleCall_6_0() { return cWhileWhileParserRuleCall_6_0; }
+
 		//exprStmt=ExpressionStatement
-		public Assignment getExprStmtAssignment_6() { return cExprStmtAssignment_6; }
+		public Assignment getExprStmtAssignment_7() { return cExprStmtAssignment_7; }
 
 		//ExpressionStatement
-		public RuleCall getExprStmtExpressionStatementParserRuleCall_6_0() { return cExprStmtExpressionStatementParserRuleCall_6_0; }
+		public RuleCall getExprStmtExpressionStatementParserRuleCall_7_0() { return cExprStmtExpressionStatementParserRuleCall_7_0; }
 
 		//ctn=Content
-		public Assignment getCtnAssignment_7() { return cCtnAssignment_7; }
+		public Assignment getCtnAssignment_8() { return cCtnAssignment_8; }
 
 		//Content
-		public RuleCall getCtnContentParserRuleCall_7_0() { return cCtnContentParserRuleCall_7_0; }
+		public RuleCall getCtnContentParserRuleCall_8_0() { return cCtnContentParserRuleCall_8_0; }
 	}
 
 	public class AlternativeElements extends AbstractParserRuleElementFinder {
@@ -844,6 +853,47 @@ public class TemplateLangGrammarAccess extends AbstractGrammarElementFinder {
 		public RuleCall getStmtStmtParserRuleCall_8_0() { return cStmtStmtParserRuleCall_8_0; }
 	}
 
+	public class WhileElements extends AbstractParserRuleElementFinder {
+		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "de.uni_hildesheim.sse.vil.templatelang.TemplateLang.While");
+		private final Group cGroup = (Group)rule.eContents().get(1);
+		private final Keyword cWhileKeyword_0 = (Keyword)cGroup.eContents().get(0);
+		private final Keyword cLeftParenthesisKeyword_1 = (Keyword)cGroup.eContents().get(1);
+		private final Assignment cExprAssignment_2 = (Assignment)cGroup.eContents().get(2);
+		private final RuleCall cExprExpressionParserRuleCall_2_0 = (RuleCall)cExprAssignment_2.eContents().get(0);
+		private final Keyword cRightParenthesisKeyword_3 = (Keyword)cGroup.eContents().get(3);
+		private final Assignment cStmtAssignment_4 = (Assignment)cGroup.eContents().get(4);
+		private final RuleCall cStmtStmtParserRuleCall_4_0 = (RuleCall)cStmtAssignment_4.eContents().get(0);
+		
+		//While:
+		//	'while' '(' expr=Expression ')'
+		//	stmt=Stmt;
+		@Override public ParserRule getRule() { return rule; }
+
+		//'while' '(' expr=Expression ')' stmt=Stmt
+		public Group getGroup() { return cGroup; }
+
+		//'while'
+		public Keyword getWhileKeyword_0() { return cWhileKeyword_0; }
+
+		//'('
+		public Keyword getLeftParenthesisKeyword_1() { return cLeftParenthesisKeyword_1; }
+
+		//expr=Expression
+		public Assignment getExprAssignment_2() { return cExprAssignment_2; }
+
+		//Expression
+		public RuleCall getExprExpressionParserRuleCall_2_0() { return cExprExpressionParserRuleCall_2_0; }
+
+		//')'
+		public Keyword getRightParenthesisKeyword_3() { return cRightParenthesisKeyword_3; }
+
+		//stmt=Stmt
+		public Assignment getStmtAssignment_4() { return cStmtAssignment_4; }
+
+		//Stmt
+		public RuleCall getStmtStmtParserRuleCall_4_0() { return cStmtStmtParserRuleCall_4_0; }
+	}
+
 	public class MultiselectElements extends AbstractParserRuleElementFinder {
 		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "de.uni_hildesheim.sse.vil.templatelang.TemplateLang.multiselect");
 		private final Alternatives cAlternatives = (Alternatives)rule.eContents().get(1);
@@ -1086,6 +1136,7 @@ public class TemplateLangGrammarAccess extends AbstractGrammarElementFinder {
 	private final SwitchElements pSwitch;
 	private final SwitchPartElements pSwitchPart;
 	private final LoopElements pLoop;
+	private final WhileElements pWhile;
 	private final MultiselectElements pMultiselect;
 	private final GenericMultiselectElements pGenericMultiselect;
 	private final MultiSelectPartElements pMultiSelectPart;
@@ -1115,6 +1166,7 @@ public class TemplateLangGrammarAccess extends AbstractGrammarElementFinder {
 		this.pSwitch = new SwitchElements();
 		this.pSwitchPart = new SwitchPartElements();
 		this.pLoop = new LoopElements();
+		this.pWhile = new WhileElements();
 		this.pMultiselect = new MultiselectElements();
 		this.pGenericMultiselect = new GenericMultiselectElements();
 		this.pMultiSelectPart = new MultiSelectPartElements();
@@ -1242,6 +1294,7 @@ public class TemplateLangGrammarAccess extends AbstractGrammarElementFinder {
 	//	| block=StmtBlock
 	//	| multi=multiselect
 	//	| loop=Loop
+	//	| while=While
 	//	| exprStmt=ExpressionStatement
 	//	| ctn=Content;
 	public StmtElements getStmtAccess() {
@@ -1305,6 +1358,17 @@ public class TemplateLangGrammarAccess extends AbstractGrammarElementFinder {
 	
 	public ParserRule getLoopRule() {
 		return getLoopAccess().getRule();
+	}
+
+	//While:
+	//	'while' '(' expr=Expression ')'
+	//	stmt=Stmt;
+	public WhileElements getWhileAccess() {
+		return pWhile;
+	}
+	
+	public ParserRule getWhileRule() {
+		return getWhileAccess().getRule();
 	}
 
 	//multiselect:

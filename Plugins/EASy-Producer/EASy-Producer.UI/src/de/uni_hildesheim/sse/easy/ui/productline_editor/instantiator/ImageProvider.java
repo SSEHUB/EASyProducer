@@ -71,7 +71,7 @@ public class ImageProvider {
             resourcePathBuilder.append(de.uni_hildesheim.sse.vil.buildlang.ui.resources.Images.NAME_INSTANTIATE);
         } else if (node instanceof JoinExpressionTreeNode) {
             resourcePathBuilder.append(de.uni_hildesheim.sse.vil.buildlang.ui.resources.Images.NAME_JOIN);
-        } else if (node instanceof MapExpressionTreeNode) {
+        } else if (node instanceof LoopExpressionTreeNode) {
             resourcePathBuilder.append(de.uni_hildesheim.sse.vil.buildlang.ui.resources.Images.NAME_MAP);
         } else if (node instanceof RuleCallExpressionTreeNode) {
             resourcePathBuilder.append(de.uni_hildesheim.sse.vil.buildlang.ui.resources.Images.NAME_RULE_INSTANCE);

@@ -81,6 +81,8 @@ RuleElementBlock:
 RuleElement:
     varDecl=VariableDeclaration
     | exprStmt=ExpressionStatement
+    | while=While ';'?
+    | for=For ';'?
 ;
 
 RuleModifier:
@@ -113,13 +115,23 @@ Instantiate:
     '(' param=ArgumentList? ')' (versionSpec=VersionSpec?)
 ;
 
-MapVariable:
+LoopVariable:
     type=Type?
     var=Identifier
 ;
 
 Map:
-    'map' '(' var+=MapVariable (',' var+=MapVariable)* separator=('=' | ':') expr=Expression ')'
+    'map' '(' var+=LoopVariable (',' var+=LoopVariable)* separator=('=' | ':') expr=Expression ')'
+    block=RuleElementBlock
+;
+
+For:
+    'for' '(' var+=LoopVariable (',' var+=LoopVariable)* separator=('=' | ':') expr=Expression ')'
+    block=RuleElementBlock
+;
+
+While:
+    'while' '(' expr=Expression ')'
     block=RuleElementBlock
 ;
 

@@ -21,6 +21,7 @@ import de.uni_hildesheim.sse.vil.templatelang.templateLang.SwitchPart;
 import de.uni_hildesheim.sse.vil.templatelang.templateLang.TemplateLangFactory;
 import de.uni_hildesheim.sse.vil.templatelang.templateLang.TemplateLangPackage;
 import de.uni_hildesheim.sse.vil.templatelang.templateLang.VilDef;
+import de.uni_hildesheim.sse.vil.templatelang.templateLang.While;
 import de.uni_hildesheim.sse.vil.templatelang.templateLang.genericMultiselect;
 import de.uni_hildesheim.sse.vil.templatelang.templateLang.multiSelectPart;
 import de.uni_hildesheim.sse.vil.templatelang.templateLang.multiselect;
@@ -131,6 +132,13 @@ public class TemplateLangPackageImpl extends EPackageImpl implements TemplateLan
    * @generated
    */
   private EClass loopEClass = null;
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  private EClass whileEClass = null;
 
   /**
    * <!-- begin-user-doc -->
@@ -585,7 +593,7 @@ public class TemplateLangPackageImpl extends EPackageImpl implements TemplateLan
    * <!-- end-user-doc -->
    * @generated
    */
-  public EReference getStmt_ExprStmt()
+  public EReference getStmt_While()
   {
     return (EReference)stmtEClass.getEStructuralFeatures().get(6);
   }
@@ -595,9 +603,19 @@ public class TemplateLangPackageImpl extends EPackageImpl implements TemplateLan
    * <!-- end-user-doc -->
    * @generated
    */
-  public EReference getStmt_Ctn()
+  public EReference getStmt_ExprStmt()
   {
     return (EReference)stmtEClass.getEStructuralFeatures().get(7);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EReference getStmt_Ctn()
+  {
+    return (EReference)stmtEClass.getEStructuralFeatures().get(8);
   }
 
   /**
@@ -818,6 +836,36 @@ public class TemplateLangPackageImpl extends EPackageImpl implements TemplateLan
   public EReference getLoop_Stmt()
   {
     return (EReference)loopEClass.getEStructuralFeatures().get(5);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EClass getWhile()
+  {
+    return whileEClass;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EReference getWhile_Expr()
+  {
+    return (EReference)whileEClass.getEStructuralFeatures().get(0);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EReference getWhile_Stmt()
+  {
+    return (EReference)whileEClass.getEStructuralFeatures().get(1);
   }
 
   /**
@@ -1081,6 +1129,7 @@ public class TemplateLangPackageImpl extends EPackageImpl implements TemplateLan
     createEReference(stmtEClass, STMT__BLOCK);
     createEReference(stmtEClass, STMT__MULTI);
     createEReference(stmtEClass, STMT__LOOP);
+    createEReference(stmtEClass, STMT__WHILE);
     createEReference(stmtEClass, STMT__EXPR_STMT);
     createEReference(stmtEClass, STMT__CTN);
 
@@ -1110,6 +1159,10 @@ public class TemplateLangPackageImpl extends EPackageImpl implements TemplateLan
     createEReference(loopEClass, LOOP__SEPARATOR);
     createEReference(loopEClass, LOOP__FINAL_SEPARATOR);
     createEReference(loopEClass, LOOP__STMT);
+
+    whileEClass = createEClass(WHILE);
+    createEReference(whileEClass, WHILE__EXPR);
+    createEReference(whileEClass, WHILE__STMT);
 
     multiselectEClass = createEClass(MULTISELECT);
     createEReference(multiselectEClass, MULTISELECT__GEN);
@@ -1213,6 +1266,7 @@ public class TemplateLangPackageImpl extends EPackageImpl implements TemplateLan
     initEReference(getStmt_Block(), this.getStmtBlock(), null, "block", null, 0, 1, Stmt.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEReference(getStmt_Multi(), this.getmultiselect(), null, "multi", null, 0, 1, Stmt.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEReference(getStmt_Loop(), this.getLoop(), null, "loop", null, 0, 1, Stmt.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getStmt_While(), this.getWhile(), null, "while", null, 0, 1, Stmt.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEReference(getStmt_ExprStmt(), theExpressionDslPackage.getExpressionStatement(), null, "exprStmt", null, 0, 1, Stmt.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEReference(getStmt_Ctn(), this.getContent(), null, "ctn", null, 0, 1, Stmt.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
@@ -1242,6 +1296,10 @@ public class TemplateLangPackageImpl extends EPackageImpl implements TemplateLan
     initEReference(getLoop_Separator(), theExpressionDslPackage.getPrimaryExpression(), null, "separator", null, 0, 1, Loop.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEReference(getLoop_FinalSeparator(), theExpressionDslPackage.getPrimaryExpression(), null, "finalSeparator", null, 0, 1, Loop.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEReference(getLoop_Stmt(), this.getStmt(), null, "stmt", null, 0, 1, Loop.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+    initEClass(whileEClass, While.class, "While", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+    initEReference(getWhile_Expr(), theExpressionDslPackage.getExpression(), null, "expr", null, 0, 1, While.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getWhile_Stmt(), this.getStmt(), null, "stmt", null, 0, 1, While.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     initEClass(multiselectEClass, multiselect.class, "multiselect", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
     initEReference(getmultiselect_Gen(), this.getgenericMultiselect(), null, "gen", null, 0, 1, multiselect.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);

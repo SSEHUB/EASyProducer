@@ -64,6 +64,7 @@ import de.uni_hildesheim.sse.vil.templatelang.templateLang.Switch;
 import de.uni_hildesheim.sse.vil.templatelang.templateLang.SwitchPart;
 import de.uni_hildesheim.sse.vil.templatelang.templateLang.TemplateLangPackage;
 import de.uni_hildesheim.sse.vil.templatelang.templateLang.VilDef;
+import de.uni_hildesheim.sse.vil.templatelang.templateLang.While;
 import de.uni_hildesheim.sse.vil.templatelang.templateLang.genericMultiselect;
 import de.uni_hildesheim.sse.vil.templatelang.templateLang.multiSelectPart;
 import de.uni_hildesheim.sse.vil.templatelang.templateLang.multiselect;
@@ -266,6 +267,9 @@ public class TemplateLangSemanticSequencer extends ExpressionDslSemanticSequence
 			case TemplateLangPackage.VIL_DEF:
 				sequence_VilDef(context, (VilDef) semanticObject); 
 				return; 
+			case TemplateLangPackage.WHILE:
+				sequence_While(context, (While) semanticObject); 
+				return; 
 			case TemplateLangPackage.GENERIC_MULTISELECT:
 				sequence_genericMultiselect(context, (genericMultiselect) semanticObject); 
 				return; 
@@ -464,6 +468,7 @@ public class TemplateLangSemanticSequencer extends ExpressionDslSemanticSequence
 	 *         block=StmtBlock | 
 	 *         multi=multiselect | 
 	 *         loop=Loop | 
+	 *         while=While | 
 	 *         exprStmt=ExpressionStatement | 
 	 *         ctn=Content
 	 *     )
@@ -515,6 +520,27 @@ public class TemplateLangSemanticSequencer extends ExpressionDslSemanticSequence
 	 */
 	protected void sequence_VilDef(ISerializationContext context, VilDef semanticObject) {
 		genericSequencer.createSequence(context, semanticObject);
+	}
+	
+	
+	/**
+	 * Contexts:
+	 *     While returns While
+	 *
+	 * Constraint:
+	 *     (expr=Expression stmt=Stmt)
+	 */
+	protected void sequence_While(ISerializationContext context, While semanticObject) {
+		if (errorAcceptor != null) {
+			if (transientValues.isValueTransient(semanticObject, TemplateLangPackage.Literals.WHILE__EXPR) == ValueTransient.YES)
+				errorAcceptor.accept(diagnosticProvider.createFeatureValueMissing(semanticObject, TemplateLangPackage.Literals.WHILE__EXPR));
+			if (transientValues.isValueTransient(semanticObject, TemplateLangPackage.Literals.WHILE__STMT) == ValueTransient.YES)
+				errorAcceptor.accept(diagnosticProvider.createFeatureValueMissing(semanticObject, TemplateLangPackage.Literals.WHILE__STMT));
+		}
+		SequenceFeeder feeder = createSequencerFeeder(context, semanticObject);
+		feeder.accept(grammarAccess.getWhileAccess().getExprExpressionParserRuleCall_2_0(), semanticObject.getExpr());
+		feeder.accept(grammarAccess.getWhileAccess().getStmtStmtParserRuleCall_4_0(), semanticObject.getStmt());
+		feeder.finish();
 	}
 	
 	

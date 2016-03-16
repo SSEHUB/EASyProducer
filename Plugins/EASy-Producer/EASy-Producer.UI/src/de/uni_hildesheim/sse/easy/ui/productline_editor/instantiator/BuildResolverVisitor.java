@@ -17,6 +17,8 @@ package de.uni_hildesheim.sse.easy.ui.productline_editor.instantiator;
 
 import de.uni_hildesheim.sse.easy.ui.productline_editor.instantiator.TreeNode.InsertionPoint;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.AlternativeExpression;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.ForStatement;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.IEnumeratingLoop;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.IRuleBlock;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.IRuleElement;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.IVisitor;
@@ -30,6 +32,7 @@ import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.Rul
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.RuleCallExpression;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.Script;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.StrategyCallExpression;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.WhileStatement;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.ruleMatch.ArtifactMatchExpression;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.ruleMatch.BooleanMatchExpression;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.ruleMatch.CollectionMatchExpression;
@@ -282,24 +285,7 @@ class BuildResolverVisitor implements IVisitor, IExpressionVisitor {
 
     @Override
     public Object visitMapExpression(MapExpression map) throws VilException {
-        Object result;
-        if (map == stop && InsertionPoint.BEFORE_THIS == point) {
-            result = Boolean.TRUE; // found
-        } else {
-            resolver.pushLevel();
-            for (int v = 0; v < map.getVariablesCount(); v++) {
-                resolver.add(map.getVariable(v));
-            }
-            if (map == stop) {
-                result = Boolean.TRUE;
-            } else {
-                result = visitBlock(map);
-            }
-            if (Boolean.TRUE != result) {
-                resolver.popLevel();
-            }
-        }
-        return result;
+        return visitLoop(map);
     }
 
     @Override
@@ -416,6 +402,58 @@ class BuildResolverVisitor implements IVisitor, IExpressionVisitor {
         } else {
             throw new VilException("No current block", VilException.ID_INTERNAL);
         }
+    }
+
+    @Override
+    public Object visitWhileStatement(WhileStatement stmt) throws VilException {
+        Object result;
+        if (stmt == stop && InsertionPoint.BEFORE_THIS == point) {
+            result = Boolean.TRUE; // found
+        } else {
+            resolver.pushLevel();
+            if (stmt == stop) {
+                result = Boolean.TRUE;
+            } else {
+                result = visitBlock(stmt);
+            }
+            if (Boolean.TRUE != result) {
+                resolver.popLevel();
+            }
+        }
+        return result;
+    }
+
+    @Override
+    public Object visitForStatement(ForStatement stmt) throws VilException {
+        return visitLoop(stmt);
+    }
+
+    /**
+     * Visits a loop.
+     * 
+     * @param loop the loop
+     * @return the visiting result (<code>true</code> for stop)
+     * @throws VilException in case of visiting problems
+     */
+    private Object visitLoop(IEnumeratingLoop loop) throws VilException {
+        Object result;
+        if (loop == stop && InsertionPoint.BEFORE_THIS == point) {
+            result = Boolean.TRUE; // found
+        } else {
+            resolver.pushLevel();
+            for (int v = 0; v < loop.getVariablesCount(); v++) {
+                resolver.add(loop.getVariable(v));
+            }
+            if (loop == stop) {
+                result = Boolean.TRUE;
+            } else {
+                result = visitBlock(loop);
+            }
+            if (Boolean.TRUE != result) {
+                resolver.popLevel();
+            }
+        }
+        return result;        
     }
     
 }

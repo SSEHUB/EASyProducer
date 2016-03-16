@@ -12,6 +12,7 @@ import de.uni_hildesheim.sse.vil.templatelang.templateLang.Stmt;
 import de.uni_hildesheim.sse.vil.templatelang.templateLang.StmtBlock;
 import de.uni_hildesheim.sse.vil.templatelang.templateLang.Switch;
 import de.uni_hildesheim.sse.vil.templatelang.templateLang.TemplateLangPackage;
+import de.uni_hildesheim.sse.vil.templatelang.templateLang.While;
 import de.uni_hildesheim.sse.vil.templatelang.templateLang.multiselect;
 
 import org.eclipse.emf.common.notify.Notification;
@@ -37,6 +38,7 @@ import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
  *   <li>{@link de.uni_hildesheim.sse.vil.templatelang.templateLang.impl.StmtImpl#getBlock <em>Block</em>}</li>
  *   <li>{@link de.uni_hildesheim.sse.vil.templatelang.templateLang.impl.StmtImpl#getMulti <em>Multi</em>}</li>
  *   <li>{@link de.uni_hildesheim.sse.vil.templatelang.templateLang.impl.StmtImpl#getLoop <em>Loop</em>}</li>
+ *   <li>{@link de.uni_hildesheim.sse.vil.templatelang.templateLang.impl.StmtImpl#getWhile <em>While</em>}</li>
  *   <li>{@link de.uni_hildesheim.sse.vil.templatelang.templateLang.impl.StmtImpl#getExprStmt <em>Expr Stmt</em>}</li>
  *   <li>{@link de.uni_hildesheim.sse.vil.templatelang.templateLang.impl.StmtImpl#getCtn <em>Ctn</em>}</li>
  * </ul>
@@ -104,6 +106,16 @@ public class StmtImpl extends MinimalEObjectImpl.Container implements Stmt
    * @ordered
    */
   protected Loop loop;
+
+  /**
+   * The cached value of the '{@link #getWhile() <em>While</em>}' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #getWhile()
+   * @generated
+   * @ordered
+   */
+  protected While while_;
 
   /**
    * The cached value of the '{@link #getExprStmt() <em>Expr Stmt</em>}' containment reference.
@@ -439,6 +451,54 @@ public class StmtImpl extends MinimalEObjectImpl.Container implements Stmt
    * <!-- end-user-doc -->
    * @generated
    */
+  public While getWhile()
+  {
+    return while_;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public NotificationChain basicSetWhile(While newWhile, NotificationChain msgs)
+  {
+    While oldWhile = while_;
+    while_ = newWhile;
+    if (eNotificationRequired())
+    {
+      ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, TemplateLangPackage.STMT__WHILE, oldWhile, newWhile);
+      if (msgs == null) msgs = notification; else msgs.add(notification);
+    }
+    return msgs;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public void setWhile(While newWhile)
+  {
+    if (newWhile != while_)
+    {
+      NotificationChain msgs = null;
+      if (while_ != null)
+        msgs = ((InternalEObject)while_).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - TemplateLangPackage.STMT__WHILE, null, msgs);
+      if (newWhile != null)
+        msgs = ((InternalEObject)newWhile).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - TemplateLangPackage.STMT__WHILE, null, msgs);
+      msgs = basicSetWhile(newWhile, msgs);
+      if (msgs != null) msgs.dispatch();
+    }
+    else if (eNotificationRequired())
+      eNotify(new ENotificationImpl(this, Notification.SET, TemplateLangPackage.STMT__WHILE, newWhile, newWhile));
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
   public ExpressionStatement getExprStmt()
   {
     return exprStmt;
@@ -552,6 +612,8 @@ public class StmtImpl extends MinimalEObjectImpl.Container implements Stmt
         return basicSetMulti(null, msgs);
       case TemplateLangPackage.STMT__LOOP:
         return basicSetLoop(null, msgs);
+      case TemplateLangPackage.STMT__WHILE:
+        return basicSetWhile(null, msgs);
       case TemplateLangPackage.STMT__EXPR_STMT:
         return basicSetExprStmt(null, msgs);
       case TemplateLangPackage.STMT__CTN:
@@ -582,6 +644,8 @@ public class StmtImpl extends MinimalEObjectImpl.Container implements Stmt
         return getMulti();
       case TemplateLangPackage.STMT__LOOP:
         return getLoop();
+      case TemplateLangPackage.STMT__WHILE:
+        return getWhile();
       case TemplateLangPackage.STMT__EXPR_STMT:
         return getExprStmt();
       case TemplateLangPackage.STMT__CTN:
@@ -617,6 +681,9 @@ public class StmtImpl extends MinimalEObjectImpl.Container implements Stmt
         return;
       case TemplateLangPackage.STMT__LOOP:
         setLoop((Loop)newValue);
+        return;
+      case TemplateLangPackage.STMT__WHILE:
+        setWhile((While)newValue);
         return;
       case TemplateLangPackage.STMT__EXPR_STMT:
         setExprStmt((ExpressionStatement)newValue);
@@ -656,6 +723,9 @@ public class StmtImpl extends MinimalEObjectImpl.Container implements Stmt
       case TemplateLangPackage.STMT__LOOP:
         setLoop((Loop)null);
         return;
+      case TemplateLangPackage.STMT__WHILE:
+        setWhile((While)null);
+        return;
       case TemplateLangPackage.STMT__EXPR_STMT:
         setExprStmt((ExpressionStatement)null);
         return;
@@ -688,6 +758,8 @@ public class StmtImpl extends MinimalEObjectImpl.Container implements Stmt
         return multi != null;
       case TemplateLangPackage.STMT__LOOP:
         return loop != null;
+      case TemplateLangPackage.STMT__WHILE:
+        return while_ != null;
       case TemplateLangPackage.STMT__EXPR_STMT:
         return exprStmt != null;
       case TemplateLangPackage.STMT__CTN:

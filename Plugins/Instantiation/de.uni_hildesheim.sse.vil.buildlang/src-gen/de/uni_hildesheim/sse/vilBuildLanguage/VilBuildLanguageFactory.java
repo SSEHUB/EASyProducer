@@ -149,13 +149,13 @@ public interface VilBuildLanguageFactory extends EFactory
   Instantiate createInstantiate();
 
   /**
-   * Returns a new object of class '<em>Map Variable</em>'.
+   * Returns a new object of class '<em>Loop Variable</em>'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return a new object of class '<em>Map Variable</em>'.
+   * @return a new object of class '<em>Loop Variable</em>'.
    * @generated
    */
-  MapVariable createMapVariable();
+  LoopVariable createLoopVariable();
 
   /**
    * Returns a new object of class '<em>Map</em>'.
@@ -165,6 +165,24 @@ public interface VilBuildLanguageFactory extends EFactory
    * @generated
    */
   Map createMap();
+
+  /**
+   * Returns a new object of class '<em>For</em>'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return a new object of class '<em>For</em>'.
+   * @generated
+   */
+  For createFor();
+
+  /**
+   * Returns a new object of class '<em>While</em>'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return a new object of class '<em>While</em>'.
+   * @generated
+   */
+  While createWhile();
 
   /**
    * Returns a new object of class '<em>Alternative</em>'.

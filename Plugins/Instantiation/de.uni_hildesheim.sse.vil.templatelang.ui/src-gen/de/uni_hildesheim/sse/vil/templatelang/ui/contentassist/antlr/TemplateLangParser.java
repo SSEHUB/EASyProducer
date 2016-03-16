@@ -77,6 +77,7 @@ public class TemplateLangParser extends AbstractContentAssistParser {
 					put(grammarAccess.getLoopAccess().getGroup(), "rule__Loop__Group__0");
 					put(grammarAccess.getLoopAccess().getGroup_6(), "rule__Loop__Group_6__0");
 					put(grammarAccess.getLoopAccess().getGroup_6_2(), "rule__Loop__Group_6_2__0");
+					put(grammarAccess.getWhileAccess().getGroup(), "rule__While__Group__0");
 					put(grammarAccess.getGenericMultiselectAccess().getGroup(), "rule__GenericMultiselect__Group__0");
 					put(grammarAccess.getMultiSelectPartAccess().getGroup(), "rule__MultiSelectPart__Group__0");
 					put(grammarAccess.getUserMultiselectAccess().getGroup(), "rule__UserMultiselect__Group__0");
@@ -170,8 +171,9 @@ public class TemplateLangParser extends AbstractContentAssistParser {
 					put(grammarAccess.getStmtAccess().getBlockAssignment_3(), "rule__Stmt__BlockAssignment_3");
 					put(grammarAccess.getStmtAccess().getMultiAssignment_4(), "rule__Stmt__MultiAssignment_4");
 					put(grammarAccess.getStmtAccess().getLoopAssignment_5(), "rule__Stmt__LoopAssignment_5");
-					put(grammarAccess.getStmtAccess().getExprStmtAssignment_6(), "rule__Stmt__ExprStmtAssignment_6");
-					put(grammarAccess.getStmtAccess().getCtnAssignment_7(), "rule__Stmt__CtnAssignment_7");
+					put(grammarAccess.getStmtAccess().getWhileAssignment_6(), "rule__Stmt__WhileAssignment_6");
+					put(grammarAccess.getStmtAccess().getExprStmtAssignment_7(), "rule__Stmt__ExprStmtAssignment_7");
+					put(grammarAccess.getStmtAccess().getCtnAssignment_8(), "rule__Stmt__CtnAssignment_8");
 					put(grammarAccess.getAlternativeAccess().getExprAssignment_2(), "rule__Alternative__ExprAssignment_2");
 					put(grammarAccess.getAlternativeAccess().getIfAssignment_4(), "rule__Alternative__IfAssignment_4");
 					put(grammarAccess.getAlternativeAccess().getElseAssignment_5_1(), "rule__Alternative__ElseAssignment_5_1");
@@ -190,6 +192,8 @@ public class TemplateLangParser extends AbstractContentAssistParser {
 					put(grammarAccess.getLoopAccess().getSeparatorAssignment_6_1(), "rule__Loop__SeparatorAssignment_6_1");
 					put(grammarAccess.getLoopAccess().getFinalSeparatorAssignment_6_2_1(), "rule__Loop__FinalSeparatorAssignment_6_2_1");
 					put(grammarAccess.getLoopAccess().getStmtAssignment_8(), "rule__Loop__StmtAssignment_8");
+					put(grammarAccess.getWhileAccess().getExprAssignment_2(), "rule__While__ExprAssignment_2");
+					put(grammarAccess.getWhileAccess().getStmtAssignment_4(), "rule__While__StmtAssignment_4");
 					put(grammarAccess.getMultiselectAccess().getGenAssignment_0(), "rule__Multiselect__GenAssignment_0");
 					put(grammarAccess.getMultiselectAccess().getUserAssignment_1(), "rule__Multiselect__UserAssignment_1");
 					put(grammarAccess.getGenericMultiselectAccess().getPreambleAssignment_1(), "rule__GenericMultiselect__PreambleAssignment_1");

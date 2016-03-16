@@ -13,6 +13,7 @@ import de.uni_hildesheim.sse.easy_producer.instantiator.Bundle;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.artifactModel.ArtifactTypes;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.ExecutionVisitor;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.IResolvableModel;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.ITerminatable;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.ModelCallExpression;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.Typedef;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilException;
@@ -43,7 +44,7 @@ import de.uni_hildesheim.sse.utils.modelManagement.IndentationConfiguration;
  * @author Holger Eichelberger
  */
 public class TemplateLangExecution extends ExecutionVisitor<Template, Def, VariableDeclaration> 
-    implements ITemplateLangVisitor {
+    implements ITemplateLangVisitor, ITerminatable {
 
     public static final ILanguage LANGUAGE = new ILanguage() {
 
@@ -90,6 +91,7 @@ public class TemplateLangExecution extends ExecutionVisitor<Template, Def, Varia
     private PrintWriter out;
     private String mainName;
     private ITracer tracer;
+    private boolean stop = false;
 
     /**
      * Creates a new evaluation visitor.
@@ -255,7 +257,7 @@ public class TemplateLangExecution extends ExecutionVisitor<Template, Def, Varia
         boolean ok = true;
         Object value = null;
         environment.increaseIndentation();
-        for (int e = 0; ok && e < block.getBodyElementCount(); e++) {
+        for (int e = 0; ok && !stop && e < block.getBodyElementCount(); e++) {
             ITemplateElement elt = block.getBodyElement(e);
             value = elt.accept(this);
             if (mayFail(elt)) {
@@ -323,7 +325,7 @@ public class TemplateLangExecution extends ExecutionVisitor<Template, Def, Varia
             Collection<?> collection = (Collection<?>) object;
             Iterator<?> iter = collection.iterator();
             tracer.visitLoop(iterVar);
-            while (iter.hasNext()) {
+            while (iter.hasNext() && !stop) {
                 Object value = iter.next();
                 environment.addValue(iterVar, value);
                 tracer.valueDefined(iterVar, null, value);
@@ -473,7 +475,13 @@ public class TemplateLangExecution extends ExecutionVisitor<Template, Def, Varia
 
     @Override
     public Object visitTemplateCallExpression(TemplateCallExpression call) throws VilException {
-        return visitModelCallExpression(call);
+        Object result;
+        if (stop) {
+            result = null;
+        } else {
+            result = visitModelCallExpression(call);
+        }
+        return result;
     }
 
     @Override
@@ -535,6 +543,36 @@ public class TemplateLangExecution extends ExecutionVisitor<Template, Def, Varia
     @Override
     public Object visitTypedef(Typedef typedef) throws VilException {
         return null; // typedefs are processed during parsing
+    }
+
+    @Override
+    public Object visitWhile(WhileStatement stmt) throws VilException {
+        Expression condition = stmt.getConditionExpression();
+        boolean executeLoop = false;
+        environment.pushLevel();
+        Object bodyResult = null;
+        do {
+            Object conditionResult = condition.accept(this);
+            executeLoop = (conditionResult instanceof Boolean && (Boolean) conditionResult);
+            if (executeLoop) {
+                tracer.visitWhileBody();
+                ITemplateElement loopStmt = stmt.getLoopStatement();
+                increaseIndentation(loopStmt);
+                bodyResult = loopStmt.accept(this);
+                if (null == bodyResult) {
+                    executeLoop = false;
+                }
+                decreaseIndentation(loopStmt);
+                tracer.visitedWhileBody();
+            }
+        } while (executeLoop && !stop);
+        environment.popLevel();
+        return bodyResult;
+    }
+
+    @Override
+    public void stop() {
+        stop = true;
     }
     
 }

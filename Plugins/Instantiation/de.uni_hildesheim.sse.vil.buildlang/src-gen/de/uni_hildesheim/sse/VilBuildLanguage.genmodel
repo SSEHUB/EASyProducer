@@ -50,6 +50,8 @@
     <genClasses ecoreClass="VilBuildLanguage.ecore#//RuleElement">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference VilBuildLanguage.ecore#//RuleElement/varDecl"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference VilBuildLanguage.ecore#//RuleElement/exprStmt"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference VilBuildLanguage.ecore#//RuleElement/while"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference VilBuildLanguage.ecore#//RuleElement/for"/>
     </genClasses>
     <genClasses ecoreClass="VilBuildLanguage.ecore#//RuleModifier">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute VilBuildLanguage.ecore#//RuleModifier/protected"/>
@@ -69,15 +71,25 @@
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference VilBuildLanguage.ecore#//Instantiate/param"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference VilBuildLanguage.ecore#//Instantiate/versionSpec"/>
     </genClasses>
-    <genClasses ecoreClass="VilBuildLanguage.ecore#//MapVariable">
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference VilBuildLanguage.ecore#//MapVariable/type"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute VilBuildLanguage.ecore#//MapVariable/var"/>
+    <genClasses ecoreClass="VilBuildLanguage.ecore#//LoopVariable">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference VilBuildLanguage.ecore#//LoopVariable/type"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute VilBuildLanguage.ecore#//LoopVariable/var"/>
     </genClasses>
     <genClasses ecoreClass="VilBuildLanguage.ecore#//Map">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference VilBuildLanguage.ecore#//Map/var"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute VilBuildLanguage.ecore#//Map/separator"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference VilBuildLanguage.ecore#//Map/expr"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference VilBuildLanguage.ecore#//Map/block"/>
+    </genClasses>
+    <genClasses ecoreClass="VilBuildLanguage.ecore#//For">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference VilBuildLanguage.ecore#//For/var"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute VilBuildLanguage.ecore#//For/separator"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference VilBuildLanguage.ecore#//For/expr"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference VilBuildLanguage.ecore#//For/block"/>
+    </genClasses>
+    <genClasses ecoreClass="VilBuildLanguage.ecore#//While">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference VilBuildLanguage.ecore#//While/expr"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference VilBuildLanguage.ecore#//While/block"/>
     </genClasses>
     <genClasses ecoreClass="VilBuildLanguage.ecore#//Alternative">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference VilBuildLanguage.ecore#//Alternative/expr"/>

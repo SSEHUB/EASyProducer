@@ -483,13 +483,31 @@ public interface VilBuildLanguagePackage extends EPackage
   int RULE_ELEMENT__EXPR_STMT = 1;
 
   /**
+   * The feature id for the '<em><b>While</b></em>' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int RULE_ELEMENT__WHILE = 2;
+
+  /**
+   * The feature id for the '<em><b>For</b></em>' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int RULE_ELEMENT__FOR = 3;
+
+  /**
    * The number of structural features of the '<em>Rule Element</em>' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int RULE_ELEMENT_FEATURE_COUNT = 2;
+  int RULE_ELEMENT_FEATURE_COUNT = 4;
 
   /**
    * The meta object id for the '{@link de.uni_hildesheim.sse.vilBuildLanguage.impl.RuleModifierImpl <em>Rule Modifier</em>}' class.
@@ -721,14 +739,14 @@ public interface VilBuildLanguagePackage extends EPackage
   int INSTANTIATE_FEATURE_COUNT = 4;
 
   /**
-   * The meta object id for the '{@link de.uni_hildesheim.sse.vilBuildLanguage.impl.MapVariableImpl <em>Map Variable</em>}' class.
+   * The meta object id for the '{@link de.uni_hildesheim.sse.vilBuildLanguage.impl.LoopVariableImpl <em>Loop Variable</em>}' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @see de.uni_hildesheim.sse.vilBuildLanguage.impl.MapVariableImpl
-   * @see de.uni_hildesheim.sse.vilBuildLanguage.impl.VilBuildLanguagePackageImpl#getMapVariable()
+   * @see de.uni_hildesheim.sse.vilBuildLanguage.impl.LoopVariableImpl
+   * @see de.uni_hildesheim.sse.vilBuildLanguage.impl.VilBuildLanguagePackageImpl#getLoopVariable()
    * @generated
    */
-  int MAP_VARIABLE = 14;
+  int LOOP_VARIABLE = 14;
 
   /**
    * The feature id for the '<em><b>Type</b></em>' containment reference.
@@ -737,7 +755,7 @@ public interface VilBuildLanguagePackage extends EPackage
    * @generated
    * @ordered
    */
-  int MAP_VARIABLE__TYPE = 0;
+  int LOOP_VARIABLE__TYPE = 0;
 
   /**
    * The feature id for the '<em><b>Var</b></em>' attribute.
@@ -746,16 +764,16 @@ public interface VilBuildLanguagePackage extends EPackage
    * @generated
    * @ordered
    */
-  int MAP_VARIABLE__VAR = 1;
+  int LOOP_VARIABLE__VAR = 1;
 
   /**
-   * The number of structural features of the '<em>Map Variable</em>' class.
+   * The number of structural features of the '<em>Loop Variable</em>' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int MAP_VARIABLE_FEATURE_COUNT = 2;
+  int LOOP_VARIABLE_FEATURE_COUNT = 2;
 
   /**
    * The meta object id for the '{@link de.uni_hildesheim.sse.vilBuildLanguage.impl.MapImpl <em>Map</em>}' class.
@@ -813,6 +831,98 @@ public interface VilBuildLanguagePackage extends EPackage
   int MAP_FEATURE_COUNT = 4;
 
   /**
+   * The meta object id for the '{@link de.uni_hildesheim.sse.vilBuildLanguage.impl.ForImpl <em>For</em>}' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see de.uni_hildesheim.sse.vilBuildLanguage.impl.ForImpl
+   * @see de.uni_hildesheim.sse.vilBuildLanguage.impl.VilBuildLanguagePackageImpl#getFor()
+   * @generated
+   */
+  int FOR = 16;
+
+  /**
+   * The feature id for the '<em><b>Var</b></em>' containment reference list.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int FOR__VAR = 0;
+
+  /**
+   * The feature id for the '<em><b>Separator</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int FOR__SEPARATOR = 1;
+
+  /**
+   * The feature id for the '<em><b>Expr</b></em>' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int FOR__EXPR = 2;
+
+  /**
+   * The feature id for the '<em><b>Block</b></em>' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int FOR__BLOCK = 3;
+
+  /**
+   * The number of structural features of the '<em>For</em>' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int FOR_FEATURE_COUNT = 4;
+
+  /**
+   * The meta object id for the '{@link de.uni_hildesheim.sse.vilBuildLanguage.impl.WhileImpl <em>While</em>}' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see de.uni_hildesheim.sse.vilBuildLanguage.impl.WhileImpl
+   * @see de.uni_hildesheim.sse.vilBuildLanguage.impl.VilBuildLanguagePackageImpl#getWhile()
+   * @generated
+   */
+  int WHILE = 17;
+
+  /**
+   * The feature id for the '<em><b>Expr</b></em>' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int WHILE__EXPR = 0;
+
+  /**
+   * The feature id for the '<em><b>Block</b></em>' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int WHILE__BLOCK = 1;
+
+  /**
+   * The number of structural features of the '<em>While</em>' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int WHILE_FEATURE_COUNT = 2;
+
+  /**
    * The meta object id for the '{@link de.uni_hildesheim.sse.vilBuildLanguage.impl.AlternativeImpl <em>Alternative</em>}' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -820,7 +930,7 @@ public interface VilBuildLanguagePackage extends EPackage
    * @see de.uni_hildesheim.sse.vilBuildLanguage.impl.VilBuildLanguagePackageImpl#getAlternative()
    * @generated
    */
-  int ALTERNATIVE = 16;
+  int ALTERNATIVE = 18;
 
   /**
    * The feature id for the '<em><b>Expr</b></em>' containment reference.
@@ -866,7 +976,7 @@ public interface VilBuildLanguagePackage extends EPackage
    * @see de.uni_hildesheim.sse.vilBuildLanguage.impl.VilBuildLanguagePackageImpl#getStatementOrBlock()
    * @generated
    */
-  int STATEMENT_OR_BLOCK = 17;
+  int STATEMENT_OR_BLOCK = 19;
 
   /**
    * The feature id for the '<em><b>Ex Stmt</b></em>' containment reference.
@@ -903,7 +1013,7 @@ public interface VilBuildLanguagePackage extends EPackage
    * @see de.uni_hildesheim.sse.vilBuildLanguage.impl.VilBuildLanguagePackageImpl#getJoin()
    * @generated
    */
-  int JOIN = 18;
+  int JOIN = 20;
 
   /**
    * The feature id for the '<em><b>Var1</b></em>' containment reference.
@@ -949,7 +1059,7 @@ public interface VilBuildLanguagePackage extends EPackage
    * @see de.uni_hildesheim.sse.vilBuildLanguage.impl.VilBuildLanguagePackageImpl#getJoinVariable()
    * @generated
    */
-  int JOIN_VARIABLE = 19;
+  int JOIN_VARIABLE = 21;
 
   /**
    * The feature id for the '<em><b>Excl</b></em>' attribute.
@@ -995,7 +1105,7 @@ public interface VilBuildLanguagePackage extends EPackage
    * @see de.uni_hildesheim.sse.vilBuildLanguage.impl.VilBuildLanguagePackageImpl#getSystemExecution()
    * @generated
    */
-  int SYSTEM_EXECUTION = 20;
+  int SYSTEM_EXECUTION = 22;
 
   /**
    * The feature id for the '<em><b>Call</b></em>' containment reference.
@@ -1379,6 +1489,28 @@ public interface VilBuildLanguagePackage extends EPackage
   EReference getRuleElement_ExprStmt();
 
   /**
+   * Returns the meta object for the containment reference '{@link de.uni_hildesheim.sse.vilBuildLanguage.RuleElement#getWhile <em>While</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the containment reference '<em>While</em>'.
+   * @see de.uni_hildesheim.sse.vilBuildLanguage.RuleElement#getWhile()
+   * @see #getRuleElement()
+   * @generated
+   */
+  EReference getRuleElement_While();
+
+  /**
+   * Returns the meta object for the containment reference '{@link de.uni_hildesheim.sse.vilBuildLanguage.RuleElement#getFor <em>For</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the containment reference '<em>For</em>'.
+   * @see de.uni_hildesheim.sse.vilBuildLanguage.RuleElement#getFor()
+   * @see #getRuleElement()
+   * @generated
+   */
+  EReference getRuleElement_For();
+
+  /**
    * Returns the meta object for class '{@link de.uni_hildesheim.sse.vilBuildLanguage.RuleModifier <em>Rule Modifier</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -1529,36 +1661,36 @@ public interface VilBuildLanguagePackage extends EPackage
   EReference getInstantiate_VersionSpec();
 
   /**
-   * Returns the meta object for class '{@link de.uni_hildesheim.sse.vilBuildLanguage.MapVariable <em>Map Variable</em>}'.
+   * Returns the meta object for class '{@link de.uni_hildesheim.sse.vilBuildLanguage.LoopVariable <em>Loop Variable</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return the meta object for class '<em>Map Variable</em>'.
-   * @see de.uni_hildesheim.sse.vilBuildLanguage.MapVariable
+   * @return the meta object for class '<em>Loop Variable</em>'.
+   * @see de.uni_hildesheim.sse.vilBuildLanguage.LoopVariable
    * @generated
    */
-  EClass getMapVariable();
+  EClass getLoopVariable();
 
   /**
-   * Returns the meta object for the containment reference '{@link de.uni_hildesheim.sse.vilBuildLanguage.MapVariable#getType <em>Type</em>}'.
+   * Returns the meta object for the containment reference '{@link de.uni_hildesheim.sse.vilBuildLanguage.LoopVariable#getType <em>Type</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @return the meta object for the containment reference '<em>Type</em>'.
-   * @see de.uni_hildesheim.sse.vilBuildLanguage.MapVariable#getType()
-   * @see #getMapVariable()
+   * @see de.uni_hildesheim.sse.vilBuildLanguage.LoopVariable#getType()
+   * @see #getLoopVariable()
    * @generated
    */
-  EReference getMapVariable_Type();
+  EReference getLoopVariable_Type();
 
   /**
-   * Returns the meta object for the attribute '{@link de.uni_hildesheim.sse.vilBuildLanguage.MapVariable#getVar <em>Var</em>}'.
+   * Returns the meta object for the attribute '{@link de.uni_hildesheim.sse.vilBuildLanguage.LoopVariable#getVar <em>Var</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @return the meta object for the attribute '<em>Var</em>'.
-   * @see de.uni_hildesheim.sse.vilBuildLanguage.MapVariable#getVar()
-   * @see #getMapVariable()
+   * @see de.uni_hildesheim.sse.vilBuildLanguage.LoopVariable#getVar()
+   * @see #getLoopVariable()
    * @generated
    */
-  EAttribute getMapVariable_Var();
+  EAttribute getLoopVariable_Var();
 
   /**
    * Returns the meta object for class '{@link de.uni_hildesheim.sse.vilBuildLanguage.Map <em>Map</em>}'.
@@ -1613,6 +1745,92 @@ public interface VilBuildLanguagePackage extends EPackage
    * @generated
    */
   EReference getMap_Block();
+
+  /**
+   * Returns the meta object for class '{@link de.uni_hildesheim.sse.vilBuildLanguage.For <em>For</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for class '<em>For</em>'.
+   * @see de.uni_hildesheim.sse.vilBuildLanguage.For
+   * @generated
+   */
+  EClass getFor();
+
+  /**
+   * Returns the meta object for the containment reference list '{@link de.uni_hildesheim.sse.vilBuildLanguage.For#getVar <em>Var</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the containment reference list '<em>Var</em>'.
+   * @see de.uni_hildesheim.sse.vilBuildLanguage.For#getVar()
+   * @see #getFor()
+   * @generated
+   */
+  EReference getFor_Var();
+
+  /**
+   * Returns the meta object for the attribute '{@link de.uni_hildesheim.sse.vilBuildLanguage.For#getSeparator <em>Separator</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the attribute '<em>Separator</em>'.
+   * @see de.uni_hildesheim.sse.vilBuildLanguage.For#getSeparator()
+   * @see #getFor()
+   * @generated
+   */
+  EAttribute getFor_Separator();
+
+  /**
+   * Returns the meta object for the containment reference '{@link de.uni_hildesheim.sse.vilBuildLanguage.For#getExpr <em>Expr</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the containment reference '<em>Expr</em>'.
+   * @see de.uni_hildesheim.sse.vilBuildLanguage.For#getExpr()
+   * @see #getFor()
+   * @generated
+   */
+  EReference getFor_Expr();
+
+  /**
+   * Returns the meta object for the containment reference '{@link de.uni_hildesheim.sse.vilBuildLanguage.For#getBlock <em>Block</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the containment reference '<em>Block</em>'.
+   * @see de.uni_hildesheim.sse.vilBuildLanguage.For#getBlock()
+   * @see #getFor()
+   * @generated
+   */
+  EReference getFor_Block();
+
+  /**
+   * Returns the meta object for class '{@link de.uni_hildesheim.sse.vilBuildLanguage.While <em>While</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for class '<em>While</em>'.
+   * @see de.uni_hildesheim.sse.vilBuildLanguage.While
+   * @generated
+   */
+  EClass getWhile();
+
+  /**
+   * Returns the meta object for the containment reference '{@link de.uni_hildesheim.sse.vilBuildLanguage.While#getExpr <em>Expr</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the containment reference '<em>Expr</em>'.
+   * @see de.uni_hildesheim.sse.vilBuildLanguage.While#getExpr()
+   * @see #getWhile()
+   * @generated
+   */
+  EReference getWhile_Expr();
+
+  /**
+   * Returns the meta object for the containment reference '{@link de.uni_hildesheim.sse.vilBuildLanguage.While#getBlock <em>Block</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the containment reference '<em>Block</em>'.
+   * @see de.uni_hildesheim.sse.vilBuildLanguage.While#getBlock()
+   * @see #getWhile()
+   * @generated
+   */
+  EReference getWhile_Block();
 
   /**
    * Returns the meta object for class '{@link de.uni_hildesheim.sse.vilBuildLanguage.Alternative <em>Alternative</em>}'.
@@ -2115,6 +2333,22 @@ public interface VilBuildLanguagePackage extends EPackage
     EReference RULE_ELEMENT__EXPR_STMT = eINSTANCE.getRuleElement_ExprStmt();
 
     /**
+     * The meta object literal for the '<em><b>While</b></em>' containment reference feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EReference RULE_ELEMENT__WHILE = eINSTANCE.getRuleElement_While();
+
+    /**
+     * The meta object literal for the '<em><b>For</b></em>' containment reference feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EReference RULE_ELEMENT__FOR = eINSTANCE.getRuleElement_For();
+
+    /**
      * The meta object literal for the '{@link de.uni_hildesheim.sse.vilBuildLanguage.impl.RuleModifierImpl <em>Rule Modifier</em>}' class.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
@@ -2235,14 +2469,14 @@ public interface VilBuildLanguagePackage extends EPackage
     EReference INSTANTIATE__VERSION_SPEC = eINSTANCE.getInstantiate_VersionSpec();
 
     /**
-     * The meta object literal for the '{@link de.uni_hildesheim.sse.vilBuildLanguage.impl.MapVariableImpl <em>Map Variable</em>}' class.
+     * The meta object literal for the '{@link de.uni_hildesheim.sse.vilBuildLanguage.impl.LoopVariableImpl <em>Loop Variable</em>}' class.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @see de.uni_hildesheim.sse.vilBuildLanguage.impl.MapVariableImpl
-     * @see de.uni_hildesheim.sse.vilBuildLanguage.impl.VilBuildLanguagePackageImpl#getMapVariable()
+     * @see de.uni_hildesheim.sse.vilBuildLanguage.impl.LoopVariableImpl
+     * @see de.uni_hildesheim.sse.vilBuildLanguage.impl.VilBuildLanguagePackageImpl#getLoopVariable()
      * @generated
      */
-    EClass MAP_VARIABLE = eINSTANCE.getMapVariable();
+    EClass LOOP_VARIABLE = eINSTANCE.getLoopVariable();
 
     /**
      * The meta object literal for the '<em><b>Type</b></em>' containment reference feature.
@@ -2250,7 +2484,7 @@ public interface VilBuildLanguagePackage extends EPackage
      * <!-- end-user-doc -->
      * @generated
      */
-    EReference MAP_VARIABLE__TYPE = eINSTANCE.getMapVariable_Type();
+    EReference LOOP_VARIABLE__TYPE = eINSTANCE.getLoopVariable_Type();
 
     /**
      * The meta object literal for the '<em><b>Var</b></em>' attribute feature.
@@ -2258,7 +2492,7 @@ public interface VilBuildLanguagePackage extends EPackage
      * <!-- end-user-doc -->
      * @generated
      */
-    EAttribute MAP_VARIABLE__VAR = eINSTANCE.getMapVariable_Var();
+    EAttribute LOOP_VARIABLE__VAR = eINSTANCE.getLoopVariable_Var();
 
     /**
      * The meta object literal for the '{@link de.uni_hildesheim.sse.vilBuildLanguage.impl.MapImpl <em>Map</em>}' class.
@@ -2301,6 +2535,74 @@ public interface VilBuildLanguagePackage extends EPackage
      * @generated
      */
     EReference MAP__BLOCK = eINSTANCE.getMap_Block();
+
+    /**
+     * The meta object literal for the '{@link de.uni_hildesheim.sse.vilBuildLanguage.impl.ForImpl <em>For</em>}' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see de.uni_hildesheim.sse.vilBuildLanguage.impl.ForImpl
+     * @see de.uni_hildesheim.sse.vilBuildLanguage.impl.VilBuildLanguagePackageImpl#getFor()
+     * @generated
+     */
+    EClass FOR = eINSTANCE.getFor();
+
+    /**
+     * The meta object literal for the '<em><b>Var</b></em>' containment reference list feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EReference FOR__VAR = eINSTANCE.getFor_Var();
+
+    /**
+     * The meta object literal for the '<em><b>Separator</b></em>' attribute feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EAttribute FOR__SEPARATOR = eINSTANCE.getFor_Separator();
+
+    /**
+     * The meta object literal for the '<em><b>Expr</b></em>' containment reference feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EReference FOR__EXPR = eINSTANCE.getFor_Expr();
+
+    /**
+     * The meta object literal for the '<em><b>Block</b></em>' containment reference feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EReference FOR__BLOCK = eINSTANCE.getFor_Block();
+
+    /**
+     * The meta object literal for the '{@link de.uni_hildesheim.sse.vilBuildLanguage.impl.WhileImpl <em>While</em>}' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see de.uni_hildesheim.sse.vilBuildLanguage.impl.WhileImpl
+     * @see de.uni_hildesheim.sse.vilBuildLanguage.impl.VilBuildLanguagePackageImpl#getWhile()
+     * @generated
+     */
+    EClass WHILE = eINSTANCE.getWhile();
+
+    /**
+     * The meta object literal for the '<em><b>Expr</b></em>' containment reference feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EReference WHILE__EXPR = eINSTANCE.getWhile_Expr();
+
+    /**
+     * The meta object literal for the '<em><b>Block</b></em>' containment reference feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EReference WHILE__BLOCK = eINSTANCE.getWhile_Block();
 
     /**
      * The meta object literal for the '{@link de.uni_hildesheim.sse.vilBuildLanguage.impl.AlternativeImpl <em>Alternative</em>}' class.

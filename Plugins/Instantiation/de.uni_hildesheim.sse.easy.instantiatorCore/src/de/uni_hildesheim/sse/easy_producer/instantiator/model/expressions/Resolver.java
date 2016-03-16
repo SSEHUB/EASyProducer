@@ -6,6 +6,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.Stack;
 
+import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.EStructuralFeature;
+
+import de.uni_hildesheim.sse.dslCore.translation.ErrorCodes;
+import de.uni_hildesheim.sse.dslCore.translation.IMessageReceiver;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeRegistry;
 import de.uni_hildesheim.sse.utils.modelManagement.IModel;
 
@@ -36,6 +41,7 @@ public abstract class Resolver<V extends IResolvable> implements IResolver<V> {
     private static class Level<V extends IResolvable> {
         private Map<String, V> variables = new HashMap<String, V>();
         private IContextType context;
+        private boolean limit = false;
         
         /**
          * Creates a new level with a given context type.
@@ -93,6 +99,24 @@ public abstract class Resolver<V extends IResolvable> implements IResolver<V> {
         public IContextType getContextType() {
             return context;
         }
+        
+        /**
+         * Indicates that subsequent resolutions within that scope shall not exceed this scope.
+         */
+        public void limitVariables() {
+            limit = true;
+        }
+        
+        /**
+         * Returns whether this scope is limited.
+         * 
+         * @return <code>true</code> if limited, <code>false</code> else
+         * @see #limitVariables()
+         */
+        public boolean isLimited() {
+            return limit;
+        }
+        
     }
     
     private Stack<Level<V>> levels = new Stack<Level<V>>();
@@ -129,17 +153,42 @@ public abstract class Resolver<V extends IResolvable> implements IResolver<V> {
         return registry;
     }
     
-    @SuppressWarnings("unchecked")
     @Override
     public V resolve(String name, boolean local) {
+        return resolve(name, local, null, null, null);
+    }
+
+    /**
+     * Resolves a variable.
+     * 
+     * @param name the name of the variable
+     * @param local consider only the local scope or also outside nested scopes
+     * @param cause the causing EObject (may be <b>null</b>)
+     * @param causeFeature the causing feature on <code>cause</code> (may be <b>null</b>)
+     * @param receiver the message receiver for discouraged warnings (may be <b>null</b>, but if not <b>null</b> also 
+     *     <code>cause</code> and <code>causeFeature</code> shall be given for standard message receivers)
+     * @return the variable declaration or <b>null</b>
+     */
+    @SuppressWarnings("unchecked")
+    public V resolve(String name, boolean local, EObject cause, EStructuralFeature causeFeature, 
+        IMessageReceiver receiver) {
         V result = null;
         if (null != environment) {
             result = (V) environment.get(name);
         }
+        boolean limited = false;
         for (int l = levels.size() - 1; null == result && l >= 0; l--) {
-            result = levels.get(l).get(name);
+            Level<V> level = levels.get(l);
+            result = level.get(name);
+            if (limited && null != result && null != receiver) {
+                receiver.warning("discouraged scope access to variable '" + name + "'", cause, 
+                    causeFeature, ErrorCodes.DISCOURAGED);
+            }
             if (local) {
                 break;
+            }
+            if (null == result && level.isLimited()) {
+                limited = true;
             }
         }
         return result;
@@ -195,6 +244,13 @@ public abstract class Resolver<V extends IResolvable> implements IResolver<V> {
     protected void add(V decl, String qualification) {
         Level<V> level = levels.peek();
         level.put(qualification + decl.getName(), decl);
+    }
+    
+    /**
+     * Indicates that subsequent resolutions within that scope shall not exceed the actual scope.
+     */
+    public void limitVariablesOnCurrentLevel() {
+        levels.peek().limitVariables();
     }
 
     /**

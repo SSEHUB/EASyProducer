@@ -77,6 +77,7 @@ public class TemplateLangFactoryImpl extends EFactoryImpl implements TemplateLan
       case TemplateLangPackage.SWITCH: return createSwitch();
       case TemplateLangPackage.SWITCH_PART: return createSwitchPart();
       case TemplateLangPackage.LOOP: return createLoop();
+      case TemplateLangPackage.WHILE: return createWhile();
       case TemplateLangPackage.MULTISELECT: return createmultiselect();
       case TemplateLangPackage.GENERIC_MULTISELECT: return creategenericMultiselect();
       case TemplateLangPackage.MULTI_SELECT_PART: return createmultiSelectPart();
@@ -229,6 +230,17 @@ public class TemplateLangFactoryImpl extends EFactoryImpl implements TemplateLan
   {
     LoopImpl loop = new LoopImpl();
     return loop;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public While createWhile()
+  {
+    WhileImpl while_ = new WhileImpl();
+    return while_;
   }
 
   /**

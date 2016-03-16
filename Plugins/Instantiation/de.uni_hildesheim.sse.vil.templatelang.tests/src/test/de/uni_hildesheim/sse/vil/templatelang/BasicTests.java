@@ -285,7 +285,37 @@ public class BasicTests extends AbstractTest {
     }
 
     /**
-     * Tests a loop alternative with block.
+     * Tests a while loop with Integer.
+     * 
+     * @throws IOException should not occur
+     */
+    @Test
+    public void testWhileLoop1() throws IOException {
+        assertEqual("whileLoop1");
+    }
+
+    /**
+     * Tests a while loop with Boolean.
+     * 
+     * @throws IOException should not occur
+     */
+    @Test
+    public void testWhileLoop2() throws IOException {
+        assertEqual("whileLoop2");
+    }
+
+    /**
+     * Tests a while loop with String (fail).
+     * 
+     * @throws IOException should not occur
+     */
+    @Test
+    public void testWhileLoopFail() throws IOException {
+        assertEqual("whileLoopFail", ErrorCodes.TYPE_CONSISTENCY);
+    }
+    
+    /**
+     * Tests a loop with block.
      * 
      * @throws IOException should not occur
      */
@@ -295,7 +325,7 @@ public class BasicTests extends AbstractTest {
     }
 
     /**
-     * Tests a loop alternative with statement.
+     * Tests a loop with statement.
      * 
      * @throws IOException should not occur
      */
@@ -305,7 +335,7 @@ public class BasicTests extends AbstractTest {
     }
 
     /**
-     * Tests a loop alternative with statement and one separator.
+     * Tests a loop with statement and one separator.
      * 
      * @throws IOException should not occur
      */
@@ -315,7 +345,7 @@ public class BasicTests extends AbstractTest {
     }
 
     /**
-     * Tests a loop alternative with statement and two separators.
+     * Tests a loop with statement and two separators.
      * 
      * @throws IOException should not occur
      */

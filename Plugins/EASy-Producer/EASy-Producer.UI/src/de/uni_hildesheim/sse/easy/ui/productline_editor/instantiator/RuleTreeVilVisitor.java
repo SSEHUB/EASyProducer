@@ -20,6 +20,7 @@ import java.util.List;
 import java.util.Stack;
 
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.AlternativeExpression;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.ForStatement;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.IRuleBlock;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.IVisitor;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.InstantiateExpression;
@@ -31,6 +32,7 @@ import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.Rul
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.RuleCallExpression;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.Script;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.StrategyCallExpression;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.WhileStatement;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.ruleMatch.ArtifactMatchExpression;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.ruleMatch.BooleanMatchExpression;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.ruleMatch.CollectionMatchExpression;
@@ -226,8 +228,22 @@ public class RuleTreeVilVisitor implements IVisitor, IExpressionVisitor {
 
     @Override
     public Object visitMapExpression(MapExpression map) throws VilException {
-        MapExpressionTreeNode result = new MapExpressionTreeNode(getCurrentParent(), map);
+        LoopExpressionTreeNode result = new LoopExpressionTreeNode(getCurrentParent(), map);
         visitRuleBlock(result, map);
+        return result;
+    }
+    
+    @Override
+    public Object visitWhileStatement(WhileStatement stmt) throws VilException {
+        WhileTreeNode result = new WhileTreeNode(getCurrentParent(), stmt);
+        visitRuleBlock(result, stmt);
+        return result;        
+    }
+
+    @Override
+    public Object visitForStatement(ForStatement stmt) throws VilException {
+        LoopExpressionTreeNode result = new LoopExpressionTreeNode(getCurrentParent(), stmt);
+        visitRuleBlock(result, stmt);
         return result;
     }
 

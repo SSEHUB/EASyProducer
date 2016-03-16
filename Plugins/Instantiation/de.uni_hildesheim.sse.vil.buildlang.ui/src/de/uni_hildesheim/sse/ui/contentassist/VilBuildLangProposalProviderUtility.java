@@ -30,7 +30,7 @@ import de.uni_hildesheim.sse.vil.expressions.expressionDsl.impl.VariableDeclarat
 import de.uni_hildesheim.sse.vil.expressions.translation.Utils;
 import de.uni_hildesheim.sse.vilBuildLanguage.ImplementationUnit;
 import de.uni_hildesheim.sse.vilBuildLanguage.LanguageUnit;
-import de.uni_hildesheim.sse.vilBuildLanguage.MapVariable;
+import de.uni_hildesheim.sse.vilBuildLanguage.LoopVariable;
 import de.uni_hildesheim.sse.vilBuildLanguage.RuleConditions;
 import de.uni_hildesheim.sse.vilBuildLanguage.RuleElement;
 import de.uni_hildesheim.sse.vilBuildLanguage.RuleElementBlock;
@@ -383,7 +383,7 @@ public class VilBuildLangProposalProviderUtility {
                 MapImpl parentMap = (MapImpl) semanticElement;
                 // TODO: determine the actual type of each variable by analyzing the expression
                 if (parentMap != null && hasElements(parentMap.getVar()) /* && parentMap.getExpr() != null*/) {
-                    EList<MapVariable> parentMapVars = parentMap.getVar();
+                    EList<LoopVariable> parentMapVars = parentMap.getVar();
                     for (int i = 0; i < parentMapVars.size(); i++) {
                         StyledString mapParam = new StyledString(parentMapVars.get(i).getVar());
                         // TODO: now an explicit given type may be available (or null if not given!)

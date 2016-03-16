@@ -91,6 +91,24 @@ public interface IVisitor extends de.uni_hildesheim.sse.easy_producer.instantiat
      * @throws VilException in case that visiting fails (e.g., execution)
      */
     public Object visitMapExpression(MapExpression map) throws VilException;
+
+    /**
+     * Visits a while statement.
+     * 
+     * @param stmt the statement to be visited
+     * @return the result of visiting the given expression (may be <b>null</b>)
+     * @throws VilException in case that visiting fails (e.g., execution)
+     */
+    public Object visitWhileStatement(WhileStatement stmt) throws VilException;
+
+    /**
+     * Visits a for statement.
+     * 
+     * @param stmt the statement to be visited
+     * @return the result of visiting the given expression (may be <b>null</b>)
+     * @throws VilException in case that visiting fails (e.g., execution)
+     */
+    public Object visitForStatement(ForStatement stmt) throws VilException;
     
     /**
      * Visits an instantiate expression.

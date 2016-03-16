@@ -1,0 +1,12 @@
+-> main()
+    -> create StringCreator() with () = <StringCreator>
+    sc <- <StringCreator>
+    for {
+        -> strings(StringCreator) with (<StringCreator>) = <Iterator>
+        for: s <- 1
+        -> println(Any) with (1)
+        for: s <- 2
+        -> println(Any) with (2)
+        for: s <- 3
+        -> println(Any) with (3)
+    }

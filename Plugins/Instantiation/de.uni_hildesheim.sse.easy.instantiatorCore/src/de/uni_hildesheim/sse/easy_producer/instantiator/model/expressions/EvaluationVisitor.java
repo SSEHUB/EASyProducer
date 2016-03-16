@@ -84,6 +84,9 @@ public class EvaluationVisitor implements IExpressionVisitor {
                 named.put(Constants.IMPLICIT_PARENT_PARAMETER_NAME, parent);
                 named.put(Constants.IMPLICIT_PATHS_PARAMETER_NAME, environment.getContextPaths());
             }
+            if (resolved.acceptsImplicitParameters()) {
+                addImplicitParamters(named);
+            }
         }
         int pCount = resolved.getParameterCount();
         if (acceptsNamed) {
@@ -113,6 +116,14 @@ public class EvaluationVisitor implements IExpressionVisitor {
         }        
         tracer.visitedCallExpression(resolved, type, args, result);
         return result;        
+    }
+
+    /**
+     * Adds additional implicit named parameters.
+     * 
+     * @param named the named parameters
+     */
+    protected void addImplicitParamters(java.util.Map<String, Object> named) {
     }
 
     @Override

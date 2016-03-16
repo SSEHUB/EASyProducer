@@ -438,9 +438,21 @@ public class BuildlangWriter extends WriterVisitor<VariableDeclaration> implemen
 
     @Override
     public Object visitMapExpression(MapExpression map) throws VilException {
-        print("map(");
-        for (int v = 0; v < map.getVariablesCount(); v++) {
-            TypeDescriptor<?> givenType = map.getGivenType(v);
+        return visitLoop(map);
+    }
+
+    /**
+     * Visits a loop.
+     * 
+     * @param loop the loop to be visited
+     * @return <b>null</b>
+     * @throws VilException in case of visiting problems
+     */
+    private Object visitLoop(IEnumeratingLoop loop) throws VilException {
+        print(loop.getElementName());
+        print("(");
+        for (int v = 0; v < loop.getVariablesCount(); v++) {
+            TypeDescriptor<?> givenType = loop.getGivenType(v);
             if (null != givenType) {
                 print(givenType.getVilName());
                 print(" ");
@@ -448,16 +460,16 @@ public class BuildlangWriter extends WriterVisitor<VariableDeclaration> implemen
             if (v > 0) {
                 print(",");
             }
-            print(map.getVariable(v).getName());
+            print(loop.getVariable(v).getName());
         }
-        if (map.isColonSeparator()) {
+        if (loop.isColonSeparator()) {
             print(Constants.COLON);
         } else {
             print(Constants.ASSIGNMENT);
         }
-        map.getExpression().accept(this);
+        loop.getExpression().accept(this);
         print(") ");
-        printBlock(map);
+        printBlock(loop);
         return null;
     }
 
@@ -492,6 +504,25 @@ public class BuildlangWriter extends WriterVisitor<VariableDeclaration> implemen
     @Override
     public Object visitCompoundMatchExpression(CompoundMatchExpression expression) throws VilException {
         return expression.getCompositeExpression().accept(this);
+    }
+
+    @Override
+    public Object visitWhileStatement(WhileStatement stmt) throws VilException {
+        printIndentation();
+        print("while(");
+        stmt.getCondition().accept(this);
+        print(") ");
+        printBlock(stmt);
+        println(";");
+        return null;
+    }
+
+    @Override
+    public Object visitForStatement(ForStatement stmt) throws VilException {
+        printIndentation();
+        visitLoop(stmt);
+        println(";");
+        return null;
     }
 
 }

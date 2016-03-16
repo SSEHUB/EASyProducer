@@ -78,8 +78,10 @@ public class VilBuildLanguageFactoryImpl extends EFactoryImpl implements VilBuil
       case VilBuildLanguagePackage.EXPRESSION_STATEMENT: return createExpressionStatement();
       case VilBuildLanguagePackage.PRIMARY_EXPRESSION: return createPrimaryExpression();
       case VilBuildLanguagePackage.INSTANTIATE: return createInstantiate();
-      case VilBuildLanguagePackage.MAP_VARIABLE: return createMapVariable();
+      case VilBuildLanguagePackage.LOOP_VARIABLE: return createLoopVariable();
       case VilBuildLanguagePackage.MAP: return createMap();
+      case VilBuildLanguagePackage.FOR: return createFor();
+      case VilBuildLanguagePackage.WHILE: return createWhile();
       case VilBuildLanguagePackage.ALTERNATIVE: return createAlternative();
       case VilBuildLanguagePackage.STATEMENT_OR_BLOCK: return createStatementOrBlock();
       case VilBuildLanguagePackage.JOIN: return createJoin();
@@ -249,10 +251,10 @@ public class VilBuildLanguageFactoryImpl extends EFactoryImpl implements VilBuil
    * <!-- end-user-doc -->
    * @generated
    */
-  public MapVariable createMapVariable()
+  public LoopVariable createLoopVariable()
   {
-    MapVariableImpl mapVariable = new MapVariableImpl();
-    return mapVariable;
+    LoopVariableImpl loopVariable = new LoopVariableImpl();
+    return loopVariable;
   }
 
   /**
@@ -264,6 +266,28 @@ public class VilBuildLanguageFactoryImpl extends EFactoryImpl implements VilBuil
   {
     MapImpl map = new MapImpl();
     return map;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public For createFor()
+  {
+    ForImpl for_ = new ForImpl();
+    return for_;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public While createWhile()
+  {
+    WhileImpl while_ = new WhileImpl();
+    return while_;
   }
 
   /**

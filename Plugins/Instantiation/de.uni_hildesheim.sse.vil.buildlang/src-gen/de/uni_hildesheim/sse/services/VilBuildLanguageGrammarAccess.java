@@ -501,13 +501,23 @@ public class VilBuildLanguageGrammarAccess extends AbstractGrammarElementFinder 
 		private final RuleCall cVarDeclVariableDeclarationParserRuleCall_0_0 = (RuleCall)cVarDeclAssignment_0.eContents().get(0);
 		private final Assignment cExprStmtAssignment_1 = (Assignment)cAlternatives.eContents().get(1);
 		private final RuleCall cExprStmtExpressionStatementParserRuleCall_1_0 = (RuleCall)cExprStmtAssignment_1.eContents().get(0);
+		private final Group cGroup_2 = (Group)cAlternatives.eContents().get(2);
+		private final Assignment cWhileAssignment_2_0 = (Assignment)cGroup_2.eContents().get(0);
+		private final RuleCall cWhileWhileParserRuleCall_2_0_0 = (RuleCall)cWhileAssignment_2_0.eContents().get(0);
+		private final Keyword cSemicolonKeyword_2_1 = (Keyword)cGroup_2.eContents().get(1);
+		private final Group cGroup_3 = (Group)cAlternatives.eContents().get(3);
+		private final Assignment cForAssignment_3_0 = (Assignment)cGroup_3.eContents().get(0);
+		private final RuleCall cForForParserRuleCall_3_0_0 = (RuleCall)cForAssignment_3_0.eContents().get(0);
+		private final Keyword cSemicolonKeyword_3_1 = (Keyword)cGroup_3.eContents().get(1);
 		
 		//RuleElement:
 		//	varDecl=VariableDeclaration
-		//	| exprStmt=ExpressionStatement;
+		//	| exprStmt=ExpressionStatement
+		//	| while=While ';'?
+		//	| for=For ';'?;
 		@Override public ParserRule getRule() { return rule; }
 
-		//varDecl=VariableDeclaration | exprStmt=ExpressionStatement
+		//varDecl=VariableDeclaration | exprStmt=ExpressionStatement | while=While ';'? | for=For ';'?
 		public Alternatives getAlternatives() { return cAlternatives; }
 
 		//varDecl=VariableDeclaration
@@ -521,6 +531,30 @@ public class VilBuildLanguageGrammarAccess extends AbstractGrammarElementFinder 
 
 		//ExpressionStatement
 		public RuleCall getExprStmtExpressionStatementParserRuleCall_1_0() { return cExprStmtExpressionStatementParserRuleCall_1_0; }
+
+		//while=While ';'?
+		public Group getGroup_2() { return cGroup_2; }
+
+		//while=While
+		public Assignment getWhileAssignment_2_0() { return cWhileAssignment_2_0; }
+
+		//While
+		public RuleCall getWhileWhileParserRuleCall_2_0_0() { return cWhileWhileParserRuleCall_2_0_0; }
+
+		//';'?
+		public Keyword getSemicolonKeyword_2_1() { return cSemicolonKeyword_2_1; }
+
+		//for=For ';'?
+		public Group getGroup_3() { return cGroup_3; }
+
+		//for=For
+		public Assignment getForAssignment_3_0() { return cForAssignment_3_0; }
+
+		//For
+		public RuleCall getForForParserRuleCall_3_0_0() { return cForForParserRuleCall_3_0_0; }
+
+		//';'?
+		public Keyword getSemicolonKeyword_3_1() { return cSemicolonKeyword_3_1; }
 	}
 
 	public class RuleModifierElements extends AbstractParserRuleElementFinder {
@@ -762,15 +796,15 @@ public class VilBuildLanguageGrammarAccess extends AbstractGrammarElementFinder 
 		public RuleCall getVersionSpecVersionSpecParserRuleCall_5_0() { return cVersionSpecVersionSpecParserRuleCall_5_0; }
 	}
 
-	public class MapVariableElements extends AbstractParserRuleElementFinder {
-		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "de.uni_hildesheim.sse.VilBuildLanguage.MapVariable");
+	public class LoopVariableElements extends AbstractParserRuleElementFinder {
+		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "de.uni_hildesheim.sse.VilBuildLanguage.LoopVariable");
 		private final Group cGroup = (Group)rule.eContents().get(1);
 		private final Assignment cTypeAssignment_0 = (Assignment)cGroup.eContents().get(0);
 		private final RuleCall cTypeTypeParserRuleCall_0_0 = (RuleCall)cTypeAssignment_0.eContents().get(0);
 		private final Assignment cVarAssignment_1 = (Assignment)cGroup.eContents().get(1);
 		private final RuleCall cVarIdentifierParserRuleCall_1_0 = (RuleCall)cVarAssignment_1.eContents().get(0);
 		
-		//MapVariable:
+		//LoopVariable:
 		//	type=Type?
 		//	var=Identifier;
 		@Override public ParserRule getRule() { return rule; }
@@ -797,11 +831,11 @@ public class VilBuildLanguageGrammarAccess extends AbstractGrammarElementFinder 
 		private final Keyword cMapKeyword_0 = (Keyword)cGroup.eContents().get(0);
 		private final Keyword cLeftParenthesisKeyword_1 = (Keyword)cGroup.eContents().get(1);
 		private final Assignment cVarAssignment_2 = (Assignment)cGroup.eContents().get(2);
-		private final RuleCall cVarMapVariableParserRuleCall_2_0 = (RuleCall)cVarAssignment_2.eContents().get(0);
+		private final RuleCall cVarLoopVariableParserRuleCall_2_0 = (RuleCall)cVarAssignment_2.eContents().get(0);
 		private final Group cGroup_3 = (Group)cGroup.eContents().get(3);
 		private final Keyword cCommaKeyword_3_0 = (Keyword)cGroup_3.eContents().get(0);
 		private final Assignment cVarAssignment_3_1 = (Assignment)cGroup_3.eContents().get(1);
-		private final RuleCall cVarMapVariableParserRuleCall_3_1_0 = (RuleCall)cVarAssignment_3_1.eContents().get(0);
+		private final RuleCall cVarLoopVariableParserRuleCall_3_1_0 = (RuleCall)cVarAssignment_3_1.eContents().get(0);
 		private final Assignment cSeparatorAssignment_4 = (Assignment)cGroup.eContents().get(4);
 		private final Alternatives cSeparatorAlternatives_4_0 = (Alternatives)cSeparatorAssignment_4.eContents().get(0);
 		private final Keyword cSeparatorEqualsSignKeyword_4_0_0 = (Keyword)cSeparatorAlternatives_4_0.eContents().get(0);
@@ -813,11 +847,11 @@ public class VilBuildLanguageGrammarAccess extends AbstractGrammarElementFinder 
 		private final RuleCall cBlockRuleElementBlockParserRuleCall_7_0 = (RuleCall)cBlockAssignment_7.eContents().get(0);
 		
 		//Map:
-		//	'map' '(' var+=MapVariable (',' var+=MapVariable)* separator=('=' | ':') expr=Expression ')'
+		//	'map' '(' var+=LoopVariable (',' var+=LoopVariable)* separator=('=' | ':') expr=Expression ')'
 		//	block=RuleElementBlock;
 		@Override public ParserRule getRule() { return rule; }
 
-		//'map' '(' var+=MapVariable (',' var+=MapVariable)* separator=('=' | ':') expr=Expression ')' block=RuleElementBlock
+		//'map' '(' var+=LoopVariable (',' var+=LoopVariable)* separator=('=' | ':') expr=Expression ')' block=RuleElementBlock
 		public Group getGroup() { return cGroup; }
 
 		//'map'
@@ -826,23 +860,23 @@ public class VilBuildLanguageGrammarAccess extends AbstractGrammarElementFinder 
 		//'('
 		public Keyword getLeftParenthesisKeyword_1() { return cLeftParenthesisKeyword_1; }
 
-		//var+=MapVariable
+		//var+=LoopVariable
 		public Assignment getVarAssignment_2() { return cVarAssignment_2; }
 
-		//MapVariable
-		public RuleCall getVarMapVariableParserRuleCall_2_0() { return cVarMapVariableParserRuleCall_2_0; }
+		//LoopVariable
+		public RuleCall getVarLoopVariableParserRuleCall_2_0() { return cVarLoopVariableParserRuleCall_2_0; }
 
-		//(',' var+=MapVariable)*
+		//(',' var+=LoopVariable)*
 		public Group getGroup_3() { return cGroup_3; }
 
 		//','
 		public Keyword getCommaKeyword_3_0() { return cCommaKeyword_3_0; }
 
-		//var+=MapVariable
+		//var+=LoopVariable
 		public Assignment getVarAssignment_3_1() { return cVarAssignment_3_1; }
 
-		//MapVariable
-		public RuleCall getVarMapVariableParserRuleCall_3_1_0() { return cVarMapVariableParserRuleCall_3_1_0; }
+		//LoopVariable
+		public RuleCall getVarLoopVariableParserRuleCall_3_1_0() { return cVarLoopVariableParserRuleCall_3_1_0; }
 
 		//separator=('=' | ':')
 		public Assignment getSeparatorAssignment_4() { return cSeparatorAssignment_4; }
@@ -870,6 +904,128 @@ public class VilBuildLanguageGrammarAccess extends AbstractGrammarElementFinder 
 
 		//RuleElementBlock
 		public RuleCall getBlockRuleElementBlockParserRuleCall_7_0() { return cBlockRuleElementBlockParserRuleCall_7_0; }
+	}
+
+	public class ForElements extends AbstractParserRuleElementFinder {
+		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "de.uni_hildesheim.sse.VilBuildLanguage.For");
+		private final Group cGroup = (Group)rule.eContents().get(1);
+		private final Keyword cForKeyword_0 = (Keyword)cGroup.eContents().get(0);
+		private final Keyword cLeftParenthesisKeyword_1 = (Keyword)cGroup.eContents().get(1);
+		private final Assignment cVarAssignment_2 = (Assignment)cGroup.eContents().get(2);
+		private final RuleCall cVarLoopVariableParserRuleCall_2_0 = (RuleCall)cVarAssignment_2.eContents().get(0);
+		private final Group cGroup_3 = (Group)cGroup.eContents().get(3);
+		private final Keyword cCommaKeyword_3_0 = (Keyword)cGroup_3.eContents().get(0);
+		private final Assignment cVarAssignment_3_1 = (Assignment)cGroup_3.eContents().get(1);
+		private final RuleCall cVarLoopVariableParserRuleCall_3_1_0 = (RuleCall)cVarAssignment_3_1.eContents().get(0);
+		private final Assignment cSeparatorAssignment_4 = (Assignment)cGroup.eContents().get(4);
+		private final Alternatives cSeparatorAlternatives_4_0 = (Alternatives)cSeparatorAssignment_4.eContents().get(0);
+		private final Keyword cSeparatorEqualsSignKeyword_4_0_0 = (Keyword)cSeparatorAlternatives_4_0.eContents().get(0);
+		private final Keyword cSeparatorColonKeyword_4_0_1 = (Keyword)cSeparatorAlternatives_4_0.eContents().get(1);
+		private final Assignment cExprAssignment_5 = (Assignment)cGroup.eContents().get(5);
+		private final RuleCall cExprExpressionParserRuleCall_5_0 = (RuleCall)cExprAssignment_5.eContents().get(0);
+		private final Keyword cRightParenthesisKeyword_6 = (Keyword)cGroup.eContents().get(6);
+		private final Assignment cBlockAssignment_7 = (Assignment)cGroup.eContents().get(7);
+		private final RuleCall cBlockRuleElementBlockParserRuleCall_7_0 = (RuleCall)cBlockAssignment_7.eContents().get(0);
+		
+		//For:
+		//	'for' '(' var+=LoopVariable (',' var+=LoopVariable)* separator=('=' | ':') expr=Expression ')'
+		//	block=RuleElementBlock;
+		@Override public ParserRule getRule() { return rule; }
+
+		//'for' '(' var+=LoopVariable (',' var+=LoopVariable)* separator=('=' | ':') expr=Expression ')' block=RuleElementBlock
+		public Group getGroup() { return cGroup; }
+
+		//'for'
+		public Keyword getForKeyword_0() { return cForKeyword_0; }
+
+		//'('
+		public Keyword getLeftParenthesisKeyword_1() { return cLeftParenthesisKeyword_1; }
+
+		//var+=LoopVariable
+		public Assignment getVarAssignment_2() { return cVarAssignment_2; }
+
+		//LoopVariable
+		public RuleCall getVarLoopVariableParserRuleCall_2_0() { return cVarLoopVariableParserRuleCall_2_0; }
+
+		//(',' var+=LoopVariable)*
+		public Group getGroup_3() { return cGroup_3; }
+
+		//','
+		public Keyword getCommaKeyword_3_0() { return cCommaKeyword_3_0; }
+
+		//var+=LoopVariable
+		public Assignment getVarAssignment_3_1() { return cVarAssignment_3_1; }
+
+		//LoopVariable
+		public RuleCall getVarLoopVariableParserRuleCall_3_1_0() { return cVarLoopVariableParserRuleCall_3_1_0; }
+
+		//separator=('=' | ':')
+		public Assignment getSeparatorAssignment_4() { return cSeparatorAssignment_4; }
+
+		//('=' | ':')
+		public Alternatives getSeparatorAlternatives_4_0() { return cSeparatorAlternatives_4_0; }
+
+		//'='
+		public Keyword getSeparatorEqualsSignKeyword_4_0_0() { return cSeparatorEqualsSignKeyword_4_0_0; }
+
+		//':'
+		public Keyword getSeparatorColonKeyword_4_0_1() { return cSeparatorColonKeyword_4_0_1; }
+
+		//expr=Expression
+		public Assignment getExprAssignment_5() { return cExprAssignment_5; }
+
+		//Expression
+		public RuleCall getExprExpressionParserRuleCall_5_0() { return cExprExpressionParserRuleCall_5_0; }
+
+		//')'
+		public Keyword getRightParenthesisKeyword_6() { return cRightParenthesisKeyword_6; }
+
+		//block=RuleElementBlock
+		public Assignment getBlockAssignment_7() { return cBlockAssignment_7; }
+
+		//RuleElementBlock
+		public RuleCall getBlockRuleElementBlockParserRuleCall_7_0() { return cBlockRuleElementBlockParserRuleCall_7_0; }
+	}
+
+	public class WhileElements extends AbstractParserRuleElementFinder {
+		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "de.uni_hildesheim.sse.VilBuildLanguage.While");
+		private final Group cGroup = (Group)rule.eContents().get(1);
+		private final Keyword cWhileKeyword_0 = (Keyword)cGroup.eContents().get(0);
+		private final Keyword cLeftParenthesisKeyword_1 = (Keyword)cGroup.eContents().get(1);
+		private final Assignment cExprAssignment_2 = (Assignment)cGroup.eContents().get(2);
+		private final RuleCall cExprExpressionParserRuleCall_2_0 = (RuleCall)cExprAssignment_2.eContents().get(0);
+		private final Keyword cRightParenthesisKeyword_3 = (Keyword)cGroup.eContents().get(3);
+		private final Assignment cBlockAssignment_4 = (Assignment)cGroup.eContents().get(4);
+		private final RuleCall cBlockRuleElementBlockParserRuleCall_4_0 = (RuleCall)cBlockAssignment_4.eContents().get(0);
+		
+		//While:
+		//	'while' '(' expr=Expression ')'
+		//	block=RuleElementBlock;
+		@Override public ParserRule getRule() { return rule; }
+
+		//'while' '(' expr=Expression ')' block=RuleElementBlock
+		public Group getGroup() { return cGroup; }
+
+		//'while'
+		public Keyword getWhileKeyword_0() { return cWhileKeyword_0; }
+
+		//'('
+		public Keyword getLeftParenthesisKeyword_1() { return cLeftParenthesisKeyword_1; }
+
+		//expr=Expression
+		public Assignment getExprAssignment_2() { return cExprAssignment_2; }
+
+		//Expression
+		public RuleCall getExprExpressionParserRuleCall_2_0() { return cExprExpressionParserRuleCall_2_0; }
+
+		//')'
+		public Keyword getRightParenthesisKeyword_3() { return cRightParenthesisKeyword_3; }
+
+		//block=RuleElementBlock
+		public Assignment getBlockAssignment_4() { return cBlockAssignment_4; }
+
+		//RuleElementBlock
+		public RuleCall getBlockRuleElementBlockParserRuleCall_4_0() { return cBlockRuleElementBlockParserRuleCall_4_0; }
 	}
 
 	public class AlternativeElements extends AbstractParserRuleElementFinder {
@@ -1116,8 +1272,10 @@ public class VilBuildLanguageGrammarAccess extends AbstractGrammarElementFinder 
 	private final ExpressionStatementElements pExpressionStatement;
 	private final PrimaryExpressionElements pPrimaryExpression;
 	private final InstantiateElements pInstantiate;
-	private final MapVariableElements pMapVariable;
+	private final LoopVariableElements pLoopVariable;
 	private final MapElements pMap;
+	private final ForElements pFor;
+	private final WhileElements pWhile;
 	private final AlternativeElements pAlternative;
 	private final StatementOrBlockElements pStatementOrBlock;
 	private final JoinElements pJoin;
@@ -1147,8 +1305,10 @@ public class VilBuildLanguageGrammarAccess extends AbstractGrammarElementFinder 
 		this.pExpressionStatement = new ExpressionStatementElements();
 		this.pPrimaryExpression = new PrimaryExpressionElements();
 		this.pInstantiate = new InstantiateElements();
-		this.pMapVariable = new MapVariableElements();
+		this.pLoopVariable = new LoopVariableElements();
 		this.pMap = new MapElements();
+		this.pFor = new ForElements();
+		this.pWhile = new WhileElements();
 		this.pAlternative = new AlternativeElements();
 		this.pStatementOrBlock = new StatementOrBlockElements();
 		this.pJoin = new JoinElements();
@@ -1302,7 +1462,9 @@ public class VilBuildLanguageGrammarAccess extends AbstractGrammarElementFinder 
 
 	//RuleElement:
 	//	varDecl=VariableDeclaration
-	//	| exprStmt=ExpressionStatement;
+	//	| exprStmt=ExpressionStatement
+	//	| while=While ';'?
+	//	| for=For ';'?;
 	public RuleElementElements getRuleElementAccess() {
 		return pRuleElement;
 	}
@@ -1361,19 +1523,19 @@ public class VilBuildLanguageGrammarAccess extends AbstractGrammarElementFinder 
 		return getInstantiateAccess().getRule();
 	}
 
-	//MapVariable:
+	//LoopVariable:
 	//	type=Type?
 	//	var=Identifier;
-	public MapVariableElements getMapVariableAccess() {
-		return pMapVariable;
+	public LoopVariableElements getLoopVariableAccess() {
+		return pLoopVariable;
 	}
 	
-	public ParserRule getMapVariableRule() {
-		return getMapVariableAccess().getRule();
+	public ParserRule getLoopVariableRule() {
+		return getLoopVariableAccess().getRule();
 	}
 
 	//Map:
-	//	'map' '(' var+=MapVariable (',' var+=MapVariable)* separator=('=' | ':') expr=Expression ')'
+	//	'map' '(' var+=LoopVariable (',' var+=LoopVariable)* separator=('=' | ':') expr=Expression ')'
 	//	block=RuleElementBlock;
 	public MapElements getMapAccess() {
 		return pMap;
@@ -1381,6 +1543,28 @@ public class VilBuildLanguageGrammarAccess extends AbstractGrammarElementFinder 
 	
 	public ParserRule getMapRule() {
 		return getMapAccess().getRule();
+	}
+
+	//For:
+	//	'for' '(' var+=LoopVariable (',' var+=LoopVariable)* separator=('=' | ':') expr=Expression ')'
+	//	block=RuleElementBlock;
+	public ForElements getForAccess() {
+		return pFor;
+	}
+	
+	public ParserRule getForRule() {
+		return getForAccess().getRule();
+	}
+
+	//While:
+	//	'while' '(' expr=Expression ')'
+	//	block=RuleElementBlock;
+	public WhileElements getWhileAccess() {
+		return pWhile;
+	}
+	
+	public ParserRule getWhileRule() {
+		return getWhileAccess().getRule();
 	}
 
 	//Alternative:

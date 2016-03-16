@@ -383,6 +383,26 @@ public class ExecutionTests extends AbstractTest {
     public void testAlternative6() throws IOException {
         assertEqual("alternative6");
     }
+    
+    /**
+     * Tests a simple while loop using an Integer.
+     * 
+     * @throws IOException should not occur
+     */
+    @Test
+    public void whileLoop1() throws IOException {
+        assertEqual("whileLoop1");
+    }
+
+    /**
+     * Tests a simple while loop using an Integer (not entered).
+     * 
+     * @throws IOException should not occur
+     */
+    @Test
+    public void whileLoop2() throws IOException {
+        assertEqual("whileLoop2");
+    }
 
     /**
      * Tests a simple loop with empty body.

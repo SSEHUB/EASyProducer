@@ -472,13 +472,22 @@ public interface TemplateLangPackage extends EPackage
   int STMT__LOOP = 5;
 
   /**
+   * The feature id for the '<em><b>While</b></em>' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int STMT__WHILE = 6;
+
+  /**
    * The feature id for the '<em><b>Expr Stmt</b></em>' containment reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int STMT__EXPR_STMT = 6;
+  int STMT__EXPR_STMT = 7;
 
   /**
    * The feature id for the '<em><b>Ctn</b></em>' containment reference.
@@ -487,7 +496,7 @@ public interface TemplateLangPackage extends EPackage
    * @generated
    * @ordered
    */
-  int STMT__CTN = 7;
+  int STMT__CTN = 8;
 
   /**
    * The number of structural features of the '<em>Stmt</em>' class.
@@ -496,7 +505,7 @@ public interface TemplateLangPackage extends EPackage
    * @generated
    * @ordered
    */
-  int STMT_FEATURE_COUNT = 8;
+  int STMT_FEATURE_COUNT = 9;
 
   /**
    * The meta object id for the '{@link de.uni_hildesheim.sse.vil.templatelang.templateLang.impl.AlternativeImpl <em>Alternative</em>}' class.
@@ -747,6 +756,43 @@ public interface TemplateLangPackage extends EPackage
   int LOOP_FEATURE_COUNT = 6;
 
   /**
+   * The meta object id for the '{@link de.uni_hildesheim.sse.vil.templatelang.templateLang.impl.WhileImpl <em>While</em>}' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see de.uni_hildesheim.sse.vil.templatelang.templateLang.impl.WhileImpl
+   * @see de.uni_hildesheim.sse.vil.templatelang.templateLang.impl.TemplateLangPackageImpl#getWhile()
+   * @generated
+   */
+  int WHILE = 13;
+
+  /**
+   * The feature id for the '<em><b>Expr</b></em>' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int WHILE__EXPR = 0;
+
+  /**
+   * The feature id for the '<em><b>Stmt</b></em>' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int WHILE__STMT = 1;
+
+  /**
+   * The number of structural features of the '<em>While</em>' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int WHILE_FEATURE_COUNT = 2;
+
+  /**
    * The meta object id for the '{@link de.uni_hildesheim.sse.vil.templatelang.templateLang.impl.multiselectImpl <em>multiselect</em>}' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -754,7 +800,7 @@ public interface TemplateLangPackage extends EPackage
    * @see de.uni_hildesheim.sse.vil.templatelang.templateLang.impl.TemplateLangPackageImpl#getmultiselect()
    * @generated
    */
-  int MULTISELECT = 13;
+  int MULTISELECT = 14;
 
   /**
    * The feature id for the '<em><b>Gen</b></em>' containment reference.
@@ -791,7 +837,7 @@ public interface TemplateLangPackage extends EPackage
    * @see de.uni_hildesheim.sse.vil.templatelang.templateLang.impl.TemplateLangPackageImpl#getgenericMultiselect()
    * @generated
    */
-  int GENERIC_MULTISELECT = 14;
+  int GENERIC_MULTISELECT = 15;
 
   /**
    * The feature id for the '<em><b>Preamble</b></em>' containment reference.
@@ -846,7 +892,7 @@ public interface TemplateLangPackage extends EPackage
    * @see de.uni_hildesheim.sse.vil.templatelang.templateLang.impl.TemplateLangPackageImpl#getmultiSelectPart()
    * @generated
    */
-  int MULTI_SELECT_PART = 15;
+  int MULTI_SELECT_PART = 16;
 
   /**
    * The feature id for the '<em><b>Case</b></em>' containment reference.
@@ -892,7 +938,7 @@ public interface TemplateLangPackage extends EPackage
    * @see de.uni_hildesheim.sse.vil.templatelang.templateLang.impl.TemplateLangPackageImpl#getuserMultiselect()
    * @generated
    */
-  int USER_MULTISELECT = 16;
+  int USER_MULTISELECT = 17;
 
   /**
    * The feature id for the '<em><b>Id</b></em>' attribute.
@@ -929,7 +975,7 @@ public interface TemplateLangPackage extends EPackage
    * @see de.uni_hildesheim.sse.vil.templatelang.templateLang.impl.TemplateLangPackageImpl#getExtension()
    * @generated
    */
-  int EXTENSION = 17;
+  int EXTENSION = 18;
 
   /**
    * The feature id for the '<em><b>Name</b></em>' containment reference.
@@ -957,7 +1003,7 @@ public interface TemplateLangPackage extends EPackage
    * @see de.uni_hildesheim.sse.vil.templatelang.templateLang.impl.TemplateLangPackageImpl#getJavaQualifiedName()
    * @generated
    */
-  int JAVA_QUALIFIED_NAME = 18;
+  int JAVA_QUALIFIED_NAME = 19;
 
   /**
    * The feature id for the '<em><b>Qname</b></em>' attribute list.
@@ -1345,6 +1391,17 @@ public interface TemplateLangPackage extends EPackage
   EReference getStmt_Loop();
 
   /**
+   * Returns the meta object for the containment reference '{@link de.uni_hildesheim.sse.vil.templatelang.templateLang.Stmt#getWhile <em>While</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the containment reference '<em>While</em>'.
+   * @see de.uni_hildesheim.sse.vil.templatelang.templateLang.Stmt#getWhile()
+   * @see #getStmt()
+   * @generated
+   */
+  EReference getStmt_While();
+
+  /**
    * Returns the meta object for the containment reference '{@link de.uni_hildesheim.sse.vil.templatelang.templateLang.Stmt#getExprStmt <em>Expr Stmt</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -1602,6 +1659,38 @@ public interface TemplateLangPackage extends EPackage
    * @generated
    */
   EReference getLoop_Stmt();
+
+  /**
+   * Returns the meta object for class '{@link de.uni_hildesheim.sse.vil.templatelang.templateLang.While <em>While</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for class '<em>While</em>'.
+   * @see de.uni_hildesheim.sse.vil.templatelang.templateLang.While
+   * @generated
+   */
+  EClass getWhile();
+
+  /**
+   * Returns the meta object for the containment reference '{@link de.uni_hildesheim.sse.vil.templatelang.templateLang.While#getExpr <em>Expr</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the containment reference '<em>Expr</em>'.
+   * @see de.uni_hildesheim.sse.vil.templatelang.templateLang.While#getExpr()
+   * @see #getWhile()
+   * @generated
+   */
+  EReference getWhile_Expr();
+
+  /**
+   * Returns the meta object for the containment reference '{@link de.uni_hildesheim.sse.vil.templatelang.templateLang.While#getStmt <em>Stmt</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the containment reference '<em>Stmt</em>'.
+   * @see de.uni_hildesheim.sse.vil.templatelang.templateLang.While#getStmt()
+   * @see #getWhile()
+   * @generated
+   */
+  EReference getWhile_Stmt();
 
   /**
    * Returns the meta object for class '{@link de.uni_hildesheim.sse.vil.templatelang.templateLang.multiselect <em>multiselect</em>}'.
@@ -2118,6 +2207,14 @@ public interface TemplateLangPackage extends EPackage
     EReference STMT__LOOP = eINSTANCE.getStmt_Loop();
 
     /**
+     * The meta object literal for the '<em><b>While</b></em>' containment reference feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EReference STMT__WHILE = eINSTANCE.getStmt_While();
+
+    /**
      * The meta object literal for the '<em><b>Expr Stmt</b></em>' containment reference feature.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
@@ -2318,6 +2415,32 @@ public interface TemplateLangPackage extends EPackage
      * @generated
      */
     EReference LOOP__STMT = eINSTANCE.getLoop_Stmt();
+
+    /**
+     * The meta object literal for the '{@link de.uni_hildesheim.sse.vil.templatelang.templateLang.impl.WhileImpl <em>While</em>}' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see de.uni_hildesheim.sse.vil.templatelang.templateLang.impl.WhileImpl
+     * @see de.uni_hildesheim.sse.vil.templatelang.templateLang.impl.TemplateLangPackageImpl#getWhile()
+     * @generated
+     */
+    EClass WHILE = eINSTANCE.getWhile();
+
+    /**
+     * The meta object literal for the '<em><b>Expr</b></em>' containment reference feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EReference WHILE__EXPR = eINSTANCE.getWhile_Expr();
+
+    /**
+     * The meta object literal for the '<em><b>Stmt</b></em>' containment reference feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EReference WHILE__STMT = eINSTANCE.getWhile_Stmt();
 
     /**
      * The meta object literal for the '{@link de.uni_hildesheim.sse.vil.templatelang.templateLang.impl.multiselectImpl <em>multiselect</em>}' class.

@@ -1279,19 +1279,19 @@ public class RtVilGrammarAccess extends AbstractGrammarElementFinder {
 		return getInstantiateAccess().getRule();
 	}
 
-	//MapVariable:
+	//LoopVariable:
 	//	type=Type?
 	//	var=Identifier;
-	public VilBuildLanguageGrammarAccess.MapVariableElements getMapVariableAccess() {
-		return gaVilBuildLanguage.getMapVariableAccess();
+	public VilBuildLanguageGrammarAccess.LoopVariableElements getLoopVariableAccess() {
+		return gaVilBuildLanguage.getLoopVariableAccess();
 	}
 	
-	public ParserRule getMapVariableRule() {
-		return getMapVariableAccess().getRule();
+	public ParserRule getLoopVariableRule() {
+		return getLoopVariableAccess().getRule();
 	}
 
 	//Map:
-	//	'map' '(' var+=MapVariable (',' var+=MapVariable)* separator=('=' | ':') expr=Expression ')'
+	//	'map' '(' var+=LoopVariable (',' var+=LoopVariable)* separator=('=' | ':') expr=Expression ')'
 	//	block=super::RuleElementBlock;
 	public VilBuildLanguageGrammarAccess.MapElements getMapAccess() {
 		return gaVilBuildLanguage.getMapAccess();
@@ -1299,6 +1299,28 @@ public class RtVilGrammarAccess extends AbstractGrammarElementFinder {
 	
 	public ParserRule getMapRule() {
 		return getMapAccess().getRule();
+	}
+
+	//For:
+	//	'for' '(' var+=LoopVariable (',' var+=LoopVariable)* separator=('=' | ':') expr=Expression ')'
+	//	block=super::RuleElementBlock;
+	public VilBuildLanguageGrammarAccess.ForElements getForAccess() {
+		return gaVilBuildLanguage.getForAccess();
+	}
+	
+	public ParserRule getForRule() {
+		return getForAccess().getRule();
+	}
+
+	//While:
+	//	'while' '(' expr=Expression ')'
+	//	block=super::RuleElementBlock;
+	public VilBuildLanguageGrammarAccess.WhileElements getWhileAccess() {
+		return gaVilBuildLanguage.getWhileAccess();
+	}
+	
+	public ParserRule getWhileRule() {
+		return getWhileAccess().getRule();
 	}
 
 	//Alternative:

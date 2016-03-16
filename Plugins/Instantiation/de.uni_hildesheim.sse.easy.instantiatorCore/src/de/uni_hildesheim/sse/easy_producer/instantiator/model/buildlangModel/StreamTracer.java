@@ -80,22 +80,24 @@ public class StreamTracer extends de.uni_hildesheim.sse.easy_producer.instantiat
     }
 
     @Override
-    public void visitMap(MapExpression map, RuntimeEnvironment environment) {
+    public void visitLoop(IEnumeratingLoop loop, RuntimeEnvironment environment) {
         printIndentation();
-        println("map {");
+        print(loop.getElementName());
+        println(" {");
         increaseIndentation();
     }
 
     @Override
-    public void visitMapIteratorAssignment(VariableDeclaration var, Object value) {
+    public void visitIteratorAssignment(IEnumeratingLoop loop, VariableDeclaration var, Object value) {
         printIndentation();
-        print("map: ");
+        print(loop.getElementName());
+        print(": ");
         printValueDefined(var, null, value);
         println();
     }
     
     @Override
-    public void visitedMap(MapExpression map, RuntimeEnvironment environment) {
+    public void visitedLoop(IEnumeratingLoop loop, RuntimeEnvironment environment) {
         decreaseIndentation();
         printIndentation();
         println("}");
@@ -175,6 +177,20 @@ public class StreamTracer extends de.uni_hildesheim.sse.easy_producer.instantiat
         } else {
             println("else-branch");
         }
+    }
+
+    @Override
+    public void visitWhileBody() {
+        printIndentation();
+        println("while body {");
+        increaseIndentation();
+    }
+
+    @Override
+    public void visitedWhileBody() {
+        decreaseIndentation();
+        printIndentation();
+        println("}");
     }
 
 }

@@ -14,6 +14,7 @@ import de.uni_hildesheim.sse.dslCore.translation.StringUtils;
 import de.uni_hildesheim.sse.dslCore.translation.TranslatorException;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.AlternativeExpression;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.ExpressionStatement;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.ForStatement;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.IRuleBlock;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.IRuleElement;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.InstantiateExpression;
@@ -25,6 +26,7 @@ import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.Res
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.SimpleStatementBlock;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.StrategyCallExpression;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.VariableDeclaration;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.WhileStatement;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilException;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.AbstractCallExpression;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.CallArgument;
@@ -45,7 +47,7 @@ import de.uni_hildesheim.sse.vil.expressions.expressionDsl.ExpressionDslPackage;
 import de.uni_hildesheim.sse.vilBuildLanguage.Alternative;
 import de.uni_hildesheim.sse.vilBuildLanguage.Join;
 import de.uni_hildesheim.sse.vilBuildLanguage.JoinVariable;
-import de.uni_hildesheim.sse.vilBuildLanguage.MapVariable;
+import de.uni_hildesheim.sse.vilBuildLanguage.LoopVariable;
 import de.uni_hildesheim.sse.vilBuildLanguage.PrimaryExpression;
 import de.uni_hildesheim.sse.vilBuildLanguage.RuleElement;
 import de.uni_hildesheim.sse.vilBuildLanguage.RuleElementBlock;
@@ -117,7 +119,8 @@ public class ExpressionTranslator
         VariableDeclaration var = null;
         if (null != inst.getProject()) {
             // check what can be checked... remainder happens at runtime
-            var = resolver.resolve(inst.getProject(), false);
+            var = resolver.resolve(inst.getProject(), false, inst, 
+                VilBuildLanguagePackage.Literals.INSTANTIATE__PROJECT, this);
             if (null != var) {
                 if (!IvmlTypes.projectType().isAssignableFrom(var.getType())) {
                     throw new TranslatorException(inst.getProject() + " is not of type Project", inst, 
@@ -183,11 +186,103 @@ public class ExpressionTranslator
             throw new TranslatorException(e, alt, VilBuildLanguagePackage.Literals.ALTERNATIVE__IF);
         }
     }
+
+    /**
+     * Processes a "while" statement.
+     * 
+     * @param stmt the ECore object representing the statement
+     * @param resolver a resolver instance for resolving variables etc.
+     * @return the translated object in terms of the build language model
+     * @throws TranslatorException in case that the translation fails
+     */
+    private WhileStatement processWhileStatement(de.uni_hildesheim.sse.vilBuildLanguage.While stmt, Resolver resolver) 
+        throws TranslatorException {
+        Expression expr = processExpression(stmt.getExpr(), resolver);
+        TypeDescriptor<?> type = null;
+        try {
+            type = expr.inferType();
+        } catch (VilException e) {
+            throw new TranslatorException(e, stmt, VilBuildLanguagePackage.Literals.WHILE__EXPR);
+        }
+        if (!TypeRegistry.booleanType().isAssignableFrom(type)) {
+            throw new TranslatorException("while condition must be of type Boolean rather than " + type.getVilName(), 
+                stmt, VilBuildLanguagePackage.Literals.MAP__EXPR, ErrorCodes.TYPE_CONSISTENCY);
+        }
+        resolver.pushLevel();
+        IRuleElement[] block = resolveBlock(stmt.getBlock(), resolver);
+        resolver.popLevel();
+        try {
+            return new WhileStatement(expr, block);
+        } catch (VilException e) {
+            throw new TranslatorException(e, stmt, VilBuildLanguagePackage.Literals.WHILE__EXPR);
+        }
+    }
+
+    /**
+     * Processes a "for" statement.
+     * 
+     * @param stmt the ECore object representing the statement
+     * @param resolver a resolver instance for resolving variables etc.
+     * @return the translated object in terms of the build language model
+     * @throws TranslatorException in case that the translation fails
+     */
+    private ForStatement processForStatement(de.uni_hildesheim.sse.vilBuildLanguage.For stmt, Resolver resolver) 
+        throws TranslatorException {
+        Expression expr = processExpression(stmt.getExpr(), resolver);
+        TypeDescriptor<?> type = null;
+        try {
+            type = expr.inferType();
+        } catch (VilException e) {
+            throw new TranslatorException(e, stmt, VilBuildLanguagePackage.Literals.FOR__EXPR);
+        }
+        if (!type.isCollection() && !type.isIterator()) {
+            OperationDescriptor conversion = type.getConversionToSequence();
+            if (null == conversion) {
+                throw new TranslatorException("for must run over collection", stmt, 
+                    VilBuildLanguagePackage.Literals.FOR__EXPR, ErrorCodes.TYPE_CONSISTENCY);
+            } else {
+                type = conversion.getReturnType();
+            }
+        }
+        EList<LoopVariable> vars = stmt.getVar();
+        if (type.getGenericParameterCount() != vars.size()) {
+            throw new TranslatorException("number of for variables does not comply with expression", stmt, 
+                VilBuildLanguagePackage.Literals.FOR__EXPR, ErrorCodes.TYPE_CONSISTENCY);
+        }
+        int vSize = vars.size();
+        VariableDeclaration[] mapVars = new VariableDeclaration[vSize];
+        TypeDescriptor<?>[] givenTypes = TypeDescriptor.createArray(vSize);
+        for (int i = 0; i < vars.size(); i++) {
+            LoopVariable mv = vars.get(i);
+            TypeDescriptor<?> varType = type.getGenericParameterType(i);
+            if (null != mv.getType()) {
+                givenTypes[i] = processType(mv.getType(), resolver);
+                if (!givenTypes[i].isAssignableFrom(varType) && null == varType.findConversion(varType, givenTypes[i])) {
+                    throw new TranslatorException("explicitly given type '" + givenTypes[i].getVilName() 
+                        + "'of for iterator variable '" + mv.getVar() + "' does not match inferred type '" 
+                        + varType.getVilName() + "'", mv, 
+                        VilBuildLanguagePackage.Literals.LOOP_VARIABLE__TYPE, ErrorCodes.TYPE_CONSISTENCY);
+                } else {
+                    varType = givenTypes[i];
+                }
+            }
+            mapVars[i] = new VariableDeclaration(mv.getVar(), varType);
+        }
+        resolver.pushLevel();
+        resolver.add(mapVars);
+        IRuleElement[] block = resolveBlock(stmt.getBlock(), resolver);
+        resolver.popLevel();
+        try {
+            return new ForStatement(mapVars, expr, block, givenTypes, stmt.getSeparator().equals(Constants.COLON));
+        } catch (VilException e) {
+            throw new TranslatorException(e, stmt, VilBuildLanguagePackage.Literals.FOR__VAR);
+        }
+    }
     
     /**
-     * Processes a map expression.
+     * Processes a "map" expression.
      * 
-     * @param map the ECore object representing the statement
+     * @param map the ECore object representing the expression
      * @param resolver a resolver instance for resolving variables etc.
      * @return the translated object in terms of the build language model
      * @throws TranslatorException in case that the translation fails
@@ -210,7 +305,7 @@ public class ExpressionTranslator
                 type = conversion.getReturnType();
             }
         }
-        EList<MapVariable> vars = map.getVar();
+        EList<LoopVariable> vars = map.getVar();
         if (type.getGenericParameterCount() != vars.size()) {
             throw new TranslatorException("number of map variables does not comply with expression", map, 
                 VilBuildLanguagePackage.Literals.MAP__EXPR, ErrorCodes.TYPE_CONSISTENCY);
@@ -219,7 +314,7 @@ public class ExpressionTranslator
         VariableDeclaration[] mapVars = new VariableDeclaration[vSize];
         TypeDescriptor<?>[] givenTypes = TypeDescriptor.createArray(vSize);
         for (int i = 0; i < vars.size(); i++) {
-            MapVariable mv = vars.get(i);
+            LoopVariable mv = vars.get(i);
             TypeDescriptor<?> varType = type.getGenericParameterType(i);
             if (null != mv.getType()) {
                 givenTypes[i] = processType(mv.getType(), resolver);
@@ -227,7 +322,7 @@ public class ExpressionTranslator
                     throw new TranslatorException("explicitly given type '" + givenTypes[i].getVilName() 
                         + "'of map variable '" + mv.getVar() + "' does not match inferred type '" 
                         + varType.getVilName() + "'", mv, 
-                        VilBuildLanguagePackage.Literals.MAP_VARIABLE__TYPE, ErrorCodes.TYPE_CONSISTENCY);
+                        VilBuildLanguagePackage.Literals.LOOP_VARIABLE__TYPE, ErrorCodes.TYPE_CONSISTENCY);
                 } else {
                     varType = givenTypes[i];
                 }
@@ -235,6 +330,7 @@ public class ExpressionTranslator
             mapVars[i] = new VariableDeclaration(mv.getVar(), varType);
         }
         resolver.pushLevel();
+        resolver.limitVariablesOnCurrentLevel(); // specific for map
         resolver.add(mapVars);
         IRuleElement[] block = resolveBlock(map.getBlock(), resolver);
         resolver.popLevel();
@@ -299,6 +395,10 @@ public class ExpressionTranslator
                         tmp.add(processExpressionStatement(elt.getExprStmt(), resolver));
                     } else if (null != elt.getVarDecl()) {
                         tmp.add(processVariableDeclaration(elt.getVarDecl(), resolver));
+                    } else if (null != elt.getFor()) {
+                        tmp.add(processForStatement(elt.getFor(), resolver));
+                    } else if (null != elt.getWhile()) {
+                        tmp.add(processWhileStatement(elt.getWhile(), resolver));
                     } else {
                         IRuleElement rElt = resolveRuleElement(elt, resolver);
                         if (null != rElt) {
@@ -428,7 +528,8 @@ public class ExpressionTranslator
         arguments.toArray(arg);
         if (CallType.SYSTEM == type) {
             try {
-                VariableDeclaration nameVar = resolver.resolve(name, false);
+                VariableDeclaration nameVar = resolver.resolve(name, false, call, 
+                    ExpressionDslPackage.Literals.CALL__NAME, this);
                 if (null == nameVar) {
                     throw new TranslatorException("cannot resolve variable " + nameVar, call, 
                         ExpressionDslPackage.Literals.CALL__NAME, ErrorCodes.UNKNOWN_ELEMENT);

@@ -1,0 +1,53 @@
+-> main(Project, Configuration) with (<project>, <config>)
+    i <- 0
+    -> <(Integer, Integer) with (0, 10) = true
+    while body {
+        -> +(Integer, Integer) with (0, 1) = 1
+        i <- 1
+    }
+    -> <(Integer, Integer) with (1, 10) = true
+    while body {
+        -> +(Integer, Integer) with (1, 1) = 2
+        i <- 2
+    }
+    -> <(Integer, Integer) with (2, 10) = true
+    while body {
+        -> +(Integer, Integer) with (2, 1) = 3
+        i <- 3
+    }
+    -> <(Integer, Integer) with (3, 10) = true
+    while body {
+        -> +(Integer, Integer) with (3, 1) = 4
+        i <- 4
+    }
+    -> <(Integer, Integer) with (4, 10) = true
+    while body {
+        -> +(Integer, Integer) with (4, 1) = 5
+        i <- 5
+    }
+    -> <(Integer, Integer) with (5, 10) = true
+    while body {
+        -> +(Integer, Integer) with (5, 1) = 6
+        i <- 6
+    }
+    -> <(Integer, Integer) with (6, 10) = true
+    while body {
+        -> +(Integer, Integer) with (6, 1) = 7
+        i <- 7
+    }
+    -> <(Integer, Integer) with (7, 10) = true
+    while body {
+        -> +(Integer, Integer) with (7, 1) = 8
+        i <- 8
+    }
+    -> <(Integer, Integer) with (8, 10) = true
+    while body {
+        -> +(Integer, Integer) with (8, 1) = 9
+        i <- 9
+    }
+    -> <(Integer, Integer) with (9, 10) = true
+    while body {
+        -> +(Integer, Integer) with (9, 1) = 10
+        i <- 10
+    }
+    -> <(Integer, Integer) with (10, 10) = false

@@ -78,4 +78,14 @@ public interface ITracer extends de.uni_hildesheim.sse.easy_producer.instantiato
      */
     public void failedAt(ITemplateLangElement element);
 
+    /**
+     * Is called at the beginning of a while body being visited.
+     */
+    public void visitWhileBody();
+
+    /**
+     * Is called at the end of a while body being visited.
+     */
+    public void visitedWhileBody();
+    
 }

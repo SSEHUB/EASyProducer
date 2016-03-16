@@ -17,6 +17,8 @@ import org.eclipse.emf.ecore.EObject;
  * <ul>
  *   <li>{@link de.uni_hildesheim.sse.vilBuildLanguage.RuleElement#getVarDecl <em>Var Decl</em>}</li>
  *   <li>{@link de.uni_hildesheim.sse.vilBuildLanguage.RuleElement#getExprStmt <em>Expr Stmt</em>}</li>
+ *   <li>{@link de.uni_hildesheim.sse.vilBuildLanguage.RuleElement#getWhile <em>While</em>}</li>
+ *   <li>{@link de.uni_hildesheim.sse.vilBuildLanguage.RuleElement#getFor <em>For</em>}</li>
  * </ul>
  *
  * @see de.uni_hildesheim.sse.vilBuildLanguage.VilBuildLanguagePackage#getRuleElement()
@@ -76,5 +78,57 @@ public interface RuleElement extends EObject
    * @generated
    */
   void setExprStmt(ExpressionStatement value);
+
+  /**
+   * Returns the value of the '<em><b>While</b></em>' containment reference.
+   * <!-- begin-user-doc -->
+   * <p>
+   * If the meaning of the '<em>While</em>' containment reference isn't clear,
+   * there really should be more of a description here...
+   * </p>
+   * <!-- end-user-doc -->
+   * @return the value of the '<em>While</em>' containment reference.
+   * @see #setWhile(While)
+   * @see de.uni_hildesheim.sse.vilBuildLanguage.VilBuildLanguagePackage#getRuleElement_While()
+   * @model containment="true"
+   * @generated
+   */
+  While getWhile();
+
+  /**
+   * Sets the value of the '{@link de.uni_hildesheim.sse.vilBuildLanguage.RuleElement#getWhile <em>While</em>}' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @param value the new value of the '<em>While</em>' containment reference.
+   * @see #getWhile()
+   * @generated
+   */
+  void setWhile(While value);
+
+  /**
+   * Returns the value of the '<em><b>For</b></em>' containment reference.
+   * <!-- begin-user-doc -->
+   * <p>
+   * If the meaning of the '<em>For</em>' containment reference isn't clear,
+   * there really should be more of a description here...
+   * </p>
+   * <!-- end-user-doc -->
+   * @return the value of the '<em>For</em>' containment reference.
+   * @see #setFor(For)
+   * @see de.uni_hildesheim.sse.vilBuildLanguage.VilBuildLanguagePackage#getRuleElement_For()
+   * @model containment="true"
+   * @generated
+   */
+  For getFor();
+
+  /**
+   * Sets the value of the '{@link de.uni_hildesheim.sse.vilBuildLanguage.RuleElement#getFor <em>For</em>}' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @param value the new value of the '<em>For</em>' containment reference.
+   * @see #getFor()
+   * @generated
+   */
+  void setFor(For value);
 
 } // RuleElement

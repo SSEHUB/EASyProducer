@@ -22,10 +22,12 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
+import java.util.Set;
 import java.util.Stack;
 
 import org.apache.commons.lang.SystemUtils;
@@ -52,6 +54,8 @@ import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.rul
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.ruleMatch.StringMatchExpression;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.ExecutionVisitor;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.IResolvableModel;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.ITerminatable;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.ITerminator;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.ModelCallExpression;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.StreamGobbler;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.Typedef;
@@ -63,7 +67,6 @@ import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.Consta
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.Expression;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.ExpressionParserRegistry;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.ResolvableOperationCallExpression;
-//import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.StringReplacer;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.ExpressionParserRegistry.ILanguage;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.IExpressionParser;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.IResolvable;
@@ -71,6 +74,7 @@ import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.String
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.ArraySequence;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.ArraySet;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.Collection;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.Constants;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.FixedListSequence;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.ITypedModel;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.IVilType;
@@ -97,7 +101,7 @@ import de.uni_hildesheim.sse.utils.modelManagement.ModelManagementException;
  * @author Holger Eichelberger
  */
 public class BuildlangExecution extends ExecutionVisitor<Script, Rule, VariableDeclaration> 
-    implements IBuildlangVisitor, RuleBodyExecutor {
+    implements IBuildlangVisitor, RuleBodyExecutor, ITerminator {
 
     public static final ILanguage LANGUAGE = new ILanguage() {
 
@@ -139,6 +143,8 @@ public class BuildlangExecution extends ExecutionVisitor<Script, Rule, VariableD
     private Stack<RuleExecutionContext> ruleStack = new Stack<RuleExecutionContext>();
     private Resolver resolver;
     private boolean enableRuleElementFailed = true;
+    private boolean stop = false;
+    private Set<ITerminatable> terminatables = new HashSet<ITerminatable>();
         
     /**
      * Creates a new execution environment.
@@ -181,6 +187,16 @@ public class BuildlangExecution extends ExecutionVisitor<Script, Rule, VariableD
         this.base = new File("");
         this.startRuleName = DEFAULT_MAIN_RULE;
         initialize();
+    }
+    
+    /**
+     * Stops the execution, e.g., within endless loops constructed by the user.
+     */
+    public void stop() {
+        this.stop = true;
+        for (ITerminatable t : terminatables) {
+            t.stop();
+        }
     }
     
     /**
@@ -668,7 +684,7 @@ public class BuildlangExecution extends ExecutionVisitor<Script, Rule, VariableD
     @Override
     public Object visitStrategyCallExpression(StrategyCallExpression call) throws VilException {
         Object result;
-        if (call.isPlaceholder()) {
+        if (stop || call.isPlaceholder()) {
             result = null;
         } else {
             result = visitStrategyCallExpressionImpl(call);
@@ -739,10 +755,16 @@ public class BuildlangExecution extends ExecutionVisitor<Script, Rule, VariableD
         }
         return result;
     }
-
-/*  @Override
-    public void visitDefer(Defer defer) throws BuildlangException {
-    }*/
+    
+    /**
+     * Adds additional implicit named parameters.
+     * 
+     * @param named the named parameters
+     */
+    protected void addImplicitParamters(java.util.Map<String, Object> named) {
+        super.addImplicitParamters(named);
+        named.put(Constants.IMPLICIT_TERMINATOR_NAME, this);
+    }
 
     @Override
     public Object visitLoadProperties(LoadProperties properties) throws VilException {
@@ -1082,7 +1104,13 @@ public class BuildlangExecution extends ExecutionVisitor<Script, Rule, VariableD
 
     @Override
     protected Object executeModelCall(Rule rule) throws VilException {
-        return rule.accept(this);
+        Object result;
+        if (stop) {
+            result = null;
+        } else {
+            result = rule.accept(this);
+        }
+        return result;
     }
 
     @Override
@@ -1326,53 +1354,13 @@ public class BuildlangExecution extends ExecutionVisitor<Script, Rule, VariableD
     public Object visitMapExpression(MapExpression map) throws VilException {
         boolean failed = false;
         List<Object> result;
-        RuleExecutionContext context = ruleStack.peek();
         TypeDescriptor<?> mapType = map.inferType();
         result = TypeRegistry.voidType() == mapType ? null : new ArrayList<Object>(); 
         try {
             environment.pushLevel();
-            tracer.visitMap(map, environment);
-            Expression expr = map.getExpression();
-            Object set = convertToContainer(expr, expr.accept(this), "map");
-            if (set instanceof Collection) {
-                Collection<?> coll = (Collection<?>) set;
-                if (coll.allowSequenceAdjustment()) {
-                    coll = tracer.adjustSequenceForMap(coll);
-                }
-                for (Object entry : coll) {
-                    if (map.getVariablesCount() > 1) {
-                        Object[] data = (Object[]) entry;
-                        for (int v = 0; v < map.getVariablesCount(); v++) {
-                            VariableDeclaration var = map.getVariable(v);
-                            environment.addValue(var, data[v]);
-                            tracer.visitMapIteratorAssignment(var, data[v]);
-                        }
-                    } else {
-                        VariableDeclaration var = map.getVariable(0);
-                        environment.addValue(var, entry);
-                        tracer.visitMapIteratorAssignment(var, entry);
-                    }
-                    Object iterResult = null;
-                    IRuleElement determinesResult = map.determinesResult();
-                    for (int e = 0; !failed && e < map.getBodyElementCount(); e++) {
-                        IRuleElement elt = map.getBodyElement(e);
-                        Object eltRes = elt.accept(this);
-                        context.add(eltRes);
-                        if (elt == determinesResult) {
-                            iterResult = eltRes; // collect the last one
-                        } else if (mayFail(elt)) {
-                            failed = !checkConditionResult(eltRes, elt, ConditionTest.DONT_CARE);
-                            if (enableRuleElementFailed) {
-                                ruleElementFailed(elt, context);
-                            }
-                        }
-                    }
-                    if (null != result) {
-                        result.add(iterResult);
-                    }
-                }
-            }
-            tracer.visitedMap(map, environment);
+            tracer.visitLoop(map, environment);
+            failed = (null == executeLoop(map, true, result));
+            tracer.visitedLoop(map, environment);
         } catch (ClassCastException e) { // for handcrafted models
             throw new VilException(e.getMessage(), VilException.ID_INTERNAL); 
         } catch (IndexOutOfBoundsException e) { // for handcrafted models
@@ -1380,6 +1368,66 @@ public class BuildlangExecution extends ExecutionVisitor<Script, Rule, VariableD
         } 
         environment.popLevel();
         return mapResult(mapType, result, failed);
+    }
+
+    /**
+     * Executes a loop.
+     * 
+     * @param loop the loop to be executed
+     * @param parallelize whether execution may happen in parallel
+     * @param result the result collector (may be <b>null</b> for no collection)
+     * @return the last statement execution result
+     * @throws VilException in case that expression evaluation fails
+     */
+    private Object executeLoop(IEnumeratingLoop loop, boolean parallelize, List<Object> result) 
+        throws VilException {
+        Object bodyResult = null;
+        boolean failed = false;
+        RuleExecutionContext context = ruleStack.peek();
+        Expression expr = loop.getExpression();
+        Object set = convertToContainer(expr, expr.accept(this), loop.getElementName());
+        if (set instanceof Collection) {
+            Collection<?> coll = (Collection<?>) set;
+            if (coll.allowSequenceAdjustment()) {
+                coll = tracer.adjustSequenceForMap(coll);
+            }
+            Iterator<?> iter = coll.iterator();
+            while (iter.hasNext() && !stop) {
+                Object entry = iter.next();
+                if (loop.getVariablesCount() > 1) {
+                    Object[] data = (Object[]) entry;
+                    for (int v = 0; v < loop.getVariablesCount(); v++) {
+                        VariableDeclaration var = loop.getVariable(v);
+                        environment.addValue(var, data[v]);
+                        tracer.visitIteratorAssignment(loop, var, data[v]);
+                    }
+                } else {
+                    VariableDeclaration var = loop.getVariable(0);
+                    environment.addValue(var, entry);
+                    tracer.visitIteratorAssignment(loop, var, entry);
+                }
+                Object iterResult = null;
+                IRuleElement determinesResult = loop.determinesResult();
+                for (int e = 0; !failed && e < loop.getBodyElementCount(); e++) {
+                    IRuleElement elt = loop.getBodyElement(e);
+                    Object eltRes = elt.accept(this);
+                    context.add(eltRes);
+                    if (elt == determinesResult) {
+                        iterResult = eltRes; // collect the last one
+                    } else if (mayFail(elt)) {
+                        failed = !checkConditionResult(eltRes, elt, ConditionTest.DONT_CARE);
+                        if (enableRuleElementFailed) {
+                            ruleElementFailed(elt, context);
+                        }
+                    }
+                }
+                if (null != result) {
+                    result.add(iterResult);
+                }
+                bodyResult = iterResult;
+            }
+        }
+        return bodyResult;
     }
     
     /**
@@ -1567,6 +1615,60 @@ public class BuildlangExecution extends ExecutionVisitor<Script, Rule, VariableD
     @Override
     public Object visitTypedef(Typedef typedef) throws VilException {
         return null; // typedefs are processed during parsing
+    }
+
+    @Override
+    public Object visitWhileStatement(WhileStatement stmt) throws VilException {
+        Expression condition = stmt.getCondition();
+        boolean executeLoop = false;
+        RuleExecutionContext context = ruleStack.peek();
+        Object bodyResult = null;
+        do {
+            Object conditionResult = condition.accept(this);
+            executeLoop = (conditionResult instanceof Boolean && (Boolean) conditionResult);
+            if (executeLoop) {
+                tracer.visitWhileBody();
+                bodyResult = executeRuleBody(stmt, context);
+                if (null == bodyResult) {
+                    executeLoop = false;
+                }
+                tracer.visitedWhileBody();
+            }
+        } while (executeLoop && !stop);
+        return bodyResult;
+    }
+
+    @Override
+    public Object visitForStatement(ForStatement stmt) throws VilException {
+        Object result = null;
+        try {
+            environment.pushLevel();
+            tracer.visitLoop(stmt, environment);
+            result = executeLoop(stmt, false, null);
+            tracer.visitedLoop(stmt, environment);
+        } catch (ClassCastException e) { // for handcrafted models
+            throw new VilException(e.getMessage(), VilException.ID_INTERNAL); 
+        } catch (IndexOutOfBoundsException e) { // for handcrafted models
+            throw new VilException("index out of bounds " + e.getMessage(), VilException.ID_INTERNAL);
+        } 
+        environment.popLevel();
+        return result;
+    }
+
+    @Override
+    public void register(ITerminatable terminatable) {
+        if (null != terminatable) {
+            terminatables.add(terminatable);
+        }
+    }
+    
+    // TODO -> stop() terminate all, pass to VIL
+
+    @Override
+    public void unregister(ITerminatable terminatable) {
+        if (null != terminatable) {
+            terminatables.remove(terminatable);
+        }
     }
 
 }

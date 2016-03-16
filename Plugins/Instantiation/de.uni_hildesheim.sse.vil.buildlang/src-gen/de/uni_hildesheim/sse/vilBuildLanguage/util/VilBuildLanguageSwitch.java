@@ -173,10 +173,10 @@ public class VilBuildLanguageSwitch<T> extends Switch<T>
         if (result == null) result = defaultCase(theEObject);
         return result;
       }
-      case VilBuildLanguagePackage.MAP_VARIABLE:
+      case VilBuildLanguagePackage.LOOP_VARIABLE:
       {
-        MapVariable mapVariable = (MapVariable)theEObject;
-        T result = caseMapVariable(mapVariable);
+        LoopVariable loopVariable = (LoopVariable)theEObject;
+        T result = caseLoopVariable(loopVariable);
         if (result == null) result = defaultCase(theEObject);
         return result;
       }
@@ -184,6 +184,20 @@ public class VilBuildLanguageSwitch<T> extends Switch<T>
       {
         Map map = (Map)theEObject;
         T result = caseMap(map);
+        if (result == null) result = defaultCase(theEObject);
+        return result;
+      }
+      case VilBuildLanguagePackage.FOR:
+      {
+        For for_ = (For)theEObject;
+        T result = caseFor(for_);
+        if (result == null) result = defaultCase(theEObject);
+        return result;
+      }
+      case VilBuildLanguagePackage.WHILE:
+      {
+        While while_ = (While)theEObject;
+        T result = caseWhile(while_);
         if (result == null) result = defaultCase(theEObject);
         return result;
       }
@@ -451,17 +465,17 @@ public class VilBuildLanguageSwitch<T> extends Switch<T>
   }
 
   /**
-   * Returns the result of interpreting the object as an instance of '<em>Map Variable</em>'.
+   * Returns the result of interpreting the object as an instance of '<em>Loop Variable</em>'.
    * <!-- begin-user-doc -->
    * This implementation returns null;
    * returning a non-null result will terminate the switch.
    * <!-- end-user-doc -->
    * @param object the target of the switch.
-   * @return the result of interpreting the object as an instance of '<em>Map Variable</em>'.
+   * @return the result of interpreting the object as an instance of '<em>Loop Variable</em>'.
    * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
    * @generated
    */
-  public T caseMapVariable(MapVariable object)
+  public T caseLoopVariable(LoopVariable object)
   {
     return null;
   }
@@ -478,6 +492,38 @@ public class VilBuildLanguageSwitch<T> extends Switch<T>
    * @generated
    */
   public T caseMap(Map object)
+  {
+    return null;
+  }
+
+  /**
+   * Returns the result of interpreting the object as an instance of '<em>For</em>'.
+   * <!-- begin-user-doc -->
+   * This implementation returns null;
+   * returning a non-null result will terminate the switch.
+   * <!-- end-user-doc -->
+   * @param object the target of the switch.
+   * @return the result of interpreting the object as an instance of '<em>For</em>'.
+   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+   * @generated
+   */
+  public T caseFor(For object)
+  {
+    return null;
+  }
+
+  /**
+   * Returns the result of interpreting the object as an instance of '<em>While</em>'.
+   * <!-- begin-user-doc -->
+   * This implementation returns null;
+   * returning a non-null result will terminate the switch.
+   * <!-- end-user-doc -->
+   * @param object the target of the switch.
+   * @return the result of interpreting the object as an instance of '<em>While</em>'.
+   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+   * @generated
+   */
+  public T caseWhile(While object)
   {
     return null;
   }

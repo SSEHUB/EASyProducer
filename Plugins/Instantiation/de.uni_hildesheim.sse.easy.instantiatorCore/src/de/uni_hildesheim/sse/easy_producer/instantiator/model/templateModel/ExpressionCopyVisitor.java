@@ -84,4 +84,9 @@ public class ExpressionCopyVisitor extends CopyVisitor implements IVisitor {
         return result;
     }
 
+    @Override
+    public Object visitWhile(WhileStatement stmt) throws VilException {
+        throw new VilException("not an expression", VilException.ID_INTERNAL);
+    }
+
 }

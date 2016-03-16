@@ -66,6 +66,8 @@ public class Constants {
     public static final String IMPLICIT_PARENT_PARAMETER_NAME = "$parent";
 
     public static final String IMPLICIT_PATHS_PARAMETER_NAME = "$paths";
+
+    public static final String IMPLICIT_TERMINATOR_NAME = "$terminator";
     
     public static final java.util.Set<String> IMPLICIT_PARAMETER;
     
@@ -73,6 +75,7 @@ public class Constants {
         java.util.Set<String> tmp = new HashSet<String>();
         tmp.add(IMPLICIT_PARENT_PARAMETER_NAME);
         tmp.add(IMPLICIT_PATHS_PARAMETER_NAME);
+        tmp.add(IMPLICIT_TERMINATOR_NAME);
         IMPLICIT_PARAMETER = Collections.unmodifiableSet(tmp);
     }
 }

@@ -89,6 +89,7 @@ public class Executor {
     private String startRuleName = DEFAULT_START_RULE_NAME;
     private File base;
     private boolean frozenOnly = true;
+    private transient BuildlangExecution executor;
     
     /**
      * Creates an executor with default arguments.
@@ -451,7 +452,7 @@ public class Executor {
             EASyLoggerFactory.INSTANCE.getLogger(getClass(), Bundle.ID).info("Reloading model " + script.getName() 
                 + " " + System.identityHashCode(script) + " as it was marked dirty " + (old != script)); // for Cui
         }
-        BuildlangExecution executor = createExecutionEnvironment(tracer, base, startRuleName, actArgs);
+        executor = createExecutionEnvironment(tracer, base, startRuleName, actArgs);
         try {
             Object result = script.accept(executor);
             if (result instanceof RuleExecutionResult) {
@@ -465,6 +466,16 @@ public class Executor {
             throw e;
         }
         tracer.reset();
+    }
+    
+    /**
+     * Stops the execution of a previous {@link #execute(ProgressObserver, boolean)} call. Requires some form
+     * of threaded call of the execution and this method!
+     */
+    public void stop() {
+        if (null != executor) {
+            executor.stop();
+        }
     }
     
     /**

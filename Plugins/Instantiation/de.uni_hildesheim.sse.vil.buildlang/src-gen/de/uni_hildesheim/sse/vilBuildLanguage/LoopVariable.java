@@ -8,22 +8,22 @@ import org.eclipse.emf.ecore.EObject;
 
 /**
  * <!-- begin-user-doc -->
- * A representation of the model object '<em><b>Map Variable</b></em>'.
+ * A representation of the model object '<em><b>Loop Variable</b></em>'.
  * <!-- end-user-doc -->
  *
  * <p>
  * The following features are supported:
  * </p>
  * <ul>
- *   <li>{@link de.uni_hildesheim.sse.vilBuildLanguage.MapVariable#getType <em>Type</em>}</li>
- *   <li>{@link de.uni_hildesheim.sse.vilBuildLanguage.MapVariable#getVar <em>Var</em>}</li>
+ *   <li>{@link de.uni_hildesheim.sse.vilBuildLanguage.LoopVariable#getType <em>Type</em>}</li>
+ *   <li>{@link de.uni_hildesheim.sse.vilBuildLanguage.LoopVariable#getVar <em>Var</em>}</li>
  * </ul>
  *
- * @see de.uni_hildesheim.sse.vilBuildLanguage.VilBuildLanguagePackage#getMapVariable()
+ * @see de.uni_hildesheim.sse.vilBuildLanguage.VilBuildLanguagePackage#getLoopVariable()
  * @model
  * @generated
  */
-public interface MapVariable extends EObject
+public interface LoopVariable extends EObject
 {
   /**
    * Returns the value of the '<em><b>Type</b></em>' containment reference.
@@ -35,14 +35,14 @@ public interface MapVariable extends EObject
    * <!-- end-user-doc -->
    * @return the value of the '<em>Type</em>' containment reference.
    * @see #setType(Type)
-   * @see de.uni_hildesheim.sse.vilBuildLanguage.VilBuildLanguagePackage#getMapVariable_Type()
+   * @see de.uni_hildesheim.sse.vilBuildLanguage.VilBuildLanguagePackage#getLoopVariable_Type()
    * @model containment="true"
    * @generated
    */
   Type getType();
 
   /**
-   * Sets the value of the '{@link de.uni_hildesheim.sse.vilBuildLanguage.MapVariable#getType <em>Type</em>}' containment reference.
+   * Sets the value of the '{@link de.uni_hildesheim.sse.vilBuildLanguage.LoopVariable#getType <em>Type</em>}' containment reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @param value the new value of the '<em>Type</em>' containment reference.
@@ -61,14 +61,14 @@ public interface MapVariable extends EObject
    * <!-- end-user-doc -->
    * @return the value of the '<em>Var</em>' attribute.
    * @see #setVar(String)
-   * @see de.uni_hildesheim.sse.vilBuildLanguage.VilBuildLanguagePackage#getMapVariable_Var()
+   * @see de.uni_hildesheim.sse.vilBuildLanguage.VilBuildLanguagePackage#getLoopVariable_Var()
    * @model
    * @generated
    */
   String getVar();
 
   /**
-   * Sets the value of the '{@link de.uni_hildesheim.sse.vilBuildLanguage.MapVariable#getVar <em>Var</em>}' attribute.
+   * Sets the value of the '{@link de.uni_hildesheim.sse.vilBuildLanguage.LoopVariable#getVar <em>Var</em>}' attribute.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @param value the new value of the '<em>Var</em>' attribute.
@@ -77,4 +77,4 @@ public interface MapVariable extends EObject
    */
   void setVar(String value);
 
-} // MapVariable
+} // LoopVariable

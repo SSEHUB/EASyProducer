@@ -55,6 +55,15 @@ public interface IVisitor {
     public Object visitLoop(LoopStatement loop) throws VilException;
 
     /**
+     * Visits a while statement.
+     * 
+     * @param stmt the while statement to visit
+     * @return the result of visiting the given statement (may be <b>null</b>)
+     * @throws VilException in case that visiting fails (e.g., execution)
+     */
+    public Object visitWhile(WhileStatement stmt) throws VilException;
+
+    /**
      * Visits a switch statement.
      * 
      * @param swtch the switch statement to visit

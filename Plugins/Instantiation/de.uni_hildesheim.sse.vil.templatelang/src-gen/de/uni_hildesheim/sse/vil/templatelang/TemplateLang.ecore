@@ -62,6 +62,8 @@
     <eStructuralFeatures xsi:type="ecore:EReference" name="multi" eType="#//multiselect"
         containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="loop" eType="#//Loop" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="while" eType="#//While"
+        containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="exprStmt" eType="ecore:EClass platform:/resource/de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/ExpressionDsl.ecore#//ExpressionStatement"
         containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="ctn" eType="#//Content"
@@ -102,6 +104,11 @@
     <eStructuralFeatures xsi:type="ecore:EReference" name="separator" eType="ecore:EClass platform:/resource/de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/ExpressionDsl.ecore#//PrimaryExpression"
         containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="finalSeparator" eType="ecore:EClass platform:/resource/de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/ExpressionDsl.ecore#//PrimaryExpression"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="stmt" eType="#//Stmt" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="While">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="expr" eType="ecore:EClass platform:/resource/de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/ExpressionDsl.ecore#//Expression"
         containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="stmt" eType="#//Stmt" containment="true"/>
   </eClassifiers>

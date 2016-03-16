@@ -453,7 +453,7 @@ public class BasicTests extends AbstractBasicTest<Script> {
     }
 
     /**
-     * Tests instantiator calls in map statements (contributed by Christian).
+     * Tests instantiator calls in a map statement (contributed by Christian).
      * 
      * @throws IOException should not occur
      */
@@ -462,6 +462,36 @@ public class BasicTests extends AbstractBasicTest<Script> {
         assertEqual("mapInstantiator");
     }
 
+    /**
+     * Tests instantiator calls in for statement.
+     * 
+     * @throws IOException should not occur
+     */
+    @Test
+    public void testForInstantiator() throws IOException {
+        assertEqual("forInstantiator");
+    }
+
+    /**
+     * Tests a simple while loop.
+     * 
+     * @throws IOException should not occur
+     */
+    @Test
+    public void testWhileLoop() throws IOException {
+        assertEqual("whileLoop");
+    }
+
+    /**
+     * Tests a simple failing while loop.
+     * 
+     * @throws IOException should not occur
+     */
+    @Test
+    public void testWhileLoopFail() throws IOException {
+        assertEqual("whileLoopFail", ErrorCodes.TYPE_CONSISTENCY);
+    }
+    
     /**
      * Tests the instantiate syntax.
      * 

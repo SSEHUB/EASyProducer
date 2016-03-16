@@ -145,14 +145,24 @@ public class VilBuildLanguageAdapterFactory extends AdapterFactoryImpl
         return createInstantiateAdapter();
       }
       @Override
-      public Adapter caseMapVariable(MapVariable object)
+      public Adapter caseLoopVariable(LoopVariable object)
       {
-        return createMapVariableAdapter();
+        return createLoopVariableAdapter();
       }
       @Override
       public Adapter caseMap(Map object)
       {
         return createMapAdapter();
+      }
+      @Override
+      public Adapter caseFor(For object)
+      {
+        return createForAdapter();
+      }
+      @Override
+      public Adapter caseWhile(While object)
+      {
+        return createWhileAdapter();
       }
       @Override
       public Adapter caseAlternative(Alternative object)
@@ -427,16 +437,16 @@ public class VilBuildLanguageAdapterFactory extends AdapterFactoryImpl
   }
 
   /**
-   * Creates a new adapter for an object of class '{@link de.uni_hildesheim.sse.vilBuildLanguage.MapVariable <em>Map Variable</em>}'.
+   * Creates a new adapter for an object of class '{@link de.uni_hildesheim.sse.vilBuildLanguage.LoopVariable <em>Loop Variable</em>}'.
    * <!-- begin-user-doc -->
    * This default implementation returns null so that we can easily ignore cases;
    * it's useful to ignore a case when inheritance will catch all the cases anyway.
    * <!-- end-user-doc -->
    * @return the new adapter.
-   * @see de.uni_hildesheim.sse.vilBuildLanguage.MapVariable
+   * @see de.uni_hildesheim.sse.vilBuildLanguage.LoopVariable
    * @generated
    */
-  public Adapter createMapVariableAdapter()
+  public Adapter createLoopVariableAdapter()
   {
     return null;
   }
@@ -452,6 +462,36 @@ public class VilBuildLanguageAdapterFactory extends AdapterFactoryImpl
    * @generated
    */
   public Adapter createMapAdapter()
+  {
+    return null;
+  }
+
+  /**
+   * Creates a new adapter for an object of class '{@link de.uni_hildesheim.sse.vilBuildLanguage.For <em>For</em>}'.
+   * <!-- begin-user-doc -->
+   * This default implementation returns null so that we can easily ignore cases;
+   * it's useful to ignore a case when inheritance will catch all the cases anyway.
+   * <!-- end-user-doc -->
+   * @return the new adapter.
+   * @see de.uni_hildesheim.sse.vilBuildLanguage.For
+   * @generated
+   */
+  public Adapter createForAdapter()
+  {
+    return null;
+  }
+
+  /**
+   * Creates a new adapter for an object of class '{@link de.uni_hildesheim.sse.vilBuildLanguage.While <em>While</em>}'.
+   * <!-- begin-user-doc -->
+   * This default implementation returns null so that we can easily ignore cases;
+   * it's useful to ignore a case when inheritance will catch all the cases anyway.
+   * <!-- end-user-doc -->
+   * @return the new adapter.
+   * @see de.uni_hildesheim.sse.vilBuildLanguage.While
+   * @generated
+   */
+  public Adapter createWhileAdapter()
   {
     return null;
   }

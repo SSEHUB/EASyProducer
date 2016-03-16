@@ -11,7 +11,7 @@ import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeRegis
  * 
  * @author Holger Eichelberger
  */
-public class MapExpression extends Expression implements IRuleBlock {
+public class MapExpression extends Expression implements IRuleBlock, IEnumeratingLoop {
 
     private VariableDeclaration[] variables;
     private Expression expr;
@@ -43,6 +43,7 @@ public class MapExpression extends Expression implements IRuleBlock {
                 VilException.ID_SEMANTIC);
         }
         this.variables = variables;
+        this.colon = colon;
         if (null == expr) {
             throw new VilException("no expression given", VilException.ID_SEMANTIC);
         }
@@ -65,44 +66,22 @@ public class MapExpression extends Expression implements IRuleBlock {
         return body[index];
     }
     
-    /**
-     * Returns the number of variables defined for this map statement.
-     * 
-     * @return the number of variables
-     */
+    @Override
     public int getVariablesCount() {
         return variables.length;
     }
     
-    /**
-     * Returns the specified variable.
-     * 
-     * @param index the 0-based index denoting the variable to be returned
-     * @return the specified variable
-     * @throws IndexOutOfBoundsException in case that 
-     *   <code>index &lt; 0 || index &gt;={@link #getVariablesCount()}</code>
-     */
+    @Override
     public VariableDeclaration getVariable(int index) {
         return variables[index];
     }
     
-    /**
-     * Returns the specified given type (further specifying to {@link #getVariable(int)}).
-     * 
-     * @param index the 0-based index denoting the type to be returned
-     * @return the specified type, may be <b>null</b> if not given
-     * @throws IndexOutOfBoundsException in case that 
-     *   <code>index &lt; 0 || index &gt;={@link #getVariablesCount()}</code>
-     */    
+    @Override
     public TypeDescriptor<?> getGivenType(int index) {
         return null == givenTypes ? null : givenTypes[index]; 
     }
     
-    /**
-     * Returns the iterator expression.
-     * 
-     * @return the iterator expression
-     */
+    @Override
     public Expression getExpression() {
         return expr;
     }
@@ -133,21 +112,13 @@ public class MapExpression extends Expression implements IRuleBlock {
         } 
         return type;
     }
-    
-    /**
-     * Returns the body element which determines the result.
-     * 
-     * @return the rule element determining the result
-     */
+
+    @Override
     public IRuleElement determinesResult() {
         return Utils.findLastExpressionStatement(this);
     }
     
-    /**
-     * Returns whether the given separator was a colon.
-     * 
-     * @return <code>true</code> it it was a colon, <code>else</code> if it was an equals character
-     */
+    @Override
     public boolean isColonSeparator() {
         return colon;
     }
@@ -160,6 +131,11 @@ public class MapExpression extends Expression implements IRuleBlock {
     @Override
     public void addBodyElement(int index, IRuleElement elt) {
         body = RuleBlock.addBodyElement(body, index, elt);
+    }
+
+    @Override
+    public String getElementName() {
+        return "map";
     }
 
 }

@@ -75,4 +75,10 @@ public class ExpressionVersionRestrictionValidator
         return null;
     }
 
+    @Override
+    public Object visitWhile(WhileStatement stmt) throws VilException {
+        emit("not supported here", true, VilException.ID_SEMANTIC);
+        return null;
+    }
+
 }

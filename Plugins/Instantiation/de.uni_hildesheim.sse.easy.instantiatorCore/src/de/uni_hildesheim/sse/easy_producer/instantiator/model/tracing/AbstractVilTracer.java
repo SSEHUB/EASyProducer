@@ -6,7 +6,7 @@ import java.util.Map;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.BuildModel;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.BuildlangWriter;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.IBuildlangElement;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.MapExpression;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.IEnumeratingLoop;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.Rule;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.Script;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.RuntimeEnvironment;
@@ -176,17 +176,17 @@ public abstract class AbstractVilTracer
     }
 
     @Override
-    public void visitMap(MapExpression map, RuntimeEnvironment environment) {
+    public void visitLoop(IEnumeratingLoop map, RuntimeEnvironment environment) {
     }
 
     @Override
-    public void visitMapIteratorAssignment(
+    public void visitIteratorAssignment(IEnumeratingLoop loop, 
         de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.VariableDeclaration var,
         Object value) {
     }
 
     @Override
-    public void visitedMap(MapExpression map, RuntimeEnvironment environment) {
+    public void visitedLoop(IEnumeratingLoop loop, RuntimeEnvironment environment) {
     }
 
     @Override
@@ -345,6 +345,14 @@ public abstract class AbstractVilTracer
      */
     public void traceError(String message) {
         write(message);
+    }
+
+    @Override
+    public void visitWhileBody() {
+    }
+
+    @Override
+    public void visitedWhileBody() {
     }
 
 }

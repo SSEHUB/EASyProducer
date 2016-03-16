@@ -140,6 +140,11 @@ public class TemplateLangAdapterFactory extends AdapterFactoryImpl
         return createLoopAdapter();
       }
       @Override
+      public Adapter caseWhile(While object)
+      {
+        return createWhileAdapter();
+      }
+      @Override
       public Adapter casemultiselect(multiselect object)
       {
         return createmultiselectAdapter();
@@ -387,6 +392,21 @@ public class TemplateLangAdapterFactory extends AdapterFactoryImpl
    * @generated
    */
   public Adapter createLoopAdapter()
+  {
+    return null;
+  }
+
+  /**
+   * Creates a new adapter for an object of class '{@link de.uni_hildesheim.sse.vil.templatelang.templateLang.While <em>While</em>}'.
+   * <!-- begin-user-doc -->
+   * This default implementation returns null so that we can easily ignore cases;
+   * it's useful to ignore a case when inheritance will catch all the cases anyway.
+   * <!-- end-user-doc -->
+   * @return the new adapter.
+   * @see de.uni_hildesheim.sse.vil.templatelang.templateLang.While
+   * @generated
+   */
+  public Adapter createWhileAdapter()
   {
     return null;
   }

@@ -318,4 +318,18 @@ class VariableFinder implements IBuildlangVisitor {
         return null; // no variables involved
     }
 
+    @Override
+    public Object visitWhileStatement(WhileStatement stmt) throws VilException {
+        stmt.getCondition().accept(this);
+        visitRuleBlock(stmt);
+        return null;
+    }
+
+    @Override
+    public Object visitForStatement(ForStatement stmt) throws VilException {
+        stmt.getExpression().accept(this);
+        visitRuleBlock(stmt);
+        return null;
+    }
+
 }

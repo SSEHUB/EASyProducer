@@ -3,6 +3,10 @@ package de.uni_hildesheim.sse.vil.expressions.translation;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.EStructuralFeature;
+
+import de.uni_hildesheim.sse.dslCore.translation.IMessageReceiver;
 import de.uni_hildesheim.sse.easy_producer.instantiator.Bundle;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.ExpressionStatement;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VariableDeclaration;
@@ -20,14 +24,11 @@ import de.uni_hildesheim.sse.utils.logger.EASyLoggerFactory;
  * StringResolver to resolve variables and expressions on compiling. Use the StringReplacer if you need to replace
  * expressions or variables on runtime.
  * 
+ * @param <V> the actual IResolvable
  * @author Sass
- * 
- * @param <V>
- *            IResolvable
- *            
  */
 public class StringResolver<I extends VariableDeclaration, R extends Resolver<I>, 
-E extends ExpressionStatement> {
+    E extends ExpressionStatement> implements IMessageReceiver {
 
     private StringBuilder text;
     private ExpressionTranslator<I, R, E> translator;
@@ -306,7 +307,8 @@ E extends ExpressionStatement> {
      */
     public CompositeExpression resolveVariable(String text) {
         CompositeExpression compExpression = null;
-        VariableDeclaration var = (VariableDeclaration) resolver.resolve(text, false);
+        // we are our own message receiver - cause/feature not needed here
+        VariableDeclaration var = (VariableDeclaration) resolver.resolve(text, false, null, null, this);
         VariableExpression varExpr = null;
         if (var != null) {
             varExpr = new VariableExpression(var);
@@ -331,7 +333,7 @@ E extends ExpressionStatement> {
         String pattern2 = "\\$([A-Za-z0-9]+)";
         variableName = variableName.replaceAll(pattern2, "$1");
         pos = replace(text, curStart - 1, pos, variableName);
-        VariableDeclaration var = (VariableDeclaration) resolver.resolve(variableName, false);
+        VariableDeclaration var = (VariableDeclaration) resolver.resolve(variableName, false, null, null, this);
         VariableExpression varExpr = null;
         if (var != null) {
             varExpr = new VariableExpression(var);
@@ -365,6 +367,21 @@ E extends ExpressionStatement> {
         } // else end is ok as same length
         text.replace(start, end, value);
         return result;
+    }
+
+    @Override
+    public void error(String message, EObject cause, EStructuralFeature causeFeature, int code) {
+        // we just collect warnings here
+    }
+
+    @Override
+    public void warning(String message, EObject cause, EStructuralFeature causeFeature, int code) {
+        if (null != warnings) {
+            if (warnings.length() > 0) {
+                warnings.append(", ");
+            }
+            warnings.append(message);
+        }
     }
 
 }

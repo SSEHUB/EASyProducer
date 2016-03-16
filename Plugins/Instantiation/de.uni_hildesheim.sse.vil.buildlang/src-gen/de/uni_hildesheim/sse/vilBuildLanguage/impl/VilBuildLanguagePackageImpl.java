@@ -6,14 +6,15 @@ import de.uni_hildesheim.sse.vil.expressions.expressionDsl.ExpressionDslPackage;
 
 import de.uni_hildesheim.sse.vilBuildLanguage.Alternative;
 import de.uni_hildesheim.sse.vilBuildLanguage.ExpressionStatement;
+import de.uni_hildesheim.sse.vilBuildLanguage.For;
 import de.uni_hildesheim.sse.vilBuildLanguage.ImplementationUnit;
 import de.uni_hildesheim.sse.vilBuildLanguage.Instantiate;
 import de.uni_hildesheim.sse.vilBuildLanguage.Join;
 import de.uni_hildesheim.sse.vilBuildLanguage.JoinVariable;
 import de.uni_hildesheim.sse.vilBuildLanguage.LanguageUnit;
 import de.uni_hildesheim.sse.vilBuildLanguage.LoadProperties;
+import de.uni_hildesheim.sse.vilBuildLanguage.LoopVariable;
 import de.uni_hildesheim.sse.vilBuildLanguage.Map;
-import de.uni_hildesheim.sse.vilBuildLanguage.MapVariable;
 import de.uni_hildesheim.sse.vilBuildLanguage.PrimaryExpression;
 import de.uni_hildesheim.sse.vilBuildLanguage.Require;
 import de.uni_hildesheim.sse.vilBuildLanguage.RuleConditions;
@@ -27,6 +28,7 @@ import de.uni_hildesheim.sse.vilBuildLanguage.StatementOrBlock;
 import de.uni_hildesheim.sse.vilBuildLanguage.SystemExecution;
 import de.uni_hildesheim.sse.vilBuildLanguage.VilBuildLanguageFactory;
 import de.uni_hildesheim.sse.vilBuildLanguage.VilBuildLanguagePackage;
+import de.uni_hildesheim.sse.vilBuildLanguage.While;
 
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
@@ -146,7 +148,7 @@ public class VilBuildLanguagePackageImpl extends EPackageImpl implements VilBuil
    * <!-- end-user-doc -->
    * @generated
    */
-  private EClass mapVariableEClass = null;
+  private EClass loopVariableEClass = null;
 
   /**
    * <!-- begin-user-doc -->
@@ -154,6 +156,20 @@ public class VilBuildLanguagePackageImpl extends EPackageImpl implements VilBuil
    * @generated
    */
   private EClass mapEClass = null;
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  private EClass forEClass = null;
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  private EClass whileEClass = null;
 
   /**
    * <!-- begin-user-doc -->
@@ -591,6 +607,26 @@ public class VilBuildLanguagePackageImpl extends EPackageImpl implements VilBuil
    * <!-- end-user-doc -->
    * @generated
    */
+  public EReference getRuleElement_While()
+  {
+    return (EReference)ruleElementEClass.getEStructuralFeatures().get(2);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EReference getRuleElement_For()
+  {
+    return (EReference)ruleElementEClass.getEStructuralFeatures().get(3);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
   public EClass getRuleModifier()
   {
     return ruleModifierEClass;
@@ -731,9 +767,9 @@ public class VilBuildLanguagePackageImpl extends EPackageImpl implements VilBuil
    * <!-- end-user-doc -->
    * @generated
    */
-  public EClass getMapVariable()
+  public EClass getLoopVariable()
   {
-    return mapVariableEClass;
+    return loopVariableEClass;
   }
 
   /**
@@ -741,9 +777,9 @@ public class VilBuildLanguagePackageImpl extends EPackageImpl implements VilBuil
    * <!-- end-user-doc -->
    * @generated
    */
-  public EReference getMapVariable_Type()
+  public EReference getLoopVariable_Type()
   {
-    return (EReference)mapVariableEClass.getEStructuralFeatures().get(0);
+    return (EReference)loopVariableEClass.getEStructuralFeatures().get(0);
   }
 
   /**
@@ -751,9 +787,9 @@ public class VilBuildLanguagePackageImpl extends EPackageImpl implements VilBuil
    * <!-- end-user-doc -->
    * @generated
    */
-  public EAttribute getMapVariable_Var()
+  public EAttribute getLoopVariable_Var()
   {
-    return (EAttribute)mapVariableEClass.getEStructuralFeatures().get(1);
+    return (EAttribute)loopVariableEClass.getEStructuralFeatures().get(1);
   }
 
   /**
@@ -804,6 +840,86 @@ public class VilBuildLanguagePackageImpl extends EPackageImpl implements VilBuil
   public EReference getMap_Block()
   {
     return (EReference)mapEClass.getEStructuralFeatures().get(3);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EClass getFor()
+  {
+    return forEClass;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EReference getFor_Var()
+  {
+    return (EReference)forEClass.getEStructuralFeatures().get(0);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EAttribute getFor_Separator()
+  {
+    return (EAttribute)forEClass.getEStructuralFeatures().get(1);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EReference getFor_Expr()
+  {
+    return (EReference)forEClass.getEStructuralFeatures().get(2);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EReference getFor_Block()
+  {
+    return (EReference)forEClass.getEStructuralFeatures().get(3);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EClass getWhile()
+  {
+    return whileEClass;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EReference getWhile_Expr()
+  {
+    return (EReference)whileEClass.getEStructuralFeatures().get(0);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EReference getWhile_Block()
+  {
+    return (EReference)whileEClass.getEStructuralFeatures().get(1);
   }
 
   /**
@@ -1058,6 +1174,8 @@ public class VilBuildLanguagePackageImpl extends EPackageImpl implements VilBuil
     ruleElementEClass = createEClass(RULE_ELEMENT);
     createEReference(ruleElementEClass, RULE_ELEMENT__VAR_DECL);
     createEReference(ruleElementEClass, RULE_ELEMENT__EXPR_STMT);
+    createEReference(ruleElementEClass, RULE_ELEMENT__WHILE);
+    createEReference(ruleElementEClass, RULE_ELEMENT__FOR);
 
     ruleModifierEClass = createEClass(RULE_MODIFIER);
     createEAttribute(ruleModifierEClass, RULE_MODIFIER__PROTECTED);
@@ -1077,15 +1195,25 @@ public class VilBuildLanguagePackageImpl extends EPackageImpl implements VilBuil
     createEReference(instantiateEClass, INSTANTIATE__PARAM);
     createEReference(instantiateEClass, INSTANTIATE__VERSION_SPEC);
 
-    mapVariableEClass = createEClass(MAP_VARIABLE);
-    createEReference(mapVariableEClass, MAP_VARIABLE__TYPE);
-    createEAttribute(mapVariableEClass, MAP_VARIABLE__VAR);
+    loopVariableEClass = createEClass(LOOP_VARIABLE);
+    createEReference(loopVariableEClass, LOOP_VARIABLE__TYPE);
+    createEAttribute(loopVariableEClass, LOOP_VARIABLE__VAR);
 
     mapEClass = createEClass(MAP);
     createEReference(mapEClass, MAP__VAR);
     createEAttribute(mapEClass, MAP__SEPARATOR);
     createEReference(mapEClass, MAP__EXPR);
     createEReference(mapEClass, MAP__BLOCK);
+
+    forEClass = createEClass(FOR);
+    createEReference(forEClass, FOR__VAR);
+    createEAttribute(forEClass, FOR__SEPARATOR);
+    createEReference(forEClass, FOR__EXPR);
+    createEReference(forEClass, FOR__BLOCK);
+
+    whileEClass = createEClass(WHILE);
+    createEReference(whileEClass, WHILE__EXPR);
+    createEReference(whileEClass, WHILE__BLOCK);
 
     alternativeEClass = createEClass(ALTERNATIVE);
     createEReference(alternativeEClass, ALTERNATIVE__EXPR);
@@ -1190,6 +1318,8 @@ public class VilBuildLanguagePackageImpl extends EPackageImpl implements VilBuil
     initEClass(ruleElementEClass, RuleElement.class, "RuleElement", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
     initEReference(getRuleElement_VarDecl(), theExpressionDslPackage.getVariableDeclaration(), null, "varDecl", null, 0, 1, RuleElement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEReference(getRuleElement_ExprStmt(), this.getExpressionStatement(), null, "exprStmt", null, 0, 1, RuleElement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getRuleElement_While(), this.getWhile(), null, "while", null, 0, 1, RuleElement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getRuleElement_For(), this.getFor(), null, "for", null, 0, 1, RuleElement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     initEClass(ruleModifierEClass, RuleModifier.class, "RuleModifier", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
     initEAttribute(getRuleModifier_Protected(), ecorePackage.getEString(), "protected", null, 0, 1, RuleModifier.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -1209,15 +1339,25 @@ public class VilBuildLanguagePackageImpl extends EPackageImpl implements VilBuil
     initEReference(getInstantiate_Param(), theExpressionDslPackage.getArgumentList(), null, "param", null, 0, 1, Instantiate.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEReference(getInstantiate_VersionSpec(), theExpressionDslPackage.getVersionSpec(), null, "versionSpec", null, 0, 1, Instantiate.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
-    initEClass(mapVariableEClass, MapVariable.class, "MapVariable", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-    initEReference(getMapVariable_Type(), theExpressionDslPackage.getType(), null, "type", null, 0, 1, MapVariable.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEAttribute(getMapVariable_Var(), ecorePackage.getEString(), "var", null, 0, 1, MapVariable.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEClass(loopVariableEClass, LoopVariable.class, "LoopVariable", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+    initEReference(getLoopVariable_Type(), theExpressionDslPackage.getType(), null, "type", null, 0, 1, LoopVariable.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEAttribute(getLoopVariable_Var(), ecorePackage.getEString(), "var", null, 0, 1, LoopVariable.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     initEClass(mapEClass, Map.class, "Map", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-    initEReference(getMap_Var(), this.getMapVariable(), null, "var", null, 0, -1, Map.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getMap_Var(), this.getLoopVariable(), null, "var", null, 0, -1, Map.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEAttribute(getMap_Separator(), ecorePackage.getEString(), "separator", null, 0, 1, Map.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEReference(getMap_Expr(), theExpressionDslPackage.getExpression(), null, "expr", null, 0, 1, Map.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEReference(getMap_Block(), this.getRuleElementBlock(), null, "block", null, 0, 1, Map.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+    initEClass(forEClass, For.class, "For", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+    initEReference(getFor_Var(), this.getLoopVariable(), null, "var", null, 0, -1, For.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEAttribute(getFor_Separator(), ecorePackage.getEString(), "separator", null, 0, 1, For.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getFor_Expr(), theExpressionDslPackage.getExpression(), null, "expr", null, 0, 1, For.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getFor_Block(), this.getRuleElementBlock(), null, "block", null, 0, 1, For.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+    initEClass(whileEClass, While.class, "While", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+    initEReference(getWhile_Expr(), theExpressionDslPackage.getExpression(), null, "expr", null, 0, 1, While.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getWhile_Block(), this.getRuleElementBlock(), null, "block", null, 0, 1, While.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     initEClass(alternativeEClass, Alternative.class, "Alternative", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
     initEReference(getAlternative_Expr(), theExpressionDslPackage.getExpression(), null, "expr", null, 0, 1, Alternative.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);

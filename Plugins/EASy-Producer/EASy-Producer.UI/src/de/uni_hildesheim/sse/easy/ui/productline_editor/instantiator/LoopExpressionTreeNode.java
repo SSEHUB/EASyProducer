@@ -15,15 +15,15 @@
  */
 package de.uni_hildesheim.sse.easy.ui.productline_editor.instantiator;
 
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.MapExpression;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.IEnumeratingLoop;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.VariableDeclaration;
 
 /**
- * Implements an element node for map expressions.
+ * Implements an element node for loop expressions.
  * 
  * @author Holger Eichelberger
  */
-class MapExpressionTreeNode extends ElementTreeNode<MapExpression> {
+class LoopExpressionTreeNode extends ElementTreeNode<IEnumeratingLoop> {
     
     /**
      * Implements an element tree node.
@@ -31,14 +31,15 @@ class MapExpressionTreeNode extends ElementTreeNode<MapExpression> {
      * @param parent the parent node
      * @param elt the VIL map expression
      */
-    MapExpressionTreeNode(TreeNode parent, MapExpression elt) {
+    LoopExpressionTreeNode(TreeNode parent, IEnumeratingLoop elt) {
         super(parent, elt);
     }
     
     @Override
     public String getText() {
-        MapExpression ex = getElement();
-        String result = "map(";
+        IEnumeratingLoop ex = getElement();
+        String result = ex.getElementName();
+        result += "(";
         for (int v = 0; v < ex.getVariablesCount(); v++) {
             if (v > 0) {
                 result += ", ";
@@ -46,6 +47,8 @@ class MapExpressionTreeNode extends ElementTreeNode<MapExpression> {
             VariableDeclaration decl = ex.getVariable(v);
             result += decl.getType().getVilName() + " " + decl.getName();
         }
+        result += ":";
+        result += expressionToString(ex.getExpression());
         result += ")";
         return result;
     }

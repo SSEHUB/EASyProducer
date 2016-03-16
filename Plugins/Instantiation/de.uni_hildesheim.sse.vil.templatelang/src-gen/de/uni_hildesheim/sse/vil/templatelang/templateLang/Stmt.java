@@ -22,6 +22,7 @@ import org.eclipse.emf.ecore.EObject;
  *   <li>{@link de.uni_hildesheim.sse.vil.templatelang.templateLang.Stmt#getBlock <em>Block</em>}</li>
  *   <li>{@link de.uni_hildesheim.sse.vil.templatelang.templateLang.Stmt#getMulti <em>Multi</em>}</li>
  *   <li>{@link de.uni_hildesheim.sse.vil.templatelang.templateLang.Stmt#getLoop <em>Loop</em>}</li>
+ *   <li>{@link de.uni_hildesheim.sse.vil.templatelang.templateLang.Stmt#getWhile <em>While</em>}</li>
  *   <li>{@link de.uni_hildesheim.sse.vil.templatelang.templateLang.Stmt#getExprStmt <em>Expr Stmt</em>}</li>
  *   <li>{@link de.uni_hildesheim.sse.vil.templatelang.templateLang.Stmt#getCtn <em>Ctn</em>}</li>
  * </ul>
@@ -187,6 +188,32 @@ public interface Stmt extends EObject
    * @generated
    */
   void setLoop(Loop value);
+
+  /**
+   * Returns the value of the '<em><b>While</b></em>' containment reference.
+   * <!-- begin-user-doc -->
+   * <p>
+   * If the meaning of the '<em>While</em>' containment reference isn't clear,
+   * there really should be more of a description here...
+   * </p>
+   * <!-- end-user-doc -->
+   * @return the value of the '<em>While</em>' containment reference.
+   * @see #setWhile(While)
+   * @see de.uni_hildesheim.sse.vil.templatelang.templateLang.TemplateLangPackage#getStmt_While()
+   * @model containment="true"
+   * @generated
+   */
+  While getWhile();
+
+  /**
+   * Sets the value of the '{@link de.uni_hildesheim.sse.vil.templatelang.templateLang.Stmt#getWhile <em>While</em>}' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @param value the new value of the '<em>While</em>' containment reference.
+   * @see #getWhile()
+   * @generated
+   */
+  void setWhile(While value);
 
   /**
    * Returns the value of the '<em><b>Expr Stmt</b></em>' containment reference.

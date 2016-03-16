@@ -167,7 +167,8 @@ public abstract class ExpressionTranslator<I extends VariableDeclaration, R exte
             throw new TranslatorException(e, expr, ExpressionDslPackage.Literals.EXPRESSION_STATEMENT__EXPR);
         }
         if (null != expr.getVar()) {
-            I decl = resolver.resolve(expr.getVar(), false);
+            I decl = resolver.resolve(expr.getVar(), false, expr, 
+                ExpressionDslPackage.Literals.EXPRESSION_STATEMENT__VAR, this);
             if (null == decl) {
                 throw new TranslatorException("cannot resolve variable '" + expr.getVar() + "'", expr, 
                     ExpressionDslPackage.Literals.EXPRESSION_STATEMENT__VAR, ErrorCodes.UNKNOWN_ELEMENT);
@@ -536,7 +537,8 @@ public abstract class ExpressionTranslator<I extends VariableDeclaration, R exte
                         if (0 == count && null != iterators) { // just on the first "parameter"
                             if (null != paramName) {
                                 // if "named", turn into assignment -> grammar
-                                I var = resolver.resolve(paramName, false);
+                                I var = resolver.resolve(paramName, false, param, 
+                                    ExpressionDslPackage.Literals.PARAMETER__NAME, this);
                                 if (null == var) {
                                     throw new TranslatorException("Cannot resolve '" + paramName + "'", param, 
                                         ExpressionDslPackage.Literals.PARAMETER__NAME, ErrorCodes.CANNOT_RESOLVE_ITER);
@@ -808,7 +810,7 @@ public abstract class ExpressionTranslator<I extends VariableDeclaration, R exte
             if (Version.isVersion(name)) { // parser mismatch fixed here
                 result = convertToVersion(name, arg, resolver);
             } else {
-                result = processQualifiedValue(name, arg, resolver);
+                result = processQualifiedValue(name, arg, ExpressionDslPackage.Literals.CONSTANT__QVALUE, resolver);
             }
         } else if (null != arg.getBValue()) {
             result = createConstant(TypeRegistry.booleanType(), arg.getBValue(), arg, 
@@ -872,19 +874,20 @@ public abstract class ExpressionTranslator<I extends VariableDeclaration, R exte
      * Processes a qualified value and creates variable expressions.
      * @param name the qualified name
      * @param arg the constant to be processed
+     * @param feature the feature corresponding to <code>arg</code>
      * @param resolver a resolver instance for resolving variables etc.
      * @return the resulting expression node
      * @throws TranslatorException in case that the translation fails for some reason, in particular if 
      *     ITER cannot be resolved
      */
-    protected Expression processQualifiedValue(String name, Constant arg, R resolver) throws TranslatorException {
+    protected Expression processQualifiedValue(String name, Constant arg, EStructuralFeature feature, R resolver) throws TranslatorException {
         Expression result = null;
         int pos = name.indexOf('.');
         IResolvable res = null;
         if (pos > 0 && pos < name.length()) { // grammar: there may by at maximum one "." in a qualified name
             String head = name.substring(0, pos);
             String tail = name.substring(pos + 1);
-            res = resolver.resolve(head, false);
+            res = resolver.resolve(head, false, arg, feature, this);
             if (res instanceof VariableDeclaration) {
                 VariableDeclaration var = (VariableDeclaration) res;
                 FieldAccessExpression fae = null;
@@ -915,7 +918,7 @@ public abstract class ExpressionTranslator<I extends VariableDeclaration, R exte
             }
         } 
         if (null == res && null == result) {
-            res = resolver.resolve(name, false);
+            res = resolver.resolve(name, false, arg, feature, this);
         }
         if (null == res && null == result) {
             if ("ITER".equals(name)) {

@@ -1,0 +1,10 @@
+vilScript whileLoop (Project source, Configuration config) {
+
+    main(Project source, Configuration config) = : {
+        Integer i = 0;
+        while(i < 10) {
+            i = i + 1;
+        };
+    }
+
+}

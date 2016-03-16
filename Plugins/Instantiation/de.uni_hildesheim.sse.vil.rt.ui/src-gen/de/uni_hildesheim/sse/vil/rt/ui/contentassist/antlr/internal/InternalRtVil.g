@@ -677,25 +677,25 @@ finally {
 
 
 
-// Entry rule entryRuleMapVariable
-entryRuleMapVariable 
+// Entry rule entryRuleLoopVariable
+entryRuleLoopVariable 
 :
-{ before(grammarAccess.getMapVariableRule()); }
-	 ruleMapVariable
-{ after(grammarAccess.getMapVariableRule()); } 
+{ before(grammarAccess.getLoopVariableRule()); }
+	 ruleLoopVariable
+{ after(grammarAccess.getLoopVariableRule()); } 
 	 EOF 
 ;
 
-// Rule MapVariable
-ruleMapVariable
+// Rule LoopVariable
+ruleLoopVariable
     @init {
 		int stackSize = keepStackSize();
     }
 	:
 (
-{ before(grammarAccess.getMapVariableAccess().getGroup()); }
-(rule__MapVariable__Group__0)
-{ after(grammarAccess.getMapVariableAccess().getGroup()); }
+{ before(grammarAccess.getLoopVariableAccess().getGroup()); }
+(rule__LoopVariable__Group__0)
+{ after(grammarAccess.getLoopVariableAccess().getGroup()); }
 )
 
 ;
@@ -730,6 +730,10 @@ ruleMap
 finally {
 	restoreStackSize(stackSize);
 }
+
+
+
+
 
 
 
@@ -2462,6 +2466,7 @@ rule__Map__SeparatorAlternatives_4_0
 finally {
 	restoreStackSize(stackSize);
 }
+
 
 rule__StatementOrBlock__Alternatives
     @init {
@@ -7396,27 +7401,27 @@ finally {
 
 
 
-rule__MapVariable__Group__0
+rule__LoopVariable__Group__0
     @init {
 		int stackSize = keepStackSize();
     }
 :
-	rule__MapVariable__Group__0__Impl
-	rule__MapVariable__Group__1
+	rule__LoopVariable__Group__0__Impl
+	rule__LoopVariable__Group__1
 ;
 finally {
 	restoreStackSize(stackSize);
 }
 
-rule__MapVariable__Group__0__Impl
+rule__LoopVariable__Group__0__Impl
     @init {
 		int stackSize = keepStackSize();
     }
 :
 (
-{ before(grammarAccess.getMapVariableAccess().getTypeAssignment_0()); }
-(rule__MapVariable__TypeAssignment_0)?
-{ after(grammarAccess.getMapVariableAccess().getTypeAssignment_0()); }
+{ before(grammarAccess.getLoopVariableAccess().getTypeAssignment_0()); }
+(rule__LoopVariable__TypeAssignment_0)?
+{ after(grammarAccess.getLoopVariableAccess().getTypeAssignment_0()); }
 )
 
 ;
@@ -7425,26 +7430,26 @@ finally {
 }
 
 
-rule__MapVariable__Group__1
+rule__LoopVariable__Group__1
     @init {
 		int stackSize = keepStackSize();
     }
 :
-	rule__MapVariable__Group__1__Impl
+	rule__LoopVariable__Group__1__Impl
 ;
 finally {
 	restoreStackSize(stackSize);
 }
 
-rule__MapVariable__Group__1__Impl
+rule__LoopVariable__Group__1__Impl
     @init {
 		int stackSize = keepStackSize();
     }
 :
 (
-{ before(grammarAccess.getMapVariableAccess().getVarAssignment_1()); }
-(rule__MapVariable__VarAssignment_1)
-{ after(grammarAccess.getMapVariableAccess().getVarAssignment_1()); }
+{ before(grammarAccess.getLoopVariableAccess().getVarAssignment_1()); }
+(rule__LoopVariable__VarAssignment_1)
+{ after(grammarAccess.getLoopVariableAccess().getVarAssignment_1()); }
 )
 
 ;
@@ -7767,6 +7772,9 @@ rule__Map__Group_3__1__Impl
 finally {
 	restoreStackSize(stackSize);
 }
+
+
+
 
 
 
@@ -13997,14 +14005,14 @@ finally {
 	restoreStackSize(stackSize);
 }
 
-rule__MapVariable__TypeAssignment_0
+rule__LoopVariable__TypeAssignment_0
     @init {
 		int stackSize = keepStackSize();
     }
 :
 (
-{ before(grammarAccess.getMapVariableAccess().getTypeTypeParserRuleCall_0_0()); }
-	ruleType{ after(grammarAccess.getMapVariableAccess().getTypeTypeParserRuleCall_0_0()); }
+{ before(grammarAccess.getLoopVariableAccess().getTypeTypeParserRuleCall_0_0()); }
+	ruleType{ after(grammarAccess.getLoopVariableAccess().getTypeTypeParserRuleCall_0_0()); }
 )
 
 ;
@@ -14012,14 +14020,14 @@ finally {
 	restoreStackSize(stackSize);
 }
 
-rule__MapVariable__VarAssignment_1
+rule__LoopVariable__VarAssignment_1
     @init {
 		int stackSize = keepStackSize();
     }
 :
 (
-{ before(grammarAccess.getMapVariableAccess().getVarIdentifierParserRuleCall_1_0()); }
-	ruleIdentifier{ after(grammarAccess.getMapVariableAccess().getVarIdentifierParserRuleCall_1_0()); }
+{ before(grammarAccess.getLoopVariableAccess().getVarIdentifierParserRuleCall_1_0()); }
+	ruleIdentifier{ after(grammarAccess.getLoopVariableAccess().getVarIdentifierParserRuleCall_1_0()); }
 )
 
 ;
@@ -14033,8 +14041,8 @@ rule__Map__VarAssignment_2
     }
 :
 (
-{ before(grammarAccess.getMapAccess().getVarMapVariableParserRuleCall_2_0()); }
-	ruleMapVariable{ after(grammarAccess.getMapAccess().getVarMapVariableParserRuleCall_2_0()); }
+{ before(grammarAccess.getMapAccess().getVarLoopVariableParserRuleCall_2_0()); }
+	ruleLoopVariable{ after(grammarAccess.getMapAccess().getVarLoopVariableParserRuleCall_2_0()); }
 )
 
 ;
@@ -14048,8 +14056,8 @@ rule__Map__VarAssignment_3_1
     }
 :
 (
-{ before(grammarAccess.getMapAccess().getVarMapVariableParserRuleCall_3_1_0()); }
-	ruleMapVariable{ after(grammarAccess.getMapAccess().getVarMapVariableParserRuleCall_3_1_0()); }
+{ before(grammarAccess.getMapAccess().getVarLoopVariableParserRuleCall_3_1_0()); }
+	ruleLoopVariable{ after(grammarAccess.getMapAccess().getVarLoopVariableParserRuleCall_3_1_0()); }
 )
 
 ;
@@ -14102,6 +14110,13 @@ rule__Map__BlockAssignment_7
 finally {
 	restoreStackSize(stackSize);
 }
+
+
+
+
+
+
+
 
 rule__Alternative__ExprAssignment_2
     @init {

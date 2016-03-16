@@ -44,26 +44,27 @@ public interface ITracer extends de.uni_hildesheim.sse.easy_producer.instantiato
     /**
      * Is called when visiting a map starts.
      * 
-     * @param map the map being visited
+     * @param loop the loop being visited
      * @param environment the runtime environment
      */
-    public void visitMap(MapExpression map, RuntimeEnvironment environment);
+    public void visitLoop(IEnumeratingLoop loop, RuntimeEnvironment environment);
 
     /**
-     * Is called when visiting a map starts.
+     * Is called when a loop iterator variable is assigned.
      * 
-     * @param var the map iterator variable
+     * @param loop the loop
+     * @param var the iterator variable
      * @param value the actual value
      */
-    public void visitMapIteratorAssignment(VariableDeclaration var, Object value);
+    public void visitIteratorAssignment(IEnumeratingLoop loop, VariableDeclaration var, Object value);
     
     /**
      * Is called when visiting a map ends.
      * 
-     * @param map the map being visited
+     * @param loop the loop being visited
      * @param environment the runtime environment
      */
-    public void visitedMap(MapExpression map, RuntimeEnvironment environment);
+    public void visitedLoop(IEnumeratingLoop loop, RuntimeEnvironment environment);
 
     /**
      * Allows a tracer to change the sequence of processing a map collection.
@@ -126,4 +127,15 @@ public interface ITracer extends de.uni_hildesheim.sse.easy_producer.instantiato
      */
     public void reset();
 
+    /**
+     * Is called when visiting a while body starts.
+     */
+    public void visitWhileBody();
+    
+
+    /**
+     * Is called when visiting a while body ends.
+     */
+    public void visitedWhileBody();
+    
 }

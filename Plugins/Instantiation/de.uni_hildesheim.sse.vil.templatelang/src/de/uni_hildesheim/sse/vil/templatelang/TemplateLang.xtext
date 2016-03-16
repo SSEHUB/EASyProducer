@@ -55,6 +55,7 @@ Stmt:
   | block = StmtBlock
   | multi=multiselect
   | loop=Loop 
+  | while=While
   | exprStmt=ExpressionStatement
   | ctn=Content
   ;
@@ -84,6 +85,10 @@ Loop:
     ')' stmt=Stmt
     ;
 
+While:
+    'while' '(' expr=Expression ')' 
+    stmt=Stmt
+;
       
 multiselect: 
     gen=genericMultiselect 

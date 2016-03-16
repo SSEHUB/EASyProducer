@@ -20,6 +20,8 @@ import de.uni_hildesheim.sse.easy_producer.instantiator.model.artifactModel.Path
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.artifactModel.VtlFileArtifact;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.BuildModel;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.Script;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.ITerminatable;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.ITerminator;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilException;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.execution.TracerFactory;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.EvaluationVisitor;
@@ -483,6 +485,8 @@ public class VilTemplateProcessor implements IVilType {
     @OperationMeta(returnGenerics = IArtifact.class)
     private static void process(Template template, Configuration config, 
         IArtifact target, Map<String, Object> other, List<IArtifact> result) throws VilException {
+        ITerminator terminator = null;
+        TemplateLangExecution exec = null;
         // executing the model
         try {
             StringWriter out = new StringWriter();
@@ -496,7 +500,14 @@ public class VilTemplateProcessor implements IVilType {
             localParam.put(TemplateLangExecution.PARAM_CONFIG_SURE, config);
             localParam.put(TemplateLangExecution.PARAM_TARGET_SURE, target);
             ITracer tracer = TracerFactory.createTemplateLanguageTracer();
-            TemplateLangExecution exec = new TemplateLangExecution(tracer, out, localParam);
+            exec = new TemplateLangExecution(tracer, out, localParam);
+            if (null != other) {
+                Object tmp = other.get(Constants.IMPLICIT_TERMINATOR_NAME);
+                if (tmp instanceof ITerminator) {
+                    terminator = (ITerminator) tmp;
+                    terminator.register(exec);
+                }
+            }
             template.accept(exec);
             String tmp = out.toString();
             if (tmp.length() > 0) {
@@ -504,10 +515,23 @@ public class VilTemplateProcessor implements IVilType {
                 target.store(); // just to be sure for the moment
             }
         } catch (VilException e) {
+            unregisterTerminatable(terminator, exec);
             EASyLoggerFactory.INSTANCE.getLogger(VilTemplateProcessor.class, Bundle.ID).exception(e);
             throw new VilException(e.getMessage(), VilException.ID_WHILE_INSTANTIATION);
         }
         result.add(target);
+    }
+
+    /**
+     * Clears the terminator from a potential execution instance.
+     * 
+     * @param terminator the terminator (may be <b>null</b>)
+     * @param terminatable the terminatable (may be <b>null</b>)
+     */
+    private static void unregisterTerminatable(ITerminator terminator, ITerminatable terminatable) {
+        if (null != terminator && null != terminatable) {
+            terminator.unregister(terminatable);
+        }
     }
 
     /**

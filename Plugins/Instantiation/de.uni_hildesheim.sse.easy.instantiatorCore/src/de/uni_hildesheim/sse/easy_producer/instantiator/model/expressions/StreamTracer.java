@@ -159,8 +159,7 @@ public abstract class StreamTracer extends AbstractWriter implements ITracer {
         for (Map.Entry<?, ?> ent : inMap.entrySet()) {
             boolean skip = false;
             if (ent.getKey() instanceof String) {
-                if (Constants.IMPLICIT_PARENT_PARAMETER_NAME.equals(ent.getKey()) 
-                    || Constants.IMPLICIT_PATHS_PARAMETER_NAME.equals(ent.getKey())) {
+                if (Constants.IMPLICIT_PARAMETER.contains(ent.getKey())) {
                     skip = true;
                 }
             } 

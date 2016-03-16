@@ -5,8 +5,10 @@ package de.uni_hildesheim.sse.vilBuildLanguage.impl;
 import de.uni_hildesheim.sse.vil.expressions.expressionDsl.VariableDeclaration;
 
 import de.uni_hildesheim.sse.vilBuildLanguage.ExpressionStatement;
+import de.uni_hildesheim.sse.vilBuildLanguage.For;
 import de.uni_hildesheim.sse.vilBuildLanguage.RuleElement;
 import de.uni_hildesheim.sse.vilBuildLanguage.VilBuildLanguagePackage;
+import de.uni_hildesheim.sse.vilBuildLanguage.While;
 
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.NotificationChain;
@@ -27,6 +29,8 @@ import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
  * <ul>
  *   <li>{@link de.uni_hildesheim.sse.vilBuildLanguage.impl.RuleElementImpl#getVarDecl <em>Var Decl</em>}</li>
  *   <li>{@link de.uni_hildesheim.sse.vilBuildLanguage.impl.RuleElementImpl#getExprStmt <em>Expr Stmt</em>}</li>
+ *   <li>{@link de.uni_hildesheim.sse.vilBuildLanguage.impl.RuleElementImpl#getWhile <em>While</em>}</li>
+ *   <li>{@link de.uni_hildesheim.sse.vilBuildLanguage.impl.RuleElementImpl#getFor <em>For</em>}</li>
  * </ul>
  *
  * @generated
@@ -52,6 +56,26 @@ public class RuleElementImpl extends MinimalEObjectImpl.Container implements Rul
    * @ordered
    */
   protected ExpressionStatement exprStmt;
+
+  /**
+   * The cached value of the '{@link #getWhile() <em>While</em>}' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #getWhile()
+   * @generated
+   * @ordered
+   */
+  protected While while_;
+
+  /**
+   * The cached value of the '{@link #getFor() <em>For</em>}' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #getFor()
+   * @generated
+   * @ordered
+   */
+  protected For for_;
 
   /**
    * <!-- begin-user-doc -->
@@ -175,6 +199,102 @@ public class RuleElementImpl extends MinimalEObjectImpl.Container implements Rul
    * <!-- end-user-doc -->
    * @generated
    */
+  public While getWhile()
+  {
+    return while_;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public NotificationChain basicSetWhile(While newWhile, NotificationChain msgs)
+  {
+    While oldWhile = while_;
+    while_ = newWhile;
+    if (eNotificationRequired())
+    {
+      ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, VilBuildLanguagePackage.RULE_ELEMENT__WHILE, oldWhile, newWhile);
+      if (msgs == null) msgs = notification; else msgs.add(notification);
+    }
+    return msgs;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public void setWhile(While newWhile)
+  {
+    if (newWhile != while_)
+    {
+      NotificationChain msgs = null;
+      if (while_ != null)
+        msgs = ((InternalEObject)while_).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - VilBuildLanguagePackage.RULE_ELEMENT__WHILE, null, msgs);
+      if (newWhile != null)
+        msgs = ((InternalEObject)newWhile).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - VilBuildLanguagePackage.RULE_ELEMENT__WHILE, null, msgs);
+      msgs = basicSetWhile(newWhile, msgs);
+      if (msgs != null) msgs.dispatch();
+    }
+    else if (eNotificationRequired())
+      eNotify(new ENotificationImpl(this, Notification.SET, VilBuildLanguagePackage.RULE_ELEMENT__WHILE, newWhile, newWhile));
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public For getFor()
+  {
+    return for_;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public NotificationChain basicSetFor(For newFor, NotificationChain msgs)
+  {
+    For oldFor = for_;
+    for_ = newFor;
+    if (eNotificationRequired())
+    {
+      ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, VilBuildLanguagePackage.RULE_ELEMENT__FOR, oldFor, newFor);
+      if (msgs == null) msgs = notification; else msgs.add(notification);
+    }
+    return msgs;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public void setFor(For newFor)
+  {
+    if (newFor != for_)
+    {
+      NotificationChain msgs = null;
+      if (for_ != null)
+        msgs = ((InternalEObject)for_).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - VilBuildLanguagePackage.RULE_ELEMENT__FOR, null, msgs);
+      if (newFor != null)
+        msgs = ((InternalEObject)newFor).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - VilBuildLanguagePackage.RULE_ELEMENT__FOR, null, msgs);
+      msgs = basicSetFor(newFor, msgs);
+      if (msgs != null) msgs.dispatch();
+    }
+    else if (eNotificationRequired())
+      eNotify(new ENotificationImpl(this, Notification.SET, VilBuildLanguagePackage.RULE_ELEMENT__FOR, newFor, newFor));
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
   @Override
   public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs)
   {
@@ -184,6 +304,10 @@ public class RuleElementImpl extends MinimalEObjectImpl.Container implements Rul
         return basicSetVarDecl(null, msgs);
       case VilBuildLanguagePackage.RULE_ELEMENT__EXPR_STMT:
         return basicSetExprStmt(null, msgs);
+      case VilBuildLanguagePackage.RULE_ELEMENT__WHILE:
+        return basicSetWhile(null, msgs);
+      case VilBuildLanguagePackage.RULE_ELEMENT__FOR:
+        return basicSetFor(null, msgs);
     }
     return super.eInverseRemove(otherEnd, featureID, msgs);
   }
@@ -202,6 +326,10 @@ public class RuleElementImpl extends MinimalEObjectImpl.Container implements Rul
         return getVarDecl();
       case VilBuildLanguagePackage.RULE_ELEMENT__EXPR_STMT:
         return getExprStmt();
+      case VilBuildLanguagePackage.RULE_ELEMENT__WHILE:
+        return getWhile();
+      case VilBuildLanguagePackage.RULE_ELEMENT__FOR:
+        return getFor();
     }
     return super.eGet(featureID, resolve, coreType);
   }
@@ -221,6 +349,12 @@ public class RuleElementImpl extends MinimalEObjectImpl.Container implements Rul
         return;
       case VilBuildLanguagePackage.RULE_ELEMENT__EXPR_STMT:
         setExprStmt((ExpressionStatement)newValue);
+        return;
+      case VilBuildLanguagePackage.RULE_ELEMENT__WHILE:
+        setWhile((While)newValue);
+        return;
+      case VilBuildLanguagePackage.RULE_ELEMENT__FOR:
+        setFor((For)newValue);
         return;
     }
     super.eSet(featureID, newValue);
@@ -242,6 +376,12 @@ public class RuleElementImpl extends MinimalEObjectImpl.Container implements Rul
       case VilBuildLanguagePackage.RULE_ELEMENT__EXPR_STMT:
         setExprStmt((ExpressionStatement)null);
         return;
+      case VilBuildLanguagePackage.RULE_ELEMENT__WHILE:
+        setWhile((While)null);
+        return;
+      case VilBuildLanguagePackage.RULE_ELEMENT__FOR:
+        setFor((For)null);
+        return;
     }
     super.eUnset(featureID);
   }
@@ -260,6 +400,10 @@ public class RuleElementImpl extends MinimalEObjectImpl.Container implements Rul
         return varDecl != null;
       case VilBuildLanguagePackage.RULE_ELEMENT__EXPR_STMT:
         return exprStmt != null;
+      case VilBuildLanguagePackage.RULE_ELEMENT__WHILE:
+        return while_ != null;
+      case VilBuildLanguagePackage.RULE_ELEMENT__FOR:
+        return for_ != null;
     }
     return super.eIsSet(featureID);
   }

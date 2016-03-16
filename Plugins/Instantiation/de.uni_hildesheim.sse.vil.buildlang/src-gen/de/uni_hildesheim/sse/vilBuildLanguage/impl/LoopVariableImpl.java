@@ -4,7 +4,7 @@ package de.uni_hildesheim.sse.vilBuildLanguage.impl;
 
 import de.uni_hildesheim.sse.vil.expressions.expressionDsl.Type;
 
-import de.uni_hildesheim.sse.vilBuildLanguage.MapVariable;
+import de.uni_hildesheim.sse.vilBuildLanguage.LoopVariable;
 import de.uni_hildesheim.sse.vilBuildLanguage.VilBuildLanguagePackage;
 
 import org.eclipse.emf.common.notify.Notification;
@@ -18,19 +18,19 @@ import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
 
 /**
  * <!-- begin-user-doc -->
- * An implementation of the model object '<em><b>Map Variable</b></em>'.
+ * An implementation of the model object '<em><b>Loop Variable</b></em>'.
  * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
  * </p>
  * <ul>
- *   <li>{@link de.uni_hildesheim.sse.vilBuildLanguage.impl.MapVariableImpl#getType <em>Type</em>}</li>
- *   <li>{@link de.uni_hildesheim.sse.vilBuildLanguage.impl.MapVariableImpl#getVar <em>Var</em>}</li>
+ *   <li>{@link de.uni_hildesheim.sse.vilBuildLanguage.impl.LoopVariableImpl#getType <em>Type</em>}</li>
+ *   <li>{@link de.uni_hildesheim.sse.vilBuildLanguage.impl.LoopVariableImpl#getVar <em>Var</em>}</li>
  * </ul>
  *
  * @generated
  */
-public class MapVariableImpl extends MinimalEObjectImpl.Container implements MapVariable
+public class LoopVariableImpl extends MinimalEObjectImpl.Container implements LoopVariable
 {
   /**
    * The cached value of the '{@link #getType() <em>Type</em>}' containment reference.
@@ -67,7 +67,7 @@ public class MapVariableImpl extends MinimalEObjectImpl.Container implements Map
    * <!-- end-user-doc -->
    * @generated
    */
-  protected MapVariableImpl()
+  protected LoopVariableImpl()
   {
     super();
   }
@@ -80,7 +80,7 @@ public class MapVariableImpl extends MinimalEObjectImpl.Container implements Map
   @Override
   protected EClass eStaticClass()
   {
-    return VilBuildLanguagePackage.Literals.MAP_VARIABLE;
+    return VilBuildLanguagePackage.Literals.LOOP_VARIABLE;
   }
 
   /**
@@ -104,7 +104,7 @@ public class MapVariableImpl extends MinimalEObjectImpl.Container implements Map
     type = newType;
     if (eNotificationRequired())
     {
-      ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, VilBuildLanguagePackage.MAP_VARIABLE__TYPE, oldType, newType);
+      ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, VilBuildLanguagePackage.LOOP_VARIABLE__TYPE, oldType, newType);
       if (msgs == null) msgs = notification; else msgs.add(notification);
     }
     return msgs;
@@ -121,14 +121,14 @@ public class MapVariableImpl extends MinimalEObjectImpl.Container implements Map
     {
       NotificationChain msgs = null;
       if (type != null)
-        msgs = ((InternalEObject)type).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - VilBuildLanguagePackage.MAP_VARIABLE__TYPE, null, msgs);
+        msgs = ((InternalEObject)type).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - VilBuildLanguagePackage.LOOP_VARIABLE__TYPE, null, msgs);
       if (newType != null)
-        msgs = ((InternalEObject)newType).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - VilBuildLanguagePackage.MAP_VARIABLE__TYPE, null, msgs);
+        msgs = ((InternalEObject)newType).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - VilBuildLanguagePackage.LOOP_VARIABLE__TYPE, null, msgs);
       msgs = basicSetType(newType, msgs);
       if (msgs != null) msgs.dispatch();
     }
     else if (eNotificationRequired())
-      eNotify(new ENotificationImpl(this, Notification.SET, VilBuildLanguagePackage.MAP_VARIABLE__TYPE, newType, newType));
+      eNotify(new ENotificationImpl(this, Notification.SET, VilBuildLanguagePackage.LOOP_VARIABLE__TYPE, newType, newType));
   }
 
   /**
@@ -151,7 +151,7 @@ public class MapVariableImpl extends MinimalEObjectImpl.Container implements Map
     String oldVar = var;
     var = newVar;
     if (eNotificationRequired())
-      eNotify(new ENotificationImpl(this, Notification.SET, VilBuildLanguagePackage.MAP_VARIABLE__VAR, oldVar, var));
+      eNotify(new ENotificationImpl(this, Notification.SET, VilBuildLanguagePackage.LOOP_VARIABLE__VAR, oldVar, var));
   }
 
   /**
@@ -164,7 +164,7 @@ public class MapVariableImpl extends MinimalEObjectImpl.Container implements Map
   {
     switch (featureID)
     {
-      case VilBuildLanguagePackage.MAP_VARIABLE__TYPE:
+      case VilBuildLanguagePackage.LOOP_VARIABLE__TYPE:
         return basicSetType(null, msgs);
     }
     return super.eInverseRemove(otherEnd, featureID, msgs);
@@ -180,9 +180,9 @@ public class MapVariableImpl extends MinimalEObjectImpl.Container implements Map
   {
     switch (featureID)
     {
-      case VilBuildLanguagePackage.MAP_VARIABLE__TYPE:
+      case VilBuildLanguagePackage.LOOP_VARIABLE__TYPE:
         return getType();
-      case VilBuildLanguagePackage.MAP_VARIABLE__VAR:
+      case VilBuildLanguagePackage.LOOP_VARIABLE__VAR:
         return getVar();
     }
     return super.eGet(featureID, resolve, coreType);
@@ -198,10 +198,10 @@ public class MapVariableImpl extends MinimalEObjectImpl.Container implements Map
   {
     switch (featureID)
     {
-      case VilBuildLanguagePackage.MAP_VARIABLE__TYPE:
+      case VilBuildLanguagePackage.LOOP_VARIABLE__TYPE:
         setType((Type)newValue);
         return;
-      case VilBuildLanguagePackage.MAP_VARIABLE__VAR:
+      case VilBuildLanguagePackage.LOOP_VARIABLE__VAR:
         setVar((String)newValue);
         return;
     }
@@ -218,10 +218,10 @@ public class MapVariableImpl extends MinimalEObjectImpl.Container implements Map
   {
     switch (featureID)
     {
-      case VilBuildLanguagePackage.MAP_VARIABLE__TYPE:
+      case VilBuildLanguagePackage.LOOP_VARIABLE__TYPE:
         setType((Type)null);
         return;
-      case VilBuildLanguagePackage.MAP_VARIABLE__VAR:
+      case VilBuildLanguagePackage.LOOP_VARIABLE__VAR:
         setVar(VAR_EDEFAULT);
         return;
     }
@@ -238,9 +238,9 @@ public class MapVariableImpl extends MinimalEObjectImpl.Container implements Map
   {
     switch (featureID)
     {
-      case VilBuildLanguagePackage.MAP_VARIABLE__TYPE:
+      case VilBuildLanguagePackage.LOOP_VARIABLE__TYPE:
         return type != null;
-      case VilBuildLanguagePackage.MAP_VARIABLE__VAR:
+      case VilBuildLanguagePackage.LOOP_VARIABLE__VAR:
         return VAR_EDEFAULT == null ? var != null : !VAR_EDEFAULT.equals(var);
     }
     return super.eIsSet(featureID);
@@ -263,4 +263,4 @@ public class MapVariableImpl extends MinimalEObjectImpl.Container implements Map
     return result.toString();
   }
 
-} //MapVariableImpl
+} //LoopVariableImpl

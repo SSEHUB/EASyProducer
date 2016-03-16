@@ -4,8 +4,8 @@ package de.uni_hildesheim.sse.vilBuildLanguage.impl;
 
 import de.uni_hildesheim.sse.vil.expressions.expressionDsl.Expression;
 
+import de.uni_hildesheim.sse.vilBuildLanguage.LoopVariable;
 import de.uni_hildesheim.sse.vilBuildLanguage.Map;
-import de.uni_hildesheim.sse.vilBuildLanguage.MapVariable;
 import de.uni_hildesheim.sse.vilBuildLanguage.RuleElementBlock;
 import de.uni_hildesheim.sse.vilBuildLanguage.VilBuildLanguagePackage;
 
@@ -51,7 +51,7 @@ public class MapImpl extends MinimalEObjectImpl.Container implements Map
    * @generated
    * @ordered
    */
-  protected EList<MapVariable> var;
+  protected EList<LoopVariable> var;
 
   /**
    * The default value of the '{@link #getSeparator() <em>Separator</em>}' attribute.
@@ -119,11 +119,11 @@ public class MapImpl extends MinimalEObjectImpl.Container implements Map
    * <!-- end-user-doc -->
    * @generated
    */
-  public EList<MapVariable> getVar()
+  public EList<LoopVariable> getVar()
   {
     if (var == null)
     {
-      var = new EObjectContainmentEList<MapVariable>(MapVariable.class, this, VilBuildLanguagePackage.MAP__VAR);
+      var = new EObjectContainmentEList<LoopVariable>(LoopVariable.class, this, VilBuildLanguagePackage.MAP__VAR);
     }
     return var;
   }
@@ -302,7 +302,7 @@ public class MapImpl extends MinimalEObjectImpl.Container implements Map
     {
       case VilBuildLanguagePackage.MAP__VAR:
         getVar().clear();
-        getVar().addAll((Collection<? extends MapVariable>)newValue);
+        getVar().addAll((Collection<? extends LoopVariable>)newValue);
         return;
       case VilBuildLanguagePackage.MAP__SEPARATOR:
         setSeparator((String)newValue);

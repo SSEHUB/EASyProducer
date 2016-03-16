@@ -55,4 +55,12 @@ public class NoTracer extends de.uni_hildesheim.sse.easy_producer.instantiator.m
     public void visitedTemplate(Template template) {
     }
 
+    @Override
+    public void visitWhileBody() {
+    }
+
+    @Override
+    public void visitedWhileBody() {
+    }
+
 }
