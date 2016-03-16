@@ -2,7 +2,7 @@
 <feature
       id="de.uni_hildesheim.sse.easy_producer.core_feature"
       label="EASy Producer Core"
-      version="1.0.0"
+      version="1.1.0"
       provider-name="University of Hildesheim - SSE"
       plugin="de.uni_hildesheim.sse.easy_producer.eclipse">
 
@@ -46,7 +46,7 @@ limitations under the License.
          id="de.uni_hildesheim.sse.easy.ui"
          download-size="0"
          install-size="0"
-         version="1.0.0"
+         version="1.1.0"
          unpack="false"/>
 
 </feature>

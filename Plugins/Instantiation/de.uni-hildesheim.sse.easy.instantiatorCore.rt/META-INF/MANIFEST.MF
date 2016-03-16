@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Runtime VIL model
 Bundle-SymbolicName: de.uni-hildesheim.sse.easy.instantiatorCore.rt;singleton:=true
-Bundle-Version: 0.0.1
+Bundle-Version: 0.0.3
 Bundle-Vendor: University of Hildesheim - SSE
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Service-Component: OSGI-INF/instantiatorCoreRt.xml

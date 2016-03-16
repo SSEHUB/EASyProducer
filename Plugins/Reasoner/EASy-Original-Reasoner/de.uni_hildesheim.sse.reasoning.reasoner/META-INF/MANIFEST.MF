@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Reasoner 1st Edition
 Bundle-SymbolicName: de.uni_hildesheim.sse.reasoning.reasoner;singleton:=true
-Bundle-Version: 1.0.0
+Bundle-Version: 1.1.0
 Import-Package: de.uni_hildesheim.sse.ivml,
  org.osgi.framework
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6

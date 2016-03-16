@@ -2,15 +2,15 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: EASy-Examples
 Bundle-SymbolicName: de.uni_hildesheim.sse.easy.examples;singleton:=true
-Bundle-Version: 1.0.0
+Bundle-Version: 1.1.0
 Eclipse-BundleShape: dir
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Require-Bundle: de.uni-hildesheim.sse.easy.instantiator.velocity,
  de.uni-hildesheim.sse.easy.instantiator.xvcl,
  de.uni_hildesheim.sse.easy.instantiator.ant,
  de.uni_hildesheim.sse.easy.instantiator.aspectj,
- de.uni_hildesheim.sse.easy.instantiator.java;bundle-version="0.2.3",
- de.uni_hildesheim.sse.easy.instantiator.maven,
+ de.uni_hildesheim.sse.easy.instantiator.java;bundle-version="1.1.0",
+ de.uni_hildesheim.sse.easy.instantiator.maven;bundle-version="3.2.3.2",
  de.uni_hildesheim.sse.easy.ui;bundle-version="0.11.3",
  org.eclipse.jface,
  org.eclipse.ui.workbench,

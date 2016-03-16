@@ -2,7 +2,7 @@
 <feature
       id="de.uni_hildesheim.sse.reasoning.reasoner_feature"
       label="SSE Reasoner"
-      version="1.0.0"
+      version="1.1.0"
       provider-name="University of Hildesheim">
 
    <description url="http://www.sse.uni-hildesheim.de/easy-producer">
@@ -32,7 +32,7 @@ limitations under the License.
          id="de.uni_hildesheim.sse.reasoning.reasoner"
          download-size="0"
          install-size="0"
-         version="1.0.0"
+         version="1.1.0"
          unpack="false"/>
 
 </feature>

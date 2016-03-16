@@ -2,7 +2,7 @@
 <feature
       id="de.uni_hildesheim.sse.easy.instantiator.java.feature"
       label="EASy Instantiator - Java"
-      version="1.0.0"
+      version="1.1.0"
       provider-name="University of Hildesheim, SSE">
 
    <description>
@@ -35,7 +35,7 @@ limitations under the License.
          id="de.uni_hildesheim.sse.easy.instantiator.java"
          download-size="0"
          install-size="0"
-         version="1.0.0"
+         version="1.1.0"
          unpack="false"/>
 
 </feature>

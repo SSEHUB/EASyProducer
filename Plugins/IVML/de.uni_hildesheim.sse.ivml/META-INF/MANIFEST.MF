@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: de.uni_hildesheim.sse.ivml
 Bundle-Vendor: University of Hildesheim - SSE
-Bundle-Version: 1.0.0
+Bundle-Version: 1.1.0
 Bundle-SymbolicName: de.uni_hildesheim.sse.ivml;singleton:=true
 Bundle-ActivationPolicy: lazy
 Require-Bundle: org.eclipse.xtext;bundle-version="2.5.0";visibility:=reexport,

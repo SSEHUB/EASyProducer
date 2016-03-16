@@ -2,7 +2,7 @@
 <feature
       id="de.uni_hildesheim.sse.easy.obsolete"
       label="Outdated Plugins of EASy-Producer"
-      version="1.0.0">
+      version="1.1.0">
 
    <description>
       Old plug-ins of EASy-Producer, which still may be used.
@@ -31,7 +31,7 @@ limitations under the License.
          id="de.uni_hildesheim.sse.reasoning.drools2"
          download-size="0"
          install-size="0"
-         version="0.0.0"
+         version="0.2.0"
          unpack="false"/>
 
 </feature>
