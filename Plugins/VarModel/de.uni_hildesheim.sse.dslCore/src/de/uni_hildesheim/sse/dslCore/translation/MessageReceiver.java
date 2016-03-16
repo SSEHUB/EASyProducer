@@ -1,7 +1,5 @@
 package de.uni_hildesheim.sse.dslCore.translation;
 
-import org.eclipse.emf.ecore.EObject;
-import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.resource.Resource.Diagnostic;
 
 /**
@@ -11,39 +9,7 @@ import org.eclipse.emf.ecore.resource.Resource.Diagnostic;
  * 
  * @author Holger Eichelberger
  */
-public abstract class MessageReceiver {
-
-    /**
-     * Receives an error message.
-     * 
-     * @param message
-     *            the message
-     * @param cause
-     *            the cause (as instance of the EMF grammar model)
-     * @param causeFeature
-     *            the cause of the feature as an appropriate constant from
-     *            {@link de.uni_hildesheim.sse.ivml.IvmlPackage.Literals}
-     * @param code
-     *            a numerical identification of the error
-     */
-    public abstract void error(String message, EObject cause,
-            EStructuralFeature causeFeature, int code);
-
-    /**
-     * Receives an warning message.
-     * 
-     * @param message
-     *            the message
-     * @param cause
-     *            the cause (as instance of the EMF grammar model)
-     * @param causeFeature
-     *            the cause of the feature as an appropriate constant from
-     *            {@link de.uni_hildesheim.sse.ivml.IvmlPackage.Literals}
-     * @param code
-     *            a numerical identification of the warning
-     */
-    public abstract void warning(String message, EObject cause,
-            EStructuralFeature causeFeature, int code);
+public abstract class MessageReceiver implements IMessageReceiver {
 
     /**
      * Receives an error message in terms of a {@link TranslatorException}.
