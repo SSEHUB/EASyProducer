@@ -1345,6 +1345,9 @@ public class ExpressionTranslator extends de.uni_hildesheim.sse.dslCore.translat
                     ConstraintSyntaxTree varTree = context.processQValue(entry.getName(), entry, 
                         IvmlPackage.Literals.EXPRESSION_LIST_ENTRY__NAME);
                     exprs[e] = new OCLFeatureCall(varTree, OclKeyWords.ASSIGNMENT, context.getProject(), exprs[e]);
+                    warning("assignment is discouraged in constraint set as it is always true", entry, 
+                        IvmlPackage.Literals.EXPRESSION_LIST_ENTRY__NAME, ErrorCodes.DISCOURAGED);
+                    exprs[e].inferDatatype();
                 }
             }
             if (null != entry.getCollection()) {
