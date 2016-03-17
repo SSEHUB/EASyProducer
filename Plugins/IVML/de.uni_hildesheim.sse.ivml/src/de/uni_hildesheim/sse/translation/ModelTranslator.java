@@ -513,57 +513,59 @@ public class ModelTranslator extends de.uni_hildesheim.sse.dslCore.translation.M
     private void processAttributeAssignmentExpressions(List<AttrAssignment> assignments, TypeContext context) {
         for (AttrAssignment assgn : assignments) {
             AttributeAssignment assignment = assignmentMapping.get(assgn);
-            context.pushLayer(null);
-            context.addToContext(assignment);
-            try {
-                for (AttrAssignmentPart part : assgn.getParts()) {
-                    expressionTranslator.initLevel();
-                    ConstraintSyntaxTree valueEx = expressionTranslator.processLogicalExpression(
-                        part.getValue(), context, assignment);
-                    expressionTranslator.errorAboutTopLevelWarning(part, 
-                        IvmlPackage.Literals.ATTR_ASSIGNMENT_PART__VALUE);
-                    AttributeAssignment.Assignment data = new AttributeAssignment.Assignment(part.getName(), 
-                        IvmlKeyWords.ASSIGNMENT, valueEx);
-                    assignment.add(data);
-                    for (int e = 0; e < assignment.getElementCount(); e++) {
-                        try {
-                            DecisionVariableDeclaration var = assignment.getElement(e);
-                            String attributeName = var.getName() + "." + data.getName();
-                            AbstractVariable attribute = context.findVariable(attributeName, null);
-                            if (null == attribute || !(attribute instanceof Attribute)) {
-                                throw new UnknownVariableException(attributeName, part, 
-                                    IvmlPackage.Literals.ATTR_ASSIGNMENT_PART__NAME);
+            if (null != assignment) { // may happen if resolving the inner parts of the assignment fails
+                context.pushLayer(null);
+                context.addToContext(assignment);
+                try {
+                    for (AttrAssignmentPart part : assgn.getParts()) {
+                        expressionTranslator.initLevel();
+                        ConstraintSyntaxTree valueEx = expressionTranslator.processLogicalExpression(
+                            part.getValue(), context, assignment);
+                        expressionTranslator.errorAboutTopLevelWarning(part, 
+                            IvmlPackage.Literals.ATTR_ASSIGNMENT_PART__VALUE);
+                        AttributeAssignment.Assignment data = new AttributeAssignment.Assignment(part.getName(), 
+                            IvmlKeyWords.ASSIGNMENT, valueEx);
+                        assignment.add(data);
+                        for (int e = 0; e < assignment.getElementCount(); e++) {
+                            try {
+                                DecisionVariableDeclaration var = assignment.getElement(e);
+                                String attributeName = var.getName() + "." + data.getName();
+                                AbstractVariable attribute = context.findVariable(attributeName, null);
+                                if (null == attribute || !(attribute instanceof Attribute)) {
+                                    throw new UnknownVariableException(attributeName, part, 
+                                        IvmlPackage.Literals.ATTR_ASSIGNMENT_PART__NAME);
+                                }
+                                ConstraintSyntaxTree cst = new OCLFeatureCall(
+                                    context.obtainVariable(attribute), data.getOperation(), data.getExpression());
+                                Constraint constraint = new Constraint(assignment);
+                                constraint.setConsSyntax(cst);
+                                assignment.addConstraint(constraint, true);
+                            } catch (ModelQueryException ex) {
+                                error(ex, part, IvmlPackage.Literals.ATTR_ASSIGNMENT_PART__NAME);
+                            } catch (CSTSemanticException ex) {
+                                error(ex, part, IvmlPackage.Literals.ATTR_ASSIGNMENT_PART__NAME);
                             }
-                            ConstraintSyntaxTree cst = new OCLFeatureCall(
-                                context.obtainVariable(attribute), data.getOperation(), data.getExpression());
-                            Constraint constraint = new Constraint(assignment);
-                            constraint.setConsSyntax(cst);
-                            assignment.addConstraint(constraint, true);
-                        } catch (ModelQueryException ex) {
-                            error(ex, part, IvmlPackage.Literals.ATTR_ASSIGNMENT_PART__NAME);
-                        } catch (CSTSemanticException ex) {
-                            error(ex, part, IvmlPackage.Literals.ATTR_ASSIGNMENT_PART__NAME);
                         }
                     }
-                }
-                SplitResult split = Utils.split(assgn.getElements());
-                if (null != split.getExprs()) {
-                    for (ExpressionStatement expression : split.getExprs()) {
-                        try {
-                            processExpressionStatement(expression, context, assignment, false);
-                        } catch (TranslatorException e) {
-                            error(e); // in case of problems... stop, throw but also pop layer
+                    SplitResult split = Utils.split(assgn.getElements());
+                    if (null != split.getExprs()) {
+                        for (ExpressionStatement expression : split.getExprs()) {
+                            try {
+                                processExpressionStatement(expression, context, assignment, false);
+                            } catch (TranslatorException e) {
+                                error(e); // in case of problems... stop, throw but also pop layer
+                            }
                         }
                     }
+                    if (null != split.getAttrAssignments()) {
+                        processAttributeAssignmentExpressions(split.getAttrAssignments(), context);
+                    }
+                } catch (TranslatorException e) {
+                    error(e); // in case of problems... stop, notify but also pop layer
+                } finally  {
+                    context.popLayer();
+                    context.closeSorter(assignment, assgn.getElements());
                 }
-                if (null != split.getAttrAssignments()) {
-                    processAttributeAssignmentExpressions(split.getAttrAssignments(), context);
-                }
-            } catch (TranslatorException e) {
-                error(e); // in case of problems... stop, notify but also pop layer
-            } finally  {
-                context.popLayer();
-                context.closeSorter(assignment, assgn.getElements());
             }
         }
     }
