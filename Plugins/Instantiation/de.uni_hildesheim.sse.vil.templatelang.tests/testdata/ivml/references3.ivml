@@ -1,0 +1,15 @@
+project references3 {
+
+    compound Alg {
+        String name;
+    }
+
+    sequenceOf(Alg) algs = {{name="Alg1"}, {name = "Alg2"}, {name = "Alg3"}};
+
+    refTo(Alg) algRef = refBy(algs[0]);
+    
+    freeze {
+        algs;
+        algRef;
+    }
+}

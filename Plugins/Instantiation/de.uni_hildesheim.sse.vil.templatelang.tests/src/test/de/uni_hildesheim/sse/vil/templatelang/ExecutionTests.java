@@ -1248,4 +1248,14 @@ public class ExecutionTests extends AbstractTest {
         assertEqualWithIvml("references2", "references2");
     }
 
+    /**
+     * Tests the value of a reference into a collection.
+     * 
+     * @throws IOException should not occur
+     */
+    @Test
+    public void testReferences3() throws IOException {
+        assertEqualWithIvml("references3", "references3");
+    }
+
 }

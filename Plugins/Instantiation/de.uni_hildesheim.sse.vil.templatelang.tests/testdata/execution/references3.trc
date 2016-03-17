@@ -1,0 +1,4 @@
+-> main(Configuration, Artifact) with (<config>, test.texts)
+    cfg <- <config>
+    a <- references3::algRef
+    s <- Alg1

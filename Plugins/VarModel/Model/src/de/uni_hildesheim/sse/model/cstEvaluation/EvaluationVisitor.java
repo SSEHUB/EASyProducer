@@ -75,6 +75,7 @@ import de.uni_hildesheim.sse.model.varModel.values.ReferenceValue;
 import de.uni_hildesheim.sse.model.varModel.values.Value;
 import de.uni_hildesheim.sse.model.varModel.values.ValueDoesNotMatchTypeException;
 import de.uni_hildesheim.sse.model.varModel.values.ValueFactory;
+import de.uni_hildesheim.sse.persistency.StringProvider;
 import de.uni_hildesheim.sse.utils.messages.Status;
 import de.uni_hildesheim.sse.utils.modelManagement.IVariable;
 
@@ -762,13 +763,24 @@ public class EvaluationVisitor implements IConstraintTreeVisitor {
     
     @Override
     public void visitConstantValue(ConstantValue value) {
+        Value constValue = value.getConstantValue();
+        if (constValue instanceof ReferenceValue) { // dereference if valueExpression
+            ReferenceValue ref = (ReferenceValue) constValue;
+            if (null != ref.getValueEx()) {
+                ref.getValueEx().accept(this); // -> leads to result
+                if (null != result) {
+                    constValue = result.getReferenceValue();
+                    clearResult();
+                }
+            }
+        } 
         // constants must not be changed, at least original constants :o
-        Value cVal = value.getConstantValue().clone();
+        Value cVal = constValue.clone();
         result = ConstantAccessor.POOL.getInstance().bind(cVal, context);
     }
 
     @Override
-    public void visitVariable(Variable variable) {        
+    public void visitVariable(Variable variable) {
         ConstraintSyntaxTree qualifier = variable.getQualifier();
         if (null != qualifier) {
             // special case: attributes -> find attribute decision variable
