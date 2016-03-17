@@ -634,7 +634,7 @@ public class TypeContext implements IResolutionScope {
      * @return the corresponding syntax tree
      * @throws TranslatorException in case of any translation problem
      */
-    private ConstraintSyntaxTree processQValue(String sValue, EObject object,
+    ConstraintSyntaxTree processQValue(String sValue, EObject object,
         EStructuralFeature feature) throws TranslatorException {
         ConstraintSyntaxTree result = null;
         try {

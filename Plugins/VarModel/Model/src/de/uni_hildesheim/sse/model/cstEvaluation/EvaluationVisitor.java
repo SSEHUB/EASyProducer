@@ -75,7 +75,6 @@ import de.uni_hildesheim.sse.model.varModel.values.ReferenceValue;
 import de.uni_hildesheim.sse.model.varModel.values.Value;
 import de.uni_hildesheim.sse.model.varModel.values.ValueDoesNotMatchTypeException;
 import de.uni_hildesheim.sse.model.varModel.values.ValueFactory;
-import de.uni_hildesheim.sse.persistency.StringProvider;
 import de.uni_hildesheim.sse.utils.messages.Status;
 import de.uni_hildesheim.sse.utils.modelManagement.IVariable;
 

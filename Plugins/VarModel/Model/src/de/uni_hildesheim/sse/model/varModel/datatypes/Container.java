@@ -251,6 +251,20 @@ public class Container extends StructuredDatatype {
         }
         return result;
     }
+
+    /**
+     * Returns whether <code>type</code> is a container with one generic of type Constraint.
+     * 
+     * @param type the type to check for
+     * @return <code>true</code> if <code>type</code> is a container of Constraints, <code>false</code> else
+     */
+    public static final boolean isConstraintContainer(IDatatype type) {
+        boolean result = false;
+        if (isContainer(type, ConstraintType.TYPE)) {
+            result = ConstraintType.isConstraint(type.getGenericType(0)); // avoid booleans
+        }
+        return result;
+    }
         
     /**
      * Returns whether <code>type</code> is a container and the given <code>generics</code> match.

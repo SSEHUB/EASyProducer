@@ -1172,14 +1172,20 @@ public class ExpressionTranslator extends de.uni_hildesheim.sse.dslCore.translat
         int withoutId = 0;
         int withId = 0;
         int entryCount = 0;
+        boolean isConstraintContainer = Container.isConstraintContainer(lhsType);
         EList<ExpressionListEntry> entryList;
         if (null != init) {
             entryList = init.getList();
             entryCount = entryList.size();
             for (int e = 0; e < entryCount; e++) {
-                String name = entryList.get(e).getName();
+                ExpressionListEntry entry = entryList.get(e);
+                String name = entry.getName();
                 if (null != name) {
-                    withId++;
+                    if (isConstraintContainer) { // ambiguous grammar situation, name=value looks like constraint
+                        withoutId++;
+                    } else {
+                        withId++;
+                    }
                 } else {
                     withoutId++;
                 }
@@ -1333,6 +1339,12 @@ public class ExpressionTranslator extends de.uni_hildesheim.sse.dslCore.translat
                 exprs[e] = processImplicationExpression(entry.getValue(), context, parent);
                 if (null != exprs[e]) {
                     exprs[e].inferDatatype();
+                }
+                if (isConstraintCollection && null != entry.getName()) { 
+                    // ambiguous grammar situation, name=value looks like constraint
+                    ConstraintSyntaxTree varTree = context.processQValue(entry.getName(), entry, 
+                        IvmlPackage.Literals.EXPRESSION_LIST_ENTRY__NAME);
+                    exprs[e] = new OCLFeatureCall(varTree, OclKeyWords.ASSIGNMENT, context.getProject(), exprs[e]);
                 }
             }
             if (null != entry.getCollection()) {

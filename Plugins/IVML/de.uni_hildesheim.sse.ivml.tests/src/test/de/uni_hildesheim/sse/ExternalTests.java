@@ -85,6 +85,16 @@ public class ExternalTests extends AbstractTest {
     public void testConstraintSet2() throws IOException {
         assertEqual(createFile("constraintSet2"), null, null);
     }
+    
+    /**
+     * Constraint set test case. Simplified version contributed by QualiMaster (R. Sizonenko).
+     * 
+     * @throws IOException should not occur
+     */
+    @Test
+    public void testConstraintSet3() throws IOException {
+        assertEqual(createFile("constraintSet3"), null, null);
+    }
 
     /**
      * A basic test for cyclic imports.

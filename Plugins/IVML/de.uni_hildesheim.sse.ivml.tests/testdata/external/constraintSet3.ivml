@@ -1,0 +1,11 @@
+project constraintSet3 {
+
+    version v0;
+    Integer i;
+    compound Pipeline {
+        String name;
+        setOf(Constraint) constraints;
+    }
+
+    Pipeline pipeline = {name = "pip", constraints = {true, name = "test"}};
+}
