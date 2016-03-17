@@ -11,7 +11,7 @@ March 16 2016: EASy-Producer release 1.1.0 is out
 
 Release History
 ---------------
-[release history](http://htmlpreview.github.io/?https://github.com/SSEHUB/EASyProducer/blob/master/changelog.html "release history")
+Please see [release history](http://htmlpreview.github.io/?https://github.com/SSEHUB/EASyProducer/blob/master/changelog.html "release history") for details.
 
 Documentation
 -------------
