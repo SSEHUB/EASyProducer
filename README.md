@@ -7,11 +7,11 @@ EASy-Producer was already successfully tested in industrial environments.
 
 Watch out for more!
 
-Upcoming Release (expected March 18 2016)
+March 16 2016: EASy-Producer release 1.1.0 is out
 
 Release History
 ---------------
-http://htmlpreview.github.io/?https://github.com/SSEHUB/EASyProducer/blob/master/changelog.html
+Please see [release history](http://htmlpreview.github.io/?https://github.com/SSEHUB/EASyProducer/blob/master/changelog.html "release history") for details.
 
 Documentation
 -------------
