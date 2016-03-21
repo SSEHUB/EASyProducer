@@ -779,16 +779,26 @@ public class RtVilGrammarAccess extends AbstractGrammarElementFinder {
 		private final RuleCall cVarDeclVariableDeclarationParserRuleCall_0_0 = (RuleCall)cVarDeclAssignment_0.eContents().get(0);
 		private final Assignment cExprStmtAssignment_1 = (Assignment)cAlternatives.eContents().get(1);
 		private final RuleCall cExprStmtExpressionStatementParserRuleCall_1_0 = (RuleCall)cExprStmtAssignment_1.eContents().get(0);
-		private final Assignment cFailAssignment_2 = (Assignment)cAlternatives.eContents().get(2);
-		private final RuleCall cFailFailStatementParserRuleCall_2_0 = (RuleCall)cFailAssignment_2.eContents().get(0);
+		private final Group cGroup_2 = (Group)cAlternatives.eContents().get(2);
+		private final Assignment cWhileAssignment_2_0 = (Assignment)cGroup_2.eContents().get(0);
+		private final RuleCall cWhileWhileParserRuleCall_2_0_0 = (RuleCall)cWhileAssignment_2_0.eContents().get(0);
+		private final Keyword cSemicolonKeyword_2_1 = (Keyword)cGroup_2.eContents().get(1);
+		private final Group cGroup_3 = (Group)cAlternatives.eContents().get(3);
+		private final Assignment cForAssignment_3_0 = (Assignment)cGroup_3.eContents().get(0);
+		private final RuleCall cForForParserRuleCall_3_0_0 = (RuleCall)cForAssignment_3_0.eContents().get(0);
+		private final Keyword cSemicolonKeyword_3_1 = (Keyword)cGroup_3.eContents().get(1);
+		private final Assignment cFailAssignment_4 = (Assignment)cAlternatives.eContents().get(4);
+		private final RuleCall cFailFailStatementParserRuleCall_4_0 = (RuleCall)cFailAssignment_4.eContents().get(0);
 		
 		//RuleElement:
 		//	varDecl=VariableDeclaration
 		//	| exprStmt=ExpressionStatement
+		//	| while=While ';'?
+		//	| for=For ';'?
 		//	| fail=FailStatement;
 		@Override public ParserRule getRule() { return rule; }
 
-		//varDecl=VariableDeclaration | exprStmt=ExpressionStatement | fail=FailStatement
+		//varDecl=VariableDeclaration | exprStmt=ExpressionStatement | while=While ';'? | for=For ';'? | fail=FailStatement
 		public Alternatives getAlternatives() { return cAlternatives; }
 
 		//varDecl=VariableDeclaration
@@ -803,11 +813,35 @@ public class RtVilGrammarAccess extends AbstractGrammarElementFinder {
 		//ExpressionStatement
 		public RuleCall getExprStmtExpressionStatementParserRuleCall_1_0() { return cExprStmtExpressionStatementParserRuleCall_1_0; }
 
+		//while=While ';'?
+		public Group getGroup_2() { return cGroup_2; }
+
+		//while=While
+		public Assignment getWhileAssignment_2_0() { return cWhileAssignment_2_0; }
+
+		//While
+		public RuleCall getWhileWhileParserRuleCall_2_0_0() { return cWhileWhileParserRuleCall_2_0_0; }
+
+		//';'?
+		public Keyword getSemicolonKeyword_2_1() { return cSemicolonKeyword_2_1; }
+
+		//for=For ';'?
+		public Group getGroup_3() { return cGroup_3; }
+
+		//for=For
+		public Assignment getForAssignment_3_0() { return cForAssignment_3_0; }
+
+		//For
+		public RuleCall getForForParserRuleCall_3_0_0() { return cForForParserRuleCall_3_0_0; }
+
+		//';'?
+		public Keyword getSemicolonKeyword_3_1() { return cSemicolonKeyword_3_1; }
+
 		//fail=FailStatement
-		public Assignment getFailAssignment_2() { return cFailAssignment_2; }
+		public Assignment getFailAssignment_4() { return cFailAssignment_4; }
 
 		//FailStatement
-		public RuleCall getFailFailStatementParserRuleCall_2_0() { return cFailFailStatementParserRuleCall_2_0; }
+		public RuleCall getFailFailStatementParserRuleCall_4_0() { return cFailFailStatementParserRuleCall_4_0; }
 	}
 
 	public class IntentDeclarationElements extends AbstractParserRuleElementFinder {
@@ -1127,6 +1161,8 @@ public class RtVilGrammarAccess extends AbstractGrammarElementFinder {
 	//RuleElement:
 	//	varDecl=VariableDeclaration
 	//	| exprStmt=ExpressionStatement
+	//	| while=While ';'?
+	//	| for=For ';'?
 	//	| fail=FailStatement;
 	public RuleElementElements getRuleElementAccess() {
 		return pRuleElement;

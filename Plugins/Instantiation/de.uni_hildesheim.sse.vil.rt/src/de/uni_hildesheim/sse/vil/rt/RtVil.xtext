@@ -106,6 +106,8 @@ RuleElementBlock:
 RuleElement:
     varDecl=VariableDeclaration
     | exprStmt=ExpressionStatement
+    | while=While ';'?
+    | for=For ';'?
     | fail = FailStatement
 ;
 

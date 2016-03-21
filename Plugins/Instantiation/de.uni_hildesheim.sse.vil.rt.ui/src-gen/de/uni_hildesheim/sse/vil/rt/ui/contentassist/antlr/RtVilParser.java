@@ -80,6 +80,8 @@ public class RtVilParser extends AbstractContentAssistParser {
 					put(grammarAccess.getBreakdownWithPartAccess().getGroup(), "rule__BreakdownWithPart__Group__0");
 					put(grammarAccess.getTacticDeclarationAccess().getGroup(), "rule__TacticDeclaration__Group__0");
 					put(grammarAccess.getRuleElementBlockAccess().getGroup(), "rule__RuleElementBlock__Group__0");
+					put(grammarAccess.getRuleElementAccess().getGroup_2(), "rule__RuleElement__Group_2__0");
+					put(grammarAccess.getRuleElementAccess().getGroup_3(), "rule__RuleElement__Group_3__0");
 					put(grammarAccess.getIntentDeclarationAccess().getGroup(), "rule__IntentDeclaration__Group__0");
 					put(grammarAccess.getFailStatementAccess().getGroup(), "rule__FailStatement__Group__0");
 					put(grammarAccess.getFailStatementAccess().getGroup_0_0(), "rule__FailStatement__Group_0_0__0");
@@ -208,7 +210,9 @@ public class RtVilParser extends AbstractContentAssistParser {
 					put(grammarAccess.getRuleElementBlockAccess().getElementsAssignment_3(), "rule__RuleElementBlock__ElementsAssignment_3");
 					put(grammarAccess.getRuleElementAccess().getVarDeclAssignment_0(), "rule__RuleElement__VarDeclAssignment_0");
 					put(grammarAccess.getRuleElementAccess().getExprStmtAssignment_1(), "rule__RuleElement__ExprStmtAssignment_1");
-					put(grammarAccess.getRuleElementAccess().getFailAssignment_2(), "rule__RuleElement__FailAssignment_2");
+					put(grammarAccess.getRuleElementAccess().getWhileAssignment_2_0(), "rule__RuleElement__WhileAssignment_2_0");
+					put(grammarAccess.getRuleElementAccess().getForAssignment_3_0(), "rule__RuleElement__ForAssignment_3_0");
+					put(grammarAccess.getRuleElementAccess().getFailAssignment_4(), "rule__RuleElement__FailAssignment_4");
 					put(grammarAccess.getIntentDeclarationAccess().getExprStmtAssignment_1(), "rule__IntentDeclaration__ExprStmtAssignment_1");
 					put(grammarAccess.getFailStatementAccess().getNameAssignment_0_0_0(), "rule__FailStatement__NameAssignment_0_0_0");
 					put(grammarAccess.getFailStatementAccess().getReasonAssignment_0_0_1(), "rule__FailStatement__ReasonAssignment_0_0_1");
