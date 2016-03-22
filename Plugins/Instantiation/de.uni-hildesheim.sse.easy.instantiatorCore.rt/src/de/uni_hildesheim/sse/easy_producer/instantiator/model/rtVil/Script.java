@@ -44,6 +44,7 @@ public class Script extends de.uni_hildesheim.sse.easy_producer.instantiator.mod
 
     private List<Strategy> strategies = new ArrayList<Strategy>();
     private List<Tactic> tactics = new ArrayList<Tactic>();
+    private boolean wasExecuted = false;
     
     /**
      * Constructor for a script without parent, parameters or advices and with the default
@@ -149,6 +150,23 @@ public class Script extends de.uni_hildesheim.sse.easy_producer.instantiator.mod
             result = visitor.visitScript(this);
         }
         return result;
+    }
+    
+    /**
+     * Returns whether this script was already executed (initialization).
+     * 
+     * @return <code>true</code> if it was already executed, <code>false</code> else
+     * @see #markAsExecuted()
+     */
+    public boolean wasExecuted() {
+        return wasExecuted;
+    }
+    
+    /**
+     * Marks this script as executed.
+     */
+    public void markAsExecuted() {
+        wasExecuted = true;
     }
 
     //TODO getOperations

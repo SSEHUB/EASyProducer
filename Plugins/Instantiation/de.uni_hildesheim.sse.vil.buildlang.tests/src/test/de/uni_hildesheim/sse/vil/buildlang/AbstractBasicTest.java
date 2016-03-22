@@ -47,7 +47,7 @@ public abstract class AbstractBasicTest <M extends Script> extends AbstractTest<
      */
     protected void assertEqual(String file, String expectedName, int... expectedErrorCodes) 
         throws IOException {
-        EqualitySetup data = new EqualitySetup(createFile(file), expectedName, null);
+        EqualitySetup<M> data = new EqualitySetup<M>(createFile(file), expectedName, null);
         assertEqual(data, expectedErrorCodes);
     }
     
@@ -73,7 +73,7 @@ public abstract class AbstractBasicTest <M extends Script> extends AbstractTest<
      */
     protected void assertEqual(String file, String expectedName, String expectedVersion, int... expectedErrorCodes) 
         throws IOException {
-        EqualitySetup data = new EqualitySetup(createFile(file), expectedName, expectedVersion, null);
+        EqualitySetup<M> data = new EqualitySetup<M>(createFile(file), expectedName, expectedVersion, null);
         assertEqual(data, expectedErrorCodes);
     }
     
@@ -94,7 +94,7 @@ public abstract class AbstractBasicTest <M extends Script> extends AbstractTest<
      *             problems finding or reading the model file
      */
     protected void assertEqual(String file, int... expectedErrorCodes) throws IOException {
-        EqualitySetup data = new EqualitySetup(createFile(file), file, null, null);
+        EqualitySetup<M> data = new EqualitySetup<M>(createFile(file), file, null, null);
         assertEqual(data, expectedErrorCodes);
     }
 

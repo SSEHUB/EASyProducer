@@ -94,7 +94,7 @@ public abstract class AbstractExecutionTest <M extends Script> extends AbstractT
      * @throws IOException in case that loading files fails
      */
     protected void assertEqual(String name, int... expectedExceptions) throws IOException {
-        EqualitySetup setup = new EqualitySetup(createFile(name), name, null, createTraceFile(name));
+        EqualitySetup<M> setup = new EqualitySetup<M>(createFile(name), name, null, createTraceFile(name));
         assertEqual(setup, expectedExceptions);
     }
     
@@ -135,7 +135,7 @@ public abstract class AbstractExecutionTest <M extends Script> extends AbstractT
      */
     protected void assertEqualDefaultParam(String name, int... expectedExceptions) throws IOException {
         Map<String, Object> param = createParameterMap(null, null, null);
-        EqualitySetup setup = new EqualitySetup(createFile(name), name, null, createTraceFile(name), param);
+        EqualitySetup<M> setup = new EqualitySetup<M>(createFile(name), name, null, createTraceFile(name), param);
         assertEqual(setup, expectedExceptions);
     }
 
@@ -275,7 +275,7 @@ public abstract class AbstractExecutionTest <M extends Script> extends AbstractT
             if (pos > 0) {
                 pName = pName.substring(pos + 1);
             }
-            EqualitySetup setup = new EqualitySetup(createFile(name), pName, null, createTraceFile(name), param);
+            EqualitySetup<M> setup = new EqualitySetup<M>(createFile(name), pName, null, createTraceFile(name), param);
             setup.setStartElement(startRuleName);
             assertEqual(setup, createCleaner(asserter, temp), expectedExceptions);
             if (null != asserter) {

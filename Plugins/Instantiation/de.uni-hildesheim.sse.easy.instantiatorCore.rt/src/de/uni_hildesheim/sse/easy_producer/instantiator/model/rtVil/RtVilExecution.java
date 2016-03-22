@@ -162,7 +162,7 @@ public class RtVilExecution extends BuildlangExecution implements IRtVilVisitor 
     };
 
     /**
-     * A fallback for the start VTL rule.
+     * A fallback for the start VIL rule.
      */
     private static final IDynamicCallFallback START_FALLBACK = new IDynamicCallFallback() {
         
@@ -177,7 +177,7 @@ public class RtVilExecution extends BuildlangExecution implements IRtVilVisitor 
     };
 
     /**
-     * A fallback for the succeeded VTL rule.
+     * A fallback for the succeeded VIL rule.
      */
     private static final IDynamicCallFallback SUCCEEDED_FALLBACK = new IDynamicCallFallback() {
         
@@ -192,7 +192,7 @@ public class RtVilExecution extends BuildlangExecution implements IRtVilVisitor 
     };
     
     /**
-     * A fallback for the update VTL rule.
+     * A fallback for the update VIL rule.
      */
     private static final IDynamicCallFallback UPDATE_FALLBACK = new IDynamicCallFallback() {
         
@@ -203,7 +203,7 @@ public class RtVilExecution extends BuildlangExecution implements IRtVilVisitor 
     };
     
     /**
-     * A fallback for the failed VTL rule.
+     * A fallback for the failed VIL rule.
      */
     private static final IDynamicCallFallback FAILED_FALLBACK = new IDynamicCallFallback() {
         
@@ -218,7 +218,7 @@ public class RtVilExecution extends BuildlangExecution implements IRtVilVisitor 
     };
 
     /**
-     * A fallback for the bind values VTL rule.
+     * A fallback for the bind values VIL rule.
      */
     private static final IDynamicCallFallback BIND_VALUES_FALLBACK = new IDynamicCallFallback() {
 
@@ -228,7 +228,19 @@ public class RtVilExecution extends BuildlangExecution implements IRtVilVisitor 
         }
         
     };
-    
+
+    /**
+     * A fallback for the initialize VIL rule.
+     */
+    private static final IDynamicCallFallback INITIALIZE_FALLBACK = new IDynamicCallFallback() {
+
+        @Override
+        public Object call(RtVilExecution evaluator, CallArgument... args) throws VilException {
+            return null;
+        }
+        
+    };
+
     private static final EASyLogger LOGGER = EASyLoggerFactory.INSTANCE.getLogger(RtVilExecution.class, Bundle.ID);
 
     private List<IRtVilConcept> successful = new LinkedList<IRtVilConcept>();
@@ -684,6 +696,7 @@ public class RtVilExecution extends BuildlangExecution implements IRtVilVisitor 
         Script tmp = currentScript;
         currentScript = script;
         Object result = super.visitScript(script); // just pass through, handled in executeDefault
+        script.markAsExecuted();
         currentScript = tmp;
         return result;
     }
@@ -692,6 +705,7 @@ public class RtVilExecution extends BuildlangExecution implements IRtVilVisitor 
     protected void processProperties(
         de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.Script script, File base) 
         throws VilException {
+        callInitialize();
         callBindValues();
         if (!stopAfterBindValues) {
             super.processProperties(script, base);
@@ -1049,6 +1063,20 @@ public class RtVilExecution extends BuildlangExecution implements IRtVilVisitor 
             setEnableRuleElementFailed(enabled);
         } else {
             LOGGER.info("bindValues not found - map declaration missing?");
+        }
+    }
+
+    /**
+     * Calls the initialization of the actual script.
+     * 
+     * @throws VilException in case that constructing, resolving or executing the corresponding VIL rule fails
+     */
+    private void callInitialize() throws VilException {
+        Script script = getCurrentScript();
+        if (!script.wasExecuted()) {
+            CallArgument[] args = new CallArgument[1];
+            args[0] = getCurrentConfiguration();
+            dynamicCall("initialize", INITIALIZE_FALLBACK, args);
         }
     }
     

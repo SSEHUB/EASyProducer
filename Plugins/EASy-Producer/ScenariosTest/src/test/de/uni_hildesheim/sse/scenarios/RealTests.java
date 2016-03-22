@@ -21,6 +21,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import de.uni_hildesheim.sse.easy.maven.Registration;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.Script;
 
 /**
  * Real use case tests. Although Maven is available, we run the tests without Maven in order to
@@ -97,7 +98,7 @@ public class RealTests extends AbstractScenarioTest {
      */
     protected void assertEqual(String file, String expectedName, int... expectedErrorCodes) 
         throws IOException {
-        EqualitySetup data = new EqualitySetup(createFile(file), expectedName, null);
+        EqualitySetup<Script> data = new EqualitySetup<Script>(createFile(file), expectedName, null);
         assertEqual(data, expectedErrorCodes);
     }
     
@@ -123,7 +124,7 @@ public class RealTests extends AbstractScenarioTest {
      */
     protected void assertEqual(String file, String expectedName, String expectedVersion, int... expectedErrorCodes) 
         throws IOException {
-        EqualitySetup data = new EqualitySetup(createFile(file), expectedName, expectedVersion, null);
+        EqualitySetup<Script> data = new EqualitySetup<Script>(createFile(file), expectedName, expectedVersion, null);
         assertEqual(data, expectedErrorCodes);
     }
     
@@ -144,7 +145,7 @@ public class RealTests extends AbstractScenarioTest {
      *             problems finding or reading the model file
      */
     protected void assertEqual(String file, int... expectedErrorCodes) throws IOException {
-        EqualitySetup data = new EqualitySetup(createFile(file), file, null, null);
+        EqualitySetup<Script> data = new EqualitySetup<Script>(createFile(file), file, null, null);
         assertEqual(data, expectedErrorCodes);
     }
     

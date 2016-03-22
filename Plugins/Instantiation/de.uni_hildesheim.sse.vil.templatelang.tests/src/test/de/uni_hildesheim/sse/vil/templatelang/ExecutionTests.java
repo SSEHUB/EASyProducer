@@ -17,6 +17,7 @@ import de.uni_hildesheim.sse.easy_producer.instantiator.model.artifactModel.IArt
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.artifactModel.IFileSystemArtifact;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilException;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.defaultInstantiators.RandomDouble;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.templateModel.Template;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.templateModel.TemplateLangExecution;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.configuration.Configuration;
 import de.uni_hildesheim.sse.model.confModel.ConfigurationException;
@@ -138,7 +139,8 @@ public class ExecutionTests extends AbstractTest {
     protected List<Message> assertEqual(String name, String startRuleName, Configuration cfg, 
         int... expectedExceptions) throws IOException {
         Map<String, Object> param = createParameterMap(cfg, null);
-        EqualitySetup setup = new EqualitySetup(createFile(name), name, null, createTraceFile(name), param);
+        EqualitySetup<Template> setup = new EqualitySetup<Template>(createFile(name), name, null, 
+            createTraceFile(name), param);
         setup.setStartElement(startRuleName);
         setup.setExpectedOutputFile(createOutFile(name));
         return assertEqual(setup, expectedExceptions);
@@ -699,7 +701,8 @@ public class ExecutionTests extends AbstractTest {
         String name = "ivml6";
         Configuration cfg = new Configuration(DefaultConfiguration.createDefaultConfiguration());
         Map<String, Object> param = createParameterMap(cfg, null);
-        EqualitySetup setup = new EqualitySetup(createFile(name), name, null, createTraceFile(name), param);
+        EqualitySetup<Template> setup = new EqualitySetup<Template>(createFile(name), name, null, 
+            createTraceFile(name), param);
         setup.setStartElement("main");
         setup.setExpectedOutputFile(createOutFile(name));
         IFileSystemArtifact target = (IFileSystemArtifact) setup.getParameter().get(TemplateLangExecution.PARAM_TARGET);

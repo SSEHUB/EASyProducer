@@ -140,7 +140,7 @@ public abstract class AbstractTest extends de.uni_hildesheim.sse.dslCore.test.Ab
      * @return the warnings collected (may be <b>null</b>)
      * @throws IOException problems finding or reading the model file
      */
-    protected List<Message> assertEqual(EqualitySetup data, int... expectedErrorCodes)
+    protected List<Message> assertEqual(EqualitySetup<Template> data, int... expectedErrorCodes)
         throws IOException {
         List<Message> warnings = null;
         File file = data.getFile();
@@ -225,7 +225,7 @@ public abstract class AbstractTest extends de.uni_hildesheim.sse.dslCore.test.Ab
      * @param setup the setup instance to be analyzed for default parameters
      * @return the base folders or <b>null</b>
      */
-    private static String[] getBaseFolders(EqualitySetup setup) {
+    private static String[] getBaseFolders(EqualitySetup<Template> setup) {
         List<String> tmp = new ArrayList<String>();
         Map<String, Object> param = setup.getParameter();
         if (null != param) {

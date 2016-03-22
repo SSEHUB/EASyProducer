@@ -79,7 +79,7 @@ public class ExecutionRtTests extends AbstractRtTest {
     
     @Override
     protected void testExecutor(de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.Script script, 
-        EqualitySetup data) throws VilException {
+        EqualitySetup<Script> data) throws VilException {
         // disable the executor testing for now - leads to the execution of a rtVILscript with VIL searching for
         // the default main model
     }
@@ -131,7 +131,7 @@ public class ExecutionRtTests extends AbstractRtTest {
         
         // do the same game with different trace result that shall lead to different variable assignment
         Map<String, Object> param = createParameterMap(null, null, null);
-        EqualitySetup setup = new EqualitySetup(createFile(testName), testName, null, 
+        EqualitySetup<Script> setup = new EqualitySetup<>(createFile(testName), testName, null, 
             createTraceFile(testName + ".snd"), param);
         assertEqual(setup);
         
@@ -150,7 +150,7 @@ public class ExecutionRtTests extends AbstractRtTest {
         final String name = "startup";
         Map<String, Object> param = createParameterMap(null, null, null);
         param.put("event", new LifecycleEvent("pipeline", LifecycleEvent.Status.START));
-        EqualitySetup setup = new EqualitySetup(createFile(name), name, null, createTraceFile(name), param);
+        EqualitySetup<Script> setup = new EqualitySetup<>(createFile(name), name, null, createTraceFile(name), param);
         assertEqual(setup, AbstractException.ID_CANNOT_RESOLVE);
     }
 
@@ -164,7 +164,7 @@ public class ExecutionRtTests extends AbstractRtTest {
         final String name = "startup1";
         Map<String, Object> param = createParameterMap(null, null, null);
         param.put("event", new LifecycleEvent("pipeline", LifecycleEvent.Status.START));
-        EqualitySetup setup = new EqualitySetup(createFile(name), name, null, createTraceFile(name), param);
+        EqualitySetup<Script> setup = new EqualitySetup<>(createFile(name), name, null, createTraceFile(name), param);
         assertEqual(setup);
     }
 
@@ -180,15 +180,16 @@ public class ExecutionRtTests extends AbstractRtTest {
         
         // test startup
         param.put("event", new LifecycleEvent("pipeline", LifecycleEvent.Status.START));
-        EqualitySetup setup = new EqualitySetup(createFile(name), name, null, createTraceFile(name + ".start"), param);
+        EqualitySetup<Script> setup = new EqualitySetup<>(createFile(name), name, null, 
+            createTraceFile(name + ".start"), param);
         assertEqual(setup);
 
         param.put("event", new LifecycleEvent("pipeline", LifecycleEvent.Status.END));
-        setup = new EqualitySetup(createFile(name), name, null, createTraceFile(name + ".end"), param);
+        setup = new EqualitySetup<>(createFile(name), name, null, createTraceFile(name + ".end"), param);
         assertEqual(setup);
 
         param.put("event", new RegularAdaptationEvent());
-        setup = new EqualitySetup(createFile(name), name, null, createTraceFile(name + ".regular"), param);
+        setup = new EqualitySetup<>(createFile(name), name, null, createTraceFile(name + ".regular"), param);
         assertEqual(setup);
     }
     
@@ -205,7 +206,7 @@ public class ExecutionRtTests extends AbstractRtTest {
         Configuration cfg = getIvmlConfiguration("QM1", NoVariableFilter.INSTANCE);
         Map<String, Object> param = createParameterMap(null, null, cfg);
         param.put("event", new LifecycleEvent("pip", LifecycleEvent.Status.START));
-        EqualitySetup setup = new EqualitySetup(createFile(name), name, null, createTraceFile(name), param);
+        EqualitySetup<Script> setup = new EqualitySetup<>(createFile(name), name, null, createTraceFile(name), param);
         assertEqual(setup);
         Assert.assertEquals(2, CommandCollector.getExecutedCount());
         Assert.assertTrue(CommandCollector.getExecuted(0) instanceof CommandSequence);
@@ -240,6 +241,7 @@ public class ExecutionRtTests extends AbstractRtTest {
         Assert.assertEquals(0, result.getErrorCount());
         Assert.assertEquals(1, result.getResultCount());
         
+        // do initialization here
         Executor exec = new Executor(result.getResult(0));
         File tmp = File.createTempFile("rtviltest", "temp");
         tmp.delete();
@@ -262,7 +264,8 @@ public class ExecutionRtTests extends AbstractRtTest {
         Map<String, Object> param = createParameterMap(null, null, cfg);
         param.put("event", new LifecycleEvent("pip", LifecycleEvent.Status.START));
         param.put("values", null);
-        EqualitySetup setup = new EqualitySetup(modelFile, name, null, createTraceFile(name), param);
+        EqualitySetup<Script> setup = new EqualitySetup<>(modelFile, name, null, createTraceFile(name), param);
+        setup.setModel(result.getResult(0)); // ensure same for initialize - no initialization here
         assertEqual(setup);
         Assert.assertEquals(2, CommandCollector.getExecutedCount());
         Assert.assertTrue(CommandCollector.getExecuted(0) instanceof CommandSequence);
@@ -301,7 +304,7 @@ public class ExecutionRtTests extends AbstractRtTest {
         
         Map<String, Object> param = createParameterMap(null, null, cfg);
         param.put("event", new ParameterAdaptationEvent<Integer>("pipeline", "element", "delay", 50));
-        EqualitySetup setup = new EqualitySetup(modelFile, name, null, createTraceFile(name), param);
+        EqualitySetup<Script> setup = new EqualitySetup<>(modelFile, name, null, createTraceFile(name), param);
         setup.setEnableEquals(false);
         assertEqual(setup);
     }
@@ -316,7 +319,7 @@ public class ExecutionRtTests extends AbstractRtTest {
         final String name = "parameter2";
         Configuration cfg = getIvmlConfiguration("QM2", NoVariableFilter.INSTANCE);
         Map<String, Object> param = createParameterMap(null, null, cfg);
-        EqualitySetup setup = new EqualitySetup(createFile(name), name, null, createTraceFile(name), param);
+        EqualitySetup<Script> setup = new EqualitySetup<>(createFile(name), name, null, createTraceFile(name), param);
         setup.setExpectedFailReason("not done");
         assertEqual(setup);
     }
@@ -349,7 +352,7 @@ public class ExecutionRtTests extends AbstractRtTest {
         
         Map<String, Object> param = createParameterMap(null, null, cfg);
         param.put("event", new ParameterAdaptationEvent<Integer>("pipeline", "element", "delay", 50));
-        EqualitySetup setup = new EqualitySetup(modelFile, name, null, createTraceFile(name), param);
+        EqualitySetup<Script> setup = new EqualitySetup<>(modelFile, name, null, createTraceFile(name), param);
         setup.setEnableEquals(false);
         assertEqual(setup);
     }
@@ -366,7 +369,7 @@ public class ExecutionRtTests extends AbstractRtTest {
         Configuration cfg = getIvmlConfiguration("QM4", NoVariableFilter.INSTANCE);
         
         Map<String, Object> param = createParameterMap(null, null, cfg);
-        EqualitySetup setup = new EqualitySetup(modelFile, name, null, createTraceFile(name), param);
+        EqualitySetup<Script> setup = new EqualitySetup<>(modelFile, name, null, createTraceFile(name), param);
         setup.setEnableEquals(false);
         assertEqual(setup);
     }
@@ -383,7 +386,7 @@ public class ExecutionRtTests extends AbstractRtTest {
         Configuration cfg = getIvmlConfiguration("QM5", NoVariableFilter.INSTANCE);
         
         Map<String, Object> param = createParameterMap(null, null, cfg);
-        EqualitySetup setup = new EqualitySetup(modelFile, name, null, createTraceFile(name), param);
+        EqualitySetup<Script> setup = new EqualitySetup<>(modelFile, name, null, createTraceFile(name), param);
         setup.setEnableEquals(false);
         assertEqual(setup);
     }
@@ -438,7 +441,7 @@ public class ExecutionRtTests extends AbstractRtTest {
     public void testFail3() throws IOException {
         final String name = "fail3";
         Map<String, Object> param = createParameterMap(null, null, null);
-        EqualitySetup setup = new EqualitySetup(createFile(name), name, null, createTraceFile(name), param);
+        EqualitySetup<Script> setup = new EqualitySetup<>(createFile(name), name, null, createTraceFile(name), param);
         setup.setExpectedFailCode(127);
         setup.setExpectedFailReason("unknown");
         assertEqual(setup);
@@ -453,7 +456,7 @@ public class ExecutionRtTests extends AbstractRtTest {
     public void testFail4() throws IOException {
         final String name = "fail4";
         Map<String, Object> param = createParameterMap(null, null, null);
-        EqualitySetup setup = new EqualitySetup(createFile(name), name, null, createTraceFile(name), param);
+        EqualitySetup<Script> setup = new EqualitySetup<>(createFile(name), name, null, createTraceFile(name), param);
         setup.setExpectedFailCode(127);
         setup.setExpectedFailReason("unknown");
         assertEqual(setup);
@@ -469,7 +472,7 @@ public class ExecutionRtTests extends AbstractRtTest {
         final String name = "fail5";
         Map<String, Object> param = createParameterMap(null, null, null);
         param.put("event", new ParameterAdaptationEvent<Integer>("pipeline", "element", "param", 5));
-        EqualitySetup setup = new EqualitySetup(createFile(name), name, null, createTraceFile(name), param);
+        EqualitySetup<Script> setup = new EqualitySetup<>(createFile(name), name, null, createTraceFile(name), param);
         setup.setExpectedFailReason("unknown");
         setup.setExpectedFailCode(127);
         assertEqual(setup);
@@ -521,7 +524,7 @@ public class ExecutionRtTests extends AbstractRtTest {
         param.put("event", new StartupAdaptationEvent("pipeline"));
         param.put("bindings", null);
 
-        EqualitySetup setup = new EqualitySetup(createFile(name), name, null, createTraceFile(name), param);
+        EqualitySetup<Script> setup = new EqualitySetup<>(createFile(name), name, null, createTraceFile(name), param);
         assertEqual(setup);
 
         Assert.assertEquals(2, CommandCollector.getExecutedCount());
@@ -529,7 +532,7 @@ public class ExecutionRtTests extends AbstractRtTest {
         Assert.assertTrue(CommandCollector.getExecuted(1) instanceof AlgorithmChangeCommand);
         CommandCollector.clear();
         
-        setup = new EqualitySetup(createFile(name), name, null, createTraceFile(name + ".snd"), param);
+        setup = new EqualitySetup<>(createFile(name), name, null, createTraceFile(name + ".snd"), param);
         assertEqual(setup);
         
         Assert.assertEquals(0, CommandCollector.getExecutedCount());
@@ -546,7 +549,7 @@ public class ExecutionRtTests extends AbstractRtTest {
      */
     protected void assertEqual(String name, int... expectedExceptions) throws IOException {
         Map<String, Object> param = createParameterMap(null, null, null);
-        EqualitySetup setup = new EqualitySetup(createFile(name), name, null, createTraceFile(name), param);
+        EqualitySetup<Script> setup = new EqualitySetup<>(createFile(name), name, null, createTraceFile(name), param);
         assertEqual(setup, expectedExceptions);
     }
 
@@ -560,7 +563,7 @@ public class ExecutionRtTests extends AbstractRtTest {
         final String name = "call";
         Configuration cfg = getIvmlConfiguration("QM1", NoVariableFilter.INSTANCE);
         Map<String, Object> param = createParameterMap(null, null, cfg);
-        EqualitySetup setup = new EqualitySetup(createFile(name), name, null, createTraceFile(name), param);
+        EqualitySetup<Script> setup = new EqualitySetup<>(createFile(name), name, null, createTraceFile(name), param);
         assertEqual(setup);
     }
     
@@ -574,7 +577,7 @@ public class ExecutionRtTests extends AbstractRtTest {
         final String name = "add";
         Configuration cfg = getIvmlConfiguration("Add", NoVariableFilter.INSTANCE);
         Map<String, Object> param = createParameterMap(null, null, cfg);
-        EqualitySetup setup = new EqualitySetup(createFile(name), name, null, createTraceFile(name), param);
+        EqualitySetup<Script> setup = new EqualitySetup<>(createFile(name), name, null, createTraceFile(name), param);
         assertEqual(setup);
     }
 
@@ -588,7 +591,7 @@ public class ExecutionRtTests extends AbstractRtTest {
         final String name = "dispatch1";
         Configuration cfg = getIvmlConfiguration("dispatch1", NoVariableFilter.INSTANCE);
         Map<String, Object> param = createParameterMap(null, null, cfg);
-        EqualitySetup setup = new EqualitySetup(createFile(name), name, null, createTraceFile(name), param);
+        EqualitySetup<Script> setup = new EqualitySetup<>(createFile(name), name, null, createTraceFile(name), param);
         assertEqual(setup);
     }
     
@@ -602,12 +605,12 @@ public class ExecutionRtTests extends AbstractRtTest {
         final String name = "default";
         Configuration cfg = getIvmlConfiguration("Add", NoVariableFilter.INSTANCE);
         Map<String, Object> param = createParameterMap(null, null, cfg);
-        EqualitySetup setup = new EqualitySetup(createFile(name), name, null, createTraceFile(name), param);
+        EqualitySetup<Script> setup = new EqualitySetup<>(createFile(name), name, null, createTraceFile(name), param);
         assertEqual(setup);
     }
 
     @Override
-    protected void assertExecutor(EqualitySetup data, 
+    protected void assertExecutor(EqualitySetup<Script> data, 
         de.uni_hildesheim.sse.easy_producer.instantiator.model.execution.Executor executor) {
         if (executor instanceof Executor) {
             Executor e = (Executor) executor;
@@ -616,7 +619,7 @@ public class ExecutionRtTests extends AbstractRtTest {
     }
 
     @Override
-    protected void assertFailure(EqualitySetup data, Object result) {
+    protected void assertFailure(EqualitySetup<Script> data, Object result) {
         String actualFailReason;
         Integer actualFailCode;
         de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.RuleExecutionResult.Status status;
@@ -644,7 +647,7 @@ public class ExecutionRtTests extends AbstractRtTest {
     }
 
     @Override
-    protected void assertFailure(EqualitySetup data, String actualFailReason, Integer actualFailCode, 
+    protected void assertFailure(EqualitySetup<Script> data, String actualFailReason, Integer actualFailCode, 
         de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.RuleExecutionResult.Status status) {
         if (null != data.getExpectedFailCode() || null != data.getExpectedFailReason()) {
             if (null != data.getExpectedFailCode()) {

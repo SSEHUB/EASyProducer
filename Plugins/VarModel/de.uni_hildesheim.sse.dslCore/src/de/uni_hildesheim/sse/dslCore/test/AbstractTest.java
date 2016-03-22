@@ -454,9 +454,10 @@ public abstract class AbstractTest<R extends IModel> {
     /**
      * Setup data needed to compare test results for equality.
      * 
+     * @param <R> the model type
      * @author Holger Eichelberger
      */
-    protected static class EqualitySetup {
+    protected static class EqualitySetup<R extends IModel> {
         private File file;
         private String expectedName;
         private String expectedVersion;
@@ -467,6 +468,7 @@ public abstract class AbstractTest<R extends IModel> {
         private boolean enableEquals = true;
         private Integer expectedFailCode;
         private String expectedFailReason;
+        private R model;
 
         /**
          * Creates an instance with no trace output and empty parameters.
@@ -512,6 +514,25 @@ public abstract class AbstractTest<R extends IModel> {
             this.expectedVersion = expectedVersion;
             this.expectedTrace = expectedTrace;
             this.parameter = parameter;
+        }
+        
+        /**
+         * Sets the (overriding) model. If using this method, ensure that the model you are using
+         * is identical to the model used during tests.
+         * 
+         * @param model the model (may be <b>null</b> for none)
+         */
+        public void setModel(R model) {
+            this.model = model;
+        }
+        
+        /**
+         * Returns the (overriding) model.
+         * 
+         * @return the model (may be <b>null</b> if there is none)
+         */
+        public R getModel() {
+            return model;
         }
 
         /**
@@ -660,7 +681,7 @@ public abstract class AbstractTest<R extends IModel> {
      * 
      * @return the message to be used in assertions
      */
-    protected String assertNamingAndVersion(EqualitySetup data, TranslationResult<R> result) {
+    protected String assertNamingAndVersion(EqualitySetup<R> data, TranslationResult<R> result) {
         String message = null;
         if (null != data.expectedName) {
             boolean found = false;

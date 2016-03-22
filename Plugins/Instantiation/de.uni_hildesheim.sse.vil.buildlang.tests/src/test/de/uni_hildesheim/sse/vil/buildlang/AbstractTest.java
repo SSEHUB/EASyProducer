@@ -210,7 +210,7 @@ public abstract class AbstractTest<M extends Script> extends de.uni_hildesheim.s
      *   multiple times need to be listed multiple times here)
      * @throws IOException problems finding or reading the model file
      */
-    protected void assertEqual(EqualitySetup data, int... expectedErrorCodes) throws IOException {
+    protected void assertEqual(EqualitySetup<M> data, int... expectedErrorCodes) throws IOException {
         assertEqual(data, null, expectedErrorCodes);
     }
 
@@ -228,7 +228,7 @@ public abstract class AbstractTest<M extends Script> extends de.uni_hildesheim.s
      *   multiple times need to be listed multiple times here)
      * @throws IOException problems finding or reading the model file
      */
-    protected void assertEqual(EqualitySetup data, Cleaner cleaner, int... expectedErrorCodes) throws IOException {
+    protected void assertEqual(EqualitySetup<M> data, Cleaner cleaner, int... expectedErrorCodes) throws IOException {
         BuildlangExecution exec;
         File file = data.getFile();
         if (file.exists()) {
@@ -257,7 +257,7 @@ public abstract class AbstractTest<M extends Script> extends de.uni_hildesheim.s
                 try { // for debugging insert DelegatingSysoutWriter here
                     String fileAsString = file2String(expectedTrace);
                     Assert.assertTrue(null != fileAsString);
-                    Script script = result.getResult(0);
+                    Script script = getModel(result.getResult(0), data);
                     TracerFactory oldFactory = TracerFactory.getInstance();
                     TracerFactory.setInstance(configurer.createTestTracerFactory(trace, getBaseFolders(data)));
                     exec = configurer.createExecutionEnvironment(TracerFactory.createBuildLanguageTracer(), 
@@ -298,14 +298,27 @@ public abstract class AbstractTest<M extends Script> extends de.uni_hildesheim.s
             Assert.assertTrue("File '" + file + "' does not exist", false);
         }
     }
+
+    /**
+     * Returns the active model from <code>model</code> and <code>data</code>.
+     * 
+     * @param model the model
+     * @param data the setup data
+     * @return the active model
+     */
+    private M getModel(M model, EqualitySetup<M> data) {
+        M dModel = data.getModel();
+        return null == dModel ? model : dModel;
+    }
     
     /**
      * Obtain the base folders (for the stream tracer) from <code>setup</code>.
      * 
+     * @param <M> the model type
      * @param setup the setup instance to be analyzed for default parameters
      * @return the base folders or <b>null</b>
      */
-    private static String[] getBaseFolders(EqualitySetup setup) {
+    private static <M extends Script> String[] getBaseFolders(EqualitySetup<M> setup) {
         List<String> tmp = new ArrayList<String>();
         addBaseFolders(setup, Executor.PARAM_SOURCE, tmp);
         addBaseFolders(setup, Executor.PARAM_TARGET, tmp);
@@ -324,11 +337,13 @@ public abstract class AbstractTest<M extends Script> extends de.uni_hildesheim.s
     /**
      * Adds base folders from <code>setup</code> for <code>paramName</code> to <code>result</code>.
      * 
+     * @param <M> the model type
      * @param setup the setup instance to be analyzed for default parameters
      * @param paramName the parameter name to be taken into account
      * @param result modified as a side effect to contain the obtained base folders
      */
-    private static void addBaseFolders(EqualitySetup setup, String paramName, List<String> result) {
+    private static <M extends Script> void addBaseFolders(EqualitySetup<M> setup, String paramName, 
+        List<String> result) {
         Map<String, Object> param = setup.getParameter();
         if (null != param) {
             Object p = param.get(paramName);
@@ -370,7 +385,7 @@ public abstract class AbstractTest<M extends Script> extends de.uni_hildesheim.s
      *     
      * @see #assertExecutor(de.uni_hildesheim.sse.dslCore.test.AbstractTest.EqualitySetup, Executor)
      */
-    protected void testExecutor(Script script, EqualitySetup data) throws VilException {
+    protected void testExecutor(Script script, EqualitySetup<M> data) throws VilException {
         // this may not do the same as the execution before - this would be a second instantiation
         Map<String, Object> args = data.getParameter();
         // several test cases do not have all default parameters!
@@ -399,7 +414,7 @@ public abstract class AbstractTest<M extends Script> extends de.uni_hildesheim.s
      * @param data the test setup
      * @param result the execution result
      */
-    protected void assertFailure(EqualitySetup data, Object result) {
+    protected void assertFailure(EqualitySetup<M> data, Object result) {
     }
     
     /**
@@ -410,7 +425,7 @@ public abstract class AbstractTest<M extends Script> extends de.uni_hildesheim.s
      * @param actualFailCode the code for failing (may be <b>null</b>)
      * @param status the actual execution status
      */
-    protected void assertFailure(EqualitySetup data, String actualFailReason, Integer actualFailCode, 
+    protected void assertFailure(EqualitySetup<M> data, String actualFailReason, Integer actualFailCode, 
         de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.RuleExecutionResult.Status status) {
     }
 
@@ -420,7 +435,7 @@ public abstract class AbstractTest<M extends Script> extends de.uni_hildesheim.s
      * @param data the test setup data
      * @param executor the executor
      */
-    protected void assertExecutor(EqualitySetup data, Executor executor) {
+    protected void assertExecutor(EqualitySetup<M> data, Executor executor) {
     }
     
     /**

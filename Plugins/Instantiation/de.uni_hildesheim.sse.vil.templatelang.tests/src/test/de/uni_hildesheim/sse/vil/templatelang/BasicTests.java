@@ -7,6 +7,7 @@ import org.junit.Test;
 
 import de.uni_hildesheim.sse.dslCore.translation.ErrorCodes;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilException;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.templateModel.Template;
 
 /**
  * Performs basic (syntactic) tests.
@@ -43,7 +44,7 @@ public class BasicTests extends AbstractTest {
      *             problems finding or reading the model file
      */
     protected void assertEqual(String file, int... expectedErrorCodes) throws IOException {
-        EqualitySetup data = new EqualitySetup(createFile(file), file, null, null);
+        EqualitySetup<Template> data = new EqualitySetup<Template>(createFile(file), file, null, null);
         assertEqual(data, expectedErrorCodes);
     }
 
@@ -67,7 +68,7 @@ public class BasicTests extends AbstractTest {
      */
     protected void assertEqual(String file, String expectedName, int... expectedErrorCodes) 
         throws IOException {
-        EqualitySetup data = new EqualitySetup(createFile(file), expectedName, null);
+        EqualitySetup<Template> data = new EqualitySetup<Template>(createFile(file), expectedName, null);
         assertEqual(data, expectedErrorCodes);
     }
 
@@ -90,7 +91,7 @@ public class BasicTests extends AbstractTest {
      */
     protected void assertEqual(String file, String expectedName, String expectedVersion, int... expectedErrorCodes) 
         throws IOException {
-        EqualitySetup data = new EqualitySetup(createFile(file), expectedName, expectedVersion);
+        EqualitySetup<Template> data = new EqualitySetup<Template>(createFile(file), expectedName, expectedVersion);
         assertEqual(data, expectedErrorCodes);
     }
     
