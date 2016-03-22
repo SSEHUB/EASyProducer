@@ -462,7 +462,7 @@ public class VariableValueCopier {
      * @param qname the variable name to search for
      * @return the resulting variable or <b>null</b> if there is none
      */
-    private IDecisionVariable findVariable(IDecisionVariable base, String qname) {
+    public static IDecisionVariable findVariable(IDecisionVariable base, String qname) {
         int pos = qname.indexOf(IvmlKeyWords.COMPOUND_ACCESS);
         String searchName;
         String restName;
