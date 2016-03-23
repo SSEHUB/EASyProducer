@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project name="QMProperties" default="copy" basedir=".">
+<project name="QMProperties" default="all" basedir=".">
 	
 	<!-- Targets  -->
 	<target name="copy">
@@ -13,6 +13,11 @@
                 <include name="changelog.html"/>
             </fileset>
         </scp>
+    </target>
+    
+    <target name="all">
+        <antcall target="copy"/>
+        <antcall target="updateChLog"/>
     </target>
 	
 </project>
