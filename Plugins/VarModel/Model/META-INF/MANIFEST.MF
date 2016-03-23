@@ -27,4 +27,5 @@ Export-Package: de.uni_hildesheim.sse.capabilities,
 Bundle-Vendor: University of Hildesheim - SSE
 Bundle-ActivationPolicy: lazy
 Bundle-ClassPath: .
-Require-Bundle: de.uni_hildesheim.sse.utils;bundle-version="0.0.1";visibility:=reexport
+Require-Bundle: de.uni_hildesheim.sse.utils;bundle-version="0.0.1";visibility:=reexport,
+ org.apache.commons.lang;bundle-version="2.6.0"

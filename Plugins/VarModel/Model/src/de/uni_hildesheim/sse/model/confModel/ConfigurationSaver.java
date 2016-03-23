@@ -41,13 +41,11 @@ import de.uni_hildesheim.sse.model.varModel.ProjectImport;
 import de.uni_hildesheim.sse.model.varModel.datatypes.Compound;
 import de.uni_hildesheim.sse.model.varModel.datatypes.IDatatype;
 import de.uni_hildesheim.sse.model.varModel.datatypes.OclKeyWords;
-import de.uni_hildesheim.sse.model.varModel.datatypes.StringType;
 import de.uni_hildesheim.sse.model.varModel.filter.ConstraintSeparator;
 import de.uni_hildesheim.sse.model.varModel.filter.FilterType;
 import de.uni_hildesheim.sse.model.varModel.filter.FreezeBlockFinder;
 import de.uni_hildesheim.sse.model.varModel.filter.FrozenElementsFinder;
 import de.uni_hildesheim.sse.model.varModel.values.CompoundValue;
-import de.uni_hildesheim.sse.model.varModel.values.StringValue;
 import de.uni_hildesheim.sse.model.varModel.values.Value;
 import de.uni_hildesheim.sse.model.varModel.values.ValueDoesNotMatchTypeException;
 import de.uni_hildesheim.sse.model.varModel.values.ValueFactory;
@@ -375,20 +373,7 @@ public class ConfigurationSaver {
      */
     protected Value toSaveableValue(IDecisionVariable var, Value value) {
         if (null != value && null != value.getValue()) {
-            if (value instanceof StringValue) {
-                StringValue sValue = (StringValue) value;
-                String tmpValue = sValue.getValue();
-                // Replace \ with \\
-                tmpValue = tmpValue.replaceAll("\\\\", "\\\\\\\\");
-                // Replace " with \"
-                tmpValue = tmpValue.replaceAll("\\\"", "\\\\\"");
-                try {
-                    value = ValueFactory.createValue(StringType.TYPE, tmpValue);
-                } catch (ValueDoesNotMatchTypeException e) {
-                    // This exception should not occur.
-                    Bundle.getLogger(ConfigurationSaver.class).exception(e);
-                }
-            } else if (value instanceof CompoundValue) {
+            if (value instanceof CompoundValue) {
                 // Filter compound value/variable for user defined states and save only them
                 CompoundValue cmpValue = (CompoundValue) value;
                 ArrayList<Object> slotsNValues = new ArrayList<Object>();

@@ -15,13 +15,62 @@
  */
 package de.uni_hildesheim.sse.persistency;
 
-import static de.uni_hildesheim.sse.model.varModel.IvmlKeyWords.*;
+import static de.uni_hildesheim.sse.model.varModel.IvmlKeyWords.ABSTRACT;
+import static de.uni_hildesheim.sse.model.varModel.IvmlKeyWords.ASSIGN;
+import static de.uni_hildesheim.sse.model.varModel.IvmlKeyWords.ASSIGNMENT;
+import static de.uni_hildesheim.sse.model.varModel.IvmlKeyWords.ATTRIBUTE;
+import static de.uni_hildesheim.sse.model.varModel.IvmlKeyWords.BEGINNING_BLOCK;
+import static de.uni_hildesheim.sse.model.varModel.IvmlKeyWords.BEGINNING_PARENTHESIS;
+import static de.uni_hildesheim.sse.model.varModel.IvmlKeyWords.BUT;
+import static de.uni_hildesheim.sse.model.varModel.IvmlKeyWords.COMMA;
+import static de.uni_hildesheim.sse.model.varModel.IvmlKeyWords.COMPOUND;
+import static de.uni_hildesheim.sse.model.varModel.IvmlKeyWords.COMPOUND_ACCESS;
+import static de.uni_hildesheim.sse.model.varModel.IvmlKeyWords.CONFLICTS;
+import static de.uni_hildesheim.sse.model.varModel.IvmlKeyWords.CONTAINER_OP_ACCESS;
+import static de.uni_hildesheim.sse.model.varModel.IvmlKeyWords.DEF;
+import static de.uni_hildesheim.sse.model.varModel.IvmlKeyWords.ELSE;
+import static de.uni_hildesheim.sse.model.varModel.IvmlKeyWords.ENDIF;
+import static de.uni_hildesheim.sse.model.varModel.IvmlKeyWords.ENDING_BLOCK;
+import static de.uni_hildesheim.sse.model.varModel.IvmlKeyWords.ENDING_PARENTHESIS;
+import static de.uni_hildesheim.sse.model.varModel.IvmlKeyWords.ENUM;
+import static de.uni_hildesheim.sse.model.varModel.IvmlKeyWords.ENUM_ACCESS;
+import static de.uni_hildesheim.sse.model.varModel.IvmlKeyWords.EVAL;
+import static de.uni_hildesheim.sse.model.varModel.IvmlKeyWords.EXPORT;
+import static de.uni_hildesheim.sse.model.varModel.IvmlKeyWords.FREEZE;
+import static de.uni_hildesheim.sse.model.varModel.IvmlKeyWords.IF;
+import static de.uni_hildesheim.sse.model.varModel.IvmlKeyWords.IMPORT;
+import static de.uni_hildesheim.sse.model.varModel.IvmlKeyWords.IN;
+import static de.uni_hildesheim.sse.model.varModel.IvmlKeyWords.INTERFACE;
+import static de.uni_hildesheim.sse.model.varModel.IvmlKeyWords.LET;
+import static de.uni_hildesheim.sse.model.varModel.IvmlKeyWords.LINEFEED;
+import static de.uni_hildesheim.sse.model.varModel.IvmlKeyWords.NAMESPACE_SEPARATOR;
+import static de.uni_hildesheim.sse.model.varModel.IvmlKeyWords.NULL;
+import static de.uni_hildesheim.sse.model.varModel.IvmlKeyWords.OPDEF_SEPARATOR;
+import static de.uni_hildesheim.sse.model.varModel.IvmlKeyWords.PIPE;
+import static de.uni_hildesheim.sse.model.varModel.IvmlKeyWords.PROJECT;
+import static de.uni_hildesheim.sse.model.varModel.IvmlKeyWords.QUOTES;
+import static de.uni_hildesheim.sse.model.varModel.IvmlKeyWords.REFBY;
+import static de.uni_hildesheim.sse.model.varModel.IvmlKeyWords.REFINES;
+import static de.uni_hildesheim.sse.model.varModel.IvmlKeyWords.SEMICOLON;
+import static de.uni_hildesheim.sse.model.varModel.IvmlKeyWords.SEQUENCEOF;
+import static de.uni_hildesheim.sse.model.varModel.IvmlKeyWords.SETOF;
+import static de.uni_hildesheim.sse.model.varModel.IvmlKeyWords.STATIC;
+import static de.uni_hildesheim.sse.model.varModel.IvmlKeyWords.THEN;
+import static de.uni_hildesheim.sse.model.varModel.IvmlKeyWords.TO;
+import static de.uni_hildesheim.sse.model.varModel.IvmlKeyWords.TYPEDEF;
+import static de.uni_hildesheim.sse.model.varModel.IvmlKeyWords.VERSION;
+import static de.uni_hildesheim.sse.model.varModel.IvmlKeyWords.VERSION_START;
+import static de.uni_hildesheim.sse.model.varModel.IvmlKeyWords.WHITESPACE;
+import static de.uni_hildesheim.sse.model.varModel.IvmlKeyWords.WITH;
+import static de.uni_hildesheim.sse.model.varModel.datatypes.OclKeyWords.SELF;
 
 import java.io.Writer;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Stack;
+
+import org.apache.commons.lang.StringEscapeUtils;
 
 import de.uni_hildesheim.sse.model.cst.AttributeVariable;
 import de.uni_hildesheim.sse.model.cst.CompoundAccess;
@@ -392,7 +441,7 @@ public class IVMLWriter extends AbstractVarModelWriter {
         String val = value.getValue();
         if (null != val) {
             appendOutput(QUOTES);
-            appendOutput(val);
+            appendOutput(StringEscapeUtils.escapeJava(val));
             appendOutput(QUOTES);
         }
     }

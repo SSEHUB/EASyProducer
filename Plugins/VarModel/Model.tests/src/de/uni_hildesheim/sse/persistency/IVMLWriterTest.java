@@ -5,7 +5,6 @@ import java.io.StringWriter;
 
 import org.junit.Assert;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import de.uni_hildesheim.sse.model.confModel.AssignmentState;
@@ -998,13 +997,12 @@ public class IVMLWriterTest {
      * @throws ConfigurationException Must not occur, unless
      *     {@link IDecisionVariable#setValue(Value, de.uni_hildesheim.sse.model.confModel.IAssignmentState)} is broken
      */
-    @Ignore("Will be fixed by Sascha")
     @Test
     public void testWriteValuesContainingEscapedChars() throws ValueDoesNotMatchTypeException, CSTSemanticException,
         ConfigurationException {
         
-        String actualValue = "\"";
-        Value actualStrValue = ValueFactory.createValue(StringType.TYPE, actualValue);
+        String unescapedValue = "\"";
+        Value actualStrValue = ValueFactory.createValue(StringType.TYPE, unescapedValue);
         // String var, value will be assigned through the configuration (must be the first)
         DecisionVariableDeclaration strDecl0 = new DecisionVariableDeclaration("strVar0", StringType.TYPE, pro);
         pro.add(strDecl0);
@@ -1014,7 +1012,7 @@ public class IVMLWriterTest {
         config.toProject(false);
         // String var with default value
         DecisionVariableDeclaration strDecl1 = new DecisionVariableDeclaration("strVar1", StringType.TYPE, pro);
-        strDecl1.setValue(actualValue);
+        strDecl1.setValue(unescapedValue);
         pro.add(strDecl1);
         // String var with assigned value
         DecisionVariableDeclaration strDecl2 = new DecisionVariableDeclaration("strVar2", StringType.TYPE, pro);
@@ -1028,15 +1026,25 @@ public class IVMLWriterTest {
         // Validate project before testing
         ProjectTestUtilities.validateProject(pro);
         
+        // Test: Elements shall not be escaped inside the model
+        OCLFeatureCall configAssignment = (OCLFeatureCall) ((Constraint) pro.getElement(1)).getConsSyntax();
+        Value assignedValue0 = ((ConstantValue) configAssignment.getParameter(0)).getConstantValue();
+        String actualValue0 = assignedValue0.getValue().toString();
+        Assert.assertEquals("Wrong value assignment for: strVar0 = " + actualValue0, unescapedValue, actualValue0);
+        String actualValue1 = ((ConstantValue) strDecl1.getDefaultValue()).getConstantValue().getValue().toString();
+        Assert.assertEquals("Wrong value assignment for: strVar1 = " + actualValue1, unescapedValue, actualValue1);
+        String actualValue2 = actualStrValue.getValue().toString();
+        Assert.assertEquals("Wrong value assignment for: strVar2 = " + actualValue2, unescapedValue, actualValue2);
+        
         // Test whether all three values are saved in the same and correct way
-        String expectedValue = "\\\"";
+        String escapedValue = "\\\"";
         String result = saveProjectToString();
         String[] lines = result.split("\n");
         for (int i = 0; i < lines.length; i++) {
             String line = lines[i].trim();
             if (line.contains(OclKeyWords.ASSIGNMENT)) {
                 Assert.assertTrue("String value was saved incorrectly in line " + (i + 1) + " in :\n" + result,
-                    line.contains(expectedValue));
+                    line.contains(escapedValue));
             }
         }
     }
