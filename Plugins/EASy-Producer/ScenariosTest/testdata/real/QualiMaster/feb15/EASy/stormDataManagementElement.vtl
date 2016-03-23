@@ -137,14 +137,14 @@ template stormDataManagementElement(Configuration config, FileArtifact target, D
 			strategyStr = null;
 		} else if(strategy == DataManagementStrategy.FirstInFirstOut){
 			strategyStr = "FirstInFirstOutStorageStrategyDescriptor.INSTANCE";
-		} else if(DataManagementStrategy.LeastFrequentlyUsed){
+		} else if(strategy == DataManagementStrategy.LeastFrequentlyUsed){
 			Integer cutoffCapacity = persistentDataElt.cutoffCapacity;
 			strategyStr = "LeastFrequentlyUsedStorageStrategyDescriptor($cutoffCapacity)";			
-		} else if(DataManagementStrategy.LeastFrequentlyRecentlyUsed){
+		} else if(strategy == DataManagementStrategy.LeastFrequentlyRecentlyUsed){
 			Integer timeLine = persistentDataElt.timeLine;
 			Integer cutoffCapacity = persistentDataElt.cutoffCapacity;
 			strategyStr = "LeastFrequentlyRecentlyUsedStorageStrategyDescriptor($cutoffCapacity, $timeLine)";
-		} else if(DataManagementStrategy.LeastRecentlyUsed){
+		} else if(strategy == DataManagementStrategy.LeastRecentlyUsed){
 			Integer timeLine = persistentDataElt.timeLine;
 			strategyStr = "LeastRecentlyUsedStorageStrategyDescriptor($timeLine)";			
 		}

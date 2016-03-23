@@ -1,3 +1,4 @@
 -> main(Configuration, FileArtifact) with (<config>, test.texts)
+    cfg <- <config>
     visit if-branch
     visit if-branch

@@ -504,6 +504,8 @@ public class ModelTranslator extends de.uni_hildesheim.sse.vil.expressions.trans
     private AlternativeStatement processAlternative(de.uni_hildesheim.sse.vil.templatelang.templateLang.Alternative alt) 
         throws TranslatorException {
         Expression condition = expressionTranslator.processExpression(alt.getExpr(), resolver);
+        condition = expressionTranslator.assertBooleanExpression(condition, alt, 
+            TemplateLangPackage.Literals.ALTERNATIVE__EXPR);
         resolver.pushLevel();
         ITemplateElement ifElt = processStatement(alt.getIf());
         resolver.popLevel();
@@ -549,16 +551,8 @@ public class ModelTranslator extends de.uni_hildesheim.sse.vil.expressions.trans
     private WhileStatement processWhile(de.uni_hildesheim.sse.vil.templatelang.templateLang.While loop) 
         throws TranslatorException {
         Expression loopExpression = expressionTranslator.processExpression(loop.getExpr(), resolver);
-        TypeDescriptor<?> exprType = null;
-        try {
-            exprType = loopExpression.inferType();
-        } catch (VilException e) {
-            throw new TranslatorException(e, loop, TemplateLangPackage.Literals.LOOP__EXPR);
-        }
-        if (!TypeRegistry.booleanType().isAssignableFrom(exprType)) {
-            throw new TranslatorException("while condition must be of type Boolean rather than " 
-                + exprType.getVilName(), loop, TemplateLangPackage.Literals.WHILE__EXPR, ErrorCodes.TYPE_CONSISTENCY);
-        }
+        loopExpression = expressionTranslator.assertBooleanExpression(loopExpression, loop, 
+            TemplateLangPackage.Literals.WHILE__EXPR);
         resolver.pushLevel();
         ITemplateElement stmt = null;
         try {

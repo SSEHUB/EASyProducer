@@ -2,12 +2,13 @@
 template alternative5(Configuration config, FileArtifact target) {
 
     def main(Configuration config, FileArtifact target) {
-        if (node.fast) {
+        alternative5 cfg = config;
+        if (cfg.node.fast) {
             'fast'
         } else {
             'slow'
         }
-        if (nodeRef.fast) {
+        if (cfg.nodeRef.fast) {
             'fastRef'
         } else {
             'slowRef'
