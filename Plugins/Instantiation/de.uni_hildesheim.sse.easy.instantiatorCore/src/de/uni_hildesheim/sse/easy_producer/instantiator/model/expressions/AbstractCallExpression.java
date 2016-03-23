@@ -498,18 +498,9 @@ public abstract class AbstractCallExpression extends Expression implements IArgu
                     if (2 == arguments.length) { // it could be an operator and the first could be a decision variable
                         op = tryOpConversionToSecond(opType, name, arguments);
                     }
-                    if (null == op) { // last resort... most types can be converted to string and it is ok
-                        IMetaType stringType = TypeRegistry.stringType();
-                        IMetaOperation convOp = TypeHelper.findConversion(opType, stringType); // includes Any->String
-                        if (null != convOp) {
-                            op = resolveOperation(stringType, name, arguments, true, false);
-                            if (opType == TypeRegistry.anyType()) {
-                                arguments[0].insertConversion(convOp);
-                                // ANY is assignable by itself, other conversion
-                                // will be added on the way but for ANY the conversion
-                                // is still needed
-                            } 
-                        } else {
+                    if (null == op) {
+                        op = resolveFallbacks(opType, name, arguments);
+                        if (null == op) {
                             throw e;
                         }
                     }
@@ -518,6 +509,45 @@ public abstract class AbstractCallExpression extends Expression implements IArgu
                 }
             } catch (VilException e1) {
                 throw e;
+            }
+        }
+        return op;
+    }
+    
+    /**
+     * Last resort resolution, try with String or in case of a decision variable with the primitive types it can 
+     * represent.
+     * 
+     * @param opType the operand type
+     * @param name the operation name
+     * @param arguments the arguments
+     * @return the operation or <b>null</b> if there is none
+     */
+    private static IMetaOperation resolveFallbacks(IMetaType opType, String name, CallArgument[] arguments) {
+        IMetaOperation op = null;
+        List<IMetaType> fallback = new ArrayList<IMetaType>();
+        fallback.add(TypeRegistry.stringType());
+        if (IvmlTypes.decisionVariableType().isAssignableFrom(opType)) {
+            fallback.add(TypeRegistry.booleanType());
+            fallback.add(TypeRegistry.realType());
+            fallback.add(TypeRegistry.integerType());
+        }
+        IMetaOperation convOp = null;
+        for (int f = 0; null == op && f < fallback.size(); f++) {
+            IMetaType fType = fallback.get(f);
+            convOp = TypeHelper.findConversion(opType, fType); // includes Any->String
+            if (null != convOp) {
+                try {
+                    op = resolveOperation(fType, name, arguments, true, false);
+                    if (opType == TypeRegistry.anyType()) {
+                        arguments[0].insertConversion(convOp);
+                        // ANY is assignable by itself, other conversion
+                        // will be added on the way but for ANY the conversion
+                        // is still needed
+                    } 
+                } catch (VilException e1) {
+                    // see below if not found
+                }
             }
         }
         return op;
@@ -647,7 +677,7 @@ public abstract class AbstractCallExpression extends Expression implements IArgu
             resolved = operand.addPlaceholderOperation(name, unnamed.length, arguments.length - unnamed.length > 0);
         }
         if (null == resolved) {
-            throw new VilException("cannot call operation " + getSignature(name, arguments), 
+            throw new VilException("cannot resolve operation " + getSignature(name, arguments), 
                 VilException.ID_CANNOT_RESOLVE);
         } else {
             if (unnamed.length != arguments.length && !resolved.acceptsNamedParameters()) {
