@@ -945,12 +945,12 @@ public class IVMLWriterTest {
      * Tests whether <b>typed</b> iterator variables inside a constraint saved correctly.
      * @throws ValueDoesNotMatchTypeException Must not occur, otherwise the {@link ValueFactory} or
      * {@link de.uni_hildesheim.sse.model.varModel.AbstractVariable#setValue(String)} are broken.
-     * @throws CSTSemanticException Must not occur, otherwise
-     * @throws IOException Must not occur, otherwise {@link IVMLWriter#flush()} is not working.
+     * @throws CSTSemanticException Must not occur, otherwise {@link Constraint#setConsSyntax(ConstraintSyntaxTree)} is
+     * broken.
      */
     @Test
     public void testTypedIteratorVariablesInConstraintTest() throws ValueDoesNotMatchTypeException,
-        CSTSemanticException, IOException {
+        CSTSemanticException {
         
         // Create compound
         Compound cType = new Compound("CP1", pro);
@@ -977,13 +977,92 @@ public class IVMLWriterTest {
         // Validate project before testing
         ProjectTestUtilities.validateProject(pro);
         
-        // Test: Iterator variable of constraint should be typed (with CP1)
+        String result = saveProjectToString();
+        String[] lines = result.split("\n");
+        Assert.assertEquals("    size(cmps->collect(CP1 c|c.intSlot > 10)) > 10;", lines[lines.length - 2]);
+    }
+    
+    /**
+     * Tests whether strings containing escaped characters are handled correctly when saving the project.
+     * This method tests whether quotes (&quot;) for String variables are handled correctly in the following cases:
+     * <ul>
+     *   <li>When setting the value through the configuration</li>
+     *   <li>When setting the value during the declaration (default value)</li>
+     *   <li>When assigning a value (via an assignment constraint)</li>
+     * </ul>
+     * @throws ValueDoesNotMatchTypeException Must not occur, otherwise the {@link ValueFactory} or
+     * {@link de.uni_hildesheim.sse.model.varModel.AbstractVariable#setValue(String)} are broken.
+     * @throws CSTSemanticException Must not occur, otherwise {@link Constraint#setConsSyntax(ConstraintSyntaxTree)} is
+     * broken.
+     * @throws ConfigurationException Must not occur, unless
+     *     {@link IDecisionVariable#setValue(Value, de.uni_hildesheim.sse.model.confModel.IAssignmentState)} is broken
+     */
+    @Test
+    public void testWriteValuesContainingEscapedChars() throws ValueDoesNotMatchTypeException, CSTSemanticException,
+        ConfigurationException {
+        
+        String unescapedValue = "\"";
+        Value actualStrValue = ValueFactory.createValue(StringType.TYPE, unescapedValue);
+        // String var, value will be assigned through the configuration (must be the first)
+        DecisionVariableDeclaration strDecl0 = new DecisionVariableDeclaration("strVar0", StringType.TYPE, pro);
+        pro.add(strDecl0);
+        Configuration config = new Configuration(pro, false);
+        IDecisionVariable strVar0 = config.getDecision(strDecl0);
+        strVar0.setValue(actualStrValue, AssignmentState.ASSIGNED);
+        config.toProject(false);
+        // String var with default value
+        DecisionVariableDeclaration strDecl1 = new DecisionVariableDeclaration("strVar1", StringType.TYPE, pro);
+        strDecl1.setValue(unescapedValue);
+        pro.add(strDecl1);
+        // String var with assigned value
+        DecisionVariableDeclaration strDecl2 = new DecisionVariableDeclaration("strVar2", StringType.TYPE, pro);
+        pro.add(strDecl2);
+        Constraint assignment = new Constraint(pro);
+        OCLFeatureCall call = new OCLFeatureCall(new Variable(strDecl2), OclKeyWords.ASSIGNMENT,
+            new ConstantValue(actualStrValue));
+        assignment.setConsSyntax(call);
+        pro.add(assignment);       
+        
+        // Validate project before testing
+        ProjectTestUtilities.validateProject(pro);
+        
+        // Test: Elements shall not be escaped inside the model
+        OCLFeatureCall configAssignment = (OCLFeatureCall) ((Constraint) pro.getElement(1)).getConsSyntax();
+        Value assignedValue0 = ((ConstantValue) configAssignment.getParameter(0)).getConstantValue();
+        String actualValue0 = assignedValue0.getValue().toString();
+        Assert.assertEquals("Wrong value assignment for: strVar0 = " + actualValue0, unescapedValue, actualValue0);
+        String actualValue1 = ((ConstantValue) strDecl1.getDefaultValue()).getConstantValue().getValue().toString();
+        Assert.assertEquals("Wrong value assignment for: strVar1 = " + actualValue1, unescapedValue, actualValue1);
+        String actualValue2 = actualStrValue.getValue().toString();
+        Assert.assertEquals("Wrong value assignment for: strVar2 = " + actualValue2, unescapedValue, actualValue2);
+        
+        // Test whether all three values are saved in the same and correct way
+        String escapedValue = "\\\"";
+        String result = saveProjectToString();
+        String[] lines = result.split("\n");
+        for (int i = 0; i < lines.length; i++) {
+            String line = lines[i].trim();
+            if (line.contains(OclKeyWords.ASSIGNMENT)) {
+                Assert.assertTrue("String value was saved incorrectly in line " + (i + 1) + " in :\n" + result,
+                    line.contains(escapedValue));
+            }
+        }
+    }
+
+    /**
+     * Helper method: Uses the {@link IVMLWriter} to save the project into a String.
+     * @return The saved projects as a string, not containing any carriage returns to make this String
+     * platform independent.
+     */
+    private String saveProjectToString() {
         StringWriter sWriter = new StringWriter();
         IVMLWriter iWriter = new IVMLWriter(sWriter);
         pro.accept(iWriter);
-        iWriter.flush();
-        String result = sWriter.toString().replace("\r", "");
-        String[] lines = result.split("\n");
-        Assert.assertEquals("    size(cmps->collect(CP1 c|c.intSlot > 10)) > 10;", lines[lines.length - 2]);
+        try {
+            iWriter.flush();
+        } catch (IOException e) {
+            Assert.fail(e.getMessage());
+        }
+        return sWriter.toString().replace("\r", "").trim();
     }
 }
