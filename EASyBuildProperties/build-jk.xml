@@ -7,8 +7,8 @@
 	</target>
     
     <target name="updateChLog">
-        <scp todir="jenkins@projects.sse.uni-hildesheim.de:/var/www/eclipse/update-sites/easy/nightly" trust="true" keyfile="${user.home}/.ssh/id_rsa">
-            <fileset dir="/var/www/easy/docs/">
+        <scp todir="jenkins@projects.sse.uni-hildesheim.de:/var/www/easy/docs/" trust="true" keyfile="${user.home}/.ssh/id_rsa">
+            <fileset dir=".">
                 <include name="changelog.html"/>
             </fileset>
         </scp>
