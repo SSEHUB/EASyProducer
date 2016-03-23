@@ -5,5 +5,14 @@
 	<target name="copy">
 	    <copy file = "./global-build.properties" todir="${user.home}"/>
 	</target>
+    
+    <target name="updateChLog">
+        <sshexec host="projects.sse.uni-hildesheim.de" username="jenkins" trust="true" keyfile="${user.home}/.ssh/id_rsa" command="rm /var/www/easy/docs/changelog.html"/>
+        <scp todir="jenkins@projects.sse.uni-hildesheim.de:/var/www/eclipse/update-sites/easy/nightly" trust="true" keyfile="${user.home}/.ssh/id_rsa">
+            <fileset dir="/var/www/easy/docs/">
+                <include name="changelog.html"/>
+            </fileset>
+        </scp>
+    </target>
 	
 </project>
