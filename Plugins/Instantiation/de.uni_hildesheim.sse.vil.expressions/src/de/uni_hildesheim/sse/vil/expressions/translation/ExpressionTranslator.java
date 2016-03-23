@@ -1,6 +1,5 @@
 package de.uni_hildesheim.sse.vil.expressions.translation;
 
-import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -25,7 +24,6 @@ import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.Expres
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilException;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.AbstractCallExpression;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.ExpressionVersionRestriction;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.ExpressionWriter;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.FieldAccessExpression;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.IResolvable;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.ParenthesisExpression;
@@ -1378,9 +1376,6 @@ public abstract class ExpressionTranslator<I extends VariableDeclaration, R exte
                     ok = TypeRegistry.booleanType().isAssignableFrom(type);
                 }
                 if (!ok) {
-System.out.println("ERROR!!!");                    
-ExpressionWriter writer = new ExpressionWriter(new PrintWriter(System.out));
-expression.accept(writer);
                     throw new TranslatorException("condition must be a Boolean expression rather than " + type.getVilName(), 
                         cause, causingFeature, ErrorCodes.TYPE_CONSISTENCY);
                 }
