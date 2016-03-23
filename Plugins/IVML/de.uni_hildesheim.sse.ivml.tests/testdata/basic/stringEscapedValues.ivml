@@ -1,0 +1,16 @@
+project testStringEscapeSequences {
+
+    version v0;
+    String quotesVar1 = "\"";
+    String quotesVar2;
+    quotesVar2 = "\"";
+    String tabVar1 = "\t";
+    String tabVar2;
+    tabVar2 = "\t";
+    String newLineVar1 = "\n";
+    String newLineVar2;
+    newLineVar2 = "\n";
+    String backslashVar1 = "\\";
+    String backslashVar2;
+    backslashVar2 = "\\";
+}

@@ -10,7 +10,10 @@ import org.junit.Test;
 import de.uni_hildesheim.sse.model.cst.CSTSemanticException;
 import de.uni_hildesheim.sse.model.cst.ConstantValue;
 import de.uni_hildesheim.sse.model.cst.ConstraintSyntaxTree;
+import de.uni_hildesheim.sse.model.cst.OCLFeatureCall;
 import de.uni_hildesheim.sse.model.varModel.AbstractVariable;
+import de.uni_hildesheim.sse.model.varModel.Constraint;
+import de.uni_hildesheim.sse.model.varModel.ContainableModelElement;
 import de.uni_hildesheim.sse.model.varModel.Project;
 import de.uni_hildesheim.sse.model.varModel.datatypes.BooleanType;
 import de.uni_hildesheim.sse.model.varModel.datatypes.ConstraintType;
@@ -449,6 +452,54 @@ public class BasicTests extends AbstractTest {
     @Test
     public void testCompoundInitFail() throws IOException {
         assertEqual(createFile("compoundInitFail"), "compoundInitFail", "0", ErrorCodes.INITIALIZER_CONSISTENCY);
+    } 
+    
+    /**
+     * Tests correct handling of String values containing escape sequences. The desired behavior is:
+     * <ul>
+     *   <li>They should be escaped while writing the text file</li>
+     *   <li>Parser should be able to read escaped characters</li>
+     *   <li>Should <b>not</b> be escaped in the data model</li>
+     * </ul>
+     * 
+     * This test tests:
+     * <ul>
+     *   <li>Tab</li>
+     *   <li>double quotes</li>
+     *   <li>line break</li>
+     *   <li>backslash</li>
+     * </ul>
+     * 
+     * Each time as default value and also as assignment.
+     * @throws IOException should not occur
+     */
+    @Test
+    public void testStringEscapeSequences() throws IOException {
+        List<Project> projects = assertEqual(createFile("stringEscapedValues"), "testStringEscapeSequences", "0");
+        
+        Assert.assertEquals("File does not contain exactly one project.", 1, projects.size());
+        Project project = projects.get(0);
+        for (int i = 0, end = project.getElementCount(); i < end; i++) {
+            ContainableModelElement element = project.getElement(i);
+            if (element instanceof AbstractVariable) {
+                ConstantValue defaultValue = (ConstantValue) ((AbstractVariable) element).getDefaultValue();
+                if (null != defaultValue) {
+                    String strValue = defaultValue.getConstantValue().getValue().toString();
+                    // Consider backslash value while checking whether the value was escaped during parsing
+                    boolean valueWasEscaped = strValue.contains("\\") && strValue.length() > 1;
+                    Assert.assertFalse("Default value of \"" + element.getName() + "\" was escaped: " + strValue,
+                        valueWasEscaped);
+                }
+            } else if (element instanceof Constraint) {
+                OCLFeatureCall assignment = (OCLFeatureCall) ((Constraint) element).getConsSyntax();
+                Value assignedValue = ((ConstantValue) assignment.getParameter(0)).getConstantValue();
+                String strValue = assignedValue.getValue().toString();
+                // Consider backslash value while checking whether the value was escaped during parsing
+                boolean valueWasEscaped = strValue.contains("\\") && strValue.length() > 1;
+                Assert.assertFalse("Default value of \"" + element.getName() + "\" was escaped: " + strValue,
+                    valueWasEscaped);
+            }
+        }
     }
     
     /**
@@ -461,7 +512,7 @@ public class BasicTests extends AbstractTest {
             "0");
         
         // Search for the two declarations
-        Assert.assertEquals("File does not contain exectly one project.", 1, projects.size());
+        Assert.assertEquals("File does not contain exactly one project.", 1, projects.size());
         DeclarationFinder finder = new DeclarationFinder(projects.get(0), FilterType.ALL, null);
         List<AbstractVariable> variables = finder.getVariableDeclarations(VisibilityType.ALL);
         Assert.assertEquals("Project has not exactly 2 declarations.", 2, variables.size());
