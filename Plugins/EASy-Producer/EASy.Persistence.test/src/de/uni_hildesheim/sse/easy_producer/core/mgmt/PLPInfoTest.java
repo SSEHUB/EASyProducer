@@ -20,6 +20,7 @@ import org.junit.Ignore;
 import org.junit.Test;
 
 import de.uni_hildesheim.sse.easy_producer.core.AllTests;
+import de.uni_hildesheim.sse.easy_producer.core.mgmt.VilTestExectuter.AbstractVilListener;
 import de.uni_hildesheim.sse.easy_producer.core.persistence.Configuration.PathKind;
 import de.uni_hildesheim.sse.easy_producer.core.persistence.PersistenceException;
 import de.uni_hildesheim.sse.easy_producer.core.persistence.PersistenceUtils;
@@ -436,8 +437,9 @@ public class PLPInfoTest extends AbstractPLPInfoTest {
         // Test that uninstantiated SRC-Files are NOT compileable
         compile(plp.getProjectLocation(), false);
         
-        //Instantiate project
-        plp.addVilExecutionListener(new IVilExecutionListener() {
+        // Start instantiation
+        VilTestExectuter plpInstantiator = new VilTestExectuter();
+        plpInstantiator.assertInstantiation(plp, 5000, new AbstractVilListener() {
             
             @Override
             public void vilExecutionFinished(PLPInfo plp) {
@@ -450,7 +452,6 @@ public class PLPInfoTest extends AbstractPLPInfoTest {
                 Assert.fail(exc.getMessage());
             }
         });
-        plp.instantiate(null);
     }
 
     /**
@@ -464,23 +465,9 @@ public class PLPInfoTest extends AbstractPLPInfoTest {
         final File copiedFile = new File(copiedFolder, "HelloWorld.java");
         Assert.assertFalse(copiedFile.exists());
         
-        // Needed for second instantiation
-        final IVilExecutionListener listener2 = new IVilExecutionListener() {
-            
-            @Override
-            public void vilExecutionFinished(PLPInfo plp) {
-                Assert.assertTrue(copiedFile.exists());
-            }
-            
-            @Override
-            public void vilExecutionAborted(PLPInfo plp, VilException exc) {
-                exc.printStackTrace();
-                Assert.fail("Second instantiation failed: " + exc.getMessage());
-            }
-        };
-        
         // First instantiation
-        plp.addVilExecutionListener(new IVilExecutionListener() {
+        VilTestExectuter plpInstantiator2 = new VilTestExectuter();
+        plpInstantiator2.assertInstantiation(plp, 5000,  new AbstractVilListener() {
             
             @Override
             public void vilExecutionFinished(PLPInfo plp) {
@@ -488,9 +475,20 @@ public class PLPInfoTest extends AbstractPLPInfoTest {
                 Assert.assertTrue(copiedFile.delete());
                 
                 // Start second instantiation
-                plp.removeVilExecutionListener(this);
-                plp.addVilExecutionListener(listener2);
-                plp.instantiate(null);
+                VilTestExectuter plpInstantiator = new VilTestExectuter();
+                plpInstantiator.assertInstantiation(plp, new AbstractVilListener() {
+                    @Override
+                    public void vilExecutionFinished(PLPInfo plp) {
+                        // Finished second instantiation
+                        Assert.assertTrue(copiedFile.exists());
+                    }
+                    
+                    @Override
+                    public void vilExecutionAborted(PLPInfo plp, VilException exc) {
+                        exc.printStackTrace();
+                        Assert.fail("Second instantiation failed: " + exc.getMessage());
+                    }
+                });
             }
             
             @Override
@@ -499,7 +497,6 @@ public class PLPInfoTest extends AbstractPLPInfoTest {
                 Assert.fail("First instantiation failed: " + exc.getMessage());
             }
         });
-        plp.instantiate(null);
     }
     
     /**
@@ -644,7 +641,8 @@ public class PLPInfoTest extends AbstractPLPInfoTest {
         Assert.assertFalse(generatedFile.exists());
         
         // Start instantiation
-        plp.addVilExecutionListener(new IVilExecutionListener() {
+        VilTestExectuter plpInstantiator = new VilTestExectuter();
+        plpInstantiator.assertInstantiation(plp, new AbstractVilListener() {
             
             @Override
             public void vilExecutionFinished(PLPInfo plp) {
@@ -659,7 +657,6 @@ public class PLPInfoTest extends AbstractPLPInfoTest {
                 Assert.fail(exc.getMessage());
             }
         });
-        plp.instantiate(null);
     }
     
     /**

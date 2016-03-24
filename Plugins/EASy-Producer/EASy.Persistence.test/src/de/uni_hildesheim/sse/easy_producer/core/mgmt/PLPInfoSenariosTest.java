@@ -12,6 +12,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import de.uni_hildesheim.sse.easy_producer.core.AllTests;
+import de.uni_hildesheim.sse.easy_producer.core.mgmt.VilTestExectuter.AbstractVilListener;
 import de.uni_hildesheim.sse.easy_producer.core.persistence.PersistenceException;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilException;
 import de.uni_hildesheim.sse.model.confModel.AllFreezeSelector;
@@ -137,22 +138,20 @@ public class PLPInfoSenariosTest extends AbstractPLPInfoTest {
         printPLP(plp3);
         
         // Hierarchical instantiation
-        plp3.addVilExecutionListener(this);
-        plp3.instantiate(null);
+        VilTestExectuter plpInstantiator = new VilTestExectuter();
+        plpInstantiator.assertInstantiation(plp3, new AbstractVilListener() { });
     }
     
     /**
      * Tests whether the instantiation process of templates will work.
      * @throws PersistenceException If the project could not be loaded from the file system.
      * @throws VilException If instantiation is not possible
-     * @throws IOException If the produced file was not saved or the expected file was not found for comparison
      */
     @Test
-    public void testInstantiateNumericCSVInstantiation() throws PersistenceException, VilException,
-        IOException {
+    public void testInstantiateNumericCSVInstantiation() throws PersistenceException, VilException {
 
-        File expectedFile = new File(TEST_TEMPLATE_INSTANTIATION, "expected/NumericCSVInstantiationTest.csv");
-        File actualFile = new File(TEST_TEMPLATE_INSTANTIATION, "NumericCSVInstantiationTest.csv");
+        final File expectedFile = new File(TEST_TEMPLATE_INSTANTIATION, "expected/NumericCSVInstantiationTest.csv");
+        final File actualFile = new File(TEST_TEMPLATE_INSTANTIATION, "NumericCSVInstantiationTest.csv");
         
         // Load project
         PLPInfo plp = loadPLPInfo(TEST_TEMPLATE_INSTANTIATION);
@@ -166,14 +165,22 @@ public class PLPInfoSenariosTest extends AbstractPLPInfoTest {
         Assert.assertTrue(expectedFile.exists());
         Assert.assertFalse(actualFile.exists());
         
-        //Instantiate project
-        plp.addVilExecutionListener(PLPInfoSenariosTest.this);
-        plp.instantiate(null);
-        
-        // Test postcondition: actualFile must exist and have exactly the same content as expectedFile.
-        Assert.assertTrue(expectedFile.exists());
-        Assert.assertTrue("File: " + actualFile.getAbsolutePath() + " not found.", actualFile.exists());
-        assertFileEquality(actualFile, expectedFile);
+        // Start instantiation
+        VilTestExectuter plpInstantiator = new VilTestExectuter();
+        plpInstantiator.assertInstantiation(plp, new AbstractVilListener() {
+            
+            @Override
+            public void vilExecutionFinished(PLPInfo plp) {
+                // Test postcondition: actualFile must exist and have exactly the same content as expectedFile.
+                Assert.assertTrue(expectedFile.exists());
+                Assert.assertTrue("File: " + actualFile.getAbsolutePath() + " not found.", actualFile.exists());
+                try {
+                    assertFileEquality(actualFile, expectedFile);
+                } catch (IOException e) {
+                    Assert.fail(e.getMessage());
+                }
+            }
+        });
     }
     
     /**
@@ -224,23 +231,29 @@ public class PLPInfoSenariosTest extends AbstractPLPInfoTest {
                 Assert.assertFalse(errorMsg.toString(), result.hasConflict());
                 
                 plp.getConfiguration().freeze(AllFreezeSelector.INSTANCE);
-                plp.addVilExecutionListener(PLPInfoSenariosTest.this);
-                plp.instantiate(null);
                 
-                /* 
-                 * Test postcondition: actualFile must exist and have exactly the same content as expectedFile.
-                 * The configuration should contain 4 frozen variables (but only 2 are instantiated).
-                 */
-                int nFrozenVars = countFrozenVariables(plp);
-                Assert.assertEquals("Error: Expected 4 frozen variables, but there where " + nFrozenVars
-                    + " frozen vars.", 4, nFrozenVars);
-                Assert.assertTrue(expectedFile.exists());
-                Assert.assertTrue("File: " + actualFile.getAbsolutePath() + " not found.", actualFile.exists());
-                try {
-                    PLPInfoTest.assertFileEquality(actualFile, expectedFile);
-                } catch (IOException e) {
-                    Assert.fail(e.getMessage());
-                }
+                // Start instantiation
+                VilTestExectuter plpInstantiator = new VilTestExectuter();
+                plpInstantiator.assertInstantiation(plp, new AbstractVilListener() {
+                    
+                    @Override
+                    public void vilExecutionFinished(PLPInfo plp) {
+                        /* 
+                         * Test postcondition: actualFile must exist and have exactly the same content as expectedFile.
+                         * The configuration should contain 4 frozen variables (but only 2 are instantiated).
+                         */
+                        int nFrozenVars = countFrozenVariables(plp);
+                        Assert.assertEquals("Error: Expected 4 frozen variables, but there where " + nFrozenVars
+                            + " frozen vars.", 4, nFrozenVars);
+                        Assert.assertTrue(expectedFile.exists());
+                        Assert.assertTrue("File: " + actualFile.getAbsolutePath() + " not found.", actualFile.exists());
+                        try {
+                            PLPInfoTest.assertFileEquality(actualFile, expectedFile);
+                        } catch (IOException e) {
+                            Assert.fail(e.getMessage());
+                        }
+                    }            
+                });
             }
         });
     }
@@ -262,16 +275,20 @@ public class PLPInfoSenariosTest extends AbstractPLPInfoTest {
         Assert.assertTrue(expectedFile.exists());
         Assert.assertFalse(actualFile.exists());
         
-        plp.addVilExecutionListener(this);
-        plp.instantiate(null);
-        
-        // Test postcondition: actualFile must exist and have exactly the same content as expectedFile.
-        Assert.assertTrue(expectedFile.exists());
-        Assert.assertTrue("File: " + actualFile.getAbsolutePath() + " not found.", actualFile.exists());
-        try {
-            PLPInfoTest.assertFileEquality(actualFile, expectedFile);
-        } catch (IOException e) {
-            Assert.fail(e.getMessage());
-        }
+        // Start instantiation
+        VilTestExectuter plpInstantiator = new VilTestExectuter();
+        plpInstantiator.assertInstantiation(plp, new AbstractVilListener() {
+            @Override
+            public void vilExecutionFinished(PLPInfo plp) {
+                // Test postcondition: actualFile must exist and have exactly the same content as expectedFile.
+                Assert.assertTrue(expectedFile.exists());
+                Assert.assertTrue("File: " + actualFile.getAbsolutePath() + " not found.", actualFile.exists());
+                try {
+                    PLPInfoTest.assertFileEquality(actualFile, expectedFile);
+                } catch (IOException e) {
+                    Assert.fail(e.getMessage());
+                }
+            }            
+        });
     }
 }
