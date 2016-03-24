@@ -23,7 +23,6 @@ import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.Ins
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.MapExpression;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.Rule;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.Script;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilException;
 import de.uni_hildesheim.sse.easy_producer.model.ProductLineProject;
 import de.uni_hildesheim.sse.easy_producer.persistency.ResourcesMgmt;
 import de.uni_hildesheim.sse.model.confModel.AllFreezeSelector;
@@ -328,11 +327,7 @@ public class EASyProjectCreatorFactoryTest {
         ProductLineProject plpSuc = createProject("New_derived_project2", plpPre.getProjectID());
         plpSuc.getConfiguration().freeze(AllFreezeSelector.INSTANCE);
         plpSuc.save();
-        try {
-            plpSuc.instantiate();
-        } catch (VilException e) {
-            Assert.fail("Error in instantiation: " + e.getLocalizedMessage());
-        }
+        plpSuc.instantiate(null);
     }
     
     /**

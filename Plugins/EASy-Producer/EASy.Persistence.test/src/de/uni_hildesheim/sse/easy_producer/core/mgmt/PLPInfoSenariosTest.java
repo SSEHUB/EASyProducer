@@ -137,7 +137,8 @@ public class PLPInfoSenariosTest extends AbstractPLPInfoTest {
         printPLP(plp3);
         
         // Hierarchical instantiation
-        plp3.instantiate();
+        plp3.addVilExecutionListener(this);
+        plp3.instantiate(null);
     }
     
     /**
@@ -166,7 +167,8 @@ public class PLPInfoSenariosTest extends AbstractPLPInfoTest {
         Assert.assertFalse(actualFile.exists());
         
         //Instantiate project
-        plp.instantiate();
+        plp.addVilExecutionListener(PLPInfoSenariosTest.this);
+        plp.instantiate(null);
         
         // Test postcondition: actualFile must exist and have exactly the same content as expectedFile.
         Assert.assertTrue(expectedFile.exists());
@@ -222,12 +224,8 @@ public class PLPInfoSenariosTest extends AbstractPLPInfoTest {
                 Assert.assertFalse(errorMsg.toString(), result.hasConflict());
                 
                 plp.getConfiguration().freeze(AllFreezeSelector.INSTANCE);
-                
-                try {
-                    plp.instantiate();
-                } catch (VilException e) {
-                    Assert.fail(e.getMessage());
-                }
+                plp.addVilExecutionListener(PLPInfoSenariosTest.this);
+                plp.instantiate(null);
                 
                 /* 
                  * Test postcondition: actualFile must exist and have exactly the same content as expectedFile.
@@ -264,11 +262,8 @@ public class PLPInfoSenariosTest extends AbstractPLPInfoTest {
         Assert.assertTrue(expectedFile.exists());
         Assert.assertFalse(actualFile.exists());
         
-        try {
-            plp.instantiate();
-        } catch (VilException e) {
-            Assert.fail(e.getMessage());
-        }
+        plp.addVilExecutionListener(this);
+        plp.instantiate(null);
         
         // Test postcondition: actualFile must exist and have exactly the same content as expectedFile.
         Assert.assertTrue(expectedFile.exists());

@@ -25,14 +25,16 @@ public interface IVilExecutionListener {
 
     /**
      * VIL execution (instantiation) was aborted through an error.
+     * @param plp The {@link PLPInfo}, which should be instantiated and is the source for this error.
      * @param exc The error which lead to the abortion.
      */
-    public void vilExecutionAborted(VilException exc);
+    public void vilExecutionAborted(PLPInfo plp, VilException exc);
     
     /**
      * VIL execution (instantiation) was finished.
      * This is usually the case if script execution reached the end of the script, but may also be the case
      * if the user aborted the instantiation.
+     * @param plp The {@link PLPInfo}, which was be instantiated
      */
-    public void vilExecutionFinished();
+    public void vilExecutionFinished(PLPInfo plp);
 }

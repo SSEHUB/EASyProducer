@@ -26,6 +26,7 @@ import de.uni_hildesheim.sse.easy_producer.core.persistence.datatypes.PathEnviro
 import de.uni_hildesheim.sse.easy_producer.core.persistence.datatypes.PersistentProject;
 import de.uni_hildesheim.sse.easy_producer.core.persistence.standard.Persistencer;
 import de.uni_hildesheim.sse.easy_producer.core.persistence.standard.PersistentProject2PLPConverter;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilException;
 import de.uni_hildesheim.sse.model.confModel.AssignmentState;
 import de.uni_hildesheim.sse.model.confModel.IDecisionVariable;
 import de.uni_hildesheim.sse.utils.progress.ProgressObserver;
@@ -35,7 +36,7 @@ import de.uni_hildesheim.sse.utils.progress.ProgressObserver;
  * @author El-Sharkawy
  *
  */
-class AbstractPLPInfoTest {
+class AbstractPLPInfoTest implements IVilExecutionListener {
     
     protected static final Set<PLPInfo> LOADED_INFOS = new HashSet<PLPInfo>();
     
@@ -203,5 +204,15 @@ class AbstractPLPInfoTest {
         System.out.println("PLP: " + plp.getProjectName());
         System.out.println(" - Predecessors: " + plp.getMemberController().getPredecessorsCount());
         System.out.println(" - Successors: " + plp.getMemberController().getSuccessorsCount());
+    }
+
+    @Override
+    public void vilExecutionAborted(PLPInfo plp, VilException exc) {
+        Assert.fail(exc.getMessage());
+    }
+
+    @Override
+    public void vilExecutionFinished(PLPInfo plp) {
+        // Not needed
     }
 }

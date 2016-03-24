@@ -138,7 +138,7 @@ public class VilExecutionThread implements Runnable {
             executor.execute(observer, true);
         } catch (VilException e) {
             for (int i = 0; i < listeners.size(); i++) {
-                listeners.get(i).vilExecutionAborted(e);
+                listeners.get(i).vilExecutionAborted(plp, e);
             }
         } finally {
             executor = null;
@@ -146,7 +146,7 @@ public class VilExecutionThread implements Runnable {
             plp.refresh();
         }
         for (int i = 0; i < listeners.size(); i++) {
-            listeners.get(i).vilExecutionFinished();
+            listeners.get(i).vilExecutionFinished(plp);
         }
     }
 }

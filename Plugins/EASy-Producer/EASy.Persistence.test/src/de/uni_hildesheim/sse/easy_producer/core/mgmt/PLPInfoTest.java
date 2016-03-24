@@ -437,10 +437,20 @@ public class PLPInfoTest extends AbstractPLPInfoTest {
         compile(plp.getProjectLocation(), false);
         
         //Instantiate project
-        plp.instantiate();
-        
-        // Test that instantiated SRC-Files are compileable
-        compile(plp.getProjectLocation(), true);
+        plp.addVilExecutionListener(new IVilExecutionListener() {
+            
+            @Override
+            public void vilExecutionFinished(PLPInfo plp) {
+                // Test that instantiated SRC-Files are compileable
+                compile(plp.getProjectLocation(), true);
+            }
+            
+            @Override
+            public void vilExecutionAborted(PLPInfo plp, VilException exc) {
+                Assert.fail(exc.getMessage());
+            }
+        });
+        plp.instantiate(null);
     }
 
     /**
@@ -450,24 +460,46 @@ public class PLPInfoTest extends AbstractPLPInfoTest {
     @Test
     public void testMultipleInstantiation() throws PersistenceException {
         PLPInfo plp = loadPLPInfo(TEST_MULTI_INSTANTIATION);
-        File copiedFile = new File(plp.getProjectLocation(), "src");
-        copiedFile = new File(copiedFile, "HelloWorld.java");
+        File copiedFolder = new File(plp.getProjectLocation(), "src");
+        final File copiedFile = new File(copiedFolder, "HelloWorld.java");
         Assert.assertFalse(copiedFile.exists());
-        try {
-            plp.instantiate();
-        } catch (VilException e) {
-            e.printStackTrace();
-            Assert.fail("First instantiation failed: " + e.getMessage());
-        }
-        Assert.assertTrue(copiedFile.exists());
-        Assert.assertTrue(copiedFile.delete());
-        try {
-            plp.instantiate();
-        } catch (VilException e) {
-            e.printStackTrace();
-            Assert.fail("Second instantiation failed: " + e.getMessage());
-        }
-        Assert.assertTrue(copiedFile.exists());
+        
+        // Needed for second instantiation
+        final IVilExecutionListener listener2 = new IVilExecutionListener() {
+            
+            @Override
+            public void vilExecutionFinished(PLPInfo plp) {
+                Assert.assertTrue(copiedFile.exists());
+            }
+            
+            @Override
+            public void vilExecutionAborted(PLPInfo plp, VilException exc) {
+                exc.printStackTrace();
+                Assert.fail("Second instantiation failed: " + exc.getMessage());
+            }
+        };
+        
+        // First instantiation
+        plp.addVilExecutionListener(new IVilExecutionListener() {
+            
+            @Override
+            public void vilExecutionFinished(PLPInfo plp) {
+                Assert.assertTrue(copiedFile.exists());
+                Assert.assertTrue(copiedFile.delete());
+                
+                // Start second instantiation
+                plp.removeVilExecutionListener(this);
+                plp.addVilExecutionListener(listener2);
+                plp.instantiate(null);
+            }
+            
+            @Override
+            public void vilExecutionAborted(PLPInfo plp, VilException exc) {
+                exc.printStackTrace();
+                Assert.fail("First instantiation failed: " + exc.getMessage());
+            }
+        });
+        plp.instantiate(null);
     }
     
     /**
@@ -597,7 +629,7 @@ public class PLPInfoTest extends AbstractPLPInfoTest {
     public void testMultipleConfigFolders() throws PersistenceException, VilException {
         // Load project
         PLPInfo plp = loadPLPInfo(TEST_MULTIPLE_CONFIG_FOLDERS);
-        File generatedFile = new File(plp.getProjectLocation(), "out.txt");
+        final File generatedFile = new File(plp.getProjectLocation(), "out.txt");
         
         // Check that all folders are different
         Assert.assertNotNull(plp.getConfigLocation());
@@ -612,12 +644,22 @@ public class PLPInfoTest extends AbstractPLPInfoTest {
         Assert.assertFalse(generatedFile.exists());
         
         // Start instantiation
-        plp.instantiate();
-        
-        // Test postcondition: File must be created and contain a "Hello World" ;-)
-        Assert.assertTrue(generatedFile.exists());
-        //String content = FileUtils.readFileToString(generatedFile);
-        //Assert.assertTrue(content.contains("\"Hello World\""));
+        plp.addVilExecutionListener(new IVilExecutionListener() {
+            
+            @Override
+            public void vilExecutionFinished(PLPInfo plp) {
+                // Test postcondition: File must be created and contain a "Hello World" ;-)
+                Assert.assertTrue(generatedFile.exists());
+                //String content = FileUtils.readFileToString(generatedFile);
+                //Assert.assertTrue(content.contains("\"Hello World\""));
+            }
+            
+            @Override
+            public void vilExecutionAborted(PLPInfo plp, VilException exc) {
+                Assert.fail(exc.getMessage());
+            }
+        });
+        plp.instantiate(null);
     }
     
     /**

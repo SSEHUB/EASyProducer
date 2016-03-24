@@ -42,6 +42,7 @@ import de.uni_hildesheim.sse.easy.ui.productline_editor.EasyProducerDialog;
 import de.uni_hildesheim.sse.easy.ui.productline_editor.EclipseConsole;
 import de.uni_hildesheim.sse.easy_producer.core.mgmt.IProductLineProjectListener;
 import de.uni_hildesheim.sse.easy_producer.core.mgmt.IVilExecutionListener;
+import de.uni_hildesheim.sse.easy_producer.core.mgmt.PLPInfo;
 import de.uni_hildesheim.sse.easy_producer.instantiator.Bundle;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilException;
 import de.uni_hildesheim.sse.easy_producer.model.ProductLineProject;
@@ -460,29 +461,33 @@ public class ConfigurationHeaderMenu extends AbstractConfigMenu implements IProd
     }
 
     @Override
-    public void vilExecutionAborted(final VilException exc) {
-        Display.getDefault().asyncExec(new Runnable() {
-            
-            @Override
-            public void run() {
-                EasyProducerDialog.showErrorDialog(exc.getMessage());
-            }
-        });
-        vilExecutionFinished();
+    public void vilExecutionAborted(final PLPInfo plp, final VilException exc) {
+        if (plp == getProductLineProject()) {
+            Display.getDefault().asyncExec(new Runnable() {
+                
+                @Override
+                public void run() {
+                    EasyProducerDialog.showErrorDialog(exc.getMessage());
+                }
+            });
+            vilExecutionFinished(plp);
+        }
     }
 
     @Override
-    public void vilExecutionFinished() {
-        Display.getDefault().asyncExec(new Runnable() {
-
-            @Override
-            public void run() {
-                if (null != ConfigurationHeaderMenu.this && !ConfigurationHeaderMenu.this.isDisposed()) {
-                    btnAbortInstantiation.setEnabled(false);
-                    btnInstantiate.setEnabled(true);
+    public void vilExecutionFinished(final PLPInfo plp) {
+        if (plp == getProductLineProject()) {
+            Display.getDefault().asyncExec(new Runnable() {
+    
+                @Override
+                public void run() {
+                    if (null != ConfigurationHeaderMenu.this && !ConfigurationHeaderMenu.this.isDisposed()) {
+                        
+                        btnAbortInstantiation.setEnabled(false);
+                        btnInstantiate.setEnabled(true);
+                    }
                 }
-            }
-            
-        });
+            });
+        }
     }
 }
