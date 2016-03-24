@@ -21,9 +21,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
-import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.core.runtime.IStatus;
-import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
@@ -44,9 +41,11 @@ import de.uni_hildesheim.sse.easy.ui.productline_editor.AbstractEASyEditorPage;
 import de.uni_hildesheim.sse.easy.ui.productline_editor.EasyProducerDialog;
 import de.uni_hildesheim.sse.easy.ui.productline_editor.EclipseConsole;
 import de.uni_hildesheim.sse.easy_producer.core.mgmt.IProductLineProjectListener;
+import de.uni_hildesheim.sse.easy_producer.core.mgmt.IVilExecutionListener;
 import de.uni_hildesheim.sse.easy_producer.instantiator.Bundle;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilException;
 import de.uni_hildesheim.sse.easy_producer.model.ProductLineProject;
+import de.uni_hildesheim.sse.easy_producer.observer.EclipseProgressObserver;
 import de.uni_hildesheim.sse.model.confModel.ConfigurationException;
 import de.uni_hildesheim.sse.model.confModel.IDecisionVariable;
 import de.uni_hildesheim.sse.reasoning.core.frontend.IReasonerListener;
@@ -70,7 +69,8 @@ import de.uni_hildesheim.sse.utils.messages.Status;
  * @author EL-Sharkawy
  * 
  */
-public class ConfigurationHeaderMenu extends AbstractConfigMenu implements IProductLineProjectListener {
+public class ConfigurationHeaderMenu extends AbstractConfigMenu implements IProductLineProjectListener,
+    IVilExecutionListener {
 
     private static final EASyLogger LOGGER = EASyLoggerFactory.INSTANCE.getLogger(ConfigurationHeaderMenu.class, 
             Bundle.ID);
@@ -83,11 +83,14 @@ public class ConfigurationHeaderMenu extends AbstractConfigMenu implements IProd
         .getImage(IDE.SharedImages.IMG_OPEN_MARKER);
     private static final Image IMG_UNDO = PlatformUI.getWorkbench().getSharedImages()
         .getImage(ISharedImages.IMG_TOOL_UNDO);
+    private static final Image IMG_ABORT = PlatformUI.getWorkbench().getSharedImages()
+        .getImage(ISharedImages.IMG_OBJS_ERROR_TSK);
 
     private Button validateProductButton;
     private Button undoButton;
     private Button btnInstantiate;
     private Button btnFreezeAll;
+    private Button btnAbortInstantiation;
 
     /**
      * Created for demonstrating only. Please remove this after Dry-Run-Review.
@@ -199,6 +202,7 @@ public class ConfigurationHeaderMenu extends AbstractConfigMenu implements IProd
         setBackground(parent.getBackground());
         this.parentPage = parentPage;
         plp.register(this);
+        plp.addVilExecutionListener(this);
         createButtons();
     }
     
@@ -211,6 +215,7 @@ public class ConfigurationHeaderMenu extends AbstractConfigMenu implements IProd
         createPropagateButton();
         createFreezeButton();
         createUndoButton();
+        createAbortInstantiationButton();
     }
 
     
@@ -221,7 +226,7 @@ public class ConfigurationHeaderMenu extends AbstractConfigMenu implements IProd
     private void createPropagateButton() {
         btnPropagate = new Button(this, SWT.NONE);
         btnPropagate.setText("Propagate Values");
-        btnPropagate.setLayoutData(new GridData(SWT.LEFT, SWT.TOP, true, true, 1, 1));
+        btnPropagate.setLayoutData(new GridData(SWT.FILL, SWT.TOP, true, true, 1, 1));
         btnPropagate.setImage(IMG_VALIDATE);
 
         // Add Listener
@@ -239,7 +244,7 @@ public class ConfigurationHeaderMenu extends AbstractConfigMenu implements IProd
     private void createFreezeButton() {
         btnFreezeAll = new Button(this, SWT.NONE);
         btnFreezeAll.setText("Freeze All");
-        btnFreezeAll.setLayoutData(new GridData(SWT.LEFT, SWT.TOP, true, true, 1, 1));
+        btnFreezeAll.setLayoutData(new GridData(SWT.FILL, SWT.TOP, true, true, 1, 1));
         btnFreezeAll.setImage(IMG_FREEZE);
 
         // Add Listener
@@ -271,7 +276,7 @@ public class ConfigurationHeaderMenu extends AbstractConfigMenu implements IProd
     private void createUndoButton() {
         undoButton = new Button(this, SWT.NONE);
         undoButton.setText("Undo Changes");
-        undoButton.setLayoutData(new GridData(SWT.LEFT, SWT.TOP, true, true, 1, 1));
+        undoButton.setLayoutData(new GridData(SWT.FILL, SWT.TOP, true, true, 1, 1));
         undoButton.setImage(IMG_UNDO);
         // Add Listener
         undoButton.addSelectionListener(new SelectionAdapter() {
@@ -318,7 +323,7 @@ public class ConfigurationHeaderMenu extends AbstractConfigMenu implements IProd
     private void createValidateButton() {
         validateProductButton = new Button(this, SWT.NONE);
         validateProductButton.setText("Validate Product");
-        validateProductButton.setLayoutData(new GridData(SWT.LEFT, SWT.TOP, true, true, 1, 1));
+        validateProductButton.setLayoutData(new GridData(SWT.FILL, SWT.TOP, true, true, 1, 1));
         validateProductButton.setImage(IMG_VALIDATE);
 
         // Add Listener
@@ -341,9 +346,20 @@ public class ConfigurationHeaderMenu extends AbstractConfigMenu implements IProd
      */
     private void createInstantiateButton() {
         btnInstantiate = new Button(this, SWT.PUSH);
-        btnInstantiate.setLayoutData(new GridData(SWT.RIGHT, SWT.TOP, true, true, 1, 1));
+        btnInstantiate.setLayoutData(new GridData(SWT.FILL, SWT.TOP, true, true, 1, 1));
         btnInstantiate.setText("Instantiate Product");
         btnInstantiate.setImage(IMG_INSTANTIATE);
+    }
+    
+    /**
+     * Creates the transform button.
+     */
+    private void createAbortInstantiationButton() {
+        btnAbortInstantiation = new Button(this, SWT.PUSH);
+        btnAbortInstantiation.setLayoutData(new GridData(SWT.FILL, SWT.TOP, true, true, 1, 1));
+        btnAbortInstantiation.setText("Stop Instantiation");
+        btnAbortInstantiation.setImage(IMG_ABORT);
+        btnAbortInstantiation.setEnabled(false);
         // Add Listener
         setTransformListener();
     }
@@ -354,62 +370,22 @@ public class ConfigurationHeaderMenu extends AbstractConfigMenu implements IProd
     private void setTransformListener() {
         btnInstantiate.addSelectionListener(new SelectionAdapter() {
             public void widgetSelected(SelectionEvent event) {
+                btnAbortInstantiation.setEnabled(true);
+                btnInstantiate.setEnabled(false);
                 /*
                  * The EclipseConsole allows displaying relevant information on instantiation processes to the user.
                  * Thus, for each instantiation process triggered by the user, the console will be cleared first and
                  * then the new output of the new instantiation process will be written to the console
                  */
                 EclipseConsole.INSTANCE.clearConsole();
-                Job job = new Job("Running VIL") {
-                    
-                    @Override
-                    protected IStatus run(IProgressMonitor monitor) {
-                        try {
-                            ProductLineProject plp = getProductLineProject();
-                            plp.instantiate();
-                            plp.refreshArtifacts(); // force Eclipse to show new files
-                        } catch (VilException e) {
-                            final VilException exc = e;
-                            Display.getDefault().asyncExec(new Runnable() {
-                                
-                                @Override
-                                public void run() {
-                                    EasyProducerDialog.showErrorDialog(null, exc.getMessage());
-                                }
-                            });
-                        }
-                        return org.eclipse.core.runtime.Status.OK_STATUS;
-                    }
-                };
-                job.schedule();
-                // run execution in thread in order to enable update of the console
-                /*new Thread(new Runnable() {
-
-                    @Override
-                    public void run() {
-                        try {
-                            IWorkspace workspace = ResourcesPlugin.getWorkspace();
-                            IWorkspaceDescription description = workspace.getDescription();
-                            boolean autoBuilding = description.isAutoBuilding();
-                            description.setAutoBuilding(false);
-
-                            ProductLineProject plp = getProductLineProject();
-                            plp.instantiate(ConfigurationHeaderMenu.this);
-                            plp.refreshArtifacts(); // force Eclipse to show new files
-                            description.setAutoBuilding(autoBuilding);
-                        } catch (VilLanguageException e) {
-                            final VilLanguageException exc = e;
-                            Display.getDefault().asyncExec(new Runnable() {
-                                
-                                @Override
-                                public void run() {
-                                    EasyProducerDialog.showErrorDialog(null, exc.getMessage());
-                                }
-                            });
-                        }
-                    }
-                    
-                }).start();*/
+                getProductLineProject().instantiate(new EclipseProgressObserver());
+                getProductLineProject().refreshArtifacts(); 
+            }
+        });
+        
+        btnAbortInstantiation.addSelectionListener(new SelectionAdapter() {
+            public void widgetSelected(SelectionEvent event) {
+                getProductLineProject().abortInstantiation();
             }
         });
     }
@@ -469,6 +445,7 @@ public class ConfigurationHeaderMenu extends AbstractConfigMenu implements IProd
     @Override
     public void dispose() {
         getProductLineProject().unregister(this);
+        getProductLineProject().removeVilExecutionListener(this);
         super.dispose();
     }
 
@@ -480,5 +457,32 @@ public class ConfigurationHeaderMenu extends AbstractConfigMenu implements IProd
     @Override
     public void buildScriptChanged() {
         revalidateButtons();
+    }
+
+    @Override
+    public void vilExecutionAborted(final VilException exc) {
+        Display.getDefault().asyncExec(new Runnable() {
+            
+            @Override
+            public void run() {
+                EasyProducerDialog.showErrorDialog(exc.getMessage());
+            }
+        });
+        vilExecutionFinished();
+    }
+
+    @Override
+    public void vilExecutionFinished() {
+        Display.getDefault().asyncExec(new Runnable() {
+
+            @Override
+            public void run() {
+                if (null != ConfigurationHeaderMenu.this && !ConfigurationHeaderMenu.this.isDisposed()) {
+                    btnAbortInstantiation.setEnabled(false);
+                    btnInstantiate.setEnabled(true);
+                }
+            }
+            
+        });
     }
 }

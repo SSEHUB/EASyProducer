@@ -5,8 +5,6 @@ import java.util.List;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.Shell;
-import org.eclipse.ui.IWorkbench;
-import org.eclipse.ui.PlatformUI;
 
 import de.uni_hildesheim.sse.easy_producer.EASyProducerConstants;
 import de.uni_hildesheim.sse.model.varModel.ModelElement;
@@ -62,9 +60,7 @@ public class EasyProducerDialog {
      * @return <b>SWT.OK</b> after the dialog is confirmed.
      */
     public static int showErrorDialog(String message) {
-        IWorkbench workbench = PlatformUI.getWorkbench();
-        Shell parent = workbench.getActiveWorkbenchWindow().getShell();
-        return showDialog(parent, message, EASyProducerConstants.EASY_PRODUCER_ERROR, SWT.OK | SWT.ICON_ERROR);
+        return showDialog(new Shell(), message, EASyProducerConstants.EASY_PRODUCER_ERROR, SWT.OK | SWT.ICON_ERROR);
     }
     
     /**

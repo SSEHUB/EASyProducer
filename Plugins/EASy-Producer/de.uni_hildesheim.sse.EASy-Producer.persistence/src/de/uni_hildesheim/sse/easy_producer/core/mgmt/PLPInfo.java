@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2013 University of Hildesheim, Software Systems Engineering
+ * Copyright 2009-2016 University of Hildesheim, Software Systems Engineering
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -36,10 +36,7 @@ import de.uni_hildesheim.sse.easy_producer.core.varMod.container.SemanticErrorDe
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.IInstantiatorProject;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.BuildModel;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.Script;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilException;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.execution.Executor;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.templateModel.TemplateModel;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.IProjectDescriptor;
 import de.uni_hildesheim.sse.model.confModel.Configuration;
 import de.uni_hildesheim.sse.model.management.VarModel;
 import de.uni_hildesheim.sse.model.varModel.Project;
@@ -97,6 +94,7 @@ public class PLPInfo implements IInstantiatorProject, IModelListener<Script> {
      */
     private boolean saveDebugInformation;
     
+    private VilExecutionThread vilExecutor;
     
     /**
      * Creates an information instance.
@@ -136,6 +134,7 @@ public class PLPInfo implements IInstantiatorProject, IModelListener<Script> {
         initModels();
         saveDebugInformation = false;
         //SPLsManager.INSTANCE.addPLP(this);
+        vilExecutor = new VilExecutionThread(this);
     }
     
     
@@ -427,60 +426,49 @@ public class PLPInfo implements IInstantiatorProject, IModelListener<Script> {
     }
     
     /**
-     * Instantiates the whole project.
-     * @throws VilException In case that artifact operations or script execution fails
+     * Instantiates the whole project in a separate thread.
+     * @deprecated Use {@link #instantiate(ProgressObserver)} instead.
      */
-    public void instantiate() throws VilException {
-        // >> VIL addition
-        // VIL output is handled via the TracerFactory configured in UI.Startup
-        if (null != getBuildScript()) { // just to be sure for now
-            try {
-                createExecutor().execute(); // TODO replace observer
-            } finally {
-                refresh();
-            }
-        }
+    @Deprecated
+    public void instantiate() {
+        vilExecutor.startInstantiation(ProgressObserver.NO_OBSERVER);
     }
     
     /**
-     * Creates a VIL executor for the contained PLP.
-     * 
-     * @return the created executor
+     * Instantiates the whole project in a separate thread.
+     * @param observer The observer to inform about the current progress (in case of <tt>null</tt>
+     * {@link ProgressObserver#NO_OBSERVER} will be used).
+     * @see #abortInstantiation()
      */
-    private Executor createExecutor() {
-        // old styles... without having explicit predecessors in VIL projects
-        
-        /*Executor executor = new Executor(getBuildScript())
-            .addTarget(getProjectLocation())
-            .addConfiguration(getConfiguration());
-        List<File> predecessors = getPredecessorLocations(true);
-        if (null == predecessors || predecessors.isEmpty()) {
-            // no predecessors - assume self-instantiation
-            executor.addSource(getProjectLocation());
-        } else {
-            executor.addSources(predecessors);
-        }
-        VilArgumentProvider.provideArguments(this, executor);
-        return executor;*/
-        ProjectDescriptor me = new ProjectDescriptor(this);
-        Executor executor = new Executor(getBuildScript())
-            .addTarget(me)
-            .addConfiguration(getConfiguration());
-        int predCount = getMemberController().getPredecessorsCount();
-        if (0 == predCount) {
-            // no predecessors - assume self-instantiation
-            executor.addSource(me);
-        } else {
-            IProjectDescriptor[] pred = new IProjectDescriptor[predCount + 1];
-            int i = 0;
-            pred[i++] = me;
-            for (PLPInfo p : getMemberController().getPredecessors()) {
-                pred[i++] = new ProjectDescriptor(p);
-            }
-            executor.addSources(pred);
-        }
-        VilArgumentProvider.provideArguments(this, executor);
-        return executor;
+    public void instantiate(ProgressObserver observer) {
+        vilExecutor.startInstantiation(observer);
+    }
+    
+    /**
+     * Aborts the current execution of the VIL script at the next possible point (that is not any time possible, e.g.,
+     * during the execution of third party tools like embedded <tt>maven</tt> scripts).
+     * @see #instantiate(ProgressObserver)
+     */
+    public void abortInstantiation() {
+        vilExecutor.abortInstantiation();
+    }
+    
+    /**
+     * Adds a new {@link IVilExecutionListener} to get informed when the instantiation was finished/aborted.
+     * @param newListener The listener to be informed about the VIL execution.
+     * @see #removeVilExecutionListener(IVilExecutionListener)
+     */
+    public void addVilExecutionListener(IVilExecutionListener newListener) {
+        vilExecutor.addListener(newListener);
+    }
+    
+    /**
+     * Removes an {@link IVilExecutionListener}.
+     * @param oldListener The old listener, to be removed.
+     * @see #addVilExecutionListener(IVilExecutionListener)
+     */
+    public void removeVilExecutionListener(IVilExecutionListener oldListener) {
+        vilExecutor.removeListener(oldListener);
     }
     
     /**
