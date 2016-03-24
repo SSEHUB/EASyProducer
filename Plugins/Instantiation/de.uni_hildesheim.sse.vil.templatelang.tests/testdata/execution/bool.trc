@@ -1,0 +1,10 @@
+-> main(Configuration, Artifact) with (<config>, test.texts)
+    cfg <- <config>
+    -> !(Boolean) with (false) = true
+    visit if-branch
+    -> !(Boolean) with (false) = true
+    -> select(Set, ExpressionEvaluator) with ({bool::cSet {0}}, <evaluator>) = {bool::cSet {0}}
+    s <- {bool::cSet {0}}
+    for c {
+        c <- bool::cSet {0}
+    }

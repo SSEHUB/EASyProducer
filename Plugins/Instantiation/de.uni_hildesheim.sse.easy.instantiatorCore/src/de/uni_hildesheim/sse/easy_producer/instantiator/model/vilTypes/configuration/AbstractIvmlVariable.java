@@ -379,7 +379,17 @@ public abstract class AbstractIvmlVariable extends IvmlElement {
      * @return the simple type name
      */
     public String getType() {
-        return variable.getDeclaration().getType().getName();
+        return getIvmlType().getName();
+    }
+    
+    /**
+     * Returns the IVML type of the decision variable.
+     * 
+     * @return the IVML type
+     */
+    @Invisible
+    public IDatatype getIvmlType() {
+        return variable.getDeclaration().getType();
     }
 
     /**

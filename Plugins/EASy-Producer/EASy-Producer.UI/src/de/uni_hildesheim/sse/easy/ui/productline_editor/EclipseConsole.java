@@ -71,7 +71,7 @@ public class EclipseConsole {
         //no console found, so create a new one
         if (null == console) {
             console = new MessageConsole(consoleName, null);
-            console.setWaterMarks(20000, 80000); // currently fixed
+            console.setWaterMarks(20000, 800000); // currently fixed
             conMan.addConsoles(new IConsole[]{console});
         }
         return console; 

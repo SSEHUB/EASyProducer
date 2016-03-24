@@ -40,6 +40,7 @@ import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.IMetaType
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.OperationDescriptor;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.ReflectionTypeDescriptor;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeDescriptor;
+import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeHelper;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeRegistry;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.configuration.IvmlElement;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.configuration.IvmlTypes;
@@ -1345,6 +1346,44 @@ public abstract class ExpressionTranslator<I extends VariableDeclaration, R exte
     @Override
     public void resolved(VarModelIdentifierExpression ex) {
         ivmlWarnings.remove(ex);
+    }
+
+    /**
+     * Asserts the given expression to be of Boolean type.
+     * 
+     * @param expression the expression to check
+     * @param cause the causing ECore AST object
+     * @param causingFeature the causing feature
+     * @return <code>expression</code> or a converted expression
+     * @throws TranslatorException thrown if the expression is not of type Boolean
+     */
+    public Expression assertBooleanExpression(Expression expression, EObject cause, EStructuralFeature causingFeature) 
+        throws TranslatorException {
+        if (null != expression) {
+            try {
+                TypeDescriptor<?> type = expression.inferType();
+                boolean ok = false;
+                if (IvmlTypes.decisionVariableType().isAssignableFrom(type)) {
+                    ok = true; // just risk it, can be queried for a Boolean value (may be null)
+                    IMetaOperation convOp = TypeHelper.findConversion(type, TypeRegistry.booleanType());
+                    if (convOp instanceof OperationDescriptor) {
+                        expression = new CallExpression((OperationDescriptor) convOp, new CallArgument(expression));;
+                    } else {
+                        throw new TranslatorException("No conversion from decisionVariable to Boolean defined", 
+                                        cause, causingFeature, ErrorCodes.TYPE_CONSISTENCY);
+                    }
+                } else {
+                    ok = TypeRegistry.booleanType().isAssignableFrom(type);
+                }
+                if (!ok) {
+                    throw new TranslatorException("condition must be a Boolean expression rather than " + type.getVilName(), 
+                        cause, causingFeature, ErrorCodes.TYPE_CONSISTENCY);
+                }
+            } catch (VilException e) {
+                throw new TranslatorException(e, cause, causingFeature);
+            }
+        }
+        return expression;
     }
     
 }

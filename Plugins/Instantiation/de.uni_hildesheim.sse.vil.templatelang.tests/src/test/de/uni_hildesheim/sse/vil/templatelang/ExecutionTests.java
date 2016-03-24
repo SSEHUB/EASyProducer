@@ -1261,4 +1261,14 @@ public class ExecutionTests extends AbstractTest {
         assertEqualWithIvml("references3", "references3");
     }
 
+    /**
+     * Tests the negation of boolean IVML variables.
+     * 
+     * @throws IOException should not occur
+     */
+    @Test
+    public void testBoolean() throws IOException {
+        assertEqualWithIvml("bool", "bool");
+    }
+
 }

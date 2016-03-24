@@ -1,0 +1,18 @@
+@advice(bool)
+template bool(Configuration config, Artifact target) {
+
+    def main(Configuration config, Artifact target) {
+        bool cfg = config;
+        if (!cfg.bVal) {
+            'bVal=${bVal}'
+        }
+        if (cfg.bVal) {
+            'bVal1=${bVal}'
+        }
+        setOf(Cmp) s = cfg.cSet->select(c | !c.b);
+        for (Cmp c : s) {
+            'b=${c.b}'
+        }
+    }
+
+}

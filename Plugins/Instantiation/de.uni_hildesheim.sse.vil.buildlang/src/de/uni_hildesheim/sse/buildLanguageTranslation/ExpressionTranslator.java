@@ -38,7 +38,6 @@ import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.Resolv
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.Constants;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.OperationDescriptor;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeDescriptor;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeRegistry;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.configuration.IvmlTypes;
 import de.uni_hildesheim.sse.utils.modelManagement.IVersionRestriction;
 import de.uni_hildesheim.sse.utils.modelManagement.RestrictionEvaluationException;
@@ -165,16 +164,7 @@ public class ExpressionTranslator
     private AlternativeExpression processAlternative(Alternative alt, Resolver resolver) throws TranslatorException {
         try {
             Expression cond = processExpression(alt.getExpr(), resolver);
-            try {
-                TypeDescriptor<?> condType = cond.inferType();
-                if (!TypeRegistry.booleanType().isAssignableFrom(condType)) {
-                    throw new TranslatorException("condition must be a Boolean expression", 
-                        alt, VilBuildLanguagePackage.Literals.ALTERNATIVE__EXPR,
-                        VilException.ID_SEMANTIC);
-                }
-            } catch (VilException e) {
-                throw new TranslatorException(e, alt, VilBuildLanguagePackage.Literals.ALTERNATIVE__EXPR);
-            }
+            cond = assertBooleanExpression(cond, alt, VilBuildLanguagePackage.Literals.ALTERNATIVE__EXPR);
             resolver.pushLevel();
             IRuleBlock ifBlock = resolveStatementOrBlock(alt.getIf(), resolver);
             resolver.popLevel();
@@ -198,16 +188,7 @@ public class ExpressionTranslator
     private WhileStatement processWhileStatement(de.uni_hildesheim.sse.vilBuildLanguage.While stmt, Resolver resolver) 
         throws TranslatorException {
         Expression expr = processExpression(stmt.getExpr(), resolver);
-        TypeDescriptor<?> type = null;
-        try {
-            type = expr.inferType();
-        } catch (VilException e) {
-            throw new TranslatorException(e, stmt, VilBuildLanguagePackage.Literals.WHILE__EXPR);
-        }
-        if (!TypeRegistry.booleanType().isAssignableFrom(type)) {
-            throw new TranslatorException("while condition must be of type Boolean rather than " + type.getVilName(), 
-                stmt, VilBuildLanguagePackage.Literals.MAP__EXPR, ErrorCodes.TYPE_CONSISTENCY);
-        }
+        expr = assertBooleanExpression(expr, stmt, VilBuildLanguagePackage.Literals.MAP__EXPR);
         resolver.pushLevel();
         IRuleElement[] block = resolveBlock(stmt.getBlock(), resolver);
         resolver.popLevel();

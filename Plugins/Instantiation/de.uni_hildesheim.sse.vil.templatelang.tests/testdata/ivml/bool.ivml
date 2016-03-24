@@ -1,0 +1,18 @@
+project bool {
+  version v0;
+  Boolean bVal = false;
+
+  compound Cmp {
+    Boolean b = false;
+  }
+
+  Cmp c = {};
+  setOf(Cmp) cSet = {{b = false}};
+
+  freeze{
+    bVal;
+    c;
+    cSet;
+  }
+  
+}
