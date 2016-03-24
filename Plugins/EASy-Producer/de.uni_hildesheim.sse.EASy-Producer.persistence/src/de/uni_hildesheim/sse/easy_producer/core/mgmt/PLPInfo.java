@@ -431,17 +431,31 @@ public class PLPInfo implements IInstantiatorProject, IModelListener<Script> {
      */
     @Deprecated
     public void instantiate() {
-        vilExecutor.startInstantiation(ProgressObserver.NO_OBSERVER);
+        vilExecutor.startInstantiation(ProgressObserver.NO_OBSERVER, false);
+    }
+    
+    /**
+     * Instantiates the whole project in a separate thread (asynchronous behavior).
+     * @param observer The observer to inform about the current progress (in case of <tt>null</tt>
+     * {@link ProgressObserver#NO_OBSERVER} will be used).
+     * @see #instantiate(ProgressObserver, boolean)
+     * @see #abortInstantiation()
+     */
+    public void instantiate(ProgressObserver observer) {
+        vilExecutor.startInstantiation(observer, false);
     }
     
     /**
      * Instantiates the whole project in a separate thread.
      * @param observer The observer to inform about the current progress (in case of <tt>null</tt>
      * {@link ProgressObserver#NO_OBSERVER} will be used).
+     * @param waitFor <tt>true</tt> This method will wait until the script was processed completely (blocking method),
+     *   <tt>false</tt> script will be processed in an asynchronous manner (usually used in an GUI environment).
+     * @see #instantiate(ProgressObserver)
      * @see #abortInstantiation()
      */
-    public void instantiate(ProgressObserver observer) {
-        vilExecutor.startInstantiation(observer);
+    public void instantiate(ProgressObserver observer, boolean waitFor) {
+        vilExecutor.startInstantiation(observer, waitFor);
     }
     
     /**

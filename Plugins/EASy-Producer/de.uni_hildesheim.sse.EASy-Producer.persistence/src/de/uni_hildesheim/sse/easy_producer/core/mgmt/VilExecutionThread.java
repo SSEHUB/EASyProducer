@@ -18,6 +18,7 @@ package de.uni_hildesheim.sse.easy_producer.core.mgmt;
 import java.util.ArrayList;
 import java.util.List;
 
+import de.uni_hildesheim.sse.easy_producer.core.persistence.internal.Activator;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilException;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.execution.Executor;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.IProjectDescriptor;
@@ -110,13 +111,23 @@ public class VilExecutionThread implements Runnable {
      * Starts the execution of the underlying VIL script ({@link PLPInfo#getBuildScript()}) in an own thread. 
      * @param observer The observer to inform about the current progress (in case of <tt>null</tt>
      * {@link ProgressObserver#NO_OBSERVER} will be used).
+     * @param waitFor <tt>true</tt> This method will wait until the script was processed completely (blocking method),
+     *   <tt>false</tt> script will be processed in an asynchronous manner (usually used in an GUI environment).
      * @see #abortInstantiation()
      */
-    public void startInstantiation(ProgressObserver observer) {
+    public void startInstantiation(ProgressObserver observer, boolean waitFor) {
         if (null == executor) {
             this.observer = (observer != null) ? observer : ProgressObserver.NO_OBSERVER;
             executor = createExecutor();
-            new Thread(this).start();
+            Thread executionThread = new Thread(this);
+            executionThread.start();
+            if (waitFor) {
+                try {
+                    executionThread.join();
+                } catch (InterruptedException e) {
+                    Activator.getLogger(VilExecutionThread.class).exception(e);
+                }
+            }
         }
     }
     

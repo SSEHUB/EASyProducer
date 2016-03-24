@@ -6,6 +6,8 @@ import org.osgi.framework.BundleContext;
 import de.uni_hildesheim.sse.easy_producer.core.persistence.standard.EASyInitializer;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.execution.TracerFactory;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.tracing.ConsoleTracerFactory;
+import de.uni_hildesheim.sse.utils.logger.EASyLoggerFactory;
+import de.uni_hildesheim.sse.utils.logger.EASyLoggerFactory.EASyLogger;
 
 
 
@@ -52,4 +54,14 @@ public class Activator implements BundleActivator {
         Activator.context = null;
     }
     //checkstyle: resume exception type check
+    
+    /**
+     * Simplification of {@link EASyLoggerFactory#getLogger(Class, String)} to retrieve a logger used within
+     * this plug-in.
+     * @param clazz The class to log.
+     * @return A logger instance for this specified class and plug-in.
+     */
+    public static EASyLogger getLogger(Class<?> clazz) {
+        return EASyLoggerFactory.INSTANCE.getLogger(clazz, PLUGIN_ID);
+    }
 }

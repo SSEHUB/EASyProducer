@@ -362,13 +362,13 @@ public class ConfigurationHeaderMenu extends AbstractConfigMenu implements IProd
         btnAbortInstantiation.setImage(IMG_ABORT);
         btnAbortInstantiation.setEnabled(false);
         // Add Listener
-        setTransformListener();
+        setInstantiationListeners();
     }
 
     /**
-     * Creates a listener for the transform button and add it to the button.
+     * Creates a listener for the instantiation and abort button and add them the buttons.
      */
-    private void setTransformListener() {
+    private void setInstantiationListeners() {
         btnInstantiate.addSelectionListener(new SelectionAdapter() {
             public void widgetSelected(SelectionEvent event) {
                 btnAbortInstantiation.setEnabled(true);
@@ -379,7 +379,7 @@ public class ConfigurationHeaderMenu extends AbstractConfigMenu implements IProd
                  * then the new output of the new instantiation process will be written to the console
                  */
                 EclipseConsole.INSTANCE.clearConsole();
-                getProductLineProject().instantiate(new EclipseProgressObserver());
+                getProductLineProject().instantiate(new EclipseProgressObserver(), false);
                 getProductLineProject().refreshArtifacts(); 
             }
         });
