@@ -7,6 +7,7 @@ import java.util.UUID;
 
 import org.apache.commons.io.FileUtils;
 
+import de.uni_hildesheim.sse.easy_producer.core.mgmt.IVilExecutionListener;
 import de.uni_hildesheim.sse.easy_producer.core.mgmt.PLPInfo;
 import de.uni_hildesheim.sse.easy_producer.core.mgmt.VilArgumentProvider;
 import de.uni_hildesheim.sse.easy_producer.core.persistence.Configuration;
@@ -37,11 +38,32 @@ import de.uni_hildesheim.sse.utils.progress.ProgressObserver;
  * @author El-Sharkawy
  */
 public final class InstantiationCommands {
-
+    
     /**
      * Should prevent instantiation of this utility class.
      */
     private InstantiationCommands() {}
+    
+    
+    /**
+     * Listener to collect {@link VilException}s during script execution.
+     * @author El-Sharkawy
+     *
+     */
+    private static class InstantiationListener implements IVilExecutionListener {
+        private VilException exc = null;
+
+        @Override
+        public void vilExecutionAborted(PLPInfo plp, VilException exc) {
+            this.exc = exc;
+        }
+
+        @Override
+        public void vilExecutionFinished(PLPInfo plp) {
+            // Not needed
+        }
+        
+    }
 
     /**
      * Instantiates the given project.
@@ -87,7 +109,12 @@ public final class InstantiationCommands {
         String projectName = ProjectNameMapper.getInstance().getName(project);
         PLPInfo plp = LowlevelCommands.getProject(projectName);
         if (null != plp) {
-            plp.instantiate();
+            InstantiationListener listener = new InstantiationListener();
+            plp.addVilExecutionListener(listener);
+            plp.instantiate(ProgressObserver.NO_OBSERVER, true);
+            if (null != listener.exc) {
+                throw listener.exc; 
+            }
         } else {
             throw new PersistenceException("Project \"" + projectName + "\" could not be loaded.");
         }
@@ -200,8 +227,13 @@ public final class InstantiationCommands {
             ProjectContainer pCont = new ProjectContainer(ivmlProject, config);
             ScriptContainer sCont = new ScriptContainer(buildScript, config);
             PLPInfo plp = new ProductLineProject(UUID.randomUUID().toString(), projectName, pCont, project, sCont);
-            plp.instantiate();
+            InstantiationListener listener = new InstantiationListener();
+            plp.addVilExecutionListener(listener);
+            plp.instantiate(ProgressObserver.NO_OBSERVER, true);
             VilArgumentProvider.remove(provider); // ok if provider is null
+            if (null != listener.exc) {
+                throw listener.exc; 
+            }
         } else {
             throw new PersistenceException("The specified IVML/VIL files could not be loaded.");
         }
@@ -317,8 +349,13 @@ public final class InstantiationCommands {
             plpSuc.save();
             
             // 3. Instantiate
-            plpSuc.instantiate();
+            InstantiationListener listener = new InstantiationListener();
+            plpSuc.addVilExecutionListener(listener);
+            plpSuc.instantiate(ProgressObserver.NO_OBSERVER, true);
             VilArgumentProvider.remove(provider); // works with null as argument
+            if (null != listener.exc) {
+                throw listener.exc; 
+            }
         }
     }
 
@@ -358,7 +395,12 @@ public final class InstantiationCommands {
         PLPInfo plp = LowlevelCommands.getProject(projectName);
         
         if (null != plp) {
-            plp.instantiate();
+            InstantiationListener listener = new InstantiationListener();
+            plp.addVilExecutionListener(listener);
+            plp.instantiate(ProgressObserver.NO_OBSERVER, true);
+            if (null != listener.exc) {
+                throw listener.exc; 
+            }
         } else {
             throw new PersistenceException("Project \"" + projectName + "\" could not be loaded.");
         }
@@ -488,9 +530,14 @@ public final class InstantiationCommands {
         PLPInfo plpSuc = new ProductLineProject(UUID.randomUUID().toString(), projectNameTrg, pCont,
             projectTarget, sCont);
         plpSuc.getMemberController().addPredecessor(plpPre);
-        plpSuc.instantiate();
-        
+        InstantiationListener listener = new InstantiationListener();
+        plpSuc.addVilExecutionListener(listener);
+        plpSuc.instantiate(ProgressObserver.NO_OBSERVER, true);
         VilArgumentProvider.remove(provider); // works with null as argument
+        if (null != listener.exc) {
+            throw listener.exc; 
+        }
+        
     }
 
     /**

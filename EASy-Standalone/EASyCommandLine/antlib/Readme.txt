@@ -1,0 +1,1 @@
+Only needed for Eclipse, Jenkins will resolve this library correctly.
