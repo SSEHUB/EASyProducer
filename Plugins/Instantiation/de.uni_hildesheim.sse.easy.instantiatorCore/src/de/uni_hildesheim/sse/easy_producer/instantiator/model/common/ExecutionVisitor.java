@@ -299,16 +299,8 @@ public abstract class ExecutionVisitor <M extends IResolvableModel<V>, O extends
                 sParam.remove(name);
             }
         }
-        if (!sParam.isEmpty()) {
-            StringBuilder tmp = new StringBuilder();
-            for (String name : sParam.keySet()) {
-                if (tmp.length() > 0) {
-                    tmp.append(", ");
-                }
-                tmp.append(name);
-            }
-            throw new VilException("unbound script parameter in " + model.getName() + ": " + tmp, 
-                VilException.ID_RUNTIME_PARAMETER);
+        for (Map.Entry<String, V> unbound : sParam.entrySet()) {
+            setModelArgument(unbound.getValue(), null);
         }
     }
 
@@ -462,7 +454,8 @@ public abstract class ExecutionVisitor <M extends IResolvableModel<V>, O extends
         // we do the main call via the call expression to get the parameter right
         // we just ignore more parameters in the model
         CallArgument[] args = new CallArgument[operation.getParameterCount()];
-        for (int p = 0; p < operation.getParameterCount(); p++) {
+        int commonParameterCount = Math.min(operation.getParameterCount(), model.getParameterCount());
+        for (int p = 0; p < commonParameterCount; p++) {
             V opPar = operation.getParameter(p);
             V modelPar = model.getParameter(p);
             if (!opPar.getType().isAssignableFrom(modelPar.getType())) {

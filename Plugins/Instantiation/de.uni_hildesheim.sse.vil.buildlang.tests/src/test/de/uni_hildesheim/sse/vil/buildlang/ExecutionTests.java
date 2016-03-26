@@ -8,6 +8,7 @@ import java.io.IOException;
 import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.artifactModel.ArtifactFactory;
@@ -285,6 +286,7 @@ public class ExecutionTests extends AbstractExecutionTest<Script> {
      * 
      * @throws IOException should not occur
      */
+    @Ignore("obsolete due to null-parameter")
     @Test
     public void testScriptParameter2() throws IOException {
         assertEqual("scriptParameter2", VilException.ID_RUNTIME_PARAMETER);
@@ -306,6 +308,7 @@ public class ExecutionTests extends AbstractExecutionTest<Script> {
      * 
      * @throws IOException should not occur
      */
+    @Ignore("obsolete due to null-parameter")
     @Test
     public void testSimpleRules2() throws IOException {
         assertEqual("simpleRules2", VilException.ID_RUNTIME_PARAMETER);

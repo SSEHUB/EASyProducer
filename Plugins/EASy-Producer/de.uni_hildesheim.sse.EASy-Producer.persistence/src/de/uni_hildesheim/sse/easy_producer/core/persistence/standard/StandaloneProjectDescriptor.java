@@ -18,7 +18,7 @@ import de.uni_hildesheim.sse.utils.progress.ProgressObserver;
  */
 public class StandaloneProjectDescriptor implements IProjectDescriptor {
 
-    private StandaloneProjectDescriptor parent;
+    private IProjectDescriptor parent;
     private File base;
     private Script vilScript;
 
@@ -57,7 +57,7 @@ public class StandaloneProjectDescriptor implements IProjectDescriptor {
      *   be obtained via {@link #ProjectDescriptor()})
      * @param base the folder to instantiate into
      */
-    public StandaloneProjectDescriptor(StandaloneProjectDescriptor parent, File base) {
+    public StandaloneProjectDescriptor(IProjectDescriptor parent, File base) {
         this.parent = parent;
         this.base = base;
         if (!base.exists()) {
