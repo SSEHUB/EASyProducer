@@ -11,9 +11,7 @@ import de.uni_hildesheim.sse.utils.progress.ProgressObserver;
 
 /**
  * Implements a descriptor for the source and target VIL project locations.
- * The {@link #ProjectDescriptor() no-argument constructor}
- * obtains the relevant information for the model itself (i.e., the project
- * it is located in). The {@link #ProjectDescriptor(StandaloneProjectDescriptor, File) 
+ * The {@link #ProjectDescriptor(StandaloneProjectDescriptor, File) 
  * second constructor} allows to specify a different target location.
  * 
  * @author Holger Eichelberger
@@ -25,7 +23,7 @@ public class StandaloneProjectDescriptor implements IProjectDescriptor {
     private Script vilScript;
 
     /**
-     * Creates the standalone project descriptor.
+     * Creates a standalone project descriptor.
      * 
      * @param vilInfo the model information instance for the VIL script to run
      * @param base the folder to instantiate into
@@ -35,8 +33,21 @@ public class StandaloneProjectDescriptor implements IProjectDescriptor {
     public StandaloneProjectDescriptor(ModelInfo<Script> vilInfo, File base) throws ModelManagementException {
         this.parent = null;
         this.base = base;
-
         vilScript = BuildModel.INSTANCE.load(vilInfo);
+    }
+
+    /**
+     * Creates a standalone project descriptor.
+     * 
+     * @param vilScript the VIL script to run
+     * @param base the folder to instantiate into
+     * @throws ModelManagementException in case that resolving the model, obtaining 
+     *   information etc failed.
+     */
+    public StandaloneProjectDescriptor(Script vilScript, File base) throws ModelManagementException {
+        this.parent = null;
+        this.base = base;
+        this.vilScript = vilScript;
     }
 
     /**
