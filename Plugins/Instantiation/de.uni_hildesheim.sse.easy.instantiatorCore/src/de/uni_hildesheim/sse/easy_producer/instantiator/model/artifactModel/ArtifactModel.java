@@ -451,7 +451,9 @@ public class ArtifactModel {
      * Clears this artifact. For internal use only.
      */
     void clear() {
-        for (IFileSystemArtifact fa : fileArtifacts.values()) {
+        List<IFileSystemArtifact> files = new ArrayList<IFileSystemArtifact>(fileArtifacts.size());
+        files.addAll(fileArtifacts.values()); // avoid concurrent modification
+        for (IFileSystemArtifact fa : files) {
             if (fa.isTemporary()) {
                 try {
                     fa.delete();
