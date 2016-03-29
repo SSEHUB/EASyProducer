@@ -57,6 +57,13 @@ public class ExecuteQM2ModelFromXMLTest extends AbstractUtil {
             Registration.register();
             BuiltIn.initialize();
             de.uni_hildesheim.sse.easy.maven.Registration.register();
+            
+            // Ensure correct reasoner is used
+            while (ReasonerRegistry.getInstance().getReasonerCount() > 0) {
+                // Unregister all reasoners
+                ReasonerRegistry.getInstance().unregister(ReasonerRegistry.getInstance().getReasoner(0));
+            }
+            // register desired reasoner: SSE-Reasoner
             ReasonerRegistry.getInstance().register(new Reasoner());
         }
         // Remove all possible locations
