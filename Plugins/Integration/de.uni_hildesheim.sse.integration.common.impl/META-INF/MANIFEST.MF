@@ -8,4 +8,4 @@ Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Require-Bundle: de.uni_hildesheim.sse.integration.common;bundle-version="0.0.1",
  de.uni_hildesheim.sse.varModel;bundle-version="0.0.2",
  de.uni_hildesheim.sse.ivml;bundle-version="0.0.8"
-Export-Package: de.uni_hildesheim.sse.integration.common.impl
+Export-Package: net.ssehub.easy.integration.common.impl

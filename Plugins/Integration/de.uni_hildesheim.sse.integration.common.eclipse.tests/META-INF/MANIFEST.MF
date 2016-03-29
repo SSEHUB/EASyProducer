@@ -10,4 +10,4 @@ Require-Bundle: org.junit;bundle-version="4.8.2";visibility:=reexport,
  de.uni_hildesheim.sse.integration.common.eclipse;bundle-version="0.0.1",
  de.uni_hildesheim.sse.integration.common.tests;bundle-version="0.0.1",
  ReasonerCore;bundle-version="0.4.0"
-Export-Package: de.uni_hildesheim.sse.integration.common.eclipse.tests
+Export-Package: net.ssehub.easy.integration.common.eclipse.tests

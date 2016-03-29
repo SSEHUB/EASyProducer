@@ -5,5 +5,5 @@ Bundle-SymbolicName: de.uni_hildesheim.sse.integration.common;singleton:=true
 Bundle-Version: 1.1.0
 Bundle-Vendor: University of Hildesheim - SSE
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
-Export-Package: de.uni_hildesheim.sse.integration.common
+Export-Package: net.ssehub.easy.integration.common
 Require-Bundle: de.uni_hildesheim.sse.varModel;bundle-version="0.0.2";visibility:=reexport
