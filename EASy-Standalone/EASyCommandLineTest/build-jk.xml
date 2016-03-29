@@ -51,7 +51,7 @@
 			<sysproperty key="EASyCommandline.binFolder" value="${home.standalone.executer.dir}/${build.classes.dir}"/>
 			<sysproperty key="EASyCommandline.libFolder" value="${home.standalone.executer.dir}/lib"/>
 			<formatter type="xml"/>		
-		    <test name="net.ssehub.easy.standalone.cmd.AllTests" toDir="${basedir}/junit">
+		    <test name="net.ssehub.easy.standalone.AllTests" toDir="${basedir}/junit">
 		    	<formatter type="xml"/>
 		    </test>
 		</junit>
