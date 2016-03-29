@@ -1,6 +1,6 @@
 package de.uni_hildesheim.sse.reasoning.drools2;
-import net.ssehub.easy.reasonerCore.frontend.IReasonerInitializer;
-import net.ssehub.easy.reasonerCore.reasoner.IReasoner;
+import net.ssehub.easy.reasoning.core.frontend.IReasonerInitializer;
+import net.ssehub.easy.reasoning.core.reasoner.IReasoner;
 
 
 /**

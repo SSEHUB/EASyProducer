@@ -43,8 +43,8 @@ import de.uni_hildesheim.sse.vil.rt.tests.types.RegularAdaptationEvent;
 import de.uni_hildesheim.sse.vil.rt.tests.types.StartupAdaptationEvent;
 import net.ssehub.easy.basics.messages.AbstractException;
 import net.ssehub.easy.basics.progress.ProgressObserver;
-import net.ssehub.easy.reasonerCore.frontend.ReasonerFrontend;
-import net.ssehub.easy.reasonerCore.reasoner.ReasonerConfiguration;
+import net.ssehub.easy.reasoning.core.frontend.ReasonerFrontend;
+import net.ssehub.easy.reasoning.core.reasoner.ReasonerConfiguration;
 
 /**
  * Tests the execution of rt-VIL.

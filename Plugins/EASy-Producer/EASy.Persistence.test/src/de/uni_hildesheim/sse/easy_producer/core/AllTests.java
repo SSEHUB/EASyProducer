@@ -33,9 +33,9 @@ import de.uni_hildesheim.sse.easy_producer.core.persistence.standard.EASyInitial
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.BuiltIn;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeRegistry;
 import de.uni_hildesheim.sse.easy_producer.instantiator.velocity.VelocityInstantiator;
-import de.uni_hildesheim.sse.reasoning.reasoner.Reasoner;
 import net.ssehub.easy.basics.Environment;
-import net.ssehub.easy.reasonerCore.frontend.ReasonerFrontend;
+import net.ssehub.easy.reasoning.core.frontend.ReasonerFrontend;
+import net.ssehub.easy.reasoning.sseReasoner.Reasoner;
 
 /**
  * Test suite: runs all test classes.

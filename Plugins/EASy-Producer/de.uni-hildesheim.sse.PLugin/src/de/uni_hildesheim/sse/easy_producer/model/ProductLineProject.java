@@ -26,9 +26,9 @@ import net.ssehub.easy.basics.modelManagement.ModelManagementException;
 import net.ssehub.easy.basics.modelManagement.Version;
 import net.ssehub.easy.basics.modelManagement.VersionFormatException;
 import net.ssehub.easy.basics.progress.ProgressObserver;
-import net.ssehub.easy.reasonerCore.frontend.IReasonerListener;
-import net.ssehub.easy.reasonerCore.frontend.ReasoningProcess;
-import net.ssehub.easy.reasonerCore.model.ReasoningOperation;
+import net.ssehub.easy.reasoning.core.frontend.IReasonerListener;
+import net.ssehub.easy.reasoning.core.frontend.ReasoningProcess;
+import net.ssehub.easy.reasoning.core.model.ReasoningOperation;
 import net.ssehub.easy.varModel.management.VarModel;
 import net.ssehub.easy.varModel.model.Project;
 

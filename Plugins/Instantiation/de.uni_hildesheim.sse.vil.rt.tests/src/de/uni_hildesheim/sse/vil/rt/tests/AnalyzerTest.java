@@ -23,9 +23,9 @@ import org.junit.Test;
 
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.rtVil.AbstractAnalyzerVisitor;
 import net.ssehub.easy.basics.progress.ProgressObserver;
-import net.ssehub.easy.reasonerCore.frontend.ReasonerFrontend;
-import net.ssehub.easy.reasonerCore.reasoner.ReasonerConfiguration;
-import net.ssehub.easy.reasonerCore.reasoner.ReasoningResult;
+import net.ssehub.easy.reasoning.core.frontend.ReasonerFrontend;
+import net.ssehub.easy.reasoning.core.reasoner.ReasonerConfiguration;
+import net.ssehub.easy.reasoning.core.reasoner.ReasoningResult;
 import net.ssehub.easy.varModel.confModel.AssignmentState;
 import net.ssehub.easy.varModel.confModel.Configuration;
 import net.ssehub.easy.varModel.confModel.ConfigurationException;

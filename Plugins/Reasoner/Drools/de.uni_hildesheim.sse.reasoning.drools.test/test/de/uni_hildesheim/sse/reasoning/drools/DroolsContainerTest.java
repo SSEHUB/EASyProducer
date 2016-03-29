@@ -5,7 +5,7 @@ import java.io.IOException;
 
 import org.junit.Assert;
 
-import net.ssehub.easy.reasonerCore.reasoner.ReasoningResult;
+import net.ssehub.easy.reasoning.core.reasoner.ReasoningResult;
 
 public class DroolsContainerTest extends AbstractTest {
 

@@ -12,7 +12,7 @@ import java.util.Set;
 
 import org.eclipse.swt.widgets.Composite;
 
-import net.ssehub.easy.reasonerCore.reasoner.Message;
+import net.ssehub.easy.reasoning.core.reasoner.Message;
 import net.ssehub.easy.varModel.confModel.Configuration;
 import net.ssehub.easy.varModel.confModel.IDecisionVariable;
 import net.ssehub.easy.varModel.model.AbstractVariable;

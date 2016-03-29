@@ -7,7 +7,7 @@ import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import net.ssehub.easy.reasonerCore.reasoner.ReasoningResult;
+import net.ssehub.easy.reasoning.core.reasoner.ReasoningResult;
 
 /**
  * Class to test simple constraints over non-nested no compound type variables.

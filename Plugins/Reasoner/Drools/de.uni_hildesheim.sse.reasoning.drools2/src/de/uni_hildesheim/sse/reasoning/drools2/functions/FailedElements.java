@@ -17,7 +17,7 @@ public class FailedElements {
     /**
      * List of violated constraints.
      * The numbers must match to the ordering of
-     * {@link net.ssehub.easy.reasonerCore.model.ReasonerModel#getTotalValueValidationConstraintCount()}.
+     * {@link net.ssehub.easy.reasoning.core.model.ReasonerModel#getTotalValueValidationConstraintCount()}.
      */
     private Set<Integer> failedRules;
     
@@ -38,7 +38,7 @@ public class FailedElements {
     /**
      * Adds the number of a failed rule to this instance.
      * @param failedRule The number of the failed rule (must match to
-     *     {@link net.ssehub.easy.reasonerCore.model.ReasonerModel#getTotalValueValidationConstraintCount()}).
+     *     {@link net.ssehub.easy.reasoning.core.model.ReasonerModel#getTotalValueValidationConstraintCount()}).
      */
     void addRule(int failedRule) {
         failedRules.add(failedRule);

@@ -17,7 +17,7 @@ package de.uni_hildesheim.sse.easy_producer.instantiator.model.rtVil;
 
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.configuration.Configuration;
 import net.ssehub.easy.basics.messages.Status;
-import net.ssehub.easy.reasonerCore.reasoner.Message;
+import net.ssehub.easy.reasoning.core.reasoner.Message;
 
 /**
  * A reasoning hook allowing the system using the rt-VIL environment to influence the validity

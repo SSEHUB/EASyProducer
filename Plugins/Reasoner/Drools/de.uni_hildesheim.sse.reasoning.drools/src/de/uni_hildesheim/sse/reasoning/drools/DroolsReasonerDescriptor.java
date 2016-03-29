@@ -1,6 +1,6 @@
 package de.uni_hildesheim.sse.reasoning.drools;
 
-import net.ssehub.easy.reasonerCore.reasoner.ReasonerDescriptor;
+import net.ssehub.easy.reasoning.core.reasoner.ReasonerDescriptor;
 
 /**
  * A specific reasoner descriptor for Jess.

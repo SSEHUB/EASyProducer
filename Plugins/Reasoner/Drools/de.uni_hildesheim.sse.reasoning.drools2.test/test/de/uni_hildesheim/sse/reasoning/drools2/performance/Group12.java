@@ -22,9 +22,9 @@ import net.ssehub.easy.basics.logger.EASyLoggerFactory.EASyLogger;
 import net.ssehub.easy.basics.messages.Status;
 import net.ssehub.easy.basics.modelManagement.ModelManagementException;
 import net.ssehub.easy.basics.progress.ProgressObserver;
-import net.ssehub.easy.reasonerCore.model.ReasonerModel;
-import net.ssehub.easy.reasonerCore.model.ReasoningOperation;
-import net.ssehub.easy.reasonerCore.reasoner.ReasoningResult;
+import net.ssehub.easy.reasoning.core.model.ReasonerModel;
+import net.ssehub.easy.reasoning.core.model.ReasoningOperation;
+import net.ssehub.easy.reasoning.core.reasoner.ReasoningResult;
 import net.ssehub.easy.varModel.confModel.Configuration;
 import net.ssehub.easy.varModel.management.VarModel;
 import net.ssehub.easy.varModel.model.Project;
@@ -144,7 +144,7 @@ public class Group12 extends AbstractTest<Project> {
         // Test whether reasoning detected correct result  
         int failedConstraints = 0;
         if (result.getMessageCount() > 0 && result.getMessage(0).getStatus() == Status.ERROR) {            
-            net.ssehub.easy.reasonerCore.reasoner.Message cause = result.getMessage(0);
+            net.ssehub.easy.reasoning.core.reasoner.Message cause = result.getMessage(0);
             failedConstraints = Math.max(cause.getConflicts().size(), result.getMessageCount());
         }
         Assert.assertEquals("Failed constraints: ", expectedFailedConstraints, failedConstraints);

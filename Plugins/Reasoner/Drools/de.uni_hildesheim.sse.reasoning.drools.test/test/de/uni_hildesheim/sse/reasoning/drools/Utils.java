@@ -1,7 +1,7 @@
 package de.uni_hildesheim.sse.reasoning.drools;
 
-import net.ssehub.easy.reasonerCore.frontend.AbstractReasonerFrontendTest;
-import net.ssehub.easy.reasonerCore.frontend.TestConfiguration;
+import net.ssehub.easy.reasoning.core.frontend.AbstractReasonerFrontendTest;
+import net.ssehub.easy.reasoning.core.frontend.TestConfiguration;
 
 /**
  * Test utilities.

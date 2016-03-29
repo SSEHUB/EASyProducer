@@ -2,8 +2,8 @@ package de.uni_hildesheim.sse.easy.ui.core.reasoning;
 
 import org.eclipse.swt.widgets.Display;
 
-import net.ssehub.easy.reasonerCore.frontend.IReasonerListener;
-import net.ssehub.easy.reasonerCore.reasoner.ReasoningResult;
+import net.ssehub.easy.reasoning.core.frontend.IReasonerListener;
+import net.ssehub.easy.reasoning.core.reasoner.ReasoningResult;
 
 /**
  * {@link IReasonerListener} which shall update the GUI.
