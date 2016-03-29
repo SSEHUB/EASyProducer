@@ -53,7 +53,7 @@
 		</copy>
         <jar destfile="${build.base.dir}/bundle/${ant.project.name}.jar" basedir="${build.classes.dir}">
             <manifest>
-                <attribute name="Main-Class" value="de.uni_hildesheim.sse.easy.cmd.CommandLineExecuter"/>
+                <attribute name="Main-Class" value="net.ssehub.easy.standalone.cmd.CommandLineExecuter"/>
                 <attribute name="Class-Path" value="lib/org.eclipse.osgi_3.9.1.v20140110-1610.jar lib/org.eclipse.osgi.services_3.3.100.v20130513-1956.jar lib/eclipse-part.jar lib/easy-headless.jar lib/org.eclipse.equinox.common_3.6.200.jar lib/org.eclipse.equinox.preferences_3.5.100.jar"/>
             </manifest>
         </jar>
