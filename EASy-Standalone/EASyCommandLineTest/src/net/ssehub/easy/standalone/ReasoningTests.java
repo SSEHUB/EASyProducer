@@ -13,7 +13,7 @@ import org.junit.Test;
 
 public class ReasoningTests {
     
-    private static final String MAIN_CLASS = "de.uni_hildesheim.sse.easy.cmd.CommandLineExecuter";
+    private static final String MAIN_CLASS = "net.ssehub.easy.standalone.cmd.CommandLineExecuter";
     
     @BeforeClass
     public static void setUpBeforeClass() {
