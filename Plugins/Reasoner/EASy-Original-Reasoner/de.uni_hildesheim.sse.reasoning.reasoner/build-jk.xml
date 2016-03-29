@@ -33,22 +33,22 @@
 		<delete dir="${easyLibs.dir}"/>
 
 		<!-- Prepare EASy standalone ANT Lib (copy libraries to avoid problems with building the standalone libs) -->
-		<!--mkdir dir="${easyLibs.dir}"/>
+		<mkdir dir="${easyLibs.dir}"/>
 	  <copy todir="${easyLibs.dir}">
 			<fileset dir="${home.base.dir}/${projects.standalone.dir}/build/generatedLibs/dist">
 	        <include name="**/*.jar"/>
 	    </fileset>
-	  </copy-->
+	  </copy>
 			
 		<!-- collect the standalone libraries -->
-  	<!--path id="easyTaskDef.lib">
+  	<path id="easyTaskDef.lib">
   		<fileset dir="easyLibs">
   			<include name="*.jar"/>
   	  </fileset>
-  	</path-->
+  	</path>
 
 	  <!-- Create EASy task -->
-	  <!--taskdef name="easy" classname="de.uni_hildesheim.sse.easy.ant.EASy" classpathref="easyTaskDef.lib"/-->
+	  <taskdef name="easy" classname="net.ssehub.easy.standalone.ant.EASy" classpathref="easyTaskDef.lib"/>
 		
 		<!-- Create folders -->
     <mkdir dir="${build.base.dir}"/>
@@ -58,7 +58,7 @@
 	
 	<!-- Compile all files without test classes -->
 	<target name="compile" depends="init">
-		<!--easy source="${basedir}" target="${basedir}" projectName="Reasoner"/-->
+		<easy source="${basedir}" target="${basedir}" projectName="Reasoner"/>
 		<javac srcdir="${src.dir}" debug="true" destdir="${build.classes.dir}" includeAntRuntime="no" failonerror="true" source="${javacSource}" target="${javacTarget}" encoding="${javac.encoding}">
 			<classpath refid="includes" />	
 		</javac>
@@ -66,7 +66,7 @@
 	
 	<!-- Creates a jar file -->
 	<target name="jar" depends="compile">
-        <!-- Copy needed non class files -->
+    <!-- Copy needed non class files -->
 		<copy todir="${build.classes.dir}" failonerror="true" overwrite="true">
 			<fileset dir="${basedir}">
 				<include name="OSGI-INF/**/*" />
