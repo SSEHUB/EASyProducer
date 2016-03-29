@@ -12,9 +12,9 @@ import org.junit.BeforeClass;
 
 import de.uni_hildesheim.sse.ConstraintSyntaxException;
 import de.uni_hildesheim.sse.ModelUtility;
-import de.uni_hildesheim.sse.dslCore.StandaloneInitializer;
 import net.ssehub.easy.basics.modelManagement.ModelManagementException;
 import net.ssehub.easy.basics.progress.ProgressObserver;
+import net.ssehub.easy.dslCore.StandaloneInitializer;
 import net.ssehub.easy.reasoning.core.reasoner.EvaluationResult;
 import net.ssehub.easy.reasoning.core.reasoner.ReasoningResult;
 import net.ssehub.easy.reasoning.core.reasoner.EvaluationResult.ConstraintEvaluationResult;
@@ -105,7 +105,7 @@ public abstract class AbstractTest {
        }
        
        // Parse IVML File
-       de.uni_hildesheim.sse.dslCore.TranslationResult<Project> result = ModelUtility.INSTANCE.parse(file);
+       net.ssehub.easy.dslCore.TranslationResult<Project> result = ModelUtility.INSTANCE.parse(file);
        for (int i = 0; i < result.getMessageCount(); i++) {
            System.out.println("Parsing error -> " + result.getMessage(i).getDescription());
        }

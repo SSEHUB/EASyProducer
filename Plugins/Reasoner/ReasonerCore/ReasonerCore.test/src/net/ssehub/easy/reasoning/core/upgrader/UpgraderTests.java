@@ -16,8 +16,8 @@ import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import de.uni_hildesheim.sse.dslCore.test.AbstractTest;
 import net.ssehub.easy.basics.progress.ProgressObserver;
+import net.ssehub.easy.dslCore.test.AbstractTest;
 import net.ssehub.easy.reasoning.core.reasoner.FileUpgrader;
 import net.ssehub.easy.reasoning.core.reasoner.IUpgrader;
 import net.ssehub.easy.reasoning.core.reasoner.ReasoningResult;

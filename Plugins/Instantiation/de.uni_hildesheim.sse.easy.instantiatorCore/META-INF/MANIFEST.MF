@@ -31,6 +31,6 @@ Export-Package: de.uni_hildesheim.sse.easy_producer.instantiator,
  de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes,
  de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.configuration
 Bundle-ClassPath: .
-Import-Package: de.uni_hildesheim.sse.dslCore.translation,
+Import-Package: net.ssehub.easy.dslCore.translation,
  org.osgi.service.component
 Bundle-ActivationPolicy: lazy

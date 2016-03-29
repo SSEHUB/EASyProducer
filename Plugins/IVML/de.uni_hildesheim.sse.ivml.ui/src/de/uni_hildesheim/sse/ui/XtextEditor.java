@@ -9,10 +9,10 @@ import org.eclipse.ui.PartInitException;
 
 import de.uni_hildesheim.sse.IvmlBundleId;
 import de.uni_hildesheim.sse.ModelUtility;
-import de.uni_hildesheim.sse.dslCore.IResourceInitializer;
-import de.uni_hildesheim.sse.dslCore.TranslationResult;
-import de.uni_hildesheim.sse.dslcore.ui.editors.CommonXtextEditor;
 import de.uni_hildesheim.sse.ivml.VariabilityUnit;
+import net.ssehub.easy.dslCore.IResourceInitializer;
+import net.ssehub.easy.dslCore.TranslationResult;
+import net.ssehub.easy.dslCore.ui.editors.CommonXtextEditor;
 import net.ssehub.easy.varModel.model.Project;
 
 /**

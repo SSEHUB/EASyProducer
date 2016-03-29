@@ -9,10 +9,10 @@ import java.util.Stack;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
 
-import de.uni_hildesheim.sse.dslCore.translation.ErrorCodes;
-import de.uni_hildesheim.sse.dslCore.translation.IMessageReceiver;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeRegistry;
 import net.ssehub.easy.basics.modelManagement.IModel;
+import net.ssehub.easy.dslCore.translation.ErrorCodes;
+import net.ssehub.easy.dslCore.translation.IMessageReceiver;
 
 /**
  * A basic implementation for a hierarchical resolver.

@@ -3,7 +3,7 @@ package de.uni_hildesheim.sse.translation;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
 
-import de.uni_hildesheim.sse.dslCore.translation.TranslatorException;
+import net.ssehub.easy.dslCore.translation.TranslatorException;
 
 /**
  * Thrown in case of an unknown variable.

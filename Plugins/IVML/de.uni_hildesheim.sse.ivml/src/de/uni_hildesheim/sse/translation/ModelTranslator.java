@@ -15,7 +15,6 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
 
 import de.uni_hildesheim.sse.ModelUtility;
-import de.uni_hildesheim.sse.dslCore.translation.TranslatorException;
 import de.uni_hildesheim.sse.ivml.AnnotateTo;
 import de.uni_hildesheim.sse.ivml.AttrAssignment;
 import de.uni_hildesheim.sse.ivml.AttrAssignmentPart;
@@ -50,6 +49,7 @@ import net.ssehub.easy.basics.modelManagement.ImportResolver;
 import net.ssehub.easy.basics.modelManagement.ModelInfo;
 import net.ssehub.easy.basics.modelManagement.Version;
 import net.ssehub.easy.basics.modelManagement.VersionFormatException;
+import net.ssehub.easy.dslCore.translation.TranslatorException;
 import net.ssehub.easy.varModel.cst.CSTSemanticException;
 import net.ssehub.easy.varModel.cst.ConstantValue;
 import net.ssehub.easy.varModel.cst.ConstraintSyntaxTree;
@@ -99,7 +99,7 @@ import net.ssehub.easy.varModel.model.datatypes.Reference;
  * 
  * @author Holger Eichelberger
  */
-public class ModelTranslator extends de.uni_hildesheim.sse.dslCore.translation.ModelTranslator<ExpressionTranslator> {
+public class ModelTranslator extends net.ssehub.easy.dslCore.translation.ModelTranslator<ExpressionTranslator> {
 
     private Map<TypedefCompound, Compound> compoundMapping = new HashMap<TypedefCompound, Compound>();
     private Map<AttrAssignment, AttributeAssignment> assignmentMapping 

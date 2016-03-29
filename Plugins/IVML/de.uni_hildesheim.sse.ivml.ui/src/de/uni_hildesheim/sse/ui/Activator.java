@@ -8,16 +8,16 @@ import org.eclipse.swt.widgets.Composite;
 import org.osgi.framework.BundleContext;
 
 import de.uni_hildesheim.sse.ModelUtility;
-import de.uni_hildesheim.sse.dslcore.ui.EditorEmbedderFactory;
-import de.uni_hildesheim.sse.dslcore.ui.EditorEmbedderFactory.IEditorCreator;
-import de.uni_hildesheim.sse.dslcore.ui.editors.AbstractModelChangeListener;
-import de.uni_hildesheim.sse.dslcore.ui.editors.IEmbeddedEditor;
-import de.uni_hildesheim.sse.dslcore.ui.editors.ModelEditorConfigurer;
-import de.uni_hildesheim.sse.dslcore.ui.editors.ModelEditorConfigurer.IHeader;
-import de.uni_hildesheim.sse.dslcore.ui.editors.ModelEditorConfigurer.IModelEditorConfigurer;
 import de.uni_hildesheim.sse.ui.embed.EditorUtils;
 import de.uni_hildesheim.sse.ui.internal.IvmlActivator;
 import net.ssehub.easy.basics.modelManagement.ModelInfo;
+import net.ssehub.easy.dslCore.ui.EditorEmbedderFactory;
+import net.ssehub.easy.dslCore.ui.EditorEmbedderFactory.IEditorCreator;
+import net.ssehub.easy.dslCore.ui.editors.AbstractModelChangeListener;
+import net.ssehub.easy.dslCore.ui.editors.IEmbeddedEditor;
+import net.ssehub.easy.dslCore.ui.editors.ModelEditorConfigurer;
+import net.ssehub.easy.dslCore.ui.editors.ModelEditorConfigurer.IHeader;
+import net.ssehub.easy.dslCore.ui.editors.ModelEditorConfigurer.IModelEditorConfigurer;
 import net.ssehub.easy.varModel.confModel.Configuration;
 
 /**

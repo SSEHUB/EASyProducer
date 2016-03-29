@@ -29,14 +29,14 @@ import net.ssehub.easy.varModel.persistency.PersistencyConstants;
 public class IntegrationTest extends AbstractEASyTest {
 
     /**
-     * Project for testing correct behavior of the {@link de.uni_hildesheim.sse.dslCore.ModelUtility}s.
+     * Project for testing correct behavior of the {@link net.ssehub.easy.dslCore.ModelUtility}s.
      * Project will not be modified -> Project can be loaded from the origins folder. 
      */
     private static final File TEST_PROJECT_MODELUTILITY
         = new File(AllTests.TESTDATA_DIR_ORIGINS, "ModelUtilityTestProject");
     
     /**
-     * this test checks whether the {@link de.uni_hildesheim.sse.dslCore.ModelUtility}s are loaded correctly.
+     * this test checks whether the {@link net.ssehub.easy.dslCore.ModelUtility}s are loaded correctly.
      */
     @Test
     public void testModelUtilitiesConfiguredCorrectly() {

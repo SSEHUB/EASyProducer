@@ -12,10 +12,6 @@ import org.eclipse.emf.common.util.URI;
 import org.eclipse.xtext.nodemodel.INode;
 import org.eclipse.xtext.parser.IParseResult;
 
-import de.uni_hildesheim.sse.dslCore.TranslationResult;
-import de.uni_hildesheim.sse.dslCore.translation.Message;
-import de.uni_hildesheim.sse.dslCore.translation.MessageReceiver;
-import de.uni_hildesheim.sse.dslCore.translation.TranslatorException;
 import de.uni_hildesheim.sse.ivml.ConflictStmt;
 import de.uni_hildesheim.sse.ivml.DerivedType;
 import de.uni_hildesheim.sse.ivml.Expression;
@@ -36,6 +32,10 @@ import net.ssehub.easy.basics.modelManagement.ModelImport;
 import net.ssehub.easy.basics.modelManagement.ModelInfo;
 import net.ssehub.easy.basics.modelManagement.Version;
 import net.ssehub.easy.basics.modelManagement.VersionFormatException;
+import net.ssehub.easy.dslCore.TranslationResult;
+import net.ssehub.easy.dslCore.translation.Message;
+import net.ssehub.easy.dslCore.translation.MessageReceiver;
+import net.ssehub.easy.dslCore.translation.TranslatorException;
 import net.ssehub.easy.varModel.cst.CSTSemanticException;
 import net.ssehub.easy.varModel.cst.ConstraintSyntaxTree;
 import net.ssehub.easy.varModel.model.AbstractVariable;
@@ -53,7 +53,7 @@ import net.ssehub.easy.varModel.persistency.ConfigurableIVMLWriter;
  * 
  * @author Holger Eichelberger
  */
-public class ModelUtility extends de.uni_hildesheim.sse.dslCore.ModelUtility<VariabilityUnit, Project> 
+public class ModelUtility extends net.ssehub.easy.dslCore.ModelUtility<VariabilityUnit, Project> 
     implements IModelLoader<Project> {
 
     public static final ModelUtility INSTANCE = new ModelUtility();

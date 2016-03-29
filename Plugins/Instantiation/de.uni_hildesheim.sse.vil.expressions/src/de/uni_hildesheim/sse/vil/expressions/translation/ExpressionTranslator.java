@@ -9,9 +9,6 @@ import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
 
-import de.uni_hildesheim.sse.dslCore.translation.ErrorCodes;
-import de.uni_hildesheim.sse.dslCore.translation.StringUtils;
-import de.uni_hildesheim.sse.dslCore.translation.TranslatorException;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.ExpressionStatement;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VariableDeclaration;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.CallArgument;
@@ -81,6 +78,9 @@ import net.ssehub.easy.basics.modelManagement.IVersionRestriction;
 import net.ssehub.easy.basics.modelManagement.RestrictionEvaluationException;
 import net.ssehub.easy.basics.modelManagement.Version;
 import net.ssehub.easy.basics.modelManagement.VersionFormatException;
+import net.ssehub.easy.dslCore.translation.ErrorCodes;
+import net.ssehub.easy.dslCore.translation.StringUtils;
+import net.ssehub.easy.dslCore.translation.TranslatorException;
 import net.ssehub.easy.varModel.model.values.EnumValue;
 
 /**
@@ -89,7 +89,7 @@ import net.ssehub.easy.varModel.model.values.EnumValue;
  * @author Holger Eichelberger
  */
 public abstract class ExpressionTranslator<I extends VariableDeclaration, R extends Resolver<I>, 
-    E extends ExpressionStatement> extends de.uni_hildesheim.sse.dslCore.translation.ExpressionTranslator 
+    E extends ExpressionStatement> extends net.ssehub.easy.dslCore.translation.ExpressionTranslator 
     implements ResolutionListener {
 
     private java.util.Map<VarModelIdentifierExpression, EObject> ivmlWarnings 

@@ -12,9 +12,6 @@ import org.eclipse.emf.common.util.URI;
 import org.eclipse.xtext.nodemodel.INode;
 import org.eclipse.xtext.parser.IParseResult;
 
-import de.uni_hildesheim.sse.dslCore.TranslationResult;
-import de.uni_hildesheim.sse.dslCore.translation.Message;
-import de.uni_hildesheim.sse.dslCore.translation.TranslatorException;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.Resolver;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilException;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.Expression;
@@ -33,13 +30,16 @@ import net.ssehub.easy.basics.modelManagement.ImportResolver;
 import net.ssehub.easy.basics.modelManagement.ModelImport;
 import net.ssehub.easy.basics.modelManagement.ModelInfo;
 import net.ssehub.easy.basics.modelManagement.Version;
+import net.ssehub.easy.dslCore.TranslationResult;
+import net.ssehub.easy.dslCore.translation.Message;
+import net.ssehub.easy.dslCore.translation.TranslatorException;
 
 /**
  * Provides language-wide functionality.
  * 
  * @author Holger Eichelberger
  */
-public class RtVilModelUtility extends de.uni_hildesheim.sse.dslCore.ModelUtility<ImplementationUnit, Script> 
+public class RtVilModelUtility extends net.ssehub.easy.dslCore.ModelUtility<ImplementationUnit, Script> 
     implements IModelLoader<Script> {
     
     public static final RtVilModelUtility INSTANCE = new RtVilModelUtility();

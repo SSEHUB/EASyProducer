@@ -7,13 +7,13 @@ import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorSite;
 import org.eclipse.ui.PartInitException;
 
-import de.uni_hildesheim.sse.dslCore.IResourceInitializer;
-import de.uni_hildesheim.sse.dslCore.TranslationResult;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.templateModel.Template;
 import de.uni_hildesheim.sse.vil.AbstractXTextEditor;
 import de.uni_hildesheim.sse.vil.templatelang.TemplateLangModelUtility;
 import de.uni_hildesheim.sse.vil.templatelang.VtlBundleId;
 import de.uni_hildesheim.sse.vil.templatelang.templateLang.LanguageUnit;
+import net.ssehub.easy.dslCore.IResourceInitializer;
+import net.ssehub.easy.dslCore.TranslationResult;
 
 /**
  * A specific editor class for VTL.

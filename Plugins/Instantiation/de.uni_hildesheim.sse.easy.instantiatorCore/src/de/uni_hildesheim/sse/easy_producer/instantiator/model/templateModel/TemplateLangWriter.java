@@ -4,7 +4,6 @@ import static de.uni_hildesheim.sse.easy_producer.instantiator.model.templateMod
 
 import java.io.Writer;
 
-import de.uni_hildesheim.sse.dslCore.translation.StringUtils;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.IVisitor;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilException;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.WriterVisitor;
@@ -12,6 +11,7 @@ import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.Expres
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.Constants;
 import net.ssehub.easy.basics.modelManagement.IndentationConfiguration;
 import net.ssehub.easy.basics.modelManagement.ModelImport;
+import net.ssehub.easy.dslCore.translation.StringUtils;
 
 /**
  * For writing a template language model to a print stream. Needed for persisting the 

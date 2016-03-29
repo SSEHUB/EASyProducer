@@ -1,8 +1,6 @@
 package de.uni_hildesheim.sse.translation;
 
 
-import de.uni_hildesheim.sse.dslCore.translation.MessageHandler;
-import de.uni_hildesheim.sse.dslCore.translation.TranslatorException;
 import de.uni_hildesheim.sse.ivml.ConflictStmt;
 import de.uni_hildesheim.sse.ivml.Expression;
 import de.uni_hildesheim.sse.ivml.ImportStmt;
@@ -10,6 +8,8 @@ import de.uni_hildesheim.sse.ivml.IvmlPackage;
 import net.ssehub.easy.basics.messages.IMessageHandler;
 import net.ssehub.easy.basics.modelManagement.IVersionRestriction;
 import net.ssehub.easy.basics.modelManagement.RestrictionEvaluationException;
+import net.ssehub.easy.dslCore.translation.MessageHandler;
+import net.ssehub.easy.dslCore.translation.TranslatorException;
 import net.ssehub.easy.varModel.cst.ConstraintSyntaxTree;
 import net.ssehub.easy.varModel.management.VarModel;
 import net.ssehub.easy.varModel.model.DecisionVariableDeclaration;

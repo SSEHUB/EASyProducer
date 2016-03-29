@@ -10,12 +10,12 @@ import org.junit.Assert;
 import org.osgi.framework.Bundle;
 
 import de.uni_hildesheim.sse.ModelUtility;
-import de.uni_hildesheim.sse.dslCore.StandaloneInitializer;
 import net.ssehub.easy.basics.messages.Status;
 import net.ssehub.easy.basics.modelManagement.ModelInfo;
 import net.ssehub.easy.basics.modelManagement.ModelManagementException;
 import net.ssehub.easy.basics.modelManagement.Version;
 import net.ssehub.easy.basics.progress.ProgressObserver;
+import net.ssehub.easy.dslCore.StandaloneInitializer;
 import net.ssehub.easy.reasoning.core.frontend.IReasonerInitializer;
 import net.ssehub.easy.reasoning.core.frontend.ReasonerFrontend;
 import net.ssehub.easy.reasoning.core.frontend.TestConfiguration.Capabilities;
@@ -163,12 +163,12 @@ public abstract class AbstractReasonerFrontendTest {
         }
 
         // Parse IVML File
-        de.uni_hildesheim.sse.dslCore.TranslationResult<Project> result = ModelUtility.INSTANCE.parse(file);
+        net.ssehub.easy.dslCore.TranslationResult<Project> result = ModelUtility.INSTANCE.parse(file);
         Project p = null;
         
         StringBuffer errorMsg = new StringBuffer();
         for (int i = 0; i < result.getMessageCount(); i++) {
-            de.uni_hildesheim.sse.dslCore.translation.Message msg = result.getMessage(i);
+            net.ssehub.easy.dslCore.translation.Message msg = result.getMessage(i);
             if (!msg.ignore()) {
                 errorMsg.append(msg.getDescription());
                 errorMsg.append("\n");

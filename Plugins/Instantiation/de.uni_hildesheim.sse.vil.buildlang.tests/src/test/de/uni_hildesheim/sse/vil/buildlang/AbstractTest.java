@@ -14,8 +14,6 @@ import org.junit.Assert;
 
 import de.uni_hildesheim.sse.ModelUtility;
 import de.uni_hildesheim.sse.VilExpressionParser;
-import de.uni_hildesheim.sse.dslCore.TranslationResult;
-import de.uni_hildesheim.sse.dslCore.translation.Message;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.BuiltIn;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.artifactModel.PathUtils;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.BuildlangExecution;
@@ -30,6 +28,8 @@ import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeRegis
 import de.uni_hildesheim.sse.easy_producer.instantiator.velocity.VelocityInstantiator;
 import net.ssehub.easy.basics.messages.Status;
 import net.ssehub.easy.basics.modelManagement.ModelManagementException;
+import net.ssehub.easy.dslCore.TranslationResult;
+import net.ssehub.easy.dslCore.translation.Message;
 import net.ssehub.easy.varModel.management.VarModel;
 
 /**
@@ -38,7 +38,7 @@ import net.ssehub.easy.varModel.management.VarModel;
  * @param <M> the actual model type
  * @author Holger Eichelberger
  */
-public abstract class AbstractTest<M extends Script> extends de.uni_hildesheim.sse.dslCore.test.AbstractTest<M> {
+public abstract class AbstractTest<M extends Script> extends net.ssehub.easy.dslCore.test.AbstractTest<M> {
 
     private ITestConfigurer<M> configurer = createTestConfigurer();
     
@@ -383,7 +383,7 @@ public abstract class AbstractTest<M extends Script> extends de.uni_hildesheim.s
      * @throws VilException in case that the execution fails (shall not happen but one never knows
      *     whether VIL fails runing the same script twice)
      *     
-     * @see #assertExecutor(de.uni_hildesheim.sse.dslCore.test.AbstractTest.EqualitySetup, Executor)
+     * @see #assertExecutor(net.ssehub.easy.dslCore.test.AbstractTest.EqualitySetup, Executor)
      */
     protected void testExecutor(Script script, EqualitySetup<M> data) throws VilException {
         // this may not do the same as the execution before - this would be a second instantiation

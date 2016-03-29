@@ -25,8 +25,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import de.uni_hildesheim.sse.dslCore.TopLevelModelAccessor;
-import de.uni_hildesheim.sse.dslCore.TopLevelModelAccessor.IModelAccessor;
 import de.uni_hildesheim.sse.easy_producer.core.mgmt.PLPInfo;
 import de.uni_hildesheim.sse.easy_producer.core.persistence.Configuration.PathKind;
 import de.uni_hildesheim.sse.easy_producer.core.persistence.datatypes.Entity;
@@ -65,6 +63,8 @@ import net.ssehub.easy.basics.modelManagement.RestrictionEvaluationException;
 import net.ssehub.easy.basics.modelManagement.Version;
 import net.ssehub.easy.basics.modelManagement.VersionFormatException;
 import net.ssehub.easy.basics.progress.ProgressObserver;
+import net.ssehub.easy.dslCore.TopLevelModelAccessor;
+import net.ssehub.easy.dslCore.TopLevelModelAccessor.IModelAccessor;
 import net.ssehub.easy.varModel.cst.CSTSemanticException;
 import net.ssehub.easy.varModel.cst.ConstraintSyntaxTree;
 import net.ssehub.easy.varModel.management.VarModel;

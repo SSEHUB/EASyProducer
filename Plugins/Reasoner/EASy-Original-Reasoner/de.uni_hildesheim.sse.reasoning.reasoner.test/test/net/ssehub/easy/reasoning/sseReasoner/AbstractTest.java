@@ -25,7 +25,7 @@ import net.ssehub.easy.varModel.model.Project;
  * @author El-Sharkawy
  *
  */
-public abstract class AbstractTest extends de.uni_hildesheim.sse.dslCore.test.AbstractTest<Project> {
+public abstract class AbstractTest extends net.ssehub.easy.dslCore.test.AbstractTest<Project> {
     
     public static final File TESTDATA = determineTestDataFolder("reasonerCore.testdata.home");
     

@@ -22,9 +22,6 @@ import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.part.MultiPageEditorPart;
 
-import de.uni_hildesheim.sse.dslCore.TopLevelModelAccessor;
-import de.uni_hildesheim.sse.dslcore.ui.editors.ModelEditorConfigurer;
-import de.uni_hildesheim.sse.dslcore.ui.editors.ModelEditorConfigurer.IModelEditorConfigurer;
 import de.uni_hildesheim.sse.easy.ui.contributions.Contributions;
 import de.uni_hildesheim.sse.easy.ui.contributions.Contributions.UIElement;
 import de.uni_hildesheim.sse.easy.ui.core.contributions.ExternalEditor;
@@ -38,6 +35,9 @@ import de.uni_hildesheim.sse.easy_producer.core.varMod.container.SemanticErrorDe
 import de.uni_hildesheim.sse.easy_producer.model.ProductLineProject;
 import de.uni_hildesheim.sse.easy_producer.persistency.ResourcesMgmt;
 import net.ssehub.easy.basics.modelManagement.ModelInfo;
+import net.ssehub.easy.dslCore.TopLevelModelAccessor;
+import net.ssehub.easy.dslCore.ui.editors.ModelEditorConfigurer;
+import net.ssehub.easy.dslCore.ui.editors.ModelEditorConfigurer.IModelEditorConfigurer;
 
 /**
  * Multipage editor for editing and configuring one product line project.

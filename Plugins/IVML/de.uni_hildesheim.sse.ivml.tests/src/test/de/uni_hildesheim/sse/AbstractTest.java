@@ -14,11 +14,11 @@ import org.junit.BeforeClass;
 import org.junit.Assert;
 
 import de.uni_hildesheim.sse.ModelUtility;
-import de.uni_hildesheim.sse.dslCore.TranslationResult;
 import net.ssehub.easy.basics.modelManagement.ModelInfo;
 import net.ssehub.easy.basics.modelManagement.ModelManagementException;
 import net.ssehub.easy.basics.modelManagement.Version;
 import net.ssehub.easy.basics.modelManagement.VersionFormatException;
+import net.ssehub.easy.dslCore.TranslationResult;
 import net.ssehub.easy.varModel.management.CommentResource;
 import net.ssehub.easy.varModel.management.VarModel;
 import net.ssehub.easy.varModel.model.ContainableModelElement;
@@ -31,7 +31,7 @@ import net.ssehub.easy.varModel.validation.IvmlValidationVisitor;
  * 
  * @author Holger Eichelberger
  */
-public abstract class AbstractTest extends de.uni_hildesheim.sse.dslCore.test.AbstractTest<Project> {
+public abstract class AbstractTest extends net.ssehub.easy.dslCore.test.AbstractTest<Project> {
 
     /**
      * The directory containing all tests.

@@ -20,8 +20,6 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-import de.uni_hildesheim.sse.dslCore.TopLevelModelAccessor;
-import de.uni_hildesheim.sse.dslCore.TopLevelModelAccessor.IModelAccessor;
 import de.uni_hildesheim.sse.easy_producer.core.persistence.Configuration.PathKind;
 import de.uni_hildesheim.sse.easy_producer.core.persistence.PersistenceException;
 import de.uni_hildesheim.sse.easy_producer.core.persistence.PersistenceUtils;
@@ -46,6 +44,8 @@ import net.ssehub.easy.basics.modelManagement.ModelManagementException;
 import net.ssehub.easy.basics.modelManagement.Version;
 import net.ssehub.easy.basics.modelManagement.VersionFormatException;
 import net.ssehub.easy.basics.progress.ProgressObserver;
+import net.ssehub.easy.dslCore.TopLevelModelAccessor;
+import net.ssehub.easy.dslCore.TopLevelModelAccessor.IModelAccessor;
 import net.ssehub.easy.reasoning.core.frontend.IReasonerListener;
 import net.ssehub.easy.reasoning.core.frontend.ReasoningProcess;
 import net.ssehub.easy.reasoning.core.model.ReasoningOperation;

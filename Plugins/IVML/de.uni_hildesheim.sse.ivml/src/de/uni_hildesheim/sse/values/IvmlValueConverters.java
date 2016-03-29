@@ -9,7 +9,7 @@ import org.eclipse.xtext.conversion.impl.STRINGValueConverter;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 
-import de.uni_hildesheim.sse.dslCore.values.VersionValueConverter;
+import net.ssehub.easy.dslCore.values.VersionValueConverter;
 
 /**
  * Factory for the value converters.

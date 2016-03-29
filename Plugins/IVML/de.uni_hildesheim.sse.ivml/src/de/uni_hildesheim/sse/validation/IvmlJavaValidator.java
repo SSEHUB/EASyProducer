@@ -9,11 +9,11 @@ import org.eclipse.xtext.validation.Check;
 
 import de.uni_hildesheim.sse.Config;
 import de.uni_hildesheim.sse.ModelUtility;
-import de.uni_hildesheim.sse.dslCore.TranslationResult;
-import de.uni_hildesheim.sse.dslCore.validation.ValidationUtils;
-import de.uni_hildesheim.sse.dslCore.validation.ValidationUtils.IModelValidationCallback;
-import de.uni_hildesheim.sse.dslCore.validation.ValidationUtils.MessageType;
 import de.uni_hildesheim.sse.ivml.VariabilityUnit;
+import net.ssehub.easy.dslCore.TranslationResult;
+import net.ssehub.easy.dslCore.validation.ValidationUtils;
+import net.ssehub.easy.dslCore.validation.ValidationUtils.IModelValidationCallback;
+import net.ssehub.easy.dslCore.validation.ValidationUtils.MessageType;
 import net.ssehub.easy.varModel.management.VarModel;
 import net.ssehub.easy.varModel.model.Project;
 

@@ -6,9 +6,6 @@ import java.util.List;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
 
-import de.uni_hildesheim.sse.dslCore.translation.ErrorCodes;
-import de.uni_hildesheim.sse.dslCore.translation.MessageHandler;
-import de.uni_hildesheim.sse.dslCore.translation.TranslatorException;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.AbstractCallExpression;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.CallArgument;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.CallExpression;
@@ -25,6 +22,9 @@ import de.uni_hildesheim.sse.vil.expressions.expressionDsl.Call;
 import de.uni_hildesheim.sse.vil.expressions.expressionDsl.ExpressionDslPackage;
 import de.uni_hildesheim.sse.vil.templatelang.TemplateLangModelUtility;
 import net.ssehub.easy.basics.modelManagement.RestrictionEvaluationException;
+import net.ssehub.easy.dslCore.translation.ErrorCodes;
+import net.ssehub.easy.dslCore.translation.MessageHandler;
+import net.ssehub.easy.dslCore.translation.TranslatorException;
 
 /**
  * A specific expression translator for the template language.

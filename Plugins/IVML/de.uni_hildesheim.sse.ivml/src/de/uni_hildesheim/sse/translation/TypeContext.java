@@ -10,15 +10,15 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
 
 import de.uni_hildesheim.sse.ModelUtility;
-import de.uni_hildesheim.sse.dslCore.translation.Message;
-import de.uni_hildesheim.sse.dslCore.translation.MessageReceiver;
-import de.uni_hildesheim.sse.dslCore.translation.TranslatorException;
 import de.uni_hildesheim.sse.ivml.DerivedType;
 import de.uni_hildesheim.sse.ivml.IvmlPackage;
 import de.uni_hildesheim.sse.ivml.Type;
 import de.uni_hildesheim.sse.ivml.Typedef;
 import de.uni_hildesheim.sse.ivml.Value;
 import net.ssehub.easy.basics.modelManagement.Version;
+import net.ssehub.easy.dslCore.translation.Message;
+import net.ssehub.easy.dslCore.translation.MessageReceiver;
+import net.ssehub.easy.dslCore.translation.TranslatorException;
 import net.ssehub.easy.varModel.capabilities.DefaultReasonerAccess;
 import net.ssehub.easy.varModel.capabilities.IvmlReasonerCapabilities;
 import net.ssehub.easy.varModel.cst.ConstantValue;

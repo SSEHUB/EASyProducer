@@ -2,10 +2,6 @@ package de.uni_hildesheim.sse.easy_producer.core.persistence.standard;
 
 import de.uni_hildesheim.sse.BuildLangModelUtility;
 import de.uni_hildesheim.sse.ModelUtility;
-import de.uni_hildesheim.sse.dslCore.EclipseResourceInitializer;
-import de.uni_hildesheim.sse.dslCore.StandaloneInitializer;
-import de.uni_hildesheim.sse.dslCore.TopLevelModelAccessor;
-import de.uni_hildesheim.sse.dslCore.TopLevelModelAccessor.IModelAccessor;
 import de.uni_hildesheim.sse.easy_producer.core.persistence.internal.Activator;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.BuildModel;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.templateModel.TemplateModel;
@@ -14,10 +10,14 @@ import net.ssehub.easy.basics.logger.EASyLoggerFactory;
 import net.ssehub.easy.basics.logger.EASyLoggerFactory.EASyLogger;
 import net.ssehub.easy.basics.modelManagement.ModelManagementException;
 import net.ssehub.easy.basics.progress.ProgressObserver;
+import net.ssehub.easy.dslCore.EclipseResourceInitializer;
+import net.ssehub.easy.dslCore.StandaloneInitializer;
+import net.ssehub.easy.dslCore.TopLevelModelAccessor;
+import net.ssehub.easy.dslCore.TopLevelModelAccessor.IModelAccessor;
 import net.ssehub.easy.varModel.management.VarModel;
 
 /**
- * This singelton class controls the {@link de.uni_hildesheim.sse.dslCore.IResourceInitializer} for the EASyPeristencer.
+ * This singelton class controls the {@link net.ssehub.easy.dslCore.IResourceInitializer} for the EASyPeristencer.
  * @author El-Sharkawy
  *
  */
@@ -31,7 +31,7 @@ public abstract class EASyInitializer {
         , Activator.PLUGIN_ID);    
     
     /**
-     * Registers the {@link de.uni_hildesheim.sse.dslCore.ModelUtility}s to the Models, if it was not already done by
+     * Registers the {@link net.ssehub.easy.dslCore.ModelUtility}s to the Models, if it was not already done by
      * the descriptive services.
      */
     public static void setInitializer() {
@@ -65,8 +65,8 @@ public abstract class EASyInitializer {
     }
     
     /**
-     * Changes the {@link de.uni_hildesheim.sse.dslCore.IResourceInitializer} of all
-     * {@link de.uni_hildesheim.sse.dslCore.ModelUtility}s.
+     * Changes the {@link net.ssehub.easy.dslCore.IResourceInitializer} of all
+     * {@link net.ssehub.easy.dslCore.ModelUtility}s.
      * @param runsInEclipse <tt>true</tt> if the {@link EclipseResourceInitializer} should be used,
      *     <tt>false</tt> if the {@link StandaloneInitializer} should be used.
      */

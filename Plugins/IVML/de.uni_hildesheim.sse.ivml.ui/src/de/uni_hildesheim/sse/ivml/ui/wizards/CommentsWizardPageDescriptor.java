@@ -17,8 +17,8 @@ package de.uni_hildesheim.sse.ivml.ui.wizards;
 
 import org.eclipse.jface.resource.ImageDescriptor;
 
-import de.uni_hildesheim.sse.dslcore.ui.wizards.IWizardPageDescriptor;
 import de.uni_hildesheim.sse.ui.Activator;
+import net.ssehub.easy.dslCore.ui.wizards.IWizardPageDescriptor;
 
 /**
  * Specification of the {@link CommentsFiletypeWizardPage}.

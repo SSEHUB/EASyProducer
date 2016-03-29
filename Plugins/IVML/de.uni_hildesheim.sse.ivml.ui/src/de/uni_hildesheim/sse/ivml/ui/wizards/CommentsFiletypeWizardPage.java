@@ -17,7 +17,7 @@ package de.uni_hildesheim.sse.ivml.ui.wizards;
 
 import org.eclipse.jface.viewers.ISelection;
 
-import de.uni_hildesheim.sse.dslcore.ui.wizards.AbstractFiletypeWizardPage;
+import net.ssehub.easy.dslCore.ui.wizards.AbstractFiletypeWizardPage;
 
 /**
  * The "New" wizard page allows setting the container for the new file as well

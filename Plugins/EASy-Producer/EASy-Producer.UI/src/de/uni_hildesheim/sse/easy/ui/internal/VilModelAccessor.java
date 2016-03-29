@@ -15,7 +15,6 @@
  */
 package de.uni_hildesheim.sse.easy.ui.internal;
 
-import de.uni_hildesheim.sse.dslCore.TopLevelModelAccessor.AbstractDefaultModelAccessor;
 import de.uni_hildesheim.sse.easy_producer.core.persistence.Configuration.PathKind;
 import de.uni_hildesheim.sse.easy_producer.core.persistence.standard.EASyInitializer;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.BuildModel;
@@ -23,6 +22,7 @@ import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.Scr
 import de.uni_hildesheim.sse.easy_producer.model.ProductLineProject;
 import net.ssehub.easy.basics.modelManagement.ModelInfo;
 import net.ssehub.easy.basics.modelManagement.ModelManagement;
+import net.ssehub.easy.dslCore.TopLevelModelAccessor.AbstractDefaultModelAccessor;
 
 /**
  * Implements a model accessor for the top level IVML project.

@@ -18,8 +18,8 @@ package de.uni_hildesheim.sse.ivml.ui.wizards;
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 
-import de.uni_hildesheim.sse.dslcore.ui.Activator;
-import de.uni_hildesheim.sse.dslcore.ui.wizards.AbstractFiletypeWizard;
+import net.ssehub.easy.dslCore.ui.Activator;
+import net.ssehub.easy.dslCore.ui.wizards.AbstractFiletypeWizard;
 
 /**
  * This is a new file wizard for ivml files. Its role is to create a new file resource in the

@@ -25,7 +25,6 @@ import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import de.uni_hildesheim.sse.dslCore.TranslationResult;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.RuleExecutionResult;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilException;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.rtVil.Executor;
@@ -43,6 +42,7 @@ import de.uni_hildesheim.sse.vil.rt.tests.types.RegularAdaptationEvent;
 import de.uni_hildesheim.sse.vil.rt.tests.types.StartupAdaptationEvent;
 import net.ssehub.easy.basics.messages.AbstractException;
 import net.ssehub.easy.basics.progress.ProgressObserver;
+import net.ssehub.easy.dslCore.TranslationResult;
 import net.ssehub.easy.reasoning.core.frontend.ReasonerFrontend;
 import net.ssehub.easy.reasoning.core.reasoner.ReasonerConfiguration;
 

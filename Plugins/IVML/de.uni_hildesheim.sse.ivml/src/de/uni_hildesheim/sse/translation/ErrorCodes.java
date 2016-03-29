@@ -5,7 +5,7 @@ package de.uni_hildesheim.sse.translation;
  * 
  * @author Holger Eichelberger
  */
-public class ErrorCodes extends de.uni_hildesheim.sse.dslCore.translation.ErrorCodes {
+public class ErrorCodes extends net.ssehub.easy.dslCore.translation.ErrorCodes {
 
     /**
      * Operand of collection operation is not a collection.

@@ -10,7 +10,6 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Text;
 
-import de.uni_hildesheim.sse.dslcore.ui.ConfigurationEditorFactory.IConfigurationEditorCreator;
 import de.uni_hildesheim.sse.easy.ui.confModel.GUIConfiguration;
 import de.uni_hildesheim.sse.easy.ui.confModel.GUIEditor;
 import de.uni_hildesheim.sse.easy.ui.confModel.GUIValueFactory;
@@ -22,6 +21,7 @@ import de.uni_hildesheim.sse.easy.ui.productline_editor.configuration.NonFrozenF
 import de.uni_hildesheim.sse.easy_producer.instantiator.Bundle;
 import net.ssehub.easy.basics.logger.EASyLoggerFactory;
 import net.ssehub.easy.basics.modelManagement.IModelListener;
+import net.ssehub.easy.dslCore.ui.ConfigurationEditorFactory.IConfigurationEditorCreator;
 import net.ssehub.easy.varModel.confModel.AssignmentState;
 import net.ssehub.easy.varModel.confModel.Configuration;
 import net.ssehub.easy.varModel.confModel.DisplayNameProvider;

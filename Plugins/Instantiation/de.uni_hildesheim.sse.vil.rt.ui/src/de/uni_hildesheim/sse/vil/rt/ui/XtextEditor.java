@@ -7,13 +7,13 @@ import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorSite;
 import org.eclipse.ui.PartInitException;
 
-import de.uni_hildesheim.sse.dslCore.IResourceInitializer;
-import de.uni_hildesheim.sse.dslCore.TranslationResult;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.rtVil.Script;
 import de.uni_hildesheim.sse.vil.AbstractXTextEditor;
 import de.uni_hildesheim.sse.vil.rt.RtVilBundleId;
 import de.uni_hildesheim.sse.vil.rt.RtVilModelUtility;
 import de.uni_hildesheim.sse.vil.rt.rtVil.ImplementationUnit;
+import net.ssehub.easy.dslCore.IResourceInitializer;
+import net.ssehub.easy.dslCore.TranslationResult;
 
 /**
  * A specific editor class for VIL.

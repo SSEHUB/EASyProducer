@@ -9,17 +9,17 @@ import org.osgi.service.component.ComponentContext;
 import com.google.inject.Injector;
 
 import de.uni_hildesheim.sse.BuildLangModelUtility;
-import de.uni_hildesheim.sse.dslcore.ui.EditorEmbedderFactory;
-import de.uni_hildesheim.sse.dslcore.ui.EditorEmbedderFactory.IEditorCreator;
-import de.uni_hildesheim.sse.dslcore.ui.editors.AbstractModelChangeListener;
-import de.uni_hildesheim.sse.dslcore.ui.editors.EmbeddingHelper;
-import de.uni_hildesheim.sse.dslcore.ui.editors.IEmbeddedEditor;
-import de.uni_hildesheim.sse.dslcore.ui.editors.ModelEditorConfigurer;
-import de.uni_hildesheim.sse.dslcore.ui.editors.ModelEditorConfigurer.IHeader;
-import de.uni_hildesheim.sse.dslcore.ui.editors.ModelEditorConfigurer.IModelEditorConfigurer;
 import de.uni_hildesheim.sse.ui.BuildModelListener;
 import de.uni_hildesheim.sse.ui.internal.VilBuildLanguageActivator;
 import net.ssehub.easy.basics.modelManagement.ModelInfo;
+import net.ssehub.easy.dslCore.ui.EditorEmbedderFactory;
+import net.ssehub.easy.dslCore.ui.EditorEmbedderFactory.IEditorCreator;
+import net.ssehub.easy.dslCore.ui.editors.AbstractModelChangeListener;
+import net.ssehub.easy.dslCore.ui.editors.EmbeddingHelper;
+import net.ssehub.easy.dslCore.ui.editors.IEmbeddedEditor;
+import net.ssehub.easy.dslCore.ui.editors.ModelEditorConfigurer;
+import net.ssehub.easy.dslCore.ui.editors.ModelEditorConfigurer.IHeader;
+import net.ssehub.easy.dslCore.ui.editors.ModelEditorConfigurer.IModelEditorConfigurer;
 import net.ssehub.easy.varModel.confModel.Configuration;
 
 /**

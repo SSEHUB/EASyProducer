@@ -6,7 +6,6 @@ import java.util.List;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
 
-import de.uni_hildesheim.sse.dslCore.translation.IMessageReceiver;
 import de.uni_hildesheim.sse.easy_producer.instantiator.Bundle;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.ExpressionStatement;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VariableDeclaration;
@@ -19,6 +18,7 @@ import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.Variab
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.VariableExpression;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeRegistry;
 import net.ssehub.easy.basics.logger.EASyLoggerFactory;
+import net.ssehub.easy.dslCore.translation.IMessageReceiver;
 
 /**
  * StringResolver to resolve variables and expressions on compiling. Use the StringReplacer if you need to replace

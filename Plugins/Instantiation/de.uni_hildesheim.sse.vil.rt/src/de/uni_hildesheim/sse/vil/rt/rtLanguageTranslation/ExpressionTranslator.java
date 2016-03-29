@@ -3,8 +3,6 @@ package de.uni_hildesheim.sse.vil.rt.rtLanguageTranslation;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
 
-import de.uni_hildesheim.sse.dslCore.translation.ErrorCodes;
-import de.uni_hildesheim.sse.dslCore.translation.TranslatorException;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.IRuleElement;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.Resolver;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilException;
@@ -14,6 +12,8 @@ import de.uni_hildesheim.sse.vil.expressions.expressionDsl.Expression;
 import de.uni_hildesheim.sse.vil.rt.rtVil.FailStatement;
 import de.uni_hildesheim.sse.vil.rt.rtVil.RtVilPackage;
 import de.uni_hildesheim.sse.vil.rt.rtVil.RuleElement;
+import net.ssehub.easy.dslCore.translation.ErrorCodes;
+import net.ssehub.easy.dslCore.translation.TranslatorException;
 
 /**
  * A specific expression translator for the adaptation language.

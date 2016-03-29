@@ -9,9 +9,9 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import de.uni_hildesheim.sse.ModelUtility;
-import de.uni_hildesheim.sse.dslCore.TranslationResult;
 import de.uni_hildesheim.sse.translation.ErrorCodes;
 import net.ssehub.easy.basics.modelManagement.ModelInfo;
+import net.ssehub.easy.dslCore.TranslationResult;
 import net.ssehub.easy.varModel.confModel.AssignmentState;
 import net.ssehub.easy.varModel.confModel.Configuration;
 import net.ssehub.easy.varModel.cst.CSTSemanticException;

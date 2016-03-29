@@ -10,8 +10,6 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
 
 import de.uni_hildesheim.sse.IvmlBundleId;
-import de.uni_hildesheim.sse.dslCore.translation.Message;
-import de.uni_hildesheim.sse.dslCore.translation.TranslatorException;
 import de.uni_hildesheim.sse.ivml.ActualParameterList;
 import de.uni_hildesheim.sse.ivml.AdditiveExpression;
 import de.uni_hildesheim.sse.ivml.AdditiveExpressionPart;
@@ -44,6 +42,8 @@ import de.uni_hildesheim.sse.ivml.Value;
 import net.ssehub.easy.basics.logger.EASyLoggerFactory;
 import net.ssehub.easy.basics.logger.EASyLoggerFactory.EASyLogger;
 import net.ssehub.easy.basics.messages.IIdentifiable;
+import net.ssehub.easy.dslCore.translation.Message;
+import net.ssehub.easy.dslCore.translation.TranslatorException;
 import net.ssehub.easy.varModel.capabilities.DefaultReasonerAccess;
 import net.ssehub.easy.varModel.capabilities.IvmlReasonerCapabilities;
 import net.ssehub.easy.varModel.cst.AttributeVariable;
@@ -94,7 +94,7 @@ import net.ssehub.easy.varModel.model.values.ValueFactory;
  * 
  * @author Holger Eichelberger
  */
-public class ExpressionTranslator extends de.uni_hildesheim.sse.dslCore.translation.ExpressionTranslator {
+public class ExpressionTranslator extends net.ssehub.easy.dslCore.translation.ExpressionTranslator {
 
     private AssignmentDetector assignmentDetector = new AssignmentDetector();
     private int level;

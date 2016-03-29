@@ -11,8 +11,6 @@ import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
 
-import de.uni_hildesheim.sse.dslCore.translation.ErrorCodes;
-import de.uni_hildesheim.sse.dslCore.translation.TranslatorException;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.Advice;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.ExpressionStatement;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.ITypedefReceiver;
@@ -41,6 +39,8 @@ import net.ssehub.easy.basics.modelManagement.ModelInfo;
 import net.ssehub.easy.basics.modelManagement.ModelManagement;
 import net.ssehub.easy.basics.modelManagement.Version;
 import net.ssehub.easy.basics.modelManagement.VersionFormatException;
+import net.ssehub.easy.dslCore.translation.ErrorCodes;
+import net.ssehub.easy.dslCore.translation.TranslatorException;
 import net.ssehub.easy.varModel.model.Project;
 
 /**
@@ -54,7 +54,7 @@ import net.ssehub.easy.varModel.model.Project;
  */
 public abstract class ModelTranslator 
     <M extends IModel, I extends VariableDeclaration, R extends Resolver<I>, S extends ExpressionStatement, 
-    E extends ExpressionTranslator<I, R, S>> extends de.uni_hildesheim.sse.dslCore.translation.ModelTranslator<E> {
+    E extends ExpressionTranslator<I, R, S>> extends net.ssehub.easy.dslCore.translation.ModelTranslator<E> {
 
     private R resolver;
     

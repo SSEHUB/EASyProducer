@@ -8,8 +8,8 @@ import org.eclipse.xtext.conversion.impl.AbstractIDValueConverter;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 
-import de.uni_hildesheim.sse.dslCore.values.StringValueConverter;
-import de.uni_hildesheim.sse.dslCore.values.VersionValueConverter;
+import net.ssehub.easy.dslCore.values.StringValueConverter;
+import net.ssehub.easy.dslCore.values.VersionValueConverter;
 
 /**
  * Factory for the value converters. Typically, one would also

@@ -5,9 +5,9 @@ import java.io.IOException;
 
 import org.junit.Test;
 
-import de.uni_hildesheim.sse.dslCore.translation.ErrorCodes;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilException;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.templateModel.Template;
+import net.ssehub.easy.dslCore.translation.ErrorCodes;
 
 /**
  * Performs basic (syntactic) tests.

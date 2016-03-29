@@ -31,7 +31,6 @@ import org.eclipse.jface.window.Window;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
 
-import de.uni_hildesheim.sse.dslcore.ui.ConfigurationEditorFactory;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.rtVil.Bundle;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.VariableDeclaration;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilException;
@@ -48,6 +47,7 @@ import de.uni_hildesheim.sse.vil.rt.ui.embed.SimulationSettingsDialog.TempArgume
 import net.ssehub.easy.basics.logger.EASyLoggerFactory;
 import net.ssehub.easy.basics.logger.EASyLoggerFactory.EASyLogger;
 import net.ssehub.easy.basics.modelManagement.ModelInfo;
+import net.ssehub.easy.dslCore.ui.ConfigurationEditorFactory;
 import net.ssehub.easy.varModel.confModel.Configuration;
 
 /**

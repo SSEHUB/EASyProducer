@@ -24,7 +24,6 @@ import org.eclipse.emf.common.util.URI;
 import org.junit.Assert;
 
 import de.uni_hildesheim.sse.BuildLangModelUtility;
-import de.uni_hildesheim.sse.dslCore.TranslationResult;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.BuildModel;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.BuildlangExecution;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.ITracer;
@@ -41,6 +40,7 @@ import net.ssehub.easy.basics.modelManagement.IModelLoader;
 import net.ssehub.easy.basics.modelManagement.ModelManagement;
 import net.ssehub.easy.basics.modelManagement.ModelManagementException;
 import net.ssehub.easy.basics.progress.ProgressObserver;
+import net.ssehub.easy.dslCore.TranslationResult;
 import net.ssehub.easy.varModel.management.VarModel;
 import test.de.uni_hildesheim.sse.vil.buildlang.ITestConfigurer;
 import test.de.uni_hildesheim.sse.vil.buildlang.TestTracerFactory;

@@ -14,9 +14,6 @@ import org.eclipse.xtext.parser.IParseResult;
 
 import de.uni_hildesheim.sse.buildLanguageTranslation.ExpressionTranslator;
 import de.uni_hildesheim.sse.buildLanguageTranslation.ModelTranslator;
-import de.uni_hildesheim.sse.dslCore.TranslationResult;
-import de.uni_hildesheim.sse.dslCore.translation.Message;
-import de.uni_hildesheim.sse.dslCore.translation.TranslatorException;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.BuildlangWriter;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.Resolver;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.Script;
@@ -32,13 +29,16 @@ import net.ssehub.easy.basics.modelManagement.ImportResolver;
 import net.ssehub.easy.basics.modelManagement.ModelImport;
 import net.ssehub.easy.basics.modelManagement.ModelInfo;
 import net.ssehub.easy.basics.modelManagement.Version;
+import net.ssehub.easy.dslCore.TranslationResult;
+import net.ssehub.easy.dslCore.translation.Message;
+import net.ssehub.easy.dslCore.translation.TranslatorException;
 
 /**
  * Provides language-wide functionality.
  * 
  * @author Holger Eichelberger
  */
-public class BuildLangModelUtility extends de.uni_hildesheim.sse.dslCore.ModelUtility<ImplementationUnit, Script> 
+public class BuildLangModelUtility extends net.ssehub.easy.dslCore.ModelUtility<ImplementationUnit, Script> 
     implements IModelLoader<Script> {
     
     public static final BuildLangModelUtility INSTANCE = new BuildLangModelUtility();

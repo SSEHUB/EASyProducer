@@ -6,10 +6,10 @@ import com.google.inject.Injector;
 
 import de.uni_hildesheim.sse.ConstraintSyntaxException;
 import de.uni_hildesheim.sse.ModelUtility;
-import de.uni_hildesheim.sse.dslcore.ui.editors.EmbeddingHelper;
-import de.uni_hildesheim.sse.dslcore.ui.editors.IEmbeddedEditor;
 import de.uni_hildesheim.sse.ui.internal.IvmlActivator;
 import net.ssehub.easy.basics.modelManagement.ModelInfo;
+import net.ssehub.easy.dslCore.ui.editors.EmbeddingHelper;
+import net.ssehub.easy.dslCore.ui.editors.IEmbeddedEditor;
 import net.ssehub.easy.varModel.cst.CSTSemanticException;
 import net.ssehub.easy.varModel.cst.ConstraintSyntaxTree;
 import net.ssehub.easy.varModel.model.IModelElement;

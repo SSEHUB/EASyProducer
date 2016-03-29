@@ -25,9 +25,6 @@ import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
 
-import de.uni_hildesheim.sse.dslCore.translation.ErrorCodes;
-import de.uni_hildesheim.sse.dslCore.translation.StringUtils;
-import de.uni_hildesheim.sse.dslCore.translation.TranslatorException;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.IRuleElement;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.Imports;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.LoadProperties;
@@ -63,6 +60,9 @@ import net.ssehub.easy.basics.modelManagement.ModelImport;
 import net.ssehub.easy.basics.modelManagement.ModelManagement;
 import net.ssehub.easy.basics.modelManagement.Version;
 import net.ssehub.easy.basics.modelManagement.VersionFormatException;
+import net.ssehub.easy.dslCore.translation.ErrorCodes;
+import net.ssehub.easy.dslCore.translation.StringUtils;
+import net.ssehub.easy.dslCore.translation.TranslatorException;
 
 /**
  * Implements the translation from the DSL to the build model in the instantiator core. This class is intended for

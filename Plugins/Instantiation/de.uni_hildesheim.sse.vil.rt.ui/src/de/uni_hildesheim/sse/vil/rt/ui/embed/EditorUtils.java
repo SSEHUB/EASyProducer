@@ -9,17 +9,6 @@ import org.osgi.service.component.ComponentContext;
 
 import com.google.inject.Injector;
 
-import de.uni_hildesheim.sse.dslCore.TopLevelModelAccessor;
-import de.uni_hildesheim.sse.dslCore.TopLevelModelAccessor.AbstractModelAccessor;
-import de.uni_hildesheim.sse.dslCore.TopLevelModelAccessor.IModelAccessor;
-import de.uni_hildesheim.sse.dslcore.ui.EditorEmbedderFactory;
-import de.uni_hildesheim.sse.dslcore.ui.EditorEmbedderFactory.IEditorCreator;
-import de.uni_hildesheim.sse.dslcore.ui.editors.AbstractModelChangeListener;
-import de.uni_hildesheim.sse.dslcore.ui.editors.EmbeddingHelper;
-import de.uni_hildesheim.sse.dslcore.ui.editors.IEmbeddedEditor;
-import de.uni_hildesheim.sse.dslcore.ui.editors.ModelEditorConfigurer;
-import de.uni_hildesheim.sse.dslcore.ui.editors.ModelEditorConfigurer.IHeader;
-import de.uni_hildesheim.sse.dslcore.ui.editors.ModelEditorConfigurer.IModelEditorConfigurer;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.rtVil.Bundle;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.rtVil.RtVilModel;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.rtVil.Script;
@@ -31,6 +20,17 @@ import net.ssehub.easy.basics.modelManagement.ModelInfo;
 import net.ssehub.easy.basics.modelManagement.ModelManagement;
 import net.ssehub.easy.basics.modelManagement.ModelManagementException;
 import net.ssehub.easy.basics.modelManagement.Version;
+import net.ssehub.easy.dslCore.TopLevelModelAccessor;
+import net.ssehub.easy.dslCore.TopLevelModelAccessor.AbstractModelAccessor;
+import net.ssehub.easy.dslCore.TopLevelModelAccessor.IModelAccessor;
+import net.ssehub.easy.dslCore.ui.EditorEmbedderFactory;
+import net.ssehub.easy.dslCore.ui.EditorEmbedderFactory.IEditorCreator;
+import net.ssehub.easy.dslCore.ui.editors.AbstractModelChangeListener;
+import net.ssehub.easy.dslCore.ui.editors.EmbeddingHelper;
+import net.ssehub.easy.dslCore.ui.editors.IEmbeddedEditor;
+import net.ssehub.easy.dslCore.ui.editors.ModelEditorConfigurer;
+import net.ssehub.easy.dslCore.ui.editors.ModelEditorConfigurer.IHeader;
+import net.ssehub.easy.dslCore.ui.editors.ModelEditorConfigurer.IModelEditorConfigurer;
 import net.ssehub.easy.varModel.confModel.Configuration;
 
 /**

@@ -15,8 +15,6 @@ import org.junit.Assert;
 import org.junit.BeforeClass;
 
 import de.uni_hildesheim.sse.ModelUtility;
-import de.uni_hildesheim.sse.dslCore.TranslationResult;
-import de.uni_hildesheim.sse.dslCore.translation.Message;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.BuiltIn;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.artifactModel.FileUtils;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.artifactModel.IFileSystemArtifact;
@@ -33,6 +31,8 @@ import de.uni_hildesheim.sse.vil.templatelang.TemplateLangModelUtility;
 import de.uni_hildesheim.sse.vil.templatelang.VtlExpressionParser;
 import net.ssehub.easy.basics.messages.Status;
 import net.ssehub.easy.basics.modelManagement.ModelManagementException;
+import net.ssehub.easy.dslCore.TranslationResult;
+import net.ssehub.easy.dslCore.translation.Message;
 import net.ssehub.easy.varModel.management.VarModel;
 
 /**
@@ -40,7 +40,7 @@ import net.ssehub.easy.varModel.management.VarModel;
  * 
  * @author Holger Eichelberger
  */
-public abstract class AbstractTest extends de.uni_hildesheim.sse.dslCore.test.AbstractTest<Template> {
+public abstract class AbstractTest extends net.ssehub.easy.dslCore.test.AbstractTest<Template> {
 
     /**
      * The directory containing all tests.

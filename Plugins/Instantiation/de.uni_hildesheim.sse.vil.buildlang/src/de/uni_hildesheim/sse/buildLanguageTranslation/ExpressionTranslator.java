@@ -8,10 +8,6 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
 
 import de.uni_hildesheim.sse.BuildLangModelUtility;
-import de.uni_hildesheim.sse.dslCore.translation.ErrorCodes;
-import de.uni_hildesheim.sse.dslCore.translation.MessageHandler;
-import de.uni_hildesheim.sse.dslCore.translation.StringUtils;
-import de.uni_hildesheim.sse.dslCore.translation.TranslatorException;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.AlternativeExpression;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.ExpressionStatement;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.ForStatement;
@@ -53,6 +49,10 @@ import de.uni_hildesheim.sse.vilBuildLanguage.SystemExecution;
 import de.uni_hildesheim.sse.vilBuildLanguage.VilBuildLanguagePackage;
 import net.ssehub.easy.basics.modelManagement.IVersionRestriction;
 import net.ssehub.easy.basics.modelManagement.RestrictionEvaluationException;
+import net.ssehub.easy.dslCore.translation.ErrorCodes;
+import net.ssehub.easy.dslCore.translation.MessageHandler;
+import net.ssehub.easy.dslCore.translation.StringUtils;
+import net.ssehub.easy.dslCore.translation.TranslatorException;
 
 /**
  * A specific expression translator for the build language.

@@ -3,7 +3,7 @@ package net.ssehub.easy.integration.common.eclipse.tests;
 import org.junit.Assert;
 
 import de.uni_hildesheim.sse.ModelUtility;
-import de.uni_hildesheim.sse.dslCore.StandaloneInitializer;
+import net.ssehub.easy.dslCore.StandaloneInitializer;
 
 /**
  * Sets up testing environment and provides helpful utility methods.

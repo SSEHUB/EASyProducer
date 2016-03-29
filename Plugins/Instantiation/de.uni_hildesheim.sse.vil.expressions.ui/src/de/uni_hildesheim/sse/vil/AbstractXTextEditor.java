@@ -8,8 +8,8 @@ import org.eclipse.xtext.resource.XtextResource;
 import org.eclipse.xtext.ui.editor.model.IXtextDocument;
 import org.eclipse.xtext.util.concurrent.IUnitOfWork;
 
-import de.uni_hildesheim.sse.dslcore.ui.editors.CommonXtextEditor;
 import de.uni_hildesheim.sse.vil.expressions.ResourceRegistry;
+import net.ssehub.easy.dslCore.ui.editors.CommonXtextEditor;
 
 /**
  * An abstract XText editor providing some capabilities for VIL/VTL.

@@ -3,7 +3,7 @@ package net.ssehub.easy.reasoning.sseReasoner.reasoner;
 import org.junit.Assert;
 import org.junit.Test;
 
-import de.uni_hildesheim.sse.dslCore.test.AbstractTest;
+import net.ssehub.easy.dslCore.test.AbstractTest;
 import net.ssehub.easy.varModel.confModel.AssignmentState;
 import net.ssehub.easy.varModel.confModel.Configuration;
 import net.ssehub.easy.varModel.confModel.IDecisionVariable;

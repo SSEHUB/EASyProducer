@@ -18,14 +18,14 @@ package de.uni_hildesheim.sse.easy.ui.productline_editor;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 
-import de.uni_hildesheim.sse.dslcore.ui.EditorEmbedderFactory;
-import de.uni_hildesheim.sse.dslcore.ui.editors.IEmbeddedEditor;
-import de.uni_hildesheim.sse.dslcore.ui.editors.IEmbeddedEditor.IDocumentStateListener;
-import de.uni_hildesheim.sse.dslcore.ui.editors.IEmbeddedEditor.IValidationStateListener;
-import de.uni_hildesheim.sse.dslcore.ui.editors.ModelEditorConfigurer.IHeader;
-import de.uni_hildesheim.sse.dslcore.ui.editors.ModelEditorConfigurer.IModelEditorConfigurer;
 import de.uni_hildesheim.sse.easy_producer.model.ProductLineProject;
 import net.ssehub.easy.basics.modelManagement.ModelInfo;
+import net.ssehub.easy.dslCore.ui.EditorEmbedderFactory;
+import net.ssehub.easy.dslCore.ui.editors.IEmbeddedEditor;
+import net.ssehub.easy.dslCore.ui.editors.IEmbeddedEditor.IDocumentStateListener;
+import net.ssehub.easy.dslCore.ui.editors.IEmbeddedEditor.IValidationStateListener;
+import net.ssehub.easy.dslCore.ui.editors.ModelEditorConfigurer.IHeader;
+import net.ssehub.easy.dslCore.ui.editors.ModelEditorConfigurer.IModelEditorConfigurer;
 
 /**
  * A model editor page for the product line editor which shows an embedded editor.
