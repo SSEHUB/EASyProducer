@@ -19,8 +19,8 @@ import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import de.uni_hildesheim.sse.reasoning.core.reasoner.ReasonerConfiguration;
 import net.ssehub.easy.basics.progress.ProgressObserver;
+import net.ssehub.easy.reasonerCore.reasoner.ReasonerConfiguration;
 import net.ssehub.easy.varModel.confModel.AssignmentState;
 import net.ssehub.easy.varModel.confModel.Configuration;
 import net.ssehub.easy.varModel.confModel.ConfigurationException;

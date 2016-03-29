@@ -1,6 +1,6 @@
 package de.uni_hildesheim.sse.reasoning.drools2;
 
-import de.uni_hildesheim.sse.reasoning.core.reasoner.ReasonerDescriptor;
+import net.ssehub.easy.reasonerCore.reasoner.ReasonerDescriptor;
 
 /**
  * A specific reasoner descriptor for Drools.

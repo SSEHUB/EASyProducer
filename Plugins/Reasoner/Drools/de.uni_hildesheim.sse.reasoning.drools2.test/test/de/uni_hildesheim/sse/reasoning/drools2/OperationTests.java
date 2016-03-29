@@ -8,7 +8,7 @@ import org.junit.BeforeClass;
  * 
  * @author Holger Eichelberger
  */
-public class OperationTests extends de.uni_hildesheim.sse.reasoning.core.frontend.OperationTests {
+public class OperationTests extends net.ssehub.easy.reasonerCore.frontend.OperationTests {
 
     /**
      * Initializes the tests (for single execution outside the suite).

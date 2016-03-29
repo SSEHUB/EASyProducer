@@ -20,11 +20,11 @@ import org.junit.BeforeClass;
 import de.uni_hildesheim.sse.reasoning.reasoner.Utils;
 
 /**
- * Configures the {@link de.uni_hildesheim.sse.reasoning.core.frontend.CollectionOperationsTests}
+ * Configures the {@link net.ssehub.easy.reasonerCore.frontend.CollectionOperationsTests}
  * for the SSE-Reasoner.
  * @author El-Sharkawy
  */
-public class CollectionOperationsTests extends de.uni_hildesheim.sse.reasoning.core.frontend.CollectionOperationsTests {
+public class CollectionOperationsTests extends net.ssehub.easy.reasonerCore.frontend.CollectionOperationsTests {
 
     /**
      * Initializes the tests (for single execution outside the suite).

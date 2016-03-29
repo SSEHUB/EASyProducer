@@ -5,11 +5,10 @@ import java.io.Writer;
 import java.util.ArrayList;
 import java.util.List;
 
-
-import de.uni_hildesheim.sse.reasoning.core.model.ReasonerModel;
 import de.uni_hildesheim.sse.reasoning.drools2.DroolsReasonerDescriptor;
 import net.ssehub.easy.basics.logger.EASyLoggerFactory;
 import net.ssehub.easy.basics.logger.EASyLoggerFactory.EASyLogger;
+import net.ssehub.easy.reasonerCore.model.ReasonerModel;
 
 /**
  * Abstract super class for the individual translator classes, which are responsible for the translation of the

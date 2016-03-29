@@ -19,12 +19,13 @@ import org.drools.definition.type.FactType;
 import org.drools.io.ResourceFactory;
 import org.drools.runtime.StatefulKnowledgeSession;
 
-import de.uni_hildesheim.sse.reasoning.core.reasoner.EvaluationResult;
-import de.uni_hildesheim.sse.reasoning.core.reasoner.EvaluationResult.ConstraintEvaluationResult;
-import de.uni_hildesheim.sse.reasoning.core.reasoner.EvaluationResult.EvaluationPair;
 import net.ssehub.easy.basics.logger.EASyLoggerFactory;
 import net.ssehub.easy.basics.logger.EASyLoggerFactory.EASyLogger;
 import net.ssehub.easy.basics.progress.ProgressObserver;
+import net.ssehub.easy.reasonerCore.reasoner.EvaluationResult;
+import net.ssehub.easy.reasonerCore.reasoner.ReasonerConfiguration;
+import net.ssehub.easy.reasonerCore.reasoner.EvaluationResult.ConstraintEvaluationResult;
+import net.ssehub.easy.reasonerCore.reasoner.EvaluationResult.EvaluationPair;
 import net.ssehub.easy.varModel.confModel.Configuration;
 import net.ssehub.easy.varModel.cst.AttributeVariable;
 import net.ssehub.easy.varModel.cst.Comment;
@@ -47,7 +48,6 @@ import net.ssehub.easy.varModel.model.ModelElement;
 import net.ssehub.easy.varModel.model.Project;
 import net.ssehub.easy.varModel.model.ProjectImport;
 import net.ssehub.easy.varModel.model.datatypes.OclKeyWords;
-import de.uni_hildesheim.sse.reasoning.core.reasoner.ReasonerConfiguration;
 
 /**
  * Class for evaluation of a set of constraints.

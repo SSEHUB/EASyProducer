@@ -20,9 +20,9 @@ import de.uni_hildesheim.sse.easy_producer.core.persistence.datatypes.Persistent
 import de.uni_hildesheim.sse.easy_producer.core.persistence.standard.PersistenceConstants;
 import de.uni_hildesheim.sse.easy_producer.core.varMod.container.ProjectContainer;
 import de.uni_hildesheim.sse.easy_producer.model.ProductLineProject;
-import de.uni_hildesheim.sse.reasoning.core.reasoner.AttributeException;
-import de.uni_hildesheim.sse.reasoning.core.reasoner.AttributeValues;
-import de.uni_hildesheim.sse.reasoning.core.reasoner.ReasonerConfiguration;
+import net.ssehub.easy.reasonerCore.reasoner.AttributeException;
+import net.ssehub.easy.reasonerCore.reasoner.AttributeValues;
+import net.ssehub.easy.reasonerCore.reasoner.ReasonerConfiguration;
 
 /**
  * Abstraction Layer for saving/reading persistent EASy-Producer information.

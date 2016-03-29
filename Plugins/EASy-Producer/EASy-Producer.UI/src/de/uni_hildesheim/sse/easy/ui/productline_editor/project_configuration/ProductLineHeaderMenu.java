@@ -47,12 +47,12 @@ import de.uni_hildesheim.sse.easy_producer.model.ProductLineProject;
 import de.uni_hildesheim.sse.easy_producer.persistency.project_creation.InvalidProjectnameException;
 import de.uni_hildesheim.sse.easy_producer.persistency.project_creation.ProjectAlreadyExistsException;
 import de.uni_hildesheim.sse.easy_producer.persistency.project_creation.ProjectCreator;
-import de.uni_hildesheim.sse.reasoning.core.frontend.ReasonerFrontend;
-import de.uni_hildesheim.sse.reasoning.core.model.ReasoningOperation;
-import de.uni_hildesheim.sse.reasoning.core.reasoner.Message;
-import de.uni_hildesheim.sse.reasoning.core.reasoner.ReasoningResult;
 import net.ssehub.easy.basics.logger.EASyLoggerFactory;
 import net.ssehub.easy.basics.logger.EASyLoggerFactory.EASyLogger;
+import net.ssehub.easy.reasonerCore.frontend.ReasonerFrontend;
+import net.ssehub.easy.reasonerCore.model.ReasoningOperation;
+import net.ssehub.easy.reasonerCore.reasoner.Message;
+import net.ssehub.easy.reasonerCore.reasoner.ReasoningResult;
 import net.ssehub.easy.varModel.validation.IvmlIdentifierCheck;
 
 /**

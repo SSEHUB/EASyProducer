@@ -21,8 +21,8 @@ import java.io.File;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import de.uni_hildesheim.sse.reasoning.core.frontend.MismatchedTest;
 import de.uni_hildesheim.sse.reasoning.reasoner.Utils;
+import net.ssehub.easy.reasonerCore.frontend.MismatchedTest;
 
 /**
  * Qualimaster model test.

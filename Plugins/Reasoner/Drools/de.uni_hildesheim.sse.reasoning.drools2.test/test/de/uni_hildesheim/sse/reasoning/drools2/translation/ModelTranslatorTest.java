@@ -5,11 +5,11 @@ import java.io.StringWriter;
 import org.junit.Assert;
 import org.junit.Test;
 
-import de.uni_hildesheim.sse.reasoning.core.model.ReasonerModel;
-import de.uni_hildesheim.sse.reasoning.core.model.ReasoningOperation;
 import de.uni_hildesheim.sse.reasoning.drools2.DroolsReasonerDescriptor;
 import net.ssehub.easy.basics.logger.EASyLoggerFactory;
 import net.ssehub.easy.basics.logger.EASyLoggerFactory.EASyLogger;
+import net.ssehub.easy.reasonerCore.model.ReasonerModel;
+import net.ssehub.easy.reasonerCore.model.ReasoningOperation;
 import net.ssehub.easy.varModel.confModel.Configuration;
 import net.ssehub.easy.varModel.confModel.ConfigurationException;
 import net.ssehub.easy.varModel.cst.CSTSemanticException;

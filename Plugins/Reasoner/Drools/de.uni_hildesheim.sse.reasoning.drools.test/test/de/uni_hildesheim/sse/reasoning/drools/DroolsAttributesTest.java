@@ -6,7 +6,7 @@ import java.io.IOException;
 import org.junit.Assert;
 import org.junit.Test;
 
-import de.uni_hildesheim.sse.reasoning.core.reasoner.ReasoningResult;
+import net.ssehub.easy.reasonerCore.reasoner.ReasoningResult;
 
 /**
  * Class to test attributes.

@@ -13,10 +13,11 @@ import org.junit.BeforeClass;
 import de.uni_hildesheim.sse.ConstraintSyntaxException;
 import de.uni_hildesheim.sse.ModelUtility;
 import de.uni_hildesheim.sse.dslCore.StandaloneInitializer;
-import de.uni_hildesheim.sse.reasoning.core.reasoner.EvaluationResult;
-import de.uni_hildesheim.sse.reasoning.core.reasoner.EvaluationResult.ConstraintEvaluationResult;
 import net.ssehub.easy.basics.modelManagement.ModelManagementException;
 import net.ssehub.easy.basics.progress.ProgressObserver;
+import net.ssehub.easy.reasonerCore.reasoner.EvaluationResult;
+import net.ssehub.easy.reasonerCore.reasoner.ReasoningResult;
+import net.ssehub.easy.reasonerCore.reasoner.EvaluationResult.ConstraintEvaluationResult;
 import net.ssehub.easy.varModel.confModel.Configuration;
 import net.ssehub.easy.varModel.confModel.IAssignmentState;
 import net.ssehub.easy.varModel.confModel.IDecisionVariable;
@@ -24,7 +25,6 @@ import net.ssehub.easy.varModel.cst.CSTSemanticException;
 import net.ssehub.easy.varModel.management.VarModel;
 import net.ssehub.easy.varModel.model.Constraint;
 import net.ssehub.easy.varModel.model.Project;
-import de.uni_hildesheim.sse.reasoning.core.reasoner.ReasoningResult;
 
 /**
  * Abstract test class for checking the reasoning correctness. 

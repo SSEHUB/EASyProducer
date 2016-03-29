@@ -7,7 +7,7 @@ import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.Shell;
 
 import de.uni_hildesheim.sse.easy_producer.EASyProducerConstants;
-import de.uni_hildesheim.sse.reasoning.core.reasoner.Message;
+import net.ssehub.easy.reasonerCore.reasoner.Message;
 import net.ssehub.easy.varModel.model.ModelElement;
 import net.ssehub.easy.varModel.persistency.StringProvider;
 

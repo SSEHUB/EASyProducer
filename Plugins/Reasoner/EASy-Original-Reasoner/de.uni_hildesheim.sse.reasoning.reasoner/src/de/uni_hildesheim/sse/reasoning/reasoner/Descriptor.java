@@ -1,7 +1,7 @@
 package de.uni_hildesheim.sse.reasoning.reasoner;
 
-import de.uni_hildesheim.sse.reasoning.core.reasoner.GeneralReasonerCapabilities;
-import de.uni_hildesheim.sse.reasoning.core.reasoner.ReasonerDescriptor;
+import net.ssehub.easy.reasonerCore.reasoner.GeneralReasonerCapabilities;
+import net.ssehub.easy.reasonerCore.reasoner.ReasonerDescriptor;
 import net.ssehub.easy.varModel.capabilities.IvmlReasonerCapabilities;
 
 /**

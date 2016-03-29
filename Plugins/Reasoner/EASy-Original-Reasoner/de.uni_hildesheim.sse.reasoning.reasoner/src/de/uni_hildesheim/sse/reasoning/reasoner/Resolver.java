@@ -8,9 +8,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import de.uni_hildesheim.sse.reasoning.core.model.PerformanceStatistics;
-import de.uni_hildesheim.sse.reasoning.core.reasoner.ReasonerConfiguration;
-import de.uni_hildesheim.sse.reasoning.core.reasoner.ReasonerConfiguration.IAdditionalInformationLogger;
 import de.uni_hildesheim.sse.reasoning.reasoner.functions.FailedElementDetails;
 import de.uni_hildesheim.sse.reasoning.reasoner.functions.FailedElements;
 import de.uni_hildesheim.sse.reasoning.reasoner.functions.ScopeAssignments;
@@ -21,6 +18,9 @@ import de.uni_hildesheim.sse.reasoning.reasoner.model.VariablesInConstraintsFind
 import net.ssehub.easy.basics.logger.EASyLoggerFactory;
 import net.ssehub.easy.basics.logger.EASyLoggerFactory.EASyLogger;
 import net.ssehub.easy.basics.modelManagement.Utils;
+import net.ssehub.easy.reasonerCore.model.PerformanceStatistics;
+import net.ssehub.easy.reasonerCore.reasoner.ReasonerConfiguration;
+import net.ssehub.easy.reasonerCore.reasoner.ReasonerConfiguration.IAdditionalInformationLogger;
 import net.ssehub.easy.varModel.confModel.AssignmentState;
 import net.ssehub.easy.varModel.confModel.CompoundVariable;
 import net.ssehub.easy.varModel.confModel.Configuration;
@@ -1450,7 +1450,7 @@ public class Resolver {
     }
     
     /**
-     * Getter for the map of all {@link de.uni_hildesheim.sse.reasoning.core.model.variables.ConstraintVariable}
+     * Getter for the map of all {@link net.ssehub.easy.reasonerCore.model.variables.ConstraintVariable}
      * and their {@link Constraint}s.
      * @return Map of constraint variables and their constraints.
      */

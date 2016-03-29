@@ -34,8 +34,6 @@ import de.uni_hildesheim.sse.easy_producer.instantiator.model.rtVil.RtVilStorage
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.rtVil.Script;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.configuration.Configuration;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.configuration.NoVariableFilter;
-import de.uni_hildesheim.sse.reasoning.core.frontend.ReasonerFrontend;
-import de.uni_hildesheim.sse.reasoning.core.reasoner.ReasonerConfiguration;
 import de.uni_hildesheim.sse.vil.rt.tests.types.AlgorithmChangeCommand;
 import de.uni_hildesheim.sse.vil.rt.tests.types.CommandCollector;
 import de.uni_hildesheim.sse.vil.rt.tests.types.CommandSequence;
@@ -45,6 +43,8 @@ import de.uni_hildesheim.sse.vil.rt.tests.types.RegularAdaptationEvent;
 import de.uni_hildesheim.sse.vil.rt.tests.types.StartupAdaptationEvent;
 import net.ssehub.easy.basics.messages.AbstractException;
 import net.ssehub.easy.basics.progress.ProgressObserver;
+import net.ssehub.easy.reasonerCore.frontend.ReasonerFrontend;
+import net.ssehub.easy.reasonerCore.reasoner.ReasonerConfiguration;
 
 /**
  * Tests the execution of rt-VIL.

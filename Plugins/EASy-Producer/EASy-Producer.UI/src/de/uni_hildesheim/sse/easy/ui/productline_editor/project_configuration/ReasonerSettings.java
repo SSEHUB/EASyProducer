@@ -9,7 +9,7 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 
 import de.uni_hildesheim.sse.easy.ui.productline_editor.AbstractEASyEditorPage;
-import de.uni_hildesheim.sse.reasoning.core.reasoner.ReasonerConfiguration;
+import net.ssehub.easy.reasonerCore.reasoner.ReasonerConfiguration;
 
 /**
  * Some UI elements for defining the project specific reasoner settings.

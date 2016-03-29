@@ -20,15 +20,15 @@ import de.uni_hildesheim.sse.easy_producer.core.varMod.container.ScriptContainer
 import de.uni_hildesheim.sse.easy_producer.internal.ReasoningProgressObserver;
 import de.uni_hildesheim.sse.easy_producer.persistency.EASyPersistencer;
 import de.uni_hildesheim.sse.easy_producer.persistency.ResourcesMgmt;
-import de.uni_hildesheim.sse.reasoning.core.frontend.IReasonerListener;
-import de.uni_hildesheim.sse.reasoning.core.frontend.ReasoningProcess;
-import de.uni_hildesheim.sse.reasoning.core.model.ReasoningOperation;
 import net.ssehub.easy.basics.logger.EASyLoggerFactory;
 import net.ssehub.easy.basics.logger.EASyLoggerFactory.EASyLogger;
 import net.ssehub.easy.basics.modelManagement.ModelManagementException;
 import net.ssehub.easy.basics.modelManagement.Version;
 import net.ssehub.easy.basics.modelManagement.VersionFormatException;
 import net.ssehub.easy.basics.progress.ProgressObserver;
+import net.ssehub.easy.reasonerCore.frontend.IReasonerListener;
+import net.ssehub.easy.reasonerCore.frontend.ReasoningProcess;
+import net.ssehub.easy.reasonerCore.model.ReasoningOperation;
 import net.ssehub.easy.varModel.management.VarModel;
 import net.ssehub.easy.varModel.model.Project;
 

@@ -24,7 +24,7 @@ import de.uni_hildesheim.sse.reasoning.reasoner.Utils;
  * @author El-Sharkawy
  *
  */
-public class StructureTests extends de.uni_hildesheim.sse.reasoning.core.frontend.StructureTests {
+public class StructureTests extends net.ssehub.easy.reasonerCore.frontend.StructureTests {
 
     /**
      * Initializes the tests (for single execution outside the suite).

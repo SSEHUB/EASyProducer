@@ -1,6 +1,6 @@
 package de.uni_hildesheim.sse.reasoning.drools2.translation;
 
-import de.uni_hildesheim.sse.reasoning.core.model.ConstraintPattern;
+import net.ssehub.easy.reasonerCore.model.ConstraintPattern;
 
 /**
  * A factory for appending relevant translation fragments..

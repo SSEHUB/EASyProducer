@@ -11,7 +11,7 @@ import de.uni_hildesheim.sse.reasoning.reasoner.Utils;
  * @author Holger Eichelberger
  * @author El-Sharkawy
  */
-public class OperationTests extends de.uni_hildesheim.sse.reasoning.core.frontend.OperationTests {
+public class OperationTests extends net.ssehub.easy.reasonerCore.frontend.OperationTests {
 
     /**
      * Initializes the tests (for single execution outside the suite).

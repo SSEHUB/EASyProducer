@@ -4,7 +4,7 @@ import org.eclipse.swt.widgets.Composite;
 
 import de.uni_hildesheim.sse.easy.ui.productline_editor.AbstractHeaderMenu;
 import de.uni_hildesheim.sse.easy_producer.model.ProductLineProject;
-import de.uni_hildesheim.sse.reasoning.core.reasoner.Message;
+import net.ssehub.easy.reasonerCore.reasoner.Message;
 import net.ssehub.easy.varModel.confModel.Configuration;
 import net.ssehub.easy.varModel.confModel.IConfigurationChangeListener;
 import net.ssehub.easy.varModel.confModel.IDecisionVariable;

@@ -16,9 +16,6 @@ import de.uni_hildesheim.sse.dslCore.StandaloneInitializer;
 import de.uni_hildesheim.sse.dslCore.TranslationResult;
 import de.uni_hildesheim.sse.dslCore.test.AbstractTest;
 import de.uni_hildesheim.sse.dslCore.translation.Message;
-import de.uni_hildesheim.sse.reasoning.core.model.ReasonerModel;
-import de.uni_hildesheim.sse.reasoning.core.model.ReasoningOperation;
-import de.uni_hildesheim.sse.reasoning.core.reasoner.ReasoningResult;
 import de.uni_hildesheim.sse.reasoning.drools2.DroolsEngine;
 import de.uni_hildesheim.sse.reasoning.drools2.DroolsReasonerDescriptor;
 import net.ssehub.easy.basics.logger.EASyLoggerFactory;
@@ -26,6 +23,9 @@ import net.ssehub.easy.basics.logger.EASyLoggerFactory.EASyLogger;
 import net.ssehub.easy.basics.messages.Status;
 import net.ssehub.easy.basics.modelManagement.ModelManagementException;
 import net.ssehub.easy.basics.progress.ProgressObserver;
+import net.ssehub.easy.reasonerCore.model.ReasonerModel;
+import net.ssehub.easy.reasonerCore.model.ReasoningOperation;
+import net.ssehub.easy.reasonerCore.reasoner.ReasoningResult;
 import net.ssehub.easy.varModel.confModel.Configuration;
 import net.ssehub.easy.varModel.management.VarModel;
 import net.ssehub.easy.varModel.model.Project;
@@ -145,7 +145,7 @@ public class DroolsEngineTests extends AbstractTest<Project> {
         // Test whether reasoning detected correct result  
         int failedConstraints = 0;
         if (result.getMessageCount() > 0 && result.getMessage(0).getStatus() == Status.ERROR) {            
-            de.uni_hildesheim.sse.reasoning.core.reasoner.Message cause = result.getMessage(0);
+            net.ssehub.easy.reasonerCore.reasoner.Message cause = result.getMessage(0);
             failedConstraints = Math.max(cause.getConflicts().size(), result.getMessageCount());
         }
         Assert.assertEquals("Failed constraints: ", expectedFailedConstraints, failedConstraints);

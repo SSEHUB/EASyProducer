@@ -3,11 +3,11 @@ package de.uni_hildesheim.sse.reasoning.drools2.functions;
 import org.drools.runtime.StatefulKnowledgeSession;
 import org.drools.runtime.rule.FactHandle;
 
-import de.uni_hildesheim.sse.reasoning.core.model.IModelChangeListener;
-import de.uni_hildesheim.sse.reasoning.core.model.variables.ReasonerVariable;
 import de.uni_hildesheim.sse.reasoning.drools2.DroolsReasonerDescriptor;
 import net.ssehub.easy.basics.logger.EASyLoggerFactory;
 import net.ssehub.easy.basics.logger.EASyLoggerFactory.EASyLogger;
+import net.ssehub.easy.reasonerCore.model.IModelChangeListener;
+import net.ssehub.easy.reasonerCore.model.variables.ReasonerVariable;
 
 /**
  * Class for updating facts in Drools session.

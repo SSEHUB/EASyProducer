@@ -29,10 +29,10 @@ import org.eclipse.ui.IWorkbenchPreferencePage;
 import org.eclipse.ui.PlatformUI;
 
 import de.uni_hildesheim.sse.easy.ui.internal.EASyPreferenceStore;
-import de.uni_hildesheim.sse.reasoning.core.frontend.ReasonerFrontend;
-import de.uni_hildesheim.sse.reasoning.core.reasoner.ReasonerDescriptor;
-import de.uni_hildesheim.sse.reasoning.core.reasoner.ReasoningResult;
 import net.ssehub.easy.basics.progress.ProgressObserver;
+import net.ssehub.easy.reasonerCore.frontend.ReasonerFrontend;
+import net.ssehub.easy.reasonerCore.reasoner.ReasonerDescriptor;
+import net.ssehub.easy.reasonerCore.reasoner.ReasoningResult;
 
 /**
  * Implements the preference page.

@@ -5,15 +5,15 @@ import java.util.List;
 
 import org.osgi.service.component.ComponentContext;
 
-import de.uni_hildesheim.sse.reasoning.core.frontend.ReasonerFrontend;
-import de.uni_hildesheim.sse.reasoning.core.reasoner.EvaluationResult;
-import de.uni_hildesheim.sse.reasoning.core.reasoner.IReasoner;
-import de.uni_hildesheim.sse.reasoning.core.reasoner.IReasonerMessage;
-import de.uni_hildesheim.sse.reasoning.core.reasoner.ReasonerConfiguration;
-import de.uni_hildesheim.sse.reasoning.core.reasoner.ReasonerDescriptor;
-import de.uni_hildesheim.sse.reasoning.core.reasoner.ReasoningResult;
 import de.uni_hildesheim.sse.reasoning.drools.drl.IRules;
 import net.ssehub.easy.basics.progress.ProgressObserver;
+import net.ssehub.easy.reasonerCore.frontend.ReasonerFrontend;
+import net.ssehub.easy.reasonerCore.reasoner.EvaluationResult;
+import net.ssehub.easy.reasonerCore.reasoner.IReasoner;
+import net.ssehub.easy.reasonerCore.reasoner.IReasonerMessage;
+import net.ssehub.easy.reasonerCore.reasoner.ReasonerConfiguration;
+import net.ssehub.easy.reasonerCore.reasoner.ReasonerDescriptor;
+import net.ssehub.easy.reasonerCore.reasoner.ReasoningResult;
 import net.ssehub.easy.varModel.confModel.Configuration;
 import net.ssehub.easy.varModel.model.Constraint;
 import net.ssehub.easy.varModel.model.Project;

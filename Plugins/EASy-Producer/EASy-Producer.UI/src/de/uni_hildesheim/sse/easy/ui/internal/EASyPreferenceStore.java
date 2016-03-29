@@ -10,9 +10,9 @@ import org.osgi.service.prefs.BackingStoreException;
 import de.uni_hildesheim.sse.easy_producer.core.mgmt.VilArgumentProvider;
 import de.uni_hildesheim.sse.easy_producer.core.persistence.Configuration;
 import de.uni_hildesheim.sse.easy_producer.core.persistence.Configuration.PathKind;
-import de.uni_hildesheim.sse.reasoning.core.frontend.ReasonerFrontend;
-import de.uni_hildesheim.sse.reasoning.core.reasoner.ReasonerDescriptor;
 import net.ssehub.easy.basics.logger.EASyLoggerFactory;
+import net.ssehub.easy.reasonerCore.frontend.ReasonerFrontend;
+import net.ssehub.easy.reasonerCore.reasoner.ReasonerDescriptor;
 import net.ssehub.easy.varModel.persistency.AbstractVarModelWriter;
 
 /**

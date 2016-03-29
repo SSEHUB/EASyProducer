@@ -20,7 +20,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import de.uni_hildesheim.sse.reasoning.core.reasoner.ReasoningResult;
+import net.ssehub.easy.reasonerCore.reasoner.ReasoningResult;
 import net.ssehub.easy.varModel.confModel.Configuration;
 import net.ssehub.easy.varModel.confModel.IDecisionVariable;
 import net.ssehub.easy.varModel.cst.CompoundAccess;
@@ -261,7 +261,7 @@ public abstract class AbstractAnalyzerVisitor<V> extends EvaluationVisitor {
     public List<V> analyze(Configuration config, ReasoningResult reasoningResult) {
         List<V> result = null;
         for (int m = 0; m < reasoningResult.getMessageCount(); m++) {
-            de.uni_hildesheim.sse.reasoning.core.reasoner.Message msg = reasoningResult.getMessage(m);
+            net.ssehub.easy.reasonerCore.reasoner.Message msg = reasoningResult.getMessage(m);
             List<Set<IDecisionVariable>> probVars = msg.getProblemVariables();
             List<ConstraintSyntaxTree> probConstraintParts = msg.getProblemConstraintParts();
             List<Constraint> probConstraints = msg.getProblemConstraints();

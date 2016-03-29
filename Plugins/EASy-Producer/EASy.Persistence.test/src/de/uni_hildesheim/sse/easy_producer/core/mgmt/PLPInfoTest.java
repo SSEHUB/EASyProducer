@@ -30,13 +30,13 @@ import de.uni_hildesheim.sse.easy_producer.core.persistence.datatypes.PathEnviro
 import de.uni_hildesheim.sse.easy_producer.core.persistence.standard.Persistencer;
 import de.uni_hildesheim.sse.easy_producer.core.varMod.container.ProjectContainer;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilException;
-import de.uni_hildesheim.sse.reasoning.core.model.ReasoningOperation;
-import de.uni_hildesheim.sse.reasoning.core.reasoner.Message;
-import de.uni_hildesheim.sse.reasoning.core.reasoner.ReasoningResult;
 import net.ssehub.easy.basics.modelManagement.ModelInfo;
 import net.ssehub.easy.basics.modelManagement.ModelManagementException;
 import net.ssehub.easy.basics.modelManagement.Version;
 import net.ssehub.easy.basics.progress.ProgressObserver;
+import net.ssehub.easy.reasonerCore.model.ReasoningOperation;
+import net.ssehub.easy.reasonerCore.reasoner.Message;
+import net.ssehub.easy.reasonerCore.reasoner.ReasoningResult;
 import net.ssehub.easy.varModel.confModel.AssignmentState;
 import net.ssehub.easy.varModel.confModel.Configuration;
 import net.ssehub.easy.varModel.confModel.ConfigurationException;
@@ -259,7 +259,7 @@ public class PLPInfoTest extends AbstractPLPInfoTest {
     }
     
     /**
-     * Tests the {@link PLPInfo#reason(de.uni_hildesheim.sse.reasoning.core.model.ReasoningOperation,
+     * Tests the {@link PLPInfo#reason(net.ssehub.easy.reasonerCore.model.ReasoningOperation,
      * de.uni_hildesheim.sse.reasoning.core.frontend.IReasonerListener)} method.<br/>
      * The performed reasoning should detect a incosistence in the configuration.
      * @throws PersistenceException Must not occur, otherwise the config files inside the toplevel location are corrupt.

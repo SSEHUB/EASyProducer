@@ -4,7 +4,8 @@ import java.io.File;
 import java.io.IOException;
 
 import org.junit.Assert;
-import de.uni_hildesheim.sse.reasoning.core.reasoner.ReasoningResult;
+
+import net.ssehub.easy.reasonerCore.reasoner.ReasoningResult;
 
 public class DroolsContainerTest extends AbstractTest {
 

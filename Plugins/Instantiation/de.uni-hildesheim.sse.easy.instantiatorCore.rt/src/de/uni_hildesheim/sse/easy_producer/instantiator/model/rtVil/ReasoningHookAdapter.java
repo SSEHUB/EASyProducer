@@ -16,8 +16,8 @@
 package de.uni_hildesheim.sse.easy_producer.instantiator.model.rtVil;
 
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.configuration.Configuration;
-import de.uni_hildesheim.sse.reasoning.core.reasoner.Message;
 import net.ssehub.easy.basics.messages.Status;
+import net.ssehub.easy.reasonerCore.reasoner.Message;
 
 /**
  * Provides a neutral reasoning hook implementation, i.e., a hook that does not influencing the 

@@ -9,7 +9,7 @@ Require-Bundle: org.junit,
  ReasonerCore;bundle-version="0.0.3";visibility:=reexport,
  org.eclipse.core.runtime;bundle-version="3.7.0",
  de.uni_hildesheim.sse.dslCore;bundle-version="0.0.1"
-Export-Package: de.uni_hildesheim.sse.reasoning.core.frontend
+Export-Package: net.ssehub.easy.reasonerCore.frontend
 Bundle-ClassPath: testdata/,
  .
 Bundle-ActivationPolicy: lazy

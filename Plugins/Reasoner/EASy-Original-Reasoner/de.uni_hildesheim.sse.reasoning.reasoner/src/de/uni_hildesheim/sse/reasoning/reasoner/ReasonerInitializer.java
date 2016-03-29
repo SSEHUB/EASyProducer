@@ -1,6 +1,6 @@
 package de.uni_hildesheim.sse.reasoning.reasoner;
-import de.uni_hildesheim.sse.reasoning.core.frontend.IReasonerInitializer;
-import de.uni_hildesheim.sse.reasoning.core.reasoner.IReasoner;
+import net.ssehub.easy.reasonerCore.frontend.IReasonerInitializer;
+import net.ssehub.easy.reasonerCore.reasoner.IReasoner;
 
 
 /**

@@ -2,11 +2,11 @@ package de.uni_hildesheim.sse.reasoning.drools2.translation;
 
 import java.io.Writer;
 
-import de.uni_hildesheim.sse.reasoning.core.model.ConstraintPattern;
-import de.uni_hildesheim.sse.reasoning.core.model.ReasonerModel;
-import de.uni_hildesheim.sse.reasoning.core.model.ReasoningOperation;
 import de.uni_hildesheim.sse.reasoning.drools2.translation.oclFeatureCalls.OCLFeatureTranslationFactory;
 import de.uni_hildesheim.sse.reasoning.drools2.translation.oclFeatureCalls.TranslationFragment;
+import net.ssehub.easy.reasonerCore.model.ConstraintPattern;
+import net.ssehub.easy.reasonerCore.model.ReasonerModel;
+import net.ssehub.easy.reasonerCore.model.ReasoningOperation;
 import net.ssehub.easy.varModel.cst.AttributeVariable;
 import net.ssehub.easy.varModel.cst.CSTSemanticException;
 import net.ssehub.easy.varModel.cst.Comment;

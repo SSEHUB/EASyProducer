@@ -15,9 +15,9 @@ import de.uni_hildesheim.sse.easy_producer.core.persistence.datatypes.Model;
 import de.uni_hildesheim.sse.easy_producer.core.persistence.datatypes.ModelType;
 import de.uni_hildesheim.sse.easy_producer.core.persistence.datatypes.PersistentProject;
 import de.uni_hildesheim.sse.easy_producer.core.varMod.container.ProjectContainer;
-import de.uni_hildesheim.sse.reasoning.core.reasoner.AttributeException;
-import de.uni_hildesheim.sse.reasoning.core.reasoner.AttributeValues;
-import de.uni_hildesheim.sse.reasoning.core.reasoner.ReasonerConfiguration;
+import net.ssehub.easy.reasonerCore.reasoner.AttributeException;
+import net.ssehub.easy.reasonerCore.reasoner.AttributeValues;
+import net.ssehub.easy.reasonerCore.reasoner.ReasonerConfiguration;
 
 /**
  * Stores the information of a {@link PersistentProject} in a {@link PLPInfo}

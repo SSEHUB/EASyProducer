@@ -6,10 +6,10 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
-import de.uni_hildesheim.sse.reasoning.core.model.ConstraintPatternFactory;
-import de.uni_hildesheim.sse.reasoning.core.model.ReasonerModel;
-import de.uni_hildesheim.sse.reasoning.core.model.ReasoningOperation;
-import de.uni_hildesheim.sse.reasoning.core.model.datatypes.CompoundType;
+import net.ssehub.easy.reasonerCore.model.ConstraintPatternFactory;
+import net.ssehub.easy.reasonerCore.model.ReasonerModel;
+import net.ssehub.easy.reasonerCore.model.ReasoningOperation;
+import net.ssehub.easy.reasonerCore.model.datatypes.CompoundType;
 import net.ssehub.easy.varModel.cst.ConstraintSyntaxTree;
 import net.ssehub.easy.varModel.persistency.StringProvider;
 

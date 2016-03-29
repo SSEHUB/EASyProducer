@@ -1,7 +1,7 @@
 package de.uni_hildesheim.sse.easy_producer.core.mgmt;
 
-import de.uni_hildesheim.sse.reasoning.core.frontend.IReasonerListener;
-import de.uni_hildesheim.sse.reasoning.core.reasoner.ReasoningResult;
+import net.ssehub.easy.reasonerCore.frontend.IReasonerListener;
+import net.ssehub.easy.reasonerCore.reasoner.ReasoningResult;
 
 /**
  * Helper class for testing  the
