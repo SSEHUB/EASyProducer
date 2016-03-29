@@ -17,19 +17,19 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
 
 import de.uni_hildesheim.sse.ConstraintSyntaxException;
-import de.uni_hildesheim.sse.dslcore.ui.editors.IEmbeddedEditor;
-import de.uni_hildesheim.sse.dslcore.ui.editors.IEmbeddedEditor.IValidationStateListener;
-import de.uni_hildesheim.sse.model.cst.CSTSemanticException;
-import de.uni_hildesheim.sse.model.cst.ConstraintSyntaxTree;
-import de.uni_hildesheim.sse.model.management.VarModel;
-import de.uni_hildesheim.sse.model.varModel.IModelElement;
-import de.uni_hildesheim.sse.model.varModel.Project;
-import de.uni_hildesheim.sse.persistency.StringProvider;
-import de.uni_hildesheim.sse.persistency.ConstraintSplitWriter.IConstraintFilter;
+import net.ssehub.easy.dslCore.ui.editors.IEmbeddedEditor;
+import net.ssehub.easy.dslCore.ui.editors.IEmbeddedEditor.IValidationStateListener;
+import net.ssehub.easy.varModel.cst.CSTSemanticException;
+import net.ssehub.easy.varModel.cst.ConstraintSyntaxTree;
+import net.ssehub.easy.varModel.management.VarModel;
+import net.ssehub.easy.varModel.model.IModelElement;
+import net.ssehub.easy.varModel.model.Project;
+import net.ssehub.easy.varModel.persistency.StringProvider;
+import net.ssehub.easy.varModel.persistency.ConstraintSplitWriter.IConstraintFilter;
 import de.uni_hildesheim.sse.ui.embed.EditorUtils;
-import de.uni_hildesheim.sse.utils.modelManagement.ModelInfo;
-import de.uni_hildesheim.sse.utils.modelManagement.ModelManagementException;
-import de.uni_hildesheim.sse.utils.progress.ProgressObserver;
+import net.ssehub.easy.basics.modelManagement.ModelInfo;
+import net.ssehub.easy.basics.modelManagement.ModelManagementException;
+import net.ssehub.easy.basics.progress.ProgressObserver;
 
 /**
  * This class realizes a dialog which includes an embedded IVML-editor.
