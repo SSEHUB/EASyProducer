@@ -16,8 +16,8 @@ import de.uni_hildesheim.sse.easy_producer.core.persistence.internal.Activator;
 import de.uni_hildesheim.sse.easy_producer.core.persistence.internal.IndentationPrintWriter;
 import de.uni_hildesheim.sse.easy_producer.core.persistence.internal.util.FileUtils;
 import de.uni_hildesheim.sse.easy_producer.core.persistence.standard.PersistenceConstants;
-import de.uni_hildesheim.sse.utils.logger.EASyLoggerFactory;
-import de.uni_hildesheim.sse.utils.logger.EASyLoggerFactory.EASyLogger;
+import net.ssehub.easy.basics.logger.EASyLoggerFactory;
+import net.ssehub.easy.basics.logger.EASyLoggerFactory.EASyLogger;
 
 /**
  * Implements the base (path) configuration of EASy. The configuration normalized the given paths ({@link FileUtils}. 

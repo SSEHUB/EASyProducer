@@ -5,7 +5,7 @@ import java.util.List;
 
 import de.uni_hildesheim.sse.dslCore.translation.Message;
 import de.uni_hildesheim.sse.dslCore.translation.MessageReceiver;
-import de.uni_hildesheim.sse.utils.messages.IMessage;
+import net.ssehub.easy.basics.messages.IMessage;
 
 /**
  * Represents the result of a translation.

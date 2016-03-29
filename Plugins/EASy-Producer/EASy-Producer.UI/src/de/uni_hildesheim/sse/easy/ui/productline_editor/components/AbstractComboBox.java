@@ -26,7 +26,7 @@ import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 
 import de.uni_hildesheim.sse.easy_producer.core.mgmt.PLPInfo;
-import de.uni_hildesheim.sse.model.varModel.Project;
+import net.ssehub.easy.varModel.model.Project;
 
  /**
   * Super class for combox box working with information of a {@link PLPInfo} object.

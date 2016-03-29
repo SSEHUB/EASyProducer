@@ -6,23 +6,23 @@ import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import de.uni_hildesheim.sse.model.confModel.AssignmentState;
-import de.uni_hildesheim.sse.model.confModel.Configuration;
-import de.uni_hildesheim.sse.model.confModel.IDecisionVariable;
-import de.uni_hildesheim.sse.model.cst.CSTSemanticException;
-import de.uni_hildesheim.sse.model.cst.ConstantValue;
-import de.uni_hildesheim.sse.model.cst.OCLFeatureCall;
-import de.uni_hildesheim.sse.model.cst.Variable;
-import de.uni_hildesheim.sse.model.varModel.Constraint;
-import de.uni_hildesheim.sse.model.varModel.DecisionVariableDeclaration;
-import de.uni_hildesheim.sse.model.varModel.Project;
-import de.uni_hildesheim.sse.model.varModel.datatypes.IntegerType;
-import de.uni_hildesheim.sse.model.varModel.datatypes.OclKeyWords;
-import de.uni_hildesheim.sse.model.varModel.values.Value;
-import de.uni_hildesheim.sse.model.varModel.values.ValueDoesNotMatchTypeException;
-import de.uni_hildesheim.sse.model.varModel.values.ValueFactory;
-import de.uni_hildesheim.sse.utils.progress.ProgressObserver;
-import de.uni_hildesheim.sse.varModel.testSupport.ProjectTestUtilities;
+import net.ssehub.easy.basics.progress.ProgressObserver;
+import net.ssehub.easy.varModel.confModel.AssignmentState;
+import net.ssehub.easy.varModel.confModel.Configuration;
+import net.ssehub.easy.varModel.confModel.IDecisionVariable;
+import net.ssehub.easy.varModel.cst.CSTSemanticException;
+import net.ssehub.easy.varModel.cst.ConstantValue;
+import net.ssehub.easy.varModel.cst.OCLFeatureCall;
+import net.ssehub.easy.varModel.cst.Variable;
+import net.ssehub.easy.varModel.model.Constraint;
+import net.ssehub.easy.varModel.model.DecisionVariableDeclaration;
+import net.ssehub.easy.varModel.model.Project;
+import net.ssehub.easy.varModel.model.datatypes.IntegerType;
+import net.ssehub.easy.varModel.model.datatypes.OclKeyWords;
+import net.ssehub.easy.varModel.model.values.Value;
+import net.ssehub.easy.varModel.model.values.ValueDoesNotMatchTypeException;
+import net.ssehub.easy.varModel.model.values.ValueFactory;
+import net.ssehub.easy.varModel.varModel.testSupport.ProjectTestUtilities;
 
 /**
  * Test cases with coded reasoning scenarios.
@@ -49,7 +49,7 @@ public class ReasoningScenarioTests {
      * @throws ValueDoesNotMatchTypeException Must not happen otherwise there is an error inside the
      * {@link Configuration}.
      * @throws CSTSemanticException Must not happen otherwise there is an error inside the
-     * {@link de.uni_hildesheim.sse.model.cst.ConstraintSyntaxTree}s
+     * {@link net.ssehub.easy.varModel.cst.ConstraintSyntaxTree}s
      */
     @Before
     public void setUp() throws ValueDoesNotMatchTypeException, CSTSemanticException {

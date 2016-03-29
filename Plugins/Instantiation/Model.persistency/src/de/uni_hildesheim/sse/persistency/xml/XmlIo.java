@@ -37,14 +37,14 @@ import de.uni_hildesheim.sse.persistency.xml.converter.ReflectionTypeDescriptorC
 import de.uni_hildesheim.sse.persistency.xml.converter.TypeRegistryConverter;
 import de.uni_hildesheim.sse.persistency.xml.converter.VTLTypeConverter;
 import de.uni_hildesheim.sse.persistency.xml.mapper.ClassNameAliasingMapper;
-import de.uni_hildesheim.sse.utils.logger.EASyLoggerFactory;
-import de.uni_hildesheim.sse.utils.logger.EASyLoggerFactory.EASyLogger;
-import de.uni_hildesheim.sse.utils.modelManagement.IModel;
+import net.ssehub.easy.basics.logger.EASyLoggerFactory;
+import net.ssehub.easy.basics.logger.EASyLoggerFactory.EASyLogger;
+import net.ssehub.easy.basics.modelManagement.IModel;
 
 /**
  * Supports storing projects (and referenced projects) into XML format. Please note that the XML format is intended for
  * temporary storage of models, in particular in environments where xText or Eclipse dependency must not be used.
- * Further, this class does not rely on {@link de.uni_hildesheim.sse.model.management.VarModel}, i.e. the related
+ * Further, this class does not rely on {@link net.ssehub.easy.varModel.management.VarModel}, i.e. the related
  * mechanisms, loaders and listeners there are not considered by this class (this would require a specific XML loader).
  * [req SAP, TUV]
  * 

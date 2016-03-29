@@ -7,8 +7,8 @@ import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilExceptio
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.VariableExpression;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeDescriptor;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeRegistry;
-import de.uni_hildesheim.sse.utils.modelManagement.RestrictionEvaluationException;
-import de.uni_hildesheim.sse.utils.modelManagement.Version;
+import net.ssehub.easy.basics.modelManagement.RestrictionEvaluationException;
+import net.ssehub.easy.basics.modelManagement.Version;
 
 /**
  * Some VTL utility methods.

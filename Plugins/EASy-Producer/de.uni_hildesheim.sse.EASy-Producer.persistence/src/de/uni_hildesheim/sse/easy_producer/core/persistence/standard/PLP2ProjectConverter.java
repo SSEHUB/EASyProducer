@@ -9,10 +9,10 @@ import de.uni_hildesheim.sse.easy_producer.core.persistence.datatypes.IPersisten
 import de.uni_hildesheim.sse.easy_producer.core.persistence.datatypes.Model;
 import de.uni_hildesheim.sse.easy_producer.core.persistence.datatypes.ModelType;
 import de.uni_hildesheim.sse.easy_producer.core.persistence.datatypes.PersistentProject;
-import de.uni_hildesheim.sse.model.confModel.ConfigurationException;
-import de.uni_hildesheim.sse.model.varModel.Attribute;
 import de.uni_hildesheim.sse.reasoning.core.reasoner.AttributeValues;
 import de.uni_hildesheim.sse.reasoning.core.reasoner.ReasonerConfiguration;
+import net.ssehub.easy.varModel.confModel.ConfigurationException;
+import net.ssehub.easy.varModel.model.Attribute;
 
 /**
  * Stores the information of a {@link PLPInfo} in a {@link PersistentProject}

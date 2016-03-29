@@ -30,7 +30,7 @@ import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.WriterVisit
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.templateModel.Template;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.Constants;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeDescriptor;
-import de.uni_hildesheim.sse.utils.modelManagement.ModelImport;
+import net.ssehub.easy.basics.modelManagement.ModelImport;
 
 /**
  * For writing a buildlanguage model to a print stream. Needed for persisting the 

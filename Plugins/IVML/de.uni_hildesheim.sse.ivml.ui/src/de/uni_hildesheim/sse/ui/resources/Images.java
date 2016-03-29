@@ -4,15 +4,15 @@ import java.util.HashMap;
 import java.util.Map;
 
 import de.uni_hildesheim.sse.ivml.Project;
-import de.uni_hildesheim.sse.model.varModel.Attribute;
-import de.uni_hildesheim.sse.model.varModel.DecisionVariableDeclaration;
-import de.uni_hildesheim.sse.model.varModel.OperationDefinition;
-import de.uni_hildesheim.sse.model.varModel.ProjectInterface;
-import de.uni_hildesheim.sse.model.varModel.datatypes.Compound;
-import de.uni_hildesheim.sse.model.varModel.datatypes.DerivedDatatype;
-import de.uni_hildesheim.sse.model.varModel.datatypes.EnumLiteral;
-import de.uni_hildesheim.sse.model.varModel.datatypes.Operation;
-import de.uni_hildesheim.sse.model.varModel.datatypes.OrderedEnum;
+import net.ssehub.easy.varModel.model.Attribute;
+import net.ssehub.easy.varModel.model.DecisionVariableDeclaration;
+import net.ssehub.easy.varModel.model.OperationDefinition;
+import net.ssehub.easy.varModel.model.ProjectInterface;
+import net.ssehub.easy.varModel.model.datatypes.Compound;
+import net.ssehub.easy.varModel.model.datatypes.DerivedDatatype;
+import net.ssehub.easy.varModel.model.datatypes.EnumLiteral;
+import net.ssehub.easy.varModel.model.datatypes.Operation;
+import net.ssehub.easy.varModel.model.datatypes.OrderedEnum;
 
 public class Images {
 
@@ -53,7 +53,7 @@ public class Images {
 		MAPPING.put(Project.class, NAME_PROJECT);
 		MAPPING.put(DecisionVariableDeclaration.class, NAME_VARIABLE);
 		MAPPING.put(Compound.class, NAME_COMPOUND);
-		MAPPING.put(de.uni_hildesheim.sse.model.varModel.datatypes.Enum.class, Images.NAME_ENUM);
+		MAPPING.put(net.ssehub.easy.varModel.model.datatypes.Enum.class, Images.NAME_ENUM);
 		MAPPING.put(OrderedEnum.class, NAME_ENUM);
 		MAPPING.put(EnumLiteral.class, NAME_ENUM_LITERAL);
 		MAPPING.put(ProjectInterface.class, NAME_INTERFACE);

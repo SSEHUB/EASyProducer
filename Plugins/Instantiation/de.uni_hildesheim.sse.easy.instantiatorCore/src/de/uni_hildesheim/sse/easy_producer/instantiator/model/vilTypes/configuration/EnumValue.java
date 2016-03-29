@@ -2,7 +2,7 @@ package de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.configur
 
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.Conversion;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.Invisible;
-import de.uni_hildesheim.sse.model.varModel.datatypes.IDatatype;
+import net.ssehub.easy.varModel.model.datatypes.IDatatype;
 
 /**
  * Represents an IVML enum value.
@@ -11,14 +11,14 @@ import de.uni_hildesheim.sse.model.varModel.datatypes.IDatatype;
  */
 public class EnumValue extends IvmlElement {
 
-    private de.uni_hildesheim.sse.model.varModel.values.EnumValue value;
+    private net.ssehub.easy.varModel.model.values.EnumValue value;
 
     /**
      * Creates a new enum value.
      * 
      * @param value the IVML enum literal
      */
-    public EnumValue(de.uni_hildesheim.sse.model.varModel.values.EnumValue value) {
+    public EnumValue(net.ssehub.easy.varModel.model.values.EnumValue value) {
         this.value = value;
     }
     

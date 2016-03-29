@@ -1,6 +1,6 @@
 package test.de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes;
 
-import de.uni_hildesheim.sse.model.confModel.IDecisionVariable;
+import net.ssehub.easy.varModel.confModel.IDecisionVariable;
 
 /**
  * A simple type-equality selector.

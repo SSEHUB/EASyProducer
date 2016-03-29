@@ -13,7 +13,7 @@ import de.uni_hildesheim.sse.dslCore.IResourceInitializer;
 import de.uni_hildesheim.sse.dslCore.TranslationResult;
 import de.uni_hildesheim.sse.dslcore.ui.editors.CommonXtextEditor;
 import de.uni_hildesheim.sse.ivml.VariabilityUnit;
-import de.uni_hildesheim.sse.model.varModel.Project;
+import net.ssehub.easy.varModel.model.Project;
 
 /**
  * This class extends the official xText editor in order to hook into the saving

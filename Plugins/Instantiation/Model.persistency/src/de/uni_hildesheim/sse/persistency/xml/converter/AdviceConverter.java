@@ -9,9 +9,9 @@ import com.thoughtworks.xstream.io.HierarchicalStreamReader;
 import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
 
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.Advice;
-import de.uni_hildesheim.sse.model.management.VarModel;
-import de.uni_hildesheim.sse.model.varModel.Project;
-import de.uni_hildesheim.sse.utils.modelManagement.ModelInfo;
+import net.ssehub.easy.basics.modelManagement.ModelInfo;
+import net.ssehub.easy.varModel.management.VarModel;
+import net.ssehub.easy.varModel.model.Project;
 
 /**
  * A converter for the {@link Advice}. While marshaling the project name will be written.

@@ -1,7 +1,7 @@
 package de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes;
 
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.configuration.DecisionVariable;
-import de.uni_hildesheim.sse.model.varModel.values.Value;
+import net.ssehub.easy.varModel.model.values.Value;
 
 /**
  * Common operations for sequences.

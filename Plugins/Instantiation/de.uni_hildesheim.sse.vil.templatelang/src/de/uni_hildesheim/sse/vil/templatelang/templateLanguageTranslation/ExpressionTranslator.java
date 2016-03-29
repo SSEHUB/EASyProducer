@@ -21,10 +21,10 @@ import de.uni_hildesheim.sse.easy_producer.instantiator.model.templateModel.Expr
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.templateModel.Resolver;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.templateModel.VariableDeclaration;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeDescriptor;
-import de.uni_hildesheim.sse.utils.modelManagement.RestrictionEvaluationException;
 import de.uni_hildesheim.sse.vil.expressions.expressionDsl.Call;
 import de.uni_hildesheim.sse.vil.expressions.expressionDsl.ExpressionDslPackage;
 import de.uni_hildesheim.sse.vil.templatelang.TemplateLangModelUtility;
+import net.ssehub.easy.basics.modelManagement.RestrictionEvaluationException;
 
 /**
  * A specific expression translator for the template language.

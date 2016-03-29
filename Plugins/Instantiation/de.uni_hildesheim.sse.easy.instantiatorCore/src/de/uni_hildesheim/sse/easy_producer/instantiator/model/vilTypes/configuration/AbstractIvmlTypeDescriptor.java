@@ -17,11 +17,11 @@ import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.Reflectio
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.ReflectionTypeDescriptor;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeDescriptor;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeRegistry;
+import net.ssehub.easy.varModel.model.IAttributableElement;
+import net.ssehub.easy.varModel.model.IModelElement;
+import net.ssehub.easy.varModel.model.datatypes.IDatatype;
+import net.ssehub.easy.varModel.model.datatypes.TypeQueries;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilException;
-import de.uni_hildesheim.sse.model.varModel.IAttributableElement;
-import de.uni_hildesheim.sse.model.varModel.IModelElement;
-import de.uni_hildesheim.sse.model.varModel.datatypes.IDatatype;
-import de.uni_hildesheim.sse.model.varModel.datatypes.TypeQueries;
 
 /**
  * Implements a dynamic type descriptor for IVM decision variables. Instances of this
@@ -151,7 +151,7 @@ abstract class AbstractIvmlTypeDescriptor extends TypeDescriptor<DecisionVariabl
             if (iter instanceof IAttributableElement) {
                 IAttributableElement aElt = (IAttributableElement) iter;
                 for (int a = 0; a < aElt.getAttributesCount(); a++) {
-                    de.uni_hildesheim.sse.model.varModel.Attribute attribute = aElt.getAttribute(a);
+                    net.ssehub.easy.varModel.model.Attribute attribute = aElt.getAttribute(a);
                     Utils.addField(new IvmlAnnotationFieldDescriptor(this, attribute, registry), fields);
                 }
             }

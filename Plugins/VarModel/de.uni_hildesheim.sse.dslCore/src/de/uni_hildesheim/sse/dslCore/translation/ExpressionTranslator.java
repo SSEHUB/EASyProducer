@@ -7,7 +7,7 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.resource.Resource.Diagnostic;
 
-import de.uni_hildesheim.sse.utils.messages.Status;
+import net.ssehub.easy.basics.messages.Status;
 
 /**
  * A basic implementation of an expression translator, i.e., a basic class for translating

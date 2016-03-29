@@ -2,9 +2,9 @@ package de.uni_hildesheim.sse.reasoning.core.model;
 
 import java.util.Set;
 
-import de.uni_hildesheim.sse.model.cst.ConstraintSyntaxTree;
-import de.uni_hildesheim.sse.model.varModel.ModelElement;
 import de.uni_hildesheim.sse.reasoning.core.model.variables.ReasonerVariable;
+import net.ssehub.easy.varModel.cst.ConstraintSyntaxTree;
+import net.ssehub.easy.varModel.model.ModelElement;
 
 /**
  * Part of the {@link ReasonerModel}, holding all used constraints.
@@ -49,10 +49,10 @@ public interface IConstraintContainer {
     public ConstraintSyntaxTree getConstraint(int index);
     
     /**
-     * Returns the conflicting {@link ModelElement} ({@link de.uni_hildesheim.sse.model.varModel.Constraint}
-     * or {@link de.uni_hildesheim.sse.model.varModel.datatypes.DerivedDatatype})for a conflicting constraint.
+     * Returns the conflicting {@link ModelElement} ({@link net.ssehub.easy.varModel.model.Constraint}
+     * or {@link net.ssehub.easy.varModel.model.datatypes.DerivedDatatype})for a conflicting constraint.
      * The specified index must be the same index as used to get the
-     * {@link de.uni_hildesheim.sse.model.varModel.Constraint} 
+     * {@link net.ssehub.easy.varModel.model.Constraint} 
      * via the {@link #getConstraint(int)} method.
      * @param index A 0 based index to specify which {@link ModelElement} shall be returned.
      * @return The {@link ModelElement} from where the {@link ConstraintSyntaxTree} came from

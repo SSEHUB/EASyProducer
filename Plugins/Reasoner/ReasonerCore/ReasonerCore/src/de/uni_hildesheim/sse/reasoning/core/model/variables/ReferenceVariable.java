@@ -1,7 +1,7 @@
 package de.uni_hildesheim.sse.reasoning.core.model.variables;
 
-import de.uni_hildesheim.sse.model.confModel.IDecisionVariable;
 import de.uni_hildesheim.sse.reasoning.core.model.ReasonerModel;
+import net.ssehub.easy.varModel.confModel.IDecisionVariable;
 
 /**
  * {@link ReasonerVariable} representing a reference {@link IDecisionVariable}.

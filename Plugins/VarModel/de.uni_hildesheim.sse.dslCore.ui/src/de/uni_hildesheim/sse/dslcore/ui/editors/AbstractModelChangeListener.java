@@ -6,7 +6,7 @@ import org.eclipse.core.resources.IResource;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.xtext.ui.editor.model.IXtextDocument;
 
-import de.uni_hildesheim.sse.utils.modelManagement.IModel;
+import net.ssehub.easy.basics.modelManagement.IModel;
 
 /**
  * Abstract listener for listening to changes of an underlying model and updating the respective

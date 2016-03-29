@@ -3,7 +3,7 @@ package de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions;
 import de.uni_hildesheim.sse.easy_producer.instantiator.Bundle;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilException;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.StringValueHelper;
-import de.uni_hildesheim.sse.utils.logger.EASyLoggerFactory;
+import net.ssehub.easy.basics.logger.EASyLoggerFactory;
 
 /**
  * A parser and replacer for values (<i>$name</i>) and expressions (<i>${expression}</i>) in string values.

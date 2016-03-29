@@ -5,7 +5,7 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
-import de.uni_hildesheim.sse.capabilities.IReasonerCapability;
+import net.ssehub.easy.varModel.capabilities.IReasonerCapability;
 
 /**
  * Represents descriptive information about a reasoner. This class is intended to be subclassed in order to provide

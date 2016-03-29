@@ -5,7 +5,7 @@ import java.util.List;
 
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.Advice;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.Imports;
-import de.uni_hildesheim.sse.utils.modelManagement.IndentationConfiguration;
+import net.ssehub.easy.basics.modelManagement.IndentationConfiguration;
 
 /**
  * Carries the information for creating a template (just a temporary instance).

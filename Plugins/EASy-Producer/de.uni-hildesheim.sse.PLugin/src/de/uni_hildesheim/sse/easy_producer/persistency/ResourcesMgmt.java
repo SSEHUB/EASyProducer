@@ -25,7 +25,7 @@ import de.uni_hildesheim.sse.easy_producer.persistency.project_creation.IEASyPro
 import de.uni_hildesheim.sse.easy_producer.persistency.project_creation.InvalidProjectnameException;
 import de.uni_hildesheim.sse.easy_producer.persistency.project_creation.ProjectAlreadyExistsException;
 import de.uni_hildesheim.sse.easy_producer.persistency.project_creation.ProjectCreator;
-import de.uni_hildesheim.sse.utils.logger.EASyLoggerFactory;
+import net.ssehub.easy.basics.logger.EASyLoggerFactory;
 
 /**
  * Resources abstraction layer.

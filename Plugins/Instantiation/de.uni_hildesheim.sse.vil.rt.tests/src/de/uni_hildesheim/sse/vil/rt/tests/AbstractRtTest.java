@@ -25,12 +25,12 @@ import org.junit.Assert;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.rtVil.Script;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.configuration.Configuration;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.configuration.IVariableFilter;
-import de.uni_hildesheim.sse.model.management.VarModel;
-import de.uni_hildesheim.sse.model.varModel.Project;
 import de.uni_hildesheim.sse.reasoning.core.frontend.ReasonerFrontend;
 import de.uni_hildesheim.sse.reasoning.reasoner.Reasoner;
-import de.uni_hildesheim.sse.utils.modelManagement.ModelInfo;
-import de.uni_hildesheim.sse.utils.modelManagement.ModelManagementException;
+import net.ssehub.easy.basics.modelManagement.ModelInfo;
+import net.ssehub.easy.basics.modelManagement.ModelManagementException;
+import net.ssehub.easy.varModel.management.VarModel;
+import net.ssehub.easy.varModel.model.Project;
 
 /**
  * An abstract basic rt-VIL test.
@@ -83,8 +83,8 @@ public abstract class AbstractRtTest extends AbstractExecutionTest<Script> {
             Assert.fail("unexpected exception: " + e.getMessage());
         }
         Assert.assertNotNull("IVML model '" + varModelName + "' not loaded", varModel);
-        de.uni_hildesheim.sse.model.confModel.Configuration cfg 
-            = new de.uni_hildesheim.sse.model.confModel.Configuration(varModel);
+        net.ssehub.easy.varModel.confModel.Configuration cfg 
+            = new net.ssehub.easy.varModel.confModel.Configuration(varModel);
         return new Configuration(cfg , filter);
     }
 

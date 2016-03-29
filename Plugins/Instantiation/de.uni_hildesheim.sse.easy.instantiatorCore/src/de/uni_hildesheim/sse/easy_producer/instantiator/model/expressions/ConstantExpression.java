@@ -4,7 +4,7 @@ import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilExceptio
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeDescriptor;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeRegistry;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.configuration.EnumValue;
-import de.uni_hildesheim.sse.utils.modelManagement.Version;
+import net.ssehub.easy.basics.modelManagement.Version;
 
 /**
  * Represents a parenthesis expression.

@@ -3,28 +3,28 @@ package de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.configur
 import java.util.ArrayList;
 import java.util.List;
 
-import de.uni_hildesheim.sse.model.confModel.IDecisionVariable;
-import de.uni_hildesheim.sse.model.varModel.Attribute;
-import de.uni_hildesheim.sse.model.varModel.AttributeAssignment;
-import de.uni_hildesheim.sse.model.varModel.Comment;
-import de.uni_hildesheim.sse.model.varModel.CompoundAccessStatement;
-import de.uni_hildesheim.sse.model.varModel.Constraint;
-import de.uni_hildesheim.sse.model.varModel.DecisionVariableDeclaration;
-import de.uni_hildesheim.sse.model.varModel.FreezeBlock;
-import de.uni_hildesheim.sse.model.varModel.IModelVisitor;
-import de.uni_hildesheim.sse.model.varModel.OperationDefinition;
-import de.uni_hildesheim.sse.model.varModel.PartialEvaluationBlock;
-import de.uni_hildesheim.sse.model.varModel.Project;
-import de.uni_hildesheim.sse.model.varModel.ProjectImport;
-import de.uni_hildesheim.sse.model.varModel.ProjectInterface;
-import de.uni_hildesheim.sse.model.varModel.datatypes.Compound;
-import de.uni_hildesheim.sse.model.varModel.datatypes.DerivedDatatype;
-import de.uni_hildesheim.sse.model.varModel.datatypes.Enum;
-import de.uni_hildesheim.sse.model.varModel.datatypes.EnumLiteral;
-import de.uni_hildesheim.sse.model.varModel.datatypes.OrderedEnum;
-import de.uni_hildesheim.sse.model.varModel.datatypes.Reference;
-import de.uni_hildesheim.sse.model.varModel.datatypes.Sequence;
-import de.uni_hildesheim.sse.model.varModel.datatypes.Set;
+import net.ssehub.easy.varModel.confModel.IDecisionVariable;
+import net.ssehub.easy.varModel.model.Attribute;
+import net.ssehub.easy.varModel.model.AttributeAssignment;
+import net.ssehub.easy.varModel.model.Comment;
+import net.ssehub.easy.varModel.model.CompoundAccessStatement;
+import net.ssehub.easy.varModel.model.Constraint;
+import net.ssehub.easy.varModel.model.DecisionVariableDeclaration;
+import net.ssehub.easy.varModel.model.FreezeBlock;
+import net.ssehub.easy.varModel.model.IModelVisitor;
+import net.ssehub.easy.varModel.model.OperationDefinition;
+import net.ssehub.easy.varModel.model.PartialEvaluationBlock;
+import net.ssehub.easy.varModel.model.Project;
+import net.ssehub.easy.varModel.model.ProjectImport;
+import net.ssehub.easy.varModel.model.ProjectInterface;
+import net.ssehub.easy.varModel.model.datatypes.Compound;
+import net.ssehub.easy.varModel.model.datatypes.DerivedDatatype;
+import net.ssehub.easy.varModel.model.datatypes.Enum;
+import net.ssehub.easy.varModel.model.datatypes.EnumLiteral;
+import net.ssehub.easy.varModel.model.datatypes.OrderedEnum;
+import net.ssehub.easy.varModel.model.datatypes.Reference;
+import net.ssehub.easy.varModel.model.datatypes.Sequence;
+import net.ssehub.easy.varModel.model.datatypes.Set;
 
 /**
  * A variable collector used to collect the (configured) variables of a variability model.
@@ -120,7 +120,7 @@ class VariableCollector implements IModelVisitor {
     @Override
     public void visitDecisionVariableDeclaration(DecisionVariableDeclaration decl) {
         // retrieve and if ok wrap
-        de.uni_hildesheim.sse.model.confModel.Configuration cfg = configuration.getConfiguration();
+        net.ssehub.easy.varModel.confModel.Configuration cfg = configuration.getConfiguration();
         IDecisionVariable var = cfg.getDecision(decl);
         if (null != var && filter.isEnabled(var)) {
             variables.add(new DecisionVariable(configuration, var, filter));

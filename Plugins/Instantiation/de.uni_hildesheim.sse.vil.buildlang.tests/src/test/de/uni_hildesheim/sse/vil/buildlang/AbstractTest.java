@@ -28,9 +28,9 @@ import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.IVilType;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.Project;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeRegistry;
 import de.uni_hildesheim.sse.easy_producer.instantiator.velocity.VelocityInstantiator;
-import de.uni_hildesheim.sse.model.management.VarModel;
-import de.uni_hildesheim.sse.utils.messages.Status;
-import de.uni_hildesheim.sse.utils.modelManagement.ModelManagementException;
+import net.ssehub.easy.basics.messages.Status;
+import net.ssehub.easy.basics.modelManagement.ModelManagementException;
+import net.ssehub.easy.varModel.management.VarModel;
 
 /**
  * The refined version of abstract tests for the build language.

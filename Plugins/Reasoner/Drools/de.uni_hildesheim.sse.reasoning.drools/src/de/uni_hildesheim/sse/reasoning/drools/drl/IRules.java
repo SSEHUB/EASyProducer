@@ -1,7 +1,7 @@
 package de.uni_hildesheim.sse.reasoning.drools.drl;
 
-import de.uni_hildesheim.sse.model.confModel.Configuration;
-import de.uni_hildesheim.sse.model.varModel.Project;
+import net.ssehub.easy.varModel.confModel.Configuration;
+import net.ssehub.easy.varModel.model.Project;
 
 /**
  * Interface for producing the Drools Rules.

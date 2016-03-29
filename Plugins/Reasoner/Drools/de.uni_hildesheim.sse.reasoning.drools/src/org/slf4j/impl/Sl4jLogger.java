@@ -3,8 +3,8 @@ package org.slf4j.impl;
 import org.slf4j.Logger;
 import org.slf4j.Marker;
 
-import de.uni_hildesheim.sse.utils.logger.EASyLoggerFactory;
-import de.uni_hildesheim.sse.utils.logger.EASyLoggerFactory.EASyLogger;
+import net.ssehub.easy.basics.logger.EASyLoggerFactory;
+import net.ssehub.easy.basics.logger.EASyLoggerFactory.EASyLogger;
 
 public class Sl4jLogger implements Logger {
     

@@ -7,15 +7,15 @@ import de.uni_hildesheim.sse.ivml.ConflictStmt;
 import de.uni_hildesheim.sse.ivml.Expression;
 import de.uni_hildesheim.sse.ivml.ImportStmt;
 import de.uni_hildesheim.sse.ivml.IvmlPackage;
-import de.uni_hildesheim.sse.model.cst.ConstraintSyntaxTree;
-import de.uni_hildesheim.sse.model.management.VarModel;
-import de.uni_hildesheim.sse.model.varModel.DecisionVariableDeclaration;
-import de.uni_hildesheim.sse.model.varModel.ExpressionVersionRestriction;
-import de.uni_hildesheim.sse.model.varModel.ExpressionVersionRestrictionValidator;
-import de.uni_hildesheim.sse.model.varModel.ProjectImport;
-import de.uni_hildesheim.sse.utils.messages.IMessageHandler;
-import de.uni_hildesheim.sse.utils.modelManagement.IVersionRestriction;
-import de.uni_hildesheim.sse.utils.modelManagement.RestrictionEvaluationException;
+import net.ssehub.easy.basics.messages.IMessageHandler;
+import net.ssehub.easy.basics.modelManagement.IVersionRestriction;
+import net.ssehub.easy.basics.modelManagement.RestrictionEvaluationException;
+import net.ssehub.easy.varModel.cst.ConstraintSyntaxTree;
+import net.ssehub.easy.varModel.management.VarModel;
+import net.ssehub.easy.varModel.model.DecisionVariableDeclaration;
+import net.ssehub.easy.varModel.model.ExpressionVersionRestriction;
+import net.ssehub.easy.varModel.model.ExpressionVersionRestrictionValidator;
+import net.ssehub.easy.varModel.model.ProjectImport;
 
 /**
  * A class which specifically does the import translations. The methods

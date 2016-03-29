@@ -29,8 +29,8 @@ import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.Bui
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.ITracer;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.Script;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.execution.TracerFactory;
-import de.uni_hildesheim.sse.utils.modelManagement.IModelLoader;
-import de.uni_hildesheim.sse.utils.modelManagement.ModelManagement;
+import net.ssehub.easy.basics.modelManagement.IModelLoader;
+import net.ssehub.easy.basics.modelManagement.ModelManagement;
 
 /**
  * Configures the tests for the build language (VIL).

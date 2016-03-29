@@ -3,7 +3,7 @@ package de.uni_hildesheim.sse.easy_producer.core.persistence.datatypes;
 import java.io.File;
 
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.Script;
-import de.uni_hildesheim.sse.model.varModel.Project;
+import net.ssehub.easy.varModel.model.Project;
 
 /**
  * An instance of this class will be returned after calling

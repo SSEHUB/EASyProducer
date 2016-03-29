@@ -33,11 +33,11 @@ import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.CallAr
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.CompositeExpression;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.CopyVisitor;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.Expression;
-import de.uni_hildesheim.sse.utils.logger.EASyLoggerFactory;
-import de.uni_hildesheim.sse.utils.modelManagement.IVariable;
-import de.uni_hildesheim.sse.utils.modelManagement.IVersionRestriction;
-import de.uni_hildesheim.sse.utils.modelManagement.IVersionRestriction.IVariableMapper;
-import de.uni_hildesheim.sse.utils.modelManagement.RestrictionEvaluationException;
+import net.ssehub.easy.basics.logger.EASyLoggerFactory;
+import net.ssehub.easy.basics.modelManagement.IVariable;
+import net.ssehub.easy.basics.modelManagement.IVersionRestriction;
+import net.ssehub.easy.basics.modelManagement.RestrictionEvaluationException;
+import net.ssehub.easy.basics.modelManagement.IVersionRestriction.IVariableMapper;
 
 /**
  * The copy visitor for VIL expressions.

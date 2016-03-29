@@ -13,8 +13,8 @@ import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.Constants
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.IMetaOperation;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.IMetaType;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeRegistry;
-import de.uni_hildesheim.sse.utils.modelManagement.IModel;
-import de.uni_hildesheim.sse.utils.modelManagement.ModelImport;
+import net.ssehub.easy.basics.modelManagement.IModel;
+import net.ssehub.easy.basics.modelManagement.ModelImport;
 
 /**
  * A common resolver.

@@ -2,7 +2,7 @@ package de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.configur
 
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilException;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeDescriptor;
-import de.uni_hildesheim.sse.model.varModel.DecisionVariableDeclaration;
+import net.ssehub.easy.varModel.model.DecisionVariableDeclaration;
 
 /**
  * Defines an operation descriptor which enables comfortable access to a top-level decision variable

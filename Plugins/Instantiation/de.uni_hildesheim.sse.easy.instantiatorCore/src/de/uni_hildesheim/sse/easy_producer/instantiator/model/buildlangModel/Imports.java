@@ -3,7 +3,7 @@ package de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel;
 import java.util.List;
 
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.templateModel.Template;
-import de.uni_hildesheim.sse.utils.modelManagement.ModelImport;
+import net.ssehub.easy.basics.modelManagement.ModelImport;
 
 /**
  * Stores the model imports and VTL requirements for a Script.

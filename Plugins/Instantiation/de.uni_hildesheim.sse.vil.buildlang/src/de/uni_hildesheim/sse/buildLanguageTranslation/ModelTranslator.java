@@ -13,14 +13,14 @@ import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.Imp
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.Script;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.Script.ScriptDescriptor;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeRegistry;
-import de.uni_hildesheim.sse.utils.modelManagement.IModelLoader;
-import de.uni_hildesheim.sse.utils.modelManagement.ImportResolver;
-import de.uni_hildesheim.sse.utils.modelManagement.ModelImport;
-import de.uni_hildesheim.sse.utils.modelManagement.ModelManagement;
 import de.uni_hildesheim.sse.vil.expressions.ResourceRegistry;
 import de.uni_hildesheim.sse.vil.expressions.expressionDsl.ExpressionDslPackage;
 import de.uni_hildesheim.sse.vilBuildLanguage.ImplementationUnit;
 import de.uni_hildesheim.sse.vilBuildLanguage.LanguageUnit;
+import net.ssehub.easy.basics.modelManagement.IModelLoader;
+import net.ssehub.easy.basics.modelManagement.ImportResolver;
+import net.ssehub.easy.basics.modelManagement.ModelImport;
+import net.ssehub.easy.basics.modelManagement.ModelManagement;
 
 /**
  * Implements the translation from the DSL to the build model in the instantiator core.

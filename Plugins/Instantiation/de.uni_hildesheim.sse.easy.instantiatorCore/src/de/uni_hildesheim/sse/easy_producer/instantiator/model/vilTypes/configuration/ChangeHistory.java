@@ -24,11 +24,11 @@ import java.util.Stack;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.IStringValueProvider;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.IVilType;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.Invisible;
-import de.uni_hildesheim.sse.model.confModel.IConfigurationChangeListener;
-import de.uni_hildesheim.sse.model.confModel.IConfigurationElement;
-import de.uni_hildesheim.sse.model.confModel.IDecisionVariable;
-import de.uni_hildesheim.sse.model.varModel.values.NullValue;
-import de.uni_hildesheim.sse.model.varModel.values.Value;
+import net.ssehub.easy.varModel.confModel.IConfigurationChangeListener;
+import net.ssehub.easy.varModel.confModel.IConfigurationElement;
+import net.ssehub.easy.varModel.confModel.IDecisionVariable;
+import net.ssehub.easy.varModel.model.values.NullValue;
+import net.ssehub.easy.varModel.model.values.Value;
 
 /**
  * Implements a checkpointing change history of variable changes. Changes are traced in
@@ -129,7 +129,7 @@ public class ChangeHistory implements IVilType, IStringValueProvider {
     private class ChangeListener implements IConfigurationChangeListener {
 
         @Override
-        public void itemChanged(de.uni_hildesheim.sse.model.confModel.Configuration config,
+        public void itemChanged(net.ssehub.easy.varModel.confModel.Configuration config,
             IDecisionVariable changedVariable, Value oldValue) {
             // check config?
             IvmlElement elt = configuration.get(changedVariable.getDeclaration().getQualifiedName());
@@ -139,12 +139,12 @@ public class ChangeHistory implements IVilType, IStringValueProvider {
         }
 
         @Override
-        public void stateChanged(de.uni_hildesheim.sse.model.confModel.Configuration config,
+        public void stateChanged(net.ssehub.easy.varModel.confModel.Configuration config,
             IDecisionVariable changedVariable) {
         }
 
         @Override
-        public void configurationRefreshed(de.uni_hildesheim.sse.model.confModel.Configuration config) {
+        public void configurationRefreshed(net.ssehub.easy.varModel.confModel.Configuration config) {
         }
         
     }
@@ -236,7 +236,7 @@ public class ChangeHistory implements IVilType, IStringValueProvider {
         if (null == value) {
             value = variable.getVariable().getValue();
         }
-        Value result = de.uni_hildesheim.sse.model.confModel.Configuration.dereference(
+        Value result = net.ssehub.easy.varModel.confModel.Configuration.dereference(
             configuration.getConfiguration(), value);
         return result;
     }

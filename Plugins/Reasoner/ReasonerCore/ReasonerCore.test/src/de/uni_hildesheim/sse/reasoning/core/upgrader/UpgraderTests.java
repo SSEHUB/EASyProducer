@@ -17,12 +17,12 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import de.uni_hildesheim.sse.dslCore.test.AbstractTest;
-import de.uni_hildesheim.sse.model.varModel.Project;
 import de.uni_hildesheim.sse.reasoning.core.reasoner.FileUpgrader;
 import de.uni_hildesheim.sse.reasoning.core.reasoner.IUpgrader;
 import de.uni_hildesheim.sse.reasoning.core.reasoner.ReasoningResult;
 import de.uni_hildesheim.sse.reasoning.core.reasoner.ZipUpgrader;
-import de.uni_hildesheim.sse.utils.progress.ProgressObserver;
+import net.ssehub.easy.basics.progress.ProgressObserver;
+import net.ssehub.easy.varModel.model.Project;
 
 /**
  * Specific tests for the upgrade mechanism.

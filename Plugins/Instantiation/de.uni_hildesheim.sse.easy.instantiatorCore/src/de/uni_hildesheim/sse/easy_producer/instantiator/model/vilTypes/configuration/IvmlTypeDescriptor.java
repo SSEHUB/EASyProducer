@@ -12,19 +12,19 @@ import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.IMetaType
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.OperationDescriptor;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeDescriptor;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeRegistry;
-import de.uni_hildesheim.sse.model.varModel.DecisionVariableDeclaration;
-import de.uni_hildesheim.sse.model.varModel.IDecisionVariableContainer;
-import de.uni_hildesheim.sse.model.varModel.IModelElement;
-import de.uni_hildesheim.sse.model.varModel.Project;
-import de.uni_hildesheim.sse.model.varModel.datatypes.BooleanType;
-import de.uni_hildesheim.sse.model.varModel.datatypes.Compound;
-import de.uni_hildesheim.sse.model.varModel.datatypes.Container;
-import de.uni_hildesheim.sse.model.varModel.datatypes.DerivedDatatype;
-import de.uni_hildesheim.sse.model.varModel.datatypes.IDatatype;
-import de.uni_hildesheim.sse.model.varModel.datatypes.IntegerType;
-import de.uni_hildesheim.sse.model.varModel.datatypes.RealType;
-import de.uni_hildesheim.sse.model.varModel.datatypes.Sequence;
-import de.uni_hildesheim.sse.model.varModel.datatypes.StringType;
+import net.ssehub.easy.varModel.model.DecisionVariableDeclaration;
+import net.ssehub.easy.varModel.model.IDecisionVariableContainer;
+import net.ssehub.easy.varModel.model.IModelElement;
+import net.ssehub.easy.varModel.model.Project;
+import net.ssehub.easy.varModel.model.datatypes.BooleanType;
+import net.ssehub.easy.varModel.model.datatypes.Compound;
+import net.ssehub.easy.varModel.model.datatypes.Container;
+import net.ssehub.easy.varModel.model.datatypes.DerivedDatatype;
+import net.ssehub.easy.varModel.model.datatypes.IDatatype;
+import net.ssehub.easy.varModel.model.datatypes.IntegerType;
+import net.ssehub.easy.varModel.model.datatypes.RealType;
+import net.ssehub.easy.varModel.model.datatypes.Sequence;
+import net.ssehub.easy.varModel.model.datatypes.StringType;
 
 /**
  * Implements a dynamic type descriptor for IVM decision variables. Instances of this
@@ -62,7 +62,7 @@ public class IvmlTypeDescriptor extends AbstractIvmlTypeDescriptor {
      * @throws VilException if analyzing the underlying type fails for some reason
      */
     void resolve(Project project, IDatatype ivmlType, 
-        Set<de.uni_hildesheim.sse.model.varModel.Attribute> declaredAttributes) throws VilException {
+        Set<net.ssehub.easy.varModel.model.Attribute> declaredAttributes) throws VilException {
         TypeRegistry registry = getTypeRegistry();
         Map<String, OperationDescriptor> operations = new HashMap<String, OperationDescriptor>();
         Map<String, FieldDescriptor> fields = new HashMap<String, FieldDescriptor>();
@@ -72,7 +72,7 @@ public class IvmlTypeDescriptor extends AbstractIvmlTypeDescriptor {
         addAttributeFields(fields, ivmlType instanceof IModelElement ? (IModelElement) ivmlType : project, 
             registry);
         if (null != declaredAttributes) {
-            for (de.uni_hildesheim.sse.model.varModel.Attribute att : declaredAttributes) {
+            for (net.ssehub.easy.varModel.model.Attribute att : declaredAttributes) {
                 Utils.addField(new IvmlAnnotationFieldDescriptor(this, att, registry), fields);
             }
         }
@@ -104,7 +104,7 @@ public class IvmlTypeDescriptor extends AbstractIvmlTypeDescriptor {
         if (DerivedDatatype.TYPE.isAssignableFrom(ivmlType)) {
             IDatatype baseType = DerivedDatatype.resolveToBasis(ivmlType);
             TypeDescriptor<?> vilBaseType = registry.getType(baseType.getName());
-            if (de.uni_hildesheim.sse.model.varModel.datatypes.Set.TYPE.isAssignableFrom(baseType)) {
+            if (net.ssehub.easy.varModel.model.datatypes.Set.TYPE.isAssignableFrom(baseType)) {
                 IvmlOperationDescriptor desc = new IvmlSetConversionOperationDescriptor(this, vilBaseType);
                 conversions.add(desc);
                 this.baseType = desc.getReturnType();
@@ -178,9 +178,9 @@ public class IvmlTypeDescriptor extends AbstractIvmlTypeDescriptor {
         } else if (object instanceof EnumValue) {
             objectType = ((EnumValue) object).getDatatype();
         } else if (object instanceof de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.Set) {
-            objectType = de.uni_hildesheim.sse.model.varModel.datatypes.Set.TYPE;
+            objectType = net.ssehub.easy.varModel.model.datatypes.Set.TYPE;
         } else if (object instanceof de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.Sequence) {
-            objectType = de.uni_hildesheim.sse.model.varModel.datatypes.Sequence.TYPE;
+            objectType = net.ssehub.easy.varModel.model.datatypes.Sequence.TYPE;
         } else if (object instanceof Integer) {
             objectType = IntegerType.TYPE;
         } else if (object instanceof Double) {

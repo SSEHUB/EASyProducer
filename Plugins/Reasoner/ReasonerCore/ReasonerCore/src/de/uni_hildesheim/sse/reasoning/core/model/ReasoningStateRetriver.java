@@ -1,43 +1,43 @@
 package de.uni_hildesheim.sse.reasoning.core.model;
 
-import de.uni_hildesheim.sse.model.cst.AttributeVariable;
-import de.uni_hildesheim.sse.model.cst.CompoundAccess;
-import de.uni_hildesheim.sse.model.cst.CompoundInitializer;
-import de.uni_hildesheim.sse.model.cst.ConstantValue;
-import de.uni_hildesheim.sse.model.cst.ContainerInitializer;
-import de.uni_hildesheim.sse.model.cst.ContainerOperationCall;
-import de.uni_hildesheim.sse.model.cst.IConstraintTreeVisitor;
-import de.uni_hildesheim.sse.model.cst.IfThen;
-import de.uni_hildesheim.sse.model.cst.Let;
-import de.uni_hildesheim.sse.model.cst.OCLFeatureCall;
-import de.uni_hildesheim.sse.model.cst.Parenthesis;
-import de.uni_hildesheim.sse.model.cst.Self;
-import de.uni_hildesheim.sse.model.cst.UnresolvedExpression;
-import de.uni_hildesheim.sse.model.cst.Variable;
-import de.uni_hildesheim.sse.model.varModel.AbstractProjectVisitor;
-import de.uni_hildesheim.sse.model.varModel.AbstractVariable;
-import de.uni_hildesheim.sse.model.varModel.Attribute;
-import de.uni_hildesheim.sse.model.varModel.AttributeAssignment;
-import de.uni_hildesheim.sse.model.varModel.Comment;
-import de.uni_hildesheim.sse.model.varModel.CompoundAccessStatement;
-import de.uni_hildesheim.sse.model.varModel.Constraint;
-import de.uni_hildesheim.sse.model.varModel.DecisionVariableDeclaration;
-import de.uni_hildesheim.sse.model.varModel.FreezeBlock;
-import de.uni_hildesheim.sse.model.varModel.OperationDefinition;
-import de.uni_hildesheim.sse.model.varModel.PartialEvaluationBlock;
-import de.uni_hildesheim.sse.model.varModel.Project;
-import de.uni_hildesheim.sse.model.varModel.ProjectInterface;
-import de.uni_hildesheim.sse.model.varModel.datatypes.Compound;
-import de.uni_hildesheim.sse.model.varModel.datatypes.DerivedDatatype;
-import de.uni_hildesheim.sse.model.varModel.datatypes.Enum;
-import de.uni_hildesheim.sse.model.varModel.datatypes.EnumLiteral;
-import de.uni_hildesheim.sse.model.varModel.datatypes.OclKeyWords;
-import de.uni_hildesheim.sse.model.varModel.datatypes.OrderedEnum;
-import de.uni_hildesheim.sse.model.varModel.datatypes.Reference;
-import de.uni_hildesheim.sse.model.varModel.datatypes.Sequence;
-import de.uni_hildesheim.sse.model.varModel.datatypes.Set;
-import de.uni_hildesheim.sse.model.varModel.filter.FilterType;
 import de.uni_hildesheim.sse.reasoning.core.model.variables.ReasonerVariable;
+import net.ssehub.easy.varModel.cst.AttributeVariable;
+import net.ssehub.easy.varModel.cst.CompoundAccess;
+import net.ssehub.easy.varModel.cst.CompoundInitializer;
+import net.ssehub.easy.varModel.cst.ConstantValue;
+import net.ssehub.easy.varModel.cst.ContainerInitializer;
+import net.ssehub.easy.varModel.cst.ContainerOperationCall;
+import net.ssehub.easy.varModel.cst.IConstraintTreeVisitor;
+import net.ssehub.easy.varModel.cst.IfThen;
+import net.ssehub.easy.varModel.cst.Let;
+import net.ssehub.easy.varModel.cst.OCLFeatureCall;
+import net.ssehub.easy.varModel.cst.Parenthesis;
+import net.ssehub.easy.varModel.cst.Self;
+import net.ssehub.easy.varModel.cst.UnresolvedExpression;
+import net.ssehub.easy.varModel.cst.Variable;
+import net.ssehub.easy.varModel.model.AbstractProjectVisitor;
+import net.ssehub.easy.varModel.model.AbstractVariable;
+import net.ssehub.easy.varModel.model.Attribute;
+import net.ssehub.easy.varModel.model.AttributeAssignment;
+import net.ssehub.easy.varModel.model.Comment;
+import net.ssehub.easy.varModel.model.CompoundAccessStatement;
+import net.ssehub.easy.varModel.model.Constraint;
+import net.ssehub.easy.varModel.model.DecisionVariableDeclaration;
+import net.ssehub.easy.varModel.model.FreezeBlock;
+import net.ssehub.easy.varModel.model.OperationDefinition;
+import net.ssehub.easy.varModel.model.PartialEvaluationBlock;
+import net.ssehub.easy.varModel.model.Project;
+import net.ssehub.easy.varModel.model.ProjectInterface;
+import net.ssehub.easy.varModel.model.datatypes.Compound;
+import net.ssehub.easy.varModel.model.datatypes.DerivedDatatype;
+import net.ssehub.easy.varModel.model.datatypes.Enum;
+import net.ssehub.easy.varModel.model.datatypes.EnumLiteral;
+import net.ssehub.easy.varModel.model.datatypes.OclKeyWords;
+import net.ssehub.easy.varModel.model.datatypes.OrderedEnum;
+import net.ssehub.easy.varModel.model.datatypes.Reference;
+import net.ssehub.easy.varModel.model.datatypes.Sequence;
+import net.ssehub.easy.varModel.model.datatypes.Set;
+import net.ssehub.easy.varModel.model.filter.FilterType;
 
 /**
  * A visitor to retrieve which variables have ReasoningState.DEFAULT_SAME.
@@ -185,7 +185,7 @@ class ReasoningStateRetriver extends AbstractProjectVisitor implements IConstrai
     }
 
     @Override
-    public void visitComment(de.uni_hildesheim.sse.model.cst.Comment comment) {
+    public void visitComment(net.ssehub.easy.varModel.cst.Comment comment) {
         // TODO Auto-generated method stub
         
     }

@@ -1,8 +1,8 @@
 package de.uni_hildesheim.sse.reasoning.core.model.variables;
 
-import de.uni_hildesheim.sse.model.confModel.AssignmentState;
-import de.uni_hildesheim.sse.model.confModel.IDecisionVariable;
 import de.uni_hildesheim.sse.reasoning.core.model.ReasonerModel;
+import net.ssehub.easy.varModel.confModel.AssignmentState;
+import net.ssehub.easy.varModel.confModel.IDecisionVariable;
 
 /**
  * {@link ReasonerVariable} representing an real {@link IDecisionVariable}.

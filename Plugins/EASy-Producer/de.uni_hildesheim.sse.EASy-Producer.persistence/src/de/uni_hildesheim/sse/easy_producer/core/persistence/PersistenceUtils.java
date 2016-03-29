@@ -54,28 +54,28 @@ import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.Expres
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.VariableExpression;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.templateModel.TemplateModel;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.configuration.IvmlTypes;
-import de.uni_hildesheim.sse.model.cst.CSTSemanticException;
-import de.uni_hildesheim.sse.model.cst.ConstraintSyntaxTree;
-import de.uni_hildesheim.sse.model.management.VarModel;
-import de.uni_hildesheim.sse.model.varModel.DecisionVariableDeclaration;
-import de.uni_hildesheim.sse.model.varModel.ExpressionVersionRestriction;
-import de.uni_hildesheim.sse.model.varModel.IvmlKeyWords;
-import de.uni_hildesheim.sse.model.varModel.Project;
-import de.uni_hildesheim.sse.model.varModel.ProjectImport;
-import de.uni_hildesheim.sse.model.varModel.datatypes.OclKeyWords;
-import de.uni_hildesheim.sse.model.varModel.values.ValueDoesNotMatchTypeException;
-import de.uni_hildesheim.sse.persistency.IVMLWriter;
-import de.uni_hildesheim.sse.utils.logger.EASyLoggerFactory;
-import de.uni_hildesheim.sse.utils.logger.EASyLoggerFactory.EASyLogger;
-import de.uni_hildesheim.sse.utils.modelManagement.IModel;
-import de.uni_hildesheim.sse.utils.modelManagement.ModelImport;
-import de.uni_hildesheim.sse.utils.modelManagement.ModelInfo;
-import de.uni_hildesheim.sse.utils.modelManagement.ModelManagement;
-import de.uni_hildesheim.sse.utils.modelManagement.ModelManagementException;
-import de.uni_hildesheim.sse.utils.modelManagement.RestrictionEvaluationException;
-import de.uni_hildesheim.sse.utils.modelManagement.Version;
-import de.uni_hildesheim.sse.utils.modelManagement.VersionFormatException;
-import de.uni_hildesheim.sse.utils.progress.ProgressObserver;
+import net.ssehub.easy.basics.logger.EASyLoggerFactory;
+import net.ssehub.easy.basics.logger.EASyLoggerFactory.EASyLogger;
+import net.ssehub.easy.basics.modelManagement.IModel;
+import net.ssehub.easy.basics.modelManagement.ModelImport;
+import net.ssehub.easy.basics.modelManagement.ModelInfo;
+import net.ssehub.easy.basics.modelManagement.ModelManagement;
+import net.ssehub.easy.basics.modelManagement.ModelManagementException;
+import net.ssehub.easy.basics.modelManagement.RestrictionEvaluationException;
+import net.ssehub.easy.basics.modelManagement.Version;
+import net.ssehub.easy.basics.modelManagement.VersionFormatException;
+import net.ssehub.easy.basics.progress.ProgressObserver;
+import net.ssehub.easy.varModel.cst.CSTSemanticException;
+import net.ssehub.easy.varModel.cst.ConstraintSyntaxTree;
+import net.ssehub.easy.varModel.management.VarModel;
+import net.ssehub.easy.varModel.model.DecisionVariableDeclaration;
+import net.ssehub.easy.varModel.model.ExpressionVersionRestriction;
+import net.ssehub.easy.varModel.model.IvmlKeyWords;
+import net.ssehub.easy.varModel.model.Project;
+import net.ssehub.easy.varModel.model.ProjectImport;
+import net.ssehub.easy.varModel.model.datatypes.OclKeyWords;
+import net.ssehub.easy.varModel.model.values.ValueDoesNotMatchTypeException;
+import net.ssehub.easy.varModel.persistency.IVMLWriter;
 
 /**
  * Static utility functions related to the persistence layer.
@@ -641,12 +641,12 @@ public class PersistenceUtils {
     }
     
     /**
-     * Adds an import to the {@link de.uni_hildesheim.sse.model.varModel.Project} and to the {@link Script} of a given
-     * {@link PLPInfo} to the {@link de.uni_hildesheim.sse.model.varModel.Project} and {@link Script} of a predecessor
+     * Adds an import to the {@link net.ssehub.easy.varModel.model.Project} and to the {@link Script} of a given
+     * {@link PLPInfo} to the {@link net.ssehub.easy.varModel.model.Project} and {@link Script} of a predecessor
      * project.
      * 
      * @param plp the product line project to add the import to
-     * @param predecessor A predecessor project of plp, where the {@link de.uni_hildesheim.sse.model.varModel.Project}
+     * @param predecessor A predecessor project of plp, where the {@link net.ssehub.easy.varModel.model.Project}
      *     <b>and</b> the {@link Script} should be included.
      * @param considerVIL <tt>true</tt> if the parent project has also a build script which should be considered,
      *     <tt>false</tt> otherwise

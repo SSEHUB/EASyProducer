@@ -9,14 +9,14 @@ import java.util.List;
 import de.uni_hildesheim.sse.easy_producer.instantiator.Bundle;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.templateModel.Template;
 import de.uni_hildesheim.sse.persistency.xml.XmlIo;
-import de.uni_hildesheim.sse.utils.logger.EASyLoggerFactory;
-import de.uni_hildesheim.sse.utils.logger.EASyLoggerFactory.EASyLogger;
-import de.uni_hildesheim.sse.utils.messages.IMessage;
-import de.uni_hildesheim.sse.utils.modelManagement.IModel;
-import de.uni_hildesheim.sse.utils.modelManagement.IModelLoader;
-import de.uni_hildesheim.sse.utils.modelManagement.ImportResolver;
-import de.uni_hildesheim.sse.utils.modelManagement.ModelInfo;
-import de.uni_hildesheim.sse.utils.modelManagement.Version;
+import net.ssehub.easy.basics.logger.EASyLoggerFactory;
+import net.ssehub.easy.basics.logger.EASyLoggerFactory.EASyLogger;
+import net.ssehub.easy.basics.messages.IMessage;
+import net.ssehub.easy.basics.modelManagement.IModel;
+import net.ssehub.easy.basics.modelManagement.IModelLoader;
+import net.ssehub.easy.basics.modelManagement.ImportResolver;
+import net.ssehub.easy.basics.modelManagement.ModelInfo;
+import net.ssehub.easy.basics.modelManagement.Version;
 
 /**
  * Loader for VTL.
@@ -39,7 +39,7 @@ public class VTLModelLoader implements IModelLoader<Template> {
     }
 
     @Override
-    public de.uni_hildesheim.sse.utils.modelManagement.IModelLoader.LoadResult<Template> load(
+    public net.ssehub.easy.basics.modelManagement.IModelLoader.LoadResult<Template> load(
         ModelInfo<Template> info, ImportResolver<Template> resolver) {
         LoadResult<Template> loadResult = null;
         for (Template template : templates) {
@@ -55,7 +55,7 @@ public class VTLModelLoader implements IModelLoader<Template> {
 
     @Override
     public void scan(File location,
-            de.uni_hildesheim.sse.utils.modelManagement.IModelLoader.IModelInfoHolder<Template> holder) {
+            net.ssehub.easy.basics.modelManagement.IModelLoader.IModelInfoHolder<Template> holder) {
         if (location.getName().endsWith(".xml")) {
             templates = new ArrayList<Template>();
             try {

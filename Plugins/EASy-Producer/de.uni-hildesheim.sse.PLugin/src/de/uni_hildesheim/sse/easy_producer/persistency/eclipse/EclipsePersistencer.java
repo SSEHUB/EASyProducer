@@ -24,11 +24,11 @@ import de.uni_hildesheim.sse.easy_producer.core.persistence.datatypes.IProjectCr
 import de.uni_hildesheim.sse.easy_producer.core.persistence.datatypes.PathEnvironment;
 import de.uni_hildesheim.sse.easy_producer.core.persistence.datatypes.PersistentProject;
 import de.uni_hildesheim.sse.easy_producer.core.persistence.standard.Persistencer;
-import de.uni_hildesheim.sse.model.management.VarModel;
-import de.uni_hildesheim.sse.model.varModel.Project;
-import de.uni_hildesheim.sse.model.varModel.ProjectImport;
-import de.uni_hildesheim.sse.persistency.IVMLWriter;
-import de.uni_hildesheim.sse.utils.progress.ProgressObserver;
+import net.ssehub.easy.basics.progress.ProgressObserver;
+import net.ssehub.easy.varModel.management.VarModel;
+import net.ssehub.easy.varModel.model.Project;
+import net.ssehub.easy.varModel.model.ProjectImport;
+import net.ssehub.easy.varModel.persistency.IVMLWriter;
 
 /**
  * This class represents an interlayer between persistency-layer and model. It provides functions

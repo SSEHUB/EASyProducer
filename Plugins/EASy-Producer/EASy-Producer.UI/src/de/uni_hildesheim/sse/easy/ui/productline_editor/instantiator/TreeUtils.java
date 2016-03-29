@@ -33,7 +33,7 @@ import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilExceptio
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.CallArgument;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.Expression;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.IMetaOperation;
-import de.uni_hildesheim.sse.utils.modelManagement.ModelInfo;
+import net.ssehub.easy.basics.modelManagement.ModelInfo;
 
 /**
  * Some tree utility methods.

@@ -24,7 +24,7 @@ import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.ITypedMod
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.ListSequence;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.OperationDescriptor;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeDescriptor;
-import de.uni_hildesheim.sse.utils.modelManagement.ModelImport;
+import net.ssehub.easy.basics.modelManagement.ModelImport;
 
 /**
  * Extends the basic expression evaluation visitor for the execution of those classes being

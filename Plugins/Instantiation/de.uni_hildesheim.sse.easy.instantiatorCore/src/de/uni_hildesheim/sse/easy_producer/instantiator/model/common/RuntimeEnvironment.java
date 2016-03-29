@@ -23,16 +23,16 @@ import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.configura
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.configuration.DecisionVariable;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.configuration.IvmlElement;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.configuration.IvmlTypes;
-import de.uni_hildesheim.sse.model.varModel.datatypes.DerivedDatatype;
-import de.uni_hildesheim.sse.model.varModel.datatypes.IDatatype;
-import de.uni_hildesheim.sse.model.varModel.datatypes.Reference;
-import de.uni_hildesheim.sse.model.varModel.values.NullValue;
-import de.uni_hildesheim.sse.utils.modelManagement.IModel;
-import de.uni_hildesheim.sse.utils.modelManagement.IRestrictionEvaluationContext;
-import de.uni_hildesheim.sse.utils.modelManagement.IVariable;
-import de.uni_hildesheim.sse.utils.modelManagement.IndentationConfiguration;
-import de.uni_hildesheim.sse.utils.modelManagement.RestrictionEvaluationException;
-import de.uni_hildesheim.sse.utils.modelManagement.Version;
+import net.ssehub.easy.basics.modelManagement.IModel;
+import net.ssehub.easy.basics.modelManagement.IRestrictionEvaluationContext;
+import net.ssehub.easy.basics.modelManagement.IVariable;
+import net.ssehub.easy.basics.modelManagement.IndentationConfiguration;
+import net.ssehub.easy.basics.modelManagement.RestrictionEvaluationException;
+import net.ssehub.easy.basics.modelManagement.Version;
+import net.ssehub.easy.varModel.model.datatypes.DerivedDatatype;
+import net.ssehub.easy.varModel.model.datatypes.IDatatype;
+import net.ssehub.easy.varModel.model.datatypes.Reference;
+import net.ssehub.easy.varModel.model.values.NullValue;
 
 /**
  * Provides the runtime environment for executing a VIL models. After

@@ -29,7 +29,7 @@ import org.eclipse.jdt.ui.wizards.JavaCapabilityConfigurationPage;
 import de.uni_hildesheim.sse.easy.ui.internal.Activator;
 import de.uni_hildesheim.sse.easy_producer.ProjectConstants;
 import de.uni_hildesheim.sse.easy_producer.persistency.project_creation.IEASyProjectConfigurator;
-import de.uni_hildesheim.sse.utils.logger.EASyLoggerFactory;
+import net.ssehub.easy.basics.logger.EASyLoggerFactory;
 
 /**
  * Configures a new created {@link IProject} to an Java project with lib and ressources folder.

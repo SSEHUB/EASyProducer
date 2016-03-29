@@ -25,8 +25,8 @@ import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.Rul
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.Script;
 import de.uni_hildesheim.sse.easy_producer.model.ProductLineProject;
 import de.uni_hildesheim.sse.easy_producer.persistency.ResourcesMgmt;
-import de.uni_hildesheim.sse.model.confModel.AllFreezeSelector;
-import de.uni_hildesheim.sse.model.varModel.Project;
+import net.ssehub.easy.varModel.confModel.AllFreezeSelector;
+import net.ssehub.easy.varModel.model.Project;
 import test.AllTests;
 import test.de.uni_hildesheim.sse.easy_producer.mgmt.ResourcesMgmtTest;
 

@@ -17,28 +17,28 @@ package de.uni_hildesheim.sse.reasoning.reasoner.model;
 
 import java.util.Map;
 
-import de.uni_hildesheim.sse.model.cst.AttributeVariable;
-import de.uni_hildesheim.sse.model.cst.CSTSemanticException;
-import de.uni_hildesheim.sse.model.cst.Comment;
-import de.uni_hildesheim.sse.model.cst.CompoundAccess;
-import de.uni_hildesheim.sse.model.cst.CompoundInitializer;
-import de.uni_hildesheim.sse.model.cst.ConstantValue;
-import de.uni_hildesheim.sse.model.cst.ConstraintSyntaxTree;
-import de.uni_hildesheim.sse.model.cst.ContainerInitializer;
-import de.uni_hildesheim.sse.model.cst.ContainerOperationCall;
-import de.uni_hildesheim.sse.model.cst.IConstraintTreeVisitor;
-import de.uni_hildesheim.sse.model.cst.IfThen;
-import de.uni_hildesheim.sse.model.cst.Let;
-import de.uni_hildesheim.sse.model.cst.OCLFeatureCall;
-import de.uni_hildesheim.sse.model.cst.Parenthesis;
-import de.uni_hildesheim.sse.model.cst.Self;
-import de.uni_hildesheim.sse.model.cst.UnresolvedExpression;
-import de.uni_hildesheim.sse.model.cst.Variable;
-import de.uni_hildesheim.sse.model.varModel.AbstractVariable;
-import de.uni_hildesheim.sse.model.varModel.DecisionVariableDeclaration;
-import de.uni_hildesheim.sse.utils.logger.EASyLoggerFactory;
-import de.uni_hildesheim.sse.utils.modelManagement.IVariable;
-import de.uni_hildesheim.sse.utils.modelManagement.IVersionRestriction.IVariableMapper;
+import net.ssehub.easy.basics.logger.EASyLoggerFactory;
+import net.ssehub.easy.basics.modelManagement.IVariable;
+import net.ssehub.easy.basics.modelManagement.IVersionRestriction.IVariableMapper;
+import net.ssehub.easy.varModel.cst.AttributeVariable;
+import net.ssehub.easy.varModel.cst.CSTSemanticException;
+import net.ssehub.easy.varModel.cst.Comment;
+import net.ssehub.easy.varModel.cst.CompoundAccess;
+import net.ssehub.easy.varModel.cst.CompoundInitializer;
+import net.ssehub.easy.varModel.cst.ConstantValue;
+import net.ssehub.easy.varModel.cst.ConstraintSyntaxTree;
+import net.ssehub.easy.varModel.cst.ContainerInitializer;
+import net.ssehub.easy.varModel.cst.ContainerOperationCall;
+import net.ssehub.easy.varModel.cst.IConstraintTreeVisitor;
+import net.ssehub.easy.varModel.cst.IfThen;
+import net.ssehub.easy.varModel.cst.Let;
+import net.ssehub.easy.varModel.cst.OCLFeatureCall;
+import net.ssehub.easy.varModel.cst.Parenthesis;
+import net.ssehub.easy.varModel.cst.Self;
+import net.ssehub.easy.varModel.cst.UnresolvedExpression;
+import net.ssehub.easy.varModel.cst.Variable;
+import net.ssehub.easy.varModel.model.AbstractVariable;
+import net.ssehub.easy.varModel.model.DecisionVariableDeclaration;
 
 /**
  * Copies a constraint syntax tree possibly mapping the variables. May be 

@@ -28,10 +28,11 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Tree;
 
 import de.uni_hildesheim.sse.easy.ui.confModel.GUIVariable;
-import de.uni_hildesheim.sse.model.confModel.IDecisionVariable;
+import net.ssehub.easy.varModel.confModel.IDecisionVariable;
 
 /**
- * Displays the current annotation values for a given {@link de.uni_hildesheim.sse.model.confModel.IDecisionVariable}.
+ * Displays the current annotation values for a given
+ * {@link net.ssehub.easy.varModel.confModel.IDecisionVariable}.
  * 
  * @author El-Sharkawy
  */

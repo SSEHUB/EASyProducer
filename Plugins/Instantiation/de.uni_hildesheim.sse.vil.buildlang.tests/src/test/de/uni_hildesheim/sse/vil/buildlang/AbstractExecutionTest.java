@@ -17,11 +17,11 @@ import de.uni_hildesheim.sse.easy_producer.instantiator.model.execution.Executor
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.templateModel.TemplateModel;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.Project;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.configuration.Configuration;
-import de.uni_hildesheim.sse.model.management.VarModel;
-import de.uni_hildesheim.sse.utils.modelManagement.ModelInfo;
-import de.uni_hildesheim.sse.utils.modelManagement.ModelManagementException;
-import de.uni_hildesheim.sse.utils.progress.ProgressObserver;
-import de.uni_hildesheim.sse.varModel.testSupport.DefaultConfiguration;
+import net.ssehub.easy.basics.modelManagement.ModelInfo;
+import net.ssehub.easy.basics.modelManagement.ModelManagementException;
+import net.ssehub.easy.basics.progress.ProgressObserver;
+import net.ssehub.easy.varModel.management.VarModel;
+import net.ssehub.easy.varModel.varModel.testSupport.DefaultConfiguration;
 
 /**
  * Implements the functionality of an abstract execution test (basis for reuse).
@@ -115,7 +115,7 @@ public abstract class AbstractExecutionTest <M extends Script> extends AbstractT
             target = new Project(); // just dummy
         }
         if (null == config) {
-            de.uni_hildesheim.sse.model.confModel.Configuration cfg = DefaultConfiguration.createDefaultConfiguration();
+            net.ssehub.easy.varModel.confModel.Configuration cfg = DefaultConfiguration.createDefaultConfiguration();
             Assert.assertNotNull("creating default IVML configuration failed", cfg);
             config = new Configuration(cfg);
         }
@@ -253,7 +253,7 @@ public abstract class AbstractExecutionTest <M extends Script> extends AbstractT
             Project project = new Project(temp, ProgressObserver.NO_OBSERVER);
             Configuration config = null;
             if (null != configName) {
-                List<ModelInfo<de.uni_hildesheim.sse.model.varModel.Project>> info = 
+                List<ModelInfo<net.ssehub.easy.varModel.model.Project>> info = 
                     VarModel.INSTANCE.availableModels().getModelInfo(configName);
                 if (info.isEmpty()) {
                     Assert.fail("cannot find IVML model " + configName);
@@ -262,7 +262,7 @@ public abstract class AbstractExecutionTest <M extends Script> extends AbstractT
                     Assert.fail("IVML model ambiguous " + info);
                 }
                 try {
-                    config = new Configuration(new de.uni_hildesheim.sse.model.confModel.Configuration(
+                    config = new Configuration(new net.ssehub.easy.varModel.confModel.Configuration(
                         VarModel.INSTANCE.load(info.get(0))));
                 } catch (ModelManagementException e) {
                     Assert.fail(e.getMessage());

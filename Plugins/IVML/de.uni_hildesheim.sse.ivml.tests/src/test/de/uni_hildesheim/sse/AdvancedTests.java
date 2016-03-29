@@ -8,12 +8,12 @@ import java.util.Locale;
 import org.junit.Assert;
 import org.junit.Test;
 
-import de.uni_hildesheim.sse.model.cst.CSTSemanticException;
-import de.uni_hildesheim.sse.model.management.VarModel;
-import de.uni_hildesheim.sse.model.varModel.ModelQueryException;
-import de.uni_hildesheim.sse.model.varModel.Project;
 import de.uni_hildesheim.sse.translation.ErrorCodes;
 import de.uni_hildesheim.sse.translation.UnknownTypeException;
+import net.ssehub.easy.varModel.cst.CSTSemanticException;
+import net.ssehub.easy.varModel.management.VarModel;
+import net.ssehub.easy.varModel.model.ModelQueryException;
+import net.ssehub.easy.varModel.model.Project;
 
 /**
  * A test class for blackbox testing parser and type resolution. Please note

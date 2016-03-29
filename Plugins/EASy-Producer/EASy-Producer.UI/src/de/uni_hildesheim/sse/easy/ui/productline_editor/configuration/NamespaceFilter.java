@@ -1,7 +1,7 @@
 package de.uni_hildesheim.sse.easy.ui.productline_editor.configuration;
 
 import de.uni_hildesheim.sse.easy.ui.confModel.GUIVariable;
-import de.uni_hildesheim.sse.model.varModel.AbstractVariable;
+import net.ssehub.easy.varModel.model.AbstractVariable;
 
 /**
  * A filter for showing only variables of a given namespace (project name).

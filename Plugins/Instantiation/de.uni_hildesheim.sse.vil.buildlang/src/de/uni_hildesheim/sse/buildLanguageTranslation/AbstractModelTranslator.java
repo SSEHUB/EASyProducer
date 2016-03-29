@@ -48,12 +48,6 @@ import de.uni_hildesheim.sse.easy_producer.instantiator.model.templateModel.Temp
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.OperationDescriptor;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeDescriptor;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeRegistry;
-import de.uni_hildesheim.sse.utils.modelManagement.IModelLoader;
-import de.uni_hildesheim.sse.utils.modelManagement.ImportResolver;
-import de.uni_hildesheim.sse.utils.modelManagement.ModelImport;
-import de.uni_hildesheim.sse.utils.modelManagement.ModelManagement;
-import de.uni_hildesheim.sse.utils.modelManagement.Version;
-import de.uni_hildesheim.sse.utils.modelManagement.VersionFormatException;
 import de.uni_hildesheim.sse.vil.expressions.expressionDsl.ExpressionDslPackage;
 import de.uni_hildesheim.sse.vil.expressions.expressionDsl.Import;
 import de.uni_hildesheim.sse.vil.expressions.expressionDsl.ParameterList;
@@ -63,6 +57,12 @@ import de.uni_hildesheim.sse.vilBuildLanguage.RuleConditions;
 import de.uni_hildesheim.sse.vilBuildLanguage.RuleDeclaration;
 import de.uni_hildesheim.sse.vilBuildLanguage.RuleElementBlock;
 import de.uni_hildesheim.sse.vilBuildLanguage.VilBuildLanguagePackage;
+import net.ssehub.easy.basics.modelManagement.IModelLoader;
+import net.ssehub.easy.basics.modelManagement.ImportResolver;
+import net.ssehub.easy.basics.modelManagement.ModelImport;
+import net.ssehub.easy.basics.modelManagement.ModelManagement;
+import net.ssehub.easy.basics.modelManagement.Version;
+import net.ssehub.easy.basics.modelManagement.VersionFormatException;
 
 /**
  * Implements the translation from the DSL to the build model in the instantiator core. This class is intended for

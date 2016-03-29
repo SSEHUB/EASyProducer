@@ -5,7 +5,7 @@ import java.util.Properties;
 
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilException;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.Invisible;
-import de.uni_hildesheim.sse.utils.messages.Message;
+import net.ssehub.easy.basics.messages.Message;
 
 /**
  * Describes creator instances which know how to translate real world objects into artifact instances.

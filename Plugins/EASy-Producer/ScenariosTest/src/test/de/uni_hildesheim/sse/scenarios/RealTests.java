@@ -1,7 +1,7 @@
 package test.de.uni_hildesheim.sse.scenarios;
 
-import static de.uni_hildesheim.sse.varModel.testSupport.TextTestUtils.assertFileEquality;
-import static de.uni_hildesheim.sse.varModel.testSupport.TextTestUtils.assertFileEqualityRec;
+import static net.ssehub.easy.varModel.varModel.testSupport.TextTestUtils.assertFileEquality;
+import static net.ssehub.easy.varModel.varModel.testSupport.TextTestUtils.assertFileEqualityRec;
 
 import java.io.File;
 import java.io.IOException;

@@ -3,7 +3,7 @@ package de.uni_hildesheim.sse.easy_producer.instantiator.model.common;
 import java.io.PrintStream;
 import java.util.List;
 
-import de.uni_hildesheim.sse.utils.messages.AbstractException;
+import net.ssehub.easy.basics.messages.AbstractException;
 
 /**
  * Defines a specific exception issued when building up the model fails for some reason.

@@ -3,21 +3,21 @@ package de.uni_hildesheim.sse.reasoning.core.model.variables;
 import java.util.ArrayList;
 import java.util.List;
 
-import de.uni_hildesheim.sse.model.confModel.AssignmentState;
-import de.uni_hildesheim.sse.model.confModel.ConfigurationException;
-import de.uni_hildesheim.sse.model.confModel.IDecisionVariable;
-import de.uni_hildesheim.sse.model.varModel.AbstractVariable;
-import de.uni_hildesheim.sse.model.varModel.datatypes.Enum;
-import de.uni_hildesheim.sse.model.varModel.datatypes.EnumLiteral;
-import de.uni_hildesheim.sse.model.varModel.datatypes.IDatatype;
-import de.uni_hildesheim.sse.model.varModel.values.Value;
-import de.uni_hildesheim.sse.model.varModel.values.ValueDoesNotMatchTypeException;
-import de.uni_hildesheim.sse.model.varModel.values.ValueFactory;
 import de.uni_hildesheim.sse.reasoning.core.Bundle;
 import de.uni_hildesheim.sse.reasoning.core.model.ReasonerModel;
 import de.uni_hildesheim.sse.reasoning.core.model.ReasoningState;
-import de.uni_hildesheim.sse.utils.logger.EASyLoggerFactory;
-import de.uni_hildesheim.sse.utils.logger.EASyLoggerFactory.EASyLogger;
+import net.ssehub.easy.basics.logger.EASyLoggerFactory;
+import net.ssehub.easy.basics.logger.EASyLoggerFactory.EASyLogger;
+import net.ssehub.easy.varModel.confModel.AssignmentState;
+import net.ssehub.easy.varModel.confModel.ConfigurationException;
+import net.ssehub.easy.varModel.confModel.IDecisionVariable;
+import net.ssehub.easy.varModel.model.AbstractVariable;
+import net.ssehub.easy.varModel.model.datatypes.Enum;
+import net.ssehub.easy.varModel.model.datatypes.EnumLiteral;
+import net.ssehub.easy.varModel.model.datatypes.IDatatype;
+import net.ssehub.easy.varModel.model.values.Value;
+import net.ssehub.easy.varModel.model.values.ValueDoesNotMatchTypeException;
+import net.ssehub.easy.varModel.model.values.ValueFactory;
 
 /**
  * Adapter class for passing {@link IDecisionVariable}s to an
@@ -116,7 +116,7 @@ public abstract class ReasonerVariable {
     
     /**
      * Getter for the {@link IDecisionVariable}.
-     * @return The corresponding variable stored inside the {@link de.uni_hildesheim.sse.model.confModel.Configuration}.
+     * @return The corresponding variable stored inside the {@link net.ssehub.easy.varModel.confModel.Configuration}.
      */
     public final IDecisionVariable getDecisionVariable() {
         return configVariable;
@@ -255,7 +255,7 @@ public abstract class ReasonerVariable {
             try {
                 IDatatype type = configVariable.getDeclaration().getType();
                 Value value = null;
-                if (type instanceof de.uni_hildesheim.sse.model.varModel.datatypes.Enum) {
+                if (type instanceof net.ssehub.easy.varModel.model.datatypes.Enum) {
                     EnumLiteral literal = ((Enum) type).getLiteralByOrdinal((Integer) getValue());
                     value = ValueFactory.createValue(type, literal);
                 } else {

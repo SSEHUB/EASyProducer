@@ -3,7 +3,7 @@ package de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes;
 import java.io.File;
 
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.Script;
-import de.uni_hildesheim.sse.utils.progress.ProgressObserver;
+import net.ssehub.easy.basics.progress.ProgressObserver;
 
 /**
  * Describes a {@link Project} for creation of a project object. This interface helps

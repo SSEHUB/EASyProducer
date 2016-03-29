@@ -7,9 +7,9 @@ import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import de.uni_hildesheim.sse.model.varModel.datatypes.Operation;
 import de.uni_hildesheim.sse.reasoning.drools2.translation.oclFeatureCalls.OCLFeatureTranslationFactory;
 import de.uni_hildesheim.sse.reasoning.drools2.translation.oclFeatureCalls.TranslationFragment;
+import net.ssehub.easy.varModel.model.datatypes.Operation;
 
 /**
  * Tests the {@link OCLFeatureTranslationFactory}.

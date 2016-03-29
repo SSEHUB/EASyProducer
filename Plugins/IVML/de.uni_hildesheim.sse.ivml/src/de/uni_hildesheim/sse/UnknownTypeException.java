@@ -1,6 +1,6 @@
 package de.uni_hildesheim.sse;
 
-import de.uni_hildesheim.sse.model.varModel.IvmlException;
+import net.ssehub.easy.varModel.model.IvmlException;
 
 /**
  * A specific exception thrown in case that a type cannot be resolved.

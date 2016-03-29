@@ -45,8 +45,8 @@ import org.eclipse.xtext.ui.editor.validation.XtextAnnotation;
 import org.eclipse.xtext.diagnostics.Severity;
 
 import de.uni_hildesheim.sse.dslcore.ui.Activator;
-import de.uni_hildesheim.sse.utils.logger.EASyLoggerFactory;
-import de.uni_hildesheim.sse.utils.logger.EASyLoggerFactory.EASyLogger;
+import net.ssehub.easy.basics.logger.EASyLoggerFactory;
+import net.ssehub.easy.basics.logger.EASyLoggerFactory.EASyLogger;
 
 /**
  * Represents an embedded Xtext editor.

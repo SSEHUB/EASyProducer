@@ -3,10 +3,10 @@ package de.uni_hildesheim.sse.reasoning.core.reasoner;
 import java.net.URI;
 import java.util.List;
 
-import de.uni_hildesheim.sse.model.confModel.Configuration;
-import de.uni_hildesheim.sse.model.varModel.Constraint;
-import de.uni_hildesheim.sse.model.varModel.Project;
-import de.uni_hildesheim.sse.utils.progress.ProgressObserver;
+import net.ssehub.easy.basics.progress.ProgressObserver;
+import net.ssehub.easy.varModel.confModel.Configuration;
+import net.ssehub.easy.varModel.model.Constraint;
+import net.ssehub.easy.varModel.model.Project;
 
 /**
  * General interface for reasoner, which can be registered to the <tt>ReasonerRegistry</tt>. Please note that 
@@ -44,7 +44,7 @@ public interface IReasoner {
      * @param reasonerConfiguration the reasoner configuration to be used for reasoning (e.g. taken from the UI, 
      *        may be <b>null</b>)
      * @return The result of this reasoning step. Can have the status
-     *     {@link de.uni_hildesheim.sse.utils.messages.Status#UNSUPPORTED} if the concrete reasoner does not support
+     *     {@link net.ssehub.easy.basics.messages.Status#UNSUPPORTED} if the concrete reasoner does not support
      *     this operation.
      */
     public ReasoningResult isConsistent(Project project, ReasonerConfiguration reasonerConfiguration, 
@@ -61,7 +61,7 @@ public interface IReasoner {
      *        may be <b>null</b>)                   
      * @param observer an optional progress observer, shall be {@link ProgressObserver#NO_OBSERVER} if unused
      * @return The result of this reasoning step. Can have the status
-     *     {@link de.uni_hildesheim.sse.utils.messages.Status#UNSUPPORTED} if the concrete reasoner does not support
+     *     {@link net.ssehub.easy.basics.messages.Status#UNSUPPORTED} if the concrete reasoner does not support
      *     this operation.
      */
     public ReasoningResult check(Project project, Configuration cfg, ReasonerConfiguration reasonerConfiguration, 
@@ -79,7 +79,7 @@ public interface IReasoner {
      *        may be <b>null</b>)                   
      * @param observer an optional progress observer, shall be {@link ProgressObserver#NO_OBSERVER} if unused
      * @return The result of this reasoning step. Can have the status
-     *     {@link de.uni_hildesheim.sse.utils.messages.Status#UNSUPPORTED} if the concrete reasoner does not support
+     *     {@link net.ssehub.easy.basics.messages.Status#UNSUPPORTED} if the concrete reasoner does not support
      *     this operation.
      */
     public ReasoningResult propagate(Project project, Configuration cfg, ReasonerConfiguration reasonerConfiguration, 
@@ -99,7 +99,7 @@ public interface IReasoner {
      *        may be <b>null</b>)
      * @param observer an optional progress observer, shall be {@link ProgressObserver#NO_OBSERVER} if unused
      * @return The result of this reasoning step. Can have the status
-     *     {@link de.uni_hildesheim.sse.utils.messages.Status#UNSUPPORTED} if the concrete reasoner does not support
+     *     {@link net.ssehub.easy.basics.messages.Status#UNSUPPORTED} if the concrete reasoner does not support
      *     this operation.
      */
     public EvaluationResult evaluate(Project project, Configuration cfg, List<Constraint> constraints, 

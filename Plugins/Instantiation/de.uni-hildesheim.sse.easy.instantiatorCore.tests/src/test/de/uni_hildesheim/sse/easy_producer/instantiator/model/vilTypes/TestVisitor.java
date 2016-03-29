@@ -10,30 +10,30 @@ import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.Sequence;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.configuration.AbstractIvmlVariable;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.configuration.Configuration;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.configuration.DecisionVariable;
-import de.uni_hildesheim.sse.model.confModel.AssignmentState;
-import de.uni_hildesheim.sse.model.confModel.IDecisionVariable;
-import de.uni_hildesheim.sse.model.varModel.AbstractVariable;
-import de.uni_hildesheim.sse.model.varModel.Attribute;
-import de.uni_hildesheim.sse.model.varModel.AttributeAssignment;
-import de.uni_hildesheim.sse.model.varModel.Comment;
-import de.uni_hildesheim.sse.model.varModel.CompoundAccessStatement;
-import de.uni_hildesheim.sse.model.varModel.Constraint;
-import de.uni_hildesheim.sse.model.varModel.DecisionVariableDeclaration;
-import de.uni_hildesheim.sse.model.varModel.FreezeBlock;
-import de.uni_hildesheim.sse.model.varModel.IModelVisitor;
-import de.uni_hildesheim.sse.model.varModel.OperationDefinition;
-import de.uni_hildesheim.sse.model.varModel.PartialEvaluationBlock;
-import de.uni_hildesheim.sse.model.varModel.Project;
-import de.uni_hildesheim.sse.model.varModel.ProjectImport;
-import de.uni_hildesheim.sse.model.varModel.ProjectInterface;
-import de.uni_hildesheim.sse.model.varModel.datatypes.Compound;
-import de.uni_hildesheim.sse.model.varModel.datatypes.Container;
-import de.uni_hildesheim.sse.model.varModel.datatypes.DerivedDatatype;
-import de.uni_hildesheim.sse.model.varModel.datatypes.Enum;
-import de.uni_hildesheim.sse.model.varModel.datatypes.EnumLiteral;
-import de.uni_hildesheim.sse.model.varModel.datatypes.OrderedEnum;
-import de.uni_hildesheim.sse.model.varModel.datatypes.Reference;
-import de.uni_hildesheim.sse.model.varModel.datatypes.Set;
+import net.ssehub.easy.varModel.confModel.AssignmentState;
+import net.ssehub.easy.varModel.confModel.IDecisionVariable;
+import net.ssehub.easy.varModel.model.AbstractVariable;
+import net.ssehub.easy.varModel.model.Attribute;
+import net.ssehub.easy.varModel.model.AttributeAssignment;
+import net.ssehub.easy.varModel.model.Comment;
+import net.ssehub.easy.varModel.model.CompoundAccessStatement;
+import net.ssehub.easy.varModel.model.Constraint;
+import net.ssehub.easy.varModel.model.DecisionVariableDeclaration;
+import net.ssehub.easy.varModel.model.FreezeBlock;
+import net.ssehub.easy.varModel.model.IModelVisitor;
+import net.ssehub.easy.varModel.model.OperationDefinition;
+import net.ssehub.easy.varModel.model.PartialEvaluationBlock;
+import net.ssehub.easy.varModel.model.Project;
+import net.ssehub.easy.varModel.model.ProjectImport;
+import net.ssehub.easy.varModel.model.ProjectInterface;
+import net.ssehub.easy.varModel.model.datatypes.Compound;
+import net.ssehub.easy.varModel.model.datatypes.Container;
+import net.ssehub.easy.varModel.model.datatypes.DerivedDatatype;
+import net.ssehub.easy.varModel.model.datatypes.Enum;
+import net.ssehub.easy.varModel.model.datatypes.EnumLiteral;
+import net.ssehub.easy.varModel.model.datatypes.OrderedEnum;
+import net.ssehub.easy.varModel.model.datatypes.Reference;
+import net.ssehub.easy.varModel.model.datatypes.Set;
 
 /**
  * A model visitor for testing the individual variables.
@@ -43,7 +43,7 @@ import de.uni_hildesheim.sse.model.varModel.datatypes.Set;
 class TestVisitor implements IModelVisitor {
 
     private Map<String, DecisionVariable> map;
-    private de.uni_hildesheim.sse.model.confModel.Configuration config;
+    private net.ssehub.easy.varModel.confModel.Configuration config;
     
     /**
      * Creates a test visitor for the given configurations.
@@ -51,7 +51,7 @@ class TestVisitor implements IModelVisitor {
      * @param config the IVML configuration
      * @param configuration the VIL configuration wrapper
      */
-    TestVisitor(de.uni_hildesheim.sse.model.confModel.Configuration config, Configuration configuration) {
+    TestVisitor(net.ssehub.easy.varModel.confModel.Configuration config, Configuration configuration) {
         this.config = config;
         map = new HashMap<String, DecisionVariable>();
         Sequence<DecisionVariable> variables = configuration.variables();
@@ -88,7 +88,7 @@ class TestVisitor implements IModelVisitor {
     }
 
     @Override
-    public void visitSequence(de.uni_hildesheim.sse.model.varModel.datatypes.Sequence sequence) {
+    public void visitSequence(net.ssehub.easy.varModel.model.datatypes.Sequence sequence) {
     }
 
     @Override

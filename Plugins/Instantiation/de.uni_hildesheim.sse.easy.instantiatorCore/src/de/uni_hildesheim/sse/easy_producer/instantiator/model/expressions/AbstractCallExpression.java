@@ -15,8 +15,8 @@ import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeHelpe
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeRegistry;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.configuration.EnumValue;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.configuration.IvmlTypes;
-import de.uni_hildesheim.sse.model.varModel.datatypes.IDatatype;
-import de.uni_hildesheim.sse.utils.modelManagement.IModel;
+import net.ssehub.easy.basics.modelManagement.IModel;
+import net.ssehub.easy.varModel.model.datatypes.IDatatype;
 
 /**
  * Implements the type checking and automated type conversion mechanism in an abstracted form based on 

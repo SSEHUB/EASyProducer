@@ -1,9 +1,9 @@
 package de.uni_hildesheim.sse.reasoning.core.model.variables;
 
-import de.uni_hildesheim.sse.model.confModel.AssignmentState;
-import de.uni_hildesheim.sse.model.confModel.IDecisionVariable;
-import de.uni_hildesheim.sse.model.varModel.datatypes.EnumLiteral;
 import de.uni_hildesheim.sse.reasoning.core.model.ReasonerModel;
+import net.ssehub.easy.varModel.confModel.AssignmentState;
+import net.ssehub.easy.varModel.confModel.IDecisionVariable;
+import net.ssehub.easy.varModel.model.datatypes.EnumLiteral;
 
 /**
  * {@link ReasonerVariable} representing an enumeration {@link IDecisionVariable}.

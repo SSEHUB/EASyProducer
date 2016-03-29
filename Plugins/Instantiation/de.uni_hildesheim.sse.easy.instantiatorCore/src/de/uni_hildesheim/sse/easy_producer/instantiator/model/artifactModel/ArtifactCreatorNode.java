@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 
-import de.uni_hildesheim.sse.utils.messages.Message;
+import net.ssehub.easy.basics.messages.Message;
 
 /**
  * Stores an artifact creator and its subordinate (more specific) creators according 

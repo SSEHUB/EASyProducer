@@ -4,10 +4,10 @@ package de.uni_hildesheim.sse.reasoning.core.model;
 /**
  * Assignment states needed by the reasoner.
  * Some of the assignment states can be mapped 1:1 to the
- * {@link de.uni_hildesheim.sse.model.confModel.AssignmentState}s.
+ * {@link net.ssehub.easy.varModel.confModel.AssignmentState}s.
  * However another differentiation is needed by the reasoner.
  * For this purpose, the reasoner should use the {@link ReasoningState}s instead of the
- * {@link de.uni_hildesheim.sse.model.confModel.AssignmentState}s.
+ * {@link net.ssehub.easy.varModel.confModel.AssignmentState}s.
  * @author El-Sharkawy
  *
  */

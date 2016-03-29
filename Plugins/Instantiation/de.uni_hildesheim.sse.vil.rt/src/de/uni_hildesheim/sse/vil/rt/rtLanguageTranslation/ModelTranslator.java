@@ -39,11 +39,6 @@ import de.uni_hildesheim.sse.easy_producer.instantiator.model.rtVil.types.RtVilT
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.rtVil.types.TupleType;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeDescriptor;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeRegistry;
-import de.uni_hildesheim.sse.utils.messages.IMessage;
-import de.uni_hildesheim.sse.utils.modelManagement.IModelLoader;
-import de.uni_hildesheim.sse.utils.modelManagement.ImportResolver;
-import de.uni_hildesheim.sse.utils.modelManagement.ModelImport;
-import de.uni_hildesheim.sse.utils.modelManagement.ModelManagement;
 import de.uni_hildesheim.sse.vil.expressions.ResourceRegistry;
 import de.uni_hildesheim.sse.vil.expressions.expressionDsl.ExpressionDslPackage;
 import de.uni_hildesheim.sse.vil.expressions.expressionDsl.ParameterList;
@@ -63,6 +58,11 @@ import de.uni_hildesheim.sse.vil.rt.rtVil.TacticDeclaration;
 import de.uni_hildesheim.sse.vil.rt.rtVil.WeightingStatement;
 import de.uni_hildesheim.sse.vilBuildLanguage.RuleConditions;
 import de.uni_hildesheim.sse.vilBuildLanguage.RuleElementBlock;
+import net.ssehub.easy.basics.messages.IMessage;
+import net.ssehub.easy.basics.modelManagement.IModelLoader;
+import net.ssehub.easy.basics.modelManagement.ImportResolver;
+import net.ssehub.easy.basics.modelManagement.ModelImport;
+import net.ssehub.easy.basics.modelManagement.ModelManagement;
 
 /**
  * Implements the translation from the DSL to the adaptation language model in the instantiator core.

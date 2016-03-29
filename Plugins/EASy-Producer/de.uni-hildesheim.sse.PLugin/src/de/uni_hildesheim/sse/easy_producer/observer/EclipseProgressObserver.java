@@ -5,7 +5,7 @@ import java.util.List;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 
-import de.uni_hildesheim.sse.utils.progress.ProgressObserver;
+import net.ssehub.easy.basics.progress.ProgressObserver;
 
 /**
  * Observes the progress of a longer lasting task for the eclipse ui.

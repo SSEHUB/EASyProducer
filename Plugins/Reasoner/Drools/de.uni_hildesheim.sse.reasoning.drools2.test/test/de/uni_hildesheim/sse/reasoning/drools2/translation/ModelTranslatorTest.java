@@ -5,19 +5,19 @@ import java.io.StringWriter;
 import org.junit.Assert;
 import org.junit.Test;
 
-import de.uni_hildesheim.sse.model.confModel.Configuration;
-import de.uni_hildesheim.sse.model.confModel.ConfigurationException;
-import de.uni_hildesheim.sse.model.cst.CSTSemanticException;
-import de.uni_hildesheim.sse.model.varModel.DecisionVariableDeclaration;
-import de.uni_hildesheim.sse.model.varModel.Project;
-import de.uni_hildesheim.sse.model.varModel.datatypes.Compound;
-import de.uni_hildesheim.sse.model.varModel.datatypes.IntegerType;
-import de.uni_hildesheim.sse.model.varModel.values.ValueDoesNotMatchTypeException;
 import de.uni_hildesheim.sse.reasoning.core.model.ReasonerModel;
 import de.uni_hildesheim.sse.reasoning.core.model.ReasoningOperation;
 import de.uni_hildesheim.sse.reasoning.drools2.DroolsReasonerDescriptor;
-import de.uni_hildesheim.sse.utils.logger.EASyLoggerFactory;
-import de.uni_hildesheim.sse.utils.logger.EASyLoggerFactory.EASyLogger;
+import net.ssehub.easy.basics.logger.EASyLoggerFactory;
+import net.ssehub.easy.basics.logger.EASyLoggerFactory.EASyLogger;
+import net.ssehub.easy.varModel.confModel.Configuration;
+import net.ssehub.easy.varModel.confModel.ConfigurationException;
+import net.ssehub.easy.varModel.cst.CSTSemanticException;
+import net.ssehub.easy.varModel.model.DecisionVariableDeclaration;
+import net.ssehub.easy.varModel.model.Project;
+import net.ssehub.easy.varModel.model.datatypes.Compound;
+import net.ssehub.easy.varModel.model.datatypes.IntegerType;
+import net.ssehub.easy.varModel.model.values.ValueDoesNotMatchTypeException;
 
 /**
  * Tests the {@link ModelTranslator}.
@@ -33,7 +33,7 @@ public class ModelTranslatorTest extends AbstractTransformationTest {
      * This method creates a project with one constraint in the form of "intA greater than 2" and translates it into
      * drools specific code.
      * @throws ValueDoesNotMatchTypeException Should not occur, otherwise there is an error inside the
-     *     {@link de.uni_hildesheim.sse.model.varModel.values.ValueFactory}
+     *     {@link net.ssehub.easy.varModel.model.values.ValueFactory}
      * @throws CSTSemanticException Should not occur, otherwise there is an error inside the
      *     {@link Constraint#setConsSyntax(de.uni_hildesheim.sse.model.cst.ConstraintSyntaxTree)) method.
      * @throws ConfigurationException Should not occur, otherwise there is an error inside the

@@ -51,29 +51,29 @@ import de.uni_hildesheim.sse.ivml.SetOp;
 import de.uni_hildesheim.sse.ivml.TypedefCompound;
 import de.uni_hildesheim.sse.ivml.UnaryExpression;
 import de.uni_hildesheim.sse.ivml.Value;
-import de.uni_hildesheim.sse.model.management.VarModel;
-import de.uni_hildesheim.sse.model.varModel.AbstractVariable;
-import de.uni_hildesheim.sse.model.varModel.AttributeAssignment;
-import de.uni_hildesheim.sse.model.varModel.ContainableModelElement;
-import de.uni_hildesheim.sse.model.varModel.DecisionVariableDeclaration;
-import de.uni_hildesheim.sse.model.varModel.IModelElement;
-import de.uni_hildesheim.sse.model.varModel.IvmlDatatypeVisitor;
-import de.uni_hildesheim.sse.model.varModel.ModelQuery;
-import de.uni_hildesheim.sse.model.varModel.ModelQueryException;
-import de.uni_hildesheim.sse.model.varModel.datatypes.AnyType;
-import de.uni_hildesheim.sse.model.varModel.datatypes.BooleanType;
-import de.uni_hildesheim.sse.model.varModel.datatypes.Compound;
-import de.uni_hildesheim.sse.model.varModel.datatypes.DerivedDatatype;
-import de.uni_hildesheim.sse.model.varModel.datatypes.IDatatype;
-import de.uni_hildesheim.sse.model.varModel.datatypes.IResolutionScope;
-import de.uni_hildesheim.sse.model.varModel.datatypes.IntegerType;
-import de.uni_hildesheim.sse.model.varModel.datatypes.Operation;
-import de.uni_hildesheim.sse.model.varModel.datatypes.RealType;
-import de.uni_hildesheim.sse.model.varModel.datatypes.Reference;
-import de.uni_hildesheim.sse.model.varModel.datatypes.VersionType;
 import de.uni_hildesheim.sse.translation.Utils;
 import de.uni_hildesheim.sse.ui.resources.Images;
-import de.uni_hildesheim.sse.utils.modelManagement.ModelInfo;
+import net.ssehub.easy.basics.modelManagement.ModelInfo;
+import net.ssehub.easy.varModel.management.VarModel;
+import net.ssehub.easy.varModel.model.AbstractVariable;
+import net.ssehub.easy.varModel.model.AttributeAssignment;
+import net.ssehub.easy.varModel.model.ContainableModelElement;
+import net.ssehub.easy.varModel.model.DecisionVariableDeclaration;
+import net.ssehub.easy.varModel.model.IModelElement;
+import net.ssehub.easy.varModel.model.IvmlDatatypeVisitor;
+import net.ssehub.easy.varModel.model.ModelQuery;
+import net.ssehub.easy.varModel.model.ModelQueryException;
+import net.ssehub.easy.varModel.model.datatypes.AnyType;
+import net.ssehub.easy.varModel.model.datatypes.BooleanType;
+import net.ssehub.easy.varModel.model.datatypes.Compound;
+import net.ssehub.easy.varModel.model.datatypes.DerivedDatatype;
+import net.ssehub.easy.varModel.model.datatypes.IDatatype;
+import net.ssehub.easy.varModel.model.datatypes.IResolutionScope;
+import net.ssehub.easy.varModel.model.datatypes.IntegerType;
+import net.ssehub.easy.varModel.model.datatypes.Operation;
+import net.ssehub.easy.varModel.model.datatypes.RealType;
+import net.ssehub.easy.varModel.model.datatypes.Reference;
+import net.ssehub.easy.varModel.model.datatypes.VersionType;
 
 /**
  * Implements a proposal provider for IVML expressions. We separate the expression proposal provider
@@ -106,11 +106,11 @@ public class ExpressionProposalProvider extends AbstractIvmlProposalProvider  {
      * @param model the node representing the ECore Xtext model
      * @return the IVML project (<b>null</b> if not available)
      */
-    protected de.uni_hildesheim.sse.model.varModel.Project getVarModel(EObject model) {
-        de.uni_hildesheim.sse.model.varModel.Project result = null;
+    protected net.ssehub.easy.varModel.model.Project getVarModel(EObject model) {
+        net.ssehub.easy.varModel.model.Project result = null;
         try {
             URI uri = new URI(model.eResource().getURI().toString());
-            ModelInfo<de.uni_hildesheim.sse.model.varModel.Project> info 
+            ModelInfo<net.ssehub.easy.varModel.model.Project> info 
                 = VarModel.INSTANCE.availableModels().getInfo(uri);
             if (null != info) {
                 result = info.getResolved();
@@ -133,7 +133,7 @@ public class ExpressionProposalProvider extends AbstractIvmlProposalProvider  {
     protected IDatatype findType(EObject model, TypedefCompound typeDef, String name) {
         IDatatype result = null;
         String typeName = null == typeDef ? null : typeDef.getName();
-        de.uni_hildesheim.sse.model.varModel.Project prj = getVarModel(model);
+        net.ssehub.easy.varModel.model.Project prj = getVarModel(model);
         if (null != prj) {
             IResolutionScope scope = prj;
             if (null != typeName) {
@@ -245,7 +245,7 @@ public class ExpressionProposalProvider extends AbstractIvmlProposalProvider  {
     @Override
     public void completeLiteral_Val(EObject model, Assignment assignment, ContentAssistContext context, 
         ICompletionProposalAcceptor acceptor) {
-        de.uni_hildesheim.sse.model.varModel.Project project = getVarModel(model);
+        net.ssehub.easy.varModel.model.Project project = getVarModel(model);
         if (null != project) {
             Set<String> done = new HashSet<String>();
             INode node = context.getCurrentNode();

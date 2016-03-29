@@ -18,7 +18,7 @@ package de.uni_hildesheim.sse.easy_producer.persistency.project_creation;
 import org.eclipse.core.resources.ResourcesPlugin;
 
 import de.uni_hildesheim.sse.easy_producer.model.ProductLineProject;
-import de.uni_hildesheim.sse.model.validation.IvmlIdentifierCheck;
+import net.ssehub.easy.varModel.validation.IvmlIdentifierCheck;
 
 /**
  * Creates new EASy projects in Eclipse.

@@ -1,8 +1,8 @@
 package de.uni_hildesheim.sse.reasoning.reasoner;
 
-import de.uni_hildesheim.sse.capabilities.IvmlReasonerCapabilities;
 import de.uni_hildesheim.sse.reasoning.core.reasoner.GeneralReasonerCapabilities;
 import de.uni_hildesheim.sse.reasoning.core.reasoner.ReasonerDescriptor;
+import net.ssehub.easy.varModel.capabilities.IvmlReasonerCapabilities;
 
 /**
  * A specific reasoner descriptor for AssignmentResolver reasoner.

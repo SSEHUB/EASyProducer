@@ -17,10 +17,10 @@ package de.uni_hildesheim.sse.dslcore.ui.listeners;
 
 import org.eclipse.xtext.util.Arrays;
 
-import de.uni_hildesheim.sse.utils.modelManagement.IModel;
-import de.uni_hildesheim.sse.utils.modelManagement.IModelProcessingListener;
-import de.uni_hildesheim.sse.utils.modelManagement.ModelInfo;
-import de.uni_hildesheim.sse.utils.modelManagement.ModelManagement;
+import net.ssehub.easy.basics.modelManagement.IModel;
+import net.ssehub.easy.basics.modelManagement.IModelProcessingListener;
+import net.ssehub.easy.basics.modelManagement.ModelInfo;
+import net.ssehub.easy.basics.modelManagement.ModelManagement;
 
 /**
  * Generically implements a model processing (loading) listener which disables UI controls.

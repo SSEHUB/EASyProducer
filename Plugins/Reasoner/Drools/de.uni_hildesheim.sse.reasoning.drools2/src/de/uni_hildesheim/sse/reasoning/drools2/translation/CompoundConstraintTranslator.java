@@ -2,15 +2,15 @@ package de.uni_hildesheim.sse.reasoning.drools2.translation;
 
 import java.io.Writer;
 
-import de.uni_hildesheim.sse.model.cst.ConstraintSyntaxTree;
-import de.uni_hildesheim.sse.model.cst.Variable;
-import de.uni_hildesheim.sse.model.varModel.AbstractVariable;
-import de.uni_hildesheim.sse.model.varModel.datatypes.Compound;
 import de.uni_hildesheim.sse.reasoning.core.model.ConstraintPatternFactory;
 import de.uni_hildesheim.sse.reasoning.core.model.ReasonerModel;
 import de.uni_hildesheim.sse.reasoning.core.model.datatypes.CompoundType;
 import de.uni_hildesheim.sse.reasoning.core.model.variables.CompoundVariable;
 import de.uni_hildesheim.sse.reasoning.core.model.variables.ReasonerVariable;
+import net.ssehub.easy.varModel.cst.ConstraintSyntaxTree;
+import net.ssehub.easy.varModel.cst.Variable;
+import net.ssehub.easy.varModel.model.AbstractVariable;
+import net.ssehub.easy.varModel.model.datatypes.Compound;
 
 /**
  * Translates the constraints of a compound into Drools specific code.

@@ -1,9 +1,9 @@
 package de.uni_hildesheim.sse.reasoning.core.model.variables;
 
-import de.uni_hildesheim.sse.model.confModel.IDecisionVariable;
-import de.uni_hildesheim.sse.model.cst.ConstraintSyntaxTree;
 import de.uni_hildesheim.sse.reasoning.core.model.ReasonerModel;
 import de.uni_hildesheim.sse.reasoning.core.model.ReasoningState;
+import net.ssehub.easy.varModel.confModel.IDecisionVariable;
+import net.ssehub.easy.varModel.cst.ConstraintSyntaxTree;
 
 /**
  * {@link ReasonerVariable} representing an Constraint {@link IDecisionVariable}.

@@ -14,14 +14,14 @@ import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
 
-import de.uni_hildesheim.sse.model.confModel.DisplayNameProvider;
-import de.uni_hildesheim.sse.model.confModel.IDecisionVariable;
-import de.uni_hildesheim.sse.model.varModel.AbstractVariable;
-import de.uni_hildesheim.sse.model.varModel.datatypes.IDatatype;
-import de.uni_hildesheim.sse.model.varModel.datatypes.Reference;
-import de.uni_hildesheim.sse.model.varModel.filter.ReferenceValuesFinder;
-import de.uni_hildesheim.sse.model.varModel.values.ContainerValue;
-import de.uni_hildesheim.sse.model.varModel.values.ReferenceValue;
+import net.ssehub.easy.varModel.confModel.DisplayNameProvider;
+import net.ssehub.easy.varModel.confModel.IDecisionVariable;
+import net.ssehub.easy.varModel.model.AbstractVariable;
+import net.ssehub.easy.varModel.model.datatypes.IDatatype;
+import net.ssehub.easy.varModel.model.datatypes.Reference;
+import net.ssehub.easy.varModel.model.filter.ReferenceValuesFinder;
+import net.ssehub.easy.varModel.model.values.ContainerValue;
+import net.ssehub.easy.varModel.model.values.ReferenceValue;
 
 /**
  * Implements a GUI representation for references.

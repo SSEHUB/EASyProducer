@@ -15,16 +15,16 @@ import org.junit.Assert;
 
 import de.uni_hildesheim.sse.ModelUtility;
 import de.uni_hildesheim.sse.dslCore.TranslationResult;
-import de.uni_hildesheim.sse.model.management.CommentResource;
-import de.uni_hildesheim.sse.model.management.VarModel;
-import de.uni_hildesheim.sse.model.validation.IvmlValidationVisitor;
-import de.uni_hildesheim.sse.model.varModel.ContainableModelElement;
-import de.uni_hildesheim.sse.model.varModel.Project;
-import de.uni_hildesheim.sse.model.varModel.datatypes.Compound;
-import de.uni_hildesheim.sse.utils.modelManagement.ModelInfo;
-import de.uni_hildesheim.sse.utils.modelManagement.ModelManagementException;
-import de.uni_hildesheim.sse.utils.modelManagement.Version;
-import de.uni_hildesheim.sse.utils.modelManagement.VersionFormatException;
+import net.ssehub.easy.basics.modelManagement.ModelInfo;
+import net.ssehub.easy.basics.modelManagement.ModelManagementException;
+import net.ssehub.easy.basics.modelManagement.Version;
+import net.ssehub.easy.basics.modelManagement.VersionFormatException;
+import net.ssehub.easy.varModel.management.CommentResource;
+import net.ssehub.easy.varModel.management.VarModel;
+import net.ssehub.easy.varModel.model.ContainableModelElement;
+import net.ssehub.easy.varModel.model.Project;
+import net.ssehub.easy.varModel.model.datatypes.Compound;
+import net.ssehub.easy.varModel.validation.IvmlValidationVisitor;
 
 /**
  * An abstract test support class for reading, parsing and comparing models.
@@ -257,7 +257,7 @@ public abstract class AbstractTest extends de.uni_hildesheim.sse.dslCore.test.Ab
             }
             String expectedKey = getKey(expectedName, expectedVersion);
             for (int r = 0; r < result.getResultCount(); r++) {
-                de.uni_hildesheim.sse.model.varModel.Project project = result.getResult(r);
+                net.ssehub.easy.varModel.model.Project project = result.getResult(r);
                 String key = getKey(project.getName(), project.getVersion());
                 if (null != expectedKey && expectedKey.equals(key)) {
                     expectedKey = null;

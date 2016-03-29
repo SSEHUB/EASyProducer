@@ -20,8 +20,8 @@ import org.eclipse.xtext.util.concurrent.IUnitOfWork;
 import de.uni_hildesheim.sse.dslCore.IResourceInitializer;
 import de.uni_hildesheim.sse.dslCore.TranslationResult;
 import de.uni_hildesheim.sse.dslCore.validation.ValidationUtils;
-import de.uni_hildesheim.sse.utils.logger.EASyLoggerFactory;
-import de.uni_hildesheim.sse.utils.logger.EASyLoggerFactory.EASyLogger;
+import net.ssehub.easy.basics.logger.EASyLoggerFactory;
+import net.ssehub.easy.basics.logger.EASyLoggerFactory.EASyLogger;
 
 /**
  * A common extension of the general <code>org.eclipse.xtext.ui.editor.XtextEditor</code>.

@@ -21,11 +21,11 @@ import de.uni_hildesheim.sse.easy_producer.instantiator.model.execution.TracerFa
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.templateModel.TemplateModel;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.Project;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.configuration.Configuration;
-import de.uni_hildesheim.sse.model.management.VarModel;
-import de.uni_hildesheim.sse.utils.modelManagement.ModelInfo;
-import de.uni_hildesheim.sse.utils.modelManagement.ModelManagementException;
-import de.uni_hildesheim.sse.utils.modelManagement.VersionFormatException;
-import de.uni_hildesheim.sse.utils.progress.ProgressObserver;
+import net.ssehub.easy.basics.modelManagement.ModelInfo;
+import net.ssehub.easy.basics.modelManagement.ModelManagementException;
+import net.ssehub.easy.basics.modelManagement.VersionFormatException;
+import net.ssehub.easy.basics.progress.ProgressObserver;
+import net.ssehub.easy.varModel.management.VarModel;
 import test.de.uni_hildesheim.sse.vil.buildlang.AbstractTest;
 import test.de.uni_hildesheim.sse.vil.buildlang.BuildLangTestConfigurer;
 import test.de.uni_hildesheim.sse.vil.buildlang.ITestConfigurer;
@@ -133,8 +133,8 @@ public abstract class AbstractScenarioTest extends AbstractTest<Script> {
         } catch (ModelManagementException e) {
             Assert.fail("unexpected exception: " + e.getMessage());
         }
-        de.uni_hildesheim.sse.model.varModel.Project ivmlModel = obtainIvmlModel(modelName, versions[0], ivmlFolder);
-        Configuration config = new Configuration(new de.uni_hildesheim.sse.model.confModel.Configuration(ivmlModel));
+        net.ssehub.easy.varModel.model.Project ivmlModel = obtainIvmlModel(modelName, versions[0], ivmlFolder);
+        Configuration config = new Configuration(new net.ssehub.easy.varModel.confModel.Configuration(ivmlModel));
         File sourceFile = temp.getAbsoluteFile();
         Project source = createProjectInstance(sourceFile);
         File targetFile = sourceFile;
@@ -211,12 +211,12 @@ public abstract class AbstractScenarioTest extends AbstractTest<Script> {
      * @param ivmlFolder the base folder for IVML files
      * @return the IVML model
      */
-    private static de.uni_hildesheim.sse.model.varModel.Project obtainIvmlModel(String projectName, String ivmlVersion,
+    private static net.ssehub.easy.varModel.model.Project obtainIvmlModel(String projectName, String ivmlVersion,
         File ivmlFolder) {
         URI modelURI = new File(ivmlFolder, projectName + "_" + ivmlVersion + ".ivml").toURI();
-        de.uni_hildesheim.sse.model.varModel.Project ivmlModel = null;
+        net.ssehub.easy.varModel.model.Project ivmlModel = null;
         try {
-            ModelInfo<de.uni_hildesheim.sse.model.varModel.Project> info = 
+            ModelInfo<net.ssehub.easy.varModel.model.Project> info = 
                 VarModel.INSTANCE.availableModels().getModelInfo(projectName, ivmlVersion, modelURI);
             Assert.assertNotNull("IVML model " + projectName + " cannot be found", info);
             ivmlModel = VarModel.INSTANCE.load(info);

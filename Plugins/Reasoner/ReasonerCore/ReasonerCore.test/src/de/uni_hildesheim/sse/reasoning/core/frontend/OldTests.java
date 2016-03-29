@@ -4,11 +4,11 @@ import java.io.IOException;
 
 import org.junit.Test;
 
-import de.uni_hildesheim.sse.model.confModel.Configuration;
-import de.uni_hildesheim.sse.model.confModel.ConfigurationException;
-import de.uni_hildesheim.sse.model.varModel.IvmlException;
-import de.uni_hildesheim.sse.model.varModel.Project;
-import de.uni_hildesheim.sse.model.varModel.values.ValueDoesNotMatchTypeException;
+import net.ssehub.easy.varModel.confModel.Configuration;
+import net.ssehub.easy.varModel.confModel.ConfigurationException;
+import net.ssehub.easy.varModel.model.IvmlException;
+import net.ssehub.easy.varModel.model.Project;
+import net.ssehub.easy.varModel.model.values.ValueDoesNotMatchTypeException;
 
 /**
  * Old tests - please review, revise, refactor or skip.

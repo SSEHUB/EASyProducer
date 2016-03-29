@@ -10,9 +10,9 @@ import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilExceptio
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.CallExpression.CallType;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.Constants;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.IStringValueProvider.StringComparator;
+import net.ssehub.easy.varModel.model.values.NullValue;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.OperationDescriptor;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.StringValueHelper;
-import de.uni_hildesheim.sse.model.varModel.values.NullValue;
 
 /**
  * Implements a simple stream-based execution tracer. Produces normalized sequences of collections

@@ -36,14 +36,14 @@ import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeDescr
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeRegistry;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.configuration.Configuration;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.configuration.IvmlTypes;
-import de.uni_hildesheim.sse.model.confModel.IDecisionVariable;
 import de.uni_hildesheim.sse.reasoning.core.frontend.ReasonerFrontend;
 import de.uni_hildesheim.sse.reasoning.core.reasoner.Message;
 import de.uni_hildesheim.sse.reasoning.core.reasoner.ReasonerConfiguration;
 import de.uni_hildesheim.sse.reasoning.core.reasoner.ReasoningResult;
-import de.uni_hildesheim.sse.utils.logger.EASyLoggerFactory;
-import de.uni_hildesheim.sse.utils.logger.EASyLoggerFactory.EASyLogger;
-import de.uni_hildesheim.sse.utils.progress.ProgressObserver;
+import net.ssehub.easy.basics.logger.EASyLoggerFactory;
+import net.ssehub.easy.basics.logger.EASyLoggerFactory.EASyLogger;
+import net.ssehub.easy.basics.progress.ProgressObserver;
+import net.ssehub.easy.varModel.confModel.IDecisionVariable;
 
 /**
  * Executes an rtVil adaptation script.
@@ -102,7 +102,7 @@ public class RtVilExecution extends BuildlangExecution implements IRtVilVisitor 
                 Script currentScript = evaluator.currentScript;
                 IRtValueAccess valueAccess = evaluator.valueAccess;
                 evaluator.reasoningHook.preReasoning(currentScript, concept, valueAccess, cfg);
-                de.uni_hildesheim.sse.model.confModel.Configuration easyConfig = cfg.getConfiguration();
+                net.ssehub.easy.varModel.confModel.Configuration easyConfig = cfg.getConfiguration();
                 EASyLogger logger = EASyLoggerFactory.INSTANCE.getLogger(RtVilExecution.class, Bundle.ID);
                 ReasoningResult rResult = null;
                 try {
@@ -116,7 +116,7 @@ public class RtVilExecution extends BuildlangExecution implements IRtVilVisitor 
                 int errorCount = 0;
                 for (int m = 0; m < rResult.getMessageCount(); m++) {
                     Message msg = rResult.getMessage(m);
-                    de.uni_hildesheim.sse.utils.messages.Status status = evaluator.reasoningHook.analyze(
+                    net.ssehub.easy.basics.messages.Status status = evaluator.reasoningHook.analyze(
                         currentScript, concept, valueAccess, msg);
                     if (null != status) {
                         switch (status) {
@@ -336,7 +336,7 @@ public class RtVilExecution extends BuildlangExecution implements IRtVilVisitor 
                 Iterator<IDecisionVariable> iter2 = set.iterator();
                 while (iter2.hasNext()) {
                     IDecisionVariable var = iter2.next();
-                    result += de.uni_hildesheim.sse.model.confModel.Configuration.getInstanceName(var);
+                    result += net.ssehub.easy.varModel.confModel.Configuration.getInstanceName(var);
                     if (iter2.hasNext()) {
                         result += ", ";
                     }

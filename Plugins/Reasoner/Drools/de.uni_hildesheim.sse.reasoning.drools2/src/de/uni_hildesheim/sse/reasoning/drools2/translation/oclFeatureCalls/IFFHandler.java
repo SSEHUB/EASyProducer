@@ -1,7 +1,7 @@
 package de.uni_hildesheim.sse.reasoning.drools2.translation.oclFeatureCalls;
 
-import de.uni_hildesheim.sse.model.cst.OCLFeatureCall;
 import de.uni_hildesheim.sse.reasoning.drools2.translation.AbstractConstraintTranslator;
+import net.ssehub.easy.varModel.cst.OCLFeatureCall;
 
 /**
  * This Handler translates a logical equality (if and only if, short iff) into drools specific code.

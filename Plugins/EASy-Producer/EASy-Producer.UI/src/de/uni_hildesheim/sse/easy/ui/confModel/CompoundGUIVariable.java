@@ -2,7 +2,7 @@ package de.uni_hildesheim.sse.easy.ui.confModel;
 
 import org.eclipse.swt.widgets.Composite;
 
-import de.uni_hildesheim.sse.model.confModel.IDecisionVariable;
+import net.ssehub.easy.varModel.confModel.IDecisionVariable;
 
 /**
  * GUI representation of compound values.

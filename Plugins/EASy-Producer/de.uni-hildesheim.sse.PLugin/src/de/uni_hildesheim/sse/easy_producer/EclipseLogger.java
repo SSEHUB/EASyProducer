@@ -5,7 +5,7 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Plugin;
 import org.eclipse.core.runtime.Status;
 
-import de.uni_hildesheim.sse.utils.logger.ILogger;
+import net.ssehub.easy.basics.logger.ILogger;
 
 /**
  * ILogger implementation for eclipse logger.

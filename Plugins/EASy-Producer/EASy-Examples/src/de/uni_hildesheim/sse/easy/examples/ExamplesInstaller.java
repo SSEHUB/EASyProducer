@@ -32,7 +32,7 @@ import org.eclipse.core.runtime.CoreException;
 import de.uni_hildesheim.sse.easy.examples.AvailableExamples.ExampleDescriptor;
 import de.uni_hildesheim.sse.easy.examples.internal.Bundle;
 import de.uni_hildesheim.sse.easy_producer.persistency.ResourcesMgmt;
-import de.uni_hildesheim.sse.utils.logger.EASyLoggerFactory;
+import net.ssehub.easy.basics.logger.EASyLoggerFactory;
 
 /**
  * Methods for installing selected examples into the workspace.

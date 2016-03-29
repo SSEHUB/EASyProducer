@@ -30,25 +30,25 @@ import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.configura
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.configuration.Configuration;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.configuration.DecisionVariable;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.configuration.NoVariableFilter;
-import de.uni_hildesheim.sse.model.confModel.AssignmentState;
-import de.uni_hildesheim.sse.model.confModel.ConfigurationException;
-import de.uni_hildesheim.sse.model.confModel.IConfiguration;
-import de.uni_hildesheim.sse.model.confModel.IDecisionVariable;
-import de.uni_hildesheim.sse.model.cst.CSTSemanticException;
-import de.uni_hildesheim.sse.model.varModel.Attribute;
-import de.uni_hildesheim.sse.model.varModel.DecisionVariableDeclaration;
-import de.uni_hildesheim.sse.model.varModel.ModelQuery;
-import de.uni_hildesheim.sse.model.varModel.ModelQueryException;
-import de.uni_hildesheim.sse.model.varModel.Project;
-import de.uni_hildesheim.sse.model.varModel.datatypes.Compound;
-import de.uni_hildesheim.sse.model.varModel.datatypes.Enum;
-import de.uni_hildesheim.sse.model.varModel.datatypes.OclKeyWords;
-import de.uni_hildesheim.sse.model.varModel.values.ContainerValue;
-import de.uni_hildesheim.sse.model.varModel.values.NullValue;
-import de.uni_hildesheim.sse.model.varModel.values.ReferenceValue;
-import de.uni_hildesheim.sse.model.varModel.values.Value;
-import de.uni_hildesheim.sse.model.varModel.values.ValueDoesNotMatchTypeException;
-import de.uni_hildesheim.sse.model.varModel.values.ValueFactory;
+import net.ssehub.easy.varModel.confModel.AssignmentState;
+import net.ssehub.easy.varModel.confModel.ConfigurationException;
+import net.ssehub.easy.varModel.confModel.IConfiguration;
+import net.ssehub.easy.varModel.confModel.IDecisionVariable;
+import net.ssehub.easy.varModel.cst.CSTSemanticException;
+import net.ssehub.easy.varModel.model.Attribute;
+import net.ssehub.easy.varModel.model.DecisionVariableDeclaration;
+import net.ssehub.easy.varModel.model.ModelQuery;
+import net.ssehub.easy.varModel.model.ModelQueryException;
+import net.ssehub.easy.varModel.model.Project;
+import net.ssehub.easy.varModel.model.datatypes.Compound;
+import net.ssehub.easy.varModel.model.datatypes.Enum;
+import net.ssehub.easy.varModel.model.datatypes.OclKeyWords;
+import net.ssehub.easy.varModel.model.values.ContainerValue;
+import net.ssehub.easy.varModel.model.values.NullValue;
+import net.ssehub.easy.varModel.model.values.ReferenceValue;
+import net.ssehub.easy.varModel.model.values.Value;
+import net.ssehub.easy.varModel.model.values.ValueDoesNotMatchTypeException;
+import net.ssehub.easy.varModel.model.values.ValueFactory;
 
 /**
  * A test for {@link VariableValueCopier}.
@@ -131,7 +131,7 @@ public class VariableValueCopierTest extends AbstractRtTest {
     private int testCopier(String prefix, IAssignmentListener listener) throws ConfigurationException, 
         ValueDoesNotMatchTypeException, ModelQueryException, CSTSemanticException {
         Configuration configuration = getIvmlConfiguration("Copy", NoVariableFilter.INSTANCE);
-        de.uni_hildesheim.sse.model.confModel.Configuration cfg = configuration.getConfiguration();
+        net.ssehub.easy.varModel.confModel.Configuration cfg = configuration.getConfiguration();
         Project prj = cfg.getProject();
 
         Compound sourceType = (Compound) ModelQuery.findType(prj, "Source", Compound.class);
@@ -192,7 +192,7 @@ public class VariableValueCopierTest extends AbstractRtTest {
      * @return the nested element (may be <b>null</b> if not found or <code>base</code> is <b>null</b>)
      */
     public static IDecisionVariable getNestedElement(IDecisionVariable base, String name) {
-        return de.uni_hildesheim.sse.model.confModel.Configuration.getNestedElement(base, name);
+        return net.ssehub.easy.varModel.confModel.Configuration.getNestedElement(base, name);
     }
     
     /**
@@ -203,7 +203,7 @@ public class VariableValueCopierTest extends AbstractRtTest {
      * @return the dereferenced value
      */
     private static Value dereference(IConfiguration conf, Value value) {
-        return de.uni_hildesheim.sse.model.confModel.Configuration.dereference(conf, value);
+        return net.ssehub.easy.varModel.confModel.Configuration.dereference(conf, value);
     }
 
     /**
@@ -216,7 +216,7 @@ public class VariableValueCopierTest extends AbstractRtTest {
      *   {@link #projectFirstValue(Value) first value} of "available" and not by the 
      *   {@link #projectFirstValue(Value) first value} of "notAvailable)
      */
-    private static void assertReferences(de.uni_hildesheim.sse.model.confModel.Configuration cfg, 
+    private static void assertReferences(net.ssehub.easy.varModel.confModel.Configuration cfg, 
         DecisionVariableDeclaration decl, IDecisionVariable notAvailable, boolean assertActual) {
         Value expectedActualValue = null;
         Value unexpectedActualValue = null;
@@ -282,7 +282,7 @@ public class VariableValueCopierTest extends AbstractRtTest {
      * @param cfg the configuration
      * @param value the value to assert the frozen state on
      */
-    private static void assertFrozen(de.uni_hildesheim.sse.model.confModel.Configuration cfg, Value value) {
+    private static void assertFrozen(net.ssehub.easy.varModel.confModel.Configuration cfg, Value value) {
         if (value instanceof ContainerValue) {
             ContainerValue cVal = (ContainerValue) value;
             for (int e = 0; e < cVal.getElementSize(); e++) {

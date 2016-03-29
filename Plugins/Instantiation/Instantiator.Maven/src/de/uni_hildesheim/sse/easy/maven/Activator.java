@@ -25,7 +25,7 @@ import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
 
-import de.uni_hildesheim.sse.utils.logger.EASyLoggerFactory;
+import net.ssehub.easy.basics.logger.EASyLoggerFactory;
 
 /**
  * An explicit bundle activator providing access to the resources of this bundle.

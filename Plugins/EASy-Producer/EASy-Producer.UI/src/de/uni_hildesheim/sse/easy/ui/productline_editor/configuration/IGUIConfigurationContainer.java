@@ -3,7 +3,7 @@ package de.uni_hildesheim.sse.easy.ui.productline_editor.configuration;
 import org.eclipse.jface.viewers.ViewerFilter;
 
 import de.uni_hildesheim.sse.easy.ui.confModel.GUIConfiguration;
-import de.uni_hildesheim.sse.model.confModel.Configuration;
+import net.ssehub.easy.varModel.confModel.Configuration;
 
 /**
  * Interface for a viewer holding the GUIConfiguration.

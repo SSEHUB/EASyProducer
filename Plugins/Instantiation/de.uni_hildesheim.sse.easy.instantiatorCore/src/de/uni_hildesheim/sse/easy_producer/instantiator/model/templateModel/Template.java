@@ -12,10 +12,10 @@ import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.IMetaOper
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.IMetaType;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeDescriptor;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeRegistry;
-import de.uni_hildesheim.sse.utils.modelManagement.IRestrictionEvaluationContext;
-import de.uni_hildesheim.sse.utils.modelManagement.IndentationConfiguration;
-import de.uni_hildesheim.sse.utils.modelManagement.ModelImport;
-import de.uni_hildesheim.sse.utils.modelManagement.Version;
+import net.ssehub.easy.basics.modelManagement.IRestrictionEvaluationContext;
+import net.ssehub.easy.basics.modelManagement.IndentationConfiguration;
+import net.ssehub.easy.basics.modelManagement.ModelImport;
+import net.ssehub.easy.basics.modelManagement.Version;
 
 /**
  * Represents a VIL template.

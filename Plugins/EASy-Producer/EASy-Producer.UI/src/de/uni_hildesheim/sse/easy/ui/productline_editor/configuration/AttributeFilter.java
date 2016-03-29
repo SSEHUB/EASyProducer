@@ -4,9 +4,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 import de.uni_hildesheim.sse.easy.ui.confModel.GUIVariable;
-import de.uni_hildesheim.sse.model.confModel.IDecisionVariable;
-import de.uni_hildesheim.sse.model.varModel.Attribute;
-import de.uni_hildesheim.sse.model.varModel.values.Value;
+import net.ssehub.easy.varModel.confModel.IDecisionVariable;
+import net.ssehub.easy.varModel.model.Attribute;
+import net.ssehub.easy.varModel.model.values.Value;
 
 /**
  * Filter for filtering elements having certain attribute assignments.

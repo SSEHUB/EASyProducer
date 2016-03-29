@@ -8,14 +8,14 @@ import de.uni_hildesheim.sse.ConstraintSyntaxException;
 import de.uni_hildesheim.sse.ModelUtility;
 import de.uni_hildesheim.sse.dslcore.ui.editors.EmbeddingHelper;
 import de.uni_hildesheim.sse.dslcore.ui.editors.IEmbeddedEditor;
-import de.uni_hildesheim.sse.model.cst.CSTSemanticException;
-import de.uni_hildesheim.sse.model.cst.ConstraintSyntaxTree;
-import de.uni_hildesheim.sse.model.varModel.IModelElement;
-import de.uni_hildesheim.sse.model.varModel.Project;
-import de.uni_hildesheim.sse.persistency.ConstraintSplitWriter;
-import de.uni_hildesheim.sse.persistency.ConstraintSplitWriter.IConstraintFilter;
 import de.uni_hildesheim.sse.ui.internal.IvmlActivator;
-import de.uni_hildesheim.sse.utils.modelManagement.ModelInfo;
+import net.ssehub.easy.basics.modelManagement.ModelInfo;
+import net.ssehub.easy.varModel.cst.CSTSemanticException;
+import net.ssehub.easy.varModel.cst.ConstraintSyntaxTree;
+import net.ssehub.easy.varModel.model.IModelElement;
+import net.ssehub.easy.varModel.model.Project;
+import net.ssehub.easy.varModel.persistency.ConstraintSplitWriter;
+import net.ssehub.easy.varModel.persistency.ConstraintSplitWriter.IConstraintFilter;
 
 /**
  * Provides editor utility methods.

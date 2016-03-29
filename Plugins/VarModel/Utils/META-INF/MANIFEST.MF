@@ -5,14 +5,14 @@ Bundle-SymbolicName: de.uni_hildesheim.sse.utils;singleton:=true
 Bundle-Version: 1.1.0
 Bundle-Vendor: University of Hildesheim, SSE
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
-Export-Package: de.uni_hildesheim.sse.utils,
- de.uni_hildesheim.sse.utils.logger,
- de.uni_hildesheim.sse.utils.messages,
- de.uni_hildesheim.sse.utils.modelManagement,
- de.uni_hildesheim.sse.utils.os,
- de.uni_hildesheim.sse.utils.pool,
- de.uni_hildesheim.sse.utils.progress,
- edu.umd.cs.findbugs.annotations
+Export-Package: edu.umd.cs.findbugs.annotations,
+ net.ssehub.easy.basics,
+ net.ssehub.easy.basics.logger,
+ net.ssehub.easy.basics.messages,
+ net.ssehub.easy.basics.modelManagement,
+ net.ssehub.easy.basics.os,
+ net.ssehub.easy.basics.pool,
+ net.ssehub.easy.basics.progress
 Bundle-ActivationPolicy: lazy
 Bundle-ClassPath: lib/findbugs-annotations-3.0.0.jar,
  .

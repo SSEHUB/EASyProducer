@@ -16,7 +16,7 @@
 package de.uni_hildesheim.sse.easy.ui.productline_editor.configuration;
 
 import de.uni_hildesheim.sse.easy.ui.confModel.GUIVariable;
-import de.uni_hildesheim.sse.model.confModel.AssignmentState;
+import net.ssehub.easy.varModel.confModel.AssignmentState;
 
 /**
  * Implements a simple attribute filter.

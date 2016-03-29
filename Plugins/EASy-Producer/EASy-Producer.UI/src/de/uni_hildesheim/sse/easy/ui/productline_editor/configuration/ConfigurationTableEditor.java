@@ -19,10 +19,10 @@ import de.uni_hildesheim.sse.easy.ui.confModel.IGUIConfigChangeListener;
 import de.uni_hildesheim.sse.easy.ui.contributions.Contributions;
 import de.uni_hildesheim.sse.easy.ui.productline_editor.IEASyEditorPage;
 import de.uni_hildesheim.sse.easy.ui.productline_editor.configuration.EditorContextMenuListener.Action;
-import de.uni_hildesheim.sse.model.confModel.Configuration;
-import de.uni_hildesheim.sse.model.confModel.IConfigurationChangeListener;
-import de.uni_hildesheim.sse.model.confModel.IDecisionVariable;
-import de.uni_hildesheim.sse.model.varModel.values.Value;
+import net.ssehub.easy.varModel.confModel.Configuration;
+import net.ssehub.easy.varModel.confModel.IConfigurationChangeListener;
+import net.ssehub.easy.varModel.confModel.IDecisionVariable;
+import net.ssehub.easy.varModel.model.values.Value;
 
 /**
  * The table for editing the configuration, without surrounding buttons or other stuff.

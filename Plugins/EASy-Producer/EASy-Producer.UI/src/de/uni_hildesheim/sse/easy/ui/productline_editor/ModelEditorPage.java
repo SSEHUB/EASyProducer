@@ -25,7 +25,7 @@ import de.uni_hildesheim.sse.dslcore.ui.editors.IEmbeddedEditor.IValidationState
 import de.uni_hildesheim.sse.dslcore.ui.editors.ModelEditorConfigurer.IHeader;
 import de.uni_hildesheim.sse.dslcore.ui.editors.ModelEditorConfigurer.IModelEditorConfigurer;
 import de.uni_hildesheim.sse.easy_producer.model.ProductLineProject;
-import de.uni_hildesheim.sse.utils.modelManagement.ModelInfo;
+import net.ssehub.easy.basics.modelManagement.ModelInfo;
 
 /**
  * A model editor page for the product line editor which shows an embedded editor.

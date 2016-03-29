@@ -4,18 +4,20 @@ import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 
-import de.uni_hildesheim.sse.capabilities.DefaultReasonerAccess;
-import de.uni_hildesheim.sse.capabilities.IReasonerCapability;
-import de.uni_hildesheim.sse.capabilities.DefaultReasonerAccess.IDefaultReasonerProvider;
-import de.uni_hildesheim.sse.model.confModel.Configuration;
-import de.uni_hildesheim.sse.model.confModel.ConfigurationInitializerRegistry;
-import de.uni_hildesheim.sse.model.confModel.ConfigurationInitializerRegistry.IConfigurationInitializer;
-import de.uni_hildesheim.sse.model.varModel.Constraint;
-import de.uni_hildesheim.sse.model.varModel.Project;
 import de.uni_hildesheim.sse.reasoning.core.impl.ReasonerRegistry;
 import de.uni_hildesheim.sse.reasoning.core.reasoner.EvaluationResult;
 import de.uni_hildesheim.sse.reasoning.core.reasoner.EvaluationResult.ConstraintEvaluationResult;
 import de.uni_hildesheim.sse.reasoning.core.reasoner.EvaluationResult.EvaluationPair;
+import net.ssehub.easy.basics.messages.Status;
+import net.ssehub.easy.basics.progress.ProgressObserver;
+import net.ssehub.easy.varModel.capabilities.DefaultReasonerAccess;
+import net.ssehub.easy.varModel.capabilities.IReasonerCapability;
+import net.ssehub.easy.varModel.capabilities.DefaultReasonerAccess.IDefaultReasonerProvider;
+import net.ssehub.easy.varModel.confModel.Configuration;
+import net.ssehub.easy.varModel.confModel.ConfigurationInitializerRegistry;
+import net.ssehub.easy.varModel.confModel.ConfigurationInitializerRegistry.IConfigurationInitializer;
+import net.ssehub.easy.varModel.model.Constraint;
+import net.ssehub.easy.varModel.model.Project;
 import de.uni_hildesheim.sse.reasoning.core.reasoner.GeneralReasonerCapabilities;
 import de.uni_hildesheim.sse.reasoning.core.reasoner.IReasoner;
 import de.uni_hildesheim.sse.reasoning.core.reasoner.IReasonerRegistry;
@@ -23,8 +25,6 @@ import de.uni_hildesheim.sse.reasoning.core.reasoner.Message;
 import de.uni_hildesheim.sse.reasoning.core.reasoner.ReasonerConfiguration;
 import de.uni_hildesheim.sse.reasoning.core.reasoner.ReasonerDescriptor;
 import de.uni_hildesheim.sse.reasoning.core.reasoner.ReasoningResult;
-import de.uni_hildesheim.sse.utils.messages.Status;
-import de.uni_hildesheim.sse.utils.progress.ProgressObserver;
 
 /**
  * The main interface to the reasoner core infrastructure. Models and configurations will be transparently passed to
@@ -74,9 +74,9 @@ public class ReasonerFrontend {
             private IConfigurationInitializer fallback = ConfigurationInitializerRegistry.getInitializer();
             
             @Override
-            public List<de.uni_hildesheim.sse.utils.messages.Message> initializeConfiguration(
+            public List<net.ssehub.easy.basics.messages.Message> initializeConfiguration(
                 Configuration config, ProgressObserver observer) {
-                List<de.uni_hildesheim.sse.utils.messages.Message> result = null;
+                List<net.ssehub.easy.basics.messages.Message> result = null;
                 IReasoner reasoner = canInitializeConfig(getActualReasoner(config.getProject(), config, null, null));
                 for (int r = 0; null == reasoner && r < registry.getReasonerCount(); r++) {
                     IReasoner tmp = registry.getReasoner(r);
@@ -91,7 +91,7 @@ public class ReasonerFrontend {
                     ReasoningResult tmp = reasoner.propagate(config.getProject(), config, initCfg, observer); 
                     useFallback = tmp.reasoningUnsupported();
                     if (tmp.getMessageCount() > 0) {
-                        result = new ArrayList<de.uni_hildesheim.sse.utils.messages.Message>();
+                        result = new ArrayList<net.ssehub.easy.basics.messages.Message>();
                         for (int m = 0; m < tmp.getMessageCount(); m++) {
                             result.add(tmp.getMessage(m));
                         }
@@ -211,7 +211,7 @@ public class ReasonerFrontend {
      * @param project
      *            The project which should be tested whether it is satisfiable.
      * @return The result of this reasoning step. Can have the status
-     *     {@link de.uni_hildesheim.sse.utils.messages.Status#UNSUPPORTED} if the concrete reasoner does not support
+     *     {@link net.ssehub.easy.basics.messages.Status#UNSUPPORTED} if the concrete reasoner does not support
      *     this operation.
      * @deprecated use {@link #isConsistent(Project, ReasonerConfiguration, ProgressObserver)} instead
      */
@@ -230,7 +230,7 @@ public class ReasonerFrontend {
      * @param observer a progress observer indicating the progress, use {@link ProgressObserver#NO_OBSERVER} if no
      *        progress shall be indicated           
      * @return The result of this reasoning step. Can have the status
-     *     {@link de.uni_hildesheim.sse.utils.messages.Status#UNSUPPORTED} if the concrete reasoner does not support
+     *     {@link net.ssehub.easy.basics.messages.Status#UNSUPPORTED} if the concrete reasoner does not support
      *     this operation.
      */
     public ReasoningResult isConsistent(Project project, ReasonerConfiguration reasonerConfiguration, 
@@ -257,7 +257,7 @@ public class ReasonerFrontend {
      * @param observer a progress observer indicating the progress, use {@link ProgressObserver#NO_OBSERVER} if no
      *        progress shall be indicated           
      * @return The result of this reasoning step. Can have the status
-     *     {@link de.uni_hildesheim.sse.utils.messages.Status#UNSUPPORTED} if the concrete reasoner does not support
+     *     {@link net.ssehub.easy.basics.messages.Status#UNSUPPORTED} if the concrete reasoner does not support
      *     this operation.
      * @deprecated use {@link #isConsistent(Project, ReasonerConfiguration, ProgressObserver)} instead
      */
@@ -274,7 +274,7 @@ public class ReasonerFrontend {
      * @param cfg
      *            The current configuration based on the given project.
      * @return The result of this reasoning step. Can have the status
-     *     {@link de.uni_hildesheim.sse.utils.messages.Status#UNSUPPORTED} if the concrete reasoner does not support
+     *     {@link net.ssehub.easy.basics.messages.Status#UNSUPPORTED} if the concrete reasoner does not support
      *     this operation.
      * @deprecated use {@link #check(Project, Configuration, ReasonerConfiguration, ProgressObserver)} instead
      */
@@ -293,7 +293,7 @@ public class ReasonerFrontend {
      * @param observer a progress observer indicating the progress, use {@link ProgressObserver#NO_OBSERVER} if no
      *        progress shall be indicated           
      * @return The result of this reasoning step. Can have the status
-     *     {@link de.uni_hildesheim.sse.utils.messages.Status#UNSUPPORTED} if the concrete reasoner does not support
+     *     {@link net.ssehub.easy.basics.messages.Status#UNSUPPORTED} if the concrete reasoner does not support
      *     this operation.
      * @deprecated use {@link #check(Project, Configuration, ReasonerConfiguration, ProgressObserver)}
      */
@@ -314,7 +314,7 @@ public class ReasonerFrontend {
      * @param observer a progress observer indicating the progress, use {@link ProgressObserver#NO_OBSERVER} if no
      *        progress shall be indicated           
      * @return The result of this reasoning step. Can have the status
-     *     {@link de.uni_hildesheim.sse.utils.messages.Status#UNSUPPORTED} if the concrete reasoner does not support
+     *     {@link net.ssehub.easy.basics.messages.Status#UNSUPPORTED} if the concrete reasoner does not support
      *     this operation.
      */
     public ReasoningResult check(Project project, Configuration cfg, ReasonerConfiguration reasonerConfiguration, 
@@ -340,7 +340,7 @@ public class ReasonerFrontend {
      *            The current configuration based on the given project. (may be modified as a side effect
      *            of value propagation)
      * @return The result of this reasoning step. Can have the status
-     *     {@link de.uni_hildesheim.sse.utils.messages.Status#UNSUPPORTED} if the concrete reasoner does not support
+     *     {@link net.ssehub.easy.basics.messages.Status#UNSUPPORTED} if the concrete reasoner does not support
      *     this operation.
      * @deprecated use {@link #propagate(Project, Configuration, ProgressObserver)} instead
      */
@@ -360,7 +360,7 @@ public class ReasonerFrontend {
      * @param observer a progress observer indicating the progress, use {@link ProgressObserver#NO_OBSERVER} if no
      *        progress shall be indicated           
      * @return The result of this reasoning step. Can have the status
-     *     {@link de.uni_hildesheim.sse.utils.messages.Status#UNSUPPORTED} if the concrete reasoner does not support
+     *     {@link net.ssehub.easy.basics.messages.Status#UNSUPPORTED} if the concrete reasoner does not support
      *     this operation.
      * @deprecated use {@link #propagate(Project, Configuration, ReasonerConfiguration, ProgressObserver)}
      */
@@ -382,7 +382,7 @@ public class ReasonerFrontend {
      * @param reasonerConfiguration the reasoner configuration to be used for reasoning (e.g. taken from the UI, 
      *        may be <b>null</b>)
      * @return The result of this reasoning step. Can have the status
-     *     {@link de.uni_hildesheim.sse.utils.messages.Status#UNSUPPORTED} if the concrete reasoner does not support
+     *     {@link net.ssehub.easy.basics.messages.Status#UNSUPPORTED} if the concrete reasoner does not support
      *     this operation.
      */
     public ReasoningResult propagate(Project project, Configuration cfg, ReasonerConfiguration reasonerConfiguration, 
@@ -411,7 +411,7 @@ public class ReasonerFrontend {
      *            the constraints (expressions which must evaluate to <code>true</code>)
      * @return The result of this reasoning step. The result pairs may be given in a different order than in
      *         <code>constraints</code>. <b>null</b> constraints are ignored and not returned as a result. Can have the
-     *         status {@link de.uni_hildesheim.sse.utils.messages.Status#UNSUPPORTED} if the concrete reasoner does not
+     *         status {@link net.ssehub.easy.basics.messages.Status#UNSUPPORTED} if the concrete reasoner does not
      *         support this operation.
      * @deprecated use {@link #evaluate(Project, Configuration, List, ProgressObserver)} instead
      */
@@ -434,7 +434,7 @@ public class ReasonerFrontend {
      *        progress shall be indicated           
      * @return The result of this reasoning step. The result pairs may be given in a different order than in
      *         <code>constraints</code>. <b>null</b> constraints are ignored and not returned as a result. Can have the
-     *         status {@link de.uni_hildesheim.sse.utils.messages.Status#UNSUPPORTED} if the concrete reasoner does not
+     *         status {@link net.ssehub.easy.basics.messages.Status#UNSUPPORTED} if the concrete reasoner does not
      *         support this operation.
      * @deprecated use {@link #evaluate(Project, Configuration, List, ReasonerConfiguration, ProgressObserver)}
      */
@@ -460,7 +460,7 @@ public class ReasonerFrontend {
      *        progress shall be indicated           
      * @return The result of this reasoning step. The result pairs may be given in a different order than in
      *         <code>constraints</code>. <b>null</b> constraints are ignored and not returned as a result. Can have the
-     *         status {@link de.uni_hildesheim.sse.utils.messages.Status#UNSUPPORTED} if the concrete reasoner does not
+     *         status {@link net.ssehub.easy.basics.messages.Status#UNSUPPORTED} if the concrete reasoner does not
      *         support this operation.
      */
     public EvaluationResult evaluate(Project project, Configuration cfg, List<Constraint> constraints, 
@@ -549,7 +549,7 @@ public class ReasonerFrontend {
      *            the URI where the data for the upgrade is located at
      * @param observer an optional progress observer, shall be {@link ProgressObserver#NO_OBSERVER} if unused
      * @return The result of this reasoning step. Can have the status
-     *     {@link de.uni_hildesheim.sse.utils.messages.Status#UNSUPPORTED} if the concrete reasoner does not support
+     *     {@link net.ssehub.easy.basics.messages.Status#UNSUPPORTED} if the concrete reasoner does not support
      *     this operation.
      * @throws IllegalArgumentException
      *             in case of illegal arguments

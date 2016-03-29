@@ -1,7 +1,7 @@
 package de.uni_hildesheim.sse.reasoning.drools2.translation.oclFeatureCalls;
 
-import de.uni_hildesheim.sse.model.cst.OCLFeatureCall;
 import de.uni_hildesheim.sse.reasoning.drools2.translation.AbstractConstraintTranslator;
+import net.ssehub.easy.varModel.cst.OCLFeatureCall;
 
 /**
  * Handler for translating de.uni_hildesheim.sse.model.varModel.datatypes.Compound.IS_DEFINED operations.

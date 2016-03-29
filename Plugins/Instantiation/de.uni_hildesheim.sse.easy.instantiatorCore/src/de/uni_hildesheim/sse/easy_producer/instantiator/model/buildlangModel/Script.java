@@ -38,12 +38,12 @@ import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.IMetaType
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeDescriptor;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeRegistry;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.configuration.IvmlTypes;
-import de.uni_hildesheim.sse.utils.logger.EASyLoggerFactory;
-import de.uni_hildesheim.sse.utils.modelManagement.IRestrictionEvaluationContext;
-import de.uni_hildesheim.sse.utils.modelManagement.IndentationConfiguration;
-import de.uni_hildesheim.sse.utils.modelManagement.ModelImport;
-import de.uni_hildesheim.sse.utils.modelManagement.ModelInfo;
-import de.uni_hildesheim.sse.utils.modelManagement.Version;
+import net.ssehub.easy.basics.logger.EASyLoggerFactory;
+import net.ssehub.easy.basics.modelManagement.IRestrictionEvaluationContext;
+import net.ssehub.easy.basics.modelManagement.IndentationConfiguration;
+import net.ssehub.easy.basics.modelManagement.ModelImport;
+import net.ssehub.easy.basics.modelManagement.ModelInfo;
+import net.ssehub.easy.basics.modelManagement.Version;
 
 /**
  * Creates a project which is the top-level element of a build script VIL-model.

@@ -30,28 +30,28 @@ import de.uni_hildesheim.sse.easy_producer.core.persistence.datatypes.PathEnviro
 import de.uni_hildesheim.sse.easy_producer.core.persistence.standard.Persistencer;
 import de.uni_hildesheim.sse.easy_producer.core.varMod.container.ProjectContainer;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilException;
-import de.uni_hildesheim.sse.model.confModel.AssignmentState;
-import de.uni_hildesheim.sse.model.confModel.Configuration;
-import de.uni_hildesheim.sse.model.confModel.ConfigurationException;
-import de.uni_hildesheim.sse.model.confModel.IDecisionVariable;
-import de.uni_hildesheim.sse.model.management.VarModel;
-import de.uni_hildesheim.sse.model.varModel.AbstractVariable;
-import de.uni_hildesheim.sse.model.varModel.DecisionVariableDeclaration;
-import de.uni_hildesheim.sse.model.varModel.Project;
-import de.uni_hildesheim.sse.model.varModel.ProjectImport;
-import de.uni_hildesheim.sse.model.varModel.filter.DeclarationFinder;
-import de.uni_hildesheim.sse.model.varModel.filter.DeclarationFinder.VisibilityType;
-import de.uni_hildesheim.sse.model.varModel.filter.FilterType;
-import de.uni_hildesheim.sse.model.varModel.values.Value;
-import de.uni_hildesheim.sse.model.varModel.values.ValueDoesNotMatchTypeException;
-import de.uni_hildesheim.sse.model.varModel.values.ValueFactory;
 import de.uni_hildesheim.sse.reasoning.core.model.ReasoningOperation;
 import de.uni_hildesheim.sse.reasoning.core.reasoner.Message;
 import de.uni_hildesheim.sse.reasoning.core.reasoner.ReasoningResult;
-import de.uni_hildesheim.sse.utils.modelManagement.ModelInfo;
-import de.uni_hildesheim.sse.utils.modelManagement.ModelManagementException;
-import de.uni_hildesheim.sse.utils.modelManagement.Version;
-import de.uni_hildesheim.sse.utils.progress.ProgressObserver;
+import net.ssehub.easy.basics.modelManagement.ModelInfo;
+import net.ssehub.easy.basics.modelManagement.ModelManagementException;
+import net.ssehub.easy.basics.modelManagement.Version;
+import net.ssehub.easy.basics.progress.ProgressObserver;
+import net.ssehub.easy.varModel.confModel.AssignmentState;
+import net.ssehub.easy.varModel.confModel.Configuration;
+import net.ssehub.easy.varModel.confModel.ConfigurationException;
+import net.ssehub.easy.varModel.confModel.IDecisionVariable;
+import net.ssehub.easy.varModel.management.VarModel;
+import net.ssehub.easy.varModel.model.AbstractVariable;
+import net.ssehub.easy.varModel.model.DecisionVariableDeclaration;
+import net.ssehub.easy.varModel.model.Project;
+import net.ssehub.easy.varModel.model.ProjectImport;
+import net.ssehub.easy.varModel.model.filter.DeclarationFinder;
+import net.ssehub.easy.varModel.model.filter.FilterType;
+import net.ssehub.easy.varModel.model.filter.DeclarationFinder.VisibilityType;
+import net.ssehub.easy.varModel.model.values.Value;
+import net.ssehub.easy.varModel.model.values.ValueDoesNotMatchTypeException;
+import net.ssehub.easy.varModel.model.values.ValueFactory;
 
 /**
  * Tests the {@link PLPInfo} class.
@@ -195,7 +195,7 @@ public class PLPInfoTest extends AbstractPLPInfoTest {
     
     /**
      * Closes all {@link PLPInfo}s, which were loaded in a test.
-     * This should avoid side effects inside the {@link de.uni_hildesheim.sse.utils.modelManagement.ModelManagement}s,
+     * This should avoid side effects inside the {@link net.ssehub.easy.basics.modelManagement.ModelManagement}s,
      * while parsing the config files of different {@link PLPInfo} projects.
      */
     @After
@@ -386,9 +386,9 @@ public class PLPInfoTest extends AbstractPLPInfoTest {
      * Tests whether a modified {@link PLPInfo} can be saved.
      * @throws PersistenceException IF the files could not be written/created to the file system.
      * @throws ValueDoesNotMatchTypeException Will be thrown, if the only one {@link DecisionVariableDeclaration}
-     *     inside of the IVML file is not of type {@link de.uni_hildesheim.sse.model.varModel.datatypes.IntegerType}.
+     *     inside of the IVML file is not of type {@link net.ssehub.easy.varModel.model.datatypes.IntegerType}.
      * @throws ConfigurationException Must not occur, otherwise there is a failure inside of the
-     *     {@link de.uni_hildesheim.sse.model.confModel.Configuration}.
+     *     {@link net.ssehub.easy.varModel.confModel.Configuration}.
      * @throws IOException Will be thrown, if the changed file could not be saved to the local file system.
      */
     @Test
@@ -548,7 +548,7 @@ public class PLPInfoTest extends AbstractPLPInfoTest {
                 // Test whether declB got a propagated value
                 Assert.assertEquals(1, result.getMessageCount());
                 Message msg = result.getMessage(0);
-                Assert.assertSame(de.uni_hildesheim.sse.utils.messages.Status.INFO, msg.getStatus());
+                Assert.assertSame(net.ssehub.easy.basics.messages.Status.INFO, msg.getStatus());
                 Assert.assertEquals(1, msg.getConflicts().size());
                 Assert.assertSame(propagatedDeclaration, msg.getConflicts().get(0));
             }

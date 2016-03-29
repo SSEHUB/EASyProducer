@@ -15,8 +15,8 @@
  */
 package de.uni_hildesheim.sse.easy.ui.productline_editor;
 
-import de.uni_hildesheim.sse.model.varModel.values.Value;
-import de.uni_hildesheim.sse.model.varModel.values.ValueDoesNotMatchTypeException;
+import net.ssehub.easy.varModel.model.values.Value;
+import net.ssehub.easy.varModel.model.values.ValueDoesNotMatchTypeException;
 
 /**
  * Declares the interface of an overriding editor in {@link ConfigurationTableEditorFactory} that
@@ -29,7 +29,7 @@ import de.uni_hildesheim.sse.model.varModel.values.ValueDoesNotMatchTypeExceptio
 public interface IOverridingEditor extends IRefreshableEditor {
 
     /**
-     * Returns the value of the given {@link de.uni_hildesheim.sse.model.confModel.IDecisionVariable} so that it can 
+     * Returns the value of the given {@link net.ssehub.easy.varModel.confModel.IDecisionVariable} so that it can 
      * be used as return value for the {@link org.eclipse.jface.viewers.EditingSupport#getValue(Object)} method.
      * 
      * @return A value as needed by the Eclipse UI.
@@ -43,7 +43,7 @@ public interface IOverridingEditor extends IRefreshableEditor {
      * 
      * @return A {@link Value} representation of the object, maybe <tt>null</tt>.
      * @throws ValueDoesNotMatchTypeException in case of <code>value</code> cannot be converted to
-     * the related data type of the wrapped {@link de.uni_hildesheim.sse.model.confModel.IDecisionVariable}.
+     * the related data type of the wrapped {@link net.ssehub.easy.varModel.confModel.IDecisionVariable}.
      */
     public Value getValueAssignment(Object value) throws ValueDoesNotMatchTypeException;
     

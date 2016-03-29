@@ -10,8 +10,8 @@ import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilExceptio
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.WriterVisitor;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.Expression;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.Constants;
-import de.uni_hildesheim.sse.utils.modelManagement.IndentationConfiguration;
-import de.uni_hildesheim.sse.utils.modelManagement.ModelImport;
+import net.ssehub.easy.basics.modelManagement.IndentationConfiguration;
+import net.ssehub.easy.basics.modelManagement.ModelImport;
 
 /**
  * For writing a template language model to a print stream. Needed for persisting the 

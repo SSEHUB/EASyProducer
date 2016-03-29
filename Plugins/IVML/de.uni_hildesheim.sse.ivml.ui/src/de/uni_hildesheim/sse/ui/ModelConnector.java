@@ -5,14 +5,14 @@ import java.net.URISyntaxException;
 import java.util.List;
 
 import de.uni_hildesheim.sse.ModelUtility;
-import de.uni_hildesheim.sse.model.management.VarModel;
-import de.uni_hildesheim.sse.model.varModel.Constraint;
-import de.uni_hildesheim.sse.model.varModel.PartialEvaluationBlock;
-import de.uni_hildesheim.sse.model.varModel.Project;
-import de.uni_hildesheim.sse.model.varModel.datatypes.DerivedDatatype;
-import de.uni_hildesheim.sse.model.varModel.filter.ConstraintSeparator;
-import de.uni_hildesheim.sse.persistency.StringProvider;
-import de.uni_hildesheim.sse.utils.modelManagement.VersionFormatException;
+import net.ssehub.easy.basics.modelManagement.VersionFormatException;
+import net.ssehub.easy.varModel.management.VarModel;
+import net.ssehub.easy.varModel.model.Constraint;
+import net.ssehub.easy.varModel.model.PartialEvaluationBlock;
+import net.ssehub.easy.varModel.model.Project;
+import net.ssehub.easy.varModel.model.datatypes.DerivedDatatype;
+import net.ssehub.easy.varModel.model.filter.ConstraintSeparator;
+import net.ssehub.easy.varModel.persistency.StringProvider;
 
 /**
  * This class is used to get information out of the variability model that cannot

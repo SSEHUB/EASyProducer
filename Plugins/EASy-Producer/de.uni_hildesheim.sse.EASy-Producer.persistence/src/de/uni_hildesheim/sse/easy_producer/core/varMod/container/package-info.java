@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 /**
- * {@link de.uni_hildesheim.sse.utils.modelManagement.IModel} container for simplifying the usage of
- * the different {@link de.uni_hildesheim.sse.utils.modelManagement.IModel}s in EASy-Producer projects.
+ * {@link net.ssehub.easy.basics.modelManagement.IModel} container for simplifying the usage of
+ * the different {@link net.ssehub.easy.basics.modelManagement.IModel}s in EASy-Producer projects.
  * @author El-Sharkawy
  *
  */

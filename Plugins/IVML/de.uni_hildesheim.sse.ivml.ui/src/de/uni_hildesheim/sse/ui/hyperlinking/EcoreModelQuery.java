@@ -23,12 +23,12 @@ import de.uni_hildesheim.sse.ivml.TypedefMapping;
 import de.uni_hildesheim.sse.ivml.VariableDeclaration;
 import de.uni_hildesheim.sse.ivml.VariableDeclarationPart;
 import de.uni_hildesheim.sse.ivml.impl.VariabilityUnitImpl;
-import de.uni_hildesheim.sse.model.management.VarModel;
-import de.uni_hildesheim.sse.model.varModel.filter.ModelElementTypeFinder.ClassType;
-import de.uni_hildesheim.sse.model.varModel.filter.ModelElementTypeFinder.ModelElementDescription;
 import de.uni_hildesheim.sse.translation.Utils;
 import de.uni_hildesheim.sse.translation.Utils.SplitResult;
 import de.uni_hildesheim.sse.ui.XtextEditor;
+import net.ssehub.easy.varModel.management.VarModel;
+import net.ssehub.easy.varModel.model.filter.ModelElementTypeFinder.ClassType;
+import net.ssehub.easy.varModel.model.filter.ModelElementTypeFinder.ModelElementDescription;
 
 public class EcoreModelQuery {
 	

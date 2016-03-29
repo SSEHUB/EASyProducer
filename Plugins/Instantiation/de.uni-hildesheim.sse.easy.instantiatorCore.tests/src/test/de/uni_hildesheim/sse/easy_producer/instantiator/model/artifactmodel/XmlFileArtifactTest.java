@@ -1,6 +1,6 @@
 package test.de.uni_hildesheim.sse.easy_producer.instantiator.model.artifactmodel;
 
-import static de.uni_hildesheim.sse.varModel.testSupport.TextTestUtils.*;
+import static net.ssehub.easy.varModel.varModel.testSupport.TextTestUtils.*;
 
 import java.io.File;
 import java.io.FileInputStream;

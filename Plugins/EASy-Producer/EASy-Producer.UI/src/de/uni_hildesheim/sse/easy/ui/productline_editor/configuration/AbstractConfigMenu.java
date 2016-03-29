@@ -4,11 +4,11 @@ import org.eclipse.swt.widgets.Composite;
 
 import de.uni_hildesheim.sse.easy.ui.productline_editor.AbstractHeaderMenu;
 import de.uni_hildesheim.sse.easy_producer.model.ProductLineProject;
-import de.uni_hildesheim.sse.model.confModel.Configuration;
-import de.uni_hildesheim.sse.model.confModel.IConfigurationChangeListener;
-import de.uni_hildesheim.sse.model.confModel.IDecisionVariable;
-import de.uni_hildesheim.sse.model.varModel.values.Value;
 import de.uni_hildesheim.sse.reasoning.core.reasoner.Message;
+import net.ssehub.easy.varModel.confModel.Configuration;
+import net.ssehub.easy.varModel.confModel.IConfigurationChangeListener;
+import net.ssehub.easy.varModel.confModel.IDecisionVariable;
+import net.ssehub.easy.varModel.model.values.Value;
 
 /**
  * Abstract super class for menu modifying the {@link de.uni_hildesheim.sse.easy.ui.confModel.GUIConfiguration}.

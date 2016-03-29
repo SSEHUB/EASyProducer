@@ -18,8 +18,8 @@ import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.Scr
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilException;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.templateModel.Template;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.templateModel.TemplateLangWriter;
-import de.uni_hildesheim.sse.model.varModel.Project;
-import de.uni_hildesheim.sse.persistency.StringProvider;
+import net.ssehub.easy.varModel.model.Project;
+import net.ssehub.easy.varModel.persistency.StringProvider;
 
 /**
  * Abstract utility class for test cases.

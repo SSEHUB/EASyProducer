@@ -19,9 +19,6 @@ import org.drools.io.Resource;
 import org.drools.io.ResourceFactory;
 import org.drools.runtime.StatefulKnowledgeSession;
 
-import de.uni_hildesheim.sse.model.confModel.IDecisionVariable;
-import de.uni_hildesheim.sse.model.varModel.ModelElement;
-import de.uni_hildesheim.sse.persistency.StringProvider;
 import de.uni_hildesheim.sse.reasoning.core.model.ReasonerModel;
 import de.uni_hildesheim.sse.reasoning.core.model.ReasoningOperation;
 import de.uni_hildesheim.sse.reasoning.core.model.ReasoningState;
@@ -33,10 +30,13 @@ import de.uni_hildesheim.sse.reasoning.drools2.functions.FactUpdater;
 import de.uni_hildesheim.sse.reasoning.drools2.functions.FailedElements;
 import de.uni_hildesheim.sse.reasoning.drools2.functions.FailedRules;
 import de.uni_hildesheim.sse.reasoning.drools2.translation.ModelTranslator;
-import de.uni_hildesheim.sse.utils.logger.EASyLoggerFactory;
-import de.uni_hildesheim.sse.utils.logger.EASyLoggerFactory.EASyLogger;
-import de.uni_hildesheim.sse.utils.messages.Status;
-import de.uni_hildesheim.sse.utils.progress.ProgressObserver;
+import net.ssehub.easy.basics.logger.EASyLoggerFactory;
+import net.ssehub.easy.basics.logger.EASyLoggerFactory.EASyLogger;
+import net.ssehub.easy.basics.messages.Status;
+import net.ssehub.easy.basics.progress.ProgressObserver;
+import net.ssehub.easy.varModel.confModel.IDecisionVariable;
+import net.ssehub.easy.varModel.model.ModelElement;
+import net.ssehub.easy.varModel.persistency.StringProvider;
 
 /**
  * Drools reasoning instance for performing one reasoning step. Check for Stats.

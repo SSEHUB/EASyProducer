@@ -16,7 +16,7 @@ import de.uni_hildesheim.sse.ivml.QualifiedName;
 import de.uni_hildesheim.sse.ivml.Typedef;
 import de.uni_hildesheim.sse.ivml.VariableDeclaration;
 import de.uni_hildesheim.sse.ivml.VariableDeclarationPart;
-import de.uni_hildesheim.sse.model.management.VarModel;
+import net.ssehub.easy.varModel.management.VarModel;
 
 /**
  * Some public utility methods.

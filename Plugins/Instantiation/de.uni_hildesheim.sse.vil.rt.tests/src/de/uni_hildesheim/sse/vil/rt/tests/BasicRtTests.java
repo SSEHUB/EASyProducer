@@ -27,8 +27,8 @@ import test.de.uni_hildesheim.sse.vil.buildlang.ITestConfigurer;
 import de.uni_hildesheim.sse.dslCore.translation.ErrorCodes;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilException;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.rtVil.Script;
-import de.uni_hildesheim.sse.utils.messages.AbstractException;
 import de.uni_hildesheim.sse.vil.rt.RtErrorCodes;
+import net.ssehub.easy.basics.messages.AbstractException;
 
 /**
  * Basic syntactic language tests.

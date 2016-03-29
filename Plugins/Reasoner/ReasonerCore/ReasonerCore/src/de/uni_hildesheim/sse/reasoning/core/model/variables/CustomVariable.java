@@ -1,11 +1,11 @@
 package de.uni_hildesheim.sse.reasoning.core.model.variables;
 
-import de.uni_hildesheim.sse.model.confModel.IDecisionVariable;
 import de.uni_hildesheim.sse.reasoning.core.Bundle;
 import de.uni_hildesheim.sse.reasoning.core.model.ReasonerModel;
 import de.uni_hildesheim.sse.reasoning.core.model.datatypes.ReasonerDatatype;
-import de.uni_hildesheim.sse.utils.logger.EASyLoggerFactory;
-import de.uni_hildesheim.sse.utils.logger.EASyLoggerFactory.EASyLogger;
+import net.ssehub.easy.basics.logger.EASyLoggerFactory;
+import net.ssehub.easy.basics.logger.EASyLoggerFactory.EASyLogger;
+import net.ssehub.easy.varModel.confModel.IDecisionVariable;
 
 /**
  * Abstract super class for {@link ReasonerVariable}s, which are an instance of a {@link ReasonerDatatype}.

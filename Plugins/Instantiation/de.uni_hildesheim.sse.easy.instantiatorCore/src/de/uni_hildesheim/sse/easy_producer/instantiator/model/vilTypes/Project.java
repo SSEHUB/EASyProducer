@@ -13,7 +13,7 @@ import de.uni_hildesheim.sse.easy_producer.instantiator.model.artifactModel.Path
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.Script;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilException;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.IProjectDescriptor.ModelKind;
-import de.uni_hildesheim.sse.utils.progress.ProgressObserver;
+import net.ssehub.easy.basics.progress.ProgressObserver;
 
 /**
  * Represents the physical project we are operating on. Call {@link #release()}

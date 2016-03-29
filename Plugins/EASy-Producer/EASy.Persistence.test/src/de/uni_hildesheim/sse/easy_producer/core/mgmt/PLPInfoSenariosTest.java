@@ -15,13 +15,13 @@ import de.uni_hildesheim.sse.easy_producer.core.AllTests;
 import de.uni_hildesheim.sse.easy_producer.core.mgmt.VilTestExectuter.AbstractVilListener;
 import de.uni_hildesheim.sse.easy_producer.core.persistence.PersistenceException;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilException;
-import de.uni_hildesheim.sse.model.confModel.AllFreezeSelector;
-import de.uni_hildesheim.sse.model.varModel.ModelElement;
-import de.uni_hildesheim.sse.persistency.StringProvider;
 import de.uni_hildesheim.sse.reasoning.core.frontend.IReasonerListener;
 import de.uni_hildesheim.sse.reasoning.core.model.ReasoningOperation;
 import de.uni_hildesheim.sse.reasoning.core.reasoner.Message;
 import de.uni_hildesheim.sse.reasoning.core.reasoner.ReasoningResult;
+import net.ssehub.easy.varModel.confModel.AllFreezeSelector;
+import net.ssehub.easy.varModel.model.ModelElement;
+import net.ssehub.easy.varModel.persistency.StringProvider;
 
 /**
  * Extended test cases for the {@link PLPInfo}. Contrary to {@link PLPInfoTest},
@@ -92,7 +92,7 @@ public class PLPInfoSenariosTest extends AbstractPLPInfoTest {
     
     /**
      * Closes all {@link PLPInfo}s, which were loaded in a test.
-     * This should avoid side effects inside the {@link de.uni_hildesheim.sse.utils.modelManagement.ModelManagement}s,
+     * This should avoid side effects inside the {@link net.ssehub.easy.basics.modelManagement.ModelManagement}s,
      * while parsing the config files of different {@link PLPInfo} projects.
      */
     @After
@@ -259,7 +259,7 @@ public class PLPInfoSenariosTest extends AbstractPLPInfoTest {
     }
     
     /**
-     * Tests whether {@link de.uni_hildesheim.sse.model.varModel.datatypes.Compound}s can be used in instantiation.
+     * Tests whether {@link net.ssehub.easy.varModel.model.datatypes.Compound}s can be used in instantiation.
      * Bug occurred on 12.08.2014.
      * @throws PersistenceException If the project could not be loaded from the file system.
      */

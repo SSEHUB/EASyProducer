@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.Properties;
 
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilException;
-import de.uni_hildesheim.sse.utils.messages.Message;
+import net.ssehub.easy.basics.messages.Message;
 
 /**
  * Defines the default folder creator.

@@ -7,16 +7,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 import de.uni_hildesheim.sse.easy_producer.instantiator.Bundle;
-import de.uni_hildesheim.sse.model.varModel.Project;
 import de.uni_hildesheim.sse.persistency.xml.XmlIo;
-import de.uni_hildesheim.sse.utils.logger.EASyLoggerFactory;
-import de.uni_hildesheim.sse.utils.logger.EASyLoggerFactory.EASyLogger;
-import de.uni_hildesheim.sse.utils.messages.IMessage;
-import de.uni_hildesheim.sse.utils.modelManagement.IModel;
-import de.uni_hildesheim.sse.utils.modelManagement.IModelLoader;
-import de.uni_hildesheim.sse.utils.modelManagement.ImportResolver;
-import de.uni_hildesheim.sse.utils.modelManagement.ModelInfo;
-import de.uni_hildesheim.sse.utils.modelManagement.Version;
+import net.ssehub.easy.basics.logger.EASyLoggerFactory;
+import net.ssehub.easy.basics.logger.EASyLoggerFactory.EASyLogger;
+import net.ssehub.easy.basics.messages.IMessage;
+import net.ssehub.easy.basics.modelManagement.IModel;
+import net.ssehub.easy.basics.modelManagement.IModelLoader;
+import net.ssehub.easy.basics.modelManagement.ImportResolver;
+import net.ssehub.easy.basics.modelManagement.ModelInfo;
+import net.ssehub.easy.basics.modelManagement.Version;
+import net.ssehub.easy.varModel.model.Project;
 
 /**
  * Loader to load IVML files.
@@ -40,7 +40,7 @@ public class IVMLModelLoader implements IModelLoader<Project> {
     }
     
     @Override
-    public de.uni_hildesheim.sse.utils.modelManagement.IModelLoader.LoadResult<Project> load(ModelInfo<Project> info, 
+    public net.ssehub.easy.basics.modelManagement.IModelLoader.LoadResult<Project> load(ModelInfo<Project> info, 
         ImportResolver<Project> resolver) {
         LoadResult<Project> loadResult = null;
         for (Project project : projects) {
@@ -56,7 +56,7 @@ public class IVMLModelLoader implements IModelLoader<Project> {
 
     @Override
     public void scan(File location,
-            de.uni_hildesheim.sse.utils.modelManagement.IModelLoader.IModelInfoHolder<Project> holder) {
+            net.ssehub.easy.basics.modelManagement.IModelLoader.IModelInfoHolder<Project> holder) {
         if (location.getName().endsWith(".xml")) {
             projects = new ArrayList<Project>();
             try {

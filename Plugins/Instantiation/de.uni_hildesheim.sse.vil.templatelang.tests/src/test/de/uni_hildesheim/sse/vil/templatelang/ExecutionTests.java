@@ -20,13 +20,13 @@ import de.uni_hildesheim.sse.easy_producer.instantiator.model.defaultInstantiato
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.templateModel.Template;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.templateModel.TemplateLangExecution;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.configuration.Configuration;
-import de.uni_hildesheim.sse.model.confModel.ConfigurationException;
-import de.uni_hildesheim.sse.model.management.VarModel;
-import de.uni_hildesheim.sse.model.varModel.Project;
-import de.uni_hildesheim.sse.persistency.IVMLWriter;
-import de.uni_hildesheim.sse.utils.modelManagement.ModelInfo;
-import de.uni_hildesheim.sse.utils.modelManagement.ModelManagementException;
-import de.uni_hildesheim.sse.varModel.testSupport.DefaultConfiguration;
+import net.ssehub.easy.basics.modelManagement.ModelInfo;
+import net.ssehub.easy.basics.modelManagement.ModelManagementException;
+import net.ssehub.easy.varModel.confModel.ConfigurationException;
+import net.ssehub.easy.varModel.management.VarModel;
+import net.ssehub.easy.varModel.model.Project;
+import net.ssehub.easy.varModel.persistency.IVMLWriter;
+import net.ssehub.easy.varModel.varModel.testSupport.DefaultConfiguration;
 
 /**
  * Performs some executions of templates and compares the traces
@@ -79,7 +79,7 @@ public class ExecutionTests extends AbstractTest {
     private static Map<String, Object> createParameterMap(Configuration config, IArtifact target) {
         Map<String, Object> param = new HashMap<String, Object>();
         if (null == config) {
-            de.uni_hildesheim.sse.model.confModel.Configuration cfg = DefaultConfiguration.createDefaultConfiguration();
+            net.ssehub.easy.varModel.confModel.Configuration cfg = DefaultConfiguration.createDefaultConfiguration();
             Assert.assertNotNull("creating default IVML configuration failed", cfg);
             config = new Configuration(cfg);
         }
@@ -171,7 +171,7 @@ public class ExecutionTests extends AbstractTest {
             Assert.fail("unexpected exception: " + e.getMessage());
         }
         Assert.assertNotNull("IVML model '" + varModelName + "' not loaded", varModel);
-        Configuration cfg = new Configuration(new de.uni_hildesheim.sse.model.confModel.Configuration(varModel));
+        Configuration cfg = new Configuration(new net.ssehub.easy.varModel.confModel.Configuration(varModel));
         return assertEqual(vtlModelName, "main", cfg, expectedExceptions);
     }
 

@@ -1,7 +1,7 @@
 package de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions;
 
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilException;
-import de.uni_hildesheim.sse.utils.messages.IMessageHandler;
+import net.ssehub.easy.basics.messages.IMessageHandler;
 
 /**
  * Implements a basic expression version restriction validator.

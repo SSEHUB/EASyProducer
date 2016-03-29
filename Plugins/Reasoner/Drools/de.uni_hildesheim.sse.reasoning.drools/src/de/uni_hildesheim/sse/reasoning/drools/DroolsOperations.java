@@ -5,7 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import de.uni_hildesheim.sse.model.varModel.datatypes.OclKeyWords;
+import net.ssehub.easy.varModel.model.datatypes.OclKeyWords;
 
 /**
  * This class contains methods to identify if the IVML operations are implicitly supported by Jess.

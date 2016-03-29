@@ -1,8 +1,8 @@
 package de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel;
 
-import de.uni_hildesheim.sse.utils.modelManagement.ImportResolver;
-import de.uni_hildesheim.sse.utils.modelManagement.DefaultImportResolver;
-import de.uni_hildesheim.sse.utils.modelManagement.ModelManagement;
+import net.ssehub.easy.basics.modelManagement.DefaultImportResolver;
+import net.ssehub.easy.basics.modelManagement.ImportResolver;
+import net.ssehub.easy.basics.modelManagement.ModelManagement;
 
 /**
  * Provides mechanisms for loading, linking, referring, searching and storing build models

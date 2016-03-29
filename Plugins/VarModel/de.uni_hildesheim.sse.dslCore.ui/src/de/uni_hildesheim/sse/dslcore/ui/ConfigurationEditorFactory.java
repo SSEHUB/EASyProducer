@@ -21,7 +21,7 @@ import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.viewers.ViewerFilter;
 import org.eclipse.swt.widgets.Composite;
 
-import de.uni_hildesheim.sse.model.confModel.Configuration;
+import net.ssehub.easy.varModel.confModel.Configuration;
 
 /**
  * Implements a factory for creating EASy configuration editors. This is needed to decouple

@@ -19,7 +19,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import de.uni_hildesheim.sse.easy.ui.confModel.GUIVariable;
-import de.uni_hildesheim.sse.model.varModel.ProjectInterface;
+import net.ssehub.easy.varModel.model.ProjectInterface;
 
 /**
  * A filter based on {@link ProjectInterface}s defined in the same project as the currently shown project.

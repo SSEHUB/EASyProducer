@@ -1,8 +1,8 @@
 package de.uni_hildesheim.sse.easy.ui.productline_editor.configuration;
 
 import de.uni_hildesheim.sse.easy.ui.confModel.GUIVariable;
-import de.uni_hildesheim.sse.model.confModel.AssignmentState;
-import de.uni_hildesheim.sse.model.confModel.IAssignmentState;
+import net.ssehub.easy.varModel.confModel.AssignmentState;
+import net.ssehub.easy.varModel.confModel.IAssignmentState;
 
 /**
  * Filters variables which are in a specific state.

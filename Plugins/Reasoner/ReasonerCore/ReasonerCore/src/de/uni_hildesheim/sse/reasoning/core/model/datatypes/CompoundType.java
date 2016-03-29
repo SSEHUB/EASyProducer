@@ -2,10 +2,10 @@ package de.uni_hildesheim.sse.reasoning.core.model.datatypes;
 
 import java.util.List;
 
-import de.uni_hildesheim.sse.model.cst.ConstraintSyntaxTree;
-import de.uni_hildesheim.sse.model.varModel.Constraint;
-import de.uni_hildesheim.sse.model.varModel.ModelElement;
-import de.uni_hildesheim.sse.model.varModel.datatypes.Compound;
+import net.ssehub.easy.varModel.cst.ConstraintSyntaxTree;
+import net.ssehub.easy.varModel.model.Constraint;
+import net.ssehub.easy.varModel.model.ModelElement;
+import net.ssehub.easy.varModel.model.datatypes.Compound;
 
 
 /**

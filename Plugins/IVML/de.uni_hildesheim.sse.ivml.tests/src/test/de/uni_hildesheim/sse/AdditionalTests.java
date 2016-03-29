@@ -7,10 +7,10 @@ import java.util.List;
 import org.junit.Test;
 import org.junit.Assert;
 
-import de.uni_hildesheim.sse.model.confModel.Configuration;
-import de.uni_hildesheim.sse.model.varModel.Project;
-import de.uni_hildesheim.sse.model.varModel.values.ValueDoesNotMatchTypeException;
 import de.uni_hildesheim.sse.translation.ErrorCodes;
+import net.ssehub.easy.varModel.confModel.Configuration;
+import net.ssehub.easy.varModel.model.Project;
+import net.ssehub.easy.varModel.model.values.ValueDoesNotMatchTypeException;
 
 /**
  * A test class for blackbox testing parser and type resolution of additional

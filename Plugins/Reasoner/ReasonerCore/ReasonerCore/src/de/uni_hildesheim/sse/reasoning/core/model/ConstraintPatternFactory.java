@@ -1,6 +1,6 @@
 package de.uni_hildesheim.sse.reasoning.core.model;
 
-import de.uni_hildesheim.sse.model.cst.ConstraintSyntaxTree;
+import net.ssehub.easy.varModel.cst.ConstraintSyntaxTree;
 
 /**
  * A factory for determining constraint type.

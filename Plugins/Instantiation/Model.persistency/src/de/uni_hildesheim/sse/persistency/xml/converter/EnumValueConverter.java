@@ -10,16 +10,16 @@ import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
 
 import de.uni_hildesheim.sse.easy_producer.instantiator.Bundle;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.configuration.EnumValue;
-import de.uni_hildesheim.sse.model.management.VarModel;
-import de.uni_hildesheim.sse.model.varModel.IvmlException;
-import de.uni_hildesheim.sse.model.varModel.ModelQuery;
-import de.uni_hildesheim.sse.model.varModel.ModelQueryException;
-import de.uni_hildesheim.sse.model.varModel.Project;
-import de.uni_hildesheim.sse.model.varModel.values.Value;
-import de.uni_hildesheim.sse.utils.logger.EASyLoggerFactory;
-import de.uni_hildesheim.sse.utils.logger.EASyLoggerFactory.EASyLogger;
-import de.uni_hildesheim.sse.utils.modelManagement.ModelInfo;
-import de.uni_hildesheim.sse.utils.modelManagement.ModelManagementException;
+import net.ssehub.easy.basics.logger.EASyLoggerFactory;
+import net.ssehub.easy.basics.logger.EASyLoggerFactory.EASyLogger;
+import net.ssehub.easy.basics.modelManagement.ModelInfo;
+import net.ssehub.easy.basics.modelManagement.ModelManagementException;
+import net.ssehub.easy.varModel.management.VarModel;
+import net.ssehub.easy.varModel.model.IvmlException;
+import net.ssehub.easy.varModel.model.ModelQuery;
+import net.ssehub.easy.varModel.model.ModelQueryException;
+import net.ssehub.easy.varModel.model.Project;
+import net.ssehub.easy.varModel.model.values.Value;
 
 /**
  * Converter for the enums.
@@ -64,8 +64,8 @@ public class EnumValueConverter implements Converter {
     public void marshal(Object object, HierarchicalStreamWriter writer, MarshallingContext context) {
         EnumValue enumValue = (EnumValue) object;
         writer.startNode("enumValue");
-        de.uni_hildesheim.sse.model.varModel.datatypes.Enum e = 
-            (de.uni_hildesheim.sse.model.varModel.datatypes.Enum) enumValue.getDatatype();
+        net.ssehub.easy.varModel.model.datatypes.Enum e = 
+            (net.ssehub.easy.varModel.model.datatypes.Enum) enumValue.getDatatype();
         writer.addAttribute("project", String.valueOf(e.getTopLevelParent().getName()));
         writer.addAttribute("type", enumValue.getDatatype().getName());
         writer.addAttribute("enum", enumValue.getQualifiedName());
@@ -98,8 +98,8 @@ public class EnumValueConverter implements Converter {
             if (project != null) {
                 try {
                     Value eVal = ModelQuery.enumLiteralAsValue(project, name);
-                    if (eVal instanceof de.uni_hildesheim.sse.model.varModel.values.EnumValue) {
-                        result = new EnumValue((de.uni_hildesheim.sse.model.varModel.values.EnumValue) eVal);
+                    if (eVal instanceof net.ssehub.easy.varModel.model.values.EnumValue) {
+                        result = new EnumValue((net.ssehub.easy.varModel.model.values.EnumValue) eVal);
                     }
                 } catch (ModelQueryException e) {
                     logger.exception(e);

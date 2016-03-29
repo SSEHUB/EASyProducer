@@ -8,55 +8,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import de.uni_hildesheim.sse.model.confModel.AssignmentState;
-import de.uni_hildesheim.sse.model.confModel.CompoundVariable;
-import de.uni_hildesheim.sse.model.confModel.Configuration;
-import de.uni_hildesheim.sse.model.confModel.ConfigurationException;
-import de.uni_hildesheim.sse.model.confModel.IAssignmentState;
-import de.uni_hildesheim.sse.model.confModel.IConfigurationElement;
-import de.uni_hildesheim.sse.model.confModel.IDecisionVariable;
-import de.uni_hildesheim.sse.model.cst.AttributeVariable;
-import de.uni_hildesheim.sse.model.cst.CSTSemanticException;
-import de.uni_hildesheim.sse.model.cst.CompoundAccess;
-import de.uni_hildesheim.sse.model.cst.CompoundInitializer;
-import de.uni_hildesheim.sse.model.cst.ConstraintReplacer;
-import de.uni_hildesheim.sse.model.cst.ConstraintSyntaxTree;
-import de.uni_hildesheim.sse.model.cst.ContainerInitializer;
-import de.uni_hildesheim.sse.model.cst.ContainerOperationCall;
-import de.uni_hildesheim.sse.model.cst.OCLFeatureCall;
-import de.uni_hildesheim.sse.model.cst.Variable;
-import de.uni_hildesheim.sse.model.cstEvaluation.EvaluationVisitor;
-import de.uni_hildesheim.sse.model.cstEvaluation.IResolutionListener;
-import de.uni_hildesheim.sse.model.cstEvaluation.IValueChangeListener;
-import de.uni_hildesheim.sse.model.cstEvaluation.LocalDecisionVariable;
-import de.uni_hildesheim.sse.model.varModel.AbstractVariable;
-import de.uni_hildesheim.sse.model.varModel.Attribute;
-import de.uni_hildesheim.sse.model.varModel.AttributeAssignment;
-import de.uni_hildesheim.sse.model.varModel.AttributeAssignment.Assignment;
-import de.uni_hildesheim.sse.model.varModel.Constraint;
-import de.uni_hildesheim.sse.model.varModel.DecisionVariableDeclaration;
-import de.uni_hildesheim.sse.model.varModel.IModelElement;
-import de.uni_hildesheim.sse.model.varModel.InternalConstraint;
-import de.uni_hildesheim.sse.model.varModel.OperationDefinition;
-import de.uni_hildesheim.sse.model.varModel.Project;
-import de.uni_hildesheim.sse.model.varModel.datatypes.BooleanType;
-import de.uni_hildesheim.sse.model.varModel.datatypes.Compound;
-import de.uni_hildesheim.sse.model.varModel.datatypes.ConstraintType;
-import de.uni_hildesheim.sse.model.varModel.datatypes.Container;
-import de.uni_hildesheim.sse.model.varModel.datatypes.DerivedDatatype;
-import de.uni_hildesheim.sse.model.varModel.datatypes.IDatatype;
-import de.uni_hildesheim.sse.model.varModel.datatypes.OclKeyWords;
-import de.uni_hildesheim.sse.model.varModel.datatypes.Operation;
-import de.uni_hildesheim.sse.model.varModel.datatypes.Sequence;
-import de.uni_hildesheim.sse.model.varModel.filter.ConstraintFinder;
-import de.uni_hildesheim.sse.model.varModel.filter.DeclarationFinder;
-import de.uni_hildesheim.sse.model.varModel.filter.DeclarationFinder.VisibilityType;
-import de.uni_hildesheim.sse.model.varModel.filter.FilterType;
-import de.uni_hildesheim.sse.model.varModel.filter.VariablesInConstraintFinder;
-import de.uni_hildesheim.sse.model.varModel.values.ConstraintValue;
-import de.uni_hildesheim.sse.model.varModel.values.ContainerValue;
-import de.uni_hildesheim.sse.model.varModel.values.Value;
-import de.uni_hildesheim.sse.persistency.StringProvider;
 import de.uni_hildesheim.sse.reasoning.core.model.PerformanceStatistics;
 import de.uni_hildesheim.sse.reasoning.core.reasoner.ReasonerConfiguration;
 import de.uni_hildesheim.sse.reasoning.core.reasoner.ReasonerConfiguration.IAdditionalInformationLogger;
@@ -67,9 +18,58 @@ import de.uni_hildesheim.sse.reasoning.reasoner.model.AssignmentConstraintFinder
 import de.uni_hildesheim.sse.reasoning.reasoner.model.CollectionConstraintsFinder;
 import de.uni_hildesheim.sse.reasoning.reasoner.model.CopyVisitor;
 import de.uni_hildesheim.sse.reasoning.reasoner.model.VariablesInConstraintsFinder;
-import de.uni_hildesheim.sse.utils.logger.EASyLoggerFactory;
-import de.uni_hildesheim.sse.utils.logger.EASyLoggerFactory.EASyLogger;
-import de.uni_hildesheim.sse.utils.modelManagement.Utils;
+import net.ssehub.easy.basics.logger.EASyLoggerFactory;
+import net.ssehub.easy.basics.logger.EASyLoggerFactory.EASyLogger;
+import net.ssehub.easy.basics.modelManagement.Utils;
+import net.ssehub.easy.varModel.confModel.AssignmentState;
+import net.ssehub.easy.varModel.confModel.CompoundVariable;
+import net.ssehub.easy.varModel.confModel.Configuration;
+import net.ssehub.easy.varModel.confModel.ConfigurationException;
+import net.ssehub.easy.varModel.confModel.IAssignmentState;
+import net.ssehub.easy.varModel.confModel.IConfigurationElement;
+import net.ssehub.easy.varModel.confModel.IDecisionVariable;
+import net.ssehub.easy.varModel.cst.AttributeVariable;
+import net.ssehub.easy.varModel.cst.CSTSemanticException;
+import net.ssehub.easy.varModel.cst.CompoundAccess;
+import net.ssehub.easy.varModel.cst.CompoundInitializer;
+import net.ssehub.easy.varModel.cst.ConstraintReplacer;
+import net.ssehub.easy.varModel.cst.ConstraintSyntaxTree;
+import net.ssehub.easy.varModel.cst.ContainerInitializer;
+import net.ssehub.easy.varModel.cst.ContainerOperationCall;
+import net.ssehub.easy.varModel.cst.OCLFeatureCall;
+import net.ssehub.easy.varModel.cst.Variable;
+import net.ssehub.easy.varModel.cstEvaluation.EvaluationVisitor;
+import net.ssehub.easy.varModel.cstEvaluation.IResolutionListener;
+import net.ssehub.easy.varModel.cstEvaluation.IValueChangeListener;
+import net.ssehub.easy.varModel.cstEvaluation.LocalDecisionVariable;
+import net.ssehub.easy.varModel.model.AbstractVariable;
+import net.ssehub.easy.varModel.model.Attribute;
+import net.ssehub.easy.varModel.model.AttributeAssignment;
+import net.ssehub.easy.varModel.model.Constraint;
+import net.ssehub.easy.varModel.model.DecisionVariableDeclaration;
+import net.ssehub.easy.varModel.model.IModelElement;
+import net.ssehub.easy.varModel.model.InternalConstraint;
+import net.ssehub.easy.varModel.model.OperationDefinition;
+import net.ssehub.easy.varModel.model.Project;
+import net.ssehub.easy.varModel.model.AttributeAssignment.Assignment;
+import net.ssehub.easy.varModel.model.datatypes.BooleanType;
+import net.ssehub.easy.varModel.model.datatypes.Compound;
+import net.ssehub.easy.varModel.model.datatypes.ConstraintType;
+import net.ssehub.easy.varModel.model.datatypes.Container;
+import net.ssehub.easy.varModel.model.datatypes.DerivedDatatype;
+import net.ssehub.easy.varModel.model.datatypes.IDatatype;
+import net.ssehub.easy.varModel.model.datatypes.OclKeyWords;
+import net.ssehub.easy.varModel.model.datatypes.Operation;
+import net.ssehub.easy.varModel.model.datatypes.Sequence;
+import net.ssehub.easy.varModel.model.filter.ConstraintFinder;
+import net.ssehub.easy.varModel.model.filter.DeclarationFinder;
+import net.ssehub.easy.varModel.model.filter.FilterType;
+import net.ssehub.easy.varModel.model.filter.VariablesInConstraintFinder;
+import net.ssehub.easy.varModel.model.filter.DeclarationFinder.VisibilityType;
+import net.ssehub.easy.varModel.model.values.ConstraintValue;
+import net.ssehub.easy.varModel.model.values.ContainerValue;
+import net.ssehub.easy.varModel.model.values.Value;
+import net.ssehub.easy.varModel.persistency.StringProvider;
 
 /**
  * Class for performing reasoning with AssignmnetResolver.
@@ -424,7 +424,7 @@ public class Resolver {
         }  
         collectionCompoundConstraints.addAll(collectionCompoundConstraints(decl, null));
         // Container
-        if (de.uni_hildesheim.sse.model.varModel.datatypes.Container.TYPE.isAssignableFrom(type)) {            
+        if (net.ssehub.easy.varModel.model.datatypes.Container.TYPE.isAssignableFrom(type)) {            
             collectionInternalConstraints(decl, null);
         }
         if (null != defaultValue) {
@@ -790,17 +790,17 @@ public class Resolver {
      */
     private void collectionInternalConstraints(AbstractVariable decl, CompoundAccess topcmpAccess) {
         IDatatype type = decl.getType();
-        if (de.uni_hildesheim.sse.model.varModel.datatypes.Set.TYPE.isAssignableFrom(type)) {
-            de.uni_hildesheim.sse.model.varModel.datatypes.Set set 
-                = (de.uni_hildesheim.sse.model.varModel.datatypes.Set) type;
+        if (net.ssehub.easy.varModel.model.datatypes.Set.TYPE.isAssignableFrom(type)) {
+            net.ssehub.easy.varModel.model.datatypes.Set set 
+                = (net.ssehub.easy.varModel.model.datatypes.Set) type;
             if (set.getContainedType() instanceof DerivedDatatype) {
                 transformCollectionInternalConstraints((DerivedDatatype) set.getContainedType(),
-                    de.uni_hildesheim.sse.model.varModel.datatypes.Set.FORALL, decl, topcmpAccess);
+                    net.ssehub.easy.varModel.model.datatypes.Set.FORALL, decl, topcmpAccess);
             }
         }
-        if (de.uni_hildesheim.sse.model.varModel.datatypes.Sequence.TYPE.isAssignableFrom(type)) {
-            de.uni_hildesheim.sse.model.varModel.datatypes.Sequence sequence 
-                = (de.uni_hildesheim.sse.model.varModel.datatypes.Sequence) type;
+        if (net.ssehub.easy.varModel.model.datatypes.Sequence.TYPE.isAssignableFrom(type)) {
+            net.ssehub.easy.varModel.model.datatypes.Sequence sequence 
+                = (net.ssehub.easy.varModel.model.datatypes.Sequence) type;
             if (sequence.getContainedType() instanceof DerivedDatatype) {
                 transformCollectionInternalConstraints((DerivedDatatype) sequence.getContainedType(),
                     Sequence.FORALL, decl, topcmpAccess);
@@ -859,17 +859,17 @@ public class Resolver {
     private List<Constraint> collectionCompoundConstraints(AbstractVariable decl, CompoundAccess topcmpAccess) {
         List<Constraint> constraints = new ArrayList<Constraint>();
         IDatatype type = decl.getType();
-        if (de.uni_hildesheim.sse.model.varModel.datatypes.Set.TYPE.isAssignableFrom(type)) {
-            de.uni_hildesheim.sse.model.varModel.datatypes.Set set 
-                = (de.uni_hildesheim.sse.model.varModel.datatypes.Set) type;
+        if (net.ssehub.easy.varModel.model.datatypes.Set.TYPE.isAssignableFrom(type)) {
+            net.ssehub.easy.varModel.model.datatypes.Set set 
+                = (net.ssehub.easy.varModel.model.datatypes.Set) type;
             if (Compound.TYPE.isAssignableFrom(set.getContainedType())) {
                 constraints = transformCompoundConstraints((Compound) set.getContainedType(),
-                    de.uni_hildesheim.sse.model.varModel.datatypes.Set.FORALL, decl, topcmpAccess);
+                    net.ssehub.easy.varModel.model.datatypes.Set.FORALL, decl, topcmpAccess);
             }
         }
-        if (de.uni_hildesheim.sse.model.varModel.datatypes.Sequence.TYPE.isAssignableFrom(type)) {
-            de.uni_hildesheim.sse.model.varModel.datatypes.Sequence sequence 
-                = (de.uni_hildesheim.sse.model.varModel.datatypes.Sequence) type;
+        if (net.ssehub.easy.varModel.model.datatypes.Sequence.TYPE.isAssignableFrom(type)) {
+            net.ssehub.easy.varModel.model.datatypes.Sequence sequence 
+                = (net.ssehub.easy.varModel.model.datatypes.Sequence) type;
             if (Compound.TYPE.isAssignableFrom(sequence.getContainedType())) {
                 constraints = transformCompoundConstraints((Compound) sequence.getContainedType(),
                     Sequence.FORALL, decl, topcmpAccess);

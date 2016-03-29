@@ -1,6 +1,6 @@
 package de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.configuration;
 
-import de.uni_hildesheim.sse.model.varModel.Project;
+import net.ssehub.easy.varModel.model.Project;
 
 /**
  * A project-based filter, i.e., all {@link IvmlElement elements} contained in a project

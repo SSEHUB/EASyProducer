@@ -27,8 +27,8 @@ import org.eclipse.core.runtime.Platform;
 
 import de.uni_hildesheim.sse.easy.examples.internal.Bundle;
 import de.uni_hildesheim.sse.easy.ui.productline_editor.EasyProducerDialog;
-import de.uni_hildesheim.sse.utils.Environment;
-import de.uni_hildesheim.sse.utils.logger.EASyLoggerFactory;
+import net.ssehub.easy.basics.Environment;
+import net.ssehub.easy.basics.logger.EASyLoggerFactory;
 
 /**
  * Lists examples provides by this Plug-in.

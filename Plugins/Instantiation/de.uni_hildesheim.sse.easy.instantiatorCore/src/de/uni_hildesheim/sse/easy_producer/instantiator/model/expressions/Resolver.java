@@ -12,7 +12,7 @@ import org.eclipse.emf.ecore.EStructuralFeature;
 import de.uni_hildesheim.sse.dslCore.translation.ErrorCodes;
 import de.uni_hildesheim.sse.dslCore.translation.IMessageReceiver;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeRegistry;
-import de.uni_hildesheim.sse.utils.modelManagement.IModel;
+import net.ssehub.easy.basics.modelManagement.IModel;
 
 /**
  * A basic implementation for a hierarchical resolver.

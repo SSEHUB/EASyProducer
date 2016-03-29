@@ -43,7 +43,7 @@ import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.Conversio
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.Invisible;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.OperationMeta;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.Set;
-import de.uni_hildesheim.sse.utils.logger.EASyLoggerFactory;
+import net.ssehub.easy.basics.logger.EASyLoggerFactory;
 
 /**
  * Represents a parsed XML file artifact. Due to Java internal intelligent processing, it 

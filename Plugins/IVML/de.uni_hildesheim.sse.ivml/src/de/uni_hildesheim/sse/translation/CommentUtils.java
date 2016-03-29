@@ -8,10 +8,10 @@ import org.eclipse.xtext.nodemodel.ICompositeNode;
 import org.eclipse.xtext.nodemodel.INode;
 import org.eclipse.xtext.nodemodel.util.NodeModelUtils;
 
-import de.uni_hildesheim.sse.model.varModel.Comment;
-import de.uni_hildesheim.sse.model.varModel.IModelElement;
-import de.uni_hildesheim.sse.model.varModel.ModelElement;
-import de.uni_hildesheim.sse.model.varModel.StructuredComment;
+import net.ssehub.easy.varModel.model.Comment;
+import net.ssehub.easy.varModel.model.IModelElement;
+import net.ssehub.easy.varModel.model.ModelElement;
+import net.ssehub.easy.varModel.model.StructuredComment;
 
 /**
  * Methods for accessing and converting comments.

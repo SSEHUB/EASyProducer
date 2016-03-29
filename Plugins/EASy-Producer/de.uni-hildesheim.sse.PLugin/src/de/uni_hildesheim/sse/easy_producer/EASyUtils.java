@@ -36,12 +36,12 @@ import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilExceptio
 import de.uni_hildesheim.sse.easy_producer.persistency.EASyPersistencer;
 import de.uni_hildesheim.sse.easy_producer.persistency.ResourcesMgmt;
 import de.uni_hildesheim.sse.easy_producer.persistency.eclipse.PersistenceUtils;
-import de.uni_hildesheim.sse.utils.logger.EASyLoggerFactory;
-import de.uni_hildesheim.sse.utils.logger.EASyLoggerFactory.EASyLogger;
-import de.uni_hildesheim.sse.utils.modelManagement.ModelImport;
-import de.uni_hildesheim.sse.utils.modelManagement.ModelInfo;
-import de.uni_hildesheim.sse.utils.modelManagement.ModelManagementException;
-import de.uni_hildesheim.sse.utils.progress.ProgressObserver;
+import net.ssehub.easy.basics.logger.EASyLoggerFactory;
+import net.ssehub.easy.basics.logger.EASyLoggerFactory.EASyLogger;
+import net.ssehub.easy.basics.modelManagement.ModelImport;
+import net.ssehub.easy.basics.modelManagement.ModelInfo;
+import net.ssehub.easy.basics.modelManagement.ModelManagementException;
+import net.ssehub.easy.basics.progress.ProgressObserver;
 
 /**
  * Some utility methods.
@@ -142,12 +142,12 @@ public class EASyUtils {
     }
     
     /**
-     * Adds an import to the {@link de.uni_hildesheim.sse.model.varModel.Project} and to the {@link Script} of a given
-     * {@link PLPInfo} to the {@link de.uni_hildesheim.sse.model.varModel.Project} and {@link Script} of a predecessor
+     * Adds an import to the {@link net.ssehub.easy.varModel.model.Project} and to the {@link Script} of a given
+     * {@link PLPInfo} to the {@link net.ssehub.easy.varModel.model.Project} and {@link Script} of a predecessor
      * project.
      * 
      * @param plp the product line project to add the import to
-     * @param predecessor A predecessor project of plp, where the {@link de.uni_hildesheim.sse.model.varModel.Project}
+     * @param predecessor A predecessor project of plp, where the {@link net.ssehub.easy.varModel.model.Project}
      *     <b>and</b> the {@link Script} should be included.
      * @param considerVIL <tt>true</tt> if the parent project has also a build script which should be considered,
      *     <tt>false</tt> otherwise

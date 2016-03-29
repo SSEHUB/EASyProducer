@@ -4,9 +4,9 @@ import java.io.Writer;
 
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.ExpressionWriter;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.IResolvable;
-import de.uni_hildesheim.sse.utils.modelManagement.IModel;
-import de.uni_hildesheim.sse.utils.modelManagement.IVersionRestriction;
-import de.uni_hildesheim.sse.utils.modelManagement.Version;
+import net.ssehub.easy.basics.modelManagement.IModel;
+import net.ssehub.easy.basics.modelManagement.IVersionRestriction;
+import net.ssehub.easy.basics.modelManagement.Version;
 
 /**
  * A writer for VIL languages.

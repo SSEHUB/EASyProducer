@@ -35,13 +35,13 @@ import de.uni_hildesheim.sse.ivml.VariableDeclarationPart;
 import de.uni_hildesheim.sse.ivml.impl.TypedefCompoundImpl;
 import de.uni_hildesheim.sse.ivml.impl.VariableDeclarationImpl;
 import de.uni_hildesheim.sse.ivml.impl.VariableDeclarationPartImpl;
-import de.uni_hildesheim.sse.model.management.VarModel;
-import de.uni_hildesheim.sse.model.varModel.datatypes.IDatatype;
-import de.uni_hildesheim.sse.model.varModel.datatypes.Operation;
-import de.uni_hildesheim.sse.model.varModel.datatypes.TypeMapper;
 import de.uni_hildesheim.sse.translation.Utils;
 import de.uni_hildesheim.sse.translation.Utils.SplitResult;
 import de.uni_hildesheim.sse.ui.resources.Images;
+import net.ssehub.easy.varModel.management.VarModel;
+import net.ssehub.easy.varModel.model.datatypes.IDatatype;
+import net.ssehub.easy.varModel.model.datatypes.Operation;
+import net.ssehub.easy.varModel.model.datatypes.TypeMapper;
 
 
 /**

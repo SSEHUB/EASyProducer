@@ -32,7 +32,7 @@ import de.uni_hildesheim.sse.easy.ui.internal.EASyPreferenceStore;
 import de.uni_hildesheim.sse.reasoning.core.frontend.ReasonerFrontend;
 import de.uni_hildesheim.sse.reasoning.core.reasoner.ReasonerDescriptor;
 import de.uni_hildesheim.sse.reasoning.core.reasoner.ReasoningResult;
-import de.uni_hildesheim.sse.utils.progress.ProgressObserver;
+import net.ssehub.easy.basics.progress.ProgressObserver;
 
 /**
  * Implements the preference page.

@@ -17,10 +17,10 @@ import de.uni_hildesheim.sse.dslcore.ui.editors.IEmbeddedEditor;
 import de.uni_hildesheim.sse.dslcore.ui.editors.ModelEditorConfigurer;
 import de.uni_hildesheim.sse.dslcore.ui.editors.ModelEditorConfigurer.IHeader;
 import de.uni_hildesheim.sse.dslcore.ui.editors.ModelEditorConfigurer.IModelEditorConfigurer;
-import de.uni_hildesheim.sse.model.confModel.Configuration;
 import de.uni_hildesheim.sse.ui.BuildModelListener;
 import de.uni_hildesheim.sse.ui.internal.VilBuildLanguageActivator;
-import de.uni_hildesheim.sse.utils.modelManagement.ModelInfo;
+import net.ssehub.easy.basics.modelManagement.ModelInfo;
+import net.ssehub.easy.varModel.confModel.Configuration;
 
 /**
  * Provides editor utility methods.

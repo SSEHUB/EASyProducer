@@ -6,10 +6,10 @@ import org.osgi.service.component.ComponentContext;
 
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.IRegistration;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeRegistry;
-import de.uni_hildesheim.sse.utils.modelManagement.ModelInitializer;
-import de.uni_hildesheim.sse.utils.modelManagement.ModelInitializer.IModelInitializer;
-import de.uni_hildesheim.sse.utils.modelManagement.ModelManagementException;
-import de.uni_hildesheim.sse.utils.progress.ProgressObserver;
+import net.ssehub.easy.basics.modelManagement.ModelInitializer;
+import net.ssehub.easy.basics.modelManagement.ModelManagementException;
+import net.ssehub.easy.basics.modelManagement.ModelInitializer.IModelInitializer;
+import net.ssehub.easy.basics.progress.ProgressObserver;
 
 /**
  * Registers the serialization additions to VIL.

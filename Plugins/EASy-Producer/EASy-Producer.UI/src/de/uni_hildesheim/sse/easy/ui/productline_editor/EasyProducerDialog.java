@@ -7,9 +7,9 @@ import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.Shell;
 
 import de.uni_hildesheim.sse.easy_producer.EASyProducerConstants;
-import de.uni_hildesheim.sse.model.varModel.ModelElement;
-import de.uni_hildesheim.sse.persistency.StringProvider;
 import de.uni_hildesheim.sse.reasoning.core.reasoner.Message;
+import net.ssehub.easy.varModel.model.ModelElement;
+import net.ssehub.easy.varModel.persistency.StringProvider;
 
 /**
  * Error and Info Box for EASy-Producer. This class should be used to have a global look and feel for error and info

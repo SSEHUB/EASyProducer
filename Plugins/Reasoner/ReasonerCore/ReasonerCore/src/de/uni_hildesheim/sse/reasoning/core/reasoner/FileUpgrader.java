@@ -6,8 +6,8 @@ import java.net.URI;
 import java.util.Iterator;
 import java.util.Map;
 
-import de.uni_hildesheim.sse.utils.messages.Status;
-import de.uni_hildesheim.sse.utils.progress.ProgressObserver;
+import net.ssehub.easy.basics.messages.Status;
+import net.ssehub.easy.basics.progress.ProgressObserver;
 
 /**
  * An upgrader for file input locations.

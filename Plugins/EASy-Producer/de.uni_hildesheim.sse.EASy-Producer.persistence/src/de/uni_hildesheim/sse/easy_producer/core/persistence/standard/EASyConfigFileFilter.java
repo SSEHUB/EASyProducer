@@ -4,7 +4,7 @@ import java.io.File;
 import java.io.FileFilter;
 
 import de.uni_hildesheim.sse.easy_producer.core.persistence.Configuration.PathKind;
-import de.uni_hildesheim.sse.persistency.PersistencyConstants;
+import net.ssehub.easy.varModel.persistency.PersistencyConstants;
 
 /**
  * {@link FileFilter} for EASy config files (variability model, build scripts, and templates).

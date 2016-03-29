@@ -1,10 +1,10 @@
 package de.uni_hildesheim.sse.reasoning.core.model.datatypes;
 
-import de.uni_hildesheim.sse.model.varModel.datatypes.CustomDatatype;
+import net.ssehub.easy.varModel.model.datatypes.CustomDatatype;
 
 
 /**
- * Abstract super class for all translated {@link de.uni_hildesheim.sse.model.varModel.datatypes.CustomDatatype}.
+ * Abstract super class for all translated {@link net.ssehub.easy.varModel.model.datatypes.CustomDatatype}.
  * @author El-Sharkawy
  * @author Sizonenko
  *

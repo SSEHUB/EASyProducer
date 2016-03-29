@@ -1,10 +1,10 @@
 package de.uni_hildesheim.sse.reasoning.drools2.translation.oclFeatureCalls;
 
-import de.uni_hildesheim.sse.model.cst.OCLFeatureCall;
 import de.uni_hildesheim.sse.reasoning.drools2.translation.AbstractConstraintTranslator;
+import net.ssehub.easy.varModel.cst.OCLFeatureCall;
 
 /**
- * Handler for translating {@link de.uni_hildesheim.sse.model.varModel.datatypes.OclKeyWords#DIV_INT} operations.
+ * Handler for translating {@link net.ssehub.easy.varModel.model.datatypes.OclKeyWords#DIV_INT} operations.
  * div operation returns how many times parameter fits in the operand. Example: 10 div 3 == 3;
  * @author Sizonenko
  *

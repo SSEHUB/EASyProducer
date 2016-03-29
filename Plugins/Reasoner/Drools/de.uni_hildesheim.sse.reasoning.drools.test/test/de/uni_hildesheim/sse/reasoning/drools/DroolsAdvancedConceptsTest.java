@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import org.junit.Assert;
 
 import de.uni_hildesheim.sse.ConstraintSyntaxException;
-import de.uni_hildesheim.sse.model.cst.CSTSemanticException;
+import net.ssehub.easy.varModel.cst.CSTSemanticException;
 
 public class DroolsAdvancedConceptsTest extends AbstractTest {
 	

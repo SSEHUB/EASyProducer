@@ -35,7 +35,7 @@ import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeRegis
 import de.uni_hildesheim.sse.easy_producer.instantiator.velocity.VelocityInstantiator;
 import de.uni_hildesheim.sse.reasoning.core.frontend.ReasonerFrontend;
 import de.uni_hildesheim.sse.reasoning.reasoner.Reasoner;
-import de.uni_hildesheim.sse.utils.Environment;
+import net.ssehub.easy.basics.Environment;
 
 /**
  * Test suite: runs all test classes.

@@ -15,7 +15,7 @@
  */
 package de.uni_hildesheim.sse.reasoning.core.reasoner;
 
-import de.uni_hildesheim.sse.capabilities.IReasonerCapability;
+import net.ssehub.easy.varModel.capabilities.IReasonerCapability;
 
 /**
  * Defines general reasoner capabilities.

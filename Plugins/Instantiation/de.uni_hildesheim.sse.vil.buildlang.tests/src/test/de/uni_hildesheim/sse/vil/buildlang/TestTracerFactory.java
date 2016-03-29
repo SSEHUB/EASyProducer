@@ -6,7 +6,7 @@ import de.uni_hildesheim.sse.easy_producer.instantiator.model.execution.IInstant
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.execution.TracerFactory;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.templateModel.Template;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.templateModel.TemplateModel;
-import de.uni_hildesheim.sse.utils.modelManagement.ModelInfo;
+import net.ssehub.easy.basics.modelManagement.ModelInfo;
 
 /**
  * Defines a factory for tracing VIL and VTL outputs.

@@ -3,8 +3,8 @@ package de.uni_hildesheim.sse.reasoning.reasoner.functions;
 import java.util.HashSet;
 import java.util.Set;
 
-import de.uni_hildesheim.sse.model.confModel.AssignmentState;
-import de.uni_hildesheim.sse.model.confModel.IDecisionVariable;
+import net.ssehub.easy.varModel.confModel.AssignmentState;
+import net.ssehub.easy.varModel.confModel.IDecisionVariable;
 
 /**
  * Class contains variables that were assigned in a specific scope..

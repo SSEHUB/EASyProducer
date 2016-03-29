@@ -22,20 +22,20 @@ import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.configura
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.configuration.IvmlElement;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.configuration.NoVariableFilter;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.configuration.Utils;
-import de.uni_hildesheim.sse.model.confModel.AssignmentState;
-import de.uni_hildesheim.sse.model.confModel.IDecisionVariable;
-import de.uni_hildesheim.sse.model.management.VarModel;
-import de.uni_hildesheim.sse.model.varModel.AbstractVariable;
-import de.uni_hildesheim.sse.model.varModel.ContainableModelElement;
-import de.uni_hildesheim.sse.model.varModel.Project;
-import de.uni_hildesheim.sse.model.varModel.ProjectImport;
-import de.uni_hildesheim.sse.model.varModel.datatypes.Compound;
-import de.uni_hildesheim.sse.model.varModel.datatypes.IDatatype;
-import de.uni_hildesheim.sse.model.varModel.datatypes.Reference;
-import de.uni_hildesheim.sse.utils.modelManagement.ModelInfo;
-import de.uni_hildesheim.sse.utils.modelManagement.ModelManagementException;
-import de.uni_hildesheim.sse.utils.progress.ProgressObserver;
-import de.uni_hildesheim.sse.varModel.testSupport.DefaultConfiguration;
+import net.ssehub.easy.basics.modelManagement.ModelInfo;
+import net.ssehub.easy.basics.modelManagement.ModelManagementException;
+import net.ssehub.easy.basics.progress.ProgressObserver;
+import net.ssehub.easy.varModel.confModel.AssignmentState;
+import net.ssehub.easy.varModel.confModel.IDecisionVariable;
+import net.ssehub.easy.varModel.management.VarModel;
+import net.ssehub.easy.varModel.model.AbstractVariable;
+import net.ssehub.easy.varModel.model.ContainableModelElement;
+import net.ssehub.easy.varModel.model.Project;
+import net.ssehub.easy.varModel.model.ProjectImport;
+import net.ssehub.easy.varModel.model.datatypes.Compound;
+import net.ssehub.easy.varModel.model.datatypes.IDatatype;
+import net.ssehub.easy.varModel.model.datatypes.Reference;
+import net.ssehub.easy.varModel.varModel.testSupport.DefaultConfiguration;
 
 /**
  * Performs tests on the configuration wrapper.
@@ -89,7 +89,7 @@ public class ConfigurationTests extends AbstractTest {
      */
     @Test
     public void testConfiguration() {
-        de.uni_hildesheim.sse.model.confModel.Configuration cfg = DefaultConfiguration.createDefaultConfiguration();
+        net.ssehub.easy.varModel.confModel.Configuration cfg = DefaultConfiguration.createDefaultConfiguration();
         Assert.assertNotNull("creating default IVML configuration failed", cfg);
         Configuration configuration = new Configuration(cfg);
         Assert.assertNotNull(configuration);
@@ -140,7 +140,7 @@ public class ConfigurationTests extends AbstractTest {
      * @param cfg an IVML configuration providing the actual data
      * @param selector the selector determining the variables to be considered
      */
-    private void compare(Configuration configuration, de.uni_hildesheim.sse.model.confModel.Configuration cfg, 
+    private void compare(Configuration configuration, net.ssehub.easy.varModel.confModel.Configuration cfg, 
         IVariableSelector selector) {
         Map<String, IDecisionVariable> reference = new HashMap<String, IDecisionVariable>();
         put(cfg.getProject(), reference, cfg, selector);
@@ -164,7 +164,7 @@ public class ConfigurationTests extends AbstractTest {
      * @param selector the selector instance
      */
     private void put(Project project, Map<String, IDecisionVariable> data, 
-        de.uni_hildesheim.sse.model.confModel.Configuration cfg, IVariableSelector selector) {
+        net.ssehub.easy.varModel.confModel.Configuration cfg, IVariableSelector selector) {
         for (int i = 0; i < project.getImportsCount(); i++) {
             ProjectImport imp = project.getImport(i);
             if (null != imp.getResolved()) {
@@ -188,13 +188,13 @@ public class ConfigurationTests extends AbstractTest {
      * @param modelName the model name
      * @return the configuration
      */
-    private static de.uni_hildesheim.sse.model.confModel.Configuration getConfiguration(String modelName) {
-        de.uni_hildesheim.sse.model.confModel.Configuration config = null;
-        List<ModelInfo<de.uni_hildesheim.sse.model.varModel.Project>> info = 
+    private static net.ssehub.easy.varModel.confModel.Configuration getConfiguration(String modelName) {
+        net.ssehub.easy.varModel.confModel.Configuration config = null;
+        List<ModelInfo<net.ssehub.easy.varModel.model.Project>> info = 
             VarModel.INSTANCE.availableModels().getModelInfo(modelName);
         Assert.assertTrue(info.size() > 0);
         try {
-            config = new de.uni_hildesheim.sse.model.confModel.Configuration(VarModel.INSTANCE.load(info.get(0)));
+            config = new net.ssehub.easy.varModel.confModel.Configuration(VarModel.INSTANCE.load(info.get(0)));
         } catch (ModelManagementException e) {
             Assert.fail(e.getMessage());
         }
@@ -207,7 +207,7 @@ public class ConfigurationTests extends AbstractTest {
      * @param cfg the configuration to test
      * @return the configuration wrapper instance
      */
-    private static Configuration getRuntimeConfiguration(de.uni_hildesheim.sse.model.confModel.Configuration cfg) {
+    private static Configuration getRuntimeConfiguration(net.ssehub.easy.varModel.confModel.Configuration cfg) {
         return new Configuration(cfg, NoVariableFilter.INSTANCE);
     }
 
@@ -216,7 +216,7 @@ public class ConfigurationTests extends AbstractTest {
      * 
      * @param cfg the configuration to test
      */
-    private static void assertChangeEmpty(de.uni_hildesheim.sse.model.confModel.Configuration cfg) {
+    private static void assertChangeEmpty(net.ssehub.easy.varModel.confModel.Configuration cfg) {
         assertChangeEmpty(new Configuration(cfg));
     }
     
@@ -235,7 +235,7 @@ public class ConfigurationTests extends AbstractTest {
      */
     @Test
     public void testSelectChanged1unchanged() {
-        de.uni_hildesheim.sse.model.confModel.Configuration ivml = getConfiguration("context1");
+        net.ssehub.easy.varModel.confModel.Configuration ivml = getConfiguration("context1");
         assertChangeEmpty(ivml); // non-rt cfg has empty changes
         
         Configuration baseCfg = getRuntimeConfiguration(ivml);
@@ -250,7 +250,7 @@ public class ConfigurationTests extends AbstractTest {
      */
     @Test
     public void testSelectChanged1() {
-        de.uni_hildesheim.sse.model.confModel.Configuration ivml = getConfiguration("context1");
+        net.ssehub.easy.varModel.confModel.Configuration ivml = getConfiguration("context1");
         assertChangeEmpty(ivml); // non-rt cfg has empty changes
         
         Configuration baseCfg = getRuntimeConfiguration(ivml);
@@ -278,7 +278,7 @@ public class ConfigurationTests extends AbstractTest {
      */
     @Test
     public void testSelectChanged2() {
-        de.uni_hildesheim.sse.model.confModel.Configuration ivml = getConfiguration("context2");
+        net.ssehub.easy.varModel.confModel.Configuration ivml = getConfiguration("context2");
         assertChangeEmpty(ivml); // non-rt cfg has empty changes
         
         Configuration baseCfg = getRuntimeConfiguration(ivml);
@@ -305,7 +305,7 @@ public class ConfigurationTests extends AbstractTest {
      */
     @Test
     public void testSelectChanged3() {
-        de.uni_hildesheim.sse.model.confModel.Configuration ivml = getConfiguration("context3");
+        net.ssehub.easy.varModel.confModel.Configuration ivml = getConfiguration("context3");
         assertChangeEmpty(ivml); // non-rt cfg has empty changes
         
         Configuration baseCfg = getRuntimeConfiguration(ivml);
@@ -329,7 +329,7 @@ public class ConfigurationTests extends AbstractTest {
         Assert.assertEquals(1, cfg.variables().size());
         Assert.assertNull(cfg.getByName("j"));
         seq = cfg.getByName("cmpSeq");
-        assertAssignable(de.uni_hildesheim.sse.model.varModel.datatypes.Sequence.TYPE, seq);
+        assertAssignable(net.ssehub.easy.varModel.model.datatypes.Sequence.TYPE, seq);
         Assert.assertNotNull(seq);
         vars = seq.variables();
         Assert.assertEquals(1, vars.size());
@@ -373,7 +373,7 @@ public class ConfigurationTests extends AbstractTest {
      */
     @Test
     public void testSelectChanged4() {
-        de.uni_hildesheim.sse.model.confModel.Configuration ivml = getConfiguration("context4");
+        net.ssehub.easy.varModel.confModel.Configuration ivml = getConfiguration("context4");
         assertChangeEmpty(ivml); // non-rt cfg has empty changes
         
         Configuration baseCfg = getRuntimeConfiguration(ivml);
@@ -396,7 +396,7 @@ public class ConfigurationTests extends AbstractTest {
         Assert.assertNotNull(getCompoundVar(cfg, "cmp1", "i1")); // in context
         Assert.assertNotNull(getCompoundVar(cfg, "cmp1", "i2")); 
         DecisionVariable seq = cfg.getByName("cmpSeq");
-        assertAssignable(de.uni_hildesheim.sse.model.varModel.datatypes.Sequence.TYPE, seq);
+        assertAssignable(net.ssehub.easy.varModel.model.datatypes.Sequence.TYPE, seq);
         Assert.assertNotNull(seq);
         Sequence<DecisionVariable> vars = seq.variables();
         Assert.assertEquals(1, vars.size());

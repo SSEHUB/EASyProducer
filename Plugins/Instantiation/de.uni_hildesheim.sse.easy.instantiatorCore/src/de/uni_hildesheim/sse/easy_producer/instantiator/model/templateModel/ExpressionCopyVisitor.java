@@ -6,7 +6,7 @@ import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VariableDec
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilException;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.CopyVisitor;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.Expression;
-import de.uni_hildesheim.sse.utils.modelManagement.IVersionRestriction.IVariableMapper;
+import net.ssehub.easy.basics.modelManagement.IVersionRestriction.IVariableMapper;
 
 /**
  * The copy visitor for VTL expressions.

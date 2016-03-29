@@ -1,13 +1,13 @@
 package de.uni_hildesheim.sse.reasoning.reasoner;
 
-import de.uni_hildesheim.sse.model.confModel.AssignmentState;
-import de.uni_hildesheim.sse.model.confModel.CompoundVariable;
-import de.uni_hildesheim.sse.model.confModel.IAssignmentState;
-import de.uni_hildesheim.sse.model.confModel.IConfiguration;
-import de.uni_hildesheim.sse.model.confModel.IDecisionVariable;
-import de.uni_hildesheim.sse.model.cstEvaluation.EvaluationVisitor;
-import de.uni_hildesheim.sse.model.cstEvaluation.IValueChangeListener;
 import de.uni_hildesheim.sse.reasoning.reasoner.functions.ScopeAssignments;
+import net.ssehub.easy.varModel.confModel.AssignmentState;
+import net.ssehub.easy.varModel.confModel.CompoundVariable;
+import net.ssehub.easy.varModel.confModel.IAssignmentState;
+import net.ssehub.easy.varModel.confModel.IConfiguration;
+import net.ssehub.easy.varModel.confModel.IDecisionVariable;
+import net.ssehub.easy.varModel.cstEvaluation.EvaluationVisitor;
+import net.ssehub.easy.varModel.cstEvaluation.IValueChangeListener;
 
 /**
  * This class shall extend {@link EvaluationVisitor} for using it in the Reasoning plugin.

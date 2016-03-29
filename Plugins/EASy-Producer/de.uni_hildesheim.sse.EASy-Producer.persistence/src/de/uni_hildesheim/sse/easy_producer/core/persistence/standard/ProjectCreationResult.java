@@ -6,7 +6,7 @@ import de.uni_hildesheim.sse.easy_producer.core.persistence.PersistenceUtils;
 import de.uni_hildesheim.sse.easy_producer.core.persistence.Configuration.PathKind;
 import de.uni_hildesheim.sse.easy_producer.core.persistence.datatypes.IProjectCreationResult;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.Script;
-import de.uni_hildesheim.sse.model.varModel.Project;
+import net.ssehub.easy.varModel.model.Project;
 
 /**
  * Result of {@link Persistencer#createProject(String, File, String, boolean)}.

@@ -23,16 +23,16 @@ import org.eclipse.xtext.nodemodel.util.NodeModelUtils;
 import org.eclipse.xtext.ui.editor.model.IXtextDocument;
 
 import de.uni_hildesheim.sse.ivml.Project;
-import de.uni_hildesheim.sse.model.management.VarModel;
-import de.uni_hildesheim.sse.model.varModel.ContainableModelElement;
-import de.uni_hildesheim.sse.model.varModel.ModelQuery;
-import de.uni_hildesheim.sse.model.varModel.ModelQueryException;
-import de.uni_hildesheim.sse.model.varModel.filter.FilterType;
-import de.uni_hildesheim.sse.model.varModel.filter.ModelElementTypeFinder;
-import de.uni_hildesheim.sse.model.varModel.filter.ModelElementTypeFinder.ModelElementDescription;
 import de.uni_hildesheim.sse.ui.XtextEditor;
-import de.uni_hildesheim.sse.utils.modelManagement.AvailableModels;
-import de.uni_hildesheim.sse.utils.modelManagement.ModelInfo;
+import net.ssehub.easy.basics.modelManagement.AvailableModels;
+import net.ssehub.easy.basics.modelManagement.ModelInfo;
+import net.ssehub.easy.varModel.management.VarModel;
+import net.ssehub.easy.varModel.model.ContainableModelElement;
+import net.ssehub.easy.varModel.model.ModelQuery;
+import net.ssehub.easy.varModel.model.ModelQueryException;
+import net.ssehub.easy.varModel.model.filter.FilterType;
+import net.ssehub.easy.varModel.model.filter.ModelElementTypeFinder;
+import net.ssehub.easy.varModel.model.filter.ModelElementTypeFinder.ModelElementDescription;
 
 /**
  * This class provides a single method for opening an IVML-editor and selecting a specific element
@@ -80,7 +80,7 @@ public class IvmlEditorOpener {
 				XtextEditor ivmlEditor = null;
 				int projectCounter = 0;
 				while (ivmlEditor == null && projectCounter < VarModel.INSTANCE.getModelCount()) {
-					de.uni_hildesheim.sse.model.varModel.Project project = VarModel.INSTANCE.getModel(projectCounter);
+					net.ssehub.easy.varModel.model.Project project = VarModel.INSTANCE.getModel(projectCounter);
 					if (project.getName().equals(parseTreeElement.getText())) {
 						// Get the URI of the project for opening the IVML-file at that URI in a (new) editor.
 						URI projectUri = getProjectUri(project);
@@ -99,7 +99,7 @@ public class IvmlEditorOpener {
 				}
 			} else {
 				// If the selected element is a project element, we need the parent project the varModelElement is declared in.
-				de.uni_hildesheim.sse.model.varModel.Project parentProject = getParentProject(varModelElement);
+				net.ssehub.easy.varModel.model.Project parentProject = getParentProject(varModelElement);
 				// Get the URI of the parent project for opening the IVML-file at that URI in a (new) editor.
 				URI parentProjectUri = getProjectUri(parentProject);
 				// Get the IVML-editor by opening the parent project (the IVML-file) in a (new) instance of such an editor
@@ -156,38 +156,38 @@ public class IvmlEditorOpener {
 	}
 	
 	/**
-	 * Returns the parent {@link de.uni_hildesheim.sse.model.varModel.Project} the given {@link ContainableModelElement}
+	 * Returns the parent {@link net.ssehub.easy.varModel.model.Project} the given {@link ContainableModelElement}
 	 * is declared in.
 	 * 
 	 * @param modelElement the {@link ContainableModelElement} for which the parent project should be found
-	 * @return the parent {@link de.uni_hildesheim.sse.model.varModel.Project} the given {@link ContainableModelElement}
+	 * @return the parent {@link net.ssehub.easy.varModel.model.Project} the given {@link ContainableModelElement}
 	 * is declared in. May return <code>null</null> if the given model element is <code>null</null>, if the model element
-	 * has no top-level parent (which typically is  the {@link de.uni_hildesheim.sse.model.varModel.Project}), or the
-	 * top-level parent is not an instance of {@link de.uni_hildesheim.sse.model.varModel.Project}.
+	 * has no top-level parent (which typically is  the {@link net.ssehub.easy.varModel.model.Project}), or the
+	 * top-level parent is not an instance of {@link net.ssehub.easy.varModel.model.Project}.
 	 */
-	private de.uni_hildesheim.sse.model.varModel.Project getParentProject(ContainableModelElement modelElement) {
-		de.uni_hildesheim.sse.model.varModel.Project parentProject = null;
+	private net.ssehub.easy.varModel.model.Project getParentProject(ContainableModelElement modelElement) {
+		net.ssehub.easy.varModel.model.Project parentProject = null;
 		if (modelElement != null
 				&& modelElement.getTopLevelParent() != null
-				&& modelElement.getTopLevelParent() instanceof de.uni_hildesheim.sse.model.varModel.Project) {
-			parentProject =	(de.uni_hildesheim.sse.model.varModel.Project) modelElement.getTopLevelParent();
+				&& modelElement.getTopLevelParent() instanceof net.ssehub.easy.varModel.model.Project) {
+			parentProject =	(net.ssehub.easy.varModel.model.Project) modelElement.getTopLevelParent();
 		}
 		return parentProject;
 	}
 	
 	/**
-	 * Returns the {@link URI} of the given {@link de.uni_hildesheim.sse.model.varModel.Project}.
+	 * Returns the {@link URI} of the given {@link net.ssehub.easy.varModel.model.Project}.
 	 * 
-	 * @param project the {@link de.uni_hildesheim.sse.model.varModel.Project} for which the {@link URI} should be returned
+	 * @param project the {@link net.ssehub.easy.varModel.model.Project} for which the {@link URI} should be returned
 	 * @return the {@link URI} of the given project. May return <code>null</code> if the given project is <code>null</code>
 	 * or the project URI could not be resolved.
 	 */
-	private java.net.URI getProjectUri (de.uni_hildesheim.sse.model.varModel.Project project) {
+	private java.net.URI getProjectUri (net.ssehub.easy.varModel.model.Project project) {
 		java.net.URI varModelProjectUri = null;
 		if (project != null) {
-    		AvailableModels<de.uni_hildesheim.sse.model.varModel.Project> availableModel = VarModel.INSTANCE.availableModels();
+    		AvailableModels<net.ssehub.easy.varModel.model.Project> availableModel = VarModel.INSTANCE.availableModels();
     		if (availableModel != null) {
-    			ModelInfo<de.uni_hildesheim.sse.model.varModel.Project> projectInfo = availableModel.getModelInfo(project);
+    			ModelInfo<net.ssehub.easy.varModel.model.Project> projectInfo = availableModel.getModelInfo(project);
     			if (projectInfo != null) {
     				varModelProjectUri = projectInfo.getLocation();
     			}

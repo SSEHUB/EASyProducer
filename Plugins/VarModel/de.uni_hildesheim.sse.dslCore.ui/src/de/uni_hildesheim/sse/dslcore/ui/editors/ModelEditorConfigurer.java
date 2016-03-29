@@ -23,8 +23,8 @@ import java.util.List;
 
 import org.eclipse.swt.widgets.Composite;
 
-import de.uni_hildesheim.sse.model.confModel.Configuration;
-import de.uni_hildesheim.sse.utils.modelManagement.ModelInfo;
+import net.ssehub.easy.basics.modelManagement.ModelInfo;
+import net.ssehub.easy.varModel.confModel.Configuration;
 
 /**
  * Defines an interface and registration methods to describe how top-level models shall

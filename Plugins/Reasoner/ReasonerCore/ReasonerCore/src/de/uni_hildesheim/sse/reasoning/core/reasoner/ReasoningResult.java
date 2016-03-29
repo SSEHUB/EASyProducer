@@ -3,8 +3,8 @@ package de.uni_hildesheim.sse.reasoning.core.reasoner;
 import java.util.ArrayList;
 import java.util.List;
 
-import de.uni_hildesheim.sse.model.confModel.IDecisionVariable;
-import de.uni_hildesheim.sse.utils.messages.Status;
+import net.ssehub.easy.basics.messages.Status;
+import net.ssehub.easy.varModel.confModel.IDecisionVariable;
 
 /**
  * Result of (one) reasoning step.

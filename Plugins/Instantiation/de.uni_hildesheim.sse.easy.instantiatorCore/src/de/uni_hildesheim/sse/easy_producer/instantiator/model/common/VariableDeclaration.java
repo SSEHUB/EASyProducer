@@ -8,7 +8,7 @@ import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.IResol
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.ResolvableOperationExpression;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.IMetaOperation;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeDescriptor;
-import de.uni_hildesheim.sse.utils.modelManagement.IVariable;
+import net.ssehub.easy.basics.modelManagement.IVariable;
 
 /**
  * Represents a variable declaration.

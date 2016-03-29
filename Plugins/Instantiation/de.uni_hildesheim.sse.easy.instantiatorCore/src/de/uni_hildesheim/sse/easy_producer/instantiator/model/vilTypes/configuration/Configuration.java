@@ -21,18 +21,18 @@ import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.Invisible
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.OperationMeta;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.Sequence;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.configuration.NameRegExFilter.DataType;
-import de.uni_hildesheim.sse.model.confModel.ConfigurationException;
-import de.uni_hildesheim.sse.model.confModel.IDecisionVariable;
-import de.uni_hildesheim.sse.model.varModel.AbstractVariable;
-import de.uni_hildesheim.sse.model.varModel.IvmlException;
-import de.uni_hildesheim.sse.model.varModel.ModelQuery;
-import de.uni_hildesheim.sse.model.varModel.Project;
-import de.uni_hildesheim.sse.model.varModel.values.Value;
-import de.uni_hildesheim.sse.persistency.IVMLWriter;
 import de.uni_hildesheim.sse.reasoning.core.frontend.ReasonerFrontend;
 import de.uni_hildesheim.sse.reasoning.core.reasoner.ReasonerConfiguration;
 import de.uni_hildesheim.sse.reasoning.core.reasoner.ReasoningResult;
-import de.uni_hildesheim.sse.utils.progress.ProgressObserver;
+import net.ssehub.easy.basics.progress.ProgressObserver;
+import net.ssehub.easy.varModel.confModel.ConfigurationException;
+import net.ssehub.easy.varModel.confModel.IDecisionVariable;
+import net.ssehub.easy.varModel.model.AbstractVariable;
+import net.ssehub.easy.varModel.model.IvmlException;
+import net.ssehub.easy.varModel.model.ModelQuery;
+import net.ssehub.easy.varModel.model.Project;
+import net.ssehub.easy.varModel.model.values.Value;
+import net.ssehub.easy.varModel.persistency.IVMLWriter;
 
 /**
  * Represents a variability model and its configuration in VIL. This class provides
@@ -48,7 +48,7 @@ public class Configuration extends IvmlElement implements IStringValueProvider {
 
     private Script rootScript;
     private Project project; 
-    private de.uni_hildesheim.sse.model.confModel.Configuration configuration;
+    private net.ssehub.easy.varModel.confModel.Configuration configuration;
     private DecisionVariable[] variables;
     private Attribute[] attributes;
     private Map<String, IvmlElement> nameMap = new HashMap<String, IvmlElement>();
@@ -62,7 +62,7 @@ public class Configuration extends IvmlElement implements IStringValueProvider {
      * 
      * @param configuration the IVML configuration instance to be wrapped
      */
-    public Configuration(de.uni_hildesheim.sse.model.confModel.Configuration configuration) {
+    public Configuration(net.ssehub.easy.varModel.confModel.Configuration configuration) {
         this(configuration, FrozenVariablesFilter.INSTANCE);
     }
     
@@ -72,7 +72,7 @@ public class Configuration extends IvmlElement implements IStringValueProvider {
      * @param configuration the IVML configuration instance to be wrapped
      * @param filter the external variable filter, e.g., for frozen variables
      */
-    public Configuration(de.uni_hildesheim.sse.model.confModel.Configuration configuration, 
+    public Configuration(net.ssehub.easy.varModel.confModel.Configuration configuration, 
         IVariableFilter filter) {
         this.configuration = configuration;
         this.project = configuration.getProject();
@@ -87,7 +87,7 @@ public class Configuration extends IvmlElement implements IStringValueProvider {
      * @param variables the variables representing the actual contents of this configuration
      * @param filter the external variable filter
      */
-    Configuration(de.uni_hildesheim.sse.model.confModel.Configuration configuration, DecisionVariable[] variables, 
+    Configuration(net.ssehub.easy.varModel.confModel.Configuration configuration, DecisionVariable[] variables, 
         IVariableFilter filter) {
         this.configuration = configuration;
         this.variables = variables;
@@ -189,7 +189,7 @@ public class Configuration extends IvmlElement implements IStringValueProvider {
      * @return the EASy configuration
      */
     @Invisible
-    public de.uni_hildesheim.sse.model.confModel.Configuration getConfiguration() {
+    public net.ssehub.easy.varModel.confModel.Configuration getConfiguration() {
         return configuration;
     }
     
@@ -488,8 +488,8 @@ public class Configuration extends IvmlElement implements IStringValueProvider {
             }
             try {
                 Value eVal = ModelQuery.enumLiteralAsValue(project, name);
-                if (eVal instanceof de.uni_hildesheim.sse.model.varModel.values.EnumValue) {
-                    match = new EnumValue((de.uni_hildesheim.sse.model.varModel.values.EnumValue) eVal);
+                if (eVal instanceof net.ssehub.easy.varModel.model.values.EnumValue) {
+                    match = new EnumValue((net.ssehub.easy.varModel.model.values.EnumValue) eVal);
                 }
             } catch (IvmlException e) {
             }
@@ -663,7 +663,7 @@ public class Configuration extends IvmlElement implements IStringValueProvider {
      */
     public Configuration copy() {
         Configuration result = new Configuration(
-            new de.uni_hildesheim.sse.model.confModel.Configuration(configuration), filter);
+            new net.ssehub.easy.varModel.confModel.Configuration(configuration), filter);
         result.isValid = isValid;
         return result;
     }
@@ -737,7 +737,7 @@ public class Configuration extends IvmlElement implements IStringValueProvider {
      */
     @Invisible
     public DecisionVariable findVariable(IDecisionVariable var) {
-        DecisionVariable result = getByName(de.uni_hildesheim.sse.model.confModel.Configuration.getInstanceName(var));
+        DecisionVariable result = getByName(net.ssehub.easy.varModel.confModel.Configuration.getInstanceName(var));
         for (int v = 0; null == result && v < variables.length; v++) {
             result = findVariable(var, variables[v]);
         }

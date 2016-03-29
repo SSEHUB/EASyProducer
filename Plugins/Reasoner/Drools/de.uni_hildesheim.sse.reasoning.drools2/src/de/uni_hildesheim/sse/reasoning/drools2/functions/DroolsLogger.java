@@ -2,8 +2,8 @@ package de.uni_hildesheim.sse.reasoning.drools2.functions;
 
 
 import de.uni_hildesheim.sse.reasoning.drools2.DroolsReasonerDescriptor;
-import de.uni_hildesheim.sse.utils.logger.EASyLoggerFactory;
-import de.uni_hildesheim.sse.utils.logger.EASyLoggerFactory.EASyLogger;
+import net.ssehub.easy.basics.logger.EASyLoggerFactory;
+import net.ssehub.easy.basics.logger.EASyLoggerFactory.EASyLogger;
 
 /**
  * Adapter/Wrapper for drools to enable logging via static methods.

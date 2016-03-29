@@ -19,7 +19,6 @@ import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.IVilType;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.OperationDescriptor;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeDescriptor;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeRegistry;
-import de.uni_hildesheim.sse.utils.modelManagement.ModelInfo;
 import de.uni_hildesheim.sse.vil.expressions.ResourceRegistry;
 import de.uni_hildesheim.sse.vil.expressions.expressionDsl.LogicalExpression;
 import de.uni_hildesheim.sse.vil.expressions.expressionDsl.Parameter;
@@ -38,6 +37,7 @@ import de.uni_hildesheim.sse.vilBuildLanguage.ScriptContents;
 import de.uni_hildesheim.sse.vilBuildLanguage.impl.ImplementationUnitImpl;
 import de.uni_hildesheim.sse.vilBuildLanguage.impl.MapImpl;
 import de.uni_hildesheim.sse.vilBuildLanguage.impl.RuleDeclarationImpl;
+import net.ssehub.easy.basics.modelManagement.ModelInfo;
 
 /**
  * A utility class for determining different elements in the VIL build model based on the

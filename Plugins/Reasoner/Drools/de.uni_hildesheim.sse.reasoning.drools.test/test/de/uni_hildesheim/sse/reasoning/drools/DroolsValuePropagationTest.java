@@ -5,8 +5,8 @@ import java.io.IOException;
 
 import org.junit.Test;
 
-import de.uni_hildesheim.sse.model.confModel.AssignmentState;
-import de.uni_hildesheim.sse.model.confModel.Configuration;
+import net.ssehub.easy.varModel.confModel.AssignmentState;
+import net.ssehub.easy.varModel.confModel.Configuration;
 
 public class DroolsValuePropagationTest extends AbstractTest{
     

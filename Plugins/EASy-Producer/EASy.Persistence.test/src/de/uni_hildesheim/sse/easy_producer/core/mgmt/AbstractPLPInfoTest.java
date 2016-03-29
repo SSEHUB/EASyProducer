@@ -26,9 +26,9 @@ import de.uni_hildesheim.sse.easy_producer.core.persistence.datatypes.PathEnviro
 import de.uni_hildesheim.sse.easy_producer.core.persistence.datatypes.PersistentProject;
 import de.uni_hildesheim.sse.easy_producer.core.persistence.standard.Persistencer;
 import de.uni_hildesheim.sse.easy_producer.core.persistence.standard.PersistentProject2PLPConverter;
-import de.uni_hildesheim.sse.model.confModel.AssignmentState;
-import de.uni_hildesheim.sse.model.confModel.IDecisionVariable;
-import de.uni_hildesheim.sse.utils.progress.ProgressObserver;
+import net.ssehub.easy.basics.progress.ProgressObserver;
+import net.ssehub.easy.varModel.confModel.AssignmentState;
+import net.ssehub.easy.varModel.confModel.IDecisionVariable;
 
 /**
  * Super class for tests, which should test the {@link PLPInfo} class.
@@ -87,7 +87,7 @@ class AbstractPLPInfoTest {
 
     /**
      * Counts how many frozen variables are contained inside the given {@link PLPInfo}.
-     * @param plp The {@link PLPInfo} of which the {@link de.uni_hildesheim.sse.model.confModel.Configuration}
+     * @param plp The {@link PLPInfo} of which the {@link net.ssehub.easy.varModel.confModel.Configuration}
      * should be inspected.
      * @return The number of stored frozen variables inside the configuration (must be greater or equal to 0).
      */

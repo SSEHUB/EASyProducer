@@ -8,8 +8,8 @@ import de.uni_hildesheim.sse.easy_producer.core.persistence.datatypes.IPersisten
 import de.uni_hildesheim.sse.easy_producer.core.persistence.datatypes.PathEnvironment;
 import de.uni_hildesheim.sse.easy_producer.core.persistence.standard.Persistencer;
 import de.uni_hildesheim.sse.easy_producer.persistency.eclipse.EclipsePersistencer;
-import de.uni_hildesheim.sse.utils.Environment;
-import de.uni_hildesheim.sse.utils.progress.ProgressObserver;
+import net.ssehub.easy.basics.Environment;
+import net.ssehub.easy.basics.progress.ProgressObserver;
 
 /**
  * This class returns a correct {@link IPersistencer} instance as it is needed by the {@link EASyPersistencer}.

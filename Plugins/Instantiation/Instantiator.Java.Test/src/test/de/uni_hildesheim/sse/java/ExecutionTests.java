@@ -1,6 +1,6 @@
 package test.de.uni_hildesheim.sse.java;
 
-import static de.uni_hildesheim.sse.varModel.testSupport.TextTestUtils.assertFileEqualitySafe;
+import static net.ssehub.easy.varModel.varModel.testSupport.TextTestUtils.assertFileEqualitySafe;
 
 import java.io.File;
 import java.io.IOException;

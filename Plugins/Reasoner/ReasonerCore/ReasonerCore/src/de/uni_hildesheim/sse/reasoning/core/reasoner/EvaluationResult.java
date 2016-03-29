@@ -3,7 +3,7 @@ package de.uni_hildesheim.sse.reasoning.core.reasoner;
 import java.util.ArrayList;
 import java.util.List;
 
-import de.uni_hildesheim.sse.model.varModel.Constraint;
+import net.ssehub.easy.varModel.model.Constraint;
 
 /**
  * A specific reasoning result for evaluations of presence conditions.

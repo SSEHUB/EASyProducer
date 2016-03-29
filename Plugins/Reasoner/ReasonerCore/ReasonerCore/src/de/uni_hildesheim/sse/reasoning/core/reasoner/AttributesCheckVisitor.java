@@ -6,17 +6,17 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import de.uni_hildesheim.sse.model.confModel.AssignmentState;
-import de.uni_hildesheim.sse.model.confModel.Configuration;
-import de.uni_hildesheim.sse.model.confModel.IAssignmentState;
-import de.uni_hildesheim.sse.model.confModel.IConfigurationElement;
-import de.uni_hildesheim.sse.model.confModel.IConfigurationVisitor;
-import de.uni_hildesheim.sse.model.confModel.IDecisionVariable;
-import de.uni_hildesheim.sse.model.varModel.AbstractVariable;
-import de.uni_hildesheim.sse.model.varModel.Attribute;
-import de.uni_hildesheim.sse.model.varModel.ModelElement;
-import de.uni_hildesheim.sse.model.varModel.values.Value;
-import de.uni_hildesheim.sse.utils.messages.Status;
+import net.ssehub.easy.basics.messages.Status;
+import net.ssehub.easy.varModel.confModel.AssignmentState;
+import net.ssehub.easy.varModel.confModel.Configuration;
+import net.ssehub.easy.varModel.confModel.IAssignmentState;
+import net.ssehub.easy.varModel.confModel.IConfigurationElement;
+import net.ssehub.easy.varModel.confModel.IConfigurationVisitor;
+import net.ssehub.easy.varModel.confModel.IDecisionVariable;
+import net.ssehub.easy.varModel.model.AbstractVariable;
+import net.ssehub.easy.varModel.model.Attribute;
+import net.ssehub.easy.varModel.model.ModelElement;
+import net.ssehub.easy.varModel.model.values.Value;
 
 /**
  * A visitor for checking frozen values for all variables which correspond

@@ -11,7 +11,7 @@ import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.ExpressionS
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.Typedef;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VariableDeclaration;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilException;
-import de.uni_hildesheim.sse.utils.messages.IMessageHandler;
+import net.ssehub.easy.basics.messages.IMessageHandler;
 
 /**
  * Implements a VIL expression version restriction validator.

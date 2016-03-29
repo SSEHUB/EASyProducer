@@ -5,7 +5,7 @@ import org.eclipse.jface.viewers.Viewer;
 
 import de.uni_hildesheim.sse.easy.ui.confModel.GUIValueFactory;
 import de.uni_hildesheim.sse.easy.ui.confModel.GUIVariable;
-import de.uni_hildesheim.sse.model.confModel.IDecisionVariable;
+import net.ssehub.easy.varModel.confModel.IDecisionVariable;
 
 /**
  * Content provider for the default configuration editor.

@@ -30,20 +30,20 @@ import de.uni_hildesheim.sse.easy.ui.productline_editor.AbstractEASyEditorPage;
 import de.uni_hildesheim.sse.easy.ui.productline_editor.AbstractHeaderMenu;
 import de.uni_hildesheim.sse.easy.ui.productline_editor.configuration.ConfigurationTableEditor.IUpdateListener;
 import de.uni_hildesheim.sse.easy_producer.model.ProductLineProject;
-import de.uni_hildesheim.sse.model.confModel.Configuration;
-import de.uni_hildesheim.sse.model.confModel.ConfigurationException;
-import de.uni_hildesheim.sse.model.confModel.IAssignmentState;
-import de.uni_hildesheim.sse.model.confModel.IConfigurationChangeListener;
-import de.uni_hildesheim.sse.model.confModel.IDecisionVariable;
-import de.uni_hildesheim.sse.model.varModel.AbstractVariable;
-import de.uni_hildesheim.sse.model.varModel.Attribute;
-import de.uni_hildesheim.sse.model.varModel.IvmlDatatypeVisitor;
-import de.uni_hildesheim.sse.model.varModel.ModelQuery;
-import de.uni_hildesheim.sse.model.varModel.Project;
-import de.uni_hildesheim.sse.model.varModel.values.Value;
 import de.uni_hildesheim.sse.reasoning.core.reasoner.AttributeException;
 import de.uni_hildesheim.sse.reasoning.core.reasoner.AttributeValues;
 import de.uni_hildesheim.sse.reasoning.core.reasoner.ReasonerConfiguration;
+import net.ssehub.easy.varModel.confModel.Configuration;
+import net.ssehub.easy.varModel.confModel.ConfigurationException;
+import net.ssehub.easy.varModel.confModel.IAssignmentState;
+import net.ssehub.easy.varModel.confModel.IConfigurationChangeListener;
+import net.ssehub.easy.varModel.confModel.IDecisionVariable;
+import net.ssehub.easy.varModel.model.AbstractVariable;
+import net.ssehub.easy.varModel.model.Attribute;
+import net.ssehub.easy.varModel.model.IvmlDatatypeVisitor;
+import net.ssehub.easy.varModel.model.ModelQuery;
+import net.ssehub.easy.varModel.model.Project;
+import net.ssehub.easy.varModel.model.values.Value;
 
 /**
  * Editor for displaying and editing the temporary attribute settings to be passed configuration of the current project.

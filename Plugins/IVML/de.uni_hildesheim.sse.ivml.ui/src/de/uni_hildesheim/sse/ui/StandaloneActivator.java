@@ -9,8 +9,8 @@ import org.eclipse.core.runtime.Status;
 import org.osgi.framework.BundleContext;
 
 import de.uni_hildesheim.sse.ModelUtility;
-import de.uni_hildesheim.sse.model.management.VarModel;
-import de.uni_hildesheim.sse.utils.modelManagement.ModelManagementException;
+import net.ssehub.easy.basics.modelManagement.ModelManagementException;
+import net.ssehub.easy.varModel.management.VarModel;
 
 /**
  * The activator class controls the plug-in life cycle. This class is required only if the IVML editor 

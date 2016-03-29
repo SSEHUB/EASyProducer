@@ -15,7 +15,7 @@ import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPreferencePage;
 
 import de.uni_hildesheim.sse.easy.ui.internal.EASyPreferenceStore;
-import de.uni_hildesheim.sse.persistency.AbstractVarModelWriter;
+import net.ssehub.easy.varModel.persistency.AbstractVarModelWriter;
 
 /**
  * Implements preferencePage for customization of ivml-properties such as

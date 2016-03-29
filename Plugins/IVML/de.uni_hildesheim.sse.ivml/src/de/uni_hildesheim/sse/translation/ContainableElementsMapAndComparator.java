@@ -6,8 +6,8 @@ import java.util.Map;
 
 import org.eclipse.emf.ecore.EObject;
 
-import de.uni_hildesheim.sse.model.varModel.Comment;
-import de.uni_hildesheim.sse.model.varModel.ContainableModelElement;
+import net.ssehub.easy.varModel.model.Comment;
+import net.ssehub.easy.varModel.model.ContainableModelElement;
 
 /**
  * A helper class which supports ordering of containable model elements. Basically, the

@@ -17,7 +17,7 @@ package de.uni_hildesheim.sse.reasoning;
 
 import java.io.File;
 
-import de.uni_hildesheim.sse.model.varModel.Project;
+import net.ssehub.easy.varModel.model.Project;
 
 /**
  * General abstract test class for reasoning tests.

@@ -8,7 +8,7 @@ import de.uni_hildesheim.sse.easy_producer.core.persistence.datatypes.PathEnviro
 import de.uni_hildesheim.sse.easy_producer.core.persistence.datatypes.PersistentProject;
 import de.uni_hildesheim.sse.easy_producer.core.persistence.internal.util.FileUtils;
 import de.uni_hildesheim.sse.easy_producer.core.persistence.standard.PersistenceConstants;
-import de.uni_hildesheim.sse.utils.modelManagement.Version;
+import net.ssehub.easy.basics.modelManagement.Version;
 
 /**
  * XML Constants for the XML Connector.

@@ -18,7 +18,7 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 
 import de.uni_hildesheim.sse.easy_producer.EASyProducerConstants;
-import de.uni_hildesheim.sse.model.validation.IvmlIdentifierCheck;
+import net.ssehub.easy.varModel.validation.IvmlIdentifierCheck;
 
 /**
  * WizardPage for the creation of a new product line project.

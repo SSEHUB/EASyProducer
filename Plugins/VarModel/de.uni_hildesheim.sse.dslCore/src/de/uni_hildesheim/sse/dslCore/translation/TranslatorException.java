@@ -3,7 +3,7 @@ package de.uni_hildesheim.sse.dslCore.translation;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
 
-import de.uni_hildesheim.sse.utils.messages.IIdentifiable;
+import net.ssehub.easy.basics.messages.IIdentifiable;
 
 /**
  * Defines a specific model translator exception which carries information about

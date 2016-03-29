@@ -1,6 +1,6 @@
 package de.uni_hildesheim.sse.reasoning.core.model.datatypes;
 
-import de.uni_hildesheim.sse.model.varModel.datatypes.Enum;
+import net.ssehub.easy.varModel.model.datatypes.Enum;
 
 
 /**

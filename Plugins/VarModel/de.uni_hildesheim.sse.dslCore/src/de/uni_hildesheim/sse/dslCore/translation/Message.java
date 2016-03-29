@@ -3,7 +3,7 @@ package de.uni_hildesheim.sse.dslCore.translation;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
 
-import de.uni_hildesheim.sse.utils.messages.Status;
+import net.ssehub.easy.basics.messages.Status;
 
 /**
  * Implements a message issues by the model translator (in order to provide
@@ -11,7 +11,7 @@ import de.uni_hildesheim.sse.utils.messages.Status;
  * 
  * @author Holger Eichelberger
  */
-public class Message extends de.uni_hildesheim.sse.utils.messages.Message {
+public class Message extends net.ssehub.easy.basics.messages.Message {
     // this inner class is just here due to OSGi exports - should be in
     // translation
 

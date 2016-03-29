@@ -9,14 +9,14 @@ import java.util.List;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.rtVil.Bundle;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.rtVil.Script;
 import de.uni_hildesheim.sse.persistency.xml.XmlIo;
-import de.uni_hildesheim.sse.utils.logger.EASyLoggerFactory;
-import de.uni_hildesheim.sse.utils.logger.EASyLoggerFactory.EASyLogger;
-import de.uni_hildesheim.sse.utils.messages.IMessage;
-import de.uni_hildesheim.sse.utils.modelManagement.IModel;
-import de.uni_hildesheim.sse.utils.modelManagement.IModelLoader;
-import de.uni_hildesheim.sse.utils.modelManagement.ImportResolver;
-import de.uni_hildesheim.sse.utils.modelManagement.ModelInfo;
-import de.uni_hildesheim.sse.utils.modelManagement.Version;
+import net.ssehub.easy.basics.logger.EASyLoggerFactory;
+import net.ssehub.easy.basics.logger.EASyLoggerFactory.EASyLogger;
+import net.ssehub.easy.basics.messages.IMessage;
+import net.ssehub.easy.basics.modelManagement.IModel;
+import net.ssehub.easy.basics.modelManagement.IModelLoader;
+import net.ssehub.easy.basics.modelManagement.ImportResolver;
+import net.ssehub.easy.basics.modelManagement.ModelInfo;
+import net.ssehub.easy.basics.modelManagement.Version;
 
 /**
  * Loader for RTVIL.
@@ -41,7 +41,7 @@ public class RTVILModelLoader implements IModelLoader<Script> {
     }
     
     @Override
-    public de.uni_hildesheim.sse.utils.modelManagement.IModelLoader.LoadResult<Script> load(ModelInfo<Script> info, 
+    public net.ssehub.easy.basics.modelManagement.IModelLoader.LoadResult<Script> load(ModelInfo<Script> info, 
         ImportResolver<Script> resolver) {
         LoadResult<Script> loadResult = null;
         for (Script script : scripts) {
@@ -57,7 +57,7 @@ public class RTVILModelLoader implements IModelLoader<Script> {
 
     @Override
     public void scan(File location,
-            de.uni_hildesheim.sse.utils.modelManagement.IModelLoader.IModelInfoHolder<Script> holder) {
+            net.ssehub.easy.basics.modelManagement.IModelLoader.IModelInfoHolder<Script> holder) {
         if (location.getName().endsWith(".xml")) {
             scripts = new ArrayList<Script>();
             try {

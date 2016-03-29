@@ -6,7 +6,7 @@ import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilExceptio
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.IExpressionVisitor;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeDescriptor;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeRegistry;
-import de.uni_hildesheim.sse.utils.modelManagement.IVersionRestriction;
+import net.ssehub.easy.basics.modelManagement.IVersionRestriction;
 
 /**
  * Represents an instantiate expression. However, an instantiate expression can only be resolved at runtime.

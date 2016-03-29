@@ -41,8 +41,8 @@ public abstract class CollectionOperationsTests extends AbstractReasonerFrontend
     
     /**
      * Tests whether the reasoner is able to handle fulfilled
-     * {@link de.uni_hildesheim.sse.model.varModel.datatypes.OclKeyWords#COLLECT}
-     * constraints based on a collection of {@link de.uni_hildesheim.sse.model.varModel.datatypes.Compound}s.
+     * {@link net.ssehub.easy.varModel.model.datatypes.OclKeyWords#COLLECT}
+     * constraints based on a collection of {@link net.ssehub.easy.varModel.model.datatypes.Compound}s.
      * 
      * @throws IOException in case of problems reading a model
      */
@@ -53,8 +53,8 @@ public abstract class CollectionOperationsTests extends AbstractReasonerFrontend
     
     /**
      * Tests whether the reasoner is able to detect errors based in a
-     * {@link de.uni_hildesheim.sse.model.varModel.datatypes.OclKeyWords#COLLECT}
-     * constraints based on a collection of {@link de.uni_hildesheim.sse.model.varModel.datatypes.Compound}s.
+     * {@link net.ssehub.easy.varModel.model.datatypes.OclKeyWords#COLLECT}
+     * constraints based on a collection of {@link net.ssehub.easy.varModel.model.datatypes.Compound}s.
      * 
      * @throws IOException in case of problems reading a model
      */

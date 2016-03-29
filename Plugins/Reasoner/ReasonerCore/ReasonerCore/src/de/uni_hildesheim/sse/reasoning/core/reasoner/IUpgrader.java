@@ -10,10 +10,10 @@ import java.util.Iterator;
 import java.util.Map;
 
 import de.uni_hildesheim.sse.reasoning.core.Bundle;
-import de.uni_hildesheim.sse.utils.logger.EASyLoggerFactory;
-import de.uni_hildesheim.sse.utils.logger.EASyLoggerFactory.EASyLogger;
-import de.uni_hildesheim.sse.utils.messages.Status;
-import de.uni_hildesheim.sse.utils.progress.ProgressObserver;
+import net.ssehub.easy.basics.logger.EASyLoggerFactory;
+import net.ssehub.easy.basics.logger.EASyLoggerFactory.EASyLogger;
+import net.ssehub.easy.basics.messages.Status;
+import net.ssehub.easy.basics.progress.ProgressObserver;
 
 /**
  * Defines the interface to an installation upgrade mechanism.

@@ -15,7 +15,7 @@
  */
 package de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel;
 
-import de.uni_hildesheim.sse.utils.messages.AbstractException;
+import net.ssehub.easy.basics.messages.AbstractException;
 
 /**
  * Defines a specific exception for failing rule conditions carrying the index of the 

@@ -6,7 +6,7 @@ import com.thoughtworks.xstream.converters.UnmarshallingContext;
 import com.thoughtworks.xstream.io.HierarchicalStreamReader;
 import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
 
-import de.uni_hildesheim.sse.model.varModel.values.NullValue;
+import net.ssehub.easy.varModel.model.values.NullValue;
 
 /**
  * A type converter for delegating types. Background: In the IVML object model, 

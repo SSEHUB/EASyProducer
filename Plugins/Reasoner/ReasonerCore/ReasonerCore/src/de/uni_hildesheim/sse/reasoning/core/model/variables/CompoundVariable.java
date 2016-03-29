@@ -4,11 +4,11 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
-import de.uni_hildesheim.sse.model.confModel.IDecisionVariable;
 import de.uni_hildesheim.sse.reasoning.core.model.IVariableContainer;
 import de.uni_hildesheim.sse.reasoning.core.model.ReasonerModel;
 import de.uni_hildesheim.sse.reasoning.core.model.ReasoningState;
 import de.uni_hildesheim.sse.reasoning.core.model.datatypes.CompoundType;
+import net.ssehub.easy.varModel.confModel.IDecisionVariable;
 
 /**
  * {@link ReasonerVariable} representing a reference {@link IDecisionVariable}.
@@ -49,7 +49,7 @@ public class CompoundVariable extends CustomVariable implements IVariableContain
      * the specified name.
      *
      * @param nestedName The name  of the nested Element, written exactly as in the related
-     * {@link de.uni_hildesheim.sse.model.varModel.datatypes.Compound} datatype.
+     * {@link net.ssehub.easy.varModel.model.datatypes.Compound} datatype.
      * @return the nested {@link ReasonerVariable} to which the specified <tt>nestedName</tt> is mapped, or
      *     {@code null} if this {@link CompoundVariable} contains no nested {@link ReasonerVariable} with
      *     the specified name.

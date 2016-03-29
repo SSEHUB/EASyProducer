@@ -3,9 +3,9 @@ package de.uni_hildesheim.sse.reasoning.reasoner.functions;
 import java.util.HashSet;
 import java.util.Set;
 
-import de.uni_hildesheim.sse.model.confModel.IDecisionVariable;
-import de.uni_hildesheim.sse.model.cst.ConstraintSyntaxTree;
-import de.uni_hildesheim.sse.model.varModel.Constraint;
+import net.ssehub.easy.varModel.confModel.IDecisionVariable;
+import net.ssehub.easy.varModel.cst.ConstraintSyntaxTree;
+import net.ssehub.easy.varModel.model.Constraint;
 
 /**
  * Class for storing Failed elements details.

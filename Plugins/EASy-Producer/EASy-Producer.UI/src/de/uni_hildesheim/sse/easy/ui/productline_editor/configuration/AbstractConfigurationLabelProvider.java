@@ -16,9 +16,9 @@ import de.uni_hildesheim.sse.easy.ui.confModel.GUIVariable;
 import de.uni_hildesheim.sse.easy.ui.internal.Activator;
 import de.uni_hildesheim.sse.easy.ui.productline_editor.ImageProvider;
 import de.uni_hildesheim.sse.easy.ui.productline_editor.ImageProvider.ImageType;
-import de.uni_hildesheim.sse.model.confModel.AssignmentState;
-import de.uni_hildesheim.sse.model.confModel.DisplayNameProvider;
-import de.uni_hildesheim.sse.model.confModel.IAssignmentState;
+import net.ssehub.easy.varModel.confModel.AssignmentState;
+import net.ssehub.easy.varModel.confModel.DisplayNameProvider;
+import net.ssehub.easy.varModel.confModel.IAssignmentState;
 
 /**
  * Super class for configuration label provider. This label provider is capable of determining correct:

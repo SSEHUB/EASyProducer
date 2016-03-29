@@ -3,7 +3,7 @@ package de.uni_hildesheim.sse.easy_producer.instantiator.model;
 import java.io.File;
 import java.util.List;
 
-import de.uni_hildesheim.sse.model.confModel.Configuration;
+import net.ssehub.easy.varModel.confModel.Configuration;
 
 /**
  * Needed project information for the instantiation process.

@@ -12,29 +12,29 @@ import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.Sequence;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.Set;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.UnmodifiableSequence;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.UnmodifiableSet;
-import de.uni_hildesheim.sse.model.confModel.AssignmentState;
-import de.uni_hildesheim.sse.model.confModel.ConfigurationException;
-import de.uni_hildesheim.sse.model.confModel.IAssignmentState;
-import de.uni_hildesheim.sse.model.confModel.IConfiguration;
-import de.uni_hildesheim.sse.model.confModel.IConfigurationElement;
-import de.uni_hildesheim.sse.model.confModel.IConfigurationVisitor;
-import de.uni_hildesheim.sse.model.confModel.IDecisionVariable;
-import de.uni_hildesheim.sse.model.confModel.IFreezeSelector;
-import de.uni_hildesheim.sse.model.varModel.AbstractVariable;
-import de.uni_hildesheim.sse.model.varModel.DecisionVariableDeclaration;
-import de.uni_hildesheim.sse.model.varModel.datatypes.Compound;
-import de.uni_hildesheim.sse.model.varModel.datatypes.IDatatype;
-import de.uni_hildesheim.sse.model.varModel.datatypes.IntegerType;
-import de.uni_hildesheim.sse.model.varModel.datatypes.Reference;
-import de.uni_hildesheim.sse.model.varModel.datatypes.TypeQueries;
-import de.uni_hildesheim.sse.model.varModel.values.CompoundValue;
-import de.uni_hildesheim.sse.model.varModel.values.ContainerValue;
-import de.uni_hildesheim.sse.model.varModel.values.NullValue;
-import de.uni_hildesheim.sse.model.varModel.values.ReferenceValue;
-import de.uni_hildesheim.sse.model.varModel.values.Value;
-import de.uni_hildesheim.sse.model.varModel.values.ValueDoesNotMatchTypeException;
-import de.uni_hildesheim.sse.model.varModel.values.ValueFactory;
-import de.uni_hildesheim.sse.utils.logger.EASyLoggerFactory;
+import net.ssehub.easy.basics.logger.EASyLoggerFactory;
+import net.ssehub.easy.varModel.confModel.AssignmentState;
+import net.ssehub.easy.varModel.confModel.ConfigurationException;
+import net.ssehub.easy.varModel.confModel.IAssignmentState;
+import net.ssehub.easy.varModel.confModel.IConfiguration;
+import net.ssehub.easy.varModel.confModel.IConfigurationElement;
+import net.ssehub.easy.varModel.confModel.IConfigurationVisitor;
+import net.ssehub.easy.varModel.confModel.IDecisionVariable;
+import net.ssehub.easy.varModel.confModel.IFreezeSelector;
+import net.ssehub.easy.varModel.model.AbstractVariable;
+import net.ssehub.easy.varModel.model.DecisionVariableDeclaration;
+import net.ssehub.easy.varModel.model.datatypes.Compound;
+import net.ssehub.easy.varModel.model.datatypes.IDatatype;
+import net.ssehub.easy.varModel.model.datatypes.IntegerType;
+import net.ssehub.easy.varModel.model.datatypes.Reference;
+import net.ssehub.easy.varModel.model.datatypes.TypeQueries;
+import net.ssehub.easy.varModel.model.values.CompoundValue;
+import net.ssehub.easy.varModel.model.values.ContainerValue;
+import net.ssehub.easy.varModel.model.values.NullValue;
+import net.ssehub.easy.varModel.model.values.ReferenceValue;
+import net.ssehub.easy.varModel.model.values.Value;
+import net.ssehub.easy.varModel.model.values.ValueDoesNotMatchTypeException;
+import net.ssehub.easy.varModel.model.values.ValueFactory;
 
 /**
  * Wraps a decision variable. Primitive values may be obtained using the getter methods. Complex
@@ -200,7 +200,7 @@ public abstract class AbstractIvmlVariable extends IvmlElement {
         }
 
         @Override
-        public de.uni_hildesheim.sse.model.confModel.Configuration getConfiguration() {
+        public net.ssehub.easy.varModel.confModel.Configuration getConfiguration() {
             return parent.getConfiguration();
         }
 
@@ -278,7 +278,7 @@ public abstract class AbstractIvmlVariable extends IvmlElement {
 
         @Override
         public IDecisionVariable getNestedElement(String name) {
-            return de.uni_hildesheim.sse.model.confModel.Configuration.getNestedElement(this, name);
+            return net.ssehub.easy.varModel.confModel.Configuration.getNestedElement(this, name);
         }
 
         @Override
@@ -457,7 +457,7 @@ public abstract class AbstractIvmlVariable extends IvmlElement {
         } else {
             EASyLoggerFactory.INSTANCE.getLogger(getClass(), Bundle.ID).error(
                 "setting " + value + " as new value is not possible as variable " 
-                    + de.uni_hildesheim.sse.model.confModel.Configuration.getInstanceName(variable) + " is frozen");
+                    + net.ssehub.easy.varModel.confModel.Configuration.getInstanceName(variable) + " is frozen");
         }
     }
 

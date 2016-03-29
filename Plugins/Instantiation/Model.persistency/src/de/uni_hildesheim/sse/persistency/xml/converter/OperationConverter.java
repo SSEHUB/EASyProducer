@@ -9,10 +9,10 @@ import com.thoughtworks.xstream.converters.UnmarshallingContext;
 import com.thoughtworks.xstream.io.HierarchicalStreamReader;
 import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
 
-import de.uni_hildesheim.sse.model.varModel.IvmlDatatypeVisitor;
-import de.uni_hildesheim.sse.model.varModel.datatypes.Operation;
-import de.uni_hildesheim.sse.model.varModel.datatypes.QualifiedNameMode;
-import de.uni_hildesheim.sse.model.varModel.datatypes.Types;
+import net.ssehub.easy.varModel.model.IvmlDatatypeVisitor;
+import net.ssehub.easy.varModel.model.datatypes.Operation;
+import net.ssehub.easy.varModel.model.datatypes.QualifiedNameMode;
+import net.ssehub.easy.varModel.model.datatypes.Types;
 
 /**
  * A type converter for built-in operations. Background: Similar to delegating 

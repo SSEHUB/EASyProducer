@@ -3,12 +3,12 @@ package de.uni_hildesheim.sse.ui;
 import java.net.URI;
 
 import de.uni_hildesheim.sse.dslcore.ui.editors.AbstractModelChangeListener;
-import de.uni_hildesheim.sse.model.management.VarModel;
-import de.uni_hildesheim.sse.model.varModel.Project;
-import de.uni_hildesheim.sse.utils.modelManagement.IModel;
-import de.uni_hildesheim.sse.utils.modelManagement.IModelListener;
-import de.uni_hildesheim.sse.utils.modelManagement.IModelReloadListener;
-import de.uni_hildesheim.sse.utils.modelManagement.ModelInfo;
+import net.ssehub.easy.basics.modelManagement.IModel;
+import net.ssehub.easy.basics.modelManagement.IModelListener;
+import net.ssehub.easy.basics.modelManagement.IModelReloadListener;
+import net.ssehub.easy.basics.modelManagement.ModelInfo;
+import net.ssehub.easy.varModel.management.VarModel;
+import net.ssehub.easy.varModel.model.Project;
 
 /**
  * A <code>de.uni_hildesheim.sse.model.varModel.Project</code> listener, which

@@ -4,8 +4,8 @@ import java.io.File;
 import java.util.List;
 
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeRegistry;
-import de.uni_hildesheim.sse.utils.modelManagement.IModel;
-import de.uni_hildesheim.sse.utils.modelManagement.IModelLoader;
+import net.ssehub.easy.basics.modelManagement.IModel;
+import net.ssehub.easy.basics.modelManagement.IModelLoader;
 
 /**
  * Interface for the SerializerPlugin that adds the functionality of serializing runtime VIL.

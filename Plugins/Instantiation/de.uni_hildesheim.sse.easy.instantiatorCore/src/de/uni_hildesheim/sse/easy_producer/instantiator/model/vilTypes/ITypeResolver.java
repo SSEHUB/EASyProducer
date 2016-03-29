@@ -1,6 +1,6 @@
 package de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes;
 
-import de.uni_hildesheim.sse.model.varModel.datatypes.IDatatype;
+import net.ssehub.easy.varModel.model.datatypes.IDatatype;
 
 /**
  * An external type resolver for {@link TypeRegistry}. This may allow for deferred type

@@ -4,13 +4,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-import de.uni_hildesheim.sse.model.confModel.IDecisionVariable;
-import de.uni_hildesheim.sse.model.cst.ConstraintSyntaxTree;
-import de.uni_hildesheim.sse.model.varModel.AbstractVariable;
-import de.uni_hildesheim.sse.model.varModel.Constraint;
-import de.uni_hildesheim.sse.model.varModel.ModelElement;
-import de.uni_hildesheim.sse.model.varModel.Project;
-import de.uni_hildesheim.sse.utils.messages.Status;
+import net.ssehub.easy.basics.messages.Status;
+import net.ssehub.easy.varModel.confModel.IDecisionVariable;
+import net.ssehub.easy.varModel.cst.ConstraintSyntaxTree;
+import net.ssehub.easy.varModel.model.AbstractVariable;
+import net.ssehub.easy.varModel.model.Constraint;
+import net.ssehub.easy.varModel.model.ModelElement;
+import net.ssehub.easy.varModel.model.Project;
 
 /**
  * Part of the {@link ReasoningResult} class, expressing on error/warning of a complete {@link ReasoningResult}.
@@ -18,7 +18,7 @@ import de.uni_hildesheim.sse.utils.messages.Status;
  * @author Sizonenko
  *
  */
-public class Message extends de.uni_hildesheim.sse.utils.messages.Message {
+public class Message extends net.ssehub.easy.basics.messages.Message {
 
     private List<ModelElement> conflictingElements;
     private List<String> conflictingElementLabels;

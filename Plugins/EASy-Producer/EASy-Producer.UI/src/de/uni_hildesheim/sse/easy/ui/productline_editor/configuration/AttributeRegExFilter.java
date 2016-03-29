@@ -20,9 +20,9 @@ import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
 
 import de.uni_hildesheim.sse.easy.ui.confModel.GUIVariable;
-import de.uni_hildesheim.sse.model.confModel.IDecisionVariable;
-import de.uni_hildesheim.sse.model.varModel.values.Value;
-import de.uni_hildesheim.sse.persistency.StringProvider;
+import net.ssehub.easy.varModel.confModel.IDecisionVariable;
+import net.ssehub.easy.varModel.model.values.Value;
+import net.ssehub.easy.varModel.persistency.StringProvider;
 
 /**
  * Implements a simple attribute filter.

@@ -15,8 +15,8 @@ import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilExceptio
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.ListSet;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.Set;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.SettingsInitializerRegistry;
-import de.uni_hildesheim.sse.utils.progress.ProgressObserver;
-import de.uni_hildesheim.sse.utils.progress.ProgressObserver.ITask;
+import net.ssehub.easy.basics.progress.ProgressObserver;
+import net.ssehub.easy.basics.progress.ProgressObserver.ITask;
 
 /**
  * Implements the artifact model starting at a certain file root. However, the artifact 

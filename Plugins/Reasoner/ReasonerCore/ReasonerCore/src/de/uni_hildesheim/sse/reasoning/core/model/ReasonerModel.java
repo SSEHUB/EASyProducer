@@ -9,17 +9,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import de.uni_hildesheim.sse.model.confModel.Configuration;
-import de.uni_hildesheim.sse.model.confModel.IDecisionVariable;
-import de.uni_hildesheim.sse.model.cst.ConstraintSyntaxTree;
-import de.uni_hildesheim.sse.model.varModel.AbstractVariable;
-import de.uni_hildesheim.sse.model.varModel.Attribute;
-import de.uni_hildesheim.sse.model.varModel.ModelElement;
-import de.uni_hildesheim.sse.model.varModel.Project;
-import de.uni_hildesheim.sse.model.varModel.datatypes.CustomDatatype;
-import de.uni_hildesheim.sse.model.varModel.filter.DatatypeFinder;
-import de.uni_hildesheim.sse.model.varModel.filter.FilterType;
-import de.uni_hildesheim.sse.model.varModel.values.Value;
 import de.uni_hildesheim.sse.reasoning.core.Bundle;
 import de.uni_hildesheim.sse.reasoning.core.model.datatypes.CompoundType;
 import de.uni_hildesheim.sse.reasoning.core.model.datatypes.ReasonerDatatype;
@@ -29,12 +18,23 @@ import de.uni_hildesheim.sse.reasoning.core.model.variables.ReasonerVariable;
 import de.uni_hildesheim.sse.reasoning.core.model.variables.ReasonerVariableFactory;
 import de.uni_hildesheim.sse.reasoning.core.reasoner.AttributeValues;
 import de.uni_hildesheim.sse.reasoning.core.reasoner.ReasonerConfiguration;
-import de.uni_hildesheim.sse.utils.logger.EASyLoggerFactory;
-import de.uni_hildesheim.sse.utils.logger.EASyLoggerFactory.EASyLogger;
+import net.ssehub.easy.basics.logger.EASyLoggerFactory;
+import net.ssehub.easy.basics.logger.EASyLoggerFactory.EASyLogger;
+import net.ssehub.easy.varModel.confModel.Configuration;
+import net.ssehub.easy.varModel.confModel.IDecisionVariable;
+import net.ssehub.easy.varModel.cst.ConstraintSyntaxTree;
+import net.ssehub.easy.varModel.model.AbstractVariable;
+import net.ssehub.easy.varModel.model.Attribute;
+import net.ssehub.easy.varModel.model.ModelElement;
+import net.ssehub.easy.varModel.model.Project;
+import net.ssehub.easy.varModel.model.datatypes.CustomDatatype;
+import net.ssehub.easy.varModel.model.filter.DatatypeFinder;
+import net.ssehub.easy.varModel.model.filter.FilterType;
+import net.ssehub.easy.varModel.model.values.Value;
 
 /**
  * A structured model containing relevant information about
- * {@link de.uni_hildesheim.sse.model.confModel.IDecisionVariable}s, needed by the individual
+ * {@link net.ssehub.easy.varModel.confModel.IDecisionVariable}s, needed by the individual
  * {@link  de.uni_hildesheim.sse.reasoning.core.reasoner.IReasoner}.
  * @author El-Sharkawy
  *
@@ -481,7 +481,7 @@ public class ReasonerModel implements IConstraintContainer, Iterable<ReasonerVar
     
     /**
      * Returns a translated {@link ReasonerDatatype} for the given name.
-     * @param name The name of the origin {@link de.uni_hildesheim.sse.model.varModel.datatypes.IDatatype},
+     * @param name The name of the origin {@link net.ssehub.easy.varModel.model.datatypes.IDatatype},
      *     which should be returned.
      * @return The translated {@link ReasonerDatatype} or
      *     <tt>null</tt> if no {@link ReasonerDatatype} exists with the given name.

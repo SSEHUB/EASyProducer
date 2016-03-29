@@ -26,7 +26,7 @@ import org.eclipse.xtext.ui.editor.embedded.IEditedResourceProvider;
 import com.google.inject.Injector;
 
 import de.uni_hildesheim.sse.dslcore.ui.Activator;
-import de.uni_hildesheim.sse.utils.logger.EASyLoggerFactory;
+import net.ssehub.easy.basics.logger.EASyLoggerFactory;
 
 /**
  * Helps embedding the xText-editor of a certain grammar.

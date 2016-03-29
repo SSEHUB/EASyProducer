@@ -7,8 +7,8 @@ import java.util.Map;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VariableDeclaration;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilException;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.IMetaOperation;
-import de.uni_hildesheim.sse.utils.modelManagement.IVariable;
-import de.uni_hildesheim.sse.utils.modelManagement.IVersionRestriction.IVariableMapper;
+import net.ssehub.easy.basics.modelManagement.IVariable;
+import net.ssehub.easy.basics.modelManagement.IVersionRestriction.IVariableMapper;
 
 /**
  * Implements a visitor for copying expressions. Results of the methods will always be expressions.

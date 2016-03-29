@@ -4,14 +4,14 @@ import org.junit.BeforeClass;
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 
+import net.ssehub.easy.basics.logger.EASyLoggerFactory;
+import net.ssehub.easy.basics.logger.LoggingLevel;
 import test.de.uni_hildesheim.sse.easy_producer.instantiator.model.JavaUtilitiesTest;
 import test.de.uni_hildesheim.sse.easy_producer.instantiator.model.artifactmodel.XmlFileArtifactTest;
 import test.de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.BuildlangTests;
 import test.de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.ExpressionTests;
 import test.de.uni_hildesheim.sse.easy_producer.instantiator.model.templateModel.TemplateLangTests;
 import test.de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.VilTests;
-import de.uni_hildesheim.sse.utils.logger.EASyLoggerFactory;
-import de.uni_hildesheim.sse.utils.logger.LoggingLevel;
 
 /**
  * Test Suite, which starts all individual test cases.

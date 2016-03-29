@@ -32,13 +32,13 @@ import org.eclipse.xtext.resource.XtextResourceSet;
 import com.google.inject.Injector;
 
 import de.uni_hildesheim.sse.dslCore.translation.MessageReceiver;
-import de.uni_hildesheim.sse.utils.Environment;
-import de.uni_hildesheim.sse.utils.messages.IMessage;
-import de.uni_hildesheim.sse.utils.messages.Status;
-import de.uni_hildesheim.sse.utils.modelManagement.IModel;
-import de.uni_hildesheim.sse.utils.modelManagement.IModelLoader;
-import de.uni_hildesheim.sse.utils.modelManagement.ImportResolver;
-import de.uni_hildesheim.sse.utils.modelManagement.ModelInfo;
+import net.ssehub.easy.basics.Environment;
+import net.ssehub.easy.basics.messages.IMessage;
+import net.ssehub.easy.basics.messages.Status;
+import net.ssehub.easy.basics.modelManagement.IModel;
+import net.ssehub.easy.basics.modelManagement.IModelLoader;
+import net.ssehub.easy.basics.modelManagement.ImportResolver;
+import net.ssehub.easy.basics.modelManagement.ModelInfo;
 
 /**
  * A basic set of model utilities.
@@ -433,7 +433,7 @@ public abstract class ModelUtility <E extends EObject, R extends IModel> impleme
     public abstract List<ModelInfo<R>> obtainInfo(URI uri) throws IOException;
     
     @Override
-    public de.uni_hildesheim.sse.utils.modelManagement.IModelLoader.LoadResult<R> load(ModelInfo<R> info, 
+    public net.ssehub.easy.basics.modelManagement.IModelLoader.LoadResult<R> load(ModelInfo<R> info, 
         ImportResolver<R> resolver) {
         List<R> models = null;
         List<IMessage> messages = null;
@@ -454,7 +454,7 @@ public abstract class ModelUtility <E extends EObject, R extends IModel> impleme
                 } catch (IOException e) {
                     if (null == messages) {
                         messages = new ArrayList<IMessage>();
-                        messages.add(new de.uni_hildesheim.sse.utils.messages.Message(e.getMessage(), Status.ERROR));
+                        messages.add(new net.ssehub.easy.basics.messages.Message(e.getMessage(), Status.ERROR));
                     }
                 }
                 beingLoadedInThread.remove(location);

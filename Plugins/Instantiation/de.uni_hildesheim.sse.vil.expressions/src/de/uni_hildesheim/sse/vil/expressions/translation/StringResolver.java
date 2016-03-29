@@ -18,7 +18,7 @@ import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.Resolv
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.VariableEx;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.VariableExpression;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeRegistry;
-import de.uni_hildesheim.sse.utils.logger.EASyLoggerFactory;
+import net.ssehub.easy.basics.logger.EASyLoggerFactory;
 
 /**
  * StringResolver to resolve variables and expressions on compiling. Use the StringReplacer if you need to replace

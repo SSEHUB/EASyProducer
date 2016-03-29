@@ -1,8 +1,8 @@
 package de.uni_hildesheim.sse.easy.ui.confModel;
 
-import de.uni_hildesheim.sse.model.confModel.IAssignmentState;
-import de.uni_hildesheim.sse.model.confModel.IDecisionVariable;
-import de.uni_hildesheim.sse.model.varModel.values.Value;
+import net.ssehub.easy.varModel.confModel.IAssignmentState;
+import net.ssehub.easy.varModel.confModel.IDecisionVariable;
+import net.ssehub.easy.varModel.model.values.Value;
 
 /**
  * Stores one value entered via the GUI until they are saved permanently.

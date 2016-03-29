@@ -3,8 +3,8 @@ package de.uni_hildesheim.sse.easy_producer.instantiator.model.common;
 import java.util.ArrayList;
 import java.util.List;
 
-import de.uni_hildesheim.sse.utils.modelManagement.IModel;
-import de.uni_hildesheim.sse.utils.modelManagement.ModelImport;
+import net.ssehub.easy.basics.modelManagement.IModel;
+import net.ssehub.easy.basics.modelManagement.ModelImport;
 
 /**
  * Stores the model imports for a language unit.

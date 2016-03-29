@@ -4,7 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import de.uni_hildesheim.sse.easy_producer.instantiator.Bundle;
-import de.uni_hildesheim.sse.utils.logger.EASyLoggerFactory;
+import net.ssehub.easy.basics.logger.EASyLoggerFactory;
 
 /**
  * A global registry for expression parsers.

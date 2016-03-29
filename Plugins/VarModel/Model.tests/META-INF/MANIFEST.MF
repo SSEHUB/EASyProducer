@@ -11,4 +11,4 @@ Bundle-ClassPath: .
 Require-Bundle: de.uni_hildesheim.sse.varModel;bundle-version="0.0.10",
  org.junit,
  org.apache.commons.io;bundle-version="2.0.1"
-Export-Package: de.uni_hildesheim.sse.varModel.testSupport
+Export-Package: net.ssehub.easy.varModel.varModel.testSupport

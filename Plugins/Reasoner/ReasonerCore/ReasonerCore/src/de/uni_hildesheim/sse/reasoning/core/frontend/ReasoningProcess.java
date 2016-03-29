@@ -1,12 +1,12 @@
 package de.uni_hildesheim.sse.reasoning.core.frontend;
 
-import de.uni_hildesheim.sse.model.confModel.Configuration;
-import de.uni_hildesheim.sse.model.varModel.Project;
 import de.uni_hildesheim.sse.reasoning.core.model.ReasoningOperation;
 import de.uni_hildesheim.sse.reasoning.core.reasoner.Message;
 import de.uni_hildesheim.sse.reasoning.core.reasoner.ReasonerConfiguration;
 import de.uni_hildesheim.sse.reasoning.core.reasoner.ReasoningResult;
-import de.uni_hildesheim.sse.utils.progress.ProgressObserver;
+import net.ssehub.easy.basics.progress.ProgressObserver;
+import net.ssehub.easy.varModel.confModel.Configuration;
+import net.ssehub.easy.varModel.model.Project;
 
 /**
  * Delegate for starting a reasoning. This class can be run as a thread or be used inside a thread, e.g. as
@@ -98,7 +98,7 @@ public class ReasoningProcess implements Runnable {
                 default:
                     result = new ReasoningResult();
                     Message msg = new Message("Nothing done.", null,
-                        de.uni_hildesheim.sse.utils.messages.Status.WARNING);
+                        net.ssehub.easy.basics.messages.Status.WARNING);
                     result.addMessage(msg);
                     break;
                 }
@@ -132,7 +132,7 @@ public class ReasoningProcess implements Runnable {
      */
     private void setErrorResult(String errorMsg) {
         result = new ReasoningResult();
-        Message msg = new Message(errorMsg, null, de.uni_hildesheim.sse.utils.messages.Status.ERROR);
+        Message msg = new Message(errorMsg, null, net.ssehub.easy.basics.messages.Status.ERROR);
         result.addMessage(msg);
     }
 }

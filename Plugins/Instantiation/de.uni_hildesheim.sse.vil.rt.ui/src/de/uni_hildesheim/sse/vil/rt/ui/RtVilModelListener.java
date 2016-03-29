@@ -5,10 +5,10 @@ import java.net.URI;
 import de.uni_hildesheim.sse.dslcore.ui.editors.AbstractModelChangeListener;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.rtVil.RtVilModel;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.rtVil.Script;
-import de.uni_hildesheim.sse.utils.modelManagement.IModel;
-import de.uni_hildesheim.sse.utils.modelManagement.IModelListener;
-import de.uni_hildesheim.sse.utils.modelManagement.IModelReloadListener;
-import de.uni_hildesheim.sse.utils.modelManagement.ModelInfo;
+import net.ssehub.easy.basics.modelManagement.IModel;
+import net.ssehub.easy.basics.modelManagement.IModelListener;
+import net.ssehub.easy.basics.modelManagement.IModelReloadListener;
+import net.ssehub.easy.basics.modelManagement.ModelInfo;
 
 /**
  * A <code>de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.Script</code>
