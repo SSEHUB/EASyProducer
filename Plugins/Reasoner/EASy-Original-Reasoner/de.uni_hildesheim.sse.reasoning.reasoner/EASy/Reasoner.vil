@@ -29,7 +29,7 @@ vilScript Reasoner (Project source, Configuration config, Project target) {
                 // Remove imports after all logging references were removed
                 setOf(JavaImport) imports = file.imports();
                 map (JavaImport imp = imports) {
-                    if (imp.getName() == "de.uni_hildesheim.sse.utils.logger.EASyLoggerFactory.EASyLogger" or imp.getName() == "de.uni_hildesheim.sse.utils.logger.EASyLoggerFactory") {
+                    if (imp.getName() == "net.ssehub.easy.basics.logger.EASyLoggerFactory.EASyLogger" or imp.getName() == "net.ssehub.easy.basics.logger.EASyLoggerFactory") {
                         imp.delete();
                     }
                 };

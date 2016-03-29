@@ -7,7 +7,7 @@
     
     <!-- Indivdual properties for this build script -->
     <property name="test.plugin" value="ReasonerCore.test"/>
-    <property name="test.suite" value="net.ssehub.easy.reasonerCore.AllTests"/>
+    <property name="test.suite" value="net.ssehub.easy.reasoning.core.AllTests"/>
 
 	<target name="init">
 		<!-- Delete generated folders -->
