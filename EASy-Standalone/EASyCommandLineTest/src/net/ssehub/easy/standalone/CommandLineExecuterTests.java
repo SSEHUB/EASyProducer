@@ -35,7 +35,7 @@ import org.junit.Test;
  */
 public class CommandLineExecuterTests {
     
-    private static final String MAIN_CLASS = "de.uni_hildesheim.sse.easy.cmd.CommandLineExecuter";
+    private static final String MAIN_CLASS = "net.ssehub.easy.standalone.cmd.CommandLineExecuter";
     
     /**
      * Fallback No. 2 ;-)
