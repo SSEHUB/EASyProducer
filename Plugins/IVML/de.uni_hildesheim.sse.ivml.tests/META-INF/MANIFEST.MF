@@ -11,7 +11,7 @@ Require-Bundle: de.uni_hildesheim.sse.ivml,
  de.uni_hildesheim.sse.varModel;bundle-version="0.0.3",
  org.eclipse.xtext.junit4,
  org.eclipse.ui.workbench;resolution:=optional,
- de.uni_hildesheim.sse.dslCore;bundle-version="0.0.1",
+ net.ssehub.easy.dslCore;bundle-version="0.0.1",
  org.objectweb.asm;bundle-version="[5.0.1,6.0.0)";resolution:=optional
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Import-Package: org.junit.runner;version="4.5.0",

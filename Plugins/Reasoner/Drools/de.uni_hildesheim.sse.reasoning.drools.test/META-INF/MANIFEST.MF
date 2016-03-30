@@ -1,13 +1,13 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: drools.tests
-Bundle-SymbolicName: de.uni_hildesheim.sse.reasoning.drools.test
+Bundle-SymbolicName: net.ssehub.easy.reasoning.drools.test
 Bundle-Version: 0.0.1
 Bundle-Vendor: University of Hildesheim - SSE
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Require-Bundle: de.uni_hildesheim.sse.ivml;bundle-version="0.1.1",
  org.junit;bundle-version="4.8.2",
- ReasonerCore.test;bundle-version="0.0.1",
- de.uni_hildesheim.sse.reasoning.drools;bundle-version="0.5.0",
- ReasonerCore;bundle-version="0.0.8",
- de.uni_hildesheim.sse.dslCore;bundle-version="0.0.1"
+ net.ssehub.easy.reasoning.core.test;bundle-version="0.0.1",
+ net.ssehub.easy.reasoning.drools;bundle-version="0.5.0",
+ net.ssehub.easy.reasoning.core;bundle-version="0.0.8",
+ net.ssehub.easy.dslCore;bundle-version="0.0.1"

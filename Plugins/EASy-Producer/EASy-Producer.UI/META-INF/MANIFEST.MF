@@ -21,9 +21,9 @@ Require-Bundle:
  net.ssehub.easy.reasoning.core;bundle-version="0.0.8",
  org.eclipse.ui.console;bundle-version="3.5.100",
  de.uni_hildesheim.sse.varModel;bundle-version="0.5.5",
- de.uni_hildesheim.sse.dslCore.ui;bundle-version="0.0.1",
+ net.ssehub.easy.dslCore.ui;bundle-version="0.0.1",
  de.uni_hildesheim.sse.vil.buildlang.ui;bundle-version="0.5.3",
- de.uni_hildesheim.sse.dslCore;bundle-version="0.8.3",
+ net.ssehub.easy.dslCore;bundle-version="0.8.3",
  de.uni_hildesheim.sse.vil.buildlang;bundle-version="0.5.3"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Bundle-ActivationPolicy: lazy

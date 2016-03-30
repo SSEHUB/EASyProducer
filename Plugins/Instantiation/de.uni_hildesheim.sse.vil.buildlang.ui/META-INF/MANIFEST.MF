@@ -20,7 +20,7 @@ Require-Bundle: de.uni_hildesheim.sse.vil.buildlang;visibility:=reexport,
  de.uni_hildesheim.sse.varModel;bundle-version="0.5.2",
  de.uni-hildesheim.sse.easy.instantiatorCore;bundle-version="0.5.0",
  de.uni_hildesheim.sse.vil.expressions.ui;bundle-version="0.0.1",
- de.uni_hildesheim.sse.dslCore.ui,
+ net.ssehub.easy.dslCore.ui,
  de.uni_hildesheim.sse.utils
 Service-Component: OSGI-INF/vilFactory.xml
 Import-Package: org.apache.log4j

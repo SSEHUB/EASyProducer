@@ -31,6 +31,6 @@ Require-Bundle: de.uni_hildesheim.sse.varModel;bundle-version="0.0.10",
  org.eclipse.core.runtime,
  org.apache.commons.lang,
  de.uni-hildesheim.sse.easy.instantiatorCore,
- de.uni_hildesheim.sse.reasoning.reasoner;bundle-version="0.0.2"
+ net.ssehub.easy.reasoning.sseReasoner;bundle-version="0.0.2"
 Export-Package: net.ssehub.easy.instantiation.serializer.xml,
  net.ssehub.easy.instantiation.serializer.xml.loader

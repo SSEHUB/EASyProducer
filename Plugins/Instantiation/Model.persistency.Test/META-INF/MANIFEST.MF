@@ -17,5 +17,5 @@ Require-Bundle: org.junit,
  de.uni_hildesheim.sse.vil.templatelang;bundle-version="0.5.3",
  de.uni_hildesheim.sse.easy.instantiator.maven;bundle-version="3.2.3",
  net.ssehub.easy.reasoning.core,
- de.uni_hildesheim.sse.reasoning.reasoner
+ net.ssehub.easy.reasoning.sseReasoner
 Export-Package: net.ssehub.easy.instantiation.serializer.xml

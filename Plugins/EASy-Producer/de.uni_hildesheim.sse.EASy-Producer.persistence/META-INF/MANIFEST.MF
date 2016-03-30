@@ -8,7 +8,7 @@ Bundle-Vendor: University of Hildesheim - SSE
 Require-Bundle: de.uni_hildesheim.sse.varModel;bundle-version="0.5.4",
  de.uni-hildesheim.sse.easy.instantiatorCore;bundle-version="0.5.4",
  net.ssehub.easy.reasoning.core;bundle-version="0.5.5",
- de.uni_hildesheim.sse.dslCore;bundle-version="0.6.0",
+ net.ssehub.easy.dslCore;bundle-version="0.6.0",
  de.uni_hildesheim.sse.ivml;bundle-version="0.6.0",
  de.uni_hildesheim.sse.vil.buildlang;bundle-version="0.1.3",
  de.uni_hildesheim.sse.vil.templatelang;bundle-version="0.1.3",
