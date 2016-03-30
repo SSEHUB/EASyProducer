@@ -1,4 +1,4 @@
-package test.de.uni_hildesheim.sse.aspectj;
+package net.ssehub.easy.instantiation.aspectj;
 
 /**
  * Contains those tests not working on the integration server (whyever). It's fine if there are no tests

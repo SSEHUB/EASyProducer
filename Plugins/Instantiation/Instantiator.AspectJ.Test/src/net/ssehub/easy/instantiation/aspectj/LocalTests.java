@@ -1,4 +1,4 @@
-package test.de.uni_hildesheim.sse.aspectj;
+package net.ssehub.easy.instantiation.aspectj;
 
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
