@@ -9,11 +9,11 @@
     <property name="test.plugin.instantiation" value="de.uni-hildesheim.sse.easy.instantiatorCore.tests"/>
     <property name="test.suite.instantiation" value="net.ssehub.easy.instantiation.core.AllTests"/>
     <property name="test.plugin.instantiation.java" value="de.uni_hildesheim.sse.easy.instantiator.java.test"/>
-    <property name="test.suite.instantiation.java" value="test.de.uni_hildesheim.sse.java.AllTests"/>
+    <property name="test.suite.instantiation.java" value="net.ssehub.easy.instantiation.java.AllTests"/>
     <property name="test.plugin.instantiation.ant" value="de.uni_hildesheim.sse.easy.instantiator.ant.test"/>
-    <property name="test.suite.instantiation.ant" value="test.de.uni_hildesheim.sse.ant.AllTests"/>
+    <property name="test.suite.instantiation.ant" value="net.ssehub.easy.instantiation.ant.AllTests"/>
     <property name="test.plugin.instantiation.aspectj" value="de.uni_hildesheim.sse.easy.instantiator.aspectj.test"/>
-    <property name="test.suite.instantiation.aspectj" value="test.de.uni_hildesheim.sse.aspectj.AllTests"/>
+    <property name="test.suite.instantiation.aspectj" value="net.ssehub.easy.instantiation.aspectj.AllTests"/>
     <property name="test.plugin.instantiation.rtVil" value="de.uni_hildesheim.sse.vil.rt.tests"/>
     <property name="test.suite.instantiation.rtVil" value="de.uni_hildesheim.sse.vil.rt.tests.AllTests"/>
     <property name="test.plugin.vil" value="de.uni_hildesheim.sse.vil.buildlang.tests"/>
@@ -21,7 +21,7 @@
     <property name="test.plugin.template" value="de.uni_hildesheim.sse.vil.templatelang.tests"/>
     <property name="test.suite.template" value="test.de.uni_hildesheim.sse.vil.templatelang.AllTests"/>
 	<property name="test.plugin.instantiation.serializer" value="Model.persistency.Test" />
-	<property name="test.suite.instantiation.serializer" value="de.uni_hildesheim.sse.persistency.xml.AllTests"/>
+	<property name="test.suite.instantiation.serializer" value="net.ssehub.easy.instantiation.serializer.xml.AllTests"/>
     
 	<target name="init">
 		<!-- Delete generated folders -->
