@@ -10,7 +10,7 @@ Require-Bundle: de.uni_hildesheim.sse.vil.buildlang.tests;bundle-version="0.0.1"
  de.uni-hildesheim.sse.easy.instantiatorCore;bundle-version="0.5.5",
  de.uni_hildesheim.sse.varModel;bundle-version="0.5.5",
  de.uni_hildesheim.sse.easy.instantiator.java;bundle-version="0.0.1",
- de.uni_hildesheim.sse.varModel.tests;bundle-version="0.0.10",
+ net.ssehub.easy.varModel.tests;bundle-version="0.0.10",
  org.eclipse.core.resources,
  org.apache.commons.io,
  de.uni_hildesheim.sse.varModel.persistency,
