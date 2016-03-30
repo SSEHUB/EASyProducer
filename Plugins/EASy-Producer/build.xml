@@ -9,7 +9,7 @@
 	<taskdef resource="emma_ant.properties" classpathref="emma.lib" />
     
     <!-- Indivdual properties for this build script -->
-    <property name="test.plugin" value="de.uni_hildesheim.sse.EASy-Producer.tests"/>
+    <property name="test.plugin" value="net.ssehub.easy.producer.eclipse.tests"/>
     <property name="test.suite" value="net.ssehub.easy.producer.eclipse.AllTests"/>
     <property name="test.plugin.szenarios" value="de.uni_hildeshem.sse.easy.scenario.tests"/>
     <property name="test.suite.szenarios" value="net.ssehub.easy.producer.scenario_tests.AllTests"/>
