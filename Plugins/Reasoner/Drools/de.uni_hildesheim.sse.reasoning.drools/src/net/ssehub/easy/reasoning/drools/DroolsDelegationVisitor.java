@@ -89,8 +89,7 @@ class DroolsDelegationVisitor {
      */
     public void addDroolsGlobals(String name, DroolsPrinter dPrinter) {
         dPrinter.openProject(name);
-        String functionImports = "import function de.uni_hildesheim.sse"
-                + ".reasoning.drools.functions.IVMLFunctions.*\n";
+        String functionImports = "import function net.ssehub.easy.reasoning.drools.functions.IVMLFunctions.*\n";
         dPrinter.append(functionImports);
         String isDefinedFunction = "function boolean isDefined(Object o) { \n"
                     + "\t" + "return o != null;"

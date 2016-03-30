@@ -30,22 +30,22 @@ public class ModelTranslator extends AbstractModelTranslator {
     /**
      * Constant value for the <b>beginning</b> of each Drools reasoner file.
      */
-    private static final String BEGIN_OF_FILE = "package de.uni_hildesheim.sse.reasoning.drools2;"
+    private static final String BEGIN_OF_FILE = "package net.ssehub.easy.reasoning.drools2;"
             + LINEBREAK
             + LINEBREAK
-            + "import function de.uni_hildesheim.sse.reasoning.drools2.functions.FailedRules.addFailedRule"
+            + "import function net.ssehub.easy.reasoning.drools2.functions.FailedRules.addFailedRule"
             + LINEBREAK
-            + "import function de.uni_hildesheim.sse.reasoning.drools2.functions.FailedRules.addFailedRuleInCompound"
+            + "import function net.ssehub.easy.reasoning.drools2.functions.FailedRules.addFailedRuleInCompound"
             + LINEBREAK
-            + "import function de.uni_hildesheim.sse.reasoning.drools2.functions.BooleanAlgebraFunctions.*"
+            + "import function net.ssehub.easy.reasoning.drools2.functions.BooleanAlgebraFunctions.*"
             + LINEBREAK
-            + "import function de.uni_hildesheim.sse.reasoning.drools2.functions.AdvancedMathFunctions.*"
+            + "import function net.ssehub.easy.reasoning.drools2.functions.AdvancedMathFunctions.*"
             + LINEBREAK
-            + "import function de.uni_hildesheim.sse.reasoning.drools2.functions.StringFunctions.*"
+            + "import function net.ssehub.easy.reasoning.drools2.functions.StringFunctions.*"
             + LINEBREAK
-            + "import function de.uni_hildesheim.sse.reasoning.drools2.functions.DefFunctions.*"
+            + "import function net.ssehub.easy.reasoning.drools2.functions.DefFunctions.*"
             + LINEBREAK
-            + "import de.uni_hildesheim.sse.reasoning.core.model.variables.*"
+            + "import net.ssehub.easy.reasoning.core.model.variables.*"
             + LINEBREAK
             + LINEBREAK
             + "dialect \"mvel\""
