@@ -6,7 +6,7 @@
     </taskdef>
     
     <!-- Individual properties for this build script -->
-    <property name="test.plugin.instantiation" value="de.uni-hildesheim.sse.easy.instantiatorCore.tests"/>
+    <property name="test.plugin.instantiation" value="de.uni_hildesheim.sse.easy_producer.core.test"/>
     <property name="test.suite.instantiation" value="net.ssehub.easy.instantiation.core.AllTests"/>
     <property name="test.plugin.instantiation.java" value="de.uni_hildesheim.sse.easy.instantiator.java.test"/>
     <property name="test.suite.instantiation.java" value="net.ssehub.easy.instantiation.java.AllTests"/>
@@ -20,7 +20,7 @@
     <property name="test.suite.vil" value="test.de.uni_hildesheim.sse.vil.buildlang.AllTests"/>
     <property name="test.plugin.template" value="de.uni_hildesheim.sse.vil.templatelang.tests"/>
     <property name="test.suite.template" value="test.de.uni_hildesheim.sse.vil.templatelang.AllTests"/>
-	<property name="test.plugin.instantiation.serializer" value="Model.persistency.Test" />
+	<property name="test.plugin.instantiation.serializer" value="net.ssehub.easy.instantiation.serializer.xml.tests" />
 	<property name="test.suite.instantiation.serializer" value="net.ssehub.easy.instantiation.serializer.xml.AllTests"/>
     
 	<target name="init">
