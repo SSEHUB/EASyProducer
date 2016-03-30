@@ -1,7 +1,7 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: SSE Variability Model (IVML) - Tests
-Bundle-SymbolicName: de.uni_hildesheim.sse.varModel.tests;singleton:=true
+Bundle-SymbolicName: net.ssehub.easy.varModel.tests;singleton:=true
 Bundle-Version: 0.0.10
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Import-Package: org.osgi.framework
