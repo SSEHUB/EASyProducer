@@ -41,9 +41,9 @@ seq4 <- {1, 2, 2, 3, 4, 5}
 set2 <- {1, 2, 3, 4, 5}
 -> toSequence(Set) with ({1, 2, 3, 4, 5}) = {1, 2, 3, 4, 5}
 seq7 <- {1, 2, 3, 4, 5}
--> selectByType(Sequence, Type) with ({1, 2, 3, 4}, Integer representing de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.PseudoInteger) = {1, 2, 3, 4}
+-> selectByType(Sequence, Type) with ({1, 2, 3, 4}, Integer representing net.ssehub.easy.instantiation.core.model.vilTypes.PseudoInteger) = {1, 2, 3, 4}
 seq8 <- {1, 2, 3, 4}
--> selectByType(Sequence, Type) with ({1, 2, 3, 4}, Real representing de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.PseudoReal) = {}
+-> selectByType(Sequence, Type) with ({1, 2, 3, 4}, Real representing net.ssehub.easy.instantiation.core.model.vilTypes.PseudoReal) = {}
 seq9 <- {}
 -> excluding(Sequence, Collection) with ({1, 2, 2, 3, 4, 5}, {1, 2, 3, 4}) = {5}
 seq10 <- {5}
@@ -57,9 +57,9 @@ seq11 <- {5}
 -> >(Integer, Integer) with (5, 4) = true
 -> select(Sequence, ExpressionEvaluator) with ({1, 2, 2, 3, 4, 5}, <evaluator>) = {5}
 seq12 <- {5}
--> selectByType(Set, Type) with ({1, 2, 3, 4, 5}, Integer representing de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.PseudoInteger) = {1, 2, 3, 4, 5}
+-> selectByType(Set, Type) with ({1, 2, 3, 4, 5}, Integer representing net.ssehub.easy.instantiation.core.model.vilTypes.PseudoInteger) = {1, 2, 3, 4, 5}
 set3 <- {1, 2, 3, 4, 5}
--> selectByType(Set, Type) with ({1, 2, 3, 4, 5}, Real representing de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.PseudoReal) = {}
+-> selectByType(Set, Type) with ({1, 2, 3, 4, 5}, Real representing net.ssehub.easy.instantiation.core.model.vilTypes.PseudoReal) = {}
 set4 <- {}
 -> excluding(Set, Collection) with ({1, 2, 3, 4, 5}, {1, 2, 3, 4, 5}) = {}
 set5 <- {}
