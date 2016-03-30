@@ -3,7 +3,7 @@ Bundle-ManifestVersion: 2
 Bundle-Name: de.uni-hildesheim.sse.easy.help
 Bundle-SymbolicName: de.uni-hildesheim.sse.easy.help;singleton:=true
 Bundle-Version: 1.1.0
-Bundle-Activator: de.uni_hildesheim.sse.easy.help.Activator
+Bundle-Activator: net.ssehub.easy.producer.help.Activator
 Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime
 Bundle-ActivationPolicy: lazy

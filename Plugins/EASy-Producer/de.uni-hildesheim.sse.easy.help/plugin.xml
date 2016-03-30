@@ -30,7 +30,7 @@
          point="org.eclipse.ui.handlers">
       <handler
             commandId="easy.help.command"
-            class="de.uni_hildesheim.sse.easy.help.handlers.HelpCommand">
+            class="net.ssehub.easy.producer.help.handlers.HelpCommand">
       </handler>
    </extension>
    
