@@ -75,9 +75,8 @@
         <property name="eclipse-home" value="${test.eclipse.path}"/>
         <ant target="core-test" antfile="plugins/${test.eclipse.testFW.dir}/library.xml" dir="${test.eclipse.path}">       
           <property name="data-dir" value="${test.eclipse.workspace.dir} -clean"/>
-          <property name="plugin-name" value="de.uni_hildesheim.sse.varModel.tests"/>
+          <property name="plugin-name" value="net.ssehub.easy.varModel.tests"/>
           <property name="classname" value="net.ssehub.easy.varModel.AllTests"/>
-          <!-- property name="vmargs" value="-Dbaz=true"/ -->
           <property name="extraVMargs" value="-javaagent:${jacoco.path}/jacocoagent.jar=append=true,destfile=${basedir}/${coverage.results.dir}/${ant.project.name}.exec"/>
           <property name="os" value="${test.eclipse.os}"/>
 		  <property name="ws" value="${test.eclipse.ws}"/>
