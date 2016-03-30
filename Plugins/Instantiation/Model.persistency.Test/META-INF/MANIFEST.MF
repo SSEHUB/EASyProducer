@@ -1,7 +1,7 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Model.persistency.Test
-Bundle-SymbolicName: Model.persistency.Test
+Bundle-SymbolicName: net.ssehub.easy.instantiation.serializer.xml.tests
 Bundle-Version: 1.0.0.qualifier
 Bundle-Vendor: University of Hildesheim - SSE
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
@@ -16,6 +16,6 @@ Require-Bundle: org.junit,
  de.uni_hildesheim.sse.vil.expressions;bundle-version="0.5.3",
  de.uni_hildesheim.sse.vil.templatelang;bundle-version="0.5.3",
  de.uni_hildesheim.sse.easy.instantiator.maven;bundle-version="3.2.3",
- ReasonerCore,
+ net.ssehub.easy.reasoning.core,
  de.uni_hildesheim.sse.reasoning.reasoner
 Export-Package: net.ssehub.easy.instantiation.serializer.xml
