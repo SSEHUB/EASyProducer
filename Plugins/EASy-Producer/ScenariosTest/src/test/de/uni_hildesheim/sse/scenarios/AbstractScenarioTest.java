@@ -10,7 +10,6 @@ import java.util.Map;
 import org.apache.commons.io.FileUtils;
 import org.junit.Assert;
 
-import de.uni_hildesheim.sse.easy.java.Registration;
 import net.ssehub.easy.basics.modelManagement.ModelInfo;
 import net.ssehub.easy.basics.modelManagement.ModelManagementException;
 import net.ssehub.easy.basics.modelManagement.VersionFormatException;
@@ -25,6 +24,7 @@ import net.ssehub.easy.instantiation.core.model.execution.TracerFactory;
 import net.ssehub.easy.instantiation.core.model.templateModel.TemplateModel;
 import net.ssehub.easy.instantiation.core.model.vilTypes.Project;
 import net.ssehub.easy.instantiation.core.model.vilTypes.configuration.Configuration;
+import net.ssehub.easy.instantiation.java.Registration;
 import net.ssehub.easy.varModel.management.VarModel;
 import test.de.uni_hildesheim.sse.vil.buildlang.AbstractTest;
 import test.de.uni_hildesheim.sse.vil.buildlang.BuildLangTestConfigurer;

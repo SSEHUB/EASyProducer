@@ -13,13 +13,13 @@ import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import de.uni_hildesheim.sse.easy.java.Registration;
-import de.uni_hildesheim.sse.easy.java.artifacts.DefaultJavaFileArtifactCreator;
-import de.uni_hildesheim.sse.easy.java.artifacts.JavaClass;
-import de.uni_hildesheim.sse.easy.java.artifacts.JavaFileArtifact;
 import net.ssehub.easy.instantiation.core.model.buildlangModel.Script;
 import net.ssehub.easy.instantiation.core.model.common.VilException;
 import net.ssehub.easy.instantiation.core.model.vilTypes.Set;
+import net.ssehub.easy.instantiation.java.Registration;
+import net.ssehub.easy.instantiation.java.artifacts.DefaultJavaFileArtifactCreator;
+import net.ssehub.easy.instantiation.java.artifacts.JavaClass;
+import net.ssehub.easy.instantiation.java.artifacts.JavaFileArtifact;
 import test.de.uni_hildesheim.sse.vil.buildlang.AbstractExecutionTest;
 import test.de.uni_hildesheim.sse.vil.buildlang.BuildLangTestConfigurer;
 import test.de.uni_hildesheim.sse.vil.buildlang.ITestConfigurer;

@@ -10,13 +10,13 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import de.uni_hildesheim.sse.easy.java.Registration;
 import net.ssehub.easy.basics.modelManagement.ModelManagementException;
 import net.ssehub.easy.instantiation.core.model.buildlangModel.Script;
 import net.ssehub.easy.instantiation.core.model.common.VilException;
 import net.ssehub.easy.instantiation.core.model.execution.Executor;
 import net.ssehub.easy.instantiation.core.model.execution.TracerFactory;
 import net.ssehub.easy.instantiation.core.model.tracing.ConsoleTracerFactory;
+import net.ssehub.easy.instantiation.java.Registration;
 import test.de.uni_hildesheim.sse.vil.buildlang.AbstractExecutionTest;
 import test.de.uni_hildesheim.sse.vil.buildlang.BuildLangTestConfigurer;
 import test.de.uni_hildesheim.sse.vil.buildlang.ITestConfigurer;

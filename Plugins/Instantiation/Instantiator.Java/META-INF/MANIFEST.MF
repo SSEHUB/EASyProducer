@@ -20,7 +20,7 @@ Import-Package: org.eclipse.jdt.core,
  org.eclipse.jdt.core.dom,
  org.eclipse.jface.text,
  org.osgi.service.component
-Export-Package: de.uni_hildesheim.sse.easy.java,
- de.uni_hildesheim.sse.easy.java.artifacts
+Export-Package: net.ssehub.easy.instantiation.java,
+ net.ssehub.easy.instantiation.java.artifacts
 Bundle-ActivationPolicy: lazy
 Bundle-ClassPath: .
