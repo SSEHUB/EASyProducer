@@ -48,6 +48,7 @@
 		<emma enabled="true" verbosity="verbose">
 			<instr destdir="${coverage.instr.dir}" metadatafile="${coverage.results.dir}/metadata.emma" mode="fullcopy" >
 				<filter includes="*de.uni_hildesheim.sse*"/>
+				<filter includes="*net.ssehub.easy.*"/>
 				<filter excludes="*Activator*"/>
 				<filter excludes="*AllTests*"/>
 				<instrpath>
