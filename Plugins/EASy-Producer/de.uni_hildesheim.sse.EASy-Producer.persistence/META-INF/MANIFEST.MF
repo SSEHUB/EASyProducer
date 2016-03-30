@@ -3,7 +3,7 @@ Bundle-ManifestVersion: 2
 Bundle-Name: Persistence
 Bundle-SymbolicName: de.uni_hildesheim.sse.easy_producer.core;singleton:=true
 Bundle-Version: 1.1.0
-Bundle-Activator: de.uni_hildesheim.sse.easy_producer.core.persistence.internal.Activator
+Bundle-Activator: net.ssehub.easy.producer.core.persistence.internal.Activator
 Bundle-Vendor: University of Hildesheim - SSE
 Require-Bundle: de.uni_hildesheim.sse.varModel;bundle-version="0.5.4",
  de.uni-hildesheim.sse.easy.instantiatorCore;bundle-version="0.5.4",
@@ -16,11 +16,11 @@ Require-Bundle: de.uni_hildesheim.sse.varModel;bundle-version="0.5.4",
 Import-Package: org.osgi.framework
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Bundle-ActivationPolicy: lazy
-Export-Package: de.uni_hildesheim.sse.easy_producer.core.contributions,
- de.uni_hildesheim.sse.easy_producer.core.mgmt,
- de.uni_hildesheim.sse.easy_producer.core.persistence,
- de.uni_hildesheim.sse.easy_producer.core.persistence.datatypes,
- de.uni_hildesheim.sse.easy_producer.core.persistence.standard,
- de.uni_hildesheim.sse.easy_producer.core.varMod.container
+Export-Package: net.ssehub.easy.producer.core.contributions,
+ net.ssehub.easy.producer.core.mgmt,
+ net.ssehub.easy.producer.core.persistence,
+ net.ssehub.easy.producer.core.persistence.datatypes,
+ net.ssehub.easy.producer.core.persistence.standard,
+ net.ssehub.easy.producer.core.varMod.container
 Bundle-ClassPath: lib/,
  .

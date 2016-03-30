@@ -9,7 +9,7 @@
    </category>
    <wizard
          category="de.uni_hildesheim.sse.easy.examples.importWizards"
-         class="de.uni_hildesheim.sse.easy.examples.internal.ExamplesWizard"
+         class="net.ssehub.easy.producer.examples.internal.ExamplesWizard"
          icon="icons/logo_icon.gif"
          id="de.uni_hildesheim.sse.easy.examples.internal.ExamplesWizard"
          name="Import EASy-Producer Examples">

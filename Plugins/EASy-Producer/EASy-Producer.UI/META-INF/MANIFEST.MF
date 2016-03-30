@@ -3,7 +3,7 @@ Bundle-ManifestVersion: 2
 Bundle-Name: EASy-Producer.UI
 Bundle-SymbolicName: de.uni_hildesheim.sse.easy.ui;singleton:=true
 Bundle-Version: 1.1.0
-Bundle-Activator: de.uni_hildesheim.sse.easy.ui.internal.Activator
+Bundle-Activator: net.ssehub.easy.producer.ui.internal.Activator
 Bundle-Vendor: University of Hildesheim - SSE
 Require-Bundle: 
  org.eclipse.ui,
@@ -28,10 +28,10 @@ Require-Bundle:
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Bundle-ActivationPolicy: lazy
 Bundle-ClassPath: .
-Export-Package: de.uni_hildesheim.sse.easy.ui.contributions,
- de.uni_hildesheim.sse.easy.ui.core,
- de.uni_hildesheim.sse.easy.ui.core.contributions,
- de.uni_hildesheim.sse.easy.ui.core.reasoning,
- de.uni_hildesheim.sse.easy.ui.internal,
- de.uni_hildesheim.sse.easy.ui.productline_editor,
- de.uni_hildesheim.sse.easy.ui.project_management
+Export-Package: net.ssehub.easy.producer.ui.contributions,
+ net.ssehub.easy.producer.ui.core,
+ net.ssehub.easy.producer.ui.core.contributions,
+ net.ssehub.easy.producer.ui.core.reasoning,
+ net.ssehub.easy.producer.ui.internal,
+ net.ssehub.easy.producer.ui.productline_editor,
+ net.ssehub.easy.producer.ui.project_management

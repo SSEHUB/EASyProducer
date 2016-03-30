@@ -10,7 +10,7 @@
       </category>
       <wizard
             category="de.uni_hildesheim.sse.EASy_Producer"
-            class="de.uni_hildesheim.sse.easy.ui.internal.NewEASyProjectWizard"
+            class="net.ssehub.easy.producer.ui.internal.NewEASyProjectWizard"
             icon="icons/logo_icon.gif"
             id="de.uni_hildesheim.sse.plugin.wizards.PLuginNewWizard"
             name="EASy-Producer Product Line Project"
@@ -21,15 +21,15 @@
    <extension
          point="org.eclipse.ui.editors">
       <editor
-            class="de.uni_hildesheim.sse.easy.ui.productline_editor.Editor"
-            contributorClass="de.uni_hildesheim.sse.easy.ui.productline_editor.ProductLineConfigurationEditorContributor"
+            class="net.ssehub.easy.producer.ui.productline_editor.Editor"
+            contributorClass="net.ssehub.easy.producer.ui.productline_editor.ProductLineConfigurationEditorContributor"
             icon="icons/logo_icon.gif"
             id="de.uni_hildesheim.sse.easy_producer.ProductLineConfigurationEditor.new"
             name="Product Line Configuration Editor">
       </editor>
    </extension>
    <extension point="org.eclipse.ui.startup">
-     <startup class="de.uni_hildesheim.sse.easy.ui.internal.Startup"/>
+     <startup class="net.ssehub.easy.producer.ui.internal.Startup"/>
    </extension>
    
    <extension point="org.eclipse.ui.popupMenus">
@@ -38,7 +38,7 @@
             id="de.uni_hildesheim.sse.easy_producer.popUpMenu"
             objectClass="org.eclipse.core.resources.IProject">
          <action
-               class="de.uni_hildesheim.sse.easy.ui.internal.EditProductLineAction"
+               class="net.ssehub.easy.producer.ui.internal.EditProductLineAction"
                enablesFor="1"
                icon="icons/logo_icon.gif"
                id="de.uni_hildesheim.sse.easy_producer.editProductlineAction"
@@ -55,7 +55,7 @@
             id="org.eclipse.xtext.builder.addNature"
             objectClass="org.eclipse.core.resources.IProject">
          <action
-               class="de.uni_hildesheim.sse.easy.ui.internal.ToggleEASyNatureAction"
+               class="net.ssehub.easy.producer.ui.internal.ToggleEASyNatureAction"
                icon="icons/logo_icon.gif"
                id="de.uni_hildesheim.sse.easy_producer.AddEASyNatureAction"
                label="Add EASy-Producer Nature"
@@ -76,7 +76,7 @@
             id="org.eclipse.xtext.builder.removeNature"
             objectClass="org.eclipse.core.resources.IProject">
          <action
-               class="de.uni_hildesheim.sse.easy.ui.internal.ToggleEASyNatureAction"
+               class="net.ssehub.easy.producer.ui.internal.ToggleEASyNatureAction"
                icon="icons/logo_icon.gif"
                id="de.uni_hildesheim.sse.easy_producer.RemoveEASyNatureAction"
                label="Remove EASy PLE Nature"
@@ -113,31 +113,31 @@
    
    <extension point="org.eclipse.ui.preferencePages">
       <page
-            class="de.uni_hildesheim.sse.easy.ui.configuration.MainPreferencePage"
+            class="net.ssehub.easy.producer.ui.configuration.MainPreferencePage"
             id="de.uni_hildesheim.sse.EASy"
             name="EASy-Producer">
       </page>
       <page
             category="de.uni_hildesheim.sse.EASy"
-            class="de.uni_hildesheim.sse.easy.ui.reasoner.ReasonerPreferencePage"
+            class="net.ssehub.easy.producer.ui.reasoner.ReasonerPreferencePage"
             id="de.uni_hildesheim.sse.EASy.reasoners"
             name="Reasoners">
       </page>
       <page
             category="de.uni_hildesheim.sse.EASy"
-            class="de.uni_hildesheim.sse.easy.ui.configuration.GlobalPathPreferencePage"
+            class="net.ssehub.easy.producer.ui.configuration.GlobalPathPreferencePage"
             id="de.uni_hildesheim.sse.EASy.paths"
             name="Model paths">
       </page>
        <page
             category="de.uni_hildesheim.sse.EASy"
-            class="de.uni_hildesheim.sse.easy.ui.configuration.VtlArgumentProviderPreferencePage"
+            class="net.ssehub.easy.producer.ui.configuration.VtlArgumentProviderPreferencePage"
             id="de.uni_hildesheim.sse.EASy.paths"
             name="VTL Argument Provider">
       </page>
       <page
             category="de.uni_hildesheim.sse.EASy/de.uni_hildesheim.sse.Ivml"
-            class="de.uni_hildesheim.sse.easy.ui.configuration.IvmlIndentationPreferencePage"
+            class="net.ssehub.easy.producer.ui.configuration.IvmlIndentationPreferencePage"
             id="de.uni_hildesheim.sse.easy.ui.configuration.IvmlIndentationPreferencePage"
             name="Indentation">
       </page>
@@ -145,14 +145,14 @@
    
    <extension point="org.eclipse.ui.propertyPages">
      <page
-        class="de.uni_hildesheim.sse.easy.ui.configuration.MainPropertyPage"
+        class="net.ssehub.easy.producer.ui.configuration.MainPropertyPage"
         id="de.uni_hildesheim.sse.EASy"
         name="EASy-Producer">
      </page>
      <page
         category="de.uni_hildesheim.sse.EASy"
         name="Model paths"
-        class="de.uni_hildesheim.sse.easy.ui.configuration.PathPropertyPage"
+        class="net.ssehub.easy.producer.ui.configuration.PathPropertyPage"
         id="de.uni_hildesheim.sse.easy.ui.configuration.ProjectConfigurationPage">
      </page>
    </extension>

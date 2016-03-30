@@ -10,13 +10,13 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.IPath;
 
-import de.uni_hildesheim.sse.easy_producer.core.persistence.Configuration.PathKind;
-import de.uni_hildesheim.sse.easy_producer.persistency.eclipse.PersistenceUtils;
 import net.ssehub.easy.basics.modelManagement.ModelInfo;
 import net.ssehub.easy.basics.modelManagement.ModelManagementException;
 import net.ssehub.easy.basics.progress.ProgressObserver;
 import net.ssehub.easy.integration.common.IModelInfo;
 import net.ssehub.easy.integration.common.ModelException;
+import net.ssehub.easy.producer.core.persistence.Configuration.PathKind;
+import net.ssehub.easy.producer.eclipse.persistency.eclipse.PersistenceUtils;
 import net.ssehub.easy.varModel.management.VarModel;
 import net.ssehub.easy.varModel.model.Project;
 

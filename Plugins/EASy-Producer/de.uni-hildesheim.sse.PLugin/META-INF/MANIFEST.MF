@@ -3,7 +3,7 @@ Bundle-ManifestVersion: 2
 Bundle-Name: EASy-Producer - Eclipse
 Bundle-SymbolicName: de.uni_hildesheim.sse.easy_producer.eclipse;singleton:=true
 Bundle-Version: 1.1.0
-Bundle-Activator: de.uni_hildesheim.sse.easy_producer.Activator
+Bundle-Activator: net.ssehub.easy.producer.eclipse.Activator
 Require-Bundle: 
  org.eclipse.core.runtime,
  org.eclipse.core.resources,
@@ -15,11 +15,11 @@ Require-Bundle:
 Bundle-ActivationPolicy: lazy
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Bundle-Vendor: University of Hildesheim - SSE
-Export-Package: de.uni_hildesheim.sse.easy_producer,
- de.uni_hildesheim.sse.easy_producer.contributions,
- de.uni_hildesheim.sse.easy_producer.model,
- de.uni_hildesheim.sse.easy_producer.observer,
- de.uni_hildesheim.sse.easy_producer.persistency,
- de.uni_hildesheim.sse.easy_producer.persistency.eclipse,
- de.uni_hildesheim.sse.easy_producer.persistency.project_creation
+Export-Package: net.ssehub.easy.producer.eclipse,
+ net.ssehub.easy.producer.eclipse.contributions,
+ net.ssehub.easy.producer.eclipse.model,
+ net.ssehub.easy.producer.eclipse.observer,
+ net.ssehub.easy.producer.eclipse.persistency,
+ net.ssehub.easy.producer.eclipse.persistency.eclipse,
+ net.ssehub.easy.producer.eclipse.persistency.project_creation
 Bundle-ClassPath: .

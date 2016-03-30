@@ -18,4 +18,4 @@ Require-Bundle: de.uni_hildesheim.sse.vil.buildlang.tests;bundle-version="0.0.1"
  de.uni_hildesheim.sse.easy.instantiator.aspectj;bundle-version="0.2.3",
  de.uni_hildesheim.sse.easy.instantiator.maven;bundle-version="3.2.3"
 Bundle-ClassPath: .
-Export-Package: test.de.uni_hildesheim.sse.scenarios
+Export-Package: net.ssehub.easy.producer.scenario_tests

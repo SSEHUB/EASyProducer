@@ -6,7 +6,7 @@
          name="EASy-Producer 2.0"
          point="org.eclipse.core.resources.natures">
       <runtime>
-         <run class="de.uni_hildesheim.sse.easy_producer.persistency.eclipse.EASyNature">
+         <run class="net.ssehub.easy.producer.eclipse.persistency.eclipse.EASyNature">
          </run>
       </runtime>
    </extension>
