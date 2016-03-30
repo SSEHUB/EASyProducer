@@ -66,7 +66,7 @@
 		<property name="eclipse-home" value="${test.eclipse.path}"/>
         <ant target="core-test" antfile="plugins/${test.eclipse.testFW.dir}/library.xml" dir="${test.eclipse.path}">
 		  <property name="data-dir" value="${test.eclipse.workspace.dir} -clean"/>
-		  <property name="plugin-name" value="de.uni_hildesheim.sse.reasoning.reasoner.test"/>
+		  <property name="plugin-name" value="net.ssehub.easy.reasoning.core.test"/>
 		  <property name="classname" value="net.ssehub.easy.reasoning.sseReasoner.AllTests"/>
 		  <property name="extraVMargs" value="-DreasonerCore.testdata.home=${home.reasonerCore.test.dir}/testdata -javaagent:${jacoco.path}/jacocoagent.jar=append=true,destfile=${basedir}/${coverage.results.dir}/${ant.project.name}.exec" />
 		  <property name="os" value="${test.eclipse.os}"/>
