@@ -54,21 +54,21 @@ limitations under the License.
          version="1.1.0"/>
 
    <plugin
-         id="de.uni_hildesheim.sse.integration.common"
+         id="net.ssehub.easy.integration.common"
          download-size="0"
          install-size="0"
          version="1.1.0"
          unpack="false"/>
 
    <plugin
-         id="de.uni_hildesheim.sse.integration.common.eclipse"
+         id="net.ssehub.easy.integration.common.eclipse"
          download-size="0"
          install-size="0"
          version="1.1.0"
          unpack="false"/>
 
    <plugin
-         id="de.uni_hildesheim.sse.integration.common.impl"
+         id="net.ssehub.easy.integration.common.impl"
          download-size="0"
          install-size="0"
          version="1.1.0"
@@ -89,14 +89,14 @@ limitations under the License.
          unpack="false"/>
 
    <plugin
-         id="de.uni_hildesheim.sse.dslCore"
+         id="net.ssehub.easy.dslCore"
          download-size="0"
          install-size="0"
          version="1.1.0"
          unpack="false"/>
 
    <plugin
-         id="de.uni_hildesheim.sse.utils"
+         id="net.ssehub.easy.basics"
          download-size="0"
          install-size="0"
          version="1.1.0"
@@ -110,7 +110,7 @@ limitations under the License.
          unpack="false"/>
 
    <plugin
-         id="ReasonerCore"
+         id="net.ssehub.easy.reasoning.core"
          download-size="0"
          install-size="0"
          version="1.1.0"

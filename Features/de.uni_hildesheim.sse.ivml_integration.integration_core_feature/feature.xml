@@ -32,21 +32,21 @@ limitations under the License.
    </url>
 
    <plugin
-         id="de.uni_hildesheim.sse.integration.common"
+         id="net.ssehub.easy.integration.common"
          download-size="0"
          install-size="0"
          version="0.7.1"
          unpack="false"/>
 
    <plugin
-         id="de.uni_hildesheim.sse.integration.common.impl"
+         id="net.ssehub.easy.integration.common.impl"
          download-size="0"
          install-size="0"
          version="0.6.2"
          unpack="false"/>
 
    <plugin
-         id="de.uni_hildesheim.sse.integration.common.eclipse"
+         id="net.ssehub.easy.integration.common.eclipse"
          download-size="0"
          install-size="0"
          version="0.10.1"

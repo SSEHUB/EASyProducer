@@ -38,7 +38,7 @@ limitations under the License.
    </url>
 
    <plugin
-         id="ReasonerCore"
+         id="net.ssehub.easy.reasoning.core"
          download-size="0"
          install-size="0"
          version="1.1.0"

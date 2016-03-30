@@ -18,14 +18,14 @@
    </license>
 
    <plugin
-         id="ReasonerCore"
+         id="net.ssehub.easy.reasoning.core"
          download-size="0"
          install-size="0"
          version="0.10.3"
          unpack="false"/>
 
    <plugin
-         id="de.uni_hildesheim.sse.reasoning.reasoner"
+         id="net.ssehub.easy.reasoning.sseReasoner"
          download-size="0"
          install-size="0"
          version="0.0.1"
