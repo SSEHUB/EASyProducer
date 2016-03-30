@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project name="de.uni_hildesheim.sse.easy.ui.core" default="jar" basedir=".">
+<project name="net.ssehub.easy.producer.ui" default="jar" basedir=".">
 	<!-- import von globalen Properties Einstellungen -->
 	<property file="${user.home}/global-build.properties"/>
 	
