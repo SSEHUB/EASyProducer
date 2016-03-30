@@ -1,0 +1,33 @@
+// Project: ReasonerTest @ 11:18:18 (29.08.2013)
+package de.uni_hildesheim.sse.reasoning.drools2;
+import de.uni_hildesheim.sse.reasoning.core.model.variables.*;
+dialect "mvel"
+
+// Defintion of datatypes
+
+// Defintion of variables
+
+// Defintion of "normal" constraints
+rule "0"
+when
+$intA : IntVariable ( name == "intA" )
+$intB : IntVariable ( name == "intB" )
+eval (
+!($intA.value >= $intB.value)
+)
+then
+System.out.println("Rule 0 failed");
+end
+rule "1"
+when
+$intA : IntVariable ( name == "intA" )
+eval (
+!($intA.value >= 100)
+)
+then
+System.out.println("Rule 1 failed");
+end
+
+// Defintion of internal constraints
+    
+

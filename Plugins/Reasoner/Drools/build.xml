@@ -95,8 +95,7 @@
         <ant target="core-test" antfile="plugins/${test.eclipse.testFW.dir}/library.xml" dir="${test.eclipse.path}">
 		  <property name="data-dir" value="${test.eclipse.workspace.dir} -clean"/>
 		  <property name="plugin-name" value="de.uni_hildesheim.sse.reasoning.drools.test"/>
-		  <property name="classname" value="de.uni_hildesheim.sse.reasoning.drools.AllTests"/>
-		  <property name="vmargs" value="-Dbaz=true"/>
+		  <property name="classname" value="net.ssehub.easy.reasoning.drools.AllTests"/>
 		  <property name="extraVMargs" value="-DreasonerCore.testdata.home=${home.reasonerCore.test.dir}/testdata -DDrools.testdata.dir=${home.drools.test.dir}/testdata -Demma.coverage.out.file=${basedir}/${coverage.results.dir}/${ant.project.name}.emma -Dosgi.dev=${emma.path}/emma.jar" />
 		  <property name="os" value="${test.eclipse.os}"/>
 		  <property name="ws" value="${test.eclipse.ws}"/>
@@ -107,8 +106,7 @@
         <ant target="core-test" antfile="plugins/${test.eclipse.testFW.dir}/library.xml" dir="${test.eclipse.path}">
 		  <property name="data-dir" value="${test.eclipse.workspace.dir} -clean"/>
 		  <property name="plugin-name" value="de.uni_hildesheim.sse.reasoning.drools2.test"/>
-		  <property name="classname" value="de.uni_hildesheim.sse.reasoning.drools2.AllTests"/>
-		  <property name="vmargs" value="-Dbaz=true"/>
+		  <property name="classname" value="net.ssehub.easy.reasoning.drools2.AllTests"/>
 		  <property name="extraVMargs" value="-DreasonerCore.testdata.home=${home.reasonerCore.test.dir}/testdata -DDrools2.testdata.dir=${home.drools2.test.dir}/testdata -Demma.coverage.out.file=${basedir}/${coverage.results.dir}/${ant.project.name}.emma -Dosgi.dev=${emma.path}/emma.jar" />
 		  <property name="os" value="${test.eclipse.os}"/>
 		  <property name="ws" value="${test.eclipse.ws}"/>
