@@ -11,5 +11,5 @@ Require-Bundle: org.junit,
  org.apache.commons.io;bundle-version="2.0.1",
  de.uni_hildesheim.sse.ivml;bundle-version="1.0.0"
 Bundle-ClassPath: .
-Export-Package: test,
- test.de.uni_hildesheim.sse.easy_producer.instantiator.model
+Export-Package: net.ssehub.easy.instantiation.core,
+ net.ssehub.easy.instantiation.core.model
