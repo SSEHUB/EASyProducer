@@ -7,7 +7,7 @@
     
     <!-- Individual properties for this build script -->
     <property name="test.plugin.instantiation" value="de.uni-hildesheim.sse.easy.instantiatorCore.tests"/>
-    <property name="test.suite.instantiation" value="test.AllTests"/>
+    <property name="test.suite.instantiation" value="net.ssehub.easy.instantiation.core.AllTests"/>
     <property name="test.plugin.instantiation.java" value="de.uni_hildesheim.sse.easy.instantiator.java.test"/>
     <property name="test.suite.instantiation.java" value="test.de.uni_hildesheim.sse.java.AllTests"/>
     <property name="test.plugin.instantiation.ant" value="de.uni_hildesheim.sse.easy.instantiator.ant.test"/>
