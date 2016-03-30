@@ -3,12 +3,12 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Iterator;
 
-import de.uni_hildesheim.sse.easy_producer.core.mgmt.PLPInfo;
-import de.uni_hildesheim.sse.easy_producer.core.persistence.PersistenceException;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilException;
 import net.ssehub.easy.basics.logger.EASyLoggerFactory;
 import net.ssehub.easy.basics.logger.EASyLoggerFactory.EASyLogger;
 import net.ssehub.easy.basics.modelManagement.ModelManagementException;
+import net.ssehub.easy.instantiation.core.model.common.VilException;
+import net.ssehub.easy.producer.core.mgmt.PLPInfo;
+import net.ssehub.easy.producer.core.persistence.PersistenceException;
 import net.ssehub.easy.standalone.cmd.InstantiationCommands;
 import net.ssehub.easy.standalone.cmd.LowlevelCommands;
 import net.ssehub.easy.varModel.confModel.Configuration;

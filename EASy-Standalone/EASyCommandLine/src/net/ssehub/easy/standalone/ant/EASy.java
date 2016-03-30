@@ -21,11 +21,11 @@ import java.io.IOException;
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.Task;
 
-import de.uni_hildesheim.sse.easy_producer.core.mgmt.PLPInfo;
-import de.uni_hildesheim.sse.easy_producer.core.persistence.PersistenceException;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilException;
 import net.ssehub.easy.basics.messages.Message;
 import net.ssehub.easy.basics.progress.ProgressObserver;
+import net.ssehub.easy.instantiation.core.model.common.VilException;
+import net.ssehub.easy.producer.core.mgmt.PLPInfo;
+import net.ssehub.easy.producer.core.persistence.PersistenceException;
 import net.ssehub.easy.reasoning.core.frontend.ReasonerFrontend;
 import net.ssehub.easy.reasoning.core.reasoner.IReasoner;
 import net.ssehub.easy.reasoning.core.reasoner.ReasonerConfiguration;

@@ -19,12 +19,12 @@ package net.ssehub.easy.standalone.cmd;
 import java.io.File;
 import java.io.IOException;
 
-import de.uni_hildesheim.sse.easy_producer.core.contributions.Contributions;
-import de.uni_hildesheim.sse.easy_producer.core.persistence.Configuration;
-import de.uni_hildesheim.sse.easy_producer.core.persistence.Configuration.PathKind;
-import de.uni_hildesheim.sse.easy_producer.core.persistence.PersistenceUtils;
-import de.uni_hildesheim.sse.easy_producer.core.persistence.standard.NatureHelper;
-import de.uni_hildesheim.sse.easy_producer.persistency.eclipse.EASyNature;
+import net.ssehub.easy.producer.core.contributions.Contributions;
+import net.ssehub.easy.producer.core.persistence.Configuration;
+import net.ssehub.easy.producer.core.persistence.Configuration.PathKind;
+import net.ssehub.easy.producer.core.persistence.PersistenceUtils;
+import net.ssehub.easy.producer.core.persistence.standard.NatureHelper;
+import net.ssehub.easy.producer.eclipse.persistency.eclipse.EASyNature;
 
 /**
  * Command line commands on project level.<br/>

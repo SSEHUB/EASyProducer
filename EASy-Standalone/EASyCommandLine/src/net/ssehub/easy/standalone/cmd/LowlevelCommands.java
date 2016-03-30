@@ -5,10 +5,10 @@ import java.io.IOException;
 import java.util.Collection;
 
 import de.uni_hildesheim.sse.easy.loader.ListLoader;
-import de.uni_hildesheim.sse.easy_producer.core.mgmt.PLPInfo;
-import de.uni_hildesheim.sse.easy_producer.core.mgmt.SPLsManager;
-import de.uni_hildesheim.sse.easy_producer.core.persistence.PersistenceException;
-import de.uni_hildesheim.sse.easy_producer.persistency.EASyPersistencer;
+import net.ssehub.easy.producer.core.mgmt.PLPInfo;
+import net.ssehub.easy.producer.core.mgmt.SPLsManager;
+import net.ssehub.easy.producer.core.persistence.PersistenceException;
+import net.ssehub.easy.producer.eclipse.persistency.EASyPersistencer;
 
 /**
  * Static commands for running and controlling EASy via command line or by a build tool.

@@ -19,10 +19,10 @@ package net.ssehub.easy.standalone.cmd;
 import java.io.File;
 import java.io.IOException;
 
-import de.uni_hildesheim.sse.easy_producer.core.persistence.PersistenceUtils;
 import net.ssehub.easy.basics.modelManagement.ModelManagementException;
 import net.ssehub.easy.basics.modelManagement.VersionFormatException;
 import net.ssehub.easy.basics.progress.ProgressObserver;
+import net.ssehub.easy.producer.core.persistence.PersistenceUtils;
 import net.ssehub.easy.reasoning.core.frontend.ReasonerFrontend;
 import net.ssehub.easy.reasoning.core.reasoner.ReasonerConfiguration;
 import net.ssehub.easy.reasoning.core.reasoner.ReasoningResult;
@@ -51,7 +51,7 @@ public class ReasoningCommands {
      */
     public static boolean checkValidity(File project, File ivmlFile) 
         throws ModelManagementException {
-        de.uni_hildesheim.sse.easy_producer.core.persistence.Configuration config 
+        net.ssehub.easy.producer.core.persistence.Configuration config 
             = PersistenceUtils.getConfiguration(project);
         PersistenceUtils.addLocation(config, ProgressObserver.NO_OBSERVER);    
         Project ivmlProject = PersistenceUtils.loadModel(VarModel.INSTANCE, ivmlFile);      

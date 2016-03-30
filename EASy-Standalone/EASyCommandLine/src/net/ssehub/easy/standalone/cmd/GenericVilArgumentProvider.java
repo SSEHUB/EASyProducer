@@ -2,9 +2,9 @@ package net.ssehub.easy.standalone.cmd;
 
 import java.util.Map;
 
-import de.uni_hildesheim.sse.easy_producer.core.mgmt.PLPInfo;
-import de.uni_hildesheim.sse.easy_producer.core.mgmt.VilArgumentProvider;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.execution.Executor;
+import net.ssehub.easy.instantiation.core.model.execution.Executor;
+import net.ssehub.easy.producer.core.mgmt.PLPInfo;
+import net.ssehub.easy.producer.core.mgmt.VilArgumentProvider;
 
 /**
  * A generic VIL argument provider which just maps all arguments given in terms

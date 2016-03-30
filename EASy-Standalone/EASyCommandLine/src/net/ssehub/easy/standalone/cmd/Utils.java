@@ -4,15 +4,11 @@ import java.io.File;
 import java.net.URI;
 import java.util.List;
 
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.BuildModel;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.Script;
 import net.ssehub.easy.basics.modelManagement.IModel;
 import net.ssehub.easy.basics.modelManagement.IModelData;
 import net.ssehub.easy.basics.modelManagement.ModelInfo;
 import net.ssehub.easy.basics.modelManagement.ModelManagement;
 import net.ssehub.easy.basics.modelManagement.ModelManagementException;
-import net.ssehub.easy.varModel.management.VarModel;
-import net.ssehub.easy.varModel.model.Project;
 
 /**
  * Command line utility functions.
@@ -39,11 +35,13 @@ class Utils {
      * (ordering of parameters will be considered).
      * 
      * @param modelMgmt The {@link ModelManagement} instance from where the {@link IModel} should be loaded from, i.e.
-     *     {@link VarModel#INSTANCE} or {@link BuildModel#INSTANCE}.
+     *     {@link net.ssehub.easy.varModel.management.VarModel#INSTANCE}
+     *     or {@link net.ssehub.easy.instantiation.core.model.buildlangModel.BuildModel#INSTANCE}.
      * @param modelDefinition A (model name, version) pair for specifying which {@link IModel} should be loaded.
      * @param locations A ordered list of locations from where the {@link IModel} should be loaded from.
      * @param <M> The specific model type, will be derived from the {@link ModelManagement} instance.
-     *     Will be {@link Project} or {@link Script}.
+     *     Will be {@link net.ssehub.easy.varModel.model.Project}
+     *     or {@link net.ssehub.easy.instantiation.core.model.buildlangModel.Script}.
      * @return A loaded {@link IModel} or <tt>null</tt>.
      * 
      * @throws ModelManagementException In case that the available information
