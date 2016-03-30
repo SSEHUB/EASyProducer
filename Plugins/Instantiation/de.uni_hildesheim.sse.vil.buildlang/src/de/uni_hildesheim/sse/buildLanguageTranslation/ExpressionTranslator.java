@@ -8,33 +8,6 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
 
 import de.uni_hildesheim.sse.BuildLangModelUtility;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.AlternativeExpression;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.ExpressionStatement;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.ForStatement;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.IRuleBlock;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.IRuleElement;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.InstantiateExpression;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.JoinExpression;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.JoinVariableDeclaration;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.MapExpression;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.NestedRuleBlock;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.Resolver;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.SimpleStatementBlock;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.StrategyCallExpression;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.VariableDeclaration;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.WhileStatement;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilException;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.AbstractCallExpression;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.CallArgument;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.CallExpression;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.Expression;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.ExpressionVersionRestriction;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.ExpressionVersionRestrictionValidator;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.ResolvableOperationCallExpression;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.Constants;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.OperationDescriptor;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeDescriptor;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.configuration.IvmlTypes;
 import de.uni_hildesheim.sse.vil.expressions.expressionDsl.Call;
 import de.uni_hildesheim.sse.vil.expressions.expressionDsl.ExpressionDslPackage;
 import de.uni_hildesheim.sse.vilBuildLanguage.Alternative;
@@ -53,6 +26,33 @@ import net.ssehub.easy.dslCore.translation.ErrorCodes;
 import net.ssehub.easy.dslCore.translation.MessageHandler;
 import net.ssehub.easy.dslCore.translation.StringUtils;
 import net.ssehub.easy.dslCore.translation.TranslatorException;
+import net.ssehub.easy.instantiation.core.model.buildlangModel.AlternativeExpression;
+import net.ssehub.easy.instantiation.core.model.buildlangModel.ExpressionStatement;
+import net.ssehub.easy.instantiation.core.model.buildlangModel.ForStatement;
+import net.ssehub.easy.instantiation.core.model.buildlangModel.IRuleBlock;
+import net.ssehub.easy.instantiation.core.model.buildlangModel.IRuleElement;
+import net.ssehub.easy.instantiation.core.model.buildlangModel.InstantiateExpression;
+import net.ssehub.easy.instantiation.core.model.buildlangModel.JoinExpression;
+import net.ssehub.easy.instantiation.core.model.buildlangModel.JoinVariableDeclaration;
+import net.ssehub.easy.instantiation.core.model.buildlangModel.MapExpression;
+import net.ssehub.easy.instantiation.core.model.buildlangModel.NestedRuleBlock;
+import net.ssehub.easy.instantiation.core.model.buildlangModel.Resolver;
+import net.ssehub.easy.instantiation.core.model.buildlangModel.SimpleStatementBlock;
+import net.ssehub.easy.instantiation.core.model.buildlangModel.StrategyCallExpression;
+import net.ssehub.easy.instantiation.core.model.buildlangModel.VariableDeclaration;
+import net.ssehub.easy.instantiation.core.model.buildlangModel.WhileStatement;
+import net.ssehub.easy.instantiation.core.model.common.VilException;
+import net.ssehub.easy.instantiation.core.model.expressions.AbstractCallExpression;
+import net.ssehub.easy.instantiation.core.model.expressions.CallArgument;
+import net.ssehub.easy.instantiation.core.model.expressions.CallExpression;
+import net.ssehub.easy.instantiation.core.model.expressions.Expression;
+import net.ssehub.easy.instantiation.core.model.expressions.ExpressionVersionRestriction;
+import net.ssehub.easy.instantiation.core.model.expressions.ExpressionVersionRestrictionValidator;
+import net.ssehub.easy.instantiation.core.model.expressions.ResolvableOperationCallExpression;
+import net.ssehub.easy.instantiation.core.model.vilTypes.Constants;
+import net.ssehub.easy.instantiation.core.model.vilTypes.OperationDescriptor;
+import net.ssehub.easy.instantiation.core.model.vilTypes.TypeDescriptor;
+import net.ssehub.easy.instantiation.core.model.vilTypes.configuration.IvmlTypes;
 
 /**
  * A specific expression translator for the build language.
@@ -584,13 +584,13 @@ public class ExpressionTranslator
 
     @Override
     protected ExpressionVersionRestriction createExpressionVersionRestriction(Expression expr,
-        de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VariableDeclaration decl, 
+        net.ssehub.easy.instantiation.core.model.common.VariableDeclaration decl, 
         EObject cause, EStructuralFeature feature) throws RestrictionEvaluationException {
         try {
             ExpressionVersionRestrictionValidator validator = new ExpressionVersionRestrictionValidator(
                 new MessageHandler(this, cause, feature));
             expr.accept(validator);
-            return new de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.
+            return new net.ssehub.easy.instantiation.core.model.buildlangModel.
                 ExpressionVersionRestriction(expr, decl);
         } catch (VilException e) {
             throw new RestrictionEvaluationException(e.getMessage(), e.getId());

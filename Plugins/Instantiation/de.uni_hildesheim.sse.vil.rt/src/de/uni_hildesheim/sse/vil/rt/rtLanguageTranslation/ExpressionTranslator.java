@@ -3,17 +3,17 @@ package de.uni_hildesheim.sse.vil.rt.rtLanguageTranslation;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
 
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.IRuleElement;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.Resolver;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilException;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeDescriptor;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeRegistry;
 import de.uni_hildesheim.sse.vil.expressions.expressionDsl.Expression;
 import de.uni_hildesheim.sse.vil.rt.rtVil.FailStatement;
 import de.uni_hildesheim.sse.vil.rt.rtVil.RtVilPackage;
 import de.uni_hildesheim.sse.vil.rt.rtVil.RuleElement;
 import net.ssehub.easy.dslCore.translation.ErrorCodes;
 import net.ssehub.easy.dslCore.translation.TranslatorException;
+import net.ssehub.easy.instantiation.core.model.buildlangModel.IRuleElement;
+import net.ssehub.easy.instantiation.core.model.buildlangModel.Resolver;
+import net.ssehub.easy.instantiation.core.model.common.VilException;
+import net.ssehub.easy.instantiation.core.model.vilTypes.TypeDescriptor;
+import net.ssehub.easy.instantiation.core.model.vilTypes.TypeRegistry;
 
 /**
  * A specific expression translator for the adaptation language.
@@ -52,10 +52,10 @@ public class ExpressionTranslator extends de.uni_hildesheim.sse.buildLanguageTra
     private de.uni_hildesheim.sse.easy_producer.instantiator.model.rtVil.FailStatement createFailStatement(
         de.uni_hildesheim.sse.vilBuildLanguage.RuleElement elt, FailStatement fStmt, Resolver resolver) 
         throws TranslatorException{
-        de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.Expression reasonEx = 
+        net.ssehub.easy.instantiation.core.model.expressions.Expression reasonEx = 
             resolveFailExpression(fStmt.getReason(), TypeRegistry.stringType(), fStmt, 
             RtVilPackage.Literals.FAIL_STATEMENT__REASON, resolver);
-        de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.Expression codeEx = 
+        net.ssehub.easy.instantiation.core.model.expressions.Expression codeEx = 
             resolveFailExpression(fStmt.getCode(), TypeRegistry.integerType(), fStmt, 
             RtVilPackage.Literals.FAIL_STATEMENT__CODE, resolver);
         return new de.uni_hildesheim.sse.easy_producer.instantiator.model.rtVil.FailStatement(reasonEx, codeEx);        
@@ -72,10 +72,10 @@ public class ExpressionTranslator extends de.uni_hildesheim.sse.buildLanguageTra
      * @return the resolved expression or <b>null</b>
      * @throws TranslatorException in case of translation problems
      */
-    private de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.Expression resolveFailExpression(
+    private net.ssehub.easy.instantiation.core.model.expressions.Expression resolveFailExpression(
         Expression ex, TypeDescriptor<?> requiredType, EObject failCause, 
         EStructuralFeature failFeature, Resolver resolver) throws TranslatorException {
-        de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.Expression result = null;
+        net.ssehub.easy.instantiation.core.model.expressions.Expression result = null;
         if (null != ex) {
             result = processExpression(ex, resolver);
             if (null != result) {

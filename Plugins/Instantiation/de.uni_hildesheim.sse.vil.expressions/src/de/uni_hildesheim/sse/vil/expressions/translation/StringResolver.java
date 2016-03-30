@@ -6,19 +6,19 @@ import java.util.List;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
 
-import de.uni_hildesheim.sse.easy_producer.instantiator.Bundle;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.ExpressionStatement;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VariableDeclaration;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.CompositeExpression;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.ConstantExpression;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.Expression;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilException;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.Resolver;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.VariableEx;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.VariableExpression;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeRegistry;
 import net.ssehub.easy.basics.logger.EASyLoggerFactory;
 import net.ssehub.easy.dslCore.translation.IMessageReceiver;
+import net.ssehub.easy.instantiation.core.Bundle;
+import net.ssehub.easy.instantiation.core.model.common.ExpressionStatement;
+import net.ssehub.easy.instantiation.core.model.common.VariableDeclaration;
+import net.ssehub.easy.instantiation.core.model.common.VilException;
+import net.ssehub.easy.instantiation.core.model.expressions.CompositeExpression;
+import net.ssehub.easy.instantiation.core.model.expressions.ConstantExpression;
+import net.ssehub.easy.instantiation.core.model.expressions.Expression;
+import net.ssehub.easy.instantiation.core.model.expressions.Resolver;
+import net.ssehub.easy.instantiation.core.model.expressions.VariableEx;
+import net.ssehub.easy.instantiation.core.model.expressions.VariableExpression;
+import net.ssehub.easy.instantiation.core.model.vilTypes.TypeRegistry;
 
 /**
  * StringResolver to resolve variables and expressions on compiling. Use the StringReplacer if you need to replace

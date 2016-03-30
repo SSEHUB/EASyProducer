@@ -12,18 +12,18 @@ import org.eclipse.jdt.core.dom.Modifier.ModifierKeyword;
 import org.eclipse.jdt.core.dom.StringLiteral;
 import org.eclipse.jdt.core.dom.VariableDeclarationFragment;
 
-import de.uni_hildesheim.sse.easy_producer.instantiator.Bundle;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.artifactModel.ArtifactModel;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.artifactModel.IArtifactVisitor;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.artifactModel.representation.Binary;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.artifactModel.representation.Text;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilException;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.Invisible;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.OperationMeta;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.Set;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.configuration.DecisionVariable;
 import net.ssehub.easy.basics.logger.EASyLoggerFactory;
 import net.ssehub.easy.basics.logger.EASyLoggerFactory.EASyLogger;
+import net.ssehub.easy.instantiation.core.Bundle;
+import net.ssehub.easy.instantiation.core.model.artifactModel.ArtifactModel;
+import net.ssehub.easy.instantiation.core.model.artifactModel.IArtifactVisitor;
+import net.ssehub.easy.instantiation.core.model.artifactModel.representation.Binary;
+import net.ssehub.easy.instantiation.core.model.artifactModel.representation.Text;
+import net.ssehub.easy.instantiation.core.model.common.VilException;
+import net.ssehub.easy.instantiation.core.model.vilTypes.Invisible;
+import net.ssehub.easy.instantiation.core.model.vilTypes.OperationMeta;
+import net.ssehub.easy.instantiation.core.model.vilTypes.Set;
+import net.ssehub.easy.instantiation.core.model.vilTypes.configuration.DecisionVariable;
 
 /**
  * Represents a Java attribute.

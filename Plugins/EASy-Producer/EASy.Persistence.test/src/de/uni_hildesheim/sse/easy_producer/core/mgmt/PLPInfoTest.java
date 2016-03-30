@@ -29,11 +29,11 @@ import de.uni_hildesheim.sse.easy_producer.core.persistence.datatypes.IProjectCr
 import de.uni_hildesheim.sse.easy_producer.core.persistence.datatypes.PathEnvironment;
 import de.uni_hildesheim.sse.easy_producer.core.persistence.standard.Persistencer;
 import de.uni_hildesheim.sse.easy_producer.core.varMod.container.ProjectContainer;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilException;
 import net.ssehub.easy.basics.modelManagement.ModelInfo;
 import net.ssehub.easy.basics.modelManagement.ModelManagementException;
 import net.ssehub.easy.basics.modelManagement.Version;
 import net.ssehub.easy.basics.progress.ProgressObserver;
+import net.ssehub.easy.instantiation.core.model.common.VilException;
 import net.ssehub.easy.reasoning.core.model.ReasoningOperation;
 import net.ssehub.easy.reasoning.core.reasoner.Message;
 import net.ssehub.easy.reasoning.core.reasoner.ReasoningResult;

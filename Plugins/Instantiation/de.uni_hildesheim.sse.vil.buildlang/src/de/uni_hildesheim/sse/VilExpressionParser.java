@@ -2,14 +2,6 @@ package de.uni_hildesheim.sse;
 
 import org.osgi.service.component.ComponentContext;
 
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.BuildModel;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.BuildlangExecution;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.Script;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.Expression;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilException;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.ExpressionParserRegistry;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.IExpressionParser;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.IRuntimeEnvironment;
 import net.ssehub.easy.basics.logger.EASyLoggerFactory;
 import net.ssehub.easy.basics.modelManagement.AbstractModelInitializer;
 import net.ssehub.easy.basics.modelManagement.IModelLoader;
@@ -17,6 +9,14 @@ import net.ssehub.easy.basics.modelManagement.ModelInitializer;
 import net.ssehub.easy.basics.modelManagement.ModelManagement;
 import net.ssehub.easy.basics.modelManagement.ModelManagementException;
 import net.ssehub.easy.basics.progress.ProgressObserver;
+import net.ssehub.easy.instantiation.core.model.buildlangModel.BuildModel;
+import net.ssehub.easy.instantiation.core.model.buildlangModel.BuildlangExecution;
+import net.ssehub.easy.instantiation.core.model.buildlangModel.Script;
+import net.ssehub.easy.instantiation.core.model.common.VilException;
+import net.ssehub.easy.instantiation.core.model.expressions.Expression;
+import net.ssehub.easy.instantiation.core.model.expressions.ExpressionParserRegistry;
+import net.ssehub.easy.instantiation.core.model.expressions.IExpressionParser;
+import net.ssehub.easy.instantiation.core.model.expressions.IRuntimeEnvironment;
 
 /**
  * Provides an expression parser for VIL.

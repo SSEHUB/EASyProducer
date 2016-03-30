@@ -29,10 +29,6 @@ import de.uni_hildesheim.sse.easy_producer.core.mgmt.PLPInfo;
 import de.uni_hildesheim.sse.easy_producer.core.mgmt.SPLsManager;
 import de.uni_hildesheim.sse.easy_producer.core.persistence.Configuration;
 import de.uni_hildesheim.sse.easy_producer.core.persistence.PersistenceException;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.BuildModel;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.Rule;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.Script;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilException;
 import de.uni_hildesheim.sse.easy_producer.persistency.EASyPersistencer;
 import de.uni_hildesheim.sse.easy_producer.persistency.ResourcesMgmt;
 import de.uni_hildesheim.sse.easy_producer.persistency.eclipse.PersistenceUtils;
@@ -42,6 +38,10 @@ import net.ssehub.easy.basics.modelManagement.ModelImport;
 import net.ssehub.easy.basics.modelManagement.ModelInfo;
 import net.ssehub.easy.basics.modelManagement.ModelManagementException;
 import net.ssehub.easy.basics.progress.ProgressObserver;
+import net.ssehub.easy.instantiation.core.model.buildlangModel.BuildModel;
+import net.ssehub.easy.instantiation.core.model.buildlangModel.Rule;
+import net.ssehub.easy.instantiation.core.model.buildlangModel.Script;
+import net.ssehub.easy.instantiation.core.model.common.VilException;
 
 /**
  * Some utility methods.

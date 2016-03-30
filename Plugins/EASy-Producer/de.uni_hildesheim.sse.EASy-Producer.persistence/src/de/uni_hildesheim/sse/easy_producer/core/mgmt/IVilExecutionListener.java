@@ -15,7 +15,7 @@
  */
 package de.uni_hildesheim.sse.easy_producer.core.mgmt;
 
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilException;
+import net.ssehub.easy.instantiation.core.model.common.VilException;
 
 /**
  * Part of the {@link VilExecutionThread} to inform other threads when the instantiation was finished or aborted.

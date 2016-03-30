@@ -4,9 +4,9 @@ import java.util.Iterator;
 
 import org.junit.Assert;
 
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.Sequence;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.configuration.AbstractIvmlVariable;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.configuration.DecisionVariable;
+import net.ssehub.easy.instantiation.core.model.vilTypes.Sequence;
+import net.ssehub.easy.instantiation.core.model.vilTypes.configuration.AbstractIvmlVariable;
+import net.ssehub.easy.instantiation.core.model.vilTypes.configuration.DecisionVariable;
 import net.ssehub.easy.varModel.model.values.BooleanValue;
 import net.ssehub.easy.varModel.model.values.CompoundValue;
 import net.ssehub.easy.varModel.model.values.ConstraintValue;
@@ -48,7 +48,7 @@ class ValueTester implements IValueVisitor {
     @Override
     public void visitEnumValue(EnumValue value) {
         Assert.assertTrue(decl.getValue() 
-            instanceof de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.configuration.EnumValue);
+            instanceof net.ssehub.easy.instantiation.core.model.vilTypes.configuration.EnumValue);
         Assert.assertNotNull(decl.getEnumValue());
         Assert.assertTrue(decl.getEnumValue().equals(decl.getValue())); // may be two different instances
         Assert.assertEquals(value.getValue().getName(), decl.getEnumValue().getName());

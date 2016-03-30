@@ -8,22 +8,22 @@ import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import net.ssehub.easy.instantiation.core.model.common.VilException;
+import net.ssehub.easy.instantiation.core.model.vilTypes.Invisible;
+import net.ssehub.easy.instantiation.core.model.vilTypes.OperationDescriptor;
+import net.ssehub.easy.instantiation.core.model.vilTypes.OperationMeta;
+import net.ssehub.easy.instantiation.core.model.vilTypes.PseudoBoolean;
+import net.ssehub.easy.instantiation.core.model.vilTypes.PseudoInteger;
+import net.ssehub.easy.instantiation.core.model.vilTypes.PseudoReal;
+import net.ssehub.easy.instantiation.core.model.vilTypes.PseudoString;
+import net.ssehub.easy.instantiation.core.model.vilTypes.SignatureUtils;
+import net.ssehub.easy.instantiation.core.model.vilTypes.TypeDescriptor;
+import net.ssehub.easy.instantiation.core.model.vilTypes.TypeRegistry;
+import net.ssehub.easy.instantiation.core.model.vilTypes.OperationDescriptor.AliasType;
+import net.ssehub.easy.instantiation.core.model.vilTypes.OperationDescriptor.CompatibilityResult;
 import test.de.uni_hildesheim.sse.easy_producer.instantiator.model.AbstractTest;
 import test.de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.testArtifacts.MyArtifact;
 import test.de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.testArtifacts.MySubArtifact;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilException;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.Invisible;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.OperationDescriptor;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.OperationDescriptor.AliasType;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.OperationDescriptor.CompatibilityResult;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.OperationMeta;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.PseudoBoolean;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.PseudoInteger;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.PseudoReal;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.PseudoString;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.SignatureUtils;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeDescriptor;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeRegistry;
 
 /**
  * Tests the type descriptor class. This test must be executed 

@@ -34,24 +34,24 @@ import org.eclipse.text.edits.TextEdit;
 
 import de.uni_hildesheim.sse.easy.java.JavaSettings;
 import de.uni_hildesheim.sse.easy.java.JavaSettingsInitializer;
-import de.uni_hildesheim.sse.easy_producer.instantiator.Bundle;
-import de.uni_hildesheim.sse.easy_producer.instantiator.JavaUtilities;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.artifactModel.ArtifactCreator;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.artifactModel.ArtifactFactory;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.artifactModel.ArtifactModel;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.artifactModel.FileArtifact;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.artifactModel.FragmentArtifact;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.artifactModel.IFileSystemArtifact;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.artifactModel.Path;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.artifactModel.representation.Text;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilException;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.ArraySet;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.Conversion;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.Invisible;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.OperationMeta;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.Set;
 import net.ssehub.easy.basics.logger.EASyLoggerFactory;
 import net.ssehub.easy.basics.logger.EASyLoggerFactory.EASyLogger;
+import net.ssehub.easy.instantiation.core.Bundle;
+import net.ssehub.easy.instantiation.core.JavaUtilities;
+import net.ssehub.easy.instantiation.core.model.artifactModel.ArtifactCreator;
+import net.ssehub.easy.instantiation.core.model.artifactModel.ArtifactFactory;
+import net.ssehub.easy.instantiation.core.model.artifactModel.ArtifactModel;
+import net.ssehub.easy.instantiation.core.model.artifactModel.FileArtifact;
+import net.ssehub.easy.instantiation.core.model.artifactModel.FragmentArtifact;
+import net.ssehub.easy.instantiation.core.model.artifactModel.IFileSystemArtifact;
+import net.ssehub.easy.instantiation.core.model.artifactModel.Path;
+import net.ssehub.easy.instantiation.core.model.artifactModel.representation.Text;
+import net.ssehub.easy.instantiation.core.model.common.VilException;
+import net.ssehub.easy.instantiation.core.model.vilTypes.ArraySet;
+import net.ssehub.easy.instantiation.core.model.vilTypes.Conversion;
+import net.ssehub.easy.instantiation.core.model.vilTypes.Invisible;
+import net.ssehub.easy.instantiation.core.model.vilTypes.OperationMeta;
+import net.ssehub.easy.instantiation.core.model.vilTypes.Set;
 
 /**
  * Represents a Java source code file artifact.

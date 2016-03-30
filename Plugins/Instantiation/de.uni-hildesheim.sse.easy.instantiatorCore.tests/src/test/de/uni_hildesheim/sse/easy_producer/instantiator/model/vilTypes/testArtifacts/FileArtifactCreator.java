@@ -2,9 +2,9 @@ package test.de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.tes
 
 import java.io.File;
 
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.artifactModel.ArtifactModel;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.artifactModel.DefaultFileArtifactCreator;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilException;
+import net.ssehub.easy.instantiation.core.model.artifactModel.ArtifactModel;
+import net.ssehub.easy.instantiation.core.model.artifactModel.DefaultFileArtifactCreator;
+import net.ssehub.easy.instantiation.core.model.common.VilException;
 
 /**
  * A specific file artifact creator for the test artifact.

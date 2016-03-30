@@ -3,8 +3,6 @@ package de.uni_hildesheim.sse.easy_producer.core.persistence.standard;
 import de.uni_hildesheim.sse.BuildLangModelUtility;
 import de.uni_hildesheim.sse.ModelUtility;
 import de.uni_hildesheim.sse.easy_producer.core.persistence.internal.Activator;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.BuildModel;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.templateModel.TemplateModel;
 import de.uni_hildesheim.sse.vil.templatelang.TemplateLangModelUtility;
 import net.ssehub.easy.basics.logger.EASyLoggerFactory;
 import net.ssehub.easy.basics.logger.EASyLoggerFactory.EASyLogger;
@@ -14,6 +12,8 @@ import net.ssehub.easy.dslCore.EclipseResourceInitializer;
 import net.ssehub.easy.dslCore.StandaloneInitializer;
 import net.ssehub.easy.dslCore.TopLevelModelAccessor;
 import net.ssehub.easy.dslCore.TopLevelModelAccessor.IModelAccessor;
+import net.ssehub.easy.instantiation.core.model.buildlangModel.BuildModel;
+import net.ssehub.easy.instantiation.core.model.templateModel.TemplateModel;
 import net.ssehub.easy.varModel.management.VarModel;
 
 /**

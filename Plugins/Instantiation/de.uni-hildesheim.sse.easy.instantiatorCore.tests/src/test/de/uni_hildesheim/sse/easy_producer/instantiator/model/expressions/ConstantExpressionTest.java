@@ -3,11 +3,11 @@ package test.de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions;
 import org.junit.Assert;
 import org.junit.Test;
 
+import net.ssehub.easy.instantiation.core.model.common.VilException;
+import net.ssehub.easy.instantiation.core.model.expressions.ConstantExpression;
+import net.ssehub.easy.instantiation.core.model.vilTypes.TypeDescriptor;
+import net.ssehub.easy.instantiation.core.model.vilTypes.TypeRegistry;
 import test.de.uni_hildesheim.sse.easy_producer.instantiator.model.AbstractTest;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.ConstantExpression;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilException;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeDescriptor;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeRegistry;
 
 /**
  * Tests the constant expression.

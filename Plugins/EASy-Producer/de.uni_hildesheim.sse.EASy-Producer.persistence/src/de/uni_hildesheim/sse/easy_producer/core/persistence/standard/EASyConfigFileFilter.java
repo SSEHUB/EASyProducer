@@ -66,7 +66,7 @@ public class EASyConfigFileFilter implements FileFilter {
      */
     private boolean considerVILFiles(String file) {
         return copyVIL && file.endsWith(
-            de.uni_hildesheim.sse.easy_producer.instantiator.model.PersistencyConstants.SCRIPT_FILE_ENDING);
+            net.ssehub.easy.instantiation.core.model.PersistencyConstants.SCRIPT_FILE_ENDING);
     }
     
     /**
@@ -77,7 +77,7 @@ public class EASyConfigFileFilter implements FileFilter {
      */
     private boolean considerVTLFiles(String file) {
         return copyVTL && file.endsWith(
-                de.uni_hildesheim.sse.easy_producer.instantiator.model.PersistencyConstants.TEMPLATE_FILE_ENDING);
+                net.ssehub.easy.instantiation.core.model.PersistencyConstants.TEMPLATE_FILE_ENDING);
     }
     
     /**

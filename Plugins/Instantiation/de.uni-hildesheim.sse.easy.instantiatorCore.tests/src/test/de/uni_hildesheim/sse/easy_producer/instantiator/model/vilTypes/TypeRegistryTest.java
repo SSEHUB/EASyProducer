@@ -5,6 +5,12 @@ import java.util.HashSet;
 import org.junit.Assert;
 import org.junit.Test;
 
+import net.ssehub.easy.instantiation.core.model.artifactModel.xml.XmlFileArtifact;
+import net.ssehub.easy.instantiation.core.model.common.VilException;
+import net.ssehub.easy.instantiation.core.model.vilTypes.IVilType;
+import net.ssehub.easy.instantiation.core.model.vilTypes.OperationDescriptor;
+import net.ssehub.easy.instantiation.core.model.vilTypes.TypeDescriptor;
+import net.ssehub.easy.instantiation.core.model.vilTypes.TypeRegistry;
 import test.de.uni_hildesheim.sse.easy_producer.instantiator.model.AbstractTest;
 import test.de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.testArtifacts.FailingInstantiator1;
 import test.de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.testArtifacts.FailingInstantiator2;
@@ -13,12 +19,6 @@ import test.de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.test
 import test.de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.testArtifacts.FailingInstantiator5;
 import test.de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.testArtifacts.InstanceInstantiator;
 import test.de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.testArtifacts.StaticInstantiator;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.artifactModel.xml.XmlFileArtifact;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilException;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.IVilType;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.OperationDescriptor;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeDescriptor;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeRegistry;
 
 /**
  * Tests the type registry.

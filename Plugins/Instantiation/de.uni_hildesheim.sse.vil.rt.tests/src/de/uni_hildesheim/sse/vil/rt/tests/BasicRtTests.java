@@ -24,11 +24,11 @@ import org.junit.Test;
 
 import test.de.uni_hildesheim.sse.vil.buildlang.AbstractBasicTest;
 import test.de.uni_hildesheim.sse.vil.buildlang.ITestConfigurer;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilException;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.rtVil.Script;
 import de.uni_hildesheim.sse.vil.rt.RtErrorCodes;
 import net.ssehub.easy.basics.messages.AbstractException;
 import net.ssehub.easy.dslCore.translation.ErrorCodes;
+import net.ssehub.easy.instantiation.core.model.common.VilException;
 
 /**
  * Basic syntactic language tests.

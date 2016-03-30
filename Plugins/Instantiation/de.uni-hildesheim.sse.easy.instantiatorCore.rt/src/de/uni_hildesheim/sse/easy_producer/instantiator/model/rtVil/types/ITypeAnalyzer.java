@@ -19,9 +19,9 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.IClassNameMapper;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.IRegisteredStringValueProvider;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeDescriptor;
+import net.ssehub.easy.instantiation.core.model.vilTypes.IClassNameMapper;
+import net.ssehub.easy.instantiation.core.model.vilTypes.IRegisteredStringValueProvider;
+import net.ssehub.easy.instantiation.core.model.vilTypes.TypeDescriptor;
 
 /**
  * Allows to change the default VIL behavior of creating type descriptors.

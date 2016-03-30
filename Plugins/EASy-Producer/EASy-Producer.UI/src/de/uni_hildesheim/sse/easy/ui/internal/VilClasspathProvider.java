@@ -13,9 +13,9 @@ import org.eclipse.jdt.core.JavaModelException;
 
 import de.uni_hildesheim.sse.easy_producer.core.mgmt.PLPInfo;
 import de.uni_hildesheim.sse.easy_producer.core.mgmt.VilArgumentProvider;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.execution.Executor;
 import de.uni_hildesheim.sse.easy_producer.persistency.eclipse.PersistenceUtils;
 import net.ssehub.easy.basics.logger.EASyLoggerFactory;
+import net.ssehub.easy.instantiation.core.model.execution.Executor;
 
 /**
  * A parameter provider which adds the project's classpath as a given parameter name to the

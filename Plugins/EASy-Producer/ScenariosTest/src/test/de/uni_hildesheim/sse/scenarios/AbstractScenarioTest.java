@@ -11,20 +11,20 @@ import org.apache.commons.io.FileUtils;
 import org.junit.Assert;
 
 import de.uni_hildesheim.sse.easy.java.Registration;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.artifactModel.ArtifactFactory;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.BuildModel;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.Script;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilException;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.execution.Executor;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.execution.IInstantiatorTracer;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.execution.TracerFactory;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.templateModel.TemplateModel;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.Project;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.configuration.Configuration;
 import net.ssehub.easy.basics.modelManagement.ModelInfo;
 import net.ssehub.easy.basics.modelManagement.ModelManagementException;
 import net.ssehub.easy.basics.modelManagement.VersionFormatException;
 import net.ssehub.easy.basics.progress.ProgressObserver;
+import net.ssehub.easy.instantiation.core.model.artifactModel.ArtifactFactory;
+import net.ssehub.easy.instantiation.core.model.buildlangModel.BuildModel;
+import net.ssehub.easy.instantiation.core.model.buildlangModel.Script;
+import net.ssehub.easy.instantiation.core.model.common.VilException;
+import net.ssehub.easy.instantiation.core.model.execution.Executor;
+import net.ssehub.easy.instantiation.core.model.execution.IInstantiatorTracer;
+import net.ssehub.easy.instantiation.core.model.execution.TracerFactory;
+import net.ssehub.easy.instantiation.core.model.templateModel.TemplateModel;
+import net.ssehub.easy.instantiation.core.model.vilTypes.Project;
+import net.ssehub.easy.instantiation.core.model.vilTypes.configuration.Configuration;
 import net.ssehub.easy.varModel.management.VarModel;
 import test.de.uni_hildesheim.sse.vil.buildlang.AbstractTest;
 import test.de.uni_hildesheim.sse.vil.buildlang.BuildLangTestConfigurer;
@@ -326,17 +326,17 @@ public abstract class AbstractScenarioTest extends AbstractTest<Script> {
         }
         
         @Override
-        protected de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.ITracer 
+        protected net.ssehub.easy.instantiation.core.model.buildlangModel.ITracer 
             createBuildLanguageTracerImpl() {
             
-            return new de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.StreamTracer(writer, true);
+            return new net.ssehub.easy.instantiation.core.model.buildlangModel.StreamTracer(writer, true);
         }
 
         @Override
-        protected de.uni_hildesheim.sse.easy_producer.instantiator.model.templateModel.ITracer 
+        protected net.ssehub.easy.instantiation.core.model.templateModel.ITracer 
             createTemplateLanguageTracerImpl() {
             
-            return new de.uni_hildesheim.sse.easy_producer.instantiator.model.templateModel.StreamTracer(writer, true);
+            return new net.ssehub.easy.instantiation.core.model.templateModel.StreamTracer(writer, true);
         }
 
         @Override

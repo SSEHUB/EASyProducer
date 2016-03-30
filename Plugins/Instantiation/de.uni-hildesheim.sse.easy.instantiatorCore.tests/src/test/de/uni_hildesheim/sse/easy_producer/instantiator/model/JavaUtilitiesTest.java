@@ -20,7 +20,7 @@ import java.io.File;
 import org.junit.Assert;
 import org.junit.Test;
 
-import de.uni_hildesheim.sse.easy_producer.instantiator.JavaUtilities;
+import net.ssehub.easy.instantiation.core.JavaUtilities;
 
 /**
  * Tests the {@link JavaUtilities} class.

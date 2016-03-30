@@ -14,12 +14,6 @@ import org.eclipse.xtext.parser.IParseResult;
 
 import de.uni_hildesheim.sse.buildLanguageTranslation.ExpressionTranslator;
 import de.uni_hildesheim.sse.buildLanguageTranslation.ModelTranslator;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.BuildlangWriter;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.Resolver;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.Script;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilException;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.Expression;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.IRuntimeEnvironment;
 import de.uni_hildesheim.sse.vil.expressions.expressionDsl.Import;
 import de.uni_hildesheim.sse.vilBuildLanguage.ImplementationUnit;
 import net.ssehub.easy.basics.logger.EASyLoggerFactory;
@@ -32,6 +26,12 @@ import net.ssehub.easy.basics.modelManagement.Version;
 import net.ssehub.easy.dslCore.TranslationResult;
 import net.ssehub.easy.dslCore.translation.Message;
 import net.ssehub.easy.dslCore.translation.TranslatorException;
+import net.ssehub.easy.instantiation.core.model.buildlangModel.BuildlangWriter;
+import net.ssehub.easy.instantiation.core.model.buildlangModel.Resolver;
+import net.ssehub.easy.instantiation.core.model.buildlangModel.Script;
+import net.ssehub.easy.instantiation.core.model.common.VilException;
+import net.ssehub.easy.instantiation.core.model.expressions.Expression;
+import net.ssehub.easy.instantiation.core.model.expressions.IRuntimeEnvironment;
 
 /**
  * Provides language-wide functionality.

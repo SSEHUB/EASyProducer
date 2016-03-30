@@ -22,13 +22,13 @@ import java.util.Map;
 
 import org.eclipse.emf.common.util.URI;
 
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.BuildlangExecution;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.ITracer;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.execution.TracerFactory;
 import net.ssehub.easy.basics.modelManagement.IModel;
 import net.ssehub.easy.basics.modelManagement.IModelLoader;
 import net.ssehub.easy.basics.modelManagement.ModelManagement;
 import net.ssehub.easy.dslCore.TranslationResult;
+import net.ssehub.easy.instantiation.core.model.buildlangModel.BuildlangExecution;
+import net.ssehub.easy.instantiation.core.model.buildlangModel.ITracer;
+import net.ssehub.easy.instantiation.core.model.execution.TracerFactory;
 
 /**
  * Supports application-specific configuration of tests, in particular settings

@@ -5,10 +5,10 @@ import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.PlatformUI;
 
 import de.uni_hildesheim.sse.easy.ui.core.instantiation.GuiTracerFactory;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.execution.TracerFactory;
 import de.uni_hildesheim.sse.easy_producer.persistency.ResourcesMgmt;
 import net.ssehub.easy.basics.logger.EASyLoggerFactory;
 import net.ssehub.easy.basics.logger.EASyLoggerFactory.EASyLogger;
+import net.ssehub.easy.instantiation.core.model.execution.TracerFactory;
 
 /**
  * This class registers a startup mechanism for the plug-in, which enables the startup after the workbench was

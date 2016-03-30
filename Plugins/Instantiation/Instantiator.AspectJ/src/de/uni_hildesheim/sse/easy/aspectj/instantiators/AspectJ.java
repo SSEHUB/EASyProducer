@@ -16,20 +16,20 @@ import org.aspectj.bridge.context.CompilationAndWeavingContext;
 import org.aspectj.tools.ajc.Main;
 import org.aspectj.weaver.Dump;
 
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.artifactModel.FileArtifact;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.artifactModel.FileUtils;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.artifactModel.FileUtils.ScanResult;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.artifactModel.Path;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.artifactModel.PathUtils;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilException;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.defaultInstantiators.AbstractFileInstantiator;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.execution.IInstantiatorTracer;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.execution.TracerFactory;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.Collection;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.Instantiator;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.ListSet;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.OperationMeta;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.Set;
+import net.ssehub.easy.instantiation.core.model.artifactModel.FileArtifact;
+import net.ssehub.easy.instantiation.core.model.artifactModel.FileUtils;
+import net.ssehub.easy.instantiation.core.model.artifactModel.Path;
+import net.ssehub.easy.instantiation.core.model.artifactModel.PathUtils;
+import net.ssehub.easy.instantiation.core.model.artifactModel.FileUtils.ScanResult;
+import net.ssehub.easy.instantiation.core.model.common.VilException;
+import net.ssehub.easy.instantiation.core.model.defaultInstantiators.AbstractFileInstantiator;
+import net.ssehub.easy.instantiation.core.model.execution.IInstantiatorTracer;
+import net.ssehub.easy.instantiation.core.model.execution.TracerFactory;
+import net.ssehub.easy.instantiation.core.model.vilTypes.Collection;
+import net.ssehub.easy.instantiation.core.model.vilTypes.Instantiator;
+import net.ssehub.easy.instantiation.core.model.vilTypes.ListSet;
+import net.ssehub.easy.instantiation.core.model.vilTypes.OperationMeta;
+import net.ssehub.easy.instantiation.core.model.vilTypes.Set;
 
 /**
  * Compiles java files using the AspectJ compiler.

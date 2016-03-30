@@ -15,24 +15,24 @@ import org.junit.Assert;
 import org.junit.BeforeClass;
 
 import de.uni_hildesheim.sse.ModelUtility;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.BuiltIn;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.artifactModel.FileUtils;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.artifactModel.IFileSystemArtifact;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.artifactModel.PathUtils;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilException;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.ExpressionParserRegistry;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.templateModel.ExtensionClassLoaders;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.templateModel.StreamTracer;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.templateModel.Template;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.templateModel.TemplateLangExecution;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.templateModel.TemplateModel;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeRegistry;
 import de.uni_hildesheim.sse.vil.templatelang.TemplateLangModelUtility;
 import de.uni_hildesheim.sse.vil.templatelang.VtlExpressionParser;
 import net.ssehub.easy.basics.messages.Status;
 import net.ssehub.easy.basics.modelManagement.ModelManagementException;
 import net.ssehub.easy.dslCore.TranslationResult;
 import net.ssehub.easy.dslCore.translation.Message;
+import net.ssehub.easy.instantiation.core.model.BuiltIn;
+import net.ssehub.easy.instantiation.core.model.artifactModel.FileUtils;
+import net.ssehub.easy.instantiation.core.model.artifactModel.IFileSystemArtifact;
+import net.ssehub.easy.instantiation.core.model.artifactModel.PathUtils;
+import net.ssehub.easy.instantiation.core.model.common.VilException;
+import net.ssehub.easy.instantiation.core.model.expressions.ExpressionParserRegistry;
+import net.ssehub.easy.instantiation.core.model.templateModel.ExtensionClassLoaders;
+import net.ssehub.easy.instantiation.core.model.templateModel.StreamTracer;
+import net.ssehub.easy.instantiation.core.model.templateModel.Template;
+import net.ssehub.easy.instantiation.core.model.templateModel.TemplateLangExecution;
+import net.ssehub.easy.instantiation.core.model.templateModel.TemplateModel;
+import net.ssehub.easy.instantiation.core.model.vilTypes.TypeRegistry;
 import net.ssehub.easy.varModel.management.VarModel;
 
 /**

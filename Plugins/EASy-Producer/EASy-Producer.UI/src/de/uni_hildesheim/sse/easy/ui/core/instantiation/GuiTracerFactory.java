@@ -1,8 +1,8 @@
 package de.uni_hildesheim.sse.easy.ui.core.instantiation;
 
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.execution.IInstantiatorTracer;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.execution.TracerFactory;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.templateModel.ITracer;
+import net.ssehub.easy.instantiation.core.model.execution.IInstantiatorTracer;
+import net.ssehub.easy.instantiation.core.model.execution.TracerFactory;
+import net.ssehub.easy.instantiation.core.model.templateModel.ITracer;
 
 /**
  * Factory for the creation of VIL build language tracer and
@@ -36,7 +36,7 @@ public class GuiTracerFactory extends TracerFactory {
     }
 
     @Override
-    protected de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.ITracer
+    protected net.ssehub.easy.instantiation.core.model.buildlangModel.ITracer
         createBuildLanguageTracerImpl() {
         
         return VilTracer.INSTANCE;

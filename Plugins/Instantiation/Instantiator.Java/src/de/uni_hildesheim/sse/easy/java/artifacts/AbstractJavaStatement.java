@@ -18,11 +18,11 @@ package de.uni_hildesheim.sse.easy.java.artifacts;
 import org.eclipse.jdt.core.dom.ExpressionStatement;
 import org.eclipse.jdt.core.dom.ITypeBinding;
 
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.artifactModel.IArtifactVisitor;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.artifactModel.representation.Binary;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.artifactModel.representation.Text;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilException;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.Invisible;
+import net.ssehub.easy.instantiation.core.model.artifactModel.IArtifactVisitor;
+import net.ssehub.easy.instantiation.core.model.artifactModel.representation.Binary;
+import net.ssehub.easy.instantiation.core.model.artifactModel.representation.Text;
+import net.ssehub.easy.instantiation.core.model.common.VilException;
+import net.ssehub.easy.instantiation.core.model.vilTypes.Invisible;
 
 /**
  * Super class for nested elements of a {@link JavaMethod}.

@@ -1,6 +1,6 @@
 package de.uni_hildesheim.sse.easy.java;
 
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.artifactModel.ProjectSettings;
+import net.ssehub.easy.instantiation.core.model.artifactModel.ProjectSettings;
 
 /**
  * Java Settings. This enum contains settings that can be modified via VIL.

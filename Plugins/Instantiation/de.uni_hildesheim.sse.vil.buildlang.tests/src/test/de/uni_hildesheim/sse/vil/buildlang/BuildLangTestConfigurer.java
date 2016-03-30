@@ -23,14 +23,14 @@ import java.util.Map;
 import org.eclipse.emf.common.util.URI;
 
 import de.uni_hildesheim.sse.BuildLangModelUtility;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.BuildModel;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.BuildlangExecution;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.ITracer;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.Script;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.execution.TracerFactory;
 import net.ssehub.easy.basics.modelManagement.IModelLoader;
 import net.ssehub.easy.basics.modelManagement.ModelManagement;
 import net.ssehub.easy.dslCore.TranslationResult;
+import net.ssehub.easy.instantiation.core.model.buildlangModel.BuildModel;
+import net.ssehub.easy.instantiation.core.model.buildlangModel.BuildlangExecution;
+import net.ssehub.easy.instantiation.core.model.buildlangModel.ITracer;
+import net.ssehub.easy.instantiation.core.model.buildlangModel.Script;
+import net.ssehub.easy.instantiation.core.model.execution.TracerFactory;
 
 /**
  * Configures the tests for the build language (VIL).

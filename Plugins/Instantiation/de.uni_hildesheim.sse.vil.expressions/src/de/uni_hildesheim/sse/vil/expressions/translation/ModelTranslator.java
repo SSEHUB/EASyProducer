@@ -11,18 +11,6 @@ import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
 
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.Advice;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.ExpressionStatement;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.ITypedefReceiver;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.IVariableDeclarationReceiver;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.Imports;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.Typedef;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VariableDeclaration;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilException;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.Resolver;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeDescriptor;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeRegistry;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.configuration.IvmlTypeResolver;
 import de.uni_hildesheim.sse.vil.expressions.expressionDsl.ExpressionDslPackage;
 import de.uni_hildesheim.sse.vil.expressions.expressionDsl.Import;
 import de.uni_hildesheim.sse.vil.expressions.expressionDsl.LanguageUnit;
@@ -41,6 +29,18 @@ import net.ssehub.easy.basics.modelManagement.Version;
 import net.ssehub.easy.basics.modelManagement.VersionFormatException;
 import net.ssehub.easy.dslCore.translation.ErrorCodes;
 import net.ssehub.easy.dslCore.translation.TranslatorException;
+import net.ssehub.easy.instantiation.core.model.common.Advice;
+import net.ssehub.easy.instantiation.core.model.common.ExpressionStatement;
+import net.ssehub.easy.instantiation.core.model.common.ITypedefReceiver;
+import net.ssehub.easy.instantiation.core.model.common.IVariableDeclarationReceiver;
+import net.ssehub.easy.instantiation.core.model.common.Imports;
+import net.ssehub.easy.instantiation.core.model.common.Typedef;
+import net.ssehub.easy.instantiation.core.model.common.VariableDeclaration;
+import net.ssehub.easy.instantiation.core.model.common.VilException;
+import net.ssehub.easy.instantiation.core.model.expressions.Resolver;
+import net.ssehub.easy.instantiation.core.model.vilTypes.TypeDescriptor;
+import net.ssehub.easy.instantiation.core.model.vilTypes.TypeRegistry;
+import net.ssehub.easy.instantiation.core.model.vilTypes.configuration.IvmlTypeResolver;
 import net.ssehub.easy.varModel.model.Project;
 
 /**

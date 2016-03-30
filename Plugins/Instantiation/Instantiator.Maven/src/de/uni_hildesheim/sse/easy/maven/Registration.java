@@ -17,8 +17,8 @@ package de.uni_hildesheim.sse.easy.maven;
 
 import org.osgi.service.component.ComponentContext;
 
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.IRegistration;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeRegistry;
+import net.ssehub.easy.instantiation.core.model.vilTypes.IRegistration;
+import net.ssehub.easy.instantiation.core.model.vilTypes.TypeRegistry;
 
 /**
  * Registers the Java additions to VIL.

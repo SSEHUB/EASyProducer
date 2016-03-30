@@ -1,17 +1,17 @@
 package test.de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions;
 
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.RuntimeEnvironment;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.IExpressionVisitor;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.IMetaField;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.IMetaOperation;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.IMetaType;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.ITypedModel;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeDescriptor;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeRegistry;
 import net.ssehub.easy.basics.modelManagement.IRestrictionEvaluationContext;
 import net.ssehub.easy.basics.modelManagement.IndentationConfiguration;
 import net.ssehub.easy.basics.modelManagement.ModelImport;
 import net.ssehub.easy.basics.modelManagement.Version;
+import net.ssehub.easy.instantiation.core.model.common.RuntimeEnvironment;
+import net.ssehub.easy.instantiation.core.model.expressions.IExpressionVisitor;
+import net.ssehub.easy.instantiation.core.model.vilTypes.IMetaField;
+import net.ssehub.easy.instantiation.core.model.vilTypes.IMetaOperation;
+import net.ssehub.easy.instantiation.core.model.vilTypes.IMetaType;
+import net.ssehub.easy.instantiation.core.model.vilTypes.ITypedModel;
+import net.ssehub.easy.instantiation.core.model.vilTypes.TypeDescriptor;
+import net.ssehub.easy.instantiation.core.model.vilTypes.TypeRegistry;
 
 /**
  * A pseudo instance for testing.

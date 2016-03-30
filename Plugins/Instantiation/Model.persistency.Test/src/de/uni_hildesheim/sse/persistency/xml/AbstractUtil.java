@@ -13,11 +13,11 @@ import java.util.Properties;
 
 import org.junit.Assert;
 
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.BuildlangWriter;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.Script;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilException;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.templateModel.Template;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.templateModel.TemplateLangWriter;
+import net.ssehub.easy.instantiation.core.model.buildlangModel.BuildlangWriter;
+import net.ssehub.easy.instantiation.core.model.buildlangModel.Script;
+import net.ssehub.easy.instantiation.core.model.common.VilException;
+import net.ssehub.easy.instantiation.core.model.templateModel.Template;
+import net.ssehub.easy.instantiation.core.model.templateModel.TemplateLangWriter;
 import net.ssehub.easy.varModel.model.Project;
 import net.ssehub.easy.varModel.persistency.StringProvider;
 

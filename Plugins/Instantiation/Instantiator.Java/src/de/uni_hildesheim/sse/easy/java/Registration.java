@@ -15,9 +15,9 @@ import de.uni_hildesheim.sse.easy.java.instantiators.CocktailInstantiator;
 import de.uni_hildesheim.sse.easy.java.instantiators.Jar;
 import de.uni_hildesheim.sse.easy.java.instantiators.Javac;
 import de.uni_hildesheim.sse.easy.java.instantiators.Unjar;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.IRegistration;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.SettingsInitializerRegistry;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeRegistry;
+import net.ssehub.easy.instantiation.core.model.vilTypes.IRegistration;
+import net.ssehub.easy.instantiation.core.model.vilTypes.SettingsInitializerRegistry;
+import net.ssehub.easy.instantiation.core.model.vilTypes.TypeRegistry;
 
 /**
  * Registers the Java additions to VIL.

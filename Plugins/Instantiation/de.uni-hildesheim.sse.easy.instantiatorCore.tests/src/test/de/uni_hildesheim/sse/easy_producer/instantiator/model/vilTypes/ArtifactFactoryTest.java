@@ -5,15 +5,15 @@ import java.io.File;
 import org.junit.Assert;
 import org.junit.Test;
 
+import net.ssehub.easy.instantiation.core.model.artifactModel.ArtifactFactory;
+import net.ssehub.easy.instantiation.core.model.artifactModel.FileArtifact;
+import net.ssehub.easy.instantiation.core.model.artifactModel.FolderArtifact;
+import net.ssehub.easy.instantiation.core.model.artifactModel.IArtifact;
+import net.ssehub.easy.instantiation.core.model.artifactModel.IFileSystemArtifact;
+import net.ssehub.easy.instantiation.core.model.artifactModel.VtlFileArtifact;
+import net.ssehub.easy.instantiation.core.model.artifactModel.xml.XmlFileArtifact;
+import net.ssehub.easy.instantiation.core.model.common.VilException;
 import test.de.uni_hildesheim.sse.easy_producer.instantiator.model.AbstractTest;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.artifactModel.ArtifactFactory;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.artifactModel.FileArtifact;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.artifactModel.FolderArtifact;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.artifactModel.IArtifact;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.artifactModel.IFileSystemArtifact;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.artifactModel.VtlFileArtifact;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.artifactModel.xml.XmlFileArtifact;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilException;
 
 /**
  * Tests the artifact factory.

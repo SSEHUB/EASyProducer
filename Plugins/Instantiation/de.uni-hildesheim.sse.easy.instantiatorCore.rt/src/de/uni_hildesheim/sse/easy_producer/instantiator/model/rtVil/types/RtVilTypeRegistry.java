@@ -24,32 +24,32 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.artifactModel.ArtifactFactory;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilException;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.rtVil.Bundle;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.rtVil.ISimulationNotifier;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.rtVil.RtVilStorage;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.ArraySequence;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.ArraySet;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.FieldDescriptor;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.IClassNameMapper;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.IClassNameMapperProvider;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.IDirectTypeRegistryAccess;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.ILazyDescriptor;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.IRegisteredStringValueProvider;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.ITypeResolver;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.IVilType;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.Map;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.OperationDescriptor;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.ReflectionConstructorDescriptor;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.ReflectionFieldDescriptor;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.ReflectionOperationDescriptor;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.ReflectionTypeDescriptor;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.Sequence;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.StringValueHelper;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeDescriptor;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeRegistry;
 import net.ssehub.easy.basics.logger.EASyLoggerFactory;
+import net.ssehub.easy.instantiation.core.model.artifactModel.ArtifactFactory;
+import net.ssehub.easy.instantiation.core.model.common.VilException;
+import net.ssehub.easy.instantiation.core.model.vilTypes.ArraySequence;
+import net.ssehub.easy.instantiation.core.model.vilTypes.ArraySet;
+import net.ssehub.easy.instantiation.core.model.vilTypes.FieldDescriptor;
+import net.ssehub.easy.instantiation.core.model.vilTypes.IClassNameMapper;
+import net.ssehub.easy.instantiation.core.model.vilTypes.IClassNameMapperProvider;
+import net.ssehub.easy.instantiation.core.model.vilTypes.IDirectTypeRegistryAccess;
+import net.ssehub.easy.instantiation.core.model.vilTypes.ILazyDescriptor;
+import net.ssehub.easy.instantiation.core.model.vilTypes.IRegisteredStringValueProvider;
+import net.ssehub.easy.instantiation.core.model.vilTypes.ITypeResolver;
+import net.ssehub.easy.instantiation.core.model.vilTypes.IVilType;
+import net.ssehub.easy.instantiation.core.model.vilTypes.Map;
+import net.ssehub.easy.instantiation.core.model.vilTypes.OperationDescriptor;
+import net.ssehub.easy.instantiation.core.model.vilTypes.ReflectionConstructorDescriptor;
+import net.ssehub.easy.instantiation.core.model.vilTypes.ReflectionFieldDescriptor;
+import net.ssehub.easy.instantiation.core.model.vilTypes.ReflectionOperationDescriptor;
+import net.ssehub.easy.instantiation.core.model.vilTypes.ReflectionTypeDescriptor;
+import net.ssehub.easy.instantiation.core.model.vilTypes.Sequence;
+import net.ssehub.easy.instantiation.core.model.vilTypes.StringValueHelper;
+import net.ssehub.easy.instantiation.core.model.vilTypes.TypeDescriptor;
+import net.ssehub.easy.instantiation.core.model.vilTypes.TypeRegistry;
 import net.ssehub.easy.varModel.model.datatypes.IDatatype;
 
 /**
@@ -653,8 +653,8 @@ public class RtVilTypeRegistry extends TypeRegistry implements IClassNameMapperP
             value = ((Map<?, ?>) value).toMap();
         } else if (value instanceof Sequence) {
             value = ((Sequence<?>) value).toMappedList();
-        } else if (value instanceof de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.Set<?>) {
-            value = ((de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.Set<?>) value).toMappedSet();
+        } else if (value instanceof net.ssehub.easy.instantiation.core.model.vilTypes.Set<?>) {
+            value = ((net.ssehub.easy.instantiation.core.model.vilTypes.Set<?>) value).toMappedSet();
         }
         return value;
     }

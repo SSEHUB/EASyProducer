@@ -12,17 +12,6 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
 
 import de.uni_hildesheim.sse.buildLanguageTranslation.RuleInfo;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.BuildModel;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.ExpressionStatement;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.IRuleElement;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.Imports;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.Resolver;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.RuleExecutionResult;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.VariableDeclaration;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.Script.ScriptDescriptor;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilException;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.CallArgument;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.Expression;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.rtVil.AbstractBreakdownCall;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.rtVil.RtVilStorage;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.rtVil.RtVilModel;
@@ -35,8 +24,6 @@ import de.uni_hildesheim.sse.easy_producer.instantiator.model.rtVil.VariableDecl
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.rtVil.WeightingFunction;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.rtVil.types.RtVilTypeRegistry;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.rtVil.types.TupleType;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeDescriptor;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeRegistry;
 import de.uni_hildesheim.sse.vil.expressions.ResourceRegistry;
 import de.uni_hildesheim.sse.vil.expressions.expressionDsl.ExpressionDslPackage;
 import de.uni_hildesheim.sse.vil.expressions.expressionDsl.ParameterList;
@@ -63,6 +50,19 @@ import net.ssehub.easy.basics.modelManagement.ModelImport;
 import net.ssehub.easy.basics.modelManagement.ModelManagement;
 import net.ssehub.easy.dslCore.translation.ErrorCodes;
 import net.ssehub.easy.dslCore.translation.TranslatorException;
+import net.ssehub.easy.instantiation.core.model.buildlangModel.BuildModel;
+import net.ssehub.easy.instantiation.core.model.buildlangModel.ExpressionStatement;
+import net.ssehub.easy.instantiation.core.model.buildlangModel.IRuleElement;
+import net.ssehub.easy.instantiation.core.model.buildlangModel.Imports;
+import net.ssehub.easy.instantiation.core.model.buildlangModel.Resolver;
+import net.ssehub.easy.instantiation.core.model.buildlangModel.RuleExecutionResult;
+import net.ssehub.easy.instantiation.core.model.buildlangModel.VariableDeclaration;
+import net.ssehub.easy.instantiation.core.model.buildlangModel.Script.ScriptDescriptor;
+import net.ssehub.easy.instantiation.core.model.common.VilException;
+import net.ssehub.easy.instantiation.core.model.expressions.CallArgument;
+import net.ssehub.easy.instantiation.core.model.expressions.Expression;
+import net.ssehub.easy.instantiation.core.model.vilTypes.TypeDescriptor;
+import net.ssehub.easy.instantiation.core.model.vilTypes.TypeRegistry;
 
 /**
  * Implements the translation from the DSL to the adaptation language model in the instantiator core.
@@ -138,10 +138,10 @@ public class ModelTranslator extends de.uni_hildesheim.sse.buildLanguageTranslat
     protected List<IMessage> postResolveImports(Script model, URI uri, List<IMessage> resolutionMessages) {
         // by default imports are resolved against RtVilModel, but plain VIL scripts are not considered
         // as the import resolver is typed, we have to trick the BuildModel resolver
-        de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.Script tmp 
-            = new de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.Script("tmp");
+        net.ssehub.easy.instantiation.core.model.buildlangModel.Script tmp 
+            = new net.ssehub.easy.instantiation.core.model.buildlangModel.Script("tmp");
         for (int i = 0; i < model.getImportsCount(); i++) {
-            ModelImport<de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.Script> imp 
+            ModelImport<net.ssehub.easy.instantiation.core.model.buildlangModel.Script> imp 
                 = model.getImport(i);
             if (null == imp.getResolved()) {
                 tmp.addImport(imp);

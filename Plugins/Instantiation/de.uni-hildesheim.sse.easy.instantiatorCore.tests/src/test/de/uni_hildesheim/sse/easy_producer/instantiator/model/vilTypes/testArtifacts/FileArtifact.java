@@ -2,14 +2,14 @@ package test.de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.tes
 
 import java.io.File;
 
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.artifactModel.ArtifactCreator;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.artifactModel.ArtifactModel;
+import net.ssehub.easy.instantiation.core.model.artifactModel.ArtifactCreator;
+import net.ssehub.easy.instantiation.core.model.artifactModel.ArtifactModel;
 
 /** 
  * A new file artifact that does not conflict with an existing artifact.
  */
 @ArtifactCreator(FileArtifactCreator.class)
-public class FileArtifact extends de.uni_hildesheim.sse.easy_producer.instantiator.model.artifactModel.FileArtifact {
+public class FileArtifact extends net.ssehub.easy.instantiation.core.model.artifactModel.FileArtifact {
 
     /**
      * Creates a new file artifact from <code>file</code>.

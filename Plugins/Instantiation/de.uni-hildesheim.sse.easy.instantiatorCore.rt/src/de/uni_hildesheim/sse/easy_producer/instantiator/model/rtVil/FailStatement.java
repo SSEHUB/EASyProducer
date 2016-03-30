@@ -15,10 +15,10 @@
  */
 package de.uni_hildesheim.sse.easy_producer.instantiator.model.rtVil;
 
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.IRuleElement;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.IVisitor;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilException;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.Expression;
+import net.ssehub.easy.instantiation.core.model.buildlangModel.IRuleElement;
+import net.ssehub.easy.instantiation.core.model.buildlangModel.IVisitor;
+import net.ssehub.easy.instantiation.core.model.common.VilException;
+import net.ssehub.easy.instantiation.core.model.expressions.Expression;
 
 /**
  * Implements a fail statement, i.e., when a tactic or a strategy explicitly wants to signal that it cannot do it's job

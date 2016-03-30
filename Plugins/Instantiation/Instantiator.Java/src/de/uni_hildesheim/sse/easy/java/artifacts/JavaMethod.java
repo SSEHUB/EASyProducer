@@ -12,17 +12,17 @@ import org.eclipse.jdt.core.dom.ITypeBinding;
 import org.eclipse.jdt.core.dom.MethodDeclaration;
 import org.eclipse.jdt.core.dom.MethodInvocation;
 
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.artifactModel.ArtifactModel;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.artifactModel.IArtifactVisitor;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.artifactModel.representation.Binary;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.artifactModel.representation.Text;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilException;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.ExpressionEvaluator;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.ArraySet;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.Invisible;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.OperationMeta;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.Set;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeDescriptor;
+import net.ssehub.easy.instantiation.core.model.artifactModel.ArtifactModel;
+import net.ssehub.easy.instantiation.core.model.artifactModel.IArtifactVisitor;
+import net.ssehub.easy.instantiation.core.model.artifactModel.representation.Binary;
+import net.ssehub.easy.instantiation.core.model.artifactModel.representation.Text;
+import net.ssehub.easy.instantiation.core.model.common.VilException;
+import net.ssehub.easy.instantiation.core.model.expressions.ExpressionEvaluator;
+import net.ssehub.easy.instantiation.core.model.vilTypes.ArraySet;
+import net.ssehub.easy.instantiation.core.model.vilTypes.Invisible;
+import net.ssehub.easy.instantiation.core.model.vilTypes.OperationMeta;
+import net.ssehub.easy.instantiation.core.model.vilTypes.Set;
+import net.ssehub.easy.instantiation.core.model.vilTypes.TypeDescriptor;
 
 /**
  * Represents a Java annotation.

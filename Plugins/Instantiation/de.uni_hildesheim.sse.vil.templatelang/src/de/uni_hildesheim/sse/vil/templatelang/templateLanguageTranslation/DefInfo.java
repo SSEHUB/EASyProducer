@@ -1,7 +1,7 @@
 package de.uni_hildesheim.sse.vil.templatelang.templateLanguageTranslation;
 
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.templateModel.Def;
 import de.uni_hildesheim.sse.vil.templatelang.templateLang.VilDef;
+import net.ssehub.easy.instantiation.core.model.templateModel.Def;
 
 /**
  * Stores (temporary) information about the relation of an ECore and an Template 

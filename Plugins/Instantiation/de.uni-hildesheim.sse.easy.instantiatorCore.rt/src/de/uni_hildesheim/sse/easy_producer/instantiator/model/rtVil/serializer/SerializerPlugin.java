@@ -14,7 +14,6 @@ import de.uni_hildesheim.sse.easy_producer.instantiator.model.rtVil.Strategy;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.rtVil.Tactic;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.rtVil.TacticCall;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.rtVil.types.RtVilTypeRegistry;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeRegistry;
 import de.uni_hildesheim.sse.persistency.xml.ISerializerPlugin;
 import net.ssehub.easy.basics.logger.EASyLoggerFactory;
 import net.ssehub.easy.basics.logger.EASyLoggerFactory.EASyLogger;
@@ -23,6 +22,7 @@ import net.ssehub.easy.basics.modelManagement.IModelLoader;
 import net.ssehub.easy.basics.modelManagement.ModelInfo;
 import net.ssehub.easy.basics.modelManagement.ModelManagementException;
 import net.ssehub.easy.basics.progress.ProgressObserver;
+import net.ssehub.easy.instantiation.core.model.vilTypes.TypeRegistry;
 
 /**
  * Plug-in to serialize runtime VIL.

@@ -6,21 +6,21 @@ import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;
 
+import net.ssehub.easy.instantiation.core.model.artifactModel.ArtifactFactory;
+import net.ssehub.easy.instantiation.core.model.artifactModel.FileArtifact;
+import net.ssehub.easy.instantiation.core.model.artifactModel.IArtifact;
+import net.ssehub.easy.instantiation.core.model.buildlangModel.BuildlangExecution;
+import net.ssehub.easy.instantiation.core.model.buildlangModel.Script;
+import net.ssehub.easy.instantiation.core.model.buildlangModel.StrategyCallExpression;
+import net.ssehub.easy.instantiation.core.model.buildlangModel.VariableDeclaration;
+import net.ssehub.easy.instantiation.core.model.common.VilException;
+import net.ssehub.easy.instantiation.core.model.expressions.ConstantExpression;
+import net.ssehub.easy.instantiation.core.model.vilTypes.IVilType;
+import net.ssehub.easy.instantiation.core.model.vilTypes.Instantiator;
+import net.ssehub.easy.instantiation.core.model.vilTypes.Set;
+import net.ssehub.easy.instantiation.core.model.vilTypes.TypeDescriptor;
+import net.ssehub.easy.instantiation.core.model.vilTypes.TypeRegistry;
 import test.de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.testArtifacts.StaticInstantiator;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.artifactModel.ArtifactFactory;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.artifactModel.FileArtifact;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.artifactModel.IArtifact;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.BuildlangExecution;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.Script;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.StrategyCallExpression;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.VariableDeclaration;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilException;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.ConstantExpression;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.IVilType;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.Instantiator;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.Set;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeDescriptor;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeRegistry;
 
 /**
  * Tests {@link StrategyCallExpression}.

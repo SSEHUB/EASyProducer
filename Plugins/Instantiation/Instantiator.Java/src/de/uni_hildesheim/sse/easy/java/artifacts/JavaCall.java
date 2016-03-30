@@ -3,8 +3,8 @@ package de.uni_hildesheim.sse.easy.java.artifacts;
 import org.eclipse.jdt.core.dom.ExpressionStatement;
 import org.eclipse.jdt.core.dom.ITypeBinding;
 
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.artifactModel.ArtifactModel;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.Invisible;
+import net.ssehub.easy.instantiation.core.model.artifactModel.ArtifactModel;
+import net.ssehub.easy.instantiation.core.model.vilTypes.Invisible;
 
 /**
  * Represents a Java annotation.

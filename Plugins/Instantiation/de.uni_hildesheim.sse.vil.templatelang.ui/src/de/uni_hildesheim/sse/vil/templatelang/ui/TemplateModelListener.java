@@ -2,13 +2,13 @@ package de.uni_hildesheim.sse.vil.templatelang.ui;
 
 import java.net.URI;
 
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.templateModel.Template;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.templateModel.TemplateModel;
 import net.ssehub.easy.basics.modelManagement.IModel;
 import net.ssehub.easy.basics.modelManagement.IModelListener;
 import net.ssehub.easy.basics.modelManagement.IModelReloadListener;
 import net.ssehub.easy.basics.modelManagement.ModelInfo;
 import net.ssehub.easy.dslCore.ui.editors.AbstractModelChangeListener;
+import net.ssehub.easy.instantiation.core.model.templateModel.Template;
+import net.ssehub.easy.instantiation.core.model.templateModel.TemplateModel;
 
 /**
  * A <code>de.uni_hildesheim.sse.easy_producer.instantiator.model.templateModel.Template</code>

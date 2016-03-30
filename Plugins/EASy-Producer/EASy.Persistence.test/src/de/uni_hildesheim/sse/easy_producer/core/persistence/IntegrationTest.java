@@ -7,14 +7,14 @@ import org.junit.Test;
 
 import de.uni_hildesheim.sse.easy_producer.core.AllTests;
 import de.uni_hildesheim.sse.easy_producer.core.persistence.standard.PersistenceConstants;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.BuildModel;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.Script;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.templateModel.Template;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.templateModel.TemplateModel;
 import net.ssehub.easy.basics.modelManagement.ModelInfo;
 import net.ssehub.easy.basics.modelManagement.ModelManagementException;
 import net.ssehub.easy.basics.modelManagement.Version;
 import net.ssehub.easy.basics.progress.ProgressObserver;
+import net.ssehub.easy.instantiation.core.model.buildlangModel.BuildModel;
+import net.ssehub.easy.instantiation.core.model.buildlangModel.Script;
+import net.ssehub.easy.instantiation.core.model.templateModel.Template;
+import net.ssehub.easy.instantiation.core.model.templateModel.TemplateModel;
 import net.ssehub.easy.varModel.management.VarModel;
 import net.ssehub.easy.varModel.model.Project;
 import net.ssehub.easy.varModel.persistency.PersistencyConstants;
@@ -47,9 +47,9 @@ public class IntegrationTest extends AbstractEASyTest {
         File ivmlFile = new File(easyFolder, fileName + PersistencyConstants.PROJECT_FILE_ENDING);
 //        File commentsFile = new File(easyFolder, fileName + PersistencyConstants.COMMENT_FILE_ENDING);
         File vilFile = new File(easyFolder, fileName
-            + de.uni_hildesheim.sse.easy_producer.instantiator.model.PersistencyConstants.SCRIPT_FILE_ENDING);
+            + net.ssehub.easy.instantiation.core.model.PersistencyConstants.SCRIPT_FILE_ENDING);
         File vtlFile = new File(easyFolder, fileName
-            + de.uni_hildesheim.sse.easy_producer.instantiator.model.PersistencyConstants.TEMPLATE_FILE_ENDING);
+            + net.ssehub.easy.instantiation.core.model.PersistencyConstants.TEMPLATE_FILE_ENDING);
         Version version = new Version(0);
         
         // Precondition: Test that the Infos are NOT available

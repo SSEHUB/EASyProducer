@@ -17,12 +17,12 @@ package de.uni_hildesheim.sse.easy_producer.instantiator.xvcl;
 
 import org.osgi.service.component.ComponentContext;
 
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.artifactModel.FileArtifact;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilException;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.IRegistration;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.IVilType;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.Instantiator;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeRegistry;
+import net.ssehub.easy.instantiation.core.model.artifactModel.FileArtifact;
+import net.ssehub.easy.instantiation.core.model.common.VilException;
+import net.ssehub.easy.instantiation.core.model.vilTypes.IRegistration;
+import net.ssehub.easy.instantiation.core.model.vilTypes.IVilType;
+import net.ssehub.easy.instantiation.core.model.vilTypes.Instantiator;
+import net.ssehub.easy.instantiation.core.model.vilTypes.TypeRegistry;
 
 /**
  * Registers and calls the XVCL instantiatior from VIL.

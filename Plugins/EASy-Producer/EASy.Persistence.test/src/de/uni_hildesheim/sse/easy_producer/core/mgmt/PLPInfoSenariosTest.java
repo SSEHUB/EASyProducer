@@ -14,7 +14,7 @@ import org.junit.Test;
 import de.uni_hildesheim.sse.easy_producer.core.AllTests;
 import de.uni_hildesheim.sse.easy_producer.core.mgmt.VilTestExectuter.AbstractVilListener;
 import de.uni_hildesheim.sse.easy_producer.core.persistence.PersistenceException;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilException;
+import net.ssehub.easy.instantiation.core.model.common.VilException;
 import net.ssehub.easy.reasoning.core.frontend.IReasonerListener;
 import net.ssehub.easy.reasoning.core.model.ReasoningOperation;
 import net.ssehub.easy.reasoning.core.reasoner.Message;

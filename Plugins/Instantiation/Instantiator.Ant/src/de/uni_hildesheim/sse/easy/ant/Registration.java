@@ -4,8 +4,8 @@ import org.osgi.service.component.ComponentContext;
 
 import de.uni_hildesheim.sse.easy.ant.instantiators.Ant;
 import de.uni_hildesheim.sse.easy.ant.instantiators.Make;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.IRegistration;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeRegistry;
+import net.ssehub.easy.instantiation.core.model.vilTypes.IRegistration;
+import net.ssehub.easy.instantiation.core.model.vilTypes.TypeRegistry;
 
 /**
  * Registers the ANT additions to VIL.

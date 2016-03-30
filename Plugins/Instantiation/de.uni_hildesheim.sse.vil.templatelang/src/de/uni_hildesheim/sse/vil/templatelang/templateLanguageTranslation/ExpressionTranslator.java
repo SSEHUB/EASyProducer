@@ -6,18 +6,6 @@ import java.util.List;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
 
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.AbstractCallExpression;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.CallArgument;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.CallExpression;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.Expression;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.ResolvableOperationCallExpression;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilException;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.ExpressionVersionRestriction;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.ExpressionVersionRestrictionValidator;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.templateModel.ExpressionStatement;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.templateModel.Resolver;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.templateModel.VariableDeclaration;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeDescriptor;
 import de.uni_hildesheim.sse.vil.expressions.expressionDsl.Call;
 import de.uni_hildesheim.sse.vil.expressions.expressionDsl.ExpressionDslPackage;
 import de.uni_hildesheim.sse.vil.templatelang.TemplateLangModelUtility;
@@ -25,6 +13,18 @@ import net.ssehub.easy.basics.modelManagement.RestrictionEvaluationException;
 import net.ssehub.easy.dslCore.translation.ErrorCodes;
 import net.ssehub.easy.dslCore.translation.MessageHandler;
 import net.ssehub.easy.dslCore.translation.TranslatorException;
+import net.ssehub.easy.instantiation.core.model.common.VilException;
+import net.ssehub.easy.instantiation.core.model.expressions.AbstractCallExpression;
+import net.ssehub.easy.instantiation.core.model.expressions.CallArgument;
+import net.ssehub.easy.instantiation.core.model.expressions.CallExpression;
+import net.ssehub.easy.instantiation.core.model.expressions.Expression;
+import net.ssehub.easy.instantiation.core.model.expressions.ExpressionVersionRestriction;
+import net.ssehub.easy.instantiation.core.model.expressions.ExpressionVersionRestrictionValidator;
+import net.ssehub.easy.instantiation.core.model.expressions.ResolvableOperationCallExpression;
+import net.ssehub.easy.instantiation.core.model.templateModel.ExpressionStatement;
+import net.ssehub.easy.instantiation.core.model.templateModel.Resolver;
+import net.ssehub.easy.instantiation.core.model.templateModel.VariableDeclaration;
+import net.ssehub.easy.instantiation.core.model.vilTypes.TypeDescriptor;
 
 /**
  * A specific expression translator for the template language.
@@ -120,14 +120,14 @@ public class ExpressionTranslator
 
     @Override
     protected ExpressionVersionRestriction createExpressionVersionRestriction(Expression expr,
-        de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VariableDeclaration decl, 
+        net.ssehub.easy.instantiation.core.model.common.VariableDeclaration decl, 
         EObject cause, EStructuralFeature feature)
         throws RestrictionEvaluationException {
         try {
             ExpressionVersionRestrictionValidator validator = new ExpressionVersionRestrictionValidator(
                 new MessageHandler(this, cause, feature));
             expr.accept(validator);
-            return new de.uni_hildesheim.sse.easy_producer.instantiator.model.templateModel.
+            return new net.ssehub.easy.instantiation.core.model.templateModel.
                 ExpressionVersionRestriction(expr, decl);
         } catch (VilException e) {
             throw new RestrictionEvaluationException(e.getMessage(), e.getId());

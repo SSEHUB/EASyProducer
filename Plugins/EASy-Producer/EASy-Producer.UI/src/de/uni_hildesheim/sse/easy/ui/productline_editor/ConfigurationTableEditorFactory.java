@@ -18,10 +18,10 @@ import de.uni_hildesheim.sse.easy.ui.productline_editor.configuration.AttributeR
 import de.uni_hildesheim.sse.easy.ui.productline_editor.configuration.ConfigNameFilter;
 import de.uni_hildesheim.sse.easy.ui.productline_editor.configuration.ConfigurationTableEditor;
 import de.uni_hildesheim.sse.easy.ui.productline_editor.configuration.NonFrozenFilter;
-import de.uni_hildesheim.sse.easy_producer.instantiator.Bundle;
 import net.ssehub.easy.basics.logger.EASyLoggerFactory;
 import net.ssehub.easy.basics.modelManagement.IModelListener;
 import net.ssehub.easy.dslCore.ui.ConfigurationEditorFactory.IConfigurationEditorCreator;
+import net.ssehub.easy.instantiation.core.Bundle;
 import net.ssehub.easy.varModel.confModel.AssignmentState;
 import net.ssehub.easy.varModel.confModel.Configuration;
 import net.ssehub.easy.varModel.confModel.DisplayNameProvider;

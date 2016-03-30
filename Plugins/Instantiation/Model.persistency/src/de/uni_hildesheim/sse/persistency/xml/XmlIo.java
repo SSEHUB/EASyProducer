@@ -21,7 +21,6 @@ import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.io.xml.CompactWriter;
 import com.thoughtworks.xstream.mapper.MapperWrapper;
 
-import de.uni_hildesheim.sse.easy_producer.instantiator.Bundle;
 import de.uni_hildesheim.sse.persistency.xml.converter.AdviceConverter;
 import de.uni_hildesheim.sse.persistency.xml.converter.ClassWrapperConverter;
 import de.uni_hildesheim.sse.persistency.xml.converter.DelegatingTypeConverter;
@@ -40,6 +39,7 @@ import de.uni_hildesheim.sse.persistency.xml.mapper.ClassNameAliasingMapper;
 import net.ssehub.easy.basics.logger.EASyLoggerFactory;
 import net.ssehub.easy.basics.logger.EASyLoggerFactory.EASyLogger;
 import net.ssehub.easy.basics.modelManagement.IModel;
+import net.ssehub.easy.instantiation.core.Bundle;
 
 /**
  * Supports storing projects (and referenced projects) into XML format. Please note that the XML format is intended for

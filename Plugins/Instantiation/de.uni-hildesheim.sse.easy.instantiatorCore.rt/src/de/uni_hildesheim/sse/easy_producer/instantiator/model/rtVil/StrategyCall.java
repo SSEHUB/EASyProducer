@@ -15,11 +15,11 @@
  */
 package de.uni_hildesheim.sse.easy_producer.instantiator.model.rtVil;
 
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.IVisitor;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.Rule;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilException;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.CallArgument;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.IMetaOperation;
+import net.ssehub.easy.instantiation.core.model.buildlangModel.IVisitor;
+import net.ssehub.easy.instantiation.core.model.buildlangModel.Rule;
+import net.ssehub.easy.instantiation.core.model.common.VilException;
+import net.ssehub.easy.instantiation.core.model.expressions.CallArgument;
+import net.ssehub.easy.instantiation.core.model.vilTypes.IMetaOperation;
 
 /**
  * Represents a sub-strategy call as part of a strategy breakdown.

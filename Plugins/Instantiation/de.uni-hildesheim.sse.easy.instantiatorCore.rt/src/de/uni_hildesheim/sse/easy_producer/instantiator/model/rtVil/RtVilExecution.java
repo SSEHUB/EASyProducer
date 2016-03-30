@@ -12,33 +12,33 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.BuildlangExecution;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.IRuleElement;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.ITracer;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.Rule;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.RuleCallExpression;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.RuleDescriptor;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.RuleExecutionContext;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.RuleExecutionResult;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.RuntimeEnvironment;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.RuleExecutionResult.Status;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.VariableDeclaration;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilException;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.CallArgument;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.Expression;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.ExpressionParserRegistry.ILanguage;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.rtVil.AbstractBreakdownCall.TupleField;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.rtVil.types.RtVilTypeRegistry;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.rtVil.types.TupleType;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.rtVil.types.TupleType.TupleInstance;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.IMetaType;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeDescriptor;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeRegistry;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.configuration.Configuration;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.configuration.IvmlTypes;
 import net.ssehub.easy.basics.logger.EASyLoggerFactory;
 import net.ssehub.easy.basics.logger.EASyLoggerFactory.EASyLogger;
 import net.ssehub.easy.basics.progress.ProgressObserver;
+import net.ssehub.easy.instantiation.core.model.buildlangModel.BuildlangExecution;
+import net.ssehub.easy.instantiation.core.model.buildlangModel.IRuleElement;
+import net.ssehub.easy.instantiation.core.model.buildlangModel.ITracer;
+import net.ssehub.easy.instantiation.core.model.buildlangModel.Rule;
+import net.ssehub.easy.instantiation.core.model.buildlangModel.RuleCallExpression;
+import net.ssehub.easy.instantiation.core.model.buildlangModel.RuleDescriptor;
+import net.ssehub.easy.instantiation.core.model.buildlangModel.RuleExecutionContext;
+import net.ssehub.easy.instantiation.core.model.buildlangModel.RuleExecutionResult;
+import net.ssehub.easy.instantiation.core.model.buildlangModel.RuntimeEnvironment;
+import net.ssehub.easy.instantiation.core.model.buildlangModel.VariableDeclaration;
+import net.ssehub.easy.instantiation.core.model.buildlangModel.RuleExecutionResult.Status;
+import net.ssehub.easy.instantiation.core.model.common.VilException;
+import net.ssehub.easy.instantiation.core.model.expressions.CallArgument;
+import net.ssehub.easy.instantiation.core.model.expressions.Expression;
+import net.ssehub.easy.instantiation.core.model.expressions.ExpressionParserRegistry.ILanguage;
+import net.ssehub.easy.instantiation.core.model.vilTypes.IMetaType;
+import net.ssehub.easy.instantiation.core.model.vilTypes.TypeDescriptor;
+import net.ssehub.easy.instantiation.core.model.vilTypes.TypeRegistry;
+import net.ssehub.easy.instantiation.core.model.vilTypes.configuration.Configuration;
+import net.ssehub.easy.instantiation.core.model.vilTypes.configuration.IvmlTypes;
 import net.ssehub.easy.reasoning.core.frontend.ReasonerFrontend;
 import net.ssehub.easy.reasoning.core.reasoner.Message;
 import net.ssehub.easy.reasoning.core.reasoner.ReasonerConfiguration;
@@ -272,7 +272,7 @@ public class RtVilExecution extends BuildlangExecution implements IRtVilVisitor 
         this.valueAccess = new IRtValueAccess() {
             
             @Override
-            public Object getValue(de.uni_hildesheim.sse.easy_producer.instantiator.model.common.
+            public Object getValue(net.ssehub.easy.instantiation.core.model.common.
                 VariableDeclaration var) throws VilException {
                 return getRuntimeEnvironment().getValue(var);
             }
@@ -407,7 +407,7 @@ public class RtVilExecution extends BuildlangExecution implements IRtVilVisitor 
     }
 
     @Override
-    protected Object executeDefault(de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.Script script)
+    protected Object executeDefault(net.ssehub.easy.instantiation.core.model.buildlangModel.Script script)
         throws VilException {
         RuleExecutionResult result = null;
         if (!stopAfterBindValues) {
@@ -703,7 +703,7 @@ public class RtVilExecution extends BuildlangExecution implements IRtVilVisitor 
 
     @Override
     protected void processProperties(
-        de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.Script script, File base) 
+        net.ssehub.easy.instantiation.core.model.buildlangModel.Script script, File base) 
         throws VilException {
         callInitialize();
         callBindValues();
@@ -732,7 +732,7 @@ public class RtVilExecution extends BuildlangExecution implements IRtVilVisitor 
      * @param script the script to store the variables for
      * @throws VilException in case that accessing a variable value fails
      */
-    private void persistVariables(de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.Script script) 
+    private void persistVariables(net.ssehub.easy.instantiation.core.model.buildlangModel.Script script) 
         throws VilException {
         RtVilStorage storage = RtVilStorage.getInstance();
         if (null != storage) { // check whether this position is correct
@@ -1147,7 +1147,7 @@ public class RtVilExecution extends BuildlangExecution implements IRtVilVisitor 
      * @return the rule execution result
      * @throws VilException in case that constructing, resolving or executing the VIL rule fails
      */
-    private Object dynamicCall(de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.Script script, 
+    private Object dynamicCall(net.ssehub.easy.instantiation.core.model.buildlangModel.Script script, 
         String name, CallArgument... args) throws VilException {
         Object result = null;
         VilException failure = null;
@@ -1165,7 +1165,7 @@ public class RtVilExecution extends BuildlangExecution implements IRtVilVisitor 
         if (failure != null) {
             boolean succeeded = false;
             for (int i = 0; !succeeded && i < script.getImportsCount(); i++) {
-                de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.Script tmp 
+                net.ssehub.easy.instantiation.core.model.buildlangModel.Script tmp 
                     = script.getImport(i).getResolved();
                 if (null != tmp) {
                     try {

@@ -17,11 +17,11 @@ package de.uni_hildesheim.sse.vil.rt.ui.embed;
 
 import java.io.StringWriter;
 
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilException;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.Expression;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.rtVil.RtVilWriter;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.StringValueHelper;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeDescriptor;
+import net.ssehub.easy.instantiation.core.model.common.VilException;
+import net.ssehub.easy.instantiation.core.model.expressions.Expression;
+import net.ssehub.easy.instantiation.core.model.vilTypes.StringValueHelper;
+import net.ssehub.easy.instantiation.core.model.vilTypes.TypeDescriptor;
 
 /**
  * Represents an (open, to be defined) script argument.

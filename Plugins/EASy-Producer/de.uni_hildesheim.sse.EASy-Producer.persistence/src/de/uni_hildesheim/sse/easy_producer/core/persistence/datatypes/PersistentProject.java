@@ -6,8 +6,8 @@ import de.uni_hildesheim.sse.easy_producer.core.persistence.Configuration;
 import de.uni_hildesheim.sse.easy_producer.core.persistence.PersistenceUtils;
 import de.uni_hildesheim.sse.easy_producer.core.varMod.container.ProjectContainer;
 import de.uni_hildesheim.sse.easy_producer.core.varMod.container.ScriptContainer;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.Script;
 import net.ssehub.easy.basics.modelManagement.Version;
+import net.ssehub.easy.instantiation.core.model.buildlangModel.Script;
 import net.ssehub.easy.varModel.model.Project;
 
 /**

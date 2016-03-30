@@ -3,20 +3,20 @@ package test.de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions;
 import org.junit.Assert;
 import org.junit.Test;
 
+import net.ssehub.easy.instantiation.core.model.artifactModel.ArtifactTypes;
+import net.ssehub.easy.instantiation.core.model.artifactModel.JavaPath;
+import net.ssehub.easy.instantiation.core.model.artifactModel.Path;
+import net.ssehub.easy.instantiation.core.model.common.VilException;
+import net.ssehub.easy.instantiation.core.model.expressions.CallArgument;
+import net.ssehub.easy.instantiation.core.model.expressions.CallExpression;
+import net.ssehub.easy.instantiation.core.model.expressions.ConstantExpression;
+import net.ssehub.easy.instantiation.core.model.expressions.EvaluationVisitor;
+import net.ssehub.easy.instantiation.core.model.expressions.NoTracer;
+import net.ssehub.easy.instantiation.core.model.templateModel.RuntimeEnvironment;
+import net.ssehub.easy.instantiation.core.model.vilTypes.OperationDescriptor;
+import net.ssehub.easy.instantiation.core.model.vilTypes.TypeDescriptor;
+import net.ssehub.easy.instantiation.core.model.vilTypes.TypeRegistry;
 import test.de.uni_hildesheim.sse.easy_producer.instantiator.model.AbstractTest;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.artifactModel.ArtifactTypes;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.artifactModel.JavaPath;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.artifactModel.Path;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.CallArgument;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.CallExpression;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.ConstantExpression;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.EvaluationVisitor;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilException;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.NoTracer;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.templateModel.RuntimeEnvironment;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.OperationDescriptor;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeDescriptor;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeRegistry;
 
 /**
  * Tests {@link CallExpression}.

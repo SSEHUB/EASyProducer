@@ -16,8 +16,8 @@
 package de.uni_hildesheim.sse.easy_producer.core.varMod.container;
 
 import de.uni_hildesheim.sse.easy_producer.core.persistence.Configuration;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.Script;
 import net.ssehub.easy.basics.modelManagement.IModel;
+import net.ssehub.easy.instantiation.core.model.buildlangModel.Script;
 import net.ssehub.easy.varModel.model.Project;
 
 /**

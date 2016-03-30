@@ -17,7 +17,7 @@ package de.uni_hildesheim.sse.easy_producer.core.mgmt;
 
 import org.junit.Assert;
 
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilException;
+import net.ssehub.easy.instantiation.core.model.common.VilException;
 
 /**
  * Needed to test {@link PLPInfo#instantiate(de.uni_hildesheim.sse.utils.progress.ProgressObserver)}

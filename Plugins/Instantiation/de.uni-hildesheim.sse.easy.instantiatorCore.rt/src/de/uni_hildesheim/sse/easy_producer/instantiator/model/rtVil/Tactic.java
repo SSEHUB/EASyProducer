@@ -15,14 +15,14 @@
  */
 package de.uni_hildesheim.sse.easy_producer.instantiator.model.rtVil;
 
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.ExpressionStatement;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.IVisitor;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.Rule;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.RuleDescriptor;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.RuleExecutionResult;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.VariableDeclaration;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilException;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeDescriptor;
+import net.ssehub.easy.instantiation.core.model.buildlangModel.ExpressionStatement;
+import net.ssehub.easy.instantiation.core.model.buildlangModel.IVisitor;
+import net.ssehub.easy.instantiation.core.model.buildlangModel.Rule;
+import net.ssehub.easy.instantiation.core.model.buildlangModel.RuleDescriptor;
+import net.ssehub.easy.instantiation.core.model.buildlangModel.RuleExecutionResult;
+import net.ssehub.easy.instantiation.core.model.buildlangModel.VariableDeclaration;
+import net.ssehub.easy.instantiation.core.model.common.VilException;
+import net.ssehub.easy.instantiation.core.model.vilTypes.TypeDescriptor;
 
 /**
  * Implements a tactic, i.e., a sequence of adaptive changes.

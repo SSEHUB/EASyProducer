@@ -9,11 +9,11 @@ import org.eclipse.ui.PartInitException;
 
 import de.uni_hildesheim.sse.BuildLangModelUtility;
 import de.uni_hildesheim.sse.VilBundleId;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.Script;
 import de.uni_hildesheim.sse.vil.AbstractXTextEditor;
 import de.uni_hildesheim.sse.vilBuildLanguage.ImplementationUnit;
 import net.ssehub.easy.dslCore.IResourceInitializer;
 import net.ssehub.easy.dslCore.TranslationResult;
+import net.ssehub.easy.instantiation.core.model.buildlangModel.Script;
 
 /**
  * A specific editor class for VIL.

@@ -25,11 +25,11 @@ import de.uni_hildesheim.sse.easy_producer.instantiator.model.rtVil.VariableValu
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.rtVil.VariableValueCopier.EnumAttributeFreezeProvider;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.rtVil.VariableValueCopier.IAssignmentListener;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.rtVil.VariableValueCopier.IFreezeProvider;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.Sequence;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.configuration.ChangeHistory;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.configuration.Configuration;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.configuration.DecisionVariable;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.configuration.NoVariableFilter;
+import net.ssehub.easy.instantiation.core.model.vilTypes.Sequence;
+import net.ssehub.easy.instantiation.core.model.vilTypes.configuration.ChangeHistory;
+import net.ssehub.easy.instantiation.core.model.vilTypes.configuration.Configuration;
+import net.ssehub.easy.instantiation.core.model.vilTypes.configuration.DecisionVariable;
+import net.ssehub.easy.instantiation.core.model.vilTypes.configuration.NoVariableFilter;
 import net.ssehub.easy.varModel.confModel.AssignmentState;
 import net.ssehub.easy.varModel.confModel.ConfigurationException;
 import net.ssehub.easy.varModel.confModel.IConfiguration;

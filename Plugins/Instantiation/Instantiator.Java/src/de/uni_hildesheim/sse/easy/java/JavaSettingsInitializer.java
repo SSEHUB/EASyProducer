@@ -5,12 +5,12 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Map;
 
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.artifactModel.Path;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.artifactModel.ProjectSettings;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.ISettingsInitializer;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.Set;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeDescriptor;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeRegistry;
+import net.ssehub.easy.instantiation.core.model.artifactModel.Path;
+import net.ssehub.easy.instantiation.core.model.artifactModel.ProjectSettings;
+import net.ssehub.easy.instantiation.core.model.vilTypes.ISettingsInitializer;
+import net.ssehub.easy.instantiation.core.model.vilTypes.Set;
+import net.ssehub.easy.instantiation.core.model.vilTypes.TypeDescriptor;
+import net.ssehub.easy.instantiation.core.model.vilTypes.TypeRegistry;
 
 /**
  * Initializes the settings for java.

@@ -1,10 +1,10 @@
 package test.de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.testArtifacts;
 
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.artifactModel.IArtifactVisitor;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.artifactModel.SimpleArtifact;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.artifactModel.representation.Binary;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.artifactModel.representation.Text;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilException;
+import net.ssehub.easy.instantiation.core.model.artifactModel.IArtifactVisitor;
+import net.ssehub.easy.instantiation.core.model.artifactModel.SimpleArtifact;
+import net.ssehub.easy.instantiation.core.model.artifactModel.representation.Binary;
+import net.ssehub.easy.instantiation.core.model.artifactModel.representation.Text;
+import net.ssehub.easy.instantiation.core.model.common.VilException;
 
 /**
  * An abstract default implementation just to avoid code duplication in test artifacts.

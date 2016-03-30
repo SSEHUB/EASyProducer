@@ -2,14 +2,14 @@ package de.uni_hildesheim.sse.easy_producer.instantiator.model.rtVil;
 
 import java.io.Writer;
 
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.BuildlangWriter;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.ExpressionStatement;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.IRuleBlock;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.Rule.Side;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VariableDeclaration;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilException;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.Expression;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.rtVil.AbstractBreakdownCall.TupleField;
+import net.ssehub.easy.instantiation.core.model.buildlangModel.BuildlangWriter;
+import net.ssehub.easy.instantiation.core.model.buildlangModel.ExpressionStatement;
+import net.ssehub.easy.instantiation.core.model.buildlangModel.IRuleBlock;
+import net.ssehub.easy.instantiation.core.model.buildlangModel.Rule.Side;
+import net.ssehub.easy.instantiation.core.model.common.VariableDeclaration;
+import net.ssehub.easy.instantiation.core.model.common.VilException;
+import net.ssehub.easy.instantiation.core.model.expressions.Expression;
 
 /**
  * Defines the output writer for rt-VIL.
@@ -54,7 +54,7 @@ public class RtVilWriter extends BuildlangWriter implements IRtVilVisitor {
      *     <code>script</code> is empty
      */
     protected boolean hasContainedElements(
-        de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.Script script) {
+        net.ssehub.easy.instantiation.core.model.buildlangModel.Script script) {
         boolean result = super.hasContainedElements(script);
         if (script instanceof Script) {
             Script scr = (Script) script;
@@ -71,7 +71,7 @@ public class RtVilWriter extends BuildlangWriter implements IRtVilVisitor {
      */
     @Override
     protected void printScriptContentsBeforeRules(
-        de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.Script script) 
+        net.ssehub.easy.instantiation.core.model.buildlangModel.Script script) 
         throws VilException {
         if (script instanceof Script) {
             Script scr = (Script) script;

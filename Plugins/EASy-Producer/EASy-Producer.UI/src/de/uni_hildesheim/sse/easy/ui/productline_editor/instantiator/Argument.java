@@ -15,8 +15,8 @@
  */
 package de.uni_hildesheim.sse.easy.ui.productline_editor.instantiator;
 
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.IMetaType;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeDescriptor;
+import net.ssehub.easy.instantiation.core.model.vilTypes.IMetaType;
+import net.ssehub.easy.instantiation.core.model.vilTypes.TypeDescriptor;
 
 /**
  * Represents a user-specified call argument.

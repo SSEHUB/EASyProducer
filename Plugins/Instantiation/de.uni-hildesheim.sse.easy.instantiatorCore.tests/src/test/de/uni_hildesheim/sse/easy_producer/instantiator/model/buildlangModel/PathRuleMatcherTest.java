@@ -4,7 +4,7 @@ import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.ruleMatch.AbstractPathRuleMatchExpression;
+import net.ssehub.easy.instantiation.core.model.buildlangModel.ruleMatch.AbstractPathRuleMatchExpression;
 
 /**
  * Tests the path rule matcher in {@link AbstractPathRuleMatchExpression}.

@@ -15,7 +15,7 @@
  */
 package de.uni_hildesheim.sse.easy.ui.productline_editor.instantiator;
 
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.AlternativeExpression;
+import net.ssehub.easy.instantiation.core.model.buildlangModel.AlternativeExpression;
 
 /**
  * Implements an element node for alternative expressions.

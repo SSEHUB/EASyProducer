@@ -28,22 +28,22 @@ import java.util.regex.PatternSyntaxException;
 
 import org.apache.maven.cli.MavenCli;
 
-import de.uni_hildesheim.sse.easy_producer.instantiator.JavaUtilities;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.artifactModel.FileArtifact;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.artifactModel.FileUtils;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.artifactModel.FileUtils.ScanResult;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.artifactModel.Path;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.artifactModel.PathUtils;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.StreamGobbler;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.StreamGobbler.IMsgManipulator;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilException;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.defaultInstantiators.AbstractFileInstantiator;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.Instantiator;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.ListSet;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.OperationMeta;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.Sequence;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.Set;
 import net.ssehub.easy.basics.Environment;
+import net.ssehub.easy.instantiation.core.JavaUtilities;
+import net.ssehub.easy.instantiation.core.model.artifactModel.FileArtifact;
+import net.ssehub.easy.instantiation.core.model.artifactModel.FileUtils;
+import net.ssehub.easy.instantiation.core.model.artifactModel.Path;
+import net.ssehub.easy.instantiation.core.model.artifactModel.PathUtils;
+import net.ssehub.easy.instantiation.core.model.artifactModel.FileUtils.ScanResult;
+import net.ssehub.easy.instantiation.core.model.common.StreamGobbler;
+import net.ssehub.easy.instantiation.core.model.common.VilException;
+import net.ssehub.easy.instantiation.core.model.common.StreamGobbler.IMsgManipulator;
+import net.ssehub.easy.instantiation.core.model.defaultInstantiators.AbstractFileInstantiator;
+import net.ssehub.easy.instantiation.core.model.vilTypes.Instantiator;
+import net.ssehub.easy.instantiation.core.model.vilTypes.ListSet;
+import net.ssehub.easy.instantiation.core.model.vilTypes.OperationMeta;
+import net.ssehub.easy.instantiation.core.model.vilTypes.Sequence;
+import net.ssehub.easy.instantiation.core.model.vilTypes.Set;
 
 /**
  * Builds Java applications with Maven.

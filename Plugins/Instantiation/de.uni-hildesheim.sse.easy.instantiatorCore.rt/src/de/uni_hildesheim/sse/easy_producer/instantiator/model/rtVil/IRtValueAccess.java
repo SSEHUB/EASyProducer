@@ -15,8 +15,8 @@
  */
 package de.uni_hildesheim.sse.easy_producer.instantiator.model.rtVil;
 
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VariableDeclaration;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilException;
+import net.ssehub.easy.instantiation.core.model.common.VariableDeclaration;
+import net.ssehub.easy.instantiation.core.model.common.VilException;
 
 /**
  * Provides access to rt-VIL values during the execution of a rt-VIL script. Do not modify the values!

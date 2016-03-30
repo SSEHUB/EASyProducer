@@ -11,7 +11,7 @@ import test.de.uni_hildesheim.sse.vil.buildlang.AbstractExecutionTest;
 import test.de.uni_hildesheim.sse.vil.buildlang.BuildLangTestConfigurer;
 import test.de.uni_hildesheim.sse.vil.buildlang.ITestConfigurer;
 import de.uni_hildesheim.sse.easy.ant.Registration;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.Script;
+import net.ssehub.easy.instantiation.core.model.buildlangModel.Script;
 
 /**
  * Tests for the basic language.

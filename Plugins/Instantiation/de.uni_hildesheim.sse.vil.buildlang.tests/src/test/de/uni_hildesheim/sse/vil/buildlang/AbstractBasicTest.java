@@ -17,7 +17,7 @@ package test.de.uni_hildesheim.sse.vil.buildlang;
 
 import java.io.IOException;
 
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.Script;
+import net.ssehub.easy.instantiation.core.model.buildlangModel.Script;
 
 /**
  * An abstract test for basic (structural) tests.

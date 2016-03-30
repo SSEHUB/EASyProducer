@@ -35,23 +35,6 @@ import de.uni_hildesheim.sse.easy_producer.core.persistence.internal.Activator;
 import de.uni_hildesheim.sse.easy_producer.core.persistence.internal.DataStorage;
 import de.uni_hildesheim.sse.easy_producer.core.persistence.internal.StorageType;
 import de.uni_hildesheim.sse.easy_producer.core.persistence.standard.PersistenceConstants;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.BuildModel;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.BuildlangWriter;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.ExpressionStatement;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.IRuleElement;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.InstantiateExpression;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.MapExpression;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.Rule;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.Script;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.Utils;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.VariableDeclaration;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilException;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.CallArgument;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.CallExpression;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.Expression;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.VariableExpression;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.templateModel.TemplateModel;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.configuration.IvmlTypes;
 import net.ssehub.easy.basics.logger.EASyLoggerFactory;
 import net.ssehub.easy.basics.logger.EASyLoggerFactory.EASyLogger;
 import net.ssehub.easy.basics.modelManagement.IModel;
@@ -65,6 +48,23 @@ import net.ssehub.easy.basics.modelManagement.VersionFormatException;
 import net.ssehub.easy.basics.progress.ProgressObserver;
 import net.ssehub.easy.dslCore.TopLevelModelAccessor;
 import net.ssehub.easy.dslCore.TopLevelModelAccessor.IModelAccessor;
+import net.ssehub.easy.instantiation.core.model.buildlangModel.BuildModel;
+import net.ssehub.easy.instantiation.core.model.buildlangModel.BuildlangWriter;
+import net.ssehub.easy.instantiation.core.model.buildlangModel.ExpressionStatement;
+import net.ssehub.easy.instantiation.core.model.buildlangModel.IRuleElement;
+import net.ssehub.easy.instantiation.core.model.buildlangModel.InstantiateExpression;
+import net.ssehub.easy.instantiation.core.model.buildlangModel.MapExpression;
+import net.ssehub.easy.instantiation.core.model.buildlangModel.Rule;
+import net.ssehub.easy.instantiation.core.model.buildlangModel.Script;
+import net.ssehub.easy.instantiation.core.model.buildlangModel.Utils;
+import net.ssehub.easy.instantiation.core.model.buildlangModel.VariableDeclaration;
+import net.ssehub.easy.instantiation.core.model.common.VilException;
+import net.ssehub.easy.instantiation.core.model.expressions.CallArgument;
+import net.ssehub.easy.instantiation.core.model.expressions.CallExpression;
+import net.ssehub.easy.instantiation.core.model.expressions.Expression;
+import net.ssehub.easy.instantiation.core.model.expressions.VariableExpression;
+import net.ssehub.easy.instantiation.core.model.templateModel.TemplateModel;
+import net.ssehub.easy.instantiation.core.model.vilTypes.configuration.IvmlTypes;
 import net.ssehub.easy.varModel.cst.CSTSemanticException;
 import net.ssehub.easy.varModel.cst.ConstraintSyntaxTree;
 import net.ssehub.easy.varModel.management.VarModel;
@@ -529,7 +529,7 @@ public class PersistenceUtils {
      *     desired file, which should be loaded by the model.
      * @param modelFile The model file which should be loaded, must be of the type of the used {@link ModelManagement}.
      * @param <M> The type handled by the given {@link ModelManagement}, i.e. {@link Project}, {@link Script},
-     *     or {@link de.uni_hildesheim.sse.easy_producer.instantiator.model.templateModel.Template}
+     *     or {@link net.ssehub.easy.instantiation.core.model.templateModel.Template}
      * @return The loaded (and parsed) model.
      * @throws ModelManagementException In case of any error during loading the file.
      */

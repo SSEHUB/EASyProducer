@@ -25,14 +25,10 @@ import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.RuleExecutionResult;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilException;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.rtVil.Executor;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.rtVil.RtVILMemoryStorage;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.rtVil.RtVilStorage;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.rtVil.Script;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.configuration.Configuration;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.configuration.NoVariableFilter;
 import de.uni_hildesheim.sse.vil.rt.tests.types.AlgorithmChangeCommand;
 import de.uni_hildesheim.sse.vil.rt.tests.types.CommandCollector;
 import de.uni_hildesheim.sse.vil.rt.tests.types.CommandSequence;
@@ -43,6 +39,10 @@ import de.uni_hildesheim.sse.vil.rt.tests.types.StartupAdaptationEvent;
 import net.ssehub.easy.basics.messages.AbstractException;
 import net.ssehub.easy.basics.progress.ProgressObserver;
 import net.ssehub.easy.dslCore.TranslationResult;
+import net.ssehub.easy.instantiation.core.model.buildlangModel.RuleExecutionResult;
+import net.ssehub.easy.instantiation.core.model.common.VilException;
+import net.ssehub.easy.instantiation.core.model.vilTypes.configuration.Configuration;
+import net.ssehub.easy.instantiation.core.model.vilTypes.configuration.NoVariableFilter;
 import net.ssehub.easy.reasoning.core.frontend.ReasonerFrontend;
 import net.ssehub.easy.reasoning.core.reasoner.ReasonerConfiguration;
 
@@ -78,7 +78,7 @@ public class ExecutionRtTests extends AbstractRtTest {
     }
     
     @Override
-    protected void testExecutor(de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.Script script, 
+    protected void testExecutor(net.ssehub.easy.instantiation.core.model.buildlangModel.Script script, 
         EqualitySetup<Script> data) throws VilException {
         // disable the executor testing for now - leads to the execution of a rtVILscript with VIL searching for
         // the default main model
@@ -624,7 +624,7 @@ public class ExecutionRtTests extends AbstractRtTest {
 
     @Override
     protected void assertExecutor(EqualitySetup<Script> data, 
-        de.uni_hildesheim.sse.easy_producer.instantiator.model.execution.Executor executor) {
+        net.ssehub.easy.instantiation.core.model.execution.Executor executor) {
         if (executor instanceof Executor) {
             Executor e = (Executor) executor;
             assertFailure(data, e.getFailReason(), e.getFailCode(), null);
@@ -635,7 +635,7 @@ public class ExecutionRtTests extends AbstractRtTest {
     protected void assertFailure(EqualitySetup<Script> data, Object result) {
         String actualFailReason;
         Integer actualFailCode;
-        de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.RuleExecutionResult.Status status;
+        net.ssehub.easy.instantiation.core.model.buildlangModel.RuleExecutionResult.Status status;
         if (null != data.getExpectedFailCode() || null != data.getExpectedFailReason()) {
             Assert.assertNotNull("explicit failure expected but no execution result", result);
             Assert.assertTrue("expected instanceof of RuleExecutionResult", result instanceof RuleExecutionResult);
@@ -650,7 +650,7 @@ public class ExecutionRtTests extends AbstractRtTest {
                 actualFailReason = rResult.getFailReason();
                 actualFailCode = rResult.getFailCode();
             } else {
-                status = de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.RuleExecutionResult.
+                status = net.ssehub.easy.instantiation.core.model.buildlangModel.RuleExecutionResult.
                     Status.SUCCESS; 
                 actualFailReason = null;
                 actualFailCode = null;
@@ -661,7 +661,7 @@ public class ExecutionRtTests extends AbstractRtTest {
 
     @Override
     protected void assertFailure(EqualitySetup<Script> data, String actualFailReason, Integer actualFailCode, 
-        de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.RuleExecutionResult.Status status) {
+        net.ssehub.easy.instantiation.core.model.buildlangModel.RuleExecutionResult.Status status) {
         if (null != data.getExpectedFailCode() || null != data.getExpectedFailReason()) {
             if (null != data.getExpectedFailCode()) {
                 Assert.assertEquals(data.getExpectedFailCode(), actualFailCode);
@@ -670,14 +670,14 @@ public class ExecutionRtTests extends AbstractRtTest {
                 Assert.assertEquals(data.getExpectedFailReason(), actualFailReason);
             }
             if (null != status) {
-                Assert.assertEquals(de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.
+                Assert.assertEquals(net.ssehub.easy.instantiation.core.model.buildlangModel.
                     RuleExecutionResult.Status.FAIL, status);
             }
         } else {
             Assert.assertNull(actualFailCode);
             Assert.assertNull(actualFailReason);
             if (null != status) {
-                Assert.assertEquals(de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.
+                Assert.assertEquals(net.ssehub.easy.instantiation.core.model.buildlangModel.
                     RuleExecutionResult.Status.SUCCESS, status);
             }
         }

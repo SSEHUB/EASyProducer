@@ -16,7 +16,7 @@
 package de.uni_hildesheim.sse.easy_producer.instantiator.model.rtVil.types;
 
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.rtVil.Tactic;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.ClassMeta;
+import net.ssehub.easy.instantiation.core.model.vilTypes.ClassMeta;
 
 /**
  * Defines the type of a strategy.

@@ -15,8 +15,8 @@
  */
 package de.uni_hildesheim.sse.easy_producer.instantiator.model.rtVil;
 
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.IBuildlangVisitor;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilException;
+import net.ssehub.easy.instantiation.core.model.buildlangModel.IBuildlangVisitor;
+import net.ssehub.easy.instantiation.core.model.common.VilException;
 
 /**
  * Defines the visitor rt-VIL.

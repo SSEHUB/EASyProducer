@@ -18,8 +18,8 @@ package de.uni_hildesheim.sse.easy_producer.instantiator.model.rtVil;
 import org.osgi.service.component.ComponentContext;
 
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.rtVil.serializer.SerializerPlugin;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.IRegistration;
 import de.uni_hildesheim.sse.persistency.xml.Extensions;
+import net.ssehub.easy.instantiation.core.model.vilTypes.IRegistration;
 
 /**
  * Initializes built-in rt-VIL types.

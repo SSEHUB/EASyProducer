@@ -1,6 +1,6 @@
 package test.de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.testArtifacts;
 
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.Invisible;
+import net.ssehub.easy.instantiation.core.model.vilTypes.Invisible;
 
 /**
  * An interface which declares an inherited invisible method.

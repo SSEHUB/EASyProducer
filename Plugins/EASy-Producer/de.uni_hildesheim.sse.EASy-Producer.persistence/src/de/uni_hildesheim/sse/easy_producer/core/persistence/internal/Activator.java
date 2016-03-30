@@ -4,10 +4,10 @@ import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
 
 import de.uni_hildesheim.sse.easy_producer.core.persistence.standard.EASyInitializer;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.execution.TracerFactory;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.tracing.ConsoleTracerFactory;
 import net.ssehub.easy.basics.logger.EASyLoggerFactory;
 import net.ssehub.easy.basics.logger.EASyLoggerFactory.EASyLogger;
+import net.ssehub.easy.instantiation.core.model.execution.TracerFactory;
+import net.ssehub.easy.instantiation.core.model.tracing.ConsoleTracerFactory;
 
 
 

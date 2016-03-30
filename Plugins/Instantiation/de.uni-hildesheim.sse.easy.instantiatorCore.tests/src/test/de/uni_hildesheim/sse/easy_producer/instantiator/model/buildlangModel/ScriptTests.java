@@ -7,19 +7,19 @@ import java.util.List;
 import org.junit.Assert;
 import org.junit.Test;
 
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.BuildlangWriter;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.ExpressionVersionRestriction;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.Imports;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.Script;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.Script.ScriptDescriptor;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.VariableDeclaration;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilException;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.Expression;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeRegistry;
 import net.ssehub.easy.basics.modelManagement.ModelImport;
 import net.ssehub.easy.basics.modelManagement.RestrictionEvaluationException;
 import net.ssehub.easy.basics.modelManagement.Version;
 import net.ssehub.easy.basics.modelManagement.VersionFormatException;
+import net.ssehub.easy.instantiation.core.model.buildlangModel.BuildlangWriter;
+import net.ssehub.easy.instantiation.core.model.buildlangModel.ExpressionVersionRestriction;
+import net.ssehub.easy.instantiation.core.model.buildlangModel.Imports;
+import net.ssehub.easy.instantiation.core.model.buildlangModel.Script;
+import net.ssehub.easy.instantiation.core.model.buildlangModel.VariableDeclaration;
+import net.ssehub.easy.instantiation.core.model.buildlangModel.Script.ScriptDescriptor;
+import net.ssehub.easy.instantiation.core.model.common.VilException;
+import net.ssehub.easy.instantiation.core.model.expressions.Expression;
+import net.ssehub.easy.instantiation.core.model.vilTypes.TypeRegistry;
 import net.ssehub.easy.varModel.model.IvmlKeyWords;
 
 /**

@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.execution.Executor;
+import net.ssehub.easy.instantiation.core.model.execution.Executor;
 
 /**
  * An argument provider for VIL execution. This class provides an extension point for EASy plugins.

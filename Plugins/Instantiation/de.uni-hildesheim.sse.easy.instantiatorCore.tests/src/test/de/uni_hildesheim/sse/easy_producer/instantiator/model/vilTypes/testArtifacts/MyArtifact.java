@@ -1,8 +1,8 @@
 package test.de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.testArtifacts;
 
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.artifactModel.IArtifactChangedListener;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilException;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.Invisible;
+import net.ssehub.easy.instantiation.core.model.artifactModel.IArtifactChangedListener;
+import net.ssehub.easy.instantiation.core.model.common.VilException;
+import net.ssehub.easy.instantiation.core.model.vilTypes.Invisible;
 
 /**
  * An own artifact. Please adjust the declared arrays in case that further VIL
@@ -77,7 +77,7 @@ public class MyArtifact extends DefaultSimpleArtifact implements IMyArtifact, IA
    
     /**
      * Shall be invisible by default (see 
-     * {@link de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeRegistry#INVISIBLE_BY_DEFAULT}).
+     * {@link net.ssehub.easy.instantiation.core.model.vilTypes.TypeRegistry#INVISIBLE_BY_DEFAULT}).
      * 
      * @return the textual representation of this object
      */

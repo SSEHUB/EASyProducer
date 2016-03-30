@@ -3,10 +3,10 @@ package de.uni_hildesheim.sse.persistency.xml.mapper;
 import com.thoughtworks.xstream.mapper.ClassAliasingMapper;
 import com.thoughtworks.xstream.mapper.Mapper;
 
-import de.uni_hildesheim.sse.easy_producer.instantiator.Bundle;
 import de.uni_hildesheim.sse.persistency.xml.XmlIo;
 import net.ssehub.easy.basics.logger.EASyLoggerFactory;
 import net.ssehub.easy.basics.logger.EASyLoggerFactory.EASyLogger;
+import net.ssehub.easy.instantiation.core.Bundle;
 
 /**
  * Class Aliasing Mapper that shortens the class names.

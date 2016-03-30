@@ -15,7 +15,7 @@
  */
 package de.uni_hildesheim.sse.easy.ui.productline_editor.instantiator;
 
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.WhileStatement;
+import net.ssehub.easy.instantiation.core.model.buildlangModel.WhileStatement;
 
 /**
  * Implements an element node for while statements.

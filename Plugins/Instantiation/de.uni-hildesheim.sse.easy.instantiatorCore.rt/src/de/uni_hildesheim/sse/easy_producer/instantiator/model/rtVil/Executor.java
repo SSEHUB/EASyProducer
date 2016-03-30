@@ -18,17 +18,17 @@ package de.uni_hildesheim.sse.easy_producer.instantiator.model.rtVil;
 import java.io.File;
 import java.util.Map;
 
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.BuildlangExecution;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.ITracer;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.RuleExecutionResult;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilException;
+import net.ssehub.easy.instantiation.core.model.buildlangModel.BuildlangExecution;
+import net.ssehub.easy.instantiation.core.model.buildlangModel.ITracer;
+import net.ssehub.easy.instantiation.core.model.buildlangModel.RuleExecutionResult;
+import net.ssehub.easy.instantiation.core.model.common.VilException;
 
 /**
  * A specialized executor for rt-VIL.
  * 
  * @author Holger Eichelberger
  */
-public class Executor extends de.uni_hildesheim.sse.easy_producer.instantiator.model.execution.Executor {
+public class Executor extends net.ssehub.easy.instantiation.core.model.execution.Executor {
 
     private boolean stopAfterBindValues = false;
     private boolean enactment = true;
@@ -103,8 +103,8 @@ public class Executor extends de.uni_hildesheim.sse.easy_producer.instantiator.m
     }
 
     @Override
-    protected de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.Script 
-        reload(de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.Script script) {
+    protected net.ssehub.easy.instantiation.core.model.buildlangModel.Script 
+        reload(net.ssehub.easy.instantiation.core.model.buildlangModel.Script script) {
         
         // template parameter would be nicer but it requires changes to the existing code and we aim at unifying 
         // rtVIL and VIL later one
@@ -112,7 +112,7 @@ public class Executor extends de.uni_hildesheim.sse.easy_producer.instantiator.m
     }
     
     @Override
-    protected de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.BuildlangExecution 
+    protected net.ssehub.easy.instantiation.core.model.buildlangModel.BuildlangExecution 
         createExecutionEnvironment(ITracer tracer, File base, String startRuleName, 
         Map<String, Object> parameter) {
         RtVilExecution result = new RtVilExecution(tracer, base, parameter);

@@ -17,10 +17,10 @@ package de.uni_hildesheim.sse.easy_producer.instantiator.xvcl;
 
 import java.io.File;
 
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.artifactModel.FileArtifact;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilException;
 import edu.xvcl.core.api.XVCLException;
 import edu.xvcl.core.util.XVCLProcessor;
+import net.ssehub.easy.instantiation.core.model.artifactModel.FileArtifact;
+import net.ssehub.easy.instantiation.core.model.common.VilException;
 
 /**
  * The XVCL instantiator implementation.

@@ -41,10 +41,10 @@ import de.uni_hildesheim.sse.easy.ui.productline_editor.ImageProvider;
 import de.uni_hildesheim.sse.easy.ui.productline_editor.ImageProvider.ImageType;
 import de.uni_hildesheim.sse.easy.ui.productline_editor.instantiator.TreeNode.Insertable;
 import de.uni_hildesheim.sse.easy.ui.productline_editor.instantiator.TreeNode.InsertionPoint;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.Script;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.VariableDeclaration;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilException;
 import de.uni_hildesheim.sse.easy_producer.model.ProductLineProject;
+import net.ssehub.easy.instantiation.core.model.buildlangModel.Script;
+import net.ssehub.easy.instantiation.core.model.buildlangModel.VariableDeclaration;
+import net.ssehub.easy.instantiation.core.model.common.VilException;
 
 /**
  * Creates the editor page for linking files with a file instantiator.<br>

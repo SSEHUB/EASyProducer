@@ -1,7 +1,7 @@
 package test.de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.testArtifacts;
 
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.IVilType;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.Instantiator;
+import net.ssehub.easy.instantiation.core.model.vilTypes.IVilType;
+import net.ssehub.easy.instantiation.core.model.vilTypes.Instantiator;
 
 /**
  * A dynamic instantiator with missing instantiator method.

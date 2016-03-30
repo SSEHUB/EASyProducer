@@ -6,8 +6,8 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Text;
 
-import de.uni_hildesheim.sse.easy_producer.instantiator.Bundle;
 import net.ssehub.easy.basics.logger.EASyLoggerFactory;
+import net.ssehub.easy.instantiation.core.Bundle;
 import net.ssehub.easy.varModel.confModel.ConfigurationException;
 import net.ssehub.easy.varModel.confModel.ContainerVariable;
 import net.ssehub.easy.varModel.confModel.IDecisionVariable;

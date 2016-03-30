@@ -2,11 +2,6 @@ package de.uni_hildesheim.sse.vil.rt;
 
 import org.osgi.service.component.ComponentContext;
 
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.Expression;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilException;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.ExpressionParserRegistry;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.IExpressionParser;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.IRuntimeEnvironment;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.rtVil.RtVilExecution;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.rtVil.RtVilModel;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.rtVil.Script;
@@ -17,6 +12,11 @@ import net.ssehub.easy.basics.modelManagement.ModelInitializer;
 import net.ssehub.easy.basics.modelManagement.ModelManagement;
 import net.ssehub.easy.basics.modelManagement.ModelManagementException;
 import net.ssehub.easy.basics.progress.ProgressObserver;
+import net.ssehub.easy.instantiation.core.model.common.VilException;
+import net.ssehub.easy.instantiation.core.model.expressions.Expression;
+import net.ssehub.easy.instantiation.core.model.expressions.ExpressionParserRegistry;
+import net.ssehub.easy.instantiation.core.model.expressions.IExpressionParser;
+import net.ssehub.easy.instantiation.core.model.expressions.IRuntimeEnvironment;
 
 /**
  * Provides an expression parser for rtVIL.

@@ -21,7 +21,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import de.uni_hildesheim.sse.easy.maven.Registration;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.Script;
+import net.ssehub.easy.instantiation.core.model.buildlangModel.Script;
 
 /**
  * Real use case tests. Although Maven is available, we run the tests without Maven in order to

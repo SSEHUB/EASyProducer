@@ -3,7 +3,7 @@ package test.de.uni_hildesheim.sse.easy_producer.instantiator.model.templateMode
 import org.junit.Assert;
 import org.junit.Test;
 
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.templateModel.IndentationUtils;
+import net.ssehub.easy.instantiation.core.model.templateModel.IndentationUtils;
 
 /**
  * Tests for the indentation utilities.

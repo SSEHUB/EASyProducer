@@ -15,7 +15,7 @@
  */
 package de.uni_hildesheim.sse.easy.ui.productline_editor.instantiator;
 
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.RuleCallExpression;
+import net.ssehub.easy.instantiation.core.model.buildlangModel.RuleCallExpression;
 
 /**
  * Implements an element node for rule call expressions.

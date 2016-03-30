@@ -8,8 +8,8 @@ import com.thoughtworks.xstream.converters.UnmarshallingContext;
 import com.thoughtworks.xstream.io.HierarchicalStreamReader;
 import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
 
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.Advice;
 import net.ssehub.easy.basics.modelManagement.ModelInfo;
+import net.ssehub.easy.instantiation.core.model.common.Advice;
 import net.ssehub.easy.varModel.management.VarModel;
 import net.ssehub.easy.varModel.model.Project;
 

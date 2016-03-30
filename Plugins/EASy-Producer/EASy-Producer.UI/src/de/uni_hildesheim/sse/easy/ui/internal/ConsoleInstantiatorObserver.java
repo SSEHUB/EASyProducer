@@ -1,6 +1,6 @@
 package de.uni_hildesheim.sse.easy.ui.internal;
 
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.IInstantiatorStateObserver;
+import net.ssehub.easy.instantiation.core.model.IInstantiatorStateObserver;
 
 /**
  * This class represents an observer that listens for new messages send from the instantiators.

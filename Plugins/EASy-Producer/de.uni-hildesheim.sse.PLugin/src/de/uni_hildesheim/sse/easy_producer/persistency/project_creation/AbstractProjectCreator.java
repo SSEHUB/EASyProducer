@@ -31,7 +31,6 @@ import de.uni_hildesheim.sse.easy_producer.core.persistence.PersistenceException
 import de.uni_hildesheim.sse.easy_producer.core.persistence.PersistenceUtils;
 import de.uni_hildesheim.sse.easy_producer.core.varMod.container.ProjectContainer;
 import de.uni_hildesheim.sse.easy_producer.core.varMod.container.ScriptContainer;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.Script;
 import de.uni_hildesheim.sse.easy_producer.model.ProductLineProject;
 import de.uni_hildesheim.sse.easy_producer.persistency.EASyPersistencer;
 import de.uni_hildesheim.sse.easy_producer.persistency.eclipse.EclipsePersistencer;
@@ -39,6 +38,7 @@ import de.uni_hildesheim.sse.easy_producer.persistency.eclipse.IEclipseProjectCr
 import net.ssehub.easy.basics.logger.EASyLoggerFactory;
 import net.ssehub.easy.basics.logger.EASyLoggerFactory.EASyLogger;
 import net.ssehub.easy.basics.modelManagement.Version;
+import net.ssehub.easy.instantiation.core.model.buildlangModel.Script;
 
 /**
  * Super class for creating new EASy projects.

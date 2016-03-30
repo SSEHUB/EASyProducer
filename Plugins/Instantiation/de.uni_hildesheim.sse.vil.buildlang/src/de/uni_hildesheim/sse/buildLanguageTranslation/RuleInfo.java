@@ -2,10 +2,10 @@ package de.uni_hildesheim.sse.buildLanguageTranslation;
 
 import org.eclipse.emf.ecore.EObject;
 
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.Resolver;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.Rule;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.RuleDescriptor;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilException;
+import net.ssehub.easy.instantiation.core.model.buildlangModel.Resolver;
+import net.ssehub.easy.instantiation.core.model.buildlangModel.Rule;
+import net.ssehub.easy.instantiation.core.model.buildlangModel.RuleDescriptor;
+import net.ssehub.easy.instantiation.core.model.common.VilException;
 
 /**
  * Stores (temporary) information about the relation of an ECore and an Rule 

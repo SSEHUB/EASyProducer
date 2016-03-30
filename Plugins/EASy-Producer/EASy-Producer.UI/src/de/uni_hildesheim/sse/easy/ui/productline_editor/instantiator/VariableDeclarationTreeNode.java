@@ -15,7 +15,7 @@
  */
 package de.uni_hildesheim.sse.easy.ui.productline_editor.instantiator;
 
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VariableDeclaration;
+import net.ssehub.easy.instantiation.core.model.common.VariableDeclaration;
 
 /**
  * Implements an element node for variable declarations.

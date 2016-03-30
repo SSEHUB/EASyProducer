@@ -15,8 +15,8 @@
  */
 package de.uni_hildesheim.sse.easy.ui.productline_editor.instantiator;
 
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.StrategyCallExpression;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.StrategyCallExpression.Type;
+import net.ssehub.easy.instantiation.core.model.buildlangModel.StrategyCallExpression;
+import net.ssehub.easy.instantiation.core.model.buildlangModel.StrategyCallExpression.Type;
 
 /**
  * Implements an element node for strategy call expressions.

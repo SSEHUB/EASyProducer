@@ -18,17 +18,17 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.w3c.dom.DOMException;
 
+import net.ssehub.easy.instantiation.core.model.artifactModel.ArtifactFactory;
+import net.ssehub.easy.instantiation.core.model.artifactModel.ArtifactModel;
+import net.ssehub.easy.instantiation.core.model.artifactModel.FragmentArtifact;
+import net.ssehub.easy.instantiation.core.model.artifactModel.xml.DefaultXmlFileArtifactCreator;
+import net.ssehub.easy.instantiation.core.model.artifactModel.xml.PathUtils;
+import net.ssehub.easy.instantiation.core.model.artifactModel.xml.XmlAttribute;
+import net.ssehub.easy.instantiation.core.model.artifactModel.xml.XmlElement;
+import net.ssehub.easy.instantiation.core.model.artifactModel.xml.XmlFileArtifact;
+import net.ssehub.easy.instantiation.core.model.common.VilException;
+import net.ssehub.easy.instantiation.core.model.vilTypes.Set;
 import test.de.uni_hildesheim.sse.easy_producer.instantiator.model.AbstractTest;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.artifactModel.ArtifactFactory;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.artifactModel.ArtifactModel;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.artifactModel.FragmentArtifact;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.artifactModel.xml.DefaultXmlFileArtifactCreator;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.artifactModel.xml.PathUtils;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.artifactModel.xml.XmlAttribute;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.artifactModel.xml.XmlElement;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.artifactModel.xml.XmlFileArtifact;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilException;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.Set;
 
 /**
  * Load a xml-File, call the test-Methods for renaming, deleting, inserting etc. and

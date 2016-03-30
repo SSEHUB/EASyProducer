@@ -9,38 +9,6 @@ import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
 
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.ExpressionStatement;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VariableDeclaration;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.CallArgument;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.CallExpression;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.ConstantExpression;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.ConstructorCallExpression;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.ContainerInitializerExpression;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.Expression;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.ExpressionEvaluator;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilException;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.AbstractCallExpression;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.ExpressionVersionRestriction;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.FieldAccessExpression;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.IResolvable;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.ParenthesisExpression;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.ResolutionListener;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.Resolver;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.ValueAssignmentExpression;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.VarModelIdentifierExpression;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.VariableExpression;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.VilTypeExpression;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.Constants;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.FieldDescriptor;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.IMetaOperation;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.IMetaType;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.OperationDescriptor;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.ReflectionTypeDescriptor;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeDescriptor;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeHelper;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeRegistry;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.configuration.IvmlElement;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.configuration.IvmlTypes;
 import de.uni_hildesheim.sse.vil.expressions.expressionDsl.AdditiveExpression;
 import de.uni_hildesheim.sse.vil.expressions.expressionDsl.AdditiveExpressionPart;
 import de.uni_hildesheim.sse.vil.expressions.expressionDsl.ArgumentList;
@@ -81,6 +49,38 @@ import net.ssehub.easy.basics.modelManagement.VersionFormatException;
 import net.ssehub.easy.dslCore.translation.ErrorCodes;
 import net.ssehub.easy.dslCore.translation.StringUtils;
 import net.ssehub.easy.dslCore.translation.TranslatorException;
+import net.ssehub.easy.instantiation.core.model.common.ExpressionStatement;
+import net.ssehub.easy.instantiation.core.model.common.VariableDeclaration;
+import net.ssehub.easy.instantiation.core.model.common.VilException;
+import net.ssehub.easy.instantiation.core.model.expressions.AbstractCallExpression;
+import net.ssehub.easy.instantiation.core.model.expressions.CallArgument;
+import net.ssehub.easy.instantiation.core.model.expressions.CallExpression;
+import net.ssehub.easy.instantiation.core.model.expressions.ConstantExpression;
+import net.ssehub.easy.instantiation.core.model.expressions.ConstructorCallExpression;
+import net.ssehub.easy.instantiation.core.model.expressions.ContainerInitializerExpression;
+import net.ssehub.easy.instantiation.core.model.expressions.Expression;
+import net.ssehub.easy.instantiation.core.model.expressions.ExpressionEvaluator;
+import net.ssehub.easy.instantiation.core.model.expressions.ExpressionVersionRestriction;
+import net.ssehub.easy.instantiation.core.model.expressions.FieldAccessExpression;
+import net.ssehub.easy.instantiation.core.model.expressions.IResolvable;
+import net.ssehub.easy.instantiation.core.model.expressions.ParenthesisExpression;
+import net.ssehub.easy.instantiation.core.model.expressions.ResolutionListener;
+import net.ssehub.easy.instantiation.core.model.expressions.Resolver;
+import net.ssehub.easy.instantiation.core.model.expressions.ValueAssignmentExpression;
+import net.ssehub.easy.instantiation.core.model.expressions.VarModelIdentifierExpression;
+import net.ssehub.easy.instantiation.core.model.expressions.VariableExpression;
+import net.ssehub.easy.instantiation.core.model.expressions.VilTypeExpression;
+import net.ssehub.easy.instantiation.core.model.vilTypes.Constants;
+import net.ssehub.easy.instantiation.core.model.vilTypes.FieldDescriptor;
+import net.ssehub.easy.instantiation.core.model.vilTypes.IMetaOperation;
+import net.ssehub.easy.instantiation.core.model.vilTypes.IMetaType;
+import net.ssehub.easy.instantiation.core.model.vilTypes.OperationDescriptor;
+import net.ssehub.easy.instantiation.core.model.vilTypes.ReflectionTypeDescriptor;
+import net.ssehub.easy.instantiation.core.model.vilTypes.TypeDescriptor;
+import net.ssehub.easy.instantiation.core.model.vilTypes.TypeHelper;
+import net.ssehub.easy.instantiation.core.model.vilTypes.TypeRegistry;
+import net.ssehub.easy.instantiation.core.model.vilTypes.configuration.IvmlElement;
+import net.ssehub.easy.instantiation.core.model.vilTypes.configuration.IvmlTypes;
 import net.ssehub.easy.varModel.model.values.EnumValue;
 
 /**
@@ -935,8 +935,7 @@ public abstract class ExpressionTranslator<I extends VariableDeclaration, R exte
                     type = registry.getType(eValue.getType());
                     if (null != type) {
                         try {
-                            result = new ConstantExpression(type, new de.uni_hildesheim.sse.easy_producer.instantiator.
-                                model.vilTypes.configuration.EnumValue(eValue), registry);
+                            result = new ConstantExpression(type, new net.ssehub.easy.instantiation.core.model.vilTypes.configuration.EnumValue(eValue), registry);
                         } catch (VilException e) {
                             throw new TranslatorException(e, arg, ExpressionDslPackage.Literals.CONSTANT__QVALUE);
                         }

@@ -18,8 +18,8 @@ package de.uni_hildesheim.sse.easy_producer.instantiator.model.rtVil;
 import java.util.ArrayList;
 import java.util.List;
 
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.RuleExecutionContext;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.RuntimeEnvironment;
+import net.ssehub.easy.instantiation.core.model.buildlangModel.RuleExecutionContext;
+import net.ssehub.easy.instantiation.core.model.buildlangModel.RuntimeEnvironment;
 
 /**
  * Defines specific information to be considered during the execution

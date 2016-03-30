@@ -2,11 +2,11 @@ package test.de.uni_hildesheim.sse.vil.buildlang;
 
 import java.io.Writer;
 
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.execution.IInstantiatorTracer;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.execution.TracerFactory;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.templateModel.Template;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.templateModel.TemplateModel;
 import net.ssehub.easy.basics.modelManagement.ModelInfo;
+import net.ssehub.easy.instantiation.core.model.execution.IInstantiatorTracer;
+import net.ssehub.easy.instantiation.core.model.execution.TracerFactory;
+import net.ssehub.easy.instantiation.core.model.templateModel.Template;
+import net.ssehub.easy.instantiation.core.model.templateModel.TemplateModel;
 
 /**
  * Defines a factory for tracing VIL and VTL outputs.
@@ -16,8 +16,8 @@ import net.ssehub.easy.basics.modelManagement.ModelInfo;
 public class TestTracerFactory extends TracerFactory {
 
     private static final boolean DEBUG = false;
-    private de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.ITracer buildTracer;
-    private de.uni_hildesheim.sse.easy_producer.instantiator.model.templateModel.ITracer templateTracer;
+    private net.ssehub.easy.instantiation.core.model.buildlangModel.ITracer buildTracer;
+    private net.ssehub.easy.instantiation.core.model.templateModel.ITracer templateTracer;
 
     /**
      * A specific tracer to record also the template location.
@@ -25,7 +25,7 @@ public class TestTracerFactory extends TracerFactory {
      * @author Holger Eichelberger
      */
     private static class TemplateTracer extends 
-        de.uni_hildesheim.sse.easy_producer.instantiator.model.templateModel.StreamTracer {
+        net.ssehub.easy.instantiation.core.model.templateModel.StreamTracer {
 
         /**
          * Creates a new template stream tracer.
@@ -65,25 +65,25 @@ public class TestTracerFactory extends TracerFactory {
      * @param baseFolders the base folders
      */
     public TestTracerFactory(Writer trace, String[] baseFolders) {
-        buildTracer = new de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.StreamTracer(
+        buildTracer = new net.ssehub.easy.instantiation.core.model.buildlangModel.StreamTracer(
             trace, baseFolders);
         if (DEBUG) {
             templateTracer = new TemplateTracer(trace, baseFolders);
         } else {
-            templateTracer = new de.uni_hildesheim.sse.easy_producer.instantiator.model.templateModel.StreamTracer(
+            templateTracer = new net.ssehub.easy.instantiation.core.model.templateModel.StreamTracer(
                 trace, baseFolders);
         }
     }
     
     @Override
-    protected de.uni_hildesheim.sse.easy_producer.instantiator.model.templateModel.ITracer 
+    protected net.ssehub.easy.instantiation.core.model.templateModel.ITracer 
         createTemplateLanguageTracerImpl() {
         
         return templateTracer;
     }
 
     @Override
-    protected de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.ITracer 
+    protected net.ssehub.easy.instantiation.core.model.buildlangModel.ITracer 
         createBuildLanguageTracerImpl() {
         
         return buildTracer;

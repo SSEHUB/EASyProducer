@@ -4,8 +4,8 @@ import java.io.File;
 
 import org.junit.BeforeClass;
 
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.BuiltIn;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeRegistry;
+import net.ssehub.easy.instantiation.core.model.BuiltIn;
+import net.ssehub.easy.instantiation.core.model.vilTypes.TypeRegistry;
 
 /**
  * An abstract test class for the instantiator core tests.

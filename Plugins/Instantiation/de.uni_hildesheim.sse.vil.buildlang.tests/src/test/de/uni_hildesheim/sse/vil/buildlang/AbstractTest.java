@@ -14,22 +14,22 @@ import org.junit.Assert;
 
 import de.uni_hildesheim.sse.ModelUtility;
 import de.uni_hildesheim.sse.VilExpressionParser;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.BuiltIn;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.artifactModel.PathUtils;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.BuildlangExecution;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.Script;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilException;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.execution.Executor;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.execution.TracerFactory;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.ExpressionParserRegistry;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.IVilType;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.Project;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeRegistry;
 import de.uni_hildesheim.sse.easy_producer.instantiator.velocity.VelocityInstantiator;
 import net.ssehub.easy.basics.messages.Status;
 import net.ssehub.easy.basics.modelManagement.ModelManagementException;
 import net.ssehub.easy.dslCore.TranslationResult;
 import net.ssehub.easy.dslCore.translation.Message;
+import net.ssehub.easy.instantiation.core.model.BuiltIn;
+import net.ssehub.easy.instantiation.core.model.artifactModel.PathUtils;
+import net.ssehub.easy.instantiation.core.model.buildlangModel.BuildlangExecution;
+import net.ssehub.easy.instantiation.core.model.buildlangModel.Script;
+import net.ssehub.easy.instantiation.core.model.common.VilException;
+import net.ssehub.easy.instantiation.core.model.execution.Executor;
+import net.ssehub.easy.instantiation.core.model.execution.TracerFactory;
+import net.ssehub.easy.instantiation.core.model.expressions.ExpressionParserRegistry;
+import net.ssehub.easy.instantiation.core.model.vilTypes.IVilType;
+import net.ssehub.easy.instantiation.core.model.vilTypes.Project;
+import net.ssehub.easy.instantiation.core.model.vilTypes.TypeRegistry;
 import net.ssehub.easy.varModel.management.VarModel;
 
 /**
@@ -426,7 +426,7 @@ public abstract class AbstractTest<M extends Script> extends net.ssehub.easy.dsl
      * @param status the actual execution status
      */
     protected void assertFailure(EqualitySetup<M> data, String actualFailReason, Integer actualFailCode, 
-        de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.RuleExecutionResult.Status status) {
+        net.ssehub.easy.instantiation.core.model.buildlangModel.RuleExecutionResult.Status status) {
     }
 
     /**

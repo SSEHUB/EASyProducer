@@ -19,10 +19,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import de.uni_hildesheim.sse.easy_producer.core.persistence.internal.Activator;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilException;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.execution.Executor;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.IProjectDescriptor;
 import net.ssehub.easy.basics.progress.ProgressObserver;
+import net.ssehub.easy.instantiation.core.model.common.VilException;
+import net.ssehub.easy.instantiation.core.model.execution.Executor;
+import net.ssehub.easy.instantiation.core.model.vilTypes.IProjectDescriptor;
 
 /**
  * Responsible class for the execution of VIL scripts, i.e., instantiation of product line artifacts.

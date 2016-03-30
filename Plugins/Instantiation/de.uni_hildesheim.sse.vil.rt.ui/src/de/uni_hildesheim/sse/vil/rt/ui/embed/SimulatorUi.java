@@ -32,22 +32,22 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
 
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.rtVil.Bundle;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.VariableDeclaration;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilException;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.rtVil.Executor;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.rtVil.ISimulationNotifier;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.rtVil.RtVILMemoryStorage;
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.rtVil.Script;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.OperationDescriptor;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.Sequence;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeDescriptor;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeRegistry;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.configuration.NoVariableFilter;
 import de.uni_hildesheim.sse.vil.rt.ui.embed.SimulationSettingsDialog.TempArgument;
 import net.ssehub.easy.basics.logger.EASyLoggerFactory;
 import net.ssehub.easy.basics.logger.EASyLoggerFactory.EASyLogger;
 import net.ssehub.easy.basics.modelManagement.ModelInfo;
 import net.ssehub.easy.dslCore.ui.ConfigurationEditorFactory;
+import net.ssehub.easy.instantiation.core.model.buildlangModel.VariableDeclaration;
+import net.ssehub.easy.instantiation.core.model.common.VilException;
+import net.ssehub.easy.instantiation.core.model.vilTypes.OperationDescriptor;
+import net.ssehub.easy.instantiation.core.model.vilTypes.Sequence;
+import net.ssehub.easy.instantiation.core.model.vilTypes.TypeDescriptor;
+import net.ssehub.easy.instantiation.core.model.vilTypes.TypeRegistry;
+import net.ssehub.easy.instantiation.core.model.vilTypes.configuration.NoVariableFilter;
 import net.ssehub.easy.varModel.confModel.Configuration;
 
 /**
@@ -58,7 +58,7 @@ import net.ssehub.easy.varModel.confModel.Configuration;
 public class SimulatorUi implements ISimulationNotifier {
 
     private Shell shell;
-    private de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.configuration.Configuration config;
+    private net.ssehub.easy.instantiation.core.model.vilTypes.configuration.Configuration config;
     private Script model;
     private Argument[] openArguments;
     private File base;
@@ -89,8 +89,7 @@ public class SimulatorUi implements ISimulationNotifier {
         RtVILMemoryStorage.setSimulationNotifier(this);
         this.shell = shell;
         Configuration cfg = new Configuration(config.getProject()); // copy the configuration to avoid writing back
-        this.config = new de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.
-            configuration.Configuration(cfg, NoVariableFilter.INSTANCE); // for change history
+        this.config = new net.ssehub.easy.instantiation.core.model.vilTypes.configuration.Configuration(cfg, NoVariableFilter.INSTANCE); // for change history
         this.filters = null == filters ? createDefaultFilters() : filters;
         initModel(info);
         this.base = base;
@@ -260,16 +259,16 @@ public class SimulatorUi implements ISimulationNotifier {
                 if (value instanceof Sequence<?>) {
                     try {
                         // default type if VIL does not know of which left hand side an initializer is
-                        value = de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.Map.convert(
+                        value = net.ssehub.easy.instantiation.core.model.vilTypes.Map.convert(
                            (Sequence<?>) value);
                     } catch (VilException e) {
                         getLogger().exception(e);
                     }
                 }
                 Map<?, ?> map = null;
-                if (value instanceof de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.Map) {
-                    de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.Map<?, ?> tmp 
-                        = (de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.Map<?, ?>) value;
+                if (value instanceof net.ssehub.easy.instantiation.core.model.vilTypes.Map) {
+                    net.ssehub.easy.instantiation.core.model.vilTypes.Map<?, ?> tmp 
+                        = (net.ssehub.easy.instantiation.core.model.vilTypes.Map<?, ?>) value;
                     map = tmp.toMap();
                 } else if (value instanceof Map<?, ?>) {
                     map = (Map<?, ?>) value;
@@ -360,8 +359,8 @@ public class SimulatorUi implements ISimulationNotifier {
             TypeDescriptor<?>[] types = new TypeDescriptor<?>[2];
             types[0] = TypeRegistry.stringType();
             types[1] = TypeRegistry.realType();
-            de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.Map<String, Double> values 
-                = new de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.Map<String, Double>(map, types);
+            net.ssehub.easy.instantiation.core.model.vilTypes.Map<String, Double> values 
+                = new net.ssehub.easy.instantiation.core.model.vilTypes.Map<String, Double>(map, types);
             bindings.setValue(tmp.getValueExpression(), values);
         } catch (VilException e) {
             getLogger().error("While setting simulator bindings from '" + settingsFile + "': " 

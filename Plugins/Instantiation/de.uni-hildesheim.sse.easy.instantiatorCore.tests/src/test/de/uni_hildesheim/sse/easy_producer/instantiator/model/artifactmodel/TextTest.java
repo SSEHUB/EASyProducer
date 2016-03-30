@@ -12,9 +12,9 @@ import java.util.regex.PatternSyntaxException;
 import org.junit.Assert;
 import org.junit.Test;
 
+import net.ssehub.easy.instantiation.core.model.artifactModel.representation.Text;
+import net.ssehub.easy.instantiation.core.model.common.VilException;
 import test.de.uni_hildesheim.sse.easy_producer.instantiator.model.AbstractTest;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.artifactModel.representation.Text;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilException;
 
 /**
  * Tests for the textual representation of an artifact.

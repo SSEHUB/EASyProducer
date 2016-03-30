@@ -19,7 +19,7 @@ import java.util.zip.ZipInputStream;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOUtils;
 
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.defaultInstantiators.ZipHandler;
+import net.ssehub.easy.instantiation.core.model.defaultInstantiators.ZipHandler;
 
 /**
  * A ZIP handler for JAR files.

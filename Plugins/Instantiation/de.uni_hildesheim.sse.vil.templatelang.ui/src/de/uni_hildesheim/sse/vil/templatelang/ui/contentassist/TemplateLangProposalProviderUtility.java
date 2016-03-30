@@ -11,8 +11,6 @@ import org.eclipse.emf.common.util.EList;
 import org.eclipse.jface.viewers.StyledString;
 import org.eclipse.xtext.nodemodel.INode;
 
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeDescriptor;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeRegistry;
 import de.uni_hildesheim.sse.vil.expressions.ResourceRegistry;
 import de.uni_hildesheim.sse.vil.expressions.expressionDsl.Parameter;
 import de.uni_hildesheim.sse.vil.expressions.expressionDsl.VariableDeclaration;
@@ -22,6 +20,8 @@ import de.uni_hildesheim.sse.vil.templatelang.templateLang.VilDef;
 import de.uni_hildesheim.sse.vil.templatelang.templateLang.impl.LanguageUnitImpl;
 import de.uni_hildesheim.sse.vil.templatelang.templateLang.impl.StmtBlockImpl;
 import de.uni_hildesheim.sse.vil.templatelang.templateLang.impl.VilDefImpl;
+import net.ssehub.easy.instantiation.core.model.vilTypes.TypeDescriptor;
+import net.ssehub.easy.instantiation.core.model.vilTypes.TypeRegistry;
 
 
 /**

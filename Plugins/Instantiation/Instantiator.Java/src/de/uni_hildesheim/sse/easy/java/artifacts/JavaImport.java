@@ -2,12 +2,12 @@ package de.uni_hildesheim.sse.easy.java.artifacts;
 
 import org.eclipse.jdt.core.dom.ImportDeclaration;
 
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.artifactModel.ArtifactModel;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.artifactModel.IArtifactVisitor;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.artifactModel.representation.Binary;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.artifactModel.representation.Text;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilException;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.Invisible;
+import net.ssehub.easy.instantiation.core.model.artifactModel.ArtifactModel;
+import net.ssehub.easy.instantiation.core.model.artifactModel.IArtifactVisitor;
+import net.ssehub.easy.instantiation.core.model.artifactModel.representation.Binary;
+import net.ssehub.easy.instantiation.core.model.artifactModel.representation.Text;
+import net.ssehub.easy.instantiation.core.model.common.VilException;
+import net.ssehub.easy.instantiation.core.model.vilTypes.Invisible;
 
 /**
  * Represents a Java import.

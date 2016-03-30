@@ -2,8 +2,8 @@ package test.de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes;
 
 import java.util.Iterator;
 
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.OperationDescriptor;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeDescriptor;
+import net.ssehub.easy.instantiation.core.model.vilTypes.OperationDescriptor;
+import net.ssehub.easy.instantiation.core.model.vilTypes.TypeDescriptor;
 
 /**
  * Iterates over the operations of a {@link TypeDescriptor} (simplyify testing).

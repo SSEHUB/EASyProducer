@@ -11,17 +11,17 @@ import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.artifactModel.ArtifactFactory;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.artifactModel.IArtifact;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.artifactModel.IFileSystemArtifact;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilException;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.defaultInstantiators.RandomDouble;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.templateModel.Template;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.templateModel.TemplateLangExecution;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.configuration.Configuration;
 import net.ssehub.easy.basics.modelManagement.ModelInfo;
 import net.ssehub.easy.basics.modelManagement.ModelManagementException;
 import net.ssehub.easy.dslCore.translation.Message;
+import net.ssehub.easy.instantiation.core.model.artifactModel.ArtifactFactory;
+import net.ssehub.easy.instantiation.core.model.artifactModel.IArtifact;
+import net.ssehub.easy.instantiation.core.model.artifactModel.IFileSystemArtifact;
+import net.ssehub.easy.instantiation.core.model.common.VilException;
+import net.ssehub.easy.instantiation.core.model.defaultInstantiators.RandomDouble;
+import net.ssehub.easy.instantiation.core.model.templateModel.Template;
+import net.ssehub.easy.instantiation.core.model.templateModel.TemplateLangExecution;
+import net.ssehub.easy.instantiation.core.model.vilTypes.configuration.Configuration;
 import net.ssehub.easy.varModel.confModel.ConfigurationException;
 import net.ssehub.easy.varModel.management.VarModel;
 import net.ssehub.easy.varModel.model.Project;
@@ -944,9 +944,10 @@ public class ExecutionTests extends AbstractTest {
     }
 
     /**
-     * Tests an advice with implicit value replacement ({@link de.uni_hildesheim.sse.easy_producer.instantiator.
-     * model.vilTypes.IActualValueProvider}) for the configuration object. The test shall actually do the same
-     * as {@link #testAdvice4()} except for the explicit configuration projection to the target project.
+     * Tests an advice with implicit value replacement
+     * ({@link net.ssehub.easy.instantiation.core.model.vilTypes.IActualValueProvider}) for the configuration object.
+     * The test shall actually do the same as {@link #testAdvice4()} except for the explicit configuration
+     * projection to the target project. <br/>
      * This test focuses on the dynamic project types.
      * 
      * @throws IOException should not occur

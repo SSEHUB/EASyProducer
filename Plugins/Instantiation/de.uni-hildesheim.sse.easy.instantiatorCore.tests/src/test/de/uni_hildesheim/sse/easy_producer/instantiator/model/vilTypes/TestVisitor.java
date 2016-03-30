@@ -6,10 +6,10 @@ import java.util.Map;
 
 import org.junit.Assert;
 
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.Sequence;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.configuration.AbstractIvmlVariable;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.configuration.Configuration;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.configuration.DecisionVariable;
+import net.ssehub.easy.instantiation.core.model.vilTypes.Sequence;
+import net.ssehub.easy.instantiation.core.model.vilTypes.configuration.AbstractIvmlVariable;
+import net.ssehub.easy.instantiation.core.model.vilTypes.configuration.Configuration;
+import net.ssehub.easy.instantiation.core.model.vilTypes.configuration.DecisionVariable;
 import net.ssehub.easy.varModel.confModel.AssignmentState;
 import net.ssehub.easy.varModel.confModel.IDecisionVariable;
 import net.ssehub.easy.varModel.model.AbstractVariable;
@@ -141,7 +141,7 @@ class TestVisitor implements IModelVisitor {
                     IDecisionVariable attrib = decVar.getAttribute(a);
                     attrMap.put(attrib.getDeclaration().getName(), attrib);
                 }
-                for (de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.configuration.Attribute attr
+                for (net.ssehub.easy.instantiation.core.model.vilTypes.configuration.Attribute attr
                     : var.attributes()) {
                     IDecisionVariable origAttrib = attrMap.get(attr.getName());
                     Assert.assertNotNull(origAttrib);

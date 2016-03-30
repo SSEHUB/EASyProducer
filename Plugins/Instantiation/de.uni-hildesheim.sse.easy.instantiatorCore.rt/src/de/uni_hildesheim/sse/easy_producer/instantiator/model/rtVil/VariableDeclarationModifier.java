@@ -15,7 +15,7 @@
  */
 package de.uni_hildesheim.sse.easy_producer.instantiator.model.rtVil;
 
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.IModifier;
+import net.ssehub.easy.instantiation.core.model.common.IModifier;
 
 /**
  * Defines the modifiers for variable declarations.

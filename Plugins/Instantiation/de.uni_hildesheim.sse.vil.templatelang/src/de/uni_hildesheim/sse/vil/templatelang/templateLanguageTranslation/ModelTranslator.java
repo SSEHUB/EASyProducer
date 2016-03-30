@@ -1,6 +1,6 @@
 package de.uni_hildesheim.sse.vil.templatelang.templateLanguageTranslation;
 
-import static de.uni_hildesheim.sse.easy_producer.instantiator.model.templateModel.Constants.*;
+import static net.ssehub.easy.instantiation.core.model.templateModel.Constants.*;
 
 import java.net.URI;
 import java.util.ArrayList;
@@ -14,31 +14,6 @@ import java.util.Set;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
 
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.Imports;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilException;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.CompositeExpression;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.expressions.Expression;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.templateModel.AlternativeStatement;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.templateModel.ContentStatement;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.templateModel.Def;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.templateModel.ExpressionStatement;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.templateModel.FormattingConfiguration;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.templateModel.ITemplateElement;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.templateModel.JavaExtension;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.templateModel.LoopStatement;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.templateModel.Resolver;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.templateModel.SwitchStatement;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.templateModel.Template;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.templateModel.TemplateBlock;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.templateModel.TemplateDescriptor;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.templateModel.TemplateLangExecution;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.templateModel.TemplateModel;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.templateModel.VariableDeclaration;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.templateModel.WhileStatement;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.IMetaType;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.OperationDescriptor;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeDescriptor;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeRegistry;
 import de.uni_hildesheim.sse.vil.expressions.ResourceRegistry;
 import de.uni_hildesheim.sse.vil.expressions.expressionDsl.ExpressionDslPackage;
 import de.uni_hildesheim.sse.vil.expressions.expressionDsl.PrimaryExpression;
@@ -62,6 +37,31 @@ import net.ssehub.easy.basics.modelManagement.ModelManagement;
 import net.ssehub.easy.dslCore.translation.ErrorCodes;
 import net.ssehub.easy.dslCore.translation.StringUtils;
 import net.ssehub.easy.dslCore.translation.TranslatorException;
+import net.ssehub.easy.instantiation.core.model.common.Imports;
+import net.ssehub.easy.instantiation.core.model.common.VilException;
+import net.ssehub.easy.instantiation.core.model.expressions.CompositeExpression;
+import net.ssehub.easy.instantiation.core.model.expressions.Expression;
+import net.ssehub.easy.instantiation.core.model.templateModel.AlternativeStatement;
+import net.ssehub.easy.instantiation.core.model.templateModel.ContentStatement;
+import net.ssehub.easy.instantiation.core.model.templateModel.Def;
+import net.ssehub.easy.instantiation.core.model.templateModel.ExpressionStatement;
+import net.ssehub.easy.instantiation.core.model.templateModel.FormattingConfiguration;
+import net.ssehub.easy.instantiation.core.model.templateModel.ITemplateElement;
+import net.ssehub.easy.instantiation.core.model.templateModel.JavaExtension;
+import net.ssehub.easy.instantiation.core.model.templateModel.LoopStatement;
+import net.ssehub.easy.instantiation.core.model.templateModel.Resolver;
+import net.ssehub.easy.instantiation.core.model.templateModel.SwitchStatement;
+import net.ssehub.easy.instantiation.core.model.templateModel.Template;
+import net.ssehub.easy.instantiation.core.model.templateModel.TemplateBlock;
+import net.ssehub.easy.instantiation.core.model.templateModel.TemplateDescriptor;
+import net.ssehub.easy.instantiation.core.model.templateModel.TemplateLangExecution;
+import net.ssehub.easy.instantiation.core.model.templateModel.TemplateModel;
+import net.ssehub.easy.instantiation.core.model.templateModel.VariableDeclaration;
+import net.ssehub.easy.instantiation.core.model.templateModel.WhileStatement;
+import net.ssehub.easy.instantiation.core.model.vilTypes.IMetaType;
+import net.ssehub.easy.instantiation.core.model.vilTypes.OperationDescriptor;
+import net.ssehub.easy.instantiation.core.model.vilTypes.TypeDescriptor;
+import net.ssehub.easy.instantiation.core.model.vilTypes.TypeRegistry;
 
 /**
  * Translates a parsed template language in ECore instances into

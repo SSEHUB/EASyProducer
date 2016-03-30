@@ -7,8 +7,6 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.xtext.validation.Check;
 
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.templateModel.Template;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.templateModel.TemplateModel;
 import de.uni_hildesheim.sse.vil.templatelang.TemplateLangConfig;
 import de.uni_hildesheim.sse.vil.templatelang.TemplateLangModelUtility;
 import de.uni_hildesheim.sse.vil.templatelang.templateLang.LanguageUnit;
@@ -16,6 +14,8 @@ import net.ssehub.easy.dslCore.TranslationResult;
 import net.ssehub.easy.dslCore.validation.ValidationUtils;
 import net.ssehub.easy.dslCore.validation.ValidationUtils.IModelValidationCallback;
 import net.ssehub.easy.dslCore.validation.ValidationUtils.MessageType;
+import net.ssehub.easy.instantiation.core.model.templateModel.Template;
+import net.ssehub.easy.instantiation.core.model.templateModel.TemplateModel;
  
 public class TemplateLangJavaValidator extends AbstractTemplateLangJavaValidator {
 

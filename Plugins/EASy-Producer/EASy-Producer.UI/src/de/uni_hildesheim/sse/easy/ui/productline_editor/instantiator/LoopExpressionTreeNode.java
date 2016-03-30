@@ -15,8 +15,8 @@
  */
 package de.uni_hildesheim.sse.easy.ui.productline_editor.instantiator;
 
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.IEnumeratingLoop;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.VariableDeclaration;
+import net.ssehub.easy.instantiation.core.model.buildlangModel.IEnumeratingLoop;
+import net.ssehub.easy.instantiation.core.model.buildlangModel.VariableDeclaration;
 
 /**
  * Implements an element node for loop expressions.

@@ -30,10 +30,10 @@ import de.uni_hildesheim.sse.easy_producer.core.persistence.IntegrationTest;
 import de.uni_hildesheim.sse.easy_producer.core.persistence.NatureHelperTest;
 import de.uni_hildesheim.sse.easy_producer.core.persistence.TempDirectoryInitializer;
 import de.uni_hildesheim.sse.easy_producer.core.persistence.standard.EASyInitializer;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.BuiltIn;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeRegistry;
 import de.uni_hildesheim.sse.easy_producer.instantiator.velocity.VelocityInstantiator;
 import net.ssehub.easy.basics.Environment;
+import net.ssehub.easy.instantiation.core.model.BuiltIn;
+import net.ssehub.easy.instantiation.core.model.vilTypes.TypeRegistry;
 import net.ssehub.easy.reasoning.core.frontend.ReasonerFrontend;
 import net.ssehub.easy.reasoning.sseReasoner.Reasoner;
 

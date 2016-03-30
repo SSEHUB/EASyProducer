@@ -15,7 +15,7 @@
  */
 package de.uni_hildesheim.sse.easy_producer.instantiator.model.rtVil;
 
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.OperationDescriptor;
+import net.ssehub.easy.instantiation.core.model.vilTypes.OperationDescriptor;
 
 /**
  * Notified if operations are not executed due to the rt-VIL simulation mode.

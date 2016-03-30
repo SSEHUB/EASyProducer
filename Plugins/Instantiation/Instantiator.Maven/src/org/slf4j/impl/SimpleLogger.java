@@ -29,8 +29,8 @@ import org.slf4j.helpers.MarkerIgnoringBase;
 import org.slf4j.helpers.MessageFormatter;
 import org.slf4j.spi.LocationAwareLogger;
 
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.execution.IInstantiatorTracer;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.execution.TracerFactory;
+import net.ssehub.easy.instantiation.core.model.execution.IInstantiatorTracer;
+import net.ssehub.easy.instantiation.core.model.execution.TracerFactory;
 
 /**
  * Simple implementation of an SLF4J logger for turning maven messages into VIL

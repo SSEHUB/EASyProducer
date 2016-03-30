@@ -3,9 +3,9 @@ package de.uni_hildesheim.sse.persistency.xml;
 import java.io.File;
 import java.util.List;
 
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeRegistry;
 import net.ssehub.easy.basics.modelManagement.IModel;
 import net.ssehub.easy.basics.modelManagement.IModelLoader;
+import net.ssehub.easy.instantiation.core.model.vilTypes.TypeRegistry;
 
 /**
  * Interface for the SerializerPlugin that adds the functionality of serializing runtime VIL.

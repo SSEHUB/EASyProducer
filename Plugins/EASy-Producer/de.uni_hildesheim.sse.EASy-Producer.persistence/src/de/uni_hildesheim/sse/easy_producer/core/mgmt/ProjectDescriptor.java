@@ -3,9 +3,9 @@ package de.uni_hildesheim.sse.easy_producer.core.mgmt;
 import java.io.File;
 import java.util.Collection;
 
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.Script;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.IProjectDescriptor;
 import net.ssehub.easy.basics.progress.ProgressObserver;
+import net.ssehub.easy.instantiation.core.model.buildlangModel.Script;
+import net.ssehub.easy.instantiation.core.model.vilTypes.IProjectDescriptor;
 
 /**
  * Implements the mapping of relevant information from EASy projects to VIL projects.

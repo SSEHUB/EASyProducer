@@ -15,7 +15,7 @@
  */
 package de.uni_hildesheim.sse.easy.ui.productline_editor.instantiator;
 
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.JoinExpression;
+import net.ssehub.easy.instantiation.core.model.buildlangModel.JoinExpression;
 
 /**
  * Implements an element node for join expressions.

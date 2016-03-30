@@ -16,8 +16,8 @@
 package de.uni_hildesheim.sse.easy_producer.instantiator.model.rtVil.types;
 
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.rtVil.IRtVilConcept;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.ClassMeta;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.IVilType;
+import net.ssehub.easy.instantiation.core.model.vilTypes.ClassMeta;
+import net.ssehub.easy.instantiation.core.model.vilTypes.IVilType;
 
 /**
  * Defines the type of a rt-VIL concept and its operations.

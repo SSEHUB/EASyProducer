@@ -17,7 +17,7 @@ package de.uni_hildesheim.sse.vil.rt.tests.types;
 
 import java.util.Map;
 
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.OperationMeta;
+import net.ssehub.easy.instantiation.core.model.vilTypes.OperationMeta;
 
 /**
  * Represents an algorithm change command.

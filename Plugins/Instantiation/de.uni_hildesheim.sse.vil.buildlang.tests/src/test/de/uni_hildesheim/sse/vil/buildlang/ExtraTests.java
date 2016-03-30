@@ -7,7 +7,7 @@ import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.Script;
+import net.ssehub.easy.instantiation.core.model.buildlangModel.Script;
 
 /**
  * Tests for the basic language.

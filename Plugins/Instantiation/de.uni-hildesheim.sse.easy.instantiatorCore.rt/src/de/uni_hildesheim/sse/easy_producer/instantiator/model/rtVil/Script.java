@@ -20,27 +20,27 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.IRuleElement;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.IVisitor;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.Imports;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.RuntimeEnvironment;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.common.VilException;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.templateModel.Template;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.IMetaOperation;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeRegistry;
 import net.ssehub.easy.basics.modelManagement.IRestrictionEvaluationContext;
 import net.ssehub.easy.basics.modelManagement.ModelImport;
 import net.ssehub.easy.basics.modelManagement.ModelManagementException;
+import net.ssehub.easy.instantiation.core.model.buildlangModel.IRuleElement;
+import net.ssehub.easy.instantiation.core.model.buildlangModel.IVisitor;
+import net.ssehub.easy.instantiation.core.model.buildlangModel.Imports;
+import net.ssehub.easy.instantiation.core.model.buildlangModel.RuntimeEnvironment;
+import net.ssehub.easy.instantiation.core.model.common.VilException;
+import net.ssehub.easy.instantiation.core.model.templateModel.Template;
+import net.ssehub.easy.instantiation.core.model.vilTypes.IMetaOperation;
+import net.ssehub.easy.instantiation.core.model.vilTypes.TypeRegistry;
 
 /**
  * Represents a script, i.e., the top-level element of a rtVIL-model.
  * Scripts represent an implicit type, i.e., they are not registered with the 
- * {@link de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.TypeRegistry} and, thus, not
+ * {@link net.ssehub.easy.instantiation.core.model.vilTypes.TypeRegistry} and, thus, not
  * assignable.
  * 
  * @author Holger Eichelberger
  */
-public class Script extends de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.Script {
+public class Script extends net.ssehub.easy.instantiation.core.model.buildlangModel.Script {
 
     private List<Strategy> strategies = new ArrayList<Strategy>();
     private List<Tactic> tactics = new ArrayList<Tactic>();
@@ -86,13 +86,13 @@ public class Script extends de.uni_hildesheim.sse.easy_producer.instantiator.mod
      * @param imp the import (may be <b>null</b>)
      * @return the converted import (<b>null</b> if <code>imp</code> is null)
      */
-    private static ModelImport<de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.Script> 
+    private static ModelImport<net.ssehub.easy.instantiation.core.model.buildlangModel.Script> 
         convert(ModelImport<Script> imp) {
         
         // not nice, to be removed if rt-VIL and VIL are unified in the future
-        ModelImport<de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.Script> result;
+        ModelImport<net.ssehub.easy.instantiation.core.model.buildlangModel.Script> result;
         if (null != imp) {
-            result = new ModelImport<de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.Script>(
+            result = new ModelImport<net.ssehub.easy.instantiation.core.model.buildlangModel.Script>(
                 imp.getName(), imp.isConflict(), imp.getVersionRestriction());
             try {
                 result.setResolved(imp.getResolved());
@@ -111,14 +111,14 @@ public class Script extends de.uni_hildesheim.sse.easy_producer.instantiator.mod
      * @param desc the descriptor
      * @return the converted descriptor
      */
-    private static ScriptDescriptor<de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.Script> 
+    private static ScriptDescriptor<net.ssehub.easy.instantiation.core.model.buildlangModel.Script> 
         convert(ScriptDescriptor<Script> desc) {
         
         // not nice, to be removed if rt-VIL and VIL are unified in the future
         Imports<Script> sImps = desc.getImports();
-        List<ModelImport<de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.Script>> imp;
+        List<ModelImport<net.ssehub.easy.instantiation.core.model.buildlangModel.Script>> imp;
         imp = new ArrayList<
-            ModelImport<de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.Script>>();
+            ModelImport<net.ssehub.easy.instantiation.core.model.buildlangModel.Script>>();
         for (int i = 0; i < sImps.getImportsCount(); i++) {
             imp.add(convert(sImps.getImport(i)));
         }
@@ -126,9 +126,9 @@ public class Script extends de.uni_hildesheim.sse.easy_producer.instantiator.mod
         for (int i = 0; i < sImps.getVtlRestrictionsCount(); i++) {
             vtl.add(sImps.getVtlRestriction(i));
         }
-        Imports<de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.Script> imps;
-        imps = new Imports<de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.Script>(imp, vtl);
-        return new ScriptDescriptor<de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.Script>(
+        Imports<net.ssehub.easy.instantiation.core.model.buildlangModel.Script> imps;
+        imps = new Imports<net.ssehub.easy.instantiation.core.model.buildlangModel.Script>(imp, vtl);
+        return new ScriptDescriptor<net.ssehub.easy.instantiation.core.model.buildlangModel.Script>(
             desc.getParameters(), desc.getAdvices(), imps);
     }
 

@@ -5,7 +5,7 @@ import java.io.File;
 import de.uni_hildesheim.sse.easy_producer.core.persistence.PersistenceUtils;
 import de.uni_hildesheim.sse.easy_producer.core.persistence.Configuration.PathKind;
 import de.uni_hildesheim.sse.easy_producer.core.persistence.datatypes.IProjectCreationResult;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.Script;
+import net.ssehub.easy.instantiation.core.model.buildlangModel.Script;
 import net.ssehub.easy.varModel.model.Project;
 
 /**

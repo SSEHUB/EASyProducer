@@ -4,7 +4,7 @@ import com.thoughtworks.xstream.converters.Converter;
 import com.thoughtworks.xstream.converters.MarshallingContext;
 import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
 
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.ReflectionOperationDescriptor;
+import net.ssehub.easy.instantiation.core.model.vilTypes.ReflectionOperationDescriptor;
 
 /**
  * Converter for the {@link ReflectionOperationDescriptor}.

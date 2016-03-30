@@ -15,7 +15,7 @@
  */
 package de.uni_hildesheim.sse.vil.rt.tests.types;
 
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.ClassMeta;
+import net.ssehub.easy.instantiation.core.model.vilTypes.ClassMeta;
 
 /**
  * Just a marker interface.

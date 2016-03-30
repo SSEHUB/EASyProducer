@@ -23,10 +23,10 @@ import java.util.List;
 import org.junit.Assert;
 
 import de.uni_hildesheim.sse.easy_producer.instantiator.model.rtVil.Script;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.configuration.Configuration;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.configuration.IVariableFilter;
 import net.ssehub.easy.basics.modelManagement.ModelInfo;
 import net.ssehub.easy.basics.modelManagement.ModelManagementException;
+import net.ssehub.easy.instantiation.core.model.vilTypes.configuration.Configuration;
+import net.ssehub.easy.instantiation.core.model.vilTypes.configuration.IVariableFilter;
 import net.ssehub.easy.reasoning.core.frontend.ReasonerFrontend;
 import net.ssehub.easy.reasoning.sseReasoner.Reasoner;
 import net.ssehub.easy.varModel.management.VarModel;
@@ -66,7 +66,7 @@ public abstract class AbstractRtTest extends AbstractExecutionTest<Script> {
      * 
      * @param varModelName the name of the variability model
      * @param filter the variable filter to apply (use 
-     *   {@link de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.configuration.NoVariableFilter#INSTANCE}
+     *   {@link net.ssehub.easy.instantiation.core.model.vilTypes.configuration.NoVariableFilter#INSTANCE}
      *   for runtime)
      * @return the default configuration
      */

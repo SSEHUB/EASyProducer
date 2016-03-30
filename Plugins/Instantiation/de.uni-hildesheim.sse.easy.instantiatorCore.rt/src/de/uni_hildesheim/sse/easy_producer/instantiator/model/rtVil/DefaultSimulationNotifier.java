@@ -15,7 +15,7 @@
  */
 package de.uni_hildesheim.sse.easy_producer.instantiator.model.rtVil;
 
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.OperationDescriptor;
+import net.ssehub.easy.instantiation.core.model.vilTypes.OperationDescriptor;
 
 /**
  * Provides a default implementation of an empty (no action) simulation notifier and 
