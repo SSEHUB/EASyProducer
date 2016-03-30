@@ -52,8 +52,8 @@ public abstract class AbstractScenarioTest extends AbstractTest<Script> {
     @Override
     protected void furtherInitialization() {
         Registration.register();
-        de.uni_hildesheim.sse.easy.ant.Registration.register();
-        de.uni_hildesheim.sse.easy.aspectj.Registration.register();
+        net.ssehub.easy.instantiation.ant.Registration.register();
+        net.ssehub.easy.instantiation.aspectj.Registration.register();
         //de.uni_hildesheim.sse.easy.maven.Registration.register();
     }
     

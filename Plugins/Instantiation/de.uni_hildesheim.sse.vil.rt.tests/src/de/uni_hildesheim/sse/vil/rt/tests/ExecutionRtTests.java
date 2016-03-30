@@ -25,10 +25,6 @@ import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.rtVil.Executor;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.rtVil.RtVILMemoryStorage;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.rtVil.RtVilStorage;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.rtVil.Script;
 import de.uni_hildesheim.sse.vil.rt.tests.types.AlgorithmChangeCommand;
 import de.uni_hildesheim.sse.vil.rt.tests.types.CommandCollector;
 import de.uni_hildesheim.sse.vil.rt.tests.types.CommandSequence;
@@ -43,6 +39,10 @@ import net.ssehub.easy.instantiation.core.model.buildlangModel.RuleExecutionResu
 import net.ssehub.easy.instantiation.core.model.common.VilException;
 import net.ssehub.easy.instantiation.core.model.vilTypes.configuration.Configuration;
 import net.ssehub.easy.instantiation.core.model.vilTypes.configuration.NoVariableFilter;
+import net.ssehub.easy.instantiation.rt.core.model.rtVil.Executor;
+import net.ssehub.easy.instantiation.rt.core.model.rtVil.RtVILMemoryStorage;
+import net.ssehub.easy.instantiation.rt.core.model.rtVil.RtVilStorage;
+import net.ssehub.easy.instantiation.rt.core.model.rtVil.Script;
 import net.ssehub.easy.reasoning.core.frontend.ReasonerFrontend;
 import net.ssehub.easy.reasoning.core.reasoner.ReasonerConfiguration;
 

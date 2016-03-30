@@ -20,8 +20,8 @@ import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import de.uni_hildesheim.sse.easy.maven.Registration;
 import net.ssehub.easy.instantiation.core.model.buildlangModel.Script;
+import net.ssehub.easy.instantiation.maven.Registration;
 
 /**
  * Real use case tests. Although Maven is available, we run the tests without Maven in order to

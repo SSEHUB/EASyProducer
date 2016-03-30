@@ -24,13 +24,13 @@ import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.rtVil.RtVilModel;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.rtVil.Script;
 import net.ssehub.easy.basics.modelManagement.ModelInfo;
 import net.ssehub.easy.dslCore.ui.editors.ModelEditorConfigurer.IHeader;
 import net.ssehub.easy.dslCore.ui.listeners.AggregatingModelLoadingListener;
 import net.ssehub.easy.dslCore.ui.listeners.BasicModelLoadingListener;
 import net.ssehub.easy.dslCore.ui.listeners.ButtonUiControl;
+import net.ssehub.easy.instantiation.rt.core.model.rtVil.RtVilModel;
+import net.ssehub.easy.instantiation.rt.core.model.rtVil.Script;
 import net.ssehub.easy.varModel.confModel.Configuration;
 import net.ssehub.easy.varModel.management.VarModel;
 import net.ssehub.easy.varModel.model.Project;

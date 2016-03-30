@@ -32,5 +32,5 @@ Require-Bundle: de.uni_hildesheim.sse.varModel;bundle-version="0.0.10",
  org.apache.commons.lang,
  de.uni-hildesheim.sse.easy.instantiatorCore,
  de.uni_hildesheim.sse.reasoning.reasoner;bundle-version="0.0.2"
-Export-Package: de.uni_hildesheim.sse.persistency.xml,
- de.uni_hildesheim.sse.persistency.xml.loader
+Export-Package: net.ssehub.easy.instantiation.serializer.xml,
+ net.ssehub.easy.instantiation.serializer.xml.loader

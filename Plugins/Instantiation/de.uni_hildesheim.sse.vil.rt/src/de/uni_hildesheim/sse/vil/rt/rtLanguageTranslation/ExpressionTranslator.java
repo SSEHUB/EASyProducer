@@ -33,7 +33,7 @@ public class ExpressionTranslator extends de.uni_hildesheim.sse.buildLanguageTra
                 if ("fail".equals(fStmt.getName())) {
                     result = createFailStatement(elt, fStmt, resolver);
                 } else {
-                    result = new de.uni_hildesheim.sse.easy_producer.instantiator.model.rtVil.FailStatement();
+                    result = new net.ssehub.easy.instantiation.rt.core.model.rtVil.FailStatement();
                 }
             }
         }
@@ -49,7 +49,7 @@ public class ExpressionTranslator extends de.uni_hildesheim.sse.buildLanguageTra
      * @return the created model element
      * @throws TranslatorException in case that translation fails
      */
-    private de.uni_hildesheim.sse.easy_producer.instantiator.model.rtVil.FailStatement createFailStatement(
+    private net.ssehub.easy.instantiation.rt.core.model.rtVil.FailStatement createFailStatement(
         de.uni_hildesheim.sse.vilBuildLanguage.RuleElement elt, FailStatement fStmt, Resolver resolver) 
         throws TranslatorException{
         net.ssehub.easy.instantiation.core.model.expressions.Expression reasonEx = 
@@ -58,7 +58,7 @@ public class ExpressionTranslator extends de.uni_hildesheim.sse.buildLanguageTra
         net.ssehub.easy.instantiation.core.model.expressions.Expression codeEx = 
             resolveFailExpression(fStmt.getCode(), TypeRegistry.integerType(), fStmt, 
             RtVilPackage.Literals.FAIL_STATEMENT__CODE, resolver);
-        return new de.uni_hildesheim.sse.easy_producer.instantiator.model.rtVil.FailStatement(reasonEx, codeEx);        
+        return new net.ssehub.easy.instantiation.rt.core.model.rtVil.FailStatement(reasonEx, codeEx);        
     }
     
     /**

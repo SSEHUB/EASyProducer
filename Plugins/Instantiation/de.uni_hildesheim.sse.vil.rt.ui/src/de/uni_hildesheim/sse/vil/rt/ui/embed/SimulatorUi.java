@@ -31,11 +31,6 @@ import org.eclipse.jface.window.Window;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
 
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.rtVil.Bundle;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.rtVil.Executor;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.rtVil.ISimulationNotifier;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.rtVil.RtVILMemoryStorage;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.rtVil.Script;
 import de.uni_hildesheim.sse.vil.rt.ui.embed.SimulationSettingsDialog.TempArgument;
 import net.ssehub.easy.basics.logger.EASyLoggerFactory;
 import net.ssehub.easy.basics.logger.EASyLoggerFactory.EASyLogger;
@@ -48,6 +43,11 @@ import net.ssehub.easy.instantiation.core.model.vilTypes.Sequence;
 import net.ssehub.easy.instantiation.core.model.vilTypes.TypeDescriptor;
 import net.ssehub.easy.instantiation.core.model.vilTypes.TypeRegistry;
 import net.ssehub.easy.instantiation.core.model.vilTypes.configuration.NoVariableFilter;
+import net.ssehub.easy.instantiation.rt.core.model.rtVil.Bundle;
+import net.ssehub.easy.instantiation.rt.core.model.rtVil.Executor;
+import net.ssehub.easy.instantiation.rt.core.model.rtVil.ISimulationNotifier;
+import net.ssehub.easy.instantiation.rt.core.model.rtVil.RtVILMemoryStorage;
+import net.ssehub.easy.instantiation.rt.core.model.rtVil.Script;
 import net.ssehub.easy.varModel.confModel.Configuration;
 
 /**

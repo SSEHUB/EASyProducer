@@ -27,13 +27,13 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.rtVil.RtVilExecution;
 import de.uni_hildesheim.sse.vil.rt.RtVilModelUtility;
 import net.ssehub.easy.dslCore.ui.ConfigurationEditorFactory;
 import net.ssehub.easy.instantiation.core.model.common.VilException;
 import net.ssehub.easy.instantiation.core.model.expressions.Expression;
 import net.ssehub.easy.instantiation.core.model.vilTypes.configuration.ChangeHistory;
 import net.ssehub.easy.instantiation.core.model.vilTypes.configuration.Configuration;
+import net.ssehub.easy.instantiation.rt.core.model.rtVil.RtVilExecution;
 
 /**
  * Implements a settings dialog for the simulation.

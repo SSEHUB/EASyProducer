@@ -11,14 +11,14 @@ import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.xtext.validation.Check;
 
 import de.uni_hildesheim.sse.BuildLangConfig;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.rtVil.RtVilModel;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.rtVil.Script;
 import de.uni_hildesheim.sse.vil.rt.RtVilModelUtility;
 import de.uni_hildesheim.sse.vil.rt.rtVil.ImplementationUnit;
 import net.ssehub.easy.dslCore.TranslationResult;
 import net.ssehub.easy.dslCore.validation.ValidationUtils;
 import net.ssehub.easy.dslCore.validation.ValidationUtils.IModelValidationCallback;
 import net.ssehub.easy.dslCore.validation.ValidationUtils.MessageType;
+import net.ssehub.easy.instantiation.rt.core.model.rtVil.RtVilModel;
+import net.ssehub.easy.instantiation.rt.core.model.rtVil.Script;
 
 /**
  * Custom validation rules. 

@@ -12,18 +12,6 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
 
 import de.uni_hildesheim.sse.buildLanguageTranslation.RuleInfo;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.rtVil.AbstractBreakdownCall;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.rtVil.RtVilStorage;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.rtVil.RtVilModel;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.rtVil.Script;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.rtVil.Strategy;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.rtVil.StrategyCall;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.rtVil.Tactic;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.rtVil.TacticCall;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.rtVil.VariableDeclarationModifier;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.rtVil.WeightingFunction;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.rtVil.types.RtVilTypeRegistry;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.rtVil.types.TupleType;
 import de.uni_hildesheim.sse.vil.expressions.ResourceRegistry;
 import de.uni_hildesheim.sse.vil.expressions.expressionDsl.ExpressionDslPackage;
 import de.uni_hildesheim.sse.vil.expressions.expressionDsl.ParameterList;
@@ -63,6 +51,18 @@ import net.ssehub.easy.instantiation.core.model.expressions.CallArgument;
 import net.ssehub.easy.instantiation.core.model.expressions.Expression;
 import net.ssehub.easy.instantiation.core.model.vilTypes.TypeDescriptor;
 import net.ssehub.easy.instantiation.core.model.vilTypes.TypeRegistry;
+import net.ssehub.easy.instantiation.rt.core.model.rtVil.AbstractBreakdownCall;
+import net.ssehub.easy.instantiation.rt.core.model.rtVil.RtVilModel;
+import net.ssehub.easy.instantiation.rt.core.model.rtVil.RtVilStorage;
+import net.ssehub.easy.instantiation.rt.core.model.rtVil.Script;
+import net.ssehub.easy.instantiation.rt.core.model.rtVil.Strategy;
+import net.ssehub.easy.instantiation.rt.core.model.rtVil.StrategyCall;
+import net.ssehub.easy.instantiation.rt.core.model.rtVil.Tactic;
+import net.ssehub.easy.instantiation.rt.core.model.rtVil.TacticCall;
+import net.ssehub.easy.instantiation.rt.core.model.rtVil.VariableDeclarationModifier;
+import net.ssehub.easy.instantiation.rt.core.model.rtVil.WeightingFunction;
+import net.ssehub.easy.instantiation.rt.core.model.rtVil.types.RtVilTypeRegistry;
+import net.ssehub.easy.instantiation.rt.core.model.rtVil.types.TupleType;
 
 /**
  * Implements the translation from the DSL to the adaptation language model in the instantiator core.

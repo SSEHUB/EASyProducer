@@ -12,8 +12,6 @@ import org.eclipse.emf.common.util.URI;
 import org.eclipse.xtext.nodemodel.INode;
 import org.eclipse.xtext.parser.IParseResult;
 
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.rtVil.RtVilWriter;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.rtVil.Script;
 import de.uni_hildesheim.sse.vil.expressions.expressionDsl.Import;
 import de.uni_hildesheim.sse.vil.expressions.expressionDsl.PrimaryExpression;
 import de.uni_hildesheim.sse.vil.rt.rtLanguageTranslation.ExpressionTranslator;
@@ -33,6 +31,8 @@ import net.ssehub.easy.instantiation.core.model.buildlangModel.Resolver;
 import net.ssehub.easy.instantiation.core.model.common.VilException;
 import net.ssehub.easy.instantiation.core.model.expressions.Expression;
 import net.ssehub.easy.instantiation.core.model.expressions.IRuntimeEnvironment;
+import net.ssehub.easy.instantiation.rt.core.model.rtVil.RtVilWriter;
+import net.ssehub.easy.instantiation.rt.core.model.rtVil.Script;
 
 /**
  * Provides language-wide functionality.

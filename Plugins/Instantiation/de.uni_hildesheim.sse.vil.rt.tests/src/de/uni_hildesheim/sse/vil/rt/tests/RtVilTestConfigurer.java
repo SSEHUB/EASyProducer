@@ -24,10 +24,6 @@ import org.eclipse.emf.common.util.URI;
 import org.junit.Assert;
 
 import de.uni_hildesheim.sse.BuildLangModelUtility;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.rtVil.BuiltIn;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.rtVil.RtVilExecution;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.rtVil.RtVilModel;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.rtVil.Script;
 import de.uni_hildesheim.sse.vil.rt.RtVilExpressionParser;
 import de.uni_hildesheim.sse.vil.rt.RtVilModelUtility;
 import de.uni_hildesheim.sse.vil.rt.tests.types.Register;
@@ -41,6 +37,10 @@ import net.ssehub.easy.instantiation.core.model.buildlangModel.BuildlangExecutio
 import net.ssehub.easy.instantiation.core.model.buildlangModel.ITracer;
 import net.ssehub.easy.instantiation.core.model.execution.TracerFactory;
 import net.ssehub.easy.instantiation.core.model.expressions.ExpressionParserRegistry;
+import net.ssehub.easy.instantiation.rt.core.model.rtVil.BuiltIn;
+import net.ssehub.easy.instantiation.rt.core.model.rtVil.RtVilExecution;
+import net.ssehub.easy.instantiation.rt.core.model.rtVil.RtVilModel;
+import net.ssehub.easy.instantiation.rt.core.model.rtVil.Script;
 import net.ssehub.easy.varModel.management.VarModel;
 import test.de.uni_hildesheim.sse.vil.buildlang.ITestConfigurer;
 import test.de.uni_hildesheim.sse.vil.buildlang.TestTracerFactory;

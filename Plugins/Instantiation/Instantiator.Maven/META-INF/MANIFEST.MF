@@ -55,5 +55,5 @@ Bundle-ClassPath: .,
  lib/wagon-http-2.6-shaded.jar,
  lib/wagon-http-shared-2.6.jar,
  lib/wagon-provider-api-2.6.jar
-Export-Package: de.uni_hildesheim.sse.easy.maven
-Bundle-Activator: de.uni_hildesheim.sse.easy.maven.Activator
+Export-Package: net.ssehub.easy.instantiation.maven
+Bundle-Activator: net.ssehub.easy.instantiation.maven.Activator

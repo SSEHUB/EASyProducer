@@ -21,8 +21,6 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.rtVil.types.ITypeAnalyzer;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.rtVil.types.RtVilTypeRegistry;
 import net.ssehub.easy.instantiation.core.model.common.VilException;
 import net.ssehub.easy.instantiation.core.model.vilTypes.IRegisteredStringValueProvider;
 import net.ssehub.easy.instantiation.core.model.vilTypes.OperationMeta;
@@ -31,6 +29,8 @@ import net.ssehub.easy.instantiation.core.model.vilTypes.TypeDescriptor;
 import net.ssehub.easy.instantiation.core.model.vilTypes.TypeHelper;
 import net.ssehub.easy.instantiation.core.model.vilTypes.TypeRegistry;
 import net.ssehub.easy.instantiation.core.model.vilTypes.IStringValueProvider.StringComparator;
+import net.ssehub.easy.instantiation.rt.core.model.rtVil.types.ITypeAnalyzer;
+import net.ssehub.easy.instantiation.rt.core.model.rtVil.types.RtVilTypeRegistry;
 
 /**
  * Registers additional types.

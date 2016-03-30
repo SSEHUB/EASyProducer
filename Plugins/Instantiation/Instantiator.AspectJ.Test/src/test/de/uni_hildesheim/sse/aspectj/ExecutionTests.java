@@ -9,7 +9,7 @@ import org.junit.Test;
 import test.de.uni_hildesheim.sse.vil.buildlang.AbstractExecutionTest;
 import test.de.uni_hildesheim.sse.vil.buildlang.BuildLangTestConfigurer;
 import test.de.uni_hildesheim.sse.vil.buildlang.ITestConfigurer;
-import de.uni_hildesheim.sse.easy.aspectj.Registration;
+import net.ssehub.easy.instantiation.aspectj.Registration;
 import net.ssehub.easy.instantiation.core.model.buildlangModel.Script;
 
 /**

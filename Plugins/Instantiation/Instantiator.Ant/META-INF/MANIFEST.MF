@@ -16,7 +16,7 @@ Import-Package: org.eclipse.jdt.core,
  org.eclipse.jdt.core.dom,
  org.eclipse.jface.text,
  org.osgi.service.component
-Export-Package: de.uni_hildesheim.sse.easy.ant
+Export-Package: net.ssehub.easy.instantiation.ant
 Bundle-ActivationPolicy: lazy
 Bundle-ClassPath: .,
  lib/ant/ant-launcher.jar,

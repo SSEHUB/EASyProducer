@@ -14,7 +14,7 @@ Import-Package: org.osgi.service.component
 Bundle-ActivationPolicy: lazy
 Bundle-ClassPath: .,
  lib/velocity-1.7-dep.jar
-Export-Package: de.uni_hildesheim.sse.easy_producer.instantiator.velocity;
+Export-Package: net.ssehub.easy.instantiation.velocity;
   uses:="de.uni_hildesheim.sse.model.varModel.datatypes,
    de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.configuration,
    de.uni_hildesheim.sse.easy_producer.instantiator,

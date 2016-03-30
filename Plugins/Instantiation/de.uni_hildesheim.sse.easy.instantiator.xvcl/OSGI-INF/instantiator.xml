@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" immediate="true" name="EASy XVCL for VIL">
-   <implementation class="de.uni_hildesheim.sse.easy_producer.instantiator.xvcl.XVCLInstantiator"/>
+   <implementation class="net.ssehub.easy.instantiation.xvcl.XVCLInstantiator"/>
    <service>
-      <provide interface="de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.IRegistration"/>
+      <provide interface="net.ssehub.easy.instantiation.core.model.vilTypes.IRegistration"/>
    </service>
 </scr:component>
 

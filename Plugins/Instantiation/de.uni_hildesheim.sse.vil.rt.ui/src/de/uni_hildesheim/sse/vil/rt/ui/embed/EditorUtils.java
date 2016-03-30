@@ -9,9 +9,6 @@ import org.osgi.service.component.ComponentContext;
 
 import com.google.inject.Injector;
 
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.rtVil.Bundle;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.rtVil.RtVilModel;
-import de.uni_hildesheim.sse.easy_producer.instantiator.model.rtVil.Script;
 import de.uni_hildesheim.sse.vil.rt.RtVilModelUtility;
 import de.uni_hildesheim.sse.vil.rt.ui.RtVilModelListener;
 import de.uni_hildesheim.sse.vil.rt.ui.internal.RtVilActivator;
@@ -31,6 +28,9 @@ import net.ssehub.easy.dslCore.ui.editors.IEmbeddedEditor;
 import net.ssehub.easy.dslCore.ui.editors.ModelEditorConfigurer;
 import net.ssehub.easy.dslCore.ui.editors.ModelEditorConfigurer.IHeader;
 import net.ssehub.easy.dslCore.ui.editors.ModelEditorConfigurer.IModelEditorConfigurer;
+import net.ssehub.easy.instantiation.rt.core.model.rtVil.Bundle;
+import net.ssehub.easy.instantiation.rt.core.model.rtVil.RtVilModel;
+import net.ssehub.easy.instantiation.rt.core.model.rtVil.Script;
 import net.ssehub.easy.varModel.confModel.Configuration;
 
 /**
