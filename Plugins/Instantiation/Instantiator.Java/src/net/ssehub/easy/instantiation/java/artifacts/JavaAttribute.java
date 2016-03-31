@@ -14,7 +14,7 @@ import org.eclipse.jdt.core.dom.VariableDeclarationFragment;
 
 import net.ssehub.easy.basics.logger.EASyLoggerFactory;
 import net.ssehub.easy.basics.logger.EASyLoggerFactory.EASyLogger;
-import net.ssehub.easy.instantiation.core.Bundle;
+import net.ssehub.easy.instantiation.java.Bundle;
 import net.ssehub.easy.instantiation.core.model.artifactModel.ArtifactModel;
 import net.ssehub.easy.instantiation.core.model.artifactModel.IArtifactVisitor;
 import net.ssehub.easy.instantiation.core.model.artifactModel.representation.Binary;

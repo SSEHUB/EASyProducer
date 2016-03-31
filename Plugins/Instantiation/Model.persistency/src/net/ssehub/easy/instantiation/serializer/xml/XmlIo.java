@@ -24,7 +24,7 @@ import com.thoughtworks.xstream.mapper.MapperWrapper;
 import net.ssehub.easy.basics.logger.EASyLoggerFactory;
 import net.ssehub.easy.basics.logger.EASyLoggerFactory.EASyLogger;
 import net.ssehub.easy.basics.modelManagement.IModel;
-import net.ssehub.easy.instantiation.core.Bundle;
+import net.ssehub.easy.instantiation.serializer.xml.Bundle;
 import net.ssehub.easy.instantiation.serializer.xml.converter.AdviceConverter;
 import net.ssehub.easy.instantiation.serializer.xml.converter.ClassWrapperConverter;
 import net.ssehub.easy.instantiation.serializer.xml.converter.DelegatingTypeConverter;

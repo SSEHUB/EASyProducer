@@ -35,7 +35,7 @@ import net.ssehub.easy.basics.logger.EASyLoggerFactory;
 public class Activator implements BundleActivator {
 
     public static final String PROTOCOL_FILE = "file";
-    public static final String BUNDLE_ID = "de.uni_hildesheim.sse.easy.instantiator.maven";
+    public static final String BUNDLE_ID = "net.ssehub.easy.instantiation.maven";
     private static Bundle bundle;
 
     //checkstyle: stop exception type check

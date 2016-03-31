@@ -5,7 +5,7 @@ import com.thoughtworks.xstream.mapper.Mapper;
 
 import net.ssehub.easy.basics.logger.EASyLoggerFactory;
 import net.ssehub.easy.basics.logger.EASyLoggerFactory.EASyLogger;
-import net.ssehub.easy.instantiation.core.Bundle;
+import net.ssehub.easy.instantiation.serializer.xml.Bundle;
 import net.ssehub.easy.instantiation.serializer.xml.XmlIo;
 
 /**

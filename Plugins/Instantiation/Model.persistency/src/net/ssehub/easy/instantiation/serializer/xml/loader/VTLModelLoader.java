@@ -14,7 +14,7 @@ import net.ssehub.easy.basics.modelManagement.IModelLoader;
 import net.ssehub.easy.basics.modelManagement.ImportResolver;
 import net.ssehub.easy.basics.modelManagement.ModelInfo;
 import net.ssehub.easy.basics.modelManagement.Version;
-import net.ssehub.easy.instantiation.core.Bundle;
+import net.ssehub.easy.instantiation.serializer.xml.Bundle;
 import net.ssehub.easy.instantiation.core.model.templateModel.Template;
 import net.ssehub.easy.instantiation.serializer.xml.XmlIo;
 

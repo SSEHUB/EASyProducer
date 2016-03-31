@@ -16,7 +16,7 @@ import org.eclipse.jdt.core.dom.VariableDeclarationFragment;
 
 import net.ssehub.easy.basics.logger.EASyLoggerFactory;
 import net.ssehub.easy.basics.logger.EASyLoggerFactory.EASyLogger;
-import net.ssehub.easy.instantiation.core.Bundle;
+import net.ssehub.easy.instantiation.java.Bundle;
 
 /**
  * Visitor to find all method invocations.

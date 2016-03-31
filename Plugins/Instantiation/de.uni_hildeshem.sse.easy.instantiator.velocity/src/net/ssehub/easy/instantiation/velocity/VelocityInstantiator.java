@@ -253,7 +253,8 @@ public class VelocityInstantiator implements IVilType, IRegistration {
             errorMsg.append(detailedMsg.substring(start + 1));
             throw new VilException(errorMsg.toString(), VilException.ID_IO);
         } catch (Exception e) {
-            EASyLoggerFactory.INSTANCE.getLogger(VelocityInstantiator.class, "velocity").exception(e);
+            EASyLoggerFactory.INSTANCE.getLogger(VelocityInstantiator.class,
+                "net.ssehub.easy.instantiation.velocity").exception(e);
             throw new VilException(e.getLocalizedMessage(), VilException.ID_IO);
         }
         //checkstyle: resume exception type check 

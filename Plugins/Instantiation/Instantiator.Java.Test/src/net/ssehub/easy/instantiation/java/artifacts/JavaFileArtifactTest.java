@@ -14,15 +14,9 @@ import org.junit.Test;
 
 import net.ssehub.easy.basics.logger.EASyLoggerFactory;
 import net.ssehub.easy.basics.logger.EASyLoggerFactory.EASyLogger;
-import net.ssehub.easy.instantiation.core.Bundle;
 import net.ssehub.easy.instantiation.core.model.buildlangModel.Script;
 import net.ssehub.easy.instantiation.core.model.common.VilException;
 import net.ssehub.easy.instantiation.core.model.vilTypes.Set;
-import net.ssehub.easy.instantiation.java.artifacts.DefaultJavaFileArtifactCreator;
-import net.ssehub.easy.instantiation.java.artifacts.JavaAttribute;
-import net.ssehub.easy.instantiation.java.artifacts.JavaClass;
-import net.ssehub.easy.instantiation.java.artifacts.JavaFileArtifact;
-import net.ssehub.easy.instantiation.java.artifacts.JavaMethod;
 import test.de.uni_hildesheim.sse.vil.buildlang.AbstractExecutionTest;
 import test.de.uni_hildesheim.sse.vil.buildlang.BuildLangTestConfigurer;
 import test.de.uni_hildesheim.sse.vil.buildlang.ITestConfigurer;
@@ -35,7 +29,8 @@ import test.de.uni_hildesheim.sse.vil.buildlang.ITestConfigurer;
  */
 public class JavaFileArtifactTest extends AbstractExecutionTest<Script> {
 
-    private static EASyLogger logger = EASyLoggerFactory.INSTANCE.getLogger(JavaFileArtifactTest.class, Bundle.ID);
+    private static EASyLogger logger = EASyLoggerFactory.INSTANCE.getLogger(JavaFileArtifactTest.class,
+        "net.ssehub.easy.instantiation.java.tests");
 
     // TODO ok for now as the JavaFileArtifact was not registered with the
     // ArtifactFactory,

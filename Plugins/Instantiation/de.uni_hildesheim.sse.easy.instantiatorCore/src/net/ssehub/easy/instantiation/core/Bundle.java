@@ -10,6 +10,6 @@ public class Bundle {
     /**
      * Stores the bundle ID.
      */
-    public static final String ID = "de.uni-hildesheim.sse.easy.instantiatorCore";
+    public static final String ID = "net.ssehub.easy.instantiation.core";
 
 }

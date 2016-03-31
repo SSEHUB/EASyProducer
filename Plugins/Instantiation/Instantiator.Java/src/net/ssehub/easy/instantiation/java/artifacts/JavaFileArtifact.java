@@ -34,7 +34,6 @@ import org.eclipse.text.edits.TextEdit;
 
 import net.ssehub.easy.basics.logger.EASyLoggerFactory;
 import net.ssehub.easy.basics.logger.EASyLoggerFactory.EASyLogger;
-import net.ssehub.easy.instantiation.core.Bundle;
 import net.ssehub.easy.instantiation.core.JavaUtilities;
 import net.ssehub.easy.instantiation.core.model.artifactModel.ArtifactCreator;
 import net.ssehub.easy.instantiation.core.model.artifactModel.ArtifactFactory;
@@ -50,6 +49,7 @@ import net.ssehub.easy.instantiation.core.model.vilTypes.Conversion;
 import net.ssehub.easy.instantiation.core.model.vilTypes.Invisible;
 import net.ssehub.easy.instantiation.core.model.vilTypes.OperationMeta;
 import net.ssehub.easy.instantiation.core.model.vilTypes.Set;
+import net.ssehub.easy.instantiation.java.Bundle;
 import net.ssehub.easy.instantiation.java.JavaSettings;
 import net.ssehub.easy.instantiation.java.JavaSettingsInitializer;
 
