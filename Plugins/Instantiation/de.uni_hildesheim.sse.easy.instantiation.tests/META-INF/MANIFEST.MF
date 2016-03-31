@@ -7,5 +7,5 @@ Bundle-Vendor: Uni Hildesheim, SSE
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Require-Bundle: org.junit,
  net.ssehub.easy.instantiation.serializer.xml.tests;bundle-version="1.0.0",
- de.uni-hildesheim.sse.easy.instantiatorCore.tests;bundle-version="0.0.2",
+ net.ssehub.easy.instantiation.core.tests;bundle-version="0.0.2",
  de.uni_hildesheim.sse.vil.buildlang.tests;bundle-version="0.0.1"
