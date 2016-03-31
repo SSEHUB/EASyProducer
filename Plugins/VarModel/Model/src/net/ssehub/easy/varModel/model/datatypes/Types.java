@@ -7,7 +7,7 @@ package net.ssehub.easy.varModel.model.datatypes;
  */
 public class Types {
     
-    private static final IDatatype[] TYPES = { 
+    private static final IDatatype[] TYPES = {
         AnyType.TYPE, 
         BooleanType.TYPE, 
         Compound.TYPE,
