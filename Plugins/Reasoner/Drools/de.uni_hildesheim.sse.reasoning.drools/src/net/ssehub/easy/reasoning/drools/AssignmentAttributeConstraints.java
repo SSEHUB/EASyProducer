@@ -52,8 +52,7 @@ import net.ssehub.easy.varModel.model.values.VersionValue;
  */
 public class AssignmentAttributeConstraints implements IConstraintTreeVisitor, IValueVisitor {
     
-    private EASyLogger logger = EASyLoggerFactory.INSTANCE.getLogger(this.getClass(),
-            "de.uni_hildesheim.sse.reasoning.drools");
+    private EASyLogger logger = EASyLoggerFactory.INSTANCE.getLogger(this.getClass(), Activator.BUNDLE_ID);
     
     private static int ruleCounter = 0;
     

@@ -42,8 +42,7 @@ import net.ssehub.easy.varModel.model.datatypes.StringType;
  */
 public class DroolsVariablesPreProcessor implements IConstraintTreeVisitor {
     
-    private EASyLogger logger = EASyLoggerFactory.INSTANCE.getLogger(this.getClass(),
-            "de.uni_hildesheim.sse.reasoning.drools");
+    private EASyLogger logger = EASyLoggerFactory.INSTANCE.getLogger(this.getClass(), Activator.BUNDLE_ID);
     
     /**
      * if optimization type is advanced, the OCL generated via configuration are not used in translation of the model.

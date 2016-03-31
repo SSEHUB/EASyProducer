@@ -8,6 +8,7 @@ import java.util.Set;
 
 import net.ssehub.easy.basics.logger.EASyLoggerFactory;
 import net.ssehub.easy.basics.logger.EASyLoggerFactory.EASyLogger;
+import net.ssehub.easy.reasoning.drools.Activator;
 
 /**
  * This class contains additional functions to support IVML operations.
@@ -16,9 +17,6 @@ import net.ssehub.easy.basics.logger.EASyLoggerFactory.EASyLogger;
  *
  */
 public class IVMLFunctions {
-    
-    private static EASyLogger logger = EASyLoggerFactory.INSTANCE.getLogger(IVMLFunctions.class,
-            "de.uni_hildesheim.sse.reasoning.drools");
     
     private static int pre = 0;
     private static int ins = 0;

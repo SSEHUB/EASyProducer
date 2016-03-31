@@ -60,8 +60,7 @@ import net.ssehub.easy.varModel.model.values.VersionValue;
 public class DroolsConstraintVisitor implements 
     IConstraintTreeVisitor, IValueVisitor {
     
-    private EASyLogger logger = EASyLoggerFactory.INSTANCE.getLogger(this.getClass(),
-            "de.uni_hildesheim.sse.reasoning.drools");
+    private EASyLogger logger = EASyLoggerFactory.INSTANCE.getLogger(this.getClass(), Activator.BUNDLE_ID);
     
     private static final String WHEN = "when";
     private static final String THEN = "then";

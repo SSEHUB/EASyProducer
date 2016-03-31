@@ -15,6 +15,8 @@ import net.ssehub.easy.basics.logger.EASyLoggerFactory.EASyLogger;
  */
 public class Activator implements BundleActivator {
 
+    public static final String BUNDLE_ID = "net.ssehub.easy.reasoning.drools";
+    
     private static BundleContext context;
     
     /**
@@ -29,8 +31,7 @@ public class Activator implements BundleActivator {
     @Override
     public void start(BundleContext bundleContext) throws Exception {
         Activator.context = bundleContext;
-        EASyLogger logger = EASyLoggerFactory.INSTANCE.getLogger(this.getClass(),
-            "de.uni_hildesheim.sse.reasoning.drools");
+        EASyLogger logger = EASyLoggerFactory.INSTANCE.getLogger(this.getClass(), BUNDLE_ID);
         logger.info("Drools started ");
     }
     @Override

@@ -22,8 +22,7 @@ import net.ssehub.easy.basics.logger.EASyLoggerFactory.EASyLogger;
  */
 public class DroolsPrinter {
     
-    private EASyLogger logger = EASyLoggerFactory.INSTANCE.getLogger(this.getClass(),
-            "de.uni_hildesheim.sse.reasoning.drools");
+    private EASyLogger logger = EASyLoggerFactory.INSTANCE.getLogger(this.getClass(), Activator.BUNDLE_ID);
     
     private static final String CONFIGRULE = "rule " + "\"Config rule\" " 
             + "\n agenda-group " + "\"Group Config\""

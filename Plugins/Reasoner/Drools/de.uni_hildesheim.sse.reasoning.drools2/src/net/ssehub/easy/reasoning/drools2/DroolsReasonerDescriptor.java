@@ -16,7 +16,7 @@ public class DroolsReasonerDescriptor extends ReasonerDescriptor {
      * The ID of this bundle.
      * Maybe used for retrieving {@link de.uni_hildesheim.sse.logger.EASyLoggerFactory.EASyLogger}s.
      */
-    public static final String BUNDLE_NAME = "de.uni_hildesheim.sse.reasoning.drools2"; 
+    public static final String BUNDLE_NAME = "net.ssehub.easy.reasoning.drools2"; 
 
     static final String NAME = "Drools Expert v2";
 

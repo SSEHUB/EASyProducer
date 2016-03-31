@@ -57,8 +57,7 @@ import net.ssehub.easy.varModel.model.values.VersionValue;
  */
 public class DroolsAssignmentsVisitor implements IConstraintTreeVisitor, IValueVisitor {
     
-    private EASyLogger logger = EASyLoggerFactory.INSTANCE.getLogger(this.getClass(),
-            "de.uni_hildesheim.sse.reasoning.drools");
+    private EASyLogger logger = EASyLoggerFactory.INSTANCE.getLogger(this.getClass(), Activator.BUNDLE_ID);
     
     private static final String AGENDA = "agenda-group " + "\"" + "Group 0";
     private static final String NOLOOP = "no-loop true" + "\n";

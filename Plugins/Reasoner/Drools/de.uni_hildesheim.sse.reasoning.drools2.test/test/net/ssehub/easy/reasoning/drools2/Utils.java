@@ -22,7 +22,7 @@ class Utils {
      */
     public static final void init() {
         AbstractReasonerFrontendTest.setupTests(new TestConfiguration(
-            "de.uni_hildesheim.sse.reasoning.drools2.test", 
+            "net.ssehub.easy.reasoning.drools2.tests", 
             null, 
             true, // CHECK
             false), // CONSISTENT

@@ -57,8 +57,7 @@ import net.ssehub.easy.varModel.model.datatypes.OclKeyWords;
  */
 public class DroolsEvaluation implements IConstraintTreeVisitor {
     
-    private EASyLogger logger = EASyLoggerFactory.INSTANCE.getLogger(this.getClass(),
-            "de.uni_hildesheim.sse.reasoning.drools");
+    private EASyLogger logger = EASyLoggerFactory.INSTANCE.getLogger(this.getClass(), Activator.BUNDLE_ID);
 
     private DroolsVisitor droolsVisitor;
     private int key = 1;

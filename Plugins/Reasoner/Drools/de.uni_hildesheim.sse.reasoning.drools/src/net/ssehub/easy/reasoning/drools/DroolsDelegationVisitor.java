@@ -14,8 +14,7 @@ import net.ssehub.easy.varModel.model.datatypes.Compound;
  */
 class DroolsDelegationVisitor {
     
-    private EASyLogger logger = EASyLoggerFactory.INSTANCE.getLogger(this.getClass(),
-            "de.uni_hildesheim.sse.reasoning.drools");
+    private EASyLogger logger = EASyLoggerFactory.INSTANCE.getLogger(this.getClass(), Activator.BUNDLE_ID);
     
     /**
      * Method that generates a rule for the freeze block.

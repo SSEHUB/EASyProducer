@@ -90,8 +90,7 @@ import net.ssehub.easy.varModel.model.values.VersionValue;
 public class DroolsVisitor implements IModelVisitor, 
     IDatatypeVisitor, IConstraintTreeVisitor, IValueVisitor, IConfigurationVisitor {
     
-    private EASyLogger logger = EASyLoggerFactory.INSTANCE.getLogger(this.getClass(),
-            "de.uni_hildesheim.sse.reasoning.drools");
+    private EASyLogger logger = EASyLoggerFactory.INSTANCE.getLogger(this.getClass(), Activator.BUNDLE_ID);
     
     public static final int THRESHOLD = 200;
     public static final String TYPESAFE = "@typesafe (false) \n";

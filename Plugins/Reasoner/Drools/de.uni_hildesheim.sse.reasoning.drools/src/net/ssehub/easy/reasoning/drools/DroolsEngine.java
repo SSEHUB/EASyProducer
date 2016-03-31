@@ -71,8 +71,7 @@ import net.ssehub.easy.varModel.model.values.ValueFactory;
  */
 public class DroolsEngine {
     
-    private EASyLogger logger = EASyLoggerFactory.INSTANCE.getLogger(this.getClass(),
-            "de.uni_hildesheim.sse.reasoning.drools");
+    private EASyLogger logger = EASyLoggerFactory.INSTANCE.getLogger(this.getClass(), Activator.BUNDLE_ID);
     
     /**
      * Optimization Case Nr. : 
