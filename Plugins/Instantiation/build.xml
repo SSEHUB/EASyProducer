@@ -8,11 +8,11 @@
     <!-- Individual properties for this build script -->
     <property name="test.plugin.instantiation" value="net.ssehub.easy.instantiation.core.tests"/>
     <property name="test.suite.instantiation" value="net.ssehub.easy.instantiation.core.AllTests"/>
-    <property name="test.plugin.instantiation.java" value="de.uni_hildesheim.sse.easy.instantiator.java.test"/>
+    <property name="test.plugin.instantiation.java" value="net.ssehub.easy.instantiation.java.tests"/>
     <property name="test.suite.instantiation.java" value="net.ssehub.easy.instantiation.java.AllTests"/>
-    <property name="test.plugin.instantiation.ant" value="de.uni_hildesheim.sse.easy.instantiator.ant.test"/>
+    <property name="test.plugin.instantiation.ant" value="net.ssehub.easy.instantiation.ant.test"/>
     <property name="test.suite.instantiation.ant" value="net.ssehub.easy.instantiation.ant.AllTests"/>
-    <property name="test.plugin.instantiation.aspectj" value="de.uni_hildesheim.sse.easy.instantiator.aspectj.test"/>
+    <property name="test.plugin.instantiation.aspectj" value="net.ssehub.easy.instantiation.aspectj.tests"/>
     <property name="test.suite.instantiation.aspectj" value="net.ssehub.easy.instantiation.aspectj.AllTests"/>
     <property name="test.plugin.instantiation.rtVil" value="de.uni_hildesheim.sse.vil.rt.tests"/>
     <property name="test.suite.instantiation.rtVil" value="de.uni_hildesheim.sse.vil.rt.tests.AllTests"/>
