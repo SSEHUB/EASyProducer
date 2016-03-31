@@ -10,6 +10,6 @@ public class Bundle {
     /**
      * Stores the bundle ID.
      */
-    public static final String ID = "ReasonerCore";
+    public static final String ID = "net.ssehub.easy.reasoning.core";
     
 }
