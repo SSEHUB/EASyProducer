@@ -18,7 +18,7 @@ Require-Bundle: de.uni_hildesheim.sse.ivml;visibility:=reexport,
  org.eclipse.compare,
  org.eclipse.core.resources,
  org.eclipse.core.runtime,
- de.uni_hildesheim.sse.varModel;bundle-version="0.0.3",
+ net.ssehub.easy.varModel;bundle-version="0.0.3",
  net.ssehub.easy.dslCore;bundle-version="0.0.1",
  net.ssehub.easy.dslCore.ui;bundle-version="0.0.1"
 Import-Package: org.apache.commons.logging,

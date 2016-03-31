@@ -9,7 +9,7 @@ Service-Component: OSGI-INF/instantiator.xml
 Require-Bundle: de.uni-hildesheim.sse.easy.instantiatorCore;bundle-version="0.0.1",
  org.eclipse.equinox.ds,
  org.eclipse.core.runtime,
- de.uni_hildesheim.sse.varModel;bundle-version="0.5.5"
+ net.ssehub.easy.varModel;bundle-version="0.5.5"
 Import-Package: org.osgi.service.component
 Bundle-ActivationPolicy: lazy
 Bundle-ClassPath: .,

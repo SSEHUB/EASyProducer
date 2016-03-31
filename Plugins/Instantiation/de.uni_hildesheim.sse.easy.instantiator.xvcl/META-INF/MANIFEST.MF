@@ -14,6 +14,6 @@ Bundle-ClassPath: lib/xvcl.jar,
  lib/log4j-1.2.13.jar
 Require-Bundle: de.uni-hildesheim.sse.easy.instantiatorCore;bundle-version="0.0.1",
  org.eclipse.core.runtime,
- de.uni_hildesheim.sse.varModel;bundle-version="0.5.5"
+ net.ssehub.easy.varModel;bundle-version="0.5.5"
 Import-Package: org.osgi.service.component
 Bundle-ActivationPolicy: lazy

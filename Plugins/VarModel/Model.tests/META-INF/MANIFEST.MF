@@ -8,7 +8,7 @@ Import-Package: org.osgi.framework
 Bundle-Vendor: University of Hildesheim - SSE
 Bundle-ActivationPolicy: lazy
 Bundle-ClassPath: .
-Require-Bundle: de.uni_hildesheim.sse.varModel;bundle-version="0.0.10",
+Require-Bundle: net.ssehub.easy.varModel;bundle-version="0.0.10",
  org.junit,
  org.apache.commons.io;bundle-version="2.0.1"
 Export-Package: net.ssehub.easy.varModel.varModel.testSupport

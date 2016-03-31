@@ -7,7 +7,7 @@ Import-Package: org.osgi.framework
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Bundle-Vendor: University of Hildesheim - SSE
 Require-Bundle: net.ssehub.easy.reasoning.core;bundle-version="0.0.3",
- de.uni_hildesheim.sse.varModel;bundle-version="0.0.6",
+ net.ssehub.easy.varModel;bundle-version="0.0.6",
  org.eclipse.equinox.ds,
  org.eclipse.osgi.services,
  org.eclipse.equinox.launcher;bundle-version="1.2.0",

@@ -8,7 +8,7 @@ Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Service-Component: OSGI-INF/instantiatorCoreRt.xml
 Require-Bundle: de.uni-hildesheim.sse.easy.instantiatorCore;bundle-version="0.11.2";visibility:=reexport,
  net.ssehub.easy.basics;bundle-version="0.4.2",
- de.uni_hildesheim.sse.varModel;bundle-version="0.11.3",
+ net.ssehub.easy.varModel;bundle-version="0.11.3",
  org.eclipse.equinox.ds,
  org.eclipse.core.runtime,
  net.ssehub.easy.reasoning.core;bundle-version="0.10.3",

@@ -23,7 +23,7 @@ Require-Bundle: de.uni_hildesheim.sse.vil.rt;visibility:=reexport,
  org.eclipse.osgi.services,
  org.eclipse.compare,
  de.uni-hildesheim.sse.easy.instantiatorCore.rt;bundle-version="0.0.1",
- de.uni_hildesheim.sse.varModel;bundle-version="0.11.3"
+ net.ssehub.easy.varModel;bundle-version="0.11.3"
 Import-Package: org.apache.log4j,
  org.eclipse.xtext.xbase.lib
 Service-Component: OSGI-INF/rtvilFactory.xml

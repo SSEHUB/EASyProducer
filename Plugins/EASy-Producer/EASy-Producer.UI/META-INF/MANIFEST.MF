@@ -20,7 +20,7 @@ Require-Bundle:
  de.uni_hildesheim.sse.easy_producer.eclipse;bundle-version="0.7.2",
  net.ssehub.easy.reasoning.core;bundle-version="0.0.8",
  org.eclipse.ui.console;bundle-version="3.5.100",
- de.uni_hildesheim.sse.varModel;bundle-version="0.5.5",
+ net.ssehub.easy.varModel;bundle-version="0.5.5",
  net.ssehub.easy.dslCore.ui;bundle-version="0.0.1",
  de.uni_hildesheim.sse.vil.buildlang.ui;bundle-version="0.5.3",
  net.ssehub.easy.dslCore;bundle-version="0.8.3",

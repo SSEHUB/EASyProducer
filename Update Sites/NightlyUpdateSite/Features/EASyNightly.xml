@@ -51,14 +51,14 @@
          unpack="false"/>
 
    <plugin
-         id="de.uni_hildesheim.sse.dslCore"
+         id="net.ssehub.easy.dslCore"
          download-size="0"
          install-size="0"
          version="0.0.0"
          unpack="false"/>
 
    <plugin
-         id="de.uni_hildesheim.sse.dslCore.ui"
+         id="net.ssehub.easy.dslCore.ui"
          download-size="0"
          install-size="0"
          version="0.0.0"
@@ -142,14 +142,14 @@
          unpack="false"/>
          
    <plugin
-         id="de.uni_hildesheim.sse.utils"
+         id="net.ssehub.easy.basics"
          download-size="0"
          install-size="0"
          version="0.0.0"
          unpack="false"/>
 
    <plugin
-         id="de.uni_hildesheim.sse.varModel"
+         id="net.ssehub.easy.varModel"
          download-size="0"
          install-size="0"
          version="0.0.0"

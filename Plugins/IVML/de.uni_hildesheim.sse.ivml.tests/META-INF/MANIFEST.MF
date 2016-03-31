@@ -8,7 +8,7 @@ Bundle-ActivationPolicy: lazy
 Require-Bundle: de.uni_hildesheim.sse.ivml,
  org.eclipse.core.runtime,
  org.junit;bundle-version="4.8.2",
- de.uni_hildesheim.sse.varModel;bundle-version="0.0.3",
+ net.ssehub.easy.varModel;bundle-version="0.0.3",
  org.eclipse.xtext.junit4,
  org.eclipse.ui.workbench;resolution:=optional,
  net.ssehub.easy.dslCore;bundle-version="0.0.1",

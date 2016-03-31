@@ -19,7 +19,7 @@ Require-Bundle: de.uni_hildesheim.sse.vil.templatelang;visibility:=reexport,
  org.eclipse.equinox.ds,
  org.eclipse.osgi.services,
  de.uni_hildesheim.sse.vil.expressions.ui;bundle-version="0.0.1",
- de.uni_hildesheim.sse.varModel;bundle-version="0.5.5",
+ net.ssehub.easy.varModel;bundle-version="0.5.5",
  de.uni-hildesheim.sse.easy.instantiatorCore;bundle-version="0.5.5",
  net.ssehub.easy.dslCore.ui
 Service-Component: OSGI-INF/vtlFactory.xml
