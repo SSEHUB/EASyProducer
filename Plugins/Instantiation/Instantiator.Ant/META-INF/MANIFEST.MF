@@ -1,7 +1,7 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: ANT Instantiation Support
-Bundle-SymbolicName: de.uni_hildesheim.sse.easy.instantiator.ant;singleton:=true
+Bundle-SymbolicName: net.ssehub.easy.instantiation.ant;singleton:=true
 Bundle-Version: 1.9.4.0
 Bundle-Vendor: University of Hildesheim, SSE
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6

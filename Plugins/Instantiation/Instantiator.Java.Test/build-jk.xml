@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project name="de.uni_hildeshem.sse.easy.instantiator.java.test" default="jar" basedir=".">
+<project name="net.ssehub.easy.instantiation.java.tests" default="jar" basedir=".">
 	<!-- import von globalen Properties Einstellungen -->
 	<property file="${user.home}/global-build.properties"/>
 	

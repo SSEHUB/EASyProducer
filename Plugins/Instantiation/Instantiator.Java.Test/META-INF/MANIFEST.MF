@@ -1,7 +1,7 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Java Instantiator Test
-Bundle-SymbolicName: de.uni_hildesheim.sse.easy.instantiator.java.test;singleton:=true
+Bundle-SymbolicName: net.ssehub.easy.instantiation.java.tests;singleton:=true
 Bundle-Version: 0.0.1
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Require-Bundle: de.uni_hildesheim.sse.vil.buildlang.tests;bundle-version="0.0.1",

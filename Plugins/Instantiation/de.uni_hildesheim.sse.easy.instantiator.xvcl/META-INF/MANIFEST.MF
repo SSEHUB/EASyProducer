@@ -1,7 +1,7 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: XVCL instantiator
-Bundle-SymbolicName: de.uni-hildesheim.sse.easy.instantiator.xvcl;singleton:=true
+Bundle-SymbolicName: net.ssehub.easy.instantiation.xvcl;singleton:=true
 Bundle-Version: 3.3.0.3
 Bundle-Vendor: University of Hildesheim - SSE
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6

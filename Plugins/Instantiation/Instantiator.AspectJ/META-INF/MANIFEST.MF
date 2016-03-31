@@ -1,7 +1,7 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: AspectJ Instantiation Support
-Bundle-SymbolicName: de.uni_hildesheim.sse.easy.instantiator.aspectj;singleton:=true
+Bundle-SymbolicName: net.ssehub.easy.instantiation.aspectj;singleton:=true
 Bundle-Version: 1.8.6.1
 Bundle-Vendor: University of Hildesheim, SSE
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
