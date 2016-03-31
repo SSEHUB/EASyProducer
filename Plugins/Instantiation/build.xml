@@ -6,7 +6,7 @@
     </taskdef>
     
     <!-- Individual properties for this build script -->
-    <property name="test.plugin.instantiation" value="de.uni-hildesheim.sse.easy.instantiatorCore.tests"/>
+    <property name="test.plugin.instantiation" value="net.ssehub.easy.instantiation.core.tests"/>
     <property name="test.suite.instantiation" value="net.ssehub.easy.instantiation.core.AllTests"/>
     <property name="test.plugin.instantiation.java" value="de.uni_hildesheim.sse.easy.instantiator.java.test"/>
     <property name="test.suite.instantiation.java" value="net.ssehub.easy.instantiation.java.AllTests"/>
