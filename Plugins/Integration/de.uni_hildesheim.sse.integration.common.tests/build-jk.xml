@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project name="de.uni_hildesheim.sse.integration.common.tests" default="jar" basedir=".">
+<project name="net.ssehub.easy.integration.common.tests" default="jar" basedir=".">
 	<!-- import von globalen Properties Einstellungen -->
 	<property file="${user.home}/global-build.properties"/>
 	
@@ -10,18 +10,16 @@
 	
 	<path id ="includes">
 		<!-- Model -->
-        <pathelement path="${libs.utils}"/>
+    <pathelement path="${libs.utils}"/>
 		<pathelement path="${libs.model}"/>
-        <!-- DSL core common classes -->
-        <pathelement path="${libs.dslCore}"/>       
+    <pathelement path="${libs.dslCore}"/>       
 		<!-- Integration Common -->
 		<pathelement path="${libs.integration.common}"/>
-		<!-- Integration Common Impl -->
 		<pathelement path="${libs.integration.common.impl}"/>
 		<!-- IVML-->
 		<pathelement path="${libs.ivml}"/>
-        <!-- ReasonerCore -->
-        <pathelement path="${libs.reasonerCore}"/>
+    <!-- ReasonerCore -->
+    <pathelement path="${libs.reasonerCore}"/>
 		<!-- Eclipse-Plugins -->
 		<fileset dir="${eclipse.plugins.dir}">
 			<include name="**/*.jar" />

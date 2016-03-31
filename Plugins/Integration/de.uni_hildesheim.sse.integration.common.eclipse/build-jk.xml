@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project name="de.uni_hildesheim.sse.integration.common.eclipse" default="jar" basedir=".">
+<project name="net.ssehub.easy.integration.common.eclipse" default="jar" basedir=".">
 	<!-- import von globalen Properties Einstellungen -->
 	<property file="${user.home}/global-build.properties"/>
 	
@@ -10,14 +10,13 @@
 	
 	<path id ="includes">
 		<!-- Model -->
-        <pathelement path="${libs.utils}"/>
+    <pathelement path="${libs.utils}"/>
 		<pathelement path="${libs.model}"/>
 		<!-- Integration Common -->
 		<pathelement path="${libs.integration.common}"/>
-        <!-- Persistencer -->
-        <pathelement path="${libs.easy.persistence}"/>
-        <!-- EASy core -->
-        <pathelement path="${libs.easy.PLugin}"/>
+    <!-- EASy -->
+    <pathelement path="${libs.easy.persistence}"/>
+    <pathelement path="${libs.easy.PLugin}"/>
 		<!-- Eclipse-Plugins -->
 		<fileset dir="${eclipse.plugins.dir}">
 			<include name="**/*.jar" />
