@@ -6,7 +6,7 @@
     </taskdef>
     
     <!-- Indivdual properties for this build script -->
-    <property name="test.plugin" value="net.ssehub.easy.reasoning.core.test"/>
+    <property name="test.plugin" value="net.ssehub.easy.reasoning.core.tests"/>
     <property name="test.suite" value="net.ssehub.easy.reasoning.core.AllTests"/>
 
 	<target name="init">
