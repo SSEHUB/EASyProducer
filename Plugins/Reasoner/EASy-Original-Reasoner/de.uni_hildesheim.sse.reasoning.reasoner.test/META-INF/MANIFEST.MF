@@ -1,6 +1,6 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: de.uni_hildesheim.sse.reasoning.reasoner.test
+Bundle-Name: SSE-Reasoner Tests
 Bundle-SymbolicName: net.ssehub.easy.reasoning.sseReasoner.tests
 Bundle-Version: 0.0.1
 Bundle-Vendor: University of Hildesheim - SSE

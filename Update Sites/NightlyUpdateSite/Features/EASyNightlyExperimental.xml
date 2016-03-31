@@ -33,7 +33,7 @@
    </requires>
    
    <plugin
-         id="de.uni_hildesheim.sse.reasoning.drools2"
+         id="net.ssehub.easy.reasoning.drools2"
          download-size="0"
          install-size="0"
          version="0.0.0"
