@@ -11,7 +11,7 @@ Bundle-Vendor: University of Hildesheim, SSE
 EASyLoader-BundleClassPath: false
 Service-Component: OSGI-INF/instantiator.xml
 Eclipse-BundleShape: dir
-Require-Bundle: de.uni-hildesheim.sse.easy.instantiatorCore;bundle-version="0.5.5",
+Require-Bundle: net.ssehub.easy.instantiation.core;bundle-version="0.5.5",
  net.ssehub.easy.basics,
  org.eclipse.equinox.ds,
  org.eclipse.core.runtime

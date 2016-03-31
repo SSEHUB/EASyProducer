@@ -6,7 +6,7 @@ Bundle-Version: 1.8.6.1
 Bundle-Vendor: University of Hildesheim, SSE
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Service-Component: OSGI-INF/instantiator.xml
-Require-Bundle: de.uni-hildesheim.sse.easy.instantiatorCore;bundle-version="0.5.5",
+Require-Bundle: net.ssehub.easy.instantiation.core;bundle-version="0.5.5",
  net.ssehub.easy.basics;bundle-version="0.0.1",
  org.eclipse.equinox.ds,
  org.eclipse.jdt.core,

@@ -8,7 +8,7 @@ Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Require-Bundle: org.junit,
  net.ssehub.easy.basics,
  de.uni_hildesheim.sse.varModel.persistency,
- de.uni-hildesheim.sse.easy.instantiatorCore,
+ net.ssehub.easy.instantiation.core,
  net.ssehub.easy.varModel,
  de.uni_hildesheim.sse.ivml,
  org.apache.commons.io;bundle-version="2.0.1",

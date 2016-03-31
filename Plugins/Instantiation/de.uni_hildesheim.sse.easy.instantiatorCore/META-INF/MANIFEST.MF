@@ -1,7 +1,7 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: InstantiatorCore
-Bundle-SymbolicName: de.uni-hildesheim.sse.easy.instantiatorCore;singleton:=true
+Bundle-SymbolicName: net.ssehub.easy.instantiation.core;singleton:=true
 Bundle-Version: 1.1.0
 Bundle-Vendor: University of Hildesheim - SSE
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6

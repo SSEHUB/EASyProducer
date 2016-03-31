@@ -20,7 +20,7 @@ Require-Bundle: de.uni_hildesheim.sse.vil.templatelang;visibility:=reexport,
  org.eclipse.osgi.services,
  de.uni_hildesheim.sse.vil.expressions.ui;bundle-version="0.0.1",
  net.ssehub.easy.varModel;bundle-version="0.5.5",
- de.uni-hildesheim.sse.easy.instantiatorCore;bundle-version="0.5.5",
+ net.ssehub.easy.instantiation.core;bundle-version="0.5.5",
  net.ssehub.easy.dslCore.ui
 Service-Component: OSGI-INF/vtlFactory.xml
 Import-Package: org.apache.log4j

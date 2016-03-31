@@ -6,7 +6,7 @@ Bundle-Version: 1.1.0
 Bundle-Activator: net.ssehub.easy.producer.core.persistence.internal.Activator
 Bundle-Vendor: University of Hildesheim - SSE
 Require-Bundle: net.ssehub.easy.varModel;bundle-version="0.5.4",
- de.uni-hildesheim.sse.easy.instantiatorCore;bundle-version="0.5.4",
+ net.ssehub.easy.instantiation.core;bundle-version="0.5.4",
  net.ssehub.easy.reasoning.core;bundle-version="0.5.5",
  net.ssehub.easy.dslCore;bundle-version="0.6.0",
  de.uni_hildesheim.sse.ivml;bundle-version="0.6.0",
