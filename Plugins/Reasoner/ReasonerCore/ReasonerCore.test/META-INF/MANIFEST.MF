@@ -1,6 +1,6 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: ReasonerCore.test
+Bundle-Name: net.ssehub.easy.reasoning.core.tests
 Bundle-SymbolicName: net.ssehub.easy.reasoning.core.test;singleton:=true
 Bundle-Version: 0.0.1
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6

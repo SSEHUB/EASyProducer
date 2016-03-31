@@ -17,7 +17,7 @@ public class TestConfiguration {
         CONSISTENT
     }
     
-    public static final String PLUGIN_ID = "ReasonerCore.test";
+    public static final String PLUGIN_ID = "net.ssehub.easy.reasoning.core.tests";
     public static final String SYSTEM_PROPERTY = "reasonerCore.testdata.home";
     static final String PROJECT_NAME = "../ReasonerCore.test/";
     
