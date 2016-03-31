@@ -27,7 +27,7 @@ limitations under the License.
    </license>
 
    <plugin
-         id="de.uni_hildesheim.sse.easy.instantiator.ant"
+         id="net.ssehub.easy.instantiation.ant"
          download-size="0"
          install-size="0"
          version="1.9.4.0"

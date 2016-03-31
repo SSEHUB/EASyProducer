@@ -39,7 +39,7 @@
          unpack="false"/>
 
    <plugin
-         id="de.uni_hildesheim.sse.varModel.persistency"
+         id="net.ssehub.easy.instantiation.serializer.xml"
          download-size="0"
          install-size="0"
          version="0.7.2"

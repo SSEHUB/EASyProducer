@@ -28,7 +28,7 @@ limitations under the License.
    </license>
 
    <plugin
-         id="de.uni_hildesheim.sse.easy.instantiator.maven"
+         id="net.ssehub.easy.instantiation.maven"
          download-size="0"
          install-size="0"
          version="3.2.3.2"

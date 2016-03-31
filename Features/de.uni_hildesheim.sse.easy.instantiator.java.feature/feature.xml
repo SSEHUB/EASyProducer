@@ -32,7 +32,7 @@ limitations under the License.
    </url>
 
    <plugin
-         id="de.uni_hildesheim.sse.easy.instantiator.java"
+         id="net.ssehub.easy.instantiation.java"
          download-size="0"
          install-size="0"
          version="1.1.0"

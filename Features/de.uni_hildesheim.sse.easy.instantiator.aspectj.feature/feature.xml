@@ -27,7 +27,7 @@ limitations under the License.
    </license>
 
    <plugin
-         id="de.uni_hildesheim.sse.easy.instantiator.aspectj"
+         id="net.ssehub.easy.instantiation.aspectj"
          download-size="0"
          install-size="0"
          version="1.8.6.1"

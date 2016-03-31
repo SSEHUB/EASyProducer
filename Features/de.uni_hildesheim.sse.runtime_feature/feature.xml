@@ -67,14 +67,14 @@
          unpack="false"/>
 
    <plugin
-         id="de.uni-hildesheim.sse.easy.instantiatorCore"
+         id="net.ssehub.easy.instantiation.core"
          download-size="0"
          install-size="0"
          version="0.11.3"
          unpack="false"/>
 
    <plugin
-         id="de.uni_hildesheim.sse.easy.instantiator.java"
+         id="net.ssehub.easy.instantiation.java"
          download-size="0"
          install-size="0"
          version="0.2.3"
@@ -95,7 +95,7 @@
          unpack="false"/>
 
    <plugin
-         id="de.uni-hildesheim.sse.easy.instantiator.velocity"
+         id="net.ssehub.easy.instantiation.velocity"
          download-size="0"
          install-size="0"
          version="1.8.2"
@@ -109,14 +109,14 @@
          unpack="false"/>
 
    <plugin
-         id="de.uni_hildesheim.sse.easy.instantiator.ant"
+         id="net.ssehub.easy.instantiation.ant"
          download-size="0"
          install-size="0"
          version="0.2.3"
          unpack="false"/>
 
    <plugin
-         id="de.uni_hildesheim.sse.easy.instantiator.aspectj"
+         id="net.ssehub.easy.instantiation.aspectj"
          download-size="0"
          install-size="0"
          version="0.2.3"
