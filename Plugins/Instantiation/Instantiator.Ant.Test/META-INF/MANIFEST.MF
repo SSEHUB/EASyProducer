@@ -10,4 +10,4 @@ Require-Bundle: de.uni_hildesheim.sse.vil.buildlang.tests;bundle-version="0.0.1"
  net.ssehub.easy.instantiation.core;bundle-version="0.5.5",
  net.ssehub.easy.varModel;bundle-version="0.5.5",
  net.ssehub.easy.varModel.tests;bundle-version="0.0.10",
- de.uni_hildesheim.sse.easy.instantiator.ant;bundle-version="0.2.3"
+ net.ssehub.easy.instantiation.ant;bundle-version="0.2.3"

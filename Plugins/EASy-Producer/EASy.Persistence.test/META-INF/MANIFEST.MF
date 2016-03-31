@@ -7,6 +7,6 @@ Fragment-Host: de.uni_hildesheim.sse.easy_producer.core;bundle-version="0.7.2"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Bundle-ClassPath: .
 Require-Bundle: org.junit;bundle-version="4.8.1",
- de.uni-hildesheim.sse.easy.instantiator.velocity;bundle-version="1.7.13",
+ net.ssehub.easy.instantiation.velocity;bundle-version="1.7.13",
  org.apache.commons.io;bundle-version="2.0.1",
  net.ssehub.easy.reasoning.sseReasoner;bundle-version="1.0.0"

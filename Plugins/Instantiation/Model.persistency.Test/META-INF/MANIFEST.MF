@@ -7,7 +7,7 @@ Bundle-Vendor: University of Hildesheim - SSE
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Require-Bundle: org.junit,
  net.ssehub.easy.basics,
- de.uni_hildesheim.sse.varModel.persistency,
+ net.ssehub.easy.instantiation.serializer.xml,
  net.ssehub.easy.instantiation.core,
  net.ssehub.easy.varModel,
  de.uni_hildesheim.sse.ivml,
@@ -15,7 +15,7 @@ Require-Bundle: org.junit,
  de.uni_hildesheim.sse.vil.buildlang;bundle-version="0.5.3",
  de.uni_hildesheim.sse.vil.expressions;bundle-version="0.5.3",
  de.uni_hildesheim.sse.vil.templatelang;bundle-version="0.5.3",
- de.uni_hildesheim.sse.easy.instantiator.maven;bundle-version="3.2.3",
+ net.ssehub.easy.instantiation.maven;bundle-version="3.2.3",
  net.ssehub.easy.reasoning.core,
  net.ssehub.easy.reasoning.sseReasoner
 Export-Package: net.ssehub.easy.instantiation.serializer.xml
