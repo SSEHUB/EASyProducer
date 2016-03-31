@@ -9,7 +9,7 @@ import org.osgi.framework.BundleContext;
 public class Activator extends AbstractUIPlugin {
 
     // The plug-in ID
-    public static final String PLUGIN_ID = "de.uni_hildesheim.sse.dslCore.ui"; //$NON-NLS-1$
+    public static final String PLUGIN_ID = "net.ssehub.easy.dslCore.ui"; //$NON-NLS-1$
 
     // The shared instance
     private static Activator plugin;

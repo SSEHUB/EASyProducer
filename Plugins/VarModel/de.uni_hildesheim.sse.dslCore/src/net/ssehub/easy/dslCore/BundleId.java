@@ -7,5 +7,5 @@ package net.ssehub.easy.dslCore;
  */
 public class BundleId {
 
-    public static final String ID = "de.uni_hildesheim.sse.dslCore";
+    public static final String ID = "net.ssehub.easy.dslCore";
 }

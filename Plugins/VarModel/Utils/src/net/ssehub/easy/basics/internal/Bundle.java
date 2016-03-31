@@ -28,6 +28,6 @@ public class Bundle {
      * Stores the bundle ID.
      * Must be the same ID as specified inside the Manifest file.
      */
-    public static final String ID = "de.uni_hildesheim.sse.utils";
+    public static final String ID = "net.ssehub.easy.basics";
 
 }

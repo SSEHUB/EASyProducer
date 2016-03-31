@@ -28,7 +28,7 @@ public class Bundle {
     /**
      * Stores the bundle ID.
      */
-    public static final String ID = "de.uni_hildesheim.sse.varModel";
+    public static final String ID = "net.ssehub.easy.varModel";
     
     /**
      * Helper method for getting an Logger for a Class of this bundle.
