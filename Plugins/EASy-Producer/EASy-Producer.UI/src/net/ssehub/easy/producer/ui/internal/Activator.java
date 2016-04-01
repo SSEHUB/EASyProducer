@@ -17,7 +17,7 @@ public class Activator extends AbstractUIPlugin {
     /**
      * The plug-in ID.
      */
-    public static final String PLUGIN_ID = "de.uni_hildesheim.sse.easy.ui"; //$NON-NLS-1$
+    public static final String PLUGIN_ID = "net.ssehub.easy.producer.ui"; //$NON-NLS-1$
 
     /**
      * The shared instance.
