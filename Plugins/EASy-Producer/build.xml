@@ -11,9 +11,9 @@
     <!-- Indivdual properties for this build script -->
     <property name="test.plugin" value="net.ssehub.easy.producer.eclipse.tests"/>
     <property name="test.suite" value="net.ssehub.easy.producer.eclipse.AllTests"/>
-    <property name="test.plugin.szenarios" value="de.uni_hildeshem.sse.easy.scenario.tests"/>
+    <property name="test.plugin.szenarios" value="net.ssehub.easy.producer.scenario_tests"/>
     <property name="test.suite.szenarios" value="net.ssehub.easy.producer.scenario_tests.AllTests"/>
-    <property name="test.plugin.core" value="de.uni_hildesheim.sse.easy_producer.core.test"/>
+    <property name="test.plugin.core" value="net.ssehub.easy.producer.core.tests"/>
     <property name="test.suite.core" value="net.ssehub.easy.producer.core.AllTests"/>
 
 	<target name="init">
@@ -83,7 +83,7 @@
 				<filter excludes="*Activator*"/>
 				<filter excludes="*AllTests*"/>
 				<filter excludes="*Test"/>
-				<filter excludes="*de.uni_hildesheim.sse.easy.ui*"/>
+				<filter excludes="*net.ssehub.easy.*ui*"/>
 				<instrpath>
 					<fileset dir="${home.easy.persistence.dir}/${build.jar.dir}/" includes="**/*.jar" />
 					<fileset dir="${home.easy.easy-producer.core.tests.dir}/${build.jar.dir}/" includes="**/*.jar" />
@@ -157,7 +157,7 @@
 		<antcall target="prepareTestEclipseGUI"/>
 		
 		<copy todir="${basedir}/${test.eclipseGUI.name}/plugins" failonerror="true" overwrite="true">
-			<!-- Plug-ins of this project/job (must not be instrumnted)! -->
+			<!-- Plug-ins of this project/job (must not be instrumented)! -->
 			<fileset dir="${home.easy.persistence.dir}/${build.jar.dir}/" includes="**/*.jar" />
 			<fileset dir="${home.easy.tests.dir}/${build.jar.dir}/" includes="**/*.jar" />
 			<fileset dir="${home.easy.PLugin.dir}/${build.jar.dir}/" includes="**/*.jar" />
@@ -175,8 +175,6 @@
             <fileset dir="${home.instantiatorCore.dir}/${build.jar.dir}" includes="**/*.jar" />
             <fileset dir="${home.instantiator.velocity.dir}/${build.jar.dir}" includes="**/*.jar" />
             <fileset dir="${home.adaptation.events.dir}/${build.jar.dir}" includes="**/*.jar" />
-            <!--fileset dir="${home.instantiator.copy.core.dir}/${build.jar.dir}" includes="**/*.jar" />
-            <fileset dir="${home.instantiator.velocityLib.dir}/${build.jar.dir}" includes="**/*.jar" /-->
             <!-- Instantiation -->
             <fileset dir="${home.vil.core.dir}/${build.jar.dir}" includes="**/*.jar" />
             <fileset dir="${home.template.core.dir}/${build.jar.dir}" includes="**/*.jar" />
