@@ -93,28 +93,28 @@
          unpack="false"/>
 
    <plugin
-         id="de.uni_hildesheim.sse.easy.ui"
+         id="net.ssehub.easy.producer.ui"
          download-size="0"
          install-size="0"
          version="0.0.0"
          unpack="false"/>
 
    <plugin
-         id="de.uni-hildesheim.sse.easy.help"
+         id="net.ssehub.easy.producer.help"
          download-size="0"
          install-size="0"
          version="0.0.0"
          unpack="false"/>
          
    <plugin
-         id="de.uni_hildesheim.sse.easy_producer.core"
+         id="net.ssehub.easy.producer.core"
          download-size="0"
          install-size="0"
          version="0.0.0"
          unpack="false"/>
 
    <plugin
-         id="de.uni_hildesheim.sse.easy_producer.eclipse"
+         id="net.ssehub.easy.producer.eclipse"
          download-size="0"
          install-size="0"
          version="0.0.0"
@@ -205,7 +205,7 @@
          unpack="false"/>
    
    <plugin
-         id="de.uni_hildesheim.sse.easy.examples"
+         id="net.ssehub.easy.producer.examples"
          download-size="0"
          install-size="0"
          version="0.0.0"

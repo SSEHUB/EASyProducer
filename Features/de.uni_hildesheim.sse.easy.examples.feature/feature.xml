@@ -41,7 +41,7 @@ limitations under the License.
    </requires>
 
    <plugin
-         id="de.uni_hildesheim.sse.easy.examples"
+         id="net.ssehub.easy.producer.examples"
          download-size="0"
          install-size="0"
          version="0.0.0"/>

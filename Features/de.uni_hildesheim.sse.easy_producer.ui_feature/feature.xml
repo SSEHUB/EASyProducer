@@ -36,14 +36,14 @@ limitations under the License.
          version="0.0.0"/>
 
    <plugin
-         id="de.uni_hildesheim.sse.easy.ui"
+         id="net.ssehub.easy.producer.ui"
          download-size="0"
          install-size="0"
          version="1.1.0"
          unpack="false"/>
 
    <plugin
-         id="de.uni-hildesheim.sse.easy.help"
+         id="net.ssehub.easy.producer.help"
          download-size="0"
          install-size="0"
          version="1.1.0"
