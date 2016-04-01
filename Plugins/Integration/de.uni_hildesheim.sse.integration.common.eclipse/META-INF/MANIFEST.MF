@@ -10,5 +10,5 @@ Require-Bundle: org.eclipse.core.runtime;visibility:=reexport,
  org.eclipse.core.resources;visibility:=reexport,
  net.ssehub.easy.varModel;bundle-version="0.0.2";visibility:=reexport,
  net.ssehub.easy.integration.common;bundle-version="0.0.5";visibility:=reexport,
- de.uni_hildesheim.sse.easy_producer.core;bundle-version="0.7.2",
- de.uni_hildesheim.sse.easy_producer.eclipse;bundle-version="0.7.2"
+ net.ssehub.easy.producer.core;bundle-version="0.7.2",
+ net.ssehub.easy.producer.eclipse;bundle-version="0.7.2"

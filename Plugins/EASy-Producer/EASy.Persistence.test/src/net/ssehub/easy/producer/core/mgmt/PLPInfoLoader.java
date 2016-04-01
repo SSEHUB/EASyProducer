@@ -2,6 +2,7 @@ package net.ssehub.easy.producer.core.mgmt;
 
 import net.ssehub.easy.basics.logger.EASyLoggerFactory;
 import net.ssehub.easy.basics.logger.EASyLoggerFactory.EASyLogger;
+import net.ssehub.easy.producer.core.AllTests;
 import net.ssehub.easy.producer.core.mgmt.PLPInfo;
 import net.ssehub.easy.producer.core.mgmt.SPLsManager;
 import net.ssehub.easy.producer.core.persistence.Configuration;
@@ -18,8 +19,8 @@ import net.ssehub.easy.producer.core.varMod.container.ScriptContainer;
  *
  */
 class PLPInfoLoader extends PLPInfo {
-    private static final EASyLogger LOGGER = EASyLoggerFactory.INSTANCE.getLogger(PLPInfoLoader.class
-        , "de.uni_hildesheim.sse.easy_producer.core.test");
+    private static final EASyLogger LOGGER = EASyLoggerFactory.INSTANCE.getLogger(PLPInfoLoader.class,
+        AllTests.PLUGIN_ID);
     
     /**
      * Constructor for loading {@link PLPInfo}s.

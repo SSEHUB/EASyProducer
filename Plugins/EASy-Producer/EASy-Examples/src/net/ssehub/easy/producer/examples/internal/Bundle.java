@@ -22,6 +22,6 @@ package net.ssehub.easy.producer.examples.internal;
  */
 public class Bundle {
     
-    public static final String PLUGIN_ID = "de.uni_hildesheim.sse.easy.examples";
+    public static final String PLUGIN_ID = "net.ssehub.easy.producer.examples";
 
 }

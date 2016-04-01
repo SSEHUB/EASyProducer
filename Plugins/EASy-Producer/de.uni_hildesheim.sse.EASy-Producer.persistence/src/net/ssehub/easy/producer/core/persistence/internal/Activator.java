@@ -17,8 +17,7 @@ import net.ssehub.easy.producer.core.persistence.standard.EASyInitializer;
 public class Activator implements BundleActivator {
 
     // The plug-in ID
-    public static final String PLUGIN_ID =
-            "de.uni_hildesheim.sse.EASy-Producer.persistence"; //$NON-NLS-1$
+    public static final String PLUGIN_ID = "net.ssehub.easy.producer.core";
     
     private static BundleContext context;
 

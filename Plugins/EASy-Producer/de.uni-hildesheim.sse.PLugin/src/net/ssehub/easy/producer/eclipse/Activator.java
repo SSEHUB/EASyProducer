@@ -18,7 +18,7 @@ public class Activator extends Plugin {
     /**
      * The plug-in ID.
      */
-    public static final String PLUGIN_ID = "de.uni_hildesheim.sse.EASy-Producer";
+    public static final String PLUGIN_ID = "net.ssehub.easy.producer.eclipse";
 
     /**
      * The shared instance.

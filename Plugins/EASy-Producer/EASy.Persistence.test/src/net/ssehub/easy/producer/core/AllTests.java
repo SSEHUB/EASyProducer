@@ -66,7 +66,7 @@ public class AllTests {
      */
     public static final File TESTDATA_DIR_COPY = new File(TESTDATA_DIR_ORIGINS, "temp");
     
-    public static final String PLUGIN_ID = "de.uni_hildesheim.sse.easy_producer.core.test";
+    public static final String PLUGIN_ID = "net.ssehub.easy.producer.core.test";
     
     private static boolean initialized = false;
     

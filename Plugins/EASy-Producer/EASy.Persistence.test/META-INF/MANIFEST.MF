@@ -1,9 +1,9 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Test
-Bundle-SymbolicName: de.uni_hildesheim.sse.easy_producer.core.test
+Bundle-SymbolicName: net.ssehub.easy.producer.core.tests
 Bundle-Version: 0.0.1
-Fragment-Host: de.uni_hildesheim.sse.easy_producer.core;bundle-version="0.7.2"
+Fragment-Host: net.ssehub.easy.producer.core;bundle-version="0.7.2"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Bundle-ClassPath: .
 Require-Bundle: org.junit;bundle-version="4.8.1",
