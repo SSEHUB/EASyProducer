@@ -359,6 +359,8 @@ public abstract class AbstractTest<R extends IModel> {
             writer.println(fileAsString);
             writer.println("MODEL: ");
             writer.println(modelAsString);
+            writer.println();
+            writer.println("Error at index (startinng at 1): " + (pos + 1));
             writer.println("--");
             equals = false;
         }
