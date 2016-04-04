@@ -141,7 +141,10 @@ public abstract class AbstractTest extends net.ssehub.easy.dslCore.test.Abstract
                 ModelUtility.INSTANCE.print(result, writer, false, false);
                 String errorMsg = checkEqualsAndPrepareMessage(fileAsString, writer);
                 if (null != errorMsg) {
-                    Assert.assertEquals(fileAsString.trim(), writer.toString().trim());
+                    // Only traditional comparison if file does not contain replacement comments
+                    if (!fileAsString.contains("//*")) {
+                        Assert.assertEquals(fileAsString.trim(), writer.toString().trim());
+                    }
                     // Fallback
                     Assert.fail(errorMsg);
                 }
