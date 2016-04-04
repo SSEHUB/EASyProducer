@@ -63,7 +63,7 @@ public class VilExecutionThread implements Runnable {
      * 
      * @return the created executor
      */
-    private Executor createExecutor() {
+    protected Executor createExecutor() {
         ProjectDescriptor me = new ProjectDescriptor(plp);
         Executor executor = new Executor(plp.getBuildScript())
             .addTarget(me)
