@@ -5,4 +5,4 @@ project testEnumerations2 {
     colors2 minVal = min(colors2.red, colors2.blue);
     //* colors2 maxVal = max(colors2.red, colors2.green);
     colors2 maxVal = colors2.red.max(colors2.green);
-} //
+}
