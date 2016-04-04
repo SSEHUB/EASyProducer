@@ -278,6 +278,22 @@ public class Executor {
         arguments.put(PARAM_CONFIG, config);
         return this;
     }
+    
+    /**
+     * Adds the configuration as argument.
+     * 
+     * @param config the variability configuration
+     * @return this executor instance
+     * @throws IllegalArgumentException in case that <code>config</code> is <b>null</b>
+     */
+    public Executor addConfiguration(
+        net.ssehub.easy.instantiation.core.model.vilTypes.configuration.Configuration config) {
+        if (null == config) {
+            throw new IllegalArgumentException("config must not be null");
+        }
+        arguments.put(PARAM_CONFIG, config);
+        return this;
+    }
 
     /**
      * Explicitly adds an argument for the base directory for resolving property files.
