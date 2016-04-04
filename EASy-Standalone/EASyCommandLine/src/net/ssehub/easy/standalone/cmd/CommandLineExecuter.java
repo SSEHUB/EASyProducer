@@ -132,6 +132,9 @@ public class CommandLineExecuter {
         try {
             File project = new File(args[1]);
             switch (args.length) {
+            case 2:
+                result = ReasoningCommands.checkValidity(project);
+                break;
             case 3:
                 File ivmlFile = new File(args[2]);
                 result = ReasoningCommands.checkValidity(project, ivmlFile);
@@ -156,6 +159,8 @@ public class CommandLineExecuter {
         } catch (ModelManagementException e) {
             LOGGER.exception(e);
         } catch (IOException e) {
+            LOGGER.exception(e);
+        } catch (PersistenceException e) {
             LOGGER.exception(e);
         } 
     }

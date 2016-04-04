@@ -22,6 +22,8 @@ import java.io.IOException;
 import net.ssehub.easy.basics.modelManagement.ModelManagementException;
 import net.ssehub.easy.basics.modelManagement.VersionFormatException;
 import net.ssehub.easy.basics.progress.ProgressObserver;
+import net.ssehub.easy.producer.core.mgmt.PLPInfo;
+import net.ssehub.easy.producer.core.persistence.PersistenceException;
 import net.ssehub.easy.producer.core.persistence.PersistenceUtils;
 import net.ssehub.easy.reasoning.core.frontend.ReasonerFrontend;
 import net.ssehub.easy.reasoning.core.reasoner.ReasonerConfiguration;
@@ -37,9 +39,25 @@ import net.ssehub.easy.varModel.model.Project;
  * {@link LowlevelCommands#startEASy()}.</b>
  * 
  * @author Holger Eichelberger
+ * @author Sascha El-Sharkawy
  */
 public class ReasoningCommands {
 
+    /**
+     * Checks the validity of the specified EASy project by reasoning.
+     * 
+     * @param project the project the model is located in
+     * @return <code>true</code> if conflict occurred, <code>false</code> otherwise
+     * 
+     * @throws PersistenceException in case that the model cannot be loaded for some reason
+     */
+    public static boolean checkValidity(File project) throws PersistenceException {
+        LowlevelCommands.loadProject(project);
+        String projectName = ProjectNameMapper.getInstance().getName(project);
+        PLPInfo plp = LowlevelCommands.getProject(projectName);
+        return checkValidity(plp.getProject());
+    }
+    
     /**
      * Checks the validity of the specified IVML model by reasoning.
      * 

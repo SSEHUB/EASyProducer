@@ -85,7 +85,7 @@ public final class InstantiationCommands {
     }
     
     /**
-     * Instatiates the given project.
+     * Instantiates the given project.
      * The project must:
      * <ul>
      * <li>be a valid EASy project with the usual configuration files and folders.</li>
@@ -122,7 +122,7 @@ public final class InstantiationCommands {
     }
 
     /**
-     * Instatiates the given project.
+     * Instantiates the given project.
      * The project must:
      * <ul>
      * <li>contain VIL script which can be applied to itself, which uses the usual EASy naming convention for
@@ -144,7 +144,7 @@ public final class InstantiationCommands {
     }
     
     /**
-     * Instatiates the given project.
+     * Instantiates the given project.
      * The project must:
      * <ul>
      * <li>contain VIL script which can be applied to itself, which uses the usual EASy naming convention for
