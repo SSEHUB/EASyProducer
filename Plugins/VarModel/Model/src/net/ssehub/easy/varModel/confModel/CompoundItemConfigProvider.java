@@ -111,7 +111,7 @@ class CompoundItemConfigProvider extends NestedVarConfigProvider {
 
     @Override
     protected void setHistoryValue(Value value, IAssignmentState state) throws ConfigurationException {
-        // Function not needed here
+        this.state = state;
     }
 
     @Override

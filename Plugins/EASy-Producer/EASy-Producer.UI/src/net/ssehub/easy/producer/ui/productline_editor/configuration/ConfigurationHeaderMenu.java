@@ -44,6 +44,7 @@ import net.ssehub.easy.producer.core.mgmt.PLPInfo;
 import net.ssehub.easy.producer.eclipse.model.ProductLineProject;
 import net.ssehub.easy.producer.eclipse.observer.EclipseProgressObserver;
 import net.ssehub.easy.producer.ui.confModel.GUIConfiguration;
+import net.ssehub.easy.producer.ui.confModel.GUIHistory;
 import net.ssehub.easy.producer.ui.confModel.GUIHistoryItem;
 import net.ssehub.easy.producer.ui.confModel.GUIVariable;
 import net.ssehub.easy.producer.ui.core.reasoning.AbstractReasonerListener;
@@ -299,8 +300,7 @@ public class ConfigurationHeaderMenu extends AbstractConfigMenu implements IProd
                     GUIHistoryItem guiHistoryitem = guiVariable.getHistory().getLastHistoryItem();
                     if (guiHistoryitem != null) {
                         try {
-                            guiVariable.getVariable().setHistoryValue(guiHistoryitem.getValue(), 
-                                guiHistoryitem.getState());
+                            restoreHistoryValue(guiVariable, guiHistoryitem);
                         } catch (ConfigurationException configurationException) {
                             LOGGER.exception(configurationException);
                         }
@@ -313,6 +313,24 @@ public class ConfigurationHeaderMenu extends AbstractConfigMenu implements IProd
                             LOGGER.debug("Nested: " + tmp + "; " + tmp.getState());
                         }
                     } 
+                }
+            }
+
+            private void restoreHistoryValue(GUIVariable guiVariable, GUIHistoryItem guiHistoryitem)
+                throws ConfigurationException {
+                
+                if (null != guiHistoryitem) {
+                    guiVariable.getVariable().setHistoryValue(guiHistoryitem.getValue(), 
+                        guiHistoryitem.getState());
+                    IGUIConfigurationContainer editor = getConfigContainer();
+                    editor.updateItem(guiVariable);
+                    
+                    for (int i = 0, end = guiVariable.getNestedElementsCount(); i < end; i++) {
+                        GUIVariable nestedGUIVar = guiVariable.getNestedElement(i);
+                        GUIHistory nestedGUIHistory = nestedGUIVar.getHistory();
+                        GUIHistoryItem nestedGUIHistoryItem = nestedGUIHistory.getLastHistoryItem();
+                        restoreHistoryValue(nestedGUIVar, nestedGUIHistoryItem);
+                    }
                 }
             }
         });

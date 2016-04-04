@@ -312,12 +312,28 @@ public abstract class GUIVariable implements IGUIConfigurableElement, Comparable
     public void freeze() {
         if (!isFrozen()) {
             // Add value to history if variable is toplevel
-            getTopLevelParent().history.assignValue(getTopLevelParent().getVariable());
+            GUIVariable topVariable = getTopLevelParent();
+            topVariable.history.assignValue(topVariable.getVariable());
+            for (int i = 0, end = topVariable.getNestedElementsCount(); i < end; i++) {
+                freezeNested(topVariable.getNestedElement(i));
+            }
             getVariable().freeze(AllFreezeSelector.INSTANCE);
             // Inform listeners only if state has been changed.
             if (isFrozen()) {
                 getConfiguration().changed(this);
             }
+        }
+    }
+    
+    /**
+     * Recursive part of {@link #freeze()} to freeze also all nested elements.
+     * This is especially needed to store nested states for the undo function.
+     * @param nestedVar The nested element to freeze.
+     */
+    private void freezeNested(GUIVariable nestedVar) {
+        nestedVar.history.assignValue(nestedVar.getVariable());
+        for (int i = 0, end = nestedVar.getNestedElementsCount(); i < end; i++) {      
+            freezeNested(nestedVar.getNestedElement(i));
         }
     }
     

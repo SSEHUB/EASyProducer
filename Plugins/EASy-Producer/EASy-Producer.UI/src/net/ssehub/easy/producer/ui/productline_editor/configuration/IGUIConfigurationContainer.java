@@ -3,6 +3,7 @@ package net.ssehub.easy.producer.ui.productline_editor.configuration;
 import org.eclipse.jface.viewers.ViewerFilter;
 
 import net.ssehub.easy.producer.ui.confModel.GUIConfiguration;
+import net.ssehub.easy.producer.ui.confModel.GUIVariable;
 import net.ssehub.easy.varModel.confModel.Configuration;
 
 /**
@@ -58,4 +59,12 @@ interface IGUIConfigurationContainer {
      * @return the configuration instance
      */
     public Configuration getConfig();
+    
+    /**
+     * Informs the container that a single item has changed (not added/deleted).
+     * This is much more efficient than to refresh the whole container and in case of an editor,
+     * does not force to collapse open items.
+     * @param variable The item which has been modified (not added or deleted).
+     */
+    public void updateItem(GUIVariable variable);
 }
