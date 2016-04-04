@@ -305,7 +305,16 @@ public abstract class AbstractTest<R extends IModel> {
                 expected.inc();
                 actual.inc();
             } else {
-                ok = false;
+                // Handle Linux/Windows LineFeeds
+                if (fc == '\n' && mc == '\r' && actual.inRange(1) && actual.at(1) == '\n') {
+                    actual.inc();
+                    break;
+                } else if (fc == '\r' && mc == '\n' && expected.inRange(1) && expected.at(1) == '\n') {
+                    expected.inc();
+                    break;
+                } else {
+                    ok = false;
+                }
             }
         }
         // read line end only
@@ -356,9 +365,9 @@ public abstract class AbstractTest<R extends IModel> {
             // and the files
             writer.println();
             writer.println("FILE: ");
-            writer.println(fileAsString.replace("\n", "\n[LF]").replace("\r", "\r[CR]").replace("\t", "[TAB]"));
+            writer.println(fileAsString.replace("\n", "\n[LF]").replace("\r", "[CR]").replace("\t", "[TAB]"));
             writer.println("MODEL: ");
-            writer.println(modelAsString.replace("\n", "\n[LF]").replace("\r", "\r[CR]").replace("\t", "[TAB]"));
+            writer.println(modelAsString.replace("\n", "\n[LF]").replace("\r", "[CR]").replace("\t", "[TAB]"));
             writer.println();
             if (pos < 0) {
                 writer.println("Error: Model contains more data than the file.");
