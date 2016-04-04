@@ -398,10 +398,11 @@ public abstract class AbstractTest<R extends IModel> {
         throws IOException {
         String modelAsString = model.toString();
         if (trimModel) {
+            fileAsString = fileAsString.trim();
             modelAsString = modelAsString.trim();
         } else {
             StringBuilder tmp = new StringBuilder(modelAsString);
-            while (tmp.length() > 0 && Character.isWhitespace(tmp.charAt(tmp.length() - 1))) {
+            while (tmp.length() > 0 && (Character.isWhitespace(tmp.charAt(tmp.length() - 1)))) {
                 tmp.deleteCharAt(tmp.length() - 1);
             }
             modelAsString = tmp.toString();
