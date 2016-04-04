@@ -360,8 +360,18 @@ public abstract class AbstractTest<R extends IModel> {
             writer.println("MODEL: ");
             writer.println(modelAsString);
             writer.println();
-            writer.println("Error at index (1 - " + (fileAsString.length() + 1)
-                + ", 0 = the model contains more data): " + (pos + 1));
+            if (pos < 0) {
+                writer.println("Error: Model contains more data than the file.");
+            } else if (0 == fileAsString.length() && modelAsString.length() > 0) {
+                writer.println("Error: File is empty, but model contains data.");
+            } else if (pos <= fileAsString.length()) {
+                writer.println("Error in file at index (1 - " + (fileAsString.length() + 1) + "): " + (pos + 1));
+                int start = Math.max(0, pos - 5);
+                int end = Math.min(pos + 5, fileAsString.length());
+                String excerpt = fileAsString.substring(start, end).replace("\n", "[LF]").replace("\r", "[CR]");
+                excerpt = excerpt.replace("\t", "[TAB]");
+                writer.println("Excerpt (+/- 5 chars): " + excerpt);
+            }
             writer.println("--");
             equals = false;
         }
