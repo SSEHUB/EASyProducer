@@ -360,7 +360,8 @@ public abstract class AbstractTest<R extends IModel> {
             writer.println("MODEL: ");
             writer.println(modelAsString);
             writer.println();
-            writer.println("Error at index (startinng at 1): " + (pos + 1));
+            writer.println("Error at index (1 - " + fileAsString.length() + ", 0 = the model contains more data): "
+                + (pos + 1));
             writer.println("--");
             equals = false;
         }
