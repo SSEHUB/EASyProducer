@@ -21,27 +21,20 @@ import java.util.Set;
 import net.ssehub.easy.varModel.cst.AttributeVariable;
 import net.ssehub.easy.varModel.cst.CSTSemanticException;
 import net.ssehub.easy.varModel.cst.CompoundAccess;
-import net.ssehub.easy.varModel.cst.ConstantValue;
 import net.ssehub.easy.varModel.cst.ConstraintSyntaxTree;
 import net.ssehub.easy.varModel.cst.ContainerOperationCall;
 import net.ssehub.easy.varModel.cst.Let;
-import net.ssehub.easy.varModel.cst.Variable;
 import net.ssehub.easy.varModel.model.AbstractVariable;
-import net.ssehub.easy.varModel.model.datatypes.Compound;
-import net.ssehub.easy.varModel.model.values.CompoundValue;
-import net.ssehub.easy.varModel.model.values.ContainerValue;
-import net.ssehub.easy.varModel.model.values.ReferenceValue;
-import net.ssehub.easy.varModel.model.values.Value;
 
 /**
  * Filter class for retrieving all {@link AbstractVariable}'s nested inside a given constraint.
+ * @see IDecisionVariableInConstraintFinder
  * @author El-Sharkawy
  *
  */
 public class DeclrationInConstraintFinder extends AbstractVariableInConstraintFinder {
     
     private Set<AbstractVariable> declarations;
-    private boolean considerReferences;
     
     /**
      * Default constructor for this class.
@@ -58,8 +51,8 @@ public class DeclrationInConstraintFinder extends AbstractVariableInConstraintFi
      * reference values, <tt>false</tt> these values will be ignored.
      */
     public DeclrationInConstraintFinder(ConstraintSyntaxTree cst, boolean considerReferences) {
+        super(considerReferences);
         declarations = new HashSet<AbstractVariable>();
-        this.considerReferences = considerReferences;
         cst.accept(this);
     }
     
@@ -69,11 +62,6 @@ public class DeclrationInConstraintFinder extends AbstractVariableInConstraintFi
      */
     public Set<AbstractVariable> getDeclarations() {
         return declarations;
-    }
-
-    @Override
-    public void visitVariable(Variable variable) {
-        declarations.add(variable.getVariable());
     }
 
     @Override
@@ -109,36 +97,9 @@ public class DeclrationInConstraintFinder extends AbstractVariableInConstraintFi
         declarations.add(access.getResolvedSlot());
         access.getCompoundExpression().accept(this);
     }
-    
+        
     @Override
-    public void visitConstantValue(ConstantValue value) {
-        if (considerReferences) {
-            visitValue(value.getConstantValue());
-        }
-    }
-    
-    /**
-     * Recursive method to find reference values pointing to a {@link AbstractVariable}.
-     * @param value the content of a {@link ConstantValue}.
-     * @see #visitConstantValue(ConstantValue)
-     */
-    private void visitValue(Value value) {
-        if (null != value) {
-            if (value instanceof ContainerValue) {
-                ContainerValue containerValue = (ContainerValue) value;
-                for (int i = 0; i < containerValue.getElementSize(); i++) {
-                    visitValue(containerValue.getElement(i));
-                }
-            } else if (value instanceof CompoundValue) {
-                CompoundValue compoundValue = (CompoundValue) value;
-                Compound cType = (Compound) compoundValue.getType();
-                for (int i = 0; i < cType.getInheritedElementCount(); i++) {
-                    visitValue(compoundValue.getNestedValue(cType.getInheritedElement(i).getName()));
-                }
-            } else if (value instanceof ReferenceValue) {
-                ReferenceValue refValue = (ReferenceValue) value;
-                declarations.add(refValue.getValue());
-            }
-        }
+    protected void addVariable(AbstractVariable declaration) {
+        declarations.add(declaration);
     }
 }

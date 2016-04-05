@@ -49,6 +49,7 @@ public class VariablesInConstraintFinder extends AbstractVariableInConstraintFin
      * (must not be <tt>null</tt>).
      */
     public VariablesInConstraintFinder(ConstraintSyntaxTree cst, Configuration config) {
+        super(false);
         this.config = config;
         variables = new HashSet<IDecisionVariable>();
         states = new HashSet<IAssignmentState>();
@@ -87,7 +88,7 @@ public class VariablesInConstraintFinder extends AbstractVariableInConstraintFin
      * @param declaration A discovered declaration for which the {@link IDecisionVariable} and its state should
      * be saved.
      */
-    private void addVariable(AbstractVariable declaration) {
+    protected void addVariable(AbstractVariable declaration) {
         // TODO check local variables
         IDecisionVariable var = config.getDecision(declaration);
         if (null != var) {

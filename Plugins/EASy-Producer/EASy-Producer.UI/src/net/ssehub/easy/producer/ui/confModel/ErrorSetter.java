@@ -2,6 +2,8 @@ package net.ssehub.easy.producer.ui.confModel;
 
 import java.util.Map;
 
+import net.ssehub.easy.varModel.confModel.Configuration;
+import net.ssehub.easy.varModel.confModel.IDecisionVariable;
 import net.ssehub.easy.varModel.cst.ConstraintSyntaxTree;
 import net.ssehub.easy.varModel.model.AbstractVariable;
 import net.ssehub.easy.varModel.model.Attribute;
@@ -25,7 +27,7 @@ import net.ssehub.easy.varModel.model.datatypes.OrderedEnum;
 import net.ssehub.easy.varModel.model.datatypes.Reference;
 import net.ssehub.easy.varModel.model.datatypes.Sequence;
 import net.ssehub.easy.varModel.model.datatypes.Set;
-import net.ssehub.easy.varModel.model.filter.DeclrationInConstraintFinder;
+import net.ssehub.easy.varModel.model.filter.IDecisionVariableInConstraintFinder;
 
 /**
  * Sets error messages for {@link GUIVariable}s.
@@ -35,14 +37,17 @@ import net.ssehub.easy.varModel.model.filter.DeclrationInConstraintFinder;
 class ErrorSetter implements IModelVisitor {
     private Map<AbstractVariable, GUIVariable> variableMap;
     private String errorMsg;
+    private Configuration config;
     
     /**
      * Sole constructor for setting error messages by this class.
      * @param variableMap A map of ({@link AbstractVariable}, {@link GUIVariable}) for all
-     * {@link GUIVariable}s of the {@link GUIConfiguration} where this {@link ErrorSetter} is used. 
+     * {@link GUIVariable}s of the {@link GUIConfiguration} where this {@link ErrorSetter} is used.
+     * @param config The wrapped {@link Configuration} of the current {@link GUIConfiguration}.
      */
-    ErrorSetter(Map<AbstractVariable, GUIVariable> variableMap) {
+    ErrorSetter(Map<AbstractVariable, GUIVariable> variableMap, Configuration config) {
         this.variableMap = variableMap;
+        this.config = config;
     }
     
     /**
@@ -128,15 +133,43 @@ class ErrorSetter implements IModelVisitor {
     public void visitConstraint(Constraint constraint) {
         if (null != constraint) {
             ConstraintSyntaxTree cst = constraint.getConsSyntax();
-            DeclrationInConstraintFinder finder = new DeclrationInConstraintFinder(cst);
-            java.util.Set<AbstractVariable> delcarations = finder.getDeclarations();
-            for (AbstractVariable abstractVariable : delcarations) {
-                GUIVariable guiVariable = variableMap.get(abstractVariable);
+            IDecisionVariableInConstraintFinder finder = new IDecisionVariableInConstraintFinder(config, false);
+            cst.accept(finder);
+            java.util.Set<IDecisionVariable> variables = finder.getVariables();
+            for (IDecisionVariable variable : variables) {
+                GUIVariable guiVariable = getVariable(variable);
                 if (null != guiVariable) {
                     guiVariable.addErrorMessage(constraint, errorMsg);
                 }
             }
         }
+    }
+    
+    /**
+     * Recursive part of {@link #visitConstraint(Constraint)}: Maps a (nested) {@link IDecisionVariable} to the correct
+     * (nested) {@link GUIVariable}.
+     * @param variable The {@link IDecisionVariable} for which the {@link GUIVariable} shall be retrieved.
+     * @return The wrapping {@link GUIVariable} for the given {@link IDecisionVariable} or <tt>null</tt> if it could
+     * not be found.
+     */
+    private GUIVariable getVariable(IDecisionVariable variable) {
+        GUIVariable result = null;
+        
+        if (variable.isNested() && variable.getParent() instanceof IDecisionVariable) {
+            GUIVariable parent = getVariable((IDecisionVariable) variable.getParent());
+            if (null != parent) {
+                for (int i = 0, end = parent.getNestedElementsCount(); i < end && null == result; i++) {
+                    GUIVariable nestedVar = parent.getNestedElement(i);
+                    if (nestedVar.getVariable() == variable) {
+                        result = nestedVar;
+                    }
+                }
+            }
+        } else {
+            result = variableMap.get(variable.getDeclaration());
+        }
+        
+        return result;
     }
 
     @Override

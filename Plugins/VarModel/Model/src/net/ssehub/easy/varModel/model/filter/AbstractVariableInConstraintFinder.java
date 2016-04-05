@@ -25,6 +25,13 @@ import net.ssehub.easy.varModel.cst.OCLFeatureCall;
 import net.ssehub.easy.varModel.cst.Parenthesis;
 import net.ssehub.easy.varModel.cst.Self;
 import net.ssehub.easy.varModel.cst.UnresolvedExpression;
+import net.ssehub.easy.varModel.cst.Variable;
+import net.ssehub.easy.varModel.model.AbstractVariable;
+import net.ssehub.easy.varModel.model.datatypes.Compound;
+import net.ssehub.easy.varModel.model.values.CompoundValue;
+import net.ssehub.easy.varModel.model.values.ContainerValue;
+import net.ssehub.easy.varModel.model.values.ReferenceValue;
+import net.ssehub.easy.varModel.model.values.Value;
 
 /**
  * Superclass for searching for variables/declarations inside
@@ -34,9 +41,23 @@ import net.ssehub.easy.varModel.cst.UnresolvedExpression;
  */
 abstract class AbstractVariableInConstraintFinder implements IConstraintTreeVisitor {
 
+    private boolean considerReferences;
+    
+    /**
+     * Single constructor for this class.
+     * @param considerReferences <tt>true</tt> declarations of
+     *   {@link net.ssehub.easy.varModel.model.datatypes.Reference} values will also be found,
+     *   <tt>false</tt> these declarations will be omitted. 
+     */
+    protected AbstractVariableInConstraintFinder(boolean considerReferences) {
+        this.considerReferences = considerReferences;
+    }
+    
     @Override
     public void visitConstantValue(ConstantValue value) {
-        // No function needed
+        if (considerReferences) {
+            visitValue(value.getConstantValue());
+        }
     }
     
     @Override
@@ -85,4 +106,40 @@ abstract class AbstractVariableInConstraintFinder implements IConstraintTreeVisi
     public void visitSelf(Self self) {
         // no variable declaration
     }
+    
+    @Override
+    public void visitVariable(Variable variable) {
+        addVariable(variable.getVariable());
+    }
+    
+    /**
+     * Recursive method to find reference values pointing to a {@link AbstractVariable}.
+     * @param value the content of a {@link ConstantValue}.
+     * @see #visitConstantValue(ConstantValue)
+     */
+    protected void visitValue(Value value) {
+        if (null != value) {
+            if (value instanceof ContainerValue) {
+                ContainerValue containerValue = (ContainerValue) value;
+                for (int i = 0; i < containerValue.getElementSize(); i++) {
+                    visitValue(containerValue.getElement(i));
+                }
+            } else if (value instanceof CompoundValue) {
+                CompoundValue compoundValue = (CompoundValue) value;
+                Compound cType = (Compound) compoundValue.getType();
+                for (int i = 0; i < cType.getInheritedElementCount(); i++) {
+                    visitValue(compoundValue.getNestedValue(cType.getInheritedElement(i).getName()));
+                }
+            } else if (value instanceof ReferenceValue) {
+                ReferenceValue refValue = (ReferenceValue) value;
+                addVariable(refValue.getValue());
+            }
+        }
+    }
+    
+    /**
+     * Handle a discovered declaration.
+     * @param declaration The declaration which was found and should be added to the list of found elements.
+     */
+    protected abstract void addVariable(AbstractVariable declaration);
 }

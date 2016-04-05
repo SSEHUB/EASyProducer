@@ -162,7 +162,7 @@ public class GUIConfiguration implements IGUIConfigurableElement {
         // Add all new messages
         if (null != warnings) {           
             Map<AbstractVariable, GUIVariable> variableMap = toHashMap();
-            ErrorSetter errorSetter = new ErrorSetter(variableMap);
+            ErrorSetter errorSetter = new ErrorSetter(variableMap, config);
 
             for (int i = 0; i < warnings.length; i++) {
                 Message warning = warnings[i];
