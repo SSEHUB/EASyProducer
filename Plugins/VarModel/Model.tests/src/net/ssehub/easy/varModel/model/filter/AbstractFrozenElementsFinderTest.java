@@ -1,4 +1,4 @@
-package net.ssehub.easy.varModel.varModel.filter;
+package net.ssehub.easy.varModel.model.filter;
 
 import java.util.ArrayList;
 import java.util.List;
