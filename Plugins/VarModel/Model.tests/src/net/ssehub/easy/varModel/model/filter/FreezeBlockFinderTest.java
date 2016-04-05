@@ -1,4 +1,4 @@
-package net.ssehub.easy.varModel.varModel.filter;
+package net.ssehub.easy.varModel.model.filter;
 
 import static org.hamcrest.CoreMatchers.allOf;
 import static org.hamcrest.CoreMatchers.hasItem;

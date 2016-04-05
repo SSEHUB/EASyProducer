@@ -19,4 +19,4 @@
  * @author El-Sharkawy
  *
  */
-package net.ssehub.easy.varModel.varModel.datytypes;
+package net.ssehub.easy.varModel.model.datytypes;
