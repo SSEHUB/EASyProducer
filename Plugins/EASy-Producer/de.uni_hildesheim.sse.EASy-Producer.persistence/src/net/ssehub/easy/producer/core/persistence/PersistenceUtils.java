@@ -41,9 +41,9 @@ import net.ssehub.easy.dslCore.TopLevelModelAccessor.IModelAccessor;
 import net.ssehub.easy.instantiation.core.model.buildlangModel.BuildModel;
 import net.ssehub.easy.instantiation.core.model.buildlangModel.BuildlangWriter;
 import net.ssehub.easy.instantiation.core.model.buildlangModel.ExpressionStatement;
+import net.ssehub.easy.instantiation.core.model.buildlangModel.ForStatement;
 import net.ssehub.easy.instantiation.core.model.buildlangModel.IRuleElement;
 import net.ssehub.easy.instantiation.core.model.buildlangModel.InstantiateExpression;
-import net.ssehub.easy.instantiation.core.model.buildlangModel.MapExpression;
 import net.ssehub.easy.instantiation.core.model.buildlangModel.Rule;
 import net.ssehub.easy.instantiation.core.model.buildlangModel.Script;
 import net.ssehub.easy.instantiation.core.model.buildlangModel.Utils;
@@ -54,6 +54,7 @@ import net.ssehub.easy.instantiation.core.model.expressions.CallExpression;
 import net.ssehub.easy.instantiation.core.model.expressions.Expression;
 import net.ssehub.easy.instantiation.core.model.expressions.VariableExpression;
 import net.ssehub.easy.instantiation.core.model.templateModel.TemplateModel;
+import net.ssehub.easy.instantiation.core.model.vilTypes.TypeDescriptor;
 import net.ssehub.easy.instantiation.core.model.vilTypes.configuration.IvmlTypes;
 import net.ssehub.easy.producer.core.mgmt.PLPInfo;
 import net.ssehub.easy.producer.core.persistence.Configuration.PathKind;
@@ -602,7 +603,7 @@ public class PersistenceUtils {
                     if (mainRule.getBodyElementCount() == 0) {
                         try {
                             // Create variable for iteration
-                            VariableDeclaration p = new VariableDeclaration("p", IvmlTypes.projectType());
+                            VariableDeclaration p = new VariableDeclaration("predecessor", IvmlTypes.projectType());
                             
                             // Create: source.predecessors()
                             Expression sourceVar = new VariableExpression(mainRule.getParameter(0));
@@ -615,20 +616,20 @@ public class PersistenceUtils {
                             CallArgument config = new CallArgument(new VariableExpression(mainRule.getParameter(1)));
                             CallArgument targetProject
                                 = new CallArgument(new VariableExpression(mainRule.getParameter(2)));
-                            Expression mapBody = new InstantiateExpression(p, null, null, sourceProject, config,
+                            Expression forBody = new InstantiateExpression(p, null, null, sourceProject, config,
                                 targetProject);
                             // Resolve expression
-                            mapBody.inferType();
+                            forBody.inferType();
                             
-                            // Create map
-                            ExpressionStatement bodyStatement = new ExpressionStatement(mapBody);
+                            // Create for each loop
+                            ExpressionStatement bodyStatement = new ExpressionStatement(forBody);
                             VariableDeclaration[] mapVariables = {p};
-                            MapExpression map = new MapExpression(mapVariables, predecessorAccess,
-                                new IRuleElement[]{bodyStatement}, null, true);
-                            ExpressionStatement mapStatement = new ExpressionStatement(map);
+                            ForStatement map = new ForStatement(mapVariables, predecessorAccess,
+                                new IRuleElement[]{bodyStatement}, new TypeDescriptor[] {p.getType()} , true);
+                            //ExpressionStatement mapStatement = new ExpressionStatement(map);
                             
                             // Set body of main rule
-                            mainRule.setBody(new IRuleElement[] {mapStatement});
+                            mainRule.setBody(new IRuleElement[] {map});
                             // If changes where successful (no exception occurred, notify model that script was edited.
                             plp.buildScriptWasEdited();
                         } catch (VilException e) {
