@@ -616,7 +616,7 @@ public class ExecutionRtTests extends AbstractRtTest {
     }
 
     /**
-     * Tests dynamic dispatch over references.
+     * Tests dynamic dispatch over references. Testing also {@link VariableValueCopier}.
      * 
      * @throws IOException should not occur
      * @throws ModelQueryException should not occur
