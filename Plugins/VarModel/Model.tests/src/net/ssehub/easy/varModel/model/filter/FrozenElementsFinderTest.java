@@ -9,8 +9,6 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import net.ssehub.easy.varModel.model.IFreezable;
-import net.ssehub.easy.varModel.model.filter.FilterType;
-import net.ssehub.easy.varModel.model.filter.FrozenElementsFinder;
 
 /**
  * Test cases for FreezeBlockFinder class.

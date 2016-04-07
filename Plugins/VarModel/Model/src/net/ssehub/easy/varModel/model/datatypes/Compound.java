@@ -235,7 +235,19 @@ public class Compound extends StructuredDatatype implements IResolutionScope, ID
     
     @Override
     public boolean add(DecisionVariableDeclaration elem) {
-        return container.add(elem);
+        boolean alreadyIn = false;
+        Compound basisCP = getRefines();
+        while (null != basisCP && !alreadyIn) {
+            alreadyIn = basisCP.container.containsByName(elem.getName());
+            basisCP = basisCP.getRefines();
+        }
+        
+        if (!alreadyIn) {
+            // Was already in if container.add returns false
+            alreadyIn = !container.add(elem);
+        }
+        
+        return !alreadyIn;
     }
     
     @Override
@@ -409,6 +421,11 @@ public class Compound extends StructuredDatatype implements IResolutionScope, ID
     @Override
     public void add(EvaluationBlock eval) {
         container.add(eval);
+    }
+    
+    @Override
+    public boolean containsByName(String name) {
+        return container.containsByName(name);
     }
 
 }

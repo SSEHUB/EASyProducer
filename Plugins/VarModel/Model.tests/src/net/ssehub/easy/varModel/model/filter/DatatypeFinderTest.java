@@ -20,8 +20,6 @@ import net.ssehub.easy.varModel.model.datatypes.OrderedEnum;
 import net.ssehub.easy.varModel.model.datatypes.Reference;
 import net.ssehub.easy.varModel.model.datatypes.Sequence;
 import net.ssehub.easy.varModel.model.datatypes.Set;
-import net.ssehub.easy.varModel.model.filter.DatatypeFinder;
-import net.ssehub.easy.varModel.model.filter.FilterType;
 import net.ssehub.easy.varModel.validation.IvmlValidationVisitor;
 
 /**

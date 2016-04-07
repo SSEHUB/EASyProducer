@@ -20,9 +20,6 @@ import java.util.Arrays;
 import org.junit.Assert;
 import org.junit.Test;
 
-import net.ssehub.easy.varModel.cstEvaluation.EvaluatorRegistry;
-import net.ssehub.easy.varModel.cstEvaluation.IIteratorEvaluator;
-import net.ssehub.easy.varModel.cstEvaluation.IOperationEvaluator;
 import net.ssehub.easy.varModel.model.datatypes.IDatatype;
 import net.ssehub.easy.varModel.model.datatypes.Operation;
 import net.ssehub.easy.varModel.model.datatypes.Types;

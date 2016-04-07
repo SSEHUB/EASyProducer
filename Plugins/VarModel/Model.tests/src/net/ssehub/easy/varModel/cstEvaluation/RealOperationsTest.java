@@ -17,7 +17,6 @@ package net.ssehub.easy.varModel.cstEvaluation;
 
 import org.junit.Test;
 
-import net.ssehub.easy.varModel.cstEvaluation.EvaluationAccessor;
 import net.ssehub.easy.varModel.cstEvaluation.NumberOperationUtils.IntComparison;
 import net.ssehub.easy.varModel.cstEvaluation.NumberOperationUtils.RealComparison;
 import net.ssehub.easy.varModel.cstEvaluation.NumberOperationUtils.RealOperation;

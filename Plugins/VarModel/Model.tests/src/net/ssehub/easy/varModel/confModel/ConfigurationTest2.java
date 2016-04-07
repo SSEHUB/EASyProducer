@@ -23,8 +23,6 @@ import org.junit.Before;
 import org.junit.Test;
 
 import net.ssehub.easy.basics.modelManagement.ModelManagementException;
-import net.ssehub.easy.varModel.confModel.Configuration;
-import net.ssehub.easy.varModel.confModel.IDecisionVariable;
 import net.ssehub.easy.varModel.model.AbstractVariable;
 import net.ssehub.easy.varModel.model.DecisionVariableDeclaration;
 import net.ssehub.easy.varModel.model.Project;

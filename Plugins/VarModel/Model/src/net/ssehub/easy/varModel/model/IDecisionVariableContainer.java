@@ -191,5 +191,13 @@ public interface IDecisionVariableContainer extends IModelElement, IContainableE
      */
     public DecisionVariableDeclaration getDeclaration(int index);
 
+    /**
+     * Returns whether this project contains an element and its name.
+     * 
+     * @param name
+     *            the name to search for
+     * @return <code>true</code> if this project contains the specified element, <code>false</code> else
+     */
+    public boolean containsByName(String name);
 }
 

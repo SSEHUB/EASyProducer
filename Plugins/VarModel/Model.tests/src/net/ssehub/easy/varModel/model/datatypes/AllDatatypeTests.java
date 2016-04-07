@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package net.ssehub.easy.varModel.model.datytypes;
+package net.ssehub.easy.varModel.model.datatypes;
 
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
@@ -34,7 +34,8 @@ import org.junit.runners.Suite.SuiteClasses;
     EnumTest.class,
     OperationTest.class,
     ReferenceTest.class,
-    SequenceTestTMP.class
+    SequenceTestTMP.class,
+    TypeMapperTests.class
     })
 public class AllDatatypeTests {
 

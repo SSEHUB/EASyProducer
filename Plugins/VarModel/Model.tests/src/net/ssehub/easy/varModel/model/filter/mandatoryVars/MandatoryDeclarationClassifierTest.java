@@ -36,8 +36,6 @@ import net.ssehub.easy.varModel.model.datatypes.DerivedDatatype;
 import net.ssehub.easy.varModel.model.datatypes.IntegerType;
 import net.ssehub.easy.varModel.model.datatypes.OclKeyWords;
 import net.ssehub.easy.varModel.model.filter.FilterType;
-import net.ssehub.easy.varModel.model.filter.mandatoryVars.MandatoryDeclarationClassifier;
-import net.ssehub.easy.varModel.model.filter.mandatoryVars.VariableContainer;
 import net.ssehub.easy.varModel.model.values.ValueDoesNotMatchTypeException;
 import net.ssehub.easy.varModel.model.values.ValueFactory;
 import net.ssehub.easy.varModel.persistency.StringProvider;

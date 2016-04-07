@@ -20,6 +20,7 @@ import java.util.Comparator;
 import java.util.List;
 
 import net.ssehub.easy.varModel.cst.ConstraintSyntaxTree;
+import net.ssehub.easy.varModel.model.datatypes.Compound;
 
 /**
  * Represents an assignment of a value to attributes of at least
@@ -141,17 +142,11 @@ public class AttributeAssignment extends ContainableModelElement implements IDec
     
     @Override
     public boolean add(DecisionVariableDeclaration elem) {
-        boolean yetAdded = false;
-        IModelElement parent = getEffectiveParent();
-        if (parent instanceof Project) {
-            if (((Project) parent).containsByName(elem.getName())) {
-                yetAdded = true;
-            }
-        } // handled in compound
-        if (!yetAdded) {
-            yetAdded = !container.add(elem);
+        boolean added = false;
+        if (!containsByName(elem.getName())) {
+            added = container.add(elem);
         } 
-        return !yetAdded;
+        return added;
     }
     
     /**
@@ -269,6 +264,22 @@ public class AttributeAssignment extends ContainableModelElement implements IDec
     @Override
     public void add(EvaluationBlock eval) {
         container.add(eval);
+    }
+    
+    @Override
+    public boolean containsByName(String name) {
+        boolean found = container.containsByName(name);
+        IModelElement parent = getEffectiveParent();
+        if (parent instanceof Project) {
+            found = ((Project) parent).containsByName(name);
+        } else if (parent instanceof Compound) {
+            Compound cmp = ((Compound) parent);
+            do {
+                found = cmp.containsByName(name);
+                cmp = cmp.getRefines();
+            } while (cmp != null && !found);
+        }
+        return found;
     }
 
 }

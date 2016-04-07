@@ -13,12 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package net.ssehub.easy.varModel.model.datytypes;
+package net.ssehub.easy.varModel.model.datatypes;
 
 import org.junit.Test;
-
-import net.ssehub.easy.varModel.model.datatypes.IDatatype;
-import net.ssehub.easy.varModel.model.datatypes.Sequence;
 
 /**
  * This class tests the correct behavior of the sequence class.

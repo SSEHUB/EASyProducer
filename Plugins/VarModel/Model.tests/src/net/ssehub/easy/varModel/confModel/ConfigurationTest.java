@@ -25,11 +25,6 @@ import org.junit.Before;
 import org.junit.Test;
 
 import net.ssehub.easy.basics.modelManagement.ModelManagementException;
-import net.ssehub.easy.varModel.confModel.AssignmentState;
-import net.ssehub.easy.varModel.confModel.Configuration;
-import net.ssehub.easy.varModel.confModel.ConfigurationException;
-import net.ssehub.easy.varModel.confModel.IAssignmentState;
-import net.ssehub.easy.varModel.confModel.IDecisionVariable;
 import net.ssehub.easy.varModel.cst.ConstantValue;
 import net.ssehub.easy.varModel.cst.OCLFeatureCall;
 import net.ssehub.easy.varModel.cst.Variable;

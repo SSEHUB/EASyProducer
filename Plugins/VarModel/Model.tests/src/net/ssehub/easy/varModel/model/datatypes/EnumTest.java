@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package net.ssehub.easy.varModel.model.datytypes;
+package net.ssehub.easy.varModel.model.datatypes;
 
 import org.junit.Assert;
 import org.junit.Before;
@@ -22,10 +22,6 @@ import org.junit.Test;
 import net.ssehub.easy.varModel.cst.ConstantValue;
 import net.ssehub.easy.varModel.cst.OCLFeatureCall;
 import net.ssehub.easy.varModel.model.IvmlException;
-import net.ssehub.easy.varModel.model.datatypes.BooleanType;
-import net.ssehub.easy.varModel.model.datatypes.Enum;
-import net.ssehub.easy.varModel.model.datatypes.EnumLiteral;
-import net.ssehub.easy.varModel.model.datatypes.OrderedEnum;
 import net.ssehub.easy.varModel.model.values.Value;
 import net.ssehub.easy.varModel.model.values.ValueFactory;
 
