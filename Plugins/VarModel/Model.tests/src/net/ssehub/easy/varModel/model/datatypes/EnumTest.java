@@ -16,7 +16,6 @@
 package net.ssehub.easy.varModel.model.datatypes;
 
 import org.junit.Assert;
-import org.junit.Before;
 import org.junit.Test;
 
 import net.ssehub.easy.varModel.cst.ConstantValue;
@@ -29,34 +28,20 @@ import net.ssehub.easy.varModel.model.values.ValueFactory;
  * Testfile for the EnumClass.
  * 
  * @author heiko beck
+ * @author Sascha El-Sharkawy
  *
  */
 public class EnumTest {
-
-    private String enumName;
-    private Enum test;
-    
-    /**
-     * setUp method to create an new test enum.
-     */
-    @Before
-    public void setUp() {
-        enumName = "enum1";
-        test = new Enum(enumName, null);
-    }
     
     /**
      * Method to test whether the empty enumeration is correctly initialized.
      */
     @Test
-    public void testEmptyEnum() {        
-        Assert.assertEquals(enumName, test.getName());
-        Assert.assertEquals(0, test.getLiteralCount());
-        
-        //test the getLength-method to improve test-coverage to 100%
-        //method returns the final int 1;
-//        int n = test.getFieldLength();
-//        Assert.assertEquals(1, n);
+    public void testEmptyEnum() {      
+        String enumName = "enum1";
+        Enum testEnum = new Enum(enumName, null, new String[] {});
+        Assert.assertEquals(enumName, testEnum.getName());
+        Assert.assertEquals(0, testEnum.getLiteralCount());
     }
     
     /**
@@ -66,7 +51,7 @@ public class EnumTest {
     public void testToFillEnum() {
         String lit1 = "Montag";        
         String lit2 = "Dienstag";
-        Enum woche = new Enum(enumName, null, lit1, lit2);
+        Enum woche = new Enum("enum1", null, lit1, lit2);
         Assert.assertEquals(2, woche.getLiteralCount());
         Assert.assertNotNull(woche.getLiteralByOrdinal(0));
         Assert.assertEquals(lit1, woche.getLiteralByOrdinal(0).getName());
@@ -84,7 +69,7 @@ public class EnumTest {
     @Test
     public void testOrdered() throws IvmlException {
         // this should fail and therefore succeed
-        testEnumForOrdering(new Enum("unordered", null));
+        testEnumForOrdering(new Enum("unordered", null, new String[] {}));
         // this should only succeed
         OrderedEnum oen = new OrderedEnum("ordered", null);
         testEnumForOrdering(oen);

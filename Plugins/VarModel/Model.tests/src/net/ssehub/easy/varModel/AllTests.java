@@ -50,7 +50,6 @@ import net.ssehub.easy.varModel.varModel.versioning.ImportValidationTest;
 
 /**
  * Test Suite for running all test cases. <br/>
- * this test suite is for simplifying local testing of all test cases, and is not used on the CruiseControl server.
  * Please insert all test cases to this test suite for simplify testing.
  * @author El-Sharkawy
  *
