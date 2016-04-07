@@ -1,0 +1,21 @@
+project dispatch5 {
+  version v0;
+  
+  compound HwNode {
+      String name;
+  }
+  
+  compound MPCCNode refines HwNode {
+      Integer dfe;
+  }
+  
+  MPCCNode node = {name = "test", dfe=2};
+  
+  refTo(HwNode) ref = refBy(node);
+  
+  freeze {
+    node;
+    ref;
+  };
+  
+}

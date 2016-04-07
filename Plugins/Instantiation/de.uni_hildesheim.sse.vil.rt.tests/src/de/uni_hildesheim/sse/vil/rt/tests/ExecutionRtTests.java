@@ -43,8 +43,16 @@ import net.ssehub.easy.instantiation.rt.core.model.rtVil.Executor;
 import net.ssehub.easy.instantiation.rt.core.model.rtVil.RtVILMemoryStorage;
 import net.ssehub.easy.instantiation.rt.core.model.rtVil.RtVilStorage;
 import net.ssehub.easy.instantiation.rt.core.model.rtVil.Script;
+import net.ssehub.easy.instantiation.rt.core.model.rtVil.VariableValueCopier;
+import net.ssehub.easy.instantiation.rt.core.model.rtVil.VariableValueCopier.CopySpec;
 import net.ssehub.easy.reasoning.core.frontend.ReasonerFrontend;
 import net.ssehub.easy.reasoning.core.reasoner.ReasonerConfiguration;
+import net.ssehub.easy.varModel.confModel.ConfigurationException;
+import net.ssehub.easy.varModel.cst.CSTSemanticException;
+import net.ssehub.easy.varModel.model.ModelQuery;
+import net.ssehub.easy.varModel.model.ModelQueryException;
+import net.ssehub.easy.varModel.model.datatypes.Compound;
+import net.ssehub.easy.varModel.model.values.ValueDoesNotMatchTypeException;
 
 /**
  * Tests the execution of rt-VIL.
@@ -602,6 +610,31 @@ public class ExecutionRtTests extends AbstractRtTest {
         final String name = "dispatch1";
         Configuration cfg = getIvmlConfiguration("dispatch1", NoVariableFilter.INSTANCE);
         Map<String, Object> param = createParameterMap(null, null, cfg);
+        EqualitySetup<Script> setup = new EqualitySetup<Script>(createFile(name), name, null, 
+            createTraceFile(name), param);
+        assertEqual(setup);
+    }
+
+    /**
+     * Tests dynamic dispatch over references.
+     * 
+     * @throws IOException should not occur
+     * @throws ModelQueryException should not occur
+     * @throws CSTSemanticException should not occur
+     * @throws ValueDoesNotMatchTypeException should not occur
+     * @throws ConfigurationException should not occur
+     */
+    @Test
+    public void testDispatch2() throws IOException, ModelQueryException, CSTSemanticException, 
+        ValueDoesNotMatchTypeException, ConfigurationException {
+        final String name = "dispatch2";
+        net.ssehub.easy.varModel.confModel.Configuration cfg 
+            = getIvmlConfiguration("dispatch2", NoVariableFilter.INSTANCE).getConfiguration();
+        Compound algType = (Compound) ModelQuery.findType(cfg.getProject(), "Algorithm", null);
+        CopySpec spec = new CopySpec(algType, "ref", "avail");
+        VariableValueCopier copier = new VariableValueCopier("TEST", spec);
+        copier.process(cfg);
+        Map<String, Object> param = createParameterMap(null, null, new Configuration(cfg, NoVariableFilter.INSTANCE));
         EqualitySetup<Script> setup = new EqualitySetup<Script>(createFile(name), name, null, 
             createTraceFile(name), param);
         assertEqual(setup);

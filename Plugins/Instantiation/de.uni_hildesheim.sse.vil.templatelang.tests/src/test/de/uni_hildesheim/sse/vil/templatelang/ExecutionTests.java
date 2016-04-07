@@ -1233,6 +1233,16 @@ public class ExecutionTests extends AbstractTest {
     }
 
     /**
+     * Tests a dispatch on a refined reference type (contributed by QM).
+     * 
+     * @throws IOException should not occur
+     */
+    @Test
+    public void testDispatch5() throws IOException {
+        assertEqualWithIvml("dispatch5", "dispatch5");
+    }
+    
+    /**
      * Tests nested fields on references.
      * 
      * @throws IOException should not occur

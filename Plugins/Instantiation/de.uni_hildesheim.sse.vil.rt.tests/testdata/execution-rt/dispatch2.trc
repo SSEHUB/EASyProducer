@@ -1,0 +1,8 @@
+-> main(Project, Configuration, Project) with (<project>, <config>, <project>)
+    -> t(Configuration) with (<config>)
+        dp <- <config>
+        a <- dispatch2::alg
+        a.act <- dispatch2::Algorithm::avail
+        -> process(MPCCNode) with (dispatch2::Algorithm::act)
+        Reasoner execution: true
+    -> enact(Project, Configuration, Project) with (<project>, <config>, <project>)

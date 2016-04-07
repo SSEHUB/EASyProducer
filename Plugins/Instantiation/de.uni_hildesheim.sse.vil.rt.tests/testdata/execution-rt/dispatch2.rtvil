@@ -1,0 +1,27 @@
+@advice(dispatch2)
+rtVilScript dispatch2 (Project source, Configuration config, Project target) {
+
+    strategy main(Project source, Configuration config, Project target) = {
+        objective true;
+        breakdown {
+            tactic t(config);
+        }
+    }
+
+    tactic t(Configuration config) = {
+        dispatch2 dp = config;
+        Algorithm a = dp.alg;
+        a.act = a.avail;
+        process(a.act);
+    }
+
+    process(HwNode node) = : {
+    }
+
+    process(MPCCNode node) = : {
+    }
+
+    enact(Project source, Configuration config, Project target) = : {
+    }
+
+}

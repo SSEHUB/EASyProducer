@@ -1,0 +1,17 @@
+@advice(dispatch5)
+template dispatch5(Configuration config, Artifact target) {
+
+    def main(Configuration config, Artifact target) {
+        dispatch5 dp = config;
+        process(dp.ref);
+    }
+
+    def process(HwNode node) {
+        'node ${node.name}'
+    }
+
+    def process(MPCCNode node) {
+        'mpcc ${node.name} ${node.dfe}'
+    }
+
+}
