@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package net.ssehub.easy.varModel.varModel.datytypes;
+package net.ssehub.easy.varModel.model.datatypes;
 
 import java.util.HashMap;
 
@@ -26,20 +26,6 @@ import net.ssehub.easy.varModel.cst.OCLFeatureCall;
 import net.ssehub.easy.varModel.cst.Variable;
 import net.ssehub.easy.varModel.model.DecisionVariableDeclaration;
 import net.ssehub.easy.varModel.model.Project;
-import net.ssehub.easy.varModel.model.datatypes.AnyType;
-import net.ssehub.easy.varModel.model.datatypes.BooleanType;
-import net.ssehub.easy.varModel.model.datatypes.Compound;
-import net.ssehub.easy.varModel.model.datatypes.Container;
-import net.ssehub.easy.varModel.model.datatypes.Enum;
-import net.ssehub.easy.varModel.model.datatypes.IDatatype;
-import net.ssehub.easy.varModel.model.datatypes.IntegerType;
-import net.ssehub.easy.varModel.model.datatypes.MetaType;
-import net.ssehub.easy.varModel.model.datatypes.Operation;
-import net.ssehub.easy.varModel.model.datatypes.OrderedEnum;
-import net.ssehub.easy.varModel.model.datatypes.RealType;
-import net.ssehub.easy.varModel.model.datatypes.Sequence;
-import net.ssehub.easy.varModel.model.datatypes.Set;
-import net.ssehub.easy.varModel.model.datatypes.StringType;
 
 /**
  * TestFile to test the OperationList.

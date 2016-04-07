@@ -6,7 +6,8 @@ import java.util.List;
 import net.ssehub.easy.basics.logger.ILogger;
 
 /**
- * Logger for testing correct behavior of {@link LoggingLevel}s inside the {@link EASyLoggerFactoryTest} test suite.
+ * Logger for testing correct behavior of {@link net.ssehub.easy.basics.logger.LoggingLevel}s
+ * inside the {@link EASyLoggerFactoryTest} test suite.
  * @author El-Sharkawy
  *
  */

@@ -23,8 +23,8 @@ import net.ssehub.easy.varModel.confModel.AllTestsForConfModel;
 import net.ssehub.easy.varModel.cst.AllCSTTests;
 import net.ssehub.easy.varModel.cstEvaluation.CstEvaluationTests;
 import net.ssehub.easy.varModel.logger.AllLoggerTests;
-import net.ssehub.easy.varModel.model.datatypes.TypeMapperTests;
-import net.ssehub.easy.varModel.model.filter.mandatoryVars.MandatoryDeclarationClassifierTest;
+import net.ssehub.easy.varModel.model.datatypes.AllDatatypeTests;
+import net.ssehub.easy.varModel.model.filter.AllFilterTests;
 import net.ssehub.easy.varModel.persistency.IVMLWriterTest;
 import net.ssehub.easy.varModel.validation.AllValidationTests;
 import net.ssehub.easy.varModel.varModel.ContainableModelElementListTest;
@@ -34,8 +34,6 @@ import net.ssehub.easy.varModel.varModel.PartialEvaluationBlockTest;
 import net.ssehub.easy.varModel.varModel.ProjectInfoTest;
 import net.ssehub.easy.varModel.varModel.ProjectInterfaceTest;
 import net.ssehub.easy.varModel.varModel.VersionTest;
-import net.ssehub.easy.varModel.varModel.datytypes.AllDatatypeTests;
-import net.ssehub.easy.varModel.varModel.filter.AllFilterTests;
 import net.ssehub.easy.varModel.varModel.management.AllManagementTests;
 import net.ssehub.easy.varModel.varModel.rewrite.ProjectRewriteVisitorTest;
 import net.ssehub.easy.varModel.varModel.values.CompoundValueTest;
@@ -52,7 +50,6 @@ import net.ssehub.easy.varModel.varModel.versioning.ImportValidationTest;
 
 /**
  * Test Suite for running all test cases. <br/>
- * this test suite is for simplifying local testing of all test cases, and is not used on the CruiseControl server.
  * Please insert all test cases to this test suite for simplify testing.
  * @author El-Sharkawy
  *
@@ -88,10 +85,8 @@ import net.ssehub.easy.varModel.varModel.versioning.ImportValidationTest;
     ImportValidationTest.class,
 //    IVMLValidationVisitorTest.class,
     AllValidationTests.class,
-    TypeMapperTests.class,
     CstEvaluationTests.class,
-    ProjectRewriteVisitorTest.class,
-    MandatoryDeclarationClassifierTest.class
+    ProjectRewriteVisitorTest.class
     })
 public class AllTests {
 

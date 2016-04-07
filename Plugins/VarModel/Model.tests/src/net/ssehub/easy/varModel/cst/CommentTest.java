@@ -5,10 +5,6 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import net.ssehub.easy.varModel.cst.Comment;
-import net.ssehub.easy.varModel.cst.ConstantValue;
-import net.ssehub.easy.varModel.cst.ConstraintSyntaxTree;
-import net.ssehub.easy.varModel.cst.OCLFeatureCall;
 import net.ssehub.easy.varModel.model.datatypes.IntegerType;
 import net.ssehub.easy.varModel.model.datatypes.OclKeyWords;
 import net.ssehub.easy.varModel.model.values.Value;

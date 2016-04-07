@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package net.ssehub.easy.varModel.varModel.filter;
+package net.ssehub.easy.varModel.model.filter;
 
 import java.util.List;
 
@@ -25,8 +25,6 @@ import net.ssehub.easy.basics.modelManagement.ModelManagementException;
 import net.ssehub.easy.varModel.model.Project;
 import net.ssehub.easy.varModel.model.ProjectImport;
 import net.ssehub.easy.varModel.model.ProjectInterface;
-import net.ssehub.easy.varModel.model.filter.FilterType;
-import net.ssehub.easy.varModel.model.filter.ProjectInterfaceFinder;
 import net.ssehub.easy.varModel.varModel.testSupport.ProjectTestUtilities;
 
 /**

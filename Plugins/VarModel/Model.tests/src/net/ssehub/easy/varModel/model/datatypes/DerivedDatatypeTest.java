@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package net.ssehub.easy.varModel.varModel.datytypes;
+package net.ssehub.easy.varModel.model.datatypes;
 
 import org.junit.Assert;
 import org.junit.Before;
@@ -26,8 +26,6 @@ import net.ssehub.easy.varModel.model.Constraint;
 import net.ssehub.easy.varModel.model.DecisionVariableDeclaration;
 import net.ssehub.easy.varModel.model.IvmlException;
 import net.ssehub.easy.varModel.model.Project;
-import net.ssehub.easy.varModel.model.datatypes.DerivedDatatype;
-import net.ssehub.easy.varModel.model.datatypes.IntegerType;
 import net.ssehub.easy.varModel.model.values.Value;
 import net.ssehub.easy.varModel.model.values.ValueFactory;
 

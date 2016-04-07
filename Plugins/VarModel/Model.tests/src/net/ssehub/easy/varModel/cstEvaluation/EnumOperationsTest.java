@@ -2,8 +2,6 @@ package net.ssehub.easy.varModel.cstEvaluation;
 
 import org.junit.Test;
 
-import net.ssehub.easy.varModel.cstEvaluation.EvaluationAccessor;
-import net.ssehub.easy.varModel.cstEvaluation.EvaluationContext;
 import net.ssehub.easy.varModel.model.datatypes.Enum;
 import net.ssehub.easy.varModel.model.datatypes.EnumLiteral;
 import net.ssehub.easy.varModel.model.datatypes.OrderedEnum;

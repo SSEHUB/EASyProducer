@@ -22,25 +22,6 @@ import java.util.Map;
 import org.junit.Assert;
 import org.junit.Test;
 
-import net.ssehub.easy.varModel.model.datatypes.AnyType;
-import net.ssehub.easy.varModel.model.datatypes.BooleanType;
-import net.ssehub.easy.varModel.model.datatypes.Compound;
-import net.ssehub.easy.varModel.model.datatypes.ConstraintType;
-import net.ssehub.easy.varModel.model.datatypes.Container;
-import net.ssehub.easy.varModel.model.datatypes.DerivedDatatype;
-import net.ssehub.easy.varModel.model.datatypes.Enum;
-import net.ssehub.easy.varModel.model.datatypes.FreezeVariableType;
-import net.ssehub.easy.varModel.model.datatypes.IDatatype;
-import net.ssehub.easy.varModel.model.datatypes.IntegerType;
-import net.ssehub.easy.varModel.model.datatypes.MetaType;
-import net.ssehub.easy.varModel.model.datatypes.OrderedEnum;
-import net.ssehub.easy.varModel.model.datatypes.RealType;
-import net.ssehub.easy.varModel.model.datatypes.Reference;
-import net.ssehub.easy.varModel.model.datatypes.Sequence;
-import net.ssehub.easy.varModel.model.datatypes.Set;
-import net.ssehub.easy.varModel.model.datatypes.StringType;
-import net.ssehub.easy.varModel.model.datatypes.TypeMapper;
-
 /**
  * Tests for the {@link TypeMapper}.
  * @author El-Sharkawy

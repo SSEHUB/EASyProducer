@@ -15,8 +15,8 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import net.ssehub.easy.instantiation.core.model.buildlangModel.ExpressionStatement;
+import net.ssehub.easy.instantiation.core.model.buildlangModel.ForStatement;
 import net.ssehub.easy.instantiation.core.model.buildlangModel.InstantiateExpression;
-import net.ssehub.easy.instantiation.core.model.buildlangModel.MapExpression;
 import net.ssehub.easy.instantiation.core.model.buildlangModel.Rule;
 import net.ssehub.easy.instantiation.core.model.buildlangModel.Script;
 import net.ssehub.easy.producer.core.mgmt.PLPInfo;
@@ -27,12 +27,6 @@ import net.ssehub.easy.producer.eclipse.ProjectConstants;
 import net.ssehub.easy.producer.eclipse.mgmt.ResourcesMgmtTest;
 import net.ssehub.easy.producer.eclipse.model.ProductLineProject;
 import net.ssehub.easy.producer.eclipse.persistency.ResourcesMgmt;
-import net.ssehub.easy.producer.eclipse.persistency.project_creation.EASyProjectCreatorFactory;
-import net.ssehub.easy.producer.eclipse.persistency.project_creation.IEASyProjectConfigurator;
-import net.ssehub.easy.producer.eclipse.persistency.project_creation.InvalidProjectnameException;
-import net.ssehub.easy.producer.eclipse.persistency.project_creation.ProjectAlreadyExistsException;
-import net.ssehub.easy.producer.eclipse.persistency.project_creation.ProjectCreationException;
-import net.ssehub.easy.producer.eclipse.persistency.project_creation.ValidProjectNameType;
 import net.ssehub.easy.varModel.confModel.AllFreezeSelector;
 import net.ssehub.easy.varModel.model.Project;
 
@@ -312,11 +306,10 @@ public class EASyProjectCreatorFactoryTest {
         Assert.assertEquals(plpPre.getProject().getName(), script.getImport(0).getName());
         Rule mainRule = script.getMainRule(false);
         Assert.assertEquals(1, mainRule.getBodyElementCount());
-        ExpressionStatement statement = (ExpressionStatement) mainRule.getBodyElement(0);
-        MapExpression expression = (MapExpression) statement.getExpression();
-        Assert.assertEquals(1, expression.getBodyElementCount());
-        ExpressionStatement mapBody = (ExpressionStatement) expression.getBodyElement(0);
-        Assert.assertTrue(mapBody.getExpression() instanceof InstantiateExpression);       
+        ForStatement statement = (ForStatement) mainRule.getBodyElement(0);
+        Assert.assertEquals(1, statement.getBodyElementCount());
+        ExpressionStatement forBody = (ExpressionStatement) statement.getBodyElement(0);
+        Assert.assertTrue(forBody.getExpression() instanceof InstantiateExpression);       
     }
     
     /**

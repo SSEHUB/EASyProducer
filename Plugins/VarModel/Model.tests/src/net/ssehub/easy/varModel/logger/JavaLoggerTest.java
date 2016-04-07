@@ -6,17 +6,17 @@ import java.util.logging.Filter;
 import java.util.logging.Level;
 import java.util.logging.LogRecord;
 
-import org.junit.Assert;
 import org.junit.AfterClass;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
 import net.ssehub.easy.basics.logger.AbstractJavaLogger;
 import net.ssehub.easy.basics.logger.EASyLoggerFactory;
+import net.ssehub.easy.basics.logger.EASyLoggerFactory.EASyLogger;
 import net.ssehub.easy.basics.logger.JavaLogger;
 import net.ssehub.easy.basics.logger.LoggingLevel;
-import net.ssehub.easy.basics.logger.EASyLoggerFactory.EASyLogger;
 
 /**
  * Test class for {@link JavaLogger}.

@@ -19,8 +19,6 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 import org.junit.runners.Suite.SuiteClasses;
 
-import net.ssehub.easy.varModel.confModel.IDecisionVariable;
-
 /**
  * Sub Test Suite to load all tests related to the Configuration and {@link IDecisionVariable}s. 
  * @author El-Sharkawy

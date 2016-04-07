@@ -57,6 +57,7 @@ public class ForStatement extends RuleBlock implements IRuleElement, IEnumeratin
         this.givenTypes = givenTypes;
         this.variables = variables;
         this.expr = expr;
+        this.colon = colon;
         if (null == expr) {
             throw new VilException("no expression given", VilException.ID_SEMANTIC);
         }

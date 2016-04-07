@@ -27,10 +27,13 @@ import net.ssehub.easy.varModel.cst.CSTSemanticException;
 import net.ssehub.easy.varModel.cst.CompoundAccess;
 import net.ssehub.easy.varModel.cst.ContainerOperationCall;
 import net.ssehub.easy.varModel.cst.Let;
+import net.ssehub.easy.varModel.cst.OCLFeatureCall;
 import net.ssehub.easy.varModel.model.AbstractVariable;
 import net.ssehub.easy.varModel.model.datatypes.Compound;
+import net.ssehub.easy.varModel.model.datatypes.OclKeyWords;
 import net.ssehub.easy.varModel.model.values.CompoundValue;
 import net.ssehub.easy.varModel.model.values.ContainerValue;
+import net.ssehub.easy.varModel.model.values.IntValue;
 import net.ssehub.easy.varModel.model.values.ReferenceValue;
 import net.ssehub.easy.varModel.model.values.Value;
 
@@ -52,12 +55,9 @@ public class IDecisionVariableInConstraintFinder extends AbstractVariableInConst
      * {@link net.ssehub.easy.varModel.cst.ConstraintSyntaxTree
      *   #accept(net.ssehub.easy.varModel.cst.IConstraintTreeVisitor)} must be called.
      * @param config The underlying configuration, from which the {@link IDecisionVariable}s shall come from.
-     * @param considerReferences <tt>true</tt> declarations of
-     *   {@link net.ssehub.easy.varModel.model.datatypes.Reference} values will also be found,
-     *   <tt>false</tt> these declarations will be omitted. 
      */
-    public IDecisionVariableInConstraintFinder(Configuration config, boolean considerReferences) {
-        super(considerReferences);
+    public IDecisionVariableInConstraintFinder(Configuration config) {
+        super(true);
         this.config = config;
         parents = new ArrayDeque<IDecisionVariable>();
         lastVariable = null;
@@ -140,6 +140,13 @@ public class IDecisionVariableInConstraintFinder extends AbstractVariableInConst
             } else if (value instanceof ReferenceValue) {
                 ReferenceValue refValue = (ReferenceValue) value;
                 addVariable(refValue.getValue());
+            } else if (value instanceof IntValue && !parents.isEmpty()) {
+                int index = ((IntValue) value).getValue();
+                IDecisionVariable parent = parents.peekFirst();
+                lastVariable = parent.getNestedElement(index);
+                if (null != lastVariable) {
+                    variables.add(lastVariable);
+                }
             }
         }
     }
@@ -163,6 +170,27 @@ public class IDecisionVariableInConstraintFinder extends AbstractVariableInConst
             lastVariable = config.getDecision(declaration);
             if (null != lastVariable) {
                 variables.add(lastVariable);
+            }
+        }
+    }
+    
+    @Override
+    public void visitOclFeatureCall(OCLFeatureCall call) {
+        if (null != call.getOperand()) { // user defined function!
+            call.getOperand().accept(this);
+        }
+        
+        String op = call.getOperation();
+        if (OclKeyWords.INDEX_ACCESS.equals(op) || OclKeyWords.AT.equals(op)) {
+            // Index based access to elements of a container
+            parents.addFirst(lastVariable);
+            for (int i = 0; i < call.getParameterCount(); i++) {
+                call.getParameter(i).accept(this);
+            }
+            parents.removeFirst();
+        } else {
+            for (int i = 0; i < call.getParameterCount(); i++) {
+                call.getParameter(i).accept(this);
             }
         }
     }

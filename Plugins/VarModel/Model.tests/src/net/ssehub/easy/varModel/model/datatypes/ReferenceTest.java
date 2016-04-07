@@ -13,13 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package net.ssehub.easy.varModel.varModel.datytypes;
+package net.ssehub.easy.varModel.model.datatypes;
 
 import org.junit.Assert;
 import org.junit.Test;
-
-import net.ssehub.easy.varModel.model.datatypes.Compound;
-import net.ssehub.easy.varModel.model.datatypes.Reference;
 
 /**
  * Testfile for the Reference-class.

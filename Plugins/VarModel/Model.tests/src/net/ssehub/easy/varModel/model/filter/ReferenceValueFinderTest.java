@@ -1,4 +1,4 @@
-package net.ssehub.easy.varModel.varModel.filter;
+package net.ssehub.easy.varModel.model.filter;
 
 import java.util.List;
 
@@ -12,7 +12,6 @@ import net.ssehub.easy.varModel.model.DecisionVariableDeclaration;
 import net.ssehub.easy.varModel.model.Project;
 import net.ssehub.easy.varModel.model.datatypes.Compound;
 import net.ssehub.easy.varModel.model.datatypes.Reference;
-import net.ssehub.easy.varModel.model.filter.ReferenceValuesFinder;
 import net.ssehub.easy.varModel.validation.IvmlValidationVisitor;
 
 /**

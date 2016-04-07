@@ -13,14 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package net.ssehub.easy.varModel.varModel.datytypes;
+package net.ssehub.easy.varModel.model.datatypes;
 
 import org.junit.Assert;
 import org.junit.Test;
 
 import net.ssehub.easy.varModel.cst.CSTSemanticException;
 import net.ssehub.easy.varModel.model.DecisionVariableDeclaration;
-import net.ssehub.easy.varModel.model.datatypes.StringType;
 
 /**
  * Testclass for basis datatypes.

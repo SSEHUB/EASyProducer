@@ -1,4 +1,4 @@
-package net.ssehub.easy.varModel.varModel.filter;
+package net.ssehub.easy.varModel.model.filter;
 
 import static org.hamcrest.CoreMatchers.allOf;
 import static org.hamcrest.CoreMatchers.hasItem;
@@ -11,8 +11,6 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import net.ssehub.easy.varModel.model.FreezeBlock;
-import net.ssehub.easy.varModel.model.filter.FilterType;
-import net.ssehub.easy.varModel.model.filter.FreezeBlockFinder;
 
 /**
  * Test cases for FreezeBlockFinder class.

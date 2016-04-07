@@ -25,8 +25,6 @@ import net.ssehub.easy.varModel.model.Project;
 import net.ssehub.easy.varModel.model.datatypes.Enum;
 import net.ssehub.easy.varModel.model.datatypes.IntegerType;
 import net.ssehub.easy.varModel.model.datatypes.OclKeyWords;
-import net.ssehub.easy.varModel.validation.IvmlValidationVisitor;
-import net.ssehub.easy.varModel.validation.ValidationMessage;
 
 /**
  * Tests the {@link IvmlValidationVisitor}.

@@ -133,7 +133,7 @@ class ErrorSetter implements IModelVisitor {
     public void visitConstraint(Constraint constraint) {
         if (null != constraint) {
             ConstraintSyntaxTree cst = constraint.getConsSyntax();
-            IDecisionVariableInConstraintFinder finder = new IDecisionVariableInConstraintFinder(config, false);
+            IDecisionVariableInConstraintFinder finder = new IDecisionVariableInConstraintFinder(config);
             cst.accept(finder);
             java.util.Set<IDecisionVariable> variables = finder.getVariables();
             for (IDecisionVariable variable : variables) {
