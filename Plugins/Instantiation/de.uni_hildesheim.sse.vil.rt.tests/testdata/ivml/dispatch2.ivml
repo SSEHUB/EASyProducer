@@ -18,7 +18,7 @@ project dispatch2 {
       refTo(HwNode) ref;
       assign (bindingTime = BindingTime.runtime) to {
           refTo(HwNode) act;
-          refTo(HwNode) avail;
+          sequenceOf(refTo(HwNode)) avail;
       }
   }
   

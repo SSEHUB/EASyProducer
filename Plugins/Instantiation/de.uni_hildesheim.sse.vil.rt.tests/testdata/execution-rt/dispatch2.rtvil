@@ -11,7 +11,7 @@ rtVilScript dispatch2 (Project source, Configuration config, Project target) {
     tactic t(Configuration config) = {
         dispatch2 dp = config;
         Algorithm a = dp.alg;
-        a.act = a.avail;
+        a.act = a.avail.first();
         process(a.act);
     }
 
