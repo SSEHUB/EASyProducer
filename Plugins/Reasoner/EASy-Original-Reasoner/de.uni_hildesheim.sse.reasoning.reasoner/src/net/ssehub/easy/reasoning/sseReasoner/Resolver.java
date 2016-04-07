@@ -433,6 +433,7 @@ public class Resolver {
 //                && !(defaultValue instanceof ConstantValue)) {
                 if (compound == null) {
                     try {
+                        variablesCounter--;
                         // use closest parent instead of project -> runtime analysis
                         Constraint constraint = new Constraint(defaultValue, variable.getDeclaration());
                         constraintVariables.add(constraint);
@@ -1024,9 +1025,9 @@ public class Resolver {
                 constraintBase.addAll(assignedAttributeConstraints);
             }            
         }
-        constraintCounter = constraintCounter + constraintBase.size();
-        clearConstraintLists();
         constraintBaseSize = constraintBase.size();
+        constraintCounter = constraintCounter + constraintBaseSize;
+        clearConstraintLists();
         resolveConstraints(constraintBase, dispatchScope);
         constraintBase.clear(); 
     }
