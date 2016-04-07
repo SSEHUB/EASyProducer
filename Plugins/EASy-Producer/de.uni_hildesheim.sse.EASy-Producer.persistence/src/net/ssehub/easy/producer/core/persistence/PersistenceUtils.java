@@ -624,12 +624,12 @@ public class PersistenceUtils {
                             // Create for each loop
                             ExpressionStatement bodyStatement = new ExpressionStatement(forBody);
                             VariableDeclaration[] mapVariables = {p};
-                            ForStatement map = new ForStatement(mapVariables, predecessorAccess,
+                            ForStatement forEachLoop = new ForStatement(mapVariables, predecessorAccess,
                                 new IRuleElement[]{bodyStatement}, new TypeDescriptor[] {p.getType()} , true);
                             //ExpressionStatement mapStatement = new ExpressionStatement(map);
                             
                             // Set body of main rule
-                            mainRule.setBody(new IRuleElement[] {map});
+                            mainRule.setBody(new IRuleElement[] {forEachLoop});
                             // If changes where successful (no exception occurred, notify model that script was edited.
                             plp.buildScriptWasEdited();
                         } catch (VilException e) {
