@@ -25,8 +25,6 @@ import net.ssehub.easy.basics.modelManagement.ModelManagementException;
 import net.ssehub.easy.varModel.model.Project;
 import net.ssehub.easy.varModel.model.ProjectImport;
 import net.ssehub.easy.varModel.model.ProjectInterface;
-import net.ssehub.easy.varModel.model.filter.FilterType;
-import net.ssehub.easy.varModel.model.filter.ProjectInterfaceFinder;
 import net.ssehub.easy.varModel.varModel.testSupport.ProjectTestUtilities;
 
 /**

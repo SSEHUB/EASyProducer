@@ -16,7 +16,6 @@
 package net.ssehub.easy.varModel.cstEvaluation;
 
 import net.ssehub.easy.varModel.confModel.IDecisionVariable;
-import net.ssehub.easy.varModel.cstEvaluation.IValueChangeListener;
 
 /**
  * Special {@link IValueChangeListener} which is used during the tests.

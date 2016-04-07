@@ -21,7 +21,6 @@ import java.util.Collections;
 import org.junit.Assert;
 import org.junit.Test;
 
-import net.ssehub.easy.varModel.cstEvaluation.EvaluationAccessor;
 import net.ssehub.easy.varModel.model.datatypes.AnyType;
 import net.ssehub.easy.varModel.model.datatypes.IDatatype;
 import net.ssehub.easy.varModel.model.datatypes.IntegerType;

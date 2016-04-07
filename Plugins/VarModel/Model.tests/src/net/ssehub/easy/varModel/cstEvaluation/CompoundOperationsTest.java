@@ -17,7 +17,6 @@ package net.ssehub.easy.varModel.cstEvaluation;
 
 import org.junit.Test;
 
-import net.ssehub.easy.varModel.cstEvaluation.EvaluationAccessor;
 import net.ssehub.easy.varModel.model.DecisionVariableDeclaration;
 import net.ssehub.easy.varModel.model.datatypes.AnyType;
 import net.ssehub.easy.varModel.model.datatypes.Compound;

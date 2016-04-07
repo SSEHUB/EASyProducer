@@ -19,11 +19,6 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import net.ssehub.easy.basics.modelManagement.ModelManagementException;
-import net.ssehub.easy.varModel.confModel.AssignmentResolver;
-import net.ssehub.easy.varModel.confModel.AssignmentState;
-import net.ssehub.easy.varModel.confModel.Configuration;
-import net.ssehub.easy.varModel.confModel.IAssignmentState;
-import net.ssehub.easy.varModel.confModel.IDecisionVariable;
 import net.ssehub.easy.varModel.cst.CSTSemanticException;
 import net.ssehub.easy.varModel.cst.CompoundAccess;
 import net.ssehub.easy.varModel.cst.ConstantValue;

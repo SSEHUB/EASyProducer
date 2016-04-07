@@ -4,7 +4,6 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import net.ssehub.easy.varModel.model.IvmlKeyWords;
-import net.ssehub.easy.varModel.validation.IvmlIdentifierCheck;
 
 /**
  * Tests the {@link IvmlIdentifierCheck} class.

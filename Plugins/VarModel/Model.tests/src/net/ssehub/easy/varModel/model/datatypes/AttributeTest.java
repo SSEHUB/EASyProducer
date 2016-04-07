@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package net.ssehub.easy.varModel.model.datytypes;
+package net.ssehub.easy.varModel.model.datatypes;
 
 import org.junit.Assert;
 import org.junit.Before;
@@ -22,7 +22,6 @@ import org.junit.Test;
 import net.ssehub.easy.varModel.model.Attribute;
 import net.ssehub.easy.varModel.model.DecisionVariableDeclaration;
 import net.ssehub.easy.varModel.model.Project;
-import net.ssehub.easy.varModel.model.datatypes.StringType;
 
 /**
  * Testcases for attributes.

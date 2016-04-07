@@ -18,7 +18,9 @@ package net.ssehub.easy.varModel.model;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import net.ssehub.easy.varModel.model.filter.DeclarationInContainerFinder;
 
@@ -38,6 +40,7 @@ public class BasicDecisionVariableContainer extends ModelElement implements IDec
     private List<Constraint> constraints = new ArrayList<Constraint>();
     private List<AttributeAssignment> assignments = null; // lazy
     private List<ContainableModelElement> modelElements = new ArrayList<ContainableModelElement>();
+    private Set<String> names = new HashSet<String>();
     
     /**
      * This includes all {@link DecisionVariableDeclaration}, including nested {@link DecisionVariableDeclaration}s
@@ -131,7 +134,7 @@ public class BasicDecisionVariableContainer extends ModelElement implements IDec
 
     @Override
     public boolean contains(DecisionVariableDeclaration var) {
-        boolean found = false;
+        boolean found = containsByName(var.getName());
         for (int e = 0; !found && e < elements.size(); e++) {
             found = elements.get(e).isSame(var);
         }
@@ -139,6 +142,17 @@ public class BasicDecisionVariableContainer extends ModelElement implements IDec
             found = getAssignment(a).contains(var);
         }
         return found;
+    }
+    
+    /**
+     * Returns whether this project contains an element and its name.
+     * 
+     * @param name
+     *            the name to search for
+     * @return <code>true</code> if this project contains the specified element, <code>false</code> else
+     */
+    public boolean containsByName(String name) {
+        return null != name && names.contains(name);
     }
 
     @Override
@@ -163,6 +177,7 @@ public class BasicDecisionVariableContainer extends ModelElement implements IDec
         assert null != elem;
         boolean found = contains(elem);
         if (!found) {
+            names.add(elem.getName());
             elements.add(elem);
             modelElements.add(elem);
         }
