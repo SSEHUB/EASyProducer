@@ -10,6 +10,7 @@ import net.ssehub.easy.reasoning.core.reasoner.ReasoningOperation;
 import net.ssehub.easy.reasoning.drools2.model.ConstraintPatternFactory;
 import net.ssehub.easy.reasoning.drools2.model.ReasonerModel;
 import net.ssehub.easy.reasoning.drools2.model.datatypes.CompoundType;
+import net.ssehub.easy.reasoning.drools2.model.variables.ReasonerVariable;
 import net.ssehub.easy.varModel.cst.ConstraintSyntaxTree;
 import net.ssehub.easy.varModel.persistency.StringProvider;
 
@@ -45,7 +46,7 @@ public class ModelTranslator extends AbstractModelTranslator {
             + LINEBREAK
             + "import function net.ssehub.easy.reasoning.drools2.functions.DefFunctions.*"
             + LINEBREAK
-            + "import net.ssehub.easy.reasoning.drools2.model.variables.*"
+            + "import " + ReasonerVariable.class.getPackage().getName() + ".*"
             + LINEBREAK
             + LINEBREAK
             + "dialect \"mvel\""
