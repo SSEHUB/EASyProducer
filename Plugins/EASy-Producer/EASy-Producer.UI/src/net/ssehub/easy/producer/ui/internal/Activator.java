@@ -8,6 +8,8 @@ import net.ssehub.easy.dslCore.TopLevelModelAccessor;
 import net.ssehub.easy.dslCore.ui.ConfigurationEditorFactory;
 import net.ssehub.easy.producer.core.mgmt.VilArgumentProvider;
 import net.ssehub.easy.producer.ui.productline_editor.ConfigurationTableEditorFactory;
+import net.ssehub.easy.producer.ui.project_management.JavaProjectConfigurationDescriptor;
+import net.ssehub.easy.producer.ui.project_management.ProjectConfigurationRegistry;
 
 /**
  * The activator class controls the plug-in life cycle.
@@ -42,6 +44,7 @@ public class Activator extends AbstractUIPlugin {
     public void start(BundleContext context) throws Exception {
         super.start(context);
         plugin = this;
+        ProjectConfigurationRegistry.registerProjectDescriptor(new JavaProjectConfigurationDescriptor());
         VilArgumentProvider.add(new VilClasspathProvider("classpath"));
         EASyPreferenceStore.loadOnStart();
         TopLevelModelAccessor.register(IvmlModelAccessor.EXTENSION, IvmlModelAccessor.INSTANCE);

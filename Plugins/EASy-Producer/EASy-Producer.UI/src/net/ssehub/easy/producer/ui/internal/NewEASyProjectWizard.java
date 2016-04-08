@@ -13,7 +13,6 @@ import net.ssehub.easy.producer.eclipse.persistency.project_creation.InvalidProj
 import net.ssehub.easy.producer.eclipse.persistency.project_creation.ProjectAlreadyExistsException;
 import net.ssehub.easy.producer.eclipse.persistency.project_creation.ProjectCreator;
 import net.ssehub.easy.producer.ui.core.GUIUtils;
-import net.ssehub.easy.producer.ui.project_management.EASyJavaConfigurator;
 
 /**
  * Wizard for the creation of a new productline project. Creates project, subfolders and files.
@@ -50,7 +49,7 @@ public class NewEASyProjectWizard extends Wizard implements INewWizard {
  
         try {
             ProjectCreator pc = new ProjectCreator(page.getProjectName());
-            ProductLineProject newPLP = pc.newPLP(new EASyJavaConfigurator());
+            ProductLineProject newPLP = pc.newPLP(page.getProjectConfigurator());
             GUIUtils.openProductLineEditor(newPLP);
         } catch (ProjectAlreadyExistsException e) {
             successful = false;

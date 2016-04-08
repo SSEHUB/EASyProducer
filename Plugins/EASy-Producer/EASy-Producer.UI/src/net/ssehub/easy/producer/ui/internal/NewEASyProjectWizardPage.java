@@ -13,11 +13,15 @@ import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 
 import net.ssehub.easy.producer.eclipse.EASyProducerConstants;
+import net.ssehub.easy.producer.eclipse.persistency.project_creation.IEASyProjectConfigurator;
+import net.ssehub.easy.producer.ui.project_management.AbstractProjectCreationDescriptor;
+import net.ssehub.easy.producer.ui.project_management.ProjectConfigurationRegistry;
 import net.ssehub.easy.varModel.validation.IvmlIdentifierCheck;
 
 /**
@@ -32,7 +36,7 @@ public class NewEASyProjectWizardPage extends WizardPage {
     private Text txtProjectName;
     private String defaultPrefix;
     private String lblText;
-    
+    private Combo projectTypeSelection;
 
     /**
      * Sole constructor for creating a new {@link NewEASyProjectWizardPage}.
@@ -42,7 +46,7 @@ public class NewEASyProjectWizardPage extends WizardPage {
         setDescription("This wizard creates a new project for product lines.");
         setImageDescriptor(Activator.getImageDescriptor("icons/logo_big.gif"));
         this.defaultPrefix = "PL_";
-        this.lblText = "Name of the product line:";
+        this.lblText = "Name of the project:";
         updateStatus("updateStatus");
     }
     
@@ -51,7 +55,7 @@ public class NewEASyProjectWizardPage extends WizardPage {
      */
     public void createControl(Composite parent) {
         Composite container = new Composite(parent, SWT.NULL);
-        GridLayout layout = new GridLayout();
+        GridLayout layout = new GridLayout(2, false);
         container.setLayout(layout);
         layout.numColumns = 2;
         layout.verticalSpacing = 9;
@@ -67,16 +71,13 @@ public class NewEASyProjectWizardPage extends WizardPage {
 
             @Override
             public void modifyText(ModifyEvent modifiedEvent) {
-                
                 dialogChanged();
-                
             }
             
         });
         
         txtProjectName.setText(defaultPrefix);
         txtProjectName.addSelectionListener(new SelectionListener() {
-
             
             public void widgetDefaultSelected(SelectionEvent exc) {
                 dialogChanged();
@@ -86,11 +87,42 @@ public class NewEASyProjectWizardPage extends WizardPage {
                 dialogChanged();              
             }
         });
-
+        
+        projectTypeSelection = null;
+        if (ProjectConfigurationRegistry.getDescriptorSize() > 0) {
+            Label lblProjectTypeSelection = new Label(container, SWT.WRAP | SWT.LEFT);
+            GridData gdTypeSelection = new GridData(SWT.HORIZONTAL, SWT.TOP, false, false, 1, 1);
+            gdTypeSelection.widthHint = 200;
+            lblProjectTypeSelection.setLayoutData(gdTypeSelection);
+            lblProjectTypeSelection.setText("Underlying Eclipse project basis for the new "
+                + EASyProducerConstants.PROGRAM_NAME + " project:");
+            projectTypeSelection = new Combo(container, SWT.DROP_DOWN);
+            projectTypeSelection.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+            for (int i = 0, end = ProjectConfigurationRegistry.getDescriptorSize(); i < end; i++) {
+                projectTypeSelection.add(ProjectConfigurationRegistry.getDescriptor(i).getProjectType());
+            }
+            projectTypeSelection.select(0);
+        }
+        
         dialogChanged();
         setControl(container);
     }
 
+    /**
+     * Returns the selected {@link IEASyProjectConfigurator}.
+     * @return The selected {@link IEASyProjectConfigurator}, maybe <tt>null</tt> only in case of errors.
+     */
+    IEASyProjectConfigurator getProjectConfigurator() {
+        AbstractProjectCreationDescriptor projectDescriptor = null;
+        if (null != projectTypeSelection && projectTypeSelection.getItemCount() > 0) {
+            int index = projectTypeSelection.getSelectionIndex();
+            if (index >= 0 && ProjectConfigurationRegistry.getDescriptorSize() > index) {
+                projectDescriptor = (ProjectConfigurationRegistry.getDescriptor(index));
+            }  
+        }
+        return null != projectDescriptor ? projectDescriptor.getProjectConfigurator() : null;
+    }
+    
     /**
      * Ensures that the text field is set correctly.
      */

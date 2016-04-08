@@ -27,7 +27,6 @@ import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.ui.wizards.JavaCapabilityConfigurationPage;
 
 import net.ssehub.easy.basics.logger.EASyLoggerFactory;
-import net.ssehub.easy.producer.eclipse.ProjectConstants;
 import net.ssehub.easy.producer.eclipse.persistency.project_creation.IEASyProjectConfigurator;
 import net.ssehub.easy.producer.ui.internal.Activator;
 
@@ -51,22 +50,6 @@ public class EASyJavaConfigurator implements IEASyProjectConfigurator {
         } catch (InterruptedException e1) {
             EASyLoggerFactory.INSTANCE.getLogger(EASyJavaConfigurator.class, Activator.PLUGIN_ID).exception(e1);
         }
-        
-        
-        // Create default java folders and settings
-        try {
-            project.getFolder(ProjectConstants.FOLDER_LIBS).create(false, true, null);
-            IFolder resFolder = project.getFolder(ProjectConstants.FOLDER_RES);
-            resFolder.create(false, true, null);
-            IClasspathEntry resEntry = JavaCore.newSourceEntry(resFolder.getFullPath());
-            IClasspathEntry[] currentEntries = javaProject.getRawClasspath();
-            IClasspathEntry[] newEntries = new IClasspathEntry[currentEntries.length + 1];
-            System.arraycopy(currentEntries, 0, newEntries, 0, currentEntries.length);
-            newEntries[newEntries.length - 1] = resEntry;
-            javaProject.setRawClasspath(newEntries, null);
-        } catch (CoreException e) {
-            EASyLoggerFactory.INSTANCE.getLogger(EASyJavaConfigurator.class, Activator.PLUGIN_ID).exception(e);
-        }
     }
 
     @Override
@@ -86,9 +69,6 @@ public class EASyJavaConfigurator implements IEASyProjectConfigurator {
         
         // Try to copy settings from parent
         try {
-            project.getFolder(ProjectConstants.FOLDER_LIBS).create(false, true, null);
-            IFolder resFolder = project.getFolder(ProjectConstants.FOLDER_RES);
-            resFolder.create(false, true, null);
             IClasspathEntry[] parrentEntries = javaParentProject.getRawClasspath();
             IClasspathEntry[] newEntries = new IClasspathEntry[parrentEntries.length];
             
