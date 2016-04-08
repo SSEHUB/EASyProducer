@@ -1,0 +1,3 @@
+-> main(Configuration, Artifact) with (<config>, test.texts)
+    dp <- <config>
+    -> process(MPCCNode) with (dispatch5::ref)

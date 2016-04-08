@@ -1,0 +1,32 @@
+project dispatch2 {
+  version v0;
+
+  enum BindingTime {compile, runtime};
+  annotate BindingTime bindingTime = BindingTime.compile to dispatch2;
+  
+  compound HwNode {
+      String name;
+  }
+  
+  compound MPCCNode refines HwNode {
+      Integer dfe;
+  }
+  
+  MPCCNode node = {name = "test", dfe=2};
+  
+  compound Algorithm {
+      refTo(HwNode) ref;
+      assign (bindingTime = BindingTime.runtime) to {
+          refTo(HwNode) act;
+          sequenceOf(refTo(HwNode)) avail;
+      }
+  }
+  
+  Algorithm alg = {ref = refBy(node)};
+  
+  freeze {
+    node; 
+    ref; // don't freeze act
+  } but (v | v.bindingTime == BindingTime.runtime);
+  
+}
