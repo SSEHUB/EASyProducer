@@ -28,7 +28,7 @@ import net.ssehub.easy.producer.eclipse.persistency.EASyPersistencer;
 import net.ssehub.easy.producer.eclipse.persistency.ResourcesMgmt;
 import net.ssehub.easy.reasoning.core.frontend.IReasonerListener;
 import net.ssehub.easy.reasoning.core.frontend.ReasoningProcess;
-import net.ssehub.easy.reasoning.core.model.ReasoningOperation;
+import net.ssehub.easy.reasoning.core.reasoner.ReasoningOperation;
 import net.ssehub.easy.varModel.management.VarModel;
 import net.ssehub.easy.varModel.model.Project;
 

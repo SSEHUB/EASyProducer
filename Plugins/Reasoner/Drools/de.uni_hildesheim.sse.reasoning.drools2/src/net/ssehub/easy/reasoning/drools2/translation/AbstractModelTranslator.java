@@ -7,8 +7,8 @@ import java.util.List;
 
 import net.ssehub.easy.basics.logger.EASyLoggerFactory;
 import net.ssehub.easy.basics.logger.EASyLoggerFactory.EASyLogger;
-import net.ssehub.easy.reasoning.core.model.ReasonerModel;
 import net.ssehub.easy.reasoning.drools2.DroolsReasonerDescriptor;
+import net.ssehub.easy.reasoning.drools2.model.ReasonerModel;
 
 /**
  * Abstract super class for the individual translator classes, which are responsible for the translation of the

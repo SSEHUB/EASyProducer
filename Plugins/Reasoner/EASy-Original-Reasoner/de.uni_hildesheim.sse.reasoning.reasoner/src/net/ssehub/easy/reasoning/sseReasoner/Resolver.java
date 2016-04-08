@@ -11,7 +11,7 @@ import java.util.Set;
 import net.ssehub.easy.basics.logger.EASyLoggerFactory;
 import net.ssehub.easy.basics.logger.EASyLoggerFactory.EASyLogger;
 import net.ssehub.easy.basics.modelManagement.Utils;
-import net.ssehub.easy.reasoning.core.model.PerformanceStatistics;
+import net.ssehub.easy.reasoning.core.performance.PerformanceStatistics;
 import net.ssehub.easy.reasoning.core.reasoner.ReasonerConfiguration;
 import net.ssehub.easy.reasoning.core.reasoner.ReasonerConfiguration.IAdditionalInformationLogger;
 import net.ssehub.easy.reasoning.sseReasoner.functions.FailedElementDetails;
@@ -1451,7 +1451,7 @@ public class Resolver {
     }
     
     /**
-     * Getter for the map of all {@link net.ssehub.easy.reasoning.core.model.variables.ConstraintVariable}
+     * Getter for the map of all ConstraintVariables.
      * and their {@link Constraint}s.
      * @return Map of constraint variables and their constraints.
      */

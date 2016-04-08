@@ -50,8 +50,8 @@ import net.ssehub.easy.producer.ui.productline_editor.EasyProducerDialog;
 import net.ssehub.easy.producer.ui.productline_editor.predecessorSelection.PredecessorSelectionDialog;
 import net.ssehub.easy.producer.ui.project_management.EASyJavaConfigurator;
 import net.ssehub.easy.reasoning.core.frontend.ReasonerFrontend;
-import net.ssehub.easy.reasoning.core.model.ReasoningOperation;
 import net.ssehub.easy.reasoning.core.reasoner.Message;
+import net.ssehub.easy.reasoning.core.reasoner.ReasoningOperation;
 import net.ssehub.easy.reasoning.core.reasoner.ReasoningResult;
 import net.ssehub.easy.varModel.validation.IvmlIdentifierCheck;
 

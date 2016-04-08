@@ -5,9 +5,9 @@ import org.drools.runtime.rule.FactHandle;
 
 import net.ssehub.easy.basics.logger.EASyLoggerFactory;
 import net.ssehub.easy.basics.logger.EASyLoggerFactory.EASyLogger;
-import net.ssehub.easy.reasoning.core.model.IModelChangeListener;
-import net.ssehub.easy.reasoning.core.model.variables.ReasonerVariable;
 import net.ssehub.easy.reasoning.drools2.DroolsReasonerDescriptor;
+import net.ssehub.easy.reasoning.drools2.model.IModelChangeListener;
+import net.ssehub.easy.reasoning.drools2.model.variables.ReasonerVariable;
 
 /**
  * Class for updating facts in Drools session.

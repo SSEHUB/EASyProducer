@@ -4,7 +4,6 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 import org.junit.runners.Suite.SuiteClasses;
 
-import net.ssehub.easy.reasoning.core.model.ReasonerModelTest;
 import net.ssehub.easy.reasoning.core.reasoner.AttributeValuesTest;
 import net.ssehub.easy.reasoning.core.upgrader.UpgraderTests;
 
@@ -19,8 +18,7 @@ import net.ssehub.easy.reasoning.core.upgrader.UpgraderTests;
 @RunWith(Suite.class)
 @SuiteClasses({
     UpgraderTests.class,
-    AttributeValuesTest.class,
-    ReasonerModelTest.class })
+    AttributeValuesTest.class})
 public class AllTests {
         
 }

@@ -49,5 +49,8 @@ Bundle-ClassPath: .,
  lib/xpp3_min-1.1.4c.jar,
  lib/xstream-1.4.1.jar
 Export-Package: net.ssehub.easy.reasoning.drools2,
+ net.ssehub.easy.reasoning.drools2.model,
+ net.ssehub.easy.reasoning.drools2.model.datatypes,
+ net.ssehub.easy.reasoning.drools2.model.variables,
  net.ssehub.easy.reasoning.drools2.translation,
  net.ssehub.easy.reasoning.drools2.translation.oclFeatureCalls

@@ -1,9 +1,9 @@
 package net.ssehub.easy.reasoning.core.frontend;
 
 import net.ssehub.easy.basics.progress.ProgressObserver;
-import net.ssehub.easy.reasoning.core.model.ReasoningOperation;
 import net.ssehub.easy.reasoning.core.reasoner.Message;
 import net.ssehub.easy.reasoning.core.reasoner.ReasonerConfiguration;
+import net.ssehub.easy.reasoning.core.reasoner.ReasoningOperation;
 import net.ssehub.easy.reasoning.core.reasoner.ReasoningResult;
 import net.ssehub.easy.varModel.confModel.Configuration;
 import net.ssehub.easy.varModel.model.Project;

@@ -2,11 +2,11 @@ package net.ssehub.easy.reasoning.drools2.translation;
 
 import java.io.Writer;
 
-import net.ssehub.easy.reasoning.core.model.ConstraintPatternFactory;
-import net.ssehub.easy.reasoning.core.model.ReasonerModel;
-import net.ssehub.easy.reasoning.core.model.datatypes.CompoundType;
-import net.ssehub.easy.reasoning.core.model.variables.CompoundVariable;
-import net.ssehub.easy.reasoning.core.model.variables.ReasonerVariable;
+import net.ssehub.easy.reasoning.drools2.model.ConstraintPatternFactory;
+import net.ssehub.easy.reasoning.drools2.model.ReasonerModel;
+import net.ssehub.easy.reasoning.drools2.model.datatypes.CompoundType;
+import net.ssehub.easy.reasoning.drools2.model.variables.CompoundVariable;
+import net.ssehub.easy.reasoning.drools2.model.variables.ReasonerVariable;
 import net.ssehub.easy.varModel.cst.ConstraintSyntaxTree;
 import net.ssehub.easy.varModel.cst.Variable;
 import net.ssehub.easy.varModel.model.AbstractVariable;

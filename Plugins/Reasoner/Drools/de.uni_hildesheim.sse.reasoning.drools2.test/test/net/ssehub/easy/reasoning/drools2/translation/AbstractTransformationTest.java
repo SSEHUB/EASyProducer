@@ -15,7 +15,7 @@ import net.ssehub.easy.dslCore.StandaloneInitializer;
 import net.ssehub.easy.dslCore.TranslationResult;
 import net.ssehub.easy.dslCore.test.AbstractTest;
 import net.ssehub.easy.dslCore.translation.Message;
-import net.ssehub.easy.reasoning.core.model.ReasonerModel;
+import net.ssehub.easy.reasoning.drools2.model.ReasonerModel;
 import net.ssehub.easy.reasoning.drools2.translation.AbstractModelTranslator;
 import net.ssehub.easy.varModel.confModel.AssignmentState;
 import net.ssehub.easy.varModel.confModel.Configuration;

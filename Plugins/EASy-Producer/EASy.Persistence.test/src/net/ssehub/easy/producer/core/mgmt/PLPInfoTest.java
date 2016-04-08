@@ -35,8 +35,8 @@ import net.ssehub.easy.producer.core.persistence.datatypes.IProjectCreationResul
 import net.ssehub.easy.producer.core.persistence.datatypes.PathEnvironment;
 import net.ssehub.easy.producer.core.persistence.standard.Persistencer;
 import net.ssehub.easy.producer.core.varMod.container.ProjectContainer;
-import net.ssehub.easy.reasoning.core.model.ReasoningOperation;
 import net.ssehub.easy.reasoning.core.reasoner.Message;
+import net.ssehub.easy.reasoning.core.reasoner.ReasoningOperation;
 import net.ssehub.easy.reasoning.core.reasoner.ReasoningResult;
 import net.ssehub.easy.varModel.confModel.AssignmentState;
 import net.ssehub.easy.varModel.confModel.Configuration;
@@ -260,7 +260,7 @@ public class PLPInfoTest extends AbstractPLPInfoTest {
     }
     
     /**
-     * Tests the {@link PLPInfo#reason(net.ssehub.easy.reasoning.core.model.ReasoningOperation,
+     * Tests the {@link PLPInfo#reason(net.ssehub.easy.reasoning.core.reasoner.ReasoningOperation,
      * de.uni_hildesheim.sse.reasoning.core.frontend.IReasonerListener)} method.<br/>
      * The performed reasoning should detect a incosistence in the configuration.
      * @throws PersistenceException Must not occur, otherwise the config files inside the toplevel location are corrupt.

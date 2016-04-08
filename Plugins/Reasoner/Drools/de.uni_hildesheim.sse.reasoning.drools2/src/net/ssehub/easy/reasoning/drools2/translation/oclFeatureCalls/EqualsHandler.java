@@ -1,7 +1,7 @@
 package net.ssehub.easy.reasoning.drools2.translation.oclFeatureCalls;
 
-import net.ssehub.easy.reasoning.core.model.ConstraintPattern;
-import net.ssehub.easy.reasoning.core.model.ReasoningOperation;
+import net.ssehub.easy.reasoning.core.reasoner.ReasoningOperation;
+import net.ssehub.easy.reasoning.drools2.model.ConstraintPattern;
 import net.ssehub.easy.reasoning.drools2.translation.AbstractConstraintTranslator;
 import net.ssehub.easy.varModel.cst.OCLFeatureCall;
 

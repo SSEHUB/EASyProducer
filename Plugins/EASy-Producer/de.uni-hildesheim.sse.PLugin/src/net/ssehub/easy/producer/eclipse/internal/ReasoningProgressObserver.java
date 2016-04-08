@@ -20,7 +20,7 @@ public class ReasoningProgressObserver extends ObservableWorkspaceJob {
      * Sole constructor for this Observer.
      * @param process A configured {@link ReasoningProcess} (cf.
      * {@link net.ssehub.easy.producer.eclipse.model.ProductLineProject
-     * #reason(net.ssehub.easy.reasoning.core.model.ReasoningOperation,
+     * #reason(net.ssehub.easy.reasoning.core.utils.ReasoningOperation,
      * net.ssehub.easy.reasoning.core.frontend.IReasonerListener)}).
      */
     public ReasoningProgressObserver(ReasoningProcess process) {

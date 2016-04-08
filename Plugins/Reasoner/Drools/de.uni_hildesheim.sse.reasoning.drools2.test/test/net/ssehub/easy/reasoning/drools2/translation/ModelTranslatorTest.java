@@ -7,9 +7,9 @@ import org.junit.Test;
 
 import net.ssehub.easy.basics.logger.EASyLoggerFactory;
 import net.ssehub.easy.basics.logger.EASyLoggerFactory.EASyLogger;
-import net.ssehub.easy.reasoning.core.model.ReasonerModel;
-import net.ssehub.easy.reasoning.core.model.ReasoningOperation;
+import net.ssehub.easy.reasoning.core.reasoner.ReasoningOperation;
 import net.ssehub.easy.reasoning.drools2.DroolsReasonerDescriptor;
+import net.ssehub.easy.reasoning.drools2.model.ReasonerModel;
 import net.ssehub.easy.reasoning.drools2.translation.ModelTranslator;
 import net.ssehub.easy.varModel.confModel.Configuration;
 import net.ssehub.easy.varModel.confModel.ConfigurationException;
