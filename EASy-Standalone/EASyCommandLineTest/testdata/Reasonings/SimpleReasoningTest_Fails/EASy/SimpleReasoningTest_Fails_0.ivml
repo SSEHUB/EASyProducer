@@ -1,0 +1,10 @@
+project SimpleReasoningTest_Fails {
+
+	version v0;
+	Integer a = 5;
+  a < 0;
+  
+  freeze {
+    a;
+  }
+}

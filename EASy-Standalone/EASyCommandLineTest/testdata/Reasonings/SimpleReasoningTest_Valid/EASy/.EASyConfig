@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ProductLineProject id="bd62282b-66b8-4c94-9b0d-0cbabe48135d" name="SimpleReasoningTest_Valid" version="0" location="SimpleReasoningTest_Valid">
+	<predecessors>
+	</predecessors>
+	<successors>
+	</successors>
+	<settings>
+	</settings>
+	<reasoners>
+	</reasoners>
+	<instantiators>
+	</instantiators>
+</ProductLineProject>
