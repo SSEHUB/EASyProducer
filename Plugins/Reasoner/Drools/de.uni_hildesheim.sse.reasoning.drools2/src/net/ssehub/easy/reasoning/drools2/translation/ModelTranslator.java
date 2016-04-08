@@ -45,7 +45,7 @@ public class ModelTranslator extends AbstractModelTranslator {
             + LINEBREAK
             + "import function net.ssehub.easy.reasoning.drools2.functions.DefFunctions.*"
             + LINEBREAK
-            + "import net.ssehub.easy.reasoning.core.model.variables.*"
+            + "import net.ssehub.easy.reasoning.drools2.model.variables.*"
             + LINEBREAK
             + LINEBREAK
             + "dialect \"mvel\""
