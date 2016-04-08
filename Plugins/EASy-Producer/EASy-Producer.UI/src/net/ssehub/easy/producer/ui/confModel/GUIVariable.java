@@ -385,6 +385,9 @@ public abstract class GUIVariable implements IGUIConfigurableElement, Comparable
      */
     final void removeErrorMessages() {
         errorMsg = null;
+        for (int i = 0, end = getNestedElementsCount(); i < end; i++) {
+            getNestedElement(i).removeErrorMessages();
+        }
     }
     
     /**
