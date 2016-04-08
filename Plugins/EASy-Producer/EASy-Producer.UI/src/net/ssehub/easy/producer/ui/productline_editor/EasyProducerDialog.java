@@ -2,10 +2,12 @@ package net.ssehub.easy.producer.ui.productline_editor;
 
 import java.util.List;
 
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.Shell;
 
+import net.ssehub.easy.basics.messages.Status;
 import net.ssehub.easy.producer.eclipse.EASyProducerConstants;
 import net.ssehub.easy.reasoning.core.reasoner.Message;
 import net.ssehub.easy.varModel.model.ModelElement;
@@ -112,9 +114,11 @@ public class EasyProducerDialog {
         Message... messages) {
 
         int returnValue = 0;
+        boolean hasConflict = false;
         if (messages != null && messages.length > 0) {
             for (int i = 0; i < messages.length; i++) {
                 Message oneMsg = messages[i];
+                hasConflict |= oneMsg.getStatus() == Status.ERROR;
                 msg.append("\n");
                 msg.append(oneMsg.getDescription());
                 List<ModelElement> conflicts = oneMsg.getConflicts();
@@ -139,7 +143,11 @@ public class EasyProducerDialog {
                 }
             }
             
-            returnValue = showDialog(parent, msg.toString(), title, SWT.OK | messageBoxStyle);
+            Shell shell = parent != null ? new Shell(parent) : new Shell();
+            int swtImage = hasConflict ? MessageDialog.ERROR : MessageDialog.INFORMATION;
+            MessageDialogWithCopy msgDialog = new MessageDialogWithCopy(shell, title, null, msg.toString(), swtImage,
+                new String[] {"OK"}, 0);
+            returnValue = msgDialog.open();
         }
         
         return returnValue;

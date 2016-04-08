@@ -31,7 +31,7 @@ import net.ssehub.easy.producer.eclipse.persistency.project_creation.IEASyProjec
 import net.ssehub.easy.producer.ui.internal.Activator;
 
 /**
- * Configures a new created {@link IProject} to an Java project with lib and ressources folder.
+ * Configures a new created {@link IProject} to an Java project with a src folder.
  * @author El-Sharkawy
  *
  */
