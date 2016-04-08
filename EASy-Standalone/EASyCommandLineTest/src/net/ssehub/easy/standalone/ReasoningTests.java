@@ -178,7 +178,7 @@ public class ReasoningTests {
     public void testSimpleProjectReasoningValid() {
         String projectName = "SimpleReasoningTest_Valid";
         File projectFolder = new File(AllTests.REASONINGS_DIR, projectName);
-        checkValidity(projectFolder, null, null, true);
+        checkValidity(projectFolder, null, null, false);
     }
     
     /**
