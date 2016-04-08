@@ -69,14 +69,20 @@ public class ReasoningTests {
      * Performs the reasoning. And tests whether the reasoning process was executed correctly.
      * @param projectFolder File object pointing to a test project folder (inside of {@link AllTests#TESTDATA_DIR}.
      * @param ivmlName The name of the variability model inside of the project folder, which should be used for
-     *     reasoning.
+     *     reasoning. Maybe <tt>null</tt>, in this case also the version is ignored and the project must be a complete
+     *     EASy/Eclipse project.
      * @param ivmlVersion the version of the ivml project, which shall be used for reasoning.
      */
     private static void performReasoning(File projectFolder, String ivmlName, String ivmlVersion) {
         ProcessExecuter executor = null;
         try {
+            if (null != ivmlName) {
             executor = new ProcessExecuter(MAIN_CLASS + " checkValidity "
                 + projectFolder.getCanonicalPath() + " " + ivmlName + " " + ivmlVersion, false);
+            } else {
+                executor = new ProcessExecuter(MAIN_CLASS + " checkValidity " + projectFolder.getCanonicalPath(),
+                    false);
+            }
             executor.waitFor();
         } catch (IOException e) {
             Assert.fail("Error in creating the process: " + e.getMessage());
@@ -101,7 +107,8 @@ public class ReasoningTests {
      * 
      * @param projectFolder File object pointing to a test project folder (inside of {@link AllTests#TESTDATA_DIR}.
      * @param ivmlName The name of the variability model inside of the project folder, which should be used for
-     *     reasoning.
+     *     reasoning. Maybe <tt>null</tt>, in this case also the version is ignored and the project must be a complete
+     *     EASy/Eclipse project.
      * @param ivmlVersion the version of the ivml project, which shall be used for reasoning.
      * @param expectedResult <tt>true</tt> if a conflict should be detected by the reasoner, <tt>false</tt> otherwise.
      */
@@ -161,5 +168,27 @@ public class ReasoningTests {
         String projectName = "ADDReasoningFails_TestProject";
         File projectFolder = new File(AllTests.REASONINGS_DIR, projectName);
         checkValidity(projectFolder, projectName, "0", true);
+    }
+    
+    /**
+     * Tests whether an EASy project can be used for reasoning with only one parameter, the project folder.
+     * In this test, the reasoner should <b>not</b> detect any errors.
+     */
+    @Test
+    public void testSimpleProjectReasoningValid() {
+        String projectName = "SimpleReasoningTest_Valid";
+        File projectFolder = new File(AllTests.REASONINGS_DIR, projectName);
+        checkValidity(projectFolder, null, null, true);
+    }
+    
+    /**
+     * Tests whether an EASy project can be used for reasoning with only one parameter, the project folder.
+     * In this test, the reasoner should detect one error.
+     */
+    @Test
+    public void testSimpleProjectReasoningFails() {
+        String projectName = "SimpleReasoningTest_Fails";
+        File projectFolder = new File(AllTests.REASONINGS_DIR, projectName);
+        checkValidity(projectFolder, null, null, true);
     }
 }
