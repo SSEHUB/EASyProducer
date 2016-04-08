@@ -55,8 +55,8 @@ abstract class AbstractProjectCreator {
     private EclipsePersistencer persistencer;
     private IProject project;
     private boolean lazy;
+   
     /**
-    
      * Configurators to configure the project during creation.
      * Maybe <tt>null</tt>.
      */
@@ -140,7 +140,9 @@ abstract class AbstractProjectCreator {
         // Configure project to java Project
         if (null != configurators) {
             for (IEASyProjectConfigurator configurator : configurators) {
-                configureProject(project, configurator);
+                if (null != configurator) {
+                    configureProject(project, configurator);
+                }
             }
         }
     }
