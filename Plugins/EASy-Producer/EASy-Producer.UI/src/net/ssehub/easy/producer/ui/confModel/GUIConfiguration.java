@@ -16,6 +16,7 @@ import net.ssehub.easy.reasoning.core.reasoner.Message;
 import net.ssehub.easy.varModel.confModel.Configuration;
 import net.ssehub.easy.varModel.confModel.IDecisionVariable;
 import net.ssehub.easy.varModel.model.AbstractVariable;
+import net.ssehub.easy.varModel.model.AttributeAssignment;
 import net.ssehub.easy.varModel.model.ContainableModelElement;
 import net.ssehub.easy.varModel.model.DecisionVariableDeclaration;
 import net.ssehub.easy.varModel.model.ModelElement;
@@ -60,6 +61,8 @@ public class GUIConfiguration implements IGUIConfigurableElement {
                 ContainableModelElement elt = scope.getElement(e);
                 if (elt instanceof DecisionVariableDeclaration) {
                     visible.add((DecisionVariableDeclaration) elt);
+                } else if (elt instanceof AttributeAssignment) {
+                    determineVisible((AttributeAssignment) elt, visible);
                 }
             }
             for (int i = 0; i < scope.getImportsCount(); i++) {
@@ -67,6 +70,23 @@ public class GUIConfiguration implements IGUIConfigurableElement {
                 if (null != imp.getScope()) {
                     determineVisible(imp.getScope(), visible, done);
                 }
+            }
+        }
+    }
+    
+    /**
+     * Part of {@link #determineVisible(IResolutionScope, Set, Set)}, which handles {@link AttributeAssignment} blocks
+     * recursively.
+     * @param block the current assignment block
+     * @param visible the visible variables (to be modified as a side effect)
+     */
+    private static void determineVisible(AttributeAssignment block, Set<AbstractVariable> visible) {
+        for (int e = 0; e < block.getElementCount(); e++) {
+            ContainableModelElement elt = block.getElement(e);
+            if (elt instanceof DecisionVariableDeclaration) {
+                visible.add((DecisionVariableDeclaration) elt);
+            } else if (elt instanceof AttributeAssignment) {
+                determineVisible((AttributeAssignment) elt, visible);
             }
         }
     }
