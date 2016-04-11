@@ -86,6 +86,15 @@ public class CopyVisitor implements IConstraintTreeVisitor {
     }
     
     /**
+     * Returns the specified variable mapping.
+     * @return A mapping from old variable declarations to new variable declarations,
+     *   existing variable declarations are taken over if no mapping is given, may be <b>null</b>
+     */
+    protected Map<AbstractVariable, AbstractVariable> getMapping() {
+        return mapping;
+    }
+    
+    /**
      * Returns the copied syntax tree.
      * 
      * @return the copied tree (may be <b>null</b> if no tree was visited).
@@ -177,7 +186,7 @@ public class CopyVisitor implements IConstraintTreeVisitor {
      * @param var the variable to be mapped
      * @return the mapped variable or <code>var</code>
      */
-    private AbstractVariable mapVariable(AbstractVariable var) {
+    protected AbstractVariable mapVariable(AbstractVariable var) {
         AbstractVariable result = null;
         if (null != mapping) {
             result = mapping.get(var);

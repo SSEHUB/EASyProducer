@@ -15,16 +15,28 @@
  */
 package net.ssehub.easy.varModel.model.rewrite;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.junit.Assert;
 import org.junit.Test;
 
 import net.ssehub.easy.basics.modelManagement.Version;
+import net.ssehub.easy.varModel.cst.CSTSemanticException;
+import net.ssehub.easy.varModel.cst.Variable;
+import net.ssehub.easy.varModel.model.AbstractVariable;
+import net.ssehub.easy.varModel.model.Attribute;
 import net.ssehub.easy.varModel.model.Comment;
 import net.ssehub.easy.varModel.model.ContainableModelElement;
 import net.ssehub.easy.varModel.model.DecisionVariableDeclaration;
+import net.ssehub.easy.varModel.model.IAttributableElement;
 import net.ssehub.easy.varModel.model.Project;
+import net.ssehub.easy.varModel.model.datatypes.Enum;
+import net.ssehub.easy.varModel.model.datatypes.EnumLiteral;
 import net.ssehub.easy.varModel.model.datatypes.IDatatype;
+import net.ssehub.easy.varModel.model.datatypes.OrderedEnum;
 import net.ssehub.easy.varModel.model.datatypes.RealType;
+import net.ssehub.easy.varModel.model.datatypes.StringType;
 import net.ssehub.easy.varModel.model.filter.FilterType;
 import net.ssehub.easy.varModel.model.values.ValueDoesNotMatchTypeException;
 import net.ssehub.easy.varModel.varModel.testSupport.ProjectTestUtilities;
@@ -82,6 +94,71 @@ public class ProjectCopyVisitorTest {
             + "\".", originalElement.getName(), copiedElement.getName());
         Assert.assertSame("Copied element has wrong parent", copy, copiedElement.getParent());
         Assert.assertNotSame(originalElement.getParent(), copiedElement.getParent());
+        Assert.assertSame("Copied element has wrong comment", originalElement.getComment(), copiedElement.getComment());
+    }
+    
+    /**
+     * Tests whether the original and copied enumeration are equal.
+     * @param enumType The original enumeration
+     * @param copiedEnum The copied enumeration
+     * @param copy The new expected parent for the copied element
+     */
+    private void assertEnumeration(Enum enumType, Enum copiedEnum, Project copy) {
+        assertCopiedElement(enumType, copiedEnum, copy);
+        
+        Assert.assertEquals("Copied enumeration type has different amount of literals.", enumType.getLiteralCount(),
+            copiedEnum.getLiteralCount());
+        for (int i = 0; i < enumType.getLiteralCount(); i++) {
+            Assert.assertEquals("Literal[" + i + "] is of different class", enumType.getLiteral(i).getClass(),
+                copiedEnum.getLiteral(i).getClass());
+            Assert.assertEquals("Literal[" + i + "] has different name", enumType.getLiteral(i).getName(),
+                copiedEnum.getLiteral(i).getName());
+            Assert.assertEquals("Literal[" + i + "] has different ordinal value", enumType.getLiteral(i).getOrdinal(),
+                copiedEnum.getLiteral(i).getOrdinal());
+            Assert.assertEquals("Literal[" + i + "] has different comment", enumType.getLiteral(i).getComment(),
+                copiedEnum.getLiteral(i).getComment());
+        }
+    }
+    
+    /**
+     * Checks that the original and copied declaration are basically equal.
+     * @param decl The original declaration
+     * @param copieddecl The copied declaration to test
+     * @param copyMapping Tuple of (original declaration, copied project parent) to verify parents (recursive
+     * function for nested annotations).
+     */
+    private void assertDeclaration(AbstractVariable decl, AbstractVariable copieddecl,
+        Map<AbstractVariable, Project> copyMapping) {
+        
+        assertCopiedElement(decl, copieddecl, copyMapping.get(decl));
+        
+        // Data type
+        IDatatype basisType = decl.getType();
+        if (basisType.isPrimitive()) {
+            Assert.assertSame("Copied declaration does not have the same type", basisType, copieddecl.getType());
+        }
+        
+        // Default value
+        Assert.assertEquals("Copied type has not the same default value.", decl.getDefaultValue(),
+            copieddecl.getDefaultValue());
+        
+        if (decl instanceof Attribute) {
+            Attribute orgAnnoatation = (Attribute) decl;
+            Attribute copiedAnnoatation = (Attribute) copieddecl;
+            IAttributableElement orgAnnotatedElement = orgAnnoatation.getElement();
+            IAttributableElement copiedAnnotatedElement = copiedAnnoatation.getElement();
+            Assert.assertEquals(orgAnnotatedElement.getQualifiedName(), copiedAnnotatedElement.getQualifiedName());
+            Assert.assertNotSame(orgAnnotatedElement, copiedAnnotatedElement);
+        }
+        
+        // Annotations
+        Assert.assertEquals(decl.isAttribute(), copieddecl.isAttribute());
+        Assert.assertEquals("Copied type has not the same attribute count", decl.getAttributesCount(),
+            copieddecl.getAttributesCount());
+        for (int i = 0, end = decl.getAttributesCount(); i < end; i++) {
+            assertDeclaration(decl.getAttribute(i), copieddecl.getAttribute(i), copyMapping);
+        }
+        
     }
     
     /**
@@ -118,6 +195,37 @@ public class ProjectCopyVisitorTest {
     }
     
     /**
+     * Tests whether (non ordered) enumerations can be copied.
+     */
+    @Test
+    public void testCopyEnum() {
+        Project original = new Project("testCopyEnum");
+        Enum enumType = new Enum("enumType", original, "LiteralA", "LiteralB", "LiteralC");
+        original.add(enumType);
+        
+        Project copy = copyProject(original);
+        Enum copiedEnum = (Enum) copy.getElement(0);
+        assertEnumeration(enumType, copiedEnum, copy);
+    }
+    
+    /**
+     * Tests whether <b>ordered</b> enumerations can be copied.
+     */
+    @Test
+    public void testCopyOrderedEnum() {
+        Project original = new Project("testCopyEnum");
+        OrderedEnum enumType = new OrderedEnum("enumType", original);
+        enumType.add(new EnumLiteral("LiteralA", 11, enumType));
+        enumType.add(new EnumLiteral("LiteralB", 7, enumType));
+        enumType.add(new EnumLiteral("LiteralC", 13, enumType));
+        original.add(enumType);
+        
+        Project copy = copyProject(original);
+        Enum copiedEnum = (Enum) copy.getElement(0);
+        assertEnumeration(enumType, copiedEnum, copy);
+    }
+    
+    /**
      * Tests whether declarations can be copied. This method tests a declaration:
      * <ul>
      *   <li>No attributes</li>
@@ -133,13 +241,10 @@ public class ProjectCopyVisitorTest {
         original.add(decl);
         
         Project copy = copyProject(original);
-        DecisionVariableDeclaration copieddecl = (DecisionVariableDeclaration) copy.getElement(0);
-        assertCopiedElement(decl, copieddecl, copy);
-        Assert.assertSame("Copied declaration does not have the same type", basisType, copieddecl.getType());
-        Assert.assertEquals("Copied type has not the same default value.", decl.getDefaultValue(),
-            copieddecl.getDefaultValue());
-        Assert.assertEquals("Copied type has not the same attribute count", decl.getAttributesCount(),
-            copieddecl.getAttributesCount());
+        AbstractVariable copieddecl = (AbstractVariable) copy.getElement(0);
+        Map<AbstractVariable, Project> copyMapping = new HashMap<AbstractVariable, Project>();
+        copyMapping.put(decl, copy);
+        assertDeclaration(decl, copieddecl, copyMapping);
     }
     
     /**
@@ -153,20 +258,77 @@ public class ProjectCopyVisitorTest {
      */
     @Test
     public void testSimpleDeclarationWithDefaultCopy() throws ValueDoesNotMatchTypeException {
-        Project original = new Project("testSimpleDeclarationCopy");
+        Project original = new Project("testSimpleDeclarationWithDefaultCopy");
         IDatatype basisType = RealType.TYPE;
         DecisionVariableDeclaration decl = new DecisionVariableDeclaration("decl", basisType, original);
         decl.setValue("5.0");
         original.add(decl);
         
         Project copy = copyProject(original);
-        DecisionVariableDeclaration copieddecl = (DecisionVariableDeclaration) copy.getElement(0);
-        assertCopiedElement(decl, copieddecl, copy);
-        Assert.assertSame("Copied declaration does not have the same type", basisType, copieddecl.getType());
-        Assert.assertEquals("Copied type has not the same default value.", decl.getDefaultValue(),
-            copieddecl.getDefaultValue());
-        Assert.assertEquals("Copied type has not the same attribute count", decl.getAttributesCount(),
-            copieddecl.getAttributesCount());
+        AbstractVariable copieddecl = (AbstractVariable) copy.getElement(0);
+        Map<AbstractVariable, Project> copyMapping = new HashMap<AbstractVariable, Project>();
+        copyMapping.put(decl, copy);
+        assertDeclaration(decl, copieddecl, copyMapping);
+    }
+    
+    /**
+     * Tests whether declarations can be copied. This method tests a declaration:
+     * <ul>
+     *   <li>No attributes</li>
+     *   <li>Simple data type (is already known)</li>
+     *   <li>Has a default value referencing another variable, which is defined at a later point</li>
+     * </ul>
+     * @throws ValueDoesNotMatchTypeException Identifies errors in {@link DecisionVariableDeclaration
+     *     #setValue(net.ssehub.easy.varModel.cst.ConstraintSyntaxTree )}
+     * @throws CSTSemanticException Identifies errors in {@link DecisionVariableDeclaration
+     *     #setValue(net.ssehub.easy.varModel.cst.ConstraintSyntaxTree )}
+     */
+    @Test
+    public void testSimpleDeclarationWithDependingDefaultCopy() throws ValueDoesNotMatchTypeException,
+        CSTSemanticException {
+        
+        Project original = new Project("testSimpleDeclarationWithDefaultCopy");
+        IDatatype basisType = RealType.TYPE;
+        DecisionVariableDeclaration declA = new DecisionVariableDeclaration("declA", basisType, original);
+        DecisionVariableDeclaration declB = new DecisionVariableDeclaration("declB", basisType, original);
+        declA.setValue(new Variable(declB));
+        original.add(declA);
+        original.add(declB);
+        
+        Project copy = copyProject(original);
+        AbstractVariable copiedDeclA = (AbstractVariable) copy.getElement(0);
+        AbstractVariable copiedDeclB = (AbstractVariable) copy.getElement(1);
+        Map<AbstractVariable, Project> copyMapping = new HashMap<AbstractVariable, Project>();
+        copyMapping.put(declA, copy);
+        copyMapping.put(declB, copy);
+        assertDeclaration(declA, copiedDeclA, copyMapping);
+        assertDeclaration(declB, copiedDeclB, copyMapping);
+        Variable defaultA = (Variable) copiedDeclA.getDefaultValue();
+        Assert.assertSame("Default value of first declaration is pointing to wrong instance of second declaration",
+            copiedDeclB, defaultA.getVariable());
+    }
+    
+    /**
+     * Tests whether Attribute can be copied. This method tests a declaration:
+     * <ul>
+     *   <li>Annotated to whole project</li>
+     *   <li>Simple data type (is already known)</li>
+     *   <li>No default value</li>
+     * </ul>
+     */
+    @Test
+    public void testSimpleAnnotationCopy() {
+        Project original = new Project("testSimpleAnnotationCopy");
+        IDatatype basisType = StringType.TYPE;
+        Attribute decl = new Attribute("anno", basisType, original, original);
+        original.add(decl);
+        original.attribute(decl);
+        
+        Project copy = copyProject(original);
+        AbstractVariable copieddecl = (AbstractVariable) copy.getElement(0);
+        Map<AbstractVariable, Project> copyMapping = new HashMap<AbstractVariable, Project>();
+        copyMapping.put(decl, copy);
+        assertDeclaration(decl, copieddecl, copyMapping);
     }
 
 }

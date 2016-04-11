@@ -19,13 +19,13 @@ import java.util.ArrayDeque;
 import java.util.Deque;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Map;
 
 import net.ssehub.easy.basics.modelManagement.Version;
 import net.ssehub.easy.varModel.Bundle;
 import net.ssehub.easy.varModel.cst.CSTSemanticException;
 import net.ssehub.easy.varModel.cst.ConstraintSyntaxTree;
-import net.ssehub.easy.varModel.cst.CopyVisitor;
 import net.ssehub.easy.varModel.model.AbstractProjectVisitor;
 import net.ssehub.easy.varModel.model.AbstractVariable;
 import net.ssehub.easy.varModel.model.Attribute;
@@ -36,12 +36,12 @@ import net.ssehub.easy.varModel.model.Constraint;
 import net.ssehub.easy.varModel.model.ContainableModelElement;
 import net.ssehub.easy.varModel.model.DecisionVariableDeclaration;
 import net.ssehub.easy.varModel.model.FreezeBlock;
+import net.ssehub.easy.varModel.model.IAttributableElement;
 import net.ssehub.easy.varModel.model.IModelElement;
 import net.ssehub.easy.varModel.model.OperationDefinition;
 import net.ssehub.easy.varModel.model.PartialEvaluationBlock;
 import net.ssehub.easy.varModel.model.Project;
 import net.ssehub.easy.varModel.model.ProjectInterface;
-import net.ssehub.easy.varModel.model.datatypes.BasisDatatype;
 import net.ssehub.easy.varModel.model.datatypes.Compound;
 import net.ssehub.easy.varModel.model.datatypes.Container;
 import net.ssehub.easy.varModel.model.datatypes.DerivedDatatype;
@@ -71,9 +71,20 @@ public class ProjectCopyVisitor extends AbstractProjectVisitor {
     private Map<ContainableModelElement, ContainableModelElement> copiedElements;
     /**
      * Sub set of {@link #copiedElements} with (oldDeclaration, copiedDeclaration).
-     * This map is useful for the {@link CopyVisitor}.
+     * This map is useful for the {@link CSTCopyVisitor}.
      */
     private Map<AbstractVariable, AbstractVariable> copiedDeclarations;
+    
+    /**
+     * Set of used wrapper for declarations which are used in constraints, but could not be translated so far.
+     * Tuple of (original declaration, wrapper for declaration, which is used in constraints).
+     */
+    private Map<AbstractVariable, UntranslatedDeclaration> untranslatedDeclarations;
+    
+    /**
+     * Tuple of (translated model element, incomplete constraint) for translating the constraints at a later point.
+     */
+    private Map<ContainableModelElement, ConstraintSyntaxTree> incompleteConstraints;
     
     /**
      * Elements which where found during visitation, but could not be translated yet, e.g., as the parent is missing.
@@ -102,7 +113,42 @@ public class ProjectCopyVisitor extends AbstractProjectVisitor {
         copiedElements = new HashMap<ContainableModelElement, ContainableModelElement>();
         copiedDeclarations = new HashMap<AbstractVariable, AbstractVariable>();
         openElements = new HashSet<ContainableModelElement>();
+        untranslatedDeclarations = new HashMap<AbstractVariable, UntranslatedDeclaration>();
+        incompleteConstraints = new HashMap<ContainableModelElement, ConstraintSyntaxTree>();
         parents = new ArrayDeque<IModelElement>();
+    }
+    
+    @Override
+    public void visitProject(Project project) {
+        super.visitProject(project);
+        
+        //handle incomplete constraints
+        java.util.Set<Map.Entry<ContainableModelElement, ConstraintSyntaxTree>> incompleteCSTs
+            = incompleteConstraints.entrySet();
+        Iterator<Map.Entry<ContainableModelElement, ConstraintSyntaxTree>> itr = incompleteCSTs.iterator();
+        while (itr.hasNext()) {
+            Map.Entry<ContainableModelElement, ConstraintSyntaxTree> entry = itr.next();
+            ContainableModelElement element = entry.getKey();
+            if (element.getTopLevelParent() == parents.peekFirst()) {
+                CSTCopyVisitor copyier = new CSTCopyVisitor(copiedDeclarations, this);
+                if (element instanceof AbstractVariable) {
+                    AbstractVariable aDecl = (AbstractVariable) element;
+                    aDecl.getDefaultValue().accept(copyier);
+                    if (copyier.translatedCompletely()) {
+                        try {
+                            aDecl.setValue(copyier.getResult());
+                            itr.remove();
+                        } catch (ValueDoesNotMatchTypeException e) {
+                            // Should not be possible, since the original was valid
+                            Bundle.getLogger(ProjectCopyVisitor.class).exception(e);
+                        } catch (CSTSemanticException e) {
+                            // Should not be possible, since the original was valid
+                            Bundle.getLogger(ProjectCopyVisitor.class).exception(e);
+                        }
+                    }
+                }
+            }
+        }
     }
     
     /**
@@ -112,6 +158,24 @@ public class ProjectCopyVisitor extends AbstractProjectVisitor {
      */
     public Project getCopiedProject() {
         return copiedProject;
+    }
+    
+    /**
+     * Returns a temporary wrapper for declarations already used in constraints, but has not been translated so far.
+     * @param original The original declaration of the original project.
+     * @return A {@link UntranslatedDeclaration} or <tt>null</tt> if this was not needed so far.
+     */
+    AbstractVariable getUntranslatedDeclaration(AbstractVariable original) {
+        return untranslatedDeclarations.get(original);
+    }
+    
+    /**
+     * Adds a new {@link UntranslatedDeclaration} to this visitor if it was necessary to create one during copying
+     * a constraint.
+     * @param declaration The temporary wrapper to add (must not be <tt>null</tt>).
+     */
+    void addUntranslatedDeclaration(UntranslatedDeclaration declaration) {
+        untranslatedDeclarations.put(declaration.getDeclaration(), declaration);
     }
     
     /**
@@ -132,24 +196,26 @@ public class ProjectCopyVisitor extends AbstractProjectVisitor {
      *     datatype wasn't translated so far.
      */
     private IDatatype getTranslatedType(IDatatype originalType) {
-        IDatatype delegatingType = originalType.getType();
         IDatatype copiedType = null;
         
-        if (delegatingType instanceof BasisDatatype) {
+        if (originalType.isPrimitive()) {
+            // Real, Strings, Integers, Booleans, Constraints
             copiedType = originalType;
-        } else if (delegatingType instanceof Container) {
+        } else if (Container.TYPE.isAssignableFrom(originalType)) {
             Container conType = (Container) originalType;
             IDatatype containedType = getTranslatedType(conType.getContainedType());
             Project copiedParent = copiedProjects.get(conType.getParent());
             if (null != containedType && null != copiedParent) {
-                if (delegatingType instanceof Sequence) {
+                if (Sequence.TYPE.isAssignableFrom(originalType)) {
                     copiedType = new Sequence(originalType.getName(), containedType, copiedParent);
-                } else if (delegatingType instanceof Set) {
+                } else if (Set.TYPE.isAssignableFrom(originalType)) {
                     copiedType = new Sequence(originalType.getName(), containedType, copiedParent);
                 }
             }
+        } else if (Compound.TYPE.isAssignableFrom(originalType) || Enum.TYPE.isAssignableFrom(originalType)) {
+            copiedType = (IDatatype) copiedElements.get(originalType);
         }
-        // TODO SE: references, enums, compounds
+        // TODO SE: references, typedefs
         
         return copiedType;
     }
@@ -186,22 +252,15 @@ public class ProjectCopyVisitor extends AbstractProjectVisitor {
             addToCurrentParent(copiedDecl);
             copiedElements.put(decl, copiedDecl);
             copiedDeclarations.put(decl, copiedDecl);
+            UntranslatedDeclaration uDecl = untranslatedDeclarations.get(decl);
+            if (null != uDecl) {
+                copiedElements.put(uDecl, copiedDecl);
+                copiedDeclarations.put(uDecl, copiedDecl);
+                untranslatedDeclarations.remove(decl);
+            }
             
             // Copy default value
-            ConstraintSyntaxTree cst = decl.getDefaultValue();
-            if (null != cst) {
-                CopyVisitor cstCopyier = new CopyVisitor(copiedDeclarations); 
-                cst.accept(cstCopyier);
-                try {
-                    copiedDecl.setValue(cstCopyier.getResult());
-                } catch (ValueDoesNotMatchTypeException e) {
-                    // Should not be possible, since the original was valid
-                    Bundle.getLogger(ProjectCopyVisitor.class).exception(e);
-                } catch (CSTSemanticException e) {
-                    // Should not be possible, since the original was valid
-                    Bundle.getLogger(ProjectCopyVisitor.class).exception(e);
-                }
-            }
+            copyDefaultValue(decl, copiedDecl);
             
             // TODO SE: Annotations
         } else {
@@ -209,10 +268,56 @@ public class ProjectCopyVisitor extends AbstractProjectVisitor {
         }
     }
 
+    /**
+     * Copies the default value from the original declaration to the copied declaration.
+     * @param decl The original declaration from where the default value shall be copied from.
+     * @param copiedDecl The target declaration.
+     */
+    private void copyDefaultValue(AbstractVariable decl, AbstractVariable copiedDecl) {
+        ConstraintSyntaxTree cst = decl.getDefaultValue();
+        if (null != cst) {
+            CSTCopyVisitor cstCopyier = new CSTCopyVisitor(copiedDeclarations, this); 
+            cst.accept(cstCopyier);
+            try {
+                copiedDecl.setValue(cstCopyier.getResult());
+                if (!cstCopyier.translatedCompletely()) {
+                    incompleteConstraints.put(copiedDecl, cst);
+                }
+            } catch (ValueDoesNotMatchTypeException e) {
+                // Should not be possible, since the original was valid
+                Bundle.getLogger(ProjectCopyVisitor.class).exception(e);
+            } catch (CSTSemanticException e) {
+                // Should not be possible, since the original was valid
+                Bundle.getLogger(ProjectCopyVisitor.class).exception(e);
+            }
+        }
+    }
+
     @Override
     public void visitAttribute(Attribute attribute) {
-        // TODO Auto-generated method stub
-        
+        IDatatype type = getTranslatedType(attribute.getType());
+        IAttributableElement annotatedElement = attribute.getElement();
+        if (annotatedElement instanceof Project) {
+            annotatedElement = copiedProjects.get(annotatedElement);
+        } else {
+            annotatedElement = (IAttributableElement) copiedElements.get(annotatedElement);
+        }
+        if (null != type && null != annotatedElement) {
+            // Copy annotation
+            Attribute copiedAnnotation = new Attribute(attribute.getName(), type, parents.peekFirst(),
+                annotatedElement);
+            addToCurrentParent(copiedAnnotation);
+            copiedElements.put(attribute, copiedAnnotation);
+            copiedDeclarations.put(attribute, copiedAnnotation);
+            annotatedElement.attribute(copiedAnnotation);
+            
+            // Copy default value
+            copyDefaultValue(attribute, copiedAnnotation);
+            
+            // TODO SE: Annotations
+        } else {
+            openElements.add(attribute);
+        }
     }
 
     @Override
@@ -265,14 +370,24 @@ public class ProjectCopyVisitor extends AbstractProjectVisitor {
 
     @Override
     public void visitEnum(Enum eenum) {
-        // TODO Auto-generated method stub
-        
+        String[] literals = new String[eenum.getLiteralCount()];
+        for (int i = 0; i < literals.length; i++) {
+            literals[i] = eenum.getLiteral(i).getName();
+        }
+        Enum copiedEnum = new Enum(eenum.getName(), (Project) parents.peekFirst(), literals);
+        addToCurrentParent(copiedEnum);
+        copiedElements.put(eenum, copiedEnum);
     }
 
     @Override
     public void visitOrderedEnum(OrderedEnum eenum) {
-        // TODO Auto-generated method stub
-        
+        OrderedEnum copiedEnum = new OrderedEnum(eenum.getName(), (Project) parents.peekFirst());
+        for (int i = 0, end = eenum.getLiteralCount(); i < end; i++) {
+            EnumLiteral originalLiteral = eenum.getLiteral(i);
+            copiedEnum.add(new EnumLiteral(originalLiteral.getName(), originalLiteral.getOrdinal(), copiedEnum));
+        }
+        addToCurrentParent(copiedEnum);
+        copiedElements.put(eenum, copiedEnum);
     }
 
     @Override
@@ -289,8 +404,7 @@ public class ProjectCopyVisitor extends AbstractProjectVisitor {
 
     @Override
     public void visitEnumLiteral(EnumLiteral literal) {
-        // TODO Auto-generated method stub
-        
+        // Not needed
     }
 
     @Override
