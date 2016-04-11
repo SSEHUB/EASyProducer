@@ -13,33 +13,23 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package net.ssehub.easy.varModel.model.filter;
+package net.ssehub.easy.varModel.model.rewrite;
 
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 import org.junit.runners.Suite.SuiteClasses;
 
-import net.ssehub.easy.varModel.model.filter.mandatoryVars.MandatoryDeclarationClassifierTest;
 
 /**
- * Test Suite for running tests of this package, the tests for the filters.
+ * Test Suite for running tests of this package, the tests for project rewriters.
  * @author El-Sharkawy
  *
  */
 @RunWith(Suite.class)
 @SuiteClasses({
-    AbstractFrozenElementsFinderTest.class,
-    ConstraintSeparatorTest.class,
-    DatatypeFinderTest.class,
-    FreezeBlockFinderTest.class,
-    FrozenElementsFinderTest.class,
-    IDecisionVariableInConstraintFinderTest.class,
-    ProjectInterfaceTest.class,
-    ReferenceValueFinderTest.class,
-    
-    // Sub packages
-    MandatoryDeclarationClassifierTest.class
+    ProjectCopyVisitorTest.class,
+    ProjectRewriteVisitorTest.class
     })
-public class AllFilterTests {
+public class AllRewriteTests {
 
 }

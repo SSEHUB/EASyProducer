@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package net.ssehub.easy.varModel.varModel.rewrite;
+package net.ssehub.easy.varModel.model.rewrite;
 
 import java.io.IOException;
 import java.io.StringWriter;
@@ -57,7 +57,6 @@ import net.ssehub.easy.varModel.model.datatypes.Reference;
 import net.ssehub.easy.varModel.model.datatypes.Sequence;
 import net.ssehub.easy.varModel.model.datatypes.Set;
 import net.ssehub.easy.varModel.model.filter.FilterType;
-import net.ssehub.easy.varModel.model.rewrite.ProjectRewriteVisitor;
 import net.ssehub.easy.varModel.model.rewrite.modifier.DeclarationNameFilter;
 import net.ssehub.easy.varModel.model.rewrite.modifier.FrozenCompoundConstraintsOmitter;
 import net.ssehub.easy.varModel.model.rewrite.modifier.FrozenConstraintVarFilter;
