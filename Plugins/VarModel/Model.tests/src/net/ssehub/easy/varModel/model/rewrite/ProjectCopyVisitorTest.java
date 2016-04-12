@@ -34,16 +34,22 @@ import net.ssehub.easy.varModel.model.Constraint;
 import net.ssehub.easy.varModel.model.ContainableModelElement;
 import net.ssehub.easy.varModel.model.DecisionVariableDeclaration;
 import net.ssehub.easy.varModel.model.IAttributableElement;
+import net.ssehub.easy.varModel.model.IModelElement;
 import net.ssehub.easy.varModel.model.Project;
+import net.ssehub.easy.varModel.model.datatypes.BooleanType;
+import net.ssehub.easy.varModel.model.datatypes.DerivedDatatype;
 import net.ssehub.easy.varModel.model.datatypes.Enum;
 import net.ssehub.easy.varModel.model.datatypes.EnumLiteral;
 import net.ssehub.easy.varModel.model.datatypes.IDatatype;
+import net.ssehub.easy.varModel.model.datatypes.IntegerType;
 import net.ssehub.easy.varModel.model.datatypes.OclKeyWords;
 import net.ssehub.easy.varModel.model.datatypes.OrderedEnum;
 import net.ssehub.easy.varModel.model.datatypes.RealType;
+import net.ssehub.easy.varModel.model.datatypes.Reference;
 import net.ssehub.easy.varModel.model.datatypes.StringType;
 import net.ssehub.easy.varModel.model.filter.DeclrationInConstraintFinder;
 import net.ssehub.easy.varModel.model.filter.FilterType;
+import net.ssehub.easy.varModel.model.values.BooleanValue;
 import net.ssehub.easy.varModel.model.values.ValueDoesNotMatchTypeException;
 import net.ssehub.easy.varModel.model.values.ValueFactory;
 import net.ssehub.easy.varModel.persistency.StringProvider;
@@ -105,17 +111,18 @@ public class ProjectCopyVisitorTest {
      * General comparison between original and copied model element.
      * @param originalElement The original element which should be copied.
      * @param copiedElement The copied element to test.
-     * @param copy The new expected parent for the copied element
+     * @param expectedParent The new expected parent for the copied element
      */
     private void assertCopiedElement(ContainableModelElement originalElement, ContainableModelElement copiedElement,
-        Project copy) {
+        IModelElement expectedParent) {
         
         Assert.assertNotNull("Copied element is null", copiedElement);
         Assert.assertSame("Copied element is not of type \"" + originalElement.getClass()
             + "\".", originalElement.getClass(), copiedElement.getClass());
         Assert.assertEquals("Copied element has not the same name \"" + originalElement.getName()
             + "\".", originalElement.getName(), copiedElement.getName());
-        Assert.assertSame("Copied element has wrong parent", copy, copiedElement.getParent());
+        Assert.assertSame("Copied element \"" + copiedElement.getName() + "\" has wrong parent", expectedParent,
+            copiedElement.getParent());
         Assert.assertNotSame(originalElement.getParent(), copiedElement.getParent());
         Assert.assertSame("Copied element has wrong comment", originalElement.getComment(), copiedElement.getComment());
         /*
@@ -192,18 +199,50 @@ public class ProjectCopyVisitorTest {
      * Checks whether a constraint was copied correctly.
      * @param constraint The original constraint for comparison
      * @param copiedConstraint The copied constraint to test
-     * @param copy The expected parent of the constraint
+     * @param expectedParent The expected parent of the constraint
      * @param copiedProjects Valid parents for elements of the constraint.
      */
-    private void assertConstraint(Constraint constraint, Constraint copiedConstraint, Project copy,
+    private void assertConstraint(Constraint constraint, Constraint copiedConstraint, IModelElement expectedParent,
         java.util.Set<Project> copiedProjects) {
         
-        assertCopiedElement(constraint, copiedConstraint, copy);
+        assertCopiedElement(constraint, copiedConstraint, expectedParent);
         DeclrationInConstraintFinder finder = new DeclrationInConstraintFinder(copiedConstraint.getConsSyntax());
         for (AbstractVariable usedDecl : finder.getDeclarations()) {
             Assert.assertTrue("Used declaration \"" + usedDecl.getName() + "\" of original project.",
-                copiedProjects.contains(usedDecl.getParent()));
+                copiedProjects.contains(usedDecl.getTopLevelParent()));
         }
+    }
+    
+    /**
+     * Checks a copied {@link DerivedDatatype}.
+     * @param dType The original type for comparison
+     * @param copiedType The copied type to test
+     * @param copy The expected parent of the constraint
+     * @param copiedProjects Valid parents for elements of the constraint.
+     */
+    private void assertDerivedType(DerivedDatatype dType, DerivedDatatype copiedType,
+        Project copy, java.util.Set<Project> copiedProjects) {
+        
+        assertCopiedElement(dType, copiedType, copy);
+        Assert.assertEquals("Copied type has different amount of constraints", dType.getConstraintCount(),
+            copiedType.getConstraintCount());
+        for (int i = 0; i < dType.getConstraintCount(); i++) {
+            Constraint orgConstraint = dType.getConstraint(i);
+            Constraint copiedConstraint = copiedType.getConstraint(i);
+            assertConstraint(orgConstraint, copiedConstraint, copiedType, copiedProjects);
+        }
+    }
+    
+    /**
+     * Checks a copied {@link Reference}s.
+     * @param refType The original type for comparison
+     * @param copiedType The copied type to test
+     * @param copy The expected parent of the constraint
+     */
+    private void assertReferenceType(Reference refType, Reference copiedType, Project copy) {
+        assertCopiedElement(refType, copiedType, copy);
+        Assert.assertEquals(refType.getType().getName(), copiedType.getType().getName());
+        Assert.assertSame(refType.getType().getClass(), copiedType.getType().getClass());
     }
     
     /**
@@ -422,4 +461,108 @@ public class ProjectCopyVisitorTest {
         assertDeclaration(decl, copieddecl, copyMapping);
     }
 
+    /**
+     * Tests whether a simple {@link DerivedDatatype} without any dependencies can be copied.
+     * @throws CSTSemanticException If <tt>true</tt>  cannot be created as constraint for a boolean type
+     */
+    @Test
+    public void testCopyDerivedType() throws CSTSemanticException {
+        Project original = new Project("testCopyDerivedType");
+        IDatatype basisType = BooleanType.TYPE;
+        DerivedDatatype dType = new DerivedDatatype("posType", basisType, original);
+        Constraint constraint = new Constraint(dType);
+        OCLFeatureCall equality = new OCLFeatureCall(new Variable(dType.getTypeDeclaration()), OclKeyWords.EQUALS,
+                new ConstantValue(BooleanValue.TRUE));
+        constraint.setConsSyntax(equality);
+        dType.setConstraints(new Constraint[] {constraint});
+        original.add(dType);
+        
+        java.util.Set<Project> copiedProjects = new HashSet<Project>();
+        Project copy = copyProject(original, copiedProjects);
+        DerivedDatatype copiedType = (DerivedDatatype) copy.getElement(0);
+        assertDerivedType(dType, copiedType, copy, copiedProjects);
+    }
+    
+    /**
+     * Tests whether a {@link DerivedDatatype}, depending on a declaration can be copied.
+     * @throws CSTSemanticException If a boolean equality constraint cannot be created
+     */
+    @Test
+    public void testCopyDerivedTypeDependingOnDeclaration() throws CSTSemanticException {
+        Project original = new Project("testCopyDerivedTypeDependingOnDeclaration");
+        IDatatype basisType = BooleanType.TYPE;
+        DecisionVariableDeclaration decl = new DecisionVariableDeclaration("decl", basisType, original);
+        DerivedDatatype dType = new DerivedDatatype("bType", basisType, original);
+        Constraint constraint = new Constraint(dType);
+        OCLFeatureCall equality = new OCLFeatureCall(new Variable(dType.getTypeDeclaration()), OclKeyWords.EQUALS,
+            new Variable(decl));
+        constraint.setConsSyntax(equality);
+        dType.setConstraints(new Constraint[] {constraint});
+        original.add(dType);
+        original.add(decl);
+        
+        java.util.Set<Project> copiedProjects = new HashSet<Project>();
+        Project copy = copyProject(original, copiedProjects);
+        DerivedDatatype copiedType = (DerivedDatatype) copy.getElement(0);
+        assertDerivedType(dType, copiedType, copy, copiedProjects);
+    }
+    
+    /**
+     * Tests whether a simple {@link DerivedDatatype} without any dependencies can be copied.
+     * @throws CSTSemanticException If a greater constraint cannot be created
+     * @throws ValueDoesNotMatchTypeException If 0 cannot be created as value
+     */
+    @Test
+    public void testCopyDerivedTypeDependingOnType() throws CSTSemanticException, ValueDoesNotMatchTypeException {
+        Project original = new Project("testCopyDerivedTypeDependingOnType");
+        IDatatype basisType = IntegerType.TYPE;
+        DerivedDatatype dType1 = new DerivedDatatype("posType", basisType, original);
+        Constraint constraint = new Constraint(dType1);
+        ConstantValue zero = new ConstantValue(ValueFactory.createValue(basisType, 0));
+        OCLFeatureCall greater = new OCLFeatureCall(new Variable(dType1.getTypeDeclaration()), OclKeyWords.GREATER,
+            zero);
+        constraint.setConsSyntax(greater);
+        dType1.setConstraints(new Constraint[] {constraint});
+        DerivedDatatype dType2 = new DerivedDatatype("alias", dType1, original);
+        original.add(dType2);
+        original.add(dType1);
+        
+        java.util.Set<Project> copiedProjects = new HashSet<Project>();
+        Project copy = copyProject(original, copiedProjects);
+        // Attention: Ordering has changed!
+        DerivedDatatype copiedType = (DerivedDatatype) copy.getElement(1);
+        assertDerivedType(dType2, copiedType, copy, copiedProjects);
+    }
+    
+    /**
+     * Tests whether a simple {@link Reference} without any dependencies can be copied.
+     */
+    @Test
+    public void testCopyReferenceType() {
+        Project original = new Project("testCopyReferenceType");
+        IDatatype basisType = RealType.TYPE;
+        Reference refType = new Reference("refType", basisType, original);
+        original.add(refType);
+        
+        Project copy = copyProject(original);
+        Reference copiedType = (Reference) copy.getElement(0);
+        assertReferenceType(refType, copiedType, copy);
+    }
+    
+    /**
+     * Tests whether a simple {@link Reference} depending on another type can be copied.
+     */
+    @Test
+    public void testCopyReferenceDependingOnType() {
+        Project original = new Project("testCopyReferenceDependingOnType");
+        Enum eType = new Enum("Color", original, "R", "G", "B");
+        Reference refType = new Reference("refType", eType, original);
+        original.add(refType);
+        original.add(eType);
+        
+        Project copy = copyProject(original);
+        // Attention: Ordering has changed!
+        Reference copiedType = (Reference) copy.getElement(1);
+        assertReferenceType(refType, copiedType, copy);
+    }
 }

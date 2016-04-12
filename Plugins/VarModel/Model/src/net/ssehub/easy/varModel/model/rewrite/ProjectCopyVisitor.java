@@ -44,6 +44,7 @@ import net.ssehub.easy.varModel.model.Project;
 import net.ssehub.easy.varModel.model.ProjectInterface;
 import net.ssehub.easy.varModel.model.datatypes.Compound;
 import net.ssehub.easy.varModel.model.datatypes.Container;
+import net.ssehub.easy.varModel.model.datatypes.CustomDatatype;
 import net.ssehub.easy.varModel.model.datatypes.DerivedDatatype;
 import net.ssehub.easy.varModel.model.datatypes.Enum;
 import net.ssehub.easy.varModel.model.datatypes.EnumLiteral;
@@ -117,45 +118,88 @@ public class ProjectCopyVisitor extends AbstractProjectVisitor {
     @Override
     public void visitProject(Project project) {
         super.visitProject(project);
-        
-        // Handle incomplete default values
-        Iterator<AbstractVariable> declDefaultItr = incompleteElements.getDeclarationsWithMissingDefaults().iterator();
-        while (declDefaultItr.hasNext()) {
-            AbstractVariable decl = declDefaultItr.next();
-            CSTCopyVisitor copyier = new CSTCopyVisitor(copiedDeclarations);
-            decl.getDefaultValue().accept(copyier);
-            if (copyier.translatedCompletely()) {
-                try {
-                    decl.setValue(copyier.getResult());
-                    declDefaultItr.remove();
-                } catch (ValueDoesNotMatchTypeException e) {
-                    // Should not be possible, since the original was valid
-                    Bundle.getLogger(ProjectCopyVisitor.class).exception(e);
-                } catch (CSTSemanticException e) {
-                    // Should not be possible, since the original was valid
-                    Bundle.getLogger(ProjectCopyVisitor.class).exception(e);
-                }
-            }
-        }
-        
-        // Handle incomplete constraints
-        Iterator<Constraint> constraintItr = incompleteElements.getUnresolvedconstraints().iterator();
-        while (constraintItr.hasNext()) {
-            Constraint constraint = constraintItr.next();
-            CSTCopyVisitor copyier = new CSTCopyVisitor(copiedDeclarations);
-            constraint.getConsSyntax().accept(copyier);
-            if (copyier.translatedCompletely()) {
-                try {
-                    constraint.setConsSyntax(copyier.getResult());
-                    constraintItr.remove();
-                } catch (CSTSemanticException e) {
-                    // Should not be possible, since the original was valid
-                    Bundle.getLogger(ProjectCopyVisitor.class).exception(e);
-                }
-            }
-        }
         // super.visitProject(project) -> calls addFirst
         parents.pollFirst();
+        
+        // Finally at the end of the whole translation, try to fix all the missed elements
+        if (project == getStartingProject()) {
+            parents.clear();
+            boolean elementsResolved = false;
+            
+            do {
+                elementsResolved = false;
+                
+                // Handle incomplete custom types
+                elementsResolved = resolveOutStandingTypes();
+                
+                // Handle incomplete default values
+                Iterator<AbstractVariable> declDefaultItr =
+                    incompleteElements.getDeclarationsWithMissingDefaults().iterator();
+                while (declDefaultItr.hasNext()) {
+                    AbstractVariable decl = declDefaultItr.next();
+                    CSTCopyVisitor copyier = new CSTCopyVisitor(copiedDeclarations);
+                    decl.getDefaultValue().accept(copyier);
+                    if (copyier.translatedCompletely()) {
+                        try {
+                            decl.setValue(copyier.getResult());
+                            declDefaultItr.remove();
+                            elementsResolved = true;
+                        } catch (ValueDoesNotMatchTypeException e) {
+                            // Should not be possible, since the original was valid
+                            Bundle.getLogger(ProjectCopyVisitor.class).exception(e);
+                        } catch (CSTSemanticException e) {
+                            // Should not be possible, since the original was valid
+                            Bundle.getLogger(ProjectCopyVisitor.class).exception(e);
+                        }
+                    }
+                }
+                
+                // Handle incomplete constraints
+                Iterator<Constraint> constraintItr = incompleteElements.getUnresolvedconstraints().iterator();
+                while (constraintItr.hasNext()) {
+                    Constraint constraint = constraintItr.next();
+                    CSTCopyVisitor copyier = new CSTCopyVisitor(copiedDeclarations, this);
+                    constraint.getConsSyntax().accept(copyier);
+                    if (copyier.translatedCompletely()) {
+                        try {
+                            constraint.setConsSyntax(copyier.getResult());
+                            constraintItr.remove();
+                            elementsResolved = true;
+                        } catch (CSTSemanticException e) {
+                            // Should not be possible, since the original was valid
+                            Bundle.getLogger(ProjectCopyVisitor.class).exception(e);
+                        }
+                    }
+                }
+            } while(elementsResolved);
+        }
+        
+    }
+
+    /**
+     * Part of the end of the coping: Tries to resolve custom data types, which could not be translated during
+     * the regular visitation.
+     * @return <tt>true</tt> if at least one element was resolved, <tt>false</tt> no elements have been resolved,
+     *     maybe because there was nothing to do.
+     */
+    private boolean resolveOutStandingTypes() {
+        boolean elementsResolved = false;
+        
+        Iterator<CustomDatatype> typeItr = incompleteElements.getUnresolvedTypes().iterator();
+        while (typeItr.hasNext()) {
+            CustomDatatype type = typeItr.next();
+            Project copiedProject = copiedProjects.get(type.getTopLevelParent());
+            parents.add(copiedProject);
+            type.accept(this);
+            IModelElement copiedType = copiedElements.get(type);
+            if (null != copiedType) {
+                elementsResolved = true;
+                typeItr.remove();
+            }
+            parents.removeFirst();
+        }
+        
+        return elementsResolved;
     }
     
     /**
@@ -209,7 +253,8 @@ public class ProjectCopyVisitor extends AbstractProjectVisitor {
                     copiedType = new Sequence(originalType.getName(), containedType, copiedParent);
                 }
             }
-        } else if (Compound.TYPE.isAssignableFrom(originalType) || Enum.TYPE.isAssignableFrom(originalType)) {
+        } else if (Compound.TYPE.isAssignableFrom(originalType) || Enum.TYPE.isAssignableFrom(originalType)
+            || DerivedDatatype.TYPE.isAssignableFrom(originalType)) {
             copiedType = (IDatatype) copiedElements.get(originalType);
         }
         // TODO SE: references, typedefs
@@ -408,8 +453,28 @@ public class ProjectCopyVisitor extends AbstractProjectVisitor {
 
     @Override
     public void visitDerivedDatatype(DerivedDatatype datatype) {
-        // TODO Auto-generated method stub
-        
+        IDatatype basisType = getTranslatedType(datatype.getBasisType());
+        if (null != basisType) {
+            DerivedDatatype copiedType = new DerivedDatatype(datatype.getName(), basisType,
+                (Project) parents.peekFirst());
+            addToCurrentParent(copiedType);
+            copiedElements.put(datatype, copiedType);
+            copiedElements.put(datatype.getTypeDeclaration(), copiedType.getTypeDeclaration());
+            copiedDeclarations.put(datatype.getTypeDeclaration(), copiedType.getTypeDeclaration());
+            
+            // Handle constraints
+            parents.addFirst(copiedType);
+            Constraint[] copiedConstraints = new Constraint[datatype.getConstraintCount()];
+            for (int i = 0; i < copiedConstraints.length; i++) {
+                Constraint orgConstraint = datatype.getConstraint(i);
+                visitConstraint(orgConstraint);
+                copiedConstraints[i] = (Constraint) copiedElements.get(orgConstraint);
+            }
+            copiedType.setConstraints(copiedConstraints);
+            parents.removeFirst();
+        } else {
+            incompleteElements.addUnresolvedType(datatype);
+        }
     }
 
     @Override
@@ -419,8 +484,14 @@ public class ProjectCopyVisitor extends AbstractProjectVisitor {
 
     @Override
     public void visitReference(Reference reference) {
-        // TODO Auto-generated method stub
-        
+        IDatatype basisType = getTranslatedType(reference.getType());
+        if (null != basisType) {
+            Reference copiedType = new Reference(reference.getName(), basisType, (Project) parents.peekFirst());
+            addToCurrentParent(copiedType);
+            copiedElements.put(reference, copiedType);
+        } else {
+            incompleteElements.addUnresolvedType(reference);
+        }
     }
 
     @Override

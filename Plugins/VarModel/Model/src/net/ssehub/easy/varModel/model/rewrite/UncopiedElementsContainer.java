@@ -20,6 +20,7 @@ import java.util.Set;
 
 import net.ssehub.easy.varModel.model.AbstractVariable;
 import net.ssehub.easy.varModel.model.Constraint;
+import net.ssehub.easy.varModel.model.datatypes.CustomDatatype;
 
 /**
  * Stores elements of the {@link ProjectCopyVisitor}, which could not be copied completely as dependent elements
@@ -46,6 +47,11 @@ class UncopiedElementsContainer {
      * cst can be used for copying it at a later point.
      */
     private Set<Constraint> unresolvedConstraints = new HashSet<Constraint>();
+    
+    /**
+     * Set of custom data types which are dependent of other custom data types, not translated so far.
+     */
+    private Set<CustomDatatype> unresolvedDatatypes = new HashSet<CustomDatatype>();
     
     /**
      * Adds a copied/translated {@link AbstractVariable}, from which the default value could not be translated, as
@@ -89,5 +95,22 @@ class UncopiedElementsContainer {
      */
     Set<Constraint> getUnresolvedconstraints() {
         return unresolvedConstraints;
+    }
+    
+    /**
+     * Adds a custom data type which could not be translated as it is dependent of another custom data type, which
+     * hasn't been copied so far.
+     * @param unresolvedType The unresolved data type, which still has to be translated.
+     */
+    void addUnresolvedType(CustomDatatype unresolvedType) {
+        unresolvedDatatypes.add(unresolvedType);
+    }
+    
+    /**
+     * Returns the set of all unresolved (original) data types which could not be translated so far.
+     * @return The unresolved data types
+     */
+    Set<CustomDatatype> getUnresolvedTypes() {
+        return unresolvedDatatypes;
     }
 }

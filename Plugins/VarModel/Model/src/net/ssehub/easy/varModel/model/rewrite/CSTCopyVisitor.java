@@ -27,16 +27,32 @@ import net.ssehub.easy.varModel.model.AbstractVariable;
 class CSTCopyVisitor extends CopyVisitor {
     
     private boolean complete;
+    private ProjectCopyVisitor copyier;
     
     /**
-     * Creates a copy visitor with explicit mapping.
+     * Creates a copy visitor with explicit mapping. This is for first round of translation, where <b>not</b> all
+     * projects have been translated.
      * 
      * @param mapping a mapping from old variable declarations to new variable declarations,
      *   existing variable declarations are taken over if no mapping is given, may be <b>null</b>
      *   in case of no mapping at all
      */
     CSTCopyVisitor(Map<AbstractVariable, AbstractVariable> mapping) {
+        this(mapping, null);
+    }
+    
+    /**
+     * Creates a copy visitor with explicit mapping. This is for the final round of translation, where all projects
+     * have been translated.
+     * 
+     * @param mapping a mapping from old variable declarations to new variable declarations,
+     *   existing variable declarations are taken over if no mapping is given, may be <b>null</b>
+     *   in case of no mapping at all
+     * @param copyier The calling {@link ProjectCopyVisitor}, containing the list of currently translated projects.
+     */
+    CSTCopyVisitor(Map<AbstractVariable, AbstractVariable> mapping, ProjectCopyVisitor copyier) {
         super(mapping);
+        this.copyier = copyier;
         complete = true;
     }
     
@@ -56,7 +72,9 @@ class CSTCopyVisitor extends CopyVisitor {
             result = getMapping().get(var);
             if (null == result) {
                 result = var;
-                complete = false;
+                if (copyier == null || !copyier.getAllCopiedProjects().contains(result.getTopLevelParent())) {
+                    complete = false;
+                }
             }
         } else {
             result = var;
