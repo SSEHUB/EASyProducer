@@ -16,6 +16,7 @@
 package net.ssehub.easy.varModel.model.rewrite;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 
 import org.junit.Assert;
@@ -23,10 +24,13 @@ import org.junit.Test;
 
 import net.ssehub.easy.basics.modelManagement.Version;
 import net.ssehub.easy.varModel.cst.CSTSemanticException;
+import net.ssehub.easy.varModel.cst.ConstantValue;
+import net.ssehub.easy.varModel.cst.OCLFeatureCall;
 import net.ssehub.easy.varModel.cst.Variable;
 import net.ssehub.easy.varModel.model.AbstractVariable;
 import net.ssehub.easy.varModel.model.Attribute;
 import net.ssehub.easy.varModel.model.Comment;
+import net.ssehub.easy.varModel.model.Constraint;
 import net.ssehub.easy.varModel.model.ContainableModelElement;
 import net.ssehub.easy.varModel.model.DecisionVariableDeclaration;
 import net.ssehub.easy.varModel.model.IAttributableElement;
@@ -34,11 +38,14 @@ import net.ssehub.easy.varModel.model.Project;
 import net.ssehub.easy.varModel.model.datatypes.Enum;
 import net.ssehub.easy.varModel.model.datatypes.EnumLiteral;
 import net.ssehub.easy.varModel.model.datatypes.IDatatype;
+import net.ssehub.easy.varModel.model.datatypes.OclKeyWords;
 import net.ssehub.easy.varModel.model.datatypes.OrderedEnum;
 import net.ssehub.easy.varModel.model.datatypes.RealType;
 import net.ssehub.easy.varModel.model.datatypes.StringType;
+import net.ssehub.easy.varModel.model.filter.DeclrationInConstraintFinder;
 import net.ssehub.easy.varModel.model.filter.FilterType;
 import net.ssehub.easy.varModel.model.values.ValueDoesNotMatchTypeException;
+import net.ssehub.easy.varModel.model.values.ValueFactory;
 import net.ssehub.easy.varModel.varModel.testSupport.ProjectTestUtilities;
 
 /**
@@ -158,8 +165,25 @@ public class ProjectCopyVisitorTest {
         for (int i = 0, end = decl.getAttributesCount(); i < end; i++) {
             assertDeclaration(decl.getAttribute(i), copieddecl.getAttribute(i), copyMapping);
         }
-        
     }
+    
+//    /**
+//     * Checks whether a constraint was copied correctly.
+//     * @param constraint
+//     * @param copy
+//     * @param copiedProjects
+//     * @param copiedConstraint
+//     */
+//    private void assertConstraint(Constraint constraint, Project copy, java.util.Set<Project> copiedProjects,
+//        Constraint copiedConstraint) {
+//        
+//        assertCopiedElement(constraint, copiedConstraint, copy);
+//        DeclrationInConstraintFinder finder = new DeclrationInConstraintFinder(copiedConstraint.getConsSyntax());
+//        for (AbstractVariable usedDecl : finder.getDeclarations()) {
+//            Assert.assertTrue("Used declaration \"" + usedDecl.getName() + "\" of original project.",
+//                copiedProjects.contains(usedDecl.getParent()));
+//        }
+//    }
     
     /**
      * Tests whether an empty project may be copied.
@@ -223,6 +247,51 @@ public class ProjectCopyVisitorTest {
         Project copy = copyProject(original);
         Enum copiedEnum = (Enum) copy.getElement(0);
         assertEnumeration(enumType, copiedEnum, copy);
+    }
+    
+    /**
+     * Copies a constraint, which has no outstanding dependencies.
+     * @throws ValueDoesNotMatchTypeException If String values cannot be created.
+     * @throws CSTSemanticException If a string constraint cannot be created
+     */
+    @Test
+    public void testSimpleConstraintCopy() throws ValueDoesNotMatchTypeException, CSTSemanticException {
+        Project original = new Project("testSimpleConstraintCopy");
+        IDatatype basisType = StringType.TYPE;
+        DecisionVariableDeclaration decl = new DecisionVariableDeclaration("decl", basisType, original);
+        original.add(decl);
+        Constraint constraint = new Constraint(original);
+        ConstantValue helloWorldVal = new ConstantValue(ValueFactory.createValue(basisType, "Hello World"));
+        OCLFeatureCall equality = new OCLFeatureCall(new Variable(decl), OclKeyWords.EQUALS, helloWorldVal);
+        constraint.setConsSyntax(equality);
+        original.add(constraint);
+        
+        Project copy = copyProject(original);
+        Constraint copiedConstraint = (Constraint) copy.getElement(1);
+        assertCopiedElement(constraint, copiedConstraint, copy);
+    }
+    
+    /**
+     * Copies a constraint, which is depending on elements, defined at a later point.
+     * @throws ValueDoesNotMatchTypeException If String values cannot be created.
+     * @throws CSTSemanticException If a string constraint cannot be created
+     */
+    @Test
+    public void testDependingConstraintCopy() throws ValueDoesNotMatchTypeException, CSTSemanticException {
+        Project original = new Project("testDependingConstraintCopy");
+        IDatatype basisType = StringType.TYPE;
+        DecisionVariableDeclaration decl = new DecisionVariableDeclaration("decl", basisType, original);
+        Constraint constraint = new Constraint(original);
+        ConstantValue helloWorldVal = new ConstantValue(ValueFactory.createValue(basisType, "Hello World"));
+        OCLFeatureCall equality = new OCLFeatureCall(new Variable(decl), OclKeyWords.EQUALS, helloWorldVal);
+        constraint.setConsSyntax(equality);
+        original.add(constraint);
+        original.add(decl);
+        
+        Project copy = copyProject(original);
+        java.util.Set<Project> copiedProjects = new HashSet<Project>();
+        Constraint copiedConstraint = (Constraint) copy.getElement(0);
+//        assertConstraint(constraint, copy, copiedProjects, copiedConstraint);
     }
     
     /**

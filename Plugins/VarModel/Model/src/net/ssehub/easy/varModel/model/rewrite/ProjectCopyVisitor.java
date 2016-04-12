@@ -76,15 +76,9 @@ public class ProjectCopyVisitor extends AbstractProjectVisitor {
     private Map<AbstractVariable, AbstractVariable> copiedDeclarations;
     
     /**
-     * Set of used wrapper for declarations which are used in constraints, but could not be translated so far.
-     * Tuple of (original declaration, wrapper for declaration, which is used in constraints).
+     * Stores elements which could not be copied (completely).
      */
-    private Map<AbstractVariable, UntranslatedDeclaration> untranslatedDeclarations;
-    
-    /**
-     * Tuple of (translated model element, incomplete constraint) for translating the constraints at a later point.
-     */
-    private Map<ContainableModelElement, ConstraintSyntaxTree> incompleteConstraints;
+    private UncopiedElementsContainer incompleteElements;
     
     /**
      * Elements which where found during visitation, but could not be translated yet, e.g., as the parent is missing.
@@ -113,8 +107,7 @@ public class ProjectCopyVisitor extends AbstractProjectVisitor {
         copiedElements = new HashMap<ContainableModelElement, ContainableModelElement>();
         copiedDeclarations = new HashMap<AbstractVariable, AbstractVariable>();
         openElements = new HashSet<ContainableModelElement>();
-        untranslatedDeclarations = new HashMap<AbstractVariable, UntranslatedDeclaration>();
-        incompleteConstraints = new HashMap<ContainableModelElement, ConstraintSyntaxTree>();
+        incompleteElements = new UncopiedElementsContainer();
         parents = new ArrayDeque<IModelElement>();
     }
     
@@ -122,29 +115,23 @@ public class ProjectCopyVisitor extends AbstractProjectVisitor {
     public void visitProject(Project project) {
         super.visitProject(project);
         
-        //handle incomplete constraints
-        java.util.Set<Map.Entry<ContainableModelElement, ConstraintSyntaxTree>> incompleteCSTs
-            = incompleteConstraints.entrySet();
-        Iterator<Map.Entry<ContainableModelElement, ConstraintSyntaxTree>> itr = incompleteCSTs.iterator();
-        while (itr.hasNext()) {
-            Map.Entry<ContainableModelElement, ConstraintSyntaxTree> entry = itr.next();
-            ContainableModelElement element = entry.getKey();
-            if (element.getTopLevelParent() == parents.peekFirst()) {
-                CSTCopyVisitor copyier = new CSTCopyVisitor(copiedDeclarations, this);
-                if (element instanceof AbstractVariable) {
-                    AbstractVariable aDecl = (AbstractVariable) element;
-                    aDecl.getDefaultValue().accept(copyier);
-                    if (copyier.translatedCompletely()) {
-                        try {
-                            aDecl.setValue(copyier.getResult());
-                            itr.remove();
-                        } catch (ValueDoesNotMatchTypeException e) {
-                            // Should not be possible, since the original was valid
-                            Bundle.getLogger(ProjectCopyVisitor.class).exception(e);
-                        } catch (CSTSemanticException e) {
-                            // Should not be possible, since the original was valid
-                            Bundle.getLogger(ProjectCopyVisitor.class).exception(e);
-                        }
+        //handle incomplete default values
+        Iterator<AbstractVariable> declDefaultItr = incompleteElements.getDeclarationsWithMissingDefaults().iterator();
+        while (declDefaultItr.hasNext()) {
+            AbstractVariable decl = declDefaultItr.next();
+            if (decl.getTopLevelParent() == parents.peekFirst()) {
+                CSTCopyVisitor copyier = new CSTCopyVisitor(copiedDeclarations);
+                decl.getDefaultValue().accept(copyier);
+                if (copyier.translatedCompletely()) {
+                    try {
+                        decl.setValue(copyier.getResult());
+                        declDefaultItr.remove();
+                    } catch (ValueDoesNotMatchTypeException e) {
+                        // Should not be possible, since the original was valid
+                        Bundle.getLogger(ProjectCopyVisitor.class).exception(e);
+                    } catch (CSTSemanticException e) {
+                        // Should not be possible, since the original was valid
+                        Bundle.getLogger(ProjectCopyVisitor.class).exception(e);
                     }
                 }
             }
@@ -158,24 +145,6 @@ public class ProjectCopyVisitor extends AbstractProjectVisitor {
      */
     public Project getCopiedProject() {
         return copiedProject;
-    }
-    
-    /**
-     * Returns a temporary wrapper for declarations already used in constraints, but has not been translated so far.
-     * @param original The original declaration of the original project.
-     * @return A {@link UntranslatedDeclaration} or <tt>null</tt> if this was not needed so far.
-     */
-    AbstractVariable getUntranslatedDeclaration(AbstractVariable original) {
-        return untranslatedDeclarations.get(original);
-    }
-    
-    /**
-     * Adds a new {@link UntranslatedDeclaration} to this visitor if it was necessary to create one during copying
-     * a constraint.
-     * @param declaration The temporary wrapper to add (must not be <tt>null</tt>).
-     */
-    void addUntranslatedDeclaration(UntranslatedDeclaration declaration) {
-        untranslatedDeclarations.put(declaration.getDeclaration(), declaration);
     }
     
     /**
@@ -252,12 +221,6 @@ public class ProjectCopyVisitor extends AbstractProjectVisitor {
             addToCurrentParent(copiedDecl);
             copiedElements.put(decl, copiedDecl);
             copiedDeclarations.put(decl, copiedDecl);
-            UntranslatedDeclaration uDecl = untranslatedDeclarations.get(decl);
-            if (null != uDecl) {
-                copiedElements.put(uDecl, copiedDecl);
-                copiedDeclarations.put(uDecl, copiedDecl);
-                untranslatedDeclarations.remove(decl);
-            }
             
             // Copy default value
             copyDefaultValue(decl, copiedDecl);
@@ -276,12 +239,12 @@ public class ProjectCopyVisitor extends AbstractProjectVisitor {
     private void copyDefaultValue(AbstractVariable decl, AbstractVariable copiedDecl) {
         ConstraintSyntaxTree cst = decl.getDefaultValue();
         if (null != cst) {
-            CSTCopyVisitor cstCopyier = new CSTCopyVisitor(copiedDeclarations, this); 
+            CSTCopyVisitor cstCopyier = new CSTCopyVisitor(copiedDeclarations); 
             cst.accept(cstCopyier);
             try {
                 copiedDecl.setValue(cstCopyier.getResult());
                 if (!cstCopyier.translatedCompletely()) {
-                    incompleteConstraints.put(copiedDecl, cst);
+                    incompleteElements.addMissingDefault(copiedDecl);
                 }
             } catch (ValueDoesNotMatchTypeException e) {
                 // Should not be possible, since the original was valid
@@ -322,7 +285,25 @@ public class ProjectCopyVisitor extends AbstractProjectVisitor {
 
     @Override
     public void visitConstraint(Constraint constraint) {
-        // TODO Auto-generated method stub
+        Constraint copiedConstraint = new Constraint(parents.peekFirst());
+        addToCurrentParent(copiedConstraint);
+        copiedElements.put(constraint, copiedConstraint);
+        
+        // Handle the CST
+        ConstraintSyntaxTree cst = constraint.getConsSyntax();
+        if (cst != null) {
+            CSTCopyVisitor cstCopyier = new CSTCopyVisitor(copiedDeclarations); 
+            cst.accept(cstCopyier);
+            try {
+                copiedConstraint.setConsSyntax(cstCopyier.getResult());
+                if (!cstCopyier.translatedCompletely()) {
+                    incompleteElements.addUnresolvedConstraint(copiedConstraint);
+                }
+            } catch (CSTSemanticException e) {
+                // Should not be possible, since the original was valid
+                Bundle.getLogger(ProjectCopyVisitor.class).exception(e);
+            }
+        }
         
     }
 
