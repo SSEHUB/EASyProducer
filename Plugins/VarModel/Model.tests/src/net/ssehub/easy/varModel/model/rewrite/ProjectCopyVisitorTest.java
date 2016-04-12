@@ -46,6 +46,7 @@ import net.ssehub.easy.varModel.model.filter.DeclrationInConstraintFinder;
 import net.ssehub.easy.varModel.model.filter.FilterType;
 import net.ssehub.easy.varModel.model.values.ValueDoesNotMatchTypeException;
 import net.ssehub.easy.varModel.model.values.ValueFactory;
+import net.ssehub.easy.varModel.persistency.StringProvider;
 import net.ssehub.easy.varModel.varModel.testSupport.ProjectTestUtilities;
 
 /**
@@ -61,12 +62,27 @@ public class ProjectCopyVisitorTest {
      * @return The copied project for further testings.
      */
     private Project copyProject(Project original) {
+        return copyProject(original, null);
+    }
+    
+    /**
+     * Helper method for applying the {@link ProjectCopyVisitor}, will copy the project and apply
+     * some general assertions.
+     * @param original The project to copy.
+     * @param allProjects Optional an empty set of projects, where all copied projects will be added to.
+     *     Maybe <tt>null</tt>.
+     * @return The copied project for further testings.
+     */
+    private Project copyProject(Project original, java.util.Set<Project> allProjects) {
         // Check validity of original before testing
         ProjectTestUtilities.validateProject(original);
         
         ProjectCopyVisitor copyier = new ProjectCopyVisitor(original, FilterType.ALL);
         original.accept(copyier);
         Project copy = copyier.getCopiedProject();
+        if (null != allProjects) {
+            allProjects.addAll(copyier.getAllCopiedProjects());
+        }
         
         // Test correct copy
         Assert.assertNotNull("Copy is null", copy);
@@ -102,6 +118,11 @@ public class ProjectCopyVisitorTest {
         Assert.assertSame("Copied element has wrong parent", copy, copiedElement.getParent());
         Assert.assertNotSame(originalElement.getParent(), copiedElement.getParent());
         Assert.assertSame("Copied element has wrong comment", originalElement.getComment(), copiedElement.getComment());
+        /*
+         * If both elements are printed out, they should look equal (especially no namespaces should be introduced
+         * through copying the elements
+         */
+        Assert.assertEquals(StringProvider.toIvmlString(originalElement), StringProvider.toIvmlString(originalElement));
     }
     
     /**
@@ -167,23 +188,23 @@ public class ProjectCopyVisitorTest {
         }
     }
     
-//    /**
-//     * Checks whether a constraint was copied correctly.
-//     * @param constraint
-//     * @param copy
-//     * @param copiedProjects
-//     * @param copiedConstraint
-//     */
-//    private void assertConstraint(Constraint constraint, Project copy, java.util.Set<Project> copiedProjects,
-//        Constraint copiedConstraint) {
-//        
-//        assertCopiedElement(constraint, copiedConstraint, copy);
-//        DeclrationInConstraintFinder finder = new DeclrationInConstraintFinder(copiedConstraint.getConsSyntax());
-//        for (AbstractVariable usedDecl : finder.getDeclarations()) {
-//            Assert.assertTrue("Used declaration \"" + usedDecl.getName() + "\" of original project.",
-//                copiedProjects.contains(usedDecl.getParent()));
-//        }
-//    }
+    /**
+     * Checks whether a constraint was copied correctly.
+     * @param constraint The original constraint for comparison
+     * @param copiedConstraint The copied constraint to test
+     * @param copy The expected parent of the constraint
+     * @param copiedProjects Valid parents for elements of the constraint.
+     */
+    private void assertConstraint(Constraint constraint, Constraint copiedConstraint, Project copy,
+        java.util.Set<Project> copiedProjects) {
+        
+        assertCopiedElement(constraint, copiedConstraint, copy);
+        DeclrationInConstraintFinder finder = new DeclrationInConstraintFinder(copiedConstraint.getConsSyntax());
+        for (AbstractVariable usedDecl : finder.getDeclarations()) {
+            Assert.assertTrue("Used declaration \"" + usedDecl.getName() + "\" of original project.",
+                copiedProjects.contains(usedDecl.getParent()));
+        }
+    }
     
     /**
      * Tests whether an empty project may be copied.
@@ -266,9 +287,10 @@ public class ProjectCopyVisitorTest {
         constraint.setConsSyntax(equality);
         original.add(constraint);
         
-        Project copy = copyProject(original);
+        java.util.Set<Project> copiedProjects = new HashSet<Project>();
+        Project copy = copyProject(original, copiedProjects);
         Constraint copiedConstraint = (Constraint) copy.getElement(1);
-        assertCopiedElement(constraint, copiedConstraint, copy);
+        assertConstraint(constraint, copiedConstraint, copy, copiedProjects);
     }
     
     /**
@@ -288,10 +310,10 @@ public class ProjectCopyVisitorTest {
         original.add(constraint);
         original.add(decl);
         
-        Project copy = copyProject(original);
         java.util.Set<Project> copiedProjects = new HashSet<Project>();
+        Project copy = copyProject(original, copiedProjects);
         Constraint copiedConstraint = (Constraint) copy.getElement(0);
-//        assertConstraint(constraint, copy, copiedProjects, copiedConstraint);
+        assertConstraint(constraint, copiedConstraint, copy, copiedProjects);
     }
     
     /**

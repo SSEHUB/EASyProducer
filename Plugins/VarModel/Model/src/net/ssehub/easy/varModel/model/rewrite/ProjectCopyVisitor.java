@@ -95,6 +95,8 @@ public class ProjectCopyVisitor extends AbstractProjectVisitor {
      */
     private Project copiedProject;
     
+    private java.util.Set<Project> allCopiedProjects;
+    
     /**
      * Sole constructor for creating a copy of a {@link Project}.
      * @param originProject The project where the visiting shall start
@@ -108,6 +110,7 @@ public class ProjectCopyVisitor extends AbstractProjectVisitor {
         copiedDeclarations = new HashMap<AbstractVariable, AbstractVariable>();
         openElements = new HashSet<ContainableModelElement>();
         incompleteElements = new UncopiedElementsContainer();
+        allCopiedProjects = new HashSet<Project>();
         parents = new ArrayDeque<IModelElement>();
     }
     
@@ -115,27 +118,44 @@ public class ProjectCopyVisitor extends AbstractProjectVisitor {
     public void visitProject(Project project) {
         super.visitProject(project);
         
-        //handle incomplete default values
+        // Handle incomplete default values
         Iterator<AbstractVariable> declDefaultItr = incompleteElements.getDeclarationsWithMissingDefaults().iterator();
         while (declDefaultItr.hasNext()) {
             AbstractVariable decl = declDefaultItr.next();
-            if (decl.getTopLevelParent() == parents.peekFirst()) {
-                CSTCopyVisitor copyier = new CSTCopyVisitor(copiedDeclarations);
-                decl.getDefaultValue().accept(copyier);
-                if (copyier.translatedCompletely()) {
-                    try {
-                        decl.setValue(copyier.getResult());
-                        declDefaultItr.remove();
-                    } catch (ValueDoesNotMatchTypeException e) {
-                        // Should not be possible, since the original was valid
-                        Bundle.getLogger(ProjectCopyVisitor.class).exception(e);
-                    } catch (CSTSemanticException e) {
-                        // Should not be possible, since the original was valid
-                        Bundle.getLogger(ProjectCopyVisitor.class).exception(e);
-                    }
+            CSTCopyVisitor copyier = new CSTCopyVisitor(copiedDeclarations);
+            decl.getDefaultValue().accept(copyier);
+            if (copyier.translatedCompletely()) {
+                try {
+                    decl.setValue(copyier.getResult());
+                    declDefaultItr.remove();
+                } catch (ValueDoesNotMatchTypeException e) {
+                    // Should not be possible, since the original was valid
+                    Bundle.getLogger(ProjectCopyVisitor.class).exception(e);
+                } catch (CSTSemanticException e) {
+                    // Should not be possible, since the original was valid
+                    Bundle.getLogger(ProjectCopyVisitor.class).exception(e);
                 }
             }
         }
+        
+        // Handle incomplete constraints
+        Iterator<Constraint> constraintItr = incompleteElements.getUnresolvedconstraints().iterator();
+        while (constraintItr.hasNext()) {
+            Constraint constraint = constraintItr.next();
+            CSTCopyVisitor copyier = new CSTCopyVisitor(copiedDeclarations);
+            constraint.getConsSyntax().accept(copyier);
+            if (copyier.translatedCompletely()) {
+                try {
+                    constraint.setConsSyntax(copyier.getResult());
+                    constraintItr.remove();
+                } catch (CSTSemanticException e) {
+                    // Should not be possible, since the original was valid
+                    Bundle.getLogger(ProjectCopyVisitor.class).exception(e);
+                }
+            }
+        }
+        // super.visitProject(project) -> calls addFirst
+        parents.pollFirst();
     }
     
     /**
@@ -145,6 +165,14 @@ public class ProjectCopyVisitor extends AbstractProjectVisitor {
      */
     public Project getCopiedProject() {
         return copiedProject;
+    }
+    
+    /**
+     * Returns a set of all copied projects (including copies of imported projects).
+     * @return All copied projects.
+     */
+    public java.util.Set<Project> getAllCopiedProjects() {
+        return allCopiedProjects;
     }
     
     /**
@@ -197,6 +225,7 @@ public class ProjectCopyVisitor extends AbstractProjectVisitor {
         if (isMainProject) {
             copiedProject = copy;
         }
+        allCopiedProjects.add(copy);
         
         // Handle version
         Version originalVersion = project.getVersion();
