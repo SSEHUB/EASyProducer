@@ -19,6 +19,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import net.ssehub.easy.varModel.model.AbstractVariable;
+import net.ssehub.easy.varModel.model.Attribute;
 import net.ssehub.easy.varModel.model.Constraint;
 import net.ssehub.easy.varModel.model.datatypes.CustomDatatype;
 
@@ -39,6 +40,11 @@ class UncopiedElementsContainer {
     private Set<AbstractVariable> unresolvedDefaults = new HashSet<AbstractVariable>();
     
     /**
+     * {@link AbstractVariable}s which could not be translated due to a missing data type.
+     */
+    private Set<AbstractVariable> unresolvedDeclarations = new HashSet<AbstractVariable>();
+    
+    /**
      * Set of copied {@link Constraint}s, which contain {@link net.ssehub.easy.varModel.cst.ConstraintSyntaxTree}s
      * pointing to other elements, which are not copied at this moment.
      * Resolving should be possible after all {@link AbstractVariable}s (also from imported projects) have been copied.
@@ -52,6 +58,11 @@ class UncopiedElementsContainer {
      * Set of custom data types which are dependent of other custom data types, not translated so far.
      */
     private Set<CustomDatatype> unresolvedDatatypes = new HashSet<CustomDatatype>();
+    
+    /**
+     * Set of (original) annotations, which could not be translated so far.
+     */
+    private Set<Attribute> unresolvedAnnotations = new HashSet<Attribute>();
     
     /**
      * Adds a copied/translated {@link AbstractVariable}, from which the default value could not be translated, as
@@ -112,5 +123,21 @@ class UncopiedElementsContainer {
      */
     Set<CustomDatatype> getUnresolvedTypes() {
         return unresolvedDatatypes;
+    }
+    
+    /**
+     * Adds an annotation, which could not be translated so far (due to missing attributable element or type).
+     * @param originalAttribute The original attribute which could not be translated at this moment.
+     */
+    void addUnresolvedAnnotation(Attribute originalAttribute) {
+        unresolvedAnnotations.add(originalAttribute);
+    }
+    
+    /**
+     * Adds an {@link AbstractVariable}, which could not be translated so far (due to missing type).
+     * @param declWithUnresolvedType The original declaration which could not be translated at this moment.
+     */
+    void addUnresolvedDeclarationType(AbstractVariable declWithUnresolvedType) {
+        unresolvedDeclarations.add(declWithUnresolvedType);
     }
 }

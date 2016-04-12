@@ -35,9 +35,11 @@ import net.ssehub.easy.varModel.model.CompoundAccessStatement;
 import net.ssehub.easy.varModel.model.Constraint;
 import net.ssehub.easy.varModel.model.ContainableModelElement;
 import net.ssehub.easy.varModel.model.DecisionVariableDeclaration;
+import net.ssehub.easy.varModel.model.EvaluationBlock;
 import net.ssehub.easy.varModel.model.FreezeBlock;
 import net.ssehub.easy.varModel.model.IAttributableElement;
 import net.ssehub.easy.varModel.model.IModelElement;
+import net.ssehub.easy.varModel.model.ModelElement;
 import net.ssehub.easy.varModel.model.OperationDefinition;
 import net.ssehub.easy.varModel.model.PartialEvaluationBlock;
 import net.ssehub.easy.varModel.model.Project;
@@ -80,12 +82,7 @@ public class ProjectCopyVisitor extends AbstractProjectVisitor {
      * Stores elements which could not be copied (completely).
      */
     private UncopiedElementsContainer incompleteElements;
-    
-    /**
-     * Elements which where found during visitation, but could not be translated yet, e.g., as the parent is missing.
-     */
-    private java.util.Set<ContainableModelElement> openElements;
-    
+
     /**
      * Already translated model elements, which should be used as current parent of a model element.
      */
@@ -109,7 +106,6 @@ public class ProjectCopyVisitor extends AbstractProjectVisitor {
         copiedProjects = new HashMap<Project, Project>();
         copiedElements = new HashMap<ContainableModelElement, ContainableModelElement>();
         copiedDeclarations = new HashMap<AbstractVariable, AbstractVariable>();
-        openElements = new HashSet<ContainableModelElement>();
         incompleteElements = new UncopiedElementsContainer();
         allCopiedProjects = new HashSet<Project>();
         parents = new ArrayDeque<IModelElement>();
@@ -227,6 +223,17 @@ public class ProjectCopyVisitor extends AbstractProjectVisitor {
         IModelElement parent = parents.peekFirst();
         if (parent instanceof Project) {
             ((Project) parent).add(copiedElement);
+        } else if (parent instanceof Compound) {
+            Compound cType = (Compound) parent;
+            if (copiedElement instanceof DecisionVariableDeclaration) {
+                cType.add((DecisionVariableDeclaration) copiedElement);
+            } else if (copiedElement instanceof AttributeAssignment) {
+                cType.add((AttributeAssignment) copiedElement);
+            } else if (copiedElement instanceof EvaluationBlock) {
+                cType.add((EvaluationBlock) copiedElement);
+            } else if (copiedElement instanceof Comment) {
+                cType.add((Comment) copiedElement);
+            }
         }
     }
     
@@ -239,25 +246,27 @@ public class ProjectCopyVisitor extends AbstractProjectVisitor {
     private IDatatype getTranslatedType(IDatatype originalType) {
         IDatatype copiedType = null;
         
-        if (originalType.isPrimitive()) {
-            // Real, Strings, Integers, Booleans, Constraints
-            copiedType = originalType;
-        } else if (Container.TYPE.isAssignableFrom(originalType)) {
-            Container conType = (Container) originalType;
-            IDatatype containedType = getTranslatedType(conType.getContainedType());
-            Project copiedParent = copiedProjects.get(conType.getParent());
-            if (null != containedType && null != copiedParent) {
-                if (Sequence.TYPE.isAssignableFrom(originalType)) {
-                    copiedType = new Sequence(originalType.getName(), containedType, copiedParent);
-                } else if (Set.TYPE.isAssignableFrom(originalType)) {
-                    copiedType = new Sequence(originalType.getName(), containedType, copiedParent);
+        if (null != originalType) {
+            if (originalType.isPrimitive()) {
+                // Real, Strings, Integers, Booleans, Constraints
+                copiedType = originalType;
+            } else if (Container.TYPE.isAssignableFrom(originalType)) {
+                Container conType = (Container) originalType;
+                IDatatype containedType = getTranslatedType(conType.getContainedType());
+                Project copiedParent = copiedProjects.get(conType.getParent());
+                if (null != containedType && null != copiedParent) {
+                    if (Sequence.TYPE.isAssignableFrom(originalType)) {
+                        copiedType = new Sequence(originalType.getName(), containedType, copiedParent);
+                    } else if (Set.TYPE.isAssignableFrom(originalType)) {
+                        copiedType = new Sequence(originalType.getName(), containedType, copiedParent);
+                    }
                 }
+            } else if (Compound.TYPE.isAssignableFrom(originalType) || Enum.TYPE.isAssignableFrom(originalType)
+                || DerivedDatatype.TYPE.isAssignableFrom(originalType)) {
+                copiedType = (IDatatype) copiedElements.get(originalType);
             }
-        } else if (Compound.TYPE.isAssignableFrom(originalType) || Enum.TYPE.isAssignableFrom(originalType)
-            || DerivedDatatype.TYPE.isAssignableFrom(originalType)) {
-            copiedType = (IDatatype) copiedElements.get(originalType);
-        }
-        // TODO SE: references, typedefs
+        } 
+        // TODO SE: References
         
         return copiedType;
     }
@@ -301,7 +310,7 @@ public class ProjectCopyVisitor extends AbstractProjectVisitor {
             
             // TODO SE: Annotations
         } else {
-            openElements.add(decl);
+            incompleteElements.addUnresolvedDeclarationType(decl);
         }
     }
 
@@ -353,7 +362,7 @@ public class ProjectCopyVisitor extends AbstractProjectVisitor {
             
             // TODO SE: Annotations
         } else {
-            openElements.add(attribute);
+            incompleteElements.addMissingDefault(attribute);
         }
     }
 
@@ -447,8 +456,23 @@ public class ProjectCopyVisitor extends AbstractProjectVisitor {
 
     @Override
     public void visitCompound(Compound compound) {
-        // TODO Auto-generated method stub
+        Compound refinementBase = compound.getRefines();
+        Compound copiedBase = (Compound) getTranslatedType(refinementBase);
         
+        if (null != refinementBase && null == copiedBase) {
+            // Refined compound was not translated so far
+            incompleteElements.addUnresolvedType(compound);
+        } else {
+            Compound copiedCompound = new Compound(compound.getName(), (ModelElement) parents.peekFirst(),
+                compound.isAbstract(), copiedBase);
+            addToCurrentParent(copiedCompound);
+            copiedElements.put(compound, copiedCompound);
+            parents.addFirst(copiedCompound);
+            for (int i = 0, end = compound.getElementCount(); i < end; i++) {
+                compound.getElement(i).accept(this);
+            }
+            parents.removeFirst();
+        }
     }
 
     @Override
@@ -496,14 +520,26 @@ public class ProjectCopyVisitor extends AbstractProjectVisitor {
 
     @Override
     public void visitSequence(Sequence sequence) {
-        // TODO Auto-generated method stub
-        
+        IDatatype basisType = getTranslatedType(sequence.getContainedType());
+        if (null != basisType) {
+            Sequence copiedType = new Sequence(sequence.getName(), basisType, parents.peekFirst());
+            addToCurrentParent(copiedType);
+            copiedElements.put(sequence, copiedType);
+        } else {
+            incompleteElements.addUnresolvedType(sequence);
+        }
     }
 
     @Override
     public void visitSet(Set set) {
-        // TODO Auto-generated method stub
-        
+        IDatatype basisType = getTranslatedType(set.getContainedType());
+        if (null != basisType) {
+            Set copiedType = new Set(set.getName(), basisType, parents.peekFirst());
+            addToCurrentParent(copiedType);
+            copiedElements.put(set, copiedType);
+        } else {
+            incompleteElements.addUnresolvedType(set);
+        }
     }
 
 }

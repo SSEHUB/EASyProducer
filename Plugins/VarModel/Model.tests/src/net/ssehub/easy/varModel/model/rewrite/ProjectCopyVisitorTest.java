@@ -37,6 +37,7 @@ import net.ssehub.easy.varModel.model.IAttributableElement;
 import net.ssehub.easy.varModel.model.IModelElement;
 import net.ssehub.easy.varModel.model.Project;
 import net.ssehub.easy.varModel.model.datatypes.BooleanType;
+import net.ssehub.easy.varModel.model.datatypes.Compound;
 import net.ssehub.easy.varModel.model.datatypes.DerivedDatatype;
 import net.ssehub.easy.varModel.model.datatypes.Enum;
 import net.ssehub.easy.varModel.model.datatypes.EnumLiteral;
@@ -46,6 +47,8 @@ import net.ssehub.easy.varModel.model.datatypes.OclKeyWords;
 import net.ssehub.easy.varModel.model.datatypes.OrderedEnum;
 import net.ssehub.easy.varModel.model.datatypes.RealType;
 import net.ssehub.easy.varModel.model.datatypes.Reference;
+import net.ssehub.easy.varModel.model.datatypes.Sequence;
+import net.ssehub.easy.varModel.model.datatypes.Set;
 import net.ssehub.easy.varModel.model.datatypes.StringType;
 import net.ssehub.easy.varModel.model.filter.DeclrationInConstraintFinder;
 import net.ssehub.easy.varModel.model.filter.FilterType;
@@ -121,7 +124,11 @@ public class ProjectCopyVisitorTest {
             + "\".", originalElement.getClass(), copiedElement.getClass());
         Assert.assertEquals("Copied element has not the same name \"" + originalElement.getName()
             + "\".", originalElement.getName(), copiedElement.getName());
-        Assert.assertSame("Copied element \"" + copiedElement.getName() + "\" has wrong parent", expectedParent,
+        Assert.assertSame("Copied element \"" + copiedElement.getName() + "\" has wrong parent expected "
+            + expectedParent.getName() + "["
+            + Integer.toHexString(System.identityHashCode(expectedParent)) + "] but was "
+            + copiedElement.getParent() + " ["
+            + Integer.toHexString(System.identityHashCode(copiedElement.getParent())) + "]", expectedParent,
             copiedElement.getParent());
         Assert.assertNotSame(originalElement.getParent(), copiedElement.getParent());
         Assert.assertSame("Copied element has wrong comment", originalElement.getComment(), copiedElement.getComment());
@@ -217,7 +224,7 @@ public class ProjectCopyVisitorTest {
      * Checks a copied {@link DerivedDatatype}.
      * @param dType The original type for comparison
      * @param copiedType The copied type to test
-     * @param copy The expected parent of the constraint
+     * @param copy The expected parent of the derived type
      * @param copiedProjects Valid parents for elements of the constraint.
      */
     private void assertDerivedType(DerivedDatatype dType, DerivedDatatype copiedType,
@@ -243,6 +250,28 @@ public class ProjectCopyVisitorTest {
         assertCopiedElement(refType, copiedType, copy);
         Assert.assertEquals(refType.getType().getName(), copiedType.getType().getName());
         Assert.assertSame(refType.getType().getClass(), copiedType.getType().getClass());
+    }
+    
+    /**
+     * Checks a copied {@link Compound}.
+     * @param cType The original type for comparison
+     * @param copiedType The copied type to test
+     * @param expectedParent The expected parent of the compound (and parent compound)
+     */
+    private void assertCompound(Compound cType, Compound copiedType, IModelElement expectedParent) {
+        assertCopiedElement(cType, copiedType, expectedParent);
+
+        // recursive call for all parent compounds
+        if (null != cType.getRefines()) {
+            assertCompound(cType.getRefines(), copiedType.getRefines(), expectedParent);
+        }
+        
+        Assert.assertEquals("Compound differs in respect to isAbstract", cType.isAbstract(), copiedType.isAbstract());
+        Assert.assertEquals("Copied compound has different amount of nested elements", cType.getElementCount(),
+            copiedType.getElementCount());
+        for (int i = 0; i < cType.getElementCount(); i++) {
+            assertCopiedElement(cType.getElement(i), copiedType.getElement(i), copiedType);
+        }
     }
     
     /**
@@ -564,5 +593,68 @@ public class ProjectCopyVisitorTest {
         // Attention: Ordering has changed!
         Reference copiedType = (Reference) copy.getElement(1);
         assertReferenceType(refType, copiedType, copy);
+    }
+    
+    /**
+     * Tests copying a compound without any dependencies.
+     */
+    @Test
+    public void testCopySimpleCompound() {
+        Project original = new Project("testCopySimpleCompound");
+        Compound cType = new Compound("cType", original);
+        DecisionVariableDeclaration nestedDecl = new DecisionVariableDeclaration("slot", StringType.TYPE, cType);
+        cType.add(nestedDecl);
+        original.add(cType);
+        
+        Project copy = copyProject(original);
+        Compound copiedType = (Compound) copy.getElement(0);
+        assertCompound(cType, copiedType, copy);
+    }
+    
+    /**
+     * Tests copying a compound without any dependencies.
+     */
+    @Test
+    public void testCopyRefinedCompound() {
+        Project original = new Project("testCopyRefinedCompound");
+        Compound cType1 = new Compound("abstractCompound", original, true, null);
+        Compound cType2 = new Compound("cType", original, false, cType1);
+        DecisionVariableDeclaration nestedDecl = new DecisionVariableDeclaration("slot", StringType.TYPE, cType2);
+        cType2.add(nestedDecl);
+        original.add(cType2);
+        original.add(cType1);
+        
+        Project copy = copyProject(original);
+        // Attention: Ordering has changed!
+        Compound copiedType = (Compound) copy.getElement(1);
+        assertCompound(cType2, copiedType, copy);
+    }
+    
+    /**
+     * Tests copying of Sequences, badly tested as they are usually not added to the project.
+     */
+    @Test
+    public void testCopySequence() {
+        Project original = new Project("testCopySequence");
+        Sequence seqType = new Sequence("seqType", IntegerType.TYPE, original);
+        original.add(seqType);
+        
+        Project copy = copyProject(original);
+        Sequence copiedType = (Sequence) copy.getElement(0);
+        assertCopiedElement(seqType, copiedType, copy);
+    }
+    
+    /**
+     * Tests copying of Sets, badly tested as they are usually not added to the project.
+     */
+    @Test
+    public void testCopySet() {
+        Project original = new Project("testCopySet");
+        Set setType = new Set("setType", IntegerType.TYPE, original);
+        original.add(setType);
+        
+        Project copy = copyProject(original);
+        Set copiedType = (Set) copy.getElement(0);
+        assertCopiedElement(setType, copiedType, copy);
     }
 }
