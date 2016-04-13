@@ -36,6 +36,7 @@ import net.ssehub.easy.varModel.model.DecisionVariableDeclaration;
 import net.ssehub.easy.varModel.model.IAttributableElement;
 import net.ssehub.easy.varModel.model.IModelElement;
 import net.ssehub.easy.varModel.model.Project;
+import net.ssehub.easy.varModel.model.ProjectInterface;
 import net.ssehub.easy.varModel.model.datatypes.BooleanType;
 import net.ssehub.easy.varModel.model.datatypes.Compound;
 import net.ssehub.easy.varModel.model.datatypes.DerivedDatatype;
@@ -275,6 +276,24 @@ public class ProjectCopyVisitorTest {
     }
     
     /**
+     * Checks a copied {@link ProjectInterface}.
+     * @param pInterface The original interface for comparison
+     * @param copiedIface The copied interface to test
+     * @param expectedParent The expected parent of the interface and exported elements
+     */
+    private void assertProjectInterface(ProjectInterface pInterface, ProjectInterface copiedIface,
+        Project expectedParent) {
+        
+        assertCopiedElement(pInterface, copiedIface, expectedParent);
+        // Name already tested
+        Assert.assertEquals("Copied interface is importing not the correct amount of elements",
+            pInterface.getExportsCount(), copiedIface.getExportsCount());
+        for (int i = 0; i < pInterface.getExportsCount(); i++) {
+            assertCopiedElement(pInterface.getElement(i), copiedIface.getElement(i), expectedParent);
+        }
+    }
+    
+    /**
      * Tests whether an empty project may be copied.
      */
     @Test
@@ -416,7 +435,7 @@ public class ProjectCopyVisitorTest {
      */
     @Test
     public void testDeclarationWithDependingType() {
-        Project original = new Project("testSimpleDeclarationCopy");
+        Project original = new Project("testDeclarationWithDependingType");
         Compound cType = new Compound("cType", original);
         DecisionVariableDeclaration decl = new DecisionVariableDeclaration("decl", cType, original);
         original.add(decl);
@@ -441,7 +460,7 @@ public class ProjectCopyVisitorTest {
      */
     @Test
     public void testDeclarationWithDependingTypeNested() {
-        Project original = new Project("testSimpleDeclarationCopy");
+        Project original = new Project("testDeclarationWithDependingTypeNested");
         Compound dependingType = new Compound("CP1", original);
         Compound parentType = new Compound("CP2", original);
         DecisionVariableDeclaration decl = new DecisionVariableDeclaration("decl", dependingType, parentType);
@@ -706,5 +725,44 @@ public class ProjectCopyVisitorTest {
         Project copy = copyProject(original);
         Set copiedType = (Set) copy.getElement(0);
         assertCopiedElement(setType, copiedType, copy);
+    }
+    
+    /**
+     * Tests that {@link ProjectInterface}s can be copied, if all exported elements are already resolved.
+     */
+    @Test
+    public void testSimpleProjectInterfaceCopy() {
+        Project original = new Project("testSimpleProjectInterfaceCopy");
+        DecisionVariableDeclaration declA = new DecisionVariableDeclaration("declA", StringType.TYPE, original);
+        DecisionVariableDeclaration declB = new DecisionVariableDeclaration("declB", RealType.TYPE, original);
+        original.add(declA);
+        original.add(declB);
+        ProjectInterface pInterface = new ProjectInterface("anInterface", new DecisionVariableDeclaration[] {declA},
+            original);
+        original.add(pInterface);
+        
+        Project copy = copyProject(original);
+        ProjectInterface copiedIface = (ProjectInterface) copy.getElement(2);
+        assertProjectInterface(pInterface, copiedIface, copy);
+    }
+    
+    /**
+     * Tests that {@link ProjectInterface}s can be copied, if exported elements are <b>not</b>already resolved.
+     */
+    @Test
+    public void testProjectInterfaceDepeningDeclarationsCopy() {
+        Project original = new Project("testProjectInterfaceDepeningDeclarationsCopy");
+        DecisionVariableDeclaration declA = new DecisionVariableDeclaration("declA", StringType.TYPE, original);
+        DecisionVariableDeclaration declB = new DecisionVariableDeclaration("declB", RealType.TYPE, original);
+        ProjectInterface pInterface = new ProjectInterface("anInterface", new DecisionVariableDeclaration[] {declA},
+                original);
+        original.add(pInterface);
+        original.add(declA);
+        original.add(declB);
+        
+        Project copy = copyProject(original);
+        // Attention: Ordering has changed!
+        ProjectInterface copiedIface = (ProjectInterface) copy.getElement(2);
+        assertProjectInterface(pInterface, copiedIface, copy);
     }
 }

@@ -21,6 +21,7 @@ import java.util.Set;
 import net.ssehub.easy.varModel.model.AbstractVariable;
 import net.ssehub.easy.varModel.model.Attribute;
 import net.ssehub.easy.varModel.model.Constraint;
+import net.ssehub.easy.varModel.model.ProjectInterface;
 import net.ssehub.easy.varModel.model.datatypes.CustomDatatype;
 
 /**
@@ -63,6 +64,12 @@ class UncopiedElementsContainer {
      * Set of (original) annotations, which could not be translated so far.
      */
     private Set<Attribute> unresolvedAnnotations = new HashSet<Attribute>();
+    
+    /**
+     * Set of (original) {@link ProjectInterface}s, which could not be copied as some of the exported declarations
+     * are not already copied.
+     */
+    private Set<ProjectInterface> unresolvedInterfaces = new HashSet<ProjectInterface>();
     
     /**
      * Adds a copied/translated {@link AbstractVariable}, from which the default value could not be translated, as
@@ -148,5 +155,23 @@ class UncopiedElementsContainer {
      */
     Set<AbstractVariable> getDeclarationsWithMissingTypes() {
         return unresolvedDeclarations;
+    }
+    
+    /**
+     * Adds an original {@link ProjectInterface}, which could not be copied, as some of the exported declarations
+     * are not already copied.
+     * @param orgInterface The original project interface, which must be copied at a later point.
+     */
+    void addUnresolvedProjectInterface(ProjectInterface orgInterface) {
+        unresolvedInterfaces.add(orgInterface);
+    }
+    
+    /**
+     * Returns the set of uncopied project interfaces, which still has to be copied.
+     * This set may be changed as a side effect during successful copying.
+     * @return The set of outstanding interfaces.
+     */
+    Set<ProjectInterface> getUnresolvedProjectInterfaces() {
+        return unresolvedInterfaces;
     }
 }

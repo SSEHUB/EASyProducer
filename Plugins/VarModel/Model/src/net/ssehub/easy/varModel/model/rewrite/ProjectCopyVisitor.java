@@ -15,6 +15,7 @@
  */
 package net.ssehub.easy.varModel.model.rewrite;
 
+import java.awt.PageAttributes.OriginType;
 import java.util.ArrayDeque;
 import java.util.Deque;
 import java.util.HashMap;
@@ -59,7 +60,23 @@ import net.ssehub.easy.varModel.model.filter.FilterType;
 import net.ssehub.easy.varModel.model.values.ValueDoesNotMatchTypeException;
 
 /**
- * Creates a deep copy of a {@link Project}.
+ * Creates a deep copy of a {@link Project}. <br/>
+ * This visitor may change the ordering of elements inside the copied projects as it tries first to copy all elements,
+ * which do not conflict and retries to copy depending elements after needed elements have been copied.
+ * For instance:
+ * <pre><code>
+ * project p {
+ *   CP1 decl;
+ *   compound CP1 {}
+ * }
+ * </code></pre>
+ * will be translated to
+ * <pre><code>
+ * project p {
+ *   compound CP1 {}
+ *   CP1 decl;
+ * }
+ * </code></pre>
  * @author El-Sharkawy
  */
 public class ProjectCopyVisitor extends AbstractProjectVisitor {
@@ -70,6 +87,7 @@ public class ProjectCopyVisitor extends AbstractProjectVisitor {
     private Map<Project, Project> copiedProjects;
     /**
      * Tuple of (oldElement, copiedElement) containing the mapping of copied model elements.
+     * Needed for building parents and references, and to check whether an element was already copied or not.
      */
     private Map<ContainableModelElement, ContainableModelElement> copiedElements;
     /**
@@ -85,6 +103,7 @@ public class ProjectCopyVisitor extends AbstractProjectVisitor {
 
     /**
      * Already translated model elements, which should be used as current parent of a model element.
+     * Used as a Stack.
      */
     private Deque<IModelElement> parents;
     
@@ -136,6 +155,16 @@ public class ProjectCopyVisitor extends AbstractProjectVisitor {
                 
                 // Handle incomplete constraints
                 elementsResolved |= resolveIncompleteConstraints();
+                
+                // Handle incomplete interfaces (need that all declarations have been copied)
+                Iterator<ProjectInterface> iFaceItr = incompleteElements.getUnresolvedProjectInterfaces().iterator();
+                while (iFaceItr.hasNext()) {
+                    ProjectInterface orgIface = iFaceItr.next();
+                    boolean ok = buildParents(orgIface);
+                    if (ok) {
+                        elementsResolved |= retryCopyAfterBuildParents(iFaceItr, orgIface);
+                    }
+                }
             }
         }
         
@@ -179,28 +208,8 @@ public class ProjectCopyVisitor extends AbstractProjectVisitor {
         Iterator<AbstractVariable> declItr = incompleteElements.getDeclarationsWithMissingTypes().iterator();
         while (declItr.hasNext()) {
             AbstractVariable orgDecl = declItr.next();
-            parents.clear();
-            // Collect parents in reverse order -> use deque as queue not as stack 
-            IModelElement parent = orgDecl;
-            boolean abort = false;
-            do {
-                parent = parent.getParent();
-                if (parent != null) {
-                    IModelElement copiedParent = null;
-                    if (parent instanceof Project) {
-                        copiedParent = copiedProjects.get((Project) parent);
-                    } else {
-                        copiedParent = copiedElements.get(parent);
-                    }
-                    if (null != copiedParent) {
-                        parents.addLast(copiedParent);
-                    } else {
-                        // Still missing parent
-                        abort = true;
-                    }
-                }
-            } while (parent != null && !abort);
-            if (!abort) {
+            boolean ok = buildParents(orgDecl);
+            if (ok) {
                 orgDecl.accept(this);
                 if (null != copiedElements.get(orgDecl)) {
                     // Declaration was successfully copied
@@ -210,6 +219,66 @@ public class ProjectCopyVisitor extends AbstractProjectVisitor {
             }
             parents.clear();
         }
+        
+        return elementsResolved;
+    }
+
+    /**
+     * Fills up the {@link #parents} stack in the correct order for elements which are copied at the end of the
+     * visitation process as part of the {@link #visitProject(Project)} method.
+     * This cleans up the current parent stack before filling it up with the currently needed parents.
+     * @param orgElement The element which shall be copied in the next step, for which the parent stack shall be filled
+     *   correctly.
+     * @return <tt>true</tt> if the copied parents could be retrieved correctly, <tt>false</tt> if at least one needed
+     *   parent was not copied and could not be added to the parent stack (in this case the stack is cleaned up).
+     */
+    private boolean buildParents(IModelElement orgElement) {
+        parents.clear();
+        // Collect parents in reverse order -> use deque as queue not as stack 
+        IModelElement parent = orgElement;
+        boolean abort = false;
+        do {
+            parent = parent.getParent();
+            if (parent != null) {
+                IModelElement copiedParent = null;
+                if (parent instanceof Project) {
+                    copiedParent = copiedProjects.get((Project) parent);
+                } else {
+                    copiedParent = copiedElements.get(parent);
+                }
+                if (null != copiedParent) {
+                    parents.addLast(copiedParent);
+                } else {
+                    // Still missing parent
+                    abort = true;
+                }
+            }
+        } while (parent != null && !abort);
+        
+        if (abort) {
+            parents.clear();
+        }
+        return !abort;
+    }
+    
+    /**
+     * Tries to copy an outstanding/unresolved original {@link IModelElement},
+     * after {@link #buildParents(IModelElement)} was called before.
+     * @param itr The currently used iterator (if copying succeeded, the element will be removed from it).
+     * @param elementToCopy An original element, which shall be copied (the current element returned by the iterator).
+     * @return <tt>true</tt> if the element was copied successfully.
+     */
+    private boolean retryCopyAfterBuildParents(Iterator<?> itr, IModelElement elementToCopy) {
+        boolean elementsResolved = false;
+        
+        elementToCopy.accept(this);
+        if (null != copiedElements.get(elementToCopy)) {
+            // Declaration was successfully copied
+            elementsResolved = true;
+            itr.remove();
+        }
+        
+        parents.clear();
         
         return elementsResolved;
     }
@@ -485,8 +554,22 @@ public class ProjectCopyVisitor extends AbstractProjectVisitor {
 
     @Override
     public void visitProjectInterface(ProjectInterface iface) {
-        // TODO Auto-generated method stub
+        boolean allElementsCopied = true;
+        DecisionVariableDeclaration[] copiedExports = new DecisionVariableDeclaration[iface.getExportsCount()];
         
+        for (int i = 0; i < copiedExports.length && allElementsCopied; i++) {
+            DecisionVariableDeclaration orgDecl = iface.getExport(i);
+            copiedExports[i] = (DecisionVariableDeclaration) copiedElements.get(orgDecl);
+            allElementsCopied = (null != copiedExports[i]);
+        }
+        
+        if (allElementsCopied) {
+            ProjectInterface copiedIface = new ProjectInterface(iface.getName(), copiedExports,
+                (ModelElement) parents.peekFirst());
+            addToCurrentParent(copiedIface);
+        } else {
+            incompleteElements.addUnresolvedProjectInterface(iface);
+        }
     }
 
     @Override
