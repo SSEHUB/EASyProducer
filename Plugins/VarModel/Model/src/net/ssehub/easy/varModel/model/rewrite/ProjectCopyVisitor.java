@@ -36,6 +36,7 @@ import net.ssehub.easy.varModel.model.Constraint;
 import net.ssehub.easy.varModel.model.ContainableModelElement;
 import net.ssehub.easy.varModel.model.DecisionVariableDeclaration;
 import net.ssehub.easy.varModel.model.EvaluationBlock;
+import net.ssehub.easy.varModel.model.ExplicitTypeVariableDeclaration;
 import net.ssehub.easy.varModel.model.FreezeBlock;
 import net.ssehub.easy.varModel.model.IAttributableElement;
 import net.ssehub.easy.varModel.model.IModelElement;
@@ -46,6 +47,7 @@ import net.ssehub.easy.varModel.model.Project;
 import net.ssehub.easy.varModel.model.ProjectInterface;
 import net.ssehub.easy.varModel.model.datatypes.Compound;
 import net.ssehub.easy.varModel.model.datatypes.Container;
+import net.ssehub.easy.varModel.model.datatypes.CustomOperation;
 import net.ssehub.easy.varModel.model.datatypes.DerivedDatatype;
 import net.ssehub.easy.varModel.model.datatypes.Enum;
 import net.ssehub.easy.varModel.model.datatypes.EnumLiteral;
@@ -113,6 +115,11 @@ public class ProjectCopyVisitor extends AbstractProjectVisitor {
     private java.util.Set<Project> allCopiedProjects;
     
     /**
+     * Dirty but needed for {@link #getTranslatedType(IDatatype)}: Tuple of (original project type, copied project).
+     */
+    private Map<IDatatype, Project> projectTypes;
+    
+    /**
      * Sole constructor for creating a copy of a {@link Project}.
      * @param originProject The project where the visiting shall start
      * @param filterType Specifies whether project imports shall be considered or not. All considered projects
@@ -125,6 +132,7 @@ public class ProjectCopyVisitor extends AbstractProjectVisitor {
         copiedDeclarations = new HashMap<AbstractVariable, AbstractVariable>();
         incompleteElements = new UncopiedElementsContainer();
         allCopiedProjects = new HashSet<Project>();
+        projectTypes = new HashMap<IDatatype, Project>();
         parents = new ArrayDeque<IModelElement>();
     }
     
@@ -142,10 +150,10 @@ public class ProjectCopyVisitor extends AbstractProjectVisitor {
             while (elementsResolved) {
                 elementsResolved = false;
                 
-                // Handle incomplete custom types
+                // Handle uncopied custom types
                 elementsResolved |= retryCopy(incompleteElements.getUnresolvedTypes().iterator());
                 
-                // Handle incomplete declarations
+                // Handle uncopied declarations (depending on custom types)
                 elementsResolved |= retryCopy(incompleteElements.getDeclarationsWithMissingTypes().iterator());
                 
                 // Handle incomplete default values
@@ -154,13 +162,56 @@ public class ProjectCopyVisitor extends AbstractProjectVisitor {
                 // Handle incomplete constraints
                 elementsResolved |= resolveIncompleteConstraints();
                 
-                // Handle incomplete interfaces (need that all declarations have been copied)
+                // Handle uncopied interfaces (need that all exported declarations have been copied)
                 elementsResolved |= retryCopy(incompleteElements.getUnresolvedProjectInterfaces().iterator());
+                
+                // Handle incomplete operations
+                elementsResolved |= resolveIncompleteOperations();
+                
+                // Handle operations, depending on custom types
+                elementsResolved |= retryCopy(incompleteElements.getUncopiedOperations().iterator());
             }
         }
-        
     }
 
+    
+    /**
+     * Part of the end of the coping: Tries to fix {@link ConstraintSyntaxTree}s of incomplete copied
+     * {@link OperationDefinition}s.
+     * @return <tt>true</tt> if at least one element was resolved, <tt>false</tt> no elements have been resolved,
+     *     maybe because there was nothing to do.
+     */
+    private boolean resolveIncompleteOperations() {
+        boolean elementsResolved = false;
+        
+        Iterator<OperationDefinition> opItr = incompleteElements.getIncompleteOperations().iterator();
+        while (opItr.hasNext()) {
+            OperationDefinition op = opItr.next();
+            CustomOperation tmpCustomOp = op.getOperation();
+            
+            CSTCopyVisitor copyier = new CSTCopyVisitor(copiedDeclarations);
+            tmpCustomOp.getFunction().accept(copyier);
+            if (copyier.translatedCompletely()) {
+                // Copy already copied parameters
+                DecisionVariableDeclaration[] params
+                = new DecisionVariableDeclaration[tmpCustomOp.getParameterCount()];
+                for (int i = 0; i < params.length; i++) {
+                    params[i] = tmpCustomOp.getParameterDeclaration(i);
+                }
+                
+                // Create new custom operation
+                CustomOperation finalCustomOp = new CustomOperation(tmpCustomOp.getReturns(),
+                        tmpCustomOp.getName(), tmpCustomOp.getOperand(), copyier.getResult(), params);
+                op.setOperation(finalCustomOp);
+                
+                // Remove from outstanding list
+                opItr.remove();
+                elementsResolved = true;
+            }
+        }
+        return elementsResolved;
+    }
+    
     /**
      * Retries to copy not copied, original elements.
      * Part of the end of the copying process.
@@ -352,6 +403,9 @@ public class ProjectCopyVisitor extends AbstractProjectVisitor {
             } else if (Compound.TYPE.isAssignableFrom(originalType) || Enum.TYPE.isAssignableFrom(originalType)
                 || DerivedDatatype.TYPE.isAssignableFrom(originalType)) {
                 copiedType = (IDatatype) copiedElements.get(originalType);
+            } else if (null != projectTypes.get(originalType)) {
+                Project copiedProject = projectTypes.get(originalType);
+                copiedType = copiedProject.getType();
             }
         } 
         // TODO SE: References
@@ -363,6 +417,7 @@ public class ProjectCopyVisitor extends AbstractProjectVisitor {
     protected void visitProject(Project project, boolean isMainProject) {
         Project copy = new Project(project.getName());
         copiedProjects.put(project, copy);
+        projectTypes.put(project.getType(), copy);
         parents.addFirst(copy);
         if (isMainProject) {
             copiedProject = copy;
@@ -387,8 +442,13 @@ public class ProjectCopyVisitor extends AbstractProjectVisitor {
         IDatatype type = getTranslatedType(decl.getType());
         if (null != type) {
             // Copy declaration
-            DecisionVariableDeclaration copiedDecl = new DecisionVariableDeclaration(decl.getName(), type,
-                parents.peekFirst());
+            DecisionVariableDeclaration copiedDecl = null;
+            
+            if (decl.isDeclaratorTypeExplicit()) {
+                copiedDecl = new ExplicitTypeVariableDeclaration(decl.getName(), type, parents.peekFirst());
+            } else {
+                copiedDecl = new DecisionVariableDeclaration(decl.getName(), type, parents.peekFirst());
+            }
             addToCurrentParent(copiedDecl);
             copiedElements.put(decl, copiedDecl);
             copiedDeclarations.put(decl, copiedDecl);
@@ -486,8 +546,45 @@ public class ProjectCopyVisitor extends AbstractProjectVisitor {
 
     @Override
     public void visitOperationDefinition(OperationDefinition opdef) {
-        // TODO Auto-generated method stub
+        CustomOperation orgCustomOp = opdef.getOperation();
         
+        boolean allParamTypesAvailable = true;
+        for (int i = 0, end = orgCustomOp.getParameterCount(); i < end && allParamTypesAvailable; i++) {
+            IDatatype orgParamType = orgCustomOp.getParameterDeclaration(i).getType();
+            allParamTypesAvailable = (null != getTranslatedType(orgParamType));
+        }       
+        IDatatype copiedOperandType = getTranslatedType(orgCustomOp.getOperand());
+        IDatatype copiedReturnType = getTranslatedType(orgCustomOp.getReturns()); 
+        
+        if (null != copiedOperandType && null != copiedReturnType && allParamTypesAvailable) {
+            OperationDefinition copiedOP = new OperationDefinition((ModelElement) parents.peekFirst());
+
+            // Copy parameters
+            parents.addFirst(copiedOP);
+            DecisionVariableDeclaration[] copiedParameters
+                = new DecisionVariableDeclaration[orgCustomOp.getParameterCount()];
+            for (int i = 0; i < copiedParameters.length; i++) {
+                DecisionVariableDeclaration orgParamDecl = orgCustomOp.getParameterDeclaration(i);
+                orgParamDecl.accept(this);
+                copiedParameters[i] = (DecisionVariableDeclaration) copiedElements.get(orgParamDecl);
+            } 
+            parents.removeFirst();
+            
+            // Copy CST and create custom operation
+            CSTCopyVisitor cstCopy = new CSTCopyVisitor(copiedDeclarations);
+            orgCustomOp.getFunction().accept(cstCopy);
+            CustomOperation copiedCustomOp = new CustomOperation(copiedReturnType, orgCustomOp.getName(),
+                    copiedOperandType, cstCopy.getResult(), copiedParameters);
+            copiedOP.setOperation(copiedCustomOp);
+            addToCurrentParent(copiedOP);
+            if (!cstCopy.translatedCompletely()) {
+                // CustomOperaton was not copied completely, this must be replaced at a alter point.
+                incompleteElements.addIncompleteOperation(copiedOP);
+            }
+        } else {
+            // No copy of OperationDefinition was created -> Retry it later
+            incompleteElements.addUnCopiedOperation(opdef);
+        }
     }
 
     @Override
