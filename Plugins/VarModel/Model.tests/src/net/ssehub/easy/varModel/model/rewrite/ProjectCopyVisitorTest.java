@@ -25,6 +25,7 @@ import org.junit.Test;
 import net.ssehub.easy.basics.modelManagement.Version;
 import net.ssehub.easy.varModel.cst.CSTSemanticException;
 import net.ssehub.easy.varModel.cst.ConstantValue;
+import net.ssehub.easy.varModel.cst.ConstraintSyntaxTree;
 import net.ssehub.easy.varModel.cst.OCLFeatureCall;
 import net.ssehub.easy.varModel.cst.Variable;
 import net.ssehub.easy.varModel.model.AbstractVariable;
@@ -33,12 +34,15 @@ import net.ssehub.easy.varModel.model.Comment;
 import net.ssehub.easy.varModel.model.Constraint;
 import net.ssehub.easy.varModel.model.ContainableModelElement;
 import net.ssehub.easy.varModel.model.DecisionVariableDeclaration;
+import net.ssehub.easy.varModel.model.ExplicitTypeVariableDeclaration;
 import net.ssehub.easy.varModel.model.IAttributableElement;
 import net.ssehub.easy.varModel.model.IModelElement;
+import net.ssehub.easy.varModel.model.OperationDefinition;
 import net.ssehub.easy.varModel.model.Project;
 import net.ssehub.easy.varModel.model.ProjectInterface;
 import net.ssehub.easy.varModel.model.datatypes.BooleanType;
 import net.ssehub.easy.varModel.model.datatypes.Compound;
+import net.ssehub.easy.varModel.model.datatypes.CustomOperation;
 import net.ssehub.easy.varModel.model.datatypes.DerivedDatatype;
 import net.ssehub.easy.varModel.model.datatypes.Enum;
 import net.ssehub.easy.varModel.model.datatypes.EnumLiteral;
@@ -214,7 +218,16 @@ public class ProjectCopyVisitorTest {
         java.util.Set<Project> copiedProjects) {
         
         assertCopiedElement(constraint, copiedConstraint, expectedParent);
-        DeclrationInConstraintFinder finder = new DeclrationInConstraintFinder(copiedConstraint.getConsSyntax());
+        assertCST(copiedConstraint.getConsSyntax(), copiedProjects);
+    }
+    
+    /**
+     * Checks a copied {@link ConstraintSyntaxTree}.
+     * @param copiedCST The copied {@link ConstraintSyntaxTree} to test.
+     * @param copiedProjects Valid parents for nested declarations, i.e., (copied) Projects
+     */
+    private void assertCST(ConstraintSyntaxTree copiedCST, java.util.Set<Project> copiedProjects) {
+        DeclrationInConstraintFinder finder = new DeclrationInConstraintFinder(copiedCST);
         for (AbstractVariable usedDecl : finder.getDeclarations()) {
             Assert.assertTrue("Used declaration \"" + usedDecl.getName() + "\" of original project.",
                 copiedProjects.contains(usedDecl.getTopLevelParent()));
@@ -291,6 +304,30 @@ public class ProjectCopyVisitorTest {
         for (int i = 0; i < pInterface.getExportsCount(); i++) {
             assertCopiedElement(pInterface.getElement(i), copiedIface.getElement(i), expectedParent);
         }
+    }
+    
+    /**
+     * Checks a copied {@link OperationDefinition}.
+     * @param operation The original operation for comparison
+     * @param copiedOp The copied operation to test.
+     * @param expectedParent The expected parent of the interface and exported elements
+     */
+    private void assertUserOperation(OperationDefinition operation, OperationDefinition copiedOp,
+        Project expectedParent) {
+        
+        assertCopiedElement(operation, copiedOp, expectedParent);
+        CustomOperation orgOperation = operation.getOperation();
+        CustomOperation copiedOperation = copiedOp.getOperation();
+        Assert.assertEquals("NULL handling is different.", orgOperation.acceptsNull(), copiedOperation.acceptsNull());
+        Assert.assertEquals("Copied operation has different amount of parameters than expected",
+            orgOperation.getParameterCount(), copiedOperation.getParameterCount());
+        for (int i = 0, end = orgOperation.getParameterCount(); i < end; i++) {
+            assertCopiedElement(orgOperation.getParameterDeclaration(i), copiedOperation.getParameterDeclaration(i),
+                copiedOp);
+        }
+        java.util.Set<Project> parents = new HashSet<Project>();
+        parents.add(expectedParent);
+        assertCST(copiedOperation.getFunction(), parents);
     }
     
     /**
@@ -416,6 +453,25 @@ public class ProjectCopyVisitorTest {
         Project original = new Project("testSimpleDeclarationCopy");
         IDatatype basisType = RealType.TYPE;
         DecisionVariableDeclaration decl = new DecisionVariableDeclaration("decl", basisType, original);
+        original.add(decl);
+        
+        Project copy = copyProject(original);
+        AbstractVariable copieddecl = (AbstractVariable) copy.getElement(0);
+        Map<AbstractVariable, Project> copyMapping = new HashMap<AbstractVariable, Project>();
+        copyMapping.put(decl, copy);
+        assertDeclaration(decl, copieddecl, copyMapping);
+    }
+    
+    /**
+     * Tests whether {@link ExplicitTypeVariableDeclaration}s can be copied
+     * (usually used inside {@link OperationDefinition}s). Here it is used outside of a operation, this test may fail
+     * if future implementation of our variability model becomes more restrictive.
+     */
+    @Test
+    public void testSimpleExplicitDeclarationCopy() {
+        Project original = new Project("testSimpleExplicitDeclarationCopy");
+        IDatatype basisType = RealType.TYPE;
+        ExplicitTypeVariableDeclaration decl = new ExplicitTypeVariableDeclaration("decl", basisType, original);
         original.add(decl);
         
         Project copy = copyProject(original);
@@ -764,5 +820,73 @@ public class ProjectCopyVisitorTest {
         // Attention: Ordering has changed!
         ProjectInterface copiedIface = (ProjectInterface) copy.getElement(2);
         assertProjectInterface(pInterface, copiedIface, copy);
+    }
+    
+    /**
+     * Tests whether a simple {@link OperationDefinition}, without any dependencies, can be copied.
+     * Tests also that {@link ExplicitTypeVariableDeclaration}s can be copied (as they may be used inside of
+     * {@link OperationDefinition}s but not elsewhere.
+     */
+    @Test
+    public void testSimpleOperationCopy() {
+        Project original = new Project("testSimpleOperationCopy");
+        OperationDefinition operation = new OperationDefinition(original);
+        ExplicitTypeVariableDeclaration parameterDecl = new ExplicitTypeVariableDeclaration("param1", RealType.TYPE,
+            operation);
+        ConstantValue constTrueFunc = new ConstantValue(BooleanValue.TRUE);
+        CustomOperation func = new CustomOperation(BooleanType.TYPE, "returnsTrue", original.getType(), constTrueFunc,
+            new DecisionVariableDeclaration[] {parameterDecl});
+        operation.setOperation(func);
+        original.add(operation);
+        
+        Project copy = copyProject(original);
+        OperationDefinition copiedOp = (OperationDefinition) copy.getElement(0);
+        assertUserOperation(operation, copiedOp, copy);
+    }
+    
+    /**
+     * Tests whether a {@link OperationDefinition}, with a depending CST could be copied.
+     */
+    @Test
+    public void testOperationDependingCSTCopy() {
+        Project original = new Project("testOperationDependingCSTCopy");
+        DecisionVariableDeclaration decl = new DecisionVariableDeclaration("decl", RealType.TYPE, original);
+        OperationDefinition operation = new OperationDefinition(original);
+        ExplicitTypeVariableDeclaration parameterDecl = new ExplicitTypeVariableDeclaration("param1", RealType.TYPE,
+                operation);
+        OCLFeatureCall comparison = new OCLFeatureCall(new Variable(parameterDecl), OclKeyWords.GREATER,
+            new Variable(decl));
+        CustomOperation func = new CustomOperation(BooleanType.TYPE, "returnsTrue", original.getType(), comparison,
+                new DecisionVariableDeclaration[] {parameterDecl});
+        operation.setOperation(func);
+        original.add(operation);
+        original.add(decl);
+        
+        Project copy = copyProject(original);
+        OperationDefinition copiedOp = (OperationDefinition) copy.getElement(0);
+        assertUserOperation(operation, copiedOp, copy);
+    }
+    
+    /**
+     * Tests whether a {@link OperationDefinition} can be copied, which depends on an unresolved type.
+     */
+    @Test
+    public void testOperationDependingCompletely() {
+        Project original = new Project("testOperationDependingCompletely");
+        DerivedDatatype aliasType = new DerivedDatatype("boolAlias", BooleanType.TYPE, original);
+        OperationDefinition operation = new OperationDefinition(original);
+        ExplicitTypeVariableDeclaration parameterDecl = new ExplicitTypeVariableDeclaration("param1", aliasType,
+            operation);
+        ConstantValue constTrueFunc = new ConstantValue(BooleanValue.TRUE);
+        CustomOperation func = new CustomOperation(aliasType, "returnsTrue", original.getType(), constTrueFunc,
+            new DecisionVariableDeclaration[] {parameterDecl});
+        operation.setOperation(func);
+        original.add(operation);
+        original.add(aliasType);
+        
+        Project copy = copyProject(original);
+        // Attention: Ordering has changed!
+        OperationDefinition copiedOp = (OperationDefinition) copy.getElement(1);
+        assertUserOperation(operation, copiedOp, copy);
     }
 }
