@@ -25,6 +25,8 @@ import net.ssehub.easy.varModel.confModel.IConfigurationElement;
 import net.ssehub.easy.varModel.confModel.IConfigurationVisitor;
 import net.ssehub.easy.varModel.confModel.IDecisionVariable;
 import net.ssehub.easy.varModel.confModel.IFreezeSelector;
+import net.ssehub.easy.varModel.confModel.paths.IResolutionPathElement;
+import net.ssehub.easy.varModel.confModel.paths.StartPathElement;
 import net.ssehub.easy.varModel.model.AbstractVariable;
 import net.ssehub.easy.varModel.model.DecisionVariableDeclaration;
 import net.ssehub.easy.varModel.model.datatypes.Compound;
@@ -259,6 +261,11 @@ public class LocalDecisionVariable implements IDecisionVariable {
     @Override
     public String getQualifiedName() {
         return getDeclaration().getQualifiedName();
+    }
+    
+    @Override
+    public IResolutionPathElement getResolutionPath() {
+        return new StartPathElement(getDeclaration()); // unclear for now
     }
 
 }

@@ -93,4 +93,5 @@ class BasisVariable extends DecisionVariable {
         }
         return changed;
     }
+    
 }

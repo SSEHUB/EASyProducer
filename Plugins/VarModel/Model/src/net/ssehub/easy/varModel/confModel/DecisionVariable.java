@@ -18,6 +18,9 @@ package net.ssehub.easy.varModel.confModel;
 import java.util.HashMap;
 import java.util.Map;
 
+import net.ssehub.easy.varModel.confModel.paths.IResolutionPathElement;
+import net.ssehub.easy.varModel.confModel.paths.IndexAccessPathElement;
+import net.ssehub.easy.varModel.confModel.paths.StartPathElement;
 import net.ssehub.easy.varModel.cst.ConstantValue;
 import net.ssehub.easy.varModel.cst.ConstraintSyntaxTree;
 import net.ssehub.easy.varModel.cst.OCLFeatureCall;
@@ -366,4 +369,34 @@ abstract class DecisionVariable implements IDecisionVariable {
         return isNested() ? ((IDecisionVariable) getParent()).getQualifiedName() + "::" + getDeclaration().getName()
             : getDeclaration().getQualifiedName();
     }
+
+    @Override
+    public IResolutionPathElement getResolutionPath() {
+        IResolutionPathElement result = null;
+        IConfigurationElement par = getParent();
+        if (par instanceof DecisionVariable) {
+            result = ((DecisionVariable) par).getPathForNestedElement(this);
+        } else {
+            result = new StartPathElement(getDeclaration());
+        }
+        return result;
+    }
+    
+    /**
+     * Returns the resolution path for a nested element.
+     * 
+     * @param nested the nested element
+     * @return the resolution path
+     */
+    protected IResolutionPathElement getPathForNestedElement(IDecisionVariable nested) {
+        IResolutionPathElement result = null;
+        for (int n = 0; null == result && n < getNestedElementsCount(); n++) {
+            IDecisionVariable tmp = getNestedElement(n);
+            if (tmp == nested) {
+                result = new IndexAccessPathElement(getResolutionPath(), n);
+            }
+        }
+        return result;
+    }
+    
 }

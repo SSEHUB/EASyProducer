@@ -56,7 +56,8 @@ public class IvmlAccessorFieldDescriptor extends AbstractIvmlFieldDescriptor {
             if (Utils.isCompatibleToDecisionVariable(owner) != CompatibilityResult.COMPATIBLE) {
                 throw new VilException("incompatible arguments", VilException.ID_TYPE_INCOMPATIBILITY);
             }
-            DecisionVariable tmp = ((DecisionVariable) owner).getByName(getName());
+            DecisionVariable ownerVar = (DecisionVariable) owner;
+            DecisionVariable tmp = ownerVar.getByName(getName());
             if (null == tmp) {
                 result = null;
                 EASyLoggerFactory.INSTANCE.getLogger(getClass(), Bundle.ID).info("Configuration field " + getName() 

@@ -22,6 +22,8 @@ import java.util.Map;
 import java.util.Set;
 
 import net.ssehub.easy.varModel.Bundle;
+import net.ssehub.easy.varModel.confModel.paths.IResolutionPathElement;
+import net.ssehub.easy.varModel.confModel.paths.NameAccessPathElement;
 import net.ssehub.easy.varModel.cst.ConstraintSyntaxTree;
 import net.ssehub.easy.varModel.cstEvaluation.EvaluationVisitor;
 import net.ssehub.easy.varModel.model.AbstractVariable;
@@ -337,4 +339,22 @@ public class CompoundVariable extends StructuredVariable {
         
         return changed;
     }
+
+    /**
+     * Returns the resolution path for a nested element.
+     * 
+     * @param nested the nested element
+     * @return the resolution path
+     */
+    protected IResolutionPathElement getPathForNestedElement(IDecisionVariable nested) {
+        IResolutionPathElement result = null;
+        for (Map.Entry<String, IDecisionVariable> entry : nestedElements.entrySet()) {
+            if (entry.getValue() == nested) {
+                result = new NameAccessPathElement(getResolutionPath(), entry.getKey());
+                break;
+            }
+        }
+        return result;
+    }
+    
 }

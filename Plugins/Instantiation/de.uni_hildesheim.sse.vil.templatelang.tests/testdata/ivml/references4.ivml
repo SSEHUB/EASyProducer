@@ -1,0 +1,25 @@
+project references4 {
+
+    compound Tuple {
+        String name;
+    }
+
+    compound Alg {
+        String name;
+        sequenceOf(Tuple) input;
+        sequenceOf(Tuple) output;
+    }
+    
+    compound Flow {
+        String name;
+        refTo(Tuple) data;
+    }
+
+    Alg alg1 = {name="Alg1", input={{name="ti1"}, {name="ti2"}}, output={{name="to1 "},{name="to2"}}};
+    Flow flow1 = {name="f1", data=refBy(alg1.input[0])};
+    
+    freeze {
+        alg1;
+        flow1;
+    }
+}

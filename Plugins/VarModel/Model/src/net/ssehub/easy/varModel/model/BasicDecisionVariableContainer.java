@@ -281,4 +281,10 @@ public class BasicDecisionVariableContainer extends ModelElement implements IDec
         
         return found;
     }
+    
+    @Override
+    public String toString() {
+        return modelElements.toString();
+    }
+
 }

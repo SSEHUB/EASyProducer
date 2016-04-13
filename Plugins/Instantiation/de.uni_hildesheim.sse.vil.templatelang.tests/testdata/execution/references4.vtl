@@ -1,0 +1,11 @@
+@advice(references4)
+template references4(Configuration config, Artifact target) {
+
+    def main(Configuration config, Artifact target) {
+        references4 cfg = config;
+        Flow f = cfg.flow1;
+        String tupleName = f.data.name;
+        '${tupleName}'
+    }
+
+}

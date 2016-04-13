@@ -6,9 +6,6 @@ import net.ssehub.easy.basics.pool.Pool;
 import net.ssehub.easy.varModel.Bundle;
 import net.ssehub.easy.varModel.confModel.IDecisionVariable;
 import net.ssehub.easy.varModel.model.AbstractVariable;
-import net.ssehub.easy.varModel.model.Attribute;
-import net.ssehub.easy.varModel.model.ICollectionElementVariable;
-import net.ssehub.easy.varModel.model.IModelVisitor;
 import net.ssehub.easy.varModel.model.datatypes.Container;
 import net.ssehub.easy.varModel.model.datatypes.IDatatype;
 import net.ssehub.easy.varModel.model.datatypes.Reference;
@@ -116,79 +113,12 @@ class IndexAccessor extends AbstractDecisionVariableEvaluationAccessor {
                 result = ((ContainerValue) variable.getValue()).getElement(index);
             } else {
                 result = ValueFactory.createValue(new Reference("", contained, null), 
-                    new CollectionElementVariable(decl, contained, index));
+                    new CollectionElementVariable(decl, contained, variable.getResolutionPath(), index));
             }
         } catch (ValueDoesNotMatchTypeException e) {
             result = null;
         }
         return result;
-    }
-    
-    /**
-     * A temporary variable representing a value of a container. By design decision, container 
-     * do not have contained decision variables. Anyway, references to container variables can
-     * be defined and are resolved via this temporary variable.
-     * 
-     * @author Holger Eichelberger
-     */
-    private static class CollectionElementVariable extends AbstractVariable implements ICollectionElementVariable {
-        
-        private AbstractVariable base;
-        private int index;
-        
-        /**
-         * Creates a collection element variable.
-         * 
-         * @param base the base the collection variable
-         * @param type the contained type
-         * @param index the index within <code>base</code>
-         */
-        CollectionElementVariable(AbstractVariable base, IDatatype type, int index) {
-            super(String.valueOf(index), type, base);
-            this.base = base;
-            this.index = index;
-        }
-
-        @Override
-        public int getAttributesCount() {
-            return base.getAttributesCount();
-        }
-
-        @Override
-        public Attribute getAttribute(String name) {
-            return base.getAttribute(name);
-        }
-
-        @Override
-        public Attribute getAttribute(int index) {
-            return base.getAttribute(index);
-        }
-
-        @Override
-        public void accept(IModelVisitor visitor) {
-            // nothing to visit
-        }
-
-        @Override
-        public int getIndex() {
-            return index;
-        }
-
-        @Override
-        public AbstractVariable getBaseVariable() {
-            return base;
-        }
-
-        @Override
-        public boolean isTemporaryVariable() {
-            return false;
-        }
-
-        @Override
-        public boolean isAttribute() {
-            return false;
-        }
-        
     }
 
 }

@@ -15,6 +15,7 @@
  */
 package net.ssehub.easy.varModel.model.values;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -334,7 +335,7 @@ public class CompoundValue extends StructuredValue implements Cloneable {
     }
     
     @Override
-    public Value clone() {
+    public CompoundValue clone() {
         CompoundValue clonedValue = null;
         clonedValue = (CompoundValue) super.clone();
         clonedValue.nestedElements = new HashMap<String, Value>();
@@ -394,19 +395,57 @@ public class CompoundValue extends StructuredValue implements Cloneable {
                 CompoundValue otherValue = (CompoundValue) object;
                 equals = true;
                 while (equals && null != type) {
-                    for (int s = 0; equals && s < type.getElementCount(); s++) {
-                        String slotName = type.getElement(s).getName();
-                        Value oValue = otherValue.getNestedValue(slotName);
-                        if (!ignoreUndefinedInObject || (ignoreUndefinedInObject && null != oValue)) {
-                            Value myValue = getNestedValue(slotName);
-                            if (null == myValue) {
-                                equals = (null == oValue);
-                            } else {
-                                equals = myValue.equals(oValue);
-                            }
-                        }
-                    }
+                    // TODO check whether getSlotNames would be easier!!!
+                    equals = checkElements(type, otherValue, ignoreUndefinedInObject) 
+                        && checkAssignments(type, otherValue, ignoreUndefinedInObject);
                     type = type.getRefines();
+                }
+            }
+        }
+        return equals;
+    }
+    
+    /**
+     * Checks the assignments for equality.
+     * 
+     * @param container the container to check
+     * @param otherValue the other value to compare against
+     * @param ignoreUndefinedInObject whether undefined values in <code>object</code> shall be ignored 
+     *   (partial equality)
+     * @return <code>true</code> if <code>other</code> is considered equal to <b>container</b>, <code>false</code> else
+     */
+    private boolean checkAssignments(IDecisionVariableContainer container, CompoundValue otherValue, 
+        boolean ignoreUndefinedInObject) {
+        boolean equals = true;
+        for (int a = 0; equals && a < container.getAssignmentCount(); a++) {
+            AttributeAssignment assng = container.getAssignment(a);
+            equals = checkElements(assng, otherValue, ignoreUndefinedInObject) 
+                && checkAssignments(assng, otherValue, ignoreUndefinedInObject);
+        }
+        return equals;
+    }
+
+    /**
+     * Checks the elements for equality.
+     * 
+     * @param container the container to check
+     * @param otherValue the other value to compare against
+     * @param ignoreUndefinedInObject whether undefined values in <code>object</code> shall be ignored 
+     *   (partial equality)
+     * @return <code>true</code> if <code>other</code> is considered equal to <b>container</b>, <code>false</code> else
+     */
+    private boolean checkElements(IDecisionVariableContainer container, CompoundValue otherValue, boolean 
+        ignoreUndefinedInObject) {
+        boolean equals = true;
+        for (int s = 0; equals && s < container.getElementCount(); s++) {
+            String slotName = container.getElement(s).getName();
+            Value oValue = otherValue.getNestedValue(slotName);
+            if (!ignoreUndefinedInObject || (ignoreUndefinedInObject && null != oValue)) {
+                Value myValue = getNestedValue(slotName);
+                if (null == myValue) {
+                    equals = (null == oValue);
+                } else {
+                    equals = myValue.equals(oValue);
                 }
             }
         }
@@ -447,6 +486,15 @@ public class CompoundValue extends StructuredValue implements Cloneable {
             result = ((BooleanValue) nameVal).getValue();
         }
         return result;
+    }
+    
+    /**
+     * Returns the names of the assigned slots in this value.
+     * 
+     * @return the names of the assigned slots
+     */
+    public Collection<String> getSlotNames() {
+        return nestedElements.keySet();
     }
 
 }

@@ -116,6 +116,7 @@ public class EvaluationVisitor implements IConstraintTreeVisitor {
     private boolean issueWarning;
     private ConstraintSyntaxTree innermostFailed;
     private Map<AbstractVariable, IDecisionVariable> varMapping = new HashMap<AbstractVariable, IDecisionVariable>();
+    private ConstantValueResolver constantResolver = new ConstantValueResolver(this);
 
     /**
      * Implements the evaluation context. The context may contain nested local 
@@ -244,8 +245,8 @@ public class EvaluationVisitor implements IConstraintTreeVisitor {
     
     /**
      * Extended Message class for saving variables that fail in assignments.
+     * 
      * @author Sizonenko
-     *
      */
     public static class Message extends net.ssehub.easy.basics.messages.Message {
 
@@ -763,7 +764,7 @@ public class EvaluationVisitor implements IConstraintTreeVisitor {
     @Override
     public void visitConstantValue(ConstantValue value) {
         Value constValue = value.getConstantValue();
-        if (constValue instanceof ReferenceValue) { // dereference if valueExpression
+        /*if (constValue instanceof ReferenceValue) { // dereference if valueExpression
             ReferenceValue ref = (ReferenceValue) constValue;
             if (null != ref.getValueEx()) {
                 ref.getValueEx().accept(this); // -> leads to result
@@ -776,6 +777,18 @@ public class EvaluationVisitor implements IConstraintTreeVisitor {
         // constants must not be changed, at least original constants :o
         Value cVal = constValue.clone();
         result = ConstantAccessor.POOL.getInstance().bind(cVal, context);
+        */
+        constValue.accept(constantResolver);
+        Value resolvedValue = constantResolver.getValue();
+        if (null != resolvedValue) {
+            // constants must not be changed, at least original constants :o
+            if (resolvedValue == constValue) {
+                resolvedValue = resolvedValue.clone();
+            }
+            result = ConstantAccessor.POOL.getInstance().bind(resolvedValue, context);
+        } else {
+            result = null; // failure
+        }
     }
 
     @Override

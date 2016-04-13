@@ -15,6 +15,7 @@
  */
 package net.ssehub.easy.varModel.confModel;
 
+import net.ssehub.easy.varModel.confModel.paths.IResolutionPathElement;
 import net.ssehub.easy.varModel.model.values.Value;
 
 /**
@@ -144,4 +145,11 @@ public interface IDecisionVariable extends IConfigurationElement, IConfiguration
      * @return The qualified and unique name of the variable.
      */
     public String getQualifiedName();
+    
+    /**
+     * Returns a resolution path for this variable.
+     * 
+     * @return the resolution path
+     */
+    public IResolutionPathElement getResolutionPath();
 }

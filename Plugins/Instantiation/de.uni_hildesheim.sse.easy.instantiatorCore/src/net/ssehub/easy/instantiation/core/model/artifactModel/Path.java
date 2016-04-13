@@ -355,6 +355,11 @@ public class Path implements IVilType, IStringValueProvider {
         // no problem for test, as made relative for output afterwards
         return PathUtils.normalize(getAbsolutePath().getAbsolutePath());
     }
+
+    @Override
+    public String toString() {
+        return PathUtils.normalize(getAbsolutePath().getAbsolutePath());
+    }
     
     /**
      * Returns the last modification timestamp of this artifact.

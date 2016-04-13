@@ -144,12 +144,7 @@ class VariableAccessor extends AbstractDecisionVariableEvaluationAccessor {
         return true;
     }
     
-    /**
-     * Returns a nested value based on the given accessor.
-     * 
-     * @param accessor the accessor to determine the nested value
-     * @return the nested value
-     */
+    @Override
     public EvaluationAccessor getValue(EvaluationAccessor accessor) {
         EvaluationAccessor result = null;
         IDecisionVariable variable = getVariable();

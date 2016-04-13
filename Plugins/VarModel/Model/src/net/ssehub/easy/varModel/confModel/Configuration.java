@@ -39,7 +39,6 @@ import net.ssehub.easy.varModel.model.Attribute;
 import net.ssehub.easy.varModel.model.AttributeAssignment;
 import net.ssehub.easy.varModel.model.Comment;
 import net.ssehub.easy.varModel.model.ContainableModelElement;
-import net.ssehub.easy.varModel.model.ICollectionElementVariable;
 import net.ssehub.easy.varModel.model.IFreezable;
 import net.ssehub.easy.varModel.model.IModelElement;
 import net.ssehub.easy.varModel.model.IProjectListener;
@@ -444,11 +443,7 @@ public class Configuration implements IConfigurationVisitable, IProjectListener,
     public IDecisionVariable getDecision(AbstractVariable declaration) {
         IDecisionVariable result = decisions.get(declaration);
         if (null == result && declaration instanceof ICollectionElementVariable) {
-            ICollectionElementVariable var = (ICollectionElementVariable) declaration;
-            result = decisions.get(var.getBaseVariable());
-            if (null != result) {
-                result = result.getNestedElement(var.getIndex());
-            }
+            result = ((ICollectionElementVariable) declaration).resolve(this);
         }
         return result;
     }

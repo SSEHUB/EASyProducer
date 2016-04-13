@@ -247,7 +247,7 @@ public class ContainerValue extends StructuredValue implements Cloneable {
     }
     
     @Override
-    public Value clone() {
+    public ContainerValue clone() {
         ContainerValue clonedValue = (ContainerValue) super.clone();
         clonedValue.nestedElements = new ArrayList<Value>();
         for (int i = 0; i < nestedElements.size(); i++) {
@@ -355,7 +355,7 @@ public class ContainerValue extends StructuredValue implements Cloneable {
                 for (int i = 0; i < nestedElements.size() && !duplicateFound; i++) {
                     if (i != index && nestedValue.equals(nestedElements.get(i))) {
                         throw new ValueDoesNotMatchTypeException("'" + nestedValue.getValue().toString()
-                            + "' already containend and duplicates are not allowed for a Sets.",
+                            + "' already contained and duplicates are not allowed for a Sets.",
                             ValueDoesNotMatchTypeException.NOT_ALLOWED_VALUE_STRUCTURE);
                     }
                 }

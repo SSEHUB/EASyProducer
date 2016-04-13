@@ -101,6 +101,17 @@ class CompoundSlotAccessor extends AbstractDecisionVariableEvaluationAccessor {
         }
         return result;
     }
+    
+    @Override
+    public EvaluationAccessor getValue(EvaluationAccessor accessor) {
+        EvaluationAccessor result = null;
+        if (null != slotVariable) {
+            VariableAccessor tmp = VariableAccessor.POOL.getInstance().bind(slotVariable, getContext());
+            result = tmp.getValue(accessor);
+            VariableAccessor.POOL.releaseInstance(tmp);
+        }
+        return result;
+    }
 
     @Override
     public boolean setValue(Value value) {
