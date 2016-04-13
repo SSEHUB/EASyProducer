@@ -15,7 +15,6 @@
  */
 package net.ssehub.easy.varModel.model.rewrite;
 
-import java.awt.PageAttributes.OriginType;
 import java.util.ArrayDeque;
 import java.util.Deque;
 import java.util.HashMap;
@@ -47,7 +46,6 @@ import net.ssehub.easy.varModel.model.Project;
 import net.ssehub.easy.varModel.model.ProjectInterface;
 import net.ssehub.easy.varModel.model.datatypes.Compound;
 import net.ssehub.easy.varModel.model.datatypes.Container;
-import net.ssehub.easy.varModel.model.datatypes.CustomDatatype;
 import net.ssehub.easy.varModel.model.datatypes.DerivedDatatype;
 import net.ssehub.easy.varModel.model.datatypes.Enum;
 import net.ssehub.easy.varModel.model.datatypes.EnumLiteral;
@@ -145,10 +143,10 @@ public class ProjectCopyVisitor extends AbstractProjectVisitor {
                 elementsResolved = false;
                 
                 // Handle incomplete custom types
-                elementsResolved |= resolveOutStandingTypes();
+                elementsResolved |= retryCopy(incompleteElements.getUnresolvedTypes().iterator());
                 
                 // Handle incomplete declarations
-                elementsResolved |= resolveOutStandingDeclarations();
+                elementsResolved |= retryCopy(incompleteElements.getDeclarationsWithMissingTypes().iterator());
                 
                 // Handle incomplete default values
                 elementsResolved |= resolveIncompleteDefaultValues();
@@ -157,69 +155,37 @@ public class ProjectCopyVisitor extends AbstractProjectVisitor {
                 elementsResolved |= resolveIncompleteConstraints();
                 
                 // Handle incomplete interfaces (need that all declarations have been copied)
-                Iterator<ProjectInterface> iFaceItr = incompleteElements.getUnresolvedProjectInterfaces().iterator();
-                while (iFaceItr.hasNext()) {
-                    ProjectInterface orgIface = iFaceItr.next();
-                    boolean ok = buildParents(orgIface);
-                    if (ok) {
-                        elementsResolved |= retryCopyAfterBuildParents(iFaceItr, orgIface);
-                    }
-                }
+                elementsResolved |= retryCopy(incompleteElements.getUnresolvedProjectInterfaces().iterator());
             }
         }
         
-    }
-    
-    /**
-     * Part of the end of the coping: Tries to resolve custom data types, which could not be translated during
-     * the regular visitation.
-     * @return <tt>true</tt> if at least one element was resolved, <tt>false</tt> no elements have been resolved,
-     *     maybe because there was nothing to do.
-     */
-    private boolean resolveOutStandingTypes() {
-        boolean elementsResolved = false;
-        
-        Iterator<CustomDatatype> typeItr = incompleteElements.getUnresolvedTypes().iterator();
-        while (typeItr.hasNext()) {
-            CustomDatatype type = typeItr.next();
-            Project copiedProject = copiedProjects.get(type.getTopLevelParent());
-            parents.add(copiedProject);
-            type.accept(this);
-            IModelElement copiedType = copiedElements.get(type);
-            if (null != copiedType) {
-                elementsResolved = true;
-                typeItr.remove();
-            }
-            parents.removeFirst();
-        }
-        
-        return elementsResolved;
     }
 
     /**
-     * Part of the end of the coping: Tries to copy declarations, which could not be translated during
-     * the regular visitation.
+     * Retries to copy not copied, original elements.
+     * Part of the end of the copying process.
+     * @param itr An iterator of {@link #incompleteElements}, pointing to original elements, which could not be copied.
      * @return <tt>true</tt> if at least one element was resolved, <tt>false</tt> no elements have been resolved,
      *     maybe because there was nothing to do.
      */
-    private boolean resolveOutStandingDeclarations() {
+    private boolean retryCopy(Iterator<? extends IModelElement> itr) {
         boolean elementsResolved = false;
         
-        Iterator<AbstractVariable> declItr = incompleteElements.getDeclarationsWithMissingTypes().iterator();
-        while (declItr.hasNext()) {
-            AbstractVariable orgDecl = declItr.next();
-            boolean ok = buildParents(orgDecl);
+        while (itr.hasNext()) {
+            IModelElement orgElement = itr.next();
+            boolean ok = buildParents(orgElement);
             if (ok) {
-                orgDecl.accept(this);
-                if (null != copiedElements.get(orgDecl)) {
+                orgElement.accept(this);
+                if (null != copiedElements.get(orgElement)) {
                     // Declaration was successfully copied
                     elementsResolved = true;
-                    declItr.remove();
+                    itr.remove();
                 }
+                
+                // parents.clear is called if ok = false, therefore we called it here only inside the if
+                parents.clear();
             }
-            parents.clear();
         }
-        
         return elementsResolved;
     }
 
@@ -259,28 +225,6 @@ public class ProjectCopyVisitor extends AbstractProjectVisitor {
             parents.clear();
         }
         return !abort;
-    }
-    
-    /**
-     * Tries to copy an outstanding/unresolved original {@link IModelElement},
-     * after {@link #buildParents(IModelElement)} was called before.
-     * @param itr The currently used iterator (if copying succeeded, the element will be removed from it).
-     * @param elementToCopy An original element, which shall be copied (the current element returned by the iterator).
-     * @return <tt>true</tt> if the element was copied successfully.
-     */
-    private boolean retryCopyAfterBuildParents(Iterator<?> itr, IModelElement elementToCopy) {
-        boolean elementsResolved = false;
-        
-        elementToCopy.accept(this);
-        if (null != copiedElements.get(elementToCopy)) {
-            // Declaration was successfully copied
-            elementsResolved = true;
-            itr.remove();
-        }
-        
-        parents.clear();
-        
-        return elementsResolved;
     }
     
     /**
