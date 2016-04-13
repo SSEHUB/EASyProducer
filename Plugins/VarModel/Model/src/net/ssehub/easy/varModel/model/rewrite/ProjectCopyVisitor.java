@@ -126,7 +126,10 @@ public class ProjectCopyVisitor extends AbstractProjectVisitor {
                 elementsResolved = false;
                 
                 // Handle incomplete custom types
-                elementsResolved = resolveOutStandingTypes();
+                elementsResolved |= resolveOutStandingTypes();
+                
+                // Handle incomplete declarations
+                elementsResolved |= resolveOutStandingDeclarations();
                 
                 // Handle incomplete default values
                 Iterator<AbstractVariable> declDefaultItr =
@@ -170,6 +173,53 @@ public class ProjectCopyVisitor extends AbstractProjectVisitor {
             } while(elementsResolved);
         }
         
+    }
+
+    /**
+     * Part of the end of the coping: Tries to copy declarations, which could not be translated during
+     * the regular visitation.
+     * @return <tt>true</tt> if at least one element was resolved, <tt>false</tt> no elements have been resolved,
+     *     maybe because there was nothing to do.
+     */
+    private boolean resolveOutStandingDeclarations() {
+        boolean elementsResolved = false;
+        
+        Iterator<AbstractVariable> declItr = incompleteElements.getDeclarationsWithMissingTypes().iterator();
+        while (declItr.hasNext()) {
+            AbstractVariable orgDecl = declItr.next();
+            parents.clear();
+            // Collect parents in reverse order -> use deque as queue not as stack 
+            IModelElement parent = orgDecl;
+            boolean abort = false;
+            do {
+                parent = parent.getParent();
+                if (parent != null) {
+                    IModelElement copiedParent = null;
+                    if (parent instanceof Project) {
+                        copiedParent = copiedProjects.get((Project) parent);
+                    } else {
+                        copiedParent = copiedElements.get(parent);
+                    }
+                    if (null != copiedParent) {
+                        parents.addLast(copiedParent);
+                    } else {
+                        // Still missing parent
+                        abort = true;
+                    }
+                }
+            } while (parent != null && !abort);
+            if (!abort) {
+                orgDecl.accept(this);
+                if (null != copiedElements.get(orgDecl)) {
+                    // Declaration was successfully copied
+                    elementsResolved = true;
+                    declItr.remove();
+                }
+            }
+            parents.clear();
+        }
+        
+        return elementsResolved;
     }
 
     /**

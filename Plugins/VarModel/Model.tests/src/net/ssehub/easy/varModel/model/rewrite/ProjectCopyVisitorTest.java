@@ -410,6 +410,56 @@ public class ProjectCopyVisitorTest {
      * Tests whether declarations can be copied. This method tests a declaration:
      * <ul>
      *   <li>No attributes</li>
+     *   <li>Depending data type (compound which is defined later)</li>
+     *   <li>No default value</li>
+     * </ul>
+     */
+    @Test
+    public void testDeclarationWithDependingType() {
+        Project original = new Project("testSimpleDeclarationCopy");
+        Compound cType = new Compound("cType", original);
+        DecisionVariableDeclaration decl = new DecisionVariableDeclaration("decl", cType, original);
+        original.add(decl);
+        original.add(cType);
+        
+        Project copy = copyProject(original);
+        // Attention: Ordering has changed!
+        DecisionVariableDeclaration copieddecl = (DecisionVariableDeclaration) copy.getElement(1);
+        Map<AbstractVariable, Project> copyMapping = new HashMap<AbstractVariable, Project>();
+        copyMapping.put(decl, copy);
+        assertDeclaration(decl, copieddecl, copyMapping);
+    }
+    
+    /**
+     * Tests whether declarations can be copied. This method tests a declaration:
+     * <ul>
+     *   <li>No attributes</li>
+     *   <li>Depending data type (compound which is defined later)</li>
+     *   <li>Nested in another compound</li>
+     *   <li>No default value</li>
+     * </ul>
+     */
+    @Test
+    public void testDeclarationWithDependingTypeNested() {
+        Project original = new Project("testSimpleDeclarationCopy");
+        Compound dependingType = new Compound("CP1", original);
+        Compound parentType = new Compound("CP2", original);
+        DecisionVariableDeclaration decl = new DecisionVariableDeclaration("decl", dependingType, parentType);
+        parentType.add(decl);
+        original.add(parentType);
+        original.add(dependingType);
+        
+        Project copy = copyProject(original);
+        Compound copiedParentCP = (Compound) copy.getElement(0);
+        Map<AbstractVariable, Project> copyMapping = new HashMap<AbstractVariable, Project>();
+        copyMapping.put(decl, copy);
+        assertCompound(parentType, copiedParentCP, copy);
+    }
+    
+    /**
+     * Tests whether declarations can be copied. This method tests a declaration:
+     * <ul>
+     *   <li>No attributes</li>
      *   <li>Simple data type (is already known)</li>
      *   <li>Has a <b>constant</b> default value</li>
      * </ul>

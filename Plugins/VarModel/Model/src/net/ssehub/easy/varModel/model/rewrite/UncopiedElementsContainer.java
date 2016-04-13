@@ -140,4 +140,13 @@ class UncopiedElementsContainer {
     void addUnresolvedDeclarationType(AbstractVariable declWithUnresolvedType) {
         unresolvedDeclarations.add(declWithUnresolvedType);
     }
+    
+    /**
+     * Returns the set of original declarations, which could not be translated due to missing {@link CustomDatatype}s.
+     * This set may be changed as a side effect during resolving default values.
+     * @return Declarations which could not be translated.
+     */
+    Set<AbstractVariable> getDeclarationsWithMissingTypes() {
+        return unresolvedDeclarations;
+    }
 }
