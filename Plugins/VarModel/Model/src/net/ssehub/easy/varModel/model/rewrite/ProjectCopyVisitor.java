@@ -22,6 +22,8 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Map;
 
+import net.ssehub.easy.basics.modelManagement.ModelManagementException;
+import net.ssehub.easy.basics.modelManagement.RestrictionEvaluationException;
 import net.ssehub.easy.basics.modelManagement.Version;
 import net.ssehub.easy.varModel.Bundle;
 import net.ssehub.easy.varModel.cst.CSTSemanticException;
@@ -44,6 +46,7 @@ import net.ssehub.easy.varModel.model.ModelElement;
 import net.ssehub.easy.varModel.model.OperationDefinition;
 import net.ssehub.easy.varModel.model.PartialEvaluationBlock;
 import net.ssehub.easy.varModel.model.Project;
+import net.ssehub.easy.varModel.model.ProjectImport;
 import net.ssehub.easy.varModel.model.ProjectInterface;
 import net.ssehub.easy.varModel.model.datatypes.Compound;
 import net.ssehub.easy.varModel.model.datatypes.Container;
@@ -137,9 +140,69 @@ public class ProjectCopyVisitor extends AbstractProjectVisitor {
     }
     
     @Override
+    public void visitProjectImport(ProjectImport pImport) {
+        ProjectImport copiedImport = new ProjectImport(pImport.getName(), pImport.getInterfaceName(),
+            pImport.isConflict(), pImport.isCopied(), null);
+        
+        // Copy the created project
+        super.visitProjectImport(pImport);
+        
+        Project orgResolved = pImport.getResolved();
+        Project copyResolved = copiedProjects.get(orgResolved);
+        if (null != copyResolved) {
+            try {
+                copiedImport.setResolved(copyResolved);
+            } catch (ModelManagementException e) {
+                // Should not be possible, since the original should be valid
+                Bundle.getLogger(ProjectCopyVisitor.class).exception(e);
+            }
+            if (null != pImport.getVersionRestriction()) {
+                try {
+                    copiedImport.setRestrictions(pImport.copyVersionRestriction(copyResolved));
+                } catch (RestrictionEvaluationException e) {
+                    // Should not be possible, since the original should be valid
+                    Bundle.getLogger(ProjectCopyVisitor.class).exception(e);
+                }
+            }
+        } else if (null != pImport.getVersionRestriction() && null != orgResolved) {
+            try {
+                // Copy is based on the name, for this reason also the original should be ok
+                copiedImport.setRestrictions(pImport.copyVersionRestriction(orgResolved));
+            } catch (RestrictionEvaluationException e) {
+                // Should not be possible, since the original should be valid
+                Bundle.getLogger(ProjectCopyVisitor.class).exception(e);
+            }
+        }
+        
+        Project importingProject = (Project) parents.peekFirst();
+        importingProject.addImport(copiedImport);
+    }
+    
+    @Override
     public void visitProject(Project project) {
+        Project copy = new Project(project.getName());
+        copiedProjects.put(project, copy);
+        projectTypes.put(project.getType(), copy);
+        parents.addFirst(copy);
+        if (project == getStartingProject()) {
+            copiedProject = copy;
+        }
+        allCopiedProjects.add(copy);
+        
+        // Handle version
+        Version originalVersion = project.getVersion();
+        if (null != originalVersion) {
+            int[] segments = new int[originalVersion.getSegmentCount()];
+            for (int i = 0; i < segments.length; i++) {
+                segments[i] = originalVersion.getSegment(i);
+            }
+            
+            copy.setVersion(new Version(segments));
+        }
+        
+        // Start visitation (imports, 
         super.visitProject(project);
-        // super.visitProject(project) -> calls addFirst
+        
         parents.pollFirst();
         
         // Finally at the end of the whole translation, try to fix all the missed elements
@@ -413,30 +476,6 @@ public class ProjectCopyVisitor extends AbstractProjectVisitor {
         return copiedType;
     }
 
-    @Override
-    protected void visitProject(Project project, boolean isMainProject) {
-        Project copy = new Project(project.getName());
-        copiedProjects.put(project, copy);
-        projectTypes.put(project.getType(), copy);
-        parents.addFirst(copy);
-        if (isMainProject) {
-            copiedProject = copy;
-        }
-        allCopiedProjects.add(copy);
-        
-        // Handle version
-        Version originalVersion = project.getVersion();
-        if (null != originalVersion) {
-            int[] segments = new int[originalVersion.getSegmentCount()];
-            for (int i = 0; i < segments.length; i++) {
-                segments[i] = originalVersion.getSegment(i);
-            }
-            
-            copy.setVersion(new Version(segments));
-        }
-        
-    }
-    
     @Override
     public void visitDecisionVariableDeclaration(DecisionVariableDeclaration decl) {
         IDatatype type = getTranslatedType(decl.getType());

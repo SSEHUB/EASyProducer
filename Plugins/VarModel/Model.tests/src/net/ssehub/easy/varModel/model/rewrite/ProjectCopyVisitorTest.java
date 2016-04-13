@@ -22,6 +22,7 @@ import java.util.Map;
 import org.junit.Assert;
 import org.junit.Test;
 
+import net.ssehub.easy.basics.modelManagement.ModelManagementException;
 import net.ssehub.easy.basics.modelManagement.Version;
 import net.ssehub.easy.varModel.cst.CSTSemanticException;
 import net.ssehub.easy.varModel.cst.ConstantValue;
@@ -39,6 +40,7 @@ import net.ssehub.easy.varModel.model.IAttributableElement;
 import net.ssehub.easy.varModel.model.IModelElement;
 import net.ssehub.easy.varModel.model.OperationDefinition;
 import net.ssehub.easy.varModel.model.Project;
+import net.ssehub.easy.varModel.model.ProjectImport;
 import net.ssehub.easy.varModel.model.ProjectInterface;
 import net.ssehub.easy.varModel.model.datatypes.BooleanType;
 import net.ssehub.easy.varModel.model.datatypes.Compound;
@@ -99,20 +101,53 @@ public class ProjectCopyVisitorTest {
         }
         
         // Test correct copy
-        Assert.assertNotNull("Copy is null", copy);
-        Assert.assertEquals("Copied project does not have the same name", original.getName(), copy.getName());
-        Assert.assertNotSame("Projects are same, i.e., not copy was created", original, copy);
-        Assert.assertTrue("Copied project has not the same Version",
-            Version.equals(original.getVersion(), copy.getVersion()));
-        Assert.assertEquals("Copied project does not have the same amount of imports", original.getImportsCount(),
-            copy.getImportsCount());
-        Assert.assertEquals("Copied project has not the same amount of elements", original.getElementCount(),
-            copy.getElementCount());
+        java.util.Set<Project> done = new HashSet<Project>();
+        assertProject(original, copy, done);
         
         // Check validity of copy
         ProjectTestUtilities.validateProject(copy);
         
         return copy;
+    }
+
+    /**
+     * Tests the copies projects (and its imports).
+     * @param original The original for comparison.
+     * @param copy The copied project to test.
+     * @param done Already checked copied projects (to avoid cycles).
+     */
+    private void assertProject(Project original, Project copy, java.util.Set<Project> done) {
+        Assert.assertNotNull("Copy is null", copy);
+
+        if (!done.contains(copy)) {
+            done.add(copy);
+            
+            // Test project
+            Assert.assertEquals("Copied project does not have the same name", original.getName(), copy.getName());
+            Assert.assertNotSame("Projects \"" + original.getName() + "\"are same, i.e., no copy was created",
+                original, copy);
+            Assert.assertTrue("Copied project has not the same Version",
+                Version.equals(original.getVersion(), copy.getVersion()));
+            Assert.assertEquals("Copied project does not have the same amount of imports", original.getImportsCount(),
+                copy.getImportsCount());
+            Assert.assertEquals("Copied project has not the same amount of elements", original.getElementCount(),
+                copy.getElementCount());
+            
+            // Test imports
+            Assert.assertEquals("Copy has different amount of imports", original.getImportsCount(),
+                copy.getImportsCount());
+            for (int i = 0; i < original.getImportsCount(); i++) {
+                ProjectImport orgImport = original.getImport(i);
+                ProjectImport copyImport = copy.getImport(i);
+                Assert.assertNotSame("Original import[" + i + "] was used instead of copy for import of \""
+                    + copyImport.getName() + "\"", orgImport, copyImport);
+                Assert.assertEquals("Import[" + i + "] name is wrong", orgImport.getName(), copyImport.getName());
+                // TODO SE: Version restriction
+                Assert.assertEquals("Interface[" + i + "] name is wrong", orgImport.getInterfaceName(),
+                    copyImport.getInterfaceName());
+                assertProject(orgImport.getResolved(), copyImport.getResolved(), done);
+            }
+        }
     }
     
     /**
@@ -888,5 +923,20 @@ public class ProjectCopyVisitorTest {
         // Attention: Ordering has changed!
         OperationDefinition copiedOp = (OperationDefinition) copy.getElement(1);
         assertUserOperation(operation, copiedOp, copy);
+    }
+    
+    /**
+     * Tests that a {@link ProjectImport} to an empty project can be copied.
+     * @throws ModelManagementException If {@link ProjectImport#setResolved(Project)} is not working
+     */
+    @Test
+    public void testEmptyProjectImport() throws ModelManagementException {
+        Project importedProject = new Project("importedProject_of_testEmptyProjectImport");
+        Project mainProject = new Project("mainProject_of_testEmptyProjectImport");
+        ProjectImport pImport = new ProjectImport(importedProject.getName());
+        pImport.setResolved(importedProject);
+        mainProject.addImport(pImport);
+        
+        copyProject(mainProject);
     }
 }
