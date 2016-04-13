@@ -120,9 +120,9 @@ public class ProjectCopyVisitor extends AbstractProjectVisitor {
         // Finally at the end of the whole translation, try to fix all the missed elements
         if (project == getStartingProject()) {
             parents.clear();
-            boolean elementsResolved = false;
+            boolean elementsResolved = true;
             
-            do {
+            while (elementsResolved) {
                 elementsResolved = false;
                 
                 // Handle incomplete custom types
@@ -132,47 +132,39 @@ public class ProjectCopyVisitor extends AbstractProjectVisitor {
                 elementsResolved |= resolveOutStandingDeclarations();
                 
                 // Handle incomplete default values
-                Iterator<AbstractVariable> declDefaultItr =
-                    incompleteElements.getDeclarationsWithMissingDefaults().iterator();
-                while (declDefaultItr.hasNext()) {
-                    AbstractVariable decl = declDefaultItr.next();
-                    CSTCopyVisitor copyier = new CSTCopyVisitor(copiedDeclarations);
-                    decl.getDefaultValue().accept(copyier);
-                    if (copyier.translatedCompletely()) {
-                        try {
-                            decl.setValue(copyier.getResult());
-                            declDefaultItr.remove();
-                            elementsResolved = true;
-                        } catch (ValueDoesNotMatchTypeException e) {
-                            // Should not be possible, since the original was valid
-                            Bundle.getLogger(ProjectCopyVisitor.class).exception(e);
-                        } catch (CSTSemanticException e) {
-                            // Should not be possible, since the original was valid
-                            Bundle.getLogger(ProjectCopyVisitor.class).exception(e);
-                        }
-                    }
-                }
+                elementsResolved |= resolveIncompleteDefaultValues();
                 
                 // Handle incomplete constraints
-                Iterator<Constraint> constraintItr = incompleteElements.getUnresolvedconstraints().iterator();
-                while (constraintItr.hasNext()) {
-                    Constraint constraint = constraintItr.next();
-                    CSTCopyVisitor copyier = new CSTCopyVisitor(copiedDeclarations, this);
-                    constraint.getConsSyntax().accept(copyier);
-                    if (copyier.translatedCompletely()) {
-                        try {
-                            constraint.setConsSyntax(copyier.getResult());
-                            constraintItr.remove();
-                            elementsResolved = true;
-                        } catch (CSTSemanticException e) {
-                            // Should not be possible, since the original was valid
-                            Bundle.getLogger(ProjectCopyVisitor.class).exception(e);
-                        }
-                    }
-                }
-            } while(elementsResolved);
+                elementsResolved |= resolveIncompleteConstraints();
+            }
         }
         
+    }
+    
+    /**
+     * Part of the end of the coping: Tries to resolve custom data types, which could not be translated during
+     * the regular visitation.
+     * @return <tt>true</tt> if at least one element was resolved, <tt>false</tt> no elements have been resolved,
+     *     maybe because there was nothing to do.
+     */
+    private boolean resolveOutStandingTypes() {
+        boolean elementsResolved = false;
+        
+        Iterator<CustomDatatype> typeItr = incompleteElements.getUnresolvedTypes().iterator();
+        while (typeItr.hasNext()) {
+            CustomDatatype type = typeItr.next();
+            Project copiedProject = copiedProjects.get(type.getTopLevelParent());
+            parents.add(copiedProject);
+            type.accept(this);
+            IModelElement copiedType = copiedElements.get(type);
+            if (null != copiedType) {
+                elementsResolved = true;
+                typeItr.remove();
+            }
+            parents.removeFirst();
+        }
+        
+        return elementsResolved;
     }
 
     /**
@@ -221,30 +213,63 @@ public class ProjectCopyVisitor extends AbstractProjectVisitor {
         
         return elementsResolved;
     }
-
+    
     /**
-     * Part of the end of the coping: Tries to resolve custom data types, which could not be translated during
+     * Part of the end of the coping: Tries to fix default values, which could not be translated during
      * the regular visitation.
      * @return <tt>true</tt> if at least one element was resolved, <tt>false</tt> no elements have been resolved,
      *     maybe because there was nothing to do.
      */
-    private boolean resolveOutStandingTypes() {
+    private boolean resolveIncompleteDefaultValues() {
         boolean elementsResolved = false;
         
-        Iterator<CustomDatatype> typeItr = incompleteElements.getUnresolvedTypes().iterator();
-        while (typeItr.hasNext()) {
-            CustomDatatype type = typeItr.next();
-            Project copiedProject = copiedProjects.get(type.getTopLevelParent());
-            parents.add(copiedProject);
-            type.accept(this);
-            IModelElement copiedType = copiedElements.get(type);
-            if (null != copiedType) {
-                elementsResolved = true;
-                typeItr.remove();
+        Iterator<AbstractVariable> declDefaultItr = incompleteElements.getDeclarationsWithMissingDefaults().iterator();
+        while (declDefaultItr.hasNext()) {
+            AbstractVariable decl = declDefaultItr.next();
+            CSTCopyVisitor copyier = new CSTCopyVisitor(copiedDeclarations);
+            decl.getDefaultValue().accept(copyier);
+            if (copyier.translatedCompletely()) {
+                try {
+                    decl.setValue(copyier.getResult());
+                    declDefaultItr.remove();
+                    elementsResolved = true;
+                } catch (ValueDoesNotMatchTypeException e) {
+                    // Should not be possible, since the original was valid
+                    Bundle.getLogger(ProjectCopyVisitor.class).exception(e);
+                } catch (CSTSemanticException e) {
+                    // Should not be possible, since the original was valid
+                    Bundle.getLogger(ProjectCopyVisitor.class).exception(e);
+                }
             }
-            parents.removeFirst();
         }
+        return elementsResolved;
+    }
+    
+    /**
+     * Part of the end of the coping: Tries to fix constraints, which could not be translated during
+     * the regular visitation.
+     * @return <tt>true</tt> if at least one element was resolved, <tt>false</tt> no elements have been resolved,
+     *     maybe because there was nothing to do.
+     */
+    private boolean resolveIncompleteConstraints() {
+        boolean elementsResolved = false;
         
+        Iterator<Constraint> constraintItr = incompleteElements.getUnresolvedconstraints().iterator();
+        while (constraintItr.hasNext()) {
+            Constraint constraint = constraintItr.next();
+            CSTCopyVisitor copyier = new CSTCopyVisitor(copiedDeclarations, this);
+            constraint.getConsSyntax().accept(copyier);
+            if (copyier.translatedCompletely()) {
+                try {
+                    constraint.setConsSyntax(copyier.getResult());
+                    constraintItr.remove();
+                    elementsResolved = true;
+                } catch (CSTSemanticException e) {
+                    // Should not be possible, since the original was valid
+                    Bundle.getLogger(ProjectCopyVisitor.class).exception(e);
+                }
+            }
+        }
         return elementsResolved;
     }
     
