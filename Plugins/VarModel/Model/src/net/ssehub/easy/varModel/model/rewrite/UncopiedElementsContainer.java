@@ -86,6 +86,13 @@ class UncopiedElementsContainer {
      */
     private Set<OperationDefinition> notCopiedOperations = new HashSet<OperationDefinition>();
     
+//    /**
+//     * Elements which could be copied, but not all annotations where available during copy. <br/>
+//     * Attention: This set contains the original elements, even if a copy already exist, otherwise the information
+//     * about outstanding annotations would be lost.
+//     */
+//    private Set<IAttributableElement> incompleteAnnotations = new HashSet<IAttributableElement>();
+    
     /**
      * Adds a copied/translated {@link AbstractVariable}, from which the default value could not be translated, as
      * it is dependent of other elements, which not have been copied/translated so far. Resolving should be possible
@@ -225,4 +232,20 @@ class UncopiedElementsContainer {
     Set<OperationDefinition> getUncopiedOperations() {
         return notCopiedOperations;
     }
+    
+//    /**
+//     * Adds the original for an already copied element of which not all annotations could be copied.
+//     * @param originalElement The original element containing some annotations, which could not be copied to its copy.
+//     */
+//    void addIncompleteAnnotateableElement(IAttributableElement originalElement) {
+//        incompleteAnnotations.add(originalElement);
+//    }
+//    
+//    /**
+//     * Returns the set of original elements, which could be copied but not all of its annotations.
+//     * @return A set of original elements containing more annotations than their copies currently have.
+//     */
+//    Set<IAttributableElement> getIncompleteAnnotateableElements() {
+//        return incompleteAnnotations;
+//    }
 }

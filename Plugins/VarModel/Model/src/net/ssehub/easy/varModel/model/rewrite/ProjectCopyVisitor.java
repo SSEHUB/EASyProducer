@@ -219,10 +219,10 @@ public class ProjectCopyVisitor extends AbstractProjectVisitor {
                 // Handle uncopied declarations (depending on custom types)
                 elementsResolved |= retryCopy(incompleteElements.getDeclarationsWithMissingTypes().iterator());
                 
-                // Handle incomplete default values
+                // Handle incomplete default values (depending on declarations)
                 elementsResolved |= resolveIncompleteDefaultValues();
                 
-                // Handle incomplete constraints
+                // Handle incomplete constraints (depending on declarations)
                 elementsResolved |= resolveIncompleteConstraints();
                 
                 // Handle uncopied interfaces (need that all exported declarations have been copied)
@@ -236,7 +236,6 @@ public class ProjectCopyVisitor extends AbstractProjectVisitor {
             }
         }
     }
-
     
     /**
      * Part of the end of the coping: Tries to fix {@link ConstraintSyntaxTree}s of incomplete copied
@@ -495,7 +494,18 @@ public class ProjectCopyVisitor extends AbstractProjectVisitor {
             // Copy default value
             copyDefaultValue(decl, copiedDecl);
             
-            // TODO SE: Annotations
+            // Annotations will be copied through copying the annotation in its visit mehtod
+            
+//            // Copy annotations
+//            for (int i = 0, end = decl.getAttributesCount(); i < end; i++) {
+//                AbstractVariable orgAnnotation = decl.getAttribute(i);
+//                Attribute copiedAnnotation = (Attribute) copiedElements.get(orgAnnotation);
+//                if (null != copiedAnnotation) {
+//                    copiedDecl.attribute(copiedAnnotation);
+//                } else {
+//                    incompleteElements.addIncompleteAnnotateableElement(decl);
+//                }
+//            }
         } else {
             incompleteElements.addUnresolvedDeclarationType(decl);
         }
@@ -546,10 +556,8 @@ public class ProjectCopyVisitor extends AbstractProjectVisitor {
             
             // Copy default value
             copyDefaultValue(attribute, copiedAnnotation);
-            
-            // TODO SE: Annotations
         } else {
-            incompleteElements.addMissingDefault(attribute);
+            incompleteElements.addUnresolvedDeclarationType(attribute);
         }
     }
 
@@ -779,5 +787,4 @@ public class ProjectCopyVisitor extends AbstractProjectVisitor {
             incompleteElements.addUnresolvedType(set);
         }
     }
-
 }

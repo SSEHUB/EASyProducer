@@ -147,6 +147,29 @@ public class ProjectCopyVisitorTest {
                     copyImport.getInterfaceName());
                 assertProject(orgImport.getResolved(), copyImport.getResolved(), done);
             }
+            
+            // Test annotations
+            assertAnnotateableElement(original, copy, copy);
+        }
+    }
+    
+    /**
+     * Tests an annotated elements, whether all annotations are copied correctly.
+     * @param original The original for comparison
+     * @param copy The copy to test
+     * @param expectedParent The expected parent of all annotations
+     */
+    private void assertAnnotateableElement(IAttributableElement original, IAttributableElement copy,
+        Project expectedParent) {
+        
+        Assert.assertEquals("Copied element \"" + copy.getName() + "\" does not have the same amount of annontations",
+            original.getAttributesCount(), copy.getAttributesCount());
+        
+        Map<AbstractVariable, Project> mapping = new HashMap<AbstractVariable, Project>();
+        for (int i = 0; i < copy.getAttributesCount(); i++) {
+            Attribute orgAnnotation = original.getAttribute(i);
+            mapping.put(orgAnnotation, expectedParent);
+            assertDeclaration(original.getAttribute(i), copy.getAttribute(i), mapping);
         }
     }
     
@@ -160,6 +183,8 @@ public class ProjectCopyVisitorTest {
         IModelElement expectedParent) {
         
         Assert.assertNotNull("Copied element is null", copiedElement);
+        Assert.assertNotNull("Error in test case: No expected parent specified for: " + copiedElement.getName(),
+            expectedParent);
         Assert.assertSame("Copied element is not of type \"" + originalElement.getClass()
             + "\".", originalElement.getClass(), copiedElement.getClass());
         Assert.assertEquals("Copied element has not the same name \"" + originalElement.getName()
@@ -235,9 +260,13 @@ public class ProjectCopyVisitorTest {
         
         // Annotations
         Assert.assertEquals(decl.isAttribute(), copieddecl.isAttribute());
-        Assert.assertEquals("Copied type has not the same attribute count", decl.getAttributesCount(),
+        Assert.assertEquals("Copied declaration has not the same attribute count", decl.getAttributesCount(),
             copieddecl.getAttributesCount());
         for (int i = 0, end = decl.getAttributesCount(); i < end; i++) {
+            AbstractVariable orgAnnotation = decl.getAttribute(i);
+            if (null == copyMapping.get(orgAnnotation)) {
+                copyMapping.put(orgAnnotation, copieddecl.getProject());
+            }
             assertDeclaration(decl.getAttribute(i), copieddecl.getAttribute(i), copyMapping);
         }
     }
@@ -478,7 +507,7 @@ public class ProjectCopyVisitorTest {
     /**
      * Tests whether declarations can be copied. This method tests a declaration:
      * <ul>
-     *   <li>No attributes</li>
+     *   <li>No {@link Attribute}s</li>
      *   <li>Simple data type (is already known)</li>
      *   <li>No default value</li>
      * </ul>
@@ -519,7 +548,7 @@ public class ProjectCopyVisitorTest {
     /**
      * Tests whether declarations can be copied. This method tests a declaration:
      * <ul>
-     *   <li>No attributes</li>
+     *   <li>No {@link Attribute}s</li>
      *   <li>Depending data type (compound which is defined later)</li>
      *   <li>No default value</li>
      * </ul>
@@ -543,7 +572,7 @@ public class ProjectCopyVisitorTest {
     /**
      * Tests whether declarations can be copied. This method tests a declaration:
      * <ul>
-     *   <li>No attributes</li>
+     *   <li>No {@link Attribute}s</li>
      *   <li>Depending data type (compound which is defined later)</li>
      *   <li>Nested in another compound</li>
      *   <li>No default value</li>
@@ -569,7 +598,7 @@ public class ProjectCopyVisitorTest {
     /**
      * Tests whether declarations can be copied. This method tests a declaration:
      * <ul>
-     *   <li>No attributes</li>
+     *   <li>No {@link Attribute}s</li>
      *   <li>Simple data type (is already known)</li>
      *   <li>Has a <b>constant</b> default value</li>
      * </ul>
@@ -593,7 +622,7 @@ public class ProjectCopyVisitorTest {
     /**
      * Tests whether declarations can be copied. This method tests a declaration:
      * <ul>
-     *   <li>No attributes</li>
+     *   <li>No {@link Attribute}s</li>
      *   <li>Simple data type (is already known)</li>
      *   <li>Has a default value referencing another variable, which is defined at a later point</li>
      * </ul>
@@ -648,6 +677,85 @@ public class ProjectCopyVisitorTest {
         Map<AbstractVariable, Project> copyMapping = new HashMap<AbstractVariable, Project>();
         copyMapping.put(decl, copy);
         assertDeclaration(decl, copieddecl, copyMapping);
+    }
+    
+    /**
+     * Tests whether declarations can be copied. This method tests a declaration:
+     * <ul>
+     *   <li>Has an {@link Attribute}</li>
+     *   <li>Simple data type (is already known)</li>
+     *   <li>No default value</li>
+     * </ul>
+     */
+    @Test
+    public void testDeclarationWithAnnotationCopy() {
+        Project original = new Project("testDeclarationWithAnnotationCopy");
+        Attribute annotation = new Attribute("anno", StringType.TYPE, original, original);
+        original.add(annotation);
+        original.attribute(annotation);
+        DecisionVariableDeclaration decl = new DecisionVariableDeclaration("decl", RealType.TYPE, original);
+        original.add(decl);
+//        decl.attribute(annotation);
+        
+        Project copiedProject = copyProject(original);
+        AbstractVariable copiedAnnotation = (AbstractVariable) copiedProject.getElement(0);
+        DecisionVariableDeclaration copieddecl = (DecisionVariableDeclaration) copiedProject.getElement(1);
+        Map<AbstractVariable, Project> mapping = new HashMap<AbstractVariable, Project>();
+        mapping.put(copiedAnnotation, copiedProject);
+        mapping.put(copieddecl, copiedProject);
+        assertDeclaration(decl, copieddecl, mapping);
+    }
+    
+    /**
+     * Tests whether declarations can be copied. This method tests a declaration:
+     * <ul>
+     *   <li>Has an {@link Attribute}, which is defined after the declaration</li>
+     *   <li>Simple data type (is already known)</li>
+     *   <li>No default value</li>
+     * </ul>
+     */
+    @Test
+    public void testDeclarationWithDependingAnnotationCopy() {
+        Project original = new Project("testDeclarationWithDependingAnnotationCopy");
+        Attribute annotation = new Attribute("anno", StringType.TYPE, original, original);
+        DecisionVariableDeclaration decl = new DecisionVariableDeclaration("decl", RealType.TYPE, original);
+        original.add(decl);
+        original.add(annotation);
+        original.attribute(annotation);
+        
+        Project copiedProject = copyProject(original);
+        AbstractVariable copiedAnnotation = (AbstractVariable) copiedProject.getElement(1);
+        DecisionVariableDeclaration copieddecl = (DecisionVariableDeclaration) copiedProject.getElement(0);
+        Map<AbstractVariable, Project> mapping = new HashMap<AbstractVariable, Project>();
+        mapping.put(copiedAnnotation, copiedProject);
+        mapping.put(copieddecl, copiedProject);
+        assertDeclaration(decl, copieddecl, mapping);
+    }
+    
+    /**
+     * Tests whether declarations can be copied. This method tests a declaration:
+     * <ul>
+     *   <li>Has an {@link Attribute}, which is defined after the declaration (annotation is only on declaration)</li>
+     *   <li>Simple data type (is already known)</li>
+     *   <li>No default value</li>
+     * </ul>
+     */
+    @Test
+    public void testDeclarationWithDependingAnnotationCopy2() {
+        Project original = new Project("testDeclarationWithDependingAnnotationCopy2");
+        DecisionVariableDeclaration decl = new DecisionVariableDeclaration("decl", RealType.TYPE, original);
+        Attribute annotation = new Attribute("anno", StringType.TYPE, original, decl);
+        original.add(decl);
+        original.add(annotation);
+        decl.attribute(annotation);
+        
+        Project copiedProject = copyProject(original);
+        AbstractVariable copiedAnnotation = (AbstractVariable) copiedProject.getElement(1);
+        DecisionVariableDeclaration copieddecl = (DecisionVariableDeclaration) copiedProject.getElement(0);
+        Map<AbstractVariable, Project> mapping = new HashMap<AbstractVariable, Project>();
+        mapping.put(copiedAnnotation, copiedProject);
+        mapping.put(copieddecl, copiedProject);
+        assertDeclaration(decl, copieddecl, mapping);
     }
 
     /**
@@ -938,5 +1046,43 @@ public class ProjectCopyVisitorTest {
         mainProject.addImport(pImport);
         
         copyProject(mainProject);
+    }
+    
+    /**
+     * Tests that a {@link ProjectImport} with a non empty project can be copied.
+     * The importing project has a declaration with a default value to the imported project.
+     * @throws ModelManagementException If {@link ProjectImport#setResolved(Project)} is not working
+     * @throws CSTSemanticException If {@link DecisionVariableDeclaration#setValue(ConstraintSyntaxTree)} is not working
+     * @throws ValueDoesNotMatchTypeException If {@link DecisionVariableDeclaration#setValue(ConstraintSyntaxTree)}
+     *     is not working 
+     */
+    @Test
+    public void testNonEmptyProjectImport() throws ModelManagementException, ValueDoesNotMatchTypeException,
+        CSTSemanticException {
+        
+        Project importedProject = new Project("importedProject_of_testNonEmptyProjectImport");
+        DecisionVariableDeclaration decl1 = new DecisionVariableDeclaration("importedDecl", IntegerType.TYPE,
+            importedProject);
+        importedProject.add(decl1);
+        Project mainProject = new Project("mainProject_of_testNonEmptyProjectImport");
+        ProjectImport pImport = new ProjectImport(importedProject.getName());
+        pImport.setResolved(importedProject);
+        mainProject.addImport(pImport);
+        DecisionVariableDeclaration decl2 = new DecisionVariableDeclaration("mainDecl", IntegerType.TYPE, mainProject);
+        Variable defltValue = new Variable(decl1);
+        decl2.setValue(defltValue);
+        mainProject.add(decl2);
+
+        Project copiedMain = copyProject(mainProject);
+        DecisionVariableDeclaration copiedDecl2 = (DecisionVariableDeclaration) copiedMain.getElement(0);
+        Project copiedImported = copiedMain.getImport(0).getResolved();
+        DecisionVariableDeclaration copiedDecl1 = (DecisionVariableDeclaration) copiedImported.getElement(0);
+        
+        // Tuple (original declaration, expected copied parent)
+        Map<AbstractVariable, Project> mapping = new HashMap<AbstractVariable, Project>();
+        mapping.put(decl1, copiedImported);
+        mapping.put(decl2, copiedMain);
+        assertDeclaration(decl1, copiedDecl1, mapping);
+        assertDeclaration(decl2, copiedDecl2, mapping);
     }
 }
