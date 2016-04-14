@@ -74,28 +74,13 @@ public abstract class AbstractProjectVisitor implements IModelVisitor {
             boolean onlyImports = FilterType.ONLY_IMPORTS == filterType && importedProject;
             boolean noImports = FilterType.NO_IMPORTS == filterType && !importedProject;
             if (anyProject || onlyImports || noImports) {
-                visitProject(project, !importedProject);
-                
                 for (int i = 0; i < project.getElementCount(); i++) {
                     project.getElement(i).accept(this);
                 }
             }
         }
     }
-    
-    /**
-     * Part of the {@link #visitProject(Project)} method, as {@link #visitProject(Project)} is responsible for further
-     * visitation but not for logical parts. This method can be used to specify behavior how to handle the project
-     * itself, while {@link #visitProject(Project)} visits nested elements. <br/>
-     * This method does not have any implementation by default.
-     * @param project The currently visited project.
-     * @param isMainProject <tt>true</tt> if {@link #getStartingProject()} is visited, <tt>false</tt> if an imported
-     * project is visited.
-     */
-    protected void visitProject(Project project, boolean isMainProject) {
-        // No default operation
-    }
-    
+        
     /**
      * Returns the original project which was the starting point for visitation.
      * @return The starting point of the visitation.

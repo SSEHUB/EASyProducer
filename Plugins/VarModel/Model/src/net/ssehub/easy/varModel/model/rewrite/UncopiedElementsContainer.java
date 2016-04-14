@@ -21,12 +21,15 @@ import java.util.Set;
 import net.ssehub.easy.varModel.model.AbstractVariable;
 import net.ssehub.easy.varModel.model.Attribute;
 import net.ssehub.easy.varModel.model.Constraint;
+import net.ssehub.easy.varModel.model.OperationDefinition;
 import net.ssehub.easy.varModel.model.ProjectInterface;
 import net.ssehub.easy.varModel.model.datatypes.CustomDatatype;
 
 /**
  * Stores elements of the {@link ProjectCopyVisitor}, which could not be copied completely as dependent elements
- * are not copied, yet.
+ * are not copied, yet. <br/>
+ * Each element type is stored in a separate set to facilitate individual treatment and to allow that the elements
+ * can be processed in an optimized order.
  * @author El-Sharkawy
  */
 class UncopiedElementsContainer {
@@ -70,6 +73,25 @@ class UncopiedElementsContainer {
      * are not already copied.
      */
     private Set<ProjectInterface> unresolvedInterfaces = new HashSet<ProjectInterface>();
+    
+    /**
+     * {@link OperationDefinition}s, which are copied (also its parameter and so on), but of which the
+     * {@link net.ssehub.easy.varModel.model.datatypes.CustomOperation} could not be copied due the nested
+     * {@link net.ssehub.easy.varModel.cst.ConstraintSyntaxTree}.
+     */
+    private Set<OperationDefinition> incompleteOperations = new HashSet<OperationDefinition>();
+    
+    /**
+     * {@link OperationDefinition}s, which are <b>not</b> copied due to missing dependencies, i.e., types. 
+     */
+    private Set<OperationDefinition> notCopiedOperations = new HashSet<OperationDefinition>();
+    
+//    /**
+//     * Elements which could be copied, but not all annotations where available during copy. <br/>
+//     * Attention: This set contains the original elements, even if a copy already exist, otherwise the information
+//     * about outstanding annotations would be lost.
+//     */
+//    private Set<IAttributableElement> incompleteAnnotations = new HashSet<IAttributableElement>();
     
     /**
      * Adds a copied/translated {@link AbstractVariable}, from which the default value could not be translated, as
@@ -174,4 +196,56 @@ class UncopiedElementsContainer {
     Set<ProjectInterface> getUnresolvedProjectInterfaces() {
         return unresolvedInterfaces;
     }
+    
+    /**
+     * Adds a copied {@link OperationDefinition}, of which the nested
+     * {@link {@link net.ssehub.easy.varModel.cst.ConstraintSyntaxTree}} could not be copied.
+     * @param incompleteOperation The incomplete {@link OperationDefinition} of which the cst must be fixed at a later
+     *     time.
+     */
+    void addIncompleteOperation(OperationDefinition incompleteOperation) {
+        incompleteOperations.add(incompleteOperation);
+    }
+    
+    /**
+     * Returns the set of incompletely copied {@link OperationDefinition}s of which the nested
+     * {@link {@link net.ssehub.easy.varModel.cst.ConstraintSyntaxTree}} must be corrected.
+     * @return The set of incomplete {@link OperationDefinition}s.
+     */
+    Set<OperationDefinition> getIncompleteOperations() {
+        return incompleteOperations;
+    }
+    
+    /**
+     * Adds a copied {@link OperationDefinition}, which could not be copied at all.
+     * @param notCopiedOperation An original and not copied operation definition, which must be copied at a later time.
+     */
+    void addUnCopiedOperation(OperationDefinition notCopiedOperation) {
+        notCopiedOperations.add(notCopiedOperation);
+    }
+    
+    /**
+     * Returns the set of {@link OperationDefinition}s, which could not be copied (also not partially), due to missing
+     * types. The complete {@link OperationDefinition} must still be copied.
+     * @return The set original {@link OperationDefinition}s which still have to be copied.
+     */
+    Set<OperationDefinition> getUncopiedOperations() {
+        return notCopiedOperations;
+    }
+    
+//    /**
+//     * Adds the original for an already copied element of which not all annotations could be copied.
+//     * @param originalElement The original element containing some annotations, which could not be copied to its copy.
+//     */
+//    void addIncompleteAnnotateableElement(IAttributableElement originalElement) {
+//        incompleteAnnotations.add(originalElement);
+//    }
+//    
+//    /**
+//     * Returns the set of original elements, which could be copied but not all of its annotations.
+//     * @return A set of original elements containing more annotations than their copies currently have.
+//     */
+//    Set<IAttributableElement> getIncompleteAnnotateableElements() {
+//        return incompleteAnnotations;
+//    }
 }

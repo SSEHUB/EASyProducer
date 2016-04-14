@@ -22,6 +22,8 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Map;
 
+import net.ssehub.easy.basics.modelManagement.ModelManagementException;
+import net.ssehub.easy.basics.modelManagement.RestrictionEvaluationException;
 import net.ssehub.easy.basics.modelManagement.Version;
 import net.ssehub.easy.varModel.Bundle;
 import net.ssehub.easy.varModel.cst.CSTSemanticException;
@@ -36,6 +38,7 @@ import net.ssehub.easy.varModel.model.Constraint;
 import net.ssehub.easy.varModel.model.ContainableModelElement;
 import net.ssehub.easy.varModel.model.DecisionVariableDeclaration;
 import net.ssehub.easy.varModel.model.EvaluationBlock;
+import net.ssehub.easy.varModel.model.ExplicitTypeVariableDeclaration;
 import net.ssehub.easy.varModel.model.FreezeBlock;
 import net.ssehub.easy.varModel.model.IAttributableElement;
 import net.ssehub.easy.varModel.model.IModelElement;
@@ -43,9 +46,11 @@ import net.ssehub.easy.varModel.model.ModelElement;
 import net.ssehub.easy.varModel.model.OperationDefinition;
 import net.ssehub.easy.varModel.model.PartialEvaluationBlock;
 import net.ssehub.easy.varModel.model.Project;
+import net.ssehub.easy.varModel.model.ProjectImport;
 import net.ssehub.easy.varModel.model.ProjectInterface;
 import net.ssehub.easy.varModel.model.datatypes.Compound;
 import net.ssehub.easy.varModel.model.datatypes.Container;
+import net.ssehub.easy.varModel.model.datatypes.CustomOperation;
 import net.ssehub.easy.varModel.model.datatypes.DerivedDatatype;
 import net.ssehub.easy.varModel.model.datatypes.Enum;
 import net.ssehub.easy.varModel.model.datatypes.EnumLiteral;
@@ -113,6 +118,11 @@ public class ProjectCopyVisitor extends AbstractProjectVisitor {
     private java.util.Set<Project> allCopiedProjects;
     
     /**
+     * Dirty but needed for {@link #getTranslatedType(IDatatype)}: Tuple of (original project type, copied project).
+     */
+    private Map<IDatatype, Project> projectTypes;
+    
+    /**
      * Sole constructor for creating a copy of a {@link Project}.
      * @param originProject The project where the visiting shall start
      * @param filterType Specifies whether project imports shall be considered or not. All considered projects
@@ -125,13 +135,74 @@ public class ProjectCopyVisitor extends AbstractProjectVisitor {
         copiedDeclarations = new HashMap<AbstractVariable, AbstractVariable>();
         incompleteElements = new UncopiedElementsContainer();
         allCopiedProjects = new HashSet<Project>();
+        projectTypes = new HashMap<IDatatype, Project>();
         parents = new ArrayDeque<IModelElement>();
     }
     
     @Override
+    public void visitProjectImport(ProjectImport pImport) {
+        ProjectImport copiedImport = new ProjectImport(pImport.getName(), pImport.getInterfaceName(),
+            pImport.isConflict(), pImport.isCopied(), null);
+        
+        // Copy the created project
+        super.visitProjectImport(pImport);
+        
+        Project orgResolved = pImport.getResolved();
+        Project copyResolved = copiedProjects.get(orgResolved);
+        if (null != copyResolved) {
+            try {
+                copiedImport.setResolved(copyResolved);
+            } catch (ModelManagementException e) {
+                // Should not be possible, since the original should be valid
+                Bundle.getLogger(ProjectCopyVisitor.class).exception(e);
+            }
+            if (null != pImport.getVersionRestriction()) {
+                try {
+                    copiedImport.setRestrictions(pImport.copyVersionRestriction(copyResolved));
+                } catch (RestrictionEvaluationException e) {
+                    // Should not be possible, since the original should be valid
+                    Bundle.getLogger(ProjectCopyVisitor.class).exception(e);
+                }
+            }
+        } else if (null != pImport.getVersionRestriction() && null != orgResolved) {
+            try {
+                // Copy is based on the name, for this reason also the original should be ok
+                copiedImport.setRestrictions(pImport.copyVersionRestriction(orgResolved));
+            } catch (RestrictionEvaluationException e) {
+                // Should not be possible, since the original should be valid
+                Bundle.getLogger(ProjectCopyVisitor.class).exception(e);
+            }
+        }
+        
+        Project importingProject = (Project) parents.peekFirst();
+        importingProject.addImport(copiedImport);
+    }
+    
+    @Override
     public void visitProject(Project project) {
+        Project copy = new Project(project.getName());
+        copiedProjects.put(project, copy);
+        projectTypes.put(project.getType(), copy);
+        parents.addFirst(copy);
+        if (project == getStartingProject()) {
+            copiedProject = copy;
+        }
+        allCopiedProjects.add(copy);
+        
+        // Handle version
+        Version originalVersion = project.getVersion();
+        if (null != originalVersion) {
+            int[] segments = new int[originalVersion.getSegmentCount()];
+            for (int i = 0; i < segments.length; i++) {
+                segments[i] = originalVersion.getSegment(i);
+            }
+            
+            copy.setVersion(new Version(segments));
+        }
+        
+        // Start visitation (imports, 
         super.visitProject(project);
-        // super.visitProject(project) -> calls addFirst
+        
         parents.pollFirst();
         
         // Finally at the end of the whole translation, try to fix all the missed elements
@@ -142,25 +213,67 @@ public class ProjectCopyVisitor extends AbstractProjectVisitor {
             while (elementsResolved) {
                 elementsResolved = false;
                 
-                // Handle incomplete custom types
+                // Handle uncopied custom types
                 elementsResolved |= retryCopy(incompleteElements.getUnresolvedTypes().iterator());
                 
-                // Handle incomplete declarations
+                // Handle uncopied declarations (depending on custom types)
                 elementsResolved |= retryCopy(incompleteElements.getDeclarationsWithMissingTypes().iterator());
                 
-                // Handle incomplete default values
+                // Handle incomplete default values (depending on declarations)
                 elementsResolved |= resolveIncompleteDefaultValues();
                 
-                // Handle incomplete constraints
+                // Handle incomplete constraints (depending on declarations)
                 elementsResolved |= resolveIncompleteConstraints();
                 
-                // Handle incomplete interfaces (need that all declarations have been copied)
+                // Handle uncopied interfaces (need that all exported declarations have been copied)
                 elementsResolved |= retryCopy(incompleteElements.getUnresolvedProjectInterfaces().iterator());
+                
+                // Handle incomplete operations
+                elementsResolved |= resolveIncompleteOperations();
+                
+                // Handle operations, depending on custom types
+                elementsResolved |= retryCopy(incompleteElements.getUncopiedOperations().iterator());
             }
         }
-        
     }
-
+    
+    /**
+     * Part of the end of the coping: Tries to fix {@link ConstraintSyntaxTree}s of incomplete copied
+     * {@link OperationDefinition}s.
+     * @return <tt>true</tt> if at least one element was resolved, <tt>false</tt> no elements have been resolved,
+     *     maybe because there was nothing to do.
+     */
+    private boolean resolveIncompleteOperations() {
+        boolean elementsResolved = false;
+        
+        Iterator<OperationDefinition> opItr = incompleteElements.getIncompleteOperations().iterator();
+        while (opItr.hasNext()) {
+            OperationDefinition op = opItr.next();
+            CustomOperation tmpCustomOp = op.getOperation();
+            
+            CSTCopyVisitor copyier = new CSTCopyVisitor(copiedDeclarations);
+            tmpCustomOp.getFunction().accept(copyier);
+            if (copyier.translatedCompletely()) {
+                // Copy already copied parameters
+                DecisionVariableDeclaration[] params
+                = new DecisionVariableDeclaration[tmpCustomOp.getParameterCount()];
+                for (int i = 0; i < params.length; i++) {
+                    params[i] = tmpCustomOp.getParameterDeclaration(i);
+                }
+                
+                // Create new custom operation
+                CustomOperation finalCustomOp = new CustomOperation(tmpCustomOp.getReturns(),
+                        tmpCustomOp.getName(), tmpCustomOp.getOperand(), copyier.getResult(), params);
+                op.setOperation(finalCustomOp);
+                
+                // Remove from outstanding list
+                opItr.remove();
+                elementsResolved = true;
+            }
+        }
+        return elementsResolved;
+    }
+    
     /**
      * Retries to copy not copied, original elements.
      * Part of the end of the copying process.
@@ -352,6 +465,9 @@ public class ProjectCopyVisitor extends AbstractProjectVisitor {
             } else if (Compound.TYPE.isAssignableFrom(originalType) || Enum.TYPE.isAssignableFrom(originalType)
                 || DerivedDatatype.TYPE.isAssignableFrom(originalType)) {
                 copiedType = (IDatatype) copiedElements.get(originalType);
+            } else if (null != projectTypes.get(originalType)) {
+                Project copiedProject = projectTypes.get(originalType);
+                copiedType = copiedProject.getType();
             }
         } 
         // TODO SE: References
@@ -360,35 +476,17 @@ public class ProjectCopyVisitor extends AbstractProjectVisitor {
     }
 
     @Override
-    protected void visitProject(Project project, boolean isMainProject) {
-        Project copy = new Project(project.getName());
-        copiedProjects.put(project, copy);
-        parents.addFirst(copy);
-        if (isMainProject) {
-            copiedProject = copy;
-        }
-        allCopiedProjects.add(copy);
-        
-        // Handle version
-        Version originalVersion = project.getVersion();
-        if (null != originalVersion) {
-            int[] segments = new int[originalVersion.getSegmentCount()];
-            for (int i = 0; i < segments.length; i++) {
-                segments[i] = originalVersion.getSegment(i);
-            }
-            
-            copy.setVersion(new Version(segments));
-        }
-        
-    }
-    
-    @Override
     public void visitDecisionVariableDeclaration(DecisionVariableDeclaration decl) {
         IDatatype type = getTranslatedType(decl.getType());
         if (null != type) {
             // Copy declaration
-            DecisionVariableDeclaration copiedDecl = new DecisionVariableDeclaration(decl.getName(), type,
-                parents.peekFirst());
+            DecisionVariableDeclaration copiedDecl = null;
+            
+            if (decl.isDeclaratorTypeExplicit()) {
+                copiedDecl = new ExplicitTypeVariableDeclaration(decl.getName(), type, parents.peekFirst());
+            } else {
+                copiedDecl = new DecisionVariableDeclaration(decl.getName(), type, parents.peekFirst());
+            }
             addToCurrentParent(copiedDecl);
             copiedElements.put(decl, copiedDecl);
             copiedDeclarations.put(decl, copiedDecl);
@@ -396,7 +494,18 @@ public class ProjectCopyVisitor extends AbstractProjectVisitor {
             // Copy default value
             copyDefaultValue(decl, copiedDecl);
             
-            // TODO SE: Annotations
+            // Annotations will be copied through copying the annotation in its visit mehtod
+            
+//            // Copy annotations
+//            for (int i = 0, end = decl.getAttributesCount(); i < end; i++) {
+//                AbstractVariable orgAnnotation = decl.getAttribute(i);
+//                Attribute copiedAnnotation = (Attribute) copiedElements.get(orgAnnotation);
+//                if (null != copiedAnnotation) {
+//                    copiedDecl.attribute(copiedAnnotation);
+//                } else {
+//                    incompleteElements.addIncompleteAnnotateableElement(decl);
+//                }
+//            }
         } else {
             incompleteElements.addUnresolvedDeclarationType(decl);
         }
@@ -447,10 +556,8 @@ public class ProjectCopyVisitor extends AbstractProjectVisitor {
             
             // Copy default value
             copyDefaultValue(attribute, copiedAnnotation);
-            
-            // TODO SE: Annotations
         } else {
-            incompleteElements.addMissingDefault(attribute);
+            incompleteElements.addUnresolvedDeclarationType(attribute);
         }
     }
 
@@ -486,8 +593,45 @@ public class ProjectCopyVisitor extends AbstractProjectVisitor {
 
     @Override
     public void visitOperationDefinition(OperationDefinition opdef) {
-        // TODO Auto-generated method stub
+        CustomOperation orgCustomOp = opdef.getOperation();
         
+        boolean allParamTypesAvailable = true;
+        for (int i = 0, end = orgCustomOp.getParameterCount(); i < end && allParamTypesAvailable; i++) {
+            IDatatype orgParamType = orgCustomOp.getParameterDeclaration(i).getType();
+            allParamTypesAvailable = (null != getTranslatedType(orgParamType));
+        }       
+        IDatatype copiedOperandType = getTranslatedType(orgCustomOp.getOperand());
+        IDatatype copiedReturnType = getTranslatedType(orgCustomOp.getReturns()); 
+        
+        if (null != copiedOperandType && null != copiedReturnType && allParamTypesAvailable) {
+            OperationDefinition copiedOP = new OperationDefinition((ModelElement) parents.peekFirst());
+
+            // Copy parameters
+            parents.addFirst(copiedOP);
+            DecisionVariableDeclaration[] copiedParameters
+                = new DecisionVariableDeclaration[orgCustomOp.getParameterCount()];
+            for (int i = 0; i < copiedParameters.length; i++) {
+                DecisionVariableDeclaration orgParamDecl = orgCustomOp.getParameterDeclaration(i);
+                orgParamDecl.accept(this);
+                copiedParameters[i] = (DecisionVariableDeclaration) copiedElements.get(orgParamDecl);
+            } 
+            parents.removeFirst();
+            
+            // Copy CST and create custom operation
+            CSTCopyVisitor cstCopy = new CSTCopyVisitor(copiedDeclarations);
+            orgCustomOp.getFunction().accept(cstCopy);
+            CustomOperation copiedCustomOp = new CustomOperation(copiedReturnType, orgCustomOp.getName(),
+                    copiedOperandType, cstCopy.getResult(), copiedParameters);
+            copiedOP.setOperation(copiedCustomOp);
+            addToCurrentParent(copiedOP);
+            if (!cstCopy.translatedCompletely()) {
+                // CustomOperaton was not copied completely, this must be replaced at a alter point.
+                incompleteElements.addIncompleteOperation(copiedOP);
+            }
+        } else {
+            // No copy of OperationDefinition was created -> Retry it later
+            incompleteElements.addUnCopiedOperation(opdef);
+        }
     }
 
     @Override
@@ -643,5 +787,4 @@ public class ProjectCopyVisitor extends AbstractProjectVisitor {
             incompleteElements.addUnresolvedType(set);
         }
     }
-
 }
