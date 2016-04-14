@@ -41,6 +41,7 @@ import net.ssehub.easy.varModel.model.EvaluationBlock;
 import net.ssehub.easy.varModel.model.ExplicitTypeVariableDeclaration;
 import net.ssehub.easy.varModel.model.FreezeBlock;
 import net.ssehub.easy.varModel.model.IAttributableElement;
+import net.ssehub.easy.varModel.model.IFreezable;
 import net.ssehub.easy.varModel.model.IModelElement;
 import net.ssehub.easy.varModel.model.ModelElement;
 import net.ssehub.easy.varModel.model.OperationDefinition;
@@ -118,6 +119,14 @@ public class ProjectCopyVisitor extends AbstractProjectVisitor {
     private java.util.Set<Project> allCopiedProjects;
     
     /**
+     * Indicates that the currently visited elements shall <b>not</b> be added to the current parent, i.e., are local
+     * elements.
+     * <tt>true</tt>: Elements shall not be added
+     * <tt>false</tt>: Usual behavior
+     */
+    private boolean visitLocalElements;
+    
+    /**
      * Dirty but needed for {@link #getTranslatedType(IDatatype)}: Tuple of (original project type, copied project).
      */
     private Map<IDatatype, Project> projectTypes;
@@ -137,6 +146,7 @@ public class ProjectCopyVisitor extends AbstractProjectVisitor {
         allCopiedProjects = new HashSet<Project>();
         projectTypes = new HashMap<IDatatype, Project>();
         parents = new ArrayDeque<IModelElement>();
+        visitLocalElements = false;
     }
     
     @Override
@@ -233,6 +243,14 @@ public class ProjectCopyVisitor extends AbstractProjectVisitor {
                 
                 // Handle operations, depending on custom types
                 elementsResolved |= retryCopy(incompleteElements.getUncopiedOperations().iterator());
+                
+                // Handle uncopied CompoundAccesses (depending on declarations)
+                visitLocalElements = true;
+                elementsResolved |= retryCopy(incompleteElements.getUncopiedCompoundAccesses().iterator());
+                visitLocalElements = false;
+                
+                // Handle uncopied FreezeBlocks (depending on declarations, CompoundAccesses and maybe on constraints)
+                elementsResolved |= retryCopy(incompleteElements.getUncopiedFreezeBlocks().iterator());
             }
         }
     }
@@ -421,19 +439,21 @@ public class ProjectCopyVisitor extends AbstractProjectVisitor {
      * @param copiedElement The copied element to add to the current parent.
      */
     private void addToCurrentParent(ContainableModelElement copiedElement) {
-        IModelElement parent = parents.peekFirst();
-        if (parent instanceof Project) {
-            ((Project) parent).add(copiedElement);
-        } else if (parent instanceof Compound) {
-            Compound cType = (Compound) parent;
-            if (copiedElement instanceof DecisionVariableDeclaration) {
-                cType.add((DecisionVariableDeclaration) copiedElement);
-            } else if (copiedElement instanceof AttributeAssignment) {
-                cType.add((AttributeAssignment) copiedElement);
-            } else if (copiedElement instanceof EvaluationBlock) {
-                cType.add((EvaluationBlock) copiedElement);
-            } else if (copiedElement instanceof Comment) {
-                cType.add((Comment) copiedElement);
+        if (!visitLocalElements) {
+            IModelElement parent = parents.peekFirst();
+            if (parent instanceof Project) {
+                ((Project) parent).add(copiedElement);
+            } else if (parent instanceof Compound) {
+                Compound cType = (Compound) parent;
+                if (copiedElement instanceof DecisionVariableDeclaration) {
+                    cType.add((DecisionVariableDeclaration) copiedElement);
+                } else if (copiedElement instanceof AttributeAssignment) {
+                    cType.add((AttributeAssignment) copiedElement);
+                } else if (copiedElement instanceof EvaluationBlock) {
+                    cType.add((EvaluationBlock) copiedElement);
+                } else if (copiedElement instanceof Comment) {
+                    cType.add((Comment) copiedElement);
+                }
             }
         }
     }
@@ -587,8 +607,54 @@ public class ProjectCopyVisitor extends AbstractProjectVisitor {
 
     @Override
     public void visitFreezeBlock(FreezeBlock freeze) {
-        // TODO Auto-generated method stub
+        boolean allElementsFound = true;
+        IFreezable[] copiedFrozenElements = new IFreezable[freeze.getFreezableCount()];
+        for (int i = 0; i < copiedFrozenElements.length && allElementsFound; i++) {
+            IFreezable orgFrozenElement = freeze.getFreezable(i);
+            IFreezable copiedFrozenElement = (IFreezable) copiedElements.get(orgFrozenElement);
+            if (orgFrozenElement instanceof CompoundAccessStatement && null == copiedFrozenElement) {
+                visitLocalElements = true;
+                visitCompoundAccessStatement((CompoundAccessStatement) orgFrozenElement);
+                visitLocalElements = false;
+                
+                // Retry after copying
+                copiedFrozenElement = (IFreezable) copiedElements.get(orgFrozenElement);
+            }
+            copiedFrozenElements[i] = copiedFrozenElement;
+            allElementsFound = (null != copiedFrozenElement);
+        }
         
+        boolean butOK = true;
+        DecisionVariableDeclaration copiedItr = null;
+        ConstraintSyntaxTree copiedSelecor = null;
+        if (null != freeze.getSelector()) {
+            // Local iterator variable (should not have a parent)
+            visitLocalElements = true;
+            DecisionVariableDeclaration orgItr = freeze.getIter();
+            if (null != orgItr) {
+                visitDecisionVariableDeclaration(orgItr);
+                copiedItr = (DecisionVariableDeclaration) copiedElements.get(orgItr);
+            }
+            visitLocalElements = false;
+            
+            // Selector expression
+            CSTCopyVisitor copyier = new CSTCopyVisitor(copiedDeclarations);
+            freeze.getSelector().accept(copyier);
+            if (copyier.translatedCompletely()) {
+                copiedSelecor = copyier.getResult();
+            } else {
+                butOK = false;
+            }
+        }
+        
+        if (allElementsFound && butOK) {
+            FreezeBlock copiedBlock
+                = new FreezeBlock(copiedFrozenElements, copiedItr, copiedSelecor, parents.peekFirst());
+            addToCurrentParent(copiedBlock);
+            copiedElements.put(freeze, copiedBlock);
+        } else {
+            incompleteElements.addFreezeBlock(freeze);
+        }
     }
 
     @Override
@@ -674,8 +740,15 @@ public class ProjectCopyVisitor extends AbstractProjectVisitor {
 
     @Override
     public void visitCompoundAccessStatement(CompoundAccessStatement access) {
-        // TODO Auto-generated method stub
-        
+        AbstractVariable copiedCPDecl = (AbstractVariable) copiedElements.get(access.getCompoundVariable());
+        if (null != copiedCPDecl) {
+            CompoundAccessStatement copiedAccess = new CompoundAccessStatement(copiedCPDecl, access.getName(),
+                parents.peekFirst());
+            addToCurrentParent(copiedAccess);
+            copiedElements.put(access, copiedAccess);
+        } else {
+            incompleteElements.addCompoundAccess(access);
+        }
     }
 
     @Override
