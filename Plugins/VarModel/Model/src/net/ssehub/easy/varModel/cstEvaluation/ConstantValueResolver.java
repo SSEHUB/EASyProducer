@@ -15,6 +15,8 @@
  */
 package net.ssehub.easy.varModel.cstEvaluation;
 
+import net.ssehub.easy.basics.logger.EASyLoggerFactory;
+import net.ssehub.easy.varModel.Bundle;
 import net.ssehub.easy.varModel.model.values.BooleanValue;
 import net.ssehub.easy.varModel.model.values.CompoundValue;
 import net.ssehub.easy.varModel.model.values.ConstraintValue;
@@ -94,6 +96,7 @@ class ConstantValueResolver implements IValueVisitor {
                     try {
                         result.configureValue(slot, val);
                     } catch (ValueDoesNotMatchTypeException e) {
+                        EASyLoggerFactory.INSTANCE.getLogger(ConstantValueResolver.class, Bundle.ID).exception(e);
                         ok = false;
                     }
                 }
@@ -126,8 +129,8 @@ class ConstantValueResolver implements IValueVisitor {
                 } else {
                     try {
                         result.addElement(val);
-                        //result.setValue(i, val);
                     } catch (ValueDoesNotMatchTypeException e) {
+                        EASyLoggerFactory.INSTANCE.getLogger(ConstantValueResolver.class, Bundle.ID).exception(e);
                         ok = false;
                     }
                 }

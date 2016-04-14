@@ -7,6 +7,7 @@ import net.ssehub.easy.varModel.Bundle;
 import net.ssehub.easy.varModel.confModel.IDecisionVariable;
 import net.ssehub.easy.varModel.model.AbstractVariable;
 import net.ssehub.easy.varModel.model.datatypes.Container;
+import net.ssehub.easy.varModel.model.datatypes.DerivedDatatype;
 import net.ssehub.easy.varModel.model.datatypes.IDatatype;
 import net.ssehub.easy.varModel.model.datatypes.Reference;
 import net.ssehub.easy.varModel.model.values.ContainerValue;
@@ -101,7 +102,7 @@ class IndexAccessor extends AbstractDecisionVariableEvaluationAccessor {
         try {
             IDecisionVariable variable = getVariable();
             AbstractVariable decl = variable.getDeclaration();
-            IDatatype declType = decl.getType();
+            IDatatype declType = DerivedDatatype.resolveToBasis(decl.getType());
             IDatatype contained;
             if (Container.TYPE.isAssignableFrom(declType)) {
                 contained = ((Container) declType).getContainedType();

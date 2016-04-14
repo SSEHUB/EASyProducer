@@ -1,0 +1,4 @@
+-> main(Configuration, Artifact) with (<config>, test.texts)
+    cfg <- <config>
+    f <- references5::flow1
+    tupleName <- ti1

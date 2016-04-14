@@ -25,6 +25,7 @@ import net.ssehub.easy.varModel.confModel.IDecisionVariable;
 import net.ssehub.easy.varModel.cstEvaluation.EvaluationVisitor.Message;
 import net.ssehub.easy.varModel.model.AbstractVariable;
 import net.ssehub.easy.varModel.model.datatypes.Container;
+import net.ssehub.easy.varModel.model.datatypes.DerivedDatatype;
 import net.ssehub.easy.varModel.model.values.ContainerValue;
 import net.ssehub.easy.varModel.model.values.IntValue;
 import net.ssehub.easy.varModel.model.values.Value;
@@ -148,7 +149,7 @@ class VariableAccessor extends AbstractDecisionVariableEvaluationAccessor {
     public EvaluationAccessor getValue(EvaluationAccessor accessor) {
         EvaluationAccessor result = null;
         IDecisionVariable variable = getVariable();
-        if (Container.TYPE.isAssignableFrom(variable.getDeclaration().getType())) {
+        if (Container.TYPE.isAssignableFrom(DerivedDatatype.resolveToBasis(variable.getDeclaration().getType()))) {
             Value uncastedValue = variable.getValue();
             if (null != uncastedValue) {
                 if (uncastedValue instanceof ContainerValue) {

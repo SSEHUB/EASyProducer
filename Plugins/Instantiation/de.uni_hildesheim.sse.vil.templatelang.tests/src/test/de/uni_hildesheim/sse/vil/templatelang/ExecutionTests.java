@@ -1283,13 +1283,23 @@ public class ExecutionTests extends AbstractTest {
     }
     
     /**
-     * Tests the value of a reference into a collection.
+     * Tests the value of a reference into a collection (contributed by QM).
      * 
      * @throws IOException should not occur
      */
     @Test
     public void testReferences4() throws IOException {
         assertEqualWithIvml("references4", "references4");
+    }
+    
+    /**
+     * Tests the value of a reference into a collection via typedefs (contributed by QM).
+     * 
+     * @throws IOException should not occur
+     */
+    @Test
+    public void testReferences5() throws IOException {
+        assertEqualWithIvml("references5", "references5");
     }
 
     /**

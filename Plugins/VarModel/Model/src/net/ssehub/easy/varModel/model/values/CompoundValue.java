@@ -24,6 +24,7 @@ import net.ssehub.easy.varModel.cst.ConstraintSyntaxTree;
 import net.ssehub.easy.varModel.model.AttributeAssignment;
 import net.ssehub.easy.varModel.model.DecisionVariableDeclaration;
 import net.ssehub.easy.varModel.model.IDecisionVariableContainer;
+import net.ssehub.easy.varModel.model.IvmlDatatypeVisitor;
 import net.ssehub.easy.varModel.model.datatypes.Compound;
 import net.ssehub.easy.varModel.model.datatypes.IDatatype;
 
@@ -250,8 +251,10 @@ public class CompoundValue extends StructuredValue implements Cloneable {
                 if (value instanceof Value) {
                     newValue = (Value) value;
                     if (!field.getType().isAssignableFrom(newValue.getType())) {
-                        throw new ValueDoesNotMatchTypeException(newValue.getValue(), 
-                            field.getName(), 
+                        throw new ValueDoesNotMatchTypeException("value '" + newValue.getValue() + "' of type '" 
+                            + IvmlDatatypeVisitor.getUnqualifiedType(newValue.getType()) + "' cannot be assigned to "
+                            + "field '" + field.getName() + "' of type '" 
+                            + IvmlDatatypeVisitor.getUnqualifiedType(field.getType()) + "'", 
                             ValueDoesNotMatchTypeException.TYPE_MISMATCH);
                     }
                     Value oldValue = getNestedValue(name);

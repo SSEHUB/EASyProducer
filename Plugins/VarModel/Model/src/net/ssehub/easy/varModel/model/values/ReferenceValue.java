@@ -125,7 +125,18 @@ public class ReferenceValue extends Value {
 
     @Override
     public boolean equalsPartially(Value value) {
-        return equals(value); // usure
+        return equals(value); // unsure
+    }
+    
+    @Override
+    public String toString() {
+        String result;
+        if (null != valueEx) {
+            result = valueEx + " : " + getType().toString();
+        } else {
+            result = super.toString();
+        }
+        return result;
     }
 
 }
