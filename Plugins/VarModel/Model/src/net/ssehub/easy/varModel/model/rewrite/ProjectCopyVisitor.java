@@ -119,6 +119,7 @@ public class ProjectCopyVisitor extends AbstractProjectVisitor {
     private java.util.Set<Project> allCopiedProjects;
     
     /**
+<<<<<<< HEAD
      * Indicates that the currently visited elements shall <b>not</b> be added to the current parent, i.e., are local
      * elements.
      * <tt>true</tt>: Elements shall not be added
@@ -127,6 +128,8 @@ public class ProjectCopyVisitor extends AbstractProjectVisitor {
     private boolean visitLocalElements;
     
     /**
+=======
+>>>>>>> refs/remotes/origin/develop
      * Dirty but needed for {@link #getTranslatedType(IDatatype)}: Tuple of (original project type, copied project).
      */
     private Map<IDatatype, Project> projectTypes;
@@ -242,7 +245,7 @@ public class ProjectCopyVisitor extends AbstractProjectVisitor {
                 elementsResolved |= resolveIncompleteOperations();
                 
                 // Handle operations, depending on custom types
-                elementsResolved |= retryCopy(incompleteElements.getUncopiedOperations().iterator());
+                elementsResolved |= retryCopy(incompleteElements.getUncopiedOperations().iterator());               
                 
                 // Handle uncopied CompoundAccesses (depending on declarations)
                 visitLocalElements = true;

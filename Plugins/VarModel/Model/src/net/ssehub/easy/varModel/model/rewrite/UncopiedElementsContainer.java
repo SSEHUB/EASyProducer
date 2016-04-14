@@ -87,13 +87,7 @@ class UncopiedElementsContainer {
      * {@link OperationDefinition}s, which are <b>not</b> copied due to missing dependencies, i.e., types. 
      */
     private Set<OperationDefinition> notCopiedOperations = new HashSet<OperationDefinition>();
-    
-//    /**
-//     * Elements which could be copied, but not all annotations where available during copy. <br/>
-//     * Attention: This set contains the original elements, even if a copy already exist, otherwise the information
-//     * about outstanding annotations would be lost.
-//     */
-//    private Set<IAttributableElement> incompleteAnnotations = new HashSet<IAttributableElement>();
+
     /**
      * Set of {@link FreezeBlock}s which could not be translated as some frozen elements or the
      * {@link FreezeBlock#getSelector()} could not be translated. Contains the original elements.
@@ -246,21 +240,6 @@ class UncopiedElementsContainer {
         return notCopiedOperations;
     }
     
-//    /**
-//     * Adds the original for an already copied element of which not all annotations could be copied.
-//     * @param originalElement The original element containing some annotations, which could not be copied to its copy.
-//     */
-//    void addIncompleteAnnotateableElement(IAttributableElement originalElement) {
-//        incompleteAnnotations.add(originalElement);
-//    }
-//    
-//    /**
-//     * Returns the set of original elements, which could be copied but not all of its annotations.
-//     * @return A set of original elements containing more annotations than their copies currently have.
-//     */
-//    Set<IAttributableElement> getIncompleteAnnotateableElements() {
-//        return incompleteAnnotations;
-//    }
     
     /**
      * Adds an original {@link FreezeBlock}, which could not be copied at all. This block is depending on uncopied
