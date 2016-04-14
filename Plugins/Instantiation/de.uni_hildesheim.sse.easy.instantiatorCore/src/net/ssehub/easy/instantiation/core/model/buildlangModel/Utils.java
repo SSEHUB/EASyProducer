@@ -3,6 +3,7 @@ package net.ssehub.easy.instantiation.core.model.buildlangModel;
 import net.ssehub.easy.basics.modelManagement.RestrictionEvaluationException;
 import net.ssehub.easy.basics.modelManagement.Version;
 import net.ssehub.easy.instantiation.core.model.common.VilException;
+import net.ssehub.easy.instantiation.core.model.execution.TracerFactory;
 import net.ssehub.easy.instantiation.core.model.expressions.CallExpression;
 import net.ssehub.easy.instantiation.core.model.expressions.ConstantExpression;
 import net.ssehub.easy.instantiation.core.model.expressions.Expression;
@@ -74,5 +75,17 @@ public class Utils {
         // before it was the last expression statement with null != expression
         return null == stmt ? null : stmt.getExpression();
     }
+    
+    /**
+     * Emit debugging text into the tracer messages and also to the calling Eclipse console. [debug]
+     * Logging is not feasible here as it is more helpful to have the debugging information directly
+     * within the tracer output stream.
+     * 
+     * @param text the text to be emitted.
+     */
+    public static void debug(String text) {
+        System.out.println(text);
+        TracerFactory.createInstantiatorTracer().traceMessage(text);
+    }    
     
 }

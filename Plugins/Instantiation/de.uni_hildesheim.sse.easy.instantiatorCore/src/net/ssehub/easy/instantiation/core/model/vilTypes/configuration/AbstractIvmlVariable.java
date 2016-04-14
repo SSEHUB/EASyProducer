@@ -62,6 +62,7 @@ public abstract class AbstractIvmlVariable extends IvmlElement {
      */
     protected AbstractIvmlVariable(Configuration cfg, IDecisionVariable variable, IVariableFilter filter) {
         origVariable = variable; // keep the variable before dereferencing it
+        this.variable = variable;
         this.config = cfg;
         this.filter = filter;
         Value val = variable.getValue();
@@ -75,8 +76,6 @@ public abstract class AbstractIvmlVariable extends IvmlElement {
                     this.variable = origVariable; // search for??
                 }
             }
-        } else {
-            this.variable = variable;
         }
     }
     
