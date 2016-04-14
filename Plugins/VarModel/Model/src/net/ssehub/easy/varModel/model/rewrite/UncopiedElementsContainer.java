@@ -20,7 +20,9 @@ import java.util.Set;
 
 import net.ssehub.easy.varModel.model.AbstractVariable;
 import net.ssehub.easy.varModel.model.Attribute;
+import net.ssehub.easy.varModel.model.CompoundAccessStatement;
 import net.ssehub.easy.varModel.model.Constraint;
+import net.ssehub.easy.varModel.model.FreezeBlock;
 import net.ssehub.easy.varModel.model.OperationDefinition;
 import net.ssehub.easy.varModel.model.ProjectInterface;
 import net.ssehub.easy.varModel.model.datatypes.CustomDatatype;
@@ -92,6 +94,17 @@ class UncopiedElementsContainer {
 //     * about outstanding annotations would be lost.
 //     */
 //    private Set<IAttributableElement> incompleteAnnotations = new HashSet<IAttributableElement>();
+    /**
+     * Set of {@link FreezeBlock}s which could not be translated as some frozen elements or the
+     * {@link FreezeBlock#getSelector()} could not be translated. Contains the original elements.
+     */
+    private Set<FreezeBlock> uncopiedFreezeBlocks = new HashSet<FreezeBlock>();
+    
+    /**
+     * Set of {@link CompoundAccessStatement}s which could not be translated because the compound variable
+     * was not copied so far.
+     */
+    private Set<CompoundAccessStatement> uncopiedCompoundAccesses = new HashSet<CompoundAccessStatement>();
     
     /**
      * Adds a copied/translated {@link AbstractVariable}, from which the default value could not be translated, as
@@ -217,7 +230,7 @@ class UncopiedElementsContainer {
     }
     
     /**
-     * Adds a copied {@link OperationDefinition}, which could not be copied at all.
+     * Adds an original {@link OperationDefinition}, which could not be copied at all.
      * @param notCopiedOperation An original and not copied operation definition, which must be copied at a later time.
      */
     void addUnCopiedOperation(OperationDefinition notCopiedOperation) {
@@ -248,4 +261,38 @@ class UncopiedElementsContainer {
 //    Set<IAttributableElement> getIncompleteAnnotateableElements() {
 //        return incompleteAnnotations;
 //    }
+    
+    /**
+     * Adds an original {@link FreezeBlock}, which could not be copied at all. This block is depending on uncopied
+     * frozen elements or on an uncopyable {@link FreezeBlock#getIter()}
+     * @param notCopiedBlock An original and not copied {@link FreezeBlock}.
+     */
+    void addFreezeBlock(FreezeBlock notCopiedBlock) {
+        uncopiedFreezeBlocks.add(notCopiedBlock);
+    }
+    
+    /**
+     * Returns the set of {@link FreezeBlock}s, which could not be copied.
+     * @return The set original {@link FreezeBlock}s which still have to be copied.
+     */
+    Set<FreezeBlock> getUncopiedFreezeBlocks() {
+        return uncopiedFreezeBlocks;
+    }
+    
+    /**
+     * Adds an original {@link CompoundAccessStatement}, which could not be copied at all. This access is depending on
+     * a {@link AbstractVariable} which was not copied so far.
+     * @param notCopiedCompoundAccess An original and not copied {@link CompoundAccessStatement}.
+     */
+    void addCompoundAccess(CompoundAccessStatement notCopiedCompoundAccess) {
+        uncopiedCompoundAccesses.add(notCopiedCompoundAccess);
+    }
+    
+    /**
+     * Returns the set of {@link CompoundAccessStatement}s, which could not be copied.
+     * @return The set original {@link CompoundAccessStatement}s which still have to be copied.
+     */
+    Set<CompoundAccessStatement> getUncopiedCompoundAccesses() {
+        return uncopiedCompoundAccesses;
+    }
 }
