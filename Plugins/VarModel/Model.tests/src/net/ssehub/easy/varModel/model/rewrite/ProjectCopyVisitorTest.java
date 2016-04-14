@@ -42,7 +42,9 @@ import net.ssehub.easy.varModel.model.FreezeBlock;
 import net.ssehub.easy.varModel.model.IAttributableElement;
 import net.ssehub.easy.varModel.model.IFreezable;
 import net.ssehub.easy.varModel.model.IModelElement;
+import net.ssehub.easy.varModel.model.IPartialEvaluable;
 import net.ssehub.easy.varModel.model.OperationDefinition;
+import net.ssehub.easy.varModel.model.PartialEvaluationBlock;
 import net.ssehub.easy.varModel.model.Project;
 import net.ssehub.easy.varModel.model.ProjectImport;
 import net.ssehub.easy.varModel.model.ProjectInterface;
@@ -425,6 +427,39 @@ public class ProjectCopyVisitorTest {
         
         if (null != freeze.getSelector()) {
             assertCST(copiedBlock.getSelector(), allCopiedProjects);
+        }
+    }
+    
+    /**
+     * Tests a copied {@link PartialEvaluationBlock}.
+     * @param evalBlock The original block for comparison
+     * @param copiedBlock The copied block to test
+     * @param copiedProject The expected parent of the copied block
+     * @param copiedProjects All valid (copied) parents for the expression of the selector.
+     */
+    private void assertEvalBlock(PartialEvaluationBlock evalBlock, PartialEvaluationBlock copiedBlock,
+        Project copiedProject, java.util.Set<Project> copiedProjects) {
+        
+        assertCopiedElement(evalBlock, copiedBlock, copiedProject);
+        Assert.assertEquals("Copied eval block \"" + evalBlock.getName() + "\" has different amount of evaluables.",
+            evalBlock.getEvaluableCount(), copiedBlock.getEvaluableCount());
+        for (int i = 0; i < copiedBlock.getEvaluableCount(); i++) {
+            IPartialEvaluable evaluable = copiedBlock.getEvaluable(i);
+            if (evaluable instanceof Constraint) {
+                assertCST(((Constraint) evaluable).getConsSyntax(), copiedProjects);
+            }
+        }
+        Assert.assertEquals("Copied eval block \"" + evalBlock.getName()
+            + "\" has different amount of nested elements.",
+            evalBlock.getModelElementCount(), copiedBlock.getModelElementCount());
+        Map<AbstractVariable, Project> mapping = new HashMap<AbstractVariable, Project>();
+        for (int i = 0; i < copiedBlock.getModelElementCount(); i++) {
+            ContainableModelElement element = copiedBlock.getModelElement(i);
+            if (element instanceof DecisionVariableDeclaration) {
+                AbstractVariable orgDecl = (AbstractVariable) evalBlock.getModelElement(i);
+                mapping.put(orgDecl, copiedProject);
+                assertDeclaration(orgDecl, (AbstractVariable) element, mapping);
+            }
         }
     }
     
@@ -898,6 +933,40 @@ public class ProjectCopyVisitorTest {
     }
     
     /**
+     * Tests whether a {@link Reference} to a custom type ({@link Compound}) can be copied.
+     */
+    @Test
+    public void testCopyCompoundReferenceType() {
+        Project original = new Project("testCopyCompoundReferenceType");
+        Compound cType = new Compound("cType", original);
+        original.add(cType);
+        Reference refType = new Reference("refType", cType, original);
+        original.add(refType);
+        
+        Project copy = copyProject(original);
+        Reference copiedType = (Reference) copy.getElement(1);
+        assertReferenceType(refType, copiedType, copy);
+    }
+    
+    /**
+     * Tests whether a {@link Reference} can be used for a {@link DecisionVariableDeclaration}.
+     */
+    @Test
+    public void testReferenceUsage() {
+        Project original = new Project("testReferenceUsage");
+        Reference refType = new Reference("refType", IntegerType.TYPE, original);
+        original.add(refType);
+        DecisionVariableDeclaration decl = new DecisionVariableDeclaration("decl", refType, original);
+        original.add(decl);
+        
+        Project copy = copyProject(original);
+        AbstractVariable copieddecl = (AbstractVariable) copy.getElement(1);
+        Map<AbstractVariable, Project> copyMapping = new HashMap<AbstractVariable, Project>();
+        copyMapping.put(decl, copy);
+        assertDeclaration(decl, copieddecl, copyMapping);
+    }
+    
+    /**
      * Tests whether a simple {@link Reference} depending on another type can be copied.
      */
     @Test
@@ -1315,5 +1384,51 @@ public class ProjectCopyVisitorTest {
         Project copiedProject = copyProject(orgProject, allCopiedProjects);
         FreezeBlock copiedBlock = (FreezeBlock) copiedProject.getElement(3);
         assertFreezeBlock(freeze, copiedBlock, copiedProject, allCopiedProjects);
+    }
+    
+    /**
+     * Tests a copying of an evaluation block without problematic dependencies or nested declarations.
+     * @throws CSTSemanticException If {@link Constraint#setConsSyntax(ConstraintSyntaxTree)} is not working.
+     */
+    @Test
+    public void testSimplePartialEvaluationCopy() throws CSTSemanticException {
+        Project orgProject = new Project("testSimplePartialEvaluationCopy");
+        DecisionVariableDeclaration decl = new DecisionVariableDeclaration("decl", BooleanType.TYPE, orgProject);
+        orgProject.add(decl);
+        PartialEvaluationBlock evalBlock = new PartialEvaluationBlock("evalBlock", orgProject);
+        Constraint constraint = new Constraint(evalBlock);
+        OCLFeatureCall equality = new OCLFeatureCall(new Variable(decl), OclKeyWords.EQUALS,
+            new ConstantValue(BooleanValue.TRUE));
+        constraint.setConsSyntax(equality);
+        evalBlock.setEvaluables(new IPartialEvaluable[] {constraint});
+        orgProject.add(evalBlock);
+        
+        java.util.Set<Project> copiedProjects = new HashSet<Project>();
+        Project copiedProject = copyProject(orgProject, copiedProjects);
+        PartialEvaluationBlock copiedBlock = (PartialEvaluationBlock) copiedProject.getElement(1);
+        assertEvalBlock(evalBlock, copiedBlock, copiedProject, copiedProjects);
+    }
+    
+    /**
+     * Tests a copying of an evaluation block depending on a declaration defined at a later point.
+     * @throws CSTSemanticException If {@link Constraint#setConsSyntax(ConstraintSyntaxTree)} is not working.
+     */
+    @Test
+    public void testDependingPartialEvaluationCopy() throws CSTSemanticException {
+        Project orgProject = new Project("testDependingPartialEvaluationCopy");
+        DecisionVariableDeclaration decl = new DecisionVariableDeclaration("decl", BooleanType.TYPE, orgProject);
+        PartialEvaluationBlock evalBlock = new PartialEvaluationBlock("evalBlock", orgProject);
+        Constraint constraint = new Constraint(evalBlock);
+        OCLFeatureCall equality = new OCLFeatureCall(new Variable(decl), OclKeyWords.EQUALS,
+                new ConstantValue(BooleanValue.TRUE));
+        constraint.setConsSyntax(equality);
+        evalBlock.setEvaluables(new IPartialEvaluable[] {constraint});
+        orgProject.add(evalBlock);
+        orgProject.add(decl);
+        
+        java.util.Set<Project> copiedProjects = new HashSet<Project>();
+        Project copiedProject = copyProject(orgProject, copiedProjects);
+        PartialEvaluationBlock copiedBlock = (PartialEvaluationBlock) copiedProject.getElement(0);
+        assertEvalBlock(evalBlock, copiedBlock, copiedProject, copiedProjects);
     }
 }

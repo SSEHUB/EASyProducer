@@ -43,6 +43,7 @@ import net.ssehub.easy.varModel.model.FreezeBlock;
 import net.ssehub.easy.varModel.model.IAttributableElement;
 import net.ssehub.easy.varModel.model.IFreezable;
 import net.ssehub.easy.varModel.model.IModelElement;
+import net.ssehub.easy.varModel.model.IPartialEvaluable;
 import net.ssehub.easy.varModel.model.ModelElement;
 import net.ssehub.easy.varModel.model.OperationDefinition;
 import net.ssehub.easy.varModel.model.PartialEvaluationBlock;
@@ -486,14 +487,13 @@ public class ProjectCopyVisitor extends AbstractProjectVisitor {
                     }
                 }
             } else if (Compound.TYPE.isAssignableFrom(originalType) || Enum.TYPE.isAssignableFrom(originalType)
-                || DerivedDatatype.TYPE.isAssignableFrom(originalType)) {
+                || DerivedDatatype.TYPE.isAssignableFrom(originalType) || originalType instanceof Reference) {
                 copiedType = (IDatatype) copiedElements.get(originalType);
             } else if (null != projectTypes.get(originalType)) {
                 Project copiedProject = projectTypes.get(originalType);
                 copiedType = copiedProject.getType();
             }
         } 
-        // TODO SE: References
         
         return copiedType;
     }
@@ -699,6 +699,7 @@ public class ProjectCopyVisitor extends AbstractProjectVisitor {
             copiedOP.setOperation(copiedCustomOp);
             setComment(copiedOP, opdef);
             addToCurrentParent(copiedOP);
+            copiedElements.put(opdef, copiedOP);
             if (!cstCopy.translatedCompletely()) {
                 // CustomOperaton was not copied completely, this must be replaced at a alter point.
                 incompleteElements.addIncompleteOperation(copiedOP);
@@ -711,8 +712,28 @@ public class ProjectCopyVisitor extends AbstractProjectVisitor {
 
     @Override
     public void visitPartialEvaluationBlock(PartialEvaluationBlock block) {
-        // TODO Auto-generated method stub
+        PartialEvaluationBlock copiedBlock = new PartialEvaluationBlock(block.getName(), parents.peekFirst());
+        setComment(copiedBlock, block);
+        addToCurrentParent(copiedBlock);
+        copiedElements.put(block, copiedBlock);
         
+        parents.addFirst(copiedBlock);
+        IPartialEvaluable[] evaluables = new IPartialEvaluable[block.getEvaluableCount()];
+        for (int i = 0; i < evaluables.length; i++) {
+            IPartialEvaluable orgEvaluable = block.getEvaluable(i);
+            // Test whether it was already translated in an earlier step
+            IPartialEvaluable copiedEvaluable = (IPartialEvaluable) copiedElements.get(orgEvaluable);
+            if (null == copiedEvaluable) {
+                orgEvaluable.accept(this);
+                copiedEvaluable = (IPartialEvaluable) copiedElements.get(orgEvaluable);
+            }
+            // Add translated element
+            if (null != copiedBlock) {
+                evaluables[i] = copiedEvaluable;
+            }
+            copiedBlock.setEvaluables(evaluables);
+        }
+        parents.removeFirst();
     }
 
     @Override
