@@ -787,6 +787,16 @@ public class ExecutionTests extends AbstractTest {
     }
 
     /**
+     * Tests simple Boolean return.
+     * 
+     * @throws IOException should not occur
+     */
+    @Test
+    public void testReturn1() throws IOException {
+        assertEqual("return1");
+    }
+
+    /**
      * Tests simple content with variable mixing.
      * 
      * @throws IOException should not occur

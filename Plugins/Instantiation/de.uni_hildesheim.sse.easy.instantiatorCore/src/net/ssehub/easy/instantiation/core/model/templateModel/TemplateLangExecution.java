@@ -254,16 +254,19 @@ public class TemplateLangExecution extends ExecutionVisitor<Template, Def, Varia
     @Override
     public Object visitTemplateBlock(TemplateBlock block) throws VilException {
         boolean ok = true;
+        boolean returns = !TypeRegistry.voidType().isSame(block.inferType());
         Object value = null;
         environment.increaseIndentation();
-        for (int e = 0; ok && !stop && e < block.getBodyElementCount(); e++) {
+        int count = block.getBodyElementCount();
+        for (int e = 0; ok && !stop && e < count; e++) {
             ITemplateElement elt = block.getBodyElement(e);
             value = elt.accept(this);
-            if (mayFail(elt)) {
+            if ((!returns || (returns && e + 1 < count)) && mayFail(elt)) {
                 ok = checkConditionResult(value, block, ConditionTest.DONT_CARE);
             }
             if (!ok) {
                 tracer.failedAt(block.getBodyElement(e));
+                value = null;
             }
         }
         environment.decreaseIndentation();

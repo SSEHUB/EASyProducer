@@ -1,0 +1,13 @@
+template return1(Configuration config, Artifact target) {
+
+    def Boolean positive(Integer i) {
+        Boolean result = i > 0;
+        result;
+    }
+
+    def main(Configuration config, Artifact target) {
+        '${positive(0)}'
+        '${positive(1)}'
+    }
+
+}

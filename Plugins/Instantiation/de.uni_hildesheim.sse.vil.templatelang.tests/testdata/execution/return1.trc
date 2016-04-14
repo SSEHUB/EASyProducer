@@ -1,0 +1,7 @@
+-> main(Configuration, Artifact) with (<config>, test.texts)
+    -> positive(Integer) with (0)
+        -> >(Integer, Integer) with (0, 0) = false
+        result <- false
+    -> positive(Integer) with (1)
+        -> >(Integer, Integer) with (1, 0) = true
+        result <- true
