@@ -494,6 +494,18 @@ public class ProjectCopyVisitor extends AbstractProjectVisitor {
         
         return copiedType;
     }
+    
+    /**
+     * Helper method for copying the comment from the original to the copied element.
+     * Should be called after creating the copy and before adding it to the parent.
+     * @param copiedElement The currently created copy
+     * @param originalElement The original from which the copy is created from.
+     */
+    private void setComment(ContainableModelElement copiedElement, ContainableModelElement originalElement) {
+        if (null != originalElement.getComment()) {
+            copiedElement.setComment(originalElement.getComment());
+        }
+    }
 
     @Override
     public void visitDecisionVariableDeclaration(DecisionVariableDeclaration decl) {
@@ -507,6 +519,7 @@ public class ProjectCopyVisitor extends AbstractProjectVisitor {
             } else {
                 copiedDecl = new DecisionVariableDeclaration(decl.getName(), type, parents.peekFirst());
             }
+            setComment(copiedDecl, decl);
             addToCurrentParent(copiedDecl);
             copiedElements.put(decl, copiedDecl);
             copiedDeclarations.put(decl, copiedDecl);
@@ -514,18 +527,7 @@ public class ProjectCopyVisitor extends AbstractProjectVisitor {
             // Copy default value
             copyDefaultValue(decl, copiedDecl);
             
-            // Annotations will be copied through copying the annotation in its visit mehtod
-            
-//            // Copy annotations
-//            for (int i = 0, end = decl.getAttributesCount(); i < end; i++) {
-//                AbstractVariable orgAnnotation = decl.getAttribute(i);
-//                Attribute copiedAnnotation = (Attribute) copiedElements.get(orgAnnotation);
-//                if (null != copiedAnnotation) {
-//                    copiedDecl.attribute(copiedAnnotation);
-//                } else {
-//                    incompleteElements.addIncompleteAnnotateableElement(decl);
-//                }
-//            }
+            // Annotations will be copied through copying the annotation in its visit method
         } else {
             incompleteElements.addUnresolvedDeclarationType(decl);
         }
@@ -569,6 +571,7 @@ public class ProjectCopyVisitor extends AbstractProjectVisitor {
             // Copy annotation
             Attribute copiedAnnotation = new Attribute(attribute.getName(), type, parents.peekFirst(),
                 annotatedElement);
+            setComment(copiedAnnotation, attribute);
             addToCurrentParent(copiedAnnotation);
             copiedElements.put(attribute, copiedAnnotation);
             copiedDeclarations.put(attribute, copiedAnnotation);
@@ -584,6 +587,7 @@ public class ProjectCopyVisitor extends AbstractProjectVisitor {
     @Override
     public void visitConstraint(Constraint constraint) {
         Constraint copiedConstraint = new Constraint(parents.peekFirst());
+        setComment(copiedConstraint, constraint);
         addToCurrentParent(copiedConstraint);
         copiedElements.put(constraint, copiedConstraint);
         
@@ -650,6 +654,7 @@ public class ProjectCopyVisitor extends AbstractProjectVisitor {
         if (allElementsFound && butOK) {
             FreezeBlock copiedBlock
                 = new FreezeBlock(copiedFrozenElements, copiedItr, copiedSelecor, parents.peekFirst());
+            setComment(copiedBlock, freeze);
             addToCurrentParent(copiedBlock);
             copiedElements.put(freeze, copiedBlock);
         } else {
@@ -689,6 +694,7 @@ public class ProjectCopyVisitor extends AbstractProjectVisitor {
             CustomOperation copiedCustomOp = new CustomOperation(copiedReturnType, orgCustomOp.getName(),
                     copiedOperandType, cstCopy.getResult(), copiedParameters);
             copiedOP.setOperation(copiedCustomOp);
+            setComment(copiedOP, opdef);
             addToCurrentParent(copiedOP);
             if (!cstCopy.translatedCompletely()) {
                 // CustomOperaton was not copied completely, this must be replaced at a alter point.
@@ -720,6 +726,7 @@ public class ProjectCopyVisitor extends AbstractProjectVisitor {
         if (allElementsCopied) {
             ProjectInterface copiedIface = new ProjectInterface(iface.getName(), copiedExports,
                 (ModelElement) parents.peekFirst());
+            setComment(copiedIface, iface);
             addToCurrentParent(copiedIface);
         } else {
             incompleteElements.addUnresolvedProjectInterface(iface);
@@ -729,6 +736,7 @@ public class ProjectCopyVisitor extends AbstractProjectVisitor {
     @Override
     public void visitComment(Comment comment) {
         Comment copiedComment = new Comment(comment.getName(), parents.peekFirst());
+        setComment(copiedComment, comment);
         addToCurrentParent(copiedComment);
     }
 
@@ -744,6 +752,7 @@ public class ProjectCopyVisitor extends AbstractProjectVisitor {
         if (null != copiedCPDecl) {
             CompoundAccessStatement copiedAccess = new CompoundAccessStatement(copiedCPDecl, access.getName(),
                 parents.peekFirst());
+            setComment(copiedAccess, access);
             addToCurrentParent(copiedAccess);
             copiedElements.put(access, copiedAccess);
         } else {
@@ -758,6 +767,7 @@ public class ProjectCopyVisitor extends AbstractProjectVisitor {
             literals[i] = eenum.getLiteral(i).getName();
         }
         Enum copiedEnum = new Enum(eenum.getName(), (Project) parents.peekFirst(), literals);
+        setComment(copiedEnum, eenum);
         addToCurrentParent(copiedEnum);
         copiedElements.put(eenum, copiedEnum);
     }
@@ -769,6 +779,7 @@ public class ProjectCopyVisitor extends AbstractProjectVisitor {
             EnumLiteral originalLiteral = eenum.getLiteral(i);
             copiedEnum.add(new EnumLiteral(originalLiteral.getName(), originalLiteral.getOrdinal(), copiedEnum));
         }
+        setComment(copiedEnum, eenum);
         addToCurrentParent(copiedEnum);
         copiedElements.put(eenum, copiedEnum);
     }
@@ -784,6 +795,7 @@ public class ProjectCopyVisitor extends AbstractProjectVisitor {
         } else {
             Compound copiedCompound = new Compound(compound.getName(), (ModelElement) parents.peekFirst(),
                 compound.isAbstract(), copiedBase);
+            setComment(copiedCompound, compound);
             addToCurrentParent(copiedCompound);
             copiedElements.put(compound, copiedCompound);
             parents.addFirst(copiedCompound);
@@ -800,6 +812,7 @@ public class ProjectCopyVisitor extends AbstractProjectVisitor {
         if (null != basisType) {
             DerivedDatatype copiedType = new DerivedDatatype(datatype.getName(), basisType,
                 (Project) parents.peekFirst());
+            setComment(copiedType, datatype);
             addToCurrentParent(copiedType);
             copiedElements.put(datatype, copiedType);
             copiedElements.put(datatype.getTypeDeclaration(), copiedType.getTypeDeclaration());
@@ -830,6 +843,7 @@ public class ProjectCopyVisitor extends AbstractProjectVisitor {
         IDatatype basisType = getTranslatedType(reference.getType());
         if (null != basisType) {
             Reference copiedType = new Reference(reference.getName(), basisType, (Project) parents.peekFirst());
+            setComment(copiedType, reference);
             addToCurrentParent(copiedType);
             copiedElements.put(reference, copiedType);
         } else {
@@ -842,6 +856,7 @@ public class ProjectCopyVisitor extends AbstractProjectVisitor {
         IDatatype basisType = getTranslatedType(sequence.getContainedType());
         if (null != basisType) {
             Sequence copiedType = new Sequence(sequence.getName(), basisType, parents.peekFirst());
+            setComment(copiedType, sequence);
             addToCurrentParent(copiedType);
             copiedElements.put(sequence, copiedType);
         } else {
@@ -854,6 +869,7 @@ public class ProjectCopyVisitor extends AbstractProjectVisitor {
         IDatatype basisType = getTranslatedType(set.getContainedType());
         if (null != basisType) {
             Set copiedType = new Set(set.getName(), basisType, parents.peekFirst());
+            setComment(copiedType, set);
             addToCurrentParent(copiedType);
             copiedElements.put(set, copiedType);
         } else {

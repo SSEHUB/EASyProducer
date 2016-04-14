@@ -24,6 +24,7 @@ import org.junit.Test;
 
 import net.ssehub.easy.basics.modelManagement.ModelManagementException;
 import net.ssehub.easy.basics.modelManagement.Version;
+import net.ssehub.easy.varModel.cst.AttributeVariable;
 import net.ssehub.easy.varModel.cst.CSTSemanticException;
 import net.ssehub.easy.varModel.cst.ConstantValue;
 import net.ssehub.easy.varModel.cst.ConstraintSyntaxTree;
@@ -458,6 +459,23 @@ public class ProjectCopyVisitorTest {
         Project copy = copyProject(original);
         ContainableModelElement copiedComment = copy.getElement(0);
         assertCopiedElement(comment, copiedComment, copy);
+    }
+    
+    /**
+     * Tests whether commented elements keep their comments.
+     */
+    @Test
+    public void testCopyCommentOnElement() {
+        Project original = new Project("testCopyCommentOnElement");
+        DecisionVariableDeclaration decl = new DecisionVariableDeclaration("decl", RealType.TYPE, original);
+        original.add(decl);
+        decl.setComment("// A comment");
+        
+        Project copy = copyProject(original);
+        DecisionVariableDeclaration copiedDecl = (DecisionVariableDeclaration) copy.getElement(0);
+        Map<AbstractVariable, Project> mapping = new HashMap<AbstractVariable, Project>();
+        mapping.put(decl, copy);
+        assertDeclaration(decl, copiedDecl, mapping);
     }
     
     /**
@@ -1239,6 +1257,63 @@ public class ProjectCopyVisitorTest {
         Project copiedProject = copyProject(orgProject, allCopiedProjects);
         // Attention: Ordering has changed
         FreezeBlock copiedBlock = (FreezeBlock) copiedProject.getElement(2);
+        assertFreezeBlock(freeze, copiedBlock, copiedProject, allCopiedProjects);
+    }
+    
+    /**
+     * Tests copying a {@link FreezeBlock}. It tests:
+     * <ul>
+     *   <li>A known declaration</li>
+     *   <li>Simple but block (constant expression)</li>
+     * </ul>
+     */
+    @Test
+    public void testFreezeBlockKnownDeclarationSimpleBut() {
+        Project orgProject = new Project("testFreezeBlockKnownDeclarationSimpleBut");
+        DecisionVariableDeclaration decl = new DecisionVariableDeclaration("decl", RealType.TYPE, orgProject);
+        orgProject.add(decl);
+        DecisionVariableDeclaration itrDecl = new DecisionVariableDeclaration("i", BooleanType.TYPE, orgProject);
+        ConstantValue trueExpr = new ConstantValue(BooleanValue.TRUE);
+        FreezeBlock freeze = new FreezeBlock(new IFreezable[] {decl}, itrDecl, trueExpr, orgProject);
+        orgProject.add(freeze);
+        
+        java.util.Set<Project> allCopiedProjects = new HashSet<Project>();
+        Project copiedProject = copyProject(orgProject, allCopiedProjects);
+        // Attention: Ordering has changed
+        FreezeBlock copiedBlock = (FreezeBlock) copiedProject.getElement(1);
+        assertFreezeBlock(freeze, copiedBlock, copiedProject, allCopiedProjects);
+    }
+    
+    /**
+     * Tests copying a {@link FreezeBlock}. It tests:
+     * <ul>
+     *   <li>A known declaration</li>
+     *   <li>But expression on annotation</li>
+     * </ul>
+     */
+    @Test
+    public void testFreezeBlockKnownDeclarationAnnotationBut() {
+        Project orgProject = new Project("testFreezeBlockKnownDeclarationAnnotationBut");
+        Attribute annoDecl = new Attribute("anno", BooleanType.TYPE, orgProject, orgProject);
+        orgProject.add(annoDecl);
+        orgProject.attribute(annoDecl);
+        Compound cType = new Compound("CP", orgProject);
+        DecisionVariableDeclaration slotDecl = new DecisionVariableDeclaration("slot", StringType.TYPE, cType);
+        cType.add(slotDecl);
+        orgProject.add(cType);
+        DecisionVariableDeclaration decl = new DecisionVariableDeclaration("decl", cType, orgProject);
+        orgProject.add(decl);
+        
+        DecisionVariableDeclaration itrDecl = new DecisionVariableDeclaration("i", BooleanType.TYPE, orgProject);
+        AttributeVariable annotationAccess = new AttributeVariable(new Variable(itrDecl), annoDecl);
+        ConstantValue trueExpr = new ConstantValue(BooleanValue.TRUE);
+        OCLFeatureCall equality = new OCLFeatureCall(annotationAccess, OclKeyWords.EQUALS, trueExpr); 
+        FreezeBlock freeze = new FreezeBlock(new IFreezable[] {decl}, itrDecl, equality, orgProject);
+        orgProject.add(freeze);
+        
+        java.util.Set<Project> allCopiedProjects = new HashSet<Project>();
+        Project copiedProject = copyProject(orgProject, allCopiedProjects);
+        FreezeBlock copiedBlock = (FreezeBlock) copiedProject.getElement(3);
         assertFreezeBlock(freeze, copiedBlock, copiedProject, allCopiedProjects);
     }
 }
