@@ -171,7 +171,7 @@ public class ProjectCopyVisitorTest {
         Assert.assertEquals("Copied element \"" + copy.getName() + "\" does not have the same amount of annontations",
             original.getAttributesCount(), copy.getAttributesCount());
         
-        Map<AbstractVariable, Project> mapping = new HashMap<AbstractVariable, Project>();
+        Map<AbstractVariable, IModelElement> mapping = new HashMap<AbstractVariable, IModelElement>();
         for (int i = 0; i < copy.getAttributesCount(); i++) {
             Attribute orgAnnotation = original.getAttribute(i);
             mapping.put(orgAnnotation, expectedParent);
@@ -241,7 +241,7 @@ public class ProjectCopyVisitorTest {
      * function for nested annotations).
      */
     private void assertDeclaration(AbstractVariable decl, AbstractVariable copieddecl,
-        Map<AbstractVariable, Project> copyMapping) {
+        Map<AbstractVariable, IModelElement> copyMapping) {
         
         assertCopiedElement(decl, copieddecl, copyMapping.get(decl));
         
@@ -420,7 +420,7 @@ public class ProjectCopyVisitorTest {
         DecisionVariableDeclaration orgItr = freeze.getIter();
         if (null != orgItr) {
             
-            Map<AbstractVariable, Project> mapping = new HashMap<AbstractVariable, Project>();
+            Map<AbstractVariable, IModelElement> mapping = new HashMap<AbstractVariable, IModelElement>();
             mapping.put(orgItr, copiedProject);
             assertDeclaration(orgItr, copiedBlock.getIter(), mapping);
         }
@@ -452,12 +452,12 @@ public class ProjectCopyVisitorTest {
         Assert.assertEquals("Copied eval block \"" + evalBlock.getName()
             + "\" has different amount of nested elements.",
             evalBlock.getModelElementCount(), copiedBlock.getModelElementCount());
-        Map<AbstractVariable, Project> mapping = new HashMap<AbstractVariable, Project>();
+        Map<AbstractVariable, IModelElement> mapping = new HashMap<AbstractVariable, IModelElement>();
         for (int i = 0; i < copiedBlock.getModelElementCount(); i++) {
             ContainableModelElement element = copiedBlock.getModelElement(i);
             if (element instanceof DecisionVariableDeclaration) {
                 AbstractVariable orgDecl = (AbstractVariable) evalBlock.getModelElement(i);
-                mapping.put(orgDecl, copiedProject);
+                mapping.put(orgDecl, copiedBlock);
                 assertDeclaration(orgDecl, (AbstractVariable) element, mapping);
             }
         }
@@ -508,7 +508,7 @@ public class ProjectCopyVisitorTest {
         
         Project copy = copyProject(original);
         DecisionVariableDeclaration copiedDecl = (DecisionVariableDeclaration) copy.getElement(0);
-        Map<AbstractVariable, Project> mapping = new HashMap<AbstractVariable, Project>();
+        Map<AbstractVariable, IModelElement> mapping = new HashMap<AbstractVariable, IModelElement>();
         mapping.put(decl, copy);
         assertDeclaration(decl, copiedDecl, mapping);
     }
@@ -607,7 +607,7 @@ public class ProjectCopyVisitorTest {
         
         Project copy = copyProject(original);
         AbstractVariable copieddecl = (AbstractVariable) copy.getElement(0);
-        Map<AbstractVariable, Project> copyMapping = new HashMap<AbstractVariable, Project>();
+        Map<AbstractVariable, IModelElement> copyMapping = new HashMap<AbstractVariable, IModelElement>();
         copyMapping.put(decl, copy);
         assertDeclaration(decl, copieddecl, copyMapping);
     }
@@ -626,7 +626,7 @@ public class ProjectCopyVisitorTest {
         
         Project copy = copyProject(original);
         AbstractVariable copieddecl = (AbstractVariable) copy.getElement(0);
-        Map<AbstractVariable, Project> copyMapping = new HashMap<AbstractVariable, Project>();
+        Map<AbstractVariable, IModelElement> copyMapping = new HashMap<AbstractVariable, IModelElement>();
         copyMapping.put(decl, copy);
         assertDeclaration(decl, copieddecl, copyMapping);
     }
@@ -650,7 +650,7 @@ public class ProjectCopyVisitorTest {
         Project copy = copyProject(original);
         // Attention: Ordering has changed!
         DecisionVariableDeclaration copieddecl = (DecisionVariableDeclaration) copy.getElement(1);
-        Map<AbstractVariable, Project> copyMapping = new HashMap<AbstractVariable, Project>();
+        Map<AbstractVariable, IModelElement> copyMapping = new HashMap<AbstractVariable, IModelElement>();
         copyMapping.put(decl, copy);
         assertDeclaration(decl, copieddecl, copyMapping);
     }
@@ -700,7 +700,7 @@ public class ProjectCopyVisitorTest {
         
         Project copy = copyProject(original);
         AbstractVariable copieddecl = (AbstractVariable) copy.getElement(0);
-        Map<AbstractVariable, Project> copyMapping = new HashMap<AbstractVariable, Project>();
+        Map<AbstractVariable, IModelElement> copyMapping = new HashMap<AbstractVariable, IModelElement>();
         copyMapping.put(decl, copy);
         assertDeclaration(decl, copieddecl, copyMapping);
     }
@@ -732,7 +732,7 @@ public class ProjectCopyVisitorTest {
         Project copy = copyProject(original);
         AbstractVariable copiedDeclA = (AbstractVariable) copy.getElement(0);
         AbstractVariable copiedDeclB = (AbstractVariable) copy.getElement(1);
-        Map<AbstractVariable, Project> copyMapping = new HashMap<AbstractVariable, Project>();
+        Map<AbstractVariable, IModelElement> copyMapping = new HashMap<AbstractVariable, IModelElement>();
         copyMapping.put(declA, copy);
         copyMapping.put(declB, copy);
         assertDeclaration(declA, copiedDeclA, copyMapping);
@@ -760,7 +760,7 @@ public class ProjectCopyVisitorTest {
         
         Project copy = copyProject(original);
         AbstractVariable copieddecl = (AbstractVariable) copy.getElement(0);
-        Map<AbstractVariable, Project> copyMapping = new HashMap<AbstractVariable, Project>();
+        Map<AbstractVariable, IModelElement> copyMapping = new HashMap<AbstractVariable, IModelElement>();
         copyMapping.put(decl, copy);
         assertDeclaration(decl, copieddecl, copyMapping);
     }
@@ -786,7 +786,7 @@ public class ProjectCopyVisitorTest {
         Project copiedProject = copyProject(original);
         AbstractVariable copiedAnnotation = (AbstractVariable) copiedProject.getElement(0);
         DecisionVariableDeclaration copieddecl = (DecisionVariableDeclaration) copiedProject.getElement(1);
-        Map<AbstractVariable, Project> mapping = new HashMap<AbstractVariable, Project>();
+        Map<AbstractVariable, IModelElement> mapping = new HashMap<AbstractVariable, IModelElement>();
         mapping.put(copiedAnnotation, copiedProject);
         mapping.put(copieddecl, copiedProject);
         assertDeclaration(decl, copieddecl, mapping);
@@ -812,7 +812,7 @@ public class ProjectCopyVisitorTest {
         Project copiedProject = copyProject(original);
         AbstractVariable copiedAnnotation = (AbstractVariable) copiedProject.getElement(1);
         DecisionVariableDeclaration copieddecl = (DecisionVariableDeclaration) copiedProject.getElement(0);
-        Map<AbstractVariable, Project> mapping = new HashMap<AbstractVariable, Project>();
+        Map<AbstractVariable, IModelElement> mapping = new HashMap<AbstractVariable, IModelElement>();
         mapping.put(copiedAnnotation, copiedProject);
         mapping.put(copieddecl, copiedProject);
         assertDeclaration(decl, copieddecl, mapping);
@@ -838,7 +838,7 @@ public class ProjectCopyVisitorTest {
         Project copiedProject = copyProject(original);
         AbstractVariable copiedAnnotation = (AbstractVariable) copiedProject.getElement(1);
         DecisionVariableDeclaration copieddecl = (DecisionVariableDeclaration) copiedProject.getElement(0);
-        Map<AbstractVariable, Project> mapping = new HashMap<AbstractVariable, Project>();
+        Map<AbstractVariable, IModelElement> mapping = new HashMap<AbstractVariable, IModelElement>();
         mapping.put(copiedAnnotation, copiedProject);
         mapping.put(copieddecl, copiedProject);
         assertDeclaration(decl, copieddecl, mapping);
@@ -961,7 +961,7 @@ public class ProjectCopyVisitorTest {
         
         Project copy = copyProject(original);
         AbstractVariable copieddecl = (AbstractVariable) copy.getElement(1);
-        Map<AbstractVariable, Project> copyMapping = new HashMap<AbstractVariable, Project>();
+        Map<AbstractVariable, IModelElement> copyMapping = new HashMap<AbstractVariable, IModelElement>();
         copyMapping.put(decl, copy);
         assertDeclaration(decl, copieddecl, copyMapping);
     }
@@ -1199,7 +1199,7 @@ public class ProjectCopyVisitorTest {
         DecisionVariableDeclaration copiedDecl1 = (DecisionVariableDeclaration) copiedImported.getElement(0);
         
         // Tuple (original declaration, expected copied parent)
-        Map<AbstractVariable, Project> mapping = new HashMap<AbstractVariable, Project>();
+        Map<AbstractVariable, IModelElement> mapping = new HashMap<AbstractVariable, IModelElement>();
         mapping.put(decl1, copiedImported);
         mapping.put(decl2, copiedMain);
         assertDeclaration(decl1, copiedDecl1, mapping);
@@ -1425,6 +1425,30 @@ public class ProjectCopyVisitorTest {
         evalBlock.setEvaluables(new IPartialEvaluable[] {constraint});
         orgProject.add(evalBlock);
         orgProject.add(decl);
+        
+        java.util.Set<Project> copiedProjects = new HashSet<Project>();
+        Project copiedProject = copyProject(orgProject, copiedProjects);
+        PartialEvaluationBlock copiedBlock = (PartialEvaluationBlock) copiedProject.getElement(0);
+        assertEvalBlock(evalBlock, copiedBlock, copiedProject, copiedProjects);
+    }
+    
+    /**
+     * Tests a copying of an evaluation block containing a constraining, which uses a
+     * {@link DecisionVariableDeclaration} declared inside of the block.
+     * @throws CSTSemanticException If {@link Constraint#setConsSyntax(ConstraintSyntaxTree)} is not working.
+     */
+    @Test
+    public void testPartialEvaluationCopyWithInternallyDeclaredVariable() throws CSTSemanticException {
+        Project orgProject = new Project("testPartialEvaluationCopyWithInternallyDeclaredVariable");
+        PartialEvaluationBlock evalBlock = new PartialEvaluationBlock("evalBlock", orgProject);
+        DecisionVariableDeclaration decl = new DecisionVariableDeclaration("decl", BooleanType.TYPE, evalBlock);
+        Constraint constraint = new Constraint(evalBlock);
+        OCLFeatureCall equality = new OCLFeatureCall(new Variable(decl), OclKeyWords.EQUALS,
+            new ConstantValue(BooleanValue.TRUE));
+        constraint.setConsSyntax(equality);
+        evalBlock.setEvaluables(new IPartialEvaluable[] {constraint});
+        orgProject.add(evalBlock);
+        evalBlock.addModelElement(decl);
         
         java.util.Set<Project> copiedProjects = new HashSet<Project>();
         Project copiedProject = copyProject(orgProject, copiedProjects);

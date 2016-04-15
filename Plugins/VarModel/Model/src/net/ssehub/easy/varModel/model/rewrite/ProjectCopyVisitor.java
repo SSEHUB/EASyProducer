@@ -117,10 +117,7 @@ public class ProjectCopyVisitor extends AbstractProjectVisitor {
      */
     private Project copiedProject;
     
-    private java.util.Set<Project> allCopiedProjects;
-    
     /**
-<<<<<<< HEAD
      * Indicates that the currently visited elements shall <b>not</b> be added to the current parent, i.e., are local
      * elements.
      * <tt>true</tt>: Elements shall not be added
@@ -129,8 +126,6 @@ public class ProjectCopyVisitor extends AbstractProjectVisitor {
     private boolean visitLocalElements;
     
     /**
-=======
->>>>>>> refs/remotes/origin/develop
      * Dirty but needed for {@link #getTranslatedType(IDatatype)}: Tuple of (original project type, copied project).
      */
     private Map<IDatatype, Project> projectTypes;
@@ -147,7 +142,6 @@ public class ProjectCopyVisitor extends AbstractProjectVisitor {
         copiedElements = new HashMap<ContainableModelElement, ContainableModelElement>();
         copiedDeclarations = new HashMap<AbstractVariable, AbstractVariable>();
         incompleteElements = new UncopiedElementsContainer();
-        allCopiedProjects = new HashSet<Project>();
         projectTypes = new HashMap<IDatatype, Project>();
         parents = new ArrayDeque<IModelElement>();
         visitLocalElements = false;
@@ -201,7 +195,6 @@ public class ProjectCopyVisitor extends AbstractProjectVisitor {
         if (project == getStartingProject()) {
             copiedProject = copy;
         }
-        allCopiedProjects.add(copy);
         
         // Handle version
         Version originalVersion = project.getVersion();
@@ -435,7 +428,7 @@ public class ProjectCopyVisitor extends AbstractProjectVisitor {
      * @return All copied projects.
      */
     public java.util.Set<Project> getAllCopiedProjects() {
-        return allCopiedProjects;
+        return new HashSet<Project>(copiedProjects.values());
     }
     
     /**
@@ -458,6 +451,8 @@ public class ProjectCopyVisitor extends AbstractProjectVisitor {
                 } else if (copiedElement instanceof Comment) {
                     cType.add((Comment) copiedElement);
                 }
+            } else if (parent instanceof PartialEvaluationBlock) {
+                ((PartialEvaluationBlock) parent).addModelElement(copiedElement);
             }
         }
     }
@@ -717,7 +712,14 @@ public class ProjectCopyVisitor extends AbstractProjectVisitor {
         addToCurrentParent(copiedBlock);
         copiedElements.put(block, copiedBlock);
         
+        // Copy nested elements
         parents.addFirst(copiedBlock);
+        
+        /* 
+         * Copy IPartialEvaluable evaluables, i.e., nested constraints and eval blocks.
+         * Since they have a set method, they can be partially copied and replaced by a final copy at a later point
+         */
+        visitLocalElements = true;
         IPartialEvaluable[] evaluables = new IPartialEvaluable[block.getEvaluableCount()];
         for (int i = 0; i < evaluables.length; i++) {
             IPartialEvaluable orgEvaluable = block.getEvaluable(i);
@@ -733,6 +735,13 @@ public class ProjectCopyVisitor extends AbstractProjectVisitor {
             }
             copiedBlock.setEvaluables(evaluables);
         }
+        visitLocalElements = false;
+        
+        // Copy nested elements like variable declarations
+        for (int i = 0, end = block.getModelElementCount(); i < end; i++) {
+            block.getModelElement(i).accept(this);
+        }
+        
         parents.removeFirst();
     }
 
