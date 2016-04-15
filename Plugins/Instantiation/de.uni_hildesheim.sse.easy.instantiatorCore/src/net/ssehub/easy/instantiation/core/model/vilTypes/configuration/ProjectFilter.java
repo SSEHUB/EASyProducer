@@ -1,5 +1,8 @@
 package net.ssehub.easy.instantiation.core.model.vilTypes.configuration;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import net.ssehub.easy.varModel.model.Project;
 
 /**
@@ -42,17 +45,21 @@ class ProjectFilter implements IConfigurationFilter {
      * 
      * @param element the element to consider
      * @param project the project to ask for <code>element</code>
+     * @param done already considered projects to control cyclic imports
      * @return <code>true</code> if <code>element</code> shall be included, <code>false</code> else
      */
-    private boolean include(IvmlElement element, Project project) {
+    private boolean include(IvmlElement element, Project project, Set<Project> done) {
         boolean result;
         if (null == project) {
             result = false;
         } else {
             result = project.containsByName(element.getQualifiedName());
             if (!result && considerImports) {
-                for (int i = 0; !result && i < project.getImportsCount(); i++) {
-                    result = include(element, project.getImport(i).getResolved());
+                if (!done.contains(project)) {
+                    done.add(project);
+                    for (int i = 0; !result && i < project.getImportsCount(); i++) {
+                        result = include(element, project.getImport(i).getResolved(), done);
+                    }
                 }
             }
         }
@@ -61,7 +68,7 @@ class ProjectFilter implements IConfigurationFilter {
     
     @Override
     public boolean include(IvmlElement element) {
-        return checkFurther(element, include(element, project));
+        return checkFurther(element, include(element, project, new HashSet<Project>()));
     }
     
     /**

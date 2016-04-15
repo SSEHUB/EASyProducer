@@ -1,6 +1,7 @@
 package net.ssehub.easy.instantiation.core.model.vilTypes.configuration;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 
 import net.ssehub.easy.varModel.confModel.IDecisionVariable;
@@ -36,6 +37,7 @@ class VariableCollector implements IModelVisitor {
     private List<DecisionVariable> variables = new ArrayList<DecisionVariable>();
     private Configuration configuration;
     private IVariableFilter filter;
+    private java.util.Set<Project> done = new HashSet<Project>();
 
     /**
      * Creates a new variable collector.
@@ -111,10 +113,13 @@ class VariableCollector implements IModelVisitor {
 
     @Override
     public void visitProjectImport(ProjectImport pImport) {
-        if (null != pImport.getResolved()) {
-            pImport.getResolved().accept(this);
+        Project imported = pImport.getResolved();
+        if (null != imported) {
+            if (!done.contains(imported)) { // cycle prevention
+                done.add(imported);
+                imported.accept(this);
+            }
         }
-        // already resolved - not relevant here
     }
 
     @Override
