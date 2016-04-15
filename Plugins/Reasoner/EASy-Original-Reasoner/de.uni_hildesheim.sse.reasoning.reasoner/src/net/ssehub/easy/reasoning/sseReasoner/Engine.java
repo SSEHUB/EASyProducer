@@ -17,6 +17,7 @@ import net.ssehub.easy.reasoning.core.reasoner.ReasoningResult;
 import net.ssehub.easy.reasoning.core.reasoner.ReasonerConfiguration.IAdditionalInformationLogger;
 import net.ssehub.easy.reasoning.sseReasoner.functions.FailedElementDetails;
 import net.ssehub.easy.reasoning.sseReasoner.functions.FailedElements;
+import net.ssehub.easy.varModel.confModel.AssignmentState;
 import net.ssehub.easy.varModel.confModel.Configuration;
 import net.ssehub.easy.varModel.confModel.DisplayNameProvider;
 import net.ssehub.easy.varModel.confModel.IDecisionVariable;
@@ -84,6 +85,7 @@ public class Engine {
     public Engine(Project project, Configuration cfg, ReasonerConfiguration reasonerConfig,
         ProgressObserver observer) {
 //        cfg.removeDerivedValues();
+//        cfg.unfreeze(AssignmentState.DERIVED);
         this.project = project;
 //        this.reasoningID = PerformanceStatistics.createReasoningID(project.getName(), "Model validation");
         this.resolver = new Resolver(project, cfg, true, reasonerConfig);
