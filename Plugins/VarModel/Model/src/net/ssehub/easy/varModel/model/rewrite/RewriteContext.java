@@ -36,18 +36,7 @@ import net.ssehub.easy.varModel.model.datatypes.IDatatype;
  *
  */
 public class RewriteContext {
-    
-    /**
-     * Tuple (oldProject, replacement).
-     */
-    private Map<Project, Project> translatedProjects;
-    
-    /**
-     * Inverse mapping to {@link #translatedProjects}.
-     * Tuple (replacement, oldProject).
-     */
-    private Map<Project, Project> translatedProjectsInverse;
-    
+        
     /**
      * Set of identifiers (name + version) of projects which will be kept. Needed for removal of elements, which belong
      * to a removed import. A string is used instead of projects to simplify comparison if references change...
@@ -66,8 +55,6 @@ public class RewriteContext {
      * Avoid instantiation from outside.
      */
     protected RewriteContext() {
-        translatedProjects = new HashMap<Project, Project>();
-        translatedProjectsInverse = new HashMap<Project, Project>();
         removedElements = new HashMap<Class<?>, Set<ContainableModelElement>>();
         elementsOfRemovedImports = new HashMap<String, List<ContainableModelElement>>();
         projectQualifier = new HashSet<String>();
@@ -84,32 +71,6 @@ public class RewriteContext {
     }
 
     /**
-     * Stores a translated equivalent of the given Project.
-     * @param oldProject A project which is currently be translated.
-     * @param translatedProject The translated copy of the first parameter.
-     */
-    void storeTranslatedProject(Project oldProject, Project translatedProject) {
-        // Project will be translated -> it will be kept
-        String qName = generateQualifiedName(oldProject);
-        projectQualifier.add(qName);
-        
-        // Consider multiple runs of the rewriter in this case the old project may already be an replacement for
-        // another oldProject -> sore also this change.
-        Project preOldProject = translatedProjectsInverse.get(oldProject);
-        while (null != preOldProject) {
-            translatedProjects.put(preOldProject, translatedProject);
-            preOldProject = translatedProjectsInverse.get(preOldProject);
-        }
-        
-        // Store relation between original and copy
-        translatedProjects.put(oldProject, translatedProject);
-        // Also store reference to itself (if already translated project is returned somewhere).
-        translatedProjects.put(translatedProject, translatedProject);
-        // Create history for old projects (needed for the loop above)
-        translatedProjectsInverse.put(translatedProject, oldProject);
-    }
-
-    /**
      * Returns the qualified name of a project as unique identifier for comparison whether the project was deleted.
      * @param project The project for which the qualified name shall be generated.
      * @return projectName[+Version].
@@ -119,19 +80,6 @@ public class RewriteContext {
         return (null == v) ? project.getName() : project.getName() + "+" + v.getVersion();
     }
     
-    /**
-     * Returns the translated equivalent for the given project. If the given project is already a translated copy,
-     * the same reference will be returned.
-     * @param originalProject A project of the current translation process, maybe already translated.
-     * @return The translated equivalent of the current Translation process, maybe <tt>null</tt> in case of errors.
-     */
-    public Project getTranslatedProject(Project originalProject) {
-        Project newParent = translatedProjects.get(originalProject);
-        if (null == newParent) {
-            newParent = originalProject;
-        }
-        return newParent;
-    }
     
     /**
      * Stores the information that a model element was removed. Helpful for removing all instances pointing

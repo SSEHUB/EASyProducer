@@ -236,6 +236,9 @@ public class Project extends ModelElement implements IModel, IAttributableElemen
         names.clear();
         imports = new ArrayList<ProjectImport>();
         internalConstraints = new ArrayList<InternalConstraint>();
+        for (int i = type.getOperationCount() - 1; i >= 0; i--) {
+            type.removeOperation(type.getOperation(i));
+        }
     }
 
     /**

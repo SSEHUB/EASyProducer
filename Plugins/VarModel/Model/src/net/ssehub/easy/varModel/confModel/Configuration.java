@@ -51,6 +51,7 @@ import net.ssehub.easy.varModel.model.filter.DeclarationFinder;
 import net.ssehub.easy.varModel.model.filter.FilterType;
 import net.ssehub.easy.varModel.model.filter.FrozenElementsFinder;
 import net.ssehub.easy.varModel.model.filter.DeclarationFinder.VisibilityType;
+import net.ssehub.easy.varModel.model.rewrite.ProjectCopyVisitor;
 import net.ssehub.easy.varModel.model.rewrite.ProjectRewriteVisitor;
 import net.ssehub.easy.varModel.model.rewrite.modifier.FrozenCompoundConstraintsOmitter;
 import net.ssehub.easy.varModel.model.rewrite.modifier.FrozenConstraintVarFilter;
@@ -894,16 +895,17 @@ public class Configuration implements IConfigurationVisitable, IProjectListener,
     }
 
     /**
-     * Reduces the underlying {@link Project} and removes elements which are not needed for a runtime reasoning,
-     * e.g., constraints containing only frozen variables or comments.<br/>
+     * Creates a copy of the underlying {@link Project} and removes elements which are not needed for a runtime
+     * reasoning, e.g., constraints containing only frozen variables or comments.<br/>
      * <b><font color="red">Attention:</font></b> This method creates a modified, shallow copy of the visited project.
      * Thus, the original project becomes invalid through this visitation. This visitor should only be used if the
      * original is no longer needed, e.g., for performance tweaks in a automated setup which does not save any data.
-     * <br/>
-     * <b>FIXME SE:</b> Create a deep copy if a real copy mechanism is needed.
      */
     public void prune() {
-        VarModel.INSTANCE.events().removeModelListener(project, this);
+//        VarModel.INSTANCE.events().removeModelListener(project, this);
+        ProjectCopyVisitor copier = new ProjectCopyVisitor(project, FilterType.ALL);
+        project.accept(copier);
+        project = copier.getCopiedProject();
         ProjectRewriteVisitor rewriter = new ProjectRewriteVisitor(project, FilterType.ALL);
         rewriter.addModelCopyModifier(new ModelElementFilter(Comment.class));
         rewriter.addModelCopyModifier(new FrozenConstraintsFilter(this));
@@ -911,7 +913,6 @@ public class Configuration implements IConfigurationVisitable, IProjectListener,
         rewriter.addModelCopyModifier(new FrozenConstraintVarFilter(this));
         rewriter.addModelCopyModifier(new FrozenCompoundConstraintsOmitter(this));
         project.accept(rewriter);
-        project = rewriter.getCopyiedProject();
     }
     
     /**

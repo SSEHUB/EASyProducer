@@ -135,14 +135,13 @@ public class ProjectRewriteVisitorTest {
         ProjectRewriteVisitor copynator = new ProjectRewriteVisitor(p, FilterType.NO_IMPORTS);
         copynator.addModelCopyModifier(new DeclarationNameFilter(new String[] {declA.getName()}));
         p.accept(copynator);
-        Project copy = copynator.getCopyiedProject();
         
-        // Copied project should contain the declaration, but not the comment
-        ProjectTestUtilities.validateProject(copy);
-        assertProjectContainment(copy, declA, true, 2);
-        assertProjectContainment(copy, declB, false, 2);
-        assertProjectContainment(copy, assignmentA, true, 2);
-        assertProjectContainment(copy, assignmentB, false, 2);
+        // Filtered project should contain the declaration, but not the comment
+        ProjectTestUtilities.validateProject(p);
+        assertProjectContainment(p, declA, true, 2);
+        assertProjectContainment(p, declB, false, 2);
+        assertProjectContainment(p, assignmentA, true, 2);
+        assertProjectContainment(p, assignmentB, false, 2);
     }
     
     /**
@@ -163,16 +162,15 @@ public class ProjectRewriteVisitorTest {
         ProjectRewriteVisitor copynator = new ProjectRewriteVisitor(p, FilterType.NO_IMPORTS);
         copynator.addModelCopyModifier(new ModelElementFilter(Comment.class));
         p.accept(copynator);
-        Project copy = copynator.getCopyiedProject();
         
-        // Copied project should contain the declaration, but not the comment
-        ProjectTestUtilities.validateProject(copy);
-        assertProjectContainment(copy, cmt, false, 1);
-        assertProjectContainment(copy, decl, true, 1);
+        // Filtered project should contain the declaration, but not the comment
+        ProjectTestUtilities.validateProject(p);
+        assertProjectContainment(p, cmt, false, 1);
+        assertProjectContainment(p, decl, true, 1);
     }
     
     /**
-     * Tests whether container values of refernces will be filtered correctly.
+     * Tests whether container values of references will be filtered correctly.
      * @throws ValueDoesNotMatchTypeException Must not occur, otherwise the {@link ValueFactory} or
      * {@link net.ssehub.easy.varModel.model.AbstractVariable#setValue(String)} are broken.
      * @throws CSTSemanticException Must not occur, otherwise
@@ -207,14 +205,13 @@ public class ProjectRewriteVisitorTest {
         ProjectRewriteVisitor copynator = new ProjectRewriteVisitor(p, FilterType.NO_IMPORTS);
         copynator.addModelCopyModifier(new DeclarationNameFilter(new String[] {declA.getName(), seqDecl.getName()}));
         p.accept(copynator);
-        Project copy = copynator.getCopyiedProject();
         
-        // Copied project should contain the declaration, but not the comment
-        ProjectTestUtilities.validateProject(copy);
-        assertProjectContainment(copy, declA, true, 3);
-        assertProjectContainment(copy, seqDecl, true, 3);
-        assertProjectContainment(copy, declB, false, 3);
-        Constraint copiedAssignment = (Constraint) copy.getElement(2);
+        // Filtered project should contain the declaration, but not the comment
+        ProjectTestUtilities.validateProject(p);
+        assertProjectContainment(p, declA, true, 3);
+        assertProjectContainment(p, seqDecl, true, 3);
+        assertProjectContainment(p, declB, false, 3);
+        Constraint copiedAssignment = (Constraint) p.getElement(2);
         OCLFeatureCall copiedCall = (OCLFeatureCall) copiedAssignment.getConsSyntax();
         ConstantValue copiedValueCST = (ConstantValue) copiedCall.getParameter(0);
         ContainerValue copiedValue = (ContainerValue) copiedValueCST.getConstantValue();
@@ -260,12 +257,11 @@ public class ProjectRewriteVisitorTest {
         FrozenConstraintsFilter ommiter = new FrozenConstraintsFilter(config);
         copynator.addModelCopyModifier(ommiter);
         p.accept(copynator);
-        Project copy = copynator.getCopyiedProject();
         
         // Copied project should contain the first constraint (constraintA)
-        ProjectTestUtilities.validateProject(copy);
-        assertProjectContainment(copy, constraintA, false, 4);
-        assertProjectContainment(copy, constraintB, true, 4);
+        ProjectTestUtilities.validateProject(p);
+        assertProjectContainment(p, constraintA, false, 4);
+        assertProjectContainment(p, constraintB, true, 4);
     }
     
     /**
@@ -289,9 +285,13 @@ public class ProjectRewriteVisitorTest {
         p.addImport(pImport1);
         ProjectTestUtilities.validateProject(p);
         
-        ProjectRewriteVisitor copynator = new ProjectRewriteVisitor(p, FilterType.ALL);
+        // Create copy to allow comparisons between unfiltered and filtered project.
+        ProjectCopyVisitor copynator = new ProjectCopyVisitor(p, FilterType.ALL);
         p.accept(copynator);
-        Project copy = copynator.getCopyiedProject();
+        Project copy = copynator.getCopiedProject();
+        
+        ProjectRewriteVisitor rewriter = new ProjectRewriteVisitor(copy, FilterType.ALL);
+        copy.accept(rewriter);
         // Test main Project and its import
         Project importedCopy = assertProjectImport(p, copy);
         // Test first import
@@ -327,15 +327,15 @@ public class ProjectRewriteVisitorTest {
         p.add(constraint);
         ProjectTestUtilities.validateProject(p);
         
-        // Create copy
-        ProjectRewriteVisitor copynator = new ProjectRewriteVisitor(p, FilterType.ALL);
+        // Create copy to allow comparisons between unfiltered and filtered project.
+        ProjectCopyVisitor copynator = new ProjectCopyVisitor(p, FilterType.ALL);
         p.accept(copynator);
-        Project copy = copynator.getCopyiedProject();
-        ProjectTestUtilities.validateProject(copy);
+        Project copy = copynator.getCopiedProject();
+        
+        ProjectRewriteVisitor rewriter = new ProjectRewriteVisitor(copy, FilterType.ALL);
+        copy.accept(rewriter);
         // Test main Project and its import
-        Project importedCopy = assertProjectImport(p, copy);
-        assertProjectContainment(copy, constraint, true, 1);
-        assertProjectContainment(importedCopy, decl, true, 1);
+        assertProjectImport(p, copy);
     }
     
     /**
@@ -392,14 +392,13 @@ public class ProjectRewriteVisitorTest {
         ProjectRewriteVisitor rewriter = new ProjectRewriteVisitor(p, FilterType.ALL);
         rewriter.addImportModifier(new ImportRegExNameFilter("^Not a valid name to filter all Imports$", true));
         p.accept(rewriter);
-        Project copy = rewriter.getCopyiedProject();
-        ProjectTestUtilities.validateProject(copy);
+        ProjectTestUtilities.validateProject(p);
         
         // Test main Project and its import
-        Assert.assertEquals("Error: Copied project must not contain any imports.", 0, copy.getImportsCount());
-        assertProjectContainment(copy, declTop, true, 2);
-        assertProjectContainment(copy, constraintToBeKept, true, 2);
-        assertProjectContainment(copy, constraintToBeRemoved, false, 2);
+        Assert.assertEquals("Error: Copied project must not contain any imports.", 0, p.getImportsCount());
+        assertProjectContainment(p, declTop, true, 2);
+        assertProjectContainment(p, constraintToBeKept, true, 2);
+        assertProjectContainment(p, constraintToBeRemoved, false, 2);
     }
     
     /**
@@ -444,11 +443,10 @@ public class ProjectRewriteVisitorTest {
         ProjectRewriteVisitor copynator = new ProjectRewriteVisitor(p, FilterType.ALL);
         copynator.addModelCopyModifier(new FrozenTypeDefResolver(config));
         p.accept(copynator);
-        Project copy = copynator.getCopyiedProject();
-        ProjectTestUtilities.validateProject(copy);
+        ProjectTestUtilities.validateProject(p);
         
-        DerivedDatatype copiedType1 = (DerivedDatatype) copy.getElement(0);
-        DerivedDatatype copiedType2 = (DerivedDatatype) copy.getElement(2);
+        DerivedDatatype copiedType1 = (DerivedDatatype) p.getElement(0);
+        DerivedDatatype copiedType2 = (DerivedDatatype) p.getElement(2);
         Assert.assertEquals("Error: Frozen \"posInteger1\" not resolved.", 0, copiedType1.getConstraintCount());
         Assert.assertEquals("Error: Unfrozen \"posInteger2\" resolved, but should not.", 1,
             copiedType2.getConstraintCount());
@@ -497,11 +495,10 @@ public class ProjectRewriteVisitorTest {
         ProjectRewriteVisitor copynator = new ProjectRewriteVisitor(p, FilterType.ALL);
         copynator.addModelCopyModifier(new FrozenTypeDefResolver(config));
         p.accept(copynator);
-        Project copy = copynator.getCopyiedProject();
-        ProjectTestUtilities.validateProject(copy);
+        ProjectTestUtilities.validateProject(p);
         
-        DerivedDatatype copiedType1 = (DerivedDatatype) copy.getElement(0);
-        DerivedDatatype copiedType2 = (DerivedDatatype) copy.getElement(2);
+        DerivedDatatype copiedType1 = (DerivedDatatype) p.getElement(0);
+        DerivedDatatype copiedType2 = (DerivedDatatype) p.getElement(2);
         Assert.assertEquals("Error: Unfrozen \"posInteger1\" resolved, but should not.", 1,
             copiedType1.getConstraintCount());
         Assert.assertEquals("Error: Unfrozen \"posInteger2\" resolved, but should not.", 1,
@@ -569,10 +566,9 @@ public class ProjectRewriteVisitorTest {
         ProjectRewriteVisitor rewriter = new ProjectRewriteVisitor(p, FilterType.ALL);
         rewriter.addModelCopyModifier(new FrozenCompoundConstraintsOmitter(config));
         p.accept(rewriter);
-        Project copy = rewriter.getCopyiedProject();
         
         //ProjectTestUtilities.validateProject(copy, true);
-        ContainableModelElement[] copiedElements = getCopiedElements(copy, cType1, cType2, cType3);
+        ContainableModelElement[] copiedElements = getCopiedElements(p, cType1, cType2, cType3);
         Compound copiedCP1 = (Compound) copiedElements[0];
         Compound copiedCP2 = (Compound) copiedElements[1];
         Compound copiedCP3 = (Compound) copiedElements[2];
@@ -638,13 +634,12 @@ public class ProjectRewriteVisitorTest {
         ProjectRewriteVisitor copynator = new ProjectRewriteVisitor(p, FilterType.NO_IMPORTS);
         copynator.addModelCopyModifier(new FrozenConstraintVarFilter(config));
         p.accept(copynator);
-        Project copy = copynator.getCopyiedProject();
         
         // Copied project should contain the declaration, freezeblock, and unfrozen constraint
-        ProjectTestUtilities.validateProject(copy);
-        assertProjectContainment(copy, intDecl, true, 3);
-        assertProjectContainment(copy, constVar2, true, 3);
-        assertProjectContainment(copy, constVar, false, 3);
+        ProjectTestUtilities.validateProject(p);
+        assertProjectContainment(p, intDecl, true, 3);
+        assertProjectContainment(p, constVar2, true, 3);
+        assertProjectContainment(p, constVar, false, 3);
     }
     
     /**
@@ -684,14 +679,13 @@ public class ProjectRewriteVisitorTest {
         ProjectRewriteVisitor rewriter = new ProjectRewriteVisitor(p, FilterType.ALL);
         rewriter.addModelCopyModifier(new DeclarationNameFilter(new String[] {declA.getName()}));
         p.accept(rewriter);
-        Project copy = rewriter.getCopyiedProject();
         
-        ProjectTestUtilities.validateProject(copy);
-        assertProjectContainment(copy, declA, true, 4);
-        assertProjectContainment(copy, declB, false, 4);
+        ProjectTestUtilities.validateProject(p);
+        assertProjectContainment(p, declA, true, 4);
+        assertProjectContainment(p, declB, false, 4);
         StringWriter sWriter = new StringWriter();
         IVMLWriter iWriter = new IVMLWriter(sWriter);
-        copy.getElement(3).accept(iWriter);
+        p.getElement(3).accept(iWriter);
         try {
             iWriter.flush();
         } catch (IOException e) {
@@ -741,10 +735,9 @@ public class ProjectRewriteVisitorTest {
         ProjectRewriteVisitor rewriter = new ProjectRewriteVisitor(p, FilterType.ALL);
         rewriter.addModelCopyModifier(new FrozenConstraintVarFilter(config));
         p.accept(rewriter);
-        Project copy = rewriter.getCopyiedProject();
-        ProjectTestUtilities.validateProject(copy);
+        ProjectTestUtilities.validateProject(p);
         
-        ContainableModelElement[] copiedElements = getCopiedElements(copy, cType1);
+        ContainableModelElement[] copiedElements = getCopiedElements(p, cType1);
         Compound copiedCP1 = (Compound) copiedElements[0];
         Assert.assertEquals("Error: Constraint variable of frozen compound \"" + copiedCP1.getName()
             + "\" not removed.", 1, copiedCP1.getDeclarationCount());
@@ -790,13 +783,11 @@ public class ProjectRewriteVisitorTest {
         rewriter.addModelCopyModifier(new FrozenConstraintVarFilter(config));
         rewriter.addModelCopyModifier(new ModelElementFilter(Comment.class));
         p.accept(rewriter);
-        Project copy = rewriter.getCopyiedProject();
         
-        ProjectTestUtilities.validateProject(copy);
-        Assert.assertNotSame(p, copy);
+        ProjectTestUtilities.validateProject(p);
         StringWriter sWriter = new StringWriter();
         IVMLWriter iWriter = new IVMLWriter(sWriter);
-        copy.accept(iWriter);
+        p.accept(iWriter);
         iWriter.flush();
         Assert.assertFalse(sWriter.toString().contains(IvmlKeyWords.NAMESPACE_SEPARATOR));
     }
@@ -852,11 +843,10 @@ public class ProjectRewriteVisitorTest {
         ProjectRewriteVisitor rewriter = new ProjectRewriteVisitor(p, FilterType.ALL);
         rewriter.addModelCopyModifier(new FrozenConstraintVarFilter(config));
         p.accept(rewriter);
-        Project copy = rewriter.getCopyiedProject();
-        ProjectTestUtilities.validateProject(copy);
+        ProjectTestUtilities.validateProject(p);
         StringWriter sWriter = new StringWriter();
         IVMLWriter iWriter = new IVMLWriter(sWriter);
-        copy.accept(iWriter);
+        p.accept(iWriter);
         iWriter.flush();
         Assert.assertFalse(sWriter.toString().contains(IvmlKeyWords.NAMESPACE_SEPARATOR));
     }
@@ -943,9 +933,8 @@ public class ProjectRewriteVisitorTest {
         ProjectRewriteVisitor rewriter = new ProjectRewriteVisitor(p, FilterType.ALL);
         rewriter.addModelCopyModifier(new FrozenCompoundConstraintsOmitter(config));
         p.accept(rewriter);
-        Project copy = rewriter.getCopyiedProject();
-        ProjectTestUtilities.validateProject(copy, true);
-        copy.accept(iWriter);
+        ProjectTestUtilities.validateProject(p);
+        p.accept(iWriter);
         iWriter.flush();
         String projectAsStringActual = sWriter.toString().replace("\r", "");
         lines = projectAsStringActual.split("\n");

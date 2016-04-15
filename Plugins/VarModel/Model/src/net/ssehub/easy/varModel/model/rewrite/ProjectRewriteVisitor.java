@@ -15,21 +15,18 @@
  */
 package net.ssehub.easy.varModel.model.rewrite;
 
-import java.util.ArrayDeque;
 import java.util.ArrayList;
-import java.util.Deque;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
 import net.ssehub.easy.basics.logger.EASyLoggerFactory;
-import net.ssehub.easy.basics.modelManagement.ModelManagementException;
 import net.ssehub.easy.varModel.Bundle;
 import net.ssehub.easy.varModel.cst.CSTSemanticException;
 import net.ssehub.easy.varModel.cst.ConstantValue;
 import net.ssehub.easy.varModel.cst.ConstraintSyntaxTree;
-import net.ssehub.easy.varModel.cst.CopyVisitor;
 import net.ssehub.easy.varModel.cst.OCLFeatureCall;
 import net.ssehub.easy.varModel.model.AbstractProjectVisitor;
 import net.ssehub.easy.varModel.model.AbstractVariable;
@@ -42,7 +39,6 @@ import net.ssehub.easy.varModel.model.ContainableModelElement;
 import net.ssehub.easy.varModel.model.DecisionVariableDeclaration;
 import net.ssehub.easy.varModel.model.FreezeBlock;
 import net.ssehub.easy.varModel.model.IFreezable;
-import net.ssehub.easy.varModel.model.IModelElement;
 import net.ssehub.easy.varModel.model.ModelElement;
 import net.ssehub.easy.varModel.model.OperationDefinition;
 import net.ssehub.easy.varModel.model.PartialEvaluationBlock;
@@ -50,7 +46,6 @@ import net.ssehub.easy.varModel.model.Project;
 import net.ssehub.easy.varModel.model.ProjectImport;
 import net.ssehub.easy.varModel.model.ProjectInterface;
 import net.ssehub.easy.varModel.model.datatypes.Compound;
-import net.ssehub.easy.varModel.model.datatypes.CustomOperation;
 import net.ssehub.easy.varModel.model.datatypes.DerivedDatatype;
 import net.ssehub.easy.varModel.model.datatypes.Enum;
 import net.ssehub.easy.varModel.model.datatypes.EnumLiteral;
@@ -66,17 +61,18 @@ import net.ssehub.easy.varModel.model.rewrite.modifier.IModelElementFilter;
 import net.ssehub.easy.varModel.model.rewrite.modifier.IProjectImportFilter;
 
 /**
- * Visitor for creating a (modified) copy of a given project.
- * This can be used to create copies for specific demands, e.g., a {@link Project} without constraints containing
- * frozen variables.<br/><br/>
+ * Visitor for modifying a (copied) project.
+ * This can be used to filter a project for specific demands, e.g., a {@link Project} without constraints containing
+ * frozen variables.<br/>
+ * This visitor modifies the given project. For this reason, it is recommended to use the {@link ProjectCopyVisitor}
+ * before to create a copy first. <br/><br/>
  * <b>Usage</b>
  * <ol>
  *   <li>Create visitor for the desired {@link Project} and specify whether imported projects shall also
  *   be rewritten (cf. {@link FilterType})</li>
  *   <li>Add desired {@link IModelElementFilter} and {@link ProjectImport} filters</li>
  *   <li>Call {@link Project#accept(net.ssehub.easy.varModel.model.IModelVisitor)}</li>
- *   <li>{@link #getCopyiedProject()} will return the rewritten {@link Project}. However the original
- *   project will be affected through this visitation and should not be saved.</li>
+ *   <li>project will be affected through this visitation and should not be saved.</li>
  * </ol>
  * 
  * <b>For instance:</b>
@@ -90,7 +86,6 @@ import net.ssehub.easy.varModel.model.rewrite.modifier.IProjectImportFilter;
  * rewriter.addModelCopyModifier(new FrozenConstraintVarFilter(config));
  * rewriter.addModelCopyModifier(new FrozenCompoundConstraintsOmitter(config));
  * project.accept(rewriter);
- * Project filteredCopy = rewriter.getCopyiedProject();
  * </code></pre>
  * 
  * @author El-Sharkawy
@@ -101,7 +96,7 @@ public class ProjectRewriteVisitor extends AbstractProjectVisitor {
     private Map<Class<? extends ModelElement>, List<IModelElementFilter<?>>> modifiers;
     private List<IProjectImportFilter> importModifiers;
     private Project currentProject;
-    private Deque<Project> parentProjects;
+    private java.util.Set<Project> done;
     private RewriteContext context;
     
     /**
@@ -111,9 +106,9 @@ public class ProjectRewriteVisitor extends AbstractProjectVisitor {
      */
     public ProjectRewriteVisitor(Project originProject, FilterType filterType) {
         super(originProject, filterType);
+        done = new HashSet<Project>();
         modifiers = new HashMap<Class<? extends ModelElement>, List<IModelElementFilter<?>>>();
         importModifiers = new ArrayList<IProjectImportFilter>();
-        parentProjects = new ArrayDeque<Project>();
         context = new RewriteContext();
         
         // Create initial structure table, for faster lookup during rewriting
@@ -131,7 +126,6 @@ public class ProjectRewriteVisitor extends AbstractProjectVisitor {
     public void reset(Project originProject, FilterType filterType) {
         modifiers.clear();
         importModifiers.clear();
-        parentProjects.clear();
         super.clear(originProject, filterType);
         context.newRun();
     }
@@ -164,54 +158,11 @@ public class ProjectRewriteVisitor extends AbstractProjectVisitor {
     public void addImportModifier(IProjectImportFilter modifier) {
         importModifiers.add(modifier);
     }
-
-    /**
-     * Returns the copied and modified {@link Project} after the visiting method of the project was called.
-     * {@link Project#accept(net.ssehub.easy.varModel.model.IModelVisitor)} must be called before.<br/>
-     * <b><font color="red">Attention:</font></b> This method creates a modified, shallow copy of the visited project.
-     * Thus, the original project becomes invalid through this visitation. This visitor should only be used if the
-     * original is no longer needed, e.g., for performance tweaks in a automated setup which does not save any data.
-     * <br/>
-     * <b>FIXME SE:</b> Create a deep copy if a real copy mechanism is needed.
-     * @return The copied and modified version of the given {@link Project}.
-     */
-    public Project getCopyiedProject() {
-        return currentProject;
-    }
     
     @Override
     public void visitDecisionVariableDeclaration(DecisionVariableDeclaration decl) {
         DecisionVariableDeclaration copiedDecl = (DecisionVariableDeclaration) filter(decl);
-        if (null != copiedDecl && null != copiedDecl.getDefaultValue()) {
-            adaptParentOfIteratorVariables(copiedDecl.getDefaultValue());
-        }
         addCopiedElement(copiedDecl);
-    }
-
-    /**
-     * Changes the parent of iterator variables inside the given constraint.
-     * This must be done in a separate method, as the declaration is not part of visited projects.
-     * For instance this will change variables like <code>v</code> in:
-     * <code>sequenceVar->forAll(v|v>0);</code>
-     * For this method, the {@link VariableLookUpTable} must already be initialized with a
-     * {@link net.ssehub.easy.varModel.confModel.Configuration}.
-     * @param cst The constraint to change.
-     */
-    private void adaptParentOfIteratorVariables(ConstraintSyntaxTree cst) {
-        // Local iterator variables must be adapted to new parent
-        DeclrationInConstraintFinder finder = new DeclrationInConstraintFinder(cst);
-        java.util.Set<AbstractVariable> delcarations = finder.getDeclarations();
-        for (AbstractVariable declaration : delcarations) {
-            if (!context.declarationKnown(declaration)) {
-                IModelElement oldParent = declaration.getParent();
-                if (oldParent instanceof Project) {
-                    Project newParent = context.getTranslatedProject((Project) oldParent);
-                    if (newParent != oldParent) {
-                        declaration.setParent(newParent);
-                    }
-                }
-            }
-        }
     }
 
     @Override
@@ -293,17 +244,9 @@ public class ProjectRewriteVisitor extends AbstractProjectVisitor {
                 // No more elements to freeze, remove complete freeze block
                 context.removeElement(freeze);
             } else {
-                DecisionVariableDeclaration orginalIterator = copiedfreeze.getIter();
-                ConstraintSyntaxTree selectorCST = copiedfreeze.getSelector();
                 IFreezable[] frozenElements = copiedElements.toArray(new IFreezable[0]);
-                
-                /* 
-                 * Create copy with filtered elements.
-                 * Even if no elements where filtered, the block must be recreated to adjust the selector.
-                 * Otherwise the selector maybe invalid (or not parseable at all)
-                 */
-                copiedfreeze = adaptFreezeBlock(frozenElements, orginalIterator, selectorCST,
-                    (Project) freeze.getParent());
+                copiedfreeze = new FreezeBlock(frozenElements, copiedfreeze.getIter(), copiedfreeze.getSelector(),
+                    copiedfreeze.getParent());
             }
         }
         
@@ -312,83 +255,9 @@ public class ProjectRewriteVisitor extends AbstractProjectVisitor {
         }
     }
 
-    /**
-     * Creates a copy of a freezeblock with an adjusted selector.
-     * @param frozenElements The frozen elements to be added to the freezeblock.
-     * @param orginalIterator The iterator of the original freezeblock (maybe <tt>null</tt> if none was specified).
-     * @param selectorCST The selector constraint of the original freezeblock (maybe <tt>null</tt>
-     *     if none was specified).
-     * @param parent The parent project of the freezeblock.
-     * @return The copied freezeblock.
-     */
-    private FreezeBlock adaptFreezeBlock(IFreezable[] frozenElements, DecisionVariableDeclaration orginalIterator,
-        ConstraintSyntaxTree selectorCST, Project parent) {
-        
-        DecisionVariableDeclaration copiedIterator = null;
-        
-        if (null != orginalIterator) {
-            IModelElement originalParent = orginalIterator.getParent();
-            IModelElement copiedParent = originalParent;
-            
-            if (null != originalParent && originalParent instanceof Project) {
-                copiedParent = context.getTranslatedProject((Project) originalParent);
-            }
-            
-            copiedIterator = new DecisionVariableDeclaration(orginalIterator.getName(), orginalIterator.getType(),
-                copiedParent);
-        }
-        
-        // Replace iterator in selector constraint.
-        ConstraintSyntaxTree copiedSelector = null;
-        if (null != selectorCST) {
-            Map<AbstractVariable, AbstractVariable> declMapping = new HashMap<AbstractVariable,
-                AbstractVariable>();
-            declMapping.put(orginalIterator, copiedIterator);
-            CopyVisitor cstCopier = new CopyVisitor(declMapping);
-            selectorCST.accept(cstCopier);
-            copiedSelector = cstCopier.getResult();
-            try {
-                // Needed for setting the correct operation
-                copiedSelector.inferDatatype();
-            } catch (CSTSemanticException e) {
-                EASyLoggerFactory.INSTANCE.getLogger(ProjectRewriteVisitor.class, Bundle.ID).exception(e);
-            }
-        }
-        
-        // Copied Freezeblock with corrected selector
-        return new FreezeBlock(frozenElements, copiedIterator, copiedSelector, context.getTranslatedProject(parent));
-    }
-
     @Override
     public void visitOperationDefinition(OperationDefinition opdef) {
         OperationDefinition copyDef = (OperationDefinition) filter(opdef);
-        if (null != copyDef && null != copyDef.getOperation()) {
-            CustomOperation customOp = copyDef.getOperation();
-            ConstraintSyntaxTree cst = customOp.getFunction();
-            
-            // Adapt parameter to new parent
-            DeclrationInConstraintFinder finder = new DeclrationInConstraintFinder(cst);
-            java.util.Set<AbstractVariable> delcarations = finder.getDeclarations();
-            for (AbstractVariable declaration : delcarations) {
-                if (!context.declarationKnown(declaration)) {
-                    IModelElement oldParent = declaration.getParent();
-                    if (oldParent instanceof OperationDefinition && oldParent != copyDef
-                        && copyDef.getName().equals(oldParent.getName())) {
-                        declaration.setParent(copyDef);
-                    }
-                }
-            }
-            
-            // Adapt iterator variables
-            adaptParentOfIteratorVariables(cst);
-            try {
-                cst.inferDatatype();
-            } catch (CSTSemanticException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-                throw new RuntimeException(e);
-            }
-        }
         addCopiedElement(copyDef);
     }
 
@@ -511,38 +380,69 @@ public class ProjectRewriteVisitor extends AbstractProjectVisitor {
      */
     private void addCopiedElement(ContainableModelElement copy) {
         if (null != copy) {
-            /*
-             * Parent must be adjusted to the new parent, otherwise the resulting project would not be valid.
-             * FIXME SE: Currently, this Visitor is producing only a shallow copy. Therefore, the originally project
-             * won't be valid after adjusting the elements for the newly created project.
-             */
-            copy.setParent(currentProject);
             currentProject.add(copy);
         }
     }
     
     /**
      * {@inheritDoc} <br/>
-     * <b><font color="red">Attention:</font></b> This method creates a modified, shallow copy of the visited project.
-     * Thus, the original project becomes invalid through this visitation. This visitor should only be used if the
-     * original is no longer needed, e.g., for performance tweaks in a automated setup which does not save any data.
+     * <b><font color="red">Attention:</font></b> This method will modify the visited project. If the original project
+     * should not be modified, it is necessary to create a copy first via the {@link ProjectCopyVisitor}.
      * <br/>
-     * <b>FIXME SE:</b> Create a deep copy if a real copy mechanism is needed.
      */
     @Override
     public void visitProject(Project project) {
-        currentProject = new Project(project.getName());
-        context.storeTranslatedProject(project, currentProject);
-        super.visitProject(project);
-        
-        if (project == getStartingProject()) {
-            context.removeElementsOfRemovedImports();
-            if (context.elementesWereRemoved()) {
-                /*
-                 * Elements where removed start filtering again, maybe there exist some elements pointing
-                 * to the removed elements.
-                 */
-                revisit(project);
+        if (!done.contains(project)) {
+            done.add(project);
+            
+            
+            // Remove all elements from project
+            ProjectImport[] pImports = new ProjectImport[project.getImportsCount()];
+            for (int i = 0; i < pImports.length; i++) {
+                pImports[i] = project.getImport(i);
+            } 
+            ContainableModelElement[] unfilteredElements = new ContainableModelElement[project.getElementCount()];
+            for (int i = 0; i < unfilteredElements.length; i++) {
+                unfilteredElements[i] = project.getElement(i);
+            }
+            project.clear();
+            
+            // visit all elements to check which shall be kept and add them again
+            for (int i = 0; i < pImports.length; i++) {
+                ProjectImport unfilteredImport = pImports[i];
+                for (int j = 0, n = importModifiers.size(); j < n && null != pImports[i]; j++) {
+                    IProjectImportFilter currentModifier = importModifiers.get(j);
+                    pImports[i] = currentModifier.handleImport(pImports[i], context);
+                }
+                if (null != pImports[i]) {
+                    project.addImport(pImports[i]);
+                    Project importedProject = pImports[i].getResolved();
+                    if (null != importedProject) {
+                        visitProject(importedProject);
+                    }
+                } else {
+                    Project removedProject = unfilteredImport.getResolved();
+                    if (null != removedProject) {
+                        DeletedElementsCollector collector = new DeletedElementsCollector(removedProject,
+                            FilterType.ALL, context);
+                        removedProject.accept(collector);
+                    }
+                }
+            }
+            currentProject = project;
+            for (int i = 0; i < unfilteredElements.length; i++) {
+                unfilteredElements[i].accept(this);
+            }
+            
+            if (project == getStartingProject()) {
+                context.removeElementsOfRemovedImports();
+                if (context.elementesWereRemoved()) {
+                    /*
+                     * Elements where removed start filtering again, maybe there exist some elements pointing
+                     * to the removed elements.
+                     */
+                    revisit(project);
+                }
             }
         }
     }
@@ -552,57 +452,14 @@ public class ProjectRewriteVisitor extends AbstractProjectVisitor {
      * @param project The original project which was used to start the whole visitation process.
      */
     private void revisit(Project project) {
-        Project tmpProject = currentProject;
+        done.clear();
         context.clear();
-        currentProject = new Project(project.getName());
-        clear(tmpProject, FilterType.ALL);
-        context.storeTranslatedProject(tmpProject, currentProject);
+        clear(project, FilterType.ALL);
         
         // Stop modification, clean up inconsistent data.
         modifiers.clear();
         importModifiers.clear();
         
-        super.visitProject(tmpProject);
-    }
-    
-    @Override
-    public void visitProjectImport(ProjectImport pImport) {
-        ProjectImport copy = pImport;
-        for (int i = 0, n = importModifiers.size(); i < n && null != copy; i++) {
-            IProjectImportFilter currentModifier = importModifiers.get(i);
-            copy = currentModifier.handleImport(copy, context);
-        }
-
-        if (null != copy) {
-            // TODO check whether copy or pImport should be used inside this if
-            parentProjects.addFirst(currentProject);
-            
-            ProjectImport copiedImport = new ProjectImport(copy.getName(), copy.getInterfaceName(),
-                copy.isConflict(), false, copy.getVersionRestriction());
-            
-            if (null != parentProjects.peekFirst()) {
-                parentProjects.peekFirst().addImport(copiedImport);
-            }
-            
-            super.visitProjectImport(copy);
-            try {
-                copiedImport.setResolved(currentProject);
-            } catch (ModelManagementException e) {
-                EASyLoggerFactory.INSTANCE.getLogger(ProjectRewriteVisitor.class, Bundle.ID).exception(e);
-            }
-            // In case of a ProjectImport, switch back to original project after visiting the import
-            if (null != parentProjects.peekFirst()) {
-                currentProject = parentProjects.removeFirst();
-            }
-        } else {
-            // Collect removed elements
-            // TODO SE: Check behavior if two imports contain similar elements but only one is removed.
-            Project removedProject = pImport.getResolved();
-            if (null != removedProject) {
-                DeletedElementsCollector collector = new DeletedElementsCollector(removedProject, FilterType.ALL,
-                    context);
-                removedProject.accept(collector);
-            }
-        }
+        this.visitProject(project);
     }
 }
