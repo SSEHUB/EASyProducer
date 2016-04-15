@@ -649,14 +649,28 @@ public class Configuration implements IConfigurationVisitable, IProjectListener,
     }
 
     /**
-     * Unfreezes the whole configuration.
+     * Unfreezes the whole configuration (including nested variables).
      * 
      * @param state the target state after unfreezing (must not be {@link AssignmentState#FROZEN})
      */
     public void unfreeze(IAssignmentState state) {
         for (IDecisionVariable variable : decisions.values()) {
-            variable.unfreeze(state);
+            unfreezeVariable(variable, state);
         }
+    }
+    
+    /**
+     * Unfreezes a variable and all its nested elements (if such exist).
+     * @param variable {@link IDecisionVariable} to unfreeze.
+     * @param state state the target state after unfreezing (must not be {@link AssignmentState#FROZEN})
+     */
+    private void unfreezeVariable(IDecisionVariable variable, IAssignmentState state) {
+        if (variable.getNestedElementsCount() > 0) {
+            for (int i = 0, n = variable.getNestedElementsCount(); i < n; i++) {
+                unfreezeVariable(variable.getNestedElement(i), state);
+            }
+        }
+        variable.unfreeze(state);
     }
     
     /**
