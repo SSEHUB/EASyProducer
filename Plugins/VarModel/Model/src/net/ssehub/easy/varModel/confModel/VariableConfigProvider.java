@@ -85,9 +85,9 @@ abstract class VariableConfigProvider {
      * @param state the target state (must not be {@link AssignmentState#FROZEN})
      */
     protected final void unfreeze(IAssignmentState state) {
-//        Roman: Does not unfreeze variables with null value - changed
-//        if (null != getValue() && AssignmentState.FROZEN != state) {
-        if (AssignmentState.FROZEN != state) {
+        //  unfreeze shall also work on partially configured elements and only change state if variable was frozen
+//      if (null != getValue() && AssignmentState.FROZEN != state) {
+        if (AssignmentState.FROZEN != state && AssignmentState.FROZEN == getState()) {
             setState(state);
         }
     }
