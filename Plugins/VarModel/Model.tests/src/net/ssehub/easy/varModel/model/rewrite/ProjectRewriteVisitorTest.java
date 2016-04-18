@@ -17,6 +17,8 @@ package net.ssehub.easy.varModel.model.rewrite;
 
 import java.io.IOException;
 import java.io.StringWriter;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.junit.Assert;
 import org.junit.Test;
@@ -31,6 +33,7 @@ import net.ssehub.easy.varModel.cst.ConstraintSyntaxTree;
 import net.ssehub.easy.varModel.cst.ContainerOperationCall;
 import net.ssehub.easy.varModel.cst.OCLFeatureCall;
 import net.ssehub.easy.varModel.cst.Variable;
+import net.ssehub.easy.varModel.model.AbstractVariable;
 import net.ssehub.easy.varModel.model.Attribute;
 import net.ssehub.easy.varModel.model.Comment;
 import net.ssehub.easy.varModel.model.Constraint;
@@ -56,12 +59,16 @@ import net.ssehub.easy.varModel.model.datatypes.OrderedEnum;
 import net.ssehub.easy.varModel.model.datatypes.Reference;
 import net.ssehub.easy.varModel.model.datatypes.Sequence;
 import net.ssehub.easy.varModel.model.datatypes.Set;
+import net.ssehub.easy.varModel.model.datatypes.StringType;
+import net.ssehub.easy.varModel.model.filter.DeclarationFinder;
+import net.ssehub.easy.varModel.model.filter.DeclarationFinder.VisibilityType;
 import net.ssehub.easy.varModel.model.filter.FilterType;
 import net.ssehub.easy.varModel.model.rewrite.modifier.DeclarationNameFilter;
 import net.ssehub.easy.varModel.model.rewrite.modifier.FrozenCompoundConstraintsOmitter;
 import net.ssehub.easy.varModel.model.rewrite.modifier.FrozenConstraintVarFilter;
 import net.ssehub.easy.varModel.model.rewrite.modifier.FrozenConstraintsFilter;
 import net.ssehub.easy.varModel.model.rewrite.modifier.FrozenTypeDefResolver;
+import net.ssehub.easy.varModel.model.rewrite.modifier.IProjectModifier;
 import net.ssehub.easy.varModel.model.rewrite.modifier.ImportRegExNameFilter;
 import net.ssehub.easy.varModel.model.rewrite.modifier.ModelElementFilter;
 import net.ssehub.easy.varModel.model.values.ContainerValue;
@@ -943,6 +950,66 @@ public class ProjectRewriteVisitorTest {
         Assert.assertFalse(projectAsStringExpected.contains(IvmlKeyWords.NAMESPACE_SEPARATOR));
         Assert.assertEquals(expected, actual);
         Assert.assertFalse(projectAsStringActual.contains(IvmlKeyWords.NAMESPACE_SEPARATOR));
+    }
+    
+    /**
+     * Tests one example of a {@link IProjectModifier}, here it tests whether a freeze block may be created in a
+     * specific project containing elements with a specified rule.
+     * @throws ModelManagementException If {@link ProjectImport#setResolved(Project)} does not work
+     */
+    @Test
+    public void testProjectModifierByAddingFreezeblock() throws ModelManagementException {
+        Project p1 = new Project("orgProject");
+        DecisionVariableDeclaration decl1 = new DecisionVariableDeclaration("valid_name1", StringType.TYPE, p1);
+        p1.add(decl1);
+        DecisionVariableDeclaration decl2 = new DecisionVariableDeclaration("valid_name2", StringType.TYPE, p1);
+        p1.add(decl2);
+        DecisionVariableDeclaration decl3 = new DecisionVariableDeclaration("other_name", StringType.TYPE, p1);
+        p1.add(decl3);
+        
+        Project p2 = new Project("orgProjectCfg");
+        ProjectImport pImport = new ProjectImport(p1.getName());
+        pImport.setResolved(p1);
+        p2.addImport(pImport);
+        Assert.assertEquals(0, p2.getElementCount());
+        
+        ProjectRewriteVisitor rewriter = new ProjectRewriteVisitor(p2, FilterType.ALL);
+        IProjectModifier modifier = new IProjectModifier() {
+            
+            @Override
+            public void modifyProject(Project project, RewriteContext context) {
+                if (project.getName().endsWith("Cfg")) {
+                    String ns = project.getName().substring(0, project.getName().length() - 3);
+                    DeclarationFinder finder = new DeclarationFinder(project, FilterType.ALL, null);
+                    List<AbstractVariable> foundDecls = finder.getVariableDeclarations(VisibilityType.ALL);
+                    List<IFreezable> toFreeze = new ArrayList<IFreezable>();
+                    for (int i = 0, end = foundDecls.size(); i < end; i++) {
+                        AbstractVariable decl = foundDecls.get(i);
+                        if (decl.getNameSpace().equals(ns) && decl.getName().startsWith("valid_name")
+                            && decl instanceof IFreezable) {
+                            
+                            toFreeze.add((IFreezable) decl);
+                        }
+                    }
+                    IFreezable[] freezes = toFreeze.toArray(new IFreezable[0]);
+                    FreezeBlock block = new FreezeBlock(freezes, null, null, project);
+                    project.add(block);
+                }
+            }
+        };
+        
+        rewriter.addProjectModifier(modifier);
+        p2.accept(rewriter);
+        ProjectTestUtilities.validateProject(p1);
+        ProjectTestUtilities.validateProject(p2);
+        Assert.assertEquals(3, p1.getElementCount());
+        
+        // Test whether the black has been created correctly, dirty: ordering of elements could change
+        FreezeBlock createdBlock = (FreezeBlock) p2.getElement(0);
+        Assert.assertNotNull(createdBlock);
+        Assert.assertEquals(2, createdBlock.getFreezableCount());
+        Assert.assertSame(decl1, createdBlock.getFreezable(0));
+        Assert.assertSame(decl2, createdBlock.getFreezable(1));
     }
 
     /**

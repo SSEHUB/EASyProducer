@@ -28,7 +28,6 @@ import net.ssehub.easy.varModel.cst.CSTSemanticException;
 import net.ssehub.easy.varModel.cst.ConstantValue;
 import net.ssehub.easy.varModel.cst.ConstraintSyntaxTree;
 import net.ssehub.easy.varModel.cst.OCLFeatureCall;
-import net.ssehub.easy.varModel.model.AbstractProjectVisitor;
 import net.ssehub.easy.varModel.model.AbstractVariable;
 import net.ssehub.easy.varModel.model.Attribute;
 import net.ssehub.easy.varModel.model.AttributeAssignment;
@@ -39,6 +38,7 @@ import net.ssehub.easy.varModel.model.ContainableModelElement;
 import net.ssehub.easy.varModel.model.DecisionVariableDeclaration;
 import net.ssehub.easy.varModel.model.FreezeBlock;
 import net.ssehub.easy.varModel.model.IFreezable;
+import net.ssehub.easy.varModel.model.IModelVisitor;
 import net.ssehub.easy.varModel.model.ModelElement;
 import net.ssehub.easy.varModel.model.OperationDefinition;
 import net.ssehub.easy.varModel.model.PartialEvaluationBlock;
@@ -59,6 +59,7 @@ import net.ssehub.easy.varModel.model.filter.FilterType;
 import net.ssehub.easy.varModel.model.rewrite.modifier.AbstractFrozenChecker;
 import net.ssehub.easy.varModel.model.rewrite.modifier.IModelElementFilter;
 import net.ssehub.easy.varModel.model.rewrite.modifier.IProjectImportFilter;
+import net.ssehub.easy.varModel.model.rewrite.modifier.IProjectModifier;
 
 /**
  * Visitor for modifying a (copied) project.
@@ -91,10 +92,21 @@ import net.ssehub.easy.varModel.model.rewrite.modifier.IProjectImportFilter;
  * @author El-Sharkawy
  *
  */
-public class ProjectRewriteVisitor extends AbstractProjectVisitor {
+public class ProjectRewriteVisitor implements IModelVisitor {
 
+    /**
+     * The project where the visiting has been started.
+     */
+    private Project originProject;
+    
+    /**
+     * Specifies whether project imports shall be considered or not.
+     */
+    private FilterType filterType;
+    
     private Map<Class<? extends ModelElement>, List<IModelElementFilter<?>>> modifiers;
     private List<IProjectImportFilter> importModifiers;
+    private List<IProjectModifier> projectModifiers;
     private Project currentProject;
     private java.util.Set<Project> done;
     private RewriteContext context;
@@ -105,10 +117,12 @@ public class ProjectRewriteVisitor extends AbstractProjectVisitor {
      * @param filterType Specifies whether project imports shall be considered or not.
      */
     public ProjectRewriteVisitor(Project originProject, FilterType filterType) {
-        super(originProject, filterType);
+        this.originProject = originProject;
+        this.filterType = filterType;
         done = new HashSet<Project>();
         modifiers = new HashMap<Class<? extends ModelElement>, List<IModelElementFilter<?>>>();
         importModifiers = new ArrayList<IProjectImportFilter>();
+        projectModifiers = new ArrayList<IProjectModifier>();
         context = new RewriteContext();
         
         // Create initial structure table, for faster lookup during rewriting
@@ -126,7 +140,17 @@ public class ProjectRewriteVisitor extends AbstractProjectVisitor {
     public void reset(Project originProject, FilterType filterType) {
         modifiers.clear();
         importModifiers.clear();
-        super.clear(originProject, filterType);
+        projectModifiers.clear();
+        done.clear();
+        // Reset original project only if explicitly specified.
+        if (null != originProject) {
+            this.originProject = originProject;
+        }
+        
+        // Reset original filterType only if explicitly specified.
+        if (null != filterType) {
+            this.filterType = filterType;
+        }
         context.newRun();
     }
 
@@ -157,6 +181,14 @@ public class ProjectRewriteVisitor extends AbstractProjectVisitor {
      */
     public void addImportModifier(IProjectImportFilter modifier) {
         importModifiers.add(modifier);
+    }
+    
+    /**
+     * Adds a new modifier to modify complete Projects at the end of their visitation.
+     * @param modifier A modifier to change projects.
+     */
+    public void addProjectModifier(IProjectModifier modifier) {
+        projectModifiers.add(modifier);
     }
     
     @Override
@@ -394,47 +426,60 @@ public class ProjectRewriteVisitor extends AbstractProjectVisitor {
     public void visitProject(Project project) {
         if (!done.contains(project)) {
             done.add(project);
+
+            boolean isImportedProject = originProject != project;
+            boolean anyProject = FilterType.ALL == filterType;
+            boolean onlyImports = FilterType.ONLY_IMPORTS == filterType && isImportedProject;
+            boolean noImports = FilterType.NO_IMPORTS == filterType && !isImportedProject;
             
-            
-            // Remove all elements from project
-            ProjectImport[] pImports = new ProjectImport[project.getImportsCount()];
-            for (int i = 0; i < pImports.length; i++) {
-                pImports[i] = project.getImport(i);
-            } 
-            ContainableModelElement[] unfilteredElements = new ContainableModelElement[project.getElementCount()];
-            for (int i = 0; i < unfilteredElements.length; i++) {
-                unfilteredElements[i] = project.getElement(i);
-            }
-            project.clear();
-            
-            // visit all elements to check which shall be kept and add them again
-            for (int i = 0; i < pImports.length; i++) {
-                ProjectImport unfilteredImport = pImports[i];
-                for (int j = 0, n = importModifiers.size(); j < n && null != pImports[i]; j++) {
-                    IProjectImportFilter currentModifier = importModifiers.get(j);
-                    pImports[i] = currentModifier.handleImport(pImports[i], context);
+            if (anyProject || onlyImports || noImports) {
+                // Remove all elements from project
+                ProjectImport[] pImports = new ProjectImport[project.getImportsCount()];
+                for (int i = 0; i < pImports.length; i++) {
+                    pImports[i] = project.getImport(i);
+                } 
+                ContainableModelElement[] unfilteredElements = new ContainableModelElement[project.getElementCount()];
+                for (int i = 0; i < unfilteredElements.length; i++) {
+                    unfilteredElements[i] = project.getElement(i);
                 }
-                if (null != pImports[i]) {
-                    project.addImport(pImports[i]);
-                    Project importedProject = pImports[i].getResolved();
-                    if (null != importedProject) {
-                        visitProject(importedProject);
+                project.clear();
+                
+                // visit all elements to check which shall be kept and add them again
+                for (int i = 0; i < pImports.length; i++) {
+                    ProjectImport unfilteredImport = pImports[i];
+                    for (int j = 0, n = importModifiers.size(); j < n && null != pImports[i]; j++) {
+                        IProjectImportFilter currentModifier = importModifiers.get(j);
+                        pImports[i] = currentModifier.handleImport(pImports[i], context);
                     }
-                } else {
-                    Project removedProject = unfilteredImport.getResolved();
-                    if (null != removedProject) {
-                        DeletedElementsCollector collector = new DeletedElementsCollector(removedProject,
-                            FilterType.ALL, context);
-                        removedProject.accept(collector);
+                    if (null != pImports[i]) {
+                        project.addImport(pImports[i]);
+                        Project importedProject = pImports[i].getResolved();
+                        if (null != importedProject) {
+                            visitProject(importedProject);
+                        }
+                    } else {
+                        Project removedProject = unfilteredImport.getResolved();
+                        if (null != removedProject) {
+                            DeletedElementsCollector collector = new DeletedElementsCollector(removedProject,
+                                FilterType.ALL, context);
+                            removedProject.accept(collector);
+                        }
+                    }
+                }
+                currentProject = project;
+                for (int i = 0; i < unfilteredElements.length; i++) {
+                    unfilteredElements[i].accept(this);
+                }
+                
+                // Project modifier
+                for (int i = 0, end = projectModifiers.size(); i < end; i++) {
+                    IProjectModifier modifier = projectModifiers.get(i);
+                    if (null != modifier) {
+                        modifier.modifyProject(project, context);
                     }
                 }
             }
-            currentProject = project;
-            for (int i = 0; i < unfilteredElements.length; i++) {
-                unfilteredElements[i].accept(this);
-            }
-            
-            if (project == getStartingProject()) {
+            if (project == this.originProject) {
                 context.removeElementsOfRemovedImports();
                 if (context.elementesWereRemoved()) {
                     /*
@@ -454,12 +499,19 @@ public class ProjectRewriteVisitor extends AbstractProjectVisitor {
     private void revisit(Project project) {
         done.clear();
         context.clear();
-        clear(project, FilterType.ALL);
         
         // Stop modification, clean up inconsistent data.
         modifiers.clear();
         importModifiers.clear();
+        projectModifiers.clear();
         
         this.visitProject(project);
+    }
+    
+    @Override
+    public void visitProjectImport(ProjectImport pImport) {
+        if (null != pImport.getResolved()) {
+            pImport.getResolved().accept(this);
+        }
     }
 }
