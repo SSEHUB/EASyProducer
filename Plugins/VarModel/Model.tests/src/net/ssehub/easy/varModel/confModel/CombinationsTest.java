@@ -29,6 +29,7 @@ import net.ssehub.easy.varModel.model.datatypes.Compound;
 import net.ssehub.easy.varModel.model.datatypes.IntegerType;
 import net.ssehub.easy.varModel.model.datatypes.OclKeyWords;
 import net.ssehub.easy.varModel.model.datatypes.Set;
+import net.ssehub.easy.varModel.model.values.CompoundValue;
 import net.ssehub.easy.varModel.model.values.ContainerValue;
 import net.ssehub.easy.varModel.model.values.Value;
 import net.ssehub.easy.varModel.model.values.ValueDoesNotMatchTypeException;
@@ -87,7 +88,7 @@ public class CombinationsTest {
         project.add(assingnmentConstraint);
         
         // Create configuration out of valid project
-        ProjectTestUtilities.validateProject(project, true);
+        ProjectTestUtilities.validateProject(project);
      // Configuration must be started with AssignmentResolver, since Reasoner is not available in this project.
         Configuration config = new Configuration(project, true);
         
@@ -102,6 +103,44 @@ public class CombinationsTest {
         IDecisionVariable nestedCmpVar = getNestedElement(nestedSetVar);
         IDecisionVariable mostNestedVar = getNestedElement(nestedCmpVar);
         Assert.assertTrue(mostNestedVar.getValue().isConfigured());
+    }
+    
+    /**
+     * Tests whether a configured nest element will change the value of the containing compound.
+     * @throws ValueDoesNotMatchTypeException 
+     * @throws ConfigurationException 
+     */
+    @Test
+    public void testCorrectValueOfCompoundContainingSets() throws ConfigurationException,
+        ValueDoesNotMatchTypeException {
+        
+        Compound cType = new Compound("CP", project);
+        Set setType = new Set("setOfInts", IntegerType.TYPE, cType);
+        DecisionVariableDeclaration intsDecl = new DecisionVariableDeclaration("ints", setType, cType);
+        cType.add(intsDecl);
+        project.add(cType);
+        DecisionVariableDeclaration cmpDecl = new DecisionVariableDeclaration("cmp", cType, project);
+        project.add(cmpDecl);
+        
+        ProjectTestUtilities.validateProject(project, true);
+        Configuration config = new Configuration(project);
+        IDecisionVariable cmpVar = config.getDecision(cmpDecl);
+        
+        // Test pre condition: Value for the set should be null/empty
+        ContainerValue nestedValue = (ContainerValue) ((CompoundValue) cmpVar.getValue())
+            .getNestedValue(intsDecl.getName());
+        Assert.assertNull(nestedValue);
+        
+        // configure the value for the set (extend it and configure nested element)
+        ContainerVariable setVar = (ContainerVariable) cmpVar.getNestedElement(0);
+        setVar.addNestedElement();
+        IDecisionVariable firstSetElement = setVar.getNestedElement(0);
+        firstSetElement.setValue(ValueFactory.createValue(IntegerType.TYPE, "42"), AssignmentState.ASSIGNED);
+        
+        // Test post condition: compoudn value should return a value for the nested element of the set
+        nestedValue = (ContainerValue) ((CompoundValue) cmpVar.getValue()).getNestedValue(intsDecl.getName());
+        Assert.assertNotNull(nestedValue);
+        Assert.assertEquals(42, nestedValue.getElement(0).getValue());
     }
     
     /**
