@@ -242,8 +242,7 @@ abstract class DecisionVariable implements IDecisionVariable {
 
     @Override
     public IAssignmentState getState() {
-        IAssignmentState state = configProvider.getState();
-        return state;
+        return configProvider.getState();
     }
 
     @Override

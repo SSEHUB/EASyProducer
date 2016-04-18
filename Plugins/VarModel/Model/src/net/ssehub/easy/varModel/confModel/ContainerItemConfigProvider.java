@@ -92,7 +92,8 @@ class ContainerItemConfigProvider extends NestedVarConfigProvider {
 
     @Override
     protected void setState(IAssignmentState state) {
-        // Not supported by this class        
+        // Needed for undo function
+        this.state = state;
     }
 
     @Override
@@ -121,7 +122,7 @@ class ContainerItemConfigProvider extends NestedVarConfigProvider {
 
     @Override
     protected void setHistoryValue(Value value, IAssignmentState state) throws ConfigurationException {
-        // Function not needed here        
+        this.state = state;
     }
 
     @Override

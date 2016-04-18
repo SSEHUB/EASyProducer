@@ -124,16 +124,26 @@ public abstract class ContainerVariable extends StructuredVariable {
             // Create nested Elements
             if (conValue != null) {
                 for (int i = 0; i < conValue.getElementSize(); i++) {
-                    String name = getElementName(i);
-                    IDatatype eltType = conValue.getElement(i).getType(); // enable heterogenous polymorphic coll.
-                    DecisionVariableDeclaration decl = new DecisionVariableDeclaration(name, eltType, getDeclaration());
-                    VariableCreator creator = new VariableCreator(decl, this, isVisible(), false);
-                    try {
-                        IDecisionVariable var = creator.getVariable();
-                        addNestedElement(var);
-                    } catch (ConfigurationException e) {
-                        // TODO Auto-generated catch block
-                        e.printStackTrace();
+                    // check whether a new variable needs to be created
+                    boolean createNewVar = true;
+                    if (nestedElements.size() > i) {
+                        IDecisionVariable oldVar = nestedElements.get(i);
+                        Value trgValue = conValue.getElement(i);
+                        createNewVar = !(null != trgValue && trgValue.equals(oldVar.getValue()));
+                    }
+                    if (createNewVar) {
+                        String name = getElementName(i);
+                        IDatatype eltType = conValue.getElement(i).getType(); // enable heterogenous polymorphic coll.
+                        DecisionVariableDeclaration decl = new DecisionVariableDeclaration(name, eltType,
+                            getDeclaration());
+                        VariableCreator creator = new VariableCreator(decl, this, isVisible(), false);
+                        try {
+                            IDecisionVariable var = creator.getVariable();
+                            addNestedElement(var);
+                        } catch (ConfigurationException e) {
+                            // TODO Auto-generated catch block
+                            e.printStackTrace();
+                        }
                     }
                 }
             }
