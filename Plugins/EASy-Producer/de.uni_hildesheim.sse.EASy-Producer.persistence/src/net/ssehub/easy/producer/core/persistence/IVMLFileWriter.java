@@ -10,7 +10,7 @@ import net.ssehub.easy.varModel.model.Project;
 import net.ssehub.easy.varModel.persistency.IVMLWriter;
 
 /**
- * Extended {@link IVMLWriter}, which writes {@link Project}s and thier imported {@link Project}s to a given location.
+ * Extended {@link IVMLWriter}, which writes {@link Project}s and their imported {@link Project}s to a given location.
  * @author El-Sharkawy
  *
  */
@@ -18,6 +18,8 @@ public class IVMLFileWriter {
     
     private Set<Project> done;
     private final File folder;
+    private boolean formatInitializer;
+    private boolean forceCompoundTypes;
 
     /**
      * sole constructor for this class.
@@ -31,6 +33,27 @@ public class IVMLFileWriter {
               + "\" is not an existing folder.");
         }
         done = new HashSet<Project>();
+    }
+    
+    /**
+     * Defines whether initializers shall be formatted.
+     * 
+     * @param formatInitializer <code>true</code> if initializers shall be formatted, 
+     *   <code>false</code> else
+     */
+    public void setFormatInitializer(boolean formatInitializer) {
+        this.formatInitializer = formatInitializer;
+    }
+    
+    /**
+     * Forces the output of compound types and bypasses the automatic
+     * detection.
+     * 
+     * @param forceCompoundTypes if <code>true</code>, compound types are
+     *   always emitted at creation, <code>false</code> else
+     */
+    public void forceComponundTypes(boolean forceCompoundTypes) {
+        this.forceCompoundTypes = forceCompoundTypes;
     }
     
     /**
@@ -58,6 +81,8 @@ public class IVMLFileWriter {
                 File trgFile = new File(folder, project.getName() + ".ivml");
                 fWriter = new FileWriter(trgFile);
                 IVMLWriter iWriter = new IVMLWriter(fWriter);
+                iWriter.setFormatInitializer(formatInitializer);
+                iWriter.forceComponundTypes(forceCompoundTypes);
                 project.accept(iWriter);
                 iWriter.flush();
             } finally {
