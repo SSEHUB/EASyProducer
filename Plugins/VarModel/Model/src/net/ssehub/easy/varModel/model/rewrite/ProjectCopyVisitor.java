@@ -811,7 +811,9 @@ public class ProjectCopyVisitor extends AbstractProjectVisitor {
     @Override
     public void visitAttributeAssignment(AttributeAssignment assignment) {
         AttributeAssignment copiedBlock = new AttributeAssignment(parents.peekFirst());
+        setComment(assignment, copiedBlock);
         addToCurrentParent(copiedBlock);
+        copiedElements.put(assignment, copiedBlock);
         
         // Copy assignments
         for (int i = 0, end = assignment.getAssignmentDataCount(); i < end; i++) {
