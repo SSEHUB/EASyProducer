@@ -95,6 +95,14 @@ public class CopyVisitor implements IConstraintTreeVisitor {
     }
     
     /**
+     * Allows inherited classed to overwrite visiting method and to return a partially translated cst.
+     * @param cst A partially copied cst.
+     */
+    protected void setResult(ConstraintSyntaxTree cst) {
+        result = cst;
+    }
+    
+    /**
      * Returns the copied syntax tree.
      * 
      * @return the copied tree (may be <b>null</b> if no tree was visited).
@@ -160,7 +168,7 @@ public class CopyVisitor implements IConstraintTreeVisitor {
      * @param var the variable to be mapped
      * @return the mapped variable or <code>var</code>
      */
-    private DecisionVariableDeclaration mapVariable(DecisionVariableDeclaration var) {
+    protected DecisionVariableDeclaration mapVariable(DecisionVariableDeclaration var) {
         DecisionVariableDeclaration result = null;
         if (null != mapping) {
             AbstractVariable tmp = mapping.get(var); 

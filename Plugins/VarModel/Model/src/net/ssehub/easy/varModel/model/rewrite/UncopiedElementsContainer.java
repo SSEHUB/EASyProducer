@@ -18,12 +18,14 @@ package net.ssehub.easy.varModel.model.rewrite;
 import java.util.HashSet;
 import java.util.Set;
 
+import net.ssehub.easy.varModel.cst.ConstraintSyntaxTree;
 import net.ssehub.easy.varModel.model.AbstractVariable;
 import net.ssehub.easy.varModel.model.Attribute;
 import net.ssehub.easy.varModel.model.AttributeAssignment;
 import net.ssehub.easy.varModel.model.AttributeAssignment.Assignment;
 import net.ssehub.easy.varModel.model.CompoundAccessStatement;
 import net.ssehub.easy.varModel.model.Constraint;
+import net.ssehub.easy.varModel.model.ContainableModelElement;
 import net.ssehub.easy.varModel.model.FreezeBlock;
 import net.ssehub.easy.varModel.model.OperationDefinition;
 import net.ssehub.easy.varModel.model.ProjectInterface;
@@ -63,6 +65,33 @@ class UncopiedElementsContainer {
             return copiedParentBlock;
         }
     }
+    
+    /**
+     * Fallback for resolving elements containing constraint syntax trees
+     * This container is a tuple of (translated parent, original default value).
+     * @author El-Sharkawy
+     *
+     */
+    static class UnresolvedSyntaxContainer {
+        private ContainableModelElement copiedParent;
+        private ConstraintSyntaxTree uncopiedDefault;
+        
+        /**
+         * Returns the already translated parent to which the default belongs to.
+         * @return The {@link AbstractVariable} or {@link Constraint} add where the cst shall be added to.
+         */
+        ContainableModelElement getCopiedParent() {
+            return copiedParent;
+        }
+        
+        /**
+         * Returns the uncopied default, which must still be translated.
+         * @return The original default value
+         */
+        ConstraintSyntaxTree getOriginalDefault() {
+            return uncopiedDefault;
+        }
+    }
 
     /**
      * Set of copied {@link AbstractVariable}s, which contain default values pointing to other elements, which are not
@@ -72,6 +101,12 @@ class UncopiedElementsContainer {
      * default value can be used for copying it at a later point.
      */
     private Set<AbstractVariable> unresolvedDefaults = new HashSet<AbstractVariable>();
+   
+    /**
+     * Set of copied {@link AbstractVariable}s, and their default values. Contrary to {@link #unresolvedDefaults},
+     * these defaults could not be translated as some data types are still missing.
+     */
+    private Set<UnresolvedSyntaxContainer> uncopyableDefaults = new HashSet<UnresolvedSyntaxContainer>();
     
     /**
      * {@link AbstractVariable}s which could not be translated due to a missing data type.
@@ -326,5 +361,25 @@ class UncopiedElementsContainer {
      */
     Set<UnresolvedAnnotationAssignment> getUncopiedAnnotationAssignments() {
         return unresolvedAssignments;
+    }
+    
+    /**
+     * Adds an CST which could not be copied so far, also not partially.
+     * @param copiedParent The already copied declaration to where the default belongs to
+     * @param originalDefault The original default value, which can not be copied (even partially)
+     */
+    void addUncopyableCST(ContainableModelElement copiedParent, ConstraintSyntaxTree originalDefault) {
+        UnresolvedSyntaxContainer unresolvedDefault = new UnresolvedSyntaxContainer();
+        unresolvedDefault.copiedParent = copiedParent;
+        unresolvedDefault.uncopiedDefault = originalDefault;
+        uncopyableDefaults.add(unresolvedDefault);
+    }
+    
+    /**
+     * Returns the set of uncopied constraint syntax trees.
+     * @return tuple of (copied parent, original CST)
+     */
+    Set<UnresolvedSyntaxContainer> getUncopyableCSTs() {
+        return uncopyableDefaults;
     }
 }

@@ -17,8 +17,15 @@ package net.ssehub.easy.varModel.model.rewrite;
 
 import java.util.Map;
 
+import net.ssehub.easy.varModel.cst.ConstantValue;
 import net.ssehub.easy.varModel.cst.CopyVisitor;
 import net.ssehub.easy.varModel.model.AbstractVariable;
+import net.ssehub.easy.varModel.model.ContainableModelElement;
+import net.ssehub.easy.varModel.model.DecisionVariableDeclaration;
+import net.ssehub.easy.varModel.model.ExplicitTypeVariableDeclaration;
+import net.ssehub.easy.varModel.model.IModelElement;
+import net.ssehub.easy.varModel.model.datatypes.IDatatype;
+import net.ssehub.easy.varModel.model.values.Value;
 
 /**
  * Special {@link CopyVisitor} as needed by the {@link ProjectCopyVisitor}.
@@ -80,6 +87,70 @@ class CSTCopyVisitor extends CopyVisitor {
             result = var;
         }
         return result;
+    }
+    
+    @Override
+    protected DecisionVariableDeclaration mapVariable(DecisionVariableDeclaration var) {
+        DecisionVariableDeclaration resultDecl = null;
+        AbstractVariable tmpDecl = null;
+        if (null != getMapping()) {
+            tmpDecl = getMapping().get(var);
+            if (null != tmpDecl) {
+                IModelElement declsParent = tmpDecl.getTopLevelParent();
+                if (tmpDecl instanceof DecisionVariableDeclaration && null != declsParent
+                        && copyier.getAllCopiedProjects().contains(declsParent)) {
+                    
+                    resultDecl = (DecisionVariableDeclaration) tmpDecl;
+                }
+            }
+        }
+        if (null == resultDecl && null != copyier) {
+            IDatatype copiedType = copyier.getTranslatedType(var.getType());
+            IModelElement orgParent = var.getParent();
+            IModelElement parent = null;
+            if (null != orgParent && orgParent instanceof ContainableModelElement) {
+                parent = copyier.getCopiedElement((ContainableModelElement) orgParent);
+            }
+            
+            if (null != orgParent && null == parent) {
+                complete = false;
+            }
+            // Create local declarator / iterator variable
+            if (null != copiedType) {
+                if (var.isDeclaratorTypeExplicit()) {
+                    resultDecl = new ExplicitTypeVariableDeclaration(var.getName(), copiedType, parent);
+                } else {
+                    resultDecl = new DecisionVariableDeclaration(var.getName(), copiedType, parent);
+                }
+            }
+        }
+        if (null == resultDecl) {
+            // Error, but prevent NullPointerException
+            resultDecl = super.mapVariable(var);
+            complete = false;
+        }
+        return resultDecl;
+    }
+    
+    @Override
+    public void visitConstantValue(ConstantValue constantValue) {
+        Value nestedValue = constantValue.getConstantValue();
+        IDatatype type = nestedValue.getContainedType();
+        if (null != type && !type.isPrimitive()) {
+            // Value must be translated
+            complete = false;
+            
+            IDatatype copiedType = copyier.getTranslatedType(type);
+            if (null != copiedType) {
+                ValueCopyVisitor valueCopyier = new ValueCopyVisitor(copyier);
+                nestedValue.accept(valueCopyier);
+                if (valueCopyier.translatedCompletely()) {
+                    setResult(new ConstantValue(valueCopyier.getResult()));
+                    complete = true;
+                }
+            }
+        }
+        super.visitConstantValue(constantValue);
     }
 
 }
