@@ -1141,12 +1141,12 @@ public class Resolver {
             index = i;
             problemVariables.clear();
             AssignmentState state = null;
-            if (constraints.get(i).isDefaultConstraint()) {
+            Constraint constraint = constraints.get(i);
+            if (constraint.isDefaultConstraint()) {
                 state = AssignmentState.DEFAULT;
             } else {
                 state = AssignmentState.DERIVED;
             }
-            Constraint constraint = constraints.get(i);
             ConstraintSyntaxTree cst = constraint.getConsSyntax();
             reevaluationCounter++;
             if (cst != null) {

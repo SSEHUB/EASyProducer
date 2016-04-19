@@ -84,8 +84,7 @@ public class Engine {
      */
     public Engine(Project project, Configuration cfg, ReasonerConfiguration reasonerConfig,
         ProgressObserver observer) {
-//        cfg.removeDerivedValues();
-//        cfg.unfreeze(AssignmentState.DERIVED);
+        cfg.unfreeze(AssignmentState.DERIVED);
         this.project = project;
 //        this.reasoningID = PerformanceStatistics.createReasoningID(project.getName(), "Model validation");
         this.resolver = new Resolver(project, cfg, true, reasonerConfig);
