@@ -478,7 +478,7 @@ public class ProjectCopyVisitor extends AbstractProjectVisitor {
                     if (Sequence.TYPE.isAssignableFrom(originalType)) {
                         copiedType = new Sequence(originalType.getName(), containedType, copiedParent);
                     } else if (Set.TYPE.isAssignableFrom(originalType)) {
-                        copiedType = new Sequence(originalType.getName(), containedType, copiedParent);
+                        copiedType = new Set(originalType.getName(), containedType, copiedParent);
                     }
                 }
             } else if (Compound.TYPE.isAssignableFrom(originalType) || Enum.TYPE.isAssignableFrom(originalType)
