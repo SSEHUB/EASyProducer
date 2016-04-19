@@ -888,8 +888,8 @@ public class ProjectCopyVisitor extends AbstractProjectVisitor {
             addToCurrentParent(copiedCompound);
             copiedElements.put(compound, copiedCompound);
             parents.addFirst(copiedCompound);
-            for (int i = 0, end = compound.getElementCount(); i < end; i++) {
-                compound.getElement(i).accept(this);
+            for (int i = 0, end = compound.getModelElementCount(); i < end; i++) {
+                compound.getModelElement(i).accept(this);
             }
             parents.removeFirst();
         }
