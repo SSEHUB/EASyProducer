@@ -198,7 +198,8 @@ public class DerivedDatatype extends CustomDatatype {
                 ConstraintReplacer replacer = new ConstraintReplacer(oneConstraint);
                 Variable origin = new Variable(typeDeclaration);
                 Variable replacement = new Variable(declaration);
-                ConstraintSyntaxTree copiedCST = replacer.replaceVariable(origin, replacement);
+                ConstraintSyntaxTree copiedCST =
+                    (null != oneConstraint) ? replacer.replaceVariable(origin, replacement) : null;
                 // Should be in same project as the declaration belongs to
                 constraintInstances[i] = new InternalConstraint(this, copiedCST, declaration.getTopLevelParent());
             }

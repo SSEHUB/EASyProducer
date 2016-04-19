@@ -104,7 +104,7 @@ class InitialStructureCollector extends AbstractProjectVisitor {
             DeclrationInConstraintFinder finder = new DeclrationInConstraintFinder(cst);
             java.util.Set<AbstractVariable> usedDeclarations = finder.getDeclarations();
             for (AbstractVariable usedDecl : usedDeclarations) {
-                if (usedDecl.getType() == ConstraintType.TYPE) {
+                if (null != usedDecl && usedDecl.getType() == ConstraintType.TYPE) {
                     table.putConstraintOccurrence(usedDecl, element);
                 }
             }
