@@ -32,6 +32,8 @@ import net.ssehub.easy.varModel.cst.OCLFeatureCall;
 import net.ssehub.easy.varModel.cst.Variable;
 import net.ssehub.easy.varModel.model.AbstractVariable;
 import net.ssehub.easy.varModel.model.Attribute;
+import net.ssehub.easy.varModel.model.AttributeAssignment;
+import net.ssehub.easy.varModel.model.AttributeAssignment.Assignment;
 import net.ssehub.easy.varModel.model.Comment;
 import net.ssehub.easy.varModel.model.CompoundAccessStatement;
 import net.ssehub.easy.varModel.model.Constraint;
@@ -459,6 +461,40 @@ public class ProjectCopyVisitorTest {
                 AbstractVariable orgDecl = (AbstractVariable) evalBlock.getModelElement(i);
                 mapping.put(orgDecl, copiedBlock);
                 assertDeclaration(orgDecl, (AbstractVariable) element, mapping);
+            }
+        }
+    }
+    
+    /**
+     * Tests a copied {@link AttributeAssignment}.
+     * @param assignBlock The original block for comparison
+     * @param copiedBlock The block to test
+     * @param copy The expected parent of the copied block
+     * @param allCopiedProject All copied elements which are valid parents for nested declarations.
+     */
+    private void assertAssignBlock(AttributeAssignment assignBlock, AttributeAssignment copiedBlock, Project copy,
+            java.util.Set<Project> allCopiedProject) {
+        assertCopiedElement(assignBlock, copiedBlock, copy);
+        Assert.assertEquals("Copied block has different amount of assignments.", assignBlock.getAssignmentDataCount(),
+            copiedBlock.getAssignmentDataCount());
+        for (int i = 0, end = assignBlock.getAssignmentDataCount(); i < end; i++) {
+            Assignment orgAssignment = assignBlock.getAssignmentData(i);
+            Assignment copyAssignment = copiedBlock.getAssignmentData(i);
+            Assert.assertEquals("Different operations", orgAssignment.getOperation(), copyAssignment.getOperation());
+            assertCST(copyAssignment.getExpression(), allCopiedProject);
+        }
+        Assert.assertEquals("Different amount of nested elements", assignBlock.getModelElementCount(),
+            copiedBlock.getElementCount());
+        Map<AbstractVariable, IModelElement> mapping = new HashMap<AbstractVariable, IModelElement>();
+        for (int i = 0, end = assignBlock.getModelElementCount(); i < end; i++) {
+            ContainableModelElement orgElement = assignBlock.getModelElement(i);
+            ContainableModelElement copiedElement = copiedBlock.getModelElement(i);
+            if (orgElement instanceof DecisionVariableDeclaration) {
+                mapping.put((DecisionVariableDeclaration) orgElement, copiedBlock);
+                assertDeclaration((DecisionVariableDeclaration) orgElement, (DecisionVariableDeclaration) copiedElement,
+                    mapping);
+            } else {
+                assertCopiedElement(orgElement, copiedElement, assignBlock);
             }
         }
     }
@@ -1454,5 +1490,51 @@ public class ProjectCopyVisitorTest {
         Project copiedProject = copyProject(orgProject, copiedProjects);
         PartialEvaluationBlock copiedBlock = (PartialEvaluationBlock) copiedProject.getElement(0);
         assertEvalBlock(evalBlock, copiedBlock, copiedProject, copiedProjects);
+    }
+    
+    /**
+     * Tests that simple {@link AttributeAssignment}s can be copied without outstanding dependencies.
+     */
+    @Test
+    public void testAssignBlockCopySimple() {
+        Project orgProject = new Project("testAssignBlockCopySimple");
+        Attribute annoDecl = new Attribute("anno", BooleanType.TYPE, orgProject, orgProject);
+        orgProject.add(annoDecl);
+        orgProject.attribute(annoDecl);
+        AttributeAssignment assignBlock = new AttributeAssignment(orgProject);
+        ConstantValue constTrue = new ConstantValue(BooleanValue.TRUE);
+        Assignment assignment = new Assignment(annoDecl.getName(), OclKeyWords.EQUALS, constTrue);
+        assignBlock.add(assignment);
+        DecisionVariableDeclaration decl = new DecisionVariableDeclaration("decl", StringType.TYPE, assignBlock);
+        assignBlock.add(decl);
+        orgProject.add(assignBlock);
+        
+        java.util.Set<Project> allCopiedProject = new HashSet<Project>();
+        Project copy = copyProject(orgProject, allCopiedProject);
+        AttributeAssignment copiedBlock = (AttributeAssignment) copy.getElement(1);
+        assertAssignBlock(assignBlock, copiedBlock, copy, allCopiedProject);
+    }
+    
+    /**
+     * Tests that {@link AttributeAssignment}s can be copied, which are dependent on elements defined in itself.
+     */
+    @Test
+    public void testAssignBlockCopyDependingOnNestedelement() {
+        Project orgProject = new Project("testAssignBlockCopySimple");
+        Attribute annoDecl = new Attribute("anno", BooleanType.TYPE, orgProject, orgProject);
+        orgProject.add(annoDecl);
+        orgProject.attribute(annoDecl);
+        AttributeAssignment assignBlock = new AttributeAssignment(orgProject);
+        DecisionVariableDeclaration decl = new DecisionVariableDeclaration("decl", BooleanType.TYPE, assignBlock);
+        Variable var = new Variable(decl);
+        Assignment assignment = new Assignment(annoDecl.getName(), OclKeyWords.EQUALS, var);
+        assignBlock.add(assignment);
+        assignBlock.add(decl);
+        orgProject.add(assignBlock);
+        
+        java.util.Set<Project> allCopiedProject = new HashSet<Project>();
+        Project copy = copyProject(orgProject, allCopiedProject);
+        AttributeAssignment copiedBlock = (AttributeAssignment) copy.getElement(1);
+        assertAssignBlock(assignBlock, copiedBlock, copy, allCopiedProject);
     }
 }

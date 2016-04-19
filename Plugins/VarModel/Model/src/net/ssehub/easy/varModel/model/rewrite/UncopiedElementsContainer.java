@@ -20,6 +20,8 @@ import java.util.Set;
 
 import net.ssehub.easy.varModel.model.AbstractVariable;
 import net.ssehub.easy.varModel.model.Attribute;
+import net.ssehub.easy.varModel.model.AttributeAssignment;
+import net.ssehub.easy.varModel.model.AttributeAssignment.Assignment;
 import net.ssehub.easy.varModel.model.CompoundAccessStatement;
 import net.ssehub.easy.varModel.model.Constraint;
 import net.ssehub.easy.varModel.model.FreezeBlock;
@@ -35,6 +37,32 @@ import net.ssehub.easy.varModel.model.datatypes.CustomDatatype;
  * @author El-Sharkawy
  */
 class UncopiedElementsContainer {
+    
+    /**
+     * Container for holding {@link Assignment}, which could not copied so far.
+     * @author El-Sharkawy
+     *
+     */
+    static class UnresolvedAnnotationAssignment {
+        private Assignment orgAssignment;
+        private AttributeAssignment copiedParentBlock;
+        
+        /**
+         * Returns the original {@link Assignment}, which could not be copied.
+         * @return The original {@link Assignment} which still needs to be copied.
+         */
+        Assignment getUnresolvedAssignment() {
+            return orgAssignment;
+        }
+        
+        /**
+         * Returns the target/copied {@link AttributeAssignment}.
+         * @return The already copied parent.
+         */
+        AttributeAssignment getCopiedParent() {
+            return copiedParentBlock;
+        }
+    }
 
     /**
      * Set of copied {@link AbstractVariable}s, which contain default values pointing to other elements, which are not
@@ -99,6 +127,11 @@ class UncopiedElementsContainer {
      * was not copied so far.
      */
     private Set<CompoundAccessStatement> uncopiedCompoundAccesses = new HashSet<CompoundAccessStatement>();
+    
+    /**
+     * Set of (copied parent, original assignment) for {@link Assignment}s, which could not be copied so far.
+     */
+    private Set<UnresolvedAnnotationAssignment> unresolvedAssignments = new HashSet<UnresolvedAnnotationAssignment>();
     
     /**
      * Adds a copied/translated {@link AbstractVariable}, from which the default value could not be translated, as
@@ -273,5 +306,25 @@ class UncopiedElementsContainer {
      */
     Set<CompoundAccessStatement> getUncopiedCompoundAccesses() {
         return uncopiedCompoundAccesses;
+    }
+    
+    /**
+     * Adds an {@link Assignment}, which could not be copied so far.
+     * @param copiedParent The already copied parent block for the assignment.
+     * @param uncopiedAssignment The original {@link Assignment}, which still has to be copied.
+     */
+    void addUncopiedAssignment(AttributeAssignment copiedParent, Assignment uncopiedAssignment) {
+        UnresolvedAnnotationAssignment outstandingAssignment = new UnresolvedAnnotationAssignment();
+        outstandingAssignment.orgAssignment = uncopiedAssignment;
+        outstandingAssignment.copiedParentBlock = copiedParent;
+        unresolvedAssignments.add(outstandingAssignment);
+    }
+    
+    /**
+     * Returns the set of uncopied {@link Assignment}s.
+     * @return tuple of (copied parent, original assignment) for {@link Assignment}s, which could not be copied so far
+     */
+    Set<UnresolvedAnnotationAssignment> getUncopiedAnnotationAssignments() {
+        return unresolvedAssignments;
     }
 }

@@ -32,6 +32,7 @@ import net.ssehub.easy.varModel.model.AbstractProjectVisitor;
 import net.ssehub.easy.varModel.model.AbstractVariable;
 import net.ssehub.easy.varModel.model.Attribute;
 import net.ssehub.easy.varModel.model.AttributeAssignment;
+import net.ssehub.easy.varModel.model.AttributeAssignment.Assignment;
 import net.ssehub.easy.varModel.model.Comment;
 import net.ssehub.easy.varModel.model.CompoundAccessStatement;
 import net.ssehub.easy.varModel.model.Constraint;
@@ -41,6 +42,7 @@ import net.ssehub.easy.varModel.model.EvaluationBlock;
 import net.ssehub.easy.varModel.model.ExplicitTypeVariableDeclaration;
 import net.ssehub.easy.varModel.model.FreezeBlock;
 import net.ssehub.easy.varModel.model.IAttributableElement;
+import net.ssehub.easy.varModel.model.IDecisionVariableContainer;
 import net.ssehub.easy.varModel.model.IFreezable;
 import net.ssehub.easy.varModel.model.IModelElement;
 import net.ssehub.easy.varModel.model.IPartialEvaluable;
@@ -62,6 +64,7 @@ import net.ssehub.easy.varModel.model.datatypes.Reference;
 import net.ssehub.easy.varModel.model.datatypes.Sequence;
 import net.ssehub.easy.varModel.model.datatypes.Set;
 import net.ssehub.easy.varModel.model.filter.FilterType;
+import net.ssehub.easy.varModel.model.rewrite.UncopiedElementsContainer.UnresolvedAnnotationAssignment;
 import net.ssehub.easy.varModel.model.values.ValueDoesNotMatchTypeException;
 
 /**
@@ -232,6 +235,9 @@ public class ProjectCopyVisitor extends AbstractProjectVisitor {
                 // Handle incomplete constraints (depending on declarations)
                 elementsResolved |= resolveIncompleteConstraints();
                 
+                // Handly partially copied assign blocks (depending on declarations)
+                elementsResolved |= resolveIncompleteAssignBlocks();
+                
                 // Handle uncopied interfaces (need that all exported declarations have been copied)
                 elementsResolved |= retryCopy(incompleteElements.getUnresolvedProjectInterfaces().iterator());
                 
@@ -250,6 +256,35 @@ public class ProjectCopyVisitor extends AbstractProjectVisitor {
                 elementsResolved |= retryCopy(incompleteElements.getUncopiedFreezeBlocks().iterator());
             }
         }
+    }
+    
+    /**
+     * Part of the end of the coping: Tries to fix {@link Assignment}s of incomplete copied
+     * {@link AttributeAssignment}s.
+     * @return <tt>true</tt> if at least one element was resolved, <tt>false</tt> no elements have been resolved,
+     *     maybe because there was nothing to do.
+     */
+    private boolean resolveIncompleteAssignBlocks() {
+        boolean elementsResolved = false;
+        
+        Iterator<UnresolvedAnnotationAssignment> assignItr
+            = incompleteElements.getUncopiedAnnotationAssignments().iterator();
+        while (assignItr.hasNext()) {
+            UnresolvedAnnotationAssignment assignBlockContainer = assignItr.next();
+            
+            Assignment orgAssignment = assignBlockContainer.getUnresolvedAssignment();
+            CSTCopyVisitor cstCopy = new CSTCopyVisitor(copiedDeclarations);
+            orgAssignment.getExpression().accept(cstCopy);
+            if (cstCopy.translatedCompletely()) {
+                Assignment copiedAssignment = new Assignment(orgAssignment.getName(), orgAssignment.getOperation(),
+                    cstCopy.getResult());
+                assignBlockContainer.getCopiedParent().add(copiedAssignment);
+                elementsResolved = true;
+                assignItr.remove();
+            }
+        }
+        
+        return elementsResolved;
     }
     
     /**
@@ -440,16 +475,16 @@ public class ProjectCopyVisitor extends AbstractProjectVisitor {
             IModelElement parent = parents.peekFirst();
             if (parent instanceof Project) {
                 ((Project) parent).add(copiedElement);
-            } else if (parent instanceof Compound) {
-                Compound cType = (Compound) parent;
+            } else if (parent instanceof IDecisionVariableContainer) {
+                IDecisionVariableContainer container = (IDecisionVariableContainer) parent;
                 if (copiedElement instanceof DecisionVariableDeclaration) {
-                    cType.add((DecisionVariableDeclaration) copiedElement);
+                    container.add((DecisionVariableDeclaration) copiedElement);
                 } else if (copiedElement instanceof AttributeAssignment) {
-                    cType.add((AttributeAssignment) copiedElement);
+                    container.add((AttributeAssignment) copiedElement);
                 } else if (copiedElement instanceof EvaluationBlock) {
-                    cType.add((EvaluationBlock) copiedElement);
+                    container.add((EvaluationBlock) copiedElement);
                 } else if (copiedElement instanceof Comment) {
-                    cType.add((Comment) copiedElement);
+                    container.add((Comment) copiedElement);
                 }
             } else if (parent instanceof PartialEvaluationBlock) {
                 ((PartialEvaluationBlock) parent).addModelElement(copiedElement);
@@ -775,8 +810,29 @@ public class ProjectCopyVisitor extends AbstractProjectVisitor {
 
     @Override
     public void visitAttributeAssignment(AttributeAssignment assignment) {
-        // TODO Auto-generated method stub
+        AttributeAssignment copiedBlock = new AttributeAssignment(parents.peekFirst());
+        addToCurrentParent(copiedBlock);
         
+        // Copy assignments
+        for (int i = 0, end = assignment.getAssignmentDataCount(); i < end; i++) {
+            Assignment orgAssignment = assignment.getAssignmentData(i);
+            CSTCopyVisitor cstCopy = new CSTCopyVisitor(copiedDeclarations);
+            orgAssignment.getExpression().accept(cstCopy);
+            if (cstCopy.translatedCompletely()) {
+                Assignment copiedAssignment = new Assignment(orgAssignment.getName(), orgAssignment.getOperation(),
+                    cstCopy.getResult());
+                copiedBlock.add(copiedAssignment);
+            } else {
+                incompleteElements.addUncopiedAssignment(copiedBlock, orgAssignment);
+            }
+        }
+        
+        // Copy nested elements
+        parents.addFirst(copiedBlock);
+        for (int i = 0, end = assignment.getModelElementCount(); i < end; i++) {
+            assignment.getModelElement(i).accept(this);
+        }
+        parents.removeFirst();
     }
 
     @Override
