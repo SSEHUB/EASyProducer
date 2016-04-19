@@ -102,7 +102,7 @@ class ValueCopyVisitor implements IValueVisitor {
 
     @Override
     public void visitEnumValue(EnumValue value) {
-        Enum copiedType = (Enum) copyier.getTranslatedType(value.getContainedType());
+        Enum copiedType = (Enum) copyier.getTranslatedType(value.getType());
         if (null != copiedType) {
             EnumLiteral lit = copiedType.get(value.getValue().getName());
             try {

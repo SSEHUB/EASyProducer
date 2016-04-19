@@ -16,11 +16,13 @@
 package net.ssehub.easy.varModel.model.rewrite;
 
 import java.util.ArrayDeque;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Deque;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 
 import net.ssehub.easy.basics.modelManagement.ModelManagementException;
@@ -59,6 +61,7 @@ import net.ssehub.easy.varModel.model.datatypes.CustomOperation;
 import net.ssehub.easy.varModel.model.datatypes.DerivedDatatype;
 import net.ssehub.easy.varModel.model.datatypes.Enum;
 import net.ssehub.easy.varModel.model.datatypes.EnumLiteral;
+import net.ssehub.easy.varModel.model.datatypes.FreezeVariableType;
 import net.ssehub.easy.varModel.model.datatypes.IDatatype;
 import net.ssehub.easy.varModel.model.datatypes.OrderedEnum;
 import net.ssehub.easy.varModel.model.datatypes.Reference;
@@ -210,73 +213,88 @@ public class ProjectCopyVisitor extends AbstractProjectVisitor {
     
     @Override
     public void visitProject(Project project) {
-        Project copy = new Project(project.getName());
-        copiedProjects.put(project, copy);
-        projectTypes.put(project.getType(), copy);
-        parents.addFirst(copy);
-        if (project == getStartingProject()) {
-            copiedProject = copy;
-        }
+        // Check whether the project was already copied (maybe through another import)
+        Project copy = copiedProjects.get(project);
         
-        // Handle version
-        Version originalVersion = project.getVersion();
-        if (null != originalVersion) {
-            int[] segments = new int[originalVersion.getSegmentCount()];
-            for (int i = 0; i < segments.length; i++) {
-                segments[i] = originalVersion.getSegment(i);
+        if (null == copy) {
+            copy = new Project(project.getName());
+            copiedProjects.put(project, copy);
+            copiedDeclarations.put(project.getVariable(), copy.getVariable());
+            copiedElements.put(project.getVariable(), copy.getVariable());
+            projectTypes.put(project.getType(), copy);
+            parents.addFirst(copy);
+            if (project == getStartingProject()) {
+                copiedProject = copy;
             }
             
-            copy.setVersion(new Version(segments));
+            // Handle version
+            Version originalVersion = project.getVersion();
+            if (null != originalVersion) {
+                int[] segments = new int[originalVersion.getSegmentCount()];
+                for (int i = 0; i < segments.length; i++) {
+                    segments[i] = originalVersion.getSegment(i);
+                }
+                
+                copy.setVersion(new Version(segments));
+            }
+            
+            // Start visitation (imports, elements, ...)
+            super.visitProject(project);
+            
+            parents.pollFirst();
         }
-        
-        // Start visitation (imports, 
-        super.visitProject(project);
-        
-        parents.pollFirst();
         
         // Finally at the end of the whole translation, try to fix all the missed elements
         if (project == getStartingProject()) {
-            parents.clear();
-            boolean elementsResolved = true;
+            reCopyUnresolvedElements();
+        }
+    }
+
+    /**
+     * Tries to translate elements at the end of the visitation, which could not be translated during the regular
+     * visitation, because of missing elements.
+     */
+    private void reCopyUnresolvedElements() {
+        parents.clear();
+        boolean elementsResolved = true;
+        
+        while (elementsResolved) {
+            elementsResolved = false;
             
-            while (elementsResolved) {
-                elementsResolved = false;
-                
-                // Handle uncopied custom types
-                elementsResolved |= retryCopy(incompleteElements.getUnresolvedTypes().iterator());
-                
-                // Handle uncopied declarations (depending on custom types)
-                elementsResolved |= retryCopy(incompleteElements.getDeclarationsWithMissingTypes().iterator());
-                
-                // Handle incomplete default values (depending on declarations)
-                elementsResolved |= resolveIncompleteDefaultValues();
-                
-                // Handle incomplete default values (depending on custom types)
-                elementsResolved |= resolveUncopyableCSTs();
-                
-                // Handle incomplete constraints (depending on declarations)
-                elementsResolved |= resolveIncompleteConstraints();
-                
-                // Handle partially copied assign blocks (depending on declarations)
-                elementsResolved |= resolveIncompleteAssignBlocks();
-                
-                // Handle uncopied interfaces (need that all exported declarations have been copied)
-                elementsResolved |= retryCopy(incompleteElements.getUnresolvedProjectInterfaces().iterator());
-                
-                // Handle incomplete operations
-                elementsResolved |= resolveIncompleteOperations();
-                
-                // Handle operations, depending on custom types
-                elementsResolved |= retryCopy(incompleteElements.getUncopiedOperations().iterator());               
-                
-                // Handle uncopied CompoundAccesses (depending on declarations)
-                visitLocalElements = true;
-                elementsResolved |= retryCopy(incompleteElements.getUncopiedCompoundAccesses().iterator());
-                visitLocalElements = false;
-                
-                // Handle uncopied FreezeBlocks (depending on declarations, CompoundAccesses and maybe on constraints)
-                elementsResolved |= retryCopy(incompleteElements.getUncopiedFreezeBlocks().iterator());
-            }
+            // Handle uncopied custom types
+            elementsResolved |= retryCopy(incompleteElements.getUnresolvedTypes().iterator());
+            
+            // Handle uncopied declarations (depending on custom types)
+            elementsResolved |= retryCopy(incompleteElements.getDeclarationsWithMissingTypes().iterator());
+            
+//            // Handle incomplete default values (depending on declarations)
+//            elementsResolved |= resolveIncompleteDefaultValues();
+            
+            // Handle incomplete default values (depending on custom types)
+            elementsResolved |= resolveUncopyableCSTs();
+            
+//            // Handle incomplete constraints (depending on declarations)
+//            elementsResolved |= resolveIncompleteConstraints();
+            
+            // Handle partially copied assign blocks (depending on declarations)
+            elementsResolved |= resolveIncompleteAssignBlocks();
+            
+            // Handle uncopied interfaces (need that all exported declarations have been copied)
+            elementsResolved |= retryCopy(incompleteElements.getUnresolvedProjectInterfaces().iterator());
+            
+            // Handle incomplete operations
+            elementsResolved |= resolveIncompleteOperations();
+            
+            // Handle operations, depending on custom types
+            elementsResolved |= retryCopy(incompleteElements.getUncopiedOperations().iterator());               
+            
+            // Handle uncopied CompoundAccesses (depending on declarations)
+            visitLocalElements = true;
+            elementsResolved |= retryCopy(incompleteElements.getUncopiedCompoundAccesses().iterator());
+            visitLocalElements = false;
+            
+            // Handle uncopied FreezeBlocks (depending on declarations, CompoundAccesses and maybe on constraints)
+            elementsResolved |= retryCopy(incompleteElements.getUncopiedFreezeBlocks().iterator());
         }
     }
     
@@ -333,7 +351,7 @@ public class ProjectCopyVisitor extends AbstractProjectVisitor {
             UnresolvedAnnotationAssignment assignBlockContainer = assignItr.next();
             
             Assignment orgAssignment = assignBlockContainer.getUnresolvedAssignment();
-            CSTCopyVisitor cstCopy = new CSTCopyVisitor(copiedDeclarations);
+            CSTCopyVisitor cstCopy = new CSTCopyVisitor(copiedDeclarations, this);
             orgAssignment.getExpression().accept(cstCopy);
             if (cstCopy.translatedCompletely()) {
                 Assignment copiedAssignment = new Assignment(orgAssignment.getName(), orgAssignment.getOperation(),
@@ -361,7 +379,7 @@ public class ProjectCopyVisitor extends AbstractProjectVisitor {
             OperationDefinition op = opItr.next();
             CustomOperation tmpCustomOp = op.getOperation();
             
-            CSTCopyVisitor copyier = new CSTCopyVisitor(copiedDeclarations);
+            CSTCopyVisitor copyier = new CSTCopyVisitor(copiedDeclarations, this);
             tmpCustomOp.getFunction().accept(copyier);
             if (copyier.translatedCompletely()) {
                 // Copy already copied parameters
@@ -450,66 +468,67 @@ public class ProjectCopyVisitor extends AbstractProjectVisitor {
         return !abort;
     }
     
-    /**
-     * Part of the end of the coping: Tries to fix default values, which could not be translated during
-     * the regular visitation.
-     * @return <tt>true</tt> if at least one element was resolved, <tt>false</tt> no elements have been resolved,
-     *     maybe because there was nothing to do.
-     */
-    private boolean resolveIncompleteDefaultValues() {
-        boolean elementsResolved = false;
-        
-        Iterator<AbstractVariable> declDefaultItr = incompleteElements.getDeclarationsWithMissingDefaults().iterator();
-        while (declDefaultItr.hasNext()) {
-            AbstractVariable decl = declDefaultItr.next();
-            CSTCopyVisitor copyier = new CSTCopyVisitor(copiedDeclarations, this);
-            decl.getDefaultValue().accept(copyier);
-            if (copyier.translatedCompletely()) {
-                try {
-                    decl.setValue(copyier.getResult());
-                    declDefaultItr.remove();
-                    elementsResolved = true;
-                } catch (ValueDoesNotMatchTypeException e) {
-                    incompleteElements.addUncopyableCST(decl, decl.getDefaultValue());
-                    elementsResolved = true;
-                    declDefaultItr.remove();
-                } catch (CSTSemanticException e) {
-                    incompleteElements.addUncopyableCST(decl, decl.getDefaultValue());
-                    elementsResolved = true;
-                    declDefaultItr.remove();
-                }
-            }
-        }
-        return elementsResolved;
-    }
+//    /**
+//     * Part of the end of the coping: Tries to fix default values, which could not be translated during
+//     * the regular visitation.
+//     * @return <tt>true</tt> if at least one element was resolved, <tt>false</tt> no elements have been resolved,
+//     *     maybe because there was nothing to do.
+//     */
+//    private boolean resolveIncompleteDefaultValues() {
+//        boolean elementsResolved = false;
+//        
+//        Iterator<AbstractVariable> declDefaultItr
+//            = incompleteElements.getDeclarationsWithMissingDefaults().iterator();
+//        while (declDefaultItr.hasNext()) {
+//            AbstractVariable decl = declDefaultItr.next();
+//            CSTCopyVisitor copyier = new CSTCopyVisitor(copiedDeclarations, this);
+//            decl.getDefaultValue().accept(copyier);
+//            if (copyier.translatedCompletely()) {
+//                try {
+//                    decl.setValue(copyier.getResult());
+//                    declDefaultItr.remove();
+//                    elementsResolved = true;
+//                } catch (ValueDoesNotMatchTypeException e) {
+//                    incompleteElements.addUncopyableCST(decl, decl.getDefaultValue());
+//                    elementsResolved = true;
+//                    declDefaultItr.remove();
+//                } catch (CSTSemanticException e) {
+//                    incompleteElements.addUncopyableCST(decl, decl.getDefaultValue());
+//                    elementsResolved = true;
+//                    declDefaultItr.remove();
+//                }
+//            }
+//        }
+//        return elementsResolved;
+//    }
     
-    /**
-     * Part of the end of the coping: Tries to fix constraints, which could not be translated during
-     * the regular visitation.
-     * @return <tt>true</tt> if at least one element was resolved, <tt>false</tt> no elements have been resolved,
-     *     maybe because there was nothing to do.
-     */
-    private boolean resolveIncompleteConstraints() {
-        boolean elementsResolved = false;
-        
-        Iterator<Constraint> constraintItr = incompleteElements.getUnresolvedconstraints().iterator();
-        while (constraintItr.hasNext()) {
-            Constraint constraint = constraintItr.next();
-            CSTCopyVisitor copyier = new CSTCopyVisitor(copiedDeclarations, this);
-            constraint.getConsSyntax().accept(copyier);
-            if (copyier.translatedCompletely()) {
-                try {
-                    constraint.setConsSyntax(copyier.getResult());
-                    constraintItr.remove();
-                    elementsResolved = true;
-                } catch (CSTSemanticException e) {
-                    // Should not be possible, since the original was valid
-                    Bundle.getLogger(ProjectCopyVisitor.class).exception(e);
-                }
-            }
-        }
-        return elementsResolved;
-    }
+//    /**
+//     * Part of the end of the coping: Tries to fix constraints, which could not be translated during
+//     * the regular visitation.
+//     * @return <tt>true</tt> if at least one element was resolved, <tt>false</tt> no elements have been resolved,
+//     *     maybe because there was nothing to do.
+//     */
+//    private boolean resolveIncompleteConstraints() {
+//        boolean elementsResolved = false;
+//        
+//        Iterator<Constraint> constraintItr = incompleteElements.getUnresolvedconstraints().iterator();
+//        while (constraintItr.hasNext()) {
+//            Constraint constraint = constraintItr.next();
+//            CSTCopyVisitor copyier = new CSTCopyVisitor(copiedDeclarations, this);
+//            constraint.getConsSyntax().accept(copyier);
+//            if (copyier.translatedCompletely()) {
+//                try {
+//                    constraint.setConsSyntax(copyier.getResult());
+//                    constraintItr.remove();
+//                    elementsResolved = true;
+//                } catch (CSTSemanticException e) {
+//                    // Should not be possible, since the original was valid
+//                    Bundle.getLogger(ProjectCopyVisitor.class).exception(e);
+//                }
+//            }
+//        }
+//        return elementsResolved;
+//    }
     
     /**
      * Returns the copy of the visited project. This is the starting projects for all copied (imported) projects. <br/>
@@ -577,21 +596,13 @@ public class ProjectCopyVisitor extends AbstractProjectVisitor {
                 // Real, Strings, Integers, Booleans, Constraints
                 copiedType = originalType;
             } else if (Container.TYPE.isAssignableFrom(originalType)) {
-                Container conType = (Container) originalType;
-                IDatatype containedType = getTranslatedType(conType.getContainedType());
-                Project copiedParent = copiedProjects.get(conType.getParent());
-                if (null != containedType && null != copiedParent) {
-                    if (Sequence.TYPE.isAssignableFrom(originalType)) {
-                        copiedType = new Sequence(originalType.getName(), containedType, copiedParent);
-                    } else if (Set.TYPE.isAssignableFrom(originalType)) {
-                        copiedType = new Set(originalType.getName(), containedType, copiedParent);
-                    }
-                }
+                copiedType = getTranslatedContainer((Container) originalType);
             } else if (Compound.TYPE.isAssignableFrom(originalType) || Enum.TYPE.isAssignableFrom(originalType)
                 || DerivedDatatype.TYPE.isAssignableFrom(originalType)) {
+                
                 copiedType = (IDatatype) copiedElements.get(originalType);
             } else if (originalType instanceof Reference) {
-                copiedType = (IDatatype) copiedElements.get(copiedType);
+                copiedType = (IDatatype) copiedElements.get(originalType);
                 if (null == copiedType) {
                     Reference orgRef = (Reference) originalType;
                     copiedType = (IDatatype) copiedElements.get(orgRef.getType());
@@ -607,9 +618,59 @@ public class ProjectCopyVisitor extends AbstractProjectVisitor {
             } else if (null != projectTypes.get(originalType)) {
                 Project copiedProject = projectTypes.get(originalType);
                 copiedType = copiedProject.getType();
+            } else if (originalType instanceof FreezeVariableType) {
+                copiedType = (IDatatype) copiedElements.get(originalType);
+                
+                if (null == copiedType) {
+                    FreezeVariableType orgFreezeType = (FreezeVariableType) originalType;
+                    List<IFreezable> frozenElements = new ArrayList<IFreezable>();
+                    for (int i = 0, end = orgFreezeType.getAttributesCount(); i < end; i++) {
+                        // TODO SE: Unclear whether some attributes are maybe missed
+                        Attribute orgAttribute = orgFreezeType.getAttribute(i);
+                        Attribute copiedAttribute = (Attribute) copiedElements.get(orgAttribute);
+                        IAttributableElement element = null != copiedAttribute ? copiedAttribute.getElement() : null;
+                        if (null != element && element instanceof IFreezable) {
+                            frozenElements.add((IFreezable) element);
+                        }
+                    }
+                    FreezeVariableType copiedFreezeType = new FreezeVariableType(
+                        frozenElements.toArray(new IFreezable[0]), parents.peekFirst());
+                    copiedElements.put(orgFreezeType, copiedFreezeType);
+                    copiedType = copiedFreezeType;
+                }
             }
         } 
         
+        return copiedType;
+    }
+
+    /**
+     * Part of {@link #getTranslatedType(IDatatype)}: Returns the translated type for containers.
+     * @param originalType The original {@link Container} type to be copied.
+     * @return The copied {@link Container}.
+     */
+    private IDatatype getTranslatedContainer(Container originalType) {
+        IDatatype copiedType = (IDatatype) copiedElements.get(originalType);
+        
+        if (null == copiedType) {
+            IDatatype containedType = getTranslatedType(originalType.getContainedType());
+            Project copiedParent = copiedProjects.get(originalType.getParent());
+            if (null != containedType && null != copiedParent) {
+                Container copiedConType = null;
+                if (Sequence.TYPE.isAssignableFrom(originalType)) {
+                    copiedConType = new Sequence(originalType.getName(), containedType, copiedParent);
+                } else if (Set.TYPE.isAssignableFrom(originalType)) {
+                    copiedConType = new Set(originalType.getName(), containedType, copiedParent);
+                }
+                
+                setComment(copiedConType, originalType);
+                ModelElement parent = copiedElements.get(originalType.getParent());
+                addToParent(copiedConType, (IModelElement) parent);
+                copiedElements.put(copiedConType, originalType);
+                
+                copiedType = copiedConType;
+            }
+        }
         return copiedType;
     }
     
@@ -661,14 +722,15 @@ public class ProjectCopyVisitor extends AbstractProjectVisitor {
         if (null != cst) {
             CSTCopyVisitor cstCopyier = new CSTCopyVisitor(copiedDeclarations, this); 
             cst.accept(cstCopyier);
-            try {
-                copiedDecl.setValue(cstCopyier.getResult());
-                if (!cstCopyier.translatedCompletely()) {
-                    incompleteElements.addMissingDefault(copiedDecl);
+            if (cstCopyier.translatedCompletely() && null != cstCopyier.getResult()) {
+                try {
+                    copiedDecl.setValue(cstCopyier.getResult());                
+                } catch (ValueDoesNotMatchTypeException e) {
+                    incompleteElements.addUncopyableCST(copiedDecl, cst);
+                } catch (CSTSemanticException e) {
+                    incompleteElements.addUncopyableCST(copiedDecl, cst);
                 }
-            } catch (ValueDoesNotMatchTypeException e) {
-                incompleteElements.addUncopyableCST(copiedDecl, cst);
-            } catch (CSTSemanticException e) {
+            } else {
                 incompleteElements.addUncopyableCST(copiedDecl, cst);
             }
         }
@@ -712,12 +774,13 @@ public class ProjectCopyVisitor extends AbstractProjectVisitor {
         if (cst != null) {
             CSTCopyVisitor cstCopyier = new CSTCopyVisitor(copiedDeclarations, this); 
             cst.accept(cstCopyier);
-            try {
-                copiedConstraint.setConsSyntax(cstCopyier.getResult());
-                if (!cstCopyier.translatedCompletely()) {
-                    incompleteElements.addUnresolvedConstraint(copiedConstraint);
+            if (cstCopyier.translatedCompletely()) {
+                try {
+                    copiedConstraint.setConsSyntax(cstCopyier.getResult());
+                } catch (CSTSemanticException e) {
+                    incompleteElements.addUncopyableCST(copiedConstraint, cst);
                 }
-            } catch (CSTSemanticException e) {
+            } else {
                 incompleteElements.addUncopyableCST(copiedConstraint, cst);
             }
         }
@@ -757,10 +820,15 @@ public class ProjectCopyVisitor extends AbstractProjectVisitor {
             visitLocalElements = false;
             
             // Selector expression
-            CSTCopyVisitor copyier = new CSTCopyVisitor(copiedDeclarations);
+            CSTCopyVisitor copyier = new CSTCopyVisitor(copiedDeclarations, this);
             freeze.getSelector().accept(copyier);
             if (copyier.translatedCompletely()) {
                 copiedSelecor = copyier.getResult();
+                try {
+                    copiedSelecor.inferDatatype();
+                } catch (CSTSemanticException e) {
+                    butOK = false;
+                }
             } else {
                 butOK = false;
             }
@@ -804,7 +872,7 @@ public class ProjectCopyVisitor extends AbstractProjectVisitor {
             parents.removeFirst();
             
             // Copy CST and create custom operation
-            CSTCopyVisitor cstCopy = new CSTCopyVisitor(copiedDeclarations);
+            CSTCopyVisitor cstCopy = new CSTCopyVisitor(copiedDeclarations, this);
             orgCustomOp.getFunction().accept(cstCopy);
             CustomOperation copiedCustomOp = new CustomOperation(copiedReturnType, orgCustomOp.getName(),
                     copiedOperandType, cstCopy.getResult(), copiedParameters);
@@ -900,7 +968,7 @@ public class ProjectCopyVisitor extends AbstractProjectVisitor {
         // Copy assignments
         for (int i = 0, end = assignment.getAssignmentDataCount(); i < end; i++) {
             Assignment orgAssignment = assignment.getAssignmentData(i);
-            CSTCopyVisitor cstCopy = new CSTCopyVisitor(copiedDeclarations);
+            CSTCopyVisitor cstCopy = new CSTCopyVisitor(copiedDeclarations, this);
             orgAssignment.getExpression().accept(cstCopy);
             if (cstCopy.translatedCompletely()) {
                 Assignment copiedAssignment = new Assignment(orgAssignment.getName(), orgAssignment.getOperation(),

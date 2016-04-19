@@ -35,19 +35,7 @@ class CSTCopyVisitor extends CopyVisitor {
     
     private boolean complete;
     private ProjectCopyVisitor copyier;
-    
-    /**
-     * Creates a copy visitor with explicit mapping. This is for first round of translation, where <b>not</b> all
-     * projects have been translated.
-     * 
-     * @param mapping a mapping from old variable declarations to new variable declarations,
-     *   existing variable declarations are taken over if no mapping is given, may be <b>null</b>
-     *   in case of no mapping at all
-     */
-    CSTCopyVisitor(Map<AbstractVariable, AbstractVariable> mapping) {
-        this(mapping, null);
-    }
-    
+        
     /**
      * Creates a copy visitor with explicit mapping. This is for the final round of translation, where all projects
      * have been translated.
@@ -135,7 +123,7 @@ class CSTCopyVisitor extends CopyVisitor {
     @Override
     public void visitConstantValue(ConstantValue constantValue) {
         Value nestedValue = constantValue.getConstantValue();
-        IDatatype type = nestedValue.getContainedType();
+        IDatatype type = nestedValue.getType();
         if (null != type && !type.isPrimitive()) {
             // Value must be translated
             complete = false;
@@ -149,8 +137,9 @@ class CSTCopyVisitor extends CopyVisitor {
                     complete = true;
                 }
             }
+        } else {
+            super.visitConstantValue(constantValue);
         }
-        super.visitConstantValue(constantValue);
     }
 
 }
