@@ -204,6 +204,18 @@ public class ProjectRewriteVisitor implements IModelVisitor {
 
     @Override
     public void visitConstraint(Constraint constraint) {
+        if (null != constraint.getConsSyntax()) {
+            copyConstraint(constraint);
+        } else {
+            addCopiedElement(filter(constraint));
+        }
+    }
+
+    /**
+     * Copies the given Constraint.
+     * @param constraint A constraints, which syntax is not <tt>null</tt>
+     */
+    private void copyConstraint(Constraint constraint) {
         ConstraintSyntaxTree cst = constraint.getConsSyntax();
         DeclrationInConstraintFinder finder = new DeclrationInConstraintFinder(cst);
         java.util.Set<AbstractVariable> usedDeclarations = finder.getDeclarations();
@@ -215,7 +227,9 @@ public class ProjectRewriteVisitor implements IModelVisitor {
         
         // Remove constraint, if constraint used removed declarations
         if (allDeclarationsarePresent) {
-            if (cst instanceof OCLFeatureCall && OclKeyWords.ASSIGNMENT.equals(((OCLFeatureCall) cst).getOperation())) {
+            if (cst instanceof OCLFeatureCall
+                && OclKeyWords.ASSIGNMENT.equals(((OCLFeatureCall) cst).getOperation())) {
+                
                 OCLFeatureCall call = (OCLFeatureCall) cst;
                 ConstraintSyntaxTree param = call.getParameter(0);
                 if (param instanceof ConstantValue) {
@@ -228,13 +242,15 @@ public class ProjectRewriteVisitor implements IModelVisitor {
                             // Needed for setting the correct operation
                             call.inferDatatype();
                         } catch (CSTSemanticException e1) {
-                            EASyLoggerFactory.INSTANCE.getLogger(ProjectRewriteVisitor.class, Bundle.ID).exception(e1);
+                            EASyLoggerFactory.INSTANCE.getLogger(ProjectRewriteVisitor.class, Bundle.ID)
+                                .exception(e1);
                         }
                         constraint = new Constraint(constraint.getParent());
                         try {
                             constraint.setConsSyntax(call);
                         } catch (CSTSemanticException e) {
-                            EASyLoggerFactory.INSTANCE.getLogger(ProjectRewriteVisitor.class, Bundle.ID).exception(e);
+                            EASyLoggerFactory.INSTANCE.getLogger(ProjectRewriteVisitor.class, Bundle.ID)
+                                .exception(e);
                         }
                     } else if (copy.valuesOmitted() && null == copy.getValue()) {
                         // Value was completely filtered -> remove assignment constraint

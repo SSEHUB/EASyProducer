@@ -517,8 +517,12 @@ public class ProjectCopyVisitor extends AbstractProjectVisitor {
                     }
                 }
             } else if (Compound.TYPE.isAssignableFrom(originalType) || Enum.TYPE.isAssignableFrom(originalType)
-                || DerivedDatatype.TYPE.isAssignableFrom(originalType) || originalType instanceof Reference) {
+                || DerivedDatatype.TYPE.isAssignableFrom(originalType)) {
                 copiedType = (IDatatype) copiedElements.get(originalType);
+            } else if (originalType instanceof Reference) {
+                copiedType = (IDatatype) copiedElements.get(((Reference) originalType).getType());
+                ModelElement parent = copiedElements.get(((Reference) originalType).getParent());
+                copiedType = new Reference(originalType.getName(), copiedType, parent);
             } else if (null != projectTypes.get(originalType)) {
                 Project copiedProject = projectTypes.get(originalType);
                 copiedType = copiedProject.getType();
