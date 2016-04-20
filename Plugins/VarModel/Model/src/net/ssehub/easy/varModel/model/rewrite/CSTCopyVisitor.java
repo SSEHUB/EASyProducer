@@ -22,9 +22,12 @@ import net.ssehub.easy.varModel.cst.ConstraintSyntaxTree;
 import net.ssehub.easy.varModel.cst.ContainerOperationCall;
 import net.ssehub.easy.varModel.cst.CopyVisitor;
 import net.ssehub.easy.varModel.model.AbstractVariable;
+import net.ssehub.easy.varModel.model.Attribute;
+import net.ssehub.easy.varModel.model.AttributeAssignment;
 import net.ssehub.easy.varModel.model.ContainableModelElement;
 import net.ssehub.easy.varModel.model.DecisionVariableDeclaration;
 import net.ssehub.easy.varModel.model.ExplicitTypeVariableDeclaration;
+import net.ssehub.easy.varModel.model.IAttributableElement;
 import net.ssehub.easy.varModel.model.IModelElement;
 import net.ssehub.easy.varModel.model.datatypes.IDatatype;
 import net.ssehub.easy.varModel.model.values.Value;
@@ -69,6 +72,23 @@ class CSTCopyVisitor extends CopyVisitor {
         AbstractVariable result = null;
         if (null != getMapping()) {
             result = getMapping().get(var);
+            
+            if (null == result && var instanceof Attribute && null != var.getParent()
+                && null != copyier.getCopiedParent(var.getParent())) {
+                
+                IModelElement parent = copyier.getCopiedParent(var.getParent());
+                
+                if (parent instanceof IAttributableElement) {
+                    result = ((IAttributableElement) parent).getAttribute(var.getName());
+                } else if (parent instanceof AttributeAssignment) {
+                    result = ((AttributeAssignment) parent).getElement(var.getName());
+                }
+                
+                if (null != result) {
+                    getMapping().put(var, result);
+                }
+            }
+            
             if (null == result && visitItrExpression && var instanceof DecisionVariableDeclaration) {
                 // Create local iterator variable
                 DecisionVariableDeclaration varAsDecl = (DecisionVariableDeclaration) var;
@@ -160,6 +180,7 @@ class CSTCopyVisitor extends CopyVisitor {
         IDatatype type = nestedValue.getType();
         if (null != type && !type.isPrimitive()) {
             // Value must be translated
+            boolean tmpComplete = complete;
             complete = false;
             
             IDatatype copiedType = copyier.getTranslatedType(type);
@@ -168,7 +189,7 @@ class CSTCopyVisitor extends CopyVisitor {
                 nestedValue.accept(valueCopyier);
                 if (valueCopyier.translatedCompletely()) {
                     setResult(new ConstantValue(valueCopyier.getResult()));
-                    complete = true;
+                    complete = tmpComplete;
                 }
             }
         } else {
