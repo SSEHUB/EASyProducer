@@ -93,14 +93,17 @@ public class Activator implements BundleActivator {
      * @return the resolved URL
      */
     public static URL resolve(URL url) {
-        if (null != url && !isFileProtocol(url)) { // avoid resolution outside Eclipse / in Standalone
+        // avoid resolution outside Eclipse / in Standalone and no further collisions 
+        if (null != url && !isFileProtocol(url)) { 
             try {
                 url = FileLocator.resolve(url);
             } catch (IOException e) {
                 EASyLoggerFactory.INSTANCE.getLogger(Activator.class, BUNDLE_ID).exception(e);
+            } catch (NullPointerException e) {
+                // cannot resolve somehow, do not resolve at all
             }
         }
         return url;
     }
-
+    
 }

@@ -52,7 +52,8 @@ import net.ssehub.easy.instantiation.core.model.vilTypes.Set;
  */
 @Instantiator("maven")
 public class Maven extends AbstractFileInstantiator {
-    
+
+    // folder without /lib!
     private static final boolean AS_PROCESS = Boolean.valueOf(System.getProperty("easy.maven.asProcess", "true"));
     private static final String MAVEN_HOME = System.getProperty("easy.maven.home", null);
     // running the instantiator as a JUnit test from Eclipse may carry unsigned dependencies - exclude Eclipse path
