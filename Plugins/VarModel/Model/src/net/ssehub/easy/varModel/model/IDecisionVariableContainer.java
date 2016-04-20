@@ -199,5 +199,13 @@ public interface IDecisionVariableContainer extends IModelElement, IContainableE
      * @return <code>true</code> if this project contains the specified element, <code>false</code> else
      */
     public boolean containsByName(String name);
+    
+    /**
+     * Forces the {@link IDecisionVariableContainer} to update cached lists of nested
+     * {@link DecisionVariableDeclaration}s. This is only necessary if multiple {@link IDecisionVariableContainer}
+     * are nested into each other and only during incremental build up if an inner element is updated while already
+     * added to the outer element.
+     */
+    public void forceUpdate();
 }
 

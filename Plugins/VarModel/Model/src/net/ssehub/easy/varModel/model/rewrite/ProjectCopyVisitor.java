@@ -541,6 +541,8 @@ public class ProjectCopyVisitor extends AbstractProjectVisitor {
                 container.add((EvaluationBlock) copiedElement);
             } else if (copiedElement instanceof Comment) {
                 container.add((Comment) copiedElement);
+            } else if (copiedElement instanceof Constraint) {
+                container.addConstraint((Constraint) copiedElement, false);
             }
         } else if (parent instanceof PartialEvaluationBlock) {
             ((PartialEvaluationBlock) parent).addModelElement(copiedElement);

@@ -77,11 +77,15 @@ class CSTCopyVisitor extends CopyVisitor {
                 && null != copyier.getCopiedParent(var.getParent())) {
                 
                 IModelElement parent = copyier.getCopiedParent(var.getParent());
-                
+                if (parent instanceof AttributeAssignment) {
+                    IAttributableElement annotatedElement = ((Attribute) var).getElement();
+                    if (annotatedElement instanceof IModelElement) {
+                        parent = (IModelElement) annotatedElement;
+                    }
+                }
+                // If block before is optional -> Please do not wonder about casting back and forth         
                 if (parent instanceof IAttributableElement) {
                     result = ((IAttributableElement) parent).getAttribute(var.getName());
-                } else if (parent instanceof AttributeAssignment) {
-                    result = ((AttributeAssignment) parent).getElement(var.getName());
                 }
                 
                 if (null != result) {
@@ -189,6 +193,7 @@ class CSTCopyVisitor extends CopyVisitor {
                 nestedValue.accept(valueCopyier);
                 if (valueCopyier.translatedCompletely()) {
                     setResult(new ConstantValue(valueCopyier.getResult()));
+                    // complete = tmpComplete && true
                     complete = tmpComplete;
                 }
             }

@@ -428,4 +428,14 @@ public class Compound extends StructuredDatatype implements IResolutionScope, ID
         return container.containsByName(name);
     }
 
+    @Override
+    public void forceUpdate() {
+        container.forceUpdate();
+        Compound refines = getRefines();
+        while (null != refines) {
+            refines.forceUpdate();
+            refines = refines.getRefines();
+        }
+    }
+
 }
