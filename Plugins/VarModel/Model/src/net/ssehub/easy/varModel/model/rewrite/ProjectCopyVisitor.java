@@ -16,13 +16,11 @@
 package net.ssehub.easy.varModel.model.rewrite;
 
 import java.util.ArrayDeque;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Deque;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
 
 import net.ssehub.easy.basics.modelManagement.ModelManagementException;
@@ -139,6 +137,15 @@ public class ProjectCopyVisitor extends AbstractProjectVisitor {
     private Map<IDatatype, Project> projectTypes;
     
     /**
+     * Temporary frozen elements, needed for creating {@link FreezeVariableType}.
+     * Not fine, but this is needed to transfer these elements from one visitation method to another were its needed.
+     * Needed to create the data type for the selector {@link DecisionVariableDeclaration} while visiting a
+     * {@link FreezeBlock}.
+     */
+    private IFreezable[] currentlyFrozen;
+    private boolean frozenElementsOK;
+    
+    /**
      * Sole constructor for creating a copy of a {@link Project}.
      * @param originProject The project where the visiting shall start
      * @param filterType Specifies whether project imports shall be considered or not. All considered projects
@@ -152,6 +159,8 @@ public class ProjectCopyVisitor extends AbstractProjectVisitor {
         incompleteElements = new UncopiedElementsContainer();
         projectTypes = new HashMap<IDatatype, Project>();
         parents = new ArrayDeque<IModelElement>();
+        currentlyFrozen = null;
+        frozenElementsOK = false;
         visitLocalElements = false;
     }
     
@@ -162,6 +171,24 @@ public class ProjectCopyVisitor extends AbstractProjectVisitor {
      */
     ContainableModelElement getCopiedElement(ContainableModelElement orgElement) {
         return copiedElements.get(orgElement);
+    }
+    
+    /**
+     * Returns the copied parent (should only be used by the {@link CSTCopyVisitor}).
+     * @param orgParent The original parent of an element which needs to be copied on the fly outside of this visitor.
+     * @return The copied parent, a {@link Project}, a {@link ContainableModelElement}, or <tt>null</tt> if it was not
+     * copied so far.
+     */
+    IModelElement getCopiedParent(IModelElement orgParent) {
+        IModelElement result = null;
+        
+        if (orgParent instanceof Project) {
+            result = copiedProjects.get((Project) orgParent);
+        } else if (orgParent instanceof ContainableModelElement) {
+            result = getCopiedElement((ContainableModelElement) orgParent);
+        }
+        
+        return result;
     }
     
     /**
@@ -468,68 +495,6 @@ public class ProjectCopyVisitor extends AbstractProjectVisitor {
         return !abort;
     }
     
-//    /**
-//     * Part of the end of the coping: Tries to fix default values, which could not be translated during
-//     * the regular visitation.
-//     * @return <tt>true</tt> if at least one element was resolved, <tt>false</tt> no elements have been resolved,
-//     *     maybe because there was nothing to do.
-//     */
-//    private boolean resolveIncompleteDefaultValues() {
-//        boolean elementsResolved = false;
-//        
-//        Iterator<AbstractVariable> declDefaultItr
-//            = incompleteElements.getDeclarationsWithMissingDefaults().iterator();
-//        while (declDefaultItr.hasNext()) {
-//            AbstractVariable decl = declDefaultItr.next();
-//            CSTCopyVisitor copyier = new CSTCopyVisitor(copiedDeclarations, this);
-//            decl.getDefaultValue().accept(copyier);
-//            if (copyier.translatedCompletely()) {
-//                try {
-//                    decl.setValue(copyier.getResult());
-//                    declDefaultItr.remove();
-//                    elementsResolved = true;
-//                } catch (ValueDoesNotMatchTypeException e) {
-//                    incompleteElements.addUncopyableCST(decl, decl.getDefaultValue());
-//                    elementsResolved = true;
-//                    declDefaultItr.remove();
-//                } catch (CSTSemanticException e) {
-//                    incompleteElements.addUncopyableCST(decl, decl.getDefaultValue());
-//                    elementsResolved = true;
-//                    declDefaultItr.remove();
-//                }
-//            }
-//        }
-//        return elementsResolved;
-//    }
-    
-//    /**
-//     * Part of the end of the coping: Tries to fix constraints, which could not be translated during
-//     * the regular visitation.
-//     * @return <tt>true</tt> if at least one element was resolved, <tt>false</tt> no elements have been resolved,
-//     *     maybe because there was nothing to do.
-//     */
-//    private boolean resolveIncompleteConstraints() {
-//        boolean elementsResolved = false;
-//        
-//        Iterator<Constraint> constraintItr = incompleteElements.getUnresolvedconstraints().iterator();
-//        while (constraintItr.hasNext()) {
-//            Constraint constraint = constraintItr.next();
-//            CSTCopyVisitor copyier = new CSTCopyVisitor(copiedDeclarations, this);
-//            constraint.getConsSyntax().accept(copyier);
-//            if (copyier.translatedCompletely()) {
-//                try {
-//                    constraint.setConsSyntax(copyier.getResult());
-//                    constraintItr.remove();
-//                    elementsResolved = true;
-//                } catch (CSTSemanticException e) {
-//                    // Should not be possible, since the original was valid
-//                    Bundle.getLogger(ProjectCopyVisitor.class).exception(e);
-//                }
-//            }
-//        }
-//        return elementsResolved;
-//    }
-    
     /**
      * Returns the copy of the visited project. This is the starting projects for all copied (imported) projects. <br/>
      * Please note that this will only return any results if the original project was visited by this visitor.
@@ -576,6 +541,8 @@ public class ProjectCopyVisitor extends AbstractProjectVisitor {
                 container.add((EvaluationBlock) copiedElement);
             } else if (copiedElement instanceof Comment) {
                 container.add((Comment) copiedElement);
+            } else if (copiedElement instanceof Constraint) {
+                container.addConstraint((Constraint) copiedElement, false);
             }
         } else if (parent instanceof PartialEvaluationBlock) {
             ((PartialEvaluationBlock) parent).addModelElement(copiedElement);
@@ -621,20 +588,9 @@ public class ProjectCopyVisitor extends AbstractProjectVisitor {
             } else if (originalType instanceof FreezeVariableType) {
                 copiedType = (IDatatype) copiedElements.get(originalType);
                 
-                if (null == copiedType) {
+                if (null == copiedType && frozenElementsOK) {
                     FreezeVariableType orgFreezeType = (FreezeVariableType) originalType;
-                    List<IFreezable> frozenElements = new ArrayList<IFreezable>();
-                    for (int i = 0, end = orgFreezeType.getAttributesCount(); i < end; i++) {
-                        // TODO SE: Unclear whether some attributes are maybe missed
-                        Attribute orgAttribute = orgFreezeType.getAttribute(i);
-                        Attribute copiedAttribute = (Attribute) copiedElements.get(orgAttribute);
-                        IAttributableElement element = null != copiedAttribute ? copiedAttribute.getElement() : null;
-                        if (null != element && element instanceof IFreezable) {
-                            frozenElements.add((IFreezable) element);
-                        }
-                    }
-                    FreezeVariableType copiedFreezeType = new FreezeVariableType(
-                        frozenElements.toArray(new IFreezable[0]), parents.peekFirst());
+                    FreezeVariableType copiedFreezeType = new FreezeVariableType(currentlyFrozen, parents.peekFirst());
                     copiedElements.put(orgFreezeType, copiedFreezeType);
                     copiedType = copiedFreezeType;
                 }
@@ -699,7 +655,13 @@ public class ProjectCopyVisitor extends AbstractProjectVisitor {
                 copiedDecl = new DecisionVariableDeclaration(decl.getName(), type, parents.peekFirst());
             }
             setComment(copiedDecl, decl);
+            boolean tmpVisitLocal = visitLocalElements;
+            if (type instanceof FreezeVariableType) {
+                // May happen is a itr declaration of a freeze block is re-visited
+                visitLocalElements = true;
+            }
             addToCurrentParent(copiedDecl);
+            visitLocalElements = tmpVisitLocal;
             copiedElements.put(decl, copiedDecl);
             copiedDeclarations.put(decl, copiedDecl);
             
@@ -722,9 +684,10 @@ public class ProjectCopyVisitor extends AbstractProjectVisitor {
         if (null != cst) {
             CSTCopyVisitor cstCopyier = new CSTCopyVisitor(copiedDeclarations, this); 
             cst.accept(cstCopyier);
-            if (cstCopyier.translatedCompletely() && null != cstCopyier.getResult()) {
+            ConstraintSyntaxTree copiedCST = cstCopyier.getResult();
+            if (cstCopyier.translatedCompletely() && null != copiedCST) {
                 try {
-                    copiedDecl.setValue(cstCopyier.getResult());                
+                    copiedDecl.setValue(copiedCST);                
                 } catch (ValueDoesNotMatchTypeException e) {
                     incompleteElements.addUncopyableCST(copiedDecl, cst);
                 } catch (CSTSemanticException e) {
@@ -814,7 +777,11 @@ public class ProjectCopyVisitor extends AbstractProjectVisitor {
             visitLocalElements = true;
             DecisionVariableDeclaration orgItr = freeze.getIter();
             if (null != orgItr) {
+                currentlyFrozen = copiedFrozenElements;
+                frozenElementsOK = allElementsFound;
                 visitDecisionVariableDeclaration(orgItr);
+                frozenElementsOK = false;
+                currentlyFrozen = null;
                 copiedItr = (DecisionVariableDeclaration) copiedElements.get(orgItr);
             }
             visitLocalElements = false;

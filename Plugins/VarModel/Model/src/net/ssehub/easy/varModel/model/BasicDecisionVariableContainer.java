@@ -72,6 +72,20 @@ public class BasicDecisionVariableContainer extends ModelElement implements IDec
         }
         assignments.add(assignment);
         modelElements.add(assignment);
+        
+        // Force update
+        allDeclarations = null;
+    }
+    
+    @Override
+    public void forceUpdate() {
+        allDeclarations = null;
+        for (int i = 0, end = modelElements.size(); i < end; i++) {
+            ContainableModelElement element = modelElements.get(i);
+            if (element instanceof IDecisionVariableContainer) {
+                ((IDecisionVariableContainer) element).forceUpdate();
+            }
+        }
     }
     
     /**
@@ -180,6 +194,9 @@ public class BasicDecisionVariableContainer extends ModelElement implements IDec
             names.add(elem.getName());
             elements.add(elem);
             modelElements.add(elem);
+            
+            // Force update
+            allDeclarations = null;
         }
         return !found; // use exception?
     }
@@ -205,6 +222,9 @@ public class BasicDecisionVariableContainer extends ModelElement implements IDec
         }
         constraints.add(constraint);
         modelElements.add(constraint);
+        
+        // Force update
+        allDeclarations = null;
     }
 
     @Override

@@ -282,4 +282,8 @@ public class AttributeAssignment extends ContainableModelElement implements IDec
         return found;
     }
 
+    @Override
+    public void forceUpdate() {
+        container.forceUpdate();
+    }
 }
