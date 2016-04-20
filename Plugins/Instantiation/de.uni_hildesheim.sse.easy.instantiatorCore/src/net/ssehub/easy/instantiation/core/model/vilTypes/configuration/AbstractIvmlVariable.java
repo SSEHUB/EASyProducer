@@ -418,11 +418,6 @@ public abstract class AbstractIvmlVariable extends IvmlElement {
         return AssignmentState.UNDEFINED != origVariable.getState() && null != origVariable.getValue();
     }
 
-    @Override
-    public Boolean isValid() {
-        return ValidVariables.getValidFlag(this, Boolean.TRUE);
-    }
-    
     /**
      * Returns whether this element is frozen.
      * 
@@ -733,6 +728,12 @@ public abstract class AbstractIvmlVariable extends IvmlElement {
      */
     public IvmlDeclaration getDeclaration() {
         return new IvmlDeclaration(variable.getDeclaration());
+    }
+
+    @Override
+    @Invisible
+    public String getInstanceName() {
+        return net.ssehub.easy.varModel.confModel.Configuration.getInstanceName(getVariable());
     }
 
 }

@@ -673,7 +673,7 @@ public class Configuration extends IvmlElement implements IStringValueProvider {
      * 
      * @return <code>true</code> if this configuration is valid, <code>false</code> else
      */
-    public Boolean isValid() {
+    public boolean isValid() {
         return isValid;
     }
 

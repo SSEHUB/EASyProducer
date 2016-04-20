@@ -123,20 +123,20 @@ public abstract class IvmlElement implements IVilType, IResolvable, IStringValue
      * Returns whether this element is valid.
      * 
      * @return <code>true</code> if this element is valid, <code>false</code> else
-     * @see ValidVariables#getValidFlag(AbstractIvmlVariable)
+     * @see VariableValueMapping#getValidFlag(AbstractIvmlVariable)
      */
-    public Boolean isValid() {
-        return Boolean.TRUE;
+    public boolean isValid() {
+        return VariableValueMapping.getInstance().isValid(this);
     }
 
     /**
      * Returns whether this element is currently enacting.
      * 
      * @return <code>true</code> if this currently in enactment, <code>false</code> else
-     * @see ValidVariables#getValidFlag(AbstractIvmlVariable)
+     * @see VariableValueMapping#getValidFlag(AbstractIvmlVariable)
      */
-    public Boolean isEnacting() {
-        return Boolean.FALSE;
+    public boolean isEnacting() {
+        return VariableValueMapping.getInstance().isEnacting(this);
     }
 
     /**
@@ -301,6 +301,16 @@ public abstract class IvmlElement implements IVilType, IResolvable, IStringValue
     @Invisible
     @Override
     public String getStringValue(StringComparator comparator) {
+        return getQualifiedName();
+    }
+    
+    /**
+     * Returns the instance name of this element.
+     * 
+     * @return the instance name
+     */
+    @Invisible
+    public String getInstanceName() {
         return getQualifiedName();
     }
 
