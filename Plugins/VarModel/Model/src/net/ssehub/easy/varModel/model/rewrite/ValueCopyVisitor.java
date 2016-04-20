@@ -126,9 +126,10 @@ class ValueCopyVisitor implements IValueVisitor {
 
     @Override
     public void visitCompoundValue(CompoundValue value) {
-        Compound cType = (Compound) copyier.getTranslatedType(value.getType());
+        Compound orgType = (Compound) value.getType();
+        Compound cType = (Compound) copyier.getTranslatedType(orgType);
         
-        if (null != cType) {
+        if (null != cType && orgType.getInheritedElementCount() == cType.getInheritedElementCount()) {
             ArrayList<Object> copiedValues = new ArrayList<Object>();
             for (int i = 0, n = cType.getInheritedElementCount(); i < n; i++) {
                 String slotName = cType.getInheritedElement(i).getName();

@@ -72,6 +72,8 @@ public class BasicDecisionVariableContainer extends ModelElement implements IDec
         }
         assignments.add(assignment);
         modelElements.add(assignment);
+        // Force update
+        allDeclarations = null;
     }
     
     /**
@@ -180,6 +182,9 @@ public class BasicDecisionVariableContainer extends ModelElement implements IDec
             names.add(elem.getName());
             elements.add(elem);
             modelElements.add(elem);
+            
+            // Force update
+            allDeclarations = null;
         }
         return !found; // use exception?
     }

@@ -18,6 +18,8 @@ package net.ssehub.easy.varModel.model.rewrite;
 import java.util.Map;
 
 import net.ssehub.easy.varModel.cst.ConstantValue;
+import net.ssehub.easy.varModel.cst.ConstraintSyntaxTree;
+import net.ssehub.easy.varModel.cst.ContainerOperationCall;
 import net.ssehub.easy.varModel.cst.CopyVisitor;
 import net.ssehub.easy.varModel.model.AbstractVariable;
 import net.ssehub.easy.varModel.model.ContainableModelElement;
@@ -33,6 +35,7 @@ import net.ssehub.easy.varModel.model.values.Value;
  */
 class CSTCopyVisitor extends CopyVisitor {
     
+    private boolean visitItrExpression;
     private boolean complete;
     private ProjectCopyVisitor copyier;
         
@@ -49,6 +52,7 @@ class CSTCopyVisitor extends CopyVisitor {
         super(mapping);
         this.copyier = copyier;
         complete = true;
+        visitItrExpression = false;
     }
     
     /**
@@ -65,6 +69,21 @@ class CSTCopyVisitor extends CopyVisitor {
         AbstractVariable result = null;
         if (null != getMapping()) {
             result = getMapping().get(var);
+            if (null == result && visitItrExpression && var instanceof DecisionVariableDeclaration) {
+                // Create local iterator variable
+                DecisionVariableDeclaration varAsDecl = (DecisionVariableDeclaration) var;
+                IDatatype cpiedType = copyier.getTranslatedType(var.getType());
+                IModelElement copiedParent = copyier.getCopiedParent(var.getParent());
+                if (null != cpiedType && null != copiedParent) {
+                    if (varAsDecl.isDeclaratorTypeExplicit()) {
+                        result = new ExplicitTypeVariableDeclaration(var.getName(), cpiedType, copiedParent);
+                    } else {
+                        result = new DecisionVariableDeclaration(var.getName(), cpiedType, copiedParent);
+                    }
+                    // Needed when the expression is evaluated
+                    getMapping().put(var, result);
+                }
+            }
             if (null == result) {
                 result = var;
                 if (copyier == null || !copyier.getAllCopiedProjects().contains(result.getTopLevelParent())) {
@@ -75,6 +94,21 @@ class CSTCopyVisitor extends CopyVisitor {
             result = var;
         }
         return result;
+    }
+    
+    @Override
+    public void visitContainerOperationCall(ContainerOperationCall call) {
+        call.getContainer().accept(this);
+        ConstraintSyntaxTree container = getResult();
+        visitItrExpression = true;
+        call.getExpression().accept(this);
+        visitItrExpression = false;
+        ConstraintSyntaxTree expression = getResult();
+        DecisionVariableDeclaration[] decls = new DecisionVariableDeclaration[call.getDeclaratorsCount()];
+        for (int d = 0; d < decls.length; d++) {
+            decls[d] = mapVariable(call.getDeclarator(d));
+        }
+        setResult(new ContainerOperationCall(container, call.getOperation(), expression, decls));
     }
     
     @Override
