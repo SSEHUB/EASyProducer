@@ -33,6 +33,7 @@ import net.ssehub.easy.instantiation.core.model.vilTypes.Set;
 public class FileArtifact extends CompositeArtifact implements IFileSystemArtifact, IActualValueProvider {
 
     private Path path;
+    private boolean isTemporary; // path may be in temporary folder but artifact may not be created as such
 
     /**
      * Default constructor for {@link IActualValueProvider actual value provider template}.
@@ -74,7 +75,9 @@ public class FileArtifact extends CompositeArtifact implements IFileSystemArtifa
         try {
             File file = File.createTempFile("fileArtifact", "vil");
             file.deleteOnExit();
-            return ArtifactFactory.createArtifact(FileArtifact.class, file, null);
+            FileArtifact result = ArtifactFactory.createArtifact(FileArtifact.class, file, null);
+            result.isTemporary = true;
+            return result;
         } catch (IOException e) {
             throw new VilException(e, VilException.ID_IO);
         }
@@ -87,7 +90,7 @@ public class FileArtifact extends CompositeArtifact implements IFileSystemArtifa
      */
     @Invisible
     public boolean isTemporary() {
-        return getPath().isTemporary();
+        return isTemporary && getPath().isTemporary();
     }
     
     @Override

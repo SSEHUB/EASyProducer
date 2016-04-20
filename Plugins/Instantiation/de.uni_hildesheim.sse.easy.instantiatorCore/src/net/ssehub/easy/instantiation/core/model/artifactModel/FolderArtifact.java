@@ -25,6 +25,7 @@ public class FolderArtifact extends SimpleArtifact implements IFileSystemArtifac
     // TODO use listener to reload after changes
     
     private Path path;
+    private boolean isTemporary; // path may be in temporary folder but artifact may not be created as such
 
     /**
      * Default constructor for {@link IActualValueProvider actual value provider template}.
@@ -65,7 +66,9 @@ public class FolderArtifact extends SimpleArtifact implements IFileSystemArtifac
             file.delete();
             file.mkdirs();
             file.deleteOnExit();
-            return ArtifactFactory.createArtifact(FolderArtifact.class, file, null);
+            FolderArtifact result = ArtifactFactory.createArtifact(FolderArtifact.class, file, null);
+            result.isTemporary = true;
+            return result;
         } catch (IOException e) {
             throw new VilException(e, VilException.ID_IO);
         }
@@ -206,7 +209,7 @@ public class FolderArtifact extends SimpleArtifact implements IFileSystemArtifac
      * @return <code>true</code> if it is temporary, <code>false</code> else
      */
     public boolean isTemporary() {
-        return path.isTemporary();
+        return isTemporary && path.isTemporary();
     }
 
     @Override
