@@ -30,7 +30,7 @@ public class ConsoleTracerFactory extends TracerFactory {
      * as the default tracer.
      */
     private ConsoleTracerFactory() {
-        super.setInstance(this);
+        setDefaultInstance(this);
     }
     
     @Override

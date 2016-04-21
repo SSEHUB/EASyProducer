@@ -1,7 +1,12 @@
 package net.ssehub.easy.instantiation.core.model.execution;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
- * A factory for the VIL language execution tracers.
+ * A factory for the VIL language execution tracers. Basically, default tracer factory ({@link #getDefaultInstance()})
+ * is static and initialized with {@link #DEFAULT}. However, as VIL can be executed in multiple
+ * threads in parallel, this factory can also be used on a per-thread basis ({@link #getInstance()}.
  * 
  * @author Holger Eichelberger
  */
@@ -25,7 +30,8 @@ public abstract class TracerFactory {
         }
     };
 
-    private static TracerFactory instance = DEFAULT;
+    private static TracerFactory defaultFactory = DEFAULT;
+    private static Map<Long, TracerFactory> instances = new HashMap<Long, TracerFactory>();
 
     /**
      * The default tracer factory returning tracer instances which do not trace
@@ -57,23 +63,50 @@ public abstract class TracerFactory {
     };
     
     /**
-     * Defines a new tracer factory.
+     * Returns the default instance.
      * 
-     * @param newInstance the new tracer factory (<b>null</b> is ignored)
+     * @return the default instance
      */
-    public static void setInstance(TracerFactory newInstance) {
-        if (null != newInstance) {
-            instance = newInstance;
+    public static TracerFactory getDefaultInstance() {
+        return defaultFactory;
+    }
+    
+    /**
+     * Defines the default instance.
+     * 
+     * @param factory the new default instance (ignored if <b>null</b>)
+     */
+    public static void setDefaultInstance(TracerFactory factory) {
+        if (null != factory) {
+            defaultFactory = factory;
         }
     }
     
     /**
-     * Returns the current tracer factory.
+     * Defines a new tracer factory for the current thread.
      * 
-     * @return the current tracer factory
+     * @param newInstance the new tracer factory (<b>null</b> deletes a previously defined instance)
+     */
+    public static void setInstance(TracerFactory newInstance) {
+        long threadId = Thread.currentThread().getId();
+        if (null != newInstance) {
+            instances.put(threadId, newInstance);
+        } else {
+            instances.remove(threadId);
+        }
+    }
+    
+    /**
+     * Returns the tracer factory for the current thread.
+     * 
+     * @return the current tracer factory, if there is none defined return {@link #defaultFactory}
      */
     public static TracerFactory getInstance() {
-        return instance;
+        TracerFactory result = instances.get(Thread.currentThread().getId());
+        if (null == result) {
+            result = defaultFactory;
+        }
+        return result;
     }
     
     /**

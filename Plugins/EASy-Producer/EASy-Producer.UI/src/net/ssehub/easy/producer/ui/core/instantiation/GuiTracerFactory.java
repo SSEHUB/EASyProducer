@@ -27,7 +27,7 @@ public class GuiTracerFactory extends TracerFactory {
      * as the default tracer.
      */
     private GuiTracerFactory() {
-        super.setInstance(this);
+        setDefaultInstance(this);
     }
     
     @Override

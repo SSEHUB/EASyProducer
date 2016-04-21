@@ -26,7 +26,7 @@ public class Activator implements BundleActivator {
      */
     public Activator() {
         EASyInitializer.setInitializer();       
-        TracerFactory.setInstance(ConsoleTracerFactory.INSTANCE);
+        TracerFactory.setDefaultInstance(ConsoleTracerFactory.INSTANCE);
     }
 
     /**

@@ -1,7 +1,5 @@
 package net.ssehub.easy.instantiation.java;
 
-import static net.ssehub.easy.varModel.varModel.testSupport.TextTestUtils.assertFileEqualitySafe;
-
 import java.io.File;
 
 import org.apache.commons.io.FileUtils;
@@ -16,7 +14,6 @@ import net.ssehub.easy.instantiation.core.model.common.VilException;
 import net.ssehub.easy.instantiation.core.model.execution.Executor;
 import net.ssehub.easy.instantiation.core.model.execution.TracerFactory;
 import net.ssehub.easy.instantiation.core.model.tracing.ConsoleTracerFactory;
-import net.ssehub.easy.instantiation.java.Registration;
 import test.de.uni_hildesheim.sse.vil.buildlang.AbstractExecutionTest;
 import test.de.uni_hildesheim.sse.vil.buildlang.BuildLangTestConfigurer;
 import test.de.uni_hildesheim.sse.vil.buildlang.ITestConfigurer;
@@ -29,8 +26,6 @@ import test.de.uni_hildesheim.sse.vil.buildlang.ITestConfigurer;
  */
 public class ProjectExecutionTest extends AbstractExecutionTest<Script> {
     
-    private File tmpdir = new File(getArtifactsFolder(), "reasoner/dest");
-
     private File destination = new File(getArtifactsFolder(), "classpathTest/src/dest");
     
     
@@ -50,9 +45,7 @@ public class ProjectExecutionTest extends AbstractExecutionTest<Script> {
         delete(destination);
         destination = new File(getArtifactsFolder(), "deleteMethod/src/dest");
         delete(destination);
-        
     }
-    
     
     /**
      * Deletes a directory.
@@ -85,7 +78,7 @@ public class ProjectExecutionTest extends AbstractExecutionTest<Script> {
         String scriptName = script.getName().replaceAll(".vil", "");
         ProjectDescriptor source = new ProjectDescriptor(script.getAbsolutePath(), scriptName);
         ProjectDescriptor target = new ProjectDescriptor(source, targetFile);
-        TracerFactory.setInstance(ConsoleTracerFactory.INSTANCE);
+        TracerFactory.setDefaultInstance(ConsoleTracerFactory.INSTANCE);
         Executor executor = new Executor(source.getMainVilScript()).addSource(source).addTarget(target)
                 .addConfiguration(ProjectDescriptor.getConfiguration(scriptName));
         executor.execute();

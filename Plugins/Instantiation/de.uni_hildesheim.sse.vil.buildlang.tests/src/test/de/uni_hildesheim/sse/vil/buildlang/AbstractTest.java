@@ -259,12 +259,12 @@ public abstract class AbstractTest<M extends Script> extends net.ssehub.easy.dsl
                     Assert.assertTrue(null != fileAsString);
                     Script script = getModel(result.getResult(0), data);
                     TracerFactory oldFactory = TracerFactory.getInstance();
-                    TracerFactory.setInstance(configurer.createTestTracerFactory(trace, getBaseFolders(data)));
+                    TracerFactory.setDefaultInstance(configurer.createTestTracerFactory(trace, getBaseFolders(data)));
                     exec = configurer.createExecutionEnvironment(TracerFactory.createBuildLanguageTracer(), 
                         getTestDataDir(), data.getStartElement(), data.getParameter());
                     assertFailure(data, script.accept(exec));
                     exec.release(true);
-                    TracerFactory.setInstance(oldFactory);
+                    TracerFactory.setDefaultInstance(oldFactory);
                     String errorMsg = checkEqualsAndPrepareMessage(fileAsString, trace);
                     if (exec.getFailedCount() > 0) {
                         StringBuilder tmp = new StringBuilder("failed rules: ");

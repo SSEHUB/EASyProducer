@@ -152,7 +152,7 @@ public abstract class AbstractScenarioTest extends AbstractTest<Script> {
         
         TracerFactory current = TracerFactory.getInstance();
         MyTracerFactory tFactory = new MyTracerFactory();
-        TracerFactory.setInstance(tFactory);
+        TracerFactory.setDefaultInstance(tFactory);
         Script script = obtainVilModel(modelName, versions[1], vilFolder);
         Executor executor = new Executor(script, param);
         executor.addBase(targetFile);
@@ -166,7 +166,7 @@ public abstract class AbstractScenarioTest extends AbstractTest<Script> {
         if (debug) {
             System.out.println(tFactory);
         }
-        TracerFactory.setInstance(current);
+        TracerFactory.setDefaultInstance(current);
         try {
             VarModel.INSTANCE.locations().removeLocation(ivmlFolder, observer);
             BuildModel.INSTANCE.locations().removeLocation(vilFolder, observer);

@@ -32,6 +32,6 @@ public class Startup implements IStartup {
             }
         });
         // Register the observer for sending messages to the console of the running Eclipse-instance.
-        TracerFactory.setInstance(GuiTracerFactory.INSTANCE);
+        TracerFactory.setDefaultInstance(GuiTracerFactory.INSTANCE);
     }
 }

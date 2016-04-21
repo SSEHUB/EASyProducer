@@ -138,7 +138,7 @@ public class ExecuteQM2ModelFromXMLTest extends AbstractUtil {
         try {
             ProjectDescriptor source = new ProjectDescriptor("qm2.xml", "QM");
             ProjectDescriptor target = new ProjectDescriptor(source, TMP_DIR);
-            TracerFactory.setInstance(ConsoleTracerFactory.INSTANCE);
+            TracerFactory.setDefaultInstance(ConsoleTracerFactory.INSTANCE);
             Executor executor = new Executor(source.getMainVilScript()).addSource(target).addTarget(target)
                     .addConfiguration(ProjectDescriptor.getConfiguration("QM"));
             executor.execute();
