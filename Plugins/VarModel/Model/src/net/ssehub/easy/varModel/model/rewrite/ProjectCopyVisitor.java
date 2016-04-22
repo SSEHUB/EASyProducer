@@ -572,15 +572,17 @@ public class ProjectCopyVisitor extends AbstractProjectVisitor {
                 copiedType = (IDatatype) copiedElements.get(originalType);
                 if (null == copiedType) {
                     Reference orgRef = (Reference) originalType;
-                    copiedType = (IDatatype) copiedElements.get(orgRef.getType());
-                    ModelElement parent = copiedElements.get(orgRef.getParent());
-                    Reference copiedReference = new Reference(originalType.getName(), copiedType, parent);
+                    IDatatype copiedBasisType = getTranslatedType(orgRef.getType());
                     
-                    setComment(copiedReference, orgRef);
-                    addToParent(copiedReference, (IModelElement) parent);
-                    copiedElements.put(copiedReference, orgRef);
-                    
-                    copiedType = copiedReference;
+                    if (null != copiedBasisType) {
+                        ModelElement parent = (ModelElement) getCopiedParent(orgRef.getParent());
+                        Reference copiedReference = new Reference(originalType.getName(), copiedBasisType, parent);
+                        
+                        setComment(copiedReference, orgRef);
+                        copiedElements.put(copiedReference, orgRef);
+                        
+                        copiedType = copiedReference;
+                    }
                 }
             } else if (null != projectTypes.get(originalType)) {
                 Project copiedProject = projectTypes.get(originalType);
