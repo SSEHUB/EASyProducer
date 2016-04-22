@@ -23,6 +23,7 @@ public class StreamGobbler extends Thread {
     private InputStream is;
     private boolean isErrorStream;
     private IMsgManipulator manipulator;
+    private TracerFactory tracers;
 
     /**
      * Allows to manipulate messages.
@@ -61,6 +62,7 @@ public class StreamGobbler extends Thread {
         this.is = is;
         this.isErrorStream = isErrorStream;
         this.manipulator = manipulator;
+        tracers = TracerFactory.getInstance();
     }
 
     /**
@@ -87,6 +89,7 @@ public class StreamGobbler extends Thread {
 
     @Override
     public void run() {
+        TracerFactory.setInstance(tracers); // set thread-based
         IInstantiatorTracer tracer = TracerFactory.createInstantiatorTracer();
         try {
             InputStreamReader isr = new InputStreamReader(is);
@@ -108,6 +111,8 @@ public class StreamGobbler extends Thread {
             // ok, terminate
         } catch (IOException ioe) {
             EASyLoggerFactory.INSTANCE.getLogger(StreamGobbler.class, Bundle.ID).exception(ioe);
+        } finally {
+            TracerFactory.setInstance(null); // reset thread-based
         }
     }
 }
