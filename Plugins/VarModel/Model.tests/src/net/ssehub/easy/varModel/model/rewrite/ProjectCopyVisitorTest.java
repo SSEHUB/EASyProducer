@@ -15,6 +15,7 @@
  */
 package net.ssehub.easy.varModel.model.rewrite;
 
+import java.awt.Container;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -52,6 +53,7 @@ import net.ssehub.easy.varModel.model.ProjectImport;
 import net.ssehub.easy.varModel.model.ProjectInterface;
 import net.ssehub.easy.varModel.model.datatypes.BooleanType;
 import net.ssehub.easy.varModel.model.datatypes.Compound;
+import net.ssehub.easy.varModel.model.datatypes.CustomDatatype;
 import net.ssehub.easy.varModel.model.datatypes.CustomOperation;
 import net.ssehub.easy.varModel.model.datatypes.DerivedDatatype;
 import net.ssehub.easy.varModel.model.datatypes.Enum;
@@ -248,9 +250,19 @@ public class ProjectCopyVisitorTest {
         assertCopiedElement(decl, copieddecl, copyMapping.get(decl));
         
         // Data type
-        IDatatype basisType = decl.getType();
-        if (basisType.isPrimitive()) {
-            Assert.assertSame("Copied declaration does not have the same type", basisType, copieddecl.getType());
+        IDatatype orgType = decl.getType();
+        IDatatype copiedType = copieddecl.getType();
+        if (orgType.isPrimitive()) {
+            Assert.assertSame("Copied declaration does not have the same type", orgType, copieddecl.getType());
+        } else if (orgType instanceof Reference) {
+            assertReferenceType((Reference) orgType, (Reference) copiedType, copieddecl.getProject());
+        } else if (orgType instanceof DerivedDatatype) {
+            java.util.Set<Project> copiedProjects = new HashSet<Project>();
+            copiedProjects.add(copieddecl.getProject());
+            assertDerivedType((DerivedDatatype) orgType, (DerivedDatatype) copiedType, copieddecl.getProject(),
+                copiedProjects);
+        } else if (orgType instanceof Container) {
+            assertCopiedElement((CustomDatatype) orgType, (CustomDatatype) copiedType, copieddecl.getProject());
         }
         
         // Default value
@@ -969,12 +981,13 @@ public class ProjectCopyVisitorTest {
     }
     
     /**
-     * Tests whether a {@link Reference} to a custom type ({@link Compound}) can be copied.
+     * Tests whether a {@link Reference} pointing to a
+     * {@link net.ssehub.easy.varModel.model.datatypes.CustomDatatype} can be copied.
      */
     @Test
-    public void testCopyCompoundReferenceType() {
-        Project original = new Project("testCopyCompoundReferenceType");
-        Compound cType = new Compound("cType", original);
+    public void testReferenceOfCustomTypeCopy() {
+        Project original = new Project("testReferenceOfCustomTypeCopy");
+        Compound cType = new Compound("CType", original);
         original.add(cType);
         Reference refType = new Reference("refType", cType, original);
         original.add(refType);
@@ -982,6 +995,25 @@ public class ProjectCopyVisitorTest {
         Project copy = copyProject(original);
         Reference copiedType = (Reference) copy.getElement(1);
         assertReferenceType(refType, copiedType, copy);
+    }
+    
+    /**
+     * Tests whether a {@link Reference} pointing to a {@link Reference} of a
+     * {@link net.ssehub.easy.varModel.model.datatypes.CustomDatatype} can be copied.
+     */
+    @Test
+    public void testReferenceOfReferenceOfCustomTypeCopy() {
+        Project original = new Project("testReferenceOfReferenceOfCustomTypeCopy");
+        Compound cType = new Compound("CType", original);
+        original.add(cType);
+        Reference refType = new Reference("refType1", cType, original);
+        original.add(refType);
+        Reference refType2 = new Reference("refType2", refType, original);
+        original.add(refType2);
+        
+        Project copy = copyProject(original);
+        Reference copiedType = (Reference) copy.getElement(2);
+        assertReferenceType(refType2, copiedType, copy);
     }
     
     /**
@@ -993,6 +1025,27 @@ public class ProjectCopyVisitorTest {
         Reference refType = new Reference("refType", IntegerType.TYPE, original);
         original.add(refType);
         DecisionVariableDeclaration decl = new DecisionVariableDeclaration("decl", refType, original);
+        original.add(decl);
+        
+        Project copy = copyProject(original);
+        AbstractVariable copieddecl = (AbstractVariable) copy.getElement(1);
+        Map<AbstractVariable, IModelElement> copyMapping = new HashMap<AbstractVariable, IModelElement>();
+        copyMapping.put(decl, copy);
+        assertDeclaration(decl, copieddecl, copyMapping);
+    }
+    
+    /**
+     * Tests whether a {@link Reference} can be used for a {@link DecisionVariableDeclaration}.
+     * This reference is build like in {@link #testReferenceOfReferenceOfCustomTypeCopy()}.
+     */
+    @Test
+    public void testReferenceOfReferenceUsage() {
+        Project original = new Project("testReferenceOfReferenceUsage");
+        Compound cType = new Compound("CType", original);
+        original.add(cType);
+        Reference refType = new Reference("refType1", cType, original);
+        Reference refType2 = new Reference("refType2", refType, original);
+        DecisionVariableDeclaration decl = new DecisionVariableDeclaration("decl", refType2, original);
         original.add(decl);
         
         Project copy = copyProject(original);
@@ -1080,6 +1133,25 @@ public class ProjectCopyVisitorTest {
         Project copy = copyProject(original);
         Set copiedType = (Set) copy.getElement(0);
         assertCopiedElement(setType, copiedType, copy);
+    }
+    
+    /**
+     * Tests whether a {@link Container} of {@link Container} can be used for a {@link DecisionVariableDeclaration}.
+     */
+    @Test
+    public void testContainerOfContainerUsage() {
+        Project original = new Project("testContainerOfContainerUsage");
+        // Usually container are not added to their projects
+        Set setType = new Set("setType", IntegerType.TYPE, original);
+        Sequence seqType = new Sequence("seqType", setType, original);
+        DecisionVariableDeclaration decl = new DecisionVariableDeclaration("decl", seqType, original);
+        original.add(decl);
+        
+        Project copy = copyProject(original);
+        AbstractVariable copieddecl = (AbstractVariable) copy.getElement(0);
+        Map<AbstractVariable, IModelElement> copyMapping = new HashMap<AbstractVariable, IModelElement>();
+        copyMapping.put(decl, copy);
+        assertDeclaration(decl, copieddecl, copyMapping);
     }
     
     /**
