@@ -6,10 +6,10 @@ import java.util.List;
 
 import org.eclipse.swt.widgets.Composite;
 
+import net.ssehub.easy.varModel.confModel.ConfigQuery;
 import net.ssehub.easy.varModel.confModel.DisplayNameProvider;
 import net.ssehub.easy.varModel.confModel.IDecisionVariable;
-import net.ssehub.easy.varModel.model.AbstractVariable;
-import net.ssehub.easy.varModel.model.Project;
+import net.ssehub.easy.varModel.cst.ConstraintSyntaxTree;
 import net.ssehub.easy.varModel.model.datatypes.AnyType;
 import net.ssehub.easy.varModel.model.datatypes.BooleanType;
 import net.ssehub.easy.varModel.model.datatypes.Compound;
@@ -28,8 +28,8 @@ import net.ssehub.easy.varModel.model.datatypes.Sequence;
 import net.ssehub.easy.varModel.model.datatypes.Set;
 import net.ssehub.easy.varModel.model.datatypes.StringType;
 import net.ssehub.easy.varModel.model.datatypes.VersionType;
-import net.ssehub.easy.varModel.model.filter.ReferenceValuesFinder;
 import net.ssehub.easy.varModel.model.values.NullValue;
+import net.ssehub.easy.varModel.persistency.StringProvider;
 /**
  * Creates a {@link GUIVariable} for a given {@link IDecisionVariable}.
  * @author El-Sharkawy
@@ -250,18 +250,17 @@ public class GUIValueFactory {
      */
     public static ComboboxGUIVariable.ComboItem[] createComboItems(IDecisionVariable variable, 
         Reference reference) {
-        Project project = variable.getConfiguration().getProject();
-        List<AbstractVariable> possibleDeclarations = makeUnique(
-            ReferenceValuesFinder.findPossibleValues(project, reference));
+        java.util.Set<ConstraintSyntaxTree> possibleValues =
+            ConfigQuery.possibleValuesForReferences(variable.getConfiguration(), reference);
         ComboboxGUIVariable.ComboItem[] items = null;
         
-        if (possibleDeclarations.size() > 0) {
-            DisplayNameProvider nameProvider = DisplayNameProvider.getInstance();
-            items = createComboItemArray(variable, possibleDeclarations.size());
-            for (int i = 0; i < possibleDeclarations.size(); i++) {
-                AbstractVariable declaration = possibleDeclarations.get(i);
-                String name = nameProvider.getDisplayName(declaration);
-                items[i] = new ComboboxGUIVariable.ComboItem(name, declaration);  
+        if (possibleValues.size() > 0) {
+            items = createComboItemArray(variable, possibleValues.size());
+            int index = 0;
+            for (ConstraintSyntaxTree value : possibleValues) {
+                // TODO SE: Consider DisplayNameProvider
+                String label = StringProvider.toIvmlString(value, variable.getConfiguration().getProject());
+                items[index++] = new ComboboxGUIVariable.ComboItem(label, value);  
             }
         }
         return items;

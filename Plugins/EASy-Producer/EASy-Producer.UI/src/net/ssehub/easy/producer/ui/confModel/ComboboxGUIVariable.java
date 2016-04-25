@@ -10,6 +10,7 @@ import net.ssehub.easy.producer.ui.productline_editor.EasyProducerDialog;
 import net.ssehub.easy.varModel.confModel.IDecisionVariable;
 import net.ssehub.easy.varModel.model.datatypes.IDatatype;
 import net.ssehub.easy.varModel.model.datatypes.Reference;
+import net.ssehub.easy.varModel.model.values.ReferenceValue;
 import net.ssehub.easy.varModel.model.values.Value;
 import net.ssehub.easy.varModel.model.values.ValueDoesNotMatchTypeException;
 import net.ssehub.easy.varModel.model.values.ValueFactory;
@@ -153,8 +154,9 @@ class ComboboxGUIVariable extends GUIVariable {
              */
             Value correctValue = getVariable().getValue();
             if (null != correctValue) {
-                if (null == correctValue.getValue()) {
-                    result = "";                
+                Object oValue = toObjectValue(correctValue);
+                if (null == oValue) {
+                    result = "";
                 }
             } else {
                 result = "";
@@ -186,7 +188,7 @@ class ComboboxGUIVariable extends GUIVariable {
         Value val = getVariable().getValue();
         
         if (null != val) {
-            Object valueItem = val.getValue();
+            Object valueItem = toObjectValue(val);
             for (int i = 0; i < values.length && selectedIndex == 0; i++) {
                 if (null != values[i].getValue() && values[i].getValue().equals(valueItem)) {
                     selectedIndex = i;
@@ -195,6 +197,21 @@ class ComboboxGUIVariable extends GUIVariable {
         }
         
         return selectedIndex;
+    }
+    
+    /**
+     * Returns {@link Value#getValue()} considering {@link ReferenceValue}s, which are also
+     * handled by this {@link GUIVariable}.
+     * @param value A value from which the value should be extracted from.
+     * @return The {@link Value#getValue()} or maybe <tt>null</tt> if no value is set.
+     */
+    private Object toObjectValue(Value value) {
+        Object oValue = value.getValue();
+        if (null == oValue && value instanceof ReferenceValue) {
+            oValue = ((ReferenceValue) value).getValueEx();
+        }
+        
+        return oValue;
     }
     
     /**
