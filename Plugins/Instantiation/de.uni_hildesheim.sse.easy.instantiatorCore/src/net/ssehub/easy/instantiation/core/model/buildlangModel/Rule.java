@@ -352,7 +352,7 @@ public class Rule extends RuleBlock implements IResolvableOperation<VariableDecl
         signature.append("(");
         if (null != parameters) {
             for (int p = 0; p < parameters.length; p++) {
-                signature.append(parameters[p].getType().getName());
+                signature.append(parameters[p].getType().getVilName());
                 if (p < parameters.length - 1) {
                     signature.append(",");
                 }

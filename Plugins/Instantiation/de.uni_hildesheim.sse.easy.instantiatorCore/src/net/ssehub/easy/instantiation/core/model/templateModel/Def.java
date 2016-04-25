@@ -123,7 +123,7 @@ public class Def extends TemplateBlock implements ITemplateLangElement, IResolva
         signature.append("(");
         if (null != param) {
             for (int p = 0; p < param.length; p++) {
-                signature.append(param[p].getType().getName());
+                signature.append(param[p].getType().getVilName());
                 if (p < param.length - 1) {
                     signature.append(",");
                 }

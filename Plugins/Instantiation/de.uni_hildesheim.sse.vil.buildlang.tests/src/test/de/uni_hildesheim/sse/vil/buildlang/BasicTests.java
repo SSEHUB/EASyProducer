@@ -562,4 +562,14 @@ public class BasicTests extends AbstractBasicTest<Script> {
         assertEqual("alternativeDeclaration");
     }
 
+    /**
+     * Tests whether duplicated signatures are recognized.
+     * 
+     * @throws IOException should not occur
+     */
+    @Test
+    public void testRulesDuplicated() throws IOException {
+        assertEqual("rulesDuplicated");
+    }
+
 }

@@ -329,6 +329,7 @@ public abstract class AbstractModelTranslator<M extends Script, L extends Langua
                     RuleInfo<D, R> info = processRule(decl, script);
                     R rule = info.getRule();
                     String fSig = rule.getSignature() + "[" + script.getName() + ']';
+System.out.println(fSig+" "+signatures);                    
                     if (signatures.containsKey(fSig)) {
                         error("duplicated " + getDisplayName() + " definition", decl, getNameLiteral(), 
                             ErrorCodes.REDEFINITION);

@@ -1,0 +1,9 @@
+vilScript rulesDuplicated (Project source, Project target, Configuration config) {
+
+    main(mapOf(String, Integer) m) = : {
+    }
+
+    main(mapOf(String, String) m) = : {
+    }
+
+}

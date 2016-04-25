@@ -116,6 +116,16 @@ public class BasicTests extends AbstractTest {
     }
     
     /**
+     * Tests a generic attribute expression.
+     * 
+     * @throws IOException should not occur
+     */
+    @Test
+    public void testDuplicatedDef2() throws IOException {
+        assertEqual("duplicatedDef2");
+    }
+    
+    /**
      * Tests a plain version.
      * 
      * @throws IOException should not occur
