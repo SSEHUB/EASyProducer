@@ -27,8 +27,8 @@ import java.util.Map;
 import net.ssehub.easy.basics.logger.EASyLoggerFactory;
 import net.ssehub.easy.basics.messages.Message;
 import net.ssehub.easy.basics.messages.Status;
-import net.ssehub.easy.basics.modelManagement.ModelInfo;
 import net.ssehub.easy.basics.modelManagement.IModelProcessingListener.Type;
+import net.ssehub.easy.basics.modelManagement.ModelInfo;
 import net.ssehub.easy.basics.progress.ProgressObserver;
 import net.ssehub.easy.varModel.Bundle;
 import net.ssehub.easy.varModel.confModel.ConfigurationInitializerRegistry.IConfigurationInitializer;
@@ -48,9 +48,9 @@ import net.ssehub.easy.varModel.model.datatypes.IDatatype;
 import net.ssehub.easy.varModel.model.datatypes.Reference;
 import net.ssehub.easy.varModel.model.datatypes.Set;
 import net.ssehub.easy.varModel.model.filter.DeclarationFinder;
+import net.ssehub.easy.varModel.model.filter.DeclarationFinder.VisibilityType;
 import net.ssehub.easy.varModel.model.filter.FilterType;
 import net.ssehub.easy.varModel.model.filter.FrozenElementsFinder;
-import net.ssehub.easy.varModel.model.filter.DeclarationFinder.VisibilityType;
 import net.ssehub.easy.varModel.model.rewrite.ProjectCopyVisitor;
 import net.ssehub.easy.varModel.model.rewrite.ProjectRewriteVisitor;
 import net.ssehub.easy.varModel.model.rewrite.modifier.FrozenCompoundConstraintsOmitter;
@@ -107,6 +107,8 @@ public class Configuration implements IConfigurationVisitable, IProjectListener,
     
     private IAssignmentState resolutionState = AssignmentState.ASSIGNED;
     
+    private QueryCache cache;
+    
     /**
      * Creates a new configuration for the given project.
      * 
@@ -140,6 +142,7 @@ public class Configuration implements IConfigurationVisitable, IProjectListener,
     public Configuration(Configuration configuration) {
         this.project = configuration.getProject();
         this.resolutionState = configuration.getResolutionState();
+        cache = new QueryCache(this);
         VarModel.INSTANCE.events().addModelListener(project, this);
         listeners = new ArrayList<IConfigurationChangeListener>();
         if (null != project) {
@@ -184,6 +187,7 @@ public class Configuration implements IConfigurationVisitable, IProjectListener,
         this.project = project;
         this.assignValues = assignValues;
         this.resolutionState = resolutionState;
+        cache = new QueryCache(this);
         VarModel.INSTANCE.events().addModelListener(project, this);
         listeners = new ArrayList<IConfigurationChangeListener>();
         init();
@@ -412,6 +416,7 @@ public class Configuration implements IConfigurationVisitable, IProjectListener,
         decisions.clear();
         allInstances = null;
         init();
+        cache.clear();
         //maybe keep old values
         
         for (int i = 0; i < listeners.size(); i++) {
@@ -419,6 +424,14 @@ public class Configuration implements IConfigurationVisitable, IProjectListener,
         }
 
         VarModel.INSTANCE.events().notifyModelProcessing(info, false, Type.REFRESHING);
+    }
+    
+    /**
+     * Returns the {@link QueryCache}, which should usually be used for query on this {@link Configuration}.
+     * @return The cache for this {@link Configuration}.
+     */
+    public QueryCache getQueryCache() {
+        return cache;
     }
     
     /**
@@ -927,6 +940,16 @@ public class Configuration implements IConfigurationVisitable, IProjectListener,
         rewriter.addModelCopyModifier(new FrozenConstraintVarFilter(this));
         rewriter.addModelCopyModifier(new FrozenCompoundConstraintsOmitter(this));
         project.accept(rewriter);
+    }
+    
+    /**
+     * Shares the cache of <tt>this</tt> {@link Configuration} with <tt>configToShare</tt>.
+     * This is useful if <tt>configToShare</tt> is a temporary {@link Configuration} / projection and can reuse queries
+     * based <tt>this</tt> {@link Configuration}.
+     * @param configToShare A temporary configuration which may reuse the cache from this config.
+     */
+    public void shareQueryCacheWith(Configuration configToShare) {
+        configToShare.cache = new SharedQueryCache(cache);
     }
     
     /**

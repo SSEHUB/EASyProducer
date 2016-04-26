@@ -1,7 +1,15 @@
 package net.ssehub.easy.varModel.confModel;
 
+import net.ssehub.easy.varModel.cst.CompoundAccess;
+import net.ssehub.easy.varModel.cst.ConstraintSyntaxTree;
+import net.ssehub.easy.varModel.cst.OCLFeatureCall;
+import net.ssehub.easy.varModel.cst.Variable;
 import net.ssehub.easy.varModel.model.AbstractVariable;
+import net.ssehub.easy.varModel.model.IModelElement;
+import net.ssehub.easy.varModel.model.IvmlKeyWords;
 import net.ssehub.easy.varModel.model.datatypes.EnumLiteral;
+import net.ssehub.easy.varModel.model.datatypes.OclKeyWords;
+import net.ssehub.easy.varModel.persistency.StringProvider;
 
 /**
  * A provider for display names (e.g., in case that not variable names shall be displayed). This is a QualiMaster 
@@ -84,6 +92,37 @@ public abstract class DisplayNameProvider {
      * @return the display name (must not be <b>null</b>)
      */
     public abstract String getDisplayName(AbstractVariable variable);
+
+    /**
+     * Returns the display name of a constraint, e.g., for a value of a reference.
+     * 
+     * @param constraint the constraint to return the name for
+     * @param context Optional parameter to avoid unnecessary qualifiers. This is usually a
+     *     {@link net.ssehub.easy.varModel.model.Project}.
+     * @return the display name (must not be <b>null</b>)
+     */
+    public String getDisplayName(ConstraintSyntaxTree constraint, IModelElement context) {
+        // TODO make it clean / use visitor
+        String name;
+        if (constraint instanceof Variable) {
+            name = getDisplayName(((Variable) constraint).getVariable());
+        } else if (constraint instanceof CompoundAccess) {
+            CompoundAccess access = (CompoundAccess) constraint;
+            String varName = (null != access.getResolvedSlot()) ? getDisplayName(access.getResolvedSlot())
+                : access.getSlotName();
+            name = getDisplayName(access.getCompoundExpression(), context)
+                + IvmlKeyWords.COMPOUND_ACCESS + varName;
+        } else if (constraint instanceof OCLFeatureCall
+            && OclKeyWords.INDEX_ACCESS.equals(((OCLFeatureCall) constraint).getOperation())) {
+            
+            OCLFeatureCall call = (OCLFeatureCall) constraint;
+            name = getDisplayName(call.getOperand(), context) + "[" + getDisplayName(call.getParameter(0), context)
+                + "]";
+        } else {
+            name = StringProvider.toIvmlString(constraint, context);
+        }
+        return name;
+    }
 
     /**
      * Returns the display names of the parents.

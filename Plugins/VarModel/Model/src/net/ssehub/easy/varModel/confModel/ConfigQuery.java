@@ -15,9 +15,9 @@
  */
 package net.ssehub.easy.varModel.confModel;
 
-import java.util.HashSet;
+import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.Set;
+import java.util.List;
 
 import net.ssehub.easy.varModel.Bundle;
 import net.ssehub.easy.varModel.cst.CompoundAccess;
@@ -27,6 +27,7 @@ import net.ssehub.easy.varModel.cst.OCLFeatureCall;
 import net.ssehub.easy.varModel.cst.Variable;
 import net.ssehub.easy.varModel.model.ModelQueryException;
 import net.ssehub.easy.varModel.model.datatypes.Compound;
+import net.ssehub.easy.varModel.model.datatypes.DerivedDatatype;
 import net.ssehub.easy.varModel.model.datatypes.IDatatype;
 import net.ssehub.easy.varModel.model.datatypes.IntegerType;
 import net.ssehub.easy.varModel.model.datatypes.OclKeyWords;
@@ -46,11 +47,11 @@ public class ConfigQuery {
      * given {@link Reference} variable.
      * @param config The {@link Configuration} which contains the queried values.
      * @param refType The reference for which possible values should be calculated for.
-     * @return A maybe empty set of possible values for the given {@link Reference}.
+     * @return A maybe empty list of possible values for the given {@link Reference}.
      */
-    public static Set<ConstraintSyntaxTree> possibleValuesForReferences(Configuration config, Reference refType) {
-        Set<ConstraintSyntaxTree> cstValues = new HashSet<ConstraintSyntaxTree>();
-        Set<IDecisionVariable> allowedVars = collectVariablesByType(config, refType.getType(), false);
+    static List<ConstraintSyntaxTree> possibleValuesForReferences(Configuration config, Reference refType) {
+        List<ConstraintSyntaxTree> cstValues = new ArrayList<ConstraintSyntaxTree>();
+        List<IDecisionVariable> allowedVars = collectVariablesByType(config, refType.getType(), false);
         for (IDecisionVariable possibleVar : allowedVars) {
             try {
                 cstValues.add(toCST(possibleVar));
@@ -72,10 +73,10 @@ public class ConfigQuery {
      *     variables will be returned, e.g. nested inside a compound.
      * @return variables The set of variables, which match the given parameters.
      */
-    public static Set<IDecisionVariable> collectVariablesByType(Configuration config, IDatatype type,
+    public static List<IDecisionVariable> collectVariablesByType(Configuration config, IDatatype type,
         boolean onlyToplevel) {
         
-        Set<IDecisionVariable> variables = new HashSet<IDecisionVariable>();
+        List<IDecisionVariable> variables = new ArrayList<IDecisionVariable>();
         Iterator<IDecisionVariable> varItr = config.iterator();
         while (varItr.hasNext()) {
             IDecisionVariable variable = varItr.next();
@@ -96,7 +97,7 @@ public class ConfigQuery {
      * @param variables The set of variables to be returned (will be changed as a side-effect).
      */
     private static void addVariableByType(IDecisionVariable variable, IDatatype type, boolean onlyToplevel,
-        Set<IDecisionVariable> variables) {
+        List<IDecisionVariable> variables) {
         
         if (null == type || type.isAssignableFrom(variable.getDeclaration().getType())) {
             variables.add(variable);
@@ -122,10 +123,9 @@ public class ConfigQuery {
         ConstraintSyntaxTree result = null;
         
         // Convert variable and its parent to cst
-        result = new Variable(variable.getDeclaration());
         if (variable.isNested()) {
             IDecisionVariable parent = (IDecisionVariable) variable.getParent();
-            IDatatype parentType = parent.getDeclaration().getType();
+            IDatatype parentType = DerivedDatatype.resolveToBasis(parent.getDeclaration().getType());
             if (Compound.TYPE.isAssignableFrom(parentType)) {
                 result = new CompoundAccess(toCST(parent), variable.getDeclaration().getName());
             } else if (Sequence.TYPE.isAssignableFrom(parentType)) {
