@@ -1,6 +1,7 @@
 package net.ssehub.easy.producer.ui.productline_editor;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.eclipse.jface.viewers.CellEditor;
@@ -18,6 +19,7 @@ import net.ssehub.easy.producer.ui.confModel.GUIConfiguration;
 import net.ssehub.easy.producer.ui.confModel.GUIEditor;
 import net.ssehub.easy.producer.ui.confModel.GUIValueFactory;
 import net.ssehub.easy.producer.ui.confModel.GUIVariable;
+import net.ssehub.easy.producer.ui.confModel.IRangeRestriction;
 import net.ssehub.easy.producer.ui.productline_editor.configuration.AttributeRegExFilter;
 import net.ssehub.easy.producer.ui.productline_editor.configuration.ConfigNameFilter;
 import net.ssehub.easy.producer.ui.productline_editor.configuration.ConfigurationTableEditor;
@@ -560,6 +562,20 @@ public class ConfigurationTableEditorFactory implements IConfigurationEditorCrea
      * @return the editor
      */
     public static final Control createEditor(UIConfiguration config, IDecisionVariable variable) {
+        return createEditor(config, variable, (List<IRangeRestriction>) null);
+    }
+    
+    /**
+     * Creates a form editor element for the given decision variable. 
+     * 
+     * @param config the UI configuration containing <code>variable</code>
+     * @param variable the variable to return the editor for
+     * @param restrictors Optional list to restrict values of drop down editors
+     * @return the editor
+     */
+    public static final Control createEditor(UIConfiguration config, IDecisionVariable variable,
+        List<IRangeRestriction> restrictors) {
+        
         AbstractVariable decl = variable.getDeclaration();
         Control result = createEditor(config, variable, CREATORS.get(decl.getQualifiedName()));
         if (null == result) {
@@ -571,7 +587,7 @@ public class ConfigurationTableEditorFactory implements IConfigurationEditorCrea
         }
         if (null == result) {
             GUIVariable var = GUIValueFactory.createVariable(variable, config.getParent().getContentPane(), 
-                config.getConfiguration(), null);
+                config.getConfiguration(), null, restrictors);
             GUIEditor editor = var.getEditor();
             if (!editor.isPseudoEditor()) {
                 config.add(var, editor);
@@ -589,6 +605,20 @@ public class ConfigurationTableEditorFactory implements IConfigurationEditorCrea
      * @return the editor
      */
     public static final CellEditor createCellEditor(UIConfiguration config, IDecisionVariable variable) {
+        return createCellEditor(config, variable, (List<IRangeRestriction>) null);
+    }
+    
+    /**
+     * Creates a cell editor element for the given decision variable. 
+     * 
+     * @param config the UI configuration containing <code>variable</code>
+     * @param variable the variable to return the editor for
+     * @param restrictors Optional list to restrict values of drop down editors
+     * @return the editor
+     */
+    public static final CellEditor createCellEditor(UIConfiguration config, IDecisionVariable variable,
+        List<IRangeRestriction> restrictors) {
+        
         AbstractVariable decl = variable.getDeclaration();
         CellEditor result = null;
         result = createCellEditor(config, variable, CREATORS.get(decl.getQualifiedName()));
@@ -602,7 +632,7 @@ public class ConfigurationTableEditorFactory implements IConfigurationEditorCrea
         }
         if (null == result) {
             GUIVariable var = GUIValueFactory.createVariable(variable, config.getParent().getContentPane(), 
-                config.getConfiguration(), null);
+                config.getConfiguration(), null, restrictors);
             result = var.getCellEditor(config.getParent().getContentPane());
         }
         return result;

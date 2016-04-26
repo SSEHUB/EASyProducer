@@ -6,7 +6,7 @@ import java.util.List;
 
 import org.eclipse.swt.widgets.Composite;
 
-import net.ssehub.easy.varModel.confModel.ConfigQuery;
+import net.ssehub.easy.producer.ui.confModel.ComboboxGUIVariable.ComboItem;
 import net.ssehub.easy.varModel.confModel.DisplayNameProvider;
 import net.ssehub.easy.varModel.confModel.IDecisionVariable;
 import net.ssehub.easy.varModel.cst.ConstraintSyntaxTree;
@@ -29,7 +29,6 @@ import net.ssehub.easy.varModel.model.datatypes.Set;
 import net.ssehub.easy.varModel.model.datatypes.StringType;
 import net.ssehub.easy.varModel.model.datatypes.VersionType;
 import net.ssehub.easy.varModel.model.values.NullValue;
-import net.ssehub.easy.varModel.persistency.StringProvider;
 /**
  * Creates a {@link GUIVariable} for a given {@link IDecisionVariable}.
  * @author El-Sharkawy
@@ -51,6 +50,7 @@ public class GUIValueFactory {
         private IDecisionVariable variable;
         private GUIVariable varParent;
         private IGUIConfigurableElement confParent;
+        private List<IRangeRestriction> rangeRestrictors;
         
         /**
          * Sole constructor for this class.
@@ -63,11 +63,28 @@ public class GUIValueFactory {
         private VariableVisitor(IDecisionVariable variable, Composite parent, GUIConfiguration config,
             GUIVariable varParent) {
             
+            this(variable, parent, config, varParent, null);
+        }
+        
+        /**
+         * Sole constructor for this class.
+         * @param variable The {@link IDecisionVariable} represented by this GUIVariable
+         * @param parent The controlling composite, needed for the creation of CellEditors
+         * @param config The {@link GUIConfiguration} holding this BasisGUIVariable
+         * @param varParent The parent GUIVariable holding this variable. Can be <tt>null</tt> if and only if this
+         * variable is a top level variable stored inside the configuration.
+         * @param rangeRestrictors Optional list to restrict values of some {@link GUIVariable},
+         *     e.g., to restrict values of combo box based variables.
+         */
+        private VariableVisitor(IDecisionVariable variable, Composite parent, GUIConfiguration config,
+            GUIVariable varParent, List<IRangeRestriction> rangeRestrictors) {
+            
             this.config = config;
             this.variable = variable;
             this.parent = parent;
             this.varParent = varParent;
             confParent = null == varParent ? config : varParent;
+            this.rangeRestrictors = rangeRestrictors;
             variable.getDeclaration().getType().accept(this);
         }
         
@@ -117,6 +134,22 @@ public class GUIValueFactory {
         @Override
         public void visitReference(Reference reference) {
             ComboboxGUIVariable.ComboItem[] items = createComboItems(variable, reference);
+            if (null != rangeRestrictors) {
+                for (int i = 0, end = rangeRestrictors.size(); i < end; i++) {
+                    IRangeRestriction restrictor = rangeRestrictors.get(i);
+                    if (restrictor.appliesTo(variable)) {
+                        List<ComboItem> filteredItems = new ArrayList<ComboboxGUIVariable.ComboItem>();
+                        for (int j = 0; j < items.length; j++) {
+                            if (!restrictor.filterValue(items[j].getValue(), items[j].getLabel())) {
+                                filteredItems.add(items[j]);
+                            }
+                        }
+                        if (filteredItems.size() < items.length) {
+                            items = filteredItems.toArray(new ComboboxGUIVariable.ComboItem[filteredItems.size()]);
+                        }
+                    }
+                }
+            }
             resultVariable = new ComboboxGUIVariable(variable, parent, reference, items, confParent);
         }
         
@@ -192,6 +225,24 @@ public class GUIValueFactory {
         VariableVisitor visitor = new VariableVisitor(variable, parent, config, varParent); 
         return visitor.getVariable();
     }
+    
+    /**
+     * Creates a new {@link GUIVariable}.
+     * @param variable The {@link IDecisionVariable} represented by this GUIVariable
+     * @param parent The controlling composite, needed for the creation of CellEditors
+     * @param config The {@link GUIConfiguration} holding this BasisGUIVariable
+     * @param varParent The parent GUIVariable holding this variable. Can be <tt>null</tt> if and only if this variable
+     * is a top level variable stored inside the configuration.
+     * @param rangeRestrictors Optional list to restrict values of some {@link GUIVariable}, e.g., to restrict values of
+     *     combo box based variables.
+     * @return A GUI representation of the {@link IDecisionVariable}
+     */
+    public static GUIVariable createVariable(IDecisionVariable variable, Composite parent, GUIConfiguration config,
+        GUIVariable varParent, List<IRangeRestriction> rangeRestrictors) {
+        
+        VariableVisitor visitor = new VariableVisitor(variable, parent, config, varParent, rangeRestrictors); 
+        return visitor.getVariable();
+    }
 
     /**
      * Creates the array for combobox items and pre-assigns the null value if required via 
@@ -250,16 +301,16 @@ public class GUIValueFactory {
      */
     public static ComboboxGUIVariable.ComboItem[] createComboItems(IDecisionVariable variable, 
         Reference reference) {
-        java.util.Set<ConstraintSyntaxTree> possibleValues =
-            ConfigQuery.possibleValuesForReferences(variable.getConfiguration(), reference);
+        List<ConstraintSyntaxTree> possibleValues =
+            variable.getConfiguration().getQueryCache().getPossibleValues(reference);
         ComboboxGUIVariable.ComboItem[] items = null;
         
         if (possibleValues.size() > 0) {
             items = createComboItemArray(variable, possibleValues.size());
             int index = 0;
             for (ConstraintSyntaxTree value : possibleValues) {
-                // TODO SE: Consider DisplayNameProvider
-                String label = StringProvider.toIvmlString(value, variable.getConfiguration().getProject());
+                String label = DisplayNameProvider.getInstance().getDisplayName(value,
+                    variable.getConfiguration().getProject());
                 items[index++] = new ComboboxGUIVariable.ComboItem(label, value);  
             }
         }

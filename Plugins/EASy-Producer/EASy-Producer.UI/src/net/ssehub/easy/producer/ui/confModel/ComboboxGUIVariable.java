@@ -52,7 +52,7 @@ class ComboboxGUIVariable extends GUIVariable {
          * Returns the label for this class.
          * @return The label
          */
-        private String getLabel() {
+        String getLabel() {
             return label;
         }
 
@@ -60,7 +60,7 @@ class ComboboxGUIVariable extends GUIVariable {
          * Returns the object as needed by the setValue method.
          * @return Object for setting the value.
          */
-        private Object getValue() {
+        Object getValue() {
             return value;
         }
     }
@@ -85,11 +85,6 @@ class ComboboxGUIVariable extends GUIVariable {
             this.values = values;
         } else {
             this.values = new ComboItem[] {new ComboItem("", null)};
-        }
-        
-        String[] items = new String[this.values.length];
-        for (int i = 0; i < items.length; i++) {
-            items[i] = this.values[i].getLabel();
         }
     }
 
@@ -229,5 +224,4 @@ class ComboboxGUIVariable extends GUIVariable {
         }
         return result;
     }
-
 }
