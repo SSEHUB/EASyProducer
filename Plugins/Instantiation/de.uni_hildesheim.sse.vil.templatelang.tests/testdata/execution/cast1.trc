@@ -1,0 +1,5 @@
+-> main(Configuration, FileArtifact) with (<config>, test.texts)
+    cfg <- <config>
+    flow <- cast1::flow
+    d <- cast1::Flow::destination
+    -> name(DecisionVariable) with (cast1::Flow::destination) = destination

@@ -1312,4 +1312,14 @@ public class ExecutionTests extends AbstractTest {
         assertEqualWithIvml("bool", "bool");
     }
 
+    /**
+     * Tests "casting" types by assignment.
+     * 
+     * @throws IOException should not occur
+     */
+    @Test
+    public void testCast1() throws IOException {
+        assertEqualWithIvml("cast1", "cast1");
+    }
+
 }

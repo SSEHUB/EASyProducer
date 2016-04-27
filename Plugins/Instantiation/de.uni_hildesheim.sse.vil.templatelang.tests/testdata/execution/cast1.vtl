@@ -1,0 +1,12 @@
+@advice(cast1)
+template cast1(Configuration config, FileArtifact target) {
+
+    def main(Configuration config, FileArtifact target) {
+        cast1 cfg = config;
+        Flow flow = cfg.flow;
+        DecisionVariable d = flow.destination;
+        '${flow.name}'
+        '${d.name()}'
+    }
+
+}
