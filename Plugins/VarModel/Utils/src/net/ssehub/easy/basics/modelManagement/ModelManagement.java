@@ -992,11 +992,25 @@ public abstract class ModelManagement <M extends IModel> {
      * @param info the info to be cleared
      */
     public void clearModel(ModelInfo<M> info) {
-        M model = info.getResolved();
-        if (null != model) {
-            models.remove(model);
+        if (null != info) {
+            M model = info.getResolved();
+            if (null != model) {
+                models.remove(model);
+            }
+            availableModels.removeAvailable(info);
         }
-        availableModels.removeAvailable(info);
+    }
+
+    /**
+     * Clears all models.
+     */
+    public void clear() {
+        List<M> toClear = new ArrayList<M>();
+        toClear.addAll(models); // avoid concurrent modification
+        
+        for (M model : toClear) {
+            clearModel(model);
+        }
     }
 
 }
