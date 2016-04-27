@@ -384,6 +384,7 @@ public abstract class ModelManagement <M extends IModel> {
     private M setResolved(ModelInfo<M> info, M model) {
         M current = info.getResolved();
         info.setResolved(model);
+        outdated.remove(info);
         int pos = null == current ? -1 : models.indexOf(current);
         if (pos >= 0) {
             models.set(pos, model);
@@ -909,7 +910,7 @@ public abstract class ModelManagement <M extends IModel> {
             }
             subtask.notifyProgress();
         }
-        // clean up outdated
+        // ensure clean up outdated
         for (int o = 0; o < outdated.size(); o++) {
             ModelInfo<M> info = outdated.get(o);
             this.outdated.remove(info);
@@ -1002,14 +1003,14 @@ public abstract class ModelManagement <M extends IModel> {
     }
 
     /**
-     * Clears all models.
+     * Unresolves all models / forces reload.
      */
-    public void clear() {
-        List<M> toClear = new ArrayList<M>();
-        toClear.addAll(models); // avoid concurrent modification
-        
-        for (M model : toClear) {
-            clearModel(model);
+    public void outdateAll() {
+        for (M model : models) {
+            ModelInfo<M> info = availableModels.getModelInfo(model);
+            if (null != info) {
+                outdated.add(info);
+            }
         }
     }
 
