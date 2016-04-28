@@ -744,5 +744,4 @@ public abstract class AbstractTest<R extends IModel> {
         }
         return result.toString();
     }
-    
 }

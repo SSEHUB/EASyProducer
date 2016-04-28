@@ -15,6 +15,9 @@ import org.junit.Assert;
 import de.uni_hildesheim.sse.ModelUtility;
 import de.uni_hildesheim.sse.VilExpressionParser;
 import net.ssehub.easy.basics.messages.Status;
+import net.ssehub.easy.basics.modelManagement.IModel;
+import net.ssehub.easy.basics.modelManagement.ModelInfo;
+import net.ssehub.easy.basics.modelManagement.ModelManagement;
 import net.ssehub.easy.basics.modelManagement.ModelManagementException;
 import net.ssehub.easy.dslCore.TranslationResult;
 import net.ssehub.easy.dslCore.translation.Message;
@@ -484,5 +487,31 @@ public abstract class AbstractTest<M extends Script> extends net.ssehub.easy.dsl
             // don't care
         }
     }
-    
+
+    /**
+     * Asserts the outdated functionality on a model management instance.
+     * 
+     * @param <R> model type
+     * @param mgt the management instance
+     * @param modelName the model name
+     * @throws ModelManagementException in case that model loading fails
+     */
+    protected <R extends IModel> void assertOutdated(ModelManagement<R> mgt, String modelName) 
+        throws ModelManagementException {
+        List<ModelInfo<R>> infos = mgt.availableModels().getModelInfo(modelName);
+        Assert.assertTrue("model not found", !infos.isEmpty());
+        R m0 = mgt.load(infos.get(0));
+        Assert.assertFalse("model is outdated", mgt.isOutdated(m0));
+        mgt.outdateAll();
+        Assert.assertTrue("model is not outdated", mgt.isOutdated(m0));
+        R m1 = mgt.load(infos.get(0));
+        Assert.assertFalse("model is outdated", mgt.isOutdated(infos.get(0)));
+        Assert.assertFalse("model is outdated", mgt.isOutdated(m1));
+        Assert.assertTrue("model instances shall not be equal after setting outdated", m0 != m1);
+        mgt.setOutdated(m1);
+        Assert.assertTrue("model is not outdated", mgt.isOutdated(m1));
+        R m2 = mgt.load(infos.get(0));
+        Assert.assertTrue("model instances shall not be equal after setting outdated", m1 != m2);
+    }
+
 }

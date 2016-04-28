@@ -807,26 +807,6 @@ public abstract class ModelManagement <M extends IModel> {
     }
     
     /**
-     * Returns whether a model is outdated.
-     * 
-     * @param model the model to be tested (may be <b>null</b>)
-     * @return <code>true</code> if it is outdated, <code>false</code> else
-     */
-    public boolean isOutdated(M model) {
-        return isOutdated(availableModels.getModelInfo(model));
-    }
-    
-    /**
-     * Returns whether a model information is outdated.
-     * 
-     * @param info the object to be tested (may be <b>null</b>)
-     * @return <code>true</code> if it is outdated, <code>false</code> (also for <code>info==<b>null</b></code>) else
-     */
-    public boolean isOutdated(ModelInfo<M> info) {
-        return null == info ? false : outdated.contains(info);
-    }
-
-    /**
      * Returns models available for a given model <code>name</code>.
      * 
      * @param name the name to search for
@@ -951,9 +931,10 @@ public abstract class ModelManagement <M extends IModel> {
             throw new ModelManagementException("model info must not be null", ModelManagementException.INTERNAL);
         }
         M result = info.getResolved();
-        if (null == result || force) {
+        boolean reload = force || outdated.contains(info) || info.isOutdated();
+        if (null == result || reload) {
             ArrayList<IMessage> messages = new ArrayList<IMessage>();
-            if (!info.isResolved() || info.isOutdated() || outdated.contains(info) || force) {
+            if (!info.isResolved() || reload) {
                 result = load(info, messages);
                 if (null != result) {
                     List<IMessage> rmessages = resolveImports(result, info.getLocation(), null);
@@ -1021,6 +1002,46 @@ public abstract class ModelManagement <M extends IModel> {
             if (null != info) {
                 outdated.add(info);
             }
+        }
+    }
+
+    /**
+     * Returns whether a model is outdated (will force a reload upon {@link #load(ModelInfo)}).
+     * 
+     * @param model the model to be tested (may be <b>null</b>)
+     * @return <code>true</code> if it is outdated, <code>false</code> else
+     */
+    public boolean isOutdated(M model) {
+        return isOutdated(availableModels.getModelInfo(model));
+    }
+    
+    /**
+     * Returns whether a model information is outdated (will force a reload upon {@link #load(ModelInfo)}).
+     * 
+     * @param info the object to be tested (may be <b>null</b>)
+     * @return <code>true</code> if it is outdated, <code>false</code> (also for <code>info==<b>null</b></code>) else
+     */
+    public boolean isOutdated(ModelInfo<M> info) {
+        return null == info ? false : outdated.contains(info);
+    }
+
+    /**
+     * Declears a model as outdated (will force a reload upon {@link #load(ModelInfo)}).
+     * 
+     * @param model the model to be tested (may be <b>null</b>)
+     */
+    public void setOutdated(M model) {
+        setOutdated(availableModels.getModelInfo(model));
+    }
+    
+    /**
+     * Returns whether a model information is outdated.
+     * 
+     * @param info the object to be tested (may be <b>null</b>)
+     */
+    public void setOutdated(ModelInfo<M> info) {
+        if (null != info) {
+            outdated.add(info);
         }
     }
 

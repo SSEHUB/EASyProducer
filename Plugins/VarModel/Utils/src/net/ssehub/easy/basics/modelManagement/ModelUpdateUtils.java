@@ -40,16 +40,18 @@ class ModelUpdateUtils {
         Map<M, List<M>> result = new HashMap<M, List<M>>();
         for (int m = 0; m < models.size(); m++) {
             M model = models.get(m);
-            for (int i = 0; i < model.getImportsCount(); i++) {
-                @SuppressWarnings("unchecked")
-                M imported = (M) model.getImport(i).getResolved();
-                if (null != imported) {
-                    List<M> importing = result.get(imported);
-                    if (null == importing) {
-                        importing = new ArrayList<M>();
-                        result.put(imported, importing);
+            if (null != model) {
+                for (int i = 0; i < model.getImportsCount(); i++) {
+                    @SuppressWarnings("unchecked")
+                    M imported = (M) model.getImport(i).getResolved();
+                    if (null != imported) {
+                        List<M> importing = result.get(imported);
+                        if (null == importing) {
+                            importing = new ArrayList<M>();
+                            result.put(imported, importing);
+                        }
+                        importing.add(model);
                     }
-                    importing.add(model);
                 }
             }
         }

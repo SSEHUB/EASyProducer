@@ -8,7 +8,9 @@ import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Test;
 
+import net.ssehub.easy.basics.modelManagement.ModelManagementException;
 import net.ssehub.easy.dslCore.translation.ErrorCodes;
+import net.ssehub.easy.instantiation.core.model.buildlangModel.BuildModel;
 import net.ssehub.easy.instantiation.core.model.buildlangModel.Script;
 import net.ssehub.easy.instantiation.core.model.common.VilException;
 
@@ -570,6 +572,17 @@ public class BasicTests extends AbstractBasicTest<Script> {
     @Test
     public void testRulesDuplicated() throws IOException {
         assertEqual("rulesDuplicated");
+    }
+    
+    /**
+     * Tests the outdated flagging.
+     * 
+     * @throws IOException shall not occur
+     * @throws ModelManagementException shall not occur
+     */
+    @Test
+    public void testOutdated() throws IOException, ModelManagementException {
+        assertOutdated(BuildModel.INSTANCE, "importTest");
     }
 
 }
