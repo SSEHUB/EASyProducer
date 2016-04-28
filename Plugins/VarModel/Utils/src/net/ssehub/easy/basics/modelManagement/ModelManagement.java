@@ -807,13 +807,23 @@ public abstract class ModelManagement <M extends IModel> {
     }
     
     /**
-     * Returns whether a model information is outdated.
+     * Returns whether a model is outdated.
      * 
-     * @param info the object to be tested
+     * @param model the model to be tested (may be <b>null</b>)
      * @return <code>true</code> if it is outdated, <code>false</code> else
      */
-    boolean isOutdated(ModelInfo<M> info) {
-        return outdated.contains(info);
+    public boolean isOutdated(M model) {
+        return isOutdated(availableModels.getModelInfo(model));
+    }
+    
+    /**
+     * Returns whether a model information is outdated.
+     * 
+     * @param info the object to be tested (may be <b>null</b>)
+     * @return <code>true</code> if it is outdated, <code>false</code> (also for <code>info==<b>null</b></code>) else
+     */
+    public boolean isOutdated(ModelInfo<M> info) {
+        return null == info ? false : outdated.contains(info);
     }
 
     /**
