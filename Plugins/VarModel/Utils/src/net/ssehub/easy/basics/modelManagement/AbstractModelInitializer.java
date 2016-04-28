@@ -61,6 +61,11 @@ public abstract class AbstractModelInitializer<M extends IModel> implements IMod
     }
 
     @Override
+    public void addLocationToFront(File location, ProgressObserver observer) throws ModelManagementException {
+        getModelManagement().locations().addLocationToFront(stripFile(location), observer);
+    }
+
+    @Override
     public void removeLocation(File location, ProgressObserver observer) throws ModelManagementException {
         getModelManagement().locations().removeLocation(stripFile(location), observer);
     }

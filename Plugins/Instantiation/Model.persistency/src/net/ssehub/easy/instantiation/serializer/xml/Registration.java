@@ -57,6 +57,12 @@ public class Registration implements IRegistration, IModelInitializer {
     }
 
     @Override
+    public void addLocationToFront(File location, ProgressObserver observer) throws ModelManagementException {
+        // TODO if location is file, load the model - else ignore
+        // TODO derive VIL.xml by convention
+    }
+
+    @Override
     public void removeLocation(File location, ProgressObserver observer) throws ModelManagementException {
         // TODO check if removing the location is needed 
     }

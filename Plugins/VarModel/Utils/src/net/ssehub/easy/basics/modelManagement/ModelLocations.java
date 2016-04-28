@@ -29,7 +29,8 @@ import net.ssehub.easy.basics.progress.ObservableTask;
 import net.ssehub.easy.basics.progress.ProgressObserver;
 
 /**
- * Manages the model locations. This class is not intended to be instantiated directly rather than
+ * Manages the model locations. Locations are stored in terms of a list, which also defines 
+ * the model resolution sequence. This class is not intended to be instantiated directly rather than
  * being created from {@link ModelManagement}. Please not that each individual location is considered 
  * recursively, i.e., nested folders will be considered automatically and do not need to be added
  * separately. 
@@ -289,7 +290,24 @@ public class ModelLocations <M extends IModel> {
             throw new ModelManagementException(e.getMessage(), ModelManagementException.INTERNAL);
         }
     }
-    
+
+    /**
+     * Adds a file location to the end of the list of locations, i.e., a location from where models can be loaded. 
+     * Please not that <code>file</code> is considered recursively, i.e., nested folders will be considered 
+     * automatically and do not need to be added separately.
+     * 
+     * @param file the file location (<b>null</b> is ignored)
+     * @param observer an optional progress observer (use {@link ProgressObserver#NO_OBSERVER} but 
+     *   not <b>null</b> in case that no observation is intended)
+     * @return the actual location object corresponding to <code>file</code>
+     * @throws ModelManagementException in case that the available information
+     *   may be come inconsistent due to the new location or that <code>file</code> cannot be accessed / resolved
+     */
+    public synchronized Location addLocation(File file, ProgressObserver observer) 
+        throws ModelManagementException {
+        return addLocation(file, false, observer);
+    }
+
     /**
      * Adds a file location, i.e., a location from where models can be loaded. Please not that <code>file</code> 
      * is considered recursively, i.e., nested folders will be considered automatically and do not need to be added
@@ -302,12 +320,34 @@ public class ModelLocations <M extends IModel> {
      * @throws ModelManagementException in case that the available information
      *   may be come inconsistent due to the new location or that <code>file</code> cannot be accessed / resolved
      */
-    public synchronized Location addLocation(File file, ProgressObserver observer) throws ModelManagementException {
+    public synchronized Location addLocationToFront(File file, ProgressObserver observer) 
+        throws ModelManagementException {
+        return addLocation(file, true, observer);
+    }
+    
+    /**
+     * Adds a file location, i.e., a location from where models can be loaded. Please not that <code>file</code> 
+     * is considered recursively, i.e., nested folders will be considered automatically and do not need to be added
+     * separately.
+     * 
+     * @param file the file location (<b>null</b> is ignored)
+     * @param front add to the front or the end of the list of locations
+     * @param observer an optional progress observer (use {@link ProgressObserver#NO_OBSERVER} but 
+     *   not <b>null</b> in case that no observation is intended)
+     * @return the actual location object corresponding to <code>file</code>
+     * @throws ModelManagementException in case that the available information
+     *   may be come inconsistent due to the new location or that <code>file</code> cannot be accessed / resolved
+     */
+    private Location addLocation(File file, boolean front, ProgressObserver observer) throws ModelManagementException {
         Location location = null;
         if (null != file) {
             location = getLocationFor(file, true);
             if (!locations.contains(location)) {
-                locations.add(location);
+                if (front) {
+                    locations.add(0, location);
+                } else {
+                    locations.add(location);
+                }
             }
             repository.updateModelInformation(file, observer);
         }

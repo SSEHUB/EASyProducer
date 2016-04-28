@@ -41,7 +41,7 @@ public class ModelInitializer {
     public interface IModelInitializer {
 
         /**
-         * Adds a model location.
+         * Adds a model location to the end of the list of existing locations.
          * 
          * @param location the model location. Basically, this is a folder but for serializers, 
          *     this may be a file.
@@ -50,6 +50,16 @@ public class ModelInitializer {
          */
         public void addLocation(File location, ProgressObserver observer) throws ModelManagementException;
 
+        /**
+         * Adds a model location to the beginning of the list of existing locations.
+         * 
+         * @param location the model location. Basically, this is a folder but for serializers, 
+         *     this may be a file.
+         * @param observer the progress observer
+         * @throws ModelManagementException in case of problems registering the location
+         */
+        public void addLocationToFront(File location, ProgressObserver observer) throws ModelManagementException;
+        
         /**
          * Adds a model location.
          * 
