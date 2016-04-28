@@ -1,0 +1,21 @@
+project cast1 {
+  version v0;
+  
+  compound PipelineNode {
+      String name;
+  }
+  
+  compound Flow {
+      String name;
+      refTo(PipelineNode) destination;
+  }
+
+  PipelineNode node = {name = "node"};
+  Flow flow = {name = "flow", destination = refBy(node)};
+  
+  freeze {
+    node;
+    flow;
+  };
+  
+}

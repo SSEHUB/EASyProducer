@@ -952,7 +952,7 @@ public class ExecutionTests extends AbstractExecutionTest<Script> {
      * @throws IOException should not occur
      */
     @Test
-    public void nullTest() throws IOException {
+    public void testNull() throws IOException {
         assertSelfInstantiate("nullTest", "main", "nullTest", null);
     }
     
@@ -964,6 +964,16 @@ public class ExecutionTests extends AbstractExecutionTest<Script> {
     @Test
     public void testBooleanRule() throws IOException {
         assertSelfInstantiate("booleanRule", "main", "booleanRule", null);
+    }
+    
+    /**
+     * Tests implicit casting.
+     * 
+     * @throws IOException should not occur
+     */
+    @Test
+    public void testCast1() throws IOException {
+        assertSelfInstantiate("cast1", "main", "cast1", null);
     }
 
 }

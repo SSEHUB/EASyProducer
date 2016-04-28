@@ -1,0 +1,6 @@
+-> main(Project, Configuration, Project) with (<project>, <config>, <project>)
+    cfg <- <config>
+    flow <- cast1::flow
+    d <- cast1::Flow::destination
+    -> name(DecisionVariable) with (cast1::Flow::destination) = destination
+    name <- destination

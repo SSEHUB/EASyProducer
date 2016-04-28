@@ -1,0 +1,11 @@
+@advice(cast1)
+vilScript cast1 (Project source, Configuration config, Project target) {
+
+    main(Project source, Configuration config, Project target) = : {
+        cast1 cfg = config;
+        Flow flow = cfg.flow;
+        DecisionVariable d = flow.destination;
+        String name = d.name();
+    }
+
+}
