@@ -274,6 +274,7 @@ public class GUIValueFactory {
      * @param list the list to be processed
      * @return the list of unique elements from <code>list</code> in sequence of <code>list</code>
      */
+    @SuppressWarnings("unused")
     private static <T> List<T> makeUnique(List<T> list) {
         List<T> result;
         if (null == list || list.size() < 2) {
@@ -309,8 +310,7 @@ public class GUIValueFactory {
             items = createComboItemArray(variable, possibleValues.size());
             int index = 0;
             for (ConstraintSyntaxTree value : possibleValues) {
-                String label = DisplayNameProvider.getInstance().getDisplayName(value,
-                    variable.getConfiguration().getProject());
+                String label = DisplayNameProvider.getInstance().getDisplayName(value, variable.getConfiguration());
                 items[index++] = new ComboboxGUIVariable.ComboItem(label, value);  
             }
         }

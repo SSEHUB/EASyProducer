@@ -5,7 +5,6 @@ import net.ssehub.easy.varModel.cst.ConstraintSyntaxTree;
 import net.ssehub.easy.varModel.cst.OCLFeatureCall;
 import net.ssehub.easy.varModel.cst.Variable;
 import net.ssehub.easy.varModel.model.AbstractVariable;
-import net.ssehub.easy.varModel.model.IModelElement;
 import net.ssehub.easy.varModel.model.IvmlKeyWords;
 import net.ssehub.easy.varModel.model.datatypes.EnumLiteral;
 import net.ssehub.easy.varModel.model.datatypes.OclKeyWords;
@@ -97,11 +96,11 @@ public abstract class DisplayNameProvider {
      * Returns the display name of a constraint, e.g., for a value of a reference.
      * 
      * @param constraint the constraint to return the name for
-     * @param context Optional parameter to avoid unnecessary qualifiers. This is usually a
-     *     {@link net.ssehub.easy.varModel.model.Project}.
+     * @param configuration the containing configuration in order to avoid unnecessary qualifications or to resolve 
+     *   expressions for better readability
      * @return the display name (must not be <b>null</b>)
      */
-    public String getDisplayName(ConstraintSyntaxTree constraint, IModelElement context) {
+    public String getDisplayName(ConstraintSyntaxTree constraint, Configuration configuration) {
         // TODO make it clean / use visitor
         String name;
         if (constraint instanceof Variable) {
@@ -110,18 +109,29 @@ public abstract class DisplayNameProvider {
             CompoundAccess access = (CompoundAccess) constraint;
             String varName = (null != access.getResolvedSlot()) ? getDisplayName(access.getResolvedSlot())
                 : access.getSlotName();
-            name = getDisplayName(access.getCompoundExpression(), context)
+            name = getDisplayName(access.getCompoundExpression(), configuration)
                 + IvmlKeyWords.COMPOUND_ACCESS + varName;
         } else if (constraint instanceof OCLFeatureCall
             && OclKeyWords.INDEX_ACCESS.equals(((OCLFeatureCall) constraint).getOperation())) {
-            
             OCLFeatureCall call = (OCLFeatureCall) constraint;
-            name = getDisplayName(call.getOperand(), context) + "[" + getDisplayName(call.getParameter(0), context)
-                + "]";
+            name = getDisplayNameForIndexAccess(call, configuration);
         } else {
-            name = StringProvider.toIvmlString(constraint, context);
+            name = StringProvider.toIvmlString(constraint, configuration.getProject());
         }
         return name;
+    }
+    
+    /**
+     * Returns the display name for an index access constraint expression. This method is intended for overriding
+     * as the returned display name is rather generic.
+     * 
+     * @param call the call representing the index access
+     * @param configuration the containing configuration
+     * @return the display name
+     */
+    protected String getDisplayNameForIndexAccess(OCLFeatureCall call, Configuration configuration) {
+        return getDisplayName(call.getOperand(), configuration) + "[" 
+                + getDisplayName(call.getParameter(0), configuration) + "]";
     }
 
     /**
