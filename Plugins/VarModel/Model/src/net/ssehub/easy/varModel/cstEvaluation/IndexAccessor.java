@@ -59,7 +59,8 @@ class IndexAccessor extends AbstractDecisionVariableEvaluationAccessor {
     public Value getValue() {
         Value result = null;
         IDecisionVariable variable = getVariable();
-        if (Container.TYPE.isAssignableFrom(variable.getDeclaration().getType())) {
+        IDatatype type = DerivedDatatype.resolveToBasis(variable.getDeclaration().getType());
+        if (Container.TYPE.isAssignableFrom(type)) {
             ContainerValue value = (ContainerValue) variable.getValue();
             if (null != value) {
                 result = ((ContainerValue) variable.getValue()).getElement(index);

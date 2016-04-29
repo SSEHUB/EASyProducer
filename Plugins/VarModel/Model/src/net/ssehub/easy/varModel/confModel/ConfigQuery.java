@@ -20,6 +20,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import net.ssehub.easy.varModel.Bundle;
+import net.ssehub.easy.varModel.cst.CSTSemanticException;
 import net.ssehub.easy.varModel.cst.CompoundAccess;
 import net.ssehub.easy.varModel.cst.ConstantValue;
 import net.ssehub.easy.varModel.cst.ConstraintSyntaxTree;
@@ -139,8 +140,13 @@ public class ConfigQuery {
                     try {
                         ConstantValue indexValue = new ConstantValue(ValueFactory.createValue(IntegerType.TYPE, index));
                         result = new OCLFeatureCall(toCST(parent), OclKeyWords.INDEX_ACCESS, indexValue);
+                        result.inferDatatype();
                     } catch (ValueDoesNotMatchTypeException e) {
                         throw new ModelQueryException("cannot resolve nested element '"
+                            + variable.getDeclaration().getName() + "' in parent '" + parent.getDeclaration().getName()
+                            + "'", ModelQueryException.ACCESS_ERROR);
+                    } catch (CSTSemanticException e) {
+                        throw new ModelQueryException("cannot resolve access operation on '"
                             + variable.getDeclaration().getName() + "' in parent '" + parent.getDeclaration().getName()
                             + "'", ModelQueryException.ACCESS_ERROR);
                     }
