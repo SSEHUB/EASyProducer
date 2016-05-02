@@ -214,10 +214,11 @@ FreezeStatement:
 ;
 	
 Eval: 
+    {Eval}
 	'eval' 
     '{'
     nested+=Eval*
-    statements+=ExpressionStatement+ 
+    statements+=ExpressionStatement* 
     '}' ';'?
 	;	
 	

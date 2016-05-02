@@ -2295,27 +2295,36 @@ ruleEval returns [EObject current=null]
     @init { enterRule(); 
     }
     @after { leaveRule(); }:
-(	otherlv_0='eval' 
+((
+	{ 
+	  /* */ 
+	}
     {
-    	newLeafNode(otherlv_0, grammarAccess.getEvalAccess().getEvalKeyword_0());
+        $current = forceCreateModelElement(
+            grammarAccess.getEvalAccess().getEvalAction_0(),
+            $current);
     }
-	otherlv_1='{' 
+)	otherlv_1='eval' 
     {
-    	newLeafNode(otherlv_1, grammarAccess.getEvalAccess().getLeftCurlyBracketKeyword_1());
+    	newLeafNode(otherlv_1, grammarAccess.getEvalAccess().getEvalKeyword_1());
+    }
+	otherlv_2='{' 
+    {
+    	newLeafNode(otherlv_2, grammarAccess.getEvalAccess().getLeftCurlyBracketKeyword_2());
     }
 (
 (
 		{ 
-	        newCompositeNode(grammarAccess.getEvalAccess().getNestedEvalParserRuleCall_2_0()); 
+	        newCompositeNode(grammarAccess.getEvalAccess().getNestedEvalParserRuleCall_3_0()); 
 	    }
-		lv_nested_2_0=ruleEval		{
+		lv_nested_3_0=ruleEval		{
 	        if ($current==null) {
 	            $current = createModelElementForParent(grammarAccess.getEvalRule());
 	        }
        		add(
        			$current, 
        			"nested",
-        		lv_nested_2_0, 
+        		lv_nested_3_0, 
         		"de.uni_hildesheim.sse.Ivml.Eval");
 	        afterParserOrEnumRuleCall();
 	    }
@@ -2324,28 +2333,28 @@ ruleEval returns [EObject current=null]
 )*(
 (
 		{ 
-	        newCompositeNode(grammarAccess.getEvalAccess().getStatementsExpressionStatementParserRuleCall_3_0()); 
+	        newCompositeNode(grammarAccess.getEvalAccess().getStatementsExpressionStatementParserRuleCall_4_0()); 
 	    }
-		lv_statements_3_0=ruleExpressionStatement		{
+		lv_statements_4_0=ruleExpressionStatement		{
 	        if ($current==null) {
 	            $current = createModelElementForParent(grammarAccess.getEvalRule());
 	        }
        		add(
        			$current, 
        			"statements",
-        		lv_statements_3_0, 
+        		lv_statements_4_0, 
         		"de.uni_hildesheim.sse.Ivml.ExpressionStatement");
 	        afterParserOrEnumRuleCall();
 	    }
 
 )
-)+	otherlv_4='}' 
+)*	otherlv_5='}' 
     {
-    	newLeafNode(otherlv_4, grammarAccess.getEvalAccess().getRightCurlyBracketKeyword_4());
+    	newLeafNode(otherlv_5, grammarAccess.getEvalAccess().getRightCurlyBracketKeyword_5());
     }
-(	otherlv_5=';' 
+(	otherlv_6=';' 
     {
-    	newLeafNode(otherlv_5, grammarAccess.getEvalAccess().getSemicolonKeyword_5());
+    	newLeafNode(otherlv_6, grammarAccess.getEvalAccess().getSemicolonKeyword_6());
     }
 )?)
 ;

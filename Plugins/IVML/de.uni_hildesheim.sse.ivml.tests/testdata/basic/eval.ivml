@@ -1,0 +1,10 @@
+project testEval {
+
+    version v0;
+    Integer test;
+    eval {
+        eval {
+            test > 0;
+        };
+    };
+}

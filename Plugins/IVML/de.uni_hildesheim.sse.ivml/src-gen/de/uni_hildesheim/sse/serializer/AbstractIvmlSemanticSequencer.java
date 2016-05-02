@@ -535,7 +535,7 @@ public abstract class AbstractIvmlSemanticSequencer extends AbstractDelegatingSe
 	 *     Eval returns Eval
 	 *
 	 * Constraint:
-	 *     (nested+=Eval* statements+=ExpressionStatement+)
+	 *     (nested+=Eval* statements+=ExpressionStatement*)
 	 */
 	protected void sequence_Eval(ISerializationContext context, Eval semanticObject) {
 		genericSequencer.createSequence(context, semanticObject);

@@ -28,16 +28,16 @@ public class IvmlGrammarAccess extends AbstractGrammarElementFinder {
 		//	{VariabilityUnit} projects+=Project*;
 		@Override public ParserRule getRule() { return rule; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#XtextFragmentProvider_de.uni_hildesheim.sse.Ivml/Project'
+		//{VariabilityUnit} projects+=Project*
 		public Group getGroup() { return cGroup; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.0/@alternatives/@elements.0'
+		//{VariabilityUnit}
 		public Action getVariabilityUnitAction_0() { return cVariabilityUnitAction_0; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.0/@alternatives/@elements.1'
+		//projects+=Project*
 		public Assignment getProjectsAssignment_1() { return cProjectsAssignment_1; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.0/@alternatives/@elements.1/@terminal'
+		//Project
 		public RuleCall getProjectsProjectParserRuleCall_1_0() { return cProjectsProjectParserRuleCall_1_0; }
 	}
 
@@ -68,55 +68,60 @@ public class IvmlGrammarAccess extends AbstractGrammarElementFinder {
 		// contents=ProjectContents '}' ';'?;
 		@Override public ParserRule getRule() { return rule; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#XtextFragmentProvider_de.uni_hildesheim.sse.Ivml/InterfaceDeclaration'
+		//'project' name=Identifier '{' //#> Interfaces
+		// version=VersionStmt? imports+=ImportStmt* conflicts+=ConflictStmt*
+		//interfaces+=InterfaceDeclaration* //#< Interfaces
+		// contents=ProjectContents '}' ';'?
 		public Group getGroup() { return cGroup; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.1/@alternatives/@elements.0'
+		//'project'
 		public Keyword getProjectKeyword_0() { return cProjectKeyword_0; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.1/@alternatives/@elements.1'
+		//name=Identifier
 		public Assignment getNameAssignment_1() { return cNameAssignment_1; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.1/@alternatives/@elements.1/@terminal'
+		//Identifier
 		public RuleCall getNameIdentifierParserRuleCall_1_0() { return cNameIdentifierParserRuleCall_1_0; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.1/@alternatives/@elements.2'
+		//'{'
 		public Keyword getLeftCurlyBracketKeyword_2() { return cLeftCurlyBracketKeyword_2; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.1/@alternatives/@elements.3'
+		////#> Interfaces
+		// version=VersionStmt?
 		public Assignment getVersionAssignment_3() { return cVersionAssignment_3; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.1/@alternatives/@elements.3/@terminal'
+		//VersionStmt
 		public RuleCall getVersionVersionStmtParserRuleCall_3_0() { return cVersionVersionStmtParserRuleCall_3_0; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.1/@alternatives/@elements.4'
+		//imports+=ImportStmt*
 		public Assignment getImportsAssignment_4() { return cImportsAssignment_4; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.1/@alternatives/@elements.4/@terminal'
+		//ImportStmt
 		public RuleCall getImportsImportStmtParserRuleCall_4_0() { return cImportsImportStmtParserRuleCall_4_0; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.1/@alternatives/@elements.5'
+		//conflicts+=ConflictStmt*
 		public Assignment getConflictsAssignment_5() { return cConflictsAssignment_5; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.1/@alternatives/@elements.5/@terminal'
+		//ConflictStmt
 		public RuleCall getConflictsConflictStmtParserRuleCall_5_0() { return cConflictsConflictStmtParserRuleCall_5_0; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.1/@alternatives/@elements.6'
+		//interfaces+=InterfaceDeclaration*
 		public Assignment getInterfacesAssignment_6() { return cInterfacesAssignment_6; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.1/@alternatives/@elements.6/@terminal'
+		//InterfaceDeclaration
 		public RuleCall getInterfacesInterfaceDeclarationParserRuleCall_6_0() { return cInterfacesInterfaceDeclarationParserRuleCall_6_0; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.1/@alternatives/@elements.7'
+		////#< Interfaces
+		// contents=ProjectContents
 		public Assignment getContentsAssignment_7() { return cContentsAssignment_7; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.1/@alternatives/@elements.7/@terminal'
+		//ProjectContents
 		public RuleCall getContentsProjectContentsParserRuleCall_7_0() { return cContentsProjectContentsParserRuleCall_7_0; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.1/@alternatives/@elements.8'
+		//'}'
 		public Keyword getRightCurlyBracketKeyword_8() { return cRightCurlyBracketKeyword_8; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.1/@alternatives/@elements.9'
+		//';'?
 		public Keyword getSemicolonKeyword_9() { return cSemicolonKeyword_9; }
 	}
 
@@ -433,37 +438,37 @@ public class IvmlGrammarAccess extends AbstractGrammarElementFinder {
 		// '{'
 		public Keyword getLeftCurlyBracketKeyword_4() { return cLeftCurlyBracketKeyword_4; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#XtextFragmentProvider_de.uni_hildesheim.sse.Ivml/VariableDeclaration'
+		//(elements+=VariableDeclaration | elements+=ExpressionStatement | elements+=AttrAssignment | elements+=Eval)*
 		public Alternatives getAlternatives_5() { return cAlternatives_5; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.6/@alternatives/@elements.5/@elements.0'
+		//elements+=VariableDeclaration
 		public Assignment getElementsAssignment_5_0() { return cElementsAssignment_5_0; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.6/@alternatives/@elements.5/@elements.0/@terminal'
+		//VariableDeclaration
 		public RuleCall getElementsVariableDeclarationParserRuleCall_5_0_0() { return cElementsVariableDeclarationParserRuleCall_5_0_0; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.6/@alternatives/@elements.5/@elements.1'
+		//elements+=ExpressionStatement
 		public Assignment getElementsAssignment_5_1() { return cElementsAssignment_5_1; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.6/@alternatives/@elements.5/@elements.1/@terminal'
+		//ExpressionStatement
 		public RuleCall getElementsExpressionStatementParserRuleCall_5_1_0() { return cElementsExpressionStatementParserRuleCall_5_1_0; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.6/@alternatives/@elements.5/@elements.2'
+		//elements+=AttrAssignment
 		public Assignment getElementsAssignment_5_2() { return cElementsAssignment_5_2; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.6/@alternatives/@elements.5/@elements.2/@terminal'
+		//AttrAssignment
 		public RuleCall getElementsAttrAssignmentParserRuleCall_5_2_0() { return cElementsAttrAssignmentParserRuleCall_5_2_0; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.6/@alternatives/@elements.5/@elements.3'
+		//elements+=Eval
 		public Assignment getElementsAssignment_5_3() { return cElementsAssignment_5_3; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.6/@alternatives/@elements.5/@elements.3/@terminal'
+		//Eval
 		public RuleCall getElementsEvalParserRuleCall_5_3_0() { return cElementsEvalParserRuleCall_5_3_0; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.6/@alternatives/@elements.6'
+		//'}'
 		public Keyword getRightCurlyBracketKeyword_6() { return cRightCurlyBracketKeyword_6; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.6/@alternatives/@elements.7'
+		//';'?
 		public Keyword getSemicolonKeyword_7() { return cSemicolonKeyword_7; }
 	}
 
@@ -819,25 +824,25 @@ public class IvmlGrammarAccess extends AbstractGrammarElementFinder {
 		//	type=BasicType | id=QualifiedName | derived=DerivedType;
 		@Override public ParserRule getRule() { return rule; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#XtextFragmentProvider_de.uni_hildesheim.sse.Ivml/BasicType'
+		//type=BasicType | id=QualifiedName | derived=DerivedType
 		public Alternatives getAlternatives() { return cAlternatives; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.14/@alternatives/@elements.0'
+		//type=BasicType
 		public Assignment getTypeAssignment_0() { return cTypeAssignment_0; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.14/@alternatives/@elements.0/@terminal'
+		//BasicType
 		public RuleCall getTypeBasicTypeParserRuleCall_0_0() { return cTypeBasicTypeParserRuleCall_0_0; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.14/@alternatives/@elements.1'
+		//id=QualifiedName
 		public Assignment getIdAssignment_1() { return cIdAssignment_1; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.14/@alternatives/@elements.1/@terminal'
+		//QualifiedName
 		public RuleCall getIdQualifiedNameParserRuleCall_1_0() { return cIdQualifiedNameParserRuleCall_1_0; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.14/@alternatives/@elements.2'
+		//derived=DerivedType
 		public Assignment getDerivedAssignment_2() { return cDerivedAssignment_2; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.14/@alternatives/@elements.2/@terminal'
+		//DerivedType
 		public RuleCall getDerivedDerivedTypeParserRuleCall_2_0() { return cDerivedDerivedTypeParserRuleCall_2_0; }
 	}
 
@@ -846,13 +851,15 @@ public class IvmlGrammarAccess extends AbstractGrammarElementFinder {
 		private final Assignment cValAssignment = (Assignment)rule.eContents().get(1);
 		private final RuleCall cValNUMBERTerminalRuleCall_0 = (RuleCall)cValAssignment.eContents().get(0);
 		
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#XtextFragmentProvider_de.uni_hildesheim.sse.Ivml/NumValue'
+		//// just return string
+		// NumValue:
+		//	val=NUMBER;
 		@Override public ParserRule getRule() { return rule; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.15/@alternatives'
+		//val=NUMBER
 		public Assignment getValAssignment() { return cValAssignment; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.15/@alternatives/@terminal'
+		//NUMBER
 		public RuleCall getValNUMBERTerminalRuleCall_0() { return cValNUMBERTerminalRuleCall_0; }
 	}
 
@@ -872,46 +879,47 @@ public class IvmlGrammarAccess extends AbstractGrammarElementFinder {
 		private final Assignment cQNameAssignment_1 = (Assignment)cGroup.eContents().get(1);
 		private final RuleCall cQNameIdentifierParserRuleCall_1_0 = (RuleCall)cQNameAssignment_1.eContents().get(0);
 		
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#XtextFragmentProvider_de.uni_hildesheim.sse.Ivml/QualifiedName'
+		//QualifiedName:
+		//	(qName+=Identifier qName+='::' (qName+=Identifier qName+='::')*)? qName+=Identifier;
 		@Override public ParserRule getRule() { return rule; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.16/@alternatives'
+		//(qName+=Identifier qName+='::' (qName+=Identifier qName+='::')*)? qName+=Identifier
 		public Group getGroup() { return cGroup; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.16/@alternatives/@elements.0'
+		//(qName+=Identifier qName+='::' (qName+=Identifier qName+='::')*)?
 		public Group getGroup_0() { return cGroup_0; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.16/@alternatives/@elements.0/@elements.0'
+		//qName+=Identifier
 		public Assignment getQNameAssignment_0_0() { return cQNameAssignment_0_0; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.16/@alternatives/@elements.0/@elements.0/@terminal'
+		//Identifier
 		public RuleCall getQNameIdentifierParserRuleCall_0_0_0() { return cQNameIdentifierParserRuleCall_0_0_0; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.16/@alternatives/@elements.0/@elements.1'
+		//qName+='::'
 		public Assignment getQNameAssignment_0_1() { return cQNameAssignment_0_1; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.16/@alternatives/@elements.0/@elements.1/@terminal'
+		//'::'
 		public Keyword getQNameColonColonKeyword_0_1_0() { return cQNameColonColonKeyword_0_1_0; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.16/@alternatives/@elements.0/@elements.2'
+		//(qName+=Identifier qName+='::')*
 		public Group getGroup_0_2() { return cGroup_0_2; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.16/@alternatives/@elements.0/@elements.2/@elements.0'
+		//qName+=Identifier
 		public Assignment getQNameAssignment_0_2_0() { return cQNameAssignment_0_2_0; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.16/@alternatives/@elements.0/@elements.2/@elements.0/@terminal'
+		//Identifier
 		public RuleCall getQNameIdentifierParserRuleCall_0_2_0_0() { return cQNameIdentifierParserRuleCall_0_2_0_0; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.16/@alternatives/@elements.0/@elements.2/@elements.1'
+		//qName+='::'
 		public Assignment getQNameAssignment_0_2_1() { return cQNameAssignment_0_2_1; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.16/@alternatives/@elements.0/@elements.2/@elements.1/@terminal'
+		//'::'
 		public Keyword getQNameColonColonKeyword_0_2_1_0() { return cQNameColonColonKeyword_0_2_1_0; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.16/@alternatives/@elements.1'
+		//qName+=Identifier
 		public Assignment getQNameAssignment_1() { return cQNameAssignment_1; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.16/@alternatives/@elements.1/@terminal'
+		//Identifier
 		public RuleCall getQNameIdentifierParserRuleCall_1_0() { return cQNameIdentifierParserRuleCall_1_0; }
 	}
 
@@ -923,22 +931,23 @@ public class IvmlGrammarAccess extends AbstractGrammarElementFinder {
 		private final Assignment cANameAssignment_1 = (Assignment)cGroup.eContents().get(1);
 		private final RuleCall cANameIdentifierParserRuleCall_1_0 = (RuleCall)cANameAssignment_1.eContents().get(0);
 		
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#XtextFragmentProvider_de.uni_hildesheim.sse.Ivml/AccessName'
+		//AccessName:
+		//	(aName+='.' aName+=Identifier)+;
 		@Override public ParserRule getRule() { return rule; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.17/@alternatives'
+		//(aName+='.' aName+=Identifier)+
 		public Group getGroup() { return cGroup; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.17/@alternatives/@elements.0'
+		//aName+='.'
 		public Assignment getANameAssignment_0() { return cANameAssignment_0; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.17/@alternatives/@elements.0/@terminal'
+		//'.'
 		public Keyword getANameFullStopKeyword_0_0() { return cANameFullStopKeyword_0_0; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.17/@alternatives/@elements.1'
+		//aName+=Identifier
 		public Assignment getANameAssignment_1() { return cANameAssignment_1; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.17/@alternatives/@elements.1/@terminal'
+		//Identifier
 		public RuleCall getANameIdentifierParserRuleCall_1_0() { return cANameIdentifierParserRuleCall_1_0; }
 	}
 
@@ -962,58 +971,64 @@ public class IvmlGrammarAccess extends AbstractGrammarElementFinder {
 		private final Assignment cVersionAssignment_6 = (Assignment)cAlternatives.eContents().get(6);
 		private final RuleCall cVersionVERSIONTerminalRuleCall_6_0 = (RuleCall)cVersionAssignment_6.eContents().get(0);
 		
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#XtextFragmentProvider_de.uni_hildesheim.sse.Ivml/Value'
+		//Value:
+		//	nValue=NumValue | sValue=STRING | qValue=QualifiedName | bValue=('true' | 'false') | self='self' //#> Compounds
+		// |
+		//	nullValue='null' | => version=VERSION //#< Compounds
+		//;
 		@Override public ParserRule getRule() { return rule; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.18/@alternatives'
+		//nValue=NumValue | sValue=STRING | qValue=QualifiedName | bValue=('true' | 'false') | self='self' //#> Compounds
+		// |
+		//nullValue='null' | => version=VERSION
 		public Alternatives getAlternatives() { return cAlternatives; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.18/@alternatives/@elements.0'
+		//nValue=NumValue
 		public Assignment getNValueAssignment_0() { return cNValueAssignment_0; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.18/@alternatives/@elements.0/@terminal'
+		//NumValue
 		public RuleCall getNValueNumValueParserRuleCall_0_0() { return cNValueNumValueParserRuleCall_0_0; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.18/@alternatives/@elements.1'
+		//sValue=STRING
 		public Assignment getSValueAssignment_1() { return cSValueAssignment_1; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.18/@alternatives/@elements.1/@terminal'
+		//STRING
 		public RuleCall getSValueSTRINGTerminalRuleCall_1_0() { return cSValueSTRINGTerminalRuleCall_1_0; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.18/@alternatives/@elements.2'
+		//qValue=QualifiedName
 		public Assignment getQValueAssignment_2() { return cQValueAssignment_2; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.18/@alternatives/@elements.2/@terminal'
+		//QualifiedName
 		public RuleCall getQValueQualifiedNameParserRuleCall_2_0() { return cQValueQualifiedNameParserRuleCall_2_0; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.18/@alternatives/@elements.3'
+		//bValue=('true' | 'false')
 		public Assignment getBValueAssignment_3() { return cBValueAssignment_3; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.18/@alternatives/@elements.3/@terminal'
+		//('true' | 'false')
 		public Alternatives getBValueAlternatives_3_0() { return cBValueAlternatives_3_0; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.18/@alternatives/@elements.3/@terminal/@elements.0'
+		//'true'
 		public Keyword getBValueTrueKeyword_3_0_0() { return cBValueTrueKeyword_3_0_0; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.18/@alternatives/@elements.3/@terminal/@elements.1'
+		//'false'
 		public Keyword getBValueFalseKeyword_3_0_1() { return cBValueFalseKeyword_3_0_1; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.18/@alternatives/@elements.4'
+		//self='self'
 		public Assignment getSelfAssignment_4() { return cSelfAssignment_4; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.18/@alternatives/@elements.4/@terminal'
+		//'self'
 		public Keyword getSelfSelfKeyword_4_0() { return cSelfSelfKeyword_4_0; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.18/@alternatives/@elements.5'
+		//nullValue='null'
 		public Assignment getNullValueAssignment_5() { return cNullValueAssignment_5; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.18/@alternatives/@elements.5/@terminal'
+		//'null'
 		public Keyword getNullValueNullKeyword_5_0() { return cNullValueNullKeyword_5_0; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.18/@alternatives/@elements.6'
+		//=> version=VERSION
 		public Assignment getVersionAssignment_6() { return cVersionAssignment_6; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.18/@alternatives/@elements.6/@terminal'
+		//VERSION
 		public RuleCall getVersionVERSIONTerminalRuleCall_6_0() { return cVersionVERSIONTerminalRuleCall_6_0; }
 	}
 
@@ -1032,43 +1047,50 @@ public class IvmlGrammarAccess extends AbstractGrammarElementFinder {
 		private final RuleCall cTypeTypeParserRuleCall_2_0 = (RuleCall)cTypeAssignment_2.eContents().get(0);
 		private final Keyword cRightParenthesisKeyword_3 = (Keyword)cGroup.eContents().get(3);
 		
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#XtextFragmentProvider_de.uni_hildesheim.sse.Ivml/DerivedType'
+		//DerivedType:
+		//	(op='setOf' | op='sequenceOf' //#> Compounds
+		// | op='refTo' //#< Compounds
+		//) '(' type=Type ')';
 		@Override public ParserRule getRule() { return rule; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.19/@alternatives'
+		//(op='setOf' | op='sequenceOf' //#> Compounds
+		// | op='refTo' //#< Compounds
+		//) '(' type=Type ')'
 		public Group getGroup() { return cGroup; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.19/@alternatives/@elements.0'
+		//(op='setOf' | op='sequenceOf' //#> Compounds
+		// | op='refTo' //#< Compounds
+		//)
 		public Alternatives getAlternatives_0() { return cAlternatives_0; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.19/@alternatives/@elements.0/@elements.0'
+		//op='setOf'
 		public Assignment getOpAssignment_0_0() { return cOpAssignment_0_0; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.19/@alternatives/@elements.0/@elements.0/@terminal'
+		//'setOf'
 		public Keyword getOpSetOfKeyword_0_0_0() { return cOpSetOfKeyword_0_0_0; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.19/@alternatives/@elements.0/@elements.1'
+		//op='sequenceOf'
 		public Assignment getOpAssignment_0_1() { return cOpAssignment_0_1; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.19/@alternatives/@elements.0/@elements.1/@terminal'
+		//'sequenceOf'
 		public Keyword getOpSequenceOfKeyword_0_1_0() { return cOpSequenceOfKeyword_0_1_0; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.19/@alternatives/@elements.0/@elements.2'
+		//op='refTo'
 		public Assignment getOpAssignment_0_2() { return cOpAssignment_0_2; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.19/@alternatives/@elements.0/@elements.2/@terminal'
+		//'refTo'
 		public Keyword getOpRefToKeyword_0_2_0() { return cOpRefToKeyword_0_2_0; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.19/@alternatives/@elements.1'
+		//'('
 		public Keyword getLeftParenthesisKeyword_1() { return cLeftParenthesisKeyword_1; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.19/@alternatives/@elements.2'
+		//type=Type
 		public Assignment getTypeAssignment_2() { return cTypeAssignment_2; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.19/@alternatives/@elements.2/@terminal'
+		//Type
 		public RuleCall getTypeTypeParserRuleCall_2_0() { return cTypeTypeParserRuleCall_2_0; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.19/@alternatives/@elements.3'
+		//')'
 		public Keyword getRightParenthesisKeyword_3() { return cRightParenthesisKeyword_3; }
 	}
 
@@ -1092,58 +1114,63 @@ public class IvmlGrammarAccess extends AbstractGrammarElementFinder {
 		private final RuleCall cNamesIdentifierParserRuleCall_5_1_0 = (RuleCall)cNamesAssignment_5_1.eContents().get(0);
 		private final Keyword cSemicolonKeyword_6 = (Keyword)cGroup.eContents().get(6);
 		
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#XtextFragmentProvider_de.uni_hildesheim.sse.Ivml/AnnotateTo'
+		////#> Compounds
+		// // --------------------- Extension: Compounds ----------------------
+		// AnnotateTo:
+		//	sname=('attribute' | 'annotate') annotationType=Type annotationDecl=VariableDeclarationPart 'to' names+=Identifier
+		//	(',' names+=Identifier)* ';';
 		@Override public ParserRule getRule() { return rule; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.20/@alternatives'
+		//sname=('attribute' | 'annotate') annotationType=Type annotationDecl=VariableDeclarationPart 'to' names+=Identifier (','
+		//names+=Identifier)* ';'
 		public Group getGroup() { return cGroup; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.20/@alternatives/@elements.0'
+		//sname=('attribute' | 'annotate')
 		public Assignment getSnameAssignment_0() { return cSnameAssignment_0; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.20/@alternatives/@elements.0/@terminal'
+		//('attribute' | 'annotate')
 		public Alternatives getSnameAlternatives_0_0() { return cSnameAlternatives_0_0; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.20/@alternatives/@elements.0/@terminal/@elements.0'
+		//'attribute'
 		public Keyword getSnameAttributeKeyword_0_0_0() { return cSnameAttributeKeyword_0_0_0; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.20/@alternatives/@elements.0/@terminal/@elements.1'
+		//'annotate'
 		public Keyword getSnameAnnotateKeyword_0_0_1() { return cSnameAnnotateKeyword_0_0_1; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.20/@alternatives/@elements.1'
+		//annotationType=Type
 		public Assignment getAnnotationTypeAssignment_1() { return cAnnotationTypeAssignment_1; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.20/@alternatives/@elements.1/@terminal'
+		//Type
 		public RuleCall getAnnotationTypeTypeParserRuleCall_1_0() { return cAnnotationTypeTypeParserRuleCall_1_0; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.20/@alternatives/@elements.2'
+		//annotationDecl=VariableDeclarationPart
 		public Assignment getAnnotationDeclAssignment_2() { return cAnnotationDeclAssignment_2; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.20/@alternatives/@elements.2/@terminal'
+		//VariableDeclarationPart
 		public RuleCall getAnnotationDeclVariableDeclarationPartParserRuleCall_2_0() { return cAnnotationDeclVariableDeclarationPartParserRuleCall_2_0; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.20/@alternatives/@elements.3'
+		//'to'
 		public Keyword getToKeyword_3() { return cToKeyword_3; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.20/@alternatives/@elements.4'
+		//names+=Identifier
 		public Assignment getNamesAssignment_4() { return cNamesAssignment_4; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.20/@alternatives/@elements.4/@terminal'
+		//Identifier
 		public RuleCall getNamesIdentifierParserRuleCall_4_0() { return cNamesIdentifierParserRuleCall_4_0; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.20/@alternatives/@elements.5'
+		//(',' names+=Identifier)*
 		public Group getGroup_5() { return cGroup_5; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.20/@alternatives/@elements.5/@elements.0'
+		//','
 		public Keyword getCommaKeyword_5_0() { return cCommaKeyword_5_0; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.20/@alternatives/@elements.5/@elements.1'
+		//names+=Identifier
 		public Assignment getNamesAssignment_5_1() { return cNamesAssignment_5_1; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.20/@alternatives/@elements.5/@elements.1/@terminal'
+		//Identifier
 		public RuleCall getNamesIdentifierParserRuleCall_5_1_0() { return cNamesIdentifierParserRuleCall_5_1_0; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.20/@alternatives/@elements.6'
+		//';'
 		public Keyword getSemicolonKeyword_6() { return cSemicolonKeyword_6; }
 	}
 
@@ -1166,55 +1193,59 @@ public class IvmlGrammarAccess extends AbstractGrammarElementFinder {
 		private final Keyword cRightParenthesisKeyword_4_5 = (Keyword)cGroup_4.eContents().get(5);
 		private final Keyword cSemicolonKeyword_5 = (Keyword)cGroup.eContents().get(5);
 		
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#XtextFragmentProvider_de.uni_hildesheim.sse.Ivml/Freeze'
+		////#< Compounds
+		// //#> EvalFreeze
+		// // --------------------- Extension: EvalFreeze ---------------------
+		// Freeze:
+		//	'freeze' '{' names+=FreezeStatement+ '}' ('but' '(' id=Identifier '|' ex=LogicalExpression ')')? ';'?;
 		@Override public ParserRule getRule() { return rule; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.21/@alternatives'
+		//'freeze' '{' names+=FreezeStatement+ '}' ('but' '(' id=Identifier '|' ex=LogicalExpression ')')? ';'?
 		public Group getGroup() { return cGroup; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.21/@alternatives/@elements.0'
+		//'freeze'
 		public Keyword getFreezeKeyword_0() { return cFreezeKeyword_0; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.21/@alternatives/@elements.1'
+		//'{'
 		public Keyword getLeftCurlyBracketKeyword_1() { return cLeftCurlyBracketKeyword_1; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.21/@alternatives/@elements.2'
+		//names+=FreezeStatement+
 		public Assignment getNamesAssignment_2() { return cNamesAssignment_2; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.21/@alternatives/@elements.2/@terminal'
+		//FreezeStatement
 		public RuleCall getNamesFreezeStatementParserRuleCall_2_0() { return cNamesFreezeStatementParserRuleCall_2_0; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.21/@alternatives/@elements.3'
+		//'}'
 		public Keyword getRightCurlyBracketKeyword_3() { return cRightCurlyBracketKeyword_3; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.21/@alternatives/@elements.4'
+		//('but' '(' id=Identifier '|' ex=LogicalExpression ')')?
 		public Group getGroup_4() { return cGroup_4; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.21/@alternatives/@elements.4/@elements.0'
+		//'but'
 		public Keyword getButKeyword_4_0() { return cButKeyword_4_0; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.21/@alternatives/@elements.4/@elements.1'
+		//'('
 		public Keyword getLeftParenthesisKeyword_4_1() { return cLeftParenthesisKeyword_4_1; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.21/@alternatives/@elements.4/@elements.2'
+		//id=Identifier
 		public Assignment getIdAssignment_4_2() { return cIdAssignment_4_2; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.21/@alternatives/@elements.4/@elements.2/@terminal'
+		//Identifier
 		public RuleCall getIdIdentifierParserRuleCall_4_2_0() { return cIdIdentifierParserRuleCall_4_2_0; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.21/@alternatives/@elements.4/@elements.3'
+		//'|'
 		public Keyword getVerticalLineKeyword_4_3() { return cVerticalLineKeyword_4_3; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.21/@alternatives/@elements.4/@elements.4'
+		//ex=LogicalExpression
 		public Assignment getExAssignment_4_4() { return cExAssignment_4_4; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.21/@alternatives/@elements.4/@elements.4/@terminal'
+		//LogicalExpression
 		public RuleCall getExLogicalExpressionParserRuleCall_4_4_0() { return cExLogicalExpressionParserRuleCall_4_4_0; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.21/@alternatives/@elements.4/@elements.5'
+		//')'
 		public Keyword getRightParenthesisKeyword_4_5() { return cRightParenthesisKeyword_4_5; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.21/@alternatives/@elements.5'
+		//';'?
 		public Keyword getSemicolonKeyword_5() { return cSemicolonKeyword_5; }
 	}
 
@@ -1227,69 +1258,75 @@ public class IvmlGrammarAccess extends AbstractGrammarElementFinder {
 		private final RuleCall cAccessAccessNameParserRuleCall_1_0 = (RuleCall)cAccessAssignment_1.eContents().get(0);
 		private final Keyword cSemicolonKeyword_2 = (Keyword)cGroup.eContents().get(2);
 		
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#XtextFragmentProvider_de.uni_hildesheim.sse.Ivml/FreezeStatement'
+		//FreezeStatement:
+		//	name=QualifiedName access=AccessName? ';';
 		@Override public ParserRule getRule() { return rule; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.22/@alternatives'
+		//name=QualifiedName access=AccessName? ';'
 		public Group getGroup() { return cGroup; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.22/@alternatives/@elements.0'
+		//name=QualifiedName
 		public Assignment getNameAssignment_0() { return cNameAssignment_0; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.22/@alternatives/@elements.0/@terminal'
+		//QualifiedName
 		public RuleCall getNameQualifiedNameParserRuleCall_0_0() { return cNameQualifiedNameParserRuleCall_0_0; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.22/@alternatives/@elements.1'
+		//access=AccessName?
 		public Assignment getAccessAssignment_1() { return cAccessAssignment_1; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.22/@alternatives/@elements.1/@terminal'
+		//AccessName
 		public RuleCall getAccessAccessNameParserRuleCall_1_0() { return cAccessAccessNameParserRuleCall_1_0; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.22/@alternatives/@elements.2'
+		//';'
 		public Keyword getSemicolonKeyword_2() { return cSemicolonKeyword_2; }
 	}
 
 	public class EvalElements extends AbstractParserRuleElementFinder {
 		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "de.uni_hildesheim.sse.Ivml.Eval");
 		private final Group cGroup = (Group)rule.eContents().get(1);
-		private final Keyword cEvalKeyword_0 = (Keyword)cGroup.eContents().get(0);
-		private final Keyword cLeftCurlyBracketKeyword_1 = (Keyword)cGroup.eContents().get(1);
-		private final Assignment cNestedAssignment_2 = (Assignment)cGroup.eContents().get(2);
-		private final RuleCall cNestedEvalParserRuleCall_2_0 = (RuleCall)cNestedAssignment_2.eContents().get(0);
-		private final Assignment cStatementsAssignment_3 = (Assignment)cGroup.eContents().get(3);
-		private final RuleCall cStatementsExpressionStatementParserRuleCall_3_0 = (RuleCall)cStatementsAssignment_3.eContents().get(0);
-		private final Keyword cRightCurlyBracketKeyword_4 = (Keyword)cGroup.eContents().get(4);
-		private final Keyword cSemicolonKeyword_5 = (Keyword)cGroup.eContents().get(5);
+		private final Action cEvalAction_0 = (Action)cGroup.eContents().get(0);
+		private final Keyword cEvalKeyword_1 = (Keyword)cGroup.eContents().get(1);
+		private final Keyword cLeftCurlyBracketKeyword_2 = (Keyword)cGroup.eContents().get(2);
+		private final Assignment cNestedAssignment_3 = (Assignment)cGroup.eContents().get(3);
+		private final RuleCall cNestedEvalParserRuleCall_3_0 = (RuleCall)cNestedAssignment_3.eContents().get(0);
+		private final Assignment cStatementsAssignment_4 = (Assignment)cGroup.eContents().get(4);
+		private final RuleCall cStatementsExpressionStatementParserRuleCall_4_0 = (RuleCall)cStatementsAssignment_4.eContents().get(0);
+		private final Keyword cRightCurlyBracketKeyword_5 = (Keyword)cGroup.eContents().get(5);
+		private final Keyword cSemicolonKeyword_6 = (Keyword)cGroup.eContents().get(6);
 		
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#XtextFragmentProvider_de.uni_hildesheim.sse.Ivml/Eval'
+		//Eval:
+		//	{Eval} 'eval' '{' nested+=Eval* statements+=ExpressionStatement* '}' ';'?;
 		@Override public ParserRule getRule() { return rule; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.23/@alternatives'
+		//{Eval} 'eval' '{' nested+=Eval* statements+=ExpressionStatement* '}' ';'?
 		public Group getGroup() { return cGroup; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.23/@alternatives/@elements.0'
-		public Keyword getEvalKeyword_0() { return cEvalKeyword_0; }
+		//{Eval}
+		public Action getEvalAction_0() { return cEvalAction_0; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.23/@alternatives/@elements.1'
-		public Keyword getLeftCurlyBracketKeyword_1() { return cLeftCurlyBracketKeyword_1; }
+		//'eval'
+		public Keyword getEvalKeyword_1() { return cEvalKeyword_1; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.23/@alternatives/@elements.2'
-		public Assignment getNestedAssignment_2() { return cNestedAssignment_2; }
+		//'{'
+		public Keyword getLeftCurlyBracketKeyword_2() { return cLeftCurlyBracketKeyword_2; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.23/@alternatives/@elements.2/@terminal'
-		public RuleCall getNestedEvalParserRuleCall_2_0() { return cNestedEvalParserRuleCall_2_0; }
+		//nested+=Eval*
+		public Assignment getNestedAssignment_3() { return cNestedAssignment_3; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.23/@alternatives/@elements.3'
-		public Assignment getStatementsAssignment_3() { return cStatementsAssignment_3; }
+		//Eval
+		public RuleCall getNestedEvalParserRuleCall_3_0() { return cNestedEvalParserRuleCall_3_0; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.23/@alternatives/@elements.3/@terminal'
-		public RuleCall getStatementsExpressionStatementParserRuleCall_3_0() { return cStatementsExpressionStatementParserRuleCall_3_0; }
+		//statements+=ExpressionStatement*
+		public Assignment getStatementsAssignment_4() { return cStatementsAssignment_4; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.23/@alternatives/@elements.4'
-		public Keyword getRightCurlyBracketKeyword_4() { return cRightCurlyBracketKeyword_4; }
+		//ExpressionStatement
+		public RuleCall getStatementsExpressionStatementParserRuleCall_4_0() { return cStatementsExpressionStatementParserRuleCall_4_0; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.23/@alternatives/@elements.5'
-		public Keyword getSemicolonKeyword_5() { return cSemicolonKeyword_5; }
+		//'}'
+		public Keyword getRightCurlyBracketKeyword_5() { return cRightCurlyBracketKeyword_5; }
+
+		//';'?
+		public Keyword getSemicolonKeyword_6() { return cSemicolonKeyword_6; }
 	}
 
 	public class InterfaceDeclarationElements extends AbstractParserRuleElementFinder {
@@ -1304,34 +1341,39 @@ public class IvmlGrammarAccess extends AbstractGrammarElementFinder {
 		private final Keyword cRightCurlyBracketKeyword_4 = (Keyword)cGroup.eContents().get(4);
 		private final Keyword cSemicolonKeyword_5 = (Keyword)cGroup.eContents().get(5);
 		
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#XtextFragmentProvider_de.uni_hildesheim.sse.Ivml/InterfaceDeclaration'
+		////#< EvalFreeze
+		// //#> Interfaces
+		// // ---------------------- Extension: Interfaces ---------------------
+		//
+		//InterfaceDeclaration:
+		//	'interface' name=Identifier '{' exports+=Export* '}' ';'?;
 		@Override public ParserRule getRule() { return rule; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.24/@alternatives'
+		//'interface' name=Identifier '{' exports+=Export* '}' ';'?
 		public Group getGroup() { return cGroup; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.24/@alternatives/@elements.0'
+		//'interface'
 		public Keyword getInterfaceKeyword_0() { return cInterfaceKeyword_0; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.24/@alternatives/@elements.1'
+		//name=Identifier
 		public Assignment getNameAssignment_1() { return cNameAssignment_1; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.24/@alternatives/@elements.1/@terminal'
+		//Identifier
 		public RuleCall getNameIdentifierParserRuleCall_1_0() { return cNameIdentifierParserRuleCall_1_0; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.24/@alternatives/@elements.2'
+		//'{'
 		public Keyword getLeftCurlyBracketKeyword_2() { return cLeftCurlyBracketKeyword_2; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.24/@alternatives/@elements.3'
+		//exports+=Export*
 		public Assignment getExportsAssignment_3() { return cExportsAssignment_3; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.24/@alternatives/@elements.3/@terminal'
+		//Export
 		public RuleCall getExportsExportParserRuleCall_3_0() { return cExportsExportParserRuleCall_3_0; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.24/@alternatives/@elements.4'
+		//'}'
 		public Keyword getRightCurlyBracketKeyword_4() { return cRightCurlyBracketKeyword_4; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.24/@alternatives/@elements.5'
+		//';'?
 		public Keyword getSemicolonKeyword_5() { return cSemicolonKeyword_5; }
 	}
 
@@ -1347,34 +1389,35 @@ public class IvmlGrammarAccess extends AbstractGrammarElementFinder {
 		private final RuleCall cNamesQualifiedNameParserRuleCall_2_1_0 = (RuleCall)cNamesAssignment_2_1.eContents().get(0);
 		private final Keyword cSemicolonKeyword_3 = (Keyword)cGroup.eContents().get(3);
 		
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#XtextFragmentProvider_de.uni_hildesheim.sse.Ivml/Export'
+		//Export:
+		//	'export' names+=QualifiedName (',' names+=QualifiedName)* ';';
 		@Override public ParserRule getRule() { return rule; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.25/@alternatives'
+		//'export' names+=QualifiedName (',' names+=QualifiedName)* ';'
 		public Group getGroup() { return cGroup; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.25/@alternatives/@elements.0'
+		//'export'
 		public Keyword getExportKeyword_0() { return cExportKeyword_0; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.25/@alternatives/@elements.1'
+		//names+=QualifiedName
 		public Assignment getNamesAssignment_1() { return cNamesAssignment_1; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.25/@alternatives/@elements.1/@terminal'
+		//QualifiedName
 		public RuleCall getNamesQualifiedNameParserRuleCall_1_0() { return cNamesQualifiedNameParserRuleCall_1_0; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.25/@alternatives/@elements.2'
+		//(',' names+=QualifiedName)*
 		public Group getGroup_2() { return cGroup_2; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.25/@alternatives/@elements.2/@elements.0'
+		//','
 		public Keyword getCommaKeyword_2_0() { return cCommaKeyword_2_0; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.25/@alternatives/@elements.2/@elements.1'
+		//names+=QualifiedName
 		public Assignment getNamesAssignment_2_1() { return cNamesAssignment_2_1; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.25/@alternatives/@elements.2/@elements.1/@terminal'
+		//QualifiedName
 		public RuleCall getNamesQualifiedNameParserRuleCall_2_1_0() { return cNamesQualifiedNameParserRuleCall_2_1_0; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.25/@alternatives/@elements.3'
+		//';'
 		public Keyword getSemicolonKeyword_3() { return cSemicolonKeyword_3; }
 	}
 
@@ -1394,46 +1437,47 @@ public class IvmlGrammarAccess extends AbstractGrammarElementFinder {
 		private final RuleCall cRestrictionExpressionParserRuleCall_3_1_0 = (RuleCall)cRestrictionAssignment_3_1.eContents().get(0);
 		private final Keyword cSemicolonKeyword_4 = (Keyword)cGroup.eContents().get(4);
 		
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#XtextFragmentProvider_de.uni_hildesheim.sse.Ivml/ImportStmt'
+		//ImportStmt:
+		//	'import' name=Identifier ('::' interface=Identifier)? ('with' restriction=Expression)? ';';
 		@Override public ParserRule getRule() { return rule; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.26/@alternatives'
+		//'import' name=Identifier ('::' interface=Identifier)? ('with' restriction=Expression)? ';'
 		public Group getGroup() { return cGroup; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.26/@alternatives/@elements.0'
+		//'import'
 		public Keyword getImportKeyword_0() { return cImportKeyword_0; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.26/@alternatives/@elements.1'
+		//name=Identifier
 		public Assignment getNameAssignment_1() { return cNameAssignment_1; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.26/@alternatives/@elements.1/@terminal'
+		//Identifier
 		public RuleCall getNameIdentifierParserRuleCall_1_0() { return cNameIdentifierParserRuleCall_1_0; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.26/@alternatives/@elements.2'
+		//('::' interface=Identifier)?
 		public Group getGroup_2() { return cGroup_2; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.26/@alternatives/@elements.2/@elements.0'
+		//'::'
 		public Keyword getColonColonKeyword_2_0() { return cColonColonKeyword_2_0; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.26/@alternatives/@elements.2/@elements.1'
+		//interface=Identifier
 		public Assignment getInterfaceAssignment_2_1() { return cInterfaceAssignment_2_1; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.26/@alternatives/@elements.2/@elements.1/@terminal'
+		//Identifier
 		public RuleCall getInterfaceIdentifierParserRuleCall_2_1_0() { return cInterfaceIdentifierParserRuleCall_2_1_0; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.26/@alternatives/@elements.3'
+		//('with' restriction=Expression)?
 		public Group getGroup_3() { return cGroup_3; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.26/@alternatives/@elements.3/@elements.0'
+		//'with'
 		public Keyword getWithKeyword_3_0() { return cWithKeyword_3_0; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.26/@alternatives/@elements.3/@elements.1'
+		//restriction=Expression
 		public Assignment getRestrictionAssignment_3_1() { return cRestrictionAssignment_3_1; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.26/@alternatives/@elements.3/@elements.1/@terminal'
+		//Expression
 		public RuleCall getRestrictionExpressionParserRuleCall_3_1_0() { return cRestrictionExpressionParserRuleCall_3_1_0; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.26/@alternatives/@elements.4'
+		//';'
 		public Keyword getSemicolonKeyword_4() { return cSemicolonKeyword_4; }
 	}
 
@@ -1449,34 +1493,35 @@ public class IvmlGrammarAccess extends AbstractGrammarElementFinder {
 		private final RuleCall cRestrictionExpressionParserRuleCall_2_1_0 = (RuleCall)cRestrictionAssignment_2_1.eContents().get(0);
 		private final Keyword cSemicolonKeyword_3 = (Keyword)cGroup.eContents().get(3);
 		
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#XtextFragmentProvider_de.uni_hildesheim.sse.Ivml/ConflictStmt'
+		//ConflictStmt:
+		//	'conflicts' name=Identifier ('with' restriction=Expression)? ';';
 		@Override public ParserRule getRule() { return rule; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.27/@alternatives'
+		//'conflicts' name=Identifier ('with' restriction=Expression)? ';'
 		public Group getGroup() { return cGroup; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.27/@alternatives/@elements.0'
+		//'conflicts'
 		public Keyword getConflictsKeyword_0() { return cConflictsKeyword_0; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.27/@alternatives/@elements.1'
+		//name=Identifier
 		public Assignment getNameAssignment_1() { return cNameAssignment_1; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.27/@alternatives/@elements.1/@terminal'
+		//Identifier
 		public RuleCall getNameIdentifierParserRuleCall_1_0() { return cNameIdentifierParserRuleCall_1_0; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.27/@alternatives/@elements.2'
+		//('with' restriction=Expression)?
 		public Group getGroup_2() { return cGroup_2; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.27/@alternatives/@elements.2/@elements.0'
+		//'with'
 		public Keyword getWithKeyword_2_0() { return cWithKeyword_2_0; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.27/@alternatives/@elements.2/@elements.1'
+		//restriction=Expression
 		public Assignment getRestrictionAssignment_2_1() { return cRestrictionAssignment_2_1; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.27/@alternatives/@elements.2/@elements.1/@terminal'
+		//Expression
 		public RuleCall getRestrictionExpressionParserRuleCall_2_1_0() { return cRestrictionExpressionParserRuleCall_2_1_0; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.27/@alternatives/@elements.3'
+		//';'
 		public Keyword getSemicolonKeyword_3() { return cSemicolonKeyword_3; }
 	}
 
@@ -1488,22 +1533,23 @@ public class IvmlGrammarAccess extends AbstractGrammarElementFinder {
 		private final RuleCall cVersionVERSIONTerminalRuleCall_1_0 = (RuleCall)cVersionAssignment_1.eContents().get(0);
 		private final Keyword cSemicolonKeyword_2 = (Keyword)cGroup.eContents().get(2);
 		
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#XtextFragmentProvider_de.uni_hildesheim.sse.Ivml/VersionStmt'
+		//VersionStmt:
+		//	'version' version=VERSION ';';
 		@Override public ParserRule getRule() { return rule; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.28/@alternatives'
+		//'version' version=VERSION ';'
 		public Group getGroup() { return cGroup; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.28/@alternatives/@elements.0'
+		//'version'
 		public Keyword getVersionKeyword_0() { return cVersionKeyword_0; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.28/@alternatives/@elements.1'
+		//version=VERSION
 		public Assignment getVersionAssignment_1() { return cVersionAssignment_1; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.28/@alternatives/@elements.1/@terminal'
+		//VERSION
 		public RuleCall getVersionVERSIONTerminalRuleCall_1_0() { return cVersionVERSIONTerminalRuleCall_1_0; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.28/@alternatives/@elements.2'
+		//';'
 		public Keyword getSemicolonKeyword_2() { return cSemicolonKeyword_2; }
 	}
 
@@ -1526,55 +1572,58 @@ public class IvmlGrammarAccess extends AbstractGrammarElementFinder {
 		private final RuleCall cImplExpressionParserRuleCall_8_0 = (RuleCall)cImplAssignment_8.eContents().get(0);
 		private final Keyword cSemicolonKeyword_9 = (Keyword)cGroup.eContents().get(9);
 		
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#XtextFragmentProvider_de.uni_hildesheim.sse.Ivml/OpDefStatement'
+		////#< Interfaces
+		// //------------------------------------ OCL (excerpt) ----------------------------	
+		// OpDefStatement:
+		//	'def' static='static'? result=Type id=Identifier '(' param=OpDefParameterList ')' '=' impl=Expression ';';
 		@Override public ParserRule getRule() { return rule; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.29/@alternatives'
+		//'def' static='static'? result=Type id=Identifier '(' param=OpDefParameterList ')' '=' impl=Expression ';'
 		public Group getGroup() { return cGroup; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.29/@alternatives/@elements.0'
+		//'def'
 		public Keyword getDefKeyword_0() { return cDefKeyword_0; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.29/@alternatives/@elements.1'
+		//static='static'?
 		public Assignment getStaticAssignment_1() { return cStaticAssignment_1; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.29/@alternatives/@elements.1/@terminal'
+		//'static'
 		public Keyword getStaticStaticKeyword_1_0() { return cStaticStaticKeyword_1_0; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.29/@alternatives/@elements.2'
+		//result=Type
 		public Assignment getResultAssignment_2() { return cResultAssignment_2; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.29/@alternatives/@elements.2/@terminal'
+		//Type
 		public RuleCall getResultTypeParserRuleCall_2_0() { return cResultTypeParserRuleCall_2_0; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.29/@alternatives/@elements.3'
+		//id=Identifier
 		public Assignment getIdAssignment_3() { return cIdAssignment_3; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.29/@alternatives/@elements.3/@terminal'
+		//Identifier
 		public RuleCall getIdIdentifierParserRuleCall_3_0() { return cIdIdentifierParserRuleCall_3_0; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.29/@alternatives/@elements.4'
+		//'('
 		public Keyword getLeftParenthesisKeyword_4() { return cLeftParenthesisKeyword_4; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.29/@alternatives/@elements.5'
+		//param=OpDefParameterList
 		public Assignment getParamAssignment_5() { return cParamAssignment_5; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.29/@alternatives/@elements.5/@terminal'
+		//OpDefParameterList
 		public RuleCall getParamOpDefParameterListParserRuleCall_5_0() { return cParamOpDefParameterListParserRuleCall_5_0; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.29/@alternatives/@elements.6'
+		//')'
 		public Keyword getRightParenthesisKeyword_6() { return cRightParenthesisKeyword_6; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.29/@alternatives/@elements.7'
+		//'='
 		public Keyword getEqualsSignKeyword_7() { return cEqualsSignKeyword_7; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.29/@alternatives/@elements.8'
+		//impl=Expression
 		public Assignment getImplAssignment_8() { return cImplAssignment_8; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.29/@alternatives/@elements.8/@terminal'
+		//Expression
 		public RuleCall getImplExpressionParserRuleCall_8_0() { return cImplExpressionParserRuleCall_8_0; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.29/@alternatives/@elements.9'
+		//';'
 		public Keyword getSemicolonKeyword_9() { return cSemicolonKeyword_9; }
 	}
 
@@ -1590,34 +1639,35 @@ public class IvmlGrammarAccess extends AbstractGrammarElementFinder {
 		private final Assignment cListAssignment_1_1_1 = (Assignment)cGroup_1_1.eContents().get(1);
 		private final RuleCall cListOpDefParameterParserRuleCall_1_1_1_0 = (RuleCall)cListAssignment_1_1_1.eContents().get(0);
 		
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#XtextFragmentProvider_de.uni_hildesheim.sse.Ivml/OpDefParameterList'
+		//OpDefParameterList:
+		//	{OpDefParameterList} (list+=OpDefParameter (',' list+=OpDefParameter)*)?;
 		@Override public ParserRule getRule() { return rule; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.30/@alternatives'
+		//{OpDefParameterList} (list+=OpDefParameter (',' list+=OpDefParameter)*)?
 		public Group getGroup() { return cGroup; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.30/@alternatives/@elements.0'
+		//{OpDefParameterList}
 		public Action getOpDefParameterListAction_0() { return cOpDefParameterListAction_0; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.30/@alternatives/@elements.1'
+		//(list+=OpDefParameter (',' list+=OpDefParameter)*)?
 		public Group getGroup_1() { return cGroup_1; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.30/@alternatives/@elements.1/@elements.0'
+		//list+=OpDefParameter
 		public Assignment getListAssignment_1_0() { return cListAssignment_1_0; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.30/@alternatives/@elements.1/@elements.0/@terminal'
+		//OpDefParameter
 		public RuleCall getListOpDefParameterParserRuleCall_1_0_0() { return cListOpDefParameterParserRuleCall_1_0_0; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.30/@alternatives/@elements.1/@elements.1'
+		//(',' list+=OpDefParameter)*
 		public Group getGroup_1_1() { return cGroup_1_1; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.30/@alternatives/@elements.1/@elements.1/@elements.0'
+		//','
 		public Keyword getCommaKeyword_1_1_0() { return cCommaKeyword_1_1_0; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.30/@alternatives/@elements.1/@elements.1/@elements.1'
+		//list+=OpDefParameter
 		public Assignment getListAssignment_1_1_1() { return cListAssignment_1_1_1; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.30/@alternatives/@elements.1/@elements.1/@elements.1/@terminal'
+		//OpDefParameter
 		public RuleCall getListOpDefParameterParserRuleCall_1_1_1_0() { return cListOpDefParameterParserRuleCall_1_1_1_0; }
 	}
 
@@ -1633,34 +1683,35 @@ public class IvmlGrammarAccess extends AbstractGrammarElementFinder {
 		private final Assignment cValAssignment_2_1 = (Assignment)cGroup_2.eContents().get(1);
 		private final RuleCall cValExpressionParserRuleCall_2_1_0 = (RuleCall)cValAssignment_2_1.eContents().get(0);
 		
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#XtextFragmentProvider_de.uni_hildesheim.sse.Ivml/OpDefParameter'
+		//OpDefParameter:
+		//	type=Type id=Identifier ('=' val=Expression)?;
 		@Override public ParserRule getRule() { return rule; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.31/@alternatives'
+		//type=Type id=Identifier ('=' val=Expression)?
 		public Group getGroup() { return cGroup; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.31/@alternatives/@elements.0'
+		//type=Type
 		public Assignment getTypeAssignment_0() { return cTypeAssignment_0; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.31/@alternatives/@elements.0/@terminal'
+		//Type
 		public RuleCall getTypeTypeParserRuleCall_0_0() { return cTypeTypeParserRuleCall_0_0; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.31/@alternatives/@elements.1'
+		//id=Identifier
 		public Assignment getIdAssignment_1() { return cIdAssignment_1; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.31/@alternatives/@elements.1/@terminal'
+		//Identifier
 		public RuleCall getIdIdentifierParserRuleCall_1_0() { return cIdIdentifierParserRuleCall_1_0; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.31/@alternatives/@elements.2'
+		//('=' val=Expression)?
 		public Group getGroup_2() { return cGroup_2; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.31/@alternatives/@elements.2/@elements.0'
+		//'='
 		public Keyword getEqualsSignKeyword_2_0() { return cEqualsSignKeyword_2_0; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.31/@alternatives/@elements.2/@elements.1'
+		//val=Expression
 		public Assignment getValAssignment_2_1() { return cValAssignment_2_1; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.31/@alternatives/@elements.2/@elements.1/@terminal'
+		//Expression
 		public RuleCall getValExpressionParserRuleCall_2_1_0() { return cValExpressionParserRuleCall_2_1_0; }
 	}
 
@@ -1671,19 +1722,21 @@ public class IvmlGrammarAccess extends AbstractGrammarElementFinder {
 		private final RuleCall cExprExpressionParserRuleCall_0_0 = (RuleCall)cExprAssignment_0.eContents().get(0);
 		private final Keyword cSemicolonKeyword_1 = (Keyword)cGroup.eContents().get(1);
 		
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#XtextFragmentProvider_de.uni_hildesheim.sse.Ivml/ExpressionStatement'
+		//// do not rename this rule (fragment parsing)
+		// ExpressionStatement:
+		//	expr=Expression ';';
 		@Override public ParserRule getRule() { return rule; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.32/@alternatives'
+		//expr=Expression ';'
 		public Group getGroup() { return cGroup; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.32/@alternatives/@elements.0'
+		//expr=Expression
 		public Assignment getExprAssignment_0() { return cExprAssignment_0; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.32/@alternatives/@elements.0/@terminal'
+		//Expression
 		public RuleCall getExprExpressionParserRuleCall_0_0() { return cExprExpressionParserRuleCall_0_0; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.32/@alternatives/@elements.1'
+		//';'
 		public Keyword getSemicolonKeyword_1() { return cSemicolonKeyword_1; }
 	}
 
@@ -1697,28 +1750,30 @@ public class IvmlGrammarAccess extends AbstractGrammarElementFinder {
 		private final Assignment cCollectionAssignment_2 = (Assignment)cAlternatives.eContents().get(2);
 		private final RuleCall cCollectionCollectionInitializerParserRuleCall_2_0 = (RuleCall)cCollectionAssignment_2.eContents().get(0);
 		
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#XtextFragmentProvider_de.uni_hildesheim.sse.Ivml/Expression'
+		//// do not rename this rule (fragment parsing)	
+		// Expression:
+		//	let=LetExpression | expr=ImplicationExpression | collection=CollectionInitializer;
 		@Override public ParserRule getRule() { return rule; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.33/@alternatives'
+		//let=LetExpression | expr=ImplicationExpression | collection=CollectionInitializer
 		public Alternatives getAlternatives() { return cAlternatives; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.33/@alternatives/@elements.0'
+		//let=LetExpression
 		public Assignment getLetAssignment_0() { return cLetAssignment_0; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.33/@alternatives/@elements.0/@terminal'
+		//LetExpression
 		public RuleCall getLetLetExpressionParserRuleCall_0_0() { return cLetLetExpressionParserRuleCall_0_0; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.33/@alternatives/@elements.1'
+		//expr=ImplicationExpression
 		public Assignment getExprAssignment_1() { return cExprAssignment_1; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.33/@alternatives/@elements.1/@terminal'
+		//ImplicationExpression
 		public RuleCall getExprImplicationExpressionParserRuleCall_1_0() { return cExprImplicationExpressionParserRuleCall_1_0; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.33/@alternatives/@elements.2'
+		//collection=CollectionInitializer
 		public Assignment getCollectionAssignment_2() { return cCollectionAssignment_2; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.33/@alternatives/@elements.2/@terminal'
+		//CollectionInitializer
 		public RuleCall getCollectionCollectionInitializerParserRuleCall_2_0() { return cCollectionCollectionInitializerParserRuleCall_2_0; }
 	}
 
@@ -1737,43 +1792,49 @@ public class IvmlGrammarAccess extends AbstractGrammarElementFinder {
 		private final Assignment cSubExprAssignment_6 = (Assignment)cGroup.eContents().get(6);
 		private final RuleCall cSubExprExpressionParserRuleCall_6_0 = (RuleCall)cSubExprAssignment_6.eContents().get(0);
 		
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#XtextFragmentProvider_de.uni_hildesheim.sse.Ivml/LetExpression'
+		//LetExpression:
+		//	'let' type=Type name=Identifier // type is optional in OCL - IVML adjustment
+		// '=' valueExpr=Expression 'in'
+		//	subExpr=Expression;
 		@Override public ParserRule getRule() { return rule; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.34/@alternatives'
+		//'let' type=Type name=Identifier // type is optional in OCL - IVML adjustment
+		// '=' valueExpr=Expression 'in'
+		//subExpr=Expression
 		public Group getGroup() { return cGroup; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.34/@alternatives/@elements.0'
+		//'let'
 		public Keyword getLetKeyword_0() { return cLetKeyword_0; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.34/@alternatives/@elements.1'
+		//type=Type
 		public Assignment getTypeAssignment_1() { return cTypeAssignment_1; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.34/@alternatives/@elements.1/@terminal'
+		//Type
 		public RuleCall getTypeTypeParserRuleCall_1_0() { return cTypeTypeParserRuleCall_1_0; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.34/@alternatives/@elements.2'
+		//name=Identifier
 		public Assignment getNameAssignment_2() { return cNameAssignment_2; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.34/@alternatives/@elements.2/@terminal'
+		//Identifier
 		public RuleCall getNameIdentifierParserRuleCall_2_0() { return cNameIdentifierParserRuleCall_2_0; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.34/@alternatives/@elements.3'
+		//// type is optional in OCL - IVML adjustment
+		// '='
 		public Keyword getEqualsSignKeyword_3() { return cEqualsSignKeyword_3; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.34/@alternatives/@elements.4'
+		//valueExpr=Expression
 		public Assignment getValueExprAssignment_4() { return cValueExprAssignment_4; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.34/@alternatives/@elements.4/@terminal'
+		//Expression
 		public RuleCall getValueExprExpressionParserRuleCall_4_0() { return cValueExprExpressionParserRuleCall_4_0; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.34/@alternatives/@elements.5'
+		//'in'
 		public Keyword getInKeyword_5() { return cInKeyword_5; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.34/@alternatives/@elements.6'
+		//subExpr=Expression
 		public Assignment getSubExprAssignment_6() { return cSubExprAssignment_6; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.34/@alternatives/@elements.6/@terminal'
+		//Expression
 		public RuleCall getSubExprExpressionParserRuleCall_6_0() { return cSubExprExpressionParserRuleCall_6_0; }
 	}
 
@@ -1785,22 +1846,23 @@ public class IvmlGrammarAccess extends AbstractGrammarElementFinder {
 		private final Assignment cRightAssignment_1 = (Assignment)cGroup.eContents().get(1);
 		private final RuleCall cRightAssignmentExpressionPartParserRuleCall_1_0 = (RuleCall)cRightAssignment_1.eContents().get(0);
 		
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#XtextFragmentProvider_de.uni_hildesheim.sse.Ivml/AssignmentExpression'
+		//AssignmentExpression:
+		//	left=LogicalExpression right+=AssignmentExpressionPart?;
 		@Override public ParserRule getRule() { return rule; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.35/@alternatives'
+		//left=LogicalExpression right+=AssignmentExpressionPart?
 		public Group getGroup() { return cGroup; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.35/@alternatives/@elements.0'
+		//left=LogicalExpression
 		public Assignment getLeftAssignment_0() { return cLeftAssignment_0; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.35/@alternatives/@elements.0/@terminal'
+		//LogicalExpression
 		public RuleCall getLeftLogicalExpressionParserRuleCall_0_0() { return cLeftLogicalExpressionParserRuleCall_0_0; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.35/@alternatives/@elements.1'
+		//right+=AssignmentExpressionPart?
 		public Assignment getRightAssignment_1() { return cRightAssignment_1; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.35/@alternatives/@elements.1/@terminal'
+		//AssignmentExpressionPart
 		public RuleCall getRightAssignmentExpressionPartParserRuleCall_1_0() { return cRightAssignmentExpressionPartParserRuleCall_1_0; }
 	}
 
@@ -1815,31 +1877,32 @@ public class IvmlGrammarAccess extends AbstractGrammarElementFinder {
 		private final Assignment cCollectionAssignment_1_1 = (Assignment)cAlternatives_1.eContents().get(1);
 		private final RuleCall cCollectionCollectionInitializerParserRuleCall_1_1_0 = (RuleCall)cCollectionAssignment_1_1.eContents().get(0);
 		
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#XtextFragmentProvider_de.uni_hildesheim.sse.Ivml/AssignmentExpressionPart'
+		//AssignmentExpressionPart:
+		//	op=AssignmentOperator (ex=LogicalExpression | collection=CollectionInitializer);
 		@Override public ParserRule getRule() { return rule; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.36/@alternatives'
+		//op=AssignmentOperator (ex=LogicalExpression | collection=CollectionInitializer)
 		public Group getGroup() { return cGroup; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.36/@alternatives/@elements.0'
+		//op=AssignmentOperator
 		public Assignment getOpAssignment_0() { return cOpAssignment_0; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.36/@alternatives/@elements.0/@terminal'
+		//AssignmentOperator
 		public RuleCall getOpAssignmentOperatorParserRuleCall_0_0() { return cOpAssignmentOperatorParserRuleCall_0_0; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.36/@alternatives/@elements.1'
+		//(ex=LogicalExpression | collection=CollectionInitializer)
 		public Alternatives getAlternatives_1() { return cAlternatives_1; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.36/@alternatives/@elements.1/@elements.0'
+		//ex=LogicalExpression
 		public Assignment getExAssignment_1_0() { return cExAssignment_1_0; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.36/@alternatives/@elements.1/@elements.0/@terminal'
+		//LogicalExpression
 		public RuleCall getExLogicalExpressionParserRuleCall_1_0_0() { return cExLogicalExpressionParserRuleCall_1_0_0; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.36/@alternatives/@elements.1/@elements.1'
+		//collection=CollectionInitializer
 		public Assignment getCollectionAssignment_1_1() { return cCollectionAssignment_1_1; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.36/@alternatives/@elements.1/@elements.1/@terminal'
+		//CollectionInitializer
 		public RuleCall getCollectionCollectionInitializerParserRuleCall_1_1_0() { return cCollectionCollectionInitializerParserRuleCall_1_1_0; }
 	}
 
@@ -1847,10 +1910,12 @@ public class IvmlGrammarAccess extends AbstractGrammarElementFinder {
 		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "de.uni_hildesheim.sse.Ivml.AssignmentOperator");
 		private final Keyword cEqualsSignKeyword = (Keyword)rule.eContents().get(1);
 		
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#XtextFragmentProvider_de.uni_hildesheim.sse.Ivml/AssignmentOperator'
+		//AssignmentOperator:
+		//	'=' // IVML addition
+		//;
 		@Override public ParserRule getRule() { return rule; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.37/@alternatives'
+		//'='
 		public Keyword getEqualsSignKeyword() { return cEqualsSignKeyword; }
 	}
 
@@ -1862,22 +1927,23 @@ public class IvmlGrammarAccess extends AbstractGrammarElementFinder {
 		private final Assignment cRightAssignment_1 = (Assignment)cGroup.eContents().get(1);
 		private final RuleCall cRightImplicationExpressionPartParserRuleCall_1_0 = (RuleCall)cRightAssignment_1.eContents().get(0);
 		
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#XtextFragmentProvider_de.uni_hildesheim.sse.Ivml/ImplicationExpression'
+		//ImplicationExpression:
+		//	left=AssignmentExpression right+=ImplicationExpressionPart*;
 		@Override public ParserRule getRule() { return rule; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.38/@alternatives'
+		//left=AssignmentExpression right+=ImplicationExpressionPart*
 		public Group getGroup() { return cGroup; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.38/@alternatives/@elements.0'
+		//left=AssignmentExpression
 		public Assignment getLeftAssignment_0() { return cLeftAssignment_0; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.38/@alternatives/@elements.0/@terminal'
+		//AssignmentExpression
 		public RuleCall getLeftAssignmentExpressionParserRuleCall_0_0() { return cLeftAssignmentExpressionParserRuleCall_0_0; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.38/@alternatives/@elements.1'
+		//right+=ImplicationExpressionPart*
 		public Assignment getRightAssignment_1() { return cRightAssignment_1; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.38/@alternatives/@elements.1/@terminal'
+		//ImplicationExpressionPart
 		public RuleCall getRightImplicationExpressionPartParserRuleCall_1_0() { return cRightImplicationExpressionPartParserRuleCall_1_0; }
 	}
 
@@ -1889,22 +1955,23 @@ public class IvmlGrammarAccess extends AbstractGrammarElementFinder {
 		private final Assignment cExAssignment_1 = (Assignment)cGroup.eContents().get(1);
 		private final RuleCall cExAssignmentExpressionParserRuleCall_1_0 = (RuleCall)cExAssignment_1.eContents().get(0);
 		
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#XtextFragmentProvider_de.uni_hildesheim.sse.Ivml/ImplicationExpressionPart'
+		//ImplicationExpressionPart:
+		//	op=ImplicationOperator ex=AssignmentExpression;
 		@Override public ParserRule getRule() { return rule; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.39/@alternatives'
+		//op=ImplicationOperator ex=AssignmentExpression
 		public Group getGroup() { return cGroup; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.39/@alternatives/@elements.0'
+		//op=ImplicationOperator
 		public Assignment getOpAssignment_0() { return cOpAssignment_0; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.39/@alternatives/@elements.0/@terminal'
+		//ImplicationOperator
 		public RuleCall getOpImplicationOperatorParserRuleCall_0_0() { return cOpImplicationOperatorParserRuleCall_0_0; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.39/@alternatives/@elements.1'
+		//ex=AssignmentExpression
 		public Assignment getExAssignment_1() { return cExAssignment_1; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.39/@alternatives/@elements.1/@terminal'
+		//AssignmentExpression
 		public RuleCall getExAssignmentExpressionParserRuleCall_1_0() { return cExAssignmentExpressionParserRuleCall_1_0; }
 	}
 
@@ -1914,16 +1981,18 @@ public class IvmlGrammarAccess extends AbstractGrammarElementFinder {
 		private final Keyword cImpliesKeyword_0 = (Keyword)cAlternatives.eContents().get(0);
 		private final Keyword cIffKeyword_1 = (Keyword)cAlternatives.eContents().get(1);
 		
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#XtextFragmentProvider_de.uni_hildesheim.sse.Ivml/ImplicationOperator'
+		//ImplicationOperator:
+		//	'implies' | 'iff' // IVML addition
+		//;
 		@Override public ParserRule getRule() { return rule; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.40/@alternatives'
+		//'implies' | 'iff'
 		public Alternatives getAlternatives() { return cAlternatives; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.40/@alternatives/@elements.0'
+		//'implies'
 		public Keyword getImpliesKeyword_0() { return cImpliesKeyword_0; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.40/@alternatives/@elements.1'
+		//'iff'
 		public Keyword getIffKeyword_1() { return cIffKeyword_1; }
 	}
 
@@ -1935,22 +2004,23 @@ public class IvmlGrammarAccess extends AbstractGrammarElementFinder {
 		private final Assignment cRightAssignment_1 = (Assignment)cGroup.eContents().get(1);
 		private final RuleCall cRightLogicalExpressionPartParserRuleCall_1_0 = (RuleCall)cRightAssignment_1.eContents().get(0);
 		
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#XtextFragmentProvider_de.uni_hildesheim.sse.Ivml/LogicalExpression'
+		//LogicalExpression:
+		//	left=EqualityExpression right+=LogicalExpressionPart*;
 		@Override public ParserRule getRule() { return rule; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.41/@alternatives'
+		//left=EqualityExpression right+=LogicalExpressionPart*
 		public Group getGroup() { return cGroup; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.41/@alternatives/@elements.0'
+		//left=EqualityExpression
 		public Assignment getLeftAssignment_0() { return cLeftAssignment_0; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.41/@alternatives/@elements.0/@terminal'
+		//EqualityExpression
 		public RuleCall getLeftEqualityExpressionParserRuleCall_0_0() { return cLeftEqualityExpressionParserRuleCall_0_0; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.41/@alternatives/@elements.1'
+		//right+=LogicalExpressionPart*
 		public Assignment getRightAssignment_1() { return cRightAssignment_1; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.41/@alternatives/@elements.1/@terminal'
+		//LogicalExpressionPart
 		public RuleCall getRightLogicalExpressionPartParserRuleCall_1_0() { return cRightLogicalExpressionPartParserRuleCall_1_0; }
 	}
 
@@ -1962,22 +2032,23 @@ public class IvmlGrammarAccess extends AbstractGrammarElementFinder {
 		private final Assignment cExAssignment_1 = (Assignment)cGroup.eContents().get(1);
 		private final RuleCall cExEqualityExpressionParserRuleCall_1_0 = (RuleCall)cExAssignment_1.eContents().get(0);
 		
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#XtextFragmentProvider_de.uni_hildesheim.sse.Ivml/LogicalExpressionPart'
+		//LogicalExpressionPart:
+		//	op=LogicalOperator ex=EqualityExpression;
 		@Override public ParserRule getRule() { return rule; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.42/@alternatives'
+		//op=LogicalOperator ex=EqualityExpression
 		public Group getGroup() { return cGroup; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.42/@alternatives/@elements.0'
+		//op=LogicalOperator
 		public Assignment getOpAssignment_0() { return cOpAssignment_0; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.42/@alternatives/@elements.0/@terminal'
+		//LogicalOperator
 		public RuleCall getOpLogicalOperatorParserRuleCall_0_0() { return cOpLogicalOperatorParserRuleCall_0_0; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.42/@alternatives/@elements.1'
+		//ex=EqualityExpression
 		public Assignment getExAssignment_1() { return cExAssignment_1; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.42/@alternatives/@elements.1/@terminal'
+		//EqualityExpression
 		public RuleCall getExEqualityExpressionParserRuleCall_1_0() { return cExEqualityExpressionParserRuleCall_1_0; }
 	}
 
@@ -1988,19 +2059,20 @@ public class IvmlGrammarAccess extends AbstractGrammarElementFinder {
 		private final Keyword cOrKeyword_1 = (Keyword)cAlternatives.eContents().get(1);
 		private final Keyword cXorKeyword_2 = (Keyword)cAlternatives.eContents().get(2);
 		
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#XtextFragmentProvider_de.uni_hildesheim.sse.Ivml/LogicalOperator'
+		//LogicalOperator:
+		//	'and' | 'or' | 'xor';
 		@Override public ParserRule getRule() { return rule; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.43/@alternatives'
+		//'and' | 'or' | 'xor'
 		public Alternatives getAlternatives() { return cAlternatives; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.43/@alternatives/@elements.0'
+		//'and'
 		public Keyword getAndKeyword_0() { return cAndKeyword_0; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.43/@alternatives/@elements.1'
+		//'or'
 		public Keyword getOrKeyword_1() { return cOrKeyword_1; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.43/@alternatives/@elements.2'
+		//'xor'
 		public Keyword getXorKeyword_2() { return cXorKeyword_2; }
 	}
 
@@ -2012,22 +2084,23 @@ public class IvmlGrammarAccess extends AbstractGrammarElementFinder {
 		private final Assignment cRightAssignment_1 = (Assignment)cGroup.eContents().get(1);
 		private final RuleCall cRightEqualityExpressionPartParserRuleCall_1_0 = (RuleCall)cRightAssignment_1.eContents().get(0);
 		
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#XtextFragmentProvider_de.uni_hildesheim.sse.Ivml/EqualityExpression'
+		//EqualityExpression:
+		//	left=RelationalExpression right=EqualityExpressionPart?;
 		@Override public ParserRule getRule() { return rule; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.44/@alternatives'
+		//left=RelationalExpression right=EqualityExpressionPart?
 		public Group getGroup() { return cGroup; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.44/@alternatives/@elements.0'
+		//left=RelationalExpression
 		public Assignment getLeftAssignment_0() { return cLeftAssignment_0; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.44/@alternatives/@elements.0/@terminal'
+		//RelationalExpression
 		public RuleCall getLeftRelationalExpressionParserRuleCall_0_0() { return cLeftRelationalExpressionParserRuleCall_0_0; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.44/@alternatives/@elements.1'
+		//right=EqualityExpressionPart?
 		public Assignment getRightAssignment_1() { return cRightAssignment_1; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.44/@alternatives/@elements.1/@terminal'
+		//EqualityExpressionPart
 		public RuleCall getRightEqualityExpressionPartParserRuleCall_1_0() { return cRightEqualityExpressionPartParserRuleCall_1_0; }
 	}
 
@@ -2042,31 +2115,32 @@ public class IvmlGrammarAccess extends AbstractGrammarElementFinder {
 		private final Assignment cCollectionAssignment_1_1 = (Assignment)cAlternatives_1.eContents().get(1);
 		private final RuleCall cCollectionCollectionInitializerParserRuleCall_1_1_0 = (RuleCall)cCollectionAssignment_1_1.eContents().get(0);
 		
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#XtextFragmentProvider_de.uni_hildesheim.sse.Ivml/EqualityExpressionPart'
+		//EqualityExpressionPart:
+		//	op=EqualityOperator (ex=RelationalExpression | collection=CollectionInitializer);
 		@Override public ParserRule getRule() { return rule; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.45/@alternatives'
+		//op=EqualityOperator (ex=RelationalExpression | collection=CollectionInitializer)
 		public Group getGroup() { return cGroup; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.45/@alternatives/@elements.0'
+		//op=EqualityOperator
 		public Assignment getOpAssignment_0() { return cOpAssignment_0; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.45/@alternatives/@elements.0/@terminal'
+		//EqualityOperator
 		public RuleCall getOpEqualityOperatorParserRuleCall_0_0() { return cOpEqualityOperatorParserRuleCall_0_0; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.45/@alternatives/@elements.1'
+		//(ex=RelationalExpression | collection=CollectionInitializer)
 		public Alternatives getAlternatives_1() { return cAlternatives_1; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.45/@alternatives/@elements.1/@elements.0'
+		//ex=RelationalExpression
 		public Assignment getExAssignment_1_0() { return cExAssignment_1_0; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.45/@alternatives/@elements.1/@elements.0/@terminal'
+		//RelationalExpression
 		public RuleCall getExRelationalExpressionParserRuleCall_1_0_0() { return cExRelationalExpressionParserRuleCall_1_0_0; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.45/@alternatives/@elements.1/@elements.1'
+		//collection=CollectionInitializer
 		public Assignment getCollectionAssignment_1_1() { return cCollectionAssignment_1_1; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.45/@alternatives/@elements.1/@elements.1/@terminal'
+		//CollectionInitializer
 		public RuleCall getCollectionCollectionInitializerParserRuleCall_1_1_0() { return cCollectionCollectionInitializerParserRuleCall_1_1_0; }
 	}
 
@@ -2077,19 +2151,20 @@ public class IvmlGrammarAccess extends AbstractGrammarElementFinder {
 		private final Keyword cLessThanSignGreaterThanSignKeyword_1 = (Keyword)cAlternatives.eContents().get(1);
 		private final Keyword cExclamationMarkEqualsSignKeyword_2 = (Keyword)cAlternatives.eContents().get(2);
 		
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#XtextFragmentProvider_de.uni_hildesheim.sse.Ivml/EqualityOperator'
+		//EqualityOperator:
+		//	'==' | '<>' | '!=';
 		@Override public ParserRule getRule() { return rule; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.46/@alternatives'
+		//'==' | '<>' | '!='
 		public Alternatives getAlternatives() { return cAlternatives; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.46/@alternatives/@elements.0'
+		//'=='
 		public Keyword getEqualsSignEqualsSignKeyword_0() { return cEqualsSignEqualsSignKeyword_0; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.46/@alternatives/@elements.1'
+		//'<>'
 		public Keyword getLessThanSignGreaterThanSignKeyword_1() { return cLessThanSignGreaterThanSignKeyword_1; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.46/@alternatives/@elements.2'
+		//'!='
 		public Keyword getExclamationMarkEqualsSignKeyword_2() { return cExclamationMarkEqualsSignKeyword_2; }
 	}
 
@@ -2101,22 +2176,23 @@ public class IvmlGrammarAccess extends AbstractGrammarElementFinder {
 		private final Assignment cRightAssignment_1 = (Assignment)cGroup.eContents().get(1);
 		private final RuleCall cRightRelationalExpressionPartParserRuleCall_1_0 = (RuleCall)cRightAssignment_1.eContents().get(0);
 		
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#XtextFragmentProvider_de.uni_hildesheim.sse.Ivml/RelationalExpression'
+		//RelationalExpression:
+		//	left=AdditiveExpression right=RelationalExpressionPart?;
 		@Override public ParserRule getRule() { return rule; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.47/@alternatives'
+		//left=AdditiveExpression right=RelationalExpressionPart?
 		public Group getGroup() { return cGroup; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.47/@alternatives/@elements.0'
+		//left=AdditiveExpression
 		public Assignment getLeftAssignment_0() { return cLeftAssignment_0; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.47/@alternatives/@elements.0/@terminal'
+		//AdditiveExpression
 		public RuleCall getLeftAdditiveExpressionParserRuleCall_0_0() { return cLeftAdditiveExpressionParserRuleCall_0_0; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.47/@alternatives/@elements.1'
+		//right=RelationalExpressionPart?
 		public Assignment getRightAssignment_1() { return cRightAssignment_1; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.47/@alternatives/@elements.1/@terminal'
+		//RelationalExpressionPart
 		public RuleCall getRightRelationalExpressionPartParserRuleCall_1_0() { return cRightRelationalExpressionPartParserRuleCall_1_0; }
 	}
 
@@ -2128,22 +2204,23 @@ public class IvmlGrammarAccess extends AbstractGrammarElementFinder {
 		private final Assignment cExAssignment_1 = (Assignment)cGroup.eContents().get(1);
 		private final RuleCall cExAdditiveExpressionParserRuleCall_1_0 = (RuleCall)cExAssignment_1.eContents().get(0);
 		
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#XtextFragmentProvider_de.uni_hildesheim.sse.Ivml/RelationalExpressionPart'
+		//RelationalExpressionPart:
+		//	op=RelationalOperator ex=AdditiveExpression;
 		@Override public ParserRule getRule() { return rule; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.48/@alternatives'
+		//op=RelationalOperator ex=AdditiveExpression
 		public Group getGroup() { return cGroup; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.48/@alternatives/@elements.0'
+		//op=RelationalOperator
 		public Assignment getOpAssignment_0() { return cOpAssignment_0; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.48/@alternatives/@elements.0/@terminal'
+		//RelationalOperator
 		public RuleCall getOpRelationalOperatorParserRuleCall_0_0() { return cOpRelationalOperatorParserRuleCall_0_0; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.48/@alternatives/@elements.1'
+		//ex=AdditiveExpression
 		public Assignment getExAssignment_1() { return cExAssignment_1; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.48/@alternatives/@elements.1/@terminal'
+		//AdditiveExpression
 		public RuleCall getExAdditiveExpressionParserRuleCall_1_0() { return cExAdditiveExpressionParserRuleCall_1_0; }
 	}
 
@@ -2155,22 +2232,23 @@ public class IvmlGrammarAccess extends AbstractGrammarElementFinder {
 		private final Keyword cGreaterThanSignEqualsSignKeyword_2 = (Keyword)cAlternatives.eContents().get(2);
 		private final Keyword cLessThanSignEqualsSignKeyword_3 = (Keyword)cAlternatives.eContents().get(3);
 		
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#XtextFragmentProvider_de.uni_hildesheim.sse.Ivml/RelationalOperator'
+		//RelationalOperator:
+		//	'>' | '<' | '>=' | '<=';
 		@Override public ParserRule getRule() { return rule; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.49/@alternatives'
+		//'>' | '<' | '>=' | '<='
 		public Alternatives getAlternatives() { return cAlternatives; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.49/@alternatives/@elements.0'
+		//'>'
 		public Keyword getGreaterThanSignKeyword_0() { return cGreaterThanSignKeyword_0; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.49/@alternatives/@elements.1'
+		//'<'
 		public Keyword getLessThanSignKeyword_1() { return cLessThanSignKeyword_1; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.49/@alternatives/@elements.2'
+		//'>='
 		public Keyword getGreaterThanSignEqualsSignKeyword_2() { return cGreaterThanSignEqualsSignKeyword_2; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.49/@alternatives/@elements.3'
+		//'<='
 		public Keyword getLessThanSignEqualsSignKeyword_3() { return cLessThanSignEqualsSignKeyword_3; }
 	}
 
@@ -2182,22 +2260,23 @@ public class IvmlGrammarAccess extends AbstractGrammarElementFinder {
 		private final Assignment cRightAssignment_1 = (Assignment)cGroup.eContents().get(1);
 		private final RuleCall cRightAdditiveExpressionPartParserRuleCall_1_0 = (RuleCall)cRightAssignment_1.eContents().get(0);
 		
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#XtextFragmentProvider_de.uni_hildesheim.sse.Ivml/AdditiveExpression'
+		//AdditiveExpression:
+		//	left=MultiplicativeExpression right+=AdditiveExpressionPart*;
 		@Override public ParserRule getRule() { return rule; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.50/@alternatives'
+		//left=MultiplicativeExpression right+=AdditiveExpressionPart*
 		public Group getGroup() { return cGroup; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.50/@alternatives/@elements.0'
+		//left=MultiplicativeExpression
 		public Assignment getLeftAssignment_0() { return cLeftAssignment_0; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.50/@alternatives/@elements.0/@terminal'
+		//MultiplicativeExpression
 		public RuleCall getLeftMultiplicativeExpressionParserRuleCall_0_0() { return cLeftMultiplicativeExpressionParserRuleCall_0_0; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.50/@alternatives/@elements.1'
+		//right+=AdditiveExpressionPart*
 		public Assignment getRightAssignment_1() { return cRightAssignment_1; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.50/@alternatives/@elements.1/@terminal'
+		//AdditiveExpressionPart
 		public RuleCall getRightAdditiveExpressionPartParserRuleCall_1_0() { return cRightAdditiveExpressionPartParserRuleCall_1_0; }
 	}
 
@@ -2209,22 +2288,23 @@ public class IvmlGrammarAccess extends AbstractGrammarElementFinder {
 		private final Assignment cExAssignment_1 = (Assignment)cGroup.eContents().get(1);
 		private final RuleCall cExMultiplicativeExpressionParserRuleCall_1_0 = (RuleCall)cExAssignment_1.eContents().get(0);
 		
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#XtextFragmentProvider_de.uni_hildesheim.sse.Ivml/AdditiveExpressionPart'
+		//AdditiveExpressionPart:
+		//	op=AdditiveOperator ex=MultiplicativeExpression;
 		@Override public ParserRule getRule() { return rule; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.51/@alternatives'
+		//op=AdditiveOperator ex=MultiplicativeExpression
 		public Group getGroup() { return cGroup; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.51/@alternatives/@elements.0'
+		//op=AdditiveOperator
 		public Assignment getOpAssignment_0() { return cOpAssignment_0; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.51/@alternatives/@elements.0/@terminal'
+		//AdditiveOperator
 		public RuleCall getOpAdditiveOperatorParserRuleCall_0_0() { return cOpAdditiveOperatorParserRuleCall_0_0; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.51/@alternatives/@elements.1'
+		//ex=MultiplicativeExpression
 		public Assignment getExAssignment_1() { return cExAssignment_1; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.51/@alternatives/@elements.1/@terminal'
+		//MultiplicativeExpression
 		public RuleCall getExMultiplicativeExpressionParserRuleCall_1_0() { return cExMultiplicativeExpressionParserRuleCall_1_0; }
 	}
 
@@ -2234,16 +2314,17 @@ public class IvmlGrammarAccess extends AbstractGrammarElementFinder {
 		private final Keyword cPlusSignKeyword_0 = (Keyword)cAlternatives.eContents().get(0);
 		private final Keyword cHyphenMinusKeyword_1 = (Keyword)cAlternatives.eContents().get(1);
 		
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#XtextFragmentProvider_de.uni_hildesheim.sse.Ivml/AdditiveOperator'
+		//AdditiveOperator:
+		//	'+' | '-';
 		@Override public ParserRule getRule() { return rule; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.52/@alternatives'
+		//'+' | '-'
 		public Alternatives getAlternatives() { return cAlternatives; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.52/@alternatives/@elements.0'
+		//'+'
 		public Keyword getPlusSignKeyword_0() { return cPlusSignKeyword_0; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.52/@alternatives/@elements.1'
+		//'-'
 		public Keyword getHyphenMinusKeyword_1() { return cHyphenMinusKeyword_1; }
 	}
 
@@ -2255,22 +2336,23 @@ public class IvmlGrammarAccess extends AbstractGrammarElementFinder {
 		private final Assignment cRightAssignment_1 = (Assignment)cGroup.eContents().get(1);
 		private final RuleCall cRightMultiplicativeExpressionPartParserRuleCall_1_0 = (RuleCall)cRightAssignment_1.eContents().get(0);
 		
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#XtextFragmentProvider_de.uni_hildesheim.sse.Ivml/MultiplicativeExpression'
+		//MultiplicativeExpression:
+		//	left=UnaryExpression right=MultiplicativeExpressionPart?;
 		@Override public ParserRule getRule() { return rule; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.53/@alternatives'
+		//left=UnaryExpression right=MultiplicativeExpressionPart?
 		public Group getGroup() { return cGroup; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.53/@alternatives/@elements.0'
+		//left=UnaryExpression
 		public Assignment getLeftAssignment_0() { return cLeftAssignment_0; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.53/@alternatives/@elements.0/@terminal'
+		//UnaryExpression
 		public RuleCall getLeftUnaryExpressionParserRuleCall_0_0() { return cLeftUnaryExpressionParserRuleCall_0_0; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.53/@alternatives/@elements.1'
+		//right=MultiplicativeExpressionPart?
 		public Assignment getRightAssignment_1() { return cRightAssignment_1; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.53/@alternatives/@elements.1/@terminal'
+		//MultiplicativeExpressionPart
 		public RuleCall getRightMultiplicativeExpressionPartParserRuleCall_1_0() { return cRightMultiplicativeExpressionPartParserRuleCall_1_0; }
 	}
 
@@ -2282,22 +2364,23 @@ public class IvmlGrammarAccess extends AbstractGrammarElementFinder {
 		private final Assignment cExprAssignment_1 = (Assignment)cGroup.eContents().get(1);
 		private final RuleCall cExprUnaryExpressionParserRuleCall_1_0 = (RuleCall)cExprAssignment_1.eContents().get(0);
 		
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#XtextFragmentProvider_de.uni_hildesheim.sse.Ivml/MultiplicativeExpressionPart'
+		//MultiplicativeExpressionPart:
+		//	op=MultiplicativeOperator expr=UnaryExpression;
 		@Override public ParserRule getRule() { return rule; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.54/@alternatives'
+		//op=MultiplicativeOperator expr=UnaryExpression
 		public Group getGroup() { return cGroup; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.54/@alternatives/@elements.0'
+		//op=MultiplicativeOperator
 		public Assignment getOpAssignment_0() { return cOpAssignment_0; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.54/@alternatives/@elements.0/@terminal'
+		//MultiplicativeOperator
 		public RuleCall getOpMultiplicativeOperatorParserRuleCall_0_0() { return cOpMultiplicativeOperatorParserRuleCall_0_0; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.54/@alternatives/@elements.1'
+		//expr=UnaryExpression
 		public Assignment getExprAssignment_1() { return cExprAssignment_1; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.54/@alternatives/@elements.1/@terminal'
+		//UnaryExpression
 		public RuleCall getExprUnaryExpressionParserRuleCall_1_0() { return cExprUnaryExpressionParserRuleCall_1_0; }
 	}
 
@@ -2307,16 +2390,17 @@ public class IvmlGrammarAccess extends AbstractGrammarElementFinder {
 		private final Keyword cAsteriskKeyword_0 = (Keyword)cAlternatives.eContents().get(0);
 		private final Keyword cSolidusKeyword_1 = (Keyword)cAlternatives.eContents().get(1);
 		
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#XtextFragmentProvider_de.uni_hildesheim.sse.Ivml/MultiplicativeOperator'
+		//MultiplicativeOperator:
+		//	'*' | '/';
 		@Override public ParserRule getRule() { return rule; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.55/@alternatives'
+		//'*' | '/'
 		public Alternatives getAlternatives() { return cAlternatives; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.55/@alternatives/@elements.0'
+		//'*'
 		public Keyword getAsteriskKeyword_0() { return cAsteriskKeyword_0; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.55/@alternatives/@elements.1'
+		//'/'
 		public Keyword getSolidusKeyword_1() { return cSolidusKeyword_1; }
 	}
 
@@ -2328,22 +2412,23 @@ public class IvmlGrammarAccess extends AbstractGrammarElementFinder {
 		private final Assignment cExprAssignment_1 = (Assignment)cGroup.eContents().get(1);
 		private final RuleCall cExprPostfixExpressionParserRuleCall_1_0 = (RuleCall)cExprAssignment_1.eContents().get(0);
 		
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#XtextFragmentProvider_de.uni_hildesheim.sse.Ivml/UnaryExpression'
+		//UnaryExpression:
+		//	op=UnaryOperator? expr=PostfixExpression;
 		@Override public ParserRule getRule() { return rule; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.56/@alternatives'
+		//op=UnaryOperator? expr=PostfixExpression
 		public Group getGroup() { return cGroup; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.56/@alternatives/@elements.0'
+		//op=UnaryOperator?
 		public Assignment getOpAssignment_0() { return cOpAssignment_0; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.56/@alternatives/@elements.0/@terminal'
+		//UnaryOperator
 		public RuleCall getOpUnaryOperatorParserRuleCall_0_0() { return cOpUnaryOperatorParserRuleCall_0_0; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.56/@alternatives/@elements.1'
+		//expr=PostfixExpression
 		public Assignment getExprAssignment_1() { return cExprAssignment_1; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.56/@alternatives/@elements.1/@terminal'
+		//PostfixExpression
 		public RuleCall getExprPostfixExpressionParserRuleCall_1_0() { return cExprPostfixExpressionParserRuleCall_1_0; }
 	}
 
@@ -2353,16 +2438,17 @@ public class IvmlGrammarAccess extends AbstractGrammarElementFinder {
 		private final Keyword cNotKeyword_0 = (Keyword)cAlternatives.eContents().get(0);
 		private final Keyword cHyphenMinusKeyword_1 = (Keyword)cAlternatives.eContents().get(1);
 		
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#XtextFragmentProvider_de.uni_hildesheim.sse.Ivml/UnaryOperator'
+		//UnaryOperator:
+		//	'not' | '-';
 		@Override public ParserRule getRule() { return rule; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.57/@alternatives'
+		//'not' | '-'
 		public Alternatives getAlternatives() { return cAlternatives; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.57/@alternatives/@elements.0'
+		//'not'
 		public Keyword getNotKeyword_0() { return cNotKeyword_0; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.57/@alternatives/@elements.1'
+		//'-'
 		public Keyword getHyphenMinusKeyword_1() { return cHyphenMinusKeyword_1; }
 	}
 
@@ -2379,37 +2465,38 @@ public class IvmlGrammarAccess extends AbstractGrammarElementFinder {
 		private final Assignment cLeftAssignment_1 = (Assignment)cAlternatives.eContents().get(1);
 		private final RuleCall cLeftPrimaryExpressionParserRuleCall_1_0 = (RuleCall)cLeftAssignment_1.eContents().get(0);
 		
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#XtextFragmentProvider_de.uni_hildesheim.sse.Ivml/PostfixExpression'
+		//PostfixExpression:
+		//	call=FeatureCall fCalls+=Call* access=ExpressionAccess? | left=PrimaryExpression;
 		@Override public ParserRule getRule() { return rule; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.58/@alternatives'
+		//call=FeatureCall fCalls+=Call* access=ExpressionAccess? | left=PrimaryExpression
 		public Alternatives getAlternatives() { return cAlternatives; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.58/@alternatives/@elements.0'
+		//call=FeatureCall fCalls+=Call* access=ExpressionAccess?
 		public Group getGroup_0() { return cGroup_0; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.58/@alternatives/@elements.0/@elements.0'
+		//call=FeatureCall
 		public Assignment getCallAssignment_0_0() { return cCallAssignment_0_0; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.58/@alternatives/@elements.0/@elements.0/@terminal'
+		//FeatureCall
 		public RuleCall getCallFeatureCallParserRuleCall_0_0_0() { return cCallFeatureCallParserRuleCall_0_0_0; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.58/@alternatives/@elements.0/@elements.1'
+		//fCalls+=Call*
 		public Assignment getFCallsAssignment_0_1() { return cFCallsAssignment_0_1; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.58/@alternatives/@elements.0/@elements.1/@terminal'
+		//Call
 		public RuleCall getFCallsCallParserRuleCall_0_1_0() { return cFCallsCallParserRuleCall_0_1_0; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.58/@alternatives/@elements.0/@elements.2'
+		//access=ExpressionAccess?
 		public Assignment getAccessAssignment_0_2() { return cAccessAssignment_0_2; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.58/@alternatives/@elements.0/@elements.2/@terminal'
+		//ExpressionAccess
 		public RuleCall getAccessExpressionAccessParserRuleCall_0_2_0() { return cAccessExpressionAccessParserRuleCall_0_2_0; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.58/@alternatives/@elements.1'
+		//left=PrimaryExpression
 		public Assignment getLeftAssignment_1() { return cLeftAssignment_1; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.58/@alternatives/@elements.1/@terminal'
+		//PrimaryExpression
 		public RuleCall getLeftPrimaryExpressionParserRuleCall_1_0() { return cLeftPrimaryExpressionParserRuleCall_1_0; }
 	}
 
@@ -2430,49 +2517,56 @@ public class IvmlGrammarAccess extends AbstractGrammarElementFinder {
 		private final RuleCall cArrayExExpressionParserRuleCall_2_1_0 = (RuleCall)cArrayExAssignment_2_1.eContents().get(0);
 		private final Keyword cRightSquareBracketKeyword_2_2 = (Keyword)cGroup_2.eContents().get(2);
 		
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#XtextFragmentProvider_de.uni_hildesheim.sse.Ivml/Call'
+		//Call: // IVML: "lambda"-expression with apply operation set->apply(t,r=0|max(t,r))
+		// '.' call=FeatureCall | '->'
+		//	setOp=SetOp | '[' arrayEx=Expression ']' // IVML addition to OCL
+		//;
 		@Override public ParserRule getRule() { return rule; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.59/@alternatives'
+		//// IVML: "lambda"-expression with apply operation set->apply(t,r=0|max(t,r))
+		// '.' call=FeatureCall | '->' setOp=SetOp |
+		//'[' arrayEx=Expression ']'
 		public Alternatives getAlternatives() { return cAlternatives; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.59/@alternatives/@elements.0'
+		//// IVML: "lambda"-expression with apply operation set->apply(t,r=0|max(t,r))
+		// '.' call=FeatureCall
 		public Group getGroup_0() { return cGroup_0; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.59/@alternatives/@elements.0/@elements.0'
+		//// IVML: "lambda"-expression with apply operation set->apply(t,r=0|max(t,r))
+		// '.'
 		public Keyword getFullStopKeyword_0_0() { return cFullStopKeyword_0_0; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.59/@alternatives/@elements.0/@elements.1'
+		//call=FeatureCall
 		public Assignment getCallAssignment_0_1() { return cCallAssignment_0_1; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.59/@alternatives/@elements.0/@elements.1/@terminal'
+		//FeatureCall
 		public RuleCall getCallFeatureCallParserRuleCall_0_1_0() { return cCallFeatureCallParserRuleCall_0_1_0; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.59/@alternatives/@elements.1'
+		//'->' setOp=SetOp
 		public Group getGroup_1() { return cGroup_1; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.59/@alternatives/@elements.1/@elements.0'
+		//'->'
 		public Keyword getHyphenMinusGreaterThanSignKeyword_1_0() { return cHyphenMinusGreaterThanSignKeyword_1_0; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.59/@alternatives/@elements.1/@elements.1'
+		//setOp=SetOp
 		public Assignment getSetOpAssignment_1_1() { return cSetOpAssignment_1_1; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.59/@alternatives/@elements.1/@elements.1/@terminal'
+		//SetOp
 		public RuleCall getSetOpSetOpParserRuleCall_1_1_0() { return cSetOpSetOpParserRuleCall_1_1_0; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.59/@alternatives/@elements.2'
+		//'[' arrayEx=Expression ']'
 		public Group getGroup_2() { return cGroup_2; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.59/@alternatives/@elements.2/@elements.0'
+		//'['
 		public Keyword getLeftSquareBracketKeyword_2_0() { return cLeftSquareBracketKeyword_2_0; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.59/@alternatives/@elements.2/@elements.1'
+		//arrayEx=Expression
 		public Assignment getArrayExAssignment_2_1() { return cArrayExAssignment_2_1; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.59/@alternatives/@elements.2/@elements.1/@terminal'
+		//Expression
 		public RuleCall getArrayExExpressionParserRuleCall_2_1_0() { return cArrayExExpressionParserRuleCall_2_1_0; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.59/@alternatives/@elements.2/@elements.2'
+		//']'
 		public Keyword getRightSquareBracketKeyword_2_2() { return cRightSquareBracketKeyword_2_2; }
 	}
 
@@ -2486,28 +2580,29 @@ public class IvmlGrammarAccess extends AbstractGrammarElementFinder {
 		private final RuleCall cParamActualParameterListParserRuleCall_2_0 = (RuleCall)cParamAssignment_2.eContents().get(0);
 		private final Keyword cRightParenthesisKeyword_3 = (Keyword)cGroup.eContents().get(3);
 		
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#XtextFragmentProvider_de.uni_hildesheim.sse.Ivml/FeatureCall'
+		//FeatureCall:
+		//	name=Identifier '(' param=ActualParameterList? ')';
 		@Override public ParserRule getRule() { return rule; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.60/@alternatives'
+		//name=Identifier '(' param=ActualParameterList? ')'
 		public Group getGroup() { return cGroup; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.60/@alternatives/@elements.0'
+		//name=Identifier
 		public Assignment getNameAssignment_0() { return cNameAssignment_0; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.60/@alternatives/@elements.0/@terminal'
+		//Identifier
 		public RuleCall getNameIdentifierParserRuleCall_0_0() { return cNameIdentifierParserRuleCall_0_0; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.60/@alternatives/@elements.1'
+		//'('
 		public Keyword getLeftParenthesisKeyword_1() { return cLeftParenthesisKeyword_1; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.60/@alternatives/@elements.2'
+		//param=ActualParameterList?
 		public Assignment getParamAssignment_2() { return cParamAssignment_2; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.60/@alternatives/@elements.2/@terminal'
+		//ActualParameterList
 		public RuleCall getParamActualParameterListParserRuleCall_2_0() { return cParamActualParameterListParserRuleCall_2_0; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.60/@alternatives/@elements.3'
+		//')'
 		public Keyword getRightParenthesisKeyword_3() { return cRightParenthesisKeyword_3; }
 	}
 
@@ -2523,34 +2618,38 @@ public class IvmlGrammarAccess extends AbstractGrammarElementFinder {
 		private final RuleCall cDeclExExpressionParserRuleCall_3_0 = (RuleCall)cDeclExAssignment_3.eContents().get(0);
 		private final Keyword cRightParenthesisKeyword_4 = (Keyword)cGroup.eContents().get(4);
 		
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#XtextFragmentProvider_de.uni_hildesheim.sse.Ivml/SetOp'
+		//SetOp:
+		//	name=Identifier '(' // set operation only for quantors
+		// decl=Declarator declEx=Expression? ')';
 		@Override public ParserRule getRule() { return rule; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.61/@alternatives'
+		//name=Identifier '(' // set operation only for quantors
+		// decl=Declarator declEx=Expression? ')'
 		public Group getGroup() { return cGroup; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.61/@alternatives/@elements.0'
+		//name=Identifier
 		public Assignment getNameAssignment_0() { return cNameAssignment_0; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.61/@alternatives/@elements.0/@terminal'
+		//Identifier
 		public RuleCall getNameIdentifierParserRuleCall_0_0() { return cNameIdentifierParserRuleCall_0_0; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.61/@alternatives/@elements.1'
+		//'('
 		public Keyword getLeftParenthesisKeyword_1() { return cLeftParenthesisKeyword_1; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.61/@alternatives/@elements.2'
+		//// set operation only for quantors
+		// decl=Declarator
 		public Assignment getDeclAssignment_2() { return cDeclAssignment_2; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.61/@alternatives/@elements.2/@terminal'
+		//Declarator
 		public RuleCall getDeclDeclaratorParserRuleCall_2_0() { return cDeclDeclaratorParserRuleCall_2_0; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.61/@alternatives/@elements.3'
+		//declEx=Expression?
 		public Assignment getDeclExAssignment_3() { return cDeclExAssignment_3; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.61/@alternatives/@elements.3/@terminal'
+		//Expression
 		public RuleCall getDeclExExpressionParserRuleCall_3_0() { return cDeclExExpressionParserRuleCall_3_0; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.61/@alternatives/@elements.4'
+		//')'
 		public Keyword getRightParenthesisKeyword_4() { return cRightParenthesisKeyword_4; }
 	}
 
@@ -2565,31 +2664,32 @@ public class IvmlGrammarAccess extends AbstractGrammarElementFinder {
 		private final RuleCall cDeclDeclarationParserRuleCall_1_1_0 = (RuleCall)cDeclAssignment_1_1.eContents().get(0);
 		private final Keyword cVerticalLineKeyword_2 = (Keyword)cGroup.eContents().get(2);
 		
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#XtextFragmentProvider_de.uni_hildesheim.sse.Ivml/Declarator'
+		//Declarator:
+		//	decl+=Declaration (';' decl+=Declaration)* '|';
 		@Override public ParserRule getRule() { return rule; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.62/@alternatives'
+		//decl+=Declaration (';' decl+=Declaration)* '|'
 		public Group getGroup() { return cGroup; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.62/@alternatives/@elements.0'
+		//decl+=Declaration
 		public Assignment getDeclAssignment_0() { return cDeclAssignment_0; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.62/@alternatives/@elements.0/@terminal'
+		//Declaration
 		public RuleCall getDeclDeclarationParserRuleCall_0_0() { return cDeclDeclarationParserRuleCall_0_0; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.62/@alternatives/@elements.1'
+		//(';' decl+=Declaration)*
 		public Group getGroup_1() { return cGroup_1; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.62/@alternatives/@elements.1/@elements.0'
+		//';'
 		public Keyword getSemicolonKeyword_1_0() { return cSemicolonKeyword_1_0; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.62/@alternatives/@elements.1/@elements.1'
+		//decl+=Declaration
 		public Assignment getDeclAssignment_1_1() { return cDeclAssignment_1_1; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.62/@alternatives/@elements.1/@elements.1/@terminal'
+		//Declaration
 		public RuleCall getDeclDeclarationParserRuleCall_1_1_0() { return cDeclDeclarationParserRuleCall_1_1_0; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.62/@alternatives/@elements.2'
+		//'|'
 		public Keyword getVerticalLineKeyword_2() { return cVerticalLineKeyword_2; }
 	}
 
@@ -2609,13 +2709,14 @@ public class IvmlGrammarAccess extends AbstractGrammarElementFinder {
 		private final Assignment cInitAssignment_3_1 = (Assignment)cGroup_3.eContents().get(1);
 		private final RuleCall cInitExpressionParserRuleCall_3_1_0 = (RuleCall)cInitAssignment_3_1.eContents().get(0);
 		
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#XtextFragmentProvider_de.uni_hildesheim.sse.Ivml/Declaration'
+		//Declaration:
+		//	type=Type? id+=Identifier (',' id+=Identifier)* ('=' init=Expression)?;
 		@Override public ParserRule getRule() { return rule; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.63/@alternatives'
+		//type=Type? id+=Identifier (',' id+=Identifier)* ('=' init=Expression)?
 		public Group getGroup() { return cGroup; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.63/@alternatives/@elements.0'
+		//type=Type?
 		public Assignment getTypeAssignment_0() { return cTypeAssignment_0; }
 
 		//Type
@@ -2861,13 +2962,13 @@ public class IvmlGrammarAccess extends AbstractGrammarElementFinder {
 		// '{'
 		public Keyword getLeftCurlyBracketKeyword_2() { return cLeftCurlyBracketKeyword_2; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#XtextFragmentProvider_de.uni_hildesheim.sse.Ivml/ExpressionListOrRange'
+		//init=ExpressionListOrRange?
 		public Assignment getInitAssignment_3() { return cInitAssignment_3; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.67/@alternatives/@elements.3/@terminal'
+		//ExpressionListOrRange
 		public RuleCall getInitExpressionListOrRangeParserRuleCall_3_0() { return cInitExpressionListOrRangeParserRuleCall_3_0; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.67/@alternatives/@elements.4'
+		//'}'
 		public Keyword getRightCurlyBracketKeyword_4() { return cRightCurlyBracketKeyword_4; }
 	}
 
@@ -2988,7 +3089,7 @@ public class IvmlGrammarAccess extends AbstractGrammarElementFinder {
 		// val=Value
 		public Assignment getValAssignment() { return cValAssignment; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#XtextFragmentProvider_de.uni_hildesheim.sse.Ivml/Value'
+		//Value
 		public RuleCall getValValueParserRuleCall_0() { return cValValueParserRuleCall_0; }
 	}
 
@@ -3006,40 +3107,41 @@ public class IvmlGrammarAccess extends AbstractGrammarElementFinder {
 		private final RuleCall cElseExExpressionParserRuleCall_5_0 = (RuleCall)cElseExAssignment_5.eContents().get(0);
 		private final Keyword cEndifKeyword_6 = (Keyword)cGroup.eContents().get(6);
 		
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#XtextFragmentProvider_de.uni_hildesheim.sse.Ivml/IfExpression'
+		//IfExpression:
+		//	'if' ifEx=Expression 'then' thenEx=Expression 'else' elseEx=Expression 'endif';
 		@Override public ParserRule getRule() { return rule; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.71/@alternatives'
+		//'if' ifEx=Expression 'then' thenEx=Expression 'else' elseEx=Expression 'endif'
 		public Group getGroup() { return cGroup; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.71/@alternatives/@elements.0'
+		//'if'
 		public Keyword getIfKeyword_0() { return cIfKeyword_0; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.71/@alternatives/@elements.1'
+		//ifEx=Expression
 		public Assignment getIfExAssignment_1() { return cIfExAssignment_1; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.71/@alternatives/@elements.1/@terminal'
+		//Expression
 		public RuleCall getIfExExpressionParserRuleCall_1_0() { return cIfExExpressionParserRuleCall_1_0; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.71/@alternatives/@elements.2'
+		//'then'
 		public Keyword getThenKeyword_2() { return cThenKeyword_2; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.71/@alternatives/@elements.3'
+		//thenEx=Expression
 		public Assignment getThenExAssignment_3() { return cThenExAssignment_3; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.71/@alternatives/@elements.3/@terminal'
+		//Expression
 		public RuleCall getThenExExpressionParserRuleCall_3_0() { return cThenExExpressionParserRuleCall_3_0; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.71/@alternatives/@elements.4'
+		//'else'
 		public Keyword getElseKeyword_4() { return cElseKeyword_4; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.71/@alternatives/@elements.5'
+		//elseEx=Expression
 		public Assignment getElseExAssignment_5() { return cElseExAssignment_5; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.71/@alternatives/@elements.5/@terminal'
+		//Expression
 		public RuleCall getElseExExpressionParserRuleCall_5_0() { return cElseExExpressionParserRuleCall_5_0; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.71/@alternatives/@elements.6'
+		//'endif'
 		public Keyword getEndifKeyword_6() { return cEndifKeyword_6; }
 	}
 
@@ -3051,22 +3153,26 @@ public class IvmlGrammarAccess extends AbstractGrammarElementFinder {
 		private final RuleCall cEXPONENTTerminalRuleCall_2 = (RuleCall)cAlternatives.eContents().get(2);
 		private final Keyword cVersionKeyword_3 = (Keyword)cAlternatives.eContents().get(3);
 		
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#XtextFragmentProvider_de.uni_hildesheim.sse.Ivml/Identifier'
+		//// unify distinct terminals -> IdentifierValueConverter
+		//
+		//// never allow identifiers starting with $ -> Reasoner name prefixes
+		// Identifier:
+		//	ID | VERSION | EXPONENT | 'version';
 		@Override public ParserRule getRule() { return rule; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.72/@alternatives'
+		//ID | VERSION | EXPONENT | 'version'
 		public Alternatives getAlternatives() { return cAlternatives; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.72/@alternatives/@elements.0'
+		//ID
 		public RuleCall getIDTerminalRuleCall_0() { return cIDTerminalRuleCall_0; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.72/@alternatives/@elements.1'
+		//VERSION
 		public RuleCall getVERSIONTerminalRuleCall_1() { return cVERSIONTerminalRuleCall_1; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.72/@alternatives/@elements.2'
+		//EXPONENT
 		public RuleCall getEXPONENTTerminalRuleCall_2() { return cEXPONENTTerminalRuleCall_2; }
 
-		//org.eclipse.xtext.resource.ClasspathUriResolutionException: org.eclipse.xtext.resource.FileNotFoundOnClasspathException: Couldn't find resource on classpath. URI was 'classpath:/de/uni_hildesheim/sse/Ivml.xtext#/0/@rules.72/@alternatives/@elements.3'
+		//'version'
 		public Keyword getVersionKeyword_3() { return cVersionKeyword_3; }
 	}
 	
@@ -3523,7 +3629,7 @@ public class IvmlGrammarAccess extends AbstractGrammarElementFinder {
 	}
 
 	//Eval:
-	//	'eval' '{' nested+=Eval* statements+=ExpressionStatement+ '}' ';'?;
+	//	{Eval} 'eval' '{' nested+=Eval* statements+=ExpressionStatement* '}' ';'?;
 	public EvalElements getEvalAccess() {
 		return pEval;
 	}

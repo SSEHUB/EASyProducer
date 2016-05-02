@@ -245,6 +245,16 @@ public class BasicTests extends AbstractTest {
         assertEqual(createFile("enumerationsFail2"), "testEnumerationsFail2",
                 "0", ErrorCodes.NAME_CLASH);
     }
+    
+    /**
+     * Tests nested enums.
+     * 
+     * @throws IOException should not occur
+     */
+    @Test
+    public void testEval() throws IOException {
+        assertEqual(createFile("eval"), "testEval", "0");
+    }
 
     /**
      * Tests initializers at basic compounds.

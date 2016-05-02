@@ -21,7 +21,7 @@ public abstract class AbstractIvmlSyntacticSequencer extends AbstractSyntacticSe
 
 	protected IvmlGrammarAccess grammarAccess;
 	protected AbstractElementAlias match_AttrAssignment_SemicolonKeyword_9_q;
-	protected AbstractElementAlias match_Eval_SemicolonKeyword_5_q;
+	protected AbstractElementAlias match_Eval_SemicolonKeyword_6_q;
 	protected AbstractElementAlias match_Freeze_SemicolonKeyword_5_q;
 	protected AbstractElementAlias match_InterfaceDeclaration_SemicolonKeyword_5_q;
 	protected AbstractElementAlias match_Project_SemicolonKeyword_9_q;
@@ -31,7 +31,7 @@ public abstract class AbstractIvmlSyntacticSequencer extends AbstractSyntacticSe
 	protected void init(IGrammarAccess access) {
 		grammarAccess = (IvmlGrammarAccess) access;
 		match_AttrAssignment_SemicolonKeyword_9_q = new TokenAlias(false, true, grammarAccess.getAttrAssignmentAccess().getSemicolonKeyword_9());
-		match_Eval_SemicolonKeyword_5_q = new TokenAlias(false, true, grammarAccess.getEvalAccess().getSemicolonKeyword_5());
+		match_Eval_SemicolonKeyword_6_q = new TokenAlias(false, true, grammarAccess.getEvalAccess().getSemicolonKeyword_6());
 		match_Freeze_SemicolonKeyword_5_q = new TokenAlias(false, true, grammarAccess.getFreezeAccess().getSemicolonKeyword_5());
 		match_InterfaceDeclaration_SemicolonKeyword_5_q = new TokenAlias(false, true, grammarAccess.getInterfaceDeclarationAccess().getSemicolonKeyword_5());
 		match_Project_SemicolonKeyword_9_q = new TokenAlias(false, true, grammarAccess.getProjectAccess().getSemicolonKeyword_9());
@@ -52,8 +52,8 @@ public abstract class AbstractIvmlSyntacticSequencer extends AbstractSyntacticSe
 			List<INode> syntaxNodes = getNodesFor(transitionNodes, syntax);
 			if (match_AttrAssignment_SemicolonKeyword_9_q.equals(syntax))
 				emit_AttrAssignment_SemicolonKeyword_9_q(semanticObject, getLastNavigableState(), syntaxNodes);
-			else if (match_Eval_SemicolonKeyword_5_q.equals(syntax))
-				emit_Eval_SemicolonKeyword_5_q(semanticObject, getLastNavigableState(), syntaxNodes);
+			else if (match_Eval_SemicolonKeyword_6_q.equals(syntax))
+				emit_Eval_SemicolonKeyword_6_q(semanticObject, getLastNavigableState(), syntaxNodes);
 			else if (match_Freeze_SemicolonKeyword_5_q.equals(syntax))
 				emit_Freeze_SemicolonKeyword_5_q(semanticObject, getLastNavigableState(), syntaxNodes);
 			else if (match_InterfaceDeclaration_SemicolonKeyword_5_q.equals(syntax))
@@ -84,9 +84,11 @@ public abstract class AbstractIvmlSyntacticSequencer extends AbstractSyntacticSe
 	 *     ';'?
 	 *
 	 * This ambiguous syntax occurs at:
+	 *     (rule start) 'eval' '{' '}' (ambiguity) (rule start)
+	 *     nested+=Eval '}' (ambiguity) (rule end)
 	 *     statements+=ExpressionStatement '}' (ambiguity) (rule end)
 	 */
-	protected void emit_Eval_SemicolonKeyword_5_q(EObject semanticObject, ISynNavigable transition, List<INode> nodes) {
+	protected void emit_Eval_SemicolonKeyword_6_q(EObject semanticObject, ISynNavigable transition, List<INode> nodes) {
 		acceptNodes(transition, nodes);
 	}
 	
