@@ -6,3 +6,5 @@
     -> add(Map, String, Integer) with ({{test1, 1}}, test1, 1)
     -> get(Map, Any) with ({{test1, 1}}, test1) = 1
     -> get(Map, Any) with ({{test, {{test1, 1}}}}, test) = {{test1, 1}}
+    -> getKeys(Map) with ({{test, {{test1, 1}}}}) = {test}
+    k <- {test}    

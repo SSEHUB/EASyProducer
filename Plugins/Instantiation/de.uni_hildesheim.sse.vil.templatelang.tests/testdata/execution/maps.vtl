@@ -7,6 +7,7 @@ template maps(Configuration config, FileArtifact target) {
         test.add("test1", 1);
         '${test.get("test1")}'
         '${m.get("test")}'
+        setOf(String) k = m.getKeys();
     }
 
 }

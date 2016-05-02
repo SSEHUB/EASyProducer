@@ -507,7 +507,7 @@ public abstract class OperationDescriptor implements IMetaOperation {
         if (!isStatic()) {
             initialize();
             if (returnType.isCollection() && getParameterCount() > 0) {
-                ok = getParameterType(0).isCollection();
+                ok = getParameterType(0).isCollection() || getParameterType(0).isMap();
             }
         }
         return ok;

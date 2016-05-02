@@ -541,7 +541,7 @@ public abstract class ExpressionTranslator<I extends VariableDeclaration, R exte
                                 I var = resolver.resolve(paramName, false, param, 
                                     ExpressionDslPackage.Literals.PARAMETER__NAME, this);
                                 if (null == var) {
-                                    throw new TranslatorException("Cannot resolve '" + paramName + "'", param, 
+                                    throw new TranslatorException("cannot resolve '" + paramName + "'", param, 
                                         ExpressionDslPackage.Literals.PARAMETER__NAME, ErrorCodes.CANNOT_RESOLVE_ITER);
                                 }
                                 ex = new ValueAssignmentExpression(var, ex);
