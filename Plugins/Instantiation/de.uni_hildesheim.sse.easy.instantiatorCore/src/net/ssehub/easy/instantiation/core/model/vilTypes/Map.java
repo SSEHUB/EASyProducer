@@ -106,6 +106,15 @@ public class Map<K, V> implements IVilGenericType, IStringValueProvider {
     public V get(Object key) {
         return at(key);
     }
+
+    /**
+     * Returns the keys of this map.
+     * 
+     * @return the keys
+     */
+    public Set<K> keys() {
+        return getKeys();
+    }
     
     /**
      * Returns the keys of this map.
