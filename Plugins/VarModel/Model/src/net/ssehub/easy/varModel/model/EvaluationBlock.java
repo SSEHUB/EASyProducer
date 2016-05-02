@@ -40,4 +40,25 @@ public abstract class EvaluationBlock extends ContainableModelElement {
         return true;
     }
     
+    /**
+     * Returns the number of nested evaluation blocks.
+     * 
+     * @return the number of nested evaluation blocks
+     */
+    public int getNestedEvaluationBlockCount() {
+        return 0;
+    }
+    
+    /**
+     * Returns the specified nested evaluation block.
+     * 
+     * @param index the 0-based index of the block
+     * @return the evaluation block
+     * @throws IndexOutOfBoundsException if 
+     *     <code>index&lt;0 || index&gt;={{@link #getNestedEvaluationBlockCount()}}</code>
+     */
+    public EvaluationBlock getNestedEvaluationBlock(int index) {
+        throw new IndexOutOfBoundsException();
+    }
+    
 }
