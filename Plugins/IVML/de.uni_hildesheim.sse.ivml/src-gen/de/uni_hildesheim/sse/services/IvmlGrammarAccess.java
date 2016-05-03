@@ -677,49 +677,57 @@ public class IvmlGrammarAccess extends AbstractGrammarElementFinder {
 	public class VariableDeclarationElements extends AbstractParserRuleElementFinder {
 		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "de.uni_hildesheim.sse.Ivml.VariableDeclaration");
 		private final Group cGroup = (Group)rule.eContents().get(1);
-		private final Assignment cTypeAssignment_0 = (Assignment)cGroup.eContents().get(0);
-		private final RuleCall cTypeTypeParserRuleCall_0_0 = (RuleCall)cTypeAssignment_0.eContents().get(0);
-		private final Assignment cDeclsAssignment_1 = (Assignment)cGroup.eContents().get(1);
-		private final RuleCall cDeclsVariableDeclarationPartParserRuleCall_1_0 = (RuleCall)cDeclsAssignment_1.eContents().get(0);
-		private final Group cGroup_2 = (Group)cGroup.eContents().get(2);
-		private final Keyword cCommaKeyword_2_0 = (Keyword)cGroup_2.eContents().get(0);
-		private final Assignment cDeclsAssignment_2_1 = (Assignment)cGroup_2.eContents().get(1);
-		private final RuleCall cDeclsVariableDeclarationPartParserRuleCall_2_1_0 = (RuleCall)cDeclsAssignment_2_1.eContents().get(0);
-		private final Keyword cSemicolonKeyword_3 = (Keyword)cGroup.eContents().get(3);
+		private final Assignment cConstAssignment_0 = (Assignment)cGroup.eContents().get(0);
+		private final Keyword cConstConstKeyword_0_0 = (Keyword)cConstAssignment_0.eContents().get(0);
+		private final Assignment cTypeAssignment_1 = (Assignment)cGroup.eContents().get(1);
+		private final RuleCall cTypeTypeParserRuleCall_1_0 = (RuleCall)cTypeAssignment_1.eContents().get(0);
+		private final Assignment cDeclsAssignment_2 = (Assignment)cGroup.eContents().get(2);
+		private final RuleCall cDeclsVariableDeclarationPartParserRuleCall_2_0 = (RuleCall)cDeclsAssignment_2.eContents().get(0);
+		private final Group cGroup_3 = (Group)cGroup.eContents().get(3);
+		private final Keyword cCommaKeyword_3_0 = (Keyword)cGroup_3.eContents().get(0);
+		private final Assignment cDeclsAssignment_3_1 = (Assignment)cGroup_3.eContents().get(1);
+		private final RuleCall cDeclsVariableDeclarationPartParserRuleCall_3_1_0 = (RuleCall)cDeclsAssignment_3_1.eContents().get(0);
+		private final Keyword cSemicolonKeyword_4 = (Keyword)cGroup.eContents().get(4);
 		
 		//VariableDeclaration:
-		//	type=Type decls+=VariableDeclarationPart (',' decls+=VariableDeclarationPart)* ';';
+		//	const='const'? type=Type decls+=VariableDeclarationPart (',' decls+=VariableDeclarationPart)* ';';
 		@Override public ParserRule getRule() { return rule; }
 
-		//type=Type decls+=VariableDeclarationPart (',' decls+=VariableDeclarationPart)* ';'
+		//const='const'? type=Type decls+=VariableDeclarationPart (',' decls+=VariableDeclarationPart)* ';'
 		public Group getGroup() { return cGroup; }
 
+		//const='const'?
+		public Assignment getConstAssignment_0() { return cConstAssignment_0; }
+
+		//'const'
+		public Keyword getConstConstKeyword_0_0() { return cConstConstKeyword_0_0; }
+
 		//type=Type
-		public Assignment getTypeAssignment_0() { return cTypeAssignment_0; }
+		public Assignment getTypeAssignment_1() { return cTypeAssignment_1; }
 
 		//Type
-		public RuleCall getTypeTypeParserRuleCall_0_0() { return cTypeTypeParserRuleCall_0_0; }
+		public RuleCall getTypeTypeParserRuleCall_1_0() { return cTypeTypeParserRuleCall_1_0; }
 
 		//decls+=VariableDeclarationPart
-		public Assignment getDeclsAssignment_1() { return cDeclsAssignment_1; }
+		public Assignment getDeclsAssignment_2() { return cDeclsAssignment_2; }
 
 		//VariableDeclarationPart
-		public RuleCall getDeclsVariableDeclarationPartParserRuleCall_1_0() { return cDeclsVariableDeclarationPartParserRuleCall_1_0; }
+		public RuleCall getDeclsVariableDeclarationPartParserRuleCall_2_0() { return cDeclsVariableDeclarationPartParserRuleCall_2_0; }
 
 		//(',' decls+=VariableDeclarationPart)*
-		public Group getGroup_2() { return cGroup_2; }
+		public Group getGroup_3() { return cGroup_3; }
 
 		//','
-		public Keyword getCommaKeyword_2_0() { return cCommaKeyword_2_0; }
+		public Keyword getCommaKeyword_3_0() { return cCommaKeyword_3_0; }
 
 		//decls+=VariableDeclarationPart
-		public Assignment getDeclsAssignment_2_1() { return cDeclsAssignment_2_1; }
+		public Assignment getDeclsAssignment_3_1() { return cDeclsAssignment_3_1; }
 
 		//VariableDeclarationPart
-		public RuleCall getDeclsVariableDeclarationPartParserRuleCall_2_1_0() { return cDeclsVariableDeclarationPartParserRuleCall_2_1_0; }
+		public RuleCall getDeclsVariableDeclarationPartParserRuleCall_3_1_0() { return cDeclsVariableDeclarationPartParserRuleCall_3_1_0; }
 
 		//';'
-		public Keyword getSemicolonKeyword_3() { return cSemicolonKeyword_3; }
+		public Keyword getSemicolonKeyword_4() { return cSemicolonKeyword_4; }
 	}
 
 	public class VariableDeclarationPartElements extends AbstractParserRuleElementFinder {
@@ -3497,7 +3505,7 @@ public class IvmlGrammarAccess extends AbstractGrammarElementFinder {
 	}
 
 	//VariableDeclaration:
-	//	type=Type decls+=VariableDeclarationPart (',' decls+=VariableDeclarationPart)* ';';
+	//	const='const'? type=Type decls+=VariableDeclarationPart (',' decls+=VariableDeclarationPart)* ';';
 	public VariableDeclarationElements getVariableDeclarationAccess() {
 		return pVariableDeclaration;
 	}

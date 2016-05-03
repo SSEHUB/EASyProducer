@@ -528,13 +528,22 @@ public interface IvmlPackage extends EPackage
   int VARIABLE_DECLARATION = 11;
 
   /**
+   * The feature id for the '<em><b>Const</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int VARIABLE_DECLARATION__CONST = 0;
+
+  /**
    * The feature id for the '<em><b>Type</b></em>' containment reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int VARIABLE_DECLARATION__TYPE = 0;
+  int VARIABLE_DECLARATION__TYPE = 1;
 
   /**
    * The feature id for the '<em><b>Decls</b></em>' containment reference list.
@@ -543,7 +552,7 @@ public interface IvmlPackage extends EPackage
    * @generated
    * @ordered
    */
-  int VARIABLE_DECLARATION__DECLS = 1;
+  int VARIABLE_DECLARATION__DECLS = 2;
 
   /**
    * The number of structural features of the '<em>Variable Declaration</em>' class.
@@ -552,7 +561,7 @@ public interface IvmlPackage extends EPackage
    * @generated
    * @ordered
    */
-  int VARIABLE_DECLARATION_FEATURE_COUNT = 2;
+  int VARIABLE_DECLARATION_FEATURE_COUNT = 3;
 
   /**
    * The meta object id for the '{@link de.uni_hildesheim.sse.ivml.impl.VariableDeclarationPartImpl <em>Variable Declaration Part</em>}' class.
@@ -3088,6 +3097,17 @@ public interface IvmlPackage extends EPackage
   EClass getVariableDeclaration();
 
   /**
+   * Returns the meta object for the attribute '{@link de.uni_hildesheim.sse.ivml.VariableDeclaration#getConst <em>Const</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the attribute '<em>Const</em>'.
+   * @see de.uni_hildesheim.sse.ivml.VariableDeclaration#getConst()
+   * @see #getVariableDeclaration()
+   * @generated
+   */
+  EAttribute getVariableDeclaration_Const();
+
+  /**
    * Returns the meta object for the containment reference '{@link de.uni_hildesheim.sse.ivml.VariableDeclaration#getType <em>Type</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -5359,6 +5379,14 @@ public interface IvmlPackage extends EPackage
      * @generated
      */
     EClass VARIABLE_DECLARATION = eINSTANCE.getVariableDeclaration();
+
+    /**
+     * The meta object literal for the '<em><b>Const</b></em>' attribute feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EAttribute VARIABLE_DECLARATION__CONST = eINSTANCE.getVariableDeclaration_Const();
 
     /**
      * The meta object literal for the '<em><b>Type</b></em>' containment reference feature.

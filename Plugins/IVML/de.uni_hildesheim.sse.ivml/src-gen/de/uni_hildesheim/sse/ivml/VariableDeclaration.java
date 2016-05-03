@@ -15,6 +15,7 @@ import org.eclipse.emf.ecore.EObject;
  * The following features are supported:
  * </p>
  * <ul>
+ *   <li>{@link de.uni_hildesheim.sse.ivml.VariableDeclaration#getConst <em>Const</em>}</li>
  *   <li>{@link de.uni_hildesheim.sse.ivml.VariableDeclaration#getType <em>Type</em>}</li>
  *   <li>{@link de.uni_hildesheim.sse.ivml.VariableDeclaration#getDecls <em>Decls</em>}</li>
  * </ul>
@@ -25,6 +26,32 @@ import org.eclipse.emf.ecore.EObject;
  */
 public interface VariableDeclaration extends EObject
 {
+  /**
+   * Returns the value of the '<em><b>Const</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <p>
+   * If the meaning of the '<em>Const</em>' attribute isn't clear,
+   * there really should be more of a description here...
+   * </p>
+   * <!-- end-user-doc -->
+   * @return the value of the '<em>Const</em>' attribute.
+   * @see #setConst(String)
+   * @see de.uni_hildesheim.sse.ivml.IvmlPackage#getVariableDeclaration_Const()
+   * @model
+   * @generated
+   */
+  String getConst();
+
+  /**
+   * Sets the value of the '{@link de.uni_hildesheim.sse.ivml.VariableDeclaration#getConst <em>Const</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @param value the new value of the '<em>Const</em>' attribute.
+   * @see #getConst()
+   * @generated
+   */
+  void setConst(String value);
+
   /**
    * Returns the value of the '<em><b>Type</b></em>' containment reference.
    * <!-- begin-user-doc -->

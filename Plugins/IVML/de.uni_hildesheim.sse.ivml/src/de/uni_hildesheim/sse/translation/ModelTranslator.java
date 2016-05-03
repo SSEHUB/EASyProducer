@@ -59,6 +59,7 @@ import net.ssehub.easy.varModel.model.AbstractVariable;
 import net.ssehub.easy.varModel.model.Attribute;
 import net.ssehub.easy.varModel.model.AttributeAssignment;
 import net.ssehub.easy.varModel.model.Comment;
+import net.ssehub.easy.varModel.model.ConstantDecisionVariableDeclaration;
 import net.ssehub.easy.varModel.model.Constraint;
 import net.ssehub.easy.varModel.model.DecisionVariableDeclaration;
 import net.ssehub.easy.varModel.model.FreezeBlock;
@@ -839,8 +840,16 @@ public class ModelTranslator extends net.ssehub.easy.dslCore.translation.ModelTr
                 }
                 expressionTranslator.warnDiscouragedNames(part.getName(), part, 
                     IvmlPackage.Literals.VARIABLE_DECLARATION_PART__NAME);
-                DecisionVariableDeclaration decVar = new DecisionVariableDeclaration(
-                    part.getName(), type, parent);
+                DecisionVariableDeclaration decVar;
+                if (null != decl.getConst()) {
+                    if (null == part.getDefault()) {
+                        throw new TranslatorException("constant '" + part.getName() + "' must be defined immediatley", 
+                            part, IvmlPackage.Literals.VARIABLE_DECLARATION__CONST, ErrorCodes.REDEFINITION);
+                    }
+                    decVar = new ConstantDecisionVariableDeclaration(part.getName(), type, parent);
+                } else {
+                    decVar = new DecisionVariableDeclaration(part.getName(), type, parent);
+                }
                 if (null != part.getDefault()) {
                     varMapping.put(part, decVar);
                     // expressions are processed in a separate step

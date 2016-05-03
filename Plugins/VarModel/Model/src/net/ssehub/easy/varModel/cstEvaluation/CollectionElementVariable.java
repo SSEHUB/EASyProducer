@@ -102,5 +102,10 @@ class CollectionElementVariable extends AbstractVariable implements ICollectionE
         }
         return result;
     }
+
+    @Override
+    public boolean isConstant() {
+        return false;
+    }
     
 }

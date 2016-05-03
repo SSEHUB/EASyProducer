@@ -31,6 +31,7 @@ import org.eclipse.emf.ecore.util.InternalEList;
  * The following features are implemented:
  * </p>
  * <ul>
+ *   <li>{@link de.uni_hildesheim.sse.ivml.impl.VariableDeclarationImpl#getConst <em>Const</em>}</li>
  *   <li>{@link de.uni_hildesheim.sse.ivml.impl.VariableDeclarationImpl#getType <em>Type</em>}</li>
  *   <li>{@link de.uni_hildesheim.sse.ivml.impl.VariableDeclarationImpl#getDecls <em>Decls</em>}</li>
  * </ul>
@@ -39,6 +40,26 @@ import org.eclipse.emf.ecore.util.InternalEList;
  */
 public class VariableDeclarationImpl extends MinimalEObjectImpl.Container implements VariableDeclaration
 {
+  /**
+   * The default value of the '{@link #getConst() <em>Const</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #getConst()
+   * @generated
+   * @ordered
+   */
+  protected static final String CONST_EDEFAULT = null;
+
+  /**
+   * The cached value of the '{@link #getConst() <em>Const</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #getConst()
+   * @generated
+   * @ordered
+   */
+  protected String const_ = CONST_EDEFAULT;
+
   /**
    * The cached value of the '{@link #getType() <em>Type</em>}' containment reference.
    * <!-- begin-user-doc -->
@@ -78,6 +99,29 @@ public class VariableDeclarationImpl extends MinimalEObjectImpl.Container implem
   protected EClass eStaticClass()
   {
     return IvmlPackage.Literals.VARIABLE_DECLARATION;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public String getConst()
+  {
+    return const_;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public void setConst(String newConst)
+  {
+    String oldConst = const_;
+    const_ = newConst;
+    if (eNotificationRequired())
+      eNotify(new ENotificationImpl(this, Notification.SET, IvmlPackage.VARIABLE_DECLARATION__CONST, oldConst, const_));
   }
 
   /**
@@ -170,6 +214,8 @@ public class VariableDeclarationImpl extends MinimalEObjectImpl.Container implem
   {
     switch (featureID)
     {
+      case IvmlPackage.VARIABLE_DECLARATION__CONST:
+        return getConst();
       case IvmlPackage.VARIABLE_DECLARATION__TYPE:
         return getType();
       case IvmlPackage.VARIABLE_DECLARATION__DECLS:
@@ -189,6 +235,9 @@ public class VariableDeclarationImpl extends MinimalEObjectImpl.Container implem
   {
     switch (featureID)
     {
+      case IvmlPackage.VARIABLE_DECLARATION__CONST:
+        setConst((String)newValue);
+        return;
       case IvmlPackage.VARIABLE_DECLARATION__TYPE:
         setType((Type)newValue);
         return;
@@ -210,6 +259,9 @@ public class VariableDeclarationImpl extends MinimalEObjectImpl.Container implem
   {
     switch (featureID)
     {
+      case IvmlPackage.VARIABLE_DECLARATION__CONST:
+        setConst(CONST_EDEFAULT);
+        return;
       case IvmlPackage.VARIABLE_DECLARATION__TYPE:
         setType((Type)null);
         return;
@@ -230,12 +282,31 @@ public class VariableDeclarationImpl extends MinimalEObjectImpl.Container implem
   {
     switch (featureID)
     {
+      case IvmlPackage.VARIABLE_DECLARATION__CONST:
+        return CONST_EDEFAULT == null ? const_ != null : !CONST_EDEFAULT.equals(const_);
       case IvmlPackage.VARIABLE_DECLARATION__TYPE:
         return type != null;
       case IvmlPackage.VARIABLE_DECLARATION__DECLS:
         return decls != null && !decls.isEmpty();
     }
     return super.eIsSet(featureID);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  public String toString()
+  {
+    if (eIsProxy()) return super.toString();
+
+    StringBuffer result = new StringBuffer(super.toString());
+    result.append(" (const: ");
+    result.append(const_);
+    result.append(')');
+    return result.toString();
   }
 
 } //VariableDeclarationImpl

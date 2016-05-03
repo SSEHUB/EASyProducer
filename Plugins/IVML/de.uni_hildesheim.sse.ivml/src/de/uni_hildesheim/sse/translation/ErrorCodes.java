@@ -48,6 +48,11 @@ public class ErrorCodes extends net.ssehub.easy.dslCore.translation.ErrorCodes {
     public static final int DEREFERENCE = 20212;
     
     /**
+     * In case that a constant shall be modified.
+     */
+    public static final int CONSTANT = 20213;
+    
+    /**
      * Prevents creating instances of this class.
      */
     private ErrorCodes() {

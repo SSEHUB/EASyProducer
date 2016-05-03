@@ -1,0 +1,11 @@
+project constants {
+
+    version v0;
+    const Integer xVal = 1;
+    compound position {
+        Integer x = xVal;
+    }
+
+    position p;
+    Integer myX = xVal;
+}

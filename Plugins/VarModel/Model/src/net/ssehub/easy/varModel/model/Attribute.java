@@ -156,5 +156,10 @@ public class Attribute extends AbstractVariable {
     public String toString() {
         return getElement().getName() + "." + getName();
     }
+
+    @Override
+    public boolean isConstant() {
+        return false;
+    }
     
 }

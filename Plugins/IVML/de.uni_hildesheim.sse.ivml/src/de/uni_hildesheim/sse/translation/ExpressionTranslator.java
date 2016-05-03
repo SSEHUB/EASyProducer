@@ -262,7 +262,7 @@ public class ExpressionTranslator extends net.ssehub.easy.dslCore.translation.Ex
         }
         return result;
     }
-
+    
     /**
      * Process an assignment expression and turn it into a feature call.
      * 
@@ -280,8 +280,7 @@ public class ExpressionTranslator extends net.ssehub.easy.dslCore.translation.Ex
     private ConstraintSyntaxTree processAssignmentExpression(
         AssignmentExpression expr, TypeContext context, IModelElement parent)
         throws TranslatorException {
-        ConstraintSyntaxTree result = processLogicalExpression(
-                expr.getLeft(), context, parent);
+        ConstraintSyntaxTree result = processLogicalExpression(expr.getLeft(), context, parent);
         if (null != expr.getRight()) {
             level++;
             for (AssignmentExpressionPart part : expr.getRight()) {

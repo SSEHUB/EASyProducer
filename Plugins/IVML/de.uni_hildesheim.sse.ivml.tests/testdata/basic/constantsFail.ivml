@@ -1,0 +1,5 @@
+project constantsFail {
+
+    version v0;
+    const Integer xVal;
+}

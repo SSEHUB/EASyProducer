@@ -207,4 +207,11 @@ public abstract class AbstractVariable extends ContainableModelElement implement
      * @return <code>true</code> if it is an attribute, <code>false</code> else
      */
     public abstract boolean isAttribute();
+    
+    /**
+     * Returns whether this variable is a constant.
+     * 
+     * @return <code>true</code> for constant, <code>false</code> else
+     */
+    public abstract boolean isConstant();
 }

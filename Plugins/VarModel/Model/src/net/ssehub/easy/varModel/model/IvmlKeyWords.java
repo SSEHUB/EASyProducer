@@ -183,7 +183,12 @@ public class IvmlKeyWords extends OclKeyWords {
      * <b>IVML Keyword:</b> Keyword for "null".
      */
     public static final String NULL = "null";
-    
+
+    /**
+     * <b>IVML Keyword:</b> Keyword for "const".
+     */
+    public static final String CONST = "const";
+
     //Characters
 
     /**

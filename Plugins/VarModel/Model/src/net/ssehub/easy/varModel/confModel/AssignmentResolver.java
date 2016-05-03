@@ -499,6 +499,9 @@ public class AssignmentResolver {
                 }
                 evaluator.clear();
             }
+            if (decl.isConstant()) {
+                variable.freeze(AllFreezeSelector.INSTANCE);
+            }
         }
         
         return valueResolved;

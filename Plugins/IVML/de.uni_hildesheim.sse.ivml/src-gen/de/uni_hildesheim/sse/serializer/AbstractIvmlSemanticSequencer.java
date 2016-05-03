@@ -1180,7 +1180,7 @@ public abstract class AbstractIvmlSemanticSequencer extends AbstractDelegatingSe
 	 *     VariableDeclaration returns VariableDeclaration
 	 *
 	 * Constraint:
-	 *     (type=Type decls+=VariableDeclarationPart decls+=VariableDeclarationPart*)
+	 *     (const='const'? type=Type decls+=VariableDeclarationPart decls+=VariableDeclarationPart*)
 	 */
 	protected void sequence_VariableDeclaration(ISerializationContext context, VariableDeclaration semanticObject) {
 		genericSequencer.createSequence(context, semanticObject);

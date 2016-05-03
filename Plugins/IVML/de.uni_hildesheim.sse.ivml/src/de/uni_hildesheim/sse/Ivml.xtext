@@ -111,6 +111,7 @@ TypedefConstraint:
 	;
 
 VariableDeclaration : 
+    const='const'?
 	type=Type 
 	decls+=VariableDeclarationPart 
 	(

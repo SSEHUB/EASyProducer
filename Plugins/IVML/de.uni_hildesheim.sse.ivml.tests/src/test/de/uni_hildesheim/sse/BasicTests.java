@@ -245,6 +245,26 @@ public class BasicTests extends AbstractTest {
         assertEqual(createFile("enumerationsFail2"), "testEnumerationsFail2",
                 "0", ErrorCodes.NAME_CLASH);
     }
+
+    /**
+     * Tests constants.
+     * 
+     * @throws IOException should not occur
+     */
+    @Test
+    public void testConstants() throws IOException {
+        assertEqual(createFile("constants"), "constants", "0");
+    }
+
+    /**
+     * Tests constant failures.
+     * 
+     * @throws IOException should not occur
+     */
+    @Test
+    public void testConstantsFail() throws IOException {
+        assertEqual(createFile("constantsFail"), "constantsFail", "0", ErrorCodes.REDEFINITION);
+    }
     
     /**
      * Tests nested enums.

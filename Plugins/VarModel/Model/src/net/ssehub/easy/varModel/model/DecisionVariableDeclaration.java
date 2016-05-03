@@ -179,5 +179,10 @@ public class DecisionVariableDeclaration extends AbstractVariable
     public boolean isDeclaratorTypeExplicit() {
         return false;
     }
+
+    @Override
+    public boolean isConstant() {
+        return false;
+    }
     
 }

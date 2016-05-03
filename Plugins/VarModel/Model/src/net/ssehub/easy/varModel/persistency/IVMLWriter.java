@@ -22,6 +22,7 @@ import static net.ssehub.easy.varModel.model.IvmlKeyWords.ATTRIBUTE;
 import static net.ssehub.easy.varModel.model.IvmlKeyWords.BEGINNING_BLOCK;
 import static net.ssehub.easy.varModel.model.IvmlKeyWords.BEGINNING_PARENTHESIS;
 import static net.ssehub.easy.varModel.model.IvmlKeyWords.BUT;
+import static net.ssehub.easy.varModel.model.IvmlKeyWords.CONST;
 import static net.ssehub.easy.varModel.model.IvmlKeyWords.COMMA;
 import static net.ssehub.easy.varModel.model.IvmlKeyWords.COMPOUND;
 import static net.ssehub.easy.varModel.model.IvmlKeyWords.COMPOUND_ACCESS;
@@ -405,6 +406,10 @@ public class IVMLWriter extends AbstractVarModelWriter {
     private void emitDecisionVariableDeclarationExpression(DecisionVariableDeclaration decl, 
         ConstraintSyntaxTree defaultValue) {
         inDecl = decl;
+        if (decl.isConstant()) {
+            appendOutput(CONST);
+            appendOutput(WHITESPACE);
+        }
         appendOutput(IvmlDatatypeVisitor.getUniqueType(decl.getType()));
         appendOutput(WHITESPACE);
         appendOutput(decl.getName());
