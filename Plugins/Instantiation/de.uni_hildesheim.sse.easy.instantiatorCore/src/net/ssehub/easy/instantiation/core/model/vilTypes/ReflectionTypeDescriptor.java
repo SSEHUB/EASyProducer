@@ -13,8 +13,6 @@ import net.ssehub.easy.basics.logger.EASyLoggerFactory.EASyLogger;
 import net.ssehub.easy.instantiation.core.Bundle;
 import net.ssehub.easy.instantiation.core.model.common.VilException;
 import net.ssehub.easy.instantiation.core.model.vilTypes.OperationDescriptor.CompatibilityResult;
-import net.ssehub.easy.instantiation.core.model.vilTypes.configuration.DecisionVariable;
-import net.ssehub.easy.instantiation.core.model.vilTypes.configuration.IvmlTypeDescriptor;
 
 /**
  * Represents an actual type based on reflection analysis of the underlying class. Instances of this class are created 
@@ -574,8 +572,8 @@ public class ReflectionTypeDescriptor <T> extends TypeDescriptor <T> {
         type = AliasTypeDescriptor.unalias(type);
         if (ReflectionTypeDescriptor.class.isInstance(type)) {
             assignable = isAssignableFrom(ReflectionTypeDescriptor.class.cast(type));
-        } else if (cls == DecisionVariable.class) {
-            assignable = type instanceof IvmlTypeDescriptor;
+        } else if (type instanceof IActualTypeAssignmentProvider) {
+            assignable = ((IActualTypeAssignmentProvider) type).isAssignableFrom(this, type);
         }
         return assignable;
     }

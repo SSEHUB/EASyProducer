@@ -8,7 +8,9 @@ import java.util.Set;
 
 import net.ssehub.easy.instantiation.core.model.common.VilException;
 import net.ssehub.easy.instantiation.core.model.vilTypes.FieldDescriptor;
+import net.ssehub.easy.instantiation.core.model.vilTypes.IActualTypeAssignmentProvider;
 import net.ssehub.easy.instantiation.core.model.vilTypes.IMetaType;
+import net.ssehub.easy.instantiation.core.model.vilTypes.Invisible;
 import net.ssehub.easy.instantiation.core.model.vilTypes.OperationDescriptor;
 import net.ssehub.easy.instantiation.core.model.vilTypes.TypeDescriptor;
 import net.ssehub.easy.instantiation.core.model.vilTypes.TypeRegistry;
@@ -33,7 +35,7 @@ import net.ssehub.easy.varModel.model.datatypes.StringType;
  * 
  * @author Holger Eichelberger
  */
-public class IvmlTypeDescriptor extends AbstractIvmlTypeDescriptor {
+public class IvmlTypeDescriptor extends AbstractIvmlTypeDescriptor implements IActualTypeAssignmentProvider {
 
     private TypeDescriptor<?> baseType;
     private IDatatype type;
@@ -163,6 +165,13 @@ public class IvmlTypeDescriptor extends AbstractIvmlTypeDescriptor {
             assignable = baseType.isAssignableFrom(desc);
         }
         return assignable;
+    }
+    
+    @Invisible
+    @Override
+    public boolean isAssignableFrom(IMetaType type1, IMetaType type2) {
+        // allow for backward compatibility complementing to isAssignableFrom(TypeDescriptor<?>)
+        return IvmlTypes.decisionVariableType() == type1 && type2 instanceof IvmlTypeDescriptor;
     }
 
     @Override
