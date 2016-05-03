@@ -445,7 +445,8 @@ public class DefaultImportResolver<M extends IModel> extends ImportResolver<M> {
             M found = localModelOverride.get(toLoad); // precedence to models in resolution
             if (null == found) {
                 found = toLoad.getResolved();
-                if ((null == found && isTransitiveLoadingEnabled()) || repository.isOutdated(toLoad)) {
+                if ((null == found && context.considerLoading(isTransitiveLoadingEnabled())) 
+                    || repository.isOutdated(toLoad)) {
                     if (!context.isLoop(toLoad)) {
                         found = repository.load(toLoad, this, messages);
                     } else {
@@ -454,7 +455,7 @@ public class DefaultImportResolver<M extends IModel> extends ImportResolver<M> {
                             Status.ERROR));                    
                     }
                 }
-            } 
+            }
             if (null != found) {
                 try {
                     if (checkImported(imp, found, messages)) {

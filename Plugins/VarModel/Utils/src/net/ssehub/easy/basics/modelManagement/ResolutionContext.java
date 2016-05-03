@@ -39,6 +39,7 @@ class ResolutionContext <M extends IModel> {
     private List<ModelInfo<M>> inProgress;
     private IRestrictionEvaluationContext evaluationContext;
     private List<ModelImport<M>> conflicts;
+    private boolean topLevel = true;
     
     /**
      * Creates a resolution context.
@@ -49,6 +50,7 @@ class ResolutionContext <M extends IModel> {
      */
     public ResolutionContext(M model, URI modelUri, ResolutionContext<M> context) {
         this(model, modelUri, context.inProgress, context.repository, context.evaluationContext);
+        this.topLevel = false;
     }
     
     /**
@@ -356,6 +358,25 @@ class ResolutionContext <M extends IModel> {
      */
     public boolean isConflict(ModelInfo<M> info) throws RestrictionEvaluationException {
         return null != getConflict(info.getName(), info.getVersion());
+    }
+    
+    /**
+     * Returns whether this is a top-level or a recursively used context.
+     * 
+     * @return <code>true</code> for top-level, <code>false</code> else
+     */
+    public boolean isTopLevel() {
+        return topLevel;
+    }
+    
+    /**
+     * Returns whether model loading shall be considered.
+     * 
+     * @param isTransitiveEnabled whether transitive loading is enabled
+     * @return <code>true</code> for loading, <code>false</code> else
+     */
+    public boolean considerLoading(boolean isTransitiveEnabled) {
+        return topLevel || (!topLevel && isTransitiveEnabled);
     }
 
 }
