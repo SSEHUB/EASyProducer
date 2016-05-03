@@ -1,0 +1,23 @@
+@advice(dispatch5)
+template dispatch7(Configuration config, Artifact target) {
+
+    def main(Configuration config, Artifact target) {
+        dispatch5 dp = config;
+        process(dp.ref, dp.node);
+        DecisionVariable var = dp.node;
+        process(var, dp.ref);
+    }
+
+    def process(DecisionVariable var, DecisionVariable var2) {
+        'base case ${var.name()}'
+    }
+
+    def process(HwNode node, DecisionVariable var2) {
+        'node ${node.name}'
+    }
+
+    def process(MPCCNode node, DecisionVariable var2) {
+        'mpcc ${node.name} ${node.dfe}'
+    }
+
+}

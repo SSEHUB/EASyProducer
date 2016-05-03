@@ -1251,7 +1251,27 @@ public class ExecutionTests extends AbstractTest {
     public void testDispatch5() throws IOException {
         assertEqualWithIvml("dispatch5", "dispatch5");
     }
-    
+
+    /**
+     * Tests a dispatch on a refined reference type and DecisionVariable (contributed by C. Qin, QM).
+     * 
+     * @throws IOException should not occur
+     */
+    @Test
+    public void testDispatch6() throws IOException {
+        assertEqualWithIvml("dispatch6", "dispatch5"); // IVML model is dispatch5
+    }
+
+    /**
+     * Tests a dispatch on a refined reference type and DecisionVariable (contributed by C. Qin, QM).
+     * 
+     * @throws IOException should not occur
+     */
+    @Test
+    public void testDispatch7() throws IOException {
+        assertEqualWithIvml("dispatch7", "dispatch5"); // IVML model is dispatch5
+    }
+
     /**
      * Tests nested fields on references.
      * 

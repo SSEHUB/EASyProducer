@@ -13,11 +13,15 @@ import net.ssehub.easy.basics.logger.EASyLoggerFactory.EASyLogger;
 import net.ssehub.easy.instantiation.core.Bundle;
 import net.ssehub.easy.instantiation.core.model.common.VilException;
 import net.ssehub.easy.instantiation.core.model.vilTypes.OperationDescriptor.CompatibilityResult;
+import net.ssehub.easy.instantiation.core.model.vilTypes.configuration.DecisionVariable;
+import net.ssehub.easy.instantiation.core.model.vilTypes.configuration.IvmlTypeDescriptor;
 
 /**
  * Represents an actual type based on reflection analysis of the underlying class. Instances of this class are created 
  * upon registration. This class works on the default type registry (only). Thereby, the available operations are 
  * determined and cached for fast access.
+ * 
+ * Considers {@link IActualTypeProvider}.
  * 
  * @param <T> the specific VilType or Artifact
  * @author Holger Eichelberger
@@ -566,12 +570,14 @@ public class ReflectionTypeDescriptor <T> extends TypeDescriptor <T> {
     
     @Override
     public boolean isAssignableFrom(IMetaType type) {
-        boolean result = false;
+        boolean assignable = false;
         type = AliasTypeDescriptor.unalias(type);
         if (ReflectionTypeDescriptor.class.isInstance(type)) {
-            result = isAssignableFrom(ReflectionTypeDescriptor.class.cast(type));
+            assignable = isAssignableFrom(ReflectionTypeDescriptor.class.cast(type));
+        } else if (cls == DecisionVariable.class) {
+            assignable = type instanceof IvmlTypeDescriptor;
         }
-        return result;
+        return assignable;
     }
 
     @Override

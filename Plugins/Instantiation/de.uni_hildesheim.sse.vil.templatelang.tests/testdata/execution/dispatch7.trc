@@ -1,0 +1,5 @@
+-> main(Configuration, Artifact) with (<config>, test.texts)
+    dp <- <config>
+    -> process(MPCCNode, DecisionVariable) with (dispatch5::ref, dispatch5::node)
+    var <- dispatch5::node
+    -> process(MPCCNode, DecisionVariable) with (dispatch5::node, dispatch5::ref)
