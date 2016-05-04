@@ -134,13 +134,6 @@ public abstract class ExpressionTranslator extends MessageReceiver {
     
     @Override
     public void collect(IMessage message, EObject cause, EStructuralFeature causeFeature, int code) {
-/*
-            System.out.println("ERROR " + message+" "+getURI(cause)+" "+this);        
-            Throwable t = new Throwable();
-            t.printStackTrace(System.out);
-                    messages.add(new Message(message, Status.ERROR, cause, causeFeature, code));
-                    errorCount++;
-*/
         Message msg = null;
         switch (message.getStatus()) {
         case ERROR:

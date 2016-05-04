@@ -443,7 +443,7 @@ public class DefaultImportResolver<M extends IModel> extends ImportResolver<M> {
         } else {
             IModelRepository<M> repository = context.getModelRepository();
             // is it already loaded?
-            M found = localModelOverride.get(toLoad); // precedence to models in resolution
+            M found = localModelOverride.get(toLoad); // precedence to models in resolution            
             if (null == found) {
                 found = toLoad.getResolved();
                 if ((null == found && context.considerLoading(isTransitiveLoadingEnabled())) 
@@ -459,8 +459,8 @@ public class DefaultImportResolver<M extends IModel> extends ImportResolver<M> {
                     }
                 }
             }
-            if (null != found) {
-                try {
+            try {
+                if (null != found) {
                     if (checkImported(imp, found, messages)) {
                         handleImports(context, found, null); // collect conflicts
                         // check for new conflicts
@@ -483,9 +483,12 @@ public class DefaultImportResolver<M extends IModel> extends ImportResolver<M> {
                             imp.setResolved(null);
                         }
                     }
-                } catch (ModelManagementException e) {
-                    EASyLoggerFactory.INSTANCE.getLogger(getClass(), Bundle.ID).exception(e);
+                } else {
+                    imp.setResolved(null);
+                    localModelOverride.remove(toLoad);
                 }
+            } catch (ModelManagementException e) {
+                EASyLoggerFactory.INSTANCE.getLogger(getClass(), Bundle.ID).exception(e);
             }
         }
         return conflicts;

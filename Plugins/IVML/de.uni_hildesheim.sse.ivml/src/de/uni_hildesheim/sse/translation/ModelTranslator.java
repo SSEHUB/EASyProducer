@@ -805,6 +805,24 @@ public class ModelTranslator extends net.ssehub.easy.dslCore.translation.ModelTr
     }
     
     /**
+     * Turns variable declaration parts into strings for debugging.
+     * 
+     * @param parts the parts
+     * @return the names
+     */
+    @SuppressWarnings("unused")
+    private String toString(List<VariableDeclarationPart> parts) {
+        String result = "";
+        for (int i = 0; i < parts.size(); i++) {
+            if (i > 0) {
+                result = result + ",";
+            }
+            result = result + parts.get(i).getName();
+        }
+        return result;
+    }
+    
+    /**
      * Process variable declaration <code>decl</code> add IVML object model
      * instances to <code>project</code> or <code>compound</code>.
      * 
