@@ -19,9 +19,12 @@ import java.net.URI;
 import java.util.List;
 
 import net.ssehub.easy.basics.messages.IMessage;
+import net.ssehub.easy.basics.modelManagement.IModelProcessingListener.Type;
 
 /**
- * Basic implementation of a model import resolver. 
+ * Basic implementation of a model import resolver. Import resolvers may have a model processing listener to 
+ * inform about loading new models. Please note that this listener is not bound to a specific project as it is the case
+ * for use with {@link ModelManagement}.
  * 
  * @param <M> the specific model type
  * 
@@ -30,6 +33,46 @@ import net.ssehub.easy.basics.messages.IMessage;
 public abstract class ImportResolver<M extends IModel> {
 
     private boolean transitiveLoading = true;
+    private IModelProcessingListener<M> processingListener;
+    
+    /**
+     * Defines the actual processing listener.
+     * 
+     * @param processingListener the listener (may be <b>null</b> for none)
+     * @return the previous listener (may be <b>null</b> for none)
+     */
+    public IModelProcessingListener<M> setProcessingListener(IModelProcessingListener<M> processingListener) {
+        IModelProcessingListener<M> old = processingListener;
+        this.processingListener = processingListener;
+        return old;
+    }
+    
+    /**
+     * Returns the processing listener.
+     * 
+     * @return the processing listener (may be <b>null</b>)
+     */
+    public IModelProcessingListener<M> getProcessingListener() {
+        return processingListener;
+    }
+    
+    /**
+     * Notifies the processing listener if defined.
+     *
+     * @param info the information object the operation is performed on
+     * @param type the processing type
+     * @param started whether the operation started or ended
+     */
+    protected void notifyProcessing(ModelInfo<M> info, Type type, boolean started) {
+        IModelProcessingListener<M> listener = getProcessingListener();
+        if (null != listener) {
+            if (started) {
+                listener.notifyProcessingStarted(info, type);
+            } else {
+                listener.notifyProcessingEnded(info, type);
+            }
+        }
+    }
     
     /**
      * Clears this instance for reuse.

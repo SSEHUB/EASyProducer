@@ -7,6 +7,8 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
 
 import net.ssehub.easy.basics.logger.EASyLoggerFactory;
+import net.ssehub.easy.basics.messages.IMessage;
+import net.ssehub.easy.basics.messages.Status;
 import net.ssehub.easy.dslCore.translation.IMessageReceiver;
 import net.ssehub.easy.instantiation.core.Bundle;
 import net.ssehub.easy.instantiation.core.model.common.ExpressionStatement;
@@ -380,6 +382,13 @@ public class StringResolver<I extends VariableDeclaration, R extends Resolver<I>
             if (warnings.length() > 0) {
                 warnings.append(", ");
             }
+            warnings.append(message);
+        }
+    }
+
+    @Override
+    public void collect(IMessage message, EObject cause, EStructuralFeature causeFeature, int code) {
+        if (Status.WARNING == message.getStatus()) {
             warnings.append(message);
         }
     }

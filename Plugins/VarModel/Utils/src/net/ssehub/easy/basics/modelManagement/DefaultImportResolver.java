@@ -28,6 +28,7 @@ import net.ssehub.easy.basics.logger.EASyLoggerFactory;
 import net.ssehub.easy.basics.messages.IMessage;
 import net.ssehub.easy.basics.messages.Message;
 import net.ssehub.easy.basics.messages.Status;
+import net.ssehub.easy.basics.modelManagement.IModelProcessingListener.Type;
 
 /**
  * A model imports resolver. Due to the instance data needed to perform cyclic model resolution,
@@ -448,7 +449,9 @@ public class DefaultImportResolver<M extends IModel> extends ImportResolver<M> {
                 if ((null == found && context.considerLoading(isTransitiveLoadingEnabled())) 
                     || repository.isOutdated(toLoad)) {
                     if (!context.isLoop(toLoad)) {
+                        notifyProcessing(toLoad, Type.LOADING, true);
                         found = repository.load(toLoad, this, messages);
+                        notifyProcessing(toLoad, Type.LOADING, false);
                     } else {
                         messages.add(new Message("Model '" + imp.getName() 
                             + "' cannot be resolved here due to errors in the imported model", 

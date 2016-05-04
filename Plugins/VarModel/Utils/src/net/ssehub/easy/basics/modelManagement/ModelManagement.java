@@ -189,7 +189,7 @@ public abstract class ModelManagement <M extends IModel> {
      * @return the top-level resolver
      * @see #releaseResolver(ImportResolver)
      */
-    protected ImportResolver<M> getResolverFromPool() {
+    public ImportResolver<M> getResolverFromPool() {
         return resolverPool.getInstance();
     }
     
@@ -199,7 +199,7 @@ public abstract class ModelManagement <M extends IModel> {
      * @param resolver the resolver to be released
      * @see #getResolverFromPool()
      */
-    protected void releaseResolver(ImportResolver<M> resolver) {
+    public void releaseResolver(ImportResolver<M> resolver) {
         resolverPool.releaseInstance(resolver);
     }
     

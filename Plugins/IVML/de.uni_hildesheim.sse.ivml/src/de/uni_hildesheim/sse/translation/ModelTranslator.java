@@ -45,6 +45,7 @@ import de.uni_hildesheim.sse.translation.Utils.SplitResult;
 import net.ssehub.easy.basics.messages.IIdentifiable;
 import net.ssehub.easy.basics.messages.IMessage;
 import net.ssehub.easy.basics.modelManagement.AvailableModels;
+import net.ssehub.easy.basics.modelManagement.IModelProcessingListener;
 import net.ssehub.easy.basics.modelManagement.ImportResolver;
 import net.ssehub.easy.basics.modelManagement.ModelInfo;
 import net.ssehub.easy.basics.modelManagement.Version;
@@ -112,6 +113,21 @@ public class ModelTranslator extends net.ssehub.easy.dslCore.translation.ModelTr
     private Map<TypedefMapping, DerivedDatatype> typedefMapping = new HashMap<TypedefMapping, DerivedDatatype>();
     
     private Set<EObject> definitionsProcessed = new HashSet<EObject>();
+    private IModelProcessingListener<Project> onLoadMsgCleanupListener = new IModelProcessingListener<Project>() {
+
+        @Override
+        public void notifyProcessingStarted(ModelInfo<Project> info, Type type) {
+            if (Type.LOADING == type) {
+                expressionTranslator.clearMessages(info);
+            }
+        }
+
+        @Override
+        public void notifyProcessingEnded(ModelInfo<Project> info, Type type) {
+            // nothing to do
+        }
+        
+    };
         
     /**
      * Contains an expression translator instance. Expression are realized in an
@@ -307,20 +323,21 @@ public class ModelTranslator extends net.ssehub.easy.dslCore.translation.ModelTr
                     error(e.getMessage(), input, IvmlPackage.Literals.PROJECT__IMPORTS, ErrorCodes.IMPORT);
                 }
             }
+            ImportResolver<Project> ir;
+            if (null == impResolver) {
+                ir = VarModel.INSTANCE.getResolverFromPool();
+            } else {
+                ir = impResolver;
+            }
+            IModelProcessingListener<Project> oldListener = ir.setProcessingListener(onLoadMsgCleanupListener);
             List<IMessage> resolutionMessages = VarModel.INSTANCE.resolveImports(project, uri, infoInProgress, 
-                impResolver, transitiveLoading);
+                ir, transitiveLoading);
+            ir.setProcessingListener(oldListener);
+            if (null == impResolver) {
+                VarModel.INSTANCE.releaseResolver(impResolver);
+            }
             for (int i = 0; i < resolutionMessages.size(); i++) {
-                IMessage msg = resolutionMessages.get(i);
-                switch (msg.getStatus()) {
-                case ERROR:
-                    error(msg.getDescription(), input, IvmlPackage.Literals.PROJECT__IMPORTS, ErrorCodes.IMPORT);
-                    break;
-                case WARNING:
-                    warning(msg.getDescription(), input, IvmlPackage.Literals.PROJECT__IMPORTS, ErrorCodes.IMPORT);
-                    break;
-                default:
-                    break;
-                }
+                collect(resolutionMessages.get(i), input, IvmlPackage.Literals.PROJECT__IMPORTS, ErrorCodes.IMPORT);
             }
         }
     }

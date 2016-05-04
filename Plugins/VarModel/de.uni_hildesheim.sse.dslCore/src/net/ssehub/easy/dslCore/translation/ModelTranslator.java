@@ -7,6 +7,8 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.resource.Resource.Diagnostic;
 
+import net.ssehub.easy.basics.messages.IMessage;
+
 /**
  * A basic implementation of a model translator, i.e., a basic class for translating
  * individual model elements into model instances. This class relies on an associated
@@ -73,15 +75,18 @@ public abstract class ModelTranslator <E extends ExpressionTranslator> extends M
     }
 
     @Override
-    public void error(String message, EObject cause, EStructuralFeature causeFeature,
-            int code) {
+    public void error(String message, EObject cause, EStructuralFeature causeFeature, int code) {
         expressionTranslator.error(message, cause, causeFeature, code);
     }
 
     @Override
-    public void warning(String message, EObject cause,
-            EStructuralFeature causeFeature, int code) {
+    public void warning(String message, EObject cause, EStructuralFeature causeFeature, int code) {
         expressionTranslator.warning(message, cause, causeFeature, code);
+    }
+    
+    @Override
+    public void collect(IMessage message, EObject cause, EStructuralFeature causeFeature, int code) {
+        expressionTranslator.collect(message, cause, causeFeature, code);
     }
 
     /**
