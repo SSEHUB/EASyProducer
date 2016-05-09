@@ -241,6 +241,9 @@ public class ConstraintFinder implements IModelVisitor {
 
     @Override
     public void visitPartialEvaluationBlock(PartialEvaluationBlock block) {
+        for (int i = 0; i < block.getNestedCount(); i++) {
+            block.getNested(i).accept(this);
+        }
         isEvalConstraint = true;
         for (int i = 0; i < block.getEvaluableCount(); i++) {
             block.getEvaluable(i).accept(this);
