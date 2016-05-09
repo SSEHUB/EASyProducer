@@ -16,6 +16,7 @@
 package net.ssehub.easy.basics.modelManagement;
 
 import java.net.URI;
+import java.util.ArrayList;
 import java.util.List;
 
 import net.ssehub.easy.basics.messages.IMessage;
@@ -24,7 +25,8 @@ import net.ssehub.easy.basics.modelManagement.IModelProcessingListener.Type;
 /**
  * Basic implementation of a model import resolver. Import resolvers may have a model processing listener to 
  * inform about loading new models. Please note that this listener is not bound to a specific project as it is the case
- * for use with {@link ModelManagement}.
+ * for use with {@link ModelManagement}. Further, this class enables deferred loading, i.e., (cyclic) models that 
+ * perform processing of declarations first and then require later subsequent resolution of model elements.
  * 
  * @param <M> the specific model type
  * 
@@ -34,6 +36,7 @@ public abstract class ImportResolver<M extends IModel> {
 
     private boolean transitiveLoading = true;
     private IModelProcessingListener<M> processingListener;
+    private List<IDeferredModelLoader<M>> deferredLoaders = new ArrayList<IDeferredModelLoader<M>>();
     
     /**
      * Defines the actual processing listener.
@@ -78,6 +81,10 @@ public abstract class ImportResolver<M extends IModel> {
      * Clears this instance for reuse.
      */
     public void clear() {
+        for (int l = 0; l < deferredLoaders.size(); l++) {
+            deferredLoaders.get(l).completeLoading();
+        }
+        deferredLoaders.clear();
         transitiveLoading = true; // back to default
     }
     
@@ -137,6 +144,17 @@ public abstract class ImportResolver<M extends IModel> {
      */
     public boolean isTransitiveLoadingEnabled() {
         return transitiveLoading;
+    }
+    
+    /**
+     * Adds a deferred loader.
+     * 
+     * @param loader the loader
+     */
+    public void addDeferredLoader(IDeferredModelLoader<M> loader) {
+        if (null != loader) {
+            deferredLoaders.add(loader);
+        }
     }
     
 }

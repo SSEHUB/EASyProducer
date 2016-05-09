@@ -383,7 +383,7 @@ public class VariableValueCopier {
             IDecisionVariable srcVar = tmp.get(t);
             Map<String, CopySpec> fieldSpecs = specs.get(srcVar.getDeclaration().getType());
             if (null != fieldSpecs) {
-                process(srcVar, srcVar, "", fieldSpecs);
+                process(srcVar, srcVar, "", fieldSpecs, new HashSet<IDecisionVariable>());
             }
         }
     }
@@ -395,31 +395,35 @@ public class VariableValueCopier {
      * @param base the base variable where processing initially started
      * @param prefix the prefix access name processed so far
      * @param fieldSpecs the field specifications for <code>base</code>
+     * @param done already processed variables - avoiding cycles
      * @throws ConfigurationException in case that the configuration is not possible 
      * @throws ValueDoesNotMatchTypeException in case that value types do not match
      * @throws CSTSemanticException in case that expressions such as freeze-buts are not correctly constructed
      */
     private void process(IDecisionVariable variable, IDecisionVariable base, String prefix, 
-        Map<String, CopySpec> fieldSpecs) throws ConfigurationException, ValueDoesNotMatchTypeException, 
-        CSTSemanticException {
-        for (int n = 0; n < variable.getNestedElementsCount(); n++) {
-            IDecisionVariable nested = variable.getNestedElement(n);
-            String name = nested.getDeclaration().getName();
-            if (prefix.length() > 0) {
-                name = prefix + IvmlKeyWords.COMPOUND_ACCESS + name;
-            }
-            CopySpec spec = fieldSpecs.get(name);
-            if (null != spec) {
-                String[] names = spec.getTargetVariableNames();
-                if (names.length >= 1) {
-                    IDecisionVariable target = findVariable(base, names[0]);
-                    if (null != target) {
-                        Value value = copy(nested, target, spec.getFreezeProvider());
-                        handleFurther(base, names, value);
+        Map<String, CopySpec> fieldSpecs, Set<IDecisionVariable> done) 
+        throws ConfigurationException, ValueDoesNotMatchTypeException, CSTSemanticException {
+        if (!done.contains(variable)) {
+            done.add(variable);
+            for (int n = 0; n < variable.getNestedElementsCount(); n++) {
+                IDecisionVariable nested = variable.getNestedElement(n);
+                String name = nested.getDeclaration().getName();
+                if (prefix.length() > 0) {
+                    name = prefix + IvmlKeyWords.COMPOUND_ACCESS + name;
+                }
+                CopySpec spec = fieldSpecs.get(name);
+                if (null != spec) {
+                    String[] names = spec.getTargetVariableNames();
+                    if (names.length >= 1) {
+                        IDecisionVariable target = findVariable(base, names[0]);
+                        if (null != target) {
+                            Value value = copy(nested, target, spec.getFreezeProvider());
+                            handleFurther(base, names, value);
+                        }
                     }
                 }
+                process(Configuration.dereference(nested), base, name, fieldSpecs, done);
             }
-            process(Configuration.dereference(nested), base, name, fieldSpecs);
         }
     }
 

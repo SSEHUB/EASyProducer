@@ -212,6 +212,19 @@ public abstract class ModelManagement <M extends IModel> {
      * @param loader The parser able to load model
      */
     public synchronized void updateModel(M model, URI uri, IModelLoader<M> loader) {
+        updateModel(model, uri, loader, true);
+    }
+    
+    /**
+     * Add a model to this management instance. Existing models are overwritten
+     * in case of same name and version.
+     * 
+     * @param model the model to be added
+     * @param uri the URI of the model (used for unique identification)
+     * @param loader The parser able to load model
+     * @param deepReload perform a deep reload of the dependent models
+     */
+    public synchronized void updateModel(M model, URI uri, IModelLoader<M> loader, boolean deepReload) {
         if (!inUpdate) {
             inUpdate = true;
             if (null != uri) {
@@ -250,7 +263,7 @@ public abstract class ModelManagement <M extends IModel> {
                 }
                 vInfos.add(info);
             }
-            if (null != oldModel) {
+            if (null != oldModel && deepReload) {
                 // TODO turn this into an incremental updated structure -> performance
                 reload(ModelUpdateUtils.determineUpdateSeqence(oldModel, ModelUpdateUtils.collectImporting(models)));
             }

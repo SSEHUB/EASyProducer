@@ -17,8 +17,10 @@ package net.ssehub.easy.basics.modelManagement;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * A set of algorithms to enable recursive model updates along the imports.
@@ -71,7 +73,7 @@ class ModelUpdateUtils {
     static <M extends IModel> List<M> determineUpdateSeqence(M model, Map<M, List<M>> using) {
         List<M> result = new ArrayList<M>();
         Map<M, Integer> updateSequence = new HashMap<M, Integer>();
-        int max = followImporting(model, using, updateSequence, 0);
+        int max = followImporting(model, using, updateSequence, 0, new HashSet<M>());
         while (result.size() < max) {
             result.add(null);
         }
@@ -91,17 +93,21 @@ class ModelUpdateUtils {
      * @param using the actual importing models
      * @param sequence the importing models and their assigned sequence number
      * @param start the start sequence number
+     * @param done already processed models - cycle prevention
      * @return the updated start sequence number
      */
     private static <M extends IModel> int followImporting(M model, Map<M, List<M>> using, Map<M, Integer> sequence, 
-        int start) {
-        List<M> importing = using.get(model);
-        if (null != importing) {
-            for (int i = 0; i < importing.size(); i++) {
-                M tmp = importing.get(i);
-                if (tmp != model) { // prevent circles - model translation shall prevent this anyway
-                    sequence.put(tmp, start++);
-                    start = followImporting(tmp, using, sequence, start);
+        int start, Set<M> done) {
+        if (!done.contains(model)) { // prevent cycles
+            done.add(model);
+            List<M> importing = using.get(model);
+            if (null != importing) {
+                for (int i = 0; i < importing.size(); i++) {
+                    M tmp = importing.get(i);
+                    if (tmp != model) { // prevent further cycles
+                        sequence.put(tmp, start++);
+                        start = followImporting(tmp, using, sequence, start, done);
+                    }
                 }
             }
         }

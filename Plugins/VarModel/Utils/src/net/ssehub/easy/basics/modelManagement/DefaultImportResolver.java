@@ -71,6 +71,7 @@ public class DefaultImportResolver<M extends IModel> extends ImportResolver<M> {
     @Override
     public void clear() {
         localModelOverride.clear();
+        super.clear();
     }
     
     @Override
