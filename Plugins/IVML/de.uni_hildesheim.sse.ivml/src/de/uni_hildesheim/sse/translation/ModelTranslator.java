@@ -30,7 +30,6 @@ import de.uni_hildesheim.sse.ivml.InterfaceDeclaration;
 import de.uni_hildesheim.sse.ivml.IvmlPackage;
 import de.uni_hildesheim.sse.ivml.OpDefParameter;
 import de.uni_hildesheim.sse.ivml.OpDefStatement;
-import de.uni_hildesheim.sse.ivml.ProjectContents;
 import de.uni_hildesheim.sse.ivml.QualifiedName;
 import de.uni_hildesheim.sse.ivml.Typedef;
 import de.uni_hildesheim.sse.ivml.TypedefCompound;
@@ -45,11 +44,13 @@ import de.uni_hildesheim.sse.translation.Utils.SplitResult;
 import net.ssehub.easy.basics.messages.IIdentifiable;
 import net.ssehub.easy.basics.messages.IMessage;
 import net.ssehub.easy.basics.modelManagement.AvailableModels;
+import net.ssehub.easy.basics.modelManagement.IDeferredModelLoader;
 import net.ssehub.easy.basics.modelManagement.IModelProcessingListener;
 import net.ssehub.easy.basics.modelManagement.ImportResolver;
 import net.ssehub.easy.basics.modelManagement.ModelInfo;
 import net.ssehub.easy.basics.modelManagement.Version;
 import net.ssehub.easy.basics.modelManagement.VersionFormatException;
+import net.ssehub.easy.dslCore.TranslationResult;
 import net.ssehub.easy.dslCore.translation.TranslatorException;
 import net.ssehub.easy.varModel.cst.CSTSemanticException;
 import net.ssehub.easy.varModel.cst.ConstantValue;
@@ -128,6 +129,113 @@ public class ModelTranslator extends net.ssehub.easy.dslCore.translation.ModelTr
         }
         
     };
+
+    /**
+     * A result entry consisting of an xtext and a result model.
+     * 
+     * @author Holger Eichelberger
+     */
+    private static class ResultEntry {
+        private de.uni_hildesheim.sse.ivml.Project eProject; 
+        private Project project;
+        private TypeContext context;
+        private Utils.SplitResult splitResult;
+
+        /**
+         * Creates the result entry.
+         * 
+         * @param eProject the xtext project
+         * @param project the result project
+         * @param context the actual type context
+         * @param splitResult the type splitted model elements of <code>eProject</code>
+         */
+        private ResultEntry(de.uni_hildesheim.sse.ivml.Project eProject, Project project, TypeContext context, 
+            Utils.SplitResult splitResult) {
+            this.eProject = eProject;
+            this.project = project;
+            this.context = context;
+            this.splitResult = splitResult;
+        }
+        
+        /**
+         * Completes loading.
+         * 
+         * @param result the parent instance
+         */
+        private void completeLoading(Result result) { 
+            result.getTranslator().completeLoading(eProject, project, context, splitResult);
+        }
+
+        /**
+         * Returns the (result) project.
+         * 
+         * @return the project
+         */
+        private Project getProject() {
+            return project;
+        }
+       
+    }
+    
+    /**
+     * Implements a translation result enabling deferred model loading. As long as {@link #completeLoading()} is not 
+     * called, the model instances stored in this instance are not ready for use.
+     * 
+     * @author Holger Eichelberger
+     */
+    public static class Result implements IDeferredModelLoader<Project> {
+
+        private List<ResultEntry> entries = new ArrayList<ResultEntry>();
+        private ModelTranslator translator;
+        
+        /**
+         * Creates a result instance representing the parse result for multiple projects and enables deferred loading.
+         * 
+         * @param translator the model translator instance
+         */
+        private Result(ModelTranslator translator) {
+            this.translator = translator;
+        }
+
+        /**
+         * Adds a partially completed xText project and an IVML project in terms of an <code>entry</code>.
+         * 
+         * @param entry the entry to be added
+         */
+        private void add(ResultEntry entry) {
+            entries.add(entry);
+        }
+        
+        @Override
+        public void completeLoading() {
+            for (int e = 0; e < entries.size(); e++) {
+                entries.get(e).completeLoading(this);
+            }
+        }
+        
+        /**
+         * Creates the translation result.
+         * 
+         * @return the translation result
+         */
+        public TranslationResult<Project> createTranslationResult() {
+            List<Project> projects = new ArrayList<Project>();
+            for (int e = 0; e < entries.size(); e++) {
+                projects.add(entries.get(e).getProject());
+            }
+            return new TranslationResult<Project>(projects, translator);
+        }
+        
+        /**
+         * Returns the translator instance.
+         * 
+         * @return the translator instance
+         */
+        private ModelTranslator getTranslator() {
+            return translator;
+        }
+        
+    }
         
     /**
      * Contains an expression translator instance. Expression are realized in an
@@ -158,9 +266,9 @@ public class ModelTranslator extends net.ssehub.easy.dslCore.translation.ModelTr
      * @param impResolver the import resolver (may be <b>null</b> to use a new default import resolver)           
      * @return the corresponding variability model
      */
-    public List<Project> createModel(VariabilityUnit unit, URI uri, boolean registerSuccessful, 
+    public Result createModel(VariabilityUnit unit, URI uri, boolean registerSuccessful, 
         ImportResolver<Project> impResolver) {
-        List<Project> result = new ArrayList<Project>();
+        Result result = new Result(this);
         if (null != unit.getProjects()) {
             HashSet<String> names = new HashSet<String>();
             for (de.uni_hildesheim.sse.ivml.Project p : unit.getProjects()) {
@@ -225,9 +333,9 @@ public class ModelTranslator extends net.ssehub.easy.dslCore.translation.ModelTr
      * @param impResolver the import resolver to use (may be <b>null</b> to use a new default import resolver)
      * @return the corresponding IVML project
      */
-    public Project createProject(de.uni_hildesheim.sse.ivml.Project project,
-            URI uri, boolean registerSuccessful,
-            List<de.uni_hildesheim.sse.ivml.Project> inProgress, ImportResolver<Project> impResolver) {
+    private ResultEntry createProject(de.uni_hildesheim.sse.ivml.Project project,
+            URI uri, boolean registerSuccessful, List<de.uni_hildesheim.sse.ivml.Project> inProgress, 
+            ImportResolver<Project> impResolver) {
         int errorCount = getErrorCount();
         Project result = new Project(project.getName());
         TypeContext context = new TypeContext(result, this);
@@ -250,14 +358,37 @@ public class ModelTranslator extends net.ssehub.easy.dslCore.translation.ModelTr
         for (ConflictStmt importStmt : project.getConflicts()) {
             processConflict(importStmt, context);
         }
-        ProjectContents contents = project.getContents();
-        Utils.SplitResult splitRes = Utils.split(contents.getElements());
+        
+        Utils.SplitResult splitRes = Utils.split(project.getContents().getElements());
         resolveImports(project, result, uri, inProgress, impResolver, false);
         processDefinitions(splitRes.getTypedefs(), splitRes.getVarDecls(), splitRes.getAttrAssignments(), 
             context, false);
         resolveImports(project, result, uri, inProgress, impResolver, true);
         processDefinitions(splitRes.getTypedefs(), splitRes.getVarDecls(), splitRes.getAttrAssignments(), 
             context, true);
+        for (InterfaceDeclaration iface : project.getInterfaces()) {
+            processInterface(iface, context);
+        }
+        
+        // requires completeLoading!
+
+        if (registerSuccessful && errorCount == getErrorCount()) {
+            // required if models in the same file refer to each other
+            VarModel.INSTANCE.updateModel(result, uri, ModelUtility.INSTANCE, false);
+        }
+        return new ResultEntry(project, result, context, splitRes);
+    }
+    
+    /**
+     * Complete loading of a given model.
+     * 
+     * @param project the xText project
+     * @param result the (result) model to complete the loading for
+     * @param context the actual type context
+     * @param splitRes the type-splitted model elements of <code>project</code>
+     */
+    private void completeLoading(de.uni_hildesheim.sse.ivml.Project project, Project result, TypeContext context, 
+        Utils.SplitResult splitRes) {
         if (null != splitRes.getAttrs()) {
             for (AnnotateTo annotation : splitRes.getAttrs()) {
                 processAnnotation(annotation, context);
@@ -267,9 +398,6 @@ public class ModelTranslator extends net.ssehub.easy.dslCore.translation.ModelTr
             processOpDefs(splitRes.getOpdefs(), context);
         }
         processExpressions(splitRes.getTypedefs(), splitRes.getAttrAssignments(), splitRes.getExprs(), context);
-        for (InterfaceDeclaration iface : project.getInterfaces()) {
-            processInterface(iface, context);
-        }
         if (null != splitRes.getEvals()) {
             for (Eval eval : splitRes.getEvals()) {
                 processEval(eval, context, null);
@@ -280,13 +408,9 @@ public class ModelTranslator extends net.ssehub.easy.dslCore.translation.ModelTr
                 processFreeze(freeze, context);
             }
         }
-        if (registerSuccessful && errorCount == getErrorCount()) {
-            // required if models in the same file refer to each other
-            VarModel.INSTANCE.updateModel(result, uri, ModelUtility.INSTANCE);
-        }
-        context.sortProjectElements(contents.getElements());
+
+        context.sortProjectElements(project.getContents().getElements());
         context.clear();
-        return result;
     }
 
     /**
@@ -323,19 +447,10 @@ public class ModelTranslator extends net.ssehub.easy.dslCore.translation.ModelTr
                     error(e.getMessage(), input, IvmlPackage.Literals.PROJECT__IMPORTS, ErrorCodes.IMPORT);
                 }
             }
-            ImportResolver<Project> ir;
-            if (null == impResolver) {
-                ir = VarModel.INSTANCE.getResolverFromPool();
-            } else {
-                ir = impResolver;
-            }
-            IModelProcessingListener<Project> oldListener = ir.setProcessingListener(onLoadMsgCleanupListener);
+            IModelProcessingListener<Project> oldListener = impResolver.setProcessingListener(onLoadMsgCleanupListener);
             List<IMessage> resolutionMessages = VarModel.INSTANCE.resolveImports(project, uri, infoInProgress, 
-                ir, transitiveLoading);
-            ir.setProcessingListener(oldListener);
-            if (null == impResolver) {
-                VarModel.INSTANCE.releaseResolver(impResolver);
-            }
+                impResolver, transitiveLoading);
+            impResolver.setProcessingListener(oldListener);
             for (int i = 0; i < resolutionMessages.size(); i++) {
                 collect(resolutionMessages.get(i), input, IvmlPackage.Literals.PROJECT__IMPORTS, ErrorCodes.IMPORT);
             }

@@ -23,6 +23,7 @@ import de.uni_hildesheim.sse.ivml.VersionStmt;
 import de.uni_hildesheim.sse.translation.ExpressionTranslator;
 import de.uni_hildesheim.sse.translation.ImportTranslator;
 import de.uni_hildesheim.sse.translation.ModelTranslator;
+import de.uni_hildesheim.sse.translation.ModelTranslator.Result;
 import de.uni_hildesheim.sse.translation.TypeContext;
 import de.uni_hildesheim.sse.translation.Utils;
 import net.ssehub.easy.basics.messages.Status;
@@ -38,6 +39,7 @@ import net.ssehub.easy.dslCore.translation.MessageReceiver;
 import net.ssehub.easy.dslCore.translation.TranslatorException;
 import net.ssehub.easy.varModel.cst.CSTSemanticException;
 import net.ssehub.easy.varModel.cst.ConstraintSyntaxTree;
+import net.ssehub.easy.varModel.management.VarModel;
 import net.ssehub.easy.varModel.model.AbstractVariable;
 import net.ssehub.easy.varModel.model.Constraint;
 import net.ssehub.easy.varModel.model.IModelElement;
@@ -99,7 +101,11 @@ public class ModelUtility extends net.ssehub.easy.dslCore.ModelUtility<Variabili
     public TranslationResult<Project> createVarModel(VariabilityUnit root, java.net.URI uri, 
         boolean registerSuccessful) {
         ModelTranslator translator = new ModelTranslator();
-        return new TranslationResult<Project>(translator.createModel(root, uri, registerSuccessful, null), translator);
+        ImportResolver<Project> impResolver = VarModel.INSTANCE.getResolverFromPool();
+        Result mRes = translator.createModel(root, uri, registerSuccessful, impResolver);
+        impResolver.addDeferredLoader(mRes);
+        VarModel.INSTANCE.releaseResolver(impResolver);
+        return mRes.createTranslationResult();
     }
 
     /**
@@ -124,17 +130,28 @@ public class ModelUtility extends net.ssehub.easy.dslCore.ModelUtility<Variabili
 
     @Override
     public TranslationResult<Project> parse(URI uri, ImportResolver<Project> resolver) throws IOException {
+        ImportResolver<Project> impResolver;
+        if (null == resolver) {
+            impResolver = VarModel.INSTANCE.getResolverFromPool();
+        } else {
+            impResolver = resolver;
+        }
+        
         ModelTranslator translator = new ModelTranslator();
         VariabilityUnit root = parse(uri, true, translator, VariabilityUnit.class);
-        List<Project> result = null;
+        Result mRes = null;
         if (null != root) {
             try {
-                result = translator.createModel(root, toNetUri(uri), true, resolver);
+                mRes = translator.createModel(root, toNetUri(uri), true, impResolver);
             } catch (URISyntaxException e) {
                 throw new IOException(e);
             }
         }
-        return new TranslationResult<Project>(result, translator);
+        impResolver.addDeferredLoader(mRes);
+        if (null == resolver) {
+            VarModel.INSTANCE.releaseResolver(impResolver);
+        }
+        return mRes.createTranslationResult();
     }
 
     /**
