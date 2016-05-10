@@ -50,6 +50,7 @@ import net.ssehub.easy.varModel.model.DecisionVariableDeclaration;
 import net.ssehub.easy.varModel.model.IModelElement;
 import net.ssehub.easy.varModel.model.InternalConstraint;
 import net.ssehub.easy.varModel.model.OperationDefinition;
+import net.ssehub.easy.varModel.model.PartialEvaluationBlock;
 import net.ssehub.easy.varModel.model.Project;
 import net.ssehub.easy.varModel.model.AttributeAssignment.Assignment;
 import net.ssehub.easy.varModel.model.datatypes.BooleanType;
@@ -96,6 +97,7 @@ public class Resolver {
     private List<Constraint> constraintBase;   
     private List<Constraint> constraintVariables;
     private List<Constraint> compoundConstraints;
+    private List<Constraint> compoundEvalConstraints;
     private List<Constraint> unresolvedConstraints; 
     private List<Constraint> defaultAttributeConstraints;
     private List<Constraint> assignedAttributeConstraints;
@@ -292,6 +294,7 @@ public class Resolver {
         this.constraintBase = new ArrayList<Constraint>();
         this.constraintVariables = new ArrayList<Constraint>();
         this.compoundConstraints = new ArrayList<Constraint>();
+        this.compoundEvalConstraints = new ArrayList<Constraint>();
         this.defaultAttributeConstraints = new ArrayList<Constraint>();
         this.assignedAttributeConstraints = new ArrayList<Constraint>();
         this.collectionConstraints = new ArrayList<Constraint>();
@@ -617,9 +620,9 @@ public class Resolver {
     private void resolveCompoundDefaultValueForDeclaration(AbstractVariable decl, IDecisionVariable variable,
         CompoundAccess compound, IDatatype type) {
         CompoundAccess cmpAccess = compound;
-        Compound cmpType = (Compound) type;        
+        Compound cmpType = (Compound) type;
         List<Constraint> thisCompoundConstraints = new ArrayList<Constraint>(); 
-        getAllCompoundConstraints(cmpType, thisCompoundConstraints, false); 
+        getAllCompoundConstraints(cmpType, thisCompoundConstraints, false);        
         CompoundVariable cmpVar = (CompoundVariable) variable;  
         for (int i = 0, n = cmpVar.getNestedElementsCount(); i < n; i++) {
             IDecisionVariable nestedVariable = cmpVar.getNestedElement(i);
@@ -673,7 +676,50 @@ public class Resolver {
                 LOGGER.exception(e);
             }               
         }
-    }  
+        processCompoundEvals(cmpType);
+    }
+
+    /**
+     * Method for extracting constraints from compounds eval blocks (also refined compounds).
+     * @param cmpType Compound to be analyzed 
+     */
+    private void processCompoundEvals(Compound cmpType) {
+        if (cmpType.getRefines() != null) {
+            Compound refinedCmp = cmpType.getRefines();
+            processCompoundEvals(refinedCmp);
+        }
+        for (int i = 0; i < cmpType.getModelElementCount(); i++) {            
+            if (cmpType.getModelElement(i) instanceof PartialEvaluationBlock) {
+                PartialEvaluationBlock evalBlock = (PartialEvaluationBlock) cmpType.getModelElement(i);
+                processEvalConstraints(evalBlock);
+            }
+        }
+    }
+    
+    /**
+     * Method for handling eval blocks - searching for nested eval blocks and extracting constraints.
+     * @param evalBlock Eval block to be processed.
+     */
+    private void processEvalConstraints(PartialEvaluationBlock evalBlock) {
+        for (int i = 0; i < evalBlock.getNestedCount(); i++) {
+            processEvalConstraints(evalBlock.getNested(i));
+        }
+        for (int i = 0; i < evalBlock.getEvaluableCount(); i++) {
+            if (evalBlock.getEvaluable(i) instanceof Constraint) {
+                Constraint constraint = (Constraint) evalBlock.getEvaluable(i);
+                ConstraintSyntaxTree cst = copyVisitor(constraint.getConsSyntax(), null);
+                try {
+                    cst.inferDatatype();
+                    constraint.setConsSyntax(cst);
+                    compoundEvalConstraints.add(constraint);
+//                    System.out.println("Eval constraint: " 
+//                        + StringProvider.toIvmlString(constraint.getConsSyntax()));
+                } catch (CSTSemanticException e) {
+                    LOGGER.exception(e);
+                }
+            }
+        }
+    }
 
     /**
      * Checks a container value for nested constraints.
@@ -983,6 +1029,9 @@ public class Resolver {
         }
         ConstraintFinder finder = new ConstraintFinder(project, false, false, true);
         addAllConstraints(scopeConstraints, finder.getEvalConstraints());
+        if (compoundEvalConstraints.size() > 0) {
+            scopeConstraints.addAll(compoundEvalConstraints);
+        }
         addAllConstraints(scopeConstraints, finder.getConstraints());
         if (!incremental) {
             List<AttributeAssignment> scopeAttributes = new ArrayList<AttributeAssignment>();
@@ -1226,6 +1275,7 @@ public class Resolver {
         defaultConstraints.clear();
         internalConstraints.clear();
         compoundConstraints.clear();
+        compoundEvalConstraints.clear();
         constraintVariables.clear();        
         collectionCompoundConstraints.clear(); 
         collectionConstraints.clear();      
