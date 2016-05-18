@@ -500,4 +500,21 @@ public class CompoundValue extends StructuredValue implements Cloneable {
         return nestedElements.keySet();
     }
 
+    /**
+     * Get the number of nested elements.
+     * @return size of nestedelements.
+     */
+    public int getNestedElementsSize() {
+        return nestedElements.size();
+    }
+    
+    /**
+     * Get the nested element at index.
+     * @param index The index to return.
+     * @return value The nested element at the specified index.
+     */
+    public Value getNestedElement(int index) {
+        Value value = (Value) nestedElements.values().toArray()[index];
+        return value;
+    }
 }
