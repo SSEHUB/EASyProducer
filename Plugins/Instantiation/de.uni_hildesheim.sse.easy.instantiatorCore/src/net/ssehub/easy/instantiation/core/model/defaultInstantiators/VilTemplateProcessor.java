@@ -373,10 +373,27 @@ public class VilTemplateProcessor implements IVilType {
             if (null == caller) {
                 caller = getParent(other);
             }
+            String[] possiblePaths = getVtlPaths(other);
             Template template = obtainTemplate(templateName, getVtlRestrictions(templateName, other), 
-                getVtlPaths(other), caller);
-            process(template, config, target, other, tmp);
-            result = new ListSet<IArtifact>(tmp, IArtifact.class);
+                possiblePaths, caller);
+            if (null != template) {
+                process(template, config, target, other, tmp);
+                result = new ListSet<IArtifact>(tmp, IArtifact.class);
+            } else {
+                StringBuffer errMsg = new StringBuffer("The script \"");
+                errMsg.append(templateName);
+                errMsg.append("\" coult not be loaded, maybe it is not parseable.");
+                if (null != possiblePaths && possiblePaths.length > 0) {
+                    errMsg.append("Please check whether one of the following paths contains a valid template file:\n");
+                    errMsg.append(" - ");
+                    errMsg.append(possiblePaths[0]);
+                    for (int i = 1; i < possiblePaths.length; i++) {
+                        errMsg.append("\n - ");
+                        errMsg.append(possiblePaths[i]);
+                    }
+                    throw new VilException(errMsg.toString() , VilException.ID_NOT_FOUND);
+                }
+            }
         }
         return result;
     }
