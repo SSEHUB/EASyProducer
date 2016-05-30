@@ -15,6 +15,7 @@
  */
 package net.ssehub.easy.basics.logger;
 
+import java.util.logging.Handler;
 import java.util.logging.Logger;
 
 /**
@@ -33,17 +34,33 @@ public class AdvancedJavaLogger extends AbstractJavaLogger {
     public AdvancedJavaLogger() {
         ConsoleHandler infoHandler = new ConsoleHandler();
         infoHandler.setConsole(System.out);
-        infoLoger = createLogger(AdvancedJavaLogger.class, "::info");
+        infoLoger = createLogger("::info");
         infoLoger.addHandler(infoHandler);
         
         ConsoleHandler errorHandler = new ConsoleHandler();
-        errorLoger = createLogger(AdvancedJavaLogger.class, "::error");
+        errorLoger = createLogger("::error");
         errorLoger.addHandler(errorHandler);
         
         /* 
          * Currently no logging into a file is implemented.
          * Please add this here if it is desired.
          */       
+    }
+    
+    /**
+     * Returns a {@link Logger} instance.
+     * @param appendix An optional appendix (should be used if multiple loggers needed).
+     * @return A {@link Logger}.
+     */
+    private static Logger createLogger(String appendix) {
+        Logger logger = createLogger(AdvancedJavaLogger.class, appendix);
+        
+        Handler[] oldHandlers = logger.getHandlers();
+        for (int i = 0; i < oldHandlers.length; i++) {
+            logger.removeHandler(oldHandlers[i]);
+        }
+        
+        return logger;
     }
     
     @Override

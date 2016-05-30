@@ -92,7 +92,7 @@ public abstract class AbstractJavaLogger implements ILogger {
     
     /**
      * Returns a {@link Logger} instance.
-     * @param loggerClass The class, where the logger is created/needed.
+     * @param loggerClass The class, where the logger is created/needed).
      * @param appendix An optional appendix (should be used if multiple loggers needed.
      * @return A {@link Logger}.
      */
