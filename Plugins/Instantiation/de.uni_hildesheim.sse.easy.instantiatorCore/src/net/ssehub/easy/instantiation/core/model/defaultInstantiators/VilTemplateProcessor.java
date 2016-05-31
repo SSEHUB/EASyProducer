@@ -374,28 +374,45 @@ public class VilTemplateProcessor implements IVilType {
                 caller = getParent(other);
             }
             String[] possiblePaths = getVtlPaths(other);
-            Template template = obtainTemplate(templateName, getVtlRestrictions(templateName, other), 
-                possiblePaths, caller);
-            if (null != template) {
-                process(template, config, target, other, tmp);
-                result = new ListSet<IArtifact>(tmp, IArtifact.class);
-            } else {
-                StringBuffer errMsg = new StringBuffer("The script \"");
-                errMsg.append(templateName);
-                errMsg.append("\" coult not be loaded, maybe it is not parseable.");
-                if (null != possiblePaths && possiblePaths.length > 0) {
-                    errMsg.append("Please check whether one of the following paths contains a valid template file:\n");
-                    errMsg.append(" - ");
-                    errMsg.append(possiblePaths[0]);
-                    for (int i = 1; i < possiblePaths.length; i++) {
-                        errMsg.append("\n - ");
-                        errMsg.append(possiblePaths[i]);
-                    }
-                    throw new VilException(errMsg.toString() , VilException.ID_NOT_FOUND);
+            try {
+                Template template = obtainTemplate(templateName, getVtlRestrictions(templateName, other), 
+                    possiblePaths, caller);
+                if (null != template) {
+                    process(template, config, target, other, tmp);
+                    result = new ListSet<IArtifact>(tmp, IArtifact.class);
+                } else {
+                    throwMissingTemplateError(templateName, possiblePaths);
                 }
+            } catch (VilException e) {
+                throwMissingTemplateError(templateName, possiblePaths);
             }
         }
         return result;
+    }
+
+    /**
+     * Creates a VIL exception with a detailed/helpful message if the desired template could not be loaded/found.
+     * @param templateName the name of the template
+     * @param possiblePaths Used VTL paths to search for the template, maybe <b>null</b>
+     * @throws VilException The helpful exception
+     */
+    private static void throwMissingTemplateError(String templateName, String[] possiblePaths) throws VilException {
+        StringBuffer errMsg = new StringBuffer("The script \"");
+        errMsg.append(templateName);
+        errMsg.append("\" coult not be loaded, maybe the file contains syntax errors or is not named as \"");
+        errMsg.append(templateName);
+        errMsg.append("\".");
+        if (null != possiblePaths && possiblePaths.length > 0) {
+            errMsg.append("\nPlease check whether one of the following paths contains a valid template file:\n");
+            errMsg.append(" - ");
+            errMsg.append(possiblePaths[0]);
+            for (int i = 1; i < possiblePaths.length; i++) {
+                errMsg.append("\n - ");
+                errMsg.append(possiblePaths[i]);
+            }
+            errMsg.append("\n");
+            throw new VilException(errMsg.toString() , VilException.ID_NOT_FOUND);
+        }
     }
     
     /**
