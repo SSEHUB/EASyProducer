@@ -1234,7 +1234,7 @@ public class ProjectCopyVisitorTest {
         original.add(decl);
         
         Project copy = copyProject(original);
-        OperationDefinition copiedOp = (OperationDefinition) copy.getElement(0);
+        OperationDefinition copiedOp = (OperationDefinition) copy.getElement(1);
         assertUserOperation(operation, copiedOp, copy);
     }
     

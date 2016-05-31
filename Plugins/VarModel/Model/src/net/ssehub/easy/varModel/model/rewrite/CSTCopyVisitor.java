@@ -15,12 +15,14 @@
  */
 package net.ssehub.easy.varModel.model.rewrite;
 
+import java.util.Iterator;
 import java.util.Map;
 
 import net.ssehub.easy.varModel.cst.ConstantValue;
 import net.ssehub.easy.varModel.cst.ConstraintSyntaxTree;
 import net.ssehub.easy.varModel.cst.ContainerOperationCall;
 import net.ssehub.easy.varModel.cst.CopyVisitor;
+import net.ssehub.easy.varModel.cst.OCLFeatureCall;
 import net.ssehub.easy.varModel.model.AbstractVariable;
 import net.ssehub.easy.varModel.model.Attribute;
 import net.ssehub.easy.varModel.model.AttributeAssignment;
@@ -29,6 +31,8 @@ import net.ssehub.easy.varModel.model.DecisionVariableDeclaration;
 import net.ssehub.easy.varModel.model.ExplicitTypeVariableDeclaration;
 import net.ssehub.easy.varModel.model.IAttributableElement;
 import net.ssehub.easy.varModel.model.IModelElement;
+import net.ssehub.easy.varModel.model.Project;
+import net.ssehub.easy.varModel.model.datatypes.ICustomOperationAccessor;
 import net.ssehub.easy.varModel.model.datatypes.IDatatype;
 import net.ssehub.easy.varModel.model.values.Value;
 
@@ -41,6 +45,7 @@ class CSTCopyVisitor extends CopyVisitor {
     private boolean visitItrExpression;
     private boolean complete;
     private ProjectCopyVisitor copyier;
+    private boolean forceAccessors;
         
     /**
      * Creates a copy visitor with explicit mapping. This is for the final round of translation, where all projects
@@ -56,6 +61,18 @@ class CSTCopyVisitor extends CopyVisitor {
         this.copyier = copyier;
         complete = true;
         visitItrExpression = false;
+        forceAccessors = false;
+    }
+    
+    /**
+     * Specification whether this visitor should try to fix broken {@link ICustomOperationAccessor}s.
+     * These are usually {@link Project}s. 
+     * @param forceAccessors <tt>true</tt> If an accessor could not be found, a fallback (unprezise) mechanism is used,
+     *     this should only be used at the end of the translation if all projects are surely copied, <tt>false</tt> is
+     *     the default option for this.
+     */
+    void setForceaccessors(boolean forceAccessors) {
+        this.forceAccessors = forceAccessors;
     }
     
     /**
@@ -118,6 +135,47 @@ class CSTCopyVisitor extends CopyVisitor {
             result = var;
         }
         return result;
+    }
+    
+    @Override
+    public void visitOclFeatureCall(OCLFeatureCall call) {
+        ConstraintSyntaxTree operand = call.getOperand();
+        if (null != operand) {
+            operand.accept(this);
+        }
+        operand = getResult();
+        ConstraintSyntaxTree[] args = new ConstraintSyntaxTree[call.getParameterCount()];
+        for (int p = 0; p < args.length; p++) {
+            call.getParameter(p).accept(this);
+            args[p] =  getResult();
+        }
+        
+        ICustomOperationAccessor accessor = call.getAccessor();
+        if (null != accessor) {
+            ICustomOperationAccessor copiedAccessor = copyier.getCopiedAccessor(accessor);
+            
+            // Fallback ;-)
+            if (null == copiedAccessor && forceAccessors && accessor instanceof Project) {
+                Project orgAcessor = (Project) accessor;
+                Iterator<Project> copiedProjectsItr = copyier.getAllCopiedProjects().iterator();
+                while (copiedAccessor == null && copiedProjectsItr.hasNext()) {
+                    Project candidate = copiedProjectsItr.next();
+                    if (orgAcessor.getName().equals(candidate.getName())) {
+                        copiedAccessor = candidate;
+                    }
+                }
+                
+            }
+
+            if (null != copiedAccessor) {
+                accessor = copiedAccessor;
+            } else {
+                // Avoid null pointer by continuing copy process but mark copy as incomplete.
+                complete = false;
+            }
+        }
+        
+        setResult(new OCLFeatureCall(operand, call.getOperation(), accessor, args));
     }
     
     @Override

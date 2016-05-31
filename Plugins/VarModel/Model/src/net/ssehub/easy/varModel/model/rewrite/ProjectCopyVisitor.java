@@ -60,6 +60,7 @@ import net.ssehub.easy.varModel.model.datatypes.DerivedDatatype;
 import net.ssehub.easy.varModel.model.datatypes.Enum;
 import net.ssehub.easy.varModel.model.datatypes.EnumLiteral;
 import net.ssehub.easy.varModel.model.datatypes.FreezeVariableType;
+import net.ssehub.easy.varModel.model.datatypes.ICustomOperationAccessor;
 import net.ssehub.easy.varModel.model.datatypes.IDatatype;
 import net.ssehub.easy.varModel.model.datatypes.OrderedEnum;
 import net.ssehub.easy.varModel.model.datatypes.Reference;
@@ -144,6 +145,7 @@ public class ProjectCopyVisitor extends AbstractProjectVisitor {
      */
     private IFreezable[] currentlyFrozen;
     private boolean frozenElementsOK;
+    private boolean restranslationSucceeded;
     
     /**
      * Sole constructor for creating a copy of a {@link Project}.
@@ -197,6 +199,25 @@ public class ProjectCopyVisitor extends AbstractProjectVisitor {
      */
     Map<AbstractVariable, AbstractVariable> getDeclarationMapping() {
         return Collections.unmodifiableMap(copiedDeclarations);
+    }
+    
+    /**
+     * Returns a copied {@link ICustomOperationAccessor} for the given original accessor. 
+     * @param orgAccessor An original accessor, must not be <tt>null</tt>.
+     * @return The copied accessor or <tt>null</tt> if it was not copied so far.
+     */
+    ICustomOperationAccessor getCopiedAccessor(ICustomOperationAccessor orgAccessor) {
+        ICustomOperationAccessor copiedAccessor = null;
+        
+        /*
+         * Currently, only Projects can be ICustomOperationAccessor. However, instanceof check is used
+         * for to avoid class cast exceptions in future implementations
+         */
+        if (orgAccessor instanceof Project) {
+            copiedAccessor = copiedProjects.get((Project) orgAccessor);
+        }
+        
+        return copiedAccessor;
     }
     
     @Override
@@ -341,14 +362,16 @@ public class ProjectCopyVisitor extends AbstractProjectVisitor {
             
             ConstraintSyntaxTree cst = cstContainer.getOriginalDefault();
             CSTCopyVisitor cstCopy = new CSTCopyVisitor(copiedDeclarations, this);
+            cstCopy.setForceaccessors(true);
             cst.accept(cstCopy);
             if (cstCopy.translatedCompletely()) {
                 try {
+                    ConstraintSyntaxTree copiedTree = cstCopy.getResult();
                     ContainableModelElement parent = cstContainer.getCopiedParent();
                     if (parent instanceof AbstractVariable) {
-                        ((AbstractVariable) parent).setValue(cstCopy.getResult());
+                        ((AbstractVariable) parent).setValue(copiedTree);
                     } else if (parent instanceof Constraint) {
-                        ((Constraint) parent).setConsSyntax(cstCopy.getResult());
+                        ((Constraint) parent).setConsSyntax(copiedTree);
                     }
                     elementsResolved = true;
                     cstItr.remove();
@@ -407,23 +430,35 @@ public class ProjectCopyVisitor extends AbstractProjectVisitor {
             CustomOperation tmpCustomOp = op.getOperation();
             
             CSTCopyVisitor copyier = new CSTCopyVisitor(copiedDeclarations, this);
+            copyier.setForceaccessors(true);
             tmpCustomOp.getFunction().accept(copyier);
-            if (copyier.translatedCompletely()) {
-                // Copy already copied parameters
-                DecisionVariableDeclaration[] params
-                    = new DecisionVariableDeclaration[tmpCustomOp.getParameterCount()];
-                for (int i = 0; i < params.length; i++) {
-                    params[i] = tmpCustomOp.getParameterDeclaration(i);
+            ConstraintSyntaxTree copiedCST = copyier.getResult();
+            try {
+                if (copyier.translatedCompletely()) {
+                    copiedCST.inferDatatype();
+                    // Copy already copied parameters
+                    DecisionVariableDeclaration[] params
+                        = new DecisionVariableDeclaration[tmpCustomOp.getParameterCount()];
+                    for (int i = 0; i < params.length; i++) {
+                        DecisionVariableDeclaration copiedParameter = (DecisionVariableDeclaration)
+                            copiedDeclarations.get(tmpCustomOp.getParameterDeclaration(i));
+                        if (null != copiedParameter) {
+                            params[i] = copiedParameter;
+                        }
+                    }
+                    
+                    // Create new custom operation
+                    CustomOperation finalCustomOp = new CustomOperation(tmpCustomOp.getReturns(),
+                            tmpCustomOp.getName(), tmpCustomOp.getOperand(), copiedCST, params);
+                    op.setOperation(finalCustomOp);
+                    addToParent(op, op.getParent());
+                    
+                    // Remove from outstanding list
+                    opItr.remove();
+                    elementsResolved = true;
                 }
-                
-                // Create new custom operation
-                CustomOperation finalCustomOp = new CustomOperation(tmpCustomOp.getReturns(),
-                        tmpCustomOp.getName(), tmpCustomOp.getOperand(), copyier.getResult(), params);
-                op.setOperation(finalCustomOp);
-                
-                // Remove from outstanding list
-                opItr.remove();
-                elementsResolved = true;
+            } catch (CSTSemanticException e) {
+                // Re try copy at a later time
             }
         }
         return elementsResolved;
@@ -443,8 +478,9 @@ public class ProjectCopyVisitor extends AbstractProjectVisitor {
             IModelElement orgElement = itr.next();
             boolean ok = buildParents(orgElement);
             if (ok) {
+                restranslationSucceeded = true;
                 orgElement.accept(this);
-                if (null != copiedElements.get(orgElement)) {
+                if (null != copiedElements.get(orgElement) && restranslationSucceeded) {
                     // Declaration was successfully copied
                     elementsResolved = true;
                     itr.remove();
@@ -689,6 +725,7 @@ public class ProjectCopyVisitor extends AbstractProjectVisitor {
             ConstraintSyntaxTree copiedCST = cstCopyier.getResult();
             if (cstCopyier.translatedCompletely() && null != copiedCST) {
                 try {
+                    copiedCST.inferDatatype();
                     copiedDecl.setValue(copiedCST);                
                 } catch (ValueDoesNotMatchTypeException e) {
                     incompleteElements.addUncopyableCST(copiedDecl, cst);
@@ -828,6 +865,8 @@ public class ProjectCopyVisitor extends AbstractProjectVisitor {
         
         if (null != copiedOperandType && null != copiedReturnType && allParamTypesAvailable) {
             OperationDefinition copiedOP = new OperationDefinition((ModelElement) parents.peekFirst());
+            copiedElements.put(opdef, copiedOP);
+            restranslationSucceeded = false;
 
             // Copy parameters
             parents.addFirst(copiedOP);
@@ -843,16 +882,35 @@ public class ProjectCopyVisitor extends AbstractProjectVisitor {
             // Copy CST and create custom operation
             CSTCopyVisitor cstCopy = new CSTCopyVisitor(copiedDeclarations, this);
             orgCustomOp.getFunction().accept(cstCopy);
-            CustomOperation copiedCustomOp = new CustomOperation(copiedReturnType, orgCustomOp.getName(),
-                    copiedOperandType, cstCopy.getResult(), copiedParameters);
-            copiedOP.setOperation(copiedCustomOp);
-            setComment(copiedOP, opdef);
-            addToCurrentParent(copiedOP);
-            copiedElements.put(opdef, copiedOP);
-            if (!cstCopy.translatedCompletely()) {
-                // CustomOperaton was not copied completely, this must be replaced at a alter point.
+            
+            boolean success = false;
+            if (cstCopy.translatedCompletely()) {
+                ConstraintSyntaxTree copiedTree = cstCopy.getResult();
+                try {
+                    copiedTree.inferDatatype();
+                    CustomOperation copiedCustomOp = new CustomOperation(copiedReturnType, orgCustomOp.getName(),
+                            copiedOperandType, cstCopy.getResult(), copiedParameters);
+                    copiedOP.setOperation(copiedCustomOp);
+                    success = true;
+                } catch (CSTSemanticException e) {
+                    // No copy of OperationDefinition was created -> Retry it later
+                    copiedOP.setOperation(orgCustomOp);
+                    incompleteElements.addIncompleteOperation(copiedOP);
+                }
+            } else {
+                // No copy of OperationDefinition was created -> Retry it later
+                copiedOP.setOperation(orgCustomOp);
                 incompleteElements.addIncompleteOperation(copiedOP);
             }
+            
+            if (success) {
+                setComment(copiedOP, opdef);
+                addToCurrentParent(copiedOP);
+                restranslationSucceeded = true;
+            }
+//            if (!cstCopy.translatedCompletely()) {
+//                // CustomOperaton was not copied completely, this must be replaced at a later point.
+//            }
         } else {
             // No copy of OperationDefinition was created -> Retry it later
             incompleteElements.addUnCopiedOperation(opdef);
