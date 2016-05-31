@@ -550,7 +550,13 @@ public class RtVilTypeRegistry extends TypeRegistry implements IClassNameMapperP
             Class<?> cls = classes.get(t);
             if (null != cls) {
                 resolver.inProcess(cls);
-                registerRtType(cls);
+                try {
+                    registerRtType(cls);
+                } catch (NoClassDefFoundError e) { 
+                    // dependent class not found, may not be important, use @QMInternal, but just in case...
+                    EASyLoggerFactory.INSTANCE.getLogger(RtVilTypeRegistry.class, Bundle.ID).error(
+                        "While registering " + cls.getName() + ":" + e.getMessage());        
+                }
                 resolver.done(cls);
             }
         }
