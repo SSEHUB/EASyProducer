@@ -17,6 +17,7 @@ public class VariablePool {
 
     private static final boolean ENABLE = true; // for testing, debugging, measuring
     private Map<Integer, Variable> variablesCache = new HashMap<Integer, Variable>();
+    //private Map<AbstractVariable, Variable> variablesCache = new HashMap<AbstractVariable, Variable>();
 
     /**
      * Returns a {@link Variable} for the given {@link AbstractVariable}.
@@ -30,12 +31,14 @@ public class VariablePool {
         Variable variable;
         if (ENABLE) {
             variable = variablesCache.get(keyObject(decl));
+            //variable = variablesCache.get(decl);
         } else {
             variable = null;
         }
         if (null == variable) {
             variable = new Variable(decl);
             variablesCache.put(keyObject(decl), variable);
+            //variablesCache.put(decl, variable);
         }
         return variable;
     }
@@ -60,6 +63,7 @@ public class VariablePool {
      */
     public final boolean knowsVariable(AbstractVariable decl) {
         return variablesCache.containsKey(keyObject(decl));
+        //return variablesCache.containsKey(decl);
     }
     
     /**
