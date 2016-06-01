@@ -277,10 +277,19 @@ public abstract class ModelManagement <M extends IModel> {
      * @param models the models to be (re)loaded (entries may be <b>null</b>)
      */
     private void reload(List<M> models) {
+        // strategy: outdate listed models, reload then (still) outdated starting with the top-most one
         for (int m = 0; m < models.size(); m++) {
             M tmp = models.get(m);
             if (null != tmp) {
-                reload(tmp);
+                setOutdated(models.get(m));
+            }
+        }
+        for (int m = models.size() - 1; m >= 0; m--) {
+            M tmp = models.get(m);
+            if (null != tmp) {
+                if (isOutdated(tmp)) {
+                    reload(tmp);
+                }
             }
         }
     }
@@ -292,6 +301,17 @@ public abstract class ModelManagement <M extends IModel> {
      * @return the loaded model (may be <code>model</code> if no new model was loaded)
      */
     public M reload(M model) {
+        return reload(model, false);
+    }
+    
+    /**
+     * Update the given model by trying to reload it. Errors are logged.
+     * 
+     * @param model the model to be reloaded
+     * @param deepReload perform a deep reload of the dependent models
+     * @return the loaded model (may be <code>model</code> if no new model was loaded)
+     */
+    public M reload(M model, boolean deepReload) {
         M result = model;
         ModelInfo<M> info = availableModels.getModelInfo(model);
         if (null != info) {
@@ -308,6 +328,11 @@ public abstract class ModelManagement <M extends IModel> {
         }
         if (model == result) {
             events.notifyModelReloadFailed(model);
+        } else {
+            if (null != model && deepReload) {
+                // TODO turn this into an incremental updated structure -> performance
+                reload(ModelUpdateUtils.determineUpdateSeqence(model, ModelUpdateUtils.collectImporting(models)));
+            }
         }
         return result;
     }
@@ -355,24 +380,33 @@ public abstract class ModelManagement <M extends IModel> {
         int count = 0;
         // unload models - from models list, from event mechanism, from resolved models
         for (M p : toUnload) {
-            models.remove(p);
-            events.removeAllListeners(p);
-            List<ModelInfo<M>> info = availableModels.getModelInfos(p);
-            if (null != info) {
-                int size = info.size();
-                for (int i = 0; i < size; i++) {
-                    ModelInfo<M> pInfo = info.get(i);
-                    // no early termination just to be sure
-                    if (pInfo.getResolved() == p) {
-                        pInfo.setResolved(null);
-                    }
-                }
-            }
+            unloadImpl(p);
             count++;
         }
         observer.notifyProgress(task, step++);
         observer.notifyEnd(task);
         return count;
+    }
+
+    /**
+     * Unloads a certain model.
+     * 
+     * @param model the model to unload
+     */
+    private void unloadImpl(M model) {
+        models.remove(model);
+        events.removeAllListeners(model);
+        List<ModelInfo<M>> info = availableModels.getModelInfos(model);
+        if (null != info) {
+            int size = info.size();
+            for (int i = 0; i < size; i++) {
+                ModelInfo<M> pInfo = info.get(i);
+                // no early termination just to be sure
+                if (pInfo.getResolved() == model) {
+                    pInfo.setResolved(null);
+                }
+            }
+        }        
     }
     
     /**
@@ -396,18 +430,20 @@ public abstract class ModelManagement <M extends IModel> {
      */
     private M setResolved(ModelInfo<M> info, M model) {
         M current = info.getResolved();
-        info.setResolved(model);
-        outdated.remove(info);
-        int pos = null == current ? -1 : models.indexOf(current);
-        if (pos >= 0) {
-            models.set(pos, model);
-            if (model != current) { // might be used before but disturbs existing behavior
-                current.dispose();
+        if (model != current) {
+            info.setResolved(model);
+            outdated.remove(info);
+            int pos = null == current ? -1 : models.indexOf(current);
+            if (pos >= 0) {
+                models.set(pos, model);
+                if (model != current) { // might be used before but disturbs existing behavior
+                    current.dispose();
+                }
+            } else {
+                models.add(model);    
             }
-        } else {
-            models.add(model);    
+            events.notifyModelReplacement(current, model);
         }
-        events.notifyModelReplacement(current, model);
         return current;
     }
     
