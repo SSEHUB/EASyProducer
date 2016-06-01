@@ -1,0 +1,10 @@
+import collectionReturnImp;
+
+@advice(nullTest)
+vilScript collectionReturnTest2 (Project source, Project target, Configuration config) {
+
+    main(Project source, Project target, Configuration config) = : {
+        setOf(TestCompound) s = doSet();
+    }
+
+}

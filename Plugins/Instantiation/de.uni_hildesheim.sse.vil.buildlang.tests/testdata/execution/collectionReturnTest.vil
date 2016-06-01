@@ -1,0 +1,13 @@
+@advice(nullTest)
+vilScript collectionReturnest (Project source, Project target, Configuration config) {
+
+    setOf(TestCompound) doSet() = : {
+        setOf(TestCompound) res = {};
+        res;
+    }
+
+    main(Project source, Project target, Configuration config) = : {
+        setOf(TestCompound) s = doSet();
+    }
+
+}
