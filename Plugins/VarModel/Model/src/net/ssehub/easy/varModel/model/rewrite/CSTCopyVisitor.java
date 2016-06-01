@@ -18,6 +18,7 @@ package net.ssehub.easy.varModel.model.rewrite;
 import java.util.Iterator;
 import java.util.Map;
 
+import net.ssehub.easy.varModel.cst.CSTSemanticException;
 import net.ssehub.easy.varModel.cst.ConstantValue;
 import net.ssehub.easy.varModel.cst.ConstraintSyntaxTree;
 import net.ssehub.easy.varModel.cst.ContainerOperationCall;
@@ -35,6 +36,7 @@ import net.ssehub.easy.varModel.model.Project;
 import net.ssehub.easy.varModel.model.datatypes.ICustomOperationAccessor;
 import net.ssehub.easy.varModel.model.datatypes.IDatatype;
 import net.ssehub.easy.varModel.model.values.Value;
+import net.ssehub.easy.varModel.model.values.ValueDoesNotMatchTypeException;
 
 /**
  * Special {@link CopyVisitor} as needed by the {@link ProjectCopyVisitor}.
@@ -139,43 +141,52 @@ class CSTCopyVisitor extends CopyVisitor {
     
     @Override
     public void visitOclFeatureCall(OCLFeatureCall call) {
-        ConstraintSyntaxTree operand = call.getOperand();
-        if (null != operand) {
-            operand.accept(this);
-        }
-        operand = getResult();
-        ConstraintSyntaxTree[] args = new ConstraintSyntaxTree[call.getParameterCount()];
-        for (int p = 0; p < args.length; p++) {
-            call.getParameter(p).accept(this);
-            args[p] =  getResult();
-        }
-        
-        ICustomOperationAccessor accessor = call.getAccessor();
-        if (null != accessor) {
-            ICustomOperationAccessor copiedAccessor = copyier.getCopiedAccessor(accessor);
+        if (complete) {
+            ConstraintSyntaxTree operand = call.getOperand();
+            if (null != operand) {
+                operand.accept(this);
+            }
+            operand = getResult();
+            ConstraintSyntaxTree[] args = new ConstraintSyntaxTree[call.getParameterCount()];
+            for (int p = 0; p < args.length; p++) {
+                call.getParameter(p).accept(this);
+                args[p] =  getResult();
+            }
             
-            // Fallback ;-)
-            if (null == copiedAccessor && forceAccessors && accessor instanceof Project) {
-                Project orgAcessor = (Project) accessor;
-                Iterator<Project> copiedProjectsItr = copyier.getAllCopiedProjects().iterator();
-                while (copiedAccessor == null && copiedProjectsItr.hasNext()) {
-                    Project candidate = copiedProjectsItr.next();
-                    if (orgAcessor.getName().equals(candidate.getName())) {
-                        copiedAccessor = candidate;
-                    }
-                }
+            ICustomOperationAccessor accessor = call.getAccessor();
+            if (null != accessor) {
+                ICustomOperationAccessor copiedAccessor = copyier.getCopiedAccessor(accessor);
                 
+                // Fallback ;-)
+                if (null == copiedAccessor && forceAccessors && accessor instanceof Project) {
+                    Project orgAcessor = (Project) accessor;
+                    Iterator<Project> copiedProjectsItr = copyier.getAllCopiedProjects().iterator();
+                    while (copiedAccessor == null && copiedProjectsItr.hasNext()) {
+                        Project candidate = copiedProjectsItr.next();
+                        if (orgAcessor.getName().equals(candidate.getName())) {
+                            copiedAccessor = candidate;
+                        }
+                    }
+                    
+                }
+    
+                if (null != copiedAccessor) {
+                    accessor = copiedAccessor;
+                } else {
+                    // Avoid null pointer by continuing copy process but mark copy as incomplete.
+                    complete = false;
+                }
             }
-
-            if (null != copiedAccessor) {
-                accessor = copiedAccessor;
+            
+            if (complete) {
+                setResult(new OCLFeatureCall(operand, call.getOperation(), accessor, args));
             } else {
-                // Avoid null pointer by continuing copy process but mark copy as incomplete.
-                complete = false;
+                setResult(call);
             }
+        } else {
+            setResult(call);
+            
         }
-        
-        setResult(new OCLFeatureCall(operand, call.getOperation(), accessor, args));
     }
     
     @Override
@@ -188,7 +199,26 @@ class CSTCopyVisitor extends CopyVisitor {
         ConstraintSyntaxTree expression = getResult();
         DecisionVariableDeclaration[] decls = new DecisionVariableDeclaration[call.getDeclaratorsCount()];
         for (int d = 0; d < decls.length; d++) {
-            decls[d] = mapVariable(call.getDeclarator(d));
+            DecisionVariableDeclaration orgDeclarator = call.getDeclarator(d);
+            decls[d] = mapVariable(orgDeclarator);
+            
+            // Declarators in apply's have a default value
+            if (null != orgDeclarator.getDefaultValue() && null == decls[d].getDefaultValue()) {
+                CSTCopyVisitor dfltValueCopyier = new CSTCopyVisitor(getMapping(), copyier);
+                orgDeclarator.getDefaultValue().accept(dfltValueCopyier);
+                if (dfltValueCopyier.translatedCompletely()) {
+                    ConstraintSyntaxTree copiedDefault = dfltValueCopyier.getResult();
+                    try {
+                        decls[d].setValue(copiedDefault);
+                    } catch (ValueDoesNotMatchTypeException e) {
+                        complete = false;
+                    } catch (CSTSemanticException e) {
+                        complete = false;
+                    }
+                } else {
+                    complete = false;
+                }
+            }
         }
         setResult(new ContainerOperationCall(container, call.getOperation(), expression, decls));
     }

@@ -448,14 +448,18 @@ public class ProjectCopyVisitor extends AbstractProjectVisitor {
                     }
                     
                     // Create new custom operation
-                    CustomOperation finalCustomOp = new CustomOperation(tmpCustomOp.getReturns(),
-                            tmpCustomOp.getName(), tmpCustomOp.getOperand(), copiedCST, params);
-                    op.setOperation(finalCustomOp);
-                    addToParent(op, op.getParent());
-                    
-                    // Remove from outstanding list
-                    opItr.remove();
-                    elementsResolved = true;
+                    IDatatype copiedOperandType = getTranslatedType(tmpCustomOp.getOperand());
+                    IDatatype copiedReturnType = getTranslatedType(tmpCustomOp.getReturns());
+                    if (null != copiedOperandType && null != copiedReturnType) {
+                        CustomOperation finalCustomOp = new CustomOperation(copiedReturnType,
+                                tmpCustomOp.getName(), copiedOperandType, copiedCST, params);
+                        op.setOperation(finalCustomOp);
+                        addToParent(op, op.getParent());
+                        
+                        // Remove from outstanding list
+                        opItr.remove();
+                        elementsResolved = true;
+                    }
                 }
             } catch (CSTSemanticException e) {
                 // Re try copy at a later time
@@ -889,7 +893,7 @@ public class ProjectCopyVisitor extends AbstractProjectVisitor {
                 try {
                     copiedTree.inferDatatype();
                     CustomOperation copiedCustomOp = new CustomOperation(copiedReturnType, orgCustomOp.getName(),
-                            copiedOperandType, cstCopy.getResult(), copiedParameters);
+                            copiedOperandType, copiedTree, copiedParameters);
                     copiedOP.setOperation(copiedCustomOp);
                     success = true;
                 } catch (CSTSemanticException e) {
