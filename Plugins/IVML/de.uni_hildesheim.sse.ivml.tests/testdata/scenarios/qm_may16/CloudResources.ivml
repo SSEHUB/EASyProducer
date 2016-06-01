@@ -1,0 +1,61 @@
+project CloudResources {
+	
+	import Basics;
+	import Observables;	
+	
+	annotate BindingTime bindingTime = BindingTime.compile to CloudResources;
+	
+	abstract compound CloudResource{
+		
+		MemorySize maxMemory;
+		NonNegativeReal maxProcessors;
+		MemorySize maxWorkingStorage;
+	
+		NonEmptyString name;
+		
+		assign(bindingTime = BindingTime.runtimeMon) to {
+			
+			MemorySize UsedHarddiscMem;
+			NonNegativeReal UsedProcessors;
+			MemorySize UsedWorkingStorage;
+			
+			Percentage cloudFit;
+		
+			PositiveInteger ping;
+			Bandwidth bandwidth;
+		
+		}
+			Constraint nameCheck = isDefined(name);
+			Constraint maxWorkingStorageCheck = isDefined(maxWorkingStorage);
+			Constraint maxProcessorsCheck = isDefined(maxProcessors);
+			Constraint maxMemoryCheck = isDefined(maxMemory);
+	}
+	
+	compound PublicCloudEnvironment refines CloudResource{
+		NonEmptyString amiID;
+		NonEmptyString pathToKeyFile;
+	
+		assign(bindingTime = BindingTime.runtimeMon) to {				
+			NonNegativeReal costPerHour; 
+		}
+		
+		Constraint amiIDCheck = isDefined(amiID);
+		Constraint pathToKeyFileCheck = isDefined(pathToKeyFile);
+		
+		if ping > 200 or (UsedHarddiscMem/maxMemory) > 0.9 or (UsedWorkingStorage/UsedWorkingStorage) > 0.9 or (UsedProcessors/maxProcessors) > 0.9
+			then cloudFit = 0
+			else cloudFit = 0.1*(UsedHarddiscMem/maxMemory) + 0.3*costPerHour + 0.1*(UsedWorkingStorage/UsedWorkingStorage) + 0.2*(UsedProcessors/maxProcessors) + 0.3*(1-(ping/200))
+		endif;			
+	}
+	
+	compound PrivateCloudEnvironment refines CloudResource{		
+		NonEmptyString pathToTemplate;		
+		
+		if ping > 200 or (UsedHarddiscMem/maxMemory) > 0.9 or (UsedWorkingStorage/UsedWorkingStorage) > 0.9 or (UsedProcessors/maxProcessors) > 0.9
+			then cloudFit = 0
+			else cloudFit = 0.2*(UsedHarddiscMem/maxMemory) + 0.2*(UsedWorkingStorage/UsedWorkingStorage) + 0.2*(UsedProcessors/maxProcessors) + 0.4*(1-(ping/200))
+		endif;			
+	}
+	
+	setOf(refTo(CloudResource)) cloudEnvironments;
+}

@@ -1,0 +1,86 @@
+project Observables {
+	
+    import Basics;
+	
+	annotate BindingTime bindingTime = BindingTime.compile to Observables;
+
+    // don't move these alias definitions!
+    // define each category of observable / quality property as an own type
+    // avoid derived types with constraints here - speed up reasoning
+    
+    // time-behavior
+    typedef Latency Integer;
+    typedef Throughput_Item Integer;
+    typedef Throughput_Volume Integer;
+    typedef EnactmentDelay Integer;
+    
+    // resource utilization
+    typedef UsedMemory Integer;
+    typedef AvailableMemory Integer;
+    typedef AvailableFrequency Integer;
+    typedef UsedMachines Integer;
+    typedef AvailableMachines Integer;
+    typedef Bandwidth Real;
+    typedef Capacity Real;
+    typedef Executors Integer;
+    typedef Hosts Integer;
+    typedef Tasks Integer;
+    typedef IsAvailable Boolean;
+    typedef Load Real;
+    
+    typedef Accuracy_Confidence Real;
+    typedef Accuracy_ErrorRate Real;
+    typedef Believability Real;
+    typedef Relevancy Real;
+    typedef Completeness Real;
+    // MPVolatility?
+    
+    typedef Volume Real;
+    typedef Velocity Real;
+    typedef Volatility Real;
+    typedef Variety Integer;
+    typedef Items Real;
+
+    abstract compound Observable {
+    	NonEmptyString type; // not nice
+    }
+
+    compound QualityParameter refines Observable {
+    }
+
+    compound ConfiguredQualityParameter refines QualityParameter{
+    	NonEmptyString monitorCls = null;
+    }
+
+    setOf(ConfiguredQualityParameter) qualityParameters = {
+    	{type="Latency"},
+    	{type="Throughput_Item"},
+    	{type="Throughput_Volume"},
+    	{type="EnactmentDelay"},
+    	{type="UsedMemory"},
+    	{type="UsedMachines"},
+    	{type="AvailableMachines"},
+    	{type="Bandwidth"},
+    	{type="Capacity"},
+    	{type="Executors"},
+        {type="Tasks"},
+        {type="IsAvailable"},
+    	{type="Accuracy_Confidence"},
+    	{type="Accuracy_ErrorRate"},
+    	{type="Believability"},
+    	{type="Relevancy"},
+    	{type="Completeness"},
+    	{type="Volume"},
+    	{type="Velocity"},
+    	{type="Volatility"},
+    	{type="Variety"}
+    };
+    Constraint paramTypes = qualityParameters->collect(p|p.type).size() == qualityParameters.size();
+    
+    setOf(ConfiguredQualityParameter) configuredParameters = {};
+    Constraint cfgParamTypes = configuredParameters->collect(p|p.type).size() == configuredParameters.size();
+    	 
+    freeze {
+    	qualityParameters;
+    }
+} 

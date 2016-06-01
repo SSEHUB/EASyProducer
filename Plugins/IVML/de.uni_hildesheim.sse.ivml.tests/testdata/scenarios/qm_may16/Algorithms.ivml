@@ -1,0 +1,56 @@
+project Algorithms {
+
+    import Basics;
+    import Observables;
+	import ReconfigurableHardware;
+	
+	annotate BindingTime bindingTime = BindingTime.compile to Algorithms;
+	 
+	compound Algorithm {
+		NonEmptyString name; 
+		ArtifactString artifact;
+		ClassString class;
+		Description description;
+		Tuples input;    
+		Tuples output;
+		Parameters parameters;
+		refTo(HwNode) hwNode;
+		OptionalClassString algTopologyClass = null;
+		refTo(Algorithm) successor = null;
+		setOf(Constraint) constraints;
+		
+	    assign(bindingTime = BindingTime.runtimeMon) to {
+			Latency latency;
+			Throughput_Item throughputItems;
+			Throughput_Volume throughputVolume;
+			UsedMemory memoryUse;
+            Accuracy_Confidence accuracyConfidence;
+            Accuracy_ErrorRate accuracyErrorRate;
+            Believability believability;
+            Relevancy relevancy;
+            Completeness completeness;
+            Volume volume;
+            Velocity velocity;
+            Variety variety;
+            
+            Hosts pipeline_Hosts;
+            Items family_Items;
+            Boolean isValid = true;
+            
+            // TODO runtime enact
+            refTo(HwNode) actualHwNode;
+		} 
+		Constraint inputGivenCheck = input.isDefined(); //untested
+		Constraint outputGivenCheck = output.isDefined(); //untested
+	} 
+	
+	compound HardwareAlgorithm refines Algorithm {
+		PositiveInteger senderParallelism;
+		PositiveInteger receiverParallelism;
+		OptionalPositiveInteger senderNumTasks;
+		OptionalPositiveInteger receiverNumTasks;
+	}
+	
+	setOf(refTo(Algorithm)) algorithms;
+	Constraint algNamesUnique = algorithms->collect(a|a.name.substitutes(" ", "")).size() == algorithms.size(); 
+}

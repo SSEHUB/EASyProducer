@@ -1,0 +1,52 @@
+project SubTopologyCfg {
+
+	import Basics;
+	import Pipelines;
+	import FamiliesCfg;
+	import DataManagementCfg;
+	annotate BindingTime bindingTime = BindingTime.compile to SubTopology;
+	Pipeline SubTopology;
+	SubTopology = {name = "CorrelationSW", sources = {/*refBy(SubTopology_Source0), refBy(SubTopology_Source1)*/}, connectors = {refBy(SubTopology_FamilyElement0)}, subPipelineFamily = refBy(fCorrelationFinancial),numworkers = 13, artifact = "eu.qualimaster:CorrelationSW:0.0.1-SNAPSHOT", debug = false, fastSerialization = false, isSubPipeline = true, constraints = {}};
+	
+//	Source SubTopology_Source0;//source to mapper
+//	Source SubTopology_Source1;//source to hayashiyoshida
+//	Flow SubTopology_Flow4;//source flow to mapper
+//	Flow SubTopology_Flow5;//source flow to hayashiyoshida
+	Flow SubTopology_Flow0;
+	Flow SubTopology_Flow1;
+	Flow SubTopology_Flow2;
+//	Flow SubTopology_Flow3; //a flow cycle case
+	FamilyElement SubTopology_FamilyElement0;
+	FamilyElement SubTopology_FamilyElement1;
+//	Sink SubTopology_Sink0;
+//	Flow SubTopology_Flow6;
+//	SubTopology_Source0 = {output = {refBy(SubTopology_Flow4)}, source = refBy(randomSource), parallelism = 1, name = "testMaperSource", constraints = {}};
+//	SubTopology_Source1 = {output = {refBy(SubTopology_Flow5)}, source = refBy(randomSource), parallelism = 1, name = "testHayaSource", constraints = {}};
+//	SubTopology_Sink0 = {sink = refBy(priorSnk), parallelism = 1, name = "Sink", constraints = {}};
+	SubTopology_Flow0 = {destination = refBy(SubTopology_FamilyElement1), grouping = Grouping.directGrouping, tupleType = refBy(fMapper.output[0]), name = "f1", constraints = {}};
+	SubTopology_Flow1 = {destination = refBy(SubTopology_FamilyElement1), grouping = Grouping.directGrouping, tupleType = refBy(fMapper.output[1]), name = "f2", constraints = {}};
+	SubTopology_Flow2 = {destination = refBy(SubTopology_FamilyElement1), grouping = Grouping.allGrouping, tupleType = refBy(fMapper.output[2]), name = "f3", constraints = {}};
+//	SubTopology_Flow3 = {destination = refBy(SubTopology_FamilyElement1), grouping = Grouping.allGrouping, tupleType = refBy(fHayashiYoshida.output[1]), name = "f4", constraints = {}};
+//	SubTopology_Flow4 = {destination = refBy(SubTopology_FamilyElement0), grouping = Grouping.shuffleGrouping, tupleType = refBy(fMapper.input[2]), name = "f4", constraints = {}};
+//	SubTopology_Flow5 = {destination = refBy(SubTopology_FamilyElement1), grouping = Grouping.shuffleGrouping, tupleType = refBy(fHayashiYoshida.input[3]), name = "f5", constraints = {}};
+//	SubTopology_Flow6 = {destination = refBy(SubTopology_Sink0), grouping = Grouping.shuffleGrouping, tupleType = refBy(fHayashiYoshida.output[0]), name = "f6", constraints = {}};
+	SubTopology_FamilyElement0 = {family = refBy(fMapper), output = {refBy(SubTopology_Flow0),refBy(SubTopology_Flow1),refBy(SubTopology_Flow2)}, parallelism = 1, name = "Mapper", constraints = {}};
+	SubTopology_FamilyElement1 = {family = refBy(fHayashiYoshida), output = {/*refBy(SubTopology_Flow6)*/}, parallelism = 13, name = "HayashiYoshida", constraints = {}};
+	
+	freeze {
+		SubTopology;
+		SubTopology_Flow0;
+	    SubTopology_Flow1;
+	    SubTopology_Flow2;
+//	    SubTopology_Flow3;
+//        SubTopology_Source0;
+//	    SubTopology_Flow4;
+//	    SubTopology_Source1;
+//	    SubTopology_Flow5;
+		SubTopology_FamilyElement0;
+		SubTopology_FamilyElement1;
+//		SubTopology_Sink0;
+//		SubTopology_Flow6;
+	} but (f|f.bindingTime >= BindingTime.runtimeMon)
+
+}

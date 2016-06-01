@@ -1,0 +1,34 @@
+project PipelineVar_5Cfg {
+
+	import Basics;
+	import Pipelines;
+	import FamiliesCfg;
+	import DataManagementCfg;
+	annotate BindingTime bindingTime = BindingTime.compile to PipelineVar_5Cfg;
+	Pipeline PipelineVar_5;
+	Source PipelineVar_5_Source0;
+	Flow PipelineVar_5_Flow0;
+	FamilyElement PipelineVar_5_FamilyElement0;
+	Flow PipelineVar_5_Flow1;
+	FamilyElement PipelineVar_5_FamilyElement1;
+	Flow PipelineVar_5_Flow2;
+	FamilyElement PipelineVar_5_FamilyElement2;
+	PipelineVar_5_FamilyElement2 = {family = refBy(FamilyVar_20), output = {}, parallelism = 1, name = "recom", constraints = {}};
+	PipelineVar_5_Flow2 = {destination = refBy(PipelineVar_5_FamilyElement2), grouping = Grouping.shuffleGrouping, name = "f3", constraints = {}};
+	PipelineVar_5_FamilyElement1 = {family = refBy(fTwitterEventDetection), output = {refBy(PipelineVar_5_Flow2)}, parallelism = 1, name = "ed", constraints = {}};
+	PipelineVar_5_Flow1 = {destination = refBy(PipelineVar_5_FamilyElement1), grouping = Grouping.shuffleGrouping, name = "f2", constraints = {}};
+	PipelineVar_5_FamilyElement0 = {family = refBy(FamilyVar_21), output = {refBy(PipelineVar_5_Flow1)}, parallelism = 1, name = "stockParser", constraints = {}};
+	PipelineVar_5_Flow0 = {destination = refBy(PipelineVar_5_FamilyElement0), grouping = Grouping.shuffleGrouping, name = "f1", constraints = {}};
+	PipelineVar_5_Source0 = {output = {refBy(PipelineVar_5_Flow0)}, source = refBy(twitter), parallelism = 1, name = "source1", constraints = {}};
+	PipelineVar_5 = {name = "SimpleEDPipeline", sources = {refBy(PipelineVar_5_Source0)}, numworkers = 1, artifact = "eu.qualimaster:SimpleEDPipeline:0.0.1-SNAPSHOT", debug = false, fastSerialization = false, constraints = {}};
+	freeze {
+		PipelineVar_5;
+		PipelineVar_5_Source0;
+		PipelineVar_5_Flow0;
+		PipelineVar_5_FamilyElement0;
+		PipelineVar_5_Flow1;
+		PipelineVar_5_FamilyElement1;
+		PipelineVar_5_Flow2;
+		PipelineVar_5_FamilyElement2;
+	} but (f|f.bindingTime >= BindingTime.runtimeMon)
+}

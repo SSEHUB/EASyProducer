@@ -1,0 +1,110 @@
+project Basics {
+
+    // common type definitions
+
+    typedef NaturalNumber Integer with (NaturalNumber >= 0 and isDefined(NaturalNumber));
+	typedef PositiveInteger Integer with (PositiveInteger > 0 and isDefined(PositiveInteger));
+	typedef OptionalNaturalNumber Integer with (OptionalNaturalNumber >= 0);
+	typedef OptionalPositiveInteger Integer with (OptionalPositiveInteger > 0);
+	typedef NonEmptyString String with (NonEmptyString.size() > 0 and isDefined(NonEmptyString));
+	typedef PortInteger Integer with (PortInteger > 0 and PortInteger < 65536 and isDefined(PortInteger));
+	typedef NonNegativeReal Real with (NonNegativeReal >= 0 and isDefined(NonNegativeReal));
+	typedef OptionalNonNegativeReal Real with (OptionalNonNegativeReal >= 0);
+	typedef ArtifactString String with (ArtifactString.size() > 0 and ArtifactString.matches(".+:.+:.+") and isDefined(ArtifactString)); 
+	typedef OptionalArtifactString String with (OptionalArtifactString.size() > 0 implies OptionalArtifactString.matches(".+:.+:.+")); 
+	typedef ClassString OptionalClassString with (ClassString.size() > 0 and isDefined(ClassString));
+	typedef OptionalClassString String; 
+	typedef Description String;
+	typedef UrlString OptionalUrlString with (isDefined(UrlString));
+	typedef OptionalUrlString String with (OptionalUrlString.size() > 0);
+	
+	typedef MemorySize PositiveInteger;
+	typedef Frequency PositiveInteger;
+	typedef OptionalMemorySize OptionalPositiveInteger;
+	typedef OptionalFrequency OptionalPositiveInteger;
+	typedef Percentage Real with (Percentage >=0 and Percentage <=1);
+	
+	enum BindingTime {compile = 0, startup = 1, runtimeMon = 2, runtimeEnact = 3};
+	annotate BindingTime bindingTime = BindingTime.compile to Basics;
+
+    compound FieldType {
+   	    NonEmptyString name;
+   	    ClassString class;
+   	    OptionalArtifactString artifact; // optional
+   	    OptionalClassString serializer; // optional
+   	    OptionalArtifactString serializerArtifact; // optional
+   	    // currently unclear: own compounds for inherited types, generic types
+    }
+
+    setOf(refTo(FieldType)) types = {};
+	Constraint typeNamesUnique = types->collect(t|t.name).size() == types.size();
+
+	typedef Tuples sequenceOf(Tuple) /*with (isDefined(Tuples))*/;
+	typedef Parameters sequenceOf(Parameter) with (Parameters->collect(p|p.name).size() == Parameters.size()/*  and isDefined(Parameters)*/);
+	typedef Fields sequenceOf(Field) with (Fields->collect(f|f.name).hasDuplicates() == false/* and isDefined(Fields)*/);
+	
+	// for the moment we assume that we will not have nested Tuples
+	compound Tuple { // this conception is based on how the Storm describes the stream
+		NonEmptyString name;
+		Fields fields;
+		Constraint fieldsCheck = fields.size() > 0; 
+	} 
+	
+	compound Field { // in order to fit the data structure in the Storm
+		NonEmptyString name;
+		refTo(FieldType) type;
+		Boolean keyPart = false; //TODO: need to add constraint if the keypart is used in the instantiation
+		Constraint typeCheck = isDefined(type);
+	}
+	
+	// parameters are different than fields as they may have a configured default value for startup
+	
+	compound Parameter {
+		NonEmptyString name;		
+	}
+	
+	compound IntegerParameter refines Parameter {
+		Integer defaultValue;
+		assign(bindingTime = BindingTime.runtimeEnact) to {
+			Integer value; // this may get a "default/startup" value from the configuration
+		}
+		Constraint defaultValueCheck = isDefined(defaultValue);
+	}
+	
+	compound StringParameter refines Parameter {
+		String defaultValue;
+		assign(bindingTime = BindingTime.runtimeEnact) to {
+			String value; // this may get a "default/startup" value from the configuration
+		}
+		Constraint defaultValueCheck = isDefined(defaultValue);
+	}
+
+	compound RealParameter refines Parameter {
+		Real defaultValue;
+		assign(bindingTime = BindingTime.runtimeEnact) to {
+			Real value; // this may get a "default/startup" value from the configuration
+		}
+		Constraint defaultValueCheck = isDefined(defaultValue);
+	}
+
+	compound BooleanParameter refines Parameter {
+		Boolean defaultValue;
+		assign(bindingTime = BindingTime.runtimeEnact) to {
+			Boolean value; // this may get a "default/startup" value from the configuration
+		}
+		Constraint defaultValueCheck = isDefined(defaultValue);
+	}
+	
+	compound LongParameter refines Parameter {
+		Real defaultValue;
+		assign(bindingTime = BindingTime.runtimeEnact) to {
+			Real value; // this may get a "default/startup" value from the configuration
+		}
+		Constraint defaultValueCheck = isDefined(defaultValue);
+	}
+
+    // for now this is just some kind of constant. To be configured from infrastructure via propagation.	
+	Real capacityLowWatermark = 0.1;
+	Real capacityHighWatermark = 0.6; // for testing, was 0.8
+
+}
