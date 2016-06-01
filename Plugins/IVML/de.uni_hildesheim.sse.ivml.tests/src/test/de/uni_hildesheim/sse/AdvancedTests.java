@@ -2,18 +2,54 @@ package test.de.uni_hildesheim.sse;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
+import java.util.Set;
+import java.util.Stack;
 
 import org.junit.Assert;
 import org.junit.Test;
 
 import de.uni_hildesheim.sse.translation.ErrorCodes;
 import de.uni_hildesheim.sse.translation.UnknownTypeException;
+import net.ssehub.easy.varModel.cst.AttributeVariable;
 import net.ssehub.easy.varModel.cst.CSTSemanticException;
+import net.ssehub.easy.varModel.cst.CompoundAccess;
+import net.ssehub.easy.varModel.cst.CompoundInitializer;
+import net.ssehub.easy.varModel.cst.ConstantValue;
+import net.ssehub.easy.varModel.cst.ContainerInitializer;
+import net.ssehub.easy.varModel.cst.ContainerOperationCall;
+import net.ssehub.easy.varModel.cst.IConstraintTreeVisitor;
+import net.ssehub.easy.varModel.cst.IfThen;
+import net.ssehub.easy.varModel.cst.Let;
+import net.ssehub.easy.varModel.cst.OCLFeatureCall;
+import net.ssehub.easy.varModel.cst.Parenthesis;
+import net.ssehub.easy.varModel.cst.Self;
+import net.ssehub.easy.varModel.cst.UnresolvedExpression;
+import net.ssehub.easy.varModel.cst.Variable;
+import net.ssehub.easy.varModel.cst.VariablePool;
 import net.ssehub.easy.varModel.management.VarModel;
+import net.ssehub.easy.varModel.model.AbstractVariable;
+import net.ssehub.easy.varModel.model.AbstractVisitor;
+import net.ssehub.easy.varModel.model.Attribute;
+import net.ssehub.easy.varModel.model.AttributeAssignment;
+import net.ssehub.easy.varModel.model.Comment;
+import net.ssehub.easy.varModel.model.CompoundAccessStatement;
+import net.ssehub.easy.varModel.model.Constraint;
+import net.ssehub.easy.varModel.model.DecisionVariableDeclaration;
+import net.ssehub.easy.varModel.model.FreezeBlock;
 import net.ssehub.easy.varModel.model.ModelQueryException;
+import net.ssehub.easy.varModel.model.OperationDefinition;
+import net.ssehub.easy.varModel.model.PartialEvaluationBlock;
 import net.ssehub.easy.varModel.model.Project;
+import net.ssehub.easy.varModel.model.ProjectImport;
+import net.ssehub.easy.varModel.model.ProjectInterface;
+import net.ssehub.easy.varModel.model.datatypes.CustomOperation;
+import net.ssehub.easy.varModel.model.datatypes.DerivedDatatype;
+import net.ssehub.easy.varModel.model.datatypes.EnumLiteral;
+import net.ssehub.easy.varModel.model.datatypes.Reference;
+import net.ssehub.easy.varModel.model.datatypes.Sequence;
 
 /**
  * A test class for blackbox testing parser and type resolution. Please note
@@ -659,6 +695,264 @@ public class AdvancedTests extends AbstractTest {
     @Test
     public void testQualifiedNameInOperation1() throws IOException {
         assertEqual(createFile("QualifiedNameInOperation1"), null, null);
+    }
+    
+    /**
+     * Tests uniqueness of variable nodes for local decision variables in user-defined
+     * variables.
+     * 
+     * @throws IOException Should not occur
+     */
+    @Test
+    public void testUserDefined() throws IOException {
+        List<Project> parsed = assertEqual(createFile("userDefined"), null, null);
+        
+        LocalVariableCheckVisitor vis = new LocalVariableCheckVisitor();
+        for (int p = 0; p < parsed.size(); p++) {
+            Project prj = parsed.get(p);
+            prj.accept(vis);
+        }
+    }
+    
+    /**
+     * Tests a visitor for checking local variables.
+     * 
+     * @author Holger Eichelberger
+     */
+    private class LocalVariableCheckVisitor extends AbstractVisitor implements IConstraintTreeVisitor {
+
+        private Set<Integer> globalVarDecls = new HashSet<Integer>();
+        private Stack<Set<Integer>> localVars = new Stack<Set<Integer>>();
+        private String projectName;
+        private String currentOp = "";
+        
+        /**
+         * Pushes a local variable layer.
+         */
+        private void pushLayer() {
+            localVars.push(new HashSet<Integer>());
+        }
+        
+        /**
+         * Pops a local variable layer.
+         */
+        private void popLayer() {
+            localVars.pop();
+        }
+        
+        /**
+         * Adds a local variable.
+         * 
+         * @param var the local variable
+         */
+        private void addLocalVar(AbstractVariable var) {
+            localVars.peek().add(VariablePool.keyObject(var));
+        }
+        
+        /**
+         * Adds a global variable.
+         * 
+         * @param var the variable
+         */
+        private void addGlobalVar(AbstractVariable var) {
+            globalVarDecls.add(VariablePool.keyObject(var));
+        }
+        
+        /**
+         * Asserts the proper existence of a variable.
+         * 
+         * @param var the variable
+         */
+        private void assertVariable(AbstractVariable var) {
+            if (null != var) {
+                Integer key = VariablePool.keyObject(var);
+                boolean exists = globalVarDecls.contains(key);
+                for (int l = 0; !exists && l < localVars.size(); l++) {
+                    exists = localVars.get(l).contains(key);
+                }
+                Assert.assertTrue("Variable " + var.getName() + " in " + projectName + currentOp 
+                    + " is not declared correctly", exists);
+            }
+        }
+        
+        @Override
+        public void visitProject(Project project) {
+            projectName = project.getName();
+            super.visitProject(project);
+        }
+        
+        @Override
+        public void visitProjectImport(ProjectImport pImport) {
+        }
+
+        @Override
+        public void visitDecisionVariableDeclaration(DecisionVariableDeclaration decl) {
+            addGlobalVar(decl);
+        }
+
+        @Override
+        public void visitAttribute(Attribute attribute) {
+            addGlobalVar(attribute);
+        }
+
+        @Override
+        public void visitConstraint(Constraint constraint) {
+            constraint.getConsSyntax().accept(this);
+        }
+
+        @Override
+        public void visitFreezeBlock(FreezeBlock freeze) {
+        }
+
+        @Override
+        public void visitOperationDefinition(OperationDefinition opdef) {
+            CustomOperation custOp = opdef.getOperation();
+            currentOp = " " + custOp.getSignature();
+            pushLayer();
+            for (int p = 0; p < custOp.getParameterCount(); p++) {
+                addLocalVar(custOp.getParameterDeclaration(p));
+            }
+            custOp.getFunction().accept(this);
+            popLayer();
+            currentOp = "";
+        }
+
+        @Override
+        public void visitPartialEvaluationBlock(PartialEvaluationBlock block) {
+        }
+
+        @Override
+        public void visitProjectInterface(ProjectInterface iface) {
+        }
+
+        @Override
+        public void visitComment(Comment comment) {
+        }
+
+        @Override
+        public void visitAttributeAssignment(AttributeAssignment assignment) {
+            for (int a = 0; a < assignment.getAssignmentCount(); a++) {
+                assignment.getAssignment(a).accept(this);
+            }
+            for (int e = 0; e < assignment.getElementCount(); e++) {
+                assignment.getElement(e).accept(this);
+            }
+        }
+
+        @Override
+        public void visitCompoundAccessStatement(CompoundAccessStatement access) {
+            assertVariable(access.getCompoundVariable());
+            assertVariable(access.getSlotDeclaration());
+        }
+
+        @Override
+        public void visitDerivedDatatype(DerivedDatatype datatype) {
+        }
+
+        @Override
+        public void visitEnumLiteral(EnumLiteral literal) {
+        }
+
+        @Override
+        public void visitReference(Reference reference) {
+        }
+
+        @Override
+        public void visitSequence(Sequence sequence) {
+        }
+
+        @Override
+        public void visitSet(net.ssehub.easy.varModel.model.datatypes.Set set) {
+        }
+
+        @Override
+        public void visitConstantValue(ConstantValue value) {
+        }
+
+        @Override
+        public void visitVariable(Variable variable) {
+            assertVariable(variable.getVariable());
+        }
+
+        @Override
+        public void visitAnnotationVariable(AttributeVariable variable) {
+        }
+
+        @Override
+        public void visitParenthesis(Parenthesis parenthesis) {
+            parenthesis.getExpr().accept(this);
+        }
+
+        @Override
+        public void visitComment(net.ssehub.easy.varModel.cst.Comment comment) {
+        }
+
+        @Override
+        public void visitOclFeatureCall(OCLFeatureCall call) {
+            call.getOperand().accept(this);
+            for (int p = 0; p < call.getParameterCount(); p++) {
+                call.getParameter(p).accept(this);
+            }
+        }
+
+        @Override
+        public void visitLet(Let let) {
+            pushLayer();
+            addLocalVar(let.getVariable());
+            let.getInitExpression().accept(this);
+            let.getInExpression().accept(this);
+            popLayer();
+        }
+
+        @Override
+        public void visitIfThen(IfThen ifThen) {
+            ifThen.getIfExpr().accept(this);
+            ifThen.getThenExpr().accept(this);
+            if (null != ifThen.getElseExpr()) {
+                ifThen.getElseExpr().accept(this);
+            }
+        }
+
+        @Override
+        public void visitContainerOperationCall(ContainerOperationCall call) {
+            pushLayer();
+            for (int d = 0; d < call.getDeclaratorsCount(); d++) {
+                addLocalVar(call.getDeclarator(d));
+            }
+            call.getExpression().accept(this);
+            popLayer();
+        }
+
+        @Override
+        public void visitCompoundAccess(CompoundAccess access) {
+            if (null != access.getCompoundExpression()) {
+                access.getCompoundExpression().accept(this);
+            }
+            assertVariable(access.getResolvedSlot());
+        }
+
+        @Override
+        public void visitUnresolvedExpression(UnresolvedExpression expression) {
+        }
+
+        @Override
+        public void visitCompoundInitializer(CompoundInitializer initializer) {
+            for (int e = 0; e < initializer.getExpressionCount(); e++) {
+                initializer.getExpression(e).accept(this);
+            }
+        }
+
+        @Override
+        public void visitContainerInitializer(ContainerInitializer initializer) {
+            for (int e = 0; e < initializer.getExpressionCount(); e++) {
+                initializer.getExpression(e).accept(this);
+            }
+        }
+
+        @Override
+        public void visitSelf(Self self) {
+        }
+        
     }
     
     /**

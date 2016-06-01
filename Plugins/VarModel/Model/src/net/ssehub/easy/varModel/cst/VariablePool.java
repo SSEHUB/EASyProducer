@@ -16,7 +16,7 @@ import net.ssehub.easy.varModel.model.AbstractVariable;
 public class VariablePool {
 
     private static final boolean ENABLE = true; // for testing, debugging, measuring
-    private Map<AbstractVariable, Variable> variablesCache = new HashMap<AbstractVariable, Variable>();
+    private Map<Integer, Variable> variablesCache = new HashMap<Integer, Variable>();
 
     /**
      * Returns a {@link Variable} for the given {@link AbstractVariable}.
@@ -29,15 +29,27 @@ public class VariablePool {
     public final Variable obtainVariable(AbstractVariable decl) {
         Variable variable;
         if (ENABLE) {
-            variable = variablesCache.get(decl);
+            variable = variablesCache.get(keyObject(decl));
         } else {
             variable = null;
         }
         if (null == variable) {
             variable = new Variable(decl);
-            variablesCache.put(decl, variable);
+            variablesCache.put(keyObject(decl), variable);
         }
         return variable;
+    }
+    
+    /**
+     * Returns the key object for hashes, also for tests. This is needed, as the equals/hashcode
+     * implementation of {@link AbstractVariable} is just based on the name and does not cope with
+     * local variables. This method shall remind dependent implementations about the aforementionied problem.
+     * 
+     * @param decl the declaration
+     * @return the key/hash object
+     */
+    public static final Integer keyObject(AbstractVariable decl) {
+        return System.identityHashCode(decl);
     }
     
     /**
@@ -47,7 +59,7 @@ public class VariablePool {
      * @return <code>true</code> if the pool knows the variable, <code>false</code> else
      */
     public final boolean knowsVariable(AbstractVariable decl) {
-        return variablesCache.containsKey(decl);
+        return variablesCache.containsKey(keyObject(decl));
     }
     
     /**

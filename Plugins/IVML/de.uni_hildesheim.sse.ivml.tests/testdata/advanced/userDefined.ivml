@@ -1,0 +1,15 @@
+project userDefined {
+
+    version v0;
+    compound PipelineNode {
+    }
+
+    compound Flow {
+        refTo(PipelineNode) destination;
+    }
+
+    def static Boolean typeCheck(setOf(refTo(Flow)) output) = output->forAll(f|typeCheck(f.destination) and typeCheck2(f.destination));
+    def static Boolean typeCheck2(setOf(refTo(Flow)) output) = output->forAll(f|typeCheck(f.destination) and typeCheck2(f.destination));
+    def static Boolean typeCheck(PipelineNode node) = true;
+    def static Boolean typeCheck2(PipelineNode node) = true;
+}
