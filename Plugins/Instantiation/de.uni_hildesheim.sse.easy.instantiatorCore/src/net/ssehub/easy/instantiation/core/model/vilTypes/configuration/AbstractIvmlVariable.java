@@ -5,6 +5,7 @@ import java.util.List;
 
 import net.ssehub.easy.basics.logger.EASyLoggerFactory;
 import net.ssehub.easy.instantiation.core.Bundle;
+import net.ssehub.easy.instantiation.core.model.common.VilException;
 import net.ssehub.easy.instantiation.core.model.vilTypes.ArraySequence;
 import net.ssehub.easy.instantiation.core.model.vilTypes.ArraySet;
 import net.ssehub.easy.instantiation.core.model.vilTypes.Invisible;
@@ -734,6 +735,26 @@ public abstract class AbstractIvmlVariable extends IvmlElement {
     @Invisible
     public String getInstanceName() {
         return net.ssehub.easy.varModel.confModel.Configuration.getInstanceName(getVariable());
+    }
+    
+    /**
+     * Creates a value matching to this variable and tries to assign it.
+     *
+     * @param override try overriding the existing value (<code>true</code>) or just do nothing if a value already 
+     *    exists (<code>false</code>)
+     * @throws VilException if creating the value or assigning it fails
+     */
+    public void createValue(boolean override) throws VilException {
+        if (override || (!override && !isConfigured())) {
+            try {
+                origVariable.setValue(ValueFactory.createValue(origVariable.getDeclaration().getType()), 
+                    AssignmentState.ASSIGNED);
+            } catch (ConfigurationException e) {
+                throw new VilException(e.getMessage(), e, VilException.ID_RUNTIME);
+            } catch (ValueDoesNotMatchTypeException e) {
+                throw new VilException(e.getMessage(), e, VilException.ID_RUNTIME);
+            }
+        }
     }
 
 }
