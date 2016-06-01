@@ -149,22 +149,28 @@ public class IvmlTypeDescriptor extends AbstractIvmlTypeDescriptor implements IA
         // final check at runtime
         // check direct type or decision variable
         boolean assignable = (desc == this || IvmlTypes.decisionVariableType() == desc);
-        if (!assignable && null != desc) {
+        if (!assignable && desc instanceof AbstractIvmlTypeDescriptor) {
             // check refines hierarchy on desc
-            TypeDescriptor<?> iter = desc;
-            do {
+            AbstractIvmlTypeDescriptor iter = (AbstractIvmlTypeDescriptor) desc;
+            assignable = isEqual(iter, this);
+            while (!assignable && null != iter) {
                 if (iter instanceof AbstractIvmlTypeDescriptor) {
                     iter = ((AbstractIvmlTypeDescriptor) iter).getRefines();
-                    assignable = (iter == this);
+                    assignable = isEqual(iter, this);
                 } else {
                     iter = null;
                 }
-            } while (!assignable && null != iter);
+            }
         }
         if (!assignable && null != baseType) {
             assignable = baseType.isAssignableFrom(desc);
         }
         return assignable;
+    }
+    
+    @Override
+    protected IDatatype getIvmlType() {
+        return type;
     }
     
     @Invisible

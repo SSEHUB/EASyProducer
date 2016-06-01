@@ -18,6 +18,7 @@ import net.ssehub.easy.varModel.model.ContainableModelElement;
 import net.ssehub.easy.varModel.model.DecisionVariableDeclaration;
 import net.ssehub.easy.varModel.model.IDecisionVariableContainer;
 import net.ssehub.easy.varModel.model.Project;
+import net.ssehub.easy.varModel.model.datatypes.IDatatype;
 
 /**
  * Implements a dynamic type descriptor for a project containing IVML decision variables. 
@@ -178,6 +179,11 @@ class IvmlProjectTypeDescriptor extends AbstractIvmlTypeDescriptor implements IA
     @Override
     public boolean isInstantiator() {
         return false;
+    }
+
+    @Override
+    protected IDatatype getIvmlType() {
+        return project.getType();
     }
 
 }

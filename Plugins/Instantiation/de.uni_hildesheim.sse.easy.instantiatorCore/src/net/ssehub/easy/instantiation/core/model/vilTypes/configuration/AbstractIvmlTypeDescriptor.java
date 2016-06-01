@@ -248,5 +248,24 @@ abstract class AbstractIvmlTypeDescriptor extends TypeDescriptor<DecisionVariabl
         // exclude further specialization in this hierarchy and fake types
         return !getClass().isInstance(type) && !FakeTypeDescriptor.class.isInstance(type);
     }
+    
+    /**
+     * Returns the underlying IVML type.
+     * 
+     * @return the type
+     */
+    protected abstract IDatatype getIvmlType();
+
+    /**
+     * Returns whether two IVML type descriptors are considered to be equal.
+     * 
+     * @param d1 the first descriptor
+     * @param d2 the second descriptor
+     * @return <code>true</code> for type equality, <code>false</code> else
+     */
+    protected boolean isEqual(AbstractIvmlTypeDescriptor d1, AbstractIvmlTypeDescriptor d2) {
+        return (d1 == d2 
+            || (d1 != null && d2 != null && TypeQueries.sameTypes(d1.getIvmlType(), d2.getIvmlType())));
+    }
 
 }

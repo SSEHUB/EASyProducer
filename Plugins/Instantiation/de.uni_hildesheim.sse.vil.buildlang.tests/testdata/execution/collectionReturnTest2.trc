@@ -1,0 +1,4 @@
+-> main(Project, Project, Configuration) with (<project>, <project>, <config>)
+    -> doSet()
+        res <- {}
+    s <- null
