@@ -24,6 +24,7 @@ import net.ssehub.easy.varModel.cst.ConstraintSyntaxTree;
 import net.ssehub.easy.varModel.cst.ContainerOperationCall;
 import net.ssehub.easy.varModel.cst.CopyVisitor;
 import net.ssehub.easy.varModel.cst.OCLFeatureCall;
+import net.ssehub.easy.varModel.cst.Self;
 import net.ssehub.easy.varModel.model.AbstractVariable;
 import net.ssehub.easy.varModel.model.Attribute;
 import net.ssehub.easy.varModel.model.AttributeAssignment;
@@ -33,6 +34,7 @@ import net.ssehub.easy.varModel.model.ExplicitTypeVariableDeclaration;
 import net.ssehub.easy.varModel.model.IAttributableElement;
 import net.ssehub.easy.varModel.model.IModelElement;
 import net.ssehub.easy.varModel.model.Project;
+import net.ssehub.easy.varModel.model.datatypes.Compound;
 import net.ssehub.easy.varModel.model.datatypes.ICustomOperationAccessor;
 import net.ssehub.easy.varModel.model.datatypes.IDatatype;
 import net.ssehub.easy.varModel.model.values.Value;
@@ -145,8 +147,10 @@ class CSTCopyVisitor extends CopyVisitor {
             ConstraintSyntaxTree operand = call.getOperand();
             if (null != operand) {
                 operand.accept(this);
+                operand = getResult();
+            } else {
+                operand = null;
             }
-            operand = getResult();
             ConstraintSyntaxTree[] args = new ConstraintSyntaxTree[call.getParameterCount()];
             for (int p = 0; p < args.length; p++) {
                 call.getParameter(p).accept(this);
@@ -287,6 +291,21 @@ class CSTCopyVisitor extends CopyVisitor {
             }
         } else {
             super.visitConstantValue(constantValue);
+        }
+    }
+    
+    @Override
+    public void visitSelf(Self self) {
+        if (complete && null != copyier) {
+            IDatatype copiedType = copyier.getTranslatedType(self.getType());
+            if (null != copiedType && copiedType instanceof Compound) {
+                setResult(new Self((Compound) copiedType));
+            } else {
+                complete = false;
+                super.visitSelf(self);
+            }
+        } else {
+            super.visitSelf(self);
         }
     }
 

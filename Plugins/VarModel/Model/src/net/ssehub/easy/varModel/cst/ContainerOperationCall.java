@@ -140,6 +140,7 @@ public class ContainerOperationCall extends ConstraintSyntaxTree {
                     if (size > 1 && null != declarators[size - 1].getDefaultValue()) {
                         param = declarators[size - 1].getType();
                         size--; // the result value in apply
+                        expression.inferDatatype();
                     } else {
                         param = expression.inferDatatype(); // typically boolean
                     }

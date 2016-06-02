@@ -19,6 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import net.ssehub.easy.varModel.Bundle;
+import net.ssehub.easy.varModel.cst.ConstraintSyntaxTree;
 import net.ssehub.easy.varModel.model.AbstractVariable;
 import net.ssehub.easy.varModel.model.datatypes.Compound;
 import net.ssehub.easy.varModel.model.datatypes.Container;
@@ -204,16 +205,36 @@ class ValueCopyVisitor implements IValueVisitor {
     @Override
     public void visitReferenceValue(ReferenceValue referenceValue) {
         AbstractVariable referencedDecl = referenceValue.getValue();
-        
-        AbstractVariable copiedDecl = (AbstractVariable) copyier.getCopiedElement(referencedDecl);
+        ConstraintSyntaxTree refCST = referenceValue.getValueEx();
         IDatatype refType = copyier.getTranslatedType(referenceValue.getType());
         
-        if (null != copiedDecl && null != refType) {
-            try {
-                result = ValueFactory.createValue(refType, copiedDecl);
-            } catch (ValueDoesNotMatchTypeException e) {
-                // Should not happen
-                Bundle.getLogger(ValueCopyVisitor.class).exception(e);
+        if (null != referencedDecl) {
+            AbstractVariable copiedDecl = (AbstractVariable) copyier.getCopiedElement(referencedDecl);
+            
+            if (null != copiedDecl && null != refType) {
+                try {
+                    result = ValueFactory.createValue(refType, copiedDecl);
+                } catch (ValueDoesNotMatchTypeException e) {
+                    // Should not happen
+                    Bundle.getLogger(ValueCopyVisitor.class).exception(e);
+                }
+            } else {
+                result = referenceValue;
+                complete = false;
+            }
+        } else if (null != refCST) {
+            CSTCopyVisitor cstCopyier = new CSTCopyVisitor(copyier.getDeclarationMapping(), copyier);
+            refCST.accept(cstCopyier);
+            if (cstCopyier.translatedCompletely()) {
+                try {
+                    result = ValueFactory.createValue(refType, cstCopyier.getResult());
+                } catch (ValueDoesNotMatchTypeException e) {
+                    result = referenceValue;
+                    complete = false;
+                }
+            } else {
+                result = referenceValue;
+                complete = false;
             }
         } else {
             result = referenceValue;
