@@ -15,7 +15,11 @@
  */
 package test.de.uni_hildesheim.sse.cycletest;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
 
 import net.ssehub.easy.varModel.cst.ConstraintSyntaxTree;
 import net.ssehub.easy.varModel.model.AbstractProjectVisitor;
@@ -233,6 +237,25 @@ class UsedProjectFinder extends AbstractProjectVisitor implements IUsedProjectFi
     @Override
     public java.util.Set<Project> getUsedProjects() {
         return usedProjects;
+    }
+    
+    /**
+     * Creates a map ion form of (project name, list of instances) for all found projects.
+     * @return A map of used {@link Project} instances, will not be <tt>null</tt> unless
+     * the main {@link Project} was not visited before.
+     */
+    public Map<String, List<Project>> createProjectMap() {
+        Map<String, List<Project>> projectMap = new HashMap<String, List<Project>>();
+        for (Project project : usedProjects) {
+            List<Project> projects = projectMap.get(project.getName());
+            if (null == projects) {
+                projects = new ArrayList<Project>();
+                projectMap.put(project.getName(), projects);
+            }
+            projects.add(project);
+        }
+        
+        return projectMap;
     }
 
 }
