@@ -191,7 +191,7 @@ public class IvmlTypeDescriptor extends AbstractIvmlTypeDescriptor implements IA
             if (null != val) {
                 objectType = val.getType(); // obtain the specific type
             } else {
-                objectType = var.getDecisionVariable().getValue().getType();
+                objectType = var.getDecisionVariable().getDeclaration().getType();
             }
         } else if (object instanceof Attribute) {
             Attribute att = (Attribute) object;
