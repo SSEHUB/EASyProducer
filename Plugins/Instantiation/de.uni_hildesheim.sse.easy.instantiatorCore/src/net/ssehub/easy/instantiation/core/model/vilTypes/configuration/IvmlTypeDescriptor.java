@@ -27,6 +27,7 @@ import net.ssehub.easy.varModel.model.datatypes.IntegerType;
 import net.ssehub.easy.varModel.model.datatypes.RealType;
 import net.ssehub.easy.varModel.model.datatypes.Sequence;
 import net.ssehub.easy.varModel.model.datatypes.StringType;
+import net.ssehub.easy.varModel.model.values.Value;
 
 /**
  * Implements a dynamic type descriptor for IVM decision variables. Instances of this
@@ -186,7 +187,12 @@ public class IvmlTypeDescriptor extends AbstractIvmlTypeDescriptor implements IA
         IDatatype objectType = null;
         if (object instanceof DecisionVariable) {
             DecisionVariable var = (DecisionVariable) object;
-            objectType = var.getDecisionVariable().getDeclaration().getType();
+            Value val = var.getDecisionVariable().getValue();
+            if (null != val) {
+                objectType = val.getType(); // obtain the specific type
+            } else {
+                objectType = var.getDecisionVariable().getValue().getType();
+            }
         } else if (object instanceof Attribute) {
             Attribute att = (Attribute) object;
             objectType = att.getDecisionVariable().getDeclaration().getType();

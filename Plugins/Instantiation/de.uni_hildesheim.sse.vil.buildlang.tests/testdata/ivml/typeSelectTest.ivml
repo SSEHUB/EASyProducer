@@ -1,0 +1,17 @@
+project typeSelectTest {
+  version v0;
+  
+  compound TestCompound {
+      Integer iVal;
+  }
+  
+  compound SpecialCompound refines TestCompound {
+  }
+  
+  setOf(TestCompound) t = {TestCompound{iVal=1}, TestCompound{iVal=2}, SpecialCompound{iVal=3}};
+  
+  freeze {
+    t;
+  };
+  
+}

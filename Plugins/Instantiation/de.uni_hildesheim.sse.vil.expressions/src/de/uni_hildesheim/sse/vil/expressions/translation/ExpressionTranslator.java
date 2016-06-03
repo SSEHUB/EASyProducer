@@ -920,6 +920,12 @@ public abstract class ExpressionTranslator<I extends VariableDeclaration, R exte
         } 
         if (null == res && null == result) {
             res = resolver.resolve(name, false, arg, feature, this);
+            if (null == res) {
+                TypeDescriptor<?> desc = resolver.getTypeRegistry().getType(name, false);
+                if (null != desc) {
+                    result = new VilTypeExpression(name, desc);    
+                }
+            }
         }
         if (null == res && null == result) {
             if ("ITER".equals(name)) {
@@ -950,6 +956,7 @@ public abstract class ExpressionTranslator<I extends VariableDeclaration, R exte
                 }
             } else {
                 result = new VilTypeExpression(name, type);
+System.out.println("HERE");                
                 ivmlWarning(name, arg, ExpressionDslPackage.Literals.CONSTANT__QVALUE);
             }
         } else if (res instanceof VariableDeclaration) {
@@ -1045,8 +1052,7 @@ public abstract class ExpressionTranslator<I extends VariableDeclaration, R exte
         }
         if (result.isPlaceholder()) {
             String typeName = Utils.getQualifiedNameString(type.getName());
-            warning("'" + typeName + "' is unknown, shall be an IVML/known type - may lead to a runtime error", type, 
-                ExpressionDslPackage.Literals.TYPE__NAME, ErrorCodes.UNKNOWN_TYPE);
+            ivmlWarning(typeName, type, ExpressionDslPackage.Literals.TYPE__NAME);
         }
         return result;
     }

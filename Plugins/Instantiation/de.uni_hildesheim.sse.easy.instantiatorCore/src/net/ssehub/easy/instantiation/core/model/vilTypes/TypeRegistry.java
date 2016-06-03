@@ -557,7 +557,7 @@ public class TypeRegistry {
      *   shall be prevented for internal types!)
      * @return the type descriptor or <b>null</b> if no one is registered for <code>name</code>
      */
-    private TypeDescriptor<?> getType(String name, boolean addIfMissing) {
+    public TypeDescriptor<?> getType(String name, boolean addIfMissing) {
         TypeDescriptor<?> result = findType(name);
         if (null == result) {
             result = resolve(name, addIfMissing);

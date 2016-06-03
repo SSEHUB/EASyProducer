@@ -1,0 +1,9 @@
+@advice(typeSelectTest)
+vilScript typeSelect2 (Project source, Project target, Configuration config) {
+
+    main() = : {
+        typeSelectTest cfg = config;
+        setOf(TestCompound) projected = cfg.t.selectByType(SpecialCompound);
+    }
+
+}
