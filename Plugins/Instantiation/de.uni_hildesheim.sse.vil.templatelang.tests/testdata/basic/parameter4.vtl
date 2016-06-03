@@ -1,0 +1,12 @@
+@advice(parameter4)
+template parameter4(Configuration config, FileArtifact target, FamilyElement fe) {
+
+    def getFamily(Family fm) {
+        '${fm.name}'
+    }
+
+    def main(Configuration config, FileArtifact target, FamilyElement fe) {
+        getFamily(fe);
+    }
+
+}

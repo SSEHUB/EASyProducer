@@ -176,6 +176,12 @@ class AliasTypeDescriptor <T> extends TypeDescriptor<T> {
         return type.isInstantiator();
     }
     
+    @Override
+    public boolean checkConversion(IMetaType param, IMetaOperation conversion) {
+        return true;
+    }
+
+    
     /**
      * Unalisases <code>type</code>.
      * 

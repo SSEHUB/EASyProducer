@@ -10,6 +10,7 @@ import net.ssehub.easy.instantiation.core.Bundle;
 import net.ssehub.easy.instantiation.core.model.common.VilException;
 import net.ssehub.easy.instantiation.core.model.vilTypes.FieldDescriptor;
 import net.ssehub.easy.instantiation.core.model.vilTypes.IActualValueProvider;
+import net.ssehub.easy.instantiation.core.model.vilTypes.IMetaOperation;
 import net.ssehub.easy.instantiation.core.model.vilTypes.IMetaType;
 import net.ssehub.easy.instantiation.core.model.vilTypes.OperationDescriptor;
 import net.ssehub.easy.instantiation.core.model.vilTypes.TypeDescriptor;
@@ -184,6 +185,11 @@ class IvmlProjectTypeDescriptor extends AbstractIvmlTypeDescriptor implements IA
     @Override
     protected IDatatype getIvmlType() {
         return project.getType();
+    }
+
+    @Override
+    public boolean checkConversion(IMetaType param, IMetaOperation conversion) {
+        return true;
     }
 
 }

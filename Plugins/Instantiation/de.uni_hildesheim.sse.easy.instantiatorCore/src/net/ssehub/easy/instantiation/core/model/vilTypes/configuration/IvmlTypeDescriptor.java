@@ -9,6 +9,7 @@ import java.util.Set;
 import net.ssehub.easy.instantiation.core.model.common.VilException;
 import net.ssehub.easy.instantiation.core.model.vilTypes.FieldDescriptor;
 import net.ssehub.easy.instantiation.core.model.vilTypes.IActualTypeAssignmentProvider;
+import net.ssehub.easy.instantiation.core.model.vilTypes.IMetaOperation;
 import net.ssehub.easy.instantiation.core.model.vilTypes.IMetaType;
 import net.ssehub.easy.instantiation.core.model.vilTypes.Invisible;
 import net.ssehub.easy.instantiation.core.model.vilTypes.OperationDescriptor;
@@ -240,6 +241,18 @@ public class IvmlTypeDescriptor extends AbstractIvmlTypeDescriptor implements IA
     @Override
     public boolean isInstantiator() {
         return false;
+    }
+
+    @Override
+    public boolean checkConversion(IMetaType param, IMetaOperation conversion) {
+        boolean result = true;
+        if (param instanceof IvmlTypeDescriptor) {
+            IMetaType type = conversion.getReturnType();
+            if (IvmlTypes.decisionVariableType() == type || IvmlTypes.ivmlElement() == type) {
+                result = false; // this is else an implicit conversion from IVML a to IVML b, a and b unrelated
+            }
+        }
+        return result;
     }
 
 }

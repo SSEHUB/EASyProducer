@@ -158,5 +158,10 @@ class DummyModel implements ITypedModel {
     public TypeDescriptor<?> getGenericParameterType(int index) {
         throw new IllegalArgumentException();
     }
+    
+    @Override
+    public boolean checkConversion(IMetaType param, IMetaOperation conversion) {
+        return true;
+    }
 
 }

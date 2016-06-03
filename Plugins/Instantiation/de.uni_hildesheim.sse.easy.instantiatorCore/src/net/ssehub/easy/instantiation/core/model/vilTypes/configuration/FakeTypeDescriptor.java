@@ -1,6 +1,7 @@
 package net.ssehub.easy.instantiation.core.model.vilTypes.configuration;
 
 import net.ssehub.easy.instantiation.core.model.common.VilException;
+import net.ssehub.easy.instantiation.core.model.vilTypes.IMetaOperation;
 import net.ssehub.easy.instantiation.core.model.vilTypes.IMetaType;
 import net.ssehub.easy.instantiation.core.model.vilTypes.OperationDescriptor;
 import net.ssehub.easy.instantiation.core.model.vilTypes.TypeDescriptor;
@@ -133,6 +134,11 @@ public class FakeTypeDescriptor extends TypeDescriptor<IvmlElement> {
     @Override
     public IMetaType getSuperType() {
         return null; // no information about types
+    }
+
+    @Override
+    public boolean checkConversion(IMetaType param, IMetaOperation conversion) {
+        return true;
     }
 
 }

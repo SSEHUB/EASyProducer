@@ -1,0 +1,25 @@
+project parameter4 {
+
+	version v0;
+	
+	compound Family {
+		String name;
+		
+	}
+	
+	compound FamilyElement {
+		String name;
+		refTo(Family) family;
+	}
+	
+	Family fm = {
+		name = "fm"
+	};
+	
+	FamilyElement fe = {
+		name = "fe",
+		family = refBy(fm)
+	};
+	
+	freeze{fm; fe;}
+}

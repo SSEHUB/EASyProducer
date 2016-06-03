@@ -147,5 +147,10 @@ public class ClassWrapper implements IMetaType {
     public TypeDescriptor<?> getGenericParameterType(int index) {
         throw new IllegalArgumentException();
     }
+    
+    @Override
+    public boolean checkConversion(IMetaType param, IMetaOperation conversion) {
+        return true;
+    }
 
 }

@@ -345,4 +345,9 @@ public class Template extends AbstractResolvableModel<VariableDeclaration, Templ
         throw new IllegalArgumentException();
     }
 
+    @Override
+    public boolean checkConversion(IMetaType param, IMetaOperation conversion) {
+        return true;
+    }
+
 }

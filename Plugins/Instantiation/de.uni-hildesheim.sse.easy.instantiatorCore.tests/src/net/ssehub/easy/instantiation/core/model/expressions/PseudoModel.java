@@ -5,7 +5,6 @@ import net.ssehub.easy.basics.modelManagement.IndentationConfiguration;
 import net.ssehub.easy.basics.modelManagement.ModelImport;
 import net.ssehub.easy.basics.modelManagement.Version;
 import net.ssehub.easy.instantiation.core.model.common.RuntimeEnvironment;
-import net.ssehub.easy.instantiation.core.model.expressions.IExpressionVisitor;
 import net.ssehub.easy.instantiation.core.model.vilTypes.IMetaField;
 import net.ssehub.easy.instantiation.core.model.vilTypes.IMetaOperation;
 import net.ssehub.easy.instantiation.core.model.vilTypes.IMetaType;
@@ -162,6 +161,11 @@ public class PseudoModel implements ITypedModel {
     @Override
     public TypeDescriptor<?> getGenericParameterType(int index) {
         throw new IllegalArgumentException();
+    }
+
+    @Override
+    public boolean checkConversion(IMetaType param, IMetaOperation conversion) {
+        return true;
     }
 
 }

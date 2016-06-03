@@ -5,6 +5,7 @@ import java.io.IOException;
 
 import org.junit.Test;
 
+import net.ssehub.easy.basics.messages.AbstractException;
 import net.ssehub.easy.dslCore.translation.ErrorCodes;
 import net.ssehub.easy.instantiation.core.model.common.VilException;
 import net.ssehub.easy.instantiation.core.model.templateModel.Template;
@@ -515,4 +516,15 @@ public class BasicTests extends AbstractTest {
         assertEqual("attribute");
     }
 
+    /**
+     * Tests a wrong parameter passing (shall fail).
+     * 
+     * @throws IOException should not occur
+     */
+    @Test
+    public void testParameter4() throws IOException {
+        assertEqual("parameter4", "parameter4", AbstractException.ID_CANNOT_RESOLVE);
+    }
+
+    
 }

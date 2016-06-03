@@ -774,4 +774,9 @@ public class ReflectionTypeDescriptor <T> extends TypeDescriptor <T> {
         return superType;
     }
 
+    @Override
+    public boolean checkConversion(IMetaType param, IMetaOperation conversion) {
+        return true;
+    }
+
 }

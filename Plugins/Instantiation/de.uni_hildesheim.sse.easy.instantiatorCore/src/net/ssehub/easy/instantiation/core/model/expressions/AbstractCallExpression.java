@@ -412,7 +412,11 @@ public abstract class AbstractCallExpression extends Expression implements IArgu
                     if (!paramType.isAssignableFrom(argType)) {
                         conversionOps[p] = TypeHelper.findConversion(argType, paramType);
                         if (null != conversionOps[p]) {
-                            conversionCount++;
+                            if (argType.checkConversion(paramType, conversionOps[p])) {
+                                conversionCount++;
+                            } else {
+                                conversionOps[p] = null;
+                            }
                         }
                         allParamOk = (null != conversionOps[p]);
                     }

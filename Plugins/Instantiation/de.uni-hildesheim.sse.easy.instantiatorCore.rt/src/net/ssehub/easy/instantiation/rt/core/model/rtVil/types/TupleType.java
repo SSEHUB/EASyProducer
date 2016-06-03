@@ -21,6 +21,7 @@ import java.util.Map;
 
 import net.ssehub.easy.instantiation.core.model.common.VilException;
 import net.ssehub.easy.instantiation.core.model.vilTypes.FieldDescriptor;
+import net.ssehub.easy.instantiation.core.model.vilTypes.IMetaOperation;
 import net.ssehub.easy.instantiation.core.model.vilTypes.IMetaType;
 import net.ssehub.easy.instantiation.core.model.vilTypes.IVilType;
 import net.ssehub.easy.instantiation.core.model.vilTypes.OperationDescriptor;
@@ -238,6 +239,11 @@ public class TupleType extends TypeDescriptor<TupleType> implements IVilType {
     @Override
     public IMetaType getSuperType() {
         return null;
+    }
+
+    @Override
+    public boolean checkConversion(IMetaType param, IMetaOperation conversion) {
+        return true;
     }
 
 }

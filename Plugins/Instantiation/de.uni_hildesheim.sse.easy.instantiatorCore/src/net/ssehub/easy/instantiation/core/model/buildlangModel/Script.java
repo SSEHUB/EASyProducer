@@ -752,4 +752,9 @@ public class Script extends AbstractResolvableModel<VariableDeclaration, Script>
         throw new IllegalArgumentException();
     }
 
+    @Override
+    public boolean checkConversion(IMetaType param, IMetaOperation conversion) {
+        return true;
+    }
+
 }

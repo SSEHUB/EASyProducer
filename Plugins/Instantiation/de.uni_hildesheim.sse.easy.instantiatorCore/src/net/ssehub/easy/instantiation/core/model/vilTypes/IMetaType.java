@@ -159,5 +159,13 @@ public interface IMetaType {
      * @return <code>true</code> if this type is internal, <code>false</code> else
      */
     public boolean isInternal();
-    
+
+    /**
+     * Checks a conversion from this type to <code>param</code> via the given <code>conversion</code>.
+     * 
+     * @param param the original parameter value
+     * @param conversion the conversion function
+     * @return <code>true</code> if ok, <code>false</code> else
+     */
+    public boolean checkConversion(IMetaType param, IMetaOperation conversion);
 }
