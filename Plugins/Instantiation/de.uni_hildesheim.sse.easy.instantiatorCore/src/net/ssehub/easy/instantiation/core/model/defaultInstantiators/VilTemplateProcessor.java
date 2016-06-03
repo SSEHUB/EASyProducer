@@ -399,7 +399,7 @@ public class VilTemplateProcessor implements IVilType {
     private static void throwMissingTemplateError(String templateName, String[] possiblePaths) throws VilException {
         StringBuffer errMsg = new StringBuffer("The script \"");
         errMsg.append(templateName);
-        errMsg.append("\" coult not be loaded, maybe the file contains syntax errors or is not named as \"");
+        errMsg.append("\" could not be loaded, maybe the file contains syntax errors or is not named as \"");
         errMsg.append(templateName);
         errMsg.append("\".");
         if (null != possiblePaths && possiblePaths.length > 0) {
