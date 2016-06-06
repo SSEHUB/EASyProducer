@@ -8,6 +8,7 @@ import org.eclipse.swt.widgets.Composite;
 
 import net.ssehub.easy.producer.ui.productline_editor.EasyProducerDialog;
 import net.ssehub.easy.varModel.confModel.IDecisionVariable;
+import net.ssehub.easy.varModel.cst.Variable;
 import net.ssehub.easy.varModel.model.datatypes.IDatatype;
 import net.ssehub.easy.varModel.model.datatypes.Reference;
 import net.ssehub.easy.varModel.model.values.ReferenceValue;
@@ -185,13 +186,39 @@ class ComboboxGUIVariable extends GUIVariable {
         if (null != val) {
             Object valueItem = toObjectValue(val);
             for (int i = 0; i < values.length && selectedIndex == 0; i++) {
-                if (null != values[i].getValue() && values[i].getValue().equals(valueItem)) {
+                if (isEqual(valueItem, values[i])) {
                     selectedIndex = i;
                 }
             }
         }
         
         return selectedIndex;
+    }
+    
+    /**
+     * Compares the current value of the {@link IDecisionVariable} with an element of the possible value from the
+     * combo box.
+     * @param currentValue The current value of the {@link IDecisionVariable}, maybe <tt>null</tt>.
+     * @param possibleItem An item of {@link #values}.
+     * @return <tt>true</tt> if the <tt>currentValue</tt> matches the given <tt>possibleItem</tt>
+     */
+    private boolean isEqual(Object currentValue, ComboItem possibleItem) {
+        boolean isEqual = false;
+        
+        if (null != possibleItem.getValue()) {
+            Object possibleValue = possibleItem.getValue();
+            isEqual = possibleValue.equals(currentValue);
+            
+            /*
+             * Consider References:
+             * currentValue can be a declaration and items can be CSTs, e.g. a Variables pointing to declarations
+             */
+            if (!isEqual && possibleValue instanceof Variable) {
+                isEqual = ((Variable) possibleValue).getVariable().equals(currentValue);
+            }
+        }
+        
+        return isEqual;
     }
     
     /**
