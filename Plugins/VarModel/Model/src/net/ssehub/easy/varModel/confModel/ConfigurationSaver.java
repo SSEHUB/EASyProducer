@@ -181,6 +181,14 @@ public class ConfigurationSaver {
     public Project getSavedConfiguration() {
         return destProject;
     }
+    
+    /**
+     * Returns the {@link Configuration}, which will currently saved by this saver.
+     * @return The configuration to be saved.
+     */
+    protected Configuration getConfiguration() {
+        return srcConfiguration;
+    }
 
     /**
      * Creates the project to store the configuration into.
@@ -418,7 +426,7 @@ public class ConfigurationSaver {
      * @param confProject The project where the states should be saved to.
      * @see Configuration#toProject(boolean)
      */
-    private void saveFreezeStates(Project confProject) {
+    protected void saveFreezeStates(Project confProject) {
         // Find (all) frozen elements
         List<IFreezable> frozenElements = new ArrayList<IFreezable>();
         for (IDecisionVariable decisionVariable : srcConfiguration) {
