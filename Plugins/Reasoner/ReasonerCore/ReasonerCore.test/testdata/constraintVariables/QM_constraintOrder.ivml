@@ -1,0 +1,245 @@
+project QM_constraintOrder {
+
+	version v0;
+	
+	compound FieldType {
+		String name;		
+	}
+	
+	compound Tuple {
+		String name;
+		Constraint fieldsCheck = size(fields) > 0;
+		Fields fields;
+	}
+	
+	compound Field {
+		String name;
+		Constraint typeCheck = isDefined(type);
+		refTo(FieldType) type;
+		Boolean keyPart = false;
+	}
+	
+	typedef Tuples sequenceOf(Tuple);
+	typedef Fields sequenceOf(Field);
+	
+	compound Algorithm {		
+		Tuples input;
+		Tuples output;
+	}
+	
+	compound Family {
+		setOf(refTo(Algorithm)) members;
+		Constraint inputCheck = members->forAll(refTo(Algorithm) algorithm|fieldCheck(input, algorithm.input));
+		Constraint outputCheck = members->forAll(refTo(Algorithm) algorithm|fieldCheck(output, algorithm.output));
+		Tuples output;
+		Tuples input;
+	}
+	
+	setOf(refTo(Family)) families;
+	
+	def static sequenceOf(sequenceOf(refTo(FieldType))) collectFieldTypes(Tuples tuples) = tuples->collect(Tuple tuple|tuple.fields->collect(Field field|field.type));
+	def static sequenceOf(sequenceOf(String)) collectFieldNames(Tuples tuples) = tuples->collect(Tuple tuple|append(tuple.fields->collect(Field field|field.name), tuple.name));
+	def static Boolean fieldCheck(Tuples fTuples, Tuples aTuples) = (collectFieldNames(fTuples) == collectFieldNames(aTuples)) and (collectFieldTypes(fTuples) == collectFieldTypes(aTuples));
+	
+	FieldType StringListType;
+	FieldType StatusType;
+	FieldType IFEventListType;
+	FieldType IFTimeIntervalType;
+	
+	StringListType = FieldType {
+		name = "STRINGLIST"
+	};
+	
+	StatusType = FieldType {
+		name = "STATUS"
+	};
+
+	IFEventListType = FieldType {
+		name = "IFEVENTLISTTYPE"
+	};
+	
+	IFTimeIntervalType = FieldType {
+		name = "IFTIMEINTERVAL"	
+	};
+	
+	Algorithm AlgorithmVar_20;
+	Algorithm AlgorithmVar_21;
+	Algorithm AlgorithmVar_24;
+	
+		AlgorithmVar_20 = Algorithm {
+		input = {
+			Tuple {
+				name = "analysis", 
+				fields = {
+					Field {
+						name = "status", 
+						type = refBy(StatusType)
+					}
+				}
+			}
+		},
+		output = {
+			Tuple {
+				name = "analysis", 
+				fields = {
+					Field {
+						name = "events", 
+						type = refBy(IFEventListType)
+					}, Field {
+						name = "symbols", 
+						type = refBy(IFEventListType)
+					}, Field {
+						name = "timeInterval", 
+						type = refBy(IFTimeIntervalType)
+					}
+				}
+			}
+		}
+	};
+	
+	AlgorithmVar_21 = Algorithm {
+		input = {
+			Tuple {
+				name = "analysis", 
+				fields = {
+					Field {
+						name = "status", 
+						type = refBy(StatusType)
+					}
+				}
+			}
+		},
+
+		output = {
+			Tuple {
+				name = "analysis", 
+				fields = {
+					Field {
+						name = "events", 
+						type = refBy(IFEventListType)
+					}, Field {
+						name = "symbols", 
+						type = refBy(IFEventListType)
+					}, Field {
+						name = "timeInterval", 
+						type = refBy(IFTimeIntervalType)
+					}
+				}
+			}
+		}
+	};
+	
+	AlgorithmVar_24 = Algorithm {		
+		input = {
+			Tuple {
+				name = "twitterStream", 
+				fields = {
+					Field {
+						name = "status", 
+						type = refBy(StatusType)
+					}, Field {
+						name = "stocks", 
+						type = refBy(StringListType)
+					}
+				}
+			}
+		}, 
+
+		output = {
+			Tuple {
+				name = "twitterStream", 
+				fields = {
+					Field {
+						name = "events", 
+						type = refBy(IFEventListType)
+					}, Field {
+						name = "status", 
+						type = refBy(StatusType)
+					}
+				}
+			}
+		}
+
+	};
+	
+	Family fTwitterEventDetection;
+	Family fTwitterEventPrediction;
+	
+	fTwitterEventDetection = Family {		
+		members = {
+			refBy(AlgorithmVar_24)
+		},
+		output = {
+			Tuple {
+				name = "twitterStream", 
+				fields = {
+					Field {
+						name = "events", 
+						type = refBy(IFEventListType)
+					}, Field {
+						name = "status", 
+						type = refBy(StatusType)
+					}
+				}
+			}
+		}, 
+		input = {
+			Tuple {
+				name = "twitterStream", 
+				fields = {
+					Field {
+						name = "status", 
+						type = refBy(StatusType), 
+						keyPart = false
+					}, Field {
+						name = "stocks", 
+						type = refBy(StringListType)
+					}
+				}
+			}
+		}
+	};
+	
+	fTwitterEventPrediction = Family {
+		members = {
+			refBy(AlgorithmVar_20), refBy(AlgorithmVar_21)
+		},	
+		output = {
+			Tuple {
+				name = "analysis", 
+				fields = {
+					Field {
+						name = "events", 
+						type = refBy(IFEventListType), 
+						keyPart = false
+					}, Field {
+						name = "symbols", 
+						type = refBy(IFEventListType), 
+						keyPart = false
+					}, Field {
+						name = "timeInterval", 
+						type = refBy(IFTimeIntervalType), 
+						keyPart = false
+					}
+				}
+			}
+		}, 
+		input = {
+			Tuple {
+				name = "analysis", 
+				fields = {
+					Field {
+						name = "status", 
+						type = refBy(StatusType), 
+						keyPart = false
+					}
+				}
+			}
+		}
+	};
+	
+	families = {
+		refBy(fTwitterEventDetection), refBy(fTwitterEventPrediction)
+	};
+	
+}
