@@ -260,5 +260,13 @@ public class ConstraintVariableTests extends net.ssehub.easy.reasoning.sseReason
     public void setOfBooleanWithNoDefaultValue() {
         reasoningTest("setOfBooleanWithNoDefaultValue.ivml", 0);
     }
+    
+    /**
+     * Tests constraint variable order influence (QM project case).
+     */
+    @Test
+    public void compoundConstraintVarOrder() {
+        reasoningTest("QM_constraintOrder.ivml", 0);
+    }
 
 }

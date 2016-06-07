@@ -353,9 +353,9 @@ public class Resolver {
      * </ol>
      */
     public void resolve() { 
-        if (Descriptor.LOGGING) {
-            printModelElements(config, "Before reasoning");            
-        }        
+//        if (Descriptor.LOGGING) {
+//            printModelElements(config, "Before reasoning");            
+//        }        
         // Stack of importedProject (start with inner most imported project)
         List<Project> projects = Utils.discoverImports(config.getProject());    
         
@@ -375,15 +375,17 @@ public class Resolver {
             config.freezeValues(project, FilterType.NO_IMPORTS);
             // TODO do incremental freezing in here -> required by interfaces with propagation constraints
             if (Descriptor.LOGGING) {
-                printModelElements(config, "After reasoning in scope " + project.getName());
+//                printModelElements(config, "After reasoning in scope " + project.getName());
                 displayFailedElements();                                
             }
         }
         variablesInConstraintsCounter = constraintMap.getDeclarationSize();
-        if (Descriptor.LOGGING) {
-            printModelElements(config, "Reasoning done");
-        }
+//        if (Descriptor.LOGGING) {
+//            printModelElements(config, "Reasoning done");
+//        }
     }   
+    
+
     
     /**
      * Part of the {@link #resolve()} method.
@@ -640,17 +642,12 @@ public class Resolver {
             } catch (CSTSemanticException e) {
                 LOGGER.exception(e);
             }
-            compoundConstraints.addAll(collectionCompoundConstraints(nestedDecl, cmpAccess));
+            // fill varMap
             varMap.put(nestedDecl, cmpAccess); // TODO turn into local map!
-            if (ConstraintType.TYPE.isAssignableFrom(nestedType) 
-                && !(nestedType.getType() == BooleanType.TYPE.getType())) {
-                createConstraint(nestedDecl.getDefaultValue(), decl, nestedDecl, nestedVariable, variable);
-            }
             resolveDefaultValueForDeclaration(nestedDecl, cmpVar.getNestedVariable(nestedDecl.getName()),
                 cmpAccess);
         }
-        // required strategy: resolve compound accesses first in loop before, then constraints using them
-        // TODO check whether createConstraint shall move into next loop
+        // used strategy: resolve compound accesses first in loop before, then constraints using them
         for (int i = 0, n = cmpVar.getNestedElementsCount(); i < n; i++) {
             IDecisionVariable nestedVariable = cmpVar.getNestedElement(i);
             AbstractVariable nestedDecl = nestedVariable.getDeclaration();
@@ -659,6 +656,11 @@ public class Resolver {
                 && nestedVariable.getValue() instanceof ContainerValue) {
                 checkContainerValue((ContainerValue) nestedVariable.getValue(), decl, nestedDecl, 
                     nestedVariable, variable);
+            }
+            compoundConstraints.addAll(collectionCompoundConstraints(nestedDecl, cmpAccess));
+            if (ConstraintType.TYPE.isAssignableFrom(nestedType) 
+                && !(nestedType.getType() == BooleanType.TYPE.getType())) {
+                createConstraint(nestedDecl.getDefaultValue(), decl, nestedDecl, nestedVariable, variable);
             }
         }
         // Nested attribute assignments handling
@@ -937,6 +939,7 @@ public class Resolver {
         CompoundAccess topcmpAccess) {        
         List<Constraint> constraints = new ArrayList<Constraint>();
         DecisionVariableDeclaration localDecl = new DecisionVariableDeclaration("cmp", cmpType, null);        
+        // fill varMap
         for (int i = 0, n = cmpType.getInheritedElementCount(); i < n; i++) {
             AbstractVariable nestedDecl = cmpType.getInheritedElement(i);
             CompoundAccess cmpAccess = null;           
