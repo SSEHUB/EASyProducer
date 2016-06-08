@@ -159,7 +159,7 @@ class DeletedElementsCollector extends AbstractProjectVisitor {
     
     @Override
     public void visitProject(Project project) {
-        boolean projectIsStillPart = context.projectWasNotRemoved(project);
+        boolean projectIsStillPart = context.projectIsStillPresent(project);
         
         // Visit this project only if it was maybe deleted.
         if (!projectIsStillPart) {

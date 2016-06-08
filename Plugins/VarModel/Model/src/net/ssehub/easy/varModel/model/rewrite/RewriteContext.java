@@ -149,7 +149,7 @@ public class RewriteContext {
      * @param project The project to test
      * @return <tt>true</tt>project is still part of the main project, <b><tt>false</tt></b> it is unclear.
      */
-    public boolean projectWasNotRemoved(Project project) {
+    public boolean projectIsStillPresent(Project project) {
         String qName = generateQualifiedName(project);
         return projectQualifier.contains(qName);
     }
@@ -220,5 +220,15 @@ public class RewriteContext {
      */
     boolean declarationKnown(AbstractVariable declaration) {
         return variablesTable.declarationKnown(declaration);
+    }
+
+    /**
+     * Marks that a project was used, i.e., is still part of the overall structure and should not be removed.
+     * @param project A visited project, which is may be imported.
+     * @see #projectIsStillPressent(Project)
+     */
+    public void addUsedProject(Project project) {
+        String qName = generateQualifiedName(project);
+        projectQualifier.add(qName);
     }
 }

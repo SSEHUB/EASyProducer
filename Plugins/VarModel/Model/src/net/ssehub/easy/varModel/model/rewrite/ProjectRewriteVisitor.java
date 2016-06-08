@@ -442,6 +442,7 @@ public class ProjectRewriteVisitor implements IModelVisitor {
     @Override
     public void visitProject(Project project) {
         if (!done.contains(project)) {
+            context.addUsedProject(project);
             done.add(project);
 
             boolean isImportedProject = originProject != project;
