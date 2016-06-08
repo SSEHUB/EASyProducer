@@ -180,10 +180,11 @@ class ValueCopy implements IValueVisitor {
     @Override
     public void visitReferenceValue(ReferenceValue referenceValue) {
         AbstractVariable referencedDecl = referenceValue.getValue();
-        if (context.elementWasRemoved(referencedDecl)) {
+        if (null != referencedDecl && context.elementWasRemoved(referencedDecl)) {
             this.copiedValue = null;
             valuesOmmited = true;
         } else {
+            // TODO SE: Handle referenceValue.getValueEx()
             this.copiedValue = referenceValue;
         }
     }
