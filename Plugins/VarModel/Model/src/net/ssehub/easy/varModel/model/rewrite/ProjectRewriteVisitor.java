@@ -291,6 +291,7 @@ public class ProjectRewriteVisitor implements IModelVisitor {
             if (copiedElements.isEmpty()) {
                 // No more elements to freeze, remove complete freeze block
                 context.removeElement(freeze);
+                copiedfreeze = null;
             } else {
                 IFreezable[] frozenElements = copiedElements.toArray(new IFreezable[0]);
                 copiedfreeze = new FreezeBlock(frozenElements, copiedfreeze.getIter(), copiedfreeze.getSelector(),
@@ -434,9 +435,9 @@ public class ProjectRewriteVisitor implements IModelVisitor {
     
     /**
      * {@inheritDoc} <br/>
-     * <b><font color="red">Attention:</font></b> This method will modify the visited project. If the original project
-     * should not be modified, it is necessary to create a copy first via the {@link ProjectCopyVisitor}.
-     * <br/>
+     * <b><font color="red">Attention:</font></b> This method will modify the visited project as a side effect.
+     * If the original project should not be modified, it is necessary to create a copy first via the
+     * {@link ProjectCopyVisitor}.
      */
     @Override
     public void visitProject(Project project) {
