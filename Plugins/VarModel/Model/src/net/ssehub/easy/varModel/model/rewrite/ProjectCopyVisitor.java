@@ -360,7 +360,7 @@ public class ProjectCopyVisitor extends AbstractProjectVisitor {
         while (cstItr.hasNext()) {
             UnresolvedSyntaxContainer cstContainer = cstItr.next();
             
-            ConstraintSyntaxTree cst = cstContainer.getOriginalDefault();
+            ConstraintSyntaxTree cst = cstContainer.getOriginalSyntax();
             CSTCopyVisitor cstCopy = new CSTCopyVisitor(copiedDeclarations, this);
             cstCopy.setForceaccessors(true);
             cst.accept(cstCopy);

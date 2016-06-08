@@ -73,7 +73,7 @@ class UncopiedElementsContainer {
      */
     static class UnresolvedSyntaxContainer {
         private ContainableModelElement copiedParent;
-        private ConstraintSyntaxTree uncopiedDefault;
+        private ConstraintSyntaxTree uncopiedCST;
         
         /**
          * Returns the already translated parent to which the default belongs to.
@@ -85,11 +85,17 @@ class UncopiedElementsContainer {
         }
         
         /**
-         * Returns the uncopied default, which must still be translated.
-         * @return The original default value
+         * Returns the uncopied {@link ConstraintSyntaxTree}, which must still be translated.
+         * @return The original cst
          */
-        ConstraintSyntaxTree getOriginalDefault() {
-            return uncopiedDefault;
+        ConstraintSyntaxTree getOriginalSyntax() {
+            return uncopiedCST;
+        }
+        
+        @Override
+        public String toString() {
+            String result = copiedParent instanceof AbstractVariable ? copiedParent.getName() + " = " : "";
+            return result + uncopiedCST.toString();
         }
     }
 
@@ -107,7 +113,7 @@ class UncopiedElementsContainer {
      * Set of copied {@link AbstractVariable}s, and their default values. Contrary to {@link #unresolvedDefaults},
      * these defaults could not be translated as some data types are still missing.
      */
-    private Set<UnresolvedSyntaxContainer> uncopyableDefaults = new HashSet<UnresolvedSyntaxContainer>();
+    private Set<UnresolvedSyntaxContainer> uncopyableCSTs = new HashSet<UnresolvedSyntaxContainer>();
     
     /**
      * {@link AbstractVariable}s which could not be translated due to a missing data type.
@@ -374,8 +380,8 @@ class UncopiedElementsContainer {
     void addUncopyableCST(ContainableModelElement copiedParent, ConstraintSyntaxTree originalDefault) {
         UnresolvedSyntaxContainer unresolvedDefault = new UnresolvedSyntaxContainer();
         unresolvedDefault.copiedParent = copiedParent;
-        unresolvedDefault.uncopiedDefault = originalDefault;
-        uncopyableDefaults.add(unresolvedDefault);
+        unresolvedDefault.uncopiedCST = originalDefault;
+        uncopyableCSTs.add(unresolvedDefault);
     }
     
     /**
@@ -383,6 +389,6 @@ class UncopiedElementsContainer {
      * @return tuple of (copied parent, original CST)
      */
     Set<UnresolvedSyntaxContainer> getUncopyableCSTs() {
-        return uncopyableDefaults;
+        return uncopyableCSTs;
     }
 }
