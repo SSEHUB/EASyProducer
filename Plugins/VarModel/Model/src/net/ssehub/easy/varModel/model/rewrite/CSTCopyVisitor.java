@@ -18,9 +18,13 @@ package net.ssehub.easy.varModel.model.rewrite;
 import java.util.Iterator;
 import java.util.Map;
 
+import net.ssehub.easy.basics.logger.EASyLoggerFactory;
+import net.ssehub.easy.varModel.Bundle;
 import net.ssehub.easy.varModel.cst.CSTSemanticException;
+import net.ssehub.easy.varModel.cst.CompoundInitializer;
 import net.ssehub.easy.varModel.cst.ConstantValue;
 import net.ssehub.easy.varModel.cst.ConstraintSyntaxTree;
+import net.ssehub.easy.varModel.cst.ContainerInitializer;
 import net.ssehub.easy.varModel.cst.ContainerOperationCall;
 import net.ssehub.easy.varModel.cst.CopyVisitor;
 import net.ssehub.easy.varModel.cst.OCLFeatureCall;
@@ -35,6 +39,7 @@ import net.ssehub.easy.varModel.model.IAttributableElement;
 import net.ssehub.easy.varModel.model.IModelElement;
 import net.ssehub.easy.varModel.model.Project;
 import net.ssehub.easy.varModel.model.datatypes.Compound;
+import net.ssehub.easy.varModel.model.datatypes.Container;
 import net.ssehub.easy.varModel.model.datatypes.ICustomOperationAccessor;
 import net.ssehub.easy.varModel.model.datatypes.IDatatype;
 import net.ssehub.easy.varModel.model.values.Value;
@@ -190,6 +195,66 @@ class CSTCopyVisitor extends CopyVisitor {
         } else {
             setResult(call);
             
+        }
+    }
+    
+    @Override
+    public void visitCompoundInitializer(CompoundInitializer initializer) {
+        if (complete) {
+            String[] slots = new String[initializer.getSlotCount()];
+            for (int s = 0; s < slots.length; s++) {
+                slots[s] = initializer.getSlot(s);
+            }
+            AbstractVariable[] slotDecls = new DecisionVariableDeclaration[initializer.getSlotCount()];
+            for (int s = 0; s < slotDecls.length; s++) {
+                slotDecls[s] = mapVariable(initializer.getSlotDeclaration(s));
+            }
+            ConstraintSyntaxTree[] exprs = new ConstraintSyntaxTree[initializer.getExpressionCount()];
+            for (int e = 0; e < exprs.length; e++) {
+                initializer.getExpression(e).accept(this);
+                exprs[e] = getResult();
+            }
+            IDatatype copiedType = copyier.getTranslatedType(initializer.getType());
+            if (null != copiedType && copiedType instanceof Compound) {
+                try {
+                    setResult(new CompoundInitializer((Compound) copiedType, slots, slotDecls, exprs));
+                } catch (CSTSemanticException e) {
+                    complete = false;
+                    setResult(initializer);
+                    EASyLoggerFactory.INSTANCE.getLogger(CopyVisitor.class, Bundle.ID).exception(e);
+                }
+            } else {
+                complete = false;
+                setResult(initializer);
+            }
+        } else {
+            setResult(initializer);
+        }
+    }
+
+    @Override
+    public void visitContainerInitializer(ContainerInitializer initializer) {
+        if (complete) {
+            ConstraintSyntaxTree[] exprs = new ConstraintSyntaxTree[initializer.getExpressionCount()];
+            for (int e = 0; e < exprs.length; e++) {
+                initializer.getExpression(e).accept(this);
+                exprs[e] = getResult();
+            }
+            IDatatype copiedType = copyier.getTranslatedType(initializer.getType());
+            if (null != copiedType && copiedType instanceof Container) {
+                try {
+                    setResult(new ContainerInitializer((Container) copiedType, exprs));
+                } catch (CSTSemanticException e) {
+                    complete = false;
+                    setResult(initializer);
+                    EASyLoggerFactory.INSTANCE.getLogger(CopyVisitor.class, Bundle.ID).exception(e);
+                }
+            } else {
+                complete = false;
+                setResult(initializer);
+            }
+        } else {
+            setResult(initializer);
         }
     }
     

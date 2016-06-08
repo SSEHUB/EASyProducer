@@ -98,16 +98,6 @@ class UncopiedElementsContainer {
             return result + uncopiedCST.toString();
         }
     }
-
-//    /**
-//     * Set of copied {@link AbstractVariable}s, which contain default values pointing to other elements,
-//     * which are not
-//     * copied at this moment. Resolving should be possible after all {@link AbstractVariable}s (also from imported
-//     * projects) have been copied.<br/>
-//     * <b>Note:</b> These variables must still contain the old or a partially copied default value, so that the
-//     * default value can be used for copying it at a later point.
-//     */
-//    private Set<AbstractVariable> unresolvedDefaults = new HashSet<AbstractVariable>();
    
     /**
      * Set of copied {@link AbstractVariable}s, and their default values. Contrary to {@link #unresolvedDefaults},
@@ -119,17 +109,6 @@ class UncopiedElementsContainer {
      * {@link AbstractVariable}s which could not be translated due to a missing data type.
      */
     private Set<AbstractVariable> unresolvedDeclarations = new HashSet<AbstractVariable>();
-    
-//    /**
-//     * Set of copied {@link Constraint}s, which contain {@link net.ssehub.easy.varModel.cst.ConstraintSyntaxTree}s
-//     * pointing to other elements, which are not copied at this moment.
-//     * Resolving should be possible after all {@link AbstractVariable}s (also from imported projects)
-//     * have been copied.
-//     * <br/>
-//     * <b>Note:</b> These {@link Constraint}s must still contain the old or a partially copied cst, so that the
-//     * cst can be used for copying it at a later point.
-//     */
-//    private Set<Constraint> unresolvedConstraints = new HashSet<Constraint>();
     
     /**
      * Set of custom data types which are dependent of other custom data types, not translated so far.
@@ -175,51 +154,6 @@ class UncopiedElementsContainer {
      * Set of (copied parent, original assignment) for {@link Assignment}s, which could not be copied so far.
      */
     private Set<UnresolvedAnnotationAssignment> unresolvedAssignments = new HashSet<UnresolvedAnnotationAssignment>();
-    
-//    /**
-//     * Adds a copied/translated {@link AbstractVariable}, from which the default value could not be translated, as
-//     * it is dependent of other elements, which not have been copied/translated so far. Resolving should be possible
-//     * after all {@link AbstractVariable}s (also from imported projects) have been copied.<br/>
-//     * <b>Note:</b> These variables must still contain the old or a partially copied default value, so that the
-//     * default value can be used for copying it at a later point.
-//     * @param declWithMissingDefault A copied declaration with its (uncopied) default value.
-//     */
-//    void addMissingDefault(AbstractVariable declWithMissingDefault) {
-//        unresolvedDefaults.add(declWithMissingDefault);
-//    }
-//    
-//    /**
-//     * Returns the set of copied/translated declarations with incomplete translated default values.
-//     * This set may be changed as a side effect during resolving default values.
-//     * @return Declarations where the default values has to be resolved.
-//     */
-//    Set<AbstractVariable> getDeclarationsWithMissingDefaults() {
-//        return unresolvedDefaults;
-//    }
-    
-//    /**
-//     * Adds a copied/translated {@link Constraint}, from which the
-//     * {@link net.ssehub.easy.varModel.cst.ConstraintSyntaxTree} could not be translated,
-//     * as it is dependent of other elements, which not have been copied/translated so far.
-//     * Resolving should be possible
-//     * after all {@link AbstractVariable}s (also from imported projects) have been copied.<br/>
-//     * <b>Note:</b> These constraints must still contain the old or a partially copied cst, so that the
-//     * cst can be used for copying it at a later point.
-//     * @param unresolvedConstraint A copied constraint with its (uncopied) cst.
-//     */
-//    void addUnresolvedConstraint(Constraint unresolvedConstraint) {
-//        unresolvedConstraints.add(unresolvedConstraint);
-//    }
-//    
-//    /**
-//     * Returns the set of copied/translated {@link Constraint}s with incomplete translated
-//     * {@link net.ssehub.easy.varModel.cst.ConstraintSyntaxTree}s. This set may be changed
-//     * as a side effect during resolving the csts.
-//     * @return Constraints where the csts has to be resolved.
-//     */
-//    Set<Constraint> getUnresolvedconstraints() {
-//        return unresolvedConstraints;
-//    }
     
     /**
      * Adds a custom data type which could not be translated as it is dependent of another custom data type, which
@@ -374,19 +308,19 @@ class UncopiedElementsContainer {
     
     /**
      * Adds an CST which could not be copied so far, also not partially.
-     * @param copiedParent The already copied declaration to where the default belongs to
-     * @param originalDefault The original default value, which can not be copied (even partially)
+     * @param copiedParent The already copied declaration or constraint to where the cst belongs to
+     * @param originalCST The original syntax, which can not be copied (even partially)
      */
-    void addUncopyableCST(ContainableModelElement copiedParent, ConstraintSyntaxTree originalDefault) {
+    void addUncopyableCST(ContainableModelElement copiedParent, ConstraintSyntaxTree originalCST) {
         UnresolvedSyntaxContainer unresolvedDefault = new UnresolvedSyntaxContainer();
         unresolvedDefault.copiedParent = copiedParent;
-        unresolvedDefault.uncopiedCST = originalDefault;
+        unresolvedDefault.uncopiedCST = originalCST;
         uncopyableCSTs.add(unresolvedDefault);
     }
     
     /**
      * Returns the set of uncopied constraint syntax trees.
-     * @return tuple of (copied parent, original CST)
+     * @return tuple of (copied parent (AbstractVariable or Constraint), original CST)
      */
     Set<UnresolvedSyntaxContainer> getUncopyableCSTs() {
         return uncopyableCSTs;

@@ -315,14 +315,8 @@ public class ProjectCopyVisitor extends AbstractProjectVisitor {
             // Handle uncopied declarations (depending on custom types)
             elementsResolved |= retryCopy(incompleteElements.getDeclarationsWithMissingTypes().iterator());
             
-//            // Handle incomplete default values (depending on declarations)
-//            elementsResolved |= resolveIncompleteDefaultValues();
-            
             // Handle incomplete default values (depending on custom types)
             elementsResolved |= resolveUncopyableCSTs();
-            
-//            // Handle incomplete constraints (depending on declarations)
-//            elementsResolved |= resolveIncompleteConstraints();
             
             // Handle partially copied assign blocks (depending on declarations)
             elementsResolved |= resolveIncompleteAssignBlocks();
