@@ -59,6 +59,7 @@ public class Engine {
     private List<Project> failedElementProjects;
     private List<String> failedElementSuggestions;  
     private List<IDecisionVariable> constraintVariables;  
+    private List<Integer> errorClassification;  
     
     private Map<Constraint, IDecisionVariable> constraintVariableMap;
     
@@ -193,6 +194,7 @@ public class Engine {
                 failedElementLabels.add(msgText);
                 failedElementComments.add(comment);
                 failedElementSuggestions.add(suggestion);
+                errorClassification.add(failedElementDetails.getErrorClassifier());
             }
             Message problemConstraintMsg = createMessage(VIOLATED_CONSTRAINTS);
             result.addMessage(problemConstraintMsg);
@@ -230,11 +232,10 @@ public class Engine {
                 problemConstraints.add(failedElementDetails.getProblemConstraint());
                 variablesInConstraints.add(vars);
                 constraintVariables.add(null);
+                errorClassification.add(failedElementDetails.getErrorClassifier());
             } 
             Message problemVarialbeMsg = createMessage(VIOLATED_VARIABLES);
             result.addMessage(problemVarialbeMsg);
-//            if (Descriptor.LOGGING) {
-//            }
             printMessage(problemVarialbeMsg);                
             nullFailedLists();
         } 
@@ -270,6 +271,7 @@ public class Engine {
         failedElementProjects = new ArrayList<Project>();
         failedElementSuggestions = new ArrayList<String>();
         constraintVariables = new ArrayList<IDecisionVariable>();
+        errorClassification = new ArrayList<Integer>();
         msgText = null;
         comment = null;
         suggestion = null;
@@ -289,6 +291,7 @@ public class Engine {
         failedElementProjects = null;
         failedElementSuggestions = null;
         constraintVariables = null;
+        errorClassification = null;
         msgText = null;
         comment = null;
         suggestion = null;
@@ -310,6 +313,7 @@ public class Engine {
         msg.addConflictingElementProjects(failedElementProjects);
         msg.addConflictingElementSuggestions(failedElementSuggestions);
         msg.addNamedConstraintVariables(constraintVariables);
+        msg.addErrorClassification(errorClassification);
         return msg;
     }
     
@@ -338,7 +342,8 @@ public class Engine {
                     + StringProvider.toIvmlString(msg.getProblemConstraintParts().get(i)));                
             }
             infoLogger.info("Failed elements constraint variable: " 
-                + msg.getNamedConstraintVariables().get(i));            
+                + msg.getNamedConstraintVariables().get(i)); 
+            infoLogger.info("Reasoning error code: " + msg.getErrorClassification().get(i));
         }
     }      
     

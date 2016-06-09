@@ -17,6 +17,7 @@ public class FailedElementDetails {
     private Set<IDecisionVariable> problemPoints;
     private ConstraintSyntaxTree problemConstraintPart;
     private Constraint problemConstraint;
+    private Integer errorClassifier;
     
     /**
      * Main constructor.
@@ -25,6 +26,7 @@ public class FailedElementDetails {
         problemPoints = new HashSet<IDecisionVariable>();
         problemConstraintPart = null;
         problemConstraint = null;
+        errorClassifier = null;
     }
     
     /**
@@ -50,6 +52,14 @@ public class FailedElementDetails {
     public void setProblemConstraint(Constraint problemConstraint) {
         this.problemConstraint = problemConstraint;
     }
+    
+    /**
+     * Method for adding error classifier.
+     * @param classifier error classifier.
+     */
+    public void setErrorClassifier(Integer classifier) {
+        this.errorClassifier = classifier;
+    }
 
     /**
      * Method for returning a set of {@link IDecisionVariable}s that may caused a constraint to fail.
@@ -66,11 +76,20 @@ public class FailedElementDetails {
     public ConstraintSyntaxTree getProblemConstraintPart() {
         return problemConstraintPart;
     }
+    
     /**
      * Method for returning the failed Constraint {@link Constraint}.
      * @return The failed constraint.
      */
     public Constraint getProblemConstraint() {
         return problemConstraint;
+    }
+    
+    /**
+     * Method for returning error classifier.
+     * @return error classifier.
+     */
+    public Integer getErrorClassifier() {
+        return errorClassifier;
     }
 }

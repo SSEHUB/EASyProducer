@@ -14,6 +14,7 @@ import net.ssehub.easy.basics.modelManagement.Utils;
 import net.ssehub.easy.reasoning.core.performance.PerformanceStatistics;
 import net.ssehub.easy.reasoning.core.reasoner.ReasonerConfiguration;
 import net.ssehub.easy.reasoning.core.reasoner.ReasonerConfiguration.IAdditionalInformationLogger;
+import net.ssehub.easy.reasoning.core.reasoner.ReasoningErrorCodes;
 import net.ssehub.easy.reasoning.sseReasoner.functions.FailedElementDetails;
 import net.ssehub.easy.reasoning.sseReasoner.functions.FailedElements;
 import net.ssehub.easy.reasoning.sseReasoner.functions.ScopeAssignments;
@@ -82,9 +83,7 @@ public class Resolver {
 
     private static final EASyLogger LOGGER
         = EASyLoggerFactory.INSTANCE.getLogger(Resolver.class, Descriptor.BUNDLE_NAME);
-    private IAdditionalInformationLogger infoLogger;
-    
-    private String reasoningID; 
+    private IAdditionalInformationLogger infoLogger; 
     
     private Project project;
     private Configuration config;
@@ -287,7 +286,6 @@ public class Resolver {
         this.config = config;
         evaluator = new EvalVisitor();
         constraintMap = new VariablesMap();
-        this.reasoningID = PerformanceStatistics.createReasoningID(project.getName(), "Model validation");
         this.failedElements = new FailedElements();
         this.scopeAssignments = new ScopeAssignments();
         this.constraintVariableMap = new HashMap<Constraint, IDecisionVariable>();
@@ -1185,7 +1183,6 @@ public class Resolver {
      * @param dispatchScope the scope for dynamic dispatches
      */
     private void resolveConstraints(List<Constraint> constraints, Project dispatchScope) {
-//        PerformanceStatistics.addTimestamp(reasoningID);
         if (Descriptor.LOGGING) {
             printConstraints(constraintBase);            
         }
@@ -1228,6 +1225,7 @@ public class Resolver {
                             // due to NULL result if failed assignment
                             failedelementDetails.setProblemConstraintPart(cst);
                             failedelementDetails.setProblemConstraint(constraint);
+                            failedelementDetails.setErrorClassifier(ReasoningErrorCodes.FAILED_REASSIGNMENT);
                             failedElements.addProblemVariable(evaluator.getMessage(j).getVariable(), 
                                 failedelementDetails);
                             if (Descriptor.LOGGING) {
@@ -1314,6 +1312,7 @@ public class Resolver {
             failedElementDetails.setProblemPoints(new HashSet<IDecisionVariable>(problemVariables));
             failedElementDetails.setProblemConstraintPart(getFailedConstraintPart());
             failedElementDetails.setProblemConstraint(constraint);
+            failedElementDetails.setErrorClassifier(ReasoningErrorCodes.FAILED_CONSTRAINT);
             failedElements.addProblemConstraint(constraint, failedElementDetails);
             if (Descriptor.LOGGING) {
                 LOGGER.debug("Failed constraint: " 
