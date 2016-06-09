@@ -30,7 +30,7 @@ public class Message extends net.ssehub.easy.basics.messages.Message {
     private List<Project> conflictingElementProjects;
     private List<String> conflictingElementSuggestions;
     private List<IDecisionVariable> constraintVariables;
-    private List<ReasoningError> errorClassification;
+    private List<Integer> errorClassification;
     
 
     /**
@@ -260,10 +260,10 @@ public class Message extends net.ssehub.easy.basics.messages.Message {
     
     /**
      * Method for adding a list of reasoning error classifiers Null if non.
-     * @param errorClassification {@link ReasoningError} or null.
+     * @param errorClassification defined error codes or null.
      */
-    public void addErrorClassification(List<ReasoningError> errorClassification) {
-        this.errorClassification = new ArrayList<ReasoningError>();
+    public void addErrorClassification(List<Integer> errorClassification) {
+        this.errorClassification = new ArrayList<Integer>();
         if (null != errorClassification) {
             this.errorClassification.addAll(errorClassification);
         }
@@ -271,9 +271,9 @@ public class Message extends net.ssehub.easy.basics.messages.Message {
     
     /**
      * Method for returning a list of reasoning error classifiers. Null if none.
-     * @return List of {@link ReasoningError}s or null.
+     * @return List of error codes or null.
      */
-    public List<ReasoningError> getErrorClassification() {
+    public List<Integer> getErrorClassification() {
         return errorClassification;
     }
 }

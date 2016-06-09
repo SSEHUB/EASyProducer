@@ -5,15 +5,16 @@ package net.ssehub.easy.reasoning.core.reasoner;
  * @author sizonenko
  *
  */
-public enum ReasoningError {
+public class ReasoningErrorCodes {
+    
     /**
      * Reassignment of the variable in the same scope or assigning value to the froozen variable.
      */
-    FAILED_REASSIGNMENT,
+    public static final int FAILED_REASSIGNMENT = 101;
     
     /**
      * Constraint not satisfied.
      */
-    FAILED_CONSTRAINT;
+    public static final int FAILED_CONSTRAINT = 102;
 
 }
