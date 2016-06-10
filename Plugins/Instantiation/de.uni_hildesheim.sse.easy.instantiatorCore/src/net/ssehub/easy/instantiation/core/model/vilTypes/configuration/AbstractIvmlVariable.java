@@ -4,18 +4,20 @@ import java.util.ArrayList;
 import java.util.List;
 
 import net.ssehub.easy.basics.logger.EASyLoggerFactory;
+import net.ssehub.easy.basics.logger.EASyLoggerFactory.EASyLogger;
 import net.ssehub.easy.instantiation.core.Bundle;
-import net.ssehub.easy.instantiation.core.model.common.VilException;
 import net.ssehub.easy.instantiation.core.model.vilTypes.ArraySequence;
 import net.ssehub.easy.instantiation.core.model.vilTypes.ArraySet;
 import net.ssehub.easy.instantiation.core.model.vilTypes.Invisible;
 import net.ssehub.easy.instantiation.core.model.vilTypes.OperationMeta;
 import net.ssehub.easy.instantiation.core.model.vilTypes.Sequence;
 import net.ssehub.easy.instantiation.core.model.vilTypes.Set;
+import net.ssehub.easy.instantiation.core.model.vilTypes.TypeDescriptor;
 import net.ssehub.easy.instantiation.core.model.vilTypes.UnmodifiableSequence;
 import net.ssehub.easy.instantiation.core.model.vilTypes.UnmodifiableSet;
 import net.ssehub.easy.varModel.confModel.AssignmentState;
 import net.ssehub.easy.varModel.confModel.ConfigurationException;
+import net.ssehub.easy.varModel.confModel.ContainerVariable;
 import net.ssehub.easy.varModel.confModel.IAssignmentState;
 import net.ssehub.easy.varModel.confModel.IConfiguration;
 import net.ssehub.easy.varModel.confModel.IConfigurationElement;
@@ -27,6 +29,7 @@ import net.ssehub.easy.varModel.confModel.paths.StartPathElement;
 import net.ssehub.easy.varModel.model.AbstractVariable;
 import net.ssehub.easy.varModel.model.DecisionVariableDeclaration;
 import net.ssehub.easy.varModel.model.datatypes.Compound;
+import net.ssehub.easy.varModel.model.datatypes.Container;
 import net.ssehub.easy.varModel.model.datatypes.IDatatype;
 import net.ssehub.easy.varModel.model.datatypes.IntegerType;
 import net.ssehub.easy.varModel.model.datatypes.Reference;
@@ -124,7 +127,7 @@ public abstract class AbstractIvmlVariable extends IvmlElement {
                 for (int n = 0; n < variable.getNestedElementsCount(); n++) {
                     IDecisionVariable var = variable.getNestedElement(n);
                     if (filter.isEnabled(var)) {
-                        tmp.add(new DecisionVariable(config, variable.getNestedElement(n), filter));
+                        tmp.add(new DecisionVariable(config, var, filter));
                     }
                 }
                 nested = tmp.toArray(new DecisionVariable[tmp.size()]);
@@ -738,23 +741,105 @@ public abstract class AbstractIvmlVariable extends IvmlElement {
     }
     
     /**
-     * Creates a value matching to this variable and tries to assign it.
+     * Returns the logger for this class.
+     * 
+     * @return the logger
+     */
+    private EASyLogger getLogger() {
+        return EASyLoggerFactory.INSTANCE.getLogger(AbstractIvmlVariable.class, Bundle.ID);
+    }
+    
+    /**
+     * Creates a value matching to this variable and tries to assign it. Failures will be logged
+     * and ignored.
      *
      * @param override try overriding the existing value (<code>true</code>) or just do nothing if a value already 
      *    exists (<code>false</code>)
-     * @throws VilException if creating the value or assigning it fails
      */
-    public void createValue(boolean override) throws VilException {
-        if (override || (!override && !isConfigured())) {
+    public void createValue(boolean override) {
+        if (null != variable && (override || (!override && !isConfigured()))) {
             try {
-                origVariable.setValue(ValueFactory.createValue(origVariable.getDeclaration().getType()), 
+                variable.setValue(ValueFactory.createValue(variable.getDeclaration().getType()), 
                     AssignmentState.ASSIGNED);
             } catch (ConfigurationException e) {
-                throw new VilException(e.getMessage(), e, VilException.ID_RUNTIME);
+                getLogger().warn(e.getMessage());
             } catch (ValueDoesNotMatchTypeException e) {
-                throw new VilException(e.getMessage(), e, VilException.ID_RUNTIME);
+                getLogger().warn(e.getMessage());
             }
         }
+    }
+
+    /**
+     * Adds a value if the actual variable represents an IVML collection. The declared element type is used
+     * as type of the new value.
+     * 
+     * @return the added variable
+     */
+    public DecisionVariable addValue() {
+        DecisionVariable result = null;
+        if (null != variable) {
+            IDatatype vType = variable.getDeclaration().getType();
+            if (Container.TYPE.isAssignableFrom(vType) && vType.getGenericTypeCount() > 0) {
+                result = addValue(vType.getGenericType(0));
+            } else {
+                getLogger().warn("given type is not a container");
+            }
+        }
+        return result;
+    }
+
+    /**
+     * Adds a value if the actual variable represents an IVML collection.
+     * 
+     * @param type the desired type of the new variable (must be compatible to the element type of the 
+     *     underlying collection)
+     * @return the added variable
+     */
+    public DecisionVariable addValue(TypeDescriptor<?> type) {
+        DecisionVariable result = null;
+        if (null != variable && type instanceof IvmlTypeDescriptor) {
+            IDatatype vType = variable.getDeclaration().getType();
+            if (Container.TYPE.isAssignableFrom(vType) && vType.getGenericTypeCount() > 0) {
+                IDatatype iType = ((IvmlTypeDescriptor) type).getIvmlType();
+                if (vType.isAssignableFrom(iType)) {
+                    addValue(iType);
+                } else {
+                    getLogger().warn("given type is not compatible to container element type");
+                }
+            } else {
+                getLogger().warn("given type is not a container");
+            }
+        }
+        return result;
+    }
+
+    /**
+     * adds a value of a given type to a container.
+     * 
+     * @param type the type
+     * @return the created variable
+     */
+    private DecisionVariable addValue(IDatatype type) {
+        DecisionVariable result = null;
+        if (variable instanceof ContainerVariable) {
+            ContainerVariable cVariable = (ContainerVariable) variable;
+            IDecisionVariable var = cVariable.addNestedElement();
+            try {
+                var.setValue(ValueFactory.createValue(type), AssignmentState.ASSIGNED);
+                if (filter.isEnabled(var)) {
+                    result = new DecisionVariable(config, var, filter);
+                    DecisionVariable[] tmp = new DecisionVariable[nested.length + 1];
+                    System.arraycopy(nested, 0, tmp, 0, nested.length);
+                    tmp[nested.length + 1] = result;
+                    nested = tmp;
+                }
+            } catch (ConfigurationException e) {
+                getLogger().warn(e.getMessage());
+            } catch (ValueDoesNotMatchTypeException e) {
+                getLogger().warn(e.getMessage());
+            }
+        }
+        return result;
     }
 
 }

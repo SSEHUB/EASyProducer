@@ -443,7 +443,7 @@ public abstract class ModelManagement <M extends IModel> {
                 models.add(model);    
             }
             events.notifyModelReplacement(current, model);
-          current = model;
+            current = model;
         }
         return current;
     }
