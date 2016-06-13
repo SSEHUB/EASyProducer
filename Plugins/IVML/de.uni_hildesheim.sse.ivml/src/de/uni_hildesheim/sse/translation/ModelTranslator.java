@@ -140,6 +140,8 @@ public class ModelTranslator extends net.ssehub.easy.dslCore.translation.ModelTr
         private Project project;
         private TypeContext context;
         private Utils.SplitResult splitResult;
+        private URI uri;
+        private int errorCount;
 
         /**
          * Creates the result entry.
@@ -158,12 +160,23 @@ public class ModelTranslator extends net.ssehub.easy.dslCore.translation.ModelTr
         }
         
         /**
+         * Sets additional information required to register a successfully created model with {@link VarModel}.
+         * 
+         * @param uri the URI of the model (if given, indicates that a successfully loaded model shall be registered) 
+         * @param errorCount the initial error count
+         */
+        private void setRegistrationInfo(URI uri, int errorCount) {
+            this.uri = uri;
+            this.errorCount = errorCount;
+        }
+        
+        /**
          * Completes loading.
          * 
          * @param result the parent instance
          */
         private void completeLoading(Result result) { 
-            result.getTranslator().completeLoading(eProject, project, context, splitResult);
+            result.getTranslator().completeLoading(this);
         }
 
         /**
@@ -173,6 +186,50 @@ public class ModelTranslator extends net.ssehub.easy.dslCore.translation.ModelTr
          */
         private Project getProject() {
             return project;
+        }
+        
+        /**
+         * Returns the splitted entries.
+         * 
+         * @return the splitted entries
+         */
+        private Utils.SplitResult getSplitResult() {
+            return splitResult;
+        }
+        
+        /**
+         * Returns the actual type context.
+         * 
+         * @return the type context
+         */
+        private TypeContext getContext() {
+            return context;
+        }
+        
+        /**
+         * Returns the xText project.
+         * 
+         * @return the xText project
+         */
+        private de.uni_hildesheim.sse.ivml.Project getEProject() {
+            return eProject;
+        }
+        
+        /**
+         * Registers the (successful) result if needed, i.e., if {@link #setRegistrationInfo(URI, int)} has been called
+         * with a URL.
+         * 
+         * @param errorCount the actual error count
+         * @return <code>true</code> if a registration happened, <code>false</code> else
+         */
+        private boolean registerIfNeeded(int errorCount) {
+            boolean registered = false;
+            if (null != uri && this.errorCount == errorCount) {
+                // required if models in the same file refer to each other
+                VarModel.INSTANCE.updateModel(project, uri, ModelUtility.INSTANCE, false);
+                registered = true;
+            }
+            return registered;
         }
        
     }
@@ -372,23 +429,22 @@ public class ModelTranslator extends net.ssehub.easy.dslCore.translation.ModelTr
         
         // requires completeLoading!
 
-        if (registerSuccessful && errorCount == getErrorCount()) {
-            // required if models in the same file refer to each other
-            VarModel.INSTANCE.updateModel(result, uri, ModelUtility.INSTANCE, false);
+        ResultEntry entry = new ResultEntry(project, result, context, splitRes);
+        if (registerSuccessful) {
+            entry.setRegistrationInfo(uri, errorCount);
         }
-        return new ResultEntry(project, result, context, splitRes);
+        return entry;
     }
     
     /**
      * Complete loading of a given model.
      * 
-     * @param project the xText project
-     * @param result the (result) model to complete the loading for
-     * @param context the actual type context
-     * @param splitRes the type-splitted model elements of <code>project</code>
+     * @param entry the result entry on which to complete loading
      */
-    private void completeLoading(de.uni_hildesheim.sse.ivml.Project project, Project result, TypeContext context, 
-        Utils.SplitResult splitRes) {
+    private void completeLoading(ResultEntry entry) {
+        Utils.SplitResult splitRes = entry.getSplitResult();
+        TypeContext context = entry.getContext();
+        //eProject, project, context, splitResult
         if (null != splitRes.getAttrs()) {
             for (AnnotateTo annotation : splitRes.getAttrs()) {
                 processAnnotation(annotation, context);
@@ -409,8 +465,10 @@ public class ModelTranslator extends net.ssehub.easy.dslCore.translation.ModelTr
             }
         }
 
-        context.sortProjectElements(project.getContents().getElements());
+        context.sortProjectElements(entry.getEProject().getContents().getElements());
         context.clear();
+
+        entry.registerIfNeeded(getErrorCount());
     }
 
     /**
