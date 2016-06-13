@@ -1,0 +1,20 @@
+project PipelinesCfg {
+
+	import Basics;
+	import Pipelines;
+	import PriorityPipCfg;
+	import PipelineVar_1Cfg;
+	import PipelineVar_2Cfg;
+	import PipelineVar_3Cfg;
+	import PipelineVar_4Cfg;
+	import PipelineVar_5Cfg;
+	import PipelineVar_6Cfg;
+	import PipelineVar_7Cfg;
+	import PipelineVar_8Cfg;
+	import SubTopologyCfg;
+	pipelines = {
+		refBy(PriorityPip), refBy(PipelineVar_1), refBy(PipelineVar_2), refBy(PipelineVar_3), refBy(PipelineVar_4), refBy(PipelineVar_5), refBy(PipelineVar_6), refBy(PipelineVar_7), refBy(PipelineVar_8), refBy(SubTopology)
+	};
+	pipelines.userVisible = true;
+	pipelines.bindingTime = BindingTime.compile;
+}

@@ -1,0 +1,17 @@
+project Adaptivity {
+
+	import Basics;
+	import Observables;
+	annotate BindingTime bindingTime = BindingTime.compile to Adaptivity;
+	compound QualityParameterWeighting {
+		refTo(QualityParameter) parameter;
+		Real weight;
+	}
+
+	assign (bindingTime = BindingTime.runtimeEnact) to {
+		Integer updateFrequency = 1000;
+		Constraint updateFrequencyLimit = updateFrequency == 0 or updateFrequency > 500;
+		setOf(QualityParameterWeighting) pipelineImportance = null;
+		setOf(QualityParameterWeighting) crossPipelineTradeoffs = null;
+	}
+}

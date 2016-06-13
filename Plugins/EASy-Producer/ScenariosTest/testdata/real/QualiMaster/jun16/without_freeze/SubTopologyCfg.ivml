@@ -1,0 +1,65 @@
+project SubTopologyCfg {
+
+	import Basics;
+	import Pipelines;
+	import FamiliesCfg;
+	import DataManagementCfg;
+	Pipeline SubTopology;
+	SubTopology = Pipeline {
+		name = "CorrelationSW", 
+		sources = {}, 
+		numworkers = 13, 
+		artifact = "eu.qualimaster:CorrelationSW:0.0.1-SNAPSHOT", 
+		debug = false, 
+		fastSerialization = false, 
+		isSubPipeline = true, 
+		connectors = {
+			refBy(SubTopology_FamilyElement0)
+		}, 
+		subPipelineFamily = refBy(fCorrelationFinancial), 
+		constraints = {}
+	};
+	Flow SubTopology_Flow0;
+	Flow SubTopology_Flow1;
+	Flow SubTopology_Flow2;
+	FamilyElement SubTopology_FamilyElement0;
+	FamilyElement SubTopology_FamilyElement1;
+	SubTopology_Flow0 = Flow {
+		grouping = Grouping.directGrouping, 
+		tupleType = refBy(fMapper.output[0]), 
+		destination = refBy(SubTopology_FamilyElement1), 
+		name = "f1", 
+		constraints = {}
+	};
+	SubTopology_Flow1 = Flow {
+		grouping = Grouping.directGrouping, 
+		tupleType = refBy(fMapper.output[1]), 
+		destination = refBy(SubTopology_FamilyElement1), 
+		name = "f2", 
+		constraints = {}
+	};
+	SubTopology_Flow2 = Flow {
+		grouping = Grouping.allGrouping, 
+		tupleType = refBy(fMapper.output[2]), 
+		destination = refBy(SubTopology_FamilyElement1), 
+		name = "f3", 
+		constraints = {}
+	};
+	SubTopology_FamilyElement0 = FamilyElement {
+		family = refBy(fMapper), 
+		output = {
+			refBy(SubTopology_Flow0), refBy(SubTopology_Flow1), refBy(SubTopology_Flow2)
+		}, 
+		parallelism = 1, 
+		name = "Mapper", 
+		constraints = {}
+	};
+	SubTopology_FamilyElement1 = FamilyElement {
+		family = refBy(fHayashiYoshida), 
+		output = {}, 
+		parallelism = 13, 
+		name = "HayashiYoshida", 
+		constraints = {}
+	};
+	annotate BindingTime bindingTime = BindingTime.compile to SubTopologyCfg;
+}

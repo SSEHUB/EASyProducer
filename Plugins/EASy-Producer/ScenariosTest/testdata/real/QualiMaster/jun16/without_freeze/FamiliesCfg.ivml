@@ -1,0 +1,1196 @@
+project FamiliesCfg {
+
+	import ReconfigurableHardware;
+	import Families;
+	import AlgorithmsCfg;
+	import BasicsCfg;
+	Family fPreprocessor;
+	Family fCorrelationFinancial;
+	Family fSentimentAnalysis;
+	Family fCorrelationTwitter;
+	Family fMismatchedFamily;
+	Family randomFamily;
+	Family switchFamily;
+	Family fExpertSearch;
+	Family fFinancialNetworkExtraction;
+	Family fTwitterCrawling;
+	Family fTwitterEventDetection;
+	Family fTwitterEventPrediction;
+	Family fTwitterStreamFiltering;
+	Family FamilyVar_14;
+	Family FamilyVar_15;
+	Family FamilyVar_16;
+	Family FamilyVar_17;
+	Family FamilyVar_18;
+	Family FamilyVar_19;
+	Family FamilyVar_20;
+	Family FamilyVar_21;
+	Family FamilyVar_22;
+	Family FamilyVar_23;
+	Family FamilyVar_24;
+	Family fMapper;
+	Family fHayashiYoshida;
+	families = {
+		refBy(fPreprocessor), refBy(fCorrelationFinancial), refBy(fSentimentAnalysis), refBy(fCorrelationTwitter), refBy(fMismatchedFamily), refBy(randomFamily), refBy(switchFamily), refBy(fExpertSearch), refBy(fFinancialNetworkExtraction), refBy(fTwitterCrawling), refBy(fTwitterEventDetection), refBy(fTwitterEventPrediction), refBy(fTwitterStreamFiltering), refBy(FamilyVar_14), refBy(FamilyVar_15), refBy(FamilyVar_16), refBy(FamilyVar_17), refBy(FamilyVar_18), refBy(FamilyVar_19), refBy(FamilyVar_20), refBy(FamilyVar_21), refBy(FamilyVar_22), refBy(FamilyVar_23), refBy(FamilyVar_24), refBy(fMapper), refBy(fHayashiYoshida)
+	};
+	families.bindingTime = BindingTime.compile;
+	fPreprocessor = Family {
+		name = "fPreprocessor", 
+		description = "", 
+		members = {
+			refBy(swPreprocessor)
+		}, 
+		input = {
+			Tuple {
+				name = "springStream", 
+				fields = {
+					Field {
+						name = "symbolTuple", 
+						type = refBy(StringType), 
+						keyPart = false
+					}
+				}
+			}
+		}, 
+		output = {
+			Tuple {
+				name = "preprocessedStream", 
+				fields = {
+					Field {
+						name = "symbolId", 
+						type = refBy(StringType), 
+						keyPart = false
+					}, Field {
+						name = "timestamp", 
+						type = refBy(LongType), 
+						keyPart = false
+					}, Field {
+						name = "value", 
+						type = refBy(RealType), 
+						keyPart = false
+					}, Field {
+						name = "volume", 
+						type = refBy(IntegerType), 
+						keyPart = false
+					}
+				}
+			}
+		}
+	};
+	fCorrelationFinancial = Family {
+		name = "fCorrelationFinancial", 
+		description = "", 
+		members = {
+			refBy(SWTopoCorrelationFinancial), refBy(GenHWTopoCorrelationFinancial), refBy(correlationSW)
+		}, 
+		input = {
+			Tuple {
+				name = "preprocessedStream", 
+				fields = {
+					Field {
+						name = "symbolId", 
+						type = refBy(StringType), 
+						keyPart = false
+					}, Field {
+						name = "timestamp", 
+						type = refBy(LongType), 
+						keyPart = false
+					}, Field {
+						name = "value", 
+						type = refBy(RealType), 
+						keyPart = false
+					}, Field {
+						name = "volume", 
+						type = refBy(IntegerType), 
+						keyPart = false
+					}
+				}
+			}, Tuple {
+				name = "symbolList", 
+				fields = {
+					Field {
+						name = "allSymbols", 
+						type = refBy(StringListType), 
+						keyPart = false
+					}
+				}
+			}
+		}, 
+		parameters = {
+			IntegerParameter {
+				name = "windowSize"
+			}
+		}, 
+		output = {
+			Tuple {
+				name = "pairwiseFinancial", 
+				fields = {
+					Field {
+						name = "pairwiseCorrelationFinancial", 
+						type = refBy(StringType), 
+						keyPart = false
+					}
+				}
+			}
+		}
+	};
+	fSentimentAnalysis = Family {
+		name = "fSentimentAnalysis", 
+		description = "", 
+		members = {
+			refBy(topoSentiWord), refBy(topoSVM)
+		}, 
+		input = {
+			Tuple {
+				name = "twitterStream", 
+				fields = {
+					Field {
+						name = "status", 
+						type = refBy(StatusType), 
+						keyPart = false
+					}
+				}
+			}
+		}, 
+		parameters = {
+			IntegerParameter {
+				name = "timeSeriesGranularity"
+			}, IntegerParameter {
+				name = "sentimentClass"
+			}, RealParameter {
+				name = "classificationThreshold"
+			}
+		}, 
+		output = {
+			Tuple {
+				name = "analyzedStream", 
+				fields = {
+					Field {
+						name = "symbolId", 
+						type = refBy(StringType), 
+						keyPart = false
+					}, Field {
+						name = "timestamp", 
+						type = refBy(LongType), 
+						keyPart = false
+					}, Field {
+						name = "value", 
+						type = refBy(RealType), 
+						keyPart = false
+					}, Field {
+						name = "volume", 
+						type = refBy(IntegerType), 
+						keyPart = false
+					}
+				}
+			}
+		}
+	};
+	fCorrelationTwitter = Family {
+		name = "fCorrelationTwitter", 
+		description = "", 
+		members = {
+			refBy(SWTopoCorrelationTwitter), refBy(HWTopoCorrelationTwitter)
+		}, 
+		input = {
+			Tuple {
+				name = "analyzedStream", 
+				fields = {
+					Field {
+						name = "symbolId", 
+						type = refBy(StringType), 
+						keyPart = false
+					}, Field {
+						name = "timestamp", 
+						type = refBy(LongType), 
+						keyPart = false
+					}, Field {
+						name = "value", 
+						type = refBy(RealType), 
+						keyPart = false
+					}, Field {
+						name = "volume", 
+						type = refBy(IntegerType), 
+						keyPart = false
+					}
+				}
+			}, Tuple {
+				name = "symbolList", 
+				fields = {
+					Field {
+						name = "allSymbols", 
+						type = refBy(StringListType), 
+						keyPart = false
+					}
+				}
+			}
+		}, 
+		parameters = {
+			IntegerParameter {
+				name = "windowSize"
+			}
+		}, 
+		output = {
+			Tuple {
+				name = "pairwiseTwitter", 
+				fields = {
+					Field {
+						name = "pairwiseCorrelationTwitter", 
+						type = refBy(StringType), 
+						keyPart = false
+					}
+				}
+			}
+		}
+	};
+	fMismatchedFamily = Family {
+		name = "fMismatchedFamily", 
+		members = {
+			refBy(mismatchedAlg)
+		}, 
+		input = {
+			Tuple {
+				name = "misString", 
+				fields = {
+					Field {
+						name = "symbolTuple1", 
+						type = refBy(StringType), 
+						keyPart = false
+					}, Field {
+						name = "volume", 
+						type = refBy(IntegerType), 
+						keyPart = false
+					}
+				}
+			}
+		}, 
+		output = {
+			Tuple {
+				name = "misString", 
+				fields = {
+					Field {
+						name = "streamID1", 
+						type = refBy(StringType), 
+						keyPart = false
+					}, Field {
+						name = "timestamp", 
+						type = refBy(IntegerType), 
+						keyPart = false
+					}, Field {
+						name = "quote", 
+						type = refBy(RealType), 
+						keyPart = false
+					}
+				}
+			}
+		}
+	};
+	randomFamily = Family {
+		name = "randomFamily", 
+		members = {
+			refBy(randomAlg1), refBy(randomAlg2)
+		}, 
+		input = {
+			Tuple {
+				name = "randomData", 
+				fields = {
+					Field {
+						name = "randomInteger", 
+						type = refBy(IntegerType), 
+						keyPart = false
+					}
+				}
+			}
+		}, 
+		parameters = {
+			IntegerParameter {
+				name = "delay"
+			}, BooleanParameter {
+				name = "flag"
+			}
+		}, 
+		output = {
+			Tuple {
+				name = "proccessedData", 
+				fields = {
+					Field {
+						name = "randomInteger", 
+						type = refBy(IntegerType), 
+						keyPart = false
+					}
+				}
+			}
+		}
+	};
+	switchFamily = Family {
+		name = "switchFamily", 
+		description = "", 
+		members = {
+			refBy(switchAlg1), refBy(switchAlg2)
+		}, 
+		input = {
+			Tuple {
+				name = "randomData", 
+				fields = {
+					Field {
+						name = "randomInteger", 
+						type = refBy(IntegerType), 
+						keyPart = false
+					}
+				}
+			}
+		}, 
+		parameters = {
+			IntegerParameter {
+				name = "aggregationFactor"
+			}, IntegerParameter {
+				name = "delay"
+			}, BooleanParameter {
+				name = "flag"
+			}
+		}, 
+		output = {
+			Tuple {
+				name = "proccessedData", 
+				fields = {
+					Field {
+						name = "randomInteger", 
+						type = refBy(IntegerType), 
+						keyPart = false
+					}
+				}
+			}
+		}
+	};
+	fExpertSearch = Family {
+		name = "fExpertSearch", 
+		description = "", 
+		members = {
+			refBy(expertSearch)
+		}, 
+		input = {
+			Tuple {
+				name = "analysis", 
+				fields = {
+					Field {
+						name = "status", 
+						type = refBy(StatusType), 
+						keyPart = false
+					}
+				}
+			}
+		}, 
+		parameters = {
+			IntegerParameter {
+				name = "timeSeriesGranularity"
+			}
+		}, 
+		output = {
+			Tuple {
+				name = "analysis", 
+				fields = {
+					Field {
+						name = "experts", 
+						type = refBy(IFExpertListType), 
+						keyPart = false
+					}, Field {
+						name = "timeInterval", 
+						type = refBy(IFTimeIntervalType), 
+						keyPart = false
+					}, Field {
+						name = "keywords", 
+						type = refBy(StringListType), 
+						keyPart = false
+					}, Field {
+						name = "symbols", 
+						type = refBy(StringListType), 
+						keyPart = false
+					}
+				}
+			}
+		}
+	};
+	fFinancialNetworkExtraction = Family {
+		name = "fFinancialNetworkExtraction", 
+		members = {
+			refBy(financialNetworkExtraction)
+		}, 
+		input = {
+			Tuple {
+				name = "analysis", 
+				fields = {
+					Field {
+						name = "status", 
+						type = refBy(StatusType), 
+						keyPart = false
+					}
+				}
+			}
+		}, 
+		parameters = {
+			IntegerParameter {
+				name = "timeSeriesGranularity"
+			}
+		}, 
+		output = {
+			Tuple {
+				name = "analysis", 
+				fields = {
+					Field {
+						name = "edges", 
+						type = refBy(IFEdgeListType), 
+						keyPart = false
+					}, Field {
+						name = "timeInterval", 
+						type = refBy(IFTimeIntervalType), 
+						keyPart = false
+					}
+				}
+			}
+		}
+	};
+	fTwitterCrawling = Family {
+		name = "fTwitterCrawling", 
+		members = {
+			refBy(twitterCrawling)
+		}, 
+		input = {
+			Tuple {
+				name = "analysis", 
+				fields = {
+					Field {
+						name = "status", 
+						type = refBy(StatusType), 
+						keyPart = false
+					}
+				}
+			}
+		}, 
+		parameters = {
+			IntegerParameter {
+				name = "timeSeriesGranularity"
+			}
+		}, 
+		output = {
+			Tuple {
+				name = "analysis", 
+				fields = {
+					Field {
+						name = "events", 
+						type = refBy(IFEventListType), 
+						keyPart = false
+					}, Field {
+						name = "timeInterval", 
+						type = refBy(IFTimeIntervalType), 
+						keyPart = false
+					}
+				}
+			}
+		}
+	};
+	fTwitterEventDetection = Family {
+		name = "fTwitterEventDetection", 
+		description = "", 
+		members = {
+			refBy(AlgorithmVar_24)
+		}, 
+		input = {
+			Tuple {
+				name = "twitterStream", 
+				fields = {
+					Field {
+						name = "status", 
+						type = refBy(StatusType), 
+						keyPart = false
+					}, Field {
+						name = "stocks", 
+						type = refBy(StringListType)
+					}
+				}
+			}
+		}, 
+		parameters = {
+			IntegerParameter {
+				defaultValue = 1000, 
+				name = "hardThreshold"
+			}, RealParameter {
+				defaultValue = 0.5, 
+				name = "percentageThreshold"
+			}, IntegerParameter {
+				defaultValue = 86400, 
+				name = "lengthOfTimeWindow"
+			}, IntegerParameter {
+				defaultValue = 1, 
+				name = "frequenceOfCheckForEvent"
+			}
+		}, 
+		output = {
+			Tuple {
+				name = "twitterStream", 
+				fields = {
+					Field {
+						name = "events", 
+						type = refBy(IFEventListType)
+					}, Field {
+						name = "status", 
+						type = refBy(StatusType)
+					}
+				}
+			}
+		}
+	};
+	fTwitterEventPrediction = Family {
+		name = "fTwitterEventPrediction", 
+		description = "", 
+		members = {
+			refBy(AlgorithmVar_20), refBy(AlgorithmVar_21)
+		}, 
+		input = {
+			Tuple {
+				name = "analysis", 
+				fields = {
+					Field {
+						name = "status", 
+						type = refBy(StatusType), 
+						keyPart = false
+					}
+				}
+			}
+		}, 
+		parameters = {
+			IntegerParameter {
+				name = "timeSeriesGranularity"
+			}
+		}, 
+		output = {
+			Tuple {
+				name = "analysis", 
+				fields = {
+					Field {
+						name = "events", 
+						type = refBy(IFEventListType), 
+						keyPart = false
+					}, Field {
+						name = "symbols", 
+						type = refBy(IFEventListType), 
+						keyPart = false
+					}, Field {
+						name = "timeInterval", 
+						type = refBy(IFTimeIntervalType), 
+						keyPart = false
+					}
+				}
+			}
+		}
+	};
+	fTwitterStreamFiltering = Family {
+		name = "fTwitterStreamFiltering", 
+		description = "", 
+		members = {
+			refBy(twitterStreamFiltering)
+		}, 
+		input = {
+			Tuple {
+				name = "analysis", 
+				fields = {
+					Field {
+						name = "status", 
+						type = refBy(ObjectType), 
+						keyPart = false
+					}
+				}
+			}
+		}, 
+		output = {
+			Tuple {
+				name = "analysis", 
+				fields = {
+					Field {
+						name = "status", 
+						type = refBy(ObjectType), 
+						keyPart = false
+					}
+				}
+			}
+		}
+	};
+	FamilyVar_14 = Family {
+		name = "fSpamDetection", 
+		description = "Detects spam in tweet stream", 
+		members = {
+			refBy(spamDetection)
+		}, 
+		input = {
+			Tuple {
+				name = "twitterStream", 
+				fields = {
+					Field {
+						name = "status", 
+						type = refBy(StatusType)
+					}
+				}
+			}
+		}, 
+		output = {
+			Tuple {
+				name = "twitterStream", 
+				fields = {
+					Field {
+						name = "status", 
+						type = refBy(StatusType)
+					}, Field {
+						name = "spamPropability", 
+						type = refBy(DoubleType)
+					}
+				}
+			}
+		}
+	};
+	FamilyVar_15 = Family {
+		name = "fSpamRemoval", 
+		description = "Removes Spam from twitter stream", 
+		members = {
+			refBy(spamRemoval)
+		}, 
+		input = {
+			Tuple {
+				name = "twitterStream", 
+				fields = {
+					Field {
+						name = "status", 
+						type = refBy(StatusType)
+					}, Field {
+						name = "spamPropability", 
+						type = refBy(DoubleType)
+					}
+				}
+			}
+		}, 
+		parameters = {
+			RealParameter {
+				defaultValue = 0.5, 
+				name = "spamThreshold"
+			}
+		}, 
+		output = {
+			Tuple {
+				name = "twitterStream", 
+				fields = {
+					Field {
+						name = "status", 
+						type = refBy(StatusType)
+					}
+				}
+			}
+		}
+	};
+	FamilyVar_16 = Family {
+		name = "fTweetClassifier", 
+		description = "checks if tweet belongs to a certain stock", 
+		members = {
+			refBy(tweetClassifier)
+		}, 
+		input = {
+			Tuple {
+				name = "modifiedTwitterStream", 
+				fields = {
+					Field {
+						name = "status", 
+						type = refBy(StatusType)
+					}
+				}
+			}, Tuple {
+				name = "keywordStream", 
+				fields = {
+					Field {
+						name = "keywords", 
+						type = refBy(StringListType)
+					}
+				}
+			}
+		}, 
+		output = {
+			Tuple {
+				name = "modifiedTwitterStream", 
+				fields = {
+					Field {
+						name = "tweet", 
+						type = refBy(StatusType)
+					}, Field {
+						name = "stocks", 
+						type = refBy(StringListType)
+					}
+				}
+			}
+		}
+	};
+	FamilyVar_17 = Family {
+		name = "fKeywordAnalyzer", 
+		description = "deduces typical keywords for a current event", 
+		members = {
+			refBy(keywordAnalyzer)
+		}, 
+		input = {
+			Tuple {
+				name = "twitterStream", 
+				fields = {
+					Field {
+						name = "events", 
+						type = refBy(IFEventListType)
+					}, Field {
+						name = "status", 
+						type = refBy(StatusType)
+					}
+				}
+			}
+		}, 
+		parameters = {
+			RealParameter {
+				defaultValue = 0.5, 
+				name = "threshold"
+			}, RealParameter {
+				defaultValue = 0.5, 
+				name = "decay"
+			}
+		}, 
+		output = {
+			Tuple {
+				name = "twitterStream", 
+				fields = {
+					Field {
+						name = "events", 
+						type = refBy(IFEventListType)
+					}, Field {
+						name = "status", 
+						type = refBy(StatusType)
+					}
+				}
+			}
+		}
+	};
+	FamilyVar_18 = Family {
+		name = "fEventEnrichment", 
+		description = "simply adds keywords to events", 
+		members = {
+			refBy(eventEnrichment)
+		}, 
+		input = {
+			Tuple {
+				name = "eventStream", 
+				fields = {
+					Field {
+						name = "tweet", 
+						type = refBy(StatusType)
+					}, Field {
+						name = "events", 
+						type = refBy(IFEventListType)
+					}
+				}
+			}, Tuple {
+				name = "keywordStream", 
+				fields = {
+					Field {
+						name = "keywords", 
+						type = refBy(StringListType)
+					}
+				}
+			}
+		}, 
+		output = {
+			Tuple {
+				name = "enrichedEventsStream", 
+				fields = {
+					Field {
+						name = "events", 
+						type = refBy(IFEventListType)
+					}
+				}
+			}
+		}
+	};
+	FamilyVar_19 = Family {
+		name = "fRecommendations", 
+		description = "", 
+		members = {
+			refBy(recommendations)
+		}, 
+		input = {
+			Tuple {
+				name = "twitterStream", 
+				fields = {
+					Field {
+						name = "events", 
+						type = refBy(IFEventListType)
+					}, Field {
+						name = "status", 
+						type = refBy(StatusType)
+					}
+				}
+			}
+		}, 
+		parameters = {
+			RealParameter {
+				defaultValue = 0.5, 
+				name = "impactThreshold"
+			}, RealParameter {
+				defaultValue = 0.5, 
+				name = "stockCooccurrenceThreshold"
+			}
+		}, 
+		output = {
+			Tuple {
+				name = "recommendationStream", 
+				fields = {
+					Field {
+						name = "recommendations", 
+						type = refBy(StringType)
+					}
+				}
+			}
+		}
+	};
+	FamilyVar_20 = Family {
+		name = "fSimpleRecommendations", 
+		description = "", 
+		members = {
+			refBy(AlgorithmVar_23)
+		}, 
+		input = {
+			Tuple {
+				name = "twitterStream", 
+				fields = {
+					Field {
+						name = "events", 
+						type = refBy(IFEventListType)
+					}, Field {
+						name = "status", 
+						type = refBy(StatusType)
+					}
+				}
+			}
+		}, 
+		output = {
+			Tuple {
+				name = "twitterStream", 
+				fields = {
+					Field {
+						name = "recommendations", 
+						type = refBy(StringType)
+					}
+				}
+			}
+		}
+	};
+	FamilyVar_21 = Family {
+		name = "fStockParser", 
+		description = "", 
+		members = {
+			refBy(AlgorithmVar_22)
+		}, 
+		input = {
+			Tuple {
+				name = "twitterStream", 
+				fields = {
+					Field {
+						name = "status", 
+						type = refBy(StatusType)
+					}
+				}
+			}
+		}, 
+		output = {
+			Tuple {
+				name = "twitterStream", 
+				fields = {
+					Field {
+						name = "status", 
+						type = refBy(StatusType)
+					}, Field {
+						name = "stocks", 
+						type = refBy(StringListType)
+					}
+				}
+			}
+		}
+	};
+	FamilyVar_22 = Family {
+		name = "fDynamicGraphCompilation", 
+		description = "", 
+		members = {
+			refBy(AlgorithmVar_25)
+		}, 
+		input = {
+			Tuple {
+				name = "pairwiseFinancial", 
+				fields = {
+					Field {
+						name = "pairwiseCorrelationFinancial", 
+						type = refBy(StringType), 
+						keyPart = false
+					}
+				}
+			}
+		}, 
+		parameters = {
+			RealParameter {
+				name = "correlationThreshold"
+			}
+		}, 
+		output = {
+			Tuple {
+				name = "edgeStream", 
+				fields = {
+					Field {
+						name = "edge", 
+						type = refBy(StringType), 
+						keyPart = false
+					}
+				}
+			}
+		}
+	};
+	FamilyVar_23 = Family {
+		name = "fDynamicHubComputation", 
+		description = "", 
+		members = {
+			refBy(AlgorithmVar_26)
+		}, 
+		input = {
+			Tuple {
+				name = "edgeStream", 
+				fields = {
+					Field {
+						name = "edge", 
+						type = refBy(StringType), 
+						keyPart = false
+					}
+				}
+			}
+		}, 
+		parameters = {
+			IntegerParameter {
+				defaultValue = 30, 
+				name = "windowSize"
+			}, IntegerParameter {
+				defaultValue = 10, 
+				name = "hubListSize"
+			}
+		}, 
+		output = {
+			Tuple {
+				name = "hubStream", 
+				fields = {
+					Field {
+						name = "hubList", 
+						type = refBy(StringType), 
+						keyPart = false
+					}
+				}
+			}
+		}
+	};
+	FamilyVar_24 = Family {
+		name = "fTransferEntropy", 
+		description = "", 
+		members = {
+			refBy(AlgorithmVar_28)
+		}, 
+		input = {
+			Tuple {
+				name = "preprocessedStream", 
+				fields = {
+					Field {
+						name = "symbolId", 
+						type = refBy(StringType), 
+						keyPart = false
+					}, Field {
+						name = "timestamp", 
+						type = refBy(LongType), 
+						keyPart = false
+					}, Field {
+						name = "value", 
+						type = refBy(RealType), 
+						keyPart = false
+					}, Field {
+						name = "volume", 
+						type = refBy(IntegerType), 
+						keyPart = false
+					}
+				}
+			}, Tuple {
+				name = "symbolList", 
+				fields = {
+					Field {
+						name = "allSymbols", 
+						type = refBy(StringListType), 
+						keyPart = false
+					}
+				}
+			}
+		}, 
+		parameters = {
+			IntegerParameter {
+				name = "windowSize"
+			}
+		}, 
+		output = {
+			Tuple {
+				name = "pairwiseFinancial", 
+				fields = {
+					Field {
+						name = "pairwiseCorrelationFinancial", 
+						type = refBy(StringType), 
+						keyPart = false
+					}
+				}
+			}
+		}
+	};
+	fMapper = Family {
+		name = "fMapper", 
+		description = "", 
+		members = {
+			refBy(aMapper)
+		}, 
+		input = {
+			Tuple {
+				name = "preprocessedStream", 
+				fields = {
+					Field {
+						name = "symbolId", 
+						type = refBy(StringType), 
+						keyPart = false
+					}, Field {
+						name = "timestamp", 
+						type = refBy(LongType), 
+						keyPart = false
+					}, Field {
+						name = "value", 
+						type = refBy(RealType), 
+						keyPart = false
+					}, Field {
+						name = "volume", 
+						type = refBy(IntegerType), 
+						keyPart = false
+					}
+				}
+			}, Tuple {
+				name = "symbolList", 
+				fields = {
+					Field {
+						name = "allSymbols", 
+						type = refBy(StringListType), 
+						keyPart = false
+					}
+				}
+			}
+		}, 
+		parameters = {
+			IntegerParameter {
+				name = "windowSize"
+			}
+		}, 
+		output = {
+			Tuple {
+				name = "symbolsStream", 
+				fields = {
+					Field {
+						name = "symbolId", 
+						type = refBy(StringType), 
+						keyPart = false
+					}, Field {
+						name = "timestamp", 
+						type = refBy(LongType), 
+						keyPart = false
+					}, Field {
+						name = "value", 
+						type = refBy(RealType), 
+						keyPart = false
+					}
+				}
+			}, Tuple {
+				name = "configurationStream", 
+				fields = {
+					Field {
+						name = "pairKey", 
+						type = refBy(StringType), 
+						keyPart = false
+					}, Field {
+						name = "pairValue", 
+						type = refBy(StringType), 
+						keyPart = false
+					}
+				}
+			}, Tuple {
+				name = "resetWindowStream", 
+				fields = {
+					Field {
+						name = "windowStart", 
+						type = refBy(LongType), 
+						keyPart = false
+					}
+				}
+			}
+		}
+	};
+	fHayashiYoshida = Family {
+		name = "fHayashiYoshida", 
+		members = {
+			refBy(aHayashiYoshida)
+		}, 
+		input = {
+			Tuple {
+				name = "symbolsStream", 
+				fields = {
+					Field {
+						name = "symbolId", 
+						type = refBy(StringType), 
+						keyPart = false
+					}, Field {
+						name = "timestamp", 
+						type = refBy(LongType), 
+						keyPart = false
+					}, Field {
+						name = "value", 
+						type = refBy(RealType), 
+						keyPart = false
+					}
+				}
+			}, Tuple {
+				name = "configurationStream", 
+				fields = {
+					Field {
+						name = "pairKey", 
+						type = refBy(StringType), 
+						keyPart = false
+					}, Field {
+						name = "pairValue", 
+						type = refBy(StringType), 
+						keyPart = false
+					}
+				}
+			}, Tuple {
+				name = "resetWindowStream", 
+				fields = {
+					Field {
+						name = "windowStart", 
+						type = refBy(LongType), 
+						keyPart = false
+					}
+				}
+			}
+		}, 
+		output = {
+			Tuple {
+				name = "pairwiseFinancial", 
+				fields = {
+					Field {
+						name = "pairwiseCorrelationFinancial", 
+						type = refBy(StringType), 
+						keyPart = false
+					}
+				}
+			}
+		}
+	};
+}

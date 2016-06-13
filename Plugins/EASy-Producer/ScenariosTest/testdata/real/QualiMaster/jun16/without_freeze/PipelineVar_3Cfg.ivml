@@ -1,0 +1,70 @@
+project PipelineVar_3Cfg {
+
+	import Basics;
+	import Pipelines;
+	import FamiliesCfg;
+	import DataManagementCfg;
+	annotate BindingTime bindingTime = BindingTime.compile to PipelineVar_3Cfg;
+	Pipeline PipelineVar_3;
+	Source PipelineVar_3_Source0;
+	Flow PipelineVar_3_Flow0;
+	FamilyElement PipelineVar_3_FamilyElement0;
+	Flow PipelineVar_3_Flow1;
+	DataManagementElement PipelineVar_3_DataManagementElement0;
+	Flow PipelineVar_3_Flow2;
+	Sink PipelineVar_3_Sink0;
+	PipelineVar_3_Sink0 = Sink {
+		sink = refBy(randomSink), 
+		parallelism = 1, 
+		name = "sink"
+	};
+	PipelineVar_3_Flow2 = Flow {
+		grouping = Grouping.shuffleGrouping, 
+		destination = refBy(PipelineVar_3_Sink0), 
+		name = "f3"
+	};
+	PipelineVar_3_DataManagementElement0 = DataManagementElement {
+		dataManagement = refBy(hBaseDataManagement), 
+		output = {
+			refBy(PipelineVar_3_Flow2)
+		}, 
+		parallelism = 1, 
+		name = "dm"
+	};
+	PipelineVar_3_Flow1 = Flow {
+		grouping = Grouping.shuffleGrouping, 
+		destination = refBy(PipelineVar_3_DataManagementElement0), 
+		name = "f2"
+	};
+	PipelineVar_3_FamilyElement0 = FamilyElement {
+		family = refBy(switchFamily), 
+		output = {
+			refBy(PipelineVar_3_Flow1)
+		}, 
+		parallelism = 1, 
+		name = "fm1"
+	};
+	PipelineVar_3_Flow0 = Flow {
+		grouping = Grouping.shuffleGrouping, 
+		destination = refBy(PipelineVar_3_FamilyElement0), 
+		name = "f1"
+	};
+	PipelineVar_3_Source0 = Source {
+		output = {
+			refBy(PipelineVar_3_Flow0)
+		}, 
+		source = refBy(randomSource), 
+		parallelism = 1, 
+		name = "src"
+	};
+	PipelineVar_3 = Pipeline {
+		name = "testDMPip", 
+		sources = {
+			refBy(PipelineVar_3_Source0)
+		}, 
+		numworkers = 3, 
+		artifact = "eu.qualimaster:testDMPip:0.0.1-SNAPSHOT", 
+		debug = false, 
+		fastSerialization = false
+	};
+}

@@ -1,0 +1,93 @@
+project Observables {
+
+	import Basics;
+	annotate BindingTime bindingTime = BindingTime.compile to Observables;
+	typedef Latency Integer;
+	typedef Throughput_Item Integer;
+	typedef Throughput_Volume Integer;
+	typedef EnactmentDelay Integer;
+	typedef UsedMemory Integer;
+	typedef AvailableMemory Integer;
+	typedef AvailableFrequency Integer;
+	typedef UsedMachines Integer;
+	typedef AvailableMachines Integer;
+	typedef Bandwidth Real;
+	typedef Capacity Real;
+	typedef Executors Integer;
+	typedef Hosts Integer;
+	typedef Tasks Integer;
+	typedef IsAvailable Boolean;
+	typedef Load Real;
+	typedef Accuracy_Confidence Real;
+	typedef Accuracy_ErrorRate Real;
+	typedef Believability Real;
+	typedef Relevancy Real;
+	typedef Completeness Real;
+	typedef Volume Real;
+	typedef Velocity Real;
+	typedef Volatility Real;
+	typedef Variety Integer;
+	typedef Items Real;
+	abstract compound Observable {
+		NonEmptyString type;
+	}
+
+	compound QualityParameter refines Observable {
+	}
+
+	compound ConfiguredQualityParameter refines QualityParameter {
+		NonEmptyString monitorCls = null;
+	}
+
+	setOf(ConfiguredQualityParameter) qualityParameters = {
+		ConfiguredQualityParameter {
+			type = "Latency"
+		}, ConfiguredQualityParameter {
+			type = "Throughput_Item"
+		}, ConfiguredQualityParameter {
+			type = "Throughput_Volume"
+		}, ConfiguredQualityParameter {
+			type = "EnactmentDelay"
+		}, ConfiguredQualityParameter {
+			type = "UsedMemory"
+		}, ConfiguredQualityParameter {
+			type = "UsedMachines"
+		}, ConfiguredQualityParameter {
+			type = "AvailableMachines"
+		}, ConfiguredQualityParameter {
+			type = "Bandwidth"
+		}, ConfiguredQualityParameter {
+			type = "Capacity"
+		}, ConfiguredQualityParameter {
+			type = "Executors"
+		}, ConfiguredQualityParameter {
+			type = "Tasks"
+		}, ConfiguredQualityParameter {
+			type = "IsAvailable"
+		}, ConfiguredQualityParameter {
+			type = "Accuracy_Confidence"
+		}, ConfiguredQualityParameter {
+			type = "Accuracy_ErrorRate"
+		}, ConfiguredQualityParameter {
+			type = "Believability"
+		}, ConfiguredQualityParameter {
+			type = "Relevancy"
+		}, ConfiguredQualityParameter {
+			type = "Completeness"
+		}, ConfiguredQualityParameter {
+			type = "Volume"
+		}, ConfiguredQualityParameter {
+			type = "Velocity"
+		}, ConfiguredQualityParameter {
+			type = "Volatility"
+		}, ConfiguredQualityParameter {
+			type = "Variety"
+		}
+	};
+	Constraint paramTypes = size(qualityParameters->collect(p|p.type)) == size(qualityParameters);
+	setOf(ConfiguredQualityParameter) configuredParameters = {};
+	Constraint cfgParamTypes = size(configuredParameters->collect(p|p.type)) == size(configuredParameters);
+	freeze {
+		qualityParameters;
+	}
+}

@@ -1,0 +1,248 @@
+project PipelineVar_7Cfg {
+
+	import Basics;
+	import Pipelines;
+	import FamiliesCfg;
+	import DataManagementCfg;
+	annotate BindingTime bindingTime = BindingTime.compile to PipelineVar_7Cfg;
+	Pipeline PipelineVar_7;
+	Source PipelineVar_7_Source0;
+	Flow PipelineVar_7_Flow0;
+	FamilyElement PipelineVar_7_FamilyElement0;
+	Flow PipelineVar_7_Flow1;
+	FamilyElement PipelineVar_7_FamilyElement1;
+	Flow PipelineVar_7_Flow2;
+	FamilyElement PipelineVar_7_FamilyElement2;
+	Flow PipelineVar_7_Flow3;
+	FamilyElement PipelineVar_7_FamilyElement3;
+	Flow PipelineVar_7_Flow4;
+	FamilyElement PipelineVar_7_FamilyElement4;
+	Flow PipelineVar_7_Flow5;
+	FamilyElement PipelineVar_7_FamilyElement5;
+	Flow PipelineVar_7_Flow6;
+	Sink PipelineVar_7_Sink0;
+	PipelineVar_7_Sink0 = Sink {
+		sink = refBy(DataSinkVar_3), 
+		parallelism = 1, 
+		name = "FocusSink", 
+		constraints = {}
+	};
+	PipelineVar_7_Flow6 = Flow {
+		grouping = Grouping.shuffleGrouping, 
+		destination = refBy(PipelineVar_7_Sink0), 
+		name = "f11", 
+		constraints = {}
+	};
+	PipelineVar_7_FamilyElement5 = FamilyElement {
+		family = refBy(FamilyVar_19), 
+		output = {
+			refBy(PipelineVar_7_Flow6)
+		}, 
+		parallelism = 1, 
+		name = "Recommendations", 
+		constraints = {}
+	};
+	PipelineVar_7_Flow5 = Flow {
+		grouping = Grouping.shuffleGrouping, 
+		destination = refBy(PipelineVar_7_FamilyElement5), 
+		name = "f6", 
+		constraints = {}
+	};
+	PipelineVar_7_FamilyElement4 = FamilyElement {
+		family = refBy(FamilyVar_17), 
+		output = {
+			refBy(PipelineVar_7_Flow5)
+		}, 
+		parallelism = 1, 
+		name = "KeywordAnalyzer", 
+		constraints = {}
+	};
+	PipelineVar_7_Flow4 = Flow {
+		grouping = Grouping.shuffleGrouping, 
+		destination = refBy(PipelineVar_7_FamilyElement4), 
+		name = "f5", 
+		constraints = {}
+	};
+	PipelineVar_7_FamilyElement3 = FamilyElement {
+		family = refBy(fTwitterEventDetection), 
+		output = {
+			refBy(PipelineVar_7_Flow4)
+		}, 
+		parallelism = 1, 
+		name = "EventDetection", 
+		constraints = {}
+	};
+	PipelineVar_7_Flow3 = Flow {
+		grouping = Grouping.shuffleGrouping, 
+		destination = refBy(PipelineVar_7_FamilyElement3), 
+		name = "f4", 
+		constraints = {}
+	};
+	PipelineVar_7_FamilyElement2 = FamilyElement {
+		family = refBy(FamilyVar_21), 
+		output = {
+			refBy(PipelineVar_7_Flow3)
+		}, 
+		parallelism = 1, 
+		name = "StockParser", 
+		constraints = {}
+	};
+	PipelineVar_7_Flow2 = Flow {
+		grouping = Grouping.shuffleGrouping, 
+		destination = refBy(PipelineVar_7_FamilyElement2), 
+		name = "f3", 
+		constraints = {}
+	};
+	PipelineVar_7_FamilyElement1 = FamilyElement {
+		family = refBy(FamilyVar_15), 
+		output = {
+			refBy(PipelineVar_7_Flow2)
+		}, 
+		parallelism = 1, 
+		name = "Spam Removal", 
+		constraints = {}
+	};
+	PipelineVar_7_Flow1 = Flow {
+		grouping = Grouping.shuffleGrouping, 
+		destination = refBy(PipelineVar_7_FamilyElement1), 
+		name = "f2", 
+		constraints = {}
+	};
+	PipelineVar_7_FamilyElement0 = FamilyElement {
+		family = refBy(FamilyVar_14), 
+		output = {
+			refBy(PipelineVar_7_Flow1)
+		}, 
+		parallelism = 1, 
+		name = "SpamDetection", 
+		constraints = {}
+	};
+	PipelineVar_7_Flow0 = Flow {
+		grouping = Grouping.shuffleGrouping, 
+		destination = refBy(PipelineVar_7_FamilyElement0), 
+		name = "f1", 
+		constraints = {}
+	};
+	PipelineVar_7_Source0 = Source {
+		output = {
+			refBy(PipelineVar_7_Flow0)
+		}, 
+		source = refBy(twitter), 
+		parallelism = 1, 
+		name = "TwitterDataSource", 
+		constraints = {}
+	};
+	Source PipelineVar_7_Source1;
+	Flow PipelineVar_7_Flow7;
+	FamilyElement PipelineVar_7_FamilyElement6;
+	Flow PipelineVar_7_Flow8;
+	FamilyElement PipelineVar_7_FamilyElement7;
+	Flow PipelineVar_7_Flow9;
+	FamilyElement PipelineVar_7_FamilyElement8;
+	Flow PipelineVar_7_Flow10;
+	PipelineVar_7_Flow10 = Flow {
+		grouping = Grouping.shuffleGrouping, 
+		destination = refBy(PipelineVar_7_Sink0), 
+		name = "f10", 
+		constraints = {}
+	};
+	PipelineVar_7_FamilyElement8 = FamilyElement {
+		family = refBy(FamilyVar_22), 
+		output = {
+			refBy(PipelineVar_7_Flow10)
+		}, 
+		parallelism = 1, 
+		name = "DynamicGraphCompilation", 
+		constraints = {}
+	};
+	PipelineVar_7_Flow9 = Flow {
+		grouping = Grouping.shuffleGrouping, 
+		destination = refBy(PipelineVar_7_FamilyElement8), 
+		name = "f9", 
+		constraints = {}
+	};
+	PipelineVar_7_FamilyElement7 = FamilyElement {
+		family = refBy(fCorrelationFinancial), 
+		output = {
+			refBy(PipelineVar_7_Flow9)
+		}, 
+		parallelism = 1, 
+		name = "correlation", 
+		constraints = {}
+	};
+	PipelineVar_7_Flow8 = Flow {
+		grouping = Grouping.shuffleGrouping, 
+		destination = refBy(PipelineVar_7_FamilyElement7), 
+		name = "f8", 
+		constraints = {}
+	};
+	PipelineVar_7_FamilyElement6 = FamilyElement {
+		family = refBy(fPreprocessor), 
+		output = {
+			refBy(PipelineVar_7_Flow8)
+		}, 
+		parallelism = 1, 
+		name = "preprocessor", 
+		constraints = {}
+	};
+	PipelineVar_7_Flow7 = Flow {
+		grouping = Grouping.shuffleGrouping, 
+		destination = refBy(PipelineVar_7_FamilyElement6), 
+		name = "f7", 
+		constraints = {}
+	};
+	Flow PipelineVar_7_Flow11;
+	PipelineVar_7_Flow11 = Flow {
+		grouping = Grouping.shuffleGrouping, 
+		destination = refBy(PipelineVar_7_FamilyElement7), 
+		name = "f12", 
+		constraints = {}
+	};
+	PipelineVar_7_Source1 = Source {
+		output = {
+			refBy(PipelineVar_7_Flow7), refBy(PipelineVar_7_Flow11)
+		}, 
+		source = refBy(DataSourceVar_6), 
+		parallelism = 1, 
+		name = "SpringDataSource", 
+		constraints = {}
+	};
+	PipelineVar_7 = Pipeline {
+		name = "FocusPip", 
+		sources = {
+			refBy(PipelineVar_7_Source0), refBy(PipelineVar_7_Source1)
+		}, 
+		numworkers = 1, 
+		artifact = "eu.qualimaster:FocusPip:0.0.1-SNAPSHOT", 
+		debug = false, 
+		fastSerialization = false, 
+		constraints = {}
+	};
+	freeze {
+		PipelineVar_7;
+		PipelineVar_7_Source0;
+		PipelineVar_7_Flow0;
+		PipelineVar_7_FamilyElement0;
+		PipelineVar_7_Flow1;
+		PipelineVar_7_FamilyElement1;
+		PipelineVar_7_Flow2;
+		PipelineVar_7_FamilyElement2;
+		PipelineVar_7_Flow3;
+		PipelineVar_7_FamilyElement3;
+		PipelineVar_7_Flow4;
+		PipelineVar_7_FamilyElement4;
+		PipelineVar_7_Flow5;
+		PipelineVar_7_FamilyElement5;
+		PipelineVar_7_Flow6;
+		PipelineVar_7_Sink0;
+		PipelineVar_7_Source1;
+		PipelineVar_7_Flow7;
+		PipelineVar_7_FamilyElement6;
+		PipelineVar_7_Flow8;
+		PipelineVar_7_FamilyElement7;
+		PipelineVar_7_Flow9;
+		PipelineVar_7_FamilyElement8;
+		PipelineVar_7_Flow10;
+		PipelineVar_7_Flow11;
+	} but (var|var.bindingTime >= BindingTime.runtimeMon)
+}

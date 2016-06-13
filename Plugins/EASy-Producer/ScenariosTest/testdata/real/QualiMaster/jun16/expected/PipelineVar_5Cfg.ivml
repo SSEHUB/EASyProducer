@@ -1,0 +1,89 @@
+project PipelineVar_5Cfg {
+
+	import Basics;
+	import Pipelines;
+	import FamiliesCfg;
+	import DataManagementCfg;
+	annotate BindingTime bindingTime = BindingTime.compile to PipelineVar_5Cfg;
+	Pipeline PipelineVar_5;
+	Source PipelineVar_5_Source0;
+	Flow PipelineVar_5_Flow0;
+	FamilyElement PipelineVar_5_FamilyElement0;
+	Flow PipelineVar_5_Flow1;
+	FamilyElement PipelineVar_5_FamilyElement1;
+	Flow PipelineVar_5_Flow2;
+	FamilyElement PipelineVar_5_FamilyElement2;
+	PipelineVar_5_FamilyElement2 = FamilyElement {
+		family = refBy(FamilyVar_20), 
+		output = {}, 
+		parallelism = 1, 
+		name = "recom", 
+		constraints = {}
+	};
+	PipelineVar_5_Flow2 = Flow {
+		grouping = Grouping.shuffleGrouping, 
+		destination = refBy(PipelineVar_5_FamilyElement2), 
+		name = "f3", 
+		constraints = {}
+	};
+	PipelineVar_5_FamilyElement1 = FamilyElement {
+		family = refBy(fTwitterEventDetection), 
+		output = {
+			refBy(PipelineVar_5_Flow2)
+		}, 
+		parallelism = 1, 
+		name = "ed", 
+		constraints = {}
+	};
+	PipelineVar_5_Flow1 = Flow {
+		grouping = Grouping.shuffleGrouping, 
+		destination = refBy(PipelineVar_5_FamilyElement1), 
+		name = "f2", 
+		constraints = {}
+	};
+	PipelineVar_5_FamilyElement0 = FamilyElement {
+		family = refBy(FamilyVar_21), 
+		output = {
+			refBy(PipelineVar_5_Flow1)
+		}, 
+		parallelism = 1, 
+		name = "stockParser", 
+		constraints = {}
+	};
+	PipelineVar_5_Flow0 = Flow {
+		grouping = Grouping.shuffleGrouping, 
+		destination = refBy(PipelineVar_5_FamilyElement0), 
+		name = "f1", 
+		constraints = {}
+	};
+	PipelineVar_5_Source0 = Source {
+		output = {
+			refBy(PipelineVar_5_Flow0)
+		}, 
+		source = refBy(twitter), 
+		parallelism = 1, 
+		name = "source1", 
+		constraints = {}
+	};
+	PipelineVar_5 = Pipeline {
+		name = "SimpleEDPipeline", 
+		sources = {
+			refBy(PipelineVar_5_Source0)
+		}, 
+		numworkers = 1, 
+		artifact = "eu.qualimaster:SimpleEDPipeline:0.0.1-SNAPSHOT", 
+		debug = false, 
+		fastSerialization = false, 
+		constraints = {}
+	};
+	freeze {
+		PipelineVar_5;
+		PipelineVar_5_Source0;
+		PipelineVar_5_Flow0;
+		PipelineVar_5_FamilyElement0;
+		PipelineVar_5_Flow1;
+		PipelineVar_5_FamilyElement1;
+		PipelineVar_5_Flow2;
+		PipelineVar_5_FamilyElement2;
+	} but (var|var.bindingTime >= BindingTime.runtimeMon)
+}

@@ -1,0 +1,96 @@
+project BasicsCfg {
+
+	import Basics;
+	FieldType IntegerType;
+	FieldType LongType;
+	FieldType StringType;
+	FieldType BooleanType;
+	FieldType FloatType;
+	FieldType DoubleType;
+	FieldType RealType;
+	FieldType ObjectType;
+	FieldType StringListType;
+	FieldType IFExpertListType;
+	FieldType IFTimeIntervalType;
+	FieldType StatusType;
+	FieldType IFEdgeListType;
+	FieldType IFEventListType;
+	types = {
+		refBy(IntegerType), refBy(LongType), refBy(StringType), refBy(BooleanType), refBy(FloatType), refBy(DoubleType), refBy(RealType), refBy(ObjectType), refBy(StringListType), refBy(IFTimeIntervalType), refBy(IFExpertListType), refBy(StatusType), refBy(IFEdgeListType), refBy(IFEventListType)
+	};
+	types.bindingTime = BindingTime.compile;
+	IntegerType = FieldType {
+		name = "INTEGER", 
+		class = "int"
+	};
+	LongType = FieldType {
+		name = "LONG", 
+		class = "long"
+	};
+	StringType = FieldType {
+		name = "STRING", 
+		class = "String"
+	};
+	BooleanType = FieldType {
+		name = "BOOLEAN", 
+		class = "boolean"
+	};
+	FloatType = FieldType {
+		name = "Float", 
+		class = "float"
+	};
+	DoubleType = FieldType {
+		name = "Double", 
+		class = "double"
+	};
+	RealType = FieldType {
+		name = "REAL", 
+		class = "double"
+	};
+	ObjectType = FieldType {
+		name = "OBJECT", 
+		class = "Object"
+	};
+	StringListType = FieldType {
+		name = "STRINGLIST", 
+		artifact = "", 
+		serializer = "eu.qualimaster.base.serializer.StringListSerializer", 
+		serializerArtifact = "eu.qualimaster:StormCommons:0.5.0-SNAPSHOT", 
+		class = "java.util.List<String>"
+	};
+	IFExpertListType = FieldType {
+		name = "IFEXPERTLIST", 
+		artifact = "eu.qualimaster.families:Datatypes:0.0.1-SNAPSHOT", 
+		serializer = "", 
+		serializerArtifact = "", 
+		class = "java.util.List<eu.qualimaster.families.datatypes.expertsearch.IFExpert>"
+	};
+	IFTimeIntervalType = FieldType {
+		name = "IFTIMEINTERVAL", 
+		artifact = "eu.qualimaster.families:Datatypes:0.0.1-SNAPSHOT", 
+		serializer = "", 
+		serializerArtifact = "", 
+		class = "eu.qualimaster.families.datatypes.common.IFTimeInterval"
+	};
+	StatusType = FieldType {
+		name = "STATUS", 
+		artifact = "org.twitter4j:twitter4j-stream:4.0.1", 
+		serializer = "", 
+		serializerArtifact = "", 
+		class = "twitter4j.Status"
+	};
+	IFEdgeListType = FieldType {
+		name = "IFEDGETYPE", 
+		artifact = "eu.qualimaster.families:Datatypes:0.0.1-SNAPSHOT", 
+		serializer = "", 
+		serializerArtifact = "", 
+		class = "java.util.List<eu.qualimaster.families.datatypes.financialnetwork.IFEdge>"
+	};
+	IFEventListType = FieldType {
+		name = "IFEVENTLISTTYPE", 
+		artifact = "eu.qualimaster.families:Datatypes:0.0.1-SNAPSHOT", 
+		serializer = "", 
+		serializerArtifact = "", 
+		class = "java.util.List<eu.qualimaster.families.datatypes.events.IFEvent>"
+	};
+}

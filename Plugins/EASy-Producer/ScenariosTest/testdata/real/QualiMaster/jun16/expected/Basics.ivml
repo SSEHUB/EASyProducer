@@ -1,0 +1,97 @@
+project Basics {
+
+	typedef NaturalNumber Integer with (NaturalNumber >= 0 and isDefined(NaturalNumber));
+	typedef PositiveInteger Integer with (PositiveInteger > 0 and isDefined(PositiveInteger));
+	typedef OptionalNaturalNumber Integer with (OptionalNaturalNumber >= 0);
+	typedef OptionalPositiveInteger Integer with (OptionalPositiveInteger > 0);
+	typedef NonEmptyString String with (size(NonEmptyString) > 0 and isDefined(NonEmptyString));
+	typedef PortInteger Integer with (PortInteger > 0 and PortInteger < 65536 and isDefined(PortInteger));
+	typedef NonNegativeReal Real with (NonNegativeReal >= 0 and isDefined(NonNegativeReal));
+	typedef OptionalNonNegativeReal Real with (OptionalNonNegativeReal >= 0);
+	typedef ArtifactString String with (size(ArtifactString) > 0 and matches(ArtifactString, ".+:.+:.+") and isDefined(ArtifactString));
+	typedef OptionalArtifactString String with (size(OptionalArtifactString) > 0 implies matches(OptionalArtifactString, ".+:.+:.+"));
+	typedef OptionalClassString String;
+	typedef Description String;
+	typedef OptionalUrlString String with (size(OptionalUrlString) > 0);
+	typedef MemorySize PositiveInteger;
+	typedef Frequency PositiveInteger;
+	typedef OptionalMemorySize OptionalPositiveInteger;
+	typedef OptionalFrequency OptionalPositiveInteger;
+	typedef Percentage Real with (Percentage >= 0 and Percentage <= 1);
+	enum BindingTime {compile = 0, startup = 1, runtimeMon = 2, runtimeEnact = 3};
+	annotate BindingTime bindingTime = BindingTime.compile to Basics;
+	compound FieldType {
+		NonEmptyString name;
+		OptionalArtifactString artifact;
+		OptionalClassString serializer;
+		OptionalArtifactString serializerArtifact;
+		ClassString class;
+	}
+
+	setOf(refTo(FieldType)) types = {};
+	Constraint typeNamesUnique = size(types->collect(t|t.name)) == size(types);
+	compound Tuple {
+		NonEmptyString name;
+		Constraint fieldsCheck = size(fields) > 0;
+		Fields fields;
+	}
+
+	compound Field {
+		NonEmptyString name;
+		refTo(FieldType) type;
+		Boolean keyPart = false;
+		Constraint typeCheck = isDefined(type);
+	}
+
+	compound Parameter {
+		NonEmptyString name;
+	}
+
+	compound IntegerParameter refines Parameter {
+		Integer defaultValue;
+		assign (bindingTime = BindingTime.runtimeEnact) to {
+			Integer value;
+		}
+		Constraint defaultValueCheck = isDefined(defaultValue);
+	}
+
+	compound StringParameter refines Parameter {
+		String defaultValue;
+		assign (bindingTime = BindingTime.runtimeEnact) to {
+			String value;
+		}
+		Constraint defaultValueCheck = isDefined(defaultValue);
+	}
+
+	compound RealParameter refines Parameter {
+		Real defaultValue;
+		assign (bindingTime = BindingTime.runtimeEnact) to {
+			Real value;
+		}
+		Constraint defaultValueCheck = isDefined(defaultValue);
+	}
+
+	compound BooleanParameter refines Parameter {
+		Boolean defaultValue;
+		assign (bindingTime = BindingTime.runtimeEnact) to {
+			Boolean value;
+		}
+		Constraint defaultValueCheck = isDefined(defaultValue);
+	}
+
+	compound LongParameter refines Parameter {
+		Real defaultValue;
+		assign (bindingTime = BindingTime.runtimeEnact) to {
+			Real value;
+		}
+		Constraint defaultValueCheck = isDefined(defaultValue);
+	}
+
+	Real capacityLowWatermark = 0.1;
+	Real capacityHighWatermark = 0.6;
+	typedef Parameters sequenceOf(Parameter) with (size(Parameters->collect(p|p.name)) == size(Parameters));
+	typedef ClassString OptionalClassString with (size(ClassString) > 0 and isDefined(ClassString));
+	typedef Tuples sequenceOf(Tuple);
+	typedef UrlString OptionalUrlString with (isDefined(UrlString));
+	typedef Fields sequenceOf(Field) with (hasDuplicates(Fields->collect(f|f.name)) == false);
+}

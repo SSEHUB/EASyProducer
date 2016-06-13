@@ -1,0 +1,41 @@
+project Hardware {
+
+	import Basics;
+	import Observables;
+	annotate BindingTime bindingTime = BindingTime.compile to Hardware;
+	enum MachineRole {Manager, Worker};
+	compound Machine {
+		NonEmptyString name;
+		MemorySize memory;
+		PositiveInteger processors;
+		PositiveInteger executors;
+		Frequency frequency;
+		setOf(PortInteger) ports;
+		MachineRole role;
+		assign (bindingTime = BindingTime.runtimeMon) to {
+			Bandwidth bandwidth;
+			UsedMemory usedMemory;
+			AvailableMemory availableMemory;
+			AvailableFrequency availableFrequency;
+			Load load;
+		}
+		assign (bindingTime = BindingTime.runtimeEnact) to {
+			IsAvailable available;
+		}
+		Constraint portsCheck = isDefined(ports);
+		Constraint roleCheck = isDefined(role);
+		Constraint managerRole = role == MachineRole.Manager implies isEmpty(ports);
+		Constraint workerRole = role == MachineRole.Worker and isEmpty(ports) implies ports == {
+			6700, 6701, 6702, 6703
+		};
+	}
+
+	setOf(refTo(Machine)) machines;
+	Constraint managerReq = machines->exists(refTo(Machine) machine|machine.role == MachineRole.Manager);
+	Constraint workerReq = machines->exists(refTo(Machine) machine|machine.role == MachineRole.Worker);
+	Constraint machineName = size(machines->collect(m|m.name)) == size(machines);
+	assign (bindingTime = BindingTime.runtimeMon) to {
+		UsedMachines usedMachines;
+		AvailableMachines availableMachines;
+	}
+}

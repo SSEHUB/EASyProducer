@@ -1,0 +1,21 @@
+project Infrastructure {
+
+	import Basics;
+	import Hardware;
+	import ReconfigurableHardware;
+	import Families;
+	import Observables;
+	import Adaptivity;
+	import Pipelines;
+	import CloudResources;
+	annotate BindingTime bindingTime = BindingTime.compile to Infrastructure;
+	setOf(refTo(Pipeline)) activePipelines;
+	ArtifactString interfaceArtifact;
+	ArtifactString modelArtifact;
+	OptionalUrlString deploymentURL;
+	def static Integer activePipelinesNumWorkers() = activePipelines->apply(refTo(Pipeline) pipeline;Integer totalNumWorkers = 0|totalNumWorkers = totalNumWorkers + pipeline.numworkers);
+	def static Integer workerMachinesPortsCount() = machines->select(m|m.role == MachineRole.Worker)->apply(refTo(Machine) machine;Integer usedPorts = 0|usedPorts = usedPorts + size(machine.ports));
+	Constraint workerportCheck = activePipelinesNumWorkers() <= workerMachinesPortsCount();
+	Constraint activePipelinesCheck = isDefined(activePipelines);
+	UrlString repositoryURL;
+}

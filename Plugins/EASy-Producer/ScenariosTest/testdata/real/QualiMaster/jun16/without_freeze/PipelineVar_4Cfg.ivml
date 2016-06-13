@@ -1,0 +1,72 @@
+project PipelineVar_4Cfg {
+
+	import Basics;
+	import Pipelines;
+	import FamiliesCfg;
+	import DataManagementCfg;
+	annotate BindingTime bindingTime = BindingTime.compile to PipelineVar_4Cfg;
+	Pipeline PipelineVar_4;
+	PipelineVar_4 = Pipeline {
+		name = "RandomProcessor", 
+		sources = {}, 
+		numworkers = 1, 
+		artifact = "eu.qualimaster.test:RandomProcessor:0.0.1-SNAPSHOT", 
+		debug = false, 
+		fastSerialization = false, 
+		isSubPipeline = true, 
+		connectors = {
+			refBy(PipelineVar_4_FamilyElement0)
+		}, 
+		subPipelineFamily = refBy(randomFamily), 
+		constraints = {}
+	};
+	FamilyElement PipelineVar_4_FamilyElement0;
+	PipelineVar_4_FamilyElement0 = FamilyElement {
+		family = refBy(randomFamily), 
+		output = {}, 
+		parallelism = 1, 
+		name = "processor", 
+		constraints = {}
+	};
+	SubPipelineAlgorithm randomProcessor = SubPipelineAlgorithm {
+		subPipeline = refBy(PipelineVar_4), 
+		name = "RandomProcessor", 
+		artifact = "eu.qualimaster.test:RandomProcessor:0.0.1-SNAPSHOT", 
+		algTopologyClass = "RandomProcessor", 
+		successor = null, 
+		inputGivenCheck = false, 
+		outputGivenCheck = false, 
+		output = {
+			Tuple {
+				name = "proccessedData", 
+				fields = {
+					Field {
+						name = "randomInteger", 
+						type = refBy(IntegerType)
+					}
+				}
+			}
+		}, 
+		parameters = {
+			IntegerParameter {
+				defaultValue = 0, 
+				name = "delay"
+			}, BooleanParameter {
+				defaultValue = false, 
+				name = "flag"
+			}
+		}, 
+		class = "eu.qualimaster.RandomProcessor.topology.SubTopology", 
+		input = {
+			Tuple {
+				name = "randomData", 
+				fields = {
+					Field {
+						name = "randomInteger", 
+						type = refBy(IntegerType)
+					}
+				}
+			}
+		}
+	};
+}

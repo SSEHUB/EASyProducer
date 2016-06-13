@@ -1,0 +1,61 @@
+project DataManagement {
+
+	import Basics;
+	import Observables;
+	annotate BindingTime bindingTime = BindingTime.compile to DataManagement;
+	annotate Boolean userVisible = true to DataManagement;
+	enum DataManagementStrategy {None, FirstInFirstOut, LeastFrequentlyUsed, LeastRecentlyUsed, LeastFrequentlyRecentlyUsed};
+	compound DataElement {
+		NonEmptyString name;
+		Description description;
+		ArtifactString artifact;
+		NonEmptyString storageLocation;
+		DataManagementStrategy strategy;
+		OptionalNaturalNumber timeLine;
+		OptionalNaturalNumber cutoffCapacity;
+		Constraint strategyAssigned = isDefined(strategy);
+		Constraint strategyC1 = strategy == DataManagementStrategy.LeastFrequentlyUsed or strategy == DataManagementStrategy.LeastFrequentlyRecentlyUsed implies cutoffCapacity > 0;
+		Constraint strategyC2 = strategy == DataManagementStrategy.LeastRecentlyUsed or strategy == DataManagementStrategy.LeastFrequentlyRecentlyUsed implies timeLine > 0;
+		Constraint strategyC3 = strategy == DataManagementStrategy.None or strategy == DataManagementStrategy.FirstInFirstOut implies timeLine == 0 and cutoffCapacity == 0;
+	}
+
+	compound DataSource refines DataElement {
+		setOf(Constraint) constraints;
+		assign (userVisible = false) to {
+			Boolean profilingSource = false;
+		}
+		assign (bindingTime = BindingTime.runtimeMon) to {
+			Velocity velocity;
+			Volume volume;
+			Volatility volatility;
+			Accuracy_Confidence accuracyConfidence;
+			Completeness completeness;
+			Boolean isValid = true;
+		}
+		ClassString sourceCls;
+		Tuples input;
+		Parameters parameters;
+	}
+
+	sequenceOf(refTo(DataSource)) dataSources;
+	Constraint sourceNamesUnique = not (hasDuplicates(dataSources->collect(s|s.name)));
+	compound DataSink refines DataElement {
+		setOf(Constraint) constraints;
+		assign (bindingTime = BindingTime.runtimeMon) to {
+			Velocity velocity;
+			Volume volume;
+			Accuracy_Confidence accuracyConfidence;
+			Boolean isValid = true;
+		}
+		ClassString sinkCls;
+		Parameters parameters;
+		Tuples output;
+	}
+
+	sequenceOf(refTo(DataSink)) dataSinks;
+	Constraint sinkNamesUnique = not (hasDuplicates(dataSinks->collect(s|s.name)));
+	compound PersistentDataElement refines DataElement {
+	}
+
+	sequenceOf(refTo(PersistentDataElement)) persistentDataElements;
+}
