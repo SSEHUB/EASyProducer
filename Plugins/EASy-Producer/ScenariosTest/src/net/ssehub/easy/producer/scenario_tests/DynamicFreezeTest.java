@@ -49,6 +49,8 @@ import net.ssehub.easy.varModel.model.IFreezable;
 import net.ssehub.easy.varModel.model.Project;
 import net.ssehub.easy.varModel.model.datatypes.ConstraintType;
 import net.ssehub.easy.varModel.model.datatypes.EnumLiteral;
+import net.ssehub.easy.varModel.model.datatypes.FreezeVariableType;
+import net.ssehub.easy.varModel.model.datatypes.IDatatype;
 import net.ssehub.easy.varModel.model.datatypes.OclKeyWords;
 import net.ssehub.easy.varModel.model.datatypes.OrderedEnum;
 import net.ssehub.easy.varModel.model.filter.DeclarationFinder;
@@ -137,7 +139,8 @@ public class DynamicFreezeTest extends AbstractScenarioTest {
                         }
                     }
                     if (null != cVal) {
-                        itr = new DecisionVariableDeclaration("var", null, null);
+                        IDatatype freezeType = new FreezeVariableType(freezes, project);
+                        itr = new DecisionVariableDeclaration("var", freezeType, project);
                         AttributeVariable attrExpr = new AttributeVariable(new Variable(itr), annotation);
                         selector = new OCLFeatureCall(attrExpr, OclKeyWords.GREATER_EQUALS, cVal);
                         try {
@@ -219,10 +222,8 @@ public class DynamicFreezeTest extends AbstractScenarioTest {
             
             return btAnnotation;
         }
-        
-        
-        
     }
+    
     private static final String PROJECT_OBSERVABLESCFG = "ObservablesCfg";
 
     private final File testdataDir = new File(getTestDataDir(), "real/QualiMaster/jun16");
