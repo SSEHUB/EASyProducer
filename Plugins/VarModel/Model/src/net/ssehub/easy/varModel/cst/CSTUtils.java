@@ -38,4 +38,32 @@ public class CSTUtils {
         return completeCST instanceof OCLFeatureCall
             && ((OCLFeatureCall) completeCST).getOperation().equals(OclKeyWords.ASSIGNMENT);
     }
+    
+    /**
+     * Checks whether the given {@link ConstraintSyntaxTree} is a simple assignment 
+     * (variable assigned with constant or compound/container initializer).
+     * @param completeCST A complete (not sub part) constraint, must not be <tt>null</tt>.
+     * @return <tt>true</tt> if the given constraint is a simple assignment, 
+     * <tt>false</tt> if it is a complex constraint. 
+     */
+    public static boolean isSimpleAssignment(ConstraintSyntaxTree completeCST) {
+        Boolean isSimpleAssignment = false;
+        if (completeCST instanceof OCLFeatureCall) {
+            OCLFeatureCall call = (OCLFeatureCall) completeCST;
+            if (null != call.getOperand()) {    
+                // user def function returns operand null!
+                if ((call.getOperand() instanceof Variable
+                    || call.getOperand() instanceof CompoundAccess)
+                    && call.getParameterCount() == 1
+                    && call.getOperation().equals(OclKeyWords.ASSIGNMENT)) {
+                    if (call.getParameter(0) instanceof ConstantValue
+                        || call.getParameter(0) instanceof ContainerInitializer
+                        || call.getParameter(0) instanceof CompoundInitializer) {
+                        isSimpleAssignment = true; 
+                    }
+                } 
+            }
+        }
+        return isSimpleAssignment;
+    }
 }
