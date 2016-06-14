@@ -426,7 +426,8 @@ public abstract class ModelManagement <M extends IModel> {
      * 
      * @param info the information object to be updated
      * @param model the resolving model
-     * @return the current model known before <code>model</code>
+     * @return the old model, before replaced by <code>model</code> (may be <b>null</b> if inconsistent
+     * or not yet loaded)
      */
     private M setResolved(ModelInfo<M> info, M model) {
         M current = info.getResolved();
@@ -443,7 +444,6 @@ public abstract class ModelManagement <M extends IModel> {
                 models.add(model);    
             }
             events.notifyModelReplacement(current, model);
-            current = model;
         }
         return current;
     }
