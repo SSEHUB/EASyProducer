@@ -32,13 +32,45 @@ import java.util.Set;
 class ModelUpdateUtils {
 
     /**
+     * Adds a pair of original and replacing model into a new mapping structure.
+     * 
+     * @param <M> the model type
+     * @param old the old model
+     * @param model the replacing model
+     * @return the mapping structure containing <code>old</code> and <code>model</code>
+     */
+    static <M extends IModel> Map<M, M> addReplacing(M old, M model) {
+        return addReplacing(old, model, null);
+    }
+
+    /**
+     * Adds a pair of original and replacing model into a new mapping structure.
+     * 
+     * @param <M> the model type
+     * @param old the old model
+     * @param model the replacing model
+     * @param result the mapping structure before adding, may be <b>null</b> then a new one is created
+     * @return the mapping structure containing <code>old</code> and <code>model</code>
+     */
+    static <M extends IModel> Map<M, M> addReplacing(M old, M model, Map<M, M> result) {
+        if (null == result) {
+            result = new HashMap<M, M>();
+        }
+        result.put(old, model);
+        return result;
+    }
+
+    
+    /**
      * Collects all importing models.
      * 
      * @param <M> the type of model
      * @param models the models to be considered
+     * @param replacing optional mapping of old and new models in case of updates (result will contain new models 
+     *   rather than old ones mentioned in the mapping), may be <b>null</b>
      * @return all importing models, key is model, value is importing models
      */
-    static <M extends IModel> Map<M, List<M>> collectImporting(List<M> models) {
+    static <M extends IModel> Map<M, List<M>> collectImporting(List<M> models, Map<M, M> replacing) {
         Map<M, List<M>> result = new HashMap<M, List<M>>();
         for (int m = 0; m < models.size(); m++) {
             M model = models.get(m);
@@ -47,6 +79,12 @@ class ModelUpdateUtils {
                     @SuppressWarnings("unchecked")
                     M imported = (M) model.getImport(i).getResolved();
                     if (null != imported) {
+                        if (null != replacing) {
+                            M tmp = replacing.get(imported);
+                            if (null != tmp) {
+                                imported = tmp;
+                            }
+                        }
                         List<M> importing = result.get(imported);
                         if (null == importing) {
                             importing = new ArrayList<M>();

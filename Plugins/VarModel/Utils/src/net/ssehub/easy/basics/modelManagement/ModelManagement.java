@@ -41,6 +41,8 @@ import net.ssehub.easy.basics.progress.ObservableTask;
 import net.ssehub.easy.basics.progress.ProgressObserver;
 import net.ssehub.easy.basics.progress.ProgressObserver.ITask;
 
+import static net.ssehub.easy.basics.modelManagement.ModelUpdateUtils.*;
+
 /**
  * A reusable class performing model imports, model linking etc. The central class holding all model 
  * instances and being
@@ -225,47 +227,47 @@ public abstract class ModelManagement <M extends IModel> {
      * @param deepReload perform a deep reload of the dependent models
      */
     public synchronized void updateModel(M model, URI uri, IModelLoader<M> loader, boolean deepReload) {
+        if (null != uri) {
+            uri = uri.normalize();
+        }
+        M oldModel = null;
+        List<VersionedModelInfos<M>> vList = availableModels.getAvailable(model.getName());
+        VersionedModelInfos<M> vInfos = VersionedModelInfos.find(vList, model.getVersion());
+        boolean done = false;
+        if (null != vInfos) {
+            ModelInfo<M> info = vInfos.find(uri);
+            if (null != info) {
+                oldModel = setResolved(info, model);
+                if (null == info.getLocale()) {
+                    info.setLocale(locale.getActualLocale());
+                }
+                try {
+                    postLoadModel(info);
+                } catch (IOException e) {
+                    EASyLoggerFactory.INSTANCE.getLogger(ModelManagement.class, Bundle.ID).exception(e);
+                }
+                done = true;
+            }
+        }
+        if (!done) {
+            // however, resolution and loading is disabled
+            ModelInfo<M> info = new ModelInfo<M>(model, uri, loader);
+            oldModel = setResolved(info, model);
+            if (null == vList) {
+                vList = new ArrayList<VersionedModelInfos<M>>();
+                availableModels.putAvailable(model.getName(), vList);
+            }
+            if (null == vInfos) {
+                vInfos = new VersionedModelInfos<M>(model.getVersion());
+                vList.add(vInfos);
+            }
+            vInfos.add(info);
+        }
         if (!inUpdate) {
             inUpdate = true;
-            if (null != uri) {
-                uri = uri.normalize();
-            }
-            M oldModel = null;
-            List<VersionedModelInfos<M>> vList = availableModels.getAvailable(model.getName());
-            VersionedModelInfos<M> vInfos = VersionedModelInfos.find(vList, model.getVersion());
-            boolean done = false;
-            if (null != vInfos) {
-                ModelInfo<M> info = vInfos.find(uri);
-                if (null != info) {
-                    oldModel = setResolved(info, model);
-                    if (null == info.getLocale()) {
-                        info.setLocale(locale.getActualLocale());
-                    }
-                    try {
-                        postLoadModel(info);
-                    } catch (IOException e) {
-                        EASyLoggerFactory.INSTANCE.getLogger(ModelManagement.class, Bundle.ID).exception(e);
-                    }
-                    done = true;
-                }
-            }
-            if (!done) {
-                // however, resolution and loading is disabled
-                ModelInfo<M> info = new ModelInfo<M>(model, uri, loader);
-                oldModel = setResolved(info, model);
-                if (null == vList) {
-                    vList = new ArrayList<VersionedModelInfos<M>>();
-                    availableModels.putAvailable(model.getName(), vList);
-                }
-                if (null == vInfos) {
-                    vInfos = new VersionedModelInfos<M>(model.getVersion());
-                    vList.add(vInfos);
-                }
-                vInfos.add(info);
-            }
             if (null != oldModel && deepReload) {
                 // TODO turn this into an incremental updated structure -> performance
-                reload(ModelUpdateUtils.determineUpdateSeqence(oldModel, ModelUpdateUtils.collectImporting(models)));
+                reload(determineUpdateSeqence(model, collectImporting(models, addReplacing(oldModel, model))));
             }
             inUpdate = false;
         }
@@ -331,7 +333,7 @@ public abstract class ModelManagement <M extends IModel> {
         } else {
             if (null != model && deepReload) {
                 // TODO turn this into an incremental updated structure -> performance
-                reload(ModelUpdateUtils.determineUpdateSeqence(model, ModelUpdateUtils.collectImporting(models)));
+                reload(determineUpdateSeqence(result, collectImporting(models, addReplacing(model, result))));
             }
         }
         return result;
@@ -431,20 +433,18 @@ public abstract class ModelManagement <M extends IModel> {
      */
     private M setResolved(ModelInfo<M> info, M model) {
         M current = info.getResolved();
-        if (model != current) {
-            info.setResolved(model);
-            outdated.remove(info);
-            int pos = null == current ? -1 : models.indexOf(current);
-            if (pos >= 0) {
-                models.set(pos, model);
-                if (model != current) { // might be used before but disturbs existing behavior
-                    current.dispose();
-                }
-            } else {
-                models.add(model);    
+        info.setResolved(model);
+        outdated.remove(info);
+        int pos = null == current ? -1 : models.indexOf(current);
+        if (pos >= 0) {
+            models.set(pos, model);
+            if (model != current) { // might be used before but disturbs existing behavior
+                current.dispose();
             }
-            events.notifyModelReplacement(current, model);
+        } else {
+            models.add(model);    
         }
+        events.notifyModelReplacement(current, model);
         return current;
     }
     
