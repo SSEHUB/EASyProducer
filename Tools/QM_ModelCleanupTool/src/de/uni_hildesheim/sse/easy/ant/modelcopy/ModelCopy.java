@@ -26,21 +26,21 @@ import org.apache.commons.io.filefilter.TrueFileFilter;
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.Task;
 
-import de.uni_hildesheim.sse.model.management.VarModel;
-import de.uni_hildesheim.sse.model.validation.IvmlValidationVisitor;
-import de.uni_hildesheim.sse.model.validation.ValidationMessage;
-import de.uni_hildesheim.sse.model.varModel.DecisionVariableDeclaration;
-import de.uni_hildesheim.sse.model.varModel.Project;
-import de.uni_hildesheim.sse.model.varModel.ProjectImport;
-import de.uni_hildesheim.sse.model.varModel.filter.FilterType;
-import de.uni_hildesheim.sse.model.varModel.rewrite.ProjectRewriteVisitor;
-import de.uni_hildesheim.sse.model.varModel.rewrite.modifier.DeclarationNameFilter;
-import de.uni_hildesheim.sse.model.varModel.rewrite.modifier.ImportNameFilter;
-import de.uni_hildesheim.sse.model.varModel.rewrite.modifier.ModelElementFilter;
-import de.uni_hildesheim.sse.reasoning.core.impl.ReasonerRegistry;
-import de.uni_hildesheim.sse.reasoning.reasoner.Reasoner;
-import de.uni_hildesheim.sse.utils.modelManagement.ModelManagementException;
-import de.uni_hildesheim.sse.utils.progress.ProgressObserver;
+import net.ssehub.easy.basics.modelManagement.ModelManagementException;
+import net.ssehub.easy.basics.progress.ProgressObserver;
+import net.ssehub.easy.reasoning.core.impl.ReasonerRegistry;
+import net.ssehub.easy.reasoning.sseReasoner.Reasoner;
+import net.ssehub.easy.varModel.management.VarModel;
+import net.ssehub.easy.varModel.model.DecisionVariableDeclaration;
+import net.ssehub.easy.varModel.model.Project;
+import net.ssehub.easy.varModel.model.ProjectImport;
+import net.ssehub.easy.varModel.model.filter.FilterType;
+import net.ssehub.easy.varModel.model.rewrite.ProjectRewriteVisitor;
+import net.ssehub.easy.varModel.model.rewrite.modifier.DeclarationNameFilter;
+import net.ssehub.easy.varModel.model.rewrite.modifier.ImportNameFilter;
+import net.ssehub.easy.varModel.model.rewrite.modifier.ModelElementFilter;
+import net.ssehub.easy.varModel.validation.IvmlValidationVisitor;
+import net.ssehub.easy.varModel.validation.ValidationMessage;
 
 /**
  * ANT task for copying the an EASy-Producer model (IVML, VIL, VTL, .EASyConfig, ...) to a specified location, while
@@ -173,14 +173,12 @@ public class ModelCopy extends Task {
                 rewriter.addModelCopyModifier(new DeclarationNameFilter(new String[] {"IntegerType", "LongType",
                     "StringType", "BooleanType", "FloatType", "DoubleType", "RealType", "ObjectType"}));
                 p.accept(rewriter);
-                p = rewriter.getCopyiedProject();
             } else if (PIPELINES_CONFIG.equals(p.getName())) {
                 // Clear Pipelines Config
                 clearRewriter(p, FilterType.NO_IMPORTS);
                 rewriter.addImportModifier(new ImportNameFilter(new String[] {"Basics", "Pipelines", "FamiliesCfg",
                     "DataManagementCfg"}));
                 p.accept(rewriter);
-                p = rewriter.getCopyiedProject();
             } else if (ALGORITHMS_CONFIG.equals(p.getName())) {
                 p = processDefaultConfig(p);
             } else if (DATAMGT_CONFIG.equals(p.getName())) {
@@ -220,7 +218,6 @@ public class ModelCopy extends Task {
         clearRewriter(p, FilterType.NO_IMPORTS);
         rewriter.addModelCopyModifier(new ModelElementFilter(DecisionVariableDeclaration.class));
         p.accept(rewriter);
-        p = rewriter.getCopyiedProject();
         return p;
     }
     
