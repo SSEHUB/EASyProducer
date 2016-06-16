@@ -240,6 +240,7 @@ public class ModelCopy extends Task {
         System.out.println("Main model: " + mainProject);
         
         // Setup
+        System.out.println("Prepare destionation folder: " + destinationFolder.getAbsolutePath());
         boolean createFolder = false;
         if (destinationFolder.exists() && allowDestDeletion) {
             try {
@@ -260,7 +261,9 @@ public class ModelCopy extends Task {
         
         // Copy and filter
         try {
+            System.out.println("Start creation of copy");
             copy();
+            System.out.println("Finished creation of copy");
         } catch (Exception e) {
             try {
                 FileUtils.deleteDirectory(destinationFolder);
@@ -282,6 +285,7 @@ public class ModelCopy extends Task {
         }
         
         // Validate result
+        System.out.println("Validate copy");
         try {
             VarModel.INSTANCE.locations().removeLocation(sourceFolder, ProgressObserver.NO_OBSERVER);
             VarModel.INSTANCE.locations().addLocation(destinationFolder, ProgressObserver.NO_OBSERVER);
