@@ -436,11 +436,30 @@ public class TypeContext implements IResolutionScope {
             }
         }
         if (null == result) {
-            // last resort - ask the project
+            // last resort - ask the project, but not all variables are allowed/accessible...
             result = ModelQuery.findVariable(project, name, type);
+            if (null != result && name.indexOf(IvmlKeyWords.NAMESPACE_SEPARATOR) < 0 
+                && !(findActualParent(result) instanceof Project)) {
+                result = null; // avoid erroneous compound access, exclude qualified access may                 
+            }
         }
         if (null == result && ex != null) {
             throw ex;
+        }
+        return result;
+    }
+  
+    /**
+     * Returns the actual project or compound the <code>element</code> is located in.
+     * 
+     * @param elt the element
+     * @return the actual parent
+     */
+    private IModelElement findActualParent(IModelElement elt) {
+        IModelElement result = elt.getParent();
+        while (null != result && null != result.getParent() 
+            && !(result instanceof Project || result instanceof Compound)) {
+            result = result.getParent();
         }
         return result;
     }

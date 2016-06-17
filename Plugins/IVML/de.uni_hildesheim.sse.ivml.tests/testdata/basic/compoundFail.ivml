@@ -1,0 +1,14 @@
+project compoundFail {
+
+    version v0;
+    compound CP1 {
+        Integer no;
+        Constraint cons = no > 0;
+    }
+
+    compound CP2 {
+        cons = null;
+    }
+
+    CP2 cmp;
+}

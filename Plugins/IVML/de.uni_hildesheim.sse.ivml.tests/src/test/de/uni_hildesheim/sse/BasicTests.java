@@ -83,6 +83,16 @@ public class BasicTests extends AbstractTest {
     public void testCompound() throws IOException {
         assertEqual(createFile("compound"), "testCompounds", "0");
     }
+    
+    /**
+     * Tests compounds with failing access as not directly defined.
+     * 
+     * @throws IOException should not occur
+     */
+    @Test
+    public void testCompoundFail() throws IOException {
+        assertEqual(createFile("compoundFail"), "compoundFail", "0", ErrorCodes.UNKNOWN_ELEMENT);
+    }
 
     /**
      * Tests an abstract compound.

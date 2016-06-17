@@ -527,8 +527,7 @@ public class ModelTranslator extends net.ssehub.easy.dslCore.translation.ModelTr
      *   was terminated abnormally
      */
     public void processExpressionStatement(ExpressionStatement statement, TypeContext context, 
-        IDecisionVariableContainer parent, boolean internal) 
-        throws TranslatorException {
+        IDecisionVariableContainer parent, boolean internal) throws TranslatorException {
         if (null != statement.getExpr()) {
             IModelElement cParent = parent;
             if (null == cParent) {
