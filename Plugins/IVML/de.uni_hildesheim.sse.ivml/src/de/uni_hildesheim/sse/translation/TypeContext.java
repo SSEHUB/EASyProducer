@@ -2,6 +2,7 @@ package de.uni_hildesheim.sse.translation;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Stack;
@@ -194,12 +195,28 @@ public class TypeContext implements IResolutionScope {
      * @param comp the compound for which all contained variables shall be added
      */
     public void addToContext(Compound comp) {
-        int count = comp.getElementCount();
-        for (int c = 0; c < count; c++) {
-            addToContext(comp.getElement(c));
-        }
-        for (int a = 0; a < comp.getAssignmentCount(); a++) {
-            addToContext(comp.getAssignment(a));
+        addToContext(comp, new HashSet<Compound>());
+    }
+
+    /**
+     * Adds a compound to the current context (layer). Please call {@link #pushLayer()} before.
+     * 
+     * @param comp the compound for which all contained variables shall be added
+     * @param done already added compounds
+     */
+    private void addToContext(Compound comp, java.util.Set<Compound> done) {
+        if (!done.contains(comp)) {
+            done.add(comp);
+            if (null != comp.getRefines()) {
+                addToContext(comp.getRefines(), done);
+            }
+            int count = comp.getElementCount();
+            for (int c = 0; c < count; c++) {
+                addToContext(comp.getElement(c));
+            }
+            for (int a = 0; a < comp.getAssignmentCount(); a++) {
+                addToContext(comp.getAssignment(a));
+            }
         }
     }
 
@@ -438,10 +455,10 @@ public class TypeContext implements IResolutionScope {
         if (null == result) {
             // last resort - ask the project, but not all variables are allowed/accessible...
             result = ModelQuery.findVariable(project, name, type);
-            /*if (null != result && name.indexOf(IvmlKeyWords.NAMESPACE_SEPARATOR) < 0 
+            if (null != result && name.indexOf(IvmlKeyWords.NAMESPACE_SEPARATOR) < 0 
                 && !(findActualParent(result) instanceof Project)) {
                 result = null; // avoid erroneous compound access, exclude qualified access may                 
-            }*/
+            }
         }
         if (null == result && ex != null) {
             throw ex;
@@ -455,7 +472,6 @@ public class TypeContext implements IResolutionScope {
      * @param elt the element
      * @return the actual parent
      */
-    @SuppressWarnings("unused")
     private IModelElement findActualParent(IModelElement elt) {
         IModelElement result = elt.getParent();
         while (null != result && null != result.getParent() 

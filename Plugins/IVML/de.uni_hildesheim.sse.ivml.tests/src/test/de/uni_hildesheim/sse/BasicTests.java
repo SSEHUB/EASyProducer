@@ -5,7 +5,6 @@ import java.io.IOException;
 import java.util.List;
 
 import org.junit.Assert;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import de.uni_hildesheim.sse.translation.ErrorCodes;
@@ -90,7 +89,6 @@ public class BasicTests extends AbstractTest {
      * 
      * @throws IOException should not occur
      */
-    @Ignore("in progress")
     @Test
     public void testCompoundFail() throws IOException {
         assertEqual(createFile("compoundFail"), "compoundFail", "0", ErrorCodes.UNKNOWN_ELEMENT);
