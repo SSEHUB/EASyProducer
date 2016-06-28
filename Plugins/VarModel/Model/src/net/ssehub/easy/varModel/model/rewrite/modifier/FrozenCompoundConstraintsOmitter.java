@@ -51,7 +51,7 @@ public class FrozenCompoundConstraintsOmitter extends AbstractFrozenChecker<Comp
         // Compound must only be rewritten if it has at least one constraint
         if (nConstraints > 0) {
             Set<IDecisionVariable> instances = context.getInstancesForType(getConfiguration(), cType);
-            boolean cmpNeverInstantiated = instances.isEmpty();
+            boolean cmpNeverInstantiated = null == instances || instances.isEmpty();
             // Avoid IndexOutOfBoundsException through iteration/deletion in reversed order
             for (int i = nConstraints - 1; i >= 0; i--) {
                 Constraint internalConstraint = cType.getConstraint(i);

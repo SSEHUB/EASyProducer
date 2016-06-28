@@ -36,6 +36,7 @@ import net.ssehub.easy.varModel.model.ContainableModelElement;
 import net.ssehub.easy.varModel.model.DecisionVariableDeclaration;
 import net.ssehub.easy.varModel.model.ExplicitTypeVariableDeclaration;
 import net.ssehub.easy.varModel.model.IAttributableElement;
+import net.ssehub.easy.varModel.model.IAttributeAccess;
 import net.ssehub.easy.varModel.model.IModelElement;
 import net.ssehub.easy.varModel.model.Project;
 import net.ssehub.easy.varModel.model.datatypes.Compound;
@@ -102,21 +103,7 @@ class CSTCopyVisitor extends CopyVisitor {
             if (null == result && var instanceof Attribute && null != var.getParent()
                 && null != copyier.getCopiedParent(var.getParent())) {
                 
-                IModelElement parent = copyier.getCopiedParent(var.getParent());
-                if (parent instanceof AttributeAssignment) {
-                    IAttributableElement annotatedElement = ((Attribute) var).getElement();
-                    if (annotatedElement instanceof IModelElement) {
-                        parent = (IModelElement) annotatedElement;
-                    }
-                }
-                // If block before is optional -> Please do not wonder about casting back and forth         
-                if (parent instanceof IAttributableElement) {
-                    result = ((IAttributableElement) parent).getAttribute(var.getName());
-                }
-                
-                if (null != result) {
-                    getMapping().put(var, result);
-                }
+                result = mapAnnotation((Attribute) var);
             }
             
             if (null == result && visitItrExpression && var instanceof DecisionVariableDeclaration) {
@@ -142,6 +129,51 @@ class CSTCopyVisitor extends CopyVisitor {
             }
         } else {
             result = var;
+        }
+        return result;
+    }
+
+    /**
+     * Part of {@link #mapVariable(AbstractVariable)} to map {@link Attribute}s.
+     * @param var the annotation to be mapped
+     * @return the mapped variable or <code>var</code>
+     */
+    private AbstractVariable mapAnnotation(Attribute var) {
+        AbstractVariable result;
+        IModelElement parent = copyier.getCopiedParent(var.getParent());
+        
+        IAttributableElement orgAttributed = var.getElement();
+        IAttributableElement copiedAttributed = (IAttributableElement) getMapping().get(orgAttributed);
+        result = null != copiedAttributed ? copiedAttributed.getAttribute(var.getName()) : null;
+        if (null != copiedAttributed && null == result && null != parent && parent instanceof IAttributeAccess) {
+            
+            /*
+             * Try to propagate annotations from parent (project) to childs
+             * (which may be added after annotation)
+             */
+            Attribute annotation = ((IAttributeAccess) parent).getAttribute(var.getName());
+            if (null != annotation) {
+                parent.propagateAttribute(annotation);
+                result = copiedAttributed.getAttribute(var.getName());
+            }
+        }
+        
+        if (null == result) {
+            if (parent instanceof AttributeAssignment) {
+                IAttributableElement annotatedElement = ((Attribute) var).getElement();
+                if (annotatedElement instanceof IModelElement) {
+                    parent = (IModelElement) annotatedElement;
+                }
+            }
+            
+            // If-block before is optional -> Please do not wonder about casting back and forth         
+            if (parent instanceof IAttributableElement) {
+                result = ((IAttributableElement) parent).getAttribute(var.getName());
+            }
+        }
+        
+        if (null != result) {
+            getMapping().put(var, result);
         }
         return result;
     }
