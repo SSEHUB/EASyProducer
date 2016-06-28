@@ -23,7 +23,6 @@ import net.ssehub.easy.varModel.model.DecisionVariableDeclaration;
 import net.ssehub.easy.varModel.model.datatypes.Compound;
 import net.ssehub.easy.varModel.model.datatypes.Container;
 import net.ssehub.easy.varModel.model.datatypes.DerivedDatatype;
-import net.ssehub.easy.varModel.model.datatypes.IDatatype;
 import net.ssehub.easy.varModel.model.values.CompoundValue;
 import net.ssehub.easy.varModel.model.values.ContainerValue;
 import net.ssehub.easy.varModel.model.values.Value;
@@ -236,10 +235,10 @@ class ToplevelVarConfigProvider extends VariableConfigProvider {
         this.value = value;
         for (int i = 0; i < conValue.getElementSize(); i++) {
             String nestedName = container.getElementName(i);
-            IDatatype containerType = DerivedDatatype.resolveToBasis(relatedVariable.getDeclaration().getType());
-            IDatatype type = ((Container) containerType).getContainedType();
+            //IDatatype containerType = DerivedDatatype.resolveToBasis(relatedVariable.getDeclaration().getType());
+            //IDatatype type = ((Container) containerType).getContainedType();
             DecisionVariableDeclaration nestedDecl = new DecisionVariableDeclaration(nestedName,
-                type, relatedVariable.getDeclaration());
+                conValue.getElement(i).getType(), relatedVariable.getDeclaration());
             VariableCreator creator = new VariableCreator(nestedDecl, relatedVariable,
                 relatedVariable.isVisible(), false);
             IDecisionVariable nestedVar = creator.getVariable();

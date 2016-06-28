@@ -102,10 +102,12 @@ public abstract class ContainerVariable extends StructuredVariable {
         type = ((Container) type).getContainedType();
         for (int i = 0; null != conValue && i < conValue.getElementSize(); i++) {
             String name = getElementName(i);
-            DecisionVariableDeclaration decl = new DecisionVariableDeclaration(name, type, getDeclaration());
+            Value eltValue = conValue.getElement(i);
+            DecisionVariableDeclaration decl = new DecisionVariableDeclaration(name, eltValue.getType(), 
+                getDeclaration());
             VariableCreator creator = new VariableCreator(decl, this, isVisible(), false);
             IDecisionVariable var = creator.getVariable();
-            var.setValue(conValue.getElement(i), state);
+            var.setValue(eltValue, state);
             nestedElements.add(var);
         }
     }
