@@ -9,7 +9,12 @@ import org.junit.Assert;
 
 import de.uni_hildesheim.sse.translation.ErrorCodes;
 import net.ssehub.easy.varModel.confModel.Configuration;
+import net.ssehub.easy.varModel.confModel.IDecisionVariable;
+import net.ssehub.easy.varModel.model.AbstractVariable;
+import net.ssehub.easy.varModel.model.ModelQuery;
+import net.ssehub.easy.varModel.model.ModelQueryException;
 import net.ssehub.easy.varModel.model.Project;
+import net.ssehub.easy.varModel.model.datatypes.IDatatype;
 import net.ssehub.easy.varModel.model.values.ValueDoesNotMatchTypeException;
 
 /**
@@ -197,4 +202,37 @@ public class AdditionalTests extends AbstractTest {
         assertEqual(createFile("collection1"), null, null);
     }
 
+    /**
+     * Tests specific refined types in collections (contributed by QM).
+     * 
+     * @throws IOException should not occur
+     * @throws ModelQueryException should not occur
+     */
+    @Test
+    public void specificTypeTest() throws IOException, ModelQueryException {
+        List<Project> loaded = assertEqual(createFile("specificTypeTest"), null, null);
+        Assert.assertTrue(1 == loaded.size());
+        Project prj = loaded.get(0);
+        AbstractVariable var = ModelQuery.findVariable(prj, "cmps", null);
+        Assert.assertNotNull(var);
+        Configuration cfg = new Configuration(prj);
+        IDecisionVariable decVar = cfg.getDecision(var);
+
+        Assert.assertNotNull(decVar);
+        IDatatype typeCP = ModelQuery.findType(prj, "CP", null);
+        Assert.assertNotNull(typeCP);
+        IDatatype typeCP2 = ModelQuery.findType(prj, "CP2", null);
+        Assert.assertNotNull(typeCP2);
+
+        IDecisionVariable nested0 = decVar.getNestedElement(0);
+        Assert.assertNotNull(nested0);
+        Assert.assertEquals(nested0.getDeclaration().getType(), typeCP);
+        Assert.assertEquals(nested0.getValue().getType(), typeCP);
+        IDecisionVariable nested1 = decVar.getNestedElement(1);
+        Assert.assertNotNull(nested1);
+        Assert.assertEquals(nested1.getDeclaration().getType(), typeCP2); // TODO typeCP2
+        Assert.assertEquals(nested1.getValue().getType(), typeCP2);
+    }
+    
+    
 }

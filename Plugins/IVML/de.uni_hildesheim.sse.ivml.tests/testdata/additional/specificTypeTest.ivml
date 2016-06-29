@@ -1,0 +1,17 @@
+project SpecificTypeTest {
+
+    version v0;
+    compound CP {
+        String s1;
+    }
+
+    compound CP2 refines CP {
+        String s2;
+    }
+
+    sequenceOf(CP) cmps = {{s1 = "hello"}, CP2 {s2 = "world", s1 = "hello"}};
+    cmps = {{s1 = "hello"}, CP2 {s2 = "world", s1 = "hello"}};
+    freeze {
+        cmps;
+    }
+}
