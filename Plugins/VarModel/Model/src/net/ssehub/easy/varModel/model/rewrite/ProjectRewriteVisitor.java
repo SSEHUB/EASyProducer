@@ -22,9 +22,9 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import net.ssehub.easy.basics.logger.EASyLoggerFactory;
 import net.ssehub.easy.varModel.Bundle;
 import net.ssehub.easy.varModel.cst.CSTSemanticException;
+import net.ssehub.easy.varModel.cst.CompoundInitializer;
 import net.ssehub.easy.varModel.cst.ConstantValue;
 import net.ssehub.easy.varModel.cst.ConstraintSyntaxTree;
 import net.ssehub.easy.varModel.cst.OCLFeatureCall;
@@ -227,35 +227,26 @@ public class ProjectRewriteVisitor implements IModelVisitor {
         
         // Remove constraint, if constraint used removed declarations
         if (allDeclarationsarePresent) {
+            // TODO SE: Use visitor
             if (cst instanceof OCLFeatureCall
                 && OclKeyWords.ASSIGNMENT.equals(((OCLFeatureCall) cst).getOperation())) {
                 
                 OCLFeatureCall call = (OCLFeatureCall) cst;
                 ConstraintSyntaxTree param = call.getParameter(0);
                 if (param instanceof ConstantValue) {
-                    ValueCopy copy = new ValueCopy(context, ((ConstantValue) param).getConstantValue());
-                    if (copy.valuesOmitted() && null != copy.getValue()) {
-                        // Filtered Value was created
-                        call = new OCLFeatureCall(call.getOperand(), call.getOperation(),
-                            new ConstantValue(copy.getValue()));
-                        try {
-                            // Needed for setting the correct operation
-                            call.inferDatatype();
-                        } catch (CSTSemanticException e1) {
-                            EASyLoggerFactory.INSTANCE.getLogger(ProjectRewriteVisitor.class, Bundle.ID)
-                                .exception(e1);
-                        }
-                        constraint = new Constraint(constraint.getParent());
-                        try {
-                            constraint.setConsSyntax(call);
-                        } catch (CSTSemanticException e) {
-                            EASyLoggerFactory.INSTANCE.getLogger(ProjectRewriteVisitor.class, Bundle.ID)
-                                .exception(e);
-                        }
-                    } else if (copy.valuesOmitted() && null == copy.getValue()) {
-                        // Value was completely filtered -> remove assignment constraint
-                        context.elementWasRemoved(constraint);
+                    constraint = reduceConstantValue(constraint, call, (ConstantValue) param);
+                } else if (param instanceof CompoundInitializer) {
+                    ConstraintSyntaxTree reducedInit = reduceCompoundInitializer((CompoundInitializer) param);
+                    if (null == reducedInit) {
                         constraint = null;
+                    } else {
+                        OCLFeatureCall filteredCall = new OCLFeatureCall(call.getOperand(), call.getOperation(),
+                            reducedInit);
+                        try {
+                            constraint.setConsSyntax(filteredCall);
+                        } catch (CSTSemanticException e) {
+                            Bundle.getLogger(ProjectRewriteVisitor.class).exception(e);
+                        }
                     }
                     // Else: Constraint is as it was before -> process it
                 }
@@ -266,6 +257,84 @@ public class ProjectRewriteVisitor implements IModelVisitor {
         } else {
             context.elementWasRemoved(constraint);
         }
+    }
+
+    /**
+     * Part of {@link #copyConstraint(Constraint)}, filters a {@link CompoundInitializer} and removed slot assignments
+     * of filtered declarations.
+     * @param cmpInit The {@link CompoundInitializer} to filter, (used recursively).
+     * @return The original {@link CompoundInitializer}, a filtered one, or <tt>null</tt>, depending on how much was
+     * filtered.
+     */
+    private ConstraintSyntaxTree reduceCompoundInitializer(CompoundInitializer cmpInit) {
+        List<String> slots = new ArrayList<String>();
+        List<AbstractVariable> decls = new ArrayList<AbstractVariable>();
+        List<ConstraintSyntaxTree> csts = new ArrayList<ConstraintSyntaxTree>();
+        
+        for (int i = 0, end = cmpInit.getSlotCount(); i < end; i++) {
+            AbstractVariable decl = cmpInit.getSlotDeclaration(i);
+            if (!context.elementWasRemoved(decl)) {
+                ConstraintSyntaxTree cst = cmpInit.getExpression(i);
+                if (cst instanceof CompoundInitializer) {
+                    cst = reduceCompoundInitializer((CompoundInitializer) cst);
+                }
+                if (null != cst) {
+                    slots.add(cmpInit.getSlot(i));
+                    decls.add(decl);
+                    csts.add(cst);
+                }
+            }
+        }
+        
+        ConstraintSyntaxTree result = null;
+        if (!slots.isEmpty()) {
+            if (slots.size() < cmpInit.getSlotCount()) {
+                try {
+                    result = new CompoundInitializer(cmpInit.getType(), slots.toArray(new String[0]),
+                        decls.toArray(new AbstractVariable[0]), csts.toArray(new ConstraintSyntaxTree[0]));
+                } catch (CSTSemanticException e) {
+                    Bundle.getLogger(ProjectRewriteVisitor.class).exception(e);
+                }
+            } else {
+                result = cmpInit;
+            }
+        }
+        
+        return result;
+    }
+
+    /**
+     * Part of {@link #copyConstraint(Constraint)}, filters constant values if used declarations have been removed.
+     * @param constraint The original constraint holding the value to be filtered.
+     * @param call The top level call of the constraint
+     * @param constValue The first and only parameter of the call.
+     * @return The filtered constraint, maybe the given constraint or <tt>null</tt>
+     * depending how much hat to be filtered.
+     */
+    private Constraint reduceConstantValue(Constraint constraint, OCLFeatureCall call, ConstantValue constValue) {
+        ValueCopy copy = new ValueCopy(context, constValue.getConstantValue());
+        if (copy.valuesOmitted() && null != copy.getValue()) {
+            // Filtered Value was created
+            call = new OCLFeatureCall(call.getOperand(), call.getOperation(),
+                new ConstantValue(copy.getValue()));
+            try {
+                // Needed for setting the correct operation
+                call.inferDatatype();
+            } catch (CSTSemanticException e1) {
+                Bundle.getLogger(ProjectRewriteVisitor.class).exception(e1);
+            }
+            constraint = new Constraint(constraint.getParent());
+            try {
+                constraint.setConsSyntax(call);
+            } catch (CSTSemanticException e) {
+                Bundle.getLogger(ProjectRewriteVisitor.class).exception(e);
+            }
+        } else if (copy.valuesOmitted() && null == copy.getValue()) {
+            // Value was completely filtered -> remove assignment constraint
+            context.elementWasRemoved(constraint);
+            constraint = null;
+        }
+        return constraint;
     }
 
     @Override
