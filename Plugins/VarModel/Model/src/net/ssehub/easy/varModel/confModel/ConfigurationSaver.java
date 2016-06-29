@@ -155,7 +155,7 @@ public class ConfigurationSaver {
                 for (int a = 0; a < var.getAttributesCount(); a++) {
                     IDecisionVariable attrVar = var.getAttribute(a);
                     Value value = attrVar.getValue();
-                    if (null != value) {
+                    if (null != value && isSavingEnabled(destProject, attrVar)) {
                         c = processAssignment(destProject, errors, attrVar.getDeclaration(), attrVar, value);
                         if (0 == code) {
                             code = c;

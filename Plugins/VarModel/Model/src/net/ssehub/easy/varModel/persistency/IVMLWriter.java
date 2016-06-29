@@ -534,7 +534,9 @@ public class IVMLWriter extends AbstractVarModelWriter {
             // be careful with null values -> writing partial configurations
             String name = cont.getElement(e).getName();
             Value nestedValue = value.getNestedValue(name);
-            if (null != nestedValue && writeValue(nestedValue)) {
+            boolean isAbstract = (null != nestedValue) && nestedValue.getType() instanceof Compound
+                && ((Compound) nestedValue.getType()).isAbstract();
+            if (null != nestedValue && !isAbstract && writeValue(nestedValue)) {
                 if (printed > 0) {
                     appendOutput(COMMA);
                     appendOutput(WHITESPACE);
