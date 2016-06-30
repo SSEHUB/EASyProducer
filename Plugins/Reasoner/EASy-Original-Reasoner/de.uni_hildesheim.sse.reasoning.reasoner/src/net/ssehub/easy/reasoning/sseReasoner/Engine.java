@@ -13,8 +13,8 @@ import net.ssehub.easy.basics.messages.Status;
 import net.ssehub.easy.basics.progress.ProgressObserver;
 import net.ssehub.easy.reasoning.core.reasoner.Message;
 import net.ssehub.easy.reasoning.core.reasoner.ReasonerConfiguration;
-import net.ssehub.easy.reasoning.core.reasoner.ReasoningResult;
 import net.ssehub.easy.reasoning.core.reasoner.ReasonerConfiguration.IAdditionalInformationLogger;
+import net.ssehub.easy.reasoning.core.reasoner.ReasoningResult;
 import net.ssehub.easy.reasoning.sseReasoner.functions.FailedElementDetails;
 import net.ssehub.easy.reasoning.sseReasoner.functions.FailedElements;
 import net.ssehub.easy.varModel.confModel.AssignmentState;
@@ -104,7 +104,6 @@ public class Engine {
         long startTime = System.currentTimeMillis();
         resolver.resolve();
 //        PerformanceStatistics.addTimestamp(reasoningID);
-//        FailedElements failedElements = FailedRules.getFailedElements(reasoningID);
         FailedElements failedElements = resolver.getFailedElements();
         if (failedElements.hasProblems()) {
             constraintVariableMap = resolver.getConstraintVariableMap();

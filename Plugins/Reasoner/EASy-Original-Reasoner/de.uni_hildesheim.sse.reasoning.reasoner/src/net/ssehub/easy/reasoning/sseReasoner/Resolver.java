@@ -11,7 +11,6 @@ import java.util.Set;
 import net.ssehub.easy.basics.logger.EASyLoggerFactory;
 import net.ssehub.easy.basics.logger.EASyLoggerFactory.EASyLogger;
 import net.ssehub.easy.basics.modelManagement.Utils;
-import net.ssehub.easy.reasoning.core.performance.PerformanceStatistics;
 import net.ssehub.easy.reasoning.core.reasoner.ReasonerConfiguration;
 import net.ssehub.easy.reasoning.core.reasoner.ReasonerConfiguration.IAdditionalInformationLogger;
 import net.ssehub.easy.reasoning.core.reasoner.ReasoningErrorCodes;
@@ -46,6 +45,7 @@ import net.ssehub.easy.varModel.cstEvaluation.LocalDecisionVariable;
 import net.ssehub.easy.varModel.model.AbstractVariable;
 import net.ssehub.easy.varModel.model.Attribute;
 import net.ssehub.easy.varModel.model.AttributeAssignment;
+import net.ssehub.easy.varModel.model.AttributeAssignment.Assignment;
 import net.ssehub.easy.varModel.model.Constraint;
 import net.ssehub.easy.varModel.model.DecisionVariableDeclaration;
 import net.ssehub.easy.varModel.model.IModelElement;
@@ -53,7 +53,6 @@ import net.ssehub.easy.varModel.model.InternalConstraint;
 import net.ssehub.easy.varModel.model.OperationDefinition;
 import net.ssehub.easy.varModel.model.PartialEvaluationBlock;
 import net.ssehub.easy.varModel.model.Project;
-import net.ssehub.easy.varModel.model.AttributeAssignment.Assignment;
 import net.ssehub.easy.varModel.model.datatypes.BooleanType;
 import net.ssehub.easy.varModel.model.datatypes.Compound;
 import net.ssehub.easy.varModel.model.datatypes.ConstraintType;
@@ -65,9 +64,9 @@ import net.ssehub.easy.varModel.model.datatypes.Operation;
 import net.ssehub.easy.varModel.model.datatypes.Sequence;
 import net.ssehub.easy.varModel.model.filter.ConstraintFinder;
 import net.ssehub.easy.varModel.model.filter.DeclarationFinder;
+import net.ssehub.easy.varModel.model.filter.DeclarationFinder.VisibilityType;
 import net.ssehub.easy.varModel.model.filter.FilterType;
 import net.ssehub.easy.varModel.model.filter.VariablesInConstraintFinder;
-import net.ssehub.easy.varModel.model.filter.DeclarationFinder.VisibilityType;
 import net.ssehub.easy.varModel.model.values.ConstraintValue;
 import net.ssehub.easy.varModel.model.values.ContainerValue;
 import net.ssehub.easy.varModel.model.values.Value;
@@ -1292,6 +1291,13 @@ public class Resolver {
     private void fillVariableConstraintPool(List<Constraint> constraints) {
         for (Constraint constraint : constraints) { 
             if (constraint.getConsSyntax() != null) {
+//                if (!CSTUtils.isSimpleAssignment(constraint.getConsSyntax())) {
+//                    VariablesInConstraintsFinder varFinder =
+//                        new VariablesInConstraintsFinder(constraint.getConsSyntax());
+//                    for (AbstractVariable declaration : varFinder.getVariables()) {
+//                        constraintMap.add(declaration, constraint);                       
+//                    }                    
+//                }
                 VariablesInConstraintsFinder varFinder = new VariablesInConstraintsFinder(constraint.getConsSyntax());
                 if (!varFinder.isSimpleAssignment()) {
                     for (AbstractVariable declaration : varFinder.getVariables()) {
@@ -1561,7 +1567,6 @@ public class Resolver {
      */
     public FailedElements getFailedElements() {
         return failedElements;
-    }
-
+    }  
 
 }

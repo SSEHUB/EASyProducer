@@ -94,12 +94,12 @@ public class HistoryStats extends net.ssehub.easy.reasoning.sseReasoner.Abstract
     @Test    
     public void historyStatsTest() {
         reasoningTest("d2d_v10_c1_bir_l1_0.ivml", 0);    
-        reasoningTest("d2d_v10_c1_bir_l1_0.ivml", 0);    
-        reasoningTest("d2d_v100_c10_bir_l1_0.ivml", 6);    
-        reasoningTest("d2d_v1000_c100_bir_l1_0.ivml", 42);
-        reasoningTest("d2d_v10_c1_bir_l3_0.ivml", 0);    
-        reasoningTest("d2d_v100_c10_bir_l3_0.ivml", 6);    
-        reasoningTest("d2d_v1000_c100_bir_l3_0.ivml", 42);
+//        reasoningTest("d2d_v10_c1_bir_l1_0.ivml", 0);    
+//        reasoningTest("d2d_v100_c10_bir_l1_0.ivml", 6);    
+//        reasoningTest("d2d_v1000_c100_bir_l1_0.ivml", 42);
+//        reasoningTest("d2d_v10_c1_bir_l3_0.ivml", 0);    
+//        reasoningTest("d2d_v100_c10_bir_l3_0.ivml", 6);    
+//        reasoningTest("d2d_v1000_c100_bir_l3_0.ivml", 42);
     } 
    
 }

@@ -94,11 +94,11 @@ public class GeneratedStats extends net.ssehub.easy.reasoning.sseReasoner.Abstra
     @Test    
     public void gr11() {
         reasoningTest("gr1_1_v100_c300_b_l2_0.ivml", 150);
-        reasoningTest("gr1_1_v100_c300_b_l2_0.ivml", 150);
-        reasoningTest("gr1_1_v300_c900_b_l2_0.ivml", 438);
-        reasoningTest("gr1_1_v500_c1500_b_l2_0.ivml", 726);
-        reasoningTest("gr1_1_v1000_c3000_b_l2_0.ivml", 1518);
-        reasoningTest("gr1_1_v1500_c4500_b_l2_0.ivml", 2236);
+//        reasoningTest("gr1_1_v100_c300_b_l2_0.ivml", 150);
+//        reasoningTest("gr1_1_v300_c900_b_l2_0.ivml", 438);
+//        reasoningTest("gr1_1_v500_c1500_b_l2_0.ivml", 726);
+//        reasoningTest("gr1_1_v1000_c3000_b_l2_0.ivml", 1518);
+//        reasoningTest("gr1_1_v1500_c4500_b_l2_0.ivml", 2236);
     } 
     
     /**
@@ -108,10 +108,10 @@ public class GeneratedStats extends net.ssehub.easy.reasoning.sseReasoner.Abstra
     @Test    
     public void gr12() {
         reasoningTest("gr1_2_v100_c100_b_l2_0.ivml", 46);
-        reasoningTest("gr1_2_v100_c100_b_l2_0.ivml", 46);
-        reasoningTest("gr1_2_v300_c300_b_l2_0.ivml", 124);
-        reasoningTest("gr1_2_v500_c500_b_l2_0.ivml", 266);
-        reasoningTest("gr1_2_v1000_c1000_b_l2_0.ivml", 504);
+//        reasoningTest("gr1_2_v100_c100_b_l2_0.ivml", 46);
+//        reasoningTest("gr1_2_v300_c300_b_l2_0.ivml", 124);
+//        reasoningTest("gr1_2_v500_c500_b_l2_0.ivml", 266);
+//        reasoningTest("gr1_2_v1000_c1000_b_l2_0.ivml", 504);
         reasoningTest("gr1_2_v1500_c1500_b_l2_0.ivml", 739);
     }   
 
