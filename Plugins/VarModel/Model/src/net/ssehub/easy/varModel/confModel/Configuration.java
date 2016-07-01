@@ -395,7 +395,11 @@ public class Configuration implements IConfigurationVisitable, IProjectListener,
     private void freezeValues(AbstractVariable var, IFreezeSelector selector) {
         if (var.isTopLevel() || var.getParent() instanceof AttributeAssignment) {
             IDecisionVariable frozenVariable = getDecision(var);
-            frozenVariable.freeze(selector);
+            
+            // Check that variable was not deleted in the meanwhile
+            if (null != frozenVariable) {
+                frozenVariable.freeze(selector);
+            }
         } else {
             IModelElement parent = var.getParent();
             System.out.println("Config freeze for nested variable not implemented: " + parent);
