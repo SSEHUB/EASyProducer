@@ -1456,7 +1456,7 @@ public class EvaluationVisitor implements IConstraintTreeVisitor {
         VariableAccessor resultVar, IIteratorEvaluator evaluator) {
         boolean ok = true;
         call.getContainer().accept(this);
-        if (null != result) {
+        if (null != result && result.getValue() instanceof ContainerValue) {
             ContainerValue container = (ContainerValue) result.getValue();
             clearResult();
             ContainerValue[] containers = new ContainerValue[declarators.length];
