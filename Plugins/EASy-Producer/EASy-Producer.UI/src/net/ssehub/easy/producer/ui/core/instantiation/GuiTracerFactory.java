@@ -31,19 +31,18 @@ public class GuiTracerFactory extends TracerFactory {
     }
     
     @Override
-    protected ITracer createTemplateLanguageTracerImpl() {
+    public ITracer createTemplateLanguageTracerImpl() {
         return VilTracer.INSTANCE;
     }
 
     @Override
-    protected net.ssehub.easy.instantiation.core.model.buildlangModel.ITracer
+    public net.ssehub.easy.instantiation.core.model.buildlangModel.ITracer
         createBuildLanguageTracerImpl() {
-        
         return VilTracer.INSTANCE;
     }
 
     @Override
-    protected IInstantiatorTracer createInstantiatorTracerImpl() {
+    public IInstantiatorTracer createInstantiatorTracerImpl() {
         return VilTracer.INSTANCE;
     }
 }

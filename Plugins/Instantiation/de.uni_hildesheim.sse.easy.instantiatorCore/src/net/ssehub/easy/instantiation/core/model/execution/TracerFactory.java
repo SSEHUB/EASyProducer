@@ -42,21 +42,21 @@ public abstract class TracerFactory {
     public static class DefaultTracerFactory extends TracerFactory {
 
         @Override
-        protected net.ssehub.easy.instantiation.core.model.templateModel.ITracer 
+        public net.ssehub.easy.instantiation.core.model.templateModel.ITracer 
             createTemplateLanguageTracerImpl() {
             
             return net.ssehub.easy.instantiation.core.model.templateModel.NoTracer.INSTANCE;
         }
 
         @Override
-        protected net.ssehub.easy.instantiation.core.model.buildlangModel.ITracer 
+        public net.ssehub.easy.instantiation.core.model.buildlangModel.ITracer 
             createBuildLanguageTracerImpl() {
             
             return net.ssehub.easy.instantiation.core.model.buildlangModel.NoTracer.INSTANCE;
         }
 
         @Override
-        protected IInstantiatorTracer createInstantiatorTracerImpl() {
+        public IInstantiatorTracer createInstantiatorTracerImpl() {
             return EMPTY_INSTANTIATOR_TRACER;
         }
         
@@ -115,7 +115,7 @@ public abstract class TracerFactory {
      * @return a tracer instance for the VIL template language (<b>null</b> will lead to the 
      *     corresponding result by {@link #DEFAULT}) 
      */
-    protected abstract net.ssehub.easy.instantiation.core.model.templateModel.ITracer 
+    public abstract net.ssehub.easy.instantiation.core.model.templateModel.ITracer 
         createTemplateLanguageTracerImpl();
     
     /**
@@ -124,7 +124,7 @@ public abstract class TracerFactory {
      * @return a tracer instance for the VIL build language (<b>null</b> will lead to the 
      *     corresponding result by {@link #DEFAULT})
      */
-    protected abstract net.ssehub.easy.instantiation.core.model.buildlangModel.ITracer 
+    public abstract net.ssehub.easy.instantiation.core.model.buildlangModel.ITracer 
         createBuildLanguageTracerImpl();
     
     /**
@@ -132,7 +132,7 @@ public abstract class TracerFactory {
      * 
      * @return the instantiator tracer
      */
-    protected abstract IInstantiatorTracer createInstantiatorTracerImpl();
+    public abstract IInstantiatorTracer createInstantiatorTracerImpl();
 
     /**
      * Creates a tracer for the VIL template language.

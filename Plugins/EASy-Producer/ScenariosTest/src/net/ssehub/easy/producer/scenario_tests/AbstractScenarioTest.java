@@ -326,21 +326,21 @@ public abstract class AbstractScenarioTest extends AbstractTest<Script> {
         }
         
         @Override
-        protected net.ssehub.easy.instantiation.core.model.buildlangModel.ITracer 
+        public net.ssehub.easy.instantiation.core.model.buildlangModel.ITracer 
             createBuildLanguageTracerImpl() {
             
             return new net.ssehub.easy.instantiation.core.model.buildlangModel.StreamTracer(writer, true);
         }
 
         @Override
-        protected net.ssehub.easy.instantiation.core.model.templateModel.ITracer 
+        public net.ssehub.easy.instantiation.core.model.templateModel.ITracer 
             createTemplateLanguageTracerImpl() {
             
             return new net.ssehub.easy.instantiation.core.model.templateModel.StreamTracer(writer, true);
         }
 
         @Override
-        protected IInstantiatorTracer createInstantiatorTracerImpl() {
+        public IInstantiatorTracer createInstantiatorTracerImpl() {
             return EMPTY_INSTANTIATOR_TRACER;
         }
         

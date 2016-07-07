@@ -76,21 +76,21 @@ public class TestTracerFactory extends TracerFactory {
     }
     
     @Override
-    protected net.ssehub.easy.instantiation.core.model.templateModel.ITracer 
+    public net.ssehub.easy.instantiation.core.model.templateModel.ITracer 
         createTemplateLanguageTracerImpl() {
         
         return templateTracer;
     }
 
     @Override
-    protected net.ssehub.easy.instantiation.core.model.buildlangModel.ITracer 
+    public net.ssehub.easy.instantiation.core.model.buildlangModel.ITracer 
         createBuildLanguageTracerImpl() {
         
         return buildTracer;
     }
 
     @Override
-    protected IInstantiatorTracer createInstantiatorTracerImpl() {
+    public IInstantiatorTracer createInstantiatorTracerImpl() {
         return EMPTY_INSTANTIATOR_TRACER;
     }
 
