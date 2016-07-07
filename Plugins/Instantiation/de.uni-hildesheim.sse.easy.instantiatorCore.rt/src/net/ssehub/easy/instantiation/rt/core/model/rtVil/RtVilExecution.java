@@ -17,7 +17,6 @@ import net.ssehub.easy.basics.logger.EASyLoggerFactory.EASyLogger;
 import net.ssehub.easy.basics.progress.ProgressObserver;
 import net.ssehub.easy.instantiation.core.model.buildlangModel.BuildlangExecution;
 import net.ssehub.easy.instantiation.core.model.buildlangModel.IRuleElement;
-import net.ssehub.easy.instantiation.core.model.buildlangModel.ITracer;
 import net.ssehub.easy.instantiation.core.model.buildlangModel.Rule;
 import net.ssehub.easy.instantiation.core.model.buildlangModel.RuleCallExpression;
 import net.ssehub.easy.instantiation.core.model.buildlangModel.RuleDescriptor;
@@ -252,6 +251,7 @@ public class RtVilExecution extends BuildlangExecution implements IRtVilVisitor 
     private IReasoningHook reasoningHook = DefaultReasoningHook.INSTANCE;
     private String lastFailReason;
     private Integer lastFailCode;
+    private ITracer rtTracer;
     
     /**
      * Creates a new execution environment for evaluating local expressions.
@@ -267,7 +267,8 @@ public class RtVilExecution extends BuildlangExecution implements IRtVilVisitor 
      * @param base the base directory for making files absolute
      * @param parameter the top-level parameter for the script to be executed
      */
-    public RtVilExecution(ITracer tracer, File base, Map<String, Object> parameter) {
+    public RtVilExecution(net.ssehub.easy.instantiation.core.model.buildlangModel.ITracer tracer, File base, 
+        Map<String, Object> parameter) {
         super(tracer, base, parameter);
         this.valueAccess = new IRtValueAccess() {
             
@@ -277,6 +278,9 @@ public class RtVilExecution extends BuildlangExecution implements IRtVilVisitor 
                 return getRuntimeEnvironment().getValue(var);
             }
         };
+        if (tracer instanceof ITracer) {
+            rtTracer = (ITracer) tracer;
+        }
     }
 
     /**
@@ -411,6 +415,9 @@ public class RtVilExecution extends BuildlangExecution implements IRtVilVisitor 
         throws VilException {
         RuleExecutionResult result = null;
         if (!stopAfterBindValues) {
+            if (null != rtTracer) {
+                rtTracer.startStrategies();
+            }
             VilException exc = null;
             try {
                 List<Strategy> strategies = determineStrategiesRanking((Script) script);
@@ -435,6 +442,9 @@ public class RtVilExecution extends BuildlangExecution implements IRtVilVisitor 
             }
             if (null != exc) {
                 throw exc;
+            }
+            if (null != rtTracer) {
+                rtTracer.endStrategies();
             }
         } else {
             RuleDescriptor desc = new RuleDescriptor();
@@ -1056,11 +1066,17 @@ public class RtVilExecution extends BuildlangExecution implements IRtVilVisitor 
             }
         }
         if (2 == pos) { // only if both parameters are present
+            if (null != rtTracer) {
+                rtTracer.startBind();
+            }
             boolean enabled = setEnableRuleElementFailed(false);
             dynamicCall("bindValues", BIND_VALUES_FALLBACK, args);
             // clear the change history 
             ((Configuration) args[0].accept(this)).getChangeHistory().clear(true);
             setEnableRuleElementFailed(enabled);
+            if (null != rtTracer) {
+                rtTracer.endBind();
+            }
         } else {
             LOGGER.info("bindValues not found - map declaration missing?");
         }
@@ -1074,9 +1090,15 @@ public class RtVilExecution extends BuildlangExecution implements IRtVilVisitor 
     private void callInitialize() throws VilException {
         Script script = getCurrentScript();
         if (!script.wasExecuted()) {
+            if (null != rtTracer) {
+                rtTracer.startInitialize();
+            }
             CallArgument[] args = new CallArgument[1];
             args[0] = getCurrentConfiguration();
             dynamicCall("initialize", INITIALIZE_FALLBACK, args);
+            if (null != rtTracer) {
+                rtTracer.endInitialize();
+            }
         }
     }
     
@@ -1087,6 +1109,9 @@ public class RtVilExecution extends BuildlangExecution implements IRtVilVisitor 
      */
     private void callEnact() throws VilException {
         if (enableEnactment) {
+            if (null != rtTracer) {
+                rtTracer.startEnact();
+            }
             Script script = getCurrentScript();
             CallArgument[] args = new CallArgument[3];
             for (int i = 0; i < Math.min(3,  script.getParameterCount()); i++) {
@@ -1095,6 +1120,9 @@ public class RtVilExecution extends BuildlangExecution implements IRtVilVisitor 
                 args[i] = new CallArgument(decl.getType()).fixValue(value);
             }
             dynamicCall("enact", null, args);
+            if (null != rtTracer) {
+                rtTracer.endEnact();
+            }
         }
     }
 
