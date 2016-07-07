@@ -433,6 +433,16 @@ public abstract class AbstractIvmlVariable extends IvmlElement {
     }
 
     /**
+     * Clears the actual variable. Has no effect if frozen.
+     */
+    public void clearValue() {
+        try {
+            origVariable.setValue(null, AssignmentState.UNDEFINED);
+        } catch (ConfigurationException e) {
+        }
+    }
+
+    /**
      * Changes the value of this variable. This method works only if the variable
      * is not {@link #isFrozen() frozen}, in particular at runtime.
      * 
