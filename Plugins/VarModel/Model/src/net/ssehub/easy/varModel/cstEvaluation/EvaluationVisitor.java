@@ -1369,17 +1369,20 @@ public class EvaluationVisitor implements IConstraintTreeVisitor {
                 } else {
                     // result is implicit
                     IDatatype type;
+                    IDatatype exType;
                     try {
                         type = call.inferDatatype();
+                        exType = call.getExpression().inferDatatype();                        
                     } catch (CSTSemanticException e) {
                         type = AnyType.TYPE; // shall not happen as model is type-valid
+                        exType = AnyType.TYPE;
                         exception(e);
                         ok = false;
                     }
                     resultDecl = new DecisionVariableDeclaration(LocalDecisionVariable.ITERATOR_RESULT_VARNAME, type, 
                         call.getParent());
                     try {
-                        resultDecl.setValue(evaluator.getStartResult(type));
+                        resultDecl.setValue(evaluator.getStartResult(type, exType));
                     } catch (ValueDoesNotMatchTypeException e) {
                         exception(e);
                         ok = false;

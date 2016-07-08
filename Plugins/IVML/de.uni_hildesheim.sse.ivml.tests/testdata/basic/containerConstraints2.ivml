@@ -1,0 +1,11 @@
+project testContainerConstraints2 {
+
+    version v0;
+    compound comp {
+        Integer x;
+    }
+
+    sequenceOf(comp) compSeq;
+    comp cMin = compSeq->min(c|c.x);
+    comp cMax = compSeq->max(c|c.x);
+}

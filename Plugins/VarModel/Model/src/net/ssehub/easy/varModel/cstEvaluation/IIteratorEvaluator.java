@@ -34,10 +34,11 @@ public interface IIteratorEvaluator {
      * from the operation itself and not explicitly defined in the model.
      * 
      * @param type the type of the return value
+     * @param iterType the type of the iterator expression
      * @return the start value (must comply to <code>type</code>)
      * @throws ValueDoesNotMatchTypeException in case of type compatibility problems
      */
-    public Value getStartResult(IDatatype type) throws ValueDoesNotMatchTypeException;
+    public Value getStartResult(IDatatype type, IDatatype iterType) throws ValueDoesNotMatchTypeException;
     
     /**
      * Aggregate <code>value</code> to <code>result</code>.

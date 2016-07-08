@@ -86,6 +86,11 @@ public class Container extends StructuredDatatype {
     public static final Operation REJECT = new Operation(TYPE, ReturnTypeMode.IMMEDIATE_OPERAND, OclKeyWords.REJECT, 
         TYPE, BooleanType.TYPE).markAsContainerOperation();
 
+    public static final Operation MIN2 = new Operation(TYPE, ReturnTypeMode.GENERIC_PARAM_1, 
+        OclKeyWords.MIN, TYPE, RealType.TYPE).markAsContainerOperation();
+    public static final Operation MAX2 = new Operation(TYPE, ReturnTypeMode.GENERIC_PARAM_1, 
+        OclKeyWords.MAX, TYPE, RealType.TYPE).markAsContainerOperation();
+    
     public static final Operation IS_DEFINED = new Operation(BooleanType.TYPE, OclKeyWords.IS_DEFINED, TYPE)
         .markAsAcceptsNull();
     public static final Operation TYPE_SELECT = new Operation(TYPE, ReturnTypeMode.TYPED_PARAM_1, 
@@ -121,6 +126,8 @@ public class Container extends StructuredDatatype {
         DTYPE.addOperation(IS_DEFINED);
         DTYPE.addOperation(TYPE_SELECT);
         DTYPE.addOperation(TYPE_REJECT);
+        DTYPE.addOperation(MIN2);
+        DTYPE.addOperation(MAX2);
     }
     
     private IDatatype type;

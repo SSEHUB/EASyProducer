@@ -608,6 +608,8 @@ public class ContainerOperations {
         EvaluatorRegistry.registerEvaluator(ContainerIterators.EXISTS, Container.EXISTS);
         EvaluatorRegistry.registerEvaluator(ContainerIterators.ANY, Container.ANY);
         EvaluatorRegistry.registerEvaluator(ContainerIterators.ONE, Container.ONE);
+        EvaluatorRegistry.registerEvaluator(ContainerIterators.MIN2, Container.MIN2);
+        EvaluatorRegistry.registerEvaluator(ContainerIterators.MAX2, Container.MAX2);
         EvaluatorRegistry.registerEvaluator(ContainerIterators.IS_UNIQUE, Container.IS_UNIQUE);
         EvaluatorRegistry.registerEvaluator(ContainerIterators.COLLECT, Container.COLLECT);
         EvaluatorRegistry.registerEvaluator(new CollectIteratorEvaluator(BooleanValue.TRUE), Container.SELECT);

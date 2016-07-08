@@ -186,6 +186,17 @@ public class BasicTests extends AbstractTest {
      * @throws IOException should not occur
      */
     @Test
+    public void testContainerConstraints2() throws IOException {
+        assertEqual(createFile("containerConstraints2"),
+                "testContainerConstraints2", "0");
+    }
+    
+    /**
+     * Tests container with associated constraints.
+     * 
+     * @throws IOException should not occur
+     */
+    @Test
     public void testContainerConstraintsFail() throws IOException {
         assertEqual(createFile("containerConstraintsFail"),
                 "testContainerConstraintsFail", "0",

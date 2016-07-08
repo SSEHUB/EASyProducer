@@ -49,6 +49,7 @@ import net.ssehub.easy.varModel.model.datatypes.IntegerType;
 import net.ssehub.easy.varModel.model.datatypes.MetaType;
 import net.ssehub.easy.varModel.model.datatypes.OclKeyWords;
 import net.ssehub.easy.varModel.model.datatypes.Operation;
+import net.ssehub.easy.varModel.model.datatypes.RealType;
 import net.ssehub.easy.varModel.model.datatypes.Reference;
 import net.ssehub.easy.varModel.model.datatypes.Sequence;
 import net.ssehub.easy.varModel.model.datatypes.Set;
@@ -412,6 +413,102 @@ public class EvaluationVisitorTest {
         visitor.clear();
     }
     
+    /**
+     * Tests the "min", "max" container operation on ints and container of compounds.
+     * 
+     * @throws ValueDoesNotMatchTypeException in case that value assignments fail (shall not occur)
+     * @throws ConfigurationException in case that initial assignment of values fail (shall not occur)
+     * @throws CSTSemanticException in case that the expressions created during this test are not 
+     *   valid (shall not occur)
+     */
+    @Test
+    public void testMinMaxIntContainerOperation() throws ValueDoesNotMatchTypeException, ConfigurationException, 
+        CSTSemanticException {
+        Project project = new Project("Test");
+        // Types
+        Compound cmpType = new Compound("Comp", project);
+        DecisionVariableDeclaration cmpDecl = new DecisionVariableDeclaration("v", IntegerType.TYPE, cmpType);
+        cmpType.add(cmpDecl);
+        Sequence seqType = new Sequence("mySeq", cmpType, project);
+        // Declarations
+        DecisionVariableDeclaration decl1 = new DecisionVariableDeclaration("cmps", seqType, project);
+        project.add(decl1);
+        // Assign value
+        Configuration config = new Configuration(project);
+        IDecisionVariable var = config.getDecision(decl1);
+        Value v1 = ValueFactory.createValue(cmpType, new Object[]{"v", 1});
+        Value v2 = ValueFactory.createValue(cmpType, new Object[]{"v", 2});
+        var.setValue(ValueFactory.createValue(seqType, new Object[]{v1, v2}), AssignmentState.ASSIGNED);
+
+        DecisionVariableDeclaration localDecl = new DecisionVariableDeclaration("a", cmpType, null);
+        ConstantValue const2 = new ConstantValue(ValueFactory.createValue(IntegerType.TYPE, 2));
+        ConstraintSyntaxTree itExpression = Utils.createCall(
+            new CompoundAccess(new Variable(localDecl), "v"), IntegerType.MULT_INTEGER_INTEGER, const2);
+        itExpression.inferDatatype();
+        ConstraintSyntaxTree containerOp = Utils.createContainerCall(decl1, Sequence.MIN2, itExpression, localDecl);
+        containerOp.inferDatatype();
+        EvaluationVisitor visitor = new EvaluationVisitor();
+        visitor.init(config, AssignmentState.DEFAULT, false, null);
+        containerOp.accept(visitor);
+        Assert.assertEquals(v1, visitor.getResult());
+        visitor.clear();
+        
+        visitor.init(config, AssignmentState.DEFAULT, false, null);
+        containerOp = Utils.createContainerCall(decl1, Sequence.MAX2, itExpression, localDecl);
+        containerOp.inferDatatype();
+        containerOp.accept(visitor);
+        Assert.assertEquals(v2, visitor.getResult());
+        visitor.clear();
+    }
+    
+    /**
+     * Tests the "min", "max" container operation on reals and container of compounds.
+     * 
+     * @throws ValueDoesNotMatchTypeException in case that value assignments fail (shall not occur)
+     * @throws ConfigurationException in case that initial assignment of values fail (shall not occur)
+     * @throws CSTSemanticException in case that the expressions created during this test are not 
+     *   valid (shall not occur)
+     */
+    @Test
+    public void testMinMaxRealContainerOperation() throws ValueDoesNotMatchTypeException, ConfigurationException, 
+        CSTSemanticException {
+        Project project = new Project("Test");
+        // Types
+        Compound cmpType = new Compound("Comp", project);
+        DecisionVariableDeclaration cmpDecl = new DecisionVariableDeclaration("v", RealType.TYPE, cmpType);
+        cmpType.add(cmpDecl);
+        Set setType = new Set("mySet", cmpType, project);
+        // Declarations
+        DecisionVariableDeclaration decl1 = new DecisionVariableDeclaration("cmps", setType, project);
+        project.add(decl1);
+        // Assign value
+        Configuration config = new Configuration(project);
+        IDecisionVariable var = config.getDecision(decl1);
+        Value v1 = ValueFactory.createValue(cmpType, new Object[]{"v", 1});
+        Value v2 = ValueFactory.createValue(cmpType, new Object[]{"v", 2});
+        var.setValue(ValueFactory.createValue(setType, new Object[]{v1, v2}), AssignmentState.ASSIGNED);
+
+        DecisionVariableDeclaration localDecl = new DecisionVariableDeclaration("a", cmpType, null);
+        ConstantValue const2 = new ConstantValue(ValueFactory.createValue(RealType.TYPE, 2));
+        ConstraintSyntaxTree itExpression = Utils.createCall(
+            new CompoundAccess(new Variable(localDecl), "v"), RealType.MULT_REAL_REAL, const2);
+        itExpression.inferDatatype();
+        ConstraintSyntaxTree containerOp = Utils.createContainerCall(decl1, Sequence.MIN2, itExpression, localDecl);
+        containerOp.inferDatatype();
+        EvaluationVisitor visitor = new EvaluationVisitor();
+        visitor.init(config, AssignmentState.DEFAULT, false, null);
+        containerOp.accept(visitor);
+        Assert.assertEquals(v1, visitor.getResult());
+        visitor.clear();
+        
+        visitor.init(config, AssignmentState.DEFAULT, false, null);
+        containerOp = Utils.createContainerCall(decl1, Sequence.MAX2, itExpression, localDecl);
+        containerOp.inferDatatype();
+        containerOp.accept(visitor);
+        Assert.assertEquals(v2, visitor.getResult());
+        visitor.clear();
+    }
+
     /**
      * Tests the "exists" container operation.
      * 
