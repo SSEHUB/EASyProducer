@@ -242,7 +242,7 @@ public class ConfigurationTableEditorFactory implements IConfigurationEditorCrea
         /**
          * Returns (a copy) of the configuration parameters.
          * 
-         * @return the parameters (may be <b>null</b>
+         * @return the parameters (may be <b>null</b>)
          */
         public Map<UIParameter, Object> getParameters() {
             Map<UIParameter, Object> result;
