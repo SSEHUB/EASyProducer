@@ -1391,11 +1391,11 @@ public class EvaluationVisitor implements IConstraintTreeVisitor {
                     .bind(addLocalVariable(cfg, resultDecl, null), context, true);
                 LocalDecisionVariable[] declarators = new LocalDecisionVariable[lastIteratorIndex];
                 int iterCount = 0;
-                IDatatype contained = call.getIteratorBaseType();
+                IDatatype contd = call.getIteratorBaseType();
                 boolean isContained = true; 
                 for (int d = 0; ok && d < declarators.length; d++) { // create local vars, initialize here only temp var
                     DecisionVariableDeclaration decl = call.getDeclarator(d);
-                    boolean isIterator = isContained && contained.isAssignableFrom(decl.getType());
+                    boolean isIterator = isContained && (null == contd || contd.isAssignableFrom(decl.getType()));
                     declarators[d] = addLocalVariable(cfg, decl, isIterator ? null : decl.getDefaultValue());
                     iterCount += isIterator ? 1 : 0;
                 }
