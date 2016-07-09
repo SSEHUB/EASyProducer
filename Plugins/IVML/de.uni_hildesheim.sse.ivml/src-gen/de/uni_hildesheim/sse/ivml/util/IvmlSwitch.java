@@ -317,6 +317,20 @@ public class IvmlSwitch<T> extends Switch<T>
         if (result == null) result = defaultCase(theEObject);
         return result;
       }
+      case IvmlPackage.OPT_BLOCK_EXPRESSION:
+      {
+        OptBlockExpression optBlockExpression = (OptBlockExpression)theEObject;
+        T result = caseOptBlockExpression(optBlockExpression);
+        if (result == null) result = defaultCase(theEObject);
+        return result;
+      }
+      case IvmlPackage.BLOCK_EXPRESSION:
+      {
+        BlockExpression blockExpression = (BlockExpression)theEObject;
+        T result = caseBlockExpression(blockExpression);
+        if (result == null) result = defaultCase(theEObject);
+        return result;
+      }
       case IvmlPackage.ASSIGNMENT_EXPRESSION:
       {
         AssignmentExpression assignmentExpression = (AssignmentExpression)theEObject;
@@ -1080,6 +1094,38 @@ public class IvmlSwitch<T> extends Switch<T>
    * @generated
    */
   public T caseLetExpression(LetExpression object)
+  {
+    return null;
+  }
+
+  /**
+   * Returns the result of interpreting the object as an instance of '<em>Opt Block Expression</em>'.
+   * <!-- begin-user-doc -->
+   * This implementation returns null;
+   * returning a non-null result will terminate the switch.
+   * <!-- end-user-doc -->
+   * @param object the target of the switch.
+   * @return the result of interpreting the object as an instance of '<em>Opt Block Expression</em>'.
+   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+   * @generated
+   */
+  public T caseOptBlockExpression(OptBlockExpression object)
+  {
+    return null;
+  }
+
+  /**
+   * Returns the result of interpreting the object as an instance of '<em>Block Expression</em>'.
+   * <!-- begin-user-doc -->
+   * This implementation returns null;
+   * returning a non-null result will terminate the switch.
+   * <!-- end-user-doc -->
+   * @param object the target of the switch.
+   * @return the result of interpreting the object as an instance of '<em>Block Expression</em>'.
+   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+   * @generated
+   */
+  public T caseBlockExpression(BlockExpression object)
   {
     return null;
   }

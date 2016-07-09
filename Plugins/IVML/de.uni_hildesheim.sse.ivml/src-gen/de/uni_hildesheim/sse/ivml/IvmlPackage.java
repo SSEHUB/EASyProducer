@@ -1284,13 +1284,22 @@ public interface IvmlPackage extends EPackage
   int OP_DEF_STATEMENT__IMPL = 4;
 
   /**
+   * The feature id for the '<em><b>Block</b></em>' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int OP_DEF_STATEMENT__BLOCK = 5;
+
+  /**
    * The number of structural features of the '<em>Op Def Statement</em>' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int OP_DEF_STATEMENT_FEATURE_COUNT = 5;
+  int OP_DEF_STATEMENT_FEATURE_COUNT = 6;
 
   /**
    * The meta object id for the '{@link de.uni_hildesheim.sse.ivml.impl.OpDefParameterListImpl <em>Op Def Parameter List</em>}' class.
@@ -1496,6 +1505,71 @@ public interface IvmlPackage extends EPackage
   int LET_EXPRESSION_FEATURE_COUNT = 4;
 
   /**
+   * The meta object id for the '{@link de.uni_hildesheim.sse.ivml.impl.OptBlockExpressionImpl <em>Opt Block Expression</em>}' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see de.uni_hildesheim.sse.ivml.impl.OptBlockExpressionImpl
+   * @see de.uni_hildesheim.sse.ivml.impl.IvmlPackageImpl#getOptBlockExpression()
+   * @generated
+   */
+  int OPT_BLOCK_EXPRESSION = 35;
+
+  /**
+   * The feature id for the '<em><b>Expr</b></em>' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int OPT_BLOCK_EXPRESSION__EXPR = 0;
+
+  /**
+   * The feature id for the '<em><b>Block</b></em>' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int OPT_BLOCK_EXPRESSION__BLOCK = 1;
+
+  /**
+   * The number of structural features of the '<em>Opt Block Expression</em>' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int OPT_BLOCK_EXPRESSION_FEATURE_COUNT = 2;
+
+  /**
+   * The meta object id for the '{@link de.uni_hildesheim.sse.ivml.impl.BlockExpressionImpl <em>Block Expression</em>}' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see de.uni_hildesheim.sse.ivml.impl.BlockExpressionImpl
+   * @see de.uni_hildesheim.sse.ivml.impl.IvmlPackageImpl#getBlockExpression()
+   * @generated
+   */
+  int BLOCK_EXPRESSION = 36;
+
+  /**
+   * The feature id for the '<em><b>Exprs</b></em>' containment reference list.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int BLOCK_EXPRESSION__EXPRS = 0;
+
+  /**
+   * The number of structural features of the '<em>Block Expression</em>' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int BLOCK_EXPRESSION_FEATURE_COUNT = 1;
+
+  /**
    * The meta object id for the '{@link de.uni_hildesheim.sse.ivml.impl.AssignmentExpressionImpl <em>Assignment Expression</em>}' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -1503,7 +1577,7 @@ public interface IvmlPackage extends EPackage
    * @see de.uni_hildesheim.sse.ivml.impl.IvmlPackageImpl#getAssignmentExpression()
    * @generated
    */
-  int ASSIGNMENT_EXPRESSION = 35;
+  int ASSIGNMENT_EXPRESSION = 37;
 
   /**
    * The feature id for the '<em><b>Left</b></em>' containment reference.
@@ -1540,7 +1614,7 @@ public interface IvmlPackage extends EPackage
    * @see de.uni_hildesheim.sse.ivml.impl.IvmlPackageImpl#getAssignmentExpressionPart()
    * @generated
    */
-  int ASSIGNMENT_EXPRESSION_PART = 36;
+  int ASSIGNMENT_EXPRESSION_PART = 38;
 
   /**
    * The feature id for the '<em><b>Op</b></em>' attribute.
@@ -1586,7 +1660,7 @@ public interface IvmlPackage extends EPackage
    * @see de.uni_hildesheim.sse.ivml.impl.IvmlPackageImpl#getImplicationExpression()
    * @generated
    */
-  int IMPLICATION_EXPRESSION = 37;
+  int IMPLICATION_EXPRESSION = 39;
 
   /**
    * The feature id for the '<em><b>Left</b></em>' containment reference.
@@ -1623,7 +1697,7 @@ public interface IvmlPackage extends EPackage
    * @see de.uni_hildesheim.sse.ivml.impl.IvmlPackageImpl#getImplicationExpressionPart()
    * @generated
    */
-  int IMPLICATION_EXPRESSION_PART = 38;
+  int IMPLICATION_EXPRESSION_PART = 40;
 
   /**
    * The feature id for the '<em><b>Op</b></em>' attribute.
@@ -1660,7 +1734,7 @@ public interface IvmlPackage extends EPackage
    * @see de.uni_hildesheim.sse.ivml.impl.IvmlPackageImpl#getLogicalExpression()
    * @generated
    */
-  int LOGICAL_EXPRESSION = 39;
+  int LOGICAL_EXPRESSION = 41;
 
   /**
    * The feature id for the '<em><b>Left</b></em>' containment reference.
@@ -1697,7 +1771,7 @@ public interface IvmlPackage extends EPackage
    * @see de.uni_hildesheim.sse.ivml.impl.IvmlPackageImpl#getLogicalExpressionPart()
    * @generated
    */
-  int LOGICAL_EXPRESSION_PART = 40;
+  int LOGICAL_EXPRESSION_PART = 42;
 
   /**
    * The feature id for the '<em><b>Op</b></em>' attribute.
@@ -1734,7 +1808,7 @@ public interface IvmlPackage extends EPackage
    * @see de.uni_hildesheim.sse.ivml.impl.IvmlPackageImpl#getEqualityExpression()
    * @generated
    */
-  int EQUALITY_EXPRESSION = 41;
+  int EQUALITY_EXPRESSION = 43;
 
   /**
    * The feature id for the '<em><b>Left</b></em>' containment reference.
@@ -1771,7 +1845,7 @@ public interface IvmlPackage extends EPackage
    * @see de.uni_hildesheim.sse.ivml.impl.IvmlPackageImpl#getEqualityExpressionPart()
    * @generated
    */
-  int EQUALITY_EXPRESSION_PART = 42;
+  int EQUALITY_EXPRESSION_PART = 44;
 
   /**
    * The feature id for the '<em><b>Op</b></em>' attribute.
@@ -1817,7 +1891,7 @@ public interface IvmlPackage extends EPackage
    * @see de.uni_hildesheim.sse.ivml.impl.IvmlPackageImpl#getRelationalExpression()
    * @generated
    */
-  int RELATIONAL_EXPRESSION = 43;
+  int RELATIONAL_EXPRESSION = 45;
 
   /**
    * The feature id for the '<em><b>Left</b></em>' containment reference.
@@ -1854,7 +1928,7 @@ public interface IvmlPackage extends EPackage
    * @see de.uni_hildesheim.sse.ivml.impl.IvmlPackageImpl#getRelationalExpressionPart()
    * @generated
    */
-  int RELATIONAL_EXPRESSION_PART = 44;
+  int RELATIONAL_EXPRESSION_PART = 46;
 
   /**
    * The feature id for the '<em><b>Op</b></em>' attribute.
@@ -1891,7 +1965,7 @@ public interface IvmlPackage extends EPackage
    * @see de.uni_hildesheim.sse.ivml.impl.IvmlPackageImpl#getAdditiveExpression()
    * @generated
    */
-  int ADDITIVE_EXPRESSION = 45;
+  int ADDITIVE_EXPRESSION = 47;
 
   /**
    * The feature id for the '<em><b>Left</b></em>' containment reference.
@@ -1928,7 +2002,7 @@ public interface IvmlPackage extends EPackage
    * @see de.uni_hildesheim.sse.ivml.impl.IvmlPackageImpl#getAdditiveExpressionPart()
    * @generated
    */
-  int ADDITIVE_EXPRESSION_PART = 46;
+  int ADDITIVE_EXPRESSION_PART = 48;
 
   /**
    * The feature id for the '<em><b>Op</b></em>' attribute.
@@ -1965,7 +2039,7 @@ public interface IvmlPackage extends EPackage
    * @see de.uni_hildesheim.sse.ivml.impl.IvmlPackageImpl#getMultiplicativeExpression()
    * @generated
    */
-  int MULTIPLICATIVE_EXPRESSION = 47;
+  int MULTIPLICATIVE_EXPRESSION = 49;
 
   /**
    * The feature id for the '<em><b>Left</b></em>' containment reference.
@@ -2002,7 +2076,7 @@ public interface IvmlPackage extends EPackage
    * @see de.uni_hildesheim.sse.ivml.impl.IvmlPackageImpl#getMultiplicativeExpressionPart()
    * @generated
    */
-  int MULTIPLICATIVE_EXPRESSION_PART = 48;
+  int MULTIPLICATIVE_EXPRESSION_PART = 50;
 
   /**
    * The feature id for the '<em><b>Op</b></em>' attribute.
@@ -2039,7 +2113,7 @@ public interface IvmlPackage extends EPackage
    * @see de.uni_hildesheim.sse.ivml.impl.IvmlPackageImpl#getUnaryExpression()
    * @generated
    */
-  int UNARY_EXPRESSION = 49;
+  int UNARY_EXPRESSION = 51;
 
   /**
    * The feature id for the '<em><b>Op</b></em>' attribute.
@@ -2076,7 +2150,7 @@ public interface IvmlPackage extends EPackage
    * @see de.uni_hildesheim.sse.ivml.impl.IvmlPackageImpl#getPostfixExpression()
    * @generated
    */
-  int POSTFIX_EXPRESSION = 50;
+  int POSTFIX_EXPRESSION = 52;
 
   /**
    * The feature id for the '<em><b>Call</b></em>' containment reference.
@@ -2131,7 +2205,7 @@ public interface IvmlPackage extends EPackage
    * @see de.uni_hildesheim.sse.ivml.impl.IvmlPackageImpl#getCall()
    * @generated
    */
-  int CALL = 51;
+  int CALL = 53;
 
   /**
    * The feature id for the '<em><b>Call</b></em>' containment reference.
@@ -2177,7 +2251,7 @@ public interface IvmlPackage extends EPackage
    * @see de.uni_hildesheim.sse.ivml.impl.IvmlPackageImpl#getFeatureCall()
    * @generated
    */
-  int FEATURE_CALL = 52;
+  int FEATURE_CALL = 54;
 
   /**
    * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -2214,7 +2288,7 @@ public interface IvmlPackage extends EPackage
    * @see de.uni_hildesheim.sse.ivml.impl.IvmlPackageImpl#getSetOp()
    * @generated
    */
-  int SET_OP = 53;
+  int SET_OP = 55;
 
   /**
    * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -2260,7 +2334,7 @@ public interface IvmlPackage extends EPackage
    * @see de.uni_hildesheim.sse.ivml.impl.IvmlPackageImpl#getDeclarator()
    * @generated
    */
-  int DECLARATOR = 54;
+  int DECLARATOR = 56;
 
   /**
    * The feature id for the '<em><b>Decl</b></em>' containment reference list.
@@ -2288,7 +2362,7 @@ public interface IvmlPackage extends EPackage
    * @see de.uni_hildesheim.sse.ivml.impl.IvmlPackageImpl#getDeclaration()
    * @generated
    */
-  int DECLARATION = 55;
+  int DECLARATION = 57;
 
   /**
    * The feature id for the '<em><b>Type</b></em>' containment reference.
@@ -2334,7 +2408,7 @@ public interface IvmlPackage extends EPackage
    * @see de.uni_hildesheim.sse.ivml.impl.IvmlPackageImpl#getActualParameterList()
    * @generated
    */
-  int ACTUAL_PARAMETER_LIST = 56;
+  int ACTUAL_PARAMETER_LIST = 58;
 
   /**
    * The feature id for the '<em><b>Param</b></em>' containment reference list.
@@ -2362,7 +2436,7 @@ public interface IvmlPackage extends EPackage
    * @see de.uni_hildesheim.sse.ivml.impl.IvmlPackageImpl#getExpressionAccess()
    * @generated
    */
-  int EXPRESSION_ACCESS = 57;
+  int EXPRESSION_ACCESS = 59;
 
   /**
    * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -2408,7 +2482,7 @@ public interface IvmlPackage extends EPackage
    * @see de.uni_hildesheim.sse.ivml.impl.IvmlPackageImpl#getPrimaryExpression()
    * @generated
    */
-  int PRIMARY_EXPRESSION = 58;
+  int PRIMARY_EXPRESSION = 60;
 
   /**
    * The feature id for the '<em><b>Lit</b></em>' containment reference.
@@ -2481,7 +2555,7 @@ public interface IvmlPackage extends EPackage
    * @see de.uni_hildesheim.sse.ivml.impl.IvmlPackageImpl#getCollectionInitializer()
    * @generated
    */
-  int COLLECTION_INITIALIZER = 59;
+  int COLLECTION_INITIALIZER = 61;
 
   /**
    * The feature id for the '<em><b>Type</b></em>' containment reference.
@@ -2518,7 +2592,7 @@ public interface IvmlPackage extends EPackage
    * @see de.uni_hildesheim.sse.ivml.impl.IvmlPackageImpl#getExpressionListOrRange()
    * @generated
    */
-  int EXPRESSION_LIST_OR_RANGE = 60;
+  int EXPRESSION_LIST_OR_RANGE = 62;
 
   /**
    * The feature id for the '<em><b>List</b></em>' containment reference list.
@@ -2546,7 +2620,7 @@ public interface IvmlPackage extends EPackage
    * @see de.uni_hildesheim.sse.ivml.impl.IvmlPackageImpl#getExpressionListEntry()
    * @generated
    */
-  int EXPRESSION_LIST_ENTRY = 61;
+  int EXPRESSION_LIST_ENTRY = 63;
 
   /**
    * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -2601,7 +2675,7 @@ public interface IvmlPackage extends EPackage
    * @see de.uni_hildesheim.sse.ivml.impl.IvmlPackageImpl#getLiteral()
    * @generated
    */
-  int LITERAL = 62;
+  int LITERAL = 64;
 
   /**
    * The feature id for the '<em><b>Val</b></em>' containment reference.
@@ -2629,7 +2703,7 @@ public interface IvmlPackage extends EPackage
    * @see de.uni_hildesheim.sse.ivml.impl.IvmlPackageImpl#getIfExpression()
    * @generated
    */
-  int IF_EXPRESSION = 63;
+  int IF_EXPRESSION = 65;
 
   /**
    * The feature id for the '<em><b>If Ex</b></em>' containment reference.
@@ -3783,6 +3857,17 @@ public interface IvmlPackage extends EPackage
   EReference getOpDefStatement_Impl();
 
   /**
+   * Returns the meta object for the containment reference '{@link de.uni_hildesheim.sse.ivml.OpDefStatement#getBlock <em>Block</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the containment reference '<em>Block</em>'.
+   * @see de.uni_hildesheim.sse.ivml.OpDefStatement#getBlock()
+   * @see #getOpDefStatement()
+   * @generated
+   */
+  EReference getOpDefStatement_Block();
+
+  /**
    * Returns the meta object for class '{@link de.uni_hildesheim.sse.ivml.OpDefParameterList <em>Op Def Parameter List</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -3963,6 +4048,59 @@ public interface IvmlPackage extends EPackage
    * @generated
    */
   EReference getLetExpression_SubExpr();
+
+  /**
+   * Returns the meta object for class '{@link de.uni_hildesheim.sse.ivml.OptBlockExpression <em>Opt Block Expression</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for class '<em>Opt Block Expression</em>'.
+   * @see de.uni_hildesheim.sse.ivml.OptBlockExpression
+   * @generated
+   */
+  EClass getOptBlockExpression();
+
+  /**
+   * Returns the meta object for the containment reference '{@link de.uni_hildesheim.sse.ivml.OptBlockExpression#getExpr <em>Expr</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the containment reference '<em>Expr</em>'.
+   * @see de.uni_hildesheim.sse.ivml.OptBlockExpression#getExpr()
+   * @see #getOptBlockExpression()
+   * @generated
+   */
+  EReference getOptBlockExpression_Expr();
+
+  /**
+   * Returns the meta object for the containment reference '{@link de.uni_hildesheim.sse.ivml.OptBlockExpression#getBlock <em>Block</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the containment reference '<em>Block</em>'.
+   * @see de.uni_hildesheim.sse.ivml.OptBlockExpression#getBlock()
+   * @see #getOptBlockExpression()
+   * @generated
+   */
+  EReference getOptBlockExpression_Block();
+
+  /**
+   * Returns the meta object for class '{@link de.uni_hildesheim.sse.ivml.BlockExpression <em>Block Expression</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for class '<em>Block Expression</em>'.
+   * @see de.uni_hildesheim.sse.ivml.BlockExpression
+   * @generated
+   */
+  EClass getBlockExpression();
+
+  /**
+   * Returns the meta object for the containment reference list '{@link de.uni_hildesheim.sse.ivml.BlockExpression#getExprs <em>Exprs</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the containment reference list '<em>Exprs</em>'.
+   * @see de.uni_hildesheim.sse.ivml.BlockExpression#getExprs()
+   * @see #getBlockExpression()
+   * @generated
+   */
+  EReference getBlockExpression_Exprs();
 
   /**
    * Returns the meta object for class '{@link de.uni_hildesheim.sse.ivml.AssignmentExpression <em>Assignment Expression</em>}'.
@@ -5929,6 +6067,14 @@ public interface IvmlPackage extends EPackage
     EReference OP_DEF_STATEMENT__IMPL = eINSTANCE.getOpDefStatement_Impl();
 
     /**
+     * The meta object literal for the '<em><b>Block</b></em>' containment reference feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EReference OP_DEF_STATEMENT__BLOCK = eINSTANCE.getOpDefStatement_Block();
+
+    /**
      * The meta object literal for the '{@link de.uni_hildesheim.sse.ivml.impl.OpDefParameterListImpl <em>Op Def Parameter List</em>}' class.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
@@ -6073,6 +6219,50 @@ public interface IvmlPackage extends EPackage
      * @generated
      */
     EReference LET_EXPRESSION__SUB_EXPR = eINSTANCE.getLetExpression_SubExpr();
+
+    /**
+     * The meta object literal for the '{@link de.uni_hildesheim.sse.ivml.impl.OptBlockExpressionImpl <em>Opt Block Expression</em>}' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see de.uni_hildesheim.sse.ivml.impl.OptBlockExpressionImpl
+     * @see de.uni_hildesheim.sse.ivml.impl.IvmlPackageImpl#getOptBlockExpression()
+     * @generated
+     */
+    EClass OPT_BLOCK_EXPRESSION = eINSTANCE.getOptBlockExpression();
+
+    /**
+     * The meta object literal for the '<em><b>Expr</b></em>' containment reference feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EReference OPT_BLOCK_EXPRESSION__EXPR = eINSTANCE.getOptBlockExpression_Expr();
+
+    /**
+     * The meta object literal for the '<em><b>Block</b></em>' containment reference feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EReference OPT_BLOCK_EXPRESSION__BLOCK = eINSTANCE.getOptBlockExpression_Block();
+
+    /**
+     * The meta object literal for the '{@link de.uni_hildesheim.sse.ivml.impl.BlockExpressionImpl <em>Block Expression</em>}' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see de.uni_hildesheim.sse.ivml.impl.BlockExpressionImpl
+     * @see de.uni_hildesheim.sse.ivml.impl.IvmlPackageImpl#getBlockExpression()
+     * @generated
+     */
+    EClass BLOCK_EXPRESSION = eINSTANCE.getBlockExpression();
+
+    /**
+     * The meta object literal for the '<em><b>Exprs</b></em>' containment reference list feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EReference BLOCK_EXPRESSION__EXPRS = eINSTANCE.getBlockExpression_Exprs();
 
     /**
      * The meta object literal for the '{@link de.uni_hildesheim.sse.ivml.impl.AssignmentExpressionImpl <em>Assignment Expression</em>}' class.

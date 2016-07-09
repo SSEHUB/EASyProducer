@@ -47,7 +47,9 @@ public class IvmlParser extends AbstractContentAssistParser {
 					put(grammarAccess.getValueAccess().getBValueAlternatives_3_0(), "rule__Value__BValueAlternatives_3_0");
 					put(grammarAccess.getDerivedTypeAccess().getAlternatives_0(), "rule__DerivedType__Alternatives_0");
 					put(grammarAccess.getAnnotateToAccess().getSnameAlternatives_0_0(), "rule__AnnotateTo__SnameAlternatives_0_0");
+					put(grammarAccess.getOpDefStatementAccess().getAlternatives_8(), "rule__OpDefStatement__Alternatives_8");
 					put(grammarAccess.getExpressionAccess().getAlternatives(), "rule__Expression__Alternatives");
+					put(grammarAccess.getOptBlockExpressionAccess().getAlternatives(), "rule__OptBlockExpression__Alternatives");
 					put(grammarAccess.getAssignmentExpressionPartAccess().getAlternatives_1(), "rule__AssignmentExpressionPart__Alternatives_1");
 					put(grammarAccess.getImplicationOperatorAccess().getAlternatives(), "rule__ImplicationOperator__Alternatives");
 					put(grammarAccess.getLogicalOperatorAccess().getAlternatives(), "rule__LogicalOperator__Alternatives");
@@ -101,6 +103,7 @@ public class IvmlParser extends AbstractContentAssistParser {
 					put(grammarAccess.getConflictStmtAccess().getGroup_2(), "rule__ConflictStmt__Group_2__0");
 					put(grammarAccess.getVersionStmtAccess().getGroup(), "rule__VersionStmt__Group__0");
 					put(grammarAccess.getOpDefStatementAccess().getGroup(), "rule__OpDefStatement__Group__0");
+					put(grammarAccess.getOpDefStatementAccess().getGroup_8_0(), "rule__OpDefStatement__Group_8_0__0");
 					put(grammarAccess.getOpDefParameterListAccess().getGroup(), "rule__OpDefParameterList__Group__0");
 					put(grammarAccess.getOpDefParameterListAccess().getGroup_1(), "rule__OpDefParameterList__Group_1__0");
 					put(grammarAccess.getOpDefParameterListAccess().getGroup_1_1(), "rule__OpDefParameterList__Group_1_1__0");
@@ -108,6 +111,7 @@ public class IvmlParser extends AbstractContentAssistParser {
 					put(grammarAccess.getOpDefParameterAccess().getGroup_2(), "rule__OpDefParameter__Group_2__0");
 					put(grammarAccess.getExpressionStatementAccess().getGroup(), "rule__ExpressionStatement__Group__0");
 					put(grammarAccess.getLetExpressionAccess().getGroup(), "rule__LetExpression__Group__0");
+					put(grammarAccess.getBlockExpressionAccess().getGroup(), "rule__BlockExpression__Group__0");
 					put(grammarAccess.getAssignmentExpressionAccess().getGroup(), "rule__AssignmentExpression__Group__0");
 					put(grammarAccess.getAssignmentExpressionPartAccess().getGroup(), "rule__AssignmentExpressionPart__Group__0");
 					put(grammarAccess.getImplicationExpressionAccess().getGroup(), "rule__ImplicationExpression__Group__0");
@@ -248,7 +252,8 @@ public class IvmlParser extends AbstractContentAssistParser {
 					put(grammarAccess.getOpDefStatementAccess().getResultAssignment_2(), "rule__OpDefStatement__ResultAssignment_2");
 					put(grammarAccess.getOpDefStatementAccess().getIdAssignment_3(), "rule__OpDefStatement__IdAssignment_3");
 					put(grammarAccess.getOpDefStatementAccess().getParamAssignment_5(), "rule__OpDefStatement__ParamAssignment_5");
-					put(grammarAccess.getOpDefStatementAccess().getImplAssignment_8(), "rule__OpDefStatement__ImplAssignment_8");
+					put(grammarAccess.getOpDefStatementAccess().getImplAssignment_8_0_0(), "rule__OpDefStatement__ImplAssignment_8_0_0");
+					put(grammarAccess.getOpDefStatementAccess().getBlockAssignment_8_1(), "rule__OpDefStatement__BlockAssignment_8_1");
 					put(grammarAccess.getOpDefParameterListAccess().getListAssignment_1_0(), "rule__OpDefParameterList__ListAssignment_1_0");
 					put(grammarAccess.getOpDefParameterListAccess().getListAssignment_1_1_1(), "rule__OpDefParameterList__ListAssignment_1_1_1");
 					put(grammarAccess.getOpDefParameterAccess().getTypeAssignment_0(), "rule__OpDefParameter__TypeAssignment_0");
@@ -262,6 +267,9 @@ public class IvmlParser extends AbstractContentAssistParser {
 					put(grammarAccess.getLetExpressionAccess().getNameAssignment_2(), "rule__LetExpression__NameAssignment_2");
 					put(grammarAccess.getLetExpressionAccess().getValueExprAssignment_4(), "rule__LetExpression__ValueExprAssignment_4");
 					put(grammarAccess.getLetExpressionAccess().getSubExprAssignment_6(), "rule__LetExpression__SubExprAssignment_6");
+					put(grammarAccess.getOptBlockExpressionAccess().getExprAssignment_0(), "rule__OptBlockExpression__ExprAssignment_0");
+					put(grammarAccess.getOptBlockExpressionAccess().getBlockAssignment_1(), "rule__OptBlockExpression__BlockAssignment_1");
+					put(grammarAccess.getBlockExpressionAccess().getExprsAssignment_1(), "rule__BlockExpression__ExprsAssignment_1");
 					put(grammarAccess.getAssignmentExpressionAccess().getLeftAssignment_0(), "rule__AssignmentExpression__LeftAssignment_0");
 					put(grammarAccess.getAssignmentExpressionAccess().getRightAssignment_1(), "rule__AssignmentExpression__RightAssignment_1");
 					put(grammarAccess.getAssignmentExpressionPartAccess().getOpAssignment_0(), "rule__AssignmentExpressionPart__OpAssignment_0");

@@ -59,12 +59,12 @@ public interface IfExpression extends EObject
    * </p>
    * <!-- end-user-doc -->
    * @return the value of the '<em>Then Ex</em>' containment reference.
-   * @see #setThenEx(Expression)
+   * @see #setThenEx(OptBlockExpression)
    * @see de.uni_hildesheim.sse.ivml.IvmlPackage#getIfExpression_ThenEx()
    * @model containment="true"
    * @generated
    */
-  Expression getThenEx();
+  OptBlockExpression getThenEx();
 
   /**
    * Sets the value of the '{@link de.uni_hildesheim.sse.ivml.IfExpression#getThenEx <em>Then Ex</em>}' containment reference.
@@ -74,7 +74,7 @@ public interface IfExpression extends EObject
    * @see #getThenEx()
    * @generated
    */
-  void setThenEx(Expression value);
+  void setThenEx(OptBlockExpression value);
 
   /**
    * Returns the value of the '<em><b>Else Ex</b></em>' containment reference.
@@ -85,12 +85,12 @@ public interface IfExpression extends EObject
    * </p>
    * <!-- end-user-doc -->
    * @return the value of the '<em>Else Ex</em>' containment reference.
-   * @see #setElseEx(Expression)
+   * @see #setElseEx(OptBlockExpression)
    * @see de.uni_hildesheim.sse.ivml.IvmlPackage#getIfExpression_ElseEx()
    * @model containment="true"
    * @generated
    */
-  Expression getElseEx();
+  OptBlockExpression getElseEx();
 
   /**
    * Sets the value of the '{@link de.uni_hildesheim.sse.ivml.IfExpression#getElseEx <em>Else Ex</em>}' containment reference.
@@ -100,6 +100,6 @@ public interface IfExpression extends EObject
    * @see #getElseEx()
    * @generated
    */
-  void setElseEx(Expression value);
+  void setElseEx(OptBlockExpression value);
 
 } // IfExpression

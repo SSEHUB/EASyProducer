@@ -140,6 +140,7 @@
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Ivml.ecore#//OpDefStatement/id"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Ivml.ecore#//OpDefStatement/param"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Ivml.ecore#//OpDefStatement/impl"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Ivml.ecore#//OpDefStatement/block"/>
     </genClasses>
     <genClasses ecoreClass="Ivml.ecore#//OpDefParameterList">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Ivml.ecore#//OpDefParameterList/list"/>
@@ -162,6 +163,13 @@
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Ivml.ecore#//LetExpression/name"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Ivml.ecore#//LetExpression/valueExpr"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Ivml.ecore#//LetExpression/subExpr"/>
+    </genClasses>
+    <genClasses ecoreClass="Ivml.ecore#//OptBlockExpression">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Ivml.ecore#//OptBlockExpression/expr"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Ivml.ecore#//OptBlockExpression/block"/>
+    </genClasses>
+    <genClasses ecoreClass="Ivml.ecore#//BlockExpression">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Ivml.ecore#//BlockExpression/exprs"/>
     </genClasses>
     <genClasses ecoreClass="Ivml.ecore#//AssignmentExpression">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Ivml.ecore#//AssignmentExpression/left"/>

@@ -250,6 +250,16 @@ public class IvmlAdapterFactory extends AdapterFactoryImpl
         return createLetExpressionAdapter();
       }
       @Override
+      public Adapter caseOptBlockExpression(OptBlockExpression object)
+      {
+        return createOptBlockExpressionAdapter();
+      }
+      @Override
+      public Adapter caseBlockExpression(BlockExpression object)
+      {
+        return createBlockExpressionAdapter();
+      }
+      @Override
       public Adapter caseAssignmentExpression(AssignmentExpression object)
       {
         return createAssignmentExpressionAdapter();
@@ -937,6 +947,36 @@ public class IvmlAdapterFactory extends AdapterFactoryImpl
    * @generated
    */
   public Adapter createLetExpressionAdapter()
+  {
+    return null;
+  }
+
+  /**
+   * Creates a new adapter for an object of class '{@link de.uni_hildesheim.sse.ivml.OptBlockExpression <em>Opt Block Expression</em>}'.
+   * <!-- begin-user-doc -->
+   * This default implementation returns null so that we can easily ignore cases;
+   * it's useful to ignore a case when inheritance will catch all the cases anyway.
+   * <!-- end-user-doc -->
+   * @return the new adapter.
+   * @see de.uni_hildesheim.sse.ivml.OptBlockExpression
+   * @generated
+   */
+  public Adapter createOptBlockExpressionAdapter()
+  {
+    return null;
+  }
+
+  /**
+   * Creates a new adapter for an object of class '{@link de.uni_hildesheim.sse.ivml.BlockExpression <em>Block Expression</em>}'.
+   * <!-- begin-user-doc -->
+   * This default implementation returns null so that we can easily ignore cases;
+   * it's useful to ignore a case when inheritance will catch all the cases anyway.
+   * <!-- end-user-doc -->
+   * @return the new adapter.
+   * @see de.uni_hildesheim.sse.ivml.BlockExpression
+   * @generated
+   */
+  public Adapter createBlockExpressionAdapter()
   {
     return null;
   }

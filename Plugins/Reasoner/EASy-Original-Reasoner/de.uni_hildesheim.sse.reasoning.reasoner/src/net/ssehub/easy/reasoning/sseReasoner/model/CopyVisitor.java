@@ -21,6 +21,7 @@ import net.ssehub.easy.basics.logger.EASyLoggerFactory;
 import net.ssehub.easy.basics.modelManagement.IVariable;
 import net.ssehub.easy.basics.modelManagement.IVersionRestriction.IVariableMapper;
 import net.ssehub.easy.varModel.cst.AttributeVariable;
+import net.ssehub.easy.varModel.cst.BlockExpression;
 import net.ssehub.easy.varModel.cst.CSTSemanticException;
 import net.ssehub.easy.varModel.cst.Comment;
 import net.ssehub.easy.varModel.cst.CompoundAccess;
@@ -353,6 +354,13 @@ public class CopyVisitor implements IConstraintTreeVisitor {
             result = new Variable(cmpVar);
         } else {
             result = self; // no replacement needed            
+        }
+    }
+
+    @Override
+    public void visitBlockExpression(BlockExpression block) {
+        for (int e = 0, n = block.getExpressionCount(); e < n; e++) {
+            block.getExpression(e).accept(this);
         }
     }
 

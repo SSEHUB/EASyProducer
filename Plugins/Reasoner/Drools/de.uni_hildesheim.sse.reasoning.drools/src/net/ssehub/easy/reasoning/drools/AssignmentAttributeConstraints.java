@@ -6,6 +6,7 @@ import java.util.List;
 import net.ssehub.easy.basics.logger.EASyLoggerFactory;
 import net.ssehub.easy.basics.logger.EASyLoggerFactory.EASyLogger;
 import net.ssehub.easy.varModel.cst.AttributeVariable;
+import net.ssehub.easy.varModel.cst.BlockExpression;
 import net.ssehub.easy.varModel.cst.CSTSemanticException;
 import net.ssehub.easy.varModel.cst.Comment;
 import net.ssehub.easy.varModel.cst.CompoundAccess;
@@ -461,13 +462,11 @@ public class AssignmentAttributeConstraints implements IConstraintTreeVisitor, I
         @Override
         public void visitLet(Let let) {
             // TODO Auto-generated method stub
-            
         }
 
         @Override
         public void visitIfThen(IfThen ifThen) {
             // TODO Auto-generated method stub
-            
         }
 
         @Override
@@ -498,11 +497,13 @@ public class AssignmentAttributeConstraints implements IConstraintTreeVisitor, I
         public void visitSelf(Self self) {
             // TODO Auto-generated method stub
         }
+
+        @Override
+        public void visitBlockExpression(BlockExpression block) {
+            // TODO Auto-generated method stub
+        }
         
     }
-    
-    
-    
 
     @Override
     public void visitCompoundAccess(CompoundAccess access) {
@@ -610,6 +611,11 @@ public class AssignmentAttributeConstraints implements IConstraintTreeVisitor, I
     public void visitAnnotationVariable(AttributeVariable variable) {
         // TODO check whether specific method is needed
         visitVariable(variable);
+    }
+
+    @Override
+    public void visitBlockExpression(BlockExpression block) {
+        doNotAddRule = true;
     }
 
 }

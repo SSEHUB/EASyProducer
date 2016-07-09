@@ -6,6 +6,7 @@ import java.util.List;
 import net.ssehub.easy.basics.logger.EASyLoggerFactory;
 import net.ssehub.easy.basics.logger.EASyLoggerFactory.EASyLogger;
 import net.ssehub.easy.varModel.cst.AttributeVariable;
+import net.ssehub.easy.varModel.cst.BlockExpression;
 import net.ssehub.easy.varModel.cst.CSTSemanticException;
 import net.ssehub.easy.varModel.cst.CompoundAccess;
 import net.ssehub.easy.varModel.cst.CompoundInitializer;
@@ -1109,6 +1110,11 @@ public class DroolsEqualityEvaluator implements IConstraintTreeVisitor, IValueVi
             visitVariable(variable);
         }
         
+        @Override
+        public void visitBlockExpression(BlockExpression block) {
+            // TODO Auto-generated method stub
+        }
+
         /**
          * Private method to get the drools type.
          * @param type Type.
@@ -1203,7 +1209,6 @@ public class DroolsEqualityEvaluator implements IConstraintTreeVisitor, IValueVi
         @Override
         public void visitIfThen(IfThen ifThen) {
             // TODO Auto-generated method stub
-            
         }
 
         @Override
@@ -1284,4 +1289,10 @@ public class DroolsEqualityEvaluator implements IConstraintTreeVisitor, IValueVi
     public void visitSelf(Self self) {
         // TODO Auto-generated method stub
     }
+
+    @Override
+    public void visitBlockExpression(BlockExpression block) {
+        // TODO Auto-generated method stub 
+    }
+
 }

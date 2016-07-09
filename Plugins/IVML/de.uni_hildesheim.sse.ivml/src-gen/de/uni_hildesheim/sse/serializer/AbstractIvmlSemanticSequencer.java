@@ -14,6 +14,7 @@ import de.uni_hildesheim.sse.ivml.AssignmentExpressionPart;
 import de.uni_hildesheim.sse.ivml.AttrAssignment;
 import de.uni_hildesheim.sse.ivml.AttrAssignmentPart;
 import de.uni_hildesheim.sse.ivml.BasicType;
+import de.uni_hildesheim.sse.ivml.BlockExpression;
 import de.uni_hildesheim.sse.ivml.Call;
 import de.uni_hildesheim.sse.ivml.CollectionInitializer;
 import de.uni_hildesheim.sse.ivml.ConflictStmt;
@@ -48,6 +49,7 @@ import de.uni_hildesheim.sse.ivml.NumValue;
 import de.uni_hildesheim.sse.ivml.OpDefParameter;
 import de.uni_hildesheim.sse.ivml.OpDefParameterList;
 import de.uni_hildesheim.sse.ivml.OpDefStatement;
+import de.uni_hildesheim.sse.ivml.OptBlockExpression;
 import de.uni_hildesheim.sse.ivml.PostfixExpression;
 import de.uni_hildesheim.sse.ivml.PrimaryExpression;
 import de.uni_hildesheim.sse.ivml.Project;
@@ -124,6 +126,9 @@ public abstract class AbstractIvmlSemanticSequencer extends AbstractDelegatingSe
 				return; 
 			case IvmlPackage.BASIC_TYPE:
 				sequence_BasicType(context, (BasicType) semanticObject); 
+				return; 
+			case IvmlPackage.BLOCK_EXPRESSION:
+				sequence_BlockExpression(context, (BlockExpression) semanticObject); 
 				return; 
 			case IvmlPackage.CALL:
 				sequence_Call(context, (Call) semanticObject); 
@@ -223,6 +228,9 @@ public abstract class AbstractIvmlSemanticSequencer extends AbstractDelegatingSe
 				return; 
 			case IvmlPackage.OP_DEF_STATEMENT:
 				sequence_OpDefStatement(context, (OpDefStatement) semanticObject); 
+				return; 
+			case IvmlPackage.OPT_BLOCK_EXPRESSION:
+				sequence_OptBlockExpression(context, (OptBlockExpression) semanticObject); 
 				return; 
 			case IvmlPackage.POSTFIX_EXPRESSION:
 				sequence_PostfixExpression(context, (PostfixExpression) semanticObject); 
@@ -430,6 +438,18 @@ public abstract class AbstractIvmlSemanticSequencer extends AbstractDelegatingSe
 	 *     (type='Integer' | type='Real' | type='Boolean' | type='String' | type='Constraint')
 	 */
 	protected void sequence_BasicType(ISerializationContext context, BasicType semanticObject) {
+		genericSequencer.createSequence(context, semanticObject);
+	}
+	
+	
+	/**
+	 * Contexts:
+	 *     BlockExpression returns BlockExpression
+	 *
+	 * Constraint:
+	 *     exprs+=ExpressionStatement+
+	 */
+	protected void sequence_BlockExpression(ISerializationContext context, BlockExpression semanticObject) {
 		genericSequencer.createSequence(context, semanticObject);
 	}
 	
@@ -661,7 +681,7 @@ public abstract class AbstractIvmlSemanticSequencer extends AbstractDelegatingSe
 	 *     IfExpression returns IfExpression
 	 *
 	 * Constraint:
-	 *     (ifEx=Expression thenEx=Expression elseEx=Expression)
+	 *     (ifEx=Expression thenEx=OptBlockExpression elseEx=OptBlockExpression)
 	 */
 	protected void sequence_IfExpression(ISerializationContext context, IfExpression semanticObject) {
 		if (errorAcceptor != null) {
@@ -674,8 +694,8 @@ public abstract class AbstractIvmlSemanticSequencer extends AbstractDelegatingSe
 		}
 		SequenceFeeder feeder = createSequencerFeeder(context, semanticObject);
 		feeder.accept(grammarAccess.getIfExpressionAccess().getIfExExpressionParserRuleCall_1_0(), semanticObject.getIfEx());
-		feeder.accept(grammarAccess.getIfExpressionAccess().getThenExExpressionParserRuleCall_3_0(), semanticObject.getThenEx());
-		feeder.accept(grammarAccess.getIfExpressionAccess().getElseExExpressionParserRuleCall_5_0(), semanticObject.getElseEx());
+		feeder.accept(grammarAccess.getIfExpressionAccess().getThenExOptBlockExpressionParserRuleCall_3_0(), semanticObject.getThenEx());
+		feeder.accept(grammarAccess.getIfExpressionAccess().getElseExOptBlockExpressionParserRuleCall_5_0(), semanticObject.getElseEx());
 		feeder.finish();
 	}
 	
@@ -742,7 +762,7 @@ public abstract class AbstractIvmlSemanticSequencer extends AbstractDelegatingSe
 	 *     LetExpression returns LetExpression
 	 *
 	 * Constraint:
-	 *     (type=Type name=Identifier valueExpr=Expression subExpr=Expression)
+	 *     (type=Type name=Identifier valueExpr=Expression subExpr=OptBlockExpression)
 	 */
 	protected void sequence_LetExpression(ISerializationContext context, LetExpression semanticObject) {
 		if (errorAcceptor != null) {
@@ -759,7 +779,7 @@ public abstract class AbstractIvmlSemanticSequencer extends AbstractDelegatingSe
 		feeder.accept(grammarAccess.getLetExpressionAccess().getTypeTypeParserRuleCall_1_0(), semanticObject.getType());
 		feeder.accept(grammarAccess.getLetExpressionAccess().getNameIdentifierParserRuleCall_2_0(), semanticObject.getName());
 		feeder.accept(grammarAccess.getLetExpressionAccess().getValueExprExpressionParserRuleCall_4_0(), semanticObject.getValueExpr());
-		feeder.accept(grammarAccess.getLetExpressionAccess().getSubExprExpressionParserRuleCall_6_0(), semanticObject.getSubExpr());
+		feeder.accept(grammarAccess.getLetExpressionAccess().getSubExprOptBlockExpressionParserRuleCall_6_0(), semanticObject.getSubExpr());
 		feeder.finish();
 	}
 	
@@ -895,9 +915,21 @@ public abstract class AbstractIvmlSemanticSequencer extends AbstractDelegatingSe
 	 *     OpDefStatement returns OpDefStatement
 	 *
 	 * Constraint:
-	 *     (static='static'? result=Type id=Identifier param=OpDefParameterList impl=Expression)
+	 *     (static='static'? result=Type id=Identifier param=OpDefParameterList (impl=Expression | block=BlockExpression))
 	 */
 	protected void sequence_OpDefStatement(ISerializationContext context, OpDefStatement semanticObject) {
+		genericSequencer.createSequence(context, semanticObject);
+	}
+	
+	
+	/**
+	 * Contexts:
+	 *     OptBlockExpression returns OptBlockExpression
+	 *
+	 * Constraint:
+	 *     (expr=Expression | block=BlockExpression)
+	 */
+	protected void sequence_OptBlockExpression(ISerializationContext context, OptBlockExpression semanticObject) {
 		genericSequencer.createSequence(context, semanticObject);
 	}
 	

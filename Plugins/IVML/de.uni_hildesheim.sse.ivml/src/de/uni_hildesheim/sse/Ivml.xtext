@@ -272,8 +272,7 @@ VersionStmt:
 OpDefStatement:
 	'def' static='static'? result=Type id=Identifier 
 	'(' param=OpDefParameterList ')' 
-	'=' impl=Expression
-	';'
+	'=' (impl=Expression ';' | block=BlockExpression)
 ;
 
 OpDefParameterList:
@@ -308,8 +307,18 @@ LetExpression:
 	'=' 
 	valueExpr=Expression 
 	'in' 
-	subExpr=Expression
+	subExpr=OptBlockExpression
 	;
+
+OptBlockExpression:
+    expr=Expression | block=BlockExpression
+;
+	
+BlockExpression:
+    '{'
+    exprs+=ExpressionStatement+
+    '}'
+;	
 
 AssignmentExpression:
     left=LogicalExpression
@@ -518,9 +527,9 @@ IfExpression:
 	'if' 
 	ifEx=Expression 
 	'then' 
-	thenEx=Expression 
+	thenEx=OptBlockExpression
 	'else' 
-	elseEx=Expression 
+	elseEx=OptBlockExpression
 	'endif'
 	;
 	

@@ -5,6 +5,7 @@ package de.uni_hildesheim.sse.ivml.impl;
 import de.uni_hildesheim.sse.ivml.Expression;
 import de.uni_hildesheim.sse.ivml.IfExpression;
 import de.uni_hildesheim.sse.ivml.IvmlPackage;
+import de.uni_hildesheim.sse.ivml.OptBlockExpression;
 
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.NotificationChain;
@@ -50,7 +51,7 @@ public class IfExpressionImpl extends MinimalEObjectImpl.Container implements If
    * @generated
    * @ordered
    */
-  protected Expression thenEx;
+  protected OptBlockExpression thenEx;
 
   /**
    * The cached value of the '{@link #getElseEx() <em>Else Ex</em>}' containment reference.
@@ -60,7 +61,7 @@ public class IfExpressionImpl extends MinimalEObjectImpl.Container implements If
    * @generated
    * @ordered
    */
-  protected Expression elseEx;
+  protected OptBlockExpression elseEx;
 
   /**
    * <!-- begin-user-doc -->
@@ -136,7 +137,7 @@ public class IfExpressionImpl extends MinimalEObjectImpl.Container implements If
    * <!-- end-user-doc -->
    * @generated
    */
-  public Expression getThenEx()
+  public OptBlockExpression getThenEx()
   {
     return thenEx;
   }
@@ -146,9 +147,9 @@ public class IfExpressionImpl extends MinimalEObjectImpl.Container implements If
    * <!-- end-user-doc -->
    * @generated
    */
-  public NotificationChain basicSetThenEx(Expression newThenEx, NotificationChain msgs)
+  public NotificationChain basicSetThenEx(OptBlockExpression newThenEx, NotificationChain msgs)
   {
-    Expression oldThenEx = thenEx;
+    OptBlockExpression oldThenEx = thenEx;
     thenEx = newThenEx;
     if (eNotificationRequired())
     {
@@ -163,7 +164,7 @@ public class IfExpressionImpl extends MinimalEObjectImpl.Container implements If
    * <!-- end-user-doc -->
    * @generated
    */
-  public void setThenEx(Expression newThenEx)
+  public void setThenEx(OptBlockExpression newThenEx)
   {
     if (newThenEx != thenEx)
     {
@@ -184,7 +185,7 @@ public class IfExpressionImpl extends MinimalEObjectImpl.Container implements If
    * <!-- end-user-doc -->
    * @generated
    */
-  public Expression getElseEx()
+  public OptBlockExpression getElseEx()
   {
     return elseEx;
   }
@@ -194,9 +195,9 @@ public class IfExpressionImpl extends MinimalEObjectImpl.Container implements If
    * <!-- end-user-doc -->
    * @generated
    */
-  public NotificationChain basicSetElseEx(Expression newElseEx, NotificationChain msgs)
+  public NotificationChain basicSetElseEx(OptBlockExpression newElseEx, NotificationChain msgs)
   {
-    Expression oldElseEx = elseEx;
+    OptBlockExpression oldElseEx = elseEx;
     elseEx = newElseEx;
     if (eNotificationRequired())
     {
@@ -211,7 +212,7 @@ public class IfExpressionImpl extends MinimalEObjectImpl.Container implements If
    * <!-- end-user-doc -->
    * @generated
    */
-  public void setElseEx(Expression newElseEx)
+  public void setElseEx(OptBlockExpression newElseEx)
   {
     if (newElseEx != elseEx)
     {
@@ -281,10 +282,10 @@ public class IfExpressionImpl extends MinimalEObjectImpl.Container implements If
         setIfEx((Expression)newValue);
         return;
       case IvmlPackage.IF_EXPRESSION__THEN_EX:
-        setThenEx((Expression)newValue);
+        setThenEx((OptBlockExpression)newValue);
         return;
       case IvmlPackage.IF_EXPRESSION__ELSE_EX:
-        setElseEx((Expression)newValue);
+        setElseEx((OptBlockExpression)newValue);
         return;
     }
     super.eSet(featureID, newValue);
@@ -304,10 +305,10 @@ public class IfExpressionImpl extends MinimalEObjectImpl.Container implements If
         setIfEx((Expression)null);
         return;
       case IvmlPackage.IF_EXPRESSION__THEN_EX:
-        setThenEx((Expression)null);
+        setThenEx((OptBlockExpression)null);
         return;
       case IvmlPackage.IF_EXPRESSION__ELSE_EX:
-        setElseEx((Expression)null);
+        setElseEx((OptBlockExpression)null);
         return;
     }
     super.eUnset(featureID);

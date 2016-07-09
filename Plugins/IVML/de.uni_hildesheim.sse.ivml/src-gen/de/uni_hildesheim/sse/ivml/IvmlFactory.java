@@ -338,6 +338,24 @@ public interface IvmlFactory extends EFactory
   LetExpression createLetExpression();
 
   /**
+   * Returns a new object of class '<em>Opt Block Expression</em>'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return a new object of class '<em>Opt Block Expression</em>'.
+   * @generated
+   */
+  OptBlockExpression createOptBlockExpression();
+
+  /**
+   * Returns a new object of class '<em>Block Expression</em>'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return a new object of class '<em>Block Expression</em>'.
+   * @generated
+   */
+  BlockExpression createBlockExpression();
+
+  /**
    * Returns a new object of class '<em>Assignment Expression</em>'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->

@@ -2,6 +2,7 @@ package net.ssehub.easy.reasoning.drools2.model;
 
 import net.ssehub.easy.reasoning.drools2.model.variables.ReasonerVariable;
 import net.ssehub.easy.varModel.cst.AttributeVariable;
+import net.ssehub.easy.varModel.cst.BlockExpression;
 import net.ssehub.easy.varModel.cst.CompoundAccess;
 import net.ssehub.easy.varModel.cst.CompoundInitializer;
 import net.ssehub.easy.varModel.cst.ConstantValue;
@@ -205,37 +206,31 @@ class ReasoningStateRetriver extends AbstractProjectVisitor implements IConstrai
     @Override
     public void visitIfThen(IfThen ifThen) {
         // TODO Auto-generated method stub
-        
     }
 
     @Override
     public void visitContainerOperationCall(ContainerOperationCall call) {
         // TODO Auto-generated method stub
-        
     }
 
     @Override
     public void visitCompoundAccess(CompoundAccess access) {
         // TODO Auto-generated method stub
-        
     }
 
     @Override
     public void visitUnresolvedExpression(UnresolvedExpression expression) {
         // TODO Auto-generated method stub
-        
     }
 
     @Override
     public void visitCompoundInitializer(CompoundInitializer initializer) {
         // TODO Auto-generated method stub
-        
     }
 
     @Override
     public void visitContainerInitializer(ContainerInitializer initializer) {
         // TODO Auto-generated method stub
-        
     }
 
     @Override
@@ -245,6 +240,11 @@ class ReasoningStateRetriver extends AbstractProjectVisitor implements IConstrai
 
     @Override
     public void visitSelf(Self self) {
+        // TODO Auto-generated method stub
+    }
+
+    @Override
+    public void visitBlockExpression(BlockExpression block) {
         // TODO Auto-generated method stub
     }
 

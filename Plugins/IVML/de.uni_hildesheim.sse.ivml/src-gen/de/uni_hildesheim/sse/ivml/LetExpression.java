@@ -112,12 +112,12 @@ public interface LetExpression extends EObject
    * </p>
    * <!-- end-user-doc -->
    * @return the value of the '<em>Sub Expr</em>' containment reference.
-   * @see #setSubExpr(Expression)
+   * @see #setSubExpr(OptBlockExpression)
    * @see de.uni_hildesheim.sse.ivml.IvmlPackage#getLetExpression_SubExpr()
    * @model containment="true"
    * @generated
    */
-  Expression getSubExpr();
+  OptBlockExpression getSubExpr();
 
   /**
    * Sets the value of the '{@link de.uni_hildesheim.sse.ivml.LetExpression#getSubExpr <em>Sub Expr</em>}' containment reference.
@@ -127,6 +127,6 @@ public interface LetExpression extends EObject
    * @see #getSubExpr()
    * @generated
    */
-  void setSubExpr(Expression value);
+  void setSubExpr(OptBlockExpression value);
 
 } // LetExpression

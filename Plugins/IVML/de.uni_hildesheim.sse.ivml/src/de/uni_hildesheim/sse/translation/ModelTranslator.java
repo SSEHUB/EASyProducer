@@ -1147,7 +1147,7 @@ public class ModelTranslator extends net.ssehub.easy.dslCore.translation.ModelTr
             opDef.setOperation(operation);
             context.addToContext(opDef);
             project.add(opDef);
-            ConstraintSyntaxTree impl = expressionTranslator.processExpression(op.getImpl(), context, opDef);
+            ConstraintSyntaxTree impl = processOpDefImpl(op, context, opDef);
             if (null != impl) {
                 try {
                     IDatatype implType = impl.inferDatatype();
@@ -1190,6 +1190,27 @@ public class ModelTranslator extends net.ssehub.easy.dslCore.translation.ModelTr
             context.popLayer();
         }
         return done;
+    }
+    
+    /**
+     * Processes an operation definition implementation.
+     * 
+     * @param op the operation definition
+     * @param context the type context
+     * @param parent the parent model element
+     * @return the implementing constraint syntax tree
+     * @throws TranslatorException in case that the processing of the <code>op</code>
+     *      must be terminated abnormally
+     */
+    private ConstraintSyntaxTree processOpDefImpl(OpDefStatement op, TypeContext context, IModelElement parent) 
+        throws TranslatorException {
+        ConstraintSyntaxTree impl = null;
+        if (null != op.getImpl()) {
+            impl = expressionTranslator.processExpression(op.getImpl(), context, parent);
+        } else if (null != op.getBlock()) {
+            impl = expressionTranslator.processBlockExpression(op.getBlock(), context, parent);
+        }
+        return impl;
     }
 
     /**

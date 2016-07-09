@@ -2826,10 +2826,10 @@ ruleOpDefStatement returns [EObject current=null]
     {
     	newLeafNode(otherlv_7, grammarAccess.getOpDefStatementAccess().getEqualsSignKeyword_7());
     }
-(
+(((
 (
 		{ 
-	        newCompositeNode(grammarAccess.getOpDefStatementAccess().getImplExpressionParserRuleCall_8_0()); 
+	        newCompositeNode(grammarAccess.getOpDefStatementAccess().getImplExpressionParserRuleCall_8_0_0_0()); 
 	    }
 		lv_impl_8_0=ruleExpression		{
 	        if ($current==null) {
@@ -2846,9 +2846,28 @@ ruleOpDefStatement returns [EObject current=null]
 )
 )	otherlv_9=';' 
     {
-    	newLeafNode(otherlv_9, grammarAccess.getOpDefStatementAccess().getSemicolonKeyword_9());
+    	newLeafNode(otherlv_9, grammarAccess.getOpDefStatementAccess().getSemicolonKeyword_8_0_1());
     }
 )
+    |(
+(
+		{ 
+	        newCompositeNode(grammarAccess.getOpDefStatementAccess().getBlockBlockExpressionParserRuleCall_8_1_0()); 
+	    }
+		lv_block_10_0=ruleBlockExpression		{
+	        if ($current==null) {
+	            $current = createModelElementForParent(grammarAccess.getOpDefStatementRule());
+	        }
+       		set(
+       			$current, 
+       			"block",
+        		lv_block_10_0, 
+        		"de.uni_hildesheim.sse.Ivml.BlockExpression");
+	        afterParserOrEnumRuleCall();
+	    }
+
+)
+)))
 ;
 
 
@@ -3207,9 +3226,9 @@ ruleLetExpression returns [EObject current=null]
 (
 (
 		{ 
-	        newCompositeNode(grammarAccess.getLetExpressionAccess().getSubExprExpressionParserRuleCall_6_0()); 
+	        newCompositeNode(grammarAccess.getLetExpressionAccess().getSubExprOptBlockExpressionParserRuleCall_6_0()); 
 	    }
-		lv_subExpr_6_0=ruleExpression		{
+		lv_subExpr_6_0=ruleOptBlockExpression		{
 	        if ($current==null) {
 	            $current = createModelElementForParent(grammarAccess.getLetExpressionRule());
 	        }
@@ -3217,12 +3236,117 @@ ruleLetExpression returns [EObject current=null]
        			$current, 
        			"subExpr",
         		lv_subExpr_6_0, 
-        		"de.uni_hildesheim.sse.Ivml.Expression");
+        		"de.uni_hildesheim.sse.Ivml.OptBlockExpression");
 	        afterParserOrEnumRuleCall();
 	    }
 
 )
 ))
+;
+
+
+
+
+
+// Entry rule entryRuleOptBlockExpression
+entryRuleOptBlockExpression returns [EObject current=null] 
+	:
+	{ newCompositeNode(grammarAccess.getOptBlockExpressionRule()); }
+	 iv_ruleOptBlockExpression=ruleOptBlockExpression 
+	 { $current=$iv_ruleOptBlockExpression.current; } 
+	 EOF 
+;
+
+// Rule OptBlockExpression
+ruleOptBlockExpression returns [EObject current=null] 
+    @init { enterRule(); 
+    }
+    @after { leaveRule(); }:
+((
+(
+		{ 
+	        newCompositeNode(grammarAccess.getOptBlockExpressionAccess().getExprExpressionParserRuleCall_0_0()); 
+	    }
+		lv_expr_0_0=ruleExpression		{
+	        if ($current==null) {
+	            $current = createModelElementForParent(grammarAccess.getOptBlockExpressionRule());
+	        }
+       		set(
+       			$current, 
+       			"expr",
+        		lv_expr_0_0, 
+        		"de.uni_hildesheim.sse.Ivml.Expression");
+	        afterParserOrEnumRuleCall();
+	    }
+
+)
+)
+    |(
+(
+		{ 
+	        newCompositeNode(grammarAccess.getOptBlockExpressionAccess().getBlockBlockExpressionParserRuleCall_1_0()); 
+	    }
+		lv_block_1_0=ruleBlockExpression		{
+	        if ($current==null) {
+	            $current = createModelElementForParent(grammarAccess.getOptBlockExpressionRule());
+	        }
+       		set(
+       			$current, 
+       			"block",
+        		lv_block_1_0, 
+        		"de.uni_hildesheim.sse.Ivml.BlockExpression");
+	        afterParserOrEnumRuleCall();
+	    }
+
+)
+))
+;
+
+
+
+
+
+// Entry rule entryRuleBlockExpression
+entryRuleBlockExpression returns [EObject current=null] 
+	:
+	{ newCompositeNode(grammarAccess.getBlockExpressionRule()); }
+	 iv_ruleBlockExpression=ruleBlockExpression 
+	 { $current=$iv_ruleBlockExpression.current; } 
+	 EOF 
+;
+
+// Rule BlockExpression
+ruleBlockExpression returns [EObject current=null] 
+    @init { enterRule(); 
+    }
+    @after { leaveRule(); }:
+(	otherlv_0='{' 
+    {
+    	newLeafNode(otherlv_0, grammarAccess.getBlockExpressionAccess().getLeftCurlyBracketKeyword_0());
+    }
+(
+(
+		{ 
+	        newCompositeNode(grammarAccess.getBlockExpressionAccess().getExprsExpressionStatementParserRuleCall_1_0()); 
+	    }
+		lv_exprs_1_0=ruleExpressionStatement		{
+	        if ($current==null) {
+	            $current = createModelElementForParent(grammarAccess.getBlockExpressionRule());
+	        }
+       		add(
+       			$current, 
+       			"exprs",
+        		lv_exprs_1_0, 
+        		"de.uni_hildesheim.sse.Ivml.ExpressionStatement");
+	        afterParserOrEnumRuleCall();
+	    }
+
+)
+)+	otherlv_2='}' 
+    {
+    	newLeafNode(otherlv_2, grammarAccess.getBlockExpressionAccess().getRightCurlyBracketKeyword_2());
+    }
+)
 ;
 
 
@@ -5527,9 +5651,9 @@ ruleIfExpression returns [EObject current=null]
 (
 (
 		{ 
-	        newCompositeNode(grammarAccess.getIfExpressionAccess().getThenExExpressionParserRuleCall_3_0()); 
+	        newCompositeNode(grammarAccess.getIfExpressionAccess().getThenExOptBlockExpressionParserRuleCall_3_0()); 
 	    }
-		lv_thenEx_3_0=ruleExpression		{
+		lv_thenEx_3_0=ruleOptBlockExpression		{
 	        if ($current==null) {
 	            $current = createModelElementForParent(grammarAccess.getIfExpressionRule());
 	        }
@@ -5537,7 +5661,7 @@ ruleIfExpression returns [EObject current=null]
        			$current, 
        			"thenEx",
         		lv_thenEx_3_0, 
-        		"de.uni_hildesheim.sse.Ivml.Expression");
+        		"de.uni_hildesheim.sse.Ivml.OptBlockExpression");
 	        afterParserOrEnumRuleCall();
 	    }
 
@@ -5549,9 +5673,9 @@ ruleIfExpression returns [EObject current=null]
 (
 (
 		{ 
-	        newCompositeNode(grammarAccess.getIfExpressionAccess().getElseExExpressionParserRuleCall_5_0()); 
+	        newCompositeNode(grammarAccess.getIfExpressionAccess().getElseExOptBlockExpressionParserRuleCall_5_0()); 
 	    }
-		lv_elseEx_5_0=ruleExpression		{
+		lv_elseEx_5_0=ruleOptBlockExpression		{
 	        if ($current==null) {
 	            $current = createModelElementForParent(grammarAccess.getIfExpressionRule());
 	        }
@@ -5559,7 +5683,7 @@ ruleIfExpression returns [EObject current=null]
        			$current, 
        			"elseEx",
         		lv_elseEx_5_0, 
-        		"de.uni_hildesheim.sse.Ivml.Expression");
+        		"de.uni_hildesheim.sse.Ivml.OptBlockExpression");
 	        afterParserOrEnumRuleCall();
 	    }
 

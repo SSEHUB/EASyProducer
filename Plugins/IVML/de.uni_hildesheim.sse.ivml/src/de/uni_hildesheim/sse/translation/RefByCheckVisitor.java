@@ -16,6 +16,7 @@
 package de.uni_hildesheim.sse.translation;
 
 import net.ssehub.easy.varModel.cst.AttributeVariable;
+import net.ssehub.easy.varModel.cst.BlockExpression;
 import net.ssehub.easy.varModel.cst.Comment;
 import net.ssehub.easy.varModel.cst.CompoundAccess;
 import net.ssehub.easy.varModel.cst.CompoundInitializer;
@@ -141,6 +142,13 @@ public class RefByCheckVisitor implements IConstraintTreeVisitor {
     @Override
     public void visitSelf(Self self) {
         canBeDereferenced = true;
+    }
+
+    @Override
+    public void visitBlockExpression(BlockExpression block) {
+        for (int e = 0, n = block.getExpressionCount(); e < n; e++) {
+            block.getExpression(e).accept(this);
+        }
     }
 
 }

@@ -1,0 +1,14 @@
+project testContainerConstraints3 {
+
+    version v0;
+    compound Comp {
+        Integer x;
+    }
+
+    sequenceOf(Comp) compSeq;
+    Comp best = compSeq->apply(Comp e;Real min = 0;Comp res = null|if res == null or e.x < min then {
+        min = e.x;
+        res = e;
+        true;
+    } else true endif);
+}

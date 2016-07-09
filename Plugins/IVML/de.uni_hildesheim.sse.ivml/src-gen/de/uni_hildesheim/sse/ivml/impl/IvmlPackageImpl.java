@@ -12,6 +12,7 @@ import de.uni_hildesheim.sse.ivml.AssignmentExpressionPart;
 import de.uni_hildesheim.sse.ivml.AttrAssignment;
 import de.uni_hildesheim.sse.ivml.AttrAssignmentPart;
 import de.uni_hildesheim.sse.ivml.BasicType;
+import de.uni_hildesheim.sse.ivml.BlockExpression;
 import de.uni_hildesheim.sse.ivml.Call;
 import de.uni_hildesheim.sse.ivml.CollectionInitializer;
 import de.uni_hildesheim.sse.ivml.ConflictStmt;
@@ -47,6 +48,7 @@ import de.uni_hildesheim.sse.ivml.NumValue;
 import de.uni_hildesheim.sse.ivml.OpDefParameter;
 import de.uni_hildesheim.sse.ivml.OpDefParameterList;
 import de.uni_hildesheim.sse.ivml.OpDefStatement;
+import de.uni_hildesheim.sse.ivml.OptBlockExpression;
 import de.uni_hildesheim.sse.ivml.PostfixExpression;
 import de.uni_hildesheim.sse.ivml.PrimaryExpression;
 import de.uni_hildesheim.sse.ivml.Project;
@@ -328,6 +330,20 @@ public class IvmlPackageImpl extends EPackageImpl implements IvmlPackage
    * @generated
    */
   private EClass letExpressionEClass = null;
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  private EClass optBlockExpressionEClass = null;
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  private EClass blockExpressionEClass = null;
 
   /**
    * <!-- begin-user-doc -->
@@ -1640,6 +1656,16 @@ public class IvmlPackageImpl extends EPackageImpl implements IvmlPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  public EReference getOpDefStatement_Block()
+  {
+    return (EReference)opDefStatementEClass.getEStructuralFeatures().get(5);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
   public EClass getOpDefParameterList()
   {
     return opDefParameterListEClass;
@@ -1803,6 +1829,56 @@ public class IvmlPackageImpl extends EPackageImpl implements IvmlPackage
   public EReference getLetExpression_SubExpr()
   {
     return (EReference)letExpressionEClass.getEStructuralFeatures().get(3);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EClass getOptBlockExpression()
+  {
+    return optBlockExpressionEClass;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EReference getOptBlockExpression_Expr()
+  {
+    return (EReference)optBlockExpressionEClass.getEStructuralFeatures().get(0);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EReference getOptBlockExpression_Block()
+  {
+    return (EReference)optBlockExpressionEClass.getEStructuralFeatures().get(1);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EClass getBlockExpression()
+  {
+    return blockExpressionEClass;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EReference getBlockExpression_Exprs()
+  {
+    return (EReference)blockExpressionEClass.getEStructuralFeatures().get(0);
   }
 
   /**
@@ -2948,6 +3024,7 @@ public class IvmlPackageImpl extends EPackageImpl implements IvmlPackage
     createEAttribute(opDefStatementEClass, OP_DEF_STATEMENT__ID);
     createEReference(opDefStatementEClass, OP_DEF_STATEMENT__PARAM);
     createEReference(opDefStatementEClass, OP_DEF_STATEMENT__IMPL);
+    createEReference(opDefStatementEClass, OP_DEF_STATEMENT__BLOCK);
 
     opDefParameterListEClass = createEClass(OP_DEF_PARAMETER_LIST);
     createEReference(opDefParameterListEClass, OP_DEF_PARAMETER_LIST__LIST);
@@ -2970,6 +3047,13 @@ public class IvmlPackageImpl extends EPackageImpl implements IvmlPackage
     createEAttribute(letExpressionEClass, LET_EXPRESSION__NAME);
     createEReference(letExpressionEClass, LET_EXPRESSION__VALUE_EXPR);
     createEReference(letExpressionEClass, LET_EXPRESSION__SUB_EXPR);
+
+    optBlockExpressionEClass = createEClass(OPT_BLOCK_EXPRESSION);
+    createEReference(optBlockExpressionEClass, OPT_BLOCK_EXPRESSION__EXPR);
+    createEReference(optBlockExpressionEClass, OPT_BLOCK_EXPRESSION__BLOCK);
+
+    blockExpressionEClass = createEClass(BLOCK_EXPRESSION);
+    createEReference(blockExpressionEClass, BLOCK_EXPRESSION__EXPRS);
 
     assignmentExpressionEClass = createEClass(ASSIGNMENT_EXPRESSION);
     createEReference(assignmentExpressionEClass, ASSIGNMENT_EXPRESSION__LEFT);
@@ -3263,6 +3347,7 @@ public class IvmlPackageImpl extends EPackageImpl implements IvmlPackage
     initEAttribute(getOpDefStatement_Id(), ecorePackage.getEString(), "id", null, 0, 1, OpDefStatement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEReference(getOpDefStatement_Param(), this.getOpDefParameterList(), null, "param", null, 0, 1, OpDefStatement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEReference(getOpDefStatement_Impl(), this.getExpression(), null, "impl", null, 0, 1, OpDefStatement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getOpDefStatement_Block(), this.getBlockExpression(), null, "block", null, 0, 1, OpDefStatement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     initEClass(opDefParameterListEClass, OpDefParameterList.class, "OpDefParameterList", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
     initEReference(getOpDefParameterList_List(), this.getOpDefParameter(), null, "list", null, 0, -1, OpDefParameterList.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -3284,7 +3369,14 @@ public class IvmlPackageImpl extends EPackageImpl implements IvmlPackage
     initEReference(getLetExpression_Type(), this.getType(), null, "type", null, 0, 1, LetExpression.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEAttribute(getLetExpression_Name(), ecorePackage.getEString(), "name", null, 0, 1, LetExpression.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEReference(getLetExpression_ValueExpr(), this.getExpression(), null, "valueExpr", null, 0, 1, LetExpression.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEReference(getLetExpression_SubExpr(), this.getExpression(), null, "subExpr", null, 0, 1, LetExpression.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getLetExpression_SubExpr(), this.getOptBlockExpression(), null, "subExpr", null, 0, 1, LetExpression.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+    initEClass(optBlockExpressionEClass, OptBlockExpression.class, "OptBlockExpression", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+    initEReference(getOptBlockExpression_Expr(), this.getExpression(), null, "expr", null, 0, 1, OptBlockExpression.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getOptBlockExpression_Block(), this.getBlockExpression(), null, "block", null, 0, 1, OptBlockExpression.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+    initEClass(blockExpressionEClass, BlockExpression.class, "BlockExpression", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+    initEReference(getBlockExpression_Exprs(), this.getExpressionStatement(), null, "exprs", null, 0, -1, BlockExpression.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     initEClass(assignmentExpressionEClass, AssignmentExpression.class, "AssignmentExpression", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
     initEReference(getAssignmentExpression_Left(), this.getLogicalExpression(), null, "left", null, 0, 1, AssignmentExpression.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -3410,8 +3502,8 @@ public class IvmlPackageImpl extends EPackageImpl implements IvmlPackage
 
     initEClass(ifExpressionEClass, IfExpression.class, "IfExpression", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
     initEReference(getIfExpression_IfEx(), this.getExpression(), null, "ifEx", null, 0, 1, IfExpression.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEReference(getIfExpression_ThenEx(), this.getExpression(), null, "thenEx", null, 0, 1, IfExpression.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEReference(getIfExpression_ElseEx(), this.getExpression(), null, "elseEx", null, 0, 1, IfExpression.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getIfExpression_ThenEx(), this.getOptBlockExpression(), null, "thenEx", null, 0, 1, IfExpression.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getIfExpression_ElseEx(), this.getOptBlockExpression(), null, "elseEx", null, 0, 1, IfExpression.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     // Create resource
     createResource(eNS_URI);

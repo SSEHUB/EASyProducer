@@ -24,6 +24,7 @@ import de.uni_hildesheim.sse.ivml.Expression;
 import de.uni_hildesheim.sse.ivml.ExpressionAccess;
 import de.uni_hildesheim.sse.ivml.ExpressionListEntry;
 import de.uni_hildesheim.sse.ivml.ExpressionListOrRange;
+import de.uni_hildesheim.sse.ivml.ExpressionStatement;
 import de.uni_hildesheim.sse.ivml.FeatureCall;
 import de.uni_hildesheim.sse.ivml.IfExpression;
 import de.uni_hildesheim.sse.ivml.ImplicationExpression;
@@ -33,6 +34,7 @@ import de.uni_hildesheim.sse.ivml.LetExpression;
 import de.uni_hildesheim.sse.ivml.LogicalExpression;
 import de.uni_hildesheim.sse.ivml.LogicalExpressionPart;
 import de.uni_hildesheim.sse.ivml.MultiplicativeExpression;
+import de.uni_hildesheim.sse.ivml.OptBlockExpression;
 import de.uni_hildesheim.sse.ivml.PostfixExpression;
 import de.uni_hildesheim.sse.ivml.PrimaryExpression;
 import de.uni_hildesheim.sse.ivml.RelationalExpression;
@@ -47,6 +49,7 @@ import net.ssehub.easy.dslCore.translation.TranslatorException;
 import net.ssehub.easy.varModel.capabilities.DefaultReasonerAccess;
 import net.ssehub.easy.varModel.capabilities.IvmlReasonerCapabilities;
 import net.ssehub.easy.varModel.cst.AttributeVariable;
+import net.ssehub.easy.varModel.cst.BlockExpression;
 import net.ssehub.easy.varModel.cst.CSTSemanticException;
 import net.ssehub.easy.varModel.cst.CompoundAccess;
 import net.ssehub.easy.varModel.cst.CompoundInitializer;
@@ -198,6 +201,54 @@ public class ExpressionTranslator extends net.ssehub.easy.dslCore.translation.Ex
         TypeContext context, IModelElement parent) throws TranslatorException {
         initLevel();
         return processExpression(null, expr, context, parent);
+    }
+
+    /**
+     * Processes a block expression.
+     * 
+     * @param block the block
+     * @param context the type context
+     * @param parent the parent element
+     * @return the created constraint syntax tree
+     * @throws TranslatorException
+     *             in case that the processing of the <code>block</code> must be
+     *             terminated abnormally
+     */
+    ConstraintSyntaxTree processBlockExpression(de.uni_hildesheim.sse.ivml.BlockExpression block, 
+        TypeContext context, IModelElement parent) throws TranslatorException {
+        List<ExpressionStatement> stmts = block.getExprs();
+        ConstraintSyntaxTree[] exprs = new ConstraintSyntaxTree[stmts.size()];
+        for (int e = 0; e < stmts.size(); e++) {
+            exprs[e] = processExpression(stmts.get(e).getExpr(), context, parent);
+        }
+        try {
+            return new BlockExpression(exprs);
+        } catch (CSTSemanticException e) {
+            throw new TranslatorException(e, block, IvmlPackage.Literals.BLOCK_EXPRESSION__EXPRS);
+        }
+    }
+    
+    /**
+     * Processes an (optional block) expression.
+     * 
+     * @param lhsType the data type on the left hand side of the expression
+     * @param expr the expression to be processed
+     * @param context the type context to be considered
+     * @param parent the actual (intended) parent of the constraint to be created
+     * @return the expression as a parsed syntax tree
+     * @throws TranslatorException
+     *             in case that the processing of the <code>expr</code> must be
+     *             terminated abnormally
+     */
+    private ConstraintSyntaxTree processExpression(IDatatype lhsType, OptBlockExpression expr,
+        TypeContext context, IModelElement parent) throws TranslatorException {
+        ConstraintSyntaxTree result = null;
+        if (null != expr.getBlock()) {
+            result = processBlockExpression(expr.getBlock(), context, parent);
+        } else if (null != expr.getExpr()) {
+            result = processExpression(lhsType, expr.getExpr(), context, parent);
+        }
+        return result;
     }
 
     /**

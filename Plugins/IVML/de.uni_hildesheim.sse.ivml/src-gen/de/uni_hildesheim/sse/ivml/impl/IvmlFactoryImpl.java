@@ -99,6 +99,8 @@ public class IvmlFactoryImpl extends EFactoryImpl implements IvmlFactory
       case IvmlPackage.EXPRESSION_STATEMENT: return createExpressionStatement();
       case IvmlPackage.EXPRESSION: return createExpression();
       case IvmlPackage.LET_EXPRESSION: return createLetExpression();
+      case IvmlPackage.OPT_BLOCK_EXPRESSION: return createOptBlockExpression();
+      case IvmlPackage.BLOCK_EXPRESSION: return createBlockExpression();
       case IvmlPackage.ASSIGNMENT_EXPRESSION: return createAssignmentExpression();
       case IvmlPackage.ASSIGNMENT_EXPRESSION_PART: return createAssignmentExpressionPart();
       case IvmlPackage.IMPLICATION_EXPRESSION: return createImplicationExpression();
@@ -516,6 +518,28 @@ public class IvmlFactoryImpl extends EFactoryImpl implements IvmlFactory
   {
     LetExpressionImpl letExpression = new LetExpressionImpl();
     return letExpression;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public OptBlockExpression createOptBlockExpression()
+  {
+    OptBlockExpressionImpl optBlockExpression = new OptBlockExpressionImpl();
+    return optBlockExpression;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public BlockExpression createBlockExpression()
+  {
+    BlockExpressionImpl blockExpression = new BlockExpressionImpl();
+    return blockExpression;
   }
 
   /**

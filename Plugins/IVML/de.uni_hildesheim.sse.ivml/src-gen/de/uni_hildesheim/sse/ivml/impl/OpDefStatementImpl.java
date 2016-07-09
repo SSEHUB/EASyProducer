@@ -2,6 +2,7 @@
  */
 package de.uni_hildesheim.sse.ivml.impl;
 
+import de.uni_hildesheim.sse.ivml.BlockExpression;
 import de.uni_hildesheim.sse.ivml.Expression;
 import de.uni_hildesheim.sse.ivml.IvmlPackage;
 import de.uni_hildesheim.sse.ivml.OpDefParameterList;
@@ -30,6 +31,7 @@ import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
  *   <li>{@link de.uni_hildesheim.sse.ivml.impl.OpDefStatementImpl#getId <em>Id</em>}</li>
  *   <li>{@link de.uni_hildesheim.sse.ivml.impl.OpDefStatementImpl#getParam <em>Param</em>}</li>
  *   <li>{@link de.uni_hildesheim.sse.ivml.impl.OpDefStatementImpl#getImpl <em>Impl</em>}</li>
+ *   <li>{@link de.uni_hildesheim.sse.ivml.impl.OpDefStatementImpl#getBlock <em>Block</em>}</li>
  * </ul>
  *
  * @generated
@@ -105,6 +107,16 @@ public class OpDefStatementImpl extends MinimalEObjectImpl.Container implements 
    * @ordered
    */
   protected Expression impl;
+
+  /**
+   * The cached value of the '{@link #getBlock() <em>Block</em>}' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #getBlock()
+   * @generated
+   * @ordered
+   */
+  protected BlockExpression block;
 
   /**
    * <!-- begin-user-doc -->
@@ -322,6 +334,54 @@ public class OpDefStatementImpl extends MinimalEObjectImpl.Container implements 
    * <!-- end-user-doc -->
    * @generated
    */
+  public BlockExpression getBlock()
+  {
+    return block;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public NotificationChain basicSetBlock(BlockExpression newBlock, NotificationChain msgs)
+  {
+    BlockExpression oldBlock = block;
+    block = newBlock;
+    if (eNotificationRequired())
+    {
+      ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, IvmlPackage.OP_DEF_STATEMENT__BLOCK, oldBlock, newBlock);
+      if (msgs == null) msgs = notification; else msgs.add(notification);
+    }
+    return msgs;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public void setBlock(BlockExpression newBlock)
+  {
+    if (newBlock != block)
+    {
+      NotificationChain msgs = null;
+      if (block != null)
+        msgs = ((InternalEObject)block).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - IvmlPackage.OP_DEF_STATEMENT__BLOCK, null, msgs);
+      if (newBlock != null)
+        msgs = ((InternalEObject)newBlock).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - IvmlPackage.OP_DEF_STATEMENT__BLOCK, null, msgs);
+      msgs = basicSetBlock(newBlock, msgs);
+      if (msgs != null) msgs.dispatch();
+    }
+    else if (eNotificationRequired())
+      eNotify(new ENotificationImpl(this, Notification.SET, IvmlPackage.OP_DEF_STATEMENT__BLOCK, newBlock, newBlock));
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
   @Override
   public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs)
   {
@@ -333,6 +393,8 @@ public class OpDefStatementImpl extends MinimalEObjectImpl.Container implements 
         return basicSetParam(null, msgs);
       case IvmlPackage.OP_DEF_STATEMENT__IMPL:
         return basicSetImpl(null, msgs);
+      case IvmlPackage.OP_DEF_STATEMENT__BLOCK:
+        return basicSetBlock(null, msgs);
     }
     return super.eInverseRemove(otherEnd, featureID, msgs);
   }
@@ -357,6 +419,8 @@ public class OpDefStatementImpl extends MinimalEObjectImpl.Container implements 
         return getParam();
       case IvmlPackage.OP_DEF_STATEMENT__IMPL:
         return getImpl();
+      case IvmlPackage.OP_DEF_STATEMENT__BLOCK:
+        return getBlock();
     }
     return super.eGet(featureID, resolve, coreType);
   }
@@ -385,6 +449,9 @@ public class OpDefStatementImpl extends MinimalEObjectImpl.Container implements 
         return;
       case IvmlPackage.OP_DEF_STATEMENT__IMPL:
         setImpl((Expression)newValue);
+        return;
+      case IvmlPackage.OP_DEF_STATEMENT__BLOCK:
+        setBlock((BlockExpression)newValue);
         return;
     }
     super.eSet(featureID, newValue);
@@ -415,6 +482,9 @@ public class OpDefStatementImpl extends MinimalEObjectImpl.Container implements 
       case IvmlPackage.OP_DEF_STATEMENT__IMPL:
         setImpl((Expression)null);
         return;
+      case IvmlPackage.OP_DEF_STATEMENT__BLOCK:
+        setBlock((BlockExpression)null);
+        return;
     }
     super.eUnset(featureID);
   }
@@ -439,6 +509,8 @@ public class OpDefStatementImpl extends MinimalEObjectImpl.Container implements 
         return param != null;
       case IvmlPackage.OP_DEF_STATEMENT__IMPL:
         return impl != null;
+      case IvmlPackage.OP_DEF_STATEMENT__BLOCK:
+        return block != null;
     }
     return super.eIsSet(featureID);
   }

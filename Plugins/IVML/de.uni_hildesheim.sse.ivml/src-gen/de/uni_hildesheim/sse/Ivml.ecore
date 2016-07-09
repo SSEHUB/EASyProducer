@@ -178,6 +178,8 @@
         containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="impl" eType="#//Expression"
         containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="block" eType="#//BlockExpression"
+        containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="OpDefParameterList">
     <eStructuralFeatures xsi:type="ecore:EReference" name="list" upperBound="-1" eType="#//OpDefParameter"
@@ -206,8 +208,18 @@
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="valueExpr" eType="#//Expression"
         containment="true"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="subExpr" eType="#//Expression"
+    <eStructuralFeatures xsi:type="ecore:EReference" name="subExpr" eType="#//OptBlockExpression"
         containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="OptBlockExpression">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="expr" eType="#//Expression"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="block" eType="#//BlockExpression"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="BlockExpression">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="exprs" upperBound="-1"
+        eType="#//ExpressionStatement" containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="AssignmentExpression">
     <eStructuralFeatures xsi:type="ecore:EReference" name="left" eType="#//LogicalExpression"
@@ -385,9 +397,9 @@
   <eClassifiers xsi:type="ecore:EClass" name="IfExpression">
     <eStructuralFeatures xsi:type="ecore:EReference" name="ifEx" eType="#//Expression"
         containment="true"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="thenEx" eType="#//Expression"
+    <eStructuralFeatures xsi:type="ecore:EReference" name="thenEx" eType="#//OptBlockExpression"
         containment="true"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="elseEx" eType="#//Expression"
+    <eStructuralFeatures xsi:type="ecore:EReference" name="elseEx" eType="#//OptBlockExpression"
         containment="true"/>
   </eClassifiers>
 </ecore:EPackage>

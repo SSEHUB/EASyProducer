@@ -181,7 +181,7 @@ public class BasicTests extends AbstractTest {
     }
 
     /**
-     * Tests container with associated constraints.
+     * Tests container with associated constraints (min/max iterator).
      * 
      * @throws IOException should not occur
      */
@@ -190,7 +190,18 @@ public class BasicTests extends AbstractTest {
         assertEqual(createFile("containerConstraints2"),
                 "testContainerConstraints2", "0");
     }
-    
+
+    /**
+     * Tests container with associated constraints (extended apply).
+     * 
+     * @throws IOException should not occur
+     */
+    @Test
+    public void testContainerConstraints3() throws IOException {
+        assertEqual(createFile("containerConstraints3"),
+                "testContainerConstraints3", "0");
+    }
+
     /**
      * Tests container with associated constraints.
      * 

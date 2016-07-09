@@ -18,6 +18,7 @@ import org.eclipse.emf.ecore.EObject;
  *   <li>{@link de.uni_hildesheim.sse.ivml.OpDefStatement#getId <em>Id</em>}</li>
  *   <li>{@link de.uni_hildesheim.sse.ivml.OpDefStatement#getParam <em>Param</em>}</li>
  *   <li>{@link de.uni_hildesheim.sse.ivml.OpDefStatement#getImpl <em>Impl</em>}</li>
+ *   <li>{@link de.uni_hildesheim.sse.ivml.OpDefStatement#getBlock <em>Block</em>}</li>
  * </ul>
  *
  * @see de.uni_hildesheim.sse.ivml.IvmlPackage#getOpDefStatement()
@@ -155,5 +156,31 @@ public interface OpDefStatement extends EObject
    * @generated
    */
   void setImpl(Expression value);
+
+  /**
+   * Returns the value of the '<em><b>Block</b></em>' containment reference.
+   * <!-- begin-user-doc -->
+   * <p>
+   * If the meaning of the '<em>Block</em>' containment reference isn't clear,
+   * there really should be more of a description here...
+   * </p>
+   * <!-- end-user-doc -->
+   * @return the value of the '<em>Block</em>' containment reference.
+   * @see #setBlock(BlockExpression)
+   * @see de.uni_hildesheim.sse.ivml.IvmlPackage#getOpDefStatement_Block()
+   * @model containment="true"
+   * @generated
+   */
+  BlockExpression getBlock();
+
+  /**
+   * Sets the value of the '{@link de.uni_hildesheim.sse.ivml.OpDefStatement#getBlock <em>Block</em>}' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @param value the new value of the '<em>Block</em>' containment reference.
+   * @see #getBlock()
+   * @generated
+   */
+  void setBlock(BlockExpression value);
 
 } // OpDefStatement

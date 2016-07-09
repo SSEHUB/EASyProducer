@@ -5,6 +5,7 @@ package de.uni_hildesheim.sse.ivml.impl;
 import de.uni_hildesheim.sse.ivml.Expression;
 import de.uni_hildesheim.sse.ivml.IvmlPackage;
 import de.uni_hildesheim.sse.ivml.LetExpression;
+import de.uni_hildesheim.sse.ivml.OptBlockExpression;
 import de.uni_hildesheim.sse.ivml.Type;
 
 import org.eclipse.emf.common.notify.Notification;
@@ -82,7 +83,7 @@ public class LetExpressionImpl extends MinimalEObjectImpl.Container implements L
    * @generated
    * @ordered
    */
-  protected Expression subExpr;
+  protected OptBlockExpression subExpr;
 
   /**
    * <!-- begin-user-doc -->
@@ -229,7 +230,7 @@ public class LetExpressionImpl extends MinimalEObjectImpl.Container implements L
    * <!-- end-user-doc -->
    * @generated
    */
-  public Expression getSubExpr()
+  public OptBlockExpression getSubExpr()
   {
     return subExpr;
   }
@@ -239,9 +240,9 @@ public class LetExpressionImpl extends MinimalEObjectImpl.Container implements L
    * <!-- end-user-doc -->
    * @generated
    */
-  public NotificationChain basicSetSubExpr(Expression newSubExpr, NotificationChain msgs)
+  public NotificationChain basicSetSubExpr(OptBlockExpression newSubExpr, NotificationChain msgs)
   {
-    Expression oldSubExpr = subExpr;
+    OptBlockExpression oldSubExpr = subExpr;
     subExpr = newSubExpr;
     if (eNotificationRequired())
     {
@@ -256,7 +257,7 @@ public class LetExpressionImpl extends MinimalEObjectImpl.Container implements L
    * <!-- end-user-doc -->
    * @generated
    */
-  public void setSubExpr(Expression newSubExpr)
+  public void setSubExpr(OptBlockExpression newSubExpr)
   {
     if (newSubExpr != subExpr)
     {
@@ -334,7 +335,7 @@ public class LetExpressionImpl extends MinimalEObjectImpl.Container implements L
         setValueExpr((Expression)newValue);
         return;
       case IvmlPackage.LET_EXPRESSION__SUB_EXPR:
-        setSubExpr((Expression)newValue);
+        setSubExpr((OptBlockExpression)newValue);
         return;
     }
     super.eSet(featureID, newValue);
@@ -360,7 +361,7 @@ public class LetExpressionImpl extends MinimalEObjectImpl.Container implements L
         setValueExpr((Expression)null);
         return;
       case IvmlPackage.LET_EXPRESSION__SUB_EXPR:
-        setSubExpr((Expression)null);
+        setSubExpr((OptBlockExpression)null);
         return;
     }
     super.eUnset(featureID);

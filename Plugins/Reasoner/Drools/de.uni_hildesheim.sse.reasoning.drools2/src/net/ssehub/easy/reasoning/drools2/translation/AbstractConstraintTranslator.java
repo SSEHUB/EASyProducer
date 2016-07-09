@@ -8,6 +8,7 @@ import net.ssehub.easy.reasoning.drools2.model.ReasonerModel;
 import net.ssehub.easy.reasoning.drools2.translation.oclFeatureCalls.OCLFeatureTranslationFactory;
 import net.ssehub.easy.reasoning.drools2.translation.oclFeatureCalls.TranslationFragment;
 import net.ssehub.easy.varModel.cst.AttributeVariable;
+import net.ssehub.easy.varModel.cst.BlockExpression;
 import net.ssehub.easy.varModel.cst.CSTSemanticException;
 import net.ssehub.easy.varModel.cst.Comment;
 import net.ssehub.easy.varModel.cst.CompoundAccess;
@@ -245,6 +246,11 @@ public class AbstractConstraintTranslator extends AbstractModelTranslator implem
 
     @Override
     public void visitIfThen(IfThen ifThen) {
+        // TODO Auto-generated method stub        
+    }
+
+    @Override
+    public void visitBlockExpression(BlockExpression block) {
         // TODO Auto-generated method stub        
     }
 

@@ -1576,17 +1576,23 @@ public class IvmlGrammarAccess extends AbstractGrammarElementFinder {
 		private final RuleCall cParamOpDefParameterListParserRuleCall_5_0 = (RuleCall)cParamAssignment_5.eContents().get(0);
 		private final Keyword cRightParenthesisKeyword_6 = (Keyword)cGroup.eContents().get(6);
 		private final Keyword cEqualsSignKeyword_7 = (Keyword)cGroup.eContents().get(7);
-		private final Assignment cImplAssignment_8 = (Assignment)cGroup.eContents().get(8);
-		private final RuleCall cImplExpressionParserRuleCall_8_0 = (RuleCall)cImplAssignment_8.eContents().get(0);
-		private final Keyword cSemicolonKeyword_9 = (Keyword)cGroup.eContents().get(9);
+		private final Alternatives cAlternatives_8 = (Alternatives)cGroup.eContents().get(8);
+		private final Group cGroup_8_0 = (Group)cAlternatives_8.eContents().get(0);
+		private final Assignment cImplAssignment_8_0_0 = (Assignment)cGroup_8_0.eContents().get(0);
+		private final RuleCall cImplExpressionParserRuleCall_8_0_0_0 = (RuleCall)cImplAssignment_8_0_0.eContents().get(0);
+		private final Keyword cSemicolonKeyword_8_0_1 = (Keyword)cGroup_8_0.eContents().get(1);
+		private final Assignment cBlockAssignment_8_1 = (Assignment)cAlternatives_8.eContents().get(1);
+		private final RuleCall cBlockBlockExpressionParserRuleCall_8_1_0 = (RuleCall)cBlockAssignment_8_1.eContents().get(0);
 		
 		////#< Interfaces
 		// //------------------------------------ OCL (excerpt) ----------------------------	
 		// OpDefStatement:
-		//	'def' static='static'? result=Type id=Identifier '(' param=OpDefParameterList ')' '=' impl=Expression ';';
+		//	'def' static='static'? result=Type id=Identifier '(' param=OpDefParameterList ')' '=' (impl=Expression ';' |
+		//	block=BlockExpression);
 		@Override public ParserRule getRule() { return rule; }
 
-		//'def' static='static'? result=Type id=Identifier '(' param=OpDefParameterList ')' '=' impl=Expression ';'
+		//'def' static='static'? result=Type id=Identifier '(' param=OpDefParameterList ')' '=' (impl=Expression ';' |
+		//block=BlockExpression)
 		public Group getGroup() { return cGroup; }
 
 		//'def'
@@ -1625,14 +1631,26 @@ public class IvmlGrammarAccess extends AbstractGrammarElementFinder {
 		//'='
 		public Keyword getEqualsSignKeyword_7() { return cEqualsSignKeyword_7; }
 
+		//(impl=Expression ';' | block=BlockExpression)
+		public Alternatives getAlternatives_8() { return cAlternatives_8; }
+
+		//impl=Expression ';'
+		public Group getGroup_8_0() { return cGroup_8_0; }
+
 		//impl=Expression
-		public Assignment getImplAssignment_8() { return cImplAssignment_8; }
+		public Assignment getImplAssignment_8_0_0() { return cImplAssignment_8_0_0; }
 
 		//Expression
-		public RuleCall getImplExpressionParserRuleCall_8_0() { return cImplExpressionParserRuleCall_8_0; }
+		public RuleCall getImplExpressionParserRuleCall_8_0_0_0() { return cImplExpressionParserRuleCall_8_0_0_0; }
 
 		//';'
-		public Keyword getSemicolonKeyword_9() { return cSemicolonKeyword_9; }
+		public Keyword getSemicolonKeyword_8_0_1() { return cSemicolonKeyword_8_0_1; }
+
+		//block=BlockExpression
+		public Assignment getBlockAssignment_8_1() { return cBlockAssignment_8_1; }
+
+		//BlockExpression
+		public RuleCall getBlockBlockExpressionParserRuleCall_8_1_0() { return cBlockBlockExpressionParserRuleCall_8_1_0; }
 	}
 
 	public class OpDefParameterListElements extends AbstractParserRuleElementFinder {
@@ -1798,17 +1816,17 @@ public class IvmlGrammarAccess extends AbstractGrammarElementFinder {
 		private final RuleCall cValueExprExpressionParserRuleCall_4_0 = (RuleCall)cValueExprAssignment_4.eContents().get(0);
 		private final Keyword cInKeyword_5 = (Keyword)cGroup.eContents().get(5);
 		private final Assignment cSubExprAssignment_6 = (Assignment)cGroup.eContents().get(6);
-		private final RuleCall cSubExprExpressionParserRuleCall_6_0 = (RuleCall)cSubExprAssignment_6.eContents().get(0);
+		private final RuleCall cSubExprOptBlockExpressionParserRuleCall_6_0 = (RuleCall)cSubExprAssignment_6.eContents().get(0);
 		
 		//LetExpression:
 		//	'let' type=Type name=Identifier // type is optional in OCL - IVML adjustment
 		// '=' valueExpr=Expression 'in'
-		//	subExpr=Expression;
+		//	subExpr=OptBlockExpression;
 		@Override public ParserRule getRule() { return rule; }
 
 		//'let' type=Type name=Identifier // type is optional in OCL - IVML adjustment
 		// '=' valueExpr=Expression 'in'
-		//subExpr=Expression
+		//subExpr=OptBlockExpression
 		public Group getGroup() { return cGroup; }
 
 		//'let'
@@ -1839,11 +1857,67 @@ public class IvmlGrammarAccess extends AbstractGrammarElementFinder {
 		//'in'
 		public Keyword getInKeyword_5() { return cInKeyword_5; }
 
-		//subExpr=Expression
+		//subExpr=OptBlockExpression
 		public Assignment getSubExprAssignment_6() { return cSubExprAssignment_6; }
 
+		//OptBlockExpression
+		public RuleCall getSubExprOptBlockExpressionParserRuleCall_6_0() { return cSubExprOptBlockExpressionParserRuleCall_6_0; }
+	}
+
+	public class OptBlockExpressionElements extends AbstractParserRuleElementFinder {
+		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "de.uni_hildesheim.sse.Ivml.OptBlockExpression");
+		private final Alternatives cAlternatives = (Alternatives)rule.eContents().get(1);
+		private final Assignment cExprAssignment_0 = (Assignment)cAlternatives.eContents().get(0);
+		private final RuleCall cExprExpressionParserRuleCall_0_0 = (RuleCall)cExprAssignment_0.eContents().get(0);
+		private final Assignment cBlockAssignment_1 = (Assignment)cAlternatives.eContents().get(1);
+		private final RuleCall cBlockBlockExpressionParserRuleCall_1_0 = (RuleCall)cBlockAssignment_1.eContents().get(0);
+		
+		//OptBlockExpression:
+		//	expr=Expression | block=BlockExpression;
+		@Override public ParserRule getRule() { return rule; }
+
+		//expr=Expression | block=BlockExpression
+		public Alternatives getAlternatives() { return cAlternatives; }
+
+		//expr=Expression
+		public Assignment getExprAssignment_0() { return cExprAssignment_0; }
+
 		//Expression
-		public RuleCall getSubExprExpressionParserRuleCall_6_0() { return cSubExprExpressionParserRuleCall_6_0; }
+		public RuleCall getExprExpressionParserRuleCall_0_0() { return cExprExpressionParserRuleCall_0_0; }
+
+		//block=BlockExpression
+		public Assignment getBlockAssignment_1() { return cBlockAssignment_1; }
+
+		//BlockExpression
+		public RuleCall getBlockBlockExpressionParserRuleCall_1_0() { return cBlockBlockExpressionParserRuleCall_1_0; }
+	}
+
+	public class BlockExpressionElements extends AbstractParserRuleElementFinder {
+		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "de.uni_hildesheim.sse.Ivml.BlockExpression");
+		private final Group cGroup = (Group)rule.eContents().get(1);
+		private final Keyword cLeftCurlyBracketKeyword_0 = (Keyword)cGroup.eContents().get(0);
+		private final Assignment cExprsAssignment_1 = (Assignment)cGroup.eContents().get(1);
+		private final RuleCall cExprsExpressionStatementParserRuleCall_1_0 = (RuleCall)cExprsAssignment_1.eContents().get(0);
+		private final Keyword cRightCurlyBracketKeyword_2 = (Keyword)cGroup.eContents().get(2);
+		
+		//BlockExpression:
+		//	'{' exprs+=ExpressionStatement+ '}';
+		@Override public ParserRule getRule() { return rule; }
+
+		//'{' exprs+=ExpressionStatement+ '}'
+		public Group getGroup() { return cGroup; }
+
+		//'{'
+		public Keyword getLeftCurlyBracketKeyword_0() { return cLeftCurlyBracketKeyword_0; }
+
+		//exprs+=ExpressionStatement+
+		public Assignment getExprsAssignment_1() { return cExprsAssignment_1; }
+
+		//ExpressionStatement
+		public RuleCall getExprsExpressionStatementParserRuleCall_1_0() { return cExprsExpressionStatementParserRuleCall_1_0; }
+
+		//'}'
+		public Keyword getRightCurlyBracketKeyword_2() { return cRightCurlyBracketKeyword_2; }
 	}
 
 	public class AssignmentExpressionElements extends AbstractParserRuleElementFinder {
@@ -3109,17 +3183,17 @@ public class IvmlGrammarAccess extends AbstractGrammarElementFinder {
 		private final RuleCall cIfExExpressionParserRuleCall_1_0 = (RuleCall)cIfExAssignment_1.eContents().get(0);
 		private final Keyword cThenKeyword_2 = (Keyword)cGroup.eContents().get(2);
 		private final Assignment cThenExAssignment_3 = (Assignment)cGroup.eContents().get(3);
-		private final RuleCall cThenExExpressionParserRuleCall_3_0 = (RuleCall)cThenExAssignment_3.eContents().get(0);
+		private final RuleCall cThenExOptBlockExpressionParserRuleCall_3_0 = (RuleCall)cThenExAssignment_3.eContents().get(0);
 		private final Keyword cElseKeyword_4 = (Keyword)cGroup.eContents().get(4);
 		private final Assignment cElseExAssignment_5 = (Assignment)cGroup.eContents().get(5);
-		private final RuleCall cElseExExpressionParserRuleCall_5_0 = (RuleCall)cElseExAssignment_5.eContents().get(0);
+		private final RuleCall cElseExOptBlockExpressionParserRuleCall_5_0 = (RuleCall)cElseExAssignment_5.eContents().get(0);
 		private final Keyword cEndifKeyword_6 = (Keyword)cGroup.eContents().get(6);
 		
 		//IfExpression:
-		//	'if' ifEx=Expression 'then' thenEx=Expression 'else' elseEx=Expression 'endif';
+		//	'if' ifEx=Expression 'then' thenEx=OptBlockExpression 'else' elseEx=OptBlockExpression 'endif';
 		@Override public ParserRule getRule() { return rule; }
 
-		//'if' ifEx=Expression 'then' thenEx=Expression 'else' elseEx=Expression 'endif'
+		//'if' ifEx=Expression 'then' thenEx=OptBlockExpression 'else' elseEx=OptBlockExpression 'endif'
 		public Group getGroup() { return cGroup; }
 
 		//'if'
@@ -3134,20 +3208,20 @@ public class IvmlGrammarAccess extends AbstractGrammarElementFinder {
 		//'then'
 		public Keyword getThenKeyword_2() { return cThenKeyword_2; }
 
-		//thenEx=Expression
+		//thenEx=OptBlockExpression
 		public Assignment getThenExAssignment_3() { return cThenExAssignment_3; }
 
-		//Expression
-		public RuleCall getThenExExpressionParserRuleCall_3_0() { return cThenExExpressionParserRuleCall_3_0; }
+		//OptBlockExpression
+		public RuleCall getThenExOptBlockExpressionParserRuleCall_3_0() { return cThenExOptBlockExpressionParserRuleCall_3_0; }
 
 		//'else'
 		public Keyword getElseKeyword_4() { return cElseKeyword_4; }
 
-		//elseEx=Expression
+		//elseEx=OptBlockExpression
 		public Assignment getElseExAssignment_5() { return cElseExAssignment_5; }
 
-		//Expression
-		public RuleCall getElseExExpressionParserRuleCall_5_0() { return cElseExExpressionParserRuleCall_5_0; }
+		//OptBlockExpression
+		public RuleCall getElseExOptBlockExpressionParserRuleCall_5_0() { return cElseExOptBlockExpressionParserRuleCall_5_0; }
 
 		//'endif'
 		public Keyword getEndifKeyword_6() { return cEndifKeyword_6; }
@@ -3220,6 +3294,8 @@ public class IvmlGrammarAccess extends AbstractGrammarElementFinder {
 	private final ExpressionStatementElements pExpressionStatement;
 	private final ExpressionElements pExpression;
 	private final LetExpressionElements pLetExpression;
+	private final OptBlockExpressionElements pOptBlockExpression;
+	private final BlockExpressionElements pBlockExpression;
 	private final AssignmentExpressionElements pAssignmentExpression;
 	private final AssignmentExpressionPartElements pAssignmentExpressionPart;
 	private final AssignmentOperatorElements pAssignmentOperator;
@@ -3308,6 +3384,8 @@ public class IvmlGrammarAccess extends AbstractGrammarElementFinder {
 		this.pExpressionStatement = new ExpressionStatementElements();
 		this.pExpression = new ExpressionElements();
 		this.pLetExpression = new LetExpressionElements();
+		this.pOptBlockExpression = new OptBlockExpressionElements();
+		this.pBlockExpression = new BlockExpressionElements();
 		this.pAssignmentExpression = new AssignmentExpressionElements();
 		this.pAssignmentExpressionPart = new AssignmentExpressionPartElements();
 		this.pAssignmentOperator = new AssignmentOperatorElements();
@@ -3703,7 +3781,8 @@ public class IvmlGrammarAccess extends AbstractGrammarElementFinder {
 	////#< Interfaces
 	// //------------------------------------ OCL (excerpt) ----------------------------	
 	// OpDefStatement:
-	//	'def' static='static'? result=Type id=Identifier '(' param=OpDefParameterList ')' '=' impl=Expression ';';
+	//	'def' static='static'? result=Type id=Identifier '(' param=OpDefParameterList ')' '=' (impl=Expression ';' |
+	//	block=BlockExpression);
 	public OpDefStatementElements getOpDefStatementAccess() {
 		return pOpDefStatement;
 	}
@@ -3757,13 +3836,33 @@ public class IvmlGrammarAccess extends AbstractGrammarElementFinder {
 	//LetExpression:
 	//	'let' type=Type name=Identifier // type is optional in OCL - IVML adjustment
 	// '=' valueExpr=Expression 'in'
-	//	subExpr=Expression;
+	//	subExpr=OptBlockExpression;
 	public LetExpressionElements getLetExpressionAccess() {
 		return pLetExpression;
 	}
 	
 	public ParserRule getLetExpressionRule() {
 		return getLetExpressionAccess().getRule();
+	}
+
+	//OptBlockExpression:
+	//	expr=Expression | block=BlockExpression;
+	public OptBlockExpressionElements getOptBlockExpressionAccess() {
+		return pOptBlockExpression;
+	}
+	
+	public ParserRule getOptBlockExpressionRule() {
+		return getOptBlockExpressionAccess().getRule();
+	}
+
+	//BlockExpression:
+	//	'{' exprs+=ExpressionStatement+ '}';
+	public BlockExpressionElements getBlockExpressionAccess() {
+		return pBlockExpression;
+	}
+	
+	public ParserRule getBlockExpressionRule() {
+		return getBlockExpressionAccess().getRule();
 	}
 
 	//AssignmentExpression:
@@ -4138,7 +4237,7 @@ public class IvmlGrammarAccess extends AbstractGrammarElementFinder {
 	}
 
 	//IfExpression:
-	//	'if' ifEx=Expression 'then' thenEx=Expression 'else' elseEx=Expression 'endif';
+	//	'if' ifEx=Expression 'then' thenEx=OptBlockExpression 'else' elseEx=OptBlockExpression 'endif';
 	public IfExpressionElements getIfExpressionAccess() {
 		return pIfExpression;
 	}
