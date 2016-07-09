@@ -1765,6 +1765,9 @@ public class EvaluationVisitor implements IConstraintTreeVisitor {
     @Override
     public void visitBlockExpression(BlockExpression block) {
         for (int e = 0, n = block.getExpressionCount(); e < n; e++) {
+            if (e > 0 && null == result) {
+                break; // break if undefined
+            }
             clearResult(); // leave only last one
             block.getExpression(e).accept(this);
         }
