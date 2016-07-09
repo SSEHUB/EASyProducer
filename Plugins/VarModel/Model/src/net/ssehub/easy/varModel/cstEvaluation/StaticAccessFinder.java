@@ -5,6 +5,7 @@ import java.util.Iterator;
 import java.util.Set;
 
 import net.ssehub.easy.varModel.cst.AttributeVariable;
+import net.ssehub.easy.varModel.cst.BlockExpression;
 import net.ssehub.easy.varModel.cst.Comment;
 import net.ssehub.easy.varModel.cst.CompoundAccess;
 import net.ssehub.easy.varModel.cst.CompoundInitializer;
@@ -188,4 +189,12 @@ public class StaticAccessFinder implements IConstraintTreeVisitor {
         // TODO check whether a specific method is needed
         visitVariable(variable);
     }
+
+    @Override
+    public void visitBlockExpression(BlockExpression block) {
+        for (int e = 0, n = block.getExpressionCount(); e < n; e++) {
+            block.getExpression(e).accept(this);
+        }
+    }
+
 }

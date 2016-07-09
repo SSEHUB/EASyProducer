@@ -21,6 +21,7 @@ import java.util.List;
 import java.util.Stack;
 
 import net.ssehub.easy.varModel.cst.AttributeVariable;
+import net.ssehub.easy.varModel.cst.BlockExpression;
 import net.ssehub.easy.varModel.cst.CompoundAccess;
 import net.ssehub.easy.varModel.cst.CompoundInitializer;
 import net.ssehub.easy.varModel.cst.ConstantValue;
@@ -490,6 +491,13 @@ public class PrefixSearchVisitor extends AbstractVisitor implements IConstraintT
     @Override
     public void visitSelf(Self self) {
         // does not contribute to result
+    }
+
+    @Override
+    public void visitBlockExpression(BlockExpression block) {
+        for (int e = 0, n = block.getExpressionCount(); e < n; e++) {
+            block.getExpression(e).accept(this);
+        }
     }
 
 }

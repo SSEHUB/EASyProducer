@@ -201,4 +201,11 @@ public class ValidationVisitor implements IConstraintTreeVisitor {
         visitVariable(variable);
     }
 
+    @Override
+    public void visitBlockExpression(BlockExpression block) {
+        for (int e = 0; e < block.getExpressionCount(); e++) {
+            block.getExpression(e).accept(this);
+        }
+    }
+
 }

@@ -203,4 +203,14 @@ public class DebugConstraintTreeVisitor implements IConstraintTreeVisitor {
         variable.getQualifier().accept(this);
     }
 
+    @Override
+    public void visitBlockExpression(BlockExpression block) {
+        println("Block");
+        increaseIndentation();
+        for (int e = 0; e < block.getExpressionCount(); e++) {
+            block.getExpression(e).accept(this);
+        }
+        decreaseIndentation();
+    }
+
 }

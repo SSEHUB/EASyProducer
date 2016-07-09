@@ -16,6 +16,7 @@
 package net.ssehub.easy.varModel.model.filter;
 
 import net.ssehub.easy.varModel.cst.AttributeVariable;
+import net.ssehub.easy.varModel.cst.BlockExpression;
 import net.ssehub.easy.varModel.cst.Comment;
 import net.ssehub.easy.varModel.cst.CompoundAccess;
 import net.ssehub.easy.varModel.cst.CompoundInitializer;
@@ -204,6 +205,12 @@ class ConstraintClassifier implements IConstraintTreeVisitor {
             //stop here, treat as variable
             isAssingmentConstraint = false;
         }
+    }
+
+    @Override
+    public void visitBlockExpression(BlockExpression block) {
+        //stop here
+        isAssingmentConstraint = false;
     }
 
 }

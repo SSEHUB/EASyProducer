@@ -316,4 +316,18 @@ public class CopyVisitor implements IConstraintTreeVisitor {
         result = var;
     }
 
+    @Override
+    public void visitBlockExpression(BlockExpression block) {
+        ConstraintSyntaxTree[] exprs = new ConstraintSyntaxTree[block.getExpressionCount()];
+        for (int e = 0, n = block.getExpressionCount(); e < n; e++) {
+            block.getExpression(e).accept(this);
+            exprs[e] = result;
+        }
+        try {
+            result = new BlockExpression(exprs);
+        } catch (CSTSemanticException e) {
+            EASyLoggerFactory.INSTANCE.getLogger(CopyVisitor.class, Bundle.ID).exception(e);
+        }
+    }
+
 }

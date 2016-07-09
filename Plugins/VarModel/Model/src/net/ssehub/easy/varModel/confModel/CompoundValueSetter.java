@@ -19,6 +19,7 @@ import java.util.ArrayList;
 import java.util.Map;
 
 import net.ssehub.easy.varModel.cst.AttributeVariable;
+import net.ssehub.easy.varModel.cst.BlockExpression;
 import net.ssehub.easy.varModel.cst.Comment;
 import net.ssehub.easy.varModel.cst.CompoundAccess;
 import net.ssehub.easy.varModel.cst.CompoundInitializer;
@@ -160,6 +161,11 @@ public class CompoundValueSetter implements IConstraintTreeVisitor {
     public void visitAnnotationVariable(AttributeVariable variable) {
         // TODO check whether a specific method is needed
         visitVariable(variable);
+    }
+
+    @Override
+    public void visitBlockExpression(BlockExpression block) {
+        // TODO Auto-generated method stub
     }
 
 }

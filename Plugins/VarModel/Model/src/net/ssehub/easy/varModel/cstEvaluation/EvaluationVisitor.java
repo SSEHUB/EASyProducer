@@ -33,6 +33,7 @@ import net.ssehub.easy.varModel.confModel.IAssignmentState;
 import net.ssehub.easy.varModel.confModel.IConfiguration;
 import net.ssehub.easy.varModel.confModel.IDecisionVariable;
 import net.ssehub.easy.varModel.cst.AttributeVariable;
+import net.ssehub.easy.varModel.cst.BlockExpression;
 import net.ssehub.easy.varModel.cst.CSTSemanticException;
 import net.ssehub.easy.varModel.cst.Comment;
 import net.ssehub.easy.varModel.cst.CompoundAccess;
@@ -1357,17 +1358,14 @@ public class EvaluationVisitor implements IConstraintTreeVisitor {
                 boolean ok = true;
                 LocalConfiguration cfg = new LocalConfiguration();
                 context.pushLevel(cfg);
-                
                 // prepare the variables; apply has an explicit result declarator, others have an implicit result 
                 // variable the other declarators are the iterators - we may have multi-dimensional cross-products
                 int lastIteratorIndex = call.getDeclaratorsCount();
                 DecisionVariableDeclaration resultDecl;
-                if (Container.APPLY == operation) {
-                    // the last declarator is the result
+                if (Container.APPLY == operation) { // the last declarator is the result
                     lastIteratorIndex--;
                     resultDecl = call.getDeclarator(lastIteratorIndex);
-                } else {
-                    // result is implicit
+                } else { // result is implicit
                     IDatatype type;
                     IDatatype exType;
                     try {
@@ -1392,14 +1390,18 @@ public class EvaluationVisitor implements IConstraintTreeVisitor {
                 VariableAccessor resultVar = VariableAccessor.POOL.getInstance()
                     .bind(addLocalVariable(cfg, resultDecl, null), context, true);
                 LocalDecisionVariable[] declarators = new LocalDecisionVariable[lastIteratorIndex];
-                for (int d = 0; ok && d < declarators.length; d++) {
-                    declarators[d] = addLocalVariable(cfg, call.getDeclarator(d), null);
+                int iterCount = 0;
+                IDatatype contained = call.getIteratorBaseType();
+                boolean isContained = true; 
+                for (int d = 0; ok && d < declarators.length; d++) { // create local vars, initialize here only temp var
+                    DecisionVariableDeclaration decl = call.getDeclarator(d);
+                    boolean isIterator = isContained && contained.isAssignableFrom(decl.getType());
+                    declarators[d] = addLocalVariable(cfg, decl, isIterator ? null : decl.getDefaultValue());
+                    iterCount += isIterator ? 1 : 0;
                 }
-
                 if (ok) {
-                    ok = executeContainerIteration(call, declarators, resultVar, evaluator);
+                    ok = executeContainerIteration(call, declarators, iterCount, resultVar, evaluator);
                 }
-    
                 context.popLevel();
                 // resultVar would be a variable, result of iteration is a constant!
                 if (ok) {
@@ -1427,7 +1429,7 @@ public class EvaluationVisitor implements IConstraintTreeVisitor {
     private boolean initialize(ContainerValue container, ContainerValue[] containers, 
         LocalDecisionVariable[] declarators) {
         boolean ok = true;
-        // initialize the actual container values
+        // initialize the actual container values, not declarators.length!
         for (int c = 0; c < containers.length; c++) {
             Value val = declarators[c].getValue();
             if (val instanceof ContainerValue) {
@@ -1449,23 +1451,24 @@ public class EvaluationVisitor implements IConstraintTreeVisitor {
      * Executes the container iteration.
      * 
      * @param call the container operation call to be executed
-     * @param declarators the declarators of the call in terms of decision variables
+     * @param declarators all declarators of the call in terms of decision variables
+     * @param iterCount the number of iterators within the declarators
      * @param resultVar the result variable to be modified as a side effect during the iteration (result aggregation)
      * @param evaluator the evaluator corresponding to <code>call</code> (may be <b>null</b> in case of an apply 
      *     operation)
      * @return <code>true</code> if successful, <code>false</code> if unevaluated
      */
     private boolean executeContainerIteration(ContainerOperationCall call, LocalDecisionVariable[] declarators, 
-        VariableAccessor resultVar, IIteratorEvaluator evaluator) {
+        int iterCount, VariableAccessor resultVar, IIteratorEvaluator evaluator) {
         boolean ok = true;
         call.getContainer().accept(this);
         if (null != result && result.getValue() instanceof ContainerValue) {
             ContainerValue container = (ContainerValue) result.getValue();
             clearResult();
-            ContainerValue[] containers = new ContainerValue[declarators.length];
+            ContainerValue[] containers = new ContainerValue[iterCount];
             ok = initialize(container, containers, declarators);
             // iterate over inner iterator again and again until all outer iterators are done
-            int[] pos = new int[declarators.length];
+            int[] pos = new int[iterCount];
             Map<Object, Object> data = new HashMap<Object, Object>();
             while (ok && null != containers[0] && pos[0] < containers[0].getElementSize()) {
                 int iter = pos.length - 1;
@@ -1482,7 +1485,7 @@ public class EvaluationVisitor implements IConstraintTreeVisitor {
                     } catch (ConfigurationException e) {
                         ok = containerException(e);
                     }
-                    call.getExpression().accept(this);      
+                    call.getExpression().accept(this);
                     if (null != result && null != result.getValue()) {
                         try {
                             boolean stop = evaluator.aggregate(resultVar, iterVal, result, data);
@@ -1757,6 +1760,14 @@ public class EvaluationVisitor implements IConstraintTreeVisitor {
     public void visitAnnotationVariable(AttributeVariable variable) {
         // TODO check whether a specific method is needed
         visitVariable(variable);
+    }
+
+    @Override
+    public void visitBlockExpression(BlockExpression block) {
+        for (int e = 0, n = block.getExpressionCount(); e < n; e++) {
+            clearResult(); // leave only last one
+            block.getExpression(e).accept(this);
+        }
     }
     
 }

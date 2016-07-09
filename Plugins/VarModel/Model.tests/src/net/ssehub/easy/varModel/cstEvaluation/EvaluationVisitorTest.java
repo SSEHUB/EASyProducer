@@ -26,6 +26,7 @@ import net.ssehub.easy.varModel.confModel.Configuration;
 import net.ssehub.easy.varModel.confModel.ConfigurationException;
 import net.ssehub.easy.varModel.confModel.IAssignmentState;
 import net.ssehub.easy.varModel.confModel.IDecisionVariable;
+import net.ssehub.easy.varModel.cst.BlockExpression;
 import net.ssehub.easy.varModel.cst.CSTSemanticException;
 import net.ssehub.easy.varModel.cst.CompoundAccess;
 import net.ssehub.easy.varModel.cst.ConstantValue;
@@ -904,6 +905,21 @@ public class EvaluationVisitorTest {
         Assert.assertTrue(visitor.getResult() instanceof IntValue);
         Utils.assertEquals(100, visitor.getResult());
         visitor.clear();
+
+        // with tmp variable - shall be ignored
+        DecisionVariableDeclaration tempLocal = new DecisionVariableDeclaration("tmp", BooleanType.TYPE, null);
+        tempLocal.setValue(BooleanValue.TRUE);
+        itExpression = new BlockExpression(new ConstraintSyntaxTree[] {itExpression});
+        containerOp = Utils.createContainerCall(decl1, Sequence.APPLY, 
+            itExpression, localDecl, tempLocal, resultDecl);
+        containerOp.inferDatatype();
+        var.setValue(ValueFactory.createValue(seqType, new Object[]{1, 1, 1, 1, 1}), AssignmentState.ASSIGNED);
+        visitor.init(config, AssignmentState.DEFAULT, false, null);
+        containerOp.accept(visitor);
+        Assert.assertTrue(visitor.getResult() instanceof IntValue);
+        Utils.assertEquals(110, visitor.getResult());
+        visitor.clear();
+        
     }
     
     /**

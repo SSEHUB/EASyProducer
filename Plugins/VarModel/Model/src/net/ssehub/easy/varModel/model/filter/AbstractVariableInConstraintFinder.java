@@ -15,6 +15,7 @@
  */
 package net.ssehub.easy.varModel.model.filter;
 
+import net.ssehub.easy.varModel.cst.BlockExpression;
 import net.ssehub.easy.varModel.cst.Comment;
 import net.ssehub.easy.varModel.cst.CompoundInitializer;
 import net.ssehub.easy.varModel.cst.ConstantValue;
@@ -134,6 +135,13 @@ abstract class AbstractVariableInConstraintFinder implements IConstraintTreeVisi
                 ReferenceValue refValue = (ReferenceValue) value;
                 addVariable(refValue.getValue());
             }
+        }
+    }
+    
+    @Override
+    public void visitBlockExpression(BlockExpression block) {
+        for (int e = 0, n = block.getExpressionCount(); e < n; e++) {
+            block.getExpression(e).accept(this);
         }
     }
     

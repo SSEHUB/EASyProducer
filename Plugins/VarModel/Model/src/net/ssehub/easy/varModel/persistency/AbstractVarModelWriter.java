@@ -85,6 +85,7 @@ public abstract class AbstractVarModelWriter extends AbstractVisitor
     
     private String myIndentStep = indentStep;
     private boolean myUseWhitespace = useWhitespace;
+    private int additionalIndentation = 0;
     
     /**
      * Stores the all parents of the currently visited element.<br/>
@@ -286,7 +287,7 @@ public abstract class AbstractVarModelWriter extends AbstractVisitor
     protected StringBuffer getIndentation() {
         int depth = parents.size();
         StringBuffer indent = new StringBuffer();
-        for (int i = 0; i < depth; i++) {
+        for (int i = 0; i < depth + additionalIndentation; i++) {
             if (myUseWhitespace) {
                 indent.append(myIndentStep);
             } else {
@@ -610,6 +611,22 @@ public abstract class AbstractVarModelWriter extends AbstractVisitor
      */
     protected IModelElement getParent(int index) {
         return parents.get(index);
+    }
+
+    /**
+     * Increases the additional indentation.
+     */
+    protected void increaseAdditionalIndentation() {
+        additionalIndentation++;
+    }
+    
+    /**
+     * Decreases the additional indentation.
+     */
+    protected void decreaseAdditionalIndentation() {
+        if (additionalIndentation > 0) {
+            additionalIndentation--;
+        }
     }
 
 }

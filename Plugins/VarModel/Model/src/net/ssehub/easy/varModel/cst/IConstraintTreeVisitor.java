@@ -122,4 +122,12 @@ public interface IConstraintTreeVisitor {
      * @param self the self object to visit
      */
     public void visitSelf(Self self);
+    
+    /**
+     * Visits the block.
+     * 
+     * @param block the block to be visited
+     */
+    public void visitBlockExpression(BlockExpression block);
+    
 }

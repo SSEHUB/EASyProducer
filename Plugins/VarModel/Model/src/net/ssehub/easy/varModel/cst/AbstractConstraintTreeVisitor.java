@@ -110,4 +110,11 @@ public class AbstractConstraintTreeVisitor implements IConstraintTreeVisitor {
         variable.getQualifier().accept(this);
     }
 
+    @Override
+    public void visitBlockExpression(BlockExpression block) {
+        for (int e = 0, n = block.getExpressionCount(); e < n; e++) {
+            block.getExpression(e).accept(this);
+        }
+    }
+
 }

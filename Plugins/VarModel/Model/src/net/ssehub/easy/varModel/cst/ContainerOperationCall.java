@@ -47,6 +47,7 @@ public class ContainerOperationCall extends ConstraintSyntaxTree {
     private ConstraintSyntaxTree expression;
     private Operation resolvedOperation; // lazy
     private IDatatype result; // lazy
+    private IDatatype iteratorBase; // lazy
     
     /**
      * Creates a new let expression.
@@ -134,7 +135,7 @@ public class ContainerOperationCall extends ConstraintSyntaxTree {
             if (null != operation && null != container) {
                 IDatatype containerType = DerivedDatatype.resolveToBasis(container.inferDatatype());
                 if (Container.TYPE.isAssignableFrom(containerType)) {
-                    IDatatype contained = ((Container) containerType).getContainedType();
+                    iteratorBase = ((Container) containerType).getContainedType();
                     int size = declarators.length;
                     IDatatype param;
                     if (size > 1 && null != declarators[size - 1].getDefaultValue()) {
@@ -149,12 +150,11 @@ public class ContainerOperationCall extends ConstraintSyntaxTree {
                         throw new CSTSemanticException("apply requires an initialized return declarator", 
                             CSTSemanticException.DECLARATOR_SEMANTICS);
                     } 
-                    for (int i = 0; i < size; i++) {
-                        if (!declarators[i].getType().isAssignableFrom(contained)) {
-                            throw new CSTSemanticException("type '" + declarators[i].getName()
-                                + "' of declarator does not match the contained type of the collection", 
-                                CSTSemanticException.TYPE_MISMATCH);
-                        }
+                    // at lest the first type must match, allow intermediary temp declarators
+                    if (!declarators[0].getType().isAssignableFrom(iteratorBase)) {
+                        throw new CSTSemanticException("type '" + declarators[0].getName()
+                            + "' of declarator does not match the contained type of the collection", 
+                            CSTSemanticException.TYPE_MISMATCH);
                     }
                     
                     // just ask the operand for the operation
@@ -216,6 +216,15 @@ public class ContainerOperationCall extends ConstraintSyntaxTree {
         hashCode *= operation.hashCode();
         // result hashcode/equals unclear
         return hashCode;
+    }
+
+    /**
+     * Returns the iterator base type (the type contained in the container we are iterating over).
+     * 
+     * @return the iterator base type
+     */
+    public IDatatype getIteratorBaseType() {
+        return iteratorBase;
     }
 
 }

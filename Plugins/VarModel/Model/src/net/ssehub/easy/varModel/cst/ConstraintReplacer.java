@@ -270,4 +270,18 @@ public class ConstraintReplacer implements IConstraintTreeVisitor {
         visitVariable(variable);
     }
 
+    @Override
+    public void visitBlockExpression(BlockExpression block) {
+        ConstraintSyntaxTree[] exprs = new ConstraintSyntaxTree[block.getExpressionCount()];
+        for (int e = 0, n = block.getExpressionCount(); e < n; e++) {
+            block.getExpression(e).accept(this);
+            exprs[e] = copiedConstraint;
+        }
+        try {
+            copiedConstraint = new BlockExpression(exprs);
+        } catch (CSTSemanticException e) {
+            LOGGER.exception(e);
+        }
+    }
+
 }

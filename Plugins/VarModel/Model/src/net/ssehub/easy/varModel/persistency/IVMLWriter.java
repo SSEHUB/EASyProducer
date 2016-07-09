@@ -76,6 +76,7 @@ import org.apache.commons.lang.StringEscapeUtils;
 import net.ssehub.easy.basics.modelManagement.IVersionRestriction;
 import net.ssehub.easy.basics.modelManagement.Version;
 import net.ssehub.easy.varModel.cst.AttributeVariable;
+import net.ssehub.easy.varModel.cst.BlockExpression;
 import net.ssehub.easy.varModel.cst.CompoundAccess;
 import net.ssehub.easy.varModel.cst.CompoundInitializer;
 import net.ssehub.easy.varModel.cst.ConstraintSyntaxTree;
@@ -1126,8 +1127,18 @@ public class IVMLWriter extends AbstractVarModelWriter {
         for (int d = 0; d < declCount; d++) {
             DecisionVariableDeclaration decl = call.getDeclarator(d);
             ConstraintSyntaxTree deflt = decl.getDefaultValue();
+            IDatatype type = decl.getType();
             // this is a bit strange but matches the OCL/IVML grammar
-            ConstraintSyntaxTree next = d + 1 >= declCount ? null : call.getDeclarator(d + 1).getDefaultValue();
+            ConstraintSyntaxTree next;
+            IDatatype nextType;
+            if (d + 1 >= declCount) {
+                next = null;
+                nextType = null;
+            } else {
+                DecisionVariableDeclaration nextDecl = call.getDeclarator(d + 1);
+                next = nextDecl.getDefaultValue();
+                nextType = nextDecl.getType();
+            }
             if (decl.isDeclaratorTypeExplicit()) {
                 appendOutput(IvmlDatatypeVisitor.getUniqueType(decl.getType()));
                 appendOutput(WHITESPACE);
@@ -1147,7 +1158,7 @@ public class IVMLWriter extends AbstractVarModelWriter {
                 decl.getDefaultValue().accept(this);
             }
             if (d < declCount - 1) {
-                if (null == deflt && null != next) {
+                if ((null == deflt && null != next) || (nextType != null && type != nextType)) {
                     // if next has a different default
                     appendOutput(SEMICOLON);
                 } else {
@@ -1328,4 +1339,22 @@ public class IVMLWriter extends AbstractVarModelWriter {
         appendOutput(SELF);
     }
     
+    @Override
+    public void visitBlockExpression(BlockExpression block) {
+        appendOutput(BEGINNING_BLOCK);
+        appendOutput(LINEFEED);
+
+        increaseAdditionalIndentation();
+        for (int e = 0, n = block.getExpressionCount(); e < n; e++) {
+            appendIndentation();
+            block.getExpression(e).accept(this);
+            appendOutput(SEMICOLON);
+            appendOutput(LINEFEED);
+        }
+        decreaseAdditionalIndentation();
+        
+        appendIndentation();
+        appendOutput(ENDING_BLOCK);
+    }
+
 }
