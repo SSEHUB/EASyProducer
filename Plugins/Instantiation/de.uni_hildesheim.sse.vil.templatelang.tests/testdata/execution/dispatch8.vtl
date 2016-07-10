@@ -1,0 +1,30 @@
+@advice(dispatch8)
+template dispatch8(Configuration config, FileArtifact target) {
+
+    def main(Configuration config, FileArtifact target) {
+        dispatch8 cfg = config;
+        Pipeline pipeline = cfg.Pipeline0;
+        for (DecisionVariable v : pipeline.sources) {
+            Tuple t;
+            processElement(v, t);
+        }
+    }
+
+    def processElement(DecisionVariable elt, Tuple tupleType) {
+    }
+
+    def processElement(Source elt, Tuple tupleType) {
+        for (Flow flow : elt.output) {
+            'Source output: ${flow.destination.type()}'
+            processElement(flow.destination, flow.tupleType);
+        }
+    }
+
+    def processElement(FamilyElement elt, Tuple tupleType) {
+        for (Flow flow : elt.output) {
+            'FamilyElement output: ${flow.destination.type()}'
+            processElement(flow.destination, flow.tupleType);
+        }
+    }
+
+}

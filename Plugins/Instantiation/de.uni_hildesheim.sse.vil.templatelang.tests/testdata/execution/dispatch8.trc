@@ -1,0 +1,19 @@
+-> main(Configuration, FileArtifact) with (<config>, test.texts)
+    cfg <- <config>
+    pipeline <- dispatch8::Pipeline0
+    for v {
+        v <- dispatch8::Pipeline::sources {0}
+        -> processElement(Source, Tuple) with (dispatch8::Pipeline::sources {0}, null)
+            for flow {
+                flow <- dispatch8::Source::output {0}
+                -> type(DecisionVariable) with (dispatch8::Flow::destination) = FamilyElement
+                -> processElement(FamilyElement, Tuple) with (dispatch8::Flow::destination, dispatch8::Flow::tupleType)
+                    for flow {
+                        flow <- dispatch8::ProcessingElement::output {0}
+                        -> type(DecisionVariable) with (dispatch8::Flow::destination) = FamilyElement
+                        -> processElement(FamilyElement, Tuple) with (dispatch8::Flow::destination, dispatch8::Flow::tupleType)
+                            for flow {
+                            }
+                    }
+            }
+    }

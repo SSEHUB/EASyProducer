@@ -1,0 +1,103 @@
+project dispatch8 {
+
+	version v0;
+			
+	compound Tuple { 
+		String name;
+		Boolean keyPart;
+	}
+	
+	compound Algorithm {
+		Tuple output;
+	} 
+	
+	compound Family {
+		Tuple output;
+	}
+	
+    abstract compound PipelineElement {
+	} 
+   
+	abstract compound PipelineNode refines PipelineElement{
+    }
+    
+    compound ProcessingElement refines PipelineNode {
+		setOf(refTo(Flow)) output;
+	}
+	
+	compound Flow refines PipelineElement {
+		refTo(PipelineNode) destination;
+		refTo(Tuple) tupleType;
+	}
+	
+    compound Source refines PipelineNode {
+		setOf(refTo(Flow)) output;
+	} 	   	
+
+	compound FamilyElement refines ProcessingElement {	
+	} 	
+	
+	compound Pipeline {
+		setOf(refTo(Source)) sources;		
+	}
+	
+	//family and algorithm configuration
+	Tuple tuple0 = Tuple {
+		name = "tuple0",
+		keyPart = false
+	};
+	Family fm = Family {
+		output = tuple0
+	};	
+	Algorithm alg = Algorithm {
+		output = tuple0
+	};
+	
+	//a test pipeline configuration
+	Pipeline Pipeline0;
+	Source Source0;
+	Flow Flow0;
+	FamilyElement FamilyElement0;
+	Flow Flow1;
+	FamilyElement FamilyElement1;
+	FamilyElement1 = FamilyElement {
+	};
+	Flow1 = Flow {
+		destination = refBy(FamilyElement1),
+		tupleType = refBy(alg.output) //failing
+		//tupleType = refBy(tuple0) //working
+	};
+	FamilyElement0 = FamilyElement { 
+		output = {
+			refBy(Flow1)
+		}
+	};
+	Flow0 = Flow {
+		destination = refBy(FamilyElement0),
+		tupleType = refBy(fm.output)//failing
+		//tupleType = refBy(tuple0) //working
+	};
+
+	Source0 = Source {
+		output = {
+			refBy(Flow0)
+		}
+	};
+	Pipeline0 = Pipeline {
+		sources = {
+			refBy(Source0)
+		}
+	};
+	
+	freeze {
+		Pipeline0;
+		Source0;
+		Flow0;
+		FamilyElement0;
+		Flow1;
+		FamilyElement1;
+		fm;
+		alg;
+		tuple0;
+	};
+}
