@@ -16,6 +16,7 @@
 package net.ssehub.easy.varModel.cstEvaluation;
 
 import net.ssehub.easy.varModel.confModel.IDecisionVariable;
+import net.ssehub.easy.varModel.model.datatypes.IDatatype;
 import net.ssehub.easy.varModel.model.datatypes.Reference;
 import net.ssehub.easy.varModel.model.values.Value;
 import net.ssehub.easy.varModel.model.values.ValueDoesNotMatchTypeException;
@@ -63,8 +64,10 @@ abstract class AbstractDecisionVariableEvaluationAccessor extends EvaluationAcce
     @Override
     public Value getReferenceValue() {
         Value result;
+        IDecisionVariable var = getVariable(); // let override take place
         try {
-            result = ValueFactory.createValue(Reference.TYPE, variable);
+            IDatatype type = var.getDeclaration().getType();
+            result = ValueFactory.createValue(new Reference(type.getName(), type, null), var.getDeclaration());
         } catch (ValueDoesNotMatchTypeException e) {
             result = null;
         }

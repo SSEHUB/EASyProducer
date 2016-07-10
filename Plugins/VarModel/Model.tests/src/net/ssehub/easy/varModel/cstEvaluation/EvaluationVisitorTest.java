@@ -46,6 +46,7 @@ import net.ssehub.easy.varModel.model.datatypes.BooleanType;
 import net.ssehub.easy.varModel.model.datatypes.Compound;
 import net.ssehub.easy.varModel.model.datatypes.ConstraintType;
 import net.ssehub.easy.varModel.model.datatypes.CustomOperation;
+import net.ssehub.easy.varModel.model.datatypes.IDatatype;
 import net.ssehub.easy.varModel.model.datatypes.IntegerType;
 import net.ssehub.easy.varModel.model.datatypes.MetaType;
 import net.ssehub.easy.varModel.model.datatypes.OclKeyWords;
@@ -60,6 +61,7 @@ import net.ssehub.easy.varModel.model.values.ConstraintValue;
 import net.ssehub.easy.varModel.model.values.ContainerValue;
 import net.ssehub.easy.varModel.model.values.IntValue;
 import net.ssehub.easy.varModel.model.values.NullValue;
+import net.ssehub.easy.varModel.model.values.ReferenceValue;
 import net.ssehub.easy.varModel.model.values.Value;
 import net.ssehub.easy.varModel.model.values.ValueDoesNotMatchTypeException;
 import net.ssehub.easy.varModel.model.values.ValueFactory;
@@ -1702,6 +1704,45 @@ public class EvaluationVisitorTest {
         Assert.assertTrue(val instanceof IntValue);
         Assert.assertEquals(10, ((IntValue) val).getValue().intValue());
     }
+    
+    /**
+     * Tests compound access in references. An expression accessing "cmp.var" as a reference (IVML maps this
+     * into a constant of a ref-Value) must be equal to the declaration of the respective decision variable.
+     * 
+     * @throws CSTSemanticException in case of constraint failures (shall not occur)
+     * @throws ValueDoesNotMatchTypeException if a value does not match the expected type (shall not occur)
+     * @throws ConfigurationException if a value cannot be configured (shall not occur)
+     */
+    @Test
+    public void testCompoundAccessRef() throws CSTSemanticException, ConfigurationException, 
+        ValueDoesNotMatchTypeException {
+        Project project = new Project("Test");
+        Compound cmpType = new Compound("cmp", project);
+        project.add(cmpType);
+        DecisionVariableDeclaration cmpTypeDecl = new DecisionVariableDeclaration("var", IntegerType.TYPE, cmpType);
+        cmpType.add(cmpTypeDecl);
+        
+        DecisionVariableDeclaration cmpVar = new DecisionVariableDeclaration("c", cmpType, project);
+        project.add(cmpVar);
+        IDatatype refType = new Reference("ref", IntegerType.TYPE, project); 
+        ConstraintSyntaxTree acc = new CompoundAccess(new Variable(cmpVar), "var");
+        acc.inferDatatype();
+        ConstraintSyntaxTree refBy = new ConstantValue(ValueFactory.createValue(refType, acc));
+        
+        Configuration config = new Configuration(project);
+        config.getDecision(cmpVar).setValue(ValueFactory.createValue(cmpType, new Object[]{"var", 1}), 
+            AssignmentState.ASSIGNED);
+
+        EvaluationVisitor visitor = new EvaluationVisitor();
+        visitor.init(config, AssignmentState.DEFAULT, false, null);
+        visitor.visit(refBy);
+        
+        Assert.assertTrue(visitor.getResult() instanceof ReferenceValue);
+        IDecisionVariable v = config.getDecision(cmpVar);
+        Assert.assertEquals(v.getNestedElement("var").getDeclaration(), 
+            ((ReferenceValue) visitor.getResult()).getValue());
+    }
+
  
     /**
      * Tests reference equality of sequences.
