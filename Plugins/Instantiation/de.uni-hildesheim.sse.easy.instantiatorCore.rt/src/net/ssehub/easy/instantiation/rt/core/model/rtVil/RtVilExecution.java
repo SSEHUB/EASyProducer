@@ -252,6 +252,7 @@ public class RtVilExecution extends BuildlangExecution implements IRtVilVisitor 
     private String lastFailReason;
     private Integer lastFailCode;
     private ITracer rtTracer;
+    private int nestedStrategyCount;
     
     /**
      * Creates a new execution environment for evaluating local expressions.
@@ -759,6 +760,7 @@ public class RtVilExecution extends BuildlangExecution implements IRtVilVisitor 
     
     @Override
     public Object visitStrategy(Strategy strategy) throws VilException {
+        nestedStrategyCount++;
         boolean visited = false;
         StrategyExecutionContext context = new StrategyExecutionContext(strategy, getRuntimeEnvironment());
         if (prepareExecution(context)) {
@@ -771,8 +773,8 @@ public class RtVilExecution extends BuildlangExecution implements IRtVilVisitor 
                 context.setStatus(applyRuleBody(strategy, context.getRhsValues(), context));
                 List<AbstractBreakdownCall> calls = determineBreakdownRanking(context);
                 RuleExecutionResult callResult = null;
-                for (int c = 0; (null == callResult || Status.SUCCESS != callResult.getStatus()) 
-                    && c < calls.size(); c++) {
+                Status lastStatus = null;
+                for (int c = 0; continueBreakdown(callResult) && c < calls.size(); c++) {
                     AbstractBreakdownCall call = calls.get(c);
                     Expression timeoutEx = call.getTimeoutExpression();
                     Object timeout = null;
@@ -782,20 +784,18 @@ public class RtVilExecution extends BuildlangExecution implements IRtVilVisitor 
                     long startTimeStamp = System.currentTimeMillis();
                     callResult = (RuleExecutionResult) visitModelCallExpression(call);
                     long endTimeStamp = System.currentTimeMillis();
-                    Status status = callResult.getStatus();
-                    if (Status.SUCCESS == status) {
-                        context.setFailCode(null);
-                        context.setFailReason(null);
+                    lastStatus = callResult.getStatus();
+                    if (Status.SUCCESS == lastStatus) {
+                        setFailInfo(context, null);
                         if (!validateTimeout(timeout, startTimeStamp, endTimeStamp, callResult)) {
                             LOGGER.info("strategy '" + call.getResolved().getSignature() + "' failed in breakdown "
                                 + "of '" + strategy.getSignature() + "' due to a timeout of " + timeout);
                         }
-                    } else if (Status.FAIL == status) {
-                        context.setFailCode(callResult.getFailCode());
-                        context.setFailReason(callResult.getFailReason());
+                    } else if (Status.FAIL == lastStatus) {
+                        setFailInfo(context, callResult);
                     }
                 }
-                if (null == callResult) { // no breakdown rule applicable
+                if (null == callResult) {
                     context.setStatus(Status.NOT_APPLICABLE);
                 } else {
                     context.setStatus(callResult.getStatus());
@@ -821,10 +821,62 @@ public class RtVilExecution extends BuildlangExecution implements IRtVilVisitor 
         if (failed) {
             callFailed(strategy);
         }
+        nestedStrategyCount--;
+        return visitedRule(visited, strategy, result);
+    }
+
+    /**
+     * Determines whether the breakdown execution shall continue.
+     * 
+     * @param callResult the call result
+     * @return <code>true</code> for continue, <code>false</code> for stop
+     * @throws VilException in case that the actual configuration cannot be found
+     */
+    private boolean continueBreakdown(RuleExecutionResult callResult) throws VilException {
+        boolean cont;
+        if (null == callResult) {
+            cont = true;
+        } else {
+            if (Status.SUCCESS == callResult.getStatus()) {
+                Configuration cfg = (Configuration) getCurrentConfiguration().accept(this);
+                cont = (null == cfg || !cfg.getChangeHistory().hasChanges());
+            } else {
+                cont = true;
+            }
+        }
+        return cont;
+    }
+
+    /**
+     * Notifies the tracer if <code>visited</code>.
+     * 
+     * @param visited whether <code>strategy</code> was visited
+     * @param strategy the strategy
+     * @param result the strategy execution result
+     * @return <code>result</code>
+     */
+    private RuleExecutionResult visitedRule(boolean visited, Strategy strategy, RuleExecutionResult result) {
         if (visited) {
             getTracer().visitedRule(strategy, getRuntimeEnvironment(), result);
         }
         return result;
+    }
+
+    /**
+     * Sets the fail code from <code>callResult</code> to <code>context</code>.
+     * 
+     * @param context the context to modify as a side effect
+     * @param callResult the call result to take the fail information from (may be <b>null</b> for <b>null</b> as 
+     *   fail code/reason)
+     */
+    private void setFailInfo(StrategyExecutionContext context, RuleExecutionResult callResult) {
+        if (null == callResult) {
+            context.setFailCode(null);
+            context.setFailReason(null);
+        } else {
+            context.setFailCode(callResult.getFailCode());
+            context.setFailReason(callResult.getFailReason());
+        }
     }
 
     /**
@@ -1108,7 +1160,7 @@ public class RtVilExecution extends BuildlangExecution implements IRtVilVisitor 
      * @throws VilException in case that constructing, resolving or executing the corresponding VIL rule fails
      */
     private void callEnact() throws VilException {
-        if (enableEnactment) {
+        if (enableEnactment && 1 == nestedStrategyCount) { // do not repeate enact calls
             if (null != rtTracer) {
                 rtTracer.startEnact();
             }
@@ -1219,7 +1271,8 @@ public class RtVilExecution extends BuildlangExecution implements IRtVilVisitor 
     }
 
     @Override
-    protected void ruleElementFailed(IRuleElement elt, RuleExecutionContext context) throws VilException {
+    protected boolean ruleElementFailed(IRuleElement elt, RuleExecutionContext context) throws VilException {
+        boolean fail = true;
         if (elt instanceof FailStatement) {
             FailStatement fStmt = (FailStatement) elt;
             String msg;
@@ -1230,6 +1283,7 @@ public class RtVilExecution extends BuildlangExecution implements IRtVilVisitor 
                     msg = "refail";
                 } else {
                     msg = null;
+                    fail = false;
                 }
             } else {
                 msg = "explicit fail";
@@ -1263,6 +1317,7 @@ public class RtVilExecution extends BuildlangExecution implements IRtVilVisitor 
                 getTracer().trace(msg);
             }
         }
+        return fail;
     }
     
     @Override

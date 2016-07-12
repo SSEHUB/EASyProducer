@@ -1,0 +1,4 @@
+-> main(Project, Configuration, Project, IAdaptationEvent) with (<project>, <config>, <project>, null)
+    -> t1(Project, Configuration, Project, IAdaptationEvent) with (<project>, <config>, <project>, null)
+    -> t2(Project, Configuration, Project, IAdaptationEvent) with (<project>, <config>, <project>, null)
+    -> enact(Project, Configuration, Project) with (<project>, <config>, <project>)

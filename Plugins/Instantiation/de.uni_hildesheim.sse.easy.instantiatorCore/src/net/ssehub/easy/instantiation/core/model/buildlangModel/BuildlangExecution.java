@@ -884,9 +884,10 @@ public class BuildlangExecution extends ExecutionVisitor<Script, Rule, VariableD
                 if (mayFail(elt) // guard expression
                     && !checkConditionResult(eltVal, elt, ConditionTest.DONT_CARE)) {
                     if (enableRuleElementFailed) {
-                        tracer.failedAt(ruleBody.getBodyElement(e));
-                        status = Status.FAIL;
-                        ruleElementFailed(elt, context);
+                        if (ruleElementFailed(elt, context)) {
+                            tracer.failedAt(ruleBody.getBodyElement(e));
+                            status = Status.FAIL;
+                        }
                     }
                 } else {
                     context.add(eltVal);
@@ -915,9 +916,11 @@ public class BuildlangExecution extends ExecutionVisitor<Script, Rule, VariableD
      *  
      * @param elt the failing element 
      * @param context the rule execution context
+     * @return <code>true</code> if the failure shall be recorded, <code>false</code> if the failure shall be ignored
      * @throws VilException in case that the evaluation of the failed element fails
      */
-    protected void ruleElementFailed(IRuleElement elt, RuleExecutionContext context) throws VilException {
+    protected boolean ruleElementFailed(IRuleElement elt, RuleExecutionContext context) throws VilException {
+        return true;
     }
     
     /**

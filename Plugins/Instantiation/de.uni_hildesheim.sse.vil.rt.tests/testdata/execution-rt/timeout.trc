@@ -1,5 +1,5 @@
 -> s0(Project, Configuration, Project) with (<project>, <config>, <project>)
     -> s2()
         -> t1()
-        -> enact(Project, Configuration, Project) with (<project>, <config>, <project>)
+    -> t1()
     -> enact(Project, Configuration, Project) with (<project>, <config>, <project>)

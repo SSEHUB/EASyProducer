@@ -1,0 +1,21 @@
+import enact;
+
+rtVilScript fail5 (Project source, Configuration config, Project target, IAdaptationEvent event) {
+
+    strategy main(Project source, Configuration config, Project target, IAdaptationEvent event) = {
+        objective true;
+        breakdown {
+            tactic t1(source, config, target, event);
+            tactic t2(source, config, target, event);
+        }
+    }
+
+    tactic t1(Project source, Configuration config, Project target, IAdaptationEvent event) = {
+        refail;
+    }
+
+    tactic t2(Project source, Configuration config, Project target, IAdaptationEvent event) = {
+        refail;
+    }
+
+}

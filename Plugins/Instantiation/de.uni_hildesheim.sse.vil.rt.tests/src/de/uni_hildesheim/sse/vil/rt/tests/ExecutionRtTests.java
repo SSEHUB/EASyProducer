@@ -494,6 +494,16 @@ public class ExecutionRtTests extends AbstractRtTest {
     }
 
     /**
+     * Tests a refail without previous fail. Nothing shall happen.
+     * 
+     * @throws IOException should not occur
+     */
+    @Test
+    public void testFail6() throws IOException {
+        assertEqual("fail6");
+    }
+
+    /**
      * Tests simple timeout expressions (negative, possible).
      * 
      * @throws IOException should not occur
@@ -512,6 +522,16 @@ public class ExecutionRtTests extends AbstractRtTest {
     @Test
     public void testTimeout1() throws IOException {
         assertEqual("timeout1");
+    }
+
+    /**
+     * Tests fallthrough tactics, i.e., no modification try next.
+     * 
+     * @throws IOException should not occur
+     */
+    @Test
+    public void testTactics1() throws IOException {
+        assertEqual("tactics1");
     }
 
     /**

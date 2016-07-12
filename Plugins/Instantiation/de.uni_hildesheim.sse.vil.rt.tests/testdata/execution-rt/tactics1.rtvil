@@ -1,0 +1,24 @@
+rtVilScript tactics1 (Project source, Configuration config, Project target, IAdaptationEvent event, mapOf(String, Real) values) {
+
+    strategy main(Project source, Configuration config, Project target, IAdaptationEvent event) = {
+        objective true;
+        breakdown {
+            tactic fallthroughTactic();
+            tactic fallthrough2Tactic();
+            tactic defaultTactic();
+        }
+    }
+
+    tactic fallthroughTactic() = {
+    }
+
+    tactic fallthrough2Tactic() = {
+    }
+
+    tactic defaultTactic() = {
+    }
+
+    enact(Project source, Configuration config, Project target) = : {
+    }
+
+}

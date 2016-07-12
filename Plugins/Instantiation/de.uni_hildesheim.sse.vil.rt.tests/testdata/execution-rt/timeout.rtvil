@@ -4,7 +4,7 @@ rtVilScript timeout (Project source, Configuration config, Project target) {
         objective true;
         breakdown {
             strategy s2() @-2;
-            tactic t1() @1;
+            tactic t1() @5;
         }
     }
 

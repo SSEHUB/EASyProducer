@@ -1,0 +1,5 @@
+-> main(Project, Configuration, Project, IAdaptationEvent) with (<project>, <config>, <project>, null)
+    -> fallthroughTactic()
+    -> fallthrough2Tactic()
+    -> defaultTactic()
+    -> enact(Project, Configuration, Project) with (<project>, <config>, <project>)
