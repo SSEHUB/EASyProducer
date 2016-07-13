@@ -1,0 +1,14 @@
+-> main(Project, Configuration, Project) with (<project>, <config>, <project>)
+    -> t(Configuration) with (<config>)
+        cfg <- <config>
+        n <- QM7::node
+        -> createValue(DecisionVariable, Type, Boolean) with (QM7::PipelineNode::shedder, LoadShedder, false)
+        shedder <- QM7::PipelineNode::shedder
+        shedder.name <- NTH_ITEM
+        -> createValue(DecisionVariable, Boolean) with (QM7::LoadShedder::parameters, false)
+        -> addValue(DecisionVariable) with (QM7::LoadShedder::parameters) = QM7::LoadShedder::parameters [0]
+        ip <- QM7::LoadShedder::parameters [0]
+        ip.name <- NTH_TUPLE
+        ip.value <- 500
+        Reasoner execution: true
+    -> enact(Project, Configuration, Project) with (<project>, <config>, <project>)

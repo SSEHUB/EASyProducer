@@ -395,9 +395,40 @@ public class ExecutionRtTests extends AbstractRtTest {
      */
     @Test
     public void testInstances() throws IOException {
-        final String name = "instances";
+        testInstances("instances", "QM6");
+    }
+
+    /**
+     * Tests value instantiation capabilities of rt-VIL (via VIL, contributed by QualiMaster).
+     * 
+     * @throws IOException should not occur
+     */
+    @Test
+    public void testInstances2() throws IOException {
+        testInstances("instances2", "QM6");
+    }
+
+    /**
+     * Tests value instantiation capabilities of rt-VIL (via VIL, contributed by QualiMaster).
+     * 
+     * @throws IOException should not occur
+     */
+    @Test
+    public void testInstances3() throws IOException {
+        testInstances("instances3", "QM7");
+    }
+
+    /**
+     * Tests value instantiation capabilities of rt-VIL for some rather similar models.
+     * 
+     * @param name instances?
+     * @param ivmlName QM6/QM7
+     * 
+     * @throws IOException should not occur
+     */
+    private void testInstances(String name, String ivmlName) throws IOException {
         File modelFile = createFile(name);
-        Configuration cfg = getIvmlConfiguration("QM6", NoVariableFilter.INSTANCE);
+        Configuration cfg = getIvmlConfiguration(ivmlName, NoVariableFilter.INSTANCE);
         
         Map<String, Object> param = createParameterMap(null, null, cfg);
         EqualitySetup<Script> setup = new EqualitySetup<Script>(modelFile, name, null, createTraceFile(name), param);

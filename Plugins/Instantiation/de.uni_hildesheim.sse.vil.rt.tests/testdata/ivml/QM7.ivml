@@ -1,20 +1,17 @@
-project QM6 {
+project QM7 {
     
     enum BindingTime {compile = 0, startup = 1, runtime = 2};
-    annotate BindingTime bindingTime = BindingTime.compile to QM6;
+    annotate BindingTime bindingTime = BindingTime.compile to QM7;
 
-    compound Parameter {
-        String name;        
-    }
-    
-    typedef Parameters sequenceOf(Parameter) with (Parameters->collect(p|p.name).size() == Parameters.size());
-    
-    compound IntegerParameter refines Parameter {
+    compound IntegerParameter {
+        String name;
         Integer defaultValue;
         assign(bindingTime = BindingTime.runtime) to {
             Integer value;
         }
     }
+    
+    typedef Parameters sequenceOf(IntegerParameter) with (Parameters->collect(p|p.name).size() == Parameters.size());
 
     compound LoadShedder {
         assign(bindingTime = BindingTime.runtime) to {
