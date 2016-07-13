@@ -37,7 +37,9 @@ import net.ssehub.easy.basics.progress.ProgressObserver;
 import net.ssehub.easy.dslCore.TranslationResult;
 import net.ssehub.easy.instantiation.core.model.buildlangModel.RuleExecutionResult;
 import net.ssehub.easy.instantiation.core.model.common.VilException;
+import net.ssehub.easy.instantiation.core.model.vilTypes.Sequence;
 import net.ssehub.easy.instantiation.core.model.vilTypes.configuration.Configuration;
+import net.ssehub.easy.instantiation.core.model.vilTypes.configuration.DecisionVariable;
 import net.ssehub.easy.instantiation.core.model.vilTypes.configuration.NoVariableFilter;
 import net.ssehub.easy.instantiation.rt.core.model.rtVil.Executor;
 import net.ssehub.easy.instantiation.rt.core.model.rtVil.RtVILMemoryStorage;
@@ -384,6 +386,44 @@ public class ExecutionRtTests extends AbstractRtTest {
         EqualitySetup<Script> setup = new EqualitySetup<Script>(modelFile, name, null, createTraceFile(name), param);
         setup.setEnableEquals(false);
         assertEqual(setup);
+    }
+
+    /**
+     * Tests value instantiation capabilities of rt-VIL (via VIL, contributed by QualiMaster).
+     * 
+     * @throws IOException should not occur
+     */
+    @Test
+    public void testInstances() throws IOException {
+        final String name = "instances";
+        File modelFile = createFile(name);
+        Configuration cfg = getIvmlConfiguration("QM6", NoVariableFilter.INSTANCE);
+        
+        Map<String, Object> param = createParameterMap(null, null, cfg);
+        EqualitySetup<Script> setup = new EqualitySetup<Script>(modelFile, name, null, createTraceFile(name), param);
+        //setup.setEnableEquals(false);
+        assertEqual(setup);
+        
+        DecisionVariable var = cfg.getByName("node");
+        Assert.assertNotNull(var);
+        DecisionVariable sVar = var.getByName("shedder");
+        Assert.assertNotNull(sVar);
+        DecisionVariable nVar = sVar.getByName("name");
+        Assert.assertNotNull(nVar);
+        Assert.assertEquals("NTH_ITEM", nVar.getStringValue());
+        DecisionVariable pVar = sVar.getByName("parameters");
+        Assert.assertNotNull(pVar);
+        Sequence<DecisionVariable> pVars = pVar.variables();
+        Assert.assertNotNull(pVars);
+        Assert.assertTrue(1 == pVars.size());
+        DecisionVariable ppVar = pVars.get(0);
+        Assert.assertNotNull(ppVar);
+        DecisionVariable ppNameVar = ppVar.getByName("name");
+        Assert.assertNotNull(ppNameVar);
+        Assert.assertEquals("NTH_TUPLE", ppNameVar.getStringValue());
+        DecisionVariable ppValueVar = ppVar.getByName("value");
+        Assert.assertNotNull(ppValueVar);
+        Assert.assertEquals(500, ppValueVar.getIntegerValue().intValue());
     }
 
     /**

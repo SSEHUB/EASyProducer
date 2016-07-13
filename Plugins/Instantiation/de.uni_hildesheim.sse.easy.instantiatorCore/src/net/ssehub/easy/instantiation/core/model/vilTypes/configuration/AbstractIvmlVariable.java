@@ -30,6 +30,7 @@ import net.ssehub.easy.varModel.model.AbstractVariable;
 import net.ssehub.easy.varModel.model.DecisionVariableDeclaration;
 import net.ssehub.easy.varModel.model.datatypes.Compound;
 import net.ssehub.easy.varModel.model.datatypes.Container;
+import net.ssehub.easy.varModel.model.datatypes.DerivedDatatype;
 import net.ssehub.easy.varModel.model.datatypes.IDatatype;
 import net.ssehub.easy.varModel.model.datatypes.IntegerType;
 import net.ssehub.easy.varModel.model.datatypes.Reference;
@@ -758,7 +759,7 @@ public abstract class AbstractIvmlVariable extends IvmlElement {
     private EASyLogger getLogger() {
         return EASyLoggerFactory.INSTANCE.getLogger(AbstractIvmlVariable.class, Bundle.ID);
     }
-    
+
     /**
      * Creates a value matching to this variable and tries to assign it. Failures will be logged
      * and ignored.
@@ -767,14 +768,31 @@ public abstract class AbstractIvmlVariable extends IvmlElement {
      *    exists (<code>false</code>)
      */
     public void createValue(boolean override) {
+    }
+    
+    /**
+     * Creates a value matching to this variable and tries to assign it. Failures will be logged
+     * and ignored.
+     *
+     * @param type the type of value to create
+     * @param override try overriding the existing value (<code>true</code>) or just do nothing if a value already 
+     *    exists (<code>false</code>)
+     */
+    public void createValue(TypeDescriptor<?> type, boolean override) {
         if (null != variable && (override || (!override && !isConfigured()))) {
-            try {
-                variable.setValue(ValueFactory.createValue(variable.getDeclaration().getType()), 
-                    AssignmentState.ASSIGNED);
-            } catch (ConfigurationException e) {
-                getLogger().warn(e.getMessage());
-            } catch (ValueDoesNotMatchTypeException e) {
-                getLogger().warn(e.getMessage());
+            if (type instanceof IvmlTypeDescriptor) {
+                IDatatype t = ((IvmlTypeDescriptor) type).getIvmlType();
+                if (variable.getDeclaration().getType().isAssignableFrom(t)) {
+                    try {
+                        variable.setValue(ValueFactory.createValue(t), AssignmentState.ASSIGNED);
+                    } catch (ConfigurationException e) {
+                        getLogger().warn(e.getMessage());
+                    } catch (ValueDoesNotMatchTypeException e) {
+                        getLogger().warn(e.getMessage());
+                    }
+                } else {
+                    getLogger().warn("given type is not compatible to variable type");
+                }
             }
         }
     }
@@ -788,7 +806,7 @@ public abstract class AbstractIvmlVariable extends IvmlElement {
     public DecisionVariable addValue() {
         DecisionVariable result = null;
         if (null != variable) {
-            IDatatype vType = variable.getDeclaration().getType();
+            IDatatype vType = DerivedDatatype.resolveToBasis(variable.getDeclaration().getType());
             if (Container.TYPE.isAssignableFrom(vType) && vType.getGenericTypeCount() > 0) {
                 result = addValue(vType.getGenericType(0));
             } else {
@@ -808,11 +826,11 @@ public abstract class AbstractIvmlVariable extends IvmlElement {
     public DecisionVariable addValue(TypeDescriptor<?> type) {
         DecisionVariable result = null;
         if (null != variable && type instanceof IvmlTypeDescriptor) {
-            IDatatype vType = variable.getDeclaration().getType();
+            IDatatype vType = DerivedDatatype.resolveToBasis(variable.getDeclaration().getType());
             if (Container.TYPE.isAssignableFrom(vType) && vType.getGenericTypeCount() > 0) {
                 IDatatype iType = ((IvmlTypeDescriptor) type).getIvmlType();
-                if (vType.isAssignableFrom(iType)) {
-                    addValue(iType);
+                if (vType.getGenericType(0).isAssignableFrom(iType)) {
+                    result = addValue(iType);
                 } else {
                     getLogger().warn("given type is not compatible to container element type");
                 }
@@ -838,9 +856,12 @@ public abstract class AbstractIvmlVariable extends IvmlElement {
                 var.setValue(ValueFactory.createValue(type), AssignmentState.ASSIGNED);
                 if (filter.isEnabled(var)) {
                     result = new DecisionVariable(config, var, filter);
-                    DecisionVariable[] tmp = new DecisionVariable[nested.length + 1];
-                    System.arraycopy(nested, 0, tmp, 0, nested.length);
-                    tmp[nested.length + 1] = result;
+                    int nestedLength = null == nested ? 0 : nested.length;
+                    DecisionVariable[] tmp = new DecisionVariable[nestedLength + 1];
+                    if (null != nested) {
+                        System.arraycopy(nested, 0, tmp, 0, nestedLength);
+                    }
+                    tmp[nestedLength] = result;
                     nested = tmp;
                 }
             } catch (ConfigurationException e) {

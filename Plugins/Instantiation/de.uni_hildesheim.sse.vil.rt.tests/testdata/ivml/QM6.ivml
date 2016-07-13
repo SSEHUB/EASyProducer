@@ -1,0 +1,40 @@
+project QM6 {
+    
+    enum BindingTime {compile = 0, startup = 1, runtime = 2};
+    annotate BindingTime bindingTime = BindingTime.compile to QM6;
+
+    compound Parameter {
+        String name;        
+    }
+    
+    typedef Parameters sequenceOf(Parameter) with (Parameters->collect(p|p.name).size() == Parameters.size()/*  and isDefined(Parameters)*/);
+    
+    compound IntegerParameter refines Parameter {
+        Integer defaultValue;
+        assign(bindingTime = BindingTime.runtime) to {
+            Integer value;
+        }
+    }
+
+    compound LoadShedder {
+        assign(bindingTime = BindingTime.runtime) to {
+            String name;
+            Parameters parameters;
+        }
+    }
+    
+    compound PipelineNode {
+        String name;
+        assign(bindingTime = BindingTime.runtime) to {
+            LoadShedder shedder;
+        }
+    }
+    
+    PipelineNode node = {
+        name = "testNode"
+    };
+    
+    freeze {
+        node;
+    } but (f|f.bindingTime >= BindingTime.runtime)
+}

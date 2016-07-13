@@ -1,0 +1,25 @@
+import enact;
+
+@advice(QM6)
+rtVilScript instances (Project source, Configuration config, Project target) {
+
+    strategy main(Project source, Configuration config, Project target) = {
+        objective true;
+        breakdown {
+            tactic t(config);
+        }
+    }
+
+    tactic t(Configuration config) = {
+        QM6 cfg = config;
+        PipelineNode n = cfg.node;
+        n.shedder.createValue(false);
+        LoadShedder shedder = n.shedder;
+        shedder.name = "NTH_ITEM";
+        shedder.parameters.createValue(false);
+        IntegerParameter ip = shedder.parameters.addValue(IntegerParameter);
+        ip.name = "NTH_TUPLE";
+        ip.value = 500;
+    }
+
+}
