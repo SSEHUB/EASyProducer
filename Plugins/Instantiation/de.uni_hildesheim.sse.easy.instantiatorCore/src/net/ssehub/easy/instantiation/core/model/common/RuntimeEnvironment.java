@@ -13,6 +13,7 @@ import net.ssehub.easy.basics.modelManagement.IVariable;
 import net.ssehub.easy.basics.modelManagement.IndentationConfiguration;
 import net.ssehub.easy.basics.modelManagement.RestrictionEvaluationException;
 import net.ssehub.easy.basics.modelManagement.Version;
+import net.ssehub.easy.instantiation.core.Bundle;
 import net.ssehub.easy.instantiation.core.model.artifactModel.IArtifact;
 import net.ssehub.easy.instantiation.core.model.expressions.IExpressionVisitor;
 import net.ssehub.easy.instantiation.core.model.expressions.IResolvable;
@@ -614,9 +615,10 @@ public abstract class RuntimeEnvironment implements IRuntimeEnvironment, IRestri
                     DecisionVariable decVar = (DecisionVariable) object;
                     oTypeName += " (" + decVar.getType() + ")";
                 }
-                throw new VilException("cannot assign value of type " + oTypeName 
-                    + " to " + var.getName() + " of type " + var.getType().getVilName(), 
-                    VilException.ID_RUNTIME_TYPE);
+                String msg = "cannot assign value of type " + oTypeName + " to " + var.getName()
+                    + " of type " + var.getType().getVilName();
+                Bundle.getLogger(RuntimeEnvironment.class).debug(msg);
+                throw new VilException(msg, VilException.ID_RUNTIME_TYPE);
             }
         }
         return object;
