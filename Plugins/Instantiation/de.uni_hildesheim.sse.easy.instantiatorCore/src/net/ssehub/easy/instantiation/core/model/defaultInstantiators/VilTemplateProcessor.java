@@ -374,16 +374,12 @@ public class VilTemplateProcessor implements IVilType {
                 caller = getParent(other);
             }
             String[] possiblePaths = getVtlPaths(other);
-            try {
-                Template template = obtainTemplate(templateName, getVtlRestrictions(templateName, other), 
+            Template template = obtainTemplate(templateName, getVtlRestrictions(templateName, other), 
                     possiblePaths, caller);
-                if (null != template) {
-                    process(template, config, target, other, tmp);
-                    result = new ListSet<IArtifact>(tmp, IArtifact.class);
-                } else {
-                    throwMissingTemplateError(templateName, possiblePaths);
-                }
-            } catch (VilException e) {
+            if (null != template) {
+                process(template, config, target, other, tmp);
+                result = new ListSet<IArtifact>(tmp, IArtifact.class);
+            } else {
                 throwMissingTemplateError(templateName, possiblePaths);
             }
         }
@@ -521,9 +517,9 @@ public class VilTemplateProcessor implements IVilType {
         IArtifact target, Map<String, Object> other, List<IArtifact> result) throws VilException {
         ITerminator terminator = null;
         TemplateLangExecution exec = null;
+        StringWriter out = new StringWriter();
         // executing the model
         try {
-            StringWriter out = new StringWriter();
             Map<String, Object> localParam = new HashMap<String, Object>();
             // put default parameter
             localParam.put(PARAM_CONFIG, config);
@@ -550,8 +546,19 @@ public class VilTemplateProcessor implements IVilType {
             }
         } catch (VilException e) {
             unregisterTerminatable(terminator, exec);
-            EASyLoggerFactory.INSTANCE.getLogger(VilTemplateProcessor.class, Bundle.ID).exception(e);
-            throw new VilException(e.getMessage(), VilException.ID_WHILE_INSTANTIATION);
+            
+            // Create more specific exception
+            StringBuffer errMsg = new StringBuffer(e.getMessage());
+            errMsg.append(" in template \"");
+            errMsg.append(template.getName());
+            errMsg.append("\".");
+            e = new VilException(errMsg.toString(), VilException.ID_WHILE_INSTANTIATION);
+            
+            // Append successfully written content to error log 
+            errMsg.append("\nWritten so far:\n");
+            errMsg.append(out.toString());
+            Bundle.getLogger(VilTemplateProcessor.class).error(errMsg.toString());
+            throw e;
         }
         result.add(target);
     }

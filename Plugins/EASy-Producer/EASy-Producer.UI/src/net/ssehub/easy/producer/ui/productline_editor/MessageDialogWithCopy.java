@@ -86,7 +86,7 @@ public class MessageDialogWithCopy extends MessageDialog {
         // Use Text control for message to allow copy
 
         if (message != null) {
-            Text msg = new Text(composite, SWT.READ_ONLY | SWT.MULTI);
+            Text msg = new Text(composite, SWT.READ_ONLY | SWT.MULTI | SWT.WRAP);
 
             msg.setText(message);
 
