@@ -155,9 +155,8 @@ public abstract class Resolver<M extends IResolvableModel<V>, O extends IResolva
      * Class for successively testing and resolving call expressions (super calls, imported calls, recursive calls).
      * 
      * @author Holger Eichelberger
-     *
      */
-    private class CallExpressionTester {
+    private class CallExpressionTester implements ICallExpressionTester<M, O, E, V> {
         
         private String name;
         private CallArgument[] arguments;
@@ -174,15 +173,8 @@ public abstract class Resolver<M extends IResolvableModel<V>, O extends IResolva
             this.arguments = arguments;
         }
 
-        /**
-         * Creates a call expression and tries to resolve the call.
-         * 
-         * @param model the model to resolve on
-         * @param isSuper whether it is a super call
-         * @param fromModel the model which issues the call
-         * @return the created call expression in case of success, <b>null</b> else
-         */
-        E createAndCheckCall(M model, boolean isSuper, M fromModel) {
+        @Override
+        public E createAndCheckCall(M model, boolean isSuper, M fromModel) {
             E result = null;
             try {
                 E tmp = createCallExpression(model, isSuper, name, arguments);
@@ -199,12 +191,8 @@ public abstract class Resolver<M extends IResolvableModel<V>, O extends IResolva
             return result;
         }
        
-        /**
-         * Returns the last exception produced by {@link #createAndCheckCall(IResolvableModel, boolean)}.
-         * 
-         * @return the last exception or <b>null</b>
-         */
-        VilException getLastException() {
+        @Override
+        public VilException getLastException() {
             return lastException;
         }
         
@@ -278,7 +266,8 @@ public abstract class Resolver<M extends IResolvableModel<V>, O extends IResolva
     }
     
     /**
-     * Creates a call to a {@link IResolvableOperation} for one of the current model instances.
+     * Creates a call to a {@link IResolvableOperation} for one of the current model instances. Uses the default
+     * call expression tester.
      * 
      * @param name the name of the function to be called
      * @param isSuper is it a super call?
@@ -286,10 +275,23 @@ public abstract class Resolver<M extends IResolvableModel<V>, O extends IResolva
      * @return the resolved expression
      * @throws VilException in case that the function cannot be resolved.
      */
+    public E createCallExpression(boolean isSuper, String name, CallArgument... arguments) throws VilException {
+        return createCallExpression(isSuper, name, new CallExpressionTester(name, arguments), arguments);
+    }
+    
+    /**
+     * Creates a call to a {@link IResolvableOperation} for one of the current model instances.
+     * 
+     * @param name the name of the function to be called
+     * @param isSuper is it a super call?
+     * @param tester the call expression tester
+     * @param arguments the arguments of the call
+     * @return the resolved expression
+     * @throws VilException in case that the function cannot be resolved.
+     */
     @SuppressWarnings("unchecked")
-    public E createCallExpression(boolean isSuper, String name, CallArgument... arguments) 
-        throws VilException {
-        CallExpressionTester tester = new CallExpressionTester(name, arguments);
+    public E createCallExpression(boolean isSuper, String name, ICallExpressionTester<M, O, E, V> tester, 
+        CallArgument... arguments) throws VilException {
         E result = null;
         if (!models.isEmpty()) {
             M model = models.peek();

@@ -1,0 +1,37 @@
+@advice(QM1)
+rtVilScript startupTactics (Project source, Configuration config, Project target, IAdaptationEvent event) {
+
+    tactic defaultTactic() = {
+    }
+
+    tactic startupTakeFirst(Configuration config, String pipName) = {
+        QM1 qm = config;
+        for(Pipeline pip:qm.pipelines) {
+            if (pip.name == pipName) {
+                for(Source src:pip.sources) {
+                    assignFirst(src);
+                };
+            }
+        };
+    }
+
+    assignFirst(Node node) = : {
+    }
+
+    assignFirst(Source src) = : {
+        for(Node n:src.next) {
+            assignFirst(n);
+        };
+    }
+
+    assignFirst(FamilyElement elt) = : {
+        Family fam = elt.family;
+        if (!elt.actual.isConfigured()) {
+            elt.actual = fam.members.toSequence().first();
+        }
+        for(Node n:elt.next) {
+            assignFirst(n);
+        };
+    }
+
+}

@@ -43,9 +43,12 @@ import net.ssehub.easy.instantiation.core.model.buildlangModel.ExpressionStateme
 import net.ssehub.easy.instantiation.core.model.buildlangModel.IRuleElement;
 import net.ssehub.easy.instantiation.core.model.buildlangModel.Imports;
 import net.ssehub.easy.instantiation.core.model.buildlangModel.Resolver;
+import net.ssehub.easy.instantiation.core.model.buildlangModel.Rule;
+import net.ssehub.easy.instantiation.core.model.buildlangModel.RuleCallExpression;
 import net.ssehub.easy.instantiation.core.model.buildlangModel.RuleExecutionResult;
 import net.ssehub.easy.instantiation.core.model.buildlangModel.VariableDeclaration;
 import net.ssehub.easy.instantiation.core.model.buildlangModel.Script.ScriptDescriptor;
+import net.ssehub.easy.instantiation.core.model.common.ICallExpressionTester;
 import net.ssehub.easy.instantiation.core.model.common.VilException;
 import net.ssehub.easy.instantiation.core.model.expressions.CallArgument;
 import net.ssehub.easy.instantiation.core.model.expressions.Expression;
@@ -467,6 +470,59 @@ public class ModelTranslator extends de.uni_hildesheim.sse.buildLanguageTranslat
     }
     
     /**
+     * Class for successively testing and resolving call expressions (super calls, imported calls, recursive calls).
+     * 
+     * @author Holger Eichelberger
+     */
+    private class BreakdownCallExpressionTester implements ICallExpressionTester<
+        net.ssehub.easy.instantiation.core.model.buildlangModel.Script, Rule, RuleCallExpression, VariableDeclaration> {
+
+        private String name;
+        private CallArgument[] arguments;
+        private VilException lastException;
+        private boolean strategy;
+
+        /**
+         * Creates a call expression tester.
+         *
+         * @param strategy or tactic call?
+         * @param name name of the call
+         * @param arguments call arguments
+         */
+        private BreakdownCallExpressionTester(boolean strategy, String name, CallArgument... arguments) {
+            this.name = name;
+            this.arguments = arguments;
+            this.strategy = strategy;
+        }
+        
+        @Override
+        public AbstractBreakdownCall createAndCheckCall(
+            net.ssehub.easy.instantiation.core.model.buildlangModel.Script model, boolean isSuper,
+            net.ssehub.easy.instantiation.core.model.buildlangModel.Script fromModel) {
+        
+            AbstractBreakdownCall result = null;
+            try {
+                if (strategy) {
+                    result = new StrategyCall((Script) model, name, arguments);
+                } else {
+                    result = new TacticCall((Script) model, name, arguments);
+                }
+                result.inferType();
+            } catch (VilException e) {
+                lastException = e;
+                result = null;
+            }
+            return result;             
+        }
+
+        @Override
+        public VilException getLastException() {
+            return lastException;
+        }
+        
+    }
+    
+    /**
      * Processes a breakdown statement.
      * 
      * @param stmt the ECore representation of the statement
@@ -485,14 +541,19 @@ public class ModelTranslator extends de.uni_hildesheim.sse.buildLanguageTranslat
         
         AbstractBreakdownCall result;
         try {
+            BreakdownCallExpressionTester tester;
             if ("strategy".equals(stmt.getType())) {
-                result = new StrategyCall(parent, name, args);
+                tester = new BreakdownCallExpressionTester(true, name, args);
+                //result = new StrategyCall(parent, name, args);
             } else if ("tactic".equals(stmt.getType())) {
-                result = new TacticCall(parent, name, args);
+                tester = new BreakdownCallExpressionTester(false, name, args);
+                //result = new TacticCall(parent, name, args);
             } else {
                 throw new TranslatorException("unknown breakdown element", stmt, 
                     RtVilPackage.Literals.BREAKDOWN_STATEMENT__NAME, TranslatorException.INTERNAL);
             }
+            result = (AbstractBreakdownCall) resolver.createCallExpression(false, name, tester, args);
+System.out.println(result.getName()+" "+result.getModel().getName());            
             if (null != stmt.getGuard()) {
                 result.setGuardExpression(eTranslator.processLogicalExpression(stmt.getGuard(), resolver));
             }
@@ -532,7 +593,7 @@ public class ModelTranslator extends de.uni_hildesheim.sse.buildLanguageTranslat
                 }
                 result.setTimeoutExpression(eTranslator.processExpression(stmt.getTime(), resolver));
             }
-            result.inferType();
+            //result.inferType();
         } catch (VilException e) {
             throw new TranslatorException(e, stmt, RtVilPackage.Literals.BREAKDOWN_STATEMENT__NAME);
         }

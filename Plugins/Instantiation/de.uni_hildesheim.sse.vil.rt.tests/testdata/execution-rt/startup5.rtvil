@@ -1,5 +1,7 @@
+import startupTactics;
+
 @advice(QM1)
-rtVilScript startup4 (Project source, Configuration config, Project target, IAdaptationEvent event, mapOf(String, Real) values) {
+rtVilScript startup5 (Project source, Configuration config, Project target, IAdaptationEvent event, mapOf(String, Real) values) {
 
     strategy main(Project source, Configuration config, Project target, IAdaptationEvent event) = {
         objective true;
@@ -15,40 +17,7 @@ rtVilScript startup4 (Project source, Configuration config, Project target, IAda
         }
     }
 
-    tactic defaultTactic() = {
-    }
-
-    tactic startupTakeFirst(Configuration config, String pipName) = {
-        QM1 qm = config;
-        for(Pipeline pip:qm.pipelines) {
-            if (pip.name == pipName) {
-                for(Source src:pip.sources) {
-                    assignFirst(src);
-                };
-            }
-        };
-    }
-
     initialize(Configuration config) = : {
-    }
-
-    assignFirst(Node node) = : {
-    }
-
-    assignFirst(Source src) = : {
-        for(Node n:src.next) {
-            assignFirst(n);
-        };
-    }
-
-    assignFirst(FamilyElement elt) = : {
-        Family fam = elt.family;
-        if (!elt.actual.isConfigured()) {
-            elt.actual = fam.members.toSequence().first();
-        }
-        for(Node n:elt.next) {
-            assignFirst(n);
-        };
     }
 
     enact(Project source, Configuration config, Project target) = : {

@@ -229,7 +229,7 @@ public class ExecutionRtTests extends AbstractRtTest {
         Assert.assertEquals("famelt1", algC.getElement());
         Assert.assertEquals("alg1", algC.getAlgorithm()); // see rtvil + ivml
     }
-    
+
     /**
      * Tests a QM-like pipeline startup with value mapping.
      * 
@@ -237,7 +237,26 @@ public class ExecutionRtTests extends AbstractRtTest {
      */
     @Test
     public void testStartup4() throws IOException {
-        final String name = "startup4";
+        testStartup4o5("startup4");
+    }
+    
+    /**
+     * Tests a QM-like pipeline startup with value mapping (as startup5, tactics separated in own file).
+     * 
+     * @throws IOException should not occur
+     */
+    @Test
+    public void testStartup5() throws IOException {
+        testStartup4o5("startup5");
+    }
+    
+    /**
+     * Tests a QM-like pipeline startup with value mapping.
+     * 
+     * @param name the name of the rt-VIL file
+     * @throws IOException should not occur
+     */
+    private void testStartup4o5(final String name) throws IOException {
         File modelFile = createFile(name);
         CommandCollector.clear();
         Configuration cfg = getIvmlConfiguration("QM1", NoVariableFilter.INSTANCE);
