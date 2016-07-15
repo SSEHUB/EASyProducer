@@ -553,7 +553,6 @@ public class ModelTranslator extends de.uni_hildesheim.sse.buildLanguageTranslat
                     RtVilPackage.Literals.BREAKDOWN_STATEMENT__NAME, TranslatorException.INTERNAL);
             }
             result = (AbstractBreakdownCall) resolver.createCallExpression(false, name, tester, args);
-System.out.println(result.getName()+" "+result.getModel().getName());            
             if (null != stmt.getGuard()) {
                 result.setGuardExpression(eTranslator.processLogicalExpression(stmt.getGuard(), resolver));
             }

@@ -2,15 +2,15 @@
     qm <- <config>
     -> create FrozenSystemState(Map) with (null) = <FrozenSystemState>
     state <- <FrozenSystemState>
-    map {
-        map: a <- ALtest::algorithms {0}
+    for {
+        for: a <- ALtest::algorithms {0}
         -> bindValues(Algorithm, FrozenSystemState) with (ALtest::algorithms {0}, <FrozenSystemState>)
             algName <- alg1
             -> getAlgorithmObservation(FrozenSystemState, String, IObservable) with (<FrozenSystemState>, alg1, LATENCY) = 2.0
             algorithm.latency <- 2.0
             -> getAlgorithmObservation(FrozenSystemState, String, IObservable) with (<FrozenSystemState>, alg1, THROUGHPUT_ITEMS) = 2.0
             algorithm.throughputItem <- 2.0
-        map: a <- ALtest::algorithms {1}
+        for: a <- ALtest::algorithms {1}
         -> bindValues(Algorithm, FrozenSystemState) with (ALtest::algorithms {1}, <FrozenSystemState>)
             algName <- alg2
             -> getAlgorithmObservation(FrozenSystemState, String, IObservable) with (<FrozenSystemState>, alg2, LATENCY) = 2.0
@@ -18,8 +18,8 @@
             -> getAlgorithmObservation(FrozenSystemState, String, IObservable) with (<FrozenSystemState>, alg2, THROUGHPUT_ITEMS) = 2.0
             algorithm.throughputItem <- 2.0
     }
-    map {
-        map: p <- ALtest::pipelines {0}
+    for {
+        for: p <- ALtest::pipelines {0}
         -> bindValues(Pipeline, FrozenSystemState) with (ALtest::pipelines {0}, <FrozenSystemState>)
             pipName <- pipeline
             -> getPipelineObservation(FrozenSystemState, String, IObservable) with (<FrozenSystemState>, pipeline, LATENCY) = 5.0
@@ -30,11 +30,11 @@
             pipeline.capacity <- 5.0
             -> getPipelineObservation(FrozenSystemState, String, IObservable) with (<FrozenSystemState>, pipeline, EXECUTORS) = 5.0
             pipeline.executors <- 5.0
-            map {
-                map: s <- ALtest::Pipeline::sources {0}
+            for {
+                for: s <- ALtest::Pipeline::sources {0}
                 -> bindValues(Source, Pipeline, FrozenSystemState) with (ALtest::Pipeline::sources {0}, ALtest::pipelines {0}, <FrozenSystemState>)
-                    map {
-                        map: n <- ALtest::Source::next {0}
+                    for {
+                        for: n <- ALtest::Source::next {0}
                         -> bindValues(FamilyElement, Pipeline, FrozenSystemState) with (ALtest::Source::next {0}, ALtest::pipelines {0}, <FrozenSystemState>)
                             pipName <- pipeline
                             eltName <- process
@@ -42,8 +42,8 @@
                             elt.capacity <- 1.0
                             -> getPipelineElementObservation(FrozenSystemState, String, String, IObservable) with (<FrozenSystemState>, pipeline, process, EXECUTORS) = 1.0
                             elt.executors <- 1.0
-                            map {
-                                map: n <- ALtest::FamilyElement::next {0}
+                            for {
+                                for: n <- ALtest::FamilyElement::next {0}
                                 -> bindValues(Node, Pipeline, FrozenSystemState) with (ALtest::FamilyElement::next {0}, ALtest::pipelines {0}, <FrozenSystemState>)
                             }
                     }
@@ -53,15 +53,15 @@
     -> getPipeline(StartupAdaptationEvent) with (<StartupAdaptationEvent>) = pipeline
     -> startupTakeFirst(Configuration, String) with (<config>, pipeline)
         qm <- <config>
-        map {
-            map: pip <- ALtest::pipelines {0}
+        for {
+            for: pip <- ALtest::pipelines {0}
             -> ==(IvmlElement, Any) with (ALtest::Pipeline::name, pipeline) = true
             visit if-branch
-            map {
-                map: src <- ALtest::Pipeline::sources {0}
+            for {
+                for: src <- ALtest::Pipeline::sources {0}
                 -> assignFirst(Source) with (ALtest::Pipeline::sources {0})
-                    map {
-                        map: n <- ALtest::Source::next {0}
+                    for {
+                        for: n <- ALtest::Source::next {0}
                         -> assignFirst(FamilyElement) with (ALtest::Source::next {0})
                             fam <- ALtest::FamilyElement::family
                             -> isConfigured(DecisionVariable) with (ALtest::FamilyElement::actual) = false
@@ -70,8 +70,8 @@
                             -> toSequence(Set) with ({ALtest::Family::members {0}, ALtest::Family::members {1}}) = {ALtest::Family::members {0}, ALtest::Family::members {1}}
                             -> first(Sequence) with ({ALtest::Family::members {0}, ALtest::Family::members {1}}) = ALtest::Family::members {0}
                             elt.actual <- ALtest::Family::members {0}
-                            map {
-                                map: n <- ALtest::FamilyElement::next {0}
+                            for {
+                                for: n <- ALtest::FamilyElement::next {0}
                                 -> assignFirst(Node) with (ALtest::FamilyElement::next {0})
                             }
                     }
@@ -81,13 +81,13 @@
     -> enact(Project, Configuration, Project) with (<project>, <config>, <project>)
         -> selectChangedWithContext(Configuration) with (<config>) = <config>
         qm <- <config>
-        map {
-            map: p <- ALtest::pipelines {0}
-            map {
-                map: s <- ALtest::Pipeline::sources {0}
+        for {
+            for: p <- ALtest::pipelines {0}
+            for {
+                for: s <- ALtest::Pipeline::sources {0}
                 -> enact(Pipeline, Source) with (ALtest::pipelines {0}, ALtest::Pipeline::sources {0})
-                    map {
-                        map: n <- ALtest::Source::next {0}
+                    for {
+                        for: n <- ALtest::Source::next {0}
                         -> enact(Pipeline, FamilyElement) with (ALtest::pipelines {0}, ALtest::Source::next {0})
                             family <- ALtest::FamilyElement::family
                             -> create CommandSequence() with () = <CommandSequence>
@@ -96,7 +96,7 @@
                             visit if-branch
                             -> create AlgorithmChangeCommand(String, String, String) with (pipeline, process, alg1) = <AlgorithmChangeCommand>
                             -> add(CommandSequence, Command) with (<CommandSequence>, <AlgorithmChangeCommand>)
-                            map {
+                            for {
                             }
                             -> exec(CommandSequence) with (<CommandSequence>)
                     }

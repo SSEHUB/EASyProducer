@@ -20,9 +20,9 @@ rtVilScript startup (Project source, Configuration config, Project target, IAdap
 
     tactic startupTakeFirst(Configuration config, String pipName) = {
         QM1 qm = config;
-        map(Pipeline pip:qm.pipelines) {
+        for(Pipeline pip:qm.pipelines) {
             if (pip.name == pipName) {
-                map(Source src:pip.sources) {
+                for(Source src:pip.sources) {
                     assignFirst(src);
                 };
             }
@@ -33,7 +33,7 @@ rtVilScript startup (Project source, Configuration config, Project target, IAdap
     }
 
     assignFirst(Source src) = : {
-        map(Node n:src.next) {
+        for(Node n:src.next) {
             assignFirst(n);
         };
     }
@@ -43,15 +43,15 @@ rtVilScript startup (Project source, Configuration config, Project target, IAdap
         if (!elt.actual.isConfigured()) {
             elt.actual = fam.members.toSequence().first();
         }
-        map(Node n:elt.next) {
+        for(Node n:elt.next) {
             assignFirst(n);
         };
     }
 
     enact(Project source, Configuration config, Project target) = : {
         QM1 qm = config.selectChangedWithContext();
-        map(Pipeline p:qm.pipelines) {
-            map(Source s:p.sources) {
+        for(Pipeline p:qm.pipelines) {
+            for(Source s:p.sources) {
                 enact(p, s);
             };
         };
@@ -61,7 +61,7 @@ rtVilScript startup (Project source, Configuration config, Project target, IAdap
     }
 
     enact(Pipeline pipeline, Source source) = : {
-        map(Node n:source.next) {
+        for(Node n:source.next) {
             enact(pipeline, n);
         };
     }
@@ -72,7 +72,7 @@ rtVilScript startup (Project source, Configuration config, Project target, IAdap
         if (elt.actual != null) {
             cmd.add(new AlgorithmChangeCommand(pipeline.name, elt.name, elt.actual.name));
         }
-        map(Node n:elt.next) {
+        for(Node n:elt.next) {
             enact(pipeline, n);
         };
         cmd.exec();

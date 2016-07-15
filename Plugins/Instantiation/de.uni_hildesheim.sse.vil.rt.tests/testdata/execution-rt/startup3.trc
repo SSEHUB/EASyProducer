@@ -14,15 +14,15 @@
     -> getPipeline(LifecycleEvent) with (<LifecycleEvent>) = pip
     -> startupTakeFirst(Configuration, String) with (<config>, pip)
         qm <- <config>
-        map {
-            map: pip <- QM1::pipelines {0}
+        for {
+            for: pip <- QM1::pipelines {0}
             -> ==(IvmlElement, Any) with (QM1::Pipeline::name, pip) = true
             visit if-branch
-            map {
-                map: src <- QM1::Pipeline::sources {0}
+            for {
+                for: src <- QM1::Pipeline::sources {0}
                 -> assignFirst(Source) with (QM1::Pipeline::sources {0})
-                    map {
-                        map: n <- QM1::Source::next {0}
+                    for {
+                        for: n <- QM1::Source::next {0}
                         -> assignFirst(FamilyElement) with (QM1::Source::next {0})
                             fam <- QM1::FamilyElement::family
                             -> isConfigured(DecisionVariable) with (QM1::FamilyElement::actual) = false
@@ -31,7 +31,7 @@
                             -> toSequence(Set) with ({QM1::Family::members {0}, QM1::Family::members {1}}) = {QM1::Family::members {0}, QM1::Family::members {1}}
                             -> first(Sequence) with ({QM1::Family::members {0}, QM1::Family::members {1}}) = QM1::Family::members {0}
                             elt.actual <- QM1::Family::members {0}
-                            map {
+                            for {
                             }
                     }
             }
@@ -40,13 +40,13 @@
     -> enact(Project, Configuration, Project) with (<project>, <config>, <project>)
         -> selectChangedWithContext(Configuration) with (<config>) = <config>
         qm <- <config>
-        map {
-            map: p <- QM1::pipelines {0}
-            map {
-                map: s <- QM1::Pipeline::sources {0}
+        for {
+            for: p <- QM1::pipelines {0}
+            for {
+                for: s <- QM1::Pipeline::sources {0}
                 -> enact(Pipeline, Source) with (QM1::pipelines {0}, QM1::Pipeline::sources {0})
-                    map {
-                        map: n <- QM1::Source::next {0}
+                    for {
+                        for: n <- QM1::Source::next {0}
                         -> enact(Pipeline, FamilyElement) with (QM1::pipelines {0}, QM1::Source::next {0})
                             family <- QM1::FamilyElement::family
                             -> create CommandSequence() with () = <CommandSequence>
@@ -55,7 +55,7 @@
                             visit if-branch
                             -> create AlgorithmChangeCommand(String, String, String) with (pip, famelt1, alg1) = <AlgorithmChangeCommand>
                             -> add(CommandSequence, Command) with (<CommandSequence>, <AlgorithmChangeCommand>)
-                            map {
+                            for {
                             }
                             -> exec(CommandSequence) with (<CommandSequence>)
                     }

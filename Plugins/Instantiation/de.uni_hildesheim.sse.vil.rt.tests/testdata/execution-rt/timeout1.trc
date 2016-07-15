@@ -2,85 +2,85 @@
     -> s2()
         -> t1()
             i1 <- 5
-            map {
+            for {
                 -> createIntegerSequence(Integer, Integer) with (1, 20) = {1, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 2, 20, 3, 4, 5, 6, 7, 8, 9}
-                map: s <- 1
+                for: s <- 1
                 -> *(Integer, Integer) with (5, 1) = 5
                 -> +(Integer, Integer) with (5, 5) = 10
                 i1 <- 10
-                map: s <- 10
+                for: s <- 10
                 -> *(Integer, Integer) with (10, 10) = 100
                 -> +(Integer, Integer) with (100, 10) = 110
                 i1 <- 110
-                map: s <- 11
+                for: s <- 11
                 -> *(Integer, Integer) with (110, 11) = 1210
                 -> +(Integer, Integer) with (1210, 110) = 1320
                 i1 <- 1320
-                map: s <- 12
+                for: s <- 12
                 -> *(Integer, Integer) with (1320, 12) = 15840
                 -> +(Integer, Integer) with (15840, 1320) = 17160
                 i1 <- 17160
-                map: s <- 13
+                for: s <- 13
                 -> *(Integer, Integer) with (17160, 13) = 223080
                 -> +(Integer, Integer) with (223080, 17160) = 240240
                 i1 <- 240240
-                map: s <- 14
+                for: s <- 14
                 -> *(Integer, Integer) with (240240, 14) = 3363360
                 -> +(Integer, Integer) with (3363360, 240240) = 3603600
                 i1 <- 3603600
-                map: s <- 15
+                for: s <- 15
                 -> *(Integer, Integer) with (3603600, 15) = 54054000
                 -> +(Integer, Integer) with (54054000, 3603600) = 57657600
                 i1 <- 57657600
-                map: s <- 16
+                for: s <- 16
                 -> *(Integer, Integer) with (57657600, 16) = 922521600
                 -> +(Integer, Integer) with (922521600, 57657600) = 980179200
                 i1 <- 980179200
-                map: s <- 17
+                for: s <- 17
                 -> *(Integer, Integer) with (980179200, 17) = -516822784
                 -> +(Integer, Integer) with (-516822784, 980179200) = 463356416
                 i1 <- 463356416
-                map: s <- 18
+                for: s <- 18
                 -> *(Integer, Integer) with (463356416, 18) = -249519104
                 -> +(Integer, Integer) with (-249519104, 463356416) = 213837312
                 i1 <- 213837312
-                map: s <- 19
+                for: s <- 19
                 -> *(Integer, Integer) with (213837312, 19) = -232058368
                 -> +(Integer, Integer) with (-232058368, 213837312) = -18221056
                 i1 <- -18221056
-                map: s <- 2
+                for: s <- 2
                 -> *(Integer, Integer) with (-18221056, 2) = -36442112
                 -> +(Integer, Integer) with (-36442112, -18221056) = -54663168
                 i1 <- -54663168
-                map: s <- 20
+                for: s <- 20
                 -> *(Integer, Integer) with (-54663168, 20) = -1093263360
                 -> +(Integer, Integer) with (-1093263360, -54663168) = -1147926528
                 i1 <- -1147926528
-                map: s <- 3
+                for: s <- 3
                 -> *(Integer, Integer) with (-1147926528, 3) = 851187712
                 -> +(Integer, Integer) with (851187712, -1147926528) = -296738816
                 i1 <- -296738816
-                map: s <- 4
+                for: s <- 4
                 -> *(Integer, Integer) with (-296738816, 4) = -1186955264
                 -> +(Integer, Integer) with (-1186955264, -296738816) = -1483694080
                 i1 <- -1483694080
-                map: s <- 5
+                for: s <- 5
                 -> *(Integer, Integer) with (-1483694080, 5) = 1171464192
                 -> +(Integer, Integer) with (1171464192, -1483694080) = -312229888
                 i1 <- -312229888
-                map: s <- 6
+                for: s <- 6
                 -> *(Integer, Integer) with (-312229888, 6) = -1873379328
                 -> +(Integer, Integer) with (-1873379328, -312229888) = 2109358080
                 i1 <- 2109358080
-                map: s <- 7
+                for: s <- 7
                 -> *(Integer, Integer) with (2109358080, 7) = 1880604672
                 -> +(Integer, Integer) with (1880604672, 2109358080) = -305004544
                 i1 <- -305004544
-                map: s <- 8
+                for: s <- 8
                 -> *(Integer, Integer) with (-305004544, 8) = 1854930944
                 -> +(Integer, Integer) with (1854930944, -305004544) = 1549926400
                 i1 <- 1549926400
-                map: s <- 9
+                for: s <- 9
                 -> *(Integer, Integer) with (1549926400, 9) = 1064435712
                 -> +(Integer, Integer) with (1064435712, 1549926400) = -1680605184
                 i1 <- -1680605184

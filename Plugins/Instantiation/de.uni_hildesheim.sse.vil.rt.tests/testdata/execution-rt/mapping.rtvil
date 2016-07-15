@@ -12,7 +12,7 @@ rtVilScript mapping (Project source, Configuration config, Project target) {
     
     tactic t(Configuration config) = {
         QM3 qm = config;
-        map(HwNode n : qm.clusters) {
+        for(HwNode n : qm.clusters) {
             bindValues(n);
         };
     }

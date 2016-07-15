@@ -20,9 +20,9 @@ rtVilScript ALtest (Project source, Configuration config, Project target, Adapta
 
     tactic startupTakeFirst(Configuration config, String pipName) = {
         ALtest qm = config;
-        map(Pipeline pip:qm.pipelines) {
+        for(Pipeline pip:qm.pipelines) {
             if (pip.name == pipName) {
-                map(Source src:pip.sources) {
+                for(Source src:pip.sources) {
                     assignFirst(src);
                 };
             }
@@ -33,7 +33,7 @@ rtVilScript ALtest (Project source, Configuration config, Project target, Adapta
     }
 
     assignFirst(Source src) = : {
-        map(Node n:src.next) {
+        for(Node n:src.next) {
             assignFirst(n);
         };
     }
@@ -43,15 +43,15 @@ rtVilScript ALtest (Project source, Configuration config, Project target, Adapta
         if (!elt.actual.isConfigured()) {
             elt.actual = fam.members.toSequence().first();
         }
-        map(Node n:elt.next) {
+        for(Node n:elt.next) {
             assignFirst(n);
         };
     }
 
     enact(Project source, Configuration config, Project target) = : {
         ALtest qm = config.selectChangedWithContext();
-        map(Pipeline p:qm.pipelines) {
-            map(Source s:p.sources) {
+        for(Pipeline p:qm.pipelines) {
+            for(Source s:p.sources) {
                 enact(p, s);
             };
         };
@@ -61,7 +61,7 @@ rtVilScript ALtest (Project source, Configuration config, Project target, Adapta
     }
 
     enact(Pipeline pipeline, Source source) = : {
-        map(Node n:source.next) {
+        for(Node n:source.next) {
             enact(pipeline, n);
         };
     }
@@ -72,7 +72,7 @@ rtVilScript ALtest (Project source, Configuration config, Project target, Adapta
         if (elt.actual != null) {
             cmd.add(new AlgorithmChangeCommand(pipeline.name, elt.name, elt.actual.name));
         }
-        map(Node n:elt.next) {
+        for(Node n:elt.next) {
             enact(pipeline, n);
         };
         cmd.exec();
@@ -81,10 +81,10 @@ rtVilScript ALtest (Project source, Configuration config, Project target, Adapta
     bindValues(Configuration config, mapOf(String, Real) bindings) = : {
         ALtest qm = config;
         FrozenSystemState state = new FrozenSystemState(bindings);
-        map(Algorithm a:qm.algorithms) {
+        for(Algorithm a:qm.algorithms) {
             bindValues(a, state);
         };
-        map(Pipeline p:qm.pipelines) {
+        for(Pipeline p:qm.pipelines) {
             bindValues(p, state);
         };
     }
@@ -101,7 +101,7 @@ rtVilScript ALtest (Project source, Configuration config, Project target, Adapta
         pipeline.throughputItem = state.getPipelineObservation(pipName, TimeBehavior.THROUGHPUT_ITEMS);
         pipeline.capacity = state.getPipelineObservation(pipName, ResourceUsage.CAPACITY);
         pipeline.executors = state.getPipelineObservation(pipName, ResourceUsage.EXECUTORS);
-        map(Source s:pipeline.sources) {
+        for(Source s:pipeline.sources) {
             bindValues(s, pipeline, state);
         };
     }
@@ -110,7 +110,7 @@ rtVilScript ALtest (Project source, Configuration config, Project target, Adapta
     }
 
     bindValues(Source src, Pipeline pipeline, FrozenSystemState state) = : {
-        map(Node n:src.next) {
+        for(Node n:src.next) {
             bindValues(n, pipeline, state);
         };
     }
@@ -120,7 +120,7 @@ rtVilScript ALtest (Project source, Configuration config, Project target, Adapta
         String eltName = elt.name;
         elt.capacity = state.getPipelineElementObservation(pipName, eltName, ResourceUsage.CAPACITY);
         elt.executors = state.getPipelineElementObservation(pipName, eltName, ResourceUsage.EXECUTORS);
-        map(Node n:elt.next) {
+        for(Node n:elt.next) {
             bindValues(n, pipeline, state);
         };
     }

@@ -23,7 +23,7 @@ rtVilScript timeout1 (Project source, Configuration config, Project target) {
 
     tactic t1() = {
         Integer i1 = 5;
-        map(Integer s=createIntegerSequence(1, 20)) {
+        for(Integer s=createIntegerSequence(1, 20)) {
             i1 = i1 * s + i1;
         };
     }
