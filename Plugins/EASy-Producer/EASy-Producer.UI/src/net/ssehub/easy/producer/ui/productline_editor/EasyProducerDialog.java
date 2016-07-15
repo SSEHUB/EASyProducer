@@ -143,14 +143,30 @@ public class EasyProducerDialog {
                 }
             }
             
-            Shell shell = parent != null ? new Shell(parent) : new Shell();
-            int swtImage = hasConflict ? MessageDialog.ERROR : MessageDialog.INFORMATION;
-            MessageDialogWithCopy msgDialog = new MessageDialogWithCopy(shell, title, null, msg.toString(), swtImage,
-                new String[] {"OK"}, 0);
-            returnValue = msgDialog.open();
+            returnValue = showDialog(parent, title, msg.toString(), hasConflict);
         }
         
         return returnValue;
+    }
+    
+    /**
+     * Creates a dialog box, from where the error message can be copy-pasted to somewhere.
+     * @param parent The caller of this dialog, maybe <tt>null</tt>.
+     * @param title The title of the dialog, should be either {@link EASyProducerConstants#EASY_PRODUCER_ERROR} or
+     *     {@link EASyProducerConstants#EASY_PRODUCER_INFO}
+     * @param message The message to display on the dialog.
+     * @param isError Specification whether the displayed message is an error or only an information.
+     *     <tt>true</tt> a read error icon will be shown, <tt>false</tt>an info icon will be shown
+     * @return A window's return codes are window-specific, although two standard return codes are predefined:
+     * <code>Window.OK</code> and <code>Window.CANCEL</code>.
+     */
+    public static int showDialog(Shell parent, String title, String message, boolean isError) {
+        Shell shell = parent != null ? new Shell(parent) : new Shell();
+        int swtImage = isError ? MessageDialog.ERROR : MessageDialog.INFORMATION;
+        MessageDialogWithCopy msgDialog = new MessageDialogWithCopy(shell, title, null, message, swtImage,
+            new String[] {"OK"}, 0);
+        
+        return msgDialog.open();
     }
     
     /**
