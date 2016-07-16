@@ -287,8 +287,7 @@ public class CallExpression extends AbstractCallExpression implements IArgumentP
                 // 2 param are ensured by isTypeSelect, determine actual return type
                 returnGenerics = TypeDescriptor.createArray(1);
                 returnGenerics[0] = ((VilTypeExpression) arguments[1].getExpression()).getResolved(); // ugly
-            }
-            if (resolved.isGenericCollectionOperation()) {
+            } else if (resolved.isGenericCollectionOperation()) {
                 // implicit parameter 1 determines type
                 TypeDescriptor<?> arg0Type = arguments[0].getExpression().inferType();
                 if (arg0Type.getGenericParameterCount() > 0) { 

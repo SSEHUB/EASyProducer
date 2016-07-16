@@ -1006,4 +1006,14 @@ public class ExecutionTests extends AbstractExecutionTest<Script> {
         assertSelfInstantiate("typeSelect2", "main", "typeSelectTest", null);
     }
 
+    /**
+     * Tests type select over IVML types.
+     * 
+     * @throws IOException should not occur
+     */
+    @Test
+    public void testTypeSelect3() throws IOException {
+        assertSelfInstantiate("typeSelect3", "main", "typeSelectTest", null);
+    }
+
 }
