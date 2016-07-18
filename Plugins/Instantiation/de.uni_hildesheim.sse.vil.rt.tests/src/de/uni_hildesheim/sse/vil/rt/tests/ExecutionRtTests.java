@@ -623,6 +623,21 @@ public class ExecutionRtTests extends AbstractRtTest {
     public void testTactics1() throws IOException {
         assertEqual("tactics1");
     }
+    
+    /**
+     * Tests a non-fallthrough tactic based on re-configuration.
+     * 
+     * @throws IOException should not occur
+     */
+    @Test
+    public void testTactics2() throws IOException {
+        final String name = "tactics2";
+        Configuration cfg = getIvmlConfiguration("tactics2", NoVariableFilter.INSTANCE);
+        Map<String, Object> param = createParameterMap(null, null, cfg);
+        EqualitySetup<Script> setup = new EqualitySetup<Script>(createFile(name), name, null, 
+            createTraceFile(name), param);
+        assertEqual(setup);
+    }
 
     /**
      * Tests mapped map types.

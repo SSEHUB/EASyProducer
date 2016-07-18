@@ -811,7 +811,7 @@ public class RtVilExecution extends BuildlangExecution implements IRtVilVisitor 
         boolean failed = true;
         if (Status.SUCCESS == context.getStatus()) {
             if (Boolean.TRUE == callValidate(strategy)) {
-                callSucceeded(strategy);
+                callSucceeded(strategy, result);
                 successful.add(strategy);
                 callUpdate();
                 callEnact();
@@ -838,8 +838,8 @@ public class RtVilExecution extends BuildlangExecution implements IRtVilVisitor 
             cont = true;
         } else {
             if (Status.SUCCESS == callResult.getStatus()) {
-                Configuration cfg = (Configuration) getCurrentConfiguration().accept(this);
-                cont = (null == cfg || !cfg.getChangeHistory().hasChanges());
+                Configuration cfg = getCurrentConfigurationIvml();
+                cont = (null == cfg || !callResult.hasChanges());
             } else {
                 cont = true;
             }
@@ -920,7 +920,7 @@ public class RtVilExecution extends BuildlangExecution implements IRtVilVisitor 
         boolean failed = true;
         if (Status.SUCCESS == context.getStatus()) {
             if (Boolean.TRUE == callValidate(tactic)) {
-                callSucceeded(tactic);
+                callSucceeded(tactic, result);
                 // no callEnact();
                 failed = false;
                 successful.add(tactic);
@@ -990,6 +990,16 @@ public class RtVilExecution extends BuildlangExecution implements IRtVilVisitor 
     private Script getCurrentScript() {
         return (Script) getRuntimeEnvironment().getContextModel();
     }
+
+    /**
+     * Returns the current configuration as IVML instance.
+     * 
+     * @return the current configuration
+     * @throws VilException in case that accessing the configuration fails
+     */
+    private Configuration getCurrentConfigurationIvml() throws VilException {
+        return (Configuration) getCurrentConfiguration().accept(this);
+    }
     
     /**
      * Returns the configuration object used in <code>script</code>, i.e., the top-level configuration object.
@@ -1019,7 +1029,7 @@ public class RtVilExecution extends BuildlangExecution implements IRtVilVisitor 
      * @throws VilException in case that constructing, resolving or executing the corresponding VIL rule fails
      */
     private Object callValidate(IRtVilConcept concept) throws VilException {
-        Configuration cfg = (Configuration) getCurrentConfiguration().accept(this);
+        Configuration cfg = getCurrentConfigurationIvml();
         Object result = Boolean.TRUE;
         if (cfg.getChangeHistory().hasChanges()) {
             result = dfltRtVilConceptCall(concept, "validate", 
@@ -1042,9 +1052,14 @@ public class RtVilExecution extends BuildlangExecution implements IRtVilVisitor 
      * Calls the VTL succeeded rule if it exists.
      * 
      * @param concept the concept to call on
+     * @param result the execution result, to be modified as a side effect
      * @throws VilException in case that constructing, resolving or executing the corresponding VIL rule fails
      */
-    private void callSucceeded(IRtVilConcept concept) throws VilException {
+    private void callSucceeded(IRtVilConcept concept, RuleExecutionResult result) throws VilException {
+        Configuration cfg = getCurrentConfigurationIvml();
+        if (null != cfg) {
+            result.setChanges(cfg.getChangeHistory().hasChanges());
+        }
         dfltRtVilConceptCall(concept, "succeeded", SUCCEEDED_FALLBACK);
     }
     

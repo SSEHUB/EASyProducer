@@ -1,0 +1,29 @@
+@advice(tactics2)
+rtVilScript tactics2 (Project source, Configuration config, Project target, IAdaptationEvent event, mapOf(String, Real) values) {
+
+    strategy main(Project source, Configuration config, Project target, IAdaptationEvent event) = {
+        objective true;
+        breakdown {
+            tactic replayTactic(config);
+            tactic defaultTactic();
+        }
+    }
+
+    tactic replayTactic(Configuration config) = {
+        tactics2 cfg = config;
+        ReplaySink rpSink = cfg.rpSink;
+        ReplayInfo info = rpSink.replay;
+        info.active = false;
+    }
+
+    tactic fallthrough2Tactic() = {
+    }
+
+    tactic defaultTactic() = {
+        fail "shall not be called";
+    }
+
+    enact(Project source, Configuration config, Project target) = : {
+    }
+
+}

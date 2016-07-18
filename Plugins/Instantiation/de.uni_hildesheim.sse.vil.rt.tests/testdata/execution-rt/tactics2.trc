@@ -1,0 +1,8 @@
+-> main(Project, Configuration, Project, IAdaptationEvent) with (<project>, <config>, <project>, null)
+    -> replayTactic(Configuration) with (<config>)
+        cfg <- <config>
+        rpSink <- tactics2::rpSink
+        info <- tactics2::ReplaySink::replay
+        info.active <- false
+        Reasoner execution: true
+    -> enact(Project, Configuration, Project) with (<project>, <config>, <project>)

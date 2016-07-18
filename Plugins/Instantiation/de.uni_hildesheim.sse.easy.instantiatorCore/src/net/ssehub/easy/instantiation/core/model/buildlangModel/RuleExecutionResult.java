@@ -69,6 +69,7 @@ public class RuleExecutionResult implements IVilType {
     private List<IArtifact> allResults;
     private String failReason;
     private Integer failCode;
+    private boolean hasChanges;
 
     /**
      * Creates a new rule execution result.
@@ -183,6 +184,26 @@ public class RuleExecutionResult implements IVilType {
      */
     public Integer getFailCode() {
         return failCode;
+    }
+    
+    /**
+     * Defines whether the rule call represented by this instance changed the configuration
+     * and committed the changes.
+     * 
+     * @param hasChanges <code>true</code> for changes, <code>false</code> else
+     */
+    public void setChanges(boolean hasChanges) {
+        this.hasChanges = hasChanges;
+    }
+
+    /**
+     * Returns whether the rule call represented by this instance changed the configuration
+     * and committed the changes.
+     * 
+     * @return <code>true</code> for changes, <code>false</code> else
+     */
+    public boolean hasChanges() {
+        return hasChanges;
     }
 
 }

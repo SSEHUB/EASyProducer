@@ -1,0 +1,26 @@
+project tactics2 {
+  version v0;
+  
+  enum BindingTime {compile, runtime};
+  annotate BindingTime bindingTime = BindingTime.compile to tactics2;
+  
+  compound ReplayInfo {
+      assign(bindingTime = BindingTime.runtime) to {
+          Boolean active = true;
+      }
+  }
+  
+  compound ReplaySink {
+      String name;
+      assign (bindingTime = BindingTime.runtime) to {
+          ReplayInfo replay;
+      }
+  }
+  
+  ReplaySink rpSink = { name="rpSink" };
+  
+  freeze {
+    rpSink;
+  } but (v | v.bindingTime == BindingTime.runtime);
+  
+}
