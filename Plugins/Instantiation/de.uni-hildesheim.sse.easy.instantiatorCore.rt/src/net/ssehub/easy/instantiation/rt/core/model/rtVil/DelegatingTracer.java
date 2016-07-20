@@ -46,6 +46,15 @@ public class DelegatingTracer implements ITracer {
         this.delegate = delegate;
     }
     
+    /**
+     * Returns the delegate.
+     * 
+     * @return the delegate
+     */
+    protected net.ssehub.easy.instantiation.core.model.buildlangModel.ITracer getDelegate() {
+        return delegate;
+    }
+    
     @Override
     public void visitScript(Script script) {
         delegate.visitScript(script);

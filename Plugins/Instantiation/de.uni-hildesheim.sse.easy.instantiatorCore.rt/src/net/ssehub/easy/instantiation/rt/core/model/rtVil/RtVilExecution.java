@@ -33,6 +33,7 @@ import net.ssehub.easy.instantiation.core.model.vilTypes.IMetaType;
 import net.ssehub.easy.instantiation.core.model.vilTypes.TypeDescriptor;
 import net.ssehub.easy.instantiation.core.model.vilTypes.TypeRegistry;
 import net.ssehub.easy.instantiation.core.model.vilTypes.configuration.Configuration;
+import net.ssehub.easy.instantiation.core.model.vilTypes.configuration.IChangeHistoryTracer;
 import net.ssehub.easy.instantiation.core.model.vilTypes.configuration.IvmlTypes;
 import net.ssehub.easy.instantiation.rt.core.model.rtVil.AbstractBreakdownCall.TupleField;
 import net.ssehub.easy.instantiation.rt.core.model.rtVil.types.RtVilTypeRegistry;
@@ -252,6 +253,7 @@ public class RtVilExecution extends BuildlangExecution implements IRtVilVisitor 
     private String lastFailReason;
     private Integer lastFailCode;
     private ITracer rtTracer;
+    private IChangeHistoryTracer chgTracer;
     private int nestedStrategyCount;
     
     /**
@@ -418,6 +420,7 @@ public class RtVilExecution extends BuildlangExecution implements IRtVilVisitor 
         if (!stopAfterBindValues) {
             if (null != rtTracer) {
                 rtTracer.startStrategies();
+                attachChangeHistoryTracer();
             }
             VilException exc = null;
             try {
@@ -441,6 +444,9 @@ public class RtVilExecution extends BuildlangExecution implements IRtVilVisitor 
                     }
                 }
             }
+            if (null != rtTracer) {
+                detachChangeHistoryTracer();
+            }
             if (null != exc) {
                 throw exc;
             }
@@ -453,6 +459,38 @@ public class RtVilExecution extends BuildlangExecution implements IRtVilVisitor 
             result = new RuleExecutionResult(Status.SUCCESS, new RuleExecutionContext(dummy, getRuntimeEnvironment()));
         }
         return result;
+    }
+
+    /**
+     * Attaches the change history tracer to the change history.
+     */
+    private void attachChangeHistoryTracer() {
+        try {
+            if (rtTracer instanceof IChangeHistoryTracer) {
+                Configuration cfg = getCurrentConfigurationIvml();
+                if (null != cfg) {
+                    chgTracer = cfg.getChangeHistory().setTracer((IChangeHistoryTracer) rtTracer);
+                }
+            }
+        } catch (VilException e) {
+            LOGGER.info(e.getMessage());
+        }
+    }
+
+    /**
+     * Detaches a previously attached change history tracer to the change history.
+     * Call in pair with {@link #attachChangeHistoryTracer()} only.
+     */
+    private void detachChangeHistoryTracer() {
+        try {
+            Configuration cfg = getCurrentConfigurationIvml();
+            if (null != cfg) {
+                cfg.getChangeHistory().setTracer(chgTracer);
+                chgTracer = null;
+            }    
+        } catch (VilException e) {
+            LOGGER.info(e.getMessage());
+        }
     }
     
     /**

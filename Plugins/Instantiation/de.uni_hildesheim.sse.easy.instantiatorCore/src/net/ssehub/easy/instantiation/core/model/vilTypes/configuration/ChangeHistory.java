@@ -41,6 +41,7 @@ import net.ssehub.easy.varModel.model.values.Value;
 public class ChangeHistory implements IVilType, IStringValueProvider {
 
     private Configuration configuration;
+    private IChangeHistoryTracer tracer;
     private Map<IDecisionVariable, Value> originalValues = new HashMap<IDecisionVariable, Value>();
     private CSet committed = new CSet();
     private Stack<CSet> changeSetStack = new Stack<CSet>();
@@ -167,6 +168,9 @@ public class ChangeHistory implements IVilType, IStringValueProvider {
      */
     public void start() {
         changeSetStack.push(new CSet());
+        if (null != tracer) {
+            tracer.started(configuration);
+        }
     }
     
     /**
@@ -174,9 +178,15 @@ public class ChangeHistory implements IVilType, IStringValueProvider {
      */
     public void rollback() {
         if (!changeSetStack.isEmpty()) {
+            if (null != tracer) {
+                tracer.rollingBack(configuration);
+            }
             CSet top = changeSetStack.pop();
             for (Map.Entry<AbstractIvmlVariable, Value> entry : top.entrySet()) {
                 entry.getKey().setValue(entry.getValue());
+            }
+            if (null != tracer) {
+                tracer.rolledBack(configuration);
             }
         }
     }
@@ -187,6 +197,9 @@ public class ChangeHistory implements IVilType, IStringValueProvider {
      */
     public void commit() {
         if (!changeSetStack.isEmpty()) {
+            if (null != tracer) {
+                tracer.committing(configuration);
+            }
             CSet top = changeSetStack.pop();
             CSet target;
             if (changeSetStack.isEmpty()) {
@@ -198,6 +211,9 @@ public class ChangeHistory implements IVilType, IStringValueProvider {
                 if (!target.containsKey(entry.getKey())) {
                     target.put(entry.getKey(), entry.getValue());
                 }
+            }
+            if (null != tracer) {
+                tracer.committed(configuration);
             }
         }
     }
@@ -282,7 +298,11 @@ public class ChangeHistory implements IVilType, IStringValueProvider {
         if (!isSameValue(variable.getVariable().getValue(), value)) {
             CSet changeSet;
             if (!originalValues.containsKey(variable)) {
-                originalValues.put(variable.origVariable, value == null ? NullValue.INSTANCE : value);
+                Value oValue = value == null ? NullValue.INSTANCE : value;
+                originalValues.put(variable.origVariable, oValue);
+                if (null != tracer) {
+                    tracer.recordedOriginalVariable(variable, oValue);
+                }
             }
             if (!changeSetStack.isEmpty()) {
                 changeSet = changeSetStack.peek();
@@ -294,6 +314,9 @@ public class ChangeHistory implements IVilType, IStringValueProvider {
                     value = NullValue.INSTANCE;
                 }
                 changeSet.notifyChanged(variable, value);
+                if (null != tracer) {
+                    tracer.recordedChangedVariable(variable, value);
+                }
             }
         }
     }
@@ -346,6 +369,27 @@ public class ChangeHistory implements IVilType, IStringValueProvider {
         if (resetOriginalValues) {
             originalValues.clear();
         }
+    }
+    
+    /**
+     * Defines or unsets the configuration tracer.
+     * 
+     * @param tracer the tracer (may be <b>null</b> for unsetting)
+     * @return the tracer before setting
+     */
+    public IChangeHistoryTracer setTracer(IChangeHistoryTracer tracer) {
+        IChangeHistoryTracer old = this.tracer;
+        this.tracer = tracer;
+        return old;
+    }
+    
+    /**
+     * Returns the current tracer.
+     * 
+     * @return the tracer
+     */
+    public IChangeHistoryTracer getTracer() {
+        return tracer;
     }
     
 }
