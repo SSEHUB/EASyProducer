@@ -16,15 +16,19 @@ import net.ssehub.easy.dslCore.TranslationResult;
 import net.ssehub.easy.dslCore.translation.Message;
 import net.ssehub.easy.reasoning.core.reasoner.ReasonerConfiguration;
 import net.ssehub.easy.reasoning.core.reasoner.ReasoningResult;
-import net.ssehub.easy.reasoning.sseReasoner.Engine;
 import net.ssehub.easy.varModel.confModel.Configuration;
 import net.ssehub.easy.varModel.management.VarModel;
 import net.ssehub.easy.varModel.model.Project;
 
 /**
  * Test suite for automated test execution on build server.
- * Do not forget to add new test suites here.
+ * Do not forget to add new test suites here.<br/>
+ * Usually a property is used to specify the location of test data.
+ * This is done with the property
+ * {@link net.ssehub.easy.reasoning.core.frontend.TestConfiguration#SYSTEM_PROPERTY}. For instance: <br/>
+ * <tt>-DreasonerCore.testdata.home=C:\EASyProducer-git\Plugins\Reasoner\ReasonerCore\ReasonerCore.test\testdata</tt>
  * @author Sizonenko
+ * @author El-Sharkawy
  *
  */
 @RunWith(Suite.class)
