@@ -1,0 +1,14 @@
+/**
+ * Tests the creation of a new set by using a apply constraint.
+ * New set will not be assigned to an existing variable.
+ * Size of the new set will be tested -> should not fail.
+ * Further: The type of the new set differs to the original setOf(refTo(String)) -> setOf(String)
+ */
+project Apply_CreateSetWithUnpackedReferences_SizeTest_Valid {
+
+    version v0;
+    sequenceOf(String) array = {"Hello", " ", "World"};
+    setOf(refTo(String)) referedVars = {refBy(array[0]), refBy(array[2])};
+
+    referedVars->apply(refTo(String) itr; setOf(String) tmpValues = {} | tmpValues.add(refBy(itr))).size() == 2;
+}

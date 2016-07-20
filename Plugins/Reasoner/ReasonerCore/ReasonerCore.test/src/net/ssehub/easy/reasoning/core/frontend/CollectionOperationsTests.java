@@ -17,6 +17,7 @@ package net.ssehub.easy.reasoning.core.frontend;
 
 import java.io.IOException;
 
+import org.junit.Ignore;
 import org.junit.Test;
 
 /**
@@ -38,6 +39,8 @@ public abstract class CollectionOperationsTests extends AbstractReasonerFrontend
     private void performOpCheck(String localFile, boolean isValid) throws IOException {
         performCheck("collectionOperations/" + localFile, isValid);
     }
+    
+    // collect
     
     /**
      * Tests whether the reasoner is able to handle fulfilled
@@ -61,5 +64,77 @@ public abstract class CollectionOperationsTests extends AbstractReasonerFrontend
     @Test
     public void testCompoundCollectionConstraintInvalid() throws IOException {
         performOpCheck("CompoundCollectionConstraintTest_Invalid.ivml", false);
+    }
+    
+    // apply
+    
+    /**
+     * Tests whether the reasoner is able to handle fulfilled
+     * {@link net.ssehub.easy.varModel.model.datatypes.OclKeyWords#APPLY}. In detail:
+     * <ul>
+     *   <li>Tests the creation of a new set by using a apply constraint.</li>
+     *   <li>New set will <b>not</b> be assigned to an existing variable.</li>
+     *   <li>Size of the new set will be tested -&gt; should <b>not</b> fail.</li>
+     *   <li>Further: The type of the new set differs to the original setOf(refTo(String)) -&gt; setOf(String)</li>
+     * </ul>
+     * 
+     * @throws IOException in case of problems reading a model
+     */
+    @Test
+    public void testApplyCreateSetWithUnpackedReferencesSizeTestValid() throws IOException {
+        performOpCheck("Apply_CreateSetWithUnpackedReferences_SizeTest_Valid.ivml", true);
+    }
+    
+    /**
+     * Tests whether the reasoner is able to handle a violated
+     * {@link net.ssehub.easy.varModel.model.datatypes.OclKeyWords#APPLY}. In detail:
+     * <ul>
+     *   <li>Tests the creation of a new set by using a apply constraint.</li>
+     *   <li>New set will <b>not</b> be assigned to an existing variable.</li>
+     *   <li>Size of the new set will be tested -&gt; should fail.</li>
+     *   <li>Further: The type of the new set differs to the original setOf(refTo(String)) -&gt; setOf(String)</li>
+     * </ul>
+     * 
+     * @throws IOException in case of problems reading a model
+     */
+    @Ignore
+    @Test
+    public void testApplyCreateSetWithUnpackedReferencesSizeTestInvalid() throws IOException {
+        performOpCheck("Apply_CreateSetWithUnpackedReferences_SizeTest_Invalid.ivml", false);
+    }
+    
+    /**
+     * Tests whether the reasoner is able to handle a fulfilled
+     * {@link net.ssehub.easy.varModel.model.datatypes.OclKeyWords#APPLY}. In detail:
+     * <ul>
+     *   <li>Tests the creation of a new set by using a apply constraint.</li>
+     *   <li>New set will be assigned to an existing variable.</li>
+     *   <li>Size of the new set will be tested -&gt; should <b>not</b> fail.</li>
+     *   <li>Further: The type of the new set differs to the original setOf(refTo(String)) -&gt; setOf(String)</li>
+     * </ul>
+     * 
+     * @throws IOException in case of problems reading a model
+     */
+    @Test
+    public void testApplyCreateSetWithUnpackedReferencesAssignmentValid() throws IOException {
+        performOpCheck("Apply_CreateSetWithUnpackedReferences_Assignment_Valid.ivml", true);
+    }
+    
+    /**
+     * Tests whether the reasoner is able to handle a fulfilled
+     * {@link net.ssehub.easy.varModel.model.datatypes.OclKeyWords#APPLY}. In detail:
+     * <ul>
+     *   <li>Tests the creation of a new set by using a apply constraint.</li>
+     *   <li>New set will be assigned to an existing variable.</li>
+     *   <li>Size of the new set will be tested -&gt; should <b>not</b> fail.</li>
+     *   <li>Further: The type of the new set differs to the original setOf(refTo(String)) -&gt; setOf(String)</li>
+     * </ul>
+     * 
+     * @throws IOException in case of problems reading a model
+     */
+    @Ignore
+    @Test
+    public void testApplyCreateSetWithUnpackedReferencesAssignmentInvalid() throws IOException {
+        performOpCheck("Apply_CreateSetWithUnpackedReferences_Assignment_Invalid.ivml", false);
     }
 }
