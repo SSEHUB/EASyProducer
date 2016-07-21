@@ -27,6 +27,7 @@ import net.ssehub.easy.varModel.model.values.BooleanValue;
 import net.ssehub.easy.varModel.model.values.CompoundValue;
 import net.ssehub.easy.varModel.model.values.MetaTypeValue;
 import net.ssehub.easy.varModel.model.values.NullValue;
+import net.ssehub.easy.varModel.model.values.ReferenceValue;
 import net.ssehub.easy.varModel.model.values.Value;
 import net.ssehub.easy.varModel.model.values.ValueDoesNotMatchTypeException;
 import net.ssehub.easy.varModel.model.values.ValueFactory;
@@ -181,8 +182,8 @@ public class GenericOperations {
     static EvaluationAccessor equals(EvaluationAccessor operand, EvaluationAccessor[] arguments, boolean negate) {
         EvaluationAccessor result;
         if (null != operand && null != arguments && arguments.length == 1) {
-            Value oValue = operand.getValue();
-            Value aValue = arguments[0].getValue();
+            Value oValue = operand.getDereferredValue();
+            Value aValue = arguments[0].getDereferredValue();
             
             // Support equals on unequal datatypes (mixed Int/Real).
             if (null != oValue && oValue.getType() == RealType.TYPE && null != aValue
@@ -214,10 +215,18 @@ public class GenericOperations {
                 if (null == oValue || null == aValue) {
                     result = null;
                 } else {
+                    boolean operandIsRef = oValue instanceof ReferenceValue;
+                    boolean parameterIsRef = aValue instanceof ReferenceValue;
                     if (null == oValue || null == aValue) {
                         // one part is undefined
                         equals = false;
+                    } else if (operandIsRef != parameterIsRef) {
+                        // One is a reference, the other not -> unpack both and compare values
+                        oValue = operand.getDereferredValue();
+                        aValue = arguments[0].getDereferredValue();
+                        equals = oValue.equals(aValue);
                     } else {
+                        // No dereferencing is needed (two references a compared based on the containing value)
                         equals = oValue.equals(aValue);
                     }
                     if (negate) {

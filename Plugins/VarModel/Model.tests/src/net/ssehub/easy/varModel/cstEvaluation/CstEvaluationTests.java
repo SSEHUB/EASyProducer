@@ -34,6 +34,7 @@ import org.junit.runners.Suite.SuiteClasses;
     DynamicDispatchTest.class,
     IntegerOperationsTest.class,
     RealOperationsTest.class,
+    ReferenceEqualityTest.class,
     ReferenceOperationsTest.class,
     SequenceOperationsTest.class,
     SetOperationsTest.class,
