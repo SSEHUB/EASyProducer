@@ -38,11 +38,22 @@ public abstract class AbstractVilTracer
 
     private static final String INDENTATION_STEP = "  ";
     private String indentation = "";
+    private boolean emitTraceText;
+
+    /**
+     * Creates a tracer instance without emitting trace texts.
+     */
+    protected AbstractVilTracer() {
+        this(false);
+    }
     
     /**
      * Creates a tracer instance.
+     * 
+     * @param emitTraceText whether text passed to {@link #trace(String)} shall be emitted
      */
-    protected AbstractVilTracer() {
+    protected AbstractVilTracer(boolean emitTraceText) {
+        this.emitTraceText = emitTraceText;
     }
     
     /**
@@ -80,6 +91,9 @@ public abstract class AbstractVilTracer
     
     @Override
     public void trace(String text) {
+        if (emitTraceText) {
+            write(text);
+        }
     }
 
     @Override

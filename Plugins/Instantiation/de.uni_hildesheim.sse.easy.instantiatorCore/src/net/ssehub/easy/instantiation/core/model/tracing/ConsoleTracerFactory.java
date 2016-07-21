@@ -23,31 +23,41 @@ public class ConsoleTracerFactory extends TracerFactory {
     public static final TracerFactory INSTANCE = new ConsoleTracerFactory();
     
     // we assume one instantiation at a time
-    private static final StreamVilTracer TRACER = new StreamVilTracer();
+    private StreamVilTracer tracer;
 
     /**
      * Constructs a new tracer factory and sets this instance
-     * as the default tracer.
+     * as the default factory.
      */
     private ConsoleTracerFactory() {
+        tracer = new StreamVilTracer();
         setDefaultInstance(this);
+    }
+
+    /**
+     * Constructs a new tracer factory which may emit tracer texts. Does not change the default
+     * factory as opposed to {@link #ConsoleTracerFactory()}.
+     * 
+     * @param emitTraceText whether text passed to {@link #trace(String)} shall be emitted
+     */
+    public ConsoleTracerFactory(boolean emitTraceText) {
+        tracer = new StreamVilTracer(emitTraceText);
     }
     
     @Override
     public ITracer createTemplateLanguageTracerImpl() {
-        return TRACER;
+        return tracer;
     }
 
     @Override
     public net.ssehub.easy.instantiation.core.model.buildlangModel.ITracer
         createBuildLanguageTracerImpl() {
-        
-        return TRACER;
+        return tracer;
     }
 
     @Override
     public IInstantiatorTracer createInstantiatorTracerImpl() {
-        return TRACER;
+        return tracer;
     }
     
 }
