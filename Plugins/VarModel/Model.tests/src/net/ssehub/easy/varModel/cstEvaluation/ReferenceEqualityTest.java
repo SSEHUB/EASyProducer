@@ -155,9 +155,9 @@ public class ReferenceEqualityTest {
      */
     @Test
     public void testUnEqualityOfDifferentReferencesWithSameValues() {
-        Project testProject = createBasisTestProject("testStringEqualityBetweenDifferentInstances", StringType.TYPE,
-            "Hello", "Hello");
-        // str0 == refTo(str1)
+        Project testProject = createBasisTestProject("testUnEqualityOfDifferentReferencesWithSameValues",
+            StringType.TYPE, "Hello", "Hello");
+        // refVar0 == refVar1
         ConstraintSyntaxTree equalityCST = createEqualityConstraint(testProject, 2, 3, true);
         
         // Test correct evaluation of the created constraint
