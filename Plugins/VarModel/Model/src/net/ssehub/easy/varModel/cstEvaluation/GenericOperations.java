@@ -181,8 +181,8 @@ public class GenericOperations {
     static EvaluationAccessor equals(EvaluationAccessor operand, EvaluationAccessor[] arguments, boolean negate) {
         EvaluationAccessor result;
         if (null != operand && null != arguments && arguments.length == 1) {
-            Value oValue = operand.getValue();
-            Value aValue = arguments[0].getValue();
+            Value oValue = operand.getDereferredValue();
+            Value aValue = arguments[0].getDereferredValue();
             
             // Support equals on unequal datatypes (mixed Int/Real).
             if (null != oValue && oValue.getType() == RealType.TYPE && null != aValue
