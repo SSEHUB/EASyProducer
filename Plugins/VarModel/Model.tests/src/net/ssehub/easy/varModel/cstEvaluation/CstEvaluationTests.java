@@ -25,6 +25,7 @@ import org.junit.runners.Suite.SuiteClasses;
  */
 @RunWith(Suite.class)
 @SuiteClasses({
+    ApplyTests.class,
     OperationCounter.class,
     BooleanOperationsTest.class,
     CompoundOperationsTest.class,
