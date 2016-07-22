@@ -222,8 +222,8 @@ public class GenericOperations {
                         equals = false;
                     } else if (operandIsRef != parameterIsRef) {
                         // One is a reference, the other not -> unpack both and compare values
-                        oValue = operand.getDereferredValue();
-                        aValue = arguments[0].getDereferredValue();
+                        oValue = operand.getDereferencedValue();
+                        aValue = arguments[0].getDereferencedValue();
                         equals = oValue.equals(aValue);
                     } else {
                         // No dereferencing is needed (two references a compared based on the containing value)

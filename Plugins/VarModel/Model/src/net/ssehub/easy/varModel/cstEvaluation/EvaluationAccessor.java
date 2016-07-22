@@ -73,7 +73,7 @@ public abstract class EvaluationAccessor {
      * @return the dereferred value (may be <b>null</b> if undefined)
      * @see #getValue()
      */
-    public Value getDereferredValue() {
+    public Value getDereferencedValue() {
         Value dereferredValue = getValue();
         if (null != dereferredValue && dereferredValue instanceof ReferenceValue) {
             AbstractVariable referredDecl = ((ReferenceValue) dereferredValue).getValue();

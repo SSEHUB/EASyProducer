@@ -56,8 +56,31 @@ public class ReferenceEqualityTest {
      * <b>Expected result:</b> is valid
      */
     @Test
-    public void testStringEquality() {
-        Project testProject = createBasisTestProject("testStringEquality", StringType.TYPE, "Hello");
+    public void testStringEqualityViaAbstracrtDeclaration() {
+        Project testProject = createBasisTestProject("testStringEqualityViaAbstracrtDeclaration", StringType.TYPE,
+            false, "Hello");
+        // str == refTo(str)
+        ConstraintSyntaxTree equalityCST = createEqualityConstraint(testProject, 0, 1, true);
+        
+        // Test correct evaluation of the created constraint
+        validateConstraint(testProject, equalityCST, true);
+    }
+    
+    /**
+     * Tests that a String variable and a reference pointing to the variable are equal.<br/>
+     * A {@link ConstraintSyntaxTree} is used to point to the declaration, which must be parsed. <br/>
+     * <b>Tests:</b>
+     * <pre><code>
+     * String var0 = "Hello";
+     * refTo(String) refVar0 = refBy(var0);
+     * 
+     * var0 == refVar0;
+     * </code></pre>
+     * <b>Expected result:</b> is valid
+     */
+    @Test
+    public void testStringEqualityViaCST() {
+        Project testProject = createBasisTestProject("testStringEqualityViaCST", StringType.TYPE, true, "Hello");
         // str == refTo(str)
         ConstraintSyntaxTree equalityCST = createEqualityConstraint(testProject, 0, 1, true);
         
@@ -81,7 +104,7 @@ public class ReferenceEqualityTest {
     @Test
     public void testStringEqualityBetweenDifferentInstances() {
         Project testProject = createBasisTestProject("testStringEqualityBetweenDifferentInstances", StringType.TYPE,
-            "Hello", "Hello");
+             false, "Hello", "Hello");
         // str0 == refTo(str1)
         ConstraintSyntaxTree equalityCST = createEqualityConstraint(testProject, 0, 3, true);
         
@@ -106,7 +129,7 @@ public class ReferenceEqualityTest {
     @Test
     public void testStringUnEqualityBetweenDifferentInstancesValid() {
         Project testProject = createBasisTestProject("testStringUnEqualityBetweenDifferentInstancesValid",
-            StringType.TYPE, "Hello", "World");
+            StringType.TYPE, false, "Hello", "World");
         // str0 != refTo(str1)
         ConstraintSyntaxTree equalityCST = createEqualityConstraint(testProject, 0, 3, false);
         
@@ -132,7 +155,7 @@ public class ReferenceEqualityTest {
     @Test
     public void testStringUnEqualityBetweenDifferentInstancesInvalid() {
         Project testProject = createBasisTestProject("testStringUnEqualityBetweenDifferentInstancesInvalid",
-            StringType.TYPE, "Hello", "World");
+            StringType.TYPE, false, "Hello", "World");
         // str0 == refTo(str1)
         ConstraintSyntaxTree equalityCST = createEqualityConstraint(testProject, 0, 3, true);
         
@@ -156,7 +179,7 @@ public class ReferenceEqualityTest {
     @Test
     public void testUnEqualityOfDifferentReferencesWithSameValues() {
         Project testProject = createBasisTestProject("testUnEqualityOfDifferentReferencesWithSameValues",
-            StringType.TYPE, "Hello", "Hello");
+            StringType.TYPE, false, "Hello", "Hello");
         // refVar0 == refVar1
         ConstraintSyntaxTree equalityCST = createEqualityConstraint(testProject, 2, 3, true);
         
@@ -249,11 +272,19 @@ public class ReferenceEqualityTest {
      *     error analysis.
      * @param basisType The datatype which shall be used for all variable declarations
      *     (and as basis for the references).
+     * @param refValuesAsCst <tt>false</tt> The target {@link AbstractVariable} will directly be stored inside the
+     *     {@link net.ssehub.easy.varModel.model.values.ReferenceValue}, this declaration can be accessed via the
+     *     {@link net.ssehub.easy.varModel.model.values.ReferenceValue#getValue()} method. <tt>true</tt> A
+     *     {@link ConstraintSyntaxTree} is used to point to the declaration. In this case,
+     *     {@link net.ssehub.easy.varModel.model.values.ReferenceValue#getValueEx()} must be used and parsed to get the
+     *     desired declaration.
      * @param values The default values for the unreferred declarations. This specifies also how many variables shall be
-     *     created.
+     *     created. 
      * @return Returns a project which can be used for testing.
      */
-    private Project createBasisTestProject(String projectName, IDatatype basisType, Object... values) {
+    private Project createBasisTestProject(String projectName, IDatatype basisType, boolean refValuesAsCst,
+        Object... values) {
+        
         Project project = new Project(projectName);
         Reference refType = new Reference("reference_of_" + basisType.getName(), basisType, project);
         
@@ -276,6 +307,16 @@ public class ReferenceEqualityTest {
             try {
                 Value refValue = ValueFactory.createValue(refType, referredDecl);
                 ConstantValue cstValue = new ConstantValue(refValue);
+                /*
+                 * ReferenceValues may directly to point to a AbstractVariable (ReferenceValue.getValue()),
+                 * or use a constraint syntax tree to point to an AbstractVariable (ReferenceValue.getValueEx()).
+                 * Currently it points directly to the AbstractVariable
+                 */
+                if (refValuesAsCst) {
+                    // Value should store the CST (in this case only the ConstantValue)
+                    refValue = ValueFactory.createValue(refType, cstValue);
+                    cstValue = new ConstantValue(refValue);
+                }
                 decl.setValue(cstValue);
             } catch (ValueDoesNotMatchTypeException e) {
                 Assert.fail("Could not set reference value \"" + referredDecl.getName() +  "\" for \"" + decl.getName()
