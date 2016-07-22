@@ -5,7 +5,6 @@ import java.lang.reflect.Constructor;
 
 import org.junit.Assert;
 
-import net.ssehub.easy.basics.messages.Message;
 import net.ssehub.easy.basics.messages.Status;
 import net.ssehub.easy.varModel.model.ContainableModelElement;
 import net.ssehub.easy.varModel.model.DecisionVariableDeclaration;
@@ -27,6 +26,7 @@ import net.ssehub.easy.varModel.model.datatypes.Set;
 import net.ssehub.easy.varModel.model.datatypes.StringType;
 import net.ssehub.easy.varModel.persistency.IVMLWriter;
 import net.ssehub.easy.varModel.validation.IvmlValidationVisitor;
+import net.ssehub.easy.varModel.validation.ValidationMessage;
 
 /**
  * General utilities for writing test cases, using a {@link Project} as basement for testing.
@@ -77,13 +77,17 @@ public class ProjectTestUtilities {
         if (validator.getErrorCount() > 0) {
             StringBuffer errorMsg = new StringBuffer("Error: Project contains errors:");
             for (int i = 0; i < validator.getMessageCount(); i++) {
-                Message msg = validator.getMessage(i);
+                ValidationMessage msg = validator.getMessage(i);
                 Status status = msg.getStatus();
                 String description = msg.getDescription();
+                Object cause = msg.getCause();
+                String elemName = cause instanceof IModelElement ? ((IModelElement) cause).getName() : cause.toString();
                 
                 errorMsg.append("\n");
                 errorMsg.append(status.name());
-                errorMsg.append(": ");
+                errorMsg.append(" for element\"");
+                errorMsg.append(elemName);
+                errorMsg.append("\": ");
                 errorMsg.append(description);
             }
             Assert.fail(errorMsg.toString());

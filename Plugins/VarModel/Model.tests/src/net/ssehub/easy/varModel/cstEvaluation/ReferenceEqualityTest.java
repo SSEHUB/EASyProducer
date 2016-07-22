@@ -16,6 +16,7 @@
 package net.ssehub.easy.varModel.cstEvaluation;
 
 import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import net.ssehub.easy.varModel.confModel.Configuration;
@@ -28,8 +29,10 @@ import net.ssehub.easy.varModel.model.AbstractVariable;
 import net.ssehub.easy.varModel.model.DecisionVariableDeclaration;
 import net.ssehub.easy.varModel.model.Project;
 import net.ssehub.easy.varModel.model.datatypes.IDatatype;
+import net.ssehub.easy.varModel.model.datatypes.IntegerType;
 import net.ssehub.easy.varModel.model.datatypes.OclKeyWords;
 import net.ssehub.easy.varModel.model.datatypes.Reference;
+import net.ssehub.easy.varModel.model.datatypes.Sequence;
 import net.ssehub.easy.varModel.model.datatypes.StringType;
 import net.ssehub.easy.varModel.model.values.Value;
 import net.ssehub.easy.varModel.model.values.ValueDoesNotMatchTypeException;
@@ -186,6 +189,103 @@ public class ReferenceEqualityTest {
         // Test correct evaluation of the created constraint
         validateConstraint(testProject, equalityCST, false);
     }
+    
+    /**
+     * Tests that a container and a reference to this container are equal.<br/>
+     * <b>Tests:</b>
+     * <pre><code>
+     * sequenceOf(Integer) var0 = {1, 2, 3};
+     * refTo(sequenceOf(Integer)) refVar0 = refBy(var0);
+     * 
+     * var0 == refVar0;
+     * </code></pre>
+     * <b>Expected result:</b> is valid
+     */
+    @Test
+    public void testEqualityForContainers() {
+        Sequence seqType = new Sequence("seqOfInt", IntegerType.TYPE, null);
+        Value value = null;
+        try {
+            value = ValueFactory.createValue(seqType, 1, 2, 3);
+        } catch (ValueDoesNotMatchTypeException e) {
+            Assert.fail("Could not create container value: " + e.getMessage());
+        }
+        Project testProject = createBasisTestProject("testEqualityForContainers", seqType,
+            false, value);
+        seqType.setParent(testProject);
+        // sequence == refTo(sequence)
+        ConstraintSyntaxTree equalityCST = createEqualityConstraint(testProject, 0, 1, true);
+        
+        // Test correct evaluation of the created constraint
+        validateConstraint(testProject, equalityCST, true);
+    }
+    
+    /**
+     * Tests that a container and a reference to this container are equal.<br/>
+     * <b>Tests:</b>
+     * <pre><code>
+     * sequenceOf(Integer) var0 = {1, 2, 3};
+     * refTo(sequenceOf(Integer)) refVar0 = refBy(var0); // Not needed, but generated
+     * sequenceOf(refTo(Integer)) refVar1 = {refBy{var0[0]}, refBy{var0[1]}, refBy{var0[2]}}
+     * 
+     * var0 == refVar0;
+     * </code></pre>
+     * <b>Expected result:</b> is valid
+     */
+    @Ignore("sequenceOf(Integer) and sequenceOf(refTo(Integer)) are not compliant")
+    @Test
+    public void testEqualityForContainerElements() {
+        Sequence seqType1 = new Sequence("seqOfInt", IntegerType.TYPE, null);
+        Value value = null;
+        try {
+            value = ValueFactory.createValue(seqType1, 1, 2, 3);
+        } catch (ValueDoesNotMatchTypeException e) {
+            Assert.fail("Could not create container value: " + e.getMessage());
+        }
+        Project testProject = createBasisTestProject("testEqualityForContainerElements", seqType1,
+            false, value);
+        seqType1.setParent(testProject);
+        Reference intRefType = new Reference("intRef", IntegerType.TYPE, testProject);
+        Sequence seqType2 = new Sequence("seqOfIntRefs", intRefType, testProject);
+        DecisionVariableDeclaration refSeqDecl = new DecisionVariableDeclaration("refVar1", seqType2, testProject);
+        testProject.add(refSeqDecl);
+        
+        // Create value for sequenceOf(refTo(Integer)) pointing to each element of sequenceOf(Integer)
+        AbstractVariable orgDeclaration = (AbstractVariable) testProject.getElement(0);
+        Variable orgContainer = new Variable(orgDeclaration);
+        Value[] value2 = new Value[3];
+        for (int i = 0; i < value2.length; i++) {
+            OCLFeatureCall indexElement = null;
+            try {
+                ConstantValue indexValue = new ConstantValue(ValueFactory.createValue(IntegerType.TYPE, i));
+                indexElement = new OCLFeatureCall(orgContainer, OclKeyWords.INDEX_ACCESS, indexValue);
+            } catch (ValueDoesNotMatchTypeException e) {
+                Assert.fail("Could not create index based reference to\"" + orgDeclaration.getName() + "[" + i + "]\":"
+                    + e.getMessage());
+            }
+            try {
+                value2[i] = ValueFactory.createValue(intRefType, indexElement);
+            } catch (ValueDoesNotMatchTypeException e) {
+                Assert.fail("Could not create expression based reference value: " + e.getMessage());
+            }
+        }
+        try {
+            Value seqValue = ValueFactory.createValue(refSeqDecl.getType(), (Object[]) value2);
+            refSeqDecl.setValue(seqValue);
+        } catch (ValueDoesNotMatchTypeException e) {
+            Assert.fail("Could not create sequence value for \"" + refSeqDecl.getName() + "\": " + e.getMessage());
+        }
+        
+        // Project changed -> validate again before testing
+        ProjectTestUtilities.validateProject(testProject, true);
+        
+        
+        // sequence == refTo(sequence)
+        ConstraintSyntaxTree equalityCST = createEqualityConstraint(orgDeclaration, refSeqDecl, true);
+        
+        // Test correct evaluation of the created constraint
+        validateConstraint(testProject, equalityCST, true);
+    }
 
     /**
      * Evaluates the specified constraint with the {@link EvaluationVisitor} and tests that the
@@ -248,7 +348,7 @@ public class ReferenceEqualityTest {
             // Must be called to facilitate evaluation
             equalityCst.inferDatatype();
         } catch (CSTSemanticException e) {
-            Assert.fail("Could not infer datatype for apply constraint: " + e.getMessage());
+            Assert.fail("Could not infer datatype for \"" + op + "\" constraint: " + e.getMessage());
         }
         
         return equalityCst;
