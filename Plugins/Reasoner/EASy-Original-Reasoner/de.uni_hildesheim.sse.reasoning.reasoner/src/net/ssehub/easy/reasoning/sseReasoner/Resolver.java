@@ -705,16 +705,20 @@ public class Resolver {
         }
         for (int i = 0; i < evalBlock.getEvaluableCount(); i++) {
             if (evalBlock.getEvaluable(i) instanceof Constraint) {
-                Constraint constraint = (Constraint) evalBlock.getEvaluable(i);
-                ConstraintSyntaxTree cst = copyVisitor(constraint.getConsSyntax(), null);
-                try {
-                    cst.inferDatatype();
-                    constraint.setConsSyntax(cst);
-                    compoundEvalConstraints.add(constraint);
-//                    System.out.println("Eval constraint: " 
+                if (evalBlock.getEvaluable(i) instanceof Constraint) {
+                    Constraint evalConstraint = (Constraint) evalBlock.getEvaluable(i);
+                    ConstraintSyntaxTree evalCst = evalConstraint.getConsSyntax();
+                    ConstraintSyntaxTree cst = copyVisitor(evalCst, null);
+                    try {
+                        cst.inferDatatype();
+                        Constraint constraint = new Constraint(project);
+                        constraint.setConsSyntax(cst);
+                        compoundEvalConstraints.add(constraint);
+//                    System.out.println("Eval constraint after: " 
 //                        + StringProvider.toIvmlString(constraint.getConsSyntax()));
-                } catch (CSTSemanticException e) {
-                    LOGGER.exception(e);
+                    } catch (CSTSemanticException e) {
+                        LOGGER.exception(e);
+                    }                    
                 }
             }
         }
@@ -1428,8 +1432,8 @@ public class Resolver {
     
     /**
      * Method for transforming constraints with CopyVisitor.
-     * @param constraints Constraints to be transformed.
-     * @param makeDefaultConstraint True if constraints should be deault.
+     * @param constraints Constraints to be transformed (already copied constraint list).
+     * @param makeDefaultConstraint True if constraints should be default.
      * @return List of transformed constraints.
      */
     private List<Constraint> transformConstraints(List<Constraint> constraints, boolean makeDefaultConstraint) {
