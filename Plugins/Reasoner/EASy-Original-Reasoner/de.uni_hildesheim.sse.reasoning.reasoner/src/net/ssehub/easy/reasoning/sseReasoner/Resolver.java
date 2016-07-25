@@ -705,21 +705,19 @@ public class Resolver {
         }
         for (int i = 0; i < evalBlock.getEvaluableCount(); i++) {
             if (evalBlock.getEvaluable(i) instanceof Constraint) {
-                if (evalBlock.getEvaluable(i) instanceof Constraint) {
-                    Constraint evalConstraint = (Constraint) evalBlock.getEvaluable(i);
-                    ConstraintSyntaxTree evalCst = evalConstraint.getConsSyntax();
-                    ConstraintSyntaxTree cst = copyVisitor(evalCst, null);
-                    try {
-                        cst.inferDatatype();
-                        Constraint constraint = new Constraint(project);
-                        constraint.setConsSyntax(cst);
-                        compoundEvalConstraints.add(constraint);
+                Constraint evalConstraint = (Constraint) evalBlock.getEvaluable(i);
+                ConstraintSyntaxTree evalCst = evalConstraint.getConsSyntax();
+                ConstraintSyntaxTree cst = copyVisitor(evalCst, null);
+                try {
+                    cst.inferDatatype();
+                    Constraint constraint = new Constraint(project);
+                    constraint.setConsSyntax(cst);
+                    compoundEvalConstraints.add(constraint);
 //                    System.out.println("Eval constraint after: " 
 //                        + StringProvider.toIvmlString(constraint.getConsSyntax()));
-                    } catch (CSTSemanticException e) {
-                        LOGGER.exception(e);
-                    }                    
-                }
+                } catch (CSTSemanticException e) {
+                    LOGGER.exception(e);
+                } 
             }
         }
     }
