@@ -249,11 +249,12 @@ class CSTCopyVisitor extends CopyVisitor {
             IDatatype copiedType = copyier.getTranslatedType(initializer.getType());
             if (null != copiedType && copiedType instanceof Compound) {
                 try {
+                    assert initializer.getType().getClass() == copiedType.getClass();
                     setResult(new CompoundInitializer((Compound) copiedType, slots, slotDecls, exprs));
                 } catch (CSTSemanticException e) {
                     complete = false;
                     setResult(initializer);
-                    EASyLoggerFactory.INSTANCE.getLogger(CopyVisitor.class, Bundle.ID).exception(e);
+                    EASyLoggerFactory.INSTANCE.getLogger(CSTCopyVisitor.class, Bundle.ID).exception(e);
                 }
             } else {
                 complete = false;
@@ -275,11 +276,12 @@ class CSTCopyVisitor extends CopyVisitor {
             IDatatype copiedType = copyier.getTranslatedType(initializer.getType());
             if (null != copiedType && copiedType instanceof Container) {
                 try {
+                    assert initializer.getType().getClass() == copiedType.getClass();
                     setResult(new ContainerInitializer((Container) copiedType, exprs));
                 } catch (CSTSemanticException e) {
                     complete = false;
                     setResult(initializer);
-                    EASyLoggerFactory.INSTANCE.getLogger(CopyVisitor.class, Bundle.ID).exception(e);
+                    EASyLoggerFactory.INSTANCE.getLogger(CSTCopyVisitor.class, Bundle.ID).exception(e);
                 }
             } else {
                 complete = false;
