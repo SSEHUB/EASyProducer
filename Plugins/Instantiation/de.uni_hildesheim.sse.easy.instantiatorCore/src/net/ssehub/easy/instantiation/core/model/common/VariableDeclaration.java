@@ -185,5 +185,10 @@ public abstract class VariableDeclaration implements IResolvable, IVariable {
     public void resolveOperation(TypeDescriptor<?> type, IMetaOperation operation) {
         this.expression = new ResolvableOperationExpression(type, operation);
     }
+    
+    @Override
+    public String toString() {
+        return type.toString() + " " + name;
+    }
 
 }
