@@ -598,9 +598,10 @@ public class ProjectCopyVisitor extends AbstractProjectVisitor {
                 copiedType = originalType;
             } else if (Container.TYPE.isAssignableFrom(originalType)) {
                 copiedType = getTranslatedContainer((Container) originalType);
-            } else if (Compound.TYPE.isAssignableFrom(originalType) || Enum.TYPE.isAssignableFrom(originalType)
-                || DerivedDatatype.TYPE.isAssignableFrom(originalType)) {
+            } else if (originalType instanceof Compound || originalType instanceof Enum
+                || originalType instanceof DerivedDatatype) {
                 
+                // Type must be defined in project and must not be created on the fly!              
                 copiedType = (IDatatype) copiedElements.get(originalType);
             } else if (originalType instanceof Reference) {
                 copiedType = (IDatatype) copiedElements.get(originalType);
@@ -633,6 +634,7 @@ public class ProjectCopyVisitor extends AbstractProjectVisitor {
             }
         } 
         
+        assert copiedType == null || copiedType.getClass() == originalType.getClass();
         return copiedType;
     }
 
@@ -682,6 +684,7 @@ public class ProjectCopyVisitor extends AbstractProjectVisitor {
     public void visitDecisionVariableDeclaration(DecisionVariableDeclaration decl) {
         IDatatype type = getTranslatedType(decl.getType());
         if (null != type) {
+            assert type.getClass() == decl.getType().getClass();
             // Copy declaration
             DecisionVariableDeclaration copiedDecl = null;
             
@@ -705,6 +708,8 @@ public class ProjectCopyVisitor extends AbstractProjectVisitor {
             copyDefaultValue(decl, copiedDecl);
             
             // Annotations will be copied through copying the annotation in its visit method
+            
+            assert decl.getClass() == copiedDecl.getClass();
         } else {
             incompleteElements.addUnresolvedDeclarationType(decl);
         }
@@ -949,7 +954,14 @@ public class ProjectCopyVisitor extends AbstractProjectVisitor {
         
         // Copy nested elements like variable declarations
         for (int i = 0, end = block.getModelElementCount(); i < end; i++) {
-            block.getModelElement(i).accept(this);
+            ContainableModelElement orgElement = block.getModelElement(i);
+            ContainableModelElement copiedElement = getCopiedElement(orgElement);
+            if (null != copiedElement) {
+                // Was already copied, i.e., it is also an IPartialEvaluable
+                copiedBlock.addModelElement(copiedElement);
+            } else {
+                block.getModelElement(i).accept(this);
+            }
         }
         
         parents.removeFirst();
@@ -1108,6 +1120,7 @@ public class ProjectCopyVisitor extends AbstractProjectVisitor {
     public void visitReference(Reference reference) {
         IDatatype basisType = getTranslatedType(reference.getType());
         if (null != basisType) {
+            assert reference.getType().getClass() == basisType.getClass();
             Reference copiedType = new Reference(reference.getName(), basisType, (Project) parents.peekFirst());
             setComment(copiedType, reference);
             addToCurrentParent(copiedType);
@@ -1121,6 +1134,7 @@ public class ProjectCopyVisitor extends AbstractProjectVisitor {
     public void visitSequence(Sequence sequence) {
         IDatatype basisType = getTranslatedType(sequence.getContainedType());
         if (null != basisType) {
+            assert sequence.getContainedType().getClass() == basisType.getClass();
             Sequence copiedType = new Sequence(sequence.getName(), basisType, parents.peekFirst());
             setComment(copiedType, sequence);
             addToCurrentParent(copiedType);
@@ -1134,6 +1148,7 @@ public class ProjectCopyVisitor extends AbstractProjectVisitor {
     public void visitSet(Set set) {
         IDatatype basisType = getTranslatedType(set.getContainedType());
         if (null != basisType) {
+            assert set.getContainedType().getClass() == basisType.getClass();
             Set copiedType = new Set(set.getName(), basisType, parents.peekFirst());
             setComment(copiedType, set);
             addToCurrentParent(copiedType);

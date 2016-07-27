@@ -252,4 +252,14 @@ public class CallArgument {
         this.expr = new ResolvableOperationExpression(type, operation);
     }
 
+    @Override
+    public String toString() {
+        try {
+            inferType();
+        } catch (VilException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        return type != null ? type.getName() : "<unknown type>";
+    }
 }

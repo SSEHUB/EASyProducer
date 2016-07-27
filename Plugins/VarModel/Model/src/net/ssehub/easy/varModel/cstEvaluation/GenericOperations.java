@@ -27,6 +27,7 @@ import net.ssehub.easy.varModel.model.values.BooleanValue;
 import net.ssehub.easy.varModel.model.values.CompoundValue;
 import net.ssehub.easy.varModel.model.values.MetaTypeValue;
 import net.ssehub.easy.varModel.model.values.NullValue;
+import net.ssehub.easy.varModel.model.values.ReferenceValue;
 import net.ssehub.easy.varModel.model.values.Value;
 import net.ssehub.easy.varModel.model.values.ValueDoesNotMatchTypeException;
 import net.ssehub.easy.varModel.model.values.ValueFactory;
@@ -214,10 +215,18 @@ public class GenericOperations {
                 if (null == oValue || null == aValue) {
                     result = null;
                 } else {
+                    boolean operandIsRef = oValue instanceof ReferenceValue;
+                    boolean parameterIsRef = aValue instanceof ReferenceValue;
                     if (null == oValue || null == aValue) {
                         // one part is undefined
                         equals = false;
+                    } else if (operandIsRef != parameterIsRef) {
+                        // One is a reference, the other not -> unpack both and compare values
+                        oValue = operand.getDereferencedValue();
+                        aValue = arguments[0].getDereferencedValue();
+                        equals = oValue.equals(aValue);
                     } else {
+                        // No dereferencing is needed (two references a compared based on the containing value)
                         equals = oValue.equals(aValue);
                     }
                     if (negate) {

@@ -179,4 +179,19 @@ public class Def extends TemplateBlock implements ITemplateLangElement, IResolva
         return getSignature();
     }
 
+    @Override
+    public String toString() {
+        StringBuffer result = new StringBuffer(name);
+        result.append("(");
+        if (null != param && param.length > 0) {
+            result.append(param[0].toString());
+            for (int i = 1; i < param.length; i++) {
+                result.append(", ");                
+                result.append(param[i].toString());                
+            }
+        }
+        result.append(")");
+        
+        return result.toString();
+    }
 }

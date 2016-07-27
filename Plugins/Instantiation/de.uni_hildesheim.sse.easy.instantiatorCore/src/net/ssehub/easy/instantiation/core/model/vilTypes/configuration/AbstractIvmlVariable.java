@@ -873,4 +873,9 @@ public abstract class AbstractIvmlVariable extends IvmlElement {
         return result;
     }
 
+    @Override
+    public String toString() {
+        AbstractVariable decl = variable.getDeclaration();
+        return decl.getType().toString() + " " + decl.getName() + " = " + variable.getValue().toString();
+    }
 }
