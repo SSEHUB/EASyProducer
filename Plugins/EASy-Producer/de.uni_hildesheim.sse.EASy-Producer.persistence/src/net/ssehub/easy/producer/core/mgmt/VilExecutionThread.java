@@ -46,6 +46,7 @@ public class VilExecutionThread implements Runnable {
     private Executor executor;
     private PLPInfo plp;
     private ProgressObserver observer;
+    private boolean userAborted;
     
     private List<IVilExecutionListener> listeners;
     
@@ -117,6 +118,7 @@ public class VilExecutionThread implements Runnable {
      */
     public void startInstantiation(ProgressObserver observer, boolean waitFor) {
         if (null == executor) {
+            userAborted = false;
             this.observer = (observer != null) ? observer : ProgressObserver.NO_OBSERVER;
             executor = createExecutor();
             Thread executionThread = new Thread(this);
@@ -138,6 +140,7 @@ public class VilExecutionThread implements Runnable {
      */
     public void abortInstantiation() {
         if (null != executor) {
+            userAborted = true;
             executor.stop();
         }
     }
@@ -157,7 +160,7 @@ public class VilExecutionThread implements Runnable {
             plp.refresh();
         }
         for (int i = 0; i < listeners.size(); i++) {
-            listeners.get(i).vilExecutionFinished(plp);
+            listeners.get(i).vilExecutionFinished(plp, !userAborted);
         }
     }
 }
