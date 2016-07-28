@@ -18,32 +18,31 @@ public @interface ClassMeta {
      * The actual name of the operation as it shall appear in VIL. This supersedes the 
      * original operation name.
      * 
-     * @return the operation name
      */
     String name() default "";
 
     /**
      * Defines assignment compatible (equivalent) classes. This is intended for 
      * basic / primitive types. Primitive types shall be referred by their wrappers
-     * and will be considered transparently.
+     * and will be considered transparently.<br/>
      * 
-     * @return the equivalent classes
+     * The equivalent classes
      */
     Class<?>[] equiv() default { };
     
     /**
      * Defines explicitly non-assignable  classes for which assignment compatibility shall
-     * not be possible. {@link #equiv()} takes precedence.
+     * not be possible. {@link #equiv()} takes precedence.<br/>
      * 
-     * @return the non assignable classes
+     * The non assignable classes
      */
     Class<?>[] nAssign() default { };
     
     /**
      * Search this class for further operations. This is in particular helpful
-     * for operations or conversions on interfaces. Object disables this.
+     * for operations or conversions on interfaces. Object disables this.<br/>
      * 
-     * @return the class containing further operations
+     * The class containing further operations
      */
     Class<?> furtherOperations() default Object.class;
 }
