@@ -167,17 +167,20 @@ public class OCLFeatureCall extends ConstraintSyntaxTree {
             checkTypeCompliance(op, operandType, paramTypes);
         }
         // normal operations
+        IDatatype origOperandType = operandType;
         operandType = BaseTypeVisitor.getBaseType(operandType);
         if (null == op) {
             operandType = Reference.dereference(operandType);
-            Reference.dereference(paramTypes);
+            dereference(parameters, paramTypes);
             op = TypeQueries.getOperation(operandType, operation, paramTypes);
+            op = checkOperand(op, origOperandType, paramTypes);
             if (null == op && null != paramTypes) {
                 IDatatype[] paramTypesBase = new IDatatype[paramTypes.length];
                 for (int p = 0; p < paramTypes.length; p++) {
                     paramTypesBase[p] = BaseTypeVisitor.getBaseType(paramTypes[p]);
                 }
                 op = TypeQueries.getOperation(operandType, operation, paramTypesBase);
+                op = checkOperand(op, origOperandType, paramTypes);
             }
             if (null == op) {
                 op = customInferDatatype(true);
@@ -193,7 +196,53 @@ public class OCLFeatureCall extends ConstraintSyntaxTree {
             replaceEmptyInitializer(op);
             checkRequiredAssignableParameter(op, operandType, paramTypes);
             result = getActualReturnType(op, operandType, paramTypes);
-            resolvedOperation = op;
+            if (null != result) {
+                resolvedOperation = op;
+            } else {
+                throw new UnknownOperationException(operation, CSTSemanticException.UNKNOWN_OPERATION, 
+                    operandType, paramTypes);
+            }
+        }
+    }
+
+    /**
+     * If required, checks the operand against the operation result type.
+     * 
+     * @param op the operation
+     * @param operandType the operand type
+     * @param paramTypes the parameter types
+     * @return <code>op</code> or <b>null</b> if <code>op</code> is not valid with respect to its operand
+     */
+    private Operation checkOperand(Operation op, IDatatype operandType, IDatatype[] paramTypes) {
+        Operation result = op;
+        if (null != op) {
+            ReturnTypeMode mode = op.getReturnTypeMode();
+            if (ReturnTypeMode.PARAM_1_CHECK == mode) {
+                if (Container.TYPE.isAssignableFrom(operandType) && 1 == operandType.getGenericTypeCount()) {
+                    if (!operandType.getGenericType(0).isAssignableFrom(
+                        getActualReturnType(op, operandType, paramTypes))) {
+                        result = null;
+                    }
+                }
+            }
+        }
+        return result;
+    }
+
+    /**
+     * Dereferences <code>types</code> if <code>parameter</code> does not indicate a refBy.
+     * 
+     * @param parameter the parameter
+     * @param types the types (modified as a side effect)
+     */
+    private static void dereference(ConstraintSyntaxTree[] parameter, IDatatype[] types) {
+        if (null != types) {
+            for (int p = 0; p < types.length; p++) {
+                IDatatype deref = Reference.dereference(types[p]);
+                if (types[p] != deref && !(parameter[p] instanceof ConstantValue)) { // constant expression -> refBy
+                    types[p] = deref;
+                } 
+            }            
         }
     }
     

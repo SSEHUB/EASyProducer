@@ -1,0 +1,9 @@
+project refby {
+
+    version v0;
+    sequenceOf(String) array = {"Hello", " ", "World"};
+    setOf(refTo(String)) referedVars = {refBy(array[0]), refBy(array[2])};
+    setOf(String) orgVars;
+    orgVars = referedVars->apply(refTo(String) itr;setOf(String) tmpValues = {}|add(tmpValues, refBy(itr)));
+    size(orgVars) == 2;
+}

@@ -51,44 +51,51 @@ public class Operation {
         /**
          * Do not change the return type.
          */
-        UNCHANGED(-1, -1, false),
+        UNCHANGED(-1, -1, false, false),
         
         /**
          * Change it to the immediate type of the operand.
          */
-        IMMEDIATE_OPERAND(-1, -1, false),
-        
-        /**
-         * Change it to the operand with generic parameter. If no generic
-         * parameter is available, {@link #IMMEDIATE_OPERAND} is applied.
-         */
-        TYPED_OPERAND_1(0, -1, false),
+        IMMEDIATE_OPERAND(-1, -1, false, false),
 
         /**
          * Change it to the operand with generic parameter. If no generic
          * parameter is available, {@link #IMMEDIATE_OPERAND} is applied.
          */
-        TYPED_PARAM_1(-1, 0, false),
+        TYPED_OPERAND_1(0, -1, false, false),
+
+        /**
+         * Change it to the operand with generic parameter. If no generic
+         * parameter is available, {@link #IMMEDIATE_OPERAND} is applied.
+         */
+        TYPED_PARAM_1(-1, 0, false, false),
 
         /**
          * Use the return value of the first operation parameter. If not
          * available, {@link #IMMEDIATE_OPERAND} is applied.
+         * Signals that checking the operand is desired.
          */
-        PARAM_1(-1, 0, false),
+        PARAM_1_CHECK(-1, 0, false, true),
+        
+        /**
+         * Use the return value of the first operation parameter. If not
+         * available, {@link #IMMEDIATE_OPERAND} is applied.
+         */
+        PARAM_1(-1, 0, false, false),
         
         /**
          * Change it to the first generic parameter. If no generic
          * parameter is available, {@link #IMMEDIATE_OPERAND} is applied.
          */
-        GENERIC_PARAM_1(0, -1, false),
-        
+        GENERIC_PARAM_1(0, -1, false, false),
+
         /**
          * Change it to the first generic operation parameter as generic type of the immediate 
          * operand in case that that is a collection. If the {@link #IMMEDIATE_OPERAND} is not a collection,
          * {@link #PARAM_1} will be applied. If no parameter
          * parameter is available, {@link #IMMEDIATE_OPERAND} is applied.
          */
-        IMMEDIATE_OPERAND_COLLECTION_PARAM_1(-1, 0, false),
+        IMMEDIATE_OPERAND_COLLECTION_PARAM_1(-1, 0, false, false),
 
         /**
          * Change it to the deepest nested first generic operation parameter as generic type of the immediate 
@@ -96,7 +103,8 @@ public class Operation {
          * {@link #PARAM_1} will be applied. If no parameter
          * parameter is available, {@link #IMMEDIATE_OPERAND} is applied.
          */
-        IMMEDIATE_OPERAND_COLLECTION_NESTED_GENERIC_1(-1, 0, true); // 0: using generic parameters as parameters here
+        // 0: using generic parameters as parameters here
+        IMMEDIATE_OPERAND_COLLECTION_NESTED_GENERIC_1(-1, 0, true, false); 
         
         /**
          * Stores the index of the affected generic type. Negative if none
@@ -114,6 +122,11 @@ public class Operation {
          * Whether searching for the result type shall be applied recursively / in a nested fashion if applicable.
          */
         private boolean recurse;
+        
+        /**
+         * Whether the operand (if a collection) shall fit the return type as parameter.
+         */
+        private boolean checkOperand;
 
         /**
          * Creates a new constant based on the affected generic type (index).
@@ -121,11 +134,22 @@ public class Operation {
          * @param typeIndex the affected generic type (negative if none is affected)
          * @param paramIndex the parameter type to be considered as return (none: relevant)
          * @param recurse searching for the result type shall be applied recursively 
+         * @param checkOperand whether the operand (if a collection) shall fit the return type as parameter
          */
-        private ReturnTypeMode(int typeIndex, int paramIndex, boolean recurse) {
+        private ReturnTypeMode(int typeIndex, int paramIndex, boolean recurse, boolean checkOperand) {
             this.typeIndex = typeIndex;
             this.paramIndex = paramIndex;
             this.recurse = recurse;
+            this.checkOperand = checkOperand;
+        }
+
+        /**
+         * Whether the operand (if a collection) shall fit the return type as parameter.
+         * 
+         * @return <code>true</code> for check, <code>false</code> else
+         */
+        public boolean checkOperand() {
+            return checkOperand;
         }
         
         /**
@@ -414,6 +438,7 @@ public class Operation {
         case IMMEDIATE_OPERAND:
             result = immediateOperand;
             break;
+        case PARAM_1_CHECK:
         case TYPED_PARAM_1:
         case PARAM_1:
             index = mode.getParameterIndex();

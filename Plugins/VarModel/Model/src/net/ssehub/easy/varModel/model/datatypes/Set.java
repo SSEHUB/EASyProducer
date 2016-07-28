@@ -53,7 +53,7 @@ public class Set extends Container {
         OclKeyWords.EXCLUDING, TYPE, AnyType.TYPE);
     public static final Operation INCLUDING = new Operation(TYPE, ReturnTypeMode.IMMEDIATE_OPERAND,
         OclKeyWords.INCLUDING, TYPE, AnyType.TYPE);
-    public static final Operation ADD = new Operation(AnyType.TYPE, ReturnTypeMode.GENERIC_PARAM_1, 
+    public static final Operation ADD = new Operation(AnyType.TYPE, ReturnTypeMode.PARAM_1_CHECK, 
         OclKeyWords.ADD, TYPE, AnyType.TYPE);
     public static final Operation FLATTEN = new Operation(TYPE, 
         ReturnTypeMode.IMMEDIATE_OPERAND_COLLECTION_NESTED_GENERIC_1, OclKeyWords.FLATTEN, TYPE);

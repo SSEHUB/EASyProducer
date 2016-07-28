@@ -10,6 +10,7 @@ import org.junit.Assert;
 import de.uni_hildesheim.sse.translation.ErrorCodes;
 import net.ssehub.easy.varModel.confModel.Configuration;
 import net.ssehub.easy.varModel.confModel.IDecisionVariable;
+import net.ssehub.easy.varModel.cst.CSTSemanticException;
 import net.ssehub.easy.varModel.model.AbstractVariable;
 import net.ssehub.easy.varModel.model.ModelQuery;
 import net.ssehub.easy.varModel.model.ModelQueryException;
@@ -233,6 +234,15 @@ public class AdditionalTests extends AbstractTest {
         Assert.assertEquals(nested1.getDeclaration().getType(), typeCP2); // TODO typeCP2
         Assert.assertEquals(nested1.getValue().getType(), typeCP2);
     }
-    
+ 
+    /**
+     * Tests a refby type problem (contributed by QM, S. El-Sharkawy).
+     * 
+     * @throws IOException should not occur
+     */
+    @Test
+    public void testRefby() throws IOException {
+        assertEqual(createFile("refby"), null, null, CSTSemanticException.UNKNOWN_OPERATION);
+    }
     
 }
