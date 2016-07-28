@@ -69,6 +69,7 @@ public class MessageDialogWithCopy extends MessageDialog {
         
         super(parentShell, dialogTitle, dialogTitleImage, dialogMessage, dialogImageType, dialogButtonLabels,
             defaultIndex);
+        setShellStyle(getShellStyle() | SWT.RESIZE);
     }
     //checkstyle: resume parameter number check
 
@@ -87,6 +88,7 @@ public class MessageDialogWithCopy extends MessageDialog {
 
         if (message != null) {
             Text msg = new Text(composite, SWT.READ_ONLY | SWT.MULTI | SWT.WRAP);
+//            msg.setBackground(Display.getDefault().getSystemColor(SWT.COLOR_WHITE));
 
             msg.setText(message);
 

@@ -488,12 +488,12 @@ public class ConfigurationHeaderMenu extends AbstractConfigMenu implements IProd
                     EasyProducerDialog.showErrorDialog(exc.getMessage());
                 }
             });
-            vilExecutionFinished(plp);
+            vilExecutionFinished(plp, false);
         }
     }
 
     @Override
-    public void vilExecutionFinished(final PLPInfo plp) {
+    public void vilExecutionFinished(final PLPInfo plp, final boolean instantiationSuccessfull) {
         if (plp == getProductLineProject()) {
             Display.getDefault().asyncExec(new Runnable() {
     
@@ -503,6 +503,11 @@ public class ConfigurationHeaderMenu extends AbstractConfigMenu implements IProd
                         
                         btnAbortInstantiation.setEnabled(false);
                         btnInstantiate.setEnabled(true);
+                        
+                        if (instantiationSuccessfull) {
+                            EasyProducerDialog.showInfoDialog(getShell(), 
+                                getProductLineProject().getProjectName() + " instantiation completed successfully");
+                        }
                     }
                 }
             });
