@@ -35,6 +35,8 @@ public interface IVilExecutionListener {
      * This is usually the case if script execution reached the end of the script, but may also be the case
      * if the user aborted the instantiation.
      * @param plp The {@link PLPInfo}, which was be instantiated
+     * @param instantiationSuccessfull <tt>true</tt>instantiation finished successfully,
+     *     <tt>false</tt> instantiation was aborted, e.g., by the user.
      */
-    public void vilExecutionFinished(PLPInfo plp);
+    public void vilExecutionFinished(PLPInfo plp, boolean instantiationSuccessfull);
 }

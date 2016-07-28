@@ -106,7 +106,7 @@ class VilTestExectuter implements IVilExecutionListener {
     }
 
     @Override
-    public void vilExecutionFinished(PLPInfo plp) {
+    public void vilExecutionFinished(PLPInfo plp, boolean successful) {
         plp.removeVilExecutionListener(this);
         listener.vilExecutionFinished(plp);
         finished = true;

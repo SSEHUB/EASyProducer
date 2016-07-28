@@ -20,9 +20,8 @@ import java.lang.annotation.Target;
 public @interface Invisible {
     
     /**
-     * Whether this annotation shall be inherited by subclasses / overridden methods (default <code>false</code>).
-     * 
-     * @return <code>true</code> for inheriting, <code>false</code> else
+     * Whether this annotation shall be inherited by subclasses / overridden methods (default <code>false</code>).<br/>
+     * <code>true</code> for inheriting, <code>false</code> else
      */
     boolean inherit() default false;
 }

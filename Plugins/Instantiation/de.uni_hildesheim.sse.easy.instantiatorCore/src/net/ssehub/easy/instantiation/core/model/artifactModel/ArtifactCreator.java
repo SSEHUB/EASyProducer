@@ -12,9 +12,7 @@ import java.lang.annotation.RetentionPolicy;
 public @interface ArtifactCreator {
 
     /**
-     * The related artifact creator.
-     * 
-     * @return the artifact creator class
+     * The related artifact creator (class).
      */
     Class<? extends IArtifactCreator> value();
 
