@@ -90,6 +90,7 @@ public class ContainerOperations {
                         result = ConstantAccessor.POOL.getInstance().bind(aValue, operand.getContext());
                     } catch (ValueDoesNotMatchTypeException e) {
                         // result -> null
+                        operand.getContext().addErrorMessage(e);
                     }
                 }
             }
