@@ -33,7 +33,6 @@ public @interface Generics {
     /**
      * The generics.
      * 
-     * @return the generics
      */
     public Class<?>[] types();
     
