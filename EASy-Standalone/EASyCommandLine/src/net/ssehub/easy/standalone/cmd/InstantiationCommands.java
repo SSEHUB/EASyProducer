@@ -59,7 +59,7 @@ public final class InstantiationCommands {
         }
 
         @Override
-        public void vilExecutionFinished(PLPInfo plp) {
+        public void vilExecutionFinished(PLPInfo plp, boolean instantiationSuccessfull) {
             // Not needed
         }
         
