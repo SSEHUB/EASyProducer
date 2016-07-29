@@ -30,6 +30,7 @@ import net.ssehub.easy.instantiation.core.model.vilTypes.configuration.Configura
 import net.ssehub.easy.instantiation.core.model.vilTypes.configuration.DecisionVariable;
 import net.ssehub.easy.instantiation.core.model.vilTypes.configuration.IvmlElement;
 import net.ssehub.easy.instantiation.core.model.vilTypes.configuration.IvmlTypes;
+import net.ssehub.easy.varModel.model.IvmlDatatypeVisitor;
 import net.ssehub.easy.varModel.model.datatypes.DerivedDatatype;
 import net.ssehub.easy.varModel.model.datatypes.IDatatype;
 import net.ssehub.easy.varModel.model.datatypes.Reference;
@@ -587,8 +588,8 @@ public abstract class RuntimeEnvironment implements IRuntimeEnvironment, IRestri
             if (!compatible) {
                 if (object instanceof DecisionVariable) {
                     DecisionVariable decVar = (DecisionVariable) object;
-                    IDatatype dType = Reference.dereference(decVar.getVariable().getDeclaration().getType());
-                    dType = DerivedDatatype.resolveToBasis(dType);
+                    IDatatype dType = decVar.getActualType();
+                    dType = DerivedDatatype.resolveToBasis(Reference.dereference(dType));
                     TypeDescriptor<?> td = getTypeRegistry().getType(dType);
                     if (null != td) {
                         compatible = varType.isAssignableFrom(td);
@@ -613,7 +614,14 @@ public abstract class RuntimeEnvironment implements IRuntimeEnvironment, IRestri
                 }
                 if (object instanceof DecisionVariable) {
                     DecisionVariable decVar = (DecisionVariable) object;
-                    oTypeName += " (" + decVar.getType() + ")";
+                    IDatatype dType = decVar.getActualType();
+                    String typeName;
+                    if (null != dType) {
+                        typeName = IvmlDatatypeVisitor.getUnqualifiedType(dType);
+                    } else { // original code fallback
+                        typeName = decVar.getType();
+                    }
+                    oTypeName += " (" + typeName + ")";
                 }
                 String msg = "cannot assign value of type \"" + oTypeName + "\" to \"" + var.getName()
                     + "\" of type \"" + var.getType().getVilName() + "\"";

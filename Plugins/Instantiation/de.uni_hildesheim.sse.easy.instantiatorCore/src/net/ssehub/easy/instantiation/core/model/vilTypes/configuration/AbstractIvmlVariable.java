@@ -344,6 +344,24 @@ public abstract class AbstractIvmlVariable extends IvmlElement {
     public IDecisionVariable getVariable() {
         return origVariable;
     }
+    
+    /**
+     * Returns the actual IVML type of <code>decVar</code>.
+     * 
+     * @return the IVML type, if possible the actual, dynamic type, else the declared type
+     */
+    @Invisible
+    public IDatatype getActualType() {
+        IDatatype dType = null;
+        // try to get actual type, don't use IVML null as type is anytype -> use then variable declaration
+        Value val = origVariable.getValue();
+        if (null != val && NullValue.INSTANCE != val) {
+            dType = val.getType();
+        } else {
+            dType = origVariable.getDeclaration().getType();
+        }
+        return dType;
+    }
 
     /**
      * Returns the simple name of the decision variable.
@@ -386,7 +404,7 @@ public abstract class AbstractIvmlVariable extends IvmlElement {
     }
     
     /**
-     * Returns the simple type name of the decision variable.
+     * Returns the simple type name of the (dereferenced) decision variable (VIL view).
      * 
      * @return the simple type name
      */
@@ -395,7 +413,7 @@ public abstract class AbstractIvmlVariable extends IvmlElement {
     }
     
     /**
-     * Returns the IVML type of the decision variable.
+     * Returns the declared IVML type of the (dereferenced) decision variable (VIL view).
      * 
      * @return the IVML type
      */
