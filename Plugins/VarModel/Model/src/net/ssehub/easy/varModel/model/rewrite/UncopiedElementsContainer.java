@@ -15,7 +15,10 @@
  */
 package net.ssehub.easy.varModel.model.rewrite;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import net.ssehub.easy.varModel.cst.ConstraintSyntaxTree;
@@ -324,5 +327,51 @@ class UncopiedElementsContainer {
      */
     Set<UnresolvedSyntaxContainer> getUncopyableCSTs() {
         return uncopyableCSTs;
+    }
+    
+    /**
+     * Maybe called after {@link ProjectCopyVisitor#getCopiedProject()} to verify that all elements could
+     * successfully be copied.
+     * @return A list of failing elements, should be empty if copying was successful.
+     */
+    List<UncopiedElement> getUnresolvedElements() {
+        List<UncopiedElement> unrelsovedElements = new ArrayList<UncopiedElement>();
+        addAll(unrelsovedElements, unresolvedDatatypes);
+        addAll(unrelsovedElements, unresolvedDeclarations);
+        if (!uncopyableCSTs.isEmpty()) {
+            for (UnresolvedSyntaxContainer uncopyableCST : uncopyableCSTs) {
+                unrelsovedElements.add(new UncopiedElement(uncopyableCST));
+            }
+        }
+        addAll(unrelsovedElements, unresolvedAnnotations);
+        addAll(unrelsovedElements, unresolvedInterfaces);
+        addAll(unrelsovedElements, incompleteOperations);
+        addAll(unrelsovedElements, notCopiedOperations);
+        addAll(unrelsovedElements, uncopiedFreezeBlocks);
+        addAll(unrelsovedElements, uncopiedCompoundAccesses);       
+        if (!unresolvedAssignments.isEmpty()) {
+            for (UnresolvedAnnotationAssignment unresolvedAssignment : unresolvedAssignments) {
+                unrelsovedElements.add(new UncopiedElement(unresolvedAssignment));
+            }
+        }
+        
+        return unrelsovedElements;
+    }
+    
+    /**
+     * Converts {@link ContainableModelElement}s into {@link UncopiedElement}s and adds them to
+     * <tt>unrelsovedElements</tt>.
+     * Part of {@link #getUnresolvedElements()}.
+     * @param unrelsovedElements The list where to add the elements.
+     * @param elementsToAdd An attribute of this class, maybe empty.
+     */
+    private void addAll(List<UncopiedElement> unrelsovedElements,
+        Collection<? extends ContainableModelElement> elementsToAdd) {
+        
+        if (!elementsToAdd.isEmpty()) {
+            for (ContainableModelElement element : elementsToAdd) {
+                unrelsovedElements.add(new UncopiedElement(element));
+            }
+        }
     }
 }

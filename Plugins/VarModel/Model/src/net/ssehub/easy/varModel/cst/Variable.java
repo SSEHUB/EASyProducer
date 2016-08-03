@@ -46,7 +46,7 @@ public class Variable extends Leaf {
     }
     
     @Override
-    public IDatatype inferDatatype() {
+    public IDatatype inferDatatype() throws CSTSemanticException {
         IDatatype result = nestedVariable.getType();
         // this does not work using a visitor due to the implicit
         // dispatch of the delegating types :(

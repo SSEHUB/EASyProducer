@@ -26,6 +26,7 @@ import java.util.Stack;
 
 import net.ssehub.easy.basics.messages.Status;
 import net.ssehub.easy.basics.modelManagement.IVariable;
+import net.ssehub.easy.varModel.Bundle;
 import net.ssehub.easy.varModel.confModel.AssignmentState;
 import net.ssehub.easy.varModel.confModel.CompoundVariable;
 import net.ssehub.easy.varModel.confModel.ConfigurationException;
@@ -696,7 +697,12 @@ public class EvaluationVisitor implements IConstraintTreeVisitor {
          */
         private VariableReplacer(DecisionVariableDeclaration iter, List<AbstractVariable> decls) {
             this.iter = new Variable(iter);
-            this.iter.inferDatatype();
+            try {
+                this.iter.inferDatatype();
+            } catch (CSTSemanticException e) {
+                // Should not be possible that Variable throws an exception 
+                Bundle.getLogger(EvaluationVisitor.class).exception(e);
+            }
             this.decls = decls;
         }
         

@@ -21,6 +21,7 @@ import java.util.Deque;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 
 import net.ssehub.easy.basics.modelManagement.ModelManagementException;
@@ -536,6 +537,14 @@ public class ProjectCopyVisitor extends AbstractProjectVisitor {
      */
     public Project getCopiedProject() {
         return copiedProject;
+    }
+    
+    /**
+     * Maybe called after visiting to verify that all elements could successfully be copied.
+     * @return A list of failing elements, should be empty if copying was successful.
+     */
+    public List<UncopiedElement> getUncopiedElements() {
+        return incompleteElements.getUnresolvedElements();
     }
     
     /**

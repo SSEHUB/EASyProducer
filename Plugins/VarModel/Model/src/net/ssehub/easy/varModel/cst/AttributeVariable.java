@@ -16,6 +16,8 @@
 package net.ssehub.easy.varModel.cst;
 
 import net.ssehub.easy.varModel.model.Attribute;
+import net.ssehub.easy.varModel.model.datatypes.DerivedDatatype;
+import net.ssehub.easy.varModel.model.datatypes.IDatatype;
 
 /**
  * A variable which represents an attribute. However, access to an attribute
@@ -77,5 +79,11 @@ public class AttributeVariable extends Variable {
     @Override
     public void accept(IConstraintTreeVisitor visitor) {
         visitor.visitAnnotationVariable(this);
+    }
+    
+    @Override
+    public IDatatype inferDatatype() throws CSTSemanticException {
+        qualifier.inferDatatype();
+        return super.inferDatatype();
     }
 }
