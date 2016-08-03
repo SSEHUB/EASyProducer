@@ -46,7 +46,7 @@ public class VilExecutionThread implements Runnable {
     private Executor executor;
     private PLPInfo plp;
     private ProgressObserver observer;
-    private boolean userAborted;
+    private boolean successful;
     
     private List<IVilExecutionListener> listeners;
     
@@ -118,7 +118,7 @@ public class VilExecutionThread implements Runnable {
      */
     public void startInstantiation(ProgressObserver observer, boolean waitFor) {
         if (null == executor) {
-            userAborted = false;
+            successful = true;
             this.observer = (observer != null) ? observer : ProgressObserver.NO_OBSERVER;
             executor = createExecutor();
             Thread executionThread = new Thread(this);
@@ -140,7 +140,7 @@ public class VilExecutionThread implements Runnable {
      */
     public void abortInstantiation() {
         if (null != executor) {
-            userAborted = true;
+            successful = false;
             executor.stop();
         }
     }
@@ -150,6 +150,9 @@ public class VilExecutionThread implements Runnable {
         try {
             // VIL output is handled via the TracerFactory configured in UI.Startup
             executor.execute(observer, true);
+            for (int i = 0; i < listeners.size(); i++) {
+                listeners.get(i).vilExecutionFinished(plp, successful);
+            }
         } catch (VilException e) {
             for (int i = 0; i < listeners.size(); i++) {
                 listeners.get(i).vilExecutionAborted(plp, e);
@@ -158,9 +161,6 @@ public class VilExecutionThread implements Runnable {
             executor = null;
             observer = null;
             plp.refresh();
-        }
-        for (int i = 0; i < listeners.size(); i++) {
-            listeners.get(i).vilExecutionFinished(plp, !userAborted);
         }
     }
 }
