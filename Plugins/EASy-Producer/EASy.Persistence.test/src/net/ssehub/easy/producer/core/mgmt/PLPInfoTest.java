@@ -468,10 +468,12 @@ public class PLPInfoTest extends AbstractPLPInfoTest {
         
         // First instantiation
         VilTestExectuter plpInstantiator2 = new VilTestExectuter();
-        plpInstantiator2.assertInstantiation(plp, 5000,  new AbstractVilListener() {
+        // More time as this listener waits also until the second instantiation is finished
+        plpInstantiator2.assertInstantiation(plp, 50000,  new AbstractVilListener() {
             
             @Override
             public void vilExecutionFinished(PLPInfo plp) {
+                System.out.println("Finished 1st instantiation");
                 Assert.assertTrue(copiedFile.exists());
                 Assert.assertTrue(copiedFile.delete());
                 
@@ -480,6 +482,7 @@ public class PLPInfoTest extends AbstractPLPInfoTest {
                 plpInstantiator.assertInstantiation(plp, new AbstractVilListener() {
                     @Override
                     public void vilExecutionFinished(PLPInfo plp) {
+                        System.out.println("Finished 2nd instantiation");
                         // Finished second instantiation
                         Assert.assertTrue(copiedFile.exists());
                     }

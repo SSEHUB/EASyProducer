@@ -147,12 +147,11 @@ public class VilExecutionThread implements Runnable {
     
     @Override
     public void run() {
+        boolean informFinished = false;
         try {
             // VIL output is handled via the TracerFactory configured in UI.Startup
             executor.execute(observer, true);
-            for (int i = 0; i < listeners.size(); i++) {
-                listeners.get(i).vilExecutionFinished(plp, successful);
-            }
+            informFinished = true;
         } catch (VilException e) {
             for (int i = 0; i < listeners.size(); i++) {
                 listeners.get(i).vilExecutionAborted(plp, e);
@@ -161,6 +160,13 @@ public class VilExecutionThread implements Runnable {
             executor = null;
             observer = null;
             plp.refresh();
+        }
+        
+        // Inform only if no exception occurred and after executor is shut down (set to null)
+        if (informFinished) {
+            for (int i = 0; i < listeners.size(); i++) {
+                listeners.get(i).vilExecutionFinished(plp, successful);
+            }
         }
     }
 }
