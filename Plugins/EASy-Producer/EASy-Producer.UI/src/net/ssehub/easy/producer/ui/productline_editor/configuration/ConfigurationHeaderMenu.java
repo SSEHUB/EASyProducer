@@ -485,7 +485,7 @@ public class ConfigurationHeaderMenu extends AbstractConfigMenu implements IProd
                 
                 @Override
                 public void run() {
-                    EasyProducerDialog.showErrorDialog(exc.getMessage());
+                    EasyProducerDialog.showErrorDialog(getShell(), exc.getMessage());
                 }
             });
             vilExecutionFinished(plp, false);
@@ -505,7 +505,7 @@ public class ConfigurationHeaderMenu extends AbstractConfigMenu implements IProd
                         btnInstantiate.setEnabled(true);
                         
                         if (instantiationSuccessfull) {
-                            EasyProducerDialog.showInfoDialog(getShell(), 
+                            EasyProducerDialog.showInfoDialog(getShell(),
                                 getProductLineProject().getProjectName() + " instantiation completed successfully");
                         }
                     }
