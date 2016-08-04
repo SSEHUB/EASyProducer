@@ -1,0 +1,30 @@
+@advice(booleanRule2)
+vilScript booleanRule2 (Project source, Configuration config, Project target) {
+
+    Integer i = 0;
+
+    test0(booleanRule2 config) = : true {
+        i = i + 1;
+    }
+
+    test1(booleanRule2 config) = : false {
+        i = i + 1;
+    }
+
+    test2(booleanRule2 config) = : config.b1 {
+        i = i + 1;
+    }
+
+    test3(booleanRule2 config) = : config.b2 {
+        i = i + 1;
+    }
+
+    main(Project source, Configuration config, Project target) = : {
+        booleanRule2 cfg = config;
+        test0(cfg);
+        test1(cfg);
+        test2(cfg);
+        test3(cfg);
+    }
+
+}

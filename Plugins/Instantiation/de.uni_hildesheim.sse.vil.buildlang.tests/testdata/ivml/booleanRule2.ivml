@@ -1,0 +1,12 @@
+project booleanRule2 {
+  version v0;
+  
+  Boolean b1 = true;
+  Boolean b2 = false;
+  
+  freeze {
+    b1;
+    b2;
+  };
+  
+}

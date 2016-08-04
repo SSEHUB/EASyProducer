@@ -17,11 +17,17 @@ package net.ssehub.easy.instantiation.core.model.buildlangModel.ruleMatch;
 
 import net.ssehub.easy.instantiation.core.model.artifactModel.ArtifactTypes;
 import net.ssehub.easy.instantiation.core.model.common.VilException;
+import net.ssehub.easy.instantiation.core.model.expressions.CallArgument;
+import net.ssehub.easy.instantiation.core.model.expressions.CallExpression;
 import net.ssehub.easy.instantiation.core.model.expressions.CompositeExpression;
 import net.ssehub.easy.instantiation.core.model.expressions.ConstantExpression;
 import net.ssehub.easy.instantiation.core.model.expressions.Expression;
+import net.ssehub.easy.instantiation.core.model.vilTypes.IMetaOperation;
+import net.ssehub.easy.instantiation.core.model.vilTypes.OperationDescriptor;
 import net.ssehub.easy.instantiation.core.model.vilTypes.TypeDescriptor;
+import net.ssehub.easy.instantiation.core.model.vilTypes.TypeHelper;
 import net.ssehub.easy.instantiation.core.model.vilTypes.TypeRegistry;
+import net.ssehub.easy.instantiation.core.model.vilTypes.configuration.IvmlTypes;
 
 /**
  * A factory to create the match expressions implemented in this package.
@@ -54,6 +60,11 @@ public class MatchFactory {
         // TODO use match expressions as prototypes for the decision here - deferred
         AbstractRuleMatchExpression result = null;
         TypeDescriptor<?> type = expr.inferType();
+        if (IvmlTypes.decisionVariableType().isAssignableFrom(type)) {
+            IMetaOperation convOp = TypeHelper.findConversion(type, TypeRegistry.booleanType());
+            expr = new CallExpression((OperationDescriptor) convOp, new CallArgument(expr));
+            type = expr.inferType();
+        }
         if (STRING == type && expr instanceof ConstantExpression) {
             ConstantExpression cExpr = (ConstantExpression) expr;
             result = new StringMatchExpression(cExpr.getValue().toString());
@@ -70,7 +81,7 @@ public class MatchFactory {
         } else if (BOOLEAN == type) {
             // last alternative - just a boolean pre/postcondition
             result = new BooleanMatchExpression(expr);
-        }
+        } 
         return result;
     }
 
