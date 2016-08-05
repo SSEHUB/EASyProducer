@@ -1,0 +1,30 @@
+project refby2 {
+
+    version v0;
+    typedef NonEmptyString String;
+    typedef ArtifactString String;
+    enum BindingTime {compile = 0, startup = 1, runtimeMon = 2, runtimeEnact = 3};
+    annotate BindingTime bindingTime = BindingTime.compile to refby2;
+    abstract compound Observable {
+        NonEmptyString type;
+    }
+
+    compound QualityParameter refines Observable {
+    }
+
+    compound ConfiguredQualityParameter refines QualityParameter {
+        NonEmptyString monitorCls = null;
+        ArtifactString artifact;
+    }
+
+    sequenceOf(ConfiguredQualityParameter) qualityParameters = {{type = "Latency"}, {type = "Throughput_Item"}};
+    compound QualityParameterWeighting {
+        refTo(QualityParameter) parameter;
+        assign (bindingTime = BindingTime.runtimeEnact) to {
+            Real weight;
+        }
+    }
+
+    sequenceOf(QualityParameterWeighting) pipelineImportance;
+    pipelineImportance = {{parameter = refBy(qualityParameters[0]), weight = 1}};
+}

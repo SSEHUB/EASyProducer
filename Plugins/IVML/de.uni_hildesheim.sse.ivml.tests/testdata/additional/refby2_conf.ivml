@@ -1,0 +1,6 @@
+project refby2_conf {
+
+    version v0;
+    import refby2 with refby2.version == v0;
+    pipelineImportance = {{parameter = refBy(qualityParameters[0]), weight = 1}};
+}

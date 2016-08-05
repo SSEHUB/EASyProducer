@@ -1,5 +1,6 @@
 package test.de.uni_hildesheim.sse;
 
+import java.io.CharArrayWriter;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
@@ -9,6 +10,8 @@ import org.junit.Assert;
 
 import de.uni_hildesheim.sse.translation.ErrorCodes;
 import net.ssehub.easy.varModel.confModel.Configuration;
+import net.ssehub.easy.varModel.confModel.ConfigurationException;
+import net.ssehub.easy.varModel.confModel.ConfigurationSaver;
 import net.ssehub.easy.varModel.confModel.IDecisionVariable;
 import net.ssehub.easy.varModel.cst.CSTSemanticException;
 import net.ssehub.easy.varModel.model.AbstractVariable;
@@ -17,6 +20,7 @@ import net.ssehub.easy.varModel.model.ModelQueryException;
 import net.ssehub.easy.varModel.model.Project;
 import net.ssehub.easy.varModel.model.datatypes.IDatatype;
 import net.ssehub.easy.varModel.model.values.ValueDoesNotMatchTypeException;
+import net.ssehub.easy.varModel.persistency.IVMLWriter;
 
 /**
  * A test class for blackbox testing parser and type resolution of additional
@@ -245,4 +249,64 @@ public class AdditionalTests extends AbstractTest {
         assertEqual(createFile("refby"), null, null, CSTSemanticException.UNKNOWN_OPERATION);
     }
     
+    /**
+     * A configuration saver for testing.
+     * 
+     * @author Holger Eichelberger
+     */
+    private static class MyConfigurationSaver extends ConfigurationSaver {
+
+        /**
+         * Default constructor for this class. This Constructor will save only user input.
+         * @param cfg The configuration which should be saved.
+         * @param ownProject return an own project (<code>true</code>) or add the 
+         *   configuration to {@link Configuration#getProject()} (<code>false</code>)
+         * @throws ConfigurationException in case of any configuration errors
+         */
+        MyConfigurationSaver(Configuration cfg, boolean ownProject) throws ConfigurationException {
+            super(cfg, ownProject, true);
+        }
+        
+    }
+
+    /**
+     * Tests a refby-to-container writing problem (contributed by QM). As the problem occurs
+     * while writing the configuration back, this test creates configurations of the read projects
+     * and compares their IVML syntax.
+     * 
+     * @throws IOException should not occur
+     * @throws ConfigurationException shall not occur
+     */
+    @Test
+    public void testRefby2() throws IOException, ConfigurationException {
+        List<Project> prjs = assertEqual(createFile("refby2"), null, null);
+        for (int p = 0; p < prjs.size(); p++) {
+            Project pr = prjs.get(p);
+            if (pr.getName().equals("refby2")) {
+                Configuration cfg = new Configuration(prjs.get(p));
+                MyConfigurationSaver s = new MyConfigurationSaver(cfg, true);
+                Project savedProject = s.getSavedConfiguration();
+                
+                String fileAsString = file2String(createFile("refby2_conf"));
+                Assert.assertTrue(null != fileAsString);
+    
+                // read model into String
+                java.io.CharArrayWriter writer = new CharArrayWriter();
+                IVMLWriter visitor = IVMLWriter.getInstance(writer);
+                savedProject.accept(visitor);
+                IVMLWriter.releaseInstance(visitor);
+    
+                String errorMsg = checkEqualsAndPrepareMessage(fileAsString, writer);
+                if (null != errorMsg) {
+                    // Only traditional comparison if file does not contain replacement comments
+                    if (!fileAsString.contains("//*")) {
+                        Assert.assertEquals(fileAsString.trim(), writer.toString().trim());
+                    }
+                    // Fallback
+                    Assert.fail(errorMsg);
+                }
+            }
+        }
+    }
+
 }

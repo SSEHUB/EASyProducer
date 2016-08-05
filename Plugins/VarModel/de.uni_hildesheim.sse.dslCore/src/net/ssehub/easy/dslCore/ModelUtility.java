@@ -358,6 +358,7 @@ public abstract class ModelUtility <E extends EObject, R extends IModel> impleme
                 }
                 hasErrors = true;
             }
+            
             EObject rootObject = null;
             if (!hasErrors) {
                 rootObject = resource.getContents().get(0);

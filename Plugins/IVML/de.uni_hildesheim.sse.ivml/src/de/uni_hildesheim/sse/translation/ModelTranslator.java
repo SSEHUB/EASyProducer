@@ -341,6 +341,15 @@ public class ModelTranslator extends net.ssehub.easy.dslCore.translation.ModelTr
         }
         return result;
     }
+    
+    /**
+     * Creates an empty result for failure cases.
+     * 
+     * @return an empty result
+     */
+    public Result createEmptyResult() {
+        return new Result(this);
+    }
 
     /**
      * Handles the comments assigned to the EMF AST element <code>object</code>.

@@ -98,6 +98,7 @@ import net.ssehub.easy.varModel.model.DecisionVariableDeclaration;
 import net.ssehub.easy.varModel.model.FreezeBlock;
 import net.ssehub.easy.varModel.model.IDecisionVariableContainer;
 import net.ssehub.easy.varModel.model.IFreezable;
+import net.ssehub.easy.varModel.model.IModelElement;
 import net.ssehub.easy.varModel.model.IvmlDatatypeVisitor;
 import net.ssehub.easy.varModel.model.OperationDefinition;
 import net.ssehub.easy.varModel.model.PartialEvaluationBlock;
@@ -911,7 +912,16 @@ public class IVMLWriter extends AbstractVarModelWriter {
         appendOutput(BEGINNING_PARENTHESIS);
         AbstractVariable referenced = referenceValue.getValue();
         if (null != referenced) {
-            appendOutput(referenced.getName());
+            String containerPrefix = "";
+            String containerPostfix = "";
+            IModelElement iter = referenced.getParent();
+            while (iter instanceof DecisionVariableDeclaration 
+                && Container.TYPE.isAssignableFrom(((DecisionVariableDeclaration) iter).getType())) {
+                containerPrefix = iter.getName() + "[" + containerPrefix;
+                containerPostfix += "]";
+                iter = iter.getParent();
+            }
+            appendOutput(containerPrefix + referenced.getName() + containerPostfix);
         } else {
             ConstraintSyntaxTree ex = referenceValue.getValueEx();
             if (null != ex) {

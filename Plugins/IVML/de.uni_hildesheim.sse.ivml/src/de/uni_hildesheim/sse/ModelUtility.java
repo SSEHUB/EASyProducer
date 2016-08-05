@@ -146,6 +146,8 @@ public class ModelUtility extends net.ssehub.easy.dslCore.ModelUtility<Variabili
             } catch (URISyntaxException e) {
                 throw new IOException(e);
             }
+        } else {
+            mRes = translator.createEmptyResult();
         }
         impResolver.addDeferredLoader(mRes);
         if (null == resolver) {
