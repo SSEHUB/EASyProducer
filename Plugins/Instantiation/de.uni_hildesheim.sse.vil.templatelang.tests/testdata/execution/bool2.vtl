@@ -1,0 +1,11 @@
+@advice(bool)
+template bool2(Configuration config, Artifact target) {
+
+    def main(Configuration config, Artifact target) {
+        bool cfg = config;
+        StringArtifact a = new StringArtifact();
+        String r = a.toString(cfg);
+        '$r'
+    }
+
+}

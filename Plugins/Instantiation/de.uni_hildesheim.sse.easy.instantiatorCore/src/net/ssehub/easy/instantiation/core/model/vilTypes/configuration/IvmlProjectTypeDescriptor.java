@@ -9,6 +9,7 @@ import net.ssehub.easy.basics.logger.EASyLoggerFactory;
 import net.ssehub.easy.instantiation.core.Bundle;
 import net.ssehub.easy.instantiation.core.model.common.VilException;
 import net.ssehub.easy.instantiation.core.model.vilTypes.FieldDescriptor;
+import net.ssehub.easy.instantiation.core.model.vilTypes.IActualTypeAssignmentProvider;
 import net.ssehub.easy.instantiation.core.model.vilTypes.IActualValueProvider;
 import net.ssehub.easy.instantiation.core.model.vilTypes.IMetaOperation;
 import net.ssehub.easy.instantiation.core.model.vilTypes.IMetaType;
@@ -28,7 +29,8 @@ import net.ssehub.easy.varModel.model.datatypes.IDatatype;
  * 
  * @author Holger Eichelberger
  */
-class IvmlProjectTypeDescriptor extends AbstractIvmlTypeDescriptor implements IActualValueProvider {
+class IvmlProjectTypeDescriptor extends AbstractIvmlTypeDescriptor implements IActualValueProvider, 
+    IActualTypeAssignmentProvider {
 
     private Project project;
     
@@ -133,6 +135,12 @@ class IvmlProjectTypeDescriptor extends AbstractIvmlTypeDescriptor implements IA
     public boolean isAssignableFrom(TypeDescriptor<?> desc) {
         // final check at runtime
         return (desc == this || IvmlTypes.configurationType() == desc);
+    }
+
+    @Override
+    public boolean isAssignableFrom(IMetaType type1, IMetaType type2) {
+        return (type1 == this && IvmlTypes.configurationType() == type2) 
+            || (type2 == this && IvmlTypes.configurationType() == type1);
     }
 
     @Override

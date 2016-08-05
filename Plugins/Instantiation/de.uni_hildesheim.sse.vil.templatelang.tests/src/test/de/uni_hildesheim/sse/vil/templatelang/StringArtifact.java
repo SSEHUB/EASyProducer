@@ -14,6 +14,7 @@ import net.ssehub.easy.instantiation.core.model.vilTypes.IStringValueProvider;
 import net.ssehub.easy.instantiation.core.model.vilTypes.OperationMeta;
 import net.ssehub.easy.instantiation.core.model.vilTypes.PseudoString;
 import net.ssehub.easy.instantiation.core.model.vilTypes.Set;
+import net.ssehub.easy.instantiation.core.model.vilTypes.configuration.Configuration;
 
 /**
  * A simple artifact for testing.
@@ -56,6 +57,16 @@ public class StringArtifact extends SimpleArtifact implements IStringValueProvid
 
     @Override
     public void rename(String name) throws VilException {
+    }
+    
+    /**
+     * Turns a configuration into a string.
+     * 
+     * @param cfg the configuration
+     * @return the string representation
+     */
+    public String toString(Configuration cfg) {
+        return cfg.getName();
     }
 
     @Override

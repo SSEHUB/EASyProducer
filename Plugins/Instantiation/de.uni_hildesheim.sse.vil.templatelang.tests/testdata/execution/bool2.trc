@@ -1,0 +1,6 @@
+-> main(Configuration, Artifact) with (<config>, test.texts)
+    cfg <- <config>
+    -> create StringArtifact() with () = <stringArtifact>
+    a <- <stringArtifact>
+    -> toString(StringArtifact, Configuration) with (<stringArtifact>, <config>) = bool
+    r <- bool

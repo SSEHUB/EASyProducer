@@ -1343,6 +1343,16 @@ public class ExecutionTests extends AbstractTest {
     }
 
     /**
+     * Tests the compatibility of a mapped configuration type.
+     * 
+     * @throws IOException should not occur
+     */
+    @Test
+    public void testBoolean2() throws IOException {
+        assertEqualWithIvml("bool2", "bool");
+    }
+    
+    /**
      * Tests "casting" types by assignment.
      * 
      * @throws IOException should not occur
