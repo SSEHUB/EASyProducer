@@ -17,7 +17,6 @@ package net.ssehub.easy.varModel.model.rewrite;
 
 import net.ssehub.easy.varModel.model.ContainableModelElement;
 import net.ssehub.easy.varModel.model.IModelElement;
-import net.ssehub.easy.varModel.model.rewrite.UncopiedElementsContainer.UnresolvedSyntaxContainer;
 import net.ssehub.easy.varModel.persistency.StringProvider;
 
 /**
@@ -45,7 +44,7 @@ public class UncopiedElement {
     }
     
     /**
-     * Constructor for an {@link UnresolvedSyntaxContainer}.
+     * Constructor for an {@link UncopiedElementsContainer.UnresolvedSyntaxContainer}.
      * @param cstContainer An element which could not be copied.
      */
     UncopiedElement(UncopiedElementsContainer.UnresolvedSyntaxContainer cstContainer) {
@@ -54,7 +53,7 @@ public class UncopiedElement {
     }
     
     /**
-     * Constructor for an {@link UnresolvedAnnotationAssignment}.
+     * Constructor for an {@link UncopiedElementsContainer.UnresolvedAnnotationAssignment}.
      * @param assignment An element which could not be copied.
      */
     UncopiedElement(UncopiedElementsContainer.UnresolvedAnnotationAssignment assignment) {
