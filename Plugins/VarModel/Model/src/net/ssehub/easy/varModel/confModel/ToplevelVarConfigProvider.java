@@ -259,7 +259,10 @@ class ToplevelVarConfigProvider extends VariableConfigProvider {
         if (allowDeletation) {
             container.clear();
         }
-        ContainerValue oldValue = (ContainerValue) value;
+        ContainerValue oldValue = null;
+        if (value instanceof ContainerValue) {
+            oldValue = (ContainerValue) value;            
+        } 
         this.value = conValue;
         for (int i = 0; i < conValue.getElementSize(); i++) {
             boolean overwrite = true;
