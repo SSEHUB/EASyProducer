@@ -18,6 +18,7 @@ package net.ssehub.easy.varModel.cstEvaluation;
 import net.ssehub.easy.basics.messages.Status;
 import net.ssehub.easy.basics.pool.IPoolManager;
 import net.ssehub.easy.basics.pool.Pool;
+import net.ssehub.easy.varModel.confModel.AssignmentState;
 import net.ssehub.easy.varModel.confModel.CompoundVariable;
 import net.ssehub.easy.varModel.confModel.ConfigurationException;
 import net.ssehub.easy.varModel.confModel.IAssignmentState;
@@ -119,7 +120,8 @@ class CompoundSlotAccessor extends AbstractDecisionVariableEvaluationAccessor {
         EvaluationContext context = getContext();
         if (context.allowAssignValues() && null != slotVariable) {
             if (null != value) {
-                if (!Value.equalsPartially(slotVariable.getValue(), value)) { // don't reassign / send message
+                if (!Value.equalsPartially(slotVariable.getValue(), value) 
+                        && slotVariable.getState() != AssignmentState.USER_ASSIGNED) { // don't reassign / send message
                     IAssignmentState targetState = context.getTargetState(slotVariable);
                     if (null != targetState) {
                         try {

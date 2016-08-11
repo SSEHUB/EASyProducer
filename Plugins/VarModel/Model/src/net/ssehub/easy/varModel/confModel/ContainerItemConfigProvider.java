@@ -83,6 +83,7 @@ class ContainerItemConfigProvider extends NestedVarConfigProvider {
             IDecisionVariable nestedVar = creator.getVariable(false);
             parent.addNestedElement(nestedVar);
         }
+        this.state = state;
     }
 
     @Override

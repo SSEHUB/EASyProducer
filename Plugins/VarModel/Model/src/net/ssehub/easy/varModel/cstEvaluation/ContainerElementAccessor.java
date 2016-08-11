@@ -18,6 +18,7 @@ package net.ssehub.easy.varModel.cstEvaluation;
 import net.ssehub.easy.basics.messages.Status;
 import net.ssehub.easy.basics.pool.IPoolManager;
 import net.ssehub.easy.basics.pool.Pool;
+import net.ssehub.easy.varModel.confModel.AssignmentState;
 import net.ssehub.easy.varModel.confModel.ConfigurationException;
 import net.ssehub.easy.varModel.confModel.IAssignmentState;
 import net.ssehub.easy.varModel.confModel.IDecisionVariable;
@@ -90,7 +91,8 @@ class ContainerElementAccessor extends AbstractDecisionVariableEvaluationAccesso
             if (null == value) {
                 context.addErrorMessage("assignable value is not defined");
             } else {
-                if (!Value.equalsPartially(elementVariable.getValue(), value)) { // don't reassign / send message
+                if (!Value.equalsPartially(elementVariable.getValue(), value)
+                        && elementVariable.getState() != AssignmentState.USER_ASSIGNED) { //don't reassign/send message
                     IAssignmentState targetState = context.getTargetState(elementVariable);
                     if (null != targetState) {
                         try {

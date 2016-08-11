@@ -117,7 +117,8 @@ class VariableAccessor extends AbstractDecisionVariableEvaluationAccessor {
                 if (null == variable) {
                     context.addErrorMessage("variable does not exist (attribute access failure)?");
                 } else {
-                    if (!Value.equalsPartially(variable.getValue(), value)) { // don't reassign / send message
+                    if (!Value.equalsPartially(variable.getValue(), value)
+                            && variable.getState() != AssignmentState.USER_ASSIGNED) { // don't reassign / send message
                         IAssignmentState targetState = isLocal() ? AssignmentState.ASSIGNED 
                             : context.getTargetState(variable);
                         if (null != targetState) {

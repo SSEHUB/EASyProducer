@@ -267,7 +267,11 @@ public class CompoundVariable extends StructuredVariable {
                     Value nestedValue = cmpValue.getNestedValue(slotName);
                     if (null != nestedVar) {
 //                        nestedVar.setState(state);
-                        nestedVar.setValue(nestedValue, state);
+                        IAssignmentState nestedState = nestedVar.getState();
+                        // Overwrite value only if it was not user defined.
+                        if (nestedState != AssignmentState.USER_ASSIGNED || state == AssignmentState.USER_ASSIGNED) {
+                            nestedVar.setValue(nestedValue, state);
+                        }
                     }
                 }
             }

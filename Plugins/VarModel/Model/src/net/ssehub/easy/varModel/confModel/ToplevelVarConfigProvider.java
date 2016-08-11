@@ -152,9 +152,9 @@ class ToplevelVarConfigProvider extends VariableConfigProvider {
              * (nested) CompoundValues.
              */
             if (value instanceof CompoundValue && null != oldValue && oldValue instanceof CompoundValue) {
-                value = assignCompoundValue(value, state, allowDeletation, oldValue);
+                value = assignCompoundValue((CompoundValue) value, state, allowDeletation, (CompoundValue) oldValue);
             } else if (value instanceof ContainerValue) {
-                value = assignContainerValue(value, state, allowDeletation);
+                value = assignContainerValue((ContainerValue) value, state, allowDeletation);
             }
         } else if (relatedVariable.getDeclaration().getType() instanceof Container && allowDeletation) {
             ContainerVariable container = (ContainerVariable) relatedVariable;
@@ -176,12 +176,13 @@ class ToplevelVarConfigProvider extends VariableConfigProvider {
      * @throws ConfigurationException in case that the types of 
      * {@link #getDeclaration()} and <code>value</code> do not comply
      */
-    private Value assignCompoundValue(Value value, IAssignmentState state, boolean allowDeletation, Value oldValue)
+    private Value assignCompoundValue(CompoundValue value, IAssignmentState state, boolean allowDeletation, 
+            CompoundValue oldValue)
         throws ConfigurationException {
-        CompoundValue newValue = (CompoundValue) oldValue;
+        CompoundValue newValue = oldValue;
         if (allowDeletation) {
 //            try {
-            newValue = (CompoundValue) value;
+            newValue = value;
 //                newValue = (CompoundValue) ValueFactory.createValue(getDeclaration().getType(),
 //                    (Object[]) null);
 //            } catch (ValueDoesNotMatchTypeException exc) {
@@ -189,7 +190,29 @@ class ToplevelVarConfigProvider extends VariableConfigProvider {
 //            }
         } else {
             try {
-                newValue.copyValuesFrom((CompoundValue) value);
+                CompoundValue tmpValue = (CompoundValue) value;
+                Compound cType = (Compound) DerivedDatatype.resolveToBasis(getDeclaration().getType());
+                for (int i = 0; i < cType.getInheritedElementCount(); i++) {
+                    DecisionVariableDeclaration decl = cType.getInheritedElement(i);
+                    String name = decl.getName();
+                    IDecisionVariable var = relatedVariable.getNestedElement(name);
+                    /*
+                     * Avoid deletion of already configured nested values.
+                     * This is needed for the stepwise configuration of
+                     * (nested) CompoundValues.
+                     */
+                    Value oldSlotValue = newValue.getNestedValue(name);
+                    Value newSlotValue = tmpValue.getNestedValue(name);
+                    IAssignmentState oldState = null != var ? var.getState() : state;
+                    if (!(oldSlotValue != null && newSlotValue == null) && (AssignmentState.USER_ASSIGNED != oldState
+                        || state == AssignmentState.USER_ASSIGNED)) {
+                        
+                        newValue.configureValue(name, newSlotValue);
+                    }
+                }
+                
+                
+//                newValue.copyValuesFrom((CompoundValue) value);
             } catch (ValueDoesNotMatchTypeException exc) {
                 LOGGER.exception(exc);
             }
@@ -201,14 +224,19 @@ class ToplevelVarConfigProvider extends VariableConfigProvider {
             Value nestedValue = newValue.getNestedValue(slotName);
             IDecisionVariable var = cmpVar.getNestedVariable(slotName);
             LOGGER.info("VAR: " + var + " STATE: " + var.getState());
+            IAssignmentState nestedState = var.getState();
+            // Use new state only iff old state is not USER_ASSIGNED
+            if (nestedState != AssignmentState.USER_ASSIGNED) {
+                nestedState = state;
+            }
             if (allowDeletation) {
                 if (nestedValue == null) {
                     var.setValue(nestedValue, AssignmentState.UNDEFINED);
                 } else {
-                    var.setValue(nestedValue, var.getState());
+                    var.setValue(nestedValue, nestedState);
                 }
             } else if (null != nestedValue && null != var) {
-                var.setValue(nestedValue, state);
+                var.setValue(nestedValue, nestedState);
             }
         }
         value = newValue;
@@ -218,35 +246,50 @@ class ToplevelVarConfigProvider extends VariableConfigProvider {
     /**
      * Assigns a ContainerValue.
      * 
-     * @param value the value (may be <b>null</b> for incremental buildup)
+     * @param conValue the value (may be <b>null</b> for incremental buildup)
      * @param state the related assignment state
      * @param allowDeletation <tt>true</tt> if <tt>null</tt> values can overwrite already set values of an compound.
      * @return value
      * @throws ConfigurationException in case that the types of 
      * {@link #getDeclaration()} and <code>value</code> do not comply
      */
-    private Value assignContainerValue(Value value, IAssignmentState state, boolean allowDeletation)
+    private Value assignContainerValue(ContainerValue conValue, IAssignmentState state, boolean allowDeletation)
         throws ConfigurationException {
         ContainerVariable container = (ContainerVariable) relatedVariable;
         if (allowDeletation) {
             container.clear();
         }
-        ContainerValue conValue = (ContainerValue) value;
-        this.value = value;
+        ContainerValue oldValue = (ContainerValue) value;
+        this.value = conValue;
         for (int i = 0; i < conValue.getElementSize(); i++) {
-            String nestedName = container.getElementName(i);
-            //IDatatype containerType = DerivedDatatype.resolveToBasis(relatedVariable.getDeclaration().getType());
-            //IDatatype type = ((Container) containerType).getContainedType();
-            DecisionVariableDeclaration nestedDecl = new DecisionVariableDeclaration(nestedName,
-                conValue.getElement(i).getType(), relatedVariable.getDeclaration());
-            VariableCreator creator = new VariableCreator(nestedDecl, relatedVariable,
-                relatedVariable.isVisible(), false);
-            IDecisionVariable nestedVar = creator.getVariable();
-            container.addNestedElement(nestedVar);
-            Value nesValue = conValue.getElement(i);
-            nestedVar.setValue(nesValue, state);
+            boolean overwrite = true;
+            if (container.getNestedElementsCount() > i) {
+                IDecisionVariable oldNestedVar = container.getNestedElement(i);
+                overwrite = AssignmentState.USER_ASSIGNED != oldNestedVar.getState()
+                    || state == AssignmentState.USER_ASSIGNED;
+            }
+            
+            if (overwrite) {
+                String nestedName = container.getElementName(i);
+                //IDatatype containerType = DerivedDatatype.resolveToBasis(relatedVariable.getDeclaration().getType());
+                //IDatatype type = ((Container) containerType).getContainedType();
+                DecisionVariableDeclaration nestedDecl = new DecisionVariableDeclaration(nestedName,
+                    conValue.getElement(i).getType(), relatedVariable.getDeclaration());
+                VariableCreator creator = new VariableCreator(nestedDecl, relatedVariable,
+                    relatedVariable.isVisible(), false);
+                IDecisionVariable nestedVar = creator.getVariable();
+                container.addNestedElement(nestedVar);
+                Value nesValue = conValue.getElement(i);
+                nestedVar.setValue(nesValue, state);
+            } else if (oldValue.getElementSize() > i) {
+                // Copy old value to new value
+                try {
+                    conValue.setValue(i, oldValue.getElement(i));
+                } catch (ValueDoesNotMatchTypeException e) {
+                    LOGGER.exception(e);
+                }
+            }
         }
-        value = conValue;
         return value;
     }
 

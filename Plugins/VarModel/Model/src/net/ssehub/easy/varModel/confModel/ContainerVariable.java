@@ -132,6 +132,11 @@ public abstract class ContainerVariable extends StructuredVariable {
                         IDecisionVariable oldVar = nestedElements.get(i);
                         Value trgValue = conValue.getElement(i);
                         createNewVar = !(null != trgValue && trgValue.equals(oldVar.getValue()));
+                        // Overwrite value only if it was not user defined
+                        if (createNewVar) {
+                            createNewVar = AssignmentState.USER_ASSIGNED != oldVar.getState() 
+                                    || AssignmentState.USER_ASSIGNED == state;
+                        }
                     }
                     if (createNewVar) {
                         String name = getElementName(i);
@@ -158,8 +163,12 @@ public abstract class ContainerVariable extends StructuredVariable {
         if (conValue != null) {
             for (int i = 0; i < conValue.getElementSize(); i++) {
                 IDecisionVariable nestedVariable = getNestedElement(i);
-                Value nestedValue = conValue.getElement(i);
-                nestedVariable.setValue(nestedValue, state);
+                if (AssignmentState.USER_ASSIGNED != nestedVariable.getState()
+                    || state == AssignmentState.USER_ASSIGNED) {
+                    
+                    Value nestedValue = conValue.getElement(i);
+                    nestedVariable.setValue(nestedValue, state);
+                }
             }
         }
     }
