@@ -1,0 +1,11 @@
+project compoundVariable {
+
+    compound C {
+        Integer a;
+        Integer b;
+    }
+    
+    C cmp;
+    cmp = {a = 1, b = 2};
+    
+}

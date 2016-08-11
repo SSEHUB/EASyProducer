@@ -1,0 +1,12 @@
+project compoundConstraints {
+
+    compound C {
+        Integer a;
+        Integer b;
+        a = 1;
+        a == 10 implies b == 20;
+    }
+
+    C cmp;
+    
+}

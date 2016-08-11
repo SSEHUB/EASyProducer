@@ -1,0 +1,6 @@
+project collectionOfIntegers {
+
+    sequenceOf(Integer) seqA;
+    seqA = {1, 2};
+    
+}

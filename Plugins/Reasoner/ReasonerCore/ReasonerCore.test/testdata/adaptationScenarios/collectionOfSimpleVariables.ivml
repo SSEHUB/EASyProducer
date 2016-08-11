@@ -1,0 +1,11 @@
+project collectionOfSimpleVariables {
+
+    Integer a;
+    Integer b;
+    a = 1;
+    b = 2;
+    sequenceOf(Integer) seqA;
+//    sequenceOf(refTo(Integer)) seqC;
+    seqA = {a, b};                  // <- will not change if a or b change
+//    seqC = {refBy{a}, refBy{b}};    // <- allowed
+}
