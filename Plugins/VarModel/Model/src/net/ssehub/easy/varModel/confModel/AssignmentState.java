@@ -34,6 +34,11 @@ public enum AssignmentState implements IAssignmentState {
     ASSIGNED,
     
     /**
+     * The value is set by the user, should not be changed by the reasoner.
+     */
+    USER_ASSIGNED,
+    
+    /**
      * The default value is (still) assigned.
      */
     DEFAULT,
