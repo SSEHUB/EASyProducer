@@ -33,6 +33,7 @@ import net.ssehub.easy.varModel.model.Project;
  */
 @RunWith(Suite.class)
 @SuiteClasses({
+    net.ssehub.easy.reasoning.sseReasoner.adaptation.AllTests.class,
     net.ssehub.easy.reasoning.sseReasoner.capabilities.AllTests.class,
     // Skip: performance in automatic testing 
     net.ssehub.easy.reasoning.sseReasoner.qm.AllTests.class,
