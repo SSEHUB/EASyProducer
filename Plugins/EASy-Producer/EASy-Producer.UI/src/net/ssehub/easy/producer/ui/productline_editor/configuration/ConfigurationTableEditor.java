@@ -105,7 +105,7 @@ public class ConfigurationTableEditor extends TreeViewer implements IGUIConfigCh
      *   and {@link #createColumnLabelProvider()}
      */
     protected int[] getColumnWidths() {
-        return new int[] {225, 225, 25, 25, 50, 225, 100};
+        return new int[] {225, 225, 25, 25, 70, 225, 100};
     }
     
     /**

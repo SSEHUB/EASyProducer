@@ -39,6 +39,8 @@ abstract class AbstractConfigurationLabelProvider extends CellLabelProvider impl
     private static final Image ASSIGNED = Activator.getImageDescriptor("icons/editor/assigned.png").createImage();
     private static final Image NULL = Activator.getImageDescriptor("icons/editor/null.png").createImage();
     private static final Image CHECKED = Activator.getImageDescriptor("icons/checkmark.png").createImage();
+    // Icon copied from org.eclipse.wb.rcp_1.8.0.r45x201506110827 plugin (ECL license)
+    private static final Image UNFROZEN = Activator.getImageDescriptor("icons/editor/unfrozen.gif").createImage();
     private static final Color ERROR_COLOR = Display.getDefault().getSystemColor(SWT.COLOR_RED);
     private static final Color NESTED_ELEMENT_COLOR = new Color(Display.getDefault(), new RGB(232, 242, 254));
 //    private static final Color NESTED_ELEMENT_COLOR = new Color(Display.getDefault(), new RGB(227, 235, 243));
@@ -140,22 +142,25 @@ abstract class AbstractConfigurationLabelProvider extends CellLabelProvider impl
     public Image getColumnImage(Object element, int columnIndex) {
         Image im = null;
         
-        GUIVariable value = (GUIVariable) element;
-        if (ColumnType.NAME == columType(columnIndex)) {
+        GUIVariable variable = (GUIVariable) element;
+        ColumnType selectedColumn = columType(columnIndex);
+        if (ColumnType.NAME == selectedColumn) {
             im = CHECKED;
-            IAssignmentState state = value.getAssignmentState();
+            IAssignmentState state = variable.getAssignmentState();
             if (AssignmentState.UNDEFINED == state) {
                 im = UNCHECKED;
             } else if (AssignmentState.ASSIGNED == state || AssignmentState.DERIVED == state
                     || AssignmentState.DEFAULT == state) {
-                if (value.hasValue() && value.hasNullValue()) {
+                if (variable.hasValue() && variable.hasNullValue()) {
                     im = NULL;
                 } else {
                     im = ASSIGNED;
                 }
             }
+        } else if (ColumnType.FREEZE == selectedColumn && variable.isFreezable()) {
+            im = UNFROZEN;
         } else {
-            im = getSpecializedColumnImage(value, columnIndex);
+            im = getSpecializedColumnImage(variable, columnIndex);
         }
         return im;
     }
