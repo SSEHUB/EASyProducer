@@ -1,0 +1,13 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Yaml Instantiation Support Test
+Bundle-SymbolicName: net.ssehub.easy.instantiation.yaml.test
+Bundle-Version: 1.0.0.0
+Bundle-Activator: net.ssehub.easy.instantiation.yaml.test.Activator
+Require-Bundle: org.eclipse.ui,
+ org.eclipse.core.runtime,
+ net.ssehub.easy.instantiation.yaml;bundle-version="1.0.0",
+ org.junit;bundle-version="4.12.0",
+ org.apache.commons.io;bundle-version="2.4.0"
+Bundle-ActivationPolicy: lazy
+Bundle-Vendor: University of Hildesheim, SSE

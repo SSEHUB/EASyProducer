@@ -1,0 +1,7 @@
+#!/bin/sh
+#environment settings for cluster-wide scripts
+NIMBUS="nimbus1.ssecluster.local"
+WORKER="host-10.ssecluster.local host-11.ssecluster.local host-12.ssecluster.local host-13.ssecluster.local host-16.ssecluster.local host4.ssecluster.local host-15.ssecluster.local host3.ssecluster.local"
+ZOOKEEPER="zkeeper1.ssecluster.local zkeeper2.ssecluster.local zkeeper3.ssecluster.local"
+#NIMBUS="192.168.0.1"
+#WORKER="192.168.0.10 192.168.0.11 192.168.0.12 192.168.0.13 192.168.0.16 192.168.0.4 192.168.0.15 192.168.0.3"
