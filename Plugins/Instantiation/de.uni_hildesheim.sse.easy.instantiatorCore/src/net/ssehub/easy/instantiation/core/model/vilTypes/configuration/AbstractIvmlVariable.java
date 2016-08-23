@@ -523,7 +523,11 @@ public abstract class AbstractIvmlVariable extends IvmlElement {
             }
             IAssignmentState varState = toChange.getState();
             if (AssignmentState.UNDEFINED == varState) {
-                varState = AssignmentState.ASSIGNED;
+                varState = AssignmentState.USER_ASSIGNED;
+            } else if (AssignmentState.ASSIGNED == varState) {
+                // for now, just be careful when overriding the assigned state; USER_ASSIGNED forces the reasoner 
+                // to recalculate dependent values
+                varState = AssignmentState.USER_ASSIGNED; 
             }
             toChange.setValue(val, varState);
             config.notifyValueChanged(this, oldValue);
