@@ -1,0 +1,20 @@
+import enact;
+
+@advice(QM8)
+rtVilScript references3 (Project source, Configuration config, Project target) {
+
+    strategy main(Project source, Configuration config, Project target) = {
+        objective true;
+        breakdown {
+            tactic t(config);
+        }
+    }
+
+    tactic t(Configuration config) = {
+        QM8 cfg = config;
+        sequenceOf(HardwareAlgorithm) algs = cfg.algs;
+        HardwareAlgorithm hAlg = algs.first();
+        hAlg.actualHwNode = hAlg.hwNode;
+    }
+    
+}

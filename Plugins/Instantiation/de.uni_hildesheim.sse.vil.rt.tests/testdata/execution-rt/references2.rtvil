@@ -18,9 +18,7 @@ rtVilScript references2 (Project source, Configuration config, Project target) {
         } else {
             println("same and not enactable :)");
         }
-println(fam1.actual.name);        
         fam1.actual = fam1.available.first();
-println(fam1.actual.name);        
         if (isEnactable(fam1.actual)) {
             println("not same and enactable :)");
         } else {

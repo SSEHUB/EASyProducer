@@ -1,0 +1,9 @@
+-> main(Project, Configuration, Project) with (<project>, <config>, <project>)
+    -> t(Configuration) with (<config>)
+        cfg <- <config>
+        algs <- {QM8::algs [0]}
+        -> first(Sequence) with ({QM8::algs [0]}) = QM8::algs [0]
+        hAlg <- QM8::algs [0]
+        hAlg.actualHwNode <- QM8::HardwareAlgorithm::hwNode
+        Reasoner execution: true
+    -> enact(Project, Configuration, Project) with (<project>, <config>, <project>)

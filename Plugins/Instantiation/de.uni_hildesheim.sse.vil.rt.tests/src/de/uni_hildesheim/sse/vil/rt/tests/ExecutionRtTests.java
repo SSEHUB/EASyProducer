@@ -50,10 +50,13 @@ import net.ssehub.easy.instantiation.rt.core.model.rtVil.VariableValueCopier.Cop
 import net.ssehub.easy.reasoning.core.frontend.ReasonerFrontend;
 import net.ssehub.easy.reasoning.core.reasoner.ReasonerConfiguration;
 import net.ssehub.easy.varModel.confModel.ConfigurationException;
+import net.ssehub.easy.varModel.confModel.IDecisionVariable;
 import net.ssehub.easy.varModel.cst.CSTSemanticException;
+import net.ssehub.easy.varModel.model.AbstractVariable;
 import net.ssehub.easy.varModel.model.ModelQuery;
 import net.ssehub.easy.varModel.model.ModelQueryException;
 import net.ssehub.easy.varModel.model.datatypes.Compound;
+import net.ssehub.easy.varModel.model.values.NullValue;
 import net.ssehub.easy.varModel.model.values.ValueDoesNotMatchTypeException;
 
 /**
@@ -493,6 +496,30 @@ public class ExecutionRtTests extends AbstractRtTest {
         assertEqual(setup);
     }
 
+    /**
+     * Tests a single reference assignment (contributed by QualiMaster).
+     * 
+     * @throws IOException should not occur
+     * @throws ModelQueryException should not occur
+     */
+    @Test
+    public void testReferences3() throws IOException, ModelQueryException {
+        final String name = "references3";
+        File modelFile = createFile(name);
+        Configuration cfg = getIvmlConfiguration("QM8", NoVariableFilter.INSTANCE);
+        
+        Map<String, Object> param = createParameterMap(null, null, cfg);
+        EqualitySetup<Script> setup = new EqualitySetup<Script>(modelFile, name, null, createTraceFile(name), param);
+        setup.setEnableEquals(false);
+        assertEqual(setup);
+        
+        net.ssehub.easy.varModel.confModel.Configuration c = cfg.getConfiguration();
+        AbstractVariable var = ModelQuery.findVariable(c.getProject(), "hAlg", null);
+        Assert.assertNotNull(var);
+        IDecisionVariable d = c.getDecision(var);
+        IDecisionVariable a = d.getNestedElement("actualHwNode");
+        Assert.assertNotEquals(NullValue.INSTANCE, a.getValue());
+    }
     
     /**
      * Tests a simple weighting function.

@@ -1,0 +1,27 @@
+project QM8 {
+    
+    enum BindingTime {compile = 0, startup = 1, runtime = 2};
+    annotate BindingTime bindingTime = BindingTime.compile to QM8;
+
+    compound HwNode {
+        String name;
+    }
+
+    compound HardwareAlgorithm {
+        String name;
+        refTo(HwNode) hwNode;
+        assign(bindingTime = BindingTime.runtime) to {
+            refTo(HwNode) actualHwNode;
+        }
+    }
+    
+    HwNode hNode = {name="hwNode"};
+    HardwareAlgorithm hAlg = {name="hAlg", hwNode=refBy(hNode)};
+    sequenceOf(refTo(HardwareAlgorithm)) algs = {refBy(hAlg)};
+    
+    freeze {
+        algs;
+        hNode;
+        hAlg;
+    } but (f|f.bindingTime >= BindingTime.runtime)
+}
