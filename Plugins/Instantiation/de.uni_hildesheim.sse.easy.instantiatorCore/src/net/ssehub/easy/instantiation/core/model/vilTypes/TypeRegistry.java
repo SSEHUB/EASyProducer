@@ -310,7 +310,7 @@ public class TypeRegistry {
                 + " (" + type.getTypeClass().getName() + ")'", VilException.ID_INVALID_INSTANTIATOR);
         }
         if (instanceInstantiatorMethods > 0 && 0 == constructorMethods) {
-            throw new VilException("no valid constructor method declared in instance instantiator" 
+            throw new VilException("no valid constructor method declared in instance instantiator " 
                 + inst.value() + " (" + type.getTypeClass().getName() + ")'", 
                 VilException.ID_INVALID_INSTANTIATOR);
         }
