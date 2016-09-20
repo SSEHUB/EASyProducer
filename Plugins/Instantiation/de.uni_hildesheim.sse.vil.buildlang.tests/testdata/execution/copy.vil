@@ -1,0 +1,13 @@
+vilScript copyTest (Project source, Configuration config, Project target) {
+
+    cpy(Project source, Configuration config, Project target) = : {
+        Path from = "$source/srcForRecursiveCopy/toCopy/**/*";
+        Path to = "$target/simpleCopy/";
+        from.copy(to);
+    }
+
+    main(Project source, Configuration config, Project target) = : {
+        setOf(Artifact) r = cpy(source, config, target);
+    }
+
+}

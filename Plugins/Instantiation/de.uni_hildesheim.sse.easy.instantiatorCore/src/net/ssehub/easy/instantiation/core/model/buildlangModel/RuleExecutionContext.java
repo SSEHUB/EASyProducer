@@ -97,6 +97,13 @@ public class RuleExecutionContext {
     }
     
     /**
+     * Aggregates results of the actual execution into all results.
+     */
+    void addAllResults() {
+        allResults.addAll(result);
+    }
+    
+    /**
      * Returns all results collected so far as a Java collection.
      * 
      * @return all results

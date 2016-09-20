@@ -1096,6 +1096,8 @@ public class BuildlangExecution extends ExecutionVisitor<Script, Rule, VariableD
             environment.popLevel();
             if (Status.FAIL == context.getStatus()) {
                 this.failed.add(rule);
+            } else if (Status.SUCCESS == context.getStatus()) {
+                context.addAllResults();
             }
         }
     }

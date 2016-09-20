@@ -1026,4 +1026,24 @@ public class ExecutionTests extends AbstractExecutionTest<Script> {
         assertSelfInstantiate("typeSelect3", "main", "typeSelectTest", null);
     }
 
+    /**
+     * Tests the copy "results".
+     * 
+     * @throws IOException should not occur
+     */
+    @Test
+    public void testCopy() throws IOException {
+        assertSelfInstantiate("copy", "main", null, null);
+    }
+
+    /**
+     * Tests the copy "results".
+     * 
+     * @throws IOException should not occur
+     */
+    @Test
+    public void testCopy2() throws IOException {
+        assertSelfInstantiate("copy2", "main", null, null);
+    }
+
 }

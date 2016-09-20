@@ -167,7 +167,5 @@ public class PseudoInteger extends PseudoReal {
     public static double convert(int val) {
         return val;
     }
-    
-    // TODO complete operations
 
 }

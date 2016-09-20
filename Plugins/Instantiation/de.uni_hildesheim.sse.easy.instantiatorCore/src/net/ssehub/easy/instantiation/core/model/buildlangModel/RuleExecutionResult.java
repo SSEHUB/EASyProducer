@@ -7,6 +7,8 @@ import net.ssehub.easy.basics.logger.EASyLoggerFactory;
 import net.ssehub.easy.instantiation.core.Bundle;
 import net.ssehub.easy.instantiation.core.model.artifactModel.IArtifact;
 import net.ssehub.easy.instantiation.core.model.common.VilException;
+import net.ssehub.easy.instantiation.core.model.vilTypes.Conversion;
+import net.ssehub.easy.instantiation.core.model.vilTypes.IStringValueProvider;
 import net.ssehub.easy.instantiation.core.model.vilTypes.IVilType;
 import net.ssehub.easy.instantiation.core.model.vilTypes.Invisible;
 import net.ssehub.easy.instantiation.core.model.vilTypes.ListSet;
@@ -20,7 +22,7 @@ import net.ssehub.easy.instantiation.core.model.vilTypes.TypeRegistry;
  * 
  * @author Holger Eichelberger
  */
-public class RuleExecutionResult implements IVilType {
+public class RuleExecutionResult implements IVilType, IStringValueProvider {
 
     /**
      * Denotes the execution status.
@@ -206,4 +208,22 @@ public class RuleExecutionResult implements IVilType {
         return hasChanges;
     }
 
+    /**
+     * Conversion operation.
+     * 
+     * @param res the rule execution result to be converted/projected
+     * @return the converted value
+     */
+    @Invisible
+    @Conversion
+    @OperationMeta(returnGenerics = IArtifact.class)
+    public static Set<IArtifact> convert(RuleExecutionResult res) {
+        return res.result();
+    }
+
+    @Override
+    public String getStringValue(StringComparator comparator) {
+        return "RuleExecutionResult " + getStatus();
+    }
+    
 }

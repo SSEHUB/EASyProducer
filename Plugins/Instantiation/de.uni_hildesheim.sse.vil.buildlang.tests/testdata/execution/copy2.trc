@@ -1,0 +1,7 @@
+-> main(Project, Configuration, Project) with (<project>, <config>, <project>)
+    -> cpy(Project, Configuration, Project) with (<project>, <config>, <project>)
+        from <- srcForRecursiveCopy/toCopy/**/*
+        to <- simpleCopy2
+        -> copy(Path, FileSystemArtifact) with (srcForRecursiveCopy/toCopy/**/*, simpleCopy2/) = {simpleCopy2/base/FileToCopy.txt}
+    -> allResults(RuleExecutionResult) with (RuleExecutionResult SUCCESS) = {simpleCopy2/base/FileToCopy.txt}
+    r <- {simpleCopy2/base/FileToCopy.txt}

@@ -1,0 +1,6 @@
+-> main(Project, Configuration, Project) with (<project>, <config>, <project>)
+    -> cpy(Project, Configuration, Project) with (<project>, <config>, <project>)
+        from <- srcForRecursiveCopy/toCopy/**/*
+        to <- simpleCopy
+        -> copy(Path, FileSystemArtifact) with (srcForRecursiveCopy/toCopy/**/*, simpleCopy/) = {simpleCopy/base/FileToCopy.txt}
+    r <- {simpleCopy/base/FileToCopy.txt}
