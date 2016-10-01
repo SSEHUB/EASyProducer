@@ -50,6 +50,7 @@ import org.eclipse.ui.ide.IDE;
 public abstract class AbstractFiletypeWizard extends Wizard implements INewWizard {
     
     protected static final String LINEFEED = "\r\n";
+    protected static final String INDENTION = "    ";
     private AbstractFiletypeWizardPage page;
     private IWizardPageFactory pageCreator;
     private ISelection selection;
@@ -88,16 +89,18 @@ public abstract class AbstractFiletypeWizard extends Wizard implements INewWizar
                 }
             }
         };
+        
+        boolean successful = true;
         try {
             getContainer().run(true, false, op);
         } catch (InterruptedException e) {
-            return false;
+            successful = false;
         } catch (InvocationTargetException e) {
             Throwable realException = e.getTargetException();
             MessageDialog.openError(getShell(), "Error", realException.getMessage());
-            return false;
+            successful = false;
         }
-        return true;
+        return successful;
     }
 
     /**

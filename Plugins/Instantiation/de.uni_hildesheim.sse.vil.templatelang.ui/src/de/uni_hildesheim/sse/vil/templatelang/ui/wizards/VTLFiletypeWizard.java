@@ -17,6 +17,11 @@ import net.ssehub.easy.dslCore.ui.wizards.AbstractFiletypeWizard;
  */
 
 public class VTLFiletypeWizard extends AbstractFiletypeWizard {
+    /**
+     * Default parameters for the complete template as well as for the main method.
+     * Also includes opening parenthesis and line feed. 
+     */
+    private static final String DEFAULT_PARAMETERS = "(Configuration config, FileArtifact target) {" + LINEFEED;
 
     /**
      * Sole Constructor for VTLFiletypeWizard.
@@ -27,8 +32,13 @@ public class VTLFiletypeWizard extends AbstractFiletypeWizard {
 
     @Override
     protected InputStream openContentStream(String fileName) {
-        String contents = "template " + fileName + "(Configuration config, FileArtifact target) {" + LINEFEED
-            + LINEFEED + "}";
+        String contents = "template " + fileName + DEFAULT_PARAMETERS
+            + LINEFEED
+            + INDENTION + "def main" + DEFAULT_PARAMETERS
+            + INDENTION + LINEFEED
+            + INDENTION + "}" + LINEFEED
+            + LINEFEED
+            + "}";
         return new ByteArrayInputStream(contents.getBytes());
     }
 }
