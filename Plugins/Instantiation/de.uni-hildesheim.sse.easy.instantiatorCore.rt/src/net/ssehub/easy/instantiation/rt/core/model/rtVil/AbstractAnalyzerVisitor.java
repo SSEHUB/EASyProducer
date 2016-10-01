@@ -84,13 +84,13 @@ public abstract class AbstractAnalyzerVisitor<V> extends EvaluationVisitor {
      */
     public List<V> getViolatingClauses() {
         List<V> result = new ArrayList<V>();
-        if (violating.isEmpty()) {
+        /*if (violating.isEmpty()) { // causes alternating behavior and re-sending of events
             Set<IDecisionVariable> tmp = new HashSet<IDecisionVariable>();
             tmp.addAll(relevant);
             for (IDecisionVariable var : tmp) {
                 addViolatingInstance(createViolationInstance(var, null, null, null));
             }
-        } 
+        }*/
         result.addAll(violating);
         return result;
     }
