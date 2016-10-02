@@ -70,13 +70,6 @@ public abstract class AbstractAnalyzerVisitor<V> extends EvaluationVisitor {
     protected abstract V createViolationInstance(IDecisionVariable var, String operation, Double deviation, 
         Double deviationPercentage);
     
-    @Override
-    public void clearResult() {
-        super.clearResult();
-        relevant.clear();
-        violating.clear();
-    }
-    
     /**
      * Returns the violating clauses.
      * 
@@ -90,7 +83,7 @@ public abstract class AbstractAnalyzerVisitor<V> extends EvaluationVisitor {
             for (IDecisionVariable var : tmp) {
                 addViolatingInstance(createViolationInstance(var, null, null, null));
             }
-        }*/
+        } */
         result.addAll(violating);
         return result;
     }
@@ -98,16 +91,17 @@ public abstract class AbstractAnalyzerVisitor<V> extends EvaluationVisitor {
     @Override
     public void visitOclFeatureCall(OCLFeatureCall call) {
         super.visitOclFeatureCall(call);
+        EvaluationAccessor result = getResultAccessor(true);
 
         EvaluationAccessor operand = null;
         EvaluationAccessor[] parameter = new EvaluationAccessor[call.getParameterCount()];
-        int startRelSize = relevant.size();
+        int startRelSize = relevant.size(); // initial size before evaluating operand
         allowUpdateRelevant = true;
         if (null != call.getOperand()) {
             call.getOperand().accept(this);
             operand = getResultAccessor(true);
         }
-        int opRelSize = relevant.size();
+        int opRelSize = relevant.size(); // may change while evaluating operand
         for (int p = 0; p < call.getParameterCount(); p++) {
             call.getParameter(p).accept(this);
             parameter[p] = getResultAccessor(true);
@@ -153,6 +147,7 @@ public abstract class AbstractAnalyzerVisitor<V> extends EvaluationVisitor {
         for (int p = 0; p < parameter.length; p++) {
             release(parameter[p]);
         }
+        setResultAcessor(result); // set back original result (accessor), shall be null due to nullifying op/param
     }
     
     /**
@@ -290,6 +285,8 @@ public abstract class AbstractAnalyzerVisitor<V> extends EvaluationVisitor {
                 }
             }
         }
+        relevant.clear();
+        violating.clear();
         return result;
     }
 
