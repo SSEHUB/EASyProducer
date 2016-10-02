@@ -433,6 +433,16 @@ public class EvaluationVisitor implements IConstraintTreeVisitor {
         }
         return res;
     }
+    
+    /**
+     * Defines the result accessor and overrides an existing accessor. Please use with care. This part takes over the 
+     * responsibility for releasing the accessor.
+     * 
+     * @param result the new result accessor (may be <b>null</b> for none)
+     */
+    protected void setResultAcessor(EvaluationAccessor result) {
+        this.result = result;
+    }
 
     /**
      * Returns whether the {@link #getResult() result of a constraint evaluation}
