@@ -44,6 +44,8 @@ import net.ssehub.easy.reasoning.core.reasoner.Message;
 import net.ssehub.easy.reasoning.core.reasoner.ReasonerConfiguration;
 import net.ssehub.easy.reasoning.core.reasoner.ReasoningResult;
 import net.ssehub.easy.varModel.confModel.IDecisionVariable;
+import net.ssehub.easy.varModel.model.Constraint;
+import net.ssehub.easy.varModel.persistency.StringProvider;
 
 /**
  * Executes an rtVil adaptation script.
@@ -138,8 +140,11 @@ public class RtVilExecution extends BuildlangExecution implements IRtVilVisitor 
                     }
                 }
                 boolean ok = (0 == errorCount);
-                evaluator.getTracer().trace("Reasoner execution: " + ok);
-                logger.warn("Reasoner execution: " + ok);                
+                evaluator.getTracer().trace("Reasoner execution ok: " + ok);
+                logger.warn("Reasoner execution ok: " + ok);
+                if (!ok) {
+                    net.ssehub.easy.varModel.confModel.Configuration.printConfig(System.out, cfg.getConfiguration());
+                }
                 result = ok;
             }
             return result;
@@ -335,7 +340,7 @@ public class RtVilExecution extends BuildlangExecution implements IRtVilVisitor 
         String result = msg.getDescription();
         List<Set<IDecisionVariable>> info = msg.getProblemVariables();
         if (null != info) {
-            result += " ";
+            result += " problem vars: ";
             Iterator<Set<IDecisionVariable>> iter = info.iterator();
             while (iter.hasNext()) {
                 Set<IDecisionVariable> set = iter.next();
@@ -352,6 +357,17 @@ public class RtVilExecution extends BuildlangExecution implements IRtVilVisitor 
                 if (iter.hasNext()) {
                     result += ", ";
                 }
+            }
+        }
+
+        List<Constraint> cstr = msg.getProblemConstraints();
+        if (null != cstr && cstr.size() > 0) {
+            result += "problem constraints: ";
+            for (int i = 0; i < cstr.size(); i++) {
+                if (i > 0) {
+                    result += ", ";
+                }
+                result += StringProvider.toIvmlString(cstr.get(i).getConsSyntax());
             }
         }
         return result;
