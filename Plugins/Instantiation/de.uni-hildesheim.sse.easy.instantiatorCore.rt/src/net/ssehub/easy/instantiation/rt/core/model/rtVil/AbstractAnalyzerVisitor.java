@@ -240,6 +240,8 @@ public abstract class AbstractAnalyzerVisitor<V> extends EvaluationVisitor {
         cst.accept(this);
         List<V> result = getViolatingClauses();
         clear();
+        relevant.clear();
+        violating.clear();
         return result;
     }
 
@@ -285,8 +287,6 @@ public abstract class AbstractAnalyzerVisitor<V> extends EvaluationVisitor {
                 }
             }
         }
-        relevant.clear();
-        violating.clear();
         return result;
     }
 

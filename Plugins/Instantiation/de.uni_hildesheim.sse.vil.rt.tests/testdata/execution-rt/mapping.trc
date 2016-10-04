@@ -9,5 +9,5 @@
             -> bindValues(MPCCNode) with (QM3::clusters [1])
                 node.bandwidth <- 0
         }
-        Reasoner execution: true
+        Reasoner execution ok: true
     -> enact(Project, Configuration, Project) with (<project>, <config>, <project>)

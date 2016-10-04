@@ -5,5 +5,5 @@
         -> first(Sequence) with ({dispatch2::Algorithm::avail [0]}) = dispatch2::Algorithm::avail [0]
         a.act <- dispatch2::Algorithm::avail [0]
         -> process(MPCCNode) with (dispatch2::Algorithm::act)
-        Reasoner execution: true
+        Reasoner execution ok: true
     -> enact(Project, Configuration, Project) with (<project>, <config>, <project>)

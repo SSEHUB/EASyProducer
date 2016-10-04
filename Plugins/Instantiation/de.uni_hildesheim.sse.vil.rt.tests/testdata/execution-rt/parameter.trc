@@ -9,7 +9,7 @@
         -> value(ParameterAdaptationEvent) with (<ParameterAdaptationEvent>) = 50
         -> setParameter(IntegerParameter, Integer) with (QM2::Source::parameters {0}, 50)
             param.value <- 50
-        Reasoner execution: true
+        Reasoner execution ok: true
     -> enact(Project, Configuration, Project) with (<project>, <config>, <project>)
         -> selectChangedWithContext(Configuration) with (<config>) = <config>
         qm <- <config>

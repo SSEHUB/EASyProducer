@@ -55,7 +55,7 @@
                     }
             }
         }
-        Reasoner execution: true
+        Reasoner execution ok: true
     -> enact(Project, Configuration, Project) with (<project>, <config>, <project>)
         -> selectChangedWithContext(Configuration) with (<config>) = <config>
         qm <- <config>

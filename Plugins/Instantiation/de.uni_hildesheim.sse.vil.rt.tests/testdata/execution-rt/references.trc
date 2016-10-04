@@ -11,5 +11,5 @@
         a <- QM4::algorithms [0]
         a.actualHwNode <- QM4::Algorithm::hwNode
         -> println(Any) with (dfeHost)
-        Reasoner execution: true
+        Reasoner execution ok: true
     -> enact(Project, Configuration, Project) with (<project>, <config>, <project>)

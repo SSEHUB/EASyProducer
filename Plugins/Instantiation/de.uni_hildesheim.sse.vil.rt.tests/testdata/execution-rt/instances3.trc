@@ -10,5 +10,5 @@
         ip <- QM7::LoadShedder::parameters [0]
         ip.name <- NTH_TUPLE
         ip.value <- 500
-        Reasoner execution: true
+        Reasoner execution ok: true
     -> enact(Project, Configuration, Project) with (<project>, <config>, <project>)

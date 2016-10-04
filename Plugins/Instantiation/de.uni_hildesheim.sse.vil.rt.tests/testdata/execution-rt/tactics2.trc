@@ -4,5 +4,5 @@
         rpSink <- tactics2::rpSink
         info <- tactics2::ReplaySink::replay
         info.active <- false
-        Reasoner execution: true
+        Reasoner execution ok: true
     -> enact(Project, Configuration, Project) with (<project>, <config>, <project>)

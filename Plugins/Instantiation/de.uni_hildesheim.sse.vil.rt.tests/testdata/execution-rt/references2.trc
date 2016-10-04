@@ -26,5 +26,5 @@
             -> !=(Any, Any) with ({name=alg1 : String}, {name=alg2 : String}) = true
         visit if-branch
         -> println(Any) with (not same and enactable :))
-        Reasoner execution: true
+        Reasoner execution ok: true
     -> enact(Project, Configuration, Project) with (<project>, <config>, <project>)
