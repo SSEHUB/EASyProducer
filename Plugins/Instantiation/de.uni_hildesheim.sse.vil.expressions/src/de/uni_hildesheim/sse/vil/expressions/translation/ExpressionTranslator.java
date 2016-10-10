@@ -956,7 +956,6 @@ public abstract class ExpressionTranslator<I extends VariableDeclaration, R exte
                 }
             } else {
                 result = new VilTypeExpression(name, type);
-System.out.println("HERE");                
                 ivmlWarning(name, arg, ExpressionDslPackage.Literals.CONSTANT__QVALUE);
             }
         } else if (res instanceof VariableDeclaration) {
