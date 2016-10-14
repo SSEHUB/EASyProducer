@@ -440,13 +440,26 @@ public abstract class AbstractCollectionWrapper<T> implements Collection<T> {
      * @throws VilException in case of evaluation problems
      */
     protected List<T> sortImpl(ExpressionEvaluator evaluator) throws VilException {
+        return sortImpl(iterator(), evaluator);
+    }
+
+    /**
+     * Sorts the elements in <code>iter</code> (take numbers if the evaluator returns numbers, 
+     * else lexicographic sort).
+     * 
+     * @param <T> the data type
+     * @param iter the iterator holding the data
+     * @param evaluator the evaluator
+     * @return the sorted sequence from <code>iter</code>
+     * @throws VilException in case of evaluation problems
+     */
+    public static <T> List<T> sortImpl(Iterator<T> iter, ExpressionEvaluator evaluator) throws VilException {
         TypeDescriptor<?> compareEltType = evaluator.getExpression().inferType();
         java.util.Map<?, List<T>> tempMap;
         if (TypeRegistry.realType().isAssignableFrom(compareEltType) 
             || TypeRegistry.integerType().isAssignableFrom(compareEltType)) {
             // lexicographic ordering does not work with negative numbers
             java.util.Map<Number, List<T>> mapping = new TreeMap<Number, List<T>>(NUMBER_COMPARATOR);
-            Iterator<T> iter = iterator();
             while (iter.hasNext()) {
                 T value = iter.next();
                 Object eval = evaluator.evaluate(value);
@@ -461,7 +474,6 @@ public abstract class AbstractCollectionWrapper<T> implements Collection<T> {
             tempMap = mapping;
         } else {
             java.util.Map<String, List<T>> mapping = new TreeMap<String, List<T>>(Collator.getInstance());
-            Iterator<T> iter = iterator();
             while (iter.hasNext()) {
                 T value = iter.next();
                 Object eval = evaluator.evaluate(value);

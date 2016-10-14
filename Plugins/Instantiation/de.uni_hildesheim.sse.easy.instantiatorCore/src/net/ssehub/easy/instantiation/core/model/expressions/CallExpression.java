@@ -283,6 +283,7 @@ public class CallExpression extends AbstractCallExpression implements IArgumentP
             }
             TypeDescriptor<?> result = considerIteratorResult(resolved.getReturnType());
             TypeDescriptor<?>[] returnGenerics = null;
+            int useParam = resolved.useGenericParameterAsReturn();
             if (resolved.isTypeSelect() && arguments[1].getExpression() instanceof VilTypeExpression) {
                 // 2 param are ensured by isTypeSelect, determine actual return type
                 returnGenerics = TypeDescriptor.createArray(1);
@@ -290,11 +291,14 @@ public class CallExpression extends AbstractCallExpression implements IArgumentP
             } else if (resolved.isGenericCollectionOperation()) {
                 // implicit parameter 1 determines type
                 TypeDescriptor<?> arg0Type = arguments[0].getExpression().inferType();
-                if (arg0Type.getGenericParameterCount() > 0) { 
+                int genParamCount = arg0Type.getGenericParameterCount();
+                if (genParamCount > 0) {
                     returnGenerics = TypeDescriptor.createArray(1);
                     returnGenerics[0] = checkUseParameter();
                     if (null == returnGenerics[0]) { // take value from implicit parameter
-                        returnGenerics[0] = arg0Type.getGenericParameterType(0);
+                        useParam = (useParam >= 0 && useParam < genParamCount) ? useParam : 0;
+                        returnGenerics[0] = arg0Type.getGenericParameterType(useParam);
+                        useParam = -1; // done
                     }
                 }
             }
@@ -308,7 +312,6 @@ public class CallExpression extends AbstractCallExpression implements IArgumentP
                     returnGenerics[1] = arg1Type.getGenericParameterType(0);
                 }
             }
-            int useParam = resolved.useGenericParameterAsReturn();
             if (useParam >= 0 && null != resolved.getDeclaringType()
                 && arguments.length > 0
                 && useParam < arguments[0].inferType().getGenericParameterCount()) {
@@ -322,24 +325,36 @@ public class CallExpression extends AbstractCallExpression implements IArgumentP
                     result = arg0Type.getGenericParameterType(0);
                 }
             }
-            if (null != returnGenerics) {
-                try {
-                    if (result.isSet()) {
-                        result = TypeRegistry.getSetType(returnGenerics);
-                    } else if (result.isSequence()) {
-                        result = TypeRegistry.getSequenceType(returnGenerics);
-                    } else {
-                        result = TypeRegistry.getMapType(returnGenerics);
-                    }
-                } catch (VilException e) {
-                    EASyLoggerFactory.INSTANCE.getLogger(CallExpression.class, Bundle.ID).exception(e);
-                }
-            }
-            type = result;
+            type = considerReturnGenerics(result, returnGenerics);
         }
         return type;
     }
-    
+
+    /**
+     * Considers the return generics on <code>type</code>.
+     * 
+     * @param type the type to consider the generics for
+     * @param returnGenerics the return generics (may be <b>null</b>)
+     * @return the resulting descriptor or <code>type</code> if no return generics are given
+     */
+    private static TypeDescriptor<?> considerReturnGenerics(TypeDescriptor<?> type, 
+        TypeDescriptor<?>[] returnGenerics) {
+        TypeDescriptor<?> result = type;
+        if (null != returnGenerics) {
+            try {
+                if (result.isSet()) {
+                    result = TypeRegistry.getSetType(returnGenerics);
+                } else if (result.isSequence()) {
+                    result = TypeRegistry.getSequenceType(returnGenerics);
+                } else {
+                    result = TypeRegistry.getMapType(returnGenerics);
+                }
+            } catch (VilException e) {
+                EASyLoggerFactory.INSTANCE.getLogger(CallExpression.class, Bundle.ID).exception(e);
+            }
+        }
+        return result;
+    }
     
     /**
      * Returns the number of arguments.

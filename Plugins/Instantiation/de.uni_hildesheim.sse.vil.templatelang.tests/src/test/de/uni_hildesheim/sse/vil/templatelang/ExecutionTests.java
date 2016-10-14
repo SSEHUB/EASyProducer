@@ -1203,6 +1203,16 @@ public class ExecutionTests extends AbstractTest {
     }
     
     /**
+     * Tests sorting IVML map elements via expression.
+     * 
+     * @throws IOException should not occur
+     */
+    @Test
+    public void testSort2() throws IOException {
+        assertEqualWithIvml("sort2", "SortModel");
+    }
+    
+    /**
      * Tests IVML null values.
      * 
      * @throws IOException should not occur

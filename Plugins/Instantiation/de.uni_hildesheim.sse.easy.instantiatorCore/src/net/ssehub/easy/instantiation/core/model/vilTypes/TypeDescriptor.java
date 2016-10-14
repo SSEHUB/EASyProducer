@@ -279,7 +279,7 @@ public abstract class TypeDescriptor <T> implements IMetaType {
     public IMetaOperation findConversion(IMetaType sourceType, IMetaType targetType) {
         IMetaOperation result = null;
         for (int c = 0; null == result && c < conversions.length; c++) {
-            IMetaOperation desc = conversions[c];   
+            IMetaOperation desc = conversions[c];  
             if (desc.getParameterType(0).isAssignableFrom(sourceType) 
                 && (desc.getReturnType().isAssignableFrom(targetType) 
                     || targetType.isAssignableFrom(desc.getReturnType()))) { // needed for derived IVML types

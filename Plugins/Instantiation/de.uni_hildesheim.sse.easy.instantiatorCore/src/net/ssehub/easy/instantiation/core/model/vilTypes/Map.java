@@ -1,11 +1,14 @@
 package net.ssehub.easy.instantiation.core.model.vilTypes;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.List;
 import java.util.TreeMap;
 
 import net.ssehub.easy.instantiation.core.model.common.VilException;
+import net.ssehub.easy.instantiation.core.model.expressions.ExpressionEvaluator;
 
 /**
  * Defines the VIL type "Map".
@@ -375,6 +378,23 @@ public class Map<K, V> implements IVilGenericType, IStringValueProvider {
             result = null;
         }
         return result;
+    }
+
+    /**
+     * Sorts values in this map according to keys.
+     * 
+     * @param evaluator the evaluator
+     * @return the map values sorted according to the keys
+     * @throws VilException in case that evaluating fails
+     */
+    @OperationMeta(useGenericParameter = 1)
+    public Sequence<V> sortByKeys(ExpressionEvaluator evaluator) throws VilException {
+        List<K> sortedKeys = AbstractCollectionWrapper.sortImpl(keys().iterator(), evaluator);
+        List<V> result = new ArrayList<V>(sortedKeys.size());
+        for (K key : sortedKeys) {
+            result.add(get(key));
+        }
+        return new ListSequence<V>(result, generics[1]); // see assertion in constructor
     }
 
 }

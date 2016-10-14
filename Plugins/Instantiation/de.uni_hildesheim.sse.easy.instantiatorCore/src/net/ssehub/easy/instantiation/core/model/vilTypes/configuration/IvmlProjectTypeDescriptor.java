@@ -1,7 +1,9 @@
 package net.ssehub.easy.instantiation.core.model.vilTypes.configuration;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -53,7 +55,9 @@ class IvmlProjectTypeDescriptor extends AbstractIvmlTypeDescriptor implements IA
         addOperations(operations, fields, project, new HashSet<Project>());
         setOperations(operations.values());
         setFields(fields.values());
-        setConversions(null);
+        List<OperationDescriptor> conversions = new ArrayList<OperationDescriptor>();
+        conversions.add(new IvmlConfigurationConversionOperationDescriptor(this));
+        setConversions(conversions);
     }
     
     /**

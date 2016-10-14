@@ -1,0 +1,9 @@
+-> main(Configuration, Artifact) with (<config>, test.texts)
+    mData <- {{1, first}, {10, second}, {20, last}}
+    -> sortByKeys(Map, ExpressionEvaluator) with ({{1, first}, {10, second}, {20, last}}, <evaluator>) = {first, last, second}
+    res <- {first, last, second}
+    for e {
+        e <- first
+        e <- second
+        e <- last
+    }

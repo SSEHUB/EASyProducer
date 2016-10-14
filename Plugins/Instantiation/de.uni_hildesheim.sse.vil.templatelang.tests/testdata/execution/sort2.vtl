@@ -1,0 +1,11 @@
+template sort2(Configuration config, Artifact target) {
+
+    def main(Configuration config, Artifact target) {
+        mapOf(Integer, String) mData = {{10, "second"}, {1, "first"}, {20, "last"}};
+        sequenceOf(String) res = mData->sortByKeys(Integer e | e);
+        for (String e : res) {
+            '${e}'
+        }
+    }
+
+}
