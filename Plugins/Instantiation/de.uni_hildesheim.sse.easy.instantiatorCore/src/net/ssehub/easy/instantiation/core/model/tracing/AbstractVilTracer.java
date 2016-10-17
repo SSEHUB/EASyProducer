@@ -253,7 +253,7 @@ public abstract class AbstractVilTracer
     }
 
     @Override
-    public void visitScript(Script script) {
+    public void visitScript(Script script, RuntimeEnvironment environment) {
         String ver = Version.toString(script.getVersion());
         if (null != ver && ver.length() > 0) {
             ver = " version " + ver;

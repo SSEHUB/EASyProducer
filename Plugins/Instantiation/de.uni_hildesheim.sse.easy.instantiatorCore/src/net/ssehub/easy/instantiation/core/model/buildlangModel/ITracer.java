@@ -14,8 +14,9 @@ public interface ITracer extends net.ssehub.easy.instantiation.core.model.common
      * Is called when a script is being visited.
      * 
      * @param script the script
+     * @param environment the runtime environment
      */
-    public void visitScript(Script script);
+    public void visitScript(Script script, RuntimeEnvironment environment);
 
     /**
      * Is called when visiting a script ends.

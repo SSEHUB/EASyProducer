@@ -344,7 +344,7 @@ public class BuildlangExecution extends ExecutionVisitor<Script, Rule, VariableD
     private Object executeScript(Script script, RuleCallExpression start) throws VilException {
         Map<String, Object> scriptParam = determineScriptParam(start);
         resolver.pushModel(script);
-        tracer.visitScript(script);
+        tracer.visitScript(script, environment);
         if (null != scriptParam) {
             scriptParam = replaceParameter(scriptParam);
         }

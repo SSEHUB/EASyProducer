@@ -155,7 +155,7 @@ public class StreamTracer extends net.ssehub.easy.instantiation.core.model.commo
     }
 
     @Override
-    public void visitScript(Script script) {
+    public void visitScript(Script script, RuntimeEnvironment environment) {
         // for compatibility with existing tests
     }
 
