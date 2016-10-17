@@ -19,6 +19,7 @@ import net.ssehub.easy.varModel.model.ModelQuery;
 import net.ssehub.easy.varModel.model.ModelQueryException;
 import net.ssehub.easy.varModel.model.Project;
 import net.ssehub.easy.varModel.model.datatypes.IDatatype;
+import net.ssehub.easy.varModel.model.values.BooleanValue;
 import net.ssehub.easy.varModel.model.values.ValueDoesNotMatchTypeException;
 import net.ssehub.easy.varModel.persistency.IVMLWriter;
 
@@ -307,6 +308,26 @@ public class AdditionalTests extends AbstractTest {
                 }
             }
         }
+    }
+
+    /**
+     * Tests constraint values as Booleans.
+     * 
+     * @throws IOException should not occur
+     * @throws ModelQueryException if a variable cannot be found
+     */
+    @Test
+    public void testConstraintValue() throws IOException, ModelQueryException {
+        List<Project> projects = assertEqual(createFile("constraintValue"), null, null);
+        Assert.assertNotNull(projects);
+        Assert.assertEquals(1, projects.size());
+        Project prj = projects.get(0);
+        AbstractVariable var = ModelQuery.findVariable(prj, "alg", null);
+        Configuration cfg = new Configuration(projects.get(0));
+        IDecisionVariable decVar = cfg.getDecision(var);
+        Assert.assertNotNull(decVar);
+        IDecisionVariable scalable = decVar.getNestedElement("scalable");
+        Assert.assertTrue(scalable.getValue() instanceof BooleanValue);
     }
 
 }

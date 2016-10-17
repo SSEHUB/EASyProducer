@@ -1,0 +1,13 @@
+project constraintValue {
+
+    version v0;
+    compound Algorithm {
+        setOf(Constraint) constraints;
+        Boolean scalable;
+    }
+
+    Algorithm alg = {constraints = {scalable == true}, scalable = true};
+    freeze {
+        alg;
+    }
+}

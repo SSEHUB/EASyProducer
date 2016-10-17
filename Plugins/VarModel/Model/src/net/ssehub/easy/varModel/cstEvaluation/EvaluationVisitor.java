@@ -1651,7 +1651,7 @@ public class EvaluationVisitor implements IConstraintTreeVisitor {
             String slotName = initializer.getSlot(s);
             values[pos++] = slotName;
             DecisionVariableDeclaration decl = type.getElement(slotName);
-            if (ConstraintType.TYPE.isAssignableFrom(decl.getType())) {
+            if (ConstraintType.isConstraint(decl.getType())) {
                 try {
                     // do not evaluate a constraint value here - this is just a value as it is / deferred
                     // see StaticAccessFinder
