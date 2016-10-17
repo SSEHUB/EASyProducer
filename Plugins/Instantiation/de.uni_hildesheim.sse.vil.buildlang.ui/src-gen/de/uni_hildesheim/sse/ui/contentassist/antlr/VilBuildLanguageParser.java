@@ -160,8 +160,8 @@ public class VilBuildLanguageParser extends AbstractContentAssistParser {
 					put(grammarAccess.getScriptContentsAccess().getElementsAssignment_1_0(), "rule__ScriptContents__ElementsAssignment_1_0");
 					put(grammarAccess.getScriptContentsAccess().getElementsAssignment_1_1(), "rule__ScriptContents__ElementsAssignment_1_1");
 					put(grammarAccess.getScriptContentsAccess().getElementsAssignment_1_2(), "rule__ScriptContents__ElementsAssignment_1_2");
-					put(grammarAccess.getRuleDeclarationAccess().getTypeAssignment_1_0(), "rule__RuleDeclaration__TypeAssignment_1_0");
-					put(grammarAccess.getRuleDeclarationAccess().getModifierAssignment_1_1(), "rule__RuleDeclaration__ModifierAssignment_1_1");
+					put(grammarAccess.getRuleDeclarationAccess().getModifierAssignment_1_0(), "rule__RuleDeclaration__ModifierAssignment_1_0");
+					put(grammarAccess.getRuleDeclarationAccess().getTypeAssignment_1_1(), "rule__RuleDeclaration__TypeAssignment_1_1");
 					put(grammarAccess.getRuleDeclarationAccess().getNameAssignment_1_2(), "rule__RuleDeclaration__NameAssignment_1_2");
 					put(grammarAccess.getRuleDeclarationAccess().getParamListAssignment_1_4(), "rule__RuleDeclaration__ParamListAssignment_1_4");
 					put(grammarAccess.getRuleDeclarationAccess().getConditionsAssignment_2(), "rule__RuleDeclaration__ConditionsAssignment_2");

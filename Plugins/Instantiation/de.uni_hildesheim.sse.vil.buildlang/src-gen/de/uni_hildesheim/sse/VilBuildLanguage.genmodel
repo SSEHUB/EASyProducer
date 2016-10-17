@@ -33,8 +33,8 @@
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference VilBuildLanguage.ecore#//ScriptContents/elements"/>
     </genClasses>
     <genClasses ecoreClass="VilBuildLanguage.ecore#//RuleDeclaration">
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference VilBuildLanguage.ecore#//RuleDeclaration/type"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference VilBuildLanguage.ecore#//RuleDeclaration/modifier"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference VilBuildLanguage.ecore#//RuleDeclaration/type"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute VilBuildLanguage.ecore#//RuleDeclaration/name"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference VilBuildLanguage.ecore#//RuleDeclaration/paramList"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference VilBuildLanguage.ecore#//RuleDeclaration/conditions"/>

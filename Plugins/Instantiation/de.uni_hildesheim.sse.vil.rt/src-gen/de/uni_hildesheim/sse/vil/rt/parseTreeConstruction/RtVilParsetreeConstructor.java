@@ -112,9 +112,7 @@ protected class ThisRootNode extends RootToken {
 /************ begin Rule ImplementationUnit ****************
  *
  * ImplementationUnit:
- * 	{ImplementationUnit} imports+=Import*
- * 	requires+=Require*
- * 	scripts+=LanguageUnit*;
+ * 	{ImplementationUnit} imports+=Import* requires+=Require* scripts+=LanguageUnit*;
  *
  **/
 
@@ -327,20 +325,14 @@ protected class ImplementationUnit_ScriptsAssignment_3 extends AssignmentToken  
 /************ begin Rule LanguageUnit ****************
  *
  * LanguageUnit:
- * 	advices+=Advice*
- * 	'rtVilScript' name=Identifier
- * 	'(' param=ParameterList? ')'
- * 	parent=ScriptParentDecl?
- * 	'{'
- * 	version=VersionStmt?
- * 	rtContents=rtContents
- * 	'}' ';'?;
+ * 	advices+=Advice* 'rtVilScript' name=Identifier '(' param=ParameterList? ')' parent=ScriptParentDecl? '{'
+ * 	version=VersionStmt? rtContents=rtContents '}' ';'?;
  *
  **/
 
 // // do not rename - required for reuse
-// advices+=Advice* 'rtVilScript' name=Identifier '(' param=ParameterList? ')' parent=ScriptParentDecl? '{'
-// version=VersionStmt? rtContents=rtContents '}' ';'?
+//  advices+=Advice* 'rtVilScript' name=Identifier '(' param=ParameterList? ')'
+// parent=ScriptParentDecl? '{' version=VersionStmt? rtContents=rtContents '}' ';'?
 protected class LanguageUnit_Group extends GroupToken {
 	
 	public LanguageUnit_Group(AbstractToken lastRuleCallOrigin, AbstractToken next, int transitionIndex, IEObjectConsumer eObjectConsumer) {
@@ -370,7 +362,7 @@ protected class LanguageUnit_Group extends GroupToken {
 }
 
 // // do not rename - required for reuse
-// advices+=Advice*
+//  advices+=Advice*
 protected class LanguageUnit_AdvicesAssignment_0 extends AssignmentToken  {
 	
 	public LanguageUnit_AdvicesAssignment_0(AbstractToken lastRuleCallOrigin, AbstractToken next, int transitionIndex, IEObjectConsumer eObjectConsumer) {
@@ -754,11 +746,8 @@ protected class LanguageUnit_RightCurlyBracketKeyword_10 extends KeywordToken  {
 /************ begin Rule rtContents ****************
  *
  * rtContents:
- * 	{rtContents} (elements+=GlobalVariableDeclaration
- * 	| elements+=RuleDeclaration
- * 	| elements+=StrategyDeclaration
- * 	| elements+=TacticDeclaration
- * 	| elements+=TypeDef)*;
+ * 	{rtContents} (elements+=GlobalVariableDeclaration | elements+=RuleDeclaration | elements+=StrategyDeclaration |
+ * 	elements+=TacticDeclaration | elements+=TypeDef)*;
  *
  **/
 
@@ -1089,8 +1078,7 @@ protected class RtContents_ElementsAssignment_1_4 extends AssignmentToken  {
 /************ begin Rule GlobalVariableDeclaration ****************
  *
  * GlobalVariableDeclaration:
- * 	persistent='persistent'?
- * 	varDecl=VariableDeclaration;
+ * 	persistent='persistent'? varDecl=VariableDeclaration;
  *
  **/
 
@@ -1209,15 +1197,9 @@ protected class GlobalVariableDeclaration_VarDeclAssignment_1 extends Assignment
 /************ begin Rule StrategyDeclaration ****************
  *
  * StrategyDeclaration:
- * 	{StrategyDeclaration}
- * 	'strategy' name=Identifier
- * 	'(' paramList=ParameterList? ')'
- * 	'=' conditions=RuleConditions?
- * 	'{'
+ * 	{StrategyDeclaration} 'strategy' name=Identifier '(' paramList=ParameterList? ')' '=' conditions=RuleConditions? '{'
  * 	varDecls+=VariableDeclaration* ('objective' objective=Expression ';')? ('breakdown' '{' weighting=WeightingStatement?
- * 	breakdown+=BreakdownElement+ '}') post+=RuleElement*
- * 	'}'
- * 	';'?;
+ * 	breakdown+=BreakdownElement+ '}') post+=RuleElement* '}' ';'?;
  *
  **/
 
@@ -1939,9 +1921,7 @@ protected class StrategyDeclaration_RightCurlyBracketKeyword_13 extends KeywordT
 /************ begin Rule BreakdownElement ****************
  *
  * BreakdownElement:
- * 	varDecl=VariableDeclaration
- * 	| exprStmt=ExpressionStatement
- * 	| breakdownStmt=BreakdownStatement;
+ * 	varDecl=VariableDeclaration | exprStmt=ExpressionStatement | breakdownStmt=BreakdownStatement;
  *
  **/
 
@@ -2347,12 +2327,8 @@ protected class WeightingStatement_SemicolonKeyword_6 extends KeywordToken  {
 /************ begin Rule BreakdownStatement ****************
  *
  * BreakdownStatement:
- * 	type=('strategy' | 'tactic') ('(' guard=LogicalExpression ')')?
- * 	name=QualifiedPrefix
- * 	'(' param=ArgumentList? ')' ('with' '('
- * 	part+=BreakdownWithPart (',' part+=BreakdownWithPart)
- * 	')')? ('@' time=Expression)?
- * 	';';
+ * 	type=('strategy' | 'tactic') ('(' guard=LogicalExpression ')')? name=QualifiedPrefix '(' param=ArgumentList? ')'
+ * 	('with' '(' part+=BreakdownWithPart (',' part+=BreakdownWithPart) ')')? ('@' time=Expression)? ';';
  *
  **/
 
@@ -3024,9 +3000,7 @@ protected class BreakdownStatement_SemicolonKeyword_8 extends KeywordToken  {
 /************ begin Rule BreakdownWithPart ****************
  *
  * BreakdownWithPart:
- * 	name=Identifier
- * 	'='
- * 	value=Expression;
+ * 	name=Identifier '=' value=Expression;
  *
  **/
 
@@ -3167,12 +3141,8 @@ protected class BreakdownWithPart_ValueAssignment_2 extends AssignmentToken  {
 /************ begin Rule TacticDeclaration ****************
  *
  * TacticDeclaration:
- * 	{TacticDeclaration}
- * 	'tactic' name=Identifier
- * 	'(' paramList=ParameterList? ')'
- * 	'=' conditions=RuleConditions?
- * 	block=RuleElementBlock
- * 	';'?;
+ * 	{TacticDeclaration} 'tactic' name=Identifier '(' paramList=ParameterList? ')' '=' conditions=RuleConditions?
+ * 	block=RuleElementBlock ';'?;
  *
  **/
 
@@ -3501,11 +3471,7 @@ protected class TacticDeclaration_BlockAssignment_8 extends AssignmentToken  {
 /************ begin Rule RuleElementBlock ****************
  *
  * RuleElementBlock:
- * 	{RuleElementBlock}
- * 	'{'
- * 	intent=IntentDeclaration?
- * 	elements+=RuleElement*
- * 	'}';
+ * 	{RuleElementBlock} '{' intent=IntentDeclaration? elements+=RuleElement* '}';
  *
  **/
 
@@ -3711,11 +3677,7 @@ protected class RuleElementBlock_RightCurlyBracketKeyword_4 extends KeywordToken
 /************ begin Rule RuleElement ****************
  *
  * RuleElement:
- * 	varDecl=VariableDeclaration
- * 	| exprStmt=ExpressionStatement
- * 	| while=While ';'?
- * 	| for=For ';'?
- * 	| fail=FailStatement;
+ * 	varDecl=VariableDeclaration | exprStmt=ExpressionStatement | while=While ';'? | for=For ';'? | fail=FailStatement;
  *
  **/
 
@@ -4452,12 +4414,14 @@ protected class FailStatement_SemicolonKeyword_1 extends KeywordToken  {
 /************ begin Rule Require ****************
  *
  * Require: //here fqn because this may reference a specific project (of an external project)
- * 	'requireVTL' name=STRING versionSpec=VersionSpec ';';
+ *  'requireVTL' name=STRING
+ * 	versionSpec=VersionSpec ';';
  *
  **/
 
 // //here fqn because this may reference a specific project (of an external project)
-// 'requireVTL' name=STRING versionSpec=VersionSpec ';'
+//  'requireVTL' name=STRING
+// versionSpec=VersionSpec ';'
 protected class Require_Group extends GroupToken {
 	
 	public Require_Group(AbstractToken lastRuleCallOrigin, AbstractToken next, int transitionIndex, IEObjectConsumer eObjectConsumer) {
@@ -4487,7 +4451,7 @@ protected class Require_Group extends GroupToken {
 }
 
 // //here fqn because this may reference a specific project (of an external project)
-// 'requireVTL'
+//  'requireVTL'
 protected class Require_RequireVTLKeyword_0 extends KeywordToken  {
 	
 	public Require_RequireVTLKeyword_0(AbstractToken lastRuleCallOrigin, AbstractToken next, int transitionIndex, IEObjectConsumer eObjectConsumer) {
@@ -4714,12 +4678,12 @@ protected class ScriptParentDecl_NameAssignment_1 extends AssignmentToken  {
  *
  * LoadProperties:
  * 	'load' 'properties' path=STRING // here string because this references a file
- * 	';';
+ *  ';';
  *
  **/
 
 // 'load' 'properties' path=STRING // here string because this references a file
-// ';'
+//  ';'
 protected class LoadProperties_Group extends GroupToken {
 	
 	public LoadProperties_Group(AbstractToken lastRuleCallOrigin, AbstractToken next, int transitionIndex, IEObjectConsumer eObjectConsumer) {
@@ -4826,7 +4790,7 @@ protected class LoadProperties_PathAssignment_2 extends AssignmentToken  {
 }
 
 // // here string because this references a file
-// ';'
+//  ';'
 protected class LoadProperties_SemicolonKeyword_3 extends KeywordToken  {
 	
 	public LoadProperties_SemicolonKeyword_3(AbstractToken lastRuleCallOrigin, AbstractToken next, int transitionIndex, IEObjectConsumer eObjectConsumer) {
@@ -4855,9 +4819,7 @@ protected class LoadProperties_SemicolonKeyword_3 extends KeywordToken  {
 /************ begin Rule ScriptContents ****************
  *
  * ScriptContents:
- * 	{ScriptContents} (elements+=VariableDeclaration
- * 	| elements+=TypeDef
- * 	| elements+=RuleDeclaration)*;
+ * 	{ScriptContents} (elements+=VariableDeclaration | elements+=TypeDef | elements+=RuleDeclaration)*;
  *
  **/
 
@@ -5090,19 +5052,13 @@ protected class ScriptContents_ElementsAssignment_1_2 extends AssignmentToken  {
 /************ begin Rule RuleDeclaration ****************
  *
  * // ---------------- rules
- * RuleDeclaration:
- * 	{RuleDeclaration} (type=Type?
- * 	modifier=RuleModifier?
- * 	name=Identifier
- * 	'(' paramList=ParameterList? ')'
- * 	'=')?
- * 	conditions=RuleConditions?
- * 	block=super::RuleElementBlock
- * 	';'?;
+ *  RuleDeclaration:
+ * 	{RuleDeclaration} (modifier=RuleModifier? type=Type? name=Identifier '(' paramList=ParameterList? ')' '=')?
+ * 	conditions=RuleConditions? block=super::RuleElementBlock ';'?;
  *
  **/
 
-// {RuleDeclaration} (type=Type? modifier=RuleModifier? name=Identifier '(' paramList=ParameterList? ')' '=')?
+// {RuleDeclaration} (modifier=RuleModifier? type=Type? name=Identifier '(' paramList=ParameterList? ')' '=')?
 // conditions=RuleConditions? block=super::RuleElementBlock ';'?
 protected class RuleDeclaration_Group extends GroupToken {
 	
@@ -5158,7 +5114,7 @@ protected class RuleDeclaration_RuleDeclarationAction_0 extends ActionToken  {
 	}
 }
 
-// (type=Type? modifier=RuleModifier? name=Identifier '(' paramList=ParameterList? ')' '=')?
+// (modifier=RuleModifier? type=Type? name=Identifier '(' paramList=ParameterList? ')' '=')?
 protected class RuleDeclaration_Group_1 extends GroupToken {
 	
 	public RuleDeclaration_Group_1(AbstractToken lastRuleCallOrigin, AbstractToken next, int transitionIndex, IEObjectConsumer eObjectConsumer) {
@@ -5180,62 +5136,16 @@ protected class RuleDeclaration_Group_1 extends GroupToken {
 
 }
 
-// type=Type?
-protected class RuleDeclaration_TypeAssignment_1_0 extends AssignmentToken  {
-	
-	public RuleDeclaration_TypeAssignment_1_0(AbstractToken lastRuleCallOrigin, AbstractToken next, int transitionIndex, IEObjectConsumer eObjectConsumer) {
-		super(lastRuleCallOrigin, next, transitionIndex, eObjectConsumer);
-	}
-	
-	@Override
-	public Assignment getGrammarElement() {
-		return grammarAccess.getRuleDeclarationAccess().getTypeAssignment_1_0();
-	}
-
-    @Override
-	public AbstractToken createFollower(int index, IEObjectConsumer inst) {
-		switch(index) {
-			case 0: return new Type_Alternatives(this, this, 0, inst);
-			default: return null;
-		}	
-	}
-
-    @Override	
-	public IEObjectConsumer tryConsume() {
-		if((value = eObjectConsumer.getConsumable("type",false)) == null) return null;
-		IEObjectConsumer obj = eObjectConsumer.cloneAndConsume("type");
-		if(value instanceof EObject) { // org::eclipse::xtext::impl::RuleCallImpl
-			IEObjectConsumer param = createEObjectConsumer((EObject)value);
-			if(param.isInstanceOf(grammarAccess.getTypeRule().getType().getClassifier())) {
-				type = AssignmentType.PARSER_RULE_CALL;
-				element = grammarAccess.getRuleDeclarationAccess().getTypeTypeParserRuleCall_1_0_0(); 
-				consumed = obj;
-				return param;
-			}
-		}
-		return null;
-	}
-
-    @Override
-	public AbstractToken createFollowerAfterReturn(AbstractToken next,	int actIndex, int index, IEObjectConsumer inst) {
-		if(value == inst.getEObject() && !inst.isConsumed()) return null;
-		switch(index) {
-			case 0: return new RuleDeclaration_RuleDeclarationAction_0(lastRuleCallOrigin, next, actIndex, consumed);
-			default: return null;
-		}	
-	}	
-}
-
 // modifier=RuleModifier?
-protected class RuleDeclaration_ModifierAssignment_1_1 extends AssignmentToken  {
+protected class RuleDeclaration_ModifierAssignment_1_0 extends AssignmentToken  {
 	
-	public RuleDeclaration_ModifierAssignment_1_1(AbstractToken lastRuleCallOrigin, AbstractToken next, int transitionIndex, IEObjectConsumer eObjectConsumer) {
+	public RuleDeclaration_ModifierAssignment_1_0(AbstractToken lastRuleCallOrigin, AbstractToken next, int transitionIndex, IEObjectConsumer eObjectConsumer) {
 		super(lastRuleCallOrigin, next, transitionIndex, eObjectConsumer);
 	}
 	
 	@Override
 	public Assignment getGrammarElement() {
-		return grammarAccess.getRuleDeclarationAccess().getModifierAssignment_1_1();
+		return grammarAccess.getRuleDeclarationAccess().getModifierAssignment_1_0();
 	}
 
     @Override
@@ -5254,7 +5164,7 @@ protected class RuleDeclaration_ModifierAssignment_1_1 extends AssignmentToken  
 			IEObjectConsumer param = createEObjectConsumer((EObject)value);
 			if(param.isInstanceOf(grammarAccess.getRuleModifierRule().getType().getClassifier())) {
 				type = AssignmentType.PARSER_RULE_CALL;
-				element = grammarAccess.getRuleDeclarationAccess().getModifierRuleModifierParserRuleCall_1_1_0(); 
+				element = grammarAccess.getRuleDeclarationAccess().getModifierRuleModifierParserRuleCall_1_0_0(); 
 				consumed = obj;
 				return param;
 			}
@@ -5266,7 +5176,53 @@ protected class RuleDeclaration_ModifierAssignment_1_1 extends AssignmentToken  
 	public AbstractToken createFollowerAfterReturn(AbstractToken next,	int actIndex, int index, IEObjectConsumer inst) {
 		if(value == inst.getEObject() && !inst.isConsumed()) return null;
 		switch(index) {
-			case 0: return new RuleDeclaration_TypeAssignment_1_0(lastRuleCallOrigin, next, actIndex, consumed);
+			case 0: return new RuleDeclaration_RuleDeclarationAction_0(lastRuleCallOrigin, next, actIndex, consumed);
+			default: return null;
+		}	
+	}	
+}
+
+// type=Type?
+protected class RuleDeclaration_TypeAssignment_1_1 extends AssignmentToken  {
+	
+	public RuleDeclaration_TypeAssignment_1_1(AbstractToken lastRuleCallOrigin, AbstractToken next, int transitionIndex, IEObjectConsumer eObjectConsumer) {
+		super(lastRuleCallOrigin, next, transitionIndex, eObjectConsumer);
+	}
+	
+	@Override
+	public Assignment getGrammarElement() {
+		return grammarAccess.getRuleDeclarationAccess().getTypeAssignment_1_1();
+	}
+
+    @Override
+	public AbstractToken createFollower(int index, IEObjectConsumer inst) {
+		switch(index) {
+			case 0: return new Type_Alternatives(this, this, 0, inst);
+			default: return null;
+		}	
+	}
+
+    @Override	
+	public IEObjectConsumer tryConsume() {
+		if((value = eObjectConsumer.getConsumable("type",false)) == null) return null;
+		IEObjectConsumer obj = eObjectConsumer.cloneAndConsume("type");
+		if(value instanceof EObject) { // org::eclipse::xtext::impl::RuleCallImpl
+			IEObjectConsumer param = createEObjectConsumer((EObject)value);
+			if(param.isInstanceOf(grammarAccess.getTypeRule().getType().getClassifier())) {
+				type = AssignmentType.PARSER_RULE_CALL;
+				element = grammarAccess.getRuleDeclarationAccess().getTypeTypeParserRuleCall_1_1_0(); 
+				consumed = obj;
+				return param;
+			}
+		}
+		return null;
+	}
+
+    @Override
+	public AbstractToken createFollowerAfterReturn(AbstractToken next,	int actIndex, int index, IEObjectConsumer inst) {
+		if(value == inst.getEObject() && !inst.isConsumed()) return null;
+		switch(index) {
+			case 0: return new RuleDeclaration_ModifierAssignment_1_0(lastRuleCallOrigin, next, actIndex, consumed);
 			case 1: return new RuleDeclaration_RuleDeclarationAction_0(lastRuleCallOrigin, next, actIndex, consumed);
 			default: return null;
 		}	
@@ -5288,8 +5244,8 @@ protected class RuleDeclaration_NameAssignment_1_2 extends AssignmentToken  {
     @Override
 	public AbstractToken createFollower(int index, IEObjectConsumer inst) {
 		switch(index) {
-			case 0: return new RuleDeclaration_ModifierAssignment_1_1(lastRuleCallOrigin, this, 0, inst);
-			case 1: return new RuleDeclaration_TypeAssignment_1_0(lastRuleCallOrigin, this, 1, inst);
+			case 0: return new RuleDeclaration_TypeAssignment_1_1(lastRuleCallOrigin, this, 0, inst);
+			case 1: return new RuleDeclaration_ModifierAssignment_1_0(lastRuleCallOrigin, this, 1, inst);
 			case 2: return new RuleDeclaration_RuleDeclarationAction_0(lastRuleCallOrigin, this, 2, inst);
 			default: return null;
 		}	
@@ -5525,8 +5481,8 @@ protected class RuleDeclaration_BlockAssignment_3 extends AssignmentToken  {
 /************ begin Rule RuleConditions ****************
  *
  * RuleConditions:
- * 	{RuleConditions} postcondition+=LogicalExpression?
- * 	':' (preconditions+=LogicalExpression (',' preconditions+=LogicalExpression)*)?;
+ * 	{RuleConditions} postcondition+=LogicalExpression? ':' (preconditions+=LogicalExpression (','
+ * 	preconditions+=LogicalExpression)*)?;
  *
  **/
 
@@ -5870,9 +5826,9 @@ protected class RuleModifier_ProtectedAssignment extends AssignmentToken  {
 /************ begin Rule ExpressionStatement ****************
  *
  * // ----------------------- overriding and extending parts of the expression grammar -------------------
+ * 
  * ExpressionStatement:
- * 	(var=Identifier ('.' field=Identifier)? '=')?
- * 	expr=Expression ';' | alt=Alternative ';'?;
+ * 	(var=Identifier ('.' field=Identifier)? '=')? expr=Expression ';' | alt=Alternative ';'?;
  *
  **/
 
@@ -6230,14 +6186,8 @@ protected class ExpressionStatement_AltAssignment_1_0 extends AssignmentToken  {
 /************ begin Rule PrimaryExpression ****************
  *
  * PrimaryExpression:
- * 	otherEx=ExpressionOrQualifiedExecution
- * 	| unqEx=UnqualifiedExecution
- * 	| superEx=SuperExecution
- * 	| sysEx=SystemExecution
- * 	| map=Map
- * 	| join=Join
- * 	| instantiate=Instantiate
- * 	| newEx=ConstructorExecution;
+ * 	otherEx=ExpressionOrQualifiedExecution | unqEx=UnqualifiedExecution | superEx=SuperExecution | sysEx=SystemExecution
+ * 	| map=Map | join=Join | instantiate=Instantiate | newEx=ConstructorExecution;
  *
  **/
 
@@ -6645,8 +6595,7 @@ protected class PrimaryExpression_NewExAssignment_7 extends AssignmentToken  {
 /************ begin Rule Instantiate ****************
  *
  * Instantiate:
- * 	'instantiate' (project=Identifier | ruleName=STRING)
- * 	'(' param=ArgumentList? ')' versionSpec=VersionSpec?;
+ * 	'instantiate' (project=Identifier | ruleName=STRING) '(' param=ArgumentList? ')' versionSpec=VersionSpec?;
  *
  **/
 
@@ -6937,8 +6886,7 @@ protected class Instantiate_VersionSpecAssignment_5 extends AssignmentToken  {
 /************ begin Rule LoopVariable ****************
  *
  * LoopVariable:
- * 	type=Type?
- * 	var=Identifier;
+ * 	type=Type? var=Identifier;
  *
  **/
 
@@ -7811,8 +7759,7 @@ protected class For_BlockAssignment_7 extends AssignmentToken  {
 /************ begin Rule While ****************
  *
  * While:
- * 	'while' '(' expr=Expression ')'
- * 	block=super::RuleElementBlock;
+ * 	'while' '(' expr=Expression ')' block=super::RuleElementBlock;
  *
  **/
 
@@ -8429,10 +8376,7 @@ protected class StatementOrBlock_BlockAssignment_1 extends AssignmentToken  {
 /************ begin Rule Join ****************
  *
  * Join:
- * 	'join' '('
- * 	var1=JoinVariable ','
- * 	var2=JoinVariable ')' ('with'
- * 	'(' condition=Expression ')')?;
+ * 	'join' '(' var1=JoinVariable ',' var2=JoinVariable ')' ('with' '(' condition=Expression ')')?;
  *
  **/
 
@@ -8787,9 +8731,7 @@ protected class Join_RightParenthesisKeyword_6_3 extends KeywordToken  {
 /************ begin Rule JoinVariable ****************
  *
  * JoinVariable:
- * 	excl='exclude'? var=Identifier
- * 	':'
- * 	expr=Expression;
+ * 	excl='exclude'? var=Identifier ':' expr=Expression;
  *
  **/
 
@@ -9119,10 +9061,7 @@ protected class SystemExecution_CallsAssignment_2 extends AssignmentToken  {
 /************ begin Rule VariableDeclaration ****************
  *
  * VariableDeclaration:
- * 	const='const'?
- * 	type=Type
- * 	name=Identifier ('=' expression=Expression)?
- * 	';';
+ * 	const='const'? type=Type name=Identifier ('=' expression=Expression)? ';';
  *
  **/
 
@@ -9389,10 +9328,7 @@ protected class VariableDeclaration_SemicolonKeyword_4 extends KeywordToken  {
 /************ begin Rule TypeDef ****************
  *
  * TypeDef:
- * 	'typedef'
- * 	name=Identifier
- * 	type=Type
- * 	';';
+ * 	'typedef' name=Identifier type=Type ';';
  *
  **/
 
@@ -9555,9 +9491,8 @@ protected class TypeDef_SemicolonKeyword_3 extends KeywordToken  {
 /************ begin Rule Advice ****************
  *
  * // used in extending languages
- * Advice:
- * 	'@advice' '(' name=QualifiedName ')'
- * 	versionSpec=VersionSpec?;
+ *  Advice:
+ * 	'@advice' '(' name=QualifiedName ')' versionSpec=VersionSpec?;
  *
  **/
 
@@ -10040,8 +9975,7 @@ protected class ParameterList_ParamAssignment_1_1 extends AssignmentToken  {
 /************ begin Rule Parameter ****************
  *
  * Parameter:
- * 	type=Type
- * 	name=Identifier;
+ * 	type=Type name=Identifier;
  *
  **/
 
@@ -10160,9 +10094,7 @@ protected class Parameter_NameAssignment_1 extends AssignmentToken  {
 /************ begin Rule VersionStmt ****************
  *
  * VersionStmt:
- * 	'version'
- * 	version=VERSION
- * 	';';
+ * 	'version' version=VERSION ';';
  *
  **/
 
@@ -10279,12 +10211,14 @@ protected class VersionStmt_SemicolonKeyword_2 extends KeywordToken  {
 /************ begin Rule Import ****************
  *
  * Import: //here fqn because this may reference a specific project (of an external project)
- * 	'import' name=Identifier versionSpec=VersionSpec? ';';
+ *  'import' name=Identifier
+ * 	versionSpec=VersionSpec? ';';
  *
  **/
 
 // //here fqn because this may reference a specific project (of an external project)
-// 'import' name=Identifier versionSpec=VersionSpec? ';'
+//  'import' name=Identifier
+// versionSpec=VersionSpec? ';'
 protected class Import_Group extends GroupToken {
 	
 	public Import_Group(AbstractToken lastRuleCallOrigin, AbstractToken next, int transitionIndex, IEObjectConsumer eObjectConsumer) {
@@ -10314,7 +10248,7 @@ protected class Import_Group extends GroupToken {
 }
 
 // //here fqn because this may reference a specific project (of an external project)
-// 'import'
+//  'import'
 protected class Import_ImportKeyword_0 extends KeywordToken  {
 	
 	public Import_ImportKeyword_0(AbstractToken lastRuleCallOrigin, AbstractToken next, int transitionIndex, IEObjectConsumer eObjectConsumer) {
@@ -10576,8 +10510,7 @@ protected class Expression_InitAssignment_1 extends AssignmentToken  {
 /************ begin Rule LogicalExpression ****************
  *
  * LogicalExpression:
- * 	left=EqualityExpression
- * 	right+=LogicalExpressionPart*;
+ * 	left=EqualityExpression right+=LogicalExpressionPart*;
  *
  **/
 
@@ -10710,8 +10643,7 @@ protected class LogicalExpression_RightAssignment_1 extends AssignmentToken  {
 /************ begin Rule LogicalExpressionPart ****************
  *
  * LogicalExpressionPart:
- * 	op=LogicalOperator
- * 	ex=EqualityExpression;
+ * 	op=LogicalOperator ex=EqualityExpression;
  *
  **/
 
@@ -10831,8 +10763,7 @@ protected class LogicalExpressionPart_ExAssignment_1 extends AssignmentToken  {
 /************ begin Rule EqualityExpression ****************
  *
  * EqualityExpression:
- * 	left=RelationalExpression
- * 	right=EqualityExpressionPart?;
+ * 	left=RelationalExpression right=EqualityExpressionPart?;
  *
  **/
 
@@ -10964,8 +10895,7 @@ protected class EqualityExpression_RightAssignment_1 extends AssignmentToken  {
 /************ begin Rule EqualityExpressionPart ****************
  *
  * EqualityExpressionPart:
- * 	op=EqualityOperator
- * 	ex=RelationalExpression;
+ * 	op=EqualityOperator ex=RelationalExpression;
  *
  **/
 
@@ -11085,8 +11015,7 @@ protected class EqualityExpressionPart_ExAssignment_1 extends AssignmentToken  {
 /************ begin Rule RelationalExpression ****************
  *
  * RelationalExpression:
- * 	left=AdditiveExpression
- * 	right=RelationalExpressionPart?;
+ * 	left=AdditiveExpression right=RelationalExpressionPart?;
  *
  **/
 
@@ -11218,8 +11147,7 @@ protected class RelationalExpression_RightAssignment_1 extends AssignmentToken  
 /************ begin Rule RelationalExpressionPart ****************
  *
  * RelationalExpressionPart:
- * 	op=RelationalOperator
- * 	ex=AdditiveExpression;
+ * 	op=RelationalOperator ex=AdditiveExpression;
  *
  **/
 
@@ -11339,8 +11267,7 @@ protected class RelationalExpressionPart_ExAssignment_1 extends AssignmentToken 
 /************ begin Rule AdditiveExpression ****************
  *
  * AdditiveExpression:
- * 	left=MultiplicativeExpression
- * 	right+=AdditiveExpressionPart*;
+ * 	left=MultiplicativeExpression right+=AdditiveExpressionPart*;
  *
  **/
 
@@ -11473,8 +11400,7 @@ protected class AdditiveExpression_RightAssignment_1 extends AssignmentToken  {
 /************ begin Rule AdditiveExpressionPart ****************
  *
  * AdditiveExpressionPart:
- * 	op=AdditiveOperator
- * 	ex=MultiplicativeExpression;
+ * 	op=AdditiveOperator ex=MultiplicativeExpression;
  *
  **/
 
@@ -11594,8 +11520,7 @@ protected class AdditiveExpressionPart_ExAssignment_1 extends AssignmentToken  {
 /************ begin Rule MultiplicativeExpression ****************
  *
  * MultiplicativeExpression:
- * 	left=UnaryExpression
- * 	right=MultiplicativeExpressionPart?;
+ * 	left=UnaryExpression right=MultiplicativeExpressionPart?;
  *
  **/
 
@@ -11727,8 +11652,7 @@ protected class MultiplicativeExpression_RightAssignment_1 extends AssignmentTok
 /************ begin Rule MultiplicativeExpressionPart ****************
  *
  * MultiplicativeExpressionPart:
- * 	op=MultiplicativeOperator
- * 	expr=UnaryExpression;
+ * 	op=MultiplicativeOperator expr=UnaryExpression;
  *
  **/
 
@@ -11848,8 +11772,7 @@ protected class MultiplicativeExpressionPart_ExprAssignment_1 extends Assignment
 /************ begin Rule UnaryExpression ****************
  *
  * UnaryExpression:
- * 	op=UnaryOperator?
- * 	expr=PostfixExpression;
+ * 	op=UnaryOperator? expr=PostfixExpression;
  *
  **/
 
@@ -12027,8 +11950,7 @@ protected class PostfixExpression_LeftAssignment extends AssignmentToken  {
 /************ begin Rule ExpressionOrQualifiedExecution ****************
  *
  * ExpressionOrQualifiedExecution:
- * 	(val=Constant
- * 	| '(' parenthesis=Expression ')') calls+=SubCall*;
+ * 	(val=Constant | '(' parenthesis=Expression ')') calls+=SubCall*;
  *
  **/
 
@@ -12853,8 +12775,7 @@ protected class ConstructorExecution_CallsAssignment_5 extends AssignmentToken  
 /************ begin Rule SubCall ****************
  *
  * SubCall:
- * 	type=('.' | '->') call=Call
- * 	| '[' arrayEx=Expression ']' // IVML addition to OCL
+ * 	type=('.' | '->') call=Call | '[' arrayEx=Expression ']' // IVML addition to OCL
  * ;
  *
  **/
@@ -13704,11 +13625,7 @@ protected class DeclarationUnit_DefltAssignment_1_1 extends AssignmentToken  {
 /************ begin Rule Call ****************
  *
  * Call:
- * 	name=QualifiedPrefix
- * 	'('
- * 	decl=Declarator?
- * 	param=ArgumentList?
- * 	')';
+ * 	name=QualifiedPrefix '(' decl=Declarator? param=ArgumentList? ')';
  *
  **/
 
@@ -13932,8 +13849,7 @@ protected class Call_RightParenthesisKeyword_4 extends KeywordToken  {
 /************ begin Rule ArgumentList ****************
  *
  * ArgumentList:
- * 	param+=NamedArgument (','
- * 	param+=NamedArgument)*;
+ * 	param+=NamedArgument (',' param+=NamedArgument)*;
  *
  **/
 
@@ -14111,8 +14027,7 @@ protected class ArgumentList_ParamAssignment_1_1 extends AssignmentToken  {
 /************ begin Rule NamedArgument ****************
  *
  * NamedArgument:
- * 	(name=Identifier '=')?
- * 	ex=Expression;
+ * 	(name=Identifier '=')? ex=Expression;
  *
  **/
 
@@ -14620,11 +14535,8 @@ protected class QualifiedName_QnameAssignment_1_1 extends AssignmentToken  {
 /************ begin Rule Constant ****************
  *
  * Constant:
- * 	nValue=NumValue
- * 	| sValue=STRING
- * 	| qValue=QualifiedName
- * 	| bValue=('true' | 'false') | null='null'
- * 	| => version=VERSION;
+ * 	nValue=NumValue | sValue=STRING | qValue=QualifiedName | bValue=('true' | 'false') | null='null' | =>
+ * 	version=VERSION;
  *
  **/
 
@@ -14943,14 +14855,16 @@ protected class NumValue_ValAssignment extends AssignmentToken  {
  *
  * Type:
  * 	name=QualifiedPrefix // specific types will be dynamically loaded at start-up
- * 	| set='setOf' param=TypeParameters | seq='sequenceOf' param=TypeParameters | map='mapOf' param=TypeParameters |
- * 	call='callOf' return=Type? param=TypeParameters;
+ *  | set='setOf' param=TypeParameters |
+ * 	seq='sequenceOf' param=TypeParameters | map='mapOf' param=TypeParameters | call='callOf' return=Type?
+ * 	param=TypeParameters;
  *
  **/
 
 // name=QualifiedPrefix // specific types will be dynamically loaded at start-up
-// | set='setOf' param=TypeParameters | seq='sequenceOf' param=TypeParameters | map='mapOf' param=TypeParameters |
-// call='callOf' return=Type? param=TypeParameters
+//  | set='setOf' param=TypeParameters |
+// seq='sequenceOf' param=TypeParameters | map='mapOf' param=TypeParameters | call='callOf' return=Type?
+// param=TypeParameters
 protected class Type_Alternatives extends AlternativesToken {
 
 	public Type_Alternatives(AbstractToken lastRuleCallOrigin, AbstractToken next, int transitionIndex, IEObjectConsumer eObjectConsumer) {
@@ -15712,8 +15626,7 @@ protected class TypeParameters_RightParenthesisKeyword_3 extends KeywordToken  {
 /************ begin Rule ContainerInitializer ****************
  *
  * ContainerInitializer:
- * 	{ContainerInitializer}
- * 	'{' (exprs+=ContainerInitializerExpression (',' exprs+=ContainerInitializerExpression)*)? '}';
+ * 	{ContainerInitializer} '{' (exprs+=ContainerInitializerExpression (',' exprs+=ContainerInitializerExpression)*)? '}';
  *
  **/
 
@@ -15986,8 +15899,7 @@ protected class ContainerInitializer_RightCurlyBracketKeyword_3 extends KeywordT
 /************ begin Rule ContainerInitializerExpression ****************
  *
  * ContainerInitializerExpression:
- * 	logical=LogicalExpression
- * 	| container=ContainerInitializer;
+ * 	logical=LogicalExpression | container=ContainerInitializer;
  *
  **/
 

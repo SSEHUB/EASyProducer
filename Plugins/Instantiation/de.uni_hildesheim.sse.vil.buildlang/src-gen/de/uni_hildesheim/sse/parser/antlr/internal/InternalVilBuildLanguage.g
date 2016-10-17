@@ -595,17 +595,17 @@ ruleRuleDeclaration returns [EObject current=null]
 )((
 (
 		{ 
-	        newCompositeNode(grammarAccess.getRuleDeclarationAccess().getTypeTypeParserRuleCall_1_0_0()); 
+	        newCompositeNode(grammarAccess.getRuleDeclarationAccess().getModifierRuleModifierParserRuleCall_1_0_0()); 
 	    }
-		lv_type_1_0=ruleType		{
+		lv_modifier_1_0=ruleRuleModifier		{
 	        if ($current==null) {
 	            $current = createModelElementForParent(grammarAccess.getRuleDeclarationRule());
 	        }
        		set(
        			$current, 
-       			"type",
-        		lv_type_1_0, 
-        		"de.uni_hildesheim.sse.vil.expressions.ExpressionDsl.Type");
+       			"modifier",
+        		lv_modifier_1_0, 
+        		"de.uni_hildesheim.sse.VilBuildLanguage.RuleModifier");
 	        afterParserOrEnumRuleCall();
 	    }
 
@@ -613,17 +613,17 @@ ruleRuleDeclaration returns [EObject current=null]
 )?(
 (
 		{ 
-	        newCompositeNode(grammarAccess.getRuleDeclarationAccess().getModifierRuleModifierParserRuleCall_1_1_0()); 
+	        newCompositeNode(grammarAccess.getRuleDeclarationAccess().getTypeTypeParserRuleCall_1_1_0()); 
 	    }
-		lv_modifier_2_0=ruleRuleModifier		{
+		lv_type_2_0=ruleType		{
 	        if ($current==null) {
 	            $current = createModelElementForParent(grammarAccess.getRuleDeclarationRule());
 	        }
        		set(
        			$current, 
-       			"modifier",
-        		lv_modifier_2_0, 
-        		"de.uni_hildesheim.sse.VilBuildLanguage.RuleModifier");
+       			"type",
+        		lv_type_2_0, 
+        		"de.uni_hildesheim.sse.vil.expressions.ExpressionDsl.Type");
 	        afterParserOrEnumRuleCall();
 	    }
 

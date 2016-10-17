@@ -327,22 +327,22 @@ public interface VilBuildLanguagePackage extends EPackage
   int RULE_DECLARATION = 6;
 
   /**
-   * The feature id for the '<em><b>Type</b></em>' containment reference.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int RULE_DECLARATION__TYPE = 0;
-
-  /**
    * The feature id for the '<em><b>Modifier</b></em>' containment reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int RULE_DECLARATION__MODIFIER = 1;
+  int RULE_DECLARATION__MODIFIER = 0;
+
+  /**
+   * The feature id for the '<em><b>Type</b></em>' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int RULE_DECLARATION__TYPE = 1;
 
   /**
    * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -1338,17 +1338,6 @@ public interface VilBuildLanguagePackage extends EPackage
   EClass getRuleDeclaration();
 
   /**
-   * Returns the meta object for the containment reference '{@link de.uni_hildesheim.sse.vilBuildLanguage.RuleDeclaration#getType <em>Type</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for the containment reference '<em>Type</em>'.
-   * @see de.uni_hildesheim.sse.vilBuildLanguage.RuleDeclaration#getType()
-   * @see #getRuleDeclaration()
-   * @generated
-   */
-  EReference getRuleDeclaration_Type();
-
-  /**
    * Returns the meta object for the containment reference '{@link de.uni_hildesheim.sse.vilBuildLanguage.RuleDeclaration#getModifier <em>Modifier</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -1358,6 +1347,17 @@ public interface VilBuildLanguagePackage extends EPackage
    * @generated
    */
   EReference getRuleDeclaration_Modifier();
+
+  /**
+   * Returns the meta object for the containment reference '{@link de.uni_hildesheim.sse.vilBuildLanguage.RuleDeclaration#getType <em>Type</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the containment reference '<em>Type</em>'.
+   * @see de.uni_hildesheim.sse.vilBuildLanguage.RuleDeclaration#getType()
+   * @see #getRuleDeclaration()
+   * @generated
+   */
+  EReference getRuleDeclaration_Type();
 
   /**
    * Returns the meta object for the attribute '{@link de.uni_hildesheim.sse.vilBuildLanguage.RuleDeclaration#getName <em>Name</em>}'.
@@ -2215,20 +2215,20 @@ public interface VilBuildLanguagePackage extends EPackage
     EClass RULE_DECLARATION = eINSTANCE.getRuleDeclaration();
 
     /**
-     * The meta object literal for the '<em><b>Type</b></em>' containment reference feature.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    EReference RULE_DECLARATION__TYPE = eINSTANCE.getRuleDeclaration_Type();
-
-    /**
      * The meta object literal for the '<em><b>Modifier</b></em>' containment reference feature.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
      * @generated
      */
     EReference RULE_DECLARATION__MODIFIER = eINSTANCE.getRuleDeclaration_Modifier();
+
+    /**
+     * The meta object literal for the '<em><b>Type</b></em>' containment reference feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EReference RULE_DECLARATION__TYPE = eINSTANCE.getRuleDeclaration_Type();
 
     /**
      * The meta object literal for the '<em><b>Name</b></em>' attribute feature.

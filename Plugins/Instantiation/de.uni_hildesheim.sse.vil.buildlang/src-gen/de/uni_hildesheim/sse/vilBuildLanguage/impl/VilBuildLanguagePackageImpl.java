@@ -467,7 +467,7 @@ public class VilBuildLanguagePackageImpl extends EPackageImpl implements VilBuil
    * <!-- end-user-doc -->
    * @generated
    */
-  public EReference getRuleDeclaration_Type()
+  public EReference getRuleDeclaration_Modifier()
   {
     return (EReference)ruleDeclarationEClass.getEStructuralFeatures().get(0);
   }
@@ -477,7 +477,7 @@ public class VilBuildLanguagePackageImpl extends EPackageImpl implements VilBuil
    * <!-- end-user-doc -->
    * @generated
    */
-  public EReference getRuleDeclaration_Modifier()
+  public EReference getRuleDeclaration_Type()
   {
     return (EReference)ruleDeclarationEClass.getEStructuralFeatures().get(1);
   }
@@ -1157,8 +1157,8 @@ public class VilBuildLanguagePackageImpl extends EPackageImpl implements VilBuil
     createEReference(scriptContentsEClass, SCRIPT_CONTENTS__ELEMENTS);
 
     ruleDeclarationEClass = createEClass(RULE_DECLARATION);
-    createEReference(ruleDeclarationEClass, RULE_DECLARATION__TYPE);
     createEReference(ruleDeclarationEClass, RULE_DECLARATION__MODIFIER);
+    createEReference(ruleDeclarationEClass, RULE_DECLARATION__TYPE);
     createEAttribute(ruleDeclarationEClass, RULE_DECLARATION__NAME);
     createEReference(ruleDeclarationEClass, RULE_DECLARATION__PARAM_LIST);
     createEReference(ruleDeclarationEClass, RULE_DECLARATION__CONDITIONS);
@@ -1301,8 +1301,8 @@ public class VilBuildLanguagePackageImpl extends EPackageImpl implements VilBuil
     initEReference(getScriptContents_Elements(), ecorePackage.getEObject(), null, "elements", null, 0, -1, ScriptContents.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     initEClass(ruleDeclarationEClass, RuleDeclaration.class, "RuleDeclaration", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-    initEReference(getRuleDeclaration_Type(), theExpressionDslPackage.getType(), null, "type", null, 0, 1, RuleDeclaration.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEReference(getRuleDeclaration_Modifier(), this.getRuleModifier(), null, "modifier", null, 0, 1, RuleDeclaration.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getRuleDeclaration_Type(), theExpressionDslPackage.getType(), null, "type", null, 0, 1, RuleDeclaration.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEAttribute(getRuleDeclaration_Name(), ecorePackage.getEString(), "name", null, 0, 1, RuleDeclaration.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEReference(getRuleDeclaration_ParamList(), theExpressionDslPackage.getParameterList(), null, "paramList", null, 0, 1, RuleDeclaration.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEReference(getRuleDeclaration_Conditions(), this.getRuleConditions(), null, "conditions", null, 0, 1, RuleDeclaration.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);

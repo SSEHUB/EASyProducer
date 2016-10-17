@@ -11897,76 +11897,34 @@ public class InternalVilBuildLanguageParser extends AbstractInternalContentAssis
 
 
     // $ANTLR start "rule__RuleDeclaration__Group_1__0__Impl"
-    // InternalVilBuildLanguage.g:3810:1: rule__RuleDeclaration__Group_1__0__Impl : ( ( rule__RuleDeclaration__TypeAssignment_1_0 )? ) ;
+    // InternalVilBuildLanguage.g:3810:1: rule__RuleDeclaration__Group_1__0__Impl : ( ( rule__RuleDeclaration__ModifierAssignment_1_0 )? ) ;
     public final void rule__RuleDeclaration__Group_1__0__Impl() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // InternalVilBuildLanguage.g:3814:1: ( ( ( rule__RuleDeclaration__TypeAssignment_1_0 )? ) )
-            // InternalVilBuildLanguage.g:3815:1: ( ( rule__RuleDeclaration__TypeAssignment_1_0 )? )
+            // InternalVilBuildLanguage.g:3814:1: ( ( ( rule__RuleDeclaration__ModifierAssignment_1_0 )? ) )
+            // InternalVilBuildLanguage.g:3815:1: ( ( rule__RuleDeclaration__ModifierAssignment_1_0 )? )
             {
-            // InternalVilBuildLanguage.g:3815:1: ( ( rule__RuleDeclaration__TypeAssignment_1_0 )? )
-            // InternalVilBuildLanguage.g:3816:1: ( rule__RuleDeclaration__TypeAssignment_1_0 )?
+            // InternalVilBuildLanguage.g:3815:1: ( ( rule__RuleDeclaration__ModifierAssignment_1_0 )? )
+            // InternalVilBuildLanguage.g:3816:1: ( rule__RuleDeclaration__ModifierAssignment_1_0 )?
             {
             if ( state.backtracking==0 ) {
-               before(grammarAccess.getRuleDeclarationAccess().getTypeAssignment_1_0()); 
+               before(grammarAccess.getRuleDeclarationAccess().getModifierAssignment_1_0()); 
             }
-            // InternalVilBuildLanguage.g:3817:1: ( rule__RuleDeclaration__TypeAssignment_1_0 )?
+            // InternalVilBuildLanguage.g:3817:1: ( rule__RuleDeclaration__ModifierAssignment_1_0 )?
             int alt37=2;
-            switch ( input.LA(1) ) {
-                case RULE_ID:
-                    {
-                    int LA37_1 = input.LA(2);
+            int LA37_0 = input.LA(1);
 
-                    if ( ((LA37_1>=RULE_ID && LA37_1<=RULE_EXPONENT)||LA37_1==35||LA37_1==64||LA37_1==67) ) {
-                        alt37=1;
-                    }
-                    }
-                    break;
-                case RULE_VERSION:
-                    {
-                    int LA37_2 = input.LA(2);
-
-                    if ( ((LA37_2>=RULE_ID && LA37_2<=RULE_EXPONENT)||LA37_2==35||LA37_2==64||LA37_2==67) ) {
-                        alt37=1;
-                    }
-                    }
-                    break;
-                case RULE_EXPONENT:
-                    {
-                    int LA37_3 = input.LA(2);
-
-                    if ( ((LA37_3>=RULE_ID && LA37_3<=RULE_EXPONENT)||LA37_3==35||LA37_3==64||LA37_3==67) ) {
-                        alt37=1;
-                    }
-                    }
-                    break;
-                case 35:
-                    {
-                    int LA37_4 = input.LA(2);
-
-                    if ( ((LA37_4>=RULE_ID && LA37_4<=RULE_EXPONENT)||LA37_4==35||LA37_4==64||LA37_4==67) ) {
-                        alt37=1;
-                    }
-                    }
-                    break;
-                case 69:
-                case 70:
-                case 71:
-                case 72:
-                    {
-                    alt37=1;
-                    }
-                    break;
+            if ( (LA37_0==64) ) {
+                alt37=1;
             }
-
             switch (alt37) {
                 case 1 :
-                    // InternalVilBuildLanguage.g:3817:2: rule__RuleDeclaration__TypeAssignment_1_0
+                    // InternalVilBuildLanguage.g:3817:2: rule__RuleDeclaration__ModifierAssignment_1_0
                     {
                     pushFollow(FOLLOW_2);
-                    rule__RuleDeclaration__TypeAssignment_1_0();
+                    rule__RuleDeclaration__ModifierAssignment_1_0();
 
                     state._fsp--;
                     if (state.failed) return ;
@@ -11977,7 +11935,7 @@ public class InternalVilBuildLanguageParser extends AbstractInternalContentAssis
             }
 
             if ( state.backtracking==0 ) {
-               after(grammarAccess.getRuleDeclarationAccess().getTypeAssignment_1_0()); 
+               after(grammarAccess.getRuleDeclarationAccess().getModifierAssignment_1_0()); 
             }
 
             }
@@ -12039,34 +11997,76 @@ public class InternalVilBuildLanguageParser extends AbstractInternalContentAssis
 
 
     // $ANTLR start "rule__RuleDeclaration__Group_1__1__Impl"
-    // InternalVilBuildLanguage.g:3839:1: rule__RuleDeclaration__Group_1__1__Impl : ( ( rule__RuleDeclaration__ModifierAssignment_1_1 )? ) ;
+    // InternalVilBuildLanguage.g:3839:1: rule__RuleDeclaration__Group_1__1__Impl : ( ( rule__RuleDeclaration__TypeAssignment_1_1 )? ) ;
     public final void rule__RuleDeclaration__Group_1__1__Impl() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // InternalVilBuildLanguage.g:3843:1: ( ( ( rule__RuleDeclaration__ModifierAssignment_1_1 )? ) )
-            // InternalVilBuildLanguage.g:3844:1: ( ( rule__RuleDeclaration__ModifierAssignment_1_1 )? )
+            // InternalVilBuildLanguage.g:3843:1: ( ( ( rule__RuleDeclaration__TypeAssignment_1_1 )? ) )
+            // InternalVilBuildLanguage.g:3844:1: ( ( rule__RuleDeclaration__TypeAssignment_1_1 )? )
             {
-            // InternalVilBuildLanguage.g:3844:1: ( ( rule__RuleDeclaration__ModifierAssignment_1_1 )? )
-            // InternalVilBuildLanguage.g:3845:1: ( rule__RuleDeclaration__ModifierAssignment_1_1 )?
+            // InternalVilBuildLanguage.g:3844:1: ( ( rule__RuleDeclaration__TypeAssignment_1_1 )? )
+            // InternalVilBuildLanguage.g:3845:1: ( rule__RuleDeclaration__TypeAssignment_1_1 )?
             {
             if ( state.backtracking==0 ) {
-               before(grammarAccess.getRuleDeclarationAccess().getModifierAssignment_1_1()); 
+               before(grammarAccess.getRuleDeclarationAccess().getTypeAssignment_1_1()); 
             }
-            // InternalVilBuildLanguage.g:3846:1: ( rule__RuleDeclaration__ModifierAssignment_1_1 )?
+            // InternalVilBuildLanguage.g:3846:1: ( rule__RuleDeclaration__TypeAssignment_1_1 )?
             int alt38=2;
-            int LA38_0 = input.LA(1);
+            switch ( input.LA(1) ) {
+                case RULE_ID:
+                    {
+                    int LA38_1 = input.LA(2);
 
-            if ( (LA38_0==64) ) {
-                alt38=1;
+                    if ( ((LA38_1>=RULE_ID && LA38_1<=RULE_EXPONENT)||LA38_1==35||LA38_1==67) ) {
+                        alt38=1;
+                    }
+                    }
+                    break;
+                case RULE_VERSION:
+                    {
+                    int LA38_2 = input.LA(2);
+
+                    if ( ((LA38_2>=RULE_ID && LA38_2<=RULE_EXPONENT)||LA38_2==35||LA38_2==67) ) {
+                        alt38=1;
+                    }
+                    }
+                    break;
+                case RULE_EXPONENT:
+                    {
+                    int LA38_3 = input.LA(2);
+
+                    if ( ((LA38_3>=RULE_ID && LA38_3<=RULE_EXPONENT)||LA38_3==35||LA38_3==67) ) {
+                        alt38=1;
+                    }
+                    }
+                    break;
+                case 35:
+                    {
+                    int LA38_4 = input.LA(2);
+
+                    if ( ((LA38_4>=RULE_ID && LA38_4<=RULE_EXPONENT)||LA38_4==35||LA38_4==67) ) {
+                        alt38=1;
+                    }
+                    }
+                    break;
+                case 69:
+                case 70:
+                case 71:
+                case 72:
+                    {
+                    alt38=1;
+                    }
+                    break;
             }
+
             switch (alt38) {
                 case 1 :
-                    // InternalVilBuildLanguage.g:3846:2: rule__RuleDeclaration__ModifierAssignment_1_1
+                    // InternalVilBuildLanguage.g:3846:2: rule__RuleDeclaration__TypeAssignment_1_1
                     {
                     pushFollow(FOLLOW_2);
-                    rule__RuleDeclaration__ModifierAssignment_1_1();
+                    rule__RuleDeclaration__TypeAssignment_1_1();
 
                     state._fsp--;
                     if (state.failed) return ;
@@ -12077,7 +12077,7 @@ public class InternalVilBuildLanguageParser extends AbstractInternalContentAssis
             }
 
             if ( state.backtracking==0 ) {
-               after(grammarAccess.getRuleDeclarationAccess().getModifierAssignment_1_1()); 
+               after(grammarAccess.getRuleDeclarationAccess().getTypeAssignment_1_1()); 
             }
 
             }
@@ -32510,66 +32510,21 @@ public class InternalVilBuildLanguageParser extends AbstractInternalContentAssis
     // $ANTLR end "rule__ScriptContents__ElementsAssignment_1_2"
 
 
-    // $ANTLR start "rule__RuleDeclaration__TypeAssignment_1_0"
-    // InternalVilBuildLanguage.g:11111:1: rule__RuleDeclaration__TypeAssignment_1_0 : ( ruleType ) ;
-    public final void rule__RuleDeclaration__TypeAssignment_1_0() throws RecognitionException {
+    // $ANTLR start "rule__RuleDeclaration__ModifierAssignment_1_0"
+    // InternalVilBuildLanguage.g:11111:1: rule__RuleDeclaration__ModifierAssignment_1_0 : ( ruleRuleModifier ) ;
+    public final void rule__RuleDeclaration__ModifierAssignment_1_0() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // InternalVilBuildLanguage.g:11115:1: ( ( ruleType ) )
-            // InternalVilBuildLanguage.g:11116:1: ( ruleType )
+            // InternalVilBuildLanguage.g:11115:1: ( ( ruleRuleModifier ) )
+            // InternalVilBuildLanguage.g:11116:1: ( ruleRuleModifier )
             {
-            // InternalVilBuildLanguage.g:11116:1: ( ruleType )
-            // InternalVilBuildLanguage.g:11117:1: ruleType
-            {
-            if ( state.backtracking==0 ) {
-               before(grammarAccess.getRuleDeclarationAccess().getTypeTypeParserRuleCall_1_0_0()); 
-            }
-            pushFollow(FOLLOW_2);
-            ruleType();
-
-            state._fsp--;
-            if (state.failed) return ;
-            if ( state.backtracking==0 ) {
-               after(grammarAccess.getRuleDeclarationAccess().getTypeTypeParserRuleCall_1_0_0()); 
-            }
-
-            }
-
-
-            }
-
-        }
-        catch (RecognitionException re) {
-            reportError(re);
-            recover(input,re);
-        }
-        finally {
-
-            	restoreStackSize(stackSize);
-
-        }
-        return ;
-    }
-    // $ANTLR end "rule__RuleDeclaration__TypeAssignment_1_0"
-
-
-    // $ANTLR start "rule__RuleDeclaration__ModifierAssignment_1_1"
-    // InternalVilBuildLanguage.g:11126:1: rule__RuleDeclaration__ModifierAssignment_1_1 : ( ruleRuleModifier ) ;
-    public final void rule__RuleDeclaration__ModifierAssignment_1_1() throws RecognitionException {
-
-        		int stackSize = keepStackSize();
-            
-        try {
-            // InternalVilBuildLanguage.g:11130:1: ( ( ruleRuleModifier ) )
-            // InternalVilBuildLanguage.g:11131:1: ( ruleRuleModifier )
-            {
-            // InternalVilBuildLanguage.g:11131:1: ( ruleRuleModifier )
-            // InternalVilBuildLanguage.g:11132:1: ruleRuleModifier
+            // InternalVilBuildLanguage.g:11116:1: ( ruleRuleModifier )
+            // InternalVilBuildLanguage.g:11117:1: ruleRuleModifier
             {
             if ( state.backtracking==0 ) {
-               before(grammarAccess.getRuleDeclarationAccess().getModifierRuleModifierParserRuleCall_1_1_0()); 
+               before(grammarAccess.getRuleDeclarationAccess().getModifierRuleModifierParserRuleCall_1_0_0()); 
             }
             pushFollow(FOLLOW_2);
             ruleRuleModifier();
@@ -32577,7 +32532,7 @@ public class InternalVilBuildLanguageParser extends AbstractInternalContentAssis
             state._fsp--;
             if (state.failed) return ;
             if ( state.backtracking==0 ) {
-               after(grammarAccess.getRuleDeclarationAccess().getModifierRuleModifierParserRuleCall_1_1_0()); 
+               after(grammarAccess.getRuleDeclarationAccess().getModifierRuleModifierParserRuleCall_1_0_0()); 
             }
 
             }
@@ -32597,7 +32552,52 @@ public class InternalVilBuildLanguageParser extends AbstractInternalContentAssis
         }
         return ;
     }
-    // $ANTLR end "rule__RuleDeclaration__ModifierAssignment_1_1"
+    // $ANTLR end "rule__RuleDeclaration__ModifierAssignment_1_0"
+
+
+    // $ANTLR start "rule__RuleDeclaration__TypeAssignment_1_1"
+    // InternalVilBuildLanguage.g:11126:1: rule__RuleDeclaration__TypeAssignment_1_1 : ( ruleType ) ;
+    public final void rule__RuleDeclaration__TypeAssignment_1_1() throws RecognitionException {
+
+        		int stackSize = keepStackSize();
+            
+        try {
+            // InternalVilBuildLanguage.g:11130:1: ( ( ruleType ) )
+            // InternalVilBuildLanguage.g:11131:1: ( ruleType )
+            {
+            // InternalVilBuildLanguage.g:11131:1: ( ruleType )
+            // InternalVilBuildLanguage.g:11132:1: ruleType
+            {
+            if ( state.backtracking==0 ) {
+               before(grammarAccess.getRuleDeclarationAccess().getTypeTypeParserRuleCall_1_1_0()); 
+            }
+            pushFollow(FOLLOW_2);
+            ruleType();
+
+            state._fsp--;
+            if (state.failed) return ;
+            if ( state.backtracking==0 ) {
+               after(grammarAccess.getRuleDeclarationAccess().getTypeTypeParserRuleCall_1_1_0()); 
+            }
+
+            }
+
+
+            }
+
+        }
+        catch (RecognitionException re) {
+            reportError(re);
+            recover(input,re);
+        }
+        finally {
+
+            	restoreStackSize(stackSize);
+
+        }
+        return ;
+    }
+    // $ANTLR end "rule__RuleDeclaration__TypeAssignment_1_1"
 
 
     // $ANTLR start "rule__RuleDeclaration__NameAssignment_1_2"
@@ -40369,17 +40369,17 @@ public class InternalVilBuildLanguageParser extends AbstractInternalContentAssis
         }
     }
     static final String dfa_26s = "\33\uffff";
-    static final String dfa_27s = "\1\4\4\0\26\uffff";
-    static final String dfa_28s = "\1\110\4\0\26\uffff";
-    static final String dfa_29s = "\5\uffff\1\1\4\uffff\1\2\20\uffff";
-    static final String dfa_30s = "\1\uffff\1\0\1\1\1\2\1\3\26\uffff}>";
+    static final String dfa_27s = "\1\4\1\uffff\4\0\25\uffff";
+    static final String dfa_28s = "\1\110\1\uffff\4\0\25\uffff";
+    static final String dfa_29s = "\1\uffff\1\1\10\uffff\1\2\20\uffff";
+    static final String dfa_30s = "\2\uffff\1\0\1\1\1\2\1\3\25\uffff}>";
     static final String[] dfa_31s = {
-            "\1\1\1\2\1\3\2\12\5\uffff\1\12\13\uffff\1\12\2\uffff\2\12\2\uffff\2\12\1\4\3\uffff\1\12\1\uffff\1\12\5\uffff\2\12\4\uffff\1\12\1\uffff\1\12\3\uffff\2\12\3\uffff\1\5\3\uffff\1\12\4\5",
-            "\1\uffff",
-            "\1\uffff",
-            "\1\uffff",
-            "\1\uffff",
+            "\1\2\1\3\1\4\2\12\5\uffff\1\12\13\uffff\1\12\2\uffff\2\12\2\uffff\2\12\1\5\3\uffff\1\12\1\uffff\1\12\5\uffff\2\12\4\uffff\1\12\1\uffff\1\12\3\uffff\2\12\3\uffff\1\1\3\uffff\1\12\4\1",
             "",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
             "",
             "",
             "",
@@ -40431,28 +40431,13 @@ public class InternalVilBuildLanguageParser extends AbstractInternalContentAssis
         	int _s = s;
             switch ( s ) {
                     case 0 : 
-                        int LA34_1 = input.LA(1);
-
-                         
-                        int index34_1 = input.index();
-                        input.rewind();
-                        s = -1;
-                        if ( (synpred57_InternalVilBuildLanguage()) ) {s = 5;}
-
-                        else if ( (true) ) {s = 10;}
-
-                         
-                        input.seek(index34_1);
-                        if ( s>=0 ) return s;
-                        break;
-                    case 1 : 
                         int LA34_2 = input.LA(1);
 
                          
                         int index34_2 = input.index();
                         input.rewind();
                         s = -1;
-                        if ( (synpred57_InternalVilBuildLanguage()) ) {s = 5;}
+                        if ( (synpred57_InternalVilBuildLanguage()) ) {s = 1;}
 
                         else if ( (true) ) {s = 10;}
 
@@ -40460,14 +40445,14 @@ public class InternalVilBuildLanguageParser extends AbstractInternalContentAssis
                         input.seek(index34_2);
                         if ( s>=0 ) return s;
                         break;
-                    case 2 : 
+                    case 1 : 
                         int LA34_3 = input.LA(1);
 
                          
                         int index34_3 = input.index();
                         input.rewind();
                         s = -1;
-                        if ( (synpred57_InternalVilBuildLanguage()) ) {s = 5;}
+                        if ( (synpred57_InternalVilBuildLanguage()) ) {s = 1;}
 
                         else if ( (true) ) {s = 10;}
 
@@ -40475,19 +40460,34 @@ public class InternalVilBuildLanguageParser extends AbstractInternalContentAssis
                         input.seek(index34_3);
                         if ( s>=0 ) return s;
                         break;
-                    case 3 : 
+                    case 2 : 
                         int LA34_4 = input.LA(1);
 
                          
                         int index34_4 = input.index();
                         input.rewind();
                         s = -1;
-                        if ( (synpred57_InternalVilBuildLanguage()) ) {s = 5;}
+                        if ( (synpred57_InternalVilBuildLanguage()) ) {s = 1;}
 
                         else if ( (true) ) {s = 10;}
 
                          
                         input.seek(index34_4);
+                        if ( s>=0 ) return s;
+                        break;
+                    case 3 : 
+                        int LA34_5 = input.LA(1);
+
+                         
+                        int index34_5 = input.index();
+                        input.rewind();
+                        s = -1;
+                        if ( (synpred57_InternalVilBuildLanguage()) ) {s = 1;}
+
+                        else if ( (true) ) {s = 10;}
+
+                         
+                        input.seek(index34_5);
                         if ( s>=0 ) return s;
                         break;
             }

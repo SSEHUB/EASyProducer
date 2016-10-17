@@ -53,8 +53,8 @@ ScriptContents:
 RuleDeclaration:
     {RuleDeclaration}
     (
-        (type = Type)?
         (modifier = RuleModifier)?
+        (type = Type)?
         name=Identifier
         '(' (paramList=ParameterList)? ')'
         '='

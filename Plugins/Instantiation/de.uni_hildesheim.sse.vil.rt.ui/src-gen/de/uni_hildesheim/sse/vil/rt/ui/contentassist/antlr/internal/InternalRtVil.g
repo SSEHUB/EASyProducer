@@ -6656,9 +6656,9 @@ rule__RuleDeclaration__Group_1__0__Impl
     }
 :
 (
-{ before(grammarAccess.getRuleDeclarationAccess().getTypeAssignment_1_0()); }
-(rule__RuleDeclaration__TypeAssignment_1_0)?
-{ after(grammarAccess.getRuleDeclarationAccess().getTypeAssignment_1_0()); }
+{ before(grammarAccess.getRuleDeclarationAccess().getModifierAssignment_1_0()); }
+(rule__RuleDeclaration__ModifierAssignment_1_0)?
+{ after(grammarAccess.getRuleDeclarationAccess().getModifierAssignment_1_0()); }
 )
 
 ;
@@ -6685,9 +6685,9 @@ rule__RuleDeclaration__Group_1__1__Impl
     }
 :
 (
-{ before(grammarAccess.getRuleDeclarationAccess().getModifierAssignment_1_1()); }
-(rule__RuleDeclaration__ModifierAssignment_1_1)?
-{ after(grammarAccess.getRuleDeclarationAccess().getModifierAssignment_1_1()); }
+{ before(grammarAccess.getRuleDeclarationAccess().getTypeAssignment_1_1()); }
+(rule__RuleDeclaration__TypeAssignment_1_1)?
+{ after(grammarAccess.getRuleDeclarationAccess().getTypeAssignment_1_1()); }
 )
 
 ;
@@ -14325,14 +14325,14 @@ finally {
 
 
 
-rule__RuleDeclaration__TypeAssignment_1_0
+rule__RuleDeclaration__ModifierAssignment_1_0
     @init {
 		int stackSize = keepStackSize();
     }
 :
 (
-{ before(grammarAccess.getRuleDeclarationAccess().getTypeTypeParserRuleCall_1_0_0()); }
-	ruleType{ after(grammarAccess.getRuleDeclarationAccess().getTypeTypeParserRuleCall_1_0_0()); }
+{ before(grammarAccess.getRuleDeclarationAccess().getModifierRuleModifierParserRuleCall_1_0_0()); }
+	ruleRuleModifier{ after(grammarAccess.getRuleDeclarationAccess().getModifierRuleModifierParserRuleCall_1_0_0()); }
 )
 
 ;
@@ -14340,14 +14340,14 @@ finally {
 	restoreStackSize(stackSize);
 }
 
-rule__RuleDeclaration__ModifierAssignment_1_1
+rule__RuleDeclaration__TypeAssignment_1_1
     @init {
 		int stackSize = keepStackSize();
     }
 :
 (
-{ before(grammarAccess.getRuleDeclarationAccess().getModifierRuleModifierParserRuleCall_1_1_0()); }
-	ruleRuleModifier{ after(grammarAccess.getRuleDeclarationAccess().getModifierRuleModifierParserRuleCall_1_1_0()); }
+{ before(grammarAccess.getRuleDeclarationAccess().getTypeTypeParserRuleCall_1_1_0()); }
+	ruleType{ after(grammarAccess.getRuleDeclarationAccess().getTypeTypeParserRuleCall_1_1_0()); }
 )
 
 ;
