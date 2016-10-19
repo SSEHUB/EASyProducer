@@ -1,0 +1,22 @@
+vilScript function3 () {
+
+    main() = : {
+        Boolean t = doSomething("test");
+        doSomethingElse();
+    }
+
+    Boolean doSomething(String param) = : {
+        Boolean result = param.length() > 0;
+        Integer i = 0;
+        if (result) {
+            i = i + 1;
+        } else {
+            i = i + 2;
+        }
+        result;
+    }
+
+    doSomethingElse() = : {
+    }
+
+}
