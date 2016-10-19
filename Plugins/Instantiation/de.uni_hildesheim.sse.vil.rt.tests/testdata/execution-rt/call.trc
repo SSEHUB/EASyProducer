@@ -3,4 +3,18 @@
         -> test()
         qm1 <- <config>
         -> initCapacity(QM1, Integer) with (<config>, 4)
+        -> calcCapacity(QM1) with (<config>)
+            result <- 0.0
+            done <- {}
+            -> doCalcCapacity(QM1, setOf(Any)) with (<config>, {})
+                -> includes(Collection, Any) with ({}, <config>) = false
+                -> !(Boolean) with (false) = true
+                process <- true
+                i <- 0
+                visit if-branch
+                -> +(Integer, Integer) with (0, 1) = 1
+                i <- 1
+            visit if-branch
+            result <- 1.0
+        t <- 1.0
     -> enact(Project, Configuration, Project) with (<project>, <config>, <project>)

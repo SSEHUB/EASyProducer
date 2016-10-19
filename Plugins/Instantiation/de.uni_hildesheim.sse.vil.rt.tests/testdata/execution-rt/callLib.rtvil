@@ -6,5 +6,23 @@ rtVilScript callLib (Project source, Configuration config, Project target) {
 
     initCapacity(QM1 cfg, Integer executorPool) = {
     }
+    
+    Real calcCapacity(QM1 cfg) = {
+        Real result = 0;
+        setOf(Any) done = {};
+        if (doCalcCapacity(cfg, done)) {
+            result = 1;
+        }
+        result;
+    }
+    
+    protected Boolean doCalcCapacity(QM1 cfg, setOf(Any) done) = {
+        Boolean process = !done.includes(cfg);
+        Integer i = 0;
+        if (process) {
+            i = i + 1;
+        }
+        process;
+   }
 
 }
