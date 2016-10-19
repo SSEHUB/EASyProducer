@@ -197,6 +197,13 @@ public class Map<K, V> implements IVilGenericType, IStringValueProvider {
             map.remove(key);
         }
     }
+    
+    /**
+     * Clears all entries.
+     */
+    public void clear() {
+        map.clear();
+    }
 
     /**
      * Returns the number of dimensions of <code>T</code>.
