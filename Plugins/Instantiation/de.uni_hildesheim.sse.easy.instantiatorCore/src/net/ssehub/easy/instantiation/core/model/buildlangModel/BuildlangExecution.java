@@ -862,7 +862,6 @@ public class BuildlangExecution extends ExecutionVisitor<Script, Rule, VariableD
             LhsRhsMatchLoop.matchLoop(rule, rhsValues, applicator, tracer);
             status = applicator.allConditionsEnabled() ? Status.SUCCESS : Status.NOT_APPLICABLE;
         }
-        
         Object result;
         if (rule.returnActualValue()) {
             result = bodyRes;
@@ -877,13 +876,16 @@ public class BuildlangExecution extends ExecutionVisitor<Script, Rule, VariableD
         Status status = Status.SUCCESS;
         Object resVal = null;
         if (null != ruleBody) {
-            for (int e = 0; Status.SUCCESS == status && e < ruleBody.getBodyElementCount(); e++) {
+            int bodyEltCount = ruleBody.getBodyElementCount();
+            int lastBodyEltIndex = bodyEltCount - 1;
+            boolean returnActual = ruleBody.returnActualValue();
+            for (int e = 0; Status.SUCCESS == status && e < bodyEltCount; e++) {
                 IRuleElement elt = ruleBody.getBodyElement(e);
                 Object eltVal = elt.accept(this);
                 resVal = eltVal;
                 if (mayFail(elt) // guard expression
                     && !checkConditionResult(eltVal, elt, ConditionTest.DONT_CARE)) {
-                    if (enableRuleElementFailed) {
+                    if (enableRuleElementFailed && !(returnActual && e == lastBodyEltIndex)) {
                         if (ruleElementFailed(elt, context)) {
                             tracer.failedAt(ruleBody.getBodyElement(e));
                             status = Status.FAIL;

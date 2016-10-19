@@ -138,4 +138,9 @@ public class MapExpression extends Expression implements IRuleBlock, IEnumeratin
         return "map";
     }
 
+    @Override
+    public boolean returnActualValue() {
+        return false;
+    }
+
 }

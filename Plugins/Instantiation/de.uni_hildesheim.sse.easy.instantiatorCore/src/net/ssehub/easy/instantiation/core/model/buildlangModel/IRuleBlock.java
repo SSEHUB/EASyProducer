@@ -42,4 +42,11 @@ public interface IRuleBlock {
      */
     public void addBodyElement(int index, IRuleElement element) throws VilException;
 
+    /**
+     * Returns whether this body shall return an actual value (function) or a rule execution result.
+     * 
+     * @return <code>true</code> in case of an actual value, <code>false</code> else
+     */
+    public boolean returnActualValue();
+
 }

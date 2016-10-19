@@ -65,4 +65,9 @@ public class WhileStatement extends RuleBlock implements IRuleElement {
         return false;
     }
 
+    @Override
+    public boolean returnActualValue() {
+        return false;
+    }
+
 }

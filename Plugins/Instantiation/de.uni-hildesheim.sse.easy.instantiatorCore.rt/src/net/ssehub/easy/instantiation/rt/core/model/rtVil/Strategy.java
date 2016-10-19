@@ -167,6 +167,11 @@ public class Strategy extends Rule implements IVariableDeclarationReceiver<Varia
                     throw new VilException("unsupported", VilException.ID_INTERNAL);
                 }
                 
+                @Override
+                public boolean returnActualValue() {
+                    return false;
+                }
+                
             };
         }
     }

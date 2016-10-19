@@ -28,4 +28,9 @@ public class NestedRuleBlock extends RuleBlock {
         return null; // must be visited explicitly
     }
 
+    @Override
+    public boolean returnActualValue() {
+        return false;
+    }
+
 }
