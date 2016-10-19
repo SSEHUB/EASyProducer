@@ -174,7 +174,7 @@ public class UnmodifiableSet<T> implements Set<T> {
      */
     @Override
     public Set<T> union(Set<T> set) {
-        return this.set.union(set);
+        return set.union(set);
     }
 
     /**
@@ -185,7 +185,13 @@ public class UnmodifiableSet<T> implements Set<T> {
      */
     @Override
     public Set<T> intersection(Set<T> set) {
-        return this.set.intersection(set);
+        return set.intersection(set);
+    }
+    
+    @Invisible
+    @Override
+    public String toString() {
+        return set.toString();
     }
 
 }

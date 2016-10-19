@@ -397,4 +397,10 @@ public class Map<K, V> implements IVilGenericType, IStringValueProvider {
         return new ListSequence<V>(result, generics[1]); // see assertion in constructor
     }
 
+    @Override
+    @Invisible
+    public String toString() {
+        return map.toString();
+    }
+
 }

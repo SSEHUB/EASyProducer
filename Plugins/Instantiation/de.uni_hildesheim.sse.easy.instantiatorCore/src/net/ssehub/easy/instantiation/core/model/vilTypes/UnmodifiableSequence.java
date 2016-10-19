@@ -213,4 +213,10 @@ public class UnmodifiableSequence<T> implements Sequence<T> {
         return sequence.getType();
     }
 
+    @Invisible
+    @Override
+    public String toString() {
+        return sequence.toString();
+    }
+
 }
