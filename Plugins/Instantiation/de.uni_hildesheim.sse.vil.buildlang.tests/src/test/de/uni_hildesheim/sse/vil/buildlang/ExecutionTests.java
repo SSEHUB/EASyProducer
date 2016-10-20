@@ -108,6 +108,16 @@ public class ExecutionTests extends AbstractExecutionTest<Script> {
     public void testAlternative() throws IOException {
         assertEqual("alternative");
     }
+    
+    /**
+     * Tests a specific recursion case.
+     * 
+     * @throws IOException should not occur
+     */
+    @Test
+    public void testRecursion() throws IOException {
+        assertEqual("recursion");
+    }
 
     /**
      * Tests the application of a "function pointer" as parameter.

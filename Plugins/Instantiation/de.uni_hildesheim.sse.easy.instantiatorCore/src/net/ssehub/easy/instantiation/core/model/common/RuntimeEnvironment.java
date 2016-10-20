@@ -54,6 +54,12 @@ public abstract class RuntimeEnvironment implements IRuntimeEnvironment, IRestri
         private Map<VariableDeclaration, Object> values = new HashMap<VariableDeclaration, Object>();
         private Map<String, VariableDeclaration> variables = new HashMap<String, VariableDeclaration>();
         private List<Configuration> configurations = new ArrayList<Configuration>();
+        
+        @Override
+        public String toString() {
+            return "[" + values + " " + variables + "]";
+        }
+
     }
 
     /**
@@ -501,12 +507,6 @@ public abstract class RuntimeEnvironment implements IRuntimeEnvironment, IRestri
      * @throws VilException in case of an attempt of modifying a constant
      */
     public void setValue(VariableDeclaration var, Object object) throws VilException {
-        TypeDescriptor<?> type = var.getType();
-        if (type instanceof IActualValueProvider) {
-            object = ((IActualValueProvider) type).determineActualValue(object);
-        } else {
-            object = checkInitialCollectionValue(type, object);
-        }
         object = checkType(var, object);
         currentContext.setValue(var, object);
     }
@@ -579,6 +579,12 @@ public abstract class RuntimeEnvironment implements IRuntimeEnvironment, IRestri
      * @throws VilException in case of type incompatibilities
      */
     private Object checkType(VariableDeclaration var, Object object) throws VilException {
+        TypeDescriptor<?> type = var.getType();
+        if (type instanceof IActualValueProvider) {
+            object = ((IActualValueProvider) type).determineActualValue(object);
+        } else {
+            object = checkInitialCollectionValue(type, object);
+        }        
         if (NullValue.INSTANCE == object || NullValue.VALUE == object) {
             object = null;
         }
