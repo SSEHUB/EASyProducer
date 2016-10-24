@@ -189,6 +189,57 @@ public class PseudoString implements IVilType {
         }
         return result;
     }
+    
+    /**
+     * Returns the specified substring of <code>in</code> from <code>start</code> to end of <code>in</code>.
+     * 
+     * @param in the string to be considered
+     * @param start the inclusive start position
+     * @return the substring (or <b>in</b> in case of any parameter problem)
+     */
+    public static String substring(String in, int start) {
+        String result;
+        if (null != in && start >= 0 && start < in.length()) {
+            result = in.substring(start);
+        } else {
+            result = in;
+        }
+        return result;
+    }
+
+    /**
+     * Returns whether the given <code>string</code> has the given <code>prefix</code>. 
+     * 
+     * @param string the string to be considered
+     * @param prefix the prefix
+     * @return <code>true</code> if <code>string</code> starts with <code>prefix</code>, <code>false</code> else
+     */
+    public static boolean startsWith(String string, String prefix) {
+        boolean result;
+        if (null != string) {
+            result = string.startsWith(prefix);
+        } else {
+            result = false;
+        }
+        return result;
+    }
+
+    /**
+     * Returns whether the given <code>string</code> has the given <code>postfix</code>. 
+     * 
+     * @param string the string to be considered
+     * @param postfix the postfix
+     * @return <code>true</code> if <code>string</code> ends with <code>postfix</code>, <code>false</code> else
+     */
+    public static boolean endsWith(String string, String postfix) {
+        boolean result;
+        if (null != string) {
+            result = string.endsWith(postfix);
+        } else {
+            result = false;
+        }
+        return result;
+    }
 
     /**
      * Transforms all characters to upper case.
