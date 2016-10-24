@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2014 University of Hildesheim, Software Systems Engineering
+ * Copyright 2009-2016 University of Hildesheim, Software Systems Engineering
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,6 +15,9 @@
  */
 package net.ssehub.easy.instantiation.rt.core.model.rtVil;
 
+import net.ssehub.easy.basics.logger.EASyLoggerFactory;
+import net.ssehub.easy.basics.logger.EASyLoggerFactory.EASyLogger;
+
 /**
  * Stores data about the containing OSGi bundle (static bundle without activator).
  * 
@@ -26,5 +29,14 @@ public class Bundle {
      * Stores the bundle ID.
      */
     public static final String ID = "de.uni-hildesheim.sse.easy.instantiatorCore.rt";
+    
+    /**
+     * Helper method for getting an Logger for a Class of this bundle.
+     * @param clazz The class of this bundle for which the logger should be returned for.
+     * @return The logger instance.
+     */
+    public static EASyLogger getLogger(Class<?> clazz) {
+        return EASyLoggerFactory.INSTANCE.getLogger(clazz, ID);
+    }
     
 }
