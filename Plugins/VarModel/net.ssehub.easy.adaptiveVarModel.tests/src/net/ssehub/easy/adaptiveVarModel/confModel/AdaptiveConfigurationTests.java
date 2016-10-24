@@ -16,7 +16,6 @@
 package net.ssehub.easy.adaptiveVarModel.confModel;
 
 import org.junit.Assert;
-import org.junit.Before;
 import org.junit.Test;
 
 import net.ssehub.easy.varModel.confModel.IDecisionVariable;
@@ -25,7 +24,6 @@ import net.ssehub.easy.varModel.model.Project;
 import net.ssehub.easy.varModel.model.datatypes.Compound;
 import net.ssehub.easy.varModel.model.datatypes.IntegerType;
 import net.ssehub.easy.varModel.model.datatypes.StringType;
-import net.ssehub.easy.varModel.model.values.Value;
 import net.ssehub.easy.varModel.model.values.ValueDoesNotMatchTypeException;
 import net.ssehub.easy.varModel.varModel.testSupport.ProjectTestUtilities;
 
@@ -35,7 +33,7 @@ import net.ssehub.easy.varModel.varModel.testSupport.ProjectTestUtilities;
  */
 public class AdaptiveConfigurationTests {
     private Project testProject;
-    private AdaptiveConfiguration config;
+    private AdaptiveConfiguration<IDecisionVariable> config;
     
     // Simple values
     private DecisionVariableDeclaration intDecl;
@@ -73,7 +71,7 @@ public class AdaptiveConfigurationTests {
         ProjectTestUtilities.validateProject(testProject, true);
         
         // Create configuration
-        config = new AdaptiveConfiguration(testProject);
+        config = new AdaptiveConfiguration<IDecisionVariable>(testProject, new IDecisionVariableIdentifier());
     }
 
     /**
@@ -139,7 +137,7 @@ public class AdaptiveConfigurationTests {
     /**
      * Checks whether the specified variable has the expected value.
      * @param var The variable to test.
-     * @param expectedValue The expected value ({@link Value#getValue()}).
+     * @param expectedValue The expected value ({@link net.ssehub.easy.varModel.model.values.Value#getValue()}).
      */
     private void assertValue(IDecisionVariable var, Object expectedValue) {
         Assert.assertEquals("Variable \"" + var.getDeclaration().getName() + "\" in test + \"" + testProject.getName()
@@ -150,7 +148,7 @@ public class AdaptiveConfigurationTests {
      * Alternative method to simplify checking of compound values in one step. However, this method is safe to use
      * as the String representation of a value may change during refactorings.
      * @param var The variable to test.
-     * @param expectedValue The expected value ({@link Value#toString()}).
+     * @param expectedValue The expected value ({@link net.ssehub.easy.varModel.model.values.Value#toString()}).
      * @see #assertValue(IDecisionVariable, Object)
      */
     private void assertValueStringBased(IDecisionVariable var, String expectedValue) {

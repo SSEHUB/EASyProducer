@@ -19,14 +19,11 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
-import org.apache.commons.lang.StringUtils;
-
 import net.ssehub.easy.adaptiveVarModel.Bundle;
 import net.ssehub.easy.varModel.confModel.AssignmentState;
 import net.ssehub.easy.varModel.confModel.Configuration;
 import net.ssehub.easy.varModel.confModel.ConfigurationException;
 import net.ssehub.easy.varModel.confModel.IDecisionVariable;
-import net.ssehub.easy.varModel.model.IvmlKeyWords;
 import net.ssehub.easy.varModel.model.Project;
 import net.ssehub.easy.varModel.model.values.Value;
 import net.ssehub.easy.varModel.model.values.ValueDoesNotMatchTypeException;
@@ -37,19 +34,25 @@ import net.ssehub.easy.varModel.model.values.ValueFactory;
  * other components until the {@link #takeOverValues()} method is called. <br/><br/>
  * 
  * This configuration should be used if much more value changes are expected than reasonings are needed.
+ * @param <V> specifies which kind of classes are used to reference {@link IDecisionVariable}s before the values
+ * are stored in the {@link IDecisionVariable}s via the {@link #takeOverValues()} method.
  * @author El-Sharkawy
  */
-public class AdaptiveConfiguration extends Configuration {
-    private static final String SEPARATOR = IvmlKeyWords.NAMESPACE_SEPARATOR;
+public class AdaptiveConfiguration<V> extends Configuration {
 
     private Map<String, Object> unsavedValues;
+    private AbstractVariableIdentifier<V> identifier;
     
     /**
      * Constructor to create a fresh adaptive configuration based on a {@link Project}.
      * @param project The project for which the configuration shall be created for.
+     * @param identifier Maps configured elements to IDs, so that they can easily mapped back to
+     * {@link IDecisionVariable}s during the {@link #takeOverValues()} method. The default implementation
+     * is the {@link IDecisionVariableIdentifier}.
      */
-    public AdaptiveConfiguration(Project project) {
+    public AdaptiveConfiguration(Project project, AbstractVariableIdentifier<V> identifier) {
         super(project);
+        this.identifier = identifier;
         unsavedValues = new HashMap<String, Object>();
     }
     
@@ -75,7 +78,7 @@ public class AdaptiveConfiguration extends Configuration {
             Iterator<IDecisionVariable> varItr = iterator();
             while (varItr.hasNext() && !tempValue.isEmpty()) {
                 IDecisionVariable topVar = varItr.next();
-                String id = topVar.getDeclaration().getQualifiedName();
+                String id = identifier.iDecisionVariableToID(topVar);
                 Object newValue = tempValue.get(id);
                 if (null != newValue) {
                     // Replace value with recent value
@@ -142,18 +145,18 @@ public class AdaptiveConfiguration extends Configuration {
      * @param value The object value to save, must be in a form that the {@link ValueFactory} can handle it.
      */
     public void addValue(String id, Object value) {
-        if (StringUtils.countMatches(id, SEPARATOR) > 1) {
+        if (identifier.isNestedVariable(id)) {
+            Iterator<String> idItr = identifier.getIDIterator(id);
             // Value of a slot in a compound
-            int pos = id.indexOf(SEPARATOR);
-            pos = id.indexOf(SEPARATOR, pos + 1);
-            String cmpName = id.substring(0, pos);
-            String slotName = id.substring(pos + 2);
+            String cmpName = idItr.next();
+            String slotName = idItr.next();
             @SuppressWarnings("unchecked")
             Map<String, Object> cmpValueMap = (Map<String, Object>) unsavedValues.get(cmpName);
             if (null == cmpValueMap) {
                 cmpValueMap = new HashMap<String, Object>();
                 unsavedValues.put(cmpName, cmpValueMap);
             }
+            // TODO SE: Full recursion if compound is nested in compound
             cmpValueMap.put(slotName, value);
         } else {
             unsavedValues.put(id, value);
@@ -166,7 +169,7 @@ public class AdaptiveConfiguration extends Configuration {
      * @param var The variable for which the value should be saved.
      * @param value The object value to save, must be in a form that the {@link ValueFactory} can handle it.
      */
-    public void addValue(IDecisionVariable var, Object value) {
-        addValue(var.getQualifiedName(), value);
+    public void addValue(V var, Object value) {
+        addValue(identifier.variableToID(var), value);
     }
 }
