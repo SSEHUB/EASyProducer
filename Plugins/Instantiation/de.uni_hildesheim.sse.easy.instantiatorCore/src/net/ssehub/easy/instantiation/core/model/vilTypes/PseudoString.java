@@ -1,5 +1,7 @@
 package net.ssehub.easy.instantiation.core.model.vilTypes;
 
+import java.util.StringTokenizer;
+
 /**
  * Implements a pseudo class for strings.
  * 
@@ -257,6 +259,31 @@ public class PseudoString implements IVilType {
     @Conversion
     public static String convertAny(Object any) {
         return StringValueHelper.getStringValue(any, null);
+    }
+
+    /**
+     * Tokenizes the given <code>string</code> along <code>delimiters</code>.
+     * 
+     * @param string the string to tokenize
+     * @param delimiters the delimiters between two tokens. Delimiter characters themselves will not
+     *     be treated as tokens.
+     * @return the tokens in sequence of occurrence
+     */
+    @OperationMeta(returnGenerics = String.class)
+    public static Sequence<String> tokenize(String string, String delimiters) {
+        Sequence<String> result;
+        if (null != string) {
+            StringTokenizer tokenizer = new StringTokenizer(string, delimiters);
+            String[] tmp = new String[tokenizer.countTokens()];
+            int count = 0;
+            while (tokenizer.hasMoreTokens()) {
+                tmp[count++] = tokenizer.nextToken();
+            }
+            result = new ArraySequence<String>(tmp, String.class);
+        } else {
+            result = null;
+        }
+        return result;
     }
     
 }
