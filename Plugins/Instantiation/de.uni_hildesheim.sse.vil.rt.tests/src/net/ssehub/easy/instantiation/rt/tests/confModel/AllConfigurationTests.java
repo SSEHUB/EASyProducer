@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2014 University of Hildesheim, Software Systems Engineering
+ * Copyright 2009-2016 University of Hildesheim, Software Systems Engineering
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,25 +13,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package de.uni_hildesheim.sse.vil.rt.tests;
+package net.ssehub.easy.instantiation.rt.tests.confModel;
 
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
-
-import net.ssehub.easy.instantiation.rt.tests.confModel.AllConfigurationTests;
+import org.junit.runners.Suite.SuiteClasses;
 
 /**
- * The rt-VIL test suite.
- * 
- * @author Holger Eichelberger
+ * Test suite for running all tests of this package and sub packages.
+ * @author El-Sharkawy
  */
 @RunWith(Suite.class)
-@Suite.SuiteClasses({
-    BasicRtTests.class,
-    ExecutionRtTests.class,
-    AnalyzerTest.class,
-    VariableValueCopierTest.class,
-    AllConfigurationTests.class})
-public class AllTests {
+@SuiteClasses({ AdaptiveConfigurationTests.class })
+public class AllConfigurationTests {
 
 }
