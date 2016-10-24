@@ -33,7 +33,28 @@ import net.ssehub.easy.varModel.model.values.ValueFactory;
  * A configuration, which can store additional temporary values. These values are ignored by the configuration and
  * other components until the {@link #takeOverValues()} method is called. <br/><br/>
  * 
- * This configuration should be used if much more value changes are expected than reasonings are needed.
+ * This configuration should be used if much more value changes are expected than reasonings are needed.<br/><br/>
+ * <b>Attention</b> Currently, only the following variable types are supported:
+ * <ul>
+ *   <li>Top level variables</li>
+ *   <li>Variables nested in a top level compound (not multiple nested)</li>
+ * </ul>
+ * <br/>
+ * <b>Manual:</b>
+ * <ol>
+ *   <li>Create AdaptiveConfiguration with appropriate {@link AbstractVariableIdentifier}</li>
+ *   <li>Add values via the {@link #addValue(Object, Object)} method</li>
+ *   <li>Call the {@link #takeOverValues()} before reasoning</li>
+ * </ol>
+ * <br/>
+ * <b>Example:</b>
+ * <pre><code>
+ * AdaptiveConfiguration config = new AdaptiveConfiguration&lt;IDecisionVariable&gt;(testProject,
+ *     new IDecisionVariableIdentifier());
+ * config.addValue(intVar, 2);
+ * ...
+ * config.takeOverValues();
+ * </code></pre>
  * @param <V> specifies which kind of classes are used to reference {@link IDecisionVariable}s before the values
  * are stored in the {@link IDecisionVariable}s via the {@link #takeOverValues()} method.
  * @author El-Sharkawy
@@ -141,7 +162,8 @@ public class AdaptiveConfiguration<V> extends Configuration {
     /**
      * Adds a temporary value to this configuration. This value won't be used until the take {@link #takeOverValues()}
      * method is used.
-     * @param id The qualified name of the variable (cf. {@link IDecisionVariable#getQualifiedName()}).
+     * @param id The id representing the specified variable
+     *     (cf. {@link AbstractVariableIdentifier#variableToID(Object)).
      * @param value The object value to save, must be in a form that the {@link ValueFactory} can handle it.
      */
     public void addValue(String id, Object value) {
