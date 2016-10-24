@@ -14,6 +14,7 @@ rtVilScript call (Project source, Configuration config, Project target) {
         test();
         QM1 qm1 = config;
         initCapacity(qm1, 4);
+        Real t = calcCapacity(qm1);
     }
 
     enact(Project source, Configuration config, Project target) = : {

@@ -1,0 +1,9 @@
+-> main()
+    -> doSomething(String) with (test)
+        result <- false
+        i <- 0
+        visit else-branch
+        -> +(Integer, Integer) with (0, 2) = 2
+        i <- 2
+    t <- false
+    -> doSomethingElse()

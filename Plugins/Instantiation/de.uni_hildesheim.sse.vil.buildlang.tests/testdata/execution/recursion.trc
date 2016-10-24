@@ -1,0 +1,47 @@
+-> main(Project, Project, Configuration) with (null, null, null)
+    result <- {}
+    -> collectRes(mapOf(Integer, String), Integer) with ({}, 0)
+        max <- {}
+        -> +(Integer, Integer) with (1, 0) = 1
+        -> add(Map, Integer, String) with ({{1, a}}, 1, a)
+        -> <(Integer, Integer) with (0, 1) = true
+        visit if-branch
+        tmp <- {}
+        -> collectRes1(mapOf(Integer, String)) with ({})
+            -> add(Map, Integer, String) with ({{100, b}}, 100, b)
+            -> collectRes(mapOf(Integer, String), Integer) with ({{100, b}}, 1)
+                max <- {}
+                -> +(Integer, Integer) with (1, 1) = 2
+                -> add(Map, Integer, String) with ({{2, a}}, 2, a)
+                -> <(Integer, Integer) with (1, 1) = false
+                visit else-branch
+                -> println(Any) with ({{100, b}})
+                for {
+                    -> keys(Map) with ({{2, a}}) = {2}
+                    for: key <- 2
+                    -> get(Map, Any) with ({{2, a}}, 2) = a
+                    -> add(Map, Integer, String) with ({{100, b}, {2, a}}, 2, a)
+                }
+        for {
+            -> keys(Map) with ({{100, b}, {2, a}}) = {100, 2}
+            for: key <- 100
+            -> get(Map, Any) with ({{100, b}, {2, a}}, 100) = b
+            -> add(Map, Integer, String) with ({{1, a}, {100, b}}, 100, b)
+            for: key <- 2
+            -> get(Map, Any) with ({{100, b}, {2, a}}, 2) = a
+            -> add(Map, Integer, String) with ({{1, a}, {100, b}, {2, a}}, 2, a)
+        }
+        -> println(Any) with ({})
+        for {
+            -> keys(Map) with ({{1, a}, {100, b}, {2, a}}) = {1, 100, 2}
+            for: key <- 1
+            -> get(Map, Any) with ({{1, a}, {100, b}, {2, a}}, 1) = a
+            -> add(Map, Integer, String) with ({{1, a}}, 1, a)
+            for: key <- 100
+            -> get(Map, Any) with ({{1, a}, {100, b}, {2, a}}, 100) = b
+            -> add(Map, Integer, String) with ({{1, a}, {100, b}}, 100, b)
+            for: key <- 2
+            -> get(Map, Any) with ({{1, a}, {100, b}, {2, a}}, 2) = a
+            -> add(Map, Integer, String) with ({{1, a}, {100, b}, {2, a}}, 2, a)
+        }
+    -> println(Any) with ({{1, a}, {100, b}, {2, a}})

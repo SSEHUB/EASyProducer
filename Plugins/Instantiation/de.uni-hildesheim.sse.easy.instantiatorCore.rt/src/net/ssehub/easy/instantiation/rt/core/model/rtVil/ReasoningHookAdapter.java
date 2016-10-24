@@ -41,6 +41,11 @@ public class ReasoningHookAdapter implements IReasoningHook {
     public void postReasoning(Script script, IRtVilConcept concept, IRtValueAccess values, Configuration config) {
         // do nothing
     }
+    
+    @Override
+    public void reasoningFailed(Configuration config) {
+        // do nothing
+    }
 
     /**
      * Turns a message into readable text. [convenience]

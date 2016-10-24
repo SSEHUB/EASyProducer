@@ -4,7 +4,9 @@
         -> first(Sequence) with ({}) = null
         param <- null
         -> setParameter(Parameter, Any) with (null, 15)
-        done <- null
-        -> ==(Boolean, Boolean) with (null, null) = true
+        done <- false
+        -> ==(Boolean, Boolean) with (false, null) = false
+        visit else-branch
+        -> !(Boolean) with (false) = true
         visit if-branch
         explicit fail message "not done"

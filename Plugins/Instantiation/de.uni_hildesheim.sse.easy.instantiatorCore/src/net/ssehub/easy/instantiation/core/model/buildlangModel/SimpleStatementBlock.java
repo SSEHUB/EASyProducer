@@ -44,4 +44,9 @@ public class SimpleStatementBlock implements IRuleBlock {
         throw new VilException("cannot add to a simple statement", VilException.ID_INTERNAL);
     }
 
+    @Override
+    public boolean returnActualValue() {
+        return false;
+    }
+
 }

@@ -1,0 +1,30 @@
+vilScript recursion (Project source, Project target, Configuration config) {
+
+    main(Project source, Project target, Configuration config) = : {
+        mapOf(Integer, String) result = {};
+        collectRes(result, 0);
+        println(result);
+    }
+
+    protected collectRes(mapOf(Integer, String) result, Integer id) = : {
+        mapOf(Integer, String) max = {};
+        max.add(1 + id, "a");
+        if (id < 1) {
+            mapOf(Integer, String) tmp = {};
+            collectRes1(tmp);
+            for(Integer key:tmp.keys()) {
+                max.add(key, tmp.get(key));
+            };
+        }
+        println(result);
+        for(Integer key:max.keys()) {
+            result.add(key, max.get(key));
+        };
+    }
+
+    protected collectRes1(mapOf(Integer, String) result) = : {
+        result.add(100, "b");
+        collectRes(result, 1);
+    }
+
+}

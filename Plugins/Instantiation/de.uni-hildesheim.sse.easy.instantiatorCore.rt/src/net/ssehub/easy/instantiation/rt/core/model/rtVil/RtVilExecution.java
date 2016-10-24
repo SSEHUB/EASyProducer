@@ -143,7 +143,7 @@ public class RtVilExecution extends BuildlangExecution implements IRtVilVisitor 
                 evaluator.getTracer().trace("Reasoner execution ok: " + ok);
                 logger.warn("Reasoner execution ok: " + ok);
                 if (!ok) {
-                    net.ssehub.easy.varModel.confModel.Configuration.printConfig(System.out, cfg.getConfiguration());
+                    evaluator.reasoningHook.reasoningFailed(cfg);
                 }
                 result = ok;
             }

@@ -376,6 +376,7 @@ public class Rule extends RuleBlock implements IResolvableOperation<VariableDecl
      * 
      * @return <code>true</code> in case of an actual value, <code>false</code> else
      */
+    @Override
     public boolean returnActualValue() {
         return !TypeRegistry.equals(getDefaultReturnType(), getReturnType());
     }

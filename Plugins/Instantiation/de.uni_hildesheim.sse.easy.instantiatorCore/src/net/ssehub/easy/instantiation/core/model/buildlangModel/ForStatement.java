@@ -116,4 +116,9 @@ public class ForStatement extends RuleBlock implements IRuleElement, IEnumeratin
         return "for";
     }
 
+    @Override
+    public boolean returnActualValue() {
+        return false;
+    }
+
 }

@@ -284,31 +284,33 @@ public class VilBuildLanguageOutlineTreeProvider extends DefaultOutlineTreeProvi
     
     protected String toString(Type type) {
         String result = "";
-        String prefix = null;
-        if (null != type.getName()) {
-            result = Utils.getQualifiedNameString(type.getName());
-        } else if (null != type.getMap()) {
-            prefix = "mapOf";
-        } else if (null != type.getSeq()) {
-            prefix = "sequenceOf";
-        } else if (null != type.getSet()) {
-            prefix = "setOf";
-        } else if (null != type.getCall()) {
-            if (null != type.getReturn()) {
-                result = toString(type.getReturn()) + " ";
-            }
-            prefix = "callOf";
-        }
-        if (null != prefix) {
-            result += "(";
-            boolean first = true;
-            for (Type param : type.getParam().getParam()) {
-                if (!first) {
-                    result += ", ";
+        if (null != type) {
+            String prefix = null;
+            if (null != type.getName()) {
+                result = Utils.getQualifiedNameString(type.getName());
+            } else if (null != type.getMap()) {
+                prefix = "mapOf";
+            } else if (null != type.getSeq()) {
+                prefix = "sequenceOf";
+            } else if (null != type.getSet()) {
+                prefix = "setOf";
+            } else if (null != type.getCall()) {
+                if (null != type.getReturn()) {
+                    result = toString(type.getReturn()) + " ";
                 }
-                result += toString(param);
+                prefix = "callOf";
             }
-            result += ")";
+            if (null != prefix) {
+                result += "(";
+                boolean first = true;
+                for (Type param : type.getParam().getParam()) {
+                    if (!first) {
+                        result += ", ";
+                    }
+                    result += toString(param);
+                }
+                result += ")";
+            }
         }
         return result;
     }

@@ -61,5 +61,12 @@ public interface IReasoningHook {
      * @param config the actual configuration
      */
     public void postReasoning(Script script, IRtVilConcept concept, IRtValueAccess values, Configuration config);
+    
+    /**
+     * Is called if reasoning is considered to fail, e.g., to inform the user.
+     * 
+     * @param config the configuration
+     */
+    public void reasoningFailed(Configuration config);
 
 }

@@ -109,6 +109,22 @@ public class Map<K, V> implements IVilGenericType, IStringValueProvider {
     public V get(Object key) {
         return at(key);
     }
+    
+    /**
+     * Returns the value assigned to <code>key</code>, if there is none <code>deflt</code>.
+     * 
+     * @param key the key to search the value for
+     * @param deflt the default value if <code>key</code> does not exist 
+     * @return the value for key (<code>deflt</code> if no key-value mapping is defined)
+     */
+    @OperationMeta(useGenericParameter = 1 )
+    public V get(Object key, V deflt) {
+        V result = deflt;
+        if (containsKey(key)) {
+            result = at(key);
+        }
+        return result;
+    }
 
     /**
      * Returns the keys of this map.
@@ -196,6 +212,13 @@ public class Map<K, V> implements IVilGenericType, IStringValueProvider {
         if (null != key) {
             map.remove(key);
         }
+    }
+    
+    /**
+     * Clears all entries.
+     */
+    public void clear() {
+        map.clear();
     }
 
     /**
@@ -395,6 +418,12 @@ public class Map<K, V> implements IVilGenericType, IStringValueProvider {
             result.add(get(key));
         }
         return new ListSequence<V>(result, generics[1]); // see assertion in constructor
+    }
+
+    @Override
+    @Invisible
+    public String toString() {
+        return map.toString();
     }
 
 }

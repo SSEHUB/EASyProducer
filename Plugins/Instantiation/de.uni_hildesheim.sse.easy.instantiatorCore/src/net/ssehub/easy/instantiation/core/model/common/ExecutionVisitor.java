@@ -126,7 +126,7 @@ public abstract class ExecutionVisitor <M extends IResolvableModel<V>, O extends
                 value = net.ssehub.easy.instantiation.core.model.vilTypes.Map.checkConvertEmpty(
                     var.getType(), value);
             }
-            environment.setValue(var, value);
+            environment.addValue(var, value);
             tracer.valueDefined(var, null, value);
         } else {
             // add as undefined to current level in runtime environment. otherwise variable may be assigned implicitly 
