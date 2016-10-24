@@ -29,6 +29,12 @@ import net.ssehub.easy.varModel.model.values.ReferenceValue;
  * 
  * @author Dennis Konoppa
  */
+/**
+ * Implements a GUI representation for references.
+ * Creates a multiple-selection table.
+ * 
+ * @author Dennis Konoppa
+ */
 public class MultipleSelectionEditor implements GUIEditor {
 
     private Table table;
@@ -39,6 +45,10 @@ public class MultipleSelectionEditor implements GUIEditor {
     
     private DisplayNameProvider nameProvider = DisplayNameProvider.getInstance();
     
+    private IDatatype referenceType;
+    
+    private IDecisionVariable referenceVariable;
+    
     /**
      * Constructor for a {@link MultipleSelectionEditor}.
      * 
@@ -47,6 +57,7 @@ public class MultipleSelectionEditor implements GUIEditor {
      * @param refVariable IDecisionVariable from current reference
      */
     public MultipleSelectionEditor(Composite composite, IDatatype refType, IDecisionVariable refVariable) {
+
         selectedValues = new ArrayList<AbstractVariable>();
         ContainerValue value = (ContainerValue) refVariable.getValue();
         if (null != value) {
@@ -62,10 +73,15 @@ public class MultipleSelectionEditor implements GUIEditor {
         TableColumn column = new TableColumn(table, SWT.NULL);
         column.setText(refVariable.getDeclaration().getName());
         IDatatype usedType = ((Reference) refType).getType();
+        
+        referenceType = usedType;
+        referenceVariable = refVariable;
+        
         List<AbstractVariable> allVariables = 
                 ReferenceValuesFinder.findPossibleValues(refVariable.getConfiguration().getProject(), usedType);
         possibleVariables = new HashMap<String, AbstractVariable>();
         
+        //TODO: Check with help of AbstractVariable whether clones exists and check them in the table
         for (int i = 0, n = allVariables.size(); i < n; i++) {
             AbstractVariable decl = allVariables.get(i);
             String currentConfiguration = nameProvider.getDisplayName(decl);
@@ -102,8 +118,21 @@ public class MultipleSelectionEditor implements GUIEditor {
      * Method to check selected references in table and update list of selected values.
      */
     public void updateSelectedValues() {
+        
         selectedValues.clear();
         TableItem[] items = table.getItems(); 
+        //int length = items.length;
+        //TableItem item = items[length - 1];
+        
+//        if (item...)  {
+//            //Got cloned???
+//            selectedValues.add(possibleVariables.get(items[length - 1].getText()));
+//        }
+        
+        updateTableInput();
+        
+        items = table.getItems(); 
+        
         for (int i = 0; i < items.length; i++) {
             TableItem item = items[i];
             if (item.getChecked()) {
@@ -112,7 +141,42 @@ public class MultipleSelectionEditor implements GUIEditor {
             }
         }
     }
-    
+   
+    /**
+     * Update the tables input by repopulating the table and checking the right elements.
+     */
+    private void updateTableInput() {
+        
+        table.removeAll();
+        
+        List<AbstractVariable> allVariables = 
+                ReferenceValuesFinder.findPossibleValues(referenceVariable.getConfiguration().getProject()
+                        , referenceType);
+        
+        possibleVariables = new HashMap<String, AbstractVariable>();
+        
+        for (int i = 0, n = allVariables.size(); i < n; i++) {
+            AbstractVariable decl = allVariables.get(i);
+            String currentConfiguration = nameProvider.getDisplayName(decl);
+            possibleVariables.put(currentConfiguration, decl);
+            TableItem item = new TableItem(table, SWT.NULL);
+            item.setText(currentConfiguration);
+        }
+        
+        //clone->selected
+        for (int i = 0, n = selectedValues.size(); i < n; i++) {
+            AbstractVariable selectedVar = selectedValues.get(i);
+            String selectedName = nameProvider.getDisplayName(selectedVar);
+            for (int j = 0; j < table.getItemCount(); j++) {
+                TableItem item = table.getItem(j);
+                if (selectedName.equals(item.getText())) {
+                    item.setChecked(true);
+                } 
+            }
+        }
+        
+    }
+
     @Override
     public Control getControl() {
         return table;
