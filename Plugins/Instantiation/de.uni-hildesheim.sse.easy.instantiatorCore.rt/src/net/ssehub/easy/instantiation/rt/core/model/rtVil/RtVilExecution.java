@@ -33,6 +33,7 @@ import net.ssehub.easy.instantiation.core.model.vilTypes.IMetaType;
 import net.ssehub.easy.instantiation.core.model.vilTypes.TypeDescriptor;
 import net.ssehub.easy.instantiation.core.model.vilTypes.TypeRegistry;
 import net.ssehub.easy.instantiation.core.model.vilTypes.configuration.Configuration;
+import net.ssehub.easy.instantiation.core.model.vilTypes.configuration.DecisionVariable;
 import net.ssehub.easy.instantiation.core.model.vilTypes.configuration.IChangeHistoryTracer;
 import net.ssehub.easy.instantiation.core.model.vilTypes.configuration.IvmlTypes;
 import net.ssehub.easy.instantiation.rt.core.model.rtVil.AbstractBreakdownCall.TupleField;
@@ -45,6 +46,7 @@ import net.ssehub.easy.reasoning.core.reasoner.ReasonerConfiguration;
 import net.ssehub.easy.reasoning.core.reasoner.ReasoningResult;
 import net.ssehub.easy.varModel.confModel.IDecisionVariable;
 import net.ssehub.easy.varModel.model.Constraint;
+import net.ssehub.easy.varModel.model.values.BooleanValue;
 import net.ssehub.easy.varModel.persistency.StringProvider;
 
 /**
@@ -1000,7 +1002,14 @@ public class RtVilExecution extends BuildlangExecution implements IRtVilVisitor 
         boolean active = true;
         Expression guard = call.getGuardExpression();
         if (null != guard) {
-            if (!Boolean.TRUE.equals(guard.accept(this))) {
+            Object o = guard.accept(this);
+            if (o instanceof DecisionVariable) {
+                o = ((DecisionVariable) o).getValue();
+            }
+            if (o instanceof BooleanValue) {
+                o = ((BooleanValue) o).getValue();
+            }
+            if (!Boolean.TRUE.equals(o)) {
                 active = false;
             }
         }

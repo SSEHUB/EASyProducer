@@ -229,4 +229,9 @@ public class Strategy extends Rule implements IVariableDeclarationReceiver<Varia
         return result;
     }
     
+    @Override
+    public String toString() {
+        return "Strategy " + getSignature();
+    }
+    
 }

@@ -1,0 +1,26 @@
+@advice(Add)
+rtVilScript substrategy (Project source, Configuration config, Project target, IAdaptationEvent event) {
+
+    strategy main(Project source, Configuration config, Project target, IAdaptationEvent event) = {
+        Add cfg = config;
+        objective true;
+        breakdown {
+            tactic (cfg.enable) t(config);
+        }
+    }
+
+    strategy lifecycle(Project source, Configuration config, Project target, LifecycleEvent event) = {
+        Boolean enable = true;
+        objective true;
+        breakdown {
+            strategy (enable) main(source, config, target, event);
+        }
+    }
+
+    tactic t(Configuration config) = {
+    }
+
+    enact(Project source, Configuration config, Project target) = : {
+    }
+
+}

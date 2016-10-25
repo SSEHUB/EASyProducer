@@ -269,7 +269,7 @@ public class Script extends net.ssehub.easy.instantiation.core.model.buildlangMo
     }
     
     /**
-     * Collects all strategies.
+     * Collects all explicitly called strategies.
      * 
      * @param result the strategies
      * @param done the visited scripts, non-recursive if <b>null</b>
@@ -302,10 +302,11 @@ public class Script extends net.ssehub.easy.instantiation.core.model.buildlangMo
             }
         }
     }
-    
+
     /**
      * Returns the top-level strategies, i.e., strategies that are not referenced and
-     * comply to the parameters of the script so that they can be called directly.
+     * comply to the parameters of the script so that they can be called directly. This
+     * is the default call and includes referenced strategies.
      * 
      * @param considerImports consider the imports of the scripts
      * @param allStrategies just all strategies or all matching strategies
@@ -313,13 +314,29 @@ public class Script extends net.ssehub.easy.instantiation.core.model.buildlangMo
      * @return the top-level strategies
      */
     public List<Strategy> getTopLevelStrategies(boolean considerImports, boolean allStrategies) {
+        return getTopLevelStrategies(considerImports, allStrategies, false);
+    }
+    
+    /**
+     * Returns the top-level strategies, i.e., strategies that are not referenced and
+     * comply to the parameters of the script so that they can be called directly.
+     * 
+     * @param considerImports consider the imports of the scripts
+     * @param allStrategies just all strategies or all matching strategies
+     * @param excludeReferenced whether referenced strategies shall count as top-level strategies or not
+     * 
+     * @return the top-level strategies
+     */
+    public List<Strategy> getTopLevelStrategies(boolean considerImports, boolean allStrategies, 
+        boolean excludeReferenced) {
         List<Strategy> result = new ArrayList<Strategy>();
         
         // hash first all those that are referenced
         HashSet<Strategy> strategies = new HashSet<Strategy>();
         HashSet<Script> done = considerImports ? new HashSet<Script>() : null;
-        collectStrategies(strategies, done);
-        
+        if (excludeReferenced) {
+            collectStrategies(strategies, done);
+        }
         // return then those that are not hashed / referenced
         for (int s = 0; s < getStrategiesCount(); s++) {
             Strategy strategy = getStrategy(s);
@@ -341,7 +358,6 @@ public class Script extends net.ssehub.easy.instantiation.core.model.buildlangMo
                 }
             }
         }
-        
         return result;
     }
 
