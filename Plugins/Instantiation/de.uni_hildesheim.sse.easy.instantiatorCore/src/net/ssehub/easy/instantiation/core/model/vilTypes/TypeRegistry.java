@@ -445,15 +445,18 @@ public class TypeRegistry {
     /**
      * Internal default registration function with error handling.
      * 
+     * @param <T> the actual implementing type
      * @param type the type class to be registered
-     * @param <T> the actual type
+     * @return the corresponding type descriptor (may be <b>null</b>)
      */
-    public <T extends IVilType> void register(Class<T> type) {
+    public <T extends IVilType> TypeDescriptor<T> register(Class<T> type) {
+        TypeDescriptor<T> result = null;
         try {
-            registerType(type);
+            result = registerType(type);
         } catch (VilException e) {
             LOGGER.error(e.getMessage());
         }
+        return result;
     }
     
     /**
