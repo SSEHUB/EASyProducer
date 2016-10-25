@@ -68,6 +68,11 @@ public class IDecisionVariableIdentifier extends AbstractVariableIdentifier<IDec
                 
                 return id;
             }
+            
+            @Override
+            public void remove() {
+                throw new UnsupportedOperationException("Removing segments are not supported. Tried this on: " + id);
+            }
         };
     }
 
