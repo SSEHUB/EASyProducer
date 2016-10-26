@@ -178,6 +178,40 @@ public class ExecutionRtTests extends AbstractRtTest {
     }
 
     /**
+     * Tests return rule with precondition (true).
+     * 
+     * @throws IOException should not occur
+     */
+    @Test
+    public void testReturn() throws IOException {
+        final String name = "return";
+        
+        Configuration cfg = getIvmlConfiguration("Add", NoVariableFilter.INSTANCE);
+        Map<String, Object> param = createParameterMap(null, null, cfg);
+        param.put("event", new LifecycleEvent("pip", LifecycleEvent.Status.START));
+        EqualitySetup<Script> setup = new EqualitySetup<Script>(createFile(name), name, null, 
+            createTraceFile(name), param);
+        assertEqual(setup);
+    }
+
+    /**
+     * Tests return rule with precondition (false).
+     * 
+     * @throws IOException should not occur
+     */
+    @Test
+    public void testReturn2() throws IOException {
+        final String name = "return2";
+        
+        Configuration cfg = getIvmlConfiguration("Add", NoVariableFilter.INSTANCE);
+        Map<String, Object> param = createParameterMap(null, null, cfg);
+        param.put("event", new LifecycleEvent("pip", LifecycleEvent.Status.START));
+        EqualitySetup<Script> setup = new EqualitySetup<Script>(createFile(name), name, null, 
+            createTraceFile(name), param);
+        assertEqual(setup);
+    }
+
+    /**
      * Tests the basic functions of startup, events and implicit calls failing at a missing enactment.
      * 
      * @throws IOException should not occur

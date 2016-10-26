@@ -840,7 +840,7 @@ public class RtVilExecution extends BuildlangExecution implements IRtVilVisitor 
                     long startTimeStamp = System.currentTimeMillis();
                     callResult = (RuleExecutionResult) visitModelCallExpression(call);
                     long endTimeStamp = System.currentTimeMillis();
-                    lastStatus = callResult.getStatus();
+                    lastStatus = null == callResult ? Status.NOT_APPLICABLE : callResult.getStatus();
                     if (Status.SUCCESS == lastStatus) {
                         setFailInfo(context, null);
                         if (!validateTimeout(timeout, startTimeStamp, endTimeStamp, callResult)) {
