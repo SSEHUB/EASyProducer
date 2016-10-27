@@ -48,10 +48,10 @@ public class PipelineVar_7_Source0Source extends BaseSignalSpout {
         try {
             Class cls = Class.forName("eu.qualimaster.data.stream.source.TwitterFileStreaming");
             sourceData = (ITwitterStreamData) cls.newInstance();
-            sourceData.setParameterConsumerKey(PipelineOptions.getExecutorStringArgument(conf, getName(), "consumerKey", "mVG7FJIMFDXrwfmVK3NTsmXJf"));
-            sourceData.setParameterConsumerSecret(PipelineOptions.getExecutorStringArgument(conf, getName(), "consumerSecret", "qbVQfvaSC5ywH1PcMZL2vTHnm9tQ2LRlD0JxEzZgIrzvqQMbnr"));
-            sourceData.setParameterAccessToken(PipelineOptions.getExecutorStringArgument(conf, getName(), "accessToken", "2831271881-fb2wQVANZdrPiSDEhzoGniRaBvIHZVfuRPI8XtJ"));
-            sourceData.setParameterAccessTokenSecret(PipelineOptions.getExecutorStringArgument(conf, getName(), "accessTokenSecret", "n4f2mmY0QuS95fWYOygtzYD8xzbRBiTlXt2EbYF77IIgy"));
+            sourceData.setParameterConsumerKey(PipelineOptions.getExecutorStringArgument(conf, getName(), "consumerKey", "consumerKey"));
+            sourceData.setParameterConsumerSecret(PipelineOptions.getExecutorStringArgument(conf, getName(), "consumerSecret", "consumerSecret"));
+            sourceData.setParameterAccessToken(PipelineOptions.getExecutorStringArgument(conf, getName(), "accessToken", "accessToken"));
+            sourceData.setParameterAccessTokenSecret(PipelineOptions.getExecutorStringArgument(conf, getName(), "accessTokenSecret", "accessTokenSecret"));
             sourceData.setParameterQueueSize(PipelineOptions.getExecutorIntArgument(conf, getName(), "queueSize", 0));
             sourceData.setParameterTweetDirectory(PipelineOptions.getExecutorStringArgument(conf, getName(), "tweetDirectory", "/user/storm/resultSymbols"));
             sourceData.setParameterSpeedFactor(PipelineOptions.getExecutorDoubleArgument(conf, getName(), "speedFactor", 0.0));

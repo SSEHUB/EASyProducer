@@ -81,16 +81,16 @@ project DataManagementCfg {
 		}, 
 		parameters = {
 			StringParameter {
-				defaultValue = "mVG7FJIMFDXrwfmVK3NTsmXJf", 
+				defaultValue = "consumerKey", 
 				name = "consumerKey"
 			}, StringParameter {
-				defaultValue = "qbVQfvaSC5ywH1PcMZL2vTHnm9tQ2LRlD0JxEzZgIrzvqQMbnr", 
+				defaultValue = "consumerSecret", 
 				name = "consumerSecret"
 			}, StringParameter {
-				defaultValue = "2831271881-fb2wQVANZdrPiSDEhzoGniRaBvIHZVfuRPI8XtJ", 
+				defaultValue = "accessToken", 
 				name = "accessToken"
 			}, StringParameter {
-				defaultValue = "n4f2mmY0QuS95fWYOygtzYD8xzbRBiTlXt2EbYF77IIgy", 
+				defaultValue = "accessTokenSecret", 
 				name = "accessTokenSecret"
 			}, IntegerParameter {
 				defaultValue = 0, 
