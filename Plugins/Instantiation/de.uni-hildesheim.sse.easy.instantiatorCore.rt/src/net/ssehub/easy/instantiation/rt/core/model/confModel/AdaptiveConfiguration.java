@@ -195,4 +195,16 @@ public class AdaptiveConfiguration<V> {
     public void addValue(V var, Object value) {
         addValue(identifier.variableToID(var), value);
     }
+    
+    /**
+     * Adds an already existing mapping to this configuration.
+     * @param mapping An already existing mapping in the form of
+     *   <tt>&lt;id for a (nested) variable, value&gt;</tt>
+     *   When using this option, the caller must ensure that the correct mapping was used.
+     */
+    public void addValues(Map<String, Object> mapping) {
+        for (Map.Entry<String, Object> entry : mapping.entrySet()) {
+            addValue(entry.getKey(), entry.getValue());
+        }
+    }
 }
