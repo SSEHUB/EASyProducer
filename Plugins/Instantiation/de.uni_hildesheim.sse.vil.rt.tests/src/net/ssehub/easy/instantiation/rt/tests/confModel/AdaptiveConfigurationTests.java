@@ -20,6 +20,7 @@ import org.junit.Test;
 
 import net.ssehub.easy.instantiation.rt.core.model.confModel.AdaptiveConfiguration;
 import net.ssehub.easy.instantiation.rt.core.model.confModel.IDecisionVariableIdentifier;
+import net.ssehub.easy.varModel.confModel.Configuration;
 import net.ssehub.easy.varModel.confModel.IDecisionVariable;
 import net.ssehub.easy.varModel.model.DecisionVariableDeclaration;
 import net.ssehub.easy.varModel.model.Project;
@@ -35,7 +36,8 @@ import net.ssehub.easy.varModel.varModel.testSupport.ProjectTestUtilities;
  */
 public class AdaptiveConfigurationTests {
     private Project testProject;
-    private AdaptiveConfiguration<IDecisionVariable> config;
+    private Configuration config;
+    private AdaptiveConfiguration<IDecisionVariable> aConfig;
     
     // Simple values
     private DecisionVariableDeclaration intDecl;
@@ -73,7 +75,8 @@ public class AdaptiveConfigurationTests {
         ProjectTestUtilities.validateProject(testProject, true);
         
         // Create configuration
-        config = new AdaptiveConfiguration<IDecisionVariable>(testProject, new IDecisionVariableIdentifier());
+        config = new Configuration(testProject);
+        aConfig = new AdaptiveConfiguration<IDecisionVariable>(config, new IDecisionVariableIdentifier());
     }
 
     /**
@@ -103,15 +106,15 @@ public class AdaptiveConfigurationTests {
         assertValue(strVar, "Hello World");
         
         // Add temporary values (must not affect the values of the variables)
-        config.addValue(intDecl.getQualifiedName(), 2);
-        config.addValue(intDecl.getQualifiedName(), 3);
-        config.addValue(strDecl.getQualifiedName(), "Hello Universe");
-        config.addValue(intDecl.getQualifiedName(), 5);
+        aConfig.addValue(intDecl.getQualifiedName(), 2);
+        aConfig.addValue(intDecl.getQualifiedName(), 3);
+        aConfig.addValue(strDecl.getQualifiedName(), "Hello Universe");
+        aConfig.addValue(intDecl.getQualifiedName(), 5);
         assertValue(intVar, 42);
         assertValue(strVar, "Hello World");
         
         // Take over values, values must change to last specified value
-        config.takeOverValues();
+        aConfig.takeOverValues();
         assertValue(intVar, 5);
         assertValue(strVar, "Hello Universe");
     }
@@ -127,12 +130,12 @@ public class AdaptiveConfigurationTests {
         assertValueStringBased(cmpVar, "{slotB=3 : Integer, slotA=2 : Integer}");
         
         // Add temporary values (must not affect the values of the variables)
-        config.addValue(cmpVar.getNestedElement("slotA").getQualifiedName(), 7);
-        config.addValue(cmpVar.getNestedElement("slotA").getQualifiedName(), 11);
+        aConfig.addValue(cmpVar.getNestedElement("slotA").getQualifiedName(), 7);
+        aConfig.addValue(cmpVar.getNestedElement("slotA").getQualifiedName(), 11);
         assertValueStringBased(cmpVar, "{slotB=3 : Integer, slotA=2 : Integer}");
         
         // Take over values, values must change to last specified value, slotB must not change
-        config.takeOverValues();
+        aConfig.takeOverValues();
         assertValueStringBased(cmpVar, "{slotB=3 : Integer, slotA=11 : Integer}");
     }
 

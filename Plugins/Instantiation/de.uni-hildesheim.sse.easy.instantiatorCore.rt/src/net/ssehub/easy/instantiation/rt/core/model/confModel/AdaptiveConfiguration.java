@@ -49,30 +49,31 @@ import net.ssehub.easy.varModel.model.values.ValueFactory;
  * <br/>
  * <b>Example:</b>
  * <pre><code>
- * AdaptiveConfiguration config = new AdaptiveConfiguration&lt;IDecisionVariable&gt;(testProject,
+ * AdaptiveConfiguration aConfig = new AdaptiveConfiguration&lt;IDecisionVariable&gt;(config,
  *     new IDecisionVariableIdentifier());
- * config.addValue(intVar, 2);
+ * aConfig.addValue(intVar, 2);
  * ...
- * config.takeOverValues();
+ * aConfig.takeOverValues();
  * </code></pre>
  * @param <V> specifies which kind of classes are used to reference {@link IDecisionVariable}s before the values
  * are stored in the {@link IDecisionVariable}s via the {@link #takeOverValues()} method.
  * @author El-Sharkawy
  */
-public class AdaptiveConfiguration<V> extends Configuration {
+public class AdaptiveConfiguration<V> {
 
     private Map<String, Object> unsavedValues;
     private AbstractVariableIdentifier<V> identifier;
+    private Configuration config;
     
     /**
      * Constructor to create a fresh adaptive configuration based on a {@link Project}.
-     * @param project The project for which the configuration shall be created for.
+     * @param config The configuration which shall be manipulated during runtime.
      * @param identifier Maps configured elements to IDs, so that they can easily mapped back to
      * {@link IDecisionVariable}s during the {@link #takeOverValues()} method. The default implementation
      * is the {@link IDecisionVariableIdentifier}.
      */
-    public AdaptiveConfiguration(Project project, AbstractVariableIdentifier<V> identifier) {
-        super(project);
+    public AdaptiveConfiguration(Configuration config, AbstractVariableIdentifier<V> identifier) {
+        this.config = config;
         this.identifier = identifier;
         unsavedValues = new HashMap<String, Object>();
     }
@@ -96,7 +97,7 @@ public class AdaptiveConfiguration<V> extends Configuration {
              * Iterate over variables: I assume this list is longer, but runtime should be O(n),
              * iteration over values should be O(n^2)
              */
-            Iterator<IDecisionVariable> varItr = iterator();
+            Iterator<IDecisionVariable> varItr = config.iterator();
             while (varItr.hasNext() && !tempValue.isEmpty()) {
                 IDecisionVariable topVar = varItr.next();
                 String id = identifier.iDecisionVariableToID(topVar);
