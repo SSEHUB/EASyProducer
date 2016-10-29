@@ -407,14 +407,19 @@ public class ReflectionOperationDescriptor extends OperationDescriptor implement
     }
     
     /**
-     * Determines the return type of a parameter.
+     * Determines the type of a parameter.
      * 
      * @param index the index of the parameter
      * @return the parameter generics (<b>null</b> if none are specified)
      * @throws IndexOutOfBoundsException if <code>index &lt; 0 || index &gt;= {@link #getParameterCount()}</code>
      */
     protected Class<?>[] getParameterGenerics(int index) {
-        return null;
+        Class<?>[] result = null;
+        ParameterMeta pMeta = method.getParameters()[index].getAnnotation(ParameterMeta.class);
+        if (null != pMeta) {
+            result = pMeta.generics();
+        }
+        return result;
     }
 
     /**
@@ -423,12 +428,12 @@ public class ReflectionOperationDescriptor extends OperationDescriptor implement
      * @return the return type generics (<b>null</b> if none are specified)
      */
     protected Class<?>[] getReturnGenerics() {
-        Class<?>[] param = null;
+        Class<?>[] result = null;
         OperationMeta opMeta = method.getAnnotation(OperationMeta.class);
         if (null != opMeta) {
-            param = opMeta.returnGenerics();
+            result = opMeta.returnGenerics();
         }
-        return param;
+        return result;
     }
 
     @Override

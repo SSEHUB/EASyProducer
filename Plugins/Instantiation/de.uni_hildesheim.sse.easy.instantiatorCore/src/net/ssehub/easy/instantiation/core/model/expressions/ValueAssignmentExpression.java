@@ -84,8 +84,12 @@ public class ValueAssignmentExpression extends Expression {
             if (null != operation) {
                 this.valueExpression = new CallExpression(operation, new CallArgument(valueExpression));
             } else {
-                throw new VilException("cannot assign/convert " + valType.getVilName() 
-                    + " to " + varType.getVilName(), VilException.ID_SEMANTIC);
+                String target = varDecl.getName();
+                if (null != field) {
+                    target = target + "." + field.getName();
+                }
+                throw new VilException("cannot assign/convert value of type " + valType.getVilName() 
+                    + " to variable " + target + " of type " + varType.getVilName(), VilException.ID_SEMANTIC);
             }
         }
         return TypeRegistry.voidType();

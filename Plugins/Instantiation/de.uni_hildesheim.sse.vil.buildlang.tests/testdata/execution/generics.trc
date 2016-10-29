@@ -1,0 +1,6 @@
+-> main()
+    -> create StringCreator() with () = <StringCreator>
+    sc <- <StringCreator>
+    weights <- {}
+    -> mapStrings(StringCreator, String, Map) with (<StringCreator>, , {}) = {{there, {{here, 1.1}}}}
+    results <- {{there, {{here, 1.1}}}}

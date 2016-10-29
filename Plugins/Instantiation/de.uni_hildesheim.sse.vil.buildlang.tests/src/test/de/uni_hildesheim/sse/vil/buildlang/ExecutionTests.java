@@ -426,6 +426,16 @@ public class ExecutionTests extends AbstractExecutionTest<Script> {
     }
 
     /**
+     * Tests complex generics.
+     * 
+     * @throws IOException should not occur
+     */
+    @Test
+    public void testGenerics() throws IOException {
+        assertSelfInstantiate("generics");
+    }
+
+    /**
      * Tests the functionality of a while loop.
      * 
      * @throws IOException should not occur

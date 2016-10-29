@@ -37,11 +37,13 @@ import net.ssehub.easy.instantiation.core.model.vilTypes.ILazyDescriptor;
 import net.ssehub.easy.instantiation.core.model.vilTypes.IRegisteredStringValueProvider;
 import net.ssehub.easy.instantiation.core.model.vilTypes.ITypeResolver;
 import net.ssehub.easy.instantiation.core.model.vilTypes.IVilType;
+import net.ssehub.easy.instantiation.core.model.vilTypes.IntHolder;
 import net.ssehub.easy.instantiation.core.model.vilTypes.Map;
 import net.ssehub.easy.instantiation.core.model.vilTypes.OperationDescriptor;
 import net.ssehub.easy.instantiation.core.model.vilTypes.ReflectionConstructorDescriptor;
 import net.ssehub.easy.instantiation.core.model.vilTypes.ReflectionFieldDescriptor;
 import net.ssehub.easy.instantiation.core.model.vilTypes.ReflectionOperationDescriptor;
+import net.ssehub.easy.instantiation.core.model.vilTypes.ReflectionResolver;
 import net.ssehub.easy.instantiation.core.model.vilTypes.ReflectionTypeDescriptor;
 import net.ssehub.easy.instantiation.core.model.vilTypes.Sequence;
 import net.ssehub.easy.instantiation.core.model.vilTypes.StringValueHelper;
@@ -624,26 +626,22 @@ public class RtVilTypeRegistry extends TypeRegistry implements IClassNameMapperP
     }
     
     @Override
-    protected TypeDescriptor<?> getMappedType(Class<?> cls, TypeDescriptor<?>[] generics) {
+    protected TypeDescriptor<?> getMappedType(Class<?> cls, Class<?>[] generics, IntHolder pos) {
         // see mapValueToJava and mapValueToVil
         TypeDescriptor<?> result = null;
-        try {
-            if (java.util.Map.class.isAssignableFrom(cls)) {
-                result = TypeRegistry.getMapType(generics);
-            } else if (java.util.List.class.isAssignableFrom(cls)) {
-                result = TypeRegistry.getSequenceType(generics);
-            } else if (java.util.Set.class.isAssignableFrom(cls)) {
-                result = TypeRegistry.getSetType(generics);
-            } else if (Double.class.equals(cls) /*|| Float.class.equals(cls)*/) {
-                result = TypeRegistry.realType();
-            } else if (Integer.class.equals(cls) /*|| Long.class.equals(cls)*/) {
-                result = TypeRegistry.integerType();
-            } else if (Boolean.class.equals(cls)) {
-                result = TypeRegistry.booleanType();
-            }
-
-        } catch (VilException e) {
-            EASyLoggerFactory.INSTANCE.getLogger(getClass(), Bundle.ID).exception(e);
+        if (java.util.Map.class.isAssignableFrom(cls)) {
+            result = ReflectionResolver.resolveType(Map.class, generics, pos);
+        } else if (List.class.isAssignableFrom(cls)) {
+            result = ReflectionResolver.resolveType(Sequence.class, generics, pos);
+        } else if (Set.class.isAssignableFrom(cls)) {
+            result = ReflectionResolver.resolveType(
+                net.ssehub.easy.instantiation.core.model.vilTypes.Set.class, generics, pos);
+        } else if (Double.class.equals(cls) /*|| Float.class.equals(cls)*/) {
+            result = TypeRegistry.realType();
+        } else if (Integer.class.equals(cls) /*|| Long.class.equals(cls)*/) {
+            result = TypeRegistry.integerType();
+        } else if (Boolean.class.equals(cls)) {
+            result = TypeRegistry.booleanType();
         }
         return result;
     }

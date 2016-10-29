@@ -6,7 +6,8 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * Marker annotation for methods in order to rename an operation or to mark it as infix.
+ * Marker annotation for providing details for a VIL operation implementation. For detailing
+ * operation parameters, see {@link ParameterMeta}.
  * 
  * @author Holger Eichelberger
  */
@@ -28,8 +29,8 @@ public @interface OperationMeta {
 
     /**
      * The generic parameters of the return type. This is required as the type parameters
-     * of Java generics cannot be accessed. Empty by default.
-     * 
+     * of Java generics cannot be accessed. Generics of complex types are just given in 
+     * linear sequence. Empty by default.
      */
     Class<?>[] returnGenerics() default { };
     

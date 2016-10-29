@@ -1,0 +1,14 @@
+vilScript copyTest (Project source, Configuration config, Project target) {
+
+    produceGenericCopy(FileArtifact x, FileArtifact y) = y : x {
+        x.copy(y);
+    }
+
+    createFolder(Path x) = target.localize(source, x) : x {
+        x.mkdir();
+    }
+
+    main(Project source, Configuration config, Project target) = : {
+    }
+
+}
