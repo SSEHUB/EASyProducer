@@ -30,7 +30,7 @@ public @interface OperationMeta {
     /**
      * The generic parameters of the return type. This is required as the type parameters
      * of Java generics cannot be accessed. Generics of complex types are just given in 
-     * linear sequence. Empty by default.
+     * linear sequence. Empty by default. Might be replaced by new reflection functions in Java 8.
      */
     Class<?>[] returnGenerics() default { };
     

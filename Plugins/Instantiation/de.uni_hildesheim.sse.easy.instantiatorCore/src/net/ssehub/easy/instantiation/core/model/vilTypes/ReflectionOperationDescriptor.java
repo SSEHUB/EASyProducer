@@ -415,7 +415,8 @@ public class ReflectionOperationDescriptor extends OperationDescriptor implement
      */
     protected Class<?>[] getParameterGenerics(int index) {
         Class<?>[] result = null;
-        ParameterMeta pMeta = method.getParameters()[index].getAnnotation(ParameterMeta.class);
+        ParameterMeta pMeta = TypeHelper.getParameterAnnotation(method.getParameterAnnotations(), 
+            index, ParameterMeta.class);
         if (null != pMeta) {
             result = pMeta.generics();
         }
