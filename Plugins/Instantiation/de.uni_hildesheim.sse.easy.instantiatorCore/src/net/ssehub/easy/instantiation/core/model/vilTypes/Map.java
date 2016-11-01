@@ -451,4 +451,18 @@ public class Map<K, V> implements IVilGenericType, IStringValueProvider {
         return map.toString();
     }
 
+    /**
+     * Translates this VIL map to a Java map.
+     * 
+     * @return the translated map
+     */
+    @Invisible
+    java.util.Map<K, V> toMappedMap() {
+        java.util.Map<K, V> result = new HashMap<K, V>();
+        for (K k : keys()) {
+            result.put(k, get(k));
+        }
+        return result;
+    }
+
 }
