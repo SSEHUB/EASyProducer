@@ -39,6 +39,7 @@ import net.ssehub.easy.varModel.model.datatypes.StringType;
 import net.ssehub.easy.varModel.model.datatypes.VersionType;
 import net.ssehub.easy.varModel.model.values.BooleanValue;
 import net.ssehub.easy.varModel.model.values.CompoundValue;
+import net.ssehub.easy.varModel.model.values.ContainerValue;
 import net.ssehub.easy.varModel.model.values.EnumValue;
 import net.ssehub.easy.varModel.model.values.IntValue;
 import net.ssehub.easy.varModel.model.values.RealValue;
@@ -108,15 +109,23 @@ class VelocityContextInitializer implements IDatatypeVisitor {
     /**
      * Shall convert {@link net.ssehub.easy.varModel.confModel.ContainerVariable}
      * into {@link VelocityContextItem}s, but not implemented yet.
+     * @see <a href=
+     * "https://velocity.apache.org/engine/devel/vtl-reference.html#foreach-loops-through-a-list-of-objects">
+     * Velocity documentation for the foreach loop</a>
      */
     private void handleContainer() {
-//        variableName.append(variable.getDeclaration().getName());
-//        ContainerValue containerValue = (ContainerValue) variable.getValue();
-//        for (int i = 0; i < containerValue.getElementSize(); i++) {
-//            ConstraintSyntaxTree cstValue = containerValue.getElement(i);
-//            //TODO SE handle this, this is only a preliminary version/test
-//            
-//        }       
+        variableName.append(variable.getDeclaration().getName());
+        
+        /*
+         *  conValue.getValue() returns an array of Values, which in turn creates ugly results if it is passed directly
+         *  to velocity. For this reason, I added the loop and unpack all the values manually.
+         */
+        ContainerValue conValue = (ContainerValue) variable.getValue();
+        List<Object> velocityValues = new ArrayList<Object>(conValue.getElementSize());
+        for (int i = 0, end = conValue.getElementSize(); i < end; i++) {
+            velocityValues.add(conValue.getElement(i).getValue());
+        }
+        values.add(new VelocityContextItem(variableName.toString(), velocityValues));
     }
     
     @Override
