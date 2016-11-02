@@ -25,6 +25,8 @@ import net.ssehub.easy.varModel.confModel.Configuration;
 import net.ssehub.easy.varModel.confModel.ConfigurationException;
 import net.ssehub.easy.varModel.confModel.IDecisionVariable;
 import net.ssehub.easy.varModel.model.Project;
+import net.ssehub.easy.varModel.model.datatypes.IDatatype;
+import net.ssehub.easy.varModel.model.datatypes.IntegerType;
 import net.ssehub.easy.varModel.model.values.Value;
 import net.ssehub.easy.varModel.model.values.ValueDoesNotMatchTypeException;
 import net.ssehub.easy.varModel.model.values.ValueFactory;
@@ -104,15 +106,7 @@ public class AdaptiveConfiguration<V> {
                 Object newValue = tempValue.get(id);
                 if (null != newValue) {
                     // Replace value with recent value
-                    Value value = convertMappedValue(topVar, newValue);
-                    if (null != value) {
-                        try {
-                            topVar.setValue(value, AssignmentState.ASSIGNED);
-                        } catch (ConfigurationException e) {
-                            // Do nothing ignore Value and log error
-                            Bundle.getLogger(AdaptiveConfiguration.class).exception(e);
-                        }
-                    }
+                    convertMappedValue(topVar, newValue);
                     
                     // remove value to facilitate abortion of loop
                     tempValue.remove(id);
@@ -126,38 +120,35 @@ public class AdaptiveConfiguration<V> {
      * @param variable The variable for which the value should be converted. When called from another method, this
      *     should be a top level variable of the configuration.
      * @param oValue The temporary object value as passed to the {@link #addValue(String, Object)} method.
-     * @return The converted {@link Value} or <tt>null</tt> in case of an error.
      */
-    private Value convertMappedValue(IDecisionVariable variable, Object oValue) {
-        Value result = null;
+    private void convertMappedValue(IDecisionVariable variable, Object oValue) {
         if (oValue instanceof Map) {
             @SuppressWarnings("unchecked")
             Map<String, Object> map = (Map<String, Object>) oValue;
-            Object[] value = new Object[map.size() * 2];
-            int index = 0;
             for (Map.Entry<String, Object> entry : map.entrySet()) {
                 // TODO SE: Handle key and nested types recursive
                 String slotName = entry.getKey();
-                value[index++] = slotName;
                 IDecisionVariable nestedVariable = variable.getNestedElement(slotName);
-                value[index++] = convertMappedValue(nestedVariable, entry.getValue());
-            }
-            try {
-                result = ValueFactory.createValue(variable.getDeclaration().getType(), value);
-            } catch (ValueDoesNotMatchTypeException e) {
-                // Do nothing ignore Value and log error
-                Bundle.getLogger(AdaptiveConfiguration.class).exception(e);
+                if (null != nestedVariable) {
+                    convertMappedValue(nestedVariable, entry.getValue());
+                }
             }
         } else {
             try {
-                result = ValueFactory.createValue(variable.getDeclaration().getType(), oValue);
+                IDatatype type = variable.getDeclaration().getType();
+                if (type == IntegerType.TYPE && oValue instanceof Double) {
+                    oValue = ((Double) oValue).intValue();
+                }
+                Value result = ValueFactory.createValue(type, oValue);
+                variable.setValue(result, AssignmentState.ASSIGNED);
             } catch (ValueDoesNotMatchTypeException e) {
                 // Do nothing ignore Value and log error
                 Bundle.getLogger(AdaptiveConfiguration.class).exception(e);
+            } catch (ConfigurationException e) {
+                // TODO Auto-generated catch block
+                Bundle.getLogger(AdaptiveConfiguration.class).exception(e);
             }
         }
-        
-        return result;
     }
     
     /**
