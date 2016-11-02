@@ -111,6 +111,7 @@ public interface Sequence<T> extends Collection<T> {
      * @return the application results
      * @throws VilException in case that application fails
      */
+    @OperationMeta(useParameter = 0)
     public Sequence<?> collect(ExpressionEvaluator evaluator) throws VilException;
     
     /**

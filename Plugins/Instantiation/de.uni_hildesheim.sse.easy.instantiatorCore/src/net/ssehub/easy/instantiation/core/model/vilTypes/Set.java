@@ -111,6 +111,7 @@ public interface Set<T> extends Collection<T> {
      * @return the application results
      * @throws VilException in case that application fails
      */
+    @OperationMeta(useParameter = 0)
     public Set<?> collect(ExpressionEvaluator evaluator) throws VilException;
     
     /**

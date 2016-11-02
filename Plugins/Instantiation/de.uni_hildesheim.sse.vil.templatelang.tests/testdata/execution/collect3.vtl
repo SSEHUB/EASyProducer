@@ -1,0 +1,9 @@
+template collect3(Configuration config, Artifact target) {
+
+    def main(Configuration config, Artifact target) {
+        sequenceOf(String) s = {"a", "b", "c", "d", "ee"};
+        sequenceOf(Integer) r = s->collect(i | i.length());
+        '${r}'
+    }
+
+}

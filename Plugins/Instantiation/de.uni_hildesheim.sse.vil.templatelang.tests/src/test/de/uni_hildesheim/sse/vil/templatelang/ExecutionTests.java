@@ -623,7 +623,17 @@ public class ExecutionTests extends AbstractTest {
     public void testCollect2() throws IOException {
         assertEqual("collect2");
     }
-        
+
+    /**
+     * Tests the collect operation on sequence while changing the type of the return sequence by projection.
+     * 
+     * @throws IOException should not occur
+     */
+    @Test
+    public void testCollect3() throws IOException {
+        assertEqual("collect3");
+    }
+
     /**
      * Tests a template derivation with calls and output.
      * 

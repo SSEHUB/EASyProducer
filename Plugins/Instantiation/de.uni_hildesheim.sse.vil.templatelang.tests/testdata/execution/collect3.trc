@@ -1,0 +1,9 @@
+-> main(Configuration, Artifact) with (<config>, test.texts)
+    s <- {a, b, c, d, ee}
+    -> length(String) with (a) = 1
+    -> length(String) with (b) = 1
+    -> length(String) with (c) = 1
+    -> length(String) with (d) = 1
+    -> length(String) with (ee) = 2
+    -> collect(Sequence, ExpressionEvaluator) with ({a, b, c, d, ee}, <evaluator>) = {1, 1, 1, 1, 2}
+    r <- {1, 1, 1, 1, 2}
