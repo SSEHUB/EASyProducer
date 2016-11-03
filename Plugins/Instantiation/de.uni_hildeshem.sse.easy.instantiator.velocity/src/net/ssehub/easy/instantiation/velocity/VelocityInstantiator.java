@@ -212,8 +212,13 @@ public class VelocityInstantiator implements IVilType, IRegistration {
                     }
                 }
                 Object value = items.get(i).getValue();
+                
+                if (items.get(i) instanceof VelocityCompoundAccess) {
+                    value = items.get(i);
+                }
+                
                 if (null != value) {
-                    context.put(name, items.get(i).getValue());
+                    context.put(name, value);
                 }
             }
         }

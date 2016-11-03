@@ -184,6 +184,8 @@ class VelocityContextInitializer implements IDatatypeVisitor {
         StringBuffer variableNameBeforeCMP = new StringBuffer(variableName);
         variableName.append(variable.getDeclaration().getName());
         CompoundValue cmpValue = (CompoundValue) variable.getValue();
+        VelocityCompoundAccess cmpContextItem = new VelocityCompoundAccess(variable.getDeclaration().getName(),
+            cmpValue);
         if (null != cmpValue) {
             for (int i = 0; i < compound.getElementCount(); i++) {
                 StringBuffer elementName = new StringBuffer(compound.getElement(i).getName());
@@ -192,9 +194,11 @@ class VelocityContextInitializer implements IDatatypeVisitor {
                     elementName.insert(0, SLOT_ACCESS);
                     elementName.insert(0, variableName);
                     values.add(new VelocityContextItem(elementName.toString(), nestedValue.getValue()));
+                    cmpContextItem.addValue(compound.getElement(i).getName(), nestedValue.getValue());
                 }
             }
-            values.add(new VelocityContextItem(variable.getDeclaration().getName(), cmpValue));
+            values.add(cmpContextItem);
+//            values.add(new VelocityContextItem(variable.getDeclaration().getName(), cmpValue));
         }
         variableName = variableNameBeforeCMP;
     }
