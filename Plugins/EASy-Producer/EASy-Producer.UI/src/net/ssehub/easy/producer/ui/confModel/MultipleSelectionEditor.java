@@ -45,9 +45,9 @@ public class MultipleSelectionEditor implements GUIEditor {
     
     private DisplayNameProvider nameProvider = DisplayNameProvider.getInstance();
     
-    private IDatatype referenceType;
+    //private IDatatype referenceType;
     
-    private IDecisionVariable referenceVariable;
+    //private IDecisionVariable referenceVariable;
     
     /**
      * Constructor for a {@link MultipleSelectionEditor}.
@@ -74,8 +74,8 @@ public class MultipleSelectionEditor implements GUIEditor {
         column.setText(refVariable.getDeclaration().getName());
         IDatatype usedType = ((Reference) refType).getType();
         
-        referenceType = usedType;
-        referenceVariable = refVariable;
+        //referenceType = usedType;
+        //referenceVariable = refVariable;
         
         List<AbstractVariable> allVariables = 
                 ReferenceValuesFinder.findPossibleValues(refVariable.getConfiguration().getProject(), usedType);
@@ -121,17 +121,6 @@ public class MultipleSelectionEditor implements GUIEditor {
         
         selectedValues.clear();
         TableItem[] items = table.getItems(); 
-        //int length = items.length;
-        //TableItem item = items[length - 1];
-        
-//        if (item...)  {
-//            //Got cloned???
-//            selectedValues.add(possibleVariables.get(items[length - 1].getText()));
-//        }
-        
-        updateTableInput();
-        
-        items = table.getItems(); 
         
         for (int i = 0; i < items.length; i++) {
             TableItem item = items[i];
@@ -140,41 +129,6 @@ public class MultipleSelectionEditor implements GUIEditor {
                 selectedValues.add(selectedVar);
             }
         }
-    }
-   
-    /**
-     * Update the tables input by repopulating the table and checking the right elements.
-     */
-    private void updateTableInput() {
-        
-        table.removeAll();
-        
-        List<AbstractVariable> allVariables = 
-                ReferenceValuesFinder.findPossibleValues(referenceVariable.getConfiguration().getProject()
-                        , referenceType);
-        
-        possibleVariables = new HashMap<String, AbstractVariable>();
-        
-        for (int i = 0, n = allVariables.size(); i < n; i++) {
-            AbstractVariable decl = allVariables.get(i);
-            String currentConfiguration = nameProvider.getDisplayName(decl);
-            possibleVariables.put(currentConfiguration, decl);
-            TableItem item = new TableItem(table, SWT.NULL);
-            item.setText(currentConfiguration);
-        }
-        
-        //clone->selected
-        for (int i = 0, n = selectedValues.size(); i < n; i++) {
-            AbstractVariable selectedVar = selectedValues.get(i);
-            String selectedName = nameProvider.getDisplayName(selectedVar);
-            for (int j = 0; j < table.getItemCount(); j++) {
-                TableItem item = table.getItem(j);
-                if (selectedName.equals(item.getText())) {
-                    item.setChecked(true);
-                } 
-            }
-        }
-        
     }
 
     @Override
