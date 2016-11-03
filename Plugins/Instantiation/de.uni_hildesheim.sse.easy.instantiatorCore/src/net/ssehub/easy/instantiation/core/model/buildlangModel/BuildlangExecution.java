@@ -863,7 +863,7 @@ public class BuildlangExecution extends ExecutionVisitor<Script, Rule, VariableD
             status = applicator.allConditionsEnabled() ? Status.SUCCESS : Status.NOT_APPLICABLE;
         }
         Object result;
-        if (rule.returnActualValue()) {
+        if (null != context && rule.returnActualValue()) { // only if body shall be evaluated and has actual return val
             result = bodyRes;
         } else {
             result = status;

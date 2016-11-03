@@ -148,7 +148,32 @@ public class Map<K, V> implements IVilGenericType, IStringValueProvider {
         }
         return new UnmodifiableSet<K>(result);
     }
-    
+
+    /**
+     * Returns the values of this map.
+     * 
+     * @return the values
+     */
+    @OperationMeta(useGenericParameter = 1)
+    public Set<V> values() {
+        return getValues();
+    }
+
+    /**
+     * Returns the values of this map.
+     * 
+     * @return the values
+     */
+    @SuppressWarnings("unchecked")
+    @OperationMeta(useGenericParameter = 1)
+    public Set<V> getValues() {
+        Set<V> result = new SetSet<V>(new HashSet<V>());
+        for (Object o : map.keySet()) {
+            result.add((V) o);
+        }
+        return new UnmodifiableSet<V>(result);
+    }
+
     /**
      * Adds a key-value pair to this map and overrides existing mappings.
      * 
@@ -424,6 +449,20 @@ public class Map<K, V> implements IVilGenericType, IStringValueProvider {
     @Invisible
     public String toString() {
         return map.toString();
+    }
+
+    /**
+     * Translates this VIL map to a Java map.
+     * 
+     * @return the translated map
+     */
+    @Invisible
+    java.util.Map<K, V> toMappedMap() {
+        java.util.Map<K, V> result = new HashMap<K, V>();
+        for (K k : keys()) {
+            result.put(k, get(k));
+        }
+        return result;
     }
 
 }

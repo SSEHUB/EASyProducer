@@ -9,10 +9,14 @@ project Add {
         }
     }
 
-    Node node = {};    
+    Node node = {};
+    Boolean enable = true;    
+    Boolean disable = false;    
     
     freeze {
         node;
+        enable;
+        disable;
     } but (v | v.bindingTime == BindingTime.runtime);
     
 }

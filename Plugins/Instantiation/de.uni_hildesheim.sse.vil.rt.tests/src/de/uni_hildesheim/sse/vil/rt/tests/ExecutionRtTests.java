@@ -152,6 +152,64 @@ public class ExecutionRtTests extends AbstractRtTest {
 
         RtVilStorage.setInstance(null);
     }
+    
+    /**
+     * Tests the re-use of strategies.
+     * 
+     * @throws IOException should not occur
+     */
+    @Test
+    public void testSubstrategy() throws IOException {
+        final String name = "substrategy";
+        
+        Configuration cfg = getIvmlConfiguration("Add", NoVariableFilter.INSTANCE);
+        // if referenced strategies are not top-level (reusable) strategies, the trace is empty
+        Map<String, Object> param = createParameterMap(null, null, cfg);
+        param.put("event", new RegularAdaptationEvent());
+        EqualitySetup<Script> setup = new EqualitySetup<Script>(createFile(name), name, null, 
+            createTraceFile(name), param);
+        assertEqual(setup);
+
+        // "normal" execution with specific event
+        param.put("event", new LifecycleEvent("pip", LifecycleEvent.Status.START));
+        setup = new EqualitySetup<Script>(createFile(name), name, null, 
+            createTraceFile(name + ".snd"), param);
+        assertEqual(setup);
+    }
+
+    /**
+     * Tests return rule with precondition (true).
+     * 
+     * @throws IOException should not occur
+     */
+    @Test
+    public void testReturn() throws IOException {
+        final String name = "return";
+        
+        Configuration cfg = getIvmlConfiguration("Add", NoVariableFilter.INSTANCE);
+        Map<String, Object> param = createParameterMap(null, null, cfg);
+        param.put("event", new LifecycleEvent("pip", LifecycleEvent.Status.START));
+        EqualitySetup<Script> setup = new EqualitySetup<Script>(createFile(name), name, null, 
+            createTraceFile(name), param);
+        assertEqual(setup);
+    }
+
+    /**
+     * Tests return rule with precondition (false).
+     * 
+     * @throws IOException should not occur
+     */
+    @Test
+    public void testReturn2() throws IOException {
+        final String name = "return2";
+        
+        Configuration cfg = getIvmlConfiguration("Add", NoVariableFilter.INSTANCE);
+        Map<String, Object> param = createParameterMap(null, null, cfg);
+        param.put("event", new LifecycleEvent("pip", LifecycleEvent.Status.START));
+        EqualitySetup<Script> setup = new EqualitySetup<Script>(createFile(name), name, null, 
+            createTraceFile(name), param);
+        assertEqual(setup);
+    }
 
     /**
      * Tests the basic functions of startup, events and implicit calls failing at a missing enactment.

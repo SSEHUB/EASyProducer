@@ -1,0 +1,5 @@
+-> lifecycle(Project, Configuration, Project, LifecycleEvent) with (<project>, <config>, <project>, <LifecycleEvent>)
+    -> convert(Add, LifecycleEvent) with (<config>, <LifecycleEvent>)
+-> main(Project, Configuration, Project, IAdaptationEvent) with (<project>, <config>, <project>, <LifecycleEvent>)
+    -> t(Configuration) with (<config>)
+    -> enact(Project, Configuration, Project) with (<project>, <config>, <project>)

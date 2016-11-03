@@ -1,0 +1,7 @@
+-> lifecycle(Project, Configuration, Project, LifecycleEvent) with (<project>, <config>, <project>, <LifecycleEvent>)
+    -> convert(Add, LifecycleEvent) with (<config>, <LifecycleEvent>)
+        -> create RegularAdaptationEvent() with () = <RegularAdaptationEvent>
+        result <- <RegularAdaptationEvent>
+    -> main(Project, Configuration, Project, IAdaptationEvent) with (<project>, <config>, <project>, <RegularAdaptationEvent>)
+        -> t(Configuration) with (<config>)
+    -> enact(Project, Configuration, Project) with (<project>, <config>, <project>)

@@ -95,4 +95,9 @@ public class Tactic extends Rule implements IRtVilConcept {
         return intent;
     }
 
+    @Override
+    public String toString() {
+        return "Tactic " + getSignature();
+    }
+
 }

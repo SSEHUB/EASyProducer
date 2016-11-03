@@ -445,15 +445,18 @@ public class TypeRegistry {
     /**
      * Internal default registration function with error handling.
      * 
+     * @param <T> the actual implementing type
      * @param type the type class to be registered
-     * @param <T> the actual type
+     * @return the corresponding type descriptor (may be <b>null</b>)
      */
-    public <T extends IVilType> void register(Class<T> type) {
+    public <T extends IVilType> TypeDescriptor<T> register(Class<T> type) {
+        TypeDescriptor<T> result = null;
         try {
-            registerType(type);
+            result = registerType(type);
         } catch (VilException e) {
             LOGGER.error(e.getMessage());
         }
+        return result;
     }
     
     /**
@@ -956,10 +959,12 @@ public class TypeRegistry {
      * This can be used to map Java collections into and from VIL.
      * 
      * @param cls the class to be turned into a type
-     * @param generics the generics to be applied to the type (ma< be <b>null</b>)
+     * @param generics the generics to be applied to the type (may be <b>null</b>)
+     * @param pos the modifiable position within <code>generics</code>, change only to indicate state of
+     *   processing of <code>generics</code>
      * @return the type descriptor or <b>null</b> if none is provided
      */
-    protected TypeDescriptor<?> getMappedType(Class<?> cls, TypeDescriptor<?>[] generics) {
+    protected TypeDescriptor<?> getMappedType(Class<?> cls, Class<?>[] generics, IntHolder pos) {
         return null;
     }
     

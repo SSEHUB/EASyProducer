@@ -1,0 +1,10 @@
+vilScript generics () {
+
+    main() = : {
+        StringCreator sc = new StringCreator();
+        mapOf(String, Real) weights = {};
+        mapOf(String, mapOf(String, Real)) results;
+        results = sc.mapStrings("", weights);
+    }
+
+}

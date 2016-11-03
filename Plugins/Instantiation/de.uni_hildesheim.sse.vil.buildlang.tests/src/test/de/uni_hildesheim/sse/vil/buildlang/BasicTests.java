@@ -445,6 +445,16 @@ public class BasicTests extends AbstractBasicTest<Script> {
     }
 
     /**
+     * Tests the resolution of the copy function.
+     * 
+     * @throws IOException should not occur
+     */
+    @Test
+    public void testCopy() throws IOException {
+        assertEqual("copy");
+    }
+
+    /**
      * Tests a simple version declaration.
      * 
      * @throws IOException should not occur

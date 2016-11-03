@@ -279,6 +279,7 @@ public abstract class ContainerVariable extends StructuredVariable {
                 // Should not occur
                 Bundle.getLogger(ContainerValue.class).exception(e);
             }
+
         }
         
         return -1 != index;

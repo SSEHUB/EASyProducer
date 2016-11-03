@@ -16,12 +16,18 @@
 package test.de.uni_hildesheim.sse.vil.buildlang;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 
+import net.ssehub.easy.instantiation.core.model.common.VilException;
 import net.ssehub.easy.instantiation.core.model.vilTypes.IStringValueProvider;
 import net.ssehub.easy.instantiation.core.model.vilTypes.IVilType;
+import net.ssehub.easy.instantiation.core.model.vilTypes.Map;
 import net.ssehub.easy.instantiation.core.model.vilTypes.OperationMeta;
+import net.ssehub.easy.instantiation.core.model.vilTypes.ParameterMeta;
+import net.ssehub.easy.instantiation.core.model.vilTypes.TypeDescriptor;
+import net.ssehub.easy.instantiation.core.model.vilTypes.TypeRegistry;
 
 /**
  * A string creator type.
@@ -66,6 +72,37 @@ public class StringCreator implements IVilType, IStringValueProvider {
     @Override
     public String getStringValue(StringComparator comparator) {
         return "<StringCreator>";
+    }
+
+    /**
+     * Tests nested return generics and parameter meta.
+     * 
+     * @param string just a string
+     * @param weights unused
+     * @return combination of strings and weights
+     */
+    @OperationMeta(returnGenerics = {String.class, Map.class, String.class, Double.class})
+    public Map<String, Map<String, Double>> mapStrings(String string, 
+        @ParameterMeta(generics = {String.class, Double.class})
+        Map<String, Double> weights) {
+        java.util.Map<Object, Object> tmp = new HashMap<Object, Object>();
+        TypeDescriptor<?>[] typesInner = TypeDescriptor.createArray(2);
+        typesInner[0] = TypeRegistry.stringType();
+        typesInner[1] = TypeRegistry.realType();
+        TypeDescriptor<?>[] types = TypeDescriptor.createArray(2);
+        types[0] = TypeRegistry.stringType();
+        try {
+            types[1] = TypeRegistry.getMapType(typesInner);
+        } catch (VilException e) {
+            types[1] = TypeRegistry.anyType();
+        }
+        
+        java.util.Map<Object, Object> tmpInner = new HashMap<Object, Object>();
+        tmpInner.put("here", 1.1);
+        Map<String, Double> inner = new Map<String, Double>(tmpInner, typesInner);
+        tmp.put("there", inner);
+        Map<String, Map<String, Double>> result = new Map<String, Map<String, Double>>(tmp, types);
+        return result;
     }
 
 }

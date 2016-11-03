@@ -1,0 +1,5 @@
+cfg <- <config>
+-> main(Project, Configuration, Project, IAdaptationEvent) with (<project>, <config>, <project>, <RegularAdaptationEvent>)
+    cfg <- <config>
+    -> t(Configuration) with (<config>)
+    -> enact(Project, Configuration, Project) with (<project>, <config>, <project>)

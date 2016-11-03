@@ -1,0 +1,29 @@
+@advice(Add)
+rtVilScript return (Project source, Configuration config, Project target, IAdaptationEvent event) {
+
+    strategy main(Project source, Configuration config, Project target, IAdaptationEvent event) = {
+        objective true;
+        breakdown {
+            tactic t(config);
+        }
+    }
+
+    strategy lifecycle(Project source, Configuration config, Project target, LifecycleEvent event) = {
+        objective true;
+        breakdown {
+            strategy main(source, config, target, convert(config, event));
+        }
+    }
+
+    tactic t(Configuration config) = {
+    }
+
+    protected RegularAdaptationEvent convert(Add cfg, LifecycleEvent event) = : cfg.disable {
+        RegularAdaptationEvent result = new RegularAdaptationEvent();
+        result;
+    }
+
+    enact(Project source, Configuration config, Project target) = : {
+    }
+
+}

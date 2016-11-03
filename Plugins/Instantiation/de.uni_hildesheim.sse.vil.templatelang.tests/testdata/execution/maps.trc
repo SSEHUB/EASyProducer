@@ -10,3 +10,7 @@
     k <- {test}
     -> keys(Map) with ({{test, {{test1, 1}}}}) = {test}
     k <- {test}
+    -> getValues(Map) with ({{test1, 1}}) = {test1}
+    v <- {test1}
+    -> values(Map) with ({{test1, 1}}) = {test1}
+    v <- {test1}    

@@ -12,6 +12,8 @@ import net.ssehub.easy.basics.modelManagement.ModelImport;
 import net.ssehub.easy.instantiation.core.model.artifactModel.IArtifact;
 import net.ssehub.easy.instantiation.core.model.buildlangModel.AlternativeExpression;
 import net.ssehub.easy.instantiation.core.model.buildlangModel.MapExpression;
+import net.ssehub.easy.instantiation.core.model.buildlangModel.RuleExecutionResult;
+import net.ssehub.easy.instantiation.core.model.buildlangModel.RuleExecutionResult.Status;
 import net.ssehub.easy.instantiation.core.model.expressions.CallArgument;
 import net.ssehub.easy.instantiation.core.model.expressions.CallExpression;
 import net.ssehub.easy.instantiation.core.model.expressions.EvaluationVisitor;
@@ -392,26 +394,34 @@ public abstract class ExecutionVisitor <M extends IResolvableModel<V>, O extends
                 scriptParam = replaceParameter(scriptParam);
             }*/
             // evaluate in this context before context switch
+            Status status = Status.SUCCESS;
             Object[] args = new Object[arguments.getArgumentsCount()];
-            for (int a = 0; a < arguments.getArgumentsCount(); a++) {
+            for (int a = 0; Status.SUCCESS == status && a < arguments.getArgumentsCount(); a++) {
                 args[a] = arguments.getArgument(a).accept(this);
+                if (args[a] instanceof RuleExecutionResult) {
+                    status = ((RuleExecutionResult) args[a]).getStatus();
+                }
             }
-            ITypedModel oldContext = environment.switchContext(model);
-            environment.pushLevel();
-            if (null == resolved) {
-                throw new VilException("call " + qName + " is not resolved", 
-                    VilException.ID_RUNTIME);
-            }
-            O operation = dynamicDispatch(resolved, args);
-            for (int p = 0; p < operation.getParameterCount(); p++) {
-                environment.addValue(operation.getParameter(p), args[p]);
-            }
-            result = executeModelCall(operation);
-            environment.popLevel();
-            environment.switchContext(oldContext);
-            /*if (null != scriptParam) {
+            if (Status.SUCCESS == status) {
+                ITypedModel oldContext = environment.switchContext(model);
+                environment.pushLevel();
+                if (null == resolved) {
+                    throw new VilException("call " + qName + " is not resolved", 
+                        VilException.ID_RUNTIME);
+                }
+                O operation = dynamicDispatch(resolved, args);
+                for (int p = 0; p < operation.getParameterCount(); p++) {
+                    environment.addValue(operation.getParameter(p), args[p]);
+                }
+                result = executeModelCall(operation);
+                environment.popLevel();
+                environment.switchContext(oldContext);
+                /*if (null != scriptParam) {
                 scriptParam = replaceParameter(scriptParam);
-            }*/
+                }*/
+            } else {
+                result = null;
+            }
         }
         return result;        
     }

@@ -1,5 +1,7 @@
 package net.ssehub.easy.instantiation.core.model.vilTypes;
 
+import java.util.StringTokenizer;
+
 /**
  * Implements a pseudo class for strings.
  * 
@@ -187,6 +189,57 @@ public class PseudoString implements IVilType {
         }
         return result;
     }
+    
+    /**
+     * Returns the specified substring of <code>in</code> from <code>start</code> to end of <code>in</code>.
+     * 
+     * @param in the string to be considered
+     * @param start the inclusive start position
+     * @return the substring (or <b>in</b> in case of any parameter problem)
+     */
+    public static String substring(String in, int start) {
+        String result;
+        if (null != in && start >= 0 && start < in.length()) {
+            result = in.substring(start);
+        } else {
+            result = in;
+        }
+        return result;
+    }
+
+    /**
+     * Returns whether the given <code>string</code> has the given <code>prefix</code>. 
+     * 
+     * @param string the string to be considered
+     * @param prefix the prefix
+     * @return <code>true</code> if <code>string</code> starts with <code>prefix</code>, <code>false</code> else
+     */
+    public static boolean startsWith(String string, String prefix) {
+        boolean result;
+        if (null != string) {
+            result = string.startsWith(prefix);
+        } else {
+            result = false;
+        }
+        return result;
+    }
+
+    /**
+     * Returns whether the given <code>string</code> has the given <code>postfix</code>. 
+     * 
+     * @param string the string to be considered
+     * @param postfix the postfix
+     * @return <code>true</code> if <code>string</code> ends with <code>postfix</code>, <code>false</code> else
+     */
+    public static boolean endsWith(String string, String postfix) {
+        boolean result;
+        if (null != string) {
+            result = string.endsWith(postfix);
+        } else {
+            result = false;
+        }
+        return result;
+    }
 
     /**
      * Transforms all characters to upper case.
@@ -257,6 +310,31 @@ public class PseudoString implements IVilType {
     @Conversion
     public static String convertAny(Object any) {
         return StringValueHelper.getStringValue(any, null);
+    }
+
+    /**
+     * Tokenizes the given <code>string</code> along <code>delimiters</code>.
+     * 
+     * @param string the string to tokenize
+     * @param delimiters the delimiters between two tokens. Delimiter characters themselves will not
+     *     be treated as tokens.
+     * @return the tokens in sequence of occurrence
+     */
+    @OperationMeta(returnGenerics = String.class)
+    public static Sequence<String> tokenize(String string, String delimiters) {
+        Sequence<String> result;
+        if (null != string) {
+            StringTokenizer tokenizer = new StringTokenizer(string, delimiters);
+            String[] tmp = new String[tokenizer.countTokens()];
+            int count = 0;
+            while (tokenizer.hasMoreTokens()) {
+                tmp[count++] = tokenizer.nextToken();
+            }
+            result = new ArraySequence<String>(tmp, String.class);
+        } else {
+            result = null;
+        }
+        return result;
     }
     
 }
