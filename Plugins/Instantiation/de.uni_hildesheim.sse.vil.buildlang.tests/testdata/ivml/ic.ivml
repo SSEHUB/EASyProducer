@@ -1,0 +1,15 @@
+project IC {
+  version v0;
+  
+  compound PipelineNode {
+      String name;
+      Real value;
+  }
+
+  setOf(PipelineNode) nodes = {{name="n1", value=1.0}, {name="n2", value=2}};
+  
+  freeze {
+    nodes;
+  };
+  
+}

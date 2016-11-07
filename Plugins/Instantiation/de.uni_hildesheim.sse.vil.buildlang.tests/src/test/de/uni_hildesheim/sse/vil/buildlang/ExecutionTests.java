@@ -1005,6 +1005,16 @@ public class ExecutionTests extends AbstractExecutionTest<Script> {
     public void testCollectionReturn2() throws IOException {
         assertSelfInstantiate("collectionReturnTest2", "main", "nullTest", null);
     }
+
+    /**
+     * Tests defining a boolean rule based on a Boolean IVML element.
+     * 
+     * @throws IOException should not occur
+     */
+    @Test
+    public void testImplicitConversion() throws IOException {
+        assertSelfInstantiate("implicitConversion", "main", "IC", null);
+    }
     
     /**
      * Tests defining a boolean rule based on a Boolean IVML element.

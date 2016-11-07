@@ -1,0 +1,14 @@
+@advice(IC)
+vilScript implicitConversion (Project source, Configuration config, Project target) {
+
+    main(Project source, Configuration config, Project target) = : {
+        IC cfg = config;
+        mapOf(String, Real) values = {};
+        for(PipelineNode node:cfg.nodes) {
+            values.add(node.name, node.value);
+        };
+        Integer sum = floor(touch(values));
+        println(sum);
+    }
+
+}

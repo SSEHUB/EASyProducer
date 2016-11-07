@@ -86,7 +86,7 @@ public abstract class AbstractIvmlFieldDescriptor extends FieldDescriptor {
         } else if (TypeRegistry.booleanType() == getType()) {
             result = tmp.getBooleanValue();
         } else if (TypeRegistry.realType() == getType()) {
-            result = tmp.getRealValue();
+            result = tmp.getRealValue();            
         } else if (TypeRegistry.integerType() == getType()) {
             result = tmp.getIntegerValue();
         }

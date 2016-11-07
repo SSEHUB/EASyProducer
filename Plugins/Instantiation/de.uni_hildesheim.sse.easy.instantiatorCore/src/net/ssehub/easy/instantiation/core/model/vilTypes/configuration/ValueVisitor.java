@@ -85,7 +85,13 @@ class ValueVisitor implements IValueVisitor {
      * @return the obtained value, may be <b>null</b> if the value was of another type
      */
     public Double getDoubleValue() {
-        return doubleValue;
+        Double result = doubleValue;
+        // IVML can assign an integer to a real, which may cause problems in instantiator code
+        // do implicit conversion here
+        if (null == result && null != intValue) {
+            result = Double.valueOf(intValue);
+        }
+        return result;
     }
     
     /**

@@ -11,7 +11,9 @@ import net.ssehub.easy.instantiation.core.model.common.VilException;
 import net.ssehub.easy.instantiation.core.model.vilTypes.ArraySet;
 import net.ssehub.easy.instantiation.core.model.vilTypes.IVilType;
 import net.ssehub.easy.instantiation.core.model.vilTypes.Instantiator;
+import net.ssehub.easy.instantiation.core.model.vilTypes.Map;
 import net.ssehub.easy.instantiation.core.model.vilTypes.OperationMeta;
+import net.ssehub.easy.instantiation.core.model.vilTypes.ParameterMeta;
 import net.ssehub.easy.instantiation.core.model.vilTypes.Set;
 
 /**
@@ -40,6 +42,23 @@ public class TouchInstantiator implements IVilType {
         IArtifact[] result = new IArtifact[1];
         result[0] = artifact;
         return new ArraySet<IArtifact>(result, IArtifact.class);
+    }
+
+    /**
+     * Not really a touch, but an instantiation type that causes problems if the incoming double
+     * is actually a decision variable.
+     * 
+     * @param values the values
+     * @return the sum of the doubles in the mapping
+     */
+    public static double touch(
+        @ParameterMeta(generics = {String.class, Double.class})
+        Map<String, Double> values) {
+        double result = 0.0;
+        for (String k : values.keys()) {
+            result += values.get(k);
+        }
+        return result;
     }
 
 }
