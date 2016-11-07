@@ -29,12 +29,6 @@ import net.ssehub.easy.varModel.model.values.ReferenceValue;
  * 
  * @author Dennis Konoppa
  */
-/**
- * Implements a GUI representation for references.
- * Creates a multiple-selection table.
- * 
- * @author Dennis Konoppa
- */
 public class MultipleSelectionEditor implements GUIEditor {
 
     private Table table;
@@ -44,10 +38,6 @@ public class MultipleSelectionEditor implements GUIEditor {
     private Map<String, AbstractVariable> possibleVariables;
     
     private DisplayNameProvider nameProvider = DisplayNameProvider.getInstance();
-    
-    //private IDatatype referenceType;
-    
-    //private IDecisionVariable referenceVariable;
     
     /**
      * Constructor for a {@link MultipleSelectionEditor}.
@@ -73,9 +63,6 @@ public class MultipleSelectionEditor implements GUIEditor {
         TableColumn column = new TableColumn(table, SWT.NULL);
         column.setText(refVariable.getDeclaration().getName());
         IDatatype usedType = ((Reference) refType).getType();
-        
-        //referenceType = usedType;
-        //referenceVariable = refVariable;
         
         List<AbstractVariable> allVariables = 
                 ReferenceValuesFinder.findPossibleValues(refVariable.getConfiguration().getProject(), usedType);
