@@ -326,7 +326,7 @@ public abstract class ExpressionTranslator<I extends VariableDeclaration, R exte
                 result = new CallExpression(null, part.getOp(), result, processUnaryExpression(part.getExpr(), resolver));
                 result.inferType();
             } catch (VilException e) {
-                throw new TranslatorException(e, ex, ExpressionDslPackage.Literals.EQUALITY_EXPRESSION__RIGHT);
+                throw new TranslatorException(e, ex, ExpressionDslPackage.Literals.MULTIPLICATIVE_EXPRESSION__RIGHT);
             }
         }
         return result;
