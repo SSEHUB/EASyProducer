@@ -106,5 +106,10 @@ public interface Collection<T> extends Iterable<T>, IVilGenericType, IStringValu
      */
     @OperationMeta(name = "equals")
     public boolean isEquals(Collection<?> elements);
+
+    /**
+     * Clears this collection.
+     */
+    public void clear();
     
 }

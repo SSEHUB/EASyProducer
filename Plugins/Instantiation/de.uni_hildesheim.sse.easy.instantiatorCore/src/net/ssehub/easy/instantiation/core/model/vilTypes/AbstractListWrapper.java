@@ -178,4 +178,9 @@ public abstract class AbstractListWrapper<T> extends AbstractCollectionWrapper<T
         return list.toString();
     }
 
+    @Override
+    public void clear() {
+        list.clear();
+    }
+    
 }

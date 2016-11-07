@@ -457,7 +457,7 @@ public class Map<K, V> implements IVilGenericType, IStringValueProvider {
      * @return the translated map
      */
     @Invisible
-    java.util.Map<K, V> toMappedMap() {
+    public java.util.Map<K, V> toMappedMap() {
         java.util.Map<K, V> result = new HashMap<K, V>();
         for (K k : keys()) {
             result.put(k, get(k));

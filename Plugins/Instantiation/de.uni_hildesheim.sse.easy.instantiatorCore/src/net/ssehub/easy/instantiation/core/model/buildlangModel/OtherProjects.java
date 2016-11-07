@@ -183,4 +183,9 @@ class OtherProjects implements Set<IArtifact> {
         return new ListSet<IArtifact>(AbstractCollectionWrapper.intersection(this, set), parameter);
     }
 
+    @Override
+    public void clear() {
+        data.clear();
+    }
+
 }

@@ -72,8 +72,8 @@ public interface Sequence<T> extends Collection<T> {
 
     /**
      * Append the elements in <code>set</code>.
-     * @param set the elements to be excluded
-     * @return this set without the elements in <code>set</code>
+     * @param set the elements to be appended
+     * @return this set including the elements in <code>set</code>
      */
     @OperationMeta(returnGenerics = IVilType.class)
     public Sequence<T> append(Collection<T> set);

@@ -194,4 +194,9 @@ public class UnmodifiableSet<T> implements Set<T> {
         return set.toString();
     }
 
+    @Override
+    public void clear() {
+        set.clear();
+    }
+
 }

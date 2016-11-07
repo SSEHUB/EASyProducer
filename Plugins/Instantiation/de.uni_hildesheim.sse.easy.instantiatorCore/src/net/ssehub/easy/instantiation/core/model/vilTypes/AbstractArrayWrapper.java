@@ -257,5 +257,11 @@ public abstract class AbstractArrayWrapper<T> extends AbstractCollectionWrapper<
         }
         return shift > 0;
     }
+    
+    @SuppressWarnings("unchecked")
+    @Override
+    public void clear() {
+        array = (T[]) new Object[0];        
+    }
 
 }

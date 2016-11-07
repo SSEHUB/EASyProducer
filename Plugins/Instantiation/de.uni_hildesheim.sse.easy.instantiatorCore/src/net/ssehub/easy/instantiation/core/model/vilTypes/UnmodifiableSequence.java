@@ -219,4 +219,9 @@ public class UnmodifiableSequence<T> implements Sequence<T> {
         return sequence.toString();
     }
 
+    @Override
+    public void clear() {
+        sequence.clear();
+    }
+
 }

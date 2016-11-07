@@ -249,4 +249,9 @@ public class SetSet<T> extends AbstractCollectionWrapper<T> implements Set<T> {
         return result;
     }
 
+    @Override
+    public void clear() {
+        set.clear();
+    }
+
 }
