@@ -40,7 +40,11 @@ public class StringUtils {
         } else {
             if ((string.startsWith("\"") && string.endsWith("\"")) 
                 || (string.startsWith("'") && string.endsWith("'"))) {
-                result = Strings.convertFromJavaString(string.substring(1, string.length() - 1), true);
+                if (string.length() > 1) {
+                    result = Strings.convertFromJavaString(string.substring(1, string.length() - 1), true);
+                } else {
+                    result = string;
+                }
             } else {
                 result = string;
             }
