@@ -25,8 +25,10 @@ import net.ssehub.easy.varModel.confModel.Configuration;
 import net.ssehub.easy.varModel.confModel.ConfigurationException;
 import net.ssehub.easy.varModel.confModel.IDecisionVariable;
 import net.ssehub.easy.varModel.model.Project;
+import net.ssehub.easy.varModel.model.datatypes.BooleanType;
 import net.ssehub.easy.varModel.model.datatypes.IDatatype;
 import net.ssehub.easy.varModel.model.datatypes.IntegerType;
+import net.ssehub.easy.varModel.model.values.BooleanValue;
 import net.ssehub.easy.varModel.model.values.Value;
 import net.ssehub.easy.varModel.model.values.ValueDoesNotMatchTypeException;
 import net.ssehub.easy.varModel.model.values.ValueFactory;
@@ -136,10 +138,15 @@ public class AdaptiveConfiguration<V> {
         } else {
             try {
                 IDatatype type = variable.getDeclaration().getType();
+                Value result = null;
                 if (type == IntegerType.TYPE && oValue instanceof Double) {
                     oValue = ((Double) oValue).intValue();
+                } else if (type == BooleanType.TYPE && oValue instanceof Double) {
+                    result = ((Double) oValue) >= 0.5 ? BooleanValue.TRUE : BooleanValue.FALSE;
                 }
-                Value result = ValueFactory.createValue(type, oValue);
+                if (null == result) {
+                    result = ValueFactory.createValue(type, oValue);
+                }
                 variable.setValue(result, AssignmentState.ASSIGNED);
             } catch (ValueDoesNotMatchTypeException e) {
                 // Do nothing ignore Value and log error
