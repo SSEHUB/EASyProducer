@@ -141,7 +141,7 @@ public class AdaptiveConfiguration<V> {
                 Value result = null;
                 if (type == IntegerType.TYPE && oValue instanceof Double) {
                     oValue = ((Double) oValue).intValue();
-                } else if (type == BooleanType.TYPE && oValue instanceof Double) {
+                } else if (BooleanType.TYPE.isAssignableFrom(type) && oValue instanceof Double) {
                     result = ((Double) oValue) >= 0.5 ? BooleanValue.TRUE : BooleanValue.FALSE;
                 }
                 if (null == result) {

@@ -21,6 +21,9 @@ import org.apache.commons.lang.StringUtils;
 
 import net.ssehub.easy.varModel.confModel.IDecisionVariable;
 import net.ssehub.easy.varModel.model.IvmlKeyWords;
+import net.ssehub.easy.varModel.model.values.Value;
+import net.ssehub.easy.varModel.model.values.ValueDoesNotMatchTypeException;
+import net.ssehub.easy.varModel.model.values.ValueFactory;
 
 /**
  * Uses {@link IDecisionVariable}s to identify temporary value mappings inside the {@link AdaptiveConfiguration}.
@@ -74,6 +77,11 @@ public class IDecisionVariableIdentifier extends AbstractVariableIdentifier<IDec
                 throw new UnsupportedOperationException("Removing segments are not supported. Tried this on: " + id);
             }
         };
+    }
+
+    @Override
+    protected Value toIVMLValue(IDecisionVariable trgVariable, Object oValue) throws ValueDoesNotMatchTypeException {
+        return ValueFactory.createValue(trgVariable.getDeclaration().getType(), oValue);
     }
 
 }

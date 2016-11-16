@@ -18,6 +18,8 @@ package net.ssehub.easy.instantiation.rt.core.model.confModel;
 import java.util.Iterator;
 
 import net.ssehub.easy.varModel.confModel.IDecisionVariable;
+import net.ssehub.easy.varModel.model.values.Value;
+import net.ssehub.easy.varModel.model.values.ValueDoesNotMatchTypeException;
 
 /**
  * Allows flexible handling of different identifier systems for referencing variable in the
@@ -65,5 +67,16 @@ public abstract class AbstractVariableIdentifier<V> {
      * @see #variableToID(Object)
      */
     protected abstract String iDecisionVariableToID(IDecisionVariable variable);
+    
+    /**
+     * Converts the given object to an IVML value depending on the target {@link IDecisionVariable}.
+     * @param trgVariable The variable for which the value shall be converted.
+     * @param oValue The object value, which shall be converted.
+     * @return The converted value.
+     * @throws ValueDoesNotMatchTypeException If the passed object value does not match to the type of the target
+     *     variable.
+     */
+    protected abstract Value toIVMLValue(IDecisionVariable trgVariable, Object oValue)
+        throws ValueDoesNotMatchTypeException;
 
 }
