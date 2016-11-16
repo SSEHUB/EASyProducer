@@ -137,19 +137,10 @@ public class AdaptiveConfiguration<V> {
             }
         } else {
             try {
-                IDatatype type = variable.getDeclaration().getType();
-                Value result = null;
-                if (type == IntegerType.TYPE && oValue instanceof Double) {
-                    oValue = ((Double) oValue).intValue();
-                } else if (BooleanType.TYPE.isAssignableFrom(type) && oValue instanceof Double) {
-                    result = ((Double) oValue) >= 0.5 ? BooleanValue.TRUE : BooleanValue.FALSE;
-                }
-                if (null == result) {
-                    result = ValueFactory.createValue(type, oValue);
-                }
-                variable.setValue(result, AssignmentState.ASSIGNED);
+                Value value = identifier.toIVMLValue(variable, oValue);
+                variable.setValue(value, AssignmentState.ASSIGNED);
             } catch (ValueDoesNotMatchTypeException e) {
-                // Do nothing ignore Value and log error
+                // Do nothing, ignore Value and log error
                 Bundle.getLogger(AdaptiveConfiguration.class).exception(e);
             } catch (ConfigurationException e) {
                 // TODO Auto-generated catch block
