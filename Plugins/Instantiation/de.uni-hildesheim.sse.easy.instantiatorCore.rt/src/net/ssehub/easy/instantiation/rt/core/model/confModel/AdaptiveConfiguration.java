@@ -110,6 +110,14 @@ public class AdaptiveConfiguration<V> {
                     tempValue.remove(id);
                 }
             }
+            
+            if (!tempValue.isEmpty()) {
+                /* 
+                 * Some elements are not part of the model, e.g., intermediate spouts.
+                 * Thus, logging only an info and not a warning.
+                 */
+                Bundle.getLogger(AdaptiveConfiguration.class).info("Some values could not be stored: " + tempValue);
+            }
         }
     }
     /**
