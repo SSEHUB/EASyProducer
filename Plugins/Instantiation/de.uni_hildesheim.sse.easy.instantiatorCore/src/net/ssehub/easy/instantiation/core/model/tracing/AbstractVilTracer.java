@@ -266,10 +266,14 @@ public abstract class AbstractVilTracer
         write("executing script " + script.getName() + ver + location);
         increaseIndentation();
     }
+    
+    @Override
+    public void visitScriptBody(Script script, RuntimeEnvironment environment) {
+        decreaseIndentation();
+    }
 
     @Override
     public void visitedScript(Script script) {
-        decreaseIndentation();
     }
 
     @Override

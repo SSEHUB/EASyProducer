@@ -381,7 +381,7 @@ public class BuildlangExecution extends ExecutionVisitor<Script, Rule, VariableD
         environment.setContextPaths(vtlPaths);
         processProperties(script, getTargetPath(script, scriptParam));
         checkConstants(script);
-        tracer.visitedScript(script);
+        tracer.visitScriptBody(script, environment);
         Object result;
         if (null == start) {
             result = executeDefault(script);
@@ -393,6 +393,7 @@ public class BuildlangExecution extends ExecutionVisitor<Script, Rule, VariableD
             scriptParam = replaceParameter(scriptParam);
         }
         environment.switchContext(oldContext);
+        tracer.visitedScript(script);
         return result;
     }
 

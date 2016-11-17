@@ -68,6 +68,10 @@ public class NoTracer extends net.ssehub.easy.instantiation.core.model.common.No
     @Override
     public void visitScript(Script script, RuntimeEnvironment environment) {
     }
+    
+    @Override
+    public void visitScriptBody(Script script, RuntimeEnvironment environment) {
+    }
 
     @Override
     public void visitedScript(Script script) {

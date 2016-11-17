@@ -11,13 +11,21 @@ import net.ssehub.easy.instantiation.core.model.vilTypes.Collection;
 public interface ITracer extends net.ssehub.easy.instantiation.core.model.common.ITracer {
     
     /**
-     * Is called when a script is being visited.
+     * Is called when a script (header) is being visited.
      * 
      * @param script the script
      * @param environment the runtime environment
      */
     public void visitScript(Script script, RuntimeEnvironment environment);
 
+    /**
+     * Is called when a script (body) is being visited.
+     * 
+     * @param script the script
+     * @param environment the runtime environment
+     */
+    public void visitScriptBody(Script script, RuntimeEnvironment environment);
+    
     /**
      * Is called when visiting a script ends.
      * 

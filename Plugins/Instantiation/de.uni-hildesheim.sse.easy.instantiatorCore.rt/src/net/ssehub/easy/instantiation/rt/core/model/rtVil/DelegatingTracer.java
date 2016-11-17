@@ -64,6 +64,11 @@ public class DelegatingTracer implements ITracer {
     public void visitedScript(Script script) {
         delegate.visitedScript(script);
     }
+    
+    @Override
+    public void visitScriptBody(Script script, RuntimeEnvironment environment) {
+        delegate.visitScriptBody(script, environment);
+    }
 
     @Override
     public void visitRule(Rule rule, RuntimeEnvironment environment) {
