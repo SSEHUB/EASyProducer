@@ -199,17 +199,12 @@ public class Message extends net.ssehub.easy.basics.messages.Message {
     
     /**
      * Method for adding a list of partial {@link ConstraintSyntaxTree}s that are involved in each failed constraint.
-     * @param constraints List of constraint trees. The entries in this 
+     * @param constraints List of constraint trees (elements may be <tt>null</tt>). The entries in this 
      * list must correspond to {@link #addProblemConstraints(List)}.
      */
     public void addProblemConstraintParts(List<ConstraintSyntaxTree> constraints) {
         if (null != constraints) {
-            for (int i = 0, end = constraints.size(); i < end; i++) {
-                ConstraintSyntaxTree cstPart = constraints.get(i);
-                if (null != cstPart) {
-                    this.problemConstraintParts.add(cstPart);
-                }
-            }
+            this.problemConstraintParts.addAll(constraints);
         }
     }
     
