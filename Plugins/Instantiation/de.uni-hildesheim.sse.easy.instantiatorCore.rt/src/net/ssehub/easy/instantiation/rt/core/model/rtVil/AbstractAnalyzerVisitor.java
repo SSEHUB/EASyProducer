@@ -276,7 +276,7 @@ public abstract class AbstractAnalyzerVisitor<V> extends EvaluationVisitor {
                     for (int c = 0; c < probConstraintParts.size(); c++) {
                         ConstraintSyntaxTree cst = probConstraintParts.get(c);
                         Constraint constraint = c < probConstraints.size() ? probConstraints.get(c) : null;
-                        List<V> clauses = analyze(config, cst, constraint);
+                        List<V> clauses = null != cst ? analyze(config, cst, constraint) : null;
                         if (null != clauses) {
                             if (null == result) {
                                 result = new ArrayList<V>();
