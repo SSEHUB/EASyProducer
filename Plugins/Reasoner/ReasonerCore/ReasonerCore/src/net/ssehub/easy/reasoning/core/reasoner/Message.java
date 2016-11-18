@@ -24,7 +24,7 @@ public class Message extends net.ssehub.easy.basics.messages.Message {
     private List<String> conflictingElementLabels;
     private List<Set<AbstractVariable>> variablesInConstraints;
     private List<Set<IDecisionVariable>> problemVariables;
-    private List<ConstraintSyntaxTree> problemConstraintParts;
+    private List<ConstraintSyntaxTree> problemConstraintParts = new ArrayList<ConstraintSyntaxTree>();
     private List<Constraint> problemConstraints;
     private List<String> conflictingElementComments;
     private List<Project> conflictingElementProjects;
@@ -203,9 +203,13 @@ public class Message extends net.ssehub.easy.basics.messages.Message {
      * list must correspond to {@link #addProblemConstraints(List)}.
      */
     public void addProblemConstraintParts(List<ConstraintSyntaxTree> constraints) {
-        this.problemConstraintParts = new ArrayList<ConstraintSyntaxTree>();
-        if (null != problemConstraintParts) {
-            this.problemConstraintParts.addAll(constraints);
+        if (null != constraints) {
+            for (int i = 0, end = constraints.size(); i < end; i++) {
+                ConstraintSyntaxTree cstPart = constraints.get(i);
+                if (null != cstPart) {
+                    this.problemConstraintParts.add(cstPart);
+                }
+            }
         }
     }
     
