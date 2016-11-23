@@ -455,6 +455,8 @@ public abstract class AbstractIvmlVariable extends IvmlElement {
      * Clears the actual variable. Has no effect if frozen.
      */
     public void clearValue() {
+        // easy implicitly assigned Java "default" values to top-level variables
+        // this is not done here - don't know where this happens
         try {
             origVariable.setValue(null, AssignmentState.UNDEFINED);
         } catch (ConfigurationException e) {

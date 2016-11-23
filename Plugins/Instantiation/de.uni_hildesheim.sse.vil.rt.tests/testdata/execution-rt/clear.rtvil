@@ -1,0 +1,29 @@
+@advice(Clear)
+rtVilScript clear (Project source, Configuration config, Project target) {
+
+    strategy main(Project source, Configuration config, Project target) = {
+        objective true;
+        breakdown {
+            tactic t(config);
+        }
+    }
+
+    tactic t(Configuration config) = {
+        Clear a = config;
+        Node node = a.node;
+        println("node " + node);
+        println("enable " + a.enable);
+        node.capacity = 0;
+        a.enable = false;
+        println("node " + node);
+        println("enable " + a.enable);
+        node.capacity.clearValue();
+        a.enable.clearValue();
+        println("node " + node);
+        println("enable " + a.enable);
+    }
+
+    enact(Project source, Configuration config, Project target) = : {
+    }
+
+}

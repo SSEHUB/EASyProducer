@@ -1,0 +1,22 @@
+project Clear {
+
+    enum BindingTime {compile, runtime};
+    annotate BindingTime bindingTime = BindingTime.compile to Clear;
+
+    compound Node {
+        assign (bindingTime = BindingTime.runtime) to {
+            Integer capacity;
+        }
+    }
+
+    Node node = {};
+    assign (bindingTime = BindingTime.runtime) to {
+        Boolean enable = true;
+    }
+    
+    freeze {
+        node;
+        enable;
+    } but (v | v.bindingTime == BindingTime.runtime);
+    
+}

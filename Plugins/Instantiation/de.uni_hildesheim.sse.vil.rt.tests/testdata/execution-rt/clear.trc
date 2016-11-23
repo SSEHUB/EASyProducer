@@ -1,0 +1,22 @@
+-> main(Project, Configuration, Project) with (<project>, <config>, <project>)
+    -> t(Configuration) with (<config>)
+        a <- <config>
+        node <- Clear::node
+        -> +(String, Any) with (node , Clear::node) = node Node node = {capacity=null}
+        -> println(Any) with (node Node node = {capacity=null})
+        -> +(String, Any) with (enable , Clear::enable) = enable Boolean enable = true : Boolean
+        -> println(Any) with (enable Boolean enable = true : Boolean)
+        node.capacity <- 0
+        a.enable <- false
+        -> +(String, Any) with (node , Clear::node) = node Node node = {capacity=0 : Integer}
+        -> println(Any) with (node Node node = {capacity=0 : Integer})
+        -> +(String, Any) with (enable , Clear::enable) = enable Boolean enable = false : Boolean
+        -> println(Any) with (enable Boolean enable = false : Boolean)
+        -> clearValue(DecisionVariable) with (Clear::Node::capacity)
+        -> clearValue(DecisionVariable) with (Clear::enable)
+        -> +(String, Any) with (node , Clear::node) = node Node node = {capacity=null}
+        -> println(Any) with (node Node node = {capacity=null})
+        -> +(String, Any) with (enable , Clear::enable) = null
+        -> println(Any) with (null)
+        Reasoner execution ok: true
+    -> enact(Project, Configuration, Project) with (<project>, <config>, <project>)

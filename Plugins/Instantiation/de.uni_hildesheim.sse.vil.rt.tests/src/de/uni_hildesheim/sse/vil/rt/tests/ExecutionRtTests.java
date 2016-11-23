@@ -811,6 +811,21 @@ public class ExecutionRtTests extends AbstractRtTest {
     }
 
     /**
+     * Tests addition on fields.
+     * 
+     * @throws IOException should not occur
+     */
+    @Test
+    public void testClear() throws IOException {
+        final String name = "clear";
+        Configuration cfg = getIvmlConfiguration("Clear", NoVariableFilter.INSTANCE);
+        Map<String, Object> param = createParameterMap(null, null, cfg);
+        EqualitySetup<Script> setup = new EqualitySetup<Script>(createFile(name), name, null, 
+            createTraceFile(name), param);
+        assertEqual(setup);
+    }
+
+    /**
      * Tests dynamic dispatch.
      * 
      * @throws IOException should not occur
