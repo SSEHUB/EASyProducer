@@ -51,6 +51,13 @@ public class AvailableModels<M extends IModel> {
     }
     
     /**
+     * Clears all loaded model infos.
+     */
+    void clear() {
+        availableModels.clear();
+    }
+    
+    /**
      * Returns all versioned model information objects.
      * 
      * @return all known versioned model information objects

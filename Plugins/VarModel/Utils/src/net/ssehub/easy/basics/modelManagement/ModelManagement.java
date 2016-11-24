@@ -1017,6 +1017,21 @@ public abstract class ModelManagement <M extends IModel> {
     }
     
     /**
+     * Clears all loaded models, available models ({@link #availableModels()}),
+     * and model locations ({@link #locations()}). This method will not remove any {@link IModelLoader}s or
+     * {@link ImportResolver}s.<br/><br/>
+     * <font color="red"><b>Warning:</b></font> Be careful with this method, as this may affect other parts
+     * of the tooling as the whole singleton will be cleaned up.
+     */
+    public void clear() {
+        // repository delegates to this -> no cleanup necessary
+        repository = new ModelRepository<M>(this);
+        availableModels.clear();
+        locations.clear();
+        // keep parsers -> do not clear loaders
+    }
+    
+    /**
      * Clears <code>model</code> from the caches. Please handle with care.
      * 
      * @param model the model to be cleared
