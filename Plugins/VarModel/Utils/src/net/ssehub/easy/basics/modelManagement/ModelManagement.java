@@ -1021,7 +1021,7 @@ public abstract class ModelManagement <M extends IModel> {
      * and model locations ({@link #locations()}). This method will not remove any {@link IModelLoader}s or
      * {@link ImportResolver}s.<br/><br/>
      * <font color="red"><b>Warning:</b></font> Be careful with this method, as this may affect other parts
-     * of the tooling as the whole singleton will be cleaned up.
+     * of the tooling as the whole singleton will be cleaned up. This method is mainly designed for testing purpose.
      */
     public void clear() {
         // repository delegates to this -> no cleanup necessary
