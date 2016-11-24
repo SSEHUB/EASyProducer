@@ -1025,7 +1025,6 @@ public abstract class ModelManagement <M extends IModel> {
      */
     public void clear() {
         // repository delegates to this -> no cleanup necessary
-        repository = new ModelRepository<M>(this);
         availableModels.clear();
         locations.clear();
         // keep parsers -> do not clear loaders
