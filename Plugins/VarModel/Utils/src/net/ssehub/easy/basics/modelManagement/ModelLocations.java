@@ -203,6 +203,14 @@ public class ModelLocations <M extends IModel> {
     }
     
     /**
+     * Removes all known model locations.
+     */
+    void clear() {
+        knownLocations.clear();
+        locations.clear();
+    }
+    
+    /**
      * Adds an excluded model location. The location disables all
      * contained locations and will be considered with the next update
      * of the file information (already known models will not be discarded).
