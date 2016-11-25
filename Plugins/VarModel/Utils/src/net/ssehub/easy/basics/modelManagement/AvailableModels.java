@@ -319,7 +319,7 @@ public class AvailableModels<M extends IModel> {
      *   <b>null</b> if unknown
      */
     public synchronized List<ModelInfo<M>> getModelInfos(M model) {
-        return getModelInfo(model.getName(), model.getVersion());
+        return null == model ? null : getModelInfo(model.getName(), model.getVersion());
     }
     
     /**
