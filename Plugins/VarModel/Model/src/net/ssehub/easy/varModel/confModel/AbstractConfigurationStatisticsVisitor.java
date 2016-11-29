@@ -199,7 +199,7 @@ public abstract class AbstractConfigurationStatisticsVisitor extends AbstractCon
         } else {
             statistics.nNormalVariables++;
             if (!nestedInContainer) {
-                statistics.nNormalVariables++;
+                statistics.nNormalVariablesNoContainer++;
             }
         }
         if (Compound.TYPE.isAssignableFrom(type)) {
