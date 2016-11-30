@@ -37,10 +37,11 @@ public class DecisionVariable extends AbstractIvmlVariable implements IActualTyp
     
     @Override
     protected void initializeAttributes() {
-        if (null == attributes && variable.getAttributesCount() > 0) {
+        // use original variable here as attributes relate to the definition
+        if (null == attributes && origVariable.getAttributesCount() > 0) {
             List<Attribute> tmp = new ArrayList<Attribute>();
-            for (int a = 0; a < variable.getAttributesCount(); a++) {
-                IDecisionVariable attribute = variable.getAttribute(a);
+            for (int a = 0; a < origVariable.getAttributesCount(); a++) {
+                IDecisionVariable attribute = origVariable.getAttribute(a);
                 if (filter.isEnabled(attribute)) {
                     tmp.add(new Attribute(getConfiguration(), attribute, filter));
                 }
