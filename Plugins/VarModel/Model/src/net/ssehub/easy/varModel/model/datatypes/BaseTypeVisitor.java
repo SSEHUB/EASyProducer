@@ -64,7 +64,7 @@ public class BaseTypeVisitor implements IDatatypeVisitor {
     private static final synchronized BaseTypeVisitor getInstance(IDatatype type) {
         BaseTypeVisitor result;
         if (POOL.size() > 0) {
-            result = POOL.get(0);
+            result = POOL.remove(0);
         } else {
             result = new BaseTypeVisitor();
         }
