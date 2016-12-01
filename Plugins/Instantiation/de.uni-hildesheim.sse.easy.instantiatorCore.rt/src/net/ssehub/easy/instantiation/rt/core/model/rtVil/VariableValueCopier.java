@@ -615,7 +615,12 @@ public class VariableValueCopier {
                 target.setValue(result, newState);
                 notifyAssigned(target, result, adding);
             } else {
-                getLogger().error("Cannot create decision variable for " + decl.getName());
+                IModelElement parent = decl.getParent();
+                String parentType = null != parent ? decl.getParent().getClass().getSimpleName() : "<no type>";
+                getLogger().error("Cannot create variable instance for " + decl.getName() + " of "
+                    + source.getDeclaration().getName() + " with:"
+                    + "\n - Parent = " + parent + "(" + parentType + ")"
+                    + "\n - Existing instance (should be null): " + cfg.getDecision(decl));
                 result = null;
             }
         } else {
