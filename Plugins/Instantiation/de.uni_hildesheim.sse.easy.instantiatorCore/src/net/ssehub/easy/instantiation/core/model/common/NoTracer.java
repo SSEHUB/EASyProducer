@@ -28,4 +28,8 @@ public class NoTracer extends net.ssehub.easy.instantiation.core.model.expressio
     public void traceExecutionException(VilException exception) {
     }
 
+    @Override
+    public void enable(boolean enable) {
+    }
+
 }

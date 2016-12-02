@@ -32,4 +32,11 @@ public interface ITracer extends net.ssehub.easy.instantiation.core.model.expres
      */
     public void traceExecutionException(VilException exception);
     
+    /**
+     * Enables or disables the tracer. By default, a tracer is enabled.
+     * 
+     * @param enable enable or disable
+     */
+    public void enable(boolean enable);
+
 }

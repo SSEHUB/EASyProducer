@@ -145,12 +145,19 @@ public class VilTemplateProcessor implements IVilType {
         // instantiate the file template
         RuntimeEnvironment runtimeEnvironment = new RuntimeEnvironment(config);
         ITracer tracer = TracerFactory.createTemplateLanguageTracer();
-        EvaluationVisitor evaluationVisitor = new EvaluationVisitor(runtimeEnvironment, tracer);
-        // TODO this operation cannot just be removed as it is the functionality of a template processor
-        // TODO However, without xtext this cannot be executed at runtime :(
-        String instantiatedContent = StringReplacer.substitute(templateContents, runtimeEnvironment, 
-            expressionParser, evaluationVisitor);
-        //String instantiatedContent = templateContents;
+        TracerFactory.registerTemplateLanguageTracer(tracer);
+        String instantiatedContent;
+        try {
+            EvaluationVisitor evaluationVisitor = new EvaluationVisitor(runtimeEnvironment, tracer);
+            // TODO this operation cannot just be removed as it is the functionality of a template processor
+            // TODO However, without xtext this cannot be executed at runtime :(
+            instantiatedContent = StringReplacer.substitute(templateContents, runtimeEnvironment, 
+                expressionParser, evaluationVisitor);
+        } catch (VilException e) {
+            throw e;
+        } finally {
+            TracerFactory.unregisterTemplateLanguageTracer(tracer);
+        }
             
         StringWriter out = new StringWriter();
         out.append(instantiatedContent);
@@ -519,6 +526,7 @@ public class VilTemplateProcessor implements IVilType {
         TemplateLangExecution exec = null;
         StringWriter out = new StringWriter();
         // executing the model
+        ITracer tracer = TracerFactory.createTemplateLanguageTracer();
         try {
             Map<String, Object> localParam = new HashMap<String, Object>();
             // put default parameter
@@ -529,7 +537,7 @@ public class VilTemplateProcessor implements IVilType {
             // put default parameters for sure
             localParam.put(TemplateLangExecution.PARAM_CONFIG_SURE, config);
             localParam.put(TemplateLangExecution.PARAM_TARGET_SURE, target);
-            ITracer tracer = TracerFactory.createTemplateLanguageTracer();
+            TracerFactory.registerTemplateLanguageTracer(tracer);
             exec = new TemplateLangExecution(tracer, out, localParam);
             if (null != other) {
                 Object tmp = other.get(Constants.IMPLICIT_TERMINATOR_NAME);
@@ -559,6 +567,8 @@ public class VilTemplateProcessor implements IVilType {
             errMsg.append(out.toString());
             Bundle.getLogger(VilTemplateProcessor.class).error(errMsg.toString());
             throw e;
+        } finally {
+            TracerFactory.registerTemplateLanguageTracer(tracer);            
         }
         result.add(target);
     }

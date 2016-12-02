@@ -3,6 +3,9 @@ package net.ssehub.easy.instantiation.core.model.execution;
 import java.util.HashMap;
 import java.util.Map;
 
+import net.ssehub.easy.basics.progress.ProgressObserver;
+import net.ssehub.easy.basics.progress.ProgressObserver.ITask;
+
 /**
  * A factory for the VIL language execution tracers. Basically, default tracer factory ({@link #getDefaultInstance()})
  * is static and initialized with {@link #DEFAULT}. However, as VIL can be executed in multiple
@@ -16,6 +19,13 @@ public abstract class TracerFactory {
      * Defines the default tracer.
      */
     public static final TracerFactory DEFAULT = new DefaultTracerFactory();
+    public static final Map<Thread, net.ssehub.easy.instantiation.core.model.templateModel.ITracer> 
+        TEMPLATELANG_TRACERS = new HashMap<Thread, 
+        net.ssehub.easy.instantiation.core.model.templateModel.ITracer>();
+    public static final Map<Thread, net.ssehub.easy.instantiation.core.model.buildlangModel.ITracer> 
+        BUILDLANG_TRACERS = new HashMap<Thread, 
+        net.ssehub.easy.instantiation.core.model.buildlangModel.ITracer>();
+    public static final Map<ProgressObserver, TaskData> PROGRESS_OBSERVERS = new HashMap<ProgressObserver, TaskData>();
 
     public static final IInstantiatorTracer EMPTY_INSTANTIATOR_TRACER = new IInstantiatorTracer() {
 
@@ -178,6 +188,142 @@ public abstract class TracerFactory {
             result = DEFAULT.createInstantiatorTracerImpl();
         }
         return result;
+    }
+    
+    /**
+     * Registers a build language tracer along with the current thread.
+     * 
+     * @param tracer the tracer, ignored if <b>null</b>
+     * @see #unregisterBuildLanguageTracer(net.ssehub.easy.instantiation.core.model.buildlangModel.ITracer)
+     */
+    public static void registerBuildLanguageTracer(
+        net.ssehub.easy.instantiation.core.model.buildlangModel.ITracer tracer) {
+        if (null != tracer) {
+            BUILDLANG_TRACERS.put(Thread.currentThread(), tracer);
+        }
+    }
+
+    /**
+     * Unregisters a build language tracer from the current thread.
+     * 
+     * @param tracer the tracer, ignored if <b>null</b>
+     * @see #registerBuildLanguageTracer(net.ssehub.easy.instantiation.core.model.buildlangModel.ITracer)
+     */
+    public static void unregisterBuildLanguageTracer(
+        net.ssehub.easy.instantiation.core.model.buildlangModel.ITracer tracer) {
+        if (null != tracer) {
+            BUILDLANG_TRACERS.remove(Thread.currentThread());
+        }
+    }
+
+    /**
+     * Returns the currently registered build language tracer for the current thread.
+     * 
+     * @return the currently registered build language tracer or <b>null</b> if there is none
+     */
+    public static net.ssehub.easy.instantiation.core.model.buildlangModel.ITracer getRegisteredBuildLanguageTracer() {
+        return BUILDLANG_TRACERS.get(Thread.currentThread());
+    }
+
+    /**
+     * Registers a template language tracer along with the current thread.
+     * 
+     * @param tracer the tracer, ignored if <b>null</b>
+     * @see #unregisterTemplateLanguageTracer(net.ssehub.easy.instantiation.core.model.templateModel.ITracer)
+     */
+    public static void registerTemplateLanguageTracer(
+        net.ssehub.easy.instantiation.core.model.templateModel.ITracer tracer) {
+        if (null != tracer) {
+            TEMPLATELANG_TRACERS.put(Thread.currentThread(), tracer);
+        }
+    }
+
+    /**
+     * Unregisters a template language tracer from the current thread.
+     * 
+     * @param tracer the tracer, ignored if <b>null</b>
+     * @see #registerTemplateLanguageTracer(net.ssehub.easy.instantiation.core.model.templateModel.ITracer)
+     */
+    public static void unregisterTemplateLanguageTracer(
+        net.ssehub.easy.instantiation.core.model.templateModel.ITracer tracer) {
+        if (null != tracer) {
+            TEMPLATELANG_TRACERS.remove(Thread.currentThread());
+        }
+    }
+
+    /**
+     * Returns the currently registered template language tracer for the current thread.
+     * 
+     * @return the currently registered template language tracer or <b>null</b> if there is none
+     */
+    public static net.ssehub.easy.instantiation.core.model.templateModel.ITracer getRegisteredTemplateLanguageTracer() {
+        return TEMPLATELANG_TRACERS.get(Thread.currentThread());
+    }
+    
+    /**
+     * Stores information about the current task of a progress observer.
+     * 
+     * @author Holger Eichelberger
+     */
+    private static class TaskData {
+        private ITask task;
+        private String taskDescription;
+        // can be extended to subtasks if needed
+    }
+    
+    /**
+     * Notifies the tracer about the actual progress in order to inform the user.
+     * 
+     * @param actual the actual step (negative disables display)
+     * @param max the maximum number of steps (may vary over time, negative disables display)
+     * @param description an optional description of the step (may be <b>null</b>)
+     */
+    public static void progress(int actual, int max, String description) {
+        for (Map.Entry<ProgressObserver, TaskData> entry : PROGRESS_OBSERVERS.entrySet()) {
+            ProgressObserver obs = entry.getKey();
+            TaskData task = entry.getValue();
+            boolean newTask = false;
+            if (null == task) {
+                newTask = true;
+            } else if (null != description && !task.taskDescription.equals(description)) {
+                // null == description -> keep task
+                // not same description -> new task
+                obs.notifyEnd(task.task);
+                newTask = true;
+            }
+            if (newTask) {
+                task = new TaskData();
+                task.taskDescription = null == description ? "..." : description;
+                task.task = obs.registerTask(task.taskDescription);
+                entry.setValue(task);
+            }
+            obs.notifyProgress(task.task, actual, max);
+        }
+    }
+    
+    /**
+     * Registers the given progress reserver.
+     * 
+     * @param observer the observer (ignored if <b>null</b>)
+     */
+    public static void registerProgressObserver(ProgressObserver observer) {
+        if (null != observer && !PROGRESS_OBSERVERS.containsKey(observer)) {
+            PROGRESS_OBSERVERS.put(observer, null);
+        }
+    }
+
+    /**
+     * Unregisters the given progress observer.
+     * 
+     * @param observer the progress observer (ignored if <b>null</b>)
+     */
+    public static void unregisterProgressObserver(ProgressObserver observer) {
+        if (null != observer) {
+            TaskData task = PROGRESS_OBSERVERS.remove(observer);
+            if (null != task && null != task.task) {
+                observer.notifyEnd(task.task);
+            }
+        }
     }
 
 }

@@ -39,6 +39,7 @@ public abstract class AbstractVilTracer
     private static final String INDENTATION_STEP = "  ";
     private String indentation = "";
     private boolean emitTraceText;
+    private boolean enable = true;
 
     /**
      * Creates a tracer instance without emitting trace texts.
@@ -79,7 +80,9 @@ public abstract class AbstractVilTracer
      * @param msg the message to be written
      */
     protected void write(String msg) {
-        writeImpl(indentation + msg);
+        if (enable) {
+            writeImpl(indentation + msg);
+        }
     }
 
     /**
@@ -371,6 +374,20 @@ public abstract class AbstractVilTracer
 
     @Override
     public void visitedWhileBody() {
+    }
+    
+    /**
+     * Returns whether the tracer is enabled.
+     * 
+     * @return <code>true</code> enabled, <code>false</code> else
+     */
+    protected boolean isEnabled() {
+        return enable;
+    }
+
+    @Override
+    public void enable(boolean enable) {
+        this.enable = enable;
     }
 
 }

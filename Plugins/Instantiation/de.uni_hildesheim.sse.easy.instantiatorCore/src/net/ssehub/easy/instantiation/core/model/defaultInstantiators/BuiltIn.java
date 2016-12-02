@@ -25,7 +25,9 @@ public class BuiltIn {
             TypeRegistry.DEFAULT.register(RandomInteger.class);
             TypeRegistry.DEFAULT.register(IntegerSequenceConstructors.class);
             TypeRegistry.DEFAULT.register(Println.class);
-            
+            TypeRegistry.DEFAULT.register(ProgressNotifier.class);
+            TypeRegistry.DEFAULT.register(Tracing.class);
+                    
             TemplateLangExecution.registerDefaultExtension(DefaultVtlJavaExtension.class);
         }
     }

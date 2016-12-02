@@ -208,4 +208,9 @@ public class DelegatingTracer implements ITracer {
     public void endStrategies() {
     }
 
+    @Override
+    public void enable(boolean enable) {
+        delegate.enable(enable);
+    }
+
 }

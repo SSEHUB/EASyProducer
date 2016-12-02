@@ -45,62 +45,72 @@ public class StreamTracer extends net.ssehub.easy.instantiation.core.model.commo
 
     @Override
     public void visitRule(Rule rule, RuntimeEnvironment environment) {
-        printIndentation();
-        print("-> " + rule.getName() + "(");
-        for (int i = 0; i < rule.getParameterCount(); i++) {
-            if (i > 0) {
-                print(", ");
-            }
-            print(rule.getParameter(i).getType().getVilName());
-        }
-        print(")");
-        if (rule.getParameterCount() > 0) {
-            print(" with (");
+        if (isEnabled()) {
+            printIndentation();
+            print("-> " + rule.getName() + "(");
             for (int i = 0; i < rule.getParameterCount(); i++) {
                 if (i > 0) {
                     print(", ");
                 }
-                try {
-                    String arg = StringValueHelper.getStringValue(
-                        environment.getValue(rule.getParameter(i)), NORMALIZER);
-                    print(makeRelative(arg));
-                } catch (VilException e) {
-                    print("<null>");
-                }
+                print(rule.getParameter(i).getType().getVilName());
             }
             print(")");
+            if (rule.getParameterCount() > 0) {
+                print(" with (");
+                for (int i = 0; i < rule.getParameterCount(); i++) {
+                    if (i > 0) {
+                        print(", ");
+                    }
+                    try {
+                        String arg = StringValueHelper.getStringValue(
+                            environment.getValue(rule.getParameter(i)), NORMALIZER);
+                        print(makeRelative(arg));
+                    } catch (VilException e) {
+                        print("<null>");
+                    }
+                }
+                print(")");
+            }
+            println();
+            increaseIndentation();
         }
-        println();
-        increaseIndentation();
     }
 
     @Override
     public void visitedRule(Rule rule, RuntimeEnvironment environment, Object result) {
-        decreaseIndentation();
+        if (isEnabled()) {
+            decreaseIndentation();
+        }
     }
 
     @Override
     public void visitLoop(IEnumeratingLoop loop, RuntimeEnvironment environment) {
-        printIndentation();
-        print(loop.getElementName());
-        println(" {");
-        increaseIndentation();
+        if (isEnabled()) {
+            printIndentation();
+            print(loop.getElementName());
+            println(" {");
+            increaseIndentation();
+        }
     }
 
     @Override
     public void visitIteratorAssignment(IEnumeratingLoop loop, VariableDeclaration var, Object value) {
-        printIndentation();
-        print(loop.getElementName());
-        print(": ");
-        printValueDefined(var, null, value);
-        println();
+        if (isEnabled()) {
+            printIndentation();
+            print(loop.getElementName());
+            print(": ");
+            printValueDefined(var, null, value);
+            println();
+        }
     }
     
     @Override
     public void visitedLoop(IEnumeratingLoop loop, RuntimeEnvironment environment) {
-        decreaseIndentation();
-        printIndentation();
-        println("}");
+        if (isEnabled()) {
+            decreaseIndentation();
+            printIndentation();
+            println("}");
+        }
     }
 
     @Override
@@ -115,15 +125,17 @@ public class StreamTracer extends net.ssehub.easy.instantiation.core.model.commo
 
     @Override
     public void visitSystemCall(String[] args) {
-        printIndentation();
-        print("system call(");
-        for (int i = 0; i < args.length; i++) {
-            if (i > 0) {
-                print(", ");
+        if (isEnabled()) {
+            printIndentation();
+            print("system call(");
+            for (int i = 0; i < args.length; i++) {
+                if (i > 0) {
+                    print(", ");
+                }
+                print(args[i]);
             }
-            print(args[i]);
+            println(")");
         }
-        println(")");
     }
 
     @Override
@@ -138,7 +150,7 @@ public class StreamTracer extends net.ssehub.easy.instantiation.core.model.commo
 
     @Override
     public void failedAt(IBuildlangElement element) {
-        if (emitFailed) {
+        if (emitFailed && isEnabled()) {
             print("failed at: ");
             BuildlangWriter writer = new BuildlangWriter(getOut());
             try {
@@ -175,27 +187,33 @@ public class StreamTracer extends net.ssehub.easy.instantiation.core.model.commo
 
     @Override
     public void visitAlternative(boolean takeIf) {
-        printIndentation();
-        print("visit ");
-        if (takeIf) {
-            println("if-branch");
-        } else {
-            println("else-branch");
+        if (isEnabled()) {
+            printIndentation();
+            print("visit ");
+            if (takeIf) {
+                println("if-branch");
+            } else {
+                println("else-branch");
+            }
         }
     }
 
     @Override
     public void visitWhileBody() {
-        printIndentation();
-        println("while body {");
-        increaseIndentation();
+        if (isEnabled()) {
+            printIndentation();
+            println("while body {");
+            increaseIndentation();
+        }
     }
 
     @Override
     public void visitedWhileBody() {
-        decreaseIndentation();
-        printIndentation();
-        println("}");
+        if (isEnabled()) {
+            decreaseIndentation();
+            printIndentation();
+            println("}");
+        }
     }
 
 }

@@ -439,6 +439,7 @@ public class Executor {
         Map<String, Object> actArgs = new HashMap<String, Object>();
         actArgs.putAll(arguments);
         ITracer tracer = TracerFactory.createBuildLanguageTracer();
+        TracerFactory.registerBuildLanguageTracer(tracer);
         File base = this.base;
         if (check) {
             checkArguments(actArgs, observer);
@@ -480,6 +481,8 @@ public class Executor {
         } catch (VilException e) {
             tracer.traceExecutionException(e);
             throw e;
+        } finally {
+            TracerFactory.unregisterBuildLanguageTracer(tracer);            
         }
         tracer.reset();
     }

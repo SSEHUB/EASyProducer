@@ -14,7 +14,9 @@ import net.ssehub.easy.instantiation.core.model.vilTypes.FieldDescriptor;
  */
 public abstract class StreamTracer 
     extends net.ssehub.easy.instantiation.core.model.expressions.StreamTracer implements ITracer {
-        
+
+    private boolean enabled = true;
+    
     /**
      * Creates a new stream tracer.
      * 
@@ -34,9 +36,11 @@ public abstract class StreamTracer
 
     @Override
     public void valueDefined(VariableDeclaration var, FieldDescriptor field, Object value) {
-        printIndentation();
-        printValueDefined(var, field, value);
-        println();
+        if (enabled) {
+            printIndentation();
+            printValueDefined(var, field, value);
+            println();
+        }
     }
 
     /**
@@ -47,28 +51,44 @@ public abstract class StreamTracer
      * @param value the actual value
      */
     protected void printValueDefined(VariableDeclaration var, FieldDescriptor field, Object value) {
-        boolean tmp = false;
-        if (value instanceof Path) {
-            tmp = ((Path) value).isTemporary();
-        } else if (value instanceof IFileSystemArtifact) {
-            tmp = ((IFileSystemArtifact) value).isTemporary();
+        if (enabled) {
+            boolean tmp = false;
+            if (value instanceof Path) {
+                tmp = ((Path) value).isTemporary();
+            } else if (value instanceof IFileSystemArtifact) {
+                tmp = ((IFileSystemArtifact) value).isTemporary();
+            }
+            String valueString;
+            if (tmp) {
+                valueString = "<temp>";
+            } else {
+                valueString = makeRelative(value);
+            }
+            String name = var.getName();
+            if (null != field) {
+                name += "." + field.getName();
+            }
+            print(name + " <- " + valueString);
         }
-        String valueString;
-        if (tmp) {
-            valueString = "<temp>";
-        } else {
-            valueString = makeRelative(value);
-        }
-        String name = var.getName();
-        if (null != field) {
-            name += "." + field.getName();
-        }
-        print(name + " <- " + valueString);
     }
     
     @Override
     public void traceExecutionException(VilException exception) {
         // not needed in testing, covered from outside
+    }
+
+    /**
+     * Returns whether this tracer is enabled.
+     * 
+     * @return <code>true</code> for enabled, <code>false</code> else
+     */
+    protected boolean isEnabled() {
+        return enabled;
+    }
+
+    @Override
+    public void enable(boolean enable) {
+        this.enabled = enable;
     }
 
 }

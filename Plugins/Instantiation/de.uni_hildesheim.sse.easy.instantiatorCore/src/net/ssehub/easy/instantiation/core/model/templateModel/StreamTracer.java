@@ -45,76 +45,88 @@ public class StreamTracer extends net.ssehub.easy.instantiation.core.model.commo
 
     @Override
     public void visitDef(Def def, RuntimeEnvironment environment) {
-        printIndentation();
-        print("-> " + def.getName() + "(");
-        for (int i = 0; i < def.getParameterCount(); i++) {
-            if (i > 0) {
-                print(", ");
-            }
-            print(def.getParameter(i).getType().getVilName());
-        }
-        print(")");
-        if (def.getParameterCount() > 0) {
-            print(" with (");
+        if (isEnabled()) {
+            printIndentation();
+            print("-> " + def.getName() + "(");
             for (int i = 0; i < def.getParameterCount(); i++) {
                 if (i > 0) {
                     print(", ");
                 }
-                try {
-                    print(StringValueHelper.getStringValue(environment.getValue(def.getParameter(i)), NORMALIZER));
-                } catch (VilException e) {
-                    print("<null>");
-                }
+                print(def.getParameter(i).getType().getVilName());
             }
             print(")");
+            if (def.getParameterCount() > 0) {
+                print(" with (");
+                for (int i = 0; i < def.getParameterCount(); i++) {
+                    if (i > 0) {
+                        print(", ");
+                    }
+                    try {
+                        print(StringValueHelper.getStringValue(environment.getValue(def.getParameter(i)), NORMALIZER));
+                    } catch (VilException e) {
+                        print("<null>");
+                    }
+                }
+                print(")");
+            }
+            println();
+            increaseIndentation();
         }
-        println();
-        increaseIndentation();
     }
 
     @Override
     public void visitedDef(Def def, RuntimeEnvironment environment, Object result) {
-        decreaseIndentation();
+        if (isEnabled()) {
+            decreaseIndentation();
+        }
     }
 
     @Override
     public void visitedSwitch(Object select, int alternative, Object value) {
-        printIndentation();
-        println("switch(" + StringValueHelper.getStringValue(select, NORMALIZER) + ")");
-        increaseIndentation();
-        printIndentation();
-        println(alternative + " : " + StringValueHelper.getStringValue(value, NORMALIZER));
-        decreaseIndentation();
+        if (isEnabled()) {
+            printIndentation();
+            println("switch(" + StringValueHelper.getStringValue(select, NORMALIZER) + ")");
+            increaseIndentation();
+            printIndentation();
+            println(alternative + " : " + StringValueHelper.getStringValue(value, NORMALIZER));
+            decreaseIndentation();
+        }
     }
 
     @Override
     public void visitLoop(VariableDeclaration var) {
-        printIndentation();
-        println("for " + var.getName() + " {");
-        increaseIndentation();
+        if (isEnabled()) {
+            printIndentation();
+            println("for " + var.getName() + " {");
+            increaseIndentation();
+        }
     }
 
     @Override
     public void visitedLoop(VariableDeclaration var) {
-        decreaseIndentation();
-        printIndentation();
-        println("}");
+        if (isEnabled()) {
+            decreaseIndentation();
+            printIndentation();
+            println("}");
+        }
     }
 
     @Override
     public void visitAlternative(boolean takeIf) {
-        printIndentation();
-        print("visit ");
-        if (takeIf) {
-            println("if-branch");
-        } else {
-            println("else-branch");
+        if (isEnabled()) {
+            printIndentation();
+            print("visit ");
+            if (takeIf) {
+                println("if-branch");
+            } else {
+                println("else-branch");
+            }
         }
     }
 
     @Override
     public void failedAt(ITemplateLangElement element) {
-        if (emitFailed) {
+        if (emitFailed && isEnabled()) {
             print("failed at: ");
             TemplateLangWriter writer = new TemplateLangWriter(getOut());
             try {
@@ -141,16 +153,20 @@ public class StreamTracer extends net.ssehub.easy.instantiation.core.model.commo
 
     @Override
     public void visitWhileBody() {
-        printIndentation();
-        println("while body {");
-        increaseIndentation();
+        if (isEnabled()) {
+            printIndentation();
+            println("while body {");
+            increaseIndentation();
+        }
     }
 
     @Override
     public void visitedWhileBody() {
-        decreaseIndentation();
-        printIndentation();
-        println("}");
+        if (isEnabled()) {
+            decreaseIndentation();
+            printIndentation();
+            println("}");
+        }
     }
 
 }
