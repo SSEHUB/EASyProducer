@@ -10,6 +10,7 @@
 	<classpathentry kind="lib" path="lib/org.eclipse.osgi_3.9.1.v20140110-1610.jar"/>
 	<classpathentry kind="lib" path="lib/org.eclipse.osgi.services_3.3.100.v20130513-1956.jar"/>
 	<classpathentry kind="lib" path="lib/ant-1.8.4.jar"/>
+	<classpathentry kind="lib" path="lib/org.apache.log4j_1.2.15.v201012070815.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
