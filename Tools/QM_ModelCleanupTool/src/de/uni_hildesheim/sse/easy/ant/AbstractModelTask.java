@@ -8,8 +8,6 @@ import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.Task;
 
 import de.uni_hildesheim.sse.easy.ant.modelcopy.ProjectUtilities;
-import eu.qualimaster.easy.extension.internal.Bundle;
-import eu.qualimaster.easy.extension.modelop.ModelModifier;
 import net.ssehub.easy.basics.modelManagement.IModel;
 import net.ssehub.easy.basics.modelManagement.ModelManagement;
 import net.ssehub.easy.basics.modelManagement.ModelManagementException;
@@ -33,6 +31,7 @@ public abstract class AbstractModelTask extends Task {
     private File sourceFolder;
     private File destinationFolder;
     private String mainProject;
+    private boolean validate = true;
     private boolean verbose = true;
     private boolean allowDestDeletion = false;
     
@@ -80,6 +79,15 @@ public abstract class AbstractModelTask extends Task {
     public void setAllowDestDeletion(boolean allowDestDeletion) {
         this.allowDestDeletion = allowDestDeletion;
     }
+    
+    /**
+     * Specifies if the result shall be validated
+     * @param valitate <tt>true</tt> an inconsistent result will lead in an crash (default),
+     * <tt>false</tt> prints errors but will not lead to a buid stop.
+     */
+    public void setValidate(boolean valitate) {
+        this.validate = valitate;
+    }
 
     /**
      * Returns the folder containing the source artifacts.
@@ -120,6 +128,15 @@ public abstract class AbstractModelTask extends Task {
     protected final boolean getAllowDestDeletion() {
         return allowDestDeletion;
     }
+    
+    /**
+     * Returns whether validation of the result should stop the build or only output an error.
+     * @param <tt>true</tt> An flawed result will stop the whole built.
+     */
+    protected final boolean getValidate() {
+        return validate;
+    }
+    
     
     /**
      * Prints a debug message if verbosity was enabled.
@@ -218,12 +235,24 @@ public abstract class AbstractModelTask extends Task {
                     errMsg.append(": ");
                     errMsg.append(msg.getDescription());
                 }
-                throw new BuildException(errMsg.toString());
+                if (getValidate()) {
+                    throw new BuildException(errMsg.toString());
+                } else {
+                    System.out.println(errMsg.toString());
+                }
             }
         } catch (ModelManagementException e) {
-            throw new BuildException("Copied Project contains errors: " + e.getMessage());
+            if (getValidate()) {
+                throw new BuildException("Copied Project contains errors: " + e.getMessage());
+            } else {
+                System.out.println("Copied Project contains errors: " + e.getMessage());
+            }
         } catch (IOException e) {
-            throw new BuildException("Copied Project contains IO errors: " + e.getMessage());
+            if (getValidate()) {
+                throw new BuildException("Copied Project contains IO errors: " + e.getMessage());
+            } else {
+                System.out.println("Copied Project contains IO errors: " + e.getMessage());
+            }
         }
     }
     
