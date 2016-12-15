@@ -76,7 +76,7 @@
       <exclude name="**/package-info.java"/>
     </javac>
 		
-		<jacoco:coverage destfile="${junitResults.dir}/jacoco.exec" includes="de.uni_hildesheim.sse.easy.ant.modelcopy.*">
+		<jacoco:coverage destfile="${junitResults.dir}/jacoco.exec" includes="de.uni_hildesheim.sse.easy.ant.**.*">
       <junit fork="true" forkmode="once" printsummary="off" haltonfailure="off">
         <classpath refid="includes" />
         <classpath refid="junit" />

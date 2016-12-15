@@ -23,6 +23,23 @@ public class AdaptationPruning extends AbstractModelTask implements QMPlatformPr
 
     private String validationError = null;
     
+    /**
+     * Constructor for the ant task.
+     */
+    public AdaptationPruning() {
+        super();
+    }
+    
+    /**
+     * Constructor for the ant task.
+     */
+    public AdaptationPruning(String orgFolder, String cpyfolder, String mainProject) {
+        super();
+        setSourceFolder(orgFolder);
+        setDestinationFolder(cpyfolder);
+        setMainProject(mainProject);
+        setAllowDestDeletion(true);
+    }
     
     @Override
     protected void doModelOperation() {
