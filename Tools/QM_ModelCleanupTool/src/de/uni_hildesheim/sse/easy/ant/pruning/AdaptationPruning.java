@@ -8,6 +8,9 @@ import de.uni_hildesheim.sse.easy.ant.AbstractModelTask;
 import eu.qualimaster.easy.extension.modelop.ModelModifier;
 import eu.qualimaster.easy.extension.modelop.ModelModifier.QMPlatformProvider;
 import net.ssehub.easy.basics.modelManagement.ModelManagementException;
+import net.ssehub.easy.instantiation.core.model.buildlangModel.BuildModel;
+import net.ssehub.easy.instantiation.core.model.templateModel.TemplateModel;
+import net.ssehub.easy.instantiation.rt.core.model.rtVil.RtVilModel;
 import net.ssehub.easy.varModel.confModel.Configuration;
 import net.ssehub.easy.varModel.model.Project;
 
@@ -32,8 +35,23 @@ public class AdaptationPruning extends AbstractModelTask implements QMPlatformPr
             throw new BuildException(e);
         }
         
+        // Locations needed for modifier
+        try {
+            addOrRemoveLocation(BuildModel.INSTANCE, getSourceFolder(), true);
+            addOrRemoveLocation(TemplateModel.INSTANCE, getSourceFolder(), true);
+            addOrRemoveLocation(RtVilModel.INSTANCE, getSourceFolder(), true);
+        } catch (ModelManagementException e) {
+            throw new BuildException(e);
+        }
         ModelModifier modifier = new ModelModifier(getDestinationFolder(), qmModel, getSourceFolder(), this);
         modifier.createExecutor();
+        try {
+            addOrRemoveLocation(BuildModel.INSTANCE, getSourceFolder(), false);
+            addOrRemoveLocation(TemplateModel.INSTANCE, getSourceFolder(), false);
+            addOrRemoveLocation(RtVilModel.INSTANCE, getSourceFolder(), false);
+        } catch (ModelManagementException e) {
+            // Ignore exception and continue
+        }
         
         if (null != validationError) {
             throw new BuildException(validationError);

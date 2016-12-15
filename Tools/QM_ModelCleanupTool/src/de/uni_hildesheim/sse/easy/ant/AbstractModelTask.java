@@ -8,8 +8,14 @@ import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.Task;
 
 import de.uni_hildesheim.sse.easy.ant.modelcopy.ProjectUtilities;
+import eu.qualimaster.easy.extension.internal.Bundle;
+import eu.qualimaster.easy.extension.modelop.ModelModifier;
+import net.ssehub.easy.basics.modelManagement.IModel;
+import net.ssehub.easy.basics.modelManagement.ModelManagement;
 import net.ssehub.easy.basics.modelManagement.ModelManagementException;
 import net.ssehub.easy.basics.progress.ProgressObserver;
+import net.ssehub.easy.instantiation.core.model.buildlangModel.BuildModel;
+import net.ssehub.easy.instantiation.core.model.templateModel.TemplateModel;
 import net.ssehub.easy.reasoning.core.impl.ReasonerRegistry;
 import net.ssehub.easy.reasoning.sseReasoner.Reasoner;
 import net.ssehub.easy.varModel.management.VarModel;
@@ -126,6 +132,24 @@ public abstract class AbstractModelTask extends Task {
     }
     
     /**
+     * Removed or adds a (temporary) folder for loading models from this locations.
+     * @param modelManagement {@link VarModel#INSTANCE}, {@link BuildModel#INSTANCE}, or {@link TemplateModel#INSTANCE}
+     * @param folder The folder to (un-)register
+     * @param add <tt>true</tt> the folder will be added as possible location for models, <tt>false</tt> the folder
+     *     will be removed.
+     * @throws ModelManagementException If model files could not be parsed
+     */
+    protected void addOrRemoveLocation(ModelManagement<? extends IModel> modelManagement, File folder, boolean add)
+        throws ModelManagementException {
+        
+        if (add) {
+            modelManagement.locations().addLocation(folder, ProgressObserver.NO_OBSERVER);
+        } else {
+            modelManagement.locations().removeLocation(folder, ProgressObserver.NO_OBSERVER);
+        }
+    }
+    
+    /**
      * Loads the specified project from the location. <br/>
      * 
      * This adds the {@link #getSourceFolder()} to the {@link VarModel}. This should be undone at a later point.
@@ -136,7 +160,7 @@ public abstract class AbstractModelTask extends Task {
      * @throws IOException If files could not be copied.
      */
     protected Project loadProject(File folder, String mainProjectName) throws ModelManagementException, IOException {
-        VarModel.INSTANCE.locations().addLocation(folder, ProgressObserver.NO_OBSERVER);
+        addOrRemoveLocation(VarModel.INSTANCE, folder, true);
         Project p = ProjectUtilities.loadProject(mainProjectName);
         debugMessage(p.getName() + " sucessfully loaded.");
         
