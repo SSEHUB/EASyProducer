@@ -1,0 +1,1 @@
+Needs libraries from QualiMaster.EASyRuntime, which include classes of QualiMaster.Extension
