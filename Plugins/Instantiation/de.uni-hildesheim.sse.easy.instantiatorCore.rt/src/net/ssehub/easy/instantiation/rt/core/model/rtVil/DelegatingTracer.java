@@ -178,34 +178,58 @@ public class DelegatingTracer implements ITracer {
 
     @Override
     public void startBind() {
+        if (delegate instanceof ITracer) {
+            ((ITracer) delegate).startBind();
+        }
     }
 
     @Override
     public void endBind() {
+        if (delegate instanceof ITracer) {
+            ((ITracer) delegate).endBind();
+        }
     }
 
     @Override
     public void startInitialize() {
+        if (delegate instanceof ITracer) {
+            ((ITracer) delegate).startInitialize();
+        }
     }
 
     @Override
     public void endInitialize() {
+        if (delegate instanceof ITracer) {
+            ((ITracer) delegate).endInitialize();
+        }
     }
 
     @Override
     public void startEnact() {
+        if (delegate instanceof ITracer) {
+            ((ITracer) delegate).startEnact();
+        }
     }
 
     @Override
     public void endEnact() {
+        if (delegate instanceof ITracer) {
+            ((ITracer) delegate).endEnact();
+        }
     }
 
     @Override
     public void startStrategies() {
+        if (delegate instanceof ITracer) {
+            ((ITracer) delegate).startStrategies();
+        }
     }
 
     @Override
     public void endStrategies() {
+        if (delegate instanceof ITracer) {
+            ((ITracer) delegate).endStrategies();
+        }
     }
 
     @Override
