@@ -24,13 +24,9 @@ import java.util.List;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.filefilter.TrueFileFilter;
 import org.apache.tools.ant.BuildException;
-import org.apache.tools.ant.Task;
 
+import de.uni_hildesheim.sse.easy.ant.AbstractModelTask;
 import net.ssehub.easy.basics.modelManagement.ModelManagementException;
-import net.ssehub.easy.basics.progress.ProgressObserver;
-import net.ssehub.easy.reasoning.core.impl.ReasonerRegistry;
-import net.ssehub.easy.reasoning.sseReasoner.Reasoner;
-import net.ssehub.easy.varModel.management.VarModel;
 import net.ssehub.easy.varModel.model.DecisionVariableDeclaration;
 import net.ssehub.easy.varModel.model.Project;
 import net.ssehub.easy.varModel.model.ProjectImport;
@@ -39,8 +35,6 @@ import net.ssehub.easy.varModel.model.rewrite.ProjectRewriteVisitor;
 import net.ssehub.easy.varModel.model.rewrite.modifier.DeclarationNameFilter;
 import net.ssehub.easy.varModel.model.rewrite.modifier.ImportNameFilter;
 import net.ssehub.easy.varModel.model.rewrite.modifier.ModelElementFilter;
-import net.ssehub.easy.varModel.validation.IvmlValidationVisitor;
-import net.ssehub.easy.varModel.validation.ValidationMessage;
 
 /**
  * ANT task for copying the an EASy-Producer model (IVML, VIL, VTL, .EASyConfig, ...) to a specified location, while
@@ -48,7 +42,7 @@ import net.ssehub.easy.varModel.validation.ValidationMessage;
  * @author El-Sharkawy
  *
  */
-public class ModelCopy extends Task {
+public class ModelCopy extends AbstractModelTask {
     
     private static final String CONFIG_FILE_EXTENSION = "cfg.ivml";
     private static final String BASICS_CONFIG = "BasicsCfg";
@@ -61,19 +55,14 @@ public class ModelCopy extends Task {
     private static final String RECONFIGURABLE_HW_CONFIG = "ReconfigurableHardwareCfg";
     private static final String REMOVEABLE_CONFIG_EXTENSION = "^.*(_\\p{Digit}*|prioritypip)" + CONFIG_FILE_EXTENSION + "$";
     
-    private File sourceFolder;
-    private File destinationFolder;
-    private String mainProject;
-    private boolean allowDestDeletion;
-    
     private ProjectRewriteVisitor rewriter;
     
     /**
      * Constructor for the ant task.
      */
     public ModelCopy() {
-        ReasonerRegistry.getInstance().register(new Reasoner());
-        allowDestDeletion = false; // Only allowed during tests.
+        super();
+        setAllowDestDeletion(false); // Only allowed during tests.
         rewriter = null;
     }
     
@@ -85,35 +74,12 @@ public class ModelCopy extends Task {
      * @throws Exception
      */
     public ModelCopy(String orgFolder, String cpyfolder, String mainProject) {
-        ReasonerRegistry.getInstance().register(new Reasoner());
-        sourceFolder = new File(orgFolder);
-        destinationFolder = new File(cpyfolder);
-        this.mainProject = mainProject;
-        allowDestDeletion = true;
+        super();
+        setSourceFolder(orgFolder);
+        setDestinationFolder(cpyfolder);
+        setMainProject(mainProject);
+        setAllowDestDeletion(true);
         rewriter = null;
-    }
-    
-    /**
-     * A folder containing artifacts to copy. Will consider sub folders.
-     * @param sourceFolder A folder containing the source artifacts for copying.
-     */
-    public void setSourceFolder(String sourceFolder) {
-        this.sourceFolder = new File(sourceFolder);
-    }
-    
-    /**
-     * The target folder where the copied models hall be stored.
-     * @param destinationFolder The folder must exist and empty or not exist (must not be <tt>null</tt>).
-     */
-    public void setDestinationFolder(String destinationFolder) {
-        this.destinationFolder = new File(destinationFolder);
-    }
-    /**
-     * Main Project, is needed for loading the projects in a correct order.
-     * @param mainProject The starting point of the model to be copied, only its name.
-     */
-    public void setMainProject(String mainProject) {
-        this.mainProject = mainProject;
     }
     
     /**
@@ -123,17 +89,15 @@ public class ModelCopy extends Task {
      */
     private void copy() throws ModelManagementException, IOException {
         // Initialize
-        VarModel.INSTANCE.locations().addLocation(sourceFolder, ProgressObserver.NO_OBSERVER);
-        Project p = ProjectUtilities.loadProject(mainProject);
-        System.out.println(p.getName() + " sucessfully loaded.");
-        Collection<File> originalFiles = FileUtils.listFiles(sourceFolder, new EASyModelFilter(),
+        loadProject(getSourceFolder(), getMainProject());
+        Collection<File> originalFiles = FileUtils.listFiles(getSourceFolder(), new EASyModelFilter(),
             TrueFileFilter.INSTANCE);
         
         // Copy all files
         for (File file : originalFiles) {
-            String relativeFileName = sourceFolder.toURI().relativize(file.toURI()).getPath();
-            System.out.println("Processing: " + relativeFileName);
-            File copyDestination = new File(destinationFolder, relativeFileName);
+            String relativeFileName = getSourceFolder().toURI().relativize(file.toURI()).getPath();
+            debugMessage("Processing: " + relativeFileName);
+            File copyDestination = new File(getDestinationFolder(), relativeFileName);
             if (!copyDestination.exists()) {
                 File destFolder = copyDestination.getParentFile();
                 destFolder.mkdirs();
@@ -165,7 +129,7 @@ public class ModelCopy extends Task {
             
             String projectName = relativeFileName.substring(lastSeparator + 1, lastDot);
             Project p = ProjectUtilities.loadProject(projectName);
-            System.out.println("Filter: " + projectName);
+            debugMessage("Filter: " + projectName);
             
             if (BASICS_CONFIG.equals(p.getName())) {
                 // Clear Basics Config
@@ -210,7 +174,7 @@ public class ModelCopy extends Task {
             }
             ProjectUtilities.saveProject(destFolder, p);
         } else {
-            System.out.println("Ommiting: " + relativeFileName);
+            debugMessage("Ommiting: " + relativeFileName);
         }
     }
 
@@ -230,83 +194,31 @@ public class ModelCopy extends Task {
     }
     
     @Override
-    public void execute() throws BuildException {
-        // Print debug data
-        System.out.println("Source folder: " + sourceFolder.getAbsolutePath());
-        System.out.println("Destination folder: " + destinationFolder.getAbsolutePath());
-        System.out.println("Main model: " + mainProject);
-        
-        // Setup
-        System.out.println("Prepare destionation folder: " + destinationFolder.getAbsolutePath());
-        boolean createFolder = false;
-        if (destinationFolder.exists() && allowDestDeletion) {
-            try {
-                FileUtils.deleteDirectory(destinationFolder);
-                createFolder = true;
-            } catch (IOException e) {
-                throw new BuildException("Destination folder \"" + destinationFolder.getAbsolutePath()
-                    + "\" exists and could not be deleted. Cause: " + e.getMessage());
-            }
-        } else if (destinationFolder.exists() && !allowDestDeletion && destinationFolder.listFiles().length > 0) {
-            throw new BuildException("Destination folder \"" + destinationFolder.getAbsolutePath() + "\" exists and "
-                + "is not empty.");
-        }
-        if (createFolder && !destinationFolder.mkdirs()) {
-            throw new BuildException("Destination folder \"" + destinationFolder.getAbsolutePath()
-                + "\" could not be created.");
-        }
-        
+    public void doModelOperation() throws BuildException {
         // Copy and filter
         try {
-            System.out.println("Start creation of copy");
+            debugMessage("Start creation of copy");
             copy();
-            System.out.println("Finished creation of copy");
+            debugMessage("Finished creation of copy");
         } catch (Exception e) {
             try {
-                FileUtils.deleteDirectory(destinationFolder);
+                FileUtils.deleteDirectory(getDestinationFolder());
             } catch (IOException exc) {
                
             }
             
             if (e instanceof IOException) {
-                throw new BuildException("IOError during copying models from \"" + sourceFolder.getAbsolutePath()
-                    + "\" to \"" + destinationFolder.getAbsolutePath() + "\". Cause: " + e.getMessage());
+                throw new BuildException("IOError during copying models from \"" + getSourceFolder().getAbsolutePath()
+                    + "\" to \"" + getDestinationFolder().getAbsolutePath() + "\". Cause: " + e.getMessage());
             } else if (e instanceof ModelManagementException) {
                 throw new BuildException("Modelloadingerror during copying models from \""
-                    + sourceFolder.getAbsolutePath() + "\" to \"" + destinationFolder.getAbsolutePath()
+                    + getSourceFolder().getAbsolutePath() + "\" to \"" + getDestinationFolder().getAbsolutePath()
                     + "\". Cause: " + e.getMessage());
             } else {
                 throw new BuildException("Unspecified error during copying models from \""
-                    + sourceFolder.getAbsolutePath() + "\" to \"" + destinationFolder.getAbsolutePath() + "\". Cause: " + e.getMessage());
+                    + getSourceFolder().getAbsolutePath() + "\" to \"" + getDestinationFolder().getAbsolutePath()
+                    + "\". Cause: " + e.getMessage());
             }
-        }
-        
-        // Validate result
-        System.out.println("Validate copy");
-        try {
-            VarModel.INSTANCE.locations().removeLocation(sourceFolder, ProgressObserver.NO_OBSERVER);
-            VarModel.INSTANCE.locations().addLocation(destinationFolder, ProgressObserver.NO_OBSERVER);
-            Project copiedProject = ProjectUtilities.loadProject(mainProject);
-            
-            IvmlValidationVisitor validator = new IvmlValidationVisitor();
-            copiedProject.accept(validator);
-            if (validator.getErrorCount() > 0) {
-                StringBuffer errMsg = new StringBuffer("Project \"");
-                errMsg.append(mainProject);
-                errMsg.append("\" was copied, but the result contains inconsitencies:");
-                for (int i = 0; i < validator.getMessageCount(); i++) {
-                    ValidationMessage msg = validator.getMessage(i);
-                    errMsg.append("\n - ");
-                    errMsg.append(msg.getStatus().name());
-                    errMsg.append(": ");
-                    errMsg.append(msg.getDescription());
-                }
-                throw new BuildException(errMsg.toString());
-            }
-        } catch (ModelManagementException e) {
-            throw new BuildException("Copied Project contains errors: " + e.getMessage());
-        } catch (IOException e) {
-            throw new BuildException("Copied Project contains IO errors: " + e.getMessage());
         }
     }
 }
