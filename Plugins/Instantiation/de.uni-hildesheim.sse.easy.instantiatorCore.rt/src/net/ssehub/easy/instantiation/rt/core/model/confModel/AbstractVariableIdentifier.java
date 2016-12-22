@@ -17,6 +17,8 @@ package net.ssehub.easy.instantiation.rt.core.model.confModel;
 
 import java.util.Iterator;
 
+import net.ssehub.easy.varModel.confModel.AssignmentState;
+import net.ssehub.easy.varModel.confModel.ConfigurationException;
 import net.ssehub.easy.varModel.confModel.IDecisionVariable;
 import net.ssehub.easy.varModel.model.values.Value;
 import net.ssehub.easy.varModel.model.values.ValueDoesNotMatchTypeException;
@@ -79,4 +81,14 @@ public abstract class AbstractVariableIdentifier<V> {
     protected abstract Value toIVMLValue(IDecisionVariable trgVariable, Object oValue)
         throws ValueDoesNotMatchTypeException;
 
+    /**
+     * Assigns the given value to the specified variable. Maybe overwritten by sub classes.
+     * @param variable The variable for which the value shall be assigned to.
+     * @param value The new value to be assigned.
+     * @throws ConfigurationException ConfigurationException in case that the types of 
+     *   {@link #getDeclaration()} and <code>value</code> do not comply
+     */
+    protected void assignValue(IDecisionVariable variable, Value value) throws ConfigurationException {
+        variable.setValue(value, AssignmentState.ASSIGNED);
+    }
 }

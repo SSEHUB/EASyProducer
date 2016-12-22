@@ -20,7 +20,6 @@ import java.util.Iterator;
 import java.util.Map;
 
 import net.ssehub.easy.instantiation.rt.core.model.rtVil.Bundle;
-import net.ssehub.easy.varModel.confModel.AssignmentState;
 import net.ssehub.easy.varModel.confModel.Configuration;
 import net.ssehub.easy.varModel.confModel.ConfigurationException;
 import net.ssehub.easy.varModel.confModel.IDecisionVariable;
@@ -142,7 +141,7 @@ public class AdaptiveConfiguration<V> {
         } else {
             try {
                 Value value = identifier.toIVMLValue(variable, oValue);
-                variable.setValue(value, AssignmentState.ASSIGNED);
+                identifier.assignValue(variable, value);
             } catch (ValueDoesNotMatchTypeException e) {
                 // Do nothing, ignore Value and log error
                 Bundle.getLogger(AdaptiveConfiguration.class).exception(e);
