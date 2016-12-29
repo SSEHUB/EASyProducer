@@ -228,7 +228,7 @@ public class ReflectionOperationDescriptor extends OperationDescriptor implement
                     if (e.getCause() instanceof NullPointerException) {
                         result = null; // fail-termination-semantics
                     } else {
-                        throw new VilException(composeExceptionMessage(e.getCause(), args), 
+                        throw new VilException(composeExceptionMessage(e.getCause(), args), e.getCause(), 
                             VilException.ID_EXECUTION_ERROR);
                     }
                 }
