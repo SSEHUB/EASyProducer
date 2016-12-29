@@ -23,10 +23,8 @@ import net.ssehub.easy.instantiation.rt.core.model.rtVil.Bundle;
 import net.ssehub.easy.varModel.confModel.Configuration;
 import net.ssehub.easy.varModel.confModel.ConfigurationException;
 import net.ssehub.easy.varModel.confModel.IDecisionVariable;
-import net.ssehub.easy.varModel.model.Project;
 import net.ssehub.easy.varModel.model.values.Value;
 import net.ssehub.easy.varModel.model.values.ValueDoesNotMatchTypeException;
-import net.ssehub.easy.varModel.model.values.ValueFactory;
 
 /**
  * A configuration, which can store additional temporary values. These values are ignored by the configuration and

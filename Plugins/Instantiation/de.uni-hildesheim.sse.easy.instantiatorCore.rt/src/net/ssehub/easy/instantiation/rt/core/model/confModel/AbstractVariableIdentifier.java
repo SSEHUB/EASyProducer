@@ -89,6 +89,16 @@ public abstract class AbstractVariableIdentifier<V> {
      *   {@link #getDeclaration()} and <code>value</code> do not comply
      */
     protected void assignValue(IDecisionVariable variable, Value value) throws ConfigurationException {
-        variable.setValue(value, AssignmentState.ASSIGNED);
+        variable.setValue(value, getAssignmentState());
     }
+    
+    /**
+     * Returns the assignment state to be used.
+     * 
+     * @return the assignment state
+     */
+    protected AssignmentState getAssignmentState() {
+        return AssignmentState.ASSIGNED;
+    }
+    
 }
