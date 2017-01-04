@@ -52,4 +52,13 @@ public class VelocityContextItem {
     Object getValue() {
         return value;
     }
+    
+    /**
+     * Returns {@link #getValue()} as String. This facilitates the direct usage of the variable inside the code
+     * to insert its value as expected by an pre-processor.
+     */
+    @Override
+    public final String toString() {
+        return getValue().toString();
+    }
 }

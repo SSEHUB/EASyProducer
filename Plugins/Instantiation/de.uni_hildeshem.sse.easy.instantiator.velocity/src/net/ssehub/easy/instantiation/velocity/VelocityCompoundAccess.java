@@ -72,9 +72,6 @@ public class VelocityCompoundAccess extends VelocityContextItem {
         return getByName(slotName);
     }
     
-    @Override
-    public String toString() {
-        return getValue().toString();
-    }
+    
 
 }
