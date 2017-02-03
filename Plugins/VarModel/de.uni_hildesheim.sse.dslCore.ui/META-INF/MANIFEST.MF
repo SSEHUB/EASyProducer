@@ -16,5 +16,6 @@ Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Bundle-ActivationPolicy: lazy
 Export-Package: net.ssehub.easy.dslCore.ui,
  net.ssehub.easy.dslCore.ui.editors,
+ net.ssehub.easy.dslCore.ui.hyperlinking,
  net.ssehub.easy.dslCore.ui.listeners,
  net.ssehub.easy.dslCore.ui.wizards
