@@ -6,9 +6,7 @@ import java.util.List;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.xtext.nodemodel.ICompositeNode;
-import org.eclipse.xtext.parser.IParseResult;
 import org.eclipse.xtext.resource.XtextResource;
-import org.eclipse.xtext.util.concurrent.IUnitOfWork;
 
 import de.uni_hildesheim.sse.ivml.BasicType;
 import de.uni_hildesheim.sse.ivml.DerivedType;
@@ -26,11 +24,13 @@ import de.uni_hildesheim.sse.ivml.impl.VariabilityUnitImpl;
 import de.uni_hildesheim.sse.translation.Utils;
 import de.uni_hildesheim.sse.translation.Utils.SplitResult;
 import de.uni_hildesheim.sse.ui.XtextEditor;
+import net.ssehub.easy.dslCore.ui.editors.CommonXtextEditor;
+import net.ssehub.easy.dslCore.ui.hyperlinking.AbstractEcoreModelQuery;
 import net.ssehub.easy.varModel.management.VarModel;
 import net.ssehub.easy.varModel.model.filter.ModelElementTypeFinder.ClassType;
 import net.ssehub.easy.varModel.model.filter.ModelElementTypeFinder.ModelElementDescription;
 
-public class EcoreModelQuery {
+public class EcoreModelQuery extends AbstractEcoreModelQuery<Project, ModelElementDescription> {
 	
 	/**
 	 * The instance of this {@link EcoreModelQuery} for retrieving elements from an
@@ -39,74 +39,10 @@ public class EcoreModelQuery {
 	public static final EcoreModelQuery INSTANCE = new EcoreModelQuery();
 	
 	/**
-	 * Stores the current {@link XtextResource} that is the basis for parsing the Ecore-model
-	 * which in turn is used for retrieving elements from.
-	 * 
-	 * This attribute is used to avoid parsing the same {@link XtextResource} multiple times.
-	 */
-	private XtextResource currentResource;
-	
-	/**
-	 * Stores the current {@link XtextEditor} from which the {@link XtextResource} is used as a basis
-	 * for parsing the Ecore-model which in turn is used for retrieving elements from.
-	 * 
-	 * This attribute is used to avoid parsing the same {@link XtextResource} multiple times.
-	 */
-	private XtextEditor currentEditor;
-	
-	/**
 	 * Constructs an instance of this {@link EcoreModelQuery}.
 	 */
 	private EcoreModelQuery() {}
-	 
-	/**
-	 * Returns the {@link XtextResource} currently displayed by the given editor.
-	 * 
-	 * This code for reading the resource is copied from: http://code.google.com/a/eclipselabs.org/p/vclipse/source/browse/
-	 * trunk/plugins/org.vclipse.base.ui/src/org/vclipse/base/ui/util/EditorUtilsExtensions.java?r=1498
-	 * 
-	 * @param ivmlEditor the {@link XtextEditor} from which the resource should be retrieved
-	 * @return the {@link XtextResource} currently displayed by the given editor. May return <code>null</code> if the
-	 * given editor is <code>null</code> or the resource of that editor cannot be read.
-	 */
-    private XtextResource getXtextResource(XtextEditor ivmlEditor) {
-    	XtextResource editorResource = null;
-    	if (ivmlEditor != null && ivmlEditor.getDocument() != null) {
-    		if (ivmlEditor.equals(currentEditor)) {
-    			editorResource = currentResource;
-    		} else {
-    			currentEditor = ivmlEditor;
-    			currentResource = (XtextResource)ivmlEditor.getDocument().readOnly(new IUnitOfWork<EObject, XtextResource>(){
-    				@Override
-    				public EObject exec(XtextResource resource) throws Exception {
-    					return resource.getParseResult().getRootASTElement();
-    				}
-    			}).eResource();
-    			editorResource = currentResource;
-    		}
-    	}
-    	
-    	return editorResource;
-    }
 
-	/**
-	 * Returns the {@link ICompositeNode} of the Ecore-model that represent the root node.
-	 * 
-	 * @param resource the {@link XtextResource} from which the root node should be retrieved
-	 * @return the {@link ICompositeNode} of the Ecore-model that represent the root node. May return
-	 * <code>null</code> if the given resource is <code>null</code> or cannot be parsed
-	 */
-	protected ICompositeNode getRootNode(XtextResource resource) {
-		ICompositeNode rootNode = null;
-		if (resource != null) {
-			IParseResult resourceParseResult = resource.getParseResult();
-			if (resourceParseResult != null && resourceParseResult.getRootNode() != null) {
-				rootNode = resourceParseResult.getRootNode();
-			}
-		}
-		return rootNode;
-	}
-	
 	/**
 	 * Returns the {@link Project} in the given resource (IVML-file).
 	 * 
@@ -138,7 +74,7 @@ public class EcoreModelQuery {
 	 * @return the {@link Project} in the given resource (IVML-file). May return <code>null</code> if the
 	 * given root node is <code>null</code>, or there is no {@link Project} in that file
 	 */
-	protected Project getProject(ICompositeNode rootNode) {
+	public Project getProject(ICompositeNode rootNode) {
 		Project ivmlProject = null;
 		if (rootNode != null && rootNode.getSemanticElement() != null && rootNode.getSemanticElement() instanceof VariabilityUnitImpl) {
 			VariabilityUnitImpl varUnitImpl = (VariabilityUnitImpl) rootNode.getSemanticElement();
@@ -164,7 +100,7 @@ public class EcoreModelQuery {
 	 * @return the {@link EObject} that matches the element described by the given {@link ModelElementDescription}. May
 	 * return <code>null</code> if the element could not be found
 	 */
-	protected EObject getEcoreElement(XtextEditor ivmlEditor, ModelElementDescription elementDescription) {
+	public EObject getEcoreElement(CommonXtextEditor<?, Project> ivmlEditor, ModelElementDescription elementDescription) {
 		EObject desiredElement = null;
 //		System.out.println("Search for: " + elementDescription.getElementType() + " " + elementDescription.getElementName() + " of class " + elementDescription.getElementClass());
 		if (ivmlEditor != null && notEmpty(elementDescription)) {
@@ -553,25 +489,6 @@ public class EcoreModelQuery {
 		return result;
 	}
 	
-	/**
-	 * Checks whether the given {@link EList} is not <code>null</code> or empty.
-	 * 
-	 * @param eListToCheck the {@link EList} to check
-	 * @return <code>true</code> if the given {@link EList} is not <code>null</code> or empty. <code>False</code> otherwise.
-	 */
-	private boolean notEmpty(EList<?> eListToCheck) {
-		return eListToCheck != null && !eListToCheck.isEmpty();
-	}
-	
-	/**
-	 * Checks whether the given {@link List} is not <code>null</code> or empty.
-	 * 
-	 * @param listToCheck the {@link List} to check
-	 * @return <code>true</code> if the given {@link List} is not <code>null</code> or empty. <code>False</code> otherwise.
-	 */
-	private boolean notEmpty(List<?> listToCheck) {
-		return listToCheck != null && !listToCheck.isEmpty();
-	}
 	
 	/**
 	 * Checks whether the given {@link ModelElementDescription} is not <code>null</code> and all information
@@ -588,13 +505,10 @@ public class EcoreModelQuery {
 				&& elementDescription.getElementClass() != null;
 	}
 	
-	/**
-	 * Checks whether the given {@link String} is not <code>null</code> or empty.
-	 * 
-	 * @param stringToCheck the {@link String} to check
-	 * @return <code>true</code> if the given {@link String} is not <code>null</code> or empty. <code>False</code> otherwise.
-	 */
-	private boolean notEmpty(String stringToCheck) {
-		return stringToCheck != null && !stringToCheck.isEmpty();
-	}
+
+    @Override
+    public String getName(Project project) {
+        return project.getName();
+    }
+    
 }
