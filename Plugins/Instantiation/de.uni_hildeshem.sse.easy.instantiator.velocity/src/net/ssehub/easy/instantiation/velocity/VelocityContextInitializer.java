@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2015 University of Hildesheim, Software Systems Engineering
+ * Copyright 2009-2017 University of Hildesheim, Software Systems Engineering
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -125,7 +125,7 @@ class VelocityContextInitializer implements IDatatypeVisitor {
         for (int i = 0, end = conValue.getElementSize(); i < end; i++) {
             velocityValues.add(conValue.getElement(i).getValue());
         }
-        values.add(new VelocityContextItem(variableName.toString(), velocityValues));
+        values.add(new VelocityContainerItem(variableName.toString(), velocityValues));
     }
     
     @Override
