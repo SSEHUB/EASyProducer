@@ -1,5 +1,6 @@
 package net.ssehub.easy.instantiation.core.model.templateModel;
 
+import net.ssehub.easy.instantiation.core.model.common.ILanguageElement;
 import net.ssehub.easy.instantiation.core.model.common.VilException;
 import net.ssehub.easy.instantiation.core.model.vilTypes.TypeDescriptor;
 import net.ssehub.easy.instantiation.core.model.vilTypes.TypeRegistry;
@@ -9,7 +10,7 @@ import net.ssehub.easy.instantiation.core.model.vilTypes.TypeRegistry;
  * 
  * @author Holger Eichelberger
  */
-public class TemplateBlock implements ITemplateElement {
+public class TemplateBlock extends AbstractTemplateElement {
 
     private ITemplateElement[] body;
 
@@ -73,6 +74,19 @@ public class TemplateBlock implements ITemplateElement {
             result = body[body.length - 1].inferType();
         }
         return result;
+    }
+
+    @Override
+    protected void setParent(ILanguageElement parent) {
+        super.setParent(parent);
+        if (null != body) {
+            for (int b = 0; b < getBodyElementCount(); b++) {
+                ITemplateLangElement elt = getBodyElement(b);
+                if (elt instanceof AbstractTemplateElement) {
+                    ((AbstractTemplateElement) elt).setParent(this);
+                }
+            }
+        }
     }
 
 }

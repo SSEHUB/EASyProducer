@@ -2,6 +2,7 @@ package net.ssehub.easy.instantiation.core.model.templateModel;
 
 import java.util.List;
 
+import net.ssehub.easy.instantiation.core.model.common.ILanguageElement;
 import net.ssehub.easy.instantiation.core.model.common.VilException;
 import net.ssehub.easy.instantiation.core.model.expressions.Expression;
 import net.ssehub.easy.instantiation.core.model.vilTypes.TypeDescriptor;
@@ -12,7 +13,7 @@ import net.ssehub.easy.instantiation.core.model.vilTypes.TypeRegistry;
  * 
  * @author Holger Eichelberger
  */
-public class SwitchStatement implements ITemplateElement {
+public class SwitchStatement extends AbstractTemplateElement {
     
     private Expression switchExpression;
     private Alternative[] alternatives;
@@ -210,6 +211,12 @@ public class SwitchStatement implements ITemplateElement {
             }
         }
         return result;
+    }
+
+    @Override
+    protected void setParent(ILanguageElement parent) {
+        super.setParent(parent);
+        implicitVar.setParent(this);
     }
 
 }

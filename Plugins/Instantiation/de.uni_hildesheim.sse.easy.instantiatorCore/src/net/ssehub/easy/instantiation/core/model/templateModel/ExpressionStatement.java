@@ -1,5 +1,6 @@
 package net.ssehub.easy.instantiation.core.model.templateModel;
 
+import net.ssehub.easy.instantiation.core.model.common.ILanguageElement;
 import net.ssehub.easy.instantiation.core.model.common.VilException;
 import net.ssehub.easy.instantiation.core.model.expressions.Expression;
 import net.ssehub.easy.instantiation.core.model.vilTypes.TypeDescriptor;
@@ -13,13 +14,17 @@ public class ExpressionStatement
     extends net.ssehub.easy.instantiation.core.model.common.ExpressionStatement 
     implements ITemplateElement {
 
+    private ILanguageElement parent;
+    
     /**
      * Creates an expression statement.
      * 
      * @param expression the expression
+     * @param parent the parent template
      */
-    public ExpressionStatement(Expression expression) {
+    public ExpressionStatement(Expression expression, ILanguageElement parent) {
         super(expression);
+        this.parent = parent;
     }
     
     @Override
@@ -35,6 +40,11 @@ public class ExpressionStatement
     @Override
     public TypeDescriptor<?> inferType() throws VilException {
         return getExpression().inferType();
+    }
+
+    @Override
+    public ILanguageElement getParent() {
+        return parent;
     }
 
 }

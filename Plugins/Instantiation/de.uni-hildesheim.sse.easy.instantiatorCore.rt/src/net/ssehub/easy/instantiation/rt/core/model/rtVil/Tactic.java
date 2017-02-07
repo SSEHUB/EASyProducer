@@ -21,6 +21,7 @@ import net.ssehub.easy.instantiation.core.model.buildlangModel.Rule;
 import net.ssehub.easy.instantiation.core.model.buildlangModel.RuleDescriptor;
 import net.ssehub.easy.instantiation.core.model.buildlangModel.RuleExecutionResult;
 import net.ssehub.easy.instantiation.core.model.buildlangModel.VariableDeclaration;
+import net.ssehub.easy.instantiation.core.model.common.ILanguageElement;
 import net.ssehub.easy.instantiation.core.model.common.VilException;
 import net.ssehub.easy.instantiation.core.model.vilTypes.TypeDescriptor;
 
@@ -98,6 +99,11 @@ public class Tactic extends Rule implements IRtVilConcept {
     @Override
     public String toString() {
         return "Tactic " + getSignature();
+    }
+    
+    @Override
+    protected void setParent(ILanguageElement parent) {
+        super.setParent(parent);
     }
 
 }

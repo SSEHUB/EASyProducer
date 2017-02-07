@@ -25,6 +25,7 @@ import net.ssehub.easy.instantiation.core.model.buildlangModel.Rule;
 import net.ssehub.easy.instantiation.core.model.buildlangModel.RuleDescriptor;
 import net.ssehub.easy.instantiation.core.model.buildlangModel.RuleExecutionResult;
 import net.ssehub.easy.instantiation.core.model.buildlangModel.VariableDeclaration;
+import net.ssehub.easy.instantiation.core.model.common.ILanguageElement;
 import net.ssehub.easy.instantiation.core.model.common.IVariableDeclarationReceiver;
 import net.ssehub.easy.instantiation.core.model.common.VilException;
 import net.ssehub.easy.instantiation.core.model.expressions.Expression;
@@ -102,6 +103,7 @@ public class Strategy extends Rule implements IVariableDeclarationReceiver<Varia
             declarations = new ArrayList<VariableDeclaration>();
         }
         declarations.add(var);
+        setParentFor(var);
     }
     
     /**
@@ -233,5 +235,13 @@ public class Strategy extends Rule implements IVariableDeclarationReceiver<Varia
     public String toString() {
         return "Strategy " + getSignature();
     }
-    
+
+    @Override
+    protected void setParent(ILanguageElement parent) {
+        super.setParent(parent);
+        for (int d = 0; d < getVariableDeclarationCount(); d++) {
+            setParentFor(getVariableDeclaration(d));
+        }
+    }
+
 }

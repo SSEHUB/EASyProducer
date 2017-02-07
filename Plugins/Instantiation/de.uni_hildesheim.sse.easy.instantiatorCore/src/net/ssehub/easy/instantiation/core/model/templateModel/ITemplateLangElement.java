@@ -1,5 +1,6 @@
 package net.ssehub.easy.instantiation.core.model.templateModel;
 
+import net.ssehub.easy.instantiation.core.model.common.ILanguageElement;
 import net.ssehub.easy.instantiation.core.model.common.VilException;
 
 /**
@@ -7,7 +8,7 @@ import net.ssehub.easy.instantiation.core.model.common.VilException;
  * 
  * @author Holger Eichelberger
  */
-public interface ITemplateLangElement {
+public interface ITemplateLangElement extends ILanguageElement {
 
     /**
      * Accepts the visitor for visiting.
@@ -17,5 +18,5 @@ public interface ITemplateLangElement {
      * @throws VilException in case that visiting fails (e.g., execution)
      */
     public Object accept(IVisitor visitor) throws VilException;
-
+    
 }

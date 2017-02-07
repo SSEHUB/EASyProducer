@@ -163,24 +163,16 @@ public class RuleDescriptor {
      * Registers the variables in <code>resolver</code> if applicable.
      * 
      * @param side the side to register variables for (LHS, RHS)
-     * @param resolver the resolver instance
+     * @param res the resolver instance
      * @param names a mapping of names and a related counter how often the variable name (without number) has been used
      *    so far in this rule head
      * @throws VilException in case that resolving one of the expressions fails
      */
-    private void registerVariables(Side side, Resolver resolver, Map<String, Integer> names) 
-        throws VilException {
+    private void registerVariables(Side side, Resolver res, Map<String, Integer> names) throws VilException {
         VariableDeclaration[] result;
         VariableDeclaration[] matchResult;
-        String predefined;
-        String predefinedAlias;
-        if (Side.LHS == side) {
-            predefined = "LHS";
-            predefinedAlias = "TO";
-        } else {
-            predefined = "RHS";
-            predefinedAlias = "FROM";
-        }
+        String predefined = Side.LHS == side ? "LHS" : "RHS";
+        String predefinedAlias = Side.LHS == side ? "TO" : "FROM";
         List<VariableDeclaration> vars = null;
         List<VariableDeclaration> matchVars = null; // match vars only in front if needed
         AbstractRuleMatchExpression[] matches = getRuleMatches(side);
@@ -197,16 +189,16 @@ public class RuleDescriptor {
                     nameAlias += m;
                 }
                 if (Side.RHS == side) { // register the match expression itself
-                    VariableDeclaration matchDecl 
-                        = new VariableDeclaration(name + MATCH_VAR_POSTFIX, matches[m].inferType());
+                    VariableDeclaration matchDecl = new VariableDeclaration(name + MATCH_VAR_POSTFIX, 
+                        matches[m].inferType());
                     matchVars.add(matchDecl);
-                    resolver.add(matchDecl);
-                    resolver.addAlias(nameAlias + "_" + MATCH_VAR_POSTFIX, matchDecl);
+                    res.add(matchDecl);
+                    res.addAlias(nameAlias + "_" + MATCH_VAR_POSTFIX, matchDecl);
                 } // register the iterator expression
                 VariableDeclaration varDecl = new VariableDeclaration(name, matches[m].getEntryType());
                 vars.add(varDecl);
-                resolver.add(varDecl);
-                resolver.addAlias(nameAlias, varDecl);
+                res.add(varDecl);
+                res.addAlias(nameAlias, varDecl);
             }
         }
         RuleCallExpression[] calls = getRuleCalls(side);
@@ -226,7 +218,7 @@ public class RuleDescriptor {
                 }
                 VariableDeclaration varDecl = new VariableDeclaration(name, call.inferType());
                 vars.add(varDecl);
-                resolver.add(varDecl);
+                res.add(varDecl);
             }            
         }
         result = toArray(vars);

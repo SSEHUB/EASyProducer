@@ -1,5 +1,6 @@
 package net.ssehub.easy.instantiation.core.model.templateModel;
 
+import net.ssehub.easy.instantiation.core.model.common.ILanguageElement;
 import net.ssehub.easy.instantiation.core.model.common.VilException;
 import net.ssehub.easy.instantiation.core.model.expressions.CompositeExpression;
 import net.ssehub.easy.instantiation.core.model.expressions.Expression;
@@ -11,7 +12,7 @@ import net.ssehub.easy.instantiation.core.model.vilTypes.TypeRegistry;
  * 
  * @author Holger Eichelberger
  */
-public class ContentStatement implements ITemplateElement {
+public class ContentStatement extends AbstractTemplateElement {
 
     private CompositeExpression content;
     private String terminal;
@@ -26,11 +27,12 @@ public class ContentStatement implements ITemplateElement {
      * @param indentExpression an optional integer expression determining the additional 
      *     indentation, e.g., in loops or recursions
      * @param printLineEnd whether a line end shall be emitted
+     * @param parent the parent language element
      * @throws VilException in case that the expression cannot be resolved or does not evaluate to an integer
      */
     public ContentStatement(CompositeExpression content, String terminal, Expression indentExpression, 
-        boolean printLineEnd) 
-        throws VilException {
+        boolean printLineEnd, ILanguageElement parent) throws VilException {
+        setParent(parent);
         this.printLineEnd = printLineEnd;
         this.content = content;
         this.terminal = terminal;

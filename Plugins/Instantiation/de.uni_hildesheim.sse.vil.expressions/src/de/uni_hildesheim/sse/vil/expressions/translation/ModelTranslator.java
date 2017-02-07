@@ -164,7 +164,7 @@ public abstract class ModelTranslator
                     error("Type name '" + name + "' already exists", def, 
                         ExpressionDslPackage.Literals.TYPE_DEF__NAME, ErrorCodes.NAME_CLASH);
                 }
-                Typedef typedef = new Typedef(name, type);
+                Typedef typedef = createTypedef(name, type);
                 receiver.addTypedef(typedef);
                 iter.remove();
             } catch (VilException e) {
@@ -177,8 +177,16 @@ public abstract class ModelTranslator
                 }
             }
         }        
-        
     }
+    
+    /**
+     * Creates a typdef object.
+     * 
+     * @param name the name of the typdef/alias
+     * @param type the the type
+     * @return the typedef
+     */
+    protected abstract Typedef createTypedef(String name, TypeDescriptor<?> type) throws VilException;
 
     /**
      * Processes all variable declarations considering dependencies and terminates with
@@ -289,13 +297,14 @@ public abstract class ModelTranslator
      * Resolves the parameters in <code>pList</code>.
      * 
      * @param pList the parameter list to be resolved
+     * @param resolver the resolver instance
      * @return the resolved parameters (may actually be less then in <code>pList</code> in case of name or type failures
      * @throws TranslatorException in case that a problem occurred
      */
-    protected I[] resolveParameters(ParameterList pList) throws TranslatorException {
+    protected I[] resolveParameters(ParameterList pList, R resolver) throws TranslatorException {
         I[] result;
         if (null != pList) {
-            result = resolveParameters(pList.getParam());
+            result = resolveParameters(pList.getParam(), resolver);
         } else {
             result = null;
         }
@@ -306,11 +315,12 @@ public abstract class ModelTranslator
      * Resolves the parameters in <code>parameters</code>.
      * 
      * @param parameters the parameters to be resolved
+     * @param resolver the resolver instance
      * @return the resolved parameters (may actually be less then in <code>pList</code> in case of name or type failures
      * @throws TranslatorException in case that a problem occurred
      */
-    protected I[] resolveParameters(EList<de.uni_hildesheim.sse.vil.expressions.expressionDsl.Parameter> parameters) 
-        throws TranslatorException {
+    protected I[] resolveParameters(EList<de.uni_hildesheim.sse.vil.expressions.expressionDsl.Parameter> parameters, 
+        R resolver) throws TranslatorException {
         I[] result;
         if (null != parameters) {
             List<I> tmp = new ArrayList<I>();
@@ -323,7 +333,8 @@ public abstract class ModelTranslator
                                 ExpressionDslPackage.Literals.PARAMETER__NAME, ErrorCodes.NAME_CLASH);
                         }
                     }
-                    tmp.add(getExpressionTranslator().createVariableDeclaration(p.getName(), type, false, null));
+                    tmp.add(getExpressionTranslator().createVariableDeclaration(p.getName(), type, false, 
+                        null, resolver));
                 }
             }
             result = createArray(tmp.size());

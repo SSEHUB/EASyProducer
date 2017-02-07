@@ -216,7 +216,7 @@ public class ExpressionCopyVisitor extends CopyVisitor implements IVisitor {
 
     @Override
     public Object visitTypedef(Typedef typedef) throws VilException {
-        return new Typedef(typedef.getName(), typedef.getType());
+        throw new VilException("not an expression", VilException.ID_INTERNAL);
     }
 
     @Override

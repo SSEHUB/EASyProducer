@@ -195,6 +195,22 @@ public class Script extends AbstractResolvableModel<VariableDeclaration, Script>
         this.rules = new ArrayList<Rule>();        
         this.parameters = null == descriptor ? null : descriptor.parameters;
         createImplicitVariables();
+        adjustParents();
+    }
+    
+    /**
+     * Adjusts the parents of contained elements.
+     */
+    private void adjustParents() {
+        for (int r = 0; r < rules.size(); r++) {
+            rules.get(r).setParent(this);
+        }
+        for (int p = 0; p < getParameterCount(); p++) {
+            getParameter(p).setParent(this);
+        }
+        for (int d = 0; d < getVariableDeclarationCount(); d++) {
+            getVariableDeclaration(d).setParent(this);
+        }
     }
     
     @Override
@@ -275,6 +291,7 @@ public class Script extends AbstractResolvableModel<VariableDeclaration, Script>
      */
     public void addRule(Rule rule) {
         rules.add(rule);
+        rule.setParent(this);
     }
     
     /**
@@ -293,6 +310,7 @@ public class Script extends AbstractResolvableModel<VariableDeclaration, Script>
      */
     public void addVariableDeclaration(VariableDeclaration varDecl) {
         declarations.add(varDecl);
+        varDecl.setParent(this);
     }
     
     /**

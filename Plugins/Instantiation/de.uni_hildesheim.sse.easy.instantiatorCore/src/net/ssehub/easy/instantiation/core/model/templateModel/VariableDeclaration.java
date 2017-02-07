@@ -1,5 +1,6 @@
 package net.ssehub.easy.instantiation.core.model.templateModel;
 
+import net.ssehub.easy.instantiation.core.model.common.ILanguageElement;
 import net.ssehub.easy.instantiation.core.model.common.VilException;
 import net.ssehub.easy.instantiation.core.model.expressions.Expression;
 import net.ssehub.easy.instantiation.core.model.expressions.IResolvable;
@@ -16,8 +17,10 @@ public class VariableDeclaration extends
     net.ssehub.easy.instantiation.core.model.common.VariableDeclaration 
     implements ITemplateLangElement, ITemplateElement, IResolvable {
     
+    private ILanguageElement parent;
+    
     /**
-     * Creates a new variable declaration.
+     * Creates a new variable declaration. Parent must be explicitly adjusted by parent instance.
      * 
      * @param name the name of the variable
      * @param type the type of the variable
@@ -52,6 +55,21 @@ public class VariableDeclaration extends
     @Override
     public TypeDescriptor<?> inferType() throws VilException {
         return TypeRegistry.voidType();
+    }
+
+    @Override
+    public ILanguageElement getParent() {
+        return parent;
+    }
+    
+    /**
+     * Changes the parent. Please override if children must be adjusted according.
+     * Shall be called only once per instance, but there is no limitation.
+     * 
+     * @param parent the parent
+     */
+    protected void setParent(ILanguageElement parent) {
+        this.parent = parent;
     }
 
 }

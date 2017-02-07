@@ -4,11 +4,13 @@
 package de.uni_hildesheim.sse.vil.templatelang.ui;
 
 import org.eclipse.ui.plugin.AbstractUIPlugin;
+import org.eclipse.xtext.ui.editor.hyperlinking.IHyperlinkHelper;
 import org.eclipse.xtext.ui.editor.syntaxcoloring.IHighlightingConfiguration;
 import org.eclipse.xtext.ui.editor.syntaxcoloring.ISemanticHighlightingCalculator;
 
 import de.uni_hildesheim.sse.vil.expressions.ui.highlighting.VilHighlightingCalculator;
 import de.uni_hildesheim.sse.vil.expressions.ui.highlighting.VilHighlightingConfiguration;
+import de.uni_hildesheim.sse.vil.templatelang.ui.hyperlinking.VtlHyperlinkHelper;
 
 /**
  * Use this class to register components to be used within the IDE.
@@ -36,4 +38,15 @@ public class TemplateLangUiModule extends de.uni_hildesheim.sse.vil.templatelang
     public Class<? extends ISemanticHighlightingCalculator> bindISemanticHighlightingCalculator(){
         return VilHighlightingCalculator.class;   
     }
+    
+    /**
+     * Binds the custom VTL hyperlink helper for the creation of the <code>com.google.inject.Bindery</code>.
+     * 
+     * This enables the creation of hyperlinks for VTL-elements in an VTL-file and the custom
+     * reaction on selecting these Hyperlinks (or pressing F3), e.g. showing the element's declaration.
+     */
+    public Class<? extends IHyperlinkHelper> bindIHyperlinkHelper() {
+        return VtlHyperlinkHelper.class;
+    }
+
 }

@@ -1,5 +1,6 @@
 package net.ssehub.easy.instantiation.core.model.buildlangModel;
 
+import net.ssehub.easy.instantiation.core.model.common.ILanguageElement;
 import net.ssehub.easy.instantiation.core.model.common.VilException;
 import net.ssehub.easy.instantiation.core.model.expressions.Expression;
 
@@ -11,6 +12,8 @@ import net.ssehub.easy.instantiation.core.model.expressions.Expression;
 public class ExpressionStatement 
     extends net.ssehub.easy.instantiation.core.model.common.ExpressionStatement implements IRuleElement {
 
+    private ILanguageElement parent;
+    
     /**
      * Creates an expression statement.
      * 
@@ -23,6 +26,20 @@ public class ExpressionStatement
     @Override
     public Object accept(IVisitor visitor) throws VilException {
         return accept((net.ssehub.easy.instantiation.core.model.common.IVisitor) visitor);
+    }
+
+    /**
+     * Changes the parent.
+     * 
+     * @param parent the new parent
+     */
+    protected void setParent(ILanguageElement parent) {
+        this.parent = parent;
+    }
+    
+    @Override
+    public ILanguageElement getParent() {
+        return parent;
     }
 
 }

@@ -1,12 +1,13 @@
 package net.ssehub.easy.instantiation.core.model.buildlangModel;
 
+import net.ssehub.easy.instantiation.core.model.common.ILanguageElement;
 import net.ssehub.easy.instantiation.core.model.common.VilException;
 import net.ssehub.easy.instantiation.core.model.expressions.Expression;
 import net.ssehub.easy.instantiation.core.model.expressions.IResolvable;
 import net.ssehub.easy.instantiation.core.model.vilTypes.TypeDescriptor;
 
 /**
- * Represents a variable declaration.
+ * Represents a variable declaration. Parent instances are responsible for setting the right parent.
  * 
  * @author Christian Kröher
  * @author Holger Eichelberger
@@ -14,6 +15,8 @@ import net.ssehub.easy.instantiation.core.model.vilTypes.TypeDescriptor;
 public class VariableDeclaration 
     extends net.ssehub.easy.instantiation.core.model.common.VariableDeclaration
     implements IBuildlangElement, IRuleElement, IResolvable {
+    
+    private ILanguageElement parent;
     
     /**
      * Creates a new variable declaration.
@@ -41,6 +44,21 @@ public class VariableDeclaration
     @Override
     public Object accept(IVisitor visitor) throws VilException {
         return accept((net.ssehub.easy.instantiation.core.model.common.IVisitor) visitor);
+    }
+
+    @Override
+    public ILanguageElement getParent() {
+        return parent;
+    }
+    
+    /**
+     * Changes the parent. Please override if children must be adjusted according.
+     * Shall be called only once per instance, but there is no limitation.
+     * 
+     * @param parent the parent
+     */
+    protected void setParent(ILanguageElement parent) {
+        this.parent = parent;
     }
         
 }

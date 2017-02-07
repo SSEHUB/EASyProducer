@@ -1,5 +1,6 @@
 package net.ssehub.easy.instantiation.core.model.templateModel;
 
+import net.ssehub.easy.instantiation.core.model.common.ILanguageElement;
 import net.ssehub.easy.instantiation.core.model.common.IResolvableOperation;
 import net.ssehub.easy.instantiation.core.model.common.VilException;
 import net.ssehub.easy.instantiation.core.model.vilTypes.IMetaType;
@@ -37,6 +38,7 @@ public class Def extends TemplateBlock implements ITemplateLangElement, IResolva
         this.name = name;
         this.param = param;
         this.specifiedType = specifiedType;
+        setParent(this); // propagate parent
     }
     
     /**
@@ -194,4 +196,13 @@ public class Def extends TemplateBlock implements ITemplateLangElement, IResolva
         
         return result.toString();
     }
+
+    @Override
+    protected void setParent(ILanguageElement parent) {
+        super.setParent(parent);
+        for (int p = 0; p < getParameterCount(); p++) {
+            getParameter(p).setParent(this);
+        }
+    }
+    
 }

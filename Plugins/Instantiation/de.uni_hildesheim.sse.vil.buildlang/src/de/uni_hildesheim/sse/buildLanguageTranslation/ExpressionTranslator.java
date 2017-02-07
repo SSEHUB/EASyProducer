@@ -411,7 +411,7 @@ public class ExpressionTranslator
     }
 
     @Override
-    protected ExpressionStatement createExpressionStatement(Expression expression) {
+    protected ExpressionStatement createExpressionStatement(Expression expression, Resolver resolver) {
         return new ExpressionStatement(expression);
     }
 
@@ -428,7 +428,7 @@ public class ExpressionTranslator
         throws TranslatorException {
         ExpressionStatement result;
         if (null != expr.getAlt()) {
-            result = createExpressionStatement(processAlternative(expr.getAlt(), resolver));
+            result = createExpressionStatement(processAlternative(expr.getAlt(), resolver), resolver);
         } else {
             result = super.processExpressionStatement(expr, resolver);
         }
@@ -578,7 +578,7 @@ public class ExpressionTranslator
 
     @Override
     protected VariableDeclaration createVariableDeclaration(String name, TypeDescriptor<?> type,
-        boolean isConstant, Expression expression) {
+        boolean isConstant, Expression expression, Resolver resolver) {
         return new VariableDeclaration(name, type, isConstant, expression);
     }
 

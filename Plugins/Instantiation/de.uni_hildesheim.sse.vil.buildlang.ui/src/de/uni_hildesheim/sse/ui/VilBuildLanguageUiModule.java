@@ -4,9 +4,11 @@
 package de.uni_hildesheim.sse.ui;
 
 import org.eclipse.ui.plugin.AbstractUIPlugin;
+import org.eclipse.xtext.ui.editor.hyperlinking.IHyperlinkHelper;
 import org.eclipse.xtext.ui.editor.syntaxcoloring.IHighlightingConfiguration;
 import org.eclipse.xtext.ui.editor.syntaxcoloring.ISemanticHighlightingCalculator;
 
+import de.uni_hildesheim.sse.ui.hyperlinking.VilHyperlinkHelper;
 import de.uni_hildesheim.sse.vil.expressions.ui.highlighting.VilHighlightingCalculator;
 import de.uni_hildesheim.sse.vil.expressions.ui.highlighting.VilHighlightingConfiguration;
 
@@ -37,4 +39,15 @@ public class VilBuildLanguageUiModule extends de.uni_hildesheim.sse.ui.AbstractV
 	public Class<? extends ISemanticHighlightingCalculator> bindISemanticHighlightingCalculator(){
         return VilHighlightingCalculator.class;   
     }
+
+    /**
+     * Binds the custom VIL hyperlink helper for the creation of the <code>com.google.inject.Bindery</code>.
+     * 
+     * This enables the creation of hyperlinks for VIL-elements in an VIL-file and the custom
+     * reaction on selecting these Hyperlinks (or pressing F3), e.g. showing the element's declaration.
+     */
+    public Class<? extends IHyperlinkHelper> bindIHyperlinkHelper() {
+        return VilHyperlinkHelper.class;
+    }
+
 }

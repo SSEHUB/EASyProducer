@@ -32,7 +32,7 @@ public class Utils {
      * @return the restriction object
      * @throws RestrictionEvaluationException in case of expression problems
      */
-    public static ExpressionVersionRestriction createSingleRestriction(Object parent, String operation, 
+    public static ExpressionVersionRestriction createSingleRestriction(Script parent, String operation, 
         Version version) throws RestrictionEvaluationException {
         try {
             TypeDescriptor<?> versionType = TypeRegistry.versionType();

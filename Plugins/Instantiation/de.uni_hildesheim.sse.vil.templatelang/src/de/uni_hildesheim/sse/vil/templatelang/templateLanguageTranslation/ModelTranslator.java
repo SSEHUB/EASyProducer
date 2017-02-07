@@ -38,6 +38,7 @@ import net.ssehub.easy.dslCore.translation.ErrorCodes;
 import net.ssehub.easy.dslCore.translation.StringUtils;
 import net.ssehub.easy.dslCore.translation.TranslatorException;
 import net.ssehub.easy.instantiation.core.model.common.Imports;
+import net.ssehub.easy.instantiation.core.model.common.Typedef;
 import net.ssehub.easy.instantiation.core.model.common.VilException;
 import net.ssehub.easy.instantiation.core.model.expressions.CompositeExpression;
 import net.ssehub.easy.instantiation.core.model.expressions.Expression;
@@ -56,6 +57,7 @@ import net.ssehub.easy.instantiation.core.model.templateModel.TemplateBlock;
 import net.ssehub.easy.instantiation.core.model.templateModel.TemplateDescriptor;
 import net.ssehub.easy.instantiation.core.model.templateModel.TemplateLangExecution;
 import net.ssehub.easy.instantiation.core.model.templateModel.TemplateModel;
+import net.ssehub.easy.instantiation.core.model.templateModel.TypeDef;
 import net.ssehub.easy.instantiation.core.model.templateModel.VariableDeclaration;
 import net.ssehub.easy.instantiation.core.model.templateModel.WhileStatement;
 import net.ssehub.easy.instantiation.core.model.vilTypes.IMetaType;
@@ -109,7 +111,7 @@ public class ModelTranslator extends de.uni_hildesheim.sse.vil.expressions.trans
             desc.setAdvices(processAdvices(tpl.getAdvices(), uri));
             
             processJavaExtensions(tpl, desc);
-            desc.setParameter(resolveParameters(tpl.getParam()), resolver);
+            desc.setParameter(resolveParameters(tpl.getParam(), resolver), resolver);
             ModelImport<Template> extension = getExtensionImport(tpl.getExt(), imports, tpl, 
                 TemplateLangPackage.Literals.LANGUAGE_UNIT__EXT);
             if (null != tpl.getIndent()) {
@@ -398,7 +400,7 @@ public class ModelTranslator extends de.uni_hildesheim.sse.vil.expressions.trans
      * @throws TranslatorException in case that processing the definition fail
      */
     private Def processDef(VilDef def, Template template) throws TranslatorException {
-        VariableDeclaration[] param = resolveParameters(def.getParam());
+        VariableDeclaration[] param = resolveParameters(def.getParam(), resolver);
         TypeDescriptor<?> specifiedType = null;
         if (null != def.getType()) {
             specifiedType = getExpressionTranslator().processType(def.getType(), resolver);
@@ -706,7 +708,8 @@ public class ModelTranslator extends de.uni_hildesheim.sse.vil.expressions.trans
             if (warnings.length() > 0) {
                 warning(warnings.toString(), content, TemplateLangPackage.Literals.CONTENT__CTN, 0);
             }
-            return new ContentStatement(tmp, terminal, indentExpr, content.getPrint() == null);
+            return new ContentStatement(tmp, terminal, indentExpr, content.getPrint() == null, 
+                resolver.getCurrentModel());
         } catch (VilException e) {
             throw new TranslatorException(e, content, TemplateLangPackage.Literals.CONTENT__INDENT);
         }
@@ -750,5 +753,10 @@ public class ModelTranslator extends de.uni_hildesheim.sse.vil.expressions.trans
             }
         }
     }
-    
+ 
+    @Override
+    protected Typedef createTypedef(String name, TypeDescriptor<?> type) throws VilException {
+        return new TypeDef(name, type, getResolver().getCurrentModel());
+    }
+
 }

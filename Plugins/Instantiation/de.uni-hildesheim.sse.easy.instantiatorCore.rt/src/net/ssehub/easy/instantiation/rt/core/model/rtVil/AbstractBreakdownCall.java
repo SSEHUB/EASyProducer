@@ -180,5 +180,10 @@ public abstract class AbstractBreakdownCall extends RuleCallExpression implement
     public int getTupleFieldCount() {
         return null == tuples ? 0 : tuples.size();
     }
+    
+    @Override
+    public net.ssehub.easy.instantiation.core.model.buildlangModel.Script getParent() {
+        return getModel();
+    }
 
 }

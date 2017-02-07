@@ -19,6 +19,8 @@ package net.ssehub.easy.instantiation.core.model.buildlangModel;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.ssehub.easy.instantiation.core.model.common.ILanguageElement;
+
 /**
  * Defines a rule block, i.e., a set of rule elements.
  * 
@@ -67,6 +69,9 @@ public abstract class RuleBlock extends ProjectElement implements IRuleBlock {
                 body = tmp;
             }
             body[body.length - 1] = elt;
+            if (elt instanceof ProjectElement) {
+                ((ProjectElement) elt).setParent(this);
+            }
         }
     }
     
@@ -77,6 +82,7 @@ public abstract class RuleBlock extends ProjectElement implements IRuleBlock {
      */
     public void setBody(IRuleElement[] body) {
         this.body = body;
+        setParent(getParent()); // propagate parents
     }
     
     /**
@@ -104,6 +110,17 @@ public abstract class RuleBlock extends ProjectElement implements IRuleBlock {
     @Override
     public void addBodyElement(int index, IRuleElement elt) {
         body = addBodyElement(body, index, elt);
+    }
+
+    @Override
+    protected void setParent(ILanguageElement parent) {
+        super.setParent(parent);
+        for (int b = 0; b < getBodyElementCount(); b++) {
+            IRuleElement elt = getBodyElement(b);
+            if (elt instanceof ProjectElement) {
+                ((ProjectElement) elt).setParent(this);
+            }
+        }
     }
 
 }

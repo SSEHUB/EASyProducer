@@ -3,9 +3,6 @@ package net.ssehub.easy.instantiation.core.model.buildlangModel;
 import org.junit.Assert;
 import org.junit.Test;
 
-import net.ssehub.easy.instantiation.core.model.buildlangModel.BuildlangExecution;
-import net.ssehub.easy.instantiation.core.model.buildlangModel.Script;
-import net.ssehub.easy.instantiation.core.model.buildlangModel.VariableDeclaration;
 import net.ssehub.easy.instantiation.core.model.common.RuntimeEnvironment;
 import net.ssehub.easy.instantiation.core.model.common.VilException;
 import net.ssehub.easy.instantiation.core.model.expressions.CallArgument;

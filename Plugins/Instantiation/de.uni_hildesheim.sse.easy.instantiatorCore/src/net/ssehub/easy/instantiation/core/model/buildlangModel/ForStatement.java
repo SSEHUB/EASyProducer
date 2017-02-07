@@ -15,6 +15,7 @@
  */
 package net.ssehub.easy.instantiation.core.model.buildlangModel;
 
+import net.ssehub.easy.instantiation.core.model.common.ILanguageElement;
 import net.ssehub.easy.instantiation.core.model.common.VilException;
 import net.ssehub.easy.instantiation.core.model.expressions.Expression;
 import net.ssehub.easy.instantiation.core.model.vilTypes.TypeDescriptor;
@@ -119,6 +120,14 @@ public class ForStatement extends RuleBlock implements IRuleElement, IEnumeratin
     @Override
     public boolean returnActualValue() {
         return false;
+    }
+
+    @Override
+    protected void setParent(ILanguageElement parent) {
+        super.setParent(parent);
+        for (int v = 0; v < getVariablesCount(); v++) {
+            getVariable(v).setParent(this);
+        }
     }
 
 }

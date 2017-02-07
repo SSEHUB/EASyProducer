@@ -78,6 +78,19 @@ public class Script extends net.ssehub.easy.instantiation.core.model.buildlangMo
     public Script(String name, ModelImport<Script> parent, ScriptDescriptor<Script> descriptor, 
         TypeRegistry registry) {
         super(name, convert(parent), convert(descriptor), registry);
+        adjustParents();
+    }
+    
+    /**
+     * Adjusts the parents of the contained elements.
+     */
+    private void adjustParents() {
+        for (int s = 0; s < getStrategiesCount(); s++) {
+            getStrategy(s).setParent(this);
+        }
+        for (int t = 0; t < getTacticsCount(); t++) {
+            getTactic(t).setParent(this);
+        }
     }
     
     /**
@@ -199,6 +212,7 @@ public class Script extends net.ssehub.easy.instantiation.core.model.buildlangMo
     public void addStrategy(Strategy strategy) {
         if (null != strategy) {
             strategies.add(strategy);
+            strategy.setParent(this);
         }
     }
     
@@ -230,6 +244,7 @@ public class Script extends net.ssehub.easy.instantiation.core.model.buildlangMo
     public void addTactic(Tactic tactic) {
         if (null != tactic) {
             tactics.add(tactic);
+            tactic.setParent(this);
         }
     }
 

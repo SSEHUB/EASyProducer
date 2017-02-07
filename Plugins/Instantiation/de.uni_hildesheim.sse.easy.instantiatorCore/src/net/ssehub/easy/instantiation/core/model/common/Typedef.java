@@ -22,7 +22,7 @@ import net.ssehub.easy.instantiation.core.model.vilTypes.TypeDescriptor;
  * 
  * @author Holger Eichelberger
  */
-public class Typedef {
+public abstract class Typedef {
     
     private String name;
     private TypeDescriptor<?> type;

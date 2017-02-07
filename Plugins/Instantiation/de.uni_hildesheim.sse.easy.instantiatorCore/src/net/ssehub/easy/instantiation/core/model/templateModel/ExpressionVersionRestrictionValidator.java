@@ -1,6 +1,10 @@
 package net.ssehub.easy.instantiation.core.model.templateModel;
 
 import net.ssehub.easy.basics.messages.IMessageHandler;
+import net.ssehub.easy.instantiation.core.model.common.Advice;
+import net.ssehub.easy.instantiation.core.model.common.ExpressionStatement;
+import net.ssehub.easy.instantiation.core.model.common.Typedef;
+import net.ssehub.easy.instantiation.core.model.common.VariableDeclaration;
 import net.ssehub.easy.instantiation.core.model.common.VilException;
 
 /**
@@ -78,6 +82,29 @@ public class ExpressionVersionRestrictionValidator
     @Override
     public Object visitWhile(WhileStatement stmt) throws VilException {
         emit("not supported here", true, VilException.ID_SEMANTIC);
+        return null;
+    }
+
+    @Override
+    public Object visitAdvice(Advice advice) throws VilException {
+        emit("advice is not allowed here", true, VilException.ID_SEMANTIC);
+        return null;
+    }
+
+    @Override
+    public Object visitTypedef(Typedef typedef) throws VilException {
+        emit("typedef is not allowed here", true, VilException.ID_SEMANTIC);
+        return null;
+    }
+
+    @Override
+    public Object visitExpressionStatement(ExpressionStatement statement) throws VilException {
+        return null; // fallback
+    }
+
+    @Override
+    public Object visitVariableDeclaration(VariableDeclaration var) throws VilException {
+        emit("variable declaration is not allowed here", true, VilException.ID_SEMANTIC);
         return null;
     }
 

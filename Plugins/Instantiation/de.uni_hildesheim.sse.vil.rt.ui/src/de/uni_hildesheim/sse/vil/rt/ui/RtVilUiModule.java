@@ -4,12 +4,29 @@
 package de.uni_hildesheim.sse.vil.rt.ui;
 
 import org.eclipse.ui.plugin.AbstractUIPlugin;
+import org.eclipse.xtext.ui.editor.hyperlinking.IHyperlinkHelper;
+
+import de.uni_hildesheim.sse.vil.rt.ui.hyperlinking.RtVilHyperlinkHelper;
 
 /**
  * Use this class to register components to be used within the IDE.
  */
 public class RtVilUiModule extends de.uni_hildesheim.sse.vil.rt.ui.AbstractRtVilUiModule {
-	public RtVilUiModule(AbstractUIPlugin plugin) {
-		super(plugin);
-	}
+
+    public RtVilUiModule(AbstractUIPlugin plugin) {
+        super(plugin);
+    }
+
+    /**
+     * Binds the custom VIL hyperlink helper for the creation of the
+     * <code>com.google.inject.Bindery</code>.
+     * 
+     * This enables the creation of hyperlinks for VIL-elements in an VIL-file
+     * and the custom reaction on selecting these Hyperlinks (or pressing F3),
+     * e.g. showing the element's declaration.
+     */
+    public Class<? extends IHyperlinkHelper> bindIHyperlinkHelper() {
+        return RtVilHyperlinkHelper.class;
+    }
+
 }

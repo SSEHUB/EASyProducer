@@ -11,7 +11,7 @@ import net.ssehub.easy.instantiation.core.model.vilTypes.TypeRegistry;
  * 
  * @author kroeher
  */
-public class WhileStatement implements ITemplateElement {
+public class WhileStatement extends AbstractTemplateElement {
 
     private Expression condition;
     private ITemplateElement statement;
@@ -24,8 +24,7 @@ public class WhileStatement implements ITemplateElement {
      *   processed multiple times.
      * @throws VilException in case of semantic problems while creating this loop object
      */
-    public WhileStatement(Expression condition, ITemplateElement statement) 
-        throws VilException {
+    public WhileStatement(Expression condition, ITemplateElement statement) throws VilException {
         this.condition = condition;
         this.statement = statement;
         if (null == condition) {

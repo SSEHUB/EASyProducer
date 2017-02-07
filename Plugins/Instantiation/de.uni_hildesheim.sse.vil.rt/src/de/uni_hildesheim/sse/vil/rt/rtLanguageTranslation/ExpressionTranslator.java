@@ -33,7 +33,8 @@ public class ExpressionTranslator extends de.uni_hildesheim.sse.buildLanguageTra
                 if ("fail".equals(fStmt.getName())) {
                     result = createFailStatement(elt, fStmt, resolver);
                 } else {
-                    result = new net.ssehub.easy.instantiation.rt.core.model.rtVil.FailStatement();
+                    result = new net.ssehub.easy.instantiation.rt.core.model.rtVil.FailStatement(
+                        resolver.getCurrentModel());
                 }
             }
         }
@@ -58,7 +59,8 @@ public class ExpressionTranslator extends de.uni_hildesheim.sse.buildLanguageTra
         net.ssehub.easy.instantiation.core.model.expressions.Expression codeEx = 
             resolveFailExpression(fStmt.getCode(), TypeRegistry.integerType(), fStmt, 
             RtVilPackage.Literals.FAIL_STATEMENT__CODE, resolver);
-        return new net.ssehub.easy.instantiation.rt.core.model.rtVil.FailStatement(reasonEx, codeEx);        
+        return new net.ssehub.easy.instantiation.rt.core.model.rtVil.FailStatement(reasonEx, codeEx, 
+            resolver.getCurrentModel());        
     }
     
     /**

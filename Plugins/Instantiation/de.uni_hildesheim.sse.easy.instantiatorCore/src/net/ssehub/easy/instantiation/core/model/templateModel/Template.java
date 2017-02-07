@@ -57,6 +57,21 @@ public class Template extends AbstractResolvableModel<VariableDeclaration, Templ
         this.param = descriptor.getParameter();
         this.indentationConfiguration = descriptor.getIndentationConfiguration();
         this.formattingConfiguration = descriptor.getFormattingConfiguration();
+        adjustParents();
+    }
+
+    /**
+     * Adjusts the parents.
+     */
+    protected void adjustParents() {
+        for (int p = 0; p < getParameterCount(); p++) {
+            getParameter(p).setParent(this);
+        }
+        for (int d = 0; d < getVariableDeclarationCount(); d++) {
+            getVariableDeclaration(d).setParent(this);
+        }
+        // typdefs shall be ok 
+        // defs shall be ok
     }
     
     /**
@@ -103,6 +118,7 @@ public class Template extends AbstractResolvableModel<VariableDeclaration, Templ
             declarations = new ArrayList<VariableDeclaration>();
         }
         declarations.add(var);
+        var.setParent(this);
     }
     
     /**
@@ -148,6 +164,7 @@ public class Template extends AbstractResolvableModel<VariableDeclaration, Templ
             defs = new ArrayList<Def>();
         }
         defs.add(def);
+        def.setParent(this);
     }
     
     /**

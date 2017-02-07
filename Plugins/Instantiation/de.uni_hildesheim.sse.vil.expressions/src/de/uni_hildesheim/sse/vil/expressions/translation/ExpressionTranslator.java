@@ -196,7 +196,7 @@ public abstract class ExpressionTranslator<I extends VariableDeclaration, R exte
                 }
             }
         }
-        return createExpressionStatement(result);
+        return createExpressionStatement(result, resolver);
     }
     
     /**
@@ -210,9 +210,10 @@ public abstract class ExpressionTranslator<I extends VariableDeclaration, R exte
      * Creates an expression statement.
      * 
      * @param expression the expression
+     * @param resolver the resolver instance
      * @return the expression statement
      */
-    protected abstract E createExpressionStatement(Expression expression);
+    protected abstract E createExpressionStatement(Expression expression, R resolver);
     
     /**
      * Processes a logical expression.
@@ -498,7 +499,7 @@ public abstract class ExpressionTranslator<I extends VariableDeclaration, R exte
                 if (null != unit.getDeflt()) {
                     deflt = processExpression(unit.getDeflt(), resolver);
                 }
-                I var = createVariableDeclaration(unit.getId(), t, false, deflt);
+                I var = createVariableDeclaration(unit.getId(), t, false, deflt, resolver);
                 var.setHasExplicitType(firstUnit && null != d.getType());
                 result.add(var);
                 firstUnit = false;
@@ -598,7 +599,8 @@ public abstract class ExpressionTranslator<I extends VariableDeclaration, R exte
                 TypeDescriptor<?> arg0Type = arguments.get(0).inferType();
                 if (arg0Type.isCollection() && arg0Type.getGenericParameterCount() > 0) {
                     resolver.pushLevel();
-                    I iterVar = createVariableDeclaration("ITER", arg0Type.getGenericParameterType(0), false, null);
+                    I iterVar = createVariableDeclaration("ITER", arg0Type.getGenericParameterType(0), false, null, 
+                        resolver);
                     resolver.add(iterVar); // iterVar shall be strictly local!
                     ex = new ExpressionEvaluator(processExpression(param.getEx(), resolver), iterVar, null);
                     resolver.popLevel();
@@ -617,9 +619,10 @@ public abstract class ExpressionTranslator<I extends VariableDeclaration, R exte
      * @param type the type of the variable
      * @param isConstant whether this variable is a constant
      * @param expression an expression denoting the initial value (may be <b>null</b>)
+     * @param resolver the resolver instance
      */
     protected abstract I createVariableDeclaration(String name, TypeDescriptor<?> type, 
-        boolean isConstant, Expression expression);
+        boolean isConstant, Expression expression, R resolver);
 
     /**
      * Processes a function call.
@@ -1198,7 +1201,7 @@ public abstract class ExpressionTranslator<I extends VariableDeclaration, R exte
                 throw new TranslatorException(e, decl, ExpressionDslPackage.Literals.VARIABLE_DECLARATION__TYPE);
             }
         } 
-        I result = createVariableDeclaration(name, type, isConstant, init);
+        I result = createVariableDeclaration(name, type, isConstant, init, resolver);
         resolver.add(result);
         return result;
     }
@@ -1320,7 +1323,7 @@ public abstract class ExpressionTranslator<I extends VariableDeclaration, R exte
         IVersionRestriction result = null;
         if (null != spec && null != spec.getRestriction()) {
             resolver.pushLevel();
-            I versionVariable = createVariableDeclaration("version", TypeRegistry.versionType(), false, null);
+            I versionVariable = createVariableDeclaration("version", TypeRegistry.versionType(), false, null, resolver);
             resolver.add(versionVariable);
             try {
                 result = createExpressionVersionRestriction(processExpression(spec.getRestriction(), resolver), 

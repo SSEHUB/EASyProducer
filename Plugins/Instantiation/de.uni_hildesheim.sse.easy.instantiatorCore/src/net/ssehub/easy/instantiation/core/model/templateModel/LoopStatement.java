@@ -1,5 +1,6 @@
 package net.ssehub.easy.instantiation.core.model.templateModel;
 
+import net.ssehub.easy.instantiation.core.model.common.ILanguageElement;
 import net.ssehub.easy.instantiation.core.model.common.VilException;
 import net.ssehub.easy.instantiation.core.model.expressions.Expression;
 import net.ssehub.easy.instantiation.core.model.vilTypes.TypeDescriptor;
@@ -11,13 +12,15 @@ import net.ssehub.easy.instantiation.core.model.vilTypes.TypeRegistry;
  * 
  * @author kroeher
  */
-public class LoopStatement implements ITemplateElement {
+public class LoopStatement extends AbstractTemplateElement {
 
     private VariableDeclaration iteratorVar;
     private Expression containerExpression;
     private ITemplateElement statement;
     private Expression separatorExpression;
     private Expression finalSeparatorExpression;
+    
+    // checkstyle: stop parameter number check
     
     /**
      * Create a loop-statement.
@@ -32,8 +35,7 @@ public class LoopStatement implements ITemplateElement {
      * @throws VilException in case of semantic problems while creating this loop object
      */
     public LoopStatement(VariableDeclaration iteratorVar, Expression containerExpression, ITemplateElement statement, 
-        Expression separatorExpression, Expression finalSeparatorExpression) 
-        throws VilException {
+        Expression separatorExpression, Expression finalSeparatorExpression) throws VilException {
         this.iteratorVar = iteratorVar;
         this.containerExpression = containerExpression;
         this.statement = statement;
@@ -43,6 +45,8 @@ public class LoopStatement implements ITemplateElement {
             this.finalSeparatorExpression = finalSeparatorExpression;
         }
     }
+
+    // checkstyle: resume parameter number check
     
     /**
      * Returns the optional separator expression.
@@ -102,6 +106,12 @@ public class LoopStatement implements ITemplateElement {
     @Override
     public TypeDescriptor<?> inferType() throws VilException {
         return TypeRegistry.voidType();
+    }
+
+    @Override
+    protected void setParent(ILanguageElement parent) {
+        super.setParent(parent);
+        iteratorVar.setParent(this);
     }
 
 }

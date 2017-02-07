@@ -11,7 +11,7 @@ import net.ssehub.easy.instantiation.core.model.vilTypes.TypeRegistry;
  *  
  * @author kroeher
  */
-public class AlternativeStatement implements ITemplateElement {
+public class AlternativeStatement extends AbstractTemplateElement {
     
     private Expression condition;
     private ITemplateElement ifStatement;

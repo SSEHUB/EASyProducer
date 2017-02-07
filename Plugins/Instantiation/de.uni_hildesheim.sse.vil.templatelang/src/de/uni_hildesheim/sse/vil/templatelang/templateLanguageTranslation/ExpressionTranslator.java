@@ -114,7 +114,7 @@ public class ExpressionTranslator
     
     @Override
     protected VariableDeclaration createVariableDeclaration(String name, TypeDescriptor<?> type,
-                    boolean isConstant, Expression expression) {
+        boolean isConstant, Expression expression, Resolver resolver) {
         return new VariableDeclaration(name, type, isConstant, expression);
     }
 
@@ -140,8 +140,8 @@ public class ExpressionTranslator
     }
 
     @Override
-    protected ExpressionStatement createExpressionStatement(Expression expression) {
-        return new ExpressionStatement(expression);
+    protected ExpressionStatement createExpressionStatement(Expression expression, Resolver resolver) {
+        return new ExpressionStatement(expression, resolver.getCurrentModel());
     }
 
     @Override

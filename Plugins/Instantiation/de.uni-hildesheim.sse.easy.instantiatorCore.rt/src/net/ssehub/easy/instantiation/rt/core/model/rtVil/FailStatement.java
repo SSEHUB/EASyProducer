@@ -17,6 +17,7 @@ package net.ssehub.easy.instantiation.rt.core.model.rtVil;
 
 import net.ssehub.easy.instantiation.core.model.buildlangModel.IRuleElement;
 import net.ssehub.easy.instantiation.core.model.buildlangModel.IVisitor;
+import net.ssehub.easy.instantiation.core.model.buildlangModel.Script;
 import net.ssehub.easy.instantiation.core.model.common.VilException;
 import net.ssehub.easy.instantiation.core.model.expressions.Expression;
 
@@ -31,12 +32,16 @@ public class FailStatement implements IRuleElement {
     private Expression reason;
     private Expression codeEx;
     private boolean reFail = false;
+    private Script parent;
 
     /**
      * Creates a fail statement instance.
+     * 
+     * @param parent the parent script
      */
-    public FailStatement() {
+    public FailStatement(Script parent) {
         reFail = true;
+        this.parent = parent;
     }
     
     /**
@@ -44,10 +49,12 @@ public class FailStatement implements IRuleElement {
      * 
      * @param reason an optional reason for failing
      * @param codeEx an optional code expression
+     * @param parent the parent script
      */
-    public FailStatement(Expression reason, Expression codeEx) {
+    public FailStatement(Expression reason, Expression codeEx, Script parent) {
         this.reason = reason;
         this.codeEx = codeEx;
+        this.parent = parent;
     }
     
     /**
@@ -86,6 +93,11 @@ public class FailStatement implements IRuleElement {
             result = null;
         }
         return result;
+    }
+
+    @Override
+    public Script getParent() {
+        return parent;
     }
 
 }

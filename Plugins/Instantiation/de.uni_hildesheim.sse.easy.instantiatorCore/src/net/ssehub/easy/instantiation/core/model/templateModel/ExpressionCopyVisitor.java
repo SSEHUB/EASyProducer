@@ -3,6 +3,9 @@ package net.ssehub.easy.instantiation.core.model.templateModel;
 import java.util.Map;
 
 import net.ssehub.easy.basics.modelManagement.IVersionRestriction.IVariableMapper;
+import net.ssehub.easy.instantiation.core.model.common.Advice;
+import net.ssehub.easy.instantiation.core.model.common.ExpressionStatement;
+import net.ssehub.easy.instantiation.core.model.common.Typedef;
 import net.ssehub.easy.instantiation.core.model.common.VariableDeclaration;
 import net.ssehub.easy.instantiation.core.model.common.VilException;
 import net.ssehub.easy.instantiation.core.model.expressions.CopyVisitor;
@@ -35,6 +38,16 @@ public class ExpressionCopyVisitor extends CopyVisitor implements IVisitor {
     public ExpressionCopyVisitor(Map<VariableDeclaration, VariableDeclaration> mapping, boolean reuse, 
         IVariableMapper mapper) {
         super(mapping, reuse, mapper);
+    }
+
+    @Override
+    public Object visitAdvice(Advice advice) throws VilException {
+        throw new VilException("not an expression", VilException.ID_INTERNAL);
+    }
+
+    @Override
+    public Object visitExpressionStatement(ExpressionStatement statement) throws VilException {
+        throw new VilException("not an expression", VilException.ID_INTERNAL);
     }
 
     @Override
@@ -86,6 +99,16 @@ public class ExpressionCopyVisitor extends CopyVisitor implements IVisitor {
 
     @Override
     public Object visitWhile(WhileStatement stmt) throws VilException {
+        throw new VilException("not an expression", VilException.ID_INTERNAL);
+    }
+
+    @Override
+    public Object visitTypedef(Typedef typedef) throws VilException {
+        throw new VilException("not an expression", VilException.ID_INTERNAL);
+    }
+
+    @Override
+    public Object visitVariableDeclaration(VariableDeclaration var) throws VilException {
         throw new VilException("not an expression", VilException.ID_INTERNAL);
     }
 

@@ -28,6 +28,7 @@ Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Export-Package: de.uni_hildesheim.sse.ui.contentassist,
  de.uni_hildesheim.sse.ui.contentassist.antlr,
  de.uni_hildesheim.sse.ui.contentassist.antlr.internal,
+ de.uni_hildesheim.sse.ui.hyperlinking,
  de.uni_hildesheim.sse.ui.internal,
  de.uni_hildesheim.sse.ui.outline,
  de.uni_hildesheim.sse.ui.quickfix,

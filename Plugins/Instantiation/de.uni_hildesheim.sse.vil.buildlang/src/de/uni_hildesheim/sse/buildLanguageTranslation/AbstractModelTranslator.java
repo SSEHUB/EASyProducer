@@ -52,11 +52,13 @@ import net.ssehub.easy.instantiation.core.model.buildlangModel.RuleDescriptor;
 import net.ssehub.easy.instantiation.core.model.buildlangModel.RuleDescriptorException;
 import net.ssehub.easy.instantiation.core.model.buildlangModel.RuleExecutionResult;
 import net.ssehub.easy.instantiation.core.model.buildlangModel.Script;
+import net.ssehub.easy.instantiation.core.model.buildlangModel.TypeDef;
 import net.ssehub.easy.instantiation.core.model.buildlangModel.VariableDeclaration;
 import net.ssehub.easy.instantiation.core.model.buildlangModel.Rule.Side;
 import net.ssehub.easy.instantiation.core.model.buildlangModel.Script.ScriptDescriptor;
 import net.ssehub.easy.instantiation.core.model.common.Advice;
 import net.ssehub.easy.instantiation.core.model.common.ExpressionStatement;
+import net.ssehub.easy.instantiation.core.model.common.Typedef;
 import net.ssehub.easy.instantiation.core.model.common.VilException;
 import net.ssehub.easy.instantiation.core.model.expressions.Expression;
 import net.ssehub.easy.instantiation.core.model.templateModel.Template;
@@ -115,7 +117,7 @@ public abstract class AbstractModelTranslator<M extends Script, L extends Langua
         Imports<M> imports, ImportResolver<M> impResolver) throws TranslatorException {
         int errorCount = getErrorCount();
         Advice[] advices = processAdvices(script.getAdvices(), uri);
-        VariableDeclaration[] param = resolveParameters(script.getParam());
+        VariableDeclaration[] param = resolveParameters(script.getParam(), resolver);
         ModelImport<M> parent = null;
         if (null != script.getParent()) {
             parent = getExtensionImport(script.getParent().getName(), imports, script.getParent(), 
@@ -135,7 +137,7 @@ public abstract class AbstractModelTranslator<M extends Script, L extends Langua
         }
         if (null != script.getLoadProperties()) {
             for (de.uni_hildesheim.sse.vilBuildLanguage.LoadProperties prop : script.getLoadProperties()) {
-                result.addLoadProperties(new LoadProperties(StringUtils.convertString(prop.getPath())));
+                result.addLoadProperties(new LoadProperties(StringUtils.convertString(prop.getPath()), result));
             }
         }
         resolveImports(script, ExpressionDslPackage.Literals.LANGUAGE_UNIT__IMPORTS, result, uri, inProgress, 
@@ -365,7 +367,7 @@ public abstract class AbstractModelTranslator<M extends Script, L extends Langua
                 resolver.setContextType(Resolver.ContextType.RULE_HEADER);
                 RuleDescriptor descriptor = new RuleDescriptor();
                 descriptor.setReturnType(getReturnType(ruleDecl, resolver));
-                VariableDeclaration[] params = resolveParameters(getParameterList(ruleDecl));
+                VariableDeclaration[] params = resolveParameters(getParameterList(ruleDecl), resolver);
                 resolver.add(params);
                 processRuleConditions(descriptor, getRuleConditions(ruleDecl));
                 R rule = createRule(ruleDecl, descriptor.getReturnType(), params, parent);
@@ -804,6 +806,11 @@ public abstract class AbstractModelTranslator<M extends Script, L extends Langua
                 resolver.add(decl);
             }
         }
+    }
+
+    @Override
+    protected Typedef createTypedef(String name, TypeDescriptor<?> type) throws VilException {
+        return new TypeDef(name, type, resolver.getCurrentModel());
     }
 
 }

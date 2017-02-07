@@ -17,6 +17,7 @@
 package net.ssehub.easy.instantiation.core.model.buildlangModel;
 
 import net.ssehub.easy.instantiation.core.model.buildlangModel.ruleMatch.AbstractRuleMatchExpression;
+import net.ssehub.easy.instantiation.core.model.common.ILanguageElement;
 import net.ssehub.easy.instantiation.core.model.common.IResolvableOperation;
 import net.ssehub.easy.instantiation.core.model.common.VilException;
 import net.ssehub.easy.instantiation.core.model.expressions.CallArgument;
@@ -426,7 +427,9 @@ public class Rule extends RuleBlock implements IResolvableOperation<VariableDecl
             }
             RuleCallExpression call = new RuleCallExpression(target.getParent(), false, name, args);
             call.inferType(); // resolve the call
-            append(new ExpressionStatement(call));
+            ExpressionStatement stmt = new ExpressionStatement(call);
+            stmt.setParent(this);
+            append(stmt);
         }
     }
 
@@ -443,6 +446,39 @@ public class Rule extends RuleBlock implements IResolvableOperation<VariableDecl
     @Override
     public String getStringValue(StringComparator comparator) {
         return getSignature();
+    }
+    
+    @Override
+    protected void setParent(ILanguageElement parent) {
+        super.setParent(parent);
+        for (int v = 0; v < getParameterCount(); v++) {
+            getParameter(v).setParent(this);
+        }
+        setParentFor(lhsVars);
+        setParentFor(rhsVars);
+        setParentFor(rhsMatchVars);
+    }
+    
+    /**
+     * Changes the parents for <code>vars</code> to <b>this</b>. [convenience]
+     * 
+     * @param vars the variables
+     */
+    protected void setParentFor(VariableDeclaration[] vars) {
+        if (null != vars) {
+            for (int v = 0; v < vars.length; v++) {
+                setParentFor(vars[v]);
+            }
+        }
+    }
+    
+    /**
+     * Changes the parent of the given variable to <b>this</b>. [access modifiers]
+     * 
+     * @param var the variable
+     */
+    protected void setParentFor(VariableDeclaration var) {
+        var.setParent(this);
     }
 
 }

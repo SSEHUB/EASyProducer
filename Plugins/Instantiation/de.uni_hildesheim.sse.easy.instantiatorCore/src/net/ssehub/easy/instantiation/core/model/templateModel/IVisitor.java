@@ -7,7 +7,7 @@ import net.ssehub.easy.instantiation.core.model.common.VilException;
  * 
  * @author Holger Eichelberger
  */
-public interface IVisitor {
+public interface IVisitor extends net.ssehub.easy.instantiation.core.model.common.IVisitor {
     
     /**
      * Visits a template.
