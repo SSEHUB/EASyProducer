@@ -27,8 +27,10 @@ public class Utils {
      */
     public static String getQualifiedNameString(QualifiedPrefix name) {
         StringBuilder result = new StringBuilder();
+        if (null != name) {
         for (String s : name.getQname()) {
             result.append(s);
+        }
         }
         return result.toString();
     }

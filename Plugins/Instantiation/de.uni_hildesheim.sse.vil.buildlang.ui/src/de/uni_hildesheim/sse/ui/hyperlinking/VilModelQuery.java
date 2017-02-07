@@ -92,6 +92,7 @@ public class VilModelQuery implements IModelQuery<Script, IBuildlangElement, ILa
                 result = (TypeDef) td;
             }
         }
+System.err.println(model.getName()+" "+name+" -> "+result);        
         return result;
     }
 

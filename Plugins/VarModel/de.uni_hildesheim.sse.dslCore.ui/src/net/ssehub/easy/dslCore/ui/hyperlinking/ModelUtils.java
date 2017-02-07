@@ -15,12 +15,20 @@
  */
 package net.ssehub.easy.dslCore.ui.hyperlinking;
 
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
+import net.ssehub.easy.basics.logger.EASyLoggerFactory;
 import net.ssehub.easy.basics.modelManagement.IModel;
 import net.ssehub.easy.basics.modelManagement.ModelImport;
 import net.ssehub.easy.basics.modelManagement.ModelManagement;
+import net.ssehub.easy.basics.modelManagement.ModelManagementException;
+import net.ssehub.easy.basics.modelManagement.Version;
+import net.ssehub.easy.basics.modelManagement.VersionedModelInfos;
+import net.ssehub.easy.dslCore.BundleId;
 
 /**
  * Some utilities on model side.
@@ -29,6 +37,16 @@ import net.ssehub.easy.basics.modelManagement.ModelManagement;
  */
 public class ModelUtils {
 
+    private static final Comparator<VersionedModelInfos<?>> DESC_VERSION_COMPARATOR 
+        = new Comparator<VersionedModelInfos<?>>() {
+
+            @Override
+            public int compare(VersionedModelInfos<?> o1, VersionedModelInfos<?> o2) {
+                return -Version.compare(o1.getVersion(), o2.getVersion());
+            }
+        
+        };
+    
     /**
      * A model finder for a certain model. Model imports are handled by caller.
      * 
@@ -75,6 +93,22 @@ public class ModelUtils {
                     modelElement = findElement(mgt.getModel(modelCounter), selectedElement, finder, done);
                 }
                 modelCounter++;
+            }
+            if (0 == modelCounter && !mgt.getAvailable(selectedElementsProjectName).isEmpty()) {
+                List<VersionedModelInfos<M>> available = mgt.getAvailable(selectedElementsProjectName);
+                if (null != available && !available.isEmpty()) {
+                    // heuristic
+                    Collections.sort(available, DESC_VERSION_COMPARATOR);
+                    VersionedModelInfos<M> infos = available.get(0);
+                    if (infos.size() > 0) {
+                        Set<M> done = new HashSet<M>();
+                        try {
+                            modelElement = findElement(mgt.load(infos.get(0)), selectedElement, finder, done);
+                        } catch (ModelManagementException e) {
+                            EASyLoggerFactory.INSTANCE.getLogger(ModelUtils.class, BundleId.ID).error(e.getMessage());
+                        }
+                    }
+                }
             }
         }
         return modelElement;

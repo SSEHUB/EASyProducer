@@ -10,7 +10,9 @@ import org.eclipse.jface.text.TextSelection;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionProvider;
 import org.eclipse.ui.IEditorDescriptor;
+import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
+import org.eclipse.ui.IEditorReference;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchWindow;
@@ -145,6 +147,7 @@ public class GenericEditorOpener <T extends EObject, P extends EObject, M extend
             }
         }
     }
+    
 
     /**
      * Returns the {@link URI} of the given
@@ -189,7 +192,6 @@ public class GenericEditorOpener <T extends EObject, P extends EObject, M extend
      */
     private CommonXtextEditor<T, P> openEditor(java.net.URI uri) {
         CommonXtextEditor<T, P> editor = null;
-
         if (uri != null) {
             IFile[] allWorkspaceFiles = ResourcesPlugin.getWorkspace().getRoot().findFilesForLocationURI(uri);
             if (allWorkspaceFiles.length > 0) {
@@ -208,7 +210,6 @@ public class GenericEditorOpener <T extends EObject, P extends EObject, M extend
                     IWorkbenchPage activeWorkbenchWindowPage = activeWorkbenchWindow.getActivePage();
                     IEditorDescriptor editorDescr = workbench.getEditorRegistry()
                                     .getDefaultEditor(projectFile.getName());
-
                     editor = open(editorDescr, activeWorkbenchWindowPage, projectFile);
                 }
             }
@@ -229,15 +230,33 @@ public class GenericEditorOpener <T extends EObject, P extends EObject, M extend
         IFile projectFile) {
         CommonXtextEditor<T, P> result = null;
         if (editorDescr != null) {
-            // Try opening the file in the editor.
-            try {
-                IEditorPart openedEditorPart = activeWorkbenchWindowPage
-                    .openEditor(new FileEditorInput(projectFile), editorDescr.getId());
-                if (openedEditorPart instanceof CommonXtextEditor) {
-                    result = (CommonXtextEditor<T, P>) openedEditorPart;
+            IEditorPart editorPart = null;
+            IEditorReference[] refs = activeWorkbenchWindowPage.getEditorReferences();
+            for (int r = 0; null == editorPart && r < refs.length; r++) {
+                if (refs[r].getId().equals(editorDescr.getId())) {
+                    try {
+                        IEditorInput input = refs[r].getEditorInput();
+                        if (input instanceof FileEditorInput) {
+                            if (((FileEditorInput) input).getFile().equals(projectFile)) {
+                                editorPart = refs[r].getEditor(true);
+                            }
+                        }
+                    } catch (PartInitException e) {
+                        getLogger().error("Finding editor: " + e.getMessage());
+                    }
                 }
-            } catch (PartInitException e) {
-                getLogger().error("Opening editor: " + e.getMessage());
+            }
+            if (null == editorPart) {
+                try {
+                    // Try opening the file in the editor.
+                    editorPart = activeWorkbenchWindowPage
+                        .openEditor(new FileEditorInput(projectFile), editorDescr.getId());
+                } catch (PartInitException e) {
+                    getLogger().error("Opening editor: " + e.getMessage());
+                }
+            }
+            if (editorPart instanceof CommonXtextEditor) {
+                result = (CommonXtextEditor<T, P>) editorPart;
             }
         }
         return result;
