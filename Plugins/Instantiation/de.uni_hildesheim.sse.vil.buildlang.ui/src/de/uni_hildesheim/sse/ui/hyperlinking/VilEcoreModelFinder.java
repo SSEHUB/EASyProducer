@@ -43,6 +43,7 @@ public class VilEcoreModelFinder {
      * @return the ECore object representing <code>declaration</code>, may be <b>null</b> if not found
      */
     public EObject getEcoreElement(EObject contentElement, ILanguageElement declaration) {
+System.err.println("ECORE " + contentElement+" "+declaration);        
         EObject result = null;
         // TODO consider parameters!
         if (contentElement instanceof de.uni_hildesheim.sse.vil.expressions.expressionDsl.VariableDeclaration 
@@ -67,16 +68,28 @@ public class VilEcoreModelFinder {
                 }
             }
             if (declaration instanceof VariableDeclaration && !(declaration.getParent() instanceof Script)) {
-                int level = 0;
-                ILanguageElement iter = declaration.getParent();
-                while (null != iter && !(iter instanceof Rule)) {
-                    iter = iter.getParent();
-                    level++;
-                }
+                int level = calcLevel(declaration, Rule.class);
                 result = findInRuleElts(ruleDecl.getBlock().getElements(), declaration, level);
             }
         }
         return result;
+    }
+
+    /**
+     * Determines the nesting level of <code>element</code> until <code>stopCls</code>.
+     * 
+     * @param elt the element to determine the nesting for
+     * @param stopCls the stop class or run until the topmost parent
+     * @return the nesting level
+     */
+    protected int calcLevel(ILanguageElement elt, Class<?> stopCls) {
+        int level = 0;
+        ILanguageElement iter = elt.getParent();
+        while (null != iter && !(stopCls.isInstance(iter))) {
+            iter = iter.getParent();
+            level++;
+        }
+        return level;
     }
 
     /**
@@ -88,7 +101,7 @@ public class VilEcoreModelFinder {
      *   next levels
      * @return the found EObject or <b>null</b> if not found
      */
-    private EObject findInRuleElts(RuleElementBlock block, ILanguageElement declaration, int level) {
+    protected EObject findInRuleElts(RuleElementBlock block, ILanguageElement declaration, int level) {
         EObject result = null;
         if (null != block) {
             result = findInRuleElts(block.getElements(), declaration, level);
@@ -105,7 +118,7 @@ public class VilEcoreModelFinder {
      *   next levels
      * @return the found EObject or <b>null</b> if not found
      */
-    private EObject findInRuleElts(List<RuleElement> elts, ILanguageElement declaration, int level) {
+    protected EObject findInRuleElts(List<? extends RuleElement> elts, ILanguageElement declaration, int level) {
         EObject result = null;
         if (null != elts) {
             for (int s = 0; null == result && s < elts.size(); s++) {
@@ -124,7 +137,7 @@ public class VilEcoreModelFinder {
      *   next levels
      * @return the found EObject or <b>null</b> if not found
      */
-    private EObject findInRuleElt(RuleElement elt, ILanguageElement declaration, int level) {
+    protected EObject findInRuleElt(RuleElement elt, ILanguageElement declaration, int level) {
         EObject result = null;
         if (null != elt) {
             if (0 == level) {

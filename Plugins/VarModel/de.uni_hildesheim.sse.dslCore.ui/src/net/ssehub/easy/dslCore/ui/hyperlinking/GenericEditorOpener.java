@@ -81,13 +81,13 @@ public class GenericEditorOpener <T extends EObject, P extends EObject, M extend
     public void open(ILeafNode parseTreeElement, P parseTreeProject) {
         if (parseTreeElement != null) {
             ModelManagement<M> modelMgt = modelQuery.getModelManagement();
-            // We need the element of the VarModel to get the information in
+            // We need the element of the model to get the information in
             // which project the element's declaration is located
-            E varModelElement = modelQuery.getModelElement(parseTreeElement.getText(),
+            E modelElement = modelQuery.getModelElement(parseTreeElement.getText(),
                 ecoreModelQuery.getName(parseTreeProject));
             // If the selected element is a project, e.g. in an import
-            // statement, varModelElement is null.
-            if (varModelElement == null) {
+            // statement, modelElement is null.
+            if (modelElement == null) {
                 /*
                  * In that case, use the text from parseTreeElement to check
                  * whether a project exists that has this name, then open it and
@@ -119,7 +119,7 @@ public class GenericEditorOpener <T extends EObject, P extends EObject, M extend
             } else {
                 // If the selected element is a project element, we need the
                 // parent project the varModelElement is declared in.
-                M parentProject = modelQuery.getParentProject(varModelElement);
+                M parentProject = modelQuery.getParentProject(modelElement);
                 // Get the URI of the parent project for opening the file
                 // at that URI in a (new) editor.
                 URI parentProjectUri = getProjectUri(parentProject);
@@ -128,7 +128,7 @@ public class GenericEditorOpener <T extends EObject, P extends EObject, M extend
                 CommonXtextEditor<T, P> editor = openEditor(parentProjectUri);
                 // Get the type of the varModelElement in order to unambiguously
                 // identify its declaration in the newly opened editor
-                R declaration = modelQuery.findDeclaration(parentProject, varModelElement);
+                R declaration = modelQuery.findDeclaration(parentProject, modelElement);
 
                 /*
                  * If the type if the varModelElement is "project", we do not
@@ -243,6 +243,9 @@ public class GenericEditorOpener <T extends EObject, P extends EObject, M extend
                         }
                     } catch (PartInitException e) {
                         getLogger().error("Finding editor: " + e.getMessage());
+                    }
+                    if (null != editorPart) {
+                        activeWorkbenchWindowPage.bringToTop(editorPart);
                     }
                 }
             }

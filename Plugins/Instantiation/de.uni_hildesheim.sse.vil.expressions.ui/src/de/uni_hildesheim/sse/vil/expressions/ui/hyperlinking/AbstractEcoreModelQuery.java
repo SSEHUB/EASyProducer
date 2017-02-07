@@ -40,7 +40,7 @@ public abstract class AbstractEcoreModelQuery<P extends EObject, R>
      * @param element the element to search for
      * @return the found variable declaration or <b>null</b>
      */
-    protected static EObject findVariableDeclaration(
+    public static EObject findVariableDeclaration(
         List<de.uni_hildesheim.sse.vil.expressions.expressionDsl.VariableDeclaration> defs, 
         VariableDeclaration element) {
         EObject result = null;
@@ -60,7 +60,7 @@ public abstract class AbstractEcoreModelQuery<P extends EObject, R>
      * @param element the element to search for
      * @return the found type def or <b>null</b>
      */
-    protected static EObject findTypedef(List<de.uni_hildesheim.sse.vil.expressions.expressionDsl.TypeDef> defs, 
+    public static EObject findTypedef(List<de.uni_hildesheim.sse.vil.expressions.expressionDsl.TypeDef> defs, 
         Typedef element) {
         EObject result = null;
         String alias = ((Typedef) element).getName();

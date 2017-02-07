@@ -137,7 +137,7 @@ public class ModelUtils {
                 for (int i = 0; null == result && i < model.getImportsCount(); i++) {
                     ModelImport<?> imp = model.getImport(i);
                     if (null != imp.getResolved()) {
-                        findElement((M) imp.getResolved(), selectedElement, finder, done);
+                        result = findElement((M) imp.getResolved(), selectedElement, finder, done);
                     }
                 }
             }

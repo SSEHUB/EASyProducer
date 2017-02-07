@@ -73,7 +73,6 @@ public class RtVilModelQuery implements IModelQuery<Script, IBuildlangElement, I
                 result = tactic;
             }
         }
-System.err.println(model.getName()+" "+name+" -r> "+result);        
         if (null == result) {
             result = VilModelQuery.findScriptElement(model, name);
         }
