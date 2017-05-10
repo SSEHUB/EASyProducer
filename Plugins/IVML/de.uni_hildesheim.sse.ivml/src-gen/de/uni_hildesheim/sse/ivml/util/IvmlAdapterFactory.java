@@ -365,9 +365,9 @@ public class IvmlAdapterFactory extends AdapterFactoryImpl
         return createDeclarationAdapter();
       }
       @Override
-      public Adapter caseActualParameterList(ActualParameterList object)
+      public Adapter caseActualArgumentList(ActualArgumentList object)
       {
-        return createActualParameterListAdapter();
+        return createActualArgumentListAdapter();
       }
       @Override
       public Adapter caseExpressionAccess(ExpressionAccess object)
@@ -1297,16 +1297,16 @@ public class IvmlAdapterFactory extends AdapterFactoryImpl
   }
 
   /**
-   * Creates a new adapter for an object of class '{@link de.uni_hildesheim.sse.ivml.ActualParameterList <em>Actual Parameter List</em>}'.
+   * Creates a new adapter for an object of class '{@link de.uni_hildesheim.sse.ivml.ActualArgumentList <em>Actual Argument List</em>}'.
    * <!-- begin-user-doc -->
    * This default implementation returns null so that we can easily ignore cases;
    * it's useful to ignore a case when inheritance will catch all the cases anyway.
    * <!-- end-user-doc -->
    * @return the new adapter.
-   * @see de.uni_hildesheim.sse.ivml.ActualParameterList
+   * @see de.uni_hildesheim.sse.ivml.ActualArgumentList
    * @generated
    */
-  public Adapter createActualParameterListAdapter()
+  public Adapter createActualArgumentListAdapter()
   {
     return null;
   }

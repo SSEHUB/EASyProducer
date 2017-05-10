@@ -452,14 +452,14 @@ Call: // IVML: "lambda"-expression with apply operation set->apply(t,r=0|max(t,r
 FeatureCall:	
 	name=Identifier 
 	'(' 
-	param=ActualParameterList? 
+	ActualArgumentList? 
 	')'
 	;
 	
 SetOp:
 	name=Identifier 
 	'(' 
-		decl=Declarator? declEx=ActualParameterList?
+		decl=Declarator? ActualArgumentList?
 	')'
 	;
 
@@ -472,11 +472,11 @@ Declaration:
 	('=' init=Expression)?
 	;	
 	
-ActualParameterList:	
-	param+=Expression 
+fragment ActualArgumentList:	
+	args+=Expression 
 	(
 		',' 
-		param+=Expression
+		args+=Expression
 	)*
 	;
 

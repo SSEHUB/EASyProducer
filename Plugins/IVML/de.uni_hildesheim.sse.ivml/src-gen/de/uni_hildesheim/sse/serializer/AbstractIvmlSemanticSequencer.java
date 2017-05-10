@@ -5,7 +5,6 @@ package de.uni_hildesheim.sse.serializer;
 
 import com.google.inject.Inject;
 import de.uni_hildesheim.sse.ivml.AccessName;
-import de.uni_hildesheim.sse.ivml.ActualParameterList;
 import de.uni_hildesheim.sse.ivml.AdditiveExpression;
 import de.uni_hildesheim.sse.ivml.AdditiveExpressionPart;
 import de.uni_hildesheim.sse.ivml.AnnotateTo;
@@ -100,9 +99,6 @@ public abstract class AbstractIvmlSemanticSequencer extends AbstractDelegatingSe
 			case IvmlPackage.ACCESS_NAME:
 				sequence_AccessName(context, (AccessName) semanticObject); 
 				return; 
-			case IvmlPackage.ACTUAL_PARAMETER_LIST:
-				sequence_ActualParameterList(context, (ActualParameterList) semanticObject); 
-				return; 
 			case IvmlPackage.ADDITIVE_EXPRESSION:
 				sequence_AdditiveExpression(context, (AdditiveExpression) semanticObject); 
 				return; 
@@ -176,7 +172,7 @@ public abstract class AbstractIvmlSemanticSequencer extends AbstractDelegatingSe
 				sequence_ExpressionStatement(context, (ExpressionStatement) semanticObject); 
 				return; 
 			case IvmlPackage.FEATURE_CALL:
-				sequence_FeatureCall(context, (FeatureCall) semanticObject); 
+				sequence_ActualArgumentList_FeatureCall(context, (FeatureCall) semanticObject); 
 				return; 
 			case IvmlPackage.FREEZE:
 				sequence_Freeze(context, (Freeze) semanticObject); 
@@ -254,7 +250,7 @@ public abstract class AbstractIvmlSemanticSequencer extends AbstractDelegatingSe
 				sequence_RelationalExpressionPart(context, (RelationalExpressionPart) semanticObject); 
 				return; 
 			case IvmlPackage.SET_OP:
-				sequence_SetOp(context, (SetOp) semanticObject); 
+				sequence_ActualArgumentList_SetOp(context, (SetOp) semanticObject); 
 				return; 
 			case IvmlPackage.TYPE:
 				sequence_Type(context, (Type) semanticObject); 
@@ -314,12 +310,24 @@ public abstract class AbstractIvmlSemanticSequencer extends AbstractDelegatingSe
 	
 	/**
 	 * Contexts:
-	 *     ActualParameterList returns ActualParameterList
+	 *     FeatureCall returns FeatureCall
 	 *
 	 * Constraint:
-	 *     (param+=Expression param+=Expression*)
+	 *     (name=Identifier (args+=Expression args+=Expression*)?)
 	 */
-	protected void sequence_ActualParameterList(ISerializationContext context, ActualParameterList semanticObject) {
+	protected void sequence_ActualArgumentList_FeatureCall(ISerializationContext context, FeatureCall semanticObject) {
+		genericSequencer.createSequence(context, semanticObject);
+	}
+	
+	
+	/**
+	 * Contexts:
+	 *     SetOp returns SetOp
+	 *
+	 * Constraint:
+	 *     (name=Identifier decl=Declarator? (args+=Expression args+=Expression*)?)
+	 */
+	protected void sequence_ActualArgumentList_SetOp(ISerializationContext context, SetOp semanticObject) {
 		genericSequencer.createSequence(context, semanticObject);
 	}
 	
@@ -636,18 +644,6 @@ public abstract class AbstractIvmlSemanticSequencer extends AbstractDelegatingSe
 	 *     (let=LetExpression | expr=ImplicationExpression | collection=CollectionInitializer)
 	 */
 	protected void sequence_Expression(ISerializationContext context, Expression semanticObject) {
-		genericSequencer.createSequence(context, semanticObject);
-	}
-	
-	
-	/**
-	 * Contexts:
-	 *     FeatureCall returns FeatureCall
-	 *
-	 * Constraint:
-	 *     (name=Identifier param=ActualParameterList?)
-	 */
-	protected void sequence_FeatureCall(ISerializationContext context, FeatureCall semanticObject) {
 		genericSequencer.createSequence(context, semanticObject);
 	}
 	
@@ -1039,18 +1035,6 @@ public abstract class AbstractIvmlSemanticSequencer extends AbstractDelegatingSe
 	 *     (left=AdditiveExpression right=RelationalExpressionPart?)
 	 */
 	protected void sequence_RelationalExpression(ISerializationContext context, RelationalExpression semanticObject) {
-		genericSequencer.createSequence(context, semanticObject);
-	}
-	
-	
-	/**
-	 * Contexts:
-	 *     SetOp returns SetOp
-	 *
-	 * Constraint:
-	 *     (name=Identifier decl=Declarator? declEx=ActualParameterList?)
-	 */
-	protected void sequence_SetOp(ISerializationContext context, SetOp semanticObject) {
 		genericSequencer.createSequence(context, semanticObject);
 	}
 	

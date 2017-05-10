@@ -244,14 +244,9 @@
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Ivml.ecore#//Call/setOp"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Ivml.ecore#//Call/arrayEx"/>
     </genClasses>
-    <genClasses ecoreClass="Ivml.ecore#//FeatureCall">
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Ivml.ecore#//FeatureCall/name"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Ivml.ecore#//FeatureCall/param"/>
-    </genClasses>
+    <genClasses ecoreClass="Ivml.ecore#//FeatureCall"/>
     <genClasses ecoreClass="Ivml.ecore#//SetOp">
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Ivml.ecore#//SetOp/name"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Ivml.ecore#//SetOp/decl"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Ivml.ecore#//SetOp/declEx"/>
     </genClasses>
     <genClasses ecoreClass="Ivml.ecore#//Declarator">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Ivml.ecore#//Declarator/decl"/>
@@ -261,8 +256,9 @@
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Ivml.ecore#//Declaration/id"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Ivml.ecore#//Declaration/init"/>
     </genClasses>
-    <genClasses ecoreClass="Ivml.ecore#//ActualParameterList">
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Ivml.ecore#//ActualParameterList/param"/>
+    <genClasses ecoreClass="Ivml.ecore#//ActualArgumentList">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Ivml.ecore#//ActualArgumentList/args"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Ivml.ecore#//ActualArgumentList/name"/>
     </genClasses>
     <genClasses ecoreClass="Ivml.ecore#//ExpressionAccess">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Ivml.ecore#//ExpressionAccess/name"/>

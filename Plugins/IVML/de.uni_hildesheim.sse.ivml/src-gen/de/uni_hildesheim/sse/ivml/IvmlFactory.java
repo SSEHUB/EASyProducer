@@ -545,13 +545,13 @@ public interface IvmlFactory extends EFactory
   Declaration createDeclaration();
 
   /**
-   * Returns a new object of class '<em>Actual Parameter List</em>'.
+   * Returns a new object of class '<em>Actual Argument List</em>'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return a new object of class '<em>Actual Parameter List</em>'.
+   * @return a new object of class '<em>Actual Argument List</em>'.
    * @generated
    */
-  ActualParameterList createActualParameterList();
+  ActualArgumentList createActualArgumentList();
 
   /**
    * Returns a new object of class '<em>Expression Access</em>'.

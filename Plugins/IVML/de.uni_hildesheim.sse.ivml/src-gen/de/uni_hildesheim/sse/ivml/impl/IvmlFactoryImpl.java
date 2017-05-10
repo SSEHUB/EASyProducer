@@ -122,7 +122,7 @@ public class IvmlFactoryImpl extends EFactoryImpl implements IvmlFactory
       case IvmlPackage.SET_OP: return createSetOp();
       case IvmlPackage.DECLARATOR: return createDeclarator();
       case IvmlPackage.DECLARATION: return createDeclaration();
-      case IvmlPackage.ACTUAL_PARAMETER_LIST: return createActualParameterList();
+      case IvmlPackage.ACTUAL_ARGUMENT_LIST: return createActualArgumentList();
       case IvmlPackage.EXPRESSION_ACCESS: return createExpressionAccess();
       case IvmlPackage.PRIMARY_EXPRESSION: return createPrimaryExpression();
       case IvmlPackage.COLLECTION_INITIALIZER: return createCollectionInitializer();
@@ -778,10 +778,10 @@ public class IvmlFactoryImpl extends EFactoryImpl implements IvmlFactory
    * <!-- end-user-doc -->
    * @generated
    */
-  public ActualParameterList createActualParameterList()
+  public ActualArgumentList createActualArgumentList()
   {
-    ActualParameterListImpl actualParameterList = new ActualParameterListImpl();
-    return actualParameterList;
+    ActualArgumentListImpl actualArgumentList = new ActualArgumentListImpl();
+    return actualArgumentList;
   }
 
   /**

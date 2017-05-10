@@ -3,7 +3,7 @@
 package de.uni_hildesheim.sse.ivml.impl;
 
 import de.uni_hildesheim.sse.ivml.AccessName;
-import de.uni_hildesheim.sse.ivml.ActualParameterList;
+import de.uni_hildesheim.sse.ivml.ActualArgumentList;
 import de.uni_hildesheim.sse.ivml.AdditiveExpression;
 import de.uni_hildesheim.sse.ivml.AdditiveExpressionPart;
 import de.uni_hildesheim.sse.ivml.AnnotateTo;
@@ -497,7 +497,7 @@ public class IvmlPackageImpl extends EPackageImpl implements IvmlPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  private EClass actualParameterListEClass = null;
+  private EClass actualArgumentListEClass = null;
 
   /**
    * <!-- begin-user-doc -->
@@ -2456,26 +2456,6 @@ public class IvmlPackageImpl extends EPackageImpl implements IvmlPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EAttribute getFeatureCall_Name()
-  {
-    return (EAttribute)featureCallEClass.getEStructuralFeatures().get(0);
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  public EReference getFeatureCall_Param()
-  {
-    return (EReference)featureCallEClass.getEStructuralFeatures().get(1);
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
   public EClass getSetOp()
   {
     return setOpEClass;
@@ -2486,29 +2466,9 @@ public class IvmlPackageImpl extends EPackageImpl implements IvmlPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EAttribute getSetOp_Name()
-  {
-    return (EAttribute)setOpEClass.getEStructuralFeatures().get(0);
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
   public EReference getSetOp_Decl()
   {
-    return (EReference)setOpEClass.getEStructuralFeatures().get(1);
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  public EReference getSetOp_DeclEx()
-  {
-    return (EReference)setOpEClass.getEStructuralFeatures().get(2);
+    return (EReference)setOpEClass.getEStructuralFeatures().get(0);
   }
 
   /**
@@ -2576,9 +2536,9 @@ public class IvmlPackageImpl extends EPackageImpl implements IvmlPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EClass getActualParameterList()
+  public EClass getActualArgumentList()
   {
-    return actualParameterListEClass;
+    return actualArgumentListEClass;
   }
 
   /**
@@ -2586,9 +2546,19 @@ public class IvmlPackageImpl extends EPackageImpl implements IvmlPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EReference getActualParameterList_Param()
+  public EReference getActualArgumentList_Args()
   {
-    return (EReference)actualParameterListEClass.getEStructuralFeatures().get(0);
+    return (EReference)actualArgumentListEClass.getEStructuralFeatures().get(0);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EAttribute getActualArgumentList_Name()
+  {
+    return (EAttribute)actualArgumentListEClass.getEStructuralFeatures().get(1);
   }
 
   /**
@@ -3129,13 +3099,9 @@ public class IvmlPackageImpl extends EPackageImpl implements IvmlPackage
     createEReference(callEClass, CALL__ARRAY_EX);
 
     featureCallEClass = createEClass(FEATURE_CALL);
-    createEAttribute(featureCallEClass, FEATURE_CALL__NAME);
-    createEReference(featureCallEClass, FEATURE_CALL__PARAM);
 
     setOpEClass = createEClass(SET_OP);
-    createEAttribute(setOpEClass, SET_OP__NAME);
     createEReference(setOpEClass, SET_OP__DECL);
-    createEReference(setOpEClass, SET_OP__DECL_EX);
 
     declaratorEClass = createEClass(DECLARATOR);
     createEReference(declaratorEClass, DECLARATOR__DECL);
@@ -3145,8 +3111,9 @@ public class IvmlPackageImpl extends EPackageImpl implements IvmlPackage
     createEAttribute(declarationEClass, DECLARATION__ID);
     createEReference(declarationEClass, DECLARATION__INIT);
 
-    actualParameterListEClass = createEClass(ACTUAL_PARAMETER_LIST);
-    createEReference(actualParameterListEClass, ACTUAL_PARAMETER_LIST__PARAM);
+    actualArgumentListEClass = createEClass(ACTUAL_ARGUMENT_LIST);
+    createEReference(actualArgumentListEClass, ACTUAL_ARGUMENT_LIST__ARGS);
+    createEAttribute(actualArgumentListEClass, ACTUAL_ARGUMENT_LIST__NAME);
 
     expressionAccessEClass = createEClass(EXPRESSION_ACCESS);
     createEAttribute(expressionAccessEClass, EXPRESSION_ACCESS__NAME);
@@ -3212,6 +3179,8 @@ public class IvmlPackageImpl extends EPackageImpl implements IvmlPackage
     // Set bounds for type parameters
 
     // Add supertypes to classes
+    featureCallEClass.getESuperTypes().add(this.getActualArgumentList());
+    setOpEClass.getESuperTypes().add(this.getActualArgumentList());
 
     // Initialize classes and features; add operations and parameters
     initEClass(variabilityUnitEClass, VariabilityUnit.class, "VariabilityUnit", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
@@ -3452,13 +3421,9 @@ public class IvmlPackageImpl extends EPackageImpl implements IvmlPackage
     initEReference(getCall_ArrayEx(), this.getExpression(), null, "arrayEx", null, 0, 1, Call.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     initEClass(featureCallEClass, FeatureCall.class, "FeatureCall", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-    initEAttribute(getFeatureCall_Name(), ecorePackage.getEString(), "name", null, 0, 1, FeatureCall.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEReference(getFeatureCall_Param(), this.getActualParameterList(), null, "param", null, 0, 1, FeatureCall.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     initEClass(setOpEClass, SetOp.class, "SetOp", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-    initEAttribute(getSetOp_Name(), ecorePackage.getEString(), "name", null, 0, 1, SetOp.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEReference(getSetOp_Decl(), this.getDeclarator(), null, "decl", null, 0, 1, SetOp.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEReference(getSetOp_DeclEx(), this.getActualParameterList(), null, "declEx", null, 0, 1, SetOp.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     initEClass(declaratorEClass, Declarator.class, "Declarator", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
     initEReference(getDeclarator_Decl(), this.getDeclaration(), null, "decl", null, 0, -1, Declarator.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -3468,8 +3433,9 @@ public class IvmlPackageImpl extends EPackageImpl implements IvmlPackage
     initEAttribute(getDeclaration_Id(), ecorePackage.getEString(), "id", null, 0, -1, Declaration.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, !IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEReference(getDeclaration_Init(), this.getExpression(), null, "init", null, 0, 1, Declaration.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
-    initEClass(actualParameterListEClass, ActualParameterList.class, "ActualParameterList", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-    initEReference(getActualParameterList_Param(), this.getExpression(), null, "param", null, 0, -1, ActualParameterList.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEClass(actualArgumentListEClass, ActualArgumentList.class, "ActualArgumentList", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+    initEReference(getActualArgumentList_Args(), this.getExpression(), null, "args", null, 0, -1, ActualArgumentList.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEAttribute(getActualArgumentList_Name(), ecorePackage.getEString(), "name", null, 0, 1, ActualArgumentList.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     initEClass(expressionAccessEClass, ExpressionAccess.class, "ExpressionAccess", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
     initEAttribute(getExpressionAccess_Name(), ecorePackage.getEString(), "name", null, 0, 1, ExpressionAccess.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);

@@ -32,7 +32,6 @@ import org.eclipse.xtext.ui.editor.contentassist.ICompletionProposalAcceptor;
 
 import com.google.inject.Inject;
 
-import de.uni_hildesheim.sse.ivml.ActualParameterList;
 import de.uni_hildesheim.sse.ivml.AdditiveExpression;
 import de.uni_hildesheim.sse.ivml.AssignmentExpression;
 import de.uni_hildesheim.sse.ivml.Call;
@@ -654,11 +653,11 @@ public class ExpressionProposalProvider extends AbstractIvmlProposalProvider  {
                 result = inferType(call.getCall(), operand, model, cmpDef);
             } else if (null != call.getSetOp()) {
                 SetOp sOp = call.getSetOp();
-                ActualParameterList params = sOp.getDeclEx();
-                int pCount = null == params || null == params.getParam() ? 0 : params.getParam().size();
+                List<Expression> args = sOp.getArgs();
+                int pCount = null == args ? 0 : args.size();
                 IDatatype[] param = new IDatatype[pCount];
                 for (int p = 0; p < pCount; p++) {
-                    param[p] = inferType(params.getParam().get(p), model, cmpDef);
+                    param[p] = inferType(args.get(p), model, cmpDef);
                }
                 result = inferType(sOp.getName(), operand, param, true);
             } else if (null != call.getArrayEx()) {
@@ -679,24 +678,21 @@ public class ExpressionProposalProvider extends AbstractIvmlProposalProvider  {
      * @return the inferred type or <b>null</b> if no type is available
      */
     private IDatatype inferType(FeatureCall call, IDatatype operand, EObject model, TypedefCompound cmpDef) {
-        ActualParameterList param = call.getParam();
+        List<Expression> args = call.getArgs();
         IDatatype[] pTypes = null;
-        if (null != param) {
-            List<Expression> pList = param.getParam();
-            if (null != pList) {
+        if (null != args) {
                 int offset = 0;
-                if (null == operand && !pList.isEmpty()) {
+                if (null == operand && !args.isEmpty()) {
                     // if not explicitly given, determine from first (implicit) parameter
-                    operand = inferType(pList.get(0), model, cmpDef);
+                    operand = inferType(args.get(0), model, cmpDef);
                     offset = 1;
                 }
-                if (pList.size() > offset) {
-                    pTypes = new IDatatype[pList.size() - offset];
-                    for (int e = offset; e < pList.size(); e++) {
-                        pTypes[e - offset] = inferType(pList.get(e), model, cmpDef);
+                if (args.size() > offset) {
+                    pTypes = new IDatatype[args.size() - offset];
+                    for (int e = offset; e < args.size(); e++) {
+                        pTypes[e - offset] = inferType(args.get(e), model, cmpDef);
                     }
                 }
-            }
         }
         return inferType(call.getName(), operand, pTypes, false);
     }

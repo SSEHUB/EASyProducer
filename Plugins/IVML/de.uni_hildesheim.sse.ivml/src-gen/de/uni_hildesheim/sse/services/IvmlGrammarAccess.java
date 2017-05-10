@@ -2658,15 +2658,14 @@ public class IvmlGrammarAccess extends AbstractGrammarElementFinder {
 		private final Assignment cNameAssignment_0 = (Assignment)cGroup.eContents().get(0);
 		private final RuleCall cNameIdentifierParserRuleCall_0_0 = (RuleCall)cNameAssignment_0.eContents().get(0);
 		private final Keyword cLeftParenthesisKeyword_1 = (Keyword)cGroup.eContents().get(1);
-		private final Assignment cParamAssignment_2 = (Assignment)cGroup.eContents().get(2);
-		private final RuleCall cParamActualParameterListParserRuleCall_2_0 = (RuleCall)cParamAssignment_2.eContents().get(0);
+		private final RuleCall cActualArgumentListParserRuleCall_2 = (RuleCall)cGroup.eContents().get(2);
 		private final Keyword cRightParenthesisKeyword_3 = (Keyword)cGroup.eContents().get(3);
 		
 		//FeatureCall:
-		//	name=Identifier '(' param=ActualParameterList? ')';
+		//	name=Identifier '(' ActualArgumentList? ')';
 		@Override public ParserRule getRule() { return rule; }
 
-		//name=Identifier '(' param=ActualParameterList? ')'
+		//name=Identifier '(' ActualArgumentList? ')'
 		public Group getGroup() { return cGroup; }
 
 		//name=Identifier
@@ -2678,11 +2677,8 @@ public class IvmlGrammarAccess extends AbstractGrammarElementFinder {
 		//'('
 		public Keyword getLeftParenthesisKeyword_1() { return cLeftParenthesisKeyword_1; }
 
-		//param=ActualParameterList?
-		public Assignment getParamAssignment_2() { return cParamAssignment_2; }
-
-		//ActualParameterList
-		public RuleCall getParamActualParameterListParserRuleCall_2_0() { return cParamActualParameterListParserRuleCall_2_0; }
+		//ActualArgumentList?
+		public RuleCall getActualArgumentListParserRuleCall_2() { return cActualArgumentListParserRuleCall_2; }
 
 		//')'
 		public Keyword getRightParenthesisKeyword_3() { return cRightParenthesisKeyword_3; }
@@ -2696,15 +2692,14 @@ public class IvmlGrammarAccess extends AbstractGrammarElementFinder {
 		private final Keyword cLeftParenthesisKeyword_1 = (Keyword)cGroup.eContents().get(1);
 		private final Assignment cDeclAssignment_2 = (Assignment)cGroup.eContents().get(2);
 		private final RuleCall cDeclDeclaratorParserRuleCall_2_0 = (RuleCall)cDeclAssignment_2.eContents().get(0);
-		private final Assignment cDeclExAssignment_3 = (Assignment)cGroup.eContents().get(3);
-		private final RuleCall cDeclExActualParameterListParserRuleCall_3_0 = (RuleCall)cDeclExAssignment_3.eContents().get(0);
+		private final RuleCall cActualArgumentListParserRuleCall_3 = (RuleCall)cGroup.eContents().get(3);
 		private final Keyword cRightParenthesisKeyword_4 = (Keyword)cGroup.eContents().get(4);
 		
 		//SetOp:
-		//	name=Identifier '(' decl=Declarator? declEx=ActualParameterList? ')';
+		//	name=Identifier '(' decl=Declarator? ActualArgumentList? ')';
 		@Override public ParserRule getRule() { return rule; }
 
-		//name=Identifier '(' decl=Declarator? declEx=ActualParameterList? ')'
+		//name=Identifier '(' decl=Declarator? ActualArgumentList? ')'
 		public Group getGroup() { return cGroup; }
 
 		//name=Identifier
@@ -2722,11 +2717,8 @@ public class IvmlGrammarAccess extends AbstractGrammarElementFinder {
 		//Declarator
 		public RuleCall getDeclDeclaratorParserRuleCall_2_0() { return cDeclDeclaratorParserRuleCall_2_0; }
 
-		//declEx=ActualParameterList?
-		public Assignment getDeclExAssignment_3() { return cDeclExAssignment_3; }
-
-		//ActualParameterList
-		public RuleCall getDeclExActualParameterListParserRuleCall_3_0() { return cDeclExActualParameterListParserRuleCall_3_0; }
+		//ActualArgumentList?
+		public RuleCall getActualArgumentListParserRuleCall_3() { return cActualArgumentListParserRuleCall_3; }
 
 		//')'
 		public Keyword getRightParenthesisKeyword_4() { return cRightParenthesisKeyword_4; }
@@ -2832,40 +2824,40 @@ public class IvmlGrammarAccess extends AbstractGrammarElementFinder {
 		public RuleCall getInitExpressionParserRuleCall_3_1_0() { return cInitExpressionParserRuleCall_3_1_0; }
 	}
 
-	public class ActualParameterListElements extends AbstractParserRuleElementFinder {
-		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "de.uni_hildesheim.sse.Ivml.ActualParameterList");
+	public class ActualArgumentListElements extends AbstractParserRuleElementFinder {
+		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "de.uni_hildesheim.sse.Ivml.ActualArgumentList");
 		private final Group cGroup = (Group)rule.eContents().get(1);
-		private final Assignment cParamAssignment_0 = (Assignment)cGroup.eContents().get(0);
-		private final RuleCall cParamExpressionParserRuleCall_0_0 = (RuleCall)cParamAssignment_0.eContents().get(0);
+		private final Assignment cArgsAssignment_0 = (Assignment)cGroup.eContents().get(0);
+		private final RuleCall cArgsExpressionParserRuleCall_0_0 = (RuleCall)cArgsAssignment_0.eContents().get(0);
 		private final Group cGroup_1 = (Group)cGroup.eContents().get(1);
 		private final Keyword cCommaKeyword_1_0 = (Keyword)cGroup_1.eContents().get(0);
-		private final Assignment cParamAssignment_1_1 = (Assignment)cGroup_1.eContents().get(1);
-		private final RuleCall cParamExpressionParserRuleCall_1_1_0 = (RuleCall)cParamAssignment_1_1.eContents().get(0);
+		private final Assignment cArgsAssignment_1_1 = (Assignment)cGroup_1.eContents().get(1);
+		private final RuleCall cArgsExpressionParserRuleCall_1_1_0 = (RuleCall)cArgsAssignment_1_1.eContents().get(0);
 		
-		//ActualParameterList:
-		//	param+=Expression (',' param+=Expression)*;
+		//fragment ActualArgumentList:
+		//	args+=Expression (',' args+=Expression)*;
 		@Override public ParserRule getRule() { return rule; }
 
-		//param+=Expression (',' param+=Expression)*
+		//args+=Expression (',' args+=Expression)*
 		public Group getGroup() { return cGroup; }
 
-		//param+=Expression
-		public Assignment getParamAssignment_0() { return cParamAssignment_0; }
+		//args+=Expression
+		public Assignment getArgsAssignment_0() { return cArgsAssignment_0; }
 
 		//Expression
-		public RuleCall getParamExpressionParserRuleCall_0_0() { return cParamExpressionParserRuleCall_0_0; }
+		public RuleCall getArgsExpressionParserRuleCall_0_0() { return cArgsExpressionParserRuleCall_0_0; }
 
-		//(',' param+=Expression)*
+		//(',' args+=Expression)*
 		public Group getGroup_1() { return cGroup_1; }
 
 		//','
 		public Keyword getCommaKeyword_1_0() { return cCommaKeyword_1_0; }
 
-		//param+=Expression
-		public Assignment getParamAssignment_1_1() { return cParamAssignment_1_1; }
+		//args+=Expression
+		public Assignment getArgsAssignment_1_1() { return cArgsAssignment_1_1; }
 
 		//Expression
-		public RuleCall getParamExpressionParserRuleCall_1_1_0() { return cParamExpressionParserRuleCall_1_1_0; }
+		public RuleCall getArgsExpressionParserRuleCall_1_1_0() { return cArgsExpressionParserRuleCall_1_1_0; }
 	}
 
 	public class ExpressionAccessElements extends AbstractParserRuleElementFinder {
@@ -3322,7 +3314,7 @@ public class IvmlGrammarAccess extends AbstractGrammarElementFinder {
 	private final SetOpElements pSetOp;
 	private final DeclaratorElements pDeclarator;
 	private final DeclarationElements pDeclaration;
-	private final ActualParameterListElements pActualParameterList;
+	private final ActualArgumentListElements pActualArgumentList;
 	private final ExpressionAccessElements pExpressionAccess;
 	private final PrimaryExpressionElements pPrimaryExpression;
 	private final CollectionInitializerElements pCollectionInitializer;
@@ -3412,7 +3404,7 @@ public class IvmlGrammarAccess extends AbstractGrammarElementFinder {
 		this.pSetOp = new SetOpElements();
 		this.pDeclarator = new DeclaratorElements();
 		this.pDeclaration = new DeclarationElements();
-		this.pActualParameterList = new ActualParameterListElements();
+		this.pActualArgumentList = new ActualArgumentListElements();
 		this.pExpressionAccess = new ExpressionAccessElements();
 		this.pPrimaryExpression = new PrimaryExpressionElements();
 		this.pCollectionInitializer = new CollectionInitializerElements();
@@ -4117,7 +4109,7 @@ public class IvmlGrammarAccess extends AbstractGrammarElementFinder {
 	}
 
 	//FeatureCall:
-	//	name=Identifier '(' param=ActualParameterList? ')';
+	//	name=Identifier '(' ActualArgumentList? ')';
 	public FeatureCallElements getFeatureCallAccess() {
 		return pFeatureCall;
 	}
@@ -4127,7 +4119,7 @@ public class IvmlGrammarAccess extends AbstractGrammarElementFinder {
 	}
 
 	//SetOp:
-	//	name=Identifier '(' decl=Declarator? declEx=ActualParameterList? ')';
+	//	name=Identifier '(' decl=Declarator? ActualArgumentList? ')';
 	public SetOpElements getSetOpAccess() {
 		return pSetOp;
 	}
@@ -4156,14 +4148,14 @@ public class IvmlGrammarAccess extends AbstractGrammarElementFinder {
 		return getDeclarationAccess().getRule();
 	}
 
-	//ActualParameterList:
-	//	param+=Expression (',' param+=Expression)*;
-	public ActualParameterListElements getActualParameterListAccess() {
-		return pActualParameterList;
+	//fragment ActualArgumentList:
+	//	args+=Expression (',' args+=Expression)*;
+	public ActualArgumentListElements getActualArgumentListAccess() {
+		return pActualArgumentList;
 	}
 	
-	public ParserRule getActualParameterListRule() {
-		return getActualParameterListAccess().getRule();
+	public ParserRule getActualArgumentListRule() {
+		return getActualArgumentListAccess().getRule();
 	}
 
 	//ExpressionAccess:

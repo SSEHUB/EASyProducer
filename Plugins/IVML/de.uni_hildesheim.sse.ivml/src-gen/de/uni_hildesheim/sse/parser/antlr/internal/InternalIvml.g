@@ -4763,23 +4763,20 @@ ruleFeatureCall returns [EObject current=null]
     	newLeafNode(otherlv_1, grammarAccess.getFeatureCallAccess().getLeftParenthesisKeyword_1());
     }
 (
-(
-		{ 
-	        newCompositeNode(grammarAccess.getFeatureCallAccess().getParamActualParameterListParserRuleCall_2_0()); 
-	    }
-		lv_param_2_0=ruleActualParameterList		{
-	        if ($current==null) {
-	            $current = createModelElementForParent(grammarAccess.getFeatureCallRule());
-	        }
-       		set(
-       			$current, 
-       			"param",
-        		lv_param_2_0, 
-        		"de.uni_hildesheim.sse.Ivml.ActualParameterList");
-	        afterParserOrEnumRuleCall();
-	    }
-
-)
+	{ 
+	  /* */ 
+	}
+    { 
+		if ($current==null) {
+			$current = createModelElement(grammarAccess.getFeatureCallRule());
+		}
+        newCompositeNode(grammarAccess.getFeatureCallAccess().getActualArgumentListParserRuleCall_2()); 
+    }
+    this_ActualArgumentList_2=ruleActualArgumentList[$current]
+    { 
+        $current = $this_ActualArgumentList_2.current; 
+        afterParserOrEnumRuleCall();
+    }
 )?	otherlv_3=')' 
     {
     	newLeafNode(otherlv_3, grammarAccess.getFeatureCallAccess().getRightParenthesisKeyword_3());
@@ -4846,23 +4843,20 @@ ruleSetOp returns [EObject current=null]
 
 )
 )?(
-(
-		{ 
-	        newCompositeNode(grammarAccess.getSetOpAccess().getDeclExActualParameterListParserRuleCall_3_0()); 
-	    }
-		lv_declEx_3_0=ruleActualParameterList		{
-	        if ($current==null) {
-	            $current = createModelElementForParent(grammarAccess.getSetOpRule());
-	        }
-       		set(
-       			$current, 
-       			"declEx",
-        		lv_declEx_3_0, 
-        		"de.uni_hildesheim.sse.Ivml.ActualParameterList");
-	        afterParserOrEnumRuleCall();
-	    }
-
-)
+	{ 
+	  /* */ 
+	}
+    { 
+		if ($current==null) {
+			$current = createModelElement(grammarAccess.getSetOpRule());
+		}
+        newCompositeNode(grammarAccess.getSetOpAccess().getActualArgumentListParserRuleCall_3()); 
+    }
+    this_ActualArgumentList_3=ruleActualArgumentList[$current]
+    { 
+        $current = $this_ActualArgumentList_3.current; 
+        afterParserOrEnumRuleCall();
+    }
 )?	otherlv_4=')' 
     {
     	newLeafNode(otherlv_4, grammarAccess.getSetOpAccess().getRightParenthesisKeyword_4());
@@ -5040,33 +5034,25 @@ ruleDeclaration returns [EObject current=null]
 
 
 
-// Entry rule entryRuleActualParameterList
-entryRuleActualParameterList returns [EObject current=null] 
-	:
-	{ newCompositeNode(grammarAccess.getActualParameterListRule()); }
-	 iv_ruleActualParameterList=ruleActualParameterList 
-	 { $current=$iv_ruleActualParameterList.current; } 
-	 EOF 
-;
 
-// Rule ActualParameterList
-ruleActualParameterList returns [EObject current=null] 
+// Rule ActualArgumentList
+ruleActualArgumentList [EObject in_current] returns [EObject current=in_current] 
     @init { enterRule(); 
     }
     @after { leaveRule(); }:
 ((
 (
 		{ 
-	        newCompositeNode(grammarAccess.getActualParameterListAccess().getParamExpressionParserRuleCall_0_0()); 
+	        newCompositeNode(grammarAccess.getActualArgumentListAccess().getArgsExpressionParserRuleCall_0_0()); 
 	    }
-		lv_param_0_0=ruleExpression		{
+		lv_args_0_0=ruleExpression		{
 	        if ($current==null) {
-	            $current = createModelElementForParent(grammarAccess.getActualParameterListRule());
+	            $current = createModelElementForParent(grammarAccess.getActualArgumentListRule());
 	        }
        		add(
        			$current, 
-       			"param",
-        		lv_param_0_0, 
+       			"args",
+        		lv_args_0_0, 
         		"de.uni_hildesheim.sse.Ivml.Expression");
 	        afterParserOrEnumRuleCall();
 	    }
@@ -5074,21 +5060,21 @@ ruleActualParameterList returns [EObject current=null]
 )
 )(	otherlv_1=',' 
     {
-    	newLeafNode(otherlv_1, grammarAccess.getActualParameterListAccess().getCommaKeyword_1_0());
+    	newLeafNode(otherlv_1, grammarAccess.getActualArgumentListAccess().getCommaKeyword_1_0());
     }
 (
 (
 		{ 
-	        newCompositeNode(grammarAccess.getActualParameterListAccess().getParamExpressionParserRuleCall_1_1_0()); 
+	        newCompositeNode(grammarAccess.getActualArgumentListAccess().getArgsExpressionParserRuleCall_1_1_0()); 
 	    }
-		lv_param_2_0=ruleExpression		{
+		lv_args_2_0=ruleExpression		{
 	        if ($current==null) {
-	            $current = createModelElementForParent(grammarAccess.getActualParameterListRule());
+	            $current = createModelElementForParent(grammarAccess.getActualArgumentListRule());
 	        }
        		add(
        			$current, 
-       			"param",
-        		lv_param_2_0, 
+       			"args",
+        		lv_args_2_0, 
         		"de.uni_hildesheim.sse.Ivml.Expression");
 	        afterParserOrEnumRuleCall();
 	    }

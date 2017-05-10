@@ -454,6 +454,7 @@ public class IvmlSwitch<T> extends Switch<T>
       {
         FeatureCall featureCall = (FeatureCall)theEObject;
         T result = caseFeatureCall(featureCall);
+        if (result == null) result = caseActualArgumentList(featureCall);
         if (result == null) result = defaultCase(theEObject);
         return result;
       }
@@ -461,6 +462,7 @@ public class IvmlSwitch<T> extends Switch<T>
       {
         SetOp setOp = (SetOp)theEObject;
         T result = caseSetOp(setOp);
+        if (result == null) result = caseActualArgumentList(setOp);
         if (result == null) result = defaultCase(theEObject);
         return result;
       }
@@ -478,10 +480,10 @@ public class IvmlSwitch<T> extends Switch<T>
         if (result == null) result = defaultCase(theEObject);
         return result;
       }
-      case IvmlPackage.ACTUAL_PARAMETER_LIST:
+      case IvmlPackage.ACTUAL_ARGUMENT_LIST:
       {
-        ActualParameterList actualParameterList = (ActualParameterList)theEObject;
-        T result = caseActualParameterList(actualParameterList);
+        ActualArgumentList actualArgumentList = (ActualArgumentList)theEObject;
+        T result = caseActualArgumentList(actualArgumentList);
         if (result == null) result = defaultCase(theEObject);
         return result;
       }
@@ -1467,17 +1469,17 @@ public class IvmlSwitch<T> extends Switch<T>
   }
 
   /**
-   * Returns the result of interpreting the object as an instance of '<em>Actual Parameter List</em>'.
+   * Returns the result of interpreting the object as an instance of '<em>Actual Argument List</em>'.
    * <!-- begin-user-doc -->
    * This implementation returns null;
    * returning a non-null result will terminate the switch.
    * <!-- end-user-doc -->
    * @param object the target of the switch.
-   * @return the result of interpreting the object as an instance of '<em>Actual Parameter List</em>'.
+   * @return the result of interpreting the object as an instance of '<em>Actual Argument List</em>'.
    * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
    * @generated
    */
-  public T caseActualParameterList(ActualParameterList object)
+  public T caseActualArgumentList(ActualArgumentList object)
   {
     return null;
   }

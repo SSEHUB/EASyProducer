@@ -2244,6 +2244,43 @@ public interface IvmlPackage extends EPackage
   int CALL_FEATURE_COUNT = 3;
 
   /**
+   * The meta object id for the '{@link de.uni_hildesheim.sse.ivml.impl.ActualArgumentListImpl <em>Actual Argument List</em>}' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see de.uni_hildesheim.sse.ivml.impl.ActualArgumentListImpl
+   * @see de.uni_hildesheim.sse.ivml.impl.IvmlPackageImpl#getActualArgumentList()
+   * @generated
+   */
+  int ACTUAL_ARGUMENT_LIST = 58;
+
+  /**
+   * The feature id for the '<em><b>Args</b></em>' containment reference list.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int ACTUAL_ARGUMENT_LIST__ARGS = 0;
+
+  /**
+   * The feature id for the '<em><b>Name</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int ACTUAL_ARGUMENT_LIST__NAME = 1;
+
+  /**
+   * The number of structural features of the '<em>Actual Argument List</em>' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int ACTUAL_ARGUMENT_LIST_FEATURE_COUNT = 2;
+
+  /**
    * The meta object id for the '{@link de.uni_hildesheim.sse.ivml.impl.FeatureCallImpl <em>Feature Call</em>}' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -2254,22 +2291,22 @@ public interface IvmlPackage extends EPackage
   int FEATURE_CALL = 54;
 
   /**
+   * The feature id for the '<em><b>Args</b></em>' containment reference list.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int FEATURE_CALL__ARGS = ACTUAL_ARGUMENT_LIST__ARGS;
+
+  /**
    * The feature id for the '<em><b>Name</b></em>' attribute.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int FEATURE_CALL__NAME = 0;
-
-  /**
-   * The feature id for the '<em><b>Param</b></em>' containment reference.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int FEATURE_CALL__PARAM = 1;
+  int FEATURE_CALL__NAME = ACTUAL_ARGUMENT_LIST__NAME;
 
   /**
    * The number of structural features of the '<em>Feature Call</em>' class.
@@ -2278,7 +2315,7 @@ public interface IvmlPackage extends EPackage
    * @generated
    * @ordered
    */
-  int FEATURE_CALL_FEATURE_COUNT = 2;
+  int FEATURE_CALL_FEATURE_COUNT = ACTUAL_ARGUMENT_LIST_FEATURE_COUNT + 0;
 
   /**
    * The meta object id for the '{@link de.uni_hildesheim.sse.ivml.impl.SetOpImpl <em>Set Op</em>}' class.
@@ -2291,13 +2328,22 @@ public interface IvmlPackage extends EPackage
   int SET_OP = 55;
 
   /**
+   * The feature id for the '<em><b>Args</b></em>' containment reference list.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int SET_OP__ARGS = ACTUAL_ARGUMENT_LIST__ARGS;
+
+  /**
    * The feature id for the '<em><b>Name</b></em>' attribute.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int SET_OP__NAME = 0;
+  int SET_OP__NAME = ACTUAL_ARGUMENT_LIST__NAME;
 
   /**
    * The feature id for the '<em><b>Decl</b></em>' containment reference.
@@ -2306,16 +2352,7 @@ public interface IvmlPackage extends EPackage
    * @generated
    * @ordered
    */
-  int SET_OP__DECL = 1;
-
-  /**
-   * The feature id for the '<em><b>Decl Ex</b></em>' containment reference.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int SET_OP__DECL_EX = 2;
+  int SET_OP__DECL = ACTUAL_ARGUMENT_LIST_FEATURE_COUNT + 0;
 
   /**
    * The number of structural features of the '<em>Set Op</em>' class.
@@ -2324,7 +2361,7 @@ public interface IvmlPackage extends EPackage
    * @generated
    * @ordered
    */
-  int SET_OP_FEATURE_COUNT = 3;
+  int SET_OP_FEATURE_COUNT = ACTUAL_ARGUMENT_LIST_FEATURE_COUNT + 1;
 
   /**
    * The meta object id for the '{@link de.uni_hildesheim.sse.ivml.impl.DeclaratorImpl <em>Declarator</em>}' class.
@@ -2399,34 +2436,6 @@ public interface IvmlPackage extends EPackage
    * @ordered
    */
   int DECLARATION_FEATURE_COUNT = 3;
-
-  /**
-   * The meta object id for the '{@link de.uni_hildesheim.sse.ivml.impl.ActualParameterListImpl <em>Actual Parameter List</em>}' class.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @see de.uni_hildesheim.sse.ivml.impl.ActualParameterListImpl
-   * @see de.uni_hildesheim.sse.ivml.impl.IvmlPackageImpl#getActualParameterList()
-   * @generated
-   */
-  int ACTUAL_PARAMETER_LIST = 58;
-
-  /**
-   * The feature id for the '<em><b>Param</b></em>' containment reference list.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int ACTUAL_PARAMETER_LIST__PARAM = 0;
-
-  /**
-   * The number of structural features of the '<em>Actual Parameter List</em>' class.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int ACTUAL_PARAMETER_LIST_FEATURE_COUNT = 1;
 
   /**
    * The meta object id for the '{@link de.uni_hildesheim.sse.ivml.impl.ExpressionAccessImpl <em>Expression Access</em>}' class.
@@ -4712,28 +4721,6 @@ public interface IvmlPackage extends EPackage
   EClass getFeatureCall();
 
   /**
-   * Returns the meta object for the attribute '{@link de.uni_hildesheim.sse.ivml.FeatureCall#getName <em>Name</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for the attribute '<em>Name</em>'.
-   * @see de.uni_hildesheim.sse.ivml.FeatureCall#getName()
-   * @see #getFeatureCall()
-   * @generated
-   */
-  EAttribute getFeatureCall_Name();
-
-  /**
-   * Returns the meta object for the containment reference '{@link de.uni_hildesheim.sse.ivml.FeatureCall#getParam <em>Param</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for the containment reference '<em>Param</em>'.
-   * @see de.uni_hildesheim.sse.ivml.FeatureCall#getParam()
-   * @see #getFeatureCall()
-   * @generated
-   */
-  EReference getFeatureCall_Param();
-
-  /**
    * Returns the meta object for class '{@link de.uni_hildesheim.sse.ivml.SetOp <em>Set Op</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -4742,17 +4729,6 @@ public interface IvmlPackage extends EPackage
    * @generated
    */
   EClass getSetOp();
-
-  /**
-   * Returns the meta object for the attribute '{@link de.uni_hildesheim.sse.ivml.SetOp#getName <em>Name</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for the attribute '<em>Name</em>'.
-   * @see de.uni_hildesheim.sse.ivml.SetOp#getName()
-   * @see #getSetOp()
-   * @generated
-   */
-  EAttribute getSetOp_Name();
 
   /**
    * Returns the meta object for the containment reference '{@link de.uni_hildesheim.sse.ivml.SetOp#getDecl <em>Decl</em>}'.
@@ -4764,17 +4740,6 @@ public interface IvmlPackage extends EPackage
    * @generated
    */
   EReference getSetOp_Decl();
-
-  /**
-   * Returns the meta object for the containment reference '{@link de.uni_hildesheim.sse.ivml.SetOp#getDeclEx <em>Decl Ex</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for the containment reference '<em>Decl Ex</em>'.
-   * @see de.uni_hildesheim.sse.ivml.SetOp#getDeclEx()
-   * @see #getSetOp()
-   * @generated
-   */
-  EReference getSetOp_DeclEx();
 
   /**
    * Returns the meta object for class '{@link de.uni_hildesheim.sse.ivml.Declarator <em>Declarator</em>}'.
@@ -4841,25 +4806,36 @@ public interface IvmlPackage extends EPackage
   EReference getDeclaration_Init();
 
   /**
-   * Returns the meta object for class '{@link de.uni_hildesheim.sse.ivml.ActualParameterList <em>Actual Parameter List</em>}'.
+   * Returns the meta object for class '{@link de.uni_hildesheim.sse.ivml.ActualArgumentList <em>Actual Argument List</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return the meta object for class '<em>Actual Parameter List</em>'.
-   * @see de.uni_hildesheim.sse.ivml.ActualParameterList
+   * @return the meta object for class '<em>Actual Argument List</em>'.
+   * @see de.uni_hildesheim.sse.ivml.ActualArgumentList
    * @generated
    */
-  EClass getActualParameterList();
+  EClass getActualArgumentList();
 
   /**
-   * Returns the meta object for the containment reference list '{@link de.uni_hildesheim.sse.ivml.ActualParameterList#getParam <em>Param</em>}'.
+   * Returns the meta object for the containment reference list '{@link de.uni_hildesheim.sse.ivml.ActualArgumentList#getArgs <em>Args</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return the meta object for the containment reference list '<em>Param</em>'.
-   * @see de.uni_hildesheim.sse.ivml.ActualParameterList#getParam()
-   * @see #getActualParameterList()
+   * @return the meta object for the containment reference list '<em>Args</em>'.
+   * @see de.uni_hildesheim.sse.ivml.ActualArgumentList#getArgs()
+   * @see #getActualArgumentList()
    * @generated
    */
-  EReference getActualParameterList_Param();
+  EReference getActualArgumentList_Args();
+
+  /**
+   * Returns the meta object for the attribute '{@link de.uni_hildesheim.sse.ivml.ActualArgumentList#getName <em>Name</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the attribute '<em>Name</em>'.
+   * @see de.uni_hildesheim.sse.ivml.ActualArgumentList#getName()
+   * @see #getActualArgumentList()
+   * @generated
+   */
+  EAttribute getActualArgumentList_Name();
 
   /**
    * Returns the meta object for class '{@link de.uni_hildesheim.sse.ivml.ExpressionAccess <em>Expression Access</em>}'.
@@ -6757,22 +6733,6 @@ public interface IvmlPackage extends EPackage
     EClass FEATURE_CALL = eINSTANCE.getFeatureCall();
 
     /**
-     * The meta object literal for the '<em><b>Name</b></em>' attribute feature.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    EAttribute FEATURE_CALL__NAME = eINSTANCE.getFeatureCall_Name();
-
-    /**
-     * The meta object literal for the '<em><b>Param</b></em>' containment reference feature.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    EReference FEATURE_CALL__PARAM = eINSTANCE.getFeatureCall_Param();
-
-    /**
      * The meta object literal for the '{@link de.uni_hildesheim.sse.ivml.impl.SetOpImpl <em>Set Op</em>}' class.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
@@ -6783,28 +6743,12 @@ public interface IvmlPackage extends EPackage
     EClass SET_OP = eINSTANCE.getSetOp();
 
     /**
-     * The meta object literal for the '<em><b>Name</b></em>' attribute feature.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    EAttribute SET_OP__NAME = eINSTANCE.getSetOp_Name();
-
-    /**
      * The meta object literal for the '<em><b>Decl</b></em>' containment reference feature.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
      * @generated
      */
     EReference SET_OP__DECL = eINSTANCE.getSetOp_Decl();
-
-    /**
-     * The meta object literal for the '<em><b>Decl Ex</b></em>' containment reference feature.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    EReference SET_OP__DECL_EX = eINSTANCE.getSetOp_DeclEx();
 
     /**
      * The meta object literal for the '{@link de.uni_hildesheim.sse.ivml.impl.DeclaratorImpl <em>Declarator</em>}' class.
@@ -6859,22 +6803,30 @@ public interface IvmlPackage extends EPackage
     EReference DECLARATION__INIT = eINSTANCE.getDeclaration_Init();
 
     /**
-     * The meta object literal for the '{@link de.uni_hildesheim.sse.ivml.impl.ActualParameterListImpl <em>Actual Parameter List</em>}' class.
+     * The meta object literal for the '{@link de.uni_hildesheim.sse.ivml.impl.ActualArgumentListImpl <em>Actual Argument List</em>}' class.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @see de.uni_hildesheim.sse.ivml.impl.ActualParameterListImpl
-     * @see de.uni_hildesheim.sse.ivml.impl.IvmlPackageImpl#getActualParameterList()
+     * @see de.uni_hildesheim.sse.ivml.impl.ActualArgumentListImpl
+     * @see de.uni_hildesheim.sse.ivml.impl.IvmlPackageImpl#getActualArgumentList()
      * @generated
      */
-    EClass ACTUAL_PARAMETER_LIST = eINSTANCE.getActualParameterList();
+    EClass ACTUAL_ARGUMENT_LIST = eINSTANCE.getActualArgumentList();
 
     /**
-     * The meta object literal for the '<em><b>Param</b></em>' containment reference list feature.
+     * The meta object literal for the '<em><b>Args</b></em>' containment reference list feature.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
      * @generated
      */
-    EReference ACTUAL_PARAMETER_LIST__PARAM = eINSTANCE.getActualParameterList_Param();
+    EReference ACTUAL_ARGUMENT_LIST__ARGS = eINSTANCE.getActualArgumentList_Args();
+
+    /**
+     * The meta object literal for the '<em><b>Name</b></em>' attribute feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EAttribute ACTUAL_ARGUMENT_LIST__NAME = eINSTANCE.getActualArgumentList_Name();
 
     /**
      * The meta object literal for the '{@link de.uni_hildesheim.sse.ivml.impl.ExpressionAccessImpl <em>Expression Access</em>}' class.

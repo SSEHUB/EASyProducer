@@ -10,7 +10,7 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
 
 import de.uni_hildesheim.sse.IvmlBundleId;
-import de.uni_hildesheim.sse.ivml.ActualParameterList;
+import de.uni_hildesheim.sse.ivml.ActualArgumentList;
 import de.uni_hildesheim.sse.ivml.AdditiveExpression;
 import de.uni_hildesheim.sse.ivml.AdditiveExpressionPart;
 import de.uni_hildesheim.sse.ivml.AssignmentExpression;
@@ -636,71 +636,7 @@ public class ExpressionTranslator extends net.ssehub.easy.dslCore.translation.Ex
      */
     private ConstraintSyntaxTree processFeatureCall(ConstraintSyntaxTree lhs,
         FeatureCall call, TypeContext context, IModelElement parent) throws TranslatorException {
-        FeatureCallWrapper wrapper = new FeatureCallWrapper(call);
-        return processFeatureCall(lhs, wrapper, context, parent);
-        /*
-        level++;
-        boolean regularFeatureCall = true;
-        ActualParameterList pList = call.getParam();
-        String callName = call.getName();
-        ConstraintSyntaxTree[] param;
-        if (null == pList) {
-            param = null;
-            if (null != lhs) {
-                try {
-                    IDatatype leftType = lhs.inferDatatype();
-                    if (leftType.isAssignableFrom(Compound.TYPE)) {
-                        // check whether it could be an operation
-                        boolean isOp = false;
-                        for (int o = 0; !isOp && o < leftType.getOperationCount(); o++) {
-                            isOp = leftType.getOperation(o).getName().equals(callName);
-                        }
-                        if (isOp) {
-                            checkForCompoundElement((Compound) leftType, callName, call);
-                        }
-                    }
-                } catch (CSTSemanticException e) {
-                    throw new TranslatorException(e, call, IvmlPackage.Literals.FEATURE_CALL__PARAM);
-                }
-            }
-        } else {
-            int pListSize = pList.getParam().size();
-            if (0 == pListSize) {
-                param = null;
-            } else {
-                if (null == lhs) {
-                    lhs = processExpression(null, pList.getParam().get(0), context, parent);
-                    if (pListSize - 1 > 0) {
-                        param = new ConstraintSyntaxTree[pListSize - 1];
-                        for (int p = 1; p < pListSize; p++) {
-                            param[p - 1] = processExpression(null, pList.getParam().get(p), context, parent);
-                        }
-                    } else {
-                        param = null;
-                    }
-                } else {
-                    param = new ConstraintSyntaxTree[pListSize];
-                    for (int p = 0; p < pListSize; p++) {
-                        param[p] = processExpression(null, pList.getParam().get(p), context, parent);
-                    }
-                }
-            }
-        }
-        if (regularFeatureCall) {
-            // if this is a feature call, obtain all parameters and construct
-            // a feature call node
-            lhs = new OCLFeatureCall(lhs, callName, context.getProject(), param);
-        }
-        if (OclKeyWords.WARNING.equals(callName)) {
-            if (level > 1) {                 
-                error("warning is not allowed in nested expressions", call, IvmlPackage.Literals.FEATURE_CALL__NAME, 
-                    ErrorCodes.WARNING_USAGE);
-            } else {
-                this.hasTopLevelWarning = true;
-            }
-        }
-        level--;
-        return lhs;*/
+        return processFeatureCallImpl(lhs, call, context, parent);
     }
 
     /**
@@ -722,14 +658,14 @@ public class ExpressionTranslator extends net.ssehub.easy.dslCore.translation.Ex
      *             in case that the processing of the <code>lhs</code> must be
      *             terminated abnormally
      */
-    private ConstraintSyntaxTree processFeatureCall(ConstraintSyntaxTree lhs,
-        ICall call, TypeContext context, IModelElement parent) throws TranslatorException {
+    private ConstraintSyntaxTree processFeatureCallImpl(ConstraintSyntaxTree lhs,
+        ActualArgumentList call, TypeContext context, IModelElement parent) throws TranslatorException {
         level++;
         boolean regularFeatureCall = true;
-        ActualParameterList pList = call.getArguments();
+        List<Expression> args = call.getArgs();
         String callName = call.getName();
         ConstraintSyntaxTree[] param;
-        if (null == pList) {
+        if (null == args) {
             param = null;
             if (null != lhs) {
                 try {
@@ -745,20 +681,20 @@ public class ExpressionTranslator extends net.ssehub.easy.dslCore.translation.Ex
                         }
                     }
                 } catch (CSTSemanticException e) {
-                    throw new TranslatorException(e, call.getCause(), call.getArgumentsFeature());
+                    throw new TranslatorException(e, call, IvmlPackage.Literals.ACTUAL_ARGUMENT_LIST__ARGS);
                 }
             }
         } else {
-            int pListSize = pList.getParam().size();
+            int pListSize = args.size();
             if (0 == pListSize) {
                 param = null;
             } else {
                 if (null == lhs) {
-                    lhs = processExpression(null, pList.getParam().get(0), context, parent);
+                    lhs = processExpression(null, args.get(0), context, parent);
                     if (pListSize - 1 > 0) {
                         param = new ConstraintSyntaxTree[pListSize - 1];
                         for (int p = 1; p < pListSize; p++) {
-                            param[p - 1] = processExpression(null, pList.getParam().get(p), context, parent);
+                            param[p - 1] = processExpression(null, args.get(p), context, parent);
                         }
                     } else {
                         param = null;
@@ -766,7 +702,7 @@ public class ExpressionTranslator extends net.ssehub.easy.dslCore.translation.Ex
                 } else {
                     param = new ConstraintSyntaxTree[pListSize];
                     for (int p = 0; p < pListSize; p++) {
-                        param[p] = processExpression(null, pList.getParam().get(p), context, parent);
+                        param[p] = processExpression(null, args.get(p), context, parent);
                     }
                 }
             }
@@ -778,8 +714,8 @@ public class ExpressionTranslator extends net.ssehub.easy.dslCore.translation.Ex
         }
         if (OclKeyWords.WARNING.equals(callName)) {
             if (level > 1) {                 
-                error("warning is not allowed in nested expressions", call.getCause(), call.getNameFeature(), 
-                    ErrorCodes.WARNING_USAGE);
+                error("warning is not allowed in nested expressions", call, 
+                    IvmlPackage.Literals.ACTUAL_ARGUMENT_LIST__NAME, ErrorCodes.WARNING_USAGE);
             } else {
                 this.hasTopLevelWarning = true;
             }
@@ -788,7 +724,6 @@ public class ExpressionTranslator extends net.ssehub.easy.dslCore.translation.Ex
         return lhs;
     }
 
-    
     /**
      * Checks for an existing compound element <code>name</code> in <code>comp</code> and throws an
      * exception if that element does not exist. This method is used to check whether a compound access
@@ -800,10 +735,11 @@ public class ExpressionTranslator extends net.ssehub.easy.dslCore.translation.Ex
      * @throws TranslatorException an exception in case that the element does not exist (and in this
      *   specific case clashes with an operation call of the same name
      */
-    private void checkForCompoundElement(Compound comp, String name, ICall call) throws TranslatorException {
+    private void checkForCompoundElement(Compound comp, String name, ActualArgumentList call) 
+        throws TranslatorException {
         if (null != comp.getElement(name)) {
             throw new TranslatorException("compound slot '" + name + "' clashes with operation of same name",
-                call.getCause(), call.getNameFeature(), ErrorCodes.NAME_CLASH);
+                call, IvmlPackage.Literals.ACTUAL_ARGUMENT_LIST__NAME, ErrorCodes.NAME_CLASH);
         }        
     }
 
@@ -836,10 +772,10 @@ public class ExpressionTranslator extends net.ssehub.easy.dslCore.translation.Ex
                     type = ((Container) collectionType).getContainedType();
                 } else {
                     error("left hand of " + IvmlKeyWords.CONTAINER_OP_ACCESS + " is not a collection", op,
-                        IvmlPackage.Literals.SET_OP__DECL_EX, ErrorCodes.LHS_NOT_COLLECTION);
+                        IvmlPackage.Literals.ACTUAL_ARGUMENT_LIST__ARGS, ErrorCodes.LHS_NOT_COLLECTION);
                 }
             } catch (IvmlException e) {
-                error(e, op, IvmlPackage.Literals.SET_OP__DECL_EX);
+                error(e, op, IvmlPackage.Literals.ACTUAL_ARGUMENT_LIST__ARGS);
             }
         }
         ConstraintSyntaxTree valueEx;
@@ -862,7 +798,7 @@ public class ExpressionTranslator extends net.ssehub.easy.dslCore.translation.Ex
                     try {
                         declarator.setValue(valueEx);
                     } catch (IvmlException e) {
-                        error(e, op, IvmlPackage.Literals.SET_OP__DECL_EX);
+                        error(e, op, IvmlPackage.Literals.ACTUAL_ARGUMENT_LIST__ARGS);
                     }
                 }
                 declarators.add(declarator);
@@ -891,9 +827,9 @@ public class ExpressionTranslator extends net.ssehub.easy.dslCore.translation.Ex
         SetOp op, TypeContext context, IModelElement parent)
         throws TranslatorException {
         Declarator declarator = op.getDecl();
-        ActualParameterList params = op.getDeclEx();
-        if (null != declarator && (null == params || null == params.getParam() || params.getParam().size() == 1)) {
-            Expression declEx = (null != params && null != params.getParam()) ? params.getParam().get(0) : null;
+        List<Expression> args = op.getArgs();
+        if (null != declarator && (null == args || args.size() == 1)) {
+            Expression declEx = null != args ? args.get(0) : null;
             level++;
             // process a set operation, i.e. a quantor call after ->
             EList<Declaration> declarations = declarator.getDecl();
@@ -933,11 +869,10 @@ public class ExpressionTranslator extends net.ssehub.easy.dslCore.translation.Ex
             }
             level--;
         } else if (null == declarator) { // go for parameters
-            SetOpCallWrapper wrapper = new SetOpCallWrapper(op);
-            lhs = processFeatureCall(lhs, wrapper, context, parent);
+            lhs = processFeatureCallImpl(lhs, op, context, parent);
         } else {
             throw new TranslatorException("An iterating set operation requires at most one expression", op, 
-                IvmlPackage.Literals.SET_OP__DECL_EX, ErrorCodes.SYNTAX);
+                IvmlPackage.Literals.ACTUAL_ARGUMENT_LIST__ARGS, ErrorCodes.SYNTAX);
         }
         return lhs;
     }
