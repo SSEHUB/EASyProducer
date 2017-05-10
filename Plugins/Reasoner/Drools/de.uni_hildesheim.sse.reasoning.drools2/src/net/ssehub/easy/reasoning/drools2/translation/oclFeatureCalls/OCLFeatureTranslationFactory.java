@@ -68,6 +68,7 @@ public class OCLFeatureTranslationFactory {
         registerTranslationFragment(new OrHandler(), BooleanType.OR);
         registerTranslationFragment(new RoundHandler(), RealType.ROUND);
         registerTranslationFragment(new StringConcatHandler(), StringType.CONCAT);
+        registerTranslationFragment(new StringConcatHandler(), StringType.PLUS);
         registerTranslationFragment(new StringSizeHandler(), StringType.SIZE);
         registerTranslationFragment(new StringToIntegerHandler(), StringType.TO_INTEGER);
         registerTranslationFragment(new StringToRealHandler(), StringType.TO_REAL);
