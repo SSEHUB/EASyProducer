@@ -465,6 +465,48 @@ public class ContainerOperations {
     };
 
     /**
+     * Implements the "includesAll"/"excludesAll" function.
+     */
+    static final class IncludesAllOperationEvaluator implements IOperationEvaluator {
+        
+        private boolean exclude;
+        
+        /**
+         * Creates an includes all operation evaluator.
+         * 
+         * @param exclude negate the result ("excludesAll") or use the derived result ("includesAll")
+         */
+        public IncludesAllOperationEvaluator(boolean exclude) {
+            this.exclude = exclude;
+        }
+        
+        @Override
+        public EvaluationAccessor evaluate(EvaluationAccessor operand, EvaluationAccessor[] arguments) {
+            EvaluationAccessor result = null;
+            if (1 == arguments.length) {
+                Value oValue = operand.getValue();
+                Value aValue = arguments[0].getValue();
+                if (oValue instanceof ContainerValue && aValue instanceof ContainerValue) {
+                    ContainerValue coValue = (ContainerValue) oValue;
+                    ContainerValue caValue = (ContainerValue) aValue;
+                    boolean all = true;
+                    for (int i = 0; all && i < caValue.getElementSize(); i++) {
+                        Value val = caValue.getElement(i);
+                        if (exclude) {
+                            all &= coValue.indexOf(val) < 0; // exclude
+                        } else {
+                            all &= coValue.indexOf(val) >= 0;
+                        }
+                    }
+                    result = ConstantAccessor.POOL.getInstance().bind(
+                        BooleanValue.toBooleanValue(all), operand.getContext());
+                }
+            }
+            return result;
+        }
+    };
+
+    /**
      * Implements the "count" operation.
      */
     static final IOperationEvaluator COUNT = new IOperationEvaluator() {
@@ -595,6 +637,8 @@ public class ContainerOperations {
         EvaluatorRegistry.registerEvaluator(GenericOperations.UNEQUALS, Container.UNEQUALS);
         EvaluatorRegistry.registerEvaluator(new FindOperationEvaluator(false), Container.INCLUDES);
         EvaluatorRegistry.registerEvaluator(new FindOperationEvaluator(true), Container.EXCLUDES);
+        EvaluatorRegistry.registerEvaluator(new IncludesAllOperationEvaluator(false), Container.INCLUDES_ALL);
+        EvaluatorRegistry.registerEvaluator(new IncludesAllOperationEvaluator(true), Container.EXCLUDES_ALL);
         EvaluatorRegistry.registerEvaluator(COUNT, Container.COUNT);
         EvaluatorRegistry.registerEvaluator(new IsEmptyOperationEvaluator(false), Container.IS_EMPTY);
         EvaluatorRegistry.registerEvaluator(new IsEmptyOperationEvaluator(true), Container.NOT_EMPTY);

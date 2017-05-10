@@ -233,6 +233,7 @@ public class StringOperations {
         EvaluatorRegistry.registerEvaluator(TO_INT, StringType.TO_INTEGER);
         EvaluatorRegistry.registerEvaluator(TO_REAL, StringType.TO_REAL);
         EvaluatorRegistry.registerEvaluator(CONCAT, StringType.CONCAT);
+        EvaluatorRegistry.registerEvaluator(CONCAT, StringType.PLUS);
         EvaluatorRegistry.registerEvaluator(SUBSTRING, StringType.SUBSTRING);
         EvaluatorRegistry.registerEvaluator(MATCHES, StringType.MATCHES);
         EvaluatorRegistry.registerEvaluator(SUBSTITUTES, StringType.SUBSTITUTES);

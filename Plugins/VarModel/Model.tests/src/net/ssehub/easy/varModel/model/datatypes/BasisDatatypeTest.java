@@ -39,8 +39,6 @@ public class BasisDatatypeTest {
         Assert.assertEquals("", dec.getType().getNameSpace());
         Assert.assertEquals("String", dec.getType().getQualifiedName());
         Assert.assertEquals("String", dec.getType().getUniqueName());
-        Assert.assertEquals(14, dec.getType().getOperationCount());
-        Assert.assertEquals(StringType.EQUALS, dec.getType().getOperation(3));
         Assert.assertEquals(StringType.class, dec.getType().getTypeClass());
         
         try {

@@ -46,6 +46,7 @@ public class StringType extends BasisDatatype {
     public static final Operation SIZE = new Operation(IntegerType.TYPE, OclKeyWords.SIZE, TYPE);
     public static final Operation TO_INTEGER = new Operation(IntegerType.TYPE, OclKeyWords.TO_INTEGER, TYPE);
     public static final Operation TO_REAL = new Operation(RealType.TYPE, OclKeyWords.TO_REAL, TYPE);
+    public static final Operation PLUS = new Operation(TYPE, OclKeyWords.PLUS, TYPE, TYPE);
     public static final Operation CONCAT = new Operation(TYPE, OclKeyWords.CONCAT, TYPE, TYPE);
     public static final Operation SUBSTRING = new Operation(TYPE, OclKeyWords.SUBSTRING, TYPE, 
         IntegerType.TYPE, IntegerType.TYPE);
@@ -65,6 +66,7 @@ public class StringType extends BasisDatatype {
         DTYPE.addOperation(SIZE);
         DTYPE.addOperation(TO_INTEGER);
         DTYPE.addOperation(TO_REAL);
+        DTYPE.addOperation(PLUS);
         DTYPE.addOperation(CONCAT);
         DTYPE.addOperation(SUBSTRING);
         DTYPE.addOperation(MATCHES);

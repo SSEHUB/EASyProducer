@@ -989,16 +989,25 @@ public class ModelQuery {
     public static Value enumLiteralAsValue(IResolutionScope elements, String name) 
         throws IvmlException, ModelQueryException {
         Value result = null;
-        String innerName = null;
         int pos = name.indexOf(IvmlKeyWords.ENUM_ACCESS);
         if (pos > 0) {
-            innerName = name.substring(pos + 1);
-            name = name.substring(0, pos);
+            String literalName = name.substring(pos + 1);
+            String enumName = name.substring(0, pos);
+            Enum enumResult = (Enum) findElementByName(elements, enumName, Enum.class);
+            if (null != enumResult && null != enumResult.get(literalName)) {
+                result = ValueFactory.createValue(enumResult, literalName);
+            }
         }
-        Enum enumResult = (Enum) findElementByName(elements, name, Enum.class);
-        if (null != enumResult && null != enumResult.get(innerName)) {
-            result = ValueFactory.createValue(enumResult, innerName);
-            // currently - only one innerName step and no attribute???
+        if (null == result) { // fallback for OCL notation
+            pos = name.lastIndexOf(IvmlKeyWords.NAMESPACE_SEPARATOR);
+            if (pos > 0) {
+                String literalName = name.substring(pos + IvmlKeyWords.NAMESPACE_SEPARATOR.length());
+                String enumName = name.substring(0, pos);
+                Enum enumResult = (Enum) findElementByName(elements, enumName, Enum.class);
+                if (null != enumResult && null != enumResult.get(literalName)) {
+                    result = ValueFactory.createValue(enumResult, literalName);
+                }
+            }
         }
         return result;
     }

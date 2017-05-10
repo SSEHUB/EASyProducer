@@ -613,7 +613,7 @@ public class SequenceOperationsTest {
     }
 
     /**
-     * Tests the "Includes" function.
+     * Tests the "Includes"/"Excludes" function.
      * 
      * @throws ValueDoesNotMatchTypeException shall not occur
      */
@@ -635,6 +635,40 @@ public class SequenceOperationsTest {
         Utils.assertEquals(false, Utils.evaluate(Sequence.INCLUDES, set, value));
         set.release();
         value.release();
+    }
+    
+    /**
+     * Tests the "IncludesAll"/"ExcludesAll" function.
+     * 
+     * @throws ValueDoesNotMatchTypeException shall not occur
+     */
+    @Test
+    public void testIncludesAll() throws ValueDoesNotMatchTypeException {
+        TestEvaluationContext context = new TestEvaluationContext();
+        IDatatype seqIntType = new Sequence("intSeq", IntegerType.TYPE, null);
+        EvaluationAccessor set1 = Utils.createValue(seqIntType, context, new Object[] {1, 7, 9, 10, 4});
+        EvaluationAccessor set2 = Utils.createValue(seqIntType, context, new Object[] {1, 9, 7, 4});
+        EvaluationAccessor set3 = Utils.createValue(seqIntType, context, new Object[] {1, 9, 7, 12});
+        EvaluationAccessor set4 = Utils.createValue(seqIntType, context, new Object[] {2, 100, 87, 13});
+        EvaluationAccessor setE = Utils.createValue(seqIntType, context, new Object[] {});
+
+        Utils.assertEquals(true, Utils.evaluate(Sequence.INCLUDES_ALL, set1, set1));
+        Utils.assertEquals(true, Utils.evaluate(Sequence.INCLUDES_ALL, set1, set2));
+        Utils.assertEquals(false, Utils.evaluate(Sequence.INCLUDES_ALL, set1, set3));
+        Utils.assertEquals(false, Utils.evaluate(Sequence.INCLUDES_ALL, set1, set4));
+        Utils.assertEquals(true, Utils.evaluate(Sequence.INCLUDES_ALL, set1, setE));
+
+        Utils.assertEquals(false, Utils.evaluate(Sequence.EXCLUDES_ALL, set1, set1));
+        Utils.assertEquals(false, Utils.evaluate(Sequence.EXCLUDES_ALL, set1, set2));
+        Utils.assertEquals(false, Utils.evaluate(Sequence.EXCLUDES_ALL, set1, set3));
+        Utils.assertEquals(true, Utils.evaluate(Sequence.EXCLUDES_ALL, set1, set4));
+        Utils.assertEquals(true, Utils.evaluate(Sequence.EXCLUDES_ALL, set1, setE));
+
+        set1.release();
+        set2.release();
+        set3.release();
+        set4.release();
+        setE.release();
     }
 
     /**

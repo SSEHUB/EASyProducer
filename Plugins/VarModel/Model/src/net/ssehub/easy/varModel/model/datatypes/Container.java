@@ -45,6 +45,10 @@ public class Container extends StructuredDatatype {
     
     public static final Operation INCLUDES = new Operation(BooleanType.TYPE, OclKeyWords.INCLUDES, TYPE, AnyType.TYPE);
     public static final Operation EXCLUDES = new Operation(BooleanType.TYPE, OclKeyWords.EXCLUDES, TYPE, AnyType.TYPE);
+    public static final Operation INCLUDES_ALL = new Operation(BooleanType.TYPE, OclKeyWords.INCLUDES_ALL, TYPE, 
+            AnyType.TYPE);
+    public static final Operation EXCLUDES_ALL = new Operation(BooleanType.TYPE, OclKeyWords.EXCLUDES_ALL, TYPE, 
+            AnyType.TYPE);
     public static final Operation COUNT = new Operation(BooleanType.TYPE, OclKeyWords.COUNT, TYPE, AnyType.TYPE);
     public static final Operation IS_EMPTY = new Operation(BooleanType.TYPE, OclKeyWords.IS_EMPTY, TYPE);
     public static final Operation NOT_EMPTY = new Operation(BooleanType.TYPE, OclKeyWords.NOT_EMPTY, TYPE);
@@ -107,6 +111,8 @@ public class Container extends StructuredDatatype {
         DTYPE.addOperation(APPLY);
         DTYPE.addOperation(INCLUDES);
         DTYPE.addOperation(EXCLUDES);
+        DTYPE.addOperation(INCLUDES_ALL);
+        DTYPE.addOperation(EXCLUDES_ALL);
         DTYPE.addOperation(COUNT);
         DTYPE.addOperation(IS_EMPTY);
         DTYPE.addOperation(NOT_EMPTY);

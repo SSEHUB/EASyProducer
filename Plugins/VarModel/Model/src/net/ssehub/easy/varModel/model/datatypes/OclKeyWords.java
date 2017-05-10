@@ -80,6 +80,8 @@ public class OclKeyWords {
     // e.g. Container, Set, Sequence
     public static final String INCLUDES = "includes";
     public static final String EXCLUDES = "excludes";
+    public static final String INCLUDES_ALL = "includesAll";
+    public static final String EXCLUDES_ALL = "excludesAll";
     public static final String COUNT = "count";
     public static final String IS_EMPTY = "isEmpty";
     public static final String NOT_EMPTY = "notEmpty";

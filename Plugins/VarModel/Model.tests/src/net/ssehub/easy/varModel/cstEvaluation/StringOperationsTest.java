@@ -173,14 +173,21 @@ public class StringOperationsTest {
         EvaluationAccessor strS2 = Utils.createValue(StringType.TYPE, context, s2Value);
         EvaluationAccessor strEmpty = Utils.createValue(StringType.TYPE, context, "");
         EvaluationAccessor nullV = Utils.createNullValue(context);
-        final Operation op = StringType.CONCAT;
+        Operation op = StringType.CONCAT;
 
         Utils.assertEquals(testValue, Utils.evaluate(op, strS1, strS2));
         Utils.assertEquals(s1Value, Utils.evaluate(op, strS1, strEmpty));
         Utils.assertEquals(s2Value, Utils.evaluate(op, strEmpty, strS2));
         Utils.assertEquals((String) null, Utils.evaluate(op, strS1, nullV));
         Utils.assertEquals((String) null, Utils.evaluate(op, strEmpty, nullV));
-        
+
+        op = StringType.PLUS;
+        Utils.assertEquals(testValue, Utils.evaluate(op, strS1, strS2));
+        Utils.assertEquals(s1Value, Utils.evaluate(op, strS1, strEmpty));
+        Utils.assertEquals(s2Value, Utils.evaluate(op, strEmpty, strS2));
+        Utils.assertEquals((String) null, Utils.evaluate(op, strS1, nullV));
+        Utils.assertEquals((String) null, Utils.evaluate(op, strEmpty, nullV));
+
         strS1.release();
         strS2.release();
         strEmpty.release();
