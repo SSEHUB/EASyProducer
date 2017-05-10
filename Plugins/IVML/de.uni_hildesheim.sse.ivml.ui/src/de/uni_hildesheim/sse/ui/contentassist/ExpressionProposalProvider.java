@@ -654,8 +654,12 @@ public class ExpressionProposalProvider extends AbstractIvmlProposalProvider  {
                 result = inferType(call.getCall(), operand, model, cmpDef);
             } else if (null != call.getSetOp()) {
                 SetOp sOp = call.getSetOp();
-                IDatatype[] param = new IDatatype[1];
-                param[0] = inferType(sOp.getDeclEx(), model, cmpDef);
+                ActualParameterList params = sOp.getDeclEx();
+                int pCount = null == params || null == params.getParam() ? 0 : params.getParam().size();
+                IDatatype[] param = new IDatatype[pCount];
+                for (int p = 0; p < pCount; p++) {
+                    param[p] = inferType(params.getParam().get(p), model, cmpDef);
+               }
                 result = inferType(sOp.getName(), operand, param, true);
             } else if (null != call.getArrayEx()) {
                 result = null; // TODO

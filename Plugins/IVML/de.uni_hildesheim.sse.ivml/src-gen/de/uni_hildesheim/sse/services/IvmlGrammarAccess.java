@@ -2697,16 +2697,14 @@ public class IvmlGrammarAccess extends AbstractGrammarElementFinder {
 		private final Assignment cDeclAssignment_2 = (Assignment)cGroup.eContents().get(2);
 		private final RuleCall cDeclDeclaratorParserRuleCall_2_0 = (RuleCall)cDeclAssignment_2.eContents().get(0);
 		private final Assignment cDeclExAssignment_3 = (Assignment)cGroup.eContents().get(3);
-		private final RuleCall cDeclExExpressionParserRuleCall_3_0 = (RuleCall)cDeclExAssignment_3.eContents().get(0);
+		private final RuleCall cDeclExActualParameterListParserRuleCall_3_0 = (RuleCall)cDeclExAssignment_3.eContents().get(0);
 		private final Keyword cRightParenthesisKeyword_4 = (Keyword)cGroup.eContents().get(4);
 		
 		//SetOp:
-		//	name=Identifier '(' // set operation only for quantors
-		// decl=Declarator declEx=Expression? ')';
+		//	name=Identifier '(' decl=Declarator? declEx=ActualParameterList? ')';
 		@Override public ParserRule getRule() { return rule; }
 
-		//name=Identifier '(' // set operation only for quantors
-		// decl=Declarator declEx=Expression? ')'
+		//name=Identifier '(' decl=Declarator? declEx=ActualParameterList? ')'
 		public Group getGroup() { return cGroup; }
 
 		//name=Identifier
@@ -2718,18 +2716,17 @@ public class IvmlGrammarAccess extends AbstractGrammarElementFinder {
 		//'('
 		public Keyword getLeftParenthesisKeyword_1() { return cLeftParenthesisKeyword_1; }
 
-		//// set operation only for quantors
-		// decl=Declarator
+		//decl=Declarator?
 		public Assignment getDeclAssignment_2() { return cDeclAssignment_2; }
 
 		//Declarator
 		public RuleCall getDeclDeclaratorParserRuleCall_2_0() { return cDeclDeclaratorParserRuleCall_2_0; }
 
-		//declEx=Expression?
+		//declEx=ActualParameterList?
 		public Assignment getDeclExAssignment_3() { return cDeclExAssignment_3; }
 
-		//Expression
-		public RuleCall getDeclExExpressionParserRuleCall_3_0() { return cDeclExExpressionParserRuleCall_3_0; }
+		//ActualParameterList
+		public RuleCall getDeclExActualParameterListParserRuleCall_3_0() { return cDeclExActualParameterListParserRuleCall_3_0; }
 
 		//')'
 		public Keyword getRightParenthesisKeyword_4() { return cRightParenthesisKeyword_4; }
@@ -4130,8 +4127,7 @@ public class IvmlGrammarAccess extends AbstractGrammarElementFinder {
 	}
 
 	//SetOp:
-	//	name=Identifier '(' // set operation only for quantors
-	// decl=Declarator declEx=Expression? ')';
+	//	name=Identifier '(' decl=Declarator? declEx=ActualParameterList? ')';
 	public SetOpElements getSetOpAccess() {
 		return pSetOp;
 	}

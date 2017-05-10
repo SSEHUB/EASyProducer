@@ -85,12 +85,12 @@ public interface SetOp extends EObject
    * </p>
    * <!-- end-user-doc -->
    * @return the value of the '<em>Decl Ex</em>' containment reference.
-   * @see #setDeclEx(Expression)
+   * @see #setDeclEx(ActualParameterList)
    * @see de.uni_hildesheim.sse.ivml.IvmlPackage#getSetOp_DeclEx()
    * @model containment="true"
    * @generated
    */
-  Expression getDeclEx();
+  ActualParameterList getDeclEx();
 
   /**
    * Sets the value of the '{@link de.uni_hildesheim.sse.ivml.SetOp#getDeclEx <em>Decl Ex</em>}' containment reference.
@@ -100,6 +100,6 @@ public interface SetOp extends EObject
    * @see #getDeclEx()
    * @generated
    */
-  void setDeclEx(Expression value);
+  void setDeclEx(ActualParameterList value);
 
 } // SetOp

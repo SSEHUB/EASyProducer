@@ -2,8 +2,8 @@
  */
 package de.uni_hildesheim.sse.ivml.impl;
 
+import de.uni_hildesheim.sse.ivml.ActualParameterList;
 import de.uni_hildesheim.sse.ivml.Declarator;
-import de.uni_hildesheim.sse.ivml.Expression;
 import de.uni_hildesheim.sse.ivml.IvmlPackage;
 import de.uni_hildesheim.sse.ivml.SetOp;
 
@@ -71,7 +71,7 @@ public class SetOpImpl extends MinimalEObjectImpl.Container implements SetOp
    * @generated
    * @ordered
    */
-  protected Expression declEx;
+  protected ActualParameterList declEx;
 
   /**
    * <!-- begin-user-doc -->
@@ -170,7 +170,7 @@ public class SetOpImpl extends MinimalEObjectImpl.Container implements SetOp
    * <!-- end-user-doc -->
    * @generated
    */
-  public Expression getDeclEx()
+  public ActualParameterList getDeclEx()
   {
     return declEx;
   }
@@ -180,9 +180,9 @@ public class SetOpImpl extends MinimalEObjectImpl.Container implements SetOp
    * <!-- end-user-doc -->
    * @generated
    */
-  public NotificationChain basicSetDeclEx(Expression newDeclEx, NotificationChain msgs)
+  public NotificationChain basicSetDeclEx(ActualParameterList newDeclEx, NotificationChain msgs)
   {
-    Expression oldDeclEx = declEx;
+    ActualParameterList oldDeclEx = declEx;
     declEx = newDeclEx;
     if (eNotificationRequired())
     {
@@ -197,7 +197,7 @@ public class SetOpImpl extends MinimalEObjectImpl.Container implements SetOp
    * <!-- end-user-doc -->
    * @generated
    */
-  public void setDeclEx(Expression newDeclEx)
+  public void setDeclEx(ActualParameterList newDeclEx)
   {
     if (newDeclEx != declEx)
     {
@@ -268,7 +268,7 @@ public class SetOpImpl extends MinimalEObjectImpl.Container implements SetOp
         setDecl((Declarator)newValue);
         return;
       case IvmlPackage.SET_OP__DECL_EX:
-        setDeclEx((Expression)newValue);
+        setDeclEx((ActualParameterList)newValue);
         return;
     }
     super.eSet(featureID, newValue);
@@ -291,7 +291,7 @@ public class SetOpImpl extends MinimalEObjectImpl.Container implements SetOp
         setDecl((Declarator)null);
         return;
       case IvmlPackage.SET_OP__DECL_EX:
-        setDeclEx((Expression)null);
+        setDeclEx((ActualParameterList)null);
         return;
     }
     super.eUnset(featureID);

@@ -18,6 +18,7 @@ import de.uni_hildesheim.sse.ivml.AssignmentExpressionPart;
 import de.uni_hildesheim.sse.ivml.Call;
 import de.uni_hildesheim.sse.ivml.CollectionInitializer;
 import de.uni_hildesheim.sse.ivml.Declaration;
+import de.uni_hildesheim.sse.ivml.Declarator;
 import de.uni_hildesheim.sse.ivml.EqualityExpression;
 import de.uni_hildesheim.sse.ivml.EqualityExpressionPart;
 import de.uni_hildesheim.sse.ivml.Expression;
@@ -635,6 +636,9 @@ public class ExpressionTranslator extends net.ssehub.easy.dslCore.translation.Ex
      */
     private ConstraintSyntaxTree processFeatureCall(ConstraintSyntaxTree lhs,
         FeatureCall call, TypeContext context, IModelElement parent) throws TranslatorException {
+        FeatureCallWrapper wrapper = new FeatureCallWrapper(call);
+        return processFeatureCall(lhs, wrapper, context, parent);
+        /*
         level++;
         boolean regularFeatureCall = true;
         ActualParameterList pList = call.getParam();
@@ -696,8 +700,94 @@ public class ExpressionTranslator extends net.ssehub.easy.dslCore.translation.Ex
             }
         }
         level--;
+        return lhs;*/
+    }
+
+    /**
+     * Processes a feature call. This method allows to work with an empty
+     * <code>lhs</code> in case of a "context less method call" such as
+     * <code>max(1, 2)</code> or with a given <code>lhs</code>, e.g. for
+     * <code>s.size()</code>;
+     * 
+     * @param lhs
+     *            the operand expression (may be <b>null</b> as described above)
+     * @param call
+     *            the call to be processed
+     * @param context
+     *            the type context to be considered
+     * @param parent
+     *            the actual (intended) parent of the constraint to be created
+     * @return the expression as a parsed syntax tree
+     * @throws TranslatorException
+     *             in case that the processing of the <code>lhs</code> must be
+     *             terminated abnormally
+     */
+    private ConstraintSyntaxTree processFeatureCall(ConstraintSyntaxTree lhs,
+        ICall call, TypeContext context, IModelElement parent) throws TranslatorException {
+        level++;
+        boolean regularFeatureCall = true;
+        ActualParameterList pList = call.getArguments();
+        String callName = call.getName();
+        ConstraintSyntaxTree[] param;
+        if (null == pList) {
+            param = null;
+            if (null != lhs) {
+                try {
+                    IDatatype leftType = lhs.inferDatatype();
+                    if (leftType.isAssignableFrom(Compound.TYPE)) {
+                        // check whether it could be an operation
+                        boolean isOp = false;
+                        for (int o = 0; !isOp && o < leftType.getOperationCount(); o++) {
+                            isOp = leftType.getOperation(o).getName().equals(callName);
+                        }
+                        if (isOp) {
+                            checkForCompoundElement((Compound) leftType, callName, call);
+                        }
+                    }
+                } catch (CSTSemanticException e) {
+                    throw new TranslatorException(e, call.getCause(), call.getArgumentsFeature());
+                }
+            }
+        } else {
+            int pListSize = pList.getParam().size();
+            if (0 == pListSize) {
+                param = null;
+            } else {
+                if (null == lhs) {
+                    lhs = processExpression(null, pList.getParam().get(0), context, parent);
+                    if (pListSize - 1 > 0) {
+                        param = new ConstraintSyntaxTree[pListSize - 1];
+                        for (int p = 1; p < pListSize; p++) {
+                            param[p - 1] = processExpression(null, pList.getParam().get(p), context, parent);
+                        }
+                    } else {
+                        param = null;
+                    }
+                } else {
+                    param = new ConstraintSyntaxTree[pListSize];
+                    for (int p = 0; p < pListSize; p++) {
+                        param[p] = processExpression(null, pList.getParam().get(p), context, parent);
+                    }
+                }
+            }
+        }
+        if (regularFeatureCall) {
+            // if this is a feature call, obtain all parameters and construct
+            // a feature call node
+            lhs = new OCLFeatureCall(lhs, callName, context.getProject(), param);
+        }
+        if (OclKeyWords.WARNING.equals(callName)) {
+            if (level > 1) {                 
+                error("warning is not allowed in nested expressions", call.getCause(), call.getNameFeature(), 
+                    ErrorCodes.WARNING_USAGE);
+            } else {
+                this.hasTopLevelWarning = true;
+            }
+        }
+        level--;
         return lhs;
     }
+
     
     /**
      * Checks for an existing compound element <code>name</code> in <code>comp</code> and throws an
@@ -706,14 +796,14 @@ public class ExpressionTranslator extends net.ssehub.easy.dslCore.translation.Ex
      * 
      * @param comp the compound to check
      * @param name the name of the element
-     * @param call the causing feature call
+     * @param call the causing call
      * @throws TranslatorException an exception in case that the element does not exist (and in this
      *   specific case clashes with an operation call of the same name
      */
-    private void checkForCompoundElement(Compound comp, String name, FeatureCall call) throws TranslatorException {
+    private void checkForCompoundElement(Compound comp, String name, ICall call) throws TranslatorException {
         if (null != comp.getElement(name)) {
             throw new TranslatorException("compound slot '" + name + "' clashes with operation of same name",
-                call, IvmlPackage.Literals.POSTFIX_EXPRESSION__LEFT, ErrorCodes.NAME_CLASH);
+                call.getCause(), call.getNameFeature(), ErrorCodes.NAME_CLASH);
         }        
     }
 
@@ -800,44 +890,55 @@ public class ExpressionTranslator extends net.ssehub.easy.dslCore.translation.Ex
     private ConstraintSyntaxTree processSetOp(ConstraintSyntaxTree lhs,
         SetOp op, TypeContext context, IModelElement parent)
         throws TranslatorException {
-        level++;
-        // process a set operation, i.e. a quantor call after ->
-        EList<Declaration> declarations = op.getDecl().getDecl();
-        // grammar ensures that at least one declarator is present
-        List<DecisionVariableDeclaration> declarators = new ArrayList<DecisionVariableDeclaration>();
-        // declarators are local variable declarations for iteration
-        for (int d = 0; d < declarations.size(); d++) {
-            Declaration declaration = declarations.get(d);
-            List<String> ids = declaration.getId();
-            if (ids != null && ids.size() > 0 && ids.get(0) != null) {
-                processDeclaration(lhs, op, context, parent, declaration, declarators);
-            } else {
-                throw new TranslatorException("set operations require at least one declarator", declaration, 
-                    IvmlPackage.Literals.SET_OP__DECL, ErrorCodes.SYNTAX);
+        Declarator declarator = op.getDecl();
+        ActualParameterList params = op.getDeclEx();
+        if (null != declarator && (null == params || null == params.getParam() || params.getParam().size() == 1)) {
+            Expression declEx = (null != params && null != params.getParam()) ? params.getParam().get(0) : null;
+            level++;
+            // process a set operation, i.e. a quantor call after ->
+            EList<Declaration> declarations = declarator.getDecl();
+            // grammar ensures that at least one declarator is present
+            List<DecisionVariableDeclaration> declarators = new ArrayList<DecisionVariableDeclaration>();
+            // declarators are local variable declarations for iteration
+            for (int d = 0; d < declarations.size(); d++) {
+                Declaration declaration = declarations.get(d);
+                List<String> ids = declaration.getId();
+                if (ids != null && ids.size() > 0 && ids.get(0) != null) {
+                    processDeclaration(lhs, op, context, parent, declaration, declarators);
+                } else {
+                    throw new TranslatorException("Iterating set operations require at least one declarator", 
+                        declaration, IvmlPackage.Literals.SET_OP__DECL, ErrorCodes.SYNTAX);
+                }
+                
             }
-            
+            context.pushLayer(parent);
+            // construct container operation call
+            int declSize = declarators.size();
+            DecisionVariableDeclaration[] decls = new DecisionVariableDeclaration[declSize];
+            for (int ds = 0; ds < declSize; ds++) {
+                decls[ds] = declarators.get(ds);
+                context.addToContext(decls[ds]);
+            }
+            try {
+                ConstraintSyntaxTree ex = processExpression(null, declEx, context, parent);
+                ex.inferDatatype();
+                lhs = new ContainerOperationCall(lhs, op.getName(), ex, decls); 
+                lhs.inferDatatype();
+            } catch (TranslatorException e) {
+                throw e;
+            } catch (CSTSemanticException e) {
+                throw new TranslatorException(e, op, IvmlPackage.Literals.SET_OP__DECL);
+            } finally {
+                context.popLayer();
+            }
+            level--;
+        } else if (null == declarator) { // go for parameters
+            SetOpCallWrapper wrapper = new SetOpCallWrapper(op);
+            lhs = processFeatureCall(lhs, wrapper, context, parent);
+        } else {
+            throw new TranslatorException("An iterating set operation requires at most one expression", op, 
+                IvmlPackage.Literals.SET_OP__DECL_EX, ErrorCodes.SYNTAX);
         }
-        context.pushLayer(parent);
-        // construct container operation call
-        int declSize = declarators.size();
-        DecisionVariableDeclaration[] decls = new DecisionVariableDeclaration[declSize];
-        for (int ds = 0; ds < declSize; ds++) {
-            decls[ds] = declarators.get(ds);
-            context.addToContext(decls[ds]);
-        }
-        try {
-            ConstraintSyntaxTree ex = processExpression(null, op.getDeclEx(), context, parent);
-            ex.inferDatatype();
-            lhs = new ContainerOperationCall(lhs, op.getName(), ex, decls); 
-            lhs.inferDatatype();
-        } catch (TranslatorException e) {
-            throw e;
-        } catch (CSTSemanticException e) {
-            throw new TranslatorException(e, op, IvmlPackage.Literals.SET_OP__DECL);
-        } finally {
-            context.popLayer();
-        }
-        level--;
         return lhs;
     }
 

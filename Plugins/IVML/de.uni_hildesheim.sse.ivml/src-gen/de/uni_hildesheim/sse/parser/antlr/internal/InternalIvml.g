@@ -4845,12 +4845,12 @@ ruleSetOp returns [EObject current=null]
 	    }
 
 )
-)(
+)?(
 (
 		{ 
-	        newCompositeNode(grammarAccess.getSetOpAccess().getDeclExExpressionParserRuleCall_3_0()); 
+	        newCompositeNode(grammarAccess.getSetOpAccess().getDeclExActualParameterListParserRuleCall_3_0()); 
 	    }
-		lv_declEx_3_0=ruleExpression		{
+		lv_declEx_3_0=ruleActualParameterList		{
 	        if ($current==null) {
 	            $current = createModelElementForParent(grammarAccess.getSetOpRule());
 	        }
@@ -4858,7 +4858,7 @@ ruleSetOp returns [EObject current=null]
        			$current, 
        			"declEx",
         		lv_declEx_3_0, 
-        		"de.uni_hildesheim.sse.Ivml.Expression");
+        		"de.uni_hildesheim.sse.Ivml.ActualParameterList");
 	        afterParserOrEnumRuleCall();
 	    }
 

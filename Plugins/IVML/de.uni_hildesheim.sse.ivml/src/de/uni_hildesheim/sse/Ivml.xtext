@@ -459,9 +459,7 @@ FeatureCall:
 SetOp:
 	name=Identifier 
 	'(' 
-		// set operation only for quantors
-		decl=Declarator 
-		declEx=Expression?
+		decl=Declarator? declEx=ActualParameterList?
 	')'
 	;
 
@@ -471,7 +469,6 @@ Declarator:
 
 Declaration:	
 	(type=Type)? id+=Identifier (',' id+=Identifier)*
-	
 	('=' init=Expression)?
 	;	
 	

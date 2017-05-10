@@ -1048,7 +1048,7 @@ public abstract class AbstractIvmlSemanticSequencer extends AbstractDelegatingSe
 	 *     SetOp returns SetOp
 	 *
 	 * Constraint:
-	 *     (name=Identifier decl=Declarator declEx=Expression?)
+	 *     (name=Identifier decl=Declarator? declEx=ActualParameterList?)
 	 */
 	protected void sequence_SetOp(ISerializationContext context, SetOp semanticObject) {
 		genericSequencer.createSequence(context, semanticObject);

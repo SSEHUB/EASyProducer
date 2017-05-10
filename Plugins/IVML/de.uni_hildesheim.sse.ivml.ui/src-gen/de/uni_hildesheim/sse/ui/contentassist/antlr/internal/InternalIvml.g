@@ -10174,7 +10174,7 @@ rule__SetOp__Group__2__Impl
 :
 (
 { before(grammarAccess.getSetOpAccess().getDeclAssignment_2()); }
-(rule__SetOp__DeclAssignment_2)
+(rule__SetOp__DeclAssignment_2)?
 { after(grammarAccess.getSetOpAccess().getDeclAssignment_2()); }
 )
 
@@ -14518,8 +14518,8 @@ rule__SetOp__DeclExAssignment_3
     }
 :
 (
-{ before(grammarAccess.getSetOpAccess().getDeclExExpressionParserRuleCall_3_0()); }
-	ruleExpression{ after(grammarAccess.getSetOpAccess().getDeclExExpressionParserRuleCall_3_0()); }
+{ before(grammarAccess.getSetOpAccess().getDeclExActualParameterListParserRuleCall_3_0()); }
+	ruleActualParameterList{ after(grammarAccess.getSetOpAccess().getDeclExActualParameterListParserRuleCall_3_0()); }
 )
 
 ;
