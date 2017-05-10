@@ -673,34 +673,40 @@ public class TypeContext implements IResolutionScope {
     ConstraintSyntaxTree processQValue(String sValue, EObject object,
         EStructuralFeature feature) throws TranslatorException {
         ConstraintSyntaxTree result = null;
+        IvmlException varException = null;
+        AbstractVariable var = null;
         try {
-            AbstractVariable var = findVariable(sValue, null);
-            if (null == var) {
-                try {
-                    net.ssehub.easy.varModel.model.values.Value litValue = ModelQuery
-                            .enumLiteralAsValue(project, sValue);
-                    if (null != litValue) {
-                        result = new ConstantValue(litValue);
+            var = findVariable(sValue, null);
+        } catch (IvmlException e) {
+            varException = e;
+        }
+        if (null == var) {
+            try {
+                net.ssehub.easy.varModel.model.values.Value litValue = ModelQuery
+                        .enumLiteralAsValue(project, sValue);
+                if (null != litValue) {
+                    result = new ConstantValue(litValue);
+                } else {
+                    IDatatype type = findType(sValue, null);
+                    if (null == type && sValue.equals(project.getName())) {
+                        type = project.getType();
+                    }
+                    if (null != type) {
+                        result = new ConstantValue(ValueFactory.createValue(MetaType.TYPE, type));
                     } else {
-                        IDatatype type = findType(sValue, null);
-                        if (null == type && sValue.equals(project.getName())) {
-                            type = project.getType();
-                        }
-                        if (null != type) {
-                            result = new ConstantValue(ValueFactory.createValue(MetaType.TYPE, type));
+                        if (null != varException) {
+                            throw new TranslatorException(varException, object, feature);
                         } else {
                             throw new TranslatorException("'" + sValue + "' is unknown", object, feature,
                                 ErrorCodes.UNKNOWN_ELEMENT);
                         }
                     }
-                } catch (IvmlException e) {
-                    throw new TranslatorException(e, object, feature);
                 }
-            } else {
-                result = obtainVariable(var);
+            } catch (IvmlException e) {
+                throw new TranslatorException(e, object, feature);
             }
-        } catch (IvmlException e) {
-            throw new TranslatorException(e, object, feature);
+        } else {
+            result = obtainVariable(var);
         }
         return result;
     }
