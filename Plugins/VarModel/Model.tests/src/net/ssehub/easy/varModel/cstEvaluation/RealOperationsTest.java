@@ -448,4 +448,20 @@ public class RealOperationsTest {
         value.release();
     }
 
+    /**
+     * Tests the "toString" operation.
+     * 
+     * @throws ValueDoesNotMatchTypeException shall not occur
+     */
+    @Test
+    public void testToString() throws ValueDoesNotMatchTypeException {
+        TestEvaluationContext context = new TestEvaluationContext();
+        EvaluationAccessor rValue = Utils.createValue(RealType.TYPE, context, 1.234);
+        Utils.testToString(context, RealType.TO_STRING, rValue, "1.234");
+        rValue.release();
+        rValue = Utils.createValue(RealType.TYPE, context, -21.482);
+        Utils.testToString(context, RealType.TO_STRING, rValue, "-21.482");
+        rValue.release();
+    }
+    
 }

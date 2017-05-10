@@ -22,15 +22,18 @@ import net.ssehub.easy.varModel.model.datatypes.IDatatype;
 import net.ssehub.easy.varModel.model.datatypes.IntegerType;
 import net.ssehub.easy.varModel.model.datatypes.MetaType;
 import net.ssehub.easy.varModel.model.datatypes.RealType;
+import net.ssehub.easy.varModel.model.datatypes.StringType;
 import net.ssehub.easy.varModel.model.datatypes.TypeQueries;
 import net.ssehub.easy.varModel.model.values.BooleanValue;
 import net.ssehub.easy.varModel.model.values.CompoundValue;
 import net.ssehub.easy.varModel.model.values.MetaTypeValue;
 import net.ssehub.easy.varModel.model.values.NullValue;
 import net.ssehub.easy.varModel.model.values.ReferenceValue;
+import net.ssehub.easy.varModel.model.values.StringValue;
 import net.ssehub.easy.varModel.model.values.Value;
 import net.ssehub.easy.varModel.model.values.ValueDoesNotMatchTypeException;
 import net.ssehub.easy.varModel.model.values.ValueFactory;
+import net.ssehub.easy.varModel.persistency.StringProvider;
 
 /**
  * Generic operation implementation for the individual types. Testing shall happen
@@ -76,7 +79,35 @@ public class GenericOperations {
             return GenericOperations.equals(operand, arguments, true); 
         }
     };
- 
+
+    /**
+     * Implements the generic toString operation.
+     */
+    static final IOperationEvaluator TO_STRING = new IOperationEvaluator() {
+        
+        public EvaluationAccessor evaluate(EvaluationAccessor operand, EvaluationAccessor[] arguments) {
+            EvaluationAccessor result = null;
+            if (null != operand) {
+                try {
+                    Value sv = operand.getValue();
+                    String sValue;
+                    if (sv instanceof StringValue) {
+                        // direct access, avoid IVML quoting
+                        sValue = ((StringValue) sv).getValue();
+                    } else {
+                        sValue = StringProvider.toIvmlString(operand.getValue());
+                    }
+                    result = ConstantAccessor.POOL.getInstance().bind(
+                        ValueFactory.createValue(StringType.TYPE, sValue), 
+                        operand.getContext());
+                } catch (ValueDoesNotMatchTypeException e) {
+                    // result -> null
+                } 
+            }
+            return result; 
+        }
+    };
+    
     /**
      * Implements the "is defined" operation.
      */

@@ -106,7 +106,10 @@ public class IntegerType extends BasisDatatype {
         RealType.TYPE, OclKeyWords.MOD, TYPE, RealType.TYPE);
     
     public static final Operation DIV_INTEGER_INTEGER = Operation.createInfixOperator(TYPE, 
-            OclKeyWords.DIV_INT, TYPE, TYPE);
+        OclKeyWords.DIV_INT, TYPE, TYPE);
+    
+    public static final Operation TO_STRING = new Operation(
+        AnyType.STRING_TYPE, OclKeyWords.TO_STRING, TYPE);
     
     static {
         RealType.INTEGER_TYPE.setDelegate(new IntegerType());
@@ -142,6 +145,7 @@ public class IntegerType extends BasisDatatype {
         RealType.INTEGER_TYPE.addOperation(INVERSE_INTEGER);
         RealType.INTEGER_TYPE.addOperation(MOD_INTEGER_INTEGER);
         RealType.INTEGER_TYPE.addOperation(MOD_INTEGER_REAL);
+        RealType.INTEGER_TYPE.addOperation(TO_STRING);
     }
     
     /**

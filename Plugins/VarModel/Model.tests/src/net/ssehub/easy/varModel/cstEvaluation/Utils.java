@@ -383,8 +383,8 @@ class Utils {
     /**
      * Tests the "typeOf" operation. 
      * 
-     * @param op the operation to be tested
      * @param context the evaluation context
+     * @param op the operation to be tested
      * @param values the values to be tested
      * 
      * @throws ValueDoesNotMatchTypeException shall not occur
@@ -398,6 +398,59 @@ class Utils {
         }
         
         nullV.release();
+    }
+
+    /**
+     * Tests the "toString" operation. 
+     * 
+     * @param context the evaluation context
+     * @param op the operation to be tested
+     * @param operand the operand value to calculate the string representation for
+     * @param expected the expected output
+     * 
+     * @throws ValueDoesNotMatchTypeException shall not occur
+     */
+    static void testToString(EvaluationContext context, Operation op, EvaluationAccessor operand, String expected) {
+        testToString(context, op, operand, expected, -1);
+    }
+    
+    /**
+     * Tests the "toString" operation. 
+     * 
+     * @param context the evaluation context
+     * @param op the operation to be tested
+     * @param operand the operand value to calculate the string representation for
+     * @param expected the expected output
+     * @param maxLen the maximum length to compare, ignored if negative
+     * 
+     * @throws ValueDoesNotMatchTypeException shall not occur
+     */
+    static void testToString(EvaluationContext context, Operation op, EvaluationAccessor operand, String expected, 
+        int maxLen) {
+        EvaluationAccessor res = Utils.evaluate(op, operand);
+        Assert.assertNotNull(res);
+        Assert.assertNotNull(res.getValue());
+        Assert.assertTrue(res.getValue() instanceof StringValue);
+        Assert.assertEquals(cut(expected, maxLen), cut(((StringValue) res.getValue()).getValue(), maxLen));
+        res.release();
+        
+        res = Utils.evaluate(op, null);
+        Assert.assertNull(res);
+    }
+
+    /**
+     * Cuts the given <code>text</code>.
+     * 
+     * @param text the text to cut
+     * @param maxLen the maximum length to compare, ignored if negative
+     * @return the <code>text</code> in <code>maxLen</code>
+     */
+    private static String cut(String text, int maxLen) {
+        String result = text;
+        if (null != result && maxLen >= 0 && result.length() > maxLen) {
+            result = result.substring(0, maxLen);
+        }
+        return result;
     }
 
     /**

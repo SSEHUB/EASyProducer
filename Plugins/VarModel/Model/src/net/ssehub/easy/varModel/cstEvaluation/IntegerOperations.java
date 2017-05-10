@@ -108,6 +108,7 @@ public class IntegerOperations {
     public static final void register() {
         EvaluatorRegistry.registerEvaluator(GenericOperations.TYPE_OF, IntegerType.TYPE_OF);
         EvaluatorRegistry.registerEvaluator(GenericOperations.EQUALS, IntegerType.EQUALS_INTEGER_INTEGER);
+        EvaluatorRegistry.registerEvaluator(GenericOperations.TO_STRING, IntegerType.TO_STRING);
         EvaluatorRegistry.registerEvaluator(EQUALS_INT_REAL, IntegerType.EQUALS_INTEGER_REAL);
         EvaluatorRegistry.registerEvaluator(GenericOperations.ASSIGNMENT, IntegerType.ASSIGNMENT_INTEGER_INTEGER);
         EvaluatorRegistry.registerEvaluator(GenericOperations.IS_DEFINED, IntegerType.IS_DEFINED);

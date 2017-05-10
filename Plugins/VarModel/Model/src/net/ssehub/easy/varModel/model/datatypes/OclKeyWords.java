@@ -65,6 +65,7 @@ public class OclKeyWords {
     public static final String ROUND = "round";
     public static final String MOD = "mod";
     public static final String WARNING = "warning";
+    public static final String TO_STRING = "toString";
     
     // e.g. String
     public static final String TO_INTEGER = "toInteger";

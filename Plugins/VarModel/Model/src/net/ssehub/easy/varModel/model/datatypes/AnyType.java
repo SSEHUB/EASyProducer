@@ -31,8 +31,10 @@ public class AnyType extends BasisDatatype {
     static final DelegatingType DTYPE = new DelegatingType();
     public static final IDatatype TYPE = DTYPE;
     
+    // forward type declaration to avoid class loading cycles / null
     static final DelegatingType META_TYPE = new DelegatingType();
     static final DelegatingType BOOLEAN_TYPE = new DelegatingType(DTYPE);
+    static final DelegatingType STRING_TYPE = new DelegatingType(AnyType.DTYPE);
     static final DelegatingType CONSTRAINT_TYPE = new DelegatingType(AnyType.DTYPE);
     
     // operations go here

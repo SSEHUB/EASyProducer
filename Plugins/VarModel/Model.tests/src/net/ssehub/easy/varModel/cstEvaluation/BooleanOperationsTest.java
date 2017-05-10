@@ -176,6 +176,22 @@ public class BooleanOperationsTest {
         Utils.testTypeOf(context, BooleanType.TYPE_OF, bValue);
         bValue.release();
     }
+    
+    /**
+     * Tests the "toString" operation.
+     * 
+     * @throws ValueDoesNotMatchTypeException shall not occur
+     */
+    @Test
+    public void testToString() throws ValueDoesNotMatchTypeException {
+        TestEvaluationContext context = new TestEvaluationContext();
+        EvaluationAccessor bValue = Utils.createValue(BooleanType.TYPE, context, true);
+        Utils.testToString(context, BooleanType.TO_STRING, bValue, "true");
+        bValue.release();
+        bValue = Utils.createValue(BooleanType.TYPE, context, false);
+        Utils.testToString(context, BooleanType.TO_STRING, bValue, "false");
+        bValue.release();
+    }
 
     /**
      * Tests the "isTypeOf" operation.

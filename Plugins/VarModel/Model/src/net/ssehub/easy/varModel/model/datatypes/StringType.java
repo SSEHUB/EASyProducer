@@ -26,7 +26,7 @@ public class StringType extends BasisDatatype {
     
     // checkstyle: stop declaration order check
 
-    static final DelegatingType DTYPE = new DelegatingType(AnyType.DTYPE);
+    static final DelegatingType DTYPE = AnyType.STRING_TYPE;
     
     public static final IDatatype TYPE = DTYPE;
     
@@ -53,6 +53,7 @@ public class StringType extends BasisDatatype {
 
     public static final Operation MATCHES = new Operation(BooleanType.TYPE, OclKeyWords.MATCHES, TYPE, TYPE);
     public static final Operation SUBSTITUTES = new Operation(TYPE, OclKeyWords.SUBSTITUTES, TYPE, TYPE, TYPE);
+    public static final Operation TO_STRING = new Operation(TYPE, OclKeyWords.TO_STRING, TYPE);
 
     // checkstyle: resume declaration order check
     
@@ -71,6 +72,7 @@ public class StringType extends BasisDatatype {
         DTYPE.addOperation(SUBSTRING);
         DTYPE.addOperation(MATCHES);
         DTYPE.addOperation(SUBSTITUTES);
+        DTYPE.addOperation(TO_STRING);
     }
     
     /**

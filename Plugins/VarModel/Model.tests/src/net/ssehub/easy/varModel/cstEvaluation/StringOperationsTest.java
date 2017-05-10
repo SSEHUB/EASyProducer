@@ -408,4 +408,21 @@ public class StringOperationsTest {
         // Configuration calls the evaluation visitor, check that NO NullPointerException occurrs!
         new Configuration(project);
     }
+    
+    /**
+     * Tests the "toString" operation.
+     * 
+     * @throws ValueDoesNotMatchTypeException shall not occur
+     */
+    @Test
+    public void testToString() throws ValueDoesNotMatchTypeException {
+        TestEvaluationContext context = new TestEvaluationContext();
+        EvaluationAccessor sValue = Utils.createValue(StringType.TYPE, context, "abba");
+        Utils.testToString(context, StringType.TO_STRING, sValue, "abba");
+        sValue.release();
+        sValue = Utils.createValue(StringType.TYPE, context, "");
+        Utils.testToString(context, StringType.TO_STRING, sValue, "");
+        sValue.release();
+    }
+
 }

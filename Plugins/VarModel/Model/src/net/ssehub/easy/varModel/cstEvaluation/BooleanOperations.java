@@ -141,6 +141,7 @@ public class BooleanOperations {
         EvaluatorRegistry.registerEvaluator(GenericOperations.UNEQUALS, BooleanType.UNEQUALS);
         EvaluatorRegistry.registerEvaluator(GenericOperations.ASSIGNMENT, BooleanType.ASSIGNMENT);
         EvaluatorRegistry.registerEvaluator(GenericOperations.IS_DEFINED, BooleanType.IS_DEFINED);
+        EvaluatorRegistry.registerEvaluator(GenericOperations.TO_STRING, BooleanType.TO_STRING);
         EvaluatorRegistry.registerEvaluator(NOT, BooleanType.NOT);
         EvaluatorRegistry.registerEvaluator(WARNING, BooleanType.WARNING);
         EvaluatorRegistry.registerEvaluator(new BinaryOperationEvaluator(new BinaryBooleanOperation() {

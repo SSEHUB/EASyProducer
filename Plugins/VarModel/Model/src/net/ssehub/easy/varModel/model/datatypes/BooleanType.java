@@ -47,6 +47,7 @@ public class BooleanType extends BasisDatatype {
     // IVML  
     public static final Operation IFF = Operation.createInfixOperator(TYPE, OclKeyWords.IFF, TYPE, TYPE);
     public static final Operation WARNING = new Operation(TYPE, OclKeyWords.WARNING, TYPE);
+    public static final Operation TO_STRING = new Operation(AnyType.BOOLEAN_TYPE, OclKeyWords.TO_STRING, TYPE);
     
     static {
         AnyType.BOOLEAN_TYPE.setDelegate(new BooleanType());
@@ -62,6 +63,7 @@ public class BooleanType extends BasisDatatype {
         AnyType.BOOLEAN_TYPE.addOperation(IMPLIES);
         AnyType.BOOLEAN_TYPE.addOperation(IFF);
         AnyType.BOOLEAN_TYPE.addOperation(WARNING);
+        AnyType.BOOLEAN_TYPE.addOperation(TO_STRING);
     }
     
     /**

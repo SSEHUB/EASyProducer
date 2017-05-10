@@ -95,10 +95,8 @@ public class RealType extends BasisDatatype {
 
     public static final Operation MIN_REAL_REAL = new Operation(
         TYPE, OclKeyWords.MIN, TYPE, TYPE);
-    
     public static final Operation MAX_REAL_REAL = new Operation(
         TYPE, OclKeyWords.MAX, TYPE, TYPE);
-
     public static final Operation MIN_REAL_INTEGER = new Operation(
         TYPE, OclKeyWords.MIN, TYPE, INTEGER_TYPE);
         
@@ -118,10 +116,12 @@ public class RealType extends BasisDatatype {
     
     public static final Operation FLOOR = new Operation(
         INTEGER_TYPE, OclKeyWords.FLOOR, TYPE);
-    
     public static final Operation ROUND = new Operation(
         INTEGER_TYPE, OclKeyWords.ROUND, TYPE);
-    
+
+    public static final Operation TO_STRING = new Operation(
+        AnyType.STRING_TYPE, OclKeyWords.TO_STRING, TYPE);
+
     // checkstyle: resume declaration order check
     
     static {
@@ -162,6 +162,7 @@ public class RealType extends BasisDatatype {
         DTYPE.addOperation(INVERSE_REAL);
         DTYPE.addOperation(FLOOR);
         DTYPE.addOperation(ROUND);
+        DTYPE.addOperation(TO_STRING);
         // ensure initialization, avoid cyclic class dependency
         // otherwise IntegerType is not properly initialized when
         // RealType is used without using IntegerType before

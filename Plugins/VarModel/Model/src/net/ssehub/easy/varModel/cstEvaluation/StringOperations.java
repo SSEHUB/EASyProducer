@@ -229,6 +229,7 @@ public class StringOperations {
         EvaluatorRegistry.registerEvaluator(GenericOperations.UNEQUALS, StringType.UNEQUALS);
         EvaluatorRegistry.registerEvaluator(GenericOperations.ASSIGNMENT, StringType.ASSIGNMENT);
         EvaluatorRegistry.registerEvaluator(GenericOperations.IS_DEFINED, StringType.IS_DEFINED);
+        EvaluatorRegistry.registerEvaluator(GenericOperations.TO_STRING, StringType.TO_STRING);
         EvaluatorRegistry.registerEvaluator(SIZE, StringType.SIZE);
         EvaluatorRegistry.registerEvaluator(TO_INT, StringType.TO_INTEGER);
         EvaluatorRegistry.registerEvaluator(TO_REAL, StringType.TO_REAL);

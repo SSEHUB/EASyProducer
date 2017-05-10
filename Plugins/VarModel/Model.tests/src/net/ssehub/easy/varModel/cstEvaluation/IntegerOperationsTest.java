@@ -386,5 +386,21 @@ public class IntegerOperationsTest {
             RealType.TYPE);
         value.release();
     }
-    
+
+    /**
+     * Tests the "toString" operation.
+     * 
+     * @throws ValueDoesNotMatchTypeException shall not occur
+     */
+    @Test
+    public void testToString() throws ValueDoesNotMatchTypeException {
+        TestEvaluationContext context = new TestEvaluationContext();
+        EvaluationAccessor sValue = Utils.createValue(IntegerType.TYPE, context, 1234);
+        Utils.testToString(context, IntegerType.TO_STRING, sValue, "1234");
+        sValue.release();
+        sValue = Utils.createValue(IntegerType.TYPE, context, "-189");
+        Utils.testToString(context, IntegerType.TO_STRING, sValue, "-189");
+        sValue.release();
+    }
+
 }
