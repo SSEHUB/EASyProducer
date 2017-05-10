@@ -99,6 +99,8 @@ public class Container extends StructuredDatatype {
         .markAsAcceptsNull();
     public static final Operation TYPE_SELECT = new Operation(TYPE, ReturnTypeMode.TYPED_PARAM_1, 
         OclKeyWords.TYPE_SELECT, TYPE, AnyType.TYPE);    
+    public static final Operation SELECT_BY_TYPE = new Operation(TYPE, ReturnTypeMode.TYPED_PARAM_1, 
+        OclKeyWords.SELECT_BY_TYPE, TYPE, AnyType.TYPE);    
     public static final Operation TYPE_REJECT = new Operation(TYPE, ReturnTypeMode.TYPED_PARAM_1, 
         OclKeyWords.TYPE_REJECT, TYPE, AnyType.TYPE);
     // checkstyle: resume declaration order check
@@ -131,6 +133,7 @@ public class Container extends StructuredDatatype {
         DTYPE.addOperation(REJECT);
         DTYPE.addOperation(IS_DEFINED);
         DTYPE.addOperation(TYPE_SELECT);
+        DTYPE.addOperation(SELECT_BY_TYPE);
         DTYPE.addOperation(TYPE_REJECT);
         DTYPE.addOperation(MIN2);
         DTYPE.addOperation(MAX2);

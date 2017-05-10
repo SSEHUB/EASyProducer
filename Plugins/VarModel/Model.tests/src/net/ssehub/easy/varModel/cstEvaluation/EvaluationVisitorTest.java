@@ -996,12 +996,14 @@ public class EvaluationVisitorTest {
 
         // select the base type - all must be in
         assertTypeSelect(visitor, decl1, Sequence.TYPE_SELECT, baseCTypeEx, seqData);
+        assertTypeSelect(visitor, decl1, Sequence.SELECT_BY_TYPE, baseCTypeEx, seqData);
 
         // reject the base type - all must be out
         assertTypeSelect(visitor, decl1, Sequence.TYPE_REJECT, baseCTypeEx, new Object[]{});
 
         // select any type - all must be in
         assertTypeSelect(visitor, decl1, Sequence.TYPE_SELECT, anyTypeEx, seqData);
+        assertTypeSelect(visitor, decl1, Sequence.SELECT_BY_TYPE, anyTypeEx, seqData);
 
         // reject any type - all must be out
         assertTypeSelect(visitor, decl1, Sequence.TYPE_REJECT, anyTypeEx, new Object[]{});

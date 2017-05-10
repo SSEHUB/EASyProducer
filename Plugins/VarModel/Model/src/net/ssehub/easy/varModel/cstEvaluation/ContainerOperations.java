@@ -660,6 +660,7 @@ public class ContainerOperations {
         EvaluatorRegistry.registerEvaluator(new CollectIteratorEvaluator(BooleanValue.TRUE), Container.SELECT);
         EvaluatorRegistry.registerEvaluator(new CollectIteratorEvaluator(BooleanValue.FALSE), Container.REJECT);
         EvaluatorRegistry.registerEvaluator(new TypeSelectEvaluator(false), Container.TYPE_SELECT);
+        EvaluatorRegistry.registerEvaluator(new TypeSelectEvaluator(false), Container.SELECT_BY_TYPE);
         EvaluatorRegistry.registerEvaluator(new TypeSelectEvaluator(true), Container.TYPE_REJECT);
         EvaluatorRegistry.registerEvaluator(GenericOperations.IS_DEFINED, Container.IS_DEFINED);
     }
