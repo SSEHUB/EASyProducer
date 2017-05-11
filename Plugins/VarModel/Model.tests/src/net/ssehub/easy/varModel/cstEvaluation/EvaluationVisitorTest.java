@@ -954,6 +954,31 @@ public class EvaluationVisitorTest {
     }
     
     /**
+     * Projects <code>values</code> from <code>array</code>.
+     * 
+     * @param <T> the type
+     * @param array the array to select from
+     * @param values the values to select
+     * @return the selected values
+     */
+/*    static <T> T[] select(T[] array, T... values) {
+        HashSet<T> conditions = new HashSet<T>();
+        for (T v : values) {
+            conditions.add(v);
+        }
+        ArrayList<T> tmp = new ArrayList<T>();
+        for (T a : array) {
+            if (conditions.contains(a)) {
+                tmp.add(a);
+            }
+        }
+        @SuppressWarnings("unchecked")
+        T[] result = (T[]) new Object[tmp.size()];
+        tmp.toArray(result);
+        return result;
+    }*/
+    
+    /**
      * Tests the "typeSelect" and "typeReject" container operations.
      * 
      * @throws ValueDoesNotMatchTypeException in case that value assignments fail (shall not occur)
@@ -985,6 +1010,10 @@ public class EvaluationVisitorTest {
         seqData[3] = ValueFactory.createValue(refC, createCompoundData("r.2"));
         seqData[4] = ValueFactory.createValue(refC, createCompoundData("r.3"));
         seqData[5] = ValueFactory.createValue(baseC, createCompoundData("b.3"));
+        Object[] seqDataBaseC = new Object[3];
+        seqDataBaseC[0] = seqData[0];
+        seqDataBaseC[1] = seqData[2];
+        seqDataBaseC[2] = seqData[5];
         var.setValue(ValueFactory.createValue(seqType, seqData), AssignmentState.ASSIGNED);
         // type expressions
         ConstraintSyntaxTree baseCTypeEx = new ConstantValue(ValueFactory.createValue(MetaType.TYPE, baseC));
@@ -996,14 +1025,16 @@ public class EvaluationVisitorTest {
 
         // select the base type - all must be in
         assertTypeSelect(visitor, decl1, Sequence.TYPE_SELECT, baseCTypeEx, seqData);
-        assertTypeSelect(visitor, decl1, Sequence.SELECT_BY_TYPE, baseCTypeEx, seqData);
+        assertTypeSelect(visitor, decl1, Sequence.SELECT_BY_TYPE, baseCTypeEx, seqDataBaseC); // only 3 baseC
+        assertTypeSelect(visitor, decl1, Sequence.SELECT_BY_KIND, baseCTypeEx, seqData);
 
         // reject the base type - all must be out
         assertTypeSelect(visitor, decl1, Sequence.TYPE_REJECT, baseCTypeEx, new Object[]{});
 
         // select any type - all must be in
         assertTypeSelect(visitor, decl1, Sequence.TYPE_SELECT, anyTypeEx, seqData);
-        assertTypeSelect(visitor, decl1, Sequence.SELECT_BY_TYPE, anyTypeEx, seqData);
+        assertTypeSelect(visitor, decl1, Sequence.SELECT_BY_TYPE, anyTypeEx, new Object[]{}); // no any instance
+        assertTypeSelect(visitor, decl1, Sequence.SELECT_BY_KIND, anyTypeEx, seqData);
 
         // reject any type - all must be out
         assertTypeSelect(visitor, decl1, Sequence.TYPE_REJECT, anyTypeEx, new Object[]{});

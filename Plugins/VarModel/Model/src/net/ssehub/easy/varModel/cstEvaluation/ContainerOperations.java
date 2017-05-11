@@ -151,14 +151,18 @@ public class ContainerOperations {
     static class TypeSelectEvaluator implements IOperationEvaluator {
         
         private boolean reject;
+        private boolean kindOf;
         
         /**
          * Creates a type select evaluator.
          * 
          * @param reject do reject instead of select
+         * @param kindOf shall the evaluator take the subtypes into account (<code>true</code>) or
+         *   consider only type equality (<code>false</code>)
          */
-        TypeSelectEvaluator(boolean reject) {
+        TypeSelectEvaluator(boolean reject, boolean kindOf) {
             this.reject = reject;
+            this.kindOf = kindOf;
         }
         
         @Override
@@ -174,7 +178,12 @@ public class ContainerOperations {
                     int size = cont.getElementSize();
                     for (int i = 0; i < size; i++) {
                         Value elt = cont.getElement(i);
-                        boolean condition = type.isAssignableFrom(elt.getType());
+                        boolean condition;
+                        if (kindOf) {
+                            condition = type.isAssignableFrom(elt.getType());
+                        } else {
+                            condition = TypeQueries.sameTypes(type, elt.getType());
+                        }
                         if (reject) {
                             condition = !condition;
                         }
@@ -659,9 +668,10 @@ public class ContainerOperations {
         EvaluatorRegistry.registerEvaluator(ContainerIterators.COLLECT, Container.COLLECT);
         EvaluatorRegistry.registerEvaluator(new CollectIteratorEvaluator(BooleanValue.TRUE), Container.SELECT);
         EvaluatorRegistry.registerEvaluator(new CollectIteratorEvaluator(BooleanValue.FALSE), Container.REJECT);
-        EvaluatorRegistry.registerEvaluator(new TypeSelectEvaluator(false), Container.TYPE_SELECT);
-        EvaluatorRegistry.registerEvaluator(new TypeSelectEvaluator(false), Container.SELECT_BY_TYPE);
-        EvaluatorRegistry.registerEvaluator(new TypeSelectEvaluator(true), Container.TYPE_REJECT);
+        EvaluatorRegistry.registerEvaluator(new TypeSelectEvaluator(false, true), Container.TYPE_SELECT);
+        EvaluatorRegistry.registerEvaluator(new TypeSelectEvaluator(false, false), Container.SELECT_BY_TYPE);
+        EvaluatorRegistry.registerEvaluator(new TypeSelectEvaluator(false, true), Container.SELECT_BY_KIND);
+        EvaluatorRegistry.registerEvaluator(new TypeSelectEvaluator(true, true), Container.TYPE_REJECT);
         EvaluatorRegistry.registerEvaluator(GenericOperations.IS_DEFINED, Container.IS_DEFINED);
     }
 
