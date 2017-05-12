@@ -73,6 +73,7 @@ public class OclKeyWords {
     public static final String TO_INTEGER = "toInteger";
     public static final String TO_REAL = "toReal";
     public static final String TO_BOOLEAN = "toBoolean";
+    public static final String CHARACTERS = "characters";
     public static final String TO_UPPER_CASE = "toUpperCase";
     public static final String TO_LOWER_CASE = "toLowerCase";
     public static final String CONCAT = "concat";    

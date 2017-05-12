@@ -20,6 +20,7 @@ import java.util.regex.PatternSyntaxException;
 
 import net.ssehub.easy.varModel.model.datatypes.IntegerType;
 import net.ssehub.easy.varModel.model.datatypes.RealType;
+import net.ssehub.easy.varModel.model.datatypes.Sequence;
 import net.ssehub.easy.varModel.model.datatypes.StringType;
 import net.ssehub.easy.varModel.model.values.BooleanValue;
 import net.ssehub.easy.varModel.model.values.IntValue;
@@ -367,6 +368,30 @@ public class StringOperations {
             return result;
         }
     };
+    
+    static final IOperationEvaluator CHARACTERS = new IOperationEvaluator() {
+
+        public EvaluationAccessor evaluate(EvaluationAccessor operand, EvaluationAccessor[] arguments) {
+            EvaluationAccessor result = null;
+            Value opVal = operand.getValue();
+            if (opVal instanceof StringValue) {
+                String op = ((StringValue) opVal).getValue();
+                String[] chars = new String[op.length()];
+                for (int c = 0; c < op.length(); c++) {
+                    chars[c] = String.valueOf(op.charAt(c));
+                }
+                Sequence type = new Sequence("", StringType.TYPE, null);
+                try {
+                    result = ConstantAccessor.POOL.getInstance().bind(
+                        ValueFactory.createValue(type, (Object[]) chars), operand.getContext());
+                } catch (ValueDoesNotMatchTypeException e) {
+                    operand.getContext().addErrorMessage(e);
+                }
+            }
+            return result;
+        }
+        
+    };
 
     /**
      * Implements the "substitutes" operation.
@@ -458,6 +483,7 @@ public class StringOperations {
         EvaluatorRegistry.registerEvaluator(SUBSTITUTES, StringType.SUBSTITUTES);
         EvaluatorRegistry.registerEvaluator(GenericOperations.TO_STRING, StringType.TO_STRING);
         EvaluatorRegistry.registerEvaluator(TO_BOOLEAN, StringType.TO_BOOLEAN);
+        EvaluatorRegistry.registerEvaluator(CHARACTERS, StringType.CHARACTERS);
         EvaluatorRegistry.registerEvaluator(new CompareOperation(-1, false), StringType.LESS);
         EvaluatorRegistry.registerEvaluator(new CompareOperation(-1, true), StringType.LESS_EQUALS);
         EvaluatorRegistry.registerEvaluator(new CompareOperation(1, false), StringType.GREATER);

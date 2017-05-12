@@ -33,6 +33,8 @@ import net.ssehub.easy.varModel.model.datatypes.IntegerType;
 import net.ssehub.easy.varModel.model.datatypes.OclKeyWords;
 import net.ssehub.easy.varModel.model.datatypes.Operation;
 import net.ssehub.easy.varModel.model.datatypes.StringType;
+import net.ssehub.easy.varModel.model.values.ContainerValue;
+import net.ssehub.easy.varModel.model.values.StringValue;
 import net.ssehub.easy.varModel.model.values.Value;
 import net.ssehub.easy.varModel.model.values.ValueDoesNotMatchTypeException;
 import net.ssehub.easy.varModel.model.values.ValueFactory;
@@ -569,6 +571,49 @@ public class StringOperationsTest {
         Utils.assertEquals(true, Utils.evaluate(StringType.GREATER_EQUALS, value1, value1));
         value1.release();
         value2.release();
+    }
+
+    /**
+     * Tests the "sequence" operator.
+     * 
+     * @throws ValueDoesNotMatchTypeException shall not occur
+     */
+    @Test
+    public void testSequence() throws ValueDoesNotMatchTypeException {
+        TestEvaluationContext context = new TestEvaluationContext();
+        EvaluationAccessor value = Utils.createValue(StringType.TYPE, context, "abba");
+        assertConcatenatedSequence("abba", Utils.evaluate(StringType.CHARACTERS, value));
+        value.release();
+        value = Utils.createValue(StringType.TYPE, context, "");
+        assertConcatenatedSequence("", Utils.evaluate(StringType.CHARACTERS, value));
+        value.release();
+    }
+    
+    /**
+     * Asserts that <code>actual</code> is a container of String values and compares the concatenated
+     * string values (in container given sequence) to <code>expected</code>. If <code>expected</code> is 
+     * <b>null</b>, the value of <code>actual</code> must be null. Releases actual at the end.
+     * 
+     * @param expected the expected concatenated string
+     * @param actual the actual evaluation result
+     */
+    private static void assertConcatenatedSequence(String expected, EvaluationAccessor actual) {
+        Value val = actual.getValue();
+        if (null == expected) {
+            Assert.assertNull(expected);
+        } else {
+            Assert.assertNotNull(expected);
+            Assert.assertTrue(val instanceof ContainerValue);
+            ContainerValue cValue = (ContainerValue) val;
+            String sActual = "";
+            for (int i = 0; i < cValue.getElementSize(); i++) {
+                Value eVal = cValue.getElement(i);
+                Assert.assertTrue(eVal instanceof StringValue);
+                sActual += ((StringValue) eVal).getValue();
+            }
+            Assert.assertEquals(expected, sActual);
+            actual.release();
+        }
     }
 
 }

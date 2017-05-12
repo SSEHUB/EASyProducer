@@ -36,7 +36,10 @@ public class AnyType extends BasisDatatype {
     static final DelegatingType BOOLEAN_TYPE = new DelegatingType(DTYPE);
     static final DelegatingType STRING_TYPE = new DelegatingType(AnyType.DTYPE);
     static final DelegatingType CONSTRAINT_TYPE = new DelegatingType(AnyType.DTYPE);
-    
+    static final DelegatingType CONTAINER_TYPE = new DelegatingType(AnyType.DTYPE);
+    static final DelegatingType SEQUENCE_TYPE = new DelegatingType(CONTAINER_TYPE);
+    static final DelegatingType SET_TYPE = new DelegatingType(CONTAINER_TYPE);
+            
     // operations go here
     public static final Operation IS_TYPE_OF = new Operation(
         BOOLEAN_TYPE, OclKeyWords.IS_TYPE_OF, TYPE, META_TYPE);

@@ -31,7 +31,7 @@ public class Container extends StructuredDatatype {
 
     // checkstyle: stop declaration order check
 
-    static final DelegatingType DTYPE = new DelegatingType(AnyType.DTYPE);
+    static final DelegatingType DTYPE = AnyType.CONTAINER_TYPE;
     
     /**
      * This constant represents the common type of all sets. Each specific sequence type 

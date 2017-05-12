@@ -61,6 +61,7 @@ public class StringType extends BasisDatatype {
     public static final Operation SUBSTITUTES = new Operation(TYPE, OclKeyWords.SUBSTITUTES, TYPE, TYPE, TYPE);
     public static final Operation TO_STRING = new Operation(TYPE, OclKeyWords.TO_STRING, TYPE);
     public static final Operation TO_BOOLEAN = new Operation(BooleanType.TYPE, OclKeyWords.TO_BOOLEAN, TYPE);
+    public static final Operation CHARACTERS = new Operation(AnyType.SEQUENCE_TYPE, OclKeyWords.CHARACTERS, TYPE);
     public static final Operation LESS = new Operation(BooleanType.TYPE, OclKeyWords.LESS, TYPE, TYPE);
     public static final Operation LESS_EQUALS = new Operation(BooleanType.TYPE, OclKeyWords.LESS_EQUALS, TYPE, TYPE);
     public static final Operation GREATER = new Operation(BooleanType.TYPE, OclKeyWords.GREATER, TYPE, TYPE);
@@ -91,6 +92,7 @@ public class StringType extends BasisDatatype {
         DTYPE.addOperation(SUBSTITUTES);
         DTYPE.addOperation(TO_STRING);
         DTYPE.addOperation(TO_BOOLEAN);
+        DTYPE.addOperation(CHARACTERS);
         DTYPE.addOperation(LESS);
         DTYPE.addOperation(LESS_EQUALS);
         DTYPE.addOperation(GREATER);

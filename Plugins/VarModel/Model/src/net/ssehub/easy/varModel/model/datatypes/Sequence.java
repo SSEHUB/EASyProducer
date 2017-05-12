@@ -32,7 +32,7 @@ public class Sequence extends Container {
 
     // checkstyle: stop declaration order check
     
-    static final DelegatingType DTYPE = new DelegatingType(Container.DTYPE);
+    static final DelegatingType DTYPE = AnyType.SEQUENCE_TYPE;
     // actually we can define operations once and reuse them but I'm not sure whether this makes
     // sense with respect to the reasoner -> define in "supertype" and link to respective DTYPE
     
