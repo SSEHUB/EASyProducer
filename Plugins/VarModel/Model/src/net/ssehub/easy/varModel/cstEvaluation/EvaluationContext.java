@@ -15,6 +15,9 @@
  */
 package net.ssehub.easy.varModel.cstEvaluation;
 
+import java.text.Collator;
+import java.util.Locale;
+
 import net.ssehub.easy.basics.messages.Status;
 import net.ssehub.easy.varModel.confModel.IAssignmentState;
 import net.ssehub.easy.varModel.confModel.IConfiguration;
@@ -26,6 +29,58 @@ import net.ssehub.easy.varModel.confModel.IDecisionVariable;
  * @author Holger Eichelberger
  */
 public abstract class EvaluationContext implements IConfiguration {
+    
+    private static Locale defaultLocale = new Locale("en", "us");
+    private Locale locale = defaultLocale;
+
+    /**
+     * Changes the default locale for evaluation.
+     * 
+     * @param locale the new locale, ignored if <b>null</b>
+     */
+    public static void setDefaultLocale(Locale locale) {
+        if (null != locale)  {
+            defaultLocale = locale;
+        }
+    }
+
+    /**
+     * Returns the default locale for evaluation.
+     * 
+     * @return the locale
+     */
+    public static Locale getDefaultLocale() {
+        return defaultLocale;
+    }
+    
+    /**
+     * Returns the actual locale for evaluation.
+     * 
+     * @return the locale
+     */
+    public Locale getLocale() {
+        return locale;
+    }
+    
+    /**
+     * Changes the locale for evaluation.
+     * 
+     * @param locale the new locale, ignored if <b>null</b>
+     */
+    public void setLocale(Locale locale) {
+        if (null != locale) {
+            this.locale = locale;
+        }
+    }
+
+    /**
+     * Returns the collator corresponding to the actual locale of this context.
+     * 
+     * @return the collator
+     */
+    public Collator getCollator() {
+        return Collator.getInstance(getLocale());
+    }
     
     /**
      * Returns whether values shall be assigned, i.e., the configuration may be changed.

@@ -34,6 +34,7 @@ public class OclKeyWords {
     public static final String ASSIGNMENT = "=";
     public static final String IS_TYPE_OF = "isTypeOf";
     public static final String IS_KIND_OF = "isKindOf";
+    public static final String LOCALE = "locale";
     
     // e.g. Boolean
     @IVMLKeyWord
@@ -68,8 +69,12 @@ public class OclKeyWords {
     public static final String TO_STRING = "toString";
     
     // e.g. String
+    public static final String EQUALS_IGNORE_CASE = "equalsIgnoreCase";
     public static final String TO_INTEGER = "toInteger";
     public static final String TO_REAL = "toReal";
+    public static final String TO_BOOLEAN = "toBoolean";
+    public static final String TO_UPPER_CASE = "toUpperCase";
+    public static final String TO_LOWER_CASE = "toLowerCase";
     public static final String CONCAT = "concat";    
     public static final String SUBSTRING = "substring";
     public static final String MATCHES = "matches";

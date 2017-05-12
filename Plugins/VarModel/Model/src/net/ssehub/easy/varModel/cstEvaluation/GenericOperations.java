@@ -15,6 +15,8 @@
  */
 package net.ssehub.easy.varModel.cstEvaluation;
 
+import java.util.Locale;
+
 import net.ssehub.easy.varModel.confModel.AssignmentState;
 import net.ssehub.easy.varModel.confModel.CompoundVariable;
 import net.ssehub.easy.varModel.model.datatypes.AnyType;
@@ -187,11 +189,78 @@ public class GenericOperations {
             return result;
         }
     };
-    
+
+    static final IOperationEvaluator GET_LOCALE = new IOperationEvaluator() {
+        
+        public EvaluationAccessor evaluate(EvaluationAccessor operand, EvaluationAccessor[] arguments) {
+            EvaluationAccessor result = null;
+            try {
+                result = ConstantAccessor.POOL.getInstance().bind(ValueFactory.createValue(StringType.TYPE, 
+                    localeToString(operand)), operand.getContext());
+            } catch (ValueDoesNotMatchTypeException e) {
+                // -> null
+            }
+            return result;
+        }
+    };
+
+    static final IOperationEvaluator SET_LOCALE = new IOperationEvaluator() {
+        
+        public EvaluationAccessor evaluate(EvaluationAccessor operand, EvaluationAccessor[] arguments) {
+            EvaluationAccessor result = null;
+            if (1 == arguments.length) {
+                Value arg = arguments[0].getValue();
+                if (arg instanceof StringValue) {
+                    String loc = ((StringValue) arg).getValue();
+                    Locale locale;
+                    int pos = loc.indexOf("_");
+                    if (pos < 0 && pos + 1 < loc.length()) {
+                        locale = new Locale(loc);
+                    } else {
+                        locale = new Locale(loc.substring(0, pos), loc.substring(pos + 1));
+                    }
+                    operand.getContext().setLocale(locale);
+                    try {
+                        result = ConstantAccessor.POOL.getInstance().bind(ValueFactory.createValue(StringType.TYPE, 
+                            localeToString(operand)), operand.getContext());
+                    } catch (ValueDoesNotMatchTypeException e) {
+                        // -> null
+                    }
+                }
+            }
+            return result;
+        }
+    };
+
     /**
      * Prevents external instantiation.
      */
     private GenericOperations() {
+    }
+
+    /**
+     * Turns the locale of the accessor/context into a string.
+     * 
+     * @param accessor the accessor
+     * @return the locale as string
+     */
+    public static String localeToString(EvaluationAccessor accessor) {
+        return toString(accessor.getContext().getLocale());
+    }
+
+    /**
+     * Turns the locale into a string.
+     * 
+     * @param locale the locale
+     * @return the locale as string
+     */
+    public static String toString(Locale locale) {
+        String result = locale.getLanguage();
+        String ctry = locale.getCountry();
+        if (ctry.length() > 0) {
+            result += "_" + ctry;
+        }
+        return result;
     }
 
     /**
@@ -200,6 +269,8 @@ public class GenericOperations {
     public static void register() {
         EvaluatorRegistry.registerEvaluator(IS_TYPE_OF, AnyType.IS_TYPE_OF);
         EvaluatorRegistry.registerEvaluator(IS_KIND_OF, AnyType.IS_KIND_OF);
+        EvaluatorRegistry.registerEvaluator(GET_LOCALE, AnyType.GET_LOCALE);
+        EvaluatorRegistry.registerEvaluator(SET_LOCALE, AnyType.SET_LOCALE);
     }
 
     /**

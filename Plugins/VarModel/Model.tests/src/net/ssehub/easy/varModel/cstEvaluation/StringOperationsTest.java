@@ -157,7 +157,32 @@ public class StringOperationsTest {
         strEmpty.release();
         nullV.release();
     }
-    
+
+    /**
+     * Tests the "toReal" operation.
+     * 
+     * @throws ValueDoesNotMatchTypeException shall not occur
+     */
+    @Test
+    public void testToBoolean() throws ValueDoesNotMatchTypeException {
+        TestEvaluationContext context = new TestEvaluationContext();
+        EvaluationAccessor strTrue = Utils.createValue(StringType.TYPE, context, "true");
+        EvaluationAccessor strFalse = Utils.createValue(StringType.TYPE, context, "false");
+        EvaluationAccessor strEmpty = Utils.createValue(StringType.TYPE, context, "");
+        EvaluationAccessor strSSE = Utils.createValue(StringType.TYPE, context, "SSE");
+        final Operation op = StringType.TO_BOOLEAN;
+
+        Utils.assertEquals(true, Utils.evaluate(op, strTrue));
+        Utils.assertEquals(false, Utils.evaluate(op, strFalse));
+        Utils.assertEquals(false, Utils.evaluate(op, strEmpty));
+        Utils.assertEquals(false, Utils.evaluate(op, strSSE));
+        
+        strTrue.release();
+        strFalse.release();
+        strEmpty.release();
+        strSSE.release();
+    }
+
     /**
      * Tests the "concat" operation.
      * 
@@ -423,6 +448,127 @@ public class StringOperationsTest {
         sValue = Utils.createValue(StringType.TYPE, context, "");
         Utils.testToString(context, StringType.TO_STRING, sValue, "");
         sValue.release();
+    }
+    
+    /**
+     * Tests the "indexOf" operation.
+     * 
+     * @throws ValueDoesNotMatchTypeException shall not occur
+     */
+    @Test
+    public void testIndexOf() throws ValueDoesNotMatchTypeException {
+        TestEvaluationContext context = new TestEvaluationContext();
+        EvaluationAccessor textValue = Utils.createValue(StringType.TYPE, context, "abba");
+        EvaluationAccessor searchValue = Utils.createValue(StringType.TYPE, context, "a");
+        Utils.assertEquals(0, Utils.evaluate(StringType.INDEX_OF, textValue, searchValue));
+        searchValue.release();
+        searchValue = Utils.createValue(StringType.TYPE, context, "ba");
+        Utils.assertEquals(2, Utils.evaluate(StringType.INDEX_OF, textValue, searchValue));
+        searchValue.release();
+        searchValue = Utils.createValue(StringType.TYPE, context, "c");
+        Utils.assertEquals(-1, Utils.evaluate(StringType.INDEX_OF, textValue, searchValue));
+        searchValue.release();
+        textValue.release();
+    }
+
+    /**
+     * Tests the "indexOf" operation.
+     * 
+     * @throws ValueDoesNotMatchTypeException shall not occur
+     */
+    @Test
+    public void testAt() throws ValueDoesNotMatchTypeException {
+        TestEvaluationContext context = new TestEvaluationContext();
+        EvaluationAccessor textValue = Utils.createValue(StringType.TYPE, context, "abba");
+        EvaluationAccessor indexValue = Utils.createValue(IntegerType.TYPE, context, 0);
+        Utils.assertEquals("a", Utils.evaluate(StringType.AT, textValue, indexValue));
+        indexValue.release();
+        indexValue = Utils.createValue(IntegerType.TYPE, context, 2);
+        Utils.assertEquals("b", Utils.evaluate(StringType.AT, textValue, indexValue));
+        indexValue.release();
+        indexValue = Utils.createValue(IntegerType.TYPE, context, -1);
+        Assert.assertNull(Utils.evaluate(StringType.AT, textValue, indexValue));
+        indexValue.release();
+        indexValue = Utils.createValue(IntegerType.TYPE, context, 5);
+        Assert.assertNull(Utils.evaluate(StringType.AT, textValue, indexValue));
+        indexValue.release();
+        textValue.release();
+    }
+
+    /**
+     * Tests the "equalsIgnoreCase" operation.
+     * 
+     * @throws ValueDoesNotMatchTypeException shall not occur
+     */
+    @Test
+    public void testEqualsIgnoreCase() throws ValueDoesNotMatchTypeException {
+        TestEvaluationContext context = new TestEvaluationContext();
+        EvaluationAccessor textValue = Utils.createValue(StringType.TYPE, context, "abba");
+        EvaluationAccessor testValue = Utils.createValue(StringType.TYPE, context, "ABBA");
+        assertLocale(textValue);
+        Utils.assertEquals(true, Utils.evaluate(StringType.EQUALS_IGNORE_CASE, textValue, testValue));
+        Utils.assertEquals(true, Utils.evaluate(StringType.EQUALS_IGNORE_CASE, textValue, textValue));
+        testValue.release();
+        testValue = Utils.createValue(StringType.TYPE, context, "AB1BA");
+        Utils.assertEquals(false, Utils.evaluate(StringType.EQUALS_IGNORE_CASE, textValue, testValue));
+        testValue.release();
+        textValue.release();
+    }
+
+    /**
+     * Tests the "equalsIgnoreCase" operation.
+     * 
+     * @throws ValueDoesNotMatchTypeException shall not occur
+     */
+    @Test
+    public void testCase() throws ValueDoesNotMatchTypeException {
+        TestEvaluationContext context = new TestEvaluationContext();
+        EvaluationAccessor textValue = Utils.createValue(StringType.TYPE, context, "abba");
+        assertLocale(textValue);
+        Utils.assertEquals("ABBA", Utils.evaluate(StringType.TO_UPPER_CASE, textValue));
+        textValue.release();
+        textValue = Utils.createValue(StringType.TYPE, context, "ABBA");
+        Utils.assertEquals("abba", Utils.evaluate(StringType.TO_LOWER_CASE, textValue));
+        textValue.release();
+    }
+    
+    /**
+     * Asserts the global locale (and the locale operations) on <code>accessor</code>.
+     * 
+     * @param accessor the accessor to change the locale on
+     * @throws ValueDoesNotMatchTypeException shall not occur
+     */
+    public static void assertLocale(EvaluationAccessor accessor) throws ValueDoesNotMatchTypeException {
+        String expected = GenericOperations.localeToString(accessor);
+        Utils.assertEquals(expected, Utils.evaluate(AnyType.GET_LOCALE, accessor));
+        String testLocale = "en_US";
+        EvaluationAccessor textValue = Utils.createValue(StringType.TYPE, accessor.getContext(), testLocale);
+        Utils.assertEquals(testLocale, Utils.evaluate(AnyType.SET_LOCALE, accessor, textValue));
+        Assert.assertEquals(GenericOperations.localeToString(accessor), testLocale);
+        textValue.release();
+    }
+    
+    /**
+     * Tests the compare operations.
+     * 
+     * @throws ValueDoesNotMatchTypeException shall not occur
+     */
+    @Test
+    public void testCompare() throws ValueDoesNotMatchTypeException {
+        TestEvaluationContext context = new TestEvaluationContext();
+        EvaluationAccessor value1 = Utils.createValue(StringType.TYPE, context, "abba");
+        assertLocale(value1);
+        EvaluationAccessor value2 = Utils.createValue(StringType.TYPE, context, "ABBA");
+        Utils.assertEquals(true, Utils.evaluate(StringType.LESS, value1, value2));
+        Utils.assertEquals(true, Utils.evaluate(StringType.LESS_EQUALS, value1, value2));
+        Utils.assertEquals(false, Utils.evaluate(StringType.LESS, value1, value1));
+        Utils.assertEquals(true, Utils.evaluate(StringType.LESS_EQUALS, value1, value1));
+        Utils.assertEquals(true, Utils.evaluate(StringType.GREATER, value2, value1));
+        Utils.assertEquals(false, Utils.evaluate(StringType.GREATER_EQUALS, value1, value2));
+        Utils.assertEquals(false, Utils.evaluate(StringType.GREATER, value1, value1));
+        Utils.assertEquals(true, Utils.evaluate(StringType.GREATER_EQUALS, value1, value1));
+        value1.release();
+        value2.release();
     }
 
 }

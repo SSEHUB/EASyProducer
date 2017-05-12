@@ -42,6 +42,10 @@ public class AnyType extends BasisDatatype {
         BOOLEAN_TYPE, OclKeyWords.IS_TYPE_OF, TYPE, META_TYPE);
     public static final Operation IS_KIND_OF = new Operation(
         BOOLEAN_TYPE, OclKeyWords.IS_KIND_OF, TYPE, META_TYPE);
+    public static final Operation SET_LOCALE = new Operation(
+        STRING_TYPE, OclKeyWords.LOCALE, TYPE, STRING_TYPE);
+    public static final Operation GET_LOCALE = new Operation(
+        STRING_TYPE, OclKeyWords.LOCALE, TYPE);
 
     // checkstyle: resume declaration order check
     
@@ -49,6 +53,8 @@ public class AnyType extends BasisDatatype {
         DTYPE.setDelegate(new AnyType());
         DTYPE.addOperation(IS_TYPE_OF);
         DTYPE.addOperation(IS_KIND_OF);
+        DTYPE.addOperation(SET_LOCALE);
+        DTYPE.addOperation(GET_LOCALE);
     }
     
     /**
