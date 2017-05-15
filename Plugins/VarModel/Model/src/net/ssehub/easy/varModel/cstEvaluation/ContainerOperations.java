@@ -853,6 +853,19 @@ public class ContainerOperations {
             result.add(cont.getElement(i));
         }
     }
+
+    /**
+     * Adds all elements in <code>cont</code> to <code>result</code>.
+     * 
+     * @param cont the source of the elements
+     * @param result the target (to be modified as a side effect)
+     */
+    static final void addAll(ContainerValue cont, java.util.Set<Value> result) {
+        for (int i = 0; i < cont.getElementSize(); i++) {
+            result.add(cont.getElement(i));
+        }
+    }
+
     
     /**
      * Returns whether the first argument value can be found in the <code>operand</code> given that operand

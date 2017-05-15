@@ -110,12 +110,13 @@ public class OclKeyWords {
     public static final String FOR_ALL = "forAll";
     public static final String ADD = "add";
     public static final String FLATTEN = "flatten";
+    public static final String INCLUDING = "including";
+    public static final String EXCLUDING = "excluding";
     
     // e.g. Set
     public static final String INTERSECTION = "intersection";
-    public static final String INCLUDING = "including";
-    public static final String EXCLUDING = "excluding";
     public static final String REVERSE = "reverse";
+    public static final String SYMMETRIC_DIFFERENCE = "symmetricDifference";
     
     // e.g. Sequence
     public static final String APPEND = "append";

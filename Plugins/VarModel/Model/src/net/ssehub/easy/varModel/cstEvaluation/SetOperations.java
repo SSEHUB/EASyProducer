@@ -51,9 +51,7 @@ public class SetOperations {
         
         public void evaluate(ContainerValue c1, ContainerValue c2, List<Value> result) {
             HashSet<Value> inC2 = new HashSet<Value>();
-            for (int e = 0; e < c2.getElementSize(); e++) {
-                inC2.add(c2.getElement(e));
-            }
+            ContainerOperations.addAll(c2, inC2);
             for (int e = 0; e < c1.getElementSize(); e++) {
                 Value val = c1.getElement(e);
                 if (!inC2.contains(val)) {
@@ -63,6 +61,21 @@ public class SetOperations {
         }
     });
 
+    /**
+     * Implements the symmetric difference operation.
+     */
+    static final IOperationEvaluator SYMMETRIC_DIFFERENCE = new Container2OperationEvaluator(new Container2Operation() {
+        
+        public void evaluate(ContainerValue c1, ContainerValue c2, List<Value> result) {
+            HashSet<Value> inC1 = new HashSet<Value>();
+            HashSet<Value> inC2 = new HashSet<Value>();
+            ContainerOperations.addAll(c1, inC1);
+            ContainerOperations.addAll(c2, inC2);
+            addAllXor(c1, inC1, inC2, result);
+            addAllXor(c2, inC1, inC2, result);
+        }
+    });
+    
     /**
      * Implements the "excluding" operation.
      */
@@ -113,6 +126,7 @@ public class SetOperations {
         EvaluatorRegistry.registerEvaluator(EXCLUDING, Set.EXCLUDING);
         EvaluatorRegistry.registerEvaluator(INCLUDING, Set.INCLUDING);
         EvaluatorRegistry.registerEvaluator(DIFFERENCE, Set.DIFFERENCE);
+        EvaluatorRegistry.registerEvaluator(SYMMETRIC_DIFFERENCE, Set.SYMMETRIC_DIFFERENCE);
         EvaluatorRegistry.registerEvaluator(GenericOperations.EQUALS, Set.EQUALS);
         EvaluatorRegistry.registerEvaluator(GenericOperations.ASSIGNMENT, Set.ASSIGNMENT);
         EvaluatorRegistry.registerEvaluator(ContainerOperations.ADD, Set.ADD);
@@ -132,6 +146,24 @@ public class SetOperations {
             if (!done.contains(elt)) {
                 result.add(elt);
                 done.add(elt);
+            }
+        }
+    }
+
+    /**
+     * Adds all elements from <code>cont</code> to <code>result</code> if the individual
+     * elements are either in <code>set1</code> or in <code>set2</code>.
+     * 
+     * @param cont the container to take the values from
+     * @param set1 the first set
+     * @param set2 the second set
+     * @param result the resulting elements
+     */
+    private static void addAllXor(ContainerValue cont, HashSet<Value> set1, HashSet<Value> set2, List<Value> result)  {
+        for (int e = 0; e < cont.getElementSize(); e++) {
+            Value val = cont.getElement(e);
+            if (set1.contains(val) ^ set2.contains(val)) {
+                result.add(val);
             }
         }
     }

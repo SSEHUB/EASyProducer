@@ -392,7 +392,33 @@ public class SetOperationsTest {
         set2.release();
         setE.release();
     }
-    
+
+    /**
+     * Tests the "symmetricDifference" operation.
+     * 
+     * @throws ValueDoesNotMatchTypeException shall not occur
+     */
+    @Test
+    public void testSymmetricDifference() throws ValueDoesNotMatchTypeException {
+        TestEvaluationContext context = new TestEvaluationContext();
+        IDatatype setIntType = new Set("intSet", IntegerType.TYPE, null);
+        EvaluationAccessor set1 = Utils.createValue(setIntType, context, new Object[]{1, 7, 9, 10, 4});
+        EvaluationAccessor set2 = Utils.createValue(setIntType, context, new Object[]{1, 7, 4, 12});
+        EvaluationAccessor setE = Utils.createValue(setIntType, context, new Object[]{});
+        Object[] expected = new Object[]{9, 10, 12}; 
+        Utils.assertContainer(expected, Set.SYMMETRIC_DIFFERENCE, set1, set2);
+
+        expected = new Object[]{1, 7, 9, 10, 4};
+        Utils.assertContainer(expected, Set.SYMMETRIC_DIFFERENCE, set1, setE);
+
+        expected = new Object[]{1, 7, 4, 12};
+        Utils.assertContainer(expected, Set.SYMMETRIC_DIFFERENCE, setE, set2);
+
+        set1.release();
+        set2.release();
+        setE.release();
+    }
+
     /**
      * Tests the "sum" function.
      * 

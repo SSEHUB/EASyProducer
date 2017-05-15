@@ -55,6 +55,8 @@ public class Set extends Container {
         OclKeyWords.INCLUDING, TYPE, AnyType.TYPE);
     public static final Operation DIFFERENCE = new Operation(TYPE, ReturnTypeMode.IMMEDIATE_OPERAND,
         OclKeyWords.MINUS, TYPE, AnyType.TYPE);
+    public static final Operation SYMMETRIC_DIFFERENCE = new Operation(TYPE, ReturnTypeMode.IMMEDIATE_OPERAND,
+        OclKeyWords.SYMMETRIC_DIFFERENCE, TYPE, AnyType.TYPE);
     public static final Operation ADD = new Operation(AnyType.TYPE, ReturnTypeMode.PARAM_1_CHECK, 
         OclKeyWords.ADD, TYPE, AnyType.TYPE);
     public static final Operation FLATTEN = new Operation(TYPE, 
@@ -79,6 +81,7 @@ public class Set extends Container {
         DTYPE.addOperation(EXCLUDING);
         DTYPE.addOperation(INCLUDING);
         DTYPE.addOperation(DIFFERENCE);
+        DTYPE.addOperation(SYMMETRIC_DIFFERENCE);
         DTYPE.addOperation(ADD);
         DTYPE.addOperation(FLATTEN);
     }
