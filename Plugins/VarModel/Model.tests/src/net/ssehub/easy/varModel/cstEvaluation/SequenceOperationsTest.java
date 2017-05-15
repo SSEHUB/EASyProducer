@@ -703,12 +703,12 @@ public class SequenceOperationsTest {
     }
 
     /**
-     * Tests the "Subsequence" function.
+     * Tests the "isSubsequence" function.
      * 
      * @throws ValueDoesNotMatchTypeException shall not occur
      */
     @Test
-    public void testSubsequence() throws ValueDoesNotMatchTypeException {
+    public void testIsSubsequence() throws ValueDoesNotMatchTypeException {
         TestEvaluationContext context = new TestEvaluationContext();
         IDatatype seqStringType = new Sequence("stringSeq", StringType.TYPE, null);
         EvaluationAccessor set1 = Utils.createValue(seqStringType, context, new Object[] {"aa", "bb", "cc", "dd"});
@@ -717,13 +717,13 @@ public class SequenceOperationsTest {
         EvaluationAccessor set4 = Utils.createValue(seqStringType, context, new Object[] {"aa", "bb", "cc"});
         EvaluationAccessor set5 = Utils.createValue(seqStringType, context, new Object[] {});
 
-        Utils.assertEquals(true, Utils.evaluate(Sequence.SUBSEQUENCE, set1, set1));
-        Utils.assertEquals(false, Utils.evaluate(Sequence.SUBSEQUENCE, set1, set2));
-        Utils.assertEquals(false, Utils.evaluate(Sequence.SUBSEQUENCE, set1, set3));
-        Utils.assertEquals(false, Utils.evaluate(Sequence.SUBSEQUENCE, set1, set4));
-        Utils.assertEquals(true, Utils.evaluate(Sequence.SUBSEQUENCE, set4, set1));
-        Utils.assertEquals(false, Utils.evaluate(Sequence.SUBSEQUENCE, set1, set5));
-        Utils.assertEquals(false, Utils.evaluate(Sequence.SUBSEQUENCE, set5, set1));
+        Utils.assertEquals(true, Utils.evaluate(Sequence.ISSUBSEQUENCE, set1, set1));
+        Utils.assertEquals(false, Utils.evaluate(Sequence.ISSUBSEQUENCE, set1, set2));
+        Utils.assertEquals(false, Utils.evaluate(Sequence.ISSUBSEQUENCE, set1, set3));
+        Utils.assertEquals(false, Utils.evaluate(Sequence.ISSUBSEQUENCE, set1, set4));
+        Utils.assertEquals(true, Utils.evaluate(Sequence.ISSUBSEQUENCE, set4, set1));
+        Utils.assertEquals(false, Utils.evaluate(Sequence.ISSUBSEQUENCE, set1, set5));
+        Utils.assertEquals(false, Utils.evaluate(Sequence.ISSUBSEQUENCE, set5, set1));
 
         set1.release();
         set2.release();
@@ -869,7 +869,34 @@ public class SequenceOperationsTest {
         Utils.assertContainer(new Object[]{}, Sequence.REVERSE, set);
         set.release();
     }
-    
+
+    /**
+     * Tests the "subSequence" operation.
+     * 
+     * @throws ValueDoesNotMatchTypeException shall not occur
+     */
+    @Test
+    public void testSubSequence() throws ValueDoesNotMatchTypeException {
+        TestEvaluationContext context = new TestEvaluationContext();
+        IDatatype sequenceIntType = new Set("intSeq", IntegerType.TYPE, null);
+        EvaluationAccessor set = Utils.createValue(sequenceIntType, context, new Object[]{1, 7, 9, 10, 4});
+        EvaluationAccessor lower = Utils.createValue(IntegerType.TYPE, context, 1);
+        EvaluationAccessor upper = Utils.createValue(IntegerType.TYPE, context, 3);
+        Object[] expected = new Object[]{7, 9, 10}; // here sequence is assumed... for now
+        Utils.assertContainer(expected, Sequence.SUBSEQUENCE, set, lower, upper);
+        lower.release();
+        upper.release();
+        lower = Utils.createValue(IntegerType.TYPE, context, -1);
+        upper = Utils.createValue(IntegerType.TYPE, context, 7);
+        expected = new Object[]{1, 7, 9, 10, 4}; // here sequence is assumed... for now
+        Utils.assertContainer(expected, Sequence.SUBSEQUENCE, set, lower, upper);
+        set.release();
+        
+        set = Utils.createValue(sequenceIntType, context, new Object[]{});
+        Utils.assertContainer(new Object[]{}, Sequence.REVERSE, set, lower, upper);
+        set.release();
+    }
+
     // Container iterators need to be tested on the level of the EvaluationVisitor!
 
 }

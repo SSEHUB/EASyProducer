@@ -171,7 +171,7 @@ public class SequenceOperations {
     /**
      * Implements the "isSubsequenceOf" operation.
      */
-    static final IOperationEvaluator SUBSEQUENCE = new IOperationEvaluator() {
+    static final IOperationEvaluator ISSUBSEQUENCE = new IOperationEvaluator() {
 
         @Override
         public EvaluationAccessor evaluate(EvaluationAccessor operand, EvaluationAccessor[] arguments) {
@@ -319,8 +319,7 @@ public class SequenceOperations {
                 ContainerValue cont = (ContainerValue) oValue;
                 List<Value> res = new ArrayList<Value>();
                 for (int i = cont.getElementSize() - 1; i >= 0; i--) {
-                    Value elt = cont.getElement(i);
-                    res.add(elt);
+                    res.add(cont.getElement(i));
                 }
                 try {
                     Value rValue = ValueFactory.createValue(oValue.getType(), res.toArray());
@@ -332,7 +331,39 @@ public class SequenceOperations {
             return result;
         }
     };
-    
+
+    /**
+     * Implements the "subSequence" operation.
+     */
+    static final IOperationEvaluator SUBSEQUENCE = new IOperationEvaluator() {
+        
+        @Override
+        public EvaluationAccessor evaluate(EvaluationAccessor operand, EvaluationAccessor[] arguments) {
+            EvaluationAccessor result = null;
+            if (2 == arguments.length) {
+                Value oValue = operand.getValue();
+                Value aValue1 = arguments[0].getValue();
+                Value aValue2 = arguments[1].getValue();
+                if (oValue instanceof ContainerValue && aValue1 instanceof IntValue && aValue2 instanceof IntValue) {
+                    ContainerValue cont = (ContainerValue) oValue;
+                    int lower = Math.max(0, ((IntValue) aValue1).getValue());
+                    int upper = Math.min(((IntValue) aValue2).getValue(), cont.getElementSize() - 1);
+                    List<Value> res = new ArrayList<Value>();
+                    for (int i = lower; i <= upper; i++) {
+                        res.add(cont.getElement(i));
+                    }
+                    try {
+                        Value rValue = ValueFactory.createValue(oValue.getType(), res.toArray());
+                        result = ConstantAccessor.POOL.getInstance().bind(rValue, operand.getContext());
+                    } catch (ValueDoesNotMatchTypeException e) {
+                        operand.getContext().addErrorMessage(e);
+                    }
+                }
+            }
+            return result;
+        }
+    };
+
     /**
      * Prevent instance creation.
      */
@@ -357,10 +388,11 @@ public class SequenceOperations {
         EvaluatorRegistry.registerEvaluator(INCLUDING, Sequence.INCLUDING);
         EvaluatorRegistry.registerEvaluator(EXCLUDING, Sequence.EXCLUDING);
         EvaluatorRegistry.registerEvaluator(REVERSE, Sequence.REVERSE);
+        EvaluatorRegistry.registerEvaluator(SUBSEQUENCE, Sequence.SUBSEQUENCE);
         EvaluatorRegistry.registerEvaluator(GenericOperations.EQUALS, Sequence.EQUALS);
         EvaluatorRegistry.registerEvaluator(GenericOperations.ASSIGNMENT, Sequence.ASSIGNMENT);
         EvaluatorRegistry.registerEvaluator(ContainerOperations.ADD, Sequence.ADD);
-        EvaluatorRegistry.registerEvaluator(SUBSEQUENCE, Sequence.SUBSEQUENCE);
+        EvaluatorRegistry.registerEvaluator(ISSUBSEQUENCE, Sequence.ISSUBSEQUENCE);
         EvaluatorRegistry.registerEvaluator(OVERLAPS, Sequence.OVERLAPS);
         EvaluatorRegistry.registerEvaluator(new ContainerOperations.FlattenOperationEvaluator(true), Sequence.FLATTEN);
     }

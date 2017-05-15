@@ -72,9 +72,12 @@ public class Sequence extends Container {
         OclKeyWords.INCLUDING, TYPE, AnyType.TYPE);
     public static final Operation REVERSE = new Operation(TYPE, ReturnTypeMode.IMMEDIATE_OPERAND,
         OclKeyWords.REVERSE, TYPE);
+    public static final Operation SUBSEQUENCE = new Operation(TYPE, ReturnTypeMode.IMMEDIATE_OPERAND,
+        OclKeyWords.SUBSEQUENCE, TYPE);
     public static final Operation ADD = new Operation(AnyType.TYPE, ReturnTypeMode.PARAM_1_CHECK, 
         OclKeyWords.ADD, TYPE, AnyType.TYPE);
-    public static final Operation SUBSEQUENCE = new Operation(BooleanType.TYPE, OclKeyWords.SUBSEQUENCE, TYPE, TYPE);
+    public static final Operation ISSUBSEQUENCE = new Operation(BooleanType.TYPE, 
+        OclKeyWords.ISSUBSEQUENCE, TYPE, TYPE);
     public static final Operation OVERLAPS = new Operation(BooleanType.TYPE, OclKeyWords.OVERLAPS, TYPE, TYPE);
     public static final Operation FLATTEN = new Operation(TYPE, 
         ReturnTypeMode.IMMEDIATE_OPERAND_COLLECTION_NESTED_GENERIC_1, OclKeyWords.FLATTEN, TYPE);
@@ -106,8 +109,9 @@ public class Sequence extends Container {
         DTYPE.addOperation(INCLUDING);
         DTYPE.addOperation(EXCLUDING);
         DTYPE.addOperation(REVERSE);
-        DTYPE.addOperation(ADD);
         DTYPE.addOperation(SUBSEQUENCE);
+        DTYPE.addOperation(ADD);
+        DTYPE.addOperation(ISSUBSEQUENCE);
         DTYPE.addOperation(OVERLAPS);
         DTYPE.addOperation(FLATTEN);
     }

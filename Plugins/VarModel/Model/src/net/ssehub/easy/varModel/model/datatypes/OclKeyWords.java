@@ -126,7 +126,8 @@ public class OclKeyWords {
     public static final String FIRST = "first";
     public static final String LAST = "last";
     public static final String HAS_DUPLICATES = "hasDuplicates";
-    public static final String SUBSEQUENCE = "isSubsequenceOf";
+    public static final String SUBSEQUENCE = "subSequence";
+    public static final String ISSUBSEQUENCE = "isSubsequenceOf";
     public static final String OVERLAPS = "overlaps";
 
     // Enum
