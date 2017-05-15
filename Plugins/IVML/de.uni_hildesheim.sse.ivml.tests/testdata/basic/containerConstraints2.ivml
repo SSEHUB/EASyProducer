@@ -8,4 +8,5 @@ project testContainerConstraints2 {
     sequenceOf(comp) compSeq;
     comp cMin = compSeq->min(c|c.x);
     comp cMax = compSeq->max(c|c.x);
+    cMin = compSeq->min(x);
 }

@@ -23,7 +23,6 @@ import net.ssehub.easy.varModel.persistency.AbstractVarModelWriter;
  */
 public class EASyPreferenceStore {
 
-
     /**
      * Returns the actual preferences.
      * 
@@ -163,19 +162,15 @@ public class EASyPreferenceStore {
      * Loads the properties for indentation.
      */
     public static void loadIvmlPreferences() {
-        
         try {
-        
             AbstractVarModelWriter.setIndentStep(getIvmlIndentStep());
             AbstractVarModelWriter.setUseIvmlWhitespace(getUseIvmlWhitespace());
-
         } catch (NullPointerException e) {
             AbstractVarModelWriter.setIndentStep(4);
             AbstractVarModelWriter.setUseIvmlWhitespace(true);
-            
             setIvmlPrefs(4, true);
         }
-
+        AbstractVarModelWriter.setOclCompliance(getOclCompliance());
     }
     
     /**
@@ -186,11 +181,9 @@ public class EASyPreferenceStore {
      *                    false - whitespaces are not allowed.
      */
     public static void setIvmlPrefs(int indentStep, boolean useWhitespaces) {
-        
         IEclipsePreferences prefs = getPreferences();
         prefs.putInt("ivml.indent", indentStep);
         prefs.putBoolean("ivml.useWhitespaces", useWhitespaces);
-        
         flush(prefs);
     }
     
@@ -199,10 +192,7 @@ public class EASyPreferenceStore {
      * @return indent the stored indentation.
      */
     public static int getIvmlIndentStep() {
-    
-        IEclipsePreferences prefs = getPreferences();
-        int indent = prefs.getInt("ivml.indent", 4);
-        return indent;
+        return getPreferences().getInt("ivml.indent", 4);
     }
     
     /**
@@ -211,11 +201,27 @@ public class EASyPreferenceStore {
      *                             false - whitespaces are not allowed.
      */
     public static boolean getUseIvmlWhitespace() {
-        IEclipsePreferences prefs = getPreferences();
-        boolean useWhitespaces = prefs.getBoolean("ivml.useWhitespaces", false);
-        return useWhitespaces;
+        return getPreferences().getBoolean("ivml.useWhitespaces", false);
+    }
+
+    /**
+     * Returns whether OCL compliance settings shall be enabled.
+     * 
+     * @return <code>true</code> for OCL compliance settings, <code>false</code> (default) else
+     */
+    public static boolean getOclCompliance() {
+        return getPreferences().getBoolean("easy.oclCompliance", false);
     }
     
+    /**
+     * Defines the actual OCL compliance state for EASy-Producer.
+     * 
+     * @param compliance the compliance state (default <code>false</code>, i.e., no compliance checking)
+     */
+    public static void setOclCompliance(boolean compliance) {
+        getPreferences().putBoolean("easy.oclCompliance", compliance);
+    }
+
     /**
      * Sets the default reasoner. Propagates the default reasoner into the reasoner frontend.
      * 

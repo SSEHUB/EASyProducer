@@ -32,6 +32,7 @@ import de.uni_hildesheim.sse.ivml.ImplicationExpression;
 import de.uni_hildesheim.sse.ivml.ImplicationExpressionPart;
 import de.uni_hildesheim.sse.ivml.IvmlPackage;
 import de.uni_hildesheim.sse.ivml.LetExpression;
+import de.uni_hildesheim.sse.ivml.Literal;
 import de.uni_hildesheim.sse.ivml.LogicalExpression;
 import de.uni_hildesheim.sse.ivml.LogicalExpressionPart;
 import de.uni_hildesheim.sse.ivml.MultiplicativeExpression;
@@ -67,6 +68,7 @@ import net.ssehub.easy.varModel.cst.Parenthesis;
 import net.ssehub.easy.varModel.cst.Variable;
 import net.ssehub.easy.varModel.model.AbstractVariable;
 import net.ssehub.easy.varModel.model.Attribute;
+import net.ssehub.easy.varModel.model.Constraint;
 import net.ssehub.easy.varModel.model.DecisionVariableDeclaration;
 import net.ssehub.easy.varModel.model.ExplicitTypeVariableDeclaration;
 import net.ssehub.easy.varModel.model.IModelElement;
@@ -84,11 +86,13 @@ import net.ssehub.easy.varModel.model.datatypes.FreezeVariableType;
 import net.ssehub.easy.varModel.model.datatypes.IDatatype;
 import net.ssehub.easy.varModel.model.datatypes.MetaType;
 import net.ssehub.easy.varModel.model.datatypes.OclKeyWords;
+import net.ssehub.easy.varModel.model.datatypes.Operation;
 import net.ssehub.easy.varModel.model.datatypes.Reference;
 import net.ssehub.easy.varModel.model.values.CompoundValue;
 import net.ssehub.easy.varModel.model.values.ConstraintValue;
 import net.ssehub.easy.varModel.model.values.ValueDoesNotMatchTypeException;
 import net.ssehub.easy.varModel.model.values.ValueFactory;
+import net.ssehub.easy.varModel.persistency.AbstractVarModelWriter;
 
 /**
  * Implements a class which translates a given EMF expression in terms of the
@@ -636,7 +640,7 @@ public class ExpressionTranslator extends net.ssehub.easy.dslCore.translation.Ex
      */
     private ConstraintSyntaxTree processFeatureCall(ConstraintSyntaxTree lhs,
         FeatureCall call, TypeContext context, IModelElement parent) throws TranslatorException {
-        return processFeatureCallImpl(lhs, call, context, parent);
+        return processFeatureCallImpl(lhs, call, context, parent, true);
     }
 
     /**
@@ -653,13 +657,16 @@ public class ExpressionTranslator extends net.ssehub.easy.dslCore.translation.Ex
      *            the type context to be considered
      * @param parent
      *            the actual (intended) parent of the constraint to be created
+     * @param checkOclCompliance
+     *            check for OCL compliance of this call, i.e., -> vs .
      * @return the expression as a parsed syntax tree
      * @throws TranslatorException
      *             in case that the processing of the <code>lhs</code> must be
      *             terminated abnormally
      */
     private ConstraintSyntaxTree processFeatureCallImpl(ConstraintSyntaxTree lhs,
-        ActualArgumentList call, TypeContext context, IModelElement parent) throws TranslatorException {
+        ActualArgumentList call, TypeContext context, IModelElement parent, boolean checkOclCompliance) 
+        throws TranslatorException {
         level++;
         boolean regularFeatureCall = true;
         List<Expression> args = call.getArgs();
@@ -710,7 +717,14 @@ public class ExpressionTranslator extends net.ssehub.easy.dslCore.translation.Ex
         if (regularFeatureCall) {
             // if this is a feature call, obtain all parameters and construct
             // a feature call node
-            lhs = new OCLFeatureCall(lhs, callName, context.getProject(), param);
+            OCLFeatureCall tmp = new OCLFeatureCall(lhs, callName, context.getProject(), param);
+            Operation op = tmp.getResolvedOperation();
+            if (checkOclCompliance && AbstractVarModelWriter.considerOclCompliance() 
+                && (null != op && op.isContainerOperation())) {
+                warning("OCL compliance: Container operations shall be called by '->' rather than '.'", call, 
+                    IvmlPackage.Literals.ACTUAL_ARGUMENT_LIST__NAME, ErrorCodes.WARNING_USAGE);
+            }
+            lhs = tmp;
         }
         if (OclKeyWords.WARNING.equals(callName)) {
             if (level > 1) {                 
@@ -808,7 +822,8 @@ public class ExpressionTranslator extends net.ssehub.easy.dslCore.translation.Ex
     }
 
     /**
-     * Processes a set operation.
+     * Processes a set operation. Fallback resolution to usual operations for non-iterating set operations and fallback
+     * to unqualified iterator expressions.
      * 
      * @param lhs
      *            the operand expression the set operation runs on
@@ -823,18 +838,222 @@ public class ExpressionTranslator extends net.ssehub.easy.dslCore.translation.Ex
      *             in case that the processing of the <code>lhs</code> must be
      *             terminated abnormally
      */
-    private ConstraintSyntaxTree processSetOp(ConstraintSyntaxTree lhs,
-        SetOp op, TypeContext context, IModelElement parent)
-        throws TranslatorException {
+    private ConstraintSyntaxTree processSetOp(ConstraintSyntaxTree lhs, SetOp op, TypeContext context, 
+        IModelElement parent) throws TranslatorException {
         Declarator declarator = op.getDecl();
         List<Expression> args = op.getArgs();
         if (null != declarator && (null == args || args.size() == 1)) {
-            Expression declEx = null != args ? args.get(0) : null;
-            level++;
-            // process a set operation, i.e. a quantor call after ->
-            EList<Declaration> declarations = declarator.getDecl();
+            lhs = processSetOp(lhs, op, null, null, context, parent);
+        } else if (null == declarator) { // go for parameters
+            try {
+                lhs = processFeatureCallImpl(lhs, op, context, parent, false);
+            } catch (TranslatorException e) { // may fail if container op with unqualified var
+                try {
+                    IDatatype lhsType = lhs.inferDatatype();
+                    if (Container.TYPE.isAssignableFrom(lhsType) && 1 == lhsType.getGenericTypeCount()) {
+                        List<DecisionVariableDeclaration> decls = new ArrayList<DecisionVariableDeclaration>();
+                        DecisionVariableDeclaration decl = new DecisionVariableDeclaration("t", 
+                            lhsType.getGenericType(0), new Constraint(null)); // constraint -> temporary
+                        decls.add(decl);
+                        ConstraintSyntaxTree declEx = getAccessor(args, decl);
+                        if (null != declEx) { 
+                            lhs = processSetOp(lhs, op, decls, declEx, context, parent);
+                        } else {
+                            throw e;
+                        }
+                    }
+                } catch (CSTSemanticException e1) {
+                    throw e;
+                } catch (TranslatorException e1) {
+                    throw e;
+                }
+            }
+        } else {
+            throw new TranslatorException("An iterating set operation requires at most one expression", op, 
+                IvmlPackage.Literals.ACTUAL_ARGUMENT_LIST__ARGS, ErrorCodes.SYNTAX);
+        }
+        return lhs;
+    }
+    
+    /**
+     * Extracts a compound accessor/slot name from the given arguments.
+     * 
+     * @param args the arguments
+     * @param decl the binding declarator 
+     * @return the accessor, may be <b>null</b> if there is none
+     */
+    private ConstraintSyntaxTree getAccessor(List<Expression> args, DecisionVariableDeclaration decl) {
+        ConstraintSyntaxTree result = null;
+        if (1 == args.size()) {
+            result = getAccessor(args.get(0).getExpr(), decl);
+        }
+        return result;
+    }
+
+    /**
+     * Extracts a compound accessor/slot name from the given expression.
+     * 
+     * @param ex the expression
+     * @param decl the binding declarator 
+     * @return the accessor, may be <b>null</b> if there is none
+     */
+    private ConstraintSyntaxTree getAccessor(ImplicationExpression ex, DecisionVariableDeclaration decl) {
+        return null == ex ? null : getAccessor(ex.getLeft(), decl);
+    }
+
+    /**
+     * Extracts a compound accessor/slot name from the given expression.
+     * 
+     * @param ex the expression
+     * @param decl the binding declarator 
+     * @return the accessor, may be <b>null</b> if there is none
+     */
+    private ConstraintSyntaxTree getAccessor(AssignmentExpression ex, DecisionVariableDeclaration decl) {
+        return null == ex ? null : getAccessor(ex.getLeft(), decl);
+    }
+
+    /**
+     * Extracts a compound accessor/slot name from the given expression.
+     * 
+     * @param ex the expression
+     * @param decl the binding declarator 
+     * @return the accessor, may be <b>null</b> if there is none
+     */
+    private ConstraintSyntaxTree getAccessor(LogicalExpression ex, DecisionVariableDeclaration decl) {
+        return null == ex ? null : getAccessor(ex.getLeft(), decl);
+    }
+
+    /**
+     * Extracts a compound accessor/slot name from the given expression.
+     * 
+     * @param ex the expression
+     * @param decl the binding declarator 
+     * @return the accessor, may be <b>null</b> if there is none
+     */
+    private ConstraintSyntaxTree getAccessor(EqualityExpression ex, DecisionVariableDeclaration decl) {
+        return null == ex ? null : getAccessor(ex.getLeft(), decl);
+    }
+
+    /**
+     * Extracts a compound accessor/slot name from the given expression.
+     * 
+     * @param ex the expression
+     * @param decl the binding declarator 
+     * @return the accessor, may be <b>null</b> if there is none
+     */
+    private ConstraintSyntaxTree getAccessor(RelationalExpression ex, DecisionVariableDeclaration decl) {
+        return null == ex ? null : getAccessor(ex.getLeft(), decl);
+    }
+    
+    /**
+     * Extracts a compound accessor/slot name from the given expression.
+     * 
+     * @param ex the expression
+     * @param decl the binding declarator 
+     * @return the accessor, may be <b>null</b> if there is none
+     */
+    private ConstraintSyntaxTree getAccessor(AdditiveExpression ex, DecisionVariableDeclaration decl) {
+        return null == ex ? null : getAccessor(ex.getLeft(), decl);
+    }
+
+    /**
+     * Extracts a compound accessor/slot name from the given expression.
+     * 
+     * @param ex the expression
+     * @param decl the binding declarator 
+     * @return the accessor, may be <b>null</b> if there is none
+     */
+    private ConstraintSyntaxTree getAccessor(MultiplicativeExpression ex, DecisionVariableDeclaration decl) {
+        return null == ex ? null : getAccessor(ex.getLeft(), decl);
+    }
+
+    /**
+     * Extracts a compound accessor/slot name from the given expression.
+     * 
+     * @param ex the expression
+     * @param decl the binding declarator 
+     * @return the accessor, may be <b>null</b> if there is none
+     */
+    private ConstraintSyntaxTree getAccessor(UnaryExpression ex, DecisionVariableDeclaration decl) {
+        return null == ex ? null : getAccessor(ex.getExpr(), decl);
+    }
+
+    /**
+     * Extracts a compound accessor/slot name from the given expression.
+     * 
+     * @param ex the expression
+     * @param decl the binding declarator 
+     * @return the accessor, may be <b>null</b> if there is none
+     */
+    private ConstraintSyntaxTree getAccessor(PostfixExpression ex, DecisionVariableDeclaration decl) {
+        return null == ex ? null : getAccessor(ex.getLeft(), decl);
+    }
+
+    /**
+     * Extracts a compound accessor/slot name from the given expression.
+     * 
+     * @param ex the expression
+     * @param decl the binding declarator 
+     * @return the accessor, may be <b>null</b> if there is none
+     */
+    private ConstraintSyntaxTree getAccessor(PrimaryExpression ex, DecisionVariableDeclaration decl) {
+        return null == ex ? null : getAccessor(ex.getLit(), decl);
+    }
+    
+    /**
+     * Extracts a compound accessor/slot name from the given expression.
+     * 
+     * @param ex the expression
+     * @param decl the binding declarator 
+     * @return the accessor, may be <b>null</b> if there is none
+     */
+    private ConstraintSyntaxTree getAccessor(Literal ex, DecisionVariableDeclaration decl) {
+        return null == ex ? null : getAccessor(ex.getVal(), decl);
+    }
+    
+    /**
+     * Extracts a compound accessor/slot name from the given expression.
+     * 
+     * @param ex the expression
+     * @param decl the binding declarator 
+     * @return the accessor, may be <b>null</b> if there is none
+     */
+    private ConstraintSyntaxTree getAccessor(Value ex, DecisionVariableDeclaration decl) {
+        ConstraintSyntaxTree result = null;
+        if (null != ex && null != ex.getQValue()) {
+            result = new CompoundAccess(new Variable(decl), Utils.getQualifiedNameString(ex.getQValue()));
+        }
+        return result;
+    }
+
+    /**
+     * Processes a set operation.
+     * 
+     * @param lhs
+     *            the operand expression the set operation runs on
+     * @param op
+     *            the set operation
+     * @param declarators
+     *            explicit declarators overriding the information given in <code>op</code>
+     * @param declEx
+     *            explicit iterator expression overriding the information given in <code>op</code>
+     * @param context
+     *            the type context to be considered
+     * @param parent
+     *            the actual (intended) parent of the constraint to be created
+     * @return the expression as a parsed syntax tree
+     * @throws TranslatorException
+     *             in case that the processing of the <code>lhs</code> must be
+     *             terminated abnormally
+     */
+    private ConstraintSyntaxTree processSetOp(ConstraintSyntaxTree lhs, SetOp op, 
+        List<DecisionVariableDeclaration> declarators, ConstraintSyntaxTree declEx, TypeContext context, 
+        IModelElement parent) throws TranslatorException {
+        level++;
+        if (null == declarators) {
+            List<Declaration> declarations = op.getDecl().getDecl();
             // grammar ensures that at least one declarator is present
-            List<DecisionVariableDeclaration> declarators = new ArrayList<DecisionVariableDeclaration>();
+            declarators = new ArrayList<DecisionVariableDeclaration>();
             // declarators are local variable declarations for iteration
             for (int d = 0; d < declarations.size(); d++) {
                 Declaration declaration = declarations.get(d);
@@ -845,35 +1064,38 @@ public class ExpressionTranslator extends net.ssehub.easy.dslCore.translation.Ex
                     throw new TranslatorException("Iterating set operations require at least one declarator", 
                         declaration, IvmlPackage.Literals.SET_OP__DECL, ErrorCodes.SYNTAX);
                 }
-                
             }
-            context.pushLayer(parent);
-            // construct container operation call
-            int declSize = declarators.size();
-            DecisionVariableDeclaration[] decls = new DecisionVariableDeclaration[declSize];
-            for (int ds = 0; ds < declSize; ds++) {
-                decls[ds] = declarators.get(ds);
-                context.addToContext(decls[ds]);
-            }
-            try {
-                ConstraintSyntaxTree ex = processExpression(null, declEx, context, parent);
-                ex.inferDatatype();
-                lhs = new ContainerOperationCall(lhs, op.getName(), ex, decls); 
-                lhs.inferDatatype();
-            } catch (TranslatorException e) {
-                throw e;
-            } catch (CSTSemanticException e) {
-                throw new TranslatorException(e, op, IvmlPackage.Literals.SET_OP__DECL);
-            } finally {
-                context.popLayer();
-            }
-            level--;
-        } else if (null == declarator) { // go for parameters
-            lhs = processFeatureCallImpl(lhs, op, context, parent);
-        } else {
-            throw new TranslatorException("An iterating set operation requires at most one expression", op, 
-                IvmlPackage.Literals.ACTUAL_ARGUMENT_LIST__ARGS, ErrorCodes.SYNTAX);
         }
+        context.pushLayer(parent);
+        // construct container operation call
+        int declSize = declarators.size();
+        DecisionVariableDeclaration[] decls = new DecisionVariableDeclaration[declSize];
+        for (int ds = 0; ds < declSize; ds++) {
+            decls[ds] = declarators.get(ds);
+            context.addToContext(decls[ds]);
+        }
+        try {
+            if (null == declEx) {
+                List<Expression> args = op.getArgs();
+                if (null == args || args.size() == 1) {
+                    declEx = processExpression(null, null != args ? args.get(0) : null, context, parent);    
+                }
+            }
+            if (null == declEx) {
+                throw new TranslatorException("No iterating expression given", op, 
+                    IvmlPackage.Literals.SET_OP__DECL, ErrorCodes.SYNTAX);
+            }
+            declEx.inferDatatype();
+            lhs = new ContainerOperationCall(lhs, op.getName(), declEx, decls); 
+            lhs.inferDatatype();
+        } catch (TranslatorException e) {
+            throw e;
+        } catch (CSTSemanticException e) {
+            throw new TranslatorException(e, op, IvmlPackage.Literals.SET_OP__DECL);
+        } finally {
+            context.popLayer();
+        }
+        level--;
         return lhs;
     }
 

@@ -61,6 +61,7 @@ import net.ssehub.easy.varModel.model.datatypes.StringType;
 import net.ssehub.easy.varModel.model.datatypes.VersionType;
 import net.ssehub.easy.varModel.model.values.NullValue;
 import net.ssehub.easy.varModel.model.values.ValueFactory;
+import net.ssehub.easy.varModel.persistency.AbstractVarModelWriter;
 
 /**
  * Defines a type context which consists of all variables defined in a project
@@ -683,8 +684,13 @@ public class TypeContext implements IResolutionScope {
         if (null == var) {
             try {
                 net.ssehub.easy.varModel.model.values.Value litValue = ModelQuery
-                        .enumLiteralAsValue(project, sValue);
+                    .enumLiteralAsValue(project, sValue);
                 if (null != litValue) {
+                    if (AbstractVarModelWriter.considerOclCompliance() 
+                        && sValue.indexOf(IvmlKeyWords.ENUM_ACCESS) > 0) {
+                        messageReceiver.warning("OCL compliance: Enum literal access shall be stated by '::' "
+                            + "rather than '.'", object, feature, ErrorCodes.WARNING_USAGE);
+                    }
                     result = new ConstantValue(litValue);
                 } else {
                     IDatatype type = findType(sValue, null);
