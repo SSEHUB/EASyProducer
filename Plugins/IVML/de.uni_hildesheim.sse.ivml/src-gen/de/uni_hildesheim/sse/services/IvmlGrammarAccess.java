@@ -1773,15 +1773,15 @@ public class IvmlGrammarAccess extends AbstractGrammarElementFinder {
 		private final RuleCall cLetLetExpressionParserRuleCall_0_0 = (RuleCall)cLetAssignment_0.eContents().get(0);
 		private final Assignment cExprAssignment_1 = (Assignment)cAlternatives.eContents().get(1);
 		private final RuleCall cExprImplicationExpressionParserRuleCall_1_0 = (RuleCall)cExprAssignment_1.eContents().get(0);
-		private final Assignment cCollectionAssignment_2 = (Assignment)cAlternatives.eContents().get(2);
-		private final RuleCall cCollectionCollectionInitializerParserRuleCall_2_0 = (RuleCall)cCollectionAssignment_2.eContents().get(0);
+		private final Assignment cContainerAssignment_2 = (Assignment)cAlternatives.eContents().get(2);
+		private final RuleCall cContainerContainerInitializerParserRuleCall_2_0 = (RuleCall)cContainerAssignment_2.eContents().get(0);
 		
 		//// do not rename this rule (fragment parsing)	
 		// Expression:
-		//	let=LetExpression | expr=ImplicationExpression | collection=CollectionInitializer;
+		//	let=LetExpression | expr=ImplicationExpression | container=ContainerInitializer;
 		@Override public ParserRule getRule() { return rule; }
 
-		//let=LetExpression | expr=ImplicationExpression | collection=CollectionInitializer
+		//let=LetExpression | expr=ImplicationExpression | container=ContainerInitializer
 		public Alternatives getAlternatives() { return cAlternatives; }
 
 		//let=LetExpression
@@ -1796,11 +1796,11 @@ public class IvmlGrammarAccess extends AbstractGrammarElementFinder {
 		//ImplicationExpression
 		public RuleCall getExprImplicationExpressionParserRuleCall_1_0() { return cExprImplicationExpressionParserRuleCall_1_0; }
 
-		//collection=CollectionInitializer
-		public Assignment getCollectionAssignment_2() { return cCollectionAssignment_2; }
+		//container=ContainerInitializer
+		public Assignment getContainerAssignment_2() { return cContainerAssignment_2; }
 
-		//CollectionInitializer
-		public RuleCall getCollectionCollectionInitializerParserRuleCall_2_0() { return cCollectionCollectionInitializerParserRuleCall_2_0; }
+		//ContainerInitializer
+		public RuleCall getContainerContainerInitializerParserRuleCall_2_0() { return cContainerContainerInitializerParserRuleCall_2_0; }
 	}
 
 	public class LetExpressionElements extends AbstractParserRuleElementFinder {
@@ -1956,14 +1956,14 @@ public class IvmlGrammarAccess extends AbstractGrammarElementFinder {
 		private final Alternatives cAlternatives_1 = (Alternatives)cGroup.eContents().get(1);
 		private final Assignment cExAssignment_1_0 = (Assignment)cAlternatives_1.eContents().get(0);
 		private final RuleCall cExLogicalExpressionParserRuleCall_1_0_0 = (RuleCall)cExAssignment_1_0.eContents().get(0);
-		private final Assignment cCollectionAssignment_1_1 = (Assignment)cAlternatives_1.eContents().get(1);
-		private final RuleCall cCollectionCollectionInitializerParserRuleCall_1_1_0 = (RuleCall)cCollectionAssignment_1_1.eContents().get(0);
+		private final Assignment cContainerAssignment_1_1 = (Assignment)cAlternatives_1.eContents().get(1);
+		private final RuleCall cContainerContainerInitializerParserRuleCall_1_1_0 = (RuleCall)cContainerAssignment_1_1.eContents().get(0);
 		
 		//AssignmentExpressionPart:
-		//	op=AssignmentOperator (ex=LogicalExpression | collection=CollectionInitializer);
+		//	op=AssignmentOperator (ex=LogicalExpression | container=ContainerInitializer);
 		@Override public ParserRule getRule() { return rule; }
 
-		//op=AssignmentOperator (ex=LogicalExpression | collection=CollectionInitializer)
+		//op=AssignmentOperator (ex=LogicalExpression | container=ContainerInitializer)
 		public Group getGroup() { return cGroup; }
 
 		//op=AssignmentOperator
@@ -1972,7 +1972,7 @@ public class IvmlGrammarAccess extends AbstractGrammarElementFinder {
 		//AssignmentOperator
 		public RuleCall getOpAssignmentOperatorParserRuleCall_0_0() { return cOpAssignmentOperatorParserRuleCall_0_0; }
 
-		//(ex=LogicalExpression | collection=CollectionInitializer)
+		//(ex=LogicalExpression | container=ContainerInitializer)
 		public Alternatives getAlternatives_1() { return cAlternatives_1; }
 
 		//ex=LogicalExpression
@@ -1981,11 +1981,11 @@ public class IvmlGrammarAccess extends AbstractGrammarElementFinder {
 		//LogicalExpression
 		public RuleCall getExLogicalExpressionParserRuleCall_1_0_0() { return cExLogicalExpressionParserRuleCall_1_0_0; }
 
-		//collection=CollectionInitializer
-		public Assignment getCollectionAssignment_1_1() { return cCollectionAssignment_1_1; }
+		//container=ContainerInitializer
+		public Assignment getContainerAssignment_1_1() { return cContainerAssignment_1_1; }
 
-		//CollectionInitializer
-		public RuleCall getCollectionCollectionInitializerParserRuleCall_1_1_0() { return cCollectionCollectionInitializerParserRuleCall_1_1_0; }
+		//ContainerInitializer
+		public RuleCall getContainerContainerInitializerParserRuleCall_1_1_0() { return cContainerContainerInitializerParserRuleCall_1_1_0; }
 	}
 
 	public class AssignmentOperatorElements extends AbstractParserRuleElementFinder {
@@ -2194,14 +2194,14 @@ public class IvmlGrammarAccess extends AbstractGrammarElementFinder {
 		private final Alternatives cAlternatives_1 = (Alternatives)cGroup.eContents().get(1);
 		private final Assignment cExAssignment_1_0 = (Assignment)cAlternatives_1.eContents().get(0);
 		private final RuleCall cExRelationalExpressionParserRuleCall_1_0_0 = (RuleCall)cExAssignment_1_0.eContents().get(0);
-		private final Assignment cCollectionAssignment_1_1 = (Assignment)cAlternatives_1.eContents().get(1);
-		private final RuleCall cCollectionCollectionInitializerParserRuleCall_1_1_0 = (RuleCall)cCollectionAssignment_1_1.eContents().get(0);
+		private final Assignment cContainerAssignment_1_1 = (Assignment)cAlternatives_1.eContents().get(1);
+		private final RuleCall cContainerContainerInitializerParserRuleCall_1_1_0 = (RuleCall)cContainerAssignment_1_1.eContents().get(0);
 		
 		//EqualityExpressionPart:
-		//	op=EqualityOperator (ex=RelationalExpression | collection=CollectionInitializer);
+		//	op=EqualityOperator (ex=RelationalExpression | container=ContainerInitializer);
 		@Override public ParserRule getRule() { return rule; }
 
-		//op=EqualityOperator (ex=RelationalExpression | collection=CollectionInitializer)
+		//op=EqualityOperator (ex=RelationalExpression | container=ContainerInitializer)
 		public Group getGroup() { return cGroup; }
 
 		//op=EqualityOperator
@@ -2210,7 +2210,7 @@ public class IvmlGrammarAccess extends AbstractGrammarElementFinder {
 		//EqualityOperator
 		public RuleCall getOpEqualityOperatorParserRuleCall_0_0() { return cOpEqualityOperatorParserRuleCall_0_0; }
 
-		//(ex=RelationalExpression | collection=CollectionInitializer)
+		//(ex=RelationalExpression | container=ContainerInitializer)
 		public Alternatives getAlternatives_1() { return cAlternatives_1; }
 
 		//ex=RelationalExpression
@@ -2219,11 +2219,11 @@ public class IvmlGrammarAccess extends AbstractGrammarElementFinder {
 		//RelationalExpression
 		public RuleCall getExRelationalExpressionParserRuleCall_1_0_0() { return cExRelationalExpressionParserRuleCall_1_0_0; }
 
-		//collection=CollectionInitializer
-		public Assignment getCollectionAssignment_1_1() { return cCollectionAssignment_1_1; }
+		//container=ContainerInitializer
+		public Assignment getContainerAssignment_1_1() { return cContainerAssignment_1_1; }
 
-		//CollectionInitializer
-		public RuleCall getCollectionCollectionInitializerParserRuleCall_1_1_0() { return cCollectionCollectionInitializerParserRuleCall_1_1_0; }
+		//ContainerInitializer
+		public RuleCall getContainerContainerInitializerParserRuleCall_1_1_0() { return cContainerContainerInitializerParserRuleCall_1_1_0; }
 	}
 
 	public class EqualityOperatorElements extends AbstractParserRuleElementFinder {
@@ -2591,8 +2591,8 @@ public class IvmlGrammarAccess extends AbstractGrammarElementFinder {
 		private final RuleCall cCallFeatureCallParserRuleCall_0_1_0 = (RuleCall)cCallAssignment_0_1.eContents().get(0);
 		private final Group cGroup_1 = (Group)cAlternatives.eContents().get(1);
 		private final Keyword cHyphenMinusGreaterThanSignKeyword_1_0 = (Keyword)cGroup_1.eContents().get(0);
-		private final Assignment cSetOpAssignment_1_1 = (Assignment)cGroup_1.eContents().get(1);
-		private final RuleCall cSetOpSetOpParserRuleCall_1_1_0 = (RuleCall)cSetOpAssignment_1_1.eContents().get(0);
+		private final Assignment cContainerOpAssignment_1_1 = (Assignment)cGroup_1.eContents().get(1);
+		private final RuleCall cContainerOpContainerOpParserRuleCall_1_1_0 = (RuleCall)cContainerOpAssignment_1_1.eContents().get(0);
 		private final Group cGroup_2 = (Group)cAlternatives.eContents().get(2);
 		private final Keyword cLeftSquareBracketKeyword_2_0 = (Keyword)cGroup_2.eContents().get(0);
 		private final Assignment cArrayExAssignment_2_1 = (Assignment)cGroup_2.eContents().get(1);
@@ -2601,13 +2601,13 @@ public class IvmlGrammarAccess extends AbstractGrammarElementFinder {
 		
 		//Call: // IVML: "lambda"-expression with apply operation set->apply(t,r=0|max(t,r))
 		// '.' call=FeatureCall | '->'
-		//	setOp=SetOp | '[' arrayEx=Expression ']' // IVML addition to OCL
+		//	containerOp=ContainerOp | '[' arrayEx=Expression ']' // IVML addition to OCL
 		//;
 		@Override public ParserRule getRule() { return rule; }
 
 		//// IVML: "lambda"-expression with apply operation set->apply(t,r=0|max(t,r))
-		// '.' call=FeatureCall | '->' setOp=SetOp |
-		//'[' arrayEx=Expression ']'
+		// '.' call=FeatureCall | '->'
+		//containerOp=ContainerOp | '[' arrayEx=Expression ']'
 		public Alternatives getAlternatives() { return cAlternatives; }
 
 		//// IVML: "lambda"-expression with apply operation set->apply(t,r=0|max(t,r))
@@ -2624,17 +2624,17 @@ public class IvmlGrammarAccess extends AbstractGrammarElementFinder {
 		//FeatureCall
 		public RuleCall getCallFeatureCallParserRuleCall_0_1_0() { return cCallFeatureCallParserRuleCall_0_1_0; }
 
-		//'->' setOp=SetOp
+		//'->' containerOp=ContainerOp
 		public Group getGroup_1() { return cGroup_1; }
 
 		//'->'
 		public Keyword getHyphenMinusGreaterThanSignKeyword_1_0() { return cHyphenMinusGreaterThanSignKeyword_1_0; }
 
-		//setOp=SetOp
-		public Assignment getSetOpAssignment_1_1() { return cSetOpAssignment_1_1; }
+		//containerOp=ContainerOp
+		public Assignment getContainerOpAssignment_1_1() { return cContainerOpAssignment_1_1; }
 
-		//SetOp
-		public RuleCall getSetOpSetOpParserRuleCall_1_1_0() { return cSetOpSetOpParserRuleCall_1_1_0; }
+		//ContainerOp
+		public RuleCall getContainerOpContainerOpParserRuleCall_1_1_0() { return cContainerOpContainerOpParserRuleCall_1_1_0; }
 
 		//'[' arrayEx=Expression ']'
 		public Group getGroup_2() { return cGroup_2; }
@@ -2684,8 +2684,8 @@ public class IvmlGrammarAccess extends AbstractGrammarElementFinder {
 		public Keyword getRightParenthesisKeyword_3() { return cRightParenthesisKeyword_3; }
 	}
 
-	public class SetOpElements extends AbstractParserRuleElementFinder {
-		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "de.uni_hildesheim.sse.Ivml.SetOp");
+	public class ContainerOpElements extends AbstractParserRuleElementFinder {
+		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "de.uni_hildesheim.sse.Ivml.ContainerOp");
 		private final Group cGroup = (Group)rule.eContents().get(1);
 		private final Assignment cNameAssignment_0 = (Assignment)cGroup.eContents().get(0);
 		private final RuleCall cNameIdentifierParserRuleCall_0_0 = (RuleCall)cNameAssignment_0.eContents().get(0);
@@ -2695,7 +2695,7 @@ public class IvmlGrammarAccess extends AbstractGrammarElementFinder {
 		private final RuleCall cActualArgumentListParserRuleCall_3 = (RuleCall)cGroup.eContents().get(3);
 		private final Keyword cRightParenthesisKeyword_4 = (Keyword)cGroup.eContents().get(4);
 		
-		//SetOp:
+		//ContainerOp:
 		//	name=Identifier '(' decl=Declarator? ActualArgumentList? ')';
 		@Override public ParserRule getRule() { return rule; }
 
@@ -2998,10 +2998,10 @@ public class IvmlGrammarAccess extends AbstractGrammarElementFinder {
 		public RuleCall getAccessExpressionAccessParserRuleCall_2_0() { return cAccessExpressionAccessParserRuleCall_2_0; }
 	}
 
-	public class CollectionInitializerElements extends AbstractParserRuleElementFinder {
-		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "de.uni_hildesheim.sse.Ivml.CollectionInitializer");
+	public class ContainerInitializerElements extends AbstractParserRuleElementFinder {
+		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "de.uni_hildesheim.sse.Ivml.ContainerInitializer");
 		private final Group cGroup = (Group)rule.eContents().get(1);
-		private final Action cCollectionInitializerAction_0 = (Action)cGroup.eContents().get(0);
+		private final Action cContainerInitializerAction_0 = (Action)cGroup.eContents().get(0);
 		private final Assignment cTypeAssignment_1 = (Assignment)cGroup.eContents().get(1);
 		private final RuleCall cTypeQualifiedNameParserRuleCall_1_0 = (RuleCall)cTypeAssignment_1.eContents().get(0);
 		private final Keyword cLeftCurlyBracketKeyword_2 = (Keyword)cGroup.eContents().get(2);
@@ -3009,19 +3009,19 @@ public class IvmlGrammarAccess extends AbstractGrammarElementFinder {
 		private final RuleCall cInitExpressionListOrRangeParserRuleCall_3_0 = (RuleCall)cInitAssignment_3.eContents().get(0);
 		private final Keyword cRightCurlyBracketKeyword_4 = (Keyword)cGroup.eContents().get(4);
 		
-		//CollectionInitializer:
-		//	{CollectionInitializer} type=QualifiedName? // not OclCollection as otherways Collections are excluded
+		//ContainerInitializer:
+		//	{ContainerInitializer} type=QualifiedName? // not OclCollection as otherways Collections are excluded
 		// '{'
 		//	init=ExpressionListOrRange? '}';
 		@Override public ParserRule getRule() { return rule; }
 
-		//{CollectionInitializer} type=QualifiedName? // not OclCollection as otherways Collections are excluded
+		//{ContainerInitializer} type=QualifiedName? // not OclCollection as otherways Collections are excluded
 		// '{'
 		//init=ExpressionListOrRange? '}'
 		public Group getGroup() { return cGroup; }
 
-		//{CollectionInitializer}
-		public Action getCollectionInitializerAction_0() { return cCollectionInitializerAction_0; }
+		//{ContainerInitializer}
+		public Action getContainerInitializerAction_0() { return cContainerInitializerAction_0; }
 
 		//type=QualifiedName?
 		public Assignment getTypeAssignment_1() { return cTypeAssignment_1; }
@@ -3097,14 +3097,14 @@ public class IvmlGrammarAccess extends AbstractGrammarElementFinder {
 		private final Alternatives cAlternatives_1 = (Alternatives)cGroup.eContents().get(1);
 		private final Assignment cValueAssignment_1_0 = (Assignment)cAlternatives_1.eContents().get(0);
 		private final RuleCall cValueImplicationExpressionParserRuleCall_1_0_0 = (RuleCall)cValueAssignment_1_0.eContents().get(0);
-		private final Assignment cCollectionAssignment_1_1 = (Assignment)cAlternatives_1.eContents().get(1);
-		private final RuleCall cCollectionCollectionInitializerParserRuleCall_1_1_0 = (RuleCall)cCollectionAssignment_1_1.eContents().get(0);
+		private final Assignment cContainerAssignment_1_1 = (Assignment)cAlternatives_1.eContents().get(1);
+		private final RuleCall cContainerContainerInitializerParserRuleCall_1_1_0 = (RuleCall)cContainerAssignment_1_1.eContents().get(0);
 		
 		//ExpressionListEntry:
-		//	(name=Identifier ('.' attrib=Identifier)? '=')? (value=ImplicationExpression | collection=CollectionInitializer);
+		//	(name=Identifier ('.' attrib=Identifier)? '=')? (value=ImplicationExpression | container=ContainerInitializer);
 		@Override public ParserRule getRule() { return rule; }
 
-		//(name=Identifier ('.' attrib=Identifier)? '=')? (value=ImplicationExpression | collection=CollectionInitializer)
+		//(name=Identifier ('.' attrib=Identifier)? '=')? (value=ImplicationExpression | container=ContainerInitializer)
 		public Group getGroup() { return cGroup; }
 
 		//(name=Identifier ('.' attrib=Identifier)? '=')?
@@ -3131,7 +3131,7 @@ public class IvmlGrammarAccess extends AbstractGrammarElementFinder {
 		//'='
 		public Keyword getEqualsSignKeyword_0_2() { return cEqualsSignKeyword_0_2; }
 
-		//(value=ImplicationExpression | collection=CollectionInitializer)
+		//(value=ImplicationExpression | container=ContainerInitializer)
 		public Alternatives getAlternatives_1() { return cAlternatives_1; }
 
 		//value=ImplicationExpression
@@ -3140,11 +3140,11 @@ public class IvmlGrammarAccess extends AbstractGrammarElementFinder {
 		//ImplicationExpression
 		public RuleCall getValueImplicationExpressionParserRuleCall_1_0_0() { return cValueImplicationExpressionParserRuleCall_1_0_0; }
 
-		//collection=CollectionInitializer
-		public Assignment getCollectionAssignment_1_1() { return cCollectionAssignment_1_1; }
+		//container=ContainerInitializer
+		public Assignment getContainerAssignment_1_1() { return cContainerAssignment_1_1; }
 
-		//CollectionInitializer
-		public RuleCall getCollectionCollectionInitializerParserRuleCall_1_1_0() { return cCollectionCollectionInitializerParserRuleCall_1_1_0; }
+		//ContainerInitializer
+		public RuleCall getContainerContainerInitializerParserRuleCall_1_1_0() { return cContainerContainerInitializerParserRuleCall_1_1_0; }
 	}
 
 	public class LiteralElements extends AbstractParserRuleElementFinder {
@@ -3311,13 +3311,13 @@ public class IvmlGrammarAccess extends AbstractGrammarElementFinder {
 	private final PostfixExpressionElements pPostfixExpression;
 	private final CallElements pCall;
 	private final FeatureCallElements pFeatureCall;
-	private final SetOpElements pSetOp;
+	private final ContainerOpElements pContainerOp;
 	private final DeclaratorElements pDeclarator;
 	private final DeclarationElements pDeclaration;
 	private final ActualArgumentListElements pActualArgumentList;
 	private final ExpressionAccessElements pExpressionAccess;
 	private final PrimaryExpressionElements pPrimaryExpression;
-	private final CollectionInitializerElements pCollectionInitializer;
+	private final ContainerInitializerElements pContainerInitializer;
 	private final ExpressionListOrRangeElements pExpressionListOrRange;
 	private final ExpressionListEntryElements pExpressionListEntry;
 	private final LiteralElements pLiteral;
@@ -3401,13 +3401,13 @@ public class IvmlGrammarAccess extends AbstractGrammarElementFinder {
 		this.pPostfixExpression = new PostfixExpressionElements();
 		this.pCall = new CallElements();
 		this.pFeatureCall = new FeatureCallElements();
-		this.pSetOp = new SetOpElements();
+		this.pContainerOp = new ContainerOpElements();
 		this.pDeclarator = new DeclaratorElements();
 		this.pDeclaration = new DeclarationElements();
 		this.pActualArgumentList = new ActualArgumentListElements();
 		this.pExpressionAccess = new ExpressionAccessElements();
 		this.pPrimaryExpression = new PrimaryExpressionElements();
-		this.pCollectionInitializer = new CollectionInitializerElements();
+		this.pContainerInitializer = new ContainerInitializerElements();
 		this.pExpressionListOrRange = new ExpressionListOrRangeElements();
 		this.pExpressionListEntry = new ExpressionListEntryElements();
 		this.pLiteral = new LiteralElements();
@@ -3813,7 +3813,7 @@ public class IvmlGrammarAccess extends AbstractGrammarElementFinder {
 
 	//// do not rename this rule (fragment parsing)	
 	// Expression:
-	//	let=LetExpression | expr=ImplicationExpression | collection=CollectionInitializer;
+	//	let=LetExpression | expr=ImplicationExpression | container=ContainerInitializer;
 	public ExpressionElements getExpressionAccess() {
 		return pExpression;
 	}
@@ -3865,7 +3865,7 @@ public class IvmlGrammarAccess extends AbstractGrammarElementFinder {
 	}
 
 	//AssignmentExpressionPart:
-	//	op=AssignmentOperator (ex=LogicalExpression | collection=CollectionInitializer);
+	//	op=AssignmentOperator (ex=LogicalExpression | container=ContainerInitializer);
 	public AssignmentExpressionPartElements getAssignmentExpressionPartAccess() {
 		return pAssignmentExpressionPart;
 	}
@@ -3957,7 +3957,7 @@ public class IvmlGrammarAccess extends AbstractGrammarElementFinder {
 	}
 
 	//EqualityExpressionPart:
-	//	op=EqualityOperator (ex=RelationalExpression | collection=CollectionInitializer);
+	//	op=EqualityOperator (ex=RelationalExpression | container=ContainerInitializer);
 	public EqualityExpressionPartElements getEqualityExpressionPartAccess() {
 		return pEqualityExpressionPart;
 	}
@@ -4098,7 +4098,7 @@ public class IvmlGrammarAccess extends AbstractGrammarElementFinder {
 
 	//Call: // IVML: "lambda"-expression with apply operation set->apply(t,r=0|max(t,r))
 	// '.' call=FeatureCall | '->'
-	//	setOp=SetOp | '[' arrayEx=Expression ']' // IVML addition to OCL
+	//	containerOp=ContainerOp | '[' arrayEx=Expression ']' // IVML addition to OCL
 	//;
 	public CallElements getCallAccess() {
 		return pCall;
@@ -4118,14 +4118,14 @@ public class IvmlGrammarAccess extends AbstractGrammarElementFinder {
 		return getFeatureCallAccess().getRule();
 	}
 
-	//SetOp:
+	//ContainerOp:
 	//	name=Identifier '(' decl=Declarator? ActualArgumentList? ')';
-	public SetOpElements getSetOpAccess() {
-		return pSetOp;
+	public ContainerOpElements getContainerOpAccess() {
+		return pContainerOp;
 	}
 	
-	public ParserRule getSetOpRule() {
-		return getSetOpAccess().getRule();
+	public ParserRule getContainerOpRule() {
+		return getContainerOpAccess().getRule();
 	}
 
 	//Declarator:
@@ -4180,16 +4180,16 @@ public class IvmlGrammarAccess extends AbstractGrammarElementFinder {
 		return getPrimaryExpressionAccess().getRule();
 	}
 
-	//CollectionInitializer:
-	//	{CollectionInitializer} type=QualifiedName? // not OclCollection as otherways Collections are excluded
+	//ContainerInitializer:
+	//	{ContainerInitializer} type=QualifiedName? // not OclCollection as otherways Collections are excluded
 	// '{'
 	//	init=ExpressionListOrRange? '}';
-	public CollectionInitializerElements getCollectionInitializerAccess() {
-		return pCollectionInitializer;
+	public ContainerInitializerElements getContainerInitializerAccess() {
+		return pContainerInitializer;
 	}
 	
-	public ParserRule getCollectionInitializerRule() {
-		return getCollectionInitializerAccess().getRule();
+	public ParserRule getContainerInitializerRule() {
+		return getContainerInitializerAccess().getRule();
 	}
 
 	//ExpressionListOrRange:
@@ -4205,7 +4205,7 @@ public class IvmlGrammarAccess extends AbstractGrammarElementFinder {
 	}
 
 	//ExpressionListEntry:
-	//	(name=Identifier ('.' attrib=Identifier)? '=')? (value=ImplicationExpression | collection=CollectionInitializer);
+	//	(name=Identifier ('.' attrib=Identifier)? '=')? (value=ImplicationExpression | container=ContainerInitializer);
 	public ExpressionListEntryElements getExpressionListEntryAccess() {
 		return pExpressionListEntry;
 	}

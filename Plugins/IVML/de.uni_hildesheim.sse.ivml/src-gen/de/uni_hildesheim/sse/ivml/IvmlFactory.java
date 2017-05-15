@@ -518,13 +518,13 @@ public interface IvmlFactory extends EFactory
   FeatureCall createFeatureCall();
 
   /**
-   * Returns a new object of class '<em>Set Op</em>'.
+   * Returns a new object of class '<em>Container Op</em>'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return a new object of class '<em>Set Op</em>'.
+   * @return a new object of class '<em>Container Op</em>'.
    * @generated
    */
-  SetOp createSetOp();
+  ContainerOp createContainerOp();
 
   /**
    * Returns a new object of class '<em>Declarator</em>'.
@@ -572,13 +572,13 @@ public interface IvmlFactory extends EFactory
   PrimaryExpression createPrimaryExpression();
 
   /**
-   * Returns a new object of class '<em>Collection Initializer</em>'.
+   * Returns a new object of class '<em>Container Initializer</em>'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return a new object of class '<em>Collection Initializer</em>'.
+   * @return a new object of class '<em>Container Initializer</em>'.
    * @generated
    */
-  CollectionInitializer createCollectionInitializer();
+  ContainerInitializer createContainerInitializer();
 
   /**
    * Returns a new object of class '<em>Expression List Or Range</em>'.

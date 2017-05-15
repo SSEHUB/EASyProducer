@@ -458,11 +458,11 @@ public class IvmlSwitch<T> extends Switch<T>
         if (result == null) result = defaultCase(theEObject);
         return result;
       }
-      case IvmlPackage.SET_OP:
+      case IvmlPackage.CONTAINER_OP:
       {
-        SetOp setOp = (SetOp)theEObject;
-        T result = caseSetOp(setOp);
-        if (result == null) result = caseActualArgumentList(setOp);
+        ContainerOp containerOp = (ContainerOp)theEObject;
+        T result = caseContainerOp(containerOp);
+        if (result == null) result = caseActualArgumentList(containerOp);
         if (result == null) result = defaultCase(theEObject);
         return result;
       }
@@ -501,10 +501,10 @@ public class IvmlSwitch<T> extends Switch<T>
         if (result == null) result = defaultCase(theEObject);
         return result;
       }
-      case IvmlPackage.COLLECTION_INITIALIZER:
+      case IvmlPackage.CONTAINER_INITIALIZER:
       {
-        CollectionInitializer collectionInitializer = (CollectionInitializer)theEObject;
-        T result = caseCollectionInitializer(collectionInitializer);
+        ContainerInitializer containerInitializer = (ContainerInitializer)theEObject;
+        T result = caseContainerInitializer(containerInitializer);
         if (result == null) result = defaultCase(theEObject);
         return result;
       }
@@ -1421,17 +1421,17 @@ public class IvmlSwitch<T> extends Switch<T>
   }
 
   /**
-   * Returns the result of interpreting the object as an instance of '<em>Set Op</em>'.
+   * Returns the result of interpreting the object as an instance of '<em>Container Op</em>'.
    * <!-- begin-user-doc -->
    * This implementation returns null;
    * returning a non-null result will terminate the switch.
    * <!-- end-user-doc -->
    * @param object the target of the switch.
-   * @return the result of interpreting the object as an instance of '<em>Set Op</em>'.
+   * @return the result of interpreting the object as an instance of '<em>Container Op</em>'.
    * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
    * @generated
    */
-  public T caseSetOp(SetOp object)
+  public T caseContainerOp(ContainerOp object)
   {
     return null;
   }
@@ -1517,17 +1517,17 @@ public class IvmlSwitch<T> extends Switch<T>
   }
 
   /**
-   * Returns the result of interpreting the object as an instance of '<em>Collection Initializer</em>'.
+   * Returns the result of interpreting the object as an instance of '<em>Container Initializer</em>'.
    * <!-- begin-user-doc -->
    * This implementation returns null;
    * returning a non-null result will terminate the switch.
    * <!-- end-user-doc -->
    * @param object the target of the switch.
-   * @return the result of interpreting the object as an instance of '<em>Collection Initializer</em>'.
+   * @return the result of interpreting the object as an instance of '<em>Container Initializer</em>'.
    * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
    * @generated
    */
-  public T caseCollectionInitializer(CollectionInitializer object)
+  public T caseContainerInitializer(ContainerInitializer object)
   {
     return null;
   }

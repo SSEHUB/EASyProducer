@@ -16,7 +16,7 @@ import de.uni_hildesheim.sse.ivml.AdditiveExpressionPart;
 import de.uni_hildesheim.sse.ivml.AssignmentExpression;
 import de.uni_hildesheim.sse.ivml.AssignmentExpressionPart;
 import de.uni_hildesheim.sse.ivml.Call;
-import de.uni_hildesheim.sse.ivml.CollectionInitializer;
+import de.uni_hildesheim.sse.ivml.ContainerInitializer;
 import de.uni_hildesheim.sse.ivml.Declaration;
 import de.uni_hildesheim.sse.ivml.Declarator;
 import de.uni_hildesheim.sse.ivml.EqualityExpression;
@@ -40,7 +40,7 @@ import de.uni_hildesheim.sse.ivml.OptBlockExpression;
 import de.uni_hildesheim.sse.ivml.PostfixExpression;
 import de.uni_hildesheim.sse.ivml.PrimaryExpression;
 import de.uni_hildesheim.sse.ivml.RelationalExpression;
-import de.uni_hildesheim.sse.ivml.SetOp;
+import de.uni_hildesheim.sse.ivml.ContainerOp;
 import de.uni_hildesheim.sse.ivml.UnaryExpression;
 import de.uni_hildesheim.sse.ivml.Value;
 import net.ssehub.easy.basics.logger.EASyLoggerFactory;
@@ -57,7 +57,6 @@ import net.ssehub.easy.varModel.cst.CompoundAccess;
 import net.ssehub.easy.varModel.cst.CompoundInitializer;
 import net.ssehub.easy.varModel.cst.ConstantValue;
 import net.ssehub.easy.varModel.cst.ConstraintSyntaxTree;
-import net.ssehub.easy.varModel.cst.ContainerInitializer;
 import net.ssehub.easy.varModel.cst.ContainerOperationCall;
 import net.ssehub.easy.varModel.cst.DebugConstraintTreeVisitor;
 import net.ssehub.easy.varModel.cst.EmptyInitializer;
@@ -296,11 +295,11 @@ public class ExpressionTranslator extends net.ssehub.easy.dslCore.translation.Ex
             } else if (null != expr.getExpr()) {
                 // processing of the expression
                 result = processImplicationExpression(expr.getExpr(), context, parent);
-            } else if (null != expr.getCollection()) {
+            } else if (null != expr.getContainer()) {
                 try {
-                    result = processCollectionInitializer(lhsType, expr, expr.getCollection(), context, parent);
+                    result = processContainerInitializer(lhsType, expr, expr.getContainer(), context, parent);
                 } catch (IvmlException e) {
-                    throw new TranslatorException(e, expr, IvmlPackage.Literals.EXPRESSION__COLLECTION);
+                    throw new TranslatorException(e, expr, IvmlPackage.Literals.EXPRESSION__CONTAINER);
                 }
             } 
         }
@@ -343,10 +342,10 @@ public class ExpressionTranslator extends net.ssehub.easy.dslCore.translation.Ex
                 ConstraintSyntaxTree rhs = null;
                 if (null != part.getEx()) {
                     rhs = processLogicalExpression(part.getEx(), context, parent);
-                } else if (null != part.getCollection()) {
+                } else if (null != part.getContainer()) {
                     try {
-                        rhs = processCollectionInitializer(result.inferDatatype(),
-                                expr, part.getCollection(), context, parent);
+                        rhs = processContainerInitializer(result.inferDatatype(),
+                            expr, part.getContainer(), context, parent);
                     } catch (IvmlException e) {
                         throw new TranslatorException(e, expr, IvmlPackage.Literals.ASSIGNMENT_EXPRESSION__RIGHT);
                     }
@@ -484,13 +483,13 @@ public class ExpressionTranslator extends net.ssehub.easy.dslCore.translation.Ex
             if (null != expr.getRight().getEx()) {
                 rhs = processRelationalExpression(right.getEx(), context, parent);
                 checkForAssigment(rhs, false, right, IvmlPackage.Literals.EQUALITY_EXPRESSION__RIGHT);
-            } else if (null != right.getCollection()) {
+            } else if (null != right.getContainer()) {
                 try {
-                    rhs = processCollectionInitializer(result.inferDatatype(),
-                            expr, right.getCollection(), context, parent);
+                    rhs = processContainerInitializer(result.inferDatatype(),
+                            expr, right.getContainer(), context, parent);
                 } catch (IvmlException e) {
                     throw new TranslatorException(e, expr,
-                            IvmlPackage.Literals.ASSIGNMENT_EXPRESSION_PART__COLLECTION);
+                            IvmlPackage.Literals.ASSIGNMENT_EXPRESSION_PART__CONTAINER);
                 }
             }
             if (null != rhs) {
@@ -760,15 +759,15 @@ public class ExpressionTranslator extends net.ssehub.easy.dslCore.translation.Ex
     /**
      * Processes a valid declaration.
      * 
-     * @param lhs the operand expression the set operation runs on
-     * @param op the set operation
+     * @param lhs the operand expression the container operation runs on
+     * @param op the container operation
      * @param context the type context to be considered
      * @param parent the actual (intended) parent of the constraint to be created
      * @param declaration the declaration to be processed
      * @param declarators the declarators to be modified as a side effect
      * @throws TranslatorException in case that the processing of the <code>lhs</code> must be terminated abnormally
      */
-    private void processDeclaration(ConstraintSyntaxTree lhs, SetOp op, TypeContext context, IModelElement parent, 
+    private void processDeclaration(ConstraintSyntaxTree lhs, ContainerOp op, TypeContext context, IModelElement parent,
         Declaration declaration, List<DecisionVariableDeclaration> declarators) throws TranslatorException {
         level++;
         IDatatype type = null;
@@ -822,13 +821,13 @@ public class ExpressionTranslator extends net.ssehub.easy.dslCore.translation.Ex
     }
 
     /**
-     * Processes a set operation. Fallback resolution to usual operations for non-iterating set operations and fallback
-     * to unqualified iterator expressions.
+     * Processes a container operation. Fallback resolution to usual operations for non-iterating container operations 
+     * and fallback to unqualified iterator expressions.
      * 
      * @param lhs
-     *            the operand expression the set operation runs on
+     *            the operand expression the container operation runs on
      * @param op
-     *            the set operation
+     *            the container operation
      * @param context
      *            the type context to be considered
      * @param parent
@@ -838,12 +837,12 @@ public class ExpressionTranslator extends net.ssehub.easy.dslCore.translation.Ex
      *             in case that the processing of the <code>lhs</code> must be
      *             terminated abnormally
      */
-    private ConstraintSyntaxTree processSetOp(ConstraintSyntaxTree lhs, SetOp op, TypeContext context, 
+    private ConstraintSyntaxTree processContainerOp(ConstraintSyntaxTree lhs, ContainerOp op, TypeContext context, 
         IModelElement parent) throws TranslatorException {
         Declarator declarator = op.getDecl();
         List<Expression> args = op.getArgs();
         if (null != declarator && (null == args || args.size() == 1)) {
-            lhs = processSetOp(lhs, op, null, null, context, parent);
+            lhs = processContainerOp(lhs, op, null, null, context, parent);
         } else if (null == declarator) { // go for parameters
             try {
                 lhs = processFeatureCallImpl(lhs, op, context, parent, false);
@@ -857,7 +856,7 @@ public class ExpressionTranslator extends net.ssehub.easy.dslCore.translation.Ex
                         decls.add(decl);
                         ConstraintSyntaxTree declEx = getAccessor(args, decl);
                         if (null != declEx) { 
-                            lhs = processSetOp(lhs, op, decls, declEx, context, parent);
+                            lhs = processContainerOp(lhs, op, decls, declEx, context, parent);
                         } else {
                             throw e;
                         }
@@ -869,7 +868,7 @@ public class ExpressionTranslator extends net.ssehub.easy.dslCore.translation.Ex
                 }
             }
         } else {
-            throw new TranslatorException("An iterating set operation requires at most one expression", op, 
+            throw new TranslatorException("An iterating container operation requires at most one expression", op, 
                 IvmlPackage.Literals.ACTUAL_ARGUMENT_LIST__ARGS, ErrorCodes.SYNTAX);
         }
         return lhs;
@@ -1027,12 +1026,12 @@ public class ExpressionTranslator extends net.ssehub.easy.dslCore.translation.Ex
     }
 
     /**
-     * Processes a set operation.
+     * Processes a container operation.
      * 
      * @param lhs
-     *            the operand expression the set operation runs on
+     *            the operand expression the container operation runs on
      * @param op
-     *            the set operation
+     *            the container operation
      * @param declarators
      *            explicit declarators overriding the information given in <code>op</code>
      * @param declEx
@@ -1046,7 +1045,7 @@ public class ExpressionTranslator extends net.ssehub.easy.dslCore.translation.Ex
      *             in case that the processing of the <code>lhs</code> must be
      *             terminated abnormally
      */
-    private ConstraintSyntaxTree processSetOp(ConstraintSyntaxTree lhs, SetOp op, 
+    private ConstraintSyntaxTree processContainerOp(ConstraintSyntaxTree lhs, ContainerOp op, 
         List<DecisionVariableDeclaration> declarators, ConstraintSyntaxTree declEx, TypeContext context, 
         IModelElement parent) throws TranslatorException {
         level++;
@@ -1061,8 +1060,8 @@ public class ExpressionTranslator extends net.ssehub.easy.dslCore.translation.Ex
                 if (ids != null && ids.size() > 0 && ids.get(0) != null) {
                     processDeclaration(lhs, op, context, parent, declaration, declarators);
                 } else {
-                    throw new TranslatorException("Iterating set operations require at least one declarator", 
-                        declaration, IvmlPackage.Literals.SET_OP__DECL, ErrorCodes.SYNTAX);
+                    throw new TranslatorException("Iterating container operations require at least one declarator", 
+                        declaration, IvmlPackage.Literals.CONTAINER_OP__DECL, ErrorCodes.SYNTAX);
                 }
             }
         }
@@ -1083,7 +1082,7 @@ public class ExpressionTranslator extends net.ssehub.easy.dslCore.translation.Ex
             }
             if (null == declEx) {
                 throw new TranslatorException("No iterating expression given", op, 
-                    IvmlPackage.Literals.SET_OP__DECL, ErrorCodes.SYNTAX);
+                    IvmlPackage.Literals.CONTAINER_OP__DECL, ErrorCodes.SYNTAX);
             }
             declEx.inferDatatype();
             lhs = new ContainerOperationCall(lhs, op.getName(), declEx, decls); 
@@ -1091,7 +1090,7 @@ public class ExpressionTranslator extends net.ssehub.easy.dslCore.translation.Ex
         } catch (TranslatorException e) {
             throw e;
         } catch (CSTSemanticException e) {
-            throw new TranslatorException(e, op, IvmlPackage.Literals.SET_OP__DECL);
+            throw new TranslatorException(e, op, IvmlPackage.Literals.CONTAINER_OP__DECL);
         } finally {
             context.popLayer();
         }
@@ -1251,8 +1250,8 @@ public class ExpressionTranslator extends net.ssehub.easy.dslCore.translation.Ex
             for (Call call : calls) {
                 if (null != call.getCall()) {
                     result = processFeatureCall(result, call.getCall(), context, parent);
-                } else if (null != call.getSetOp()) {
-                    result = processSetOp(result, call.getSetOp(), context, parent);
+                } else if (null != call.getContainerOp()) {
+                    result = processContainerOp(result, call.getContainerOp(), context, parent);
                 } else if (null != call.getArrayEx()) {
                     // operation is obvious, no custom operation holder
                     result = new OCLFeatureCall(result, OclKeyWords.INDEX_ACCESS, 
@@ -1371,7 +1370,7 @@ public class ExpressionTranslator extends net.ssehub.easy.dslCore.translation.Ex
     }
 
     /**
-     * Processes a collection initializer.
+     * Processes a container initializer.
      * 
      * @param lhsType the left hand side which defines the type (part)
      * @param expr the containing primary expression
@@ -1383,10 +1382,10 @@ public class ExpressionTranslator extends net.ssehub.easy.dslCore.translation.Ex
      *         be terminated abnormally
      * @throws IvmlException in case that the processing terminates in IVML type resolution
      */
-    private ConstraintSyntaxTree processCollectionInitializer(IDatatype lhsType,
-            EObject expr, CollectionInitializer initializer, TypeContext context,
+    private ConstraintSyntaxTree processContainerInitializer(IDatatype lhsType,
+            EObject expr, ContainerInitializer initializer, TypeContext context,
             IModelElement parent) throws TranslatorException, IvmlException {
-        return processLiteralCollection(lhsType, initializer, context, parent);        
+        return processLiteralContainer(lhsType, initializer, context, parent);        
     }
     
     /**
@@ -1425,7 +1424,7 @@ public class ExpressionTranslator extends net.ssehub.easy.dslCore.translation.Ex
      * @throws TranslatorException in case that the processing of the <code>initializer</code> 
      *   must be terminated abnormally
      */
-    private IDatatype getSpecificType(IDatatype lhsType, CollectionInitializer initializer, TypeContext context) 
+    private IDatatype getSpecificType(IDatatype lhsType, ContainerInitializer initializer, TypeContext context) 
         throws TranslatorException {
         IDatatype specificType = null;
         // this may now initialize either a container or a compound
@@ -1436,16 +1435,16 @@ public class ExpressionTranslator extends net.ssehub.easy.dslCore.translation.Ex
                 specificType = context.findType(sTypeName, null);
                 if (null == specificType) {
                     throw new TranslatorException("type '" + sTypeName + "' is not defined", initializer,
-                        IvmlPackage.Literals.COLLECTION_INITIALIZER__TYPE, ErrorCodes.TYPE_CONSISTENCY);
+                        IvmlPackage.Literals.CONTAINER_INITIALIZER__TYPE, ErrorCodes.TYPE_CONSISTENCY);
                 }
                 if (null != lhsType && !lhsType.isAssignableFrom(specificType)) {
                     throw new TranslatorException("collection type '" + IvmlDatatypeVisitor.getQualifiedType(lhsType)
                         + "' does not match specified entry type'" + sTypeName + "'", initializer,
-                        IvmlPackage.Literals.COLLECTION_INITIALIZER__TYPE, ErrorCodes.TYPE_CONSISTENCY);
+                        IvmlPackage.Literals.CONTAINER_INITIALIZER__TYPE, ErrorCodes.TYPE_CONSISTENCY);
                 }
                 //lhsType = specificType;
             } catch (ModelQueryException e) {
-                throw new TranslatorException(e, initializer, IvmlPackage.Literals.COLLECTION_INITIALIZER__TYPE);
+                throw new TranslatorException(e, initializer, IvmlPackage.Literals.CONTAINER_INITIALIZER__TYPE);
             }
         }
         return specificType;
@@ -1466,7 +1465,7 @@ public class ExpressionTranslator extends net.ssehub.easy.dslCore.translation.Ex
      * @throws IvmlException in case that the processing of the <code>initializer</code> 
      *   must be terminated abnormally
      */
-    private ConstraintSyntaxTree processLiteralCollection(IDatatype lhsType, CollectionInitializer initializer, 
+    private ConstraintSyntaxTree processLiteralContainer(IDatatype lhsType, ContainerInitializer initializer, 
         TypeContext context, IModelElement parent) throws TranslatorException, CSTSemanticException, IvmlException {
         level++;
         ConstraintSyntaxTree result = null;
@@ -1592,8 +1591,8 @@ public class ExpressionTranslator extends net.ssehub.easy.dslCore.translation.Ex
                 exprs[e] = processImplicationExpression(entry.getValue(), context, parent);
                 exprs[e].inferDatatype();
             }
-            if (null != entry.getCollection()) {
-                exprs[e] = processLiteralCollection(slotDecls[e].getType(), entry.getCollection(), context, parent);
+            if (null != entry.getContainer()) {
+                exprs[e] = processLiteralContainer(slotDecls[e].getType(), entry.getContainer(), context, parent);
             }            
         }
         if (allConstant(exprs)) {
@@ -1658,8 +1657,8 @@ public class ExpressionTranslator extends net.ssehub.easy.dslCore.translation.Ex
                     exprs[e].inferDatatype();
                 }
             }
-            if (null != entry.getCollection()) {
-                exprs[e] = processLiteralCollection(contained, entry.getCollection(), context, parent);
+            if (null != entry.getContainer()) {
+                exprs[e] = processLiteralContainer(contained, entry.getContainer(), context, parent);
             }
         }
         if (allConstant(exprs)) {
@@ -1680,7 +1679,7 @@ public class ExpressionTranslator extends net.ssehub.easy.dslCore.translation.Ex
             }
             result = new ConstantValue(ValueFactory.createValue(lhsType, values));
         } else {
-            result = new ContainerInitializer((Container) lhsType, exprs);
+            result = new net.ssehub.easy.varModel.cst.ContainerInitializer((Container) lhsType, exprs);
         }
         level--;
         return result;

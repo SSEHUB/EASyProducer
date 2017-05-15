@@ -1432,13 +1432,13 @@ public interface IvmlPackage extends EPackage
   int EXPRESSION__EXPR = 1;
 
   /**
-   * The feature id for the '<em><b>Collection</b></em>' containment reference.
+   * The feature id for the '<em><b>Container</b></em>' containment reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int EXPRESSION__COLLECTION = 2;
+  int EXPRESSION__CONTAINER = 2;
 
   /**
    * The number of structural features of the '<em>Expression</em>' class.
@@ -1635,13 +1635,13 @@ public interface IvmlPackage extends EPackage
   int ASSIGNMENT_EXPRESSION_PART__EX = 1;
 
   /**
-   * The feature id for the '<em><b>Collection</b></em>' containment reference.
+   * The feature id for the '<em><b>Container</b></em>' containment reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int ASSIGNMENT_EXPRESSION_PART__COLLECTION = 2;
+  int ASSIGNMENT_EXPRESSION_PART__CONTAINER = 2;
 
   /**
    * The number of structural features of the '<em>Assignment Expression Part</em>' class.
@@ -1866,13 +1866,13 @@ public interface IvmlPackage extends EPackage
   int EQUALITY_EXPRESSION_PART__EX = 1;
 
   /**
-   * The feature id for the '<em><b>Collection</b></em>' containment reference.
+   * The feature id for the '<em><b>Container</b></em>' containment reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int EQUALITY_EXPRESSION_PART__COLLECTION = 2;
+  int EQUALITY_EXPRESSION_PART__CONTAINER = 2;
 
   /**
    * The number of structural features of the '<em>Equality Expression Part</em>' class.
@@ -2217,13 +2217,13 @@ public interface IvmlPackage extends EPackage
   int CALL__CALL = 0;
 
   /**
-   * The feature id for the '<em><b>Set Op</b></em>' containment reference.
+   * The feature id for the '<em><b>Container Op</b></em>' containment reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int CALL__SET_OP = 1;
+  int CALL__CONTAINER_OP = 1;
 
   /**
    * The feature id for the '<em><b>Array Ex</b></em>' containment reference.
@@ -2318,14 +2318,14 @@ public interface IvmlPackage extends EPackage
   int FEATURE_CALL_FEATURE_COUNT = ACTUAL_ARGUMENT_LIST_FEATURE_COUNT + 0;
 
   /**
-   * The meta object id for the '{@link de.uni_hildesheim.sse.ivml.impl.SetOpImpl <em>Set Op</em>}' class.
+   * The meta object id for the '{@link de.uni_hildesheim.sse.ivml.impl.ContainerOpImpl <em>Container Op</em>}' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @see de.uni_hildesheim.sse.ivml.impl.SetOpImpl
-   * @see de.uni_hildesheim.sse.ivml.impl.IvmlPackageImpl#getSetOp()
+   * @see de.uni_hildesheim.sse.ivml.impl.ContainerOpImpl
+   * @see de.uni_hildesheim.sse.ivml.impl.IvmlPackageImpl#getContainerOp()
    * @generated
    */
-  int SET_OP = 55;
+  int CONTAINER_OP = 55;
 
   /**
    * The feature id for the '<em><b>Args</b></em>' containment reference list.
@@ -2334,7 +2334,7 @@ public interface IvmlPackage extends EPackage
    * @generated
    * @ordered
    */
-  int SET_OP__ARGS = ACTUAL_ARGUMENT_LIST__ARGS;
+  int CONTAINER_OP__ARGS = ACTUAL_ARGUMENT_LIST__ARGS;
 
   /**
    * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -2343,7 +2343,7 @@ public interface IvmlPackage extends EPackage
    * @generated
    * @ordered
    */
-  int SET_OP__NAME = ACTUAL_ARGUMENT_LIST__NAME;
+  int CONTAINER_OP__NAME = ACTUAL_ARGUMENT_LIST__NAME;
 
   /**
    * The feature id for the '<em><b>Decl</b></em>' containment reference.
@@ -2352,16 +2352,16 @@ public interface IvmlPackage extends EPackage
    * @generated
    * @ordered
    */
-  int SET_OP__DECL = ACTUAL_ARGUMENT_LIST_FEATURE_COUNT + 0;
+  int CONTAINER_OP__DECL = ACTUAL_ARGUMENT_LIST_FEATURE_COUNT + 0;
 
   /**
-   * The number of structural features of the '<em>Set Op</em>' class.
+   * The number of structural features of the '<em>Container Op</em>' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int SET_OP_FEATURE_COUNT = ACTUAL_ARGUMENT_LIST_FEATURE_COUNT + 1;
+  int CONTAINER_OP_FEATURE_COUNT = ACTUAL_ARGUMENT_LIST_FEATURE_COUNT + 1;
 
   /**
    * The meta object id for the '{@link de.uni_hildesheim.sse.ivml.impl.DeclaratorImpl <em>Declarator</em>}' class.
@@ -2557,14 +2557,14 @@ public interface IvmlPackage extends EPackage
   int PRIMARY_EXPRESSION_FEATURE_COUNT = 6;
 
   /**
-   * The meta object id for the '{@link de.uni_hildesheim.sse.ivml.impl.CollectionInitializerImpl <em>Collection Initializer</em>}' class.
+   * The meta object id for the '{@link de.uni_hildesheim.sse.ivml.impl.ContainerInitializerImpl <em>Container Initializer</em>}' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @see de.uni_hildesheim.sse.ivml.impl.CollectionInitializerImpl
-   * @see de.uni_hildesheim.sse.ivml.impl.IvmlPackageImpl#getCollectionInitializer()
+   * @see de.uni_hildesheim.sse.ivml.impl.ContainerInitializerImpl
+   * @see de.uni_hildesheim.sse.ivml.impl.IvmlPackageImpl#getContainerInitializer()
    * @generated
    */
-  int COLLECTION_INITIALIZER = 61;
+  int CONTAINER_INITIALIZER = 61;
 
   /**
    * The feature id for the '<em><b>Type</b></em>' containment reference.
@@ -2573,7 +2573,7 @@ public interface IvmlPackage extends EPackage
    * @generated
    * @ordered
    */
-  int COLLECTION_INITIALIZER__TYPE = 0;
+  int CONTAINER_INITIALIZER__TYPE = 0;
 
   /**
    * The feature id for the '<em><b>Init</b></em>' containment reference.
@@ -2582,16 +2582,16 @@ public interface IvmlPackage extends EPackage
    * @generated
    * @ordered
    */
-  int COLLECTION_INITIALIZER__INIT = 1;
+  int CONTAINER_INITIALIZER__INIT = 1;
 
   /**
-   * The number of structural features of the '<em>Collection Initializer</em>' class.
+   * The number of structural features of the '<em>Container Initializer</em>' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int COLLECTION_INITIALIZER_FEATURE_COUNT = 2;
+  int CONTAINER_INITIALIZER_FEATURE_COUNT = 2;
 
   /**
    * The meta object id for the '{@link de.uni_hildesheim.sse.ivml.impl.ExpressionListOrRangeImpl <em>Expression List Or Range</em>}' class.
@@ -2659,13 +2659,13 @@ public interface IvmlPackage extends EPackage
   int EXPRESSION_LIST_ENTRY__VALUE = 2;
 
   /**
-   * The feature id for the '<em><b>Collection</b></em>' containment reference.
+   * The feature id for the '<em><b>Container</b></em>' containment reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int EXPRESSION_LIST_ENTRY__COLLECTION = 3;
+  int EXPRESSION_LIST_ENTRY__CONTAINER = 3;
 
   /**
    * The number of structural features of the '<em>Expression List Entry</em>' class.
@@ -3994,15 +3994,15 @@ public interface IvmlPackage extends EPackage
   EReference getExpression_Expr();
 
   /**
-   * Returns the meta object for the containment reference '{@link de.uni_hildesheim.sse.ivml.Expression#getCollection <em>Collection</em>}'.
+   * Returns the meta object for the containment reference '{@link de.uni_hildesheim.sse.ivml.Expression#getContainer <em>Container</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return the meta object for the containment reference '<em>Collection</em>'.
-   * @see de.uni_hildesheim.sse.ivml.Expression#getCollection()
+   * @return the meta object for the containment reference '<em>Container</em>'.
+   * @see de.uni_hildesheim.sse.ivml.Expression#getContainer()
    * @see #getExpression()
    * @generated
    */
-  EReference getExpression_Collection();
+  EReference getExpression_Container();
 
   /**
    * Returns the meta object for class '{@link de.uni_hildesheim.sse.ivml.LetExpression <em>Let Expression</em>}'.
@@ -4176,15 +4176,15 @@ public interface IvmlPackage extends EPackage
   EReference getAssignmentExpressionPart_Ex();
 
   /**
-   * Returns the meta object for the containment reference '{@link de.uni_hildesheim.sse.ivml.AssignmentExpressionPart#getCollection <em>Collection</em>}'.
+   * Returns the meta object for the containment reference '{@link de.uni_hildesheim.sse.ivml.AssignmentExpressionPart#getContainer <em>Container</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return the meta object for the containment reference '<em>Collection</em>'.
-   * @see de.uni_hildesheim.sse.ivml.AssignmentExpressionPart#getCollection()
+   * @return the meta object for the containment reference '<em>Container</em>'.
+   * @see de.uni_hildesheim.sse.ivml.AssignmentExpressionPart#getContainer()
    * @see #getAssignmentExpressionPart()
    * @generated
    */
-  EReference getAssignmentExpressionPart_Collection();
+  EReference getAssignmentExpressionPart_Container();
 
   /**
    * Returns the meta object for class '{@link de.uni_hildesheim.sse.ivml.ImplicationExpression <em>Implication Expression</em>}'.
@@ -4379,15 +4379,15 @@ public interface IvmlPackage extends EPackage
   EReference getEqualityExpressionPart_Ex();
 
   /**
-   * Returns the meta object for the containment reference '{@link de.uni_hildesheim.sse.ivml.EqualityExpressionPart#getCollection <em>Collection</em>}'.
+   * Returns the meta object for the containment reference '{@link de.uni_hildesheim.sse.ivml.EqualityExpressionPart#getContainer <em>Container</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return the meta object for the containment reference '<em>Collection</em>'.
-   * @see de.uni_hildesheim.sse.ivml.EqualityExpressionPart#getCollection()
+   * @return the meta object for the containment reference '<em>Container</em>'.
+   * @see de.uni_hildesheim.sse.ivml.EqualityExpressionPart#getContainer()
    * @see #getEqualityExpressionPart()
    * @generated
    */
-  EReference getEqualityExpressionPart_Collection();
+  EReference getEqualityExpressionPart_Container();
 
   /**
    * Returns the meta object for class '{@link de.uni_hildesheim.sse.ivml.RelationalExpression <em>Relational Expression</em>}'.
@@ -4689,15 +4689,15 @@ public interface IvmlPackage extends EPackage
   EReference getCall_Call();
 
   /**
-   * Returns the meta object for the containment reference '{@link de.uni_hildesheim.sse.ivml.Call#getSetOp <em>Set Op</em>}'.
+   * Returns the meta object for the containment reference '{@link de.uni_hildesheim.sse.ivml.Call#getContainerOp <em>Container Op</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return the meta object for the containment reference '<em>Set Op</em>'.
-   * @see de.uni_hildesheim.sse.ivml.Call#getSetOp()
+   * @return the meta object for the containment reference '<em>Container Op</em>'.
+   * @see de.uni_hildesheim.sse.ivml.Call#getContainerOp()
    * @see #getCall()
    * @generated
    */
-  EReference getCall_SetOp();
+  EReference getCall_ContainerOp();
 
   /**
    * Returns the meta object for the containment reference '{@link de.uni_hildesheim.sse.ivml.Call#getArrayEx <em>Array Ex</em>}'.
@@ -4721,25 +4721,25 @@ public interface IvmlPackage extends EPackage
   EClass getFeatureCall();
 
   /**
-   * Returns the meta object for class '{@link de.uni_hildesheim.sse.ivml.SetOp <em>Set Op</em>}'.
+   * Returns the meta object for class '{@link de.uni_hildesheim.sse.ivml.ContainerOp <em>Container Op</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return the meta object for class '<em>Set Op</em>'.
-   * @see de.uni_hildesheim.sse.ivml.SetOp
+   * @return the meta object for class '<em>Container Op</em>'.
+   * @see de.uni_hildesheim.sse.ivml.ContainerOp
    * @generated
    */
-  EClass getSetOp();
+  EClass getContainerOp();
 
   /**
-   * Returns the meta object for the containment reference '{@link de.uni_hildesheim.sse.ivml.SetOp#getDecl <em>Decl</em>}'.
+   * Returns the meta object for the containment reference '{@link de.uni_hildesheim.sse.ivml.ContainerOp#getDecl <em>Decl</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @return the meta object for the containment reference '<em>Decl</em>'.
-   * @see de.uni_hildesheim.sse.ivml.SetOp#getDecl()
-   * @see #getSetOp()
+   * @see de.uni_hildesheim.sse.ivml.ContainerOp#getDecl()
+   * @see #getContainerOp()
    * @generated
    */
-  EReference getSetOp_Decl();
+  EReference getContainerOp_Decl();
 
   /**
    * Returns the meta object for class '{@link de.uni_hildesheim.sse.ivml.Declarator <em>Declarator</em>}'.
@@ -4957,36 +4957,36 @@ public interface IvmlPackage extends EPackage
   EReference getPrimaryExpression_Access();
 
   /**
-   * Returns the meta object for class '{@link de.uni_hildesheim.sse.ivml.CollectionInitializer <em>Collection Initializer</em>}'.
+   * Returns the meta object for class '{@link de.uni_hildesheim.sse.ivml.ContainerInitializer <em>Container Initializer</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return the meta object for class '<em>Collection Initializer</em>'.
-   * @see de.uni_hildesheim.sse.ivml.CollectionInitializer
+   * @return the meta object for class '<em>Container Initializer</em>'.
+   * @see de.uni_hildesheim.sse.ivml.ContainerInitializer
    * @generated
    */
-  EClass getCollectionInitializer();
+  EClass getContainerInitializer();
 
   /**
-   * Returns the meta object for the containment reference '{@link de.uni_hildesheim.sse.ivml.CollectionInitializer#getType <em>Type</em>}'.
+   * Returns the meta object for the containment reference '{@link de.uni_hildesheim.sse.ivml.ContainerInitializer#getType <em>Type</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @return the meta object for the containment reference '<em>Type</em>'.
-   * @see de.uni_hildesheim.sse.ivml.CollectionInitializer#getType()
-   * @see #getCollectionInitializer()
+   * @see de.uni_hildesheim.sse.ivml.ContainerInitializer#getType()
+   * @see #getContainerInitializer()
    * @generated
    */
-  EReference getCollectionInitializer_Type();
+  EReference getContainerInitializer_Type();
 
   /**
-   * Returns the meta object for the containment reference '{@link de.uni_hildesheim.sse.ivml.CollectionInitializer#getInit <em>Init</em>}'.
+   * Returns the meta object for the containment reference '{@link de.uni_hildesheim.sse.ivml.ContainerInitializer#getInit <em>Init</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @return the meta object for the containment reference '<em>Init</em>'.
-   * @see de.uni_hildesheim.sse.ivml.CollectionInitializer#getInit()
-   * @see #getCollectionInitializer()
+   * @see de.uni_hildesheim.sse.ivml.ContainerInitializer#getInit()
+   * @see #getContainerInitializer()
    * @generated
    */
-  EReference getCollectionInitializer_Init();
+  EReference getContainerInitializer_Init();
 
   /**
    * Returns the meta object for class '{@link de.uni_hildesheim.sse.ivml.ExpressionListOrRange <em>Expression List Or Range</em>}'.
@@ -5053,15 +5053,15 @@ public interface IvmlPackage extends EPackage
   EReference getExpressionListEntry_Value();
 
   /**
-   * Returns the meta object for the containment reference '{@link de.uni_hildesheim.sse.ivml.ExpressionListEntry#getCollection <em>Collection</em>}'.
+   * Returns the meta object for the containment reference '{@link de.uni_hildesheim.sse.ivml.ExpressionListEntry#getContainer <em>Container</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return the meta object for the containment reference '<em>Collection</em>'.
-   * @see de.uni_hildesheim.sse.ivml.ExpressionListEntry#getCollection()
+   * @return the meta object for the containment reference '<em>Container</em>'.
+   * @see de.uni_hildesheim.sse.ivml.ExpressionListEntry#getContainer()
    * @see #getExpressionListEntry()
    * @generated
    */
-  EReference getExpressionListEntry_Collection();
+  EReference getExpressionListEntry_Container();
 
   /**
    * Returns the meta object for class '{@link de.uni_hildesheim.sse.ivml.Literal <em>Literal</em>}'.
@@ -6147,12 +6147,12 @@ public interface IvmlPackage extends EPackage
     EReference EXPRESSION__EXPR = eINSTANCE.getExpression_Expr();
 
     /**
-     * The meta object literal for the '<em><b>Collection</b></em>' containment reference feature.
+     * The meta object literal for the '<em><b>Container</b></em>' containment reference feature.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
      * @generated
      */
-    EReference EXPRESSION__COLLECTION = eINSTANCE.getExpression_Collection();
+    EReference EXPRESSION__CONTAINER = eINSTANCE.getExpression_Container();
 
     /**
      * The meta object literal for the '{@link de.uni_hildesheim.sse.ivml.impl.LetExpressionImpl <em>Let Expression</em>}' class.
@@ -6293,12 +6293,12 @@ public interface IvmlPackage extends EPackage
     EReference ASSIGNMENT_EXPRESSION_PART__EX = eINSTANCE.getAssignmentExpressionPart_Ex();
 
     /**
-     * The meta object literal for the '<em><b>Collection</b></em>' containment reference feature.
+     * The meta object literal for the '<em><b>Container</b></em>' containment reference feature.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
      * @generated
      */
-    EReference ASSIGNMENT_EXPRESSION_PART__COLLECTION = eINSTANCE.getAssignmentExpressionPart_Collection();
+    EReference ASSIGNMENT_EXPRESSION_PART__CONTAINER = eINSTANCE.getAssignmentExpressionPart_Container();
 
     /**
      * The meta object literal for the '{@link de.uni_hildesheim.sse.ivml.impl.ImplicationExpressionImpl <em>Implication Expression</em>}' class.
@@ -6457,12 +6457,12 @@ public interface IvmlPackage extends EPackage
     EReference EQUALITY_EXPRESSION_PART__EX = eINSTANCE.getEqualityExpressionPart_Ex();
 
     /**
-     * The meta object literal for the '<em><b>Collection</b></em>' containment reference feature.
+     * The meta object literal for the '<em><b>Container</b></em>' containment reference feature.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
      * @generated
      */
-    EReference EQUALITY_EXPRESSION_PART__COLLECTION = eINSTANCE.getEqualityExpressionPart_Collection();
+    EReference EQUALITY_EXPRESSION_PART__CONTAINER = eINSTANCE.getEqualityExpressionPart_Container();
 
     /**
      * The meta object literal for the '{@link de.uni_hildesheim.sse.ivml.impl.RelationalExpressionImpl <em>Relational Expression</em>}' class.
@@ -6707,12 +6707,12 @@ public interface IvmlPackage extends EPackage
     EReference CALL__CALL = eINSTANCE.getCall_Call();
 
     /**
-     * The meta object literal for the '<em><b>Set Op</b></em>' containment reference feature.
+     * The meta object literal for the '<em><b>Container Op</b></em>' containment reference feature.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
      * @generated
      */
-    EReference CALL__SET_OP = eINSTANCE.getCall_SetOp();
+    EReference CALL__CONTAINER_OP = eINSTANCE.getCall_ContainerOp();
 
     /**
      * The meta object literal for the '<em><b>Array Ex</b></em>' containment reference feature.
@@ -6733,14 +6733,14 @@ public interface IvmlPackage extends EPackage
     EClass FEATURE_CALL = eINSTANCE.getFeatureCall();
 
     /**
-     * The meta object literal for the '{@link de.uni_hildesheim.sse.ivml.impl.SetOpImpl <em>Set Op</em>}' class.
+     * The meta object literal for the '{@link de.uni_hildesheim.sse.ivml.impl.ContainerOpImpl <em>Container Op</em>}' class.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @see de.uni_hildesheim.sse.ivml.impl.SetOpImpl
-     * @see de.uni_hildesheim.sse.ivml.impl.IvmlPackageImpl#getSetOp()
+     * @see de.uni_hildesheim.sse.ivml.impl.ContainerOpImpl
+     * @see de.uni_hildesheim.sse.ivml.impl.IvmlPackageImpl#getContainerOp()
      * @generated
      */
-    EClass SET_OP = eINSTANCE.getSetOp();
+    EClass CONTAINER_OP = eINSTANCE.getContainerOp();
 
     /**
      * The meta object literal for the '<em><b>Decl</b></em>' containment reference feature.
@@ -6748,7 +6748,7 @@ public interface IvmlPackage extends EPackage
      * <!-- end-user-doc -->
      * @generated
      */
-    EReference SET_OP__DECL = eINSTANCE.getSetOp_Decl();
+    EReference CONTAINER_OP__DECL = eINSTANCE.getContainerOp_Decl();
 
     /**
      * The meta object literal for the '{@link de.uni_hildesheim.sse.ivml.impl.DeclaratorImpl <em>Declarator</em>}' class.
@@ -6921,14 +6921,14 @@ public interface IvmlPackage extends EPackage
     EReference PRIMARY_EXPRESSION__ACCESS = eINSTANCE.getPrimaryExpression_Access();
 
     /**
-     * The meta object literal for the '{@link de.uni_hildesheim.sse.ivml.impl.CollectionInitializerImpl <em>Collection Initializer</em>}' class.
+     * The meta object literal for the '{@link de.uni_hildesheim.sse.ivml.impl.ContainerInitializerImpl <em>Container Initializer</em>}' class.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @see de.uni_hildesheim.sse.ivml.impl.CollectionInitializerImpl
-     * @see de.uni_hildesheim.sse.ivml.impl.IvmlPackageImpl#getCollectionInitializer()
+     * @see de.uni_hildesheim.sse.ivml.impl.ContainerInitializerImpl
+     * @see de.uni_hildesheim.sse.ivml.impl.IvmlPackageImpl#getContainerInitializer()
      * @generated
      */
-    EClass COLLECTION_INITIALIZER = eINSTANCE.getCollectionInitializer();
+    EClass CONTAINER_INITIALIZER = eINSTANCE.getContainerInitializer();
 
     /**
      * The meta object literal for the '<em><b>Type</b></em>' containment reference feature.
@@ -6936,7 +6936,7 @@ public interface IvmlPackage extends EPackage
      * <!-- end-user-doc -->
      * @generated
      */
-    EReference COLLECTION_INITIALIZER__TYPE = eINSTANCE.getCollectionInitializer_Type();
+    EReference CONTAINER_INITIALIZER__TYPE = eINSTANCE.getContainerInitializer_Type();
 
     /**
      * The meta object literal for the '<em><b>Init</b></em>' containment reference feature.
@@ -6944,7 +6944,7 @@ public interface IvmlPackage extends EPackage
      * <!-- end-user-doc -->
      * @generated
      */
-    EReference COLLECTION_INITIALIZER__INIT = eINSTANCE.getCollectionInitializer_Init();
+    EReference CONTAINER_INITIALIZER__INIT = eINSTANCE.getContainerInitializer_Init();
 
     /**
      * The meta object literal for the '{@link de.uni_hildesheim.sse.ivml.impl.ExpressionListOrRangeImpl <em>Expression List Or Range</em>}' class.
@@ -6999,12 +6999,12 @@ public interface IvmlPackage extends EPackage
     EReference EXPRESSION_LIST_ENTRY__VALUE = eINSTANCE.getExpressionListEntry_Value();
 
     /**
-     * The meta object literal for the '<em><b>Collection</b></em>' containment reference feature.
+     * The meta object literal for the '<em><b>Container</b></em>' containment reference feature.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
      * @generated
      */
-    EReference EXPRESSION_LIST_ENTRY__COLLECTION = eINSTANCE.getExpressionListEntry_Collection();
+    EReference EXPRESSION_LIST_ENTRY__CONTAINER = eINSTANCE.getExpressionListEntry_Container();
 
     /**
      * The meta object literal for the '{@link de.uni_hildesheim.sse.ivml.impl.LiteralImpl <em>Literal</em>}' class.

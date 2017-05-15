@@ -156,7 +156,7 @@
     <genClasses ecoreClass="Ivml.ecore#//Expression">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Ivml.ecore#//Expression/let"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Ivml.ecore#//Expression/expr"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Ivml.ecore#//Expression/collection"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Ivml.ecore#//Expression/container"/>
     </genClasses>
     <genClasses ecoreClass="Ivml.ecore#//LetExpression">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Ivml.ecore#//LetExpression/type"/>
@@ -178,7 +178,7 @@
     <genClasses ecoreClass="Ivml.ecore#//AssignmentExpressionPart">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Ivml.ecore#//AssignmentExpressionPart/op"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Ivml.ecore#//AssignmentExpressionPart/ex"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Ivml.ecore#//AssignmentExpressionPart/collection"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Ivml.ecore#//AssignmentExpressionPart/container"/>
     </genClasses>
     <genClasses ecoreClass="Ivml.ecore#//ImplicationExpression">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Ivml.ecore#//ImplicationExpression/left"/>
@@ -203,7 +203,7 @@
     <genClasses ecoreClass="Ivml.ecore#//EqualityExpressionPart">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Ivml.ecore#//EqualityExpressionPart/op"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Ivml.ecore#//EqualityExpressionPart/ex"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Ivml.ecore#//EqualityExpressionPart/collection"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Ivml.ecore#//EqualityExpressionPart/container"/>
     </genClasses>
     <genClasses ecoreClass="Ivml.ecore#//RelationalExpression">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Ivml.ecore#//RelationalExpression/left"/>
@@ -241,12 +241,12 @@
     </genClasses>
     <genClasses ecoreClass="Ivml.ecore#//Call">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Ivml.ecore#//Call/call"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Ivml.ecore#//Call/setOp"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Ivml.ecore#//Call/containerOp"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Ivml.ecore#//Call/arrayEx"/>
     </genClasses>
     <genClasses ecoreClass="Ivml.ecore#//FeatureCall"/>
-    <genClasses ecoreClass="Ivml.ecore#//SetOp">
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Ivml.ecore#//SetOp/decl"/>
+    <genClasses ecoreClass="Ivml.ecore#//ContainerOp">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Ivml.ecore#//ContainerOp/decl"/>
     </genClasses>
     <genClasses ecoreClass="Ivml.ecore#//Declarator">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Ivml.ecore#//Declarator/decl"/>
@@ -273,9 +273,9 @@
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Ivml.ecore#//PrimaryExpression/calls"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Ivml.ecore#//PrimaryExpression/access"/>
     </genClasses>
-    <genClasses ecoreClass="Ivml.ecore#//CollectionInitializer">
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Ivml.ecore#//CollectionInitializer/type"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Ivml.ecore#//CollectionInitializer/init"/>
+    <genClasses ecoreClass="Ivml.ecore#//ContainerInitializer">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Ivml.ecore#//ContainerInitializer/type"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Ivml.ecore#//ContainerInitializer/init"/>
     </genClasses>
     <genClasses ecoreClass="Ivml.ecore#//ExpressionListOrRange">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Ivml.ecore#//ExpressionListOrRange/list"/>
@@ -284,7 +284,7 @@
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Ivml.ecore#//ExpressionListEntry/name"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Ivml.ecore#//ExpressionListEntry/attrib"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Ivml.ecore#//ExpressionListEntry/value"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Ivml.ecore#//ExpressionListEntry/collection"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Ivml.ecore#//ExpressionListEntry/container"/>
     </genClasses>
     <genClasses ecoreClass="Ivml.ecore#//Literal">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Ivml.ecore#//Literal/val"/>

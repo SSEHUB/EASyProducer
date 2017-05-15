@@ -15,8 +15,9 @@ import de.uni_hildesheim.sse.ivml.AttrAssignmentPart;
 import de.uni_hildesheim.sse.ivml.BasicType;
 import de.uni_hildesheim.sse.ivml.BlockExpression;
 import de.uni_hildesheim.sse.ivml.Call;
-import de.uni_hildesheim.sse.ivml.CollectionInitializer;
 import de.uni_hildesheim.sse.ivml.ConflictStmt;
+import de.uni_hildesheim.sse.ivml.ContainerInitializer;
+import de.uni_hildesheim.sse.ivml.ContainerOp;
 import de.uni_hildesheim.sse.ivml.Declaration;
 import de.uni_hildesheim.sse.ivml.Declarator;
 import de.uni_hildesheim.sse.ivml.DerivedType;
@@ -56,7 +57,6 @@ import de.uni_hildesheim.sse.ivml.ProjectContents;
 import de.uni_hildesheim.sse.ivml.QualifiedName;
 import de.uni_hildesheim.sse.ivml.RelationalExpression;
 import de.uni_hildesheim.sse.ivml.RelationalExpressionPart;
-import de.uni_hildesheim.sse.ivml.SetOp;
 import de.uni_hildesheim.sse.ivml.Type;
 import de.uni_hildesheim.sse.ivml.Typedef;
 import de.uni_hildesheim.sse.ivml.TypedefCompound;
@@ -129,11 +129,14 @@ public abstract class AbstractIvmlSemanticSequencer extends AbstractDelegatingSe
 			case IvmlPackage.CALL:
 				sequence_Call(context, (Call) semanticObject); 
 				return; 
-			case IvmlPackage.COLLECTION_INITIALIZER:
-				sequence_CollectionInitializer(context, (CollectionInitializer) semanticObject); 
-				return; 
 			case IvmlPackage.CONFLICT_STMT:
 				sequence_ConflictStmt(context, (ConflictStmt) semanticObject); 
+				return; 
+			case IvmlPackage.CONTAINER_INITIALIZER:
+				sequence_ContainerInitializer(context, (ContainerInitializer) semanticObject); 
+				return; 
+			case IvmlPackage.CONTAINER_OP:
+				sequence_ActualArgumentList_ContainerOp(context, (ContainerOp) semanticObject); 
 				return; 
 			case IvmlPackage.DECLARATION:
 				sequence_Declaration(context, (Declaration) semanticObject); 
@@ -249,9 +252,6 @@ public abstract class AbstractIvmlSemanticSequencer extends AbstractDelegatingSe
 			case IvmlPackage.RELATIONAL_EXPRESSION_PART:
 				sequence_RelationalExpressionPart(context, (RelationalExpressionPart) semanticObject); 
 				return; 
-			case IvmlPackage.SET_OP:
-				sequence_ActualArgumentList_SetOp(context, (SetOp) semanticObject); 
-				return; 
 			case IvmlPackage.TYPE:
 				sequence_Type(context, (Type) semanticObject); 
 				return; 
@@ -310,24 +310,24 @@ public abstract class AbstractIvmlSemanticSequencer extends AbstractDelegatingSe
 	
 	/**
 	 * Contexts:
-	 *     FeatureCall returns FeatureCall
+	 *     ContainerOp returns ContainerOp
 	 *
 	 * Constraint:
-	 *     (name=Identifier (args+=Expression args+=Expression*)?)
+	 *     (name=Identifier decl=Declarator? (args+=Expression args+=Expression*)?)
 	 */
-	protected void sequence_ActualArgumentList_FeatureCall(ISerializationContext context, FeatureCall semanticObject) {
+	protected void sequence_ActualArgumentList_ContainerOp(ISerializationContext context, ContainerOp semanticObject) {
 		genericSequencer.createSequence(context, semanticObject);
 	}
 	
 	
 	/**
 	 * Contexts:
-	 *     SetOp returns SetOp
+	 *     FeatureCall returns FeatureCall
 	 *
 	 * Constraint:
-	 *     (name=Identifier decl=Declarator? (args+=Expression args+=Expression*)?)
+	 *     (name=Identifier (args+=Expression args+=Expression*)?)
 	 */
-	protected void sequence_ActualArgumentList_SetOp(ISerializationContext context, SetOp semanticObject) {
+	protected void sequence_ActualArgumentList_FeatureCall(ISerializationContext context, FeatureCall semanticObject) {
 		genericSequencer.createSequence(context, semanticObject);
 	}
 	
@@ -382,7 +382,7 @@ public abstract class AbstractIvmlSemanticSequencer extends AbstractDelegatingSe
 	 *     AssignmentExpressionPart returns AssignmentExpressionPart
 	 *
 	 * Constraint:
-	 *     (op=AssignmentOperator (ex=LogicalExpression | collection=CollectionInitializer))
+	 *     (op=AssignmentOperator (ex=LogicalExpression | container=ContainerInitializer))
 	 */
 	protected void sequence_AssignmentExpressionPart(ISerializationContext context, AssignmentExpressionPart semanticObject) {
 		genericSequencer.createSequence(context, semanticObject);
@@ -467,21 +467,9 @@ public abstract class AbstractIvmlSemanticSequencer extends AbstractDelegatingSe
 	 *     Call returns Call
 	 *
 	 * Constraint:
-	 *     (call=FeatureCall | setOp=SetOp | arrayEx=Expression)
+	 *     (call=FeatureCall | containerOp=ContainerOp | arrayEx=Expression)
 	 */
 	protected void sequence_Call(ISerializationContext context, Call semanticObject) {
-		genericSequencer.createSequence(context, semanticObject);
-	}
-	
-	
-	/**
-	 * Contexts:
-	 *     CollectionInitializer returns CollectionInitializer
-	 *
-	 * Constraint:
-	 *     (type=QualifiedName? init=ExpressionListOrRange?)
-	 */
-	protected void sequence_CollectionInitializer(ISerializationContext context, CollectionInitializer semanticObject) {
 		genericSequencer.createSequence(context, semanticObject);
 	}
 	
@@ -494,6 +482,18 @@ public abstract class AbstractIvmlSemanticSequencer extends AbstractDelegatingSe
 	 *     (name=Identifier restriction=Expression?)
 	 */
 	protected void sequence_ConflictStmt(ISerializationContext context, ConflictStmt semanticObject) {
+		genericSequencer.createSequence(context, semanticObject);
+	}
+	
+	
+	/**
+	 * Contexts:
+	 *     ContainerInitializer returns ContainerInitializer
+	 *
+	 * Constraint:
+	 *     (type=QualifiedName? init=ExpressionListOrRange?)
+	 */
+	protected void sequence_ContainerInitializer(ISerializationContext context, ContainerInitializer semanticObject) {
 		genericSequencer.createSequence(context, semanticObject);
 	}
 	
@@ -539,7 +539,7 @@ public abstract class AbstractIvmlSemanticSequencer extends AbstractDelegatingSe
 	 *     EqualityExpressionPart returns EqualityExpressionPart
 	 *
 	 * Constraint:
-	 *     (op=EqualityOperator (ex=RelationalExpression | collection=CollectionInitializer))
+	 *     (op=EqualityOperator (ex=RelationalExpression | container=ContainerInitializer))
 	 */
 	protected void sequence_EqualityExpressionPart(ISerializationContext context, EqualityExpressionPart semanticObject) {
 		genericSequencer.createSequence(context, semanticObject);
@@ -599,7 +599,7 @@ public abstract class AbstractIvmlSemanticSequencer extends AbstractDelegatingSe
 	 *     ExpressionListEntry returns ExpressionListEntry
 	 *
 	 * Constraint:
-	 *     ((name=Identifier attrib=Identifier?)? (value=ImplicationExpression | collection=CollectionInitializer))
+	 *     ((name=Identifier attrib=Identifier?)? (value=ImplicationExpression | container=ContainerInitializer))
 	 */
 	protected void sequence_ExpressionListEntry(ISerializationContext context, ExpressionListEntry semanticObject) {
 		genericSequencer.createSequence(context, semanticObject);
@@ -641,7 +641,7 @@ public abstract class AbstractIvmlSemanticSequencer extends AbstractDelegatingSe
 	 *     Expression returns Expression
 	 *
 	 * Constraint:
-	 *     (let=LetExpression | expr=ImplicationExpression | collection=CollectionInitializer)
+	 *     (let=LetExpression | expr=ImplicationExpression | container=ContainerInitializer)
 	 */
 	protected void sequence_Expression(ISerializationContext context, Expression semanticObject) {
 		genericSequencer.createSequence(context, semanticObject);

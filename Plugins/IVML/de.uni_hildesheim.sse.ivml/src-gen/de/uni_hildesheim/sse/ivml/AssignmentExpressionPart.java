@@ -15,7 +15,7 @@ import org.eclipse.emf.ecore.EObject;
  * <ul>
  *   <li>{@link de.uni_hildesheim.sse.ivml.AssignmentExpressionPart#getOp <em>Op</em>}</li>
  *   <li>{@link de.uni_hildesheim.sse.ivml.AssignmentExpressionPart#getEx <em>Ex</em>}</li>
- *   <li>{@link de.uni_hildesheim.sse.ivml.AssignmentExpressionPart#getCollection <em>Collection</em>}</li>
+ *   <li>{@link de.uni_hildesheim.sse.ivml.AssignmentExpressionPart#getContainer <em>Container</em>}</li>
  * </ul>
  *
  * @see de.uni_hildesheim.sse.ivml.IvmlPackage#getAssignmentExpressionPart()
@@ -77,29 +77,29 @@ public interface AssignmentExpressionPart extends EObject
   void setEx(LogicalExpression value);
 
   /**
-   * Returns the value of the '<em><b>Collection</b></em>' containment reference.
+   * Returns the value of the '<em><b>Container</b></em>' containment reference.
    * <!-- begin-user-doc -->
    * <p>
-   * If the meaning of the '<em>Collection</em>' containment reference isn't clear,
+   * If the meaning of the '<em>Container</em>' containment reference isn't clear,
    * there really should be more of a description here...
    * </p>
    * <!-- end-user-doc -->
-   * @return the value of the '<em>Collection</em>' containment reference.
-   * @see #setCollection(CollectionInitializer)
-   * @see de.uni_hildesheim.sse.ivml.IvmlPackage#getAssignmentExpressionPart_Collection()
+   * @return the value of the '<em>Container</em>' containment reference.
+   * @see #setContainer(ContainerInitializer)
+   * @see de.uni_hildesheim.sse.ivml.IvmlPackage#getAssignmentExpressionPart_Container()
    * @model containment="true"
    * @generated
    */
-  CollectionInitializer getCollection();
+  ContainerInitializer getContainer();
 
   /**
-   * Sets the value of the '{@link de.uni_hildesheim.sse.ivml.AssignmentExpressionPart#getCollection <em>Collection</em>}' containment reference.
+   * Sets the value of the '{@link de.uni_hildesheim.sse.ivml.AssignmentExpressionPart#getContainer <em>Container</em>}' containment reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @param value the new value of the '<em>Collection</em>' containment reference.
-   * @see #getCollection()
+   * @param value the new value of the '<em>Container</em>' containment reference.
+   * @see #getContainer()
    * @generated
    */
-  void setCollection(CollectionInitializer value);
+  void setContainer(ContainerInitializer value);
 
 } // AssignmentExpressionPart

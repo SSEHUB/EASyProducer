@@ -3121,17 +3121,17 @@ ruleExpression returns [EObject current=null]
     |(
 (
 		{ 
-	        newCompositeNode(grammarAccess.getExpressionAccess().getCollectionCollectionInitializerParserRuleCall_2_0()); 
+	        newCompositeNode(grammarAccess.getExpressionAccess().getContainerContainerInitializerParserRuleCall_2_0()); 
 	    }
-		lv_collection_2_0=ruleCollectionInitializer		{
+		lv_container_2_0=ruleContainerInitializer		{
 	        if ($current==null) {
 	            $current = createModelElementForParent(grammarAccess.getExpressionRule());
 	        }
        		set(
        			$current, 
-       			"collection",
-        		lv_collection_2_0, 
-        		"de.uni_hildesheim.sse.Ivml.CollectionInitializer");
+       			"container",
+        		lv_container_2_0, 
+        		"de.uni_hildesheim.sse.Ivml.ContainerInitializer");
 	        afterParserOrEnumRuleCall();
 	    }
 
@@ -3464,17 +3464,17 @@ ruleAssignmentExpressionPart returns [EObject current=null]
     |(
 (
 		{ 
-	        newCompositeNode(grammarAccess.getAssignmentExpressionPartAccess().getCollectionCollectionInitializerParserRuleCall_1_1_0()); 
+	        newCompositeNode(grammarAccess.getAssignmentExpressionPartAccess().getContainerContainerInitializerParserRuleCall_1_1_0()); 
 	    }
-		lv_collection_2_0=ruleCollectionInitializer		{
+		lv_container_2_0=ruleContainerInitializer		{
 	        if ($current==null) {
 	            $current = createModelElementForParent(grammarAccess.getAssignmentExpressionPartRule());
 	        }
        		set(
        			$current, 
-       			"collection",
-        		lv_collection_2_0, 
-        		"de.uni_hildesheim.sse.Ivml.CollectionInitializer");
+       			"container",
+        		lv_container_2_0, 
+        		"de.uni_hildesheim.sse.Ivml.ContainerInitializer");
 	        afterParserOrEnumRuleCall();
 	    }
 
@@ -3927,17 +3927,17 @@ ruleEqualityExpressionPart returns [EObject current=null]
     |(
 (
 		{ 
-	        newCompositeNode(grammarAccess.getEqualityExpressionPartAccess().getCollectionCollectionInitializerParserRuleCall_1_1_0()); 
+	        newCompositeNode(grammarAccess.getEqualityExpressionPartAccess().getContainerContainerInitializerParserRuleCall_1_1_0()); 
 	    }
-		lv_collection_2_0=ruleCollectionInitializer		{
+		lv_container_2_0=ruleContainerInitializer		{
 	        if ($current==null) {
 	            $current = createModelElementForParent(grammarAccess.getEqualityExpressionPartRule());
 	        }
        		set(
        			$current, 
-       			"collection",
-        		lv_collection_2_0, 
-        		"de.uni_hildesheim.sse.Ivml.CollectionInitializer");
+       			"container",
+        		lv_container_2_0, 
+        		"de.uni_hildesheim.sse.Ivml.ContainerInitializer");
 	        afterParserOrEnumRuleCall();
 	    }
 
@@ -4677,17 +4677,17 @@ ruleCall returns [EObject current=null]
 (
 (
 		{ 
-	        newCompositeNode(grammarAccess.getCallAccess().getSetOpSetOpParserRuleCall_1_1_0()); 
+	        newCompositeNode(grammarAccess.getCallAccess().getContainerOpContainerOpParserRuleCall_1_1_0()); 
 	    }
-		lv_setOp_3_0=ruleSetOp		{
+		lv_containerOp_3_0=ruleContainerOp		{
 	        if ($current==null) {
 	            $current = createModelElementForParent(grammarAccess.getCallRule());
 	        }
        		set(
        			$current, 
-       			"setOp",
-        		lv_setOp_3_0, 
-        		"de.uni_hildesheim.sse.Ivml.SetOp");
+       			"containerOp",
+        		lv_containerOp_3_0, 
+        		"de.uni_hildesheim.sse.Ivml.ContainerOp");
 	        afterParserOrEnumRuleCall();
 	    }
 
@@ -4788,28 +4788,28 @@ ruleFeatureCall returns [EObject current=null]
 
 
 
-// Entry rule entryRuleSetOp
-entryRuleSetOp returns [EObject current=null] 
+// Entry rule entryRuleContainerOp
+entryRuleContainerOp returns [EObject current=null] 
 	:
-	{ newCompositeNode(grammarAccess.getSetOpRule()); }
-	 iv_ruleSetOp=ruleSetOp 
-	 { $current=$iv_ruleSetOp.current; } 
+	{ newCompositeNode(grammarAccess.getContainerOpRule()); }
+	 iv_ruleContainerOp=ruleContainerOp 
+	 { $current=$iv_ruleContainerOp.current; } 
 	 EOF 
 ;
 
-// Rule SetOp
-ruleSetOp returns [EObject current=null] 
+// Rule ContainerOp
+ruleContainerOp returns [EObject current=null] 
     @init { enterRule(); 
     }
     @after { leaveRule(); }:
 ((
 (
 		{ 
-	        newCompositeNode(grammarAccess.getSetOpAccess().getNameIdentifierParserRuleCall_0_0()); 
+	        newCompositeNode(grammarAccess.getContainerOpAccess().getNameIdentifierParserRuleCall_0_0()); 
 	    }
 		lv_name_0_0=ruleIdentifier		{
 	        if ($current==null) {
-	            $current = createModelElementForParent(grammarAccess.getSetOpRule());
+	            $current = createModelElementForParent(grammarAccess.getContainerOpRule());
 	        }
        		set(
        			$current, 
@@ -4822,16 +4822,16 @@ ruleSetOp returns [EObject current=null]
 )
 )	otherlv_1='(' 
     {
-    	newLeafNode(otherlv_1, grammarAccess.getSetOpAccess().getLeftParenthesisKeyword_1());
+    	newLeafNode(otherlv_1, grammarAccess.getContainerOpAccess().getLeftParenthesisKeyword_1());
     }
 (
 (
 		{ 
-	        newCompositeNode(grammarAccess.getSetOpAccess().getDeclDeclaratorParserRuleCall_2_0()); 
+	        newCompositeNode(grammarAccess.getContainerOpAccess().getDeclDeclaratorParserRuleCall_2_0()); 
 	    }
 		lv_decl_2_0=ruleDeclarator		{
 	        if ($current==null) {
-	            $current = createModelElementForParent(grammarAccess.getSetOpRule());
+	            $current = createModelElementForParent(grammarAccess.getContainerOpRule());
 	        }
        		set(
        			$current, 
@@ -4848,9 +4848,9 @@ ruleSetOp returns [EObject current=null]
 	}
     { 
 		if ($current==null) {
-			$current = createModelElement(grammarAccess.getSetOpRule());
+			$current = createModelElement(grammarAccess.getContainerOpRule());
 		}
-        newCompositeNode(grammarAccess.getSetOpAccess().getActualArgumentListParserRuleCall_3()); 
+        newCompositeNode(grammarAccess.getContainerOpAccess().getActualArgumentListParserRuleCall_3()); 
     }
     this_ActualArgumentList_3=ruleActualArgumentList[$current]
     { 
@@ -4859,7 +4859,7 @@ ruleSetOp returns [EObject current=null]
     }
 )?	otherlv_4=')' 
     {
-    	newLeafNode(otherlv_4, grammarAccess.getSetOpAccess().getRightParenthesisKeyword_4());
+    	newLeafNode(otherlv_4, grammarAccess.getContainerOpAccess().getRightParenthesisKeyword_4());
     }
 )
 ;
@@ -5318,17 +5318,17 @@ rulePrimaryExpression returns [EObject current=null]
 
 
 
-// Entry rule entryRuleCollectionInitializer
-entryRuleCollectionInitializer returns [EObject current=null] 
+// Entry rule entryRuleContainerInitializer
+entryRuleContainerInitializer returns [EObject current=null] 
 	:
-	{ newCompositeNode(grammarAccess.getCollectionInitializerRule()); }
-	 iv_ruleCollectionInitializer=ruleCollectionInitializer 
-	 { $current=$iv_ruleCollectionInitializer.current; } 
+	{ newCompositeNode(grammarAccess.getContainerInitializerRule()); }
+	 iv_ruleContainerInitializer=ruleContainerInitializer 
+	 { $current=$iv_ruleContainerInitializer.current; } 
 	 EOF 
 ;
 
-// Rule CollectionInitializer
-ruleCollectionInitializer returns [EObject current=null] 
+// Rule ContainerInitializer
+ruleContainerInitializer returns [EObject current=null] 
     @init { enterRule(); 
     }
     @after { leaveRule(); }:
@@ -5338,17 +5338,17 @@ ruleCollectionInitializer returns [EObject current=null]
 	}
     {
         $current = forceCreateModelElement(
-            grammarAccess.getCollectionInitializerAccess().getCollectionInitializerAction_0(),
+            grammarAccess.getContainerInitializerAccess().getContainerInitializerAction_0(),
             $current);
     }
 )(
 (
 		{ 
-	        newCompositeNode(grammarAccess.getCollectionInitializerAccess().getTypeQualifiedNameParserRuleCall_1_0()); 
+	        newCompositeNode(grammarAccess.getContainerInitializerAccess().getTypeQualifiedNameParserRuleCall_1_0()); 
 	    }
 		lv_type_1_0=ruleQualifiedName		{
 	        if ($current==null) {
-	            $current = createModelElementForParent(grammarAccess.getCollectionInitializerRule());
+	            $current = createModelElementForParent(grammarAccess.getContainerInitializerRule());
 	        }
        		set(
        			$current, 
@@ -5361,16 +5361,16 @@ ruleCollectionInitializer returns [EObject current=null]
 )
 )?	otherlv_2='{' 
     {
-    	newLeafNode(otherlv_2, grammarAccess.getCollectionInitializerAccess().getLeftCurlyBracketKeyword_2());
+    	newLeafNode(otherlv_2, grammarAccess.getContainerInitializerAccess().getLeftCurlyBracketKeyword_2());
     }
 (
 (
 		{ 
-	        newCompositeNode(grammarAccess.getCollectionInitializerAccess().getInitExpressionListOrRangeParserRuleCall_3_0()); 
+	        newCompositeNode(grammarAccess.getContainerInitializerAccess().getInitExpressionListOrRangeParserRuleCall_3_0()); 
 	    }
 		lv_init_3_0=ruleExpressionListOrRange		{
 	        if ($current==null) {
-	            $current = createModelElementForParent(grammarAccess.getCollectionInitializerRule());
+	            $current = createModelElementForParent(grammarAccess.getContainerInitializerRule());
 	        }
        		set(
        			$current, 
@@ -5383,7 +5383,7 @@ ruleCollectionInitializer returns [EObject current=null]
 )
 )?	otherlv_4='}' 
     {
-    	newLeafNode(otherlv_4, grammarAccess.getCollectionInitializerAccess().getRightCurlyBracketKeyword_4());
+    	newLeafNode(otherlv_4, grammarAccess.getContainerInitializerAccess().getRightCurlyBracketKeyword_4());
     }
 )
 ;
@@ -5533,17 +5533,17 @@ ruleExpressionListEntry returns [EObject current=null]
     |(
 (
 		{ 
-	        newCompositeNode(grammarAccess.getExpressionListEntryAccess().getCollectionCollectionInitializerParserRuleCall_1_1_0()); 
+	        newCompositeNode(grammarAccess.getExpressionListEntryAccess().getContainerContainerInitializerParserRuleCall_1_1_0()); 
 	    }
-		lv_collection_5_0=ruleCollectionInitializer		{
+		lv_container_5_0=ruleContainerInitializer		{
 	        if ($current==null) {
 	            $current = createModelElementForParent(grammarAccess.getExpressionListEntryRule());
 	        }
        		set(
        			$current, 
-       			"collection",
-        		lv_collection_5_0, 
-        		"de.uni_hildesheim.sse.Ivml.CollectionInitializer");
+       			"container",
+        		lv_container_5_0, 
+        		"de.uni_hildesheim.sse.Ivml.ContainerInitializer");
 	        afterParserOrEnumRuleCall();
 	    }
 

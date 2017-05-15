@@ -5536,23 +5536,23 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
     // $ANTLR end "ruleFeatureCall"
 
 
-    // $ANTLR start "entryRuleSetOp"
-    // InternalIvml.g:1834:1: entryRuleSetOp : ruleSetOp EOF ;
-    public final void entryRuleSetOp() throws RecognitionException {
+    // $ANTLR start "entryRuleContainerOp"
+    // InternalIvml.g:1834:1: entryRuleContainerOp : ruleContainerOp EOF ;
+    public final void entryRuleContainerOp() throws RecognitionException {
         try {
-            // InternalIvml.g:1835:1: ( ruleSetOp EOF )
-            // InternalIvml.g:1836:1: ruleSetOp EOF
+            // InternalIvml.g:1835:1: ( ruleContainerOp EOF )
+            // InternalIvml.g:1836:1: ruleContainerOp EOF
             {
             if ( state.backtracking==0 ) {
-               before(grammarAccess.getSetOpRule()); 
+               before(grammarAccess.getContainerOpRule()); 
             }
             pushFollow(FOLLOW_1);
-            ruleSetOp();
+            ruleContainerOp();
 
             state._fsp--;
             if (state.failed) return ;
             if ( state.backtracking==0 ) {
-               after(grammarAccess.getSetOpRule()); 
+               after(grammarAccess.getContainerOpRule()); 
             }
             match(input,EOF,FOLLOW_2); if (state.failed) return ;
 
@@ -5567,30 +5567,30 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
         }
         return ;
     }
-    // $ANTLR end "entryRuleSetOp"
+    // $ANTLR end "entryRuleContainerOp"
 
 
-    // $ANTLR start "ruleSetOp"
-    // InternalIvml.g:1843:1: ruleSetOp : ( ( rule__SetOp__Group__0 ) ) ;
-    public final void ruleSetOp() throws RecognitionException {
+    // $ANTLR start "ruleContainerOp"
+    // InternalIvml.g:1843:1: ruleContainerOp : ( ( rule__ContainerOp__Group__0 ) ) ;
+    public final void ruleContainerOp() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // InternalIvml.g:1847:2: ( ( ( rule__SetOp__Group__0 ) ) )
-            // InternalIvml.g:1848:1: ( ( rule__SetOp__Group__0 ) )
+            // InternalIvml.g:1847:2: ( ( ( rule__ContainerOp__Group__0 ) ) )
+            // InternalIvml.g:1848:1: ( ( rule__ContainerOp__Group__0 ) )
             {
-            // InternalIvml.g:1848:1: ( ( rule__SetOp__Group__0 ) )
-            // InternalIvml.g:1849:1: ( rule__SetOp__Group__0 )
+            // InternalIvml.g:1848:1: ( ( rule__ContainerOp__Group__0 ) )
+            // InternalIvml.g:1849:1: ( rule__ContainerOp__Group__0 )
             {
             if ( state.backtracking==0 ) {
-               before(grammarAccess.getSetOpAccess().getGroup()); 
+               before(grammarAccess.getContainerOpAccess().getGroup()); 
             }
-            // InternalIvml.g:1850:1: ( rule__SetOp__Group__0 )
-            // InternalIvml.g:1850:2: rule__SetOp__Group__0
+            // InternalIvml.g:1850:1: ( rule__ContainerOp__Group__0 )
+            // InternalIvml.g:1850:2: rule__ContainerOp__Group__0
             {
             pushFollow(FOLLOW_2);
-            rule__SetOp__Group__0();
+            rule__ContainerOp__Group__0();
 
             state._fsp--;
             if (state.failed) return ;
@@ -5598,7 +5598,7 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
             }
 
             if ( state.backtracking==0 ) {
-               after(grammarAccess.getSetOpAccess().getGroup()); 
+               after(grammarAccess.getContainerOpAccess().getGroup()); 
             }
 
             }
@@ -5618,7 +5618,7 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
         }
         return ;
     }
-    // $ANTLR end "ruleSetOp"
+    // $ANTLR end "ruleContainerOp"
 
 
     // $ANTLR start "entryRuleDeclarator"
@@ -6012,23 +6012,23 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
     // $ANTLR end "rulePrimaryExpression"
 
 
-    // $ANTLR start "entryRuleCollectionInitializer"
-    // InternalIvml.g:1994:1: entryRuleCollectionInitializer : ruleCollectionInitializer EOF ;
-    public final void entryRuleCollectionInitializer() throws RecognitionException {
+    // $ANTLR start "entryRuleContainerInitializer"
+    // InternalIvml.g:1994:1: entryRuleContainerInitializer : ruleContainerInitializer EOF ;
+    public final void entryRuleContainerInitializer() throws RecognitionException {
         try {
-            // InternalIvml.g:1995:1: ( ruleCollectionInitializer EOF )
-            // InternalIvml.g:1996:1: ruleCollectionInitializer EOF
+            // InternalIvml.g:1995:1: ( ruleContainerInitializer EOF )
+            // InternalIvml.g:1996:1: ruleContainerInitializer EOF
             {
             if ( state.backtracking==0 ) {
-               before(grammarAccess.getCollectionInitializerRule()); 
+               before(grammarAccess.getContainerInitializerRule()); 
             }
             pushFollow(FOLLOW_1);
-            ruleCollectionInitializer();
+            ruleContainerInitializer();
 
             state._fsp--;
             if (state.failed) return ;
             if ( state.backtracking==0 ) {
-               after(grammarAccess.getCollectionInitializerRule()); 
+               after(grammarAccess.getContainerInitializerRule()); 
             }
             match(input,EOF,FOLLOW_2); if (state.failed) return ;
 
@@ -6043,30 +6043,30 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
         }
         return ;
     }
-    // $ANTLR end "entryRuleCollectionInitializer"
+    // $ANTLR end "entryRuleContainerInitializer"
 
 
-    // $ANTLR start "ruleCollectionInitializer"
-    // InternalIvml.g:2003:1: ruleCollectionInitializer : ( ( rule__CollectionInitializer__Group__0 ) ) ;
-    public final void ruleCollectionInitializer() throws RecognitionException {
+    // $ANTLR start "ruleContainerInitializer"
+    // InternalIvml.g:2003:1: ruleContainerInitializer : ( ( rule__ContainerInitializer__Group__0 ) ) ;
+    public final void ruleContainerInitializer() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // InternalIvml.g:2007:2: ( ( ( rule__CollectionInitializer__Group__0 ) ) )
-            // InternalIvml.g:2008:1: ( ( rule__CollectionInitializer__Group__0 ) )
+            // InternalIvml.g:2007:2: ( ( ( rule__ContainerInitializer__Group__0 ) ) )
+            // InternalIvml.g:2008:1: ( ( rule__ContainerInitializer__Group__0 ) )
             {
-            // InternalIvml.g:2008:1: ( ( rule__CollectionInitializer__Group__0 ) )
-            // InternalIvml.g:2009:1: ( rule__CollectionInitializer__Group__0 )
+            // InternalIvml.g:2008:1: ( ( rule__ContainerInitializer__Group__0 ) )
+            // InternalIvml.g:2009:1: ( rule__ContainerInitializer__Group__0 )
             {
             if ( state.backtracking==0 ) {
-               before(grammarAccess.getCollectionInitializerAccess().getGroup()); 
+               before(grammarAccess.getContainerInitializerAccess().getGroup()); 
             }
-            // InternalIvml.g:2010:1: ( rule__CollectionInitializer__Group__0 )
-            // InternalIvml.g:2010:2: rule__CollectionInitializer__Group__0
+            // InternalIvml.g:2010:1: ( rule__ContainerInitializer__Group__0 )
+            // InternalIvml.g:2010:2: rule__ContainerInitializer__Group__0
             {
             pushFollow(FOLLOW_2);
-            rule__CollectionInitializer__Group__0();
+            rule__ContainerInitializer__Group__0();
 
             state._fsp--;
             if (state.failed) return ;
@@ -6074,7 +6074,7 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
             }
 
             if ( state.backtracking==0 ) {
-               after(grammarAccess.getCollectionInitializerAccess().getGroup()); 
+               after(grammarAccess.getContainerInitializerAccess().getGroup()); 
             }
 
             }
@@ -6094,7 +6094,7 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
         }
         return ;
     }
-    // $ANTLR end "ruleCollectionInitializer"
+    // $ANTLR end "ruleContainerInitializer"
 
 
     // $ANTLR start "entryRuleExpressionListOrRange"
@@ -8209,13 +8209,13 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
 
 
     // $ANTLR start "rule__Expression__Alternatives"
-    // InternalIvml.g:2532:1: rule__Expression__Alternatives : ( ( ( rule__Expression__LetAssignment_0 ) ) | ( ( rule__Expression__ExprAssignment_1 ) ) | ( ( rule__Expression__CollectionAssignment_2 ) ) );
+    // InternalIvml.g:2532:1: rule__Expression__Alternatives : ( ( ( rule__Expression__LetAssignment_0 ) ) | ( ( rule__Expression__ExprAssignment_1 ) ) | ( ( rule__Expression__ContainerAssignment_2 ) ) );
     public final void rule__Expression__Alternatives() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // InternalIvml.g:2536:1: ( ( ( rule__Expression__LetAssignment_0 ) ) | ( ( rule__Expression__ExprAssignment_1 ) ) | ( ( rule__Expression__CollectionAssignment_2 ) ) )
+            // InternalIvml.g:2536:1: ( ( ( rule__Expression__LetAssignment_0 ) ) | ( ( rule__Expression__ExprAssignment_1 ) ) | ( ( rule__Expression__ContainerAssignment_2 ) ) )
             int alt13=3;
             alt13 = dfa13.predict(input);
             switch (alt13) {
@@ -8278,19 +8278,19 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
                     }
                     break;
                 case 3 :
-                    // InternalIvml.g:2549:6: ( ( rule__Expression__CollectionAssignment_2 ) )
+                    // InternalIvml.g:2549:6: ( ( rule__Expression__ContainerAssignment_2 ) )
                     {
-                    // InternalIvml.g:2549:6: ( ( rule__Expression__CollectionAssignment_2 ) )
-                    // InternalIvml.g:2550:1: ( rule__Expression__CollectionAssignment_2 )
+                    // InternalIvml.g:2549:6: ( ( rule__Expression__ContainerAssignment_2 ) )
+                    // InternalIvml.g:2550:1: ( rule__Expression__ContainerAssignment_2 )
                     {
                     if ( state.backtracking==0 ) {
-                       before(grammarAccess.getExpressionAccess().getCollectionAssignment_2()); 
+                       before(grammarAccess.getExpressionAccess().getContainerAssignment_2()); 
                     }
-                    // InternalIvml.g:2551:1: ( rule__Expression__CollectionAssignment_2 )
-                    // InternalIvml.g:2551:2: rule__Expression__CollectionAssignment_2
+                    // InternalIvml.g:2551:1: ( rule__Expression__ContainerAssignment_2 )
+                    // InternalIvml.g:2551:2: rule__Expression__ContainerAssignment_2
                     {
                     pushFollow(FOLLOW_2);
-                    rule__Expression__CollectionAssignment_2();
+                    rule__Expression__ContainerAssignment_2();
 
                     state._fsp--;
                     if (state.failed) return ;
@@ -8298,7 +8298,7 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
                     }
 
                     if ( state.backtracking==0 ) {
-                       after(grammarAccess.getExpressionAccess().getCollectionAssignment_2()); 
+                       after(grammarAccess.getExpressionAccess().getContainerAssignment_2()); 
                     }
 
                     }
@@ -8410,13 +8410,13 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
 
 
     // $ANTLR start "rule__AssignmentExpressionPart__Alternatives_1"
-    // InternalIvml.g:2582:1: rule__AssignmentExpressionPart__Alternatives_1 : ( ( ( rule__AssignmentExpressionPart__ExAssignment_1_0 ) ) | ( ( rule__AssignmentExpressionPart__CollectionAssignment_1_1 ) ) );
+    // InternalIvml.g:2582:1: rule__AssignmentExpressionPart__Alternatives_1 : ( ( ( rule__AssignmentExpressionPart__ExAssignment_1_0 ) ) | ( ( rule__AssignmentExpressionPart__ContainerAssignment_1_1 ) ) );
     public final void rule__AssignmentExpressionPart__Alternatives_1() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // InternalIvml.g:2586:1: ( ( ( rule__AssignmentExpressionPart__ExAssignment_1_0 ) ) | ( ( rule__AssignmentExpressionPart__CollectionAssignment_1_1 ) ) )
+            // InternalIvml.g:2586:1: ( ( ( rule__AssignmentExpressionPart__ExAssignment_1_0 ) ) | ( ( rule__AssignmentExpressionPart__ContainerAssignment_1_1 ) ) )
             int alt15=2;
             alt15 = dfa15.predict(input);
             switch (alt15) {
@@ -8450,19 +8450,19 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
                     }
                     break;
                 case 2 :
-                    // InternalIvml.g:2593:6: ( ( rule__AssignmentExpressionPart__CollectionAssignment_1_1 ) )
+                    // InternalIvml.g:2593:6: ( ( rule__AssignmentExpressionPart__ContainerAssignment_1_1 ) )
                     {
-                    // InternalIvml.g:2593:6: ( ( rule__AssignmentExpressionPart__CollectionAssignment_1_1 ) )
-                    // InternalIvml.g:2594:1: ( rule__AssignmentExpressionPart__CollectionAssignment_1_1 )
+                    // InternalIvml.g:2593:6: ( ( rule__AssignmentExpressionPart__ContainerAssignment_1_1 ) )
+                    // InternalIvml.g:2594:1: ( rule__AssignmentExpressionPart__ContainerAssignment_1_1 )
                     {
                     if ( state.backtracking==0 ) {
-                       before(grammarAccess.getAssignmentExpressionPartAccess().getCollectionAssignment_1_1()); 
+                       before(grammarAccess.getAssignmentExpressionPartAccess().getContainerAssignment_1_1()); 
                     }
-                    // InternalIvml.g:2595:1: ( rule__AssignmentExpressionPart__CollectionAssignment_1_1 )
-                    // InternalIvml.g:2595:2: rule__AssignmentExpressionPart__CollectionAssignment_1_1
+                    // InternalIvml.g:2595:1: ( rule__AssignmentExpressionPart__ContainerAssignment_1_1 )
+                    // InternalIvml.g:2595:2: rule__AssignmentExpressionPart__ContainerAssignment_1_1
                     {
                     pushFollow(FOLLOW_2);
-                    rule__AssignmentExpressionPart__CollectionAssignment_1_1();
+                    rule__AssignmentExpressionPart__ContainerAssignment_1_1();
 
                     state._fsp--;
                     if (state.failed) return ;
@@ -8470,7 +8470,7 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
                     }
 
                     if ( state.backtracking==0 ) {
-                       after(grammarAccess.getAssignmentExpressionPartAccess().getCollectionAssignment_1_1()); 
+                       after(grammarAccess.getAssignmentExpressionPartAccess().getContainerAssignment_1_1()); 
                     }
 
                     }
@@ -8684,13 +8684,13 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
 
 
     // $ANTLR start "rule__EqualityExpressionPart__Alternatives_1"
-    // InternalIvml.g:2664:1: rule__EqualityExpressionPart__Alternatives_1 : ( ( ( rule__EqualityExpressionPart__ExAssignment_1_0 ) ) | ( ( rule__EqualityExpressionPart__CollectionAssignment_1_1 ) ) );
+    // InternalIvml.g:2664:1: rule__EqualityExpressionPart__Alternatives_1 : ( ( ( rule__EqualityExpressionPart__ExAssignment_1_0 ) ) | ( ( rule__EqualityExpressionPart__ContainerAssignment_1_1 ) ) );
     public final void rule__EqualityExpressionPart__Alternatives_1() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // InternalIvml.g:2668:1: ( ( ( rule__EqualityExpressionPart__ExAssignment_1_0 ) ) | ( ( rule__EqualityExpressionPart__CollectionAssignment_1_1 ) ) )
+            // InternalIvml.g:2668:1: ( ( ( rule__EqualityExpressionPart__ExAssignment_1_0 ) ) | ( ( rule__EqualityExpressionPart__ContainerAssignment_1_1 ) ) )
             int alt18=2;
             alt18 = dfa18.predict(input);
             switch (alt18) {
@@ -8724,19 +8724,19 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
                     }
                     break;
                 case 2 :
-                    // InternalIvml.g:2675:6: ( ( rule__EqualityExpressionPart__CollectionAssignment_1_1 ) )
+                    // InternalIvml.g:2675:6: ( ( rule__EqualityExpressionPart__ContainerAssignment_1_1 ) )
                     {
-                    // InternalIvml.g:2675:6: ( ( rule__EqualityExpressionPart__CollectionAssignment_1_1 ) )
-                    // InternalIvml.g:2676:1: ( rule__EqualityExpressionPart__CollectionAssignment_1_1 )
+                    // InternalIvml.g:2675:6: ( ( rule__EqualityExpressionPart__ContainerAssignment_1_1 ) )
+                    // InternalIvml.g:2676:1: ( rule__EqualityExpressionPart__ContainerAssignment_1_1 )
                     {
                     if ( state.backtracking==0 ) {
-                       before(grammarAccess.getEqualityExpressionPartAccess().getCollectionAssignment_1_1()); 
+                       before(grammarAccess.getEqualityExpressionPartAccess().getContainerAssignment_1_1()); 
                     }
-                    // InternalIvml.g:2677:1: ( rule__EqualityExpressionPart__CollectionAssignment_1_1 )
-                    // InternalIvml.g:2677:2: rule__EqualityExpressionPart__CollectionAssignment_1_1
+                    // InternalIvml.g:2677:1: ( rule__EqualityExpressionPart__ContainerAssignment_1_1 )
+                    // InternalIvml.g:2677:2: rule__EqualityExpressionPart__ContainerAssignment_1_1
                     {
                     pushFollow(FOLLOW_2);
-                    rule__EqualityExpressionPart__CollectionAssignment_1_1();
+                    rule__EqualityExpressionPart__ContainerAssignment_1_1();
 
                     state._fsp--;
                     if (state.failed) return ;
@@ -8744,7 +8744,7 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
                     }
 
                     if ( state.backtracking==0 ) {
-                       after(grammarAccess.getEqualityExpressionPartAccess().getCollectionAssignment_1_1()); 
+                       after(grammarAccess.getEqualityExpressionPartAccess().getContainerAssignment_1_1()); 
                     }
 
                     }
@@ -9752,13 +9752,13 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
 
 
     // $ANTLR start "rule__ExpressionListEntry__Alternatives_1"
-    // InternalIvml.g:2924:1: rule__ExpressionListEntry__Alternatives_1 : ( ( ( rule__ExpressionListEntry__ValueAssignment_1_0 ) ) | ( ( rule__ExpressionListEntry__CollectionAssignment_1_1 ) ) );
+    // InternalIvml.g:2924:1: rule__ExpressionListEntry__Alternatives_1 : ( ( ( rule__ExpressionListEntry__ValueAssignment_1_0 ) ) | ( ( rule__ExpressionListEntry__ContainerAssignment_1_1 ) ) );
     public final void rule__ExpressionListEntry__Alternatives_1() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // InternalIvml.g:2928:1: ( ( ( rule__ExpressionListEntry__ValueAssignment_1_0 ) ) | ( ( rule__ExpressionListEntry__CollectionAssignment_1_1 ) ) )
+            // InternalIvml.g:2928:1: ( ( ( rule__ExpressionListEntry__ValueAssignment_1_0 ) ) | ( ( rule__ExpressionListEntry__ContainerAssignment_1_1 ) ) )
             int alt27=2;
             alt27 = dfa27.predict(input);
             switch (alt27) {
@@ -9792,19 +9792,19 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
                     }
                     break;
                 case 2 :
-                    // InternalIvml.g:2935:6: ( ( rule__ExpressionListEntry__CollectionAssignment_1_1 ) )
+                    // InternalIvml.g:2935:6: ( ( rule__ExpressionListEntry__ContainerAssignment_1_1 ) )
                     {
-                    // InternalIvml.g:2935:6: ( ( rule__ExpressionListEntry__CollectionAssignment_1_1 ) )
-                    // InternalIvml.g:2936:1: ( rule__ExpressionListEntry__CollectionAssignment_1_1 )
+                    // InternalIvml.g:2935:6: ( ( rule__ExpressionListEntry__ContainerAssignment_1_1 ) )
+                    // InternalIvml.g:2936:1: ( rule__ExpressionListEntry__ContainerAssignment_1_1 )
                     {
                     if ( state.backtracking==0 ) {
-                       before(grammarAccess.getExpressionListEntryAccess().getCollectionAssignment_1_1()); 
+                       before(grammarAccess.getExpressionListEntryAccess().getContainerAssignment_1_1()); 
                     }
-                    // InternalIvml.g:2937:1: ( rule__ExpressionListEntry__CollectionAssignment_1_1 )
-                    // InternalIvml.g:2937:2: rule__ExpressionListEntry__CollectionAssignment_1_1
+                    // InternalIvml.g:2937:1: ( rule__ExpressionListEntry__ContainerAssignment_1_1 )
+                    // InternalIvml.g:2937:2: rule__ExpressionListEntry__ContainerAssignment_1_1
                     {
                     pushFollow(FOLLOW_2);
-                    rule__ExpressionListEntry__CollectionAssignment_1_1();
+                    rule__ExpressionListEntry__ContainerAssignment_1_1();
 
                     state._fsp--;
                     if (state.failed) return ;
@@ -9812,7 +9812,7 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
                     }
 
                     if ( state.backtracking==0 ) {
-                       after(grammarAccess.getExpressionListEntryAccess().getCollectionAssignment_1_1()); 
+                       after(grammarAccess.getExpressionListEntryAccess().getContainerAssignment_1_1()); 
                     }
 
                     }
@@ -29134,26 +29134,26 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
 
 
     // $ANTLR start "rule__Call__Group_1__1__Impl"
-    // InternalIvml.g:9846:1: rule__Call__Group_1__1__Impl : ( ( rule__Call__SetOpAssignment_1_1 ) ) ;
+    // InternalIvml.g:9846:1: rule__Call__Group_1__1__Impl : ( ( rule__Call__ContainerOpAssignment_1_1 ) ) ;
     public final void rule__Call__Group_1__1__Impl() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // InternalIvml.g:9850:1: ( ( ( rule__Call__SetOpAssignment_1_1 ) ) )
-            // InternalIvml.g:9851:1: ( ( rule__Call__SetOpAssignment_1_1 ) )
+            // InternalIvml.g:9850:1: ( ( ( rule__Call__ContainerOpAssignment_1_1 ) ) )
+            // InternalIvml.g:9851:1: ( ( rule__Call__ContainerOpAssignment_1_1 ) )
             {
-            // InternalIvml.g:9851:1: ( ( rule__Call__SetOpAssignment_1_1 ) )
-            // InternalIvml.g:9852:1: ( rule__Call__SetOpAssignment_1_1 )
+            // InternalIvml.g:9851:1: ( ( rule__Call__ContainerOpAssignment_1_1 ) )
+            // InternalIvml.g:9852:1: ( rule__Call__ContainerOpAssignment_1_1 )
             {
             if ( state.backtracking==0 ) {
-               before(grammarAccess.getCallAccess().getSetOpAssignment_1_1()); 
+               before(grammarAccess.getCallAccess().getContainerOpAssignment_1_1()); 
             }
-            // InternalIvml.g:9853:1: ( rule__Call__SetOpAssignment_1_1 )
-            // InternalIvml.g:9853:2: rule__Call__SetOpAssignment_1_1
+            // InternalIvml.g:9853:1: ( rule__Call__ContainerOpAssignment_1_1 )
+            // InternalIvml.g:9853:2: rule__Call__ContainerOpAssignment_1_1
             {
             pushFollow(FOLLOW_2);
-            rule__Call__SetOpAssignment_1_1();
+            rule__Call__ContainerOpAssignment_1_1();
 
             state._fsp--;
             if (state.failed) return ;
@@ -29161,7 +29161,7 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
             }
 
             if ( state.backtracking==0 ) {
-               after(grammarAccess.getCallAccess().getSetOpAssignment_1_1()); 
+               after(grammarAccess.getCallAccess().getContainerOpAssignment_1_1()); 
             }
 
             }
@@ -29768,23 +29768,23 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
     // $ANTLR end "rule__FeatureCall__Group__3__Impl"
 
 
-    // $ANTLR start "rule__SetOp__Group__0"
-    // InternalIvml.g:10090:1: rule__SetOp__Group__0 : rule__SetOp__Group__0__Impl rule__SetOp__Group__1 ;
-    public final void rule__SetOp__Group__0() throws RecognitionException {
+    // $ANTLR start "rule__ContainerOp__Group__0"
+    // InternalIvml.g:10090:1: rule__ContainerOp__Group__0 : rule__ContainerOp__Group__0__Impl rule__ContainerOp__Group__1 ;
+    public final void rule__ContainerOp__Group__0() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // InternalIvml.g:10094:1: ( rule__SetOp__Group__0__Impl rule__SetOp__Group__1 )
-            // InternalIvml.g:10095:2: rule__SetOp__Group__0__Impl rule__SetOp__Group__1
+            // InternalIvml.g:10094:1: ( rule__ContainerOp__Group__0__Impl rule__ContainerOp__Group__1 )
+            // InternalIvml.g:10095:2: rule__ContainerOp__Group__0__Impl rule__ContainerOp__Group__1
             {
             pushFollow(FOLLOW_23);
-            rule__SetOp__Group__0__Impl();
+            rule__ContainerOp__Group__0__Impl();
 
             state._fsp--;
             if (state.failed) return ;
             pushFollow(FOLLOW_2);
-            rule__SetOp__Group__1();
+            rule__ContainerOp__Group__1();
 
             state._fsp--;
             if (state.failed) return ;
@@ -29803,30 +29803,30 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
         }
         return ;
     }
-    // $ANTLR end "rule__SetOp__Group__0"
+    // $ANTLR end "rule__ContainerOp__Group__0"
 
 
-    // $ANTLR start "rule__SetOp__Group__0__Impl"
-    // InternalIvml.g:10102:1: rule__SetOp__Group__0__Impl : ( ( rule__SetOp__NameAssignment_0 ) ) ;
-    public final void rule__SetOp__Group__0__Impl() throws RecognitionException {
+    // $ANTLR start "rule__ContainerOp__Group__0__Impl"
+    // InternalIvml.g:10102:1: rule__ContainerOp__Group__0__Impl : ( ( rule__ContainerOp__NameAssignment_0 ) ) ;
+    public final void rule__ContainerOp__Group__0__Impl() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // InternalIvml.g:10106:1: ( ( ( rule__SetOp__NameAssignment_0 ) ) )
-            // InternalIvml.g:10107:1: ( ( rule__SetOp__NameAssignment_0 ) )
+            // InternalIvml.g:10106:1: ( ( ( rule__ContainerOp__NameAssignment_0 ) ) )
+            // InternalIvml.g:10107:1: ( ( rule__ContainerOp__NameAssignment_0 ) )
             {
-            // InternalIvml.g:10107:1: ( ( rule__SetOp__NameAssignment_0 ) )
-            // InternalIvml.g:10108:1: ( rule__SetOp__NameAssignment_0 )
+            // InternalIvml.g:10107:1: ( ( rule__ContainerOp__NameAssignment_0 ) )
+            // InternalIvml.g:10108:1: ( rule__ContainerOp__NameAssignment_0 )
             {
             if ( state.backtracking==0 ) {
-               before(grammarAccess.getSetOpAccess().getNameAssignment_0()); 
+               before(grammarAccess.getContainerOpAccess().getNameAssignment_0()); 
             }
-            // InternalIvml.g:10109:1: ( rule__SetOp__NameAssignment_0 )
-            // InternalIvml.g:10109:2: rule__SetOp__NameAssignment_0
+            // InternalIvml.g:10109:1: ( rule__ContainerOp__NameAssignment_0 )
+            // InternalIvml.g:10109:2: rule__ContainerOp__NameAssignment_0
             {
             pushFollow(FOLLOW_2);
-            rule__SetOp__NameAssignment_0();
+            rule__ContainerOp__NameAssignment_0();
 
             state._fsp--;
             if (state.failed) return ;
@@ -29834,7 +29834,7 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
             }
 
             if ( state.backtracking==0 ) {
-               after(grammarAccess.getSetOpAccess().getNameAssignment_0()); 
+               after(grammarAccess.getContainerOpAccess().getNameAssignment_0()); 
             }
 
             }
@@ -29854,26 +29854,26 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
         }
         return ;
     }
-    // $ANTLR end "rule__SetOp__Group__0__Impl"
+    // $ANTLR end "rule__ContainerOp__Group__0__Impl"
 
 
-    // $ANTLR start "rule__SetOp__Group__1"
-    // InternalIvml.g:10119:1: rule__SetOp__Group__1 : rule__SetOp__Group__1__Impl rule__SetOp__Group__2 ;
-    public final void rule__SetOp__Group__1() throws RecognitionException {
+    // $ANTLR start "rule__ContainerOp__Group__1"
+    // InternalIvml.g:10119:1: rule__ContainerOp__Group__1 : rule__ContainerOp__Group__1__Impl rule__ContainerOp__Group__2 ;
+    public final void rule__ContainerOp__Group__1() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // InternalIvml.g:10123:1: ( rule__SetOp__Group__1__Impl rule__SetOp__Group__2 )
-            // InternalIvml.g:10124:2: rule__SetOp__Group__1__Impl rule__SetOp__Group__2
+            // InternalIvml.g:10123:1: ( rule__ContainerOp__Group__1__Impl rule__ContainerOp__Group__2 )
+            // InternalIvml.g:10124:2: rule__ContainerOp__Group__1__Impl rule__ContainerOp__Group__2
             {
             pushFollow(FOLLOW_61);
-            rule__SetOp__Group__1__Impl();
+            rule__ContainerOp__Group__1__Impl();
 
             state._fsp--;
             if (state.failed) return ;
             pushFollow(FOLLOW_2);
-            rule__SetOp__Group__2();
+            rule__ContainerOp__Group__2();
 
             state._fsp--;
             if (state.failed) return ;
@@ -29892,12 +29892,12 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
         }
         return ;
     }
-    // $ANTLR end "rule__SetOp__Group__1"
+    // $ANTLR end "rule__ContainerOp__Group__1"
 
 
-    // $ANTLR start "rule__SetOp__Group__1__Impl"
-    // InternalIvml.g:10131:1: rule__SetOp__Group__1__Impl : ( '(' ) ;
-    public final void rule__SetOp__Group__1__Impl() throws RecognitionException {
+    // $ANTLR start "rule__ContainerOp__Group__1__Impl"
+    // InternalIvml.g:10131:1: rule__ContainerOp__Group__1__Impl : ( '(' ) ;
+    public final void rule__ContainerOp__Group__1__Impl() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
@@ -29909,11 +29909,11 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
             // InternalIvml.g:10137:1: '('
             {
             if ( state.backtracking==0 ) {
-               before(grammarAccess.getSetOpAccess().getLeftParenthesisKeyword_1()); 
+               before(grammarAccess.getContainerOpAccess().getLeftParenthesisKeyword_1()); 
             }
             match(input,45,FOLLOW_2); if (state.failed) return ;
             if ( state.backtracking==0 ) {
-               after(grammarAccess.getSetOpAccess().getLeftParenthesisKeyword_1()); 
+               after(grammarAccess.getContainerOpAccess().getLeftParenthesisKeyword_1()); 
             }
 
             }
@@ -29933,26 +29933,26 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
         }
         return ;
     }
-    // $ANTLR end "rule__SetOp__Group__1__Impl"
+    // $ANTLR end "rule__ContainerOp__Group__1__Impl"
 
 
-    // $ANTLR start "rule__SetOp__Group__2"
-    // InternalIvml.g:10150:1: rule__SetOp__Group__2 : rule__SetOp__Group__2__Impl rule__SetOp__Group__3 ;
-    public final void rule__SetOp__Group__2() throws RecognitionException {
+    // $ANTLR start "rule__ContainerOp__Group__2"
+    // InternalIvml.g:10150:1: rule__ContainerOp__Group__2 : rule__ContainerOp__Group__2__Impl rule__ContainerOp__Group__3 ;
+    public final void rule__ContainerOp__Group__2() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // InternalIvml.g:10154:1: ( rule__SetOp__Group__2__Impl rule__SetOp__Group__3 )
-            // InternalIvml.g:10155:2: rule__SetOp__Group__2__Impl rule__SetOp__Group__3
+            // InternalIvml.g:10154:1: ( rule__ContainerOp__Group__2__Impl rule__ContainerOp__Group__3 )
+            // InternalIvml.g:10155:2: rule__ContainerOp__Group__2__Impl rule__ContainerOp__Group__3
             {
             pushFollow(FOLLOW_61);
-            rule__SetOp__Group__2__Impl();
+            rule__ContainerOp__Group__2__Impl();
 
             state._fsp--;
             if (state.failed) return ;
             pushFollow(FOLLOW_2);
-            rule__SetOp__Group__3();
+            rule__ContainerOp__Group__3();
 
             state._fsp--;
             if (state.failed) return ;
@@ -29971,34 +29971,34 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
         }
         return ;
     }
-    // $ANTLR end "rule__SetOp__Group__2"
+    // $ANTLR end "rule__ContainerOp__Group__2"
 
 
-    // $ANTLR start "rule__SetOp__Group__2__Impl"
-    // InternalIvml.g:10162:1: rule__SetOp__Group__2__Impl : ( ( rule__SetOp__DeclAssignment_2 )? ) ;
-    public final void rule__SetOp__Group__2__Impl() throws RecognitionException {
+    // $ANTLR start "rule__ContainerOp__Group__2__Impl"
+    // InternalIvml.g:10162:1: rule__ContainerOp__Group__2__Impl : ( ( rule__ContainerOp__DeclAssignment_2 )? ) ;
+    public final void rule__ContainerOp__Group__2__Impl() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // InternalIvml.g:10166:1: ( ( ( rule__SetOp__DeclAssignment_2 )? ) )
-            // InternalIvml.g:10167:1: ( ( rule__SetOp__DeclAssignment_2 )? )
+            // InternalIvml.g:10166:1: ( ( ( rule__ContainerOp__DeclAssignment_2 )? ) )
+            // InternalIvml.g:10167:1: ( ( rule__ContainerOp__DeclAssignment_2 )? )
             {
-            // InternalIvml.g:10167:1: ( ( rule__SetOp__DeclAssignment_2 )? )
-            // InternalIvml.g:10168:1: ( rule__SetOp__DeclAssignment_2 )?
+            // InternalIvml.g:10167:1: ( ( rule__ContainerOp__DeclAssignment_2 )? )
+            // InternalIvml.g:10168:1: ( rule__ContainerOp__DeclAssignment_2 )?
             {
             if ( state.backtracking==0 ) {
-               before(grammarAccess.getSetOpAccess().getDeclAssignment_2()); 
+               before(grammarAccess.getContainerOpAccess().getDeclAssignment_2()); 
             }
-            // InternalIvml.g:10169:1: ( rule__SetOp__DeclAssignment_2 )?
+            // InternalIvml.g:10169:1: ( rule__ContainerOp__DeclAssignment_2 )?
             int alt82=2;
             alt82 = dfa82.predict(input);
             switch (alt82) {
                 case 1 :
-                    // InternalIvml.g:10169:2: rule__SetOp__DeclAssignment_2
+                    // InternalIvml.g:10169:2: rule__ContainerOp__DeclAssignment_2
                     {
                     pushFollow(FOLLOW_2);
-                    rule__SetOp__DeclAssignment_2();
+                    rule__ContainerOp__DeclAssignment_2();
 
                     state._fsp--;
                     if (state.failed) return ;
@@ -30009,7 +30009,7 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
             }
 
             if ( state.backtracking==0 ) {
-               after(grammarAccess.getSetOpAccess().getDeclAssignment_2()); 
+               after(grammarAccess.getContainerOpAccess().getDeclAssignment_2()); 
             }
 
             }
@@ -30029,26 +30029,26 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
         }
         return ;
     }
-    // $ANTLR end "rule__SetOp__Group__2__Impl"
+    // $ANTLR end "rule__ContainerOp__Group__2__Impl"
 
 
-    // $ANTLR start "rule__SetOp__Group__3"
-    // InternalIvml.g:10179:1: rule__SetOp__Group__3 : rule__SetOp__Group__3__Impl rule__SetOp__Group__4 ;
-    public final void rule__SetOp__Group__3() throws RecognitionException {
+    // $ANTLR start "rule__ContainerOp__Group__3"
+    // InternalIvml.g:10179:1: rule__ContainerOp__Group__3 : rule__ContainerOp__Group__3__Impl rule__ContainerOp__Group__4 ;
+    public final void rule__ContainerOp__Group__3() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // InternalIvml.g:10183:1: ( rule__SetOp__Group__3__Impl rule__SetOp__Group__4 )
-            // InternalIvml.g:10184:2: rule__SetOp__Group__3__Impl rule__SetOp__Group__4
+            // InternalIvml.g:10183:1: ( rule__ContainerOp__Group__3__Impl rule__ContainerOp__Group__4 )
+            // InternalIvml.g:10184:2: rule__ContainerOp__Group__3__Impl rule__ContainerOp__Group__4
             {
             pushFollow(FOLLOW_61);
-            rule__SetOp__Group__3__Impl();
+            rule__ContainerOp__Group__3__Impl();
 
             state._fsp--;
             if (state.failed) return ;
             pushFollow(FOLLOW_2);
-            rule__SetOp__Group__4();
+            rule__ContainerOp__Group__4();
 
             state._fsp--;
             if (state.failed) return ;
@@ -30067,12 +30067,12 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
         }
         return ;
     }
-    // $ANTLR end "rule__SetOp__Group__3"
+    // $ANTLR end "rule__ContainerOp__Group__3"
 
 
-    // $ANTLR start "rule__SetOp__Group__3__Impl"
-    // InternalIvml.g:10191:1: rule__SetOp__Group__3__Impl : ( ( ruleActualArgumentList )? ) ;
-    public final void rule__SetOp__Group__3__Impl() throws RecognitionException {
+    // $ANTLR start "rule__ContainerOp__Group__3__Impl"
+    // InternalIvml.g:10191:1: rule__ContainerOp__Group__3__Impl : ( ( ruleActualArgumentList )? ) ;
+    public final void rule__ContainerOp__Group__3__Impl() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
@@ -30084,7 +30084,7 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
             // InternalIvml.g:10197:1: ( ruleActualArgumentList )?
             {
             if ( state.backtracking==0 ) {
-               before(grammarAccess.getSetOpAccess().getActualArgumentListParserRuleCall_3()); 
+               before(grammarAccess.getContainerOpAccess().getActualArgumentListParserRuleCall_3()); 
             }
             // InternalIvml.g:10198:1: ( ruleActualArgumentList )?
             int alt83=2;
@@ -30109,7 +30109,7 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
             }
 
             if ( state.backtracking==0 ) {
-               after(grammarAccess.getSetOpAccess().getActualArgumentListParserRuleCall_3()); 
+               after(grammarAccess.getContainerOpAccess().getActualArgumentListParserRuleCall_3()); 
             }
 
             }
@@ -30129,21 +30129,21 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
         }
         return ;
     }
-    // $ANTLR end "rule__SetOp__Group__3__Impl"
+    // $ANTLR end "rule__ContainerOp__Group__3__Impl"
 
 
-    // $ANTLR start "rule__SetOp__Group__4"
-    // InternalIvml.g:10208:1: rule__SetOp__Group__4 : rule__SetOp__Group__4__Impl ;
-    public final void rule__SetOp__Group__4() throws RecognitionException {
+    // $ANTLR start "rule__ContainerOp__Group__4"
+    // InternalIvml.g:10208:1: rule__ContainerOp__Group__4 : rule__ContainerOp__Group__4__Impl ;
+    public final void rule__ContainerOp__Group__4() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // InternalIvml.g:10212:1: ( rule__SetOp__Group__4__Impl )
-            // InternalIvml.g:10213:2: rule__SetOp__Group__4__Impl
+            // InternalIvml.g:10212:1: ( rule__ContainerOp__Group__4__Impl )
+            // InternalIvml.g:10213:2: rule__ContainerOp__Group__4__Impl
             {
             pushFollow(FOLLOW_2);
-            rule__SetOp__Group__4__Impl();
+            rule__ContainerOp__Group__4__Impl();
 
             state._fsp--;
             if (state.failed) return ;
@@ -30162,12 +30162,12 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
         }
         return ;
     }
-    // $ANTLR end "rule__SetOp__Group__4"
+    // $ANTLR end "rule__ContainerOp__Group__4"
 
 
-    // $ANTLR start "rule__SetOp__Group__4__Impl"
-    // InternalIvml.g:10219:1: rule__SetOp__Group__4__Impl : ( ')' ) ;
-    public final void rule__SetOp__Group__4__Impl() throws RecognitionException {
+    // $ANTLR start "rule__ContainerOp__Group__4__Impl"
+    // InternalIvml.g:10219:1: rule__ContainerOp__Group__4__Impl : ( ')' ) ;
+    public final void rule__ContainerOp__Group__4__Impl() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
@@ -30179,11 +30179,11 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
             // InternalIvml.g:10225:1: ')'
             {
             if ( state.backtracking==0 ) {
-               before(grammarAccess.getSetOpAccess().getRightParenthesisKeyword_4()); 
+               before(grammarAccess.getContainerOpAccess().getRightParenthesisKeyword_4()); 
             }
             match(input,46,FOLLOW_2); if (state.failed) return ;
             if ( state.backtracking==0 ) {
-               after(grammarAccess.getSetOpAccess().getRightParenthesisKeyword_4()); 
+               after(grammarAccess.getContainerOpAccess().getRightParenthesisKeyword_4()); 
             }
 
             }
@@ -30203,7 +30203,7 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
         }
         return ;
     }
-    // $ANTLR end "rule__SetOp__Group__4__Impl"
+    // $ANTLR end "rule__ContainerOp__Group__4__Impl"
 
 
     // $ANTLR start "rule__Declarator__Group__0"
@@ -33080,23 +33080,23 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
     // $ANTLR end "rule__PrimaryExpression__Group_0_3__3__Impl"
 
 
-    // $ANTLR start "rule__CollectionInitializer__Group__0"
-    // InternalIvml.g:11220:1: rule__CollectionInitializer__Group__0 : rule__CollectionInitializer__Group__0__Impl rule__CollectionInitializer__Group__1 ;
-    public final void rule__CollectionInitializer__Group__0() throws RecognitionException {
+    // $ANTLR start "rule__ContainerInitializer__Group__0"
+    // InternalIvml.g:11220:1: rule__ContainerInitializer__Group__0 : rule__ContainerInitializer__Group__0__Impl rule__ContainerInitializer__Group__1 ;
+    public final void rule__ContainerInitializer__Group__0() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // InternalIvml.g:11224:1: ( rule__CollectionInitializer__Group__0__Impl rule__CollectionInitializer__Group__1 )
-            // InternalIvml.g:11225:2: rule__CollectionInitializer__Group__0__Impl rule__CollectionInitializer__Group__1
+            // InternalIvml.g:11224:1: ( rule__ContainerInitializer__Group__0__Impl rule__ContainerInitializer__Group__1 )
+            // InternalIvml.g:11225:2: rule__ContainerInitializer__Group__0__Impl rule__ContainerInitializer__Group__1
             {
             pushFollow(FOLLOW_29);
-            rule__CollectionInitializer__Group__0__Impl();
+            rule__ContainerInitializer__Group__0__Impl();
 
             state._fsp--;
             if (state.failed) return ;
             pushFollow(FOLLOW_2);
-            rule__CollectionInitializer__Group__1();
+            rule__ContainerInitializer__Group__1();
 
             state._fsp--;
             if (state.failed) return ;
@@ -33115,12 +33115,12 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
         }
         return ;
     }
-    // $ANTLR end "rule__CollectionInitializer__Group__0"
+    // $ANTLR end "rule__ContainerInitializer__Group__0"
 
 
-    // $ANTLR start "rule__CollectionInitializer__Group__0__Impl"
-    // InternalIvml.g:11232:1: rule__CollectionInitializer__Group__0__Impl : ( () ) ;
-    public final void rule__CollectionInitializer__Group__0__Impl() throws RecognitionException {
+    // $ANTLR start "rule__ContainerInitializer__Group__0__Impl"
+    // InternalIvml.g:11232:1: rule__ContainerInitializer__Group__0__Impl : ( () ) ;
+    public final void rule__ContainerInitializer__Group__0__Impl() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
@@ -33132,7 +33132,7 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
             // InternalIvml.g:11238:1: ()
             {
             if ( state.backtracking==0 ) {
-               before(grammarAccess.getCollectionInitializerAccess().getCollectionInitializerAction_0()); 
+               before(grammarAccess.getContainerInitializerAccess().getContainerInitializerAction_0()); 
             }
             // InternalIvml.g:11239:1: ()
             // InternalIvml.g:11241:1: 
@@ -33140,7 +33140,7 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
             }
 
             if ( state.backtracking==0 ) {
-               after(grammarAccess.getCollectionInitializerAccess().getCollectionInitializerAction_0()); 
+               after(grammarAccess.getContainerInitializerAccess().getContainerInitializerAction_0()); 
             }
 
             }
@@ -33156,26 +33156,26 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
         }
         return ;
     }
-    // $ANTLR end "rule__CollectionInitializer__Group__0__Impl"
+    // $ANTLR end "rule__ContainerInitializer__Group__0__Impl"
 
 
-    // $ANTLR start "rule__CollectionInitializer__Group__1"
-    // InternalIvml.g:11251:1: rule__CollectionInitializer__Group__1 : rule__CollectionInitializer__Group__1__Impl rule__CollectionInitializer__Group__2 ;
-    public final void rule__CollectionInitializer__Group__1() throws RecognitionException {
+    // $ANTLR start "rule__ContainerInitializer__Group__1"
+    // InternalIvml.g:11251:1: rule__ContainerInitializer__Group__1 : rule__ContainerInitializer__Group__1__Impl rule__ContainerInitializer__Group__2 ;
+    public final void rule__ContainerInitializer__Group__1() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // InternalIvml.g:11255:1: ( rule__CollectionInitializer__Group__1__Impl rule__CollectionInitializer__Group__2 )
-            // InternalIvml.g:11256:2: rule__CollectionInitializer__Group__1__Impl rule__CollectionInitializer__Group__2
+            // InternalIvml.g:11255:1: ( rule__ContainerInitializer__Group__1__Impl rule__ContainerInitializer__Group__2 )
+            // InternalIvml.g:11256:2: rule__ContainerInitializer__Group__1__Impl rule__ContainerInitializer__Group__2
             {
             pushFollow(FOLLOW_29);
-            rule__CollectionInitializer__Group__1__Impl();
+            rule__ContainerInitializer__Group__1__Impl();
 
             state._fsp--;
             if (state.failed) return ;
             pushFollow(FOLLOW_2);
-            rule__CollectionInitializer__Group__2();
+            rule__ContainerInitializer__Group__2();
 
             state._fsp--;
             if (state.failed) return ;
@@ -33194,26 +33194,26 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
         }
         return ;
     }
-    // $ANTLR end "rule__CollectionInitializer__Group__1"
+    // $ANTLR end "rule__ContainerInitializer__Group__1"
 
 
-    // $ANTLR start "rule__CollectionInitializer__Group__1__Impl"
-    // InternalIvml.g:11263:1: rule__CollectionInitializer__Group__1__Impl : ( ( rule__CollectionInitializer__TypeAssignment_1 )? ) ;
-    public final void rule__CollectionInitializer__Group__1__Impl() throws RecognitionException {
+    // $ANTLR start "rule__ContainerInitializer__Group__1__Impl"
+    // InternalIvml.g:11263:1: rule__ContainerInitializer__Group__1__Impl : ( ( rule__ContainerInitializer__TypeAssignment_1 )? ) ;
+    public final void rule__ContainerInitializer__Group__1__Impl() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // InternalIvml.g:11267:1: ( ( ( rule__CollectionInitializer__TypeAssignment_1 )? ) )
-            // InternalIvml.g:11268:1: ( ( rule__CollectionInitializer__TypeAssignment_1 )? )
+            // InternalIvml.g:11267:1: ( ( ( rule__ContainerInitializer__TypeAssignment_1 )? ) )
+            // InternalIvml.g:11268:1: ( ( rule__ContainerInitializer__TypeAssignment_1 )? )
             {
-            // InternalIvml.g:11268:1: ( ( rule__CollectionInitializer__TypeAssignment_1 )? )
-            // InternalIvml.g:11269:1: ( rule__CollectionInitializer__TypeAssignment_1 )?
+            // InternalIvml.g:11268:1: ( ( rule__ContainerInitializer__TypeAssignment_1 )? )
+            // InternalIvml.g:11269:1: ( rule__ContainerInitializer__TypeAssignment_1 )?
             {
             if ( state.backtracking==0 ) {
-               before(grammarAccess.getCollectionInitializerAccess().getTypeAssignment_1()); 
+               before(grammarAccess.getContainerInitializerAccess().getTypeAssignment_1()); 
             }
-            // InternalIvml.g:11270:1: ( rule__CollectionInitializer__TypeAssignment_1 )?
+            // InternalIvml.g:11270:1: ( rule__ContainerInitializer__TypeAssignment_1 )?
             int alt93=2;
             int LA93_0 = input.LA(1);
 
@@ -33222,10 +33222,10 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
             }
             switch (alt93) {
                 case 1 :
-                    // InternalIvml.g:11270:2: rule__CollectionInitializer__TypeAssignment_1
+                    // InternalIvml.g:11270:2: rule__ContainerInitializer__TypeAssignment_1
                     {
                     pushFollow(FOLLOW_2);
-                    rule__CollectionInitializer__TypeAssignment_1();
+                    rule__ContainerInitializer__TypeAssignment_1();
 
                     state._fsp--;
                     if (state.failed) return ;
@@ -33236,7 +33236,7 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
             }
 
             if ( state.backtracking==0 ) {
-               after(grammarAccess.getCollectionInitializerAccess().getTypeAssignment_1()); 
+               after(grammarAccess.getContainerInitializerAccess().getTypeAssignment_1()); 
             }
 
             }
@@ -33256,26 +33256,26 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
         }
         return ;
     }
-    // $ANTLR end "rule__CollectionInitializer__Group__1__Impl"
+    // $ANTLR end "rule__ContainerInitializer__Group__1__Impl"
 
 
-    // $ANTLR start "rule__CollectionInitializer__Group__2"
-    // InternalIvml.g:11280:1: rule__CollectionInitializer__Group__2 : rule__CollectionInitializer__Group__2__Impl rule__CollectionInitializer__Group__3 ;
-    public final void rule__CollectionInitializer__Group__2() throws RecognitionException {
+    // $ANTLR start "rule__ContainerInitializer__Group__2"
+    // InternalIvml.g:11280:1: rule__ContainerInitializer__Group__2 : rule__ContainerInitializer__Group__2__Impl rule__ContainerInitializer__Group__3 ;
+    public final void rule__ContainerInitializer__Group__2() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // InternalIvml.g:11284:1: ( rule__CollectionInitializer__Group__2__Impl rule__CollectionInitializer__Group__3 )
-            // InternalIvml.g:11285:2: rule__CollectionInitializer__Group__2__Impl rule__CollectionInitializer__Group__3
+            // InternalIvml.g:11284:1: ( rule__ContainerInitializer__Group__2__Impl rule__ContainerInitializer__Group__3 )
+            // InternalIvml.g:11285:2: rule__ContainerInitializer__Group__2__Impl rule__ContainerInitializer__Group__3
             {
             pushFollow(FOLLOW_65);
-            rule__CollectionInitializer__Group__2__Impl();
+            rule__ContainerInitializer__Group__2__Impl();
 
             state._fsp--;
             if (state.failed) return ;
             pushFollow(FOLLOW_2);
-            rule__CollectionInitializer__Group__3();
+            rule__ContainerInitializer__Group__3();
 
             state._fsp--;
             if (state.failed) return ;
@@ -33294,12 +33294,12 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
         }
         return ;
     }
-    // $ANTLR end "rule__CollectionInitializer__Group__2"
+    // $ANTLR end "rule__ContainerInitializer__Group__2"
 
 
-    // $ANTLR start "rule__CollectionInitializer__Group__2__Impl"
-    // InternalIvml.g:11292:1: rule__CollectionInitializer__Group__2__Impl : ( '{' ) ;
-    public final void rule__CollectionInitializer__Group__2__Impl() throws RecognitionException {
+    // $ANTLR start "rule__ContainerInitializer__Group__2__Impl"
+    // InternalIvml.g:11292:1: rule__ContainerInitializer__Group__2__Impl : ( '{' ) ;
+    public final void rule__ContainerInitializer__Group__2__Impl() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
@@ -33311,11 +33311,11 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
             // InternalIvml.g:11298:1: '{'
             {
             if ( state.backtracking==0 ) {
-               before(grammarAccess.getCollectionInitializerAccess().getLeftCurlyBracketKeyword_2()); 
+               before(grammarAccess.getContainerInitializerAccess().getLeftCurlyBracketKeyword_2()); 
             }
             match(input,37,FOLLOW_2); if (state.failed) return ;
             if ( state.backtracking==0 ) {
-               after(grammarAccess.getCollectionInitializerAccess().getLeftCurlyBracketKeyword_2()); 
+               after(grammarAccess.getContainerInitializerAccess().getLeftCurlyBracketKeyword_2()); 
             }
 
             }
@@ -33335,26 +33335,26 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
         }
         return ;
     }
-    // $ANTLR end "rule__CollectionInitializer__Group__2__Impl"
+    // $ANTLR end "rule__ContainerInitializer__Group__2__Impl"
 
 
-    // $ANTLR start "rule__CollectionInitializer__Group__3"
-    // InternalIvml.g:11311:1: rule__CollectionInitializer__Group__3 : rule__CollectionInitializer__Group__3__Impl rule__CollectionInitializer__Group__4 ;
-    public final void rule__CollectionInitializer__Group__3() throws RecognitionException {
+    // $ANTLR start "rule__ContainerInitializer__Group__3"
+    // InternalIvml.g:11311:1: rule__ContainerInitializer__Group__3 : rule__ContainerInitializer__Group__3__Impl rule__ContainerInitializer__Group__4 ;
+    public final void rule__ContainerInitializer__Group__3() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // InternalIvml.g:11315:1: ( rule__CollectionInitializer__Group__3__Impl rule__CollectionInitializer__Group__4 )
-            // InternalIvml.g:11316:2: rule__CollectionInitializer__Group__3__Impl rule__CollectionInitializer__Group__4
+            // InternalIvml.g:11315:1: ( rule__ContainerInitializer__Group__3__Impl rule__ContainerInitializer__Group__4 )
+            // InternalIvml.g:11316:2: rule__ContainerInitializer__Group__3__Impl rule__ContainerInitializer__Group__4
             {
             pushFollow(FOLLOW_65);
-            rule__CollectionInitializer__Group__3__Impl();
+            rule__ContainerInitializer__Group__3__Impl();
 
             state._fsp--;
             if (state.failed) return ;
             pushFollow(FOLLOW_2);
-            rule__CollectionInitializer__Group__4();
+            rule__ContainerInitializer__Group__4();
 
             state._fsp--;
             if (state.failed) return ;
@@ -33373,26 +33373,26 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
         }
         return ;
     }
-    // $ANTLR end "rule__CollectionInitializer__Group__3"
+    // $ANTLR end "rule__ContainerInitializer__Group__3"
 
 
-    // $ANTLR start "rule__CollectionInitializer__Group__3__Impl"
-    // InternalIvml.g:11323:1: rule__CollectionInitializer__Group__3__Impl : ( ( rule__CollectionInitializer__InitAssignment_3 )? ) ;
-    public final void rule__CollectionInitializer__Group__3__Impl() throws RecognitionException {
+    // $ANTLR start "rule__ContainerInitializer__Group__3__Impl"
+    // InternalIvml.g:11323:1: rule__ContainerInitializer__Group__3__Impl : ( ( rule__ContainerInitializer__InitAssignment_3 )? ) ;
+    public final void rule__ContainerInitializer__Group__3__Impl() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // InternalIvml.g:11327:1: ( ( ( rule__CollectionInitializer__InitAssignment_3 )? ) )
-            // InternalIvml.g:11328:1: ( ( rule__CollectionInitializer__InitAssignment_3 )? )
+            // InternalIvml.g:11327:1: ( ( ( rule__ContainerInitializer__InitAssignment_3 )? ) )
+            // InternalIvml.g:11328:1: ( ( rule__ContainerInitializer__InitAssignment_3 )? )
             {
-            // InternalIvml.g:11328:1: ( ( rule__CollectionInitializer__InitAssignment_3 )? )
-            // InternalIvml.g:11329:1: ( rule__CollectionInitializer__InitAssignment_3 )?
+            // InternalIvml.g:11328:1: ( ( rule__ContainerInitializer__InitAssignment_3 )? )
+            // InternalIvml.g:11329:1: ( rule__ContainerInitializer__InitAssignment_3 )?
             {
             if ( state.backtracking==0 ) {
-               before(grammarAccess.getCollectionInitializerAccess().getInitAssignment_3()); 
+               before(grammarAccess.getContainerInitializerAccess().getInitAssignment_3()); 
             }
-            // InternalIvml.g:11330:1: ( rule__CollectionInitializer__InitAssignment_3 )?
+            // InternalIvml.g:11330:1: ( rule__ContainerInitializer__InitAssignment_3 )?
             int alt94=2;
             int LA94_0 = input.LA(1);
 
@@ -33401,10 +33401,10 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
             }
             switch (alt94) {
                 case 1 :
-                    // InternalIvml.g:11330:2: rule__CollectionInitializer__InitAssignment_3
+                    // InternalIvml.g:11330:2: rule__ContainerInitializer__InitAssignment_3
                     {
                     pushFollow(FOLLOW_2);
-                    rule__CollectionInitializer__InitAssignment_3();
+                    rule__ContainerInitializer__InitAssignment_3();
 
                     state._fsp--;
                     if (state.failed) return ;
@@ -33415,7 +33415,7 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
             }
 
             if ( state.backtracking==0 ) {
-               after(grammarAccess.getCollectionInitializerAccess().getInitAssignment_3()); 
+               after(grammarAccess.getContainerInitializerAccess().getInitAssignment_3()); 
             }
 
             }
@@ -33435,21 +33435,21 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
         }
         return ;
     }
-    // $ANTLR end "rule__CollectionInitializer__Group__3__Impl"
+    // $ANTLR end "rule__ContainerInitializer__Group__3__Impl"
 
 
-    // $ANTLR start "rule__CollectionInitializer__Group__4"
-    // InternalIvml.g:11340:1: rule__CollectionInitializer__Group__4 : rule__CollectionInitializer__Group__4__Impl ;
-    public final void rule__CollectionInitializer__Group__4() throws RecognitionException {
+    // $ANTLR start "rule__ContainerInitializer__Group__4"
+    // InternalIvml.g:11340:1: rule__ContainerInitializer__Group__4 : rule__ContainerInitializer__Group__4__Impl ;
+    public final void rule__ContainerInitializer__Group__4() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // InternalIvml.g:11344:1: ( rule__CollectionInitializer__Group__4__Impl )
-            // InternalIvml.g:11345:2: rule__CollectionInitializer__Group__4__Impl
+            // InternalIvml.g:11344:1: ( rule__ContainerInitializer__Group__4__Impl )
+            // InternalIvml.g:11345:2: rule__ContainerInitializer__Group__4__Impl
             {
             pushFollow(FOLLOW_2);
-            rule__CollectionInitializer__Group__4__Impl();
+            rule__ContainerInitializer__Group__4__Impl();
 
             state._fsp--;
             if (state.failed) return ;
@@ -33468,12 +33468,12 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
         }
         return ;
     }
-    // $ANTLR end "rule__CollectionInitializer__Group__4"
+    // $ANTLR end "rule__ContainerInitializer__Group__4"
 
 
-    // $ANTLR start "rule__CollectionInitializer__Group__4__Impl"
-    // InternalIvml.g:11351:1: rule__CollectionInitializer__Group__4__Impl : ( '}' ) ;
-    public final void rule__CollectionInitializer__Group__4__Impl() throws RecognitionException {
+    // $ANTLR start "rule__ContainerInitializer__Group__4__Impl"
+    // InternalIvml.g:11351:1: rule__ContainerInitializer__Group__4__Impl : ( '}' ) ;
+    public final void rule__ContainerInitializer__Group__4__Impl() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
@@ -33485,11 +33485,11 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
             // InternalIvml.g:11357:1: '}'
             {
             if ( state.backtracking==0 ) {
-               before(grammarAccess.getCollectionInitializerAccess().getRightCurlyBracketKeyword_4()); 
+               before(grammarAccess.getContainerInitializerAccess().getRightCurlyBracketKeyword_4()); 
             }
             match(input,38,FOLLOW_2); if (state.failed) return ;
             if ( state.backtracking==0 ) {
-               after(grammarAccess.getCollectionInitializerAccess().getRightCurlyBracketKeyword_4()); 
+               after(grammarAccess.getContainerInitializerAccess().getRightCurlyBracketKeyword_4()); 
             }
 
             }
@@ -33509,7 +33509,7 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
         }
         return ;
     }
-    // $ANTLR end "rule__CollectionInitializer__Group__4__Impl"
+    // $ANTLR end "rule__ContainerInitializer__Group__4__Impl"
 
 
     // $ANTLR start "rule__ExpressionListOrRange__Group__0"
@@ -40169,29 +40169,29 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
     // $ANTLR end "rule__Expression__ExprAssignment_1"
 
 
-    // $ANTLR start "rule__Expression__CollectionAssignment_2"
-    // InternalIvml.g:13742:1: rule__Expression__CollectionAssignment_2 : ( ruleCollectionInitializer ) ;
-    public final void rule__Expression__CollectionAssignment_2() throws RecognitionException {
+    // $ANTLR start "rule__Expression__ContainerAssignment_2"
+    // InternalIvml.g:13742:1: rule__Expression__ContainerAssignment_2 : ( ruleContainerInitializer ) ;
+    public final void rule__Expression__ContainerAssignment_2() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // InternalIvml.g:13746:1: ( ( ruleCollectionInitializer ) )
-            // InternalIvml.g:13747:1: ( ruleCollectionInitializer )
+            // InternalIvml.g:13746:1: ( ( ruleContainerInitializer ) )
+            // InternalIvml.g:13747:1: ( ruleContainerInitializer )
             {
-            // InternalIvml.g:13747:1: ( ruleCollectionInitializer )
-            // InternalIvml.g:13748:1: ruleCollectionInitializer
+            // InternalIvml.g:13747:1: ( ruleContainerInitializer )
+            // InternalIvml.g:13748:1: ruleContainerInitializer
             {
             if ( state.backtracking==0 ) {
-               before(grammarAccess.getExpressionAccess().getCollectionCollectionInitializerParserRuleCall_2_0()); 
+               before(grammarAccess.getExpressionAccess().getContainerContainerInitializerParserRuleCall_2_0()); 
             }
             pushFollow(FOLLOW_2);
-            ruleCollectionInitializer();
+            ruleContainerInitializer();
 
             state._fsp--;
             if (state.failed) return ;
             if ( state.backtracking==0 ) {
-               after(grammarAccess.getExpressionAccess().getCollectionCollectionInitializerParserRuleCall_2_0()); 
+               after(grammarAccess.getExpressionAccess().getContainerContainerInitializerParserRuleCall_2_0()); 
             }
 
             }
@@ -40211,7 +40211,7 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
         }
         return ;
     }
-    // $ANTLR end "rule__Expression__CollectionAssignment_2"
+    // $ANTLR end "rule__Expression__ContainerAssignment_2"
 
 
     // $ANTLR start "rule__LetExpression__TypeAssignment_1"
@@ -40709,29 +40709,29 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
     // $ANTLR end "rule__AssignmentExpressionPart__ExAssignment_1_0"
 
 
-    // $ANTLR start "rule__AssignmentExpressionPart__CollectionAssignment_1_1"
-    // InternalIvml.g:13922:1: rule__AssignmentExpressionPart__CollectionAssignment_1_1 : ( ruleCollectionInitializer ) ;
-    public final void rule__AssignmentExpressionPart__CollectionAssignment_1_1() throws RecognitionException {
+    // $ANTLR start "rule__AssignmentExpressionPart__ContainerAssignment_1_1"
+    // InternalIvml.g:13922:1: rule__AssignmentExpressionPart__ContainerAssignment_1_1 : ( ruleContainerInitializer ) ;
+    public final void rule__AssignmentExpressionPart__ContainerAssignment_1_1() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // InternalIvml.g:13926:1: ( ( ruleCollectionInitializer ) )
-            // InternalIvml.g:13927:1: ( ruleCollectionInitializer )
+            // InternalIvml.g:13926:1: ( ( ruleContainerInitializer ) )
+            // InternalIvml.g:13927:1: ( ruleContainerInitializer )
             {
-            // InternalIvml.g:13927:1: ( ruleCollectionInitializer )
-            // InternalIvml.g:13928:1: ruleCollectionInitializer
+            // InternalIvml.g:13927:1: ( ruleContainerInitializer )
+            // InternalIvml.g:13928:1: ruleContainerInitializer
             {
             if ( state.backtracking==0 ) {
-               before(grammarAccess.getAssignmentExpressionPartAccess().getCollectionCollectionInitializerParserRuleCall_1_1_0()); 
+               before(grammarAccess.getAssignmentExpressionPartAccess().getContainerContainerInitializerParserRuleCall_1_1_0()); 
             }
             pushFollow(FOLLOW_2);
-            ruleCollectionInitializer();
+            ruleContainerInitializer();
 
             state._fsp--;
             if (state.failed) return ;
             if ( state.backtracking==0 ) {
-               after(grammarAccess.getAssignmentExpressionPartAccess().getCollectionCollectionInitializerParserRuleCall_1_1_0()); 
+               after(grammarAccess.getAssignmentExpressionPartAccess().getContainerContainerInitializerParserRuleCall_1_1_0()); 
             }
 
             }
@@ -40751,7 +40751,7 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
         }
         return ;
     }
-    // $ANTLR end "rule__AssignmentExpressionPart__CollectionAssignment_1_1"
+    // $ANTLR end "rule__AssignmentExpressionPart__ContainerAssignment_1_1"
 
 
     // $ANTLR start "rule__ImplicationExpression__LeftAssignment_0"
@@ -41294,29 +41294,29 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
     // $ANTLR end "rule__EqualityExpressionPart__ExAssignment_1_0"
 
 
-    // $ANTLR start "rule__EqualityExpressionPart__CollectionAssignment_1_1"
-    // InternalIvml.g:14117:1: rule__EqualityExpressionPart__CollectionAssignment_1_1 : ( ruleCollectionInitializer ) ;
-    public final void rule__EqualityExpressionPart__CollectionAssignment_1_1() throws RecognitionException {
+    // $ANTLR start "rule__EqualityExpressionPart__ContainerAssignment_1_1"
+    // InternalIvml.g:14117:1: rule__EqualityExpressionPart__ContainerAssignment_1_1 : ( ruleContainerInitializer ) ;
+    public final void rule__EqualityExpressionPart__ContainerAssignment_1_1() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // InternalIvml.g:14121:1: ( ( ruleCollectionInitializer ) )
-            // InternalIvml.g:14122:1: ( ruleCollectionInitializer )
+            // InternalIvml.g:14121:1: ( ( ruleContainerInitializer ) )
+            // InternalIvml.g:14122:1: ( ruleContainerInitializer )
             {
-            // InternalIvml.g:14122:1: ( ruleCollectionInitializer )
-            // InternalIvml.g:14123:1: ruleCollectionInitializer
+            // InternalIvml.g:14122:1: ( ruleContainerInitializer )
+            // InternalIvml.g:14123:1: ruleContainerInitializer
             {
             if ( state.backtracking==0 ) {
-               before(grammarAccess.getEqualityExpressionPartAccess().getCollectionCollectionInitializerParserRuleCall_1_1_0()); 
+               before(grammarAccess.getEqualityExpressionPartAccess().getContainerContainerInitializerParserRuleCall_1_1_0()); 
             }
             pushFollow(FOLLOW_2);
-            ruleCollectionInitializer();
+            ruleContainerInitializer();
 
             state._fsp--;
             if (state.failed) return ;
             if ( state.backtracking==0 ) {
-               after(grammarAccess.getEqualityExpressionPartAccess().getCollectionCollectionInitializerParserRuleCall_1_1_0()); 
+               after(grammarAccess.getEqualityExpressionPartAccess().getContainerContainerInitializerParserRuleCall_1_1_0()); 
             }
 
             }
@@ -41336,7 +41336,7 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
         }
         return ;
     }
-    // $ANTLR end "rule__EqualityExpressionPart__CollectionAssignment_1_1"
+    // $ANTLR end "rule__EqualityExpressionPart__ContainerAssignment_1_1"
 
 
     // $ANTLR start "rule__RelationalExpression__LeftAssignment_0"
@@ -42194,29 +42194,29 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
     // $ANTLR end "rule__Call__CallAssignment_0_1"
 
 
-    // $ANTLR start "rule__Call__SetOpAssignment_1_1"
-    // InternalIvml.g:14417:1: rule__Call__SetOpAssignment_1_1 : ( ruleSetOp ) ;
-    public final void rule__Call__SetOpAssignment_1_1() throws RecognitionException {
+    // $ANTLR start "rule__Call__ContainerOpAssignment_1_1"
+    // InternalIvml.g:14417:1: rule__Call__ContainerOpAssignment_1_1 : ( ruleContainerOp ) ;
+    public final void rule__Call__ContainerOpAssignment_1_1() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // InternalIvml.g:14421:1: ( ( ruleSetOp ) )
-            // InternalIvml.g:14422:1: ( ruleSetOp )
+            // InternalIvml.g:14421:1: ( ( ruleContainerOp ) )
+            // InternalIvml.g:14422:1: ( ruleContainerOp )
             {
-            // InternalIvml.g:14422:1: ( ruleSetOp )
-            // InternalIvml.g:14423:1: ruleSetOp
+            // InternalIvml.g:14422:1: ( ruleContainerOp )
+            // InternalIvml.g:14423:1: ruleContainerOp
             {
             if ( state.backtracking==0 ) {
-               before(grammarAccess.getCallAccess().getSetOpSetOpParserRuleCall_1_1_0()); 
+               before(grammarAccess.getCallAccess().getContainerOpContainerOpParserRuleCall_1_1_0()); 
             }
             pushFollow(FOLLOW_2);
-            ruleSetOp();
+            ruleContainerOp();
 
             state._fsp--;
             if (state.failed) return ;
             if ( state.backtracking==0 ) {
-               after(grammarAccess.getCallAccess().getSetOpSetOpParserRuleCall_1_1_0()); 
+               after(grammarAccess.getCallAccess().getContainerOpContainerOpParserRuleCall_1_1_0()); 
             }
 
             }
@@ -42236,7 +42236,7 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
         }
         return ;
     }
-    // $ANTLR end "rule__Call__SetOpAssignment_1_1"
+    // $ANTLR end "rule__Call__ContainerOpAssignment_1_1"
 
 
     // $ANTLR start "rule__Call__ArrayExAssignment_2_1"
@@ -42329,9 +42329,9 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
     // $ANTLR end "rule__FeatureCall__NameAssignment_0"
 
 
-    // $ANTLR start "rule__SetOp__NameAssignment_0"
-    // InternalIvml.g:14462:1: rule__SetOp__NameAssignment_0 : ( ruleIdentifier ) ;
-    public final void rule__SetOp__NameAssignment_0() throws RecognitionException {
+    // $ANTLR start "rule__ContainerOp__NameAssignment_0"
+    // InternalIvml.g:14462:1: rule__ContainerOp__NameAssignment_0 : ( ruleIdentifier ) ;
+    public final void rule__ContainerOp__NameAssignment_0() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
@@ -42343,7 +42343,7 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
             // InternalIvml.g:14468:1: ruleIdentifier
             {
             if ( state.backtracking==0 ) {
-               before(grammarAccess.getSetOpAccess().getNameIdentifierParserRuleCall_0_0()); 
+               before(grammarAccess.getContainerOpAccess().getNameIdentifierParserRuleCall_0_0()); 
             }
             pushFollow(FOLLOW_2);
             ruleIdentifier();
@@ -42351,7 +42351,7 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
             state._fsp--;
             if (state.failed) return ;
             if ( state.backtracking==0 ) {
-               after(grammarAccess.getSetOpAccess().getNameIdentifierParserRuleCall_0_0()); 
+               after(grammarAccess.getContainerOpAccess().getNameIdentifierParserRuleCall_0_0()); 
             }
 
             }
@@ -42371,12 +42371,12 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
         }
         return ;
     }
-    // $ANTLR end "rule__SetOp__NameAssignment_0"
+    // $ANTLR end "rule__ContainerOp__NameAssignment_0"
 
 
-    // $ANTLR start "rule__SetOp__DeclAssignment_2"
-    // InternalIvml.g:14477:1: rule__SetOp__DeclAssignment_2 : ( ruleDeclarator ) ;
-    public final void rule__SetOp__DeclAssignment_2() throws RecognitionException {
+    // $ANTLR start "rule__ContainerOp__DeclAssignment_2"
+    // InternalIvml.g:14477:1: rule__ContainerOp__DeclAssignment_2 : ( ruleDeclarator ) ;
+    public final void rule__ContainerOp__DeclAssignment_2() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
@@ -42388,7 +42388,7 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
             // InternalIvml.g:14483:1: ruleDeclarator
             {
             if ( state.backtracking==0 ) {
-               before(grammarAccess.getSetOpAccess().getDeclDeclaratorParserRuleCall_2_0()); 
+               before(grammarAccess.getContainerOpAccess().getDeclDeclaratorParserRuleCall_2_0()); 
             }
             pushFollow(FOLLOW_2);
             ruleDeclarator();
@@ -42396,7 +42396,7 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
             state._fsp--;
             if (state.failed) return ;
             if ( state.backtracking==0 ) {
-               after(grammarAccess.getSetOpAccess().getDeclDeclaratorParserRuleCall_2_0()); 
+               after(grammarAccess.getContainerOpAccess().getDeclDeclaratorParserRuleCall_2_0()); 
             }
 
             }
@@ -42416,7 +42416,7 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
         }
         return ;
     }
-    // $ANTLR end "rule__SetOp__DeclAssignment_2"
+    // $ANTLR end "rule__ContainerOp__DeclAssignment_2"
 
 
     // $ANTLR start "rule__Declarator__DeclAssignment_0"
@@ -43184,9 +43184,9 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
     // $ANTLR end "rule__PrimaryExpression__AccessAssignment_2"
 
 
-    // $ANTLR start "rule__CollectionInitializer__TypeAssignment_1"
-    // InternalIvml.g:14747:1: rule__CollectionInitializer__TypeAssignment_1 : ( ruleQualifiedName ) ;
-    public final void rule__CollectionInitializer__TypeAssignment_1() throws RecognitionException {
+    // $ANTLR start "rule__ContainerInitializer__TypeAssignment_1"
+    // InternalIvml.g:14747:1: rule__ContainerInitializer__TypeAssignment_1 : ( ruleQualifiedName ) ;
+    public final void rule__ContainerInitializer__TypeAssignment_1() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
@@ -43198,7 +43198,7 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
             // InternalIvml.g:14753:1: ruleQualifiedName
             {
             if ( state.backtracking==0 ) {
-               before(grammarAccess.getCollectionInitializerAccess().getTypeQualifiedNameParserRuleCall_1_0()); 
+               before(grammarAccess.getContainerInitializerAccess().getTypeQualifiedNameParserRuleCall_1_0()); 
             }
             pushFollow(FOLLOW_2);
             ruleQualifiedName();
@@ -43206,7 +43206,7 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
             state._fsp--;
             if (state.failed) return ;
             if ( state.backtracking==0 ) {
-               after(grammarAccess.getCollectionInitializerAccess().getTypeQualifiedNameParserRuleCall_1_0()); 
+               after(grammarAccess.getContainerInitializerAccess().getTypeQualifiedNameParserRuleCall_1_0()); 
             }
 
             }
@@ -43226,12 +43226,12 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
         }
         return ;
     }
-    // $ANTLR end "rule__CollectionInitializer__TypeAssignment_1"
+    // $ANTLR end "rule__ContainerInitializer__TypeAssignment_1"
 
 
-    // $ANTLR start "rule__CollectionInitializer__InitAssignment_3"
-    // InternalIvml.g:14762:1: rule__CollectionInitializer__InitAssignment_3 : ( ruleExpressionListOrRange ) ;
-    public final void rule__CollectionInitializer__InitAssignment_3() throws RecognitionException {
+    // $ANTLR start "rule__ContainerInitializer__InitAssignment_3"
+    // InternalIvml.g:14762:1: rule__ContainerInitializer__InitAssignment_3 : ( ruleExpressionListOrRange ) ;
+    public final void rule__ContainerInitializer__InitAssignment_3() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
@@ -43243,7 +43243,7 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
             // InternalIvml.g:14768:1: ruleExpressionListOrRange
             {
             if ( state.backtracking==0 ) {
-               before(grammarAccess.getCollectionInitializerAccess().getInitExpressionListOrRangeParserRuleCall_3_0()); 
+               before(grammarAccess.getContainerInitializerAccess().getInitExpressionListOrRangeParserRuleCall_3_0()); 
             }
             pushFollow(FOLLOW_2);
             ruleExpressionListOrRange();
@@ -43251,7 +43251,7 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
             state._fsp--;
             if (state.failed) return ;
             if ( state.backtracking==0 ) {
-               after(grammarAccess.getCollectionInitializerAccess().getInitExpressionListOrRangeParserRuleCall_3_0()); 
+               after(grammarAccess.getContainerInitializerAccess().getInitExpressionListOrRangeParserRuleCall_3_0()); 
             }
 
             }
@@ -43271,7 +43271,7 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
         }
         return ;
     }
-    // $ANTLR end "rule__CollectionInitializer__InitAssignment_3"
+    // $ANTLR end "rule__ContainerInitializer__InitAssignment_3"
 
 
     // $ANTLR start "rule__ExpressionListOrRange__ListAssignment_0"
@@ -43499,29 +43499,29 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
     // $ANTLR end "rule__ExpressionListEntry__ValueAssignment_1_0"
 
 
-    // $ANTLR start "rule__ExpressionListEntry__CollectionAssignment_1_1"
-    // InternalIvml.g:14852:1: rule__ExpressionListEntry__CollectionAssignment_1_1 : ( ruleCollectionInitializer ) ;
-    public final void rule__ExpressionListEntry__CollectionAssignment_1_1() throws RecognitionException {
+    // $ANTLR start "rule__ExpressionListEntry__ContainerAssignment_1_1"
+    // InternalIvml.g:14852:1: rule__ExpressionListEntry__ContainerAssignment_1_1 : ( ruleContainerInitializer ) ;
+    public final void rule__ExpressionListEntry__ContainerAssignment_1_1() throws RecognitionException {
 
         		int stackSize = keepStackSize();
             
         try {
-            // InternalIvml.g:14856:1: ( ( ruleCollectionInitializer ) )
-            // InternalIvml.g:14857:1: ( ruleCollectionInitializer )
+            // InternalIvml.g:14856:1: ( ( ruleContainerInitializer ) )
+            // InternalIvml.g:14857:1: ( ruleContainerInitializer )
             {
-            // InternalIvml.g:14857:1: ( ruleCollectionInitializer )
-            // InternalIvml.g:14858:1: ruleCollectionInitializer
+            // InternalIvml.g:14857:1: ( ruleContainerInitializer )
+            // InternalIvml.g:14858:1: ruleContainerInitializer
             {
             if ( state.backtracking==0 ) {
-               before(grammarAccess.getExpressionListEntryAccess().getCollectionCollectionInitializerParserRuleCall_1_1_0()); 
+               before(grammarAccess.getExpressionListEntryAccess().getContainerContainerInitializerParserRuleCall_1_1_0()); 
             }
             pushFollow(FOLLOW_2);
-            ruleCollectionInitializer();
+            ruleContainerInitializer();
 
             state._fsp--;
             if (state.failed) return ;
             if ( state.backtracking==0 ) {
-               after(grammarAccess.getExpressionListEntryAccess().getCollectionCollectionInitializerParserRuleCall_1_1_0()); 
+               after(grammarAccess.getExpressionListEntryAccess().getContainerContainerInitializerParserRuleCall_1_1_0()); 
             }
 
             }
@@ -43541,7 +43541,7 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
         }
         return ;
     }
-    // $ANTLR end "rule__ExpressionListEntry__CollectionAssignment_1_1"
+    // $ANTLR end "rule__ExpressionListEntry__ContainerAssignment_1_1"
 
 
     // $ANTLR start "rule__Literal__ValAssignment"
@@ -43830,11 +43830,11 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
 
     // $ANTLR start synpred112_InternalIvml
     public final void synpred112_InternalIvml_fragment() throws RecognitionException {   
-        // InternalIvml.g:10169:2: ( rule__SetOp__DeclAssignment_2 )
-        // InternalIvml.g:10169:2: rule__SetOp__DeclAssignment_2
+        // InternalIvml.g:10169:2: ( rule__ContainerOp__DeclAssignment_2 )
+        // InternalIvml.g:10169:2: rule__ContainerOp__DeclAssignment_2
         {
         pushFollow(FOLLOW_2);
-        rule__SetOp__DeclAssignment_2();
+        rule__ContainerOp__DeclAssignment_2();
 
         state._fsp--;
         if (state.failed) return ;
@@ -44215,7 +44215,7 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
             this.transition = dfa_28;
         }
         public String getDescription() {
-            return "2532:1: rule__Expression__Alternatives : ( ( ( rule__Expression__LetAssignment_0 ) ) | ( ( rule__Expression__ExprAssignment_1 ) ) | ( ( rule__Expression__CollectionAssignment_2 ) ) );";
+            return "2532:1: rule__Expression__Alternatives : ( ( ( rule__Expression__LetAssignment_0 ) ) | ( ( rule__Expression__ExprAssignment_1 ) ) | ( ( rule__Expression__ContainerAssignment_2 ) ) );";
         }
     }
 
@@ -44306,7 +44306,7 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
             this.transition = dfa_35;
         }
         public String getDescription() {
-            return "2582:1: rule__AssignmentExpressionPart__Alternatives_1 : ( ( ( rule__AssignmentExpressionPart__ExAssignment_1_0 ) ) | ( ( rule__AssignmentExpressionPart__CollectionAssignment_1_1 ) ) );";
+            return "2582:1: rule__AssignmentExpressionPart__Alternatives_1 : ( ( ( rule__AssignmentExpressionPart__ExAssignment_1_0 ) ) | ( ( rule__AssignmentExpressionPart__ContainerAssignment_1_1 ) ) );";
         }
     }
     static final String dfa_36s = "\1\4\1\uffff\4\15\1\uffff\1\4\4\15\1\4";
@@ -44342,7 +44342,7 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
             this.transition = dfa_37;
         }
         public String getDescription() {
-            return "2664:1: rule__EqualityExpressionPart__Alternatives_1 : ( ( ( rule__EqualityExpressionPart__ExAssignment_1_0 ) ) | ( ( rule__EqualityExpressionPart__CollectionAssignment_1_1 ) ) );";
+            return "2664:1: rule__EqualityExpressionPart__Alternatives_1 : ( ( ( rule__EqualityExpressionPart__ExAssignment_1_0 ) ) | ( ( rule__EqualityExpressionPart__ContainerAssignment_1_1 ) ) );";
         }
     }
     static final String dfa_38s = "\1\117\1\uffff\4\100\1\uffff\1\43\4\100\1\43";
@@ -44378,7 +44378,7 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
             this.transition = dfa_39;
         }
         public String getDescription() {
-            return "2924:1: rule__ExpressionListEntry__Alternatives_1 : ( ( ( rule__ExpressionListEntry__ValueAssignment_1_0 ) ) | ( ( rule__ExpressionListEntry__CollectionAssignment_1_1 ) ) );";
+            return "2924:1: rule__ExpressionListEntry__Alternatives_1 : ( ( ( rule__ExpressionListEntry__ValueAssignment_1_0 ) ) | ( ( rule__ExpressionListEntry__ContainerAssignment_1_1 ) ) );";
         }
     }
     static final String dfa_40s = "\33\uffff";
@@ -44437,7 +44437,7 @@ public class InternalIvmlParser extends AbstractInternalContentAssistParser {
             this.transition = dfa_45;
         }
         public String getDescription() {
-            return "10169:1: ( rule__SetOp__DeclAssignment_2 )?";
+            return "10169:1: ( rule__ContainerOp__DeclAssignment_2 )?";
         }
         public int specialStateTransition(int s, IntStream _input) throws NoViableAltException {
             TokenStream input = (TokenStream)_input;

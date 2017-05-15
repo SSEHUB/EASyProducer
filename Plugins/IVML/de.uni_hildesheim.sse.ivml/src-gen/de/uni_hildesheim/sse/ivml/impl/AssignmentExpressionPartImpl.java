@@ -3,7 +3,7 @@
 package de.uni_hildesheim.sse.ivml.impl;
 
 import de.uni_hildesheim.sse.ivml.AssignmentExpressionPart;
-import de.uni_hildesheim.sse.ivml.CollectionInitializer;
+import de.uni_hildesheim.sse.ivml.ContainerInitializer;
 import de.uni_hildesheim.sse.ivml.IvmlPackage;
 import de.uni_hildesheim.sse.ivml.LogicalExpression;
 
@@ -26,7 +26,7 @@ import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
  * <ul>
  *   <li>{@link de.uni_hildesheim.sse.ivml.impl.AssignmentExpressionPartImpl#getOp <em>Op</em>}</li>
  *   <li>{@link de.uni_hildesheim.sse.ivml.impl.AssignmentExpressionPartImpl#getEx <em>Ex</em>}</li>
- *   <li>{@link de.uni_hildesheim.sse.ivml.impl.AssignmentExpressionPartImpl#getCollection <em>Collection</em>}</li>
+ *   <li>{@link de.uni_hildesheim.sse.ivml.impl.AssignmentExpressionPartImpl#getContainer <em>Container</em>}</li>
  * </ul>
  *
  * @generated
@@ -64,14 +64,14 @@ public class AssignmentExpressionPartImpl extends MinimalEObjectImpl.Container i
   protected LogicalExpression ex;
 
   /**
-   * The cached value of the '{@link #getCollection() <em>Collection</em>}' containment reference.
+   * The cached value of the '{@link #getContainer() <em>Container</em>}' containment reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @see #getCollection()
+   * @see #getContainer()
    * @generated
    * @ordered
    */
-  protected CollectionInitializer collection;
+  protected ContainerInitializer container;
 
   /**
    * <!-- begin-user-doc -->
@@ -170,9 +170,9 @@ public class AssignmentExpressionPartImpl extends MinimalEObjectImpl.Container i
    * <!-- end-user-doc -->
    * @generated
    */
-  public CollectionInitializer getCollection()
+  public ContainerInitializer getContainer()
   {
-    return collection;
+    return container;
   }
 
   /**
@@ -180,13 +180,13 @@ public class AssignmentExpressionPartImpl extends MinimalEObjectImpl.Container i
    * <!-- end-user-doc -->
    * @generated
    */
-  public NotificationChain basicSetCollection(CollectionInitializer newCollection, NotificationChain msgs)
+  public NotificationChain basicSetContainer(ContainerInitializer newContainer, NotificationChain msgs)
   {
-    CollectionInitializer oldCollection = collection;
-    collection = newCollection;
+    ContainerInitializer oldContainer = container;
+    container = newContainer;
     if (eNotificationRequired())
     {
-      ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, IvmlPackage.ASSIGNMENT_EXPRESSION_PART__COLLECTION, oldCollection, newCollection);
+      ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, IvmlPackage.ASSIGNMENT_EXPRESSION_PART__CONTAINER, oldContainer, newContainer);
       if (msgs == null) msgs = notification; else msgs.add(notification);
     }
     return msgs;
@@ -197,20 +197,20 @@ public class AssignmentExpressionPartImpl extends MinimalEObjectImpl.Container i
    * <!-- end-user-doc -->
    * @generated
    */
-  public void setCollection(CollectionInitializer newCollection)
+  public void setContainer(ContainerInitializer newContainer)
   {
-    if (newCollection != collection)
+    if (newContainer != container)
     {
       NotificationChain msgs = null;
-      if (collection != null)
-        msgs = ((InternalEObject)collection).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - IvmlPackage.ASSIGNMENT_EXPRESSION_PART__COLLECTION, null, msgs);
-      if (newCollection != null)
-        msgs = ((InternalEObject)newCollection).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - IvmlPackage.ASSIGNMENT_EXPRESSION_PART__COLLECTION, null, msgs);
-      msgs = basicSetCollection(newCollection, msgs);
+      if (container != null)
+        msgs = ((InternalEObject)container).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - IvmlPackage.ASSIGNMENT_EXPRESSION_PART__CONTAINER, null, msgs);
+      if (newContainer != null)
+        msgs = ((InternalEObject)newContainer).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - IvmlPackage.ASSIGNMENT_EXPRESSION_PART__CONTAINER, null, msgs);
+      msgs = basicSetContainer(newContainer, msgs);
       if (msgs != null) msgs.dispatch();
     }
     else if (eNotificationRequired())
-      eNotify(new ENotificationImpl(this, Notification.SET, IvmlPackage.ASSIGNMENT_EXPRESSION_PART__COLLECTION, newCollection, newCollection));
+      eNotify(new ENotificationImpl(this, Notification.SET, IvmlPackage.ASSIGNMENT_EXPRESSION_PART__CONTAINER, newContainer, newContainer));
   }
 
   /**
@@ -225,8 +225,8 @@ public class AssignmentExpressionPartImpl extends MinimalEObjectImpl.Container i
     {
       case IvmlPackage.ASSIGNMENT_EXPRESSION_PART__EX:
         return basicSetEx(null, msgs);
-      case IvmlPackage.ASSIGNMENT_EXPRESSION_PART__COLLECTION:
-        return basicSetCollection(null, msgs);
+      case IvmlPackage.ASSIGNMENT_EXPRESSION_PART__CONTAINER:
+        return basicSetContainer(null, msgs);
     }
     return super.eInverseRemove(otherEnd, featureID, msgs);
   }
@@ -245,8 +245,8 @@ public class AssignmentExpressionPartImpl extends MinimalEObjectImpl.Container i
         return getOp();
       case IvmlPackage.ASSIGNMENT_EXPRESSION_PART__EX:
         return getEx();
-      case IvmlPackage.ASSIGNMENT_EXPRESSION_PART__COLLECTION:
-        return getCollection();
+      case IvmlPackage.ASSIGNMENT_EXPRESSION_PART__CONTAINER:
+        return getContainer();
     }
     return super.eGet(featureID, resolve, coreType);
   }
@@ -267,8 +267,8 @@ public class AssignmentExpressionPartImpl extends MinimalEObjectImpl.Container i
       case IvmlPackage.ASSIGNMENT_EXPRESSION_PART__EX:
         setEx((LogicalExpression)newValue);
         return;
-      case IvmlPackage.ASSIGNMENT_EXPRESSION_PART__COLLECTION:
-        setCollection((CollectionInitializer)newValue);
+      case IvmlPackage.ASSIGNMENT_EXPRESSION_PART__CONTAINER:
+        setContainer((ContainerInitializer)newValue);
         return;
     }
     super.eSet(featureID, newValue);
@@ -290,8 +290,8 @@ public class AssignmentExpressionPartImpl extends MinimalEObjectImpl.Container i
       case IvmlPackage.ASSIGNMENT_EXPRESSION_PART__EX:
         setEx((LogicalExpression)null);
         return;
-      case IvmlPackage.ASSIGNMENT_EXPRESSION_PART__COLLECTION:
-        setCollection((CollectionInitializer)null);
+      case IvmlPackage.ASSIGNMENT_EXPRESSION_PART__CONTAINER:
+        setContainer((ContainerInitializer)null);
         return;
     }
     super.eUnset(featureID);
@@ -311,8 +311,8 @@ public class AssignmentExpressionPartImpl extends MinimalEObjectImpl.Container i
         return OP_EDEFAULT == null ? op != null : !OP_EDEFAULT.equals(op);
       case IvmlPackage.ASSIGNMENT_EXPRESSION_PART__EX:
         return ex != null;
-      case IvmlPackage.ASSIGNMENT_EXPRESSION_PART__COLLECTION:
-        return collection != null;
+      case IvmlPackage.ASSIGNMENT_EXPRESSION_PART__CONTAINER:
+        return container != null;
     }
     return super.eIsSet(featureID);
   }

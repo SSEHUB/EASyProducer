@@ -350,9 +350,9 @@ public class IvmlAdapterFactory extends AdapterFactoryImpl
         return createFeatureCallAdapter();
       }
       @Override
-      public Adapter caseSetOp(SetOp object)
+      public Adapter caseContainerOp(ContainerOp object)
       {
-        return createSetOpAdapter();
+        return createContainerOpAdapter();
       }
       @Override
       public Adapter caseDeclarator(Declarator object)
@@ -380,9 +380,9 @@ public class IvmlAdapterFactory extends AdapterFactoryImpl
         return createPrimaryExpressionAdapter();
       }
       @Override
-      public Adapter caseCollectionInitializer(CollectionInitializer object)
+      public Adapter caseContainerInitializer(ContainerInitializer object)
       {
-        return createCollectionInitializerAdapter();
+        return createContainerInitializerAdapter();
       }
       @Override
       public Adapter caseExpressionListOrRange(ExpressionListOrRange object)
@@ -1252,16 +1252,16 @@ public class IvmlAdapterFactory extends AdapterFactoryImpl
   }
 
   /**
-   * Creates a new adapter for an object of class '{@link de.uni_hildesheim.sse.ivml.SetOp <em>Set Op</em>}'.
+   * Creates a new adapter for an object of class '{@link de.uni_hildesheim.sse.ivml.ContainerOp <em>Container Op</em>}'.
    * <!-- begin-user-doc -->
    * This default implementation returns null so that we can easily ignore cases;
    * it's useful to ignore a case when inheritance will catch all the cases anyway.
    * <!-- end-user-doc -->
    * @return the new adapter.
-   * @see de.uni_hildesheim.sse.ivml.SetOp
+   * @see de.uni_hildesheim.sse.ivml.ContainerOp
    * @generated
    */
-  public Adapter createSetOpAdapter()
+  public Adapter createContainerOpAdapter()
   {
     return null;
   }
@@ -1342,16 +1342,16 @@ public class IvmlAdapterFactory extends AdapterFactoryImpl
   }
 
   /**
-   * Creates a new adapter for an object of class '{@link de.uni_hildesheim.sse.ivml.CollectionInitializer <em>Collection Initializer</em>}'.
+   * Creates a new adapter for an object of class '{@link de.uni_hildesheim.sse.ivml.ContainerInitializer <em>Container Initializer</em>}'.
    * <!-- begin-user-doc -->
    * This default implementation returns null so that we can easily ignore cases;
    * it's useful to ignore a case when inheritance will catch all the cases anyway.
    * <!-- end-user-doc -->
    * @return the new adapter.
-   * @see de.uni_hildesheim.sse.ivml.CollectionInitializer
+   * @see de.uni_hildesheim.sse.ivml.ContainerInitializer
    * @generated
    */
-  public Adapter createCollectionInitializerAdapter()
+  public Adapter createContainerInitializerAdapter()
   {
     return null;
   }

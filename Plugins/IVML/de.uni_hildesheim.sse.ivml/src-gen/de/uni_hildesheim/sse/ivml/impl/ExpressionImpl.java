@@ -2,7 +2,7 @@
  */
 package de.uni_hildesheim.sse.ivml.impl;
 
-import de.uni_hildesheim.sse.ivml.CollectionInitializer;
+import de.uni_hildesheim.sse.ivml.ContainerInitializer;
 import de.uni_hildesheim.sse.ivml.Expression;
 import de.uni_hildesheim.sse.ivml.ImplicationExpression;
 import de.uni_hildesheim.sse.ivml.IvmlPackage;
@@ -27,7 +27,7 @@ import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
  * <ul>
  *   <li>{@link de.uni_hildesheim.sse.ivml.impl.ExpressionImpl#getLet <em>Let</em>}</li>
  *   <li>{@link de.uni_hildesheim.sse.ivml.impl.ExpressionImpl#getExpr <em>Expr</em>}</li>
- *   <li>{@link de.uni_hildesheim.sse.ivml.impl.ExpressionImpl#getCollection <em>Collection</em>}</li>
+ *   <li>{@link de.uni_hildesheim.sse.ivml.impl.ExpressionImpl#getContainer <em>Container</em>}</li>
  * </ul>
  *
  * @generated
@@ -55,14 +55,14 @@ public class ExpressionImpl extends MinimalEObjectImpl.Container implements Expr
   protected ImplicationExpression expr;
 
   /**
-   * The cached value of the '{@link #getCollection() <em>Collection</em>}' containment reference.
+   * The cached value of the '{@link #getContainer() <em>Container</em>}' containment reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @see #getCollection()
+   * @see #getContainer()
    * @generated
    * @ordered
    */
-  protected CollectionInitializer collection;
+  protected ContainerInitializer container;
 
   /**
    * <!-- begin-user-doc -->
@@ -186,9 +186,9 @@ public class ExpressionImpl extends MinimalEObjectImpl.Container implements Expr
    * <!-- end-user-doc -->
    * @generated
    */
-  public CollectionInitializer getCollection()
+  public ContainerInitializer getContainer()
   {
-    return collection;
+    return container;
   }
 
   /**
@@ -196,13 +196,13 @@ public class ExpressionImpl extends MinimalEObjectImpl.Container implements Expr
    * <!-- end-user-doc -->
    * @generated
    */
-  public NotificationChain basicSetCollection(CollectionInitializer newCollection, NotificationChain msgs)
+  public NotificationChain basicSetContainer(ContainerInitializer newContainer, NotificationChain msgs)
   {
-    CollectionInitializer oldCollection = collection;
-    collection = newCollection;
+    ContainerInitializer oldContainer = container;
+    container = newContainer;
     if (eNotificationRequired())
     {
-      ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, IvmlPackage.EXPRESSION__COLLECTION, oldCollection, newCollection);
+      ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, IvmlPackage.EXPRESSION__CONTAINER, oldContainer, newContainer);
       if (msgs == null) msgs = notification; else msgs.add(notification);
     }
     return msgs;
@@ -213,20 +213,20 @@ public class ExpressionImpl extends MinimalEObjectImpl.Container implements Expr
    * <!-- end-user-doc -->
    * @generated
    */
-  public void setCollection(CollectionInitializer newCollection)
+  public void setContainer(ContainerInitializer newContainer)
   {
-    if (newCollection != collection)
+    if (newContainer != container)
     {
       NotificationChain msgs = null;
-      if (collection != null)
-        msgs = ((InternalEObject)collection).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - IvmlPackage.EXPRESSION__COLLECTION, null, msgs);
-      if (newCollection != null)
-        msgs = ((InternalEObject)newCollection).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - IvmlPackage.EXPRESSION__COLLECTION, null, msgs);
-      msgs = basicSetCollection(newCollection, msgs);
+      if (container != null)
+        msgs = ((InternalEObject)container).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - IvmlPackage.EXPRESSION__CONTAINER, null, msgs);
+      if (newContainer != null)
+        msgs = ((InternalEObject)newContainer).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - IvmlPackage.EXPRESSION__CONTAINER, null, msgs);
+      msgs = basicSetContainer(newContainer, msgs);
       if (msgs != null) msgs.dispatch();
     }
     else if (eNotificationRequired())
-      eNotify(new ENotificationImpl(this, Notification.SET, IvmlPackage.EXPRESSION__COLLECTION, newCollection, newCollection));
+      eNotify(new ENotificationImpl(this, Notification.SET, IvmlPackage.EXPRESSION__CONTAINER, newContainer, newContainer));
   }
 
   /**
@@ -243,8 +243,8 @@ public class ExpressionImpl extends MinimalEObjectImpl.Container implements Expr
         return basicSetLet(null, msgs);
       case IvmlPackage.EXPRESSION__EXPR:
         return basicSetExpr(null, msgs);
-      case IvmlPackage.EXPRESSION__COLLECTION:
-        return basicSetCollection(null, msgs);
+      case IvmlPackage.EXPRESSION__CONTAINER:
+        return basicSetContainer(null, msgs);
     }
     return super.eInverseRemove(otherEnd, featureID, msgs);
   }
@@ -263,8 +263,8 @@ public class ExpressionImpl extends MinimalEObjectImpl.Container implements Expr
         return getLet();
       case IvmlPackage.EXPRESSION__EXPR:
         return getExpr();
-      case IvmlPackage.EXPRESSION__COLLECTION:
-        return getCollection();
+      case IvmlPackage.EXPRESSION__CONTAINER:
+        return getContainer();
     }
     return super.eGet(featureID, resolve, coreType);
   }
@@ -285,8 +285,8 @@ public class ExpressionImpl extends MinimalEObjectImpl.Container implements Expr
       case IvmlPackage.EXPRESSION__EXPR:
         setExpr((ImplicationExpression)newValue);
         return;
-      case IvmlPackage.EXPRESSION__COLLECTION:
-        setCollection((CollectionInitializer)newValue);
+      case IvmlPackage.EXPRESSION__CONTAINER:
+        setContainer((ContainerInitializer)newValue);
         return;
     }
     super.eSet(featureID, newValue);
@@ -308,8 +308,8 @@ public class ExpressionImpl extends MinimalEObjectImpl.Container implements Expr
       case IvmlPackage.EXPRESSION__EXPR:
         setExpr((ImplicationExpression)null);
         return;
-      case IvmlPackage.EXPRESSION__COLLECTION:
-        setCollection((CollectionInitializer)null);
+      case IvmlPackage.EXPRESSION__CONTAINER:
+        setContainer((ContainerInitializer)null);
         return;
     }
     super.eUnset(featureID);
@@ -329,8 +329,8 @@ public class ExpressionImpl extends MinimalEObjectImpl.Container implements Expr
         return let != null;
       case IvmlPackage.EXPRESSION__EXPR:
         return expr != null;
-      case IvmlPackage.EXPRESSION__COLLECTION:
-        return collection != null;
+      case IvmlPackage.EXPRESSION__CONTAINER:
+        return container != null;
     }
     return super.eIsSet(featureID);
   }

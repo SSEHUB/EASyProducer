@@ -46,7 +46,7 @@ import de.uni_hildesheim.sse.ivml.PostfixExpression;
 import de.uni_hildesheim.sse.ivml.PrimaryExpression;
 import de.uni_hildesheim.sse.ivml.Project;
 import de.uni_hildesheim.sse.ivml.RelationalExpression;
-import de.uni_hildesheim.sse.ivml.SetOp;
+import de.uni_hildesheim.sse.ivml.ContainerOp;
 import de.uni_hildesheim.sse.ivml.TypedefCompound;
 import de.uni_hildesheim.sse.ivml.UnaryExpression;
 import de.uni_hildesheim.sse.ivml.Value;
@@ -651,8 +651,8 @@ public class ExpressionProposalProvider extends AbstractIvmlProposalProvider  {
         if (null != operand) {
             if (null != call.getCall()) {
                 result = inferType(call.getCall(), operand, model, cmpDef);
-            } else if (null != call.getSetOp()) {
-                SetOp sOp = call.getSetOp();
+            } else if (null != call.getContainerOp()) {
+                ContainerOp sOp = call.getContainerOp();
                 List<Expression> args = sOp.getArgs();
                 int pCount = null == args ? 0 : args.size();
                 IDatatype[] param = new IDatatype[pCount];

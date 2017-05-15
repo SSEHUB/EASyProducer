@@ -119,13 +119,13 @@ public class IvmlFactoryImpl extends EFactoryImpl implements IvmlFactory
       case IvmlPackage.POSTFIX_EXPRESSION: return createPostfixExpression();
       case IvmlPackage.CALL: return createCall();
       case IvmlPackage.FEATURE_CALL: return createFeatureCall();
-      case IvmlPackage.SET_OP: return createSetOp();
+      case IvmlPackage.CONTAINER_OP: return createContainerOp();
       case IvmlPackage.DECLARATOR: return createDeclarator();
       case IvmlPackage.DECLARATION: return createDeclaration();
       case IvmlPackage.ACTUAL_ARGUMENT_LIST: return createActualArgumentList();
       case IvmlPackage.EXPRESSION_ACCESS: return createExpressionAccess();
       case IvmlPackage.PRIMARY_EXPRESSION: return createPrimaryExpression();
-      case IvmlPackage.COLLECTION_INITIALIZER: return createCollectionInitializer();
+      case IvmlPackage.CONTAINER_INITIALIZER: return createContainerInitializer();
       case IvmlPackage.EXPRESSION_LIST_OR_RANGE: return createExpressionListOrRange();
       case IvmlPackage.EXPRESSION_LIST_ENTRY: return createExpressionListEntry();
       case IvmlPackage.LITERAL: return createLiteral();
@@ -745,10 +745,10 @@ public class IvmlFactoryImpl extends EFactoryImpl implements IvmlFactory
    * <!-- end-user-doc -->
    * @generated
    */
-  public SetOp createSetOp()
+  public ContainerOp createContainerOp()
   {
-    SetOpImpl setOp = new SetOpImpl();
-    return setOp;
+    ContainerOpImpl containerOp = new ContainerOpImpl();
+    return containerOp;
   }
 
   /**
@@ -811,10 +811,10 @@ public class IvmlFactoryImpl extends EFactoryImpl implements IvmlFactory
    * <!-- end-user-doc -->
    * @generated
    */
-  public CollectionInitializer createCollectionInitializer()
+  public ContainerInitializer createContainerInitializer()
   {
-    CollectionInitializerImpl collectionInitializer = new CollectionInitializerImpl();
-    return collectionInitializer;
+    ContainerInitializerImpl containerInitializer = new ContainerInitializerImpl();
+    return containerInitializer;
   }
 
   /**

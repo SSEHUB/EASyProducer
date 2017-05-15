@@ -2,9 +2,9 @@
  */
 package de.uni_hildesheim.sse.ivml.impl;
 
+import de.uni_hildesheim.sse.ivml.ContainerOp;
 import de.uni_hildesheim.sse.ivml.Declarator;
 import de.uni_hildesheim.sse.ivml.IvmlPackage;
-import de.uni_hildesheim.sse.ivml.SetOp;
 
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.NotificationChain;
@@ -16,18 +16,18 @@ import org.eclipse.emf.ecore.impl.ENotificationImpl;
 
 /**
  * <!-- begin-user-doc -->
- * An implementation of the model object '<em><b>Set Op</b></em>'.
+ * An implementation of the model object '<em><b>Container Op</b></em>'.
  * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
  * </p>
  * <ul>
- *   <li>{@link de.uni_hildesheim.sse.ivml.impl.SetOpImpl#getDecl <em>Decl</em>}</li>
+ *   <li>{@link de.uni_hildesheim.sse.ivml.impl.ContainerOpImpl#getDecl <em>Decl</em>}</li>
  * </ul>
  *
  * @generated
  */
-public class SetOpImpl extends ActualArgumentListImpl implements SetOp
+public class ContainerOpImpl extends ActualArgumentListImpl implements ContainerOp
 {
   /**
    * The cached value of the '{@link #getDecl() <em>Decl</em>}' containment reference.
@@ -44,7 +44,7 @@ public class SetOpImpl extends ActualArgumentListImpl implements SetOp
    * <!-- end-user-doc -->
    * @generated
    */
-  protected SetOpImpl()
+  protected ContainerOpImpl()
   {
     super();
   }
@@ -57,7 +57,7 @@ public class SetOpImpl extends ActualArgumentListImpl implements SetOp
   @Override
   protected EClass eStaticClass()
   {
-    return IvmlPackage.Literals.SET_OP;
+    return IvmlPackage.Literals.CONTAINER_OP;
   }
 
   /**
@@ -81,7 +81,7 @@ public class SetOpImpl extends ActualArgumentListImpl implements SetOp
     decl = newDecl;
     if (eNotificationRequired())
     {
-      ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, IvmlPackage.SET_OP__DECL, oldDecl, newDecl);
+      ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, IvmlPackage.CONTAINER_OP__DECL, oldDecl, newDecl);
       if (msgs == null) msgs = notification; else msgs.add(notification);
     }
     return msgs;
@@ -98,14 +98,14 @@ public class SetOpImpl extends ActualArgumentListImpl implements SetOp
     {
       NotificationChain msgs = null;
       if (decl != null)
-        msgs = ((InternalEObject)decl).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - IvmlPackage.SET_OP__DECL, null, msgs);
+        msgs = ((InternalEObject)decl).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - IvmlPackage.CONTAINER_OP__DECL, null, msgs);
       if (newDecl != null)
-        msgs = ((InternalEObject)newDecl).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - IvmlPackage.SET_OP__DECL, null, msgs);
+        msgs = ((InternalEObject)newDecl).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - IvmlPackage.CONTAINER_OP__DECL, null, msgs);
       msgs = basicSetDecl(newDecl, msgs);
       if (msgs != null) msgs.dispatch();
     }
     else if (eNotificationRequired())
-      eNotify(new ENotificationImpl(this, Notification.SET, IvmlPackage.SET_OP__DECL, newDecl, newDecl));
+      eNotify(new ENotificationImpl(this, Notification.SET, IvmlPackage.CONTAINER_OP__DECL, newDecl, newDecl));
   }
 
   /**
@@ -118,7 +118,7 @@ public class SetOpImpl extends ActualArgumentListImpl implements SetOp
   {
     switch (featureID)
     {
-      case IvmlPackage.SET_OP__DECL:
+      case IvmlPackage.CONTAINER_OP__DECL:
         return basicSetDecl(null, msgs);
     }
     return super.eInverseRemove(otherEnd, featureID, msgs);
@@ -134,7 +134,7 @@ public class SetOpImpl extends ActualArgumentListImpl implements SetOp
   {
     switch (featureID)
     {
-      case IvmlPackage.SET_OP__DECL:
+      case IvmlPackage.CONTAINER_OP__DECL:
         return getDecl();
     }
     return super.eGet(featureID, resolve, coreType);
@@ -150,7 +150,7 @@ public class SetOpImpl extends ActualArgumentListImpl implements SetOp
   {
     switch (featureID)
     {
-      case IvmlPackage.SET_OP__DECL:
+      case IvmlPackage.CONTAINER_OP__DECL:
         setDecl((Declarator)newValue);
         return;
     }
@@ -167,7 +167,7 @@ public class SetOpImpl extends ActualArgumentListImpl implements SetOp
   {
     switch (featureID)
     {
-      case IvmlPackage.SET_OP__DECL:
+      case IvmlPackage.CONTAINER_OP__DECL:
         setDecl((Declarator)null);
         return;
     }
@@ -184,10 +184,10 @@ public class SetOpImpl extends ActualArgumentListImpl implements SetOp
   {
     switch (featureID)
     {
-      case IvmlPackage.SET_OP__DECL:
+      case IvmlPackage.CONTAINER_OP__DECL:
         return decl != null;
     }
     return super.eIsSet(featureID);
   }
 
-} //SetOpImpl
+} //ContainerOpImpl

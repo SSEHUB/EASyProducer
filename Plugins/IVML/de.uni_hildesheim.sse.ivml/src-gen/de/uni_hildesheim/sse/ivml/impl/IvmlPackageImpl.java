@@ -14,8 +14,9 @@ import de.uni_hildesheim.sse.ivml.AttrAssignmentPart;
 import de.uni_hildesheim.sse.ivml.BasicType;
 import de.uni_hildesheim.sse.ivml.BlockExpression;
 import de.uni_hildesheim.sse.ivml.Call;
-import de.uni_hildesheim.sse.ivml.CollectionInitializer;
 import de.uni_hildesheim.sse.ivml.ConflictStmt;
+import de.uni_hildesheim.sse.ivml.ContainerInitializer;
+import de.uni_hildesheim.sse.ivml.ContainerOp;
 import de.uni_hildesheim.sse.ivml.Declaration;
 import de.uni_hildesheim.sse.ivml.Declarator;
 import de.uni_hildesheim.sse.ivml.DerivedType;
@@ -56,7 +57,6 @@ import de.uni_hildesheim.sse.ivml.ProjectContents;
 import de.uni_hildesheim.sse.ivml.QualifiedName;
 import de.uni_hildesheim.sse.ivml.RelationalExpression;
 import de.uni_hildesheim.sse.ivml.RelationalExpressionPart;
-import de.uni_hildesheim.sse.ivml.SetOp;
 import de.uni_hildesheim.sse.ivml.Type;
 import de.uni_hildesheim.sse.ivml.Typedef;
 import de.uni_hildesheim.sse.ivml.TypedefCompound;
@@ -476,7 +476,7 @@ public class IvmlPackageImpl extends EPackageImpl implements IvmlPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  private EClass setOpEClass = null;
+  private EClass containerOpEClass = null;
 
   /**
    * <!-- begin-user-doc -->
@@ -518,7 +518,7 @@ public class IvmlPackageImpl extends EPackageImpl implements IvmlPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  private EClass collectionInitializerEClass = null;
+  private EClass containerInitializerEClass = null;
 
   /**
    * <!-- begin-user-doc -->
@@ -1776,7 +1776,7 @@ public class IvmlPackageImpl extends EPackageImpl implements IvmlPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EReference getExpression_Collection()
+  public EReference getExpression_Container()
   {
     return (EReference)expressionEClass.getEStructuralFeatures().get(2);
   }
@@ -1946,7 +1946,7 @@ public class IvmlPackageImpl extends EPackageImpl implements IvmlPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EReference getAssignmentExpressionPart_Collection()
+  public EReference getAssignmentExpressionPart_Container()
   {
     return (EReference)assignmentExpressionPartEClass.getEStructuralFeatures().get(2);
   }
@@ -2136,7 +2136,7 @@ public class IvmlPackageImpl extends EPackageImpl implements IvmlPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EReference getEqualityExpressionPart_Collection()
+  public EReference getEqualityExpressionPart_Container()
   {
     return (EReference)equalityExpressionPartEClass.getEStructuralFeatures().get(2);
   }
@@ -2426,7 +2426,7 @@ public class IvmlPackageImpl extends EPackageImpl implements IvmlPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EReference getCall_SetOp()
+  public EReference getCall_ContainerOp()
   {
     return (EReference)callEClass.getEStructuralFeatures().get(1);
   }
@@ -2456,9 +2456,9 @@ public class IvmlPackageImpl extends EPackageImpl implements IvmlPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EClass getSetOp()
+  public EClass getContainerOp()
   {
-    return setOpEClass;
+    return containerOpEClass;
   }
 
   /**
@@ -2466,9 +2466,9 @@ public class IvmlPackageImpl extends EPackageImpl implements IvmlPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EReference getSetOp_Decl()
+  public EReference getContainerOp_Decl()
   {
-    return (EReference)setOpEClass.getEStructuralFeatures().get(0);
+    return (EReference)containerOpEClass.getEStructuralFeatures().get(0);
   }
 
   /**
@@ -2676,9 +2676,9 @@ public class IvmlPackageImpl extends EPackageImpl implements IvmlPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EClass getCollectionInitializer()
+  public EClass getContainerInitializer()
   {
-    return collectionInitializerEClass;
+    return containerInitializerEClass;
   }
 
   /**
@@ -2686,9 +2686,9 @@ public class IvmlPackageImpl extends EPackageImpl implements IvmlPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EReference getCollectionInitializer_Type()
+  public EReference getContainerInitializer_Type()
   {
-    return (EReference)collectionInitializerEClass.getEStructuralFeatures().get(0);
+    return (EReference)containerInitializerEClass.getEStructuralFeatures().get(0);
   }
 
   /**
@@ -2696,9 +2696,9 @@ public class IvmlPackageImpl extends EPackageImpl implements IvmlPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EReference getCollectionInitializer_Init()
+  public EReference getContainerInitializer_Init()
   {
-    return (EReference)collectionInitializerEClass.getEStructuralFeatures().get(1);
+    return (EReference)containerInitializerEClass.getEStructuralFeatures().get(1);
   }
 
   /**
@@ -2766,7 +2766,7 @@ public class IvmlPackageImpl extends EPackageImpl implements IvmlPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EReference getExpressionListEntry_Collection()
+  public EReference getExpressionListEntry_Container()
   {
     return (EReference)expressionListEntryEClass.getEStructuralFeatures().get(3);
   }
@@ -3010,7 +3010,7 @@ public class IvmlPackageImpl extends EPackageImpl implements IvmlPackage
     expressionEClass = createEClass(EXPRESSION);
     createEReference(expressionEClass, EXPRESSION__LET);
     createEReference(expressionEClass, EXPRESSION__EXPR);
-    createEReference(expressionEClass, EXPRESSION__COLLECTION);
+    createEReference(expressionEClass, EXPRESSION__CONTAINER);
 
     letExpressionEClass = createEClass(LET_EXPRESSION);
     createEReference(letExpressionEClass, LET_EXPRESSION__TYPE);
@@ -3032,7 +3032,7 @@ public class IvmlPackageImpl extends EPackageImpl implements IvmlPackage
     assignmentExpressionPartEClass = createEClass(ASSIGNMENT_EXPRESSION_PART);
     createEAttribute(assignmentExpressionPartEClass, ASSIGNMENT_EXPRESSION_PART__OP);
     createEReference(assignmentExpressionPartEClass, ASSIGNMENT_EXPRESSION_PART__EX);
-    createEReference(assignmentExpressionPartEClass, ASSIGNMENT_EXPRESSION_PART__COLLECTION);
+    createEReference(assignmentExpressionPartEClass, ASSIGNMENT_EXPRESSION_PART__CONTAINER);
 
     implicationExpressionEClass = createEClass(IMPLICATION_EXPRESSION);
     createEReference(implicationExpressionEClass, IMPLICATION_EXPRESSION__LEFT);
@@ -3057,7 +3057,7 @@ public class IvmlPackageImpl extends EPackageImpl implements IvmlPackage
     equalityExpressionPartEClass = createEClass(EQUALITY_EXPRESSION_PART);
     createEAttribute(equalityExpressionPartEClass, EQUALITY_EXPRESSION_PART__OP);
     createEReference(equalityExpressionPartEClass, EQUALITY_EXPRESSION_PART__EX);
-    createEReference(equalityExpressionPartEClass, EQUALITY_EXPRESSION_PART__COLLECTION);
+    createEReference(equalityExpressionPartEClass, EQUALITY_EXPRESSION_PART__CONTAINER);
 
     relationalExpressionEClass = createEClass(RELATIONAL_EXPRESSION);
     createEReference(relationalExpressionEClass, RELATIONAL_EXPRESSION__LEFT);
@@ -3095,13 +3095,13 @@ public class IvmlPackageImpl extends EPackageImpl implements IvmlPackage
 
     callEClass = createEClass(CALL);
     createEReference(callEClass, CALL__CALL);
-    createEReference(callEClass, CALL__SET_OP);
+    createEReference(callEClass, CALL__CONTAINER_OP);
     createEReference(callEClass, CALL__ARRAY_EX);
 
     featureCallEClass = createEClass(FEATURE_CALL);
 
-    setOpEClass = createEClass(SET_OP);
-    createEReference(setOpEClass, SET_OP__DECL);
+    containerOpEClass = createEClass(CONTAINER_OP);
+    createEReference(containerOpEClass, CONTAINER_OP__DECL);
 
     declaratorEClass = createEClass(DECLARATOR);
     createEReference(declaratorEClass, DECLARATOR__DECL);
@@ -3128,9 +3128,9 @@ public class IvmlPackageImpl extends EPackageImpl implements IvmlPackage
     createEReference(primaryExpressionEClass, PRIMARY_EXPRESSION__CALLS);
     createEReference(primaryExpressionEClass, PRIMARY_EXPRESSION__ACCESS);
 
-    collectionInitializerEClass = createEClass(COLLECTION_INITIALIZER);
-    createEReference(collectionInitializerEClass, COLLECTION_INITIALIZER__TYPE);
-    createEReference(collectionInitializerEClass, COLLECTION_INITIALIZER__INIT);
+    containerInitializerEClass = createEClass(CONTAINER_INITIALIZER);
+    createEReference(containerInitializerEClass, CONTAINER_INITIALIZER__TYPE);
+    createEReference(containerInitializerEClass, CONTAINER_INITIALIZER__INIT);
 
     expressionListOrRangeEClass = createEClass(EXPRESSION_LIST_OR_RANGE);
     createEReference(expressionListOrRangeEClass, EXPRESSION_LIST_OR_RANGE__LIST);
@@ -3139,7 +3139,7 @@ public class IvmlPackageImpl extends EPackageImpl implements IvmlPackage
     createEAttribute(expressionListEntryEClass, EXPRESSION_LIST_ENTRY__NAME);
     createEAttribute(expressionListEntryEClass, EXPRESSION_LIST_ENTRY__ATTRIB);
     createEReference(expressionListEntryEClass, EXPRESSION_LIST_ENTRY__VALUE);
-    createEReference(expressionListEntryEClass, EXPRESSION_LIST_ENTRY__COLLECTION);
+    createEReference(expressionListEntryEClass, EXPRESSION_LIST_ENTRY__CONTAINER);
 
     literalEClass = createEClass(LITERAL);
     createEReference(literalEClass, LITERAL__VAL);
@@ -3180,7 +3180,7 @@ public class IvmlPackageImpl extends EPackageImpl implements IvmlPackage
 
     // Add supertypes to classes
     featureCallEClass.getESuperTypes().add(this.getActualArgumentList());
-    setOpEClass.getESuperTypes().add(this.getActualArgumentList());
+    containerOpEClass.getESuperTypes().add(this.getActualArgumentList());
 
     // Initialize classes and features; add operations and parameters
     initEClass(variabilityUnitEClass, VariabilityUnit.class, "VariabilityUnit", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
@@ -3332,7 +3332,7 @@ public class IvmlPackageImpl extends EPackageImpl implements IvmlPackage
     initEClass(expressionEClass, Expression.class, "Expression", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
     initEReference(getExpression_Let(), this.getLetExpression(), null, "let", null, 0, 1, Expression.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEReference(getExpression_Expr(), this.getImplicationExpression(), null, "expr", null, 0, 1, Expression.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEReference(getExpression_Collection(), this.getCollectionInitializer(), null, "collection", null, 0, 1, Expression.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getExpression_Container(), this.getContainerInitializer(), null, "container", null, 0, 1, Expression.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     initEClass(letExpressionEClass, LetExpression.class, "LetExpression", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
     initEReference(getLetExpression_Type(), this.getType(), null, "type", null, 0, 1, LetExpression.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -3354,7 +3354,7 @@ public class IvmlPackageImpl extends EPackageImpl implements IvmlPackage
     initEClass(assignmentExpressionPartEClass, AssignmentExpressionPart.class, "AssignmentExpressionPart", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
     initEAttribute(getAssignmentExpressionPart_Op(), ecorePackage.getEString(), "op", null, 0, 1, AssignmentExpressionPart.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEReference(getAssignmentExpressionPart_Ex(), this.getLogicalExpression(), null, "ex", null, 0, 1, AssignmentExpressionPart.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEReference(getAssignmentExpressionPart_Collection(), this.getCollectionInitializer(), null, "collection", null, 0, 1, AssignmentExpressionPart.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getAssignmentExpressionPart_Container(), this.getContainerInitializer(), null, "container", null, 0, 1, AssignmentExpressionPart.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     initEClass(implicationExpressionEClass, ImplicationExpression.class, "ImplicationExpression", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
     initEReference(getImplicationExpression_Left(), this.getAssignmentExpression(), null, "left", null, 0, 1, ImplicationExpression.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -3379,7 +3379,7 @@ public class IvmlPackageImpl extends EPackageImpl implements IvmlPackage
     initEClass(equalityExpressionPartEClass, EqualityExpressionPart.class, "EqualityExpressionPart", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
     initEAttribute(getEqualityExpressionPart_Op(), ecorePackage.getEString(), "op", null, 0, 1, EqualityExpressionPart.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEReference(getEqualityExpressionPart_Ex(), this.getRelationalExpression(), null, "ex", null, 0, 1, EqualityExpressionPart.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEReference(getEqualityExpressionPart_Collection(), this.getCollectionInitializer(), null, "collection", null, 0, 1, EqualityExpressionPart.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getEqualityExpressionPart_Container(), this.getContainerInitializer(), null, "container", null, 0, 1, EqualityExpressionPart.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     initEClass(relationalExpressionEClass, RelationalExpression.class, "RelationalExpression", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
     initEReference(getRelationalExpression_Left(), this.getAdditiveExpression(), null, "left", null, 0, 1, RelationalExpression.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -3417,13 +3417,13 @@ public class IvmlPackageImpl extends EPackageImpl implements IvmlPackage
 
     initEClass(callEClass, Call.class, "Call", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
     initEReference(getCall_Call(), this.getFeatureCall(), null, "call", null, 0, 1, Call.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEReference(getCall_SetOp(), this.getSetOp(), null, "setOp", null, 0, 1, Call.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getCall_ContainerOp(), this.getContainerOp(), null, "containerOp", null, 0, 1, Call.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEReference(getCall_ArrayEx(), this.getExpression(), null, "arrayEx", null, 0, 1, Call.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     initEClass(featureCallEClass, FeatureCall.class, "FeatureCall", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 
-    initEClass(setOpEClass, SetOp.class, "SetOp", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-    initEReference(getSetOp_Decl(), this.getDeclarator(), null, "decl", null, 0, 1, SetOp.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEClass(containerOpEClass, ContainerOp.class, "ContainerOp", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+    initEReference(getContainerOp_Decl(), this.getDeclarator(), null, "decl", null, 0, 1, ContainerOp.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     initEClass(declaratorEClass, Declarator.class, "Declarator", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
     initEReference(getDeclarator_Decl(), this.getDeclaration(), null, "decl", null, 0, -1, Declarator.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -3450,9 +3450,9 @@ public class IvmlPackageImpl extends EPackageImpl implements IvmlPackage
     initEReference(getPrimaryExpression_Calls(), this.getCall(), null, "calls", null, 0, -1, PrimaryExpression.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEReference(getPrimaryExpression_Access(), this.getExpressionAccess(), null, "access", null, 0, 1, PrimaryExpression.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
-    initEClass(collectionInitializerEClass, CollectionInitializer.class, "CollectionInitializer", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-    initEReference(getCollectionInitializer_Type(), this.getQualifiedName(), null, "type", null, 0, 1, CollectionInitializer.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEReference(getCollectionInitializer_Init(), this.getExpressionListOrRange(), null, "init", null, 0, 1, CollectionInitializer.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEClass(containerInitializerEClass, ContainerInitializer.class, "ContainerInitializer", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+    initEReference(getContainerInitializer_Type(), this.getQualifiedName(), null, "type", null, 0, 1, ContainerInitializer.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getContainerInitializer_Init(), this.getExpressionListOrRange(), null, "init", null, 0, 1, ContainerInitializer.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     initEClass(expressionListOrRangeEClass, ExpressionListOrRange.class, "ExpressionListOrRange", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
     initEReference(getExpressionListOrRange_List(), this.getExpressionListEntry(), null, "list", null, 0, -1, ExpressionListOrRange.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -3461,7 +3461,7 @@ public class IvmlPackageImpl extends EPackageImpl implements IvmlPackage
     initEAttribute(getExpressionListEntry_Name(), ecorePackage.getEString(), "name", null, 0, 1, ExpressionListEntry.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEAttribute(getExpressionListEntry_Attrib(), ecorePackage.getEString(), "attrib", null, 0, 1, ExpressionListEntry.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEReference(getExpressionListEntry_Value(), this.getImplicationExpression(), null, "value", null, 0, 1, ExpressionListEntry.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEReference(getExpressionListEntry_Collection(), this.getCollectionInitializer(), null, "collection", null, 0, 1, ExpressionListEntry.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getExpressionListEntry_Container(), this.getContainerInitializer(), null, "container", null, 0, 1, ExpressionListEntry.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     initEClass(literalEClass, Literal.class, "Literal", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
     initEReference(getLiteral_Val(), this.getValue(), null, "val", null, 0, 1, Literal.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);

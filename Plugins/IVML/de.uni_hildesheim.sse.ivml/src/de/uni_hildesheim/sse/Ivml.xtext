@@ -298,7 +298,7 @@ ExpressionStatement:
 Expression:	
 	let=LetExpression
 	|	expr=ImplicationExpression
-	|   collection=CollectionInitializer
+	|   container=ContainerInitializer
 	;
 
 LetExpression:	
@@ -327,7 +327,7 @@ AssignmentExpression:
 
 AssignmentExpressionPart:
     op=AssignmentOperator
-    (ex=LogicalExpression | collection=CollectionInitializer)
+    (ex=LogicalExpression | container=ContainerInitializer)
 ;
 
 AssignmentOperator:
@@ -372,7 +372,7 @@ EqualityExpression:
 
 EqualityExpressionPart:
     op=EqualityOperator
-    (ex=RelationalExpression | collection=CollectionInitializer)
+    (ex=RelationalExpression | container=ContainerInitializer)
 ;
 
 EqualityOperator:
@@ -445,7 +445,7 @@ PostfixExpression:
 
 Call: // IVML: "lambda"-expression with apply operation set->apply(t,r=0|max(t,r))
 	'.' call=FeatureCall 
-	| '->' setOp=SetOp 
+	| '->' containerOp=ContainerOp 
 	| '[' arrayEx=Expression ']' // IVML addition to OCL
 ;
 
@@ -456,7 +456,7 @@ FeatureCall:
 	')'
 	;
 	
-SetOp:
+ContainerOp:
 	name=Identifier 
 	'(' 
 		decl=Declarator? ActualArgumentList?
@@ -496,8 +496,8 @@ PrimaryExpression:
 	access=ExpressionAccess?
 	;
 
-CollectionInitializer:	
-	{CollectionInitializer}
+ContainerInitializer:	
+	{ContainerInitializer}
 	type=QualifiedName? // not OclCollection as otherways Collections are excluded
 	'{' 
 	init=ExpressionListOrRange? 
@@ -512,7 +512,7 @@ ExpressionListOrRange:	// adjust values to Expressions
 	
 ExpressionListEntry:
 	(name=Identifier ('.' attrib=Identifier)? '=')? // for compound initialization (IVML extension to OCL)
-	(value=ImplicationExpression | collection=CollectionInitializer)
+	(value=ImplicationExpression | container=ContainerInitializer)
 	;	
 
 Literal:	

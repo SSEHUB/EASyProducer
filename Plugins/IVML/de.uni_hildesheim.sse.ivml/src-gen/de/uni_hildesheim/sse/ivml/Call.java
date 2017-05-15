@@ -14,7 +14,7 @@ import org.eclipse.emf.ecore.EObject;
  * </p>
  * <ul>
  *   <li>{@link de.uni_hildesheim.sse.ivml.Call#getCall <em>Call</em>}</li>
- *   <li>{@link de.uni_hildesheim.sse.ivml.Call#getSetOp <em>Set Op</em>}</li>
+ *   <li>{@link de.uni_hildesheim.sse.ivml.Call#getContainerOp <em>Container Op</em>}</li>
  *   <li>{@link de.uni_hildesheim.sse.ivml.Call#getArrayEx <em>Array Ex</em>}</li>
  * </ul>
  *
@@ -51,30 +51,30 @@ public interface Call extends EObject
   void setCall(FeatureCall value);
 
   /**
-   * Returns the value of the '<em><b>Set Op</b></em>' containment reference.
+   * Returns the value of the '<em><b>Container Op</b></em>' containment reference.
    * <!-- begin-user-doc -->
    * <p>
-   * If the meaning of the '<em>Set Op</em>' containment reference isn't clear,
+   * If the meaning of the '<em>Container Op</em>' containment reference isn't clear,
    * there really should be more of a description here...
    * </p>
    * <!-- end-user-doc -->
-   * @return the value of the '<em>Set Op</em>' containment reference.
-   * @see #setSetOp(SetOp)
-   * @see de.uni_hildesheim.sse.ivml.IvmlPackage#getCall_SetOp()
+   * @return the value of the '<em>Container Op</em>' containment reference.
+   * @see #setContainerOp(ContainerOp)
+   * @see de.uni_hildesheim.sse.ivml.IvmlPackage#getCall_ContainerOp()
    * @model containment="true"
    * @generated
    */
-  SetOp getSetOp();
+  ContainerOp getContainerOp();
 
   /**
-   * Sets the value of the '{@link de.uni_hildesheim.sse.ivml.Call#getSetOp <em>Set Op</em>}' containment reference.
+   * Sets the value of the '{@link de.uni_hildesheim.sse.ivml.Call#getContainerOp <em>Container Op</em>}' containment reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @param value the new value of the '<em>Set Op</em>' containment reference.
-   * @see #getSetOp()
+   * @param value the new value of the '<em>Container Op</em>' containment reference.
+   * @see #getContainerOp()
    * @generated
    */
-  void setSetOp(SetOp value);
+  void setContainerOp(ContainerOp value);
 
   /**
    * Returns the value of the '<em><b>Array Ex</b></em>' containment reference.

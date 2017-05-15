@@ -132,7 +132,7 @@ public class IvmlParser extends AbstractContentAssistParser {
 					put(grammarAccess.getCallAccess().getGroup_1(), "rule__Call__Group_1__0");
 					put(grammarAccess.getCallAccess().getGroup_2(), "rule__Call__Group_2__0");
 					put(grammarAccess.getFeatureCallAccess().getGroup(), "rule__FeatureCall__Group__0");
-					put(grammarAccess.getSetOpAccess().getGroup(), "rule__SetOp__Group__0");
+					put(grammarAccess.getContainerOpAccess().getGroup(), "rule__ContainerOp__Group__0");
 					put(grammarAccess.getDeclaratorAccess().getGroup(), "rule__Declarator__Group__0");
 					put(grammarAccess.getDeclaratorAccess().getGroup_1(), "rule__Declarator__Group_1__0");
 					put(grammarAccess.getDeclarationAccess().getGroup(), "rule__Declaration__Group__0");
@@ -144,7 +144,7 @@ public class IvmlParser extends AbstractContentAssistParser {
 					put(grammarAccess.getPrimaryExpressionAccess().getGroup(), "rule__PrimaryExpression__Group__0");
 					put(grammarAccess.getPrimaryExpressionAccess().getGroup_0_1(), "rule__PrimaryExpression__Group_0_1__0");
 					put(grammarAccess.getPrimaryExpressionAccess().getGroup_0_3(), "rule__PrimaryExpression__Group_0_3__0");
-					put(grammarAccess.getCollectionInitializerAccess().getGroup(), "rule__CollectionInitializer__Group__0");
+					put(grammarAccess.getContainerInitializerAccess().getGroup(), "rule__ContainerInitializer__Group__0");
 					put(grammarAccess.getExpressionListOrRangeAccess().getGroup(), "rule__ExpressionListOrRange__Group__0");
 					put(grammarAccess.getExpressionListOrRangeAccess().getGroup_1(), "rule__ExpressionListOrRange__Group_1__0");
 					put(grammarAccess.getExpressionListEntryAccess().getGroup(), "rule__ExpressionListEntry__Group__0");
@@ -262,7 +262,7 @@ public class IvmlParser extends AbstractContentAssistParser {
 					put(grammarAccess.getExpressionStatementAccess().getExprAssignment_0(), "rule__ExpressionStatement__ExprAssignment_0");
 					put(grammarAccess.getExpressionAccess().getLetAssignment_0(), "rule__Expression__LetAssignment_0");
 					put(grammarAccess.getExpressionAccess().getExprAssignment_1(), "rule__Expression__ExprAssignment_1");
-					put(grammarAccess.getExpressionAccess().getCollectionAssignment_2(), "rule__Expression__CollectionAssignment_2");
+					put(grammarAccess.getExpressionAccess().getContainerAssignment_2(), "rule__Expression__ContainerAssignment_2");
 					put(grammarAccess.getLetExpressionAccess().getTypeAssignment_1(), "rule__LetExpression__TypeAssignment_1");
 					put(grammarAccess.getLetExpressionAccess().getNameAssignment_2(), "rule__LetExpression__NameAssignment_2");
 					put(grammarAccess.getLetExpressionAccess().getValueExprAssignment_4(), "rule__LetExpression__ValueExprAssignment_4");
@@ -274,7 +274,7 @@ public class IvmlParser extends AbstractContentAssistParser {
 					put(grammarAccess.getAssignmentExpressionAccess().getRightAssignment_1(), "rule__AssignmentExpression__RightAssignment_1");
 					put(grammarAccess.getAssignmentExpressionPartAccess().getOpAssignment_0(), "rule__AssignmentExpressionPart__OpAssignment_0");
 					put(grammarAccess.getAssignmentExpressionPartAccess().getExAssignment_1_0(), "rule__AssignmentExpressionPart__ExAssignment_1_0");
-					put(grammarAccess.getAssignmentExpressionPartAccess().getCollectionAssignment_1_1(), "rule__AssignmentExpressionPart__CollectionAssignment_1_1");
+					put(grammarAccess.getAssignmentExpressionPartAccess().getContainerAssignment_1_1(), "rule__AssignmentExpressionPart__ContainerAssignment_1_1");
 					put(grammarAccess.getImplicationExpressionAccess().getLeftAssignment_0(), "rule__ImplicationExpression__LeftAssignment_0");
 					put(grammarAccess.getImplicationExpressionAccess().getRightAssignment_1(), "rule__ImplicationExpression__RightAssignment_1");
 					put(grammarAccess.getImplicationExpressionPartAccess().getOpAssignment_0(), "rule__ImplicationExpressionPart__OpAssignment_0");
@@ -287,7 +287,7 @@ public class IvmlParser extends AbstractContentAssistParser {
 					put(grammarAccess.getEqualityExpressionAccess().getRightAssignment_1(), "rule__EqualityExpression__RightAssignment_1");
 					put(grammarAccess.getEqualityExpressionPartAccess().getOpAssignment_0(), "rule__EqualityExpressionPart__OpAssignment_0");
 					put(grammarAccess.getEqualityExpressionPartAccess().getExAssignment_1_0(), "rule__EqualityExpressionPart__ExAssignment_1_0");
-					put(grammarAccess.getEqualityExpressionPartAccess().getCollectionAssignment_1_1(), "rule__EqualityExpressionPart__CollectionAssignment_1_1");
+					put(grammarAccess.getEqualityExpressionPartAccess().getContainerAssignment_1_1(), "rule__EqualityExpressionPart__ContainerAssignment_1_1");
 					put(grammarAccess.getRelationalExpressionAccess().getLeftAssignment_0(), "rule__RelationalExpression__LeftAssignment_0");
 					put(grammarAccess.getRelationalExpressionAccess().getRightAssignment_1(), "rule__RelationalExpression__RightAssignment_1");
 					put(grammarAccess.getRelationalExpressionPartAccess().getOpAssignment_0(), "rule__RelationalExpressionPart__OpAssignment_0");
@@ -307,11 +307,11 @@ public class IvmlParser extends AbstractContentAssistParser {
 					put(grammarAccess.getPostfixExpressionAccess().getAccessAssignment_0_2(), "rule__PostfixExpression__AccessAssignment_0_2");
 					put(grammarAccess.getPostfixExpressionAccess().getLeftAssignment_1(), "rule__PostfixExpression__LeftAssignment_1");
 					put(grammarAccess.getCallAccess().getCallAssignment_0_1(), "rule__Call__CallAssignment_0_1");
-					put(grammarAccess.getCallAccess().getSetOpAssignment_1_1(), "rule__Call__SetOpAssignment_1_1");
+					put(grammarAccess.getCallAccess().getContainerOpAssignment_1_1(), "rule__Call__ContainerOpAssignment_1_1");
 					put(grammarAccess.getCallAccess().getArrayExAssignment_2_1(), "rule__Call__ArrayExAssignment_2_1");
 					put(grammarAccess.getFeatureCallAccess().getNameAssignment_0(), "rule__FeatureCall__NameAssignment_0");
-					put(grammarAccess.getSetOpAccess().getNameAssignment_0(), "rule__SetOp__NameAssignment_0");
-					put(grammarAccess.getSetOpAccess().getDeclAssignment_2(), "rule__SetOp__DeclAssignment_2");
+					put(grammarAccess.getContainerOpAccess().getNameAssignment_0(), "rule__ContainerOp__NameAssignment_0");
+					put(grammarAccess.getContainerOpAccess().getDeclAssignment_2(), "rule__ContainerOp__DeclAssignment_2");
 					put(grammarAccess.getDeclaratorAccess().getDeclAssignment_0(), "rule__Declarator__DeclAssignment_0");
 					put(grammarAccess.getDeclaratorAccess().getDeclAssignment_1_1(), "rule__Declarator__DeclAssignment_1_1");
 					put(grammarAccess.getDeclarationAccess().getTypeAssignment_0(), "rule__Declaration__TypeAssignment_0");
@@ -329,14 +329,14 @@ public class IvmlParser extends AbstractContentAssistParser {
 					put(grammarAccess.getPrimaryExpressionAccess().getRefExAssignment_0_3_2(), "rule__PrimaryExpression__RefExAssignment_0_3_2");
 					put(grammarAccess.getPrimaryExpressionAccess().getCallsAssignment_1(), "rule__PrimaryExpression__CallsAssignment_1");
 					put(grammarAccess.getPrimaryExpressionAccess().getAccessAssignment_2(), "rule__PrimaryExpression__AccessAssignment_2");
-					put(grammarAccess.getCollectionInitializerAccess().getTypeAssignment_1(), "rule__CollectionInitializer__TypeAssignment_1");
-					put(grammarAccess.getCollectionInitializerAccess().getInitAssignment_3(), "rule__CollectionInitializer__InitAssignment_3");
+					put(grammarAccess.getContainerInitializerAccess().getTypeAssignment_1(), "rule__ContainerInitializer__TypeAssignment_1");
+					put(grammarAccess.getContainerInitializerAccess().getInitAssignment_3(), "rule__ContainerInitializer__InitAssignment_3");
 					put(grammarAccess.getExpressionListOrRangeAccess().getListAssignment_0(), "rule__ExpressionListOrRange__ListAssignment_0");
 					put(grammarAccess.getExpressionListOrRangeAccess().getListAssignment_1_1(), "rule__ExpressionListOrRange__ListAssignment_1_1");
 					put(grammarAccess.getExpressionListEntryAccess().getNameAssignment_0_0(), "rule__ExpressionListEntry__NameAssignment_0_0");
 					put(grammarAccess.getExpressionListEntryAccess().getAttribAssignment_0_1_1(), "rule__ExpressionListEntry__AttribAssignment_0_1_1");
 					put(grammarAccess.getExpressionListEntryAccess().getValueAssignment_1_0(), "rule__ExpressionListEntry__ValueAssignment_1_0");
-					put(grammarAccess.getExpressionListEntryAccess().getCollectionAssignment_1_1(), "rule__ExpressionListEntry__CollectionAssignment_1_1");
+					put(grammarAccess.getExpressionListEntryAccess().getContainerAssignment_1_1(), "rule__ExpressionListEntry__ContainerAssignment_1_1");
 					put(grammarAccess.getLiteralAccess().getValAssignment(), "rule__Literal__ValAssignment");
 					put(grammarAccess.getIfExpressionAccess().getIfExAssignment_1(), "rule__IfExpression__IfExAssignment_1");
 					put(grammarAccess.getIfExpressionAccess().getThenExAssignment_3(), "rule__IfExpression__ThenExAssignment_3");

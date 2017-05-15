@@ -200,7 +200,7 @@
         containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="expr" eType="#//ImplicationExpression"
         containment="true"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="collection" eType="#//CollectionInitializer"
+    <eStructuralFeatures xsi:type="ecore:EReference" name="container" eType="#//ContainerInitializer"
         containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="LetExpression">
@@ -231,7 +231,7 @@
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="op" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="ex" eType="#//LogicalExpression"
         containment="true"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="collection" eType="#//CollectionInitializer"
+    <eStructuralFeatures xsi:type="ecore:EReference" name="container" eType="#//ContainerInitializer"
         containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="ImplicationExpression">
@@ -266,7 +266,7 @@
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="op" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="ex" eType="#//RelationalExpression"
         containment="true"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="collection" eType="#//CollectionInitializer"
+    <eStructuralFeatures xsi:type="ecore:EReference" name="container" eType="#//ContainerInitializer"
         containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="RelationalExpression">
@@ -320,13 +320,13 @@
   <eClassifiers xsi:type="ecore:EClass" name="Call">
     <eStructuralFeatures xsi:type="ecore:EReference" name="call" eType="#//FeatureCall"
         containment="true"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="setOp" eType="#//SetOp"
+    <eStructuralFeatures xsi:type="ecore:EReference" name="containerOp" eType="#//ContainerOp"
         containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="arrayEx" eType="#//Expression"
         containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="FeatureCall" eSuperTypes="#//ActualArgumentList"/>
-  <eClassifiers xsi:type="ecore:EClass" name="SetOp" eSuperTypes="#//ActualArgumentList">
+  <eClassifiers xsi:type="ecore:EClass" name="ContainerOp" eSuperTypes="#//ActualArgumentList">
     <eStructuralFeatures xsi:type="ecore:EReference" name="decl" eType="#//Declarator"
         containment="true"/>
   </eClassifiers>
@@ -367,7 +367,7 @@
     <eStructuralFeatures xsi:type="ecore:EReference" name="access" eType="#//ExpressionAccess"
         containment="true"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="CollectionInitializer">
+  <eClassifiers xsi:type="ecore:EClass" name="ContainerInitializer">
     <eStructuralFeatures xsi:type="ecore:EReference" name="type" eType="#//QualifiedName"
         containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="init" eType="#//ExpressionListOrRange"
@@ -382,7 +382,7 @@
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="attrib" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="value" eType="#//ImplicationExpression"
         containment="true"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="collection" eType="#//CollectionInitializer"
+    <eStructuralFeatures xsi:type="ecore:EReference" name="container" eType="#//ContainerInitializer"
         containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Literal">

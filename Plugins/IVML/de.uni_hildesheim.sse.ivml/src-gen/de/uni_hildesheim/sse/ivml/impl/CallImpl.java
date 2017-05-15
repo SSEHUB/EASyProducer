@@ -3,10 +3,10 @@
 package de.uni_hildesheim.sse.ivml.impl;
 
 import de.uni_hildesheim.sse.ivml.Call;
+import de.uni_hildesheim.sse.ivml.ContainerOp;
 import de.uni_hildesheim.sse.ivml.Expression;
 import de.uni_hildesheim.sse.ivml.FeatureCall;
 import de.uni_hildesheim.sse.ivml.IvmlPackage;
-import de.uni_hildesheim.sse.ivml.SetOp;
 
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.NotificationChain;
@@ -26,7 +26,7 @@ import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
  * </p>
  * <ul>
  *   <li>{@link de.uni_hildesheim.sse.ivml.impl.CallImpl#getCall <em>Call</em>}</li>
- *   <li>{@link de.uni_hildesheim.sse.ivml.impl.CallImpl#getSetOp <em>Set Op</em>}</li>
+ *   <li>{@link de.uni_hildesheim.sse.ivml.impl.CallImpl#getContainerOp <em>Container Op</em>}</li>
  *   <li>{@link de.uni_hildesheim.sse.ivml.impl.CallImpl#getArrayEx <em>Array Ex</em>}</li>
  * </ul>
  *
@@ -45,14 +45,14 @@ public class CallImpl extends MinimalEObjectImpl.Container implements Call
   protected FeatureCall call;
 
   /**
-   * The cached value of the '{@link #getSetOp() <em>Set Op</em>}' containment reference.
+   * The cached value of the '{@link #getContainerOp() <em>Container Op</em>}' containment reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @see #getSetOp()
+   * @see #getContainerOp()
    * @generated
    * @ordered
    */
-  protected SetOp setOp;
+  protected ContainerOp containerOp;
 
   /**
    * The cached value of the '{@link #getArrayEx() <em>Array Ex</em>}' containment reference.
@@ -138,9 +138,9 @@ public class CallImpl extends MinimalEObjectImpl.Container implements Call
    * <!-- end-user-doc -->
    * @generated
    */
-  public SetOp getSetOp()
+  public ContainerOp getContainerOp()
   {
-    return setOp;
+    return containerOp;
   }
 
   /**
@@ -148,13 +148,13 @@ public class CallImpl extends MinimalEObjectImpl.Container implements Call
    * <!-- end-user-doc -->
    * @generated
    */
-  public NotificationChain basicSetSetOp(SetOp newSetOp, NotificationChain msgs)
+  public NotificationChain basicSetContainerOp(ContainerOp newContainerOp, NotificationChain msgs)
   {
-    SetOp oldSetOp = setOp;
-    setOp = newSetOp;
+    ContainerOp oldContainerOp = containerOp;
+    containerOp = newContainerOp;
     if (eNotificationRequired())
     {
-      ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, IvmlPackage.CALL__SET_OP, oldSetOp, newSetOp);
+      ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, IvmlPackage.CALL__CONTAINER_OP, oldContainerOp, newContainerOp);
       if (msgs == null) msgs = notification; else msgs.add(notification);
     }
     return msgs;
@@ -165,20 +165,20 @@ public class CallImpl extends MinimalEObjectImpl.Container implements Call
    * <!-- end-user-doc -->
    * @generated
    */
-  public void setSetOp(SetOp newSetOp)
+  public void setContainerOp(ContainerOp newContainerOp)
   {
-    if (newSetOp != setOp)
+    if (newContainerOp != containerOp)
     {
       NotificationChain msgs = null;
-      if (setOp != null)
-        msgs = ((InternalEObject)setOp).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - IvmlPackage.CALL__SET_OP, null, msgs);
-      if (newSetOp != null)
-        msgs = ((InternalEObject)newSetOp).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - IvmlPackage.CALL__SET_OP, null, msgs);
-      msgs = basicSetSetOp(newSetOp, msgs);
+      if (containerOp != null)
+        msgs = ((InternalEObject)containerOp).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - IvmlPackage.CALL__CONTAINER_OP, null, msgs);
+      if (newContainerOp != null)
+        msgs = ((InternalEObject)newContainerOp).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - IvmlPackage.CALL__CONTAINER_OP, null, msgs);
+      msgs = basicSetContainerOp(newContainerOp, msgs);
       if (msgs != null) msgs.dispatch();
     }
     else if (eNotificationRequired())
-      eNotify(new ENotificationImpl(this, Notification.SET, IvmlPackage.CALL__SET_OP, newSetOp, newSetOp));
+      eNotify(new ENotificationImpl(this, Notification.SET, IvmlPackage.CALL__CONTAINER_OP, newContainerOp, newContainerOp));
   }
 
   /**
@@ -241,8 +241,8 @@ public class CallImpl extends MinimalEObjectImpl.Container implements Call
     {
       case IvmlPackage.CALL__CALL:
         return basicSetCall(null, msgs);
-      case IvmlPackage.CALL__SET_OP:
-        return basicSetSetOp(null, msgs);
+      case IvmlPackage.CALL__CONTAINER_OP:
+        return basicSetContainerOp(null, msgs);
       case IvmlPackage.CALL__ARRAY_EX:
         return basicSetArrayEx(null, msgs);
     }
@@ -261,8 +261,8 @@ public class CallImpl extends MinimalEObjectImpl.Container implements Call
     {
       case IvmlPackage.CALL__CALL:
         return getCall();
-      case IvmlPackage.CALL__SET_OP:
-        return getSetOp();
+      case IvmlPackage.CALL__CONTAINER_OP:
+        return getContainerOp();
       case IvmlPackage.CALL__ARRAY_EX:
         return getArrayEx();
     }
@@ -282,8 +282,8 @@ public class CallImpl extends MinimalEObjectImpl.Container implements Call
       case IvmlPackage.CALL__CALL:
         setCall((FeatureCall)newValue);
         return;
-      case IvmlPackage.CALL__SET_OP:
-        setSetOp((SetOp)newValue);
+      case IvmlPackage.CALL__CONTAINER_OP:
+        setContainerOp((ContainerOp)newValue);
         return;
       case IvmlPackage.CALL__ARRAY_EX:
         setArrayEx((Expression)newValue);
@@ -305,8 +305,8 @@ public class CallImpl extends MinimalEObjectImpl.Container implements Call
       case IvmlPackage.CALL__CALL:
         setCall((FeatureCall)null);
         return;
-      case IvmlPackage.CALL__SET_OP:
-        setSetOp((SetOp)null);
+      case IvmlPackage.CALL__CONTAINER_OP:
+        setContainerOp((ContainerOp)null);
         return;
       case IvmlPackage.CALL__ARRAY_EX:
         setArrayEx((Expression)null);
@@ -327,8 +327,8 @@ public class CallImpl extends MinimalEObjectImpl.Container implements Call
     {
       case IvmlPackage.CALL__CALL:
         return call != null;
-      case IvmlPackage.CALL__SET_OP:
-        return setOp != null;
+      case IvmlPackage.CALL__CONTAINER_OP:
+        return containerOp != null;
       case IvmlPackage.CALL__ARRAY_EX:
         return arrayEx != null;
     }
