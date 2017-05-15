@@ -306,6 +306,32 @@ public class SequenceOperations {
         }
     });
 
+    /**
+     * Implements the "reverse" operation.
+     */
+    static final IOperationEvaluator REVERSE = new IOperationEvaluator() {
+        
+        @Override
+        public EvaluationAccessor evaluate(EvaluationAccessor operand, EvaluationAccessor[] arguments) {
+            EvaluationAccessor result = null;
+            Value oValue = operand.getValue();
+            if (oValue instanceof ContainerValue) {
+                ContainerValue cont = (ContainerValue) oValue;
+                List<Value> res = new ArrayList<Value>();
+                for (int i = cont.getElementSize() - 1; i >= 0; i--) {
+                    Value elt = cont.getElement(i);
+                    res.add(elt);
+                }
+                try {
+                    Value rValue = ValueFactory.createValue(oValue.getType(), res.toArray());
+                    result = ConstantAccessor.POOL.getInstance().bind(rValue, operand.getContext());
+                } catch (ValueDoesNotMatchTypeException e) {
+                    operand.getContext().addErrorMessage(e);
+                }
+            }
+            return result;
+        }
+    };
     
     /**
      * Prevent instance creation.
@@ -330,6 +356,7 @@ public class SequenceOperations {
         EvaluatorRegistry.registerEvaluator(INDEX_OF, Sequence.INDEX_OF);
         EvaluatorRegistry.registerEvaluator(INCLUDING, Sequence.INCLUDING);
         EvaluatorRegistry.registerEvaluator(EXCLUDING, Sequence.EXCLUDING);
+        EvaluatorRegistry.registerEvaluator(REVERSE, Sequence.REVERSE);
         EvaluatorRegistry.registerEvaluator(GenericOperations.EQUALS, Sequence.EQUALS);
         EvaluatorRegistry.registerEvaluator(GenericOperations.ASSIGNMENT, Sequence.ASSIGNMENT);
         EvaluatorRegistry.registerEvaluator(ContainerOperations.ADD, Sequence.ADD);

@@ -821,11 +821,11 @@ public class SequenceOperationsTest {
         EvaluationAccessor set = Utils.createValue(sequenceIntType, context, new Object[]{1, 7, 9, 10, 4});
         EvaluationAccessor value = Utils.createValue(IntegerType.TYPE, context, 10);
         Object[] expected = new Object[]{1, 7, 9, 4}; // here sequence is assumed... for now
-        Utils.assertContainer(expected, Set.EXCLUDING, set, value);
+        Utils.assertContainer(expected, Sequence.EXCLUDING, set, value);
         set.release();
 
         set = Utils.createValue(sequenceIntType, context, new Object[]{});
-        Utils.assertContainer(new Object[]{}, Set.EXCLUDING, set, value);
+        Utils.assertContainer(new Object[]{}, Sequence.EXCLUDING, set, value);
         set.release();
         value.release();
     }
@@ -838,16 +838,35 @@ public class SequenceOperationsTest {
     @Test
     public void testIncluding() throws ValueDoesNotMatchTypeException {
         TestEvaluationContext context = new TestEvaluationContext();
-        IDatatype sequenceIntType = new Set("intSeq", IntegerType.TYPE, null);
+        IDatatype sequenceIntType = new Sequence("intSeq", IntegerType.TYPE, null);
         EvaluationAccessor set = Utils.createValue(sequenceIntType, context, new Object[]{1, 7, 9, 10, 4});
         EvaluationAccessor value = Utils.createValue(IntegerType.TYPE, context, 11);
         Object[] expected = new Object[]{1, 7, 9, 10, 4, 11}; // here sequence is assumed... for now
-        Utils.assertContainer(expected, Set.INCLUDING, set, value);
+        Utils.assertContainer(expected, Sequence.INCLUDING, set, value);
         set.release();
         
         set = Utils.createValue(sequenceIntType, context, new Object[]{});
-        Utils.assertContainer(new Object[]{11}, Set.INCLUDING, set, value);
+        Utils.assertContainer(new Object[]{11}, Sequence.INCLUDING, set, value);
         value.release();
+        set.release();
+    }
+    
+    /**
+     * Tests the "reverse" operation.
+     * 
+     * @throws ValueDoesNotMatchTypeException shall not occur
+     */
+    @Test
+    public void testReverse() throws ValueDoesNotMatchTypeException {
+        TestEvaluationContext context = new TestEvaluationContext();
+        IDatatype sequenceIntType = new Set("intSeq", IntegerType.TYPE, null);
+        EvaluationAccessor set = Utils.createValue(sequenceIntType, context, new Object[]{1, 7, 9, 10, 4});
+        Object[] expected = new Object[]{4, 10, 9, 7, 1}; // here sequence is assumed... for now
+        Utils.assertContainer(expected, Sequence.REVERSE, set);
+        set.release();
+        
+        set = Utils.createValue(sequenceIntType, context, new Object[]{});
+        Utils.assertContainer(new Object[]{}, Sequence.REVERSE, set);
         set.release();
     }
     

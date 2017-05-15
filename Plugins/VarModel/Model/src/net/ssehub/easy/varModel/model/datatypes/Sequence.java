@@ -70,6 +70,8 @@ public class Sequence extends Container {
         OclKeyWords.EXCLUDING, TYPE, AnyType.TYPE);
     public static final Operation INCLUDING = new Operation(TYPE, ReturnTypeMode.IMMEDIATE_OPERAND,
         OclKeyWords.INCLUDING, TYPE, AnyType.TYPE);
+    public static final Operation REVERSE = new Operation(TYPE, ReturnTypeMode.IMMEDIATE_OPERAND,
+        OclKeyWords.REVERSE, TYPE);
     public static final Operation ADD = new Operation(AnyType.TYPE, ReturnTypeMode.PARAM_1_CHECK, 
         OclKeyWords.ADD, TYPE, AnyType.TYPE);
     public static final Operation SUBSEQUENCE = new Operation(BooleanType.TYPE, OclKeyWords.SUBSEQUENCE, TYPE, TYPE);
@@ -103,6 +105,7 @@ public class Sequence extends Container {
         DTYPE.addOperation(HAS_DUPLICATES);
         DTYPE.addOperation(INCLUDING);
         DTYPE.addOperation(EXCLUDING);
+        DTYPE.addOperation(REVERSE);
         DTYPE.addOperation(ADD);
         DTYPE.addOperation(SUBSEQUENCE);
         DTYPE.addOperation(OVERLAPS);

@@ -115,6 +115,7 @@ public class OclKeyWords {
     public static final String INTERSECTION = "intersection";
     public static final String INCLUDING = "including";
     public static final String EXCLUDING = "excluding";
+    public static final String REVERSE = "reverse";
     
     // e.g. Sequence
     public static final String APPEND = "append";
