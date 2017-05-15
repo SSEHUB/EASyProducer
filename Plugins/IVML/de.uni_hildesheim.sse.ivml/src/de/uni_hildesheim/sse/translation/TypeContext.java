@@ -686,11 +686,7 @@ public class TypeContext implements IResolutionScope {
                 net.ssehub.easy.varModel.model.values.Value litValue = ModelQuery
                     .enumLiteralAsValue(project, sValue);
                 if (null != litValue) {
-                    if (AbstractVarModelWriter.considerOclCompliance() 
-                        && sValue.indexOf(IvmlKeyWords.ENUM_ACCESS) > 0) {
-                        messageReceiver.warning("OCL compliance: Enum literal access shall be stated by '::' "
-                            + "rather than '.'", object, feature, ErrorCodes.WARNING_USAGE);
-                    }
+                    checkEnumOclCompliance(sValue, object, feature);
                     result = new ConstantValue(litValue);
                 } else {
                     IDatatype type = findType(sValue, null);
@@ -715,6 +711,21 @@ public class TypeContext implements IResolutionScope {
             result = obtainVariable(var);
         }
         return result;
+    }
+
+    /**
+     * Checks a (potentially) qualified enum literal name for OCL compliance if enabled.
+     * 
+     * @param qName the qualified name
+     * @param object the grammar object this method is called for
+     * @param feature the grammar feature this method is called for
+     */
+    public void checkEnumOclCompliance(String qName, EObject object, EStructuralFeature feature) {
+        if (AbstractVarModelWriter.considerOclCompliance() 
+            && qName.indexOf(IvmlKeyWords.ENUM_ACCESS) > 0) {
+            messageReceiver.warning("OCL compliance: Enum literal access shall be stated by '::' "
+                + "rather than '.'", object, feature, ErrorCodes.WARNING_USAGE);
+        }
     }
 
     /**

@@ -717,11 +717,15 @@ public class ExpressionTranslator extends net.ssehub.easy.dslCore.translation.Ex
             // if this is a feature call, obtain all parameters and construct
             // a feature call node
             OCLFeatureCall tmp = new OCLFeatureCall(lhs, callName, context.getProject(), param);
-            Operation op = tmp.getResolvedOperation();
-            if (checkOclCompliance && AbstractVarModelWriter.considerOclCompliance() 
-                && (null != op && op.isContainerOperation())) {
-                warning("OCL compliance: Container operations shall be called by '->' rather than '.'", call, 
-                    IvmlPackage.Literals.ACTUAL_ARGUMENT_LIST__NAME, ErrorCodes.WARNING_USAGE);
+            try {
+                tmp.inferDatatype();
+                Operation op = tmp.getResolvedOperation();
+                if (checkOclCompliance && AbstractVarModelWriter.considerOclCompliance() 
+                    && (null != op && Container.TYPE.isAssignableFrom(op.getOperand()))) {
+                    warning("OCL compliance: Container operations shall be called by '->' rather than '.'", call, 
+                        IvmlPackage.Literals.ACTUAL_ARGUMENT_LIST__NAME, ErrorCodes.WARNING_USAGE);
+                }
+            } catch (CSTSemanticException e) {
             }
             lhs = tmp;
         }
@@ -1338,6 +1342,8 @@ public class ExpressionTranslator extends net.ssehub.easy.dslCore.translation.Ex
                 }
             } else if (Enum.TYPE.isAssignableFrom(type) && hasLiteral((Enum) type, name)) {
                 result = new ConstantValue(ValueFactory.createValue(type, name));
+                context.checkEnumOclCompliance(((Enum) type).getName() + "." + name, access, 
+                    IvmlPackage.Literals.EXPRESSION_ACCESS__NAME);
             } else if (FreezeVariableType.TYPE.isAssignableFrom(type) 
                 && null != ((FreezeVariableType) type).getAttribute(name)) {
                 result = new AttributeVariable(lhs, ((FreezeVariableType) type).getAttribute(name));
