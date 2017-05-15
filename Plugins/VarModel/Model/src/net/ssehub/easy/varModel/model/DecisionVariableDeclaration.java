@@ -138,6 +138,21 @@ public class DecisionVariableDeclaration extends AbstractVariable
     }
     
     /**
+     * Returns whether this variable is a temporary declarator, i.e., 
+     * a temporary variable create to quality an unqualified container iterator.
+     * 
+     * @return <code>true</code> for temporary, <code>false</code> else
+     */
+    public boolean isTemporaryDeclarator() {
+        boolean result = false;
+        if (getParent() instanceof Constraint) {
+            Constraint c = (Constraint) getParent();
+            result = null == c.getConsSyntax();
+        }
+        return result;
+    }
+    
+    /**
      * Returns whether this variable is an attribute.
      * 
      * @return <code>true</code> if it is an attribute, <code>false</code> else

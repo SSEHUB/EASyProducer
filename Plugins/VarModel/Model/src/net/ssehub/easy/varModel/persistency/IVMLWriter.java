@@ -386,7 +386,11 @@ public class IVMLWriter extends AbstractVarModelWriter {
     @Override
     public void visitEnumValue(EnumValue value) {
         appendOutput(IvmlDatatypeVisitor.getUniqueType(value.getType()));
-        appendOutput(ENUM_ACCESS);
+        if (considerOclCompliance()) {
+            appendOutput(NAMESPACE_SEPARATOR);
+        } else {
+            appendOutput(ENUM_ACCESS);
+        }
         appendOutput(value.getValue().getName());
     }
     
@@ -1125,59 +1129,52 @@ public class IVMLWriter extends AbstractVarModelWriter {
         appendOutput(CONTAINER_OP_ACCESS);
         appendOutput(call.getOperation());
         appendOutput(BEGINNING_PARENTHESIS);
-        /*// old syntax before IVML-VIL alignment
-        IDatatype contained;
-        try {
-            Container cont = (Container) DerivedDatatype.resolveToBasis(call.getContainer().inferDatatype());
-            contained = cont.getContainedType();
-        } catch (CSTSemanticException e) {
-            contained = AnyType.TYPE; // just to be safe, let's see
-        }*/
         int declCount = call.getDeclaratorsCount();
-        for (int d = 0; d < declCount; d++) {
-            DecisionVariableDeclaration decl = call.getDeclarator(d);
-            ConstraintSyntaxTree deflt = decl.getDefaultValue();
-            IDatatype type = decl.getType();
-            // this is a bit strange but matches the OCL/IVML grammar
-            ConstraintSyntaxTree next;
-            IDatatype nextType;
-            if (d + 1 >= declCount) {
-                next = null;
-                nextType = null;
-            } else {
-                DecisionVariableDeclaration nextDecl = call.getDeclarator(d + 1);
-                next = nextDecl.getDefaultValue();
-                nextType = nextDecl.getType();
-            }
-            if (decl.isDeclaratorTypeExplicit()) {
-                appendOutput(IvmlDatatypeVisitor.getUniqueType(decl.getType()));
-                appendOutput(WHITESPACE);
-            }
-            appendOutput(decl.getName());
-            /* // old syntax before IVML-VIL alignment
-            if (!decl.getType().isAssignableFrom(contained)) {
-                appendOutput(WHITESPACE);
-                appendOutput(COLON);
-                appendOutput(WHITESPACE);
-                appendOutput(IvmlDatatypeVisitor.getUniqueType(decl.getType()));
-            }*/
-            if (null != deflt && deflt != next) {
-                appendOutput(WHITESPACE);
-                appendOutput(ASSIGNMENT);
-                appendOutput(WHITESPACE);
-                decl.getDefaultValue().accept(this);
-            }
-            if (d < declCount - 1) {
-                if ((null == deflt && null != next) || (nextType != null && type != nextType)) {
-                    // if next has a different default
-                    appendOutput(SEMICOLON);
+        if (!(1 == declCount && call.getDeclarator(0).isTemporaryDeclarator())) {
+            for (int d = 0; d < declCount; d++) {
+                DecisionVariableDeclaration decl = call.getDeclarator(d);
+                ConstraintSyntaxTree deflt = decl.getDefaultValue();
+                IDatatype type = decl.getType();
+                // this is a bit strange but matches the OCL/IVML grammar
+                ConstraintSyntaxTree next;
+                IDatatype nextType;
+                if (d + 1 >= declCount) {
+                    next = null;
+                    nextType = null;
                 } else {
-                    appendOutput(COMMA);
+                    DecisionVariableDeclaration nextDecl = call.getDeclarator(d + 1);
+                    next = nextDecl.getDefaultValue();
+                    nextType = nextDecl.getType();
+                }
+                if (decl.isDeclaratorTypeExplicit()) {
+                    appendOutput(IvmlDatatypeVisitor.getUniqueType(decl.getType()));
+                    appendOutput(WHITESPACE);
+                }
+                appendOutput(decl.getName());
+                if (null != deflt && deflt != next) {
+                    appendOutput(WHITESPACE);
+                    appendOutput(ASSIGNMENT);
+                    appendOutput(WHITESPACE);
+                    decl.getDefaultValue().accept(this);
+                }
+                if (d < declCount - 1) {
+                    if ((null == deflt && null != next) || (nextType != null && type != nextType)) {
+                        // if next has a different default
+                        appendOutput(SEMICOLON);
+                    } else {
+                        appendOutput(COMMA);
+                    }
                 }
             }
+            appendOutput(PIPE);
+            call.getExpression().accept(this);
+        } else {
+            // else implicitly classified
+            if (call.getExpression() instanceof CompoundAccess) {
+                CompoundAccess ca = (CompoundAccess) call.getExpression();
+                appendOutput(ca.getSlotName());
+            }
         }
-        appendOutput(PIPE);
-        call.getExpression().accept(this);
         appendOutput(ENDING_PARENTHESIS);
     }
     

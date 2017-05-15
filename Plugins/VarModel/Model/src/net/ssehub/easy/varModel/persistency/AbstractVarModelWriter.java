@@ -83,6 +83,11 @@ public abstract class AbstractVarModelWriter extends AbstractVisitor
      */
     private static boolean useWhitespace = true;
     
+    /**
+     * Detect, warn, report about and write to avoid OCL compliance problems.
+     */
+    private static boolean oclCompliance = false;
+    
     private String myIndentStep = indentStep;
     private boolean myUseWhitespace = useWhitespace;
     private int additionalIndentation = 0;
@@ -158,6 +163,24 @@ public abstract class AbstractVarModelWriter extends AbstractVisitor
         if (count != myIndentStep.length()) {
             myIndentStep = deriveIndentStep(count);
         }
+    }
+    
+    /**
+     * Changes the OCL compliance setting.
+     * 
+     * @param compliance operate with OCL compliance (<code>true</code>), allow both IVML + OCL (<code>false</code>
+     */
+    public static void setOclCompliance(boolean compliance) {
+        oclCompliance = compliance;
+    }
+    
+    /**
+     * Returns whether OCL compliance shall be considered.
+     * 
+     * @return <code>true</code> for OCL compliance, <code>false</code> else
+     */
+    public static boolean considerOclCompliance() {
+        return oclCompliance;
     }
     
     /**
