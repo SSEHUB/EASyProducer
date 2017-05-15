@@ -220,6 +220,7 @@ public class EASyPreferenceStore {
      */
     public static void setOclCompliance(boolean compliance) {
         getPreferences().putBoolean("easy.oclCompliance", compliance);
+        AbstractVarModelWriter.setOclCompliance(compliance);
     }
 
     /**
