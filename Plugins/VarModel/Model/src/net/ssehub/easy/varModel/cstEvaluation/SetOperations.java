@@ -45,6 +45,25 @@ public class SetOperations {
     });
 
     /**
+     * Implements the difference (-) operation.
+     */
+    static final IOperationEvaluator DIFFERENCE = new Container2OperationEvaluator(new Container2Operation() {
+        
+        public void evaluate(ContainerValue c1, ContainerValue c2, List<Value> result) {
+            HashSet<Value> inC2 = new HashSet<Value>();
+            for (int e = 0; e < c2.getElementSize(); e++) {
+                inC2.add(c2.getElement(e));
+            }
+            for (int e = 0; e < c1.getElementSize(); e++) {
+                Value val = c1.getElement(e);
+                if (!inC2.contains(val)) {
+                    result.add(val);
+                }
+            }
+        }
+    });
+
+    /**
      * Implements the "excluding" operation.
      */
     static final IOperationEvaluator EXCLUDING = new ContainerValueOperationEvaluator(new ContainerValueOperation() {
@@ -93,6 +112,7 @@ public class SetOperations {
         EvaluatorRegistry.registerEvaluator(ContainerOperations.INTERSECT, Set.INTERSECTION);
         EvaluatorRegistry.registerEvaluator(EXCLUDING, Set.EXCLUDING);
         EvaluatorRegistry.registerEvaluator(INCLUDING, Set.INCLUDING);
+        EvaluatorRegistry.registerEvaluator(DIFFERENCE, Set.DIFFERENCE);
         EvaluatorRegistry.registerEvaluator(GenericOperations.EQUALS, Set.EQUALS);
         EvaluatorRegistry.registerEvaluator(GenericOperations.ASSIGNMENT, Set.ASSIGNMENT);
         EvaluatorRegistry.registerEvaluator(ContainerOperations.ADD, Set.ADD);

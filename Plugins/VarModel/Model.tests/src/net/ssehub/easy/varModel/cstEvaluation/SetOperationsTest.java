@@ -368,6 +368,32 @@ public class SetOperationsTest {
     }
 
     /**
+     * Tests the "difference (-)" operation.
+     * 
+     * @throws ValueDoesNotMatchTypeException shall not occur
+     */
+    @Test
+    public void testDifference() throws ValueDoesNotMatchTypeException {
+        TestEvaluationContext context = new TestEvaluationContext();
+        IDatatype setIntType = new Set("intSet", IntegerType.TYPE, null);
+        EvaluationAccessor set1 = Utils.createValue(setIntType, context, new Object[]{1, 7, 9, 10, 4});
+        EvaluationAccessor set2 = Utils.createValue(setIntType, context, new Object[]{1, 7, 4});
+        EvaluationAccessor setE = Utils.createValue(setIntType, context, new Object[]{});
+        Object[] expected = new Object[]{9, 10}; 
+        Utils.assertContainer(expected, Set.DIFFERENCE, set1, set2);
+
+        expected = new Object[]{1, 7, 9, 10, 4};
+        Utils.assertContainer(expected, Set.DIFFERENCE, set1, setE);
+
+        expected = new Object[]{};
+        Utils.assertContainer(expected, Set.DIFFERENCE, setE, set2);
+
+        set1.release();
+        set2.release();
+        setE.release();
+    }
+    
+    /**
      * Tests the "sum" function.
      * 
      * @throws ValueDoesNotMatchTypeException shall not occur
