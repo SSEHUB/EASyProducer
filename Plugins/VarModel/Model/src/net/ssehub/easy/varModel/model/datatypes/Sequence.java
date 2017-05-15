@@ -66,6 +66,10 @@ public class Sequence extends Container {
         OclKeyWords.INSERT_AT, TYPE, IntegerType.TYPE, AnyType.TYPE);
     public static final Operation INDEX_OF = new Operation(IntegerType.TYPE, OclKeyWords.INDEX_OF, TYPE, AnyType.TYPE);
     public static final Operation HAS_DUPLICATES = new Operation(BooleanType.TYPE, OclKeyWords.HAS_DUPLICATES, TYPE);
+    public static final Operation EXCLUDING = new Operation(TYPE, ReturnTypeMode.IMMEDIATE_OPERAND,
+        OclKeyWords.EXCLUDING, TYPE, AnyType.TYPE);
+    public static final Operation INCLUDING = new Operation(TYPE, ReturnTypeMode.IMMEDIATE_OPERAND,
+        OclKeyWords.INCLUDING, TYPE, AnyType.TYPE);
     public static final Operation ADD = new Operation(AnyType.TYPE, ReturnTypeMode.PARAM_1_CHECK, 
         OclKeyWords.ADD, TYPE, AnyType.TYPE);
     public static final Operation SUBSEQUENCE = new Operation(BooleanType.TYPE, OclKeyWords.SUBSEQUENCE, TYPE, TYPE);
@@ -97,6 +101,8 @@ public class Sequence extends Container {
         DTYPE.addOperation(INSERT_AT);
         DTYPE.addOperation(INDEX_OF);
         DTYPE.addOperation(HAS_DUPLICATES);
+        DTYPE.addOperation(INCLUDING);
+        DTYPE.addOperation(EXCLUDING);
         DTYPE.addOperation(ADD);
         DTYPE.addOperation(SUBSEQUENCE);
         DTYPE.addOperation(OVERLAPS);

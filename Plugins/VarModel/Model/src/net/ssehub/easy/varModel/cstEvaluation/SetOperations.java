@@ -60,7 +60,7 @@ public class SetOperations {
     });
 
     /**
-     * Implements the "excluding" operation.
+     * Implements the "including" operation.
      */
     static final IOperationEvaluator INCLUDING = new ContainerValueOperationEvaluator(new ContainerValueOperation() {
         

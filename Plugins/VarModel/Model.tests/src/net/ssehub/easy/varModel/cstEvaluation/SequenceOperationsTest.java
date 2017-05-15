@@ -809,6 +809,48 @@ public class SequenceOperationsTest {
         set2.release();
     }
     
+    /**
+     * Tests the "excluding" operation.
+     * 
+     * @throws ValueDoesNotMatchTypeException shall not occur
+     */
+    @Test
+    public void testExcluding() throws ValueDoesNotMatchTypeException {
+        TestEvaluationContext context = new TestEvaluationContext();
+        IDatatype sequenceIntType = new Sequence("intSeq", IntegerType.TYPE, null);
+        EvaluationAccessor set = Utils.createValue(sequenceIntType, context, new Object[]{1, 7, 9, 10, 4});
+        EvaluationAccessor value = Utils.createValue(IntegerType.TYPE, context, 10);
+        Object[] expected = new Object[]{1, 7, 9, 4}; // here sequence is assumed... for now
+        Utils.assertContainer(expected, Set.EXCLUDING, set, value);
+        set.release();
+
+        set = Utils.createValue(sequenceIntType, context, new Object[]{});
+        Utils.assertContainer(new Object[]{}, Set.EXCLUDING, set, value);
+        set.release();
+        value.release();
+    }
+
+    /**
+     * Tests the "including" operation.
+     * 
+     * @throws ValueDoesNotMatchTypeException shall not occur
+     */
+    @Test
+    public void testIncluding() throws ValueDoesNotMatchTypeException {
+        TestEvaluationContext context = new TestEvaluationContext();
+        IDatatype sequenceIntType = new Set("intSeq", IntegerType.TYPE, null);
+        EvaluationAccessor set = Utils.createValue(sequenceIntType, context, new Object[]{1, 7, 9, 10, 4});
+        EvaluationAccessor value = Utils.createValue(IntegerType.TYPE, context, 11);
+        Object[] expected = new Object[]{1, 7, 9, 10, 4, 11}; // here sequence is assumed... for now
+        Utils.assertContainer(expected, Set.INCLUDING, set, value);
+        set.release();
+        
+        set = Utils.createValue(sequenceIntType, context, new Object[]{});
+        Utils.assertContainer(new Object[]{11}, Set.INCLUDING, set, value);
+        value.release();
+        set.release();
+    }
+    
     // Container iterators need to be tested on the level of the EvaluationVisitor!
 
 }

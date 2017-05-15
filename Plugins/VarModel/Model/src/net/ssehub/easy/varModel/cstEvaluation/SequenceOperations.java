@@ -7,6 +7,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import net.ssehub.easy.varModel.cstEvaluation.ContainerOperations.ContainerValueOperation;
+import net.ssehub.easy.varModel.cstEvaluation.ContainerOperations.ContainerValueOperationEvaluator;
 import net.ssehub.easy.varModel.model.datatypes.IntegerType;
 import net.ssehub.easy.varModel.model.datatypes.Sequence;
 import net.ssehub.easy.varModel.model.values.BooleanValue;
@@ -272,6 +274,40 @@ public class SequenceOperations {
     });
     
     /**
+     * Implements the "excluding" operation.
+     */
+    static final IOperationEvaluator EXCLUDING = new ContainerValueOperationEvaluator(new ContainerValueOperation() {
+        
+        public void evaluate(ContainerValue cont, Value value, List<Value> result) {
+            for (int i = 0; i < cont.getElementSize(); i++) {
+                Value elt = cont.getElement(i);
+                if (!elt.equals(value)) {
+                    result.add(elt);
+                }
+            }
+        }
+    });
+
+    /**
+     * Implements the "including" operation.
+     */
+    static final IOperationEvaluator INCLUDING = new ContainerValueOperationEvaluator(new ContainerValueOperation() {
+        
+        public void evaluate(ContainerValue cont, Value value, List<Value> result) {
+            boolean found = false;
+            for (int i = 0; i < cont.getElementSize(); i++) {
+                Value elt = cont.getElement(i);
+                result.add(elt);
+                found = elt.equals(value);
+            }
+            if (!found) {
+                result.add(value);
+            }
+        }
+    });
+
+    
+    /**
      * Prevent instance creation.
      */
     private SequenceOperations() {
@@ -292,6 +328,8 @@ public class SequenceOperations {
         EvaluatorRegistry.registerEvaluator(INSERT_AT, Sequence.INSERT_AT);
         EvaluatorRegistry.registerEvaluator(HAS_DUPLICATES, Sequence.HAS_DUPLICATES);
         EvaluatorRegistry.registerEvaluator(INDEX_OF, Sequence.INDEX_OF);
+        EvaluatorRegistry.registerEvaluator(INCLUDING, Sequence.INCLUDING);
+        EvaluatorRegistry.registerEvaluator(EXCLUDING, Sequence.EXCLUDING);
         EvaluatorRegistry.registerEvaluator(GenericOperations.EQUALS, Sequence.EQUALS);
         EvaluatorRegistry.registerEvaluator(GenericOperations.ASSIGNMENT, Sequence.ASSIGNMENT);
         EvaluatorRegistry.registerEvaluator(ContainerOperations.ADD, Sequence.ADD);
