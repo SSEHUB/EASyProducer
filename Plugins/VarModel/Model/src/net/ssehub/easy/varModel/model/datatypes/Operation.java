@@ -184,6 +184,17 @@ public class Operation {
     }
     
     /**
+     * Defines the nesting mode of the results.
+     * 
+     * @author Holger Eichelberger
+     */
+    public enum NestingMode {
+        NONE,
+        FLATTEN,
+        NESTING
+    }
+    
+    /**
      * Defines some formatting hints for emitting operations
      * in a canonical form.
      * 
@@ -240,6 +251,8 @@ public class Operation {
     private boolean acceptsNull = false;
     
     private FormattingHint formattingHint = FormattingHint.FUNCTION_CALL;
+    
+    private NestingMode nestingMode = NestingMode.NONE;
     
     /**
      * Creates a non-container operation (descriptor).
@@ -458,6 +471,16 @@ public class Operation {
             result = immediateOperand;
             break;
         }
+        // in case of a nesting operation which is applied to a nested collection, keep the nesting
+        if (NestingMode.NESTING == getNestingMode() && Container.TYPE.isAssignableFrom(immediateOperand) 
+            && 1 == immediateOperand.getGenericTypeCount() 
+            && Container.TYPE.isAssignableFrom(immediateOperand.getGenericType(0))) {
+            if (Set.TYPE.isAssignableFrom(result)) {
+                result = new Set("", result, null);
+            } else if (Sequence.TYPE.isAssignableFrom(result)) {
+                result = new Sequence("", result, null);
+            }
+        }
         return result;
     }
     
@@ -502,12 +525,21 @@ public class Operation {
     }
     
     /**
-     * Returns whether this operation is a container operation, e.g. a quantor.
+     * Returns whether this operation is a container iterating operation, e.g. a quantor.
      * 
      * @return <code>true</code> if this is a container operation, <code>false</code> else
      */
     public boolean isContainerOperation() {
         return containerOperation;
+    }
+    
+    /**
+     * Returns the nesting mode.
+     * 
+     * @return the nesting mode
+     */
+    public NestingMode getNestingMode() {
+        return nestingMode;
     }
     
     /**
@@ -520,7 +552,27 @@ public class Operation {
     }
     
     /**
-     * Marks this operation as a container operation. Introduced as constructors grew to
+     * Marks this operation as a flattening container iterating operation. Calls {@link #markAsContainerOperation()}.
+     * 
+     * @return <b>this</b>
+     */
+    Operation markAsFlatteningContainerOperation() {
+        nestingMode = NestingMode.FLATTEN;
+        return markAsContainerOperation();
+    }
+
+    /**
+     * Marks this operation as a flattening container iterating operation. Calls {@link #markAsContainerOperation()}.
+     * 
+     * @return <b>this</b>
+     */
+    Operation markAsNestingContainerOperation() {
+        nestingMode = NestingMode.NESTING;
+        return markAsContainerOperation();
+    }
+
+    /**
+     * Marks this operation as a container iterating operation. Introduced as constructors grew to
      * more than 5 parameter. 
      * 
      * @return <b>this</b>

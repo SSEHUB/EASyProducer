@@ -102,6 +102,7 @@ public class OclKeyWords {
     public static final String INDEX_ACCESS = "[]";
     public static final String AT = "at";
     public static final String COLLECT = "collect";
+    public static final String COLLECT_NESTED = "collectNested";
     public static final String SELECT = "select";
     public static final String REJECT = "reject";
     public static final String AS_SET = "asSet";

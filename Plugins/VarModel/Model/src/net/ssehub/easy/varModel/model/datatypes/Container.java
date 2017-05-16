@@ -83,8 +83,11 @@ public class Container extends StructuredDatatype {
         TYPE, BooleanType.TYPE).markAsContainerOperation();
     public static final Operation IS_UNIQUE = new Operation(TYPE, ReturnTypeMode.IMMEDIATE_OPERAND, 
         OclKeyWords.IS_UNIQUE, TYPE, AnyType.TYPE).markAsContainerOperation();
-    public static final Operation COLLECT = new Operation(TYPE, ReturnTypeMode.IMMEDIATE_OPERAND_COLLECTION_PARAM_1, 
-        OclKeyWords.COLLECT, TYPE, AnyType.TYPE).markAsContainerOperation();
+    public static final Operation COLLECT = new Operation(TYPE, ReturnTypeMode.IMMEDIATE_OPERAND_COLLECTION_PARAM_1,
+        OclKeyWords.COLLECT, TYPE, AnyType.TYPE).markAsFlatteningContainerOperation();
+    public static final Operation COLLECT_NESTED = new Operation(TYPE, 
+        ReturnTypeMode.IMMEDIATE_OPERAND_COLLECTION_PARAM_1, OclKeyWords.COLLECT_NESTED, TYPE, 
+        AnyType.TYPE).markAsNestingContainerOperation();
     public static final Operation SELECT = new Operation(TYPE, ReturnTypeMode.IMMEDIATE_OPERAND, OclKeyWords.SELECT, 
         TYPE, BooleanType.TYPE).markAsContainerOperation();
     public static final Operation REJECT = new Operation(TYPE, ReturnTypeMode.IMMEDIATE_OPERAND, OclKeyWords.REJECT, 
@@ -131,6 +134,7 @@ public class Container extends StructuredDatatype {
         DTYPE.addOperation(ONE);
         DTYPE.addOperation(IS_UNIQUE);
         DTYPE.addOperation(COLLECT);
+        DTYPE.addOperation(COLLECT_NESTED);
         DTYPE.addOperation(SELECT);
         DTYPE.addOperation(REJECT);
         DTYPE.addOperation(IS_DEFINED);

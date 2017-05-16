@@ -18,11 +18,13 @@ package net.ssehub.easy.varModel.cst;
 import java.util.Arrays;
 
 import net.ssehub.easy.varModel.model.DecisionVariableDeclaration;
+import net.ssehub.easy.varModel.model.IvmlDatatypeVisitor;
 import net.ssehub.easy.varModel.model.datatypes.Container;
 import net.ssehub.easy.varModel.model.datatypes.DerivedDatatype;
 import net.ssehub.easy.varModel.model.datatypes.IDatatype;
 import net.ssehub.easy.varModel.model.datatypes.OclKeyWords;
 import net.ssehub.easy.varModel.model.datatypes.Operation;
+import net.ssehub.easy.varModel.model.datatypes.Operation.NestingMode;
 import net.ssehub.easy.varModel.model.datatypes.TypeQueries;
 
 /**
@@ -150,12 +152,6 @@ public class ContainerOperationCall extends ConstraintSyntaxTree {
                         throw new CSTSemanticException("apply requires an initialized return declarator", 
                             CSTSemanticException.DECLARATOR_SEMANTICS);
                     } 
-                    // at lest the first type must match, allow intermediary temp declarators
-                    if (!declarators[0].getType().isAssignableFrom(iteratorBase)) {
-                        throw new CSTSemanticException("type '" + declarators[0].getName()
-                            + "' of declarator does not match the contained type of the collection", 
-                            CSTSemanticException.TYPE_MISMATCH);
-                    }
                     
                     // just ask the operand for the operation
                     Operation op = TypeQueries.getOperation(containerType, operation, param);
@@ -163,6 +159,20 @@ public class ContainerOperationCall extends ConstraintSyntaxTree {
                         throw new UnknownOperationException(operation, 
                             CSTSemanticException.UNKNOWN_OPERATION, containerType, param);
                     }
+                    // at lest the first type must match, allow intermediary temp declarators
+                    IDatatype iterType = declarators[0].getType();
+                    if (op.getNestingMode() != NestingMode.NONE) {
+                        while (Container.TYPE.isAssignableFrom(iteratorBase) 
+                            && 1 == iteratorBase.getGenericTypeCount()) {
+                            iteratorBase = iteratorBase.getGenericType(0);
+                        }
+                    }
+                    if (!iterType.isAssignableFrom(iteratorBase)) {
+                        throw new CSTSemanticException("type '" + IvmlDatatypeVisitor.getUnqualifiedType(iterType)
+                            + "' of declarator does not match the contained type of the collection", 
+                            CSTSemanticException.TYPE_MISMATCH);
+                    }
+                    
                     result = op.getActualReturnType(containerType, param);
                     resolvedOperation = op;
                     // equalparamtypes are not required here as different semantics

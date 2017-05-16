@@ -802,18 +802,18 @@ public class EvaluationVisitorTest {
         Utils.assertContainer(new Object[]{}, visitor.getResult());
         visitor.clear();
     }
-    
+
     /**
-     * Tests the "collect" container operation.
+     * Tests a collect container operation on a non-nested collection.
      * 
+     * @param op the sequence collect operation to be applied
      * @throws ValueDoesNotMatchTypeException in case that value assignments fail (shall not occur)
      * @throws ConfigurationException in case that initial assignment of values fail (shall not occur)
      * @throws CSTSemanticException in case that the expressions created during this test are not 
      *   valid (shall not occur)
      */
-    @Test
-    public void testCollectContainerOperation() throws ValueDoesNotMatchTypeException, ConfigurationException, 
-        CSTSemanticException {
+    private void testCollectNonNestedSequenceOperation(Operation op) throws ValueDoesNotMatchTypeException, 
+        ConfigurationException, CSTSemanticException {
         Project project = new Project("Test");
         // Types
         Sequence seqType = new Sequence("mySeq", IntegerType.TYPE, project);
@@ -829,7 +829,7 @@ public class EvaluationVisitorTest {
         ConstantValue const10 = new ConstantValue(ValueFactory.createValue(IntegerType.TYPE, 10));
         ConstraintSyntaxTree itExpression = Utils.createCall(localDecl, IntegerType.MULT_INTEGER_INTEGER, const10);
         itExpression.inferDatatype();
-        ConstraintSyntaxTree containerOp = Utils.createContainerCall(decl1, Sequence.COLLECT, itExpression, localDecl);
+        ConstraintSyntaxTree containerOp = Utils.createContainerCall(decl1, op, itExpression, localDecl);
         containerOp.inferDatatype();
         EvaluationVisitor visitor = new EvaluationVisitor();
         visitor.init(config, AssignmentState.DEFAULT, false, null);
@@ -847,7 +847,121 @@ public class EvaluationVisitorTest {
         Utils.assertContainer(new Object[]{}, result);
         visitor.clear();
     }
+
     
+    /**
+     * Tests the "collect" container operation on a non-nested collection.
+     * 
+     * @throws ValueDoesNotMatchTypeException in case that value assignments fail (shall not occur)
+     * @throws ConfigurationException in case that initial assignment of values fail (shall not occur)
+     * @throws CSTSemanticException in case that the expressions created during this test are not 
+     *   valid (shall not occur)
+     */
+    @Test
+    public void testCollectNonNestedSequenceOperation() throws ValueDoesNotMatchTypeException, ConfigurationException, 
+        CSTSemanticException {
+        testCollectNonNestedSequenceOperation(Sequence.COLLECT); // set has same implementation
+    }
+
+    /**
+     * Tests the "collectNested" container operation on a non-nested collection.
+     * 
+     * @throws ValueDoesNotMatchTypeException in case that value assignments fail (shall not occur)
+     * @throws ConfigurationException in case that initial assignment of values fail (shall not occur)
+     * @throws CSTSemanticException in case that the expressions created during this test are not 
+     *   valid (shall not occur)
+     */
+    @Test
+    public void testCollectNestedNonNestedSequenceOperation() throws ValueDoesNotMatchTypeException, 
+        ConfigurationException, CSTSemanticException {
+        // collect nested on non-nested sequence shall have the same result
+        testCollectNonNestedSequenceOperation(Sequence.COLLECT_NESTED); // set has same implementation
+    }
+    
+    /**
+     * Tests a collect container operation on a nested collection.
+     * 
+     * @param op the operation to test
+     * @param values the values to execute <code>op</code> on
+     * @param expected the expected result for <code>values</code>
+     * @param empty the empty set
+     * 
+     * @throws ValueDoesNotMatchTypeException in case that value assignments fail (shall not occur)
+     * @throws ConfigurationException in case that initial assignment of values fail (shall not occur)
+     * @throws CSTSemanticException in case that the expressions created during this test are not 
+     *   valid (shall not occur)
+     */
+    private void testCollectNestedSequenceOperation(Operation op, Object[] values, Object[] expected, 
+        Object[] empty) throws ValueDoesNotMatchTypeException, ConfigurationException, CSTSemanticException {
+        Project project = new Project("Test");
+        // Types
+        Sequence sType = new Sequence("mySeq", IntegerType.TYPE, project);
+        Sequence seqType = new Sequence("mySeqSeq", sType, project);
+        // Declarations
+        DecisionVariableDeclaration decl1 = new DecisionVariableDeclaration("intA", seqType, project);
+        project.add(decl1);
+        // Assign value
+        Configuration config = new Configuration(project);
+        IDecisionVariable var = config.getDecision(decl1);
+        var.setValue(ValueFactory.createValue(seqType, values), AssignmentState.ASSIGNED);
+
+        DecisionVariableDeclaration localDecl = new DecisionVariableDeclaration("a", IntegerType.TYPE, null);
+        ConstantValue const10 = new ConstantValue(ValueFactory.createValue(IntegerType.TYPE, 10));
+        ConstraintSyntaxTree itExpression = Utils.createCall(localDecl, IntegerType.MULT_INTEGER_INTEGER, const10);
+        itExpression.inferDatatype();
+        ConstraintSyntaxTree containerOp = Utils.createContainerCall(decl1, op, itExpression, localDecl);
+        containerOp.inferDatatype();
+        EvaluationVisitor visitor = new EvaluationVisitor();
+        visitor.init(config, AssignmentState.DEFAULT, false, null);
+        containerOp.accept(visitor);
+        Value result = visitor.getResult();
+        Assert.assertTrue(result instanceof ContainerValue);
+        Utils.assertContainer(expected, visitor.getResult());
+        visitor.clear();
+
+        var.setValue(ValueFactory.createValue(seqType, empty), AssignmentState.ASSIGNED);
+        visitor.init(config, AssignmentState.DEFAULT, false, null);
+        containerOp.accept(visitor);
+        result = visitor.getResult();
+        Assert.assertTrue(result instanceof ContainerValue);
+        Utils.assertContainer(empty, result);
+        visitor.clear();
+    }
+
+    /**
+     * Tests the "collect" container operation on a nested collection.
+     * 
+     * @throws ValueDoesNotMatchTypeException in case that value assignments fail (shall not occur)
+     * @throws ConfigurationException in case that initial assignment of values fail (shall not occur)
+     * @throws CSTSemanticException in case that the expressions created during this test are not 
+     *   valid (shall not occur)
+     */
+    @Test
+    public void testCollectNestedSequenceOperation() throws ValueDoesNotMatchTypeException, ConfigurationException, 
+        CSTSemanticException {
+        testCollectNestedSequenceOperation(Sequence.COLLECT, 
+            new Object[][]{{1, 2}, {3, 4}, {5}}, 
+            new Object[]{10, 20, 30, 40, 50},
+            new Object[]{});
+    }
+
+    /**
+     * Tests the "collectNested" container operation on a nested collection.
+     * 
+     * @throws ValueDoesNotMatchTypeException in case that value assignments fail (shall not occur)
+     * @throws ConfigurationException in case that initial assignment of values fail (shall not occur)
+     * @throws CSTSemanticException in case that the expressions created during this test are not 
+     *   valid (shall not occur)
+     */
+    @Test
+    public void testCollectNestedNestedSequenceOperation() throws ValueDoesNotMatchTypeException, 
+        ConfigurationException, CSTSemanticException {
+        testCollectNestedSequenceOperation(Sequence.COLLECT_NESTED, 
+            new Object[][]{{1, 2}, {3, 4}, {5}}, 
+            new Object[][]{{10, 20}, {30, 40}, {50}}, 
+            new Object[][]{});
+    }
+
     /**
      * Tests the "apply" container operation.
      * 

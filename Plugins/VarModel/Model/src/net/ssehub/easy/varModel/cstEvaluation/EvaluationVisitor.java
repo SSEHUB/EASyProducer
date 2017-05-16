@@ -68,6 +68,7 @@ import net.ssehub.easy.varModel.model.datatypes.FreezeVariableType;
 import net.ssehub.easy.varModel.model.datatypes.IDatatype;
 import net.ssehub.easy.varModel.model.datatypes.OclKeyWords;
 import net.ssehub.easy.varModel.model.datatypes.Operation;
+import net.ssehub.easy.varModel.model.datatypes.Operation.NestingMode;
 import net.ssehub.easy.varModel.model.datatypes.Reference;
 import net.ssehub.easy.varModel.model.datatypes.TypeQueries;
 import net.ssehub.easy.varModel.model.values.BooleanValue;
@@ -1464,6 +1465,147 @@ public class EvaluationVisitor implements IConstraintTreeVisitor {
     }
     
     /**
+     * Implements flattening/non-flattening container evaluation.
+     * 
+     * @author Holger Eichelberger
+     */
+    private class ContainerIterationExecutor {
+        
+        private ContainerOperationCall call;
+        private LocalDecisionVariable[] declarators;
+        private VariableAccessor resultVar;
+        private IIteratorEvaluator evaluator;
+        private Map<Object, Object> data = new HashMap<Object, Object>();
+        private int[] pos;
+        
+        /**
+         * Creates a container iteration executor with own context.
+         * 
+         * @param call the call to evaluate
+         * @param declarators the declarators
+         * @param resultVar the result variable / declarator
+         * @param evaluator the evaluator for <code>call</code>
+         */
+        private ContainerIterationExecutor(ContainerOperationCall call, LocalDecisionVariable[] declarators, 
+            VariableAccessor resultVar, IIteratorEvaluator evaluator) {
+            this.call = call;
+            this.declarators = declarators;
+            this.resultVar = resultVar;
+            this.evaluator = evaluator;
+        }
+        
+        /**
+         * Evaluate for the given number of iterators.
+         * 
+         * @param iterCount the number of iterators
+         * @return <code>true</code> for success, <code>false</code> else
+         */
+        private boolean execute(int iterCount) {
+            boolean ok = true;
+            call.getContainer().accept(EvaluationVisitor.this);
+            if (null != result && result.getValue() instanceof ContainerValue) {
+                ContainerValue container = (ContainerValue) result.getValue();
+                clearResult();
+                ContainerValue[] containers = new ContainerValue[iterCount];
+                ok = initialize(container, containers, declarators);
+                // iterate over inner iterator again and again until all outer iterators are done
+                pos = new int[iterCount];
+                while (ok && null != containers[0] && pos[0] < containers[0].getElementSize()) {
+                    int iter = pos.length - 1;
+                    ContainerValue iterator = containers[iter];
+                    boolean setSelf = selfVars.contains(declarators[iter].getDeclaration());
+                    int maxIter = iterator.getElementSize();
+                    for (pos[iter] = 0; ok && pos[iter] < maxIter; pos[iter]++) {
+                        Value iterVal = iterator.getElement(pos[iter]);
+                        ok = evaluateIterator(iter, iterVal, maxIter, setSelf, resultVar);
+                    }
+                    selfValue = null;
+                    data.clear();
+                    iter--;
+                    boolean propagate = true; // propagate loop end through other iterators
+                    while (iter > 0 && propagate) {
+                        pos[iter]++;
+                        if (pos[iter] >= containers[iter].getElementSize()) {
+                            pos[iter] = 0;
+                        } else {
+                            propagate = false;
+                        }
+                        try {
+                            declarators[iter].setValue(iterator.getElement(pos[iter]), AssignmentState.ASSIGNED);
+                        } catch (ConfigurationException e) {
+                            ok = containerException(e);
+                        }
+                        if (propagate) {
+                            iter--;
+                        } else {
+                            break;
+                        }
+                    }
+                }
+            } else {
+                ok = false;
+            }
+            return ok;
+        }
+
+        /**
+         * Evaluates an iterator. Considers the nesting mode and flattens/builds up sub-collections if needed.
+         * 
+         * @param iter the declarator iteration index
+         * @param iterVal the actual value of the iterator
+         * @param maxIter the maximum iteration index
+         * @param setSelf whether {@link EvaluationVisitor#selfValue} shall be modified
+         * @param rVar the result value accessor
+         * @return whether the execution was ok (<code>true</code>) or not <code>false</code>)
+         */
+        private boolean evaluateIterator(int iter, Value iterVal, int maxIter, boolean setSelf, 
+            EvaluationAccessor rVar) {
+            boolean ok = true;
+            NestingMode nestingMode = call.getResolvedOperation().getNestingMode();
+            if (NestingMode.NONE != nestingMode && iterVal instanceof ContainerValue) {
+                EvaluationAccessor res = rVar; 
+                if (NestingMode.NESTING == nestingMode) {
+                    try {
+                        Value val = ValueFactory.createValue(rVar.getValue().getContainedType(), (Object[]) null);
+                        res = ConstantAccessor.POOL.getInstance().bind(val, rVar.getContext());
+                        ((ContainerValue) rVar.getValue()).addElement(res.getValue());
+                    } catch (ValueDoesNotMatchTypeException ex) {
+                        ok = containerException(ex);
+                    }
+                }
+                ContainerValue cValue = (ContainerValue) iterVal;
+                for (int e = 0; ok && e < cValue.getElementSize(); e++) {
+                    ok &= evaluateIterator(iter, cValue.getElement(e), maxIter, setSelf, res);
+                }
+            } else {
+                if (setSelf) { // for now only inner...
+                    selfValue = iterVal;
+                }
+                try {
+                    declarators[iter].setValue(iterVal, AssignmentState.ASSIGNED);
+                } catch (ConfigurationException e) {
+                    ok = containerException(e);
+                }
+                call.getExpression().accept(EvaluationVisitor.this);
+                if (null != result && null != result.getValue()) {
+                    try {
+                        boolean stop = evaluator.aggregate(rVar, iterVal, result, data); 
+                        clearResult();
+                        if (stop) {
+                            pos[iter] = maxIter; // break -> endless loop
+                        }
+                    } catch (ValueDoesNotMatchTypeException ex) {
+                        ok = containerException(ex);
+                    }
+                } else {
+                    ok = false;
+                }
+            }
+            return ok;
+        }
+    }
+    
+    /**
      * Executes the container iteration.
      * 
      * @param call the container operation call to be executed
@@ -1476,75 +1618,10 @@ public class EvaluationVisitor implements IConstraintTreeVisitor {
      */
     private boolean executeContainerIteration(ContainerOperationCall call, LocalDecisionVariable[] declarators, 
         int iterCount, VariableAccessor resultVar, IIteratorEvaluator evaluator) {
-        boolean ok = true;
-        call.getContainer().accept(this);
-        if (null != result && result.getValue() instanceof ContainerValue) {
-            ContainerValue container = (ContainerValue) result.getValue();
-            clearResult();
-            ContainerValue[] containers = new ContainerValue[iterCount];
-            ok = initialize(container, containers, declarators);
-            // iterate over inner iterator again and again until all outer iterators are done
-            int[] pos = new int[iterCount];
-            Map<Object, Object> data = new HashMap<Object, Object>();
-            while (ok && null != containers[0] && pos[0] < containers[0].getElementSize()) {
-                int iter = pos.length - 1;
-                ContainerValue iterator = containers[iter];
-                boolean setSelf = selfVars.contains(declarators[iter].getDeclaration());
-                int maxIter = iterator.getElementSize();
-                for (pos[iter] = 0; ok && pos[iter] < maxIter; pos[iter]++) {
-                    Value iterVal = iterator.getElement(pos[iter]);
-                    if (setSelf) { // for now only inner...
-                        selfValue = iterVal;
-                    }
-                    try {
-                        declarators[iter].setValue(iterVal, AssignmentState.ASSIGNED);
-                    } catch (ConfigurationException e) {
-                        ok = containerException(e);
-                    }
-                    call.getExpression().accept(this);
-                    if (null != result && null != result.getValue()) {
-                        try {
-                            boolean stop = evaluator.aggregate(resultVar, iterVal, result, data);
-                            clearResult();
-                            if (stop) {
-                                pos[iter] = maxIter; // break -> endless loop
-                            }
-                        } catch (ValueDoesNotMatchTypeException e) {
-                            ok = containerException(e);
-                        }
-                    } else {
-                        ok = false;
-                    }
-                }
-                selfValue = null;
-                data.clear();
-                iter--;
-                boolean propagate = true; // propagate loop end through other iterators
-                while (iter > 0 && propagate) {
-                    pos[iter]++;
-                    if (pos[iter] >= containers[iter].getElementSize()) {
-                        pos[iter] = 0;
-                    } else {
-                        propagate = false;
-                    }
-                    try {
-                        declarators[iter].setValue(iterator.getElement(pos[iter]), AssignmentState.ASSIGNED);
-                    } catch (ConfigurationException e) {
-                        ok = containerException(e);
-                    }
-                    if (propagate) {
-                        iter--;
-                    } else {
-                        break;
-                    }
-                }
-            }
-        } else {
-            ok = false;
-        }
-        return ok;
+        ContainerIterationExecutor exec = new ContainerIterationExecutor(call, declarators, resultVar, evaluator);
+        return exec.execute(iterCount);
     }
-    
+
     /**
      * Just a wrapper for container exceptions constantly returning <b>false</b>.
      * Calls {@link #exception(Throwable)}.

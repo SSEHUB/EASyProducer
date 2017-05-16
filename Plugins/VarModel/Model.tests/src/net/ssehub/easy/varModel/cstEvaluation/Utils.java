@@ -371,6 +371,8 @@ class Utils {
                 Value eltVal = cValue.getElement(i);
                 if (expected[i] instanceof Value) {
                     Assert.assertTrue(eltVal.equals(expected[i]));
+                } else if (eltVal instanceof ContainerValue && expected[i].getClass().isArray()) {
+                    assertContainer((Object[]) expected[i], eltVal);
                 } else {
                     Assert.assertEquals(expected[i], eltVal.getValue());
                 }

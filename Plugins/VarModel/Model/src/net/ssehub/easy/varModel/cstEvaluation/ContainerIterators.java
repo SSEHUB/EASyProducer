@@ -280,7 +280,8 @@ class ContainerIterators {
     }
 
     /**
-     * Implements {@link net.ssehub.easy.varModel.model.datatypes.Container#COLLECT}.
+     * Implements {@link net.ssehub.easy.varModel.model.datatypes.Container#COLLECT} and 
+     * {@link net.ssehub.easy.varModel.model.datatypes.Container#COLLECT_NESTED}.
      */
     static final IIteratorEvaluator COLLECT = new CollectingIteratorEvaluator() {
         
