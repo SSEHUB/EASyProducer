@@ -30,7 +30,8 @@ import net.ssehub.easy.varModel.confModel.IDecisionVariable;
  */
 public abstract class EvaluationContext implements IConfiguration {
     
-    private static Locale defaultLocale = new Locale("en", "us");
+    public static final Locale INITIAL_LOCALE = new Locale("en", "us");
+    private static Locale defaultLocale = INITIAL_LOCALE;
     private Locale locale = defaultLocale;
 
     /**

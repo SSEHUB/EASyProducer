@@ -212,14 +212,7 @@ public class GenericOperations {
                 Value arg = arguments[0].getValue();
                 if (arg instanceof StringValue) {
                     String loc = ((StringValue) arg).getValue();
-                    Locale locale;
-                    int pos = loc.indexOf("_");
-                    if (pos < 0 && pos + 1 < loc.length()) {
-                        locale = new Locale(loc);
-                    } else {
-                        locale = new Locale(loc.substring(0, pos), loc.substring(pos + 1));
-                    }
-                    operand.getContext().setLocale(locale);
+                    operand.getContext().setLocale(toLocale(loc));
                     try {
                         result = ConstantAccessor.POOL.getInstance().bind(ValueFactory.createValue(StringType.TYPE, 
                             localeToString(operand)), operand.getContext());
@@ -236,6 +229,23 @@ public class GenericOperations {
      * Prevents external instantiation.
      */
     private GenericOperations() {
+    }
+
+    /**
+     * Turns <code>loc</code> into a locale.
+     * 
+     * @param loc a string specifying a locale (form: lang[_country]).
+     * @return the locale
+     */
+    public static Locale toLocale(String loc) {
+        Locale locale;
+        int pos = loc.indexOf("_");
+        if (pos < 0 && pos + 1 < loc.length()) {
+            locale = new Locale(loc);
+        } else {
+            locale = new Locale(loc.substring(0, pos), loc.substring(pos + 1));
+        }
+        return locale;
     }
 
     /**
