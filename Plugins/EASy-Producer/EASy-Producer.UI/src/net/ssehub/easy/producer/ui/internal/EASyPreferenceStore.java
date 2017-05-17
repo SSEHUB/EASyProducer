@@ -2,6 +2,7 @@
 package net.ssehub.easy.producer.ui.internal;
 
 import java.util.Iterator;
+import java.util.Locale;
 
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 import org.eclipse.core.runtime.preferences.InstanceScope;
@@ -13,6 +14,8 @@ import net.ssehub.easy.producer.core.persistence.Configuration;
 import net.ssehub.easy.producer.core.persistence.Configuration.PathKind;
 import net.ssehub.easy.reasoning.core.frontend.ReasonerFrontend;
 import net.ssehub.easy.reasoning.core.reasoner.ReasonerDescriptor;
+import net.ssehub.easy.varModel.cstEvaluation.EvaluationContext;
+import net.ssehub.easy.varModel.cstEvaluation.GenericOperations;
 import net.ssehub.easy.varModel.persistency.AbstractVarModelWriter;
 
 /**
@@ -171,6 +174,7 @@ public class EASyPreferenceStore {
             setIvmlPrefs(4, true);
         }
         AbstractVarModelWriter.setOclCompliance(getOclCompliance());
+        EvaluationContext.setDefaultLocale(getDefaultLocale());
     }
     
     /**
@@ -213,6 +217,47 @@ public class EASyPreferenceStore {
         return getPreferences().getBoolean("easy.oclCompliance", false);
     }
     
+    /**
+     * Returns the default locale from preferences.
+     * 
+     * @return the default locale
+     */
+    public static Locale getDefaultLocale() {
+        String tmp = getPreferences().get("easy.oclLocale", getInitialLocaleAsString());
+        return GenericOperations.toLocale(tmp);
+    }
+    
+    /**
+     * Returns the default locale as string.
+     * 
+     * @return the default locale
+     */
+    public static String getDefaultLocaleAsString() {
+        return GenericOperations.toString(getDefaultLocale());
+    }
+    
+    /**
+     * Changes the default locale.
+     * 
+     * @param loc the textual description for the default locale (ignored if <b>null</b> or empty)
+     */
+    public static void setDefaultLocale(String loc) {
+        if (null != loc && !loc.isEmpty()) {
+            getPreferences().put("easy.oclLocale", loc);
+            Locale l = GenericOperations.toLocale(loc);
+            EvaluationContext.setDefaultLocale(l);
+        }
+    }
+
+    /**
+     * Returns the initial locale as string.
+     * 
+     * @return the initial locale
+     */
+    public static String getInitialLocaleAsString() {
+        return GenericOperations.toString(EvaluationContext.INITIAL_LOCALE);
+    }
+
     /**
      * Defines the actual OCL compliance state for EASy-Producer.
      * 

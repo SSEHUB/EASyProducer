@@ -8,6 +8,7 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPreferencePage;
 
@@ -22,6 +23,7 @@ public class MainPreferencePage extends PreferencePage implements
     IWorkbenchPreferencePage {
 
     private Button oclCompliance;
+    private Text defaultLocale;
     
     @Override
     public void init(IWorkbench workbench) {
@@ -43,8 +45,12 @@ public class MainPreferencePage extends PreferencePage implements
         oclCompliance = new Button(pageComponent, SWT.CHECK);
         oclCompliance.setText("OCL compliance mode");
         oclCompliance.setSelection(EASyPreferenceStore.getOclCompliance());
-        
         new Label(pageComponent, SWT.LEFT);
+        
+        Label tmp = new Label(pageComponent, SWT.LEFT);
+        tmp.setText("Default locale (lang[_country]):");
+        defaultLocale = new Text(pageComponent, SWT.SINGLE | SWT.BORDER);
+        defaultLocale.setText(EASyPreferenceStore.getDefaultLocaleAsString());
         
         return pageComponent;
     }
@@ -52,12 +58,15 @@ public class MainPreferencePage extends PreferencePage implements
     @Override
     protected void performDefaults() {
         oclCompliance.setSelection(false);
+        defaultLocale.setText(EASyPreferenceStore.getInitialLocaleAsString());
         super.performDefaults();
     }
 
     @Override
     protected void performApply() {
         EASyPreferenceStore.setOclCompliance(oclCompliance.getSelection());
+        // default locale would deserve a validator
+        EASyPreferenceStore.setDefaultLocale(defaultLocale.getText());
         super.performApply();
     }
     
