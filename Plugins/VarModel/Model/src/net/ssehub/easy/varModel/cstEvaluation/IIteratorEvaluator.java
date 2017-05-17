@@ -46,11 +46,21 @@ public interface IIteratorEvaluator {
      * @param result the aggregating result
      * @param iter the current value of the iterator
      * @param value the value to be aggregated
-     * @param data arbitrary data to be hold by the actually executing function
+     * @param data arbitrary data to be hold while actually evaluating the function
      * @return <code>true</code> if iteration shall stop due to this evaluation, <code>false</code> else
      * @throws ValueDoesNotMatchTypeException in case of type compatibility problems
      */
     public boolean aggregate(EvaluationAccessor result, Value iter, EvaluationAccessor value, Map<Object, Object> data) 
+        throws ValueDoesNotMatchTypeException;
+    
+    /**
+     * Called to post-process the actual result at the end after the last iteration. 
+     * 
+     * @param result the aggregated result so far
+     * @param data arbitrary data to be hold while actually evaluating the function
+     * @throws ValueDoesNotMatchTypeException in case of type compatibility problems
+     */
+    public void postProcessResult(EvaluationAccessor result, Map<Object, Object> data) 
         throws ValueDoesNotMatchTypeException;
 
 }

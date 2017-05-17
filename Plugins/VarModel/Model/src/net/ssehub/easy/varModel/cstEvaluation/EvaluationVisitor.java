@@ -1519,6 +1519,11 @@ public class EvaluationVisitor implements IConstraintTreeVisitor {
                         Value iterVal = iterator.getElement(pos[iter]);
                         ok = evaluateIterator(iter, iterVal, maxIter, setSelf, resultVar);
                     }
+                    try {
+                        evaluator.postProcessResult(resultVar, data);
+                    } catch (ValueDoesNotMatchTypeException ex) {
+                        ok = containerException(ex);
+                    }
                     selfValue = null;
                     data.clear();
                     iter--;

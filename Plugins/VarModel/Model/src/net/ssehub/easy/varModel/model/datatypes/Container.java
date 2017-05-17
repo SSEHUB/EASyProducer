@@ -88,6 +88,8 @@ public class Container extends StructuredDatatype {
     public static final Operation COLLECT_NESTED = new Operation(TYPE, 
         ReturnTypeMode.IMMEDIATE_OPERAND_COLLECTION_PARAM_1, OclKeyWords.COLLECT_NESTED, TYPE, 
         AnyType.TYPE).markAsNestingContainerOperation();
+    public static final Operation SORTED_BY = new Operation(TYPE, ReturnTypeMode.IMMEDIATE_OPERAND,
+        OclKeyWords.SORTED_BY, TYPE, AnyType.TYPE).markAsContainerOperation();
     public static final Operation SELECT = new Operation(TYPE, ReturnTypeMode.IMMEDIATE_OPERAND, OclKeyWords.SELECT, 
         TYPE, BooleanType.TYPE).markAsContainerOperation();
     public static final Operation REJECT = new Operation(TYPE, ReturnTypeMode.IMMEDIATE_OPERAND, OclKeyWords.REJECT, 
@@ -135,6 +137,7 @@ public class Container extends StructuredDatatype {
         DTYPE.addOperation(IS_UNIQUE);
         DTYPE.addOperation(COLLECT);
         DTYPE.addOperation(COLLECT_NESTED);
+        DTYPE.addOperation(SORTED_BY);
         DTYPE.addOperation(SELECT);
         DTYPE.addOperation(REJECT);
         DTYPE.addOperation(IS_DEFINED);
