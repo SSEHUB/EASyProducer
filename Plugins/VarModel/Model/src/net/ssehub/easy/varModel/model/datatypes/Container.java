@@ -69,10 +69,10 @@ public class Container extends StructuredDatatype {
     // implementations... let's see whether this makes sense from the perspective of the reasoner
     public static final Operation TYPE_OF = new Operation(MetaType.TYPE, OclKeyWords.TYPE_OF, TYPE);
     // strange thing... the apply operation is type generic on the first parameter (result of lambda expression)
-    public static final Operation APPLY = new Operation(BooleanType.TYPE, ReturnTypeMode.PARAM_1, 
-        OclKeyWords.APPLY, TYPE, AnyType.TYPE).markAsContainerOperation();
     public static final Operation ITERATE = new Operation(BooleanType.TYPE, ReturnTypeMode.PARAM_1, 
-        OclKeyWords.ITERATE, TYPE, AnyType.TYPE).markAsContainerOperation();
+            OclKeyWords.ITERATE, TYPE, AnyType.TYPE).markAsContainerOperation();
+    public static final Operation APPLY = new Operation(BooleanType.TYPE, ReturnTypeMode.PARAM_1, 
+        OclKeyWords.APPLY, TYPE, AnyType.TYPE).markAsContainerOperation().markAsAliasOf(ITERATE);
 
     // quantors
     public static final Operation FORALL = new Operation(BooleanType.TYPE, OclKeyWords.FOR_ALL, 
@@ -107,10 +107,10 @@ public class Container extends StructuredDatatype {
     
     public static final Operation IS_DEFINED = new Operation(BooleanType.TYPE, OclKeyWords.IS_DEFINED, TYPE)
         .markAsAcceptsNull();
-    public static final Operation TYPE_SELECT = new Operation(TYPE, ReturnTypeMode.TYPED_PARAM_1, 
-        OclKeyWords.TYPE_SELECT, TYPE, AnyType.TYPE);    
     public static final Operation SELECT_BY_TYPE = new Operation(TYPE, ReturnTypeMode.TYPED_PARAM_1, 
-        OclKeyWords.SELECT_BY_TYPE, TYPE, AnyType.TYPE);    
+            OclKeyWords.SELECT_BY_TYPE, TYPE, AnyType.TYPE);    
+    public static final Operation TYPE_SELECT = new Operation(TYPE, ReturnTypeMode.TYPED_PARAM_1, 
+        OclKeyWords.TYPE_SELECT, TYPE, AnyType.TYPE).markAsAliasOf(SELECT_BY_TYPE);    
     public static final Operation SELECT_BY_KIND = new Operation(TYPE, ReturnTypeMode.TYPED_PARAM_1, 
             OclKeyWords.SELECT_BY_KIND, TYPE, AnyType.TYPE);    
     public static final Operation TYPE_REJECT = new Operation(TYPE, ReturnTypeMode.TYPED_PARAM_1, 

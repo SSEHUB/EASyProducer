@@ -176,8 +176,9 @@ public class ContainerOperationCall extends ConstraintSyntaxTree {
                         param = expression.inferDatatype(); // typically boolean
                     }
                     boolean foundResult = size != declarators.length;
-                    if (operation.equals(OclKeyWords.APPLY) && !foundResult) {
-                        throw new CSTSemanticException("apply requires an initialized return declarator", 
+                    if ((operation.equals(OclKeyWords.APPLY) || operation.equals(OclKeyWords.ITERATE)) 
+                        && !foundResult) {
+                        throw new CSTSemanticException("iterate/apply require an initialized return declarator", 
                             CSTSemanticException.DECLARATOR_SEMANTICS);
                     } 
                     

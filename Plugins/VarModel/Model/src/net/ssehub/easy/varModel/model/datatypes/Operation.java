@@ -16,7 +16,9 @@
 package net.ssehub.easy.varModel.model.datatypes;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import net.ssehub.easy.varModel.cst.ConstraintSyntaxTree;
 import net.ssehub.easy.varModel.model.IModelElement;
@@ -226,6 +228,8 @@ public class Operation {
     }
     
     private static List<Operation> allOperations = new ArrayList<Operation>();
+    // key is an alias for value
+    private static transient Map<Operation, Operation> alias = new HashMap<Operation, Operation>();
 
     private IDatatype returns;
     
@@ -598,6 +602,18 @@ public class Operation {
         nestingMode = NestingMode.LEGACY;
         return this;
     }
+    
+    /**
+     * Marks this operation as an alias of <code>op</code>, indicating that this
+     * operation is a potential a risk for breaking OCL compliance.
+     * 
+     * @param op the aliased operation
+     * @return <b>this</b>
+     */
+    Operation markAsAliasOf(Operation op) {
+        alias.put(this, op);
+        return this;
+    }
 
     /**
      * Marks that this operation requires assignable parameter types. Introduced as constructors 
@@ -720,6 +736,16 @@ public class Operation {
         }
         tmp.append(")");
         return tmp.toString();
+    }
+    
+    /**
+     * Returns the alias defined for the given operation has.
+     * 
+     * @param op the operation to look for (ignored if <b>null</b>)
+     * @return the alias or <b>null</b> for none
+     */
+    public static Operation getAlias(Operation op) {
+        return null == op ? null : alias.get(op);
     }
 
 }
