@@ -806,6 +806,34 @@ public class EvaluationVisitorIteratorTest {
     @Test
     public void testApplyContainerOperation() throws ValueDoesNotMatchTypeException, ConfigurationException, 
         CSTSemanticException {
+        testApplyIterateContainerOperation(Sequence.APPLY);
+    }
+
+    /**
+     * Tests the "iterate" container operation.
+     * 
+     * @throws ValueDoesNotMatchTypeException in case that value assignments fail (shall not occur)
+     * @throws ConfigurationException in case that initial assignment of values fail (shall not occur)
+     * @throws CSTSemanticException in case that the expressions created during this test are not 
+     *   valid (shall not occur)
+     */
+    @Test
+    public void testIterateContainerOperation() throws ValueDoesNotMatchTypeException, ConfigurationException, 
+        CSTSemanticException {
+        testApplyIterateContainerOperation(Sequence.ITERATE);
+    }
+
+    /**
+     * Tests the apply/iterate container operation.
+     * 
+     * @param op the operation to test
+     * @throws ValueDoesNotMatchTypeException in case that value assignments fail (shall not occur)
+     * @throws ConfigurationException in case that initial assignment of values fail (shall not occur)
+     * @throws CSTSemanticException in case that the expressions created during this test are not 
+     *   valid (shall not occur)
+     */
+    private void testApplyIterateContainerOperation(Operation op) throws ValueDoesNotMatchTypeException, 
+        ConfigurationException, CSTSemanticException {
         Project project = new Project("Test");
         // Types
         Sequence seqType = new Sequence("mySeq", IntegerType.TYPE, project);
@@ -830,8 +858,7 @@ public class EvaluationVisitorIteratorTest {
         itExpression = Utils.createCall(resultDecl, IntegerType.ASSIGNMENT_INTEGER_INTEGER, itExpression);
         itExpression.inferDatatype();
         
-        ConstraintSyntaxTree containerOp = Utils.createContainerCall(decl1, Sequence.APPLY, 
-            itExpression, localDecl, resultDecl);
+        ConstraintSyntaxTree containerOp = Utils.createContainerCall(decl1, op, itExpression, localDecl, resultDecl);
         containerOp.inferDatatype();
         
         EvaluationVisitor visitor = new EvaluationVisitor();
@@ -859,7 +886,7 @@ public class EvaluationVisitorIteratorTest {
         DecisionVariableDeclaration tempLocal = new DecisionVariableDeclaration("tmp", BooleanType.TYPE, null);
         tempLocal.setValue(BooleanValue.TRUE);
         itExpression = new BlockExpression(new ConstraintSyntaxTree[] {itExpression});
-        containerOp = Utils.createContainerCall(decl1, Sequence.APPLY, 
+        containerOp = Utils.createContainerCall(decl1, op, 
             itExpression, localDecl, tempLocal, resultDecl);
         containerOp.inferDatatype();
         var.setValue(ValueFactory.createValue(seqType, new Object[]{1, 1, 1, 1, 1}), AssignmentState.ASSIGNED);

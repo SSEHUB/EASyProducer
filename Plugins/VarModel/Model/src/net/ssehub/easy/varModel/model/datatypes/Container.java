@@ -71,6 +71,8 @@ public class Container extends StructuredDatatype {
     // strange thing... the apply operation is type generic on the first parameter (result of lambda expression)
     public static final Operation APPLY = new Operation(BooleanType.TYPE, ReturnTypeMode.PARAM_1, 
         OclKeyWords.APPLY, TYPE, AnyType.TYPE).markAsContainerOperation();
+    public static final Operation ITERATE = new Operation(BooleanType.TYPE, ReturnTypeMode.PARAM_1, 
+        OclKeyWords.ITERATE, TYPE, AnyType.TYPE).markAsContainerOperation();
 
     // quantors
     public static final Operation FORALL = new Operation(BooleanType.TYPE, OclKeyWords.FOR_ALL, 
@@ -121,6 +123,7 @@ public class Container extends StructuredDatatype {
         DTYPE.addOperation(UNEQUALS);
         DTYPE.addOperation(TYPE_OF);
         DTYPE.addOperation(APPLY);
+        DTYPE.addOperation(ITERATE);
         DTYPE.addOperation(INCLUDES);
         DTYPE.addOperation(EXCLUDES);
         DTYPE.addOperation(INCLUDES_ALL);

@@ -1379,7 +1379,7 @@ public class EvaluationVisitor implements IConstraintTreeVisitor {
                 // variable the other declarators are the iterators - we may have multi-dimensional cross-products
                 int lastIteratorIndex = call.getDeclaratorsCount();
                 DecisionVariableDeclaration resultDecl;
-                if (Container.APPLY == operation) { // the last declarator is the result
+                if (Container.APPLY == operation || Container.ITERATE == operation) { // last declarator is the result
                     lastIteratorIndex--;
                     resultDecl = call.getDeclarator(lastIteratorIndex);
                 } else { // result is implicit

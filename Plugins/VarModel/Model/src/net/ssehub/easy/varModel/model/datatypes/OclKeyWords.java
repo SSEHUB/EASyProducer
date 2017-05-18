@@ -144,6 +144,7 @@ public class OclKeyWords {
     // e.g. IVML
     public static final String TYPE_OF = "typeOf";
     public static final String APPLY = "apply";
+    public static final String ITERATE = "iterate";
     @IVMLKeyWord
     public static final String IFF = "iff";
     public static final String IS_DEFINED = "isDefined";    

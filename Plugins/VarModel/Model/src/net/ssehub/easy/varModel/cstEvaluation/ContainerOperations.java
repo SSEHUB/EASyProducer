@@ -658,6 +658,7 @@ public class ContainerOperations {
         EvaluatorRegistry.registerEvaluator(AVG, Container.AVG);
         EvaluatorRegistry.registerEvaluator(GenericOperations.TYPE_OF, Container.TYPE_OF);
         EvaluatorRegistry.registerEvaluator(ContainerIterators.APPLY, Container.APPLY);
+        EvaluatorRegistry.registerEvaluator(ContainerIterators.APPLY, Container.ITERATE);
         EvaluatorRegistry.registerEvaluator(ContainerIterators.FOR_ALL, Container.FORALL);
         EvaluatorRegistry.registerEvaluator(ContainerIterators.EXISTS, Container.EXISTS);
         EvaluatorRegistry.registerEvaluator(ContainerIterators.ANY, Container.ANY);
