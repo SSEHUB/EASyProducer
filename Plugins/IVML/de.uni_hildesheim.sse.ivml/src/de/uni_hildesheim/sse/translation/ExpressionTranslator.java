@@ -479,6 +479,10 @@ public class ExpressionTranslator extends net.ssehub.easy.dslCore.translation.Ex
             // normalize to OCL
             if (IvmlKeyWords.UNEQUALS_ALIAS.equals(op)) {
                 op = OclKeyWords.UNEQUALS;
+                if (AbstractVarModelWriter.considerOclCompliance()) {
+                    warning("OCL compliance: Please use <> instead of !=", expr, 
+                        IvmlPackage.Literals.EQUALITY_EXPRESSION_PART__OP, ErrorCodes.WARNING_USAGE);
+                }
             }
             ConstraintSyntaxTree rhs = null;
             if (null != expr.getRight().getEx()) {
@@ -721,10 +725,12 @@ public class ExpressionTranslator extends net.ssehub.easy.dslCore.translation.Ex
             try {
                 tmp.inferDatatype();
                 Operation op = tmp.getResolvedOperation();
-                if (checkOclCompliance && AbstractVarModelWriter.considerOclCompliance() 
-                    && (null != op && Container.TYPE.isAssignableFrom(op.getOperand()))) {
-                    warning("OCL compliance: Container operations shall be called by '->' rather than '.'", call, 
-                        IvmlPackage.Literals.ACTUAL_ARGUMENT_LIST__NAME, ErrorCodes.WARNING_USAGE);
+                if (checkOclCompliance && AbstractVarModelWriter.considerOclCompliance()) { 
+                    if (null != op && Container.TYPE.isAssignableFrom(op.getOperand())) {
+                        warning("OCL compliance: Container operations shall be called by '->' rather than '.'", call, 
+                            IvmlPackage.Literals.ACTUAL_ARGUMENT_LIST__NAME, ErrorCodes.WARNING_USAGE);
+                    }
+                    checkOperationOclCompliance(op, call, IvmlPackage.Literals.ACTUAL_ARGUMENT_LIST__NAME);
                 }
             } catch (CSTSemanticException e) {
             }
@@ -1089,8 +1095,10 @@ public class ExpressionTranslator extends net.ssehub.easy.dslCore.translation.Ex
                     IvmlPackage.Literals.CONTAINER_OP__DECL, ErrorCodes.SYNTAX);
             }
             declEx.inferDatatype();
-            lhs = new ContainerOperationCall(lhs, op.getName(), declEx, decls); 
-            lhs.inferDatatype();
+            ContainerOperationCall coc = new ContainerOperationCall(lhs, op.getName(), declEx, decls);
+            coc.inferDatatype(); 
+            checkOperationOclCompliance(coc.getResolvedOperation(), op, IvmlPackage.Literals.CONTAINER_OP__DECL);
+            lhs = coc;  
         } catch (TranslatorException e) {
             throw e;
         } catch (CSTSemanticException e) {
@@ -1100,6 +1108,23 @@ public class ExpressionTranslator extends net.ssehub.easy.dslCore.translation.Ex
         }
         level--;
         return lhs;
+    }
+
+    /**
+     * Checks for OCL operation compliance and issues a warning if violated and compliance mode is enabled.
+     * 
+     * @param op the operation
+     * @param cause the causing ECore object
+     * @param feature the causing ECore feature
+     */
+    private void checkOperationOclCompliance(Operation op, EObject cause, EStructuralFeature feature) {
+        if (AbstractVarModelWriter.considerOclCompliance()) {
+            Operation alias = Operation.getAlias(op);
+            if (null != alias) {
+                warning("OCL compliance: Please use '" + alias.getSignature() + "' instead of '" + op.getSignature() 
+                    + "'", cause, feature, ErrorCodes.WARNING_USAGE);
+            }
+        }
     }
 
     /**
