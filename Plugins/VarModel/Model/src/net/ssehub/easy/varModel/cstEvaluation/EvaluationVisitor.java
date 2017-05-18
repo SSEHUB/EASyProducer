@@ -1495,6 +1495,40 @@ public class EvaluationVisitor implements IConstraintTreeVisitor {
         }
         
         /**
+         * Determines the container value to iterate over from the container expression. If needed, create an 
+         * implicit temporary container (if operation is applied to a non-container variable).
+         * 
+         * @return the container value
+         */
+        private ContainerValue determineContainerValue() {
+            call.getContainer().accept(EvaluationVisitor.this);
+            ContainerValue container = null;
+            if (null != result) {
+                Value rValue = result.getValue();
+                if (rValue instanceof ContainerValue) {
+                    container = (ContainerValue) rValue;
+                } else if (null != rValue) {
+                    try {
+                        IDatatype containerType = call.getContainerType();
+                        container = (ContainerValue) ValueFactory.createValue(containerType, (Object[]) null);
+                        if (containerType.getGenericTypeCount() > 0) {
+                            IDatatype elementType = containerType.getGenericType(0);
+                            if (Reference.TYPE.isAssignableFrom(elementType)) {
+                                rValue = ValueFactory.createValue(elementType, result.getVariable().getDeclaration());
+                            }
+                        }
+                        container.addElement(rValue);
+                    } catch (ValueDoesNotMatchTypeException e) {
+                        exception(e);
+                    } catch (CSTSemanticException e) {
+                        exception(e);
+                    }
+                }
+            }
+            return container;
+        }
+        
+        /**
          * Evaluate for the given number of iterators.
          * 
          * @param iterCount the number of iterators
@@ -1502,9 +1536,8 @@ public class EvaluationVisitor implements IConstraintTreeVisitor {
          */
         private boolean execute(int iterCount) {
             boolean ok = true;
-            call.getContainer().accept(EvaluationVisitor.this);
-            if (null != result && result.getValue() instanceof ContainerValue) {
-                ContainerValue container = (ContainerValue) result.getValue();
+            ContainerValue container = determineContainerValue();
+            if (null != container) {
                 clearResult();
                 ContainerValue[] containers = new ContainerValue[iterCount];
                 ok = initialize(container, containers, declarators);
@@ -1594,10 +1627,15 @@ public class EvaluationVisitor implements IConstraintTreeVisitor {
                 call.getExpression().accept(EvaluationVisitor.this);
                 if (null != result && null != result.getValue()) {
                     try {
-                        boolean stop = evaluator.aggregate(rVar, iterVal, result, data); 
+                        Value aggRes = evaluator.aggregate(rVar, iterVal, result, data); 
                         clearResult();
-                        if (stop) {
+                        if (BooleanValue.TRUE == aggRes) {
                             pos[iter] = maxIter; // break -> endless loop
+                        } else if (aggRes instanceof ListWrapperValue) {
+                            ListWrapperValue lwv = (ListWrapperValue) aggRes;
+                            for (int e = 0; e < lwv.getElementCount(); e++) {
+                                ok &= evaluateIterator(iter, lwv.getElement(e), maxIter, setSelf, rVar);
+                            }
                         }
                     } catch (ValueDoesNotMatchTypeException ex) {
                         ok = containerException(ex);

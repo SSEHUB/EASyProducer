@@ -19,6 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import net.ssehub.easy.varModel.cst.ConstraintSyntaxTree;
+import net.ssehub.easy.varModel.model.IModelElement;
 import net.ssehub.easy.varModel.model.IvmlDatatypeVisitor;
 
 /**
@@ -190,6 +191,7 @@ public class Operation {
      */
     public enum NestingMode {
         NONE,
+        LEGACY,
         FLATTEN,
         NESTING
     }
@@ -240,11 +242,6 @@ public class Operation {
      * Stores the return type mode.
      */
     private ReturnTypeMode returnTypeMode = ReturnTypeMode.UNCHANGED;
-        
-    /**
-     * Stores whether the operation is a container operation.
-     */
-    private boolean containerOperation;
     
     private boolean requiresAssignableParameter = false;
     
@@ -432,10 +429,10 @@ public class Operation {
             // currently only type conversion is needed, else TYPED_PARAM_1
             if (Set.TYPE.isAssignableFrom(immediateOperand) && Sequence.TYPE.isAssignableFrom(getReturns())) {
                 Set set = (Set) immediateOperand;
-                result = new Sequence("", set.getContainedType(), set.getParent());
+                result = createCollectionReturnType(Sequence.TYPE, set.getContainedType(), set.getParent());
             } else if (Sequence.TYPE.isAssignableFrom(immediateOperand) && Set.TYPE.isAssignableFrom(getReturns())) {
                 Sequence sequence = (Sequence) immediateOperand;
-                result = new Set("", sequence.getContainedType(), sequence.getParent());
+                result = createCollectionReturnType(Set.TYPE, sequence.getContainedType(), sequence.getParent());
             } else {
                 result = immediateOperand;
             }
@@ -476,10 +473,29 @@ public class Operation {
             && 1 == immediateOperand.getGenericTypeCount() 
             && Container.TYPE.isAssignableFrom(immediateOperand.getGenericType(0))) {
             if (Set.TYPE.isAssignableFrom(result)) {
-                result = new Set("", result, null);
+                result = createCollectionReturnType(Set.TYPE, result, null);
             } else if (Sequence.TYPE.isAssignableFrom(result)) {
-                result = new Sequence("", result, null);
+                result = createCollectionReturnType(Sequence.TYPE, result, null);
             }
+        }
+        return result;
+    }
+    
+    /**
+     * Creates a collection return type based on <code>aim</code>. Subclasses may override to limit the actual return
+     * type.
+     * 
+     * @param aim the type aim ({@link Sequence#TYPE} or {@link Set#TYPE})
+     * @param elementType the element type
+     * @param parent the parent model element
+     * @return the collection return type, <b>null</b> if <code>aim</code> is none of the types given above
+     */
+    protected IDatatype createCollectionReturnType(IDatatype aim, IDatatype elementType, IModelElement parent) {
+        IDatatype result = null;
+        if (Sequence.TYPE == aim) {
+            result = new Sequence("", elementType, parent);
+        } else if (Set.TYPE == aim) {
+            result = new Set("", elementType, parent);
         }
         return result;
     }
@@ -505,7 +521,7 @@ public class Operation {
                 } else {
                     eltType = parameter[index];
                 }
-                result = new Set("", eltType, set.getParent());
+                result = createCollectionReturnType(Set.TYPE, eltType, set.getParent());
             } else if (Sequence.TYPE.isAssignableFrom(immediateOperand)) {
                 Sequence sequence = (Sequence) immediateOperand;
                 IDatatype eltType; 
@@ -514,7 +530,7 @@ public class Operation {
                 } else {
                     eltType = parameter[index];
                 }
-                result = new Sequence("", eltType, sequence.getParent());
+                result = createCollectionReturnType(Sequence.TYPE, eltType, sequence.getParent());
             } else {
                 result = parameter[index];
             }
@@ -525,12 +541,13 @@ public class Operation {
     }
     
     /**
-     * Returns whether this operation is a container iterating operation, e.g. a quantor.
+     * Returns whether this operation is a container iterating operation, e.g. a quantor, i.e., 
+     * some form of nesting mode is activated.
      * 
      * @return <code>true</code> if this is a container operation, <code>false</code> else
      */
     public boolean isContainerOperation() {
-        return containerOperation;
+        return nestingMode != NestingMode.NONE;
     }
     
     /**
@@ -552,23 +569,23 @@ public class Operation {
     }
     
     /**
-     * Marks this operation as a flattening container iterating operation. Calls {@link #markAsContainerOperation()}.
+     * Marks this operation as a flattening container iterating operation. 
      * 
      * @return <b>this</b>
      */
     Operation markAsFlatteningContainerOperation() {
         nestingMode = NestingMode.FLATTEN;
-        return markAsContainerOperation();
+        return this;
     }
 
     /**
-     * Marks this operation as a flattening container iterating operation. Calls {@link #markAsContainerOperation()}.
+     * Marks this operation as a flattening container iterating operation.
      * 
      * @return <b>this</b>
      */
     Operation markAsNestingContainerOperation() {
         nestingMode = NestingMode.NESTING;
-        return markAsContainerOperation();
+        return this;
     }
 
     /**
@@ -578,7 +595,7 @@ public class Operation {
      * @return <b>this</b>
      */
     Operation markAsContainerOperation() {
-        containerOperation = true;
+        nestingMode = NestingMode.LEGACY;
         return this;
     }
 

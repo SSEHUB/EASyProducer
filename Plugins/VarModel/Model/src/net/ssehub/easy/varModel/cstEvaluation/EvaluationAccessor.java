@@ -17,9 +17,6 @@ package net.ssehub.easy.varModel.cstEvaluation;
 
 import net.ssehub.easy.varModel.confModel.AssignmentState;
 import net.ssehub.easy.varModel.confModel.IDecisionVariable;
-import net.ssehub.easy.varModel.cst.ConstraintSyntaxTree;
-import net.ssehub.easy.varModel.model.AbstractVariable;
-import net.ssehub.easy.varModel.model.values.ReferenceValue;
 import net.ssehub.easy.varModel.model.values.Value;
 
 /**
@@ -66,33 +63,15 @@ public abstract class EvaluationAccessor {
     public abstract Value getValue();
     
     /**
-     * Returns the value of the accessed element, referred values are dereferred.<br/>
+     * Returns the value of the accessed element, referred values are dereferenced.<br/>
      * <b><font color="red">Note:</font></b> This method is expensive as it may create a new {@link EvaluationVisitor}
      * to resolve reference expressions.
      * 
-     * @return the dereferred value (may be <b>null</b> if undefined)
+     * @return the dereferenced value (may be <b>null</b> if undefined)
      * @see #getValue()
      */
     public Value getDereferencedValue() {
-        Value dereferredValue = getValue();
-        if (null != dereferredValue && dereferredValue instanceof ReferenceValue) {
-            AbstractVariable referredDecl = ((ReferenceValue) dereferredValue).getValue();
-            if (null != referredDecl) {
-                IDecisionVariable var = getContext().getDecision(referredDecl);
-                if (null != var && null != var.getValue()) {
-                    dereferredValue = var.getValue();
-                }
-            } else {
-                ConstraintSyntaxTree refExpression = ((ReferenceValue) dereferredValue).getValueEx();
-                EvaluationVisitor evalVisitor = new EvaluationVisitor(getContext(), null, false, null);
-                refExpression.accept(evalVisitor);
-                if (!evalVisitor.constraintFailed()) {
-                    dereferredValue = evalVisitor.getResult();
-                }
-            }
-        }
-        
-        return dereferredValue;
+        return getContext().getDereferencedValue(getValue());
     }
 
     /**

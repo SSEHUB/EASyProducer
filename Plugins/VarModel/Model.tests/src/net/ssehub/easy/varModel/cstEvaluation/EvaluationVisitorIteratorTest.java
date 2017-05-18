@@ -28,16 +28,19 @@ import net.ssehub.easy.varModel.cst.CompoundAccess;
 import net.ssehub.easy.varModel.cst.ConstantValue;
 import net.ssehub.easy.varModel.cst.ConstraintSyntaxTree;
 import net.ssehub.easy.varModel.cst.Variable;
+import net.ssehub.easy.varModel.model.AbstractVariable;
 import net.ssehub.easy.varModel.model.DecisionVariableDeclaration;
 import net.ssehub.easy.varModel.model.Project;
 import net.ssehub.easy.varModel.model.datatypes.AnyType;
 import net.ssehub.easy.varModel.model.datatypes.BooleanType;
 import net.ssehub.easy.varModel.model.datatypes.Compound;
+import net.ssehub.easy.varModel.model.datatypes.Container;
 import net.ssehub.easy.varModel.model.datatypes.IDatatype;
 import net.ssehub.easy.varModel.model.datatypes.IntegerType;
 import net.ssehub.easy.varModel.model.datatypes.MetaType;
 import net.ssehub.easy.varModel.model.datatypes.Operation;
 import net.ssehub.easy.varModel.model.datatypes.RealType;
+import net.ssehub.easy.varModel.model.datatypes.Reference;
 import net.ssehub.easy.varModel.model.datatypes.Sequence;
 import net.ssehub.easy.varModel.model.datatypes.Set;
 import net.ssehub.easy.varModel.model.datatypes.StringType;
@@ -975,6 +978,156 @@ public class EvaluationVisitorIteratorTest {
         containerOp.accept(visitor);
         Utils.assertContainer(expected, visitor.getResult());
         visitor.clearResult();
+    }
+
+    /**
+     * Tests closure operations.
+     * 
+     * @throws ValueDoesNotMatchTypeException in case that value assignments fail (shall not occur)
+     * @throws ConfigurationException in case that initial assignment of values fail (shall not occur)
+     * @throws CSTSemanticException in case that the expressions created during this test are not 
+     *   valid (shall not occur)
+     */
+    @Test
+    public void testClosureOnSequence() throws CSTSemanticException, ValueDoesNotMatchTypeException, 
+        ConfigurationException {
+        testClosure(false);
+    }
+
+    /**
+     * Tests closure operations.
+     * 
+     * @throws ValueDoesNotMatchTypeException in case that value assignments fail (shall not occur)
+     * @throws ConfigurationException in case that initial assignment of values fail (shall not occur)
+     * @throws CSTSemanticException in case that the expressions created during this test are not 
+     *   valid (shall not occur)
+     */
+    @Test
+    public void testClosureOnSet() throws CSTSemanticException, ValueDoesNotMatchTypeException, ConfigurationException {
+        testClosure(true);
+    }
+
+    /**
+     * Tests closure operations.
+     * 
+     * @param set test on set or on sequence
+     * 
+     * @throws ValueDoesNotMatchTypeException in case that value assignments fail (shall not occur)
+     * @throws ConfigurationException in case that initial assignment of values fail (shall not occur)
+     * @throws CSTSemanticException in case that the expressions created during this test are not 
+     *   valid (shall not occur)
+     */
+    private void testClosure(boolean set) throws CSTSemanticException, ValueDoesNotMatchTypeException, 
+        ConfigurationException {
+        Project project = new Project("Test");
+        Compound cmp = new Compound("Cmp", project);
+        Reference refType = new Reference("ref(Cmp)", cmp, project);
+        IDatatype setRefType = set ? new Set("setOf(ref(Cmp))", refType, project) 
+            : new Sequence("sequenceOf(ref(Cmp))", refType, project);
+        DecisionVariableDeclaration cmpName = new DecisionVariableDeclaration("name", StringType.TYPE, cmp);
+        cmp.add(cmpName);
+        DecisionVariableDeclaration cmpNext = new DecisionVariableDeclaration("next", refType, cmp);
+        cmp.add(cmpNext);
+        DecisionVariableDeclaration cmpFollow = new DecisionVariableDeclaration("follow", setRefType, cmp);
+        cmp.add(cmpFollow);
+        project.add(cmp);
+        
+        DecisionVariableDeclaration cVar1 = new DecisionVariableDeclaration("c1", cmp, project);
+        project.add(cVar1);
+        DecisionVariableDeclaration cVar2 = new DecisionVariableDeclaration("c2", cmp, project);
+        project.add(cVar2);
+        DecisionVariableDeclaration cVar3 = new DecisionVariableDeclaration("c3", cmp, project);
+        project.add(cVar3);
+        DecisionVariableDeclaration allVar = new DecisionVariableDeclaration("all", setRefType, project);
+        project.add(allVar);
+        // Assign value
+        Configuration config = new Configuration(project);
+        IDecisionVariable vcVar1 = config.getDecision(cVar1);
+        IDecisionVariable vcVar2 = config.getDecision(cVar2);
+        IDecisionVariable vcVar3 = config.getDecision(cVar3);
+        IDecisionVariable vallVar = config.getDecision(allVar);
+        setValue(vcVar1, ValueFactory.createValue(cmp, createCompoundData("c1", cVar2, cVar2)));
+        setValue(vcVar2, ValueFactory.createValue(cmp, createCompoundData("c2", cVar3, cVar3)));
+        setValue(vcVar3, ValueFactory.createValue(cmp, createCompoundData("c3", cVar1, cVar1, cVar2)));
+        setValue(vallVar, ValueFactory.createValue(setRefType, cVar1, cVar2, cVar3));
+
+        ConstraintSyntaxTree allNextClosure = createClosureContainerOp(refType, "next", allVar);
+        ConstraintSyntaxTree allFollowClosure = createClosureContainerOp(refType, "follow", allVar);
+        ConstraintSyntaxTree var1NextClosure = createClosureContainerOp(refType, "next", cVar1);
+        ConstraintSyntaxTree var1FollowClosure = createClosureContainerOp(refType, "follow", cVar1);
+
+        EvaluationVisitor visitor = new EvaluationVisitor();
+        // sequence is determined through pre-order (OCL)
+        assertClosure(visitor, config, allNextClosure, new Object[]{cVar1, cVar2, cVar3});
+        assertClosure(visitor, config, allFollowClosure, new Object[]{cVar1, cVar2, cVar3});
+        assertClosure(visitor, config, var1NextClosure, new Object[]{cVar1, cVar2, cVar3});
+        assertClosure(visitor, config, var1FollowClosure, new Object[]{cVar1, cVar2, cVar3});
+
+        // Test empty
+        setValue(vallVar, ValueFactory.createValue(setRefType, (Object[]) null));
+        assertClosure(visitor, config, allNextClosure, new Object[]{});
+        assertClosure(visitor, config, allFollowClosure, new Object[]{});
+    }
+
+    /**
+     * Creates the object-data representing a compound value in {@link #testClosure()}.
+     * 
+     * @param name the name of the compound
+     * @param next the reference target for the next slot
+     * @param follow the reference target(s) for the follow slot
+     * @return the object array for the value factory
+     */
+    private static final Object[] createCompoundData(String name, AbstractVariable next, AbstractVariable... follow) {
+        return new Object[]{"name", name, "next", next, "follow", follow};
+    }
+
+    /**
+     * Sets an assigned value for <code>var</code>.
+     * 
+     * @param var the variable to set the value on
+     * @param value the value
+     * @throws ConfigurationException in case of configuration/value setting problems
+     */
+    private static void setValue(IDecisionVariable var, Value value) throws ConfigurationException {
+        var.setValue(value, AssignmentState.ASSIGNED);
+    }
+
+    /**
+     * Creates a closure container operation expression.
+     * 
+     * @param itType the iterator type
+     * @param slot the slot to access on the iterator
+     * @param var the variable to bind the operation to
+     * @return the closure operation expression
+     * @throws CSTSemanticException in case of syntactic problems with the constraint expression
+     */
+    private static ConstraintSyntaxTree createClosureContainerOp(IDatatype itType, String slot, 
+        DecisionVariableDeclaration var) throws CSTSemanticException {
+        DecisionVariableDeclaration itDecl = new DecisionVariableDeclaration("a", itType, null);
+        ConstraintSyntaxTree itEx = new CompoundAccess(new Variable(itDecl), slot);
+        itEx.inferDatatype();
+        ConstraintSyntaxTree containerOp = Utils.createContainerCall(var, Container.CLOSURE, itEx, itDecl);
+        containerOp.inferDatatype();
+        return containerOp;
+    }
+
+    /**
+     * Asserts the closure result and clears the visitor.
+     * 
+     * @param visitor the reusable visitor to evaluate on
+     * @param config the configuration (for initializing <code>visitor</code>)
+     * @param ex the expression to evaluate
+     * @param expected the expected values
+     */
+    private static void assertClosure(EvaluationVisitor visitor, Configuration config, ConstraintSyntaxTree ex, 
+        Object[] expected) {
+        visitor.init(config, AssignmentState.DEFAULT, false, null);
+        ex.accept(visitor);
+        Value result = visitor.getResult();
+        Assert.assertTrue(result instanceof ContainerValue);
+        Assert.assertTrue(Set.TYPE.isAssignableFrom(result.getType()));
+        Utils.assertContainer(expected, visitor.getResult());
+        visitor.clear();
     }
 
 }

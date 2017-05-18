@@ -87,6 +87,7 @@ import net.ssehub.easy.varModel.model.datatypes.MetaType;
 import net.ssehub.easy.varModel.model.datatypes.OclKeyWords;
 import net.ssehub.easy.varModel.model.datatypes.Operation;
 import net.ssehub.easy.varModel.model.datatypes.Reference;
+import net.ssehub.easy.varModel.model.datatypes.Set;
 import net.ssehub.easy.varModel.model.values.CompoundValue;
 import net.ssehub.easy.varModel.model.values.ConstraintValue;
 import net.ssehub.easy.varModel.model.values.ValueDoesNotMatchTypeException;
@@ -788,8 +789,7 @@ public class ExpressionTranslator extends net.ssehub.easy.dslCore.translation.Ex
                 if (collectionType instanceof Container) {
                     type = ((Container) collectionType).getContainedType();
                 } else {
-                    error("left hand of " + IvmlKeyWords.CONTAINER_OP_ACCESS + " is not a collection", op,
-                        IvmlPackage.Literals.ACTUAL_ARGUMENT_LIST__ARGS, ErrorCodes.LHS_NOT_COLLECTION);
+                    type = new Set("", collectionType, null);
                 }
             } catch (IvmlException e) {
                 error(e, op, IvmlPackage.Literals.ACTUAL_ARGUMENT_LIST__ARGS);

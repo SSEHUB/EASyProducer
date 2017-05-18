@@ -114,6 +114,7 @@ public class OclKeyWords {
     public static final String FLATTEN = "flatten";
     public static final String INCLUDING = "including";
     public static final String EXCLUDING = "excluding";
+    public static final String CLOSURE = "closure";
     
     // e.g. Set
     public static final String INTERSECTION = "intersection";

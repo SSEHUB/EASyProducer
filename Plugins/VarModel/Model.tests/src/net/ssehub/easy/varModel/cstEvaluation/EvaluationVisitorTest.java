@@ -611,7 +611,6 @@ public class EvaluationVisitorTest {
         iterEx.inferDatatype();
         ConstraintSyntaxTree cst = Utils.createContainerCall(new Variable(famAlgs), Set.FORALL, iterEx, iter);
         cst.inferDatatype();
-        
         DecisionVariableDeclaration fam = new DecisionVariableDeclaration("testFam", familyC, project);
         project.add(fam);
 

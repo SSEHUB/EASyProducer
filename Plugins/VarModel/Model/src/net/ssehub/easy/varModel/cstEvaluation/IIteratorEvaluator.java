@@ -47,10 +47,12 @@ public interface IIteratorEvaluator {
      * @param iter the current value of the iterator
      * @param value the value to be aggregated
      * @param data arbitrary data to be hold while actually evaluating the function
-     * @return <code>true</code> if iteration shall stop due to this evaluation, <code>false</code> else
+     * @return a boolean value to indicate whether iteration/evaluation shall stop (<code>true</code> if iteration 
+     *   shall stop due to this evaluation, <code>false</code> else), a collection of values as instance of 
+     *   {@link ListWrapperValue} where to go on
      * @throws ValueDoesNotMatchTypeException in case of type compatibility problems
      */
-    public boolean aggregate(EvaluationAccessor result, Value iter, EvaluationAccessor value, Map<Object, Object> data) 
+    public Value aggregate(EvaluationAccessor result, Value iter, EvaluationAccessor value, Map<Object, Object> data) 
         throws ValueDoesNotMatchTypeException;
     
     /**

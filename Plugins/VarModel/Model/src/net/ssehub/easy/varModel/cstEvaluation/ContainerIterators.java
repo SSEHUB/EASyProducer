@@ -15,6 +15,7 @@ import net.ssehub.easy.varModel.model.values.ContainerValue;
 import net.ssehub.easy.varModel.model.values.IntValue;
 import net.ssehub.easy.varModel.model.values.NullValue;
 import net.ssehub.easy.varModel.model.values.RealValue;
+import net.ssehub.easy.varModel.model.values.ReferenceValue;
 import net.ssehub.easy.varModel.model.values.Value;
 import net.ssehub.easy.varModel.model.values.ValueDoesNotMatchTypeException;
 import net.ssehub.easy.varModel.model.values.ValueFactory;
@@ -33,11 +34,11 @@ class ContainerIterators {
     static final IIteratorEvaluator APPLY = new IIteratorEvaluator() {
 
         @Override
-        public boolean aggregate(EvaluationAccessor result, Value iter, EvaluationAccessor value, 
+        public BooleanValue aggregate(EvaluationAccessor result, Value iter, EvaluationAccessor value, 
             Map<Object, Object> data) throws ValueDoesNotMatchTypeException {
             // actual aggregation is defined by the apply expression, do not do here anything :o
             //result.setValue(value.getValue());
-            return false;
+            return BooleanValue.FALSE;
         }
 
         @Override
@@ -59,14 +60,14 @@ class ContainerIterators {
     static final IIteratorEvaluator FOR_ALL = new IIteratorEvaluator() {
 
         @Override
-        public boolean aggregate(EvaluationAccessor result, Value iter, EvaluationAccessor value, 
+        public BooleanValue aggregate(EvaluationAccessor result, Value iter, EvaluationAccessor value, 
             Map<Object, Object> data) throws ValueDoesNotMatchTypeException {
             if (!(BooleanValue.TRUE.equals(result.getValue()) 
                 && BooleanValue.TRUE.equals(value.getValue()))) {
                 // forAll is only true if all evaluations are true
                 result.setValue(BooleanValue.FALSE);
             }
-            return false;
+            return BooleanValue.FALSE;
         }
 
         public Value getStartResult(IDatatype type, IDatatype iterType) throws ValueDoesNotMatchTypeException {
@@ -87,15 +88,15 @@ class ContainerIterators {
     static final IIteratorEvaluator EXISTS = new IIteratorEvaluator() {
         
         @Override
-        public boolean aggregate(EvaluationAccessor result, Value iter, EvaluationAccessor value, 
+        public BooleanValue aggregate(EvaluationAccessor result, Value iter, EvaluationAccessor value, 
             Map<Object, Object> data) throws ValueDoesNotMatchTypeException {
-            boolean stop;
+            BooleanValue stop;
             if (BooleanValue.TRUE.equals(value.getValue())) {
                 // exists is fine with the first evaluation result that is true
                 result.setValue(BooleanValue.TRUE);
-                stop = true;
+                stop = BooleanValue.TRUE;
             } else {
-                stop = false;
+                stop = BooleanValue.FALSE;
             }
             return stop;
         }
@@ -119,16 +120,16 @@ class ContainerIterators {
     static final IIteratorEvaluator IS_UNIQUE = new IIteratorEvaluator() {
         
         @Override
-        public boolean aggregate(EvaluationAccessor result, Value iter, EvaluationAccessor value, 
+        public BooleanValue aggregate(EvaluationAccessor result, Value iter, EvaluationAccessor value, 
             Map<Object, Object> data) throws ValueDoesNotMatchTypeException {
-            boolean stop;
+            BooleanValue stop;
             Value val = value.getValue();
             if (data.containsKey(val)) {
-                stop = true;
+                stop = BooleanValue.TRUE;
                 result.setValue(BooleanValue.FALSE);
             } else {
                 data.put(val, null);
-                stop = false;
+                stop = BooleanValue.FALSE;
             }
             return stop;
         }
@@ -152,14 +153,14 @@ class ContainerIterators {
     static final IIteratorEvaluator ANY = new IIteratorEvaluator() {
         
         @Override
-        public boolean aggregate(EvaluationAccessor result, Value iter, EvaluationAccessor value, 
+        public BooleanValue aggregate(EvaluationAccessor result, Value iter, EvaluationAccessor value, 
             Map<Object, Object> data) {
-            boolean stop;
+            BooleanValue stop;
             if (BooleanValue.TRUE.equals(value.getValue())) {
-                stop = true;
+                stop = BooleanValue.TRUE;
                 result.setValue(iter);
             } else {
-                stop = false;
+                stop = BooleanValue.FALSE;
             }
             return stop;
         }
@@ -183,14 +184,14 @@ class ContainerIterators {
     static final IIteratorEvaluator ONE = new IIteratorEvaluator() {
         
         @Override
-        public boolean aggregate(EvaluationAccessor result, Value iter, EvaluationAccessor value, 
+        public BooleanValue aggregate(EvaluationAccessor result, Value iter, EvaluationAccessor value, 
             Map<Object, Object> data) throws ValueDoesNotMatchTypeException {
-            boolean stop;
+            BooleanValue stop;
             if (BooleanValue.TRUE.equals(value.getValue())) {
-                stop = !NullValue.INSTANCE.equals(result.getValue());
+                stop = BooleanValue.toBooleanValue(!NullValue.INSTANCE.equals(result.getValue()));
                 result.setValue(iter);
             } else {
-                stop = false;
+                stop = BooleanValue.FALSE;
             }
             return stop;
         }
@@ -234,7 +235,7 @@ class ContainerIterators {
         protected abstract double doubleOp(double d1, double d2);
 
         @Override
-        public boolean aggregate(EvaluationAccessor result, Value iter, EvaluationAccessor value, 
+        public BooleanValue aggregate(EvaluationAccessor result, Value iter, EvaluationAccessor value, 
             Map<Object, Object> data) throws ValueDoesNotMatchTypeException {
             Value val = value.getValue();
             Object newVal = null;
@@ -265,7 +266,7 @@ class ContainerIterators {
                 data.put(this, newVal);
                 result.setValue(iter);    
             }
-            return false;
+            return BooleanValue.FALSE;
         }
 
         @Override
@@ -342,13 +343,66 @@ class ContainerIterators {
     static final IIteratorEvaluator COLLECT = new CollectingIteratorEvaluator() {
         
         @Override
-        public boolean aggregate(EvaluationAccessor result, Value iter, EvaluationAccessor value, 
+        public BooleanValue aggregate(EvaluationAccessor result, Value iter, EvaluationAccessor value, 
             Map<Object, Object> data) throws ValueDoesNotMatchTypeException {
             Value cVal = result.getValue();
             if (cVal instanceof ContainerValue) {
                 ((ContainerValue) cVal).addElement(value.getValue());
             }
-            return false;
+            return BooleanValue.FALSE;
+        }
+
+    };
+    
+    /**
+     * Implements {@link net.ssehub.easy.varModel.model.datatypes.Container#CLOSURE}.
+     */
+    static final IIteratorEvaluator CLOSURE = new CollectingIteratorEvaluator() {
+        
+        @Override
+        public Value aggregate(EvaluationAccessor result, Value iter, EvaluationAccessor value, 
+            Map<Object, Object> data) throws ValueDoesNotMatchTypeException {
+            Value rValue = result.getValue();
+            List<Value> nextValues = null;
+            if (rValue instanceof ContainerValue) {
+                ContainerValue resultContainer = (ContainerValue) rValue;
+                nextValues = new ArrayList<Value>();
+                handleNextValue(iter, resultContainer, data, nextValues);
+                Value val = value.getValue();
+                if (val instanceof ContainerValue) {
+                    ContainerValue valContainer = (ContainerValue) val;
+                    for (int e = 0; e < valContainer.getElementSize(); e++) {
+                        handleNextValue(valContainer.getElement(e), 
+                            resultContainer, data, nextValues);
+                    }
+                } else if (val instanceof ReferenceValue) {
+                    handleNextValue(val, resultContainer, data, nextValues);
+                }
+            }
+            
+            Value res = BooleanValue.FALSE; // just go on
+            if (null != nextValues) {
+                res = new ListWrapperValue(nextValues);
+            } 
+            return res;
+        }
+
+        /**
+         * Handles the next value by checking whether it was already added.
+         * 
+         * @param value the value
+         * @param result the result container to be changed if not already added
+         * @param data the temporary data storing already added elements
+         * @param nextValues the next values to be considered for iteration
+         * @throws ValueDoesNotMatchTypeException if adding <code>value</code> to <code>result</code> is failing
+         */
+        private void handleNextValue(Value value, ContainerValue result, Map<Object, Object> data, 
+            List<Value> nextValues) throws ValueDoesNotMatchTypeException {
+            if (!data.containsKey(value)) {
+                nextValues.add(value);
+                result.addElement(value);
+                data.put(value,  null);
+            }
         }
 
     };
@@ -362,7 +416,7 @@ class ContainerIterators {
         
         @SuppressWarnings("unchecked")
         @Override
-        public boolean aggregate(EvaluationAccessor result, Value iter, EvaluationAccessor value, 
+        public BooleanValue aggregate(EvaluationAccessor result, Value iter, EvaluationAccessor value, 
             Map<Object, Object> data) throws ValueDoesNotMatchTypeException {
             Object tmp = data.get(KEY_SORTED_BY);
             TreeMap<Value, List<Value>> keyMap;
@@ -391,7 +445,7 @@ class ContainerIterators {
                 }
                 keyValues.add(iter);
             }
-            return false;
+            return BooleanValue.FALSE;
         }
 
         @Override
@@ -431,13 +485,13 @@ class ContainerIterators {
         }
         
         @Override
-        public boolean aggregate(EvaluationAccessor result, Value iter, EvaluationAccessor value, 
+        public BooleanValue aggregate(EvaluationAccessor result, Value iter, EvaluationAccessor value, 
             Map<Object, Object> data) throws ValueDoesNotMatchTypeException {
             Value cVal = result.getValue();
             if (condition.equals(value.getValue()) && cVal instanceof ContainerValue) {
                 ((ContainerValue) cVal).addElement(iter);
             }
-            return false;
+            return BooleanValue.FALSE;
         }
 
     };

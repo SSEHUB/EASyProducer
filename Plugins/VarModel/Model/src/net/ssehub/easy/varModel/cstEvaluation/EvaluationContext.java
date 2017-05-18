@@ -22,6 +22,10 @@ import net.ssehub.easy.basics.messages.Status;
 import net.ssehub.easy.varModel.confModel.IAssignmentState;
 import net.ssehub.easy.varModel.confModel.IConfiguration;
 import net.ssehub.easy.varModel.confModel.IDecisionVariable;
+import net.ssehub.easy.varModel.cst.ConstraintSyntaxTree;
+import net.ssehub.easy.varModel.model.AbstractVariable;
+import net.ssehub.easy.varModel.model.values.ReferenceValue;
+import net.ssehub.easy.varModel.model.values.Value;
 
 /**
  * Some basic functionality required by the evaluators without exposing the {@link EvaluationVisitor}.
@@ -152,5 +156,32 @@ public abstract class EvaluationContext implements IConfiguration {
      * @return <code>true</code> if it is a propagation, i.e. propagation shall be allowed, <code>false</code> else
      */
     public abstract boolean allowPropagation();
-   
+
+    /**
+     * Dereferences a value within this context.
+     * 
+     * @param value the value to dereference
+     * @return the dereferenced value (may be <b>null</b> if undefined)
+     */
+    public Value getDereferencedValue(Value value) {
+        Value dereferencedValue = value;
+        if (null != dereferencedValue && dereferencedValue instanceof ReferenceValue) {
+            AbstractVariable referredDecl = ((ReferenceValue) dereferencedValue).getValue();
+            if (null != referredDecl) {
+                IDecisionVariable var = getDecision(referredDecl);
+                if (null != var && null != var.getValue()) {
+                    dereferencedValue = var.getValue();
+                }
+            } else {
+                ConstraintSyntaxTree refExpression = ((ReferenceValue) dereferencedValue).getValueEx();
+                EvaluationVisitor evalVisitor = new EvaluationVisitor(this, null, false, null);
+                refExpression.accept(evalVisitor);
+                if (!evalVisitor.constraintFailed()) {
+                    dereferencedValue = evalVisitor.getResult();
+                }
+            }
+        }
+        return dereferencedValue;
+    }
+
 }

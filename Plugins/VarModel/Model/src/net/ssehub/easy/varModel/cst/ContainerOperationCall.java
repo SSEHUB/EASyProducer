@@ -19,12 +19,15 @@ import java.util.Arrays;
 
 import net.ssehub.easy.varModel.model.DecisionVariableDeclaration;
 import net.ssehub.easy.varModel.model.IvmlDatatypeVisitor;
+import net.ssehub.easy.varModel.model.datatypes.Compound;
 import net.ssehub.easy.varModel.model.datatypes.Container;
 import net.ssehub.easy.varModel.model.datatypes.DerivedDatatype;
 import net.ssehub.easy.varModel.model.datatypes.IDatatype;
 import net.ssehub.easy.varModel.model.datatypes.OclKeyWords;
 import net.ssehub.easy.varModel.model.datatypes.Operation;
 import net.ssehub.easy.varModel.model.datatypes.Operation.NestingMode;
+import net.ssehub.easy.varModel.model.datatypes.Reference;
+import net.ssehub.easy.varModel.model.datatypes.Set;
 import net.ssehub.easy.varModel.model.datatypes.TypeQueries;
 
 /**
@@ -129,13 +132,38 @@ public class ContainerOperationCall extends ConstraintSyntaxTree {
         return declarators[index];
     }
 
+    /**
+     * Returns the actual container type taking into account that the left
+     * side must not be a container but can dynamically be mapped into one.
+     * 
+     * @return the actual container type
+     * @throws CSTSemanticException if types cannot be resolved
+     */
+    public IDatatype getContainerType() throws CSTSemanticException {
+        IDatatype origContainerType = container.inferDatatype();
+        IDatatype containerType = DerivedDatatype.resolveToBasis(origContainerType);
+        if (!Container.TYPE.isAssignableFrom(containerType)) {
+            IDatatype iteratorType = origContainerType; // as "container" is not a container
+            if (Compound.TYPE.isAssignableFrom(iteratorType) 
+                && null != declarators && declarators.length > 0) {
+                IDatatype declType = declarators[0].getType();
+                if (null != declType && Reference.isReferenceTo(declType, iteratorType)) {
+                    // if there is a declarator with matching reference type, take reference for convenience
+                    iteratorType = declType;
+                }
+            }
+            containerType = new Set("", iteratorType, null);
+        }
+        return containerType;
+    }
+    
     @Override
     public IDatatype inferDatatype() throws CSTSemanticException {
         if (null == result) {
             //check whether the OCLFeatureCall is semantically correct
             //we need an operation (name) and the data type to call on
             if (null != operation && null != container) {
-                IDatatype containerType = DerivedDatatype.resolveToBasis(container.inferDatatype());
+                IDatatype containerType = getContainerType();
                 if (Container.TYPE.isAssignableFrom(containerType)) {
                     iteratorBase = ((Container) containerType).getContainedType();
                     int size = declarators.length;
@@ -159,7 +187,7 @@ public class ContainerOperationCall extends ConstraintSyntaxTree {
                         throw new UnknownOperationException(operation, 
                             CSTSemanticException.UNKNOWN_OPERATION, containerType, param);
                     }
-                    // at lest the first type must match, allow intermediary temp declarators
+                    // at least the first type must match, allow intermediary temp declarators
                     IDatatype iterType = declarators[0].getType();
                     if (op.getNestingMode() != NestingMode.NONE) {
                         while (Container.TYPE.isAssignableFrom(iteratorBase) 
@@ -169,10 +197,10 @@ public class ContainerOperationCall extends ConstraintSyntaxTree {
                     }
                     if (!iterType.isAssignableFrom(iteratorBase)) {
                         throw new CSTSemanticException("type '" + IvmlDatatypeVisitor.getUnqualifiedType(iterType)
-                            + "' of declarator does not match the contained type of the collection", 
+                            + "' of declarator does not match the contained type of the collection '" 
+                            + IvmlDatatypeVisitor.getUnqualifiedType(iteratorBase) + "'", 
                             CSTSemanticException.TYPE_MISMATCH);
                     }
-                    
                     result = op.getActualReturnType(containerType, param);
                     resolvedOperation = op;
                     // equalparamtypes are not required here as different semantics
@@ -185,7 +213,6 @@ public class ContainerOperationCall extends ConstraintSyntaxTree {
                 throw new CSTSemanticException("<internal error>", CSTSemanticException.INTERNAL);
             }
         }
-        
         //If no exception is thrown, this OCLFeature call is semantically correct. 
         return result;
     }

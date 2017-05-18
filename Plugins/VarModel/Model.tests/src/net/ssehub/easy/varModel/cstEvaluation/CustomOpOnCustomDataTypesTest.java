@@ -142,7 +142,6 @@ public class CustomOpOnCustomDataTypesTest {
         expr.inferDatatype();
         expr = new OCLFeatureCall(expr, "flatten", (ConstraintSyntaxTree[]) null);
         IDatatype exprType = expr.inferDatatype();
-        
         IDatatype resultType = new Sequence("fieldTypeRefSeq", 
             new Reference("fieldTypeRef", fieldType, collectFieldTypes), collectFieldTypes);
         Assert.assertTrue(resultType.isAssignableFrom(exprType));
