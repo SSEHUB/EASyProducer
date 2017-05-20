@@ -212,7 +212,40 @@ public class PseudoReal implements IVilType {
     public static int ceil(double r0) {
         return (int) Math.ceil(r0);
     }
-    
-    // TODO complete operations
 
+    /**
+     * Returns the minimum value of <code>r1</code> and <code>r2</code>.
+     * 
+     * @param r1 the first value to be considered
+     * @param r2 the first value to be considered
+     * @return min(r1, r2)
+     */
+    @OperationMeta(opType = OperationType.FUNCTION)
+    public static double min(double r1, double r2) {
+        return Math.min(r1, r2);
+    }
+
+    /**
+     * Returns the maximum value of <code>r1</code> and <code>r2</code>.
+     * 
+     * @param r1 the first value to be considered
+     * @param r2 the first value to be considered
+     * @return max(r1, r2)
+     */
+    @OperationMeta(opType = OperationType.FUNCTION)
+    public static double max(double r1, double r2) {
+        return Math.max(r1, r2);
+    }
+
+    /**
+     * Returns the string value of <code>r0</code>.
+     * 
+     * @param r0 the real to be turned into a string
+     * @return the string value
+     */
+    @OperationMeta(opType = OperationType.FUNCTION)
+    public static String toString(double r0) {
+        return String.valueOf(r0);
+    }
+    
 }

@@ -13,6 +13,9 @@ vilScript numbers () {
     Real r4 = r3 / 2;
     Real r5 = -r4;
     Real r6 = abs(r5);
+    Real r7 = min(r5, r6);
+    Real r8 = max(r5, r6);
+    String s1 = toString(r8);
     Integer i7 = floor(r6);
     Integer i8 = ceil(r6);
     Boolean b2 = r6 == 6.6;
