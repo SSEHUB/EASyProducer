@@ -83,6 +83,8 @@ LogicalOperator:
     'and'
     |'or'
     |'xor'
+    |'implies'
+    |'iff'
     ;
 
 EqualityExpression:   

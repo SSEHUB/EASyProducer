@@ -198,7 +198,18 @@ public class SetSet<T> extends AbstractCollectionWrapper<T> implements Set<T> {
         param[0] = evaluator.getIteratorVariable().getType();
         java.util.Set<T> tmp = new java.util.HashSet<T>();
         if (null != set) {
-            select(this, evaluator, tmp);
+            select(this, evaluator, tmp, true);
+        }
+        return new SetSet<T>(tmp, param);
+    }
+
+    @Override
+    public Set<T> reject(ExpressionEvaluator evaluator) throws VilException {
+        TypeDescriptor<?>[] param = TypeDescriptor.createArray(1);
+        param[0] = evaluator.getIteratorVariable().getType();
+        java.util.Set<T> tmp = new java.util.HashSet<T>();
+        if (null != set) {
+            select(this, evaluator, tmp, false);
         }
         return new SetSet<T>(tmp, param);
     }

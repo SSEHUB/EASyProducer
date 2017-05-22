@@ -8,7 +8,7 @@ import net.ssehub.easy.instantiation.core.model.vilTypes.OperationDescriptor;
  * 
  * @author Holger Eichelberger
  */
-public class NoTracer implements ITracer {
+public class NoTracer extends AbstractTracerBase {
     
     public static final ITracer INSTANCE = new NoTracer();
 

@@ -84,7 +84,14 @@ public class ListSet<T> extends AbstractListWrapper<T> implements Set<T> {
     public Set<T> select(ExpressionEvaluator evaluator) throws VilException {
         TypeDescriptor<?>[] param = TypeDescriptor.createArray(1);
         param[0] = evaluator.getIteratorVariable().getType();
-        return new ListSet<T>(select(this, evaluator), param);
+        return new ListSet<T>(select(this, evaluator, true), param);
+    }
+
+    @Override
+    public Set<T> reject(ExpressionEvaluator evaluator) throws VilException {
+        TypeDescriptor<?>[] param = TypeDescriptor.createArray(1);
+        param[0] = evaluator.getIteratorVariable().getType();
+        return new ListSet<T>(select(this, evaluator, false), param);
     }
 
     @OperationMeta(useParameter = 0)
@@ -94,7 +101,7 @@ public class ListSet<T> extends AbstractListWrapper<T> implements Set<T> {
         param[0] = evaluator.inferType();
         return new ListSet<Object>(collect(this, evaluator), param);
     }
-    
+
     @Override
     public Object apply(ExpressionEvaluator evaluator) throws VilException {
         return AbstractCollectionWrapper.apply(this, evaluator);

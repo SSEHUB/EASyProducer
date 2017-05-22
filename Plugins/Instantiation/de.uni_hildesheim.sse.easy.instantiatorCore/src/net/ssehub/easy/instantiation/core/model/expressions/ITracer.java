@@ -1,5 +1,7 @@
 package net.ssehub.easy.instantiation.core.model.expressions;
 
+import java.util.Locale;
+
 import net.ssehub.easy.instantiation.core.model.expressions.CallExpression.CallType;
 import net.ssehub.easy.instantiation.core.model.vilTypes.OperationDescriptor;
 
@@ -37,5 +39,19 @@ public interface ITracer {
      * @param expression the failing expression
      */
     public void failedAt(Expression expression);
+
+    /**
+     * Returns the current locale for evaluation.
+     * 
+     * @return the current locale
+     */
+    public Locale getLocale();
+    
+    /**
+     * Changes the current locale.
+     * 
+     * @param locale the new locale (ignored if <b>null</b>) 
+     */
+    public void setLocale(Locale locale);
 
 }

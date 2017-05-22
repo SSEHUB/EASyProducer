@@ -105,6 +105,15 @@ public interface Set<T> extends Collection<T> {
     public Set<T> select(ExpressionEvaluator evaluator) throws VilException;
 
     /**
+     * Rejects elements in this set according to the given expression.
+     * 
+     * @param evaluator the evaluator (results must evaluate to Boolean results)
+     * @return the rejected elements
+     * @throws VilException in case that selection fails
+     */
+    public Set<T> reject(ExpressionEvaluator evaluator) throws VilException;
+
+    /**
      * Collects the application of <code>evaluator</code> to each individual element.
      * 
      * @param evaluator the evaluator (results must evaluate to Boolean results)
@@ -113,7 +122,7 @@ public interface Set<T> extends Collection<T> {
      */
     @OperationMeta(useParameter = 0)
     public Set<?> collect(ExpressionEvaluator evaluator) throws VilException;
-    
+
     /**
      * Processes elements in this set by applying to given expression.
      * 

@@ -1,6 +1,12 @@
 package net.ssehub.easy.instantiation.core.model.vilTypes;
 
+import java.text.Collator;
+import java.util.Locale;
 import java.util.StringTokenizer;
+
+import net.ssehub.easy.basics.DefaultLocale;
+import net.ssehub.easy.instantiation.core.model.common.ITracer;
+import net.ssehub.easy.instantiation.core.model.execution.TracerFactory;
 
 /**
  * Implements a pseudo class for strings.
@@ -23,8 +29,8 @@ public class PseudoString implements IVilType {
      * @param s2 the second String (as object)to be considered
      * @return s1 + s2
      */
-    @OperationMeta(name = Constants.ADDITION, opType = OperationType.INFIX)
-    public static String concat(String s1, Object s2) {
+    @OperationMeta(name = {Constants.ADDITION}, opType = OperationType.INFIX)
+    public static String plus(String s1, Object s2) {
         String result;
         String s2Tmp = null == s2 ? null : s2.toString();
         if (null == s1) {
@@ -35,6 +41,17 @@ public class PseudoString implements IVilType {
             result = s1 + s2Tmp;
         }
         return result;
+    }
+    
+    /**
+     * Represents the string concatenation operation.
+     * 
+     * @param s1 the first String to be considered
+     * @param s2 the second String (as object)to be considered
+     * @return s1 + s2
+     */
+    public static String concat(String s1, Object s2) {
+        return plus(s1, s2);
     }
     
     /**
@@ -67,6 +84,7 @@ public class PseudoString implements IVilType {
      * @param string the string to return the length for
      * @return the length of the string
      */
+    @OperationMeta(name = {"length", "size"})
     public static int length(String string) {
         return null == string ? 0 : string.length();
     }
@@ -164,10 +182,31 @@ public class PseudoString implements IVilType {
     @OperationMeta(opType = OperationType.FUNCTION)
     public static Double toReal(String string) {
         Double result;
-        try {
-            result = Double.parseDouble(string);
-        } catch (NumberFormatException e) {
-            result = null; // lazy eval
+        if (null == string) {
+            result = null;
+        } else {
+            try {
+                result = Double.parseDouble(string);
+            } catch (NumberFormatException e) {
+                result = null; // lazy eval
+            }
+        }
+        return result;
+    }
+
+    /**
+     * Turns the given string into a Boolean.
+     * 
+     * @param string the input string
+     * @return the converted Boolean (<b>null</b> if conversion is not possible)
+     */
+    @OperationMeta(opType = OperationType.FUNCTION)
+    public static Boolean toBoolean(String string) {
+        Boolean result;
+        if (null != string) {
+            result = "true".equalsIgnoreCase(string);
+        } else {
+            result = null;
         }
         return result;
     }
@@ -248,7 +287,7 @@ public class PseudoString implements IVilType {
      * @return the transformed string
      */
     public static String toUpperCase(String string) {
-        return string.toUpperCase();
+        return string.toUpperCase(getCurrentLocale());
     }
 
     /**
@@ -258,7 +297,7 @@ public class PseudoString implements IVilType {
      * @return the transformed string
      */
     public static String toLowerCase(String string) {
-        return string.toLowerCase();
+        return string.toLowerCase(getCurrentLocale());
     }
 
     /**
@@ -268,7 +307,7 @@ public class PseudoString implements IVilType {
      * @return the transformed string
      */
     public static String firstToUpperCase(String string) {
-        return StringValueHelper.firstToUpperCase(string);
+        return StringValueHelper.firstToUpperCase(string, getCurrentLocale());
     }
 
     /**
@@ -278,7 +317,7 @@ public class PseudoString implements IVilType {
      * @return the transformed string
      */
     public static String firstToLowerCase(String string) {
-        return StringValueHelper.firstToLowerCase(string);
+        return StringValueHelper.firstToLowerCase(string, getCurrentLocale());
     }
 
     /**
@@ -336,5 +375,154 @@ public class PseudoString implements IVilType {
         }
         return result;
     }
+
+    /**
+     * Returns the string representation of <code>string</code> (OCL).
+     * 
+     * @param string the string to be turned into a string
+     * @return the string value
+     */
+    @OperationMeta(opType = OperationType.FUNCTION)
+    public static String toString(String string) {
+        return string;
+    }
     
+    /**
+     * Returns the first position of <code>part</code> in <code>string</code>.
+     * 
+     * @param string the string to search
+     * @param part the part to search for
+     * @return the first 0-based position or <code>-1</code> if <code>part</code> is not a 
+     *     substring of <code>string</code>
+     */
+    public static Integer indexOf(String string, String part) {
+        Integer result = null;
+        if (null != string && null != part) {
+            result = string.indexOf(part);
+        }
+        return result;
+    }
+
+    /**
+     * Returns the character at given position as String.
+     * 
+     * @param string the string to take the character from
+     * @param index the 0-based index to return the character for
+     * @return the character at <code>index</code> 
+     */
+    public static String at(String string, int index) {
+        String result = null;
+        if (null != string && 0 <= index && index <= string.length()) {
+            result = String.valueOf(string.charAt(index));
+        }
+        return result;
+    }
+
+    /**
+     * Returns the current locale used during evaluation.
+     * 
+     * @return the current locale
+     */
+    @Invisible
+    public static Locale getCurrentLocale() {
+        Locale result = DefaultLocale.getDefaultLocale();
+        ITracer tracer = TracerFactory.getRegisteredBuildLanguageTracer();
+        if (null == tracer) {
+            tracer = TracerFactory.getRegisteredTemplateLanguageTracer();
+        }
+        if (null != tracer) {
+            result = tracer.getLocale();
+        }
+        return result;
+    }
+    
+    /**
+     * Returns the collator for {@link #getCurrentLocale()}.
+     * 
+     * @return the collator
+     */
+    public static Collator getCurrentCollator() {
+        return Collator.getInstance(getCurrentLocale());
+    }
+    
+    /**
+     * Returns whether two strings are equal ignoring cases for the current locale.
+     * 
+     * @param string1 the first string
+     * @param string2 the second string
+     * @return <code>true</code> if both strings are considered equal for the current locale, <code>false</code> else
+     */
+    public static boolean equalsIgnoreCase(String string1, String string2) {
+        Locale locale = getCurrentLocale();
+        return string1.toLowerCase(locale).equals(string2.toLowerCase(locale));
+    }
+
+    /**
+     * Returns whether <code>string1</code> is less than <code>string2</code> with respect to
+     * the current locale.
+     * 
+     * @param string1 the first string
+     * @param string2 the second string
+     * @return whether <code>string1</code> is less than <code>string2</code>
+     */
+    @OperationMeta(name = "<", opType = OperationType.INFIX)
+    public static boolean lessThan(String string1, String string2) {
+        return getCurrentCollator().compare(string1, string2) < 0;
+    }
+
+    /**
+     * Returns whether <code>string1</code> is less than or equal <code>string2</code> with respect to
+     * the current locale.
+     * 
+     * @param string1 the first string
+     * @param string2 the second string
+     * @return whether <code>string1</code> is less than or equal <code>string2</code>
+     */
+    @OperationMeta(name = "<=", opType = OperationType.INFIX)
+    public static boolean lessThanEqual(String string1, String string2) {
+        return getCurrentCollator().compare(string1, string2) <= 0;
+    }
+    
+    /**
+     * Returns whether <code>string1</code> is greater than <code>string2</code> with respect to
+     * the current locale.
+     * 
+     * @param string1 the first string
+     * @param string2 the second string
+     * @return whether <code>string1</code> is greater than <code>string2</code>
+     */
+    @OperationMeta(name = ">", opType = OperationType.INFIX)
+    public static boolean greaterThan(String string1, String string2) {
+        return getCurrentCollator().compare(string1, string2) > 0;
+    }
+    
+    /**
+     * Returns whether <code>string1</code> is greater than or equal <code>string2</code> with respect to
+     * the current locale.
+     * 
+     * @param string1 the first string
+     * @param string2 the second string
+     * @return whether <code>string1</code> is greater than or equal <code>string2</code>
+     */
+    @OperationMeta(name = ">=", opType = OperationType.INFIX)
+    public static boolean greaterThanEqual(String string1, String string2) {
+        return getCurrentCollator().compare(string1, string2) >= 0;
+    }
+
+    /**
+     * Returns the characters of a string.
+     * 
+     * @param string the string to be turned into characters
+     * @return the characters of <code>string</code> as string sequence
+     */
+    @OperationMeta(returnGenerics = {String.class}, opType = OperationType.FUNCTION)
+    public static Sequence<String> characters(String string) {
+        String[] res = new String[string.length()];
+        for (int i = 0; i < res.length; i++) {
+            res[i] = String.valueOf(string.charAt(i));
+        }
+        Sequence<String> tmp = new ArraySequence<String>(res, String.class);
+        return new UnmodifiableSequence<String>(tmp);
+    }
+
 }

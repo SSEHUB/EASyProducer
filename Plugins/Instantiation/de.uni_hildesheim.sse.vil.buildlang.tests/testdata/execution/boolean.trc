@@ -11,4 +11,10 @@ b5 <- false
 b6 <- true
 -> ==(Boolean, Boolean) with (false, true) = false
 b7 <- false
+-> implies(Boolean, Boolean) with (true, true) = true
+b8 <- true
+-> iff(Boolean, Boolean) with (true, true) = true
+b9 <- true
+-> toString(Boolean) with (true) = true
+s1 <- true
 -> main()

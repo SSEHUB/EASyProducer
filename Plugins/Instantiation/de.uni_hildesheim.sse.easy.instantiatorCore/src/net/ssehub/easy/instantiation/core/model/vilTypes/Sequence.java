@@ -105,6 +105,15 @@ public interface Sequence<T> extends Collection<T> {
     public Sequence<T> select(ExpressionEvaluator evaluator) throws VilException;
 
     /**
+     * Rejects elements in this sequence according to the given expression.
+     * 
+     * @param evaluator the evaluator (results must evaluate to Boolean results)
+     * @return the rejected elements
+     * @throws VilException in case that selection fails
+     */
+    public Sequence<T> reject(ExpressionEvaluator evaluator) throws VilException;
+
+    /**
      * Collects the application of <code>evaluator</code> to each individual element.
      * 
      * @param evaluator the evaluator (results must evaluate to Boolean results)

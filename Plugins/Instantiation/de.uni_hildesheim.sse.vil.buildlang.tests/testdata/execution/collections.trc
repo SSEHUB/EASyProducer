@@ -72,6 +72,13 @@ set6 <- {5}
 -> >(Integer, Integer) with (5, 4) = true
 -> select(Set, ExpressionEvaluator) with ({1, 2, 3, 4, 5}, <evaluator>) = {5}
 set7 <- {5}
+-> >(Integer, Integer) with (1, 4) = false
+-> >(Integer, Integer) with (2, 4) = false
+-> >(Integer, Integer) with (3, 4) = false
+-> >(Integer, Integer) with (4, 4) = false
+-> >(Integer, Integer) with (5, 4) = true
+-> reject(Set, ExpressionEvaluator) with ({1, 2, 3, 4, 5}, <evaluator>) = {1, 2, 3, 4}
+set8 <- {1, 2, 3, 4}
 seq13 <- {1, 2, 4, 5, 6, 7}
 -> sortAlpha(Sequence) with ({1, 2, 4, 5, 6, 7}) = {1, 2, 4, 5, 6, 7}
 seq14 <- {1, 2, 4, 5, 6, 7}

@@ -15,6 +15,8 @@
  */
 package net.ssehub.easy.instantiation.rt.core.model.rtVil;
 
+import java.util.Locale;
+
 import net.ssehub.easy.instantiation.core.model.buildlangModel.IBuildlangElement;
 import net.ssehub.easy.instantiation.core.model.buildlangModel.IEnumeratingLoop;
 import net.ssehub.easy.instantiation.core.model.buildlangModel.Rule;
@@ -235,6 +237,16 @@ public class DelegatingTracer implements ITracer {
     @Override
     public void enable(boolean enable) {
         delegate.enable(enable);
+    }
+
+    @Override
+    public Locale getLocale() {
+        return delegate.getLocale();
+    }
+
+    @Override
+    public void setLocale(Locale locale) {
+        delegate.setLocale(locale);
     }
 
 }

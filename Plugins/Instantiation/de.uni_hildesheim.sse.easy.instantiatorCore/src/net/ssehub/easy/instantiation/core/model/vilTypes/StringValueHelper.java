@@ -5,6 +5,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Locale;
 import java.util.SortedMap;
 import java.util.TreeMap;
 
@@ -24,17 +25,28 @@ public class StringValueHelper {
     public static final String NULL_VALUE = "null"; // we do not really have a value for null in VIL
     private static final HashMap<Class<?>, IRegisteredStringValueProvider> REGISTERED_PROVIDERS 
         = new HashMap<Class<?>, IRegisteredStringValueProvider>();
-    
+
     /**
-     * Turns the first character into an upper case character.
+     * Turns the first character into an upper case character using the default system locale.
      * 
      * @param string the string to be transformed
      * @return the transformed string
      */
     public static String firstToUpperCase(String string) {
+        return firstToLowerCase(string, Locale.getDefault());
+    }
+    
+    /**
+     * Turns the first character into an upper case character using the given locale.
+     * 
+     * @param string the string to be transformed
+     * @param locale the locale to use
+     * @return the transformed string
+     */
+    public static String firstToUpperCase(String string, Locale locale) {
         String result = string;
         if (1 == string.length()) {
-            result = string.toUpperCase();
+            result = string.toUpperCase(locale);
         } else if (string.length() > 1) {
             result = Character.toUpperCase(string.charAt(0)) + string.substring(1);
         }
@@ -42,15 +54,26 @@ public class StringValueHelper {
     }
 
     /**
-     * Turns the first character into a lower case character.
+     * Turns the first character into a lower case character using the default system locale.
      * 
      * @param string the string to be transformed
      * @return the transformed string
      */
     public static String firstToLowerCase(String string) {
+        return firstToLowerCase(string, Locale.getDefault());
+    }
+    
+    /**
+     * Turns the first character into a lower case character using the given locale.
+     * 
+     * @param string the string to be transformed
+     * @param locale the locale to use
+     * @return the transformed string
+     */
+    public static String firstToLowerCase(String string, Locale locale) {
         String result = string;
         if (1 == string.length()) {
-            result = string.toLowerCase();
+            result = string.toLowerCase(locale);
         } else if (string.length() > 1) {
             result = Character.toLowerCase(string.charAt(0)) + string.substring(1);
         }

@@ -124,7 +124,14 @@ public class ArraySequence<T> extends AbstractArrayWrapper<T> implements Sequenc
     public Sequence<T> select(ExpressionEvaluator evaluator) throws VilException {
         TypeDescriptor<?>[] param = TypeDescriptor.createArray(1);
         param[0] = evaluator.getIteratorVariable().getType();
-        return new ListSequence<T>(select(this, evaluator), param);
+        return new ListSequence<T>(select(this, evaluator, true), param);
+    }
+
+    @Override
+    public Sequence<T> reject(ExpressionEvaluator evaluator) throws VilException {
+        TypeDescriptor<?>[] param = TypeDescriptor.createArray(1);
+        param[0] = evaluator.getIteratorVariable().getType();
+        return new ListSequence<T>(select(this, evaluator, false), param);
     }
 
     @OperationMeta(useParameter = 0)
@@ -134,7 +141,7 @@ public class ArraySequence<T> extends AbstractArrayWrapper<T> implements Sequenc
         param[0] = evaluator.inferType();
         return new ListSequence<Object>(collect(this, evaluator), param);
     }
-    
+
     @Override
     public Object apply(ExpressionEvaluator evaluator) throws VilException {
         return AbstractCollectionWrapper.apply(this, evaluator);

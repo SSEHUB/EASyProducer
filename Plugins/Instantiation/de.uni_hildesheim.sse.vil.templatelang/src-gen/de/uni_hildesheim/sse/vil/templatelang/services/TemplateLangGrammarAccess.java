@@ -54,29 +54,19 @@ public class TemplateLangGrammarAccess extends AbstractGrammarElementFinder {
 		private final Keyword cRightCurlyBracketKeyword_16 = (Keyword)cGroup.eContents().get(16);
 		
 		//LanguageUnit:
-		//	imports+=Import*
-		//	javaExts+=Extension*
-		//	advices+=Advice*
-		//	indent=IndentationHint?
-		//	formatting=FormattingHint?
-		//	'template' name=Identifier
-		//	'(' param=ParameterList? ')' ('extends' ext=Identifier)?
-		//	'{'
-		//	version=VersionStmt?
-		//	typeDefs+=TypeDef*
-		//	vars+=VariableDeclaration*
-		//	defs+=VilDef*
-		//	'}';
+		//	imports+=Import* javaExts+=Extension* advices+=Advice* indent=IndentationHint? formatting=FormattingHint? 'template'
+		//	name=Identifier '(' param=ParameterList? ')' ('extends' ext=Identifier)? '{' version=VersionStmt? typeDefs+=TypeDef*
+		//	vars+=VariableDeclaration* defs+=VilDef* '}';
 		@Override public ParserRule getRule() { return rule; }
 
 		//// do not rename - required for reuse
-		//imports+=Import* javaExts+=Extension* advices+=Advice* indent=IndentationHint? formatting=FormattingHint? 'template'
-		//name=Identifier '(' param=ParameterList? ')' ('extends' ext=Identifier)? '{' version=VersionStmt? typeDefs+=TypeDef*
-		//vars+=VariableDeclaration* defs+=VilDef* '}'
+		// imports+=Import* javaExts+=Extension* advices+=Advice* indent=IndentationHint?
+		//formatting=FormattingHint? 'template' name=Identifier '(' param=ParameterList? ')' ('extends' ext=Identifier)? '{'
+		//version=VersionStmt? typeDefs+=TypeDef* vars+=VariableDeclaration* defs+=VilDef* '}'
 		public Group getGroup() { return cGroup; }
 
 		//// do not rename - required for reuse
-		//imports+=Import*
+		// imports+=Import*
 		public Assignment getImportsAssignment_0() { return cImportsAssignment_0; }
 
 		//Import
@@ -408,10 +398,7 @@ public class TemplateLangGrammarAccess extends AbstractGrammarElementFinder {
 		private final Keyword cRightCurlyBracketKeyword_3 = (Keyword)cGroup.eContents().get(3);
 		
 		//StmtBlock:
-		//	{StmtBlock}
-		//	'{'
-		//	stmts+=Stmt*
-		//	'}';
+		//	{StmtBlock} '{' stmts+=Stmt* '}';
 		@Override public ParserRule getRule() { return rule; }
 
 		//{StmtBlock} '{' stmts+=Stmt* '}'
@@ -456,15 +443,8 @@ public class TemplateLangGrammarAccess extends AbstractGrammarElementFinder {
 		private final RuleCall cCtnContentParserRuleCall_8_0 = (RuleCall)cCtnAssignment_8.eContents().get(0);
 		
 		//Stmt:
-		//	var=VariableDeclaration
-		//	| alt=Alternative
-		//	| switch=Switch
-		//	| block=StmtBlock
-		//	| multi=multiselect
-		//	| loop=Loop
-		//	| while=While
-		//	| exprStmt=ExpressionStatement
-		//	| ctn=Content;
+		//	var=VariableDeclaration | alt=Alternative | switch=Switch | block=StmtBlock | multi=multiselect | loop=Loop |
+		//	while=While | exprStmt=ExpressionStatement | ctn=Content;
 		@Override public ParserRule getRule() { return rule; }
 
 		//var=VariableDeclaration | alt=Alternative | switch=Switch | block=StmtBlock | multi=multiselect | loop=Loop |
@@ -656,8 +636,7 @@ public class TemplateLangGrammarAccess extends AbstractGrammarElementFinder {
 		
 		//Switch:
 		//	'switch' '(' expr=Expression ')' '{' (parts+=SwitchPart (',' parts+=SwitchPart)* (',' 'default' ':'
-		//	dflt=Expression)?)
-		//	'}';
+		//	dflt=Expression)?) '}';
 		@Override public ParserRule getRule() { return rule; }
 
 		//'switch' '(' expr=Expression ')' '{' (parts+=SwitchPart (',' parts+=SwitchPart)* (',' 'default' ':' dflt=Expression)?)
@@ -782,10 +761,8 @@ public class TemplateLangGrammarAccess extends AbstractGrammarElementFinder {
 		private final RuleCall cStmtStmtParserRuleCall_8_0 = (RuleCall)cStmtAssignment_8.eContents().get(0);
 		
 		//Loop:
-		//	'for' '('
-		//	type=Type id=Identifier ':' expr=Expression (',' separator=PrimaryExpression (','
-		//	finalSeparator=PrimaryExpression)?)?
-		//	')' stmt=Stmt;
+		//	'for' '(' type=Type id=Identifier ':' expr=Expression (',' separator=PrimaryExpression (','
+		//	finalSeparator=PrimaryExpression)?)? ')' stmt=Stmt;
 		@Override public ParserRule getRule() { return rule; }
 
 		//'for' '(' type=Type id=Identifier ':' expr=Expression (',' separator=PrimaryExpression (','
@@ -865,8 +842,7 @@ public class TemplateLangGrammarAccess extends AbstractGrammarElementFinder {
 		private final RuleCall cStmtStmtParserRuleCall_4_0 = (RuleCall)cStmtAssignment_4.eContents().get(0);
 		
 		//While:
-		//	'while' '(' expr=Expression ')'
-		//	stmt=Stmt;
+		//	'while' '(' expr=Expression ')' stmt=Stmt;
 		@Override public ParserRule getRule() { return rule; }
 
 		//'while' '(' expr=Expression ')' stmt=Stmt
@@ -903,8 +879,7 @@ public class TemplateLangGrammarAccess extends AbstractGrammarElementFinder {
 		private final RuleCall cUserUserMultiselectParserRuleCall_1_0 = (RuleCall)cUserAssignment_1.eContents().get(0);
 		
 		//multiselect:
-		//	gen=genericMultiselect
-		//	| user=userMultiselect;
+		//	gen=genericMultiselect | user=userMultiselect;
 		@Override public ParserRule getRule() { return rule; }
 
 		//gen=genericMultiselect | user=userMultiselect
@@ -937,7 +912,7 @@ public class TemplateLangGrammarAccess extends AbstractGrammarElementFinder {
 		private final RuleCall cTrailerStmtBlockParserRuleCall_4_0 = (RuleCall)cTrailerAssignment_4.eContents().get(0);
 		
 		//// a kind of macro
-		//genericMultiselect:
+		// genericMultiselect:
 		//	'multiSelect' preamble=StmtBlock selector=StmtBlock part+=multiSelectPart+ trailer=StmtBlock;
 		@Override public ParserRule getRule() { return rule; }
 
@@ -1024,7 +999,7 @@ public class TemplateLangGrammarAccess extends AbstractGrammarElementFinder {
 		private final Keyword cSemicolonKeyword_4 = (Keyword)cGroup.eContents().get(4);
 		
 		//// a kind of pre-instantiated 
-		//userMultiselect:
+		// userMultiselect:
 		//	id=Identifier ':=' 'generic-multiSelect' stmt=StmtBlock ';'?;
 		@Override public ParserRule getRule() { return rule; }
 
@@ -1062,7 +1037,7 @@ public class TemplateLangGrammarAccess extends AbstractGrammarElementFinder {
 		private final Keyword cSemicolonKeyword_2 = (Keyword)cGroup.eContents().get(2);
 		
 		//// multiple alternatives missing at the moment
-		//Extension:
+		// Extension:
 		//	'extension' name=JavaQualifiedName ';';
 		@Override public ParserRule getRule() { return rule; }
 
@@ -1203,19 +1178,9 @@ public class TemplateLangGrammarAccess extends AbstractGrammarElementFinder {
 
 	
 	//LanguageUnit:
-	//	imports+=Import*
-	//	javaExts+=Extension*
-	//	advices+=Advice*
-	//	indent=IndentationHint?
-	//	formatting=FormattingHint?
-	//	'template' name=Identifier
-	//	'(' param=ParameterList? ')' ('extends' ext=Identifier)?
-	//	'{'
-	//	version=VersionStmt?
-	//	typeDefs+=TypeDef*
-	//	vars+=VariableDeclaration*
-	//	defs+=VilDef*
-	//	'}';
+	//	imports+=Import* javaExts+=Extension* advices+=Advice* indent=IndentationHint? formatting=FormattingHint? 'template'
+	//	name=Identifier '(' param=ParameterList? ')' ('extends' ext=Identifier)? '{' version=VersionStmt? typeDefs+=TypeDef*
+	//	vars+=VariableDeclaration* defs+=VilDef* '}';
 	public LanguageUnitElements getLanguageUnitAccess() {
 		return pLanguageUnit;
 	}
@@ -1275,10 +1240,7 @@ public class TemplateLangGrammarAccess extends AbstractGrammarElementFinder {
 	}
 
 	//StmtBlock:
-	//	{StmtBlock}
-	//	'{'
-	//	stmts+=Stmt*
-	//	'}';
+	//	{StmtBlock} '{' stmts+=Stmt* '}';
 	public StmtBlockElements getStmtBlockAccess() {
 		return pStmtBlock;
 	}
@@ -1288,15 +1250,8 @@ public class TemplateLangGrammarAccess extends AbstractGrammarElementFinder {
 	}
 
 	//Stmt:
-	//	var=VariableDeclaration
-	//	| alt=Alternative
-	//	| switch=Switch
-	//	| block=StmtBlock
-	//	| multi=multiselect
-	//	| loop=Loop
-	//	| while=While
-	//	| exprStmt=ExpressionStatement
-	//	| ctn=Content;
+	//	var=VariableDeclaration | alt=Alternative | switch=Switch | block=StmtBlock | multi=multiselect | loop=Loop |
+	//	while=While | exprStmt=ExpressionStatement | ctn=Content;
 	public StmtElements getStmtAccess() {
 		return pStmt;
 	}
@@ -1327,8 +1282,7 @@ public class TemplateLangGrammarAccess extends AbstractGrammarElementFinder {
 
 	//Switch:
 	//	'switch' '(' expr=Expression ')' '{' (parts+=SwitchPart (',' parts+=SwitchPart)* (',' 'default' ':'
-	//	dflt=Expression)?)
-	//	'}';
+	//	dflt=Expression)?) '}';
 	public SwitchElements getSwitchAccess() {
 		return pSwitch;
 	}
@@ -1348,10 +1302,8 @@ public class TemplateLangGrammarAccess extends AbstractGrammarElementFinder {
 	}
 
 	//Loop:
-	//	'for' '('
-	//	type=Type id=Identifier ':' expr=Expression (',' separator=PrimaryExpression (','
-	//	finalSeparator=PrimaryExpression)?)?
-	//	')' stmt=Stmt;
+	//	'for' '(' type=Type id=Identifier ':' expr=Expression (',' separator=PrimaryExpression (','
+	//	finalSeparator=PrimaryExpression)?)? ')' stmt=Stmt;
 	public LoopElements getLoopAccess() {
 		return pLoop;
 	}
@@ -1361,8 +1313,7 @@ public class TemplateLangGrammarAccess extends AbstractGrammarElementFinder {
 	}
 
 	//While:
-	//	'while' '(' expr=Expression ')'
-	//	stmt=Stmt;
+	//	'while' '(' expr=Expression ')' stmt=Stmt;
 	public WhileElements getWhileAccess() {
 		return pWhile;
 	}
@@ -1372,8 +1323,7 @@ public class TemplateLangGrammarAccess extends AbstractGrammarElementFinder {
 	}
 
 	//multiselect:
-	//	gen=genericMultiselect
-	//	| user=userMultiselect;
+	//	gen=genericMultiselect | user=userMultiselect;
 	public MultiselectElements getMultiselectAccess() {
 		return pMultiselect;
 	}
@@ -1383,7 +1333,7 @@ public class TemplateLangGrammarAccess extends AbstractGrammarElementFinder {
 	}
 
 	//// a kind of macro
-	//genericMultiselect:
+	// genericMultiselect:
 	//	'multiSelect' preamble=StmtBlock selector=StmtBlock part+=multiSelectPart+ trailer=StmtBlock;
 	public GenericMultiselectElements getGenericMultiselectAccess() {
 		return pGenericMultiselect;
@@ -1404,7 +1354,7 @@ public class TemplateLangGrammarAccess extends AbstractGrammarElementFinder {
 	}
 
 	//// a kind of pre-instantiated 
-	//userMultiselect:
+	// userMultiselect:
 	//	id=Identifier ':=' 'generic-multiSelect' stmt=StmtBlock ';'?;
 	public UserMultiselectElements getUserMultiselectAccess() {
 		return pUserMultiselect;
@@ -1415,7 +1365,7 @@ public class TemplateLangGrammarAccess extends AbstractGrammarElementFinder {
 	}
 
 	//// multiple alternatives missing at the moment
-	//Extension:
+	// Extension:
 	//	'extension' name=JavaQualifiedName ';';
 	public ExtensionElements getExtensionAccess() {
 		return pExtension;
@@ -1436,10 +1386,7 @@ public class TemplateLangGrammarAccess extends AbstractGrammarElementFinder {
 	}
 
 	//VariableDeclaration:
-	//	const='const'?
-	//	type=Type
-	//	name=Identifier ('=' expression=Expression)?
-	//	';';
+	//	const='const'? type=Type name=Identifier ('=' expression=Expression)? ';';
 	public ExpressionDslGrammarAccess.VariableDeclarationElements getVariableDeclarationAccess() {
 		return gaExpressionDsl.getVariableDeclarationAccess();
 	}
@@ -1449,10 +1396,7 @@ public class TemplateLangGrammarAccess extends AbstractGrammarElementFinder {
 	}
 
 	//TypeDef:
-	//	'typedef'
-	//	name=Identifier
-	//	type=Type
-	//	';';
+	//	'typedef' name=Identifier type=Type ';';
 	public ExpressionDslGrammarAccess.TypeDefElements getTypeDefAccess() {
 		return gaExpressionDsl.getTypeDefAccess();
 	}
@@ -1462,9 +1406,8 @@ public class TemplateLangGrammarAccess extends AbstractGrammarElementFinder {
 	}
 
 	//// used in extending languages
-	//Advice:
-	//	'@advice' '(' name=QualifiedName ')'
-	//	versionSpec=VersionSpec?;
+	// Advice:
+	//	'@advice' '(' name=QualifiedName ')' versionSpec=VersionSpec?;
 	public ExpressionDslGrammarAccess.AdviceElements getAdviceAccess() {
 		return gaExpressionDsl.getAdviceAccess();
 	}
@@ -1494,8 +1437,7 @@ public class TemplateLangGrammarAccess extends AbstractGrammarElementFinder {
 	}
 
 	//Parameter:
-	//	type=Type
-	//	name=Identifier;
+	//	type=Type name=Identifier;
 	public ExpressionDslGrammarAccess.ParameterElements getParameterAccess() {
 		return gaExpressionDsl.getParameterAccess();
 	}
@@ -1505,9 +1447,7 @@ public class TemplateLangGrammarAccess extends AbstractGrammarElementFinder {
 	}
 
 	//VersionStmt:
-	//	'version'
-	//	version=VERSION
-	//	';';
+	//	'version' version=VERSION ';';
 	public ExpressionDslGrammarAccess.VersionStmtElements getVersionStmtAccess() {
 		return gaExpressionDsl.getVersionStmtAccess();
 	}
@@ -1517,7 +1457,8 @@ public class TemplateLangGrammarAccess extends AbstractGrammarElementFinder {
 	}
 
 	//Import: //here fqn because this may reference a specific project (of an external project)
-	//	'import' name=Identifier versionSpec=VersionSpec? ';';
+	// 'import' name=Identifier
+	//	versionSpec=VersionSpec? ';';
 	public ExpressionDslGrammarAccess.ImportElements getImportAccess() {
 		return gaExpressionDsl.getImportAccess();
 	}
@@ -1527,11 +1468,10 @@ public class TemplateLangGrammarAccess extends AbstractGrammarElementFinder {
 	}
 
 	//// ------------------------------------- expressions -----------------------
-	//// used in extending languages
+	// // used in extending languages
+	//
 	//ExpressionStatement:
-	//	(var=Identifier ('.' field=Identifier)? '=')?
-	//	expr=Expression
-	//	';';
+	//	(var=Identifier ('.' field=Identifier)? '=')? expr=Expression ';';
 	public ExpressionDslGrammarAccess.ExpressionStatementElements getExpressionStatementAccess() {
 		return gaExpressionDsl.getExpressionStatementAccess();
 	}
@@ -1551,8 +1491,7 @@ public class TemplateLangGrammarAccess extends AbstractGrammarElementFinder {
 	}
 
 	//LogicalExpression:
-	//	left=EqualityExpression
-	//	right+=LogicalExpressionPart*;
+	//	left=EqualityExpression right+=LogicalExpressionPart*;
 	public ExpressionDslGrammarAccess.LogicalExpressionElements getLogicalExpressionAccess() {
 		return gaExpressionDsl.getLogicalExpressionAccess();
 	}
@@ -1562,8 +1501,7 @@ public class TemplateLangGrammarAccess extends AbstractGrammarElementFinder {
 	}
 
 	//LogicalExpressionPart:
-	//	op=LogicalOperator
-	//	ex=EqualityExpression;
+	//	op=LogicalOperator ex=EqualityExpression;
 	public ExpressionDslGrammarAccess.LogicalExpressionPartElements getLogicalExpressionPartAccess() {
 		return gaExpressionDsl.getLogicalExpressionPartAccess();
 	}
@@ -1573,9 +1511,7 @@ public class TemplateLangGrammarAccess extends AbstractGrammarElementFinder {
 	}
 
 	//LogicalOperator:
-	//	'and'
-	//	| 'or'
-	//	| 'xor';
+	//	'and' | 'or' | 'xor' | 'implies' | 'iff';
 	public ExpressionDslGrammarAccess.LogicalOperatorElements getLogicalOperatorAccess() {
 		return gaExpressionDsl.getLogicalOperatorAccess();
 	}
@@ -1585,8 +1521,7 @@ public class TemplateLangGrammarAccess extends AbstractGrammarElementFinder {
 	}
 
 	//EqualityExpression:
-	//	left=RelationalExpression
-	//	right=EqualityExpressionPart?;
+	//	left=RelationalExpression right=EqualityExpressionPart?;
 	public ExpressionDslGrammarAccess.EqualityExpressionElements getEqualityExpressionAccess() {
 		return gaExpressionDsl.getEqualityExpressionAccess();
 	}
@@ -1596,8 +1531,7 @@ public class TemplateLangGrammarAccess extends AbstractGrammarElementFinder {
 	}
 
 	//EqualityExpressionPart:
-	//	op=EqualityOperator
-	//	ex=RelationalExpression;
+	//	op=EqualityOperator ex=RelationalExpression;
 	public ExpressionDslGrammarAccess.EqualityExpressionPartElements getEqualityExpressionPartAccess() {
 		return gaExpressionDsl.getEqualityExpressionPartAccess();
 	}
@@ -1607,9 +1541,7 @@ public class TemplateLangGrammarAccess extends AbstractGrammarElementFinder {
 	}
 
 	//EqualityOperator:
-	//	'=='
-	//	| '<>'
-	//	| '!=';
+	//	'==' | '<>' | '!=';
 	public ExpressionDslGrammarAccess.EqualityOperatorElements getEqualityOperatorAccess() {
 		return gaExpressionDsl.getEqualityOperatorAccess();
 	}
@@ -1619,8 +1551,7 @@ public class TemplateLangGrammarAccess extends AbstractGrammarElementFinder {
 	}
 
 	//RelationalExpression:
-	//	left=AdditiveExpression
-	//	right=RelationalExpressionPart?;
+	//	left=AdditiveExpression right=RelationalExpressionPart?;
 	public ExpressionDslGrammarAccess.RelationalExpressionElements getRelationalExpressionAccess() {
 		return gaExpressionDsl.getRelationalExpressionAccess();
 	}
@@ -1630,8 +1561,7 @@ public class TemplateLangGrammarAccess extends AbstractGrammarElementFinder {
 	}
 
 	//RelationalExpressionPart:
-	//	op=RelationalOperator
-	//	ex=AdditiveExpression;
+	//	op=RelationalOperator ex=AdditiveExpression;
 	public ExpressionDslGrammarAccess.RelationalExpressionPartElements getRelationalExpressionPartAccess() {
 		return gaExpressionDsl.getRelationalExpressionPartAccess();
 	}
@@ -1641,10 +1571,7 @@ public class TemplateLangGrammarAccess extends AbstractGrammarElementFinder {
 	}
 
 	//RelationalOperator:
-	//	'>'
-	//	| '<'
-	//	| '>='
-	//	| '<=';
+	//	'>' | '<' | '>=' | '<=';
 	public ExpressionDslGrammarAccess.RelationalOperatorElements getRelationalOperatorAccess() {
 		return gaExpressionDsl.getRelationalOperatorAccess();
 	}
@@ -1654,8 +1581,7 @@ public class TemplateLangGrammarAccess extends AbstractGrammarElementFinder {
 	}
 
 	//AdditiveExpression:
-	//	left=MultiplicativeExpression
-	//	right+=AdditiveExpressionPart*;
+	//	left=MultiplicativeExpression right+=AdditiveExpressionPart*;
 	public ExpressionDslGrammarAccess.AdditiveExpressionElements getAdditiveExpressionAccess() {
 		return gaExpressionDsl.getAdditiveExpressionAccess();
 	}
@@ -1665,8 +1591,7 @@ public class TemplateLangGrammarAccess extends AbstractGrammarElementFinder {
 	}
 
 	//AdditiveExpressionPart:
-	//	op=AdditiveOperator
-	//	ex=MultiplicativeExpression;
+	//	op=AdditiveOperator ex=MultiplicativeExpression;
 	public ExpressionDslGrammarAccess.AdditiveExpressionPartElements getAdditiveExpressionPartAccess() {
 		return gaExpressionDsl.getAdditiveExpressionPartAccess();
 	}
@@ -1676,8 +1601,7 @@ public class TemplateLangGrammarAccess extends AbstractGrammarElementFinder {
 	}
 
 	//AdditiveOperator:
-	//	'+'
-	//	| '-';
+	//	'+' | '-';
 	public ExpressionDslGrammarAccess.AdditiveOperatorElements getAdditiveOperatorAccess() {
 		return gaExpressionDsl.getAdditiveOperatorAccess();
 	}
@@ -1687,8 +1611,7 @@ public class TemplateLangGrammarAccess extends AbstractGrammarElementFinder {
 	}
 
 	//MultiplicativeExpression:
-	//	left=UnaryExpression
-	//	right=MultiplicativeExpressionPart?;
+	//	left=UnaryExpression right=MultiplicativeExpressionPart?;
 	public ExpressionDslGrammarAccess.MultiplicativeExpressionElements getMultiplicativeExpressionAccess() {
 		return gaExpressionDsl.getMultiplicativeExpressionAccess();
 	}
@@ -1698,8 +1621,7 @@ public class TemplateLangGrammarAccess extends AbstractGrammarElementFinder {
 	}
 
 	//MultiplicativeExpressionPart:
-	//	op=MultiplicativeOperator
-	//	expr=UnaryExpression;
+	//	op=MultiplicativeOperator expr=UnaryExpression;
 	public ExpressionDslGrammarAccess.MultiplicativeExpressionPartElements getMultiplicativeExpressionPartAccess() {
 		return gaExpressionDsl.getMultiplicativeExpressionPartAccess();
 	}
@@ -1709,8 +1631,7 @@ public class TemplateLangGrammarAccess extends AbstractGrammarElementFinder {
 	}
 
 	//MultiplicativeOperator:
-	//	'*'
-	//	| '/';
+	//	'*' | '/';
 	public ExpressionDslGrammarAccess.MultiplicativeOperatorElements getMultiplicativeOperatorAccess() {
 		return gaExpressionDsl.getMultiplicativeOperatorAccess();
 	}
@@ -1720,8 +1641,7 @@ public class TemplateLangGrammarAccess extends AbstractGrammarElementFinder {
 	}
 
 	//UnaryExpression:
-	//	op=UnaryOperator?
-	//	expr=PostfixExpression;
+	//	op=UnaryOperator? expr=PostfixExpression;
 	public ExpressionDslGrammarAccess.UnaryExpressionElements getUnaryExpressionAccess() {
 		return gaExpressionDsl.getUnaryExpressionAccess();
 	}
@@ -1731,9 +1651,7 @@ public class TemplateLangGrammarAccess extends AbstractGrammarElementFinder {
 	}
 
 	//UnaryOperator:
-	//	'not'
-	//	| '!'
-	//	| '-';
+	//	'not' | '!' | '-';
 	public ExpressionDslGrammarAccess.UnaryOperatorElements getUnaryOperatorAccess() {
 		return gaExpressionDsl.getUnaryOperatorAccess();
 	}
@@ -1754,10 +1672,8 @@ public class TemplateLangGrammarAccess extends AbstractGrammarElementFinder {
 	}
 
 	//PrimaryExpression:
-	//	otherEx=ExpressionOrQualifiedExecution
-	//	| unqEx=UnqualifiedExecution
-	//	| superEx=SuperExecution
-	//	| newEx=ConstructorExecution;
+	//	otherEx=ExpressionOrQualifiedExecution | unqEx=UnqualifiedExecution | superEx=SuperExecution |
+	//	newEx=ConstructorExecution;
 	public ExpressionDslGrammarAccess.PrimaryExpressionElements getPrimaryExpressionAccess() {
 		return gaExpressionDsl.getPrimaryExpressionAccess();
 	}
@@ -1767,8 +1683,7 @@ public class TemplateLangGrammarAccess extends AbstractGrammarElementFinder {
 	}
 
 	//ExpressionOrQualifiedExecution:
-	//	(val=Constant
-	//	| '(' parenthesis=Expression ')') calls+=SubCall*;
+	//	(val=Constant | '(' parenthesis=Expression ')') calls+=SubCall*;
 	public ExpressionDslGrammarAccess.ExpressionOrQualifiedExecutionElements getExpressionOrQualifiedExecutionAccess() {
 		return gaExpressionDsl.getExpressionOrQualifiedExecutionAccess();
 	}
@@ -1808,8 +1723,7 @@ public class TemplateLangGrammarAccess extends AbstractGrammarElementFinder {
 	}
 
 	//SubCall:
-	//	type=('.' | '->') call=Call
-	//	| '[' arrayEx=Expression ']' // IVML addition to OCL
+	//	type=('.' | '->') call=Call | '[' arrayEx=Expression ']' // IVML addition to OCL
 	//;
 	public ExpressionDslGrammarAccess.SubCallElements getSubCallAccess() {
 		return gaExpressionDsl.getSubCallAccess();
@@ -1850,11 +1764,7 @@ public class TemplateLangGrammarAccess extends AbstractGrammarElementFinder {
 	}
 
 	//Call:
-	//	name=QualifiedPrefix
-	//	'('
-	//	decl=Declarator?
-	//	param=ArgumentList?
-	//	')';
+	//	name=QualifiedPrefix '(' decl=Declarator? param=ArgumentList? ')';
 	public ExpressionDslGrammarAccess.CallElements getCallAccess() {
 		return gaExpressionDsl.getCallAccess();
 	}
@@ -1864,8 +1774,7 @@ public class TemplateLangGrammarAccess extends AbstractGrammarElementFinder {
 	}
 
 	//ArgumentList:
-	//	param+=NamedArgument (','
-	//	param+=NamedArgument)*;
+	//	param+=NamedArgument (',' param+=NamedArgument)*;
 	public ExpressionDslGrammarAccess.ArgumentListElements getArgumentListAccess() {
 		return gaExpressionDsl.getArgumentListAccess();
 	}
@@ -1875,8 +1784,7 @@ public class TemplateLangGrammarAccess extends AbstractGrammarElementFinder {
 	}
 
 	//NamedArgument:
-	//	(name=Identifier '=')?
-	//	ex=Expression;
+	//	(name=Identifier '=')? ex=Expression;
 	public ExpressionDslGrammarAccess.NamedArgumentElements getNamedArgumentAccess() {
 		return gaExpressionDsl.getNamedArgumentAccess();
 	}
@@ -1906,11 +1814,8 @@ public class TemplateLangGrammarAccess extends AbstractGrammarElementFinder {
 	}
 
 	//Constant:
-	//	nValue=NumValue
-	//	| sValue=STRING
-	//	| qValue=QualifiedName
-	//	| bValue=('true' | 'false') | null='null'
-	//	| => version=VERSION;
+	//	nValue=NumValue | sValue=STRING | qValue=QualifiedName | bValue=('true' | 'false') | null='null' | =>
+	//	version=VERSION;
 	public ExpressionDslGrammarAccess.ConstantElements getConstantAccess() {
 		return gaExpressionDsl.getConstantAccess();
 	}
@@ -1941,8 +1846,9 @@ public class TemplateLangGrammarAccess extends AbstractGrammarElementFinder {
 
 	//Type:
 	//	name=QualifiedPrefix // specific types will be dynamically loaded at start-up
-	//	| set='setOf' param=TypeParameters | seq='sequenceOf' param=TypeParameters | map='mapOf' param=TypeParameters |
-	//	call='callOf' return=Type? param=TypeParameters;
+	// | set='setOf' param=TypeParameters |
+	//	seq='sequenceOf' param=TypeParameters | map='mapOf' param=TypeParameters | call='callOf' return=Type?
+	//	param=TypeParameters;
 	public ExpressionDslGrammarAccess.TypeElements getTypeAccess() {
 		return gaExpressionDsl.getTypeAccess();
 	}
@@ -1962,8 +1868,7 @@ public class TemplateLangGrammarAccess extends AbstractGrammarElementFinder {
 	}
 
 	//ContainerInitializer:
-	//	{ContainerInitializer}
-	//	'{' (exprs+=ContainerInitializerExpression (',' exprs+=ContainerInitializerExpression)*)? '}';
+	//	{ContainerInitializer} '{' (exprs+=ContainerInitializerExpression (',' exprs+=ContainerInitializerExpression)*)? '}';
 	public ExpressionDslGrammarAccess.ContainerInitializerElements getContainerInitializerAccess() {
 		return gaExpressionDsl.getContainerInitializerAccess();
 	}
@@ -1973,8 +1878,7 @@ public class TemplateLangGrammarAccess extends AbstractGrammarElementFinder {
 	}
 
 	//ContainerInitializerExpression:
-	//	logical=LogicalExpression
-	//	| container=ContainerInitializer;
+	//	logical=LogicalExpression | container=ContainerInitializer;
 	public ExpressionDslGrammarAccess.ContainerInitializerExpressionElements getContainerInitializerExpressionAccess() {
 		return gaExpressionDsl.getContainerInitializerExpressionAccess();
 	}
@@ -1996,9 +1900,7 @@ public class TemplateLangGrammarAccess extends AbstractGrammarElementFinder {
 	} 
 
 	//terminal NUMBER:
-	//	'-'? ('0'..'9'+ ('.' '0'..'9'* EXPONENT?)?
-	//	| '.' '0'..'9'+ EXPONENT?
-	//	| '0'..'9'+ EXPONENT);
+	//	'-'? ('0'..'9'+ ('.' '0'..'9'* EXPONENT?)? | '.' '0'..'9'+ EXPONENT? | '0'..'9'+ EXPONENT);
 	public TerminalRule getNUMBERRule() {
 		return gaExpressionDsl.getNUMBERRule();
 	} 
@@ -2010,8 +1912,8 @@ public class TemplateLangGrammarAccess extends AbstractGrammarElementFinder {
 	} 
 
 	//terminal STRING:
-	//	'"' ('\\' ('b' | 't' | 'n' | 'f' | 'r' | 'u' | '"' | "'" | '\\') | !('\\' | '"'))* '"' |
-	//	"'" ('\\' ('b' | 't' | 'n' | 'f' | 'r' | 'u' | '"' | "'" | '\\') | !('\\' | "'"))* "'";
+	//	'"' ('\\' ('b' | 't' | 'n' | 'f' | 'r' | 'u' | '"' | "'" | '\\') | !('\\' | '"'))* '"' | "'" ('\\' ('b' | 't' | 'n' |
+	//	'f' | 'r' | 'u' | '"' | "'" | '\\') | !('\\' | "'"))* "'";
 	public TerminalRule getSTRINGRule() {
 		return gaExpressionDsl.getSTRINGRule();
 	} 

@@ -3865,6 +3865,20 @@ ruleLogicalOperator returns [AntlrDatatypeRuleToken current=new AntlrDatatypeRul
         $current.merge(kw);
         newLeafNode(kw, grammarAccess.getLogicalOperatorAccess().getXorKeyword_2()); 
     }
+
+    |
+	kw='implies' 
+    {
+        $current.merge(kw);
+        newLeafNode(kw, grammarAccess.getLogicalOperatorAccess().getImpliesKeyword_3()); 
+    }
+
+    |
+	kw='iff' 
+    {
+        $current.merge(kw);
+        newLeafNode(kw, grammarAccess.getLogicalOperatorAccess().getIffKeyword_4()); 
+    }
 )
     ;
 

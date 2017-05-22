@@ -7,6 +7,9 @@ vilScript booleans () {
     Boolean b5 = !b4;
     Boolean b6 = not(b5);
     Boolean b7 = b5 == true;
+    Boolean b8 = b1 implies b2;
+    Boolean b9 = b1 iff b2;
+    String s1 = toString(b1);
 
     main() = : {
     }

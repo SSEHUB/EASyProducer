@@ -16,6 +16,7 @@ import net.ssehub.easy.instantiation.core.model.common.VariableDeclaration;
 import net.ssehub.easy.instantiation.core.model.common.VilException;
 import net.ssehub.easy.instantiation.core.model.execution.IInstantiatorTracer;
 import net.ssehub.easy.instantiation.core.model.expressions.Expression;
+import net.ssehub.easy.instantiation.core.model.expressions.AbstractTracerBase;
 import net.ssehub.easy.instantiation.core.model.expressions.CallExpression.CallType;
 import net.ssehub.easy.instantiation.core.model.templateModel.Def;
 import net.ssehub.easy.instantiation.core.model.templateModel.ITemplateLangElement;
@@ -32,7 +33,7 @@ import net.ssehub.easy.instantiation.core.model.vilTypes.OperationDescriptor;
  * 
  * @author Holger Eichelberger
  */
-public abstract class AbstractVilTracer 
+public abstract class AbstractVilTracer extends AbstractTracerBase
     implements net.ssehub.easy.instantiation.core.model.buildlangModel.ITracer, 
     net.ssehub.easy.instantiation.core.model.templateModel.ITracer, IInstantiatorTracer {
 

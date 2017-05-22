@@ -121,7 +121,13 @@ class OtherProjects implements Set<IArtifact> {
     @OperationMeta(useParameter = 0)
     @Override
     public Set<IArtifact> select(ExpressionEvaluator evaluator) throws VilException {
-        return new ListSet<IArtifact>(AbstractCollectionWrapper.select(this, evaluator), parameter);
+        return new ListSet<IArtifact>(AbstractCollectionWrapper.select(this, evaluator, true), parameter);
+    }
+
+    @OperationMeta(useParameter = 0)
+    @Override
+    public Set<IArtifact> reject(ExpressionEvaluator evaluator) throws VilException {
+        return new ListSet<IArtifact>(AbstractCollectionWrapper.select(this, evaluator, false), parameter);
     }
 
     @Override

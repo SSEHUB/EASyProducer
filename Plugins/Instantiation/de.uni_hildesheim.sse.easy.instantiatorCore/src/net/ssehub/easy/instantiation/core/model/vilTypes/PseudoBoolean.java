@@ -86,6 +86,39 @@ public class PseudoBoolean implements IVilType {
         return b1 != b2;
     }
 
-    // TODO complete operations
+    /**
+     * Represents the Boolean "implies" operation.
+     * 
+     * @param b1 the first boolean to be considered
+     * @param b2 the second boolean to be considered
+     * @return b1 ^ b2
+     */
+    @OperationMeta(opType = OperationType.INFIX)
+    public static boolean implies(boolean b1, boolean b2) {
+        return !b1 || b2;
+    }
+
+    /**
+     * Represents the Boolean "iff" operation.
+     * 
+     * @param b1 the first boolean to be considered
+     * @param b2 the second boolean to be considered
+     * @return b1 ^ b2
+     */
+    @OperationMeta(opType = OperationType.INFIX)
+    public static boolean iff(boolean b1, boolean b2) {
+        return (!b1 || b2) && (!b2 || b1);
+    }
+
+    /**
+     * Returns the string value of <code>b0</code>.
+     * 
+     * @param b0 the boolean to be turned into a string
+     * @return the string value
+     */
+    @OperationMeta(opType = OperationType.FUNCTION)
+    public static String toString(boolean b0) {
+        return String.valueOf(b0);
+    }
 
 }

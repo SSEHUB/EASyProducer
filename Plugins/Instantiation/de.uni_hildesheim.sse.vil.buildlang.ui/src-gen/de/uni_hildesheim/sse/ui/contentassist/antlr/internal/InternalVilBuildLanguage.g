@@ -2307,6 +2307,22 @@ rule__LogicalOperator__Alternatives
 { after(grammarAccess.getLogicalOperatorAccess().getXorKeyword_2()); }
 )
 
+    |(
+{ before(grammarAccess.getLogicalOperatorAccess().getImpliesKeyword_3()); }
+
+	'implies' 
+
+{ after(grammarAccess.getLogicalOperatorAccess().getImpliesKeyword_3()); }
+)
+
+    |(
+{ before(grammarAccess.getLogicalOperatorAccess().getIffKeyword_4()); }
+
+	'iff' 
+
+{ after(grammarAccess.getLogicalOperatorAccess().getIffKeyword_4()); }
+)
+
 ;
 finally {
 	restoreStackSize(stackSize);

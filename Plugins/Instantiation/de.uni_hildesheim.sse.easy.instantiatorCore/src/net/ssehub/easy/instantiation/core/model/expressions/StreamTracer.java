@@ -4,8 +4,10 @@ import java.io.File;
 import java.io.Writer;
 import java.net.URI;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 
+import net.ssehub.easy.basics.DefaultLocale;
 import net.ssehub.easy.instantiation.core.model.common.VilException;
 import net.ssehub.easy.instantiation.core.model.expressions.CallExpression.CallType;
 import net.ssehub.easy.instantiation.core.model.vilTypes.Constants;
@@ -49,6 +51,7 @@ public abstract class StreamTracer extends AbstractWriter implements ITracer {
         
     };
 
+    private Locale locale = DefaultLocale.getDefaultLocale();
     private String[] baseFolder;
     
     /**
@@ -187,5 +190,17 @@ public abstract class StreamTracer extends AbstractWriter implements ITracer {
      * @return the writer
      */
     protected abstract ExpressionWriter getWriter(Writer out);
+    
+    @Override
+    public Locale getLocale() {
+        return locale;
+    }
+    
+    @Override
+    public void setLocale(Locale locale) {
+        if (null != locale) {
+            this.locale = locale;
+        }
+    }
 
 }

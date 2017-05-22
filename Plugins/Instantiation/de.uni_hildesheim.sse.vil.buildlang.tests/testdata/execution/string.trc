@@ -1,8 +1,14 @@
 s1 <- test
 -> length(String) with (test) = 4
 i1 <- 4
+-> size(String) with (test) = 4
+i2 <- 4
 -> +(String, Any) with (test,  again) = test again
 s2 <- test again
+-> toString(String) with (test again) = test again
+s3 <- test again
+-> concat(String, Any) with (test,  again) = test again
+s4 <- test again
 -> ==(String, String) with (test, test again) = false
 b1 <- false
 -> ==(String, String) with (test again, test again) = true
@@ -12,7 +18,25 @@ b3 <- true
 -> matches(String, String) with (test, .*abba.*) = false
 b4 <- false
 -> toInteger(String) with (123) = 123
-i2 <- 123
+i3 <- 123
+-> indexOf(String, String) with (test again, again) = 5
+i4 <- 5
+-> at(String, Integer) with (test again, 0) = t
+s5 <- t
 -> toReal(String) with (12.3) = 12.3
 r1 <- 12.3
+-> toBoolean(String) with (true) = true
+b5 <- true
+-> >(String, String) with (aaa, bbb) = false
+b6 <- false
+-> >=(String, String) with (aaa, bbb) = false
+b7 <- false
+-> <(String, String) with (aaa, bbb) = true
+b8 <- true
+-> <=(String, String) with (aaa, bbb) = true
+b9 <- true
+-> equalsIgnoreCase(String, String) with (aaa, AAA) = true
+b10 <- true
+-> characters(String) with (aaa) = {a, a, a}
+seq <- {a, a, a}
 -> main()

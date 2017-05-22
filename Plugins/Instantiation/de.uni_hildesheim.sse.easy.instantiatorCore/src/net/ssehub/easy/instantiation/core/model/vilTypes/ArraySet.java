@@ -119,7 +119,14 @@ public class ArraySet<T> extends AbstractArrayWrapper<T> implements Set<T> {
     public Set<T> select(ExpressionEvaluator evaluator) throws VilException {
         TypeDescriptor<?>[] param = TypeDescriptor.createArray(1);
         param[0] = evaluator.getIteratorVariable().getType();
-        return new ListSet<T>(select(this, evaluator), param);
+        return new ListSet<T>(select(this, evaluator, true), param);
+    }
+
+    @Override
+    public Set<T> reject(ExpressionEvaluator evaluator) throws VilException {
+        TypeDescriptor<?>[] param = TypeDescriptor.createArray(1);
+        param[0] = evaluator.getIteratorVariable().getType();
+        return new ListSet<T>(select(this, evaluator, false), param);
     }
 
     @OperationMeta(useParameter = 0)

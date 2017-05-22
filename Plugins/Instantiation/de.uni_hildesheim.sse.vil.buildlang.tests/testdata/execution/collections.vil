@@ -34,6 +34,7 @@ vilScript collections () {
     setOf(Integer) set5 = set2.excluding(set2);
     setOf(Integer) set6 = set2.excluding(seq8);
     setOf(Integer) set7 = set2->select(i | i > 4);
+    setOf(Integer) set8 = set2->reject(i | i > 4);
     sequenceOf(Integer) seq13 = {5, 4, 7, 2, 1, 6};
     sequenceOf(Integer) seq14 = seq13.sortAlpha();
 

@@ -2,13 +2,25 @@ vilScript strings () {
 
     String s1 = "test";
     Integer i1 = s1.length();
+    Integer i2 = s1.size();
     String s2 = s1 + " again";
+    String s3 = toString(s2);
+    String s4 = s1.concat(" again");
     Boolean b1 = s1 == "test again";
     Boolean b2 = s2 == "test again";
     Boolean b3 = s1.matches(".*est.*");
     Boolean b4 = s1.matches(".*abba.*");
-    Integer i2 = toInteger("123");
+    Integer i3 = toInteger("123");
+    Integer i4 = s2.indexOf("again");
+    String s5 = s2.at(0);
     Real r1 = toReal("12.3");
+    Boolean b5 = toBoolean("true");
+    Boolean b6 = "aaa" > "bbb";
+    Boolean b7 = "aaa" >= "bbb";
+    Boolean b8 = "aaa" < "bbb";
+    Boolean b9 = "aaa" <= "bbb";
+    Boolean b10 = "aaa".equalsIgnoreCase("AAA");
+    sequenceOf(String) seq = characters("aaa");
 
     main() = : {
     }

@@ -243,13 +243,14 @@ public abstract class AbstractCollectionWrapper<T> implements Collection<T> {
      * @param <T> the element type
      * @param collection the collection to select from
      * @param evaluator the evaluator instance
+     * @param select do a select (<code>true</code>) or a reject (<code>false</code>)
      * @return the selected elements
      * @throws VilException in case that evaluation or selection fails
      */
-    public static <T> List<T> select(Collection<T> collection, ExpressionEvaluator evaluator) 
+    public static <T> List<T> select(Collection<T> collection, ExpressionEvaluator evaluator, boolean select) 
         throws VilException {
         List<T> result = new ArrayList<T>();
-        select(collection, evaluator, result);
+        select(collection, evaluator, result, select);
         return result;
     }
     
@@ -260,10 +261,11 @@ public abstract class AbstractCollectionWrapper<T> implements Collection<T> {
      * @param collection the collection to select from
      * @param evaluator the evaluator instance
      * @param result the elements of type <code>type</code> (modified as a side effect)
+     * @param select do a select (<code>true</code>) or a reject (<code>false</code>)
      * @throws VilException in case that evaluation or selection fails
      */
     protected static <T> void select(Collection<T> collection, ExpressionEvaluator evaluator, 
-        java.util.Collection<T> result) throws VilException {
+        java.util.Collection<T> result, boolean select) throws VilException {
         TypeDescriptor<?> type = evaluator.getExpression().inferType();
         boolean isDecVar = IvmlTypes.decisionVariableType().isAssignableFrom(type);
         if (!isDecVar && !TypeRegistry.booleanType().isAssignableFrom(type)) {
@@ -282,10 +284,21 @@ public abstract class AbstractCollectionWrapper<T> implements Collection<T> {
             } else if (eval instanceof Boolean) {
                 selectionCriterion = (Boolean) eval;
             }
-            if (null != selectionCriterion && selectionCriterion) {
+            if (null != selectionCriterion && isSelected(selectionCriterion, select)) {
                 result.add(value);
             }
         }
+    }
+    
+    /**
+     * Determines whether an element is selected.
+     * 
+     * @param selectionCriterion the original criterion
+     * @param select select or reject (negate)
+     * @return <code>true</code> for selected, <code>false</code> else
+     */
+    private static boolean isSelected(boolean selectionCriterion, boolean select) {
+        return (select && selectionCriterion) || (!select && !selectionCriterion);
     }
     
     /**

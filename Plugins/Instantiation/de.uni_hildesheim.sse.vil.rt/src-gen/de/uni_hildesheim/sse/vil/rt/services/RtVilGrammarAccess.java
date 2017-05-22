@@ -1430,7 +1430,7 @@ public class RtVilGrammarAccess extends AbstractGrammarElementFinder {
 	}
 
 	//LogicalOperator:
-	//	'and' | 'or' | 'xor';
+	//	'and' | 'or' | 'xor' | 'implies' | 'iff';
 	public ExpressionDslGrammarAccess.LogicalOperatorElements getLogicalOperatorAccess() {
 		return gaExpressionDsl.getLogicalOperatorAccess();
 	}
