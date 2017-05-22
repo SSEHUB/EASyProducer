@@ -4,12 +4,22 @@ i1 <- 4
 i2 <- 2
 -> *(Integer, Integer) with (2, 4) = 8
 i3 <- 8
--> /(Integer, Integer) with (8, 2) = 4
+-> div(Integer, Integer) with (8, 2) = 4
 i4 <- 4
 -> -(Integer) with (4) = -4
 i5 <- -4
 -> abs(Integer) with (4) = 4
 i6 <- 4
+-> /(Integer, Integer) with (8, 3) = 2.6666666666666665
+r0 <- 2.6666666666666665
+-> min(Integer, Integer) with (8, 3) = 3
+i8 <- 3
+-> max(Integer, Integer) with (8, 3) = 8
+i9 <- 8
+-> mod(Integer, Integer) with (8, 3) = 2
+i10 <- 2
+-> toString(Integer) with (8) = 8
+s1 <- 8
 -> ==(Integer, Integer) with (4, 4) = true
 b1 <- true
 -> +(Real, Real) with (1.0, 3.5) = 4.5
@@ -29,11 +39,11 @@ r7 <- -6.6
 -> max(Real, Real) with (-6.6, 6.6) = 6.6
 r8 <- 6.6
 -> toString(Real) with (6.6) = 6.6
-s1 <- 6.6
+s2 <- 6.6
 -> floor(Real) with (6.6) = 6
-i7 <- 6
+i11 <- 6
 -> ceil(Real) with (6.6) = 7
-i8 <- 7
+i12 <- 7
 -> ==(Real, Real) with (6.6, 6.6) = true
 b2 <- true
 -> <(Integer, Integer) with (3, 4) = true

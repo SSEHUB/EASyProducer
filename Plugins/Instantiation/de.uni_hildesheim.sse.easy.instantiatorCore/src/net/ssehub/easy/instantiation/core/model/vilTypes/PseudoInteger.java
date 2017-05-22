@@ -51,14 +51,26 @@ public class PseudoInteger extends PseudoReal {
     }
 
     /**
+     * Represents the division for integers with remainder.
+     * 
+     * @param i1 the first integer to be considered
+     * @param i2 the second integer to be considered
+     * @return i1 / i2 as real
+     */
+    @OperationMeta(name = Constants.DIVISION, opType = OperationType.INFIX)
+    public static double division(int i1, int i2) {
+        return i1 / ((double) i2);
+    }
+
+    /**
      * Represents the division for integers.
      * 
      * @param i1 the first integer to be considered
      * @param i2 the second integer to be considered
-     * @return i1 / i2
+     * @return i1 / i2 as integer
      */
-    @OperationMeta(name = Constants.DIVISION, opType = OperationType.INFIX)
-    public static int division(int i1, int i2) {
+    @OperationMeta(opType = OperationType.FUNCTION)
+    public static int div(int i1, int i2) {
         return i1 / i2;
     }
 
@@ -166,6 +178,53 @@ public class PseudoInteger extends PseudoReal {
     @Conversion
     public static double convert(int val) {
         return val;
+    }
+
+    /**
+     * Returns the modulo value of <code>i1</code> and <code>i2</code>.
+     * 
+     * @param i1 the first value to be considered
+     * @param i2 the first value to be considered
+     * @return i1 % i2
+     */
+    @OperationMeta(opType = OperationType.FUNCTION)
+    public static int mod(int i1, int i2) {
+        return i1 % i2;
+    }
+
+    /**
+     * Returns the minimum value of <code>i1</code> and <code>i2</code>.
+     * 
+     * @param i1 the first value to be considered
+     * @param i2 the first value to be considered
+     * @return min(i1, i2)
+     */
+    @OperationMeta(opType = OperationType.FUNCTION)
+    public static int min(int i1, int i2) {
+        return Math.min(i1, i2);
+    }
+
+    /**
+     * Returns the maximum value of <code>i1</code> and <code>i2</code>.
+     * 
+     * @param i1 the first value to be considered
+     * @param i2 the first value to be considered
+     * @return max(i1, i2)
+     */
+    @OperationMeta(opType = OperationType.FUNCTION)
+    public static int max(int i1, int i2) {
+        return Math.max(i1, i2);
+    }
+
+    /**
+     * Returns the string value of <code>i0</code>.
+     * 
+     * @param i0 the int to be turned into a string
+     * @return the string value
+     */
+    @OperationMeta(opType = OperationType.FUNCTION)
+    public static String toString(int i0) {
+        return String.valueOf(i0);
     }
 
 }
