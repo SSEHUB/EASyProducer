@@ -8,14 +8,13 @@ import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 import org.eclipse.core.runtime.preferences.InstanceScope;
 import org.osgi.service.prefs.BackingStoreException;
 
+import net.ssehub.easy.basics.DefaultLocale;
 import net.ssehub.easy.basics.logger.EASyLoggerFactory;
 import net.ssehub.easy.producer.core.mgmt.VilArgumentProvider;
 import net.ssehub.easy.producer.core.persistence.Configuration;
 import net.ssehub.easy.producer.core.persistence.Configuration.PathKind;
 import net.ssehub.easy.reasoning.core.frontend.ReasonerFrontend;
 import net.ssehub.easy.reasoning.core.reasoner.ReasonerDescriptor;
-import net.ssehub.easy.varModel.cstEvaluation.EvaluationContext;
-import net.ssehub.easy.varModel.cstEvaluation.GenericOperations;
 import net.ssehub.easy.varModel.persistency.AbstractVarModelWriter;
 
 /**
@@ -174,7 +173,7 @@ public class EASyPreferenceStore {
             setIvmlPrefs(4, true);
         }
         AbstractVarModelWriter.setOclCompliance(getOclCompliance());
-        EvaluationContext.setDefaultLocale(getDefaultLocale());
+        DefaultLocale.setDefaultLocale(getDefaultLocale());
     }
     
     /**
@@ -224,7 +223,7 @@ public class EASyPreferenceStore {
      */
     public static Locale getDefaultLocale() {
         String tmp = getPreferences().get("easy.oclLocale", getInitialLocaleAsString());
-        return GenericOperations.toLocale(tmp);
+        return DefaultLocale.toLocale(tmp);
     }
     
     /**
@@ -233,7 +232,7 @@ public class EASyPreferenceStore {
      * @return the default locale
      */
     public static String getDefaultLocaleAsString() {
-        return GenericOperations.toString(getDefaultLocale());
+        return DefaultLocale.toString(getDefaultLocale());
     }
     
     /**
@@ -244,8 +243,8 @@ public class EASyPreferenceStore {
     public static void setDefaultLocale(String loc) {
         if (null != loc && !loc.isEmpty()) {
             getPreferences().put("easy.oclLocale", loc);
-            Locale l = GenericOperations.toLocale(loc);
-            EvaluationContext.setDefaultLocale(l);
+            Locale l = DefaultLocale.toLocale(loc);
+            DefaultLocale.setDefaultLocale(l);
         }
     }
 
@@ -255,7 +254,7 @@ public class EASyPreferenceStore {
      * @return the initial locale
      */
     public static String getInitialLocaleAsString() {
-        return GenericOperations.toString(EvaluationContext.INITIAL_LOCALE);
+        return DefaultLocale.toString(DefaultLocale.INITIAL_LOCALE);
     }
 
     /**
