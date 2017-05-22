@@ -15,8 +15,7 @@
  */
 package net.ssehub.easy.varModel.cstEvaluation;
 
-import java.util.Locale;
-
+import net.ssehub.easy.basics.DefaultLocale;
 import net.ssehub.easy.varModel.confModel.AssignmentState;
 import net.ssehub.easy.varModel.confModel.CompoundVariable;
 import net.ssehub.easy.varModel.model.datatypes.AnyType;
@@ -212,7 +211,7 @@ public class GenericOperations {
                 Value arg = arguments[0].getValue();
                 if (arg instanceof StringValue) {
                     String loc = ((StringValue) arg).getValue();
-                    operand.getContext().setLocale(toLocale(loc));
+                    operand.getContext().setLocale(DefaultLocale.toLocale(loc));
                     try {
                         result = ConstantAccessor.POOL.getInstance().bind(ValueFactory.createValue(StringType.TYPE, 
                             localeToString(operand)), operand.getContext());
@@ -232,45 +231,13 @@ public class GenericOperations {
     }
 
     /**
-     * Turns <code>loc</code> into a locale.
-     * 
-     * @param loc a string specifying a locale (form: lang[_country]).
-     * @return the locale
-     */
-    public static Locale toLocale(String loc) {
-        Locale locale;
-        int pos = loc.indexOf("_");
-        if (pos < 0 && pos + 1 < loc.length()) {
-            locale = new Locale(loc);
-        } else {
-            locale = new Locale(loc.substring(0, pos), loc.substring(pos + 1));
-        }
-        return locale;
-    }
-
-    /**
      * Turns the locale of the accessor/context into a string.
      * 
      * @param accessor the accessor
      * @return the locale as string
      */
     public static String localeToString(EvaluationAccessor accessor) {
-        return toString(accessor.getContext().getLocale());
-    }
-
-    /**
-     * Turns the locale into a string.
-     * 
-     * @param locale the locale
-     * @return the locale as string
-     */
-    public static String toString(Locale locale) {
-        String result = locale.getLanguage();
-        String ctry = locale.getCountry();
-        if (ctry.length() > 0) {
-            result += "_" + ctry;
-        }
-        return result;
+        return DefaultLocale.toString(accessor.getContext().getLocale());
     }
 
     /**

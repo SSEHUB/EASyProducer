@@ -18,6 +18,7 @@ package net.ssehub.easy.varModel.cstEvaluation;
 import java.text.Collator;
 import java.util.Locale;
 
+import net.ssehub.easy.basics.DefaultLocale;
 import net.ssehub.easy.basics.messages.Status;
 import net.ssehub.easy.varModel.confModel.IAssignmentState;
 import net.ssehub.easy.varModel.confModel.IConfiguration;
@@ -34,29 +35,7 @@ import net.ssehub.easy.varModel.model.values.Value;
  */
 public abstract class EvaluationContext implements IConfiguration {
     
-    public static final Locale INITIAL_LOCALE = new Locale("en", "us");
-    private static Locale defaultLocale = INITIAL_LOCALE;
-    private Locale locale = defaultLocale;
-
-    /**
-     * Changes the default locale for evaluation.
-     * 
-     * @param locale the new locale, ignored if <b>null</b>
-     */
-    public static void setDefaultLocale(Locale locale) {
-        if (null != locale)  {
-            defaultLocale = locale;
-        }
-    }
-
-    /**
-     * Returns the default locale for evaluation.
-     * 
-     * @return the locale
-     */
-    public static Locale getDefaultLocale() {
-        return defaultLocale;
-    }
+    private Locale locale = DefaultLocale.getDefaultLocale();
     
     /**
      * Returns the actual locale for evaluation.
