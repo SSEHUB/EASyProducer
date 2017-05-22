@@ -46,5 +46,37 @@ public class DefaultLocale {
     public static Locale getDefaultLocale() {
         return defaultLocale;
     }
+    
+    /**
+     * Turns the locale into a string.
+     * 
+     * @param locale the locale
+     * @return the locale as string
+     */
+    public static String toString(Locale locale) {
+        String result = locale.getLanguage();
+        String ctry = locale.getCountry();
+        if (ctry.length() > 0) {
+            result += "_" + ctry;
+        }
+        return result;
+    }
+
+    /**
+     * Turns <code>loc</code> into a locale.
+     * 
+     * @param loc a string specifying a locale (form: lang[_country]).
+     * @return the locale
+     */
+    public static Locale toLocale(String loc) {
+        Locale locale;
+        int pos = loc.indexOf("_");
+        if (pos < 0 && pos + 1 < loc.length()) {
+            locale = new Locale(loc);
+        } else {
+            locale = new Locale(loc.substring(0, pos), loc.substring(pos + 1));
+        }
+        return locale;
+    }
 
 }
