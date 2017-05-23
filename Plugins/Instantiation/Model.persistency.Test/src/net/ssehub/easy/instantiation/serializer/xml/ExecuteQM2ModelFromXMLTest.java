@@ -24,10 +24,10 @@ import net.ssehub.easy.instantiation.core.model.execution.TracerFactory;
 import net.ssehub.easy.instantiation.core.model.templateModel.TemplateModel;
 import net.ssehub.easy.instantiation.core.model.tracing.ConsoleTracerFactory;
 import net.ssehub.easy.reasoning.core.frontend.ReasonerFrontend;
-import net.ssehub.easy.reasoning.core.impl.ReasonerRegistry;
+//import net.ssehub.easy.reasoning.core.impl.ReasonerRegistry;
 import net.ssehub.easy.reasoning.core.reasoner.ReasonerConfiguration;
 import net.ssehub.easy.reasoning.core.reasoner.ReasoningResult;
-import net.ssehub.easy.reasoning.sseReasoner.Reasoner;
+//import net.ssehub.easy.reasoning.sseReasoner.Reasoner;
 import net.ssehub.easy.varModel.confModel.Configuration;
 import net.ssehub.easy.varModel.management.VarModel;
 import net.ssehub.easy.varModel.model.Project;
@@ -59,13 +59,14 @@ public class ExecuteQM2ModelFromXMLTest extends AbstractUtil {
             BuiltIn.initialize();
             net.ssehub.easy.instantiation.maven.Registration.register();
             
+            // cyclic dependency if reasoner fails
             // Ensure correct reasoner is used
-            while (ReasonerRegistry.getInstance().getReasonerCount() > 0) {
+            /*while (ReasonerRegistry.getInstance().getReasonerCount() > 0) {
                 // Unregister all reasoners
                 ReasonerRegistry.getInstance().unregister(ReasonerRegistry.getInstance().getReasoner(0));
             }
             // register desired reasoner: SSE-Reasoner
-            ReasonerRegistry.getInstance().register(new Reasoner());
+            ReasonerRegistry.getInstance().register(new Reasoner());*/
         }
         // Remove all possible locations
         int locationCount = VarModel.INSTANCE.locations().getLocationCount();
