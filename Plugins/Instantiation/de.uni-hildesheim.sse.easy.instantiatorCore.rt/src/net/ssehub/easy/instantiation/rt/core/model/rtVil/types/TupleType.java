@@ -161,6 +161,12 @@ public class TupleType extends TypeDescriptor<TupleType> implements IVilType {
     }
 
     @Override
+    public boolean isSameType(Object object) {
+        return null != object && object.getClass() == TupleInstance.class 
+            && isSameType(((TupleInstance) object).getType());
+    }
+
+    @Override
     public boolean isBasicType() {
         return false;
     }

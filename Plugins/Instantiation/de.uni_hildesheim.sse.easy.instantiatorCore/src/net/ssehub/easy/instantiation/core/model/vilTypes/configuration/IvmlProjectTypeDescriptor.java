@@ -152,9 +152,19 @@ class IvmlProjectTypeDescriptor extends AbstractIvmlTypeDescriptor implements IA
         boolean isInstance = false;
         if (object instanceof Configuration) {
             Configuration cfg = (Configuration) object;
-            isInstance = cfg.getName().equals(project.getName());
+            isInstance = cfg.getName().equals(project.getName()); // no subtyping on projects
         }
         return isInstance;
+    }
+    
+    @Override
+    public boolean isSameType(Object object) {
+        boolean isSame = false;
+        if (object instanceof Configuration) {
+            Configuration cfg = (Configuration) object;
+            isSame = cfg.getName().equals(project.getName());
+        }
+        return isSame;
     }
 
     @Override

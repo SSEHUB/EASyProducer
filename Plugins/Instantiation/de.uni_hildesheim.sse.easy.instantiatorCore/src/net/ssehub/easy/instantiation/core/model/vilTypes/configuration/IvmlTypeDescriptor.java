@@ -28,6 +28,7 @@ import net.ssehub.easy.varModel.model.datatypes.IntegerType;
 import net.ssehub.easy.varModel.model.datatypes.RealType;
 import net.ssehub.easy.varModel.model.datatypes.Sequence;
 import net.ssehub.easy.varModel.model.datatypes.StringType;
+import net.ssehub.easy.varModel.model.datatypes.TypeQueries;
 import net.ssehub.easy.varModel.model.values.Value;
 
 /**
@@ -185,6 +186,24 @@ public class IvmlTypeDescriptor extends AbstractIvmlTypeDescriptor implements IA
     @Override
     public boolean isInstance(Object object) {
         boolean isInstance = false;
+        IDatatype objectType = getDatatype(object);
+        if (null != objectType) {            
+            isInstance = type.isAssignableFrom(objectType);
+            if (!isInstance && null != baseType) {
+                IDatatype bType = DerivedDatatype.resolveToBasis(type);
+                isInstance = objectType.isAssignableFrom(bType); // objectType is raw
+            }
+        } 
+        return isInstance;
+    }
+
+    /**
+     * Returns the datatype for <code>pbject</code>.
+     * 
+     * @param object the object to return the datatype for
+     * @return the datatype or <b>null</b> if there is none
+     */
+    private IDatatype getDatatype(Object object) {
         IDatatype objectType = null;
         if (object instanceof DecisionVariable) {
             DecisionVariable var = (DecisionVariable) object;
@@ -212,14 +231,21 @@ public class IvmlTypeDescriptor extends AbstractIvmlTypeDescriptor implements IA
         }  else if (object instanceof Boolean) {
             objectType = BooleanType.TYPE;
         }
+        return objectType;
+    }
+    
+    @Override
+    public boolean isSameType(Object object) {
+        boolean isSame = false;
+        IDatatype objectType = getDatatype(object);
         if (null != objectType) {            
-            isInstance = type.isAssignableFrom(objectType);
-            if (!isInstance && null != baseType) {
+            isSame = TypeQueries.sameTypes(type, objectType);
+            if (!isSame && null != baseType) {
                 IDatatype bType = DerivedDatatype.resolveToBasis(type);
-                isInstance = objectType.isAssignableFrom(bType); // objectType is raw
+                isSame = TypeQueries.sameTypes(objectType, bType); // objectType is raw
             }
         } 
-        return isInstance;
+        return isSame;
     }
 
     @Override

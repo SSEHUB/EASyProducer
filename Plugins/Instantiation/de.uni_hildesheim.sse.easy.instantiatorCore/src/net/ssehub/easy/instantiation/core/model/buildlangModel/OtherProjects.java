@@ -105,7 +105,12 @@ class OtherProjects implements Set<IArtifact> {
 
     @Override
     public Set<IArtifact> selectByType(TypeDescriptor<?> type) {
-        return new ListSet<IArtifact>(AbstractCollectionWrapper.selectByType(this, type), parameter);
+        return new ListSet<IArtifact>(AbstractCollectionWrapper.selectByType(this, type, false), parameter);
+    }
+
+    @Override
+    public Set<IArtifact> selectByKind(TypeDescriptor<?> type) {
+        return new ListSet<IArtifact>(AbstractCollectionWrapper.selectByType(this, type, true), parameter);
     }
 
     @Override

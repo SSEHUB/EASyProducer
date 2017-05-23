@@ -460,6 +460,14 @@ public abstract class TypeDescriptor <T> implements IMetaType {
     public abstract boolean isInstance(Object object);
 
     /**
+     * Returns whether the given <code>object</code> of of the type of this descriptor.
+     * 
+     * @param object the object to be checked
+     * @return <code>true</code> if <code>object</code> has the same type, <code>false</code> else
+     */
+    public abstract boolean isSameType(Object object);
+    
+    /**
      * Adds a placeholder operation, i.e., in case that the original operation cannot be resolved
      * but the script shall remain executable.
      * 

@@ -164,6 +164,11 @@ class AliasTypeDescriptor <T> extends TypeDescriptor<T> {
     public boolean isInstance(Object object) {
         return type.isInstance(object);
     }
+    
+    @Override
+    public boolean isSameType(Object object) {
+        return type.isSameType(object);
+    }
 
     @Override
     public OperationDescriptor addPlaceholderOperation(String name, int parameterCount, 

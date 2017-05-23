@@ -101,6 +101,11 @@ public class UnmodifiableSequence<T> implements Sequence<T> {
     }
 
     @Override
+    public Sequence<T> selectByKind(TypeDescriptor<?> type) {
+        return sequence.selectByKind(type);
+    }
+
+    @Override
     public Sequence<T> excluding(Collection<T> sequence) {
         return this.sequence.excluding(sequence);
     }

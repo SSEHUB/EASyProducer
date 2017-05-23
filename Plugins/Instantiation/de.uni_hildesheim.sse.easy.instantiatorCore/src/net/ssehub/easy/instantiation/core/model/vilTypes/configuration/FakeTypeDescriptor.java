@@ -102,6 +102,11 @@ public class FakeTypeDescriptor extends TypeDescriptor<IvmlElement> {
     public boolean isInstance(Object object) {
         return true; // accept everything
     }
+    
+    @Override
+    public boolean isSameType(Object object) {
+        return true; // accept everything
+    }
 
     @Override
     public OperationDescriptor addPlaceholderOperation(String name, int parameterCount, 

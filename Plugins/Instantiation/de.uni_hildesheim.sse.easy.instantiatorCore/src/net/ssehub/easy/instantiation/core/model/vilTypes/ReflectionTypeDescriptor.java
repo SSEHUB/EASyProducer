@@ -727,6 +727,27 @@ public class ReflectionTypeDescriptor <T> extends TypeDescriptor <T> {
         }
         return ok;
     }
+
+    @Override
+    public boolean isSameType(Object object) {
+        boolean ok;
+        if (null == object) {
+            ok = false;
+        } else {
+            Class<?> resClass = object.getClass();
+            ok = resClass == cls;
+            if (!ok) {
+                ClassMeta meta = cls.getAnnotation(ClassMeta.class);
+                if (null != meta && null != meta.equiv()) {
+                    Class<?>[] equiv = meta.equiv();
+                    for (int e = 0; !ok && e < equiv.length; e++) {
+                        ok = resClass == equiv[e];
+                    }
+                }
+            }
+        }
+        return ok;
+    }
     
     @Override
     public boolean isBasicType() {

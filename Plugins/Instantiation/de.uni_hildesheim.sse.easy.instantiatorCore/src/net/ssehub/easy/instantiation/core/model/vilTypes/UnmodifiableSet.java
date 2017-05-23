@@ -85,6 +85,11 @@ public class UnmodifiableSet<T> implements Set<T> {
     }
 
     @Override
+    public Set<T> selectByKind(TypeDescriptor<?> type) {
+        return set.selectByKind(type);
+    }
+
+    @Override
     public Set<T> selectByType(TypeDescriptor<?> type) {
         return set.selectByType(type);
     }

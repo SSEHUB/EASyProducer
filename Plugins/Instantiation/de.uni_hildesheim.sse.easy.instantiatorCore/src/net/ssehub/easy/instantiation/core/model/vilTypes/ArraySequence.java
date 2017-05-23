@@ -105,7 +105,13 @@ public class ArraySequence<T> extends AbstractArrayWrapper<T> implements Sequenc
     @Override
     @OperationMeta(returnGenerics = IVilType.class)
     public Sequence<T> selectByType(TypeDescriptor<?> type) {
-        return new ListSequence<T>(selectByType(this, type), getGenericParameter());
+        return new ListSequence<T>(selectByType(this, type, false), getGenericParameter());
+    }
+
+    @Override
+    @OperationMeta(returnGenerics = IVilType.class)
+    public Sequence<T> selectByKind(TypeDescriptor<?> type) {
+        return new ListSequence<T>(selectByType(this, type, true), getGenericParameter());
     }
 
     @Override

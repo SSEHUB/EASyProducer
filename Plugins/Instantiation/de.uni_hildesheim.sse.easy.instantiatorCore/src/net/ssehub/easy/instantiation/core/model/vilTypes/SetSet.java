@@ -187,7 +187,16 @@ public class SetSet<T> extends AbstractCollectionWrapper<T> implements Set<T> {
     public Set<T> selectByType(TypeDescriptor<?> type) {
         java.util.Set<T> tmp = new java.util.HashSet<T>();
         if (null != set) {
-            selectByType(this, type, tmp);
+            selectByType(this, type, tmp, false);
+        }
+        return new SetSet<T>(tmp, params);
+    }
+
+    @Override
+    public Set<T> selectByKind(TypeDescriptor<?> type) {
+        java.util.Set<T> tmp = new java.util.HashSet<T>();
+        if (null != set) {
+            selectByType(this, type, tmp, true);
         }
         return new SetSet<T>(tmp, params);
     }

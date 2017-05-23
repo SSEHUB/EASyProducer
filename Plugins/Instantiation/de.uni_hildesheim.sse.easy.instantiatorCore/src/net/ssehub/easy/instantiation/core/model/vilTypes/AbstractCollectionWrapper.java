@@ -210,11 +210,12 @@ public abstract class AbstractCollectionWrapper<T> implements Collection<T> {
      * @param <T> the element type
      * @param collection the collection to analyze
      * @param type the type to select for
+     * @param byKind select by kind (<code>true</code>, including subclasses) or by type equality <code>false</code>
      * @return the elements of type <code>type</code>
      */
-    public static <T> List<T> selectByType(Collection<T> collection, TypeDescriptor<?> type) {
+    public static <T> List<T> selectByType(Collection<T> collection, TypeDescriptor<?> type, boolean byKind) {
         List<T> result = new ArrayList<T>();
-        selectByType(collection, type, result);
+        selectByType(collection, type, result, byKind);
         return result;
     }
     
@@ -225,12 +226,15 @@ public abstract class AbstractCollectionWrapper<T> implements Collection<T> {
      * @param collection the collection to analyze
      * @param type the type to select for
      * @param result the elements of type <code>type</code> (modified as a side effect)
+     * @param byKind select by kind (<code>true</code>, including subclasses) or by type equality <code>false</code>
      */
     protected static <T> void selectByType(Collection<T> collection, TypeDescriptor<?> type, 
-        java.util.Collection<T> result) {
+        java.util.Collection<T> result, boolean byKind) {
+        // TODO consider byKind, currently always byKind
         Iterator<T> iter = collection.iterator();
         while (iter.hasNext()) {
             T element = iter.next();
+            //TODO if (null == type || (byKind && type.isInstance(element)) || (!byKind && type.isSameType(element))) {
             if (null == type || type.isInstance(element)) {
                 result.add(element);
             }
