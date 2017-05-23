@@ -2,6 +2,7 @@ vilScript typeSelect (Project source, Project target, Configuration config) {
 
     main() = : {
         setOf(XmlElement) fileSet = source.selectByType(XmlFileArtifact);
+        setOf(XmlElement) fileSet2 = source.selectByKind(XmlFileArtifact);
     }
 
 }

@@ -43,8 +43,12 @@ set2 <- {1, 2, 3, 4, 5}
 seq7 <- {1, 2, 3, 4, 5}
 -> selectByType(Sequence, Type) with ({1, 2, 3, 4}, Integer representing net.ssehub.easy.instantiation.core.model.vilTypes.PseudoInteger) = {1, 2, 3, 4}
 seq8 <- {1, 2, 3, 4}
+-> selectByKind(Sequence, Type) with ({1, 2, 3, 4}, Integer representing net.ssehub.easy.instantiation.core.model.vilTypes.PseudoInteger) = {1, 2, 3, 4}
+seq8_1 <- {1, 2, 3, 4}
 -> selectByType(Sequence, Type) with ({1, 2, 3, 4}, Real representing net.ssehub.easy.instantiation.core.model.vilTypes.PseudoReal) = {}
 seq9 <- {}
+-> selectByKind(Sequence, Type) with ({1, 2, 3, 4}, Real representing net.ssehub.easy.instantiation.core.model.vilTypes.PseudoReal) = {}
+seq9_1 <- {}
 -> excluding(Sequence, Collection) with ({1, 2, 2, 3, 4, 5}, {1, 2, 3, 4}) = {5}
 seq10 <- {5}
 -> excluding(Sequence, Collection) with ({1, 2, 2, 3, 4, 5}, {1, 2, 3, 4}) = {5}
@@ -59,8 +63,12 @@ seq11 <- {5}
 seq12 <- {5}
 -> selectByType(Set, Type) with ({1, 2, 3, 4, 5}, Integer representing net.ssehub.easy.instantiation.core.model.vilTypes.PseudoInteger) = {1, 2, 3, 4, 5}
 set3 <- {1, 2, 3, 4, 5}
+-> selectByKind(Set, Type) with ({1, 2, 3, 4, 5}, Integer representing net.ssehub.easy.instantiation.core.model.vilTypes.PseudoInteger) = {1, 2, 3, 4, 5}
+set3_1 <- {1, 2, 3, 4, 5}
 -> selectByType(Set, Type) with ({1, 2, 3, 4, 5}, Real representing net.ssehub.easy.instantiation.core.model.vilTypes.PseudoReal) = {}
 set4 <- {}
+-> selectByKind(Set, Type) with ({1, 2, 3, 4, 5}, Real representing net.ssehub.easy.instantiation.core.model.vilTypes.PseudoReal) = {}
+set4_1 <- {}
 -> excluding(Set, Collection) with ({1, 2, 3, 4, 5}, {1, 2, 3, 4, 5}) = {}
 set5 <- {}
 -> excluding(Set, Collection) with ({1, 2, 3, 4, 5}, {1, 2, 3, 4}) = {5}

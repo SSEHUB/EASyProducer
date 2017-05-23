@@ -34,7 +34,7 @@ vilScript PL_WMS_Platform (Project source, Configuration config, Project target)
     }
     
     processSpringConfiguration(Project source, Configuration config) = "$wmsProductLocation/**/*.config" : "$wmsProductLocation/**/*.*" {
-        setOf(XmlFileArtifact) springConfigFiles = wmsProductLocation.selectByType(XmlFileArtifact);
+        setOf(XmlFileArtifact) springConfigFiles = wmsProductLocation.selectByKind(XmlFileArtifact);
         map (artifact = springConfigFiles) {
             vilTemplateProcessor(source.getEasyFolder() + "/SpringConfigurationTemplate.vtl", config, artifact);
         };

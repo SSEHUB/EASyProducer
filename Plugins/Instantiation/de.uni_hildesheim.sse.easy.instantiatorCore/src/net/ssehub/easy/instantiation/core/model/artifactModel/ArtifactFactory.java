@@ -368,14 +368,15 @@ public class ArtifactFactory {
      * 
      * @param path the path denoting the artifacts to be selected
      * @param type the type of the artifacts to be returned (may be <b>null</b> if type selection does not apply)
+     * @param byKind by subtyping (<code>true</code>) or by equality (<code>false</code>)
      * 
      * @return the found artifacts
      */
-    public static synchronized Set<FileArtifact> selectByType(Path path, Class<?> type) {
+    public static synchronized Set<FileArtifact> selectByType(Path path, Class<?> type, boolean byKind) {
         initialize();
         List<FileArtifact> result = new LinkedList<FileArtifact>();
         for (int m = MODELS.size() - 1; m >= 0; m--) {
-            MODELS.get(m).selectByType(path, type, result);
+            MODELS.get(m).selectByType(path, type, result, byKind);
         }
         return new ListSet<FileArtifact>(result, type);
     }

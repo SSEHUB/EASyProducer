@@ -25,12 +25,16 @@ vilScript collections () {
     setOf(Integer) set2 = seq4.toSet();
     sequenceOf(Integer) seq7 = set2.toSequence();
     sequenceOf(Integer) seq8 = seq1.selectByType(Integer);
+    sequenceOf(Integer) seq8_1 = seq1.selectByKind(Integer);
     sequenceOf(Real) seq9 = seq1.selectByType(Real);
+    sequenceOf(Real) seq9_1 = seq1.selectByKind(Real);
     sequenceOf(Integer) seq10 = seq4.excluding(seq3);
     sequenceOf(Integer) seq11 = seq4.excluding(seq1);
     sequenceOf(Integer) seq12 = seq4->select(i | i > 4);
     setOf(Integer) set3 = set2.selectByType(Integer);
+    setOf(Integer) set3_1 = set2.selectByKind(Integer);
     setOf(Real) set4 = set2.selectByType(Real);
+    setOf(Real) set4_1 = set2.selectByKind(Real);
     setOf(Integer) set5 = set2.excluding(set2);
     setOf(Integer) set6 = set2.excluding(seq8);
     setOf(Integer) set7 = set2->select(i | i > 4);

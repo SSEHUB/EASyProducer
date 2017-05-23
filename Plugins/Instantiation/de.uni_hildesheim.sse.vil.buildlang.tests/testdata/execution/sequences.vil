@@ -6,7 +6,8 @@ vilScript sequences (Project source, Project target, Configuration config) {
 
     main() = : {
         setOf(FileArtifact) srcFiles = source_src.selectAll();
-        setOf(XmlFileArtifact) dbFiles = source.selectByType(XmlFileArtifact);
+        setOf(XmlFileArtifact) dbFiles = source.selectByKind(XmlFileArtifact);
+        setOf(XmlFileArtifact) dbFiles2 = source.selectByType(XmlFileArtifact);
     }
 
 }

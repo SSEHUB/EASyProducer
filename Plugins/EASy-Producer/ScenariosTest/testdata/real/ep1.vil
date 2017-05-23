@@ -21,10 +21,10 @@ vilScript produceEP1 (Project source, Project target, Configuration config) {
 
     createFolders() = "$source/*.java" : {
         setOf(FileArtifact) allFiles = source.getLocalProjectArtifacts();
-        map(x=allFiles.selectByType(FolderArtifact)) {
+        map(x=allFiles.selectByKind(FolderArtifact)) {
             createFolder(x.path());
         };
-        setOf(FileArtifact) noClasses = allFiles.selectByType(FileArtifact).excluding(allFiles.selectByType(ClassFileArtifact));
+        setOf(FileArtifact) noClasses = allFiles.selectByKind(FileArtifact).excluding(allFiles.selectByType(ClassFileArtifact));
         map(x=noClasses) {
             produceGenericCopy(x, target.localize(source, x));
         };
@@ -40,7 +40,7 @@ vilScript produceEP1 (Project source, Project target, Configuration config) {
     }
 
     injectAspects(Project source, Project target, Configuration config, IvmlElement time) = : compileGoal() {
-        sequenceOf(ClassFileArtifact) timedClassFiles = join(c:target.selectByType(ClassFileArtifact), exclude d:config.variables()) with (c.annotationValue("Component", "decVar") == d.name() and time == d.getAttribute(Test::bindingTime).value());
+        sequenceOf(ClassFileArtifact) timedClassFiles = join(c:target.selectByKind(ClassFileArtifact), exclude d:config.variables()) with (c.annotationValue("Component", "decVar") == d.name() and time == d.getAttribute(Test::bindingTime).value());
         map(x=timedClassFiles) {
             FileArtifact aspectFile = target_variability + "/" + (x.name()) + ".aj";
             FileArtifact template = source_templates + "/" + time + x.annotationValue("Component", "category") + "Template.tpl";
@@ -63,8 +63,8 @@ vilScript produceEP1 (Project source, Project target, Configuration config) {
         injectAspects(source, target, config, Test::BindingTime.runtime);
     }
 
-    package() = "$target_dist/client.jar" : target_bin.selectByType(ClassFileArtifact), produceJavaCompile(), produceJavaStartup(), produceJavaRuntime() {
-        sequenceOf(FileArtifact) files = join(c:target_bin.selectByType(ClassFileArtifact), exclude d:config.variables()) with (c.annotationValue("Component", "decVar") == d.name() and d.booleanValue());
+    package() = "$target_dist/client.jar" : target_bin.selectByKind(ClassFileArtifact), produceJavaCompile(), produceJavaStartup(), produceJavaRuntime() {
+        sequenceOf(FileArtifact) files = join(c:target_bin.selectByKind(ClassFileArtifact), exclude d:config.variables()) with (c.annotationValue("Component", "decVar") == d.name() and d.booleanValue());
         jar(target, files, "$target_dist/client.jar");
     }
 

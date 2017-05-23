@@ -23,7 +23,7 @@ vilScript svncontrol (Project source, Project target, Configuration config) {
     injectAspects(Project source, Project target, Configuration config, IvmlElement time) = : compileGoal() {
         // class or java file artifact would be better, sequence of values in annotation may change arbitrarily
         sequenceOf(JavaFileArtifact, DecisionVariable) timedClassFiles = 
-          join(c:target.selectByType(JavaFileArtifact), d:config.variables()) with (
+          join(c:target.selectByKind(JavaFileArtifact), d:config.variables()) with (
             time == d.getAttribute(svncontrol::bindingTime).value() and c.hasAnnotation("de.uni_hildesheim.sse.variability.runtime.annotations.Component", "boundTo", "${d.name()}"));
         map(x, d=timedClassFiles) {
             String component = "Ui"; // currently we do not consider the other types here

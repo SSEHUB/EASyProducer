@@ -4,6 +4,7 @@ vilScript typeSelect2 (Project source, Project target, Configuration config) {
     main() = : {
         typeSelectTest cfg = config;
         setOf(TestCompound) projected = cfg.t.selectByType(SpecialCompound);
+        setOf(TestCompound) projected2 = cfg.t.selectByKind(SpecialCompound);
     }
 
 }

@@ -4,5 +4,7 @@ source_initDb <- init.sql
 -> main()
     -> selectAll(Path) with (src/**/*.java) = {src/test/Test.java, src/test/Test2.java, src/test/sub/Test2.java}
     srcFiles <- {src/test/Test.java, src/test/Test2.java, src/test/sub/Test2.java}
-    -> selectByType(Project, Type) with (<project>, XmlFileArtifact representing net.ssehub.easy.instantiation.core.model.artifactModel.xml.XmlFileArtifact) = {build.xml}
+    -> selectByKind(Project, Type) with (<project>, XmlFileArtifact representing net.ssehub.easy.instantiation.core.model.artifactModel.xml.XmlFileArtifact) = {build.xml}
     dbFiles <- {build.xml}
+    -> selectByType(Project, Type) with (<project>, XmlFileArtifact representing net.ssehub.easy.instantiation.core.model.artifactModel.xml.XmlFileArtifact) = {build.xml}
+    dbFiles2 <- {build.xml}    

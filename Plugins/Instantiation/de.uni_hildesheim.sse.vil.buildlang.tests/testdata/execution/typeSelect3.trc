@@ -2,3 +2,5 @@
     cfg <- <config>
     -> selectByType(Set, Type) with ({typeSelectTest::t {0}, typeSelectTest::t {1}, typeSelectTest::t {2}}, SpecialCompound) = {typeSelectTest::t {2}}
     projected <- {typeSelectTest::t {2}}
+    -> selectByKind(Set, Type) with ({typeSelectTest::t {0}, typeSelectTest::t {1}, typeSelectTest::t {2}}, SpecialCompound) = {typeSelectTest::t {2}}
+    projected2 <- {typeSelectTest::t {2}}

@@ -5,7 +5,7 @@ vilScript Reasoner (Project source, Configuration config, Project target) {
     main(Project source, Configuration config, Project target) = : {
     	if (!config.getByName("withLogs").booleanValue()) {
             // Collect all java files
-            setOf(JavaFileArtifact) files = target.selectByType(JavaFileArtifact);
+            setOf(JavaFileArtifact) files = target.selectByKind(JavaFileArtifact);
             String utils = "/var/lib/jenkins/jobs/VarModel/workspace/Utils/build/jar/de.uni_hildesheim.sse.Utils.jar";
             String model = "/var/lib/jenkins/jobs/VarModel/workspace/Model/build/jar/de.uni_hildesheim.sse.varModel.jar";
             String reasoner = "/var/lib/jenkins/jobs/ReasonerCore/workspace/ReasonerCore/build/jar/ReasonerCore.jar";

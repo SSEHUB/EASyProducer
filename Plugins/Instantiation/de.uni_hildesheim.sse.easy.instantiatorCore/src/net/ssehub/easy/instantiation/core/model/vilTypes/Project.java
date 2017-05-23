@@ -163,7 +163,7 @@ public class Project implements IVilType, IStringValueProvider {
     }
     
     /**
-     * Does type selection of artifacts.
+     * Does type selection of artifacts type equality.
      * 
      * @param type the target type
      * @return the selected artifacts (the type will be adjusted to the actual
@@ -172,6 +172,18 @@ public class Project implements IVilType, IStringValueProvider {
     @OperationMeta(returnGenerics = FileArtifact.class)
     public Set<FileArtifact> selectByType(Class<?> type) {
         return artifactModel.selectByType(type);
+    }
+
+    /**
+     * Does type selection of artifacts by type or sub-type.
+     * 
+     * @param type the target type
+     * @return the selected artifacts (the type will be adjusted to the actual
+     *   type of <code>type</code>)
+     */
+    @OperationMeta(returnGenerics = FileArtifact.class)
+    public Set<FileArtifact> selectByKind(Class<?> type) {
+        return artifactModel.selectByKind(type);
     }
 
     /**

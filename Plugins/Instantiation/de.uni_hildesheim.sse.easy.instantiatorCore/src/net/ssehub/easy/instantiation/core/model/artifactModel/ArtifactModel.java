@@ -147,7 +147,7 @@ public class ArtifactModel {
     }
     
     /**
-     * Does type selection of artifacts.
+     * Does type selection of artifacts by type equality.
      * 
      * @param type the target type
      * @return the selected artifacts (the type will be adjusted to the actual
@@ -155,7 +155,20 @@ public class ArtifactModel {
      */
     public Set<FileArtifact> selectByType(Class<?> type) {
         List<FileArtifact> result = new ArrayList<FileArtifact>();
-        selectByType(null, type, result);
+        selectByType(null, type, result, false);
+        return new ListSet<FileArtifact>(result, type);
+    }
+
+    /**
+     * Does type selection of artifacts by subtyping.
+     * 
+     * @param type the target type
+     * @return the selected artifacts (the type will be adjusted to the actual
+     *   type of <code>type</code>)
+     */
+    public Set<FileArtifact> selectByKind(Class<?> type) {
+        List<FileArtifact> result = new ArrayList<FileArtifact>();
+        selectByType(null, type, result, true);
         return new ListSet<FileArtifact>(result, type);
     }
     
@@ -211,19 +224,39 @@ public class ArtifactModel {
      * @param path the path to be considered for selection (may be <b>null</b>)
      * @param type the type to be considered (may be <b>null</b>, than this parameter is ignored)
      * @param result to be modified as a side effect
+     * @param byKind do the selection by subtyping (<code>true</code>) or by equality (<code>false</code>)
      */
-    void selectByType(Path path, Class<?> type, List<FileArtifact> result) {
+    void selectByType(Path path, Class<?> type, List<FileArtifact> result, boolean byKind) {
         if (null == type) {
             type = FileArtifact.class; // TODO -> remove in case of IFileSystemArtifact as return type
         }
         if (null == type || FileArtifact.class.isAssignableFrom(type)) {
             // TODO improve efficiency!!! -> start at path!
             for (IFileSystemArtifact artifact: fileArtifacts.values()) {
-                if ((null == type || type.isInstance(artifact)) && matchesPath(path, artifact)) {
+                if ((null == type || isOfType(type, artifact, byKind)) && matchesPath(path, artifact)) {
                     result.add((FileArtifact) artifact);
                 }
             }
         }
+    }
+    
+    /**
+     * Returns whether type selection matches.
+     * 
+     * @param type the type to be considered (may be <b>null</b>, than this parameter is ignored)
+     * @param artifact the artifact to test
+     * @param byKind do the selection by subtyping (<code>true</code>) or by equality (<code>false</code>)
+     * @return <code>true</code> if types match, <code>false</code> else
+     */
+    private static boolean isOfType(Class<?> type, IFileSystemArtifact artifact, boolean byKind) {
+        boolean result;
+        result = type.isInstance(artifact);
+        /*TODO activate if (byKind) {
+            result = type.isInstance(artifact);
+        } else {
+            result = null != artifact && type == artifact.getClass();
+        }*/
+        return result;
     }
     
     /**

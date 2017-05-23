@@ -5,7 +5,7 @@ vilScript removeLogger (Project source, Configuration config, Project target) {
     
     main(Project source, Configuration config, Project target) = : {
     	// Collect all java files
- 	    setOf(JavaFileArtifact) files = target.selectByType(JavaFileArtifact);
+ 	    setOf(JavaFileArtifact) files = target.selectByKind(JavaFileArtifact);
  	    // Set the classpath by adding each java file to the class path
     	String newClasspath = target.path();
     	String allFiles = "";

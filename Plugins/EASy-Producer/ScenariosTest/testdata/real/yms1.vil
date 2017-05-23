@@ -26,7 +26,7 @@ vilScript yms1 (Project source, Project target, Configuration config, String bin
     }
 
     produceYmsVariant() = : {
-        sequenceOf(JavaFileArtifact) variableArtifacts = join(jFile:source.selectByType(JavaFileArtifact), exclude d:config.selectByAttribute(IVML::bindingTime, IVML::BindingTime.compile).variables()) with (jFile.hasAnnotation("VariationPoint", "value", d.name()));
+        sequenceOf(JavaFileArtifact) variableArtifacts = join(jFile:source.selectByKind(JavaFileArtifact), exclude d:config.selectByAttribute(IVML::bindingTime, IVML::BindingTime.compile).variables()) with (jFile.hasAnnotation("VariationPoint", "value", d.name()));
         applyCocktailStrategy(variableArtifacts);
         map(artifact=variableArtifacts) {
             Path targetPath = target.localize(source, artifact);
