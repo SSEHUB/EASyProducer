@@ -6,10 +6,10 @@ template cocktailResolution(setOf(JavaFileArtifact, DecisionVariable) variabilit
     /*
 	// @Params: only artifacts with @VariationPoint and decision variables with attribute bindingTime = compile!
 	def main(setOf(JavaFileArtifact, DecisionVariable) variabilities) { // Do we need this parameter here? No, because "variabilities" are global!?
-		for (JavaFileArtifact variableFile : variabilities.selectByType(JavaFileArtifact)) {
+		for (JavaFileArtifact variableFile : variabilities.selectByKind(JavaFileArtifact)) {
 		    for (JavaAttribute variableAttribute : variableFile.getAttributes()) {
 		        if (variableAttribute.hasAnnotation("@VariationPoint")) {
-		            resolveVariability(variableAttribute, variabilities.selectByType(DecisionVariables));
+		            resolveVariability(variableAttribute, variabilities.selectByKind(DecisionVariables));
 		        }
 		    }
 		}
