@@ -59,7 +59,7 @@
 	<!-- Compile all files without test classes -->
 	<target name="compile" depends="init">
 		<!-- pre-process the reasoner code - may fail if not every thing is up to date -->
-		<!-- <easy source="${basedir}" target="${basedir}" projectName="Reasoner"/>-->
+		<easy source="${basedir}" target="${basedir}" projectName="Reasoner"/>
 		<javac srcdir="${src.dir}" debug="true" destdir="${build.classes.dir}" includeAntRuntime="no" failonerror="true" source="${javacSource}" target="${javacTarget}" encoding="${javac.encoding}">
 			<classpath refid="includes" />	
 		</javac>
