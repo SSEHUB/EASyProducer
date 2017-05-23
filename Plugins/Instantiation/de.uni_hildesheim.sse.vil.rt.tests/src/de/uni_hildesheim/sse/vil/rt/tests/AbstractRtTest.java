@@ -28,7 +28,7 @@ import net.ssehub.easy.instantiation.core.model.vilTypes.configuration.Configura
 import net.ssehub.easy.instantiation.core.model.vilTypes.configuration.IVariableFilter;
 import net.ssehub.easy.instantiation.rt.core.model.rtVil.Script;
 import net.ssehub.easy.reasoning.core.frontend.ReasonerFrontend;
-import net.ssehub.easy.reasoning.sseReasoner.Reasoner;
+//import net.ssehub.easy.reasoning.sseReasoner.Reasoner;
 import net.ssehub.easy.varModel.management.VarModel;
 import net.ssehub.easy.varModel.model.Project;
 
@@ -45,7 +45,7 @@ public abstract class AbstractRtTest extends AbstractExecutionTest<Script> {
      * Registers the reasoner but only once per VM test execution.
      */
     protected static void registerReasoner() {
-        if (!reasonerRegistered) {
+  /*      if (!reasonerRegistered) {
             ReasonerFrontend fe = ReasonerFrontend.getInstance();
             Reasoner reasoner = new Reasoner();
             fe.getRegistry().register(reasoner);
@@ -53,7 +53,7 @@ public abstract class AbstractRtTest extends AbstractExecutionTest<Script> {
             // may be available
             fe.setReasonerHint(reasoner.getDescriptor());
             reasonerRegistered = true;
-        }
+        }*/
     }
     
     @Override
