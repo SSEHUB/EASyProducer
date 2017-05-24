@@ -250,12 +250,11 @@ public class ArtifactModel {
      */
     private static boolean isOfType(Class<?> type, IFileSystemArtifact artifact, boolean byKind) {
         boolean result;
-        result = type.isInstance(artifact);
-        /*TODO activate if (byKind) {
+        if (byKind) {
             result = type.isInstance(artifact);
         } else {
             result = null != artifact && type == artifact.getClass();
-        }*/
+        }
         return result;
     }
     

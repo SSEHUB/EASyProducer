@@ -230,15 +230,25 @@ public abstract class AbstractCollectionWrapper<T> implements Collection<T> {
      */
     protected static <T> void selectByType(Collection<T> collection, TypeDescriptor<?> type, 
         java.util.Collection<T> result, boolean byKind) {
-        // TODO consider byKind, currently always byKind
         Iterator<T> iter = collection.iterator();
         while (iter.hasNext()) {
             T element = iter.next();
-            //TODO if (null == type || (byKind && type.isInstance(element)) || (!byKind && type.isSameType(element))) {
-            if (null == type || type.isInstance(element)) {
+            if (null == type || isSelectedByType(type, element, byKind)) {
                 result.add(element);
             }
         }
+    }
+
+    /**
+     * Returns whether type selection matches.
+     * 
+     * @param type the type to be considered (may be <b>null</b>, than this parameter is ignored)
+     * @param element the element to test
+     * @param byKind do the selection by subtyping (<code>true</code>) or by equality (<code>false</code>)
+     * @return <code>true</code> if types match, <code>false</code> else
+     */
+    private static boolean isSelectedByType(TypeDescriptor<?> type, Object element, boolean byKind) {
+        return (byKind && type.isInstance(element)) || (!byKind && type.isSameType(element));
     }
  
     /**
