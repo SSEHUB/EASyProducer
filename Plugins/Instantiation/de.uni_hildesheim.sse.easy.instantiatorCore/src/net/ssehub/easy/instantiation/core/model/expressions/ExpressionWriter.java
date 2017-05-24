@@ -23,11 +23,14 @@ import net.ssehub.easy.instantiation.core.model.vilTypes.configuration.EnumValue
  * @author Holger Eichelberger
  */
 public class ExpressionWriter extends AbstractWriter implements IExpressionVisitor {
-    
+
+    /**
+     * Detect, warn, report about and write to avoid OCL compliance problems.
+     */
+    private static boolean oclCompliance = false;
+
     private Stack<CompositeExpression> compositeExpressions = new Stack<CompositeExpression>();
-    
     private boolean isInContent = false;
-    
     private boolean isInExpression = false;
 
     /**
@@ -37,6 +40,26 @@ public class ExpressionWriter extends AbstractWriter implements IExpressionVisit
      */
     public ExpressionWriter(Writer out) {
         super(out);
+    }
+    
+    /**
+     * Changes the OCL compliance setting. Similar to IVML, but we separate this in case
+     * that the UI shall do different settings for IVML and VIL.
+     * 
+     * @param compliance operate with OCL compliance (<code>true</code>), allow both IVML + OCL (<code>false</code>
+     */
+    public static void setOclCompliance(boolean compliance) {
+        oclCompliance = compliance;
+    }
+    
+    /**
+     * Returns whether OCL compliance shall be considered. Similar to IVML, but we separate this in case
+     * that the UI shall do different settings for IVML and VIL.
+     * 
+     * @return <code>true</code> for OCL compliance, <code>false</code> else
+     */
+    public static boolean considerOclCompliance() {
+        return oclCompliance;
     }
 
     @Override
@@ -216,7 +239,11 @@ public class ExpressionWriter extends AbstractWriter implements IExpressionVisit
         if (value instanceof EnumValue) {
             EnumValue eValue = (EnumValue) value;
             print(eValue.getType());
-            print(".");
+            if (considerOclCompliance()) {
+                print("::");
+            } else {
+                print(".");
+            }
             print(eValue.getName());
         } else if (value instanceof String) {
             boolean isInComposite = isInComposite();

@@ -7,6 +7,8 @@
         t <- adviceTestVM1::TestCompoundType::type
         -> ==(LevelType, LevelType) with (adviceTestVM1::TestCompoundType::type, high) = true
         visit if-branch
+        -> ==(LevelType, LevelType) with (adviceTestVM1::TestCompoundType::type, high) = true
+        visit if-branch
     -> byName(Configuration, String) with (<config>, c2) = adviceTestVM1::c2
     cmp <- adviceTestVM1::c2
     -> processCompound(SubTestCompoundType) with (adviceTestVM1::c2)

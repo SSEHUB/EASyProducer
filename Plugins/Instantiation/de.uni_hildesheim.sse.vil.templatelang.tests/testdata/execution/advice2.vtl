@@ -11,6 +11,12 @@ template adviceTest2(Configuration config, FileArtifact target) {
         } else {
             'other type'
         }
+        //* if (t == LevelType.high) {
+        if (t == LevelType::high) {
+            'high :: type'
+        } else {
+            'other :: type'
+        }
     }
 
     def processCompound(SubTestCompoundType cmp) {
