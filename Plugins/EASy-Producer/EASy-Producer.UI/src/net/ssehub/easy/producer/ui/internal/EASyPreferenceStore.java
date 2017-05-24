@@ -10,6 +10,7 @@ import org.osgi.service.prefs.BackingStoreException;
 
 import net.ssehub.easy.basics.DefaultLocale;
 import net.ssehub.easy.basics.logger.EASyLoggerFactory;
+import net.ssehub.easy.instantiation.core.model.expressions.ExpressionWriter;
 import net.ssehub.easy.producer.core.mgmt.VilArgumentProvider;
 import net.ssehub.easy.producer.core.persistence.Configuration;
 import net.ssehub.easy.producer.core.persistence.Configuration.PathKind;
@@ -173,6 +174,7 @@ public class EASyPreferenceStore {
             setIvmlPrefs(4, true);
         }
         AbstractVarModelWriter.setOclCompliance(getOclCompliance());
+        ExpressionWriter.setOclCompliance(getOclCompliance());
         DefaultLocale.setDefaultLocale(getDefaultLocale());
     }
     
@@ -265,6 +267,7 @@ public class EASyPreferenceStore {
     public static void setOclCompliance(boolean compliance) {
         getPreferences().putBoolean("easy.oclCompliance", compliance);
         AbstractVarModelWriter.setOclCompliance(compliance);
+        ExpressionWriter.setOclCompliance(compliance);
     }
 
     /**
