@@ -33,26 +33,18 @@ import net.ssehub.easy.instantiation.core.model.expressions.ExpressionEvaluator;
  */
 public interface Set<T> extends Collection<T> {
 
-    /**
-     * Does type selection of elements (only the same type).
-     * 
-     * @param type the target type
-     * @return the selected elements (the type will be adjusted to the actual
-     *   type for <code>type</code>)
-     */
+    @Override
     @OperationMeta(returnGenerics = IVilType.class)
     public Set<T> selectByType(TypeDescriptor<?> type);
 
-    /**
-     * Does type selection of elements (including subtypes).
-     * 
-     * @param type the target type
-     * @return the selected elements (the type will be adjusted to the actual
-     *   type for <code>type</code>)
-     */
-    @OperationMeta(returnGenerics = IVilType.class)
+    @Override
+    @OperationMeta(name = {"selectByKind", "typeSelect"}, returnGenerics = IVilType.class)
     public Set<T> selectByKind(TypeDescriptor<?> type);
     
+    @Override
+    @OperationMeta(returnGenerics = IVilType.class)
+    public Set<T> typeReject(TypeDescriptor<?> type);
+
     /**
      * Exclude the elements in <code>set</code>.
      * @param set the elements to be excluded

@@ -52,26 +52,18 @@ public interface Sequence<T> extends Collection<T> {
      */
     public T get(int index);
     
-    /**
-     * Does type selection of elements (only same type).
-     * 
-     * @param type the target type
-     * @return the selected elements (the type will be adjusted to the actual
-     *   type for <code>type</code>)
-     */
+    @Override
     @OperationMeta(returnGenerics = IVilType.class)
     public Sequence<T> selectByType(TypeDescriptor<?> type);
 
-    /**
-     * Does type selection of elements (including subtypes).
-     * 
-     * @param type the target type
-     * @return the selected elements (the type will be adjusted to the actual
-     *   type for <code>type</code>)
-     */
-    @OperationMeta(returnGenerics = IVilType.class)
+    @Override
+    @OperationMeta(name = {"selectByKind", "typeSelect"}, returnGenerics = IVilType.class)
     public Sequence<T> selectByKind(TypeDescriptor<?> type);
-    
+
+    @Override
+    @OperationMeta(returnGenerics = IVilType.class)
+    public Sequence<T> typeReject(TypeDescriptor<?> type);
+
     /**
      * Exclude the elements in <code>sequence</code>.
      * @param sequence the elements to be excluded

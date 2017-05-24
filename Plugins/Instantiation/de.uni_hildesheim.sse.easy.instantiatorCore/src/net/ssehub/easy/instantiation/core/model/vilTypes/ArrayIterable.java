@@ -23,4 +23,19 @@ class ArrayIterable <T> extends AbstractArrayWrapper<T> {
         return equals(this, elements);
     }
 
+    @Override
+    public Collection<T> selectByType(TypeDescriptor<?> type) {
+        return null;
+    }
+
+    @Override
+    public Collection<T> selectByKind(TypeDescriptor<?> type) {
+        return null;
+    }
+
+    @Override
+    public Collection<T> typeReject(TypeDescriptor<?> type) {
+        return null;
+    }
+
 }

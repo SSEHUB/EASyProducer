@@ -148,7 +148,7 @@ public class JavaClass extends JavaParentFragmentArtifact {
         for (JavaMethod method : methods()) {
             Object object = evaluator.evaluate(method);
             if (null != object && object instanceof Boolean && Boolean.TRUE == ((Boolean) object).booleanValue()) {
-                Set<FileArtifact> allFileArtifacts = getArtifactModel().selectByType(JavaFileArtifact.class);
+                Set<FileArtifact> allFileArtifacts = getArtifactModel().selectByType(JavaFileArtifact.class, false);
                 for (FileArtifact fileArtifact : allFileArtifacts) {
                     JavaFileArtifact javaFileArtifact = (JavaFileArtifact) fileArtifact;
                     for (JavaClass javaClass : javaFileArtifact.classes()) {

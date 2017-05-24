@@ -94,13 +94,19 @@ public class ListSequence<T> extends AbstractListWrapper<T> implements Sequence<
     @Override
     @OperationMeta(returnGenerics = IVilType.class)
     public Sequence<T> selectByType(TypeDescriptor<?> type) {
-        return new ListSequence<T>(selectByType(this, type, false), getGenericParameter());
+        return new ListSequence<T>(selectByType(this, type, false, false), getGenericParameter());
     }
 
     @Override
     @OperationMeta(returnGenerics = IVilType.class)
     public Sequence<T> selectByKind(TypeDescriptor<?> type) {
-        return new ListSequence<T>(selectByType(this, type, true), getGenericParameter());
+        return new ListSequence<T>(selectByType(this, type, true, false), getGenericParameter());
+    }
+
+    @Override
+    @OperationMeta(returnGenerics = IVilType.class)
+    public Sequence<T> typeReject(TypeDescriptor<?> type) {
+        return new ListSequence<T>(selectByType(this, type, true, true), getGenericParameter());
     }
 
     @Override

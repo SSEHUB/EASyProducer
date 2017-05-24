@@ -107,6 +107,11 @@ public class UnmodifiableSequence<T> implements Sequence<T> {
     }
 
     @Override
+    public Sequence<T> typeReject(TypeDescriptor<?> type) {
+        return sequence.typeReject(type);
+    }
+
+    @Override
     public Sequence<T> excluding(Collection<T> sequence) {
         return this.sequence.excluding(sequence);
     }

@@ -96,6 +96,11 @@ public class UnmodifiableSet<T> implements Set<T> {
     }
 
     @Override
+    public Set<T> typeReject(TypeDescriptor<?> type) {
+        return set.typeReject(type);
+    }
+
+    @Override
     public Set<T> excluding(Collection<T> set) {
         return this.set.excluding(set);
     }

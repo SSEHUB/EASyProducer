@@ -100,13 +100,19 @@ public class ArraySet<T> extends AbstractArrayWrapper<T> implements Set<T> {
     @Override
     @OperationMeta(returnGenerics = IVilType.class)
     public Set<T> selectByType(TypeDescriptor<?> type) {
-        return new ListSet<T>(selectByType(this, type, false), getGenericParameter());
+        return new ListSet<T>(selectByType(this, type, false, false), getGenericParameter());
     }
 
     @Override
     @OperationMeta(returnGenerics = IVilType.class)
     public Set<T> selectByKind(TypeDescriptor<?> type) {
-        return new ListSet<T>(selectByType(this, type, true), getGenericParameter());
+        return new ListSet<T>(selectByType(this, type, true, false), getGenericParameter());
+    }
+
+    @Override
+    @OperationMeta(returnGenerics = IVilType.class)
+    public Set<T> typeReject(TypeDescriptor<?> type) {
+        return new ListSet<T>(selectByType(this, type, true, true), getGenericParameter());
     }
 
     @Override

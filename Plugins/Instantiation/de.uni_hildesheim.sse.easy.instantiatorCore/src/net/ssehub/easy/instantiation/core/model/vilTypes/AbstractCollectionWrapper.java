@@ -211,11 +211,13 @@ public abstract class AbstractCollectionWrapper<T> implements Collection<T> {
      * @param collection the collection to analyze
      * @param type the type to select for
      * @param byKind select by kind (<code>true</code>, including subclasses) or by type equality <code>false</code>
+     * @param negate negate the selection
      * @return the elements of type <code>type</code>
      */
-    public static <T> List<T> selectByType(Collection<T> collection, TypeDescriptor<?> type, boolean byKind) {
+    public static <T> List<T> selectByType(Collection<T> collection, TypeDescriptor<?> type, boolean byKind, 
+        boolean negate) {
         List<T> result = new ArrayList<T>();
-        selectByType(collection, type, result, byKind);
+        selectByType(collection, type, result, byKind, negate);
         return result;
     }
     
@@ -226,14 +228,15 @@ public abstract class AbstractCollectionWrapper<T> implements Collection<T> {
      * @param collection the collection to analyze
      * @param type the type to select for
      * @param result the elements of type <code>type</code> (modified as a side effect)
+     * @param negate negate the selection
      * @param byKind select by kind (<code>true</code>, including subclasses) or by type equality <code>false</code>
      */
     protected static <T> void selectByType(Collection<T> collection, TypeDescriptor<?> type, 
-        java.util.Collection<T> result, boolean byKind) {
+        java.util.Collection<T> result, boolean byKind, boolean negate) {
         Iterator<T> iter = collection.iterator();
         while (iter.hasNext()) {
             T element = iter.next();
-            if (null == type || isSelectedByType(type, element, byKind)) {
+            if (null == type || isSelectedByType(type, element, byKind, negate)) {
                 result.add(element);
             }
         }
@@ -245,10 +248,15 @@ public abstract class AbstractCollectionWrapper<T> implements Collection<T> {
      * @param type the type to be considered (may be <b>null</b>, than this parameter is ignored)
      * @param element the element to test
      * @param byKind do the selection by subtyping (<code>true</code>) or by equality (<code>false</code>)
+     * @param negate negate the result
      * @return <code>true</code> if types match, <code>false</code> else
      */
-    private static boolean isSelectedByType(TypeDescriptor<?> type, Object element, boolean byKind) {
-        return (byKind && type.isInstance(element)) || (!byKind && type.isSameType(element));
+    private static boolean isSelectedByType(TypeDescriptor<?> type, Object element, boolean byKind, boolean negate) {
+        boolean result = (byKind && type.isInstance(element)) || (!byKind && type.isSameType(element));
+        if (negate) {
+            result = !result;
+        }
+        return result;
     }
  
     /**

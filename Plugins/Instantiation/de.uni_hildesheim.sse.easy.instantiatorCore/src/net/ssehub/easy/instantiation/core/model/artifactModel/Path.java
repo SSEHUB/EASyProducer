@@ -309,9 +309,9 @@ public class Path implements IVilType, IStringValueProvider {
      * @return the selected artifacts (the type will be adjusted to the actual
      *   type of <code>type</code>)
      */
-    @OperationMeta(returnGenerics = FileArtifact.class)
+    @OperationMeta(name = {"selectByKind", "typeSelect"}, returnGenerics = FileArtifact.class)
     public Set<FileArtifact> selectByType(Class<?> type) { 
-        return ArtifactFactory.selectByType(this, type, false); // TODO check IFileSystemArtifact
+        return ArtifactFactory.selectByType(this, type, false, false); // TODO check IFileSystemArtifact
     }
 
     /**
@@ -323,7 +323,19 @@ public class Path implements IVilType, IStringValueProvider {
      */
     @OperationMeta(returnGenerics = FileArtifact.class)
     public Set<FileArtifact> selectByKind(Class<?> type) { 
-        return ArtifactFactory.selectByType(this, type, true); // TODO check IFileSystemArtifact
+        return ArtifactFactory.selectByType(this, type, true, false); // TODO check IFileSystemArtifact
+    }
+
+    /**
+     * Does type selection of artifacts by not matched sub-typing.
+     * 
+     * @param type the target type
+     * @return the selected artifacts (the type will be adjusted to the actual
+     *   type of <code>type</code>)
+     */
+    @OperationMeta(returnGenerics = FileArtifact.class)
+    public Set<FileArtifact> typeReject(Class<?> type) { 
+        return ArtifactFactory.selectByType(this, type, true, true); // TODO check IFileSystemArtifact
     }
 
     /**
@@ -334,7 +346,7 @@ public class Path implements IVilType, IStringValueProvider {
     @OperationMeta(returnGenerics = FileArtifact.class)
     public Set<FileArtifact> selectAll() {
         List<FileArtifact> result = new LinkedList<FileArtifact>();
-        model.selectByType(this, null, result, true); // TODO check IFileSystemArtifact
+        model.selectByType(this, null, result, true, false); // TODO check IFileSystemArtifact
         return new ListSet<FileArtifact>(result, FileArtifact.class);
     }
     

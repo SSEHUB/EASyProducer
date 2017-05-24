@@ -113,4 +113,34 @@ public interface Collection<T> extends Iterable<T>, IVilGenericType, IStringValu
      */
     public void clear();
     
+    /**
+     * Does type selection of elements (only the same type).
+     * 
+     * @param type the target type
+     * @return the selected elements (the type will be adjusted to the actual
+     *   type for <code>type</code>)
+     */
+    @OperationMeta(returnGenerics = IVilType.class)
+    public Collection<T> selectByType(TypeDescriptor<?> type);
+
+    /**
+     * Does type selection of elements (including subtypes).
+     * 
+     * @param type the target type
+     * @return the selected elements (the type will be adjusted to the actual
+     *   type for <code>type</code>)
+     */
+    @OperationMeta(name = {"selectByKind", "typeSelect"}, returnGenerics = IVilType.class)
+    public Collection<T> selectByKind(TypeDescriptor<?> type);
+
+    /**
+     * Does type selection of elements not having the same type (including subtypes).
+     * 
+     * @param type the target type
+     * @return the selected elements (the type will be adjusted to the actual
+     *   type for <code>type</code>)
+     */
+    @OperationMeta(returnGenerics = IVilType.class)
+    public Collection<T> typeReject(TypeDescriptor<?> type);
+
 }

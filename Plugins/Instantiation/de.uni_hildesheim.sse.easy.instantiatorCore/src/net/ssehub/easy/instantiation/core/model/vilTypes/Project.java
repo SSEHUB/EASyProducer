@@ -107,7 +107,7 @@ public class Project implements IVilType, IStringValueProvider {
      */
     @OperationMeta(returnGenerics = { FileArtifact.class } )
     public Set<FileArtifact> selectAllFiles() {
-        return artifactModel.selectByType(FileArtifact.class);
+        return artifactModel.selectByType(FileArtifact.class, false);
     }
 
     /**
@@ -171,7 +171,7 @@ public class Project implements IVilType, IStringValueProvider {
      */
     @OperationMeta(returnGenerics = FileArtifact.class)
     public Set<FileArtifact> selectByType(Class<?> type) {
-        return artifactModel.selectByType(type);
+        return artifactModel.selectByType(type, false);
     }
 
     /**
@@ -183,7 +183,19 @@ public class Project implements IVilType, IStringValueProvider {
      */
     @OperationMeta(returnGenerics = FileArtifact.class)
     public Set<FileArtifact> selectByKind(Class<?> type) {
-        return artifactModel.selectByKind(type);
+        return artifactModel.selectByKind(type, false);
+    }
+
+    /**
+     * Does type selection of artifacts by not matching type or sub-type.
+     * 
+     * @param type the target type
+     * @return the selected artifacts (the type will be adjusted to the actual
+     *   type of <code>type</code>)
+     */
+    @OperationMeta(returnGenerics = FileArtifact.class)
+    public Set<FileArtifact> typeReject(Class<?> type) {
+        return artifactModel.selectByKind(type, true);
     }
 
     /**
