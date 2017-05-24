@@ -375,6 +375,7 @@ public abstract class AbstractCollectionWrapper<T> implements Collection<T> {
         return size() == 0;
     }
 
+    @OperationMeta(name = {"notEmpty", "isNotEmpty"}, notOclCompliant = "isNotEmpty")
     @Override
     public boolean isNotEmpty() {
         return size() != 0;

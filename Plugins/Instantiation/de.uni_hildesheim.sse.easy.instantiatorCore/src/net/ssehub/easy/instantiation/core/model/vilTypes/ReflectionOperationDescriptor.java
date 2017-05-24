@@ -483,5 +483,19 @@ public class ReflectionOperationDescriptor extends OperationDescriptor implement
         }
         return result;
     }
-    
+
+    @Override
+    public boolean isOclCompliant() {
+        boolean compliant = true;
+        OperationMeta meta = method.getAnnotation(OperationMeta.class);
+        if (null != meta) {
+            String name = getName();
+            String[] not = meta.notOclCompliant();
+            for (int i = 0; compliant && i < not.length; i++) {
+                compliant = name.equals(not[i]);
+            }
+        }
+        return compliant;
+    }
+
 }

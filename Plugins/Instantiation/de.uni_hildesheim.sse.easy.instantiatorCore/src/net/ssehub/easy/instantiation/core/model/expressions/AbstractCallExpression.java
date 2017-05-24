@@ -898,6 +898,15 @@ public abstract class AbstractCallExpression extends Expression implements IArgu
     public abstract String getVilSignature();
 
     /**
+     * Returns whether this operation is OCL compliant or flagged as not compliant.
+     * 
+     * @return <code>true</code> for compliant, <code>false</code> else
+     */
+    public boolean isOclCompliant() {
+        return true;
+    }
+    
+    /**
      * Returns the number of arguments.
      * 
      * @return the number of arguments

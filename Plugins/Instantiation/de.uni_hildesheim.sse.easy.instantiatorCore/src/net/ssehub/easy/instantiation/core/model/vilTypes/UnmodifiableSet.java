@@ -49,6 +49,7 @@ public class UnmodifiableSet<T> implements Set<T> {
         return set.isEmpty();
     }
 
+    @OperationMeta(name = {"notEmpty", "isNotEmpty"}, notOclCompliant = "isNotEmpty")
     @Override
     public boolean isNotEmpty() {
         return set.isNotEmpty();

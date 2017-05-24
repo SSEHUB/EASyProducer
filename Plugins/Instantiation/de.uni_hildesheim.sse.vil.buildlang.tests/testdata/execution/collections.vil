@@ -18,6 +18,7 @@ vilScript collections () {
     Boolean i_b6e = seq1 == seq2;
     Boolean i_b7 = seq1.isEmpty();
     Boolean i_b8 = seq1.isNotEmpty();
+    Boolean i_b9 = seq1.notEmpty();
     Integer i_i1 = seq1.get(1);
     Integer i_i2 = seq1[2];
     setOf(Integer) set1 = seq1.toSet();

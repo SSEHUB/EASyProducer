@@ -50,6 +50,7 @@ public class UnmodifiableSequence<T> implements Sequence<T> {
         return sequence.isEmpty();
     }
 
+    @OperationMeta(name = {"notEmpty", "isNotEmpty"}, notOclCompliant = "isNotEmpty")
     @Override
     public boolean isNotEmpty() {
         return sequence.isNotEmpty();

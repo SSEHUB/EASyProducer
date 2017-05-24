@@ -48,6 +48,7 @@ import net.ssehub.easy.instantiation.core.model.expressions.CallExpression;
 import net.ssehub.easy.instantiation.core.model.expressions.Expression;
 import net.ssehub.easy.instantiation.core.model.expressions.ExpressionVersionRestriction;
 import net.ssehub.easy.instantiation.core.model.expressions.ExpressionVersionRestrictionValidator;
+import net.ssehub.easy.instantiation.core.model.expressions.ExpressionWriter;
 import net.ssehub.easy.instantiation.core.model.expressions.ResolvableOperationCallExpression;
 import net.ssehub.easy.instantiation.core.model.vilTypes.Constants;
 import net.ssehub.easy.instantiation.core.model.vilTypes.OperationDescriptor;
@@ -572,6 +573,11 @@ public class ExpressionTranslator
             warning("The operation '" + result.getVilSignature() 
                 + "' is unknown, shall be a VIL type - may lead to a runtime error", call, 
                 ExpressionDslPackage.Literals.CALL__NAME, ErrorCodes.UNKNOWN_TYPE);
+        }
+        if (ExpressionWriter.considerOclCompliance() && !result.isOclCompliant()) {
+            warning("OCL compliance: The operation '" + result.getVilSignature() 
+            + "' is not OCL compliant. Please use the respective alias method instead.", call, 
+            ExpressionDslPackage.Literals.CALL__NAME, VilException.ID_UNKNOWN);
         }
         return result;
     }

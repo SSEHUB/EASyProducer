@@ -30,6 +30,8 @@ i_b6e <- false
 i_b7 <- false
 -> isNotEmpty(Collection) with ({1, 2, 3, 4}) = true
 i_b8 <- true
+-> notEmpty(Collection) with ({1, 2, 3, 4}) = true
+i_b9 <- true
 -> get(Sequence, Integer) with ({1, 2, 3, 4}, 1) = 2
 i_i1 <- 2
 -> [](Sequence, Integer) with ({1, 2, 3, 4}, 2) = 3

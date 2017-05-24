@@ -633,4 +633,13 @@ public abstract class OperationDescriptor implements IMetaOperation {
         }
     }
 
+    /**
+     * Returns whether this operation is OCL compliant or flagged as not compliant.
+     * 
+     * @return <code>true</code> for compliant, <code>false</code> else
+     */
+    public boolean isOclCompliant() {
+        return true;
+    }
+
 }

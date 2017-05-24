@@ -22,6 +22,11 @@ public @interface OperationMeta {
     String[] name() default { };
     
     /**
+     * Which names from {@link #name()} is not OCL compliant. Only aliases shall be given here.
+     */
+    String[] notOclCompliant() default {};
+    
+    /**
      * The type of this operation.<br/>
      * The operation type ({@link OperationType#NORMAL} by default)
      */

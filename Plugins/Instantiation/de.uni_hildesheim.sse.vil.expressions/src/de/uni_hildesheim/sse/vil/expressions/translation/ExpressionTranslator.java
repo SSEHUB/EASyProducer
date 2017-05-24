@@ -61,6 +61,7 @@ import net.ssehub.easy.instantiation.core.model.expressions.ContainerInitializer
 import net.ssehub.easy.instantiation.core.model.expressions.Expression;
 import net.ssehub.easy.instantiation.core.model.expressions.ExpressionEvaluator;
 import net.ssehub.easy.instantiation.core.model.expressions.ExpressionVersionRestriction;
+import net.ssehub.easy.instantiation.core.model.expressions.ExpressionWriter;
 import net.ssehub.easy.instantiation.core.model.expressions.FieldAccessExpression;
 import net.ssehub.easy.instantiation.core.model.expressions.IResolvable;
 import net.ssehub.easy.instantiation.core.model.expressions.ParenthesisExpression;
@@ -146,7 +147,7 @@ public abstract class ExpressionTranslator<I extends VariableDeclaration, R exte
      */
     private void ivmlWarning(String name, EObject cause, EStructuralFeature causingFeature) {
         warning("'" + name + "' is unknown, shall be a VIL variable, a VIL type or an IVML variable " 
-            + "/ annotation - may lead to a runtime error", cause, causingFeature, ErrorCodes.UNKNOWN_TYPE);
+            + "/ annotation - may lead to a runtime error", cause, causingFeature, VilException.ID_UNKNOWN);
     }
     
     /**
@@ -945,6 +946,7 @@ public abstract class ExpressionTranslator<I extends VariableDeclaration, R exte
                     if (null != type) {
                         try {
                             result = new ConstantExpression(type, new net.ssehub.easy.instantiation.core.model.vilTypes.configuration.EnumValue(eValue), registry);
+                            checkOclEnumCompliance(name, arg, ExpressionDslPackage.Literals.CONSTANT__QVALUE);
                         } catch (VilException e) {
                             throw new TranslatorException(e, arg, ExpressionDslPackage.Literals.CONSTANT__QVALUE);
                         }
@@ -971,6 +973,23 @@ public abstract class ExpressionTranslator<I extends VariableDeclaration, R exte
                 ExpressionDslPackage.Literals.CONSTANT__QVALUE, ErrorCodes.TYPE_CONSISTENCY);
         }
         return result;
+    }
+    
+    /**
+     * Checks the given enumeration literal name for OCL compliance.
+     * 
+     * @param name the name
+     * @param cause the causing object
+     * @param causeFeature the causing feature
+     */
+    private void checkOclEnumCompliance(String name, EObject cause, EStructuralFeature causeFeature) {
+        if (ExpressionWriter.considerOclCompliance()) {
+            int pos = name.indexOf('.');
+            if (pos > 0) {
+                warning("OCL compliance: literal access by '.' is discouraged, use '::' instead", cause, 
+                    causeFeature, VilException.ID_UNKNOWN);
+            }
+        }
     }
     
     /**

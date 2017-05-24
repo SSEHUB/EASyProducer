@@ -62,6 +62,7 @@ public interface Collection<T> extends Iterable<T>, IVilGenericType, IStringValu
      * 
      * @return <code>false</code> if it is empty, <code>true</code> else
      */
+    @OperationMeta(name = {"notEmpty", "isNotEmpty"}, notOclCompliant = "isNotEmpty")
     public boolean isNotEmpty();
     
     /**

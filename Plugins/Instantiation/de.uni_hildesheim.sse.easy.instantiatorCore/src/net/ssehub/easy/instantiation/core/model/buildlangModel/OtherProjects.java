@@ -68,6 +68,7 @@ class OtherProjects implements Set<IArtifact> {
         return data.isEmpty();
     }
 
+    @OperationMeta(name = {"notEmpty", "isNotEmpty"}, notOclCompliant = "isNotEmpty")
     @Override
     public boolean isNotEmpty() {
         return !data.isEmpty();

@@ -26,4 +26,22 @@ public class CollectionOperations {
         return result;
     }
 
+    /**
+     * Defines the unequality operation based on {@link Collection#isEquals(Collection)}.
+     * 
+     * @param c1 the first collection to be compared
+     * @param c2 the second collection to be compared
+     * @return <code>true</code> if both collections are considered not to be equal, <code>false</code> else
+     */
+    @OperationMeta(name = {Constants.UNEQUALITY, Constants.UNEQUALITY_ALIAS}, opType = OperationType.INFIX)
+    public static boolean isNotEquals(Collection<?> c1, Collection<?> c2) {
+        boolean result;
+        if (null == c1) {
+            result = (c2 != null);
+        } else {
+            result = !c1.isEquals(c2);
+        }
+        return result;
+    }
+
 }
