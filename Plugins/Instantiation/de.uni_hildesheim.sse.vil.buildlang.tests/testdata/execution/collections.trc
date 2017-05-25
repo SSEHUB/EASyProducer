@@ -39,6 +39,8 @@ i_i2 <- 3
 -> toSet(Sequence) with ({1, 2, 3, 4}) = {1, 2, 3, 4}
 set1 <- {1, 2, 3, 4}
 seq4 <- {1, 2, 2, 3, 4, 5}
+-> sum(Collection) with ({1, 2, 2, 3, 4, 5}) = 17
+sumInt4 <- 17
 -> toSet(Sequence) with ({1, 2, 2, 3, 4, 5}) = {1, 2, 3, 4, 5}
 set2 <- {1, 2, 3, 4, 5}
 -> toSequence(Set) with ({1, 2, 3, 4, 5}) = {1, 2, 3, 4, 5}
@@ -71,6 +73,10 @@ set3_1 <- {1, 2, 3, 4, 5}
 set4 <- {}
 -> selectByKind(Set, Type) with ({1, 2, 3, 4, 5}, Real representing net.ssehub.easy.instantiation.core.model.vilTypes.PseudoReal) = {}
 set4_1 <- {}
+-> typeSelect(Set, Type) with ({1, 2, 3, 4, 5}, Real representing net.ssehub.easy.instantiation.core.model.vilTypes.PseudoReal) = {}
+set4_2 <- {}
+-> typeReject(Set, Type) with ({1, 2, 3, 4, 5}, Real representing net.ssehub.easy.instantiation.core.model.vilTypes.PseudoReal) = {1, 2, 3, 4, 5}
+set4_3 <- {1, 2, 3, 4, 5}
 -> excluding(Set, Collection) with ({1, 2, 3, 4, 5}, {1, 2, 3, 4, 5}) = {}
 set5 <- {}
 -> excluding(Set, Collection) with ({1, 2, 3, 4, 5}, {1, 2, 3, 4}) = {5}
@@ -92,4 +98,6 @@ set8 <- {1, 2, 3, 4}
 seq13 <- {1, 2, 4, 5, 6, 7}
 -> sortAlpha(Sequence) with ({1, 2, 4, 5, 6, 7}) = {1, 2, 4, 5, 6, 7}
 seq14 <- {1, 2, 4, 5, 6, 7}
+-> sum(Collection) with ({1, 2, 4, 5, 6, 7}) = 25
+sumInt13 <- 25
 -> main()

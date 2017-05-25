@@ -215,4 +215,9 @@ public class UnmodifiableSet<T> implements Set<T> {
         set.clear();
     }
 
+    @Override
+    public Object sum() {
+        return set.sum();
+    }
+    
 }

@@ -23,6 +23,7 @@ vilScript collections () {
     Integer i_i2 = seq1[2];
     setOf(Integer) set1 = seq1.toSet();
     sequenceOf(Integer) seq4 = {1, 2, 2, 3, 4, 5};
+    Integer sumInt4 = seq4.sum();
     setOf(Integer) set2 = seq4.toSet();
     sequenceOf(Integer) seq7 = set2.toSequence();
     sequenceOf(Integer) seq8 = seq1.selectByType(Integer);
@@ -36,12 +37,15 @@ vilScript collections () {
     setOf(Integer) set3_1 = set2.selectByKind(Integer);
     setOf(Real) set4 = set2.selectByType(Real);
     setOf(Real) set4_1 = set2.selectByKind(Real);
+    setOf(Real) set4_2 = set2.typeSelect(Real);
+    setOf(Real) set4_3 = set2.typeReject(Real);
     setOf(Integer) set5 = set2.excluding(set2);
     setOf(Integer) set6 = set2.excluding(seq8);
     setOf(Integer) set7 = set2->select(i | i > 4);
     setOf(Integer) set8 = set2->reject(i | i > 4);
     sequenceOf(Integer) seq13 = {5, 4, 7, 2, 1, 6};
     sequenceOf(Integer) seq14 = seq13.sortAlpha();
+    Integer sumInt13 = seq13.sum();
 
     main() = : {
     }

@@ -205,4 +205,9 @@ class OtherProjects implements Set<IArtifact> {
         data.clear();
     }
 
+    @Override
+    public Object sum() {
+        return null;
+    }
+    
 }

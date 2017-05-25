@@ -487,7 +487,7 @@ public abstract class AbstractCallExpression extends Expression implements IArgu
      * @throws VilException in case that no resolution can be found for various (typically type compliance) 
      *   reasons
      */
-    public static IMetaOperation resolveOperation(IMetaType operand, String name, CallArgument[] arguments) 
+    public static IMetaOperation resolveOperation(IMetaType operand, String name, CallArgument... arguments) 
         throws VilException {
         IMetaOperation op = null;
         try {

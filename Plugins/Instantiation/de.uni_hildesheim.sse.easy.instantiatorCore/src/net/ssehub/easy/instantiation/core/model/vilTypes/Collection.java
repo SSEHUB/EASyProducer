@@ -143,4 +143,11 @@ public interface Collection<T> extends Iterable<T>, IVilGenericType, IStringValu
     @OperationMeta(returnGenerics = IVilType.class)
     public Collection<T> typeReject(TypeDescriptor<?> type);
 
+    /**
+     * Returns the sum of all elements.
+     * 
+     * @return the sum of all elements or <b>null</b> if the elements do not define addition
+     */
+    public Object sum();
+    
 }

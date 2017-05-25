@@ -10,18 +10,8 @@ import org.junit.Test;
 
 import net.ssehub.easy.instantiation.core.model.AbstractTest;
 import net.ssehub.easy.instantiation.core.model.common.VilException;
-import net.ssehub.easy.instantiation.core.model.vilTypes.Invisible;
-import net.ssehub.easy.instantiation.core.model.vilTypes.OperationDescriptor;
-import net.ssehub.easy.instantiation.core.model.vilTypes.OperationMeta;
-import net.ssehub.easy.instantiation.core.model.vilTypes.PseudoBoolean;
-import net.ssehub.easy.instantiation.core.model.vilTypes.PseudoInteger;
-import net.ssehub.easy.instantiation.core.model.vilTypes.PseudoReal;
-import net.ssehub.easy.instantiation.core.model.vilTypes.PseudoString;
-import net.ssehub.easy.instantiation.core.model.vilTypes.SignatureUtils;
-import net.ssehub.easy.instantiation.core.model.vilTypes.TypeDescriptor;
-import net.ssehub.easy.instantiation.core.model.vilTypes.TypeRegistry;
 import net.ssehub.easy.instantiation.core.model.vilTypes.OperationDescriptor.AliasType;
-import net.ssehub.easy.instantiation.core.model.vilTypes.OperationDescriptor.CompatibilityResult;
+import net.ssehub.easy.instantiation.core.model.vilTypes.IMetaOperation.CompatibilityResult;
 import net.ssehub.easy.instantiation.core.model.vilTypes.testArtifacts.MyArtifact;
 import net.ssehub.easy.instantiation.core.model.vilTypes.testArtifacts.MySubArtifact;
 

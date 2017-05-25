@@ -10,6 +10,8 @@ import java.util.List;
 import java.util.TreeMap;
 
 import net.ssehub.easy.instantiation.core.model.common.VilException;
+import net.ssehub.easy.instantiation.core.model.expressions.AbstractCallExpression;
+import net.ssehub.easy.instantiation.core.model.expressions.CallArgument;
 import net.ssehub.easy.instantiation.core.model.expressions.ExpressionEvaluator;
 import net.ssehub.easy.instantiation.core.model.vilTypes.configuration.DecisionVariable;
 import net.ssehub.easy.instantiation.core.model.vilTypes.configuration.IvmlTypes;
@@ -554,6 +556,57 @@ public abstract class AbstractCollectionWrapper<T> implements Collection<T> {
         } catch (VilException e) {
             Class<?> cls = set ? Set.class : Sequence.class;
             result = TypeRegistry.DEFAULT.findType(cls);
+        }
+        return result;
+    }
+
+    @Override
+    public Object sum() {
+        return aggregate("+");
+    }
+
+    /**
+     * Aggregates elements.
+     * 
+     * @param opName denotes an operation on the elements of this collection. The operation 
+     *   must be binary (2 parameters) on the element type of this collection and return
+     *   a type that is assignable to the element type of this collection
+     * @return the aggregated result or <b>null</b> if undefined/aggregation not possible
+     */
+    private Object aggregate(String opName) {
+        Object result = null;
+        TypeDescriptor<?> elementType;
+        if (1 == getGenericParameterCount()) {
+            elementType = getGenericParameterType(0);
+        } else {
+            elementType = TypeRegistry.anyType();
+        }
+        IMetaOperation op = null;
+        CallArgument resArg = new CallArgument(elementType);
+        CallArgument eltArg = new CallArgument(elementType);
+        try {
+            op = AbstractCallExpression.resolveOperation(elementType, opName, resArg, eltArg);
+        } catch (VilException e) {
+            // no operation, no aggregation; result -> null
+        }
+        if (null != op && elementType.isAssignableFrom(op.getReturnType())) {
+            Iterator<T> iter = iterator();
+            boolean first = true;
+            while (iter.hasNext()) {
+                T element = iter.next();
+                if (first) {
+                    result = element;
+                } else {
+                    try {
+                        result = op.invoke(result, element);
+                    } catch (VilException e) {
+                        result = null;
+                        break;
+                    }
+                }
+                first = false;
+            }
+            
         }
         return result;
     }

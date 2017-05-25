@@ -20,7 +20,7 @@ import net.ssehub.easy.instantiation.core.Bundle;
 import net.ssehub.easy.instantiation.core.model.common.VilException;
 import net.ssehub.easy.instantiation.core.model.vilTypes.TypeDescriptor;
 import net.ssehub.easy.instantiation.core.model.vilTypes.TypeRegistry;
-import net.ssehub.easy.instantiation.core.model.vilTypes.OperationDescriptor.CompatibilityResult;
+import net.ssehub.easy.instantiation.core.model.vilTypes.IMetaOperation.CompatibilityResult;
 
 /**
  * Defines a pseudo field descriptor which enables comfortable access to an individual annotation

@@ -293,57 +293,8 @@ public abstract class OperationDescriptor implements IMetaOperation {
         return aliasType;
     }
     
-    /**
-     * Returns the result of a type compatibility comparison.
-     * 
-     * @author Holger Eichelberger
-     */
-    public enum CompatibilityResult {
-        
-        /**
-         * Types are compatible.
-         */
-        COMPATIBLE,
-        
-        /**
-         * Types are incompatible.
-         */
-        INCOMPATIBLE,
-
-        /**
-         * Argument evaluates to <b>null</b>, i.e., stop expression evaluation.
-         */
-        ARG_EVALUATION_FAILED
-    }
-    
-    /**
-     * Returns whether the operation represented by this instance is compatible to
-     * the given return type and parameters. This method does not consider possible
-     * unnamed parameter rather than the underlying Java parameter.
-     * 
-     * @param retType the return type (may be <b>null</b> in order to ignore this parameter)
-     * @param params the parameters (may be <b>null</b> if there are none, may be classes)
-     * @return an instance of {@link CompatibilityResult} denoting the actual compatibility level
-     */
-    public abstract CompatibilityResult isCompatible(Class<?> retType, Object... params); 
-    
     // disable assignment Integer
     // reflection translation table
-    
-    /**
-     * Invokes the specified operation. This method does not consider possible
-     * unnamed parameter rather than the underlying Java parameter. In case of {@link #acceptsNamedParameters()}
-     * the caller must ensure that the last parameter is a <code>map&lt;String, Object&gt;</code> containing
-     * the named parameters.
-     * 
-     * @param args the arguments, in case of non-static operations the first argument 
-     *   must be the object to execute on
-     * @return the result of the execution
-     * @throws VilException if the invocation fails
-     * 
-     * @see #isCompatible
-     */
-    public abstract Object invoke(Object... args) throws VilException;
     
     /**
      * Throws an exception for the case that parameter are incompatible.

@@ -202,7 +202,7 @@ public class EvaluationVisitor implements IExpressionVisitor {
             data.add(ex.getInitExpression(e).accept(this));
         }
         TypeDescriptor<?>[] param;
-        if (type.getGenericParameterCount() > 1) {
+        if (type.getGenericParameterCount() > 0) {
             param = TypeDescriptor.createArray(type.getGenericParameterCount());
             for (int p = 0; p < param.length; p++) {
                 param[p] = type.getGenericParameterType(p);

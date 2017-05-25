@@ -7,7 +7,7 @@ import net.ssehub.easy.instantiation.core.model.vilTypes.FieldDescriptor;
 import net.ssehub.easy.instantiation.core.model.vilTypes.OperationDescriptor;
 import net.ssehub.easy.instantiation.core.model.vilTypes.TypeDescriptor;
 import net.ssehub.easy.instantiation.core.model.vilTypes.TypeRegistry;
-import net.ssehub.easy.instantiation.core.model.vilTypes.OperationDescriptor.CompatibilityResult;
+import net.ssehub.easy.instantiation.core.model.vilTypes.IMetaOperation.CompatibilityResult;
 import net.ssehub.easy.varModel.model.AbstractVariable;
 import net.ssehub.easy.varModel.model.Project;
 import net.ssehub.easy.varModel.model.datatypes.ConstraintType;

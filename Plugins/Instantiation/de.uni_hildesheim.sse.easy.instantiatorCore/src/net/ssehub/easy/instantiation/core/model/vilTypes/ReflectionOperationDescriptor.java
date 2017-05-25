@@ -8,7 +8,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import net.ssehub.easy.instantiation.core.model.common.VilException;
-import net.ssehub.easy.instantiation.core.model.vilTypes.OperationDescriptor.CompatibilityResult;
+import net.ssehub.easy.instantiation.core.model.vilTypes.IMetaOperation.CompatibilityResult;
 import net.ssehub.easy.varModel.model.values.NullValue;
 import net.ssehub.easy.varModel.model.values.NullValue.NullValueType;
 

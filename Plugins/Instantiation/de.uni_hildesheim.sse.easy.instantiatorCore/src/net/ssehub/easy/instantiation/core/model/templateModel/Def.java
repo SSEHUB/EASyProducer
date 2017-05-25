@@ -204,5 +204,15 @@ public class Def extends TemplateBlock implements ITemplateLangElement, IResolva
             getParameter(p).setParent(this);
         }
     }
+
+    @Override
+    public CompatibilityResult isCompatible(Class<?> retType, Object... params) {
+        return null; // not implemented, done by visitor
+    }
+
+    @Override
+    public Object invoke(Object... args) throws VilException {
+        return null; // not implemented, done by visitor
+    }
     
 }

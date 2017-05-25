@@ -240,4 +240,9 @@ public class UnmodifiableSequence<T> implements Sequence<T> {
         sequence.clear();
     }
 
+    @Override
+    public Object sum() {
+        return sequence.sum();
+    }
+
 }
