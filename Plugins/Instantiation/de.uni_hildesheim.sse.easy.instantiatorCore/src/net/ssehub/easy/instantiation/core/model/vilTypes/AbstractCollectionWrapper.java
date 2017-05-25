@@ -565,6 +565,11 @@ public abstract class AbstractCollectionWrapper<T> implements Collection<T> {
         return aggregate("+");
     }
 
+    @Override
+    public Object product() {
+        return aggregate("*");
+    }
+
     /**
      * Aggregates elements.
      * 

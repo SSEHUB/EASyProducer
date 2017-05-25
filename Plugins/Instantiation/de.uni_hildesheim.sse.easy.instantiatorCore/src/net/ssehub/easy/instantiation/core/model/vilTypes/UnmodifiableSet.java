@@ -219,5 +219,10 @@ public class UnmodifiableSet<T> implements Set<T> {
     public Object sum() {
         return set.sum();
     }
-    
+
+    @Override
+    public Object product() {
+        return set.product();
+    }
+
 }

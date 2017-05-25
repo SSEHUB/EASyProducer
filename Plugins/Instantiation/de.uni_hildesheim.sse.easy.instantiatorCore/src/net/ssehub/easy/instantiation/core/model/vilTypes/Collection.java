@@ -149,5 +149,12 @@ public interface Collection<T> extends Iterable<T>, IVilGenericType, IStringValu
      * @return the sum of all elements or <b>null</b> if the elements do not define addition
      */
     public Object sum();
-    
+
+    /**
+     * Returns the product of all elements.
+     * 
+     * @return the product of all elements or <b>null</b> if the elements do not define multiplication
+     */
+    public Object product();
+
 }

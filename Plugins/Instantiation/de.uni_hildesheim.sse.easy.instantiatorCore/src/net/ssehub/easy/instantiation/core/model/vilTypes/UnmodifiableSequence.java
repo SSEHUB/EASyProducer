@@ -245,4 +245,9 @@ public class UnmodifiableSequence<T> implements Sequence<T> {
         return sequence.sum();
     }
 
+    @Override
+    public Object product() {
+        return sequence.product();
+    }
+
 }

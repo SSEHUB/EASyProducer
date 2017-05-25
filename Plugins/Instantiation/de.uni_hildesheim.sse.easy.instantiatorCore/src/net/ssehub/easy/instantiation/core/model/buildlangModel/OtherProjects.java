@@ -209,5 +209,10 @@ class OtherProjects implements Set<IArtifact> {
     public Object sum() {
         return null;
     }
+
+    @Override
+    public Object product() {
+        return null;
+    }
     
 }
