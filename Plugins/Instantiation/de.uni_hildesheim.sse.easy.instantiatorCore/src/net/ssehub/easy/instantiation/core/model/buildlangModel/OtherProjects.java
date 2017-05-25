@@ -206,13 +206,28 @@ class OtherProjects implements Set<IArtifact> {
     }
 
     @Override
-    public Object sum() {
+    public IArtifact sum() {
         return null;
     }
 
     @Override
-    public Object product() {
+    public Object avg() {
         return null;
     }
-    
+
+    @Override
+    public IArtifact product() {
+        return null;
+    }
+
+    @Override
+    public IArtifact min() {
+        return null;
+    }
+
+    @Override
+    public IArtifact max() {
+        return null;
+    }
+
 }

@@ -90,4 +90,9 @@ public @interface OperationMeta {
      */
     boolean allowsAggregation() default false;
     
+    /**
+     * If Any/Object is the return type, don't override this when resolving expression results.
+     */
+    boolean useAny() default false;
+    
 }

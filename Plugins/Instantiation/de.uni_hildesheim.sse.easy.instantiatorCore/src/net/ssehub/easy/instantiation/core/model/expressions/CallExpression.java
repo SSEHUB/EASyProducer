@@ -317,7 +317,7 @@ public class CallExpression extends AbstractCallExpression implements IArgumentP
                 && useParam < arguments[0].inferType().getGenericParameterCount()) {
                 result = arguments[0].inferType().getGenericParameterType(useParam);
             }
-            if (!resolved.isStatic() && TypeRegistry.anyType() == result) {
+            if (!resolved.isStatic() && TypeRegistry.anyType() == result && !resolved.useAny()) {
                 // the operation has a generic return value -> implicit parameter determines actual type
                 // current assumption: ANY points to original template parameter 
                 TypeDescriptor<?> arg0Type = arguments[0].getExpression().inferType();

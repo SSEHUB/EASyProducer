@@ -148,13 +148,35 @@ public interface Collection<T> extends Iterable<T>, IVilGenericType, IStringValu
      * 
      * @return the sum of all elements or <b>null</b> if the elements do not define addition
      */
-    public Object sum();
+    public T sum();
+
+    /**
+     * Returns the average of all elements.
+     * 
+     * @return the average of all elements or <b>null</b> if the elements do not define addition or division
+     */
+    @OperationMeta(useAny = true)
+    public Object avg();
 
     /**
      * Returns the product of all elements.
      * 
      * @return the product of all elements or <b>null</b> if the elements do not define multiplication
      */
-    public Object product();
+    public T product();
+
+    /**
+     * Returns the minimum of all elements.
+     * 
+     * @return the minimum of all elements or <b>null</b> if the elements do not define the minimum operation
+     */
+    public T min();
+
+    /**
+     * Returns the maximum of all elements.
+     * 
+     * @return the maximum of all elements or <b>null</b> if the elements do not define the maximum operation
+     */
+    public T max();
 
 }

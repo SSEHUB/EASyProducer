@@ -561,31 +561,83 @@ public abstract class AbstractCollectionWrapper<T> implements Collection<T> {
     }
 
     @Override
-    public Object sum() {
-        return aggregate("+");
+    public T sum() {
+        return aggregate(this, "+");
+    }
+    
+    @OperationMeta(useAny = true)
+    @Override
+    public Object avg() {
+        Object res = aggregate(this, "+");
+        TypeDescriptor<?> elementType = getElementType(this);
+        IMetaOperation op = null;
+        CallArgument resArg = new CallArgument(elementType);
+        CallArgument eltArg = new CallArgument(TypeRegistry.integerType());
+        try {
+            op = AbstractCallExpression.resolveOperation(elementType, "/", resArg, eltArg);
+        } catch (VilException e) {
+            try {
+                op = AbstractCallExpression.resolveOperation(elementType, "div", resArg, eltArg);
+            } catch (VilException e1) {
+                // no operation, no aggregation; result -> null
+            }
+        }
+        if (null != op) {
+            try {
+                res = op.invoke(res, size());
+            } catch (VilException e) {
+                res = null;
+            }
+        }
+        return res;
     }
 
     @Override
-    public Object product() {
-        return aggregate("*");
+    public T product() {
+        return aggregate(this, "*");
+    }
+
+    @Override
+    public T min() {
+        return aggregate(this, "min");
+    }
+
+    @Override
+    public T max() {
+        return aggregate(this, "max");
     }
 
     /**
-     * Aggregates elements.
+     * Returns the element type of <code>collection</code>.
      * 
+     * @param collection the collection 
+     * @return the element type
+     */
+    private static TypeDescriptor<?> getElementType(Collection<?> collection) {
+        TypeDescriptor<?> elementType;
+        if (1 == collection.getGenericParameterCount()) {
+            elementType = collection.getGenericParameterType(0);
+        } else {
+            elementType = TypeRegistry.anyType();
+        }
+        return elementType;
+    }
+
+    /**
+     * Aggregates elements over <code>collection</code> by resolving the given operation over the element type
+     * of the collection.
+     * 
+     * @param <T> the element type of the collection
+     * @param collection the collection
      * @param opName denotes an operation on the elements of this collection. The operation 
      *   must be binary (2 parameters) on the element type of this collection and return
      *   a type that is assignable to the element type of this collection
      * @return the aggregated result or <b>null</b> if undefined/aggregation not possible
      */
-    private Object aggregate(String opName) {
+    @SuppressWarnings("unchecked")
+    public static <T> T aggregate(Collection<T> collection, String opName) {
         Object result = null;
-        TypeDescriptor<?> elementType;
-        if (1 == getGenericParameterCount()) {
-            elementType = getGenericParameterType(0);
-        } else {
-            elementType = TypeRegistry.anyType();
-        }
+        TypeDescriptor<?> elementType = getElementType(collection);
         IMetaOperation op = null;
         CallArgument resArg = new CallArgument(elementType);
         CallArgument eltArg = new CallArgument(elementType);
@@ -595,7 +647,7 @@ public abstract class AbstractCollectionWrapper<T> implements Collection<T> {
             // no operation, no aggregation; result -> null
         }
         if (null != op && elementType.isAssignableFrom(op.getReturnType())) {
-            Iterator<T> iter = iterator();
+            Iterator<T> iter = collection.iterator();
             boolean first = true;
             while (iter.hasNext()) {
                 T element = iter.next();
@@ -613,7 +665,7 @@ public abstract class AbstractCollectionWrapper<T> implements Collection<T> {
             }
             
         }
-        return result;
+        return (T) result;
     }
     
 }

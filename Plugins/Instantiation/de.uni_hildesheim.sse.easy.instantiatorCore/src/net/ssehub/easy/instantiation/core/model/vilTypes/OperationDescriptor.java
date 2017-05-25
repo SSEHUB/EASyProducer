@@ -592,5 +592,15 @@ public abstract class OperationDescriptor implements IMetaOperation {
     public boolean isOclCompliant() {
         return true;
     }
+    
+    /**
+     * When resolving expressions, use any as return type if object is given and do
+     * not try to override this.
+     * 
+     * @return <code>true</code> for use any, <code>false</code> else (default)
+     */
+    public boolean useAny() {
+        return false;
+    }
 
 }

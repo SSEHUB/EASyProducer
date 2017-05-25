@@ -216,13 +216,28 @@ public class UnmodifiableSet<T> implements Set<T> {
     }
 
     @Override
-    public Object sum() {
+    public T sum() {
         return set.sum();
     }
 
     @Override
-    public Object product() {
+    public Object avg() {
+        return set.sum();
+    }
+
+    @Override
+    public T product() {
         return set.product();
+    }
+
+    @Override
+    public T min() {
+        return set.min();
+    }
+
+    @Override
+    public T max() {
+        return set.max();
     }
 
 }

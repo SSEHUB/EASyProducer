@@ -24,7 +24,10 @@ vilScript collections () {
     setOf(Integer) set1 = seq1.toSet();
     sequenceOf(Integer) seq4 = {1, 2, 2, 3, 4, 5};
     Integer sumInt4 = seq4.sum();
+    Real avgInt4 = seq4.avg();
     Integer prodInt4 = seq4.product();
+    Integer minInt4 = seq4.min();
+    Integer maxInt4 = seq4.max();
     setOf(Integer) set2 = seq4.toSet();
     sequenceOf(Integer) seq7 = set2.toSequence();
     sequenceOf(Integer) seq8 = seq1.selectByType(Integer);
@@ -47,7 +50,10 @@ vilScript collections () {
     sequenceOf(Integer) seq13 = {5, 4, 7, 2, 1, 6};
     sequenceOf(Integer) seq14 = seq13.sortAlpha();
     Integer sumInt13 = seq13.sum();
+    Real avgInt13 = seq13.avg();
     Integer prodInt13 = seq13.product();
+    Integer minInt13 = seq13.min();
+    Integer maxInt13 = seq13.max();
 
     main() = : {
     }

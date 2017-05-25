@@ -41,8 +41,14 @@ set1 <- {1, 2, 3, 4}
 seq4 <- {1, 2, 2, 3, 4, 5}
 -> sum(Collection) with ({1, 2, 2, 3, 4, 5}) = 17
 sumInt4 <- 17
+-> avg(Collection) with ({1, 2, 2, 3, 4, 5}) = 2.8333333333333335
+avgInt4 <- 2.8333333333333335
 -> product(Collection) with ({1, 2, 2, 3, 4, 5}) = 240
 prodInt4 <- 240
+-> min(Collection) with ({1, 2, 2, 3, 4, 5}) = 1
+minInt4 <- 1
+-> max(Collection) with ({1, 2, 2, 3, 4, 5}) = 5
+maxInt4 <- 5
 -> toSet(Sequence) with ({1, 2, 2, 3, 4, 5}) = {1, 2, 3, 4, 5}
 set2 <- {1, 2, 3, 4, 5}
 -> toSequence(Set) with ({1, 2, 3, 4, 5}) = {1, 2, 3, 4, 5}
@@ -102,6 +108,12 @@ seq13 <- {1, 2, 4, 5, 6, 7}
 seq14 <- {1, 2, 4, 5, 6, 7}
 -> sum(Collection) with ({1, 2, 4, 5, 6, 7}) = 25
 sumInt13 <- 25
+-> avg(Collection) with ({1, 2, 4, 5, 6, 7}) = 4.166666666666667
+avgInt13 <- 4.166666666666667
 -> product(Collection) with ({1, 2, 4, 5, 6, 7}) = 1680
 prodInt13 <- 1680
+-> min(Collection) with ({1, 2, 4, 5, 6, 7}) = 1
+minInt13 <- 1
+-> max(Collection) with ({1, 2, 4, 5, 6, 7}) = 7
+maxInt13 <- 7
 -> main()

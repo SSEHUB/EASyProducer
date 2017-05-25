@@ -241,13 +241,28 @@ public class UnmodifiableSequence<T> implements Sequence<T> {
     }
 
     @Override
-    public Object sum() {
+    public T sum() {
         return sequence.sum();
     }
 
     @Override
-    public Object product() {
+    public Object avg() {
+        return sequence.avg();
+    }
+
+    @Override
+    public T product() {
         return sequence.product();
+    }
+
+    @Override
+    public T min() {
+        return sequence.min();
+    }
+
+    @Override
+    public T max() {
+        return sequence.max();
     }
 
 }

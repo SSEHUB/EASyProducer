@@ -498,4 +498,14 @@ public class ReflectionOperationDescriptor extends OperationDescriptor implement
         return compliant;
     }
 
+    @Override
+    public boolean useAny() {
+        boolean result = false;
+        OperationMeta meta = method.getAnnotation(OperationMeta.class);
+        if (null != meta) {
+            result = meta.useAny();
+        }
+        return result;
+    }
+
 }
