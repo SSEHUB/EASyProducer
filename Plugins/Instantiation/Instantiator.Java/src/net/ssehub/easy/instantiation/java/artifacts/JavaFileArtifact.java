@@ -333,9 +333,11 @@ public class JavaFileArtifact extends FileArtifact implements IJavaParent {
      * @param data
      *            the data to initialize from (source code as characters)
      */
+    @SuppressWarnings("unchecked")
     private void initialize(char[] data) {
         // TODO separate inner classes
         classList = new ArrayList<JavaClass>();
+        @SuppressWarnings("deprecation")
         ASTParser parser = ASTParser.newParser(AST.JLS4);
         parser.setSource(data);
         parser.setKind(ASTParser.K_COMPILATION_UNIT);

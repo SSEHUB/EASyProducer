@@ -74,7 +74,7 @@ public class ProjectExecutionTest extends AbstractExecutionTest<Script> {
 //        final File base = new File(getArtifactsFolder(), artifactsFolder);
 //        final File script = new File(getArtifactsFolder(), script);
         // execute
-        System.out.println(script.getAbsolutePath());
+        //System.out.println(script.getAbsolutePath());
         String scriptName = script.getName().replaceAll(".vil", "");
         ProjectDescriptor source = new ProjectDescriptor(script.getAbsolutePath(), scriptName);
         ProjectDescriptor target = new ProjectDescriptor(source, targetFile);

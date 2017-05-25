@@ -60,9 +60,7 @@ public class JavaSettingsInitializer implements ISettingsInitializer {
                 Set<?> classpathSet = (Set<?>) classpath;
                 HashSet<String> tmpClasspath = new HashSet<String>();
                 int parameterCount = classpathSet.getGenericParameterCount();
-                TypeDescriptor<?> typeDescriptorSet = classpathSet.getGenericParameterType(parameterCount - 1);
-                TypeDescriptor<?> typeDescriptorParameter = typeDescriptorSet
-                        .getGenericParameterType(typeDescriptorSet.getGenericParameterCount() - 1);
+                TypeDescriptor<?> typeDescriptorParameter = classpathSet.getGenericParameterType(parameterCount - 1);
                 for (Iterator<?> iterator = classpathSet.iterator(); iterator.hasNext();) {
                     // Validate String; if file does not exists it won't be
                     // added to the classpath
