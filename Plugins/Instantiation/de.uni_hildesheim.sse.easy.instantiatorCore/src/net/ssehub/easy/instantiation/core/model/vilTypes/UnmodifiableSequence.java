@@ -285,4 +285,14 @@ public class UnmodifiableSequence<T> implements Sequence<T> {
         return sequence.excludesAll(elements);
     }
 
+    @Override
+    public T any(ExpressionEvaluator evaluator) throws VilException {
+        return sequence.any(evaluator);
+    }
+
+    @Override
+    public T one(ExpressionEvaluator evaluator) throws VilException {
+        return sequence.one(evaluator);
+    }
+
 }

@@ -271,6 +271,7 @@ public abstract class AbstractCollectionWrapper<T> implements Collection<T> {
      * @return the selected elements
      * @throws VilException in case that evaluation or selection fails
      */
+    @Invisible
     public static <T> List<T> select(Collection<T> collection, ExpressionEvaluator evaluator, boolean select) 
         throws VilException {
         List<T> result = new ArrayList<T>();
@@ -284,18 +285,16 @@ public abstract class AbstractCollectionWrapper<T> implements Collection<T> {
      * @param <T> the element type
      * @param collection the collection to select from
      * @param evaluator the evaluator instance
-     * @param result the elements of type <code>type</code> (modified as a side effect)
+     * @param result the elements of type <code>type</code> (modified as a side effect) - may be <b>null</b> then stop
+     *   at first match
      * @param select do a select (<code>true</code>) or a reject (<code>false</code>)
+     * @return the last match
      * @throws VilException in case that evaluation or selection fails
      */
-    protected static <T> void select(Collection<T> collection, ExpressionEvaluator evaluator, 
+    protected static <T> T select(Collection<T> collection, ExpressionEvaluator evaluator, 
         java.util.Collection<T> result, boolean select) throws VilException {
-        TypeDescriptor<?> type = evaluator.getExpression().inferType();
-        boolean isDecVar = IvmlTypes.decisionVariableType().isAssignableFrom(type);
-        if (!isDecVar && !TypeRegistry.booleanType().isAssignableFrom(type)) {
-            // shall be done at language translation time, not at runtime - keep for now
-            throw new VilException("iterator must be of type boolean", VilException.ID_RUNTIME_ITERATOR);
-        }
+        T res = null;
+        boolean isDecVar = assertBooleanIterator(evaluator);
         Iterator<T> iter = collection.iterator();
         while (iter.hasNext()) {
             T value = iter.next();
@@ -309,9 +308,77 @@ public abstract class AbstractCollectionWrapper<T> implements Collection<T> {
                 selectionCriterion = (Boolean) eval;
             }
             if (null != selectionCriterion && isSelected(selectionCriterion, select)) {
-                result.add(value);
+                res = value;
+                if (null == result) {
+                    break;
+                } else {
+                    result.add(value);
+                }
             }
         }
+        return res;
+    }
+
+    /**
+     * Asserts an iterator of boolean type.
+     * 
+     * @param evaluator the evaluator to check
+     * @return whether the actual iterator is also a decision variable 
+     * @throws VilException in case that evaluation
+     */
+    private static boolean assertBooleanIterator(ExpressionEvaluator evaluator) throws VilException {
+        TypeDescriptor<?> type = evaluator.getExpression().inferType();
+        boolean isDecVar = IvmlTypes.decisionVariableType().isAssignableFrom(type);
+        if (!isDecVar && !TypeRegistry.booleanType().isAssignableFrom(type)) {
+            // shall be done at language translation time, not at runtime - keep for now
+            throw new VilException("iterator must be of type boolean", VilException.ID_RUNTIME_ITERATOR);
+        }
+        return isDecVar;
+    }
+    
+    @Override
+    public T any(ExpressionEvaluator evaluator) throws VilException {
+        return any(this, evaluator);
+    }
+
+    /**
+     * Returns the first match from <code>collection</code>.
+     *
+     * @param <T> the element type
+     * @param collection the collection
+     * @param evaluator the evaluator to check
+     * @return the first match or <b>null</b>
+     * @throws VilException in case that evaluation
+     */
+    @Invisible
+    public static <T> T any(Collection<T> collection, ExpressionEvaluator evaluator) throws VilException {
+        return select(collection, evaluator, null, true);
+    }
+
+    /**
+     * Returns the first match from <code>collection</code> if there can be only one match.
+     *
+     * @param <T> the element type
+     * @param collection the collection
+     * @param evaluator the evaluator to check
+     * @return the first and only match or <b>null</b>
+     * @throws VilException in case that evaluation
+     */
+    @Invisible
+    public static <T> T one(Collection<T> collection, ExpressionEvaluator evaluator) throws VilException {
+        T result;
+        List<T> tmp = select(collection, evaluator, true);
+        if (tmp.size() != 1) {
+            result = null;
+        } else {
+            result = tmp.get(0);
+        }
+        return result;
+    }
+
+    @Override
+    public T one(ExpressionEvaluator evaluator) throws VilException {
+        return one(this, evaluator);
     }
     
     /**

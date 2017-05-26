@@ -3,6 +3,7 @@ package net.ssehub.easy.instantiation.core.model.vilTypes;
 import java.util.Iterator;
 
 import net.ssehub.easy.instantiation.core.model.common.VilException;
+import net.ssehub.easy.instantiation.core.model.expressions.ExpressionEvaluator;
 
 /**
  * Defines the basic VIL collection type to be used with maps and joins. The iterator
@@ -114,6 +115,52 @@ public interface Collection<T> extends Iterable<T>, IVilGenericType, IStringValu
      * Clears this collection.
      */
     public void clear();
+
+    /**
+     * Selects elements in this collection according to the given expression.
+     * 
+     * @param evaluator the evaluator (results must evaluate to Boolean)
+     * @return the selected elements
+     * @throws VilException in case that selection fails
+     */
+    public Collection<T> select(ExpressionEvaluator evaluator) throws VilException;
+    
+    /**
+     * Rejects elements in this collection according to the given expression.
+     * 
+     * @param evaluator the evaluator (results must evaluate to Boolean)
+     * @return the rejected elements
+     * @throws VilException in case that selection fails
+     */
+    public Collection<T> reject(ExpressionEvaluator evaluator) throws VilException;
+
+    /**
+     * Collects the application of <code>evaluator</code> to each individual element.
+     * 
+     * @param evaluator the evaluator (results must evaluate to Boolean)
+     * @return the application results
+     * @throws VilException in case that application fails
+     */
+    @OperationMeta(useParameter = 0)
+    public Collection<?> collect(ExpressionEvaluator evaluator) throws VilException;
+    
+    /**
+     * Returns any element complying with the <code>evaluator</code>.
+     * 
+     * @param evaluator the evaluator (results must evaluate to Boolean)
+     * @return one element complying with <code>evaluator</code> 
+     * @throws VilException in case that application fails
+     */
+    public T any(ExpressionEvaluator evaluator) throws VilException;
+
+    /**
+     * Returns the element complying with the <code>evaluator</code> if there is exactly one.
+     * 
+     * @param evaluator the evaluator (results must evaluate to Boolean)
+     * @return the element complying with <code>evaluator</code> 
+     * @throws VilException in case that application fails
+     */
+    public T one(ExpressionEvaluator evaluator) throws VilException;
     
     /**
      * Does type selection of elements (only the same type).

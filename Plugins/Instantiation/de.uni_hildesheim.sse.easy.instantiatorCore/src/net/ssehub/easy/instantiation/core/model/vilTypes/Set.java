@@ -96,32 +96,14 @@ public interface Set<T> extends Collection<T> {
      * @return <code>true</code> of the element was removed, <code>false</code> else
      */
     public boolean remove(T element);
-    
-    /**
-     * Selects elements in this set according to the given expression.
-     * 
-     * @param evaluator the evaluator (results must evaluate to Boolean results)
-     * @return the selected elements
-     * @throws VilException in case that selection fails
-     */
+
+    @Override
     public Set<T> select(ExpressionEvaluator evaluator) throws VilException;
 
-    /**
-     * Rejects elements in this set according to the given expression.
-     * 
-     * @param evaluator the evaluator (results must evaluate to Boolean results)
-     * @return the rejected elements
-     * @throws VilException in case that selection fails
-     */
+    @Override
     public Set<T> reject(ExpressionEvaluator evaluator) throws VilException;
 
-    /**
-     * Collects the application of <code>evaluator</code> to each individual element.
-     * 
-     * @param evaluator the evaluator (results must evaluate to Boolean results)
-     * @return the application results
-     * @throws VilException in case that application fails
-     */
+    @Override
     @OperationMeta(useParameter = 0)
     public Set<?> collect(ExpressionEvaluator evaluator) throws VilException;
 

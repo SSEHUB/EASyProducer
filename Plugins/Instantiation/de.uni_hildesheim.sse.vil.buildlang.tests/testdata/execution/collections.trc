@@ -75,6 +75,34 @@ seq11 <- {5}
 -> >(Integer, Integer) with (5, 4) = true
 -> select(Sequence, ExpressionEvaluator) with ({1, 2, 2, 3, 4, 5}, <evaluator>) = {5}
 seq12 <- {5}
+-> >(Integer, Integer) with (1, 4) = false
+-> >(Integer, Integer) with (2, 4) = false
+-> >(Integer, Integer) with (2, 4) = false
+-> >(Integer, Integer) with (3, 4) = false
+-> >(Integer, Integer) with (4, 4) = false
+-> >(Integer, Integer) with (5, 4) = true
+-> any(Collection, ExpressionEvaluator) with ({1, 2, 2, 3, 4, 5}, <evaluator>) = 5
+seq4any1 <- 5
+-> ==(Integer, Integer) with (1, 2) = false
+-> ==(Integer, Integer) with (2, 2) = true
+-> any(Collection, ExpressionEvaluator) with ({1, 2, 2, 3, 4, 5}, <evaluator>) = 2
+seq4any2 <- 2
+-> >(Integer, Integer) with (1, 4) = false
+-> >(Integer, Integer) with (2, 4) = false
+-> >(Integer, Integer) with (2, 4) = false
+-> >(Integer, Integer) with (3, 4) = false
+-> >(Integer, Integer) with (4, 4) = false
+-> >(Integer, Integer) with (5, 4) = true
+-> one(Collection, ExpressionEvaluator) with ({1, 2, 2, 3, 4, 5}, <evaluator>) = 5
+seq4one1 <- 5
+-> ==(Integer, Integer) with (1, 2) = false
+-> ==(Integer, Integer) with (2, 2) = true
+-> ==(Integer, Integer) with (2, 2) = true
+-> ==(Integer, Integer) with (3, 2) = false
+-> ==(Integer, Integer) with (4, 2) = false
+-> ==(Integer, Integer) with (5, 2) = false
+-> one(Collection, ExpressionEvaluator) with ({1, 2, 2, 3, 4, 5}, <evaluator>) = null
+seq4one2 <- null
 -> selectByType(Set, Type) with ({1, 2, 3, 4, 5}, Integer representing net.ssehub.easy.instantiation.core.model.vilTypes.PseudoInteger) = {1, 2, 3, 4, 5}
 set3 <- {1, 2, 3, 4, 5}
 -> selectByKind(Set, Type) with ({1, 2, 3, 4, 5}, Integer representing net.ssehub.easy.instantiation.core.model.vilTypes.PseudoInteger) = {1, 2, 3, 4, 5}

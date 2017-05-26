@@ -253,4 +253,14 @@ class OtherProjects implements Set<IArtifact> {
         return AbstractCollectionWrapper.containsAll(this, elements, true);
     }
 
+    @Override
+    public IArtifact any(ExpressionEvaluator evaluator) throws VilException {
+        return AbstractCollectionWrapper.any(this, evaluator);
+    }
+
+    @Override
+    public IArtifact one(ExpressionEvaluator evaluator) throws VilException {
+        return AbstractCollectionWrapper.one(this, evaluator);
+    }
+
 }

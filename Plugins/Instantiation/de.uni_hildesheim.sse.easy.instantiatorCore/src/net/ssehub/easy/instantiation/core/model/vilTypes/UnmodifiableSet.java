@@ -261,4 +261,14 @@ public class UnmodifiableSet<T> implements Set<T> {
         return set.excludesAll(elements);
     }
 
+    @Override
+    public T any(ExpressionEvaluator evaluator) throws VilException {
+        return set.any(evaluator);
+    }
+
+    @Override
+    public T one(ExpressionEvaluator evaluator) throws VilException {
+        return set.one(evaluator);
+    }
+
 }

@@ -38,6 +38,10 @@ vilScript collections () {
     sequenceOf(Integer) seq10 = seq4.excluding(seq3);
     sequenceOf(Integer) seq11 = seq4.excluding(seq1);
     sequenceOf(Integer) seq12 = seq4->select(i | i > 4);
+    Integer seq4any1 = seq4->any(i | i > 4);
+    Integer seq4any2 = seq4->any(i | i == 2);
+    Integer seq4one1 = seq4->one(i | i > 4);
+    Integer seq4one2 = seq4->one(i | i == 2);
     setOf(Integer) set3 = set2.selectByType(Integer);
     setOf(Integer) set3_1 = set2.selectByKind(Integer);
     setOf(Real) set4 = set2.selectByType(Real);
