@@ -209,6 +209,13 @@ public class SetSet<T> extends AbstractCollectionWrapper<T> implements Set<T> {
         }
         return new SetSet<T>(tmp, params);
     }
+    
+    @Override
+    public Set<?> flatten() throws VilException {
+        java.util.Set<Object> result = new java.util.HashSet<Object>();
+        flatten(this, result);
+        return new SetSet<Object>(result, getFlattenedParams(this));
+    }
 
     @Override
     public Set<T> select(ExpressionEvaluator evaluator) throws VilException {

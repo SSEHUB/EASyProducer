@@ -10,6 +10,7 @@ vilScript collections () {
     Boolean i_b3 = seq1.excludes(3);
     Boolean i_b4 = seq1.excludes(5);
     sequenceOf(Integer, Integer) seq2 = {{1, 2}, {2, 3}, {3, 4}};
+    sequenceOf(Integer) seq2flat = seq2.flatten();
     Integer i_s2 = seq2.size();
     sequenceOf(Integer) seq3 = {1, 2, 3, 4};
     Boolean i_b5 = seq1.equals(seq3);

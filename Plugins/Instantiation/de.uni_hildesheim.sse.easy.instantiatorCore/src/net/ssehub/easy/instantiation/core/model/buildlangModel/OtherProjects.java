@@ -129,6 +129,11 @@ class OtherProjects implements Set<IArtifact> {
     public Set<IArtifact> including(Collection<IArtifact> set) {
         return new ListSet<IArtifact>(AbstractCollectionWrapper.including(this, set), parameter);
     }
+    
+    @Override
+    public Set<?> flatten() throws VilException {
+        return this; // no need to flatten, element type is IArtifact
+    }
 
     @OperationMeta(useParameter = 0)
     @Override

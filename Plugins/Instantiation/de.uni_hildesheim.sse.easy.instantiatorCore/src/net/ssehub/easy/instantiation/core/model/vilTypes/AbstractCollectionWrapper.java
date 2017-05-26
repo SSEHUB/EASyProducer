@@ -315,6 +315,62 @@ public abstract class AbstractCollectionWrapper<T> implements Collection<T> {
     }
     
     /**
+     * Returns the type parameters for a flattened collection.
+     * 
+     * @param collection the original collection
+     * @return the flattened type parameter(s)
+     */
+    public TypeDescriptor<?>[] getFlattenedParams(Collection<?> collection) {
+        TypeDescriptor<?>[] param = TypeDescriptor.createArray(1);
+        param[0] = collection.getType().flattenParam();
+        return param;
+    }
+    
+    /**
+     * Flattens a collection.
+     * 
+     * @param <T1> the element type of the input collection
+     * @param <T2> the element type of the result collection
+     * @param collection the VIL collection to flatten
+     * @param result the result (to be modified as a side effect)
+     * @throws VilException in case that a single element value cannot be added to the result collection
+     */
+    protected static <T1, T2> void flatten(Collection<T1> collection, java.util.Collection<T2> result) 
+        throws VilException {
+        Iterator<T1> iter = collection.iterator();
+        while (iter.hasNext()) {
+            flatten(iter.next(), result);
+        }
+    }
+    
+    /**
+     * Flattens an element value (may contain a Java collection).
+     * 
+     * @param <T1> the element type
+     * @param <T2> the element type of the result collection
+     * @param value the element value
+     * @param result the result (to be modified as a side effect)
+     * @throws VilException in case that a single element value cannot be added to the result collection
+     */
+    @SuppressWarnings("unchecked")
+    private static <T1, T2> void flatten(T1 value, java.util.Collection<T2> result) throws VilException {
+        if (value instanceof Collection) {
+            flatten((Collection<?>) value, result);
+        } else if (value instanceof java.util.Collection) {
+            java.util.Collection<?> coll = (java.util.Collection<?>) value;
+            for (Object o : coll) {
+                flatten(o, result);
+            }
+        } else {
+            try {
+                result.add((T2) value);
+            } catch (ClassCastException e) {
+                new VilException(e, VilException.ID_RUNTIME_TYPE);
+            }
+        }
+    }
+    
+    /**
      * Determines whether an element is selected.
      * 
      * @param selectionCriterion the original criterion

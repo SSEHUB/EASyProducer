@@ -122,6 +122,13 @@ public class ListSequence<T> extends AbstractListWrapper<T> implements Sequence<
     }
 
     @Override
+    public Sequence<?> flatten() throws VilException {
+        List<Object> result = new java.util.ArrayList<Object>();
+        flatten(this, result);
+        return new ListSequence<Object>(result, getFlattenedParams(this));
+    }
+    
+    @Override
     public Sequence<T> select(ExpressionEvaluator evaluator) throws VilException {
         TypeDescriptor<?>[] param = TypeDescriptor.createArray(1);
         param[0] = evaluator.getIteratorVariable().getType();

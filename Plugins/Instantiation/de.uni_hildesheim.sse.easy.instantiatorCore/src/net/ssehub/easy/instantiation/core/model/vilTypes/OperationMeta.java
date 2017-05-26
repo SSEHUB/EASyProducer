@@ -95,4 +95,9 @@ public @interface OperationMeta {
      */
     boolean useAny() default false;
     
+    /**
+     * Whether the result type shall be flattened to a non-collection type.
+     */
+    boolean flatten() default false;
+    
 }

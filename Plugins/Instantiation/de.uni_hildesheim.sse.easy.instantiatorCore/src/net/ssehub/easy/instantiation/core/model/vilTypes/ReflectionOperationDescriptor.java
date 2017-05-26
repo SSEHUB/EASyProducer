@@ -507,5 +507,15 @@ public class ReflectionOperationDescriptor extends OperationDescriptor implement
         }
         return result;
     }
+    
+    @Override
+    public boolean flatten() {
+        boolean result = false;
+        OperationMeta meta = method.getAnnotation(OperationMeta.class);
+        if (null != meta) {
+            result = meta.flatten();
+        }
+        return result;        
+    }
 
 }

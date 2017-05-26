@@ -157,4 +157,8 @@ public interface Set<T> extends Collection<T> {
     @Invisible
     public java.util.Set<T> toMappedSet();
 
+    @OperationMeta(useGenericParameter = 0, flatten = true)
+    @Override
+    public Set<?> flatten() throws VilException;
+    
 }

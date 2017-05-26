@@ -594,12 +594,21 @@ public abstract class OperationDescriptor implements IMetaOperation {
     }
     
     /**
-     * When resolving expressions, use any as return type if object is given and do
+     * When resolving expression types, use any as return type if object is given and do
      * not try to override this.
      * 
      * @return <code>true</code> for use any, <code>false</code> else (default)
      */
     public boolean useAny() {
+        return false;
+    }
+    
+    /**
+     * When resolving expression types, flatten the final return type.
+     * 
+     * @return <code>true</code> for use any, <code>false</code> else (default)
+     */
+    public boolean flatten() {
         return false;
     }
 

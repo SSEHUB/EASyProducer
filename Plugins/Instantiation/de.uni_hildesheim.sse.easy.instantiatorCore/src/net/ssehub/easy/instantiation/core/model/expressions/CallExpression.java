@@ -326,6 +326,9 @@ public class CallExpression extends AbstractCallExpression implements IArgumentP
                 }
             }
             type = considerReturnGenerics(result, returnGenerics);
+            if (null != type && resolved.flatten()) {
+                type = type.flatten();
+            }
         }
         return type;
     }

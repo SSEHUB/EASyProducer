@@ -121,6 +121,11 @@ public class UnmodifiableSet<T> implements Set<T> {
         // do nothing, unmodifiable
         return false;
     }
+    
+    @Override
+    public Set<?> flatten() throws VilException {
+        return set.flatten();
+    }
 
     @Override
     public Set<T> select(ExpressionEvaluator evaluator) throws VilException {

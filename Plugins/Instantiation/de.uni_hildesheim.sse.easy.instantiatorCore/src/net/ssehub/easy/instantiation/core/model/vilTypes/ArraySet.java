@@ -126,6 +126,13 @@ public class ArraySet<T> extends AbstractArrayWrapper<T> implements Set<T> {
     public Set<T> including(Collection<T> set) {
         return new ListSet<T>(including(this, set), getGenericParameter());
     }
+    
+    @Override
+    public Set<?> flatten() throws VilException {
+        java.util.List<Object> result = new java.util.ArrayList<Object>();
+        flatten(this, result);
+        return new ListSet<Object>(result, getFlattenedParams(this));
+    }
 
     @Override
     public Set<T> select(ExpressionEvaluator evaluator) throws VilException {

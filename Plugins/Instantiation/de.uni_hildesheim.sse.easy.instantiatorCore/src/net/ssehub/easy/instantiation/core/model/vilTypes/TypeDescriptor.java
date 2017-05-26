@@ -495,5 +495,53 @@ public abstract class TypeDescriptor <T> implements IMetaType {
     public boolean isSame(TypeDescriptor<?> typeDescriptor) {
         return isAssignableFrom(typeDescriptor) && typeDescriptor.isAssignableFrom(this);
     }
+
+    /**
+     * Returns a flattened collection type if this type is a collection. If not, return <b>this</b>.
+     * 
+     * @return the flattened collection type or <b>this</b>
+     * @throws VilException in case that the derivation of the type fails
+     */
+    public TypeDescriptor<?> flatten() throws VilException {
+        TypeDescriptor<?> result;
+        if (isSet()) {
+            result = TypeRegistry.getSetType(flattenParam(this));
+        } else if (isSequence()) {
+            result = TypeRegistry.getSequenceType(flattenParam(this));
+        } else if (isCollection()) {
+            result = TypeRegistry.getCollectionType(flattenParam(this));
+        } else {
+            result = this; // usn
+        }
+        return result;
+    }
+
+    /**
+     * Returns deepest nested non-collection parameter type of this type.
+     * 
+     * @return the nested non-collection type
+     */
+    public TypeDescriptor<?> flattenParam() {
+        return flattenParam(this);
+    }
+    
+    /**
+     * Returns deepest nested non-collection parameter type.
+     * 
+     * @param type the type to return the parameter type for
+     * @return the nested non-collection type
+     */
+    private TypeDescriptor<?> flattenParam(TypeDescriptor<?> type) {
+        TypeDescriptor<?> result;
+        if (type.getGenericParameterCount() > 0) {
+            result = type.getGenericParameterType(0);
+            if (result.isCollection()) {
+                result = flattenParam(result);
+            }
+        } else {
+            result = TypeRegistry.anyType();
+        }
+        return result;
+    }
     
 }

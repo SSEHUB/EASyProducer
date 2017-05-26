@@ -220,5 +220,9 @@ public interface Sequence<T> extends Collection<T> {
      */
     @Invisible
     public java.util.List<T> toMappedList();
-    
+
+    @OperationMeta(useGenericParameter = 0, flatten = true)
+    @Override
+    public Sequence<?> flatten() throws VilException;
+
 }

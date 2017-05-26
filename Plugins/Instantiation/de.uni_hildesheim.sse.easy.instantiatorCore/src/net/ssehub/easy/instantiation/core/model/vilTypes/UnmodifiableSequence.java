@@ -133,6 +133,11 @@ public class UnmodifiableSequence<T> implements Sequence<T> {
         // unmodifiable, do nothing
         return false;
     }
+    
+    @Override
+    public Sequence<?> flatten() throws VilException {
+        return sequence.flatten();
+    }
 
     @Override
     public Sequence<T> select(ExpressionEvaluator evaluator) throws VilException {

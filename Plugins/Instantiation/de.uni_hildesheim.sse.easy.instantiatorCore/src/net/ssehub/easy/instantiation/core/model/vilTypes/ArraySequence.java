@@ -15,6 +15,9 @@
  */
 package net.ssehub.easy.instantiation.core.model.vilTypes;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import net.ssehub.easy.instantiation.core.model.common.VilException;
 import net.ssehub.easy.instantiation.core.model.expressions.ExpressionEvaluator;
 
@@ -130,6 +133,13 @@ public class ArraySequence<T> extends AbstractArrayWrapper<T> implements Sequenc
     @OperationMeta(returnGenerics = IVilType.class)
     public Sequence<T> append(Collection<T> sequence) {
         return new ListSequence<T>(append(this, sequence), getGenericParameter());
+    }
+    
+    @Override
+    public Sequence<?> flatten() throws VilException {
+        List<Object> result = new ArrayList<Object>();
+        flatten(this, result);
+        return new ListSequence<Object>(result, getFlattenedParams(this));
     }
 
     @Override

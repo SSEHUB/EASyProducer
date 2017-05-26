@@ -2,6 +2,8 @@ package net.ssehub.easy.instantiation.core.model.vilTypes;
 
 import java.util.Iterator;
 
+import net.ssehub.easy.instantiation.core.model.common.VilException;
+
 /**
  * Defines the basic VIL collection type to be used with maps and joins. The iterator
  * is an internal type which is not registered in the {@link TypeRegistry}.
@@ -208,5 +210,14 @@ public interface Collection<T> extends Iterable<T>, IVilGenericType, IStringValu
      * @return the set containing the elements of this collection (excluding duplicates)
      */
     public Set<T> asSet();
+    
+    /**
+     * Flattens this collection if needed, i.e., flatten sub-collections.
+     * 
+     * @return the flattened collection
+     * @throws VilException in case of type incompatibilities
+     */
+    @OperationMeta(useGenericParameter = 0, flatten = true)
+    public Collection<?> flatten() throws VilException;
     
 }

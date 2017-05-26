@@ -15,6 +15,8 @@ i_b3 <- false
 -> excludes(Collection, Any) with ({1, 2, 3, 4}, 5) = true
 i_b4 <- true
 seq2 <- {{1, 2}, {2, 3}, {3, 4}}
+-> flatten(Sequence) with ({{1, 2}, {2, 3}, {3, 4}}) = {1, 2, 2, 3, 3, 4}
+seq2flat <- {1, 2, 2, 3, 3, 4}
 -> size(Collection) with ({{1, 2}, {2, 3}, {3, 4}}) = 3
 i_s2 <- 3
 seq3 <- {1, 2, 3, 4}
