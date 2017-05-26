@@ -295,5 +295,15 @@ public interface Collection<T> extends Iterable<T>, IVilGenericType, IStringValu
      */
     @OperationMeta(useGenericParameter = 0, flatten = true)
     public Collection<?> flatten() throws VilException;
-    
+
+    /**
+     * Sorts the elements in this collection according to the given expression in ascending order.
+     * 
+     * @param evaluator the evaluator
+     * @return the selected elements
+     * @throws VilException in case that selection fails
+     */
+    @OperationMeta(name = {"sortedBy", "sort"}, notOclCompliant = "sort", returnGenerics = IVilType.class)
+    public Collection<T> sortedBy(ExpressionEvaluator evaluator) throws VilException;
+
 }

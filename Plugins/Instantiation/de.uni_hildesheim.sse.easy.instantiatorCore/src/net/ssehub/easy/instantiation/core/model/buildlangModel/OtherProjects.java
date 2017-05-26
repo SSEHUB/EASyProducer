@@ -11,6 +11,7 @@ import net.ssehub.easy.instantiation.core.model.common.VilException;
 import net.ssehub.easy.instantiation.core.model.expressions.ExpressionEvaluator;
 import net.ssehub.easy.instantiation.core.model.vilTypes.AbstractCollectionWrapper;
 import net.ssehub.easy.instantiation.core.model.vilTypes.Collection;
+import net.ssehub.easy.instantiation.core.model.vilTypes.IVilType;
 import net.ssehub.easy.instantiation.core.model.vilTypes.ListSequence;
 import net.ssehub.easy.instantiation.core.model.vilTypes.ListSet;
 import net.ssehub.easy.instantiation.core.model.vilTypes.OperationMeta;
@@ -276,6 +277,18 @@ class OtherProjects implements Set<IArtifact> {
     @Override
     public Boolean isUnique(ExpressionEvaluator evaluator) throws VilException {
         return AbstractCollectionWrapper.isUnique(this, evaluator);
+    }
+
+    @Override
+    @OperationMeta(name = {"sortedBy", "sort"}, notOclCompliant = "sort", returnGenerics = IVilType.class)
+    public Collection<IArtifact> sortedBy(ExpressionEvaluator evaluator) throws VilException {
+        Collection<IArtifact> result;
+        if (null == data) {
+            result = this;
+        } else {
+            result = new ListSequence<IArtifact>(AbstractCollectionWrapper.sortImpl(iterator(), evaluator), parameter);
+        }
+        return result;
     }
 
 }

@@ -3,7 +3,7 @@ template sort(Configuration config, Artifact target) {
 
     def main(Configuration config, Artifact target) {
         SortModel model = config;
-        sequenceOf(Element) res = model.elts->sort(Element e | e.capacity);
+        sequenceOf(Element) res = model.elts->sortedBy(Element e | e.capacity);
         for (Element e : res) {
             '${e.capacity}'
         }

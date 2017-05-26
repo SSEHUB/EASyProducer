@@ -295,4 +295,16 @@ public class SetSet<T> extends AbstractCollectionWrapper<T> implements Set<T> {
         set.clear();
     }
 
+    @Override
+    @OperationMeta(name = {"sortedBy", "sort"}, notOclCompliant = "sort", returnGenerics = IVilType.class)
+    public Collection<T> sortedBy(ExpressionEvaluator evaluator) throws VilException {
+        Collection<T> result;
+        if (null == set) {
+            result = this;
+        } else {
+            result = new ListSequence<T>(sortImpl(evaluator), params);
+        }
+        return result;
+    }
+
 }

@@ -140,8 +140,8 @@ public interface Sequence<T> extends Collection<T> {
      * @return the selected elements
      * @throws VilException in case that selection fails
      */
-    @OperationMeta(returnGenerics = IVilType.class)
-    public Sequence<T> sort(ExpressionEvaluator evaluator) throws VilException;
+    @OperationMeta(name = {"sortedBy", "sort"}, notOclCompliant = "sort", returnGenerics = IVilType.class)
+    public Sequence<T> sortedBy(ExpressionEvaluator evaluator) throws VilException;
 
     /**
      * Reverts this sequence.

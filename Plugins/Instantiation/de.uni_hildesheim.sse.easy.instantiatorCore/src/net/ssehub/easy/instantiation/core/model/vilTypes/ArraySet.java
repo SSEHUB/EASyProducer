@@ -220,4 +220,16 @@ public class ArraySet<T> extends AbstractArrayWrapper<T> implements Set<T> {
         return new ListSet<T>(intersection(this, set), getGenericParameter());
     }
 
+    @Override
+    @OperationMeta(name = {"sortedBy", "sort"}, notOclCompliant = "sort", returnGenerics = IVilType.class)
+    public Collection<T> sortedBy(ExpressionEvaluator evaluator) throws VilException {
+        Collection<T> result;
+        if (null == getArray()) {
+            result = this;
+        } else {
+            result = new ListSequence<T>(sortImpl(evaluator), getGenericParameter());
+        }
+        return result;
+    }
+    
 }

@@ -9,6 +9,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.TreeMap;
 
+import net.ssehub.easy.basics.DefaultLocale;
 import net.ssehub.easy.instantiation.core.model.common.VilException;
 import net.ssehub.easy.instantiation.core.model.expressions.AbstractCallExpression;
 import net.ssehub.easy.instantiation.core.model.expressions.CallArgument;
@@ -728,7 +729,8 @@ public abstract class AbstractCollectionWrapper<T> implements Collection<T> {
             }
             tempMap = mapping;
         } else {
-            java.util.Map<String, List<T>> mapping = new TreeMap<String, List<T>>(Collator.getInstance());
+            java.util.Map<String, List<T>> mapping = new TreeMap<String, List<T>>(
+                Collator.getInstance(DefaultLocale.getDefaultLocale()));
             while (iter.hasNext()) {
                 T value = iter.next();
                 Object eval = evaluator.evaluate(value);

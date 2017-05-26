@@ -203,8 +203,8 @@ public class ArraySequence<T> extends AbstractArrayWrapper<T> implements Sequenc
     }
     
     @Override
-    @OperationMeta(returnGenerics = IVilType.class)
-    public Sequence<T> sort(ExpressionEvaluator evaluator) throws VilException {
+    @OperationMeta(name = {"sortedBy", "sort"}, notOclCompliant = "sort", returnGenerics = IVilType.class)
+    public Sequence<T> sortedBy(ExpressionEvaluator evaluator) throws VilException {
         Sequence<T> result;
         if (null == getArray()) {
             result = this;

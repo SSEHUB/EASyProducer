@@ -185,8 +185,8 @@ public class UnmodifiableSequence<T> implements Sequence<T> {
     }
     
     @Override
-    public Sequence<T> sort(ExpressionEvaluator evaluator) throws VilException {
-        return sequence.sort(evaluator);
+    public Sequence<T> sortedBy(ExpressionEvaluator evaluator) throws VilException {
+        return sequence.sortedBy(evaluator);
     }
 
     @Override

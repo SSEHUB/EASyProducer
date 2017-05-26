@@ -286,4 +286,9 @@ public class UnmodifiableSet<T> implements Set<T> {
         return set.isUnique(evaluator);
     }
 
+    @Override
+    public Collection<T> sortedBy(ExpressionEvaluator evaluator) throws VilException {
+        return set.sortedBy(evaluator);
+    }
+
 }
