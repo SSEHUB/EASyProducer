@@ -215,7 +215,7 @@ public class ArraySequence<T> extends AbstractArrayWrapper<T> implements Sequenc
     }
     
     @Override
-    @OperationMeta(returnGenerics = IVilType.class)
+    @OperationMeta(name = {"reverse", "revert"}, notOclCompliant = "revert", returnGenerics = IVilType.class)
     public Sequence<T> revert() {
         Sequence<T> result;
         if (null == getArray()) {

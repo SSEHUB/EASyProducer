@@ -148,7 +148,7 @@ public interface Sequence<T> extends Collection<T> {
      * 
      * @return the reverted sequence
      */
-    @OperationMeta(returnGenerics = IVilType.class)
+    @OperationMeta(name = {"reverse", "revert"}, notOclCompliant = "revert", returnGenerics = IVilType.class)
     public Sequence<T> revert();
     
     /**

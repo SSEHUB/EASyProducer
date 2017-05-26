@@ -75,6 +75,10 @@ seq11 <- {5}
 -> >(Integer, Integer) with (5, 4) = true
 -> select(Sequence, ExpressionEvaluator) with ({1, 2, 2, 3, 4, 5}, <evaluator>) = {5}
 seq12 <- {5}
+-> reverse(Sequence) with ({1, 2, 2, 3, 4, 5}) = {1, 2, 2, 3, 4, 5}
+seq4r1 <- {1, 2, 2, 3, 4, 5}
+-> revert(Sequence) with ({1, 2, 2, 3, 4, 5}) = {1, 2, 2, 3, 4, 5}
+seq4r2 <- {1, 2, 2, 3, 4, 5}
 -> >(Integer, Integer) with (1, 4) = false
 -> >(Integer, Integer) with (2, 4) = false
 -> >(Integer, Integer) with (2, 4) = false

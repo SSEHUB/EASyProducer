@@ -201,7 +201,7 @@ public class ListSequence<T> extends AbstractListWrapper<T> implements Sequence<
     }
     
     @Override
-    @OperationMeta(returnGenerics = IVilType.class)
+    @OperationMeta(name = {"reverse", "revert"}, notOclCompliant = "revert", returnGenerics = IVilType.class)
     public Sequence<T> revert() {
         Sequence<T> result;
         if (null == getList()) {

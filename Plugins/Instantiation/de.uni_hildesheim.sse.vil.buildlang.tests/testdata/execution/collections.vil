@@ -38,6 +38,8 @@ vilScript collections () {
     sequenceOf(Integer) seq10 = seq4.excluding(seq3);
     sequenceOf(Integer) seq11 = seq4.excluding(seq1);
     sequenceOf(Integer) seq12 = seq4->select(i | i > 4);
+    sequenceOf(Integer) seq4r1 = seq4.reverse();
+    sequenceOf(Integer) seq4r2 = seq4.revert();
     Integer seq4any1 = seq4->any(i | i > 4);
     Integer seq4any2 = seq4->any(i | i == 2);
     Integer seq4one1 = seq4->one(i | i > 4);
