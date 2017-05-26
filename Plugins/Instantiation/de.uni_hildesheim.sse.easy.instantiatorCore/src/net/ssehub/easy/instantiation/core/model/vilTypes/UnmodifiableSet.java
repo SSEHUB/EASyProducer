@@ -240,4 +240,14 @@ public class UnmodifiableSet<T> implements Set<T> {
         return set.max();
     }
 
+    @Override
+    public boolean includesAll(Collection<?> elements) {
+        return set.includesAll(elements);
+    }
+
+    @Override
+    public boolean excludesAll(Collection<?> elements) {
+        return set.excludesAll(elements);
+    }
+
 }

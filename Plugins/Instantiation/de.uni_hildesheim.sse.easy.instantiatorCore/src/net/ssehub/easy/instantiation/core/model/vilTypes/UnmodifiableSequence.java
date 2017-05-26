@@ -265,4 +265,14 @@ public class UnmodifiableSequence<T> implements Sequence<T> {
         return sequence.max();
     }
 
+    @Override
+    public boolean includesAll(Collection<?> elements) {
+        return sequence.includesAll(elements);
+    }
+
+    @Override
+    public boolean excludesAll(Collection<?> elements) {
+        return sequence.excludesAll(elements);
+    }
+
 }

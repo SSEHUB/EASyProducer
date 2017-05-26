@@ -54,6 +54,15 @@ vilScript collections () {
     Integer prodInt13 = seq13.product();
     Integer minInt13 = seq13.min();
     Integer maxInt13 = seq13.max();
+    Boolean incAll1 = seq4.includesAll(seq3);
+    Boolean incAll2 = seq4.includesAll(seq13);
+    Boolean incAll3 = seq4.toSet().includesAll(seq3);
+    Boolean incAll4 = seq4.toSet().includesAll(seq13.toSet());
+    sequenceOf(Integer) seq15 = {11, 12, 13, 14};
+    Boolean exlAll5 = seq4.excludesAll(seq15);
+    Boolean exlAll6 = seq4.excludesAll(seq13);
+    Boolean exlAll7 = seq4.toSet().excludesAll(seq15);
+    Boolean exlAll8 = seq4.toSet().excludesAll(seq13.toSet());
 
     main() = : {
     }

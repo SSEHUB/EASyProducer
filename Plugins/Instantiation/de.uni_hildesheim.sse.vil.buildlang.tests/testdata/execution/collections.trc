@@ -116,4 +116,27 @@ prodInt13 <- 1680
 minInt13 <- 1
 -> max(Collection) with ({1, 2, 4, 5, 6, 7}) = 7
 maxInt13 <- 7
+-> includesAll(Collection, Collection) with ({1, 2, 2, 3, 4, 5}, {1, 2, 3, 4}) = true
+incAll1 <- true
+-> includesAll(Collection, Collection) with ({1, 2, 2, 3, 4, 5}, {1, 2, 4, 5, 6, 7}) = false
+incAll2 <- false
+-> toSet(Sequence) with ({1, 2, 2, 3, 4, 5}) = {1, 2, 3, 4, 5}
+-> includesAll(Collection, Collection) with ({1, 2, 3, 4, 5}, {1, 2, 3, 4}) = true
+incAll3 <- true
+-> toSet(Sequence) with ({1, 2, 2, 3, 4, 5}) = {1, 2, 3, 4, 5}
+-> toSet(Sequence) with ({1, 2, 4, 5, 6, 7}) = {1, 2, 4, 5, 6, 7}
+-> includesAll(Collection, Collection) with ({1, 2, 3, 4, 5}, {1, 2, 4, 5, 6, 7}) = false
+incAll4 <- false
+seq15 <- {11, 12, 13, 14}
+-> excludesAll(Collection, Collection) with ({1, 2, 2, 3, 4, 5}, {11, 12, 13, 14}) = true
+exlAll5 <- true
+-> excludesAll(Collection, Collection) with ({1, 2, 2, 3, 4, 5}, {1, 2, 4, 5, 6, 7}) = false
+exlAll6 <- false
+-> toSet(Sequence) with ({1, 2, 2, 3, 4, 5}) = {1, 2, 3, 4, 5}
+-> excludesAll(Collection, Collection) with ({1, 2, 3, 4, 5}, {11, 12, 13, 14}) = true
+exlAll7 <- true
+-> toSet(Sequence) with ({1, 2, 2, 3, 4, 5}) = {1, 2, 3, 4, 5}
+-> toSet(Sequence) with ({1, 2, 4, 5, 6, 7}) = {1, 2, 4, 5, 6, 7}
+-> excludesAll(Collection, Collection) with ({1, 2, 3, 4, 5}, {1, 2, 4, 5, 6, 7}) = false
+exlAll8 <- false
 -> main()

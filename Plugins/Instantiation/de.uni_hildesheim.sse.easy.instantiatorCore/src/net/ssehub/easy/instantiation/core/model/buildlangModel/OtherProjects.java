@@ -230,4 +230,14 @@ class OtherProjects implements Set<IArtifact> {
         return null;
     }
 
+    @Override
+    public boolean includesAll(Collection<?> elements) {
+        return AbstractCollectionWrapper.containsAll(this, elements, false);
+    }
+
+    @Override
+    public boolean excludesAll(Collection<?> elements) {
+        return AbstractCollectionWrapper.containsAll(this, elements, true);
+    }
+
 }

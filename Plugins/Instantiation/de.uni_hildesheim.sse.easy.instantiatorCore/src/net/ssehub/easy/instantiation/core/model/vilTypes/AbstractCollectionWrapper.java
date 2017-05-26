@@ -667,5 +667,44 @@ public abstract class AbstractCollectionWrapper<T> implements Collection<T> {
         }
         return (T) result;
     }
+
+    @Override
+    public boolean includesAll(Collection<?> elements) {
+        return containsAll(this, elements, false);
+    }
+    
+    @Override
+    public boolean excludesAll(Collection<?> elements) {
+        return containsAll(this, elements, true);
+    }
+    
+    /**
+     * Returns whether all elements in <code>elements</code> are also in <code>base</code>
+     * collection.
+     * 
+     * @param base the base collection
+     * @param elements the elements to check for
+     * @param negate whether the result shall be negated, i.e., it shall be checked for not being
+     *   member of this collection
+     * @return <code>true</code> if (non-)containment holds for all elements
+     */
+    public static boolean containsAll(Collection<?> base, Collection<?> elements, boolean negate) {
+        boolean all = true;
+        HashSet<Object> tmp = new HashSet<Object>();
+        Iterator<?> myIter = base.iterator();
+        while (myIter.hasNext()) {
+            tmp.add(myIter.next());
+        }
+        Iterator<?> iter = elements.iterator();
+        while (all && iter.hasNext()) {
+            boolean eTmp = tmp.contains(iter.next());
+            if (negate) {
+                eTmp = !eTmp;
+            }
+            all = eTmp;
+        }
+        return all;        
+    }
+
     
 }

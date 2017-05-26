@@ -178,5 +178,21 @@ public interface Collection<T> extends Iterable<T>, IVilGenericType, IStringValu
      * @return the maximum of all elements or <b>null</b> if the elements do not define the maximum operation
      */
     public T max();
+    
+    /**
+     * Returns whether this collection contains all elements in <code>elements</code>.
+     * 
+     * @param elements the elements to look for
+     * @return <code>true</code> if this collection contains all <code>elements</code>, <code>false</code> else
+     */
+    public boolean includesAll(Collection<?> elements);
+    
+    /**
+     * Returns whether this collection contains no elements from <code>elements</code>.
+     * 
+     * @param elements the elements to look for
+     * @return <code>true</code> if this collection contains none from <code>elements</code>, <code>false</code> else
+     */
+    public boolean excludesAll(Collection<?> elements);
 
 }
