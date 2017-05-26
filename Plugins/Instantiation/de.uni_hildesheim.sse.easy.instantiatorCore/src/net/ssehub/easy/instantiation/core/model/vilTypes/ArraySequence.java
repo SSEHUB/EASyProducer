@@ -174,6 +174,11 @@ public class ArraySequence<T> extends AbstractArrayWrapper<T> implements Sequenc
     public Set<T> asSet() {
         return toSet();
     }
+    
+    @Override
+    public Sequence<T> asSequence() {
+        return this;
+    }
 
     @Override
     @OperationMeta(returnGenerics = IVilType.class)

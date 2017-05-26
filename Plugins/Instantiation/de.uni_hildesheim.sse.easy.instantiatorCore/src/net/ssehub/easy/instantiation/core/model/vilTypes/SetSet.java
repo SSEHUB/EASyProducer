@@ -259,6 +259,11 @@ public class SetSet<T> extends AbstractCollectionWrapper<T> implements Set<T> {
         tmp.addAll(set);
         return new ListSequence<T>(tmp, params);
     }
+    
+    @Override
+    public Set<T> asSet() {
+        return this;
+    }
 
     @Override
     public T projectSingle() {

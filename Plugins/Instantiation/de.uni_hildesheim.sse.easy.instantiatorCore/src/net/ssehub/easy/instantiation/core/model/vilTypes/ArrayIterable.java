@@ -38,4 +38,14 @@ class ArrayIterable <T> extends AbstractArrayWrapper<T> {
         return null;
     }
 
+    @Override
+    public Sequence<T> asSequence() {
+        return null;
+    }
+
+    @Override
+    public Set<T> asSet() {
+        return null;
+    }
+
 }

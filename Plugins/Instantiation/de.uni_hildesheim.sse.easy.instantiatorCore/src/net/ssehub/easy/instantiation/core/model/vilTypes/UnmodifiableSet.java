@@ -156,6 +156,12 @@ public class UnmodifiableSet<T> implements Set<T> {
     public Sequence<T> asSequence() {
         return toSequence();
     }
+    
+
+    @Override
+    public Set<T> asSet() {
+        return set.asSet();
+    }
 
     @Override
     public T projectSingle() {

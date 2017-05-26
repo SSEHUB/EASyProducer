@@ -136,6 +136,11 @@ public class ListSet<T> extends AbstractListWrapper<T> implements Set<T> {
     }
     
     @Override
+    public Set<T> asSet() {
+        return this;
+    }
+    
+    @Override
     public T projectSingle() {
         return 1 == size() ? getList().get(0) : null;
     }

@@ -195,4 +195,18 @@ public interface Collection<T> extends Iterable<T>, IVilGenericType, IStringValu
      */
     public boolean excludesAll(Collection<?> elements);
 
+    /**
+     * Turns this collection into a sequence.
+     * 
+     * @return the set containing the elements of this collection
+     */
+    public Sequence<T> asSequence();
+
+    /**
+     * Turns this collection into a set.
+     * 
+     * @return the set containing the elements of this collection (excluding duplicates)
+     */
+    public Set<T> asSet();
+    
 }

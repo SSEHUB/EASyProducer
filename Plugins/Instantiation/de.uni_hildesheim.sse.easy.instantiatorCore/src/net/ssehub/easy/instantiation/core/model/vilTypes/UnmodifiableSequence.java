@@ -170,6 +170,11 @@ public class UnmodifiableSequence<T> implements Sequence<T> {
     }
 
     @Override
+    public Sequence<T> asSequence() {
+        return sequence.asSequence();
+    }
+
+    @Override
     public Sequence<T> sortAlpha() {
         return sequence.sortAlpha();
     }

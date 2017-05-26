@@ -16,6 +16,7 @@ import net.ssehub.easy.instantiation.core.model.vilTypes.ListSet;
 import net.ssehub.easy.instantiation.core.model.vilTypes.OperationMeta;
 import net.ssehub.easy.instantiation.core.model.vilTypes.Sequence;
 import net.ssehub.easy.instantiation.core.model.vilTypes.Set;
+import net.ssehub.easy.instantiation.core.model.vilTypes.SetSet;
 import net.ssehub.easy.instantiation.core.model.vilTypes.TypeDescriptor;
 import net.ssehub.easy.instantiation.core.model.vilTypes.TypeRegistry;
 
@@ -162,6 +163,13 @@ class OtherProjects implements Set<IArtifact> {
     @Override
     public Sequence<IArtifact> asSequence() {
         return toSequence();
+    }
+    
+    @Override
+    public Set<IArtifact> asSet() {
+        HashSet<IArtifact> result = new HashSet<IArtifact>();
+        result.addAll(data);
+        return new SetSet<IArtifact>(result, parameter);
     }
 
     @Override

@@ -171,6 +171,11 @@ public class ArraySet<T> extends AbstractArrayWrapper<T> implements Set<T> {
     }
     
     @Override
+    public Set<T> asSet() {
+        return this;
+    }
+    
+    @Override
     public T projectSingle() {
         return 1 == size() ? getArray()[0] : null;
     }
