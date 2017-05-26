@@ -356,6 +356,100 @@ public abstract class AbstractCollectionWrapper<T> implements Collection<T> {
     }
 
     /**
+     * Returns whether there is an element matching the <code>evaluator</code>.
+     *
+     * @param <T> the element type
+     * @param collection the collection
+     * @param evaluator the evaluator to check
+     * @return <code>true</code> there is one, <code>false</code> else
+     * @throws VilException in case that evaluation
+     */
+    @Invisible
+    public static <T> Boolean exists(Collection<T> collection, ExpressionEvaluator evaluator) throws VilException {
+        return select(collection, evaluator, null, true) != null;
+    }
+
+    /**
+     * Returns whether there is an element matching the <code>evaluator</code>.
+     *
+     * @param <T> the element type
+     * @param collection the collection
+     * @param evaluator the evaluator to check
+     * @return <code>true</code> there is one, <code>false</code> else
+     * @throws VilException in case that evaluation
+     */
+    @Invisible
+    public static <T> Boolean forAll(Collection<T> collection, ExpressionEvaluator evaluator) throws VilException {
+        return select(collection, evaluator, true).size() == collection.size(); // optimize - stop on first false
+    }
+
+    /**
+     * Returns whether there is an element matching the <code>evaluator</code>.
+     *
+     * @param <T> the element type
+     * @param collection the collection
+     * @param evaluator the evaluator to check
+     * @return <code>true</code> there is one, <code>false</code> else
+     * @throws VilException in case that evaluation
+     */
+    @Invisible
+    public static <T> Boolean isUnique(Collection<T> collection, ExpressionEvaluator evaluator) throws VilException {
+        List<Object> tmp = collect(collection, evaluator); // optimize - stop on first
+        java.util.Set<Object> tmpSet = new java.util.HashSet<Object>();
+        int nullCount = 0;
+        boolean unique = true;
+        for (int i = 0; unique && i < tmp.size(); i++) {
+            Object val = tmp.get(i);
+            if (null == val) {
+                if (0 == nullCount) {
+                    nullCount++;
+                } else {
+                    unique = false;
+                }
+            } else {
+                unique = tmpSet.add(val);
+            }
+        }
+        return unique;
+    }
+
+    /**
+     * Returns whether there exists on element in the collection for which the <code>evaluator</code>
+     * returns <code>true</code>. 
+     * 
+     * @param evaluator the evaluator
+     * @return <code>true</code> for the exists one, <code>false</code> else
+     * @throws VilException in case that evaluation fails
+     */
+    @Override
+    public Boolean exists(ExpressionEvaluator evaluator) throws VilException {
+        return exists(this, evaluator);
+    }
+
+    /**
+     * Returns whether all elements in the collection for which the <code>evaluator</code>
+     * returns <code>true</code>. 
+     * 
+     * @param evaluator the evaluator
+     * @return <code>true</code> for the exists one, <code>false</code> else
+     * @throws VilException in case that evaluation fails
+     */
+    public Boolean forAll(ExpressionEvaluator evaluator) throws VilException {
+        return forAll(this, evaluator);
+    }
+
+    /**
+     * Returns whether the evaluator returns a different result for all elements in the collection. 
+     * 
+     * @param evaluator the evaluator
+     * @return <code>true</code> if all results are different, <code>false</code> else
+     * @throws VilException in case that evaluation fails
+     */
+    public Boolean isUnique(ExpressionEvaluator evaluator) throws VilException {
+        return isUnique(this, evaluator);
+    }
+
+    /**
      * Returns the first match from <code>collection</code> if there can be only one match.
      *
      * @param <T> the element type

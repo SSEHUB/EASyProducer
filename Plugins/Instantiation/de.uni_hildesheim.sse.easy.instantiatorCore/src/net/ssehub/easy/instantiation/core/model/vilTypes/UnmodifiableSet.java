@@ -271,4 +271,19 @@ public class UnmodifiableSet<T> implements Set<T> {
         return set.one(evaluator);
     }
 
+    @Override
+    public Boolean exists(ExpressionEvaluator evaluator) throws VilException {
+        return set.exists(evaluator);
+    }
+
+    @Override
+    public Boolean forAll(ExpressionEvaluator evaluator) throws VilException {
+        return set.forAll(evaluator);
+    }
+
+    @Override
+    public Boolean isUnique(ExpressionEvaluator evaluator) throws VilException {
+        return set.isUnique(evaluator);
+    }
+
 }

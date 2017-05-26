@@ -263,4 +263,19 @@ class OtherProjects implements Set<IArtifact> {
         return AbstractCollectionWrapper.one(this, evaluator);
     }
 
+    @Override
+    public Boolean exists(ExpressionEvaluator evaluator) throws VilException {
+        return AbstractCollectionWrapper.exists(this, evaluator);
+    }
+
+    @Override
+    public Boolean forAll(ExpressionEvaluator evaluator) throws VilException {
+        return AbstractCollectionWrapper.forAll(this, evaluator);
+    }
+
+    @Override
+    public Boolean isUnique(ExpressionEvaluator evaluator) throws VilException {
+        return AbstractCollectionWrapper.isUnique(this, evaluator);
+    }
+
 }

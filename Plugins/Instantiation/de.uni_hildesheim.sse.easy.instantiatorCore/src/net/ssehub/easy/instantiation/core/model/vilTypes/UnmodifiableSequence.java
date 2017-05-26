@@ -295,4 +295,19 @@ public class UnmodifiableSequence<T> implements Sequence<T> {
         return sequence.one(evaluator);
     }
 
+    @Override
+    public Boolean exists(ExpressionEvaluator evaluator) throws VilException {
+        return sequence.exists(evaluator);
+    }
+
+    @Override
+    public Boolean forAll(ExpressionEvaluator evaluator) throws VilException {
+        return sequence.forAll(evaluator);
+    }
+
+    @Override
+    public Boolean isUnique(ExpressionEvaluator evaluator) throws VilException {
+        return sequence.isUnique(evaluator);
+    }
+
 }

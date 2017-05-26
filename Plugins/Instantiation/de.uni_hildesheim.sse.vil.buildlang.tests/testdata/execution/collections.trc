@@ -103,6 +103,47 @@ seq4one1 <- 5
 -> ==(Integer, Integer) with (5, 2) = false
 -> one(Collection, ExpressionEvaluator) with ({1, 2, 2, 3, 4, 5}, <evaluator>) = null
 seq4one2 <- null
+-> >=(Integer, Integer) with (1, 0) = true
+-> >=(Integer, Integer) with (2, 0) = true
+-> >=(Integer, Integer) with (2, 0) = true
+-> >=(Integer, Integer) with (3, 0) = true
+-> >=(Integer, Integer) with (4, 0) = true
+-> >=(Integer, Integer) with (5, 0) = true
+-> forAll(Collection, ExpressionEvaluator) with ({1, 2, 2, 3, 4, 5}, <evaluator>) = true
+seq4all1 <- true
+-> >=(Integer, Integer) with (1, 4) = false
+-> >=(Integer, Integer) with (2, 4) = false
+-> >=(Integer, Integer) with (2, 4) = false
+-> >=(Integer, Integer) with (3, 4) = false
+-> >=(Integer, Integer) with (4, 4) = true
+-> >=(Integer, Integer) with (5, 4) = true
+-> forAll(Collection, ExpressionEvaluator) with ({1, 2, 2, 3, 4, 5}, <evaluator>) = false
+seq4all2 <- false
+-> >=(Integer, Integer) with (1, 0) = true
+-> exists(Collection, ExpressionEvaluator) with ({1, 2, 2, 3, 4, 5}, <evaluator>) = true
+seq4exists1 <- true
+-> <(Integer, Integer) with (1, 0) = false
+-> <(Integer, Integer) with (2, 0) = false
+-> <(Integer, Integer) with (2, 0) = false
+-> <(Integer, Integer) with (3, 0) = false
+-> <(Integer, Integer) with (4, 0) = false
+-> <(Integer, Integer) with (5, 0) = false
+-> forAll(Collection, ExpressionEvaluator) with ({1, 2, 2, 3, 4, 5}, <evaluator>) = false
+seq4exists2 <- false
+-> +(Integer, Integer) with (1, 1) = 2
+-> +(Integer, Integer) with (2, 1) = 3
+-> +(Integer, Integer) with (2, 1) = 3
+-> +(Integer, Integer) with (3, 1) = 4
+-> +(Integer, Integer) with (4, 1) = 5
+-> +(Integer, Integer) with (5, 1) = 6
+-> isUnique(Collection, ExpressionEvaluator) with ({1, 2, 2, 3, 4, 5}, <evaluator>) = false
+seq4unique <- false
+-> +(Integer, Integer) with (1, 1) = 2
+-> +(Integer, Integer) with (2, 1) = 3
+-> +(Integer, Integer) with (3, 1) = 4
+-> +(Integer, Integer) with (4, 1) = 5
+-> isUnique(Collection, ExpressionEvaluator) with ({1, 2, 3, 4}, <evaluator>) = true
+seq3unique <- true
 -> selectByType(Set, Type) with ({1, 2, 3, 4, 5}, Integer representing net.ssehub.easy.instantiation.core.model.vilTypes.PseudoInteger) = {1, 2, 3, 4, 5}
 set3 <- {1, 2, 3, 4, 5}
 -> selectByKind(Set, Type) with ({1, 2, 3, 4, 5}, Integer representing net.ssehub.easy.instantiation.core.model.vilTypes.PseudoInteger) = {1, 2, 3, 4, 5}

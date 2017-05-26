@@ -158,9 +158,38 @@ public interface Collection<T> extends Iterable<T>, IVilGenericType, IStringValu
      * 
      * @param evaluator the evaluator (results must evaluate to Boolean)
      * @return the element complying with <code>evaluator</code> 
-     * @throws VilException in case that application fails
+     * @throws VilException in case that evaluation fails
      */
     public T one(ExpressionEvaluator evaluator) throws VilException;
+    
+    /**
+     * Returns whether there exists on element in the collection for which the <code>evaluator</code>
+     * returns <code>true</code>. 
+     * 
+     * @param evaluator the evaluator
+     * @return <code>true</code> for the exists one, <code>false</code> else
+     * @throws VilException in case that evaluation fails
+     */
+    public Boolean exists(ExpressionEvaluator evaluator) throws VilException;
+
+    /**
+     * Returns whether all elements in the collection for which the <code>evaluator</code>
+     * returns <code>true</code>. 
+     * 
+     * @param evaluator the evaluator
+     * @return <code>true</code> for the exists one, <code>false</code> else
+     * @throws VilException in case that evaluation fails
+     */
+    public Boolean forAll(ExpressionEvaluator evaluator) throws VilException;
+
+    /**
+     * Returns whether the evaluator returns a different result for all elements in the collection. 
+     * 
+     * @param evaluator the evaluator
+     * @return <code>true</code> if all results are different, <code>false</code> else
+     * @throws VilException in case that evaluation fails
+     */
+    public Boolean isUnique(ExpressionEvaluator evaluator) throws VilException;
     
     /**
      * Does type selection of elements (only the same type).

@@ -42,6 +42,12 @@ vilScript collections () {
     Integer seq4any2 = seq4->any(i | i == 2);
     Integer seq4one1 = seq4->one(i | i > 4);
     Integer seq4one2 = seq4->one(i | i == 2);
+    Boolean seq4all1 = seq4->forAll(i | i >= 0);
+    Boolean seq4all2 = seq4->forAll(i | i >= 4);
+    Boolean seq4exists1 = seq4->exists(i | i >= 0);
+    Boolean seq4exists2 = seq4->forAll(i | i < 0);
+    Boolean seq4unique = seq4->isUnique(i | i + 1);
+    Boolean seq3unique = seq3->isUnique(i | i + 1);
     setOf(Integer) set3 = set2.selectByType(Integer);
     setOf(Integer) set3_1 = set2.selectByKind(Integer);
     setOf(Real) set4 = set2.selectByType(Real);
