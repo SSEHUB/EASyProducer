@@ -306,4 +306,14 @@ public interface Collection<T> extends Iterable<T>, IVilGenericType, IStringValu
     @OperationMeta(name = {"sortedBy", "sort"}, notOclCompliant = "sort", returnGenerics = IVilType.class)
     public Collection<T> sortedBy(ExpressionEvaluator evaluator) throws VilException;
 
+    /**
+     * Processes elements in this set by applying to given expression.
+     * 
+     * @param evaluator the evaluator holding the iterator / expression to apply
+     * @return the aggregated value, <b>null</b> in case of no aggregation
+     * @throws VilException in case that selection fails
+     */
+    @OperationMeta(name = {"apply", "iterate"}, notOclCompliant = "apply", allowsAggregation = true)
+    public Object apply(ExpressionEvaluator evaluator) throws VilException;
+
 }

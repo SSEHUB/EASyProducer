@@ -6,4 +6,4 @@
     -> println(Any) with (4)
     -> println(Any) with (5)
     -> println(Any) with (6)
-    -> apply(Sequence, ExpressionEvaluator) with ({1, 2, 3, 4, 5, 6}, <evaluator>)
+    -> apply(Collection, ExpressionEvaluator) with ({1, 2, 3, 4, 5, 6}, <evaluator>)

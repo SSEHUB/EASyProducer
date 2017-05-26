@@ -9,5 +9,5 @@
     -> length(String) with (ccc) = 3
     -> +(Integer, Integer) with (3, 3) = 6
     r <- 6
-    -> apply(Sequence, ExpressionEvaluator) with ({a, bb, ccc}, <evaluator>) = 6
+    -> apply(Collection, ExpressionEvaluator) with ({a, bb, ccc}, <evaluator>) = 6
     j <- 6

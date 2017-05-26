@@ -12,5 +12,5 @@
     r <- 15
     -> +(Integer, Integer) with (15, 6) = 21
     r <- 21
-    -> apply(Sequence, ExpressionEvaluator) with ({1, 2, 3, 4, 5, 6}, <evaluator>) = 21
+    -> apply(Collection, ExpressionEvaluator) with ({1, 2, 3, 4, 5, 6}, <evaluator>) = 21
     j <- 21

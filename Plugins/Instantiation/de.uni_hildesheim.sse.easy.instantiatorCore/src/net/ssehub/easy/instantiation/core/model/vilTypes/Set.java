@@ -106,16 +106,6 @@ public interface Set<T> extends Collection<T> {
     @Override
     @OperationMeta(useParameter = 0)
     public Set<?> collect(ExpressionEvaluator evaluator) throws VilException;
-
-    /**
-     * Processes elements in this set by applying to given expression.
-     * 
-     * @param evaluator the evaluator holding the iterator / expression to apply
-     * @return the aggregated value, <b>null</b> in case of no aggregation
-     * @throws VilException in case that selection fails
-     */
-    @OperationMeta(allowsAggregation = true)
-    public Object apply(ExpressionEvaluator evaluator) throws VilException;
     
     /**
      * Turns this set into a sequence.
