@@ -925,5 +925,4 @@ public abstract class AbstractCollectionWrapper<T> implements Collection<T> {
         return all;        
     }
 
-    
 }

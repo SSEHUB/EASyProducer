@@ -76,6 +76,8 @@ vilScript collections () {
     Boolean exlAll6 = seq4.excludesAll(seq13);
     Boolean exlAll7 = seq4.toSet().excludesAll(seq15);
     Boolean exlAll8 = seq4.toSet().excludesAll(seq13.toSet());
+    setOf(Integer) set9 = set1 - seq13.toSet();
+    setOf(Integer) set10 = set1.symmetricDifference(seq13.toSet());
 
     main() = : {
     }

@@ -132,5 +132,22 @@ public interface Set<T> extends Collection<T> {
     @OperationMeta(useGenericParameter = 0, flatten = true)
     @Override
     public Set<?> flatten() throws VilException;
+
+    /**
+     * Calculates the difference between this and the given set.
+     * 
+     * @param set the set to calculate the difference for
+     * @return the set difference
+     */
+    @OperationMeta(name = "-", opType = OperationType.INFIX)
+    public Set<T> difference(Set<T> set);
+
+    /**
+     * Calculates the symmetric difference between this and the given set.
+     * 
+     * @param set the set to calculate the difference for
+     * @return the symmetric set difference
+     */
+    public Set<T> symmetricDifference(Set<T> set);
     
 }

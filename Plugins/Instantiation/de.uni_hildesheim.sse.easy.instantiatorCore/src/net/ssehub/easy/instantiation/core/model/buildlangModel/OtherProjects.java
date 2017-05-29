@@ -10,6 +10,7 @@ import net.ssehub.easy.instantiation.core.model.artifactModel.IArtifact;
 import net.ssehub.easy.instantiation.core.model.common.VilException;
 import net.ssehub.easy.instantiation.core.model.expressions.ExpressionEvaluator;
 import net.ssehub.easy.instantiation.core.model.vilTypes.AbstractCollectionWrapper;
+import net.ssehub.easy.instantiation.core.model.vilTypes.SetOperations;
 import net.ssehub.easy.instantiation.core.model.vilTypes.Collection;
 import net.ssehub.easy.instantiation.core.model.vilTypes.IVilType;
 import net.ssehub.easy.instantiation.core.model.vilTypes.ListSequence;
@@ -289,6 +290,16 @@ class OtherProjects implements Set<IArtifact> {
             result = new ListSequence<IArtifact>(AbstractCollectionWrapper.sortImpl(iterator(), evaluator), parameter);
         }
         return result;
+    }
+
+    @Override
+    public Set<IArtifact> difference(Set<IArtifact> set) {
+        return new SetSet<IArtifact>(SetOperations.difference(this, set));
+    }
+
+    @Override
+    public Set<IArtifact> symmetricDifference(Set<IArtifact> set) {
+        return new SetSet<IArtifact>(SetOperations.symmetricDifference(this, set));
     }
 
 }

@@ -214,4 +214,10 @@ exlAll7 <- true
 -> toSet(Sequence) with ({1, 2, 4, 5, 6, 7}) = {1, 2, 4, 5, 6, 7}
 -> excludesAll(Collection, Collection) with ({1, 2, 3, 4, 5}, {1, 2, 4, 5, 6, 7}) = false
 exlAll8 <- false
+-> toSet(Sequence) with ({1, 2, 4, 5, 6, 7}) = {1, 2, 4, 5, 6, 7}
+-> -(Set, Set) with ({1, 2, 3, 4}, {1, 2, 4, 5, 6, 7}) = {3}
+set9 <- {3}
+-> toSet(Sequence) with ({1, 2, 4, 5, 6, 7}) = {1, 2, 4, 5, 6, 7}
+-> symmetricDifference(Set, Set) with ({1, 2, 3, 4}, {1, 2, 4, 5, 6, 7}) = {3, 5, 6, 7}
+set10 <- {3, 5, 6, 7}
 -> main()

@@ -291,4 +291,14 @@ public class UnmodifiableSet<T> implements Set<T> {
         return set.sortedBy(evaluator);
     }
 
+    @Override
+    public Set<T> difference(Set<T> set) {
+        return set.difference(set);
+    }
+
+    @Override
+    public Set<T> symmetricDifference(Set<T> set) {
+        return set.symmetricDifference(set);
+    }
+
 }

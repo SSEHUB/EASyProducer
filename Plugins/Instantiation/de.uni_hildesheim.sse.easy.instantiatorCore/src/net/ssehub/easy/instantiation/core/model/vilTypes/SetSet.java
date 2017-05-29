@@ -307,4 +307,14 @@ public class SetSet<T> extends AbstractCollectionWrapper<T> implements Set<T> {
         return result;
     }
 
+    @Override
+    public Set<T> difference(Set<T> set) {
+        return new SetSet<T>(SetOperations.difference(this, set), params);
+    }
+
+    @Override
+    public Set<T> symmetricDifference(Set<T> set) {
+        return new SetSet<T>(SetOperations.symmetricDifference(this, set), params);
+    }
+
 }

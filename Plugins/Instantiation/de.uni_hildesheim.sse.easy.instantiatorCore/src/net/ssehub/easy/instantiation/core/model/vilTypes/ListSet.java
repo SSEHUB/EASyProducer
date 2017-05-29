@@ -215,5 +215,15 @@ public class ListSet<T> extends AbstractListWrapper<T> implements Set<T> {
         }
         return result;
     }
+    
+    @Override
+    public Set<T> difference(Set<T> set) {
+        return new SetSet<T>(SetOperations.difference(this, set), getGenericParameter());
+    }
+
+    @Override
+    public Set<T> symmetricDifference(Set<T> set) {
+        return new SetSet<T>(SetOperations.symmetricDifference(this, set), getGenericParameter());
+    }
 
 }
