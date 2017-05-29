@@ -298,4 +298,19 @@ public class ListSequence<T> extends AbstractListWrapper<T> implements Sequence<
         return false;
     }
 
+    @Override
+    public boolean hasDuplicates() {
+        return SequenceOperations.hasDuplicates(this);
+    }
+
+    @Override
+    public boolean overlaps(Sequence<T> other) {
+        return SequenceOperations.overlaps(this, other);
+    }
+
+    @Override
+    public boolean isSubsequenceOf(Sequence<T> other) {
+        return SequenceOperations.isSubsequenceOf(this, other);
+    }
+
 }

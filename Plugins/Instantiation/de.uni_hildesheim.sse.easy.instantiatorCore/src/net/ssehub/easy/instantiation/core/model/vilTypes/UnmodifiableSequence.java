@@ -335,4 +335,19 @@ public class UnmodifiableSequence<T> implements Sequence<T> {
         return sequence.union(seq);
     }
 
+    @Override
+    public boolean hasDuplicates() {
+        return sequence.hasDuplicates();
+    }
+
+    @Override
+    public boolean overlaps(Sequence<T> other) {
+        return sequence.overlaps(other);
+    }
+
+    @Override
+    public boolean isSubsequenceOf(Sequence<T> other) {
+        return sequence.isSubsequenceOf(other);
+    }
+
 }

@@ -82,6 +82,15 @@ vilScript collections () {
     sequenceOf(Integer) seq17 = seq1.append(27);
     sequenceOf(Integer) seq18 = seq1.prepend(27);
     sequenceOf(Integer) seq19 = seq1.subSequence(1, 3);
+    Boolean seq1Unique = seq1.hasDuplicates();
+    Boolean seq4Unique = seq4.hasDuplicates();
+    Boolean seq1seq4Overlaps = seq1.overlaps(seq4);
+    Boolean seq4seq1Overlaps = seq4.overlaps(seq1);
+    sequenceOf(Integer) seq20 = {1, 2, 3, 4, 5};
+    Boolean seq1seq4SubSeq = seq1.isSubsequenceOf(seq4);
+    Boolean seq4seq1SubSeq = seq4.isSubsequenceOf(seq1);
+    Boolean seq1seq20SubSeq = seq1.isSubsequenceOf(seq20);
+    Boolean seq20seq1SubSeq = seq20.isSubsequenceOf(seq1);
 
     main() = : {
     }

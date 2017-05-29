@@ -1,5 +1,9 @@
 package net.ssehub.easy.instantiation.core.model.vilTypes;
 
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Set;
+
 import net.ssehub.easy.instantiation.core.model.vilTypes.configuration.DecisionVariable;
 import net.ssehub.easy.varModel.model.values.Value;
 
@@ -237,6 +241,87 @@ public class SequenceOperations {
         java.util.List<T> result = new java.util.ArrayList<T>(u - l + 1);
         addAll(result, seq, l, u);
         return result;
+    }
+
+
+    /**
+     * Returns whether at least one of the elements in <code>set</code> has a duplicate.
+     * 
+     * @param <T> the element type
+     * @param seq the sequence
+     * @return <code>true</code> for duplicates, <code>false</code> else
+     */
+    public static <T> boolean hasDuplicates(Sequence<T> seq) {
+        // see IVML implementation
+        boolean hasDuplicates = false;
+        int size = seq.size();
+        if (size > 0) {
+            Set<T> known = new HashSet<T>(size);
+            Iterator<T> iter = seq.iterator();
+            while (!hasDuplicates && iter.hasNext()) {
+                hasDuplicates = !known.add(iter.next());
+            }
+        }
+        return hasDuplicates;
+    }
+    
+    /**
+     * Returns the sequence in that <code>s1</code> and <code>s2</code> have in common.
+     * 
+     * @param <T> the element type
+     * @param s1 the first sequence
+     * @param s2 the second sequence
+     * @return <code>true</code> for overlaps, <code>false</code> else
+     */
+    public static <T> boolean overlaps(Sequence<T> s1, Sequence<T> s2) {
+        // see IVML implementation
+        Set<T> tmp = new HashSet<T>();
+        boolean found = false;
+        if (s1.size() > 0 && s2.size() > 0) {
+            Iterator<T> iter = s1.iterator();
+            while (iter.hasNext()) {
+                tmp.add(iter.next());
+            }
+            iter = s2.iterator();
+            while (!found && iter.hasNext()) {
+                found = tmp.contains(iter.next());
+            }
+        }
+        return found;
+    }
+    
+    /**
+     * Returns whether operand is a subsequence (considering the sequence and including equality) 
+     * of <code>other</code>.
+     * 
+     * @param <T> the element type
+     * @param s1 the first sequence
+     * @param s2 the second sequence
+     * @return <code>true</code> for subsequence, <code>false</code> else
+     */
+    public static <T> boolean isSubsequenceOf(Sequence<T> s1, Sequence<T> s2) {
+        // see IVML implementation
+        int size1 = s1.size();
+        int i1 = 0;
+        Iterator<T> iter1 = s1.iterator();
+        Iterator<T> iter2 = s2.iterator();
+        if (iter1.hasNext() && iter2.hasNext()) {
+            T elt1 = iter1.next();
+            T elt2 = iter2.next();
+            while (iter1.hasNext() && iter2.hasNext()) {
+                if (elt1.equals(elt2)) {
+                    i1++;
+                    elt1 = iter1.next();
+                    elt2 = iter2.next();
+                } else {
+                    elt2 = iter2.next();
+                }
+            }
+            if (elt1.equals(elt2)) {
+                i1++;
+            }
+        }
+        return size1 > 0 && i1 == size1;
     }
 
 }

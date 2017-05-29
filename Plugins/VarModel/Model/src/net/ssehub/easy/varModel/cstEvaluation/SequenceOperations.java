@@ -89,6 +89,7 @@ public class SequenceOperations {
 
         @Override
         public EvaluationAccessor evaluate(EvaluationAccessor operand, EvaluationAccessor[] arguments) {
+            // see VIL implementation            
             EvaluationAccessor result = null;
             Value value = operand.getValue();
             if (value instanceof ContainerValue) {
@@ -176,6 +177,7 @@ public class SequenceOperations {
         @Override
         public EvaluationAccessor evaluate(EvaluationAccessor operand, EvaluationAccessor[] arguments) {
             EvaluationAccessor result = null;
+            // see VIL implementation
             if (1 == arguments.length) {
                 Value oValue = operand.getValue();
                 Value aValue = arguments[0].getValue();
@@ -212,6 +214,7 @@ public class SequenceOperations {
 
         @Override
         public EvaluationAccessor evaluate(EvaluationAccessor operand, EvaluationAccessor[] arguments) {
+            // see VIL implementation
             EvaluationAccessor result = null;
             if (1 == arguments.length) {
                 Value oValue = operand.getValue();

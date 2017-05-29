@@ -242,5 +242,29 @@ public interface Sequence<T> extends Collection<T> {
      */
     @OperationMeta(returnGenerics = IVilType.class)
     public Sequence<T> subSequence(int lower, int upper); 
+
+    /**
+     * Returns whether at least one of the elements in operand has a duplicate.
+     * 
+     * @return <code>true</code> for duplicates, <code>false</code> else
+     */
+    public boolean hasDuplicates();
     
+    /**
+     * Returns the sequence in that this sequence and <code>other</code> have in common.
+     * 
+     * @param other the other sequence
+     * @return <code>true</code> for overlaps, <code>false</code> else
+     */
+    public boolean overlaps(Sequence<T> other);
+    
+    /**
+     * Returns whether operand is a subsequence (considering the sequence and including equality) 
+     * of <code>other</code>.
+     * 
+     * @param other the other sequence
+     * @return <code>true</code> for subsequence, <code>false</code> else
+     */
+    public boolean isSubsequenceOf(Sequence<T> other);
+
 }

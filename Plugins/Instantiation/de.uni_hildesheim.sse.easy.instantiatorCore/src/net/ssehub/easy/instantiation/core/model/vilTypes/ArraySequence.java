@@ -318,4 +318,19 @@ public class ArraySequence<T> extends AbstractArrayWrapper<T> implements Sequenc
         return false;
     }
 
+    @Override
+    public boolean hasDuplicates() {
+        return SequenceOperations.hasDuplicates(this);
+    }
+
+    @Override
+    public boolean overlaps(Sequence<T> other) {
+        return SequenceOperations.overlaps(this, other);
+    }
+
+    @Override
+    public boolean isSubsequenceOf(Sequence<T> other) {
+        return SequenceOperations.isSubsequenceOf(this, other);
+    }
+
 }
