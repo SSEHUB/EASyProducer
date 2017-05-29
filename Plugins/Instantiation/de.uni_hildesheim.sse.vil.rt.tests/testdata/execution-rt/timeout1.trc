@@ -8,81 +8,81 @@
                 -> *(Integer, Integer) with (5, 1) = 5
                 -> +(Integer, Integer) with (5, 5) = 10
                 i1 <- 10
-                for: s <- 10
-                -> *(Integer, Integer) with (10, 10) = 100
-                -> +(Integer, Integer) with (100, 10) = 110
-                i1 <- 110
-                for: s <- 11
-                -> *(Integer, Integer) with (110, 11) = 1210
-                -> +(Integer, Integer) with (1210, 110) = 1320
-                i1 <- 1320
-                for: s <- 12
-                -> *(Integer, Integer) with (1320, 12) = 15840
-                -> +(Integer, Integer) with (15840, 1320) = 17160
-                i1 <- 17160
-                for: s <- 13
-                -> *(Integer, Integer) with (17160, 13) = 223080
-                -> +(Integer, Integer) with (223080, 17160) = 240240
-                i1 <- 240240
-                for: s <- 14
-                -> *(Integer, Integer) with (240240, 14) = 3363360
-                -> +(Integer, Integer) with (3363360, 240240) = 3603600
-                i1 <- 3603600
-                for: s <- 15
-                -> *(Integer, Integer) with (3603600, 15) = 54054000
-                -> +(Integer, Integer) with (54054000, 3603600) = 57657600
-                i1 <- 57657600
-                for: s <- 16
-                -> *(Integer, Integer) with (57657600, 16) = 922521600
-                -> +(Integer, Integer) with (922521600, 57657600) = 980179200
-                i1 <- 980179200
-                for: s <- 17
-                -> *(Integer, Integer) with (980179200, 17) = -516822784
-                -> +(Integer, Integer) with (-516822784, 980179200) = 463356416
-                i1 <- 463356416
-                for: s <- 18
-                -> *(Integer, Integer) with (463356416, 18) = -249519104
-                -> +(Integer, Integer) with (-249519104, 463356416) = 213837312
-                i1 <- 213837312
-                for: s <- 19
-                -> *(Integer, Integer) with (213837312, 19) = -232058368
-                -> +(Integer, Integer) with (-232058368, 213837312) = -18221056
-                i1 <- -18221056
                 for: s <- 2
-                -> *(Integer, Integer) with (-18221056, 2) = -36442112
-                -> +(Integer, Integer) with (-36442112, -18221056) = -54663168
-                i1 <- -54663168
-                for: s <- 20
-                -> *(Integer, Integer) with (-54663168, 20) = -1093263360
-                -> +(Integer, Integer) with (-1093263360, -54663168) = -1147926528
-                i1 <- -1147926528
+                -> *(Integer, Integer) with (10, 2) = 20
+                -> +(Integer, Integer) with (20, 10) = 30
+                i1 <- 30
                 for: s <- 3
-                -> *(Integer, Integer) with (-1147926528, 3) = 851187712
-                -> +(Integer, Integer) with (851187712, -1147926528) = -296738816
-                i1 <- -296738816
+                -> *(Integer, Integer) with (30, 3) = 90
+                -> +(Integer, Integer) with (90, 30) = 120
+                i1 <- 120
                 for: s <- 4
-                -> *(Integer, Integer) with (-296738816, 4) = -1186955264
-                -> +(Integer, Integer) with (-1186955264, -296738816) = -1483694080
-                i1 <- -1483694080
+                -> *(Integer, Integer) with (120, 4) = 480
+                -> +(Integer, Integer) with (480, 120) = 600
+                i1 <- 600
                 for: s <- 5
-                -> *(Integer, Integer) with (-1483694080, 5) = 1171464192
-                -> +(Integer, Integer) with (1171464192, -1483694080) = -312229888
-                i1 <- -312229888
+                -> *(Integer, Integer) with (600, 5) = 3000
+                -> +(Integer, Integer) with (3000, 600) = 3600
+                i1 <- 3600
                 for: s <- 6
-                -> *(Integer, Integer) with (-312229888, 6) = -1873379328
-                -> +(Integer, Integer) with (-1873379328, -312229888) = 2109358080
-                i1 <- 2109358080
+                -> *(Integer, Integer) with (3600, 6) = 21600
+                -> +(Integer, Integer) with (21600, 3600) = 25200
+                i1 <- 25200
                 for: s <- 7
-                -> *(Integer, Integer) with (2109358080, 7) = 1880604672
-                -> +(Integer, Integer) with (1880604672, 2109358080) = -305004544
-                i1 <- -305004544
+                -> *(Integer, Integer) with (25200, 7) = 176400
+                -> +(Integer, Integer) with (176400, 25200) = 201600
+                i1 <- 201600
                 for: s <- 8
-                -> *(Integer, Integer) with (-305004544, 8) = 1854930944
-                -> +(Integer, Integer) with (1854930944, -305004544) = 1549926400
-                i1 <- 1549926400
+                -> *(Integer, Integer) with (201600, 8) = 1612800
+                -> +(Integer, Integer) with (1612800, 201600) = 1814400
+                i1 <- 1814400
                 for: s <- 9
-                -> *(Integer, Integer) with (1549926400, 9) = 1064435712
-                -> +(Integer, Integer) with (1064435712, 1549926400) = -1680605184
+                -> *(Integer, Integer) with (1814400, 9) = 16329600
+                -> +(Integer, Integer) with (16329600, 1814400) = 18144000
+                i1 <- 18144000
+                for: s <- 10
+                -> *(Integer, Integer) with (18144000, 10) = 181440000
+                -> +(Integer, Integer) with (181440000, 18144000) = 199584000
+                i1 <- 199584000
+                for: s <- 11
+                -> *(Integer, Integer) with (199584000, 11) = -2099543296
+                -> +(Integer, Integer) with (-2099543296, 199584000) = -1899959296
+                i1 <- -1899959296
+                for: s <- 12
+                -> *(Integer, Integer) with (-1899959296, 12) = -1324675072
+                -> +(Integer, Integer) with (-1324675072, -1899959296) = 1070332928
+                i1 <- 1070332928
+                for: s <- 13
+                -> *(Integer, Integer) with (1070332928, 13) = 1029426176
+                -> +(Integer, Integer) with (1029426176, 1070332928) = 2099759104
+                i1 <- 2099759104
+                for: s <- 14
+                -> *(Integer, Integer) with (2099759104, 14) = -668143616
+                -> +(Integer, Integer) with (-668143616, 2099759104) = 1431615488
+                i1 <- 1431615488
+                for: s <- 15
+                -> *(Integer, Integer) with (1431615488, 15) = -604160
+                -> +(Integer, Integer) with (-604160, 1431615488) = 1431011328
+                i1 <- 1431011328
+                for: s <- 16
+                -> *(Integer, Integer) with (1431011328, 16) = 1421344768
+                -> +(Integer, Integer) with (1421344768, 1431011328) = -1442611200
+                i1 <- -1442611200
+                for: s <- 17
+                -> *(Integer, Integer) with (-1442611200, 17) = 1245413376
+                -> +(Integer, Integer) with (1245413376, -1442611200) = -197197824
+                i1 <- -197197824
+                for: s <- 18
+                -> *(Integer, Integer) with (-197197824, 18) = 745406464
+                -> +(Integer, Integer) with (745406464, -197197824) = 548208640
+                i1 <- 548208640
+                for: s <- 19
+                -> *(Integer, Integer) with (548208640, 19) = 1826029568
+                -> +(Integer, Integer) with (1826029568, 548208640) = -1920729088
+                i1 <- -1920729088
+                for: s <- 20
+                -> *(Integer, Integer) with (-1920729088, 20) = 240123904
+                -> +(Integer, Integer) with (240123904, -1920729088) = -1680605184
                 i1 <- -1680605184
             }
     -> t2()

@@ -9,31 +9,31 @@
         map: i <- 1
         -> +(Integer, Integer) with (0, 1) = 1
         sum <- 1
-        map: i <- 10
-        -> +(Integer, Integer) with (1, 10) = 11
-        sum <- 11
         map: i <- 2
-        -> +(Integer, Integer) with (11, 2) = 13
-        sum <- 13
+        -> +(Integer, Integer) with (1, 2) = 3
+        sum <- 3
         map: i <- 3
-        -> +(Integer, Integer) with (13, 3) = 16
-        sum <- 16
+        -> +(Integer, Integer) with (3, 3) = 6
+        sum <- 6
         map: i <- 4
-        -> +(Integer, Integer) with (16, 4) = 20
-        sum <- 20
+        -> +(Integer, Integer) with (6, 4) = 10
+        sum <- 10
         map: i <- 5
-        -> +(Integer, Integer) with (20, 5) = 25
-        sum <- 25
+        -> +(Integer, Integer) with (10, 5) = 15
+        sum <- 15
         map: i <- 6
-        -> +(Integer, Integer) with (25, 6) = 31
-        sum <- 31
+        -> +(Integer, Integer) with (15, 6) = 21
+        sum <- 21
         map: i <- 7
-        -> +(Integer, Integer) with (31, 7) = 38
-        sum <- 38
+        -> +(Integer, Integer) with (21, 7) = 28
+        sum <- 28
         map: i <- 8
-        -> +(Integer, Integer) with (38, 8) = 46
-        sum <- 46
+        -> +(Integer, Integer) with (28, 8) = 36
+        sum <- 36
         map: i <- 9
-        -> +(Integer, Integer) with (46, 9) = 55
+        -> +(Integer, Integer) with (36, 9) = 45
+        sum <- 45
+        map: i <- 10
+        -> +(Integer, Integer) with (45, 10) = 55
         sum <- 55
     }

@@ -78,6 +78,10 @@ vilScript collections () {
     Boolean exlAll8 = seq4.toSet().excludesAll(seq13.toSet());
     setOf(Integer) set9 = set1 - seq13.toSet();
     setOf(Integer) set10 = set1.symmetricDifference(seq13.toSet());
+    sequenceOf(Integer) seq16 = seq1.union(seq13);
+    sequenceOf(Integer) seq17 = seq1.append(27);
+    sequenceOf(Integer) seq18 = seq1.prepend(27);
+    sequenceOf(Integer) seq19 = seq1.subSequence(1, 3);
 
     main() = : {
     }

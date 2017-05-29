@@ -283,4 +283,39 @@ public class ArraySequence<T> extends AbstractArrayWrapper<T> implements Sequenc
         return SequenceOperations.mapAny(this, other);
     }
 
+    @OperationMeta(returnGenerics = IVilType.class)
+    @Override
+    public Sequence<T> union(Sequence<T> seq) {
+        return new ListSequence<T>(SequenceOperations.union(this, seq), getGenericParameter());
+    }
+    
+    @OperationMeta(returnGenerics = IVilType.class)
+    @Override
+    public Sequence<T> append(T object) {
+        return new ListSequence<T>(SequenceOperations.append(this, object), getGenericParameter());
+    }
+
+    @OperationMeta(returnGenerics = IVilType.class)
+    @Override
+    public Sequence<T> prepend(T object) {
+        return new ListSequence<T>(SequenceOperations.prepend(this, object), getGenericParameter());
+    }
+
+    @OperationMeta(returnGenerics = IVilType.class)
+    @Override
+    public Sequence<T> insertAt(int index, T object) {
+        return new ListSequence<T>(SequenceOperations.insertAt(this, index, object), getGenericParameter());
+    }
+
+    @OperationMeta(returnGenerics = IVilType.class)
+    @Override
+    public Sequence<T> subSequence(int lower, int upper) {
+        return new ListSequence<T>(SequenceOperations.subSequence(this, lower, upper), getGenericParameter());
+    }
+    
+    @Override
+    public boolean allowSequenceAdjustment() {
+        return false;
+    }
+
 }

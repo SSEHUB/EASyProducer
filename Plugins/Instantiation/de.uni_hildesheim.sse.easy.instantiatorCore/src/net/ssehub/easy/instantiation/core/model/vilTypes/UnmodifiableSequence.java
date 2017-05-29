@@ -310,4 +310,29 @@ public class UnmodifiableSequence<T> implements Sequence<T> {
         return sequence.isUnique(evaluator);
     }
 
+    @Override
+    public Sequence<T> append(T object) {
+        return sequence.append(object); // OCL: no change to this
+    }
+
+    @Override
+    public Sequence<T> prepend(T object) {
+        return sequence.prepend(object); // OCL: no change to this
+    }
+
+    @Override
+    public Sequence<T> insertAt(int index, T object) {
+        return sequence.insertAt(index, object); // OCL: no change to this
+    }
+
+    @Override
+    public Sequence<T> subSequence(int lower, int upper) {
+        return sequence.subSequence(lower, upper); // OCL: no change to this
+    }
+
+    @Override
+    public Sequence<T> union(Sequence<T> seq) {
+        return sequence.union(seq);
+    }
+
 }

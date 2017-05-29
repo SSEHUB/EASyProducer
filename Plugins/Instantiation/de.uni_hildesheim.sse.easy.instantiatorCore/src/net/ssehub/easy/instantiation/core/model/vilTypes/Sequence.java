@@ -79,7 +79,15 @@ public interface Sequence<T> extends Collection<T> {
      */
     @OperationMeta(returnGenerics = IVilType.class)
     public Sequence<T> append(Collection<T> set);
-    
+
+    /**
+     * Append the elements in <code>seq</code>.
+     * @param seq the elements to be appended
+     * @return this set including the elements in <code>seq</code>
+     */
+    @OperationMeta(returnGenerics = IVilType.class)
+    public Sequence<T> union(Sequence<T> seq);
+
     /**
      * Adds an element to the end of this sequence.
      * 
@@ -197,4 +205,42 @@ public interface Sequence<T> extends Collection<T> {
     @Override
     public Sequence<?> flatten() throws VilException;
 
+    /**
+     * Returns the combined sequence of <code>seq</code> and <code>object</code>appended.
+     * 
+     * @param object the object to append
+     * @return the combined sequence
+     */
+    @OperationMeta(returnGenerics = IVilType.class)
+    public Sequence<T> append(T object);
+    
+    /**
+     * Returns the combined sequence of <code>object</code> prepended before this sequence.
+     * 
+     * @param object the object to prepend
+     * @return the combined sequence
+     */
+    @OperationMeta(returnGenerics = IVilType.class)
+    public Sequence<T> prepend(T object);
+
+    /**
+     * Returns the sequence having <code>object</code> inserted at position <code>index</code>.
+     * 
+     * @param index the index to insert at
+     * @param object the object to insert
+     * @return the combined sequence
+     */
+    @OperationMeta(returnGenerics = IVilType.class)
+    public Sequence<T> insertAt(int index, T object);
+    
+    /**
+     * Returns the sub-sequence of this sequence.
+     * 
+     * @param lower the lower index where the sub-sequence shall start
+     * @param upper the end index where the sub-sequence shall end
+     * @return the sub-sequence
+     */
+    @OperationMeta(returnGenerics = IVilType.class)
+    public Sequence<T> subSequence(int lower, int upper); 
+    
 }

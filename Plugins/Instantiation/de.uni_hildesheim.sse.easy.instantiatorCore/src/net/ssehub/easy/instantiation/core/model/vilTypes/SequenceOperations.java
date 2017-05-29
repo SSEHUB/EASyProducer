@@ -131,4 +131,112 @@ public class SequenceOperations {
         return result;
     }
 
+    /**
+     * Adds all elements from <code>seq</code> to <code>list</code>. Valid indexes 
+     * are assumed. No check happens
+     *   
+     * @param <T> the element type
+     * @param list the list to add all elements to 
+     * @param seq the sequence to take the elements from
+     * @param lower the lower 0-based index where to start adding
+     * @param upper the upper 0-based index where to end adding (including)
+     */
+    private static <T> void addAll(java.util.List<T> list, Sequence<T> seq, int lower, int upper) {
+        for (int i = lower; i <= upper; i++) {
+            list.add(seq.get(i));
+        }
+    }
+    
+    /**
+     * Adds all elements from <code>seq</code> to <code>list</code>.
+     *   
+     * @param <T> the element type
+     * @param list the list to add all elements to 
+     * @param seq the sequence to take the elements from
+     */
+    private static <T> void addAll(java.util.List<T> list, Sequence<T> seq) {
+        addAll(list, seq, 0, seq.size() - 1);
+    }
+
+    /**
+     * Returns the concatenated sequence of <code>seq1</code> and <code>seq2</code>.
+     * 
+     * @param <T> the element type
+     * @param seq1 the first sequence
+     * @param seq2 the second sequence
+     * @return the concatenated sequence
+     */
+    public static <T> java.util.List<T> union(Sequence<T> seq1, Sequence<T> seq2) {
+        java.util.List<T> result = new java.util.ArrayList<T>(seq1.size() + seq2.size());
+        addAll(result, seq1);
+        addAll(result, seq2);
+        return result;
+    }
+
+    /**
+     * Returns the combined sequence of <code>object</code> appended before <code>seq</code>.
+     * 
+     * @param <T> the element type
+     * @param seq the sequence
+     * @param object the object to prepend
+     * @return the combined sequence
+     */
+    public static <T> java.util.List<T> append(Sequence<T> seq, T object) {
+        java.util.List<T> result = new java.util.ArrayList<T>(seq.size() + 1);
+        addAll(result, seq);
+        result.add(object);
+        return result;
+    }
+    
+    /**
+     * Returns the combined sequence of <code>object</code> prepended before <code>seq</code>.
+     * 
+     * @param <T> the element type
+     * @param seq the sequence
+     * @param object the object to prepend
+     * @return the combined sequence
+     */
+    public static <T> java.util.List<T> prepend(Sequence<T> seq, T object) {
+        java.util.List<T> result = new java.util.ArrayList<T>(seq.size() + 1);
+        result.add(object);
+        addAll(result, seq);
+        return result;
+    }
+
+    /**
+     * Returns the sequence having <code>object</code> inserted at position <code>index</code> into <code>seq</code>.
+     * 
+     * @param <T> the element type
+     * @param seq the sequence
+     * @param index the index to insert at
+     * @param object the object to insert
+     * @return the combined sequence
+     */
+    public static <T> java.util.List<T> insertAt(Sequence<T> seq, int index, T object) {
+        java.util.List<T> result = null;
+        if (0 <= index && index <= seq.size()) {
+            result = new java.util.ArrayList<T>(seq.size());
+            addAll(result, seq);
+            result.add(index, object);
+        }
+        return result;
+    }
+
+    /**
+     * Returns the sub-sequence of <code>seq</code>.
+     * 
+     * @param <T> the element type
+     * @param seq the sequence to derive the sub-sequence from
+     * @param lower the lower index where the sub-sequence shall start
+     * @param upper the end index where the sub-sequence shall end
+     * @return the sub-sequence
+     */
+    public static <T> java.util.List<T> subSequence(Sequence<T> seq, int lower, int upper) {
+        int l = Math.max(0, lower);
+        int u = Math.min(upper, seq.size() - 1);
+        java.util.List<T> result = new java.util.ArrayList<T>(u - l + 1);
+        addAll(result, seq, l, u);
+        return result;
+    }
+
 }

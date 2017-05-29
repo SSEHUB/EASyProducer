@@ -220,4 +220,12 @@ set9 <- {3}
 -> toSet(Sequence) with ({1, 2, 4, 5, 6, 7}) = {1, 2, 4, 5, 6, 7}
 -> symmetricDifference(Set, Set) with ({1, 2, 3, 4}, {1, 2, 4, 5, 6, 7}) = {3, 5, 6, 7}
 set10 <- {3, 5, 6, 7}
+-> union(Sequence, Sequence) with ({1, 2, 3, 4}, {1, 2, 4, 5, 6, 7}) = {1, 1, 2, 2, 3, 4, 4, 5, 6, 7}
+seq16 <- {1, 1, 2, 2, 3, 4, 4, 5, 6, 7}
+-> append(Sequence, Any) with ({1, 2, 3, 4}, 27) = {1, 2, 27, 3, 4}
+seq17 <- {1, 2, 27, 3, 4}
+-> prepend(Sequence, Any) with ({1, 2, 3, 4}, 27) = {1, 2, 27, 3, 4}
+seq18 <- {1, 2, 27, 3, 4}
+-> subSequence(Sequence, Integer, Integer) with ({1, 2, 3, 4}, 1, 3) = {2, 3, 4}
+seq19 <- {2, 3, 4}
 -> main()
