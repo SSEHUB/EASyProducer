@@ -1086,4 +1086,14 @@ public class ExecutionTests extends AbstractExecutionTest<Script> {
         assertSelfInstantiate("copy2", "main", null, null);
     }
 
+    /**
+     * Tests defining two simple graphs and calculating their closure and whether they are acyclic.
+     * 
+     * @throws IOException should not occur
+     */
+    @Test
+    public void testGraph1() throws IOException {
+        assertSelfInstantiate("graph1", "main", "graph1", null);
+    }
+
 }

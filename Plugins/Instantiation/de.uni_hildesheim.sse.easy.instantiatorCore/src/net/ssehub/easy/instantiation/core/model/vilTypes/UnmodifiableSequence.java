@@ -350,4 +350,19 @@ public class UnmodifiableSequence<T> implements Sequence<T> {
         return sequence.isSubsequenceOf(other);
     }
 
+    @Override
+    public Set<?> closure(ExpressionEvaluator evaluator) throws VilException {
+        return sequence.closure(evaluator);
+    }
+
+    @Override
+    public Sequence<?> collectNested(ExpressionEvaluator evaluator) throws VilException {
+        return sequence.collectNested(evaluator);
+    }
+
+    @Override
+    public boolean isAcyclic(ExpressionEvaluator evaluator) throws VilException {
+        return sequence.isAcyclic(evaluator);
+    }
+
 }

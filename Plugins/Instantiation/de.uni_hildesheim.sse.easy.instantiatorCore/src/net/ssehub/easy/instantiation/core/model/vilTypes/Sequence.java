@@ -112,8 +112,16 @@ public interface Sequence<T> extends Collection<T> {
     public Sequence<T> reject(ExpressionEvaluator evaluator) throws VilException;
 
     @Override
+    @OperationMeta(useParameter = 0, flatten = true)
+    public Set<?> closure(ExpressionEvaluator evaluator) throws VilException; // always set
+    
+    @Override
     @OperationMeta(useParameter = 0)
     public Sequence<?> collect(ExpressionEvaluator evaluator) throws VilException;
+    
+    @Override
+    @OperationMeta(useParameter = 0)
+    public Sequence<?> collectNested(ExpressionEvaluator evaluator) throws VilException;
     
     /**
      * Turns this sequence into a set.

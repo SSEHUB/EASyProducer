@@ -113,12 +113,25 @@ public class ListSet<T> extends AbstractListWrapper<T> implements Set<T> {
         return new ListSet<T>(select(this, evaluator, false), param);
     }
 
-    @OperationMeta(useParameter = 0)
     @Override
     public Set<?> collect(ExpressionEvaluator evaluator) throws VilException {
         TypeDescriptor<?>[] param = TypeDescriptor.createArray(1);
         param[0] = evaluator.inferType();
-        return new ListSet<Object>(collect(this, evaluator), param);
+        return new ListSet<Object>(collect(this, evaluator, true), param);
+    }
+
+    @Override
+    public Set<?> collectNested(ExpressionEvaluator evaluator) throws VilException {
+        TypeDescriptor<?>[] param = TypeDescriptor.createArray(1);
+        param[0] = evaluator.inferType();
+        return new ListSet<Object>(collect(this, evaluator, false), param);
+    }
+    
+    @Override
+    public Set<?> closure(ExpressionEvaluator evaluator) throws VilException {
+        TypeDescriptor<?>[] param = TypeDescriptor.createArray(1);
+        param[0] = evaluator.inferType();
+        return new SetSet<Object>(closure(this, evaluator), param);
     }
 
     @Override

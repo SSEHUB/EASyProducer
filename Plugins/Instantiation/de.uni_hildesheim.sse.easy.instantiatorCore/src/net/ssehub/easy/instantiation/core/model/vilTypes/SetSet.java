@@ -245,11 +245,29 @@ public class SetSet<T> extends AbstractCollectionWrapper<T> implements Set<T> {
         param[0] = evaluator.inferType();
         java.util.Set<Object> tmp = new java.util.HashSet<Object>();
         if (null != set) {
-            collect(this, evaluator, tmp);
+            collect(this, evaluator, tmp, true);
+        }
+        return new SetSet<Object>(tmp, param);
+    }
+    
+    @Override
+    public Set<?> collectNested(ExpressionEvaluator evaluator) throws VilException {
+        TypeDescriptor<?>[] param = TypeDescriptor.createArray(1);
+        param[0] = evaluator.inferType();
+        java.util.Set<Object> tmp = new java.util.HashSet<Object>();
+        if (null != set) {
+            collect(this, evaluator, tmp, false);
         }
         return new SetSet<Object>(tmp, param);
     }
 
+    @Override
+    public Set<?> closure(ExpressionEvaluator evaluator) throws VilException {
+        TypeDescriptor<?>[] param = TypeDescriptor.createArray(1);
+        param[0] = evaluator.inferType();
+        return new SetSet<Object>(closure(this, evaluator), param);
+    }
+    
     @Override
     public Object apply(ExpressionEvaluator evaluator) throws VilException {
         return AbstractCollectionWrapper.apply(this, evaluator);

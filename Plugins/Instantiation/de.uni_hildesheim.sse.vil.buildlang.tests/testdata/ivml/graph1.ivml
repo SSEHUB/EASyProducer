@@ -1,0 +1,35 @@
+project graph1 {
+  version v0;
+  
+  compound Node {
+      String name;
+      setOf(refTo(Node)) next;
+  }
+  
+  compound Graph {
+      String name;
+      setOf(refTo(Node)) start;
+  }
+
+  Node n1 = {name = "n1.1", next = {refBy(n2)}};
+  Node n2 = {name = "n1.2", next = {refBy(n3)}};
+  Node n3 = {name = "n1.3", next = {refBy(n1)}};
+  
+  setOf(refTo(Node)) g1 = {refBy(n1)};
+  
+  Node n4 = {name = "n2.1", next = {refBy(n5)}};
+  Node n5 = {name = "n2.2"};
+
+  setOf(refTo(Node)) g2 = {refBy(n4)};
+  
+  freeze {
+    n1;
+    n2;
+    n3;
+    n4;
+    n5;
+    g1;
+    g2;
+  };
+  
+}

@@ -395,7 +395,7 @@ public abstract class AbstractCollectionWrapper<T> implements Collection<T> {
      */
     @Invisible
     public static <T> Boolean isUnique(Collection<T> collection, ExpressionEvaluator evaluator) throws VilException {
-        List<Object> tmp = collect(collection, evaluator); // optimize - stop on first
+        List<Object> tmp = collect(collection, evaluator, false); // optimize - stop on first
         java.util.Set<Object> tmpSet = new java.util.HashSet<Object>();
         int nullCount = 0;
         boolean unique = true;
@@ -550,7 +550,7 @@ public abstract class AbstractCollectionWrapper<T> implements Collection<T> {
      * @param collection the collection to iterate over
      * @param evaluator the evaluator holding the iterator / expression to apply
      * @return the aggregated result, <b>null</b> in case of a non-aggregating evaluation
-     * @throws VilException in case that selection fails
+     * @throws VilException in case that evaluator fails
      */
     public static <T> Object apply(Collection<T> collection, ExpressionEvaluator evaluator) throws VilException {
         Iterator<T> iter = collection.iterator();
@@ -561,19 +561,107 @@ public abstract class AbstractCollectionWrapper<T> implements Collection<T> {
         return evaluator.getResultValue();
     }
     
+    
+    /**
+     * Calculates the closure over <code>collection</code> and <code>evaluator</code>.
+     * 
+     * @param collection the collection to operate on
+     * @param evaluator the evaluator used to determine the next closure elements
+     * @return the closure
+     * @throws VilException in case that evaluation fails
+     */
+    public static java.util.Set<Object> closure(Collection<?> collection, ExpressionEvaluator evaluator) 
+        throws VilException {
+        java.util.Set<Object> result = new java.util.HashSet<Object>();
+        Iterator<?> iter = collection.iterator();
+        while (iter.hasNext()) {
+            closureOnElement(iter.next(), result, evaluator, false);
+        }
+        return result;
+    }
+    
+    /**
+     * Returns whether the closure over this collection and <code>evaluator</code> is acyclic.
+     * 
+     * @param evaluator the evaluator
+     * @return <code>true</code> for acyclic, <code>false</code> for cyclic
+     * @throws VilException in case that evaluation fails
+     */
+    public boolean isAcyclic(ExpressionEvaluator evaluator) throws VilException {
+        return isAcyclic(this, evaluator);
+    }
+
+    /**
+     * Returns whether the closure over <code>collection</code> and <code>evaluator</code> is acyclic.
+     * 
+     * @param collection the collection to run over
+     * @param evaluator the evaluator
+     * @return <code>true</code> for acyclic, <code>false</code> for cyclic
+     * @throws VilException in case that evaluation fails
+     */
+    public static boolean isAcyclic(Collection<?> collection, ExpressionEvaluator evaluator) throws VilException {
+        boolean cyclic = false;
+        java.util.Set<Object> tmp = new java.util.HashSet<Object>();
+        Iterator<?> iter = collection.iterator();
+        while (!cyclic && iter.hasNext()) {
+            cyclic = closureOnElement(iter.next(), tmp, evaluator, true);
+        }
+        return !cyclic;
+    }
+    
+    /**
+     * Calculates the closure for <code>value</code> using <code>evaluator</code> and does not visit already 
+     * visited elements in <code>result</code> again.
+     * 
+     * @param value the value to calculate the closure on
+     * @param result the result
+     * @param evaluator the evaluator
+     * @param stopOnCycle whether iteration/recursion shall stop immediately if a cycle is detected
+     * @return <code>true</code> if a cycle was detected, <code>false</code> else
+     * @throws VilException in case that evaluator fails
+     */
+    private static boolean closureOnElement(Object value, java.util.Set<Object> result, ExpressionEvaluator evaluator, 
+        boolean stopOnCycle) throws VilException {
+        boolean cyclic = false;
+        if (null != value) {
+            cyclic = !result.add(value);
+            if (!cyclic) {
+                Object eval = evaluator.evaluate(value);
+                if (null != eval) {
+                    Iterator<?> iter = null;
+                    if (eval instanceof Collection) {
+                        iter = ((Collection<?>) eval).iterator();
+                    } else if (eval instanceof java.util.Collection) {
+                        iter = ((java.util.Collection<?>) eval).iterator();
+                    } else {
+                        cyclic = !result.add(value);
+                    }
+                    while (null != iter && iter.hasNext()) {
+                        if (cyclic && stopOnCycle) {
+                            break;
+                        }
+                        cyclic |= closureOnElement(iter.next(), result, evaluator, stopOnCycle);
+                    }
+                }
+            }
+        }
+        return cyclic;
+    }
+    
     /**
      * Collects the application of <code>evaluator</code> to <code>collection</code>.
      *
      * @param <T> the element type
      * @param collection the collection to select from
      * @param evaluator the evaluator instance
+     * @param flatten flatten the result
      * @return the application results
      * @throws VilException in case that evaluation or selection fails
      */
-    public static <T> List<Object> collect(Collection<T> collection, ExpressionEvaluator evaluator) 
+    public static <T> List<Object> collect(Collection<T> collection, ExpressionEvaluator evaluator, boolean flatten) 
         throws VilException {
         List<Object> result = new ArrayList<Object>();
-        collect(collection, evaluator, result);
+        collect(collection, evaluator, result, flatten);
         return result;
     }
     
@@ -584,10 +672,11 @@ public abstract class AbstractCollectionWrapper<T> implements Collection<T> {
      * @param collection the collection to select from
      * @param evaluator the evaluator instance
      * @param result the elements of type <code>type</code> (modified as a side effect)
+     * @param flatten flatten the result
      * @throws VilException in case that evaluation or selection fails
      */
     protected static <T> void collect(Collection<T> collection, ExpressionEvaluator evaluator, 
-        java.util.Collection<Object> result) throws VilException {
+        java.util.Collection<Object> result, boolean flatten) throws VilException {
         Iterator<T> iter = collection.iterator();
         while (iter.hasNext()) {
             T value = iter.next();

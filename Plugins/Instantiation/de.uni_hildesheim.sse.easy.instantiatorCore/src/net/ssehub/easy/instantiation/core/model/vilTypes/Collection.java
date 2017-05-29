@@ -121,7 +121,7 @@ public interface Collection<T> extends Iterable<T>, IVilGenericType, IStringValu
      * 
      * @param evaluator the evaluator (results must evaluate to Boolean)
      * @return the selected elements
-     * @throws VilException in case that selection fails
+     * @throws VilException in case that evaluation fails
      */
     public Collection<T> select(ExpressionEvaluator evaluator) throws VilException;
     
@@ -130,20 +130,50 @@ public interface Collection<T> extends Iterable<T>, IVilGenericType, IStringValu
      * 
      * @param evaluator the evaluator (results must evaluate to Boolean)
      * @return the rejected elements
-     * @throws VilException in case that selection fails
+     * @throws VilException in case that evaluation fails
      */
     public Collection<T> reject(ExpressionEvaluator evaluator) throws VilException;
+    
+    /**
+     * Calculates a transitive closure over elements provided by this collection and <code>evaluator</code>.
+     * 
+     * @param evaluator the evaluator providing the links/collections to follow
+     * @return the closure
+     * @throws VilException in case that evaluation fails
+     */
+    @OperationMeta(useParameter = 0, flatten = true)
+    public Collection<?> closure(ExpressionEvaluator evaluator) throws VilException;
 
     /**
-     * Collects the application of <code>evaluator</code> to each individual element.
+     * Returns whether the transitive closure over elements provided by this collection and <code>evaluator</code> 
+     * does not contain a cycle.
+     * 
+     * @param evaluator the evaluator providing the links/collections to follow
+     * @return <code>true</code> for cycle, <code>false</code> else
+     * @throws VilException in case that evaluation fails
+     */
+    public boolean isAcyclic(ExpressionEvaluator evaluator) throws VilException;
+    
+    /**
+     * Collects the application of <code>evaluator</code> to each individual element and flattens nested structures.
      * 
      * @param evaluator the evaluator (results must evaluate to Boolean)
      * @return the application results
-     * @throws VilException in case that application fails
+     * @throws VilException in case that evaluation fails
      */
     @OperationMeta(useParameter = 0)
     public Collection<?> collect(ExpressionEvaluator evaluator) throws VilException;
-    
+
+    /**
+     * Collects the application of <code>evaluator</code> to each individual element and keeps nested structures.
+     * 
+     * @param evaluator the evaluator (results must evaluate to Boolean)
+     * @return the application results
+     * @throws VilException in case that evaluation fails
+     */
+    @OperationMeta(useParameter = 0)
+    public Collection<?> collectNested(ExpressionEvaluator evaluator) throws VilException;
+
     /**
      * Returns any element complying with the <code>evaluator</code>.
      * 

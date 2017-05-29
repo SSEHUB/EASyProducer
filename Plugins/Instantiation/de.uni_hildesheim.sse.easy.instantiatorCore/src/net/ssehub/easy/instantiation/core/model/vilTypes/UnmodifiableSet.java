@@ -301,4 +301,19 @@ public class UnmodifiableSet<T> implements Set<T> {
         return set.symmetricDifference(set);
     }
 
+    @Override
+    public Set<?> closure(ExpressionEvaluator evaluator) throws VilException {
+        return set.closure(evaluator);
+    }
+
+    @Override
+    public Set<?> collectNested(ExpressionEvaluator evaluator) throws VilException {
+        return set.collectNested(evaluator);
+    }
+
+    @Override
+    public boolean isAcyclic(ExpressionEvaluator evaluator) throws VilException {
+        return set.isAcyclic(evaluator);
+    }
+
 }

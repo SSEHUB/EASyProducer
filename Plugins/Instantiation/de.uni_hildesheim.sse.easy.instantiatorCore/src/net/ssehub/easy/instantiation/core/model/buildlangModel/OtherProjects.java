@@ -151,7 +151,22 @@ class OtherProjects implements Set<IArtifact> {
 
     @Override
     public Set<?> collect(ExpressionEvaluator evaluator) throws VilException {
-        return new ListSet<Object>(AbstractCollectionWrapper.collect(this, evaluator), parameter);
+        return new ListSet<Object>(AbstractCollectionWrapper.collect(this, evaluator, true), parameter);
+    }
+    
+    @Override
+    public Set<?> collectNested(ExpressionEvaluator evaluator) throws VilException {
+        return new ListSet<Object>(AbstractCollectionWrapper.collect(this, evaluator, false), parameter);
+    }
+    
+    @Override
+    public Set<?> closure(ExpressionEvaluator evaluator) throws VilException {
+        return new SetSet<Object>(AbstractCollectionWrapper.closure(this, evaluator), parameter);
+    }
+    
+    @Override
+    public boolean isAcyclic(ExpressionEvaluator evaluator) throws VilException {
+        return AbstractCollectionWrapper.isAcyclic(this, evaluator);
     }
 
     @OperationMeta(allowsAggregation = true)

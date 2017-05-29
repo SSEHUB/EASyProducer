@@ -1,0 +1,12 @@
+@advice(graph1)
+vilScript graph1 (Project source, Configuration config, Project target) {
+
+    main(Project source, Configuration config, Project target) = : {
+        graph1 g = config;
+        setOf(Node) g1 = g.g1->closure(n | n.next);
+        Boolean a1 = g.g1->isAcyclic(n | n.next);
+        setOf(Node) g2 = g.g2->closure(n | n.next);
+        Boolean a2 = g.g2->isAcyclic(n | n.next);
+    }
+
+}

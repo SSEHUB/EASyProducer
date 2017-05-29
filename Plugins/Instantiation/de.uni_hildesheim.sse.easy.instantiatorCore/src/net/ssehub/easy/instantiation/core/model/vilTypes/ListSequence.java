@@ -142,12 +142,25 @@ public class ListSequence<T> extends AbstractListWrapper<T> implements Sequence<
         return new ListSequence<T>(select(this, evaluator, false), param);
     }
 
-    @OperationMeta(useParameter = 0)
     @Override
     public Sequence<?> collect(ExpressionEvaluator evaluator) throws VilException {
         TypeDescriptor<?>[] param = TypeDescriptor.createArray(1);
         param[0] = evaluator.inferType();
-        return new ListSequence<Object>(collect(this, evaluator), param);
+        return new ListSequence<Object>(collect(this, evaluator, true), param);
+    }
+    
+    @Override
+    public Sequence<?> collectNested(ExpressionEvaluator evaluator) throws VilException {
+        TypeDescriptor<?>[] param = TypeDescriptor.createArray(1);
+        param[0] = evaluator.inferType();
+        return new ListSequence<Object>(collect(this, evaluator, false), param);
+    }
+    
+    @Override
+    public Set<?> closure(ExpressionEvaluator evaluator) throws VilException {
+        TypeDescriptor<?>[] param = TypeDescriptor.createArray(1);
+        param[0] = evaluator.inferType();
+        return new SetSet<Object>(closure(this, evaluator), param);
     }
     
     @Override
