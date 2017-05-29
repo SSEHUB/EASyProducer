@@ -1008,7 +1008,7 @@ public class EvaluationVisitorIteratorTest {
     }
 
     /**
-     * Tests closure operations.
+     * Tests closure operations on sequences.
      * 
      * @throws ValueDoesNotMatchTypeException in case that value assignments fail (shall not occur)
      * @throws ConfigurationException in case that initial assignment of values fail (shall not occur)
@@ -1018,11 +1018,11 @@ public class EvaluationVisitorIteratorTest {
     @Test
     public void testClosureOnSequence() throws CSTSemanticException, ValueDoesNotMatchTypeException, 
         ConfigurationException {
-        testClosure(false);
+        testClosure(false, false);
     }
 
     /**
-     * Tests closure operations.
+     * Tests closure operations on sets.
      * 
      * @throws ValueDoesNotMatchTypeException in case that value assignments fail (shall not occur)
      * @throws ConfigurationException in case that initial assignment of values fail (shall not occur)
@@ -1031,21 +1031,50 @@ public class EvaluationVisitorIteratorTest {
      */
     @Test
     public void testClosureOnSet() throws CSTSemanticException, ValueDoesNotMatchTypeException, ConfigurationException {
-        testClosure(true);
+        testClosure(true, false);
     }
-
+    
     /**
-     * Tests closure operations.
-     * 
-     * @param set test on set or on sequence
+     * Tests isAcyclic operations on sequences.
      * 
      * @throws ValueDoesNotMatchTypeException in case that value assignments fail (shall not occur)
      * @throws ConfigurationException in case that initial assignment of values fail (shall not occur)
      * @throws CSTSemanticException in case that the expressions created during this test are not 
      *   valid (shall not occur)
      */
-    private void testClosure(boolean set) throws CSTSemanticException, ValueDoesNotMatchTypeException, 
+    @Test
+    public void testIsAcyclicOnSequence() throws CSTSemanticException, ValueDoesNotMatchTypeException, 
         ConfigurationException {
+        testClosure(false, true);
+    }
+
+    /**
+     * Tests isAcyclic operations on sets.
+     * 
+     * @throws ValueDoesNotMatchTypeException in case that value assignments fail (shall not occur)
+     * @throws ConfigurationException in case that initial assignment of values fail (shall not occur)
+     * @throws CSTSemanticException in case that the expressions created during this test are not 
+     *   valid (shall not occur)
+     */
+    @Test
+    public void testIsAcyclicOnSet() throws CSTSemanticException, ValueDoesNotMatchTypeException, 
+        ConfigurationException {
+        testClosure(true, true);
+    }
+
+    /**
+     * Tests closure operations.
+     * 
+     * @param set test on set or on sequence
+     * @param testIsAcyclic whether the closure or the isAcyclic operation shall be tested
+     * 
+     * @throws ValueDoesNotMatchTypeException in case that value assignments fail (shall not occur)
+     * @throws ConfigurationException in case that initial assignment of values fail (shall not occur)
+     * @throws CSTSemanticException in case that the expressions created during this test are not 
+     *   valid (shall not occur)
+     */
+    private void testClosure(boolean set, boolean testIsAcyclic) throws CSTSemanticException, 
+        ValueDoesNotMatchTypeException, ConfigurationException {
         Project project = new Project("Test");
         Compound cmp = new Compound("Cmp", project);
         Reference refType = new Reference("ref(Cmp)", cmp, project);
@@ -1078,22 +1107,44 @@ public class EvaluationVisitorIteratorTest {
         setValue(vcVar3, ValueFactory.createValue(cmp, createCompoundData("c3", cVar1, cVar1, cVar2)));
         setValue(vallVar, ValueFactory.createValue(setRefType, cVar1, cVar2, cVar3));
 
-        ConstraintSyntaxTree allNextClosure = createClosureContainerOp(refType, "next", allVar);
-        ConstraintSyntaxTree allFollowClosure = createClosureContainerOp(refType, "follow", allVar);
-        ConstraintSyntaxTree var1NextClosure = createClosureContainerOp(refType, "next", cVar1);
-        ConstraintSyntaxTree var1FollowClosure = createClosureContainerOp(refType, "follow", cVar1);
+        ConstraintSyntaxTree allNextClosure = createClosureContainerOp(refType, "next", allVar, testIsAcyclic);
+        ConstraintSyntaxTree allFollowClosure = createClosureContainerOp(refType, "follow", allVar, testIsAcyclic);
+        ConstraintSyntaxTree var1NextClosure = createClosureContainerOp(refType, "next", cVar1, testIsAcyclic);
+        ConstraintSyntaxTree var1FollowClosure = createClosureContainerOp(refType, "follow", cVar1, testIsAcyclic);
 
         EvaluationVisitor visitor = new EvaluationVisitor();
         // sequence is determined through pre-order (OCL)
-        assertClosure(visitor, config, allNextClosure, new Object[]{cVar1, cVar2, cVar3});
-        assertClosure(visitor, config, allFollowClosure, new Object[]{cVar1, cVar2, cVar3});
-        assertClosure(visitor, config, var1NextClosure, new Object[]{cVar1, cVar2, cVar3});
-        assertClosure(visitor, config, var1FollowClosure, new Object[]{cVar1, cVar2, cVar3});
+        assertClosure(visitor, config, allNextClosure, new Object[]{cVar1, cVar2, cVar3}, 
+            acyclic(false, testIsAcyclic));
+        assertClosure(visitor, config, allFollowClosure, new Object[]{cVar1, cVar2, cVar3}, 
+            acyclic(false, testIsAcyclic));
+        assertClosure(visitor, config, var1NextClosure, new Object[]{cVar1, cVar2, cVar3}, 
+            acyclic(false, testIsAcyclic));
+        assertClosure(visitor, config, var1FollowClosure, new Object[]{cVar1, cVar2, cVar3}, 
+            acyclic(false, testIsAcyclic));
 
         // Test empty
         setValue(vallVar, ValueFactory.createValue(setRefType, (Object[]) null));
-        assertClosure(visitor, config, allNextClosure, new Object[]{});
-        assertClosure(visitor, config, allFollowClosure, new Object[]{});
+        assertClosure(visitor, config, allNextClosure, new Object[]{}, acyclic(true, testIsAcyclic));
+        assertClosure(visitor, config, allFollowClosure, new Object[]{}, acyclic(true, testIsAcyclic));
+    }
+    
+    /**
+     * Returns the expected result for the IsAcyclic-test, i.e., passes on the <code>expected</code> if 
+     * <code>testIsAcyclic</code> is enabled, <b>null</b> else.
+     * 
+     * @param expected the expected value
+     * @param testIsAcyclic shall the expected value be passed on
+     * @return the expected value or <b>null</b>
+     */
+    private Boolean acyclic(boolean expected, boolean testIsAcyclic) {
+        Boolean result;
+        if (testIsAcyclic) {
+            result = expected;
+        } else {
+            result = null; // closure operation
+        }
+        return result;
     }
 
     /**
@@ -1125,15 +1176,17 @@ public class EvaluationVisitorIteratorTest {
      * @param itType the iterator type
      * @param slot the slot to access on the iterator
      * @param var the variable to bind the operation to
+     * @param testIsAcyclic test the isAcyclic operation
      * @return the closure operation expression
      * @throws CSTSemanticException in case of syntactic problems with the constraint expression
      */
     private static ConstraintSyntaxTree createClosureContainerOp(IDatatype itType, String slot, 
-        DecisionVariableDeclaration var) throws CSTSemanticException {
+        DecisionVariableDeclaration var, boolean testIsAcyclic) throws CSTSemanticException {
         DecisionVariableDeclaration itDecl = new DecisionVariableDeclaration("a", itType, null);
         ConstraintSyntaxTree itEx = new CompoundAccess(new Variable(itDecl), slot);
         itEx.inferDatatype();
-        ConstraintSyntaxTree containerOp = Utils.createContainerCall(var, Container.CLOSURE, itEx, itDecl);
+        ConstraintSyntaxTree containerOp = Utils.createContainerCall(var, 
+            testIsAcyclic ? Container.IS_ACYCLIC : Container.CLOSURE, itEx, itDecl);
         containerOp.inferDatatype();
         return containerOp;
     }
@@ -1145,15 +1198,20 @@ public class EvaluationVisitorIteratorTest {
      * @param config the configuration (for initializing <code>visitor</code>)
      * @param ex the expression to evaluate
      * @param expected the expected values
+     * @param acyclic whether the outcome of the isAcyclic operation shall be tested against that value
      */
     private static void assertClosure(EvaluationVisitor visitor, Configuration config, ConstraintSyntaxTree ex, 
-        Object[] expected) {
+        Object[] expected, Boolean acyclic) {
         visitor.init(config, AssignmentState.DEFAULT, false, null);
         ex.accept(visitor);
         Value result = visitor.getResult();
-        Assert.assertTrue(result instanceof ContainerValue);
-        Assert.assertTrue(Set.TYPE.isAssignableFrom(result.getType()));
-        Utils.assertContainer(expected, visitor.getResult());
+        if (null != acyclic) {
+            Utils.assertEquals(acyclic, result);
+        } else {
+            Assert.assertTrue(result instanceof ContainerValue);
+            Assert.assertTrue(Set.TYPE.isAssignableFrom(result.getType()));
+            Utils.assertContainer(expected, visitor.getResult());
+        }
         visitor.clear();
     }
 

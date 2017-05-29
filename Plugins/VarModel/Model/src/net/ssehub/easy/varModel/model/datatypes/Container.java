@@ -96,6 +96,8 @@ public class Container extends StructuredDatatype {
         TYPE, BooleanType.TYPE).markAsContainerOperation();
     public static final Operation REJECT = new Operation(TYPE, ReturnTypeMode.IMMEDIATE_OPERAND, OclKeyWords.REJECT, 
         TYPE, BooleanType.TYPE).markAsContainerOperation();
+    public static final Operation IS_ACYCLIC = new Operation(AnyType.BOOLEAN_TYPE, OclKeyWords.IS_ACYCLIC, TYPE, 
+        AnyType.TYPE).markAsContainerOperation();
     public static final Operation CLOSURE = new SetReturningOperation(TYPE, 
         ReturnTypeMode.IMMEDIATE_OPERAND_COLLECTION_NESTED_GENERIC_1,
         OclKeyWords.CLOSURE, TYPE, AnyType.TYPE).markAsFlatteningContainerOperation();
@@ -146,6 +148,7 @@ public class Container extends StructuredDatatype {
         DTYPE.addOperation(SORTED_BY);
         DTYPE.addOperation(SELECT);
         DTYPE.addOperation(REJECT);
+        DTYPE.addOperation(IS_ACYCLIC);
         DTYPE.addOperation(CLOSURE);
         DTYPE.addOperation(IS_DEFINED);
         DTYPE.addOperation(TYPE_SELECT);

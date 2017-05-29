@@ -668,6 +668,7 @@ public class ContainerOperations {
         EvaluatorRegistry.registerEvaluator(ContainerIterators.IS_UNIQUE, Container.IS_UNIQUE);
         EvaluatorRegistry.registerEvaluator(ContainerIterators.COLLECT, Container.COLLECT);
         EvaluatorRegistry.registerEvaluator(ContainerIterators.COLLECT, Container.COLLECT_NESTED);
+        EvaluatorRegistry.registerEvaluator(ContainerIterators.IS_ACYCLIC, Container.IS_ACYCLIC);
         EvaluatorRegistry.registerEvaluator(ContainerIterators.CLOSURE, Container.CLOSURE);
         EvaluatorRegistry.registerEvaluator(ContainerIterators.SORTED_BY, Container.SORTED_BY);
         EvaluatorRegistry.registerEvaluator(new CollectIteratorEvaluator(BooleanValue.TRUE), Container.SELECT);

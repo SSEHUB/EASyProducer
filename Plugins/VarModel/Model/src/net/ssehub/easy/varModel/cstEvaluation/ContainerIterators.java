@@ -3,8 +3,10 @@ package net.ssehub.easy.varModel.cstEvaluation;
 import java.text.Collator;
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.TreeMap;
 
 import net.ssehub.easy.varModel.model.datatypes.IDatatype;
@@ -27,7 +29,7 @@ import net.ssehub.easy.varModel.persistency.StringProvider;
  * @author Holger Eichelberger
  */
 class ContainerIterators {
-    
+
     /**
      * Implements {@link net.ssehub.easy.varModel.model.datatypes.Container#APPLY}.
      */
@@ -353,11 +355,131 @@ class ContainerIterators {
         }
 
     };
+
+    /**
+     * Implements a basic closure iterator which can stop on a cycle. Uses {@link #DATA_CLOSURE_MARKED} and 
+     * {@link #DATA_CLOSURE_CYCLIC}.
+     * 
+     * @author Holger Eichelberger
+     */
+    private static class ClosureIteratorEvaluator extends CollectingIteratorEvaluator {
+
+        private boolean stopOnCycle = false;
+
+        /**
+         * Creates the closure iterator.
+         * 
+         * @param stopOnCycle stop on a cycle or just ignore the already vited nodes and go on
+         */
+        private ClosureIteratorEvaluator(boolean stopOnCycle) {
+            this.stopOnCycle = stopOnCycle;
+        }
+        
+        @Override
+        public Value aggregate(EvaluationAccessor result, Value iter, EvaluationAccessor value, 
+            Map<Object, Object> data) throws ValueDoesNotMatchTypeException {
+            Value rValue = result.getValue();
+            List<Value> nextValues = null;
+            ContainerValue resultContainer;
+            if (rValue instanceof ContainerValue) {
+                resultContainer = (ContainerValue) rValue;
+            } else {
+                resultContainer = null;
+            }
+            nextValues = new ArrayList<Value>();
+            handleNextValue(iter, resultContainer, data, nextValues);
+            Value val = value.getValue();
+            if (val instanceof ContainerValue) {
+                ContainerValue valContainer = (ContainerValue) val;
+                for (int e = 0; e < valContainer.getElementSize(); e++) {
+                    handleNextValue(valContainer.getElement(e), 
+                        resultContainer, data, nextValues);
+                    if (stopOnCycle && hasCycle(data)) {
+                        break;
+                    }
+                }
+            } else if (val instanceof ReferenceValue) {
+                handleNextValue(val, resultContainer, data, nextValues);
+            }
+            
+            Value res = BooleanValue.FALSE; // just go on
+            if (stopOnCycle && hasCycle(data)) {
+                res = BooleanValue.TRUE; // stop immediately
+            } else {
+                if (null != nextValues) {
+                    res = new ListWrapperValue(nextValues);
+                }
+            }
+            return res;
+        }
+
+        /**
+         * Returns whether a cycle was detected.
+         * 
+         * @param data the data object
+         * @return <code>true</code> for cycle, <code>false</code> else
+         */
+        protected boolean hasCycle(Map<Object, Object> data) {
+            return Boolean.TRUE == data.get(DATA_CLOSURE_CYCLIC); 
+        }
+
+        /**
+         * Handles the next value by checking whether it was already added.
+         * 
+         * @param value the value
+         * @param result the result container to be changed if not already added
+         * @param data the temporary data storing already added elements
+         * @param nextValues the next values to be considered for iteration
+         * @throws ValueDoesNotMatchTypeException if adding <code>value</code> to <code>result</code> is failing
+         */
+        private void handleNextValue(Value value, ContainerValue result, Map<Object, Object> data, 
+            List<Value> nextValues) throws ValueDoesNotMatchTypeException {
+            @SuppressWarnings("unchecked")
+            Set<Object> marking = (Set<Object>) data.get(DATA_CLOSURE_MARKED);
+            if (null == marking) {
+                marking = new HashSet<Object>();
+                data.put(DATA_CLOSURE_MARKED, marking);
+            }
+            if (!marking.contains(value)) {
+                nextValues.add(value);
+                if (null != result) {
+                    result.addElement(value);
+                }
+                marking.add(value);
+            } else {
+                data.put(DATA_CLOSURE_CYCLIC, Boolean.TRUE);
+            }
+        }
+
+    }
+
+    /**
+     * Implements {@link net.ssehub.easy.varModel.model.datatypes.Container#CLOSURE}.
+     */
+    static final IIteratorEvaluator CLOSURE = new ClosureIteratorEvaluator(false);
+
+    /**
+     * Implements {@link net.ssehub.easy.varModel.model.datatypes.Container#IS_ACYCLIC}.
+     */
+    static final IIteratorEvaluator IS_ACYCLIC = new ClosureIteratorEvaluator(true) {
+
+        @Override
+        public Value getStartResult(IDatatype type, IDatatype iterType) throws ValueDoesNotMatchTypeException {
+            return BooleanValue.TRUE;
+        }
+
+        @Override
+        public void postProcessResult(EvaluationAccessor result, Map<Object, Object> data) 
+            throws ValueDoesNotMatchTypeException {
+            result.setValue(BooleanValue.toBooleanValue(!hasCycle(data)));
+        }
+        
+    };
     
     /**
      * Implements {@link net.ssehub.easy.varModel.model.datatypes.Container#CLOSURE}.
      */
-    static final IIteratorEvaluator CLOSURE = new CollectingIteratorEvaluator() {
+    /*static final IIteratorEvaluator CLOSURE = new CollectingIteratorEvaluator() {
         
         @Override
         public Value aggregate(EvaluationAccessor result, Value iter, EvaluationAccessor value, 
@@ -385,7 +507,7 @@ class ContainerIterators {
                 res = new ListWrapperValue(nextValues);
             } 
             return res;
-        }
+        }*/
 
         /**
          * Handles the next value by checking whether it was already added.
@@ -396,7 +518,7 @@ class ContainerIterators {
          * @param nextValues the next values to be considered for iteration
          * @throws ValueDoesNotMatchTypeException if adding <code>value</code> to <code>result</code> is failing
          */
-        private void handleNextValue(Value value, ContainerValue result, Map<Object, Object> data, 
+        /*private void handleNextValue(Value value, ContainerValue result, Map<Object, Object> data, 
             List<Value> nextValues) throws ValueDoesNotMatchTypeException {
             if (!data.containsKey(value)) {
                 nextValues.add(value);
@@ -405,7 +527,7 @@ class ContainerIterators {
             }
         }
 
-    };
+    };*/
     
     /**
      * Implements {@link net.ssehub.easy.varModel.model.datatypes.Container#SORTED_BY}.
@@ -495,7 +617,10 @@ class ContainerIterators {
         }
 
     };
-    
+
+    private static final Object DATA_CLOSURE_MARKED = new Object();
+    private static final Object DATA_CLOSURE_CYCLIC = new Object();
+
     /**
      * The default value comparator for any value based on {@link StringProvider}.
      * 

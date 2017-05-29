@@ -115,6 +115,7 @@ public class OclKeyWords {
     public static final String INCLUDING = "including";
     public static final String EXCLUDING = "excluding";
     public static final String CLOSURE = "closure";
+    public static final String IS_ACYCLIC = "isAcyclic";
     
     // e.g. Set
     public static final String INTERSECTION = "intersection";
