@@ -47,9 +47,9 @@ public @interface OperationMeta {
     int useGenericParameter() default -1;
 
     /**
-     * Whether a parameter (index) shall be used as return type. 
-     * Unused by default.<br/>
-     * The 0-based parameter index (default <code>-1</code>)
+     * Whether a parameter (0-based index) shall be used as return type. 
+     * Unused by default (<code>-1</code>). If <code>Integer.MAX_VALUE</code> all
+     * parameters are taken over.
      */
     int useParameter() default -1;
     
