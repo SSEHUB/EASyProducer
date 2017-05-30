@@ -41,6 +41,7 @@ import net.ssehub.easy.instantiation.core.model.buildlangModel.SimpleStatementBl
 import net.ssehub.easy.instantiation.core.model.buildlangModel.StrategyCallExpression;
 import net.ssehub.easy.instantiation.core.model.buildlangModel.VariableDeclaration;
 import net.ssehub.easy.instantiation.core.model.buildlangModel.WhileStatement;
+import net.ssehub.easy.instantiation.core.model.buildlangModel.ImplicitVariableDeclaration;
 import net.ssehub.easy.instantiation.core.model.common.VilException;
 import net.ssehub.easy.instantiation.core.model.expressions.AbstractCallExpression;
 import net.ssehub.easy.instantiation.core.model.expressions.CallArgument;
@@ -571,6 +572,12 @@ public class ExpressionTranslator
     protected VariableDeclaration createVariableDeclaration(String name, TypeDescriptor<?> type,
         boolean isConstant, Expression expression, Resolver resolver) {
         return new VariableDeclaration(name, type, isConstant, expression);
+    }
+
+    @Override
+    protected VariableDeclaration createImplicitVariableDeclaration(String name, TypeDescriptor<?> type,
+        boolean isConstant, Expression expression, Resolver resolver) {
+        return new ImplicitVariableDeclaration(name, type, isConstant, expression);
     }
 
     @Override

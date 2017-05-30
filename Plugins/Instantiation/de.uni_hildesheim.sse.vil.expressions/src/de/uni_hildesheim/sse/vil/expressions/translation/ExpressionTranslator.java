@@ -96,6 +96,7 @@ public abstract class ExpressionTranslator<I extends VariableDeclaration, R exte
 
     private java.util.Map<VarModelIdentifierExpression, EObject> ivmlWarnings 
         = new HashMap<VarModelIdentifierExpression, EObject>();
+    private VarModelIdentifierExpression lastVarModelIdentifierEx;
     
     /**
      * Creates an expression translator (to be used within this package only).
@@ -405,12 +406,12 @@ public abstract class ExpressionTranslator<I extends VariableDeclaration, R exte
      * 
      * @param call the call holding the iterator declarations
      * @param type the type of the call (not the return type)
-     * @return the iterator declarations in terms of variable declarations (may be <b>null</b> if there are none)
+     * @return the iterator declarations in terms of variable declarations (may be empty if there are none)
      * @throws TranslatorException in case that the translation fails for some reason
      */
     protected List<I> resolveIteratorDeclarations(Call call, CallType type, List<CallArgument> arguments, R resolver) 
         throws TranslatorException {
-        List<I> result = null;
+        List<I> result = new ArrayList<I>();
         if (null != call) {
             Declarator decl = call.getDecl();
             if (null != decl && null != decl.getDecl()) {
@@ -478,7 +479,7 @@ public abstract class ExpressionTranslator<I extends VariableDeclaration, R exte
         Declarator decl = call.getDecl();
         boolean firstDecl = true;
         String callName = Utils.getQualifiedNameString(call.getName());
-        boolean isAggregator = "apply".equals(callName); // fixed name is not nice
+        boolean isAggregator = "iterate".equals(callName) || "apply".equals(callName); // fixed name is not nice
         for (Declaration d : decl.getDecl()) {
             TypeDescriptor<?> t;
             if (null != d.getType()) {
@@ -530,6 +531,7 @@ public abstract class ExpressionTranslator<I extends VariableDeclaration, R exte
      * Resolves call arguments.
      * 
      * @param call the call to resolve the arguments for
+     * @param iterators the iterators (may be changed as a side effect)
      * @param arguments the arguments created so far (may be the operator, list is modified as a side effect)
      * @param arrayEx an array access expression (may be <b>null</b>, but then <code>call</code> is required)
      * @param resolver a resolver instance for resolving variables etc.
@@ -541,9 +543,8 @@ public abstract class ExpressionTranslator<I extends VariableDeclaration, R exte
         String name;
         // arguments already contains implicit parameter and in case of iteration its type
         if (null != call) {
-            
             if (null != call.getParam()) {
-                if (null != iterators) {
+                if (!iterators.isEmpty()) {
                     resolver.pushLevel();
                     resolver.add(iterators);
                 }
@@ -552,8 +553,8 @@ public abstract class ExpressionTranslator<I extends VariableDeclaration, R exte
                     String paramName = param.getName();
                     Expression ex;
                     try {
-                        ex = processExpression(param.getEx(), resolver);
-                        if (0 == count && null != iterators) { // just on the first "parameter"
+                        ex = resolveCallArgumentExpression(param, count, iterators, arguments, resolver);
+                        if (0 == count && !iterators.isEmpty()) { // just on the first "parameter"
                             if (null != paramName) {
                                 // if "named", turn into assignment -> grammar
                                 I var = resolver.resolve(paramName, false, param, 
@@ -585,7 +586,7 @@ public abstract class ExpressionTranslator<I extends VariableDeclaration, R exte
                     arguments.add(new CallArgument(paramName, ex));
                     count++;
                 }
-                if (null != iterators) {
+                if (!iterators.isEmpty()) { // may have been modified
                     resolver.popLevel();
                 }
             }
@@ -595,6 +596,51 @@ public abstract class ExpressionTranslator<I extends VariableDeclaration, R exte
             name = "[]";
         }
         return name;
+    }
+    
+    /**
+     * Tries to resolve a call argument. If it is the first argument of a container iteration
+     * and there is no iterator, implicitly try to create an iterator.
+     * 
+     * @param param the parameter
+     * @param paramIndex the 0-based index of <code>param</code> in the call being processed
+     * @param iterators the iterators known so far (may be changed as a side effect)
+     * @param arguments the call arguments
+     * @param resolver the resolver instance
+     * @return the resolved expression
+     * @throws TranslatorException in case that resolution fails
+     */
+    private Expression resolveCallArgumentExpression(
+        de.uni_hildesheim.sse.vil.expressions.expressionDsl.NamedArgument param, int paramIndex, List<I> iterators, 
+        List<CallArgument> arguments, R resolver) throws TranslatorException {
+        Expression ex = null;
+        lastVarModelIdentifierEx = null;
+        try {
+            ex = processExpression(param.getEx(), resolver);
+        } catch (TranslatorException e) {
+            boolean consider = iterators.isEmpty() && 0 == paramIndex && null == param.getName();
+            consider &= null != lastVarModelIdentifierEx && arguments.size() > 0;
+            if (consider) {
+                TypeDescriptor<?> arg0Type; // implicit arg carries generic types
+                try {
+                    arg0Type = arguments.get(0).inferType();
+                } catch (VilException e1) {
+                    arg0Type = null;
+                }
+                if (null != arg0Type && arg0Type.isCollection() && arg0Type.getGenericParameterCount() > 0) {
+                    I var = createImplicitVariableDeclaration(lastVarModelIdentifierEx.getIdentifier(), 
+                        arg0Type.getGenericParameterType(0), false, null, resolver);
+                    iterators.add(var);
+                    resolver.pushLevel();
+                    resolver.add(iterators);
+                    ex = processExpression(param.getEx(), resolver);
+                } 
+            } 
+            if (null == ex) {
+                throw e;
+            }
+        }
+        return ex;
     }
 
     /**
@@ -616,8 +662,8 @@ public abstract class ExpressionTranslator<I extends VariableDeclaration, R exte
                 TypeDescriptor<?> arg0Type = arguments.get(0).inferType();
                 if (arg0Type.isCollection() && arg0Type.getGenericParameterCount() > 0) {
                     resolver.pushLevel();
-                    I iterVar = createVariableDeclaration("ITER", arg0Type.getGenericParameterType(0), false, null, 
-                        resolver);
+                    I iterVar = createImplicitVariableDeclaration("ITER", arg0Type.getGenericParameterType(0), false, 
+                        null, resolver);
                     resolver.add(iterVar); // iterVar shall be strictly local!
                     ex = new ExpressionEvaluator(processExpression(param.getEx(), resolver), iterVar, null);
                     resolver.popLevel();
@@ -639,6 +685,18 @@ public abstract class ExpressionTranslator<I extends VariableDeclaration, R exte
      * @param resolver the resolver instance
      */
     protected abstract I createVariableDeclaration(String name, TypeDescriptor<?> type, 
+        boolean isConstant, Expression expression, R resolver);
+
+    /**
+     * Creates a new implicit variable declaration.
+     * 
+     * @param name the name of the variable
+     * @param type the type of the variable
+     * @param isConstant whether this variable is a constant
+     * @param expression an expression denoting the initial value (may be <b>null</b>)
+     * @param resolver the resolver instance
+     */
+    protected abstract I createImplicitVariableDeclaration(String name, TypeDescriptor<?> type, 
         boolean isConstant, Expression expression, R resolver);
 
     /**
@@ -1016,6 +1074,7 @@ public abstract class ExpressionTranslator<I extends VariableDeclaration, R exte
                 } 
                 if (null == result) {
                     VarModelIdentifierExpression vmie = new VarModelIdentifierExpression(name); // also if elt==null 
+                    lastVarModelIdentifierEx = vmie;
                     result = vmie;
                     if (null == ivmlElement) {
                         ivmlWarnings.put(vmie, arg);

@@ -544,4 +544,21 @@ public abstract class TypeDescriptor <T> implements IMetaType {
         return result;
     }
     
+    /**
+     * Returns a collection iterator operation with given <code>name</code>.
+     * 
+     * @param name the name of the operation to search for
+     * @return the collection iterator operation or <b>null</b>
+     */
+    public OperationDescriptor findCollectionIteratorOperation(String name) {
+        OperationDescriptor result = null;
+        for (int o = 0; null == result && o < getOperationsCount(); o++) {
+            OperationDescriptor tmp = getOperation(o);
+            if (tmp.isIteratingCollectionOperation() && name.equals(tmp.getName())) {
+                result = tmp;
+            }
+        }
+        return result;
+    }
+    
 }

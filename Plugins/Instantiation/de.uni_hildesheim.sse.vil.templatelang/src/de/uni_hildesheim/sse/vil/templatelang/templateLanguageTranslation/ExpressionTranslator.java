@@ -21,6 +21,7 @@ import net.ssehub.easy.instantiation.core.model.expressions.ExpressionVersionRes
 import net.ssehub.easy.instantiation.core.model.expressions.ExpressionVersionRestrictionValidator;
 import net.ssehub.easy.instantiation.core.model.expressions.ResolvableOperationCallExpression;
 import net.ssehub.easy.instantiation.core.model.templateModel.ExpressionStatement;
+import net.ssehub.easy.instantiation.core.model.templateModel.ImplicitVariableDeclaration;
 import net.ssehub.easy.instantiation.core.model.templateModel.Resolver;
 import net.ssehub.easy.instantiation.core.model.templateModel.VariableDeclaration;
 import net.ssehub.easy.instantiation.core.model.vilTypes.TypeDescriptor;
@@ -106,6 +107,12 @@ public class ExpressionTranslator
     protected VariableDeclaration createVariableDeclaration(String name, TypeDescriptor<?> type,
         boolean isConstant, Expression expression, Resolver resolver) {
         return new VariableDeclaration(name, type, isConstant, expression);
+    }
+
+    @Override
+    protected VariableDeclaration createImplicitVariableDeclaration(String name, TypeDescriptor<?> type,
+        boolean isConstant, Expression expression, Resolver resolver) {
+        return new ImplicitVariableDeclaration(name, type, isConstant, expression);
     }
 
     @Override

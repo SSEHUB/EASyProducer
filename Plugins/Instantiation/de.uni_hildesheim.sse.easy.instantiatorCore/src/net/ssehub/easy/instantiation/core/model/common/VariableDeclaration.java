@@ -190,5 +190,14 @@ public abstract class VariableDeclaration implements IResolvable, IVariable {
     public String toString() {
         return type.toString() + " " + name;
     }
+    
+    /**
+     * Returns whether this variable declaration is implicit.
+     * 
+     * @return <code>true</code> for implicit, <code>false</code> else
+     */
+    public boolean isImplicit() {
+        return false;
+    }
 
 }

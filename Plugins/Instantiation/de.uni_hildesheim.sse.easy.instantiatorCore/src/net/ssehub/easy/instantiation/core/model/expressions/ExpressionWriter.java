@@ -101,30 +101,36 @@ public class ExpressionWriter extends AbstractWriter implements IExpressionVisit
     private void printIteratorDeclarators(CallExpression call) throws VilException {
         if (call.isIteratorCall()) {
             ExpressionEvaluator eval = (ExpressionEvaluator) call.getArgument(1).getExpression();
+            int done = 0;
             for (int d = 0; d < eval.getDeclaratorsCount(); d++) {
                 VariableDeclaration decl = eval.getDeclarator(d);
-                if (d > 0) {
-                    if (decl.hasExplicitType()) {
-                        print(";");    
-                    } else {
-                        print(",");
+                if (!decl.isImplicit()) {
+                    if (d > 0) {
+                        if (decl.hasExplicitType()) {
+                            print(";");    
+                        } else {
+                            print(",");
+                        }
+                        printWhitespace();
                     }
+                    if (decl.hasExplicitType()) {
+                        printType(decl.getType());
+                        printWhitespace();
+                    }
+                    print(decl.getName());
                     printWhitespace();
-                }
-                if (decl.hasExplicitType()) {
-                    printType(decl.getType());
-                    printWhitespace();
-                }
-                print(decl.getName());
-                printWhitespace();
-                if (null != decl.getExpression()) {
-                    print("=");
-                    printWhitespace();
-                    decl.getExpression().accept(this);
+                    if (null != decl.getExpression()) {
+                        print("=");
+                        printWhitespace();
+                        decl.getExpression().accept(this);
+                    }
+                    done++;
                 }
             }
-            print(Constants.DECLARATOR_SEPARATOR);
-            printWhitespace();
+            if (done > 0) {
+                print(Constants.DECLARATOR_SEPARATOR);
+                printWhitespace();
+            }
         }        
     }
 

@@ -13,6 +13,7 @@ vilScript collections () {
     sequenceOf(Integer) seq2flat = seq2.flatten();
     sequenceOf(Integer, Integer) seq2collN = seq2->collectNested(i | i * 2);
     sequenceOf(Integer) seq2coll = seq2->collect(i | i * 2);
+    sequenceOf(Integer) seq2coll1 = seq2->collect(i * 2);
     Integer i_s2 = seq2.size();
     sequenceOf(Integer) seq3 = {1, 2, 3, 4};
     Boolean i_b5 = seq1.equals(seq3);
