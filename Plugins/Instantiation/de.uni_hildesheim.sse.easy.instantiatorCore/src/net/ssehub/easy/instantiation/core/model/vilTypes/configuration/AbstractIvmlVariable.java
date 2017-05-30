@@ -437,6 +437,7 @@ public abstract class AbstractIvmlVariable extends IvmlElement {
      * 
      * @return <code>true</code> if the variable is configured, <code>false</code> else
      */
+    @OperationMeta(name = {"isConfigured", "isDefined"})
     public boolean isConfigured() {
         return AssignmentState.UNDEFINED != origVariable.getState() && null != origVariable.getValue();
     }
