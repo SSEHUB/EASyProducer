@@ -651,14 +651,13 @@ public abstract class AbstractCollectionWrapper<T> implements Collection<T> {
     /**
      * Collects the application of <code>evaluator</code> to <code>collection</code>.
      *
-     * @param <T> the element type
      * @param collection the collection to select from
      * @param evaluator the evaluator instance
      * @param flatten flatten the result
      * @return the application results
-     * @throws VilException in case that evaluation or selection fails
+     * @throws VilException in case that evaluation fails
      */
-    public static <T> List<Object> collect(Collection<T> collection, ExpressionEvaluator evaluator, boolean flatten) 
+    public static List<Object> collect(Collection<?> collection, ExpressionEvaluator evaluator, boolean flatten) 
         throws VilException {
         List<Object> result = new ArrayList<Object>();
         collect(collection, evaluator, result, flatten);
@@ -668,25 +667,77 @@ public abstract class AbstractCollectionWrapper<T> implements Collection<T> {
     /**
      * Collects the application of <code>evaluator</code> to <code>collection</code>.
      *
-     * @param <T> the element type
      * @param collection the collection to select from
      * @param evaluator the evaluator instance
      * @param result the elements of type <code>type</code> (modified as a side effect)
      * @param flatten flatten the result
-     * @throws VilException in case that evaluation or selection fails
+     * @throws VilException in case that evaluation fails
      */
-    protected static <T> void collect(Collection<T> collection, ExpressionEvaluator evaluator, 
+    protected static void collect(Collection<?> collection, ExpressionEvaluator evaluator, 
         java.util.Collection<Object> result, boolean flatten) throws VilException {
-        Iterator<T> iter = collection.iterator();
+        Iterator<?> iter = collection.iterator();
         while (iter.hasNext()) {
-            T value = iter.next();
+            collect(iter.next(), evaluator, result, flatten);
+        }
+    }
+
+    /**
+     * Performs a (non-)flattening collect operation on <code>value</code>.
+     * 
+     * @param value the value to collect
+     * @param evaluator the evaluator to apply on <code>value</code>
+     * @param result the result collection to fill as a side effect
+     * @param flatten whether the result shall be flattened or nesting shall be kept
+     * @throws VilException in case that evaluation fails
+     */
+    private static void collect(Object value, ExpressionEvaluator evaluator, 
+        java.util.Collection<Object> result, boolean flatten) throws VilException {
+        java.util.Collection<Object> res = result;
+        Iterator<?> iter = null;
+        if (value instanceof Collection) {
+            Collection<?> coll = (Collection<?>) value;
+            iter = coll.iterator();
+            res = createSubCollection(result, coll, flatten);
+        } else if (value instanceof java.util.Collection) {
+            java.util.Collection<?> coll = (java.util.Collection<?>) value;
+            iter = coll.iterator();
+            res = createSubCollection(result, coll, flatten);
+        } else {
             Object eval = evaluator.evaluate(value);
             if (null != eval) {
-                result.add(eval);
+                res.add(eval);
+            }
+        }
+        if (null != iter) {
+            while (iter.hasNext()) {
+                collect(iter.next(), evaluator, res, flatten);
             }
         }
     }
 
+    /**
+     * Creates a sub-collection for non-flattened collect operations.
+     * 
+     * @param parent the parent collection the sub-collection shall be added to
+     * @param template the template defining the type (set or sequence)
+     * @param flatten whether the result shall be flattened or nesting shall be kept
+     * @return the sub-collection or <code>parent</code> if no sub-collection can be created
+     */
+    private static java.util.Collection<Object> createSubCollection(java.util.Collection<Object> parent, 
+        Object template, boolean flatten) {
+        java.util.Collection<Object> result = parent;
+        if (!flatten) {
+            if (template instanceof java.util.Set || template instanceof Set) {
+                result = new HashSet<Object>();
+                parent.add(result);
+            } else if (template instanceof java.util.Set || template instanceof Sequence) {
+                result = new ArrayList<Object>();
+                parent.add(result);
+            }
+        }
+        return result;
+    }
+    
     @Override
     public boolean isEmpty() {
         return size() == 0;

@@ -253,17 +253,31 @@ public class CallExpression extends AbstractCallExpression implements IArgumentP
      * @return the parameter type or <b>null</b>
      * @throws VilException in case of type problems
      */
-    private TypeDescriptor<?> checkUseParameter() throws VilException {
-        TypeDescriptor<?> result = null;
+    private TypeDescriptor<?>[] checkUseParameter() throws VilException {
+        TypeDescriptor<?>[] result = null;
         int useParam = resolved.useParameterAsReturn();
-        if (useParam >= 0) {
-            useParam++; // ignore implicit
-            if (0 <= useParam && useParam < arguments.length) {
-                Expression param = arguments[useParam].getExpression();
-                if (param instanceof ExpressionEvaluator) {
-                    param = ((ExpressionEvaluator) param).getExpression();
+        if (useParam == Integer.MAX_VALUE) {
+            TypeDescriptor<?> op = determineOperand();
+            if (op.getGenericParameterCount() < 1) {
+                result = TypeDescriptor.createArray(1);
+                // result[0] = null
+            } else {
+                result = TypeDescriptor.createArray(op.getGenericParameterCount());
+                for (int i = 0; i < result.length; i++) {
+                    result[i] = op.getGenericParameterType(i);
                 }
-                result = param.inferType();
+            }
+        } else {
+            result = TypeDescriptor.createArray(1);
+            if (useParam >= 0) {
+                useParam++; // ignore implicit
+                if (0 <= useParam && useParam < arguments.length) {
+                    Expression param = arguments[useParam].getExpression();
+                    if (param instanceof ExpressionEvaluator) {
+                        param = ((ExpressionEvaluator) param).getExpression();
+                    }
+                    result[0] = param.inferType();
+                }
             }
         }
         return result;
@@ -293,8 +307,7 @@ public class CallExpression extends AbstractCallExpression implements IArgumentP
                 TypeDescriptor<?> arg0Type = arguments[0].getExpression().inferType();
                 int genParamCount = arg0Type.getGenericParameterCount();
                 if (genParamCount > 0) {
-                    returnGenerics = TypeDescriptor.createArray(1);
-                    returnGenerics[0] = checkUseParameter();
+                    returnGenerics = checkUseParameter();
                     if (null == returnGenerics[0]) { // take value from implicit parameter
                         useParam = (useParam >= 0 && useParam < genParamCount) ? useParam : 0;
                         returnGenerics[0] = arg0Type.getGenericParameterType(useParam);

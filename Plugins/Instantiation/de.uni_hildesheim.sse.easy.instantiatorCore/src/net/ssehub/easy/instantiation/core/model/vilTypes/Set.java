@@ -108,11 +108,11 @@ public interface Set<T> extends Collection<T> {
     public Set<?> closure(ExpressionEvaluator evaluator) throws VilException;
     
     @Override
-    @OperationMeta(useParameter = 0)
+    @OperationMeta(useParameter = 0, flatten = true)
     public Set<?> collect(ExpressionEvaluator evaluator) throws VilException;
     
     @Override
-    @OperationMeta(useParameter = 0)
+    @OperationMeta(useParameter = Integer.MAX_VALUE)
     public Set<?> collectNested(ExpressionEvaluator evaluator) throws VilException;
     
     /**

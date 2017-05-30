@@ -161,7 +161,7 @@ public interface Collection<T> extends Iterable<T>, IVilGenericType, IStringValu
      * @return the application results
      * @throws VilException in case that evaluation fails
      */
-    @OperationMeta(useParameter = 0)
+    @OperationMeta(useParameter = 0, flatten = true)
     public Collection<?> collect(ExpressionEvaluator evaluator) throws VilException;
 
     /**
@@ -171,7 +171,7 @@ public interface Collection<T> extends Iterable<T>, IVilGenericType, IStringValu
      * @return the application results
      * @throws VilException in case that evaluation fails
      */
-    @OperationMeta(useParameter = 0)
+    @OperationMeta(useParameter = Integer.MAX_VALUE)
     public Collection<?> collectNested(ExpressionEvaluator evaluator) throws VilException;
 
     /**
