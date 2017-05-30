@@ -493,22 +493,20 @@ public abstract class ExpressionTranslator<I extends VariableDeclaration, R exte
                 }
             } else {
                 if (null == implicitType) {
-if (!arguments.isEmpty()) { // as in OCL - allow
-    try {
-    TypeDescriptor<?> opType = arguments.get(0).inferType();
-    ContainerInitializerExpression cInitEx = new ImplicitContainerInitializerExpression(arguments.get(0));
-System.out.println(cInitEx.isImplicit()+" "+cInitEx);    
-    cInitEx.inferType();
-    arguments.set(0, new CallArgument(cInitEx.toSet()));
-    implicitType = opType;
-System.out.println("CHANGED TYPES " + opType.getVilName()+" "+arguments.get(0).inferType().getVilName());    
-    } catch (VilException e) {
-    }
-}
-if (null == implicitType) {
-                    throw new TranslatorException("on non-collection iterators the declarator must given with type", 
-                        call, ExpressionDslPackage.Literals.CALL__PARAM, ErrorCodes.CANNOT_RESOLVE_ITER);
-}
+                    if (!arguments.isEmpty()) { // as in OCL - allow
+                        try {
+                        TypeDescriptor<?> opType = arguments.get(0).inferType();
+                        ContainerInitializerExpression cInitEx = new ImplicitContainerInitializerExpression(arguments.get(0));
+                        cInitEx.inferType();
+                        arguments.set(0, new CallArgument(cInitEx.toSet()));
+                        implicitType = opType;
+                        } catch (VilException e) {
+                        }
+                    }
+                    if (null == implicitType) {
+                        throw new TranslatorException("on non-collection iterators the declarator must given with type", 
+                            call, ExpressionDslPackage.Literals.CALL__PARAM, ErrorCodes.CANNOT_RESOLVE_ITER);
+                    }
                 }
                 t = implicitType; // not explicitly given, take over
             }
