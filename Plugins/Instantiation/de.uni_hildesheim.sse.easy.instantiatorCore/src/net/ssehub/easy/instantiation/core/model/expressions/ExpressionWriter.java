@@ -156,11 +156,7 @@ public class ExpressionWriter extends AbstractWriter implements IExpressionVisit
                     printArgumentList(call, 0);
                 } else {
                     call.getArgument(0).accept(this);
-                    if (call.isIteratorCall()) {
-                        print(Constants.ITER_CALL);
-                    } else {
-                        print(".");
-                    }
+                    printCallAccess(call);
                     printName(call);
                     print("(");
                     printIteratorDeclarators(call);
@@ -197,6 +193,24 @@ public class ExpressionWriter extends AbstractWriter implements IExpressionVisit
             }
         }
         return null;
+    }
+
+    /**
+     * Prints the call access operator.
+     * 
+     * @param call the call to print
+     * @throws VilException in case of type resolution problems
+     */
+    private void printCallAccess(CallExpression call) throws VilException {
+        if (call.isIteratorCall()) {
+            print(Constants.ITER_CALL);
+        } else {
+            if (considerOclCompliance() && call.getArgument(0).inferType().isCollection()) {
+                print(Constants.ITER_CALL);
+            } else {
+                print(".");
+            }
+        }
     }
 
     /**

@@ -40,6 +40,7 @@ public abstract class AbstractCallExpression extends Expression implements IArgu
 
     private String name;
     private String prefix;
+    
     /**
      * Creates an instance from the given call name.
      * 
@@ -904,6 +905,15 @@ public abstract class AbstractCallExpression extends Expression implements IArgu
      */
     public boolean isOclCompliant() {
         return true;
+    }
+
+    /**
+     * Returns whether this operation is a collection-iterator operation.
+     * 
+     * @return <code>true</code> for collection-iterator, <code>false</code> else
+     */
+    public boolean isIteratingCollectionOperation() {
+        return false;
     }
     
     /**

@@ -639,6 +639,42 @@ public abstract class ExpressionTranslator<I extends VariableDeclaration, R exte
         de.uni_hildesheim.sse.vil.expressions.expressionDsl.Expression arrayEx, R resolver) 
         throws TranslatorException; 
 
+
+    /**
+     * Performs generic call expression checks after creation.
+     * 
+     * @param callEx the call expression to be checked (may be <b>null</b> if not resolvable)
+     * @param type the call type
+     * @param call the originating ECore call element
+     * @return <code>callEx</code>
+     * @throws TranslatorException in case of serious problems, e.g., <code>callEx</code> is null
+     */
+    protected AbstractCallExpression checkCallExpression(AbstractCallExpression callEx, CallType type, Call call) 
+        throws TranslatorException {
+        if (null == callEx) {
+            throw new TranslatorException("cannot resolve " + call.getName(), call, 
+                ExpressionDslPackage.Literals.CALL__NAME, ErrorCodes.UNKNOWN_ELEMENT);
+        }
+        if (callEx.isPlaceholder()) {
+            warning("The operation '" + callEx.getVilSignature() 
+                + "' is unknown, shall be a VIL type - may lead to a runtime error", call, 
+                ExpressionDslPackage.Literals.CALL__NAME, ErrorCodes.UNKNOWN_TYPE);
+        }
+        if (ExpressionWriter.considerOclCompliance()) {
+            if (!callEx.isOclCompliant()) {
+                warning("OCL compliance: The operation '" + callEx.getVilSignature() 
+                + "' is not OCL compliant. Please use the respective alias method instead.", call, 
+                ExpressionDslPackage.Literals.CALL__NAME, VilException.ID_UNKNOWN);
+            }
+            if (callEx.isIteratingCollectionOperation() && type != CallType.ITERATOR) {
+                warning("OCL compliance: The iterator operation '" + callEx.getVilSignature() 
+                + "' shall be called through '->' rather than '.'.", call, 
+                ExpressionDslPackage.Literals.CALL__NAME, VilException.ID_UNKNOWN);
+            }
+        }
+        return callEx;
+    }
+    
     /**
      * Checks the semantics of a potential call candidate.
      * 
@@ -679,11 +715,12 @@ public abstract class ExpressionTranslator<I extends VariableDeclaration, R exte
                 if (null != c) {
                     Declarator decl = c.getDecl();
                     if (null == decl) {
-                        if (CallType.ITERATOR == callType) {
+                        // OCL alignment, support both '->' and '.' for collection operations
+                        /*if (CallType.ITERATOR == callType) {
                             // it is an iterator call but without declarators -> error
                             throw new TranslatorException("iterator call without iterator variables", call, 
                                 ExpressionDslPackage.Literals.SUB_CALL__TYPE, ErrorCodes.CANNOT_RESOLVE_ITER);
-                        }
+                        }*/
                     } else {
                         // it is a call with declarators but not a iterator call ->
                         if (callType != CallType.ITERATOR) {
@@ -769,6 +806,15 @@ public abstract class ExpressionTranslator<I extends VariableDeclaration, R exte
         return result;
     }
     
+    /**
+     * Parse the given expression.
+     * 
+     * @param expression the expression as string
+     * @param resolver the resolver
+     * @param warnings a collector for warnings
+     * @return the resulting expression
+     * @throws VilException if problems occur while parsing / resolving
+     */
     protected abstract Expression parseExpression(String expression, R resolver, StringBuilder warnings) 
         throws VilException;
     

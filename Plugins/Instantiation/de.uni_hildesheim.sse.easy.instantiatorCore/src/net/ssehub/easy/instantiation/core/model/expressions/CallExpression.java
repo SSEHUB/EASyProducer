@@ -452,5 +452,10 @@ public class CallExpression extends AbstractCallExpression implements IArgumentP
     public boolean isOclCompliant() {
         return null != resolved ? resolved.isOclCompliant() : true; // else safe side
     }
+    
+    @Override
+    public boolean isIteratingCollectionOperation() {
+        return null != resolved ? resolved.isIteratingCollectionOperation() : false;
+    }
 
 }

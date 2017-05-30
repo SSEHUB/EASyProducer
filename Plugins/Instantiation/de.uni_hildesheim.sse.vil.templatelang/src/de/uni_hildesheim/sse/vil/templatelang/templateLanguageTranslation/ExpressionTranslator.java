@@ -10,7 +10,6 @@ import de.uni_hildesheim.sse.vil.expressions.expressionDsl.Call;
 import de.uni_hildesheim.sse.vil.expressions.expressionDsl.ExpressionDslPackage;
 import de.uni_hildesheim.sse.vil.templatelang.TemplateLangModelUtility;
 import net.ssehub.easy.basics.modelManagement.RestrictionEvaluationException;
-import net.ssehub.easy.dslCore.translation.ErrorCodes;
 import net.ssehub.easy.dslCore.translation.MessageHandler;
 import net.ssehub.easy.dslCore.translation.TranslatorException;
 import net.ssehub.easy.instantiation.core.model.common.VilException;
@@ -100,16 +99,7 @@ public class ExpressionTranslator
                 throw new TranslatorException(semanticException, call, ExpressionDslPackage.Literals.CALL__NAME);
             }
         }
-        if (null == result) {
-            throw new TranslatorException("cannot resolve call to '" + name + "'", call, 
-                ExpressionDslPackage.Literals.CALL__NAME, ErrorCodes.UNKNOWN_ELEMENT);
-        }
-        if (result.isPlaceholder()) {
-            warning("The operation '" + result.getVilSignature() 
-                + "' is unknown, shall be a VIL type - may lead to a runtime error", call, 
-                ExpressionDslPackage.Literals.CALL__NAME, ErrorCodes.UNKNOWN_TYPE);
-        }
-        return result;
+        return checkCallExpression(result, type, call);
     }
     
     @Override
