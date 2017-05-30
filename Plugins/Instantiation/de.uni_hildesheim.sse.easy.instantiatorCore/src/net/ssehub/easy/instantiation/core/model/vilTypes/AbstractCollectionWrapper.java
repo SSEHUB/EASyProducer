@@ -782,7 +782,7 @@ public abstract class AbstractCollectionWrapper<T> implements Collection<T> {
      * @return a sorted (internal) list
      */
     protected List<T> sortAlphaImpl() {
-        java.util.Map<String, List<T>> mapping = new TreeMap<String, List<T>>(Collator.getInstance());
+        java.util.Map<String, List<T>> mapping = new TreeMap<String, List<T>>(PseudoString.getCurrentCollator());
         Iterator<T> iter = iterator();
         while (iter.hasNext()) {
             T elt = iter.next();

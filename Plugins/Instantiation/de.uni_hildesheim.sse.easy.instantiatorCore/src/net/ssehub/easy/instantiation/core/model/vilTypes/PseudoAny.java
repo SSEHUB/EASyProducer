@@ -1,5 +1,7 @@
 package net.ssehub.easy.instantiation.core.model.vilTypes;
 
+import net.ssehub.easy.basics.DefaultLocale;
+
 /**
  * A type which can be assigned to any type.
  * 
@@ -97,6 +99,28 @@ final class PseudoAny implements IVilType {
             result = null;
         }
         return result;
+    }
+    
+    /**
+     * Returns the current (global) locale.
+     * 
+     * @param ob the object to return the current locale for (ignored, needed to assign this to Any)
+     * @return the current locale
+     */
+    public static String getLocale(Object ob) {
+        return DefaultLocale.toString(PseudoString.getCurrentLocale());
+    }
+
+    /**
+     * Changes the current (global) locale.
+     * 
+     * @param ob the object to return the current locale for (ignored, needed to assign this to Any)
+     * @param locale the new (global) locale
+     * @return the (new) current locale
+     */
+    @OperationMeta(name = "locale")
+    public static String setLocale(Object ob, String locale) {
+        return DefaultLocale.toString(PseudoString.setCurrentLocale(DefaultLocale.toLocale(locale)));
     }
 
 }

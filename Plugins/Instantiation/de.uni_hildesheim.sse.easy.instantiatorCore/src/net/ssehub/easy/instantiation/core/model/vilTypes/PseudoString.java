@@ -425,17 +425,47 @@ public class PseudoString implements IVilType {
      */
     @Invisible
     public static Locale getCurrentLocale() {
-        Locale result = DefaultLocale.getDefaultLocale();
+        return doCurrentLocale(null);
+    }
+
+    /**
+     * Changes and returns the current locale used during evaluation.
+     * 
+     * @param locale the new locale (ignored if <b>null</b>, then only the current locale 
+     *   is returned)
+     * @return the current locale (after a potential change)
+     */
+    private static Locale doCurrentLocale(Locale locale) {
+        Locale result;
         ITracer tracer = TracerFactory.getRegisteredBuildLanguageTracer();
         if (null == tracer) {
             tracer = TracerFactory.getRegisteredTemplateLanguageTracer();
         }
         if (null != tracer) {
+            if (null != locale) {
+                tracer.setLocale(locale);
+            }
             result = tracer.getLocale();
+        } else {
+            if (null != locale) {
+                DefaultLocale.setDefaultLocale(locale);
+            }
+            result = DefaultLocale.getDefaultLocale();
         }
         return result;
     }
-    
+
+    /**
+     * Changes and returns the current locale used during evaluation.
+     * 
+     * @param locale the new locale (ignored if <b>null</b>)
+     * @return the new locale
+     */
+    @Invisible
+    public static Locale setCurrentLocale(Locale locale) {
+        return doCurrentLocale(locale);
+    }
+
     /**
      * Returns the collator for {@link #getCurrentLocale()}.
      * 
