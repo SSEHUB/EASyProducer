@@ -64,6 +64,7 @@ import net.ssehub.easy.instantiation.core.model.expressions.ExpressionVersionRes
 import net.ssehub.easy.instantiation.core.model.expressions.ExpressionWriter;
 import net.ssehub.easy.instantiation.core.model.expressions.FieldAccessExpression;
 import net.ssehub.easy.instantiation.core.model.expressions.IResolvable;
+import net.ssehub.easy.instantiation.core.model.expressions.ImplicitContainerInitializerExpression;
 import net.ssehub.easy.instantiation.core.model.expressions.ParenthesisExpression;
 import net.ssehub.easy.instantiation.core.model.expressions.ResolutionListener;
 import net.ssehub.easy.instantiation.core.model.expressions.Resolver;
@@ -423,14 +424,15 @@ public abstract class ExpressionTranslator<I extends VariableDeclaration, R exte
                     if (null != arg0Type) {
                         if (arg0Type.isCollection()) {
                             if (arg0Type.getGenericParameterCount() > 0) {
-                                result = processDeclarators(call, arg0Type.getGenericParameterType(0), resolver);
+                                result = processDeclarators(call, arg0Type.getGenericParameterType(0), 
+                                    arguments, resolver);
                             } else {
                                 throw new TranslatorException("cannot apply iterator as collection does not declare "
                                     + "generic types", call, ExpressionDslPackage.Literals.CALL__DECL, 
                                     ErrorCodes.CANNOT_RESOLVE_ITER);
                             }
                         } else {
-                            result = processDeclarators(call, null, resolver);
+                            result = processDeclarators(call, null, arguments, resolver);
                         }
                     }
 
@@ -466,10 +468,12 @@ public abstract class ExpressionTranslator<I extends VariableDeclaration, R exte
      *   may be <b>null</b> if the underlying type declares the collection implicitly (see deleteJavaCall). In the 
      *   latter case, the type must be explicitly given by the declarator.
      * @param resolver the resolver
+     * @param arguments the call arguments (may be changed to enable implicit collection iterators)
      * @return a list of resolved declarators (at the moment at maximum 1)
      * @throws TranslatorException in case that the translation fails
      */
-    private ArrayList<I> processDeclarators(Call call, TypeDescriptor<?> implicitType, R resolver) throws TranslatorException {
+    private ArrayList<I> processDeclarators(Call call, TypeDescriptor<?> implicitType, List<CallArgument> arguments, 
+        R resolver) throws TranslatorException {
         ArrayList<I> result = new ArrayList<I>();
         Declarator decl = call.getDecl();
         boolean firstDecl = true;
@@ -489,8 +493,22 @@ public abstract class ExpressionTranslator<I extends VariableDeclaration, R exte
                 }
             } else {
                 if (null == implicitType) {
+if (!arguments.isEmpty()) { // as in OCL - allow
+    try {
+    TypeDescriptor<?> opType = arguments.get(0).inferType();
+    ContainerInitializerExpression cInitEx = new ImplicitContainerInitializerExpression(arguments.get(0));
+System.out.println(cInitEx.isImplicit()+" "+cInitEx);    
+    cInitEx.inferType();
+    arguments.set(0, new CallArgument(cInitEx.toSet()));
+    implicitType = opType;
+System.out.println("CHANGED TYPES " + opType.getVilName()+" "+arguments.get(0).inferType().getVilName());    
+    } catch (VilException e) {
+    }
+}
+if (null == implicitType) {
                     throw new TranslatorException("on non-collection iterators the declarator must given with type", 
                         call, ExpressionDslPackage.Literals.CALL__PARAM, ErrorCodes.CANNOT_RESOLVE_ITER);
+}
                 }
                 t = implicitType; // not explicitly given, take over
             }

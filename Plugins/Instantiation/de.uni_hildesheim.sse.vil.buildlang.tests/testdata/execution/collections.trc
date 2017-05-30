@@ -261,4 +261,7 @@ seq4seq1SubSeq <- false
 seq1seq20SubSeq <- true
 -> isSubsequenceOf(Sequence, Sequence) with ({1, 2, 3, 4, 5}, {1, 2, 3, 4}) = false
 seq20seq1SubSeq <- false
+-> >(Integer, Integer) with (1680, 0) = true
+-> select(Set, ExpressionEvaluator) with ({1680}, <evaluator>) = {1680}
+seq21 <- {1680}
 -> main()

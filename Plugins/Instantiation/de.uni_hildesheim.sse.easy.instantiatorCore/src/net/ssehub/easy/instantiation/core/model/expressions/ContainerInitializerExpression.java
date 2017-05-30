@@ -26,7 +26,7 @@ public class ContainerInitializerExpression extends Expression {
     }
 
     /**
-     * Creates a new empty container initializer expression. Currently, this 
+     * Creates a new container initializer expression. Currently, this 
      * constructor expects that the input is valid (appropriate dimensions)
      * 
      * @param initExpressions the initializer expressions, either logical expressions
@@ -43,7 +43,7 @@ public class ContainerInitializerExpression extends Expression {
      *   or container initializer expression
      * @param type the type of the expression
      */
-    private ContainerInitializerExpression(Expression[] initExpressions, TypeDescriptor<?> type) {
+    protected ContainerInitializerExpression(Expression[] initExpressions, TypeDescriptor<?> type) {
         this.initExpressions = initExpressions;
         this.type = type;
     } 
@@ -135,10 +135,32 @@ public class ContainerInitializerExpression extends Expression {
     }
     
     /**
+     * Returns whether this initializer expression is implicit and shall not be printed.
+     * 
+     * @return <code>true</code> for implicit, <code>false</code> else
+     */
+    public boolean isImplicit() {
+        return false;
+    }
+    
+    /**
+     * Creates a container initializer instance for {@link #toSet()}. May be overridden.
+     * 
+     * @param initExpressions the init expression
+     * @param type the type descriptor
+     * @return the initializer instance
+     */
+    protected ContainerInitializerExpression createInitExpression(Expression[] initExpressions, 
+        TypeDescriptor<?> type) {
+        return new ContainerInitializerExpression(initExpressions, type);
+    }
+    
+    /**
      * Converts this container initializer to a set.
      * 
      * @return the corresponding set initializer
      * @throws VilException in case that conversion fails
+     * @see #createInitExpression(Expression[], TypeDescriptor)
      */
     public ContainerInitializerExpression toSet() throws VilException {
         TypeDescriptor<?>[] parameter;
@@ -146,7 +168,7 @@ public class ContainerInitializerExpression extends Expression {
         for (int p = 0; p < parameter.length; p++) {
             parameter[p] = type.getGenericParameterType(p);
         }
-        return new ContainerInitializerExpression(initExpressions, TypeRegistry.getSetType(parameter));
+        return createInitExpression(initExpressions, TypeRegistry.getSetType(parameter));
     }
 
 }

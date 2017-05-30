@@ -348,14 +348,18 @@ public class ExpressionWriter extends AbstractWriter implements IExpressionVisit
 
     @Override
     public Object visitContainerInitializerExpression(ContainerInitializerExpression ex) throws VilException {
-        print("{");
+        if (!ex.isImplicit()) { // has then only one init expression
+            print("{");
+        }
         for (int e = 0; e < ex.getInitExpressionsCount(); e++) {
             if (e > 0) {
                 print(", ");
             }
             ex.getInitExpression(e).accept(this);
         }
-        print("}");
+        if (!ex.isImplicit()) { 
+            print("}");
+        }
         return null;
     }
     

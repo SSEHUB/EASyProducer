@@ -94,6 +94,7 @@ vilScript collections () {
     Boolean seq4seq1SubSeq = seq4.isSubsequenceOf(seq1);
     Boolean seq1seq20SubSeq = seq1.isSubsequenceOf(seq20);
     Boolean seq20seq1SubSeq = seq20.isSubsequenceOf(seq1);
+    setOf(Integer) seq21 = prodInt13->select(i | i > 0);
 
     main() = : {
     }
