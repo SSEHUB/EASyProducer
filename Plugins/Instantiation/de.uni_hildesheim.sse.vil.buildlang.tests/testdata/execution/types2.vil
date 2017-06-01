@@ -1,0 +1,34 @@
+vilScript typeOf (Project source, Project target, Configuration config) {
+
+    Integer int1 = 1;
+    Real real1 = 1.0;
+    Boolean bool1 = true;
+    String string1 = "test";
+    sequenceOf(Integer) seq1 = {1, 2, 3, 4};
+    setOf(Integer) set1 = {1, 2, 3, 4};
+
+    main() = : {
+        println(int1.type());
+        println(real1.type());
+        println(bool1.type());
+        println(string1.type());
+        println(seq1.type());
+        println(set1.type());
+        println(config.byName("tc1").type());
+        println(config.byName("tc2").type());
+        println(config.byName("tc3").type());
+        String s1 = "pre_" + config.byName("tc1").type();
+        Boolean b1 = "TestCompound" == config.byName("tc1").type();
+        Boolean b2 = config.byName("tc1").type() == "TestCompound";
+        Boolean b3 = "SpecialCompound" != config.byName("tc1").type();
+        Boolean b4 = config.byName("tc1").type() != "SpecialCompound";
+        DecisionVariable tc1 = config.byName("tc1");
+        DecisionVariable tc2 = config.byName("tc2");
+        String s2 = tc1.type();
+        Boolean b5 = s2 == "TestCompound";
+        Boolean b6 = tc1.isKindOf(tc1);
+        Boolean b7 = tc1.isTypeOf(tc1);
+        Boolean b8 = tc2.isKindOf(tc1);
+    }
+
+}

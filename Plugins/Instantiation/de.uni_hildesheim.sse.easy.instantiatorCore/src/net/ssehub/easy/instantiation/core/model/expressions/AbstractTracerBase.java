@@ -18,6 +18,7 @@ package net.ssehub.easy.instantiation.core.model.expressions;
 import java.util.Locale;
 
 import net.ssehub.easy.basics.DefaultLocale;
+import net.ssehub.easy.instantiation.core.model.common.RuntimeEnvironment;
 
 /**
  * An abstract base tracer implementation storing the actual locale.
@@ -27,6 +28,7 @@ import net.ssehub.easy.basics.DefaultLocale;
 public abstract class AbstractTracerBase implements ITracer {
 
     private Locale locale = DefaultLocale.getDefaultLocale();
+    private RuntimeEnvironment environment;
     
     @Override
     public Locale getLocale() {
@@ -38,6 +40,16 @@ public abstract class AbstractTracerBase implements ITracer {
         if (null != locale) {
             this.locale = locale;
         }
+    }
+
+    @Override
+    public void setRuntimeEnvironment(RuntimeEnvironment environment) {
+        this.environment = environment;
+    }
+
+    @Override
+    public RuntimeEnvironment getRuntimeEnvironment() {
+        return environment;
     }
     
 }

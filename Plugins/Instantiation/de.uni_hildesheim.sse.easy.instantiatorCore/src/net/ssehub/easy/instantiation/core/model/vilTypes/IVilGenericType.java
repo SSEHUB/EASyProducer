@@ -23,10 +23,10 @@ package net.ssehub.easy.instantiation.core.model.vilTypes;
 public interface IVilGenericType extends IVilType {
 
     /**
-     * Returns the actual type including generics.
+     * Returns the actual type including generics. "Overrides" {@link PseudoAny#getType(Object)}.
      * 
      * @return the actual type
      */
-    @Invisible(inherit = true)
     public TypeDescriptor<?> getType();
+    
 }

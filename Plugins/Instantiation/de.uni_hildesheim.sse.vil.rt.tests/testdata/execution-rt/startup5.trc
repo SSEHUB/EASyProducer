@@ -18,18 +18,18 @@
             }
     }
 -> status(LifecycleEvent) with (<LifecycleEvent>) = START
--> ==(String, String) with (START, START) = true
+-> ==(LifecycleEventStatus, Any) with (START, START) = true
 -> status(LifecycleEvent) with (<LifecycleEvent>) = START
--> ==(String, String) with (START, START) = true
+-> ==(LifecycleEventStatus, Any) with (START, START) = true
 -> status(LifecycleEvent) with (<LifecycleEvent>) = START
--> ==(String, String) with (START, START) = true
+-> ==(LifecycleEventStatus, Any) with (START, START) = true
 -> status(LifecycleEvent) with (<LifecycleEvent>) = START
--> ==(String, String) with (START, START) = true
+-> ==(LifecycleEventStatus, Any) with (START, START) = true
 -> startup(Project, Configuration, Project, LifecycleEvent) with (<project>, <config>, <project>, <LifecycleEvent>)
     -> status(LifecycleEvent) with (<LifecycleEvent>) = START
-    -> ==(String, String) with (START, START) = true
+    -> ==(LifecycleEventStatus, Any) with (START, START) = true
     -> status(LifecycleEvent) with (<LifecycleEvent>) = START
-    -> ==(String, String) with (START, START) = true
+    -> ==(LifecycleEventStatus, Any) with (START, START) = true
     -> getPipeline(LifecycleEvent) with (<LifecycleEvent>) = pip
     -> startupTakeFirst(Configuration, String) with (<config>, pip)
         qm <- <config>

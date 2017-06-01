@@ -2,6 +2,7 @@ package net.ssehub.easy.instantiation.core.model.expressions;
 
 import java.util.Locale;
 
+import net.ssehub.easy.instantiation.core.model.common.RuntimeEnvironment;
 import net.ssehub.easy.instantiation.core.model.expressions.CallExpression.CallType;
 import net.ssehub.easy.instantiation.core.model.vilTypes.OperationDescriptor;
 
@@ -53,5 +54,19 @@ public interface ITracer {
      * @param locale the new locale (ignored if <b>null</b>) 
      */
     public void setLocale(Locale locale);
+
+    /**
+     * Defines the actual runtime environment.
+     * 
+     * @param environment the environment
+     */
+    public void setRuntimeEnvironment(RuntimeEnvironment environment);
+
+    /**
+     * Returns the actual runtime environment.
+     * 
+     * @return registry the runtime environment (may be <b>null</b> if not currently executing)
+     */
+    public RuntimeEnvironment getRuntimeEnvironment();
 
 }

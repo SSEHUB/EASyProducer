@@ -1,0 +1,68 @@
+@advice(dispatch8)
+template types1(Configuration config, FileArtifact target) {
+
+    def process1(PipelineElement elt) {
+        switch(elt.type()) {
+            "FamilyElement" : "fe",
+            "Source" : "src",
+            "Sink" : "snk",
+            "PipelineElement" : "pe"
+        }
+    }
+
+    def process2(PipelineElement elt) {
+        switch(elt.type()) {
+            FamilyElement : "fe",
+            Source : "src",
+            Sink : "snk",
+            PipelineElement : "pe"
+        }
+    }
+
+    def process3(DecisionVariable elt) {
+        switch(elt.type()) {
+            "FamilyElement" : "fe",
+            "Source" : "src",
+            "Sink" : "snk",
+            "PipelineElement" : "pe"
+        }
+    }
+
+    def process4(DecisionVariable elt) {
+        switch(elt.type()) {
+            FamilyElement : "fe",
+            Source : "src",
+            Sink : "snk",
+            PipelineElement : "pe"
+        }
+    }
+
+    def main(Configuration config, FileArtifact target) {
+        dispatch8 cfg = config;
+        '${process1(cfg.elt1)}'
+        '${process2(cfg.elt1)}'
+        '${process3(cfg.elt1)}'
+        '${process4(cfg.elt1)}'
+        PipelineElement pe = cfg.elt1;
+        '${process1(pe)}'
+        '${process2(pe)}'
+        '${process3(pe)}'
+        '${process4(pe)}'
+        '${process1(cfg.elt2)}'
+        '${process2(cfg.elt2)}'
+        '${process3(cfg.elt2)}'
+        '${process4(cfg.elt2)}'
+        pe = cfg.elt2;
+        '${process1(pe)}'
+        '${process2(pe)}'
+        '${process3(pe)}'
+        '${process4(pe)}'
+        for (PipelineElement p : cfg.elts) {
+            '${process1(p)}'
+            '${process2(p)}'
+            '${process3(p)}'
+            '${process4(p)}'
+        }
+    }
+
+}

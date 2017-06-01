@@ -9,9 +9,15 @@ project typeSelectTest {
   }
   
   setOf(TestCompound) t = {TestCompound{iVal=1}, TestCompound{iVal=2}, SpecialCompound{iVal=3}};
+  TestCompound tc1 = {iVal=10};
+  TestCompound tc2 = SpecialCompound{iVal=11};
+  SpecialCompound tc3 = SpecialCompound{iVal=12};
   
   freeze {
     t;
+    tc1;
+    tc2;
+    tc3;
   };
   
 }

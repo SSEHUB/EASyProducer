@@ -40,6 +40,7 @@ import net.ssehub.easy.instantiation.core.model.vilTypes.IVilType;
 import net.ssehub.easy.instantiation.core.model.vilTypes.IntHolder;
 import net.ssehub.easy.instantiation.core.model.vilTypes.Map;
 import net.ssehub.easy.instantiation.core.model.vilTypes.OperationDescriptor;
+import net.ssehub.easy.instantiation.core.model.vilTypes.OperationType;
 import net.ssehub.easy.instantiation.core.model.vilTypes.ReflectionConstructorDescriptor;
 import net.ssehub.easy.instantiation.core.model.vilTypes.ReflectionFieldDescriptor;
 import net.ssehub.easy.instantiation.core.model.vilTypes.ReflectionOperationDescriptor;
@@ -98,7 +99,68 @@ public class RtVilTypeRegistry extends TypeRegistry implements IClassNameMapperP
     public static final TypeDescriptor<?> tacticType() {
         return INSTANCE.getType(Constants.TYPE_TACTIC);
     }
-    
+
+    /**
+     * A specific type descriptor for comparison operations. Required to delegate
+     * comparisons to the underlying Java implementation and to bypass potential
+     * compatible type-based comparisons.
+     * 
+     * @author Holger Eichelberger
+     */
+    private static class RtComparisonOperationDescriptor extends ReflectionOperationDescriptor {
+
+        private boolean negate;
+
+        /**
+         * Creates a comparison operation descriptor.
+         * 
+         * @param declaringType the declaring type
+         * @param method the executing method (equals)
+         * @param name the name of the operation
+         * @param negate shall the result be negated if Boolean
+         */
+        public RtComparisonOperationDescriptor(TypeDescriptor<?> declaringType, Method method, String name, 
+            boolean negate) {
+            super(declaringType, method, name, false);
+            this.negate = negate;
+            List<TypeDescriptor<?>> parameters = new ArrayList<TypeDescriptor<?>>();
+            parameters.add(declaringType);
+            parameters.add(declaringType);
+            setParameters(parameters, false, false);
+            setCharacteristics(OperationType.INFIX, null, false, name);
+        }
+
+        @Override
+        protected Class<?>[] getParameterGenerics(int index) {
+            return RtVilTypeRegistry.getTypeAnalyzer().getParameterGenerics(getMethod(), index);
+        }
+        
+        @Override
+        protected boolean considerNamedParameters() {
+            return false;
+        }
+
+        @Override
+        protected Class<?>[] getReturnGenerics() {
+            return RtVilTypeRegistry.getTypeAnalyzer().getReturnGenerics(getMethod());
+        }
+        
+        @Override
+        public Object invoke(Object... args) throws VilException {
+            mapArgumentsToJava(args);
+            Object result = super.invoke(args);
+            if (negate) {
+                if (Boolean.TRUE == result) {
+                    result = Boolean.FALSE;
+                } else if (Boolean.FALSE == result) {
+                    result = Boolean.TRUE;
+                }
+            }
+            return mapValueToVil(result, getReturnType());
+        }
+
+    }
+
     /**
      * Realizes a slightly extended reflection operation descriptor which may the actual disable execution in case 
      * of simulation as well as VIL-to-Java mapping and parameter generics mappings.
@@ -324,6 +386,17 @@ public class RtVilTypeRegistry extends TypeRegistry implements IClassNameMapperP
                     ops.add(new RtReflectionConstructorDescriptor(this, constructor));
                     canBeInstantiated = true;
                 }
+            }
+            try {
+                Method equals = getTypeClass().getMethod("equals", Object.class);
+                ops.add(new RtComparisonOperationDescriptor(this, equals, 
+                    net.ssehub.easy.instantiation.core.model.vilTypes.Constants.EQUALITY, false));
+                ops.add(new RtComparisonOperationDescriptor(this, equals, 
+                    net.ssehub.easy.instantiation.core.model.vilTypes.Constants.UNEQUALITY, true));
+                ops.add(new RtComparisonOperationDescriptor(this, equals, 
+                    net.ssehub.easy.instantiation.core.model.vilTypes.Constants.UNEQUALITY_ALIAS, true));
+            } catch (NoSuchMethodException e) {
+                // shall not occur
             }
             super.setOperations(ops);
         }

@@ -5,22 +5,20 @@ import java.util.List;
 
 import net.ssehub.easy.instantiation.core.model.vilTypes.ArraySet;
 import net.ssehub.easy.instantiation.core.model.vilTypes.Conversion;
-import net.ssehub.easy.instantiation.core.model.vilTypes.IActualTypeProvider;
-import net.ssehub.easy.instantiation.core.model.vilTypes.Invisible;
 import net.ssehub.easy.instantiation.core.model.vilTypes.OperationMeta;
 import net.ssehub.easy.instantiation.core.model.vilTypes.Sequence;
 import net.ssehub.easy.instantiation.core.model.vilTypes.Set;
+import net.ssehub.easy.instantiation.core.model.vilTypes.TypeDescriptor;
 import net.ssehub.easy.instantiation.core.model.vilTypes.UnmodifiableSet;
 import net.ssehub.easy.varModel.confModel.ContainerVariable;
 import net.ssehub.easy.varModel.confModel.IDecisionVariable;
-import net.ssehub.easy.varModel.model.datatypes.IDatatype;
 
 /**
  * Realizes the bridge to the decision variables.
  * 
  * @author Holger Eichelberger
  */
-public class DecisionVariable extends AbstractIvmlVariable implements IActualTypeProvider {
+public class DecisionVariable extends AbstractIvmlVariable {
 
     private Attribute[] attributes;
     
@@ -157,12 +155,6 @@ public class DecisionVariable extends AbstractIvmlVariable implements IActualTyp
     public static Sequence<DecisionVariable> convert2Sequence(DecisionVariable val) {
         return val.variables();
     }
-    
-    @Override
-    @Invisible
-    public IDatatype determineActualTypeName() {
-        return getDecisionVariable().getDeclaration().getType();
-    }
 
     /**
      * Returns the simple name of the decision variable.
@@ -177,6 +169,28 @@ public class DecisionVariable extends AbstractIvmlVariable implements IActualTyp
             var = (ContainerVariable) var.getParent();
         }
         return var.getDeclaration().getName();
+    }
+
+    /**
+     * Returns whether <code>type</code> is of the same type as this object. 
+     * 
+     * @param type the type to compare with
+     * @return <code>true</code> if <code>type</code> is of the same type as <b>this</b>, 
+     *   <code>false</code> else
+     */
+    public boolean isTypeOf(TypeDescriptor<?> type) {
+        return type.isSame(getType());
+    }
+
+    /**
+     * Returns whether <code>type</code> is of the same or a super type as this object.
+     * 
+     * @param type the type to compare with
+     * @return <code>true</code> if <code>type</code> is of the same or a super type as <b>this</b>, 
+     *   <code>false</code> else
+     */
+    public boolean isKindOf(TypeDescriptor<?> type) {
+        return type.isAssignableFrom(getType());
     }
 
 }

@@ -1,6 +1,7 @@
 package net.ssehub.easy.instantiation.core.model.vilTypes;
 
 import net.ssehub.easy.basics.DefaultLocale;
+import net.ssehub.easy.instantiation.core.model.common.ExecutionLocal;
 
 /**
  * A type which can be assigned to any type.
@@ -108,7 +109,7 @@ final class PseudoAny implements IVilType {
      * @return the current locale
      */
     public static String getLocale(Object ob) {
-        return DefaultLocale.toString(PseudoString.getCurrentLocale());
+        return DefaultLocale.toString(ExecutionLocal.getCurrentLocale());
     }
 
     /**
@@ -120,7 +121,32 @@ final class PseudoAny implements IVilType {
      */
     @OperationMeta(name = "locale")
     public static String setLocale(Object ob, String locale) {
-        return DefaultLocale.toString(PseudoString.setCurrentLocale(DefaultLocale.toLocale(locale)));
+        return DefaultLocale.toString(ExecutionLocal.setCurrentLocale(DefaultLocale.toLocale(locale)));
+    }
+
+    /**
+     * Returns the type of <code>ob</code>. This method is intended as fallback. In particular, 
+     * basic types, collections and configuration types shall provide their own implementation. The parameter
+     * corresponds to the operand to derive the type for, i.e., non-static implementations rely on
+     * the implicit object.
+     * 
+     * @param ob the object to return the type for
+     * @return the type of object (may be {@link TypeRegistry#voidType()})
+     */
+    public static TypeDescriptor<?> getType(Object ob) {
+        TypeDescriptor<?> result = TypeRegistry.voidType();
+        if (ob instanceof TypeDescriptor) {
+            result = (TypeDescriptor<?>) ob;
+        } else if (ob instanceof IActualTypeProvider) {
+            result = ((IActualTypeProvider) ob).getType();
+        } else if (null != ob) {
+            // default type registry as only fallback. specific type shall "override"
+            result = ExecutionLocal.getCurrentTypeRegistry().getType(ob.getClass());
+            if (null == result) {
+                result = TypeRegistry.anyType();
+            }
+        }
+        return result;
     }
 
 }

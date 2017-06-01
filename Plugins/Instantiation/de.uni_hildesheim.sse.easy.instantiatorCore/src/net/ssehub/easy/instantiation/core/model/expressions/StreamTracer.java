@@ -8,6 +8,7 @@ import java.util.Locale;
 import java.util.Map;
 
 import net.ssehub.easy.basics.DefaultLocale;
+import net.ssehub.easy.instantiation.core.model.common.RuntimeEnvironment;
 import net.ssehub.easy.instantiation.core.model.common.VilException;
 import net.ssehub.easy.instantiation.core.model.expressions.CallExpression.CallType;
 import net.ssehub.easy.instantiation.core.model.vilTypes.Constants;
@@ -53,6 +54,7 @@ public abstract class StreamTracer extends AbstractWriter implements ITracer {
 
     private Locale locale = DefaultLocale.getDefaultLocale();
     private String[] baseFolder;
+    private RuntimeEnvironment environment;
     
     /**
      * Creates a new stream tracer.
@@ -201,6 +203,16 @@ public abstract class StreamTracer extends AbstractWriter implements ITracer {
         if (null != locale) {
             this.locale = locale;
         }
+    }
+    
+    @Override
+    public void setRuntimeEnvironment(RuntimeEnvironment environment) {
+        this.environment = environment;
+    }
+
+    @Override
+    public RuntimeEnvironment getRuntimeEnvironment() {
+        return environment;
     }
 
 }

@@ -26,6 +26,7 @@ import net.ssehub.easy.instantiation.core.model.artifactModel.FileUtils;
 import net.ssehub.easy.instantiation.core.model.artifactModel.IFileSystemArtifact;
 import net.ssehub.easy.instantiation.core.model.artifactModel.PathUtils;
 import net.ssehub.easy.instantiation.core.model.common.VilException;
+import net.ssehub.easy.instantiation.core.model.execution.TracerFactory;
 import net.ssehub.easy.instantiation.core.model.expressions.ExpressionParserRegistry;
 import net.ssehub.easy.instantiation.core.model.templateModel.ExtensionClassLoaders;
 import net.ssehub.easy.instantiation.core.model.templateModel.StreamTracer;
@@ -175,11 +176,14 @@ public abstract class AbstractTest extends net.ssehub.easy.dslCore.test.Abstract
                     Assert.assertTrue(null != fileAsString);
 
                     StringWriter writer = new StringWriter();
-                    TemplateLangExecution exec = new TemplateLangExecution(new StreamTracer(trace, 
-                        getBaseFolders(data)),  writer, data.getStartElement(), data.getParameter());
+                    StreamTracer tTracer = new StreamTracer(trace, getBaseFolders(data));
+                    TracerFactory.registerTemplateLanguageTracer(tTracer);
+                    TemplateLangExecution exec = new TemplateLangExecution(tTracer, 
+                         writer, data.getStartElement(), data.getParameter());
                     result.getResult(0).accept(exec);
                     //String traceAsString = writer.toString().trim();
                     //Assert.assertTrue(checkEqualsAndPrint(fileAsString, traceAsString));
+                    TracerFactory.unregisterTemplateLanguageTracer(tTracer);
                     String errorMsg = checkEqualsAndPrepareMessage(fileAsString, trace);
                     if (null != errorMsg) {
                         Assert.assertEquals(fileAsString.trim(), trace.toString().trim());

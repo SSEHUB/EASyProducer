@@ -8,6 +8,7 @@ import net.ssehub.easy.basics.logger.EASyLoggerFactory.EASyLogger;
 import net.ssehub.easy.instantiation.core.Bundle;
 import net.ssehub.easy.instantiation.core.model.vilTypes.ArraySequence;
 import net.ssehub.easy.instantiation.core.model.vilTypes.ArraySet;
+import net.ssehub.easy.instantiation.core.model.vilTypes.IActualTypeProvider;
 import net.ssehub.easy.instantiation.core.model.vilTypes.Invisible;
 import net.ssehub.easy.instantiation.core.model.vilTypes.OperationMeta;
 import net.ssehub.easy.instantiation.core.model.vilTypes.Sequence;
@@ -49,7 +50,7 @@ import net.ssehub.easy.varModel.model.values.ValueFactory;
  * 
  * @author Holger Eichelberger
  */
-public abstract class AbstractIvmlVariable extends IvmlElement {
+public abstract class AbstractIvmlVariable extends IvmlElement implements IActualTypeProvider {
 
     private static final ValueVisitor VALUE_VISITOR = new ValueVisitor();
     protected IDecisionVariable origVariable;
@@ -408,10 +409,19 @@ public abstract class AbstractIvmlVariable extends IvmlElement {
      * 
      * @return the simple type name
      */
-    public String getType() {
+    public TypeDescriptor<?> getType() {
+        return getTypeDescriptor(getIvmlType());
+    }
+
+    /**
+     * Returns the simple type name of the (dereferenced) decision variable (VIL view).
+     * 
+     * @return the simple type name
+     */
+    public String getTypeName() {
         return getIvmlType().getName();
     }
-    
+
     /**
      * Returns the declared IVML type of the (dereferenced) decision variable (VIL view).
      * 
@@ -903,4 +913,12 @@ public abstract class AbstractIvmlVariable extends IvmlElement {
         AbstractVariable decl = variable.getDeclaration();
         return decl.getType().toString() + " " + decl.getName() + " = " + variable.getValue().toString();
     }
+
+    
+    @Override
+    @Invisible
+    public IDatatype determineActualTypeName() {
+        return getDecisionVariable().getDeclaration().getType();
+    }
+
 }

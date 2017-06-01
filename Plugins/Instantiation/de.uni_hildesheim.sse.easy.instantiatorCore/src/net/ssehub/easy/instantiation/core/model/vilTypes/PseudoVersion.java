@@ -87,5 +87,15 @@ final class PseudoVersion implements IVilType {
     public static boolean unequals(Version v1, Version v2) {
         return Version.compare(v1, v2) != 0;
     }
-    
+
+    /**
+     * Returns the type of <code>value</code>. "Overrides" {@link PseudoAny#getType(Object)}.
+     * 
+     * @param value the version to return the type for
+     * @return the type of object (<b>null</b> if <code>ob</code> is <b>null</b>)
+     */
+    public static TypeDescriptor<?> getType(Version value) {
+        return TypeRegistry.versionType();
+    }
+
 }

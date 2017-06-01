@@ -23,5 +23,7 @@ public class PseudoIterator<T> implements IVilType, IStringValueProvider {
     public String getStringValue(StringComparator comparator) {
         return STRING_VALUE;
     }
+    
+    // currently no get type as internal 
 
 }

@@ -18,7 +18,6 @@ import net.ssehub.easy.basics.progress.ProgressObserver;
 import net.ssehub.easy.dslCore.StandaloneInitializer;
 import net.ssehub.easy.instantiation.core.model.AbstractTest;
 import net.ssehub.easy.instantiation.core.model.common.VilException;
-import net.ssehub.easy.instantiation.core.model.vilTypes.Sequence;
 import net.ssehub.easy.instantiation.core.model.vilTypes.configuration.AbstractIvmlVariable;
 import net.ssehub.easy.instantiation.core.model.vilTypes.configuration.Configuration;
 import net.ssehub.easy.instantiation.core.model.vilTypes.configuration.DecisionVariable;
@@ -97,7 +96,7 @@ public class ConfigurationTests extends AbstractTest {
         Assert.assertNotNull(project);
         Assert.assertEquals(configuration.getName(), cfg.getName());
         Assert.assertEquals(configuration.getQualifiedName(), project.getQualifiedName());
-        Assert.assertEquals(configuration.getType(), project.getType().getName());
+        Assert.assertEquals(configuration.getTypeName(), project.getType().getName());
         Assert.assertEquals(configuration.getQualifiedType(), project.getType().getQualifiedName());
         TestVisitor visitor = new TestVisitor(cfg, configuration);
         project.accept(visitor);

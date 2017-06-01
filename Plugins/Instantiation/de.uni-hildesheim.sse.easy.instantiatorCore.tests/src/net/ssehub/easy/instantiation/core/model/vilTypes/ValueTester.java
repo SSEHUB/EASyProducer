@@ -4,7 +4,6 @@ import java.util.Iterator;
 
 import org.junit.Assert;
 
-import net.ssehub.easy.instantiation.core.model.vilTypes.Sequence;
 import net.ssehub.easy.instantiation.core.model.vilTypes.configuration.AbstractIvmlVariable;
 import net.ssehub.easy.instantiation.core.model.vilTypes.configuration.DecisionVariable;
 import net.ssehub.easy.varModel.model.values.BooleanValue;

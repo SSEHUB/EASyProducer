@@ -88,6 +88,9 @@ project dispatch8 {
 			refBy(Source0)
 		}
 	};
+	PipelineElement elt1 = FamilyElement {};
+	PipelineElement elt2 = Source {};
+	setOf(PipelineElement) elts = {FamilyElement{}, Source{}}; 
 	
 	freeze {
 		Pipeline0;
@@ -99,5 +102,8 @@ project dispatch8 {
 		fm;
 		alg;
 		tuple0;
+		elt1;
+		elt2;
+		elts;
 	};
 }

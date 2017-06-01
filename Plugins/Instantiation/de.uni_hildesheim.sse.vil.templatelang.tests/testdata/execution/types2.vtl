@@ -1,0 +1,22 @@
+template types2(Configuration config, FileArtifact target) {
+
+    def process1(DecisionVariable elt) {
+        switch(elt.type()) {
+            "FamilyElement" : "fe",
+            "Source" : "src",
+            "Sink" : "snk",
+            "PipelineElement" : "pe"
+        }
+    }
+
+    def main(Configuration config, FileArtifact target) {
+        DecisionVariable elt1 = config.byName("elt1");
+        '${process1(elt1)}'
+        DecisionVariable elt2 = config.byName("elt2");
+        '${process1(elt2)}'
+        for (DecisionVariable p : config.byName("elts").variables()) {
+            '${process1(p)}'
+        }
+    }
+
+}

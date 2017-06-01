@@ -1,5 +1,7 @@
 package net.ssehub.easy.instantiation.core.model.vilTypes.configuration;
 
+import net.ssehub.easy.instantiation.core.model.common.ExecutionLocal;
+import net.ssehub.easy.instantiation.core.model.common.VilException;
 import net.ssehub.easy.instantiation.core.model.expressions.IResolvable;
 import net.ssehub.easy.instantiation.core.model.vilTypes.Constants;
 import net.ssehub.easy.instantiation.core.model.vilTypes.IStringValueProvider;
@@ -7,7 +9,9 @@ import net.ssehub.easy.instantiation.core.model.vilTypes.IVilType;
 import net.ssehub.easy.instantiation.core.model.vilTypes.Invisible;
 import net.ssehub.easy.instantiation.core.model.vilTypes.OperationMeta;
 import net.ssehub.easy.instantiation.core.model.vilTypes.OperationType;
+import net.ssehub.easy.instantiation.core.model.vilTypes.TypeDescriptor;
 import net.ssehub.easy.instantiation.core.model.vilTypes.TypeRegistry;
+import net.ssehub.easy.varModel.model.datatypes.IDatatype;
 
 /**
  * Denotes an element resolved in IVML. This must not be an interface
@@ -42,11 +46,18 @@ public abstract class IvmlElement implements IVilType, IResolvable, IStringValue
     public abstract String getQualifiedName();
 
     /**
+     * Returns the VIL type of the element.
+     * 
+     * @return the VIL type (may be a fake descriptor if not resolved / no advice)
+     */
+    public abstract TypeDescriptor<?> getType();
+
+    /**
      * Returns the simple type name of the element.
      * 
      * @return the simple type name
      */
-    public abstract String getType();
+    public abstract String getTypeName();
 
     /**
      * Returns the qualified type name of the element.
@@ -312,6 +323,27 @@ public abstract class IvmlElement implements IVilType, IResolvable, IStringValue
     @Invisible
     public String getInstanceName() {
         return getQualifiedName();
+    }
+    
+    /**
+     * Returns the type descriptor for a given IVML datatype. May lead to a fake/fallback
+     * datatype if not known / advised.
+     * 
+     * @param type the type
+     * @return the type or <b>null</b> if unknown
+     */
+    static TypeDescriptor<?> getTypeDescriptor(IDatatype type) {
+        TypeRegistry registry = ExecutionLocal.getCurrentTypeRegistry();
+        TypeDescriptor<?> result = registry.getTypeOrFallback(type);
+        if (null == result && !registry.hasTypeResolver(IvmlTypeResolver.class)) {
+            // if there are type resolvers, then there is an @advice that shall provide acces to the type
+            try {
+                result = new FakeTypeDescriptor(registry, type.getName());
+                registry.registerFallbackType(type, result);
+            } catch (VilException e) {
+            }
+        }
+        return result;
     }
 
 }

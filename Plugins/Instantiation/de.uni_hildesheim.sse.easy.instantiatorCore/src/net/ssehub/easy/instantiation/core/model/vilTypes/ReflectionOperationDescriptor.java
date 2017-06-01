@@ -198,6 +198,8 @@ public class ReflectionOperationDescriptor extends OperationDescriptor implement
                 // explicit conversion - convenience and legacy
                 if (arg instanceof TypeDescriptor && paramTypes[i] == Class.class) {
                     callArgs[i] = ((TypeDescriptor<?>) arg).getTypeClass();
+                } else if (arg instanceof IActualTypeProvider && paramTypes[i] == TypeDescriptor.class) {
+                    callArgs[i] = ((IActualTypeProvider) arg).getType();
                 } else {
                     callArgs[i] = args[i + 1];
                 }

@@ -249,4 +249,14 @@ public class DelegatingTracer implements ITracer {
         delegate.setLocale(locale);
     }
 
+    @Override
+    public void setRuntimeEnvironment(RuntimeEnvironment environment) {
+        delegate.setRuntimeEnvironment(environment);
+    }
+
+    @Override
+    public RuntimeEnvironment getRuntimeEnvironment() {
+        return delegate.getRuntimeEnvironment();
+    }
+
 }

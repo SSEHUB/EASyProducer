@@ -56,6 +56,7 @@ public abstract class ExecutionVisitor <M extends IResolvableModel<V>, O extends
         super(environment, tracer);
         this.environment = environment;
         this.tracer = tracer;
+        tracer.setRuntimeEnvironment(environment);
         this.parameter = parameter;
     }
     

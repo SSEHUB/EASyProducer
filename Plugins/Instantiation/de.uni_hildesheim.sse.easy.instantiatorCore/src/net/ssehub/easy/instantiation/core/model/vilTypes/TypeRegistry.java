@@ -3,7 +3,6 @@ package net.ssehub.easy.instantiation.core.model.vilTypes;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.List;
 
 import net.ssehub.easy.basics.logger.EASyLoggerFactory;
@@ -56,9 +55,12 @@ public class TypeRegistry {
         = new HashMap<String, TypeDescriptor<? extends IVilType>>();
 
     
+    private java.util.Map<IDatatype, TypeDescriptor<?>> fallbacks 
+        = new HashMap<IDatatype, TypeDescriptor<?>>();
+    
     private TypeRegistry parentRegistry;
     
-    private List<ITypeResolver> resolver;
+    private java.util.List<ITypeResolver> resolver;
     
     private IDirectTypeRegistryAccess directAccess;
     
@@ -135,20 +137,37 @@ public class TypeRegistry {
     }
     
     /**
-     * Adds a type resolver.
+     * Adds a type resolver as the current resolver of highest precedence.
      * 
      * @param resolver the resolver to be added (may be <b>null</b>, but is ignored then)
      */
     public void addTypeResolver(ITypeResolver resolver) {
         if (null != resolver) {
             if (null == this.resolver) {
-                this.resolver = new LinkedList<ITypeResolver>();
+                this.resolver = new ArrayList<ITypeResolver>();
             }
             if (!this.resolver.contains(resolver)) {
-                this.resolver.add(resolver);
+                this.resolver.add(0, resolver);
                 resolver.setRegistryAccess(directAccess);
             }
         }
+    }
+    
+    /**
+     * Returns whether this registry has a type resolver of the given type.
+     * 
+     * @param cls the type to match, may be <b>null</b> to match all
+     * @return <code>true</code> if there is a resolver, <code>false</code> else
+     */
+    public boolean hasTypeResolver(Class<? extends ITypeResolver> cls) {
+        boolean found = false;
+        if (null != resolver) {
+            found = null == cls && !resolver.isEmpty();
+            for (int r = 0; !found && r < resolver.size(); r++) {
+                found = cls.isInstance(resolver.get(r));
+            }
+        }
+        return found;
     }
 
     /**
@@ -516,7 +535,45 @@ public class TypeRegistry {
         }
         return result;
     }
+
+    /**
+     * Returns the registered type descriptor for the given <code>type</code> or tries
+     * an explicitly registered fallback, e.g., for unknown types in models without
+     * advices.
+     * 
+     * @param type the type to look for
+     * @return the type or <b>null</b> if none was registered
+     * @see #getType(IDatatype)
+     */
+    public TypeDescriptor<?> getTypeOrFallback(IDatatype type) {
+        TypeDescriptor<?> result = getType(type);
+        if (null == result) {
+            result = fallbacks.get(type);
+        }
+        return result;
+    }
     
+    /**
+     * Whether fallback datatypes are allowed to be stored on this registry.
+     * 
+     * @return <code>true</code> for allowed, <code>false</code> else
+     */
+    protected boolean allowFallbacks() {
+        return DEFAULT != this;
+    }
+    
+    /**
+     * Registers a fallback type.
+     * 
+     * @param type the IVML datatype to register the fallback <code>descriptor</code> for
+     * @param descriptor the fallback descriptor
+     */
+    public void registerFallbackType(IDatatype type, TypeDescriptor<?> descriptor) {
+        if (null != type && null != descriptor && allowFallbacks()) {
+            fallbacks.put(type, descriptor);
+        }
+    }
+
     /**
      * Returns the registered type descriptor for the given <code>type</code>.
      * 
@@ -844,7 +901,19 @@ public class TypeRegistry {
     public TypeDescriptor<?> findType(Class<?> cls) {
         return null == cls ? null : getType(ReflectionTypeDescriptor.getRegName(cls), !isInternalType(cls));
     }
-    
+
+    /**
+     * Finds the type descriptor for a given class.
+     * 
+     * @param cls the classes to be converted
+     * @param addIfMissing allow to dynamically add the type if it is missing through a type resolver (this
+     *   shall be prevented for internal types!)
+     * @return the corresponding type descriptor or <b>null</b>
+     */
+    public TypeDescriptor<?> findType(Class<?> cls, boolean addIfMissing) {
+        return null == cls ? null : getType(ReflectionTypeDescriptor.getRegName(cls), addIfMissing);
+    }
+
     /**
      * Converts a class into a set of type descriptors.
      * 

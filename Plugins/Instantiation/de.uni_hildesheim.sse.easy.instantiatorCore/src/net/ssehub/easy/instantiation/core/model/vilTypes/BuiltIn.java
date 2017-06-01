@@ -8,6 +8,7 @@ import net.ssehub.easy.instantiation.core.model.vilTypes.configuration.DecisionV
 import net.ssehub.easy.instantiation.core.model.vilTypes.configuration.EnumValue;
 import net.ssehub.easy.instantiation.core.model.vilTypes.configuration.IvmlDeclaration;
 import net.ssehub.easy.instantiation.core.model.vilTypes.configuration.IvmlElement;
+import net.ssehub.easy.instantiation.core.model.vilTypes.configuration.IvmlTypeDescriptor;
 
 /**
  * Initializes built-in VIL types.
@@ -50,6 +51,7 @@ public class BuiltIn {
             @SuppressWarnings("unchecked")
             TypeDescriptor<Attribute> desc = (TypeDescriptor<Attribute>) TypeRegistry.DEFAULT.getType(Attribute.class);
             TypeRegistry.addTypeMapping("Annotation", desc);
+            TypeRegistry.addTypeMapping(IvmlTypeDescriptor.class.getSimpleName(), ReflectionTypeDescriptor.TYPE);
         }
     }
 

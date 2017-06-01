@@ -247,5 +247,14 @@ public class PseudoReal implements IVilType {
     public static String toString(double r0) {
         return String.valueOf(r0);
     }
-    
+
+    /**
+     * Returns the type of <code>value</code>. "Overrides" {@link PseudoAny#getType(Object)}.
+     * 
+     * @param value the Real to return the type for
+     * @return the type of object (<b>null</b> if <code>ob</code> is <b>null</b>)
+     */
+    public static TypeDescriptor<?> getType(Double value) {
+        return TypeRegistry.realType();
+    }
 }

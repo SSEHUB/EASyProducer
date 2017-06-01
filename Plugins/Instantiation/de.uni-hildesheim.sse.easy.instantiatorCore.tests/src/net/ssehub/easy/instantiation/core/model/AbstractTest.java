@@ -4,7 +4,6 @@ import java.io.File;
 
 import org.junit.BeforeClass;
 
-import net.ssehub.easy.instantiation.core.model.BuiltIn;
 import net.ssehub.easy.instantiation.core.model.vilTypes.TypeRegistry;
 
 /**

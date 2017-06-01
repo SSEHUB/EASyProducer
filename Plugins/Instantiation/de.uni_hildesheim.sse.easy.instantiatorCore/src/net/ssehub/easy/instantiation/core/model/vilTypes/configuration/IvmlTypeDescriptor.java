@@ -32,7 +32,7 @@ import net.ssehub.easy.varModel.model.datatypes.TypeQueries;
 import net.ssehub.easy.varModel.model.values.Value;
 
 /**
- * Implements a dynamic type descriptor for IVM decision variables. Instances of this
+ * Implements a dynamic type descriptor for IVML decision variables. Instances of this
  * class represent IVML types and act as a frontend for {@link DecisionVariable}, thus,
  * {@link DecisionVariable decision variables} are assignable.
  * 

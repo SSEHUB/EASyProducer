@@ -254,6 +254,7 @@ abstract class AbstractIvmlTypeDescriptor extends TypeDescriptor<DecisionVariabl
      * 
      * @return the type
      */
+    @Invisible(inherit = true)
     protected abstract IDatatype getIvmlType();
 
     /**

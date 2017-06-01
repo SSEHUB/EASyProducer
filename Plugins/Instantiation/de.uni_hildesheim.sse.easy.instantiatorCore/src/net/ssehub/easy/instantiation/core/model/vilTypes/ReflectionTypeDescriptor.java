@@ -30,9 +30,13 @@ public class ReflectionTypeDescriptor <T> extends TypeDescriptor <T> {
     // only those in the Type registry while startup thay may be used
     // Add all types into PSEUDO_TYPES array.
     public static final TypeDescriptor<PseudoVoid> VOID;
+    public static final String NAME_VOID = "VOID";
     public static final TypeDescriptor<PseudoType> TYPE;
+    public static final String NAME_TYPE = "Type";
     public static final TypeDescriptor<PseudoAny> ANY;
+    public static final String NAME_ANY = "ANY";
     public static final TypeDescriptor<PseudoVersion> VERSION;
+    public static final String NAME_VERSION = "Version";
     private static final EASyLogger LOGGER = EASyLoggerFactory.INSTANCE.getLogger(ReflectionOperationDescriptor.class, 
         Bundle.ID);
     
@@ -50,7 +54,7 @@ public class ReflectionTypeDescriptor <T> extends TypeDescriptor <T> {
                 }
 
                 {
-                    setName("Void");
+                    setName(NAME_VOID);
                 }
 
             };
@@ -76,7 +80,7 @@ public class ReflectionTypeDescriptor <T> extends TypeDescriptor <T> {
                 }
 
                 {
-                    setName("Type");
+                    setName(NAME_TYPE);
                 }
 
             };
@@ -107,7 +111,7 @@ public class ReflectionTypeDescriptor <T> extends TypeDescriptor <T> {
                 }
 
                 {
-                    setName("Any");
+                    setName(NAME_ANY);
                 }
             };
             a.resolve();
@@ -123,7 +127,7 @@ public class ReflectionTypeDescriptor <T> extends TypeDescriptor <T> {
                 }
 
                 {
-                    setName("Version");
+                    setName(NAME_VERSION);
                 }
 
             };
@@ -139,6 +143,7 @@ public class ReflectionTypeDescriptor <T> extends TypeDescriptor <T> {
         // build up a pseudo type and conversions for TypeDescriptor -> Select
         // we must use the own class for the conversions due to class initialization sequence
         TypeRegistry.addTypeMapping(TypeDescriptor.class.getSimpleName(), TYPE);
+        TypeRegistry.addTypeMapping(NAME_VERSION, VERSION);
     }
     // checkstyle: stop declaration order check
     public static final TypeDescriptor<?>[] PSEUDO_TYPES = {VOID, TYPE, ANY, VERSION};

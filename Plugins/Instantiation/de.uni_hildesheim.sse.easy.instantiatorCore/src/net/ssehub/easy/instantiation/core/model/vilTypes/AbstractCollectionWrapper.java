@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.TreeMap;
 
 import net.ssehub.easy.basics.DefaultLocale;
+import net.ssehub.easy.instantiation.core.model.common.ExecutionLocal;
 import net.ssehub.easy.instantiation.core.model.common.VilException;
 import net.ssehub.easy.instantiation.core.model.expressions.AbstractCallExpression;
 import net.ssehub.easy.instantiation.core.model.expressions.CallArgument;
@@ -782,7 +783,7 @@ public abstract class AbstractCollectionWrapper<T> implements Collection<T> {
      * @return a sorted (internal) list
      */
     protected List<T> sortAlphaImpl() {
-        java.util.Map<String, List<T>> mapping = new TreeMap<String, List<T>>(PseudoString.getCurrentCollator());
+        java.util.Map<String, List<T>> mapping = new TreeMap<String, List<T>>(ExecutionLocal.getCurrentCollator());
         Iterator<T> iter = iterator();
         while (iter.hasNext()) {
             T elt = iter.next();

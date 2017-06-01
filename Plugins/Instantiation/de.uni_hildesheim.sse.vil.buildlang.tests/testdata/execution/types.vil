@@ -1,0 +1,45 @@
+@advice(typeSelectTest)
+vilScript typeOf (Project source, Project target, Configuration config) {
+
+    Integer int1 = 1;
+    Real real1 = 1.0;
+    Boolean bool1 = true;
+    String string1 = "test";
+    sequenceOf(Integer) seq1 = {1, 2, 3, 4};
+    setOf(Integer) set1 = {1, 2, 3, 4};
+
+    main() = : {
+        typeSelectTest cfg = config;
+        println(int1.type());
+        println(real1.type());
+        println(bool1.type());
+        println(string1.type());
+        println(seq1.type());
+        println(set1.type());
+        println(cfg.tc1.type());
+        println(cfg.tc2.type());
+        println(cfg.tc3.type());
+        String s1 = "pre_" + cfg.tc1.type();
+        Boolean b1 = "TestCompound" == cfg.tc1.type();
+        Boolean b2 = cfg.tc1.type() == "TestCompound";
+        Boolean b3 = "SpecialCompound" != cfg.tc1.type();
+        Boolean b4 = cfg.tc1.type() != "SpecialCompound";
+        Boolean b5 = TestCompound == cfg.tc1.type();
+        Boolean b6 = cfg.tc1.type() == TestCompound;
+        Boolean b7 = SpecialCompound != cfg.tc1.type();
+        Boolean b8 = cfg.tc1.type() != SpecialCompound;
+        String s2 = cfg.tc1.type();
+        Boolean b9 = s2 == "TestCompound";
+        TestCompound tc = cfg.tc1;
+        String s3 = "pre_" + tc.type();
+        Boolean b10 = "TestCompound" == tc.type();
+        Boolean b11 = TestCompound == tc.type();
+        Boolean b12 = int.isTypeOf(Integer);
+        Boolean b13 = int.isKindOf(Integer);
+        Boolean b14 = int.isKindOf(Real);
+        Boolean b15 = int.isKindOf(String);
+        Boolean b16 = cfg.tc1.isTypeOf(TestCompound);
+        Boolean b17 = cfg.tc1.isKindOf(TestCompound);
+    }
+
+}

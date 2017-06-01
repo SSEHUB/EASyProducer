@@ -21,6 +21,7 @@ import net.ssehub.easy.instantiation.core.model.vilTypes.IStringValueProvider;
 import net.ssehub.easy.instantiation.core.model.vilTypes.Invisible;
 import net.ssehub.easy.instantiation.core.model.vilTypes.OperationMeta;
 import net.ssehub.easy.instantiation.core.model.vilTypes.Sequence;
+import net.ssehub.easy.instantiation.core.model.vilTypes.TypeDescriptor;
 import net.ssehub.easy.instantiation.core.model.vilTypes.configuration.NameRegExFilter.DataType;
 import net.ssehub.easy.reasoning.core.frontend.ReasonerFrontend;
 import net.ssehub.easy.reasoning.core.reasoner.ReasonerConfiguration;
@@ -382,7 +383,12 @@ public class Configuration extends IvmlElement implements IStringValueProvider {
     }
 
     @Override
-    public String getType() {
+    public TypeDescriptor<?> getType() {
+        return getTypeDescriptor(project.getType());
+    }
+
+    @Override
+    public String getTypeName() {
         return project.getType().getName();
     }
 

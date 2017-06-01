@@ -1301,6 +1301,26 @@ public class ExecutionTests extends AbstractTest {
     public void testDispatch8() throws IOException {
         assertEqualWithIvml("dispatch8", "dispatch8");
     }
+    
+    /**
+     * Tests type-based selection in VTL with advice.
+     * 
+     * @throws IOException should not occur
+     */
+    @Test
+    public void testTypes1() throws IOException {
+        assertEqualWithIvml("types1", "dispatch8");
+    }
+
+    /**
+     * Tests type-based selection in VTL without advice.
+     * 
+     * @throws IOException should not occur
+     */
+    @Test
+    public void testTypes2() throws IOException {
+        assertEqualWithIvml("types2", "dispatch8");
+    }
 
     /**
      * Tests nested fields on references.

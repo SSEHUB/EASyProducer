@@ -6,7 +6,6 @@ import java.util.Map;
 
 import org.junit.Assert;
 
-import net.ssehub.easy.instantiation.core.model.vilTypes.Sequence;
 import net.ssehub.easy.instantiation.core.model.vilTypes.configuration.AbstractIvmlVariable;
 import net.ssehub.easy.instantiation.core.model.vilTypes.configuration.Configuration;
 import net.ssehub.easy.instantiation.core.model.vilTypes.configuration.DecisionVariable;
@@ -130,7 +129,7 @@ class TestVisitor implements IModelVisitor {
             AbstractVariable decl = decVar.getDeclaration();
             Assert.assertEquals(var.getName(), decl.getName());
             Assert.assertEquals(var.getQualifiedName(), decl.getQualifiedName());
-            Assert.assertEquals(var.getType(), decl.getType().getName());
+            Assert.assertEquals(var.getTypeName(), decl.getType().getName());
             Assert.assertEquals(var.getQualifiedType(), decl.getType().getQualifiedName());
             Assert.assertNotNull(decVar.getValue()); // FROZEN!
             ValueTester tester = new ValueTester(var);

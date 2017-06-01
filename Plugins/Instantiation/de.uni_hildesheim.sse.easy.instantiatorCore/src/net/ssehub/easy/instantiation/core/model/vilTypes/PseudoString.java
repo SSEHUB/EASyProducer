@@ -1,12 +1,9 @@
 package net.ssehub.easy.instantiation.core.model.vilTypes;
 
-import java.text.Collator;
 import java.util.Locale;
 import java.util.StringTokenizer;
 
-import net.ssehub.easy.basics.DefaultLocale;
-import net.ssehub.easy.instantiation.core.model.common.ITracer;
-import net.ssehub.easy.instantiation.core.model.execution.TracerFactory;
+import net.ssehub.easy.instantiation.core.model.common.ExecutionLocal;
 
 /**
  * Implements a pseudo class for strings.
@@ -287,7 +284,7 @@ public class PseudoString implements IVilType {
      * @return the transformed string
      */
     public static String toUpperCase(String string) {
-        return string.toUpperCase(getCurrentLocale());
+        return string.toUpperCase(ExecutionLocal.getCurrentLocale());
     }
 
     /**
@@ -297,7 +294,7 @@ public class PseudoString implements IVilType {
      * @return the transformed string
      */
     public static String toLowerCase(String string) {
-        return string.toLowerCase(getCurrentLocale());
+        return string.toLowerCase(ExecutionLocal.getCurrentLocale());
     }
 
     /**
@@ -307,7 +304,7 @@ public class PseudoString implements IVilType {
      * @return the transformed string
      */
     public static String firstToUpperCase(String string) {
-        return StringValueHelper.firstToUpperCase(string, getCurrentLocale());
+        return StringValueHelper.firstToUpperCase(string, ExecutionLocal.getCurrentLocale());
     }
 
     /**
@@ -317,7 +314,7 @@ public class PseudoString implements IVilType {
      * @return the transformed string
      */
     public static String firstToLowerCase(String string) {
-        return StringValueHelper.firstToLowerCase(string, getCurrentLocale());
+        return StringValueHelper.firstToLowerCase(string, ExecutionLocal.getCurrentLocale());
     }
 
     /**
@@ -417,63 +414,6 @@ public class PseudoString implements IVilType {
         }
         return result;
     }
-
-    /**
-     * Returns the current locale used during evaluation.
-     * 
-     * @return the current locale
-     */
-    @Invisible
-    public static Locale getCurrentLocale() {
-        return doCurrentLocale(null);
-    }
-
-    /**
-     * Changes and returns the current locale used during evaluation.
-     * 
-     * @param locale the new locale (ignored if <b>null</b>, then only the current locale 
-     *   is returned)
-     * @return the current locale (after a potential change)
-     */
-    private static Locale doCurrentLocale(Locale locale) {
-        Locale result;
-        ITracer tracer = TracerFactory.getRegisteredBuildLanguageTracer();
-        if (null == tracer) {
-            tracer = TracerFactory.getRegisteredTemplateLanguageTracer();
-        }
-        if (null != tracer) {
-            if (null != locale) {
-                tracer.setLocale(locale);
-            }
-            result = tracer.getLocale();
-        } else {
-            if (null != locale) {
-                DefaultLocale.setDefaultLocale(locale);
-            }
-            result = DefaultLocale.getDefaultLocale();
-        }
-        return result;
-    }
-
-    /**
-     * Changes and returns the current locale used during evaluation.
-     * 
-     * @param locale the new locale (ignored if <b>null</b>)
-     * @return the new locale
-     */
-    @Invisible
-    public static Locale setCurrentLocale(Locale locale) {
-        return doCurrentLocale(locale);
-    }
-
-    /**
-     * Returns the collator for {@link #getCurrentLocale()}.
-     * 
-     * @return the collator
-     */
-    public static Collator getCurrentCollator() {
-        return Collator.getInstance(getCurrentLocale());
-    }
     
     /**
      * Returns whether two strings are equal ignoring cases for the current locale.
@@ -483,7 +423,7 @@ public class PseudoString implements IVilType {
      * @return <code>true</code> if both strings are considered equal for the current locale, <code>false</code> else
      */
     public static boolean equalsIgnoreCase(String string1, String string2) {
-        Locale locale = getCurrentLocale();
+        Locale locale = ExecutionLocal.getCurrentLocale();
         return string1.toLowerCase(locale).equals(string2.toLowerCase(locale));
     }
 
@@ -497,7 +437,7 @@ public class PseudoString implements IVilType {
      */
     @OperationMeta(name = "<", opType = OperationType.INFIX)
     public static boolean lessThan(String string1, String string2) {
-        return getCurrentCollator().compare(string1, string2) < 0;
+        return ExecutionLocal.getCurrentCollator().compare(string1, string2) < 0;
     }
 
     /**
@@ -510,7 +450,7 @@ public class PseudoString implements IVilType {
      */
     @OperationMeta(name = "<=", opType = OperationType.INFIX)
     public static boolean lessThanEqual(String string1, String string2) {
-        return getCurrentCollator().compare(string1, string2) <= 0;
+        return ExecutionLocal.getCurrentCollator().compare(string1, string2) <= 0;
     }
     
     /**
@@ -523,7 +463,7 @@ public class PseudoString implements IVilType {
      */
     @OperationMeta(name = ">", opType = OperationType.INFIX)
     public static boolean greaterThan(String string1, String string2) {
-        return getCurrentCollator().compare(string1, string2) > 0;
+        return ExecutionLocal.getCurrentCollator().compare(string1, string2) > 0;
     }
     
     /**
@@ -536,7 +476,7 @@ public class PseudoString implements IVilType {
      */
     @OperationMeta(name = ">=", opType = OperationType.INFIX)
     public static boolean greaterThanEqual(String string1, String string2) {
-        return getCurrentCollator().compare(string1, string2) >= 0;
+        return ExecutionLocal.getCurrentCollator().compare(string1, string2) >= 0;
     }
 
     /**
@@ -553,6 +493,42 @@ public class PseudoString implements IVilType {
         }
         Sequence<String> tmp = new ArraySequence<String>(res, String.class);
         return new UnmodifiableSequence<String>(tmp);
+    }
+
+    /**
+     * Returns the type of <code>value</code>. "Overrides" {@link PseudoAny#getType(Object)}.
+     * 
+     * @param value the String to return the type for
+     * @return the type of object (<b>null</b> if <code>ob</code> is <b>null</b>)
+     */
+    public static TypeDescriptor<?> getType(String value) {
+        return TypeRegistry.stringType();
+    }
+
+    /**
+     * Represents the equality operation for types vs. Strings (legacy). Use simple or
+     * qualified name of type for comparison.
+     * 
+     * @param string the string to compare
+     * @param type the type to compare
+     * @return string == type.getName() || string == type.getQualifiedName()
+     */
+    @OperationMeta(name = Constants.EQUALITY, opType = OperationType.INFIX)
+    public static boolean equals(String string, TypeDescriptor<?> type) {
+        return type.getName().equals(string) || type.getQualifiedName().equals(string);
+    }
+
+    /**
+     * Represents the un-equality operation for types vs. Strings (legacy). Use simple or
+     * qualified name of type for comparison.
+     * 
+     * @param string the string to compare
+     * @param type the type to compare
+     * @return string != type.getName() && string != type.getQualifiedName()
+     */
+    @OperationMeta(name = {Constants.UNEQUALITY, Constants.UNEQUALITY_ALIAS}, opType = OperationType.INFIX)
+    public static boolean notEquals(String string, TypeDescriptor<?> type) {
+        return !equals(string, type);
     }
 
 }

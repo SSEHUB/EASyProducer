@@ -625,7 +625,7 @@ public abstract class RuntimeEnvironment implements IRuntimeEnvironment, IRestri
                     if (null != dType) {
                         typeName = IvmlDatatypeVisitor.getUnqualifiedType(dType);
                     } else { // original code fallback
-                        typeName = decVar.getType();
+                        typeName = decVar.getTypeName();
                     }
                     oTypeName += " (" + typeName + ")";
                 }

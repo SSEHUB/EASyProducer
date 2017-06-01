@@ -1039,7 +1039,6 @@ public abstract class ExpressionTranslator<I extends VariableDeclaration, R exte
                         }
                     }
                 }
-                
             }
         } 
         if (null == res && null == result) {
@@ -1330,7 +1329,6 @@ public abstract class ExpressionTranslator<I extends VariableDeclaration, R exte
                     ok = true; // pretend that everything is ok -> reProcessVariableDeclaration
                 }
                 if (!ok) {
-System.out.println(decl.getName());                    
                     OperationDescriptor conversion = TypeDescriptor.findConversionOnBoth(exType, type);
                     if (null == conversion) {
                         throwVariableCannotBeInitialized(decl, type, exType);

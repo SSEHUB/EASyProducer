@@ -113,7 +113,7 @@ class NameRegExFilter implements IConfigurationFilter {
             result = checkFurther(element, match(element.getName()) || match(element.getQualifiedName()));
             break;
         case TYPE:
-            result = checkFurther(element, match(element.getType()) || match(element.getQualifiedType()));
+            result = checkFurther(element, match(element.getTypeName()) || match(element.getQualifiedType()));
             break;
         case ATTRIBUTE:
             result = false;

@@ -2,9 +2,6 @@ package net.ssehub.easy.instantiation.core.model.vilTypes;
 
 import java.util.Iterator;
 
-import net.ssehub.easy.instantiation.core.model.vilTypes.OperationDescriptor;
-import net.ssehub.easy.instantiation.core.model.vilTypes.TypeDescriptor;
-
 /**
  * Iterates over the operations of a {@link TypeDescriptor} (simplyify testing).
  * 

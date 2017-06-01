@@ -1,6 +1,7 @@
 package net.ssehub.easy.instantiation.core.model.vilTypes.configuration;
 
 import net.ssehub.easy.instantiation.core.model.vilTypes.Invisible;
+import net.ssehub.easy.instantiation.core.model.vilTypes.TypeDescriptor;
 import net.ssehub.easy.varModel.model.AbstractVariable;
 import net.ssehub.easy.varModel.model.datatypes.Compound;
 
@@ -58,7 +59,12 @@ public class IvmlDeclaration extends IvmlElement {
     }
 
     @Override
-    public String getType() {
+    public TypeDescriptor<?> getType() {
+        return getTypeDescriptor(variable.getType());
+    }
+
+    @Override
+    public String getTypeName() {
         return variable.getType().getName();
     }
 

@@ -121,4 +121,14 @@ public class PseudoBoolean implements IVilType {
         return String.valueOf(b0);
     }
 
+    /**
+     * Returns the type of <code>value</code>. "Overrides" {@link PseudoAny#getType(Object)}.
+     * 
+     * @param value the Boolean to return the type for
+     * @return the type of object (<b>null</b> if <code>ob</code> is <b>null</b>)
+     */
+    public static TypeDescriptor<?> getType(Boolean value) {
+        return TypeRegistry.booleanType();
+    }
+
 }

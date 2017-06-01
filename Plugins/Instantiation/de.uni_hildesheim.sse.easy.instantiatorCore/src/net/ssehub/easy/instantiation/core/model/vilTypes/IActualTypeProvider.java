@@ -19,5 +19,12 @@ public interface IActualTypeProvider extends IVilType {
      * @return the more actual type name (may be <b>null</b> if none can be determined)
      */
     public IDatatype determineActualTypeName();
+    
+    /**
+     * Returns the more actual type of this object.
+     * 
+     * @return the more actual type
+     */
+    public TypeDescriptor<?> getType();
         
 }

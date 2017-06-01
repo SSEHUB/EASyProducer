@@ -1,9 +1,5 @@
 package net.ssehub.easy.instantiation.core.model.vilTypes;
 
-import net.ssehub.easy.instantiation.core.model.vilTypes.OperationDescriptor;
-import net.ssehub.easy.instantiation.core.model.vilTypes.TypeDescriptor;
-import net.ssehub.easy.instantiation.core.model.vilTypes.TypeRegistry;
-
 /**
  * Prints out all registered types.
  * 

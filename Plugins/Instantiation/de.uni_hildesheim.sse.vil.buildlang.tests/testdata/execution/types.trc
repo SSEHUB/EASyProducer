@@ -1,0 +1,79 @@
+int1 <- 1
+real1 <- 1.0
+bool1 <- true
+string1 <- test
+seq1 <- {1, 2, 3, 4}
+set1 <- {1, 2, 3, 4}
+-> main()
+    cfg <- <config>
+    -> type(Integer) with (1) = Integer representing net.ssehub.easy.instantiation.core.model.vilTypes.PseudoInteger
+    -> println(Any) with (Integer representing net.ssehub.easy.instantiation.core.model.vilTypes.PseudoInteger)
+    -> type(Real) with (1.0) = Real representing net.ssehub.easy.instantiation.core.model.vilTypes.PseudoReal
+    -> println(Any) with (Real representing net.ssehub.easy.instantiation.core.model.vilTypes.PseudoReal)
+    -> type(Boolean) with (true) = Boolean representing net.ssehub.easy.instantiation.core.model.vilTypes.PseudoBoolean
+    -> println(Any) with (Boolean representing net.ssehub.easy.instantiation.core.model.vilTypes.PseudoBoolean)
+    -> type(String) with (test) = String representing net.ssehub.easy.instantiation.core.model.vilTypes.PseudoString
+    -> println(Any) with (String representing net.ssehub.easy.instantiation.core.model.vilTypes.PseudoString)
+    -> type(Collection) with ({1, 2, 3, 4}) = Sequence representing net.ssehub.easy.instantiation.core.model.vilTypes.Sequence
+    -> println(Any) with (Sequence representing net.ssehub.easy.instantiation.core.model.vilTypes.Sequence)
+    -> type(Collection) with ({1, 2, 3, 4}) = Set representing net.ssehub.easy.instantiation.core.model.vilTypes.Set
+    -> println(Any) with (Set representing net.ssehub.easy.instantiation.core.model.vilTypes.Set)
+    -> type(DecisionVariable) with (typeSelectTest::tc1) = TestCompound
+    -> println(Any) with (TestCompound)
+    -> type(DecisionVariable) with (typeSelectTest::tc2) = TestCompound
+    -> println(Any) with (TestCompound)
+    -> type(DecisionVariable) with (typeSelectTest::tc3) = SpecialCompound
+    -> println(Any) with (SpecialCompound)
+    -> type(DecisionVariable) with (typeSelectTest::tc1) = TestCompound
+    -> +(String, Any) with (pre_, TestCompound) = pre_TestCompound
+    s1 <- pre_TestCompound
+    -> type(DecisionVariable) with (typeSelectTest::tc1) = TestCompound
+    -> ==(String, Type) with (TestCompound, TestCompound) = true
+    b1 <- true
+    -> type(DecisionVariable) with (typeSelectTest::tc1) = TestCompound
+    -> ==(Type, String) with (TestCompound, TestCompound) = true
+    b2 <- true
+    -> type(DecisionVariable) with (typeSelectTest::tc1) = TestCompound
+    -> !=(String, Type) with (SpecialCompound, TestCompound) = true
+    b3 <- true
+    -> type(DecisionVariable) with (typeSelectTest::tc1) = TestCompound
+    -> !=(Type, String) with (TestCompound, SpecialCompound) = true
+    b4 <- true
+    -> type(DecisionVariable) with (typeSelectTest::tc1) = TestCompound
+    -> ==(Type, Type) with (TestCompound, TestCompound) = true
+    b5 <- true
+    -> type(DecisionVariable) with (typeSelectTest::tc1) = TestCompound
+    -> ==(Type, Type) with (TestCompound, TestCompound) = true
+    b6 <- true
+    -> type(DecisionVariable) with (typeSelectTest::tc1) = TestCompound
+    -> !=(Type, Type) with (SpecialCompound, TestCompound) = true
+    b7 <- true
+    -> type(DecisionVariable) with (typeSelectTest::tc1) = TestCompound
+    -> !=(Type, Type) with (TestCompound, SpecialCompound) = true
+    b8 <- true
+    -> type(DecisionVariable) with (typeSelectTest::tc1) = TestCompound
+    s2 <- TestCompound
+    -> ==(String, String) with (TestCompound, TestCompound) = true
+    b9 <- true
+    tc <- typeSelectTest::tc1
+    -> type(TestCompound) with (typeSelectTest::tc1) = TestCompound
+    -> +(String, Any) with (pre_, TestCompound) = pre_TestCompound
+    s3 <- pre_TestCompound
+    -> type(TestCompound) with (typeSelectTest::tc1) = TestCompound
+    -> ==(String, Type) with (TestCompound, TestCompound) = true
+    b10 <- true
+    -> type(TestCompound) with (typeSelectTest::tc1) = TestCompound
+    -> ==(Type, Type) with (TestCompound, TestCompound) = true
+    b11 <- true
+    -> isTypeOf(Any, Type) with (Integer representing net.ssehub.easy.instantiation.core.model.vilTypes.PseudoInteger, Integer representing net.ssehub.easy.instantiation.core.model.vilTypes.PseudoInteger) = true
+    b12 <- true
+    -> isKindOf(Any, Type) with (Integer representing net.ssehub.easy.instantiation.core.model.vilTypes.PseudoInteger, Integer representing net.ssehub.easy.instantiation.core.model.vilTypes.PseudoInteger) = true
+    b13 <- true
+    -> isKindOf(Any, Type) with (Integer representing net.ssehub.easy.instantiation.core.model.vilTypes.PseudoInteger, Real representing net.ssehub.easy.instantiation.core.model.vilTypes.PseudoReal) = true
+    b14 <- true
+    -> isKindOf(Any, Type) with (Integer representing net.ssehub.easy.instantiation.core.model.vilTypes.PseudoInteger, String representing net.ssehub.easy.instantiation.core.model.vilTypes.PseudoString) = false
+    b15 <- false
+    -> isTypeOf(DecisionVariable, Type) with (typeSelectTest::tc1, TestCompound) = true
+    b16 <- true
+    -> isKindOf(DecisionVariable, Type) with (typeSelectTest::tc1, TestCompound) = true
+    b17 <- true    

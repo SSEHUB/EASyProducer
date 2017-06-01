@@ -12,5 +12,5 @@ final class PseudoVoid implements IVilType {
      */
     private PseudoVoid() {
     }
-    
+
 }

@@ -1067,6 +1067,26 @@ public class ExecutionTests extends AbstractExecutionTest<Script> {
     }
 
     /**
+     * Tests type operations with advice.
+     * 
+     * @throws IOException should not occur
+     */
+    @Test
+    public void testTypes() throws IOException {
+        assertSelfInstantiate("types", "main", "typeSelectTest", null);
+    }
+
+    /**
+     * Tests type operations without advice.
+     * 
+     * @throws IOException should not occur
+     */
+    @Test
+    public void testTypes2() throws IOException {
+        assertSelfInstantiate("types2", "main", "typeSelectTest", null);
+    }
+
+    /**
      * Tests the copy "results".
      * 
      * @throws IOException should not occur

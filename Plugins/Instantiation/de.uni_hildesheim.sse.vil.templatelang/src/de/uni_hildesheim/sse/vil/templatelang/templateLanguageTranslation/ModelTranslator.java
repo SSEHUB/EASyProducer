@@ -40,6 +40,8 @@ import net.ssehub.easy.dslCore.translation.TranslatorException;
 import net.ssehub.easy.instantiation.core.model.common.Imports;
 import net.ssehub.easy.instantiation.core.model.common.Typedef;
 import net.ssehub.easy.instantiation.core.model.common.VilException;
+import net.ssehub.easy.instantiation.core.model.expressions.CallArgument;
+import net.ssehub.easy.instantiation.core.model.expressions.CallExpression;
 import net.ssehub.easy.instantiation.core.model.expressions.CompositeExpression;
 import net.ssehub.easy.instantiation.core.model.expressions.Expression;
 import net.ssehub.easy.instantiation.core.model.templateModel.AlternativeStatement;
@@ -64,6 +66,7 @@ import net.ssehub.easy.instantiation.core.model.vilTypes.IMetaType;
 import net.ssehub.easy.instantiation.core.model.vilTypes.OperationDescriptor;
 import net.ssehub.easy.instantiation.core.model.vilTypes.TypeDescriptor;
 import net.ssehub.easy.instantiation.core.model.vilTypes.TypeRegistry;
+import net.ssehub.easy.instantiation.core.model.vilTypes.configuration.IvmlTypes;
 
 /**
  * Translates a parsed template language in ECore instances into
@@ -637,43 +640,72 @@ public class ModelTranslator extends de.uni_hildesheim.sse.vil.expressions.trans
     private SwitchStatement processSwitch(de.uni_hildesheim.sse.vil.templatelang.templateLang.Switch swtch) 
         throws TranslatorException {
         Expression switchExpression = expressionTranslator.processExpression(swtch.getExpr(), resolver);
-        TypeDescriptor<?> type;
+        TypeDescriptor<?> switchExpressionType;
         try {
-            type = switchExpression.inferType();
+            switchExpressionType = switchExpression.inferType();
         } catch (VilException e) {
             throw new TranslatorException(e, swtch, TemplateLangPackage.Literals.SWITCH__EXPR);
         }
-        VariableDeclaration switchVar = new VariableDeclaration("VALUE", type);
         resolver.pushLevel();
-        resolver.add(switchVar);
+        VariableDeclaration switchVar;
         List<SwitchStatement.Alternative> alternatives = new ArrayList<SwitchStatement.Alternative>();
-        for (SwitchPart part : swtch.getParts()) {
-            Expression condition = expressionTranslator.processExpression(part.getLeft(), resolver);
-            try {
-                condition.inferType();
-            } catch (VilException e) {
-                resolver.popLevel();
-                throw new TranslatorException(e, part, TemplateLangPackage.Literals.SWITCH_PART__LEFT);
+        int loop = 1;
+        do { // resolve with VALUE (legacy) must resolve in one step, or with conversion if needed in second step
+            switchVar = new VariableDeclaration("VALUE", switchExpressionType);
+            resolver.add(switchVar);
+            TypeDescriptor<?> commonConditionType = null;
+            for (SwitchPart part : swtch.getParts()) {
+                Expression condition = expressionTranslator.processExpression(part.getLeft(), resolver);
+                TypeDescriptor<?> conditionType;
+                try {
+                    conditionType = condition.inferType();
+                } catch (VilException e) {
+                    resolver.popLevel();
+                    throw new TranslatorException(e, part, TemplateLangPackage.Literals.SWITCH_PART__LEFT);
+                }
+                Expression value = expressionTranslator.processExpression(part.getRight(), resolver);
+                try {
+                    condition.inferType();
+                } catch (VilException e) {
+                    resolver.popLevel();
+                    throw new TranslatorException(e, part, TemplateLangPackage.Literals.SWITCH_PART__RIGHT);
+                }
+                alternatives.add(new SwitchStatement.Alternative(condition, value));
+                if (null == commonConditionType || conditionType.isAssignableFrom(commonConditionType)) {
+                    commonConditionType = conditionType;
+                }
             }
-            Expression value = expressionTranslator.processExpression(part.getRight(), resolver);
-            try {
-                condition.inferType();
-            } catch (VilException e) {
-                resolver.popLevel();
-                throw new TranslatorException(e, part, TemplateLangPackage.Literals.SWITCH_PART__RIGHT);
+            if (null != swtch.getDflt()) {
+                Expression expr = expressionTranslator.processExpression(swtch.getDflt(), resolver);
+                try {
+                    expr.inferType();
+                } catch (VilException e) {
+                    resolver.popLevel();
+                    throw new TranslatorException(e, swtch, TemplateLangPackage.Literals.SWITCH__DFLT);
+                }
+                alternatives.add(new SwitchStatement.Alternative(expr));
             }
-            alternatives.add(new SwitchStatement.Alternative(condition, value));
-        }
-        if (null != swtch.getDflt()) {
-            Expression expr = expressionTranslator.processExpression(swtch.getDflt(), resolver);
-            try {
-                expr.inferType();
-            } catch (VilException e) {
-                resolver.popLevel();
-                throw new TranslatorException(e, swtch, TemplateLangPackage.Literals.SWITCH__DFLT);
+            if (switchExpressionType.isAssignableFrom(commonConditionType) 
+                || IvmlTypes.decisionVariableType().isAssignableFrom(switchExpressionType)) {
+                break;
             }
-            alternatives.add(new SwitchStatement.Alternative(expr));
-        }
+            OperationDescriptor convOp = switchExpressionType.findConversion(switchExpressionType, commonConditionType);
+            if (null == convOp) {
+                throw new TranslatorException("Cannot convert from switch expression of type " 
+                    + switchExpressionType.getVilName() + " to the (common) case expression type " 
+                    + commonConditionType.getVilName(), swtch, TemplateLangPackage.Literals.SWITCH__EXPR, 
+                    VilException.ID_INVALID_TYPE);
+            }
+            try {
+                switchExpression = new CallExpression(convOp, new CallArgument(switchExpression));
+                switchExpressionType = switchExpression.inferType();
+            } catch (VilException e) {
+                throw new TranslatorException(e, swtch, TemplateLangPackage.Literals.SWITCH__EXPR);
+            }
+            resolver.remove(switchVar);
+            alternatives.clear();
+            loop++;
+        } while (loop < 3);
         try {
             return new SwitchStatement(switchExpression, switchVar, alternatives);
         } catch (VilException e) {

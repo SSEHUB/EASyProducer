@@ -63,6 +63,15 @@ public abstract class Resolver<V extends IResolvable> implements IResolver<V> {
         }
         
         /**
+         * Removes a variable.
+         * 
+         * @param name the name of the variable
+         */
+        public void remove(String name) {
+            variables.remove(name);
+        }
+        
+        /**
          * Returns whether this level contains a variable with the given <code>name</code>.
          * 
          * @param name the name to search for
@@ -222,6 +231,15 @@ public abstract class Resolver<V extends IResolvable> implements IResolver<V> {
     }
     
     /**
+     * Removes the given declaration from the actual level.
+     * 
+     * @param decl the declaration to remove
+     */
+    public void remove(V decl) {
+        remove(decl, "");
+    }
+    
+    /**
      * Adds a <code>name</code> alias for <code>decl</code>, only if <code>name</code>
      * has not been defined before. This method helps to migrate from old to new implicit name conventions.
      * 
@@ -244,6 +262,17 @@ public abstract class Resolver<V extends IResolvable> implements IResolver<V> {
     protected void add(V decl, String qualification) {
         Level<V> level = levels.peek();
         level.put(qualification + decl.getName(), decl);
+    }
+    
+    /**
+     * Removes a variable declaration from the actual level.
+     * 
+     * @param decl the variable declaration
+     * @param qualification the qualification path of the name
+     */
+    protected void remove(V decl, String qualification) {
+        Level<V> level = levels.peek();
+        level.remove(qualification + decl.getName());
     }
     
     /**

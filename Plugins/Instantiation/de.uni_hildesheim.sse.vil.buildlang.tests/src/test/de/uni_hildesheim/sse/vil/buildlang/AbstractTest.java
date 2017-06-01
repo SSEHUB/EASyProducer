@@ -24,6 +24,7 @@ import net.ssehub.easy.dslCore.translation.Message;
 import net.ssehub.easy.instantiation.core.model.BuiltIn;
 import net.ssehub.easy.instantiation.core.model.artifactModel.PathUtils;
 import net.ssehub.easy.instantiation.core.model.buildlangModel.BuildlangExecution;
+import net.ssehub.easy.instantiation.core.model.buildlangModel.ITracer;
 import net.ssehub.easy.instantiation.core.model.buildlangModel.Script;
 import net.ssehub.easy.instantiation.core.model.common.VilException;
 import net.ssehub.easy.instantiation.core.model.execution.Executor;
@@ -263,22 +264,16 @@ public abstract class AbstractTest<M extends Script> extends net.ssehub.easy.dsl
                     Script script = getModel(result.getResult(0), data);
                     TracerFactory oldFactory = TracerFactory.getInstance();
                     TracerFactory.setDefaultInstance(configurer.createTestTracerFactory(trace, getBaseFolders(data)));
-                    exec = configurer.createExecutionEnvironment(TracerFactory.createBuildLanguageTracer(), 
+                    ITracer bTracer = TracerFactory.createBuildLanguageTracer();
+                    TracerFactory.registerBuildLanguageTracer(bTracer);
+                    exec = configurer.createExecutionEnvironment(bTracer, 
                         getTestDataDir(), data.getStartElement(), data.getParameter());
                     assertFailure(data, script.accept(exec));
                     exec.release(true);
+                    TracerFactory.unregisterBuildLanguageTracer(bTracer);
                     TracerFactory.setDefaultInstance(oldFactory);
                     String errorMsg = checkEqualsAndPrepareMessage(fileAsString, trace);
-                    if (exec.getFailedCount() > 0) {
-                        StringBuilder tmp = new StringBuilder("failed rules: ");
-                        for (int i = 0; i < exec.getFailedCount(); i++) {
-                            if (i > 0) {
-                                tmp.append(", ");
-                            }
-                            tmp.append(exec.getFailed(i).getName());
-                        }
-                        System.out.println(tmp.toString());                        
-                    }
+                    printOutput(exec);
                     if (null != errorMsg) {
                         Assert.assertEquals(fileAsString.trim(), trace.toString().trim());
                         Assert.fail(errorMsg);
@@ -299,6 +294,24 @@ public abstract class AbstractTest<M extends Script> extends net.ssehub.easy.dsl
             Assert.assertNull(errorCodes, errorCodes);
         } else {
             Assert.assertTrue("File '" + file + "' does not exist", false);
+        }
+    }
+    
+    /**
+     * Prints execution output.
+     * 
+     * @param exec the execution instance
+     */
+    private void printOutput(BuildlangExecution exec) {
+        if (exec.getFailedCount() > 0) {
+            StringBuilder tmp = new StringBuilder("failed rules: ");
+            for (int i = 0; i < exec.getFailedCount(); i++) {
+                if (i > 0) {
+                    tmp.append(", ");
+                }
+                tmp.append(exec.getFailed(i).getName());
+            }
+            System.out.println(tmp.toString());                        
         }
     }
 

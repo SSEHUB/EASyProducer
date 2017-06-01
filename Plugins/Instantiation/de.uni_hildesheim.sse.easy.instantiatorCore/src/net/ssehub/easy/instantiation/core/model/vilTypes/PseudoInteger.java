@@ -227,4 +227,14 @@ public class PseudoInteger extends PseudoReal {
         return String.valueOf(i0);
     }
 
+    /**
+     * Returns the type of <code>value</code>. "Overrides" {@link PseudoAny#getType(Object)}.
+     * 
+     * @param value the Integer to return the type for
+     * @return the type of object (<b>null</b> if <code>ob</code> is <b>null</b>)
+     */
+    public static TypeDescriptor<?> getType(Integer value) {
+        return TypeRegistry.integerType();
+    }
+
 }

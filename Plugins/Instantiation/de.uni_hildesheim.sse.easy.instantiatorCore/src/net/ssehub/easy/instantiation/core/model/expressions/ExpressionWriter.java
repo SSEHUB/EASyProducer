@@ -258,7 +258,7 @@ public class ExpressionWriter extends AbstractWriter implements IExpressionVisit
         Object value = cst.getValue();
         if (value instanceof EnumValue) {
             EnumValue eValue = (EnumValue) value;
-            print(eValue.getType());
+            print(eValue.getTypeName());
             if (considerOclCompliance()) {
                 print("::");
             } else {
