@@ -21,8 +21,8 @@ set1 <- {1, 2, 3, 4}
     -> type(DecisionVariable) with (typeSelectTest::tc1) = TestCompound
     -> println(Any) with (TestCompound)
     -> byName(Configuration, String) with (<config>, tc2) = typeSelectTest::tc2
-    -> type(DecisionVariable) with (typeSelectTest::tc2) = TestCompound
-    -> println(Any) with (TestCompound)
+    -> type(DecisionVariable) with (typeSelectTest::tc2) = SpecialCompound
+    -> println(Any) with (SpecialCompound)
     -> byName(Configuration, String) with (<config>, tc3) = typeSelectTest::tc3
     -> type(DecisionVariable) with (typeSelectTest::tc3) = SpecialCompound
     -> println(Any) with (SpecialCompound)

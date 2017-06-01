@@ -1,71 +1,71 @@
 -> main(Configuration, FileArtifact) with (<config>, test.texts)
     cfg <- <config>
     -> process1(PipelineElement) with (dispatch8::elt1)
-        -> type(PipelineElement) with (dispatch8::elt1) = PipelineElement
-        switch(PipelineElement)
-            3 : pe
+        -> type(PipelineElement) with (dispatch8::elt1) = FamilyElement
+        switch(FamilyElement)
+            0 : fe
     -> process2(PipelineElement) with (dispatch8::elt1)
-        -> type(PipelineElement) with (dispatch8::elt1) = PipelineElement
-        switch(PipelineElement)
-            3 : pe
+        -> type(PipelineElement) with (dispatch8::elt1) = FamilyElement
+        switch(FamilyElement)
+            0 : fe
     -> process3(DecisionVariable) with (dispatch8::elt1)
-        -> type(DecisionVariable) with (dispatch8::elt1) = PipelineElement
-        switch(PipelineElement)
-            3 : pe
+        -> type(DecisionVariable) with (dispatch8::elt1) = FamilyElement
+        switch(FamilyElement)
+            0 : fe
     -> process4(DecisionVariable) with (dispatch8::elt1)
-        -> type(DecisionVariable) with (dispatch8::elt1) = PipelineElement
-        switch(PipelineElement)
-            3 : pe
+        -> type(DecisionVariable) with (dispatch8::elt1) = FamilyElement
+        switch(FamilyElement)
+            0 : fe
     pe <- dispatch8::elt1
     -> process1(PipelineElement) with (dispatch8::elt1)
-        -> type(PipelineElement) with (dispatch8::elt1) = PipelineElement
-        switch(PipelineElement)
-            3 : pe
+        -> type(PipelineElement) with (dispatch8::elt1) = FamilyElement
+        switch(FamilyElement)
+            0 : fe
     -> process2(PipelineElement) with (dispatch8::elt1)
-        -> type(PipelineElement) with (dispatch8::elt1) = PipelineElement
-        switch(PipelineElement)
-            3 : pe
+        -> type(PipelineElement) with (dispatch8::elt1) = FamilyElement
+        switch(FamilyElement)
+            0 : fe
     -> process3(DecisionVariable) with (dispatch8::elt1)
-        -> type(DecisionVariable) with (dispatch8::elt1) = PipelineElement
-        switch(PipelineElement)
-            3 : pe
+        -> type(DecisionVariable) with (dispatch8::elt1) = FamilyElement
+        switch(FamilyElement)
+            0 : fe
     -> process4(DecisionVariable) with (dispatch8::elt1)
-        -> type(DecisionVariable) with (dispatch8::elt1) = PipelineElement
-        switch(PipelineElement)
-            3 : pe
+        -> type(DecisionVariable) with (dispatch8::elt1) = FamilyElement
+        switch(FamilyElement)
+            0 : fe
     -> process1(PipelineElement) with (dispatch8::elt2)
-        -> type(PipelineElement) with (dispatch8::elt2) = PipelineElement
-        switch(PipelineElement)
-            3 : pe
+        -> type(PipelineElement) with (dispatch8::elt2) = Source
+        switch(Source)
+            1 : src
     -> process2(PipelineElement) with (dispatch8::elt2)
-        -> type(PipelineElement) with (dispatch8::elt2) = PipelineElement
-        switch(PipelineElement)
-            3 : pe
+        -> type(PipelineElement) with (dispatch8::elt2) = Source
+        switch(Source)
+            1 : src
     -> process3(DecisionVariable) with (dispatch8::elt2)
-        -> type(DecisionVariable) with (dispatch8::elt2) = PipelineElement
-        switch(PipelineElement)
-            3 : pe
+        -> type(DecisionVariable) with (dispatch8::elt2) = Source
+        switch(Source)
+            1 : src
     -> process4(DecisionVariable) with (dispatch8::elt2)
-        -> type(DecisionVariable) with (dispatch8::elt2) = PipelineElement
-        switch(PipelineElement)
-            3 : pe
+        -> type(DecisionVariable) with (dispatch8::elt2) = Source
+        switch(Source)
+            1 : src
     pe <- dispatch8::elt2
     -> process1(PipelineElement) with (dispatch8::elt2)
-        -> type(PipelineElement) with (dispatch8::elt2) = PipelineElement
-        switch(PipelineElement)
-            3 : pe
+        -> type(PipelineElement) with (dispatch8::elt2) = Source
+        switch(Source)
+            1 : src
     -> process2(PipelineElement) with (dispatch8::elt2)
-        -> type(PipelineElement) with (dispatch8::elt2) = PipelineElement
-        switch(PipelineElement)
-            3 : pe
+        -> type(PipelineElement) with (dispatch8::elt2) = Source
+        switch(Source)
+            1 : src
     -> process3(DecisionVariable) with (dispatch8::elt2)
-        -> type(DecisionVariable) with (dispatch8::elt2) = PipelineElement
-        switch(PipelineElement)
-            3 : pe
+        -> type(DecisionVariable) with (dispatch8::elt2) = Source
+        switch(Source)
+            1 : src
     -> process4(DecisionVariable) with (dispatch8::elt2)
-        -> type(DecisionVariable) with (dispatch8::elt2) = PipelineElement
-        switch(PipelineElement)
-            3 : pe
+        -> type(DecisionVariable) with (dispatch8::elt2) = Source
+        switch(Source)
+            1 : src
     for p {
         p <- dispatch8::elts {0}
         -> process1(PipelineElement) with (dispatch8::elts {0})

@@ -405,12 +405,20 @@ public abstract class AbstractIvmlVariable extends IvmlElement implements IActua
     }
     
     /**
-     * Returns the simple type name of the (dereferenced) decision variable (VIL view).
+     * Returns the type of the (dereferenced) decision variable (VIL view).
      * 
-     * @return the simple type name
+     * @return the type (if configured the dynamic, actual type), else the defined type
      */
     public TypeDescriptor<?> getType() {
-        return getTypeDescriptor(getIvmlType());
+        IDatatype type;
+        Value value = getDecisionVariable().getValue();
+        if (null != value) {
+            // return the dynamic type if possible
+            type = value.getType();
+        } else {
+            type = getIvmlType();
+        }
+        return getTypeDescriptor(type);
     }
 
     /**

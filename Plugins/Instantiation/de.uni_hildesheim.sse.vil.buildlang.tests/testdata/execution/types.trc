@@ -20,8 +20,8 @@ set1 <- {1, 2, 3, 4}
     -> println(Any) with (Set representing net.ssehub.easy.instantiation.core.model.vilTypes.Set)
     -> type(DecisionVariable) with (typeSelectTest::tc1) = TestCompound
     -> println(Any) with (TestCompound)
-    -> type(DecisionVariable) with (typeSelectTest::tc2) = TestCompound
-    -> println(Any) with (TestCompound)
+    -> type(DecisionVariable) with (typeSelectTest::tc2) = SpecialCompound
+    -> println(Any) with (SpecialCompound)
     -> type(DecisionVariable) with (typeSelectTest::tc3) = SpecialCompound
     -> println(Any) with (SpecialCompound)
     -> type(DecisionVariable) with (typeSelectTest::tc1) = TestCompound
@@ -76,4 +76,4 @@ set1 <- {1, 2, 3, 4}
     -> isTypeOf(DecisionVariable, Type) with (typeSelectTest::tc1, TestCompound) = true
     b16 <- true
     -> isKindOf(DecisionVariable, Type) with (typeSelectTest::tc1, TestCompound) = true
-    b17 <- true    
+    b17 <- true

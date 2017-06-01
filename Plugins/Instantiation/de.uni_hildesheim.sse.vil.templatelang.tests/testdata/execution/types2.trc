@@ -2,15 +2,15 @@
     -> byName(Configuration, String) with (<config>, elt1) = dispatch8::elt1
     elt1 <- dispatch8::elt1
     -> process1(DecisionVariable) with (dispatch8::elt1)
-        -> type(DecisionVariable) with (dispatch8::elt1) = PipelineElement
-        switch(PipelineElement)
-            3 : pe
+        -> type(DecisionVariable) with (dispatch8::elt1) = FamilyElement
+        switch(FamilyElement)
+            0 : fe
     -> byName(Configuration, String) with (<config>, elt2) = dispatch8::elt2
     elt2 <- dispatch8::elt2
     -> process1(DecisionVariable) with (dispatch8::elt2)
-        -> type(DecisionVariable) with (dispatch8::elt2) = PipelineElement
-        switch(PipelineElement)
-            3 : pe
+        -> type(DecisionVariable) with (dispatch8::elt2) = Source
+        switch(Source)
+            1 : src
     -> byName(Configuration, String) with (<config>, elts) = dispatch8::elts
     -> variables(DecisionVariable) with (dispatch8::elts) = {dispatch8::elts {0}, dispatch8::elts {1}}
     for p {
