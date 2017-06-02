@@ -1,0 +1,4 @@
+-> main()
+    c <- <config>
+    -> allInstances(Type) with (TestCompound) = {typeSelectTest::tc1, typeSelectTest::tc2, typeSelectTest::tc3}
+    s <- {typeSelectTest::tc1, typeSelectTest::tc2, typeSelectTest::tc3}

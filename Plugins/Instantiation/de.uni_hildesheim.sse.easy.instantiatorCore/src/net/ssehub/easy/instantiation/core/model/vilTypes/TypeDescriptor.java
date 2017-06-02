@@ -561,4 +561,13 @@ public abstract class TypeDescriptor <T> implements IMetaType {
         return result;
     }
     
+    /**
+     * Provides access to all instances of this type.
+     * 
+     * @return access to all instances (may be <b>null</b> if there are none)
+     */
+    public Set<?> allInstances() {
+        return null;
+    }
+    
 }

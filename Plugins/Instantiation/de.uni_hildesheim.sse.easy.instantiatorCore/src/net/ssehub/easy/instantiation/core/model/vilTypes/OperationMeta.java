@@ -54,6 +54,13 @@ public @interface OperationMeta {
     int useParameter() default -1;
     
     /**
+     * Use the actual operand type as parameter.
+     * 
+     * @return the operand type
+     */
+    boolean useOperandTypeAsParameter() default false;
+    
+    /**
      * Whether artifacts in the current context shall be stored before executing this operation.
      */
     boolean storeArtifactsBefore() default false;

@@ -121,5 +121,20 @@ public final class PseudoType implements IVilType {
         }
         return result;
     }
+    
+    /**
+     * Provides access to all instances of this type in the configuration.
+     * 
+     * @param type the type to return all instances for
+     * @return all instances
+     */
+    @OperationMeta(returnGenerics = IVilType.class, useOperandTypeAsParameter = true, opType = OperationType.FUNCTION)
+    public static Set<?> allInstances(TypeDescriptor<?> type) {
+        Set<?> result = type.allInstances();
+        if (null == result) {
+            result = new ArraySet<Object>(new Object[0], type);
+        }
+        return result;
+    }
 
 }

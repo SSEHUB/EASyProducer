@@ -210,44 +210,6 @@ public class CallExpression extends AbstractCallExpression implements IArgumentP
     }
     
     /**
-     * Resolves the operation and takes into account that an operation directly on a field could be
-     * appropriate (not equals for decision variables).
-     * 
-     * @return the resolved operation or <b>null</b>
-     * @throws VilException in case that resolution fails
-     */
-    /*private IMetaOperation resolveOperation() throws VilException {
-        IMetaOperation op = null;
-        if (arguments.length > 0 && checkMetaForFirstArgField() 
-            && arguments[0].getExpression() instanceof FieldAccessExpression) {
-            FieldAccessExpression fae = (FieldAccessExpression) arguments[0].getExpression();
-            TypeDescriptor<?> operand = fae.getField().getMetaType();
-            if (null != operand) {
-                CallArgument[] args = new CallArgument[arguments.length];
-                args[0] = new CallArgument(operand);
-                for (int a = 1; a < arguments.length; a++) {
-                    args[a] = arguments[a];
-                }
-                try {
-                    op = resolveOperation(operand, getName(), args);
-                    if (null == args[0].getExpression() && op instanceof OperationDescriptor) {
-                        fae.enableMetaAccess();
-                    } else {
-                        op = null; // args[0] indicates that a conversion was inserted; no conversions here!
-                    }
-                } catch (VilException e) {
-                    // ignore as this was just a trial
-                }
-            }
-        }
-        if (null == op) {
-            TypeDescriptor<?> operand = determineOperand();
-            op = resolveOperation(operand, getName(), arguments);
-        }
-        return op;
-    }*/
-    
-    /**
      * Checks whether one of the parameter / argument types shall be used.
      * 
      * @return the parameter type or <b>null</b>
@@ -353,9 +315,16 @@ public class CallExpression extends AbstractCallExpression implements IArgumentP
      * @param returnGenerics the return generics (may be <b>null</b>)
      * @return the resulting descriptor or <code>type</code> if no return generics are given
      */
-    private static TypeDescriptor<?> considerReturnGenerics(TypeDescriptor<?> type, 
+    private TypeDescriptor<?> considerReturnGenerics(TypeDescriptor<?> type, 
         TypeDescriptor<?>[] returnGenerics) {
         TypeDescriptor<?> result = type;
+        if (null == returnGenerics && resolved.useOperandTypeAsParameter() && arguments.length > 0) {
+            if (arguments[0].getExpression() instanceof VilTypeExpression) {
+                VilTypeExpression vte = (VilTypeExpression) arguments[0].getExpression();
+                returnGenerics = TypeDescriptor.createArray(1);
+                returnGenerics[0] = vte.getResolved();
+            }
+        }
         if (null != returnGenerics) {
             try {
                 if (result.isSet()) {

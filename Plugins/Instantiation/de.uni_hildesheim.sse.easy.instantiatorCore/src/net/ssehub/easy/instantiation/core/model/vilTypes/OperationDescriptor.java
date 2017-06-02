@@ -612,4 +612,13 @@ public abstract class OperationDescriptor implements IMetaOperation {
         return false;
     }
 
+    /**
+     * When resolving the return type, use the actual operand type as return generics.
+     * 
+     * @return <code>true</code> for use return type, <code>false</code> else (default)
+     */
+    public boolean useOperandTypeAsParameter() {
+        return false;
+    }
+
 }

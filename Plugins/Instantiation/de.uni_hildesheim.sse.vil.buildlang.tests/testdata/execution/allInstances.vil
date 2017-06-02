@@ -1,0 +1,9 @@
+@advice(typeSelectTest)
+vilScript allInstancesTest (Project source, Project target, Configuration config) {
+
+    main() = : {
+        typeSelectTest c = config;
+        setOf(TestCompound) s = allInstances(TestCompound);
+    }
+
+}

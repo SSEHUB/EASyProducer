@@ -17,10 +17,12 @@ import net.ssehub.easy.instantiation.core.model.artifactModel.Path;
 import net.ssehub.easy.instantiation.core.model.buildlangModel.Script;
 import net.ssehub.easy.instantiation.core.model.common.VilException;
 import net.ssehub.easy.instantiation.core.model.vilTypes.ArraySequence;
+import net.ssehub.easy.instantiation.core.model.vilTypes.ArraySet;
 import net.ssehub.easy.instantiation.core.model.vilTypes.IStringValueProvider;
 import net.ssehub.easy.instantiation.core.model.vilTypes.Invisible;
 import net.ssehub.easy.instantiation.core.model.vilTypes.OperationMeta;
 import net.ssehub.easy.instantiation.core.model.vilTypes.Sequence;
+import net.ssehub.easy.instantiation.core.model.vilTypes.SetSet;
 import net.ssehub.easy.instantiation.core.model.vilTypes.TypeDescriptor;
 import net.ssehub.easy.instantiation.core.model.vilTypes.configuration.NameRegExFilter.DataType;
 import net.ssehub.easy.reasoning.core.frontend.ReasonerFrontend;
@@ -32,6 +34,9 @@ import net.ssehub.easy.varModel.model.AbstractVariable;
 import net.ssehub.easy.varModel.model.IvmlException;
 import net.ssehub.easy.varModel.model.ModelQuery;
 import net.ssehub.easy.varModel.model.Project;
+import net.ssehub.easy.varModel.model.datatypes.IDatatype;
+import net.ssehub.easy.varModel.model.values.ContainerValue;
+import net.ssehub.easy.varModel.model.values.ReferenceValue;
 import net.ssehub.easy.varModel.model.values.Value;
 import net.ssehub.easy.varModel.persistency.IVMLWriter;
 
@@ -773,5 +778,54 @@ public class Configuration extends IvmlElement implements IStringValueProvider {
         }
         return result;
     }
+    
+    /**
+     * Returns all instances of the given <code>type</code>.
+     * 
+     * @param type the type to look for
+     * @return all instances (may be empty)
+     */
+    public net.ssehub.easy.instantiation.core.model.vilTypes.Set<?> allInstances(TypeDescriptor<?> type) {
+        net.ssehub.easy.instantiation.core.model.vilTypes.Set<?> result = null;
+        if (type instanceof IvmlTypeDescriptor) {
+            IDatatype ivmlType = ((IvmlTypeDescriptor) type).getIvmlType();
+            Value val = configuration.getAllInstances(ivmlType);
+            if (val instanceof ContainerValue) {
+                ContainerValue cValue = (ContainerValue) val;
+                Set<Object> tmp = new HashSet<Object>(cValue.getElementSize());
+                for (int v = 0; v < cValue.getElementSize(); v++) {
+                    resolveAndAddValue(cValue.getElement(v), tmp);
+                }
+                if (!tmp.isEmpty()) {
+                    result = new SetSet<Object>(tmp, type);
+                }
+            }
+        }
+        if (null == result) {
+            result = new ArraySet<Object>(new Object[0], type);
+        }
+        return result;
+    }
 
+    /**
+     * Resolves the VIL decision variable object for <code>value</code> and adds it to <code>result</code>.
+     * 
+     * @param value the value
+     * @param result the result (to be modified as a side effect)
+     */
+    private void resolveAndAddValue(Value value, Set<Object> result) {
+        if (value instanceof ReferenceValue) { // always the case, just to be sure
+            AbstractVariable var = ((ReferenceValue) value).getValue();
+            if (var != null) {
+                IDecisionVariable decVar = configuration.getDecision(var);
+                if (null != decVar) {
+                    DecisionVariable dVar = findVariable(decVar);
+                    if (null != dVar) {
+                        result.add(dVar);
+                    }
+                }
+            }
+        }
+    }
+    
 }

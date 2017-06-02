@@ -21,6 +21,7 @@ import java.util.Locale;
 import net.ssehub.easy.basics.DefaultLocale;
 import net.ssehub.easy.instantiation.core.model.execution.TracerFactory;
 import net.ssehub.easy.instantiation.core.model.vilTypes.TypeRegistry;
+import net.ssehub.easy.instantiation.core.model.vilTypes.configuration.Configuration;
 
 /**
  * Provides access to execution global information that is available via registered tracers for instances that
@@ -30,6 +31,20 @@ import net.ssehub.easy.instantiation.core.model.vilTypes.TypeRegistry;
  */
 public class ExecutionLocal {
 
+    /**
+     * Returns the current (top-level) configuration known during execution.
+     * 
+     * @return the current configuration (may be <b>null</b> if unknown)
+     */
+    public static Configuration getCurrentConfiguration() {
+        Configuration result = null;
+        RuntimeEnvironment env = getCurrentRuntimeEnvironment();
+        if (null != env) {
+            result = env.getTopLevelConfiguration();
+        }
+        return result;
+    }
+    
     /**
      * Returns the current locale for this thread used during evaluation.
      * 
@@ -69,9 +84,10 @@ public class ExecutionLocal {
      * @return the current tracer (may be <b>null</b>)
      */
     public static ITracer getCurrentTracer() {
-        ITracer tracer = TracerFactory.getRegisteredBuildLanguageTracer();
+        // more specific one / nested one goes first
+        ITracer tracer = TracerFactory.getRegisteredTemplateLanguageTracer();
         if (null == tracer) {
-            tracer = TracerFactory.getRegisteredTemplateLanguageTracer();
+            tracer = TracerFactory.getRegisteredBuildLanguageTracer();
         }
         return tracer;
     }
@@ -83,9 +99,23 @@ public class ExecutionLocal {
      */
     public static TypeRegistry getCurrentTypeRegistry() {
         TypeRegistry result = TypeRegistry.DEFAULT;
+        RuntimeEnvironment env = getCurrentRuntimeEnvironment();
+        if (null != env) {
+            result = env.getTypeRegistry();
+        }
+        return result;
+    }
+    
+    /**
+     * Returns the current runtime environment for this thread.
+     * 
+     * @return the current runtime environment
+     */
+    private static RuntimeEnvironment getCurrentRuntimeEnvironment() {
+        RuntimeEnvironment result = null;
         ITracer tracer = getCurrentTracer();
-        if (null != tracer && null != tracer.getRuntimeEnvironment()) {
-            result = tracer.getRuntimeEnvironment().getTypeRegistry();
+        if (null != tracer) {
+            result = tracer.getRuntimeEnvironment();
         }
         return result;
     }

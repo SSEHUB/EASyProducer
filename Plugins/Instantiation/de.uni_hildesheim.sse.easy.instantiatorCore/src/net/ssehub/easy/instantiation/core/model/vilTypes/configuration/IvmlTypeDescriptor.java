@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import net.ssehub.easy.instantiation.core.model.common.ExecutionLocal;
 import net.ssehub.easy.instantiation.core.model.common.VilException;
 import net.ssehub.easy.instantiation.core.model.vilTypes.FieldDescriptor;
 import net.ssehub.easy.instantiation.core.model.vilTypes.IActualTypeAssignmentProvider;
@@ -323,6 +324,16 @@ public class IvmlTypeDescriptor extends AbstractIvmlTypeDescriptor implements IA
             if (IvmlTypes.decisionVariableType() == type || IvmlTypes.ivmlElement() == type) {
                 result = false; // this is else an implicit conversion from IVML a to IVML b, a and b unrelated
             }
+        }
+        return result;
+    }
+
+    @Override
+    public net.ssehub.easy.instantiation.core.model.vilTypes.Set<?> allInstances() {
+        net.ssehub.easy.instantiation.core.model.vilTypes.Set<?> result = null;
+        Configuration cfg = ExecutionLocal.getCurrentConfiguration();
+        if (null != cfg) {
+            result = cfg.allInstances(this);
         }
         return result;
     }

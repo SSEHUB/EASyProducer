@@ -320,6 +320,22 @@ public abstract class RuntimeEnvironment implements IRuntimeEnvironment, IRestri
             }
             return value;
         }
+        
+        /**
+         * Returns the top-level configuration based on defining global VIL/VTL script parameters.
+         * 
+         * @return the top-level configuration (may be <b>null</b> if unknown)
+         */
+        public Configuration getTopLevelConfiguration() {
+            Configuration result = null;
+            if (!levels.isEmpty()) {
+                List<Configuration> cfgs = levels.get(0).configurations;
+                if (cfgs != null && !cfgs.isEmpty()) {
+                    result = cfgs.get(0);
+                }
+            }
+            return result;
+        }
 
     }
     
@@ -751,6 +767,15 @@ public abstract class RuntimeEnvironment implements IRuntimeEnvironment, IRestri
         } catch (VilException e) {
             throw new RestrictionEvaluationException(e.getMessage(), e.getId());
         }
+    }
+    
+    /**
+     * Returns the top-level configuration based on defining global VIL/VTL script parameters.
+     * 
+     * @return the top-level configuration (may be <b>null</b> if unknown)
+     */
+    public Configuration getTopLevelConfiguration() {
+        return currentContext.getTopLevelConfiguration();
     }
     
 }

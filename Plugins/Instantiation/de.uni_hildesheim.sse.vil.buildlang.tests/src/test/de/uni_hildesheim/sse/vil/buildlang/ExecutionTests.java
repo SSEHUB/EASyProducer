@@ -1067,6 +1067,16 @@ public class ExecutionTests extends AbstractExecutionTest<Script> {
     }
 
     /**
+     * Tests the all instances operation.
+     * 
+     * @throws IOException should not occur
+     */
+    @Test
+    public void testAllInstances() throws IOException {
+        assertSelfInstantiate("allInstances", "main", "typeSelectTest", null);
+    }
+    
+    /**
      * Tests type operations with advice.
      * 
      * @throws IOException should not occur
