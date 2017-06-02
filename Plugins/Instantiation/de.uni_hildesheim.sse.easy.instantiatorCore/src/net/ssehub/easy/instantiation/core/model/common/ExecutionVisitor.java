@@ -220,7 +220,7 @@ public abstract class ExecutionVisitor <M extends IResolvableModel<V>, O extends
      * @param model the model to be visited
      * @throws VilException in case that visiting fails (cyclic inclusion)
      */
-    protected void visitModelHeader(IResolvableModel<V> model) throws VilException {
+    public void visitModelHeader(IResolvableModel<V> model) throws VilException {
         Set<IResolvableModel<V>> visited = new HashSet<IResolvableModel<V>>();
         visitModelHeader(model, visited);
     }

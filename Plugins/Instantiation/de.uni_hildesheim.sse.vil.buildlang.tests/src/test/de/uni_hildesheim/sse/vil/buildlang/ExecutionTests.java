@@ -955,6 +955,16 @@ public class ExecutionTests extends AbstractExecutionTest<Script> {
     }
 
     /**
+     * Tests some VTL cases (re-using VTL in VIL).
+     * 
+     * @throws IOException should not occur
+     */
+    @Test
+    public void testVtl4() throws IOException {
+        assertSelfInstantiate("vtl4", "main", "vtl3", null);
+    }
+
+    /**
      * Tests whether files are copied recursively if a file pattern was used. 
      * @throws IOException should not occur
      */

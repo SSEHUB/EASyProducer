@@ -19,9 +19,9 @@ import net.ssehub.easy.basics.modelManagement.ModelManagement;
 import net.ssehub.easy.dslCore.ui.hyperlinking.IModelQuery;
 import net.ssehub.easy.dslCore.ui.hyperlinking.ModelUtils;
 import net.ssehub.easy.dslCore.ui.hyperlinking.ModelUtils.IModelFinder;
+import net.ssehub.easy.instantiation.core.model.buildlangModel.AbstractRule;
 import net.ssehub.easy.instantiation.core.model.buildlangModel.BuildModel;
 import net.ssehub.easy.instantiation.core.model.buildlangModel.IBuildlangElement;
-import net.ssehub.easy.instantiation.core.model.buildlangModel.Rule;
 import net.ssehub.easy.instantiation.core.model.buildlangModel.Script;
 import net.ssehub.easy.instantiation.core.model.buildlangModel.TypeDef;
 import net.ssehub.easy.instantiation.core.model.buildlangModel.VariableDeclaration;
@@ -81,7 +81,7 @@ public class VilModelQuery implements IModelQuery<Script, IBuildlangElement, ILa
             }
         }
         for (int r = 0; null == result && r < model.getRuleCount(); r++) {
-            Rule rule = model.getRule(r);
+            AbstractRule rule = model.getRule(r);
             if (rule.getName().equals(name)) {
                 result = rule;
             }

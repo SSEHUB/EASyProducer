@@ -11,7 +11,7 @@ import net.ssehub.easy.instantiation.core.model.vilTypes.TypeRegistry;
  * @author Holger Eichelberger
  */
 public class Resolver extends net.ssehub.easy.instantiation.core.model.common.Resolver
-    <Script, Rule, RuleCallExpression, VariableDeclaration> {
+    <Script, AbstractRule, RuleCallExpression, VariableDeclaration> {
 
     /**
      * Defines the contexts for the VIL build language.

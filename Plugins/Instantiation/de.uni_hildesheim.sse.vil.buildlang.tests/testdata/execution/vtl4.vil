@@ -1,0 +1,9 @@
+import vtlLib;
+
+vilScript vtl4 (Project source, Project target, Configuration config) {
+
+    main(Project source, Project target, Configuration config) = : {
+        Boolean val = doSomething();
+    }
+
+}

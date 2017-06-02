@@ -11,7 +11,7 @@ import net.ssehub.easy.instantiation.core.model.vilTypes.IMetaOperation;
  * 
  * @author Holger Eichelberger
  */
-public class RuleCallExpression extends ModelCallExpression<VariableDeclaration, Script, Rule> {
+public class RuleCallExpression extends ModelCallExpression<VariableDeclaration, Script, AbstractRule> {
 
     /**
      * Creates a new rule call expression.
@@ -35,13 +35,13 @@ public class RuleCallExpression extends ModelCallExpression<VariableDeclaration,
      * @param arguments the actual arguments
      * @throws VilException in case of an erroneously qualified name
      */
-    RuleCallExpression(Script script, Rule rule, CallArgument... arguments) throws VilException {
+    RuleCallExpression(Script script, AbstractRule rule, CallArgument... arguments) throws VilException {
         super(script, rule, arguments);
     }
 
     @Override
-    protected Class<? extends Rule> getOperationClass() {
-        return Rule.class;
+    protected Class<? extends AbstractRule> getOperationClass() {
+        return AbstractRule.class;
     }
 
     @Override
@@ -63,7 +63,7 @@ public class RuleCallExpression extends ModelCallExpression<VariableDeclaration,
     @Override
     public boolean isVisible(Script fromModel) {
         boolean isVisible = true;
-        Rule resolved = getResolved();
+        AbstractRule resolved = getResolved();
         if (resolved.isProtected()) {
             isVisible = resolved.getDeclaringType().equals(fromModel);
         }

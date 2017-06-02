@@ -166,6 +166,11 @@ public class ExpressionCopyVisitor extends CopyVisitor implements IVisitor {
     }
 
     @Override
+    public Object visitRule(VtlRule rule) throws VilException {
+        throw new VilException("not an expression", VilException.ID_INTERNAL);
+    }
+
+    @Override
     public Object visitMapExpression(MapExpression map) throws VilException {
         EASyLoggerFactory.INSTANCE.getLogger(getClass(), Bundle.ID).info("MapExpression is currently not copied.");
         return map; // TODO support full copy

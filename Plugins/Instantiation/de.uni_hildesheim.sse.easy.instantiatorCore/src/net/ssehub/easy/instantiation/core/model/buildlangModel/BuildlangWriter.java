@@ -276,6 +276,12 @@ public class BuildlangWriter extends WriterVisitor<VariableDeclaration> implemen
         println(";");
         return null;
     }
+
+    @Override
+    public Object visitRule(VtlRule rule) throws VilException {
+        // do nothing - this is just a virtual concept
+        return null;
+    }
     
     @Override
     public Object visitRule(Rule rule) throws VilException {

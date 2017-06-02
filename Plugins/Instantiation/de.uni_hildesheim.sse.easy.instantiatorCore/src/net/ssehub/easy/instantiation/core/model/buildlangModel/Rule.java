@@ -18,13 +18,11 @@ package net.ssehub.easy.instantiation.core.model.buildlangModel;
 
 import net.ssehub.easy.instantiation.core.model.buildlangModel.ruleMatch.AbstractRuleMatchExpression;
 import net.ssehub.easy.instantiation.core.model.common.ILanguageElement;
-import net.ssehub.easy.instantiation.core.model.common.IResolvableOperation;
 import net.ssehub.easy.instantiation.core.model.common.VilException;
 import net.ssehub.easy.instantiation.core.model.expressions.CallArgument;
 import net.ssehub.easy.instantiation.core.model.expressions.VariableExpression;
 import net.ssehub.easy.instantiation.core.model.vilTypes.Constants;
 import net.ssehub.easy.instantiation.core.model.vilTypes.IMetaType;
-import net.ssehub.easy.instantiation.core.model.vilTypes.IStringValueProvider;
 import net.ssehub.easy.instantiation.core.model.vilTypes.TypeDescriptor;
 import net.ssehub.easy.instantiation.core.model.vilTypes.TypeRegistry;
 
@@ -33,7 +31,7 @@ import net.ssehub.easy.instantiation.core.model.vilTypes.TypeRegistry;
  * 
  * @author kroeher
  */
-public class Rule extends RuleBlock implements IResolvableOperation<VariableDeclaration>, IStringValueProvider {
+public class Rule extends AbstractRule {
     
     private AbstractRuleMatchExpression[] lhsRuleMatches;
     private RuleCallExpression[] lhsRuleCalls;
@@ -104,12 +102,8 @@ public class Rule extends RuleBlock implements IResolvableOperation<VariableDecl
             this.returnType = descriptor.getReturnType();
         }
     }
-    
-    /**
-     * Returns the parent script this rule is member of.
-     * 
-     * @return the parent
-     */
+
+    @Override
     public Script getParent() {
         return parent;
     }
@@ -259,35 +253,18 @@ public class Rule extends RuleBlock implements IResolvableOperation<VariableDecl
         return result;
     }
     
-    /**
-     * Returns whether the specified side has either rule calls or a matching condition.
-     * 
-     * @param side the side (LHS, RHS)
-     * @return whether the specified side has condiditions at all
-     */
+    @Override
     public boolean hasCondition(Side side) {
         return getRuleCallCount(side) + getRuleConditionCount(side) > 0;
     }
 
-    /**
-     * Get the number of match conditions on the given side of this rule.
-     * 
-     * @param side the side (LHS, RHS)
-     * @return The number of preconditions (match conditions) of this rule.
-     */
+    @Override
     public int getRuleConditionCount(Side side) {
         AbstractRuleMatchExpression[] conditions = selectConditions(side);
         return null == conditions ? 0 : conditions.length;
     }
-    
-    /**
-     * Get the match conditions of this rule on the given side at the specified index.
-     * 
-     * @param side the side (LHS, RHS)
-     * @param index The 0-based index of the match condition to be returned. 
-     * @return The match condition at the given index.
-     * @throws IndexOutOfBoundsException if <code>index &lt; 0 || index &gt;={@link #getRuleConditionCount(Side)}</code>
-     */
+
+    @Override
     public AbstractRuleMatchExpression getRuleCondition(Side side, int index) {
         AbstractRuleMatchExpression[] conditions = selectConditions(side);
         if (null == conditions) {
@@ -295,26 +272,14 @@ public class Rule extends RuleBlock implements IResolvableOperation<VariableDecl
         }
         return conditions[index];
     }    
-    
-    /**
-     * Get the number of rule calls on the given side of this rule.
-     * 
-     * @param side the side (LHS, RHS)
-     * @return The number of postconditions of this rule.
-     */
+
+    @Override
     public int getRuleCallCount(Side side) {
         RuleCallExpression[] conditions = selectCalls(side);
         return null == conditions ? 0 : conditions.length;
     }
-    
-    /**
-     * Get the rule call on the given side of this rule at the specified index.
-     * 
-     * @param side the side (LHS, RHS)
-     * @param index The 0-based index of the rule element to be returned. 
-     * @return The rule element at the given index.
-     * @throws IndexOutOfBoundsException if <code>index &lt; 0 || index &gt;={@link #getRuleCallCount(Side)}</code>
-     */
+
+    @Override
     public RuleCallExpression getRuleCall(Side side, int index) {
         RuleCallExpression[] conditions = selectCalls(side);
         if (null == conditions) {
@@ -322,12 +287,8 @@ public class Rule extends RuleBlock implements IResolvableOperation<VariableDecl
         }
         return conditions[index];
     }
-    
-    /**
-     * Returns whether a rule is declared as protected regarding its visibility.
-     * 
-     * @return <code>true</code> if it is protected, <code>false</code> else
-     */
+
+    @Override
     public boolean isProtected() {
         return isProtected;
     }
@@ -406,16 +367,9 @@ public class Rule extends RuleBlock implements IResolvableOperation<VariableDecl
     public IMetaType getDeclaringType() {
         return parent;
     }
-    
-    /**
-     * Appends a call to <code>target</code> to the rule body. Currently, this method considers
-     * parameters only in the sequence of the parameters of this rule.
-     * 
-     * @param target the rule to append the call to
-     * @param qualifiedCall insert a qualified call if <code>true</code>, an unqualified call if <code>false</code>
-     * @throws VilException in case that creating / resolving the rule call fails
-     */
-    public void appendCallTo(Rule target, boolean qualifiedCall) throws VilException {
+
+    @Override
+    public void appendCallTo(AbstractRule target, boolean qualifiedCall) throws VilException {
         if (null != target) {
             CallArgument[] args = new CallArgument[getParameterCount()];
             for (int p = 0; p < args.length; p++) {

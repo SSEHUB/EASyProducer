@@ -84,6 +84,15 @@ public interface IVisitor extends net.ssehub.easy.instantiation.core.model.commo
     public Object visitRule(Rule rule) throws VilException;
 
     /**
+     * Visits a VTL mapping rule.
+     * 
+     * @param rule the rule
+     * @return the result of visiting the given statement (may be <b>null</b>)
+     * @throws VilException in case that visiting fails (e.g., execution)
+     */
+    public Object visitRule(VtlRule rule) throws VilException;
+
+    /**
      * Visits a map expression.
      * 
      * @param map the expression to be visited

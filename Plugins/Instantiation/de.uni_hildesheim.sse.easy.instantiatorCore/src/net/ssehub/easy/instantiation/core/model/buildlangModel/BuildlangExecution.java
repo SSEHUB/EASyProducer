@@ -19,6 +19,7 @@ package net.ssehub.easy.instantiation.core.model.buildlangModel;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.Writer;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -30,6 +31,7 @@ import java.util.Properties;
 import java.util.Set;
 import java.util.Stack;
 
+import org.apache.commons.io.output.NullWriter;
 import org.apache.commons.lang.SystemUtils;
 
 import net.ssehub.easy.basics.logger.EASyLoggerFactory;
@@ -66,6 +68,7 @@ import net.ssehub.easy.instantiation.core.model.common.ModelCallExpression;
 import net.ssehub.easy.instantiation.core.model.common.StreamGobbler;
 import net.ssehub.easy.instantiation.core.model.common.Typedef;
 import net.ssehub.easy.instantiation.core.model.common.VilException;
+import net.ssehub.easy.instantiation.core.model.execution.TracerFactory;
 import net.ssehub.easy.instantiation.core.model.expressions.AbstractCallExpression;
 import net.ssehub.easy.instantiation.core.model.expressions.CallArgument;
 import net.ssehub.easy.instantiation.core.model.expressions.CallExpression;
@@ -76,6 +79,9 @@ import net.ssehub.easy.instantiation.core.model.expressions.IExpressionParser;
 import net.ssehub.easy.instantiation.core.model.expressions.IResolvable;
 import net.ssehub.easy.instantiation.core.model.expressions.ResolvableOperationCallExpression;
 import net.ssehub.easy.instantiation.core.model.expressions.StringReplacer;
+import net.ssehub.easy.instantiation.core.model.templateModel.Def;
+import net.ssehub.easy.instantiation.core.model.templateModel.Template;
+import net.ssehub.easy.instantiation.core.model.templateModel.TemplateLangExecution;
 import net.ssehub.easy.instantiation.core.model.expressions.ExpressionParserRegistry.ILanguage;
 import net.ssehub.easy.instantiation.core.model.vilTypes.ArraySequence;
 import net.ssehub.easy.instantiation.core.model.vilTypes.ArraySet;
@@ -100,7 +106,7 @@ import net.ssehub.easy.instantiation.core.model.vilTypes.configuration.IvmlTypes
  * 
  * @author Holger Eichelberger
  */
-public class BuildlangExecution extends ExecutionVisitor<Script, Rule, VariableDeclaration> 
+public class BuildlangExecution extends ExecutionVisitor<Script, AbstractRule, VariableDeclaration> 
     implements IBuildlangVisitor, RuleBodyExecutor, ITerminator {
 
     public static final ILanguage LANGUAGE = new ILanguage() {
@@ -492,8 +498,8 @@ public class BuildlangExecution extends ExecutionVisitor<Script, Rule, VariableD
     }
     
     @Override
-    protected ModelCallExpression<VariableDeclaration, Script, Rule> createModelCall(Script model, Rule operation,
-        CallArgument... arguments) throws VilException {
+    protected ModelCallExpression<VariableDeclaration, Script, AbstractRule> createModelCall(Script model, 
+        AbstractRule operation, CallArgument... arguments) throws VilException {
         return new RuleCallExpression(model, operation, arguments);
     }
     
@@ -933,7 +939,7 @@ public class BuildlangExecution extends ExecutionVisitor<Script, Rule, VariableD
      * @param side the side of the rule
      * @throws VilException in case of resolution problems
      */
-    void resolveMatches(Rule rule, Side side) throws VilException {
+    void resolveMatches(AbstractRule rule, Side side) throws VilException {
         int count = rule.getRuleConditionCount(side);
         if (count > 0) {
             for (int i = 0; i < count; i++) {
@@ -948,7 +954,7 @@ public class BuildlangExecution extends ExecutionVisitor<Script, Rule, VariableD
      * @param rule the rule to be tested
      * @return <code>true</code> if it is on the actual execution stack, <code>false</code> else
      */
-    boolean isOnStack(Rule rule) {
+    boolean isOnStack(AbstractRule rule) {
         boolean found = false;
         for (int i = ruleStack.size() - 1; !found && i >= 0; i--) {
             found = ruleStack.get(i).getRule() == rule; // handled internally so reference equality is ok
@@ -1019,6 +1025,25 @@ public class BuildlangExecution extends ExecutionVisitor<Script, Rule, VariableD
         }
         return result;
     } 
+    
+    @Override
+    public Object visitRule(VtlRule rule) throws VilException {
+        net.ssehub.easy.instantiation.core.model.templateModel.ITracer tracer 
+            = TracerFactory.createTemplateLanguageTracer();
+        TracerFactory.registerTemplateLanguageTracer(tracer);
+        Writer writer = new NullWriter(); // not for reuse
+        Map<String, Object> localParam = new HashMap<String, Object>(); // by default
+        localParam.put(PARAM_CONFIG, environment.getTopLevelConfiguration());
+        localParam.put(PARAM_TARGET, null); // for now
+        TemplateLangExecution exec = new TemplateLangExecution(tracer, writer, localParam);
+        Def def = rule.getDef();
+        Template template = (Template) def.getParent();
+        exec.getRuntimeEnvironment().switchContext(template);
+        exec.visitModelHeader(template);
+        Object result = def.accept(exec);
+        TracerFactory.unregisterTemplateLanguageTracer(tracer);
+        return result;
+    }
 
     /**
      * Evaluates the rule header and returns whether the rule is applicable. Call 
@@ -1111,7 +1136,7 @@ public class BuildlangExecution extends ExecutionVisitor<Script, Rule, VariableD
     }
 
     @Override
-    protected Object executeModelCall(Rule rule) throws VilException {
+    protected Object executeModelCall(AbstractRule rule) throws VilException {
         Object result;
         if (stop) {
             result = null;
@@ -1477,8 +1502,9 @@ public class BuildlangExecution extends ExecutionVisitor<Script, Rule, VariableD
     }
 
     @Override
-    protected Rule dynamicDispatch(Rule operation, Object[] args) {
-        return AbstractCallExpression.dynamicDispatch(operation, args, Rule.class, environment.getTypeRegistry());
+    protected AbstractRule dynamicDispatch(AbstractRule operation, Object[] args) {
+        return AbstractCallExpression.dynamicDispatch(operation, args, 
+             AbstractRule.class, environment.getTypeRegistry());
     }
     
     @Override

@@ -145,6 +145,15 @@ class VariableFinder implements IBuildlangVisitor {
             block.getBodyElement(b).accept(this);
         }
     }
+    
+    @Override
+    public Object visitRule(VtlRule rule) throws VilException {
+        for (int p = 0; !found && p < rule.getParameterCount(); p++) {
+            found = searchFor.contains(rule.getParameter(p));
+        }
+        // rule block not needed
+        return null;
+    }
 
     @Override
     public Object visitRule(Rule rule) throws VilException {

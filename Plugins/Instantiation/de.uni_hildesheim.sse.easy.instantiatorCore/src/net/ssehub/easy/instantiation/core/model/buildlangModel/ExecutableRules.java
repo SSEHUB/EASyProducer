@@ -17,7 +17,7 @@ import net.ssehub.easy.instantiation.core.model.vilTypes.Collection;
  */
 class ExecutableRules {
 
-    private List<Rule> rules = new ArrayList<Rule>();
+    private List<AbstractRule> rules = new ArrayList<AbstractRule>();
     
     /**
      * Creates the executable rules structure.
@@ -58,7 +58,7 @@ class ExecutableRules {
             }
             
             for (int r = 0; r < script.getRuleCount(); r++) {
-                Rule rule = script.getRule(r);
+                AbstractRule rule = script.getRule(r);
                 String signature = rule.getSignature();
                 if (asParent) {
                     if (knownSignatures.contains(signature)) {
@@ -81,9 +81,9 @@ class ExecutableRules {
      */
     public Object buildContributing(AbstractRuleMatchExpression expression, BuildlangExecution visitor) 
         throws VilException {
-        List<Rule> contributing = new ArrayList<Rule>();
+        List<AbstractRule> contributing = new ArrayList<AbstractRule>();
         for (int r = 0; r < rules.size(); r++) {
-            Rule candidate = rules.get(r);
+            AbstractRule candidate = rules.get(r);
             if (!visitor.isOnStack(candidate)) {
                 try {
                     visitor.resolveMatches(candidate, Side.LHS);

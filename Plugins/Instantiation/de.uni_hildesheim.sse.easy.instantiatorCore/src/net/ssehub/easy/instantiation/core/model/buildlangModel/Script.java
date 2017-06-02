@@ -78,7 +78,7 @@ public class Script extends AbstractResolvableModel<VariableDeclaration, Script>
     private ModelImport<Script> parent;
     private VariableDeclaration[] parameters;
     private List<VariableDeclaration> declarations;
-    private List<Rule> rules;
+    private List<AbstractRule> rules;
     private List<LoadProperties> loadProperties;
 
     /**
@@ -192,7 +192,7 @@ public class Script extends AbstractResolvableModel<VariableDeclaration, Script>
         this.version = null;
         this.loadProperties = new ArrayList<LoadProperties>();
         this.declarations = new ArrayList<VariableDeclaration>();
-        this.rules = new ArrayList<Rule>();        
+        this.rules = new ArrayList<AbstractRule>();        
         this.parameters = null == descriptor ? null : descriptor.parameters;
         createImplicitVariables();
         adjustParents();
@@ -289,7 +289,7 @@ public class Script extends AbstractResolvableModel<VariableDeclaration, Script>
      * 
      * @param rule the rule instance
      */
-    public void addRule(Rule rule) {
+    public void addRule(AbstractRule rule) {
         rules.add(rule);
         rule.setParent(this);
     }
@@ -371,7 +371,7 @@ public class Script extends AbstractResolvableModel<VariableDeclaration, Script>
      * @param index The 0-based index of the rule to be returned.
      * @return The rule at the given index.
      */
-    public Rule getRule(int index) {
+    public AbstractRule getRule(int index) {
         return this.rules.get(index);
     }
     
@@ -492,9 +492,9 @@ public class Script extends AbstractResolvableModel<VariableDeclaration, Script>
      * @return the start rule
      * @throws VilException in case that the start rule cannot be determined (uniquely)
      */
-    public Rule determineStartRule(String startRuleName) throws VilException {
-        Rule startRule = null;
-        List<Rule> roots = new ArrayList<Rule>();
+    public AbstractRule determineStartRule(String startRuleName) throws VilException {
+        AbstractRule startRule = null;
+        List<AbstractRule> roots = new ArrayList<AbstractRule>();
         collectRoots(new HashSet<Script>(), new HashSet<String>(), roots);
         if (roots.isEmpty()) {
             throw new VilException("no rule (without dependencies) to be executed", 
@@ -516,7 +516,7 @@ public class Script extends AbstractResolvableModel<VariableDeclaration, Script>
             }
             int count = 0;
             for (int r = 0; r < roots.size(); r++) {
-                Rule rule = roots.get(r);
+                AbstractRule rule = roots.get(r);
                 if (rule.getName().equals(startRuleName)) {
                     startRule = rule;
                     count++;
@@ -542,14 +542,14 @@ public class Script extends AbstractResolvableModel<VariableDeclaration, Script>
      * @param roots the actual root rules (to be modified as a side effect)
      */
     private void collectRoots(java.util.Set<Script> processed, java.util.Set<String> knownSignatures, 
-        List<Rule> roots) {
+        List<AbstractRule> roots) {
         if (!processed.contains(this)) {
             processed.add(this);
-            Set<Rule> candidates = new HashSet<Rule>();
-            Set<Rule> resolved = new HashSet<Rule>();
+            Set<AbstractRule> candidates = new HashSet<AbstractRule>();
+            Set<AbstractRule> resolved = new HashSet<AbstractRule>();
             // store all rules for fast access; first all rules are candidates for roots
             for (int r = 0; r < getRuleCount(); r++) {
-                Rule rule = getRule(r);
+                AbstractRule rule = getRule(r);
                 if (!rule.isProtected()) {
                     candidates.add(rule);
                 }
@@ -558,9 +558,9 @@ public class Script extends AbstractResolvableModel<VariableDeclaration, Script>
             // iterate over rules - remove those rules for which all preconditions are resolved
             int lastResolvedSize = resolved.size();
             do {
-                Iterator<Rule> iter = candidates.iterator();
+                Iterator<AbstractRule> iter = candidates.iterator();
                 while (iter.hasNext()) {
-                    Rule rule = iter.next();
+                    AbstractRule rule = iter.next();
                     boolean allResolved = true;
                     for (int p = 0; allResolved && p < rule.getRuleCallCount(Side.RHS); p++) {
                         RuleCallExpression call = rule.getRuleCall(Side.RHS, p);
@@ -626,7 +626,7 @@ public class Script extends AbstractResolvableModel<VariableDeclaration, Script>
      * 
      * @return the main rule or <b>null</b>
      */
-    public Rule getMainRule(boolean createIfAbsent) {
+    public AbstractRule getMainRule(boolean createIfAbsent) {
         return getMainRule(DEFAULT_START_RULE_NAME, createIfAbsent);
     }
     
@@ -639,10 +639,10 @@ public class Script extends AbstractResolvableModel<VariableDeclaration, Script>
      * @param name the name of the rule
      * @return the main rule or <b>null</b>
      */
-    public Rule getMainRule(String name, boolean createIfAbsent) {
-        Rule main = null;
+    public AbstractRule getMainRule(String name, boolean createIfAbsent) {
+        AbstractRule main = null;
         for (int r = 0; null == main && r < getRuleCount(); r++) {
-            Rule rule = getRule(r);
+            AbstractRule rule = getRule(r);
             if (rule.getName().equals(name)) {
                 boolean ok = (rule.getParameterCount() == getParameterCount());
                 for (int p = 0; ok && p < getParameterCount(); p++) {

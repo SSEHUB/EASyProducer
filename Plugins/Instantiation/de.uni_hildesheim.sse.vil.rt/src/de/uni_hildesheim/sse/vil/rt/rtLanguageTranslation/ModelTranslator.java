@@ -38,12 +38,12 @@ import net.ssehub.easy.basics.modelManagement.ModelImport;
 import net.ssehub.easy.basics.modelManagement.ModelManagement;
 import net.ssehub.easy.dslCore.translation.ErrorCodes;
 import net.ssehub.easy.dslCore.translation.TranslatorException;
+import net.ssehub.easy.instantiation.core.model.buildlangModel.AbstractRule;
 import net.ssehub.easy.instantiation.core.model.buildlangModel.BuildModel;
 import net.ssehub.easy.instantiation.core.model.buildlangModel.ExpressionStatement;
 import net.ssehub.easy.instantiation.core.model.buildlangModel.IRuleElement;
 import net.ssehub.easy.instantiation.core.model.buildlangModel.Imports;
 import net.ssehub.easy.instantiation.core.model.buildlangModel.Resolver;
-import net.ssehub.easy.instantiation.core.model.buildlangModel.Rule;
 import net.ssehub.easy.instantiation.core.model.buildlangModel.RuleCallExpression;
 import net.ssehub.easy.instantiation.core.model.buildlangModel.RuleExecutionResult;
 import net.ssehub.easy.instantiation.core.model.buildlangModel.VariableDeclaration;
@@ -475,7 +475,8 @@ public class ModelTranslator extends de.uni_hildesheim.sse.buildLanguageTranslat
      * @author Holger Eichelberger
      */
     private class BreakdownCallExpressionTester implements ICallExpressionTester<
-        net.ssehub.easy.instantiation.core.model.buildlangModel.Script, Rule, RuleCallExpression, VariableDeclaration> {
+        net.ssehub.easy.instantiation.core.model.buildlangModel.Script, AbstractRule, RuleCallExpression, 
+        VariableDeclaration> {
 
         private String name;
         private CallArgument[] arguments;

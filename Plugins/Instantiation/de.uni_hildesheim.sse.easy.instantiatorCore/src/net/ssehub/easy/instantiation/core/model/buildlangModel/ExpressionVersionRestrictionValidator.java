@@ -121,6 +121,12 @@ public class ExpressionVersionRestrictionValidator
     }
 
     @Override
+    public Object visitRule(VtlRule rule) throws VilException {
+        emit("rule is not allowed here", true, VilException.ID_SEMANTIC);
+        return null;
+    }
+
+    @Override
     public Object visitMapExpression(MapExpression map) throws VilException {
         emit("map is not allowed here", true, VilException.ID_SEMANTIC);
         return null;

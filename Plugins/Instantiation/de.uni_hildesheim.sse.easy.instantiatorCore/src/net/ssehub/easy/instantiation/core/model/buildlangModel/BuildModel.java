@@ -1,6 +1,5 @@
 package net.ssehub.easy.instantiation.core.model.buildlangModel;
 
-import net.ssehub.easy.basics.modelManagement.DefaultImportResolver;
 import net.ssehub.easy.basics.modelManagement.ImportResolver;
 import net.ssehub.easy.basics.modelManagement.ModelManagement;
 
@@ -26,7 +25,7 @@ public class BuildModel extends ModelManagement<Script> {
 
     @Override
     protected ImportResolver<Script> createResolver() {
-        return new DefaultImportResolver<Script>();
+        return new BuildLangImportResolver();
     }
 
 }
