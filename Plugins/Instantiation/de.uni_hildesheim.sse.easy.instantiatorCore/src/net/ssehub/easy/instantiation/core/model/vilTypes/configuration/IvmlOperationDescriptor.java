@@ -112,4 +112,26 @@ abstract class IvmlOperationDescriptor extends OperationDescriptor {
         return false;
     }
 
+    /**
+     * Converts an argument value to an instance of <code>cls</code> if possible.
+     * 
+     * @param <T> the target type
+     * @param arg the argument value
+     * @param cls the target class
+     * @return a value of <code>cls</code> or <b>null</b>
+     */
+    protected static <T> T convertArgument(Object arg, Class<T> cls) {
+        Object a = arg;
+        if (arg instanceof AbstractIvmlVariable) {
+            a = ((AbstractIvmlVariable) arg).getValue();
+        }
+        T result;
+        if (cls.isInstance(a)) {
+            result = cls.cast(a);
+        } else {
+            result = null;
+        }
+        return result;
+    }
+
 }

@@ -1116,4 +1116,14 @@ public class ExecutionTests extends AbstractExecutionTest<Script> {
         assertSelfInstantiate("graph1", "main", "graph1", null);
     }
 
+    /**
+     * Tests enums and enum types.
+     * 
+     * @throws IOException should not occur
+     */
+    @Test
+    public void testEnum() throws IOException {
+        assertSelfInstantiate("enumTest", "main", "enumTest", null);
+    }
+
 }

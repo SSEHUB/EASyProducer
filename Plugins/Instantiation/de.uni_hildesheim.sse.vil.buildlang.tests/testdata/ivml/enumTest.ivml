@@ -1,0 +1,18 @@
+project enumTest {
+  version v0;
+  
+  enum Color {red, green, blue};
+  enum Phases {start = 1, ende = 2};
+  
+  compound TestCompound {
+      Color c;
+      Phases p;
+  }
+
+  TestCompound cmp = {c=Color.red, p=Phases.ende};  
+  
+  freeze {
+    cmp;
+  };
+  
+}

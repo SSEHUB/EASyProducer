@@ -1,0 +1,17 @@
+-> main(Project, Configuration, Project) with (<project>, <config>, <project>)
+    e <- <config>
+    tc <- enumTest::cmp
+    -> println(Any) with (enumTest::TestCompound::c)
+    -> println(Any) with (enumTest::TestCompound::p)
+    -> min(Phases, Phases) with (start, enumTest::TestCompound::p) = start
+    p1 <- start
+    -> max(Phases, Phases) with (start, enumTest::TestCompound::p) = ende
+    p2 <- ende
+    -> <(Phases, Phases) with (start, enumTest::TestCompound::p) = true
+    b1 <- true
+    -> <=(Phases, Phases) with (start, enumTest::TestCompound::p) = true
+    b2 <- true
+    -> >(Phases, Phases) with (enumTest::TestCompound::p, ende) = false
+    b3 <- false
+    -> >=(Phases, Phases) with (enumTest::TestCompound::p, ende) = true
+    b4 <- true    

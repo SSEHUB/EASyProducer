@@ -1,0 +1,17 @@
+@advice(enumTest)
+vilScript enumTest (Project source, Configuration config, Project target) {
+
+    main(Project source, Configuration config, Project target) = : {
+        enumTest e = config;
+        TestCompound tc = e.cmp;
+        println(tc.c);
+        println(tc.p);
+        Phases p1 = min(Phases.start, tc.p);
+        Phases p2 = max(Phases.start, tc.p);
+        Boolean b1 = Phases.start < tc.p;
+        Boolean b2 = Phases.start <= tc.p;
+        Boolean b3 = tc.p > Phases.ende;
+        Boolean b4 = tc.p >= Phases.ende;
+    }
+
+}

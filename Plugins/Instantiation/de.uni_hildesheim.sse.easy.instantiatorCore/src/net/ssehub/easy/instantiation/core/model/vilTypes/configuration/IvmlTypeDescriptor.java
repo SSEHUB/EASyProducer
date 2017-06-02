@@ -25,6 +25,7 @@ import net.ssehub.easy.varModel.model.datatypes.Container;
 import net.ssehub.easy.varModel.model.datatypes.DerivedDatatype;
 import net.ssehub.easy.varModel.model.datatypes.IDatatype;
 import net.ssehub.easy.varModel.model.datatypes.IntegerType;
+import net.ssehub.easy.varModel.model.datatypes.OrderedEnum;
 import net.ssehub.easy.varModel.model.datatypes.RealType;
 import net.ssehub.easy.varModel.model.datatypes.Sequence;
 import net.ssehub.easy.varModel.model.datatypes.StringType;
@@ -81,7 +82,32 @@ public class IvmlTypeDescriptor extends AbstractIvmlTypeDescriptor implements IA
                 Utils.addField(new IvmlAnnotationFieldDescriptor(this, att, registry), fields);
             }
         }
+        addCompoundOperations(ivmlType, operations, fields);
+        addEnumOperations(ivmlType, operations);
+        if (Compound.TYPE.isAssignableFrom(ivmlType) || Container.TYPE.isAssignableFrom(ivmlType)) {
+            Utils.addOperation(new IvmlConstructorOperationDescriptor(this, ivmlType), operations);
+        }
+        setOperations(operations.values());
+        setFields(fields.values());
+        List<OperationDescriptor> conversions = new ArrayList<OperationDescriptor>();
+        conversions.add(new IvmlConversionOperationDescriptor(this));
+        addDerivedTypeConversions(ivmlType, conversions);
+        addConversionOperations(ivmlType, conversions);
+        setConversions(conversions);
+    }
+
+    /**
+     * Adds the operations for compound types if needed.
+     * 
+     * @param ivmlType the type to process
+     * @param operations the operations (may be modified as a side effect)
+     * @param fields the actually known fields of <code>ivmlType</code> (may be modified as a side effect)
+     * @throws VilException in case that creating fields for the elements fails
+     */
+    private void addCompoundOperations(IDatatype ivmlType, Map<String, OperationDescriptor> operations, 
+        Map<String, FieldDescriptor> fields) throws VilException {
         if (ivmlType instanceof Compound) {
+            TypeRegistry registry = getTypeRegistry();
             Compound comp = (Compound) ivmlType;
             Compound refines = comp.getRefines();
             if (null != refines) {
@@ -98,15 +124,37 @@ public class IvmlTypeDescriptor extends AbstractIvmlTypeDescriptor implements IA
                 }
             }
             addElements(comp, registry, fields);
+        }        
+    }
+    
+    /**
+     * Adds the operations for enumeration types if needed.
+     * 
+     * @param ivmlType the type to process
+     * @param operations the operations (may be modified as a side effect)
+     */
+    private void addEnumOperations(IDatatype ivmlType, Map<String, OperationDescriptor> operations) {
+        if (ivmlType instanceof OrderedEnum) {
+            for (IvmlOrderedEnumMinMaxOperationDescriptor.OperationKind op 
+                : IvmlOrderedEnumMinMaxOperationDescriptor.OperationKind.values()) {
+                Utils.addOperation(new IvmlOrderedEnumMinMaxOperationDescriptor(this, op), operations);
+            }
+            for (IvmlOrderedEnumComparisonOperationDescriptor.OperationKind op 
+                : IvmlOrderedEnumComparisonOperationDescriptor.OperationKind.values()) {
+                Utils.addOperation(new IvmlOrderedEnumComparisonOperationDescriptor(this, op), operations);
+            }
         }
-        if (Compound.TYPE.isAssignableFrom(ivmlType) || Container.TYPE.isAssignableFrom(ivmlType)) {
-            Utils.addOperation(new IvmlConstructorOperationDescriptor(this, ivmlType), operations);
-        }
-        setOperations(operations.values());
-        setFields(fields.values());
-        List<OperationDescriptor> conversions = new ArrayList<OperationDescriptor>();
-        conversions.add(new IvmlConversionOperationDescriptor(this));
+    }
+
+    /**
+     * Adds the conversion operations for derived types if needed.
+     * 
+     * @param ivmlType the type to process
+     * @param conversions the conversion operations (may be modified as a side effect)
+     */
+    private void addDerivedTypeConversions(IDatatype ivmlType, List<OperationDescriptor> conversions) {
         if (DerivedDatatype.TYPE.isAssignableFrom(ivmlType)) {
+            TypeRegistry registry = getTypeRegistry();
             IDatatype baseType = DerivedDatatype.resolveToBasis(ivmlType);
             TypeDescriptor<?> vilBaseType = registry.getType(baseType.getName());
             if (net.ssehub.easy.varModel.model.datatypes.Set.TYPE.isAssignableFrom(baseType)) {
@@ -119,8 +167,6 @@ public class IvmlTypeDescriptor extends AbstractIvmlTypeDescriptor implements IA
                 this.baseType = desc.getReturnType();
             }
         }
-        addConversionOperations(ivmlType, conversions);
-        setConversions(conversions);
     }
     
     /**
