@@ -32,6 +32,7 @@ import net.ssehub.easy.instantiation.core.model.buildlangModel.Rule;
 import net.ssehub.easy.instantiation.core.model.buildlangModel.RuleCallExpression;
 import net.ssehub.easy.instantiation.core.model.buildlangModel.Script;
 import net.ssehub.easy.instantiation.core.model.buildlangModel.StrategyCallExpression;
+import net.ssehub.easy.instantiation.core.model.buildlangModel.VtlRule;
 import net.ssehub.easy.instantiation.core.model.buildlangModel.WhileStatement;
 import net.ssehub.easy.instantiation.core.model.buildlangModel.ruleMatch.ArtifactMatchExpression;
 import net.ssehub.easy.instantiation.core.model.buildlangModel.ruleMatch.BooleanMatchExpression;
@@ -192,6 +193,12 @@ public class RuleTreeVilVisitor implements IVisitor, IExpressionVisitor {
             visitRuleBlock(elseNode, alt.getElsePart());
         }
         return node;
+    }
+
+    @Override
+    public Object visitRule(VtlRule rule) throws VilException {
+        // do nothing, this is just a virtual concept
+        return null;
     }
 
     @Override

@@ -30,8 +30,8 @@ import net.ssehub.easy.basics.modelManagement.ModelImport;
 import net.ssehub.easy.basics.modelManagement.ModelInfo;
 import net.ssehub.easy.basics.modelManagement.ModelManagementException;
 import net.ssehub.easy.basics.progress.ProgressObserver;
+import net.ssehub.easy.instantiation.core.model.buildlangModel.AbstractRule;
 import net.ssehub.easy.instantiation.core.model.buildlangModel.BuildModel;
-import net.ssehub.easy.instantiation.core.model.buildlangModel.Rule;
 import net.ssehub.easy.instantiation.core.model.buildlangModel.Script;
 import net.ssehub.easy.instantiation.core.model.common.VilException;
 import net.ssehub.easy.producer.core.mgmt.PLPInfo;
@@ -118,7 +118,7 @@ public class EASyUtils {
         }
         Script script = plp.getBuildScript();
         if (null != script) {
-            Rule main = script.getMainRule(true);
+            AbstractRule main = script.getMainRule(true);
             try {
                 BuildModel.INSTANCE.locations().updateLocation(plp.getConfigLocation(), ProgressObserver.NO_OBSERVER);
                 // we just need an URI to a file in the config location - this avoids writing the buildScript now
@@ -128,7 +128,7 @@ public class EASyUtils {
                     ModelImport<Script> imp = script.getImport(i);
                     if (null != imp.getResolved()) {
                         try {
-                            Rule target = imp.getResolved().getMainRule(false);
+                            AbstractRule target = imp.getResolved().getMainRule(false);
                             main.appendCallTo(target, true);
                         } catch (VilException e) {
                             LOGGER.exception(e);

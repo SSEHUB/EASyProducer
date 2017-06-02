@@ -38,13 +38,13 @@ import net.ssehub.easy.basics.modelManagement.VersionFormatException;
 import net.ssehub.easy.basics.progress.ProgressObserver;
 import net.ssehub.easy.dslCore.TopLevelModelAccessor;
 import net.ssehub.easy.dslCore.TopLevelModelAccessor.IModelAccessor;
+import net.ssehub.easy.instantiation.core.model.buildlangModel.AbstractRule;
 import net.ssehub.easy.instantiation.core.model.buildlangModel.BuildModel;
 import net.ssehub.easy.instantiation.core.model.buildlangModel.BuildlangWriter;
 import net.ssehub.easy.instantiation.core.model.buildlangModel.ExpressionStatement;
 import net.ssehub.easy.instantiation.core.model.buildlangModel.ForStatement;
 import net.ssehub.easy.instantiation.core.model.buildlangModel.IRuleElement;
 import net.ssehub.easy.instantiation.core.model.buildlangModel.InstantiateExpression;
-import net.ssehub.easy.instantiation.core.model.buildlangModel.Rule;
 import net.ssehub.easy.instantiation.core.model.buildlangModel.Script;
 import net.ssehub.easy.instantiation.core.model.buildlangModel.Utils;
 import net.ssehub.easy.instantiation.core.model.buildlangModel.VariableDeclaration;
@@ -574,7 +574,7 @@ public class PersistenceUtils {
      */
     public static void createInstantiatePredecessorScript(PLPInfo plp, PLPInfo... parentPLPs) {
         Script mainScript = plp.getBuildScript();
-        Rule mainRule = mainScript.getMainRule(true);
+        AbstractRule mainRule = mainScript.getMainRule(true);
         
         if (null != parentPLPs) {
             for (int j = 0, n = parentPLPs.length; j < n; j++) {

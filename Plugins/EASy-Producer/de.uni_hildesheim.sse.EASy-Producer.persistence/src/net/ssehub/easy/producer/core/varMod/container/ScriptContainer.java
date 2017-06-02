@@ -18,8 +18,8 @@ package net.ssehub.easy.producer.core.varMod.container;
 
 import java.io.File;
 
+import net.ssehub.easy.instantiation.core.model.buildlangModel.AbstractRule;
 import net.ssehub.easy.instantiation.core.model.buildlangModel.BuildModel;
-import net.ssehub.easy.instantiation.core.model.buildlangModel.Rule;
 import net.ssehub.easy.instantiation.core.model.buildlangModel.Script;
 import net.ssehub.easy.instantiation.core.model.buildlangModel.Rule.Side;
 import net.ssehub.easy.instantiation.core.model.common.VilException;
@@ -91,7 +91,7 @@ public class ScriptContainer extends ModelContainer<Script> {
         Script buildScript = getModel();
         if (null != buildScript) {
             try {
-                Rule startRule = buildScript.determineStartRule(Executor.DEFAULT_START_RULE_NAME);
+                AbstractRule startRule = buildScript.determineStartRule(Executor.DEFAULT_START_RULE_NAME);
                 transformable = startRule.getBodyElementCount() > 0  || startRule.hasCondition(Side.RHS) 
                     || startRule.hasCondition(Side.LHS); 
             } catch (VilException e) {

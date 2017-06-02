@@ -14,10 +14,10 @@ import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import net.ssehub.easy.instantiation.core.model.buildlangModel.AbstractRule;
 import net.ssehub.easy.instantiation.core.model.buildlangModel.ExpressionStatement;
 import net.ssehub.easy.instantiation.core.model.buildlangModel.ForStatement;
 import net.ssehub.easy.instantiation.core.model.buildlangModel.InstantiateExpression;
-import net.ssehub.easy.instantiation.core.model.buildlangModel.Rule;
 import net.ssehub.easy.instantiation.core.model.buildlangModel.Script;
 import net.ssehub.easy.producer.core.mgmt.PLPInfo;
 import net.ssehub.easy.producer.core.mgmt.SPLsManager;
@@ -304,7 +304,7 @@ public class EASyProjectCreatorFactoryTest {
         Script script = plpSuc.getBuildScript();
         Assert.assertEquals(1, script.getImportsCount());
         Assert.assertEquals(plpPre.getProject().getName(), script.getImport(0).getName());
-        Rule mainRule = script.getMainRule(false);
+        AbstractRule mainRule = script.getMainRule(false);
         Assert.assertEquals(1, mainRule.getBodyElementCount());
         ForStatement statement = (ForStatement) mainRule.getBodyElement(0);
         Assert.assertEquals(1, statement.getBodyElementCount());

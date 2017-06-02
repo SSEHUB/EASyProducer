@@ -31,6 +31,7 @@ import net.ssehub.easy.instantiation.core.model.buildlangModel.Rule;
 import net.ssehub.easy.instantiation.core.model.buildlangModel.RuleCallExpression;
 import net.ssehub.easy.instantiation.core.model.buildlangModel.Script;
 import net.ssehub.easy.instantiation.core.model.buildlangModel.StrategyCallExpression;
+import net.ssehub.easy.instantiation.core.model.buildlangModel.VtlRule;
 import net.ssehub.easy.instantiation.core.model.buildlangModel.WhileStatement;
 import net.ssehub.easy.instantiation.core.model.buildlangModel.ruleMatch.ArtifactMatchExpression;
 import net.ssehub.easy.instantiation.core.model.buildlangModel.ruleMatch.BooleanMatchExpression;
@@ -239,6 +240,30 @@ class BuildResolverVisitor implements IVisitor, IExpressionVisitor {
         return result;
     }
 
+    @Override
+    public Object visitRule(VtlRule rule) throws VilException {
+        Object result;
+        resolver.pushLevel();
+        int count = rule.getParameterCount();
+        if (rule.acceptsNamedParameters()) {
+            count--;
+        }
+        for (int p = 0; p < count; p++) {
+            resolver.add(rule.getParameter(p));
+        }
+        if (rule == stop) {
+            result = Boolean.TRUE;
+            currentBlock = rule;
+            currentBlockPosition = 0;
+        } else {
+            result = visitBlock(rule);
+        }
+        if (Boolean.TRUE != result) {
+            resolver.popLevel();
+        }
+        return result;
+    }
+    
     @Override
     public Object visitRule(Rule rule) throws VilException {
         Object result;
