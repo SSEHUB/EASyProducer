@@ -15,6 +15,8 @@
  */
 package net.ssehub.easy.varModel.model.datatypes;
 
+import net.ssehub.easy.varModel.model.datatypes.Operation.ReturnTypeMode;
+
 /**
  * Implements a data type which represents types (as result of type operations).
  * 
@@ -33,6 +35,8 @@ public class MetaType extends BasisDatatype {
         = Operation.createInfixOperator(BooleanType.TYPE, OclKeyWords.EQUALS, TYPE, TYPE);
     public static final Operation NOTEQUALS 
         = Operation.createInfixOperator(BooleanType.TYPE, OclKeyWords.UNEQUALS, TYPE, TYPE);
+    public static final Operation ALL_INSTANCES
+        = new Operation(AnyType.SET_TYPE, ReturnTypeMode.IMMEDIATE_OPERAND_COLLECTION, OclKeyWords.ALL_INSTANCES, TYPE);
 
     // checkstyle: resume declaration order check
 
@@ -40,6 +44,7 @@ public class MetaType extends BasisDatatype {
         AnyType.META_TYPE.setDelegate(new MetaType());
         AnyType.META_TYPE.addOperation(EQUALS);
         AnyType.META_TYPE.addOperation(NOTEQUALS);
+        AnyType.META_TYPE.addOperation(ALL_INSTANCES);
     }
     
     /**

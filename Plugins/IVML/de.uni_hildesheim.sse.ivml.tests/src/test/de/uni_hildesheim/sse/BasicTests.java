@@ -279,6 +279,16 @@ public class BasicTests extends AbstractTest {
     }
 
     /**
+     * Tests the all instances operation.
+     * 
+     * @throws IOException should not occur
+     */
+    @Test
+    public void testAllInstances() throws IOException {
+        assertEqual(createFile("allInstances"), "allInstances", "0");
+    }
+    
+    /**
      * Tests constants.
      * 
      * @throws IOException should not occur

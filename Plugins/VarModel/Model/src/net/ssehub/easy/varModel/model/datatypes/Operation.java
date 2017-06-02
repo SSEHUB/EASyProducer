@@ -60,7 +60,7 @@ public class Operation {
          * Change it to the immediate type of the operand.
          */
         IMMEDIATE_OPERAND(-1, -1, false, false),
-
+        
         /**
          * Change it to the operand with generic parameter. If no generic
          * parameter is available, {@link #IMMEDIATE_OPERAND} is applied.
@@ -107,8 +107,13 @@ public class Operation {
          * parameter is available, {@link #IMMEDIATE_OPERAND} is applied.
          */
         // 0: using generic parameters as parameters here
-        IMMEDIATE_OPERAND_COLLECTION_NESTED_GENERIC_1(-1, 0, true, false); 
-        
+        IMMEDIATE_OPERAND_COLLECTION_NESTED_GENERIC_1(-1, 0, true, false), 
+
+        /**
+         * Change it to a collection based on the original result type using the immediate type as type parameter.
+         */
+        IMMEDIATE_OPERAND_COLLECTION(-1, -1, false, false);
+
         /**
          * Stores the index of the affected generic type. Negative if none
          * is affected.
@@ -449,6 +454,9 @@ public class Operation {
                 result = immediateOperand;
             }
             break;
+        case IMMEDIATE_OPERAND_COLLECTION:
+            result = immediateOperandCollection(immediateOperand);
+            break;
         case IMMEDIATE_OPERAND:
             result = immediateOperand;
             break;
@@ -481,6 +489,25 @@ public class Operation {
             } else if (Sequence.TYPE.isAssignableFrom(result)) {
                 result = createCollectionReturnType(Sequence.TYPE, result, null);
             }
+        }
+        return result;
+    }
+
+    /**
+     * Returns a collection type using the immediate operand as generic based on the original return type of this
+     * operation.
+     * 
+     * @param immediateOperand the immediate operand
+     * @return the datatype
+     */
+    private IDatatype immediateOperandCollection(IDatatype immediateOperand) {
+        IDatatype result;
+        if (Sequence.TYPE.isAssignableFrom(getReturns())) {
+            result = createCollectionReturnType(Sequence.TYPE, immediateOperand, null);
+        } else if (Set.TYPE.isAssignableFrom(getReturns())) {
+            result = createCollectionReturnType(Set.TYPE, immediateOperand, null);
+        } else {
+            result = immediateOperand;
         }
         return result;
     }

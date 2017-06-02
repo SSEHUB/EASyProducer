@@ -16,6 +16,8 @@
 package net.ssehub.easy.varModel.cstEvaluation;
 
 import net.ssehub.easy.varModel.model.datatypes.MetaType;
+import net.ssehub.easy.varModel.model.values.MetaTypeValue;
+import net.ssehub.easy.varModel.model.values.Value;
 
 /**
  * Implements the meta type operations.
@@ -24,6 +26,23 @@ import net.ssehub.easy.varModel.model.datatypes.MetaType;
  */
 public class MetaTypeOperations {
 
+    /**
+     * Implements the all instances operation.
+     */
+    static final IOperationEvaluator ALL_INSTANCES = new IOperationEvaluator() {
+        
+        public EvaluationAccessor evaluate(EvaluationAccessor operand, EvaluationAccessor[] arguments) {
+            EvaluationAccessor result = null;
+            Value val = operand.getValue();
+            if (val instanceof MetaTypeValue) {
+                MetaTypeValue mtVal = (MetaTypeValue) val;
+                Value resVal = operand.getContext().getAllInstances(mtVal.getValue());
+                result = ConstantAccessor.POOL.getInstance().bind(resVal, operand.getContext());
+            }
+            return result; 
+        }
+    };
+    
     /**
      * Prevents external creation.
      */
@@ -36,6 +55,7 @@ public class MetaTypeOperations {
     public static final void register() {
         EvaluatorRegistry.registerEvaluator(GenericOperations.EQUALS, MetaType.EQUALS);
         EvaluatorRegistry.registerEvaluator(GenericOperations.UNEQUALS, MetaType.NOTEQUALS);
+        EvaluatorRegistry.registerEvaluator(ALL_INSTANCES, MetaType.ALL_INSTANCES);
     }
     
 }

@@ -16,7 +16,6 @@
 package net.ssehub.easy.varModel.cst;
 
 import net.ssehub.easy.varModel.model.Attribute;
-import net.ssehub.easy.varModel.model.datatypes.DerivedDatatype;
 import net.ssehub.easy.varModel.model.datatypes.IDatatype;
 
 /**

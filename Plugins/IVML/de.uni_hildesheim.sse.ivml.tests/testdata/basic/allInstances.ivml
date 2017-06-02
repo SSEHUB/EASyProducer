@@ -1,0 +1,12 @@
+project allInstances {
+
+    version v0;
+    compound position {
+    }
+
+    compound data {
+    }
+
+    size(allInstances(position)) > 0;
+    size(allInstances(data)) > 0;
+}

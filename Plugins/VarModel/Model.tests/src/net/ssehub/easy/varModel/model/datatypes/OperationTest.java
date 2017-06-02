@@ -308,9 +308,10 @@ public class OperationTest {
                 parameters[j] = map.get(operation.getParameter(j));  
             }
          
-            OCLFeatureCall call = new OCLFeatureCall(operand, operation.getName(), parameters);                
-                
-            Assert.assertEquals(operation.getReturns(), call.inferDatatype());
+            if (MetaType.ALL_INSTANCES != operation) {
+                OCLFeatureCall call = new OCLFeatureCall(operand, operation.getName(), parameters);                
+                Assert.assertEquals(operation.getReturns(), call.inferDatatype());
+            }
         }
         
     }

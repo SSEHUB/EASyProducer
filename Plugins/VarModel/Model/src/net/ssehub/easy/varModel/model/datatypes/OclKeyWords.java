@@ -156,6 +156,9 @@ public class OclKeyWords {
     
     // IVML aliases
     public static final String UNEQUALS_ALIAS = "!=";
+    
+    // MetaType
+    public static final String ALL_INSTANCES = "allInstances";
 
     /**
      * Prevents this class from being initialized from outside. Prepared for being

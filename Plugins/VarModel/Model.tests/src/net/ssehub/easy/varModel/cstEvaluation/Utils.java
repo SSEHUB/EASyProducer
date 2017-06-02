@@ -29,6 +29,7 @@ import net.ssehub.easy.varModel.model.datatypes.EnumLiteral;
 import net.ssehub.easy.varModel.model.datatypes.IDatatype;
 import net.ssehub.easy.varModel.model.datatypes.MetaType;
 import net.ssehub.easy.varModel.model.datatypes.Operation;
+import net.ssehub.easy.varModel.model.datatypes.Set;
 import net.ssehub.easy.varModel.model.datatypes.TypeQueries;
 import net.ssehub.easy.varModel.model.values.BooleanValue;
 import net.ssehub.easy.varModel.model.values.ContainerValue;
@@ -363,23 +364,122 @@ class Utils {
      * @param value the calculated (container) value
      */
     static void assertContainer(Object[] expected, Value value) {
-        Assert.assertTrue(value instanceof ContainerValue);
-        ContainerValue cValue = (ContainerValue) value;
-        if (null != expected) {
-            Assert.assertEquals(expected.length, cValue.getElementSize());
-            for (int i = 0; i < expected.length; i++) {
-                Value eltVal = cValue.getElement(i);
-                if (expected[i] instanceof Value) {
-                    Assert.assertTrue(eltVal.equals(expected[i]));
-                } else if (eltVal instanceof ContainerValue && expected[i].getClass().isArray()) {
-                    assertContainer((Object[]) expected[i], eltVal);
+        String check = checkContainer(expected, value);
+        Assert.assertNull(check, check);
+    }
+    
+    /**
+     * Checks a container for equality against expected values.
+     * 
+     * @param expected the expected values
+     * @param value the potential container value
+     * @return a message if checking fails, <b>null</b> if ok
+     */
+    private static String checkContainer(Object[] expected, Value value) {
+        String result = null;
+        if (value instanceof ContainerValue) {
+            ContainerValue cValue = (ContainerValue) value;
+            if (null != expected) {
+                if (expected.length == cValue.getElementSize()) {
+                    if (Set.TYPE.isAssignableFrom(value.getType())) {
+                        result = appendMessage(result, checkSetContainer(expected, cValue));
+                    } else {
+                        result = appendMessage(result, checkSequenceContainer(expected, cValue));
+                    }
                 } else {
-                    Assert.assertEquals(expected[i], eltVal.getValue());
+                    result = appendMessage(result, "lengths do not match");
                 }
+            } else {
+                result = appendMessage(result, "null expected but result obtained");
             }
         } else {
-            Assert.fail("null expected but result obtained");
+            result = appendMessage(result, "value is not a container");
         }
+        return result;
+    }
+    
+    /**
+     * Checks a set container for equality against expected values.
+     * 
+     * @param expected the expected values
+     * @param cValue the set container value
+     * @return a message if checking fails, <b>null</b> if ok
+     */
+    private static String checkSetContainer(Object[] expected, ContainerValue cValue) {
+        String result = null;
+        for (int i = 0; i < expected.length; i++) {
+            String tmp = null;
+            // may also be done in linear time - reuse complex value test
+            for (int j = 0; j < cValue.getElementSize(); j++) {
+                tmp = checkContainerValue(expected[i], cValue.getElement(j));
+                if (null == tmp) {
+                    break;
+                }
+            }
+            result = appendMessage(result, tmp);
+        }
+        return result;
+    }
+
+    /**
+     * Checks a sequence container for equality against expected values.
+     * 
+     * @param expected the expected values
+     * @param cValue the sequence container value
+     * @return a message if checking fails, <b>null</b> if ok
+     */
+    private static String checkSequenceContainer(Object[] expected, ContainerValue cValue) {
+        String result = null;
+        for (int i = 0; i < expected.length; i++) {
+            result = appendMessage(result, checkContainerValue(expected[i], cValue.getElement(i)));
+        }
+        return result;
+    }
+    
+    /**
+     * Checks a single container value an expected value.
+     * 
+     * @param expected the expected value
+     * @param eltVal the container element value
+     * @return a message if checking fails, <b>null</b> if ok
+     */
+    private static String checkContainerValue(Object expected, Value eltVal) {
+        String result = null;
+        if (expected instanceof Value) {
+            if (!eltVal.equals(expected)) {
+                result = appendMessage(result, "values do not match");
+            }
+        } else if (eltVal instanceof ContainerValue && expected.getClass().isArray()) {
+            result = appendMessage(result, checkContainer((Object[]) expected, eltVal));
+        } else {
+            if (!expected.equals(eltVal.getValue())) {
+                result = appendMessage(result, "values do not match");
+            }
+        }
+        return result;
+    }
+
+    /**
+     * Appends <code>text</code> to <code>msg</code>.
+     * 
+     * @param msg the existing check message, may be <b>null</b> for none
+     * @param text the text to add, may be <b>null</b> for none
+     * @return the appended message, may be <b>null</b> for none
+     */
+    private static String appendMessage(String msg, String text) {
+        String result;
+        if (null == msg) {
+            result = text;
+        } else {
+            result = msg;
+            if (text != null) {
+                if (result.length() > 0) {
+                    result += ", ";
+                }
+                result += text;
+            }
+        }
+        return result;
     }
     
     /**
