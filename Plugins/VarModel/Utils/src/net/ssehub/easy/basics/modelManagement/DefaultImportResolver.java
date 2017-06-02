@@ -359,6 +359,9 @@ public class DefaultImportResolver<M extends IModel> extends ImportResolver<M> {
                     }
                 }
                 result = VersionedModelInfos.getByClosestUri(tmp, context.getModelURI(), context.getModelPaths());
+                if (null == result) { // fallback, e.g., in testing
+                    result = highest;
+                }
             }
         } else {
             if (null != versions && !versions.isEmpty()) {
@@ -420,6 +423,20 @@ public class DefaultImportResolver<M extends IModel> extends ImportResolver<M> {
             }
         }
         return conflicts;
+    }
+
+    /**
+     * Is called if <code>imp</code> can finally not be resolved.
+     * 
+     * @param imp the import to be resolved
+     * @param messages which occur during resolution, <code>null</code> or empty 
+     *   if none (modified as a side effect)
+     * @param modelURI the URI of the model
+     * @param context the restriction evaluation context
+     */
+    protected void cannotResolveImport(ModelImport<M> imp, List<IMessage> messages, 
+        URI modelURI, IRestrictionEvaluationContext context) {
+        messages.add(new Message("model '" + imp.getName() + "' cannot be found", Status.ERROR));
     }
     
     // checkstyle: stop parameter number check
@@ -564,7 +581,7 @@ public class DefaultImportResolver<M extends IModel> extends ImportResolver<M> {
                 if (null != versions && versions.size() > 0) {
                     conflicts = resolve(context, done, messages, versions, imp);
                 } else {
-                    messages.add(new Message("model '" + imp.getName() + "' cannot be found", Status.ERROR));
+                    cannotResolveImport(imp, messages, context.getModelURI(), context.getEvaluationContext());
                 }
             }
         } 
