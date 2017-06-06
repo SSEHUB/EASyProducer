@@ -208,6 +208,7 @@
     <genClasses ecoreClass="Ivml.ecore#//RelationalExpression">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Ivml.ecore#//RelationalExpression/left"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Ivml.ecore#//RelationalExpression/right"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Ivml.ecore#//RelationalExpression/right2"/>
     </genClasses>
     <genClasses ecoreClass="Ivml.ecore#//RelationalExpressionPart">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Ivml.ecore#//RelationalExpressionPart/op"/>

@@ -15,6 +15,7 @@ import org.eclipse.emf.ecore.EObject;
  * <ul>
  *   <li>{@link de.uni_hildesheim.sse.ivml.RelationalExpression#getLeft <em>Left</em>}</li>
  *   <li>{@link de.uni_hildesheim.sse.ivml.RelationalExpression#getRight <em>Right</em>}</li>
+ *   <li>{@link de.uni_hildesheim.sse.ivml.RelationalExpression#getRight2 <em>Right2</em>}</li>
  * </ul>
  *
  * @see de.uni_hildesheim.sse.ivml.IvmlPackage#getRelationalExpression()
@@ -74,5 +75,31 @@ public interface RelationalExpression extends EObject
    * @generated
    */
   void setRight(RelationalExpressionPart value);
+
+  /**
+   * Returns the value of the '<em><b>Right2</b></em>' containment reference.
+   * <!-- begin-user-doc -->
+   * <p>
+   * If the meaning of the '<em>Right2</em>' containment reference isn't clear,
+   * there really should be more of a description here...
+   * </p>
+   * <!-- end-user-doc -->
+   * @return the value of the '<em>Right2</em>' containment reference.
+   * @see #setRight2(RelationalExpressionPart)
+   * @see de.uni_hildesheim.sse.ivml.IvmlPackage#getRelationalExpression_Right2()
+   * @model containment="true"
+   * @generated
+   */
+  RelationalExpressionPart getRight2();
+
+  /**
+   * Sets the value of the '{@link de.uni_hildesheim.sse.ivml.RelationalExpression#getRight2 <em>Right2</em>}' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @param value the new value of the '<em>Right2</em>' containment reference.
+   * @see #getRight2()
+   * @generated
+   */
+  void setRight2(RelationalExpressionPart value);
 
 } // RelationalExpression

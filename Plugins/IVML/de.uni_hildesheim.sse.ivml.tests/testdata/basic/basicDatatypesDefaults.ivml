@@ -13,4 +13,5 @@ project testBasicDatatypesDefaults {
     Real r5 = -5.0;
     String s1 = "here";
     String s2 = "";
+    i3 <= i2 <= i1;
 }

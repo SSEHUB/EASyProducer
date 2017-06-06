@@ -121,6 +121,7 @@ public class IvmlParser extends AbstractContentAssistParser {
 					put(grammarAccess.getEqualityExpressionAccess().getGroup(), "rule__EqualityExpression__Group__0");
 					put(grammarAccess.getEqualityExpressionPartAccess().getGroup(), "rule__EqualityExpressionPart__Group__0");
 					put(grammarAccess.getRelationalExpressionAccess().getGroup(), "rule__RelationalExpression__Group__0");
+					put(grammarAccess.getRelationalExpressionAccess().getGroup_1(), "rule__RelationalExpression__Group_1__0");
 					put(grammarAccess.getRelationalExpressionPartAccess().getGroup(), "rule__RelationalExpressionPart__Group__0");
 					put(grammarAccess.getAdditiveExpressionAccess().getGroup(), "rule__AdditiveExpression__Group__0");
 					put(grammarAccess.getAdditiveExpressionPartAccess().getGroup(), "rule__AdditiveExpressionPart__Group__0");
@@ -289,7 +290,8 @@ public class IvmlParser extends AbstractContentAssistParser {
 					put(grammarAccess.getEqualityExpressionPartAccess().getExAssignment_1_0(), "rule__EqualityExpressionPart__ExAssignment_1_0");
 					put(grammarAccess.getEqualityExpressionPartAccess().getContainerAssignment_1_1(), "rule__EqualityExpressionPart__ContainerAssignment_1_1");
 					put(grammarAccess.getRelationalExpressionAccess().getLeftAssignment_0(), "rule__RelationalExpression__LeftAssignment_0");
-					put(grammarAccess.getRelationalExpressionAccess().getRightAssignment_1(), "rule__RelationalExpression__RightAssignment_1");
+					put(grammarAccess.getRelationalExpressionAccess().getRightAssignment_1_0(), "rule__RelationalExpression__RightAssignment_1_0");
+					put(grammarAccess.getRelationalExpressionAccess().getRight2Assignment_1_1(), "rule__RelationalExpression__Right2Assignment_1_1");
 					put(grammarAccess.getRelationalExpressionPartAccess().getOpAssignment_0(), "rule__RelationalExpressionPart__OpAssignment_0");
 					put(grammarAccess.getRelationalExpressionPartAccess().getExAssignment_1(), "rule__RelationalExpressionPart__ExAssignment_1");
 					put(grammarAccess.getAdditiveExpressionAccess().getLeftAssignment_0(), "rule__AdditiveExpression__LeftAssignment_0");

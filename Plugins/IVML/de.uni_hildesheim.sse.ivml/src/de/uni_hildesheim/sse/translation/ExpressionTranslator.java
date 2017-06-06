@@ -76,6 +76,7 @@ import net.ssehub.easy.varModel.model.IvmlException;
 import net.ssehub.easy.varModel.model.IvmlKeyWords;
 import net.ssehub.easy.varModel.model.ModelElement;
 import net.ssehub.easy.varModel.model.ModelQueryException;
+import net.ssehub.easy.varModel.model.datatypes.BooleanType;
 import net.ssehub.easy.varModel.model.datatypes.Compound;
 import net.ssehub.easy.varModel.model.datatypes.ConstraintType;
 import net.ssehub.easy.varModel.model.datatypes.Container;
@@ -530,6 +531,18 @@ public class ExpressionTranslator extends net.ssehub.easy.dslCore.translation.Ex
             ConstraintSyntaxTree cst = processAdditiveExpression(expr.getRight().getEx(), context, parent);
             checkForAssigment(cst, false, expr, IvmlPackage.Literals.RELATIONAL_EXPRESSION__RIGHT);
             result = new OCLFeatureCall(result, op, context.getProject(), cst);
+            if (null != expr.getRight2()) {
+                String op2 = expr.getRight2().getOp();
+                ConstraintSyntaxTree cst2 = processAdditiveExpression(expr.getRight2().getEx(), context, parent);
+                checkForAssigment(cst2, false, expr, IvmlPackage.Literals.RELATIONAL_EXPRESSION__RIGHT);
+                ConstraintSyntaxTree result2 = new OCLFeatureCall(cst, op2, context.getProject(), cst2);
+                result = new OCLFeatureCall(result, BooleanType.MULTI_AND.getName(), result2);
+                if (AbstractVarModelWriter.considerOclCompliance()) {
+                    warning("OCL compliance: chain of relational operations shall be written by a combination of binary"
+                        + " comparisons and Boolean and operatoins", expr, 
+                        IvmlPackage.Literals.RELATIONAL_EXPRESSION__RIGHT2, ErrorCodes.WARNING_USAGE);
+                }
+            }
             level--;
         }
         return result;

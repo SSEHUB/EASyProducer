@@ -106,6 +106,7 @@ import net.ssehub.easy.varModel.model.Project;
 import net.ssehub.easy.varModel.model.ProjectImport;
 import net.ssehub.easy.varModel.model.ProjectInterface;
 import net.ssehub.easy.varModel.model.AttributeAssignment.Assignment;
+import net.ssehub.easy.varModel.model.datatypes.BooleanType;
 import net.ssehub.easy.varModel.model.datatypes.Compound;
 import net.ssehub.easy.varModel.model.datatypes.ConstraintType;
 import net.ssehub.easy.varModel.model.datatypes.Container;
@@ -1023,13 +1024,39 @@ public class IVMLWriter extends AbstractVarModelWriter {
 
     @Override
     public void visitOclFeatureCall(OCLFeatureCall call) {
+        Operation resolved = call.getResolvedOperation();
+        if (resolved == BooleanType.MULTI_AND) {
+            call.getOperand().accept(this);
+            for (int p = 0; p < call.getParameterCount(); p++) {
+                appendOutput(WHITESPACE);
+                ConstraintSyntaxTree cst = call.getParameter(p);
+                if (cst instanceof OCLFeatureCall) {
+                    OCLFeatureCall paramCall = (OCLFeatureCall) cst;
+                    appendOutput(paramCall.getOperation());
+                    appendOutput(WHITESPACE);
+                    for (int p1 = 0; p1 < paramCall.getParameterCount(); p1++) {
+                        paramCall.getParameter(p1).accept(this);
+                    }
+                }
+            }
+        } else {
+            emitOclFeatureCall(call);
+        }
+    }
+
+    /**
+     * Emits a full feature call.
+     * 
+     * @param call the call
+     */
+    private void emitOclFeatureCall(OCLFeatureCall call) {
         FormattingHint hint;
         Operation resolved = call.getResolvedOperation();
         if (null != resolved) {
             hint = resolved.getFormattingHint();
         } else {
             hint = FormattingHint.FUNCTION_CALL;
-        }
+        }            
         String name = call.getOperation();
         switch (hint) {
         case FUNCTION_CALL:

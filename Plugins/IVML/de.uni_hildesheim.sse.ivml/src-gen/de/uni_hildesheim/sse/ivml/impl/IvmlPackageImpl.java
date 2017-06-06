@@ -2176,6 +2176,16 @@ public class IvmlPackageImpl extends EPackageImpl implements IvmlPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  public EReference getRelationalExpression_Right2()
+  {
+    return (EReference)relationalExpressionEClass.getEStructuralFeatures().get(2);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
   public EClass getRelationalExpressionPart()
   {
     return relationalExpressionPartEClass;
@@ -3062,6 +3072,7 @@ public class IvmlPackageImpl extends EPackageImpl implements IvmlPackage
     relationalExpressionEClass = createEClass(RELATIONAL_EXPRESSION);
     createEReference(relationalExpressionEClass, RELATIONAL_EXPRESSION__LEFT);
     createEReference(relationalExpressionEClass, RELATIONAL_EXPRESSION__RIGHT);
+    createEReference(relationalExpressionEClass, RELATIONAL_EXPRESSION__RIGHT2);
 
     relationalExpressionPartEClass = createEClass(RELATIONAL_EXPRESSION_PART);
     createEAttribute(relationalExpressionPartEClass, RELATIONAL_EXPRESSION_PART__OP);
@@ -3384,6 +3395,7 @@ public class IvmlPackageImpl extends EPackageImpl implements IvmlPackage
     initEClass(relationalExpressionEClass, RelationalExpression.class, "RelationalExpression", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
     initEReference(getRelationalExpression_Left(), this.getAdditiveExpression(), null, "left", null, 0, 1, RelationalExpression.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEReference(getRelationalExpression_Right(), this.getRelationalExpressionPart(), null, "right", null, 0, 1, RelationalExpression.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getRelationalExpression_Right2(), this.getRelationalExpressionPart(), null, "right2", null, 0, 1, RelationalExpression.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     initEClass(relationalExpressionPartEClass, RelationalExpressionPart.class, "RelationalExpressionPart", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
     initEAttribute(getRelationalExpressionPart_Op(), ecorePackage.getEString(), "op", null, 0, 1, RelationalExpressionPart.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);

@@ -1032,7 +1032,7 @@ public abstract class AbstractIvmlSemanticSequencer extends AbstractDelegatingSe
 	 *     RelationalExpression returns RelationalExpression
 	 *
 	 * Constraint:
-	 *     (left=AdditiveExpression right=RelationalExpressionPart?)
+	 *     (left=AdditiveExpression (right=RelationalExpressionPart right2=RelationalExpressionPart?)?)
 	 */
 	protected void sequence_RelationalExpression(ISerializationContext context, RelationalExpression semanticObject) {
 		genericSequencer.createSequence(context, semanticObject);

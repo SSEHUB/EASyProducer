@@ -49,6 +49,10 @@ public class BooleanType extends BasisDatatype {
     public static final Operation WARNING = new Operation(TYPE, OclKeyWords.WARNING, TYPE);
     public static final Operation TO_STRING = new Operation(AnyType.BOOLEAN_TYPE, OclKeyWords.TO_STRING, TYPE);
     
+    // internal
+    public static final Operation MULTI_AND = new Operation(BooleanType.TYPE, "*MULTIAND*", 
+        BooleanType.TYPE, BooleanType.TYPE);
+    
     static {
         AnyType.BOOLEAN_TYPE.setDelegate(new BooleanType());
         AnyType.BOOLEAN_TYPE.addOperation(TYPE_OF);
@@ -64,6 +68,7 @@ public class BooleanType extends BasisDatatype {
         AnyType.BOOLEAN_TYPE.addOperation(IFF);
         AnyType.BOOLEAN_TYPE.addOperation(WARNING);
         AnyType.BOOLEAN_TYPE.addOperation(TO_STRING);
+        AnyType.BOOLEAN_TYPE.addOperation(MULTI_AND);
     }
     
     /**

@@ -2255,14 +2255,17 @@ public class IvmlGrammarAccess extends AbstractGrammarElementFinder {
 		private final Group cGroup = (Group)rule.eContents().get(1);
 		private final Assignment cLeftAssignment_0 = (Assignment)cGroup.eContents().get(0);
 		private final RuleCall cLeftAdditiveExpressionParserRuleCall_0_0 = (RuleCall)cLeftAssignment_0.eContents().get(0);
-		private final Assignment cRightAssignment_1 = (Assignment)cGroup.eContents().get(1);
-		private final RuleCall cRightRelationalExpressionPartParserRuleCall_1_0 = (RuleCall)cRightAssignment_1.eContents().get(0);
+		private final Group cGroup_1 = (Group)cGroup.eContents().get(1);
+		private final Assignment cRightAssignment_1_0 = (Assignment)cGroup_1.eContents().get(0);
+		private final RuleCall cRightRelationalExpressionPartParserRuleCall_1_0_0 = (RuleCall)cRightAssignment_1_0.eContents().get(0);
+		private final Assignment cRight2Assignment_1_1 = (Assignment)cGroup_1.eContents().get(1);
+		private final RuleCall cRight2RelationalExpressionPartParserRuleCall_1_1_0 = (RuleCall)cRight2Assignment_1_1.eContents().get(0);
 		
 		//RelationalExpression:
-		//	left=AdditiveExpression right=RelationalExpressionPart?;
+		//	left=AdditiveExpression (right=RelationalExpressionPart right2=RelationalExpressionPart?)?;
 		@Override public ParserRule getRule() { return rule; }
 
-		//left=AdditiveExpression right=RelationalExpressionPart?
+		//left=AdditiveExpression (right=RelationalExpressionPart right2=RelationalExpressionPart?)?
 		public Group getGroup() { return cGroup; }
 
 		//left=AdditiveExpression
@@ -2271,11 +2274,20 @@ public class IvmlGrammarAccess extends AbstractGrammarElementFinder {
 		//AdditiveExpression
 		public RuleCall getLeftAdditiveExpressionParserRuleCall_0_0() { return cLeftAdditiveExpressionParserRuleCall_0_0; }
 
-		//right=RelationalExpressionPart?
-		public Assignment getRightAssignment_1() { return cRightAssignment_1; }
+		//(right=RelationalExpressionPart right2=RelationalExpressionPart?)?
+		public Group getGroup_1() { return cGroup_1; }
+
+		//right=RelationalExpressionPart
+		public Assignment getRightAssignment_1_0() { return cRightAssignment_1_0; }
 
 		//RelationalExpressionPart
-		public RuleCall getRightRelationalExpressionPartParserRuleCall_1_0() { return cRightRelationalExpressionPartParserRuleCall_1_0; }
+		public RuleCall getRightRelationalExpressionPartParserRuleCall_1_0_0() { return cRightRelationalExpressionPartParserRuleCall_1_0_0; }
+
+		//right2=RelationalExpressionPart?
+		public Assignment getRight2Assignment_1_1() { return cRight2Assignment_1_1; }
+
+		//RelationalExpressionPart
+		public RuleCall getRight2RelationalExpressionPartParserRuleCall_1_1_0() { return cRight2RelationalExpressionPartParserRuleCall_1_1_0; }
 	}
 
 	public class RelationalExpressionPartElements extends AbstractParserRuleElementFinder {
@@ -3977,7 +3989,7 @@ public class IvmlGrammarAccess extends AbstractGrammarElementFinder {
 	}
 
 	//RelationalExpression:
-	//	left=AdditiveExpression right=RelationalExpressionPart?;
+	//	left=AdditiveExpression (right=RelationalExpressionPart right2=RelationalExpressionPart?)?;
 	public RelationalExpressionElements getRelationalExpressionAccess() {
 		return pRelationalExpression;
 	}
