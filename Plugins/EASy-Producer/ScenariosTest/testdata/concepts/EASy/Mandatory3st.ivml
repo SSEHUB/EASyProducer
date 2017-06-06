@@ -1,0 +1,6 @@
+project Mandatory3st {
+
+    import Mandatory3t;
+    var = true;
+
+}

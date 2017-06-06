@@ -1,0 +1,5 @@
+project Mandatory1 {
+
+    Boolean var = true;
+
+}

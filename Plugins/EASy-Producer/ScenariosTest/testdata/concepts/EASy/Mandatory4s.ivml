@@ -1,0 +1,6 @@
+project Mandatory4s {
+
+    import Mandatory4;
+    var = true;
+
+}

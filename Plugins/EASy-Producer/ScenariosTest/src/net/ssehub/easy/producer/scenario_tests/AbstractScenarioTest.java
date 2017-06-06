@@ -211,9 +211,13 @@ public abstract class AbstractScenarioTest extends AbstractTest<Script> {
      * @param ivmlFolder the base folder for IVML files
      * @return the IVML model
      */
-    private static net.ssehub.easy.varModel.model.Project obtainIvmlModel(String projectName, String ivmlVersion,
+    protected static net.ssehub.easy.varModel.model.Project obtainIvmlModel(String projectName, String ivmlVersion,
         File ivmlFolder) {
-        URI modelURI = new File(ivmlFolder, projectName + "_" + ivmlVersion + ".ivml").toURI();
+        String versionSuffix = "";
+        if (null != ivmlVersion) {
+            versionSuffix = "_" + ivmlVersion;
+        }
+        URI modelURI = new File(ivmlFolder, projectName + versionSuffix + ".ivml").toURI();
         net.ssehub.easy.varModel.model.Project ivmlModel = null;
         try {
             ModelInfo<net.ssehub.easy.varModel.model.Project> info = 
@@ -235,7 +239,7 @@ public abstract class AbstractScenarioTest extends AbstractTest<Script> {
      * @param base the base directory for the project
      * @return the IVML files folder
      */
-    private static File getIvmlFolderIn(File base) {
+    protected static File getIvmlFolderIn(File base) {
         return new File(base, modelPaths[0]);
     }
 
@@ -245,7 +249,7 @@ public abstract class AbstractScenarioTest extends AbstractTest<Script> {
      * @param base the base directory for the project
      * @return the VIL files folder
      */
-    private static File getVilFolderIn(File base) {
+    protected static File getVilFolderIn(File base) {
         return new File(base, modelPaths[1]);
     }
 
@@ -255,7 +259,7 @@ public abstract class AbstractScenarioTest extends AbstractTest<Script> {
      * @param base the base directory for the project
      * @return the VTL files folder
      */
-    private static File getVtlFolderIn(File base) {
+    protected static File getVtlFolderIn(File base) {
         return new File(base, modelPaths[2]);
     }
 

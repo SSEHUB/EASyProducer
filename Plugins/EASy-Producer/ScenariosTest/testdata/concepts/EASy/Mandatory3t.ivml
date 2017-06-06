@@ -1,0 +1,6 @@
+project Mandatory3t {
+
+    typedef MandatoryBoolean Boolean with (isDefined(MandatoryBoolean) and MandatoryBoolean == true);
+    MandatoryBoolean var;
+
+}

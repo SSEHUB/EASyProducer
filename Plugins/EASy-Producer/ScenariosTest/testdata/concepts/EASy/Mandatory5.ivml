@@ -1,0 +1,7 @@
+project Mandatory5 {
+
+    Boolean var;
+    var == true;
+    isDefined(var);
+
+}

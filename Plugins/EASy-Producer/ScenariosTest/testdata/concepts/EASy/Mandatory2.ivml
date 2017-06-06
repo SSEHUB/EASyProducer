@@ -1,0 +1,6 @@
+project Mandatory2 {
+
+    Boolean var = true;
+    isDefined(var) and var == true;
+
+}
