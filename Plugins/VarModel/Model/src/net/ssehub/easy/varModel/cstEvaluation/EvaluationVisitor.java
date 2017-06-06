@@ -910,47 +910,85 @@ public class EvaluationVisitor implements IConstraintTreeVisitor {
     }
     
     /**
-     * Handles an {@link BooleanType#AND} operation. Should evaluate special situations like
-     * <code>undef AND false</code> to <code>false</code>.
-     * @param operand The operand of the AND operation. The operand should already been visited.
-     * @param parameter The first parameter of the AND operation.
+     * Handles an {@link BooleanType#AND}, {@link BooleanType#OR} or {@link BooleanType#XOR} operation. Should evaluate 
+     * special situations like <code>undef OR true</code> to <code>true</code>. Dynamically changes evaluation sequence 
+     * depending on {@link #containsIsDefined(ConstraintSyntaxTree)}.
+     * 
+     * @param operand The operand of the OR operation. The operand should already been visited.
+     * @param call the call representing the OR operation
      * @return <tt>true</tt> the operation was evaluated successfully, <tt>false</tt> otherwise.
      */
-    private boolean handleAND(EvaluationAccessor operand, ConstraintSyntaxTree parameter) {
+    private boolean handleBinaryBoolean(EvaluationAccessor operand, OCLFeatureCall call) {
         boolean hasBeenEvaluated = false;
-        if (null != operand && operand.getValue() == BooleanValue.FALSE) {
-            result = ConstantAccessor.POOL.getInstance().bind(BooleanValue.FALSE, operand.getContext());
-            hasBeenEvaluated = true;
-        } else if (null != operand && null != parameter) {
-            parameter.accept(this);
-            if (null != result && result.getValue() == BooleanValue.FALSE) {
+        Operation op = call.getResolvedOperation();
+        EvaluationAccessor operandAccessor = operand;
+        EvaluationAccessor parameterAccessor = null;
+        ConstraintSyntaxTree parameter = call.getParameter(0);
+        if (containsIsDefined(call.getOperand())) {
+            if (null != parameter) { // if there is no parameter then no change in result
+                // change evaluation sequence - may not help if both contains an isDefined
+                parameterAccessor = getAccessor(parameterAccessor, parameter);
+                // re-evaluate operand!
+                operandAccessor = getAccessor(operandAccessor, call.getOperand());
+            }
+        }
+        if (op == BooleanType.AND) {
+            if (null != operandAccessor && operandAccessor.getValue() == BooleanValue.FALSE) {
                 result = ConstantAccessor.POOL.getInstance().bind(BooleanValue.FALSE, operand.getContext());
                 hasBeenEvaluated = true;
+            } else if (null != operand && null != parameter) {
+                parameterAccessor = getAccessor(parameterAccessor, parameter);
+                if (null != parameterAccessor && parameterAccessor.getValue() == BooleanValue.FALSE) {
+                    result = ConstantAccessor.POOL.getInstance().bind(BooleanValue.FALSE, operand.getContext());
+                    hasBeenEvaluated = true;
+                }
             }
+        } else if (op == BooleanType.OR) {
+            if (null != operandAccessor && operandAccessor.getValue() == BooleanValue.TRUE) {
+                result = ConstantAccessor.POOL.getInstance().bind(BooleanValue.TRUE, operand.getContext());
+                hasBeenEvaluated = true;
+            } else if (null != operandAccessor && null != parameter) {
+                parameterAccessor = getAccessor(parameterAccessor, parameter);
+                if (null != parameterAccessor && parameterAccessor.getValue() == BooleanValue.TRUE) {
+                    result = ConstantAccessor.POOL.getInstance().bind(BooleanValue.TRUE, operand.getContext());
+                    hasBeenEvaluated = true;
+                }
+            }
+        } else { // xor
+            if (null != operandAccessor && null != parameter) {
+                parameterAccessor = getAccessor(parameterAccessor, parameter);
+                if (null != parameterAccessor) {
+                    boolean xorRes = operand.getValue() == BooleanValue.TRUE ^ result.getValue() == BooleanValue.TRUE;
+                    result = ConstantAccessor.POOL.getInstance().bind(BooleanValue.toBooleanValue(xorRes), 
+                        operand.getContext());
+                    hasBeenEvaluated = true;
+                }
+            }
+        }
+        if (null != parameterAccessor) {
+            parameterAccessor.release();
+        }
+        if (operandAccessor != operand) { // we have a temporary operand
+            operandAccessor.release();
         }
         return hasBeenEvaluated;
     }
     
     /**
-     * Handles an {@link BooleanType#OR} operation. Should evaluate special situations like
-     * <code>undef OR true</code> to <code>true</code>.
-     * @param operand The operand of the OR operation. The operand should already been visited.
-     * @param parameter The first parameter of the OR operation.
-     * @return <tt>true</tt> the operation was evaluated successfully, <tt>false</tt> otherwise.
+     * Returns an evaluation accessor for <code>expression</code> if <code>accessor</code> is not already determined.
+     * 
+     * @param accessor the accessor
+     * @param expression the expression
+     * @return the accessor, may be <b>accessor</b>, may be a new accessor, may be <b>null</b>. Must be released if not
+     *   <b>null</b>
      */
-    private boolean handleOR(EvaluationAccessor operand, ConstraintSyntaxTree parameter) {
-        boolean hasBeenEvaluated = false;
-        if (null != operand && operand.getValue() == BooleanValue.TRUE) {
-            result = ConstantAccessor.POOL.getInstance().bind(BooleanValue.TRUE, operand.getContext());
-            hasBeenEvaluated = true;
-        } else if (null != operand && null != parameter) {
-            parameter.accept(this);
-            if (null != result && result.getValue() == BooleanValue.TRUE) {
-                result = ConstantAccessor.POOL.getInstance().bind(BooleanValue.TRUE, operand.getContext());
-                hasBeenEvaluated = true;
-            }
+    private EvaluationAccessor getAccessor(EvaluationAccessor accessor, ConstraintSyntaxTree expression) {
+        EvaluationAccessor result = accessor;
+        if (null == result) {
+            expression.accept(this);
+            result = this.result;
         }
-        return hasBeenEvaluated;
+        return result;
     }
 
     /**
@@ -979,7 +1017,7 @@ public class EvaluationVisitor implements IConstraintTreeVisitor {
     }
     
     /**
-     * Encapsulates a null context (some of the model test cases.
+     * Encapsulates a null context (some of the model test cases).
      * 
      * @param op the operation to consider
      * @param allow the new state of the allow flag
@@ -991,6 +1029,30 @@ public class EvaluationVisitor implements IConstraintTreeVisitor {
             result = context.setAllowPropagation(op, allow);
         }
         return result;
+    }
+    
+    /**
+     * Returns whether <code>constraint</code> somewhere contains/calls an isDefined operation.
+     * Alternative would be constraint rewriting during parsing.
+     * 
+     * @param constraint the constraint
+     * @return <code>true</code> if isDefined is somewhere used, <code>false</code> else
+     */
+    private boolean containsIsDefined(ConstraintSyntaxTree constraint) {
+        boolean found;
+        if (constraint instanceof OCLFeatureCall) {
+            OCLFeatureCall call = (OCLFeatureCall) constraint;
+            found = OclKeyWords.IS_DEFINED.equals(call.getOperation()); // we have several specific signatures
+            if (!found) {
+                found = containsIsDefined(call.getOperand());
+                for (int p = 0; !found && p < call.getParameterCount(); p++) {
+                    found = containsIsDefined(call.getParameter(p));
+                }
+            }
+        } else {
+            found = false;
+        }
+        return found;
     }
     
     @Override
@@ -1010,10 +1072,8 @@ public class EvaluationVisitor implements IConstraintTreeVisitor {
             }
             EvaluationAccessor[] args = new EvaluationAccessor[call.getParameterCount()];
             boolean allOk = true;
-            if (op == BooleanType.AND) { // Handle "short cuts", e.g., undef or true -> true
-                allOk = !handleAND(operand, call.getParameter(0));
-            } else if (op == BooleanType.OR) {
-                allOk = !handleOR(operand, call.getParameter(0));
+            if (op == BooleanType.AND || op == BooleanType.OR || op == BooleanType.XOR) { // Handle "short cuts"
+                allOk = !handleBinaryBoolean(operand, call);
             } else if (op == ConstraintType.ASSIGNMENT) {
                 result = ConstraintOperations.handleConstraintAssignment(operand, call.getParameter(0));
                 allOk = false; // constraints need the constraint assigned rather than its evaluation
@@ -1044,12 +1104,9 @@ public class EvaluationVisitor implements IConstraintTreeVisitor {
                 } else {
                     IOperationEvaluator evaluator = getOperationEvaluator(op);
                     if (null == evaluator) {
-                        String name = null != op ? op.getName() : call.getOperation();
-                        notImplementedError(name);
-                    } else {
-                        if (null != operand) {
-                            result = evaluator.evaluate(operand, args);
-                        }
+                        notImplementedError(null != op ? op.getName() : call.getOperation());
+                    } else if (null != operand) {
+                        result = evaluator.evaluate(operand, args);
                     }
                 }
                 if (null == operand && null != result) { // special isDefined situation
