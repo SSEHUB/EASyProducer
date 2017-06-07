@@ -161,6 +161,21 @@ public class CopyVisitor implements IConstraintTreeVisitor {
         }
         result = new OCLFeatureCall(operand, call.getOperation(), call.getAccessor(), args);
     }
+    
+
+    @Override
+    public void visitMultiAndExpression(MultiAndExpression expression) {
+        OCLFeatureCall[] expressions = new OCLFeatureCall[expression.getExpressionCount()];
+        for (int e = 0; e < expressions.length; e++) {
+            expression.getExpression(e).accept(this);
+            expressions[e] = (OCLFeatureCall) result;
+        }
+        try {
+            result = new MultiAndExpression(expressions);
+        } catch (CSTSemanticException e) {
+            EASyLoggerFactory.INSTANCE.getLogger(CopyVisitor.class, Bundle.ID).exception(e);
+        }
+    }
 
     /**
      * Maps a variable.

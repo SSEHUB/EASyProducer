@@ -42,6 +42,8 @@ import net.ssehub.easy.varModel.model.ContainableModelElement;
 import net.ssehub.easy.varModel.model.IFreezable;
 import net.ssehub.easy.varModel.model.IModelElement;
 import net.ssehub.easy.varModel.model.IProjectListener;
+import net.ssehub.easy.varModel.model.ModelQuery;
+import net.ssehub.easy.varModel.model.ModelQueryException;
 import net.ssehub.easy.varModel.model.Project;
 import net.ssehub.easy.varModel.model.datatypes.Compound;
 import net.ssehub.easy.varModel.model.datatypes.IDatatype;
@@ -726,6 +728,57 @@ public class Configuration implements IConfigurationVisitable, IProjectListener,
         }
         return var;
     }
+
+    /**
+     * Returns the decision variable for a potentially nested/qualified name from 
+     * this configuration.
+     * 
+     * @param varName the name of the variable
+     * @param dereference dereference intermediary reference variables
+     * @return the variable or <b>null</b> if none exists
+     * @throws ModelQueryException in case that querying the model fails
+     */
+    public IDecisionVariable getDecision(String varName, boolean dereference) throws ModelQueryException {
+        return getDecision(null, varName, dereference);
+    }
+
+    /**
+     * Returns the decision variable for a potentially nested/qualified name from 
+     * this configuration using with <code>var</code> as current search context.
+     * 
+     * @param var the variable to search within (<b>null</b> for a top-level call)
+     * @param varName the name of the variable
+     * @param dereference dereference intermediary reference variables
+     * @return the variable or <b>null</b> if none exists
+     * @throws ModelQueryException in case that querying the model fails
+     */
+    private IDecisionVariable getDecision(IDecisionVariable var, String varName, boolean dereference) 
+        throws ModelQueryException {
+        IDecisionVariable result = null;
+        int pos = varName.indexOf('.');
+        String name = varName;
+        String rest = null;
+        if (pos >= 0) {
+            name = varName.substring(0, pos);
+            rest = varName.substring(pos + 1);
+        }
+        if (null != var) {
+            result = var.getNestedElement(name);
+        } else {
+            AbstractVariable v = ModelQuery.findVariable(getProject(), name, null);
+            if (null != v) {
+                result = getDecision(v);
+            }
+        }
+        if (null != result && dereference) {
+            result = dereference(result);
+        }
+        if (null != result && null != rest) {
+            result = getDecision(result, rest, dereference);
+        }
+        return result;
+    }
+
 
     /**
      * Returns all instances of the given type and sub-types.

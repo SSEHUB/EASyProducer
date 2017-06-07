@@ -121,6 +121,17 @@ public class DebugConstraintTreeVisitor implements IConstraintTreeVisitor {
         }
         decreaseIndentation();
     }
+    
+
+    @Override
+    public void visitMultiAndExpression(MultiAndExpression expression) {
+        println("MULTI-AND");
+        increaseIndentation();
+        for (int e = 0; e < expression.getExpressionCount(); e++) {
+            expression.getExpression(e).accept(this);
+        }
+        decreaseIndentation();
+    }
 
     @Override
     public void visitLet(Let let) {

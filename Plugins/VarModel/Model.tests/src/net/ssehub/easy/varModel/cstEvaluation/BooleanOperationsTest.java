@@ -123,16 +123,6 @@ public class BooleanOperationsTest {
     public void testAnd() throws ValueDoesNotMatchTypeException {
         assertBooleanBinary(BooleanType.AND, new Boolean[]{true, false, false, false});
     }
-
-    /**
-     * Tests the internal multi-"and" function. (currently just with two parameters, same as AND)
-     * 
-     * @throws ValueDoesNotMatchTypeException shall not occur
-     */
-    @Test
-    public void testMultiAnd() throws ValueDoesNotMatchTypeException {
-        assertBooleanBinary(BooleanType.MULTI_AND, new Boolean[]{true, false, false, false});
-    }
     
     /**
      * Tests the Boolean "or" function.

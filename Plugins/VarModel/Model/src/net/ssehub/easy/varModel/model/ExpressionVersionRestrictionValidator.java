@@ -13,6 +13,7 @@ import net.ssehub.easy.varModel.cst.ContainerOperationCall;
 import net.ssehub.easy.varModel.cst.IConstraintTreeVisitor;
 import net.ssehub.easy.varModel.cst.IfThen;
 import net.ssehub.easy.varModel.cst.Let;
+import net.ssehub.easy.varModel.cst.MultiAndExpression;
 import net.ssehub.easy.varModel.cst.OCLFeatureCall;
 import net.ssehub.easy.varModel.cst.Parenthesis;
 import net.ssehub.easy.varModel.cst.Self;
@@ -64,6 +65,13 @@ public class ExpressionVersionRestrictionValidator implements IConstraintTreeVis
         call.getOperand().accept(this);
         for (int a = 0; a < call.getParameterCount(); a++) {
             call.getParameter(a).accept(this);
+        }
+    }
+    
+    @Override
+    public void visitMultiAndExpression(MultiAndExpression expression) {
+        for (int e = 0; e < expression.getExpressionCount(); e++) {
+            expression.getExpression(e).accept(this);
         }
     }
 

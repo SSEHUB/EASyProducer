@@ -31,6 +31,7 @@ import net.ssehub.easy.varModel.cst.ContainerOperationCall;
 import net.ssehub.easy.varModel.cst.IConstraintTreeVisitor;
 import net.ssehub.easy.varModel.cst.IfThen;
 import net.ssehub.easy.varModel.cst.Let;
+import net.ssehub.easy.varModel.cst.MultiAndExpression;
 import net.ssehub.easy.varModel.cst.OCLFeatureCall;
 import net.ssehub.easy.varModel.cst.Parenthesis;
 import net.ssehub.easy.varModel.cst.Self;
@@ -215,26 +216,18 @@ public class MandatoryDeclarationClassifier extends AbstractProjectVisitor imple
 
     @Override
     public void visitFreezeBlock(FreezeBlock freeze) {
-        // TODO Auto-generated method stub
-        
     }
 
     @Override
     public void visitOperationDefinition(OperationDefinition opdef) {
-        // TODO Auto-generated method stub
-        
     }
 
     @Override
     public void visitPartialEvaluationBlock(PartialEvaluationBlock block) {
-        // TODO Auto-generated method stub
-        
     }
 
     @Override
     public void visitProjectInterface(ProjectInterface iface) {
-        // TODO Auto-generated method stub
-        
     }
 
     @Override
@@ -244,14 +237,10 @@ public class MandatoryDeclarationClassifier extends AbstractProjectVisitor imple
 
     @Override
     public void visitAttributeAssignment(AttributeAssignment assignment) {
-        // TODO Auto-generated method stub
-        
     }
 
     @Override
     public void visitCompoundAccessStatement(CompoundAccessStatement access) {
-        // TODO Auto-generated method stub
-        
     }
 
     @Override
@@ -320,32 +309,22 @@ public class MandatoryDeclarationClassifier extends AbstractProjectVisitor imple
 
     @Override
     public void visitEnumLiteral(EnumLiteral literal) {
-        // TODO Auto-generated method stub
-        
     }
 
     @Override
     public void visitReference(Reference reference) {
-        // TODO Auto-generated method stub
-        
     }
 
     @Override
     public void visitSequence(Sequence sequence) {
-        // TODO Auto-generated method stub
-        
     }
 
     @Override
     public void visitSet(Set set) {
-        // TODO Auto-generated method stub
-        
     }
 
     @Override
     public void visitConstantValue(ConstantValue value) {
-        // TODO Auto-generated method stub
-        
     }
 
     @Override
@@ -384,8 +363,6 @@ public class MandatoryDeclarationClassifier extends AbstractProjectVisitor imple
 
     @Override
     public void visitComment(net.ssehub.easy.varModel.cst.Comment comment) {
-        // TODO Auto-generated method stub
-        
     }
 
     @Override
@@ -407,22 +384,24 @@ public class MandatoryDeclarationClassifier extends AbstractProjectVisitor imple
         }
     }
 
+
+    @Override
+    public void visitMultiAndExpression(MultiAndExpression expression) {
+        for (int e = 0; e < expression.getExpressionCount(); e++) {
+            expression.getExpression(e).accept(this);
+        }
+    }
+
     @Override
     public void visitLet(Let let) {
-        // TODO Auto-generated method stub
-        
     }
 
     @Override
     public void visitIfThen(IfThen ifThen) {
-        // TODO Auto-generated method stub
-        
     }
 
     @Override
     public void visitContainerOperationCall(ContainerOperationCall call) {
-        // TODO Auto-generated method stub
-        
     }
 
     @Override
@@ -463,20 +442,14 @@ public class MandatoryDeclarationClassifier extends AbstractProjectVisitor imple
     
     @Override
     public void visitUnresolvedExpression(UnresolvedExpression expression) {
-        // TODO Auto-generated method stub
-        
     }
 
     @Override
     public void visitCompoundInitializer(CompoundInitializer initializer) {
-        // TODO Auto-generated method stub
-        
     }
 
     @Override
     public void visitContainerInitializer(ContainerInitializer initializer) {
-        // TODO Auto-generated method stub
-        
     }
 
     @Override

@@ -130,4 +130,11 @@ public interface IConstraintTreeVisitor {
      */
     public void visitBlockExpression(BlockExpression block);
     
+    /**
+     * Visits a multi-and expression.
+     * 
+     * @param expression the expression to be visited
+     */
+    public void visitMultiAndExpression(MultiAndExpression expression);
+    
 }

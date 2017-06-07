@@ -174,12 +174,6 @@ public class BooleanOperations {
                 return (!b1 || b2) && (!b2 || b1);
             }
         }), BooleanType.IFF);
-        EvaluatorRegistry.registerEvaluator(new BinaryOperationEvaluator(new BinaryBooleanOperation() {
-            
-            public boolean evaluate(boolean b1, boolean b2) {
-                return b1 && b2;
-            }
-        }), BooleanType.MULTI_AND);
     }
     
 }

@@ -84,6 +84,7 @@ import net.ssehub.easy.varModel.cst.ContainerInitializer;
 import net.ssehub.easy.varModel.cst.ContainerOperationCall;
 import net.ssehub.easy.varModel.cst.IfThen;
 import net.ssehub.easy.varModel.cst.Let;
+import net.ssehub.easy.varModel.cst.MultiAndExpression;
 import net.ssehub.easy.varModel.cst.OCLFeatureCall;
 import net.ssehub.easy.varModel.cst.Parenthesis;
 import net.ssehub.easy.varModel.cst.Self;
@@ -106,7 +107,6 @@ import net.ssehub.easy.varModel.model.Project;
 import net.ssehub.easy.varModel.model.ProjectImport;
 import net.ssehub.easy.varModel.model.ProjectInterface;
 import net.ssehub.easy.varModel.model.AttributeAssignment.Assignment;
-import net.ssehub.easy.varModel.model.datatypes.BooleanType;
 import net.ssehub.easy.varModel.model.datatypes.Compound;
 import net.ssehub.easy.varModel.model.datatypes.ConstraintType;
 import net.ssehub.easy.varModel.model.datatypes.Container;
@@ -1024,32 +1024,6 @@ public class IVMLWriter extends AbstractVarModelWriter {
 
     @Override
     public void visitOclFeatureCall(OCLFeatureCall call) {
-        Operation resolved = call.getResolvedOperation();
-        if (resolved == BooleanType.MULTI_AND) {
-            call.getOperand().accept(this);
-            for (int p = 0; p < call.getParameterCount(); p++) {
-                appendOutput(WHITESPACE);
-                ConstraintSyntaxTree cst = call.getParameter(p);
-                if (cst instanceof OCLFeatureCall) {
-                    OCLFeatureCall paramCall = (OCLFeatureCall) cst;
-                    appendOutput(paramCall.getOperation());
-                    appendOutput(WHITESPACE);
-                    for (int p1 = 0; p1 < paramCall.getParameterCount(); p1++) {
-                        paramCall.getParameter(p1).accept(this);
-                    }
-                }
-            }
-        } else {
-            emitOclFeatureCall(call);
-        }
-    }
-
-    /**
-     * Emits a full feature call.
-     * 
-     * @param call the call
-     */
-    private void emitOclFeatureCall(OCLFeatureCall call) {
         FormattingHint hint;
         Operation resolved = call.getResolvedOperation();
         if (null != resolved) {
@@ -1107,6 +1081,26 @@ public class IVMLWriter extends AbstractVarModelWriter {
         default:
             // should not occur
             break;
+        }
+    }
+    
+    @Override
+    public void visitMultiAndExpression(MultiAndExpression expression) {
+        for (int e = 0; e < expression.getExpressionCount(); e++) {
+            OCLFeatureCall call = expression.getExpression(e);
+            if (0 == e) {
+                call.getOperand().accept(this);
+                appendOutput(WHITESPACE);
+            }
+            for (int p = 0; p < call.getParameterCount(); p++) {
+                appendOutput(call.getOperation());
+                appendOutput(WHITESPACE);
+                call.getParameter(p).accept(this);
+                if (!(e + 1 == expression.getExpressionCount() && p + 1 == call.getParameterCount())) {
+                    // do not emit the very last whitespace
+                    appendOutput(WHITESPACE);
+                }
+            }
         }
     }
 

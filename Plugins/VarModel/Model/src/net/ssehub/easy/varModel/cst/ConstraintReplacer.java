@@ -153,6 +153,21 @@ public class ConstraintReplacer implements IConstraintTreeVisitor {
         resolve();
     }
 
+    @Override
+    public void visitMultiAndExpression(MultiAndExpression expression) {
+        OCLFeatureCall[] expressions = new OCLFeatureCall[expression.getExpressionCount()];
+        for (int e = 0; e < expression.getExpressionCount(); e++) {
+            expression.getExpression(e).accept(this);
+            expressions[e] = (OCLFeatureCall) copiedConstraint;
+        }
+        try {
+            copiedConstraint = new MultiAndExpression(expressions);
+            resolve();
+        } catch (CSTSemanticException e) {
+            LOGGER.exception(e);
+        }
+    }
+
     /**
      * Resolves the type of {@link #copiedConstraint}.
      */

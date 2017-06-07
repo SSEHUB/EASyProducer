@@ -47,6 +47,7 @@ import net.ssehub.easy.varModel.cst.CopyVisitor;
 import net.ssehub.easy.varModel.cst.IConstraintTreeVisitor;
 import net.ssehub.easy.varModel.cst.IfThen;
 import net.ssehub.easy.varModel.cst.Let;
+import net.ssehub.easy.varModel.cst.MultiAndExpression;
 import net.ssehub.easy.varModel.cst.OCLFeatureCall;
 import net.ssehub.easy.varModel.cst.Parenthesis;
 import net.ssehub.easy.varModel.cst.Self;
@@ -1966,4 +1967,26 @@ public class EvaluationVisitor implements IConstraintTreeVisitor {
         }
     }
     
+    @Override
+    public void visitMultiAndExpression(MultiAndExpression expression) {
+        Boolean res = Boolean.TRUE;
+        for (int e = 0; Boolean.TRUE == res && e < expression.getExpressionCount(); e++) {
+            expression.getExpression(e).accept(this);
+            if (null != result) {
+                Value val = result.getValue();
+                clearResult();
+                if (val instanceof BooleanValue) {
+                    res = ((BooleanValue) val).getValue();
+                } else {
+                    res = null;
+                }
+            } else {
+                res = null;
+            }
+        }
+        if (null != res) {
+            result = ConstantAccessor.POOL.getInstance().bind(BooleanValue.toBooleanValue(res), context);
+        }
+    }
+
 }

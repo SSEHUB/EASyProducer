@@ -102,4 +102,5 @@ public class DeclrationInConstraintFinder extends AbstractVariableInConstraintFi
     protected void addVariable(AbstractVariable declaration) {
         declarations.add(declaration);
     }
+
 }

@@ -158,6 +158,13 @@ public class ValidationVisitor implements IConstraintTreeVisitor {
             // unclear: which operations are permitted?
         }*/
     }
+    
+    @Override
+    public void visitMultiAndExpression(MultiAndExpression expression) {
+        for (int e = 0; e < expression.getExpressionCount(); e++) {
+            expression.getExpression(e).accept(this);
+        }
+    }
 
     @Override
     public void visitLet(Let let) {

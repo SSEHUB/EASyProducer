@@ -30,6 +30,7 @@ import net.ssehub.easy.varModel.cst.ContainerOperationCall;
 import net.ssehub.easy.varModel.cst.IConstraintTreeVisitor;
 import net.ssehub.easy.varModel.cst.IfThen;
 import net.ssehub.easy.varModel.cst.Let;
+import net.ssehub.easy.varModel.cst.MultiAndExpression;
 import net.ssehub.easy.varModel.cst.OCLFeatureCall;
 import net.ssehub.easy.varModel.cst.Parenthesis;
 import net.ssehub.easy.varModel.cst.Self;
@@ -62,7 +63,6 @@ public class CompoundValueSetter implements IConstraintTreeVisitor {
 
     @Override
     public void visitConstantValue(ConstantValue value) {
-        // TODO Auto-generated method stub
     }
 
     @Override
@@ -88,10 +88,8 @@ public class CompoundValueSetter implements IConstraintTreeVisitor {
                 cp1.setValue(value, AssignmentState.ASSIGNED);
             }
         } catch (ValueDoesNotMatchTypeException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         } catch (ConfigurationException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
        
@@ -99,42 +97,38 @@ public class CompoundValueSetter implements IConstraintTreeVisitor {
 
     @Override
     public void visitParenthesis(Parenthesis parenthesis) {
-        // TODO Auto-generated method stub
     }
 
     @Override
     public void visitContainerInitializer(ContainerInitializer init) {
-        // TODO Auto-generated method stub
     }
     
     @Override
     public void visitCompoundInitializer(CompoundInitializer init) {
-        // TODO Auto-generated method stub
     }
     
     @Override
     public void visitComment(Comment parenthesis) {
-        // TODO Auto-generated method stub
     }
 
     @Override
     public void visitOclFeatureCall(OCLFeatureCall call) {
-        // TODO Auto-generated method stub
+    }
+    
+    @Override
+    public void visitMultiAndExpression(MultiAndExpression expression) {
     }
 
     @Override
     public void visitLet(Let let) {
-        // TODO Auto-generated method stub
     }
 
     @Override
     public void visitIfThen(IfThen ifThen) {
-        // TODO Auto-generated method stub
     }
 
     @Override
     public void visitContainerOperationCall(ContainerOperationCall call) {
-        // TODO Auto-generated method stub
     }
 
     @Override
@@ -159,13 +153,11 @@ public class CompoundValueSetter implements IConstraintTreeVisitor {
 
     @Override
     public void visitAnnotationVariable(AttributeVariable variable) {
-        // TODO check whether a specific method is needed
         visitVariable(variable);
     }
 
     @Override
     public void visitBlockExpression(BlockExpression block) {
-        // TODO Auto-generated method stub
     }
 
 }

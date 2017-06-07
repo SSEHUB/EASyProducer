@@ -33,6 +33,7 @@ import net.ssehub.easy.varModel.cst.ConstraintSyntaxTree;
 import net.ssehub.easy.varModel.cst.ContainerInitializer;
 import net.ssehub.easy.varModel.cst.IfThen;
 import net.ssehub.easy.varModel.cst.Let;
+import net.ssehub.easy.varModel.cst.MultiAndExpression;
 import net.ssehub.easy.varModel.cst.OCLFeatureCall;
 import net.ssehub.easy.varModel.cst.Self;
 import net.ssehub.easy.varModel.cst.Variable;
@@ -1139,6 +1140,50 @@ public class EvaluationVisitorTest {
         Assert.assertEquals(true, ((BooleanValue) visitor.getResult()).getValue().booleanValue());
 
         visitor.clear();
+    }
+
+    /**
+     * Tests the multi-and expression.
+     * 
+     * @throws CSTSemanticException in case of constraint failures (shall not occur)
+     * @throws ValueDoesNotMatchTypeException if a value does not match the expected type (shall not occur)
+     * @throws ConfigurationException if a value cannot be configured (shall not occur)
+     */
+    @Test
+    public void testMultiAnd() throws ValueDoesNotMatchTypeException, CSTSemanticException, ConfigurationException {
+        Project prj = new Project("test");
+        DecisionVariableDeclaration var1 = new DecisionVariableDeclaration("var1", IntegerType.TYPE, prj);
+        var1.setValue(ValueFactory.createValue(IntegerType.TYPE, 1));
+        prj.add(var1);
+        DecisionVariableDeclaration var2 = new DecisionVariableDeclaration("var2", IntegerType.TYPE, prj);
+        var2.setValue(ValueFactory.createValue(IntegerType.TYPE, 2));
+        prj.add(var2);
+        DecisionVariableDeclaration var3 = new DecisionVariableDeclaration("var3", IntegerType.TYPE, prj);
+        var3.setValue(ValueFactory.createValue(IntegerType.TYPE, 3));
+        prj.add(var3);
+
+        OCLFeatureCall call1 = new OCLFeatureCall(new Variable(var1), OclKeyWords.LESS, new Variable(var2));
+        call1.inferDatatype();
+        OCLFeatureCall call2 = new OCLFeatureCall(new Variable(var2), OclKeyWords.LESS, new Variable(var3));
+        call1.inferDatatype();
+        MultiAndExpression maEx = new MultiAndExpression(call1, call2);
+        maEx.inferDatatype();
+
+        Configuration config = new Configuration(prj);
+        EvaluationVisitor visitor = new EvaluationVisitor();
+        visitor.init(config, AssignmentState.DEFAULT, false, null);
+        visitor.visit(maEx);
+
+        Assert.assertTrue(visitor.getResult() instanceof BooleanValue);
+        Assert.assertEquals(true, ((BooleanValue) visitor.getResult()).getValue().booleanValue());
+        
+        config.getDecision(var2).setValue(ValueFactory.createValue(IntegerType.TYPE, 5), AssignmentState.ASSIGNED);
+        visitor.visit(maEx);
+
+        Assert.assertTrue(visitor.getResult() instanceof BooleanValue);
+        Assert.assertEquals(false, ((BooleanValue) visitor.getResult()).getValue().booleanValue());
+
+        visitor.clearResult();
     }
 
 }
