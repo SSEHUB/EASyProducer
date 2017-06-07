@@ -53,6 +53,7 @@ import net.ssehub.easy.instantiation.core.model.expressions.Expression;
 import net.ssehub.easy.instantiation.core.model.expressions.ExpressionEvaluator;
 import net.ssehub.easy.instantiation.core.model.expressions.FieldAccessExpression;
 import net.ssehub.easy.instantiation.core.model.expressions.IExpressionVisitor;
+import net.ssehub.easy.instantiation.core.model.expressions.MultiAndExpression;
 import net.ssehub.easy.instantiation.core.model.expressions.ParenthesisExpression;
 import net.ssehub.easy.instantiation.core.model.expressions.ResolvableOperationCallExpression;
 import net.ssehub.easy.instantiation.core.model.expressions.ResolvableOperationExpression;
@@ -269,6 +270,12 @@ public class RuleTreeVilVisitor implements IVisitor, IExpressionVisitor {
         return new CallExpressionTreeNode(getCurrentParent(), call);
     }
 
+
+    @Override
+    public Object visitMultiAndExpression(MultiAndExpression ex) throws VilException {
+        return null;
+    }
+    
     @Override
     public Object visitConstantExpression(ConstantExpression cst) throws VilException {
         return null;

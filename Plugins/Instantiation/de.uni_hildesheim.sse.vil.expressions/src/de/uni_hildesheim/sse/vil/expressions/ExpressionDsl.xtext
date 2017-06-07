@@ -105,7 +105,7 @@ EqualityOperator:
 
 RelationalExpression:   
     left=AdditiveExpression 
-    right=RelationalExpressionPart?
+    (right=RelationalExpressionPart right2=RelationalExpressionPart?)?
     ;   
 
 RelationalExpressionPart:

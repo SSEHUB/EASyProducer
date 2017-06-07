@@ -16,6 +16,7 @@ import net.ssehub.easy.varModel.cst.ContainerOperationCall;
 import net.ssehub.easy.varModel.cst.IConstraintTreeVisitor;
 import net.ssehub.easy.varModel.cst.IfThen;
 import net.ssehub.easy.varModel.cst.Let;
+import net.ssehub.easy.varModel.cst.MultiAndExpression;
 import net.ssehub.easy.varModel.cst.OCLFeatureCall;
 import net.ssehub.easy.varModel.cst.Parenthesis;
 import net.ssehub.easy.varModel.cst.Self;
@@ -538,7 +539,12 @@ public class DroolsImpliesEvaluator implements IConstraintTreeVisitor, IValueVis
         notModificationRule(call, op);
     }
     
-    
+    @Override
+    public void visitMultiAndExpression(MultiAndExpression expression) {
+        for (int e = 0; e < expression.getExpressionCount(); e++) {
+            expression.getExpression(e).accept(this);
+        }
+    }
 
     /**
      * Method to process which do not have any constraints plus modifications. 
@@ -1120,6 +1126,18 @@ public class DroolsImpliesEvaluator implements IConstraintTreeVisitor, IValueVis
                 innerlogic += " , ";
                 call.getParameter(0).accept(this);
                 innerlogic += ")";
+            }
+            innerlogic += ")";
+        }
+
+        @Override
+        public void visitMultiAndExpression(MultiAndExpression expression) {
+            this.innerlogic += "( ";
+            for (int e = 0; e < expression.getExpressionCount(); e++) {
+                if (e > 0) {
+                    innerlogic += " && ";
+                }
+                expression.getExpression(e).accept(this);
             }
             innerlogic += ")";
         }

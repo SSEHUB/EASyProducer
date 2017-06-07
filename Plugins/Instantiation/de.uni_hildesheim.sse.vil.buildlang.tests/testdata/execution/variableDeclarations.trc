@@ -2,4 +2,12 @@ varJ <- 1
 -> +(Integer, Integer) with (1, 1) = 2
 varZ <- 2
 varK <- 2
+-> <=(Integer, Integer) with (1, 2) = true
+-> <=(Integer, Integer) with (2, 3) = true
+b1 <- true
+-> +(Integer, Integer) with (2, 5) = 7
+-> <=(Integer, Integer) with (1, 7) = true
+-> +(Integer, Integer) with (2, 5) = 7
+-> <=(Integer, Integer) with (7, 3) = false
+b2 <- false
 -> main()

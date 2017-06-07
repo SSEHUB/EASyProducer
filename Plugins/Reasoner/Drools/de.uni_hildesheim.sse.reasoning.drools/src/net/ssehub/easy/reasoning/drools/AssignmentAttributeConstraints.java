@@ -17,6 +17,7 @@ import net.ssehub.easy.varModel.cst.ContainerOperationCall;
 import net.ssehub.easy.varModel.cst.IConstraintTreeVisitor;
 import net.ssehub.easy.varModel.cst.IfThen;
 import net.ssehub.easy.varModel.cst.Let;
+import net.ssehub.easy.varModel.cst.MultiAndExpression;
 import net.ssehub.easy.varModel.cst.OCLFeatureCall;
 import net.ssehub.easy.varModel.cst.Parenthesis;
 import net.ssehub.easy.varModel.cst.Self;
@@ -295,6 +296,18 @@ public class AssignmentAttributeConstraints implements IConstraintTreeVisitor, I
             constraint += ")";
         }
     }
+    
+    @Override
+    public void visitMultiAndExpression(MultiAndExpression expression) {
+        constraint += "(";
+        for (int e = 0; e < expression.getExpressionCount(); e++) {
+            if (e > 0) {
+                constraint += " && ";
+            }
+            expression.getExpression(e).accept(this);
+        }
+        constraint += ")";
+    }
 
     @Override
     public void visitLet(Let let) {
@@ -457,7 +470,17 @@ public class AssignmentAttributeConstraints implements IConstraintTreeVisitor, I
             innerlogic += ")";
         }
         
-        
+        @Override
+        public void visitMultiAndExpression(MultiAndExpression expression) {
+            this.innerlogic += "( ";
+            for (int e = 0; e < expression.getExpressionCount(); e++) {
+                if (e > 0) {
+                    innerlogic += " && ";
+                }
+                expression.getExpression(e).accept(this);
+            }
+            innerlogic += ")";
+        }
         
         @Override
         public void visitLet(Let let) {

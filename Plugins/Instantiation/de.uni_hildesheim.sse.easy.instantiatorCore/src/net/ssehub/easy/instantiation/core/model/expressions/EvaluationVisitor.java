@@ -287,4 +287,13 @@ public class EvaluationVisitor implements IExpressionVisitor {
         return result;
     }
 
+    @Override
+    public Object visitMultiAndExpression(MultiAndExpression ex) throws VilException {
+        Object result = Boolean.TRUE;
+        for (int e = 0; Boolean.TRUE.equals(result) && e < ex.getExpressionCount(); e++) {
+            result = ex.getExpression(e).accept(this);
+        }
+        return result;
+    }
+
 }

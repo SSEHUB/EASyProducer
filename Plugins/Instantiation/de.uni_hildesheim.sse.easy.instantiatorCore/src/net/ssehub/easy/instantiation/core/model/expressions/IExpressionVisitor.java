@@ -135,5 +135,13 @@ public interface IExpressionVisitor {
      * @throws VilException in case that visiting fails (e.g., execution)
      */    
     public Object visitResolvableOperationCallExpression(ResolvableOperationCallExpression ex) throws VilException;
-    
+
+    /**
+     * Visits a multi-and expression.
+     * 
+     * @param ex the expression
+     * @return the result of visiting the given statement (may be <b>null</b>)
+     * @throws VilException in case that visiting fails (e.g., execution)
+     */
+    public Object visitMultiAndExpression(MultiAndExpression ex) throws VilException;
 }

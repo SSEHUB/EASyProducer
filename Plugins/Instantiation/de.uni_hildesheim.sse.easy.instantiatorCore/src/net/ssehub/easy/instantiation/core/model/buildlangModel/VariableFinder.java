@@ -21,6 +21,7 @@ import net.ssehub.easy.instantiation.core.model.expressions.ContainerInitializer
 import net.ssehub.easy.instantiation.core.model.expressions.Expression;
 import net.ssehub.easy.instantiation.core.model.expressions.ExpressionEvaluator;
 import net.ssehub.easy.instantiation.core.model.expressions.FieldAccessExpression;
+import net.ssehub.easy.instantiation.core.model.expressions.MultiAndExpression;
 import net.ssehub.easy.instantiation.core.model.expressions.ParenthesisExpression;
 import net.ssehub.easy.instantiation.core.model.expressions.ResolvableOperationCallExpression;
 import net.ssehub.easy.instantiation.core.model.expressions.ResolvableOperationExpression;
@@ -227,6 +228,15 @@ class VariableFinder implements IBuildlangVisitor {
     public Object visitCallExpression(CallExpression call) throws VilException {
         for (int a = 0; !found && a < call.getArgumentsCount(); a++) {
             call.getArgument(a).accept(this);
+        }
+        return null;
+    }
+    
+
+    @Override
+    public Object visitMultiAndExpression(MultiAndExpression ex) throws VilException {
+        for (int e = 0; !found && e < ex.getExpressionCount(); e++) {
+            ex.getExpression(e).accept(this);
         }
         return null;
     }

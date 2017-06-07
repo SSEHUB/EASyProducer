@@ -27,6 +27,7 @@ import net.ssehub.easy.instantiation.core.model.expressions.FieldAccessExpressio
 import net.ssehub.easy.instantiation.core.model.expressions.IExpressionParser;
 import net.ssehub.easy.instantiation.core.model.expressions.IExpressionVisitor;
 import net.ssehub.easy.instantiation.core.model.expressions.IRuntimeEnvironment;
+import net.ssehub.easy.instantiation.core.model.expressions.MultiAndExpression;
 import net.ssehub.easy.instantiation.core.model.expressions.ParenthesisExpression;
 import net.ssehub.easy.instantiation.core.model.expressions.ResolvableOperationCallExpression;
 import net.ssehub.easy.instantiation.core.model.expressions.ResolvableOperationExpression;
@@ -121,6 +122,12 @@ public class MatchResolver implements IExpressionVisitor, IMatchVisitor {
 
     @Override
     public Object visitCallExpression(CallExpression call) throws VilException {
+        return null;
+    }
+    
+
+    @Override
+    public Object visitMultiAndExpression(MultiAndExpression ex) throws VilException {
         return null;
     }
 

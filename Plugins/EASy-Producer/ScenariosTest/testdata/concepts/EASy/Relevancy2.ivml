@@ -1,0 +1,19 @@
+project Relevancy2 {
+
+    compound Car {
+        refTo(Gears) gears;
+        refTo(Engine) engine;
+    }
+    
+    compound Gears {
+        Integer number;
+    }
+    
+    compound Engine {
+        Integer power;
+    }
+    
+    Gears g = {number = 7};
+    Car c = {gears = refBy(g)};
+
+}

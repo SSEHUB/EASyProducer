@@ -248,5 +248,16 @@ public class CopyVisitor implements IExpressionVisitor {
     public Object visitResolvableOperationCallExpression(ResolvableOperationCallExpression ex) throws VilException {
         return new ResolvableOperationCallExpression(ex.getVariable(), copyCallArguments(ex));
     }
+
+    @Override
+    public Object visitMultiAndExpression(MultiAndExpression ex) throws VilException {
+        AbstractCallExpression[] exprs = new AbstractCallExpression[ex.getExpressionCount()];
+        for (int e = 0; e < exprs.length; e++) {
+            exprs[e] = (AbstractCallExpression) ex.getExpression(e).accept(this);
+        }
+        Expression result = new MultiAndExpression(exprs);
+        result.inferType();
+        return result;
+    }
     
 }

@@ -414,7 +414,26 @@ public class ExpressionWriter extends AbstractWriter implements IExpressionVisit
         printArgumentList(ex, 0);
         return null;
     }
-    
+
+    @Override
+    public Object visitMultiAndExpression(MultiAndExpression ex) throws VilException {
+        for (int e = 0; e < ex.getExpressionCount(); e++) {
+            AbstractCallExpression expr = ex.getExpression(e);
+            if (expr.getArgumentsCount() > 0) {
+                if (0 == e) {
+                    expr.getArgument(0).accept(this);
+                }
+                for (int a = 1; a < expr.getArgumentsCount(); a++) {
+                    printWhitespace();
+                    print(expr.getName());
+                    printWhitespace();
+                    expr.getArgument(a).accept(this);
+                }
+            }
+        }
+        return null;
+    }
+
     /**
      * Check if Expression is in CompositeExpression.
      * @return boolean

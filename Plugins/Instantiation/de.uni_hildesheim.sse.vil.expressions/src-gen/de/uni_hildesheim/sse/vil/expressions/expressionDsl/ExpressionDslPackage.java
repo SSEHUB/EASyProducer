@@ -658,13 +658,22 @@ public interface ExpressionDslPackage extends EPackage
   int RELATIONAL_EXPRESSION__RIGHT = 1;
 
   /**
+   * The feature id for the '<em><b>Right2</b></em>' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int RELATIONAL_EXPRESSION__RIGHT2 = 2;
+
+  /**
    * The number of structural features of the '<em>Relational Expression</em>' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int RELATIONAL_EXPRESSION_FEATURE_COUNT = 2;
+  int RELATIONAL_EXPRESSION_FEATURE_COUNT = 3;
 
   /**
    * The meta object id for the '{@link de.uni_hildesheim.sse.vil.expressions.expressionDsl.impl.RelationalExpressionPartImpl <em>Relational Expression Part</em>}' class.
@@ -2273,6 +2282,17 @@ public interface ExpressionDslPackage extends EPackage
   EReference getRelationalExpression_Right();
 
   /**
+   * Returns the meta object for the containment reference '{@link de.uni_hildesheim.sse.vil.expressions.expressionDsl.RelationalExpression#getRight2 <em>Right2</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the containment reference '<em>Right2</em>'.
+   * @see de.uni_hildesheim.sse.vil.expressions.expressionDsl.RelationalExpression#getRight2()
+   * @see #getRelationalExpression()
+   * @generated
+   */
+  EReference getRelationalExpression_Right2();
+
+  /**
    * Returns the meta object for class '{@link de.uni_hildesheim.sse.vil.expressions.expressionDsl.RelationalExpressionPart <em>Relational Expression Part</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -3678,6 +3698,14 @@ public interface ExpressionDslPackage extends EPackage
      * @generated
      */
     EReference RELATIONAL_EXPRESSION__RIGHT = eINSTANCE.getRelationalExpression_Right();
+
+    /**
+     * The meta object literal for the '<em><b>Right2</b></em>' containment reference feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EReference RELATIONAL_EXPRESSION__RIGHT2 = eINSTANCE.getRelationalExpression_Right2();
 
     /**
      * The meta object literal for the '{@link de.uni_hildesheim.sse.vil.expressions.expressionDsl.impl.RelationalExpressionPartImpl <em>Relational Expression Part</em>}' class.

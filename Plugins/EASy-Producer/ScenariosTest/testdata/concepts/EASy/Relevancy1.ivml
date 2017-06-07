@@ -1,0 +1,20 @@
+project Relevancy1 {
+
+    compound Car {
+        Gears gears = {number = 4};
+        Engine engine = {power = 105};
+    }
+    
+    compound Gears {
+        Integer number;
+    }
+    
+    compound Engine {
+        Integer power;
+    }
+    
+    Car c = {
+        engine = null
+    };
+
+}

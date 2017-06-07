@@ -11,6 +11,7 @@ import net.ssehub.easy.varModel.cst.ContainerOperationCall;
 import net.ssehub.easy.varModel.cst.IConstraintTreeVisitor;
 import net.ssehub.easy.varModel.cst.IfThen;
 import net.ssehub.easy.varModel.cst.Let;
+import net.ssehub.easy.varModel.cst.MultiAndExpression;
 import net.ssehub.easy.varModel.cst.OCLFeatureCall;
 import net.ssehub.easy.varModel.cst.Parenthesis;
 import net.ssehub.easy.varModel.cst.Self;
@@ -123,6 +124,15 @@ public class AssignmentDetector implements IConstraintTreeVisitor {
             }
             level--;
         }
+    }
+    
+    @Override
+    public void visitMultiAndExpression(MultiAndExpression expression) {
+        level++;
+        for (int e = 0; e < expression.getExpressionCount(); e++) {
+            expression.getExpression(e).accept(this);
+        }
+        level--;
     }
 
     @Override

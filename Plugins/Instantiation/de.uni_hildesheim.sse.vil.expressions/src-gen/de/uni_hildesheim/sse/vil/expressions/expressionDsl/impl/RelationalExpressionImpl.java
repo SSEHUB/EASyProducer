@@ -26,6 +26,7 @@ import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
  * <ul>
  *   <li>{@link de.uni_hildesheim.sse.vil.expressions.expressionDsl.impl.RelationalExpressionImpl#getLeft <em>Left</em>}</li>
  *   <li>{@link de.uni_hildesheim.sse.vil.expressions.expressionDsl.impl.RelationalExpressionImpl#getRight <em>Right</em>}</li>
+ *   <li>{@link de.uni_hildesheim.sse.vil.expressions.expressionDsl.impl.RelationalExpressionImpl#getRight2 <em>Right2</em>}</li>
  * </ul>
  *
  * @generated
@@ -51,6 +52,16 @@ public class RelationalExpressionImpl extends MinimalEObjectImpl.Container imple
    * @ordered
    */
   protected RelationalExpressionPart right;
+
+  /**
+   * The cached value of the '{@link #getRight2() <em>Right2</em>}' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #getRight2()
+   * @generated
+   * @ordered
+   */
+  protected RelationalExpressionPart right2;
 
   /**
    * <!-- begin-user-doc -->
@@ -174,6 +185,54 @@ public class RelationalExpressionImpl extends MinimalEObjectImpl.Container imple
    * <!-- end-user-doc -->
    * @generated
    */
+  public RelationalExpressionPart getRight2()
+  {
+    return right2;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public NotificationChain basicSetRight2(RelationalExpressionPart newRight2, NotificationChain msgs)
+  {
+    RelationalExpressionPart oldRight2 = right2;
+    right2 = newRight2;
+    if (eNotificationRequired())
+    {
+      ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, ExpressionDslPackage.RELATIONAL_EXPRESSION__RIGHT2, oldRight2, newRight2);
+      if (msgs == null) msgs = notification; else msgs.add(notification);
+    }
+    return msgs;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public void setRight2(RelationalExpressionPart newRight2)
+  {
+    if (newRight2 != right2)
+    {
+      NotificationChain msgs = null;
+      if (right2 != null)
+        msgs = ((InternalEObject)right2).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - ExpressionDslPackage.RELATIONAL_EXPRESSION__RIGHT2, null, msgs);
+      if (newRight2 != null)
+        msgs = ((InternalEObject)newRight2).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - ExpressionDslPackage.RELATIONAL_EXPRESSION__RIGHT2, null, msgs);
+      msgs = basicSetRight2(newRight2, msgs);
+      if (msgs != null) msgs.dispatch();
+    }
+    else if (eNotificationRequired())
+      eNotify(new ENotificationImpl(this, Notification.SET, ExpressionDslPackage.RELATIONAL_EXPRESSION__RIGHT2, newRight2, newRight2));
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
   @Override
   public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs)
   {
@@ -183,6 +242,8 @@ public class RelationalExpressionImpl extends MinimalEObjectImpl.Container imple
         return basicSetLeft(null, msgs);
       case ExpressionDslPackage.RELATIONAL_EXPRESSION__RIGHT:
         return basicSetRight(null, msgs);
+      case ExpressionDslPackage.RELATIONAL_EXPRESSION__RIGHT2:
+        return basicSetRight2(null, msgs);
     }
     return super.eInverseRemove(otherEnd, featureID, msgs);
   }
@@ -201,6 +262,8 @@ public class RelationalExpressionImpl extends MinimalEObjectImpl.Container imple
         return getLeft();
       case ExpressionDslPackage.RELATIONAL_EXPRESSION__RIGHT:
         return getRight();
+      case ExpressionDslPackage.RELATIONAL_EXPRESSION__RIGHT2:
+        return getRight2();
     }
     return super.eGet(featureID, resolve, coreType);
   }
@@ -220,6 +283,9 @@ public class RelationalExpressionImpl extends MinimalEObjectImpl.Container imple
         return;
       case ExpressionDslPackage.RELATIONAL_EXPRESSION__RIGHT:
         setRight((RelationalExpressionPart)newValue);
+        return;
+      case ExpressionDslPackage.RELATIONAL_EXPRESSION__RIGHT2:
+        setRight2((RelationalExpressionPart)newValue);
         return;
     }
     super.eSet(featureID, newValue);
@@ -241,6 +307,9 @@ public class RelationalExpressionImpl extends MinimalEObjectImpl.Container imple
       case ExpressionDslPackage.RELATIONAL_EXPRESSION__RIGHT:
         setRight((RelationalExpressionPart)null);
         return;
+      case ExpressionDslPackage.RELATIONAL_EXPRESSION__RIGHT2:
+        setRight2((RelationalExpressionPart)null);
+        return;
     }
     super.eUnset(featureID);
   }
@@ -259,6 +328,8 @@ public class RelationalExpressionImpl extends MinimalEObjectImpl.Container imple
         return left != null;
       case ExpressionDslPackage.RELATIONAL_EXPRESSION__RIGHT:
         return right != null;
+      case ExpressionDslPackage.RELATIONAL_EXPRESSION__RIGHT2:
+        return right2 != null;
     }
     return super.eIsSet(featureID);
   }

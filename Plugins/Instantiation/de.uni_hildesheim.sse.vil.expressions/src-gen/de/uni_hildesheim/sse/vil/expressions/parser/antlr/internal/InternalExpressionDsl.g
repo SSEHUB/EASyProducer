@@ -865,10 +865,10 @@ ruleRelationalExpression returns [EObject current=null]
 	    }
 
 )
-)(
+)((
 (
 		{ 
-	        newCompositeNode(grammarAccess.getRelationalExpressionAccess().getRightRelationalExpressionPartParserRuleCall_1_0()); 
+	        newCompositeNode(grammarAccess.getRelationalExpressionAccess().getRightRelationalExpressionPartParserRuleCall_1_0_0()); 
 	    }
 		lv_right_1_0=ruleRelationalExpressionPart		{
 	        if ($current==null) {
@@ -883,7 +883,25 @@ ruleRelationalExpression returns [EObject current=null]
 	    }
 
 )
-)?)
+)(
+(
+		{ 
+	        newCompositeNode(grammarAccess.getRelationalExpressionAccess().getRight2RelationalExpressionPartParserRuleCall_1_1_0()); 
+	    }
+		lv_right2_2_0=ruleRelationalExpressionPart		{
+	        if ($current==null) {
+	            $current = createModelElementForParent(grammarAccess.getRelationalExpressionRule());
+	        }
+       		set(
+       			$current, 
+       			"right2",
+        		lv_right2_2_0, 
+        		"de.uni_hildesheim.sse.vil.expressions.ExpressionDsl.RelationalExpressionPart");
+	        afterParserOrEnumRuleCall();
+	    }
+
+)
+)?)?)
 ;
 
 

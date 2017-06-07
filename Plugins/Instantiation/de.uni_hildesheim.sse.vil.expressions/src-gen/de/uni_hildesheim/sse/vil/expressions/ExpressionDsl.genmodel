@@ -73,6 +73,7 @@
     <genClasses ecoreClass="ExpressionDsl.ecore#//RelationalExpression">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ExpressionDsl.ecore#//RelationalExpression/left"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ExpressionDsl.ecore#//RelationalExpression/right"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ExpressionDsl.ecore#//RelationalExpression/right2"/>
     </genClasses>
     <genClasses ecoreClass="ExpressionDsl.ecore#//RelationalExpressionPart">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ExpressionDsl.ecore#//RelationalExpressionPart/op"/>

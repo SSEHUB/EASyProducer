@@ -1,0 +1,7 @@
+project MultiSelect1 {
+
+    setOf(Integer) var;
+    isDefined(var) and 1 <= var.size() <= 3;
+    var = {1, 2, 3};
+
+}

@@ -48,6 +48,14 @@ public class ExpressionVersionRestrictionValidator implements IExpressionVisitor
     }
 
     @Override
+    public Object visitMultiAndExpression(MultiAndExpression ex) throws VilException {
+        for (int e = 0; e < ex.getExpressionCount(); e++) {
+            ex.getExpression(e).accept(this);
+        }
+        return null; // is ok
+    }
+
+    @Override
     public Object visitConstantExpression(ConstantExpression cst) throws VilException {
         return null; // is ok
     }

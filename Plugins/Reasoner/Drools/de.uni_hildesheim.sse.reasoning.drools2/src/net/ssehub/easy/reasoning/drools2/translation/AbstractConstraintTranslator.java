@@ -20,6 +20,7 @@ import net.ssehub.easy.varModel.cst.ContainerOperationCall;
 import net.ssehub.easy.varModel.cst.IConstraintTreeVisitor;
 import net.ssehub.easy.varModel.cst.IfThen;
 import net.ssehub.easy.varModel.cst.Let;
+import net.ssehub.easy.varModel.cst.MultiAndExpression;
 import net.ssehub.easy.varModel.cst.OCLFeatureCall;
 import net.ssehub.easy.varModel.cst.Parenthesis;
 import net.ssehub.easy.varModel.cst.Self;
@@ -234,6 +235,15 @@ public class AbstractConstraintTranslator extends AbstractModelTranslator implem
         try {
             TranslationFragment translator = OCLFeatureTranslationFactory.getTranslator(call);
             translator.toDroolsCode(this, call);            
+        } catch (CSTSemanticException exc) {
+            addException(exc);
+        }        
+    }
+    
+    @Override
+    public void visitMultiAndExpression(MultiAndExpression expression) {
+        try {
+            OCLFeatureTranslationFactory.toDroolsCode(this, expression);
         } catch (CSTSemanticException exc) {
             addException(exc);
         }        

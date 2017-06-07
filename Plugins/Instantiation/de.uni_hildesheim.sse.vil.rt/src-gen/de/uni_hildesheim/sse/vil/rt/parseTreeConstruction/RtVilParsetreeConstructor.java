@@ -11015,11 +11015,11 @@ protected class EqualityExpressionPart_ExAssignment_1 extends AssignmentToken  {
 /************ begin Rule RelationalExpression ****************
  *
  * RelationalExpression:
- * 	left=AdditiveExpression right=RelationalExpressionPart?;
+ * 	left=AdditiveExpression (right=RelationalExpressionPart right2=RelationalExpressionPart?)?;
  *
  **/
 
-// left=AdditiveExpression right=RelationalExpressionPart?
+// left=AdditiveExpression (right=RelationalExpressionPart right2=RelationalExpressionPart?)?
 protected class RelationalExpression_Group extends GroupToken {
 	
 	public RelationalExpression_Group(AbstractToken lastRuleCallOrigin, AbstractToken next, int transitionIndex, IEObjectConsumer eObjectConsumer) {
@@ -11034,7 +11034,7 @@ protected class RelationalExpression_Group extends GroupToken {
     @Override
 	public AbstractToken createFollower(int index, IEObjectConsumer inst) {
 		switch(index) {
-			case 0: return new RelationalExpression_RightAssignment_1(lastRuleCallOrigin, this, 0, inst);
+			case 0: return new RelationalExpression_Group_1(lastRuleCallOrigin, this, 0, inst);
 			case 1: return new RelationalExpression_LeftAssignment_0(lastRuleCallOrigin, this, 1, inst);
 			default: return null;
 		}	
@@ -11094,16 +11094,39 @@ protected class RelationalExpression_LeftAssignment_0 extends AssignmentToken  {
 	}	
 }
 
-// right=RelationalExpressionPart?
-protected class RelationalExpression_RightAssignment_1 extends AssignmentToken  {
+// (right=RelationalExpressionPart right2=RelationalExpressionPart?)?
+protected class RelationalExpression_Group_1 extends GroupToken {
 	
-	public RelationalExpression_RightAssignment_1(AbstractToken lastRuleCallOrigin, AbstractToken next, int transitionIndex, IEObjectConsumer eObjectConsumer) {
+	public RelationalExpression_Group_1(AbstractToken lastRuleCallOrigin, AbstractToken next, int transitionIndex, IEObjectConsumer eObjectConsumer) {
+		super(lastRuleCallOrigin, next, transitionIndex, eObjectConsumer);
+	}
+	
+	@Override
+	public Group getGrammarElement() {
+		return grammarAccess.getRelationalExpressionAccess().getGroup_1();
+	}
+
+    @Override
+	public AbstractToken createFollower(int index, IEObjectConsumer inst) {
+		switch(index) {
+			case 0: return new RelationalExpression_Right2Assignment_1_1(lastRuleCallOrigin, this, 0, inst);
+			case 1: return new RelationalExpression_RightAssignment_1_0(lastRuleCallOrigin, this, 1, inst);
+			default: return null;
+		}	
+	}
+
+}
+
+// right=RelationalExpressionPart
+protected class RelationalExpression_RightAssignment_1_0 extends AssignmentToken  {
+	
+	public RelationalExpression_RightAssignment_1_0(AbstractToken lastRuleCallOrigin, AbstractToken next, int transitionIndex, IEObjectConsumer eObjectConsumer) {
 		super(lastRuleCallOrigin, next, transitionIndex, eObjectConsumer);
 	}
 	
 	@Override
 	public Assignment getGrammarElement() {
-		return grammarAccess.getRelationalExpressionAccess().getRightAssignment_1();
+		return grammarAccess.getRelationalExpressionAccess().getRightAssignment_1_0();
 	}
 
     @Override
@@ -11116,13 +11139,13 @@ protected class RelationalExpression_RightAssignment_1 extends AssignmentToken  
 
     @Override	
 	public IEObjectConsumer tryConsume() {
-		if((value = eObjectConsumer.getConsumable("right",false)) == null) return null;
+		if((value = eObjectConsumer.getConsumable("right",true)) == null) return null;
 		IEObjectConsumer obj = eObjectConsumer.cloneAndConsume("right");
 		if(value instanceof EObject) { // org::eclipse::xtext::impl::RuleCallImpl
 			IEObjectConsumer param = createEObjectConsumer((EObject)value);
 			if(param.isInstanceOf(grammarAccess.getRelationalExpressionPartRule().getType().getClassifier())) {
 				type = AssignmentType.PARSER_RULE_CALL;
-				element = grammarAccess.getRelationalExpressionAccess().getRightRelationalExpressionPartParserRuleCall_1_0(); 
+				element = grammarAccess.getRelationalExpressionAccess().getRightRelationalExpressionPartParserRuleCall_1_0_0(); 
 				consumed = obj;
 				return param;
 			}
@@ -11139,6 +11162,53 @@ protected class RelationalExpression_RightAssignment_1 extends AssignmentToken  
 		}	
 	}	
 }
+
+// right2=RelationalExpressionPart?
+protected class RelationalExpression_Right2Assignment_1_1 extends AssignmentToken  {
+	
+	public RelationalExpression_Right2Assignment_1_1(AbstractToken lastRuleCallOrigin, AbstractToken next, int transitionIndex, IEObjectConsumer eObjectConsumer) {
+		super(lastRuleCallOrigin, next, transitionIndex, eObjectConsumer);
+	}
+	
+	@Override
+	public Assignment getGrammarElement() {
+		return grammarAccess.getRelationalExpressionAccess().getRight2Assignment_1_1();
+	}
+
+    @Override
+	public AbstractToken createFollower(int index, IEObjectConsumer inst) {
+		switch(index) {
+			case 0: return new RelationalExpressionPart_Group(this, this, 0, inst);
+			default: return null;
+		}	
+	}
+
+    @Override	
+	public IEObjectConsumer tryConsume() {
+		if((value = eObjectConsumer.getConsumable("right2",false)) == null) return null;
+		IEObjectConsumer obj = eObjectConsumer.cloneAndConsume("right2");
+		if(value instanceof EObject) { // org::eclipse::xtext::impl::RuleCallImpl
+			IEObjectConsumer param = createEObjectConsumer((EObject)value);
+			if(param.isInstanceOf(grammarAccess.getRelationalExpressionPartRule().getType().getClassifier())) {
+				type = AssignmentType.PARSER_RULE_CALL;
+				element = grammarAccess.getRelationalExpressionAccess().getRight2RelationalExpressionPartParserRuleCall_1_1_0(); 
+				consumed = obj;
+				return param;
+			}
+		}
+		return null;
+	}
+
+    @Override
+	public AbstractToken createFollowerAfterReturn(AbstractToken next,	int actIndex, int index, IEObjectConsumer inst) {
+		if(value == inst.getEObject() && !inst.isConsumed()) return null;
+		switch(index) {
+			case 0: return new RelationalExpression_RightAssignment_1_0(lastRuleCallOrigin, next, actIndex, consumed);
+			default: return null;
+		}	
+	}	
+}
+
 
 
 /************ end Rule RelationalExpression ****************/

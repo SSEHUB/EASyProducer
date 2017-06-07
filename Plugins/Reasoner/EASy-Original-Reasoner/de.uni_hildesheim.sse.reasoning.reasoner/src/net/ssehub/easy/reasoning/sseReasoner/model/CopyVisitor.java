@@ -33,6 +33,7 @@ import net.ssehub.easy.varModel.cst.ContainerOperationCall;
 import net.ssehub.easy.varModel.cst.IConstraintTreeVisitor;
 import net.ssehub.easy.varModel.cst.IfThen;
 import net.ssehub.easy.varModel.cst.Let;
+import net.ssehub.easy.varModel.cst.MultiAndExpression;
 import net.ssehub.easy.varModel.cst.OCLFeatureCall;
 import net.ssehub.easy.varModel.cst.Parenthesis;
 import net.ssehub.easy.varModel.cst.Self;
@@ -183,10 +184,24 @@ public class CopyVisitor implements IConstraintTreeVisitor {
             try {
                 result.inferDatatype();
             } catch (CSTSemanticException e) {
-                // TODO Auto-generated catch block
                 e.printStackTrace();
             }            
         }
+    }
+    
+    @Override
+    public void visitMultiAndExpression(MultiAndExpression expression) {
+        OCLFeatureCall[] expressions = new OCLFeatureCall[expression.getExpressionCount()];
+        for (int e = 0; e < expression.getExpressionCount(); e++) {
+            expression.getExpression(e).accept(this);
+            expressions[e] = (OCLFeatureCall) result;
+        }
+        try {
+            result = new MultiAndExpression(expressions);
+            result.inferDatatype();
+        } catch (CSTSemanticException e) {
+            e.printStackTrace();
+        }            
     }
 
     /**

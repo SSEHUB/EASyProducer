@@ -65,6 +65,7 @@ import net.ssehub.easy.instantiation.core.model.expressions.ExpressionWriter;
 import net.ssehub.easy.instantiation.core.model.expressions.FieldAccessExpression;
 import net.ssehub.easy.instantiation.core.model.expressions.IResolvable;
 import net.ssehub.easy.instantiation.core.model.expressions.ImplicitContainerInitializerExpression;
+import net.ssehub.easy.instantiation.core.model.expressions.MultiAndExpression;
 import net.ssehub.easy.instantiation.core.model.expressions.ParenthesisExpression;
 import net.ssehub.easy.instantiation.core.model.expressions.ResolutionListener;
 import net.ssehub.easy.instantiation.core.model.expressions.Resolver;
@@ -280,8 +281,25 @@ public abstract class ExpressionTranslator<I extends VariableDeclaration, R exte
         if (null != ex.getRight()) {
             try {
                 RelationalExpressionPart part = ex.getRight();
-                result = new CallExpression(null, part.getOp(), result, processAdditiveExpression(part.getEx(), resolver));
+                Expression rightEx;
+                CallExpression call1;
+                rightEx = processAdditiveExpression(part.getEx(), resolver);
+                call1 = new CallExpression(null, part.getOp(), result, rightEx);
+                result = call1;
                 result.inferType();
+                if (null != ex.getRight2()) {
+                    part = ex.getRight2();
+                    CallExpression call2 = new CallExpression(null, part.getOp(), rightEx, 
+                        processAdditiveExpression(part.getEx(), resolver));
+                    call2.inferType();
+                    result = new MultiAndExpression(call1, call2);
+                    result.inferType();
+                    if (ExpressionWriter.considerOclCompliance()) {
+                        warning("OCL compliance: chain of relational operations shall be written by a combination of "
+                            + "binary comparisons and Boolean and operatoins", ex, 
+                            ExpressionDslPackage.Literals.RELATIONAL_EXPRESSION__RIGHT2, VilException.ID_UNKNOWN);
+                    }
+                }
             } catch (VilException e) {
                 throw new TranslatorException(e, ex, ExpressionDslPackage.Literals.RELATIONAL_EXPRESSION__RIGHT);
             }

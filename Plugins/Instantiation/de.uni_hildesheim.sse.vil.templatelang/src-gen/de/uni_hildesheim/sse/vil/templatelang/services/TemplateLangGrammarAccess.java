@@ -1551,7 +1551,7 @@ public class TemplateLangGrammarAccess extends AbstractGrammarElementFinder {
 	}
 
 	//RelationalExpression:
-	//	left=AdditiveExpression right=RelationalExpressionPart?;
+	//	left=AdditiveExpression (right=RelationalExpressionPart right2=RelationalExpressionPart?)?;
 	public ExpressionDslGrammarAccess.RelationalExpressionElements getRelationalExpressionAccess() {
 		return gaExpressionDsl.getRelationalExpressionAccess();
 	}

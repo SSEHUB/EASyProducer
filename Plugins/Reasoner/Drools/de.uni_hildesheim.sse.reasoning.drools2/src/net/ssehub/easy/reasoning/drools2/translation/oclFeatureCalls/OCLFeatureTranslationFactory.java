@@ -3,8 +3,9 @@ package net.ssehub.easy.reasoning.drools2.translation.oclFeatureCalls;
 import java.util.HashMap;
 import java.util.Map;
 
-import net.ssehub.easy.varModel.confModel.CompoundVariable;
+import net.ssehub.easy.reasoning.drools2.translation.AbstractConstraintTranslator;
 import net.ssehub.easy.varModel.cst.CSTSemanticException;
+import net.ssehub.easy.varModel.cst.MultiAndExpression;
 import net.ssehub.easy.varModel.cst.OCLFeatureCall;
 import net.ssehub.easy.varModel.model.datatypes.BooleanType;
 import net.ssehub.easy.varModel.model.datatypes.Compound;
@@ -108,4 +109,24 @@ public class OCLFeatureTranslationFactory {
         
         return translator;
     }
+    
+    /**
+     * Translates the element into Drools specific expressions.
+     * 
+     * @param translator Instance of current translator (to avoid errors in multithreading).
+     * @param expression the expression to translate
+     * @throws CSTSemanticException Will be thrown in case that {@link OCLFeatureCall#inferDatatype()} leads
+     *     to this exception.
+     */
+    public static void toDroolsCode(AbstractConstraintTranslator translator, MultiAndExpression expression) 
+        throws CSTSemanticException {
+        for (int e = 0; e < expression.getExpressionCount(); e++) {
+            if (e > 0) {
+                translator.append(" && ");
+            }
+            TranslationFragment frag = getTranslator(expression.getExpression(e));
+            frag.toDroolsCode(translator, expression.getExpression(e));
+        }
+    }
+
 }
