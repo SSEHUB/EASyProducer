@@ -34,7 +34,9 @@ import net.ssehub.easy.reasoning.core.frontend.ReasonerFrontend;
 import net.ssehub.easy.reasoning.core.reasoner.ReasonerConfiguration;
 import net.ssehub.easy.reasoning.core.reasoner.ReasoningResult;
 import net.ssehub.easy.varModel.management.VarModel;
+import net.ssehub.easy.varModel.model.ModelQuery;
 import net.ssehub.easy.varModel.model.ModelQueryException;
+import net.ssehub.easy.varModel.model.datatypes.IDatatype;
 import net.ssehub.easy.varModel.model.datatypes.Sequence;
 import net.ssehub.easy.varModel.model.datatypes.Set;
 import net.ssehub.easy.varModel.model.values.ContainerValue;
@@ -209,13 +211,21 @@ public class ConceptsTests extends AbstractScenarioTest {
 
     /**
      * Tests a simple version of relevancies (disconnecting a tree).
+     * 
+     * @throws ModelQueryException in case of a model query problem
      */
     @Test
-    public void testRelevancy1() {
+    public void testRelevancy1() throws ModelQueryException {
         HashMap<String, Object> expected = new HashMap<String, Object>();
         expected.put("c.gears.number", 4);
         expected.put("c.engine", NullValue.INSTANCE);
-        doConceptTest("Relevancy1", expected);
+        Configuration config = doConceptTest("Relevancy1", expected);
+        IDatatype engineType = ModelQuery.findType(config.getProject(), "Engine", null);
+        Assert.assertNotNull("Engine type does not exist", engineType);
+        Value inst = config.getAllInstances(engineType);
+        if (inst instanceof ContainerValue) {
+            Assert.assertEquals("There shall be no Engine instances", 0, ((ContainerValue) inst).getElementSize());
+        }
     }
 
     /**
@@ -234,9 +244,10 @@ public class ConceptsTests extends AbstractScenarioTest {
      * 
      * @param modelName the name of the model to test
      * @param expected the expected values
+     * @return the created configuration for further tests
      */
-    private void doConceptTest(String modelName, Map<String, Object> expected) {
-        doConceptTest(modelName, true, expected);
+    private Configuration doConceptTest(String modelName, Map<String, Object> expected) {
+        return doConceptTest(modelName, true, expected);
     }
     
     /**
@@ -247,8 +258,9 @@ public class ConceptsTests extends AbstractScenarioTest {
      *   values are not tested)
      * @param expected the expected values (use nested variable names, {@link NullValue#INSTANCE} and null for not
      *   configured)
+     * @return the created configuration for further tests
      */
-    private void doConceptTest(String modelName, boolean success, Map<String, Object> expected) {
+    private Configuration doConceptTest(String modelName, boolean success, Map<String, Object> expected) {
         ReasonerConfiguration rCfg = new ReasonerConfiguration();
         rCfg.setFreshConfiguration(false); // let pass through changes of reasoner
         net.ssehub.easy.varModel.model.Project ivmlModel = obtainIvmlModel(modelName, null, getIvmlFolder());
@@ -300,6 +312,7 @@ public class ConceptsTests extends AbstractScenarioTest {
                 Assert.fail("unexpected exception " + e.getMessage());
             }
         }
+        return config;
     }
     
     /**
