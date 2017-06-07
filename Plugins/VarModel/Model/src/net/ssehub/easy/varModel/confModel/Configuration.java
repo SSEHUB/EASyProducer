@@ -586,9 +586,25 @@ public class Configuration implements IConfigurationVisitable, IProjectListener,
             listeners.get(i).itemChanged(this, var, oldValue);
         }
         if (null != allInstances) {
-            IDatatype type = var.getDeclaration().getType();
-            Map<IDecisionVariable, ReferenceValue> instances = allInstances.get(type);
-            if (null != instances && !instances.containsKey(var)) {
+            allInstancesVariableChanged(var);
+        }
+    }
+
+    /**
+     * Changes the all instance cache if <code>var</code> or one of its nested
+     * elements changed. Precondition is that {@link #allInstances} was already
+     * built up.
+     * 
+     * @param var the changed variable
+     */
+    private void allInstancesVariableChanged(IDecisionVariable var) {
+        IDatatype type = var.getDeclaration().getType();
+        Map<IDecisionVariable, ReferenceValue> instances = allInstances.get(type);
+        // && NullValue.INSTANCE != var.getValue()
+        if (null != instances) {
+            if (NullValue.INSTANCE == var.getValue()) {
+                instances.remove(var);
+            } else if (!instances.containsKey(var)) {
                 Reference rType = new Reference("", type, project);
                 try {
                     instances.put(var, (ReferenceValue) ValueFactory.createValue(rType, var));
@@ -596,6 +612,9 @@ public class Configuration implements IConfigurationVisitable, IProjectListener,
                     EASyLoggerFactory.INSTANCE.getLogger(getClass(), Bundle.ID).exception(e);
                 }
             }
+        }
+        for (int n = 0; n < var.getNestedElementsCount(); n++) {
+            allInstancesVariableChanged(var.getNestedElement(n));
         }
     }
     
@@ -801,20 +820,7 @@ public class Configuration implements IConfigurationVisitable, IProjectListener,
             instances = new HashMap<IDecisionVariable, ReferenceValue>();
             allInstances.put(type, instances);
             for (IDecisionVariable var : decisions.values()) {
-                AbstractVariable decl = var.getDeclaration();
-                IDatatype varType = decl.getType();
-                if (type.isAssignableFrom(varType)) {
-                    try {
-                        Reference refType = referenceTypes.get(varType);
-                        if (null == refType) {
-                            refType = new Reference("", varType, project);
-                            referenceTypes.put(varType, refType);
-                        }
-                        instances.put(var, (ReferenceValue) ValueFactory.createValue(refType, decl));
-                    } catch (ValueDoesNotMatchTypeException e) {
-                        e.printStackTrace();
-                    }
-                }
+                collectAllInstances(var, type, referenceTypes, instances);
             }
         }
         Value result;
@@ -825,6 +831,37 @@ public class Configuration implements IConfigurationVisitable, IProjectListener,
             result = null;
         }
         return result;
+    }
+    
+    /**
+     * Collects all instances of <code>type</code> starting at <code>var</code> and stores results into 
+     * <code>referenceTypes</code> and <code>instances</code>.
+     * 
+     * @param var the variable to collect the instances from
+     * @param type the type to collect
+     * @param referenceTypes the reference types for data types (to be modified as a side effect)
+     * @param instances the actual instances of <code>type</code> (to be modified as a side effect)
+     */
+    private void collectAllInstances(IDecisionVariable var, IDatatype type, Map<IDatatype, Reference> referenceTypes, 
+        Map<IDecisionVariable, ReferenceValue> instances) {
+        AbstractVariable decl = var.getDeclaration();
+        IDatatype varType = decl.getType();
+        if (type.isAssignableFrom(varType) && NullValue.INSTANCE != var.getValue()) {
+            try {
+                Reference refType = referenceTypes.get(varType);
+                if (null == refType) {
+                    refType = new Reference("", varType, project);
+                    referenceTypes.put(varType, refType);
+                }
+                instances.put(var, (ReferenceValue) ValueFactory.createValue(refType, decl));
+            } catch (ValueDoesNotMatchTypeException e) {
+                e.printStackTrace();
+            }
+        } else {
+            for (int n = 0; n < var.getNestedElementsCount(); n++) {
+                collectAllInstances(var.getNestedElement(n), type, referenceTypes, instances);
+            }
+        }
     }
 
     /**

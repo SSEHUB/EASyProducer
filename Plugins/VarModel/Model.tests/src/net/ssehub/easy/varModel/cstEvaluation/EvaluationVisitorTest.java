@@ -629,6 +629,7 @@ public class EvaluationVisitorTest {
         Value algs = ValueFactory.createValue(algSet, new Object[]{algVal});
         Value famVal = ValueFactory.createValue(familyC, new Object[]{"input", "fam", "algorithms", algs});
         config.getDecision(fam).setValue(famVal, AssignmentState.ASSIGNED); // this shall cause a signal -> allInstance
+
         visitor.visit(cst);
         Assert.assertTrue(visitor.getResult() instanceof BooleanValue);
         Assert.assertEquals(false, ((BooleanValue) visitor.getResult()).getValue().booleanValue());
