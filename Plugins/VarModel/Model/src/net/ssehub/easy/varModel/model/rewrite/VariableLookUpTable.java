@@ -76,7 +76,7 @@ class VariableLookUpTable {
      * </code>
      * @see #constraintReusers
      */
-    private Map<ContainableModelElement, Set<AbstractVariable>> calledByConstraintVars;
+    //private Map<ContainableModelElement, Set<AbstractVariable>> calledByConstraintVars;
     
     private Set<AbstractVariable> definedDeclarations;
     
@@ -89,7 +89,7 @@ class VariableLookUpTable {
         instancesPerDeclaration = new HashMap<AbstractVariable, Set<IDecisionVariable>>();
         definedDeclarations = new HashSet<AbstractVariable>();
         constraintReusers = new HashMap<AbstractVariable, Set<ContainableModelElement>>();
-        calledByConstraintVars = new HashMap<ContainableModelElement, Set<AbstractVariable>>();
+        //calledByConstraintVars = new HashMap<ContainableModelElement, Set<AbstractVariable>>();
     }
     
     /**

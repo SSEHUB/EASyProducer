@@ -24,8 +24,6 @@ import java.util.Map;
 
 import net.ssehub.easy.varModel.Bundle;
 import net.ssehub.easy.varModel.cst.CSTSemanticException;
-import net.ssehub.easy.varModel.cst.CompoundInitializer;
-import net.ssehub.easy.varModel.cst.ConstantValue;
 import net.ssehub.easy.varModel.cst.ConstraintSyntaxTree;
 import net.ssehub.easy.varModel.cst.OCLFeatureCall;
 import net.ssehub.easy.varModel.model.AbstractVariable;
