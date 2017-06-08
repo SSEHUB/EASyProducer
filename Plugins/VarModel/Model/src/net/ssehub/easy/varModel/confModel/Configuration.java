@@ -607,7 +607,7 @@ public class Configuration implements IConfigurationVisitable, IProjectListener,
             } else if (!instances.containsKey(var)) {
                 Reference rType = new Reference("", type, project);
                 try {
-                    instances.put(var, (ReferenceValue) ValueFactory.createValue(rType, var));
+                    instances.put(var, (ReferenceValue) ValueFactory.createValue(rType, var.getDeclaration()));
                 } catch (ValueDoesNotMatchTypeException e) {
                     EASyLoggerFactory.INSTANCE.getLogger(getClass(), Bundle.ID).exception(e);
                 }
