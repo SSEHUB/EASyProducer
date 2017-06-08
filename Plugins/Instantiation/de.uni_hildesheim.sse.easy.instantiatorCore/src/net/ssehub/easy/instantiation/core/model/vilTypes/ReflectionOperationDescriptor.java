@@ -494,7 +494,7 @@ public class ReflectionOperationDescriptor extends OperationDescriptor implement
             String name = getName();
             String[] not = meta.notOclCompliant();
             for (int i = 0; compliant && i < not.length; i++) {
-                compliant = name.equals(not[i]);
+                compliant = !name.equals(not[i]);
             }
         }
         return compliant;
