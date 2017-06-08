@@ -1,7 +1,10 @@
 package net.ssehub.easy.dslCore;
 
+import java.io.IOException;
 import java.net.URISyntaxException;
+import java.net.URL;
 
+import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.emf.common.CommonPlugin;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.xtext.resource.XtextResourceSet;
@@ -47,6 +50,11 @@ public class EclipseResourceInitializer implements IResourceInitializer {
             result = new java.net.URI(uri.toString());
         }
         return result;
+    }
+
+    @Override
+    public URL resolve(URL url) throws IOException {
+        return FileLocator.resolve(url); // depends loosely on org.eclipse.core.runtime
     }
     
 }

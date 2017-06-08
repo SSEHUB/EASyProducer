@@ -21,8 +21,6 @@ import net.ssehub.easy.basics.messages.Status;
 import net.ssehub.easy.basics.modelManagement.IModel;
 import net.ssehub.easy.basics.modelManagement.Version;
 import net.ssehub.easy.basics.progress.ProgressObserver;
-import net.ssehub.easy.dslCore.ModelUtility;
-import net.ssehub.easy.dslCore.StandaloneInitializer;
 import net.ssehub.easy.dslCore.TranslationResult;
 import net.ssehub.easy.dslCore.translation.Message;
 
@@ -42,7 +40,8 @@ public abstract class AbstractTest<R extends IModel> {
      * Performs the resource initialization.
      */
     protected static void resourceInitialization() {
-        ModelUtility.setResourceInitializer(new StandaloneInitializer());
+        //none here, let ModelUtility decide for Plugin JUnit tests
+        //ModelUtility.setResourceInitializer(new StandaloneInitializer());
     }
     
     /**

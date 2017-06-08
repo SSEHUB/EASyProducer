@@ -1,6 +1,8 @@
 package net.ssehub.easy.dslCore;
 
+import java.io.IOException;
 import java.net.URISyntaxException;
+import java.net.URL;
 
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.xtext.resource.XtextResourceSet;
@@ -40,5 +42,14 @@ public interface IResourceInitializer {
      * @return <code>true</code> for Eclipse, <code>false</code> else
      */
     public boolean forEclipse();
+    
+    /**
+     * Resolves a URL to an implementing file or Jar URL.
+     * 
+     * @param url the URL to be resolved
+     * @return the resolved URL or <code>url</code>
+     * @throws IOException in case of resolution problems 
+     */
+    public URL resolve(URL url) throws IOException;
     
 }
