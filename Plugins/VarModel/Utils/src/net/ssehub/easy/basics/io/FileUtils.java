@@ -20,6 +20,8 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URI;
+import java.net.URL;
 
 /**
  * Some file utility methods (may partially be taken from commons.io but this is currently no defined as dependency 
@@ -29,6 +31,26 @@ import java.io.InputStream;
  */
 public class FileUtils {
 
+    /**
+     * Returns whether the given <code>uri</code> is a file URI as returned, e.g., by a File.
+     * 
+     * @param uri the URI (ignored if <b>null</b>)
+     * @return <code>true</code> for a file URI, <code>false</code> else
+     */
+    public static boolean isFileURI(URI uri) {
+        return null != uri && "file".equals(uri.getScheme());
+    }
+    
+    /**
+     * Returns whether the given <code>url</code> is a JAR URL as returned, e.g., by a classloader.
+     * 
+     * @param url the URL (ignored if <b>null</b>)
+     * @return <code>true</code> for a JAR URL, <code>false</code> else
+     */
+    public static boolean isFileURL(URL url) {
+        return null != url && "file".equals(url.getProtocol());
+    }
+    
     /**
      * Copies the contents of <code>in</code> at the current position to <code>file</code>.
      * Does not attempt to close <code>in</code>. Uses a default buffer of size 1024.

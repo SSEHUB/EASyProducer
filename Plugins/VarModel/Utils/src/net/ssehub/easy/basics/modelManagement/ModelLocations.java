@@ -25,6 +25,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import net.ssehub.easy.basics.io.FileUtils;
 import net.ssehub.easy.basics.progress.ObservableTask;
 import net.ssehub.easy.basics.progress.ProgressObserver;
 
@@ -241,21 +242,23 @@ public class ModelLocations <M extends IModel> {
     public Location getLocationFor(URI uri) {
         Location result = null;
         try {
-            File f = new File(uri).getCanonicalFile();
-            while (null == result) {
-                for (int l = 0; l < locations.size(); l++) {
-                    Location tmp = locations.get(l);
-                    if (tmp.contains(f)) {
-                        if (null == result || tmp.contains(result.getLocation())) {
-                            // current assumption: return the most general location!
-                            result = tmp;
+            if (FileUtils.isFileURI(uri)) {
+                File f = new File(uri).getCanonicalFile();
+                while (null == result) {
+                    for (int l = 0; l < locations.size(); l++) {
+                        Location tmp = locations.get(l);
+                        if (tmp.contains(f)) {
+                            if (null == result || tmp.contains(result.getLocation())) {
+                                // current assumption: return the most general location!
+                                result = tmp;
+                            }
                         }
                     }
+                    if (null != result || null == f.getParentFile()) {
+                        break;
+                    }
+                    f = f.getParentFile();
                 }
-                if (null != result || null == f.getParentFile()) {
-                    break;
-                }
-                f = f.getParentFile();
             }
         } catch (IOException e) {
         }

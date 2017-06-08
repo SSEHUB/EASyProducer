@@ -18,6 +18,7 @@ package net.ssehub.easy.basics.io;
 import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
+import java.net.URI;
 import java.net.URL;
 import java.util.jar.JarEntry;
 import java.util.jar.JarInputStream;
@@ -30,6 +31,16 @@ import java.util.jar.JarInputStream;
  */
 public class JarUtils {
 
+    /**
+     * Returns whether the given <code>uri</code> is a Jar URI as returned, e.g., by a classloader.
+     * 
+     * @param uri the URI (ignored if <b>null</b>)
+     * @return <code>true</code> for a Jar URI, <code>false</code> else
+     */
+    public static boolean isJarURI(URI uri) {
+        return null != uri && "jar".equals(uri.getScheme());
+    }
+    
     /**
      * Returns whether the given <code>url</code> is a JAR URL as returned, e.g., by a classloader.
      * 
