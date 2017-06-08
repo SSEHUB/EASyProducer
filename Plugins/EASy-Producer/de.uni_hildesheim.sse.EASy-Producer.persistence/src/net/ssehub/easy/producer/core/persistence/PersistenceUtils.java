@@ -756,9 +756,12 @@ public class PersistenceUtils {
         Map<PathKind, File> alternativePaths) {
         if (0 == VarModel.INSTANCE.locations().getLocationCount()) {
             URL defltLibUrl = loader.getResource("defaultLib");
+            EASyLoggerFactory.INSTANCE.getLogger(PersistenceUtils.class, Activator.PLUGIN_ID).info(
+                "Trying to load default IVML/VIL library from '" + defltLibUrl);
             if (null != defltLibUrl) {
                 try {
                     defltLibUrl = ModelUtility.getResourceInitializer().resolve(defltLibUrl);
+                    defltLibUrl = new URL(defltLibUrl.toString().replaceAll(" ", "%20")); 
                     URI defltLibUri = defltLibUrl.toURI();
                     if (JarUtils.isJarURL(defltLibUrl)) {
                         File file = FileUtils.createTmpDir("easyDefaultLib");
@@ -771,14 +774,16 @@ public class PersistenceUtils {
                         if (defltLibFolder.exists()) {
                             Configuration cfg = getDefaultModelsConfiguration(defltLibFolder, alternativePaths);
                             addLocation(cfg, observer);
+                            EASyLoggerFactory.INSTANCE.getLogger(PersistenceUtils.class, Activator.PLUGIN_ID).info(
+                                "Loaded default IVML/VIL library from '" + defltLibUrl);
                         }
                     }
                 } catch (URISyntaxException e) {
                     EASyLoggerFactory.INSTANCE.getLogger(PersistenceUtils.class, Activator.PLUGIN_ID).error(
-                            "While loading default library in '" + defltLibUrl + "': " + e.getMessage());
+                        "While loading default library in '" + defltLibUrl + "': " + e.getMessage());
                 } catch (ModelManagementException e) {
                     EASyLoggerFactory.INSTANCE.getLogger(PersistenceUtils.class, Activator.PLUGIN_ID).error(
-                            "While loading default library in '" + defltLibUrl + "': " + e.getMessage());
+                        "While loading default library in '" + defltLibUrl + "': " + e.getMessage());
                 } catch (IOException e) {
                     EASyLoggerFactory.INSTANCE.getLogger(PersistenceUtils.class, Activator.PLUGIN_ID).error(
                         "While loading default library in '" + defltLibUrl + "': " + e.getMessage());
