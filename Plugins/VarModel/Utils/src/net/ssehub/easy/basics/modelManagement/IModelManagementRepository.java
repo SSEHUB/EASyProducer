@@ -46,13 +46,6 @@ public interface IModelManagementRepository <M extends IModel> {
      * @return the loaders
      */
     public ModelLoaders<M> loaders();
-
-    /**
-     * Returns the model paths.
-     * 
-     * @return the model paths
-     */
-    public ModelPaths paths();
     
     /**
      * Registers a model loader and updates the model information

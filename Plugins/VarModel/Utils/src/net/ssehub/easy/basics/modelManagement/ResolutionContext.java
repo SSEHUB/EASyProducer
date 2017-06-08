@@ -160,14 +160,6 @@ class ResolutionContext <M extends IModel> {
                 enumerateDependent(location, result, done);
             }
         }
-        List<String> tmp = repository.paths().getModelPath(getModelURI());
-        if (null != tmp) {
-            if (result == null) {
-                result = tmp;
-            } else {
-                result.addAll(tmp);
-            }
-        }
         return result;
     }
     

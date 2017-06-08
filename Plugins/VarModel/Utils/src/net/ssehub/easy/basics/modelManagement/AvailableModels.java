@@ -36,7 +36,6 @@ import java.util.Map;
  */
 public class AvailableModels<M extends IModel> {
 
-    private IModelManagementRepository<M> repository;
     private Map<String, List<VersionedModelInfos<M>>> availableModels 
         = new LinkedHashMap<String, List<VersionedModelInfos<M>>>();
     private Map<URI, ModelInfo<M>> tmpInfo = null;
@@ -47,7 +46,7 @@ public class AvailableModels<M extends IModel> {
      * @param repository the underlying repository instance
      */
     AvailableModels(IModelManagementRepository<M> repository) {
-        this.repository = repository;
+        // this.repository = repository; // not needed by now
     }
     
     /**
@@ -171,7 +170,7 @@ public class AvailableModels<M extends IModel> {
             int vInfosSize = vInfos.size();
             for (int i = 0; i < vInfosSize; i++) {
                 // currently we do not have model paths ;)
-                ModelInfo<M> info = vInfos.get(i).getByClosestUri(uri, repository.paths().getModelPath(uri));
+                ModelInfo<M> info = vInfos.get(i).getByClosestUri(uri, null);
                 if (null != info) {
                     if ((null == name) || (name.equals(info.getName()) && Version.equals(info.getVersion(), version))) {
                         result.add(info);
@@ -197,7 +196,7 @@ public class AvailableModels<M extends IModel> {
             int vInfosSize = vInfos.size();
             for (int i = 0; i < vInfosSize; i++) {
                 // currently we do not have model paths ;)
-                ModelInfo<M> info = vInfos.get(i).getByClosestUri(uri, repository.paths().getModelPath(uri));
+                ModelInfo<M> info = vInfos.get(i).getByClosestUri(uri, null);
                 if (null != info) {
                     if ((null == name) || (name.equals(info.getName()))) {
                         result.add(info);
@@ -247,7 +246,7 @@ public class AvailableModels<M extends IModel> {
             VersionedModelInfos<M> vInfo = VersionedModelInfos.find(
                 availableModels.get(model.getName()), model.getVersion());
             if (null != vInfo) {
-                result = vInfo.getByClosestUri(uri, repository.paths().getModelPath(uri));
+                result = vInfo.getByClosestUri(uri, null);
             }
         }
         return result;

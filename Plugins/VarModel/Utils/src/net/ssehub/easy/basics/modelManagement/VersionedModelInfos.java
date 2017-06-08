@@ -208,7 +208,7 @@ public class VersionedModelInfos <M extends IModel> {
      * @param uri the URI to match with (may be <b>null</b> then the first 
      *   information object is returned)
      * @param modelPath additional URIs prefixes which shall be considered for importing,
-     *   similar to the Java classpath 
+     *   similar to the Java classpath, may be <b>null</b> 
      * @return the matching model information (or <b>null</b> if none matches)
      */
     public ModelInfo<M> getByClosestUri(URI uri, List<String> modelPath) {
@@ -224,7 +224,7 @@ public class VersionedModelInfos <M extends IModel> {
      * @param uri the URI to match with (may be <b>null</b> then the first 
      *   information object is returned)
      * @param modelPath additional URIs prefixes which shall be considered for importing,
-     *   similar to the Java classpath 
+     *   similar to the Java classpath, may be <b>null</b> 
      * @return the matching model information (or <b>null</b> if none matches)
      */
     public static <M extends IModel> ModelInfo<M> getByClosestUri(List<ModelInfo<M>> infos, URI uri, 
@@ -280,7 +280,7 @@ public class VersionedModelInfos <M extends IModel> {
      * @param infos the information objects to be considered
      * @param searchUriText the search folder URI as text 
      * @param modelPath additional URIs prefixes which shall be considered for importing,
-     *   similar to the Java classpath 
+     *   similar to the Java classpath, may be <b>null</b> 
      * @return the matching model information (or <b>null</b> if none matches)
      */
     private static <M extends IModel> ModelInfo<M> search(List<ModelInfo<M>> infos, String searchUriText, 
@@ -322,7 +322,7 @@ public class VersionedModelInfos <M extends IModel> {
      * @param infos the information objects to be considered
      * @param uri the URI to start searching 
      * @param modelPath additional URIs prefixes which shall be considered for importing,
-     *   similar to the Java classpath 
+     *   similar to the Java classpath, may be <b>null</b> 
      * @return the matching model information (or <b>null</b> if none matches)
      */
     private static <M extends IModel> ModelInfo<M> searchOnParentLevel(List<ModelInfo<M>> infos, URI uri, 
@@ -364,7 +364,7 @@ public class VersionedModelInfos <M extends IModel> {
      * @param infos the information objects to be considered
      * @param uri the URI to start searching 
      * @param modelPath additional URIs prefixes which shall be considered for importing,
-     *   similar to the Java classpath 
+     *   similar to the Java classpath, may be <b>null</b> 
      * @return the matching model information but only if this is unique
      */
     private static <M extends IModel> ModelInfo<M> searchOnSameFolderLevel(List<ModelInfo<M>> infos, URI uri, 

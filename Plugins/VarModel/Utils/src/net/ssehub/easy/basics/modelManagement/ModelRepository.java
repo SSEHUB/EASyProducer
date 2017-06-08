@@ -117,15 +117,6 @@ class ModelRepository <M extends IModel> implements IModelManagementRepository<M
     public ModelLoaders<M> loaders() {
         return modelMgmt.loaders();
     }
-    
-    /**
-     * Returns the model paths.
-     * 
-     * @return the model paths
-     */
-    public ModelPaths paths() {
-        return modelMgmt.paths();
-    }
 
     /**
      * Removes a file location, i.e. a location from where models can be loaded.

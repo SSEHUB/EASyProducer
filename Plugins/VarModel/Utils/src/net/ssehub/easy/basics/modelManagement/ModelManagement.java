@@ -62,7 +62,6 @@ public abstract class ModelManagement <M extends IModel> {
 
     private static final EASyLogger LOGGER = EASyLoggerFactory.INSTANCE.getLogger(ModelManagement.class, Bundle.ID);
 
-    private ModelPaths paths = new ModelPaths();
     private ModelLocale locale = new ModelLocale();
 
     // required for visiting!
@@ -119,17 +118,6 @@ public abstract class ModelManagement <M extends IModel> {
      */
     public ModelLocale locale() {
         return locale;
-    }
-
-    /**
-     * Returns access to the model paths used while loading models. For future compatibility, 
-     * please store the returned instance just for temporary purposes within a method and 
-     * not for long-term use in an attribute etc.
-     * 
-     * @return the model paths object
-     */
-    public ModelPaths paths() {
-        return paths;
     }
     
     /**
