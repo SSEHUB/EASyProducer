@@ -18,6 +18,7 @@ Require-Bundle: de.uni_hildesheim.sse.vil.buildlang.tests;bundle-version="0.0.1"
  net.ssehub.easy.instantiation.aspectj;bundle-version="0.2.3",
  net.ssehub.easy.instantiation.maven;bundle-version="3.2.3",
  net.ssehub.easy.reasoning.core,
- net.ssehub.easy.reasoning.sseReasoner
+ net.ssehub.easy.reasoning.sseReasoner,
+ net.ssehub.easy.producer.core
 Bundle-ClassPath: .
 Export-Package: net.ssehub.easy.producer.scenario_tests

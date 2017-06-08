@@ -22,6 +22,8 @@ import net.ssehub.easy.reasoning.core.reasoner.ReasoningOperation;
 import net.ssehub.easy.reasoning.core.reasoner.ReasoningResult;
 import net.ssehub.easy.varModel.confModel.AllFreezeSelector;
 import net.ssehub.easy.varModel.model.ModelElement;
+import net.ssehub.easy.varModel.model.ModelQuery;
+import net.ssehub.easy.varModel.model.ModelQueryException;
 import net.ssehub.easy.varModel.persistency.StringProvider;
 
 /**
@@ -79,6 +81,12 @@ public class PLPInfoSenariosTest extends AbstractPLPInfoTest {
      */
     private static final File TEST_COMPOUND_INSTANTIATION
         = new File(BASE_TEST_FOLDER, "CompoundInstantiationTest");
+
+    /**
+     * Tests loading the default libraries.
+     */
+    private static final File TEST_DEFAULT_LIB
+        = new File(BASE_TEST_FOLDER, "DefaultLibTest");
     
     private static Set<PLPInfo> loadedInfos = new HashSet<PLPInfo>();
     
@@ -292,4 +300,11 @@ public class PLPInfoSenariosTest extends AbstractPLPInfoTest {
             }            
         });
     }
+    
+    @Test
+    public void testDefaultLib() throws PersistenceException, ModelQueryException {
+        final PLPInfo plp = loadPLPInfo(TEST_DEFAULT_LIB);
+        Assert.assertNotNull(ModelQuery.findVariable(plp.getProject(), "var", null));
+    }
+    
 }

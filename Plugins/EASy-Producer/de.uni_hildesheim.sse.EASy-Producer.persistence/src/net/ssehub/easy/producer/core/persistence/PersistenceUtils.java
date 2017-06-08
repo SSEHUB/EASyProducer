@@ -20,11 +20,15 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.net.URI;
+import java.net.URISyntaxException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import net.ssehub.easy.basics.io.FileUtils;
+import net.ssehub.easy.basics.io.JarUtils;
 import net.ssehub.easy.basics.logger.EASyLoggerFactory;
 import net.ssehub.easy.basics.logger.EASyLoggerFactory.EASyLogger;
 import net.ssehub.easy.basics.modelManagement.IModel;
@@ -35,7 +39,9 @@ import net.ssehub.easy.basics.modelManagement.ModelManagementException;
 import net.ssehub.easy.basics.modelManagement.RestrictionEvaluationException;
 import net.ssehub.easy.basics.modelManagement.Version;
 import net.ssehub.easy.basics.modelManagement.VersionFormatException;
+import net.ssehub.easy.basics.modelManagement.ModelLocations.Location;
 import net.ssehub.easy.basics.progress.ProgressObserver;
+import net.ssehub.easy.dslCore.ModelUtility;
 import net.ssehub.easy.dslCore.TopLevelModelAccessor;
 import net.ssehub.easy.dslCore.TopLevelModelAccessor.IModelAccessor;
 import net.ssehub.easy.instantiation.core.model.buildlangModel.AbstractRule;
@@ -719,4 +725,57 @@ public class PersistenceUtils {
         }
         plp.addScriptImport(scriptImport);
     }
+
+    /**
+     * Loads the default models if existent using the class loader of this class.
+     * 
+     * @param observer the progress observer
+     */
+    public static void loadDefaultModels(ProgressObserver observer) {
+        loadDefaultModels(PersistenceUtils.class.getClassLoader(), observer);
+    }
+
+    /**
+     * Loads the default models if existent.
+     * 
+     * @param loader the loader to take the resources from
+     * @param observer the progress observer
+     */
+    public static void loadDefaultModels(ClassLoader loader, ProgressObserver observer) {
+        if (0 == VarModel.INSTANCE.locations().getLocationCount()) {
+            URL defltLibUrl = loader.getResource("defaultLib");
+            if (null != defltLibUrl) {
+                try {
+                    defltLibUrl = ModelUtility.getResourceInitializer().resolve(defltLibUrl);
+                    URI defltLibUri = defltLibUrl.toURI();
+                    if (JarUtils.isJarURL(defltLibUrl)) {
+                        File file = FileUtils.createTmpDir("easyDefaultLib");
+                        JarUtils.unpackJar(defltLibUrl, file);
+                        defltLibUri = file.toURI();
+                    }
+                    Location defltLibLocation = VarModel.INSTANCE.locations().getLocationFor(defltLibUri);
+                    if (null == defltLibLocation && FileUtils.isFileURI(defltLibUri)) {
+                        File defltLibFolder = new File(defltLibUri);
+                        if (defltLibFolder.exists()) {
+                            Configuration cfg = getConfiguration(defltLibFolder);
+                            addLocation(cfg, observer);
+                        }
+                    }
+                } catch (URISyntaxException e) {
+                    EASyLoggerFactory.INSTANCE.getLogger(PersistenceUtils.class, Activator.PLUGIN_ID).error(
+                            "While loading default library in '" + defltLibUrl + "': " + e.getMessage());
+                } catch (ModelManagementException e) {
+                    EASyLoggerFactory.INSTANCE.getLogger(PersistenceUtils.class, Activator.PLUGIN_ID).error(
+                            "While loading default library in '" + defltLibUrl + "': " + e.getMessage());
+                } catch (IOException e) {
+                    EASyLoggerFactory.INSTANCE.getLogger(PersistenceUtils.class, Activator.PLUGIN_ID).error(
+                        "While loading default library in '" + defltLibUrl + "': " + e.getMessage());
+                }
+            } else {
+                EASyLoggerFactory.INSTANCE.getLogger(PersistenceUtils.class, Activator.PLUGIN_ID).info(
+                    "No default IVML/VIL library found.");
+            }
+        }
+    }
+
 }

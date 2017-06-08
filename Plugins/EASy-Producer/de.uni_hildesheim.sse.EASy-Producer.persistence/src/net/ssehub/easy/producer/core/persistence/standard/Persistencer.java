@@ -52,7 +52,7 @@ import net.ssehub.easy.varModel.model.Project;
 /**
  * This class represents an interlayer between persistency-layer and model. It provides functions
  * for loading a model from the storage or saving it to storage. Therefore it performs a conversion
- * between the persistency model and the application model.   
+ * between the persistency model and the application model. Uses {@link UrlResolver}.  
  * 
  * @author El-Sharkawy
  */
@@ -64,7 +64,7 @@ public class Persistencer implements IPersistencer, PersistenceConstants {
     private DataStorage storage;
     private ProgressObserver observer;
     private File projectFolder;
-
+    
     /**
      * Sole constructor for this class for saving/reading persistence information out of a xml file.
      * @param pathEnv a path environment for making files and paths relative
@@ -79,8 +79,16 @@ public class Persistencer implements IPersistencer, PersistenceConstants {
         this.observer = observer;
     }
 
+    /**
+     * Loads the default models if existent.
+     */
+    private void loadDefaultModels() {
+        PersistenceUtils.loadDefaultModels(Persistencer.class.getClassLoader(), observer);
+    }
+
     @Override
     public PersistentProject load() throws PersistenceException {
+        loadDefaultModels();
         Configuration config = PersistenceUtils.getConfiguration(projectFolder);
         
         /* 
@@ -158,8 +166,8 @@ public class Persistencer implements IPersistencer, PersistenceConstants {
                 projectOk = scriptFolder.mkdirs();
             } 
         }
-        
         if (projectOk) {
+            loadDefaultModels();
             // Add location of newly created project to VarModel
             try {
                 PersistenceUtils.addLocation(config, observer);

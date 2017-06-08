@@ -25,6 +25,7 @@ import net.ssehub.easy.instantiation.core.model.templateModel.TemplateModel;
 import net.ssehub.easy.instantiation.core.model.vilTypes.Project;
 import net.ssehub.easy.instantiation.core.model.vilTypes.configuration.Configuration;
 import net.ssehub.easy.instantiation.java.Registration;
+import net.ssehub.easy.producer.core.persistence.PersistenceUtils;
 import net.ssehub.easy.varModel.management.VarModel;
 import test.de.uni_hildesheim.sse.vil.buildlang.AbstractTest;
 import test.de.uni_hildesheim.sse.vil.buildlang.BuildLangTestConfigurer;
@@ -48,13 +49,14 @@ public abstract class AbstractScenarioTest extends AbstractTest<Script> {
      * Defines the current model paths.
      */
     protected static String[] modelPaths = DEFAULT_MODEL_PATHS;
-
+    
     @Override
     protected void furtherInitialization() {
         Registration.register();
         net.ssehub.easy.instantiation.ant.Registration.register();
         net.ssehub.easy.instantiation.aspectj.Registration.register();
         //de.uni_hildesheim.sse.easy.maven.Registration.register();
+        PersistenceUtils.loadDefaultModels(ProgressObserver.NO_OBSERVER);
     }
     
     @Override

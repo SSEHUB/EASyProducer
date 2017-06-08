@@ -1,0 +1,8 @@
+project DefaultLib {
+
+    typedef MandatoryBoolean Boolean with (MandatoryBoolean == true and isDefined(MandatoryBoolean));
+    typedef MandatoryReal Real with (isDefined(MandatoryReal));
+    typedef MandatoryInteger Integer with (isDefined(MandatoryInteger));
+    typedef MandatoryString String with (isDefined(MandatoryString) and MandatoryString.size() > 0);
+
+}

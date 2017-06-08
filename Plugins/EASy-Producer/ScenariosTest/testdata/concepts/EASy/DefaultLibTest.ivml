@@ -1,0 +1,6 @@
+project DefaultLibTest {
+
+    import DefaultLib;
+    
+    MandatoryBoolean var = true;
+}

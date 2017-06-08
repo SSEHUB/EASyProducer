@@ -3,6 +3,7 @@ package net.ssehub.easy.producer.core.persistence.standard;
 import de.uni_hildesheim.sse.BuildLangModelUtility;
 import de.uni_hildesheim.sse.ModelUtility;
 import de.uni_hildesheim.sse.vil.templatelang.TemplateLangModelUtility;
+import net.ssehub.easy.basics.Environment;
 import net.ssehub.easy.basics.logger.EASyLoggerFactory;
 import net.ssehub.easy.basics.logger.EASyLoggerFactory.EASyLogger;
 import net.ssehub.easy.basics.modelManagement.ModelManagementException;
@@ -35,7 +36,7 @@ public abstract class EASyInitializer {
      * the descriptive services.
      */
     public static void setInitializer() {
-        setInitializer(false);
+        setInitializer(Environment.runsInEclipse()); // false may be wrong in tests 
         ProgressObserver observer = ProgressObserver.NO_OBSERVER;
         try {
             VarModel.INSTANCE.loaders().registerLoader(ModelUtility.INSTANCE, observer);

@@ -238,6 +238,17 @@ public class ConceptsTests extends AbstractScenarioTest {
         expected.put("c.engine", null); // does not even have a value in the model
         doConceptTest("Relevancy2", expected);
     }
+    
+    /**
+     * Tests availability of IVML default library. Basically the same test as for EASy core
+     * but here without initializing the full EASy core.
+     */
+    @Test
+    public void testDefaultLib() {
+        HashMap<String, Object> expected = new HashMap<String, Object>();
+        expected.put("var", Boolean.TRUE);
+        doConceptTest("DefaultLibTest", expected);
+    }
 
     /**
      * Performs a concept test with reasoning (must be valid and not conflicting).
