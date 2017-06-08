@@ -83,7 +83,7 @@ public class Persistencer implements IPersistencer, PersistenceConstants {
      * Loads the default models if existent.
      */
     private void loadDefaultModels() {
-        PersistenceUtils.loadDefaultModels(Persistencer.class.getClassLoader(), observer);
+        PersistenceUtils.loadDefaultModels(Persistencer.class.getClassLoader(), observer, null);
     }
 
     @Override

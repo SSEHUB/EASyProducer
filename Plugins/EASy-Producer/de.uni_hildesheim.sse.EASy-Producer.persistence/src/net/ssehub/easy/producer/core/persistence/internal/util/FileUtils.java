@@ -7,7 +7,7 @@ import java.io.File;
  *
  * @author Holger Eichelberger
  */
-public class FileUtils {
+public class FileUtils extends net.ssehub.easy.basics.io.FileUtils {
 
     public static final char SEPARATOR = '/';
     

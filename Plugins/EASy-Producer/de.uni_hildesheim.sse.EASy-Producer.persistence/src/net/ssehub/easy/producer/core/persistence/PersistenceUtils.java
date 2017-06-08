@@ -732,7 +732,17 @@ public class PersistenceUtils {
      * @param observer the progress observer
      */
     public static void loadDefaultModels(ProgressObserver observer) {
-        loadDefaultModels(PersistenceUtils.class.getClassLoader(), observer);
+        loadDefaultModels(PersistenceUtils.class.getClassLoader(), observer, null);
+    }
+
+    /**
+     * Loads the default models if existent using the class loader of this class.
+     * 
+     * @param observer the progress observer
+     * @param alternativePaths for loading the models (see {@link Configuration}, may be <b>null</b>)
+     */
+    public static void loadDefaultModels(ProgressObserver observer, Map<PathKind, File> alternativePaths) {
+        loadDefaultModels(PersistenceUtils.class.getClassLoader(), observer, alternativePaths);
     }
 
     /**
@@ -740,8 +750,10 @@ public class PersistenceUtils {
      * 
      * @param loader the loader to take the resources from
      * @param observer the progress observer
+     * @param alternativePaths for loading the models (see {@link Configuration}, may be <b>null</b>)
      */
-    public static void loadDefaultModels(ClassLoader loader, ProgressObserver observer) {
+    public static void loadDefaultModels(ClassLoader loader, ProgressObserver observer, 
+        Map<PathKind, File> alternativePaths) {
         if (0 == VarModel.INSTANCE.locations().getLocationCount()) {
             URL defltLibUrl = loader.getResource("defaultLib");
             if (null != defltLibUrl) {
@@ -757,7 +769,7 @@ public class PersistenceUtils {
                     if (null == defltLibLocation && FileUtils.isFileURI(defltLibUri)) {
                         File defltLibFolder = new File(defltLibUri);
                         if (defltLibFolder.exists()) {
-                            Configuration cfg = getConfiguration(defltLibFolder);
+                            Configuration cfg = getDefaultModelsConfiguration(defltLibFolder, alternativePaths);
                             addLocation(cfg, observer);
                         }
                     }
@@ -776,6 +788,29 @@ public class PersistenceUtils {
                     "No default IVML/VIL library found.");
             }
         }
+    }
+    
+    /**
+     * Creates a configuration for loading default models.
+     * 
+     * @param folder the folder with the models
+     * @param alternativePaths for loading the models (see {@link Configuration}, may be <b>null</b>)
+     * @return the configuration
+     */
+    private static Configuration getDefaultModelsConfiguration(File folder, Map<PathKind, File> alternativePaths) {
+        Configuration result = new Configuration(folder);
+        if (null != alternativePaths) {
+            for (Map.Entry<PathKind, File> entry : alternativePaths.entrySet()) {
+                try {
+                    result.setPath(entry.getKey(), entry.getValue());
+                }  catch (IOException e) {
+                    EASyLoggerFactory.INSTANCE.getLogger(PersistenceUtils.class, Activator.PLUGIN_ID).error(
+                        "While loading default library and using " + entry.getKey() + "= " 
+                        + entry.getValue() + ": " + e.getMessage() + " - using default");
+                }
+            }
+        }
+        return result;
     }
 
 }
