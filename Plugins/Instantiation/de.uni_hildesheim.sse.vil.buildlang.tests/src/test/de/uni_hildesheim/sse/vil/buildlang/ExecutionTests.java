@@ -24,6 +24,7 @@ import net.ssehub.easy.instantiation.core.model.defaultInstantiators.RandomDoubl
 public class ExecutionTests extends AbstractExecutionTest<Script> {
     
     private static ExecutionTests tests;
+    private static final String MAIN_RULE = "main";
 
     @Override
     protected ITestConfigurer<Script> createTestConfigurer() {
@@ -535,7 +536,7 @@ public class ExecutionTests extends AbstractExecutionTest<Script> {
     public void testProtected() throws IOException {
         assertSelfInstantiate("protectedRules");
         // the same as before, just explicitly using the default start rule
-        assertSelfInstantiate("protectedRules", "main"); 
+        assertSelfInstantiate("protectedRules", MAIN_RULE); 
         // shall not work, protected
         assertSelfInstantiate("protectedRules", "compile", VilException.ID_RUNTIME_STARTRULE);
         // shall not work, does not exist
@@ -549,7 +550,7 @@ public class ExecutionTests extends AbstractExecutionTest<Script> {
      */
     @Test
     public void testVtl() throws IOException {
-        assertSelfInstantiate("vtl", "main", new SelfInstantiationAsserterAdapter() {
+        assertSelfInstantiate("vtl", MAIN_RULE, new SelfInstantiationAsserterAdapter() {
 
             @Override
             public void assertIn(File base) {
@@ -573,7 +574,7 @@ public class ExecutionTests extends AbstractExecutionTest<Script> {
      */
     @Test
     public void testVtl1() throws IOException {
-        assertSelfInstantiate("vtl1", "main", new SelfInstantiationAsserterAdapter() {
+        assertSelfInstantiate("vtl1", MAIN_RULE, new SelfInstantiationAsserterAdapter() {
 
             @Override
             public void assertIn(File base) {
@@ -592,7 +593,7 @@ public class ExecutionTests extends AbstractExecutionTest<Script> {
      */
     @Test
     public void testVelocity() throws IOException {
-        assertSelfInstantiate("velocity", "main", new SelfInstantiationAsserterAdapter() {
+        assertSelfInstantiate("velocity", MAIN_RULE, new SelfInstantiationAsserterAdapter() {
 
             @Override
             public void assertIn(File base) {
@@ -611,7 +612,7 @@ public class ExecutionTests extends AbstractExecutionTest<Script> {
      */
     @Test
     public void testFileArtifact() throws IOException {
-        assertSelfInstantiate("FileArtifactTest", "main", new SelfInstantiationAsserterAdapter() {
+        assertSelfInstantiate("FileArtifactTest", MAIN_RULE, new SelfInstantiationAsserterAdapter() {
 
             @Override
             public void assertIn(File base) {
@@ -723,7 +724,7 @@ public class ExecutionTests extends AbstractExecutionTest<Script> {
      */
     @Test
     public void testNewText() throws IOException {
-        assertSelfInstantiate("newText", "main", new SelfInstantiationAsserterAdapter() {
+        assertSelfInstantiate("newText", MAIN_RULE, new SelfInstantiationAsserterAdapter() {
 
             @Override
             public void assertIn(File base) {
@@ -764,7 +765,7 @@ public class ExecutionTests extends AbstractExecutionTest<Script> {
      */
     @Test
     public void testXML2() throws IOException {
-        assertSelfInstantiate("xml2", "main", new SelfInstantiationAsserterAdapter() {
+        assertSelfInstantiate("xml2", MAIN_RULE, new SelfInstantiationAsserterAdapter() {
 
             @Override
             public void assertIn(File base) {
@@ -793,7 +794,7 @@ public class ExecutionTests extends AbstractExecutionTest<Script> {
      */
     @Test
     public void testRename() throws IOException {
-        assertSelfInstantiate("rename", "main", new SelfInstantiationAsserterAdapter() {
+        assertSelfInstantiate("rename", MAIN_RULE, new SelfInstantiationAsserterAdapter() {
 
             @Override
             public void assertIn(File base) {
@@ -826,7 +827,7 @@ public class ExecutionTests extends AbstractExecutionTest<Script> {
      */
     @Test
     public void testRename1() throws IOException {
-        assertSelfInstantiate("rename1", "main", new SelfInstantiationAsserterAdapter() {
+        assertSelfInstantiate("rename1", MAIN_RULE, new SelfInstantiationAsserterAdapter() {
 
             @Override
             public void assertIn(File base) {
@@ -859,7 +860,7 @@ public class ExecutionTests extends AbstractExecutionTest<Script> {
      */
     @Test
     public void testStoreArtifact1() throws IOException {
-        assertSelfInstantiate("storeArtifact1", "main", new SelfInstantiationAsserterAdapter() {
+        assertSelfInstantiate("storeArtifact1", MAIN_RULE, new SelfInstantiationAsserterAdapter() {
 
             @Override
             public void assertIn(File base) {
@@ -891,7 +892,7 @@ public class ExecutionTests extends AbstractExecutionTest<Script> {
      */
     @Test
     public void testStoreArtifact2() throws IOException {
-        assertSelfInstantiate("storeArtifact2", "main", new SelfInstantiationAsserterAdapter() {
+        assertSelfInstantiate("storeArtifact2", MAIN_RULE, new SelfInstantiationAsserterAdapter() {
 
             @Override
             public void assertIn(File base) {
@@ -923,7 +924,7 @@ public class ExecutionTests extends AbstractExecutionTest<Script> {
      */
     @Test
     public void testVtl2() throws IOException {
-        assertSelfInstantiate("vtl2", "main", "adviceTestVIL1", new SelfInstantiationAsserterAdapter() {
+        assertSelfInstantiate("vtl2", MAIN_RULE, "adviceTestVIL1", new SelfInstantiationAsserterAdapter() {
 
             @Override
             public void assertIn(File base) {
@@ -942,7 +943,7 @@ public class ExecutionTests extends AbstractExecutionTest<Script> {
      */
     @Test
     public void testVtl3() throws IOException {
-        assertSelfInstantiate("vtl3", "main", "vtl3", new SelfInstantiationAsserterAdapter() {
+        assertSelfInstantiate("vtl3", MAIN_RULE, "vtl3", new SelfInstantiationAsserterAdapter() {
 
             @Override
             public void assertIn(File base) {
@@ -961,7 +962,7 @@ public class ExecutionTests extends AbstractExecutionTest<Script> {
      */
     @Test
     public void testVtl4() throws IOException {
-        assertSelfInstantiate("vtl4", "main", "vtl3", null);
+        assertSelfInstantiate("vtl4", MAIN_RULE, "vtl3", null);
     }
 
     /**
@@ -970,7 +971,7 @@ public class ExecutionTests extends AbstractExecutionTest<Script> {
      */
     @Test
     public void testRecursiveCopyOnInclusionPattern() throws IOException {
-        assertSelfInstantiate("RecursiveCopyTestProject/RecursiceCopyIncludePattern", "main", null,
+        assertSelfInstantiate("RecursiveCopyTestProject/RecursiceCopyIncludePattern", MAIN_RULE, null,
             new SelfInstantiationAsserterAdapter() {
 
                 @Override
@@ -993,7 +994,7 @@ public class ExecutionTests extends AbstractExecutionTest<Script> {
      */
     @Test
     public void testNull() throws IOException {
-        assertSelfInstantiate("nullTest", "main", "nullTest", null);
+        assertSelfInstantiate("nullTest", MAIN_RULE, "nullTest", null);
     }
 
     /**
@@ -1003,7 +1004,7 @@ public class ExecutionTests extends AbstractExecutionTest<Script> {
      */
     @Test
     public void testCollectionReturn() throws IOException {
-        assertSelfInstantiate("collectionReturnTest", "main", "nullTest", null);
+        assertSelfInstantiate("collectionReturnTest", MAIN_RULE, "nullTest", null);
     }
 
     /**
@@ -1013,7 +1014,7 @@ public class ExecutionTests extends AbstractExecutionTest<Script> {
      */
     @Test
     public void testCollectionReturn2() throws IOException {
-        assertSelfInstantiate("collectionReturnTest2", "main", "nullTest", null);
+        assertSelfInstantiate("collectionReturnTest2", MAIN_RULE, "nullTest", null);
     }
 
     /**
@@ -1023,7 +1024,7 @@ public class ExecutionTests extends AbstractExecutionTest<Script> {
      */
     @Test
     public void testImplicitConversion() throws IOException {
-        assertSelfInstantiate("implicitConversion", "main", "IC", null);
+        assertSelfInstantiate("implicitConversion", MAIN_RULE, "IC", null);
     }
     
     /**
@@ -1033,7 +1034,7 @@ public class ExecutionTests extends AbstractExecutionTest<Script> {
      */
     @Test
     public void testBooleanRule() throws IOException {
-        assertSelfInstantiate("booleanRule", "main", "booleanRule", null);
+        assertSelfInstantiate("booleanRule", MAIN_RULE, "booleanRule", null);
     }
 
     /**
@@ -1043,7 +1044,7 @@ public class ExecutionTests extends AbstractExecutionTest<Script> {
      */
     @Test
     public void testBooleanRule2() throws IOException {
-        assertSelfInstantiate("booleanRule2", "main", "booleanRule2", null);
+        assertSelfInstantiate("booleanRule2", MAIN_RULE, "booleanRule2", null);
     }
     
     /**
@@ -1053,7 +1054,7 @@ public class ExecutionTests extends AbstractExecutionTest<Script> {
      */
     @Test
     public void testCast1() throws IOException {
-        assertSelfInstantiate("cast1", "main", "cast1", null);
+        assertSelfInstantiate("cast1", MAIN_RULE, "cast1", null);
     }
     
     /**
@@ -1063,7 +1064,7 @@ public class ExecutionTests extends AbstractExecutionTest<Script> {
      */
     @Test
     public void testTypeSelect2() throws IOException {
-        assertSelfInstantiate("typeSelect2", "main", "typeSelectTest", null);
+        assertSelfInstantiate("typeSelect2", MAIN_RULE, "typeSelectTest", null);
     }
 
     /**
@@ -1073,7 +1074,7 @@ public class ExecutionTests extends AbstractExecutionTest<Script> {
      */
     @Test
     public void testTypeSelect3() throws IOException {
-        assertSelfInstantiate("typeSelect3", "main", "typeSelectTest", null);
+        assertSelfInstantiate("typeSelect3", MAIN_RULE, "typeSelectTest", null);
     }
 
     /**
@@ -1083,7 +1084,7 @@ public class ExecutionTests extends AbstractExecutionTest<Script> {
      */
     @Test
     public void testAllInstances() throws IOException {
-        assertSelfInstantiate("allInstances", "main", "typeSelectTest", null);
+        assertSelfInstantiate("allInstances", MAIN_RULE, "typeSelectTest", null);
     }
     
     /**
@@ -1093,7 +1094,7 @@ public class ExecutionTests extends AbstractExecutionTest<Script> {
      */
     @Test
     public void testTypes() throws IOException {
-        assertSelfInstantiate("types", "main", "typeSelectTest", null);
+        assertSelfInstantiate("types", MAIN_RULE, "typeSelectTest", null);
     }
 
     /**
@@ -1103,7 +1104,7 @@ public class ExecutionTests extends AbstractExecutionTest<Script> {
      */
     @Test
     public void testTypes2() throws IOException {
-        assertSelfInstantiate("types2", "main", "typeSelectTest", null);
+        assertSelfInstantiate("types2", MAIN_RULE, "typeSelectTest", null);
     }
 
     /**
@@ -1113,7 +1114,7 @@ public class ExecutionTests extends AbstractExecutionTest<Script> {
      */
     @Test
     public void testCopy() throws IOException {
-        assertSelfInstantiate("copy", "main", null, null);
+        assertSelfInstantiate("copy", MAIN_RULE, null, null);
     }
 
     /**
@@ -1123,7 +1124,7 @@ public class ExecutionTests extends AbstractExecutionTest<Script> {
      */
     @Test
     public void testCopy2() throws IOException {
-        assertSelfInstantiate("copy2", "main", null, null);
+        assertSelfInstantiate("copy2", MAIN_RULE, null, null);
     }
 
     /**
@@ -1133,7 +1134,7 @@ public class ExecutionTests extends AbstractExecutionTest<Script> {
      */
     @Test
     public void testGraph1() throws IOException {
-        assertSelfInstantiate("graph1", "main", "graph1", null);
+        assertSelfInstantiate("graph1", MAIN_RULE, "graph1", null);
     }
 
     /**
@@ -1143,7 +1144,17 @@ public class ExecutionTests extends AbstractExecutionTest<Script> {
      */
     @Test
     public void testEnum() throws IOException {
-        assertSelfInstantiate("enumTest", "main", "enumTest", null);
+        assertSelfInstantiate("enumTest", MAIN_RULE, "enumTest", null);
+    }
+    
+    /**
+     * Tests enums and enum types.
+     * 
+     * @throws IOException should not occur
+     */
+    @Test
+    public void testSorting() throws IOException {
+        assertSelfInstantiate("sorting", MAIN_RULE, "sorting", null);
     }
 
 }

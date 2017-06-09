@@ -1,0 +1,19 @@
+project sorting {
+  version v0;
+  
+  typedef NonEmptyString String with (NonEmptyString.size() > 0);
+  
+  compound Entry {
+      NonEmptyString name;
+  }
+  
+  compound SubEntry refines Entry {
+  }
+
+  setOf(Entry) eSet = {Entry{name="PriorityPip"}, Entry{name="a"}, Entry{name="z"}, SubEntry{name="TransferPip"}};  
+  
+  freeze {
+    eSet;
+  };
+  
+}

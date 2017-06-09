@@ -1,0 +1,16 @@
+-> main(Project, Project, Configuration) with (<project>, <project>, <config>)
+    cfg <- <config>
+    -> toSequence(Set) with ({sorting::eSet {0}, sorting::eSet {1}, sorting::eSet {2}, sorting::eSet {3}}) = {sorting::eSet {0}, sorting::eSet {1}, sorting::eSet {2}, sorting::eSet {3}}
+    tmp <- {sorting::eSet {0}, sorting::eSet {1}, sorting::eSet {2}, sorting::eSet {3}}
+    -> sortedBy(Sequence, ExpressionEvaluator) with ({sorting::eSet {0}, sorting::eSet {1}, sorting::eSet {2}, sorting::eSet {3}}, <evaluator>) = {sorting::eSet {0}, sorting::eSet {1}, sorting::eSet {2}, sorting::eSet {3}}
+    sTmp <- {sorting::eSet {0}, sorting::eSet {1}, sorting::eSet {2}, sorting::eSet {3}}
+    for {
+        for: e <- sorting::eSet {1}
+        -> println(Any) with (a)
+        for: e <- sorting::eSet {0}
+        -> println(Any) with (PriorityPip)
+        for: e <- sorting::eSet {3}
+        -> println(Any) with (TransferPip)
+        for: e <- sorting::eSet {2}
+        -> println(Any) with (z)
+    }

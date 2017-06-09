@@ -1,0 +1,13 @@
+@advice(sorting)
+vilScript sorting (Project source, Project target, Configuration config) {
+
+    main(Project source, Project target, Configuration config) = : {
+        sorting cfg = config;
+        sequenceOf(Entry) tmp = cfg.eSet.toSequence();
+        sequenceOf(Entry) sTmp = tmp->sortedBy(e | e.name);
+        for(Entry e:sTmp) {
+            println(e.name);
+        };
+    }
+
+}
