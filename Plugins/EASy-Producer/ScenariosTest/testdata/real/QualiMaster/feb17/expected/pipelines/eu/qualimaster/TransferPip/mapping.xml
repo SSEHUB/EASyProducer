@@ -1,0 +1,29 @@
+<mapping>
+  <pipeline name="TransferPip" class="eu.qualimaster.TransferPip.topology.Topology">
+      <node name="SpringDataSource" type="source">
+          <component name="PipelineVar_13_Source0" container="TransferPip" class="eu.qualimaster.TransferPip.topology.PipelineVar_13_Source0Source" receiver="true" thrift="false" tasks="1"/>
+      </node>
+      <node name="Preprocessor" type="family">
+          <component name="PipelineVar_13_FamilyElement0" container="TransferPip" class="eu.qualimaster.TransferPip.topology.PipelineVar_13_FamilyElement0FamilyElement" receiver="true" thrift="false" tasks="1" alternative0 = "Preprocessor"/>
+      </node>
+      <node name="TransferEntropyCalculation" type="family">
+          <component name="PipelineVar_13_FamilyElement1" container="TransferPip" class="eu.qualimaster.TransferPip.topology.PipelineVar_13_FamilyElement1FamilyElement" receiver="true" thrift="false" tasks="1" alternative0 = "TransferEntropySoftware"/>
+      </node>
+      <node name="Sink" type="sink">
+          <component name="PipelineVar_13_Sink0" container="TransferPip" class="eu.qualimaster.TransferPip.topology.PipelineVar_13_Sink0Sink" receiver="true" thrift="false" tasks="1"/>
+      </node>
+      <node name="ReplaySink" type="replaySink">
+          <component name="PipelineVar_13_ReplaySink1" container="TransferPip" class="eu.qualimaster.TransferPip.topology.PipelineVar_13_ReplaySink1ReplaySink" receiver="true" thrift="false" tasks="1"/>
+      </node>
+      <algorithm name="Preprocessor" implName="Preprocessor" class="eu.qualimaster.algorithms.imp.correlation.Preprocessor"/>
+      <algorithm name="TransferEntropySoftware" implName="TransferEntropy" class="eu.qualimaster.algorithms.imp.TransferEntropy"/>
+      <algorithm name="FocusFincancialData" implName="FocusedSpringClient" class="eu.qualimaster.focus.FocusedSpringClient"/>
+      <algorithm name="TransferSink" implName="TransferSink" class="eu.qualimaster.algorithms.imp.TransferSink"/>
+      <algorithm name="TransferSink" implName="TransferSink" class="eu.qualimaster.algorithms.imp.TransferSink"/>
+      <parameter parameter="playerList" name="SpringDataSource" receiver="PipelineVar_13_Source0"/> 
+      <parameter parameter="windowSize" name="TransferEntropyCalculation" receiver="PipelineVar_13_FamilyElement1"/> 
+      <parameter parameter="windowAdvance" name="TransferEntropyCalculation" receiver="PipelineVar_13_FamilyElement1"/> 
+      <parameter parameter="densitySize" name="TransferEntropyCalculation" receiver="PipelineVar_13_FamilyElement1"/> 
+  </pipeline>
+
+</mapping>

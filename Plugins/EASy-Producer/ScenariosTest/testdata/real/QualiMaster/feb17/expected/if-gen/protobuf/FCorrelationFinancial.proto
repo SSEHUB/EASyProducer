@@ -1,0 +1,19 @@
+package eu.qualimaster.families.protobuf;
+option java_package = "eu.qualimaster.protos";
+option java_outer_classname = "FCorrelationFinancialProtos";
+
+message SIFCorrelationFinancialPreprocessedStreamInput {
+    required string symbolId = 1;
+    required int64 timestamp = 2;
+    required double value = 3;
+    required int32 volume = 4;
+}
+
+
+message SIFCorrelationFinancialPairwiseFinancialOutput {
+    required string id0 = 1;
+    required string id1 = 2;
+    required string date = 3;
+    required double value = 4;
+}
+

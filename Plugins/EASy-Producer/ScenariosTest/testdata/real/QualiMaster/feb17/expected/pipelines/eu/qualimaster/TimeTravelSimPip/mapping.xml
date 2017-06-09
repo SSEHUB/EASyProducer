@@ -1,0 +1,31 @@
+<mapping>
+  <pipeline name="TimeTravelSimPip" class="eu.qualimaster.TimeTravelSimPip.topology.Topology">
+      <node name="GraphDataSource" type="source">
+          <component name="PipelineVar_18_Source0" container="TimeTravelSimPip" class="eu.qualimaster.TimeTravelSimPip.topology.PipelineVar_18_Source0Source" receiver="true" thrift="false" tasks="1"/>
+      </node>
+      <node name="TimeGraphMapper" type="family">
+          <component name="PipelineVar_18_FamilyElement0" container="TimeTravelSimPip" class="eu.qualimaster.TimeTravelSimPip.topology.PipelineVar_18_FamilyElement0FamilyElement" receiver="true" thrift="false" tasks="1" alternative0 = "TimeGraphMapper"/>
+      </node>
+      <node name="TimeGraphIndexer" type="family">
+          <component name="PipelineVar_18_FamilyElement1" container="TimeTravelSimPip" class="eu.qualimaster.TimeTravelSimPip.topology.PipelineVar_18_FamilyElement1FamilyElement" receiver="true" thrift="false" tasks="1" alternative0 = "TimeGraphIndexer"/>
+      </node>
+      <node name="TimeGraphQueryExecutor" type="family">
+          <component name="PipelineVar_18_FamilyElement2" container="TimeTravelSimPip" class="eu.qualimaster.TimeTravelSimPip.topology.PipelineVar_18_FamilyElement2FamilyElement" receiver="true" thrift="false" tasks="1" alternative0 = "TimeGraphQueryExecutor"/>
+      </node>
+      <node name="TimeTravelSink" type="sink">
+          <component name="PipelineVar_18_Sink0" container="TimeTravelSimPip" class="eu.qualimaster.TimeTravelSimPip.topology.PipelineVar_18_Sink0Sink" receiver="true" thrift="false" tasks="1"/>
+      </node>
+      <node name="queries" type="source">
+          <component name="PipelineVar_18_Source1" container="TimeTravelSimPip" class="eu.qualimaster.TimeTravelSimPip.topology.PipelineVar_18_Source1Source" receiver="true" thrift="false" tasks="1"/>
+      </node>
+      <algorithm name="TimeGraphMapper" implName="TimeGraphMapper" class="eu.qualimaster.timegraph.TimeGraphMapper"/>
+      <algorithm name="TimeGraphIndexer" implName="TimeGraphIndexer" class="eu.qualimaster.timegraph.TimeGraphIndexer"/>
+      <algorithm name="TimeGraphQueryExecutor" implName="TimeGraphQueryExecutor" class="eu.qualimaster.timegraph.TimeGraphQueryExecutor"/>
+      <algorithm name="SimulatedGraphData" implName="SimulatedGraphDataAlgorithm" class="eu.qualimaster.timegraph.SimulatedGraphDataAlgorithm"/>
+      <algorithm name="TimeGraphQueriesSource" implName="QueriesSource" class="eu.qualimaster.timegraph.QueriesSource"/>
+      <algorithm name="TimeTravelSink" implName="TimeTravelSink" class="eu.qualimaster.timegraph.TimeTravelSink"/>
+      <parameter parameter="snapshotQuery" name="queries" receiver="PipelineVar_18_Source1"/> 
+      <parameter parameter="pathQuery" name="queries" receiver="PipelineVar_18_Source1"/> 
+  </pipeline>
+
+</mapping>

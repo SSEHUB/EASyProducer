@@ -1,0 +1,28 @@
+package eu.qualimaster.families.protobuf;
+option java_package = "eu.qualimaster.protos";
+option java_outer_classname = "FTimeGraphQueryExecutorProtos";
+
+message SIFTimeGraphQueryExecutorSnapshotQueryStreamInput {
+    required int64 start = 1;
+    required int64 end = 2;
+}
+
+message SIFTimeGraphQueryExecutorPathQueryStreamInput {
+    required int64 start = 3;
+    required int64 end = 4;
+    required string vertexA = 5;
+    required string vertexB = 6;
+    required string type = 7;
+}
+
+
+message SIFTimeGraphQueryExecutorSnapshotStreamOutput {
+    required string snapshot = 1;
+}
+
+message SIFTimeGraphQueryExecutorPathStreamOutput {
+    required string path = 2;
+}
+
+
+

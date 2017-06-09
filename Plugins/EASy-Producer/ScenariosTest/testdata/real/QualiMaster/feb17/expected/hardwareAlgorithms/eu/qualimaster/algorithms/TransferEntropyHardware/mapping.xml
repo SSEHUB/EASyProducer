@@ -1,0 +1,11 @@
+<mapping>
+  <pipeline name="TransferEntropyHardware" class="eu.qualimaster.algorithms.TransferEntropyHardware.TransferEntropyHardwareSubTopology">
+      <node name="TransferEntropyHardwareHardwareConnectionBolt" type="family">
+             <component name="TransferEntropyHardwareHardwareConnectionBolt" container="PriorityPip" class="eu.qualimaster.algorithms.TransferEntropyHardware.HardwareConnectionBolt" receiver="true" thrift="false" tasks="1" type="HARDWARE"/>
+      </node>
+      <node name="TransferEntropyHardwareHardwareConnectionSpout" type="source">
+             <component name="TransferEntropyHardwareHardwareConnectionSpout" container="PriorityPip" class="eu.qualimaster.algorithms.TransferEntropyHardware.HardwareConnectionSpout" receiver="true" thrift="false" tasks="1" type="HARDWARE"/>
+      </node>
+  </pipeline>
+
+</mapping>

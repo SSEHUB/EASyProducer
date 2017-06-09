@@ -10,6 +10,7 @@ import eu.qualimaster.data.inf.IPriorityDataSink;
 import eu.qualimaster.data.inf.IPriorityDataSink.*;
 import eu.qualimaster.data.imp.PriorityDataSink;
 import eu.qualimaster.algorithms.imp.correlation.PriorityDataSinkForFinancialAndTwitter;
+import eu.qualimaster.families.inf.IFCorrelationFinancial.*;
 import eu.qualimaster.families.inf.IFCorrelationTwitter.*;
 
 /**
@@ -21,6 +22,7 @@ public class PriorityPip_Sink0Sink extends BaseSignalBolt {
     final static Logger logger = Logger.getLogger(PriorityPip_Sink0Sink.class);
     transient OutputCollector _collector;
     transient IPriorityDataSink sinkHandler;
+    transient IIFCorrelationFinancialOutput iTuple1 = null;
     transient IIFCorrelationTwitterOutput iTuple2 = null;
     transient IPriorityDataSink1Input input1 = null;
     transient IPriorityDataSink2Input input2 = null;
@@ -32,6 +34,8 @@ public class PriorityPip_Sink0Sink extends BaseSignalBolt {
     @Override
     public void execute(Tuple tuple) {
         //for now, sink just emits the tuple that get from last familyelement
+        if(tuple.getValue(0) instanceof IIFCorrelationFinancialOutput) {
+            iTuple1 = (IIFCorrelationFinancialOutput)tuple.getValue(0);
             input1 = new PriorityDataSink.PriorityDataSink1Input();
             input1.setPairwiseCorrelationFinancial(iTuple1.getPairwiseCorrelationFinancial());
             sinkHandler.postData1(input1);

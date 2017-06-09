@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pipeline:Pipeline xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:pipeline="pipeline" name="TimeTravelSimPip" numworkers="18" artifact="eu.qualimaster:TimeTravelSimPip:0.0.1-SNAPSHOT">
+  <nodes xsi:type="pipeline:Source" name="GraphDataSource" source="10"/>
+  <nodes xsi:type="pipeline:Source" name="queries" source="8">
+    <permissibleParameters>DataManagementCfg::DataSourceVar_9.parameters[1]</permissibleParameters>
+    <permissibleParameters>DataManagementCfg::DataSourceVar_9.parameters[0]</permissibleParameters>
+  </nodes>
+  <nodes xsi:type="pipeline:FamilyElement" name="TimeGraphQueryExecutor" family="29" defaultAlgorithm="AlgorithmsCfg::SoftwareAlgorithmVar_36"/>
+  <nodes xsi:type="pipeline:Sink" name="TimeTravelSink" sink="5"/>
+  <nodes xsi:type="pipeline:FamilyElement" name="TimeGraphIndexer" family="28" defaultAlgorithm="AlgorithmsCfg::SoftwareAlgorithmVar_35"/>
+  <nodes xsi:type="pipeline:FamilyElement" name="TimeGraphMapper" family="27" defaultAlgorithm="AlgorithmsCfg::SoftwareAlgorithmVar_34"/>
+  <flows name="f0" source="//@nodes.0" destination="//@nodes.5" tupleType="DataManagementCfg::DataSourceVar_11.input[0]"/>
+  <flows name="f1" source="//@nodes.5" destination="//@nodes.4" grouping="3" tupleType="FamiliesCfg::FamilyVar_26.output[0]"/>
+  <flows name="f2" source="//@nodes.4" destination="//@nodes.4" grouping="3" tupleType="FamiliesCfg::FamilyVar_27.output[1]"/>
+  <flows name="f4" source="//@nodes.2" destination="//@nodes.4" grouping="3" tupleType="FamiliesCfg::FamilyVar_28.output[2]"/>
+  <flows name="f5" source="//@nodes.2" destination="//@nodes.3" tupleType="FamiliesCfg::FamilyVar_28.output[0]"/>
+  <flows name="f6" source="//@nodes.2" destination="//@nodes.3" tupleType="FamiliesCfg::FamilyVar_28.output[1]"/>
+  <flows name="f7" source="//@nodes.1" destination="//@nodes.2" tupleType="DataManagementCfg::DataSourceVar_9.input[0]"/>
+  <flows name="f8" source="//@nodes.1" destination="//@nodes.2" tupleType="DataManagementCfg::DataSourceVar_9.input[1]"/>
+  <flows name="f9" source="//@nodes.4" destination="//@nodes.2" grouping="3" tupleType="FamiliesCfg::FamilyVar_27.output[0]"/>
+  <flows name="f3" source="//@nodes.2" destination="//@nodes.4" grouping="4" tupleType="FamiliesCfg::FamilyVar_28.output[3]"/>
+</pipeline:Pipeline>

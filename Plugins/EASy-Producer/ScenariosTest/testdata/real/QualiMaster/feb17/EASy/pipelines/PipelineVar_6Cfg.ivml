@@ -1,0 +1,84 @@
+project PipelineVar_6Cfg {
+
+	import Basics;
+	import Pipelines;
+	import FamiliesCfg;
+	import DataManagementCfg;
+	annotate BindingTime bindingTime = BindingTime.compile to PipelineVar_6Cfg;
+	Pipeline PipelineVar_6;
+	Source PipelineVar_6_Source0;
+	Flow PipelineVar_6_Flow0;
+	FamilyElement PipelineVar_6_FamilyElement0;
+	Flow PipelineVar_6_Flow1;
+	FamilyElement PipelineVar_6_FamilyElement1;
+	Flow PipelineVar_6_Flow2;
+	Sink PipelineVar_6_Sink0;
+	PipelineVar_6_Sink0 = Sink {
+		sink = refBy(DataSinkVar_4), 
+		parallelism = 1, 
+		name = "MIsink"
+	};
+	PipelineVar_6_Flow2 = Flow {
+		destination = refBy(PipelineVar_6_Sink0), 
+		grouping = Grouping.shuffleGrouping, 
+		tupleType = refBy(FamiliesCfg::FamilyVar_24.output[0]), 
+		name = "f3"
+	};
+	PipelineVar_6_FamilyElement1 = FamilyElement {
+		family = refBy(FamilyVar_24), 
+		output = {
+			refBy(PipelineVar_6_Flow2)
+		}, 
+		parallelism = 1, 
+		name = "MutualInform"
+	};
+	PipelineVar_6_Flow1 = Flow {
+		destination = refBy(PipelineVar_6_FamilyElement1), 
+		grouping = Grouping.shuffleGrouping, 
+		tupleType = refBy(FamiliesCfg::fPreprocessor.output[0]), 
+		name = "f2"
+	};
+	PipelineVar_6_FamilyElement0 = FamilyElement {
+		family = refBy(fPreprocessor), 
+		output = {
+			refBy(PipelineVar_6_Flow1)
+		}, 
+		parallelism = 1, 
+		name = "Preproc"
+	};
+	PipelineVar_6_Flow0 = Flow {
+		destination = refBy(PipelineVar_6_FamilyElement0), 
+		grouping = Grouping.shuffleGrouping, 
+		tupleType = refBy(DataManagementCfg::spring.input[1]), 
+		name = "f1"
+	};
+	PipelineVar_6_Source0 = Source {
+		output = {
+			refBy(PipelineVar_6_Flow0)
+		}, 
+		source = refBy(spring), 
+		parallelism = 1, 
+		name = "FinancialDataSource"
+	};
+	PipelineVar_6 = Pipeline {
+		name = "CorrelationClusteringPip", 
+		sources = {
+			refBy(PipelineVar_6_Source0)
+		}, 
+		numworkers = 1, 
+		artifact = "eu.qualimaster:CorrelationClusteringPip:0.0.1-SNAPSHOT", 
+		debug = false, 
+		fastSerialization = false, 
+		constraints = {}
+	};
+	freeze {
+		PipelineVar_6;
+		PipelineVar_6_Source0;
+		PipelineVar_6_Flow0;
+		PipelineVar_6_FamilyElement0;
+		PipelineVar_6_Flow1;
+		PipelineVar_6_FamilyElement1;
+		PipelineVar_6_Flow2;
+		PipelineVar_6_Sink0;
+	} but (f|f.bindingTime >= BindingTime.runtimeMon)
+}

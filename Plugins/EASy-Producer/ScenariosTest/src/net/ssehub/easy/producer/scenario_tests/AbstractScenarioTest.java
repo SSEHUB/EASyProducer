@@ -21,6 +21,7 @@ import net.ssehub.easy.instantiation.core.model.common.VilException;
 import net.ssehub.easy.instantiation.core.model.execution.Executor;
 import net.ssehub.easy.instantiation.core.model.execution.IInstantiatorTracer;
 import net.ssehub.easy.instantiation.core.model.execution.TracerFactory;
+import net.ssehub.easy.instantiation.core.model.templateModel.ITracer;
 import net.ssehub.easy.instantiation.core.model.templateModel.TemplateModel;
 import net.ssehub.easy.instantiation.core.model.vilTypes.Project;
 import net.ssehub.easy.instantiation.core.model.vilTypes.configuration.Configuration;
@@ -153,7 +154,7 @@ public abstract class AbstractScenarioTest extends AbstractTest<Script> {
         configureExecution(projectName, param);
         
         TracerFactory current = TracerFactory.getInstance();
-        MyTracerFactory tFactory = new MyTracerFactory();
+        TracerFactory tFactory = getTracerFactory();
         TracerFactory.setDefaultInstance(tFactory);
         Script script = obtainVilModel(modelName, versions[1], vilFolder);
         Executor executor = new Executor(script, param);
@@ -178,7 +179,15 @@ public abstract class AbstractScenarioTest extends AbstractTest<Script> {
         }
         return targetFile;
     }
-
+    
+    /**
+     * Creates the tracer factory.
+     * 
+     * @return the tracer factory
+     */
+    protected TracerFactory getTracerFactory() {
+        return new MyTracerFactory();
+    }
     
     /**
      * Obtains the specified VIL model.
@@ -332,17 +341,13 @@ public abstract class AbstractScenarioTest extends AbstractTest<Script> {
         }
         
         @Override
-        public net.ssehub.easy.instantiation.core.model.buildlangModel.ITracer 
-            createBuildLanguageTracerImpl() {
-            
-            return new net.ssehub.easy.instantiation.core.model.buildlangModel.StreamTracer(writer, true);
+        public ITracer createTemplateLanguageTracerImpl() {
+            return net.ssehub.easy.instantiation.core.model.templateModel.NoTracer.INSTANCE;
         }
 
         @Override
-        public net.ssehub.easy.instantiation.core.model.templateModel.ITracer 
-            createTemplateLanguageTracerImpl() {
-            
-            return new net.ssehub.easy.instantiation.core.model.templateModel.StreamTracer(writer, true);
+        public net.ssehub.easy.instantiation.core.model.buildlangModel.ITracer createBuildLanguageTracerImpl() {
+            return net.ssehub.easy.instantiation.core.model.buildlangModel.NoTracer.INSTANCE;
         }
 
         @Override

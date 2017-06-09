@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pipeline:Pipeline xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:pipeline="pipeline" name="CorrelationSW" artifact="eu.qualimaster:CorrelationSW:0.0.1-SNAPSHOT" isSubPipeline="true" subPipelineFamily="FamiliesCfg::fCorrelationFinancial">
+  <nodes xsi:type="pipeline:FamilyElement" name="Mapper" family="24" isConnector="true"/>
+  <nodes xsi:type="pipeline:FamilyElement" name="HayashiYoshida" family="25"/>
+  <flows name="f1" source="//@nodes.0" destination="//@nodes.1" grouping="3" tupleType="FamiliesCfg::fMapper.output[0]"/>
+  <flows name="f2" source="//@nodes.0" destination="//@nodes.1" grouping="3" tupleType="FamiliesCfg::fMapper.output[1]"/>
+  <flows name="f3" source="//@nodes.0" destination="//@nodes.1" grouping="4" tupleType="FamiliesCfg::fMapper.output[2]"/>
+</pipeline:Pipeline>

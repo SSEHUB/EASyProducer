@@ -1,0 +1,14 @@
+<mapping>
+  <pipeline name="CorrelationSWAlternative" class="eu.qualimaster.CorrelationSWAlternative.topology.Topology">
+      <node name="MP" type="family">
+          <component name="CorrelationSWAlternativeMP" container="CorrelationSWAlternative" class="eu.qualimaster.CorrelationSWAlternative.topology.SubPipelineVar_19_FamilyElement0FamilyElement" receiver="true" thrift="false" tasks="1" alternative0 = "Mapper"/>
+      </node>
+      <node name="HY" type="family">
+          <component name="CorrelationSWAlternativeHY" container="CorrelationSWAlternative" class="eu.qualimaster.CorrelationSWAlternative.topology.SubPipelineVar_19_FamilyElement1FamilyElement" receiver="true" thrift="false" tasks="14" alternative0 = "HayashiYoshida"/>
+      </node>
+      <algorithm name="Mapper" implName="Mapper" class="eu.qualimaster.algorithms.imp.correlation.Mapper"/>
+      <algorithm name="HayashiYoshida" implName="HayashiYoshida" class="eu.qualimaster.algorithms.imp.correlation.HayashiYoshida"/>
+      <parameter parameter="windowSize" name="MP" receiver="CorrelationSWAlternativeMP"/> 
+  </pipeline>
+
+</mapping>

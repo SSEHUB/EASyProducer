@@ -1,0 +1,12 @@
+package eu.qualimaster.families.protobuf;
+option java_package = "eu.qualimaster.protos";
+option java_outer_classname = "FTimeGraphMapperProtos";
+
+message SIFTimeGraphMapperEdgeStreamInput {
+    required string edge = 1;
+}
+
+message SIFTimeGraphMapperDataStreamOutput {
+    required bool isAddition = 1;
+}
+

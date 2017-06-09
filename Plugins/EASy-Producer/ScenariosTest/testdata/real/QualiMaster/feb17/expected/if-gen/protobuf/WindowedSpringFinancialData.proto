@@ -1,0 +1,14 @@
+package eu.qualimaster.data.protobuf;
+option java_package = "eu.qualimaster.protos";
+option java_outer_classname = "WindowedSpringFinancialDataProtos";
+
+
+message SWindowedSpringFinancialDataSpringStreamOutput {
+    required string symbolTuple = 1;
+}
+
+message SWindowedSpringFinancialDataResetWindowOutput {
+    required int64 windowStart = 2;
+    required int64 windowEnd = 3;
+}
+

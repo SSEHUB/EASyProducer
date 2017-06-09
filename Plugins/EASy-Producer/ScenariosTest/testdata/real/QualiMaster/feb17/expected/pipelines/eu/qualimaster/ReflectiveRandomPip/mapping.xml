@@ -1,0 +1,22 @@
+<mapping>
+  <pipeline name="ReflectiveRandomPip" class="eu.qualimaster.ReflectiveRandomPip.topology.Topology">
+      <node name="src" type="source">
+          <component name="PipelineVar_14_Source0" container="ReflectiveRandomPip" class="eu.qualimaster.ReflectiveRandomPip.topology.PipelineVar_14_Source0Source" receiver="true" thrift="false" tasks="1"/>
+      </node>
+      <node name="processor" type="family">
+          <component name="PipelineVar_14_FamilyElement0" container="ReflectiveRandomPip" class="eu.qualimaster.ReflectiveRandomPip.topology.PipelineVar_14_FamilyElement0FamilyElement" receiver="true" thrift="false" tasks="1" alternative0 = "RandomProcessor1" alternative1 = "RandomProcessor2"/>
+      </node>
+      <node name="snk" type="sink">
+          <component name="PipelineVar_14_Sink0" container="ReflectiveRandomPip" class="eu.qualimaster.ReflectiveRandomPip.topology.PipelineVar_14_Sink0Sink" receiver="true" thrift="false" tasks="1"/>
+      </node>
+      <algorithm name="RandomProcessor1" implName="RandomProcessor1" class="eu.qualimaster.algorithms.RandomProcessor1"/>
+      <algorithm name="RandomProcessor2" implName="RandomProcessor2" class="eu.qualimaster.algorithms.RandomProcessor2"/>
+      <algorithm name="Random Source" implName="RandomSourceAlg" class="eu.qualimaster.algorithms.RandomSourceAlg"/>
+      <algorithm name="Random Sink" implName="RandomSinkAlg" class="eu.qualimaster.algorithms.RandomSinkAlg"/>
+      <parameter parameter="delay" name="src" receiver="PipelineVar_14_Source0"/> 
+      <parameter parameter="delay" name="processor" receiver="PipelineVar_14_FamilyElement0"/> 
+      <parameter parameter="flag" name="processor" receiver="PipelineVar_14_FamilyElement0"/> 
+      <parameter parameter="windowSize" name="processor" receiver="PipelineVar_14_FamilyElement0"/> 
+  </pipeline>
+
+</mapping>

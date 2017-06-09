@@ -1,0 +1,11 @@
+<mapping>
+  <pipeline name="MutualInformationHardware" class="eu.qualimaster.algorithms.MutualInformationHardware.MutualInformationHardwareSubTopology">
+      <node name="MutualInformationHardwareHardwareConnectionBolt" type="family">
+             <component name="MutualInformationHardwareHardwareConnectionBolt" container="PriorityPip" class="eu.qualimaster.algorithms.MutualInformationHardware.HardwareConnectionBolt" receiver="true" thrift="false" tasks="1" type="HARDWARE"/>
+      </node>
+      <node name="MutualInformationHardwareHardwareConnectionSpout" type="source">
+             <component name="MutualInformationHardwareHardwareConnectionSpout" container="PriorityPip" class="eu.qualimaster.algorithms.MutualInformationHardware.HardwareConnectionSpout" receiver="true" thrift="false" tasks="1" type="HARDWARE"/>
+      </node>
+  </pipeline>
+
+</mapping>

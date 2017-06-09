@@ -1,0 +1,70 @@
+<mapping>
+  <pipeline name="PriorityPip" class="eu.qualimaster.PriorityPip.topology.Topology">
+      <node name="FinancialDataSource" type="source">
+          <component name="PriorityPip_Source0" container="PriorityPip" class="eu.qualimaster.PriorityPip.topology.PriorityPip_Source0Source" receiver="true" thrift="false" tasks="1"/>
+      </node>
+      <node name="FinancialCorrelation" type="family">
+          <component name="PriorityPip_FamilyElement0" container="PriorityPip" class="eu.qualimaster.PriorityPip.topology.PriorityPip_FamilyElement0FamilyElement" receiver="true" thrift="false" tasks="1" alternative0 = "TopoSoftwareCorrelationFinancial" alternative1 = "GenTopoHardwareCorrelationFinancial" alternative2 = "CorrelationSW" alternative3 = "TransferEntropyHardware" alternative4 = "MutualInformationHardware" alternative5 = "CorrelationSWAlternative"/>
+      </node>
+      <node name="Sink" type="sink">
+          <component name="PriorityPip_Sink0" container="PriorityPip" class="eu.qualimaster.PriorityPip.topology.PriorityPip_Sink0Sink" receiver="true" thrift="false" tasks="1"/>
+      </node>
+      <node name="Preprocessor" type="family">
+          <component name="PriorityPip_FamilyElement1" container="PriorityPip" class="eu.qualimaster.PriorityPip.topology.PriorityPip_FamilyElement1FamilyElement" receiver="true" thrift="false" tasks="1" alternative0 = "Preprocessor"/>
+      </node>
+      <node name="TwitterDataSource" type="source">
+          <component name="PriorityPip_Source1" container="PriorityPip" class="eu.qualimaster.PriorityPip.topology.PriorityPip_Source1Source" receiver="true" thrift="false" tasks="1"/>
+      </node>
+      <node name="SentimentAnalysis" type="family">
+          <component name="PriorityPip_FamilyElement2" container="PriorityPip" class="eu.qualimaster.PriorityPip.topology.PriorityPip_FamilyElement2FamilyElement" receiver="true" thrift="false" tasks="1" alternative0 = "SentimentAnaylsisSentiWordNetTopology" alternative1 = "SentimentAnaylsisSVMTopology"/>
+      </node>
+      <node name="DataManagement" type="data_mgt">
+          <component name="PriorityPip_DataManagementElement0" container="PriorityPip" class="eu.qualimaster.PriorityPip.topology.PriorityPip_DataManagementElement0DataManagementElement" receiver="true" thrift="false"/>
+      </node>
+      <algorithm name="TopoSoftwareCorrelationFinancial" implName="TopoSoftwareCorrelationFinancial" class="eu.qualimaster.algorithms.imp.correlation.softwaresubtopology.TopoSoftwareCorrelationFinancial"/>
+      <algorithm name="GenTopoHardwareCorrelationFinancial" implName="GenTopoHardwareCorrelationFinancialSubTopology" class="eu.qualimaster.algorithms.GenTopoHardwareCorrelationFinancial.GenTopoHardwareCorrelationFinancialSubTopology">
+          <component name="GenTopoHardwareCorrelationFinancialHardwareConnectionBolt" container="GenTopoHardwareCorrelationFinancial" class="eu.qualimaster.algorithms.GenTopoHardwareCorrelationFinancial.HardwareConnectionBolt" receiver="true" thrift="false" tasks="1" type="HARDWARE"/>
+          <component name="GenTopoHardwareCorrelationFinancialHardwareConnectionSpout" container="GenTopoHardwareCorrelationFinancial" class="eu.qualimaster.algorithms.GenTopoHardwareCorrelationFinancial.HardwareConnectionSpout" receiver="true" thrift="false" tasks="12" type="HARDWARE"/>
+      </algorithm>
+      <algorithm name="CorrelationSW" implName="CorrelationSWSubTopology" class="eu.qualimaster.CorrelationSW.topology.CorrelationSWSubTopology">
+              <component name="CorrelationSWMapper" container="PriorityPip" class="eu.qualimaster.CorrelationSW.topology.SubTopology_FamilyElement0FamilyElement" receiver="true" thrift="false" tasks="1" alternative0 = "Mapper"/>
+              <component name="CorrelationSWHayashiYoshida" container="PriorityPip" class="eu.qualimaster.CorrelationSW.topology.SubTopology_FamilyElement1FamilyElement" receiver="true" thrift="false" tasks="14" alternative0 = "HayashiYoshida"/>
+      </algorithm>
+      <algorithm name="TransferEntropyHardware" implName="TransferEntropyHardwareSubTopology" class="eu.qualimaster.algorithms.TransferEntropyHardware.TransferEntropyHardwareSubTopology">
+          <component name="TransferEntropyHardwareHardwareConnectionBolt" container="TransferEntropyHardware" class="eu.qualimaster.algorithms.TransferEntropyHardware.HardwareConnectionBolt" receiver="true" thrift="false" tasks="1" type="HARDWARE"/>
+          <component name="TransferEntropyHardwareHardwareConnectionSpout" container="TransferEntropyHardware" class="eu.qualimaster.algorithms.TransferEntropyHardware.HardwareConnectionSpout" receiver="true" thrift="false" tasks="1" type="HARDWARE"/>
+      </algorithm>
+      <algorithm name="MutualInformationHardware" implName="MutualInformationHardwareSubTopology" class="eu.qualimaster.algorithms.MutualInformationHardware.MutualInformationHardwareSubTopology">
+          <component name="MutualInformationHardwareHardwareConnectionBolt" container="MutualInformationHardware" class="eu.qualimaster.algorithms.MutualInformationHardware.HardwareConnectionBolt" receiver="true" thrift="false" tasks="1" type="HARDWARE"/>
+          <component name="MutualInformationHardwareHardwareConnectionSpout" container="MutualInformationHardware" class="eu.qualimaster.algorithms.MutualInformationHardware.HardwareConnectionSpout" receiver="true" thrift="false" tasks="1" type="HARDWARE"/>
+      </algorithm>
+      <algorithm name="CorrelationSWAlternative" implName="CorrelationSWAlternativeSubTopology" class="eu.qualimaster.CorrelationSWAlternative.topology.CorrelationSWAlternativeSubTopology">
+              <component name="CorrelationSWAlternativeMP" container="PriorityPip" class="eu.qualimaster.CorrelationSWAlternative.topology.SubPipelineVar_19_FamilyElement0FamilyElement" receiver="true" thrift="false" tasks="1" alternative0 = "Mapper"/>
+              <component name="CorrelationSWAlternativeHY" container="PriorityPip" class="eu.qualimaster.CorrelationSWAlternative.topology.SubPipelineVar_19_FamilyElement1FamilyElement" receiver="true" thrift="false" tasks="14" alternative0 = "HayashiYoshida"/>
+      </algorithm>
+      <algorithm name="Preprocessor" implName="Preprocessor" class="eu.qualimaster.algorithms.imp.correlation.Preprocessor"/>
+      <algorithm name="SentimentAnaylsisSentiWordNetTopology" implName="SentimentAnaylsisSentiWordNetTopology" class="eu.qualimaster.algorithms.stream.sentiment.topology.impl.SentimentAnaylsisSentiWordNetTopology"/>
+      <algorithm name="SentimentAnaylsisSVMTopology" implName="SentimentAnaylsisSVMTopology" class="eu.qualimaster.algorithms.stream.sentiment.topology.impl.SentimentAnaylsisSVMTopology"/>
+      <algorithm name="Spring Financial Data" implName="SpringClient" class="eu.qualimaster.algorithms.imp.correlation.SpringClient"/>
+      <algorithm name="Twitter Stream Data" implName="TwitterFileStreaming" class="eu.qualimaster.data.stream.source.TwitterFileStreaming"/>
+      <algorithm name="Priority Data Sink" implName="PriorityDataSinkForFinancialAndTwitter" class="eu.qualimaster.algorithms.imp.correlation.PriorityDataSinkForFinancialAndTwitter"/>
+      <parameter parameter="windowSize" name="FinancialCorrelation" receiver="PriorityPip_FamilyElement0"/> 
+      <parameter parameter="consumerKey" name="TwitterDataSource" receiver="PriorityPip_Source1"/> 
+      <parameter parameter="consumerSecret" name="TwitterDataSource" receiver="PriorityPip_Source1"/> 
+      <parameter parameter="accessToken" name="TwitterDataSource" receiver="PriorityPip_Source1"/> 
+      <parameter parameter="accessTokenSecret" name="TwitterDataSource" receiver="PriorityPip_Source1"/> 
+      <parameter parameter="queueSize" name="TwitterDataSource" receiver="PriorityPip_Source1"/> 
+      <parameter parameter="tweetDirectory" name="TwitterDataSource" receiver="PriorityPip_Source1"/> 
+      <parameter parameter="speedFactor" name="TwitterDataSource" receiver="PriorityPip_Source1"/> 
+      <parameter parameter="runLocally" name="TwitterDataSource" receiver="PriorityPip_Source1"/> 
+      <parameter parameter="adjustTimeToNow" name="TwitterDataSource" receiver="PriorityPip_Source1"/> 
+      <parameter parameter="realLoops" name="TwitterDataSource" receiver="PriorityPip_Source1"/> 
+      <parameter parameter="setAdditionalKeywords" name="TwitterDataSource" receiver="PriorityPip_Source1"/> 
+      <parameter parameter="timeSeriesGranularity" name="SentimentAnalysis" receiver="PriorityPip_FamilyElement2"/> 
+      <parameter parameter="sentimentClass" name="SentimentAnalysis" receiver="PriorityPip_FamilyElement2"/> 
+      <parameter parameter="classificationThreshold" name="SentimentAnalysis" receiver="PriorityPip_FamilyElement2"/> 
+      <parameter parameter="windowSize" name="Mapper" receiver="CorrelationSWMapper"/> 
+      <parameter parameter="windowSize" name="MP" receiver="CorrelationSWAlternativeMP"/> 
+  </pipeline>
+
+</mapping>

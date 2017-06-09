@@ -1,0 +1,11 @@
+package eu.qualimaster.data.protobuf;
+option java_package = "eu.qualimaster.protos";
+option java_outer_classname = "MI_data_SinkProtos";
+
+message SMI_data_SinkPairwiseFinancialInput {
+    required string id0 = 1;
+    required string id1 = 2;
+    required string date = 3;
+    required double value = 4;
+}
+

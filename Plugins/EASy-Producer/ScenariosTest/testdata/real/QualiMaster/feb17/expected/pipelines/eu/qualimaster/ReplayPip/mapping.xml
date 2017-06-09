@@ -1,0 +1,48 @@
+<mapping>
+  <pipeline name="ReplayPip" class="eu.qualimaster.ReplayPip.topology.Topology">
+      <node name="FinancialDataSource" type="source">
+          <component name="PipelineVar_9_Source0" container="ReplayPip" class="eu.qualimaster.ReplayPip.topology.PipelineVar_9_Source0Source" receiver="true" thrift="false" tasks="1"/>
+      </node>
+      <node name="Preprocessor" type="family">
+          <component name="PipelineVar_9_FamilyElement0" container="ReplayPip" class="eu.qualimaster.ReplayPip.topology.PipelineVar_9_FamilyElement0FamilyElement" receiver="true" thrift="false" tasks="1" alternative0 = "Preprocessor"/>
+      </node>
+      <node name="FinancialCorrelation" type="family">
+          <component name="PipelineVar_9_FamilyElement1" container="ReplayPip" class="eu.qualimaster.ReplayPip.topology.PipelineVar_9_FamilyElement1FamilyElement" receiver="true" thrift="false" tasks="1" alternative0 = "TopoSoftwareCorrelationFinancial" alternative1 = "GenTopoHardwareCorrelationFinancial" alternative2 = "CorrelationSW" alternative3 = "TransferEntropyHardware" alternative4 = "MutualInformationHardware" alternative5 = "CorrelationSWAlternative"/>
+      </node>
+      <node name="ReplaySink" type="replaySink">
+          <component name="PipelineVar_9_ReplaySink0" container="ReplayPip" class="eu.qualimaster.ReplayPip.topology.PipelineVar_9_ReplaySink0ReplaySink" receiver="true" thrift="false" tasks="1"/>
+      </node>
+      <node name="Sink" type="sink">
+          <component name="PipelineVar_9_Sink1" container="ReplayPip" class="eu.qualimaster.ReplayPip.topology.PipelineVar_9_Sink1Sink" receiver="true" thrift="false" tasks="1"/>
+      </node>
+      <algorithm name="Preprocessor" implName="Preprocessor" class="eu.qualimaster.algorithms.imp.correlation.Preprocessor"/>
+      <algorithm name="TopoSoftwareCorrelationFinancial" implName="TopoSoftwareCorrelationFinancial" class="eu.qualimaster.algorithms.imp.correlation.softwaresubtopology.TopoSoftwareCorrelationFinancial"/>
+      <algorithm name="GenTopoHardwareCorrelationFinancial" implName="GenTopoHardwareCorrelationFinancialSubTopology" class="eu.qualimaster.algorithms.GenTopoHardwareCorrelationFinancial.GenTopoHardwareCorrelationFinancialSubTopology">
+          <component name="GenTopoHardwareCorrelationFinancialHardwareConnectionBolt" container="GenTopoHardwareCorrelationFinancial" class="eu.qualimaster.algorithms.GenTopoHardwareCorrelationFinancial.HardwareConnectionBolt" receiver="true" thrift="false" tasks="1" type="HARDWARE"/>
+          <component name="GenTopoHardwareCorrelationFinancialHardwareConnectionSpout" container="GenTopoHardwareCorrelationFinancial" class="eu.qualimaster.algorithms.GenTopoHardwareCorrelationFinancial.HardwareConnectionSpout" receiver="true" thrift="false" tasks="12" type="HARDWARE"/>
+      </algorithm>
+      <algorithm name="CorrelationSW" implName="CorrelationSWSubTopology" class="eu.qualimaster.CorrelationSW.topology.CorrelationSWSubTopology">
+              <component name="CorrelationSWMapper" container="ReplayPip" class="eu.qualimaster.CorrelationSW.topology.SubTopology_FamilyElement0FamilyElement" receiver="true" thrift="false" tasks="1" alternative0 = "Mapper"/>
+              <component name="CorrelationSWHayashiYoshida" container="ReplayPip" class="eu.qualimaster.CorrelationSW.topology.SubTopology_FamilyElement1FamilyElement" receiver="true" thrift="false" tasks="14" alternative0 = "HayashiYoshida"/>
+      </algorithm>
+      <algorithm name="TransferEntropyHardware" implName="TransferEntropyHardwareSubTopology" class="eu.qualimaster.algorithms.TransferEntropyHardware.TransferEntropyHardwareSubTopology">
+          <component name="TransferEntropyHardwareHardwareConnectionBolt" container="TransferEntropyHardware" class="eu.qualimaster.algorithms.TransferEntropyHardware.HardwareConnectionBolt" receiver="true" thrift="false" tasks="1" type="HARDWARE"/>
+          <component name="TransferEntropyHardwareHardwareConnectionSpout" container="TransferEntropyHardware" class="eu.qualimaster.algorithms.TransferEntropyHardware.HardwareConnectionSpout" receiver="true" thrift="false" tasks="1" type="HARDWARE"/>
+      </algorithm>
+      <algorithm name="MutualInformationHardware" implName="MutualInformationHardwareSubTopology" class="eu.qualimaster.algorithms.MutualInformationHardware.MutualInformationHardwareSubTopology">
+          <component name="MutualInformationHardwareHardwareConnectionBolt" container="MutualInformationHardware" class="eu.qualimaster.algorithms.MutualInformationHardware.HardwareConnectionBolt" receiver="true" thrift="false" tasks="1" type="HARDWARE"/>
+          <component name="MutualInformationHardwareHardwareConnectionSpout" container="MutualInformationHardware" class="eu.qualimaster.algorithms.MutualInformationHardware.HardwareConnectionSpout" receiver="true" thrift="false" tasks="1" type="HARDWARE"/>
+      </algorithm>
+      <algorithm name="CorrelationSWAlternative" implName="CorrelationSWAlternativeSubTopology" class="eu.qualimaster.CorrelationSWAlternative.topology.CorrelationSWAlternativeSubTopology">
+              <component name="CorrelationSWAlternativeMP" container="ReplayPip" class="eu.qualimaster.CorrelationSWAlternative.topology.SubPipelineVar_19_FamilyElement0FamilyElement" receiver="true" thrift="false" tasks="1" alternative0 = "Mapper"/>
+              <component name="CorrelationSWAlternativeHY" container="ReplayPip" class="eu.qualimaster.CorrelationSWAlternative.topology.SubPipelineVar_19_FamilyElement1FamilyElement" receiver="true" thrift="false" tasks="14" alternative0 = "HayashiYoshida"/>
+      </algorithm>
+      <algorithm name="Spring Financial Data" implName="SpringClient" class="eu.qualimaster.algorithms.imp.correlation.SpringClient"/>
+      <algorithm name="Priority Data Sink" implName="PriorityDataSinkForFinancialAndTwitter" class="eu.qualimaster.algorithms.imp.correlation.PriorityDataSinkForFinancialAndTwitter"/>
+      <algorithm name="Priority Data Sink" implName="PriorityDataSinkForFinancialAndTwitter" class="eu.qualimaster.algorithms.imp.correlation.PriorityDataSinkForFinancialAndTwitter"/>
+      <parameter parameter="windowSize" name="FinancialCorrelation" receiver="PipelineVar_9_FamilyElement1"/> 
+      <parameter parameter="windowSize" name="Mapper" receiver="CorrelationSWMapper"/> 
+      <parameter parameter="windowSize" name="MP" receiver="CorrelationSWAlternativeMP"/> 
+  </pipeline>
+
+</mapping>

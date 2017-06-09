@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pipeline:Pipeline xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:pipeline="pipeline" name="RandomSubPipeline1" artifact="eu.qualimaster:RandomSubPipeline1:0.0.1-SNAPSHOT" isSubPipeline="true" subPipelineFamily="FamiliesCfg::randomFamily">
+  <nodes xsi:type="pipeline:FamilyElement" name="dataProcessor" family="6" isConnector="true" defaultAlgorithm="AlgorithmsCfg::switchAlg1">
+    <permissibleParameters>FamiliesCfg::switchFamily.parameters[1]</permissibleParameters>
+    <permissibleParameters>FamiliesCfg::switchFamily.parameters[3]</permissibleParameters>
+    <permissibleParameters>FamiliesCfg::switchFamily.parameters[0]</permissibleParameters>
+    <permissibleParameters>FamiliesCfg::switchFamily.parameters[2]</permissibleParameters>
+  </nodes>
+</pipeline:Pipeline>

@@ -1,0 +1,14 @@
+<mapping>
+  <pipeline name="RandomSubPipeline2" class="eu.qualimaster.RandomSubPipeline2.topology.Topology">
+      <node name="dataProcessor2" type="family">
+          <component name="RandomSubPipelineAlgorithm2DataProcessor2" container="RandomSubPipeline2" class="eu.qualimaster.RandomSubPipeline2.topology.SubPipelineVar_15_FamilyElement0FamilyElement" receiver="true" thrift="false" tasks="1" alternative0 = "SwitchProcessor1" alternative1 = "SwitchProcessor2"/>
+      </node>
+      <algorithm name="SwitchProcessor1" implName="SwitchProcessor1" class="eu.qualimaster.algorithms.SwitchProcessor1"/>
+      <algorithm name="SwitchProcessor2" implName="SwitchProcessor2" class="eu.qualimaster.algorithms.SwitchProcessor2"/>
+      <parameter parameter="aggregationFactor" name="dataProcessor2" receiver="RandomSubPipelineAlgorithm2DataProcessor2"/> 
+      <parameter parameter="delay" name="dataProcessor2" receiver="RandomSubPipelineAlgorithm2DataProcessor2"/> 
+      <parameter parameter="flag" name="dataProcessor2" receiver="RandomSubPipelineAlgorithm2DataProcessor2"/> 
+      <parameter parameter="windowSize" name="dataProcessor2" receiver="RandomSubPipelineAlgorithm2DataProcessor2"/> 
+  </pipeline>
+
+</mapping>

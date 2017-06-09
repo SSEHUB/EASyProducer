@@ -1,0 +1,103 @@
+project PipelineVar_17Cfg {
+
+	import Basics;
+	import Pipelines;
+	import FamiliesCfg;
+	import DataManagementCfg;
+	annotate BindingTime bindingTime = BindingTime.compile to PipelineVar_17Cfg;
+	Pipeline PipelineVar_17;
+	Source PipelineVar_17_Source0;
+	Flow PipelineVar_17_Flow0;
+	FamilyElement PipelineVar_17_FamilyElement0;
+	Flow PipelineVar_17_Flow1;
+	FamilyElement PipelineVar_17_FamilyElement1;
+	Flow PipelineVar_17_Flow2;
+	Sink PipelineVar_17_Sink0;
+	PipelineVar_17_Sink0 = Sink {
+		sink = refBy(priorSnk), 
+		parallelism = 1, 
+		name = "Sink", 
+		constraints = {}
+	};
+	PipelineVar_17_Flow2 = Flow {
+		destination = refBy(PipelineVar_17_Sink0), 
+		grouping = Grouping.shuffleGrouping, 
+		tupleType = refBy(FamiliesCfg::fCorrelationFinancial.output[0]), 
+		name = "f4", 
+		constraints = {}
+	};
+	PipelineVar_17_FamilyElement1 = FamilyElement {
+		family = refBy(fCorrelationFinancial), 
+		permissibleParameters = {
+			refBy(FamiliesCfg::fCorrelationFinancial.parameters[0])
+		}, 
+		output = {
+			refBy(PipelineVar_17_Flow2)
+		}, 
+		parallelism = 1, 
+		name = "CorrelationComputation", 
+		constraints = {}
+	};
+	PipelineVar_17_Flow1 = Flow {
+		destination = refBy(PipelineVar_17_FamilyElement1), 
+		grouping = Grouping.shuffleGrouping, 
+		tupleType = refBy(FamiliesCfg::fPreprocessor.output[0]), 
+		name = "f2", 
+		constraints = {}
+	};
+	PipelineVar_17_FamilyElement0 = FamilyElement {
+		family = refBy(fPreprocessor), 
+		output = {
+			refBy(PipelineVar_17_Flow1)
+		}, 
+		parallelism = 1, 
+		name = "Preprocessor", 
+		constraints = {}
+	};
+	PipelineVar_17_Flow0 = Flow {
+		destination = refBy(PipelineVar_17_FamilyElement0), 
+		grouping = Grouping.shuffleGrouping, 
+		tupleType = refBy(DataManagementCfg::DataSourceVar_10.input[1]), 
+		name = "f1", 
+		constraints = {}
+	};
+	Flow PipelineVar_17_Flow3;
+	PipelineVar_17_Flow3 = Flow {
+		destination = refBy(PipelineVar_17_FamilyElement1), 
+		grouping = Grouping.shuffleGrouping, 
+		tupleType = refBy(DataManagementCfg::DataSourceVar_10.input[0]), 
+		name = "f3", 
+		constraints = {}
+	};
+	PipelineVar_17_Source0 = Source {
+		output = {
+			refBy(PipelineVar_17_Flow0), refBy(PipelineVar_17_Flow3)
+		}, 
+		source = refBy(DataSourceVar_10), 
+		parallelism = 1, 
+		name = "FinancialSource", 
+		constraints = {}
+	};
+	PipelineVar_17 = Pipeline {
+		name = "PrioritySimulatePip", 
+		sources = {
+			refBy(PipelineVar_17_Source0)
+		}, 
+		numworkers = 5, 
+		artifact = "eu.qualimaster:PrioritySimulatePip:0.0.1-SNAPSHOT", 
+		debug = false, 
+		fastSerialization = false, 
+		constraints = {}
+	};
+	freeze {
+		PipelineVar_17;
+		PipelineVar_17_Source0;
+		PipelineVar_17_Flow0;
+		PipelineVar_17_FamilyElement0;
+		PipelineVar_17_Flow1;
+		PipelineVar_17_FamilyElement1;
+		PipelineVar_17_Flow2;
+		PipelineVar_17_Sink0;
+		PipelineVar_17_Flow3;
+	} but (f|f.bindingTime >= BindingTime.runtimeMon)
+}

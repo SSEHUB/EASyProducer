@@ -1,0 +1,9 @@
+package eu.qualimaster.data.protobuf;
+option java_package = "eu.qualimaster.protos";
+option java_outer_classname = "SpringFinancialDataProtos";
+
+
+message SSpringFinancialDataSpringStreamOutput {
+    required string symbolTuple = 1;
+}
+

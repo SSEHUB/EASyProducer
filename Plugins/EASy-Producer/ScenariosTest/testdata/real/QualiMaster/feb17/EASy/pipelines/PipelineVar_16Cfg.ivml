@@ -1,0 +1,107 @@
+project PipelineVar_16Cfg {
+
+	import Basics;
+	import Pipelines;
+	import FamiliesCfg;
+	import DataManagementCfg;
+	annotate BindingTime bindingTime = BindingTime.compile to PipelineVar_16Cfg;
+	Pipeline PipelineVar_16;
+	Source PipelineVar_16_Source0;
+	Flow PipelineVar_16_Flow0;
+	FamilyElement PipelineVar_16_FamilyElement0;
+	Flow PipelineVar_16_Flow1;
+	FamilyElement PipelineVar_16_FamilyElement1;
+	Flow PipelineVar_16_Flow2;
+	Sink PipelineVar_16_Sink0;
+	PipelineVar_16_Sink0 = Sink {
+		sink = refBy(priorSnk), 
+		parallelism = 1, 
+		name = "Sink", 
+		constraints = {}
+	};
+	PipelineVar_16_Flow2 = Flow {
+		destination = refBy(PipelineVar_16_Sink0), 
+		grouping = Grouping.shuffleGrouping, 
+		tupleType = refBy(FamiliesCfg::fCorrelationFinancial.output[0]), 
+		name = "f3", 
+		constraints = {}
+	};
+	PipelineVar_16_FamilyElement1 = FamilyElement {
+		family = refBy(fCorrelationFinancial), 
+		permissibleParameters = {
+			refBy(FamiliesCfg::fCorrelationFinancial.parameters[0])
+		}, 
+		output = {
+			refBy(PipelineVar_16_Flow2)
+		}, 
+		parallelism = 1, 
+		name = "FinancialCorrelation", 
+		constraints = {}
+	};
+	PipelineVar_16_Flow1 = Flow {
+		destination = refBy(PipelineVar_16_FamilyElement1), 
+		grouping = Grouping.shuffleGrouping, 
+		tupleType = refBy(FamiliesCfg::fPreprocessor.output[0]), 
+		name = "f2", 
+		constraints = {}
+	};
+	PipelineVar_16_FamilyElement0 = FamilyElement {
+		family = refBy(fPreprocessor), 
+		output = {
+			refBy(PipelineVar_16_Flow1)
+		}, 
+		parallelism = 1, 
+		name = "Preprocessor", 
+		constraints = {}
+	};
+	PipelineVar_16_Flow0 = Flow {
+		destination = refBy(PipelineVar_16_FamilyElement0), 
+		grouping = Grouping.shuffleGrouping, 
+		tupleType = refBy(DataManagementCfg::DataSourceVar_7.input[1]), 
+		name = "f1", 
+		constraints = {}
+	};
+	Flow PipelineVar_16_Flow3;
+	PipelineVar_16_Flow3 = Flow {
+		destination = refBy(PipelineVar_16_FamilyElement1), 
+		grouping = Grouping.shuffleGrouping, 
+		tupleType = refBy(DataManagementCfg::DataSourceVar_7.input[0]), 
+		name = "f4", 
+		constraints = {}
+	};
+	PipelineVar_16_Source0 = Source {
+		output = {
+			refBy(PipelineVar_16_Flow0), refBy(PipelineVar_16_Flow3)
+		}, 
+		source = refBy(DataSourceVar_7), 
+		permissibleParameters = {
+			refBy(DataManagementCfg::DataSourceVar_7.parameters[0])
+		}, 
+		parallelism = 1, 
+		name = "FinancialDataSource",
+		loadShedding = true, 
+		constraints = {}
+	};
+	PipelineVar_16 = Pipeline {
+		name = "PriorityFinancialPip", 
+		sources = {
+			refBy(PipelineVar_16_Source0)
+		}, 
+		numworkers = 16, 
+		artifact = "eu.qualimaster:PriorityFinancialPip:0.0.1-SNAPSHOT", 
+		debug = false, 
+		fastSerialization = false, 
+		constraints = {}
+	};
+	freeze {
+		PipelineVar_16;
+		PipelineVar_16_Source0;
+		PipelineVar_16_Flow0;
+		PipelineVar_16_FamilyElement0;
+		PipelineVar_16_Flow1;
+		PipelineVar_16_FamilyElement1;
+		PipelineVar_16_Flow2;
+		PipelineVar_16_Sink0;
+		PipelineVar_16_Flow3;
+	} but (f|f.bindingTime >= BindingTime.runtimeMon)
+}

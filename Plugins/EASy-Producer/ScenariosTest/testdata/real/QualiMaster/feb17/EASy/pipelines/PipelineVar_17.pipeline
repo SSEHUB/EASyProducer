@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pipeline:Pipeline xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:pipeline="pipeline" name="PrioritySimulatePip" numworkers="5" artifact="eu.qualimaster:PrioritySimulatePip:0.0.1-SNAPSHOT">
+  <nodes xsi:type="pipeline:Source" name="FinancialSource" source="9"/>
+  <nodes xsi:type="pipeline:FamilyElement" name="Preprocessor" family="0"/>
+  <nodes xsi:type="pipeline:FamilyElement" name="CorrelationComputation" family="1">
+    <permissibleParameters>FamiliesCfg::fCorrelationFinancial.parameters[0]</permissibleParameters>
+  </nodes>
+  <nodes xsi:type="pipeline:Sink" name="Sink" sink="0"/>
+  <flows name="f1" source="//@nodes.0" destination="//@nodes.1" tupleType="DataManagementCfg::DataSourceVar_10.input[1]"/>
+  <flows name="f2" source="//@nodes.1" destination="//@nodes.2" tupleType="FamiliesCfg::fPreprocessor.output[0]"/>
+  <flows name="f3" source="//@nodes.0" destination="//@nodes.2" tupleType="DataManagementCfg::DataSourceVar_10.input[0]"/>
+  <flows name="f4" source="//@nodes.2" destination="//@nodes.3" tupleType="FamiliesCfg::fCorrelationFinancial.output[0]"/>
+</pipeline:Pipeline>

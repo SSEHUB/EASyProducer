@@ -1,0 +1,12 @@
+package eu.qualimaster.data.protobuf;
+option java_package = "eu.qualimaster.protos";
+option java_outer_classname = "TimeTravelSinkProtos";
+
+message STimeTravelSinkSnapshotStreamInput {
+    required string snapshot = 1;
+}
+
+message STimeTravelSinkPathStreamInput {
+    required string path = 2;
+}
+

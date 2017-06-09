@@ -1,0 +1,11 @@
+<mapping>
+  <pipeline name="GenTopoHardwareCorrelationFinancial" class="eu.qualimaster.algorithms.GenTopoHardwareCorrelationFinancial.GenTopoHardwareCorrelationFinancialSubTopology">
+      <node name="GenTopoHardwareCorrelationFinancialHardwareConnectionBolt" type="family">
+             <component name="GenTopoHardwareCorrelationFinancialHardwareConnectionBolt" container="PriorityPip" class="eu.qualimaster.algorithms.GenTopoHardwareCorrelationFinancial.HardwareConnectionBolt" receiver="true" thrift="false" tasks="1" type="HARDWARE"/>
+      </node>
+      <node name="GenTopoHardwareCorrelationFinancialHardwareConnectionSpout" type="source">
+             <component name="GenTopoHardwareCorrelationFinancialHardwareConnectionSpout" container="PriorityPip" class="eu.qualimaster.algorithms.GenTopoHardwareCorrelationFinancial.HardwareConnectionSpout" receiver="true" thrift="false" tasks="12" type="HARDWARE"/>
+      </node>
+  </pipeline>
+
+</mapping>

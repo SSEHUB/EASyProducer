@@ -1,0 +1,6 @@
+CloudResources::CloudResource::nameCheck = name must be defined
+CloudResources::CloudResource::maxWorkingStorageCheck = max working storage must be defined
+CloudResources::CloudResource::maxProcessorsCheck = max processors must be defined
+CloudResources::CloudResource::maxMemoryCheck = max memory must be defined
+CloudResources::PublicCloudEnvironment::amiIDCheck = ami id must be defined
+CloudResources::PublicCloudEnvironment::pathToKeyFileCheck = path to key file must be defined

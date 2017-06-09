@@ -1,0 +1,677 @@
+import commonVTLMethods;
+@advice(QM)
+template stormHardwareConnectionSpout(Configuration config, FileArtifact target, Family family, HardwareAlgorithm algorithm, String topoName) {
+	Boolean fastThread = false;
+	String fName = family.name.firstToUpperCase();
+    String ifName = "I" + fName.firstToUpperCase();
+	String tupleName;
+	String outputImpName;
+	String algName = algorithm.name;
+	MPCCNode node = algorithm.hwNode;
+	String algClsName;	
+	def main(Configuration config, FileArtifact target, Family family, HardwareAlgorithm algorithm, String topoName) {
+		algClsName = algImplName(algorithm);
+		'package eu.qualimaster.algorithms.${firstToUpperCase(toIdentifier(algName))};'
+		''
+		'import java.io.IOException;'
+		'import java.io.ByteArrayOutputStream;'
+		'import java.io.ByteArrayInputStream;'
+		'import java.util.ArrayList;'
+		'import java.util.List;'
+		'import java.util.Map;'
+		'import java.util.HashMap;'
+		'import backtype.storm.spout.SpoutOutputCollector;'
+		'import backtype.storm.task.TopologyContext;'
+		'import backtype.storm.topology.OutputFieldsDeclarer;'
+		'import backtype.storm.tuple.Tuple;'
+		'import backtype.storm.tuple.Fields;'
+		'import backtype.storm.tuple.Values;'
+		'import eu.qualimaster.common.signal.BaseSignalSpout;'
+		'import eu.qualimaster.base.algorithm.HardwareTransmitter;'
+		'import eu.qualimaster.dataManagement.serialization.SerializerRegistry;'
+		'import eu.qualimaster.common.signal.ParameterChangeSignal;'
+		'import eu.qualimaster.common.signal.ShutdownSignal;'	
+		'import eu.qualimaster.common.signal.ParameterChange;'	
+		'import eu.qualimaster.common.signal.ValueFormatException;'
+		'import eu.qualimaster.common.signal.SignalException;'
+		'import eu.qualimaster.families.inf.${toIdentifier(ifName)}.*;'
+		if(hwlog) {
+			'import java.io.PrintWriter;'
+			'import eu.qualimaster.common.logging.DataLogger;'
+			'import java.util.Calendar;'
+		}
+		if(emitThread) {
+			'import java.util.Queue;'
+			'import java.util.concurrent.ConcurrentLinkedQueue;'
+			'import eu.qualimaster.common.switching.SynchronizedQueue;'
+		}
+		
+		if(multiHWThread) {
+			'import eu.qualimaster.common.hardware.IHardwareHandlerCreator;'
+			'import eu.qualimaster.common.hardware.MultiHardwareThreadsExecutor;'
+		}
+
+		produceImportFromOutput(family.output, fName, 0);
+		''
+		'public class HardwareConnectionSpout extends BaseSignalSpout {'
+			'final static org.apache.log4j.Logger logger = org.apache.log4j.Logger.getLogger(HardwareConnectionSpout.class);' | 4;
+			'private transient SpoutOutputCollector collector;' | 4;
+			'private String streamId;' | 4;
+			'private int MAXDATASIZE;' | 4;
+			'private int taskId;' | 4;
+			'private int taskNum;' | 4;
+			'private int taskIndex;' | 4;
+			'private boolean ready = false;' | 4;
+			if(multiHWThread) {
+				'private transient Map<String, List<Integer>> servers = null;' | 4;
+				'private transient MultiHardwareThreadsExecutor multiExecutor;' | 4; 
+				'private transient List<Integer> ports = new ArrayList<Integer>();' | 4;
+			} else {
+				'private String ip;' | 4;
+				'private int port = 0;' | 4;
+				'private byte [] msg = null;' | 4;
+				'private transient HardwareTransmitter hardwareConnection;' | 4;
+				'private transient ByteArrayInputStream in = null;' | 4;
+			}	
+			produceOutputVariable(family.output, ifName, 4, true);
+			if(hwlog){
+				'private transient PrintWriter out = null;' | 4;
+				'private transient PrintWriter out1 = null;' | 4;
+				'private int counter = 0;' | 4;
+				
+				'private long timestampInS = 0;' //record the output in second
+			}
+			if(fastThread) {
+				'private transient HardwareReceiver hardwareReceiver;' | 4;
+			}
+			if(emitThread) {
+				'private int size;' | 4;
+				'private transient DataEmitter dataEmitter;' | 4;
+			}
+			/*********************** */
+			/*******Constructor***** */
+			/*********************** */
+			'public HardwareConnectionSpout(String name, String namespace, String streamId) {' | 4;
+        		'super(name, namespace, $genMonitoringProbes); ' | 8; 
+        		'this.streamId = streamId;' | 8;
+    		'}' | 4;
+    		''
+    		/************************* */
+    		/*******prepare method**** */
+    		/************************* */
+    		'@SuppressWarnings("rawtypes")' | 4;
+    		'public void open(Map map, TopologyContext topologyContext, SpoutOutputCollector spoutputCollector) {' | 4;
+    			'super.open(map, topologyContext, spoutputCollector);' | 8;
+    			'collector = spoutputCollector;' | 8;
+    			'taskId = topologyContext.getThisTaskId();' | 8;
+    			'taskNum = topologyContext.getThisWorkerTasks().size();' | 8;
+    			'taskIndex = topologyContext.getThisTaskIndex();' | 8;
+    			if(hwlog) {
+        			'counter = 0;' | 8;
+        			'out = DataLogger.getPrintWriter("/var/nfs/spass/hardwareSpout-" + taskId +".csv");' | 8;
+					'out1 = DataLogger.getPrintWriter("/var/nfs/spass/hardwareSpoutResult-" + taskId +".csv");' | 8;     			
+        		}
+    			produceOutputVariable(family.output, ifName, 8, false);
+    			if(multiHWThread) {
+    				'ports = new ArrayList<Integer>();' | 8;
+    				if(!dynamicHWUpload) {//static ports
+        			'ports.add(2405); //replace to the port configuration' | 8;
+        			'ports.add(2406); //replace to the port configuration' | 8;
+        			} else {
+        				'while(ports.size()==taskNum) {//waiting for ports' | 8; //TODO:consider to compare with the requested number of threads
+	        			'}' | 8;
+        			}
+        			'servers = new HashMap<String, List<Integer>>();' | 8;
+        			'servers.put("${node.host}", ports);' | 8;
+    			} else {
+	    			'ip = "${node.host}";' | 8; //replace to the ip configuration
+	    			if(!dynamicHWUpload) { //static port
+//only for test---TO BE REMOVED!!!
+ 
+'List<Integer> ports = new ArrayList<Integer>();' | 8;
+'ports.add(2405); //replace to the port configuration' | 8;
+'ports.add(2406); //replace to the port configuration' | 8;	
+'ports.add(2407); //replace to the port configuration' | 8;	
+'ports.add(2408); //replace to the port configuration' | 8;	
+'port=ports.get(taskIndex);' | 8;
+ 					
+    				'ready = true;' | 8;
+	        		'//port = 2405; //default' | 8; //replace to the port configuration
+	        		} else { 
+	        			'ready = false;' | 8;
+	        			/*
+	        			'while(port==0) {//waiting for ports' | 8;
+	        			'}' | 8;
+	        			if(hwlog) {
+	        				'logger.info("Port is ready and continuing the processing...");' | 8;
+	        				'out.println("Port is ready and continuing the processing...");' | 8;
+	        				'out.flush();' | 8;
+	        			}
+	        			* 
+	        			*/
+	        		}
+	        		'msg = new byte[MAXDATASIZE];' | 8;
+        		}
+        		if(batchData) {
+        			'MAXDATASIZE = 8192;' | 8;
+        		} else {
+        		'MAXDATASIZE = 16384;' | 8;
+        		}
+        		produceTypesRegistration(family.output, fName, true,  8);
+        		
+        		if(multiHWThread) {
+        			'multiExecutor = new MultiHardwareThreadsExecutor(servers, new HardwareReceiverHandler(), ports.size());//TODO:change the default thread number' | 8;
+        			'multiExecutor.createMultiThreads();' | 8;
+        		} else {
+	        		if(fastThread) {
+	        			'try {' | 8;
+	      					'hardwareReceiver = new HardwareReceiver();' | 12;
+	    				'} catch (Exception e) {' | 8;
+	      					'logger.error("", e);' | 12;
+	    				'}' | 8;
+	    				'Thread hardwareConnectionThread = new Thread(hardwareReceiver);' | 8;
+	    				'hardwareConnectionThread.start();' | 8;
+	        		}
+        		}
+        		if(emitThread) {
+        			'try {' | 8;
+      					'dataEmitter = new DataEmitter();' | 12;
+    				'} catch (Exception e) {' | 8;
+      					'logger.error("", e);' | 12;
+    				'}' | 8;
+    				'Thread dataEmitterThread = new Thread(dataEmitter);' | 8;
+    				'dataEmitterThread.start();' | 8;
+        		}
+        		'initMonitor();' | 8;
+        		'logger.info("The end of the open method.");' | 8;
+    		'}' | 4;
+    		''
+    		//override the initial monitor
+	    	produceInitMonitor(false, 4);
+	    
+    		if(fastThread) { 
+    			if(multiHWThread) {
+    			'public class HardwareReceiverHandler implements IHardwareHandlerCreator {' | 4;   	
+					'@Override' | 8;
+					'public Runnable createHandler(String host, int port) {' | 8;
+						'return new HardwareReceiver(host, port);' | 12;
+					'}' | 8;
+    			'}' | 4;
+    			'' 
+    			} 			
+    			'public class HardwareReceiver implements Runnable {' | 4;
+    				if(multiHWThread) {
+    					'String ip;' | 8;
+				    	'int port;' | 8;
+				    	'byte [] msg = null;' | 8;
+				    	'ByteArrayInputStream in = null;' | 8;
+				    	'String str = null;' | 8;
+				    	'HardwareTransmitter hardwareConnection;' | 8;
+				    	''
+				    	'public HardwareReceiver(String ip, int port) {' | 8;
+				    		'this.ip = ip;' | 12;
+				    		'this.port = port;' | 12;
+				    		'msg = new byte[MAXDATASIZE];' | 12;
+				    	'}' | 8;
+				    	''
+				    	produceConnectMethod(8);
+				    	''
+				    	'public void close() {' | 8;
+				    		produceCloseStatement(12);
+				    	'}' | 8;
+				    	''
+    				}
+    				
+    				'@Override' | 8;
+    				'public void run() {' | 8;
+    				if(multiHWThread) {
+    					'str = null;' | 12;
+    				} else {
+    					'String str = null;' | 12;
+						if(batchData) {
+							'String str1 = null;' | 12;
+							'int k = 0;' | 12;
+						}
+					}
+						if(hwlog) {
+							'timestampInS = System.currentTimeMillis()/1000;' | 12;			
+						}
+    					'while(true) {' | 12;
+    						'if(ready) {' | 16;
+    							commonPartForFastThread(20);
+    						'}' | 16;
+    					'}' | 12;
+    				'}' | 8;
+    			'}' | 4;
+    			''
+    		} 
+    		
+    		if(emitThread) {
+    			'public class DataEmitter implements Runnable {' | 4;
+    				'private boolean cont = false;' | 8;
+    				''
+    				'public DataEmitter() {' | 8;
+    					'cont = true;' | 12;
+    				'}' | 8;
+    				''
+    				'@Override' | 8;
+    				'public void run() {' | 8;
+    					'while(cont) {' | 12;
+    					for(Tuple t : family.output) {
+    						'collector.emit(streamId, new Values(syn${firstToUpperCase(t.name)}.consume()));' | 16;
+    					}
+    					'}' | 12;
+    				'}' | 8;
+    				''
+    				'public void stop() {' | 8;
+    					'cont = false;' | 12;
+    				'}' | 8;
+    			'}' | 4;
+    			''
+    		}
+    		/************************** */
+    		/*******execute method***** */
+    		/************************** */
+    		'public void nextTuple() {' | 4;
+    		if(!fastThread) {
+    			'if(ready) {' | 8;
+    				commonPartForFastThread(8);
+    			'}' | 8;
+        		}
+        	'}' | 4;
+        	''
+        	/********************************/
+		    /* notifyParameterChange method */  
+		    /********************************/	    
+			'@Override' | 4;
+			'public void notifyParameterChange(ParameterChangeSignal signal) {' | 4;
+				'logger.info("Received the parameter change signal!");' | 8;
+				if(hwlog) {
+					'out.println(Calendar.getInstance().getTimeInMillis() + ", Received the parameter change signal!"); ' | 8;
+					'out.flush();' | 8;
+				}
+				'for(int i = 0; i < signal.getChangeCount(); i++) {' | 8;
+				'ParameterChange para = signal.getChange(i);' | 12;	
+				'switch (para.getName()) {' | 12;
+					if(dynamicHWUpload) {		
+					'case "port": ' | 16;
+						'String value = para.getStringValue();' | 20;
+						'logger.info("Received signal port!" + value + ", taskId: " + taskId); ' | 20;
+						if(hwlog) {
+						'out.println("Received signal port!" + value + ", taskId: " + taskId); ' | 20;
+						'out.flush();' | 20;
+						}
+						'String[] portList = value.split(",");' | 20;
+						if(multiHWThread) {
+							'for(int j=0; j<portList.length; j++) {' | 20;
+								'ports.add(Integer.parseInt(portList[j]));' | 24;
+							'}' | 20;
+						} else {
+		            	'port = assignPort(portList, taskIndex);' | 20;
+		            	'ready = true;' | 20;
+		            	'logger.info("Assigned port:" + port + ", taskId:" + taskId + ", taskIndex: " + taskIndex);' | 20;
+		            	if(hwlog) {
+							'out.println("Assigned port:" + port + ", taskId:" + taskId + ", taskIndex: " + taskIndex); ' | 20;
+							'out.flush();' | 20;
+						}
+		            	}
+						
+						'break;' | 20;
+						}
+						'}' | 14;
+					'}' | 8;
+			'}' |4;		
+		''
+			/**************************** */
+			/*********connect method***** */
+			/**************************** */
+			if(!multiHWThread) {
+				produceConnectMethod(4);
+			}
+    		
+    		/******************************** */
+    		/****declareOuputFields method*** */
+    		/******************************** */
+    		'public void declareOutputFields(OutputFieldsDeclarer outputFieldsDeclarer) {' | 4;
+    			'outputFieldsDeclarer.declareStream(streamId, false, new Fields("hardwareOutput"));' | 8;
+    		'}' | 4;  
+    		''
+    		/****************************/
+			/*       close method       */
+			/****************************/             
+	        '    @Override'
+	        '    public void close() {' 
+	        '        super.close();'
+	        if(multiHWThread) {
+	        	produceExecutorCloseStatement(8);
+	        } else {
+			    produceCloseStatement(8);
+			}
+	        '    }'
+	        ''
+    		/********************************* */
+	    	/*******Prepare shut down signal** */
+	    	/********************************* */
+	    	'@Override' | 4;
+	    	'protected void prepareShutdown(ShutdownSignal signal) {' | 4;
+	        	'super.prepareShutdown(signal);' | 8;
+	        	'dataEmitter.stop();' | 8;
+	        	if(multiHWThread) {
+	        		produceExecutorCloseStatement(8);
+		        } else {
+				    produceCloseStatement(8);
+				}
+	    	'}' | 4;
+	    	'' 	
+	    	produceAssignPortMethod(4);	   		
+		'}'
+	}
+	
+	def produceOutputVariable(Tuples tuples, String ifName, Integer indent, Boolean variable) {
+		String outputInfName;	
+		String tupleName;	
+		for(Tuple t : tuples) {
+			tupleName = t.name;
+			//get output interface name	
+			outputInfName = 'I' + ifName + "${firstToUpperCase(tupleName)}Output"; //output interface name		
+			if(variable) {		
+				'private transient $outputInfName output${firstToUpperCase(tupleName)} = null;' | indent;	
+				if(emitThread) {
+					'private transient Queue<$outputInfName> queue${firstToUpperCase(tupleName)} = new ConcurrentLinkedQueue<$outputInfName>();' | indent;
+					'private transient SynchronizedQueue<$outputInfName> syn${firstToUpperCase(tupleName)} = null;'	| indent;
+				}
+			} else {
+				if(emitThread) {
+					'queue${firstToUpperCase(tupleName)} = new ConcurrentLinkedQueue<$outputInfName>();' | indent;
+					'size = 50;' | indent; 
+					'syn${firstToUpperCase(tupleName)} = new SynchronizedQueue<$outputInfName>(queue${firstToUpperCase(tupleName)}, size);' | indent;	
+				}
+			}			
+	    }
+	}
+	
+	def produceImportFromOutput(Tuples tuples, String fName, Integer indent) {
+		String ifName = "I" + fName.firstToUpperCase();
+		String tupleName;
+		'import eu.qualimaster.families.imp.${firstToUpperCase(toIdentifier(fName))}.*;'
+		for(Tuple t : tuples) {
+			tupleName = t.name;
+			String outputInfName = ifName + "${firstToUpperCase(tupleName)}Output";
+			'import eu.qualimaster.families.imp.${firstToUpperCase(toIdentifier(fName))}.$outputInfName;' | indent;
+			'import eu.qualimaster.families.inf.${firstToUpperCase(toIdentifier(ifName))}.I$outputInfName;' | indent;
+		}
+	}
+	
+	def commonPartForFastThread(Integer indent) {
+        	'if (connect()) {' | indent;
+        	'try {' | indent + 4;
+        		if(batchData) {
+        			'msg = hardwareConnection.receiveBatchData(msg, MAXDATASIZE);' | indent+8;
+        		} else {
+        			'in = null;' | indent+8;
+        			if(newHWReceive) {
+        				'msg = hardwareConnection.receiveData();' | indent+8;
+        			} else {
+        				'msg = hardwareConnection.receiveData(msg, pointer);' | indent+8;
+        			}
+        		}
+        		for(Tuple t : family.output) {
+					tupleName = t.name; // assume that we only have one type of Tuple in the output of the family
+					outputImpName = ifName + "${firstToUpperCase(tupleName)}Output";
+					if(hwlog) {
+						'//out1.println("Received data!" + msg);' | indent+8;
+                		'//out1.flush();' | indent+8;
+					}
+					'if(msg != null) {' | indent+8;							
+        					'if (msg[0] == \'d\') {' | indent+12;
+        					'in = new ByteArrayInputStream(msg, 1, msg.length-1);' | indent+12;
+        					'if (in != null) {' | indent+16;
+        						if (genMonitoringProbes) {
+					            	'startMonitoring();' | indent+20;
+					        	}
+        						'output${firstToUpperCase(tupleName)} = null;' | indent+20;
+                    			'output${firstToUpperCase(tupleName)} = SerializerRegistry.getSerializerSafe("$outputImpName", I$outputImpName.class).deserializeFrom(in);' | indent+20;
+                				'if(output${firstToUpperCase(tupleName)} != null) {' | indent+20;
+                				/* 
+                				if(hwlog) {
+                					'long now = System.currentTimeMillis();' | indent+24;
+                                    'if(timestampInS == now/1000) {' | indent+24;
+                                    	'counter++;' | indent+28;
+                                    '} else {' | indent+24;
+                                    	'out1.println(timestampInS + " " + counter);' | indent+28;
+                						'out1.flush();' | indent+28;
+                                    	'timestampInS = now/1000;' | indent+28;
+                                    	'counter = 1;' | indent+28;
+                                    '}'  indent+24;
+                				}
+                				* 
+                				*/
+                				/* 
+	                			if(hwlog) { // print the log of the data received from hardware
+									'out.println(Calendar.getInstance().getTimeInMillis() + ", Receiving data to hardware: "' | indent;
+						    		for(Field f : t.fields) {
+										 String fname = toIdentifier("${f.name}");
+						    			 String mname = firstToUpperCase(fname);
+						    	         '+ ", $mname: "+ output${firstToUpperCase(tupleName)}.get${mname}()' | indent;
+									 }
+									 ');' | indent;
+						    		'out.flush();' | indent;
+						    		'logger.info(Calendar.getInstance().getTimeInMillis() + ", Receiving data to hardware: "' | indent;
+						    		for(Field f : t.fields) {
+										 String fname = toIdentifier("${f.name}");
+						    			 String mname = firstToUpperCase(fname);
+						    	         '+ ", $mname: "+ output${firstToUpperCase(tupleName)}.get${mname}()' | indent;
+									 }
+									 ');' | indent;
+								}
+								* 
+								*/
+									if(emitThread) { //queue the received data
+										'syn${firstToUpperCase(tupleName)}.produce(output${firstToUpperCase(tupleName)});'  | indent+24;
+									} else {
+	                					'collector.emit(streamId, new Values(output${firstToUpperCase(tupleName)}));' | indent+24;
+	                				}
+	                				if (genMonitoringProbes) {
+									  'endMonitoring();' | indent+24;
+							        }
+                				'}'| indent+20;
+                			'}' | indent+16;
+
+        					'} else if (msg[0] == \'o\') {' | indent+12;
+                			'/* HERE PUT THE CODE FOR THE FLUSH PROCESS */' | indent+20;
+                			if(hwlog) {
+                			'out.println(Calendar.getInstance().getTimeInMillis() + ", Sending the signal emit to the end bolt!");' | indent+16;
+                			'out.flush();' | indent+16;
+                			}
+                			'ParameterChangeSignal paraSignal = new ParameterChangeSignal(
+				                        "$topoName", "${algName}EndBolt", "emit", true, null);' | indent+16;
+				                  'try {' | indent+16;
+				                    'sendSignal(paraSignal);' | indent+20;
+				                '} catch (SignalException e) {' | indent+16;
+				                    'e.printStackTrace();' | indent+20;
+				                '}' | indent+16;
+				                
+        					'} else if (msg[0] == \'f\') {' | indent+12;
+                			'/* HERE PUT THE CODE FOR THE OMIT PROCESS */' | indent+16;
+                			if(hwlog) {
+                			'out.println(Calendar.getInstance().getTimeInMillis() + ", Sending the signal disable to the hw end bolt!");' | indent+16;
+                			'out.flush();' | indent+16;
+                			}
+                			'ParameterChangeSignal paraSignal = new ParameterChangeSignal(
+				                        "$topoName", "${algName}EndBolt", "disable", true, null);' | indent+16;
+				                  'try {' | indent+16;
+				                    'sendSignal(paraSignal);' | indent+20;
+				                '} catch (SignalException e) {' | indent+16;
+				                    'e.printStackTrace();' | indent+20;
+				                '}' | indent+16;
+                		'}' | indent+12;
+                	'}' | indent+8;			
+				}
+        	'} catch (IOException e) {' | indent+4;
+        		'logger.info("IOException : " + e.getMessage());' | indent+8;
+        	'}' | indent+4;
+        '}' | indent;
+	}
+	
+	def produceConnectMethod(Integer indent) {
+		'private boolean connect() {' | indent;
+			'if (null == hardwareConnection) {' | indent+4;
+	        	'try {' | indent+8;
+	            	'hardwareConnection = new HardwareTransmitter(ip, port);' | indent+12;
+	            	'logger.info("Created a receiver connection.");' | indent+12;
+	            	if(hwlog) {
+	            	'out.println("Created a receiver connection.");' | indent+12;
+	            	'out.flush();' | indent+12;
+	            	}
+	        	'} catch (IOException e) {' | indent+8;
+	            	'e.printStackTrace();' | indent+12;
+	        	'}' | indent+8;
+			'}' | indent+4;
+			'return null != hardwareConnection;' | indent+4;
+		'}' | indent;
+	}
+	
+	def produceCloseStatement(Integer indent) {
+		'try {' | indent;
+			'if(hardwareConnection != null) {' | indent+4;
+                'hardwareConnection.sendCloseMessage();' | indent+8;
+                'hardwareConnection.close();' | indent+8;  
+         	'}' | indent+4;  
+         	'if(in != null) {' | indent+4;
+    			'in.close();' | indent+8;
+    		'}' | indent+4;
+		'} catch (IOException e) {' | indent;
+    		'e.printStackTrace();' | indent+4;
+		'}' | indent;
+	}
+	
+	def produceExecutorCloseStatement(Integer indent) {
+		'List<Runnable> threads = multiExecutor.getThreadList();' | indent;
+        'for(int i=0; i<threads.size(); i++) {' | indent;
+        	'HardwareReceiver receiver = (HardwareReceiver) threads.get(i);' | indent+4;
+        	'receiver.close();' | indent+4;
+        '}' | indent;
+	}
+	
+	def produceAssignPortMethod(Integer indent) {
+		'protected int assignPort(String[] ports, int index) {' | indent;
+    	'//int mode = index % ports.length;'  | indent+4;
+    	'return Integer.parseInt(ports[index]);'  | indent+4;
+    '}' | indent;
+	}
+	
+	def previousReceiveCode(Integer indent) { //store the previous code 
+		'if(msg != null) {' | indent+8;
+			if(batchData) {
+				'str = new String(msg);' | indent+12;
+				'if(k > 0) {' | indent+12;
+					'str = str1.concat(str);' | indent+12;
+				'}' | indent+12;
+				'while(true) {' | indent+12;
+				    'if(str.indexOf(\'\\0\') == -1) {' | indent +16;
+				     	'break;' | indent+20;
+				    '}' | indent+16;
+					'in = null;' | indent+16;
+					'in = new ByteArrayInputStream(str.getBytes(), 1, str.indexOf(\'\\0\')-1);' | indent+16;
+			} else {
+				'in = new ByteArrayInputStream(msg);' | indent+12;
+				'in.skip(1);' | indent+12;
+				'str = new String(msg, 0, 1);' | indent+12;
+			}
+			if(batchData) {
+				'if (str.startsWith("d")) {' | indent+12;
+			} else {
+				'if (str.equalsIgnoreCase("d")) {' | indent+12;
+			}
+				'if (in != null) {' | indent+16;
+					if (genMonitoringProbes) {
+		            	'startMonitoring();' | indent+20;
+		        	}
+					'output${firstToUpperCase(tupleName)} = null;' | indent+20;
+        			'output${firstToUpperCase(tupleName)} = SerializerRegistry.getSerializerSafe("$outputImpName", I$outputImpName.class).deserializeFrom(in);' | indent+20;
+    				'if(output${firstToUpperCase(tupleName)} != null) {' | indent+20;
+    				if(hwlog) {
+    					'counter++;' | indent+24;
+    					'out1.println(Calendar.getInstance().getTimeInMillis() + " , " + counter);' | indent+24;
+    					'out1.flush();' | indent+24;
+    				}
+    				/* 
+        			if(hwlog) { // print the log of the data received from hardware
+						'out.println(Calendar.getInstance().getTimeInMillis() + ", Receiving data to hardware: "' | indent;
+			    		for(Field f : t.fields) {
+							 String fname = toIdentifier("${f.name}");
+			    			 String mname = firstToUpperCase(fname);
+			    	         '+ ", $mname: "+ output${firstToUpperCase(tupleName)}.get${mname}()' | indent;
+						 }
+						 ');' | indent;
+			    		'out.flush();' | indent;
+			    		'logger.info(Calendar.getInstance().getTimeInMillis() + ", Receiving data to hardware: "' | indent;
+			    		for(Field f : t.fields) {
+							 String fname = toIdentifier("${f.name}");
+			    			 String mname = firstToUpperCase(fname);
+			    	         '+ ", $mname: "+ output${firstToUpperCase(tupleName)}.get${mname}()' | indent;
+						 }
+						 ');' | indent;
+					}
+					* 
+					*/
+						if(emitThread) { //queue the received data
+							'syn${firstToUpperCase(tupleName)}.produce(output${firstToUpperCase(tupleName)});'  | indent+24;
+						} else {
+        					'collector.emit(streamId, new Values(output${firstToUpperCase(tupleName)}));' | indent+24;
+        				}
+        				if (genMonitoringProbes) {
+						  'endMonitoring();' | indent+24;
+				        }
+    				'}'| indent+20;
+    			'}' | indent+16;
+    		if(batchData) {
+				'} else if (str.startsWith("o")) {' | indent+12;
+			} else {
+				'} else if (str.equalsIgnoreCase("o")) {' | indent+12;
+			}
+    			'/* HERE PUT THE CODE FOR THE FLUSH PROCESS */' | indent+20;
+    			if(hwlog) {
+    			'out.println(Calendar.getInstance().getTimeInMillis() + ", Sending the signal emit to the end bolt!");' | indent+16;
+    			'out.flush();' | indent+16;
+    			}
+    			'ParameterChangeSignal paraSignal = new ParameterChangeSignal(
+	                        "$topoName", "${algName}EndBolt", "emit", true, null);' | indent+16;
+	                  'try {' | indent+16;
+	                    'sendSignal(paraSignal);' | indent+20;
+	                '} catch (SignalException e) {' | indent+16;
+	                    'e.printStackTrace();' | indent+20;
+	                '}' | indent+16;
+	        if(batchData) {
+				'} else if (str.startsWith("f")) {' | indent+12;
+			} else {
+				'} else if (str.equalsIgnoreCase("f")) {' | indent+12;
+			}
+    			'/* HERE PUT THE CODE FOR THE OMIT PROCESS */' | indent+16;
+    			if(hwlog) {
+    			'out.println(Calendar.getInstance().getTimeInMillis() + ", Sending the signal disable to the hw end bolt!");' | indent+16;
+    			'out.flush();' | indent+16;
+    			}
+    			'ParameterChangeSignal paraSignal = new ParameterChangeSignal(
+	                        "$topoName", "${algName}EndBolt", "disable", true, null);' | indent+16;
+	                  'try {' | indent+16;
+	                    'sendSignal(paraSignal);' | indent+20;
+	                '} catch (SignalException e) {' | indent+16;
+	                    'e.printStackTrace();' | indent+20;
+	                '}' | indent+16;
+    		'}' | indent+12;
+    		if(batchData) {
+    			'str = str.substring(str.indexOf(\'\\0\')+1, str.length());' | indent+12;
+    		} else if(!newHWReceive) {
+        		'pointer = 1;' | indent+12;
+        		'in.read(msg, 0, in.available());' | indent+12;
+    		}
+    	'}' | indent+8;	
+    	if(batchData) {
+    		'str1 = str;' | indent+8;
+			'k = str1.length();' | indent+8;
+			'}' | indent+4;
+    	}		
+	}
+
+}

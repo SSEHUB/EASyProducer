@@ -1,0 +1,171 @@
+package eu.qualimaster.ReplayPip.topology;
+
+import java.util.*;
+import java.io.IOException;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
+import org.apache.log4j.Logger;
+import backtype.storm.tuple.*;
+import backtype.storm.task.*;
+import backtype.storm.topology.*;
+import eu.qualimaster.common.signal.*;
+import eu.qualimaster.base.algorithm.*;
+import eu.qualimaster.dataManagement.strategies.*;
+import eu.qualimaster.infrastructure.PipelineOptions;
+import eu.qualimaster.events.EventManager;
+import eu.qualimaster.monitoring.events.AlgorithmChangedMonitoringEvent;
+import eu.qualimaster.data.inf.IPriorityDataSink;
+import eu.qualimaster.data.inf.IPriorityDataSink.*;
+import eu.qualimaster.data.imp.PriorityDataSink;
+import eu.qualimaster.data.imp.PriorityDataSink.*;
+import eu.qualimaster.dataManagement.strategies.*;
+import eu.qualimaster.dataManagement.DataManager;
+import eu.qualimaster.families.inf.IFCorrelationFinancial.*;
+import eu.qualimaster.families.inf.IFHayashiYoshida.*;
+import eu.qualimaster.families.inf.IFHayashiYoshida.*;
+
+/**
+* Defines the Sink class(GEN).
+**/
+@SuppressWarnings({ "rawtypes", "serial" })
+public class PipelineVar_9_ReplaySink0ReplaySink extends AbstractReplaySink {
+
+    final static Logger logger = Logger.getLogger(PipelineVar_9_ReplaySink0ReplaySink.class);
+    transient OutputCollector _collector;
+    transient IPriorityDataSink sinkHandler;
+private int counter = 0;
+    transient IIFCorrelationFinancialPairwiseFinancialOutput iTuplePairwiseFinancial = null;
+    transient IPriorityDataSinkPairwiseFinancialInput inputPairwiseFinancial = null;
+    transient IPriorityDataSinkAnalyzedStreamInput inputAnalyzedStream = null;
+
+	public PipelineVar_9_ReplaySink0ReplaySink(String name, String namespace) {
+        super(name, namespace, true);
+    }
+
+    public class IPriorityDataSinkPairwiseFinancialInputEmitter<IPriorityDataSinkPairwiseFinancialInput> implements AbstractReplaySink.ITupleEmitter<IPriorityDataSinkPairwiseFinancialInput> {
+        @Override
+        public void emit(int ticket, IPriorityDataSinkPairwiseFinancialInput tuple) {
+            //call from sink implementation
+            sinkHandler.emit(ticket, (IPriorityDataSink.IPriorityDataSinkPairwiseFinancialInput)tuple);
+        }
+    }
+    public class IPriorityDataSinkAnalyzedStreamInputEmitter<IPriorityDataSinkAnalyzedStreamInput> implements AbstractReplaySink.ITupleEmitter<IPriorityDataSinkAnalyzedStreamInput> {
+        @Override
+        public void emit(int ticket, IPriorityDataSinkAnalyzedStreamInput tuple) {
+            //call from sink implementation
+            sinkHandler.emit(ticket, (IPriorityDataSink.IPriorityDataSinkAnalyzedStreamInput)tuple);
+        }
+    }
+    @Override
+    protected void registerHandlers(Map conf, TopologyContext context) {
+        eu.qualimaster.dataManagement.common.replay.Tuple schema;
+        schema = new eu.qualimaster.dataManagement.common.replay.Tuple("pairwiseFinancial");
+        schema.addField(new eu.qualimaster.dataManagement.common.replay.Field("id0", String.class, true, false));
+        schema.addField(new eu.qualimaster.dataManagement.common.replay.Field("id1", String.class, true, false));
+        schema.addField(new eu.qualimaster.dataManagement.common.replay.Field("date", String.class, false, true));
+        schema.addField(new eu.qualimaster.dataManagement.common.replay.Field("value", double.class, false, false));
+        addTupleHandler(PriorityDataSinkPairwiseFinancialInput.class, schema, "output/prior", NoStorageStrategyDescriptor.INSTANCE, new IPriorityDataSinkPairwiseFinancialInputEmitter());
+        schema = new eu.qualimaster.dataManagement.common.replay.Tuple("analyzedStream");
+        schema.addField(new eu.qualimaster.dataManagement.common.replay.Field("symbolId", String.class, false, false));
+        schema.addField(new eu.qualimaster.dataManagement.common.replay.Field("timestamp", long.class, false, false));
+        schema.addField(new eu.qualimaster.dataManagement.common.replay.Field("value", double.class, false, false));
+        schema.addField(new eu.qualimaster.dataManagement.common.replay.Field("volume", int.class, false, false));
+        addTupleHandler(PriorityDataSinkAnalyzedStreamInput.class, schema, "output/prior", NoStorageStrategyDescriptor.INSTANCE, new IPriorityDataSinkAnalyzedStreamInputEmitter());
+}
+
+
+    /**
+     * Sends an algorithm change event and considers whether the coordination layer shall be bypassed for direct
+     * testing.
+     * @param algorithm the new algorithm
+     * @param causeMsgId the message id of the causing message (may be empty or null)
+     */
+    private void sendAlgorithmChangeEvent(String algorithm, String causeMsgId) {
+        EventManager.send(new AlgorithmChangedMonitoringEvent(getPipeline(), getName(), algorithm, causeMsgId));
+    }
+
+
+    public void forwardTuple(Object tupleItem) {
+        startMonitoring();
+        //for now, sink just emits the tuple that get from last familyelement
+        if(tupleItem instanceof IIFCorrelationFinancialPairwiseFinancialOutput) {
+            iTuplePairwiseFinancial = (IIFCorrelationFinancialPairwiseFinancialOutput)tupleItem;
+            inputPairwiseFinancial = new PriorityDataSink.PriorityDataSinkPairwiseFinancialInput();
+            inputPairwiseFinancial.setId0(iTuplePairwiseFinancial.getId0());
+            inputPairwiseFinancial.setId1(iTuplePairwiseFinancial.getId1());
+            inputPairwiseFinancial.setDate(iTuplePairwiseFinancial.getDate());
+            inputPairwiseFinancial.setValue(iTuplePairwiseFinancial.getValue());
+            store(inputPairwiseFinancial);
+            emitted(inputPairwiseFinancial);
+        }
+
+        endMonitoring();
+    }
+
+    @Override
+    public void execute(Tuple tuple) {
+        forwardTuple(tuple.getValue(0));
+    }
+
+    @Override
+    public void prepare(Map map, TopologyContext topologyContext, OutputCollector collector) {
+		super.prepare(map, topologyContext, collector);
+        _collector = collector;
+        new PriorityDataSink.PriorityDataSinkPairwiseFinancialInput();
+        new PriorityDataSink.PriorityDataSinkAnalyzedStreamInput();
+        try {
+            @SuppressWarnings("unchecked")
+            Class<? extends IPriorityDataSink> cls = (Class<? extends IPriorityDataSink>)Class.forName("eu.qualimaster.algorithms.imp.correlation.PriorityDataSinkForFinancialAndTwitter");
+			boolean autoConnect = "true".equals(map.get(Constants.CONFIG_KEY_SOURCE_AUTOCONNECT));
+			if(autoConnect) {
+            	sinkHandler = DataManager.DATA_SINK_MANAGER.createDataSink(getPipeline(), cls, NoStorageStrategyDescriptor.INSTANCE);
+			} else {
+            	sinkHandler = cls.newInstance();
+			}
+			if (!autoConnect) {
+		    	sinkHandler.connect();
+			}
+		    sendAlgorithmChangeEvent("PriorityDataSinkForFinancialAndTwitter", null);
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        } catch (InstantiationException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        } catch (ClassCastException e) {
+            e.printStackTrace();
+        }
+        initMonitor();
+        logger.info("The end of the prepare method.");
+    }
+
+    @Override
+    protected boolean initMonitorDuringPrepare() {
+        return false;
+    }
+
+    @Override
+    public void cleanup() {
+        super.cleanup();
+		 sinkHandler.disconnect();
+    }
+
+    @Override
+    public void declareOutputFields(OutputFieldsDeclarer declarer) {
+        declarer.declareStream("PipelineVar_9_ReplaySink0PairwiseFinancial", new Fields("PipelineVar_9_ReplaySink0PairwiseFinancialFields"));
+        declarer.declareStream("PipelineVar_9_ReplaySink0AnalyzedStream", new Fields("PipelineVar_9_ReplaySink0AnalyzedStreamFields"));
+    }
+
+    @Override
+    public void notifyAlgorithmChange(AlgorithmChangeSignal signal) {
+    sendAlgorithmChangeEvent(signal.getAlgorithm(), signal.getCauseMessageId());
+    super.notifyAlgorithmChange(signal);
+}
+
+    @Override
+    protected void prepareShutdown(ShutdownSignal signal) {
+        super.prepareShutdown(signal);
+        sinkHandler.disconnect();
+    }
+
+}

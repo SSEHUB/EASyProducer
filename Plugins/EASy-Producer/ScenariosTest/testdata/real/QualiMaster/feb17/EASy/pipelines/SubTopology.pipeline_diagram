@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<notation:Diagram xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:notation="http://www.eclipse.org/gmf/runtime/1.0.2/notation" xmlns:pipeline="pipeline" xmi:id="_lDeAED6lEeaI656rJtj2kw" type="Pipeline" name="SubTopology.pipeline_diagram" measurementUnit="Pixel">
+  <children xmi:type="notation:Shape" xmi:id="_ltl7ID6lEeaI656rJtj2kw" type="2005" fontName="Segoe UI">
+    <children xmi:type="notation:DecorationNode" xmi:id="_ltnwUD6lEeaI656rJtj2kw" type="5005">
+      <layoutConstraint xmi:type="notation:Location" xmi:id="_ltnwUT6lEeaI656rJtj2kw" y="5"/>
+    </children>
+    <element xmi:type="pipeline:FamilyElement" href="SubTopology.pipeline#//@nodes.0"/>
+    <layoutConstraint xmi:type="notation:Bounds" xmi:id="_ltl7IT6lEeaI656rJtj2kw" x="166" y="259"/>
+  </children>
+  <children xmi:type="notation:Shape" xmi:id="_nIfy4D6lEeaI656rJtj2kw" type="2005" fontName="Segoe UI">
+    <children xmi:type="notation:DecorationNode" xmi:id="_nIfy4j6lEeaI656rJtj2kw" type="5005">
+      <layoutConstraint xmi:type="notation:Location" xmi:id="_nIfy4z6lEeaI656rJtj2kw" x="-20" y="80"/>
+    </children>
+    <element xmi:type="pipeline:FamilyElement" href="SubTopology.pipeline#//@nodes.1"/>
+    <layoutConstraint xmi:type="notation:Bounds" xmi:id="_nIfy4T6lEeaI656rJtj2kw" x="360" y="252"/>
+  </children>
+  <styles xmi:type="notation:DiagramStyle" xmi:id="_lDeAET6lEeaI656rJtj2kw"/>
+  <element xmi:type="pipeline:Pipeline" href="SubTopology.pipeline#/"/>
+  <edges xmi:type="notation:Connector" xmi:id="_ppH8kD6lEeaI656rJtj2kw" type="4001" source="_ltl7ID6lEeaI656rJtj2kw" target="_nIfy4D6lEeaI656rJtj2kw">
+    <children xmi:type="notation:DecorationNode" xmi:id="_ppJxwD6lEeaI656rJtj2kw" type="6001">
+      <layoutConstraint xmi:type="notation:Location" xmi:id="_ppJxwT6lEeaI656rJtj2kw" x="5"/>
+    </children>
+    <styles xmi:type="notation:FontStyle" xmi:id="_ppH8kT6lEeaI656rJtj2kw" fontName="Segoe UI"/>
+    <element xmi:type="pipeline:Flow" href="SubTopology.pipeline#//@flows.0"/>
+    <bendpoints xmi:type="notation:RelativeBendpoints" xmi:id="_ppH8kj6lEeaI656rJtj2kw" points="[30, -18, -164, -11]$[96, -57, -98, -50]$[164, -23, -30, -16]"/>
+  </edges>
+  <edges xmi:type="notation:Connector" xmi:id="_q-GLcD6lEeaI656rJtj2kw" type="4001" source="_ltl7ID6lEeaI656rJtj2kw" target="_nIfy4D6lEeaI656rJtj2kw">
+    <children xmi:type="notation:DecorationNode" xmi:id="_q-GLcz6lEeaI656rJtj2kw" type="6001">
+      <layoutConstraint xmi:type="notation:Location" xmi:id="_q-GygD6lEeaI656rJtj2kw" x="3" y="10"/>
+    </children>
+    <styles xmi:type="notation:FontStyle" xmi:id="_q-GLcT6lEeaI656rJtj2kw" fontName="Segoe UI"/>
+    <element xmi:type="pipeline:Flow" href="SubTopology.pipeline#//@flows.1"/>
+    <bendpoints xmi:type="notation:RelativeBendpoints" xmi:id="_q-GLcj6lEeaI656rJtj2kw" points="[30, 1, -142, 0]$[164, 3, -8, 2]"/>
+    <targetAnchor xmi:type="notation:IdentityAnchor" xmi:id="_q-M5ID6lEeaI656rJtj2kw" id="(0.13333333333333333,0.6333333333333333)"/>
+  </edges>
+  <edges xmi:type="notation:Connector" xmi:id="_sbWMkD6lEeaI656rJtj2kw" type="4001" source="_ltl7ID6lEeaI656rJtj2kw" target="_nIfy4D6lEeaI656rJtj2kw">
+    <children xmi:type="notation:DecorationNode" xmi:id="_sbWzoD6lEeaI656rJtj2kw" type="6001">
+      <layoutConstraint xmi:type="notation:Location" xmi:id="_sbWzoT6lEeaI656rJtj2kw" x="7" y="10"/>
+    </children>
+    <styles xmi:type="notation:FontStyle" xmi:id="_sbWMkT6lEeaI656rJtj2kw" fontName="Segoe UI"/>
+    <element xmi:type="pipeline:Flow" href="SubTopology.pipeline#//@flows.2"/>
+    <bendpoints xmi:type="notation:RelativeBendpoints" xmi:id="_sbWMkj6lEeaI656rJtj2kw" points="[30, 15, -164, 22]$[101, 53, -93, 60]$[164, 12, -30, 19]"/>
+  </edges>
+</notation:Diagram>

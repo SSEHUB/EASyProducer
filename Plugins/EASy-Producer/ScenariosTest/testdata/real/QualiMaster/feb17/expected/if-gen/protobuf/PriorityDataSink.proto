@@ -1,0 +1,18 @@
+package eu.qualimaster.data.protobuf;
+option java_package = "eu.qualimaster.protos";
+option java_outer_classname = "PriorityDataSinkProtos";
+
+message SPriorityDataSinkPairwiseFinancialInput {
+    required string id0 = 1;
+    required string id1 = 2;
+    required string date = 3;
+    required double value = 4;
+}
+
+message SPriorityDataSinkAnalyzedStreamInput {
+    required string symbolId = 5;
+    required int64 timestamp = 6;
+    required double value = 7;
+    required int32 volume = 8;
+}
+
