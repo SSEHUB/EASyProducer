@@ -1,0 +1,5 @@
+vilScript types (Project source, Project target, Configuration config) {
+
+    typedef MyList sequenceOf(Integer);
+
+}

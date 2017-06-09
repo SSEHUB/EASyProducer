@@ -12,6 +12,7 @@ import org.eclipse.emf.ecore.EStructuralFeature;
 import net.ssehub.easy.basics.modelManagement.IModel;
 import net.ssehub.easy.dslCore.translation.ErrorCodes;
 import net.ssehub.easy.dslCore.translation.IMessageReceiver;
+import net.ssehub.easy.instantiation.core.model.vilTypes.TypeDescriptor;
 import net.ssehub.easy.instantiation.core.model.vilTypes.TypeRegistry;
 
 /**
@@ -390,6 +391,16 @@ public abstract class Resolver<V extends IResolvable> implements IResolver<V> {
      */
     public IModel getCurrentModel() {
         return null; // shall be overridden
+    }
+    
+    /**
+     * Resolves a type within the known contexts / models.
+     * 
+     * @param name the name of the type
+     * @return the type or <b>null</b> for unknown
+     */
+    public TypeDescriptor<?> resolveType(String name) {
+        return null;
     }
 
 }

@@ -79,4 +79,20 @@ public interface IResolvableModel<V extends IResolvable> extends IParameterizabl
      */
     public TypeRegistry getTypeRegistry();
     
+    /**
+     * Get the number of typedefs of this model.
+     * 
+     * @return The number of typedefs of this model.
+     */
+    public int getTypedefCount();
+    
+    /**
+     * Get the typedef at the specified index.
+     * 
+     * @param index The 0-based index of the advice to be returned.
+     * @return The advice parameter at the given index.
+     * @throws IndexOutOfBoundsException if <code>index &lt; 0 || index &gt;={@link #getTypedefCount()}</code>
+     */
+    public Typedef getTypedef(int index);
+
 }

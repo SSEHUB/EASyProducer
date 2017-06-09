@@ -14,6 +14,7 @@ import net.ssehub.easy.instantiation.core.model.expressions.IRuntimeEnvironment;
 import net.ssehub.easy.instantiation.core.model.vilTypes.Constants;
 import net.ssehub.easy.instantiation.core.model.vilTypes.IMetaOperation;
 import net.ssehub.easy.instantiation.core.model.vilTypes.IMetaType;
+import net.ssehub.easy.instantiation.core.model.vilTypes.TypeDescriptor;
 import net.ssehub.easy.instantiation.core.model.vilTypes.TypeRegistry;
 
 /**
@@ -383,6 +384,40 @@ public abstract class Resolver<M extends IResolvableModel<V>, O extends IResolva
         for (int s = models.size() - 1; null == result && s >= 0; s--) {
             result = models.get(s).getIvmlElement(name);
         }  
+        return result;
+    }
+
+    @Override
+    public TypeDescriptor<?> resolveType(String name) {
+        TypeDescriptor<?> result = null;
+        for (int s = models.size() - 1; null == result && s >= 0; s--) {
+            result = resolveType(models.get(s), name);
+        }
+        return result;
+    }
+
+    /**
+     * Resolves a type within the given model, i.e., looks for model-specific type definitions.
+     * 
+     * @param model the model to resolve <code>name</code> as type on
+     * @param name the name of the type
+     * @return the type or <b>null</b> for unknown
+     */
+    @SuppressWarnings("unchecked")
+    private TypeDescriptor<?> resolveType(M model, String name) {
+        TypeDescriptor<?> result = null;
+        for (int t = 0, n = model.getTypedefCount(); null == result && t < n; t++) {
+            Typedef td = model.getTypedef(t);
+            if (td.getName().equals(name)) {
+                result = td.getType();
+            }
+        }
+        for (int i = 0, n = model.getImportsCount(); null == result && i < n; i++) {
+            ModelImport<?> imp = model.getImport(i);
+            if (null != imp.getResolved()) {
+                result = resolveType((M) imp.getResolved(), name);
+            }
+        }
         return result;
     }
 

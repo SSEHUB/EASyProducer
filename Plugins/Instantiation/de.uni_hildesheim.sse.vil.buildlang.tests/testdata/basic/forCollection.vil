@@ -1,0 +1,10 @@
+vilScript forInstantiator (Project source, Configuration config) {
+
+    main(Project source, Configuration config) = : {
+        setOf(Integer) is = {7, 1, 3, 4, 2};
+        for(Integer i=is->sortedBy(i | i)) {
+            println(i);
+        };
+    }
+
+}

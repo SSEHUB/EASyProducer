@@ -10,7 +10,8 @@ import net.ssehub.easy.instantiation.core.model.vilTypes.StringValueHelper;
 
 /**
  * Implements a simple stream-based execution tracer. Produces normalized sequences of collections
- * in order to facilitate easy comparison.
+ * in order to facilitate easy comparison. As this may affect followup computations, don't use this tracer for 
+ * real execution!
  * 
  * @author Holger Eichelberger
  */

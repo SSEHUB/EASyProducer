@@ -1,0 +1,9 @@
+import types;
+
+vilScript importTest7 (Project source, Project target, Configuration config) {
+
+    main() = : {
+        MyList var = {1, 2, 3, 4};
+    }
+
+}

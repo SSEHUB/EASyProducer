@@ -255,13 +255,23 @@ public class BasicTests extends AbstractBasicTest<Script> {
     }
     
     /**
-     * Tests failing protected import.
+     * Tests imported rules.
      * 
      * @throws IOException should not occur
      */
     @Test
     public void testImport6() throws IOException {
         assertEqual("import6", "importTest6");
+    }
+
+    /**
+     * Tests imported typedef.
+     * 
+     * @throws IOException should not occur
+     */
+    @Test
+    public void testImport7() throws IOException {
+        assertEqual("import7", "importTest7");
     }
 
     /**
@@ -482,6 +492,16 @@ public class BasicTests extends AbstractBasicTest<Script> {
     @Test
     public void testForInstantiator() throws IOException {
         assertEqual("forInstantiator");
+    }
+
+    /**
+     * Tests a generic collection in a for statement.
+     * 
+     * @throws IOException should not occur
+     */
+    @Test
+    public void testForCollection() throws IOException {
+        assertEqual("forCollection");
     }
 
     /**

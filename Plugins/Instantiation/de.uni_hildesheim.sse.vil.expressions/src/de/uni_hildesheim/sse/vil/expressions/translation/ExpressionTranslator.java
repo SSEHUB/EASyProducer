@@ -1205,6 +1205,9 @@ public abstract class ExpressionTranslator<I extends VariableDeclaration, R exte
             String typeName = Utils.getQualifiedNameString(type.getName());
             result = resolver.getTypeRegistry().getType(typeName);
             if (null == result) {
+                result = resolveModelType(type, typeName, resolver);
+            }
+            if (null == result) {
                 throw new TranslatorException("type '" + typeName + "' unknown", type, 
                     ExpressionDslPackage.Literals.TYPE__NAME, ErrorCodes.UNKNOWN_TYPE);
             }
@@ -1212,6 +1215,34 @@ public abstract class ExpressionTranslator<I extends VariableDeclaration, R exte
         if (result.isPlaceholder()) {
             String typeName = Utils.getQualifiedNameString(type.getName());
             ivmlWarning(typeName, type, ExpressionDslPackage.Literals.TYPE__NAME);
+        }
+        return result;
+    }
+    
+    /**
+     * Resolves a model type.
+     * 
+     * @param type the type as ECore instance
+     * @param typeName the name of the type
+     * @param resolver the resolver
+     * @return the type or <b>null</b> if not resolved
+     * @throws TranslatorException in case of a serious resolution problem
+     */
+    private TypeDescriptor<?> resolveModelType(Type type, String typeName, R resolver) throws TranslatorException {
+        TypeDescriptor<?> result = resolver.resolveType(typeName);
+        if (null != result) {
+            TypeRegistry registry = resolver.getTypeRegistry();
+            try {
+                if (registry.addTypeAlias(typeName, result)) {
+                    TypeDescriptor<?> tmp = registry.getType(typeName);
+                    if (null != tmp) {
+                        result = tmp;
+                    }
+                }
+            } catch (VilException e) {
+                throw new TranslatorException("type '" + typeName + "' unknown: " + e.getMessage(), type, 
+                    ExpressionDslPackage.Literals.TYPE__NAME, ErrorCodes.UNKNOWN_TYPE);
+            }
         }
         return result;
     }

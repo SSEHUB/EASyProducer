@@ -147,22 +147,12 @@ public abstract class AbstractResolvableModel<V extends IResolvable, M extends I
         return advices[index];
     }
     
-    /**
-     * Get the number of typedefs of this model.
-     * 
-     * @return The number of typedefs of this model.
-     */
+    @Override
     public int getTypedefCount() {
         return null == typedefs ? 0 : typedefs.size();
     }
     
-    /**
-     * Get the typedef at the specified index.
-     * 
-     * @param index The 0-based index of the advice to be returned.
-     * @return The advice parameter at the given index.
-     * @throws IndexOutOfBoundsException if <code>index &lt; 0 || index &gt;={@link #getTypedefCount()}</code>
-     */
+    @Override
     public Typedef getTypedef(int index) {
         if (null == typedefs) {
             throw new IndexOutOfBoundsException();

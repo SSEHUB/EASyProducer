@@ -331,6 +331,8 @@ public class CallExpression extends AbstractCallExpression implements IArgumentP
                     result = TypeRegistry.getSetType(returnGenerics);
                 } else if (result.isSequence()) {
                     result = TypeRegistry.getSequenceType(returnGenerics);
+                } else if (result.isCollection()) {
+                    result = TypeRegistry.getCollectionType(returnGenerics);
                 } else {
                     result = TypeRegistry.getMapType(returnGenerics);
                 }
