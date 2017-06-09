@@ -3,8 +3,19 @@ vilScript mapTest () {
     mapOf(String, String) m = {{"sap", "siemens"}, {"NDL", "EU"}};
     String s1 = m["sap"];
     String s2 = m.get("NDL");
+    String s3 = m.get("NDL", "");
+    String s4 = m.defaultget("NDL", "");
+    Boolean b1 = m.isEmpty();
+    Boolean b2 = m.notEmpty();
 
     main() = : {
+        mapOf(String, String) m1 = {};
+        Boolean b3 = m.isEmpty();
+        Boolean b4 = m.notEmpty();
+        m1.add("here", "there");
+        m1.put("x", "y");
+        String s5 = m.defaultget("x", "z");
+        String s6 = m1.defaultget("x", "z");
     }
 
 }

@@ -91,6 +91,7 @@ public class Map<K, V> implements IVilGenericType, IStringValueProvider {
      * @param key the key to search for
      * @return <code>true</code> if key is included, <code>false</code> else
      */
+    @OperationMeta(name = {"containsKey", "hasKey"})
     public boolean containsKey(Object key) {
         boolean result = false;
         if (null != key) {
@@ -105,7 +106,7 @@ public class Map<K, V> implements IVilGenericType, IStringValueProvider {
      * @param key the key to search the value for
      * @return the value for key (may be <b>null</b>)
      */
-    @OperationMeta(useGenericParameter = 1 )
+    @OperationMeta(useGenericParameter = 1)
     public V get(Object key) {
         return at(key);
     }
@@ -117,7 +118,7 @@ public class Map<K, V> implements IVilGenericType, IStringValueProvider {
      * @param deflt the default value if <code>key</code> does not exist 
      * @return the value for key (<code>deflt</code> if no key-value mapping is defined)
      */
-    @OperationMeta(useGenericParameter = 1 )
+    @OperationMeta(useGenericParameter = 1, name = {"get", "defaultget"})
     public V get(Object key, V deflt) {
         V result = deflt;
         if (containsKey(key)) {
@@ -206,6 +207,17 @@ public class Map<K, V> implements IVilGenericType, IStringValueProvider {
             }
             map.put(key, val);
         }
+    }
+    
+    /**
+     * Adds a key-value pair to this map and overrides existing mappings.
+     * 
+     * @param key the key for the mapping (<b>null</b> is ignored)
+     * @param value the value of the mapping
+     */
+    @OperationMeta(genericArgument = {0, 1 })
+    public void put(Object key, V value) {
+        add(key, value);
     }
 
     /**
@@ -463,6 +475,25 @@ public class Map<K, V> implements IVilGenericType, IStringValueProvider {
             result.put(k, get(k));
         }
         return result;
+    }
+    
+    /**
+     * Returns whether the map is empty.
+     * 
+     * @return <code>true</code> for empty, <code>false</code> else
+     */
+    public boolean isEmpty() {
+        return map.isEmpty();
+    }
+
+    /**
+     * Returns whether the map is not empty.
+     * 
+     * @return <code>false</code> for empty, <code>true</code> else
+     */
+    @OperationMeta(name = {"notEmpty", "isNotEmpty"})
+    public boolean notEmpty() {
+        return !isEmpty();
     }
 
 }

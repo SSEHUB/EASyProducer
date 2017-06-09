@@ -3,4 +3,23 @@ m <- {{NDL, EU}, {sap, siemens}}
 s1 <- siemens
 -> get(Map, Any) with ({{NDL, EU}, {sap, siemens}}, NDL) = EU
 s2 <- EU
+-> get(Map, Any, Any) with ({{NDL, EU}, {sap, siemens}}, NDL, ) = EU
+s3 <- EU
+-> defaultget(Map, Any, Any) with ({{NDL, EU}, {sap, siemens}}, NDL, ) = EU
+s4 <- EU
+-> isEmpty(Map) with ({{NDL, EU}, {sap, siemens}}) = false
+b1 <- false
+-> notEmpty(Map) with ({{NDL, EU}, {sap, siemens}}) = true
+b2 <- true
 -> main()
+    m1 <- {}
+    -> isEmpty(Map) with ({{NDL, EU}, {sap, siemens}}) = false
+    b3 <- false
+    -> notEmpty(Map) with ({{NDL, EU}, {sap, siemens}}) = true
+    b4 <- true
+    -> add(Map, String, String) with ({{here, there}}, here, there)
+    -> put(Map, String, String) with ({{here, there}, {x, y}}, x, y)
+    -> defaultget(Map, Any, Any) with ({{NDL, EU}, {sap, siemens}}, x, z) = z
+    s5 <- z
+    -> defaultget(Map, Any, Any) with ({{here, there}, {x, y}}, x, z) = y
+    s6 <- y
