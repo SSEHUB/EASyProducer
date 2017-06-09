@@ -118,17 +118,34 @@ public class FileUtils {
     }
     
     /**
-     * Creates a temporary directory.
+     * Creates a temporary directory and deletes an existing one if it already exists. Deletion on exit of JVM is 
+     * enabled for the resulting directory.
      * 
      * @param name the name of the directory within the standard temporary folder 
      * @return the temporary directory
      */
     public static File createTmpDir(String name) {
+        return createTmpDir(name, true);
+    }
+
+    /**
+     * Creates a temporary directory. Deletion on exit of JVM is enabled for the resulting
+     * directory.
+     * 
+     * @param name the name of the directory within the standard temporary folder 
+     * @param deleteIfExists delete an existing one if it already exists
+     * @return the temporary directory
+     */
+    public static File createTmpDir(String name, boolean deleteIfExists) {
         File result = new File(System.getProperty("java.io.tempdir"));
         if (null != name) {
             result = new File(result, name);
         }
+        if (deleteIfExists && result.exists()) {
+            result.delete();
+        }
         createIfNotExists(result);
+        result.deleteOnExit();
         return result;
     }
 
