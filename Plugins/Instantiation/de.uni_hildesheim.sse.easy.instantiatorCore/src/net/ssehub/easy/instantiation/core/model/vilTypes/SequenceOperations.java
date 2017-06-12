@@ -5,6 +5,7 @@ import java.util.Iterator;
 import java.util.Set;
 
 import net.ssehub.easy.instantiation.core.model.vilTypes.configuration.DecisionVariable;
+import net.ssehub.easy.varModel.model.datatypes.OclKeyWords;
 import net.ssehub.easy.varModel.model.values.Value;
 
 /**
@@ -218,10 +219,11 @@ public class SequenceOperations {
      */
     public static <T> java.util.List<T> insertAt(Sequence<T> seq, int index, T object) {
         java.util.List<T> result = null;
-        if (0 <= index && index <= seq.size()) {
+        int i = OclKeyWords.toJavaIndex(index);
+        if (0 <= i && i <= seq.size()) {
             result = new java.util.ArrayList<T>(seq.size());
             addAll(result, seq);
-            result.add(index, object);
+            result.add(i, object);
         }
         return result;
     }
@@ -236,13 +238,12 @@ public class SequenceOperations {
      * @return the sub-sequence
      */
     public static <T> java.util.List<T> subSequence(Sequence<T> seq, int lower, int upper) {
-        int l = Math.max(0, lower);
-        int u = Math.min(upper, seq.size() - 1);
+        int l = Math.max(0, OclKeyWords.toJavaIndex(lower));
+        int u = Math.min(OclKeyWords.toJavaIndex(upper), seq.size() - 1);
         java.util.List<T> result = new java.util.ArrayList<T>(u - l + 1);
         addAll(result, seq, l, u);
         return result;
     }
-
 
     /**
      * Returns whether at least one of the elements in <code>set</code> has a duplicate.

@@ -1,0 +1,27 @@
+@advice(formatTest)
+template formatTest(Configuration config, FileArtifact target) {
+
+    def main(Configuration config, FileArtifact target) {
+        String f1 = "Number: %d".format(10);
+        '$f1'
+        String f2 = "String: %s".format("abba");
+        '$f2'
+        String f3 = "Float: %.2f".format(42.12);
+        '$f3'
+        formatTest cfg = config;
+        String f4 = "Var1: %d".format(cfg.tc.value);
+        '$f4'
+        DecisionVariable in = config.byName("i1");
+        String f5 = "Var2: %d".format(i1);
+        '$f5'
+        sequenceOf(Any) values = {10, "abba", 42.12};
+        String f6 = "Combined: %d %s %.2f".format(values);
+        '$f6'
+        mapOf(String, String) keyValues = {};
+        keyValues.add("k1", "v1");
+        keyValues.add("k2", "v2");
+        String f7 = "Combined: %(k1) %(k2)".format(keyValues);
+        '$f7'
+    }
+
+}

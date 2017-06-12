@@ -1,0 +1,22 @@
+-> main(Configuration, FileArtifact) with (<config>, test.texts)
+    -> format(String, Any) with (Number: %d, 10) = Number: 10
+    f1 <- Number: 10
+    -> format(String, Any) with (String: %s, abba) = String: abba
+    f2 <- String: abba
+    -> format(String, Any) with (Float: %.2f, 42.12) = Float: 42,12
+    f3 <- Float: 42,12
+    cfg <- <config>
+    -> format(String, Any) with (Var1: %d, 1) = Var1: 1
+    f4 <- Var1: 1
+    -> byName(Configuration, String) with (<config>, i1) = formatTest::i1
+    in <- formatTest::i1
+    -> format(String, Any) with (Var2: %d, formatTest::i1) = Var2: 5
+    f5 <- Var2: 5
+    values <- {10, 42.12, abba}
+    -> format(String, Any) with (Combined: %d %s %.2f, {10, 42.12, abba}) = Combined: 10 abba 42,12
+    f6 <- Combined: 10 abba 42,12
+    keyValues <- {}
+    -> add(Map, String, String) with ({{k1, v1}}, k1, v1)
+    -> add(Map, String, String) with ({{k1, v1}, {k2, v2}}, k2, v2)
+    -> format(String, Any) with (Combined: %(k1) %(k2), {{k1, v1}, {k2, v2}}) = Combined: v1 v2
+    f7 <- Combined: v1 v2

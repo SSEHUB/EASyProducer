@@ -1402,4 +1402,14 @@ public class ExecutionTests extends AbstractTest {
         assertEqualWithIvml("cast1", "cast1");
     }
 
+    /**
+     * Tests the format operation.
+     * 
+     * @throws IOException should not occur
+     */
+    @Test
+    public void testFormat() throws IOException {
+        assertEqualWithIvml("formatTest", "formatTest");
+    }
+
 }

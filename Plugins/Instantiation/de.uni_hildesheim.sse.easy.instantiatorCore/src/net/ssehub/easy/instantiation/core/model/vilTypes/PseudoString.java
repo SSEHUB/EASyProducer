@@ -1,9 +1,13 @@
 package net.ssehub.easy.instantiation.core.model.vilTypes;
 
+import java.util.IllegalFormatException;
+import java.util.List;
 import java.util.Locale;
 import java.util.StringTokenizer;
 
 import net.ssehub.easy.instantiation.core.model.common.ExecutionLocal;
+import net.ssehub.easy.instantiation.core.model.vilTypes.configuration.DecisionVariable;
+import net.ssehub.easy.varModel.model.datatypes.OclKeyWords;
 
 /**
  * Implements a pseudo class for strings.
@@ -218,8 +222,10 @@ public class PseudoString implements IVilType {
      */
     public static String substring(String in, int start, int end) {
         String result;
-        if (null != in && start >= 0 && start < end && end <= in.length()) {
-            result = in.substring(start, end);
+        int s = OclKeyWords.toJavaIndex(start);
+        int e = OclKeyWords.toJavaIndex(end);
+        if (null != in && s >= 0 && s < e && e <= in.length()) {
+            result = in.substring(s, e);
         } else {
             result = in;
         }
@@ -235,8 +241,9 @@ public class PseudoString implements IVilType {
      */
     public static String substring(String in, int start) {
         String result;
-        if (null != in && start >= 0 && start < in.length()) {
-            result = in.substring(start);
+        int s = OclKeyWords.toJavaIndex(start);
+        if (null != in && s >= 0 && s < in.length()) {
+            result = in.substring(s);
         } else {
             result = in;
         }
@@ -395,7 +402,7 @@ public class PseudoString implements IVilType {
     public static Integer indexOf(String string, String part) {
         Integer result = null;
         if (null != string && null != part) {
-            result = string.indexOf(part);
+            result = OclKeyWords.toIvmlIndex(string.indexOf(part));
         }
         return result;
     }
@@ -409,8 +416,9 @@ public class PseudoString implements IVilType {
      */
     public static String at(String string, int index) {
         String result = null;
-        if (null != string && 0 <= index && index <= string.length()) {
-            result = String.valueOf(string.charAt(index));
+        int i = OclKeyWords.toJavaIndex(index);
+        if (null != string && 0 <= i && i <= string.length()) {
+            result = String.valueOf(string.charAt(i));
         }
         return result;
     }
@@ -529,6 +537,77 @@ public class PseudoString implements IVilType {
     @OperationMeta(name = {Constants.UNEQUALITY, Constants.UNEQUALITY_ALIAS}, opType = OperationType.INFIX)
     public static boolean notEquals(String string, TypeDescriptor<?> type) {
         return !equals(string, type);
+    }
+    
+    /**
+     * Fills <code>format</code> with values from <code>value</code>. Follows the QVT specification
+     * of this operation as far as possible.
+     * 
+     * @param format the format in Java format specification, including %(x) for keys if <code>value</code> is a map
+     * @param value the value - if sequence, assign the values to the positions of the format specification; if map, 
+     *   replace %(key) by string representation; if value, just apply format.   
+     * @return the formatted string, <b>null</b> in case of any formatting problems
+     */
+    public static String format(String format, Object value) {
+        String result = null;
+        if (value instanceof Map) {
+            result = format(format, ((Map<?, ?>) value).toMappedMap());
+        } else if (value instanceof java.util.Map) {
+            result = formatImpl(format, (java.util.Map<?, ?>) value);
+        } else if (value instanceof Sequence) {
+            result = formatImpl(format, ((Sequence<?>) value).toMappedList());
+        } else if (value instanceof List) {
+            result = formatImpl(format, ((List<?>) value));
+        } else if (value instanceof DecisionVariable) {
+            result = formatImpl(format, ((DecisionVariable) value).getValue());
+        } else {
+            result = formatImpl(format, value);
+        }
+        return result;
+    }
+    
+    /**
+     * Implements the format operation for map values.
+     * 
+     * @param format the format operation
+     * @param value the map value
+     * @return the formatted string
+     */
+    private static String formatImpl(String format, java.util.Map<?, ?> value) {
+        String result = format;
+        for (java.util.Map.Entry<?, ?> entry : value.entrySet()) {
+            result = result.replace("%(" + StringValueHelper.getStringValue(entry.getKey(), null) + ")", 
+                StringValueHelper.getStringValue(entry.getValue(), null));
+        }
+        return result;
+    }
+
+    /**
+     * Implements the format operation for list values.
+     * 
+     * @param format the format operation
+     * @param values the list value(s)
+     * @return the formatted string
+     */
+    private static String formatImpl(String format, List<?> values) {
+        return formatImpl(format, values.toArray());
+    }
+    
+    /**
+     * Implements the generic format operation with exception handling.
+     * 
+     * @param format the format operation
+     * @param values the values
+     * @return the formatted string
+     */
+    private static String formatImpl(String format, Object... values) {
+        String result;
+        try {
+            result = String.format(format, values);
+        } catch (IllegalFormatException e) {
+            result = null;
+        }
+        return result;
     }
 
 }

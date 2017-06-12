@@ -20,6 +20,7 @@ import java.util.List;
 
 import net.ssehub.easy.instantiation.core.model.common.VilException;
 import net.ssehub.easy.instantiation.core.model.expressions.ExpressionEvaluator;
+import net.ssehub.easy.varModel.model.datatypes.OclKeyWords;
 
 /**
  * Implements an array wrapper for the VIL sequence type.
@@ -64,18 +65,19 @@ public class ArraySequence<T> extends AbstractArrayWrapper<T> implements Sequenc
     @Override
     public T at(int index) {
         T[] array = getArray();
+        int i = OclKeyWords.toJavaIndex(index);
         T result;
-        if (null == array || index < 0 || index >= array.length) {
+        if (null == array || i < 0 || i >= array.length) {
             result = null;
         } else {
-            result = array[index];
+            result = array[i];
         }
         return result;
     }
     
     @Override
     public T get(int index) {
-        return at(index);
+        return at(OclKeyWords.toJavaIndex(index));
     }
 
     /**
@@ -274,7 +276,7 @@ public class ArraySequence<T> extends AbstractArrayWrapper<T> implements Sequenc
                 result = i;
             }
         }
-        return result;
+        return OclKeyWords.toIvmlIndex(result);
     }
 
     @Override
