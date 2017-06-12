@@ -290,6 +290,7 @@ public class PseudoString implements IVilType {
      * @param string the string to be transformed
      * @return the transformed string
      */
+    @OperationMeta(name = {"toUpperCase", "toUpper"})
     public static String toUpperCase(String string) {
         return string.toUpperCase(ExecutionLocal.getCurrentLocale());
     }
@@ -300,6 +301,7 @@ public class PseudoString implements IVilType {
      * @param string the string to be transformed
      * @return the transformed string
      */
+    @OperationMeta(name = {"toLowerCase", "toLower"})
     public static String toLowerCase(String string) {
         return string.toLowerCase(ExecutionLocal.getCurrentLocale());
     }
@@ -310,6 +312,7 @@ public class PseudoString implements IVilType {
      * @param string the string to be transformed
      * @return the transformed string
      */
+    @OperationMeta(name = {"firstToUpper", "firstToUpperCase"})
     public static String firstToUpperCase(String string) {
         return StringValueHelper.firstToUpperCase(string, ExecutionLocal.getCurrentLocale());
     }
@@ -320,8 +323,31 @@ public class PseudoString implements IVilType {
      * @param string the string to be transformed
      * @return the transformed string
      */
+    @OperationMeta(name = {"firstToLower", "firstToLowerCase"})
     public static String firstToLowerCase(String string) {
         return StringValueHelper.firstToLowerCase(string, ExecutionLocal.getCurrentLocale());
+    }
+    
+    /**
+     * Turns the last character into an upper case character (QVT).
+     * 
+     * @param string the string to be transformed
+     * @return the transformed string
+     */
+    @OperationMeta(name = {"lastToUpper", "lastToUpperCase"})
+    public static String lastToUpperCase(String string) {
+        return StringValueHelper.lastToUpperCase(string, ExecutionLocal.getCurrentLocale());
+    }
+
+    /**
+     * Turns the last character into a lower case character.
+     * 
+     * @param string the string to be transformed
+     * @return the transformed string
+     */
+    @OperationMeta(name = {"lastToLower", "lastToLowerCase"})
+    public static String lastToLowerCase(String string) {
+        return StringValueHelper.lastToLowerCase(string, ExecutionLocal.getCurrentLocale());
     }
 
     /**

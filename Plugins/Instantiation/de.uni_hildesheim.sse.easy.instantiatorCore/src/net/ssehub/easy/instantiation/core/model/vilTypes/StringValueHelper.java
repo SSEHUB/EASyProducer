@@ -45,14 +45,43 @@ public class StringValueHelper {
      */
     public static String firstToUpperCase(String string, Locale locale) {
         String result = string;
-        if (1 == string.length()) {
+        int len = string.length();
+        if (1 == len) {
             result = string.toUpperCase(locale);
-        } else if (string.length() > 1) {
+        } else if (len > 1) {
             result = Character.toUpperCase(string.charAt(0)) + string.substring(1);
         }
         return result;
     }
 
+    /**
+     * Turns the last character into an upper case character using the default system locale.
+     * 
+     * @param string the string to be transformed
+     * @return the transformed string
+     */
+    public static String lastToUpperCase(String string) {
+        return lastToLowerCase(string, Locale.getDefault());
+    }
+
+    /**
+     * Turns the last character into an upper case character using the given locale.
+     * 
+     * @param string the string to be transformed
+     * @param locale the locale to use
+     * @return the transformed string
+     */
+    public static String lastToUpperCase(String string, Locale locale) {
+        String result = string;
+        int len = string.length();
+        if (1 == len) {
+            result = string.toUpperCase(locale);
+        } else if (len > 1) {
+            result = string.substring(0, len - 1) + Character.toUpperCase(string.charAt(len - 1));
+        }
+        return result;
+    }
+    
     /**
      * Turns the first character into a lower case character using the default system locale.
      * 
@@ -72,10 +101,39 @@ public class StringValueHelper {
      */
     public static String firstToLowerCase(String string, Locale locale) {
         String result = string;
-        if (1 == string.length()) {
+        int len = string.length();
+        if (1 == len) {
             result = string.toLowerCase(locale);
-        } else if (string.length() > 1) {
+        } else if (len > 1) {
             result = Character.toLowerCase(string.charAt(0)) + string.substring(1);
+        }
+        return result;
+    }
+    
+    /**
+     * Turns the last character into a lower case character using the default system locale.
+     * 
+     * @param string the string to be transformed
+     * @return the transformed string
+     */
+    public static String lastToLowerCase(String string) {
+        return lastToLowerCase(string, Locale.getDefault());
+    }
+
+    /**
+     * Turns the last character into a lower case character using the given locale.
+     * 
+     * @param string the string to be transformed
+     * @param locale the locale to use
+     * @return the transformed string
+     */
+    public static String lastToLowerCase(String string, Locale locale) {
+        String result = string;
+        int len = string.length();
+        if (1 == len) {
+            result = string.toLowerCase(locale);
+        } else if (len > 1) {
+            result = string.substring(0, len - 1) + Character.toLowerCase(string.charAt(len - 1));
         }
         return result;
     }

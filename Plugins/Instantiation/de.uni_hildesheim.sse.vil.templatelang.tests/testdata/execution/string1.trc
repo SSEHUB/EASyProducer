@@ -9,3 +9,13 @@
     end <- 6
     -> substring(String, Integer, Integer) with (fAdd10, 1, 6) = Add10
     aName <- Add10
+    lowerTest <- ABBA
+    upperTest <- aBBa
+    -> firstToLowerCase(String) with (ABBA) = aBBA
+    -> firstToLower(String) with (ABBA) = aBBA
+    -> lastToLowerCase(String) with (ABBA) = ABBa
+    -> lastToLower(String) with (ABBA) = ABBa
+    -> firstToUpperCase(String) with (aBBa) = ABBa
+    -> firstToUpper(String) with (aBBa) = ABBa
+    -> lastToUpperCase(String) with (aBBa) = aBBA
+    -> lastToUpper(String) with (aBBa) = aBBA

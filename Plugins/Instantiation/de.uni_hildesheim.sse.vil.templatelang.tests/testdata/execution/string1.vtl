@@ -10,6 +10,12 @@ template switch1() {
         aName = familyName.substring(1, end);
         '$familyName'
         '$aName'
+        String lowerTest = "ABBA";
+        String upperTest = "aBBa";
+        '${lowerTest.firstToLowerCase()} ${lowerTest.firstToLower()}'
+        '${lowerTest.lastToLowerCase()} ${lowerTest.lastToLower()}'
+        '${upperTest.firstToUpperCase()} ${upperTest.firstToUpper()}'
+        '${upperTest.lastToUpperCase()} ${upperTest.lastToUpper()}'
     }
 
 }
