@@ -23,6 +23,13 @@ package net.ssehub.easy.varModel.model.datatypes;
  * @author Tebbje
  */
 public class OclKeyWords {
+
+    /**
+     * The base index value for OCL index-based operations such as indexOf. Currently,
+     * IVML follows Java conventions, i.e., 0-based indexes. A value of 1 would turn
+     * IVML to OCL compliance, i.e., 1-based indexes.
+     */
+    public static final int INDEX_BASE = 0;
     
     // e.g. because of shifting operation declaration between different datatypes.
     // no explicit relations between declaration name and related datatype.
@@ -165,6 +172,26 @@ public class OclKeyWords {
      * "reused" to entire set of IVML constants.
      */
     protected OclKeyWords() {
+    }
+
+    /**
+     * Turns an IVML index to a Java index, i.e., subtracts {@link #INDEX_BASE}.
+     * 
+     * @param ivmlIndex the IVML index
+     * @return the corresponding Java index
+     */
+    public static final int toJavaIndex(int ivmlIndex) {
+        return ivmlIndex - INDEX_BASE;
+    }
+
+    /**
+     * Turns a Java index to an IVML index, i.e., adds {@link #INDEX_BASE}.
+     * 
+     * @param javaIndex the Java index
+     * @return the corresponding IVML index
+     */
+    public static final int toIvmlIndex(int javaIndex) {
+        return javaIndex + INDEX_BASE;
     }
 
 }

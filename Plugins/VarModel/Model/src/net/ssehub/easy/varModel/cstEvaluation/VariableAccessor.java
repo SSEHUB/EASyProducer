@@ -26,6 +26,7 @@ import net.ssehub.easy.varModel.cstEvaluation.EvaluationVisitor.Message;
 import net.ssehub.easy.varModel.model.AbstractVariable;
 import net.ssehub.easy.varModel.model.datatypes.Container;
 import net.ssehub.easy.varModel.model.datatypes.DerivedDatatype;
+import net.ssehub.easy.varModel.model.datatypes.OclKeyWords;
 import net.ssehub.easy.varModel.model.values.ContainerValue;
 import net.ssehub.easy.varModel.model.values.IntValue;
 import net.ssehub.easy.varModel.model.values.Value;
@@ -179,7 +180,7 @@ class VariableAccessor extends AbstractDecisionVariableEvaluationAccessor {
         EvaluationContext context = accessor.getContext();
         Value iValue = accessor.getValue();
         if (iValue instanceof IntValue) {
-            int index = ((IntValue) iValue).getValue();
+            int index = OclKeyWords.toJavaIndex(((IntValue) iValue).getValue());
             if (index < 0) {
                 context.addErrorMessage("index < 0");
             } else if (index >= value.getElementSize()) {

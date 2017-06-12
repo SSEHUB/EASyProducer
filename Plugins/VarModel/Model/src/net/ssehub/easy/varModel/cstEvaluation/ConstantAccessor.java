@@ -18,6 +18,7 @@ package net.ssehub.easy.varModel.cstEvaluation;
 import net.ssehub.easy.basics.pool.IPoolManager;
 import net.ssehub.easy.basics.pool.Pool;
 import net.ssehub.easy.varModel.confModel.IDecisionVariable;
+import net.ssehub.easy.varModel.model.datatypes.OclKeyWords;
 import net.ssehub.easy.varModel.model.values.ContainerValue;
 import net.ssehub.easy.varModel.model.values.IntValue;
 import net.ssehub.easy.varModel.model.values.ReferenceValue;
@@ -95,7 +96,7 @@ public class ConstantAccessor extends EvaluationAccessor {
             Value aValue = accessor.getValue();
             if (aValue instanceof IntValue) {
                 ContainerValue cVal = (ContainerValue) value;
-                int index = ((IntValue) aValue).getValue();
+                int index = OclKeyWords.toJavaIndex(((IntValue) aValue).getValue());
                 if (0 <= index && index < cVal.getElementSize()) {
                     result = ConstantAccessor.POOL.getInstance().bind(cVal.getElement(index), getContext());
                 } else {

@@ -19,6 +19,7 @@ import java.util.Locale;
 import java.util.regex.PatternSyntaxException;
 
 import net.ssehub.easy.varModel.model.datatypes.IntegerType;
+import net.ssehub.easy.varModel.model.datatypes.OclKeyWords;
 import net.ssehub.easy.varModel.model.datatypes.RealType;
 import net.ssehub.easy.varModel.model.datatypes.Sequence;
 import net.ssehub.easy.varModel.model.datatypes.StringType;
@@ -188,8 +189,8 @@ public class StringOperations {
                     && upperValue instanceof IntValue) {
                     try {
                         String opS = ((StringValue) opValue).getValue();
-                        int lower = ((IntValue) lowerValue).getValue();
-                        int upper = ((IntValue) upperValue).getValue();
+                        int lower = OclKeyWords.toJavaIndex(((IntValue) lowerValue).getValue());
+                        int upper = OclKeyWords.toJavaIndex(((IntValue) upperValue).getValue());
                         Value rValue = ValueFactory.createValue(StringType.TYPE, opS.substring(lower, upper));
                         result = ConstantAccessor.POOL.getInstance().bind(rValue, operand.getContext());
                     } catch (ValueDoesNotMatchTypeException e) {
@@ -217,7 +218,8 @@ public class StringOperations {
                     try {
                         int index = ((IntValue) indexValue).getValue();
                         String opS = ((StringValue) opValue).getValue();
-                        Value rValue = ValueFactory.createValue(StringType.TYPE, String.valueOf(opS.charAt(index)));
+                        Value rValue = ValueFactory.createValue(StringType.TYPE, String.valueOf(
+                            opS.charAt(OclKeyWords.toJavaIndex(index))));
                         result = ConstantAccessor.POOL.getInstance().bind(rValue, operand.getContext());
                     } catch (ValueDoesNotMatchTypeException e) {
                         // result -> null
@@ -244,7 +246,8 @@ public class StringOperations {
                     try {
                         String opS = ((StringValue) opValue).getValue();
                         String arS = ((StringValue) argValue).getValue();
-                        Value rValue = ValueFactory.createValue(IntegerType.TYPE, opS.indexOf(arS));
+                        Value rValue = ValueFactory.createValue(IntegerType.TYPE, 
+                            OclKeyWords.toIvmlIndex(opS.indexOf(arS)));
                         result = ConstantAccessor.POOL.getInstance().bind(rValue, operand.getContext());
                     } catch (ValueDoesNotMatchTypeException e) {
                         // result -> null

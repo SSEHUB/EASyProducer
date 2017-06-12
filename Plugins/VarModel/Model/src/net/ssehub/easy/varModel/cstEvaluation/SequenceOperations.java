@@ -10,6 +10,7 @@ import java.util.Set;
 import net.ssehub.easy.varModel.cstEvaluation.ContainerOperations.ContainerValueOperation;
 import net.ssehub.easy.varModel.cstEvaluation.ContainerOperations.ContainerValueOperationEvaluator;
 import net.ssehub.easy.varModel.model.datatypes.IntegerType;
+import net.ssehub.easy.varModel.model.datatypes.OclKeyWords;
 import net.ssehub.easy.varModel.model.datatypes.Sequence;
 import net.ssehub.easy.varModel.model.values.BooleanValue;
 import net.ssehub.easy.varModel.model.values.ContainerValue;
@@ -124,7 +125,7 @@ public class SequenceOperations {
                 Value insValue = arguments[1].getValue();
                 if (oValue instanceof ContainerValue && aValue instanceof IntValue && null != insValue) {
                     ContainerValue cont = (ContainerValue) oValue;
-                    int index = ((IntValue) aValue).getValue();
+                    int index = OclKeyWords.toJavaIndex(((IntValue) aValue).getValue());
                     if (0 <= index && index <= cont.getElementSize()) { // this is an insert!
                         ArrayList<Value> tmp = new ArrayList<Value>();
                         ContainerOperations.addAll(cont, tmp);
@@ -157,7 +158,8 @@ public class SequenceOperations {
                 if (oValue instanceof ContainerValue && null != aValue) {
                     ContainerValue cont = (ContainerValue) oValue;
                     try {
-                        Value resVal = ValueFactory.createValue(IntegerType.TYPE, cont.indexOf(aValue));
+                        Value resVal = ValueFactory.createValue(IntegerType.TYPE, 
+                            OclKeyWords.toIvmlIndex(cont.indexOf(aValue)));
                         result = ConstantAccessor.POOL.getInstance().bind(resVal, operand.getContext());
                     } catch (ValueDoesNotMatchTypeException e) {
                         // result -> null
@@ -349,8 +351,9 @@ public class SequenceOperations {
                 Value aValue2 = arguments[1].getValue();
                 if (oValue instanceof ContainerValue && aValue1 instanceof IntValue && aValue2 instanceof IntValue) {
                     ContainerValue cont = (ContainerValue) oValue;
-                    int lower = Math.max(0, ((IntValue) aValue1).getValue());
-                    int upper = Math.min(((IntValue) aValue2).getValue(), cont.getElementSize() - 1);
+                    int lower = OclKeyWords.toJavaIndex(Math.max(0, ((IntValue) aValue1).getValue())); 
+                    int upper = OclKeyWords.toJavaIndex(Math.min(((IntValue) aValue2).getValue(), 
+                        cont.getElementSize() - 1)); 
                     List<Value> res = new ArrayList<Value>();
                     for (int i = lower; i <= upper; i++) {
                         res.add(cont.getElement(i));
