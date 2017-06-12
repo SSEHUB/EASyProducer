@@ -583,6 +583,45 @@ public class PseudoString implements IVilType {
         }
         return result;
     }
+    
+    /**
+     * Returns whether <code>string</code> is quoted by <code>quote</code>, i.e., 
+     * starts and ends with <code>quote</code>.
+     * 
+     * @param string the string to test
+     * @param quote the quote string/character
+     * @return <code>true</code> if <code>string</code> is quoted, <code>false</code> else
+     */
+    public static boolean isQuoted(String string, String quote) {
+        return string.startsWith(quote) && string.endsWith(quote);
+    }
+
+    /**
+     * Quotifies <code>string</code> by adding <code>quote</code> around <code>string</code>.
+     * 
+     * @param string the string
+     * @param quote the quote string/character
+     * @return the quoted <code>string</code>
+     */
+    public static String quotify(String string, String quote) {
+        return quote + string + quote;
+    }
+
+    /**
+     * Unquotifies <code>string</code> if <code>quote</code> is {@link #isQuoted(String, String) quoted}.
+     * 
+     * @param string the string
+     * @param quote the quote string/character
+     * @return the unquoted <code>string</code>, if not {@link #isQuoted(String, String) quoted} <code>string</code>
+     */
+    public static String unquotify(String string, String quote) {
+        String result = string;
+        if (isQuoted(result, quote)) {
+            int qLen = quote.length();
+            result = result.substring(qLen, result.length() - qLen);
+        }
+        return result;
+    }
 
     /**
      * Returns the character at given position as String.

@@ -40,6 +40,9 @@ template string1() {
         String findTest = "find here, find there";
         Integer i = findTest.find("find");
         i = findTest.rfind("find");
+        b = findTest.isQuoted("\"");
+        String q = findTest.quotify("\"");
+        String u = q.unquotify("\"");
     }
 
 }
