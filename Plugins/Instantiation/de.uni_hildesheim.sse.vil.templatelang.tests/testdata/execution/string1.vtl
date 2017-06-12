@@ -18,6 +18,15 @@ template string1() {
         '${upperTest.lastToUpperCase()} ${upperTest.lastToUpper()}'
         String trimTest = "  ab  ";
         '${trimTest.trim()}'
+        String matchTest = "I test for a certain match.";
+        '${matchTest.substringBefore("I")}'
+        '${matchTest.substringBefore("test")}'
+        '${matchTest.substringBefore("test1")}'
+        '${matchTest.substringAfter("test")}'
+        '${matchTest.substringAfter("test1")}'
+        '${matchTest.substringAfter("match.")}'
+        String normalizeTest = " I  test   for  normalization. ";
+        '${normalizeTest.normalizeSpace()}'
     }
 
 }

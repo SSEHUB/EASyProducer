@@ -293,6 +293,58 @@ public class PseudoString implements IVilType {
     public static String trim(String string) {
         return string.trim();
     }
+    
+    /**
+     * Normalizes spaces, i.e., trims and replaces all internal multi-whitespaces by a single one.
+     * 
+     * @param string the string to normalize
+     * @return the normalized string
+     */
+    public static String normalizeSpace(String string) {
+        String result = string.trim();
+        do {
+            result = result.replace("  ", " ");
+        } while (result.indexOf("  ") >= 0);
+        return result;
+    }
+
+    /**
+     * Returns the substring of <code>string</code> before the (first) occurrence of
+     * <code>match</code>.
+     * 
+     * @param string the string to search within
+     * @param match the string to match for
+     * @return the substring before the match, an empty string in case of no match
+     */
+    public static String substringBefore(String string, String match) {
+        String result;
+        int pos = string.indexOf(match);
+        if (pos >= 0) {
+            result = string.substring(0, pos);
+        } else {
+            result = "";
+        }
+        return result;
+    }
+
+    /**
+     * Returns the substring of <code>string</code> after the (first) occurrence of
+     * <code>match</code>.
+     * 
+     * @param string the string to search within
+     * @param match the string to match for
+     * @return the substring after the match, an empty string in case of no match
+     */
+    public static String substringAfter(String string, String match) {
+        String result;
+        int pos = string.indexOf(match);
+        if (pos >= 0) {
+            result = string.substring(pos + match.length());
+        } else {
+            result = "";
+        }
+        return result;
+    }
 
     /**
      * Transforms all characters to upper case.

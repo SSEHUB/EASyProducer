@@ -20,4 +20,13 @@
     -> lastToUpperCase(String) with (aBBa) = aBBA
     -> lastToUpper(String) with (aBBa) = aBBA
     trimTest <-   ab  
-    -> trim(String) with (  ab  ) = ab    
+    -> trim(String) with (  ab  ) = ab
+    matchTest <- I test for a certain match.
+    -> substringBefore(String, String) with (I test for a certain match., I) = 
+    -> substringBefore(String, String) with (I test for a certain match., test) = I 
+    -> substringBefore(String, String) with (I test for a certain match., test1) = 
+    -> substringAfter(String, String) with (I test for a certain match., test) =  for a certain match.
+    -> substringAfter(String, String) with (I test for a certain match., test1) = 
+    -> substringAfter(String, String) with (I test for a certain match., match.) = 
+    normalizeTest <-  I  test   for  normalization. 
+    -> normalizeSpace(String) with ( I  test   for  normalization. ) = I test for normalization.
