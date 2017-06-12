@@ -27,6 +27,16 @@ template string1() {
         '${matchTest.substringAfter("match.")}'
         String normalizeTest = " I  test   for  normalization. ";
         '${normalizeTest.normalizeSpace()}'
+        Boolean b = "123".matchInteger();
+        b = "123a".matchInteger();
+        b = "123".matchReal();
+        b = "123.23".matchReal();
+        b = "123a".matchReal();
+        b = "true".matchBoolean();
+        b = "false".matchBoolean();
+        b = "123a".matchBoolean();
+        b = "var".matchIdentifier();
+        b = "var 1".matchIdentifier();
     }
 
 }

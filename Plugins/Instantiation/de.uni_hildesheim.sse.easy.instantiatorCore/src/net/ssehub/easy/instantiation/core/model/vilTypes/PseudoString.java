@@ -162,6 +162,7 @@ public class PseudoString implements IVilType {
      * 
      * @param string the input string
      * @return the converted integer (<b>null</b> if conversion is not possible)
+     * @see #matchInteger(String)
      */
     @OperationMeta(opType = OperationType.FUNCTION)
     public static Integer toInteger(String string) {
@@ -175,10 +176,29 @@ public class PseudoString implements IVilType {
     }
 
     /**
+     * Returns whether <code>string</code> represents an Integer value. (QVT)
+     * 
+     * @param string the string to test
+     * @return <code>true</code> if <code>string</code> represents an Integer value, <code>false</code else>
+     * @see #toInteger(String)
+     */
+    public static boolean matchInteger(String string) {
+        boolean result;
+        try {
+            Integer.parseInt(string);
+            result = true;
+        } catch (NumberFormatException e) {
+            result = false;
+        }
+        return result;
+    }
+    
+    /**
      * Turns the given string into a double.
      * 
      * @param string the input string
      * @return the converted double (<b>null</b> if conversion is not possible)
+     * @see #matchReal(String)
      */
     @OperationMeta(opType = OperationType.FUNCTION)
     public static Double toReal(String string) {
@@ -196,20 +216,51 @@ public class PseudoString implements IVilType {
     }
 
     /**
-     * Turns the given string into a Boolean.
+     * Returns whether <code>string</code> represents a Real value. (QVT)
+     * 
+     * @param string the string to test
+     * @return <code>true</code> if <code>string</code> represents a Real
+     * @see #toReal(String)
+     */
+    public static boolean matchReal(String string) {
+        boolean result;
+        try {
+            Double.parseDouble(string);
+            result = true;
+        } catch (NumberFormatException e) {
+            result = false;
+        }
+        return result;
+    }
+
+    /**
+     * Turns the given string into a Boolean. False is implicitly assumed for all
+     * values that do not represent true.
      * 
      * @param string the input string
      * @return the converted Boolean (<b>null</b> if conversion is not possible)
+     * @see #matchBoolean(String)
      */
     @OperationMeta(opType = OperationType.FUNCTION)
     public static Boolean toBoolean(String string) {
         Boolean result;
         if (null != string) {
-            result = "true".equalsIgnoreCase(string);
+            result = "true".equalsIgnoreCase(string); // <-> matchBoolean
         } else {
             result = null;
         }
         return result;
+    }
+
+    /**
+     * Returns whether <code>string</code> represents a Boolean value. (QVT)
+     * 
+     * @param string the string to test
+     * @return <code>true</code> if <code>string</code> represents a Boolean
+     * @see #toBoolean(String)
+     */
+    public static boolean matchBoolean(String string) {
+        return string.equalsIgnoreCase("true") || string.equalsIgnoreCase("false");
     }
 
     /**
@@ -285,7 +336,7 @@ public class PseudoString implements IVilType {
     }
     
     /**
-     * Transforms the <code>string</code> by removing all leading and trailing spaces.
+     * Transforms the <code>string</code> by removing all leading and trailing spaces. (QVT)
      * 
      * @param string the string to be transformed
      * @return the transformed string
@@ -295,7 +346,7 @@ public class PseudoString implements IVilType {
     }
     
     /**
-     * Normalizes spaces, i.e., trims and replaces all internal multi-whitespaces by a single one.
+     * Normalizes spaces, i.e., trims and replaces all internal multi-whitespaces by a single one. (QVT)
      * 
      * @param string the string to normalize
      * @return the normalized string
@@ -310,7 +361,7 @@ public class PseudoString implements IVilType {
 
     /**
      * Returns the substring of <code>string</code> before the (first) occurrence of
-     * <code>match</code>.
+     * <code>match</code>. (QVT)
      * 
      * @param string the string to search within
      * @param match the string to match for
@@ -329,7 +380,7 @@ public class PseudoString implements IVilType {
 
     /**
      * Returns the substring of <code>string</code> after the (first) occurrence of
-     * <code>match</code>.
+     * <code>match</code>. (QVT)
      * 
      * @param string the string to search within
      * @param match the string to match for
@@ -418,8 +469,11 @@ public class PseudoString implements IVilType {
      * 
      * @param string the string to be turned into an identifier
      * @return the identifier (may be empty in the extreme case)
+     * 
+     * @see #matchIdentifier(String)
      */
     public static String toIdentifier(String string) {
+        // see matchIdentifier
         StringBuilder tmp = new StringBuilder(string);
         for (int i = tmp.length() - 1; i >= 0; i--) {
             if (!Character.isJavaIdentifierPart(tmp.charAt(i))) {
@@ -427,6 +481,23 @@ public class PseudoString implements IVilType {
             }
         }
         return tmp.toString();
+    }
+    
+    /**
+     * Returns whether <code>string</code> complies with the rules for a Java identifier.
+     * If <code>true</code>, {@link #toIdentifier(String)} returns <code>string</code>, 
+     * else a string with all characters removed that are not allowed in a Java identifier.
+     * 
+     * @param string the string to be tested
+     * @return <code>true</code> if <code>string</code> represents an identifier, <code>false</code> else
+     */
+    public static boolean matchIdentifier(String string) {
+        // see toIdentifier
+        boolean isIdentifier = true;
+        for (int i = string.length() - 1; isIdentifier && i >= 0; i--) {
+            isIdentifier = Character.isJavaIdentifierPart(string.charAt(i));
+        }
+        return isIdentifier;
     }
 
     /**

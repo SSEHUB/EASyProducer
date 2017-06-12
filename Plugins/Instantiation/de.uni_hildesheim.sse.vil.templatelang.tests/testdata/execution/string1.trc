@@ -30,3 +30,23 @@
     -> substringAfter(String, String) with (I test for a certain match., match.) = 
     normalizeTest <-  I  test   for  normalization. 
     -> normalizeSpace(String) with ( I  test   for  normalization. ) = I test for normalization.
+    -> matchInteger(String) with (123) = true
+    b <- true
+    -> matchInteger(String) with (123a) = false
+    b <- false
+    -> matchReal(String) with (123) = true
+    b <- true
+    -> matchReal(String) with (123.23) = true
+    b <- true
+    -> matchReal(String) with (123a) = false
+    b <- false
+    -> matchBoolean(String) with (true) = true
+    b <- true
+    -> matchBoolean(String) with (false) = true
+    b <- true
+    -> matchBoolean(String) with (123a) = false
+    b <- false
+    -> matchIdentifier(String) with (var) = true
+    b <- true
+    -> matchIdentifier(String) with (var 1) = false
+    b <- false    
