@@ -586,7 +586,7 @@ public class PseudoString implements IVilType {
     
     /**
      * Returns whether <code>string</code> is quoted by <code>quote</code>, i.e., 
-     * starts and ends with <code>quote</code>.
+     * starts and ends with <code>quote</code>. (QVT)
      * 
      * @param string the string to test
      * @param quote the quote string/character
@@ -597,7 +597,7 @@ public class PseudoString implements IVilType {
     }
 
     /**
-     * Quotifies <code>string</code> by adding <code>quote</code> around <code>string</code>.
+     * Quotifies <code>string</code> by adding <code>quote</code> around <code>string</code>. (QVT)
      * 
      * @param string the string
      * @param quote the quote string/character
@@ -608,7 +608,7 @@ public class PseudoString implements IVilType {
     }
 
     /**
-     * Unquotifies <code>string</code> if <code>quote</code> is {@link #isQuoted(String, String) quoted}.
+     * Unquotifies <code>string</code> if <code>quote</code> is {@link #isQuoted(String, String) quoted}. (QVT)
      * 
      * @param string the string
      * @param quote the quote string/character
