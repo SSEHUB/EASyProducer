@@ -37,6 +37,9 @@ template string1() {
         b = "123a".matchBoolean();
         b = "var".matchIdentifier();
         b = "var 1".matchIdentifier();
+        String findTest = "find here, find there";
+        Integer i = findTest.find("find");
+        i = findTest.rfind("find");
     }
 
 }

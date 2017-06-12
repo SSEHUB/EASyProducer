@@ -49,4 +49,9 @@
     -> matchIdentifier(String) with (var) = true
     b <- true
     -> matchIdentifier(String) with (var 1) = false
-    b <- false    
+    b <- false
+    findTest <- find here, find there
+    -> find(String, String) with (find here, find there, find) = 0
+    i <- 0
+    -> rfind(String, String) with (find here, find there, find) = 11
+    i <- 11

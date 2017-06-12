@@ -484,7 +484,7 @@ public class PseudoString implements IVilType {
     }
     
     /**
-     * Returns whether <code>string</code> complies with the rules for a Java identifier.
+     * Returns whether <code>string</code> complies with the rules for a Java identifier. (QVT)
      * If <code>true</code>, {@link #toIdentifier(String)} returns <code>string</code>, 
      * else a string with all characters removed that are not allowed in a Java identifier.
      * 
@@ -551,17 +551,35 @@ public class PseudoString implements IVilType {
     }
     
     /**
-     * Returns the first position of <code>part</code> in <code>string</code>.
+     * Returns the first position of <code>part</code> in <code>string</code>. Find alias
+     * is due to QVT.
      * 
      * @param string the string to search
      * @param part the part to search for
      * @return the first 0-based position or <code>-1</code> if <code>part</code> is not a 
      *     substring of <code>string</code>
      */
+    @OperationMeta(name = {"indexOf", "find"})
     public static Integer indexOf(String string, String part) {
         Integer result = null;
         if (null != string && null != part) {
             result = OclKeyWords.toIvmlIndex(string.indexOf(part));
+        }
+        return result;
+    }
+
+    /**
+     * Returns the last position of <code>part</code> in <code>string</code>. (QVT)
+     * 
+     * @param string the string to search
+     * @param part the part to search for
+     * @return the last 0-based position or <code>-1</code> if <code>part</code> is not a 
+     *     substring of <code>string</code>
+     */
+    public static Integer rfind(String string, String part) {
+        Integer result = null;
+        if (null != string && null != part) {
+            result = OclKeyWords.toIvmlIndex(string.lastIndexOf(part));
         }
         return result;
     }
