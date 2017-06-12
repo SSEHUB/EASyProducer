@@ -19,3 +19,5 @@
     -> firstToUpper(String) with (aBBa) = ABBa
     -> lastToUpperCase(String) with (aBBa) = aBBA
     -> lastToUpper(String) with (aBBa) = aBBA
+    trimTest <-   ab  
+    -> trim(String) with (  ab  ) = ab    

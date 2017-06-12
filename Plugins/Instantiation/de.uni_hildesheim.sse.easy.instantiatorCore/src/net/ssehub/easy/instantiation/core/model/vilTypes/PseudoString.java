@@ -283,6 +283,16 @@ public class PseudoString implements IVilType {
         }
         return result;
     }
+    
+    /**
+     * Transforms the <code>string</code> by removing all leading and trailing spaces.
+     * 
+     * @param string the string to be transformed
+     * @return the transformed string
+     */
+    public static String trim(String string) {
+        return string.trim();
+    }
 
     /**
      * Transforms all characters to upper case.
