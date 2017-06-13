@@ -632,7 +632,7 @@ vilScript QM (Project source, Configuration config, Project target, String pipel
         	
         	//generate the hardware algorithms
         	//for(Family family : families) {
-        	for(FamilyElement fElt : hwFamilyElements) {
+        	for(FamilyElement fElt : hwFamilyElements->toSequence()->sortedBy(e|e.name)) {
         		createHardwareAlgorithms(fElt, topoName, config, target);
         	};
         	
@@ -840,7 +840,7 @@ vilScript QM (Project source, Configuration config, Project target, String pipel
         modelArtifact = cfg.modelArtifact;
     	
 	    setOf(Pipeline) activePipelines = cfg.activePipelines->select(p|p.name == pipelineName);
-        for(Pipeline p : activePipelines) {
+        for(Pipeline p : activePipelines->toSequence()->sortedBy(p|p.name)) {
 			createPipelines(p, null, "");  
 		};
 	}
