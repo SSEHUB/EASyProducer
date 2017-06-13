@@ -308,6 +308,7 @@ public interface Collection<T> extends Iterable<T>, IVilGenericType, IStringValu
      * 
      * @return the set containing the elements of this collection
      */
+    @OperationMeta(name = {"asSequence", "toSequence"}, notOclCompliant = "asSequence")
     public Sequence<T> asSequence();
 
     /**
@@ -315,6 +316,7 @@ public interface Collection<T> extends Iterable<T>, IVilGenericType, IStringValu
      * 
      * @return the set containing the elements of this collection (excluding duplicates)
      */
+    @OperationMeta(name = {"asSet", "toSet"}, notOclCompliant = "asSet")
     public Set<T> asSet();
     
     /**
