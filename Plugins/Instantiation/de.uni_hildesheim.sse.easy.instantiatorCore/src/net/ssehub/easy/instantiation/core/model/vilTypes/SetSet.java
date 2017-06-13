@@ -335,4 +335,9 @@ public class SetSet<T> extends AbstractCollectionWrapper<T> implements Set<T> {
         return new SetSet<T>(SetOperations.symmetricDifference(this, set), params);
     }
 
+    @Override
+    public Set<T> cloneCollection() {
+        return new SetSet<T>(new java.util.HashSet<T>(set), params);
+    }
+
 }

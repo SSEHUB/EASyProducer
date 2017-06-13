@@ -393,4 +393,9 @@ public class UnmodifiableSequence<T> implements Sequence<T> {
         return null;
     }
 
+    @Override
+    public Sequence<T> cloneCollection() {
+        return sequence.cloneCollection();
+    }
+
 }

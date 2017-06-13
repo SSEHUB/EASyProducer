@@ -287,6 +287,13 @@ public class CallExpression extends AbstractCallExpression implements IArgumentP
                     returnGenerics[1] = arg1Type.getGenericParameterType(0);
                 }
             }
+            // if this is a call on a map returning a map - just take over generics
+            if (result.isMap() && 0 == result.getGenericParameterCount()) {
+                TypeDescriptor<?> arg0Type = arguments[0].getExpression().inferType();
+                if (arg0Type.isMap() && 2 == arg0Type.getGenericParameterCount()) {
+                    result = arg0Type;
+                }
+            }
             if (useParam >= 0 && null != resolved.getDeclaringType()
                 && arguments.length > 0
                 && useParam < arguments[0].inferType().getGenericParameterCount()) {

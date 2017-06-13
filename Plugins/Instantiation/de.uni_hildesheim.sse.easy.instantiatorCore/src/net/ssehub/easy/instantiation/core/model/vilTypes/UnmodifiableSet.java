@@ -316,4 +316,9 @@ public class UnmodifiableSet<T> implements Set<T> {
         return set.isAcyclic(evaluator);
     }
 
+    @Override
+    public Set<T> cloneCollection() {
+        return set.cloneCollection();
+    }
+
 }

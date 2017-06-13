@@ -23,3 +23,5 @@ b2 <- true
     s5 <- z
     -> defaultget(Map, Any, Any) with ({{here, there}, {x, y}}, x, z) = y
     s6 <- y
+    -> clone(Map) with ({{here, there}, {x, y}}) = {{here, there}, {x, y}}
+    m2 <- {{here, there}, {x, y}}

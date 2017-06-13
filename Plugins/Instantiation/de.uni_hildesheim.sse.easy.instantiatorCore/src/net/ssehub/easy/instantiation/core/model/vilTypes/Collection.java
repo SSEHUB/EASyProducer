@@ -347,5 +347,13 @@ public interface Collection<T> extends Iterable<T>, IVilGenericType, IStringValu
      */
     @OperationMeta(name = {"apply", "iterate"}, notOclCompliant = "apply", allowsAggregation = true)
     public Object apply(ExpressionEvaluator evaluator) throws VilException;
+    
+    /**
+     * Clones this collection. (QVT)
+     * 
+     * @return a clone of this collection
+     */
+    @OperationMeta(name = "clone")
+    public Collection<T> cloneCollection();
 
 }

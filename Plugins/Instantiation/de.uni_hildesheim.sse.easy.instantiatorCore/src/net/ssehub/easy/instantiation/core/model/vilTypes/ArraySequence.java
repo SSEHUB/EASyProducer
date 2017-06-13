@@ -25,9 +25,8 @@ import net.ssehub.easy.varModel.model.datatypes.OclKeyWords;
 /**
  * Implements an array wrapper for the VIL sequence type.
  * 
- * @author Holger Eichelberger
- *
  * @param <T> the element type
+ * @author Holger Eichelberger
  */
 public class ArraySequence<T> extends AbstractArrayWrapper<T> implements Sequence<T> {
 
@@ -351,6 +350,11 @@ public class ArraySequence<T> extends AbstractArrayWrapper<T> implements Sequenc
     @Override
     public String joinfields(String separator, String begin, String end) {
         return SequenceOperations.joinfields(this, separator, begin, end);
+    }
+
+    @Override
+    public Sequence<T> cloneCollection() {
+        return new ArraySequence<T>(getArray(), getGenericParameter());
     }
 
 }

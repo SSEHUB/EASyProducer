@@ -315,4 +315,8 @@ public interface Sequence<T> extends Collection<T> {
      */
     public T removeLast();
 
+    @Override
+    @OperationMeta(name = "clone")
+    public Sequence<T> cloneCollection();
+
 }

@@ -317,4 +317,11 @@ class OtherProjects implements Set<IArtifact> {
         return new SetSet<IArtifact>(SetOperations.symmetricDifference(this, set));
     }
 
+    @Override
+    public Set<IArtifact> cloneCollection() {
+        OtherProjects result = new OtherProjects();
+        result.data = new java.util.HashSet<IArtifact>(data); 
+        return result;
+    }
+
 }

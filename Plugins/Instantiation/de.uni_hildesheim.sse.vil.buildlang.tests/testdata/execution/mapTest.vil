@@ -16,6 +16,7 @@ vilScript mapTest () {
         m1.put("x", "y");
         String s5 = m.defaultget("x", "z");
         String s6 = m1.defaultget("x", "z");
+        mapOf(String, String) m2 = m1.clone();
     }
 
 }

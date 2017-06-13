@@ -21,9 +21,8 @@ import net.ssehub.easy.instantiation.core.model.expressions.ExpressionEvaluator;
 /**
  * Implements an array wrapper for the VIL set type.
  * 
- * @author Holger Eichelberger
- *
  * @param <T> the element type
+ * @author Holger Eichelberger
  */
 public class ArraySet<T> extends AbstractArrayWrapper<T> implements Set<T> {
 
@@ -253,6 +252,11 @@ public class ArraySet<T> extends AbstractArrayWrapper<T> implements Set<T> {
     @Override
     public Set<T> symmetricDifference(Set<T> set) {
         return new SetSet<T>(SetOperations.symmetricDifference(this, set), getGenericParameter());
+    }
+
+    @Override
+    public Set<T> cloneCollection() {
+        return new ArraySet<T>(getArray(), getGenericParameter());
     }
     
 }

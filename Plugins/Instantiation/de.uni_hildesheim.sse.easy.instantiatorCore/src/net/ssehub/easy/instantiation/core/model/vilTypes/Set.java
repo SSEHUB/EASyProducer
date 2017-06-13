@@ -157,5 +157,9 @@ public interface Set<T> extends Collection<T> {
      * @return the symmetric set difference
      */
     public Set<T> symmetricDifference(Set<T> set);
+
+    @Override
+    @OperationMeta(name = "clone")
+    public Set<T> cloneCollection();
     
 }

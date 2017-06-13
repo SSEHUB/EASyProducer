@@ -23,13 +23,10 @@ import net.ssehub.easy.instantiation.core.model.expressions.ExpressionEvaluator;
 /**
  * Implements an list wrapper for the VIL set type.
  * 
- * @author Holger Eichelberger
- *
  * @param <T> the element type
+ * @author Holger Eichelberger
  */
 public class ListSet<T> extends AbstractListWrapper<T> implements Set<T> {
-
-    // TODO turn this into a set wrapper!!
     
     /**
      * Creates a new array collection wrapper using the default type registry.
@@ -237,6 +234,11 @@ public class ListSet<T> extends AbstractListWrapper<T> implements Set<T> {
     @Override
     public Set<T> symmetricDifference(Set<T> set) {
         return new SetSet<T>(SetOperations.symmetricDifference(this, set), getGenericParameter());
+    }
+
+    @Override
+    public Set<T> cloneCollection() {
+        return new ListSet<T>(new java.util.ArrayList<T>(getList()), getGenericParameter());
     }
 
 }

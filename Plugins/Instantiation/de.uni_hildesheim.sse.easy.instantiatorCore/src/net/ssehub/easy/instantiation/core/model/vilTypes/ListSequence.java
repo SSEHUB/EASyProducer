@@ -24,9 +24,8 @@ import net.ssehub.easy.varModel.model.datatypes.OclKeyWords;
 /**
  * Implements an array wrapper for the VIL sequence type.
  * 
- * @author Holger Eichelberger
- *
  * @param <T> the element type
+ * @author Holger Eichelberger
  */
 public class ListSequence<T> extends AbstractListWrapper<T> implements Sequence<T> {
 
@@ -358,6 +357,11 @@ public class ListSequence<T> extends AbstractListWrapper<T> implements Sequence<
     public T removeLast() {
         int size = size();
         return size > 0 ? getList().remove(size - 1) : null;
+    }
+
+    @Override
+    public Sequence<T> cloneCollection() {
+        return new ListSequence<T>(getList(), getGenericParameter());
     }
 
 }

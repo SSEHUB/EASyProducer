@@ -272,4 +272,9 @@ seq20seq1SubSeq <- false
 -> >(Integer, Integer) with (1680, 0) = true
 -> select(Set, ExpressionEvaluator) with ({1680}, <evaluator>) = {1680}
 seq21 <- {1680}
+-> clone(Sequence) with ({1, 2, 3, 4, 5}) = {1, 2, 3, 4, 5}
+seq20c <- {1, 2, 3, 4, 5}
+-> toSet(Sequence) with ({1, 2, 3, 4, 5}) = {1, 2, 3, 4, 5}
+-> clone(Set) with ({1, 2, 3, 4, 5}) = {1, 2, 3, 4, 5}
+set20c <- {1, 2, 3, 4, 5}
 -> main()

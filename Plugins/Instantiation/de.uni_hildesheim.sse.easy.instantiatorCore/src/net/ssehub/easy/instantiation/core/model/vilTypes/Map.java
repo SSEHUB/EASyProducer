@@ -54,14 +54,14 @@ public class Map<K, V> implements IVilGenericType, IStringValueProvider {
      * Creates a map wrapper.
      * 
      * @param map the map to be wrapped
-     * @param types the types in <code>map</code>
+     * @param generics the generic types in <code>map</code>
      */
-    public Map(java.util.Map<Object, Object> map, TypeDescriptor<?>[] types) {
-        assert null != types && 2 == types.length;
-        this.generics = types;
+    public Map(java.util.Map<Object, Object> map, TypeDescriptor<?>[] generics) {
+        assert null != generics && 2 == generics.length;
+        this.generics = generics;
         this.map = map;
         try {
-            this.type = TypeRegistry.getMapType(types);
+            this.type = TypeRegistry.getMapType(generics);
         } catch (VilException e) {
             this.type = TypeRegistry.DEFAULT.findType(Map.class);
         }
@@ -494,6 +494,18 @@ public class Map<K, V> implements IVilGenericType, IStringValueProvider {
     @OperationMeta(name = {"notEmpty", "isNotEmpty"})
     public boolean notEmpty() {
         return !isEmpty();
+    }
+    
+    /**
+     * Clones this map.
+     * 
+     * @return the clone
+     */
+    @OperationMeta(name = "clone")
+    public Map<K, V> cloneMap() {
+        java.util.Map<Object, Object> clone = new java.util.HashMap<Object, Object>();
+        clone.putAll(map);
+        return new Map<K, V>(clone, generics);
     }
 
 }
