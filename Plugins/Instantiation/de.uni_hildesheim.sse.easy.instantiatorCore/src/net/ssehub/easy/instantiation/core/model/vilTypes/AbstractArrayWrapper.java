@@ -5,6 +5,8 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 
+import net.ssehub.easy.varModel.model.datatypes.OclKeyWords;
+
 /**
  * Implements an array wrapper for the VIL collection type.
  * 
@@ -256,6 +258,71 @@ public abstract class AbstractArrayWrapper<T> extends AbstractCollectionWrapper<
             }
         }
         return shift > 0;
+    }
+    
+    /**
+     * Removes all elements equal to <code>element</code>. (QVT)
+     * 
+     * @param element the element to remove all copies for
+     */
+    public void removeAll(T element) {
+        if (size() > 0) {
+            T[] array = getArray();
+            for (int i = array.length - 1; i >= 0; i--) {
+                T elt = array[i];
+                if (element.equals(elt)) {
+                    removeAt(i);
+                }
+            }
+        }
+    }
+
+    /**
+     * Removes the element at <code>index</code>. (QVT)
+     * 
+     * @param index the index of the element to remove
+     * @return the removed index, undefined if index is not valid
+     */
+    public T removeAt(int index) {
+        return removeAtImpl(OclKeyWords.toJavaIndex(index));
+    }
+
+    /**
+     * Removes the element at <code>index</code>. (QVT)
+     * 
+     * @param index the 0-based index of the element to remove
+     * @return the removed index, undefined if index is not valid
+     */
+    private T removeAtImpl(int index) {
+        T result = null;
+        int size = size();
+        if (size > 0 && 0 <= index && index < size) {
+            T[] array = getArray();
+            result = array[index];
+            for (int i = index + 1; i < array.length; i++) {
+                array[i - 1] = array[i];
+            }
+            decreaseCapacity(1);
+        }
+        return result;
+    }
+
+    /**
+     * Removes the first element. (QVT)
+     * 
+     * @return the removed element, undefined if there is no first element
+     */
+    public T removeFirst() {
+        return removeAtImpl(0);
+    }
+
+    /**
+     * Removes the last element. (QVT)
+     * 
+     * @return the removed element, undefined if there is no last element
+     */
+    public T removeLast() {
+        return removeAtImpl(size() - 1);
     }
     
     @SuppressWarnings("unchecked")

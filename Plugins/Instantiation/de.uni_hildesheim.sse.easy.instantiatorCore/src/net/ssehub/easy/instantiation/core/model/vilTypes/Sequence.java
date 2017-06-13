@@ -275,4 +275,44 @@ public interface Sequence<T> extends Collection<T> {
      */
     public boolean isSubsequenceOf(Sequence<T> other);
 
+    /**
+     * Returns a concatenation of the string representation of elements, with <code>begin</code> as 
+     * lead in, <code>sep</code> as separator between the elements and <code>end</code> as lead out. (QVT)
+     * 
+     * @param separator the separator
+     * @param begin the lead in
+     * @param end the lead out
+     * @return the concatenated result
+     */
+    public String joinfields(String separator, String begin, String end);
+
+    /**
+     * Removes all elements equal to <code>element</code>. (QVT)
+     * 
+     * @param element the element to remove all copies for
+     */
+    public void removeAll(T element);
+
+    /**
+     * Removes the element at <code>index</code>. (QVT)
+     * 
+     * @param index the index of the element to remove
+     * @return the removed index, undefined if index is not valid
+     */
+    public T removeAt(int index);
+
+    /**
+     * Removes the first element. (QVT)
+     * 
+     * @return the removed element, undefined if there is no first element
+     */
+    public T removeFirst();
+
+    /**
+     * Removes the last element. (QVT)
+     * 
+     * @return the removed element, undefined if there is no last element
+     */
+    public T removeLast();
+
 }

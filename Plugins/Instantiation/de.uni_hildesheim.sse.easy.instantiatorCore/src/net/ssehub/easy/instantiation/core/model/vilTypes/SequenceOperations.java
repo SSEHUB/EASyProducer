@@ -325,4 +325,32 @@ public class SequenceOperations {
         return size1 > 0 && i1 == size1;
     }
 
+    /**
+     * Returns a concatenation of the string representation of elements, with <code>begin</code> as 
+     * lead in, <code>sep</code> as separator between the elements and <code>end</code> as lead out. (QVT)
+     * 
+     * @param <T> the sequence element type
+     * @param sequence the sequence to operate on
+     * @param separator the separator
+     * @param begin the lead in
+     * @param end the lead out
+     * @return the concatenated result
+     */
+    public static <T> String joinfields(Sequence<T> sequence, String separator, String begin, String end) {
+        StringBuilder result = new StringBuilder();
+        result.append(begin);
+        Iterator <T> iter = sequence.iterator();
+        boolean first = true;
+        while (iter.hasNext()) {
+            String tmp = StringValueHelper.getStringValue(iter.next(), null);
+            if (!first) {
+                result.append(separator);
+            }
+            result.append(tmp);
+            first = false;
+        }
+        result.append(end);
+        return result.toString();
+    }
+
 }

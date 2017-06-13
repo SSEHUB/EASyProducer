@@ -328,4 +328,36 @@ public class ListSequence<T> extends AbstractListWrapper<T> implements Sequence<
         return SequenceOperations.isSubsequenceOf(this, other);
     }
 
+    @Override
+    public String joinfields(String separator, String begin, String end) {
+        return SequenceOperations.joinfields(this, separator, begin, end);
+    }
+
+    @Override
+    public void removeAll(T element) {
+        List<T> lst = getList();
+        for (int i = lst.size() - 1; i >= 0; i--) {
+            T elt = lst.get(i);
+            if (element.equals(elt)) {
+                lst.remove(i);
+            }
+        }
+    }
+
+    @Override
+    public T removeAt(int index) {
+        return getList().remove(OclKeyWords.toJavaIndex(index));
+    }
+
+    @Override
+    public T removeFirst() {
+        return size() > 0 ? getList().remove(0) : null;
+    }
+
+    @Override
+    public T removeLast() {
+        int size = size();
+        return size > 0 ? getList().remove(size - 1) : null;
+    }
+
 }

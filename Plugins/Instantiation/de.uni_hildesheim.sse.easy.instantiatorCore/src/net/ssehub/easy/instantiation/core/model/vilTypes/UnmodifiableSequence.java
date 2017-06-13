@@ -365,4 +365,32 @@ public class UnmodifiableSequence<T> implements Sequence<T> {
         return sequence.isAcyclic(evaluator);
     }
 
+    @Override
+    public String joinfields(String separator, String begin, String end) {
+        return sequence.joinfields(separator, begin, end);
+    }
+
+    @Override
+    public void removeAll(T element) {
+        // unmodifiable, do nothing
+    }
+
+    @Override
+    public T removeAt(int index) {
+        // unmodifiable, do nothing
+        return null;
+    }
+
+    @Override
+    public T removeFirst() {
+        // unmodifiable, do nothing
+        return null;
+    }
+
+    @Override
+    public T removeLast() {
+        // unmodifiable, do nothing
+        return null;
+    }
+
 }

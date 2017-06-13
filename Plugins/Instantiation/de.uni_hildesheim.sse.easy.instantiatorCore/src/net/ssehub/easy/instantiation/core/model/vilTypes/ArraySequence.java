@@ -348,4 +348,9 @@ public class ArraySequence<T> extends AbstractArrayWrapper<T> implements Sequenc
         return SequenceOperations.isSubsequenceOf(this, other);
     }
 
+    @Override
+    public String joinfields(String separator, String begin, String end) {
+        return SequenceOperations.joinfields(this, separator, begin, end);
+    }
+
 }

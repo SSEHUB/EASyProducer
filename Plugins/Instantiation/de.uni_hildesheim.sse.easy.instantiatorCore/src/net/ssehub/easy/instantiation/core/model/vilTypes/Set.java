@@ -96,7 +96,7 @@ public interface Set<T> extends Collection<T> {
      * @return <code>true</code> of the element was removed, <code>false</code> else
      */
     public boolean remove(T element);
-
+    
     @Override
     public Set<T> select(ExpressionEvaluator evaluator) throws VilException;
 

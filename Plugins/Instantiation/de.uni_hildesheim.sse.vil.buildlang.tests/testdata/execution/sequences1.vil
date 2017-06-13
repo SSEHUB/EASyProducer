@@ -3,9 +3,22 @@ vilScript sequences1 (Project source, Project target, Configuration config) {
     main() = : {
         Integer sum = 0;
         sequenceOf(Integer) nums = createIntegerSequence(0, 10);
-        map(Integer i:nums) {
+        for(Integer i:nums) {
             sum = sum + i;
         };
+        String tmp = nums.joinfields(",", "{", "}");
+        nums.removeAt(9);
+        tmp = nums.joinfields(",", "{", "}");
+        nums.removeFirst();
+        tmp = nums.joinfields(",", "{", "}");
+        nums.removeLast();
+        tmp = nums.joinfields(",", "{", "}");
+        nums.removeAll(4);
+        tmp = nums.joinfields(",", "{", "}");
+        nums = {4, 4, 5, 4, 4, 3, 4};
+        tmp = nums.joinfields(",", "{", "}");
+        nums.removeAll(4);
+        tmp = nums.joinfields(",", "{", "}");
     }
 
 }
