@@ -15,6 +15,7 @@ import org.eclipse.emf.ecore.EObject;
  * <ul>
  *   <li>{@link de.uni_hildesheim.sse.vil.expressions.expressionDsl.Parameter#getType <em>Type</em>}</li>
  *   <li>{@link de.uni_hildesheim.sse.vil.expressions.expressionDsl.Parameter#getName <em>Name</em>}</li>
+ *   <li>{@link de.uni_hildesheim.sse.vil.expressions.expressionDsl.Parameter#getDflt <em>Dflt</em>}</li>
  * </ul>
  *
  * @see de.uni_hildesheim.sse.vil.expressions.expressionDsl.ExpressionDslPackage#getParameter()
@@ -74,5 +75,31 @@ public interface Parameter extends EObject
    * @generated
    */
   void setName(String value);
+
+  /**
+   * Returns the value of the '<em><b>Dflt</b></em>' containment reference.
+   * <!-- begin-user-doc -->
+   * <p>
+   * If the meaning of the '<em>Dflt</em>' containment reference isn't clear,
+   * there really should be more of a description here...
+   * </p>
+   * <!-- end-user-doc -->
+   * @return the value of the '<em>Dflt</em>' containment reference.
+   * @see #setDflt(Expression)
+   * @see de.uni_hildesheim.sse.vil.expressions.expressionDsl.ExpressionDslPackage#getParameter_Dflt()
+   * @model containment="true"
+   * @generated
+   */
+  Expression getDflt();
+
+  /**
+   * Sets the value of the '{@link de.uni_hildesheim.sse.vil.expressions.expressionDsl.Parameter#getDflt <em>Dflt</em>}' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @param value the new value of the '<em>Dflt</em>' containment reference.
+   * @see #getDflt()
+   * @generated
+   */
+  void setDflt(Expression value);
 
 } // Parameter

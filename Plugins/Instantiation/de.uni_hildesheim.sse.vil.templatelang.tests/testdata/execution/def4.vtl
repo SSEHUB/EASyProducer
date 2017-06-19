@@ -1,0 +1,16 @@
+import defTest3;
+
+template defTest4(Configuration config, FileArtifact target) {
+
+    def main(Configuration config, FileArtifact target) {
+        String t1 = "tt1";
+        '${cat("a")}'
+        '${cat("a", "b")}'
+        '${cat("a", s2="c")}'
+        String t2 = "tt2";
+        '${cat("a")}'
+        '${cat("a", "b")}'
+        '${cat("a", s2="c")}'
+    }
+
+}

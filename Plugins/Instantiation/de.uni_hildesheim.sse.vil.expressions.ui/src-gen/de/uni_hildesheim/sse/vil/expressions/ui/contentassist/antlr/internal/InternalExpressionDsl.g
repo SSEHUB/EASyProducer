@@ -2250,6 +2250,7 @@ rule__Parameter__Group__1
     }
 :
 	rule__Parameter__Group__1__Impl
+	rule__Parameter__Group__2
 ;
 finally {
 	restoreStackSize(stackSize);
@@ -2264,6 +2265,99 @@ rule__Parameter__Group__1__Impl
 { before(grammarAccess.getParameterAccess().getNameAssignment_1()); }
 (rule__Parameter__NameAssignment_1)
 { after(grammarAccess.getParameterAccess().getNameAssignment_1()); }
+)
+
+;
+finally {
+	restoreStackSize(stackSize);
+}
+
+
+rule__Parameter__Group__2
+    @init {
+		int stackSize = keepStackSize();
+    }
+:
+	rule__Parameter__Group__2__Impl
+;
+finally {
+	restoreStackSize(stackSize);
+}
+
+rule__Parameter__Group__2__Impl
+    @init {
+		int stackSize = keepStackSize();
+    }
+:
+(
+{ before(grammarAccess.getParameterAccess().getGroup_2()); }
+(rule__Parameter__Group_2__0)?
+{ after(grammarAccess.getParameterAccess().getGroup_2()); }
+)
+
+;
+finally {
+	restoreStackSize(stackSize);
+}
+
+
+
+
+
+
+
+
+rule__Parameter__Group_2__0
+    @init {
+		int stackSize = keepStackSize();
+    }
+:
+	rule__Parameter__Group_2__0__Impl
+	rule__Parameter__Group_2__1
+;
+finally {
+	restoreStackSize(stackSize);
+}
+
+rule__Parameter__Group_2__0__Impl
+    @init {
+		int stackSize = keepStackSize();
+    }
+:
+(
+{ before(grammarAccess.getParameterAccess().getEqualsSignKeyword_2_0()); }
+
+	'=' 
+
+{ after(grammarAccess.getParameterAccess().getEqualsSignKeyword_2_0()); }
+)
+
+;
+finally {
+	restoreStackSize(stackSize);
+}
+
+
+rule__Parameter__Group_2__1
+    @init {
+		int stackSize = keepStackSize();
+    }
+:
+	rule__Parameter__Group_2__1__Impl
+;
+finally {
+	restoreStackSize(stackSize);
+}
+
+rule__Parameter__Group_2__1__Impl
+    @init {
+		int stackSize = keepStackSize();
+    }
+:
+(
+{ before(grammarAccess.getParameterAccess().getDfltAssignment_2_1()); }
+(rule__Parameter__DfltAssignment_2_1)
+{ after(grammarAccess.getParameterAccess().getDfltAssignment_2_1()); }
 )
 
 ;
@@ -5868,6 +5962,21 @@ rule__Parameter__NameAssignment_1
 (
 { before(grammarAccess.getParameterAccess().getNameIdentifierParserRuleCall_1_0()); }
 	ruleIdentifier{ after(grammarAccess.getParameterAccess().getNameIdentifierParserRuleCall_1_0()); }
+)
+
+;
+finally {
+	restoreStackSize(stackSize);
+}
+
+rule__Parameter__DfltAssignment_2_1
+    @init {
+		int stackSize = keepStackSize();
+    }
+:
+(
+{ before(grammarAccess.getParameterAccess().getDfltExpressionParserRuleCall_2_1_0()); }
+	ruleExpression{ after(grammarAccess.getParameterAccess().getDfltExpressionParserRuleCall_2_1_0()); }
 )
 
 ;

@@ -114,7 +114,8 @@ public class ModelTranslator extends de.uni_hildesheim.sse.vil.expressions.trans
             desc.setAdvices(processAdvices(tpl.getAdvices(), uri));
             
             processJavaExtensions(tpl, desc);
-            desc.setParameter(resolveParameters(tpl.getParam(), resolver), resolver);
+            desc.setParameter(resolveParameters(tpl.getParam(), tpl, 
+                TemplateLangPackage.Literals.LANGUAGE_UNIT__PARAM,  resolver), resolver);
             ModelImport<Template> extension = getExtensionImport(tpl.getExt(), imports, tpl, 
                 TemplateLangPackage.Literals.LANGUAGE_UNIT__EXT);
             if (null != tpl.getIndent()) {
@@ -403,7 +404,8 @@ public class ModelTranslator extends de.uni_hildesheim.sse.vil.expressions.trans
      * @throws TranslatorException in case that processing the definition fail
      */
     private Def processDef(VilDef def, Template template) throws TranslatorException {
-        VariableDeclaration[] param = resolveParameters(def.getParam(), resolver);
+        VariableDeclaration[] param = resolveParameters(def.getParam(), def, 
+            TemplateLangPackage.Literals.VIL_DEF__PARAM,  resolver);
         TypeDescriptor<?> specifiedType = null;
         if (null != def.getType()) {
             specifiedType = getExpressionTranslator().processType(def.getType(), resolver);

@@ -1,5 +1,7 @@
 package net.ssehub.easy.instantiation.core.model.templateModel;
 
+import java.util.Map;
+
 import net.ssehub.easy.instantiation.core.model.common.ILanguageElement;
 import net.ssehub.easy.instantiation.core.model.common.IResolvableOperation;
 import net.ssehub.easy.instantiation.core.model.common.VilException;
@@ -18,7 +20,8 @@ public class Def extends TemplateBlock implements ITemplateLangElement, IResolva
 
     private Template parent;
     private String name;
-    private VariableDeclaration[] param;
+    private VariableDeclaration[] param; // all params in declaration sequence, required ones first
+    private Map<String, VariableDeclaration> namedParam;
     private TypeDescriptor<?> specifiedType;
     private boolean isProtected = false;
     
@@ -37,6 +40,7 @@ public class Def extends TemplateBlock implements ITemplateLangElement, IResolva
         this.parent = parent;
         this.name = name;
         this.param = param;
+        this.namedParam = VariableDeclaration.mapDefaultedParameters(this.namedParam, this.param);
         this.specifiedType = specifiedType;
         setParent(this); // propagate parent
     }
@@ -77,28 +81,27 @@ public class Def extends TemplateBlock implements ITemplateLangElement, IResolva
         return specifiedType;
     }
     
-    /**
-     * Get the number of parameter of this template.
-     * 
-     * @return The number of sub-templates of this template.
-     */
+    @Override
     public int getParameterCount() {
         return null == param ? 0 : param.length;
     }
     
-    /**
-     * Get the parameter of this template at the specified index.
-     * 
-     * @param index The 0-based index of the parameter to be returned.
-     * @return The parameter at the given index.
-     * @throws IndexOutOfBoundsException if 
-     *     <code>index &lt; 0 || index &gt;={@link #getParameterCount()}</code>
-     */
+    @Override
     public VariableDeclaration getParameter(int index) {
         if (null == param) {
             throw new IndexOutOfBoundsException();
         }
         return param[index];
+    }
+    
+    @Override
+    public int getRequiredParameterCount() {
+        return VariableDeclaration.getRequiredParameterCount(namedParam, param);
+    }
+
+    @Override
+    public VariableDeclaration getParameter(String name) {
+        return VariableDeclaration.getParameter(namedParam, name, param);
     }
     
     @Override

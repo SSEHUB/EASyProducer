@@ -574,19 +574,10 @@ public class ExpressionDslSemanticSequencer extends AbstractDelegatingSemanticSe
 	 *     Parameter returns Parameter
 	 *
 	 * Constraint:
-	 *     (type=Type name=Identifier)
+	 *     (type=Type name=Identifier dflt=Expression?)
 	 */
 	protected void sequence_Parameter(ISerializationContext context, de.uni_hildesheim.sse.vil.expressions.expressionDsl.Parameter semanticObject) {
-		if (errorAcceptor != null) {
-			if (transientValues.isValueTransient(semanticObject, ExpressionDslPackage.Literals.PARAMETER__TYPE) == ValueTransient.YES)
-				errorAcceptor.accept(diagnosticProvider.createFeatureValueMissing(semanticObject, ExpressionDslPackage.Literals.PARAMETER__TYPE));
-			if (transientValues.isValueTransient(semanticObject, ExpressionDslPackage.Literals.PARAMETER__NAME) == ValueTransient.YES)
-				errorAcceptor.accept(diagnosticProvider.createFeatureValueMissing(semanticObject, ExpressionDslPackage.Literals.PARAMETER__NAME));
-		}
-		SequenceFeeder feeder = createSequencerFeeder(context, semanticObject);
-		feeder.accept(grammarAccess.getParameterAccess().getTypeTypeParserRuleCall_0_0(), semanticObject.getType());
-		feeder.accept(grammarAccess.getParameterAccess().getNameIdentifierParserRuleCall_1_0(), semanticObject.getName());
-		feeder.finish();
+		genericSequencer.createSequence(context, semanticObject);
 	}
 	
 	

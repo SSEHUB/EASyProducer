@@ -16,7 +16,7 @@ public interface ITracer extends net.ssehub.easy.instantiation.core.model.common
      * @param script the script
      * @param environment the runtime environment
      */
-    public void visitScript(Script script, RuntimeEnvironment environment);
+    public void visitScript(Script script, RuntimeEnvironment<?> environment);
 
     /**
      * Is called when a script (body) is being visited.
@@ -24,7 +24,7 @@ public interface ITracer extends net.ssehub.easy.instantiation.core.model.common
      * @param script the script
      * @param environment the runtime environment
      */
-    public void visitScriptBody(Script script, RuntimeEnvironment environment);
+    public void visitScriptBody(Script script, RuntimeEnvironment<?> environment);
     
     /**
      * Is called when visiting a script ends.
@@ -39,7 +39,7 @@ public interface ITracer extends net.ssehub.easy.instantiation.core.model.common
      * @param rule the rule being visited
      * @param environment the runtime environment
      */
-    public void visitRule(Rule rule, RuntimeEnvironment environment);
+    public void visitRule(Rule rule, RuntimeEnvironment<?> environment);
 
     /**
      * Is called when visiting a rule ends.
@@ -48,7 +48,7 @@ public interface ITracer extends net.ssehub.easy.instantiation.core.model.common
      * @param environment the runtime environment
      * @param result the result produced by the rule
      */
-    public void visitedRule(Rule rule, RuntimeEnvironment environment, Object result);
+    public void visitedRule(Rule rule, RuntimeEnvironment<?> environment, Object result);
 
     /**
      * Is called when visiting a map starts.
@@ -56,7 +56,7 @@ public interface ITracer extends net.ssehub.easy.instantiation.core.model.common
      * @param loop the loop being visited
      * @param environment the runtime environment
      */
-    public void visitLoop(IEnumeratingLoop loop, RuntimeEnvironment environment);
+    public void visitLoop(IEnumeratingLoop loop, RuntimeEnvironment<?> environment);
 
     /**
      * Is called when a loop iterator variable is assigned.
@@ -73,7 +73,7 @@ public interface ITracer extends net.ssehub.easy.instantiation.core.model.common
      * @param loop the loop being visited
      * @param environment the runtime environment
      */
-    public void visitedLoop(IEnumeratingLoop loop, RuntimeEnvironment environment);
+    public void visitedLoop(IEnumeratingLoop loop, RuntimeEnvironment<?> environment);
 
     /**
      * Allows a tracer to change the sequence of processing a map collection.

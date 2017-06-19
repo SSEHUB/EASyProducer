@@ -41,18 +41,21 @@ import net.ssehub.easy.varModel.model.values.NullValue;
  * creating a runtime environment, first the context must be defined using
  * {@link #switchContext(IModel)}.
  * 
+ * @param <V> the variable declaration type
  * @author Holger Eichelberger
  */
-public abstract class RuntimeEnvironment implements IRuntimeEnvironment, IRestrictionEvaluationContext {
+public abstract class RuntimeEnvironment<V extends VariableDeclaration> 
+    implements IRuntimeEnvironment, IRestrictionEvaluationContext {
 
     /**
      * Defines a nested level of value assignments.
      * 
+     * @param <V> the variable declaration type
      * @author Holger Eichelberger
      */
-    private static class Level {
-        private Map<VariableDeclaration, Object> values = new HashMap<VariableDeclaration, Object>();
-        private Map<String, VariableDeclaration> variables = new HashMap<String, VariableDeclaration>();
+    private static class Level<V extends VariableDeclaration> {
+        private Map<V, Object> values = new HashMap<V, Object>();
+        private Map<String, V> variables = new HashMap<String, V>();
         private List<Configuration> configurations = new ArrayList<Configuration>();
         
         @Override
@@ -65,11 +68,12 @@ public abstract class RuntimeEnvironment implements IRuntimeEnvironment, IRestri
     /**
      * Defines a context for executing one model within.
      * 
+     * @param <V> the variable declaration type
      * @author Holger Eichelberger
      */
-    private static class Context {
-        private Stack<Level> levels = new Stack<Level>();
-        private ITypedModel model;
+    private static class Context<V extends VariableDeclaration> {
+        private Stack<Level<V>> levels = new Stack<Level<V>>();
+        private IResolvableModel<V> model;
         private int indentation;
         private IndentationConfiguration indentationConfiguration;
         private String[] paths;
@@ -79,7 +83,7 @@ public abstract class RuntimeEnvironment implements IRuntimeEnvironment, IRestri
          * 
          * @param model the related model
          */
-        public Context(ITypedModel model) {
+        public Context(IResolvableModel<V> model) {
             this.model = model;
             if (null != model.getIndentationConfiguration() 
                 && model.getIndentationConfiguration().isIndentationEnabled()) {
@@ -93,7 +97,7 @@ public abstract class RuntimeEnvironment implements IRuntimeEnvironment, IRestri
          * 
          * @return the model
          */
-        public ITypedModel getModel() {
+        public IResolvableModel<V> getModel() {
             return model;
         }
 
@@ -108,7 +112,7 @@ public abstract class RuntimeEnvironment implements IRuntimeEnvironment, IRestri
             boolean found = false;
             Object value = null;  
             for (int l = levels.size() - 1; !found && l >= 0; l--) {
-                Level level = levels.get(l);
+                Level<V> level = levels.get(l);
                 if (level.values.containsKey(resolvable)) {
                     found = true;
                     value = level.values.get(resolvable);
@@ -127,10 +131,10 @@ public abstract class RuntimeEnvironment implements IRuntimeEnvironment, IRestri
          * @param name the name of the variable
          * @return the variable or <b>null</b> if not found
          */
-        public VariableDeclaration get(String name) {
-            VariableDeclaration result = null;
+        public V get(String name) {
+            V result = null;
             for (int l = levels.size() - 1; null == result && l >= 0; l--) {
-                Level level = levels.get(l);
+                Level<V> level = levels.get(l);
                 result = level.variables.get(name);
             }
             return result;
@@ -142,10 +146,10 @@ public abstract class RuntimeEnvironment implements IRuntimeEnvironment, IRestri
          * @param var the variable to look for
          * @return <code>true</code> if <code>var</code> is defined, <code>false</code> else
          */
-        public boolean isDefined(VariableDeclaration var) {
+        public boolean isDefined(V var) {
             boolean found = false;
             for (int l = levels.size() - 1; !found && l >= 0; l--) {
-                Level level = levels.get(l);
+                Level<V> level = levels.get(l);
                 if (level.values.containsKey(var)) {
                     found = null != level.values.get(var);
                 }
@@ -160,7 +164,7 @@ public abstract class RuntimeEnvironment implements IRuntimeEnvironment, IRestri
          * @param object the value of <code>var</code>
          * @throws VilException in case of an attempt of modifying a constant
          */
-        public void setValue(VariableDeclaration var, Object object) throws VilException {
+        public void setValue(V var, Object object) throws VilException {
             if (var.isConstant() && isDefined(var)) {
                 throw new VilException("variable " + var.getName() + " is constant", 
                     VilException.ID_IS_CONSTANT);
@@ -168,7 +172,7 @@ public abstract class RuntimeEnvironment implements IRuntimeEnvironment, IRestri
             
             boolean found = false;
             for (int l = levels.size() - 1; !found && l >= 0; l--) {
-                Level level = levels.get(l);
+                Level<V> level = levels.get(l);
                 if (level.values.containsKey(var)) {
                     level.values.put(var, object);
                     level.variables.put(var.getName(), var);
@@ -188,7 +192,7 @@ public abstract class RuntimeEnvironment implements IRuntimeEnvironment, IRestri
          * Pushes a new level.
          */
         public void pushLevel() {
-            levels.push(new Level());
+            levels.push(new Level<V>());
         }
         
         /**
@@ -212,7 +216,7 @@ public abstract class RuntimeEnvironment implements IRuntimeEnvironment, IRestri
          */
         public void storeArtifacts() throws VilException {
             if (levels.size() > 0) {
-                Level top = levels.peek();
+                Level<V> top = levels.peek();
                 // rather simple, does not look for other levels!
                 for (Object o : top.values.values()) {
                     if (o instanceof IArtifact) {
@@ -230,8 +234,8 @@ public abstract class RuntimeEnvironment implements IRuntimeEnvironment, IRestri
          * @param object the value of <code>var</code>
          * @throws VilException in case of an attempt of modifying a constant
          */
-        public void addValue(VariableDeclaration var, Object object) throws VilException {
-            Level level = levels.peek();
+        public void addValue(V var, Object object) throws VilException {
+            Level<V> level = levels.peek();
             level.values.put(var, object);
             level.variables.put(var.getName(), var);
             if (var.getType() == IvmlTypes.configurationType() && object instanceof Configuration) {
@@ -244,8 +248,8 @@ public abstract class RuntimeEnvironment implements IRuntimeEnvironment, IRestri
          * 
          * @param var the variable to be removed
          */
-        public void removeValue(VariableDeclaration var) {
-            Level level = levels.peek();
+        public void removeValue(V var) {
+            Level<V> level = levels.peek();
             Object object = level.values.get(var);
             level.values.remove(var);
             level.variables.remove(var.getName());
@@ -305,7 +309,7 @@ public abstract class RuntimeEnvironment implements IRuntimeEnvironment, IRestri
             boolean found = false;
             Object value = null;  
             for (int l = levels.size() - 1; !found && l >= 0; l--) {
-                Level level = levels.get(l);
+                Level<V> level = levels.get(l);
                 for (int c = 0; !found && c < level.configurations.size(); c++) {
                     IvmlElement elt = level.configurations.get(c).getElement(name);
                     if (null != elt) {
@@ -339,23 +343,29 @@ public abstract class RuntimeEnvironment implements IRuntimeEnvironment, IRestri
 
     }
     
-    private Map<IModel, Context> contexts = new HashMap<IModel, Context>();
-    private Context currentContext;
+    private Map<IModel, Context<V>> contexts = new HashMap<IModel, Context<V>>();
+    private Context<V> currentContext;
     private TypeRegistry typeRegistry;
+    private Class<V> cls;
     
     /**
      * Creates a new runtime environment using the default type registry.
+     * 
+     * @param cls the variable declaration type
      */
-    public RuntimeEnvironment() {
+    public RuntimeEnvironment(Class<V> cls) {
+        this.cls = cls;
         typeRegistry = TypeRegistry.DEFAULT;
     }
 
     /**
      * Creates a new runtime environment with a given type registry instance.
      * 
+     * @param cls the variable declaration type
      * @param typeRegistry the type registry to use
      */
-    public RuntimeEnvironment(TypeRegistry typeRegistry) {
+    public RuntimeEnvironment(Class<V> cls, TypeRegistry typeRegistry) {
+        this.cls = cls;
         this.typeRegistry = typeRegistry;
     }
     
@@ -370,8 +380,8 @@ public abstract class RuntimeEnvironment implements IRuntimeEnvironment, IRestri
      * @param model the model the context is assigned to
      * @return the old context for switching back
      */
-    public ITypedModel switchContext(ITypedModel model) {
-        ITypedModel oldContext;
+    public IResolvableModel<V> switchContext(IResolvableModel<V> model) {
+        IResolvableModel<V> oldContext;
         if (null != currentContext) {
             oldContext = currentContext.getModel();
         } else {
@@ -383,7 +393,7 @@ public abstract class RuntimeEnvironment implements IRuntimeEnvironment, IRestri
         }
         currentContext = contexts.get(model);
         if (null == currentContext) {
-            currentContext = new Context(model);
+            currentContext = new Context<V>(model);
             contexts.put(model, currentContext);
         }
         return oldContext;
@@ -395,7 +405,7 @@ public abstract class RuntimeEnvironment implements IRuntimeEnvironment, IRestri
      * @param model the model to delete the context for
      */
     public void deleteContext(ITypedModel model) {
-        Context context = contexts.get(model);
+        Context<V> context = contexts.get(model);
         if (context != currentContext) {
             contexts.remove(model);
         }
@@ -434,8 +444,8 @@ public abstract class RuntimeEnvironment implements IRuntimeEnvironment, IRestri
      * @return the model (may be <b>null</b> if {@link #switchContext(IModel)} was 
      *   not called before)
      */
-    public ITypedModel getContextModel() {
-        ITypedModel model;
+    public IResolvableModel<?> getContextModel() {
+        IResolvableModel<?> model;
         if (null == currentContext) {
             model = null;
         } else {
@@ -451,7 +461,7 @@ public abstract class RuntimeEnvironment implements IRuntimeEnvironment, IRestri
             result = currentContext.getValue(resolvable);
         } catch (VilException e) {
             boolean found = false;
-            for (Context ctx : contexts.values()) {
+            for (Context<V> ctx : contexts.values()) {
                 if (ctx != currentContext) {
                     try {
                         result = ctx.getValue(resolvable);
@@ -467,6 +477,27 @@ public abstract class RuntimeEnvironment implements IRuntimeEnvironment, IRestri
         }
         return result;
     }
+
+    /**
+     * Returns the value of <code>name</code> within <code>contextModel</code>.
+     * 
+     * @param contextModel the model indicating the context
+     * @param name the name of the variable
+     * @return the value of <code>name</code>
+     * @throws VilException in case that the context/variable is not known
+     */
+    public Object getValue(IResolvableModel<V> contextModel, String name) throws VilException {
+        Context<V> context = contexts.get(contextModel);
+        if (null == context) {
+            throw new VilException("No such context", VilException.ID_INSUFFICIENT_ARGUMENT);
+        }
+        V varDecl = context.get(name);
+        if (null == varDecl) {
+            throw new VilException("variable " + name + " is not defined", 
+                VilException.ID_NOT_FOUND);
+        }
+        return context.getValue(varDecl);
+    }
     
     /**
      * Returns the value of <code>var</code>.
@@ -475,7 +506,7 @@ public abstract class RuntimeEnvironment implements IRuntimeEnvironment, IRestri
      * @return the value of <code>var</code>
      * @throws VilException in case that <code>var</code> was not defined
      */
-    public Object getValue(VariableDeclaration var) throws VilException {
+    public Object getValue(V var) throws VilException {
         return getValue((IResolvable) var);
     }
 
@@ -490,7 +521,7 @@ public abstract class RuntimeEnvironment implements IRuntimeEnvironment, IRestri
      * @param name the name of the variable
      * @return the variable or <b>null</b> if not found
      */
-    public VariableDeclaration get(String name) {
+    public V get(String name) {
         return currentContext.get(name);
     }
     
@@ -500,7 +531,7 @@ public abstract class RuntimeEnvironment implements IRuntimeEnvironment, IRestri
      * @param var the variable to look for
      * @return <code>true</code> if <code>var</code> is defined, <code>false</code> else
      */
-    public boolean isDefined(VariableDeclaration var) {
+    public boolean isDefined(V var) {
         return currentContext.isDefined(var);
     }
     
@@ -512,7 +543,9 @@ public abstract class RuntimeEnvironment implements IRuntimeEnvironment, IRestri
      * @throws VilException in case of an attempt of modifying a constant
      */
     public void setValue(IResolvable var, Object object) throws VilException {
-        setValue((VariableDeclaration) var, object);
+        if (cls.isInstance(var)) {
+            setValue(cls.cast(var), object);
+        }
     }
     
     /**
@@ -522,7 +555,7 @@ public abstract class RuntimeEnvironment implements IRuntimeEnvironment, IRestri
      * @param object the value of <code>var</code>
      * @throws VilException in case of an attempt of modifying a constant
      */
-    public void setValue(VariableDeclaration var, Object object) throws VilException {
+    public void setValue(V var, Object object) throws VilException {
         object = checkType(var, object);
         currentContext.setValue(var, object);
     }
@@ -572,7 +605,7 @@ public abstract class RuntimeEnvironment implements IRuntimeEnvironment, IRestri
      * @param object the value of <code>var</code>
      * @throws VilException in case of an attempt of modifying a constant
      */
-    public void addValue(VariableDeclaration var, Object object) throws VilException {
+    public void addValue(V var, Object object) throws VilException {
         object = checkType(var, object);
         currentContext.addValue(var, object);
     }
@@ -582,7 +615,7 @@ public abstract class RuntimeEnvironment implements IRuntimeEnvironment, IRestri
      * 
      * @param var the variable to be removed
      */
-    public void removeValue(VariableDeclaration var) {
+    public void removeValue(V var) {
         currentContext.removeValue(var);
     }
 
@@ -594,7 +627,7 @@ public abstract class RuntimeEnvironment implements IRuntimeEnvironment, IRestri
      * @return <code>object</code> or <b>null</b> if object is {@link NullValue}.
      * @throws VilException in case of type incompatibilities
      */
-    private Object checkType(VariableDeclaration var, Object object) throws VilException {
+    private Object checkType(V var, Object object) throws VilException {
         TypeDescriptor<?> type = var.getType();
         if (type instanceof IActualValueProvider) {
             object = ((IActualValueProvider) type).determineActualValue(object);
@@ -714,9 +747,9 @@ public abstract class RuntimeEnvironment implements IRuntimeEnvironment, IRestri
 
     @Override
     public void setValue(IVariable variable, Version version) throws RestrictionEvaluationException {
-        if (variable instanceof VariableDeclaration) {
+        if (cls.isInstance(variable)) {
             try {
-                addValue((VariableDeclaration) variable, version);
+                addValue(cls.cast(variable), version);
             } catch (VilException e) {
                 throw new RestrictionEvaluationException(e.getMessage(), e.getId());
             }
@@ -727,8 +760,8 @@ public abstract class RuntimeEnvironment implements IRuntimeEnvironment, IRestri
 
     @Override
     public void unsetValue(IVariable variable) throws RestrictionEvaluationException {
-        if (variable instanceof VariableDeclaration) {
-            removeValue((VariableDeclaration) variable);
+        if (cls.isInstance(variable)) {
+            removeValue(cls.cast(variable));
         } else {
             throw new RestrictionEvaluationException("unsupported type", RestrictionEvaluationException.ID_INTERNAL);
         }
@@ -751,7 +784,7 @@ public abstract class RuntimeEnvironment implements IRuntimeEnvironment, IRestri
     @Override
     public Object startEvaluation() throws RestrictionEvaluationException {
         if (null == currentContext) {
-            switchContext(DummyModel.INSTANCE);
+            switchContext(new DummyModel<V>());
         }
         pushLevel();
         return createEvaluationProcessor();

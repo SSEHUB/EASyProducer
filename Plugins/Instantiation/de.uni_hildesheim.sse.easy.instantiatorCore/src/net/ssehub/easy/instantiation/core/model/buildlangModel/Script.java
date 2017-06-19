@@ -77,6 +77,7 @@ public class Script extends AbstractResolvableModel<VariableDeclaration, Script>
     private Version version;
     private ModelImport<Script> parent;
     private VariableDeclaration[] parameters;
+    private java.util.Map<String, VariableDeclaration> namedParams;
     private List<VariableDeclaration> declarations;
     private List<AbstractRule> rules;
     private List<LoadProperties> loadProperties;
@@ -194,6 +195,7 @@ public class Script extends AbstractResolvableModel<VariableDeclaration, Script>
         this.declarations = new ArrayList<VariableDeclaration>();
         this.rules = new ArrayList<AbstractRule>();        
         this.parameters = null == descriptor ? null : descriptor.parameters;
+        this.namedParams = VariableDeclaration.mapDefaultedParameters(this.namedParams, this.parameters);
         createImplicitVariables();
         adjustParents();
     }
@@ -252,27 +254,27 @@ public class Script extends AbstractResolvableModel<VariableDeclaration, Script>
         return null != decl && IMPLICIT_VARS.contains(decl.getName());
     }
 
-    /**
-     * Get the number of parameters of this script.
-     * 
-     * @return The number of parameters of this script.
-     */
+    @Override
     public int getParameterCount() {
         return null == parameters ? 0 : parameters.length;
     }
     
-    /**
-     * Get the parameter of this rule at the specified index.
-     * 
-     * @param index The 0-based index of the parameter to be returned.
-     * @return The parameter at the given index.
-     * @throws IndexOutOfBoundsException if <code>index &lt; 0 || index &gt;={@link #getParameterCount()}</code>
-     */
+    @Override
     public VariableDeclaration getParameter(int index) {
         if (null == parameters) {
             throw new IndexOutOfBoundsException();
         }
         return parameters[index];
+    }
+    
+    @Override
+    public int getRequiredParameterCount() {
+        return VariableDeclaration.getRequiredParameterCount(namedParams, parameters);
+    }
+
+    @Override
+    public VariableDeclaration getParameter(String name) {
+        return VariableDeclaration.getParameter(namedParams, name, parameters);
     }
     
     /**

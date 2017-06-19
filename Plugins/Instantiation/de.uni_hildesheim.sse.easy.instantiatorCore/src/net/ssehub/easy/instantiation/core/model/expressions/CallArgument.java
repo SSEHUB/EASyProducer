@@ -52,6 +52,17 @@ public class CallArgument {
     }
 
     /**
+     * Creates a named call argument from a given runtime type.
+     * 
+     * @param name the name
+     * @param type the specific type
+     */
+    public CallArgument(String name, TypeDescriptor<?> type) {
+        this.name = name;
+        this.type = type;
+    }
+
+    /**
      * Creates unnamed arguments. [helper]
      * 
      * @param arguments the argument expressions
@@ -66,7 +77,7 @@ public class CallArgument {
     }
 
     /**
-     * Returns the number of unnamed arguments.
+     * Returns the number of unnamed arguments. Unnamed must be given before named arguments.
      * 
      * @param arguments the arguments to be considered
      * @return the number of unnamed arguments

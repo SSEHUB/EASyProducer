@@ -37,6 +37,7 @@ import net.ssehub.easy.instantiation.core.model.common.Imports;
 import net.ssehub.easy.instantiation.core.model.common.Typedef;
 import net.ssehub.easy.instantiation.core.model.common.VariableDeclaration;
 import net.ssehub.easy.instantiation.core.model.common.VilException;
+import net.ssehub.easy.instantiation.core.model.expressions.Expression;
 import net.ssehub.easy.instantiation.core.model.expressions.Resolver;
 import net.ssehub.easy.instantiation.core.model.vilTypes.TypeDescriptor;
 import net.ssehub.easy.instantiation.core.model.vilTypes.TypeRegistry;
@@ -297,14 +298,17 @@ public abstract class ModelTranslator
      * Resolves the parameters in <code>pList</code>.
      * 
      * @param pList the parameter list to be resolved
+     * @param cause the causing object containing the parameters
+     * @param paramListFeature the param list feature on <code>cause</code>
      * @param resolver the resolver instance
      * @return the resolved parameters (may actually be less then in <code>pList</code> in case of name or type failures
      * @throws TranslatorException in case that a problem occurred
      */
-    protected I[] resolveParameters(ParameterList pList, R resolver) throws TranslatorException {
+    protected I[] resolveParameters(ParameterList pList, EObject cause, EStructuralFeature paramListFeature, 
+        R resolver) throws TranslatorException {
         I[] result;
         if (null != pList) {
-            result = resolveParameters(pList.getParam(), resolver);
+            result = resolveParameters(pList.getParam(), cause, paramListFeature, resolver);
         } else {
             result = null;
         }
@@ -315,27 +319,55 @@ public abstract class ModelTranslator
      * Resolves the parameters in <code>parameters</code>.
      * 
      * @param parameters the parameters to be resolved
+     * @param cause the causing object containing the parameters
+     * @param paramListFeature the param list feature on <code>cause</code>
      * @param resolver the resolver instance
      * @return the resolved parameters (may actually be less then in <code>pList</code> in case of name or type failures
      * @throws TranslatorException in case that a problem occurred
      */
     protected I[] resolveParameters(EList<de.uni_hildesheim.sse.vil.expressions.expressionDsl.Parameter> parameters, 
-        R resolver) throws TranslatorException {
+        EObject cause, EStructuralFeature paramListFeature, R resolver) throws TranslatorException {
         I[] result;
         if (null != parameters) {
             List<I> tmp = new ArrayList<I>();
-            for (de.uni_hildesheim.sse.vil.expressions.expressionDsl.Parameter p : parameters) {
-                TypeDescriptor<?> type = getExpressionTranslator().processType(p.getType(), resolver);
+            int firstDefaultParam = -1;
+            int lastNonDefaultParam = -1;
+            for (int p = 0; p < parameters.size(); p++) {
+                de.uni_hildesheim.sse.vil.expressions.expressionDsl.Parameter par = parameters.get(p);
+                TypeDescriptor<?> type = getExpressionTranslator().processType(par.getType(), resolver);
                 if (null != type) {
                     for (int t = 0; t < tmp.size(); t++) {
-                        if (tmp.get(t).getName().equals(p.getName())) {
-                            error("duplicate parameter name '"+p.getName()+"'", p, 
+                        if (tmp.get(t).getName().equals(par.getName())) {
+                            error("duplicate parameter name '"+par.getName()+"'", par, 
                                 ExpressionDslPackage.Literals.PARAMETER__NAME, ErrorCodes.NAME_CLASH);
                         }
                     }
-                    tmp.add(getExpressionTranslator().createVariableDeclaration(p.getName(), type, false, 
-                        null, resolver));
+                    Expression dflt = null;
+                    if (null != par.getDflt()) {
+                        dflt = getExpressionTranslator().processExpression(par.getDflt(), resolver);
+                        try {
+                            if (!type.isAssignableFrom(dflt.inferType())) {
+                                error("Default value cannot be assigned to parameter '"+par.getName()+"'", par, 
+                                        ExpressionDslPackage.Literals.PARAMETER__DFLT, ErrorCodes.TYPE_CONSISTENCY);
+                            }
+                        } catch (VilException e) {
+                            throw new TranslatorException(e, par, ExpressionDslPackage.Literals.PARAMETER__DFLT);
+                        }
+                    }
+                    tmp.add(getExpressionTranslator().createVariableDeclaration(par.getName(), type, false, 
+                        dflt, resolver));
+                    if (null != dflt) {
+                        if (firstDefaultParam < 0) {
+                            firstDefaultParam = p;
+                        }
+                    } else {
+                        lastNonDefaultParam = p;
+                    }
                 }
+            }
+            if (firstDefaultParam >= 0 && lastNonDefaultParam > firstDefaultParam) {
+                error("Default parameters must be given after non-default parameters", cause, 
+                    paramListFeature, ErrorCodes.TYPE_CONSISTENCY);
             }
             result = createArray(tmp.size());
             tmp.toArray(result);

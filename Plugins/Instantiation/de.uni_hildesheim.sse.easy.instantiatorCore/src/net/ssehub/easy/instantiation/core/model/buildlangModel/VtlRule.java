@@ -32,6 +32,7 @@ public class VtlRule extends AbstractRule {
     private Script parent;
     private Def def;
     private VariableDeclaration[] parameter;
+    private java.util.Map<String, VariableDeclaration> namedParams;
 
     /**
      * Creates a new VTL rule mapper.
@@ -48,6 +49,7 @@ public class VtlRule extends AbstractRule {
             net.ssehub.easy.instantiation.core.model.templateModel.VariableDeclaration para = def.getParameter(p);
             this.parameter[p] = new VariableDeclaration(para.getName(), para.getType());
         }
+        this.namedParams = VariableDeclaration.mapDefaultedParameters(this.namedParams, this.parameter);
     }
 
     @Override
@@ -57,12 +59,22 @@ public class VtlRule extends AbstractRule {
 
     @Override
     public int getParameterCount() {
-        return def.getParameterCount();
+        return parameter.length;
     }
 
     @Override
     public VariableDeclaration getParameter(int index) {
         return parameter[index];
+    }
+
+    @Override
+    public int getRequiredParameterCount() {
+        return VariableDeclaration.getRequiredParameterCount(namedParams, parameter);
+    }
+
+    @Override
+    public VariableDeclaration getParameter(String name) {
+        return VariableDeclaration.getParameter(namedParams, name, parameter);
     }
 
     @Override

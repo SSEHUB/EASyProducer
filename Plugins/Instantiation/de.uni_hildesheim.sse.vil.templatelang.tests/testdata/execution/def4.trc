@@ -1,0 +1,51 @@
+-> main(Configuration, FileArtifact) with (<config>, test.texts)
+    t1 <- tt1
+    -> cat(String, String) with (a, a)
+        -> +(String, Any) with (cat: , a) = cat: a
+        -> +(String, Any) with (cat: a,  ) = cat: a 
+        -> +(String, Any) with (cat: a , a) = cat: a a
+        -> +(String, Any) with (cat: a a,  ) = cat: a a 
+        -> +(String, Any) with (cat: a a , tt1) = cat: a a tt1
+        -> +(String, Any) with (cat: a a tt1,  ) = cat: a a tt1 
+        -> +(String, Any) with (cat: a a tt1 , def) = cat: a a tt1 def
+    -> cat(String, String) with (a, b)
+        -> +(String, Any) with (cat: , a) = cat: a
+        -> +(String, Any) with (cat: a,  ) = cat: a 
+        -> +(String, Any) with (cat: a , b) = cat: a b
+        -> +(String, Any) with (cat: a b,  ) = cat: a b 
+        -> +(String, Any) with (cat: a b , tt1) = cat: a b tt1
+        -> +(String, Any) with (cat: a b tt1,  ) = cat: a b tt1 
+        -> +(String, Any) with (cat: a b tt1 , def) = cat: a b tt1 def
+    -> cat(String, String) with (a, c)
+        -> +(String, Any) with (cat: , a) = cat: a
+        -> +(String, Any) with (cat: a,  ) = cat: a 
+        -> +(String, Any) with (cat: a , c) = cat: a c
+        -> +(String, Any) with (cat: a c,  ) = cat: a c 
+        -> +(String, Any) with (cat: a c , tt1) = cat: a c tt1
+        -> +(String, Any) with (cat: a c tt1,  ) = cat: a c tt1 
+        -> +(String, Any) with (cat: a c tt1 , def) = cat: a c tt1 def
+    t2 <- tt2
+    -> cat(String, String) with (a, a)
+        -> +(String, Any) with (cat: , a) = cat: a
+        -> +(String, Any) with (cat: a,  ) = cat: a 
+        -> +(String, Any) with (cat: a , a) = cat: a a
+        -> +(String, Any) with (cat: a a,  ) = cat: a a 
+        -> +(String, Any) with (cat: a a , tt1) = cat: a a tt1
+        -> +(String, Any) with (cat: a a tt1,  ) = cat: a a tt1 
+        -> +(String, Any) with (cat: a a tt1 , tt2) = cat: a a tt1 tt2
+    -> cat(String, String) with (a, b)
+        -> +(String, Any) with (cat: , a) = cat: a
+        -> +(String, Any) with (cat: a,  ) = cat: a 
+        -> +(String, Any) with (cat: a , b) = cat: a b
+        -> +(String, Any) with (cat: a b,  ) = cat: a b 
+        -> +(String, Any) with (cat: a b , tt1) = cat: a b tt1
+        -> +(String, Any) with (cat: a b tt1,  ) = cat: a b tt1 
+        -> +(String, Any) with (cat: a b tt1 , tt2) = cat: a b tt1 tt2
+    -> cat(String, String) with (a, c)
+        -> +(String, Any) with (cat: , a) = cat: a
+        -> +(String, Any) with (cat: a,  ) = cat: a 
+        -> +(String, Any) with (cat: a , c) = cat: a c
+        -> +(String, Any) with (cat: a c,  ) = cat: a c 
+        -> +(String, Any) with (cat: a c , tt1) = cat: a c tt1
+        -> +(String, Any) with (cat: a c tt1,  ) = cat: a c tt1 
+        -> +(String, Any) with (cat: a c tt1 , tt2) = cat: a c tt1 tt2

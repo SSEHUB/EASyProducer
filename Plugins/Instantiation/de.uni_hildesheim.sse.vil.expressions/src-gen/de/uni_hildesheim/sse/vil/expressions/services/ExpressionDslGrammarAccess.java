@@ -263,12 +263,16 @@ public class ExpressionDslGrammarAccess extends AbstractGrammarElementFinder {
 		private final RuleCall cTypeTypeParserRuleCall_0_0 = (RuleCall)cTypeAssignment_0.eContents().get(0);
 		private final Assignment cNameAssignment_1 = (Assignment)cGroup.eContents().get(1);
 		private final RuleCall cNameIdentifierParserRuleCall_1_0 = (RuleCall)cNameAssignment_1.eContents().get(0);
+		private final Group cGroup_2 = (Group)cGroup.eContents().get(2);
+		private final Keyword cEqualsSignKeyword_2_0 = (Keyword)cGroup_2.eContents().get(0);
+		private final Assignment cDfltAssignment_2_1 = (Assignment)cGroup_2.eContents().get(1);
+		private final RuleCall cDfltExpressionParserRuleCall_2_1_0 = (RuleCall)cDfltAssignment_2_1.eContents().get(0);
 		
 		//Parameter:
-		//	type=Type name=Identifier;
+		//	type=Type name=Identifier ('=' dflt=Expression)?;
 		@Override public ParserRule getRule() { return rule; }
 
-		//type=Type name=Identifier
+		//type=Type name=Identifier ('=' dflt=Expression)?
 		public Group getGroup() { return cGroup; }
 
 		//type=Type
@@ -282,6 +286,18 @@ public class ExpressionDslGrammarAccess extends AbstractGrammarElementFinder {
 
 		//Identifier
 		public RuleCall getNameIdentifierParserRuleCall_1_0() { return cNameIdentifierParserRuleCall_1_0; }
+
+		//('=' dflt=Expression)?
+		public Group getGroup_2() { return cGroup_2; }
+
+		//'='
+		public Keyword getEqualsSignKeyword_2_0() { return cEqualsSignKeyword_2_0; }
+
+		//dflt=Expression
+		public Assignment getDfltAssignment_2_1() { return cDfltAssignment_2_1; }
+
+		//Expression
+		public RuleCall getDfltExpressionParserRuleCall_2_1_0() { return cDfltExpressionParserRuleCall_2_1_0; }
 	}
 
 	public class VersionStmtElements extends AbstractParserRuleElementFinder {
@@ -2074,7 +2090,7 @@ public class ExpressionDslGrammarAccess extends AbstractGrammarElementFinder {
 	}
 
 	//Parameter:
-	//	type=Type name=Identifier;
+	//	type=Type name=Identifier ('=' dflt=Expression)?;
 	public ParameterElements getParameterAccess() {
 		return pParameter;
 	}

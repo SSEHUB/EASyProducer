@@ -65,6 +65,21 @@ public interface IMetaOperation {
     public int getParameterCount();
     
     /**
+     * Returns the number of required parameters, i.e., non-default and non-named parameters.
+     * 
+     * @return the number of required parameters
+     */
+    public int getRequiredParameterCount();
+    
+    /**
+     * Returns a named parameter declaration.
+     * 
+     * @param name the name of the parameter
+     * @return the declaration or <b>null</b> if there is none
+     */
+    public IMetaParameterDeclaration getParameter(String name);
+
+    /**
      * Returns the specified parameter type.
      * 
      * @param index the index of the parameter to return

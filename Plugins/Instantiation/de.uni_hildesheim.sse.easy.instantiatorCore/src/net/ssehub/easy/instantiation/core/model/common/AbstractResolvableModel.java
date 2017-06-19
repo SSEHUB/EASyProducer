@@ -9,7 +9,7 @@ import net.ssehub.easy.basics.modelManagement.IModelListener;
 import net.ssehub.easy.basics.modelManagement.ModelEvents;
 import net.ssehub.easy.basics.modelManagement.ModelImport;
 import net.ssehub.easy.instantiation.core.Bundle;
-import net.ssehub.easy.instantiation.core.model.expressions.IResolvable;
+import net.ssehub.easy.instantiation.core.model.vilTypes.IMetaParameterDeclaration;
 import net.ssehub.easy.instantiation.core.model.vilTypes.TypeRegistry;
 import net.ssehub.easy.varModel.management.VarModel;
 import net.ssehub.easy.varModel.model.Project;
@@ -25,8 +25,8 @@ import net.ssehub.easy.varModel.model.Project;
  * 
  * @author Holger Eichelberger
  */
-public abstract class AbstractResolvableModel<V extends IResolvable, M extends IModel> implements IResolvableModel<V>, 
-    IModelListener<Project>, ITypedefReceiver {
+public abstract class AbstractResolvableModel<V extends IMetaParameterDeclaration, M extends IModel> 
+    implements IResolvableModel<V>, IModelListener<Project>, ITypedefReceiver {
 
     private transient boolean dirty = false;
     private Imports<M> imports;

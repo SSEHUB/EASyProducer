@@ -20,15 +20,15 @@ public class NoTracer extends net.ssehub.easy.instantiation.core.model.common.No
     }
 
     @Override
-    public void visitRule(Rule rule, RuntimeEnvironment environment) {
+    public void visitRule(Rule rule, RuntimeEnvironment<?> environment) {
     }
 
     @Override
-    public void visitedRule(Rule rule, RuntimeEnvironment environment, Object result) {
+    public void visitedRule(Rule rule, RuntimeEnvironment<?> environment, Object result) {
     }
 
     @Override
-    public void visitLoop(IEnumeratingLoop loop, RuntimeEnvironment environment) {
+    public void visitLoop(IEnumeratingLoop loop, RuntimeEnvironment<?> environment) {
     }
 
     @Override
@@ -36,7 +36,7 @@ public class NoTracer extends net.ssehub.easy.instantiation.core.model.common.No
     }
 
     @Override
-    public void visitedLoop(IEnumeratingLoop loop, RuntimeEnvironment environment) {
+    public void visitedLoop(IEnumeratingLoop loop, RuntimeEnvironment<?> environment) {
     }
 
     @Override
@@ -66,11 +66,11 @@ public class NoTracer extends net.ssehub.easy.instantiation.core.model.common.No
     }
 
     @Override
-    public void visitScript(Script script, RuntimeEnvironment environment) {
+    public void visitScript(Script script, RuntimeEnvironment<?> environment) {
     }
     
     @Override
-    public void visitScriptBody(Script script, RuntimeEnvironment environment) {
+    public void visitScriptBody(Script script, RuntimeEnvironment<?> environment) {
     }
 
     @Override

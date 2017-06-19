@@ -1,6 +1,6 @@
 package net.ssehub.easy.instantiation.core.model.common;
 
-import net.ssehub.easy.instantiation.core.model.expressions.IResolvable;
+import net.ssehub.easy.instantiation.core.model.vilTypes.IMetaParameterDeclaration;
 import net.ssehub.easy.instantiation.core.model.vilTypes.IMetaType;
 import net.ssehub.easy.instantiation.core.model.vilTypes.ITypedModel;
 import net.ssehub.easy.instantiation.core.model.vilTypes.TypeRegistry;
@@ -13,7 +13,7 @@ import net.ssehub.easy.instantiation.core.model.vilTypes.TypeRegistry;
  * 
  * @author Holger Eichelberger
  */
-public interface IResolvableModel<V extends IResolvable> extends IParameterizable<V>, ITypedModel {
+public interface IResolvableModel<V extends IMetaParameterDeclaration> extends IParameterizable<V>, ITypedModel {
 
     /**
      * Returns whether the given <code>name</code> resolves to an IVML element.

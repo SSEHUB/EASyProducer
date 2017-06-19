@@ -8,7 +8,14 @@ import net.ssehub.easy.instantiation.core.model.expressions.IExpressionVisitor;
  * @author Holger Eichelberger
  */
 public class RuntimeEnvironment 
-    extends net.ssehub.easy.instantiation.core.model.common.RuntimeEnvironment {
+    extends net.ssehub.easy.instantiation.core.model.common.RuntimeEnvironment<VariableDeclaration> {
+    
+    /**
+     * Creates a new runtime environment using the default type registry.
+     */
+    public RuntimeEnvironment() {
+        super(VariableDeclaration.class);
+    }
     
     @Override
     protected IExpressionVisitor createEvaluationProcessor() {

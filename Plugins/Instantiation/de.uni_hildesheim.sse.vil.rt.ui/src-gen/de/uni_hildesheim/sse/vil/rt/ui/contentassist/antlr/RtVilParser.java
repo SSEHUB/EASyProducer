@@ -120,6 +120,7 @@ public class RtVilParser extends AbstractContentAssistParser {
 					put(grammarAccess.getParameterListAccess().getGroup(), "rule__ParameterList__Group__0");
 					put(grammarAccess.getParameterListAccess().getGroup_1(), "rule__ParameterList__Group_1__0");
 					put(grammarAccess.getParameterAccess().getGroup(), "rule__Parameter__Group__0");
+					put(grammarAccess.getParameterAccess().getGroup_2(), "rule__Parameter__Group_2__0");
 					put(grammarAccess.getVersionStmtAccess().getGroup(), "rule__VersionStmt__Group__0");
 					put(grammarAccess.getImportAccess().getGroup(), "rule__Import__Group__0");
 					put(grammarAccess.getLogicalExpressionAccess().getGroup(), "rule__LogicalExpression__Group__0");
@@ -292,6 +293,7 @@ public class RtVilParser extends AbstractContentAssistParser {
 					put(grammarAccess.getParameterListAccess().getParamAssignment_1_1(), "rule__ParameterList__ParamAssignment_1_1");
 					put(grammarAccess.getParameterAccess().getTypeAssignment_0(), "rule__Parameter__TypeAssignment_0");
 					put(grammarAccess.getParameterAccess().getNameAssignment_1(), "rule__Parameter__NameAssignment_1");
+					put(grammarAccess.getParameterAccess().getDfltAssignment_2_1(), "rule__Parameter__DfltAssignment_2_1");
 					put(grammarAccess.getVersionStmtAccess().getVersionAssignment_1(), "rule__VersionStmt__VersionAssignment_1");
 					put(grammarAccess.getImportAccess().getNameAssignment_1(), "rule__Import__NameAssignment_1");
 					put(grammarAccess.getImportAccess().getVersionSpecAssignment_2(), "rule__Import__VersionSpecAssignment_2");

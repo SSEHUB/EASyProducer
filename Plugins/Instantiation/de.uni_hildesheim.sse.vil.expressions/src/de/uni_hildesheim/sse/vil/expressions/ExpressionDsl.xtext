@@ -42,6 +42,7 @@ ParameterList:
 Parameter:
     type=Type
     name=Identifier
+    ('=' dflt=Expression)?
 ;
 
 VersionStmt: 

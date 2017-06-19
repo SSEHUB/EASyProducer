@@ -1369,7 +1369,7 @@ public class RtVilGrammarAccess extends AbstractGrammarElementFinder {
 	}
 
 	//Parameter:
-	//	type=Type name=Identifier;
+	//	type=Type name=Identifier ('=' dflt=Expression)?;
 	public ExpressionDslGrammarAccess.ParameterElements getParameterAccess() {
 		return gaExpressionDsl.getParameterAccess();
 	}

@@ -285,6 +285,16 @@ public class BasicTests extends AbstractBasicTest<Script> {
     }
 
     /**
+     * Tests rules with default value parameters.
+     * 
+     * @throws IOException should not occur
+     */
+    @Test
+    public void testRules2() throws IOException {
+        assertEqual("rules2", "rulesTest2", null);
+    }
+
+    /**
      * Tests set and sequence definitions.
      * 
      * @throws IOException should not occur

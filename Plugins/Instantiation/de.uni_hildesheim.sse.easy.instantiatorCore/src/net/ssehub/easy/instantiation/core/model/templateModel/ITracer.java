@@ -30,7 +30,7 @@ public interface ITracer extends net.ssehub.easy.instantiation.core.model.common
      * @param def the sub-template
      * @param environment the runtime environment
      */
-    public void visitDef(Def def, RuntimeEnvironment environment);
+    public void visitDef(Def def, RuntimeEnvironment<?> environment);
 
     /**
      * Ends visiting a sub-template.
@@ -39,7 +39,7 @@ public interface ITracer extends net.ssehub.easy.instantiation.core.model.common
      * @param environment the runtime environment
      * @param result the execution result
      */
-    public void visitedDef(Def def, RuntimeEnvironment environment, Object result);
+    public void visitedDef(Def def, RuntimeEnvironment<?> environment, Object result);
     
     /**
      * A switch statement was visited.

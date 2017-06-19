@@ -1,0 +1,7 @@
+-> main()
+    -> test(Integer, Integer) with (1, 1)
+        -> *(Integer, Integer) with (1, 1) = 1
+    -> test(Integer, Integer) with (1, 2)
+        -> *(Integer, Integer) with (1, 2) = 2
+    -> test(Integer, Integer) with (1, 3)
+        -> *(Integer, Integer) with (1, 3) = 3

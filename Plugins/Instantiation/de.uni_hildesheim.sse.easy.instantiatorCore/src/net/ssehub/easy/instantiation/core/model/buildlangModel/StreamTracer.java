@@ -45,7 +45,7 @@ public class StreamTracer extends net.ssehub.easy.instantiation.core.model.commo
     }
 
     @Override
-    public void visitRule(Rule rule, RuntimeEnvironment environment) {
+    public void visitRule(Rule rule, RuntimeEnvironment<?> environment) {
         if (isEnabled()) {
             printIndentation();
             print("-> " + rule.getName() + "(");
@@ -78,14 +78,14 @@ public class StreamTracer extends net.ssehub.easy.instantiation.core.model.commo
     }
 
     @Override
-    public void visitedRule(Rule rule, RuntimeEnvironment environment, Object result) {
+    public void visitedRule(Rule rule, RuntimeEnvironment<?> environment, Object result) {
         if (isEnabled()) {
             decreaseIndentation();
         }
     }
 
     @Override
-    public void visitLoop(IEnumeratingLoop loop, RuntimeEnvironment environment) {
+    public void visitLoop(IEnumeratingLoop loop, RuntimeEnvironment<?> environment) {
         if (isEnabled()) {
             printIndentation();
             print(loop.getElementName());
@@ -106,7 +106,7 @@ public class StreamTracer extends net.ssehub.easy.instantiation.core.model.commo
     }
     
     @Override
-    public void visitedLoop(IEnumeratingLoop loop, RuntimeEnvironment environment) {
+    public void visitedLoop(IEnumeratingLoop loop, RuntimeEnvironment<?> environment) {
         if (isEnabled()) {
             decreaseIndentation();
             printIndentation();
@@ -168,12 +168,12 @@ public class StreamTracer extends net.ssehub.easy.instantiation.core.model.commo
     }
 
     @Override
-    public void visitScript(Script script, RuntimeEnvironment environment) {
+    public void visitScript(Script script, RuntimeEnvironment<?> environment) {
         // for compatibility with existing tests
     }
     
     @Override
-    public void visitScriptBody(Script script, RuntimeEnvironment environment) {
+    public void visitScriptBody(Script script, RuntimeEnvironment<?> environment) {
         // for compatibility with existing tests
     }
 

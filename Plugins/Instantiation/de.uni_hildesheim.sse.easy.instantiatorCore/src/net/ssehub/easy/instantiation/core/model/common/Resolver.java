@@ -9,10 +9,10 @@ import net.ssehub.easy.basics.modelManagement.ModelImport;
 import net.ssehub.easy.instantiation.core.model.expressions.AbstractCallExpression;
 import net.ssehub.easy.instantiation.core.model.expressions.CallArgument;
 import net.ssehub.easy.instantiation.core.model.expressions.CallExpression;
-import net.ssehub.easy.instantiation.core.model.expressions.IResolvable;
 import net.ssehub.easy.instantiation.core.model.expressions.IRuntimeEnvironment;
 import net.ssehub.easy.instantiation.core.model.vilTypes.Constants;
 import net.ssehub.easy.instantiation.core.model.vilTypes.IMetaOperation;
+import net.ssehub.easy.instantiation.core.model.vilTypes.IMetaParameterDeclaration;
 import net.ssehub.easy.instantiation.core.model.vilTypes.IMetaType;
 import net.ssehub.easy.instantiation.core.model.vilTypes.TypeDescriptor;
 import net.ssehub.easy.instantiation.core.model.vilTypes.TypeRegistry;
@@ -28,7 +28,7 @@ import net.ssehub.easy.instantiation.core.model.vilTypes.TypeRegistry;
  * @author Holger Eichelberger
  */
 public abstract class Resolver<M extends IResolvableModel<V>, O extends IResolvableOperation<V>, 
-    E extends ModelCallExpression<V, M, O>, V extends IResolvable> 
+    E extends ModelCallExpression<V, M, O>, V extends IMetaParameterDeclaration> 
     extends net.ssehub.easy.instantiation.core.model.expressions.Resolver<V> {
 
     private Stack<M> models = new Stack<M>();
@@ -54,7 +54,7 @@ public abstract class Resolver<M extends IResolvableModel<V>, O extends IResolva
         if (environment instanceof RuntimeEnvironment) {
             // push the context model of the runtime environment in order to resolve
             // also def and rule calls defined in the same model
-            RuntimeEnvironment rEnv = (RuntimeEnvironment) environment;
+            RuntimeEnvironment<?> rEnv = (RuntimeEnvironment<?>) environment;
             IModel model = rEnv.getContextModel();
             if (null != model) {
                 models.push((M) model);

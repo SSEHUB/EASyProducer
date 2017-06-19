@@ -325,13 +325,22 @@ public interface ExpressionDslPackage extends EPackage
   int PARAMETER__NAME = 1;
 
   /**
+   * The feature id for the '<em><b>Dflt</b></em>' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int PARAMETER__DFLT = 2;
+
+  /**
    * The number of structural features of the '<em>Parameter</em>' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int PARAMETER_FEATURE_COUNT = 2;
+  int PARAMETER_FEATURE_COUNT = 3;
 
   /**
    * The meta object id for the '{@link de.uni_hildesheim.sse.vil.expressions.expressionDsl.impl.VersionStmtImpl <em>Version Stmt</em>}' class.
@@ -1994,6 +2003,17 @@ public interface ExpressionDslPackage extends EPackage
   EAttribute getParameter_Name();
 
   /**
+   * Returns the meta object for the containment reference '{@link de.uni_hildesheim.sse.vil.expressions.expressionDsl.Parameter#getDflt <em>Dflt</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the containment reference '<em>Dflt</em>'.
+   * @see de.uni_hildesheim.sse.vil.expressions.expressionDsl.Parameter#getDflt()
+   * @see #getParameter()
+   * @generated
+   */
+  EReference getParameter_Dflt();
+
+  /**
    * Returns the meta object for class '{@link de.uni_hildesheim.sse.vil.expressions.expressionDsl.VersionStmt <em>Version Stmt</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -3464,6 +3484,14 @@ public interface ExpressionDslPackage extends EPackage
      * @generated
      */
     EAttribute PARAMETER__NAME = eINSTANCE.getParameter_Name();
+
+    /**
+     * The meta object literal for the '<em><b>Dflt</b></em>' containment reference feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EReference PARAMETER__DFLT = eINSTANCE.getParameter_Dflt();
 
     /**
      * The meta object literal for the '{@link de.uni_hildesheim.sse.vil.expressions.expressionDsl.impl.VersionStmtImpl <em>Version Stmt</em>}' class.

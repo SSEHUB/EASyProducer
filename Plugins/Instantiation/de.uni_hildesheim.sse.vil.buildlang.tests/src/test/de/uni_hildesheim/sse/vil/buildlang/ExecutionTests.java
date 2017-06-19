@@ -1048,6 +1048,26 @@ public class ExecutionTests extends AbstractExecutionTest<Script> {
     }
     
     /**
+     * Tests defining default parameters.
+     * 
+     * @throws IOException should not occur
+     */
+    @Test
+    public void testRules2() throws IOException {
+        assertEqual("rules2");
+    }
+    
+    /**
+     * Tests defining default script parameters.
+     * 
+     * @throws IOException should not occur
+     */
+    @Test
+    public void testRules4() throws IOException {
+        assertEqual("rules4");
+    }
+    
+    /**
      * Tests implicit casting.
      * 
      * @throws IOException should not occur

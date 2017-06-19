@@ -37,6 +37,7 @@
     <genClasses ecoreClass="ExpressionDsl.ecore#//Parameter">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ExpressionDsl.ecore#//Parameter/type"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ExpressionDsl.ecore#//Parameter/name"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ExpressionDsl.ecore#//Parameter/dflt"/>
     </genClasses>
     <genClasses ecoreClass="ExpressionDsl.ecore#//VersionStmt">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ExpressionDsl.ecore#//VersionStmt/version"/>

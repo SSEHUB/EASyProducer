@@ -305,7 +305,27 @@ public class ExecutionTests extends AbstractTest {
     public void testDef() throws IOException {
         assertEqual("def");
     }
-    
+
+    /**
+     * Tests simple defs with defaults.
+     * 
+     * @throws IOException should not occur
+     */
+    @Test
+    public void testDef2() throws IOException {
+        assertEqual("def2");
+    }
+
+    /**
+     * Tests simple defs with defaults.
+     * 
+     * @throws IOException should not occur
+     */
+    @Test
+    public void testDef4() throws IOException {
+        assertEqual("def4");
+    }
+
     /**
      * Tests simple variables.
      * 

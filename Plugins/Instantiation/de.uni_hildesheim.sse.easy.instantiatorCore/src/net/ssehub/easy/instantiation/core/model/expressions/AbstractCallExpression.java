@@ -9,6 +9,7 @@ import net.ssehub.easy.instantiation.core.model.common.VilException;
 import net.ssehub.easy.instantiation.core.model.vilTypes.Constants;
 import net.ssehub.easy.instantiation.core.model.vilTypes.IActualTypeProvider;
 import net.ssehub.easy.instantiation.core.model.vilTypes.IMetaOperation;
+import net.ssehub.easy.instantiation.core.model.vilTypes.IMetaParameterDeclaration;
 import net.ssehub.easy.instantiation.core.model.vilTypes.IMetaType;
 import net.ssehub.easy.instantiation.core.model.vilTypes.ReflectionTypeDescriptor;
 import net.ssehub.easy.instantiation.core.model.vilTypes.TypeDescriptor;
@@ -101,12 +102,49 @@ public abstract class AbstractCallExpression extends Expression implements IArgu
      * 
      * @param op the operation to be compared
      * @param name the name of the operation call to be resolved
-     * @param arguments the unnamed arguments
+     * @param argCount the number of required arguments
      * @return <code>true</code> if <code>desc</code> is a candidate, <code>false</code> else
      */
-    protected static boolean isCandidate(IMetaOperation op, String name, CallArgument[] arguments) {
-        return null != op && null != arguments && op.getName().equals(name) 
-            && op.getParameterCount() == arguments.length;
+    protected static boolean isCandidate(IMetaOperation op, String name, int argCount) {
+        boolean result; 
+        if (null != op && op.getName().equals(name)) {
+            // in case of default parameters, the actual number of required params may be less than the given ones
+            int reqParam = op.getRequiredParameterCount();
+            if (argCount > 0) {
+                result = reqParam > 0 && reqParam <= argCount && argCount <= op.getParameterCount();
+            } else {
+                result = reqParam == 0;
+            }
+        } else {
+            result = false;
+        }
+        return result;
+    }
+
+    /**
+     * Returns the parameter type considering named parameters. After unnamed arguments, this method may
+     * switch to parameter names.
+     * 
+     * @param operation the operation
+     * @param index the parameter index
+     * @param arguments the arguments
+     * @param unnamedArgsCount the number of unnamed arguments
+     * @return the parameter type (may be <b>null</b> if there is none / legacy optional named parameter)
+     */
+    protected static IMetaType getParameterType(IMetaOperation operation, int index, CallArgument[] arguments, 
+        int unnamedArgsCount) {
+        IMetaType result;
+        if (index < unnamedArgsCount) {
+            result = operation.getParameterType(index);
+        } else {
+            IMetaParameterDeclaration pDecl = operation.getParameter(arguments[index].getName());
+            if (null != pDecl) {
+                result = pDecl.getType();
+            } else {
+                result = null;
+            }
+        }
+        return result;
     }
 
     /**
@@ -116,29 +154,32 @@ public abstract class AbstractCallExpression extends Expression implements IArgu
      * 
      * @param operand the operand of the call to be resolved
      * @param name the name of the operation call to be resolved
-     * @param arguments the (unnamed) arguments of the call
+     * @param arguments the arguments of the call
      * @param allowAny allow AnyType as assignable parameter type (dynamic dispatch)
+     * @param unnamedArgsCount the number of unnamed arguments in <code>arguments</code>
      * @return the list of candidate operations
      * @throws VilException in case of type resolution problems or in case of an ambiguous call specification
      */
     private static List<IMetaOperation> assignableCandidates(IMetaType operand, String name, CallArgument[] arguments, 
-        boolean allowAny) throws VilException {
+        int unnamedArgsCount, boolean allowAny) throws VilException {
         List<IMetaOperation> result = new ArrayList<IMetaOperation>();
         IMetaType[] argumentTypes = toTypeDescriptors(arguments);
         for (int o = 0; o < operand.getOperationsCount(); o++) {
             IMetaOperation desc = operand.getOperation(o);
-            if (isCandidate(desc, name, arguments)) {
+            if (isCandidate(desc, name, unnamedArgsCount)) {
                 boolean allEqual = true;
                 for (int p = 0; allEqual && p < arguments.length; p++) {
-                    IMetaType pType = desc.getParameterType(p);
-                    IMetaType aType = argumentTypes[p];
-                    allEqual &= TypeRegistry.equals(pType, aType);
-                    if (!allEqual) {
-                        IMetaOperation funcOp = resolveResolvableOperation(operand, pType, aType, 
-                            arguments[p].getExpression(), RESLIST);
-                        if (null != funcOp) {
-                            arguments[p].resolveOperation((TypeDescriptor<?>) pType, funcOp);
-                            allEqual = true;
+                    IMetaType pType = getParameterType(desc, p, arguments, unnamedArgsCount);
+                    if (null != pType) { // pType==null legacy: undeclared unnamed parameters
+                        IMetaType aType = argumentTypes[p];
+                        allEqual &= TypeRegistry.equals(pType, aType);
+                        if (!allEqual) {
+                            IMetaOperation funcOp = resolveResolvableOperation(operand, pType, aType, 
+                                arguments[p].getExpression(), RESLIST);
+                            if (null != funcOp) {
+                                arguments[p].resolveOperation((TypeDescriptor<?>) pType, funcOp);
+                                allEqual = true;
+                            }
                         }
                     }
                 }
@@ -151,19 +192,20 @@ public abstract class AbstractCallExpression extends Expression implements IArgu
             int minAssignables = 0;
             for (int o = 0; o < operand.getOperationsCount(); o++) {
                 IMetaOperation desc = operand.getOperation(o);
-                if (isCandidate(desc, name, arguments)) {
+                if (isCandidate(desc, name, unnamedArgsCount)) {
                     boolean allAssignable = true;
                     int aCount = 0;
                     final TypeDescriptor<?> any = TypeRegistry.anyType();
                     for (int p = 0; allAssignable && p < arguments.length; p++) {
-                        IMetaType pType = desc.getParameterType(p);
+                        IMetaType pType = getParameterType(desc, p, arguments, unnamedArgsCount);
                         IMetaType aType = argumentTypes[p];
-                        if (pType.isAssignableFrom(aType) || (allowAny && any == pType)) {
-                            if (pType != aType) {
-                                aCount++;
+                        // pType==null legacy: undeclared unnamed parameters
+                        if (null != pType) { 
+                            if (pType.isAssignableFrom(aType) || (allowAny && any == pType)) {
+                                aCount += (pType != aType) ? 1 : 0;
+                            } else {
+                                allAssignable = false;
                             }
-                        } else {
-                            allAssignable = false;
                         }
                     }
                     if (allAssignable) {
@@ -173,23 +215,33 @@ public abstract class AbstractCallExpression extends Expression implements IArgu
                             minAssignables = aCount;
                         } 
                         if (aCount == minAssignables) {
-                            addAndPruneByType(result, desc, argumentTypes);
+                            addAndPruneByType(result, desc, argumentTypes, arguments, unnamedArgsCount);
                         }
                     }
                 }
             }
         }
         if (result.size() > 1) {
-            StringBuilder tmp = new StringBuilder();
-            for (IMetaOperation op : result) {
-                if (tmp.length() > 0) {
-                    tmp.append(",");
-                }
-                tmp.append(op.getSignature());
-            }
-            throw new VilException(tmp + " are ambiguous" , VilException.ID_AMBIGUOUS);
+            throw new VilException(toSignatures(result) + " are ambiguous" , VilException.ID_AMBIGUOUS);
         }
         return result;
+    }
+
+    /**
+     * Turns the signatures of the given <code>operations</code> into a string.
+     * 
+     * @param operations the operations
+     * @return the string containing all signatures
+     */
+    private static String toSignatures(Iterable<IMetaOperation> operations) {
+        StringBuilder tmp = new StringBuilder();
+        for (IMetaOperation op : operations) {
+            if (tmp.length() > 0) {
+                tmp.append(",");
+            }
+            tmp.append(op.getSignature());
+        }
+        return tmp.toString();
     }
 
     /**
@@ -211,7 +263,8 @@ public abstract class AbstractCallExpression extends Expression implements IArgu
             && initExpression instanceof VarModelIdentifierExpression) {
             VarModelIdentifierExpression varModelIdEx = (VarModelIdentifierExpression) initExpression; 
             String opName = varModelIdEx.getIdentifier();
-            List<IMetaOperation> ops = assignableCandidates(operand, opName, toTypeDescriptors(pType, 1), false);
+            CallArgument[] args = toTypeDescriptors(pType, 1);
+            List<IMetaOperation> ops = assignableCandidates(operand, opName, args, args.length, false);
             if (1 == ops.size()) { // return type may also select
                 IMetaOperation functionOp = ops.get(0);
                 TypeDescriptor<?> ret = pType.getGenericParameterType(pType.getGenericParameterCount() - 1);
@@ -263,14 +316,17 @@ public abstract class AbstractCallExpression extends Expression implements IArgu
      * @param candidates the candidates to modify
      * @param toAdd the candidate to add if it is the best candidate
      * @param argTypes the argument types
+     * @param arguments the actual arguments
+     * @param unnamedArgsCount the number of unnamed arguments in <code>arguments</code>
      */
-    private static void addAndPruneByType(List<IMetaOperation> candidates, IMetaOperation toAdd, IMetaType[] argTypes) {
+    private static void addAndPruneByType(List<IMetaOperation> candidates, IMetaOperation toAdd, IMetaType[] argTypes, 
+        CallArgument[] arguments, int unnamedArgsCount) {
         if (!candidates.isEmpty()) {
-            int toAddDiff = calcTypeDiff(toAdd, argTypes);
+            int toAddDiff = calcTypeDiff(toAdd, argTypes, arguments, unnamedArgsCount);
             // multiple conversion-equivalent candidates
             for (int i = candidates.size() - 1; i >= 0; i--) {
                 IMetaOperation op = candidates.get(i);
-                int opDiff = calcTypeDiff(op, argTypes);
+                int opDiff = calcTypeDiff(op, argTypes, arguments, unnamedArgsCount);
                 if (toAddDiff < opDiff) {
                     candidates.remove(i);
                 }
@@ -286,12 +342,15 @@ public abstract class AbstractCallExpression extends Expression implements IArgu
      * 
      * @param operation the operation to compare
      * @param argTypes the argument types to take into account
+     * @param arguments the actual arguments
+     * @param unnamedArgsCount the number of unnamed arguments in <code>arguments</code>
      * @return the (pseudo) difference in number of types
      */
-    private static int calcTypeDiff(IMetaOperation operation, IMetaType[] argTypes) {
+    private static int calcTypeDiff(IMetaOperation operation, IMetaType[] argTypes, CallArgument[] arguments, 
+        int unnamedArgsCount) {
         int diff = 0;
         for (int p = 0; p < argTypes.length; p++) {
-            IMetaType pType = operation.getParameterType(p);
+            IMetaType pType = getParameterType(operation, p, arguments, unnamedArgsCount);
             IMetaType aType = argTypes[p];
             if (!TypeRegistry.equals(pType, aType)) {
                 diff += calcSuperDiffRec(aType, pType); // iterate over argType, consider generic parameter??
@@ -362,14 +421,15 @@ public abstract class AbstractCallExpression extends Expression implements IArgu
          * Returns the conversions core to compare similar canidates.
          * 
          * @param arguments the actual arguments
+         * @param unnamedArgsCount the number of unnamed arguments in <code>arguments</code>
          * @return the number of conversions
          * @throws VilException in case that types cannot be inferred
          */
-        public int getScore(CallArgument[] arguments) throws VilException {
+        public int getScore(CallArgument[] arguments, int unnamedArgsCount) throws VilException {
             int score = 0;
             final int step = operation.getParameterCount();
             for (int c = 0; c < conversions.length; c++) {
-                IMetaType pType = operation.getParameterType(c);
+                IMetaType pType = getParameterType(operation, c, arguments, unnamedArgsCount);
                 if (null == conversions[c]) {
                     IMetaType aType = arguments[c].inferType();
                     if (pType != aType) { 
@@ -394,26 +454,28 @@ public abstract class AbstractCallExpression extends Expression implements IArgu
      * 
      * @param operand the operand of the call to be resolved
      * @param name the name of the operation call to be resolved
-     * @param arguments the (unnamed) arguments of the call
+     * @param arguments the arguments of the call
+     * @param unnamedArgsCount the number of unnamed arguments in <code>arguments</code>
      * @return the list of candidate operations including their required conversions
      * @throws VilException in case of type resolution problems or in case of an ambiguous call specification
      */
     private static List<ConvertibleOperation> convertibleCandidates(IMetaType operand, String name, 
-        CallArgument[] arguments) throws VilException {
+        CallArgument[] arguments, int unnamedArgsCount) throws VilException {
         List<ConvertibleOperation> result = new ArrayList<ConvertibleOperation>();
         for (int o = 0; o < operand.getOperationsCount(); o++) {
             IMetaOperation desc = operand.getOperation(o);
-            if (isCandidate(desc, name, arguments)) {
+            if (isCandidate(desc, name, unnamedArgsCount)) {
                 int conversionCount = 0;
                 IMetaOperation[] conversionOps = new IMetaOperation[arguments.length]; 
                 boolean allParamOk = true;
-                for (int p = 0; allParamOk && p < arguments.length; p++) {
-                    IMetaType paramType = desc.getParameterType(p);
+                for (int p = 0; allParamOk && p < desc.getRequiredParameterCount(); p++) {
+                    IMetaType pType = getParameterType(desc, p, arguments, unnamedArgsCount);
                     IMetaType argType = arguments[p].inferType();
-                    if (!paramType.isAssignableFrom(argType)) {
-                        conversionOps[p] = TypeHelper.findConversion(argType, paramType);
+                    // pType==null legacy: undeclared unnamed parameters
+                    if (null != pType && !pType.isAssignableFrom(argType)) {
+                        conversionOps[p] = TypeHelper.findConversion(argType, pType);
                         if (null != conversionOps[p]) {
-                            if (argType.checkConversion(paramType, conversionOps[p])) {
+                            if (argType.checkConversion(pType, conversionOps[p])) {
                                 conversionCount++;
                             } else {
                                 conversionOps[p] = null;
@@ -432,7 +494,7 @@ public abstract class AbstractCallExpression extends Expression implements IArgu
             }
         }
         if (result.size() > 1) {
-            result = selectAmongMultipleCandidates(result, arguments);
+            result = selectAmongMultipleCandidates(result, arguments, unnamedArgsCount);
             if (result.size() > 1) {
                 StringBuilder tmp = new StringBuilder();
                 for (ConvertibleOperation op : result) {
@@ -452,17 +514,18 @@ public abstract class AbstractCallExpression extends Expression implements IArgu
      * 
      * @param candidates the candidates
      * @param arguments the actual arguments
+     * @param unnamedArgsCount the number of unnamed arguments in <code>arguments</code>
      * @return <code>candidates</code> or a list with exactly one candidate
      * @throws VilException in case that types cannot be inferred
      */
     private static List<ConvertibleOperation> selectAmongMultipleCandidates(List<ConvertibleOperation> candidates, 
-        CallArgument[] arguments) throws VilException {
+        CallArgument[] arguments, int unnamedArgsCount) throws VilException {
         ConvertibleOperation op = null;
         int opCount = 0;
         int minScore = Integer.MAX_VALUE;
         for (int c = 0; c < candidates.size(); c++) {
             ConvertibleOperation tmp = candidates.get(c);
-            int score = tmp.getScore(arguments);
+            int score = tmp.getScore(arguments, unnamedArgsCount);
             if (null == op || score < minScore) {
                 op = tmp;
                 minScore = score;
@@ -654,38 +717,44 @@ public abstract class AbstractCallExpression extends Expression implements IArgu
         boolean allowConversion, boolean allowAny) throws VilException {
         IMetaOperation resolved = null;
         // check for direct applicable candidates
-        CallArgument[] unnamed = CallArgument.getUnnamedArguments(arguments);
-        List<IMetaOperation> candidates = assignableCandidates(operand, name, unnamed, allowAny);
+        int unnamedArgsCount = CallArgument.countUnnamedArguments(arguments);
+        List<IMetaOperation> candidates = assignableCandidates(operand, name, arguments, unnamedArgsCount, allowAny);
         if (1 == candidates.size()) {
             resolved = candidates.get(0);
         } else if (allowConversion) {
             // check for candidates by conversion
-            List<ConvertibleOperation> convertible = convertibleCandidates(operand, name, unnamed);
+            List<ConvertibleOperation> convertible = convertibleCandidates(operand, name, arguments, unnamedArgsCount);
             if (0 == convertible.size() && null != operand.getBaseType()) {
                 // also operand operations must be considered
-                convertible = convertibleCandidates(operand.getBaseType(), name, unnamed);
+                convertible = convertibleCandidates(operand.getBaseType(), name, arguments, unnamedArgsCount);
             }
             if (1 == convertible.size()) {
                 ConvertibleOperation found = convertible.get(0);
                 // replace parameter expression by transparent call expression to conversion call
                 resolved = found.operation;
-                for (int i = 0; i < unnamed.length; i++) { // same length as conversions
+                for (int i = 0; i < unnamedArgsCount; i++) { // same length as conversions
                     IMetaOperation conversionOp = found.conversions[i];
                     if (null != conversionOp) {
-                        unnamed[i].insertConversion(conversionOp);
+                        arguments[i].insertConversion(conversionOp);
                     }
                 }
             }
         }
         if (null == resolved) {
             // try to go for a placeholder, works only on placeholder types
-            resolved = operand.addPlaceholderOperation(name, unnamed.length, arguments.length - unnamed.length > 0);
+            resolved = operand.addPlaceholderOperation(name, unnamedArgsCount, arguments.length - unnamedArgsCount > 0);
         }
         if (null == resolved) {
             throw new VilException("cannot resolve operation " + getSignature(name, arguments), 
                 VilException.ID_CANNOT_RESOLVE);
         } else {
-            if (unnamed.length != arguments.length && !resolved.acceptsNamedParameters()) {
+            int optionalNamed = 0;
+            for (int i = unnamedArgsCount; i < arguments.length; i++) {
+                if (null == resolved.getParameter(arguments[i].getName())) {
+                    optionalNamed++;
+                }
+            }
+            if (optionalNamed > 0 && !resolved.acceptsNamedParameters()) {
                 // difference indicates named parameter
                 // use java signature as it is the matching signature!
                 throw new VilException(resolved.getJavaSignature() 
@@ -695,6 +764,22 @@ public abstract class AbstractCallExpression extends Expression implements IArgu
         return resolved;
     }
 
+/*    
+private static final String toString(CallArgument[] args) {
+    String res = "";
+    for (int a = 0; a < args.length; a++) {
+        if (a > 0) {
+            res += ", ";
+        }
+        if (null != args[a].getName()) {
+            res += args[a].getName();
+            res += " ";
+        }
+        res += args[a].getExpression();
+    }
+    return res;
+}*/
+    
     /**
      * Returns a java-like signature for the specified operation.
      * 
@@ -771,10 +856,11 @@ public abstract class AbstractCallExpression extends Expression implements IArgu
      * @param args the arguments
      * @param cls the type of operation
      * @param registry the (local) type registry
+     * @param arguments access to the declared arguments
      * @return <code>operation</code> or the one determined dynamically
      */
     public static <O extends IMetaOperation> O dynamicDispatch(O operation, Object[] args, Class<O> cls, 
-        TypeRegistry registry) {
+        TypeRegistry registry, IArgumentProvider arguments) {
         O result = operation;
         int offset = 0;
         if (operation.isFirstParameterOperand()) {
@@ -787,13 +873,15 @@ public abstract class AbstractCallExpression extends Expression implements IArgu
                 boolean allSame = true;
                 boolean failure = false;
                 int a = 0;
-                while (!failure && a < operation.getParameterCount()) {
-                    // consider just parameter not named arguments
+                while (!failure && a < operation.getRequiredParameterCount()) { //args.length) {
+                    String argName = arguments.getArgument(a).getName(); 
                     if (null == args[a]) {
                         if (a - offset < 0) {
                             failure = true;
                         } else {
-                            types[a - offset] = new CallArgument((TypeDescriptor<?>) operation.getParameterType(a));
+                            types[a - offset] = new CallArgument(argName, 
+                                (TypeDescriptor<?>) operation.getParameterType(a));
+                            //types[a - offset] = new CallArgument((TypeDescriptor<?>) operation.getParameterType(a));
                             a++;
                         }
                     } else {
@@ -813,7 +901,8 @@ public abstract class AbstractCallExpression extends Expression implements IArgu
                             operand = tmp;
                         } else {
                             if (tmp instanceof TypeDescriptor) {
-                                types[a - offset] = new CallArgument((TypeDescriptor<?>) tmp); // ugly
+                                types[a - offset] = new CallArgument(argName, (TypeDescriptor<?>) tmp); // ugly
+                                //types[a - offset] = new CallArgument((TypeDescriptor<?>) tmp); // ugly
                             } else {
                                 failure = true;
                             }
@@ -823,7 +912,7 @@ public abstract class AbstractCallExpression extends Expression implements IArgu
                 }
                 // fill named/optional
                 while (!failure && a < types.length) {
-                    types[a] = new CallArgument("name", null);
+                    types[a] = new CallArgument("name", (Expression) null);
                     a++;
                 }
                 if (!allSame && !failure) {

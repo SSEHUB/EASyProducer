@@ -1,0 +1,39 @@
+-> main()
+    p3 <- 4
+    -> test(Integer, Integer) with (1, 1)
+        -> *(Integer, Integer) with (1, 1) = 1
+        res <- 1
+        -> *(Integer, Integer) with (1, 4) = 4
+        res <- 4
+        -> *(Integer, Integer) with (4, 10) = 40
+    -> test(Integer, Integer) with (1, 2)
+        -> *(Integer, Integer) with (1, 2) = 2
+        res <- 2
+        -> *(Integer, Integer) with (2, 4) = 8
+        res <- 8
+        -> *(Integer, Integer) with (8, 10) = 80
+    -> test(Integer, Integer) with (1, 3)
+        -> *(Integer, Integer) with (1, 3) = 3
+        res <- 3
+        -> *(Integer, Integer) with (3, 4) = 12
+        res <- 12
+        -> *(Integer, Integer) with (12, 10) = 120
+    p4 <- 20
+    -> test(Integer, Integer) with (1, 1)
+        -> *(Integer, Integer) with (1, 1) = 1
+        res <- 1
+        -> *(Integer, Integer) with (1, 4) = 4
+        res <- 4
+        -> *(Integer, Integer) with (4, 20) = 80
+    -> test(Integer, Integer) with (1, 2)
+        -> *(Integer, Integer) with (1, 2) = 2
+        res <- 2
+        -> *(Integer, Integer) with (2, 4) = 8
+        res <- 8
+        -> *(Integer, Integer) with (8, 20) = 160
+    -> test(Integer, Integer) with (1, 3)
+        -> *(Integer, Integer) with (1, 3) = 3
+        res <- 3
+        -> *(Integer, Integer) with (3, 4) = 12
+        res <- 12
+        -> *(Integer, Integer) with (12, 20) = 240

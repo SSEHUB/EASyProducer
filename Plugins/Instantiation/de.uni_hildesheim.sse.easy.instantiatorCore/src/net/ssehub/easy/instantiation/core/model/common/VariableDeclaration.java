@@ -1,13 +1,14 @@
 package net.ssehub.easy.instantiation.core.model.common;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
-import net.ssehub.easy.basics.modelManagement.IVariable;
 import net.ssehub.easy.instantiation.core.model.expressions.Expression;
-import net.ssehub.easy.instantiation.core.model.expressions.IResolvable;
 import net.ssehub.easy.instantiation.core.model.expressions.ResolvableOperationExpression;
 import net.ssehub.easy.instantiation.core.model.vilTypes.IMetaOperation;
+import net.ssehub.easy.instantiation.core.model.vilTypes.IMetaParameterDeclaration;
 import net.ssehub.easy.instantiation.core.model.vilTypes.TypeDescriptor;
 
 /**
@@ -16,7 +17,7 @@ import net.ssehub.easy.instantiation.core.model.vilTypes.TypeDescriptor;
  * @author Christian Kröher
  * @author Holger Eichelberger
  */
-public abstract class VariableDeclaration implements IResolvable, IVariable {
+public abstract class VariableDeclaration implements IMetaParameterDeclaration {
 
     private String name;
     private TypeDescriptor<?> type;
@@ -198,6 +199,74 @@ public abstract class VariableDeclaration implements IResolvable, IVariable {
      */
     public boolean isImplicit() {
         return false;
+    }
+
+    /**
+     * Adds all parameters with default values to <code>result</code>. Creates
+     * <code>result</code> if it does not exist but is required for storing
+     * data.
+     * 
+     * @param <V> the variable declaration type
+     * @param result the map to be modified
+     * @param decls the declarations to be (conditionally) mapped
+     * @return <code>result</code> or a new map (only if needed)
+     */
+    public static <V extends VariableDeclaration> Map<String, V> mapDefaultedParameters(Map<String, V> result,
+        V[] decls) {
+        if (null != decls) {
+            for (int d = 0; d < decls.length; d++) {
+                V decl = decls[d];
+                if (null != decl.getExpression()) {
+                    if (null == result) {
+                        result = new HashMap<String, V>();
+                    }
+                    result.put(decl.getName(), decl);
+                }
+            }
+        }
+        return result;
+    }
+
+    /**
+     * Returns the number of required parameters.
+     * 
+     * @param <V> the variable declaration type
+     * @param named the named parameters (may be <b>null</b>)
+     * @param decls the declared parameters (may be <b>null</b>)
+     * @return the number of required parameters
+     */
+    public static <V extends VariableDeclaration> int getRequiredParameterCount(Map<String, V> named, V[] decls) {
+        int result = 0;
+        if (null != decls) {
+            result = null == named ? decls.length : decls.length - named.size();
+        }
+        return result;
+    }
+
+    /**
+     * Returns a named parameter.
+     * 
+     * @param <V> the variable declaration type
+     * @param named the named parameters (may be <b>null</b>)
+     * @param name the parameter name (may be <b>null</b>)
+     * @param params all paraams (fallback, may be <b>null</b>)
+     * @return the requested parameter or <b>null</b>
+     */
+    public static <V extends VariableDeclaration> V getParameter(Map<String, V> named, String name, V[] params) {
+        V result = null;
+        if (null != name) {
+            if (null != named) {
+                result = named.get(name);
+            }
+            if (null == result && null != params) {
+                for (int p = 0; null == result && p < params.length; p++) {
+                    if (params[p].getName().equals(name)) {
+                        result = params[p];
+                    }
+                }
+            }
+        }
+        return result;
     }
 
 }

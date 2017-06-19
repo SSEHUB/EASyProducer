@@ -117,7 +117,8 @@ public abstract class AbstractModelTranslator<M extends Script, L extends Langua
         Imports<M> imports, ImportResolver<M> impResolver) throws TranslatorException {
         int errorCount = getErrorCount();
         Advice[] advices = processAdvices(script.getAdvices(), uri);
-        VariableDeclaration[] param = resolveParameters(script.getParam(), resolver);
+        VariableDeclaration[] param = resolveParameters(script.getParam(), script.eContainer(), 
+            VilBuildLanguagePackage.Literals.LANGUAGE_UNIT__PARAM, resolver);
         ModelImport<M> parent = null;
         if (null != script.getParent()) {
             parent = getExtensionImport(script.getParent().getName(), imports, script.getParent(), 
@@ -367,7 +368,8 @@ public abstract class AbstractModelTranslator<M extends Script, L extends Langua
                 resolver.setContextType(Resolver.ContextType.RULE_HEADER);
                 RuleDescriptor descriptor = new RuleDescriptor();
                 descriptor.setReturnType(getReturnType(ruleDecl, resolver));
-                VariableDeclaration[] params = resolveParameters(getParameterList(ruleDecl), resolver);
+                VariableDeclaration[] params = resolveParameters(getParameterList(ruleDecl), ruleDecl, 
+                    VilBuildLanguagePackage.Literals.RULE_DECLARATION__PARAM_LIST, resolver);
                 resolver.add(params);
                 processRuleConditions(descriptor, getRuleConditions(ruleDecl));
                 R rule = createRule(ruleDecl, descriptor.getReturnType(), params, parent);

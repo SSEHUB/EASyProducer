@@ -75,6 +75,7 @@ import net.ssehub.easy.instantiation.core.model.expressions.CallExpression;
 import net.ssehub.easy.instantiation.core.model.expressions.ConstantExpression;
 import net.ssehub.easy.instantiation.core.model.expressions.Expression;
 import net.ssehub.easy.instantiation.core.model.expressions.ExpressionParserRegistry;
+import net.ssehub.easy.instantiation.core.model.expressions.IArgumentProvider;
 import net.ssehub.easy.instantiation.core.model.expressions.IExpressionParser;
 import net.ssehub.easy.instantiation.core.model.expressions.IResolvable;
 import net.ssehub.easy.instantiation.core.model.expressions.ResolvableOperationCallExpression;
@@ -88,7 +89,6 @@ import net.ssehub.easy.instantiation.core.model.vilTypes.ArraySet;
 import net.ssehub.easy.instantiation.core.model.vilTypes.Collection;
 import net.ssehub.easy.instantiation.core.model.vilTypes.Constants;
 import net.ssehub.easy.instantiation.core.model.vilTypes.FixedListSequence;
-import net.ssehub.easy.instantiation.core.model.vilTypes.ITypedModel;
 import net.ssehub.easy.instantiation.core.model.vilTypes.IVilType;
 import net.ssehub.easy.instantiation.core.model.vilTypes.ListSequence;
 import net.ssehub.easy.instantiation.core.model.vilTypes.OperationDescriptor;
@@ -383,7 +383,7 @@ public class BuildlangExecution extends ExecutionVisitor<Script, AbstractRule, V
             }
         }
         executableRules.collect(script);
-        ITypedModel oldContext = environment.switchContext(script);
+        IResolvableModel<VariableDeclaration> oldContext = environment.switchContext(script);
         environment.setContextPaths(vtlPaths);
         processProperties(script, getTargetPath(script, scriptParam));
         checkConstants(script);
@@ -1491,20 +1491,13 @@ public class BuildlangExecution extends ExecutionVisitor<Script, AbstractRule, V
     
     @Override
     public Object visitConstantExpression(ConstantExpression cst) throws VilException {
-        Object result = cst.getValue();
-        // we have to care for $name and ${} but only in strings
-//        if (result instanceof String) {
-//            System.out.println("BuildLangExecution: " +  result);
-
-//            result = StringReplacer.substitute(result.toString(), environment, getExpressionParser(), this);
-//        }
-        return result;
+        return cst.getValue();
     }
 
     @Override
-    protected AbstractRule dynamicDispatch(AbstractRule operation, Object[] args) {
-        return AbstractCallExpression.dynamicDispatch(operation, args, 
-             AbstractRule.class, environment.getTypeRegistry());
+    protected AbstractRule dynamicDispatch(AbstractRule operation, Object[] args, IArgumentProvider argumentProvider) {
+        return AbstractCallExpression.dynamicDispatch(operation, args, AbstractRule.class, 
+            environment.getTypeRegistry(), argumentProvider);
     }
     
     @Override
@@ -1516,11 +1509,42 @@ public class BuildlangExecution extends ExecutionVisitor<Script, AbstractRule, V
             ok &= IvmlTypes.configurationType().isAssignableFrom(model.getParameter(1).getType());
             ok &= IvmlTypes.projectType().isAssignableFrom(model.getParameter(2).getType());
             if (ok) {
-                setModelArgument(model.getParameter(0), getParameter(PARAM_SOURCE));
-                setModelArgument(model.getParameter(1), getParameter(PARAM_CONFIG));
-                setModelArgument(model.getParameter(2), getParameter(PARAM_TARGET));
+                assignModelParameter(model, model);
                 for (int p = 0; p < 3; p++) {
                     varMap.remove(model.getParameter(p).getName());
+                }
+            }
+        }
+    }
+
+    @Override
+    protected void assignModelParameter(IResolvableModel<VariableDeclaration> targetModel,
+        IResolvableModel<VariableDeclaration> srcModel) throws VilException {
+        setModelArgument(srcModel, 0, PARAM_SOURCE);
+        setModelArgument(srcModel, 1, PARAM_CONFIG);
+        setModelArgument(srcModel, 2, PARAM_TARGET);
+        evaluateModelParameter(targetModel, srcModel, 3);
+    }
+
+    /**
+     * Sets a model argument.
+     * 
+     * @param srcModel the model to take the parameter from
+     * @param index the index of the parameter to modify (for sequence-based assignment)
+     * @param name the name of the parameter to modify (to retrieve the value, but also for name-based assignment)
+     * @throws VilException in case that assigning the parameter fails
+     */
+    private void setModelArgument(IResolvableModel<VariableDeclaration> srcModel, int index, String name) 
+        throws VilException {
+        if (srcModel.getParameterCount() >= index + 1) {
+            try {
+                setModelArgument(srcModel.getParameter(index), getParameter(name));
+            } catch (VilException e) {
+                VariableDeclaration decl = srcModel.getParameter(name);
+                if (null != decl) {
+                    setModelArgument(decl, getParameter(name));    
+                } else {
+                    throw e;
                 }
             }
         }
@@ -1536,7 +1560,6 @@ public class BuildlangExecution extends ExecutionVisitor<Script, AbstractRule, V
      */
     private Script resolveScript(Project project, IVersionRestriction restrictions) throws VilException {
         Script script = null;
-        //ModelInfo<Script> info = null;
         AvailableModels<Script> available = BuildModel.INSTANCE.availableModels();
         Script current = resolver.getCurrentModel();
         ModelInfo<Script> currentInfo = available.getModelInfo(current);
@@ -1546,34 +1569,6 @@ public class BuildlangExecution extends ExecutionVisitor<Script, AbstractRule, V
         } catch (ModelManagementException e) {
             throw new VilException(e.getMessage(), e.getId());
         }
-        /*List<ModelInfo<Script>> infos = available.getVisibleModelInfo(project.getName(), currentInfo.getLocation());
-        if (null != infos) {
-            if (1 == infos.size()) {
-                info = infos.get(0);
-            } else {
-                Version max = null;
-                for (int i = 0; i < infos.size(); i++) {
-                    ModelInfo<Script> tmp = infos.get(i);
-                    if (null == max || max.compareTo(tmp.getVersion()) < 0) {
-                        max = tmp.getVersion();
-                        info = tmp;
-                    }
-                }
-            }
-        }
-        if (null == info) {
-            throw new ExpressionException("cannot resolve main model for " + project.getName(), 
-                ExpressionException.ID_CANNOT_RESOLVE);
-        } else {
-            script = info.getResolved();
-        }
-        if (null != restrictions) {
-            try {
-                script = BuildModel.INSTANCE.resolve(script.getName(), restrictions);
-            } catch (ModelManagementException e) {
-                throw new ExpressionException(e.getMessage(), e.getId());
-            }
-        }*/
         return script;
     }
     

@@ -1,0 +1,6 @@
+cat: a a tt1 def
+cat: a b tt1 def
+cat: a c tt1 def
+cat: a a tt1 tt2
+cat: a b tt1 tt2
+cat: a c tt1 tt2

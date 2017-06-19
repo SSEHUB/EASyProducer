@@ -15,7 +15,7 @@
  */
 package net.ssehub.easy.instantiation.core.model.common;
 
-import net.ssehub.easy.instantiation.core.model.expressions.IResolvable;
+import net.ssehub.easy.instantiation.core.model.vilTypes.IMetaParameterDeclaration;
 
 /**
  * The interface of a dynamic call expression tester.
@@ -28,7 +28,7 @@ import net.ssehub.easy.instantiation.core.model.expressions.IResolvable;
  * @author Holger Eichelberger
  */
 public interface ICallExpressionTester <M extends IResolvableModel<V>, O extends IResolvableOperation<V>, 
-    E extends ModelCallExpression<V, M, O>, V extends IResolvable> {
+    E extends ModelCallExpression<V, M, O>, V extends IMetaParameterDeclaration> {
 
     /**
      * Creates a call expression and tries to resolve the call.

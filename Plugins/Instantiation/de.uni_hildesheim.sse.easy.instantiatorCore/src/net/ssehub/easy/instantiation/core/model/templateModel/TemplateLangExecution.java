@@ -29,6 +29,7 @@ import net.ssehub.easy.instantiation.core.model.expressions.IExpressionParser;
 import net.ssehub.easy.instantiation.core.model.expressions.ResolvableOperationCallExpression;
 import net.ssehub.easy.instantiation.core.model.expressions.StringReplacer;
 import net.ssehub.easy.instantiation.core.model.expressions.ExpressionParserRegistry.ILanguage;
+import net.ssehub.easy.instantiation.core.model.expressions.IArgumentProvider;
 import net.ssehub.easy.instantiation.core.model.vilTypes.Collection;
 import net.ssehub.easy.instantiation.core.model.vilTypes.ITypedModel;
 import net.ssehub.easy.instantiation.core.model.vilTypes.StringValueHelper;
@@ -498,8 +499,9 @@ public class TemplateLangExecution extends ExecutionVisitor<Template, Def, Varia
     }
 
     @Override
-    protected Def dynamicDispatch(Def operation, Object[] args) {
-        return AbstractCallExpression.dynamicDispatch(operation, args, Def.class, environment.getTypeRegistry());
+    protected Def dynamicDispatch(Def operation, Object[] args, IArgumentProvider argumentProvider) {
+        return AbstractCallExpression.dynamicDispatch(operation, args, Def.class, environment.getTypeRegistry(), 
+            argumentProvider);
     }
 
     @Override
@@ -510,9 +512,7 @@ public class TemplateLangExecution extends ExecutionVisitor<Template, Def, Varia
             boolean ok = IvmlTypes.configurationType().isAssignableFrom(model.getParameter(0).getType());
             ok &= ArtifactTypes.artifactType().isAssignableFrom(model.getParameter(1).getType());
             if (ok) {
-                // take sure values
-                setModelArgument(model.getParameter(0), getParameter(PARAM_CONFIG_SURE));
-                setModelArgument(model.getParameter(1), getParameter(PARAM_TARGET_SURE));
+                assignModelParameter(model, model);
                 for (int p = 0; p < 2; p++) {
                     varMap.remove(model.getParameter(p).getName());
                 }
@@ -521,6 +521,19 @@ public class TemplateLangExecution extends ExecutionVisitor<Template, Def, Varia
         // remove anyway
         varMap.remove(PARAM_CONFIG_SURE);
         varMap.remove(PARAM_TARGET_SURE);
+    }
+    
+    @Override
+    protected void assignModelParameter(IResolvableModel<VariableDeclaration> targetModel, 
+        IResolvableModel<VariableDeclaration> srcModel) throws VilException {
+        // take sure values
+        if (srcModel.getParameterCount() >= 1) {
+            setModelArgument(srcModel.getParameter(0), getParameter(PARAM_CONFIG_SURE));
+        }
+        if (srcModel.getParameterCount() >= 2) {
+            setModelArgument(srcModel.getParameter(1), getParameter(PARAM_TARGET_SURE));
+        }
+        evaluateModelParameter(targetModel, srcModel, 2);
     }
 
     @Override

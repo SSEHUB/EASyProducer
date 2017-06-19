@@ -399,14 +399,15 @@ public abstract class OperationDescriptor implements IMetaOperation {
         return returnType;
     }
     
-    /**
-     * Returns the number of parameters.
-     * 
-     * @return the number of parameter
-     */
+    @Override
     public int getParameterCount() {
         initialize();
         return parameter.size();
+    }
+
+    @Override
+    public int getRequiredParameterCount() {
+        return getParameterCount(); // for now
     }
     
     /**
@@ -419,6 +420,11 @@ public abstract class OperationDescriptor implements IMetaOperation {
     public TypeDescriptor<?> getParameterType(int index) {
         initialize();
         return parameter.get(index);
+    }
+    
+    @Override
+    public IMetaParameterDeclaration getParameter(String name) {
+        return null;
     }
     
     /**

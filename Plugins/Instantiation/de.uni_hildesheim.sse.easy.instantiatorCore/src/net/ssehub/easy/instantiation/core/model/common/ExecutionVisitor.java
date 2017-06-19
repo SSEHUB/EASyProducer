@@ -23,7 +23,6 @@ import net.ssehub.easy.instantiation.core.model.expressions.IExpressionParser;
 import net.ssehub.easy.instantiation.core.model.expressions.VariableExpression;
 import net.ssehub.easy.instantiation.core.model.vilTypes.Collection;
 import net.ssehub.easy.instantiation.core.model.vilTypes.FieldDescriptor;
-import net.ssehub.easy.instantiation.core.model.vilTypes.ITypedModel;
 import net.ssehub.easy.instantiation.core.model.vilTypes.ListSequence;
 import net.ssehub.easy.instantiation.core.model.vilTypes.OperationDescriptor;
 import net.ssehub.easy.instantiation.core.model.vilTypes.TypeDescriptor;
@@ -41,7 +40,7 @@ import net.ssehub.easy.instantiation.core.model.vilTypes.TypeDescriptor;
 public abstract class ExecutionVisitor <M extends IResolvableModel<V>, O extends IResolvableOperation<V>, 
     V extends VariableDeclaration> extends EvaluationVisitor implements IVisitor {
 
-    private RuntimeEnvironment environment;
+    private RuntimeEnvironment<V> environment;
     private ITracer tracer;
     private Map<String, Object> parameter;
 
@@ -52,7 +51,7 @@ public abstract class ExecutionVisitor <M extends IResolvableModel<V>, O extends
      * @param tracer the execution tracer instance (for testing)
      * @param parameter the parameter given from outside for the execution of the model
      */
-    protected ExecutionVisitor(RuntimeEnvironment environment, ITracer tracer, Map<String, Object> parameter) {
+    protected ExecutionVisitor(RuntimeEnvironment<V> environment, ITracer tracer, Map<String, Object> parameter) {
         super(environment, tracer);
         this.environment = environment;
         this.tracer = tracer;
@@ -78,7 +77,7 @@ public abstract class ExecutionVisitor <M extends IResolvableModel<V>, O extends
      * @return the runtime environment
      */
     @Override
-    public RuntimeEnvironment getRuntimeEnvironment() {
+    public RuntimeEnvironment<V> getRuntimeEnvironment() {
         return environment;
     }
 
@@ -123,19 +122,21 @@ public abstract class ExecutionVisitor <M extends IResolvableModel<V>, O extends
     @Override
     public Object visitVariableDeclaration(VariableDeclaration var) throws VilException {
         Object value = null;
+        @SuppressWarnings("unchecked")
+        V v = (V) var;
         if (null != var.getExpression()) {
             value = var.getExpression().accept(this);
             if (var.getType().isMap()) {
                 value = net.ssehub.easy.instantiation.core.model.vilTypes.Map.checkConvertEmpty(
                     var.getType(), value);
             }
-            environment.addValue(var, value);
+            environment.addValue(v, value);
             tracer.valueDefined(var, null, value);
         } else {
             // add as undefined to current level in runtime environment. otherwise variable may be assigned implicitly 
             // to wrong level upon first assignment, which may be removed (e.g., inner levels of alternatives 
             // containing initial assignment), and thus not be valid outside on correct level
-            environment.addValue(var, null); 
+            environment.addValue(v, null); 
         }
         return value;
     }
@@ -237,7 +238,7 @@ public abstract class ExecutionVisitor <M extends IResolvableModel<V>, O extends
         throws VilException {
         if (!visited.contains(model)) {
             visited.add(model);
-            ITypedModel oldContext = environment.switchContext(model);
+            IResolvableModel<V> oldContext = environment.switchContext(model);
             processModelParameter(model);
             for (int i = 0; i < model.getImportsCount(); i++) {
                 ModelImport<?> imp = model.getImport(i);
@@ -385,41 +386,54 @@ public abstract class ExecutionVisitor <M extends IResolvableModel<V>, O extends
         if (isPlaceholder) {
             result = null;
         } else {
-            // should not be needed as handled as part of imports/model headers
-            /*Map<String, Object> scriptParam = null; 
-            if (call.getModel() != contextModel) {
-                // only if a real context change will happen
-                scriptParam = determineScriptParam(call);
-            }
-            if (null != scriptParam) {
-                scriptParam = replaceParameter(scriptParam);
-            }*/
             // evaluate in this context before context switch
             Status status = Status.SUCCESS;
             Object[] args = new Object[arguments.getArgumentsCount()];
+            Map<String, Object> namedArgs = null;
             for (int a = 0; Status.SUCCESS == status && a < arguments.getArgumentsCount(); a++) {
-                args[a] = arguments.getArgument(a).accept(this);
+                CallArgument ca = arguments.getArgument(a); 
+                args[a] = ca.accept(this);
+                if (null != ca.getName()) {
+                    if (null == namedArgs) {
+                        namedArgs = new HashMap<String, Object>();
+                        namedArgs.put(ca.getName(), args[a]);
+                    }
+                }
                 if (args[a] instanceof RuleExecutionResult) {
                     status = ((RuleExecutionResult) args[a]).getStatus();
                 }
             }
             if (Status.SUCCESS == status) {
-                ITypedModel oldContext = environment.switchContext(model);
+                IResolvableModel<V> oldContext = environment.switchContext(model);
                 environment.pushLevel();
+                assignModelParameter(model, oldContext);
                 if (null == resolved) {
                     throw new VilException("call " + qName + " is not resolved", 
                         VilException.ID_RUNTIME);
                 }
-                O operation = dynamicDispatch(resolved, args);
+                O operation = dynamicDispatch(resolved, args, arguments);
                 for (int p = 0; p < operation.getParameterCount(); p++) {
-                    environment.addValue(operation.getParameter(p), args[p]);
+                    V param = operation.getParameter(p);
+                    if (null == param.getName()) {
+                        environment.addValue(param, args[p]);    
+                    } else {
+                        if (p >= args.length) {
+                            Object pVal = null == namedArgs ? null : namedArgs.get(param.getName());
+                            if (null == pVal && null != param.getExpression()) {
+                                // no value, try default
+                                pVal = param.getExpression().accept(this);
+                            }
+                            if (null != pVal) { // legacy: optional named parameters;
+                                environment.addValue(param, pVal);
+                            }
+                        } else {
+                            environment.addValue(param, args[p]);    
+                        }
+                    }
                 }
                 result = executeModelCall(operation);
                 environment.popLevel();
                 environment.switchContext(oldContext);
-                /*if (null != scriptParam) {
-                scriptParam = replaceParameter(scriptParam);
-                }*/
             } else {
                 result = null;
             }
@@ -428,13 +442,54 @@ public abstract class ExecutionVisitor <M extends IResolvableModel<V>, O extends
     }
     
     /**
+     * Assigns the model parameters. Allows to use model-specific code.
+     * 
+     * @param targetModel the target model to be executed
+     * @param srcModel the source model to take the (named, optional) parameters from
+     * @throws VilException if accessing parameters / assigning values fails
+     */
+    protected abstract void assignModelParameter(IResolvableModel<V> targetModel, IResolvableModel<V> srcModel) 
+        throws VilException;
+
+    /**
+     * Assigns the model parameters.
+     * 
+     * @param targetModel the target model to be executed
+     * @param srcModel the source model to take the (named, optional) parameters from
+     * @param startIndex which parameter to start from
+     * @throws VilException if accessing parameters / assigning values fails
+     */
+    protected void evaluateModelParameter(IResolvableModel<V> targetModel, IResolvableModel<V> srcModel, int startIndex)
+        throws VilException {
+        RuntimeEnvironment<V> env = getRuntimeEnvironment();
+        for (int p = startIndex; p < targetModel.getParameterCount(); p++) {
+            V param = targetModel.getParameter(p);
+            Object val = getParameter(param.getName());
+            if (null == val) {
+                try {
+                    val = env.getValue(srcModel, param.getName());
+                } catch (VilException e) {
+                    // ignore for now
+                }
+            }
+            if (null == val && null != param.getExpression()) {
+                val = param.getExpression().accept(this);
+            }
+            if (null != val) {
+                setModelArgument(param, val);
+            } // else exception?
+        }
+    }
+    
+    /**
      * Performs the dynamic dispatch on the operation type.
      * 
      * @param operation the operation to be dispatched
      * @param args the actual arguments
+     * @param argumentProvider access to the argument expressions
      * @return <code>operation</code> or the more actual operation
      */
-    protected abstract O dynamicDispatch(O operation, Object[] args);
+    protected abstract O dynamicDispatch(O operation, Object[] args, IArgumentProvider argumentProvider);
     
     /**
      * Actually executes a model call. Basically, a subclassing visitor shall

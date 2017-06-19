@@ -60,13 +60,13 @@ public interface ITracer {
      * 
      * @param environment the environment
      */
-    public void setRuntimeEnvironment(RuntimeEnvironment environment);
+    public void setRuntimeEnvironment(RuntimeEnvironment<?> environment);
 
     /**
      * Returns the actual runtime environment.
      * 
      * @return registry the runtime environment (may be <b>null</b> if not currently executing)
      */
-    public RuntimeEnvironment getRuntimeEnvironment();
+    public RuntimeEnvironment<?> getRuntimeEnvironment();
 
 }

@@ -104,7 +104,7 @@ public class EvaluationVisitor implements IExpressionVisitor {
             args[pCount - 1] = named;
         }
         resolved = AbstractCallExpression.dynamicDispatch(resolved, args, OperationDescriptor.class, 
-            environment.getTypeRegistry());
+            environment.getTypeRegistry(), call);
         tracer.visitingCallExpression(resolved, type, args);
         if (resolved.storeArtifactsBeforeExecution()) {
             environment.storeArtifacts();

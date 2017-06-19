@@ -330,7 +330,29 @@ ruleParameter returns [EObject current=null]
 	    }
 
 )
-))
+)(	otherlv_2='=' 
+    {
+    	newLeafNode(otherlv_2, grammarAccess.getParameterAccess().getEqualsSignKeyword_2_0());
+    }
+(
+(
+		{ 
+	        newCompositeNode(grammarAccess.getParameterAccess().getDfltExpressionParserRuleCall_2_1_0()); 
+	    }
+		lv_dflt_3_0=ruleExpression		{
+	        if ($current==null) {
+	            $current = createModelElementForParent(grammarAccess.getParameterRule());
+	        }
+       		set(
+       			$current, 
+       			"dflt",
+        		lv_dflt_3_0, 
+        		"de.uni_hildesheim.sse.vil.expressions.ExpressionDsl.Expression");
+	        afterParserOrEnumRuleCall();
+	    }
+
+)
+))?)
 ;
 
 

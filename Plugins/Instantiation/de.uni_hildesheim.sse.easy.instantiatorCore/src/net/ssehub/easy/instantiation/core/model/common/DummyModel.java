@@ -6,24 +6,23 @@ import net.ssehub.easy.basics.modelManagement.ModelImport;
 import net.ssehub.easy.basics.modelManagement.Version;
 import net.ssehub.easy.instantiation.core.model.vilTypes.IMetaField;
 import net.ssehub.easy.instantiation.core.model.vilTypes.IMetaOperation;
+import net.ssehub.easy.instantiation.core.model.vilTypes.IMetaParameterDeclaration;
 import net.ssehub.easy.instantiation.core.model.vilTypes.IMetaType;
-import net.ssehub.easy.instantiation.core.model.vilTypes.ITypedModel;
 import net.ssehub.easy.instantiation.core.model.vilTypes.TypeDescriptor;
 import net.ssehub.easy.instantiation.core.model.vilTypes.TypeRegistry;
 
 /**
  * Implements a dummy model used for properly initializing {@link RuntimeEnvironment}.
  * 
+ * @param <V> the variable declaration type
  * @author Holger Eichelberger
  */
-class DummyModel implements ITypedModel {
-
-    static final ITypedModel INSTANCE = new DummyModel();
+class DummyModel <V extends IMetaParameterDeclaration> implements IResolvableModel<V> {
 
     /**
      * Prevents external instantiation (singleton).
      */
-    private DummyModel() {
+    public DummyModel() {
     }
     
     @Override
@@ -162,6 +161,71 @@ class DummyModel implements ITypedModel {
     @Override
     public boolean checkConversion(IMetaType param, IMetaOperation conversion) {
         return true;
+    }
+
+    @Override
+    public int getParameterCount() {
+        return 0;
+    }
+
+    @Override
+    public V getParameter(int index) {
+        throw new IllegalArgumentException();
+    }
+
+    @Override
+    public int getRequiredParameterCount() {
+        return 0;
+    }
+
+    @Override
+    public V getParameter(String name) {
+        return null;
+    }
+
+    @Override
+    public Object getIvmlElement(String name) {
+        return null;
+    }
+
+    @Override
+    public IResolvableModel<V> getParent() {
+        return null;
+    }
+
+    @Override
+    public int getExtensionTypesCount() {
+        return 0;
+    }
+
+    @Override
+    public IMetaType getExtensionType(int index) {
+        return null;
+    }
+
+    @Override
+    public int getVariableDeclarationCount() {
+        return 0;
+    }
+
+    @Override
+    public V getVariableDeclaration(int index) {
+        throw new IllegalArgumentException();
+    }
+
+    @Override
+    public boolean isImplicit(IMetaParameterDeclaration decl) {
+        return false;
+    }
+
+    @Override
+    public int getTypedefCount() {
+        return 0;
+    }
+
+    @Override
+    public Typedef getTypedef(int index) {
+        return null;
     }
 
 }

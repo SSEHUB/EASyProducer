@@ -1,0 +1,13 @@
+-> main(Configuration, FileArtifact) with (<config>, test.texts)
+    -> cat(String, String) with (a, a)
+        -> +(String, Any) with (cat: , a) = cat: a
+        -> +(String, Any) with (cat: a,  ) = cat: a 
+        -> +(String, Any) with (cat: a , a) = cat: a a
+    -> cat(String, String) with (a, b)
+        -> +(String, Any) with (cat: , a) = cat: a
+        -> +(String, Any) with (cat: a,  ) = cat: a 
+        -> +(String, Any) with (cat: a , b) = cat: a b
+    -> cat(String, String) with (a, c)
+        -> +(String, Any) with (cat: , a) = cat: a
+        -> +(String, Any) with (cat: a,  ) = cat: a 
+        -> +(String, Any) with (cat: a , c) = cat: a c

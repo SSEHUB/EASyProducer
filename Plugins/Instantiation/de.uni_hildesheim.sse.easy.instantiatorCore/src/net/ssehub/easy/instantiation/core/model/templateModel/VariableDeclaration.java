@@ -3,7 +3,6 @@ package net.ssehub.easy.instantiation.core.model.templateModel;
 import net.ssehub.easy.instantiation.core.model.common.ILanguageElement;
 import net.ssehub.easy.instantiation.core.model.common.VilException;
 import net.ssehub.easy.instantiation.core.model.expressions.Expression;
-import net.ssehub.easy.instantiation.core.model.expressions.IResolvable;
 import net.ssehub.easy.instantiation.core.model.vilTypes.TypeDescriptor;
 import net.ssehub.easy.instantiation.core.model.vilTypes.TypeRegistry;
 
@@ -15,7 +14,7 @@ import net.ssehub.easy.instantiation.core.model.vilTypes.TypeRegistry;
  */
 public class VariableDeclaration extends 
     net.ssehub.easy.instantiation.core.model.common.VariableDeclaration 
-    implements ITemplateLangElement, ITemplateElement, IResolvable {
+    implements ITemplateLangElement, ITemplateElement {
     
     private ILanguageElement parent;
     

@@ -1,0 +1,9 @@
+vilScript rulesTest3 (Project source, Project target, Configuration config, Integer p3, Integer p4=10) {
+
+    Integer test(Integer p1, Integer p2=1) = : {
+        Integer res = p1 * p2;
+        res = res * p3;
+        res * p4;
+    }
+
+}

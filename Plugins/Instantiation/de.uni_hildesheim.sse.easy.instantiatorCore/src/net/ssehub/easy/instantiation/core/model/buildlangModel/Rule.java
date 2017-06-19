@@ -16,6 +16,8 @@
 
 package net.ssehub.easy.instantiation.core.model.buildlangModel;
 
+import java.util.Map;
+
 import net.ssehub.easy.instantiation.core.model.buildlangModel.ruleMatch.AbstractRuleMatchExpression;
 import net.ssehub.easy.instantiation.core.model.common.ILanguageElement;
 import net.ssehub.easy.instantiation.core.model.common.VilException;
@@ -38,6 +40,7 @@ public class Rule extends AbstractRule {
     private AbstractRuleMatchExpression[] rhsRuleMatches;
     private RuleCallExpression[] rhsRuleCalls;
     private VariableDeclaration[] parameters;
+    private Map<String, VariableDeclaration> namedParam;
     private boolean isProtected = false;
     private Script parent;
     private VariableDeclaration[] lhsVars;
@@ -61,6 +64,7 @@ public class Rule extends AbstractRule {
         this.isProtected = isProtected;
         this.parent = parent;
         this.parameters = parameters;
+        this.namedParam = VariableDeclaration.mapDefaultedParameters(this.namedParam, this.parameters);
         if (null != returnType) {
             this.returnType = returnType;
         } else {
@@ -107,23 +111,13 @@ public class Rule extends AbstractRule {
     public Script getParent() {
         return parent;
     }
-    
-    /**
-     * Get the number of parameters of this rule.
-     * 
-     * @return The number of parameters of this rule.
-     */
+
+    @Override
     public int getParameterCount() {
         return null == parameters ? 0 : parameters.length;
     }
-    
-    /**
-     * Get the parameter of this rule at the specified index.
-     * 
-     * @param index The 0-based index of the rule parameter to be returned.
-     * @return The rule parameter at the given index.
-     * @throws IndexOutOfBoundsException if <code>index &lt; 0 || index &gt;={@link #getParameterCount()}</code>
-     */
+
+    @Override
     public VariableDeclaration getParameter(int index) {
         if (null == parameters) {
             throw new IndexOutOfBoundsException();
@@ -131,6 +125,17 @@ public class Rule extends AbstractRule {
         return parameters[index];
     }
     
+
+    @Override
+    public int getRequiredParameterCount() {
+        return VariableDeclaration.getRequiredParameterCount(namedParam, parameters);
+    }
+
+    @Override
+    public VariableDeclaration getParameter(String name) {
+        return VariableDeclaration.getParameter(namedParam, name, parameters);
+    }
+
     /**
      * Returns the specified variable.
      * 

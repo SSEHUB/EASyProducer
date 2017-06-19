@@ -3,8 +3,8 @@ package net.ssehub.easy.instantiation.core.model.common;
 import net.ssehub.easy.instantiation.core.model.expressions.AbstractCallExpression;
 import net.ssehub.easy.instantiation.core.model.expressions.CallArgument;
 import net.ssehub.easy.instantiation.core.model.expressions.IArgumentProvider;
-import net.ssehub.easy.instantiation.core.model.expressions.IResolvable;
 import net.ssehub.easy.instantiation.core.model.vilTypes.IMetaOperation;
+import net.ssehub.easy.instantiation.core.model.vilTypes.IMetaParameterDeclaration;
 import net.ssehub.easy.instantiation.core.model.vilTypes.TypeDescriptor;
 
 /**
@@ -16,7 +16,7 @@ import net.ssehub.easy.instantiation.core.model.vilTypes.TypeDescriptor;
  * 
  * @author Holger Eichelberger
  */
-public abstract class ModelCallExpression<V extends IResolvable, M extends IResolvableModel<V>, 
+public abstract class ModelCallExpression<V extends IMetaParameterDeclaration, M extends IResolvableModel<V>, 
     O extends IResolvableOperation<V>> extends AbstractCallExpression implements IArgumentProvider {
 
     protected O resolved;

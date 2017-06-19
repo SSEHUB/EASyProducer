@@ -9,7 +9,7 @@ import net.ssehub.easy.instantiation.core.model.vilTypes.TypeRegistry;
  * @author Holger Eichelberger
  */
 public class RuntimeEnvironment extends 
-    net.ssehub.easy.instantiation.core.model.common.RuntimeEnvironment {
+    net.ssehub.easy.instantiation.core.model.common.RuntimeEnvironment<VariableDeclaration> {
 
     /**
      * Defines the other project variable, currently as a local set implementation using
@@ -22,7 +22,7 @@ public class RuntimeEnvironment extends
      * Creates a new runtime environment using the default type registry.
      */
     public RuntimeEnvironment() {
-        super();
+        super(VariableDeclaration.class);
     }
 
     /**
@@ -31,7 +31,7 @@ public class RuntimeEnvironment extends
      * @param typeRegistry the type registry to use
      */
     public RuntimeEnvironment(TypeRegistry typeRegistry) {
-        super(typeRegistry);
+        super(VariableDeclaration.class, typeRegistry);
     }
 
     /**

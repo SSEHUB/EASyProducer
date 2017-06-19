@@ -32,6 +32,7 @@ public class Template extends AbstractResolvableModel<VariableDeclaration, Templ
     private JavaExtension[] javaExtensions;
     private List<VariableDeclaration> declarations;
     private VariableDeclaration[] param;
+    private java.util.Map<String, VariableDeclaration> namedParams;
     private List<Def> defs;
     private IndentationConfiguration indentationConfiguration;
     private FormattingConfiguration formattingConfiguration;
@@ -55,6 +56,7 @@ public class Template extends AbstractResolvableModel<VariableDeclaration, Templ
         this.extension = extension;
         this.javaExtensions = descriptor.getJavaExtensions();
         this.param = descriptor.getParameter();
+        this.namedParams = VariableDeclaration.mapDefaultedParameters(this.namedParams, this.param);
         this.indentationConfiguration = descriptor.getIndentationConfiguration();
         this.formattingConfiguration = descriptor.getFormattingConfiguration();
         adjustParents();
@@ -193,28 +195,27 @@ public class Template extends AbstractResolvableModel<VariableDeclaration, Templ
         return defs.get(index);
     }
     
-    /**
-     * Get the number of parameter of this template.
-     * 
-     * @return The number of parameter of this template.
-     */
+    @Override
     public int getParameterCount() {
         return null == param ? 0 : param.length;
     }
     
-    /**
-     * Get the parameter of this template at the specified index.
-     * 
-     * @param index The 0-based index of the parameter to be returned.
-     * @return The parameter at the given index.
-     * @throws IndexOutOfBoundsException if 
-     *     <code>index &lt; 0 || index &gt;={@link #getParameterCount()}</code>
-     */
+    @Override
     public VariableDeclaration getParameter(int index) {
         if (null == param) {
             throw new IndexOutOfBoundsException();
         }
         return param[index];
+    }
+    
+    @Override
+    public int getRequiredParameterCount() {
+        return VariableDeclaration.getRequiredParameterCount(namedParams, param);
+    }
+
+    @Override
+    public VariableDeclaration getParameter(String name) {
+        return VariableDeclaration.getParameter(namedParams, name, param);
     }
 
     @Override

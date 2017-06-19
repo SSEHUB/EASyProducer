@@ -38,7 +38,7 @@ public class ExecutionLocal {
      */
     public static Configuration getCurrentConfiguration() {
         Configuration result = null;
-        RuntimeEnvironment env = getCurrentRuntimeEnvironment();
+        RuntimeEnvironment<?> env = getCurrentRuntimeEnvironment();
         if (null != env) {
             result = env.getTopLevelConfiguration();
         }
@@ -99,7 +99,7 @@ public class ExecutionLocal {
      */
     public static TypeRegistry getCurrentTypeRegistry() {
         TypeRegistry result = TypeRegistry.DEFAULT;
-        RuntimeEnvironment env = getCurrentRuntimeEnvironment();
+        RuntimeEnvironment<?> env = getCurrentRuntimeEnvironment();
         if (null != env) {
             result = env.getTypeRegistry();
         }
@@ -111,8 +111,8 @@ public class ExecutionLocal {
      * 
      * @return the current runtime environment
      */
-    private static RuntimeEnvironment getCurrentRuntimeEnvironment() {
-        RuntimeEnvironment result = null;
+    private static RuntimeEnvironment<?> getCurrentRuntimeEnvironment() {
+        RuntimeEnvironment<?> result = null;
         ITracer tracer = getCurrentTracer();
         if (null != tracer) {
             result = tracer.getRuntimeEnvironment();

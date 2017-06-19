@@ -54,7 +54,7 @@ public abstract class StreamTracer extends AbstractWriter implements ITracer {
 
     private Locale locale = DefaultLocale.getDefaultLocale();
     private String[] baseFolder;
-    private RuntimeEnvironment environment;
+    private RuntimeEnvironment<?> environment;
     
     /**
      * Creates a new stream tracer.
@@ -206,12 +206,12 @@ public abstract class StreamTracer extends AbstractWriter implements ITracer {
     }
     
     @Override
-    public void setRuntimeEnvironment(RuntimeEnvironment environment) {
+    public void setRuntimeEnvironment(RuntimeEnvironment<?> environment) {
         this.environment = environment;
     }
 
     @Override
-    public RuntimeEnvironment getRuntimeEnvironment() {
+    public RuntimeEnvironment<?> getRuntimeEnvironment() {
         return environment;
     }
 

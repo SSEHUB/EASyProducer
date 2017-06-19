@@ -28,7 +28,7 @@ import net.ssehub.easy.instantiation.core.model.common.RuntimeEnvironment;
 public abstract class AbstractTracerBase implements ITracer {
 
     private Locale locale = DefaultLocale.getDefaultLocale();
-    private RuntimeEnvironment environment;
+    private RuntimeEnvironment<?> environment;
     
     @Override
     public Locale getLocale() {
@@ -43,12 +43,12 @@ public abstract class AbstractTracerBase implements ITracer {
     }
 
     @Override
-    public void setRuntimeEnvironment(RuntimeEnvironment environment) {
+    public void setRuntimeEnvironment(RuntimeEnvironment<?> environment) {
         this.environment = environment;
     }
 
     @Override
-    public RuntimeEnvironment getRuntimeEnvironment() {
+    public RuntimeEnvironment<?> getRuntimeEnvironment() {
         return environment;
     }
     

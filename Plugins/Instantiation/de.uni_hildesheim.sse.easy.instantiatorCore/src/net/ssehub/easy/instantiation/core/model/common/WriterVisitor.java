@@ -6,7 +6,7 @@ import net.ssehub.easy.basics.modelManagement.IModel;
 import net.ssehub.easy.basics.modelManagement.IVersionRestriction;
 import net.ssehub.easy.basics.modelManagement.Version;
 import net.ssehub.easy.instantiation.core.model.expressions.ExpressionWriter;
-import net.ssehub.easy.instantiation.core.model.expressions.IResolvable;
+import net.ssehub.easy.instantiation.core.model.vilTypes.IMetaParameterDeclaration;
 
 /**
  * A writer for VIL languages.
@@ -131,10 +131,14 @@ public class WriterVisitor<V extends VariableDeclaration> extends ExpressionWrit
                 print(",");
                 printWhitespace();
             }
-            V varDecl = parameterizable.getParameter(p);
-            printType(varDecl.getType());
+            V param = parameterizable.getParameter(p);
+            printType(param.getType());
             printWhitespace();
-            print(varDecl.getName());
+            print(param.getName());
+            if (null != param.getExpression()) {
+                print("=");
+                param.getExpression().accept(this);
+            }
         }
         print(')');
     }
@@ -203,13 +207,13 @@ public class WriterVisitor<V extends VariableDeclaration> extends ExpressionWrit
     /**
      * Prints the typedefs of <code>model</code>.
      * 
-     * @param <R> the resolvable type
+     * @param <R> the parameter type
      * @param <M> the model type
      * @param model the model to print the typedefs for
      * @throws VilException in case of printing problems
      */
-    protected <R extends IResolvable, M extends IModel> void printTypedefs(AbstractResolvableModel<R, M> model) 
-        throws VilException {
+    protected <R extends IMetaParameterDeclaration, M extends IModel> void printTypedefs(
+        AbstractResolvableModel<R, M> model) throws VilException {
         for (int t = 0; t < model.getTypedefCount(); t++) {
             model.getTypedef(t).accept(this);
         }
