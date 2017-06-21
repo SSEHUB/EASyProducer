@@ -7,4 +7,5 @@ project opDef {
     def static Integer prod1(Integer i1) = prod(i1);
     def static Integer prod1(Integer i1, Integer i2) = prod(i1, i2);
     def static Integer prod2(Integer i1) = prod(i1, i2 = 3);
+    def static Integer prod3(Integer i1 = 0) = i1;
 }

@@ -249,7 +249,69 @@ public class EvaluationVisitorDefOpTest {
     }
 
     /**
-     * Tests a custom operation.
+     * Tests a custom operation one default values / named parameters.
+     * 
+     * @throws ValueDoesNotMatchTypeException in case that value assignments fail (shall not occur)
+     * @throws ConfigurationException in case that initial assignment of values fail (shall not occur)
+     * @throws CSTSemanticException in case that the expressions created during this test are not 
+     *   valid (shall not occur)
+     */
+    @Test
+    public void testCustomOperationDefltValue1() throws ValueDoesNotMatchTypeException, ConfigurationException, 
+        CSTSemanticException {
+        
+        // int myFunc(int x, int y=7) = {x * y}
+        Project project = new Project("Test");
+        DecisionVariableDeclaration paramX = new DecisionVariableDeclaration("x", IntegerType.TYPE, null);
+        ConstraintSyntaxTree const1 = new ConstantValue(ValueFactory.createValue(IntegerType.TYPE, 1));
+        paramX.setValue(const1);
+        
+        ConstraintSyntaxTree func = new Variable(paramX);
+        func.inferDatatype();
+        DecisionVariableDeclaration[] params = new DecisionVariableDeclaration[1];
+        params[0] = paramX;
+        CustomOperation custOp = new CustomOperation(IntegerType.TYPE, "myFunc", project.getType(), func, params);
+        OperationDefinition opDef = new OperationDefinition(project);
+        opDef.setOperation(custOp);
+        project.add(opDef);
+        
+        DecisionVariableDeclaration declA = new DecisionVariableDeclaration("a", IntegerType.TYPE, project);
+        project.add(declA);
+        
+        Configuration config = new Configuration(project);
+        config.getDecision(declA).setValue(ValueFactory.createValue(IntegerType.TYPE, 3), AssignmentState.ASSIGNED);
+
+        // as usual
+        ConstraintSyntaxTree call = new OCLFeatureCall(null, "myFunc", project, new Variable(declA));
+        call.inferDatatype();
+        EvaluationVisitor visitor = new EvaluationVisitor();
+        visitor.init(config, AssignmentState.DEFAULT, false, null);
+        call.accept(visitor);
+        Assert.assertTrue(visitor.getResult() instanceof IntValue);
+        Assert.assertEquals(3, ((IntValue) visitor.getResult()).getValue().intValue());
+        visitor.clear();
+        
+        // no args, default
+        call = new OCLFeatureCall(null, "myFunc", project);
+        call.inferDatatype();
+        visitor.init(config, AssignmentState.DEFAULT, false, null);
+        call.accept(visitor);
+        Assert.assertTrue(visitor.getResult() instanceof IntValue);
+        Assert.assertEquals(1, ((IntValue) visitor.getResult()).getValue().intValue());
+        visitor.clear();
+
+        // named arg
+        call = new OCLFeatureCall(null, "myFunc", project, new NamedArgument("x", new Variable(declA)));
+        call.inferDatatype();
+        visitor.init(config, AssignmentState.DEFAULT, false, null);
+        call.accept(visitor);
+        Assert.assertTrue(visitor.getResult() instanceof IntValue);
+        Assert.assertEquals(3, ((IntValue) visitor.getResult()).getValue().intValue());
+        visitor.clear();
+    }
+
+    /**
+     * Tests a custom operation with a default / named parameters.
      * 
      * @throws ValueDoesNotMatchTypeException in case that value assignments fail (shall not occur)
      * @throws ConfigurationException in case that initial assignment of values fail (shall not occur)
@@ -306,7 +368,6 @@ public class EvaluationVisitorDefOpTest {
         call = new OCLFeatureCall(null, "myFunc", project, new Variable(declA), 
             new NamedArgument("y", new Variable(declB)));
         call.inferDatatype();
-
         visitor.init(config, AssignmentState.DEFAULT, false, null);
         call.accept(visitor);
         Assert.assertTrue(visitor.getResult() instanceof IntValue);
@@ -316,7 +377,6 @@ public class EvaluationVisitorDefOpTest {
         call = new OCLFeatureCall(null, "myFunc", project, new Variable(declA), 
             new NamedArgument("z", new Variable(declC)), new NamedArgument("y", new Variable(declB)));
         call.inferDatatype();
-
         visitor.init(config, AssignmentState.DEFAULT, false, null);
         call.accept(visitor);
         Assert.assertTrue(visitor.getResult() instanceof IntValue);
