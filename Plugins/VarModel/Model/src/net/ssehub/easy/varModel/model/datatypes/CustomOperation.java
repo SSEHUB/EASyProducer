@@ -15,6 +15,9 @@
  */
 package net.ssehub.easy.varModel.model.datatypes;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import net.ssehub.easy.varModel.cst.CSTSemanticException;
 import net.ssehub.easy.varModel.cst.ConstraintSyntaxTree;
 import net.ssehub.easy.varModel.model.DecisionVariableDeclaration;
@@ -32,6 +35,7 @@ public class CustomOperation extends Operation {
 
     private ConstraintSyntaxTree function;
     private DecisionVariableDeclaration[] parameters;
+    private Map<String, DecisionVariableDeclaration> namedParameters;
     
     /**
      * Operation Constructor.
@@ -43,10 +47,21 @@ public class CustomOperation extends Operation {
      * @param parameters list of parameters for operation
      */
     public CustomOperation(IDatatype returns, String methodname, IDatatype operand, 
-            ConstraintSyntaxTree function, DecisionVariableDeclaration[] parameters) {
+        ConstraintSyntaxTree function, DecisionVariableDeclaration[] parameters) {
         super(returns, methodname, operand, getParameterTypes(parameters));
         this.parameters = parameters;
         this.function = function;
+        if (null != parameters) {
+            for (int p = 0; p < parameters.length; p++) {
+                DecisionVariableDeclaration dvd = parameters[p];
+                if (null != dvd.getDefaultValue()) {
+                    if (null == namedParameters) {
+                        namedParameters = new HashMap<String, DecisionVariableDeclaration>();
+                    }
+                    namedParameters.put(dvd.getName(), dvd);
+                }
+            }
+        }
     }
 
     /**
@@ -86,40 +101,42 @@ public class CustomOperation extends Operation {
         return result;
     }
 
-    /**
-     * Returns the function expression calculated by this operation.
-     * 
-     * @return the function operation
-     */
     @Override
     public ConstraintSyntaxTree getFunction() {
         return function;
     }
-    
-    /**
-     * Returns the parameter at position <code>index</code>.
-     * 
-     * @param index a 0-based index denoting the parameter 
-     *   to be returned
-     * @return the specified parameter
-     * 
-     * @throws IndexOutOfBoundsException if 
-     *   <code>index&lt;0 || index&gt;={@link #getParameterCount()}</code>
-     */
+
+    @Override
     public DecisionVariableDeclaration getParameterDeclaration(int index) {
         if (null == parameters) {
             throw new IndexOutOfBoundsException();
         }
         return parameters[index];
     }
+
+    @Override
+    public DecisionVariableDeclaration getParameter(String name) {
+        DecisionVariableDeclaration result = null == namedParameters ? null : namedParameters.get(name);
+        if (null == result) {
+            for (int p = 0; null == result && p < getParameterCount(); p++) {
+                DecisionVariableDeclaration dvd = getParameterDeclaration(p);
+                if (dvd.getName().equals(name)) {
+                    result = dvd;
+                }
+            }
+        }
+        return result;
+    }
     
-    /**
-     * Returns the number of parameters.
-     * 
-     * @return the number of parameters
-     */
+    @Override
     public int getParameterCount() {
         return null == parameters ? 0 : parameters.length;
+    }
+    
+    @Override
+    public int getRequiredParameterCount() {
+        int paramCount = getParameterCount();
+        return null == namedParameters ? paramCount : paramCount - namedParameters.size();
     }
 
     @Override

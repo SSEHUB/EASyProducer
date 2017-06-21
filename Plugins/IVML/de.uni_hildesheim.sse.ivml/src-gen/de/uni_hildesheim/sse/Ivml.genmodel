@@ -261,6 +261,10 @@
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Ivml.ecore#//ActualArgumentList/args"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Ivml.ecore#//ActualArgumentList/name"/>
     </genClasses>
+    <genClasses ecoreClass="Ivml.ecore#//ActualArgument">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Ivml.ecore#//ActualArgument/name"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Ivml.ecore#//ActualArgument/arg"/>
+    </genClasses>
     <genClasses ecoreClass="Ivml.ecore#//ExpressionAccess">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Ivml.ecore#//ExpressionAccess/name"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Ivml.ecore#//ExpressionAccess/calls"/>

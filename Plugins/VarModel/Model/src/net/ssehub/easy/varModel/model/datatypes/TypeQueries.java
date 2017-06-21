@@ -50,7 +50,7 @@ public class TypeQueries {
                     } else if (parameter.length == tmpParamCount) {
                         boolean eq = true;
                         for (int p = 0; eq && p < tmpParamCount; p++) {
-                            IDatatype specifiedType = tmp.getParameter(p);
+                            IDatatype specifiedType = tmp.getParameterType(p);
                             IDatatype givenType = parameter[p];
                             if (null != specifiedType && null != givenType) { // xtext
                                 eq = (specifiedType.isAssignableFrom(givenType)

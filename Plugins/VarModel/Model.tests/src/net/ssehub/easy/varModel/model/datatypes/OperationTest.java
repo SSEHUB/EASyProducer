@@ -305,7 +305,7 @@ public class OperationTest {
         if (null != operand) {
             Variable[] parameters = new Variable[operation.getParameterCount()];
             for (int j = 0; j < operation.getParameterCount(); j++) {                
-                parameters[j] = map.get(operation.getParameter(j));  
+                parameters[j] = map.get(operation.getParameterType(j));  
             }
          
             if (MetaType.ALL_INSTANCES != operation) {
@@ -327,13 +327,13 @@ public class OperationTest {
             //creates a "too long" array
             Variable[] parameters = new Variable[operation.getParameterCount() + 1];
             for (int i = 0; i < operation.getParameterCount(); i++) {
-                parameters[i] = map.get(operation.getParameter(i));
+                parameters[i] = map.get(operation.getParameterType(i));
             }
             
             //try to add a parameter a second time to the parameter array
             int pos = operation.getParameterCount();
             if (0 != pos) {
-                parameters[pos] = map.get(operation.getParameter(pos - 1));
+                parameters[pos] = map.get(operation.getParameterType(pos - 1));
             } else {
                 parameters[pos] = map.get(BooleanType.TYPE);
             }
@@ -380,7 +380,7 @@ public class OperationTest {
         if (null != operand && op.getParameterCount() > 0) {
             Variable[] parameters = new Variable[op.getParameterCount()];
             for (int i = 0; i < op.getParameterCount(); i++) {
-                parameters[i] = map.get(op.getParameter(i));           
+                parameters[i] = map.get(op.getParameterType(i));           
             }
 
             //copy the operation with a wrong parameter-list
@@ -417,7 +417,7 @@ public class OperationTest {
                 if (Compound.TYPE == operand.inferDatatype()) {
                     
                     for (int j = 0; j < operation.getParameterCount(); j++) {                
-                        parameters[j] = map.get(operation.getParameter(j));  
+                        parameters[j] = map.get(operation.getParameterType(j));  
                     }
                     OCLFeatureCall call = new OCLFeatureCall(operand, operation.getName(), parameters);
                     

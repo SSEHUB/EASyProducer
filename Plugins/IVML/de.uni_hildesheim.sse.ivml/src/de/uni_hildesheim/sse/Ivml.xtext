@@ -473,12 +473,16 @@ Declaration:
 	;	
 	
 fragment ActualArgumentList:	
-	args+=Expression 
+	args+=ActualArgument
 	(
 		',' 
-		args+=Expression
+		args+=ActualArgument
 	)*
 	;
+
+ActualArgument:
+    (name=Identifier '=')? arg=Expression    
+;
 
 ExpressionAccess:
 	'.' name=Identifier

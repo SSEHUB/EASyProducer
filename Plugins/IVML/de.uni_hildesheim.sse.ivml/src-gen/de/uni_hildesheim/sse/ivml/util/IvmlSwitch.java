@@ -487,6 +487,13 @@ public class IvmlSwitch<T> extends Switch<T>
         if (result == null) result = defaultCase(theEObject);
         return result;
       }
+      case IvmlPackage.ACTUAL_ARGUMENT:
+      {
+        ActualArgument actualArgument = (ActualArgument)theEObject;
+        T result = caseActualArgument(actualArgument);
+        if (result == null) result = defaultCase(theEObject);
+        return result;
+      }
       case IvmlPackage.EXPRESSION_ACCESS:
       {
         ExpressionAccess expressionAccess = (ExpressionAccess)theEObject;
@@ -1480,6 +1487,22 @@ public class IvmlSwitch<T> extends Switch<T>
    * @generated
    */
   public T caseActualArgumentList(ActualArgumentList object)
+  {
+    return null;
+  }
+
+  /**
+   * Returns the result of interpreting the object as an instance of '<em>Actual Argument</em>'.
+   * <!-- begin-user-doc -->
+   * This implementation returns null;
+   * returning a non-null result will terminate the switch.
+   * <!-- end-user-doc -->
+   * @param object the target of the switch.
+   * @return the result of interpreting the object as an instance of '<em>Actual Argument</em>'.
+   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+   * @generated
+   */
+  public T caseActualArgument(ActualArgument object)
   {
     return null;
   }

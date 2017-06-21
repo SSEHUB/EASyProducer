@@ -21,6 +21,7 @@ import java.util.List;
 import java.util.Map;
 
 import net.ssehub.easy.varModel.cst.ConstraintSyntaxTree;
+import net.ssehub.easy.varModel.model.DecisionVariableDeclaration;
 import net.ssehub.easy.varModel.model.IModelElement;
 import net.ssehub.easy.varModel.model.IvmlDatatypeVisitor;
 
@@ -377,7 +378,16 @@ public class Operation {
     }
     
     /**
-     * Returns the parameter at position <code>index</code>.
+     * Returns the number of required parameters.
+     * 
+     * @return the number of required parameters
+     */
+    public int getRequiredParameterCount() {
+        return getParameterCount();
+    }
+    
+    /**
+     * Returns the parameter type at position <code>index</code>.
      * 
      * @param index a 0-based index denoting the parameter 
      *   to be returned
@@ -386,11 +396,57 @@ public class Operation {
      * @throws IndexOutOfBoundsException if 
      *   <code>index&lt;0 || index&gt;={@link #getParameterCount()}</code>
      */
-    public IDatatype getParameter(int index) {
+    public IDatatype getParameterType(int index) {
         if (null == parameters) {
             throw new IndexOutOfBoundsException();
         }
         return parameters[index];
+    }
+    
+    /**
+     * Returns the parameter at position <code>index</code>.
+     * 
+     * @param index a 0-based index denoting the parameter 
+     *   to be returned
+     * @return the specified parameter (may be <b>null</b> if there is no formal declaration
+     * 
+     * @throws IndexOutOfBoundsException if 
+     *   <code>index&lt;0 || index&gt;={@link #getParameterCount()}</code>
+     */
+    public DecisionVariableDeclaration getParameterDeclaration(int index) {
+        if (index < 0 || index >= getParameterCount()) {
+            throw new IndexOutOfBoundsException();
+        }
+        return null;
+    }
+
+    /**
+     * Returns the parameter default value at position <code>index</code>.
+     * 
+     * @param index a 0-based index denoting the parameter 
+     *   to be returned
+     * @return the specified parameter default value (may be <b>null</b> if there is no default value)
+     * 
+     * @throws IndexOutOfBoundsException if 
+     *   <code>index&lt;0 || index&gt;={@link #getParameterCount()}</code>
+     */
+    public ConstraintSyntaxTree getParameterDefaultValue(int index) {
+        ConstraintSyntaxTree result = null;
+        DecisionVariableDeclaration decl = getParameterDeclaration(index);
+        if (decl != null) {
+            result = decl.getDefaultValue();
+        }
+        return result;
+    }
+    
+    /**
+     * Returns the specified named parameter.
+     * 
+     * @param name the name of the parameter
+     * @return the named parameter declaration (may be <b>null</b>)
+     */
+    public DecisionVariableDeclaration getParameter(String name) {
+        return null; // so far no named parameters
     }
     
     /**
@@ -759,7 +815,7 @@ public class Operation {
             if (p > 0) {
                 tmp.append(", ");
             }
-            tmp.append(IvmlDatatypeVisitor.getQualifiedType(getParameter(p).getType()));
+            tmp.append(IvmlDatatypeVisitor.getQualifiedType(getParameterType(p).getType()));
         }
         tmp.append(")");
         return tmp.toString();

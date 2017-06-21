@@ -3,15 +3,11 @@
 package de.uni_hildesheim.sse.ivml.impl;
 
 import de.uni_hildesheim.sse.ivml.ActualArgument;
-import de.uni_hildesheim.sse.ivml.ActualArgumentList;
+import de.uni_hildesheim.sse.ivml.Expression;
 import de.uni_hildesheim.sse.ivml.IvmlPackage;
-
-import java.util.Collection;
 
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.NotificationChain;
-
-import org.eclipse.emf.common.util.EList;
 
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
@@ -19,35 +15,22 @@ import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
 
-import org.eclipse.emf.ecore.util.EObjectContainmentEList;
-import org.eclipse.emf.ecore.util.InternalEList;
-
 /**
  * <!-- begin-user-doc -->
- * An implementation of the model object '<em><b>Actual Argument List</b></em>'.
+ * An implementation of the model object '<em><b>Actual Argument</b></em>'.
  * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
  * </p>
  * <ul>
- *   <li>{@link de.uni_hildesheim.sse.ivml.impl.ActualArgumentListImpl#getArgs <em>Args</em>}</li>
- *   <li>{@link de.uni_hildesheim.sse.ivml.impl.ActualArgumentListImpl#getName <em>Name</em>}</li>
+ *   <li>{@link de.uni_hildesheim.sse.ivml.impl.ActualArgumentImpl#getName <em>Name</em>}</li>
+ *   <li>{@link de.uni_hildesheim.sse.ivml.impl.ActualArgumentImpl#getArg <em>Arg</em>}</li>
  * </ul>
  *
  * @generated
  */
-public class ActualArgumentListImpl extends MinimalEObjectImpl.Container implements ActualArgumentList
+public class ActualArgumentImpl extends MinimalEObjectImpl.Container implements ActualArgument
 {
-  /**
-   * The cached value of the '{@link #getArgs() <em>Args</em>}' containment reference list.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @see #getArgs()
-   * @generated
-   * @ordered
-   */
-  protected EList<ActualArgument> args;
-
   /**
    * The default value of the '{@link #getName() <em>Name</em>}' attribute.
    * <!-- begin-user-doc -->
@@ -69,11 +52,21 @@ public class ActualArgumentListImpl extends MinimalEObjectImpl.Container impleme
   protected String name = NAME_EDEFAULT;
 
   /**
+   * The cached value of the '{@link #getArg() <em>Arg</em>}' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #getArg()
+   * @generated
+   * @ordered
+   */
+  protected Expression arg;
+
+  /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    */
-  protected ActualArgumentListImpl()
+  protected ActualArgumentImpl()
   {
     super();
   }
@@ -86,21 +79,7 @@ public class ActualArgumentListImpl extends MinimalEObjectImpl.Container impleme
   @Override
   protected EClass eStaticClass()
   {
-    return IvmlPackage.Literals.ACTUAL_ARGUMENT_LIST;
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  public EList<ActualArgument> getArgs()
-  {
-    if (args == null)
-    {
-      args = new EObjectContainmentEList<ActualArgument>(ActualArgument.class, this, IvmlPackage.ACTUAL_ARGUMENT_LIST__ARGS);
-    }
-    return args;
+    return IvmlPackage.Literals.ACTUAL_ARGUMENT;
   }
 
   /**
@@ -123,7 +102,55 @@ public class ActualArgumentListImpl extends MinimalEObjectImpl.Container impleme
     String oldName = name;
     name = newName;
     if (eNotificationRequired())
-      eNotify(new ENotificationImpl(this, Notification.SET, IvmlPackage.ACTUAL_ARGUMENT_LIST__NAME, oldName, name));
+      eNotify(new ENotificationImpl(this, Notification.SET, IvmlPackage.ACTUAL_ARGUMENT__NAME, oldName, name));
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public Expression getArg()
+  {
+    return arg;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public NotificationChain basicSetArg(Expression newArg, NotificationChain msgs)
+  {
+    Expression oldArg = arg;
+    arg = newArg;
+    if (eNotificationRequired())
+    {
+      ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, IvmlPackage.ACTUAL_ARGUMENT__ARG, oldArg, newArg);
+      if (msgs == null) msgs = notification; else msgs.add(notification);
+    }
+    return msgs;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public void setArg(Expression newArg)
+  {
+    if (newArg != arg)
+    {
+      NotificationChain msgs = null;
+      if (arg != null)
+        msgs = ((InternalEObject)arg).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - IvmlPackage.ACTUAL_ARGUMENT__ARG, null, msgs);
+      if (newArg != null)
+        msgs = ((InternalEObject)newArg).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - IvmlPackage.ACTUAL_ARGUMENT__ARG, null, msgs);
+      msgs = basicSetArg(newArg, msgs);
+      if (msgs != null) msgs.dispatch();
+    }
+    else if (eNotificationRequired())
+      eNotify(new ENotificationImpl(this, Notification.SET, IvmlPackage.ACTUAL_ARGUMENT__ARG, newArg, newArg));
   }
 
   /**
@@ -136,8 +163,8 @@ public class ActualArgumentListImpl extends MinimalEObjectImpl.Container impleme
   {
     switch (featureID)
     {
-      case IvmlPackage.ACTUAL_ARGUMENT_LIST__ARGS:
-        return ((InternalEList<?>)getArgs()).basicRemove(otherEnd, msgs);
+      case IvmlPackage.ACTUAL_ARGUMENT__ARG:
+        return basicSetArg(null, msgs);
     }
     return super.eInverseRemove(otherEnd, featureID, msgs);
   }
@@ -152,10 +179,10 @@ public class ActualArgumentListImpl extends MinimalEObjectImpl.Container impleme
   {
     switch (featureID)
     {
-      case IvmlPackage.ACTUAL_ARGUMENT_LIST__ARGS:
-        return getArgs();
-      case IvmlPackage.ACTUAL_ARGUMENT_LIST__NAME:
+      case IvmlPackage.ACTUAL_ARGUMENT__NAME:
         return getName();
+      case IvmlPackage.ACTUAL_ARGUMENT__ARG:
+        return getArg();
     }
     return super.eGet(featureID, resolve, coreType);
   }
@@ -165,18 +192,16 @@ public class ActualArgumentListImpl extends MinimalEObjectImpl.Container impleme
    * <!-- end-user-doc -->
    * @generated
    */
-  @SuppressWarnings("unchecked")
   @Override
   public void eSet(int featureID, Object newValue)
   {
     switch (featureID)
     {
-      case IvmlPackage.ACTUAL_ARGUMENT_LIST__ARGS:
-        getArgs().clear();
-        getArgs().addAll((Collection<? extends ActualArgument>)newValue);
-        return;
-      case IvmlPackage.ACTUAL_ARGUMENT_LIST__NAME:
+      case IvmlPackage.ACTUAL_ARGUMENT__NAME:
         setName((String)newValue);
+        return;
+      case IvmlPackage.ACTUAL_ARGUMENT__ARG:
+        setArg((Expression)newValue);
         return;
     }
     super.eSet(featureID, newValue);
@@ -192,11 +217,11 @@ public class ActualArgumentListImpl extends MinimalEObjectImpl.Container impleme
   {
     switch (featureID)
     {
-      case IvmlPackage.ACTUAL_ARGUMENT_LIST__ARGS:
-        getArgs().clear();
-        return;
-      case IvmlPackage.ACTUAL_ARGUMENT_LIST__NAME:
+      case IvmlPackage.ACTUAL_ARGUMENT__NAME:
         setName(NAME_EDEFAULT);
+        return;
+      case IvmlPackage.ACTUAL_ARGUMENT__ARG:
+        setArg((Expression)null);
         return;
     }
     super.eUnset(featureID);
@@ -212,10 +237,10 @@ public class ActualArgumentListImpl extends MinimalEObjectImpl.Container impleme
   {
     switch (featureID)
     {
-      case IvmlPackage.ACTUAL_ARGUMENT_LIST__ARGS:
-        return args != null && !args.isEmpty();
-      case IvmlPackage.ACTUAL_ARGUMENT_LIST__NAME:
+      case IvmlPackage.ACTUAL_ARGUMENT__NAME:
         return NAME_EDEFAULT == null ? name != null : !NAME_EDEFAULT.equals(name);
+      case IvmlPackage.ACTUAL_ARGUMENT__ARG:
+        return arg != null;
     }
     return super.eIsSet(featureID);
   }
@@ -237,4 +262,4 @@ public class ActualArgumentListImpl extends MinimalEObjectImpl.Container impleme
     return result.toString();
   }
 
-} //ActualArgumentListImpl
+} //ActualArgumentImpl

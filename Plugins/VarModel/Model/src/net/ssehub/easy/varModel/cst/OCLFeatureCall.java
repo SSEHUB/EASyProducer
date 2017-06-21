@@ -21,6 +21,7 @@ import java.util.HashSet;
 import net.ssehub.easy.basics.logger.EASyLoggerFactory;
 import net.ssehub.easy.varModel.Bundle;
 import net.ssehub.easy.varModel.model.AbstractVariable;
+import net.ssehub.easy.varModel.model.DecisionVariableDeclaration;
 import net.ssehub.easy.varModel.model.IvmlKeyWords;
 import net.ssehub.easy.varModel.model.ProjectImport;
 import net.ssehub.easy.varModel.model.datatypes.BaseTypeVisitor;
@@ -255,7 +256,7 @@ public class OCLFeatureCall extends ConstraintSyntaxTree {
         if (null != parameters) {
             for (int p = 0; p < parameters.length; p++) {
                 if (EmptyInitializer.INSTANCE == parameters[p]) {
-                    IDatatype pType = op.getParameter(p);
+                    IDatatype pType = op.getParameterType(p);
                     try {
                         if (Compound.TYPE.isAssignableFrom(pType)) {
                             parameters[p] = new CompoundInitializer((Compound) pType, new String[] {}, 
@@ -358,7 +359,8 @@ public class OCLFeatureCall extends ConstraintSyntaxTree {
                     paramTypes[p] = Reference.dereference(parameters[p - fcOperandIncrement].inferDatatype());
                 }
             }
-            op = getCustomOperation(opAccessor, paramTypes, new HashSet<ICustomOperationAccessor>());
+            op = getCustomOperation(opAccessor, paramTypes, new HashSet<ICustomOperationAccessor>(), 
+                fcOperandIncrement);
             if (null != op) {
                 IDatatype operandType = op.getOperand();
                 replaceEmptyInitializer(op);
@@ -387,19 +389,20 @@ public class OCLFeatureCall extends ConstraintSyntaxTree {
      * @param accessor the custom operation accessor
      * @param paramTypes the parameter types
      * @param done the already processed custom operation accessors to avoid cycles
+     * @param opInc number of left parameters to ignore
      * @return the operation or <b>null</b> if not found
      */
     private Operation getCustomOperation(ICustomOperationAccessor accessor, IDatatype[] paramTypes, 
-        HashSet<ICustomOperationAccessor> done) {
+        HashSet<ICustomOperationAccessor> done, int opInc) {
         Operation result = null;
         if (!done.contains(accessor)) {
             done.add(accessor);
-            result = getCustomOperation(accessor, paramTypes);
+            result = getCustomOperation(accessor, paramTypes, opInc);
             if (null == result) {
                 for (int i = 0; null == result && i < accessor.getImportsCount(); i++) {
                     ProjectImport imp = accessor.getImport(i);
                     if (null == imp.getInterfaceName() && null != imp.getResolved()) {
-                        result = getCustomOperation(imp.getResolved(), paramTypes, done);
+                        result = getCustomOperation(imp.getResolved(), paramTypes, done, opInc);
                     }
                 }
             }
@@ -412,28 +415,30 @@ public class OCLFeatureCall extends ConstraintSyntaxTree {
      * 
      * @param accessor the custom operation accessor
      * @param paramTypes the parameter types
+     * @param opInc number of left parameters to ignore
      * @return the operation or <b>null</b> if not found
      */
-    private Operation getCustomOperation(ICustomOperationAccessor accessor, IDatatype[] paramTypes) {
+    private Operation getCustomOperation(ICustomOperationAccessor accessor, IDatatype[] paramTypes, int opInc) {
         Operation op = null;
         IDatatype operandType = accessor.getType();
         for (int o = 0; null == op && o < accessor.getOperationCount(); o++) {
             Operation tmp = accessor.getOperation(o);
             if (tmp.getName().equals(operation)) {
                 if (operandType.equals(tmp.getOperand())) { // operations of the same project only, not isAssignable!
-                    int tmpParamCount = tmp.getParameterCount();
+                    int tmpParamCount = tmp.getRequiredParameterCount();
                     if (null == paramTypes || 0 == paramTypes.length) {
-                        // feature call has no parameter, custom operation must not have parameters to be qual
-                        if (0 == tmpParamCount) {
+                        // feature call has no parameter, custom operation must have no parameters or LHS to be equal
+                        if (tmpParamCount <= 1) {
                             op = tmp;
                         }
-                    } else if (paramTypes.length == tmpParamCount) {
-                        // feature call has parameter and also the same number of parameters, check types
+                    } else if (paramTypes.length >= tmpParamCount) {
+                        // allow default params, check types
                         boolean eq = true;
-                        for (int p = 0; eq && p < tmpParamCount; p++) {
-                            boolean ok = tmp.getParameter(p).isAssignableFrom(paramTypes[p]);
+                        for (int p = 0; eq && p < paramTypes.length; p++) {
+                            IDatatype pType = getParameterType(tmp, p, tmpParamCount, opInc);
+                            boolean ok = null == pType ? true : pType.isAssignableFrom(paramTypes[p]);
                             if (!ok) {
-                                ok = tmp.getParameter(p).isAssignableFrom(Reference.dereference(paramTypes[p]));
+                                ok = pType.isAssignableFrom(Reference.dereference(paramTypes[p]));
                             }
                             eq = ok;
                         }
@@ -445,6 +450,32 @@ public class OCLFeatureCall extends ConstraintSyntaxTree {
             }
         }
         return op;
+    }
+    
+    /**
+     * Returns the parameter type of <code>tmp</code> at position <code>index</code> considering named and positional
+     * parameters.
+     * 
+     * @param tmp the operation
+     * @param index the index to return the type for
+     * @param requiredParamCount the required parameter count distinguishing positional and named parameters
+     * @param opInc number of left parameters to ignore
+     * @return the type or <b>null</b> if the parameter does not exist
+     */
+    private IDatatype getParameterType(Operation tmp, int index, int requiredParamCount, int opInc) {
+        IDatatype result = null;
+        if (index < requiredParamCount) {
+            result = tmp.getParameterType(index);
+        } else {
+            String name = parameters[index - opInc].getName();
+            if (null != name) {
+                DecisionVariableDeclaration dvd = tmp.getParameter(name);
+                if (null != dvd) {
+                    result = dvd.getType();
+                }
+            }
+        }
+        return result;
     }
 
     @Override

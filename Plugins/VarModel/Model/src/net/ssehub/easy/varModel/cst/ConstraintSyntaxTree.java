@@ -102,4 +102,14 @@ public abstract class ConstraintSyntaxTree implements IAttributeAccess {
     public boolean isSemanticallyEqual(ConstraintSyntaxTree otherTree) {
         return this.equals(otherTree);
     }
+    
+    /**
+     * Returns the name of the constraint syntax tree (in case if it is used as a named argument).
+     * 
+     * @return the name, may be <b>null</b> for none
+     */
+    public String getName() {
+        return null;
+    }
+
 }

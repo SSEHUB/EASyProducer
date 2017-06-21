@@ -32,6 +32,7 @@ import org.junit.runners.Suite.SuiteClasses;
     ConstraintOperationsTest.class,
     EvaluationVisitorTest.class,
     EvaluationVisitorIteratorTest.class,
+    EvaluationVisitorDefOpTest.class,
     DynamicDispatchTest.class,
     IntegerOperationsTest.class,
     RealOperationsTest.class,

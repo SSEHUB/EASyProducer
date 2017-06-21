@@ -32,6 +32,7 @@ import org.eclipse.xtext.ui.editor.contentassist.ICompletionProposalAcceptor;
 
 import com.google.inject.Inject;
 
+import de.uni_hildesheim.sse.ivml.ActualArgument;
 import de.uni_hildesheim.sse.ivml.AdditiveExpression;
 import de.uni_hildesheim.sse.ivml.AssignmentExpression;
 import de.uni_hildesheim.sse.ivml.Call;
@@ -384,12 +385,12 @@ public class ExpressionProposalProvider extends AbstractIvmlProposalProvider  {
                             if (p > 0) {
                                 sig += ", ";
                             }
-                            sig += IvmlDatatypeVisitor.getUniqueType(op.getParameter(p));
+                            sig += IvmlDatatypeVisitor.getUniqueType(op.getParameterType(p));
                         }
                         sig += ")";
                         break;
                     case OPERATOR_INFIX:
-                        sig = op.getName() + " " + IvmlDatatypeVisitor.getUnqualifiedType(op.getParameter(0));
+                        sig = op.getName() + " " + IvmlDatatypeVisitor.getUnqualifiedType(op.getParameterType(0));
                         prop = op.getName();
                         break;
                     case OPERATOR_POSTFIX:
@@ -653,11 +654,11 @@ public class ExpressionProposalProvider extends AbstractIvmlProposalProvider  {
                 result = inferType(call.getCall(), operand, model, cmpDef);
             } else if (null != call.getContainerOp()) {
                 ContainerOp sOp = call.getContainerOp();
-                List<Expression> args = sOp.getArgs();
+                List<ActualArgument> args = sOp.getArgs();
                 int pCount = null == args ? 0 : args.size();
                 IDatatype[] param = new IDatatype[pCount];
                 for (int p = 0; p < pCount; p++) {
-                    param[p] = inferType(args.get(p), model, cmpDef);
+                    param[p] = inferType(args.get(p).getArg(), model, cmpDef);
                }
                 result = inferType(sOp.getName(), operand, param, true);
             } else if (null != call.getArrayEx()) {
@@ -678,19 +679,19 @@ public class ExpressionProposalProvider extends AbstractIvmlProposalProvider  {
      * @return the inferred type or <b>null</b> if no type is available
      */
     private IDatatype inferType(FeatureCall call, IDatatype operand, EObject model, TypedefCompound cmpDef) {
-        List<Expression> args = call.getArgs();
+        List<ActualArgument> args = call.getArgs();
         IDatatype[] pTypes = null;
         if (null != args) {
                 int offset = 0;
                 if (null == operand && !args.isEmpty()) {
                     // if not explicitly given, determine from first (implicit) parameter
-                    operand = inferType(args.get(0), model, cmpDef);
+                    operand = inferType(args.get(0).getArg(), model, cmpDef);
                     offset = 1;
                 }
                 if (args.size() > offset) {
                     pTypes = new IDatatype[args.size() - offset];
                     for (int e = offset; e < args.size(); e++) {
-                        pTypes[e - offset] = inferType(args.get(e), model, cmpDef);
+                        pTypes[e - offset] = inferType(args.get(e).getArg(), model, cmpDef);
                     }
                 }
         }
@@ -721,7 +722,7 @@ public class ExpressionProposalProvider extends AbstractIvmlProposalProvider  {
                     ok = (null != pTypes && pCount == pTypes.length);
                 }
                 for (int p = 0; ok && p < pCount; p++) {
-                    ok = op.getParameter(p).isAssignableFrom(pTypes[p]);
+                    ok = op.getParameterType(p).isAssignableFrom(pTypes[p]);
                 }
                 if (ok) {
                     result = op.getActualReturnType(operand, pTypes);

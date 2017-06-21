@@ -783,20 +783,6 @@ public class EvaluationVisitor implements IConstraintTreeVisitor {
     @Override
     public void visitConstantValue(ConstantValue value) {
         Value constValue = value.getConstantValue();
-        /*if (constValue instanceof ReferenceValue) { // dereference if valueExpression
-            ReferenceValue ref = (ReferenceValue) constValue;
-            if (null != ref.getValueEx()) {
-                ref.getValueEx().accept(this); // -> leads to result
-                if (null != result) {
-                    constValue = result.getReferenceValue();
-                    clearResult();
-                }
-            }
-        } 
-        // constants must not be changed, at least original constants :o
-        Value cVal = constValue.clone();
-        result = ConstantAccessor.POOL.getInstance().bind(cVal, context);
-        */
         constValue.accept(constantResolver);
         Value resolvedValue = constantResolver.getValue();
         if (null != resolvedValue) {
@@ -878,9 +864,14 @@ public class EvaluationVisitor implements IConstraintTreeVisitor {
     private void evaluateCustomOperation(CustomOperation operation, EvaluationAccessor operand, 
         EvaluationAccessor[] args) {
         if (null != operand) {
-            EvaluationAccessor[] tmp = new EvaluationAccessor[args.length + 1];
+            int dec = 0;
+            // due to potential named parameters, args may be longer and contain nulls at the end -> skip them
+            while (args.length - 1 - dec >= 0 && null == args[args.length - 1 - dec]) {
+                dec++;
+            }
+            EvaluationAccessor[] tmp = new EvaluationAccessor[args.length + 1 - dec];
             tmp[0] = operand;
-            System.arraycopy(args, 0, tmp, 1, args.length);
+            System.arraycopy(args, 0, tmp, 1, args.length - dec);
             args = tmp;
         } 
         if (args.length == operation.getParameterCount()) {
@@ -1071,34 +1062,8 @@ public class EvaluationVisitor implements IConstraintTreeVisitor {
             } else {
                 operand = null; // custom operation
             }
-            EvaluationAccessor[] args = new EvaluationAccessor[call.getParameterCount()];
-            boolean allOk = true;
-            if (op == BooleanType.AND || op == BooleanType.OR || op == BooleanType.XOR) { // Handle "short cuts"
-                allOk = !handleBinaryBoolean(operand, call);
-            } else if (op == ConstraintType.ASSIGNMENT) {
-                result = ConstraintOperations.handleConstraintAssignment(operand, call.getParameter(0));
-                allOk = false; // constraints need the constraint assigned rather than its evaluation
-            } else if (op == ConstraintType.EQUALS || op == ConstraintType.UNEQUALS) {
-                result = ConstraintOperations.handleConstraintEquals(operand, call.getParameter(0), op);
-                allOk = false; // constraints need the constraint assigned rather than its evaluation (propagate)
-            }         
-            for (int a = 0; allOk && a < args.length; a++) {
-                if (op == BooleanType.IMPLIES && (null == operand || BooleanValue.FALSE.equals(operand.getValue())) ) {
-                    result = null == operand ? null 
-                        : ConstantAccessor.POOL.getInstance().bind(BooleanValue.TRUE, context);
-                    allOk = false; // Everything is ok, but no further processing shall be taken place ;-)
-                } else {
-                    call.getParameter(a).accept(this);
-                    if (null == result && op.acceptsNull()) { // evaluators must assure to work with that -> isDefined
-                        result = ConstantAccessor.POOL.getInstance().bind(null, context); 
-                    }
-                    args[a] = result;
-                    if (null == result) {
-                        allOk = false; // no message as arguments may be undefined
-                    } 
-                    result = null; // clear result - kept in args and released below
-                }
-            }
+            EvaluationAccessor[] args = new EvaluationAccessor[op.getParameterCount()];
+            boolean allOk = evaluateArguments(call, op, operand, args);
             if (allOk) {
                 if (op instanceof CustomOperation) {
                     evaluateCustomOperation((CustomOperation) op, operand, args);
@@ -1121,6 +1086,78 @@ public class EvaluationVisitor implements IConstraintTreeVisitor {
             opNesting--;
             recordIfFailed(call);
         }
+    }
+    
+    /**
+     * Evaluates the arguments.
+     * 
+     * @param call the call
+     * @param op the resolved operation
+     * @param operand the operand
+     * @param args the arguments (empty, size of number of parameters, modified as side effect)
+     * @return <code>true</code> for successful, <code>false</code> else
+     */
+    private boolean evaluateArguments(OCLFeatureCall call, Operation op, EvaluationAccessor operand, 
+        EvaluationAccessor[] args) {
+        boolean allOk = true;
+        if (op == BooleanType.AND || op == BooleanType.OR || op == BooleanType.XOR) { // Handle "short cuts"
+            allOk = !handleBinaryBoolean(operand, call);
+        } else if (op == ConstraintType.ASSIGNMENT) {
+            result = ConstraintOperations.handleConstraintAssignment(operand, call.getParameter(0));
+            allOk = false; // constraints need the constraint assigned rather than its evaluation
+        } else if (op == ConstraintType.EQUALS || op == ConstraintType.UNEQUALS) {
+            result = ConstraintOperations.handleConstraintEquals(operand, call.getParameter(0), op);
+            allOk = false; // constraints need the constraint assigned rather than its evaluation (propagate)
+        }
+        Map<String, EvaluationAccessor> namedArgs = null;
+        for (int a = 0; allOk && a < op.getParameterCount(); a++) {
+            if (op == BooleanType.IMPLIES && (null == operand || BooleanValue.FALSE.equals(operand.getValue())) ) {
+                result = null == operand ? null 
+                    : ConstantAccessor.POOL.getInstance().bind(BooleanValue.TRUE, context);
+                allOk = false; // Everything is ok, but no further processing shall be taken place ;-)
+            } else {
+                String argName = null;
+                if (a < call.getParameterCount()) {
+                    call.getParameter(a).accept(this);
+                    argName = call.getParameter(a).getName();
+                } else if (null != op.getParameterDefaultValue(a)) {
+                    op.getParameterDefaultValue(a).accept(this);
+                } else {
+                    result = null;
+                    break;
+                }
+                if (null == result && op.acceptsNull()) {
+                    if (op.acceptsNull()) { // evaluators must assure to work with that -> isDefined
+                        result = ConstantAccessor.POOL.getInstance().bind(null, context);
+                    }
+                }
+                if (argName != null) {
+                    if (null == namedArgs) {
+                        namedArgs = new HashMap<String, EvaluationAccessor>(); 
+                    }
+                    namedArgs.put(argName, result);
+                } else {
+                    args[a] = result;
+                }
+                if (null == result) {
+                    allOk = false; // no message as arguments may be undefined
+                } 
+                result = null; // clear result - kept in args and released below
+            }
+        }
+        if (allOk && null != namedArgs) {
+            for (int a = 0; a < args.length; a++) {
+                DecisionVariableDeclaration param = op.getParameterDeclaration(a);
+                if (null != param) {
+                    String paramName = param.getName();
+                    EvaluationAccessor arg = namedArgs.get(paramName);
+                    if (null != arg) {
+                        args[a] = arg;
+                    }
+                }
+            }
+        }
+        return allOk;
     }
     
     /**
@@ -1155,97 +1192,6 @@ public class EvaluationVisitor implements IConstraintTreeVisitor {
     }
     
     /**
-     * Stores dispatch information for dynamically dispatching a custom operation.
-     * 
-     * @author Holger Eichelberger
-     */
-    private static class DispatchInformation {
-        private CustomOperation operation;
-        private IDatatype[] argTypes;
-        private int bestDiff;
-        private CustomOperation bestMatch;
-        private Set<String> candidates;
-        private Set<Project> doneProjects;
-        private String opName;
-        private int opParamCount;
-        private IDatatype returnType;
-        
-        /**
-         * Creates a dispatch information object.
-         * 
-         * @param operation the operation to dispatch
-         * @param args the operation arguments
-         */
-        private DispatchInformation(CustomOperation operation, EvaluationAccessor[] args) {
-            this.operation = operation;
-            opName = operation.getName();
-            opParamCount = operation.getParameterCount();
-            returnType = operation.getReturns();
-            argTypes = new IDatatype[args.length];
-            for (int a = 0, n = args.length; a < n; a++) {
-                Value val = args[a].getValue();
-                if (null != val) {
-                    // use actual type with precedence
-                    argTypes[a] = val.getType();
-                } else if (args[a].getVariable() != null) {
-                    // Use declaration to get type if it's a variable
-                    argTypes[a] = args[a].getVariable().getDeclaration().getType();
-                }
-            }
-
-            bestMatch = operation;
-            bestDiff = calculateDiff(operation, returnType, argTypes);
-            candidates = new HashSet<String>();
-            candidates.add(operation.getSignature());
-            doneProjects = new HashSet<Project>();
-        }
-
-        /**
-         * Returns the best matching operation.
-         * 
-         * @return the best matching operation
-         */
-        private CustomOperation getBestMatch() {
-            return bestMatch;
-        }
-
-        /**
-         * Checks the given scope for dispatch candidates.
-         * 
-         * @param scope the scope to check for
-         */
-        private void checkForDispatch(Project scope) {
-            if (!doneProjects.contains(scope)) {
-                doneProjects.add(scope);
-                for (int o = 0, n = scope.getOperationCount(); bestDiff > 0 && o < n; o++) {
-                    CustomOperation tmp = scope.getOperation(o);
-                    if (tmp != operation && opName.equals(tmp.getName()) && opParamCount == tmp.getParameterCount()) {
-                        String tmpSignature = tmp.getSignature();
-                        if (!candidates.contains(tmpSignature)) {
-                            int diff = calculateDiff(tmp, returnType, argTypes);
-                            if (diff < 0) {
-                                continue;
-                            }
-                            candidates.add(tmpSignature);
-                            if (diff < bestDiff) {
-                                bestMatch = tmp;
-                                bestDiff = diff;
-                            }
-                        }
-                    }
-                }
-                for (int i = 0, n = scope.getImportsCount(); bestDiff > 0 && i < n; i++) {
-                    Project imp = scope.getImport(i).getResolved();
-                    if (null != imp) {
-                        checkForDispatch(imp);
-                    }
-                }
-            }
-        }
-        
-    }
-    
-    /**
      * Performs a dynamic dispatch of <code>operation</code> according to the given actual arguments in 
      * <code>args</code>, i.e., this method searches and returns a method that fits better to the actual
      * arguments then the statically bound operation.
@@ -1275,11 +1221,11 @@ public class EvaluationVisitor implements IConstraintTreeVisitor {
      * @return the difference, <code>0</code> in case of signature equality, <code>-1</code> if the signature
      *   does not match the required types, a the number of assignable (not equal) types else
      */
-    private static int calculateDiff(CustomOperation operation, IDatatype returns, IDatatype[] argTypes) {
+    static int calculateDiff(CustomOperation operation, IDatatype returns, IDatatype[] argTypes) {
         int diff = diff(returns, operation.getReturns()); // if no match -1
         if (diff >= 0) {
             for (int a = 0, n = argTypes.length; diff >= 0 && a < n; a++) {
-                int tmp = diff(operation.getParameter(a).getType(), argTypes[a]);
+                int tmp = diff(operation.getParameterType(a).getType(), argTypes[a]);
                 if (tmp < 0) {
                     diff = -1;
                 } else {

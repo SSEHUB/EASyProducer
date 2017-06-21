@@ -10,6 +10,7 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
 
 import de.uni_hildesheim.sse.IvmlBundleId;
+import de.uni_hildesheim.sse.ivml.ActualArgument;
 import de.uni_hildesheim.sse.ivml.ActualArgumentList;
 import de.uni_hildesheim.sse.ivml.AdditiveExpression;
 import de.uni_hildesheim.sse.ivml.AdditiveExpressionPart;
@@ -63,6 +64,7 @@ import net.ssehub.easy.varModel.cst.EmptyInitializer;
 import net.ssehub.easy.varModel.cst.IfThen;
 import net.ssehub.easy.varModel.cst.Let;
 import net.ssehub.easy.varModel.cst.MultiAndExpression;
+import net.ssehub.easy.varModel.cst.NamedArgument;
 import net.ssehub.easy.varModel.cst.OCLFeatureCall;
 import net.ssehub.easy.varModel.cst.Parenthesis;
 import net.ssehub.easy.varModel.cst.Variable;
@@ -691,7 +693,7 @@ public class ExpressionTranslator extends net.ssehub.easy.dslCore.translation.Ex
         throws TranslatorException {
         level++;
         boolean regularFeatureCall = true;
-        List<Expression> args = call.getArgs();
+        List<ActualArgument> args = call.getArgs();
         String callName = call.getName();
         ConstraintSyntaxTree[] param;
         if (null == args) {
@@ -719,11 +721,11 @@ public class ExpressionTranslator extends net.ssehub.easy.dslCore.translation.Ex
                 param = null;
             } else {
                 if (null == lhs) {
-                    lhs = processExpression(null, args.get(0), context, parent);
+                    lhs = processArgument(null, args.get(0), context, parent);
                     if (pListSize - 1 > 0) {
                         param = new ConstraintSyntaxTree[pListSize - 1];
                         for (int p = 1; p < pListSize; p++) {
-                            param[p - 1] = processExpression(null, args.get(p), context, parent);
+                            param[p - 1] = processArgument(null, args.get(p), context, parent);
                         }
                     } else {
                         param = null;
@@ -731,7 +733,7 @@ public class ExpressionTranslator extends net.ssehub.easy.dslCore.translation.Ex
                 } else {
                     param = new ConstraintSyntaxTree[pListSize];
                     for (int p = 0; p < pListSize; p++) {
-                        param[p] = processExpression(null, args.get(p), context, parent);
+                        param[p] = processArgument(null, args.get(p), context, parent);
                     }
                 }
             }
@@ -764,6 +766,25 @@ public class ExpressionTranslator extends net.ssehub.easy.dslCore.translation.Ex
         }
         level--;
         return lhs;
+    }
+
+    /**
+     * Process an argument and returns a (named) expression.
+     * 
+     * @param lhsType the left hand side type (optional, may be <b>null</b>)
+     * @param arg the argument expression
+     * @param context the type context to be considered
+     * @param parent the actual (intended) parent of the constraint to be created
+     * @return the (named) expression
+     * @throws TranslatorException in case that the expression cannot be translated for some reason
+     */
+    private ConstraintSyntaxTree processArgument(IDatatype lhsType, ActualArgument arg, TypeContext context, 
+        IModelElement parent) throws TranslatorException {
+        ConstraintSyntaxTree result = processExpression(lhsType, arg.getArg(), context, parent);
+        if (null != result && null != arg.getName()) {
+            result = new NamedArgument(arg.getName(), result);
+        }
+        return result;
     }
 
     /**
@@ -868,7 +889,7 @@ public class ExpressionTranslator extends net.ssehub.easy.dslCore.translation.Ex
     private ConstraintSyntaxTree processContainerOp(ConstraintSyntaxTree lhs, ContainerOp op, TypeContext context, 
         IModelElement parent) throws TranslatorException {
         Declarator declarator = op.getDecl();
-        List<Expression> args = op.getArgs();
+        List<ActualArgument> args = op.getArgs();
         if (null != declarator && (null == args || args.size() == 1)) {
             lhs = processContainerOp(lhs, op, null, null, context, parent);
         } else if (null == declarator) { // go for parameters
@@ -909,10 +930,13 @@ public class ExpressionTranslator extends net.ssehub.easy.dslCore.translation.Ex
      * @param decl the binding declarator 
      * @return the accessor, may be <b>null</b> if there is none
      */
-    private ConstraintSyntaxTree getAccessor(List<Expression> args, DecisionVariableDeclaration decl) {
+    private ConstraintSyntaxTree getAccessor(List<ActualArgument> args, DecisionVariableDeclaration decl) {
         ConstraintSyntaxTree result = null;
         if (1 == args.size()) {
-            result = getAccessor(args.get(0).getExpr(), decl);
+            ActualArgument arg = args.get(0);
+            if (null != arg && arg.getArg() != null) {
+                result = getAccessor(arg.getArg().getExpr(), decl);
+            }
         }
         return result;
     }
@@ -1103,9 +1127,9 @@ public class ExpressionTranslator extends net.ssehub.easy.dslCore.translation.Ex
         }
         try {
             if (null == declEx) {
-                List<Expression> args = op.getArgs();
+                List<ActualArgument> args = op.getArgs();
                 if (null == args || args.size() == 1) {
-                    declEx = processExpression(null, null != args ? args.get(0) : null, context, parent);    
+                    declEx = processExpression(null, null != args ? args.get(0).getArg() : null, context, parent);    
                 }
             }
             if (null == declEx) {

@@ -14,7 +14,6 @@ import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
 
-import de.uni_hildesheim.sse.ModelUtility;
 import de.uni_hildesheim.sse.ivml.AnnotateTo;
 import de.uni_hildesheim.sse.ivml.AttrAssignment;
 import de.uni_hildesheim.sse.ivml.AttrAssignmentPart;
@@ -131,110 +130,6 @@ public class ModelTranslator extends net.ssehub.easy.dslCore.translation.ModelTr
     };
 
     /**
-     * A result entry consisting of an xtext and a result model.
-     * 
-     * @author Holger Eichelberger
-     */
-    private static class ResultEntry {
-        private de.uni_hildesheim.sse.ivml.Project eProject; 
-        private Project project;
-        private TypeContext context;
-        private Utils.SplitResult splitResult;
-        private URI uri;
-        private int errorCount;
-
-        /**
-         * Creates the result entry.
-         * 
-         * @param eProject the xtext project
-         * @param project the result project
-         * @param context the actual type context
-         * @param splitResult the type splitted model elements of <code>eProject</code>
-         */
-        private ResultEntry(de.uni_hildesheim.sse.ivml.Project eProject, Project project, TypeContext context, 
-            Utils.SplitResult splitResult) {
-            this.eProject = eProject;
-            this.project = project;
-            this.context = context;
-            this.splitResult = splitResult;
-        }
-        
-        /**
-         * Sets additional information required to register a successfully created model with {@link VarModel}.
-         * 
-         * @param uri the URI of the model (if given, indicates that a successfully loaded model shall be registered) 
-         * @param errorCount the initial error count
-         */
-        private void setRegistrationInfo(URI uri, int errorCount) {
-            this.uri = uri;
-            this.errorCount = errorCount;
-        }
-        
-        /**
-         * Completes loading.
-         * 
-         * @param result the parent instance
-         */
-        private void completeLoading(Result result) { 
-            result.getTranslator().completeLoading(this);
-        }
-
-        /**
-         * Returns the (result) project.
-         * 
-         * @return the project
-         */
-        private Project getProject() {
-            return project;
-        }
-        
-        /**
-         * Returns the splitted entries.
-         * 
-         * @return the splitted entries
-         */
-        private Utils.SplitResult getSplitResult() {
-            return splitResult;
-        }
-        
-        /**
-         * Returns the actual type context.
-         * 
-         * @return the type context
-         */
-        private TypeContext getContext() {
-            return context;
-        }
-        
-        /**
-         * Returns the xText project.
-         * 
-         * @return the xText project
-         */
-        private de.uni_hildesheim.sse.ivml.Project getEProject() {
-            return eProject;
-        }
-        
-        /**
-         * Registers the (successful) result if needed, i.e., if {@link #setRegistrationInfo(URI, int)} has been called
-         * with a URL.
-         * 
-         * @param errorCount the actual error count
-         * @return <code>true</code> if a registration happened, <code>false</code> else
-         */
-        private boolean registerIfNeeded(int errorCount) {
-            boolean registered = false;
-            if (null != uri && this.errorCount == errorCount) {
-                // required if models in the same file refer to each other
-                VarModel.INSTANCE.updateModel(project, uri, ModelUtility.INSTANCE, false);
-                registered = true;
-            }
-            return registered;
-        }
-       
-    }
-    
-    /**
      * Implements a translation result enabling deferred model loading. As long as {@link #completeLoading()} is not 
      * called, the model instances stored in this instance are not ready for use.
      * 
@@ -288,7 +183,7 @@ public class ModelTranslator extends net.ssehub.easy.dslCore.translation.ModelTr
          * 
          * @return the translator instance
          */
-        private ModelTranslator getTranslator() {
+        ModelTranslator getTranslator() {
             return translator;
         }
         
@@ -450,7 +345,7 @@ public class ModelTranslator extends net.ssehub.easy.dslCore.translation.ModelTr
      * 
      * @param entry the result entry on which to complete loading
      */
-    private void completeLoading(ResultEntry entry) {
+    void completeLoading(ResultEntry entry) {
         Utils.SplitResult splitRes = entry.getSplitResult();
         TypeContext context = entry.getContext();
         //eProject, project, context, splitResult
@@ -1145,6 +1040,7 @@ public class ModelTranslator extends net.ssehub.easy.dslCore.translation.ModelTr
                     }
                     context.addToContext(params[p]);
                 }
+                checkDefaultParamSequence(op, params);
             }
             IDatatype projectType = project.getType();
             CustomOperation operation;
@@ -1161,10 +1057,8 @@ public class ModelTranslator extends net.ssehub.easy.dslCore.translation.ModelTr
                 try {
                     IDatatype implType = impl.inferDatatype();
                     if (!resultType.isAssignableFrom(implType)) {
-                        throw new TranslatorException("implementation type '"
-                            + IvmlDatatypeVisitor.getUnqualifiedType(implType) 
-                            + "' does not match operation result type '"
-                            + IvmlDatatypeVisitor.getUnqualifiedType(resultType) + "'", op,
+                        throw new TranslatorException("implementation type '" + unqualified(implType) 
+                            + "' does not match operation result type '" + unqualified(resultType) + "'", op,
                             IvmlPackage.Literals.OP_DEF_STATEMENT__IMPL, ErrorCodes.TYPE_CONSISTENCY);
                     }
                     operation.setFunction(impl);
@@ -1177,10 +1071,10 @@ public class ModelTranslator extends net.ssehub.easy.dslCore.translation.ModelTr
                     throw new TranslatorException("operation '" + op.getId() + "' defined multiple times on project", 
                         op, IvmlPackage.Literals.OP_DEF_PARAMETER__TYPE, ErrorCodes.REDEFINITION);
                 } else if (operation.getParameterCount() > 0 
-                    && findOperation(operation.getParameter(0), operation, true)) {
+                    && findOperation(operation.getParameterType(0), operation, true)) {
                     // does operation match to an operation on the first type (vs implicit project parameter)
                     throw new TranslatorException("operation '" + op.getId() + "' is ambigously defined on type '"
-                        + IvmlDatatypeVisitor.getUnqualifiedType(operation.getParameter(0)) + '"', op,
+                        + IvmlDatatypeVisitor.getUnqualifiedType(operation.getParameterType(0)) + '"', op,
                         IvmlPackage.Literals.OP_DEF_PARAMETER__TYPE, ErrorCodes.AMBIGUITY);
                 } else {
                     // in case of no error - add, first resolvable then as model element
@@ -1199,6 +1093,42 @@ public class ModelTranslator extends net.ssehub.easy.dslCore.translation.ModelTr
             context.popLayer();
         }
         return done;
+    }
+    
+    /**
+     * Returns the unqualified name of <code>type</code>.
+     * 
+     * @param type the type
+     * @return the unqualified name
+     */
+    private static String unqualified(IDatatype type) {
+        return IvmlDatatypeVisitor.getUnqualifiedType(type);
+    }
+    
+    /**
+     * Checks the sequence of default and non-default parameters.
+     * 
+     * @param op the operation declaration
+     * @param param the parameters to check
+     */
+    private void checkDefaultParamSequence(OpDefStatement op, DecisionVariableDeclaration[] param) {
+        int lastNonDefaultParam = -1;
+        int lastDefaultParam = -1;
+        for (int p = 0; p < param.length; p++) {
+            if (null == param[p].getName()) {
+                lastNonDefaultParam = p;
+            } else {
+                if (lastDefaultParam < 0) {
+                    lastDefaultParam = p;
+                }
+            }
+        }
+        if (param.length > 0) {
+            if (lastDefaultParam > 0 && lastNonDefaultParam > lastDefaultParam) {
+                error("parameters with default values must follow parameters without default values", op, 
+                    IvmlPackage.Literals.ACTUAL_ARGUMENT_LIST__NAME, ErrorCodes.WARNING_USAGE);
+            }
+        }
     }
     
     /**
@@ -1393,13 +1323,13 @@ public class ModelTranslator extends net.ssehub.easy.dslCore.translation.ModelTr
                 int defPInc = 0;
                 if (considerOperand) {
                     paramMatch = defOperation.getOperand().equals(
-                            operation.getParameter(0));
+                            operation.getParameterType(0));
                     defPInc = 1;
                 }
                 for (int p = 0; paramMatch
                         && p < defOperation.getParameterCount(); p++) {
-                    paramMatch = defOperation.getParameter(p + defPInc).equals(
-                            operation.getParameter(p));
+                    paramMatch = defOperation.getParameterType(p + defPInc).equals(
+                            operation.getParameterType(p));
                 }
                 found = paramMatch;
             }

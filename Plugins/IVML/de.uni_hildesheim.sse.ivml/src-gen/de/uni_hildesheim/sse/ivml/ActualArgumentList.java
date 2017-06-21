@@ -27,7 +27,7 @@ public interface ActualArgumentList extends EObject
 {
   /**
    * Returns the value of the '<em><b>Args</b></em>' containment reference list.
-   * The list contents are of type {@link de.uni_hildesheim.sse.ivml.Expression}.
+   * The list contents are of type {@link de.uni_hildesheim.sse.ivml.ActualArgument}.
    * <!-- begin-user-doc -->
    * <p>
    * If the meaning of the '<em>Args</em>' containment reference list isn't clear,
@@ -39,7 +39,7 @@ public interface ActualArgumentList extends EObject
    * @model containment="true"
    * @generated
    */
-  EList<Expression> getArgs();
+  EList<ActualArgument> getArgs();
 
   /**
    * Returns the value of the '<em><b>Name</b></em>' attribute.

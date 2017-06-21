@@ -5,6 +5,7 @@ package de.uni_hildesheim.sse.serializer;
 
 import com.google.inject.Inject;
 import de.uni_hildesheim.sse.ivml.AccessName;
+import de.uni_hildesheim.sse.ivml.ActualArgument;
 import de.uni_hildesheim.sse.ivml.AdditiveExpression;
 import de.uni_hildesheim.sse.ivml.AdditiveExpressionPart;
 import de.uni_hildesheim.sse.ivml.AnnotateTo;
@@ -98,6 +99,9 @@ public abstract class AbstractIvmlSemanticSequencer extends AbstractDelegatingSe
 			switch (semanticObject.eClass().getClassifierID()) {
 			case IvmlPackage.ACCESS_NAME:
 				sequence_AccessName(context, (AccessName) semanticObject); 
+				return; 
+			case IvmlPackage.ACTUAL_ARGUMENT:
+				sequence_ActualArgument(context, (ActualArgument) semanticObject); 
 				return; 
 			case IvmlPackage.ADDITIVE_EXPRESSION:
 				sequence_AdditiveExpression(context, (AdditiveExpression) semanticObject); 
@@ -313,7 +317,7 @@ public abstract class AbstractIvmlSemanticSequencer extends AbstractDelegatingSe
 	 *     ContainerOp returns ContainerOp
 	 *
 	 * Constraint:
-	 *     (name=Identifier decl=Declarator? (args+=Expression args+=Expression*)?)
+	 *     (name=Identifier decl=Declarator? (args+=ActualArgument args+=ActualArgument*)?)
 	 */
 	protected void sequence_ActualArgumentList_ContainerOp(ISerializationContext context, ContainerOp semanticObject) {
 		genericSequencer.createSequence(context, semanticObject);
@@ -325,9 +329,21 @@ public abstract class AbstractIvmlSemanticSequencer extends AbstractDelegatingSe
 	 *     FeatureCall returns FeatureCall
 	 *
 	 * Constraint:
-	 *     (name=Identifier (args+=Expression args+=Expression*)?)
+	 *     (name=Identifier (args+=ActualArgument args+=ActualArgument*)?)
 	 */
 	protected void sequence_ActualArgumentList_FeatureCall(ISerializationContext context, FeatureCall semanticObject) {
+		genericSequencer.createSequence(context, semanticObject);
+	}
+	
+	
+	/**
+	 * Contexts:
+	 *     ActualArgument returns ActualArgument
+	 *
+	 * Constraint:
+	 *     (name=Identifier? arg=Expression)
+	 */
+	protected void sequence_ActualArgument(ISerializationContext context, ActualArgument semanticObject) {
 		genericSequencer.createSequence(context, semanticObject);
 	}
 	

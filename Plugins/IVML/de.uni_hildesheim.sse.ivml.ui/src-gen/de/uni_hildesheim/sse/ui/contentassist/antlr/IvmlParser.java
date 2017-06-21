@@ -141,6 +141,8 @@ public class IvmlParser extends AbstractContentAssistParser {
 					put(grammarAccess.getDeclarationAccess().getGroup_3(), "rule__Declaration__Group_3__0");
 					put(grammarAccess.getActualArgumentListAccess().getGroup(), "rule__ActualArgumentList__Group__0");
 					put(grammarAccess.getActualArgumentListAccess().getGroup_1(), "rule__ActualArgumentList__Group_1__0");
+					put(grammarAccess.getActualArgumentAccess().getGroup(), "rule__ActualArgument__Group__0");
+					put(grammarAccess.getActualArgumentAccess().getGroup_0(), "rule__ActualArgument__Group_0__0");
 					put(grammarAccess.getExpressionAccessAccess().getGroup(), "rule__ExpressionAccess__Group__0");
 					put(grammarAccess.getPrimaryExpressionAccess().getGroup(), "rule__PrimaryExpression__Group__0");
 					put(grammarAccess.getPrimaryExpressionAccess().getGroup_0_1(), "rule__PrimaryExpression__Group_0_1__0");
@@ -322,6 +324,8 @@ public class IvmlParser extends AbstractContentAssistParser {
 					put(grammarAccess.getDeclarationAccess().getInitAssignment_3_1(), "rule__Declaration__InitAssignment_3_1");
 					put(grammarAccess.getActualArgumentListAccess().getArgsAssignment_0(), "rule__ActualArgumentList__ArgsAssignment_0");
 					put(grammarAccess.getActualArgumentListAccess().getArgsAssignment_1_1(), "rule__ActualArgumentList__ArgsAssignment_1_1");
+					put(grammarAccess.getActualArgumentAccess().getNameAssignment_0_0(), "rule__ActualArgument__NameAssignment_0_0");
+					put(grammarAccess.getActualArgumentAccess().getArgAssignment_1(), "rule__ActualArgument__ArgAssignment_1");
 					put(grammarAccess.getExpressionAccessAccess().getNameAssignment_1(), "rule__ExpressionAccess__NameAssignment_1");
 					put(grammarAccess.getExpressionAccessAccess().getCallsAssignment_2(), "rule__ExpressionAccess__CallsAssignment_2");
 					put(grammarAccess.getExpressionAccessAccess().getAccessAssignment_3(), "rule__ExpressionAccess__AccessAssignment_3");

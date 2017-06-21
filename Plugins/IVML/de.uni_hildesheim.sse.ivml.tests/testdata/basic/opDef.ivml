@@ -3,4 +3,8 @@ project opDef {
     version v0;
     def Boolean myOp(Integer i) = i > 0;
     def static Boolean myOpStatic(Integer i) = i > 0;
+    def static Integer prod(Integer i1, Integer i2 = 1) = i1 * i2;
+    def static Integer prod1(Integer i1) = prod(i1);
+    def static Integer prod1(Integer i1, Integer i2) = prod(i1, i2);
+    def static Integer prod2(Integer i1) = prod(i1, i2 = 3);
 }

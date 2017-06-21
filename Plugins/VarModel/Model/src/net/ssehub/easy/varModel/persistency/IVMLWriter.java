@@ -1048,11 +1048,18 @@ public class IVMLWriter extends AbstractVarModelWriter {
                 }
                 if (call.getParameterCount() > 0) {
                     for (int p = 0; p < call.getParameterCount(); p++) {
+                        ConstraintSyntaxTree param = call.getParameter(p);
                         if (null != operand || (null == operand && p > 0)) {
                             appendOutput(",");
                         }
+                        if (null != param.getName()) {
+                            appendOutput(WHITESPACE);
+                            appendOutput(param.getName());
+                            appendOutput(WHITESPACE);
+                            appendOutput("=");
+                        }
                         appendOutput(WHITESPACE);
-                        call.getParameter(p).accept(this);
+                        param.accept(this);
                     }
                 }
                 appendOutput(")");

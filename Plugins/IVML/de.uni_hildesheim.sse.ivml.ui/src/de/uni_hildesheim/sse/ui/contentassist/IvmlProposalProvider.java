@@ -1174,7 +1174,7 @@ public class IvmlProposalProvider extends ExpressionProposalProvider {
 						//setup parameters
 						if (operation.getParameterCount() > 0) {
 							for (int i = 0; i < operation.getParameterCount(); i++) {
-								IDatatype parameter = operation.getParameter(i);
+								IDatatype parameter = operation.getParameterType(i);
 								if (parameter != null && parameter.getName() != null
 										&& parameter.getType() != null
 										&& parameter.getType().getName() != null) {

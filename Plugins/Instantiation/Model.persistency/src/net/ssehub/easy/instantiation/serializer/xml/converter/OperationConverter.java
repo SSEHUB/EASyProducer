@@ -66,7 +66,7 @@ public class OperationConverter implements Converter {
             if (p > 0) {
                 result.append(",");
             }
-            result.append(dVis.getType(operation.getParameter(p)));
+            result.append(dVis.getType(operation.getParameterType(p)));
             dVis.clear();
         }
         result.append(")");

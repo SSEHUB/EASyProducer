@@ -2447,6 +2447,43 @@ public interface IvmlPackage extends EPackage
   int DECLARATION_FEATURE_COUNT = 3;
 
   /**
+   * The meta object id for the '{@link de.uni_hildesheim.sse.ivml.impl.ActualArgumentImpl <em>Actual Argument</em>}' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see de.uni_hildesheim.sse.ivml.impl.ActualArgumentImpl
+   * @see de.uni_hildesheim.sse.ivml.impl.IvmlPackageImpl#getActualArgument()
+   * @generated
+   */
+  int ACTUAL_ARGUMENT = 59;
+
+  /**
+   * The feature id for the '<em><b>Name</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int ACTUAL_ARGUMENT__NAME = 0;
+
+  /**
+   * The feature id for the '<em><b>Arg</b></em>' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int ACTUAL_ARGUMENT__ARG = 1;
+
+  /**
+   * The number of structural features of the '<em>Actual Argument</em>' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int ACTUAL_ARGUMENT_FEATURE_COUNT = 2;
+
+  /**
    * The meta object id for the '{@link de.uni_hildesheim.sse.ivml.impl.ExpressionAccessImpl <em>Expression Access</em>}' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -2454,7 +2491,7 @@ public interface IvmlPackage extends EPackage
    * @see de.uni_hildesheim.sse.ivml.impl.IvmlPackageImpl#getExpressionAccess()
    * @generated
    */
-  int EXPRESSION_ACCESS = 59;
+  int EXPRESSION_ACCESS = 60;
 
   /**
    * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -2500,7 +2537,7 @@ public interface IvmlPackage extends EPackage
    * @see de.uni_hildesheim.sse.ivml.impl.IvmlPackageImpl#getPrimaryExpression()
    * @generated
    */
-  int PRIMARY_EXPRESSION = 60;
+  int PRIMARY_EXPRESSION = 61;
 
   /**
    * The feature id for the '<em><b>Lit</b></em>' containment reference.
@@ -2573,7 +2610,7 @@ public interface IvmlPackage extends EPackage
    * @see de.uni_hildesheim.sse.ivml.impl.IvmlPackageImpl#getContainerInitializer()
    * @generated
    */
-  int CONTAINER_INITIALIZER = 61;
+  int CONTAINER_INITIALIZER = 62;
 
   /**
    * The feature id for the '<em><b>Type</b></em>' containment reference.
@@ -2610,7 +2647,7 @@ public interface IvmlPackage extends EPackage
    * @see de.uni_hildesheim.sse.ivml.impl.IvmlPackageImpl#getExpressionListOrRange()
    * @generated
    */
-  int EXPRESSION_LIST_OR_RANGE = 62;
+  int EXPRESSION_LIST_OR_RANGE = 63;
 
   /**
    * The feature id for the '<em><b>List</b></em>' containment reference list.
@@ -2638,7 +2675,7 @@ public interface IvmlPackage extends EPackage
    * @see de.uni_hildesheim.sse.ivml.impl.IvmlPackageImpl#getExpressionListEntry()
    * @generated
    */
-  int EXPRESSION_LIST_ENTRY = 63;
+  int EXPRESSION_LIST_ENTRY = 64;
 
   /**
    * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -2693,7 +2730,7 @@ public interface IvmlPackage extends EPackage
    * @see de.uni_hildesheim.sse.ivml.impl.IvmlPackageImpl#getLiteral()
    * @generated
    */
-  int LITERAL = 64;
+  int LITERAL = 65;
 
   /**
    * The feature id for the '<em><b>Val</b></em>' containment reference.
@@ -2721,7 +2758,7 @@ public interface IvmlPackage extends EPackage
    * @see de.uni_hildesheim.sse.ivml.impl.IvmlPackageImpl#getIfExpression()
    * @generated
    */
-  int IF_EXPRESSION = 65;
+  int IF_EXPRESSION = 66;
 
   /**
    * The feature id for the '<em><b>If Ex</b></em>' containment reference.
@@ -4858,6 +4895,38 @@ public interface IvmlPackage extends EPackage
   EAttribute getActualArgumentList_Name();
 
   /**
+   * Returns the meta object for class '{@link de.uni_hildesheim.sse.ivml.ActualArgument <em>Actual Argument</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for class '<em>Actual Argument</em>'.
+   * @see de.uni_hildesheim.sse.ivml.ActualArgument
+   * @generated
+   */
+  EClass getActualArgument();
+
+  /**
+   * Returns the meta object for the attribute '{@link de.uni_hildesheim.sse.ivml.ActualArgument#getName <em>Name</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the attribute '<em>Name</em>'.
+   * @see de.uni_hildesheim.sse.ivml.ActualArgument#getName()
+   * @see #getActualArgument()
+   * @generated
+   */
+  EAttribute getActualArgument_Name();
+
+  /**
+   * Returns the meta object for the containment reference '{@link de.uni_hildesheim.sse.ivml.ActualArgument#getArg <em>Arg</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the containment reference '<em>Arg</em>'.
+   * @see de.uni_hildesheim.sse.ivml.ActualArgument#getArg()
+   * @see #getActualArgument()
+   * @generated
+   */
+  EReference getActualArgument_Arg();
+
+  /**
    * Returns the meta object for class '{@link de.uni_hildesheim.sse.ivml.ExpressionAccess <em>Expression Access</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -6855,6 +6924,32 @@ public interface IvmlPackage extends EPackage
      * @generated
      */
     EAttribute ACTUAL_ARGUMENT_LIST__NAME = eINSTANCE.getActualArgumentList_Name();
+
+    /**
+     * The meta object literal for the '{@link de.uni_hildesheim.sse.ivml.impl.ActualArgumentImpl <em>Actual Argument</em>}' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see de.uni_hildesheim.sse.ivml.impl.ActualArgumentImpl
+     * @see de.uni_hildesheim.sse.ivml.impl.IvmlPackageImpl#getActualArgument()
+     * @generated
+     */
+    EClass ACTUAL_ARGUMENT = eINSTANCE.getActualArgument();
+
+    /**
+     * The meta object literal for the '<em><b>Name</b></em>' attribute feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EAttribute ACTUAL_ARGUMENT__NAME = eINSTANCE.getActualArgument_Name();
+
+    /**
+     * The meta object literal for the '<em><b>Arg</b></em>' containment reference feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EReference ACTUAL_ARGUMENT__ARG = eINSTANCE.getActualArgument_Arg();
 
     /**
      * The meta object literal for the '{@link de.uni_hildesheim.sse.ivml.impl.ExpressionAccessImpl <em>Expression Access</em>}' class.

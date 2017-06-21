@@ -3,6 +3,7 @@
 package de.uni_hildesheim.sse.ivml.impl;
 
 import de.uni_hildesheim.sse.ivml.AccessName;
+import de.uni_hildesheim.sse.ivml.ActualArgument;
 import de.uni_hildesheim.sse.ivml.ActualArgumentList;
 import de.uni_hildesheim.sse.ivml.AdditiveExpression;
 import de.uni_hildesheim.sse.ivml.AdditiveExpressionPart;
@@ -498,6 +499,13 @@ public class IvmlPackageImpl extends EPackageImpl implements IvmlPackage
    * @generated
    */
   private EClass actualArgumentListEClass = null;
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  private EClass actualArgumentEClass = null;
 
   /**
    * <!-- begin-user-doc -->
@@ -2576,6 +2584,36 @@ public class IvmlPackageImpl extends EPackageImpl implements IvmlPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  public EClass getActualArgument()
+  {
+    return actualArgumentEClass;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EAttribute getActualArgument_Name()
+  {
+    return (EAttribute)actualArgumentEClass.getEStructuralFeatures().get(0);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EReference getActualArgument_Arg()
+  {
+    return (EReference)actualArgumentEClass.getEStructuralFeatures().get(1);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
   public EClass getExpressionAccess()
   {
     return expressionAccessEClass;
@@ -3126,6 +3164,10 @@ public class IvmlPackageImpl extends EPackageImpl implements IvmlPackage
     createEReference(actualArgumentListEClass, ACTUAL_ARGUMENT_LIST__ARGS);
     createEAttribute(actualArgumentListEClass, ACTUAL_ARGUMENT_LIST__NAME);
 
+    actualArgumentEClass = createEClass(ACTUAL_ARGUMENT);
+    createEAttribute(actualArgumentEClass, ACTUAL_ARGUMENT__NAME);
+    createEReference(actualArgumentEClass, ACTUAL_ARGUMENT__ARG);
+
     expressionAccessEClass = createEClass(EXPRESSION_ACCESS);
     createEAttribute(expressionAccessEClass, EXPRESSION_ACCESS__NAME);
     createEReference(expressionAccessEClass, EXPRESSION_ACCESS__CALLS);
@@ -3446,8 +3488,12 @@ public class IvmlPackageImpl extends EPackageImpl implements IvmlPackage
     initEReference(getDeclaration_Init(), this.getExpression(), null, "init", null, 0, 1, Declaration.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     initEClass(actualArgumentListEClass, ActualArgumentList.class, "ActualArgumentList", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-    initEReference(getActualArgumentList_Args(), this.getExpression(), null, "args", null, 0, -1, ActualArgumentList.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getActualArgumentList_Args(), this.getActualArgument(), null, "args", null, 0, -1, ActualArgumentList.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEAttribute(getActualArgumentList_Name(), ecorePackage.getEString(), "name", null, 0, 1, ActualArgumentList.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+    initEClass(actualArgumentEClass, ActualArgument.class, "ActualArgument", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+    initEAttribute(getActualArgument_Name(), ecorePackage.getEString(), "name", null, 0, 1, ActualArgument.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getActualArgument_Arg(), this.getExpression(), null, "arg", null, 0, 1, ActualArgument.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     initEClass(expressionAccessEClass, ExpressionAccess.class, "ExpressionAccess", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
     initEAttribute(getExpressionAccess_Name(), ecorePackage.getEString(), "name", null, 0, 1, ExpressionAccess.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);

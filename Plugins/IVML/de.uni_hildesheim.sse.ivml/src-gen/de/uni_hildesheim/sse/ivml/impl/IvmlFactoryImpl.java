@@ -123,6 +123,7 @@ public class IvmlFactoryImpl extends EFactoryImpl implements IvmlFactory
       case IvmlPackage.DECLARATOR: return createDeclarator();
       case IvmlPackage.DECLARATION: return createDeclaration();
       case IvmlPackage.ACTUAL_ARGUMENT_LIST: return createActualArgumentList();
+      case IvmlPackage.ACTUAL_ARGUMENT: return createActualArgument();
       case IvmlPackage.EXPRESSION_ACCESS: return createExpressionAccess();
       case IvmlPackage.PRIMARY_EXPRESSION: return createPrimaryExpression();
       case IvmlPackage.CONTAINER_INITIALIZER: return createContainerInitializer();
@@ -782,6 +783,17 @@ public class IvmlFactoryImpl extends EFactoryImpl implements IvmlFactory
   {
     ActualArgumentListImpl actualArgumentList = new ActualArgumentListImpl();
     return actualArgumentList;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public ActualArgument createActualArgument()
+  {
+    ActualArgumentImpl actualArgument = new ActualArgumentImpl();
+    return actualArgument;
   }
 
   /**
