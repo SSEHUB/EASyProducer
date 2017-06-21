@@ -4,10 +4,20 @@ vilScript rulesTest2 (Project source, Project target, Configuration config) {
         p1 * p2;
     }
 
+    Integer test1(Integer p1, Integer p2=1, Integer p3=0) = : {
+        p1 * p2 + p3;
+    }
+
+    Integer test2(Integer p1=1) = : {
+        p1;
+    }
+
     main() = : {
-        test(1);
-        test(1, 2);
-        test(1, p2=3);
+        Integer t = test(1);
+        t = test(1, 2);
+        t = test(1, p2=3);
+        t = test1(1, p3=1, p2=3);
+        t = test2();
     }
 
 }
