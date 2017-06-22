@@ -62,6 +62,10 @@
  *      type parameters of a generic return type explicit. Basically, all three information types are optional.</ul>
  * <ul> {@link net.ssehub.easy.instantiation.core.model.vilTypes.ClassMeta ClassMeta} for renaming the 
  *      annotated class, i.e., hiding the Java implementation name.</ul>
+ * <ul> {@link net.ssehub.easy.instantiation.core.model.vilTypes.ParameterMeta ParameterMeta} for specifying the 
+ *      generics of a parameter or turning a parameter into a named parameter with default values.</ul>
+ * <ul> {@link net.ssehub.easy.instantiation.core.model.vilTypes.DefaultValue DefaultValue} for specifying the
+ *      default values of parameters or the default value of a type.</ul>
  * </li>
  * Collections may define generic iterator operations such as checking a condition or applying a 
  * transformation expression to each element. Therefore, a non-static operation on a collection receiving 
