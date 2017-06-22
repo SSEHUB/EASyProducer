@@ -1,6 +1,7 @@
 package net.ssehub.easy.instantiation.core.model.vilTypes;
 
 import java.lang.annotation.Annotation;
+import java.lang.reflect.Array;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -195,11 +196,23 @@ public class ReflectionOperationDescriptor extends OperationDescriptor implement
                 }
             }
         }
-        if (tmp instanceof Map) {
-            Map<?, ?> tmpMap = (Map<?, ?>) tmp;
+        if (tmp instanceof java.util.Map) {
+            Map<?, ?> tmpMap = (java.util.Map<?, ?>) tmp;
             result = new HashMap<String, Object>();
             for (Map.Entry<?, ?> ent : tmpMap.entrySet()) {
                 result.put(ent.getKey().toString(), ent.getValue());
+            }
+        }
+        if (null != tmp && tmp.getClass().isArray()) {
+            result = new HashMap<String, Object>();
+            int e = 0;
+            int size = Array.getLength(tmp);
+            while (e < size) {
+                Object key = Array.get(tmp, e++);
+                if (e < size) {
+                    Object value = Array.get(tmp, e++);
+                    result.put(key.toString(), value);
+                }
             }
         }
         return result;
