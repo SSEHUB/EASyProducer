@@ -21,13 +21,23 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * Indicates a data structure containing the default value(s) of a type or of parameters.
- * In case of a type, a single value (not necessarily of that but a VIL assignable type) 
- * representing a neutral element, shall be marked. In case of parameters, a whole data
- * structure, e.g., a Map can be marked indicating the relation between parameter names
- * and default values. In the latter case, multiple default value attributes may exist
- * for different operations to be indicated by {@link #name()}. In the first case, the last
- * defined default value counts. Inherited attributes are considered.
+ * Indicates a data structure containing the default value(s) of a type or of parameters. Two forms
+ * are supported:
+ * <ol>
+ *  <li>In case of a type, a single value (not necessarily of that but a VIL assignable type) 
+ *    representing a neutral element, can be marked. This defines the default value of 
+ *    the respective type (or if not overriden by a subsequent definition) for the 
+ *    derived subtypes.</li>
+ *  <li>In case of parameters, a whole static data structure (Map&lt;String, Object&gt; or an Object array with even 
+ *    dimension and alternating key-values are supported) can be used to define the relations between parameter names 
+ *    and default values. In the latter case, multiple default value attributes can be stated
+ *    for different operations, e.g., if the operations overlap in parameter types but not in
+ *    default values). The different operations can be indicated by their name using {@link #name()}. 
+ *    </li>
+ * </ol>
+ * Inherited attributes are considered in both cases, i.e., super classes define the default values for subclasses if 
+ * not overridden explicitly. If the respective value shall not be visible and the defined static value is not used
+ * within the defining class, the annotation {@link SuppressWarnings} may be required for that field in addition.
  * 
  * @author Holger Eichelberger
  */
