@@ -151,6 +151,7 @@ public class ReflectionTypeDescriptor <T> extends TypeDescriptor <T> {
     private Class<T> cls;
     private boolean canBeInstantiated = false; // to be initialized while adding operations
     private IMetaType superType;
+    private Object defltValue;
 
     /**
      * Stores non-assignable classes.
@@ -220,14 +221,26 @@ public class ReflectionTypeDescriptor <T> extends TypeDescriptor <T> {
      */
     protected void resolveFields() {
         Class<?> cls = getTypeClass();
-        if (cls.isEnum()) {
-            Field[] fields = cls.getFields();
-            List<FieldDescriptor> fd = new ArrayList<FieldDescriptor>();
-            for (int f = 0; f < fields.length; f++) {
-                Field field = fields[f];
+        Field[] fields = cls.getFields();
+        List<FieldDescriptor> fd = null;
+        for (int f = 0; f < fields.length; f++) {
+            Field field = fields[f];
+            if (cls.isEnum()) {
                 String name = field.getName();
+                if (null == fd) {
+                    fd = new ArrayList<FieldDescriptor>();
+                }
                 fd.add(new ReflectionFieldDescriptor(this, fields[f], name, null));
             }
+            if (null != field.getAnnotation(DefaultValue.class) && Modifier.isStatic(field.getModifiers())) {
+                try {
+                    defltValue = field.get(null);
+                } catch (IllegalArgumentException e) {
+                } catch (IllegalAccessException e) {
+                }
+            }
+        }
+        if (null != fd) {
             setFields(fd);
         }
     }
@@ -803,6 +816,11 @@ public class ReflectionTypeDescriptor <T> extends TypeDescriptor <T> {
     @Override
     public boolean checkConversion(IMetaType param, IMetaOperation conversion) {
         return true;
+    }
+    
+    @Override
+    public Object getDefaultValue() {
+        return defltValue;
     }
 
 }

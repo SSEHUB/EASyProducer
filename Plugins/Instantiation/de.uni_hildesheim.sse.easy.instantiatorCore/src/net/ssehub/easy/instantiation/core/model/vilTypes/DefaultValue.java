@@ -21,25 +21,22 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * Annotation for providing details to a VIL operation parameter.
+ * Indicates a data structure containing the default value(s) of a type or of parameters.
+ * In case of a type, a single value (not necessarily of that but a VIL assignable type) 
+ * representing a neutral element, shall be marked. In case of parameters, a whole data
+ * structure, e.g., a Map can be marked indicating the relation between parameter names
+ * and default values. In the latter case, multiple default value attributes may exist
+ * for different operations to be indicated by {@link #name()}. In the first case, the last
+ * defined default value counts. Inherited attributes are considered.
  * 
  * @author Holger Eichelberger
  */
-@Target({ElementType.PARAMETER })
+@Target({ElementType.FIELD })
 @Retention(RetentionPolicy.RUNTIME)
-public @interface ParameterMeta {
-
-    /**
-     * The generic parameters of the parameter/argument type. This is required as the type parameters
-     * of Java generics cannot be accessed. Generics of complex types are just given in 
-     * linear sequence. Empty by default. Might be replaced by new reflection functions in Java 8.
-     */
-    Class<?>[] generics() default { };
+public @interface DefaultValue {
     
     /**
-     * Indicates a named parameter. The name may be the same as the parameter name but it may also differ.
-     * Default values are either determined based on the default java values or, if given, from a static attribute
-     * marked by {@link DefaultValue}. Names per method signature shall be unique.
+     * The name of the method/operation the default value(s) apply to.
      */
     String name() default "";
 

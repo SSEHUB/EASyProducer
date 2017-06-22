@@ -9,6 +9,9 @@ package net.ssehub.easy.instantiation.core.model.vilTypes;
 @ClassMeta(name = Constants.TYPE_BOOLEAN, equiv = Boolean.class)
 public class PseudoBoolean implements IVilType {
 
+    @DefaultValue
+    public static final Boolean DEFAULT = false;
+    
     /**
      * Prevents external instantiation.
      */

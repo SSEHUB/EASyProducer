@@ -8,6 +8,7 @@ import java.io.IOException;
 import javax.tools.JavaCompiler;
 import javax.tools.ToolProvider;
 
+import org.apache.commons.io.FileUtils;
 import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.BeforeClass;
@@ -16,7 +17,6 @@ import org.junit.Test;
 import net.ssehub.easy.instantiation.core.model.buildlangModel.Script;
 import net.ssehub.easy.instantiation.core.model.common.VilException;
 import net.ssehub.easy.instantiation.core.model.vilTypes.Set;
-import net.ssehub.easy.instantiation.java.Registration;
 import net.ssehub.easy.instantiation.java.artifacts.DefaultJavaFileArtifactCreator;
 import net.ssehub.easy.instantiation.java.artifacts.JavaClass;
 import net.ssehub.easy.instantiation.java.artifacts.JavaFileArtifact;
@@ -180,6 +180,8 @@ public class ExecutionTests extends AbstractExecutionTest<Script> {
     @Test
     public void testModifyMethod() throws IOException {
         final File expected = new File(getArtifactsFolder(), "classpathTest/src/ModifiedMethodFile.java");
+        final File expectedCpy = new File(getTempDir(), "ModifiedMethodFile.java");
+        FileUtils.copyFile(expected, expectedCpy);
         try {
             DefaultJavaFileArtifactCreator creator = new DefaultJavaFileArtifactCreator();
             JavaFileArtifact javaFileArtefact = (JavaFileArtifact) creator.createArtifactInstance(expected, null);
@@ -205,6 +207,7 @@ public class ExecutionTests extends AbstractExecutionTest<Script> {
             }
 
         });
+        FileUtils.copyFile(expectedCpy, expected);
     }
 
     /**

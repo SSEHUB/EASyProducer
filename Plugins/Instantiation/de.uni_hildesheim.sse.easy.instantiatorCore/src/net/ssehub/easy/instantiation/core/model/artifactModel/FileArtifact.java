@@ -11,6 +11,7 @@ import net.ssehub.easy.instantiation.core.model.artifactModel.representation.Tex
 import net.ssehub.easy.instantiation.core.model.common.VilException;
 import net.ssehub.easy.instantiation.core.model.vilTypes.ArraySet;
 import net.ssehub.easy.instantiation.core.model.vilTypes.Conversion;
+import net.ssehub.easy.instantiation.core.model.vilTypes.DefaultValue;
 import net.ssehub.easy.instantiation.core.model.vilTypes.IActualValueProvider;
 import net.ssehub.easy.instantiation.core.model.vilTypes.Invisible;
 import net.ssehub.easy.instantiation.core.model.vilTypes.ListSet;
@@ -32,6 +33,8 @@ import net.ssehub.easy.instantiation.core.model.vilTypes.Set;
 @ArtifactCreator(DefaultFileArtifactCreator.class)
 public class FileArtifact extends CompositeArtifact implements IFileSystemArtifact, IActualValueProvider {
 
+    @DefaultValue
+    public static final FileArtifact DEFAULT = new FileArtifact();
     private Path path;
     private boolean isTemporary; // path may be in temporary folder but artifact may not be created as such
 

@@ -8,6 +8,7 @@ import net.ssehub.easy.instantiation.core.model.vilTypes.Collection;
 import net.ssehub.easy.instantiation.core.model.vilTypes.IVilType;
 import net.ssehub.easy.instantiation.core.model.vilTypes.Instantiator;
 import net.ssehub.easy.instantiation.core.model.vilTypes.OperationMeta;
+import net.ssehub.easy.instantiation.core.model.vilTypes.ParameterMeta;
 import net.ssehub.easy.instantiation.core.model.vilTypes.Set;
 
 /**
@@ -17,7 +18,7 @@ import net.ssehub.easy.instantiation.core.model.vilTypes.Set;
  */
 @Instantiator("jar")
 public class Jar implements IVilType {
-
+    
     /**
      * Packs <code>source</code> files into <code>target</code>. Manifest files is assumed to be the
      * default (empty) one.
@@ -63,12 +64,12 @@ public class Jar implements IVilType {
      * @return the created artifacts
      * @throws VilException in case that processing the JAR file fails for some reason
      */
-    @OperationMeta(returnGenerics = FileArtifact.class)
+    /*@OperationMeta(returnGenerics = FileArtifact.class)
     public static Set<FileArtifact> jar(Path base, Path artifacts, Path jar) 
         throws VilException {
         // needed as paths are typically expressed as strings and string->path->collection conversion is not supported
         return jar(base, artifacts.selectAll(), jar, null);
-    }
+    }*/
 
     /**
      * Packs <code>source</code> files into <code>target</code>.
@@ -77,15 +78,21 @@ public class Jar implements IVilType {
      *   be the source or target project
      * @param artifacts the artifacts to be handled
      * @param jar the target jar file
-     * @param manifest the manifest file
+     * @param manifest the manifest file (may be <b>null</b>, default)
      * @return the created artifacts
      * @throws VilException in case that processing the JAR file fails for some reason
      */
     @OperationMeta(returnGenerics = FileArtifact.class)
-    public static Set<FileArtifact> jar(Path base, Path artifacts, Path jar, Path manifest) 
-        throws VilException {
+    public static Set<FileArtifact> jar(Path base, Path artifacts, Path jar, 
+        @ParameterMeta(name = "manifest") Path manifest) throws VilException {
+        Set<FileArtifact> result;
+        if (manifest == Path.DUMMY) {
+            result = jar(base, artifacts.selectAll(), jar, null);
+        } else {
+            result = Zip.add(base, artifacts.selectAll(), jar, createJarHandler(manifest));
+        }
         // needed as paths are typically expressed as strings and string->path->collection conversion is not supported
-        return Zip.add(base, artifacts.selectAll(), jar, createJarHandler(manifest));
+        return result;
     }
     
     /**

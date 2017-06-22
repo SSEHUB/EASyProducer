@@ -22,6 +22,7 @@ import net.ssehub.easy.varModel.model.IAttributableElement;
 import net.ssehub.easy.varModel.model.IModelElement;
 import net.ssehub.easy.varModel.model.datatypes.IDatatype;
 import net.ssehub.easy.varModel.model.datatypes.TypeQueries;
+import net.ssehub.easy.varModel.model.values.NullValue;
 
 /**
  * Implements a dynamic type descriptor for IVM decision variables. Instances of this
@@ -267,6 +268,11 @@ abstract class AbstractIvmlTypeDescriptor extends TypeDescriptor<DecisionVariabl
     protected boolean isEqual(AbstractIvmlTypeDescriptor d1, AbstractIvmlTypeDescriptor d2) {
         return (d1 == d2 
             || (d1 != null && d2 != null && TypeQueries.sameTypes(d1.getIvmlType(), d2.getIvmlType())));
+    }
+    
+    @Override
+    public Object getDefaultValue() {
+        return NullValue.INSTANCE;
     }
 
 }

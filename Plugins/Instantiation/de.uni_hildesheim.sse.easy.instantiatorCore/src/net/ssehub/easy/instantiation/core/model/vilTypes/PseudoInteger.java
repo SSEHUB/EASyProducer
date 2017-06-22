@@ -8,6 +8,9 @@ package net.ssehub.easy.instantiation.core.model.vilTypes;
 @ClassMeta(name = Constants.TYPE_INTEGER, equiv = Integer.class, nAssign = PseudoReal.class)
 public class PseudoInteger extends PseudoReal {
 
+    @DefaultValue
+    public static final Integer DEFAULT = 0;
+    
     /**
      * Prevents external instantiation.
      */

@@ -5,6 +5,7 @@ import java.util.List;
 
 import net.ssehub.easy.instantiation.core.model.vilTypes.ArraySet;
 import net.ssehub.easy.instantiation.core.model.vilTypes.Conversion;
+import net.ssehub.easy.instantiation.core.model.vilTypes.DefaultValue;
 import net.ssehub.easy.instantiation.core.model.vilTypes.OperationMeta;
 import net.ssehub.easy.instantiation.core.model.vilTypes.Sequence;
 import net.ssehub.easy.instantiation.core.model.vilTypes.Set;
@@ -12,6 +13,8 @@ import net.ssehub.easy.instantiation.core.model.vilTypes.TypeDescriptor;
 import net.ssehub.easy.instantiation.core.model.vilTypes.UnmodifiableSet;
 import net.ssehub.easy.varModel.confModel.ContainerVariable;
 import net.ssehub.easy.varModel.confModel.IDecisionVariable;
+import net.ssehub.easy.varModel.model.values.NullValue;
+import net.ssehub.easy.varModel.model.values.Value;
 
 /**
  * Realizes the bridge to the decision variables.
@@ -20,6 +23,9 @@ import net.ssehub.easy.varModel.confModel.IDecisionVariable;
  */
 public class DecisionVariable extends AbstractIvmlVariable {
 
+    @DefaultValue
+    public static final Value DEFAULT = NullValue.INSTANCE;
+    
     private Attribute[] attributes;
     
     /**

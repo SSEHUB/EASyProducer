@@ -137,11 +137,16 @@ public abstract class AbstractCallExpression extends Expression implements IArgu
         if (index < unnamedArgsCount) {
             result = operation.getParameterType(index);
         } else {
-            IMetaParameterDeclaration pDecl = operation.getParameter(arguments[index].getName());
-            if (null != pDecl) {
-                result = pDecl.getType();
-            } else {
-                result = null;
+            IMetaParameterDeclaration pDecl;
+            if (index < arguments.length) { // named after unnamed
+                pDecl = operation.getParameter(arguments[index].getName());
+                if (null != pDecl) {
+                    result = pDecl.getType();
+                } else {
+                    result = null;
+                }
+            } else { // optional not given
+                result = operation.getParameterType(index);
             }
         }
         return result;
@@ -468,11 +473,11 @@ public abstract class AbstractCallExpression extends Expression implements IArgu
                 int conversionCount = 0;
                 IMetaOperation[] conversionOps = new IMetaOperation[arguments.length]; 
                 boolean allParamOk = true;
-                for (int p = 0; allParamOk && p < desc.getRequiredParameterCount(); p++) {
+                for (int p = 0; allParamOk && p < desc.getParameterCount(); p++) {
                     IMetaType pType = getParameterType(desc, p, arguments, unnamedArgsCount);
-                    IMetaType argType = arguments[p].inferType();
+                    IMetaType argType = p < arguments.length ? arguments[p].inferType() : null;
                     // pType==null legacy: undeclared unnamed parameters
-                    if (null != pType && !pType.isAssignableFrom(argType)) {
+                    if (null != argType && null != pType && !pType.isAssignableFrom(argType)) {
                         conversionOps[p] = TypeHelper.findConversion(argType, pType);
                         if (null != conversionOps[p]) {
                             if (argType.checkConversion(pType, conversionOps[p])) {

@@ -3,6 +3,7 @@ package net.ssehub.easy.instantiation.core.model.expressions;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import net.ssehub.easy.instantiation.core.model.common.VariableDeclaration;
 import net.ssehub.easy.instantiation.core.model.common.VilException;
@@ -10,6 +11,7 @@ import net.ssehub.easy.instantiation.core.model.execution.TracerFactory;
 import net.ssehub.easy.instantiation.core.model.expressions.CallExpression.CallType;
 import net.ssehub.easy.instantiation.core.model.vilTypes.Constants;
 import net.ssehub.easy.instantiation.core.model.vilTypes.FieldDescriptor;
+import net.ssehub.easy.instantiation.core.model.vilTypes.IMetaParameterDeclaration;
 import net.ssehub.easy.instantiation.core.model.vilTypes.ListSequence;
 import net.ssehub.easy.instantiation.core.model.vilTypes.ListSet;
 import net.ssehub.easy.instantiation.core.model.vilTypes.OperationDescriptor;
@@ -94,11 +96,28 @@ public class EvaluationVisitor implements IExpressionVisitor {
         }
         Object[] args = new Object[pCount];
         int aCount = 0;
+        Map<String, Object> namedArgs = null;
         for (int p = 0; p < call.getArgumentsCount(); p++) {
             CallArgument arg = call.getArgument(p);
             if (!arg.hasName()) {
                 args[aCount++] = arg.accept(this);
+            } else {
+                IMetaParameterDeclaration pDecl = resolved.getParameter(arg.getName());
+                if (null != pDecl) {
+                    if (null == namedArgs) {
+                        namedArgs = new HashMap<String, Object>();
+                    }
+                    namedArgs.put(arg.getName(), arg.accept(this));
+                }
             }
+        }
+        while (aCount < resolved.getParameterCount()) {
+            IMetaParameterDeclaration pDecl = resolved.getParameter(aCount);
+            Object val = null != namedArgs ? namedArgs.get(pDecl.getName()) : null;
+            if (null == val && null != pDecl.getExpression()) {
+                val = pDecl.getExpression().accept(this);
+            }
+            args[aCount++] = val;
         }
         if (acceptsNamed) {
             args[pCount - 1] = named;

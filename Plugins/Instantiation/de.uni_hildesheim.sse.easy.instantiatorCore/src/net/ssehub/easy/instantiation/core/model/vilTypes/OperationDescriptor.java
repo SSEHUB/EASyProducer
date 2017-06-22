@@ -407,7 +407,7 @@ public abstract class OperationDescriptor implements IMetaOperation {
 
     @Override
     public int getRequiredParameterCount() {
-        return getParameterCount(); // for now
+        return getParameterCount(); // default - no named params
     }
     
     /**
@@ -424,6 +424,16 @@ public abstract class OperationDescriptor implements IMetaOperation {
     
     @Override
     public IMetaParameterDeclaration getParameter(String name) {
+        return null;
+    }
+    
+    /**
+     * Returns the parameter declaration of named parameters.
+     * 
+     * @param index the index of the parameter to return
+     * @return the named parameter or <b>null</b> for an usual parameter
+     */
+    public IMetaParameterDeclaration getParameter(int index) {
         return null;
     }
     

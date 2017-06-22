@@ -8,6 +8,9 @@ package net.ssehub.easy.instantiation.core.model.vilTypes;
 @ClassMeta(name = Constants.TYPE_REAL, equiv = Double.class)
 public class PseudoReal implements IVilType {
 
+    @DefaultValue
+    public static final Double DEFAULT = 0.0;
+    
     /**
      * Prevents external instantiation.
      */

@@ -17,6 +17,9 @@ import net.ssehub.easy.varModel.model.datatypes.OclKeyWords;
 @ClassMeta(name = Constants.TYPE_STRING, equiv = String.class)
 public class PseudoString implements IVilType {
 
+    @DefaultValue
+    public static final String DEFAULT = "";
+    
     /**
      * Prevents external instantiation.
      */

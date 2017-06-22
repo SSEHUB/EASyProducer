@@ -1,5 +1,7 @@
 package net.ssehub.easy.instantiation.core.model.vilTypes;
 
+import java.lang.annotation.Annotation;
+import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
@@ -7,7 +9,11 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+import net.ssehub.easy.basics.logger.EASyLoggerFactory;
+import net.ssehub.easy.instantiation.core.Bundle;
 import net.ssehub.easy.instantiation.core.model.common.VilException;
+import net.ssehub.easy.instantiation.core.model.expressions.ConstantExpression;
+import net.ssehub.easy.instantiation.core.model.expressions.Expression;
 import net.ssehub.easy.instantiation.core.model.vilTypes.IMetaOperation.CompatibilityResult;
 import net.ssehub.easy.varModel.model.values.NullValue;
 import net.ssehub.easy.varModel.model.values.NullValue.NullValueType;
@@ -33,6 +39,8 @@ public class ReflectionOperationDescriptor extends OperationDescriptor implement
     private int returnParameterIndex = -1;
     private boolean storeArtifactsBeforeExecution = false;
     private boolean trace = true;
+    private Map<String, ReflectionOperationParameter> namedParams;
+    private ReflectionOperationParameter[] namedParamsSeq;
     
     /**
      * Creates a new operation descriptor.
@@ -130,10 +138,12 @@ public class ReflectionOperationDescriptor extends OperationDescriptor implement
         OperationMeta meta = method.getAnnotation(OperationMeta.class);
         int[] argGenericIndex = null == meta ? null : meta.genericArgument();
         TypeDescriptor<?> declaring = getDeclaringType();
-        
+        Annotation[][] paramsAnnotations = method.getParameterAnnotations();
+        Map<String, Object> defltValues = null;
         for (int i = 0; i < params.length; i++) {
             if (considerNamed && i == params.length - 1 && Map.class.isAssignableFrom(params[i])) {
                 acceptsNamedParameters = true;
+                // TODO translate legacy named parameters, do not just add to namedParams <-> requiredParams
             } else {
                 TypeDescriptor<?> type = ReflectionResolver.resolveType(params[i], getParameterGenerics(i));
                 if (null != argGenericIndex && i < argGenericIndex.length) {
@@ -143,6 +153,7 @@ public class ReflectionOperationDescriptor extends OperationDescriptor implement
                     }
                 }
                 parameter.add(type);
+                defltValues = checkForNamedParameter(type, i, paramsAnnotations, defltValues, params.length);
             }
         }
         if (acceptsNamedParameters) {
@@ -158,6 +169,106 @@ public class ReflectionOperationDescriptor extends OperationDescriptor implement
             }
         }
         setParameters(parameter, acceptsNamedParameters, acceptsImplicitParameters);
+    }
+    
+    /**
+     * Returns the default values for this method.
+     * 
+     * @return the default values
+     */
+    private Map<String, Object> getDefaultValues() {
+        Map<String, Object> result = null;
+        Object tmp = null;
+        Field[] fields = method.getDeclaringClass().getDeclaredFields();
+        for (int f = 0; f < fields.length; f++) {
+            Field field = fields[f];
+            DefaultValue dv = field.getAnnotation(DefaultValue.class);
+            if (dv != null && Modifier.isStatic(field.getModifiers())) {
+                if (dv.name().equals(method.getName()) 
+                    || (null == tmp && 0 == dv.name().length())) {
+                    field.setAccessible(true); // just to be sure
+                    try {
+                        tmp = field.get(null);
+                    } catch (IllegalArgumentException e) {
+                    } catch (IllegalAccessException e) {
+                    }
+                }
+            }
+        }
+        if (tmp instanceof Map) {
+            Map<?, ?> tmpMap = (Map<?, ?>) tmp;
+            result = new HashMap<String, Object>();
+            for (Map.Entry<?, ?> ent : tmpMap.entrySet()) {
+                result.put(ent.getKey().toString(), ent.getValue());
+            }
+        }
+        return result;
+    }
+
+    /**
+     * Checks the current parameter for a named parameter.
+     * 
+     * @param type the VIL type of the parameter
+     * @param index the 0-based index of the parameter
+     * @param annotations the parameter annotations for the method (may be <b>null</b>)
+     * @param defltValues the default values (global or local, may be <b>null</b>)
+     * @param paramCount the total number of parameters
+     * @return <code>defltValues</code>, a new instance if <code>defltValues</code> is <b>null</b> or <b>null</b>
+     */
+    private Map<String, Object> checkForNamedParameter(TypeDescriptor<?> type, int index, Annotation[][] annotations, 
+        Map<String, Object> defltValues, int paramCount) {
+        ParameterMeta pMeta = TypeHelper.getParameterAnnotation(annotations, index, ParameterMeta.class);
+        if (null != pMeta) {
+            String name = pMeta.name();
+            if (null != name && name.length() > 0) {
+                if (null == namedParams) {
+                    namedParams = new HashMap<String, ReflectionOperationParameter>();
+                    namedParamsSeq = new ReflectionOperationParameter[paramCount];
+                }
+                Expression dflt = null;
+                if (null == defltValues) {
+                    defltValues = getDefaultValues();
+                }
+                Object dfltValue;
+                if (null != defltValues) {
+                    dfltValue = defltValues.get(name);
+                } else {
+                    dfltValue = type.getDefaultValue();
+                }
+                if (null != dfltValue) {
+                    try {
+                        dflt = new ConstantExpression(type, dfltValue, getDeclaringType().getTypeRegistry());
+                    } catch (VilException e) {
+                        EASyLoggerFactory.INSTANCE.getLogger(ReflectionConstructorDescriptor.class, Bundle.ID).error(
+                            "Default value for parameter " + name + " of " + method.getDeclaringClass().getName() + "/" 
+                            + method + " does not match type " + type.getVilName() + ". Ignoring default value.");
+                    }
+                }
+                ReflectionOperationParameter param = new ReflectionOperationParameter(name, type, dflt);
+                namedParams.put(name, param);
+                namedParamsSeq[index] = param;
+            }
+        }
+        return defltValues;
+    }
+    
+    @Override
+    public int getRequiredParameterCount() {
+        int result = getParameterCount();
+        if (null != namedParams) {
+            result -= namedParams.size();
+        }
+        return result;
+    }
+    
+    @Override
+    public IMetaParameterDeclaration getParameter(String name) {
+        return null == namedParams ? null : namedParams.get(name);
+    }
+    
+    @Override
+    public IMetaParameterDeclaration getParameter(int index) {
+        return null == namedParamsSeq ? null : namedParamsSeq[index];
     }
 
     @Override

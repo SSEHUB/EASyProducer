@@ -19,6 +19,7 @@ public abstract class TypeDescriptor <T> implements IMetaType {
     private FieldDescriptor[] fields;
     private OperationDescriptor[] conversions;
     private TypeDescriptor<?>[] parameter;
+
     // reminder: AliasTypeDescriptor must take over / mock some values
 
     /**
@@ -567,6 +568,16 @@ public abstract class TypeDescriptor <T> implements IMetaType {
      * @return access to all instances (may be <b>null</b> if there are none)
      */
     public Set<?> allInstances() {
+        return null;
+    }
+    
+    /**
+     * Returns the default value for this type, usually a neutral value or a constant value
+     * to compare against.
+     * 
+     * @return the default value, <b>null</b> for none - may lead to an undefined operation execution
+     */
+    public Object getDefaultValue() {
         return null;
     }
     

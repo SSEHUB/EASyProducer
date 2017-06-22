@@ -11,6 +11,7 @@ import org.apache.tools.ant.types.selectors.SelectorUtils;
 import net.ssehub.easy.instantiation.core.model.common.VilException;
 import net.ssehub.easy.instantiation.core.model.vilTypes.Constants;
 import net.ssehub.easy.instantiation.core.model.vilTypes.Conversion;
+import net.ssehub.easy.instantiation.core.model.vilTypes.DefaultValue;
 import net.ssehub.easy.instantiation.core.model.vilTypes.IStringValueProvider;
 import net.ssehub.easy.instantiation.core.model.vilTypes.IVilType;
 import net.ssehub.easy.instantiation.core.model.vilTypes.Invisible;
@@ -27,6 +28,7 @@ import net.ssehub.easy.instantiation.core.model.vilTypes.Set;
 public class Path implements IVilType, IStringValueProvider {
 
     public static final String SEPARATOR = "/";
+    @DefaultValue
     public static final Path DUMMY = new Path("", null);
     
     private String path;
@@ -104,7 +106,13 @@ public class Path implements IVilType, IStringValueProvider {
      */
     @Invisible(inherit = true)
     public File getAbsolutePath() {
-        return getAbsolutePath(new File(model.getBasePath()));
+        File result;
+        if (null != model) {
+            result = getAbsolutePath(new File(model.getBasePath()));
+        } else {
+            result = new File(""); // for DUMMY
+        }
+        return result;
     }
     
     /**
@@ -376,8 +384,14 @@ public class Path implements IVilType, IStringValueProvider {
 
     @Override
     public String getStringValue(StringComparator comparator) {
-        // no problem for test, as made relative for output afterwards
-        return PathUtils.normalize(getAbsolutePath().getAbsolutePath());
+        String result;
+        if (DUMMY == this) {
+            result = "";
+        } else {
+            // no problem for test, as made relative for output afterwards
+            result = PathUtils.normalize(getAbsolutePath().getAbsolutePath());
+        }
+        return result;
     }
 
     @Override
