@@ -33,6 +33,9 @@ import net.ssehub.easy.instantiation.core.model.expressions.ExpressionEvaluator;
  */
 public interface Set<T> extends Collection<T> {
 
+    @DefaultValue
+    public static final java.util.Set<?> DEFAULT = new java.util.HashSet<Object>();
+    
     @Override
     @OperationMeta(returnGenerics = IVilType.class)
     public Set<T> selectByType(TypeDescriptor<?> type);

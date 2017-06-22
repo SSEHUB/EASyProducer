@@ -20,6 +20,9 @@ import net.ssehub.easy.instantiation.core.model.expressions.ExpressionEvaluator;
  */
 public class Map<K, V> implements IVilGenericType, IStringValueProvider {
 
+    @DefaultValue
+    public static final java.util.Map<?, ?> DEFAULT = new java.util.HashMap<Object, Object>();
+    
     private java.util.Map<Object, Object> map = new HashMap<Object, Object>();
     private TypeDescriptor<?>[] generics;
     private TypeDescriptor<?> type;

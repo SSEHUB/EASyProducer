@@ -33,6 +33,9 @@ import net.ssehub.easy.instantiation.core.model.expressions.ExpressionEvaluator;
  */
 public interface Sequence<T> extends Collection<T> {
 
+    @DefaultValue
+    public static final java.util.List<?> DEFAULT = new java.util.ArrayList<Object>();
+    
     /**
      * Returns a specific element from the collection.
      * 
