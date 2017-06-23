@@ -39,7 +39,6 @@ class ContainerIterators {
         public BooleanValue aggregate(EvaluationAccessor result, Value iter, EvaluationAccessor value, 
             Map<Object, Object> data) throws ValueDoesNotMatchTypeException {
             // actual aggregation is defined by the apply expression, do not do here anything :o
-            //result.setValue(value.getValue());
             return BooleanValue.FALSE;
         }
 

@@ -581,7 +581,7 @@ public class ContainerOperations {
     };
     
     /**
-     * Implements the "overlaps" operation.
+     * Implements the "flattens" operation.
      */
     static final class FlattenOperationEvaluator implements IOperationEvaluator {
 
