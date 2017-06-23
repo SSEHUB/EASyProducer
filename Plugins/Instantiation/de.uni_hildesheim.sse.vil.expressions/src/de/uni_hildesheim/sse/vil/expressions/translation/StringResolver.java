@@ -150,7 +150,11 @@ public class StringResolver<I extends VariableDeclaration, R extends Resolver<I>
             switch (state) {
             case TEXT:
                 if ('$' == c) {
-                    state = State.VARIABLE_START;
+                    if (pos > 0 && '\\' == text.charAt(pos - 1)) {
+                        state = State.TEXT; // stay, quote
+                    } else {                    
+                        state = State.VARIABLE_START;
+                    }
                 }
                 if (pos == text.length() - 1 && state == State.TEXT) { // In case we are at the end of the line
                     expr = handleConstant(pos + 1);

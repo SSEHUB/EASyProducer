@@ -268,8 +268,10 @@ public class ExpressionWriter extends AbstractWriter implements IExpressionVisit
         } else if (value instanceof String) {
             boolean isInComposite = isInComposite();
             if (isInComposite && isInContent) {
-                value = ((String) value).replaceAll("'", "\\\\'");
-                print(value);
+                String tmp = (String) value;
+                tmp = tmp.replace("\\", "\\\\");
+                tmp = tmp.replaceAll("'", "\\\\'");
+                print(tmp);
             } else {
                 printJavaEscaped((String) value);
             }

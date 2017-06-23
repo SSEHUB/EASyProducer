@@ -22,6 +22,7 @@ import net.ssehub.easy.instantiation.core.model.vilTypes.IStringValueProvider;
 import net.ssehub.easy.instantiation.core.model.vilTypes.Invisible;
 import net.ssehub.easy.instantiation.core.model.vilTypes.ListSet;
 import net.ssehub.easy.instantiation.core.model.vilTypes.OperationMeta;
+import net.ssehub.easy.instantiation.core.model.vilTypes.ParameterMeta;
 import net.ssehub.easy.instantiation.core.model.vilTypes.Set;
 
 /**
@@ -60,10 +61,12 @@ public class XmlElement extends CompositeFragmentArtifact implements IXmlContain
      * Creates a new XmlElement as child of given parent, with given name.
      * @param parent The parent of the new XmlElement.
      * @param name The name of the new XmlElement.
+     * @param contents optional initial contents, ignored if empty
      * @return The created XmlElement.
      * @throws VilException if element could not be created.
      */
-    public static XmlElement create(XmlElement parent, String name) throws VilException {
+    public static XmlElement create(XmlElement parent, String name, 
+        @ParameterMeta(name = "contents") String contents) throws VilException {
         XmlElement newElement = null;
         if (null == parent) {
             throw new VilException("Can not append child from NULL element!", VilException.ID_IS_NULL);
@@ -76,6 +79,9 @@ public class XmlElement extends CompositeFragmentArtifact implements IXmlContain
         } catch (DOMException exc) {
             throw new VilException("Invalid character, name or ID!", VilException.ID_INVALID);
         }
+        if (null != contents && contents.length() > 0) {
+            newElement.setCdata(contents);
+        }
         return newElement;
     }
     
@@ -83,11 +89,13 @@ public class XmlElement extends CompositeFragmentArtifact implements IXmlContain
      * Creates a new XmlElement as child of the root element of the given file artifact, with given name.
      * @param parent The parent of the new XmlElement.
      * @param name The name of the new XmlElement.
+     * @param contents optional initial contents, ignored if empty
      * @return The created XmlElement.
      * @throws VilException if element could not be created.
      */
-    public static XmlElement create(XmlFileArtifact parent, String name) throws VilException {
-        return create(parent.getRootElement(), name); // notifies change
+    public static XmlElement create(XmlFileArtifact parent, String name, 
+        @ParameterMeta(name = "contents") String contents) throws VilException {
+        return create(parent.getRootElement(), name, contents); // notifies change
     }
     
     @Override
@@ -538,6 +546,7 @@ public class XmlElement extends CompositeFragmentArtifact implements IXmlContain
         } else {
             this.cdata.setText(cdata);
         }
+        node.setTextContent(cdata);
     }
     
     /**

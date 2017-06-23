@@ -1,0 +1,12 @@
+template content11(Configuration config, Artifact target) {
+
+    def String myMap(String string) {
+        "test " + string;
+    }
+
+    def main(Configuration config, Artifact target) {
+        String test = "hello";
+        'content \\${myMap(test)} \\$test'
+    }
+
+}

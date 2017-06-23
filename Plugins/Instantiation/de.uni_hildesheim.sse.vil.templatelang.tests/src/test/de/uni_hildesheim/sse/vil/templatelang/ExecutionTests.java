@@ -624,6 +624,16 @@ public class ExecutionTests extends AbstractTest {
     }
     
     /**
+     * Tests escaping replacements.
+     * 
+     * @throws IOException should not occur
+     */
+    @Test
+    public void testContent11() throws IOException {
+        assertEqual("content11");
+    }
+    
+    /**
      * Tests the collect operation on set.
      * 
      * @throws IOException should not occur

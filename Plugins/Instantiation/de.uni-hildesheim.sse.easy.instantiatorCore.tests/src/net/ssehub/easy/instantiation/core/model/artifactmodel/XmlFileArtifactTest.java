@@ -18,6 +18,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.w3c.dom.DOMException;
 
+import net.ssehub.easy.basics.io.FileUtils;
 import net.ssehub.easy.instantiation.core.model.AbstractTest;
 import net.ssehub.easy.instantiation.core.model.artifactModel.ArtifactFactory;
 import net.ssehub.easy.instantiation.core.model.artifactModel.ArtifactModel;
@@ -351,7 +352,6 @@ public class XmlFileArtifactTest extends AbstractTest {
             Assert.fail(e.getMessage());
         }
     }
-    
 
     /**
      * Copy a file using filechannels.
@@ -361,31 +361,22 @@ public class XmlFileArtifactTest extends AbstractTest {
      * @throws IOException Exception.
      */
     private static void copyFileUsingFileChannels(File source, File dest) throws IOException {
+        FileInputStream input = null;
         FileChannel inputChannel = null;
+        FileOutputStream output = null;
         FileChannel outputChannel = null;
    
         try {
-            inputChannel = new FileInputStream(source).getChannel();
-            outputChannel = new FileOutputStream(dest).getChannel();
+            input = new FileInputStream(source);
+            inputChannel = input.getChannel();
+            output = new FileOutputStream(dest);
+            outputChannel = output.getChannel();
             outputChannel.transferFrom(inputChannel, 0, inputChannel.size());
         } finally {
-            closeQuietly(inputChannel);
-            closeQuietly(outputChannel);
-        }
-    }
-    
-    /**
-     * Closes a channel quietly, i.e., without throwing exceptions.
-     * 
-     * @param channel the channel to be closed, may be <b>null</b>
-     */
-    private static void closeQuietly(FileChannel channel) {
-        if (null != channel) {
-            try {
-                channel.close();
-            } catch (IOException e) {
-                Assert.fail(e.getMessage());
-            }
+            FileUtils.closeQuietly(inputChannel);
+            FileUtils.closeQuietly(input);
+            FileUtils.closeQuietly(outputChannel);
+            FileUtils.closeQuietly(output);
         }
     }
     
@@ -707,7 +698,7 @@ public class XmlFileArtifactTest extends AbstractTest {
         
         try { //add an element and see whether the element was created.
             int size = artifactCopy.selectByName("created").size();
-            XmlElement newElem = XmlElement.create(artifactCopy.getRootElement(), "created");
+            XmlElement newElem = XmlElement.create(artifactCopy.getRootElement(), "created", null);
             
             if (newElem == null || !newElem.getName().equals("created")
                     || artifactCopy.selectByName("created").size() != size + 1) {
@@ -717,7 +708,7 @@ public class XmlFileArtifactTest extends AbstractTest {
             try { //try to add an element to a non existing root
                 @SuppressWarnings("unused")
                 XmlElement invNewElem = XmlElement.create(artifactCopy.getRootElement().
-                    selectByName("forTestcaseOnly", true).iterator().next(), "forTestcaseOnly");
+                    selectByName("forTestcaseOnly", true).iterator().next(), "forTestcaseOnly", null);
             } catch (NoSuchElementException e) {
                 invElemFailed = true;
             }
@@ -735,7 +726,7 @@ public class XmlFileArtifactTest extends AbstractTest {
                 
                 @SuppressWarnings("unused")
                 XmlElement newElem2 = XmlElement.create(artifactCopy.getRootElement().elements().
-                    iterator().next(), "created");
+                    iterator().next(), "created", null);
                 
             } catch (VilException e) {
                 Assert.fail(e.getMessage());
@@ -746,7 +737,7 @@ public class XmlFileArtifactTest extends AbstractTest {
             }
             
             try {
-                XmlElement.create(artifact.getRootElement(), "/(�)");
+                XmlElement.create(artifact.getRootElement(), "/(�)", null);
                 //should never occur.
                 Assert.fail();
             } catch (VilException e) {
@@ -754,7 +745,7 @@ public class XmlFileArtifactTest extends AbstractTest {
             } 
             //Try to create an XmlElement for not existing parent
             try {
-                XmlElement.create((XmlElement) null, "test");
+                XmlElement.create((XmlElement) null, "test", null);
                 Assert.fail();
             } catch (VilException e) { 
                 //expected to happen. Appending a child without any parent does not serve any purpose.
@@ -794,7 +785,7 @@ public class XmlFileArtifactTest extends AbstractTest {
         }  
         
         try {
-            XmlElement newElem = XmlElement.create(artifactCopy.getRootElement(), "created");
+            XmlElement newElem = XmlElement.create(artifactCopy.getRootElement(), "created", null);
             XmlAttribute newAtt = XmlAttribute.create(newElem, "test", "attribute");
             if (newAtt == null || !newAtt.getName().equals("test") || !newAtt.getValue().equals("attribute")
                 || newElem.attributes().isEmpty()) {
@@ -846,16 +837,16 @@ public class XmlFileArtifactTest extends AbstractTest {
             int size = artifactCopy.getRootElement().elements().size();
         
             XmlElement newElem1 =
-                XmlElement.create(artifactCopy.getRootElement(), "oneCreated");
+                XmlElement.create(artifactCopy.getRootElement(), "oneCreated", null);
             XmlElement newElem2 =
-                XmlElement.create(artifactCopy.getRootElement(), "secondCreated");
+                XmlElement.create(artifactCopy.getRootElement(), "secondCreated", null);
           
             Assert.assertEquals(artifactCopy.getRootElement().elements().size(), size + 2);
             
             XmlElement newElem3 =
-                XmlElement.create(artifactCopy.getRootElement(), "thirdCreated");
+                XmlElement.create(artifactCopy.getRootElement(), "thirdCreated", null);
             XmlElement newElem4 =
-                XmlElement.create(artifactCopy.getRootElement(), "fourthCreated");
+                XmlElement.create(artifactCopy.getRootElement(), "fourthCreated", null);
          
             Assert.assertEquals(artifactCopy.getRootElement().elements().size(), size + 4);
             
@@ -871,9 +862,9 @@ public class XmlFileArtifactTest extends AbstractTest {
             
             int size2 = artifactCopy.selectByPath("project").iterator().next().elements().size();
             XmlElement pathNewElem1 = 
-                XmlElement.create(artifactCopy.selectByPath("project").iterator().next(), "oneCreated");
+                XmlElement.create(artifactCopy.selectByPath("project").iterator().next(), "oneCreated", null);
             XmlElement pathNewElem2 =
-                XmlElement.create(artifactCopy.selectByPath("project").iterator().next(), "secondCreated");
+                XmlElement.create(artifactCopy.selectByPath("project").iterator().next(), "secondCreated", null);
             
             Assert.assertEquals(artifactCopy.selectByPath("project").iterator().next().elements().size(), size2 + 2);
             Assert.assertFalse(compareXmlFilesManually(artifact, artifactCopy));
@@ -1079,15 +1070,15 @@ public class XmlFileArtifactTest extends AbstractTest {
             int size2 = artifactCopy.selectByPath("secondCreated").size();
             int size3 = artifactCopy.selectByPath("thirdCreatedTwice").size();
             
-            XmlElement newElem1 = XmlElement.create(artifactCopy.getRootElement(), "oneCreated");
-            XmlElement newElem2 = XmlElement.create(artifactCopy.getRootElement(), "secondCreated");
-            XmlElement newElem3 = XmlElement.create(artifactCopy.getRootElement(), "thirdCreated");
-            XmlElement newElem4 = XmlElement.create(artifactCopy.getRootElement(), "thirdCreated");
+            XmlElement newElem1 = XmlElement.create(artifactCopy.getRootElement(), "oneCreated", null);
+            XmlElement newElem2 = XmlElement.create(artifactCopy.getRootElement(), "secondCreated", null);
+            XmlElement newElem3 = XmlElement.create(artifactCopy.getRootElement(), "thirdCreated", null);
+            XmlElement newElem4 = XmlElement.create(artifactCopy.getRootElement(), "thirdCreated", null);
             
             XmlElement newElem5 = XmlElement.create(artifactCopy.getRootElement().elements().iterator().
-                next(), "fourthCreated");
+                next(), "fourthCreated", null);
             XmlElement newElem6 = XmlElement.create(artifactCopy.getRootElement().elements().iterator().
-                next(), "fifthCreated");
+                next(), "fifthCreated", null);
             
             if (newElem1 == null || newElem2 == null || newElem3 == null || newElem4 == null) {
                 Assert.fail();

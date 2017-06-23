@@ -126,7 +126,12 @@ public class StringReplacer {
             switch (state) {
             case TEXT:
                 if ('$' == c) {
-                    state = State.VARIABLE_START;
+                    if (pos > 0 && '\\' == text.charAt(pos - 1)) {
+                        text.deleteCharAt(pos - 1);
+                        state = State.TEXT; // stay, quote
+                    } else {
+                        state = State.VARIABLE_START;
+                    }
                 }
                 break;
             case VARIABLE_START:
