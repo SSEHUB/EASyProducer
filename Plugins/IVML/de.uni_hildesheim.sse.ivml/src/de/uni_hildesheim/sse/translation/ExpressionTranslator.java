@@ -1129,7 +1129,23 @@ public class ExpressionTranslator extends net.ssehub.easy.dslCore.translation.Ex
             if (null == declEx) {
                 List<ActualArgument> args = op.getArgs();
                 if (null == args || args.size() == 1) {
-                    declEx = processExpression(null, null != args ? args.get(0).getArg() : null, context, parent);    
+                    String name = null;
+                    Expression ex = null;
+                    if (null != args) {
+                        ActualArgument arg0 = args.get(0);
+                        name = arg0.getName();
+                        ex = arg0.getArg();
+                    }
+                    declEx = processExpression(null, ex, context, parent);    
+                    if (null != name) {
+                        // turn "default" value into assignment
+                        try {
+                            declEx = new OCLFeatureCall(new Variable(context.findVariable(name, null)), 
+                                OclKeyWords.ASSIGNMENT, declEx);
+                        } catch (ModelQueryException e) {
+                            throw new TranslatorException(e, op, IvmlPackage.Literals.CONTAINER_OP__DECL);
+                        }
+                    }
                 }
             }
             if (null == declEx) {
