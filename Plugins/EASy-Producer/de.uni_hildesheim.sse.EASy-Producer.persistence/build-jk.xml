@@ -54,6 +54,7 @@
 		<copy todir="${build.classes.dir}" failonerror="true" overwrite="true">
 			<fileset dir="${basedir}">
 				<include name="lib/**/*" />
+                <include name="defaultLib/**/*" />
 			</fileset>
 		</copy>
 		<jar destfile="${build.jar.dir}/${ant.project.name}.jar" basedir="${build.classes.dir}" manifest="META-INF/MANIFEST.MF"/>
