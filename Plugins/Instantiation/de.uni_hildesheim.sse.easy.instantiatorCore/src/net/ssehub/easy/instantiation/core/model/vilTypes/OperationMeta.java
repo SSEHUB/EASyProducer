@@ -62,6 +62,8 @@ public @interface OperationMeta {
     
     /**
      * Whether artifacts in the current context shall be stored before executing this operation.
+     * Such operations have more precendece than dynamic auto-store preferences (exclusion) in 
+     * {@link RuntimeEnvironment the runtime environment}.
      */
     boolean storeArtifactsBefore() default false;
     

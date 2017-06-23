@@ -37,6 +37,7 @@ import net.ssehub.easy.instantiation.core.model.artifactModel.FileArtifact;
 import net.ssehub.easy.instantiation.core.model.artifactModel.FragmentArtifact;
 import net.ssehub.easy.instantiation.core.model.artifactModel.IFileSystemArtifact;
 import net.ssehub.easy.instantiation.core.model.artifactModel.Path;
+import net.ssehub.easy.instantiation.core.model.artifactModel.representation.IArtifactRepresentation;
 import net.ssehub.easy.instantiation.core.model.artifactModel.representation.Text;
 import net.ssehub.easy.instantiation.core.model.common.VilException;
 import net.ssehub.easy.instantiation.core.model.vilTypes.ArraySet;
@@ -63,13 +64,14 @@ public class XmlFileArtifact extends FileArtifact implements IXmlContainer {
 
     private XmlElement rootElement;
     
-    private DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-    private TransformerFactory transformerFactory = TransformerFactory.newInstance();
-    private Transformer transformer;
     private Document doc;
     private File file;
     private DtdParser dtdParser = new DtdParser();
     private Dtd dtd;
+    private boolean omitXmlDeclaration = false;
+    private int indentation = 4;
+    private long lastModification = -1;
+    private long lastPersisted = -1;
     
     /**
      * Creates a new XML file artifact.
@@ -80,7 +82,6 @@ public class XmlFileArtifact extends FileArtifact implements IXmlContainer {
      */
     XmlFileArtifact(File file, ArtifactModel model) throws VilException {
         super(file, model);
-        
         this.file = file;
         initialize();
     }
@@ -98,6 +99,7 @@ public class XmlFileArtifact extends FileArtifact implements IXmlContainer {
             if (null != doc.getDocumentElement()) {
                 cleanTree(doc.getDocumentElement());
             }
+            lastPersisted = System.currentTimeMillis();
         }
     }
     
@@ -127,12 +129,23 @@ public class XmlFileArtifact extends FileArtifact implements IXmlContainer {
     
     @Override
     public void artifactChanged(Object cause) throws VilException {
-        initialize();
+        boolean fromRepresentation = cause instanceof IArtifactRepresentation; 
+        if (fromRepresentation) { // change comes from text/binary - take it over as it is
+            omitXmlDeclaration = true;
+        }
+        super.artifactChanged(cause);
+        if (fromRepresentation) { // change comes from text/binary - read in structure again
+            initialize();
+        }
+        lastModification = System.currentTimeMillis();
     }
 
     @Override
     public void store() throws VilException {
-        this.writeToFile();     
+        if (getRepresentationChanged(true)) {
+            writeToFile();
+            lastPersisted = System.currentTimeMillis();
+        }
     }
     
     @Override
@@ -166,7 +179,7 @@ public class XmlFileArtifact extends FileArtifact implements IXmlContainer {
         if (null == rootElement) {
             if (null == doc) {
                 try {
-                    DocumentBuilder builder = factory.newDocumentBuilder();
+                    DocumentBuilder builder = getDocumentBuilderFactory().newDocumentBuilder();
                     doc = builder.newDocument();
                 } catch (ParserConfigurationException exc) {
                     EASyLoggerFactory.INSTANCE.getLogger(getClass(), Bundle.ID).exception(exc);
@@ -176,7 +189,7 @@ public class XmlFileArtifact extends FileArtifact implements IXmlContainer {
             }
             Element elt = doc.createElement(name);
             doc.appendChild(elt);
-            rootElement = new XmlElement(null, name, new XmlAttribute[0], elt);
+            rootElement = new XmlRootElement(this, null, name, new XmlAttribute[0], elt);
         }
         return rootElement;
     }
@@ -212,7 +225,7 @@ public class XmlFileArtifact extends FileArtifact implements IXmlContainer {
         
             DocumentBuilder builder;
             try {
-                builder = factory.newDocumentBuilder();
+                builder = getDocumentBuilderFactory().newDocumentBuilder();
                 doc = builder.parse(file);
             } catch (ParserConfigurationException exc) {
                 EASyLoggerFactory.INSTANCE.getLogger(getClass(), Bundle.ID).exception(exc);
@@ -240,26 +253,25 @@ public class XmlFileArtifact extends FileArtifact implements IXmlContainer {
      * @return an array of XmlElements including all child elements.
      */
     private XmlElement build(Node node, XmlElement parent) {
-     
         //add elements only        
         int amountOfElem = 0;
         List<Integer> list = new ArrayList<Integer>();
-        
         for (int i = 0; i < node.getChildNodes().getLength(); i++) {
-            
             if (node.getChildNodes().item(i).getNodeType() == Node.ELEMENT_NODE) {
                 amountOfElem++;
                 list.add(i);
             }
-            
         }
         
         XmlElement element = null;
         XmlElement[] elements = new XmlElement[amountOfElem];
-        
         XmlAttribute[] attributes = this.createAttributes(node, element);
         
-        element = new XmlElement(parent, node.getNodeName(), attributes, node); 
+        if (null == parent) {
+            element = new XmlRootElement(this, parent, node.getNodeName(), attributes, node); 
+        } else {
+            element = new XmlElement(parent, node.getNodeName(), attributes, node); 
+        }
         
         //try to add textual representation
         //TODO: Test whether CDATA needs to be trimmed too.
@@ -280,7 +292,6 @@ public class XmlFileArtifact extends FileArtifact implements IXmlContainer {
         }
         
         Iterator<XmlAttribute> iter = null;
-        
         try {
             iter = element.attributes().iterator();
         } catch (VilException e) {
@@ -288,26 +299,17 @@ public class XmlFileArtifact extends FileArtifact implements IXmlContainer {
         }
         
         if (null != iter) {
-            
             while (iter.hasNext()) {
-                
                 iter.next().setParent(element);                
-                
             }
-            
         }
               
         //build child elements
         for (int i = 0; i < amountOfElem; i++) {
-            
             elements[i] = build(node.getChildNodes().item(list.get(i)), element);
-            
         }
-        
         element.setElements(elements);
-        
         return element;
-        
     }
 
     /**
@@ -406,7 +408,7 @@ public class XmlFileArtifact extends FileArtifact implements IXmlContainer {
         }
         if (null == doc && null != text && !text.getText().trim().isEmpty()) {
             try {
-                DocumentBuilder builder = factory.newDocumentBuilder();
+                DocumentBuilder builder = getDocumentBuilderFactory().newDocumentBuilder();
                 doc = builder.parse(IOUtils.toInputStream(text.getText()));
                 initializationNeeded = true;
             } catch (ParserConfigurationException exc) {
@@ -429,15 +431,10 @@ public class XmlFileArtifact extends FileArtifact implements IXmlContainer {
             DOMSource source = new DOMSource(doc);
             StreamResult result = null;
             result = new StreamResult(this.file);
-            
             try {
-                transformerFactory = TransformerFactory.newInstance();
-                transformer = transformerFactory.newTransformer();
-                // might be doc.getXmlEncoding();  but this is properly taken over... but may also normalized
-                //transformer.setOutputProperty("encoding", encoding); 
-                transformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "4");
-                transformer.setOutputProperty(OutputKeys.INDENT, "yes");
-                //transformer.setOutputProperty("{http://xml.apache.org/xalan}line-separator", "\r\n");
+                TransformerFactory transformerFactory = TransformerFactory.newInstance();
+                Transformer transformer = transformerFactory.newTransformer();
+                configureTransformer(transformer);
                 transformer.transform(source, result);
             } catch (TransformerException exc) {
                 EASyLoggerFactory.INSTANCE.getLogger(getClass(), Bundle.ID).exception(exc);
@@ -459,6 +456,27 @@ public class XmlFileArtifact extends FileArtifact implements IXmlContainer {
         if (initializationNeeded) {
             initialize();
         }
+    }
+    
+    /**
+     * Configures the transformer.
+     * 
+     * @param transformer the transformer to be configured
+     */
+    protected void configureTransformer(Transformer transformer) {
+        // might be doc.getXmlEncoding();  but this is properly taken over... but may also normalized
+        //transformer.setOutputProperty("encoding", encoding); 
+        if (indentation >= 0) {
+            transformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", 
+                String.valueOf(indentation));
+            transformer.setOutputProperty(OutputKeys.INDENT, "yes");
+        } else {
+            transformer.setOutputProperty(OutputKeys.INDENT, "no");
+        }
+        if (omitXmlDeclaration) {
+            transformer.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "yes");
+        }
+        //transformer.setOutputProperty("{http://xml.apache.org/xalan}line-separator", "\r\n");
     }
     
     /**
@@ -527,7 +545,17 @@ public class XmlFileArtifact extends FileArtifact implements IXmlContainer {
 
     @Override
     public void update() throws VilException {
-        initialize();
+        boolean update = true;
+        File file = getPath().getAbsolutePath();
+        if (null != file) {
+            // update only if file is somehow younger than the last state read/written
+            // and there is no modification that is newer
+            update = file.lastModified() > lastPersisted && !(lastModification > lastPersisted);
+        }
+        if (update) {
+            //super.update();
+            initialize(); 
+        }
     }
     
     /**
@@ -554,7 +582,6 @@ public class XmlFileArtifact extends FileArtifact implements IXmlContainer {
      * @throws VilException If File not found.
      */
     private void readDtd() throws VilException {
-        
         if (null != file && file.length() > 0) {
             try {
                 this.dtd = dtdParser.extractDTD(file);
@@ -594,6 +621,33 @@ public class XmlFileArtifact extends FileArtifact implements IXmlContainer {
             convertedValue = (XmlFileArtifact) val;
         }
         return convertedValue;
+    }
+    
+    /**
+     * Sets the number of whitespaces to use for auto-indenting this artifact while writing/storing.
+     * 
+     * @param indentation the number of whitespaces (default 4), a negative value disables indentation
+     */
+    public void setIndentation(int indentation) {
+        this.indentation = indentation;
+    }
+    
+    /**
+     * Defines whether the usual XML header declaration shall be omitted or printed while writing/storing this artifact.
+     * 
+     * @param omitXmlDeclaration omit if <code>true</code>, emit if <code>false</code> (default)
+     */
+    public void setOmitXmlDeclaration(boolean omitXmlDeclaration) {
+        this.omitXmlDeclaration = omitXmlDeclaration;
+    }
+
+    /**
+     * Returns the document builder factory.
+     * 
+     * @return the factory
+     */
+    protected DocumentBuilderFactory getDocumentBuilderFactory() {
+        return DocumentBuilderFactory.newInstance();
     }
 
 }

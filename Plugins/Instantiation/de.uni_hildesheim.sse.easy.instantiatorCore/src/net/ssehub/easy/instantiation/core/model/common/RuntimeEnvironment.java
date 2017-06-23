@@ -3,8 +3,10 @@ package net.ssehub.easy.instantiation.core.model.common;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.Stack;
 
 import net.ssehub.easy.basics.modelManagement.IModel;
@@ -68,12 +70,12 @@ public abstract class RuntimeEnvironment<V extends VariableDeclaration>
     /**
      * Defines a context for executing one model within.
      * 
-     * @param <V> the variable declaration type
+     * @param <D> the variable declaration type
      * @author Holger Eichelberger
      */
-    private static class Context<V extends VariableDeclaration> {
-        private Stack<Level<V>> levels = new Stack<Level<V>>();
-        private IResolvableModel<V> model;
+    private class Context<D extends VariableDeclaration> {
+        private Stack<Level<D>> levels = new Stack<Level<D>>();
+        private IResolvableModel<D> model;
         private int indentation;
         private IndentationConfiguration indentationConfiguration;
         private String[] paths;
@@ -83,7 +85,7 @@ public abstract class RuntimeEnvironment<V extends VariableDeclaration>
          * 
          * @param model the related model
          */
-        public Context(IResolvableModel<V> model) {
+        public Context(IResolvableModel<D> model) {
             this.model = model;
             if (null != model.getIndentationConfiguration() 
                 && model.getIndentationConfiguration().isIndentationEnabled()) {
@@ -97,7 +99,7 @@ public abstract class RuntimeEnvironment<V extends VariableDeclaration>
          * 
          * @return the model
          */
-        public IResolvableModel<V> getModel() {
+        public IResolvableModel<D> getModel() {
             return model;
         }
 
@@ -112,7 +114,7 @@ public abstract class RuntimeEnvironment<V extends VariableDeclaration>
             boolean found = false;
             Object value = null;  
             for (int l = levels.size() - 1; !found && l >= 0; l--) {
-                Level<V> level = levels.get(l);
+                Level<D> level = levels.get(l);
                 if (level.values.containsKey(resolvable)) {
                     found = true;
                     value = level.values.get(resolvable);
@@ -131,10 +133,10 @@ public abstract class RuntimeEnvironment<V extends VariableDeclaration>
          * @param name the name of the variable
          * @return the variable or <b>null</b> if not found
          */
-        public V get(String name) {
-            V result = null;
+        public D get(String name) {
+            D result = null;
             for (int l = levels.size() - 1; null == result && l >= 0; l--) {
-                Level<V> level = levels.get(l);
+                Level<D> level = levels.get(l);
                 result = level.variables.get(name);
             }
             return result;
@@ -146,10 +148,21 @@ public abstract class RuntimeEnvironment<V extends VariableDeclaration>
          * @param var the variable to look for
          * @return <code>true</code> if <code>var</code> is defined, <code>false</code> else
          */
-        public boolean isDefined(V var) {
+        public boolean isDefined(D var) {
+            return isDefined(var, levels.size() - 1);
+        }
+        
+        /**
+         * Returns whether <code>var</code> is defined (a value was assigned).
+         * 
+         * @param var the variable to look for
+         * @param maxIndex the maximum level index to start searching for
+         * @return <code>true</code> if <code>var</code> is defined, <code>false</code> else
+         */
+        private boolean isDefined(D var, int maxIndex) {
             boolean found = false;
-            for (int l = levels.size() - 1; !found && l >= 0; l--) {
-                Level<V> level = levels.get(l);
+            for (int l = maxIndex; !found && l >= 0; l--) {
+                Level<D> level = levels.get(l);
                 if (level.values.containsKey(var)) {
                     found = null != level.values.get(var);
                 }
@@ -164,7 +177,7 @@ public abstract class RuntimeEnvironment<V extends VariableDeclaration>
          * @param object the value of <code>var</code>
          * @throws VilException in case of an attempt of modifying a constant
          */
-        public void setValue(V var, Object object) throws VilException {
+        public void setValue(D var, Object object) throws VilException {
             if (var.isConstant() && isDefined(var)) {
                 throw new VilException("variable " + var.getName() + " is constant", 
                     VilException.ID_IS_CONSTANT);
@@ -172,7 +185,7 @@ public abstract class RuntimeEnvironment<V extends VariableDeclaration>
             
             boolean found = false;
             for (int l = levels.size() - 1; !found && l >= 0; l--) {
-                Level<V> level = levels.get(l);
+                Level<D> level = levels.get(l);
                 if (level.values.containsKey(var)) {
                     level.values.put(var, object);
                     level.variables.put(var.getName(), var);
@@ -192,7 +205,7 @@ public abstract class RuntimeEnvironment<V extends VariableDeclaration>
          * Pushes a new level.
          */
         public void pushLevel() {
-            levels.push(new Level<V>());
+            levels.push(new Level<D>());
         }
         
         /**
@@ -201,7 +214,7 @@ public abstract class RuntimeEnvironment<V extends VariableDeclaration>
          * @throws VilException in case that storing artifacts fails, the level will be popped anyway
          */
         public void popLevel() throws VilException {
-            storeArtifacts();
+            storeArtifacts(false);
             if (levels.size() > 1) {
                 levels.pop();
             } else {
@@ -210,16 +223,22 @@ public abstract class RuntimeEnvironment<V extends VariableDeclaration>
         }
         
         /**
-         * Stores the recent artifacts.
+         * Stores the recent artifacts, but only artifacts that are not excluded and not initially defined on the 
+         * current level (avoids repeated writing the same artifacts along a nesting hierarchy).
          * 
+         * @param force force storing artifacts
          * @throws VilException in case that storing artifacts fails
+         * @see RuntimeEnvironment#markNoAutoStore(IArtifact)
+         * @see RuntimeEnvironment#unmarkNoAutoStore(IArtifact)
          */
-        public void storeArtifacts() throws VilException {
+        public void storeArtifacts(boolean force) throws VilException {
             if (levels.size() > 0) {
-                Level<V> top = levels.peek();
-                // rather simple, does not look for other levels!
-                for (Object o : top.values.values()) {
-                    if (o instanceof IArtifact) {
+                Level<D> top = levels.peek();
+                int maxLevel = levels.size() - 2; // do not look into top
+                for (Map.Entry<D, Object> ent : top.values.entrySet()) {
+                    Object o = ent.getValue();
+                    if (o instanceof IArtifact 
+                        && (force || (!noAutoStore.contains(o) && !isDefined(ent.getKey(), maxLevel)))) {
                         IArtifact artifact = (IArtifact) o;
                         artifact.store();
                     }
@@ -234,8 +253,8 @@ public abstract class RuntimeEnvironment<V extends VariableDeclaration>
          * @param object the value of <code>var</code>
          * @throws VilException in case of an attempt of modifying a constant
          */
-        public void addValue(V var, Object object) throws VilException {
-            Level<V> level = levels.peek();
+        public void addValue(D var, Object object) throws VilException {
+            Level<D> level = levels.peek();
             level.values.put(var, object);
             level.variables.put(var.getName(), var);
             if (var.getType() == IvmlTypes.configurationType() && object instanceof Configuration) {
@@ -248,8 +267,8 @@ public abstract class RuntimeEnvironment<V extends VariableDeclaration>
          * 
          * @param var the variable to be removed
          */
-        public void removeValue(V var) {
-            Level<V> level = levels.peek();
+        public void removeValue(D var) {
+            Level<D> level = levels.peek();
             Object object = level.values.get(var);
             level.values.remove(var);
             level.variables.remove(var.getName());
@@ -309,7 +328,7 @@ public abstract class RuntimeEnvironment<V extends VariableDeclaration>
             boolean found = false;
             Object value = null;  
             for (int l = levels.size() - 1; !found && l >= 0; l--) {
-                Level<V> level = levels.get(l);
+                Level<D> level = levels.get(l);
                 for (int c = 0; !found && c < level.configurations.size(); c++) {
                     IvmlElement elt = level.configurations.get(c).getElement(name);
                     if (null != elt) {
@@ -347,6 +366,7 @@ public abstract class RuntimeEnvironment<V extends VariableDeclaration>
     private Context<V> currentContext;
     private TypeRegistry typeRegistry;
     private Class<V> cls;
+    private Set<IArtifact> noAutoStore = new HashSet<IArtifact>();
     
     /**
      * Creates a new runtime environment using the default type registry.
@@ -511,8 +531,8 @@ public abstract class RuntimeEnvironment<V extends VariableDeclaration>
     }
 
     @Override
-    public void storeArtifacts() throws VilException {
-        currentContext.storeArtifacts();
+    public void storeArtifacts(boolean force) throws VilException {
+        currentContext.storeArtifacts(force);
     }
     
     /**
@@ -811,4 +831,22 @@ public abstract class RuntimeEnvironment<V extends VariableDeclaration>
         return currentContext.getTopLevelConfiguration();
     }
     
+    /**
+     * Marks artifacts as excluded from auto-storing when related variabeles become unavailable.
+     * 
+     * @param artifact the artifact
+     */
+    public void markNoAutoStore(IArtifact artifact) {
+        noAutoStore.add(artifact);
+    }
+
+    /**
+     * Marks artifacts as again included from auto-storing when related variabeles become unavailable.
+     * 
+     * @param artifact the artifact
+     */
+    public void unmarkNoAutoStore(IArtifact artifact) {
+        noAutoStore.remove(artifact);
+    }
+
 }

@@ -43,7 +43,7 @@ public class XmlAttribute extends FragmentArtifact implements IStringValueProvid
      * @throws VilException if attribute could not be created.
      */
     public static XmlAttribute create(XmlElement parent, String name, String value) throws VilException {       
-        return create(parent, name, value, true);
+        return create(parent, name, value, true); // notifies change
     }
     
     /**
@@ -59,18 +59,15 @@ public class XmlAttribute extends FragmentArtifact implements IStringValueProvid
      */
     public static XmlAttribute create(XmlElement parent, String name, String value, boolean forceOverwrite) 
         throws VilException {
-        
         XmlAttribute newAttribute = null;
-        
         if (null == parent) {
             throw new VilException("Can not add attribute to NULL element!", VilException.ID_IS_NULL);
         }
-        
         Element parentElem = (Element) parent.getNode();
         if (forceOverwrite || !parentElem.hasAttribute(name)) {
             try {
                 parentElem.setAttribute(name, value);
-                newAttribute = parent.addAttribute(name, value);
+                newAttribute = parent.addAttribute(name, value); // notifies change
             } catch (DOMException exc) {
                 throw new VilException("Invalid character, name or ID!", 
                     VilException.ID_INVALID_CHARACTER);
@@ -78,15 +75,13 @@ public class XmlAttribute extends FragmentArtifact implements IStringValueProvid
         } else {
             newAttribute = parent.getAttribute(name);
         }
-
         return newAttribute;
-        
     }
     
     @Override
     public void delete() throws VilException {
         checkValidity();
-        parent.deleteAttribute(this);
+        parent.deleteAttribute(this); // notifies change
         this.parent = null;
     }
 
@@ -117,12 +112,13 @@ public class XmlAttribute extends FragmentArtifact implements IStringValueProvid
         checkValidity();
         this.value = value;
         this.parent.getNode().getAttributes().getNamedItem(this.name).setNodeValue(value);
+        this.parent.notifyChange(this);
     }
 
     @Override
     public void rename(String name) throws VilException {
         checkValidity();
-        parent.renameAttribute(this, name);
+        parent.renameAttribute(this, name); // notifies change
     }
 
     @Override

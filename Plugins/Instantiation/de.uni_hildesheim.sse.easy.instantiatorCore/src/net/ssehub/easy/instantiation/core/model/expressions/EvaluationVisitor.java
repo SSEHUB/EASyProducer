@@ -126,7 +126,7 @@ public class EvaluationVisitor implements IExpressionVisitor {
             environment.getTypeRegistry(), call);
         tracer.visitingCallExpression(resolved, type, args);
         if (resolved.storeArtifactsBeforeExecution()) {
-            environment.storeArtifacts();
+            environment.storeArtifacts(true);
         }
         Object result = resolved.invoke(args);
         if (null == result && call.inferType() == TypeRegistry.voidType()) {

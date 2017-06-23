@@ -63,8 +63,9 @@ public interface IRuntimeEnvironment {
     /**
      * Stores the artifacts in the current context.
      * 
+     * @param force forces storing artifacts even over (dynamic) exclusion criteria
      * @throws VilException in case that storing artifacts fails
      */
-    public void storeArtifacts() throws VilException;
+    public void storeArtifacts(boolean force) throws VilException;
 
 }

@@ -403,12 +403,7 @@ public class BuildlangExecution extends ExecutionVisitor<Script, AbstractRule, V
         return result;
     }
 
-    /**
-     * Releases the resources allocated by this execution.
-     * 
-     * @param releaseDefault shall also default artifacts, i.e., artifacts that cannot be assigned to a source / target
-     *   artifact model be released? May affect execution of other VIL models.
-     */
+    @Override
     public void release(boolean releaseDefault) {
         Object target = getParameter(PARAM_TARGET);
         if (target instanceof Project) {

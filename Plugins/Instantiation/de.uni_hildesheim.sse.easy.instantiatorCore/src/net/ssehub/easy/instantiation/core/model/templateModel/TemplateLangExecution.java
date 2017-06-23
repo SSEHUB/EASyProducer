@@ -118,6 +118,7 @@ public class TemplateLangExecution extends ExecutionVisitor<Template, Def, Varia
         this.out = new PrintWriter(out);
         this.mainName = mainName;
         this.tracer = tracer;
+        enableArtifactAutoStoreOnParameters(false);
     }
     
     /**
@@ -145,6 +146,12 @@ public class TemplateLangExecution extends ExecutionVisitor<Template, Def, Varia
         });
         this.mainName = DEFAULT_MAIN_TEMPLATE;
         this.tracer = NoTracer.INSTANCE;
+    }
+
+    @Override
+    public void release(boolean releaseDefault) {
+        enableArtifactAutoStoreOnParameters(true);
+        super.release(releaseDefault);
     }
     
     /**

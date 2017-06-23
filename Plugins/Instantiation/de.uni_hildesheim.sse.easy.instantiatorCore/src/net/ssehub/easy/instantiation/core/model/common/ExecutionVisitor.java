@@ -90,6 +90,34 @@ public abstract class ExecutionVisitor <M extends IResolvableModel<V>, O extends
     protected Object getParameter(String name) {
         return parameter.get(name);
     }
+
+    /**
+     * Enables/disables auto storing parameters upon variables becoming unavailable.
+     * 
+     * @param autoStore do auto store or not
+     */
+    protected void enableArtifactAutoStoreOnParameters(boolean autoStore) {
+        if (null != parameter) {
+            for (Object a : parameter.values()) {
+                if (a instanceof IArtifact) {
+                    if (autoStore) {
+                        environment.unmarkNoAutoStore((IArtifact) a);
+                    } else {
+                        environment.markNoAutoStore((IArtifact) a);
+                    }
+                }
+            }
+        }
+    }
+    
+    /**
+     * Releases the resources allocated by this execution.
+     * 
+     * @param releaseDefault shall also default artifacts, i.e., artifacts that cannot be assigned to a source / target
+     *   artifact model be released? May affect execution of other VIL models.
+     */
+    public void release(boolean releaseDefault) {
+    }
     
     /**
      * Returns whether the specified parameter is defined.
@@ -536,7 +564,7 @@ public abstract class ExecutionVisitor <M extends IResolvableModel<V>, O extends
         result = call.accept(this);
         environment.decreaseIndentation();
         environment.popLevel();
-        environment.storeArtifacts(); // store artifacts in global variables
+        environment.storeArtifacts(false); // store artifacts in global variables
         return result;
     }
     

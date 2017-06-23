@@ -64,24 +64,18 @@ public class XmlElement extends CompositeFragmentArtifact implements IXmlContain
      * @throws VilException if element could not be created.
      */
     public static XmlElement create(XmlElement parent, String name) throws VilException {
-        
         XmlElement newElement = null;
-        
         if (null == parent) {
             throw new VilException("Can not append child from NULL element!", VilException.ID_IS_NULL);
         }
-
         try {
             Element newNode = parent.getNode().getOwnerDocument().createElement(name);
-            
-            parent.getNode().appendChild(newNode);
-            
+            parent.getNode().appendChild(newNode); // notifies change
             newElement = new XmlElement(parent, name, null, newNode);
-            parent.addChild(newElement);
+            parent.addChild(newElement); // notifies change
         } catch (DOMException exc) {
             throw new VilException("Invalid character, name or ID!", VilException.ID_INVALID);
         }
-        
         return newElement;
     }
     
@@ -93,7 +87,7 @@ public class XmlElement extends CompositeFragmentArtifact implements IXmlContain
      * @throws VilException if element could not be created.
      */
     public static XmlElement create(XmlFileArtifact parent, String name) throws VilException {
-        return create(parent.getRootElement(), name);
+        return create(parent.getRootElement(), name); // notifies change
     }
     
     @Override
@@ -113,23 +107,18 @@ public class XmlElement extends CompositeFragmentArtifact implements IXmlContain
     void deleteChild(XmlElement child) {
         for (int i = 0; i < this.elements.length; i++) {
             if (elements[i] == child) {
-                
                 elements[i] = null;
                 XmlElement[] newElements = new XmlElement[this.elements.length - 1];
-                
                 for (int j = 0; j < newElements.length; j++) {
-                    
                     if (j < i) {
                         newElements[j] = elements[j];
                     } else {
                         newElements[j] = elements[j + 1];
                     }
-                    
                 }
-                
                 i = this.elements.length;
                 this.elements = newElements;
-                
+                notifyChange();
             }
         }        
     }
@@ -144,30 +133,24 @@ public class XmlElement extends CompositeFragmentArtifact implements IXmlContain
     public void rename(String name) throws VilException {
         //checkValidity();
         checkRoot();
-        
         this.name = name;
-
         Element newNode = (node.getOwnerDocument().createElement(name));
-        
         newNode.setNodeValue(this.node.getNodeValue());
         if (this.text != null) {
             newNode.setTextContent(this.node.getTextContent());
         } else if (this.cdata != null) {
             newNode.appendChild((node.getOwnerDocument().createCDATASection(this.cdata.getText())));
         }
-        
         for (int i = 0; i < elements.length; i++) {
             newNode.appendChild(elements[i].getNode());
         }
-        
         for (int i = 0; i < attributes.length; i++) {
             newNode.setAttribute(attributes[i].getName(), attributes[i].getValue());
         }
-        
         this.node.getParentNode().insertBefore(newNode, this.node);
         this.node.getParentNode().removeChild(this.node);
         this.node = newNode;
-        
+        notifyChange();
     }
 
     @Override
@@ -199,15 +182,12 @@ public class XmlElement extends CompositeFragmentArtifact implements IXmlContain
     
     @Override
     public boolean exists() {
-        
         boolean exists = true;
-        
         try {
             checkValidity();
         } catch (VilException exc) {
             exists = false;
         }
-        
         return exists;
     }
 
@@ -300,13 +280,13 @@ public class XmlElement extends CompositeFragmentArtifact implements IXmlContain
                         if (this.node.getNodeType() == Node.ELEMENT_NODE) {
                             Element element = (Element) this.getNode();
                             element.setAttribute(name,  value);
+                            notifyChange();
                         }
                         break;
                     }
                 }
             }
         }
-        
     }
 
     /**
@@ -371,7 +351,6 @@ public class XmlElement extends CompositeFragmentArtifact implements IXmlContain
     public Set<XmlElement> selectByName(String name, boolean caseSensitive) throws VilException {
         //checkValidity();
         List<XmlElement> result = new ArrayList<XmlElement>();
-        
         if (caseSensitive) {
             if (this.name.equals(name)) {
                 result.add(this);
@@ -381,7 +360,6 @@ public class XmlElement extends CompositeFragmentArtifact implements IXmlContain
                 result.add(this);
             }
         }
-        
         if (null != this.elements) {
             for (int i = 0; i < this.elements.length; i++) {
                 if (this.elements[i] != null) {
@@ -396,7 +374,6 @@ public class XmlElement extends CompositeFragmentArtifact implements IXmlContain
 //                }
             }
         }
-        
         return new ListSet<XmlElement>(result, XmlElement.class);
     }
     
@@ -416,24 +393,20 @@ public class XmlElement extends CompositeFragmentArtifact implements IXmlContain
         //checkValidity();
         List<XmlElement> result = new ArrayList<XmlElement>();
         Pattern pattern;
-        
         try {
             pattern = Pattern.compile(regEx);
         } catch (PatternSyntaxException e) {
             throw new VilException(e, VilException.ID_PATTERN);
         }
-        
         if (pattern.matcher(this.getName()).matches()) {
             result.add(this);
         }
-        
         for (int i = 0; i < this.elements.length; i++) {
             Iterator<XmlElement> subIterator = this.elements[i].selectByRegEx(regEx).iterator();
             while (subIterator.hasNext()) {
                 result.add(subIterator.next());
             }
         }
-
         return new ListSet<XmlElement>(result, XmlElement.class);
     }
     
@@ -453,7 +426,8 @@ public class XmlElement extends CompositeFragmentArtifact implements IXmlContain
                     } catch (VilException e) {
                         e.printStackTrace();
                     }
-                    attributes[a] = null;    
+                    attributes[a] = null;
+                    notifyChange();
                     break;
                 }
             }
@@ -488,7 +462,8 @@ public class XmlElement extends CompositeFragmentArtifact implements IXmlContain
                 this.node.getAttributes().removeNamedItem(attribute.getName());
                 Element element = (Element) this.node;
                 element.setAttribute(name, attribute.getValue());
-                attribute.setName(name);                
+                attribute.setName(name);
+                notifyChange(attribute);
             }
             if (null != caught && !caught.isEmpty()) {
                 throw new VilException(caught);
@@ -585,14 +560,12 @@ public class XmlElement extends CompositeFragmentArtifact implements IXmlContain
      */
     boolean hasChild(XmlElement child) {
         boolean has = false;
-        
         for (int i = 0; i < this.elements.length; i++) {
             if (elements[i] == child) {
                 has = true;
                 i = this.elements.length;
             }
         }
-        
         return has;
     }
     
@@ -608,27 +581,22 @@ public class XmlElement extends CompositeFragmentArtifact implements IXmlContain
      * @throws VilException If child could not be added.
      */
     void addChild(XmlElement child) throws VilException {
-        
         if (null == child) {
             throw new VilException("NULL can not be added as a child of an XmlElement!", 
                 VilException.ID_IS_NULL);
         }
-        
         XmlElement[] newElements;
         if (null != this.elements) {
             newElements = new XmlElement[this.elements.length + 1];
         } else {
             newElements = new XmlElement[1];
         }
-        
         for (int i = 0; i < (newElements.length - 1); i++) {
             newElements[i] = this.elements[i];
         }
-        
         newElements[newElements.length - 1] = child;
-        
         this.elements = newElements;
-        
+        notifyChange();
     }
     
     /**
@@ -640,23 +608,19 @@ public class XmlElement extends CompositeFragmentArtifact implements IXmlContain
      * @throws VilException If child could not be appended.
      */
     XmlElement appendChild(XmlElement child, Node childNode) throws VilException {
-        
         if (null == child || null == childNode) {
             throw new VilException("NULL can not be added as a child of an XmlElement!", 
                 VilException.ID_IS_NULL);
         }
-        
         this.insertElement(child, this.elements[this.elements.length - 1]);
-        
         try {
             this.node.appendChild(childNode);
         } catch (DOMException exc) {
             throw new VilException("Unable to append a child from a " + this.node.getNodeName() + " Node!", 
                 VilException.ID_INVALID);
         }
-        
+        notifyChange();
         return child;
-        
     }
     
     /**
@@ -668,9 +632,7 @@ public class XmlElement extends CompositeFragmentArtifact implements IXmlContain
      * @throws VilException If attribute could not be added.
      */
     XmlAttribute addAttribute(String name, String value) throws VilException {
-
         return addAttribute(name, value, true);
-        
     }
     
     /**
@@ -683,36 +645,28 @@ public class XmlElement extends CompositeFragmentArtifact implements IXmlContain
      * @throws VilException If attribute could not be added.
      */
     XmlAttribute addAttribute(String name, String value, boolean forceOverwrite) throws VilException {
-        
         XmlAttribute previousAtt = this.getAttribute(name);
         XmlAttribute newAtt = null;
-        
         if (previousAtt == null) {
-            
             XmlAttribute[] newAttributes;
             if (null != this.attributes) {
                 newAttributes = new XmlAttribute[this.attributes.length + 1];
             } else {
                 newAttributes = new XmlAttribute[1];
             }
-            
             for (int i = 0; i < (newAttributes.length - 1); i++) {
                 newAttributes[i] = this.attributes[i];
             }
-            
             newAtt = new XmlAttribute(this, name, value);
             newAttributes[newAttributes.length - 1] = newAtt;
-            
             this.attributes = newAttributes;
-            
         } else {
             previousAtt.setValue(value);
             ((Element) this.getNode()).setAttribute(name, value);
             newAtt = previousAtt;
         }  
-        
+        notifyChange();
         return newAtt;
-        
     }
     
     /**
@@ -722,18 +676,15 @@ public class XmlElement extends CompositeFragmentArtifact implements IXmlContain
      * @throws VilException if XmlElement could not be inserted for whatever reason.
      */
     private void insertElement(XmlElement elem, XmlElement previous) throws VilException {
-        
         if (null == elem) {
             throw new VilException("Tried to insert NULL element as child!", VilException.ID_IS_NULL);
         }
-        
         XmlElement[] newElements;
         if (null != this.elements) {
             newElements = new XmlElement[this.elements.length + 1];
         } else {
             newElements = new XmlElement[1];
         }
-        
         for (int i = 0; i < (newElements.length - 1); i++) {
             newElements[i] = this.elements[i];
             if (null != previous && newElements[i].equals(previous)) {
@@ -741,13 +692,11 @@ public class XmlElement extends CompositeFragmentArtifact implements IXmlContain
                 i++;
             }
         }
-        
         if (null == previous) {
             newElements[newElements.length - 1] = elem;
         }
-        
         this.elements = newElements;
-        
+        notifyChange();
     }
 
     @Override
@@ -759,6 +708,39 @@ public class XmlElement extends CompositeFragmentArtifact implements IXmlContain
     @Override
     public void artifactChanged(Object cause) throws VilException {
         node.setTextContent(cdata.getText());
+        notifyChange(this);
+    }
+
+    /**
+     * Returns the parent XML file artifact.
+     * 
+     * @return the parent file artifact, may be <b>null</b>
+     */
+    @Invisible
+    XmlFileArtifact getFile() {
+        return null != parent ? parent.getFile() : null;
+    }
+
+    /**
+     * Notifies the containing file about a change through this object.
+     */
+    protected void notifyChange() {
+        notifyChange(this);
+    }
+    
+    /**
+     * Notifies the containing file about a change.
+     * 
+     * @param cause the causing object
+     */
+    void notifyChange(Object cause) {
+        XmlFileArtifact file = getFile();
+        if (null != file) {
+            try { 
+                file.artifactChanged(cause);
+            } catch (VilException e) {
+            }
+        }
     }
     
 }

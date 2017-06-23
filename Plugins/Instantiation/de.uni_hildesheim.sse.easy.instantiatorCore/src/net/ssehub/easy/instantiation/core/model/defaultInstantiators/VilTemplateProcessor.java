@@ -550,8 +550,9 @@ public class VilTemplateProcessor implements IVilType {
             String tmp = out.toString();
             if (tmp.length() > 0) {
                 target.getText().setText(tmp);
-                target.store(); // just to be sure for the moment
             }
+            target.store();
+            exec.release(false);
         } catch (VilException e) {
             unregisterTerminatable(terminator, exec);
             
@@ -671,11 +672,11 @@ public class VilTemplateProcessor implements IVilType {
 
         @Override
         public TypeRegistry getTypeRegistry() {
-            return TypeRegistry.DEFAULT; // TODO unsure whether local is needed
+            return TypeRegistry.DEFAULT;
         }
 
         @Override
-        public void storeArtifacts() throws VilException {
+        public void storeArtifacts(boolean force) throws VilException {
         }
         
     }
