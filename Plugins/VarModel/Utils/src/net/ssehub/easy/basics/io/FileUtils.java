@@ -137,7 +137,20 @@ public class FileUtils {
      * @return the temporary directory
      */
     public static File createTmpDir(String name, boolean deleteIfExists) {
-        File result = new File(System.getProperty("java.io.tempdir"));
+        File result;
+        String tmp = System.getProperty("java.io.tempdir");
+        if (null == tmp) {
+            try {
+                File f = File.createTempFile("easy", "tmp");
+                result = f.getParentFile();
+                f.delete();
+            } catch (IOException e) {
+                result = new File("tmp");
+                result.mkdirs();
+            }
+        } else {
+            result = new File(tmp);
+        }
         if (null != name) {
             result = new File(result, name);
         }
