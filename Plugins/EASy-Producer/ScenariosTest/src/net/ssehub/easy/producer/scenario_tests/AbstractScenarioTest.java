@@ -27,6 +27,8 @@ import net.ssehub.easy.instantiation.core.model.vilTypes.Project;
 import net.ssehub.easy.instantiation.core.model.vilTypes.configuration.Configuration;
 import net.ssehub.easy.instantiation.java.Registration;
 import net.ssehub.easy.producer.core.persistence.PersistenceUtils;
+import net.ssehub.easy.reasoning.core.frontend.ReasonerFrontend;
+import net.ssehub.easy.reasoning.sseReasoner.Reasoner;
 import net.ssehub.easy.varModel.management.VarModel;
 import test.de.uni_hildesheim.sse.vil.buildlang.AbstractTest;
 import test.de.uni_hildesheim.sse.vil.buildlang.BuildLangTestConfigurer;
@@ -39,7 +41,7 @@ import test.de.uni_hildesheim.sse.vil.buildlang.ITestConfigurer;
  */
 public abstract class AbstractScenarioTest extends AbstractTest<Script> {
 
-    protected static boolean debug = true;
+    protected static boolean debug = false;
 
     /**
      * Defines the default model paths (IVML, VIL, VTL).
@@ -53,6 +55,9 @@ public abstract class AbstractScenarioTest extends AbstractTest<Script> {
     
     @Override
     protected void furtherInitialization() {
+        Reasoner reasoner = new Reasoner();
+        ReasonerFrontend.getInstance().getRegistry().register(reasoner);
+        ReasonerFrontend.getInstance().setReasonerHint(reasoner.getDescriptor());
         Registration.register();
         net.ssehub.easy.instantiation.ant.Registration.register();
         net.ssehub.easy.instantiation.aspectj.Registration.register();
@@ -92,6 +97,17 @@ public abstract class AbstractScenarioTest extends AbstractTest<Script> {
         String[] names = new String[1];
         names[0] = projectName;
         return executeCase(names, versions, caseFolder, sourceProjectName, makeExecutable);
+    }
+    
+    /**
+     * Projects the specified version from <code>versions</code>.
+     * 
+     * @param versions the versions (may be <b>null</b>)
+     * @param index the index within version (ignored if <code>versions</code> is <b>null</b>)
+     * @return the version or <b>null</b>
+     */
+    private static String project(String[] versions, int index) {
+        return null == versions ? null : versions[index];
     }
     
     /**
@@ -136,7 +152,7 @@ public abstract class AbstractScenarioTest extends AbstractTest<Script> {
         } catch (ModelManagementException e) {
             Assert.fail("unexpected exception: " + e.getMessage());
         }
-        net.ssehub.easy.varModel.model.Project ivmlModel = obtainIvmlModel(modelName, versions[0], ivmlFolder);
+        net.ssehub.easy.varModel.model.Project ivmlModel = obtainIvmlModel(modelName, project(versions, 0), ivmlFolder);
         Configuration config = new Configuration(new net.ssehub.easy.varModel.confModel.Configuration(ivmlModel));
         File sourceFile = temp.getAbsoluteFile();
         Project source = createProjectInstance(sourceFile);
@@ -156,7 +172,7 @@ public abstract class AbstractScenarioTest extends AbstractTest<Script> {
         TracerFactory current = TracerFactory.getInstance();
         TracerFactory tFactory = getTracerFactory();
         TracerFactory.setDefaultInstance(tFactory);
-        Script script = obtainVilModel(modelName, versions[1], vilFolder);
+        Script script = obtainVilModel(modelName, project(versions, 1), vilFolder);
         Executor executor = new Executor(script, param);
         executor.addBase(targetFile);
         try {
@@ -198,7 +214,11 @@ public abstract class AbstractScenarioTest extends AbstractTest<Script> {
      * @return the VIL model
      */
     private static Script obtainVilModel(String projectName, String vilVersion, File vilFolder) {
-        URI scriptURI = new File(vilFolder, projectName + "_" + vilVersion + ".vil").toURI();
+        String versionPostfix = "";
+        if (null != vilVersion) {
+            versionPostfix = "_" + vilVersion;
+        }
+        URI scriptURI = new File(vilFolder, projectName + versionPostfix + ".vil").toURI();
         Script script = null;
         try {
             ModelInfo<Script> info = 
