@@ -69,7 +69,7 @@ public abstract class AbstractPathRuleMatchExpression extends AbstractRuleMatchE
                         List<String> rhsTokens = tokenize(rhsPath, false);
                         match(rhsTokens, rhsValueText);
                         String lhs = replaceWildcards(lhsTokens, rhsTokens);
-                        resultPath = new Path(lhs, getResolved().getArtifactModel());
+                        resultPath = Path.createInstance(lhs, getResolved().getArtifactModel());
                         //}
                     }
                 }

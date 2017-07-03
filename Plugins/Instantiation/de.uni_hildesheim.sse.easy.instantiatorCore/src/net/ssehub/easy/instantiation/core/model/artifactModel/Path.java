@@ -41,9 +41,9 @@ public class Path implements IVilType, IStringValueProvider {
      * @param file the file to construct the path from
      * @param model the artifact model as a basis for relative paths
      */
-    public Path(File file, ArtifactModel model) {
-        this(file.getAbsolutePath(), model);
-    }
+    //private Path(File file, ArtifactModel model) {
+    //    this(file.getAbsolutePath(), model);
+    //}
     
     /**
      * Creates a path from the given string representation. A path may be 
@@ -52,7 +52,7 @@ public class Path implements IVilType, IStringValueProvider {
      * @param path the path to construct the path object from
      * @param model the artifact model as a basis for relative paths
      */
-    public Path(String path, ArtifactModel model) {
+    protected Path(String path, ArtifactModel model) {
         this.model = model;
         this.path = ArtifactModel.makeRelative(path, model);
     }
@@ -64,8 +64,68 @@ public class Path implements IVilType, IStringValueProvider {
      * @param path the path to construct this path object from
      * @param model the artifact model as a basis for relative paths
      */
-    public Path(Path path, ArtifactModel model) {
-        this(path.getPath(), model);
+    //private Path(Path path, ArtifactModel model) {
+    //    this(path.getPath(), model);
+    //}
+
+    /**
+     * Creates a path from the given (relative) <code>path</code> and directly localizes 
+     * it into <code>model</code>. A path may be a (regular) pattern!
+     * 
+     * @param path the path to construct this path object from
+     * @param model the artifact model as a basis for relative paths
+     * @return the created path
+     */
+    @Invisible
+    public static Path createInstance(Path path, ArtifactModel model) {
+        return lookupOrCreate(path.getPath(), model);
+    }
+
+    /**
+     * Creates a path from the given string representation. A path may be 
+     * a (regular) pattern!
+     * 
+     * @param path the path to construct the path object from
+     * @param model the artifact model as a basis for relative paths
+     * @return the created path
+     */
+    @Invisible
+    public static Path createInstance(String path, ArtifactModel model) {
+        return lookupOrCreate(path, model);  
+    }
+
+    /**
+     * Creates a path from the given string representation. A path may be 
+     * a (regular) pattern!
+     * 
+     * @param file the file to construct the path from
+     * @param model the artifact model as a basis for relative paths
+     * @return the created path
+     */
+    @Invisible
+    public static Path createInstance(File file, ArtifactModel model) {
+        return lookupOrCreate(file.getAbsolutePath(), model);
+    }
+
+    /**
+     * Looks up the given path in the path cache or creates a new path object registering it in the path cache of 
+     * <code>model</code>.
+     * 
+     * @param path the path to create the path object for
+     * @param model the artifact model as a basis for relative paths
+     * @return the created/found path
+     */
+    private static Path lookupOrCreate(String path, ArtifactModel model) {
+        String relPath = ArtifactModel.makeRelative(path, model);
+        ArtifactModel qModel = null == model ? ArtifactFactory.getDefaultArtifactModel() : model;
+        Path result = qModel.getPathFromCache(relPath);
+        if (null == result) {
+            result = new Path(path, model); // may be relPath but then double normalization, keep norm. in constructor
+            if (null != model) {
+                model.registerPath(result);
+            }
+        }
+        return result;
     }
     
     /**
@@ -87,7 +147,7 @@ public class Path implements IVilType, IStringValueProvider {
      * @throws VilException in case that the path does not comply to Java conventions
      */
     public static Path create(String path) throws VilException {
-        return new Path(path, ArtifactFactory.findModel(path));
+        return createInstance(path, ArtifactFactory.findModel(path));
     }
     
     /**
@@ -125,7 +185,7 @@ public class Path implements IVilType, IStringValueProvider {
         File f = new File(path);
         File parent = f.getParentFile();
         if (null != parent) {
-            result = new Path(parent, ArtifactFactory.findModel(parent));
+            result = createInstance(parent, ArtifactFactory.findModel(parent));
         }
         return result;
     }
@@ -242,7 +302,7 @@ public class Path implements IVilType, IStringValueProvider {
     @Invisible
     @Conversion
     public static Path convert(String val) {
-        return new Path(val, ArtifactFactory.findModel(val));
+        return createInstance(val, ArtifactFactory.findModel(val));
     }
     
     /**
@@ -490,6 +550,9 @@ public class Path implements IVilType, IStringValueProvider {
      * @throws VilException in case that renaming fails
      */
     public Path rename(String name) throws VilException {
+        if (null != this.model) {
+            this.model.beforeRename(this);
+        }
         Path result = this;
         File file = new File(name);
         if (!file.isAbsolute()) {
@@ -504,7 +567,12 @@ public class Path implements IVilType, IStringValueProvider {
         FileUtils.rename(getAbsolutePath(), file);
         ArtifactModel model = ArtifactFactory.findModel(file);
         if (null != model) {
-            result = new Path(getPath(), model);
+            this.model = model;
+            //result = createInstance(getPath(), model);
+        }
+        path = ArtifactModel.makeRelative(file.getAbsolutePath(), model);
+        if (null != this.model) {
+            this.model.afterRename(this);
         }
         return result;
     }

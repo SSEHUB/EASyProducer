@@ -39,21 +39,21 @@
     }
     -> joinfields(Sequence, String, String, String) with ({0, 1, 10, 2, 3, 4, 5, 6, 7, 8, 9}, ,, {, }) = {0,1,2,3,4,5,6,7,8,9,10}
     tmp <- {0,1,2,3,4,5,6,7,8,9,10}
-    -> removeAt(Sequence, Integer) with ({0, 1, 10, 2, 3, 4, 5, 6, 7, 8}, 9) = 9
+    -> removeAt(Sequence, Integer) with ({0, 1, 10, 2, 3, 4, 5, 6, 7, 8, 9}, 9) = 9
     -> joinfields(Sequence, String, String, String) with ({0, 1, 10, 2, 3, 4, 5, 6, 7, 8}, ,, {, }) = {0,1,2,3,4,5,6,7,8,10}
     tmp <- {0,1,2,3,4,5,6,7,8,10}
-    -> removeFirst(Sequence) with ({1, 10, 2, 3, 4, 5, 6, 7, 8}) = 0
+    -> removeFirst(Sequence) with ({0, 1, 10, 2, 3, 4, 5, 6, 7, 8}) = 0
     -> joinfields(Sequence, String, String, String) with ({1, 10, 2, 3, 4, 5, 6, 7, 8}, ,, {, }) = {1,2,3,4,5,6,7,8,10}
     tmp <- {1,2,3,4,5,6,7,8,10}
-    -> removeLast(Sequence) with ({1, 2, 3, 4, 5, 6, 7, 8}) = 10
+    -> removeLast(Sequence) with ({1, 10, 2, 3, 4, 5, 6, 7, 8}) = 10
     -> joinfields(Sequence, String, String, String) with ({1, 2, 3, 4, 5, 6, 7, 8}, ,, {, }) = {1,2,3,4,5,6,7,8}
     tmp <- {1,2,3,4,5,6,7,8}
-    -> removeAll(Sequence, Any) with ({1, 2, 3, 5, 6, 7, 8}, 4)
+    -> removeAll(Sequence, Any) with ({1, 2, 3, 4, 5, 6, 7, 8}, 4)
     -> joinfields(Sequence, String, String, String) with ({1, 2, 3, 5, 6, 7, 8}, ,, {, }) = {1,2,3,5,6,7,8}
     tmp <- {1,2,3,5,6,7,8}
     nums <- {3, 4, 4, 4, 4, 4, 5}
     -> joinfields(Sequence, String, String, String) with ({3, 4, 4, 4, 4, 4, 5}, ,, {, }) = {4,4,5,4,4,3,4}
     tmp <- {4,4,5,4,4,3,4}
-    -> removeAll(Sequence, Any) with ({3, 5}, 4)
+    -> removeAll(Sequence, Any) with ({3, 4, 4, 4, 4, 4, 5}, 4)
     -> joinfields(Sequence, String, String, String) with ({3, 5}, ,, {, }) = {5,3}
     tmp <- {5,3}

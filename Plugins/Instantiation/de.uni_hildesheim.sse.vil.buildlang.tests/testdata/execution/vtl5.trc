@@ -1,0 +1,7 @@
+-> main(Project, Project, Configuration) with (<project>, <project>, <config>)
+    p <- vtl5.tmp
+-> main(Configuration, FileArtifact) with (<config>, vtl5.tmp)
+    -> rename(FileArtifact, String) with (vtl5.tmp, vtl5.t1p)
+    -> vilTemplateProcessor(String, Configuration, Artifact) with (/templates/vtl5.vtl, <config>, vtl5.tmp, {}) = {vtl5.t1p}
+    -> println(Any) with (vtl5.t1p)
+    -> rename(Path, String) with (vtl5.t1p, /vtl5.tip) = vtl5.tip

@@ -17,8 +17,8 @@ b2 <- true
     b3 <- false
     -> notEmpty(Map) with ({{NDL, EU}, {sap, siemens}}) = true
     b4 <- true
-    -> add(Map, String, String) with ({{here, there}}, here, there)
-    -> put(Map, String, String) with ({{here, there}, {x, y}}, x, y)
+    -> add(Map, String, String) with ({}, here, there)
+    -> put(Map, String, String) with ({{here, there}}, x, y)
     -> defaultget(Map, Any, Any) with ({{NDL, EU}, {sap, siemens}}, x, z) = z
     s5 <- z
     -> defaultget(Map, Any, Any) with ({{here, there}, {x, y}}, x, z) = y

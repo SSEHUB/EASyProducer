@@ -1,0 +1,10 @@
+vilScript vtl5 (Project source, Project target, Configuration config) {
+
+    main(Project source, Project target, Configuration config) = : {
+        Path p = "$target/vtl5.tmp";
+        vilTemplateProcessor("$source/templates/vtl5.vtl", config, p);
+        println(p);
+        p.rename("$target/vtl5.tip");
+    }
+
+}

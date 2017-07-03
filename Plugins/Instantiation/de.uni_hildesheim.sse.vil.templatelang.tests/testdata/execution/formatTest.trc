@@ -16,7 +16,7 @@
     -> format(String, Any) with (Combined: %d %s %.2f, {10, 42.12, abba}) = Combined: 10 abba 42,12
     f6 <- Combined: 10 abba 42,12
     keyValues <- {}
-    -> add(Map, String, String) with ({{k1, v1}}, k1, v1)
-    -> add(Map, String, String) with ({{k1, v1}, {k2, v2}}, k2, v2)
+    -> add(Map, String, String) with ({}, k1, v1)
+    -> add(Map, String, String) with ({{k1, v1}}, k2, v2)
     -> format(String, Any) with (Combined: %(k1) %(k2), {{k1, v1}, {k2, v2}}) = Combined: v1 v2
     f7 <- Combined: v1 v2

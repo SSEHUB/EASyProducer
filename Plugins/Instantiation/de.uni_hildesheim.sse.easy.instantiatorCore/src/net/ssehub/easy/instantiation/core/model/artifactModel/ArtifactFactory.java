@@ -409,5 +409,15 @@ public class ArtifactFactory {
         }
         return result;
     }
+    
+    /**
+     * Returns the default artifact model.
+     * 
+     * @return the default artifact model
+     */
+    static ArtifactModel getDefaultArtifactModel() {
+        initialize();
+        return MODELS.get(0);
+    }
 
 }

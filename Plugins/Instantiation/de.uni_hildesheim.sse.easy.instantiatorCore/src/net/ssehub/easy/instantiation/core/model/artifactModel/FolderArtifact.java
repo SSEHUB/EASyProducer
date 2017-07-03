@@ -54,7 +54,7 @@ public class FolderArtifact extends SimpleArtifact implements IFileSystemArtifac
      * @param model the artifact model to create this folder artifact within
      */
     protected FolderArtifact(File file, ArtifactModel model) {
-        path = new Path(file, model);
+        path = Path.createInstance(file, model);
     }
     
     /**

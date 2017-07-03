@@ -51,7 +51,7 @@ public class FileArtifact extends CompositeArtifact implements IFileSystemArtifa
      * @param model the artifact model to create this folder artifact within
      */
     protected FileArtifact(File file, ArtifactModel model) {
-        path = new Path(file, model);
+        path = Path.createInstance(file, model);
     }
 
     /**
@@ -62,7 +62,7 @@ public class FileArtifact extends CompositeArtifact implements IFileSystemArtifa
      */
     protected FileArtifact(Path path, ArtifactModel model) {
         if (path.getArtifactModel() != model) {
-            this.path = new Path(path.getPath(), model);
+            this.path = Path.createInstance(path.getPath(), model);
         } else {
             this.path = path;
         }

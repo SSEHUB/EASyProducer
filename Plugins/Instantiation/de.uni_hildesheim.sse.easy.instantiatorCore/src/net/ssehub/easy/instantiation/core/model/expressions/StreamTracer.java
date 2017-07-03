@@ -6,6 +6,7 @@ import java.net.URI;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Stack;
 
 import net.ssehub.easy.basics.DefaultLocale;
 import net.ssehub.easy.instantiation.core.model.common.RuntimeEnvironment;
@@ -55,6 +56,7 @@ public abstract class StreamTracer extends AbstractWriter implements ITracer {
     private Locale locale = DefaultLocale.getDefaultLocale();
     private String[] baseFolder;
     private RuntimeEnvironment<?> environment;
+    private Stack<String> callStack = new Stack<String>();
     
     /**
      * Creates a new stream tracer.
@@ -109,13 +111,48 @@ public abstract class StreamTracer extends AbstractWriter implements ITracer {
     
     @Override
     public void visitingCallExpression(OperationDescriptor descriptor, CallType callType, Object[] args) {
+        if (CallType.TRANSPARENT != callType) {
+            String text = "-> ";
+            text += descriptor.getName();
+            if (descriptor.isConstructor() && null != descriptor.getReturnType()) {
+                text += " ";
+                text += descriptor.getReturnType().getVilName();
+            }
+            text += "(";
+            if (null != args) {
+                for (int p = 0; p < descriptor.getParameterCount(); p++) {
+                    if (p > 0) {
+                        text += ", ";
+                    }
+                    text += descriptor.getParameterType(p).getName();
+                }
+            }
+            text += ") with (";
+            if (null != args) {
+                for (int a = 0; a < args.length; a++) {
+                    if (a > 0) {
+                        text += ", ";
+                    }
+                    Object tmp = args[a];
+                    if (descriptor.acceptsImplicitParameters() && a == args.length - 1 
+                        && tmp instanceof Map<?, ?>) {
+                        tmp = skipImplicitArguments((Map<?, ?>) tmp);
+                    }
+                    text += makeRelative(tmp);
+                }
+            }
+            text += ")";
+            callStack.push(text);
+        }
     }
 
     @Override
     public void visitedCallExpression(OperationDescriptor descriptor, CallType callType, Object[] args, Object result) {
         if (CallType.TRANSPARENT != callType) {
             printIndentation();
-            print("-> ");
+            print(callStack.pop());
+            
+            /*print("-> ");
             print(descriptor.getName());
             if (descriptor.isConstructor() && null != descriptor.getReturnType()) {
                 print(" ");
@@ -144,7 +181,7 @@ public abstract class StreamTracer extends AbstractWriter implements ITracer {
                     print(makeRelative(tmp));
                 }
             }
-            print(")");
+            print(")");*/
             if (NullValue.VALUE != result) {
                 print(" = ");
                 print(makeRelative(result));

@@ -126,7 +126,7 @@ public class Project implements IVilType, IStringValueProvider {
      * @return the path
      */
     public Path getPath() {
-        return new Path(".", artifactModel);
+        return Path.createInstance(".", artifactModel);
     }
     
     /**
@@ -137,7 +137,7 @@ public class Project implements IVilType, IStringValueProvider {
      * @return the localized path
      */
     public Path localize(Project source, Path path) {
-        return new Path(path, artifactModel);
+        return Path.createInstance(path, artifactModel);
     }
 
     /**
@@ -149,7 +149,7 @@ public class Project implements IVilType, IStringValueProvider {
      * @throws VilException in case that localization is not possible due to <code>artifact</code>
      */
     public Path localize(Project source, IFileSystemArtifact artifact) throws VilException {
-        return new Path(artifact.getPath(), artifactModel);
+        return Path.createInstance(artifact.getPath(), artifactModel);
     }
 
     /**
@@ -316,7 +316,7 @@ public class Project implements IVilType, IStringValueProvider {
         if (null == path) {
             path = "EASy"; // fallback, shall be a constant
         }
-        return new Path(path, artifactModel);
+        return Path.createInstance(path, artifactModel);
     }
     
     /**

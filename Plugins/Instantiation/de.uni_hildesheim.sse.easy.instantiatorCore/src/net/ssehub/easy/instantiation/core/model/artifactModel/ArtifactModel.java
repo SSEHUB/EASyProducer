@@ -2,6 +2,7 @@ package net.ssehub.easy.instantiation.core.model.artifactModel;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -33,6 +34,7 @@ public class ArtifactModel {
     private TreeMap<String, IFileSystemArtifact> fileArtifacts = new TreeMap<String, IFileSystemArtifact>();
     private TreeMap<Object, IArtifact> otherArtifacts = new TreeMap<Object, IArtifact>();
     private Map<ProjectSettings, Object> settings;
+    private Map<String, Path> pathCache = new HashMap<String, Path>();
     
     /**
      * Creates an artifact model instance as instantiation environment.
@@ -430,9 +432,54 @@ public class ArtifactModel {
      * @param path the path being deleted
      */
     synchronized void delete(File path) {
-        fileArtifacts.remove(makeRelativeFile(path));
+        String key = makeRelativeFile(path);
+        fileArtifacts.remove(key);
+        pathCache.remove(key);
     }
     
+    /**
+     * Returns the internal path cache key for <code>path</code>.
+     * 
+     * @param path the path
+     * @return the path cache key
+     */
+    private String getPathKey(Path path) {
+        return makeRelativeFile(path.getAbsolutePath());
+    }
+    
+    /**
+     * Discards a path before it becomes invalid, e.g., as its scope is discarded
+     * during execution.
+     * 
+     * @param path the path to discard
+     */
+    synchronized void discardPath(Path path) {
+        pathCache.remove(getPathKey(path));
+    }
+    
+    /**
+     * Returns a path from the path cache.
+     * 
+     * @param pathKey the path key (normalized path)
+     * @return the path (may be <b>null</b> if unknown)
+     */
+    synchronized Path getPathFromCache(String pathKey) {
+        return pathCache.get(pathKey);
+    }
+
+    /**
+     * Called if a path is created.
+     * 
+     * @param path the path to discard
+     */
+    synchronized void registerPath(Path path) {
+        String key = getPathKey(path);
+        Path known = pathCache.get(key);
+        if (null == known) {
+            pathCache.put(key, path);
+        } // shall not occur
+    }
+
     /**
      * Called before renaming an artifact to cleanup.
      * 
@@ -440,7 +487,7 @@ public class ArtifactModel {
      * @throws VilException in case of problems obtaining the path
      */
     synchronized void beforeRename(IFileSystemArtifact artifact) throws VilException {
-        delete(artifact.getPath());
+        delete(artifact.getPath()); // clears cache
     }
 
     /**
@@ -452,6 +499,25 @@ public class ArtifactModel {
     synchronized void afterRename(IFileSystemArtifact artifact) throws VilException {
         List<VilException> errors = new ArrayList<VilException>();
         scanAll(artifact.getPath().getAbsolutePath(), 0, ProgressObserver.NO_OBSERVER, null, errors);
+        // path cache happens automatically
+    }
+
+    /**
+     * Called before a path is renamed, i.e., it is about to be renamed.
+     * 
+     * @param path the path
+     */
+    synchronized void beforeRename(Path path) {
+        pathCache.remove(getPathKey(path));
+    }
+
+    /**
+     * Called after a path was renamed.
+     * 
+     * @param path the path
+     */
+    synchronized void afterRename(Path path) {
+        registerPath(path);
     }
 
     /**
@@ -467,7 +533,9 @@ public class ArtifactModel {
                 String pattern = path.getPath();
                 Iterator<String> iter = fileArtifacts.keySet().iterator();
                 while (iter.hasNext()) {
-                    if (SelectorUtils.matchPath(pattern, iter.next())) {
+                    String pathKey = iter.next();
+                    if (SelectorUtils.matchPath(pattern, pathKey)) {
+                        pathCache.remove(pathKey);
                         iter.remove();
                     }
                 }                
@@ -478,12 +546,15 @@ public class ArtifactModel {
                 }
                 Iterator<String> iter = fileArtifacts.keySet().iterator();
                 while (iter.hasNext()) {
-                    if (iter.next().startsWith(sPath)) {
+                    String pathKey = iter.next();
+                    if (pathKey.startsWith(sPath)) {
+                        pathCache.remove(pathKey);
                         iter.remove();
                     }
                 }
             }
         }
+        pathCache.remove(getPathKey(path));
     }
 
     /**
@@ -502,6 +573,7 @@ public class ArtifactModel {
         }
         fileArtifacts.clear();
         otherArtifacts.clear();
+        pathCache.clear();
     }
     
     /**

@@ -3,9 +3,9 @@
     values <- {}
     for {
         for: node <- IC::nodes {0}
-        -> add(Map, String, Real) with ({{n1, 1.0}}, n1, 1.0)
+        -> add(Map, String, Real) with ({}, n1, 1.0)
         for: node <- IC::nodes {1}
-        -> add(Map, String, Real) with ({{n1, 1.0}, {n2, 2.0}}, n2, 2.0)
+        -> add(Map, String, Real) with ({{n1, 1.0}}, n2, 2.0)
     }
     -> touch(Map) with ({{n1, 1.0}, {n2, 2.0}}) = 3.0
     -> floor(Real) with (3.0) = 3

@@ -966,6 +966,24 @@ public class ExecutionTests extends AbstractExecutionTest<Script> {
     }
 
     /**
+     * Tests some VTL cases (renaming artifact in VIL).
+     * 
+     * @throws IOException should not occur
+     */
+    @Test
+    public void testVtl5() throws IOException {
+        assertSelfInstantiate("vtl5", MAIN_RULE, null, new SelfInstantiationAsserterAdapter() {
+            @Override
+            public void assertIn(File base) {
+                File renamedFile = new File(base, "vtl5.tip");
+                Assert.assertTrue("Error: File was not renamed \"" + renamedFile.getAbsolutePath()
+                    + "\"", renamedFile.exists());
+            }
+            
+        });
+    }
+
+    /**
      * Tests whether files are copied recursively if a file pattern was used. 
      * @throws IOException should not occur
      */
