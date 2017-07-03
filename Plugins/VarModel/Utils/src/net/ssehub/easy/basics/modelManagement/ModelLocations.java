@@ -140,7 +140,7 @@ public class ModelLocations <M extends IModel> {
             boolean result;
             try {
                 String sFile = file.toString();
-                result = sFile.startsWith(location.toString()) 
+                result = (location.length() > 0 && sFile.startsWith(location.toString())) 
                     || sFile.startsWith(location.getCanonicalPath().toString());
             } catch (IOException e) {
                 result = false;
