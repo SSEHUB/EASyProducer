@@ -104,6 +104,8 @@ public class PersistenceUtils {
     
     private static final Map<String, Configuration> CONFIGURATIONS = new HashMap<String, Configuration>();
     
+    private static boolean defaultModelsLoaded = false;
+    
     /**
      * Returns the (cached) configuration for the given project (in terms of a <code>projectFolder</code>).
      * 
@@ -754,7 +756,8 @@ public class PersistenceUtils {
      */
     public static void loadDefaultModels(ClassLoader loader, ProgressObserver observer, 
         Map<PathKind, File> alternativePaths) {
-        if (0 == VarModel.INSTANCE.locations().getLocationCount()) {
+        if (!defaultModelsLoaded) {
+            defaultModelsLoaded = true;
             URL defltLibUrl = loader.getResource("defaultLib");
             EASyLoggerFactory.INSTANCE.getLogger(PersistenceUtils.class, Activator.PLUGIN_ID).info(
                 "Trying to load default IVML/VIL library from '" + defltLibUrl);
