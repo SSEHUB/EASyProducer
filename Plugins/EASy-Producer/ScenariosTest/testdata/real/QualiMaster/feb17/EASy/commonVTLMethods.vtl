@@ -665,13 +665,15 @@ template commonVTLMethods(Configuration config, FileArtifact target) {
     }
     
     def String produceNumTasks(DecisionVariable elt) {
+	    String result;
     	DecisionVariable tasksVar = elt.byName("numtasks"); 
 		if (isConfigured(tasksVar)) {
 			Integer tasks = tasksVar;
-			".setNumTasks(" + tasks + ")";
+			result = ".setNumTasks(" + tasks + ")";
 		} else {
-    	    ""
+    	    result = "";
 		}
+		result;
     }
 
     /**

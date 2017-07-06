@@ -30,7 +30,7 @@ template CompileUiTemplate(Configuration config, FileArtifact target, IvmlElemen
          public enum $className implements de.uni_hildesheim.sse.variability.runtime.$className {\n'
   
          for (DecisionVariable v: config.variables(), ",\n\n") {
-             print '${v.name()}("", ${valueRange(v)}, ${value(v)}, ${v.element("bindingTime").value() == bindingTime})' | 4;
+             '${v.name()}("", ${valueRange(v)}, ${value(v)}, ${v.element("bindingTime").value() == bindingTime})' !<CR> | 4;
          }
          ";\n"
   
@@ -91,7 +91,7 @@ template CompileUiTemplate(Configuration config, FileArtifact target, IvmlElemen
                  } else {
                      String firstName = config.variables().first().name();
                      String lastName = config.variables().last().name();
-                     print 'return EnumSet.range($firstName, $lastName);' | 8;
+                     'return EnumSet.range($firstName, $lastName);' !<CR> | 8;
                  }
             '    }
 
