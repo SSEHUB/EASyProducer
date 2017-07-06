@@ -19,6 +19,7 @@ import java.io.File;
 
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
+import org.junit.Test;
 
 import net.ssehub.easy.instantiation.maven.Registration;
 
@@ -55,6 +56,13 @@ public class ExperimentsTests extends AbstractScenarioTest {
 //TODOtests.cleanTemp();
             tests = null;
         }
+    }
+
+    /**
+     * Prevent no runnable methods.
+     */
+    @Test
+    public void dummy() {
     }
 
 }
