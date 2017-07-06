@@ -182,7 +182,7 @@ public class TextTestUtils {
         }
         if (!exclude) {
             if (expected.isFile()) {
-                assertFileEquality(expected, generated);
+                assertFileEquality(generated, expected);
             } else {
                 File[] files = expected.listFiles();
                 if (null != files) {
@@ -191,7 +191,7 @@ public class TextTestUtils {
                         if (f.isDirectory()) {
                             assertFileEqualityRec(f, gen);
                         } else {
-                            assertFileEquality(f, gen);
+                            assertFileEquality(gen, f);
                         }
                     }
                 } 
