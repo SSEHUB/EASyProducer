@@ -68,7 +68,9 @@ public class TemplateLangParser extends AbstractContentAssistParser {
 					put(grammarAccess.getAlternativeAccess().getGroup(), "rule__Alternative__Group__0");
 					put(grammarAccess.getAlternativeAccess().getGroup_5(), "rule__Alternative__Group_5__0");
 					put(grammarAccess.getContentAccess().getGroup(), "rule__Content__Group__0");
-					put(grammarAccess.getContentAccess().getGroup_2(), "rule__Content__Group_2__0");
+					put(grammarAccess.getContentAccess().getGroup_1(), "rule__Content__Group_1__0");
+					put(grammarAccess.getContentAccess().getGroup_1_0(), "rule__Content__Group_1_0__0");
+					put(grammarAccess.getContentAccess().getGroup_1_1(), "rule__Content__Group_1_1__0");
 					put(grammarAccess.getSwitchAccess().getGroup(), "rule__Switch__Group__0");
 					put(grammarAccess.getSwitchAccess().getGroup_5(), "rule__Switch__Group_5__0");
 					put(grammarAccess.getSwitchAccess().getGroup_5_1(), "rule__Switch__Group_5_1__0");
@@ -179,9 +181,9 @@ public class TemplateLangParser extends AbstractContentAssistParser {
 					put(grammarAccess.getAlternativeAccess().getExprAssignment_2(), "rule__Alternative__ExprAssignment_2");
 					put(grammarAccess.getAlternativeAccess().getIfAssignment_4(), "rule__Alternative__IfAssignment_4");
 					put(grammarAccess.getAlternativeAccess().getElseAssignment_5_1(), "rule__Alternative__ElseAssignment_5_1");
-					put(grammarAccess.getContentAccess().getPrintAssignment_0(), "rule__Content__PrintAssignment_0");
-					put(grammarAccess.getContentAccess().getCtnAssignment_1(), "rule__Content__CtnAssignment_1");
-					put(grammarAccess.getContentAccess().getIndentAssignment_2_1(), "rule__Content__IndentAssignment_2_1");
+					put(grammarAccess.getContentAccess().getCtnAssignment_0(), "rule__Content__CtnAssignment_0");
+					put(grammarAccess.getContentAccess().getNoCRAssignment_1_0_0(), "rule__Content__NoCRAssignment_1_0_0");
+					put(grammarAccess.getContentAccess().getIndentAssignment_1_1_1(), "rule__Content__IndentAssignment_1_1_1");
 					put(grammarAccess.getSwitchAccess().getExprAssignment_2(), "rule__Switch__ExprAssignment_2");
 					put(grammarAccess.getSwitchAccess().getPartsAssignment_5_0(), "rule__Switch__PartsAssignment_5_0");
 					put(grammarAccess.getSwitchAccess().getPartsAssignment_5_1_1(), "rule__Switch__PartsAssignment_5_1_1");

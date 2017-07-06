@@ -296,6 +296,28 @@ public abstract class RuntimeEnvironment<V extends VariableDeclaration>
         }
         
         /**
+         * Changes the current indentation (in steps).
+         * 
+         * @param steps the number of indentation steps
+         */
+        public void setIndentationSteps(int steps) {
+            if (steps > 0 && null != indentationConfiguration) {
+                indentation = steps * indentationConfiguration.getIndentationStep();
+            }
+        }
+
+        /**
+         * Changes the current indentation.
+         * 
+         * @param indentation the new indentation (in single whitespaces)
+         */
+        public void setIndentation(int indentation) {
+            if (indentation >= 0) {
+                this.indentation = indentation;
+            }
+        }
+        
+        /**
          * Increases the indentation by one step.
          */
         public void increaseIndentation() {
@@ -742,6 +764,24 @@ public abstract class RuntimeEnvironment<V extends VariableDeclaration>
      */
     public int getIndentation() {
         return currentContext.getIndentation();
+    }
+
+    /**
+     * Changes the current indentation (in steps).
+     * 
+     * @param steps the number of indentation steps
+     */
+    public void setIndentationSteps(int steps) {
+        currentContext.setIndentationSteps(steps);
+    }
+
+    /**
+     * Changes the current indentation.
+     * 
+     * @param indentation the new indentation (in single whitespaces)
+     */
+    public void setIndentation(int indentation) {
+        currentContext.setIndentation(indentation);
     }
     
     /**

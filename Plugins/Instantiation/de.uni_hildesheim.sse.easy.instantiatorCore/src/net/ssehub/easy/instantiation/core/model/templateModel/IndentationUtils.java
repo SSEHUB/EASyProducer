@@ -39,7 +39,7 @@ public class IndentationUtils {
             } else if ('\n' == c) {
                 i++; // continue with next
                 startPos = i;
-            } else if (0 == i && (' ' == c || '\t' == c)) {
+            } else if (0 == i && isIndentationChar(c)) {
                 startPos = i; // continue with this
             } else {
                 i++;
@@ -74,11 +74,13 @@ public class IndentationUtils {
      * 
      * @param content the text to operate on
      * @param indentation the actual indentation in number of whitespaces (<b>positive number</b>)
+     * @param skipFirst skip the first indentation
      * @return <code>content</code> without indentation
      */
-    public static String insertIndentation(String content, int indentation) {
+    public static String insertIndentation(String content, int indentation, boolean skipFirst) {
         StringBuilder text = new StringBuilder(content);
         int i = 0;
+        int count = 0;
         while (i < text.length()) { // use actual length as we may cut the text
             int startPos = -1;
             char c = text.charAt(i);
@@ -90,17 +92,42 @@ public class IndentationUtils {
                 startPos = i + 1;
             } else if ('\n' == c) {
                 startPos = i + 1;
-            } else if (0 == i && !(' ' == c || '\t' == c)) {
+            } else if (0 == i && !isIndentationChar(c)) {
                 startPos = i;
             } else {
                 i++;
             }
             if (startPos >= 0) {
-                i = insertIndentation(text, startPos, indentation);
+                if (skipFirst && 0 == count) {
+                    i = startPos + 1; // advance, avoid endless loop
+                } else {
+                    i = insertIndentation(text, startPos, indentation);
+                }
+                count++;
                 i = skipWhitespaces(text, i);
             }
         }
         return text.toString();
+    }
+
+    /**
+     * Returns whether <code>ch</code> is an indentation character.
+     * 
+     * @param ch the character
+     * @return <code>true</code> for indentation character, <code>false</code> else
+     */
+    public static boolean isIndentationChar(char ch) {
+        return ' ' == ch || '\t' == ch;
+    }
+
+    /**
+     * Returns whether <code>ch</code> is a line end character.
+     * 
+     * @param ch the character
+     * @return <code>true</code> for line end character, <code>false</code> else
+     */
+    public static boolean isLineEnd(char ch) {
+        return '\r' == ch || '\n' == ch;
     }
     
     /**

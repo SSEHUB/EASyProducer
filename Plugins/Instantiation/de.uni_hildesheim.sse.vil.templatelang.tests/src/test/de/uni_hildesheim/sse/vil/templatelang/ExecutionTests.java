@@ -632,6 +632,52 @@ public class ExecutionTests extends AbstractTest {
     public void testContent11() throws IOException {
         assertEqual("content11");
     }
+
+    /**
+     * Tests formatting.
+     * 
+     * @throws IOException should not occur
+     */
+    @Test
+    public void testContent12() throws IOException {
+        assertEqualsNoSourceComparison("content12");
+    }
+
+    /**
+     * Tests (nested) formatting with indentation annotation.
+     * 
+     * @throws IOException should not occur
+     */
+    @Test
+    public void testContent13() throws IOException {
+        assertEqual("content13");
+    }
+
+    /**
+     * Tests (nested) formatting (same as {@link #testContent13()} but without indentation annotation.
+     * 
+     * @throws IOException should not occur
+     */
+    @Test
+    public void testContent14() throws IOException {
+        assertEqualsNoSourceComparison("content14");
+    }
+    
+    /**
+     * Asserts equality of the trace and output during execution without asserting the 
+     * equality of the formatted sources.
+     * 
+     * @param name the name of the test (files)
+     * @throws IOException problems finding or reading the model file
+     */
+    private void assertEqualsNoSourceComparison(String name) throws IOException {
+        Map<String, Object> param = createParameterMap(null, null);
+        EqualitySetup<Template> setup = new EqualitySetup<Template>(createFile(name), name, null, 
+            createTraceFile(name), param);
+        setup.setExpectedOutputFile(createOutFile(name));
+        setup.setEnableEquals(false);
+        assertEqual(setup);
+    }
     
     /**
      * Tests the collect operation on set.

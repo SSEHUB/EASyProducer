@@ -1077,24 +1077,9 @@ ruleContent returns [EObject current=null]
     @after { leaveRule(); }:
 ((
 (
-		lv_print_0_0=	'print' 
-    {
-        newLeafNode(lv_print_0_0, grammarAccess.getContentAccess().getPrintPrintKeyword_0_0());
-    }
- 
-	    {
-	        if ($current==null) {
-	            $current = createModelElement(grammarAccess.getContentRule());
-	        }
-       		setWithLastConsumed($current, "print", lv_print_0_0, "print");
-	    }
-
-)
-)?(
-(
-		lv_ctn_1_0=RULE_STRING
+		lv_ctn_0_0=RULE_STRING
 		{
-			newLeafNode(lv_ctn_1_0, grammarAccess.getContentAccess().getCtnSTRINGTerminalRuleCall_1_0()); 
+			newLeafNode(lv_ctn_0_0, grammarAccess.getContentAccess().getCtnSTRINGTerminalRuleCall_0_0()); 
 		}
 		{
 	        if ($current==null) {
@@ -1103,36 +1088,55 @@ ruleContent returns [EObject current=null]
        		setWithLastConsumed(
        			$current, 
        			"ctn",
-        		lv_ctn_1_0, 
+        		lv_ctn_0_0, 
         		"de.uni_hildesheim.sse.vil.expressions.ExpressionDsl.STRING");
 	    }
 
 )
-)(	otherlv_2='|' 
+)(((
+(
+		lv_noCR_1_0=	'!' 
     {
-    	newLeafNode(otherlv_2, grammarAccess.getContentAccess().getVerticalLineKeyword_2_0());
+        newLeafNode(lv_noCR_1_0, grammarAccess.getContentAccess().getNoCRExclamationMarkKeyword_1_0_0_0());
+    }
+ 
+	    {
+	        if ($current==null) {
+	            $current = createModelElement(grammarAccess.getContentRule());
+	        }
+       		setWithLastConsumed($current, "noCR", lv_noCR_1_0, "!");
+	    }
+
+)
+)?	otherlv_2='<CR>' 
+    {
+    	newLeafNode(otherlv_2, grammarAccess.getContentAccess().getCRKeyword_1_0_1());
+    }
+)?(	otherlv_3='|' 
+    {
+    	newLeafNode(otherlv_3, grammarAccess.getContentAccess().getVerticalLineKeyword_1_1_0());
     }
 (
 (
 		{ 
-	        newCompositeNode(grammarAccess.getContentAccess().getIndentExpressionParserRuleCall_2_1_0()); 
+	        newCompositeNode(grammarAccess.getContentAccess().getIndentExpressionParserRuleCall_1_1_1_0()); 
 	    }
-		lv_indent_3_0=ruleExpression		{
+		lv_indent_4_0=ruleExpression		{
 	        if ($current==null) {
 	            $current = createModelElementForParent(grammarAccess.getContentRule());
 	        }
        		set(
        			$current, 
        			"indent",
-        		lv_indent_3_0, 
+        		lv_indent_4_0, 
         		"de.uni_hildesheim.sse.vil.expressions.ExpressionDsl.Expression");
 	        afterParserOrEnumRuleCall();
 	    }
 
 )
-)	otherlv_4=';' 
+))?	otherlv_5=';' 
     {
-    	newLeafNode(otherlv_4, grammarAccess.getContentAccess().getSemicolonKeyword_2_2());
+    	newLeafNode(otherlv_5, grammarAccess.getContentAccess().getSemicolonKeyword_1_2());
     }
 )?)
 ;

@@ -15,8 +15,8 @@ import org.eclipse.emf.ecore.EObject;
  * The following features are supported:
  * </p>
  * <ul>
- *   <li>{@link de.uni_hildesheim.sse.vil.templatelang.templateLang.Content#getPrint <em>Print</em>}</li>
  *   <li>{@link de.uni_hildesheim.sse.vil.templatelang.templateLang.Content#getCtn <em>Ctn</em>}</li>
+ *   <li>{@link de.uni_hildesheim.sse.vil.templatelang.templateLang.Content#getNoCR <em>No CR</em>}</li>
  *   <li>{@link de.uni_hildesheim.sse.vil.templatelang.templateLang.Content#getIndent <em>Indent</em>}</li>
  * </ul>
  *
@@ -26,32 +26,6 @@ import org.eclipse.emf.ecore.EObject;
  */
 public interface Content extends EObject
 {
-  /**
-   * Returns the value of the '<em><b>Print</b></em>' attribute.
-   * <!-- begin-user-doc -->
-   * <p>
-   * If the meaning of the '<em>Print</em>' attribute isn't clear,
-   * there really should be more of a description here...
-   * </p>
-   * <!-- end-user-doc -->
-   * @return the value of the '<em>Print</em>' attribute.
-   * @see #setPrint(String)
-   * @see de.uni_hildesheim.sse.vil.templatelang.templateLang.TemplateLangPackage#getContent_Print()
-   * @model
-   * @generated
-   */
-  String getPrint();
-
-  /**
-   * Sets the value of the '{@link de.uni_hildesheim.sse.vil.templatelang.templateLang.Content#getPrint <em>Print</em>}' attribute.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @param value the new value of the '<em>Print</em>' attribute.
-   * @see #getPrint()
-   * @generated
-   */
-  void setPrint(String value);
-
   /**
    * Returns the value of the '<em><b>Ctn</b></em>' attribute.
    * <!-- begin-user-doc -->
@@ -77,6 +51,32 @@ public interface Content extends EObject
    * @generated
    */
   void setCtn(String value);
+
+  /**
+   * Returns the value of the '<em><b>No CR</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <p>
+   * If the meaning of the '<em>No CR</em>' attribute isn't clear,
+   * there really should be more of a description here...
+   * </p>
+   * <!-- end-user-doc -->
+   * @return the value of the '<em>No CR</em>' attribute.
+   * @see #setNoCR(String)
+   * @see de.uni_hildesheim.sse.vil.templatelang.templateLang.TemplateLangPackage#getContent_NoCR()
+   * @model
+   * @generated
+   */
+  String getNoCR();
+
+  /**
+   * Sets the value of the '{@link de.uni_hildesheim.sse.vil.templatelang.templateLang.Content#getNoCR <em>No CR</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @param value the new value of the '<em>No CR</em>' attribute.
+   * @see #getNoCR()
+   * @generated
+   */
+  void setNoCR(String value);
 
   /**
    * Returns the value of the '<em><b>Indent</b></em>' containment reference.

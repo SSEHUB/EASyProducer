@@ -673,7 +673,7 @@ public class TemplateLangPackageImpl extends EPackageImpl implements TemplateLan
    * <!-- end-user-doc -->
    * @generated
    */
-  public EAttribute getContent_Print()
+  public EAttribute getContent_Ctn()
   {
     return (EAttribute)contentEClass.getEStructuralFeatures().get(0);
   }
@@ -683,7 +683,7 @@ public class TemplateLangPackageImpl extends EPackageImpl implements TemplateLan
    * <!-- end-user-doc -->
    * @generated
    */
-  public EAttribute getContent_Ctn()
+  public EAttribute getContent_NoCR()
   {
     return (EAttribute)contentEClass.getEStructuralFeatures().get(1);
   }
@@ -1139,8 +1139,8 @@ public class TemplateLangPackageImpl extends EPackageImpl implements TemplateLan
     createEReference(alternativeEClass, ALTERNATIVE__ELSE);
 
     contentEClass = createEClass(CONTENT);
-    createEAttribute(contentEClass, CONTENT__PRINT);
     createEAttribute(contentEClass, CONTENT__CTN);
+    createEAttribute(contentEClass, CONTENT__NO_CR);
     createEReference(contentEClass, CONTENT__INDENT);
 
     switchEClass = createEClass(SWITCH);
@@ -1276,8 +1276,8 @@ public class TemplateLangPackageImpl extends EPackageImpl implements TemplateLan
     initEReference(getAlternative_Else(), this.getStmt(), null, "else", null, 0, 1, Alternative.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     initEClass(contentEClass, Content.class, "Content", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-    initEAttribute(getContent_Print(), ecorePackage.getEString(), "print", null, 0, 1, Content.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEAttribute(getContent_Ctn(), ecorePackage.getEString(), "ctn", null, 0, 1, Content.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEAttribute(getContent_NoCR(), ecorePackage.getEString(), "noCR", null, 0, 1, Content.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEReference(getContent_Indent(), theExpressionDslPackage.getExpression(), null, "indent", null, 0, 1, Content.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     initEClass(switchEClass, Switch.class, "Switch", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);

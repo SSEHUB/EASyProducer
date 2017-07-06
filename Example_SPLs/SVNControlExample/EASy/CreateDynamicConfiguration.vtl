@@ -32,7 +32,7 @@ template CompileUiTemplate(Configuration config, FileArtifact target, IvmlElemen
          Integer enabledElementsCount = 0;  
          for (DecisionVariable v: config.variables(), ",\n\n") {
          	 Boolean isEnabled = (v.element("bindingTime").value() == bindingTime);
-             print '${v.name()}("", ${valueRange(v)}, ${value(v)}, ${isEnabled})' | 4;
+             '${v.name()}("", ${valueRange(v)}, ${value(v)}, ${isEnabled})' !<CR> | 4;
              if (isEnabled) {
              	enabledElementsCount = enabledElementsCount + 1;
              }
@@ -96,7 +96,7 @@ template CompileUiTemplate(Configuration config, FileArtifact target, IvmlElemen
                  } else {
                      String firstName = config.variables().first().name();
                      String lastName = config.variables().last().name();
-                     print 'return EnumSet.range($firstName, $lastName);' | 8;
+                     'return EnumSet.range($firstName, $lastName);' !<CR> | 8;
                  }
             '    }
 

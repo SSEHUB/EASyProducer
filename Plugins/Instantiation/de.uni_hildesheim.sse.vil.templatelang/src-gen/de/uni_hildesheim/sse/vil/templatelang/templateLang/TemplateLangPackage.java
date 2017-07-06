@@ -564,22 +564,22 @@ public interface TemplateLangPackage extends EPackage
   int CONTENT = 9;
 
   /**
-   * The feature id for the '<em><b>Print</b></em>' attribute.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int CONTENT__PRINT = 0;
-
-  /**
    * The feature id for the '<em><b>Ctn</b></em>' attribute.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int CONTENT__CTN = 1;
+  int CONTENT__CTN = 0;
+
+  /**
+   * The feature id for the '<em><b>No CR</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int CONTENT__NO_CR = 1;
 
   /**
    * The feature id for the '<em><b>Indent</b></em>' containment reference.
@@ -1477,17 +1477,6 @@ public interface TemplateLangPackage extends EPackage
   EClass getContent();
 
   /**
-   * Returns the meta object for the attribute '{@link de.uni_hildesheim.sse.vil.templatelang.templateLang.Content#getPrint <em>Print</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for the attribute '<em>Print</em>'.
-   * @see de.uni_hildesheim.sse.vil.templatelang.templateLang.Content#getPrint()
-   * @see #getContent()
-   * @generated
-   */
-  EAttribute getContent_Print();
-
-  /**
    * Returns the meta object for the attribute '{@link de.uni_hildesheim.sse.vil.templatelang.templateLang.Content#getCtn <em>Ctn</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -1497,6 +1486,17 @@ public interface TemplateLangPackage extends EPackage
    * @generated
    */
   EAttribute getContent_Ctn();
+
+  /**
+   * Returns the meta object for the attribute '{@link de.uni_hildesheim.sse.vil.templatelang.templateLang.Content#getNoCR <em>No CR</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the attribute '<em>No CR</em>'.
+   * @see de.uni_hildesheim.sse.vil.templatelang.templateLang.Content#getNoCR()
+   * @see #getContent()
+   * @generated
+   */
+  EAttribute getContent_NoCR();
 
   /**
    * Returns the meta object for the containment reference '{@link de.uni_hildesheim.sse.vil.templatelang.templateLang.Content#getIndent <em>Indent</em>}'.
@@ -2275,20 +2275,20 @@ public interface TemplateLangPackage extends EPackage
     EClass CONTENT = eINSTANCE.getContent();
 
     /**
-     * The meta object literal for the '<em><b>Print</b></em>' attribute feature.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    EAttribute CONTENT__PRINT = eINSTANCE.getContent_Print();
-
-    /**
      * The meta object literal for the '<em><b>Ctn</b></em>' attribute feature.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
      * @generated
      */
     EAttribute CONTENT__CTN = eINSTANCE.getContent_Ctn();
+
+    /**
+     * The meta object literal for the '<em><b>No CR</b></em>' attribute feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EAttribute CONTENT__NO_CR = eINSTANCE.getContent_NoCR();
 
     /**
      * The meta object literal for the '<em><b>Indent</b></em>' containment reference feature.

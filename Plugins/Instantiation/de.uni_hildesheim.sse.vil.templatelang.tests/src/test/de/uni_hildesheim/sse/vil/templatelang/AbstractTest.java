@@ -158,12 +158,14 @@ public abstract class AbstractTest extends net.ssehub.easy.dslCore.test.Abstract
                 String fileAsString = file2String(file);
                 Assert.assertTrue("not found: " + file, null != fileAsString);
 
-                // read model into String
-                java.io.CharArrayWriter expected = new CharArrayWriter();
-                TemplateLangModelUtility.INSTANCE.print(result, expected, false, false);
-                String errorMsg = checkEqualsAndPrepareMessage(fileAsString, expected);
-                Assert.assertTrue(errorMsg, null == errorMsg);
-                assertNamingAndVersion(data, result);
+                if (data.enableEquals()) {
+                    // read model into String
+                    java.io.CharArrayWriter expected = new CharArrayWriter();
+                    TemplateLangModelUtility.INSTANCE.print(result, expected, false, false);
+                    String errorMsg = checkEqualsAndPrepareMessage(fileAsString, expected);
+                    Assert.assertTrue(errorMsg, null == errorMsg);
+                    assertNamingAndVersion(data, result);
+                }
             }
             Assert.assertTrue("multiple templates are not possible in VIL", 1 == result.getResultCount());
             
@@ -189,7 +191,6 @@ public abstract class AbstractTest extends net.ssehub.easy.dslCore.test.Abstract
                         Assert.assertEquals(fileAsString.trim(), trace.toString().trim());
                         Assert.fail(errorMsg);
                     }
-                    
                     if (null != data.getExpectedOutputFile()) {
                         fileAsString = file2String(data.getExpectedOutputFile());
                         Assert.assertTrue(null != fileAsString);

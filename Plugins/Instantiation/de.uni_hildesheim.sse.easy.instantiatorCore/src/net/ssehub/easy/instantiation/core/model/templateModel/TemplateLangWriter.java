@@ -320,27 +320,28 @@ public class TemplateLangWriter extends WriterVisitor<VariableDeclaration> imple
     @Override
     public Object visitContentStatement(ContentStatement cnt) throws VilException {
         printIndentation();
-        if (!cnt.printLineEnd()) {
-            print("print ");
-        }
         String terminal = cnt.getTerminal();
         print(terminal);
-        // TODO: Catching of exception ok?
         try {
             setInContent(true);
             cnt.getContent().accept(this);
             setInContent(false);
-//            content = content.replace(terminal, "\\" + terminal);
-//            print(content);
             print(terminal);
+            boolean semi = false;
+            if (!cnt.printLineEnd()) {
+                print(" !<CR>");
+                semi = true;
+            }
             if (null != cnt.getIndentExpression()) {
                 print(" | ");
                 cnt.getIndentExpression().accept(this);
-                print(";");
+                semi = true;
+            }
+            if (semi) {
+                print(";");                
             }
             println();
         } catch (VilException e1) {
-            // TODO Auto-generated catch block
             e1.printStackTrace();
         }
         return null;

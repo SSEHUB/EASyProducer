@@ -65,7 +65,7 @@ Alternative:
     ;
 
 Content:
-    (print='print')? ctn=STRING ('|' indent=Expression ';')?
+    ctn=STRING (((noCR='!')? '<CR>')? ('|' indent=Expression )? ';')?
     ;
 
 Switch: 

@@ -8,6 +8,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Stack;
 
 import net.ssehub.easy.basics.logger.EASyLoggerFactory;
 import net.ssehub.easy.basics.logger.EASyLoggerFactory.EASyLogger;
@@ -92,6 +93,8 @@ public class TemplateLangExecution extends ExecutionVisitor<Template, Def, Varia
     private String mainName;
     private ITracer tracer;
     private boolean stop = false;
+    private int contentNestingLevel;
+    private Stack<String> defContentStack = new Stack<String>();
 
     /**
      * Creates a new evaluation visitor.
@@ -222,6 +225,7 @@ public class TemplateLangExecution extends ExecutionVisitor<Template, Def, Varia
 
     @Override
     public Object visitDef(Def def) throws VilException {
+        defContentStack.push("");
         Object result;
         if (def.isPlaceholder()) {
             result = null;
@@ -230,6 +234,14 @@ public class TemplateLangExecution extends ExecutionVisitor<Template, Def, Varia
             result = visitTemplateBlock(def); // increases indentation
             tracer.visitedDef(def, environment, result);
         }
+        String content = defContentStack.pop();
+        if (0 == contentNestingLevel) { // top level - compose or emit
+            if (defContentStack.isEmpty()) {
+                out.print(content);
+            } else {
+                appendContent(content);
+            }
+        } // nested content mode - composed from return
         return result;
     }
 
@@ -344,10 +356,10 @@ public class TemplateLangExecution extends ExecutionVisitor<Template, Def, Varia
                 loopStmt.accept(this);
                 decreaseIndentation(loopStmt);
                 if (null != separator && iter.hasNext()) {
-                    out.print(separator);
+                    appendContent(separator);
                 }
                 if (null != finalSeparator && !iter.hasNext()) {
-                    out.print(finalSeparator);
+                    appendContent(finalSeparator);
                 }
             }
             tracer.visitedLoop(iterVar);
@@ -358,6 +370,21 @@ public class TemplateLangExecution extends ExecutionVisitor<Template, Def, Varia
             }
         }
         return Boolean.TRUE;
+    }
+    
+    /**
+     * Adds content.
+     * 
+     * @param string the string to add to the current content.
+     */
+    private void appendContent(String string) {
+        String topContent = defContentStack.pop();
+        if (null == topContent) {
+            topContent = string;
+        } else {
+            topContent += string;
+        }
+        defContentStack.push(topContent);
     }
 
     @Override
@@ -419,6 +446,7 @@ public class TemplateLangExecution extends ExecutionVisitor<Template, Def, Varia
 
     @Override
     public Object visitContentStatement(ContentStatement cnt) throws VilException {
+        contentNestingLevel++;
         String content;
         // search for \r\n, \r, \n followed by indentation*step whitespaces or tabs +1
         content = (String) cnt.getContent().accept(this);
@@ -430,12 +458,13 @@ public class TemplateLangExecution extends ExecutionVisitor<Template, Def, Varia
                 int indent = indentation + environment.getIndentationConfiguration().getAdditional();
                 content = IndentationUtils.removeIndentation(content, indent, config.getTabEmulation());
             }
+            int forced = 0;
             if (null != cnt.getIndentExpression()) {
                 Object val = cnt.getIndentExpression().accept(this);
                 if (val instanceof Integer) {
-                    int forced = ((Integer) val).intValue();
+                    forced = ((Integer) val).intValue();
                     if (forced > 0) { // precondition of insertIndentation
-                        content = IndentationUtils.insertIndentation(content, forced);
+                        content = IndentationUtils.insertIndentation(content, forced, contentNestingLevel > 1);
                     }
                 } else {
                     throw new VilException("indentation value is no integer", 
@@ -443,15 +472,67 @@ public class TemplateLangExecution extends ExecutionVisitor<Template, Def, Varia
                 }
             }
             if (cnt.printLineEnd()) {
-                out.print(content);
-                out.print(getLineEnd());
-            } else {
-                out.print(content);
+                content += getLineEnd();
             }
+            String topContent = defContentStack.pop();
+            if (0 == topContent.length()) {
+                topContent = content;
+            } else {
+                topContent = appendWithLastIndentation(topContent, content, contentNestingLevel == 1);
+            }
+            defContentStack.push(topContent);
+            content = topContent; // replace by all for end of def/return
         }
+        contentNestingLevel--;
         return content;
     }
+
+    /**
+     * Appends the with last indentation to <code>string</code>.
+     * 
+     * @param string the string to look into
+     * @param text the text to append
+     * @param skipLastIndent anyway skip the last indentation
+     * @return the string with appended indentation (if there was any)
+     */
+    private String appendWithLastIndentation(String string, String text, boolean skipLastIndent) {
+        String result = string;
+        if (result != null) {
+            if ((text.length() > 0 && IndentationUtils.isIndentationChar(text.charAt(0))) || skipLastIndent) {
+                // indented content statements
+                result = result + text;
+            } else {
+                // single chained content statements
+                int pos = result.length() - 1;
+                while (pos >= 0 && !IndentationUtils.isIndentationChar(result.charAt(pos))) {
+                    pos--;
+                }
+                int endPos = pos;
+                while (pos >= 0 && IndentationUtils.isIndentationChar(result.charAt(pos))) {
+                    pos--;
+                }
+                if (pos < 0) {
+                    pos = 0;
+                } else if (!IndentationUtils.isLineEnd(result.charAt(pos))) {
+                    pos = -1;
+                }
+                if (pos >= 0 && endPos >= pos) {
+                    String le = getLineEnd();
+                    if (result.endsWith(le)) {
+                        result = result.substring(0, result.length() - le.length());
+                    }
+                    result = result + result.substring(pos, endPos + 1) + text;
+                } else {
+                    result = result + text;
+                }
+            }
+        } else {
+            result = text;
+        }
+        return result;
+    }
     
+
     /**
      * Returns the current line end based on the formatting configuration of the actual context model.
      * 
@@ -489,7 +570,10 @@ public class TemplateLangExecution extends ExecutionVisitor<Template, Def, Varia
         if (stop) {
             result = null;
         } else {
+            int indentation = environment.getIndentation();
+            environment.setIndentationSteps(1); // reset to template level
             result = visitModelCallExpression(call);
+            environment.setIndentation(indentation);
         }
         return result;
     }

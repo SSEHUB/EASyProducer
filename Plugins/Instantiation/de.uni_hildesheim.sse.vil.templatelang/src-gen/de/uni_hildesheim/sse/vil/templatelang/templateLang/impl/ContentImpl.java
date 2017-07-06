@@ -24,8 +24,8 @@ import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
  * The following features are implemented:
  * </p>
  * <ul>
- *   <li>{@link de.uni_hildesheim.sse.vil.templatelang.templateLang.impl.ContentImpl#getPrint <em>Print</em>}</li>
  *   <li>{@link de.uni_hildesheim.sse.vil.templatelang.templateLang.impl.ContentImpl#getCtn <em>Ctn</em>}</li>
+ *   <li>{@link de.uni_hildesheim.sse.vil.templatelang.templateLang.impl.ContentImpl#getNoCR <em>No CR</em>}</li>
  *   <li>{@link de.uni_hildesheim.sse.vil.templatelang.templateLang.impl.ContentImpl#getIndent <em>Indent</em>}</li>
  * </ul>
  *
@@ -33,26 +33,6 @@ import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
  */
 public class ContentImpl extends MinimalEObjectImpl.Container implements Content
 {
-  /**
-   * The default value of the '{@link #getPrint() <em>Print</em>}' attribute.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @see #getPrint()
-   * @generated
-   * @ordered
-   */
-  protected static final String PRINT_EDEFAULT = null;
-
-  /**
-   * The cached value of the '{@link #getPrint() <em>Print</em>}' attribute.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @see #getPrint()
-   * @generated
-   * @ordered
-   */
-  protected String print = PRINT_EDEFAULT;
-
   /**
    * The default value of the '{@link #getCtn() <em>Ctn</em>}' attribute.
    * <!-- begin-user-doc -->
@@ -72,6 +52,26 @@ public class ContentImpl extends MinimalEObjectImpl.Container implements Content
    * @ordered
    */
   protected String ctn = CTN_EDEFAULT;
+
+  /**
+   * The default value of the '{@link #getNoCR() <em>No CR</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #getNoCR()
+   * @generated
+   * @ordered
+   */
+  protected static final String NO_CR_EDEFAULT = null;
+
+  /**
+   * The cached value of the '{@link #getNoCR() <em>No CR</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #getNoCR()
+   * @generated
+   * @ordered
+   */
+  protected String noCR = NO_CR_EDEFAULT;
 
   /**
    * The cached value of the '{@link #getIndent() <em>Indent</em>}' containment reference.
@@ -109,29 +109,6 @@ public class ContentImpl extends MinimalEObjectImpl.Container implements Content
    * <!-- end-user-doc -->
    * @generated
    */
-  public String getPrint()
-  {
-    return print;
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  public void setPrint(String newPrint)
-  {
-    String oldPrint = print;
-    print = newPrint;
-    if (eNotificationRequired())
-      eNotify(new ENotificationImpl(this, Notification.SET, TemplateLangPackage.CONTENT__PRINT, oldPrint, print));
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
   public String getCtn()
   {
     return ctn;
@@ -148,6 +125,29 @@ public class ContentImpl extends MinimalEObjectImpl.Container implements Content
     ctn = newCtn;
     if (eNotificationRequired())
       eNotify(new ENotificationImpl(this, Notification.SET, TemplateLangPackage.CONTENT__CTN, oldCtn, ctn));
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public String getNoCR()
+  {
+    return noCR;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public void setNoCR(String newNoCR)
+  {
+    String oldNoCR = noCR;
+    noCR = newNoCR;
+    if (eNotificationRequired())
+      eNotify(new ENotificationImpl(this, Notification.SET, TemplateLangPackage.CONTENT__NO_CR, oldNoCR, noCR));
   }
 
   /**
@@ -224,10 +224,10 @@ public class ContentImpl extends MinimalEObjectImpl.Container implements Content
   {
     switch (featureID)
     {
-      case TemplateLangPackage.CONTENT__PRINT:
-        return getPrint();
       case TemplateLangPackage.CONTENT__CTN:
         return getCtn();
+      case TemplateLangPackage.CONTENT__NO_CR:
+        return getNoCR();
       case TemplateLangPackage.CONTENT__INDENT:
         return getIndent();
     }
@@ -244,11 +244,11 @@ public class ContentImpl extends MinimalEObjectImpl.Container implements Content
   {
     switch (featureID)
     {
-      case TemplateLangPackage.CONTENT__PRINT:
-        setPrint((String)newValue);
-        return;
       case TemplateLangPackage.CONTENT__CTN:
         setCtn((String)newValue);
+        return;
+      case TemplateLangPackage.CONTENT__NO_CR:
+        setNoCR((String)newValue);
         return;
       case TemplateLangPackage.CONTENT__INDENT:
         setIndent((Expression)newValue);
@@ -267,11 +267,11 @@ public class ContentImpl extends MinimalEObjectImpl.Container implements Content
   {
     switch (featureID)
     {
-      case TemplateLangPackage.CONTENT__PRINT:
-        setPrint(PRINT_EDEFAULT);
-        return;
       case TemplateLangPackage.CONTENT__CTN:
         setCtn(CTN_EDEFAULT);
+        return;
+      case TemplateLangPackage.CONTENT__NO_CR:
+        setNoCR(NO_CR_EDEFAULT);
         return;
       case TemplateLangPackage.CONTENT__INDENT:
         setIndent((Expression)null);
@@ -290,10 +290,10 @@ public class ContentImpl extends MinimalEObjectImpl.Container implements Content
   {
     switch (featureID)
     {
-      case TemplateLangPackage.CONTENT__PRINT:
-        return PRINT_EDEFAULT == null ? print != null : !PRINT_EDEFAULT.equals(print);
       case TemplateLangPackage.CONTENT__CTN:
         return CTN_EDEFAULT == null ? ctn != null : !CTN_EDEFAULT.equals(ctn);
+      case TemplateLangPackage.CONTENT__NO_CR:
+        return NO_CR_EDEFAULT == null ? noCR != null : !NO_CR_EDEFAULT.equals(noCR);
       case TemplateLangPackage.CONTENT__INDENT:
         return indent != null;
     }
@@ -311,10 +311,10 @@ public class ContentImpl extends MinimalEObjectImpl.Container implements Content
     if (eIsProxy()) return super.toString();
 
     StringBuffer result = new StringBuffer(super.toString());
-    result.append(" (print: ");
-    result.append(print);
-    result.append(", ctn: ");
+    result.append(" (ctn: ");
     result.append(ctn);
+    result.append(", noCR: ");
+    result.append(noCR);
     result.append(')');
     return result.toString();
   }

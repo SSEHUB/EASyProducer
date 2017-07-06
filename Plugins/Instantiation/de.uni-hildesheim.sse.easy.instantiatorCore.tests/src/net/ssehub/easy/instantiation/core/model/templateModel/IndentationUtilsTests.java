@@ -3,8 +3,6 @@ package net.ssehub.easy.instantiation.core.model.templateModel;
 import org.junit.Assert;
 import org.junit.Test;
 
-import net.ssehub.easy.instantiation.core.model.templateModel.IndentationUtils;
-
 /**
  * Tests for the indentation utilities.
  * 
@@ -120,7 +118,7 @@ public class IndentationUtilsTests {
      * @param expected the expected result
      */
     private static void testInsertion(String testString, int indentation, String expected) {
-        String result = IndentationUtils.insertIndentation(testString, indentation);
+        String result = IndentationUtils.insertIndentation(testString, indentation, false);
         Assert.assertEquals("insertion fails:", result, expected);
     }
     

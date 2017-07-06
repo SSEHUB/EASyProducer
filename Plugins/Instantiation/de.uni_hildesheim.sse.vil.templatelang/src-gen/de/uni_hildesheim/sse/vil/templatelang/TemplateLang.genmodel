@@ -60,8 +60,8 @@
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference TemplateLang.ecore#//Alternative/else"/>
     </genClasses>
     <genClasses ecoreClass="TemplateLang.ecore#//Content">
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute TemplateLang.ecore#//Content/print"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute TemplateLang.ecore#//Content/ctn"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute TemplateLang.ecore#//Content/noCR"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference TemplateLang.ecore#//Content/indent"/>
     </genClasses>
     <genClasses ecoreClass="TemplateLang.ecore#//Switch">

@@ -742,8 +742,7 @@ public class ModelTranslator extends de.uni_hildesheim.sse.vil.expressions.trans
             if (warnings.length() > 0) {
                 warning(warnings.toString(), content, TemplateLangPackage.Literals.CONTENT__CTN, 0);
             }
-            return new ContentStatement(tmp, terminal, indentExpr, content.getPrint() == null, 
-                resolver.getCurrentModel());
+            return new ContentStatement(tmp, terminal, indentExpr, null == content.getNoCR(), resolver.getCurrentModel());
         } catch (VilException e) {
             throw new TranslatorException(e, content, TemplateLangPackage.Literals.CONTENT__INDENT);
         }

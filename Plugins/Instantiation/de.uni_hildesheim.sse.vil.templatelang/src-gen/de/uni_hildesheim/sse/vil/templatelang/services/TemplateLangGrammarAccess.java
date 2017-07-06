@@ -565,49 +565,61 @@ public class TemplateLangGrammarAccess extends AbstractGrammarElementFinder {
 	public class ContentElements extends AbstractParserRuleElementFinder {
 		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "de.uni_hildesheim.sse.vil.templatelang.TemplateLang.Content");
 		private final Group cGroup = (Group)rule.eContents().get(1);
-		private final Assignment cPrintAssignment_0 = (Assignment)cGroup.eContents().get(0);
-		private final Keyword cPrintPrintKeyword_0_0 = (Keyword)cPrintAssignment_0.eContents().get(0);
-		private final Assignment cCtnAssignment_1 = (Assignment)cGroup.eContents().get(1);
-		private final RuleCall cCtnSTRINGTerminalRuleCall_1_0 = (RuleCall)cCtnAssignment_1.eContents().get(0);
-		private final Group cGroup_2 = (Group)cGroup.eContents().get(2);
-		private final Keyword cVerticalLineKeyword_2_0 = (Keyword)cGroup_2.eContents().get(0);
-		private final Assignment cIndentAssignment_2_1 = (Assignment)cGroup_2.eContents().get(1);
-		private final RuleCall cIndentExpressionParserRuleCall_2_1_0 = (RuleCall)cIndentAssignment_2_1.eContents().get(0);
-		private final Keyword cSemicolonKeyword_2_2 = (Keyword)cGroup_2.eContents().get(2);
+		private final Assignment cCtnAssignment_0 = (Assignment)cGroup.eContents().get(0);
+		private final RuleCall cCtnSTRINGTerminalRuleCall_0_0 = (RuleCall)cCtnAssignment_0.eContents().get(0);
+		private final Group cGroup_1 = (Group)cGroup.eContents().get(1);
+		private final Group cGroup_1_0 = (Group)cGroup_1.eContents().get(0);
+		private final Assignment cNoCRAssignment_1_0_0 = (Assignment)cGroup_1_0.eContents().get(0);
+		private final Keyword cNoCRExclamationMarkKeyword_1_0_0_0 = (Keyword)cNoCRAssignment_1_0_0.eContents().get(0);
+		private final Keyword cCRKeyword_1_0_1 = (Keyword)cGroup_1_0.eContents().get(1);
+		private final Group cGroup_1_1 = (Group)cGroup_1.eContents().get(1);
+		private final Keyword cVerticalLineKeyword_1_1_0 = (Keyword)cGroup_1_1.eContents().get(0);
+		private final Assignment cIndentAssignment_1_1_1 = (Assignment)cGroup_1_1.eContents().get(1);
+		private final RuleCall cIndentExpressionParserRuleCall_1_1_1_0 = (RuleCall)cIndentAssignment_1_1_1.eContents().get(0);
+		private final Keyword cSemicolonKeyword_1_2 = (Keyword)cGroup_1.eContents().get(2);
 		
 		//Content:
-		//	print='print'? ctn=STRING ('|' indent=Expression ';')?;
+		//	ctn=STRING ((noCR='!'? '<CR>')? ('|' indent=Expression)? ';')?;
 		@Override public ParserRule getRule() { return rule; }
 
-		//print='print'? ctn=STRING ('|' indent=Expression ';')?
+		//ctn=STRING ((noCR='!'? '<CR>')? ('|' indent=Expression)? ';')?
 		public Group getGroup() { return cGroup; }
 
-		//print='print'?
-		public Assignment getPrintAssignment_0() { return cPrintAssignment_0; }
-
-		//'print'
-		public Keyword getPrintPrintKeyword_0_0() { return cPrintPrintKeyword_0_0; }
-
 		//ctn=STRING
-		public Assignment getCtnAssignment_1() { return cCtnAssignment_1; }
+		public Assignment getCtnAssignment_0() { return cCtnAssignment_0; }
 
 		//STRING
-		public RuleCall getCtnSTRINGTerminalRuleCall_1_0() { return cCtnSTRINGTerminalRuleCall_1_0; }
+		public RuleCall getCtnSTRINGTerminalRuleCall_0_0() { return cCtnSTRINGTerminalRuleCall_0_0; }
 
-		//('|' indent=Expression ';')?
-		public Group getGroup_2() { return cGroup_2; }
+		//((noCR='!'? '<CR>')? ('|' indent=Expression)? ';')?
+		public Group getGroup_1() { return cGroup_1; }
+
+		//(noCR='!'? '<CR>')?
+		public Group getGroup_1_0() { return cGroup_1_0; }
+
+		//noCR='!'?
+		public Assignment getNoCRAssignment_1_0_0() { return cNoCRAssignment_1_0_0; }
+
+		//'!'
+		public Keyword getNoCRExclamationMarkKeyword_1_0_0_0() { return cNoCRExclamationMarkKeyword_1_0_0_0; }
+
+		//'<CR>'
+		public Keyword getCRKeyword_1_0_1() { return cCRKeyword_1_0_1; }
+
+		//('|' indent=Expression)?
+		public Group getGroup_1_1() { return cGroup_1_1; }
 
 		//'|'
-		public Keyword getVerticalLineKeyword_2_0() { return cVerticalLineKeyword_2_0; }
+		public Keyword getVerticalLineKeyword_1_1_0() { return cVerticalLineKeyword_1_1_0; }
 
 		//indent=Expression
-		public Assignment getIndentAssignment_2_1() { return cIndentAssignment_2_1; }
+		public Assignment getIndentAssignment_1_1_1() { return cIndentAssignment_1_1_1; }
 
 		//Expression
-		public RuleCall getIndentExpressionParserRuleCall_2_1_0() { return cIndentExpressionParserRuleCall_2_1_0; }
+		public RuleCall getIndentExpressionParserRuleCall_1_1_1_0() { return cIndentExpressionParserRuleCall_1_1_1_0; }
 
 		//';'
-		public Keyword getSemicolonKeyword_2_2() { return cSemicolonKeyword_2_2; }
+		public Keyword getSemicolonKeyword_1_2() { return cSemicolonKeyword_1_2; }
 	}
 
 	public class SwitchElements extends AbstractParserRuleElementFinder {
@@ -1271,7 +1283,7 @@ public class TemplateLangGrammarAccess extends AbstractGrammarElementFinder {
 	}
 
 	//Content:
-	//	print='print'? ctn=STRING ('|' indent=Expression ';')?;
+	//	ctn=STRING ((noCR='!'? '<CR>')? ('|' indent=Expression)? ';')?;
 	public ContentElements getContentAccess() {
 		return pContent;
 	}
