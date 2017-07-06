@@ -5,11 +5,12 @@ import org.junit.runners.Suite;
 
 /**
  * Test Suite, which starts all individual test cases including local ones. It's fine if there are no tests
- * in this class :) 
+ * in this class :)
  * 
  * @author Holger Eichelberger
  */
 @RunWith(Suite.class)
-@Suite.SuiteClasses({LocalRealTests.class, DynamicFreezeTest.class, ConceptsTests.class})
+@Suite.SuiteClasses({LocalRealTests.class, DynamicFreezeTest.class, LocalConceptsTests.class, 
+    LocalExperimentsTests.class })
 public class LocalTests {
 }

@@ -68,5 +68,17 @@ public class LocalRealTests extends RealTests {
         File base = executeCase("april14", versions, "QualiMaster/", null);
         assertFileEqualityRec(new File(base, "expected"), base);
     }
+    
+    /**
+     * Tests the QualiMaster model / derivation (February 2017, without rt-VIL). Seems to fail on Jenkins.
+     * This is a slightly modified version to ensure creation of artifacts in repeatable sequence.
+     * 
+     * @throws IOException shall not occur
+     */
+    @Test
+    public void testQualiMasterFeb17() throws IOException {
+        testQualiMasterFeb17Impl();
+    }
+
 
 }
