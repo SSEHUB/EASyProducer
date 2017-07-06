@@ -186,6 +186,11 @@ public class ModelLocations <M extends IModel> {
             }
             return found;
         }
+
+        @Override
+        public String toString() {
+            return "Location: " + location + " " + dependent;
+        }
  
     }
     

@@ -269,18 +269,53 @@ public class ModelInfo <M extends IModel> implements IModelData {
     }
     
     /**
-     * Returns whether the given <code>uri</code> is contained in
-     * the location of this information object.
+     * Returns whether the location of this information object is contained in <code>uri</code>.
      * 
      * @param uri the URI to be considered as containing URI
      * @return <code>true</code> if the location of this information
      *   object is contained, <code>false</code> if not (or any of both 
-     *   is <b>null</b>)
+     *   is <b>null</b>). Please note that the opposite must not hold, e.g., if either URL is <b>null</b>.
+     *   
+     * @see #isContainedIn(String)
+     * @see #toComparablePath(URI)
      */
     public boolean isContainedIn(URI uri) {
+        return isContainedIn(toComparablePath(uri));
+    }
+
+    /**
+     * Returns whether the location of this information object is contained in <code>path</code>.
+     * 
+     * @param path the path based on {@link #toComparablePath(URI)}
+     * @return <code>true</code> if the location of this information
+     *   object is contained, <code>false</code> if not (or any of both 
+     *   is <b>null</b>). Please note that the opposite must not hold, e.g., if either URL is <b>null</b>.
+     */
+    public boolean isContainedIn(String path) {
         boolean result = false;
-        if (null != uri && null != location) {
-            result = uri.compareTo(location) < 0;
+        if (null != path && null != location) {
+            result = toComparablePath(location).startsWith(path);
+        }
+        return result;
+    }
+    
+    /**
+     * Turns the given <code>uri</code> into a comparable path.
+     * 
+     * @param uri the URI (may be <b>null</b>, shall be normalized)
+     * @return the comparable path
+     */
+    public static String toComparablePath(URI uri) {
+        String result;
+        if (null == uri) {
+            result = null;
+        } else {
+            result = uri.getPath();
+            if (!result.endsWith("/")) {
+                // this is either a path, then it is ok
+                // or it is a file and then it does not matter
+                result += "/";
+            } // else path, do not add
         }
         return result;
     }
