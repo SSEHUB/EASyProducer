@@ -10,6 +10,6 @@ import org.junit.runners.Suite;
  * @author Holger Eichelberger
  */
 @RunWith(Suite.class)
-@Suite.SuiteClasses({LocalRealTests.class })
+@Suite.SuiteClasses({LocalRealTests.class, DynamicFreezeTest.class, ConceptsTests.class, ExperimentsTests.class })
 public class LocalTests {
 }

@@ -1,0 +1,25 @@
+@indent(indentation = 4, additional = 0)
+template content12(Configuration config, Artifact target) {
+
+    def String test() {
+       '<test>
+            <test1>
+                ${test1()}
+            </test1>
+        </test>' !<CR> |12;
+    }
+
+    def String test1() {
+       '<test2>
+            Here.
+            There.
+        </test2>' !<CR> |16;
+    }
+
+    def main(Configuration config, Artifact target) {
+        '<content>
+            ${test()}
+        </content>'
+    }
+
+}

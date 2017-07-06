@@ -1,0 +1,13 @@
+package p;
+
+public enum E implements DatabaseConvertible<String> {
+    private String databaseValue;
+    
+    @Override
+    public String toString() {
+        return databaseValue.toString();
+    }
+    public String toValue() {
+        return databaseValue;
+    }
+}

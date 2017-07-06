@@ -1,0 +1,28 @@
+@indent(indentation = 4, additional = 0)
+template content13(Configuration config, Artifact target) {
+
+    def addition(Boolean test) {
+        if (test) {
+            ".toString()";
+        } else {
+            "";
+        }
+    }
+
+    def main(Configuration config, Artifact target) {
+        'package p;
+        
+        public enum E implements DatabaseConvertible<String> {'
+        'private String databaseValue;
+
+        @Override
+        public String toString() {
+            return databaseValue.toString()${addition(false)};
+        }' | 4;
+        'public String toValue() {' | 4;
+        'return databaseValue${addition(false)};' | 8;
+        '}' | 4;
+        '}'
+    }
+
+}

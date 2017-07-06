@@ -1,0 +1,5 @@
+-> main(Configuration, Artifact) with (<config>, test.texts)
+    -> addition(Boolean) with (false)
+        visit else-branch
+    -> addition(Boolean) with (false)
+        visit else-branch
