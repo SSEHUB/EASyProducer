@@ -41,7 +41,7 @@ import net.ssehub.easy.basics.modelManagement.Version;
 import net.ssehub.easy.basics.modelManagement.VersionFormatException;
 import net.ssehub.easy.basics.modelManagement.ModelLocations.Location;
 import net.ssehub.easy.basics.progress.ProgressObserver;
-import net.ssehub.easy.dslCore.ModelUtility;
+import net.ssehub.easy.dslCore.DefaultLib;
 import net.ssehub.easy.dslCore.TopLevelModelAccessor;
 import net.ssehub.easy.dslCore.TopLevelModelAccessor.IModelAccessor;
 import net.ssehub.easy.instantiation.core.model.buildlangModel.AbstractRule;
@@ -758,42 +758,41 @@ public class PersistenceUtils {
         Map<PathKind, File> alternativePaths) {
         if (!defaultModelsLoaded) {
             defaultModelsLoaded = true;
-            URL defltLibUrl = loader.getResource("defaultLib");
-            EASyLoggerFactory.INSTANCE.getLogger(PersistenceUtils.class, Activator.PLUGIN_ID).info(
-                "Trying to load default IVML/VIL library from '" + defltLibUrl);
-            if (null != defltLibUrl) {
+            List<URL> libs = new ArrayList<URL>();
+            DefaultLib.appendQuietly(libs, loader.getResource("defaultLib")); // ignores null
+            DefaultLib.appendAll(libs);
+            int count = 0;
+            for (URL url : libs) { // all shall be different from null by construction
+                EASyLoggerFactory.INSTANCE.getLogger(PersistenceUtils.class, Activator.PLUGIN_ID).info(
+                    "Trying to load default IVML/VIL library from '" + url);
                 try {
-                    defltLibUrl = ModelUtility.getResourceInitializer().resolve(defltLibUrl);
-                    defltLibUrl = new URL(defltLibUrl.toString().replaceAll(" ", "%20")); 
-                    URI defltLibUri = defltLibUrl.toURI();
-                    if (JarUtils.isJarURL(defltLibUrl)) {
-                        File file = FileUtils.createTmpDir("easyDefaultLib");
-                        JarUtils.unpackJar(defltLibUrl, file);
-                        defltLibUri = file.toURI();
+                    URI uri = url.toURI();
+                    if (JarUtils.isJarURL(url)) {
+                        File file = FileUtils.createTmpDir("easyDefaultLib_" + count);
+                        JarUtils.unpackJar(url, file);
+                        uri = file.toURI();
                     }
-                    Location defltLibLocation = VarModel.INSTANCE.locations().getLocationFor(defltLibUri);
-                    if (null == defltLibLocation && FileUtils.isFileURI(defltLibUri)) {
-                        File defltLibFolder = new File(defltLibUri);
+                    Location defltLibLocation = VarModel.INSTANCE.locations().getLocationFor(uri);
+                    if (null == defltLibLocation && FileUtils.isFileURI(uri)) {
+                        File defltLibFolder = new File(uri);
                         if (defltLibFolder.exists()) {
                             Configuration cfg = getDefaultModelsConfiguration(defltLibFolder, alternativePaths);
                             addLocation(cfg, observer);
                             EASyLoggerFactory.INSTANCE.getLogger(PersistenceUtils.class, Activator.PLUGIN_ID).info(
-                                "Loaded default IVML/VIL library from '" + defltLibUrl);
+                                "Loaded default IVML/VIL library from '" + url);
                         }
                     }
+                    count++;
                 } catch (URISyntaxException e) {
                     EASyLoggerFactory.INSTANCE.getLogger(PersistenceUtils.class, Activator.PLUGIN_ID).error(
-                        "While loading default library in '" + defltLibUrl + "': " + e.getMessage());
+                        "While loading default library in '" + url + "': " + e.getMessage());
                 } catch (ModelManagementException e) {
                     EASyLoggerFactory.INSTANCE.getLogger(PersistenceUtils.class, Activator.PLUGIN_ID).error(
-                        "While loading default library in '" + defltLibUrl + "': " + e.getMessage());
+                        "While loading default library in '" + url + "': " + e.getMessage());
                 } catch (IOException e) {
                     EASyLoggerFactory.INSTANCE.getLogger(PersistenceUtils.class, Activator.PLUGIN_ID).error(
-                        "While loading default library in '" + defltLibUrl + "': " + e.getMessage());
+                        "While loading default library in '" + url + "': " + e.getMessage());
                 }
-            } else {
-                EASyLoggerFactory.INSTANCE.getLogger(PersistenceUtils.class, Activator.PLUGIN_ID).info(
-                    "No default IVML/VIL library found.");
             }
         }
     }
