@@ -649,5 +649,16 @@ public class XmlFileArtifact extends FileArtifact implements IXmlContainer {
     protected DocumentBuilderFactory getDocumentBuilderFactory() {
         return DocumentBuilderFactory.newInstance();
     }
+    
+    /**
+     * Enforces re-loading, formatting and writing of this artifact.
+     * 
+     * @throws VilException in case that loading, formatting or writing fails
+     */
+    public void format() throws VilException {
+        initialize(); 
+        writeToFile();
+        lastPersisted = System.currentTimeMillis();
+    }
 
 }
