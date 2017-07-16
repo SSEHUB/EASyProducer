@@ -17,6 +17,7 @@ package net.ssehub.easy.instantiation.maven;
 
 import org.osgi.service.component.ComponentContext;
 
+import net.ssehub.easy.dslCore.DefaultLib;
 import net.ssehub.easy.instantiation.core.model.vilTypes.IRegistration;
 import net.ssehub.easy.instantiation.core.model.vilTypes.TypeRegistry;
 
@@ -36,6 +37,7 @@ public class Registration implements IRegistration {
         if (!registered) {
             registered = true;
             TypeRegistry.DEFAULT.register(Maven.class);
+            DefaultLib.appendURLQuietly(Registration.class.getClassLoader().getResource("defaultLib"));
         }
     }
     

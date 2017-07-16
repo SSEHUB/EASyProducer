@@ -14,7 +14,8 @@ Eclipse-BundleShape: dir
 Require-Bundle: net.ssehub.easy.instantiation.core;bundle-version="0.5.5",
  net.ssehub.easy.basics,
  org.eclipse.equinox.ds,
- org.eclipse.core.runtime
+ org.eclipse.core.runtime,
+ net.ssehub.easy.dslCore
 Bundle-ClassPath: .,
  lib/aether-api-0.9.0.M2.jar,
  lib/aether-connector-wagon-0.9.0.M2.jar,
