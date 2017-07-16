@@ -170,4 +170,16 @@ public class StreamTracer extends net.ssehub.easy.instantiation.core.model.commo
         }
     }
 
+    @Override
+    public void visitFlush() {
+    }
+
+    @Override
+    public void visitedFlush() {
+        if (isEnabled()) {
+            printIndentation();
+            println("flush");
+        }
+    }
+
 }

@@ -547,11 +547,7 @@ public class VilTemplateProcessor implements IVilType {
                 }
             }
             template.accept(exec);
-            String tmp = out.toString();
-            if (tmp.length() > 0) {
-                target.getText().setText(tmp);
-            }
-            target.store();
+            TemplateLangExecution.storeContent(target, out);
             exec.release(false);
         } catch (VilException e) {
             unregisterTerminatable(terminator, exec);

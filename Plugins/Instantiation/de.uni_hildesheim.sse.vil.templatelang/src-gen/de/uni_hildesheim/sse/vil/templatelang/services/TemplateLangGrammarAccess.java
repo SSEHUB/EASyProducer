@@ -441,14 +441,16 @@ public class TemplateLangGrammarAccess extends AbstractGrammarElementFinder {
 		private final RuleCall cExprStmtExpressionStatementParserRuleCall_7_0 = (RuleCall)cExprStmtAssignment_7.eContents().get(0);
 		private final Assignment cCtnAssignment_8 = (Assignment)cAlternatives.eContents().get(8);
 		private final RuleCall cCtnContentParserRuleCall_8_0 = (RuleCall)cCtnAssignment_8.eContents().get(0);
+		private final Assignment cFlushAssignment_9 = (Assignment)cAlternatives.eContents().get(9);
+		private final RuleCall cFlushFlushParserRuleCall_9_0 = (RuleCall)cFlushAssignment_9.eContents().get(0);
 		
 		//Stmt:
 		//	var=VariableDeclaration | alt=Alternative | switch=Switch | block=StmtBlock | multi=multiselect | loop=Loop |
-		//	while=While | exprStmt=ExpressionStatement | ctn=Content;
+		//	while=While | exprStmt=ExpressionStatement | ctn=Content | flush=Flush;
 		@Override public ParserRule getRule() { return rule; }
 
 		//var=VariableDeclaration | alt=Alternative | switch=Switch | block=StmtBlock | multi=multiselect | loop=Loop |
-		//while=While | exprStmt=ExpressionStatement | ctn=Content
+		//while=While | exprStmt=ExpressionStatement | ctn=Content | flush=Flush
 		public Alternatives getAlternatives() { return cAlternatives; }
 
 		//var=VariableDeclaration
@@ -504,6 +506,12 @@ public class TemplateLangGrammarAccess extends AbstractGrammarElementFinder {
 
 		//Content
 		public RuleCall getCtnContentParserRuleCall_8_0() { return cCtnContentParserRuleCall_8_0; }
+
+		//flush=Flush
+		public Assignment getFlushAssignment_9() { return cFlushAssignment_9; }
+
+		//Flush
+		public RuleCall getFlushFlushParserRuleCall_9_0() { return cFlushFlushParserRuleCall_9_0; }
 	}
 
 	public class AlternativeElements extends AbstractParserRuleElementFinder {
@@ -886,6 +894,26 @@ public class TemplateLangGrammarAccess extends AbstractGrammarElementFinder {
 		public RuleCall getStmtStmtParserRuleCall_4_0() { return cStmtStmtParserRuleCall_4_0; }
 	}
 
+	public class FlushElements extends AbstractParserRuleElementFinder {
+		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "de.uni_hildesheim.sse.vil.templatelang.TemplateLang.Flush");
+		private final Group cGroup = (Group)rule.eContents().get(1);
+		private final Keyword cFlushKeyword_0 = (Keyword)cGroup.eContents().get(0);
+		private final Keyword cSemicolonKeyword_1 = (Keyword)cGroup.eContents().get(1);
+		
+		//Flush:
+		//	'flush' ';';
+		@Override public ParserRule getRule() { return rule; }
+
+		//'flush' ';'
+		public Group getGroup() { return cGroup; }
+
+		//'flush'
+		public Keyword getFlushKeyword_0() { return cFlushKeyword_0; }
+
+		//';'
+		public Keyword getSemicolonKeyword_1() { return cSemicolonKeyword_1; }
+	}
+
 	public class MultiselectElements extends AbstractParserRuleElementFinder {
 		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "de.uni_hildesheim.sse.vil.templatelang.TemplateLang.multiselect");
 		private final Alternatives cAlternatives = (Alternatives)rule.eContents().get(1);
@@ -1128,6 +1156,7 @@ public class TemplateLangGrammarAccess extends AbstractGrammarElementFinder {
 	private final SwitchPartElements pSwitchPart;
 	private final LoopElements pLoop;
 	private final WhileElements pWhile;
+	private final FlushElements pFlush;
 	private final MultiselectElements pMultiselect;
 	private final GenericMultiselectElements pGenericMultiselect;
 	private final MultiSelectPartElements pMultiSelectPart;
@@ -1158,6 +1187,7 @@ public class TemplateLangGrammarAccess extends AbstractGrammarElementFinder {
 		this.pSwitchPart = new SwitchPartElements();
 		this.pLoop = new LoopElements();
 		this.pWhile = new WhileElements();
+		this.pFlush = new FlushElements();
 		this.pMultiselect = new MultiselectElements();
 		this.pGenericMultiselect = new GenericMultiselectElements();
 		this.pMultiSelectPart = new MultiSelectPartElements();
@@ -1267,7 +1297,7 @@ public class TemplateLangGrammarAccess extends AbstractGrammarElementFinder {
 
 	//Stmt:
 	//	var=VariableDeclaration | alt=Alternative | switch=Switch | block=StmtBlock | multi=multiselect | loop=Loop |
-	//	while=While | exprStmt=ExpressionStatement | ctn=Content;
+	//	while=While | exprStmt=ExpressionStatement | ctn=Content | flush=Flush;
 	public StmtElements getStmtAccess() {
 		return pStmt;
 	}
@@ -1336,6 +1366,16 @@ public class TemplateLangGrammarAccess extends AbstractGrammarElementFinder {
 	
 	public ParserRule getWhileRule() {
 		return getWhileAccess().getRule();
+	}
+
+	//Flush:
+	//	'flush' ';';
+	public FlushElements getFlushAccess() {
+		return pFlush;
+	}
+	
+	public ParserRule getFlushRule() {
+		return getFlushAccess().getRule();
 	}
 
 	//multiselect:

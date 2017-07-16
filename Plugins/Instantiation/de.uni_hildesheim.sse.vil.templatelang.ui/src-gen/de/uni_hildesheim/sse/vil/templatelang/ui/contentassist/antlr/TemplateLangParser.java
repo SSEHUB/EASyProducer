@@ -80,6 +80,7 @@ public class TemplateLangParser extends AbstractContentAssistParser {
 					put(grammarAccess.getLoopAccess().getGroup_6(), "rule__Loop__Group_6__0");
 					put(grammarAccess.getLoopAccess().getGroup_6_2(), "rule__Loop__Group_6_2__0");
 					put(grammarAccess.getWhileAccess().getGroup(), "rule__While__Group__0");
+					put(grammarAccess.getFlushAccess().getGroup(), "rule__Flush__Group__0");
 					put(grammarAccess.getGenericMultiselectAccess().getGroup(), "rule__GenericMultiselect__Group__0");
 					put(grammarAccess.getMultiSelectPartAccess().getGroup(), "rule__MultiSelectPart__Group__0");
 					put(grammarAccess.getUserMultiselectAccess().getGroup(), "rule__UserMultiselect__Group__0");
@@ -178,6 +179,7 @@ public class TemplateLangParser extends AbstractContentAssistParser {
 					put(grammarAccess.getStmtAccess().getWhileAssignment_6(), "rule__Stmt__WhileAssignment_6");
 					put(grammarAccess.getStmtAccess().getExprStmtAssignment_7(), "rule__Stmt__ExprStmtAssignment_7");
 					put(grammarAccess.getStmtAccess().getCtnAssignment_8(), "rule__Stmt__CtnAssignment_8");
+					put(grammarAccess.getStmtAccess().getFlushAssignment_9(), "rule__Stmt__FlushAssignment_9");
 					put(grammarAccess.getAlternativeAccess().getExprAssignment_2(), "rule__Alternative__ExprAssignment_2");
 					put(grammarAccess.getAlternativeAccess().getIfAssignment_4(), "rule__Alternative__IfAssignment_4");
 					put(grammarAccess.getAlternativeAccess().getElseAssignment_5_1(), "rule__Alternative__ElseAssignment_5_1");

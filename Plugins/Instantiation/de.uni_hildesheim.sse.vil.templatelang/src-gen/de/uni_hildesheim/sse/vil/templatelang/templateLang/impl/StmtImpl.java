@@ -41,6 +41,7 @@ import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
  *   <li>{@link de.uni_hildesheim.sse.vil.templatelang.templateLang.impl.StmtImpl#getWhile <em>While</em>}</li>
  *   <li>{@link de.uni_hildesheim.sse.vil.templatelang.templateLang.impl.StmtImpl#getExprStmt <em>Expr Stmt</em>}</li>
  *   <li>{@link de.uni_hildesheim.sse.vil.templatelang.templateLang.impl.StmtImpl#getCtn <em>Ctn</em>}</li>
+ *   <li>{@link de.uni_hildesheim.sse.vil.templatelang.templateLang.impl.StmtImpl#getFlush <em>Flush</em>}</li>
  * </ul>
  *
  * @generated
@@ -136,6 +137,26 @@ public class StmtImpl extends MinimalEObjectImpl.Container implements Stmt
    * @ordered
    */
   protected Content ctn;
+
+  /**
+   * The default value of the '{@link #getFlush() <em>Flush</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #getFlush()
+   * @generated
+   * @ordered
+   */
+  protected static final String FLUSH_EDEFAULT = null;
+
+  /**
+   * The cached value of the '{@link #getFlush() <em>Flush</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #getFlush()
+   * @generated
+   * @ordered
+   */
+  protected String flush = FLUSH_EDEFAULT;
 
   /**
    * <!-- begin-user-doc -->
@@ -595,6 +616,29 @@ public class StmtImpl extends MinimalEObjectImpl.Container implements Stmt
    * <!-- end-user-doc -->
    * @generated
    */
+  public String getFlush()
+  {
+    return flush;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public void setFlush(String newFlush)
+  {
+    String oldFlush = flush;
+    flush = newFlush;
+    if (eNotificationRequired())
+      eNotify(new ENotificationImpl(this, Notification.SET, TemplateLangPackage.STMT__FLUSH, oldFlush, flush));
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
   @Override
   public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs)
   {
@@ -650,6 +694,8 @@ public class StmtImpl extends MinimalEObjectImpl.Container implements Stmt
         return getExprStmt();
       case TemplateLangPackage.STMT__CTN:
         return getCtn();
+      case TemplateLangPackage.STMT__FLUSH:
+        return getFlush();
     }
     return super.eGet(featureID, resolve, coreType);
   }
@@ -690,6 +736,9 @@ public class StmtImpl extends MinimalEObjectImpl.Container implements Stmt
         return;
       case TemplateLangPackage.STMT__CTN:
         setCtn((Content)newValue);
+        return;
+      case TemplateLangPackage.STMT__FLUSH:
+        setFlush((String)newValue);
         return;
     }
     super.eSet(featureID, newValue);
@@ -732,6 +781,9 @@ public class StmtImpl extends MinimalEObjectImpl.Container implements Stmt
       case TemplateLangPackage.STMT__CTN:
         setCtn((Content)null);
         return;
+      case TemplateLangPackage.STMT__FLUSH:
+        setFlush(FLUSH_EDEFAULT);
+        return;
     }
     super.eUnset(featureID);
   }
@@ -764,8 +816,27 @@ public class StmtImpl extends MinimalEObjectImpl.Container implements Stmt
         return exprStmt != null;
       case TemplateLangPackage.STMT__CTN:
         return ctn != null;
+      case TemplateLangPackage.STMT__FLUSH:
+        return FLUSH_EDEFAULT == null ? flush != null : !FLUSH_EDEFAULT.equals(flush);
     }
     return super.eIsSet(featureID);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  public String toString()
+  {
+    if (eIsProxy()) return super.toString();
+
+    StringBuffer result = new StringBuffer(super.toString());
+    result.append(" (flush: ");
+    result.append(flush);
+    result.append(')');
+    return result.toString();
   }
 
 } //StmtImpl

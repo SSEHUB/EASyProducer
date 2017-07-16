@@ -470,7 +470,8 @@ public class TemplateLangSemanticSequencer extends ExpressionDslSemanticSequence
 	 *         loop=Loop | 
 	 *         while=While | 
 	 *         exprStmt=ExpressionStatement | 
-	 *         ctn=Content
+	 *         ctn=Content | 
+	 *         flush=Flush
 	 *     )
 	 */
 	protected void sequence_Stmt(ISerializationContext context, Stmt semanticObject) {

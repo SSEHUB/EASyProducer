@@ -88,4 +88,14 @@ public interface ITracer extends net.ssehub.easy.instantiation.core.model.common
      */
     public void visitedWhileBody();
     
+    /**
+     * Is called before a content flush.
+     */
+    public void visitFlush();
+
+    /**
+     * Is called after a content flush.
+     */
+    public void visitedFlush();
+    
 }

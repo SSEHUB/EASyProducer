@@ -53,6 +53,7 @@
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference TemplateLang.ecore#//Stmt/while"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference TemplateLang.ecore#//Stmt/exprStmt"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference TemplateLang.ecore#//Stmt/ctn"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute TemplateLang.ecore#//Stmt/flush"/>
     </genClasses>
     <genClasses ecoreClass="TemplateLang.ecore#//Alternative">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference TemplateLang.ecore#//Alternative/expr"/>

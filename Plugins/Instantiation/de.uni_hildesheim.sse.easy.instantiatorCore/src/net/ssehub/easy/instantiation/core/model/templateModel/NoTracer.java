@@ -63,4 +63,12 @@ public class NoTracer extends net.ssehub.easy.instantiation.core.model.common.No
     public void visitedWhileBody() {
     }
 
+    @Override
+    public void visitFlush() {
+    }
+
+    @Override
+    public void visitedFlush() {
+    }
+
 }

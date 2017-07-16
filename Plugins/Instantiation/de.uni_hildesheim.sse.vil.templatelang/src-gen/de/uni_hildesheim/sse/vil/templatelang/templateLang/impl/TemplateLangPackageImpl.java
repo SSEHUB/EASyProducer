@@ -623,6 +623,16 @@ public class TemplateLangPackageImpl extends EPackageImpl implements TemplateLan
    * <!-- end-user-doc -->
    * @generated
    */
+  public EAttribute getStmt_Flush()
+  {
+    return (EAttribute)stmtEClass.getEStructuralFeatures().get(9);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
   public EClass getAlternative()
   {
     return alternativeEClass;
@@ -1142,6 +1152,7 @@ public class TemplateLangPackageImpl extends EPackageImpl implements TemplateLan
     createEReference(stmtEClass, STMT__WHILE);
     createEReference(stmtEClass, STMT__EXPR_STMT);
     createEReference(stmtEClass, STMT__CTN);
+    createEAttribute(stmtEClass, STMT__FLUSH);
 
     alternativeEClass = createEClass(ALTERNATIVE);
     createEReference(alternativeEClass, ALTERNATIVE__EXPR);
@@ -1280,6 +1291,7 @@ public class TemplateLangPackageImpl extends EPackageImpl implements TemplateLan
     initEReference(getStmt_While(), this.getWhile(), null, "while", null, 0, 1, Stmt.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEReference(getStmt_ExprStmt(), theExpressionDslPackage.getExpressionStatement(), null, "exprStmt", null, 0, 1, Stmt.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEReference(getStmt_Ctn(), this.getContent(), null, "ctn", null, 0, 1, Stmt.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEAttribute(getStmt_Flush(), ecorePackage.getEString(), "flush", null, 0, 1, Stmt.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     initEClass(alternativeEClass, Alternative.class, "Alternative", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
     initEReference(getAlternative_Expr(), theExpressionDslPackage.getExpression(), null, "expr", null, 0, 1, Alternative.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);

@@ -962,6 +962,25 @@ ruleStmt returns [EObject current=null]
 	    }
 
 )
+)
+    |(
+(
+		{ 
+	        newCompositeNode(grammarAccess.getStmtAccess().getFlushFlushParserRuleCall_9_0()); 
+	    }
+		lv_flush_9_0=ruleFlush		{
+	        if ($current==null) {
+	            $current = createModelElementForParent(grammarAccess.getStmtRule());
+	        }
+       		set(
+       			$current, 
+       			"flush",
+        		lv_flush_9_0, 
+        		"de.uni_hildesheim.sse.vil.templatelang.TemplateLang.Flush");
+	        afterParserOrEnumRuleCall();
+	    }
+
+)
 ))
 ;
 
@@ -1563,6 +1582,39 @@ ruleWhile returns [EObject current=null]
 )
 ))
 ;
+
+
+
+
+
+// Entry rule entryRuleFlush
+entryRuleFlush returns [String current=null] 
+	:
+	{ newCompositeNode(grammarAccess.getFlushRule()); } 
+	 iv_ruleFlush=ruleFlush 
+	 { $current=$iv_ruleFlush.current.getText(); }  
+	 EOF 
+;
+
+// Rule Flush
+ruleFlush returns [AntlrDatatypeRuleToken current=new AntlrDatatypeRuleToken()] 
+    @init { enterRule(); 
+    }
+    @after { leaveRule(); }:
+(
+	kw='flush' 
+    {
+        $current.merge(kw);
+        newLeafNode(kw, grammarAccess.getFlushAccess().getFlushKeyword_0()); 
+    }
+
+	kw=';' 
+    {
+        $current.merge(kw);
+        newLeafNode(kw, grammarAccess.getFlushAccess().getSemicolonKeyword_1()); 
+    }
+)
+    ;
 
 
 

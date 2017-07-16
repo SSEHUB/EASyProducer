@@ -385,5 +385,12 @@ public class TemplateLangWriter extends WriterVisitor<VariableDeclaration> imple
         }
         return null;
     }
+    
+    @Override
+    public Object visitFlush(FlushStatement stmt) throws VilException {
+        printIndentation();
+        println("flush;");
+        return null;
+    }
 
 }

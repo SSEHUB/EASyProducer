@@ -49,6 +49,7 @@ import net.ssehub.easy.instantiation.core.model.templateModel.ContentStatement;
 import net.ssehub.easy.instantiation.core.model.templateModel.ContentStatement.LineEndType;
 import net.ssehub.easy.instantiation.core.model.templateModel.Def;
 import net.ssehub.easy.instantiation.core.model.templateModel.ExpressionStatement;
+import net.ssehub.easy.instantiation.core.model.templateModel.FlushStatement;
 import net.ssehub.easy.instantiation.core.model.templateModel.FormattingConfiguration;
 import net.ssehub.easy.instantiation.core.model.templateModel.ITemplateElement;
 import net.ssehub.easy.instantiation.core.model.templateModel.JavaExtension;
@@ -490,6 +491,8 @@ public class ModelTranslator extends de.uni_hildesheim.sse.vil.expressions.trans
                 result = processLoop(stmt.getLoop());
             } else if (null != stmt.getWhile()) {
                 result = processWhile(stmt.getWhile());
+            } else if (null != stmt.getFlush()) {
+                result = processFlush();
             } else if (null != stmt.getMulti()) {
                 warning("multi selection is currently not supported", stmt.getMulti(), 
                     TemplateLangPackage.Literals.STMT__MULTI, 0);
@@ -575,6 +578,17 @@ public class ModelTranslator extends de.uni_hildesheim.sse.vil.expressions.trans
         } catch (VilException e) {
             throw new TranslatorException(e, loop, TemplateLangPackage.Literals.WHILE__EXPR);
         }
+    }
+    
+    /**
+     * Processes a content flush statement.
+     * 
+     * @return the VTL flush statement
+     * @throws TranslatorException in case that the translation fails
+     */
+    private FlushStatement processFlush() 
+        throws TranslatorException {
+        return new FlushStatement();
     }
     
     /**

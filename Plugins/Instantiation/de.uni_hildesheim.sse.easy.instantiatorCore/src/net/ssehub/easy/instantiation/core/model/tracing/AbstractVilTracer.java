@@ -391,4 +391,12 @@ public abstract class AbstractVilTracer extends AbstractTracerBase
         this.enable = enable;
     }
 
+    @Override
+    public void visitFlush() {
+    }
+
+    @Override
+    public void visitedFlush() {
+    }
+
 }

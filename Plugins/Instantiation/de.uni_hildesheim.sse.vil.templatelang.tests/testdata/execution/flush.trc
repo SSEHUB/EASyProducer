@@ -1,0 +1,2 @@
+-> main(Configuration, FileArtifact) with (<config>, test.texts)
+    flush

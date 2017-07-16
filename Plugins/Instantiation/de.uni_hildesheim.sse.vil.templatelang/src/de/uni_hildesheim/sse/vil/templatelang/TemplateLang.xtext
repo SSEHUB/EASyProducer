@@ -58,6 +58,7 @@ Stmt:
   | while=While
   | exprStmt=ExpressionStatement
   | ctn=Content
+  | flush=Flush
   ;
 
 Alternative:
@@ -88,6 +89,10 @@ Loop:
 While:
     'while' '(' expr=Expression ')' 
     stmt=Stmt
+;
+
+Flush:
+    'flush' ';'
 ;
       
 multiselect: 

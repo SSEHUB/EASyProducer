@@ -25,6 +25,7 @@ import org.eclipse.emf.ecore.EObject;
  *   <li>{@link de.uni_hildesheim.sse.vil.templatelang.templateLang.Stmt#getWhile <em>While</em>}</li>
  *   <li>{@link de.uni_hildesheim.sse.vil.templatelang.templateLang.Stmt#getExprStmt <em>Expr Stmt</em>}</li>
  *   <li>{@link de.uni_hildesheim.sse.vil.templatelang.templateLang.Stmt#getCtn <em>Ctn</em>}</li>
+ *   <li>{@link de.uni_hildesheim.sse.vil.templatelang.templateLang.Stmt#getFlush <em>Flush</em>}</li>
  * </ul>
  *
  * @see de.uni_hildesheim.sse.vil.templatelang.templateLang.TemplateLangPackage#getStmt()
@@ -266,5 +267,31 @@ public interface Stmt extends EObject
    * @generated
    */
   void setCtn(Content value);
+
+  /**
+   * Returns the value of the '<em><b>Flush</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <p>
+   * If the meaning of the '<em>Flush</em>' attribute isn't clear,
+   * there really should be more of a description here...
+   * </p>
+   * <!-- end-user-doc -->
+   * @return the value of the '<em>Flush</em>' attribute.
+   * @see #setFlush(String)
+   * @see de.uni_hildesheim.sse.vil.templatelang.templateLang.TemplateLangPackage#getStmt_Flush()
+   * @model
+   * @generated
+   */
+  String getFlush();
+
+  /**
+   * Sets the value of the '{@link de.uni_hildesheim.sse.vil.templatelang.templateLang.Stmt#getFlush <em>Flush</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @param value the new value of the '<em>Flush</em>' attribute.
+   * @see #getFlush()
+   * @generated
+   */
+  void setFlush(String value);
 
 } // Stmt

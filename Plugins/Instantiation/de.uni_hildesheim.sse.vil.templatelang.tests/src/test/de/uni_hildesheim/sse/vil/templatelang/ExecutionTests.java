@@ -672,6 +672,16 @@ public class ExecutionTests extends AbstractTest {
     public void testContent15() throws IOException {
         assertEqualsNoSourceComparison("content15");
     }
+    
+    /**
+     * Tests the flush statement.
+     * 
+     * @throws IOException should not occur
+     */
+    @Test
+    public void testFlush() throws IOException {
+        assertEqual("flush");
+    }
 
     /**
      * Asserts equality of the trace and output during execution without asserting the 

@@ -499,13 +499,22 @@ public interface TemplateLangPackage extends EPackage
   int STMT__CTN = 8;
 
   /**
+   * The feature id for the '<em><b>Flush</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int STMT__FLUSH = 9;
+
+  /**
    * The number of structural features of the '<em>Stmt</em>' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int STMT_FEATURE_COUNT = 9;
+  int STMT_FEATURE_COUNT = 10;
 
   /**
    * The meta object id for the '{@link de.uni_hildesheim.sse.vil.templatelang.templateLang.impl.AlternativeImpl <em>Alternative</em>}' class.
@@ -1433,6 +1442,17 @@ public interface TemplateLangPackage extends EPackage
   EReference getStmt_Ctn();
 
   /**
+   * Returns the meta object for the attribute '{@link de.uni_hildesheim.sse.vil.templatelang.templateLang.Stmt#getFlush <em>Flush</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the attribute '<em>Flush</em>'.
+   * @see de.uni_hildesheim.sse.vil.templatelang.templateLang.Stmt#getFlush()
+   * @see #getStmt()
+   * @generated
+   */
+  EAttribute getStmt_Flush();
+
+  /**
    * Returns the meta object for class '{@link de.uni_hildesheim.sse.vil.templatelang.templateLang.Alternative <em>Alternative</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -2249,6 +2269,14 @@ public interface TemplateLangPackage extends EPackage
      * @generated
      */
     EReference STMT__CTN = eINSTANCE.getStmt_Ctn();
+
+    /**
+     * The meta object literal for the '<em><b>Flush</b></em>' attribute feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EAttribute STMT__FLUSH = eINSTANCE.getStmt_Flush();
 
     /**
      * The meta object literal for the '{@link de.uni_hildesheim.sse.vil.templatelang.templateLang.impl.AlternativeImpl <em>Alternative</em>}' class.

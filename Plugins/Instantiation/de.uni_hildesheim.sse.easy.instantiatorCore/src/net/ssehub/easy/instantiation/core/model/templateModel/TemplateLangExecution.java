@@ -2,6 +2,7 @@ package net.ssehub.easy.instantiation.core.model.templateModel;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.io.Writer;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -15,6 +16,7 @@ import net.ssehub.easy.basics.logger.EASyLoggerFactory.EASyLogger;
 import net.ssehub.easy.basics.modelManagement.IndentationConfiguration;
 import net.ssehub.easy.instantiation.core.Bundle;
 import net.ssehub.easy.instantiation.core.model.artifactModel.ArtifactTypes;
+import net.ssehub.easy.instantiation.core.model.artifactModel.IArtifact;
 import net.ssehub.easy.instantiation.core.model.common.ExecutionVisitor;
 import net.ssehub.easy.instantiation.core.model.common.IResolvableModel;
 import net.ssehub.easy.instantiation.core.model.common.ITerminatable;
@@ -89,6 +91,7 @@ public class TemplateLangExecution extends ExecutionVisitor<Template, Def, Varia
     private static final List<JavaExtension> DEFAULT_EXTENSIONS = new ArrayList<JavaExtension>();
     
     private RuntimeEnvironment environment;
+    private Writer mainOut;
     private PrintWriter out;
     private String mainName;
     private ITracer tracer;
@@ -120,6 +123,7 @@ public class TemplateLangExecution extends ExecutionVisitor<Template, Def, Varia
     public TemplateLangExecution(ITracer tracer, Writer out, String mainName, Map<String, Object> parameter) {
         super(new RuntimeEnvironment(), tracer, parameter);
         this.environment = (RuntimeEnvironment) getRuntimeEnvironment();
+        this.mainOut = out;
         this.out = new PrintWriter(out);
         this.mainName = mainName;
         this.tracer = tracer;
@@ -673,5 +677,43 @@ public class TemplateLangExecution extends ExecutionVisitor<Template, Def, Varia
     public void stop() {
         stop = true;
     }
+
+    @Override
+    public Object visitFlush(FlushStatement stmt) throws VilException {
+        tracer.visitFlush();
+        storeContent();
+        tracer.visitedFlush();
+        return null;
+    }
     
+    /**
+     * Explicitly stores the concatenated results of the content statements to the target artifact.
+     * 
+     * @throws VilException if storing the content fails for some reason
+     */
+    public void storeContent() throws VilException {
+        Object tgt = getParameter(TemplateLangExecution.PARAM_TARGET_SURE);
+        if (null == tgt) {
+            tgt = getParameter(TemplateLangExecution.PARAM_TARGET);
+        }
+        if (tgt instanceof IArtifact && mainOut instanceof StringWriter) {
+            storeContent((IArtifact) tgt, (StringWriter) mainOut);
+        }
+    }
+    
+    /**
+     * Explicitly stores the concatenated results of the content statements to the target artifact.
+     * 
+     * @param target the target artifact
+     * @param out the output writer to take the produced content from
+     * @throws VilException if storing the content fails for some reason
+     */
+    public static void storeContent(IArtifact target, StringWriter out) throws VilException {
+        String tmp = out.toString();
+        if (tmp.length() > 0) {
+            target.getText().setText(tmp);
+        }
+        target.store();
+    }
+
 }

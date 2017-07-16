@@ -68,6 +68,7 @@
         containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="ctn" eType="#//Content"
         containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="flush" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Alternative">
     <eStructuralFeatures xsi:type="ecore:EReference" name="expr" eType="ecore:EClass platform:/resource/de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/ExpressionDsl.ecore#//Expression"

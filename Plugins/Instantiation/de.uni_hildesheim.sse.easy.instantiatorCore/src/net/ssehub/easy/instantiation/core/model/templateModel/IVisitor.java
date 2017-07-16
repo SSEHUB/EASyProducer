@@ -98,5 +98,14 @@ public interface IVisitor extends net.ssehub.easy.instantiation.core.model.commo
      * @throws VilException in case that visiting fails (e.g., execution)
      */
     public Object visitTemplateCallExpression(TemplateCallExpression call) throws VilException;
+    
+    /**
+     * Visits a flush statement.
+     * 
+     * @param flush the flush statement
+     * @return the result visiting the given statement (may be <b>null</b>)
+     * @throws VilException in case that visiting fails (e.g., execution)
+     */
+    public Object visitFlush(FlushStatement flush) throws VilException;
 
 }

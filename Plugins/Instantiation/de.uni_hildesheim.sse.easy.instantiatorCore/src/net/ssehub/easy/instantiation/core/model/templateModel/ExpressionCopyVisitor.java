@@ -98,6 +98,11 @@ public class ExpressionCopyVisitor extends CopyVisitor implements IVisitor {
     }
 
     @Override
+    public Object visitFlush(FlushStatement stmt) throws VilException {
+        throw new VilException("not an expression", VilException.ID_INTERNAL);
+    }
+    
+    @Override
     public Object visitWhile(WhileStatement stmt) throws VilException {
         throw new VilException("not an expression", VilException.ID_INTERNAL);
     }
