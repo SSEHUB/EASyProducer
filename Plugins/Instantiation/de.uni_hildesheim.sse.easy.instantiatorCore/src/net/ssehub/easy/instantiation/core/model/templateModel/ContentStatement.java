@@ -17,7 +17,30 @@ public class ContentStatement extends AbstractTemplateElement {
     private CompositeExpression content;
     private String terminal;
     private Expression indentExpression;
-    private boolean printLineEnd;
+    private LineEndType lineEndType;
+    
+    /**
+     * Defines the line end types.
+     * 
+     * @author Holger Eichelberger
+     */
+    public enum LineEndType {
+        
+        /**
+         * Not explicitly specified, depending on def nesting level.
+         */
+        DEFAULT,
+        
+        /**
+         * Emit line end.
+         */
+        LINE_END,
+        
+        /**
+         * Do not emit a line end.
+         */
+        NO_LINE_END
+    }
     
     /**
      * Creates a new content statement.
@@ -26,14 +49,14 @@ public class ContentStatement extends AbstractTemplateElement {
      * @param terminal the limiting terminal (at start and end)
      * @param indentExpression an optional integer expression determining the additional 
      *     indentation, e.g., in loops or recursions
-     * @param printLineEnd whether a line end shall be emitted
+     * @param lineEndType the line end type
      * @param parent the parent language element
      * @throws VilException in case that the expression cannot be resolved or does not evaluate to an integer
      */
     public ContentStatement(CompositeExpression content, String terminal, Expression indentExpression, 
-        boolean printLineEnd, ILanguageElement parent) throws VilException {
+        LineEndType lineEndType, ILanguageElement parent) throws VilException {
         setParent(parent);
-        this.printLineEnd = printLineEnd;
+        this.lineEndType = lineEndType;
         this.content = content;
         this.terminal = terminal;
         this.indentExpression = indentExpression;
@@ -48,10 +71,26 @@ public class ContentStatement extends AbstractTemplateElement {
     /**
      * Returns whether a line end shall be emitted.
      * 
+     * @param deflt the value to be taken for {@link LineEndType#DEFAULT}
      * @return <code>true</code> if a line end shall be emitted, <code>false</code> else
      */
-    public boolean printLineEnd() {
-        return printLineEnd;
+    public boolean printLineEnd(boolean deflt) {
+        boolean result;
+        if (LineEndType.DEFAULT == lineEndType) {
+            result = deflt;
+        } else {
+            result = LineEndType.LINE_END == lineEndType;
+        }
+        return result;
+    }
+    
+    /**
+     * Returns the line end type.
+     * 
+     * @return the line end type
+     */
+    public LineEndType getLineEndType() {
+        return lineEndType;
     }
     
     /**

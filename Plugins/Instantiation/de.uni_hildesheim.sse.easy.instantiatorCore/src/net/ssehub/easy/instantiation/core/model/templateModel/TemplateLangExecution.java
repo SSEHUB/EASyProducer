@@ -94,6 +94,8 @@ public class TemplateLangExecution extends ExecutionVisitor<Template, Def, Varia
     private ITracer tracer;
     private boolean stop = false;
     private int contentNestingLevel;
+    private int lastContentNestingLevel = -1;
+    private boolean lastContentFormatted = false;
     private Stack<String> defContentStack = new Stack<String>();
 
     /**
@@ -447,6 +449,7 @@ public class TemplateLangExecution extends ExecutionVisitor<Template, Def, Varia
     @Override
     public Object visitContentStatement(ContentStatement cnt) throws VilException {
         contentNestingLevel++;
+        lastContentFormatted = false;
         String content;
         // search for \r\n, \r, \n followed by indentation*step whitespaces or tabs +1
         content = (String) cnt.getContent().accept(this);
@@ -454,7 +457,6 @@ public class TemplateLangExecution extends ExecutionVisitor<Template, Def, Varia
             int indentation = environment.getIndentation();
             if (indentation > 0) {
                 IndentationConfiguration config = environment.getIndentationConfiguration();
-                // experiment... is this sufficient for '-indentation?
                 int indent = indentation + environment.getIndentationConfiguration().getAdditional();
                 content = IndentationUtils.removeIndentation(content, indent, config.getTabEmulation());
             }
@@ -465,73 +467,64 @@ public class TemplateLangExecution extends ExecutionVisitor<Template, Def, Varia
                     forced = ((Integer) val).intValue();
                     if (forced > 0) { // precondition of insertIndentation
                         content = IndentationUtils.insertIndentation(content, forced, contentNestingLevel > 1);
+                        lastContentFormatted = true;
                     }
                 } else {
                     throw new VilException("indentation value is no integer", 
                         VilException.ID_SEMANTIC);
                 }
             }
-            if (cnt.printLineEnd()) {
+            if (cnt.printLineEnd(1 == contentNestingLevel)) { // if top-level, print line ending by default else not
                 content += getLineEnd();
             }
             String topContent = defContentStack.pop();
             if (0 == topContent.length()) {
                 topContent = content;
             } else {
-                topContent = appendWithLastIndentation(topContent, content, contentNestingLevel == 1);
+                topContent = IndentationUtils.appendWithLastIndentation(topContent, content, 
+                    contentNestingLevel == 1 || lastContentNestingLevel == contentNestingLevel);
             }
             defContentStack.push(topContent);
             content = topContent; // replace by all for end of def/return
         }
+        lastContentNestingLevel = contentNestingLevel;
         contentNestingLevel--;
         return content;
     }
 
-    /**
-     * Appends the with last indentation to <code>string</code>.
-     * 
-     * @param string the string to look into
-     * @param text the text to append
-     * @param skipLastIndent anyway skip the last indentation
-     * @return the string with appended indentation (if there was any)
-     */
-    private String appendWithLastIndentation(String string, String text, boolean skipLastIndent) {
-        String result = string;
-        if (result != null) {
-            if ((text.length() > 0 && IndentationUtils.isIndentationChar(text.charAt(0))) || skipLastIndent) {
-                // indented content statements
-                result = result + text;
-            } else {
-                // single chained content statements
-                int pos = result.length() - 1;
-                while (pos >= 0 && !IndentationUtils.isIndentationChar(result.charAt(pos))) {
-                    pos--;
-                }
-                int endPos = pos;
-                while (pos >= 0 && IndentationUtils.isIndentationChar(result.charAt(pos))) {
-                    pos--;
-                }
-                if (pos < 0) {
-                    pos = 0;
-                } else if (!IndentationUtils.isLineEnd(result.charAt(pos))) {
-                    pos = -1;
-                }
-                if (pos >= 0 && endPos >= pos) {
-                    String le = getLineEnd();
-                    if (result.endsWith(le)) {
-                        result = result.substring(0, result.length() - le.length());
-                    }
-                    result = result + result.substring(pos, endPos + 1) + text;
-                } else {
-                    result = result + text;
+    @Override
+    protected String appendInCompositeExpression(String s1, Expression e1, String s2, Expression e2) {
+        String result;
+        boolean format = false;
+        if (e1 instanceof ConstantExpression && e2 instanceof TemplateCallExpression) {
+            // do formatting only in presence of a ${template call} and if not explicitly formatted
+            format = !lastContentFormatted;
+            if (format) {
+                if (s1.length() > 0) {
+                    // avoid in-place indentation
+                    char last = s1.charAt(s1.length() - 1);
+                    format = IndentationUtils.isLineEnd(last) || IndentationUtils.isIndentationChar(last);
                 }
             }
+        }
+        if (format) {
+            IndentationConfiguration config = environment.getIndentationConfiguration();
+            int indentation = environment.getIndentation();
+            if (null != config) { // we are within/among expressions, one step out
+                indentation -= config.getIndentationStep();
+            }
+            if (indentation > 0) {
+                int indent = indentation + environment.getIndentationConfiguration().getAdditional();
+                if (IndentationUtils.allLinesStartWith(s2, indent)) {
+                    s2 = IndentationUtils.removeIndentation(s2, indent, config.getTabEmulation());
+                }
+            }
+            result = IndentationUtils.appendWithLastIndentation(s1, s2, false);
         } else {
-            result = text;
+            result = super.appendInCompositeExpression(s1, e1, s2, e2);
         }
         return result;
     }
-    
 
     /**
      * Returns the current line end based on the formatting configuration of the actual context model.

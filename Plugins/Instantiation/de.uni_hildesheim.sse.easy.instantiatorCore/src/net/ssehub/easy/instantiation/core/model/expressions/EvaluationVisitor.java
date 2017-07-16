@@ -241,6 +241,7 @@ public class EvaluationVisitor implements IExpressionVisitor {
     @Override
     public Object visitCompositeExpression(CompositeExpression ex) throws VilException {
         String result = "";
+        Expression lastEx = null;
         for (Expression expression : ex.getExpressionList()) {
             Object value;
             try {
@@ -254,13 +255,29 @@ public class EvaluationVisitor implements IExpressionVisitor {
                 }
             }
             if (value != null) {
-                result += StringValueHelper.getStringValueInReplacement(value, null);
+                result = appendInCompositeExpression(result, lastEx,
+                    StringValueHelper.getStringValueInReplacement(value, null), expression);
             } else {
                 result = null;
                 break;
             }
+            lastEx = expression;
         }
         return result;
+    }
+    
+    /**
+     * Appends <code>s2</code> to <code>s2</code> originating from the respective expressions. This
+     * allows to potentially consider indentation formatting.
+     * 
+     * @param s1 the first string
+     * @param e1 the expression causing <code>s1</code>
+     * @param s2 the string to append
+     * @param e2 the expression causing <code>s2</code>
+     * @return the appended string
+     */
+    protected String appendInCompositeExpression(String s1, Expression e1, String s2, Expression e2) {
+        return s1 + s2;
     }
 
     @Override

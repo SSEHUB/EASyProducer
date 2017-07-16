@@ -693,9 +693,19 @@ public class TemplateLangPackageImpl extends EPackageImpl implements TemplateLan
    * <!-- end-user-doc -->
    * @generated
    */
+  public EAttribute getContent_CR()
+  {
+    return (EAttribute)contentEClass.getEStructuralFeatures().get(2);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
   public EReference getContent_Indent()
   {
-    return (EReference)contentEClass.getEStructuralFeatures().get(2);
+    return (EReference)contentEClass.getEStructuralFeatures().get(3);
   }
 
   /**
@@ -1141,6 +1151,7 @@ public class TemplateLangPackageImpl extends EPackageImpl implements TemplateLan
     contentEClass = createEClass(CONTENT);
     createEAttribute(contentEClass, CONTENT__CTN);
     createEAttribute(contentEClass, CONTENT__NO_CR);
+    createEAttribute(contentEClass, CONTENT__CR);
     createEReference(contentEClass, CONTENT__INDENT);
 
     switchEClass = createEClass(SWITCH);
@@ -1278,6 +1289,7 @@ public class TemplateLangPackageImpl extends EPackageImpl implements TemplateLan
     initEClass(contentEClass, Content.class, "Content", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
     initEAttribute(getContent_Ctn(), ecorePackage.getEString(), "ctn", null, 0, 1, Content.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEAttribute(getContent_NoCR(), ecorePackage.getEString(), "noCR", null, 0, 1, Content.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEAttribute(getContent_CR(), ecorePackage.getEString(), "CR", null, 0, 1, Content.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEReference(getContent_Indent(), theExpressionDslPackage.getExpression(), null, "indent", null, 0, 1, Content.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     initEClass(switchEClass, Switch.class, "Switch", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);

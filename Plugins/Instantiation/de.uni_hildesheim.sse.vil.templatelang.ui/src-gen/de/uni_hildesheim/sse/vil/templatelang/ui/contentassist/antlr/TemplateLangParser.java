@@ -183,6 +183,7 @@ public class TemplateLangParser extends AbstractContentAssistParser {
 					put(grammarAccess.getAlternativeAccess().getElseAssignment_5_1(), "rule__Alternative__ElseAssignment_5_1");
 					put(grammarAccess.getContentAccess().getCtnAssignment_0(), "rule__Content__CtnAssignment_0");
 					put(grammarAccess.getContentAccess().getNoCRAssignment_1_0_0(), "rule__Content__NoCRAssignment_1_0_0");
+					put(grammarAccess.getContentAccess().getCRAssignment_1_0_1(), "rule__Content__CRAssignment_1_0_1");
 					put(grammarAccess.getContentAccess().getIndentAssignment_1_1_1(), "rule__Content__IndentAssignment_1_1_1");
 					put(grammarAccess.getSwitchAccess().getExprAssignment_2(), "rule__Switch__ExprAssignment_2");
 					put(grammarAccess.getSwitchAccess().getPartsAssignment_5_0(), "rule__Switch__PartsAssignment_5_0");

@@ -11,6 +11,7 @@ import net.ssehub.easy.instantiation.core.model.common.IVisitor;
 import net.ssehub.easy.instantiation.core.model.common.VilException;
 import net.ssehub.easy.instantiation.core.model.common.WriterVisitor;
 import net.ssehub.easy.instantiation.core.model.expressions.Expression;
+import net.ssehub.easy.instantiation.core.model.templateModel.ContentStatement.LineEndType;
 import net.ssehub.easy.instantiation.core.model.vilTypes.Constants;
 
 /**
@@ -328,10 +329,14 @@ public class TemplateLangWriter extends WriterVisitor<VariableDeclaration> imple
             setInContent(false);
             print(terminal);
             boolean semi = false;
-            if (!cnt.printLineEnd()) {
+            LineEndType leType = cnt.getLineEndType();
+            if (LineEndType.LINE_END == leType) {
+                print(" <CR>");
+                semi = true;
+            } else if (LineEndType.NO_LINE_END == leType) {
                 print(" !<CR>");
                 semi = true;
-            }
+            } // no output for default
             if (null != cnt.getIndentExpression()) {
                 print(" | ");
                 cnt.getIndentExpression().accept(this);

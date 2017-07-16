@@ -1,0 +1,17 @@
+-> main(Configuration, Artifact) with (<config>, test.texts)
+    -> dependencies()
+        -> appendDependency(String, String) with (test1, 1.1)
+            -> length(String) with (1.1) = 3
+            -> >(Integer, Integer) with (3, 0) = true
+            visit if-branch
+        -> appendDependency(String, String) with (test2, )
+            -> length(String) with () = 0
+            -> >(Integer, Integer) with (0, 0) = false
+    -> plugins()
+    -> dependencyManagement()
+        -> appendDependency(String, String) with (pips, )
+            -> length(String) with () = 0
+            -> >(Integer, Integer) with (0, 0) = false
+        -> appendDependency(String, String) with (infra, )
+            -> length(String) with () = 0
+            -> >(Integer, Integer) with (0, 0) = false

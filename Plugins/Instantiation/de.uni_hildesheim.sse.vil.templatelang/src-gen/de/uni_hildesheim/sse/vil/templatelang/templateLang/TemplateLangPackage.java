@@ -582,13 +582,22 @@ public interface TemplateLangPackage extends EPackage
   int CONTENT__NO_CR = 1;
 
   /**
+   * The feature id for the '<em><b>CR</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int CONTENT__CR = 2;
+
+  /**
    * The feature id for the '<em><b>Indent</b></em>' containment reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int CONTENT__INDENT = 2;
+  int CONTENT__INDENT = 3;
 
   /**
    * The number of structural features of the '<em>Content</em>' class.
@@ -597,7 +606,7 @@ public interface TemplateLangPackage extends EPackage
    * @generated
    * @ordered
    */
-  int CONTENT_FEATURE_COUNT = 3;
+  int CONTENT_FEATURE_COUNT = 4;
 
   /**
    * The meta object id for the '{@link de.uni_hildesheim.sse.vil.templatelang.templateLang.impl.SwitchImpl <em>Switch</em>}' class.
@@ -1499,6 +1508,17 @@ public interface TemplateLangPackage extends EPackage
   EAttribute getContent_NoCR();
 
   /**
+   * Returns the meta object for the attribute '{@link de.uni_hildesheim.sse.vil.templatelang.templateLang.Content#getCR <em>CR</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the attribute '<em>CR</em>'.
+   * @see de.uni_hildesheim.sse.vil.templatelang.templateLang.Content#getCR()
+   * @see #getContent()
+   * @generated
+   */
+  EAttribute getContent_CR();
+
+  /**
    * Returns the meta object for the containment reference '{@link de.uni_hildesheim.sse.vil.templatelang.templateLang.Content#getIndent <em>Indent</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -2289,6 +2309,14 @@ public interface TemplateLangPackage extends EPackage
      * @generated
      */
     EAttribute CONTENT__NO_CR = eINSTANCE.getContent_NoCR();
+
+    /**
+     * The meta object literal for the '<em><b>CR</b></em>' attribute feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EAttribute CONTENT__CR = eINSTANCE.getContent_CR();
 
     /**
      * The meta object literal for the '<em><b>Indent</b></em>' containment reference feature.

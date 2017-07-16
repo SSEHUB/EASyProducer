@@ -304,7 +304,7 @@ public class TemplateLangSemanticSequencer extends ExpressionDslSemanticSequence
 	 *     Content returns Content
 	 *
 	 * Constraint:
-	 *     (ctn=STRING noCR='!'? indent=Expression?)
+	 *     (ctn=STRING (noCR='!'? CR='<CR>')? indent=Expression?)
 	 */
 	protected void sequence_Content(ISerializationContext context, Content semanticObject) {
 		genericSequencer.createSequence(context, semanticObject);

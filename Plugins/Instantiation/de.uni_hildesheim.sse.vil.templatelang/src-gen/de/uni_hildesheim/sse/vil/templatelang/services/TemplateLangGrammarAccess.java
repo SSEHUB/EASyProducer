@@ -571,7 +571,8 @@ public class TemplateLangGrammarAccess extends AbstractGrammarElementFinder {
 		private final Group cGroup_1_0 = (Group)cGroup_1.eContents().get(0);
 		private final Assignment cNoCRAssignment_1_0_0 = (Assignment)cGroup_1_0.eContents().get(0);
 		private final Keyword cNoCRExclamationMarkKeyword_1_0_0_0 = (Keyword)cNoCRAssignment_1_0_0.eContents().get(0);
-		private final Keyword cCRKeyword_1_0_1 = (Keyword)cGroup_1_0.eContents().get(1);
+		private final Assignment cCRAssignment_1_0_1 = (Assignment)cGroup_1_0.eContents().get(1);
+		private final Keyword cCRCRKeyword_1_0_1_0 = (Keyword)cCRAssignment_1_0_1.eContents().get(0);
 		private final Group cGroup_1_1 = (Group)cGroup_1.eContents().get(1);
 		private final Keyword cVerticalLineKeyword_1_1_0 = (Keyword)cGroup_1_1.eContents().get(0);
 		private final Assignment cIndentAssignment_1_1_1 = (Assignment)cGroup_1_1.eContents().get(1);
@@ -579,10 +580,10 @@ public class TemplateLangGrammarAccess extends AbstractGrammarElementFinder {
 		private final Keyword cSemicolonKeyword_1_2 = (Keyword)cGroup_1.eContents().get(2);
 		
 		//Content:
-		//	ctn=STRING ((noCR='!'? '<CR>')? ('|' indent=Expression)? ';')?;
+		//	ctn=STRING ((noCR='!'? CR='<CR>')? ('|' indent=Expression)? ';')?;
 		@Override public ParserRule getRule() { return rule; }
 
-		//ctn=STRING ((noCR='!'? '<CR>')? ('|' indent=Expression)? ';')?
+		//ctn=STRING ((noCR='!'? CR='<CR>')? ('|' indent=Expression)? ';')?
 		public Group getGroup() { return cGroup; }
 
 		//ctn=STRING
@@ -591,10 +592,10 @@ public class TemplateLangGrammarAccess extends AbstractGrammarElementFinder {
 		//STRING
 		public RuleCall getCtnSTRINGTerminalRuleCall_0_0() { return cCtnSTRINGTerminalRuleCall_0_0; }
 
-		//((noCR='!'? '<CR>')? ('|' indent=Expression)? ';')?
+		//((noCR='!'? CR='<CR>')? ('|' indent=Expression)? ';')?
 		public Group getGroup_1() { return cGroup_1; }
 
-		//(noCR='!'? '<CR>')?
+		//(noCR='!'? CR='<CR>')?
 		public Group getGroup_1_0() { return cGroup_1_0; }
 
 		//noCR='!'?
@@ -603,8 +604,11 @@ public class TemplateLangGrammarAccess extends AbstractGrammarElementFinder {
 		//'!'
 		public Keyword getNoCRExclamationMarkKeyword_1_0_0_0() { return cNoCRExclamationMarkKeyword_1_0_0_0; }
 
+		//CR='<CR>'
+		public Assignment getCRAssignment_1_0_1() { return cCRAssignment_1_0_1; }
+
 		//'<CR>'
-		public Keyword getCRKeyword_1_0_1() { return cCRKeyword_1_0_1; }
+		public Keyword getCRCRKeyword_1_0_1_0() { return cCRCRKeyword_1_0_1_0; }
 
 		//('|' indent=Expression)?
 		public Group getGroup_1_1() { return cGroup_1_1; }
@@ -1283,7 +1287,7 @@ public class TemplateLangGrammarAccess extends AbstractGrammarElementFinder {
 	}
 
 	//Content:
-	//	ctn=STRING ((noCR='!'? '<CR>')? ('|' indent=Expression)? ';')?;
+	//	ctn=STRING ((noCR='!'? CR='<CR>')? ('|' indent=Expression)? ';')?;
 	public ContentElements getContentAccess() {
 		return pContent;
 	}

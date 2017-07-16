@@ -17,6 +17,7 @@ import org.eclipse.emf.ecore.EObject;
  * <ul>
  *   <li>{@link de.uni_hildesheim.sse.vil.templatelang.templateLang.Content#getCtn <em>Ctn</em>}</li>
  *   <li>{@link de.uni_hildesheim.sse.vil.templatelang.templateLang.Content#getNoCR <em>No CR</em>}</li>
+ *   <li>{@link de.uni_hildesheim.sse.vil.templatelang.templateLang.Content#getCR <em>CR</em>}</li>
  *   <li>{@link de.uni_hildesheim.sse.vil.templatelang.templateLang.Content#getIndent <em>Indent</em>}</li>
  * </ul>
  *
@@ -77,6 +78,32 @@ public interface Content extends EObject
    * @generated
    */
   void setNoCR(String value);
+
+  /**
+   * Returns the value of the '<em><b>CR</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <p>
+   * If the meaning of the '<em>CR</em>' attribute isn't clear,
+   * there really should be more of a description here...
+   * </p>
+   * <!-- end-user-doc -->
+   * @return the value of the '<em>CR</em>' attribute.
+   * @see #setCR(String)
+   * @see de.uni_hildesheim.sse.vil.templatelang.templateLang.TemplateLangPackage#getContent_CR()
+   * @model
+   * @generated
+   */
+  String getCR();
+
+  /**
+   * Sets the value of the '{@link de.uni_hildesheim.sse.vil.templatelang.templateLang.Content#getCR <em>CR</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @param value the new value of the '<em>CR</em>' attribute.
+   * @see #getCR()
+   * @generated
+   */
+  void setCR(String value);
 
   /**
    * Returns the value of the '<em><b>Indent</b></em>' containment reference.

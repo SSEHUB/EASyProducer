@@ -662,7 +662,17 @@ public class ExecutionTests extends AbstractTest {
     public void testContent14() throws IOException {
         assertEqualsNoSourceComparison("content14");
     }
-    
+
+    /**
+     * Tests nested formatting.
+     * 
+     * @throws IOException should not occur
+     */
+    @Test
+    public void testContent15() throws IOException {
+        assertEqualsNoSourceComparison("content15");
+    }
+
     /**
      * Asserts equality of the trace and output during execution without asserting the 
      * equality of the formatted sources.

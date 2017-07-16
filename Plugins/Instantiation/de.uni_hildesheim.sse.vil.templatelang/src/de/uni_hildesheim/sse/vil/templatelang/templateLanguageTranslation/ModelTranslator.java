@@ -46,6 +46,7 @@ import net.ssehub.easy.instantiation.core.model.expressions.CompositeExpression;
 import net.ssehub.easy.instantiation.core.model.expressions.Expression;
 import net.ssehub.easy.instantiation.core.model.templateModel.AlternativeStatement;
 import net.ssehub.easy.instantiation.core.model.templateModel.ContentStatement;
+import net.ssehub.easy.instantiation.core.model.templateModel.ContentStatement.LineEndType;
 import net.ssehub.easy.instantiation.core.model.templateModel.Def;
 import net.ssehub.easy.instantiation.core.model.templateModel.ExpressionStatement;
 import net.ssehub.easy.instantiation.core.model.templateModel.FormattingConfiguration;
@@ -742,7 +743,17 @@ public class ModelTranslator extends de.uni_hildesheim.sse.vil.expressions.trans
             if (warnings.length() > 0) {
                 warning(warnings.toString(), content, TemplateLangPackage.Literals.CONTENT__CTN, 0);
             }
-            return new ContentStatement(tmp, terminal, indentExpr, null == content.getNoCR(), resolver.getCurrentModel());
+            LineEndType leType;
+            if (null == content.getCR()) {
+                leType = LineEndType.DEFAULT;
+            } else {
+                if (null == content.getNoCR()) {
+                    leType = LineEndType.LINE_END;
+                } else {
+                    leType = LineEndType.NO_LINE_END;
+                }
+            }
+            return new ContentStatement(tmp, terminal, indentExpr, leType, resolver.getCurrentModel());
         } catch (VilException e) {
             throw new TranslatorException(e, content, TemplateLangPackage.Literals.CONTENT__INDENT);
         }

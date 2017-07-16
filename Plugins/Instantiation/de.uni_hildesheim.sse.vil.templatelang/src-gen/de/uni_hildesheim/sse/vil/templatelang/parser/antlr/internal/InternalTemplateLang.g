@@ -1108,11 +1108,22 @@ ruleContent returns [EObject current=null]
 	    }
 
 )
-)?	otherlv_2='<CR>' 
+)?(
+(
+		lv_CR_2_0=	'<CR>' 
     {
-    	newLeafNode(otherlv_2, grammarAccess.getContentAccess().getCRKeyword_1_0_1());
+        newLeafNode(lv_CR_2_0, grammarAccess.getContentAccess().getCRCRKeyword_1_0_1_0());
     }
-)?(	otherlv_3='|' 
+ 
+	    {
+	        if ($current==null) {
+	            $current = createModelElement(grammarAccess.getContentRule());
+	        }
+       		setWithLastConsumed($current, "CR", lv_CR_2_0, "<CR>");
+	    }
+
+)
+))?(	otherlv_3='|' 
     {
     	newLeafNode(otherlv_3, grammarAccess.getContentAccess().getVerticalLineKeyword_1_1_0());
     }

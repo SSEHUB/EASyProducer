@@ -11,7 +11,6 @@ import org.eclipse.xtext.IGrammarAccess;
 import org.eclipse.xtext.RuleCall;
 import org.eclipse.xtext.nodemodel.INode;
 import org.eclipse.xtext.serializer.analysis.GrammarAlias.AbstractElementAlias;
-import org.eclipse.xtext.serializer.analysis.GrammarAlias.GroupAlias;
 import org.eclipse.xtext.serializer.analysis.GrammarAlias.TokenAlias;
 import org.eclipse.xtext.serializer.analysis.ISyntacticSequencerPDAProvider.ISynNavigable;
 import org.eclipse.xtext.serializer.analysis.ISyntacticSequencerPDAProvider.ISynTransition;
@@ -21,16 +20,14 @@ import org.eclipse.xtext.serializer.sequencer.AbstractSyntacticSequencer;
 public class TemplateLangSyntacticSequencer extends AbstractSyntacticSequencer {
 
 	protected TemplateLangGrammarAccess grammarAccess;
-	protected AbstractElementAlias match_Content_CRKeyword_1_0_1_q;
-	protected AbstractElementAlias match_Content___CRKeyword_1_0_1_q_SemicolonKeyword_1_2__q;
+	protected AbstractElementAlias match_Content_SemicolonKeyword_1_2_q;
 	protected AbstractElementAlias match_VilDef_SemicolonKeyword_8_q;
 	protected AbstractElementAlias match_userMultiselect_SemicolonKeyword_4_q;
 	
 	@Inject
 	protected void init(IGrammarAccess access) {
 		grammarAccess = (TemplateLangGrammarAccess) access;
-		match_Content_CRKeyword_1_0_1_q = new TokenAlias(false, true, grammarAccess.getContentAccess().getCRKeyword_1_0_1());
-		match_Content___CRKeyword_1_0_1_q_SemicolonKeyword_1_2__q = new GroupAlias(false, true, new TokenAlias(false, true, grammarAccess.getContentAccess().getCRKeyword_1_0_1()), new TokenAlias(false, false, grammarAccess.getContentAccess().getSemicolonKeyword_1_2()));
+		match_Content_SemicolonKeyword_1_2_q = new TokenAlias(false, true, grammarAccess.getContentAccess().getSemicolonKeyword_1_2());
 		match_VilDef_SemicolonKeyword_8_q = new TokenAlias(false, true, grammarAccess.getVilDefAccess().getSemicolonKeyword_8());
 		match_userMultiselect_SemicolonKeyword_4_q = new TokenAlias(false, true, grammarAccess.getUserMultiselectAccess().getSemicolonKeyword_4());
 	}
@@ -47,10 +44,8 @@ public class TemplateLangSyntacticSequencer extends AbstractSyntacticSequencer {
 		List<INode> transitionNodes = collectNodes(fromNode, toNode);
 		for (AbstractElementAlias syntax : transition.getAmbiguousSyntaxes()) {
 			List<INode> syntaxNodes = getNodesFor(transitionNodes, syntax);
-			if (match_Content_CRKeyword_1_0_1_q.equals(syntax))
-				emit_Content_CRKeyword_1_0_1_q(semanticObject, getLastNavigableState(), syntaxNodes);
-			else if (match_Content___CRKeyword_1_0_1_q_SemicolonKeyword_1_2__q.equals(syntax))
-				emit_Content___CRKeyword_1_0_1_q_SemicolonKeyword_1_2__q(semanticObject, getLastNavigableState(), syntaxNodes);
+			if (match_Content_SemicolonKeyword_1_2_q.equals(syntax))
+				emit_Content_SemicolonKeyword_1_2_q(semanticObject, getLastNavigableState(), syntaxNodes);
 			else if (match_VilDef_SemicolonKeyword_8_q.equals(syntax))
 				emit_VilDef_SemicolonKeyword_8_q(semanticObject, getLastNavigableState(), syntaxNodes);
 			else if (match_userMultiselect_SemicolonKeyword_4_q.equals(syntax))
@@ -61,23 +56,12 @@ public class TemplateLangSyntacticSequencer extends AbstractSyntacticSequencer {
 
 	/**
 	 * Ambiguous syntax:
-	 *     '<CR>'?
-	 *
-	 * This ambiguous syntax occurs at:
-	 *     ctn=STRING (ambiguity) '|' indent=Expression
-	 */
-	protected void emit_Content_CRKeyword_1_0_1_q(EObject semanticObject, ISynNavigable transition, List<INode> nodes) {
-		acceptNodes(transition, nodes);
-	}
-	
-	/**
-	 * Ambiguous syntax:
-	 *     ('<CR>'? ';')?
+	 *     ';'?
 	 *
 	 * This ambiguous syntax occurs at:
 	 *     ctn=STRING (ambiguity) (rule end)
 	 */
-	protected void emit_Content___CRKeyword_1_0_1_q_SemicolonKeyword_1_2__q(EObject semanticObject, ISynNavigable transition, List<INode> nodes) {
+	protected void emit_Content_SemicolonKeyword_1_2_q(EObject semanticObject, ISynNavigable transition, List<INode> nodes) {
 		acceptNodes(transition, nodes);
 	}
 	

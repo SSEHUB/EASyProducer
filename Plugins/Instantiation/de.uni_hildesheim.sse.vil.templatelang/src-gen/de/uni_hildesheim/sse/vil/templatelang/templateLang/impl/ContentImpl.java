@@ -26,6 +26,7 @@ import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
  * <ul>
  *   <li>{@link de.uni_hildesheim.sse.vil.templatelang.templateLang.impl.ContentImpl#getCtn <em>Ctn</em>}</li>
  *   <li>{@link de.uni_hildesheim.sse.vil.templatelang.templateLang.impl.ContentImpl#getNoCR <em>No CR</em>}</li>
+ *   <li>{@link de.uni_hildesheim.sse.vil.templatelang.templateLang.impl.ContentImpl#getCR <em>CR</em>}</li>
  *   <li>{@link de.uni_hildesheim.sse.vil.templatelang.templateLang.impl.ContentImpl#getIndent <em>Indent</em>}</li>
  * </ul>
  *
@@ -72,6 +73,26 @@ public class ContentImpl extends MinimalEObjectImpl.Container implements Content
    * @ordered
    */
   protected String noCR = NO_CR_EDEFAULT;
+
+  /**
+   * The default value of the '{@link #getCR() <em>CR</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #getCR()
+   * @generated
+   * @ordered
+   */
+  protected static final String CR_EDEFAULT = null;
+
+  /**
+   * The cached value of the '{@link #getCR() <em>CR</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #getCR()
+   * @generated
+   * @ordered
+   */
+  protected String cr = CR_EDEFAULT;
 
   /**
    * The cached value of the '{@link #getIndent() <em>Indent</em>}' containment reference.
@@ -155,6 +176,29 @@ public class ContentImpl extends MinimalEObjectImpl.Container implements Content
    * <!-- end-user-doc -->
    * @generated
    */
+  public String getCR()
+  {
+    return cr;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public void setCR(String newCR)
+  {
+    String oldCR = cr;
+    cr = newCR;
+    if (eNotificationRequired())
+      eNotify(new ENotificationImpl(this, Notification.SET, TemplateLangPackage.CONTENT__CR, oldCR, cr));
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
   public Expression getIndent()
   {
     return indent;
@@ -228,6 +272,8 @@ public class ContentImpl extends MinimalEObjectImpl.Container implements Content
         return getCtn();
       case TemplateLangPackage.CONTENT__NO_CR:
         return getNoCR();
+      case TemplateLangPackage.CONTENT__CR:
+        return getCR();
       case TemplateLangPackage.CONTENT__INDENT:
         return getIndent();
     }
@@ -249,6 +295,9 @@ public class ContentImpl extends MinimalEObjectImpl.Container implements Content
         return;
       case TemplateLangPackage.CONTENT__NO_CR:
         setNoCR((String)newValue);
+        return;
+      case TemplateLangPackage.CONTENT__CR:
+        setCR((String)newValue);
         return;
       case TemplateLangPackage.CONTENT__INDENT:
         setIndent((Expression)newValue);
@@ -273,6 +322,9 @@ public class ContentImpl extends MinimalEObjectImpl.Container implements Content
       case TemplateLangPackage.CONTENT__NO_CR:
         setNoCR(NO_CR_EDEFAULT);
         return;
+      case TemplateLangPackage.CONTENT__CR:
+        setCR(CR_EDEFAULT);
+        return;
       case TemplateLangPackage.CONTENT__INDENT:
         setIndent((Expression)null);
         return;
@@ -294,6 +346,8 @@ public class ContentImpl extends MinimalEObjectImpl.Container implements Content
         return CTN_EDEFAULT == null ? ctn != null : !CTN_EDEFAULT.equals(ctn);
       case TemplateLangPackage.CONTENT__NO_CR:
         return NO_CR_EDEFAULT == null ? noCR != null : !NO_CR_EDEFAULT.equals(noCR);
+      case TemplateLangPackage.CONTENT__CR:
+        return CR_EDEFAULT == null ? cr != null : !CR_EDEFAULT.equals(cr);
       case TemplateLangPackage.CONTENT__INDENT:
         return indent != null;
     }
@@ -315,6 +369,8 @@ public class ContentImpl extends MinimalEObjectImpl.Container implements Content
     result.append(ctn);
     result.append(", noCR: ");
     result.append(noCR);
+    result.append(", CR: ");
+    result.append(cr);
     result.append(')');
     return result.toString();
   }

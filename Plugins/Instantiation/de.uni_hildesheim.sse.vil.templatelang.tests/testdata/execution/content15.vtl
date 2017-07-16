@@ -1,0 +1,45 @@
+@indent(indentation = 4, additional = 0)
+template content15(Configuration config, Artifact target) {
+
+    def main(Configuration config, Artifact target) {
+        '<project>
+            <dependencies>
+                ${dependencies()}
+            </dependencies>
+            <plugins>
+                ${plugins()}
+            </plugins>
+            ${dependencyManagement()}
+        </project>'
+    }
+    
+    def dependencies() {
+        '${appendDependency("test1", "1.1")}' <CR>;
+        '${appendDependency("test2")}'
+    }
+    
+    def plugins() {
+        '<plugin>
+            <artifact>art</artifact>
+        </plugin>' | 16;
+    }
+    
+    def appendDependency(String art, String version="") {
+        '<dependency>
+            <artifact>${art}</artifact>'
+        if (version.length() > 0) {
+        '\n    <version>$version</version>'
+        }
+        '\n</dependency>'
+    }
+    
+    def dependencyManagement() {
+        '<dependencyManagement>
+            <dependencies>
+                ${appendDependency("pips")}
+                ${appendDependency("infra")}
+            </dependencies>
+        </dependencyManagement>'
+    }
+
+}

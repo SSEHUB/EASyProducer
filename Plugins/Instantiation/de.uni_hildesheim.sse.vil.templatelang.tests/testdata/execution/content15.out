@@ -1,0 +1,26 @@
+<project>
+    <dependencies>
+        <dependency>
+            <artifact>test1</artifact>
+            <version>1.1</version>
+        </dependency>
+        <dependency>
+            <artifact>test2</artifact>
+        </dependency>
+    </dependencies>
+    <plugins>
+        <plugin>
+            <artifact>art</artifact>
+        </plugin>
+    </plugins>
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <artifact>pips</artifact>
+            </dependency>
+            <dependency>
+                <artifact>infra</artifact>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+</project>
