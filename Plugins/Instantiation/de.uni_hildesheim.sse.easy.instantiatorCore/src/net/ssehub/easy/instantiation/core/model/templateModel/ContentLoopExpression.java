@@ -29,7 +29,7 @@ import net.ssehub.easy.instantiation.core.model.vilTypes.TypeRegistry;
  * 
  * @author Holger Eichelberger
  */
-public class ContentLoopExpression extends Expression implements IExpressionIterator {
+public class ContentLoopExpression extends InContentExpression implements IExpressionIterator {
 
     private VariableDeclaration iterator;
     private Expression init;

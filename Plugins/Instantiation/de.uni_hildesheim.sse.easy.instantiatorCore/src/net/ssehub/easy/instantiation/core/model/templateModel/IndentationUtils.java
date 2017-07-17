@@ -290,5 +290,28 @@ public class IndentationUtils {
         }
         return allLinesStart;
     }
+    
+    /**
+     * Removes the last indentation in <code>text</code> if present. This includes (from end of <code>text</code>) line
+     * end characters and indentation characters, but no further characters.  
+     * 
+     * @param text the text to remove the last indentation for
+     * @return the text without last indentation
+     */
+    public static String removeLastIndentation(String text) {
+        String result = text;
+        int pos = result.length() - 1;
+        int initPos = pos;
+        while (pos > 0 && isLineEnd(result.charAt(pos))) {
+            pos--;
+        }
+        while (pos > 0 && isIndentationChar(result.charAt(pos))) {
+            pos--;
+        }
+        if (pos > 0 && pos < initPos) {
+            result = result.substring(0, pos);
+        }
+        return result;
+    }
 
 }

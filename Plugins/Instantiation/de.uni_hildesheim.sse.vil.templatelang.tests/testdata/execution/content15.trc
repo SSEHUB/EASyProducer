@@ -7,11 +7,25 @@
         -> appendDependency(String, String) with (test2, )
             -> length(String) with () = 0
             -> >(Integer, Integer) with (0, 0) = false
+    -> dependencies2()
+        -> appendDependency2(String, String) with (test1_2, 2.1)
+            -> length(String) with (2.1) = 3
+            -> >(Integer, Integer) with (3, 0) = true
+        -> appendDependency2(String, String) with (test2_2, )
+            -> length(String) with () = 0
+            -> >(Integer, Integer) with (0, 0) = false
     -> plugins()
     -> dependencyManagement()
         -> appendDependency(String, String) with (pips, )
             -> length(String) with () = 0
             -> >(Integer, Integer) with (0, 0) = false
         -> appendDependency(String, String) with (infra, )
+            -> length(String) with () = 0
+            -> >(Integer, Integer) with (0, 0) = false
+    -> dependencyManagement2()
+        -> appendDependency2(String, String) with (pips2, )
+            -> length(String) with () = 0
+            -> >(Integer, Integer) with (0, 0) = false
+        -> appendDependency2(String, String) with (infra2, )
             -> length(String) with () = 0
             -> >(Integer, Integer) with (0, 0) = false

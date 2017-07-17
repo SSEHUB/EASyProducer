@@ -500,6 +500,8 @@ public class TemplateLangExecution extends ExecutionVisitor<Template, Def, Varia
     protected String appendInCompositeExpression(String s1, Expression e1, String s2, Expression e2) {
         String result;
         boolean format = false;
+        boolean clear = false;
+        IndentationConfiguration config = environment.getIndentationConfiguration();
         if (e1 instanceof ConstantExpression && e2 instanceof TemplateCallExpression) {
             // do formatting only in presence of a ${template call} and if not explicitly formatted
             format = !lastContentFormatted;
@@ -510,9 +512,11 @@ public class TemplateLangExecution extends ExecutionVisitor<Template, Def, Varia
                     format = IndentationUtils.isLineEnd(last) || IndentationUtils.isIndentationChar(last);
                 }
             }
+        } else if (e2 instanceof InContentExpression) {
+            // an in-content expression leading to an empty information shall be wiped out including prepared indent
+            clear = null != config && s2.isEmpty();
         }
         if (format) {
-            IndentationConfiguration config = environment.getIndentationConfiguration();
             int indentation = environment.getIndentation();
             if (null != config) { // we are within/among expressions, one step out
                 indentation -= config.getIndentationStep();
@@ -524,6 +528,8 @@ public class TemplateLangExecution extends ExecutionVisitor<Template, Def, Varia
                 }
             }
             result = IndentationUtils.appendWithLastIndentation(s1, s2, false);
+        } else if (clear) {
+            result = IndentationUtils.removeLastIndentation(s1);
         } else {
             result = super.appendInCompositeExpression(s1, e1, s2, e2);
         }

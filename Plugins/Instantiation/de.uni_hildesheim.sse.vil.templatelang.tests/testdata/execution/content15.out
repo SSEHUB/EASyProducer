@@ -8,6 +8,15 @@
             <artifact>test2</artifact>
         </dependency>
     </dependencies>
+    <dependencies2>
+        <dependency>
+            <artifact>test1_2</artifact>
+            <version>2.1</version>
+        </dependency>
+        <dependency>
+            <artifact>test2_2</artifact>
+        </dependency>
+    </dependencies2>
     <plugins>
         <plugin>
             <artifact>art</artifact>
@@ -23,4 +32,14 @@
             </dependency>
         </dependencies>
     </dependencyManagement>
+    <dependencyManagement2>
+        <dependencies>
+            <dependency>
+                <artifact>pips2</artifact>
+            </dependency>
+            <dependency>
+                <artifact>infra2</artifact>
+            </dependency>
+        </dependencies>
+    </dependencyManagement2>
 </project>

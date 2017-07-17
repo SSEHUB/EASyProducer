@@ -29,7 +29,7 @@ import net.ssehub.easy.instantiation.core.model.vilTypes.TypeRegistry;
  * 
  * @author Holger Eichelberger
  */
-public class ContentAlternativeExpression extends Expression {
+public class ContentAlternativeExpression extends InContentExpression {
 
     private Expression condition;
     private List<Expression> thenEx;

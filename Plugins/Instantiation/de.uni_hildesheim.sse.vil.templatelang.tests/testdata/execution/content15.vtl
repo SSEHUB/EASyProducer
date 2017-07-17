@@ -6,10 +6,14 @@ template content15(Configuration config, Artifact target) {
             <dependencies>
                 ${dependencies()}
             </dependencies>
+            <dependencies2>
+                ${dependencies2()}
+            </dependencies2>
             <plugins>
                 ${plugins()}
             </plugins>
             ${dependencyManagement()}
+            ${dependencyManagement2()}
         </project>'
     }
     
@@ -18,6 +22,11 @@ template content15(Configuration config, Artifact target) {
         '${appendDependency("test2")}'
     }
     
+    def dependencies2() {
+        '${appendDependency2("test1_2", "2.1")}' <CR>;
+        '${appendDependency2("test2_2")}'
+    }
+        
     def plugins() {
         '<plugin>
             <artifact>art</artifact>
@@ -33,6 +42,13 @@ template content15(Configuration config, Artifact target) {
         '\n</dependency>'
     }
     
+    def appendDependency2(String art, String version="") {
+        '<dependency>
+            <artifact>${art}</artifact>
+            ${IF version.length() > 0}<version>$version</version>${ENDIF}
+        </dependency>'
+    }
+    
     def dependencyManagement() {
         '<dependencyManagement>
             <dependencies>
@@ -40,6 +56,15 @@ template content15(Configuration config, Artifact target) {
                 ${appendDependency("infra")}
             </dependencies>
         </dependencyManagement>'
+    }
+    
+    def dependencyManagement2() {
+        '<dependencyManagement2>
+            <dependencies>
+                ${appendDependency2("pips2")}
+                ${appendDependency2("infra2")}
+            </dependencies>
+        </dependencyManagement2>'
     }
 
 }
