@@ -1,0 +1,4 @@
+-> main(Configuration, Artifact) with (<config>, test.texts)
+    data <- d
+    test <- true
+    test <- false

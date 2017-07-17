@@ -1,6 +1,5 @@
 package net.ssehub.easy.instantiation.core.model.expressions;
 
-import java.util.EmptyStackException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -358,14 +357,10 @@ public abstract class Resolver<V extends IResolvable> implements IResolver<V> {
     /**
      * Pops the top resolution level, e.g., when a nested language unit is closed.
      * The most basic level cannot be popped.
-     * 
-     * @throws EmptyStackException if the most basic level shall be popped
      */
     public void popLevel() {
         if (levels.size() > 1) {
             levels.pop();
-        } else {
-            throw new EmptyStackException();
         }
     }
     

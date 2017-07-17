@@ -377,7 +377,23 @@ public class ExpressionWriter extends AbstractWriter implements IExpressionVisit
         if (!isInContent) {
             print("\"");
         }
-        for (Expression expression : ex.getExpressionList()) {
+        printContentExpressions(ex);
+        if (!isInContent) {
+            print("\"");
+        }
+        compositeExpressions.pop();
+        return null;
+    }
+
+    /**
+     * Prints a content expressions given by an expression iterator.
+     * 
+     * @param iter the expression iterator
+     * @throws VilException if printing fails for some reason
+     */
+    protected void printContentExpressions(IExpressionIterator iter) throws VilException {
+        for (int e = 0; e < iter.getExpressionsCount(); e++) {
+            Expression expression = iter.getExpression(e);
             if (expression instanceof VariableExpression && !(expression instanceof VariableEx)) {
                 print("$");
                 expression.accept(this);
@@ -397,11 +413,6 @@ public class ExpressionWriter extends AbstractWriter implements IExpressionVisit
                 isInExpression = false;
             }
         }
-        if (!isInContent) {
-            print("\"");
-        }
-        compositeExpressions.pop();
-        return null;
     }
 
     @Override

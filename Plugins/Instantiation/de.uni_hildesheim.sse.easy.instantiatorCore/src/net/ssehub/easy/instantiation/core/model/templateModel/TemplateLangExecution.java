@@ -716,4 +716,65 @@ public class TemplateLangExecution extends ExecutionVisitor<Template, Def, Varia
         target.store();
     }
 
+    @Override
+    public Object visitContentAlternativeExpression(ContentAlternativeExpression ex) throws VilException {
+        Object result = null;
+        Object cond = ex.getCondition().accept(this);
+        if (Boolean.TRUE.equals(cond)) {
+            result = evaluateContentExpression(ex.thenEx());
+        } else if (Boolean.FALSE.equals(cond)) {
+            if (ex.getElseExpressionsCount() > 0) {
+                result = evaluateContentExpression(ex.elseEx());
+            } else {
+                result = "";
+            }
+        }
+        return result;
+    }
+
+    @Override
+    public Object visitContentLoopExpression(ContentLoopExpression ex) throws VilException {
+        String result = null;
+        String separator = "";
+        if (null != ex.getSeparator()) {
+            Object tmp = ex.getSeparator().accept(this);
+            if (null == tmp) {
+                separator = null;
+            } else {
+                separator = tmp.toString();
+            }
+        }
+        if (null != separator) {
+            Object init = ex.getInit().accept(this);
+            Iterator<?> iter;
+            if (init instanceof Collection) {
+                iter = ((Collection<?>) init).iterator();
+            } else if (init instanceof java.util.Collection) {
+                iter = ((java.util.Collection<?>) init).iterator();
+            } else {
+                iter = null;
+            }
+            if (null != iter) {
+                result = "";
+                environment.pushLevel();
+                VariableDeclaration decl = ex.getIterator();
+                environment.addValue(decl, null);
+                while (iter.hasNext()) {
+                    environment.setValue(decl, iter.next());
+                    String tmp = evaluateContentExpression(ex);
+                    if (null == tmp) {
+                        break;
+                    }
+                    if (result.length() == 0) {
+                        result = tmp;
+                    } else {
+                        result = result + separator + tmp;
+                    }
+                }
+                environment.popLevel();
+            }
+        }
+        return result;
+    }
+
 }

@@ -10,9 +10,9 @@ import net.ssehub.easy.instantiation.core.model.vilTypes.TypeRegistry;
  * Represents a composite expression.
  * 
  * @author Sass
- *
+ * @author Holger Eichelberger
  */
-public class CompositeExpression extends Expression {
+public class CompositeExpression extends Expression implements IExpressionIterator {
     
     private List<Expression> expressionList;
     
@@ -24,23 +24,25 @@ public class CompositeExpression extends Expression {
     public CompositeExpression(List<Expression> expressionList) {
         this.expressionList = expressionList;
     }
-    
-    /**
-     * Returns a list of expressions.
-     * 
-     * @return list of expressions
-     */
-    public List<Expression> getExpressionList() {
-        return expressionList;
-    }
 
     /**
-     * Adds a list of expressions.
+     * Returns the number of expression.
      * 
-     * @param expressionList list of expressions
+     * @return the number of expressions
      */
-    public void setExpressionList(List<Expression> expressionList) {
-        this.expressionList = expressionList;
+    public int getExpressionsCount() {
+        return expressionList.size();
+    }
+    
+    /**
+     * Returns the specified expression.
+     * 
+     * @param index the 0-based index of the expression
+     * @return the expression
+     * @throws IndexOutOfBoundsException if <code>index&lt;0 || index&gt;={@link #getExpressionListCount()}</code>
+     */
+    public Expression getExpression(int index) {
+        return expressionList.get(index);
     }
 
     @Override

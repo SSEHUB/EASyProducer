@@ -232,11 +232,22 @@ public class CopyVisitor implements IExpressionVisitor {
 
     @Override
     public Object visitCompositeExpression(CompositeExpression ex) throws VilException {
+        return new CompositeExpression(copyExpressions(ex));
+    }
+
+    /**
+     * Copies all processed expressions from <code>iter</code> into the result.
+     * 
+     * @param iter the iterator to process
+     * @return the processed expressions
+     * @throws VilException if processing fails
+     */
+    protected List<Expression> copyExpressions(IExpressionIterator iter) throws VilException {
         List<Expression> result = new ArrayList<Expression>();
-        for (Expression expression : ex.getExpressionList()) {
-            result.add((Expression) expression.accept(this));
+        for (int e = 0; e < iter.getExpressionsCount(); e++) {
+            result.add((Expression) iter.getExpression(e).accept(this));
         }
-        return new CompositeExpression(result);
+        return result;
     }
 
     @Override

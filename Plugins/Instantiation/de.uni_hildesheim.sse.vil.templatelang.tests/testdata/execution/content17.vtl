@@ -1,0 +1,9 @@
+template content17(Configuration config, Artifact target) {
+
+    def main(Configuration config, Artifact target) {
+        sequenceOf(Integer) ints = {1, 2, 7, 9};
+        'Test1: ${FOR i : ints SEPARATOR ", "}val ${i}${ENDFOR}'
+        'Test2: ${FOR i : ints}val ${i}${ENDFOR}'
+    }
+
+}

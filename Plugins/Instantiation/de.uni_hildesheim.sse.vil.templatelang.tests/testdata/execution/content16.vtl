@@ -1,0 +1,12 @@
+template content16(Configuration config, Artifact target) {
+
+    def main(Configuration config, Artifact target) {
+        String data = "d";
+        Boolean test = true;
+        'Test1: res=${IF test}1${data}${ELSE}2${data}${ENDIF}'
+        'Test2: res=${IF test}x${data}${ENDIF}'
+        test = false;
+        'Test3: res=${IF test}1${data}${ELSE}2${data}${ENDIF}'
+    }
+
+}

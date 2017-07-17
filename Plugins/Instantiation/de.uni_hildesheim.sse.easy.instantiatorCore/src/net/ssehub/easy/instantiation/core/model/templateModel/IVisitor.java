@@ -108,4 +108,22 @@ public interface IVisitor extends net.ssehub.easy.instantiation.core.model.commo
      */
     public Object visitFlush(FlushStatement flush) throws VilException;
 
+    /**
+     * Visits a content alternative expression.
+     * 
+     * @param ex the expression
+     * @return the result visiting the given statement (may be <b>null</b>)
+     * @throws VilException in case that visiting fails (e.g., execution)
+     */
+    public Object visitContentAlternativeExpression(ContentAlternativeExpression ex) throws VilException;
+
+    /**
+     * Visits a content loop expression.
+     * 
+     * @param ex the expression
+     * @return the result visiting the given statement (may be <b>null</b>)
+     * @throws VilException in case that visiting fails (e.g., execution)
+     */
+    public Object visitContentLoopExpression(ContentLoopExpression ex) throws VilException;
+
 }

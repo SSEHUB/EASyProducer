@@ -393,4 +393,35 @@ public class TemplateLangWriter extends WriterVisitor<VariableDeclaration> imple
         return null;
     }
 
+    @Override
+    public Object visitContentAlternativeExpression(ContentAlternativeExpression ex) throws VilException {
+        print("${IF ");
+        ex.getCondition().accept(this);
+        print("}");
+        printContentExpressions(ex.thenEx());
+        if (ex.getElseExpressionsCount() > 0) {
+            print("${ELSE}");
+            printContentExpressions(ex.elseEx());
+        }
+        print("${ENDIF}");
+        return null;
+    }
+
+    @Override
+    public Object visitContentLoopExpression(ContentLoopExpression ex) throws VilException {
+        print("${FOR ");
+        ex.getIterator().getName();
+        print(" : ");
+        ex.getInit().accept(this);
+        if (null != ex.getSeparator()) {
+            print(" SEPARATOR \"");
+            ex.getSeparator().accept(this);
+            print("\"");
+        }
+        print("}");
+        printContentExpressions(ex);
+        print("${ENDFOR}");
+        return null;
+    }
+
 }

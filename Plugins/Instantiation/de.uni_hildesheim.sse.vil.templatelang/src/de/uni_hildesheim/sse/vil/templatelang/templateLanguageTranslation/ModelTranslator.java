@@ -17,6 +17,7 @@ import org.eclipse.emf.ecore.EStructuralFeature;
 import de.uni_hildesheim.sse.vil.expressions.ResourceRegistry;
 import de.uni_hildesheim.sse.vil.expressions.expressionDsl.ExpressionDslPackage;
 import de.uni_hildesheim.sse.vil.expressions.expressionDsl.PrimaryExpression;
+import de.uni_hildesheim.sse.vil.expressions.translation.IStringResolverFactory;
 import de.uni_hildesheim.sse.vil.expressions.translation.StringResolver;
 import de.uni_hildesheim.sse.vil.templatelang.TemplateLangModelUtility;
 import de.uni_hildesheim.sse.vil.templatelang.templateLang.Extension;
@@ -45,6 +46,8 @@ import net.ssehub.easy.instantiation.core.model.expressions.CallExpression;
 import net.ssehub.easy.instantiation.core.model.expressions.CompositeExpression;
 import net.ssehub.easy.instantiation.core.model.expressions.Expression;
 import net.ssehub.easy.instantiation.core.model.templateModel.AlternativeStatement;
+import net.ssehub.easy.instantiation.core.model.templateModel.ContentAlternativeExpression;
+import net.ssehub.easy.instantiation.core.model.templateModel.ContentLoopExpression;
 import net.ssehub.easy.instantiation.core.model.templateModel.ContentStatement;
 import net.ssehub.easy.instantiation.core.model.templateModel.ContentStatement.LineEndType;
 import net.ssehub.easy.instantiation.core.model.templateModel.Def;
@@ -78,7 +81,8 @@ import net.ssehub.easy.instantiation.core.model.vilTypes.configuration.IvmlTypes
  * @author Holger Eichelberger
  */
 public class ModelTranslator extends de.uni_hildesheim.sse.vil.expressions.translation.ModelTranslator
-    <Template, VariableDeclaration, Resolver, ExpressionStatement, ExpressionTranslator> {
+    <Template, VariableDeclaration, Resolver, ExpressionStatement, ExpressionTranslator> 
+    implements IStringResolverFactory<VariableDeclaration> {
     
     private ExpressionTranslator expressionTranslator;
     private Resolver resolver;
@@ -753,7 +757,7 @@ public class ModelTranslator extends de.uni_hildesheim.sse.vil.expressions.trans
             text = StringUtils.convertString(text);
             StringBuilder warnings = new StringBuilder();
             CompositeExpression tmp = (CompositeExpression) StringResolver.substitute(text, resolver, 
-                expressionTranslator, warnings);
+                expressionTranslator, warnings, this);
             if (warnings.length() > 0) {
                 warning(warnings.toString(), content, TemplateLangPackage.Literals.CONTENT__CTN, 0);
             }
@@ -815,6 +819,34 @@ public class ModelTranslator extends de.uni_hildesheim.sse.vil.expressions.trans
     @Override
     protected Typedef createTypedef(String name, TypeDescriptor<?> type) throws VilException {
         return new TypeDef(name, type, getResolver().getCurrentModel());
+    }
+
+    @Override
+    public Expression createIfExpression(Expression condition, List<Expression> thenEx, List<Expression> elseEx) 
+        throws VilException {
+        return new ContentAlternativeExpression(condition, thenEx, elseEx);
+    }
+
+    @Override
+    public Expression createForExpression(VariableDeclaration iterator, Expression init, Expression separator, 
+        List<Expression> body) throws VilException {
+        return new ContentLoopExpression(iterator, init, separator, body);
+    }
+
+    @Override
+    public VariableDeclaration createVariable(String name, Expression initExpression) throws VilException {
+        TypeDescriptor<?> type = initExpression.inferType();
+        if (!type.isCollection()) {
+            throw new VilException("Iterator initialization expression must be of type collection", 
+                VilException.ID_INVALID_ITERATOR);
+        } else {
+            if (type.getGenericParameterCount() > 0) {
+                type = type.getGenericParameterType(0);
+            } else {
+                type = TypeRegistry.anyType();
+            }
+        }
+        return new VariableDeclaration(name, type, false, initExpression);
     }
 
 }

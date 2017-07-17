@@ -114,4 +114,14 @@ public class ExpressionVersionRestrictionValidator
         return null;
     }
 
+    @Override
+    public Object visitContentAlternativeExpression(ContentAlternativeExpression ex) throws VilException {
+        return null; // probably ok -> CompositeExpression
+    }
+
+    @Override
+    public Object visitContentLoopExpression(ContentLoopExpression ex) throws VilException {
+        return null; // probably ok -> CompositeExpression
+    }
+
 }

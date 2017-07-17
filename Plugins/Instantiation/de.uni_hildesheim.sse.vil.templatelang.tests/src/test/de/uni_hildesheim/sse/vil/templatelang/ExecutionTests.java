@@ -672,7 +672,27 @@ public class ExecutionTests extends AbstractTest {
     public void testContent15() throws IOException {
         assertEqualsNoSourceComparison("content15");
     }
-    
+
+    /**
+     * Tests in-place content alternatives.
+     * 
+     * @throws IOException should not occur
+     */
+    @Test
+    public void testContent16() throws IOException {
+        assertEqualsNoSourceComparison("content16");
+    }
+
+    /**
+     * Tests in-place content loops.
+     * 
+     * @throws IOException should not occur
+     */
+    @Test
+    public void testContent17() throws IOException {
+        assertEqualsNoSourceComparison("content17");
+    }
+
     /**
      * Tests the flush statement.
      * 

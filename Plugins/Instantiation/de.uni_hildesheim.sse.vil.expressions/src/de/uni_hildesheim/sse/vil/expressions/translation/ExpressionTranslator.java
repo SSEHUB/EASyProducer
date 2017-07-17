@@ -938,7 +938,7 @@ public abstract class ExpressionTranslator<I extends VariableDeclaration, R exte
             Expression ex;
             try {
                 StringBuilder warnings = new StringBuilder();
-                ex = StringResolver.substitute(s, resolver, this, warnings);
+                ex = StringResolver.substitute(s, resolver, this, warnings, null);
                 if (warnings.length() > 0) {
                     warning(warnings.toString(), arg, ExpressionDslPackage.Literals.CONSTANT__SVALUE, 0);
                 }

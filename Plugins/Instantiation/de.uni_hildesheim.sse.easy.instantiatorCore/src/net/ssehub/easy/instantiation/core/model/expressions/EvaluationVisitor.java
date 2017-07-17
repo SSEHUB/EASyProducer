@@ -240,18 +240,30 @@ public class EvaluationVisitor implements IExpressionVisitor {
 
     @Override
     public Object visitCompositeExpression(CompositeExpression ex) throws VilException {
+        return evaluateContentExpression(ex);
+    }
+
+    /**
+     * Evaluates <code>iter</code> as a content expression.
+     * 
+     * @param iter the iterator
+     * @return the evaluation result
+     * @throws VilException if evaluation fails
+     */
+    protected String evaluateContentExpression(IExpressionIterator iter) throws VilException {
         String result = "";
         Expression lastEx = null;
-        for (Expression expression : ex.getExpressionList()) {
+        for (int e = 0; e < iter.getExpressionsCount(); e++) {
+            Expression expression = iter.getExpression(e);
             Object value;
             try {
                 value = expression.accept(this);
-            } catch (VilException e) {
-                if (e.getId() == VilException.ID_NOT_FOUND) {
+            } catch (VilException e1) {
+                if (e1.getId() == VilException.ID_NOT_FOUND) {
                     result = null;
                     break;
                 } else {
-                    throw e;
+                    throw e1;
                 }
             }
             if (value != null) {

@@ -1,5 +1,6 @@
 package net.ssehub.easy.instantiation.core.model.templateModel;
 
+import java.util.List;
 import java.util.Map;
 
 import net.ssehub.easy.basics.modelManagement.IVersionRestriction.IVariableMapper;
@@ -115,6 +116,25 @@ public class ExpressionCopyVisitor extends CopyVisitor implements IVisitor {
     @Override
     public Object visitVariableDeclaration(VariableDeclaration var) throws VilException {
         throw new VilException("not an expression", VilException.ID_INTERNAL);
+    }
+
+    @Override
+    public Object visitContentAlternativeExpression(ContentAlternativeExpression ex) throws VilException {
+        List<Expression> thenEx = copyExpressions(ex.thenEx());
+        List<Expression> elseEx;
+        if (ex.getElseExpressionsCount() > 0) {
+            elseEx = copyExpressions(ex.elseEx());
+        } else {
+            elseEx = null;
+        }
+        return new ContentAlternativeExpression((Expression) ex.getCondition().accept(this), thenEx, elseEx);
+    }
+
+    @Override
+    public Object visitContentLoopExpression(ContentLoopExpression ex) throws VilException {
+        List<Expression> bodyEx = copyExpressions(ex);
+        return new ContentLoopExpression(ex.getIterator(), (Expression) ex.getInit().accept(this), 
+            (Expression) ex.getSeparator().accept(this), bodyEx);
     }
 
 }
