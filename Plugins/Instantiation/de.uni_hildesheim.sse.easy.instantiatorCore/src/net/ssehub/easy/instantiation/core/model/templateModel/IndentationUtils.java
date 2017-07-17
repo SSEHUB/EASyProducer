@@ -309,7 +309,27 @@ public class IndentationUtils {
             pos--;
         }
         if (pos > 0 && pos < initPos) {
-            result = result.substring(0, pos);
+            result = result.substring(0, pos + 1);
+        }
+        return result;
+    }
+    
+    /**
+     * Does the given <code>text</code> just consist of indentation characters?
+     * 
+     * @param text the text
+     * @return <code>true</code> if just indentation characters, <code>false</code> else
+     */
+    public static boolean isIndentationString(String text) {
+        boolean result;
+        if (text.length() > 0) {
+            result = true;
+            for (int i = 0; result && i < text.length(); i++) {
+                char c = text.charAt(i);
+                result = isIndentationChar(c) || isLineEnd(c);
+            }
+        } else {
+            result = false;
         }
         return result;
     }

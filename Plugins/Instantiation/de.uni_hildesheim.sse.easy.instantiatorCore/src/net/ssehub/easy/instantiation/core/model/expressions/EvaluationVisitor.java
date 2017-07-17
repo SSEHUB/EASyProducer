@@ -253,6 +253,7 @@ public class EvaluationVisitor implements IExpressionVisitor {
     protected String evaluateContentExpression(IExpressionIterator iter) throws VilException {
         String result = "";
         Expression lastEx = null;
+        Object lastValue = null;
         for (int e = 0; e < iter.getExpressionsCount(); e++) {
             Expression expression = iter.getExpression(e);
             Object value;
@@ -267,13 +268,14 @@ public class EvaluationVisitor implements IExpressionVisitor {
                 }
             }
             if (value != null) {
-                result = appendInCompositeExpression(result, lastEx,
+                result = appendInCompositeExpression(result, lastEx, lastValue,
                     StringValueHelper.getStringValueInReplacement(value, null), expression);
             } else {
                 result = null;
                 break;
             }
             lastEx = expression;
+            lastValue = value;
         }
         return result;
     }
@@ -284,11 +286,12 @@ public class EvaluationVisitor implements IExpressionVisitor {
      * 
      * @param s1 the first string
      * @param e1 the expression causing <code>s1</code>
+     * @param v1 the value causting <code>s1</code>
      * @param s2 the string to append
      * @param e2 the expression causing <code>s2</code>
      * @return the appended string
      */
-    protected String appendInCompositeExpression(String s1, Expression e1, String s2, Expression e2) {
+    protected String appendInCompositeExpression(String s1, Expression e1, Object v1, String s2, Expression e2) {
         return s1 + s2;
     }
 

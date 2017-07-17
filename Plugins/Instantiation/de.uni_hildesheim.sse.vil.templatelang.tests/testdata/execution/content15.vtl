@@ -42,10 +42,12 @@ template content15(Configuration config, Artifact target) {
         '\n</dependency>'
     }
     
-    def appendDependency2(String art, String version="") {
+    def appendDependency2(String art, String version="", String type="", String scope="") {
         '<dependency>
             <artifact>${art}</artifact>
             ${IF version.length() > 0}<version>$version</version>${ENDIF}
+            ${IF type.length() > 0}<type>$type</type>${ENDIF}
+            ${IF scope.length() > 0}<scope>$scope</scope>${ENDIF}
         </dependency>'
     }
     

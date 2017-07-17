@@ -497,10 +497,11 @@ public class TemplateLangExecution extends ExecutionVisitor<Template, Def, Varia
     }
 
     @Override
-    protected String appendInCompositeExpression(String s1, Expression e1, String s2, Expression e2) {
+    protected String appendInCompositeExpression(String s1, Expression e1, Object v1, String s2, Expression e2) {
         String result;
         boolean format = false;
         boolean clear = false;
+        boolean isS1 = false;
         IndentationConfiguration config = environment.getIndentationConfiguration();
         if (e1 instanceof ConstantExpression && e2 instanceof TemplateCallExpression) {
             // do formatting only in presence of a ${template call} and if not explicitly formatted
@@ -515,6 +516,13 @@ public class TemplateLangExecution extends ExecutionVisitor<Template, Def, Varia
         } else if (e2 instanceof InContentExpression) {
             // an in-content expression leading to an empty information shall be wiped out including prepared indent
             clear = null != config && s2.isEmpty();
+        } else if (e1 instanceof InContentExpression) {
+            // if the last in-content expression led to an empty string and the following is an indentation, leave
+            // out the indentation
+            if (v1.toString().isEmpty() && IndentationUtils.isIndentationString(s2)) {
+                format = false;
+                isS1 = true;
+            }
         }
         if (format) {
             int indentation = environment.getIndentation();
@@ -530,8 +538,10 @@ public class TemplateLangExecution extends ExecutionVisitor<Template, Def, Varia
             result = IndentationUtils.appendWithLastIndentation(s1, s2, false);
         } else if (clear) {
             result = IndentationUtils.removeLastIndentation(s1);
+        } else if (isS1) {
+            result = s1;
         } else {
-            result = super.appendInCompositeExpression(s1, e1, s2, e2);
+            result = super.appendInCompositeExpression(s1, e1, v1, s2, e2);
         }
         return result;
     }
