@@ -11,7 +11,8 @@
 	<path id ="includes">
 		<!-- Model -->
 		<pathelement path="${libs.model}"/>
-		<pathelement path="${libs.utils}"/>  
+		<pathelement path="${libs.utils}"/>
+        <pathelement path="${libs.dslCore}"/>
         <pathelement path="${libs.instantiator.core}"/>
 		<fileset dir="lib">
             <include name="**/*.jar" />
@@ -49,6 +50,7 @@
 				<include name="OSGI-INF/**/*" />
 				<include name="lib/**/*" />
 				<exclude name="lib/**/*.zip" />
+				<exclude name="defaultLib/**/*" />
 			</fileset>
 		</copy>
 		<jar destfile="${build.jar.dir}/${ant.project.name}.jar" basedir="${build.classes.dir}" manifest="META-INF/MANIFEST.MF"/>
