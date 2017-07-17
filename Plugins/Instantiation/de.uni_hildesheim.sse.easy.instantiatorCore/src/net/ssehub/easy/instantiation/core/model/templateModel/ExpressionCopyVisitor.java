@@ -127,14 +127,14 @@ public class ExpressionCopyVisitor extends CopyVisitor implements IVisitor {
         } else {
             elseEx = null;
         }
-        return new ContentAlternativeExpression((Expression) ex.getCondition().accept(this), thenEx, elseEx);
+        return new ContentAlternativeExpression(copyExpression(ex.getCondition()), thenEx, elseEx);
     }
 
     @Override
     public Object visitContentLoopExpression(ContentLoopExpression ex) throws VilException {
         List<Expression> bodyEx = copyExpressions(ex);
-        return new ContentLoopExpression(ex.getIterator(), (Expression) ex.getInit().accept(this), 
-            (Expression) ex.getSeparator().accept(this), bodyEx);
+        return new ContentLoopExpression(ex.getIterator(), copyExpression(ex.getInit()), 
+            copyExpression(ex.getSeparator()), copyExpression(ex.getEndSeparator()), bodyEx);
     }
 
 }

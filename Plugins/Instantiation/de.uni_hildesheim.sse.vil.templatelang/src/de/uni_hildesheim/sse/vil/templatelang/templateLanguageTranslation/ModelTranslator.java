@@ -18,6 +18,8 @@ import de.uni_hildesheim.sse.vil.expressions.ResourceRegistry;
 import de.uni_hildesheim.sse.vil.expressions.expressionDsl.ExpressionDslPackage;
 import de.uni_hildesheim.sse.vil.expressions.expressionDsl.PrimaryExpression;
 import de.uni_hildesheim.sse.vil.expressions.translation.IStringResolverFactory;
+import de.uni_hildesheim.sse.vil.expressions.translation.InPlaceForCommand;
+import de.uni_hildesheim.sse.vil.expressions.translation.InPlaceIfCommand;
 import de.uni_hildesheim.sse.vil.expressions.translation.StringResolver;
 import de.uni_hildesheim.sse.vil.templatelang.TemplateLangModelUtility;
 import de.uni_hildesheim.sse.vil.templatelang.templateLang.Extension;
@@ -822,15 +824,15 @@ public class ModelTranslator extends de.uni_hildesheim.sse.vil.expressions.trans
     }
 
     @Override
-    public Expression createIfExpression(Expression condition, List<Expression> thenEx, List<Expression> elseEx) 
+    public Expression createIfExpression(InPlaceIfCommand<VariableDeclaration> cmd) 
         throws VilException {
-        return new ContentAlternativeExpression(condition, thenEx, elseEx);
+        return new ContentAlternativeExpression(cmd.getCondition(), cmd.getThenExpressions(), cmd.getElseExpressions());
     }
 
     @Override
-    public Expression createForExpression(VariableDeclaration iterator, Expression init, Expression separator, 
-        List<Expression> body) throws VilException {
-        return new ContentLoopExpression(iterator, init, separator, body);
+    public Expression createForExpression(InPlaceForCommand<VariableDeclaration> cmd) throws VilException {
+        return new ContentLoopExpression(cmd.getIterator(), cmd.getInit(), cmd.getSeparator(), cmd.getEndSeparator(), 
+            cmd.getBody());
     }
 
     @Override

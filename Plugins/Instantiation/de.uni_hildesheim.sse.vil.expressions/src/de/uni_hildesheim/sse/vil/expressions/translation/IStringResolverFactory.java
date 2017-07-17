@@ -15,8 +15,6 @@
  */
 package de.uni_hildesheim.sse.vil.expressions.translation;
 
-import java.util.List;
-
 import net.ssehub.easy.instantiation.core.model.common.VariableDeclaration;
 import net.ssehub.easy.instantiation.core.model.common.VilException;
 import net.ssehub.easy.instantiation.core.model.expressions.Expression;
@@ -33,26 +31,21 @@ public interface IStringResolverFactory<I extends VariableDeclaration> {
     /**
      * Creates an alternative expression.
      * 
-     * @param condition the condition deciding between the alternatives
-     * @param thenEx the then expressions
-     * @param elseEx the optional else expressions (may be <b>null</b>)
+     * @param cmd the command to create an if-expression for
      * @return an alternative expression (may be <b>null</b> if not supported)
      * @throws VilException if the expression cannot be created
      */
-    public Expression createIfExpression(Expression condition, List<Expression> thenEx, List<Expression> elseEx) 
+    public Expression createIfExpression(InPlaceIfCommand<I> cmd) 
         throws VilException;
 
     /**
      * Creates a for-loop expression.
      * 
-     * @param iterator the iterator variable declaration including initialization
-     * @param init the initialization for the iterator (a container expression)
-     * @param separator optional separator expression (may be <b>null</b>)
-     * @param body the for body expressions
+     * @param cmd the command to create a for-loop expression for
      * @return a for-loop expression (may be <b>null</b> if not supported)
      * @throws VilException if the expression cannot be created
      */
-    public Expression createForExpression(I iterator, Expression init, Expression separator, List<Expression> body) 
+    public Expression createForExpression(InPlaceForCommand<I> cmd) 
         throws VilException;
  
     /**

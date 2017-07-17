@@ -34,11 +34,43 @@ public class InPlaceIfCommand<I extends VariableDeclaration> extends InPlaceComm
     private List<Expression> thenEx;
     private List<Expression> elseEx;
     private transient List<Expression> curEx;
-    
+
+    /**
+     * Creates an in-place alternative.
+     * 
+     * @param condition the condition of the alternative
+     */
     InPlaceIfCommand(Expression condition) {
         this.condition = condition;
         this.thenEx = new ArrayList<Expression>();
         this.curEx = thenEx;
+    }
+    
+    /**
+     * Returns the condition expression.
+     * 
+     * @return the condition
+     */
+    public Expression getCondition() {
+        return condition;
+    }
+
+    /**
+     * Returns the then expressions.
+     * 
+     * @return the then expressions
+     */
+    public List<Expression> getThenExpressions() {
+        return thenEx;
+    }
+    
+    /**
+     * Returns the else expressions.
+     * 
+     * @return the else expressions, may be <b>null</b>
+     */
+    public List<Expression> getElseExpressions() {
+        return elseEx;
     }
 
     @Override
@@ -55,7 +87,7 @@ public class InPlaceIfCommand<I extends VariableDeclaration> extends InPlaceComm
 
     @Override
     protected Expression close(IStringResolverFactory<I> factory) throws VilException {
-        return factory.createIfExpression(condition, thenEx, elseEx);
+        return factory.createIfExpression(this);
     }
 
     @Override

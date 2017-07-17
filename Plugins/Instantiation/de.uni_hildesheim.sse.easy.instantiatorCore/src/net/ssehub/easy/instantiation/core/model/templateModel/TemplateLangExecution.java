@@ -732,46 +732,62 @@ public class TemplateLangExecution extends ExecutionVisitor<Template, Def, Varia
         return result;
     }
 
-    @Override
-    public Object visitContentLoopExpression(ContentLoopExpression ex) throws VilException {
-        String result = null;
-        String separator = "";
-        if (null != ex.getSeparator()) {
-            Object tmp = ex.getSeparator().accept(this);
+    /**
+     * Evaluates a separator expression.
+     * 
+     * @param ex the expression (may be <b>null</b>)
+     * @param deflt the default value to be used as result if <code>ex</code> is <b>null</b>
+     * @return the separator, <code>deflt</code> if <code>ex</code> is <b>null</b> or the evaluation leads to undefined,
+     *     the separator string else
+     * @throws VilException in case that the evaluation fails
+     */
+    private String evaluateSeparator(Expression ex, String deflt) throws VilException {
+        String separator = deflt;
+        if (null != ex) {
+            Object tmp = ex.accept(this);
             if (null == tmp) {
-                separator = null;
+                separator = deflt;
             } else {
                 separator = tmp.toString();
             }
         }
-        if (null != separator) {
-            Object init = ex.getInit().accept(this);
-            Iterator<?> iter;
-            if (init instanceof Collection) {
-                iter = ((Collection<?>) init).iterator();
-            } else if (init instanceof java.util.Collection) {
-                iter = ((java.util.Collection<?>) init).iterator();
-            } else {
-                iter = null;
-            }
-            if (null != iter) {
-                result = "";
-                environment.pushLevel();
-                VariableDeclaration decl = ex.getIterator();
-                environment.addValue(decl, null);
-                while (iter.hasNext()) {
-                    environment.setValue(decl, iter.next());
-                    String tmp = evaluateContentExpression(ex);
-                    if (null == tmp) {
-                        break;
-                    }
-                    if (result.length() == 0) {
-                        result = tmp;
-                    } else {
-                        result = result + separator + tmp;
-                    }
+        return separator;
+    }
+
+    @Override
+    public Object visitContentLoopExpression(ContentLoopExpression ex) throws VilException {
+        String result = null;
+        String separator = evaluateSeparator(ex.getSeparator(), "");
+        String endSeparator = evaluateSeparator(ex.getEndSeparator(), "");
+        Object init = ex.getInit().accept(this);
+        Iterator<?> iter;
+        if (init instanceof Collection) {
+            iter = ((Collection<?>) init).iterator();
+        } else if (init instanceof java.util.Collection) {
+            iter = ((java.util.Collection<?>) init).iterator();
+        } else {
+            iter = null;
+        }
+        if (null != iter) {
+            result = "";
+            environment.pushLevel();
+            VariableDeclaration decl = ex.getIterator();
+            environment.addValue(decl, null);
+            while (iter.hasNext()) {
+                environment.setValue(decl, iter.next());
+                String tmp = evaluateContentExpression(ex);
+                if (null == tmp) {
+                    break;
                 }
-                environment.popLevel();
+                if (result.length() == 0) {
+                    result = tmp;
+                } else {
+                    result = result + separator + tmp;
+                }
+            }
+            environment.popLevel();
+            if (result.length() > 0) {
+                result = result + endSeparator;
             }
         }
         return result;

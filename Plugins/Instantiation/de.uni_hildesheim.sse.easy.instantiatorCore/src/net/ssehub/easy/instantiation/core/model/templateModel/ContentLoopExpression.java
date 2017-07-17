@@ -34,6 +34,7 @@ public class ContentLoopExpression extends Expression implements IExpressionIter
     private VariableDeclaration iterator;
     private Expression init;
     private Expression separator;
+    private Expression endSeparator;
     private List<Expression> body;
     
     /**
@@ -41,19 +42,33 @@ public class ContentLoopExpression extends Expression implements IExpressionIter
      * 
      * @param iterator the iterator
      * @param init the initialization expression
-     * @param separator the optional separator (may be <b>null</b>)
+     * @param separator the optional element separator (may be <b>null</b>)
+     * @param endSeparator the optional end separator (may be <b>null</b>)
      * @param body the loop body
      * @throws VilException if creation fails
      */
     public ContentLoopExpression(VariableDeclaration iterator, Expression init, Expression separator, 
-        List<Expression> body) throws VilException {
+        Expression endSeparator, List<Expression> body) throws VilException {
         this.iterator = iterator;
         this.init = init;
         this.separator = separator;
-        if (null != this.separator && !TypeRegistry.stringType().isAssignableFrom(this.separator.inferType())) {
-            throw new VilException("Separator expression must evaluate to String", VilException.ID_INVALID_TYPE);
-        }
+        this.endSeparator = endSeparator;
+        assertSeparatorEx(this.separator, "Separator");
+        assertSeparatorEx(this.endSeparator, "End separator");
         this.body = body;
+    }
+
+    /**
+     * Asserts that a separator expression evaluates to a String.
+     * 
+     * @param ex the expression, may be <b>null</b> (ignored then)
+     * @param text text prefix if type assertion fails
+     * @throws VilException in case that obtaining the type fails
+     */
+    private void assertSeparatorEx(Expression ex, String text) throws VilException {
+        if (null != ex && !TypeRegistry.stringType().isAssignableFrom(ex.inferType())) {
+            throw new VilException(text + " expression must evaluate to String", VilException.ID_INVALID_TYPE);
+        }
     }
     
     /**
@@ -81,6 +96,15 @@ public class ContentLoopExpression extends Expression implements IExpressionIter
      */
     public Expression getSeparator() {
         return separator;
+    }
+    
+    /**
+     * Returns the optional end separator expression.
+     * 
+     * @return the expression or <b>null</b>
+     */
+    public Expression getEndSeparator() {
+        return endSeparator;
     }
     
     /**

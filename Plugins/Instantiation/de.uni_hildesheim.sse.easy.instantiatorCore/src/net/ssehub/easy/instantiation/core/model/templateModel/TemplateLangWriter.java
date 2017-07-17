@@ -417,6 +417,11 @@ public class TemplateLangWriter extends WriterVisitor<VariableDeclaration> imple
             print(" SEPARATOR \"");
             ex.getSeparator().accept(this);
             print("\"");
+            if (null != ex.getEndSeparator()) {
+                print(" END \"");
+                ex.getEndSeparator().accept(this);
+                print("\"");                
+            }
         }
         print("}");
         printContentExpressions(ex);

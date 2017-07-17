@@ -301,15 +301,23 @@ public class StringResolver<I extends VariableDeclaration, R extends Resolver<I>
                 expressionString = consumeWhitespaces(expressionString);
                 pos = expressionString.indexOf(" SEPARATOR");
                 Expression separatorEx = null;
+                Expression endSeparatorEx = null;
                 if (pos > 0) {
                     String separatorString = expressionString.substring(pos + 1).trim();
                     separatorString = removePrefix(separatorString, "SEPARATOR", true);
+                    int pos2 = separatorString.indexOf(" END");
+                    if (pos2 > 0) {
+                        String endSeparatorString = separatorString.substring(pos2 + 1).trim();
+                        endSeparatorString = removePrefix(endSeparatorString, "END", true);
+                        endSeparatorEx = parseExpression(endSeparatorString);
+                        separatorString = separatorString.substring(0, pos2).trim();
+                    }
                     separatorEx = parseExpression(separatorString);
                     expressionString = expressionString.substring(0, pos).trim();
                 }
                 Expression init = parseExpression(expressionString);
                 I iterator = factory.createVariable(iterName, init);
-                push(new InPlaceForCommand<I>(iterator, init, separatorEx));
+                push(new InPlaceForCommand<I>(iterator, init, separatorEx, endSeparatorEx));
                 resolver.pushLevel();
                 resolver.add(iterator);
             } else if (expressionString.equals("ELSE")) {

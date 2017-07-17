@@ -240,12 +240,30 @@ public class CopyVisitor implements IExpressionVisitor {
      * 
      * @param iter the iterator to process
      * @return the processed expressions
-     * @throws VilException if processing fails
+     * @throws VilException if copying fails
+     * @see #copyExpression(Expression)
      */
     protected List<Expression> copyExpressions(IExpressionIterator iter) throws VilException {
         List<Expression> result = new ArrayList<Expression>();
         for (int e = 0; e < iter.getExpressionsCount(); e++) {
-            result.add((Expression) iter.getExpression(e).accept(this));
+            result.add(copyExpression(iter.getExpression(e)));
+        }
+        return result;
+    }
+
+    /**
+     * Copies the given expression.
+     * 
+     * @param ex the expression, may be <b>null</b>
+     * @return the expression or <b>null</b> if <code>ex</code> is <b>null</b>
+     * @throws VilException if copying fails
+     */
+    protected Expression copyExpression(Expression ex) throws VilException {
+        Expression result;
+        if (null != ex) {
+            result = (Expression) ex.accept(this);
+        } else {
+            result = null;
         }
         return result;
     }

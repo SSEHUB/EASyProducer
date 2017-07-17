@@ -33,13 +33,68 @@ public class InPlaceForCommand<I extends VariableDeclaration> extends InPlaceCom
     private I iterator;
     private Expression init;
     private Expression separator;
+    private Expression endSeparator;
     private List<Expression> body;
     
-    public InPlaceForCommand(I iterator, Expression init, Expression separator) {
+    /**
+     * Creates an in-place loop command.
+     * 
+     * @param iterator the iterator variable
+     * @param init the initialization expression (collection over iterator)
+     * @param separator the optional element separator
+     * @param endSeparator the optional end separator
+     */
+    public InPlaceForCommand(I iterator, Expression init, Expression separator, Expression endSeparator) {
         this.iterator = iterator;
         this.init = init;
         this.separator = separator;
+        this.endSeparator = endSeparator;
         body = new ArrayList<Expression>();
+    }
+    
+    /**
+     * Returns the iterator variable.
+     * 
+     * @return the iterator variable
+     */
+    public I getIterator() {
+        return iterator;
+    }
+    
+    /**
+     * Returns the initialization expression.
+     * 
+     * @return the initialization expression
+     */
+    public Expression getInit() {
+        return init;
+    }
+    
+    /**
+     * Returns the element separator.
+     * 
+     * @return the element separator
+     */
+    public Expression getSeparator() {
+        return separator;
+    }
+    
+    /**
+     * Returns the optional end separator.
+     * 
+     * @return the end separator expression (may be <b>null</b>)
+     */
+    public Expression getEndSeparator() {
+        return endSeparator;
+    }
+    
+    /**
+     * Returns the body expressions.
+     * 
+     * @return the body expressions
+     */
+    public List<Expression> getBody() {
+        return body;
     }
     
     @Override
@@ -49,7 +104,7 @@ public class InPlaceForCommand<I extends VariableDeclaration> extends InPlaceCom
 
     @Override
     protected Expression close(IStringResolverFactory<I> factory) throws VilException {
-        return factory.createForExpression(iterator, init, separator, body);
+        return factory.createForExpression(this);
     }
 
     @Override

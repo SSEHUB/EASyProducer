@@ -4,6 +4,7 @@ template content17(Configuration config, Artifact target) {
         sequenceOf(Integer) ints = {1, 2, 7, 9};
         'Test1: ${FOR i : ints SEPARATOR ", "}val ${i}${ENDFOR}'
         'Test2: ${FOR i : ints}val ${i}${ENDFOR}'
+        'Test3: ${FOR i : ints SEPARATOR ", " END ";"}${i}${ENDFOR}'
     }
 
 }
