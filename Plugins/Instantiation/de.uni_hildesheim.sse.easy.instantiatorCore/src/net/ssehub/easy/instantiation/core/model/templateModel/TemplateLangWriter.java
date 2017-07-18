@@ -410,7 +410,7 @@ public class TemplateLangWriter extends WriterVisitor<VariableDeclaration> imple
     @Override
     public Object visitContentLoopExpression(ContentLoopExpression ex) throws VilException {
         print("${FOR ");
-        ex.getIterator().getName();
+        print(ex.getIterator().getName());
         print(" : ");
         ex.getInit().accept(this);
         if (null != ex.getSeparator()) {
@@ -427,6 +427,11 @@ public class TemplateLangWriter extends WriterVisitor<VariableDeclaration> imple
         printContentExpressions(ex);
         print("${ENDFOR}");
         return null;
+    }
+
+    @Override
+    protected boolean quoteExpression(Expression expression) {
+        return !(expression instanceof InContentExpression);
     }
 
 }

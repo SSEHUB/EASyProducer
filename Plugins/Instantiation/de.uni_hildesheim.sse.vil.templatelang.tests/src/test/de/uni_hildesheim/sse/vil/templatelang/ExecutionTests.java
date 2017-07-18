@@ -680,7 +680,7 @@ public class ExecutionTests extends AbstractTest {
      */
     @Test
     public void testContent16() throws IOException {
-        assertEqualsNoSourceComparison("content16");
+        assertEqual("content16");
     }
 
     /**
@@ -690,7 +690,7 @@ public class ExecutionTests extends AbstractTest {
      */
     @Test
     public void testContent17() throws IOException {
-        assertEqualsNoSourceComparison("content17");
+        assertEqual("content17");
     }
 
     /**

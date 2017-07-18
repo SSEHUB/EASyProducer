@@ -29,9 +29,9 @@ public class ExpressionWriter extends AbstractWriter implements IExpressionVisit
      */
     private static boolean oclCompliance = false;
 
-    private Stack<CompositeExpression> compositeExpressions = new Stack<CompositeExpression>();
-    private boolean isInContent = false;
-    private boolean isInExpression = false;
+    private transient Stack<CompositeExpression> compositeExpressions = new Stack<CompositeExpression>();
+    private transient boolean isInContent = false;
+    private transient boolean isInExpression = false;
 
     /**
      * Creates a build language writer.
@@ -406,13 +406,30 @@ public class ExpressionWriter extends AbstractWriter implements IExpressionVisit
                     print("\"");
                 }
             } else {
-                isInExpression = true;
-                print("${");
+                boolean before = isInExpression;
+                boolean quote = quoteExpression(expression);
+                isInExpression = quote;
+                if (quote) {
+                    print("${");
+                }
                 expression.accept(this);
-                print("}");
-                isInExpression = false;
+                if (quote) {
+                    print("}");
+                }
+                isInExpression = before;
             }
         }
+    }
+    
+    /**
+     * Returns if visiting <code>expression</code> in {@link #printContentExpressions(IExpressionIterator)}
+     * shall lead to quote constant expressions or unquoted constant expressionsisInExpression.
+     * 
+     * @param expression the expression to visit
+     * @return <code>true</code> for quoting, <code>false</code> else
+     */
+    protected boolean quoteExpression(Expression expression) {
+        return true;
     }
 
     @Override
