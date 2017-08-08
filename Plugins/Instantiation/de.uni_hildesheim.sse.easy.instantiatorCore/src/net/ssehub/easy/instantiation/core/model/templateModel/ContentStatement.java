@@ -74,7 +74,7 @@ public class ContentStatement extends AbstractTemplateElement {
      * @param deflt the value to be taken for {@link LineEndType#DEFAULT}
      * @return <code>true</code> if a line end shall be emitted, <code>false</code> else
      */
-    public boolean printLineEnd(boolean deflt) {
+    public boolean needsLineEnd(boolean deflt) {
         boolean result;
         if (LineEndType.DEFAULT == lineEndType) {
             result = deflt;

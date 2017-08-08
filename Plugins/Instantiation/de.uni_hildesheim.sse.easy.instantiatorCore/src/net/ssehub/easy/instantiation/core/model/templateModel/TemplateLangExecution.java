@@ -100,6 +100,7 @@ public class TemplateLangExecution extends ExecutionVisitor<Template, Def, Varia
     private int lastContentNestingLevel = -1;
     private boolean lastContentFormatted = false;
     private Stack<String> defContentStack = new Stack<String>();
+    private ContentStatement lastContent = null;
 
     /**
      * Creates a new evaluation visitor.
@@ -238,6 +239,11 @@ public class TemplateLangExecution extends ExecutionVisitor<Template, Def, Varia
         } else {
             tracer.visitDef(def, environment);
             result = visitTemplateBlock(def); // increases indentation
+            // if top-level, print last line ending by default else not
+            if (null != lastContent && lastContent.needsLineEnd(0 == contentNestingLevel)) { 
+                appendContent(getLineEnd());
+            }
+            lastContent = null; // handled, reset
             tracer.visitedDef(def, environment, result);
         }
         String content = defContentStack.pop();
@@ -454,6 +460,10 @@ public class TemplateLangExecution extends ExecutionVisitor<Template, Def, Varia
     public Object visitContentStatement(ContentStatement cnt) throws VilException {
         contentNestingLevel++;
         lastContentFormatted = false;
+        if (null != lastContent && lastContent.needsLineEnd(true)) { // if sequence, print line ending by default
+            appendContent(getLineEnd());
+        }
+        lastContent = null; // handled, reset
         String content;
         // search for \r\n, \r, \n followed by indentation*step whitespaces or tabs +1
         content = (String) cnt.getContent().accept(this);
@@ -478,9 +488,9 @@ public class TemplateLangExecution extends ExecutionVisitor<Template, Def, Varia
                         VilException.ID_SEMANTIC);
                 }
             }
-            if (cnt.printLineEnd(1 == contentNestingLevel)) { // if top-level, print line ending by default else not
+            /*if (cnt.needsLineEnd(1 == contentNestingLevel)) { // if top-level, print line ending by default else not
                 content += getLineEnd();
-            }
+            }*/
             String topContent = defContentStack.pop();
             if (0 == topContent.length()) {
                 topContent = content;
@@ -493,6 +503,7 @@ public class TemplateLangExecution extends ExecutionVisitor<Template, Def, Varia
         }
         lastContentNestingLevel = contentNestingLevel;
         contentNestingLevel--;
+        lastContent = cnt;
         return content;
     }
 

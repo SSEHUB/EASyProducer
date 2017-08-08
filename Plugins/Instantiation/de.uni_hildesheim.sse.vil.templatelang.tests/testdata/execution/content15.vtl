@@ -18,12 +18,12 @@ template content15(Configuration config, Artifact target) {
     }
     
     def dependencies() {
-        '${appendDependency("test1", "1.1")}' <CR>;
+        '${appendDependency("test1", "1.1")}'
         '${appendDependency("test2")}'
     }
     
     def dependencies2() {
-        '${appendDependency2("test1_2", "2.1")}' <CR>;
+        '${appendDependency2("test1_2", "2.1")}'
         '${appendDependency2("test2_2")}'
     }
         
@@ -37,9 +37,9 @@ template content15(Configuration config, Artifact target) {
         '<dependency>
             <artifact>${art}</artifact>'
         if (version.length() > 0) {
-        '\n    <version>$version</version>'
+        '    <version>$version</version>'
         }
-        '\n</dependency>'
+        '</dependency>'
     }
     
     def appendDependency2(String art, String version="", String type="", String scope="") {
