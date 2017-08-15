@@ -1,0 +1,9 @@
+-> main(Configuration, XmlFileArtifact) with (<config>, commentContents.xml)
+    -> setOmitXmlDeclaration(XmlFileArtifact, Boolean) with (commentContents.xml, true)
+    -> createRootElement(XmlFileArtifact, String) with (commentContents.xml, root) = xmlElement "root"
+    root <- xmlElement "root"
+    -> create XmlComment(XmlElement, String) with (xmlElement "root", comment 1) = xmlComment 
+    -> create XmlElement(XmlElement, String, String) with (xmlElement "root", elt, ) = xmlElement "elt"
+    elt <- xmlElement "elt"
+    -> create XmlComment(XmlElement, String) with (xmlElement "elt", inner comment) = xmlComment 
+    -> create XmlComment(XmlElement, String) with (xmlElement "root", comment 2) = xmlComment

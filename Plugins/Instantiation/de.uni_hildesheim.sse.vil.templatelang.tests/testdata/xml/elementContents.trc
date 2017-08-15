@@ -1,0 +1,10 @@
+-> main(Configuration, XmlFileArtifact) with (<config>, elementContents.xml)
+    -> createRootElement(XmlFileArtifact, String) with (elementContents.xml, root) = xmlElement "root"
+    elt <- xmlElement "root"
+    -> createMavenBuildElement(XmlElement, String) with (xmlElement "root", ${basedir}/)
+        -> create XmlElement(XmlElement, String, String) with (xmlElement "root", build, ) = xmlElement "build"
+        build <- xmlElement "build"
+        -> length(String) with (${basedir}/) = 11
+        -> >(Integer, Integer) with (11, 0) = true
+        visit if-branch
+        -> create XmlElement(XmlElement, String, String) with (xmlElement "build", sourceDirectory, ${basedir}/) = xmlElement "sourceDirectory"

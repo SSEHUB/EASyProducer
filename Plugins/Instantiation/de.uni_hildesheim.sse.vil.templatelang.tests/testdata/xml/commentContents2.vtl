@@ -1,0 +1,11 @@
+template elementContents(Configuration config, XmlFileArtifact target) {
+
+    def main(Configuration config, XmlFileArtifact target) {
+        XmlElement root = target.getRootElement();
+        sequenceOf(XmlComment) cmts = root.comments();
+        for (XmlComment c : cmts) {
+            c.setCdata(c.getCdata() + " - test");
+        }
+    }
+
+}

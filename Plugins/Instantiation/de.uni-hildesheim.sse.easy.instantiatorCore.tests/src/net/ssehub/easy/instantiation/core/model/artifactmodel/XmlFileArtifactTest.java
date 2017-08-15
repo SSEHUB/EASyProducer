@@ -29,6 +29,7 @@ import net.ssehub.easy.instantiation.core.model.artifactModel.xml.XmlAttribute;
 import net.ssehub.easy.instantiation.core.model.artifactModel.xml.XmlElement;
 import net.ssehub.easy.instantiation.core.model.artifactModel.xml.XmlFileArtifact;
 import net.ssehub.easy.instantiation.core.model.common.VilException;
+import net.ssehub.easy.instantiation.core.model.vilTypes.Sequence;
 import net.ssehub.easy.instantiation.core.model.vilTypes.Set;
 
 /**
@@ -600,7 +601,7 @@ public class XmlFileArtifactTest extends AbstractTest {
      * @param elements A Set with all elements.
      * @param elemName name of the element.
      */
-    public void xsdFunction(Set<XmlElement> elements, String elemName) {
+    public void xsdFunction(Sequence<XmlElement> elements, String elemName) {
     
         /* 
          * Delete elements which are named elemName
@@ -630,7 +631,7 @@ public class XmlFileArtifactTest extends AbstractTest {
         XmlFileArtifact xsdArtifact = artifactXsdFragmentCopy;
     
         try {
-            Set<XmlElement> elements = xsdArtifact.selectByPath(
+            Sequence<XmlElement> elements = xsdArtifact.selectByPath(
                 "xs:schema/xs:element/xs:complexType/xs:sequence").projectSingle().elements();
             
             elementCount = elements.size();

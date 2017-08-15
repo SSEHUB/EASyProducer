@@ -9,7 +9,7 @@ import org.junit.runners.Suite;
  * @author Holger Eichelberger
  */
 @RunWith(Suite.class)
-@Suite.SuiteClasses({BasicTests.class, ExecutionTests.class })
+@Suite.SuiteClasses({BasicTests.class, ExecutionTests.class, XmlExecutionTests.class })
 public class AllTests {
 
 }

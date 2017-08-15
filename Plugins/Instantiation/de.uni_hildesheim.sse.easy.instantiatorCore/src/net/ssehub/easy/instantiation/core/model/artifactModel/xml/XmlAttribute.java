@@ -68,6 +68,7 @@ public class XmlAttribute extends FragmentArtifact implements IStringValueProvid
             try {
                 parentElem.setAttribute(name, value);
                 newAttribute = parent.addAttribute(name, value); // notifies change
+                parent.synchronizeAttributeSequence();
             } catch (DOMException exc) {
                 throw new VilException("Invalid character, name or ID!", 
                     VilException.ID_INVALID_CHARACTER);

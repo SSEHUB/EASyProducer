@@ -3,8 +3,10 @@ package net.ssehub.easy.instantiation.core.model.artifactModel;
 import net.ssehub.easy.instantiation.core.model.artifactModel.representation.Binary;
 import net.ssehub.easy.instantiation.core.model.artifactModel.representation.Text;
 import net.ssehub.easy.instantiation.core.model.artifactModel.xml.XmlAttribute;
+import net.ssehub.easy.instantiation.core.model.artifactModel.xml.XmlComment;
 import net.ssehub.easy.instantiation.core.model.artifactModel.xml.XmlElement;
 import net.ssehub.easy.instantiation.core.model.artifactModel.xml.XmlFileArtifact;
+import net.ssehub.easy.instantiation.core.model.artifactModel.xml.XmlNode;
 import net.ssehub.easy.instantiation.core.model.vilTypes.TypeRegistry;
 
 /**
@@ -39,7 +41,9 @@ public class BuiltIn {
             //-------------------- preliminary -------------
             
             TypeRegistry.DEFAULT.register(XmlFileArtifact.class);
+            TypeRegistry.DEFAULT.register(XmlNode.class);
             TypeRegistry.DEFAULT.register(XmlElement.class);
+            TypeRegistry.DEFAULT.register(XmlComment.class);
             TypeRegistry.DEFAULT.register(XmlAttribute.class);
         }
     }

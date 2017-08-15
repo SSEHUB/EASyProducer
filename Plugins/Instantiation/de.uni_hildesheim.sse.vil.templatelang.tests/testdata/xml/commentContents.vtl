@@ -1,0 +1,12 @@
+template elementContents(Configuration config, XmlFileArtifact target) {
+
+    def main(Configuration config, XmlFileArtifact target) {
+        target.setOmitXmlDeclaration(true);
+        XmlElement root = target.createRootElement("root");
+        new XmlComment(root, "comment 1");
+        XmlElement elt = new XmlElement(root, "elt");
+        new XmlComment(elt, "inner comment");
+        new XmlComment(root, "comment 2");
+    }
+
+}

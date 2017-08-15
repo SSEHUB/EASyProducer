@@ -62,13 +62,13 @@ import net.ssehub.easy.instantiation.core.model.vilTypes.Set;
 @ArtifactCreator(DefaultXmlFileArtifactCreator.class)
 public class XmlFileArtifact extends FileArtifact implements IXmlContainer {
 
-    private XmlElement rootElement;
-    
+    private XmlElement rootElement; // ignore outside commend by node
     private Document doc;
     private File file;
     private DtdParser dtdParser = new DtdParser();
     private Dtd dtd;
     private boolean omitXmlDeclaration = false;
+    private boolean synchronizeAttributeSequence = true;
     private int indentation = 4;
     private long lastModification = -1;
     private long lastPersisted = -1;
@@ -95,7 +95,10 @@ public class XmlFileArtifact extends FileArtifact implements IXmlContainer {
         readDtd();
         load(file);
         if (null != doc) {
-            rootElement = build(doc.getDocumentElement(), null);
+            XmlNode rt = build(doc.getDocumentElement(), null);
+            if (rt instanceof XmlElement) {
+                rootElement = (XmlElement) rt;
+            }
             if (null != doc.getDocumentElement()) {
                 cleanTree(doc.getDocumentElement());
             }
@@ -252,27 +255,44 @@ public class XmlFileArtifact extends FileArtifact implements IXmlContainer {
      * @param parent the representation of the parent node. (Null if root element).
      * @return an array of XmlElements including all child elements.
      */
-    private XmlElement build(Node node, XmlElement parent) {
+    private XmlNode build(Node node, XmlElement parent) {
         //add elements only        
-        int amountOfElem = 0;
-        List<Integer> list = new ArrayList<Integer>();
+        List<Integer> childIndexes = new ArrayList<Integer>();
         for (int i = 0; i < node.getChildNodes().getLength(); i++) {
-            if (node.getChildNodes().item(i).getNodeType() == Node.ELEMENT_NODE) {
-                amountOfElem++;
-                list.add(i);
+            short type = node.getChildNodes().item(i).getNodeType();
+            if (type == Node.ELEMENT_NODE || type == Node.COMMENT_NODE) {
+                childIndexes.add(i);
             }
         }
         
-        XmlElement element = null;
-        XmlElement[] elements = new XmlElement[amountOfElem];
-        XmlAttribute[] attributes = this.createAttributes(node, element);
-        
+        XmlNode result = null;
         if (null == parent) {
-            element = new XmlRootElement(this, parent, node.getNodeName(), attributes, node); 
+            if (node.getNodeType() == Node.ELEMENT_NODE) {
+                XmlAttribute[] attributes = this.createAttributes(node, null);
+                result = fill(node, new XmlRootElement(this, parent, node.getNodeName(), attributes, node), 
+                    childIndexes); 
+            } // currently no comments here
         } else {
-            element = new XmlElement(parent, node.getNodeName(), attributes, node); 
+            if (node.getNodeType() == Node.ELEMENT_NODE) {
+                XmlAttribute[] attributes = this.createAttributes(node, null);
+                result = fill(node, new XmlElement(parent, node.getNodeName(), attributes, node), childIndexes); 
+            } else if (node.getNodeType() == Node.COMMENT_NODE) {
+                result = fill(node, new XmlComment(parent, node));
+            }
         }
-        
+
+        return result;
+    }
+
+    /**
+     * Fills an XML element with data.
+     * 
+     * @param node the XML node to take the data from
+     * @param element the XML element
+     * @param childIndexes the child indexes indicating the children to take over
+     * @return <code>element</code>
+     */
+    private XmlElement fill(Node node, XmlElement element, List<Integer> childIndexes) {
         //try to add textual representation
         //TODO: Test whether CDATA needs to be trimmed too.
         try {
@@ -303,12 +323,29 @@ public class XmlFileArtifact extends FileArtifact implements IXmlContainer {
                 iter.next().setParent(element);                
             }
         }
-              
-        //build child elements
-        for (int i = 0; i < amountOfElem; i++) {
-            elements[i] = build(node.getChildNodes().item(list.get(i)), element);
+        
+        XmlNode[] nodes = new XmlNode[childIndexes.size()];
+        //build child nodes
+        for (int i = 0; i < nodes.length; i++) {
+            nodes[i] = build(node.getChildNodes().item(childIndexes.get(i)), element);
         }
-        element.setElements(elements);
+        element.setNodes(nodes);
+        return element;
+    }
+
+    /**
+     * Fills an XML comment with data.
+     * 
+     * @param node the node to take data from
+     * @param element the XML comment to fill
+     * @return <code>comment</code>
+     */
+    private XmlComment fill(Node node, XmlComment element) {
+        try {
+            element.getText().setText(node.getNodeValue().trim());
+        } catch (VilException e1) {
+            EASyLoggerFactory.INSTANCE.getLogger(getClass(), Bundle.ID).exception(e1);
+        }
         return element;
     }
 
@@ -639,6 +676,29 @@ public class XmlFileArtifact extends FileArtifact implements IXmlContainer {
      */
     public void setOmitXmlDeclaration(boolean omitXmlDeclaration) {
         this.omitXmlDeclaration = omitXmlDeclaration;
+    }
+    
+    /**
+     * Returns whether the attribute sequence of XML elements shall be synchronized between document and artifact
+     * fragments, i.e., the fragment sequence defines the sequence of the attributes. Else attributes are sorted
+     * by name (default XALAN behavior).
+     * 
+     * @return <code>true</code> (default), <code>false</code> for sorted
+     */
+    @Invisible
+    public boolean synchronizeAttributeSequence() {
+        return synchronizeAttributeSequence;
+    }
+
+    /**
+     * Changes whether the attribute sequence of XML elements shall be synchronized between document and artifact
+     * fragments, i.e., the fragment sequence defines the sequence of the attributes. Else attributes are sorted
+     * by name (default XALAN behavior).
+     * 
+     * @param synchronizeAttributeSequence <code>true</code> (default), <code>false</code> for sorted
+     */
+    public void setSynchronizeAttributeSequence(boolean synchronizeAttributeSequence) {
+        this.synchronizeAttributeSequence = synchronizeAttributeSequence;
     }
 
     /**

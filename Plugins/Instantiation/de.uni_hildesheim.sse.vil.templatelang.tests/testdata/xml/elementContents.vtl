@@ -1,0 +1,16 @@
+template elementContents(Configuration config, XmlFileArtifact target) {
+
+    def main(Configuration config, XmlFileArtifact target) {
+        XmlElement elt = target.createRootElement("root");
+        createMavenBuildElement(elt);
+    }
+
+    def createMavenBuildElement(XmlElement project, String srcDir="\\${basedir}/") {
+        XmlElement build = new XmlElement(project, "build");
+        if (srcDir.length() > 0) {
+            new XmlElement(build, "sourceDirectory", srcDir);
+        }
+        build;
+    }
+
+}

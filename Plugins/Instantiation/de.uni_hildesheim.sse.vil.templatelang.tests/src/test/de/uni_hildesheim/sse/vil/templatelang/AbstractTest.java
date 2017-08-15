@@ -257,6 +257,5 @@ public abstract class AbstractTest extends net.ssehub.easy.dslCore.test.Abstract
         }
         return result;
     }
-
     
 }

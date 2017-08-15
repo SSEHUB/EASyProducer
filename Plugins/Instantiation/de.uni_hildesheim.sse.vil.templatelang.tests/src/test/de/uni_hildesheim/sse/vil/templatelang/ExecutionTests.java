@@ -3,7 +3,6 @@ package test.de.uni_hildesheim.sse.vil.templatelang;
 import java.io.CharArrayWriter;
 import java.io.File;
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -14,8 +13,6 @@ import org.junit.Test;
 import net.ssehub.easy.basics.modelManagement.ModelInfo;
 import net.ssehub.easy.basics.modelManagement.ModelManagementException;
 import net.ssehub.easy.dslCore.translation.Message;
-import net.ssehub.easy.instantiation.core.model.artifactModel.ArtifactFactory;
-import net.ssehub.easy.instantiation.core.model.artifactModel.IArtifact;
 import net.ssehub.easy.instantiation.core.model.artifactModel.IFileSystemArtifact;
 import net.ssehub.easy.instantiation.core.model.common.VilException;
 import net.ssehub.easy.instantiation.core.model.defaultInstantiators.RandomDouble;
@@ -34,7 +31,7 @@ import net.ssehub.easy.varModel.varModel.testSupport.DefaultConfiguration;
  * 
  * @author Holger Eichelberger
  */
-public class ExecutionTests extends AbstractTest {
+public class ExecutionTests extends AbstractExecutionTest {
 
     protected static final String PARAM_CONFIG = "config";
     protected static final String PARAM_TARGET = "target";
@@ -48,16 +45,6 @@ public class ExecutionTests extends AbstractTest {
     protected File getTestFolder() {
         return DIR;
     }
-    
-    /**
-     * Creates a file object relative to {@link #DIR} (not a file).
-     * 
-     * @param name the name of the file (excluding ".trc")
-     * @return the file
-     */
-    private static final File createTraceFile(String name) {
-        return new File(DIR, name + ".trc");
-    }
 
     /**
      * Creates a file object relative to {@link #DIR} (not a file).
@@ -67,36 +54,6 @@ public class ExecutionTests extends AbstractTest {
      */
     private static final File createOutFile(String name) {
         return new File(DIR, name + ".out");
-    }
-
-    /**
-     * Creates a default parameter map.
-     * 
-     * @param config the configuration (use empty if <b>null</b>)
-     * @param target the target artifact (use default if <b>null</b>)
-     * @return the parameter map
-     */
-    private static Map<String, Object> createParameterMap(Configuration config, IArtifact target) {
-        Map<String, Object> param = new HashMap<String, Object>();
-        if (null == config) {
-            net.ssehub.easy.varModel.confModel.Configuration cfg = DefaultConfiguration.createDefaultConfiguration();
-            Assert.assertNotNull("creating default IVML configuration failed", cfg);
-            config = new Configuration(cfg);
-        }
-        if (null == target) {
-            try {
-                File f = new File("test.texts"); // TODO -> temp??
-                f.deleteOnExit();
-                target = ArtifactFactory.createFileSystemArtifact(f); // shall be FileArtifact!!!
-            } catch (VilException e) {
-                Assert.fail("unexpected exception: " + e.getMessage());
-            }
-        }
-        param.put(TemplateLangExecution.PARAM_CONFIG, config);
-        param.put(TemplateLangExecution.PARAM_TARGET, target);
-        param.put(TemplateLangExecution.PARAM_CONFIG_SURE, config);
-        param.put(TemplateLangExecution.PARAM_TARGET_SURE, target);
-        return param;
     }
 
     /**
@@ -412,7 +369,7 @@ public class ExecutionTests extends AbstractTest {
      * @throws IOException should not occur
      */
     @Test
-    public void whileLoop1() throws IOException {
+    public void testWhileLoop1() throws IOException {
         assertEqual("whileLoop1");
     }
 
@@ -422,7 +379,7 @@ public class ExecutionTests extends AbstractTest {
      * @throws IOException should not occur
      */
     @Test
-    public void whileLoop2() throws IOException {
+    public void testWhileLoop2() throws IOException {
         assertEqual("whileLoop2");
     }
 

@@ -1,0 +1,15 @@
+-> main(Configuration, XmlFileArtifact) with (<config>, commentContents2.xml)
+    -> getRootElement(XmlFileArtifact) with (commentContents2.xml) = xmlElement "root"
+    root <- xmlElement "root"
+    -> comments(XmlElement) with (xmlElement "root") = {xmlComment , xmlComment }
+    cmts <- {xmlComment , xmlComment }
+    for c {
+        c <- xmlComment 
+        -> getCdata(XmlNode) with (xmlComment ) = <text>
+        -> +(String, Any) with (<text>,  - test) = <text> - test
+        -> setCdata(XmlNode, String) with (xmlComment , <text> - test)
+        c <- xmlComment 
+        -> getCdata(XmlNode) with (xmlComment ) = <text>
+        -> +(String, Any) with (<text>,  - test) = <text> - test
+        -> setCdata(XmlNode, String) with (xmlComment , <text> - test)
+    }
