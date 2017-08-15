@@ -131,7 +131,7 @@ public class XmlExecutionTests extends AbstractExecutionTest {
      */
     private void assertXml(String name, Configuration cfg, File inputFile, int... expectedExceptions) 
         throws IOException, VilException {
-        File f = new File(name + ".xml");
+        File f = new File(System.getProperty("java.io.tempdir"), name + ".xml");
         f.delete();
         if (null != inputFile) {
             Assert.assertTrue("Specified input file " + inputFile.getAbsolutePath() + " does not exist", 
@@ -156,6 +156,12 @@ public class XmlExecutionTests extends AbstractExecutionTest {
         if (!eq) {
             Assert.assertEquals(expected, produced);
         }
+        // file2String file descriptor may not have been cleaned up yet, sleep/gc
+        try {
+            Thread.sleep(100);
+        } catch (InterruptedException e) {
+        }
+        System.gc(); 
         f.delete();
     }
     
