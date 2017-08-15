@@ -150,7 +150,7 @@ public abstract class AbstractScenarioTest extends AbstractTest<Script> {
             BuildModel.INSTANCE.locations().addLocation(vilFolder, observer);
             TemplateModel.INSTANCE.locations().addLocation(vtlFolder, observer);
         } catch (ModelManagementException e) {
-            Assert.fail("unexpected exception: " + e.getMessage());
+            Assert.fail("unexpected exception (VIL/VTL): " + e.getMessage());
         }
         net.ssehub.easy.varModel.model.Project ivmlModel = obtainIvmlModel(modelName, project(versions, 0), ivmlFolder);
         Configuration config = new Configuration(new net.ssehub.easy.varModel.confModel.Configuration(ivmlModel));
@@ -256,9 +256,9 @@ public abstract class AbstractScenarioTest extends AbstractTest<Script> {
             Assert.assertNotNull("IVML model " + projectName + " cannot be found", info);
             ivmlModel = VarModel.INSTANCE.load(info);
         } catch (VersionFormatException e) {
-            Assert.fail("version information invalid");
+            Assert.fail("version information invalid (IVML)");
         } catch (ModelManagementException e) {
-            Assert.fail("unexpected exception: " + e);
+            Assert.fail("unexpected exception (IVML): " + e);
         }
         Assert.assertNotNull("cannot load IVML model " + projectName + " (syntax?)", ivmlModel);
         return ivmlModel;
