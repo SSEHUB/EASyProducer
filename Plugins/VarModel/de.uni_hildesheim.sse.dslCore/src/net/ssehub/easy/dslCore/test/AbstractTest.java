@@ -143,7 +143,9 @@ public abstract class AbstractTest<R extends IModel> {
     }
     
     /**
-     * Turns a file into a string for comparison.
+     * Turns a file into a string for comparison. If <code>file</code> is somewhat 
+     * temporary and you want to delete it, call <code>System.gc();</code> after this
+     * method. We do not call it by default as it affects the performance of the tests.
      * 
      * @param file the file to be turned into a string
      * @return the resulting string
