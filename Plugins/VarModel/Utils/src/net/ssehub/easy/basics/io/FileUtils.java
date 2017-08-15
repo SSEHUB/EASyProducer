@@ -17,6 +17,7 @@ package net.ssehub.easy.basics.io;
 
 import java.io.Closeable;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -50,14 +51,35 @@ public class FileUtils {
     public static boolean isFileURL(URL url) {
         return null != url && "file".equals(url.getProtocol());
     }
-    
+
+    /**
+     * Copies a file.
+     * 
+     * @param target the target file
+     * @param source the source file
+     * @throws IOException in any case of I/O problem, trying to close the involved files before end if possible
+     */
+    public static void copyFile(File target, File source) throws IOException {
+        FileInputStream in = null;
+        try {
+            in = new FileInputStream(source);
+            copyToFile(target, in);
+            in.close();
+        } catch (IOException e) {
+            if (null != in) {
+                closeQuietly(in);
+            }
+            throw e;
+        }
+    }
+     
     /**
      * Copies the contents of <code>in</code> at the current position to <code>file</code>.
      * Does not attempt to close <code>in</code>. Uses a default buffer of size 1024.
      * 
      * @param file the file to write to
      * @param in the input stream
-     * @throws IOException in any case of I/O problem, trying to close <code>file</code> before if possible
+     * @throws IOException in any case of I/O problem, trying to close <code>file</code> before end if possible
      */
     public static void copyToFile(File file, InputStream in) throws IOException {
         copyToFile(file, in, null);
