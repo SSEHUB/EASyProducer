@@ -419,16 +419,19 @@ public abstract class ExecutionVisitor <M extends IResolvableModel<V>, O extends
             Object[] args = new Object[arguments.getArgumentsCount()];
             Map<String, Object> namedArgs = null;
             for (int a = 0; Status.SUCCESS == status && a < arguments.getArgumentsCount(); a++) {
-                CallArgument ca = arguments.getArgument(a); 
-                args[a] = ca.accept(this);
+                CallArgument ca = arguments.getArgument(a);
+                Object argVal = ca.accept(this);
+                if (null == ca.getName() || ca.getName().equals(resolved.getParameter(a).getName())) {
+                    args[a] = argVal;
+                }
                 if (null != ca.getName()) {
                     if (null == namedArgs) {
                         namedArgs = new HashMap<String, Object>();
-                        namedArgs.put(ca.getName(), args[a]);
                     }
+                    namedArgs.put(ca.getName(), argVal);
                 }
-                if (args[a] instanceof RuleExecutionResult) {
-                    status = ((RuleExecutionResult) args[a]).getStatus();
+                if (argVal instanceof RuleExecutionResult) {
+                    status = ((RuleExecutionResult) argVal).getStatus();
                 }
             }
             if (Status.SUCCESS == status) {
@@ -440,22 +443,28 @@ public abstract class ExecutionVisitor <M extends IResolvableModel<V>, O extends
                         VilException.ID_RUNTIME);
                 }
                 O operation = dynamicDispatch(resolved, args, arguments);
+                int reqParamCount = operation.getRequiredParameterCount();
                 for (int p = 0; p < operation.getParameterCount(); p++) {
                     V param = operation.getParameter(p);
-                    if (null == param.getName()) {
+                    if (p < reqParamCount) {
                         environment.addValue(param, args[p]);    
                     } else {
-                        if (p >= args.length) {
+                        if (p >= args.length || p >= reqParamCount) {
                             Object pVal = null == namedArgs ? null : namedArgs.get(param.getName());
-                            if (null == pVal && null != param.getExpression()) {
-                                // no value, try default
-                                pVal = param.getExpression().accept(this);
+                            if (null == pVal && p < args.length) {
+                                pVal = args[p];
+                            }
+                            if (null == pVal) {
+                                pVal = evaluateDefault(param); // no value, try default; no default, pVal still null
                             }
                             if (null != pVal) { // legacy: optional named parameters;
                                 environment.addValue(param, pVal);
                             }
                         } else {
-                            environment.addValue(param, args[p]);    
+                            if (null == args[p]) {
+                                args[p] = evaluateDefault(param); // no value, try default; no deflt, args[p] still null
+                            }
+                            environment.addValue(param, args[p]);
                         }
                     }
                 }
@@ -467,6 +476,24 @@ public abstract class ExecutionVisitor <M extends IResolvableModel<V>, O extends
             }
         }
         return result;        
+    }
+    
+    /**
+     * Evaluates the default value of <code>decl</code>.
+     * 
+     * @param decl the declaration to evaluate the default value for
+     * @return the default value or <b>null</b> if none was defined
+     * @throws VilException if evaluating the default value (if defined) fails
+     */
+    private Object evaluateDefault(VariableDeclaration decl) throws VilException {
+        Object result;
+        if (null != decl.getExpression()) {
+            // no value, try default
+            result = decl.getExpression().accept(this);
+        } else {
+            result = null;
+        }
+        return result;
     }
     
     /**

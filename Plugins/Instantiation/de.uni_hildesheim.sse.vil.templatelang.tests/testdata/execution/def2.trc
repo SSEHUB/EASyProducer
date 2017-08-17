@@ -11,3 +11,13 @@
         -> +(String, Any) with (cat: , a) = cat: a
         -> +(String, Any) with (cat: a,  ) = cat: a 
         -> +(String, Any) with (cat: a , c) = cat: a c
+    -> cat2(String, String, String, String) with (a, , , a)
+        -> +(String, Any) with (cat2: , a) = cat2: a
+        -> +(String, Any) with (cat2: a, ) = cat2: a
+        -> +(String, Any) with (cat2: a, ) = cat2: a
+        -> +(String, Any) with (cat2: a, a) = cat2: aa
+    -> cat2(String, String, String, String) with (a, , b, a)
+        -> +(String, Any) with (cat2: , a) = cat2: a
+        -> +(String, Any) with (cat2: a, ) = cat2: a
+        -> +(String, Any) with (cat2: a, b) = cat2: ab
+        -> +(String, Any) with (cat2: ab, a) = cat2: aba
