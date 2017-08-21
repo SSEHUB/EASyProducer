@@ -40,6 +40,7 @@ import net.ssehub.easy.instantiation.core.model.vilTypes.TypeRegistry;
 import net.ssehub.easy.instantiation.core.model.vilTypes.configuration.EnumValue;
 import net.ssehub.easy.instantiation.core.model.vilTypes.configuration.IvmlElement;
 import net.ssehub.easy.instantiation.core.model.vilTypes.configuration.IvmlTypes;
+import net.ssehub.easy.varModel.model.values.NullValue;
 
 /**
  * Implements the execution of the template language.
@@ -352,7 +353,8 @@ public class TemplateLangExecution extends ExecutionVisitor<Template, Def, Varia
         object = convertToContainer(expr, expr.accept(this), "loop");
         String separator = getSeparatorFromExpression(loop.getSeparatorExpression());
         String finalSeparator = getSeparatorFromExpression(loop.getFinalSeparatorExpression());
-            
+
+        Object bodyResult = NullValue.VALUE;
         if (object instanceof Collection<?>) {
             VariableDeclaration iterVar = loop.getIteratorVariable();
             environment.pushLevel();
@@ -365,7 +367,7 @@ public class TemplateLangExecution extends ExecutionVisitor<Template, Def, Varia
                 tracer.valueDefined(iterVar, null, value);
                 ITemplateElement loopStmt = loop.getLoopStatement();
                 increaseIndentation(loopStmt);
-                loopStmt.accept(this);
+                bodyResult = loopStmt.accept(this);
                 decreaseIndentation(loopStmt);
                 if (null != separator && iter.hasNext()) {
                     appendContent(separator);
@@ -381,7 +383,7 @@ public class TemplateLangExecution extends ExecutionVisitor<Template, Def, Varia
                 throw new VilException("loop must iterate over collection", VilException.ID_SEMANTIC);
             }
         }
-        return Boolean.TRUE;
+        return bodyResult;
     }
     
     /**
@@ -488,9 +490,6 @@ public class TemplateLangExecution extends ExecutionVisitor<Template, Def, Varia
                         VilException.ID_SEMANTIC);
                 }
             }
-            /*if (cnt.needsLineEnd(1 == contentNestingLevel)) { // if top-level, print line ending by default else not
-                content += getLineEnd();
-            }*/
             String topContent = defContentStack.pop();
             if (0 == topContent.length()) {
                 topContent = content;
@@ -680,7 +679,7 @@ public class TemplateLangExecution extends ExecutionVisitor<Template, Def, Varia
         Expression condition = stmt.getConditionExpression();
         boolean executeLoop = false;
         environment.pushLevel();
-        Object bodyResult = null;
+        Object bodyResult = NullValue.VALUE;
         do {
             Object conditionResult = condition.accept(this);
             executeLoop = (conditionResult instanceof Boolean && (Boolean) conditionResult);
