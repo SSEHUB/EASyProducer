@@ -1,4 +1,6 @@
 -> main(Configuration, FileArtifact) with (<config>, test.texts)
     -> emptyInt()
     -> filledInt()
-    -> emptyTypes()    
+    -> emptyTypes()
+    -> emptyTypes2()
+        t <- {}        

@@ -1342,15 +1342,20 @@ public abstract class ExpressionTranslator<I extends VariableDeclaration, R exte
         if (null != decl.getExpression()) {
             init = processExpression(decl.getExpression(), resolver);
             try {
-                TypeDescriptor<?> exType = init.inferType();
+                TypeDescriptor<?> exType = init.inferType(); 
                 boolean ok = type.isAssignableFrom(exType);
-                if (!ok && type.isSequence() && exType.isSequence() && 0 == exType.getGenericParameterCount() 
+                TypeDescriptor<?> checkType = type; // used for checks only, keep original type if base type differs
+                if (!ok && type.getBaseType() instanceof TypeDescriptor && null == exType.getBaseType()) {
+                    // allow for IVML type alias compatibility with VIL sequences
+                    checkType = (TypeDescriptor<?>) type.getBaseType();
+                }
+                if (!ok && checkType.isSequence() && exType.isSequence() && 0 == exType.getGenericParameterCount() 
                     && init instanceof ContainerInitializerExpression) {
                     // left side is sequence and right side is empty container initializer - this works
                     ContainerInitializerExpression cie = (ContainerInitializerExpression) init;
                     ok = 0 == cie.getInitExpressionsCount();
                 }
-                if (!ok && type.isSet() && exType.isSequence() && 0 == exType.getGenericParameterCount() 
+                if (!ok && checkType.isSet() && exType.isSequence() && 0 == exType.getGenericParameterCount() 
                     && init instanceof ContainerInitializerExpression) {
                     // left side is set and right side is empty container initializer - convert and ok
                     ContainerInitializerExpression cie = (ContainerInitializerExpression) init;
@@ -1360,25 +1365,25 @@ public abstract class ExpressionTranslator<I extends VariableDeclaration, R exte
                         ok = true;
                     }
                 }
-                if (!ok && type.isSet() && exType.isSequence() && init instanceof ContainerInitializerExpression) {
+                if (!ok && checkType.isSet() && exType.isSequence() && init instanceof ContainerInitializerExpression) {
                     // left side is set and right side is empty container initializer - convert and ok
                     ContainerInitializerExpression cie = (ContainerInitializerExpression) init;
                     ContainerInitializerExpression tmp = cie.toSet();
                     TypeDescriptor<?> tmpType = tmp.inferType();
-                    if (type.isAssignableFrom(tmpType)) {
+                    if (checkType.isAssignableFrom(tmpType)) {
                         init = tmp;
                         exType = tmpType;
                         ok = true;
                     }
                 }
-                if (!ok && TypeRegistry.resolvableOperationType().isAssignableFrom(type) 
+                if (!ok && TypeRegistry.resolvableOperationType().isAssignableFrom(checkType) 
                     && IvmlTypes.ivmlElement().isAssignableFrom(exType)) {
                     // this may be a "function pointer" - defer until everything is resolved and try later
                     init = new DeferredResolvableOperationExpression(decl, type, init);
                     ok = true; // pretend that everything is ok -> reProcessVariableDeclaration
                 }
                 if (!ok) {
-                    OperationDescriptor conversion = TypeDescriptor.findConversionOnBoth(exType, type);
+                    OperationDescriptor conversion = TypeDescriptor.findConversionOnBoth(exType, checkType);
                     if (null == conversion) {
                         throwVariableCannotBeInitialized(decl, type, exType);
                     } else {

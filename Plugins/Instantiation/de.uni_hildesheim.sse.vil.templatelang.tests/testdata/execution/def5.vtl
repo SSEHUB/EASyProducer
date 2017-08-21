@@ -13,10 +13,16 @@ template defTest5(Configuration config, FileArtifact target) {
         {};
     }
 
+    def Types emptyTypes2() {
+        Types t = {};
+        t;
+    }
+
     def main(Configuration config, FileArtifact target) {
         '${emptyInt()}'
         '${filledInt()}'
         '${emptyTypes()}'
+        '${emptyTypes2()}'
     }
 
 }
