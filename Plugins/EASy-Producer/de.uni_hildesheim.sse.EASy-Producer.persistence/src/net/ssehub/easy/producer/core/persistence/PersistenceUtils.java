@@ -766,7 +766,8 @@ public class PersistenceUtils {
                 EASyLoggerFactory.INSTANCE.getLogger(PersistenceUtils.class, Activator.PLUGIN_ID).info(
                     "Trying to load default IVML/VIL library from '" + url);
                 try {
-                    URI uri = url.toURI();
+                    String urlString = url.toString().replace(" ", "%20"); // space problem :(
+                    URI uri = new URI(urlString);
                     if (JarUtils.isJarURL(url)) {
                         File file = FileUtils.createTmpDir("easyDefaultLib_" + count);
                         JarUtils.unpackJar(url, file);
