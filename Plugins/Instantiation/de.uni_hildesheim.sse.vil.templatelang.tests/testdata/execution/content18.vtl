@@ -1,0 +1,13 @@
+template content17(Configuration config, Artifact target) {
+
+    def Integer getLen(sequenceOf(String) seq1, sequenceOf(String) seq2) {
+        seq1.size() + seq2.size();
+    }
+
+    def main(Configuration config, Artifact target) {
+        '${getLen({"a", "b", "c"}, {"d", "e", "f"})}'
+        sequenceOf(String) t = {"1", "2", "3"};
+        '${t.size()}("");'
+    }
+
+}

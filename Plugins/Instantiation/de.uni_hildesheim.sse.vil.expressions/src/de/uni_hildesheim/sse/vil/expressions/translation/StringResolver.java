@@ -40,6 +40,7 @@ public class StringResolver<I extends VariableDeclaration, R extends Resolver<I>
     private ExpressionTranslator<I, R, E> translator;
     private int pos;
     private int curStart;
+    private int innerBracketLevel;
     private R resolver;
     private StringBuilder warnings;
     private IStringResolverFactory<I> factory;
@@ -174,7 +175,7 @@ public class StringResolver<I extends VariableDeclaration, R extends Resolver<I>
                 }
                 break;
             case VARIABLE_START:
-                state = checkVariableStart(list, c);
+                state = checkVariableStart(list, c, state);
                 break;
             case VARIABLE:
                 if (!Character.isJavaIdentifierPart(c) || c == '$') {
@@ -186,12 +187,18 @@ public class StringResolver<I extends VariableDeclaration, R extends Resolver<I>
                 }
                 break;
             case EXPRESSION:
-                if ('}' == c) {
-                    expr = handleExpression();
-                    addToList(expr, list);
-                    state = State.TEXT;
-                    curStart = pos + 1;
-                    pos--;
+                if ('{' == c) {
+                    innerBracketLevel++;
+                } else if ('}' == c) {
+                    if (0 == innerBracketLevel) {
+                        expr = handleExpression();
+                        addToList(expr, list);
+                        state = State.TEXT;
+                        curStart = pos + 1;
+                        pos--;
+                    } else {
+                        innerBracketLevel--;
+                    }
                 }
                 break;
             default:
@@ -206,7 +213,7 @@ public class StringResolver<I extends VariableDeclaration, R extends Resolver<I>
             addToList(expr, list);
             break;
         case EXPRESSION:
-            if ('}' == text.charAt(pos)) {
+            if ('}' == text.charAt(pos) && 0 == innerBracketLevel) {
                 expr = handleExpression();
                 addToList(expr, list);
             }
@@ -228,10 +235,11 @@ public class StringResolver<I extends VariableDeclaration, R extends Resolver<I>
      * 
      * @param list  the list of expressions
      * @param character char on pos
+     * @param curState the current state
      * @return the state
      * @throws VilException in case of evaluation problems
      */
-    private State checkVariableStart(List<Expression> list, char character) throws VilException {
+    private State checkVariableStart(List<Expression> list, char character, State curState) throws VilException {
         State state;
         Expression expr;
         if ('{' == character) {
@@ -277,7 +285,9 @@ public class StringResolver<I extends VariableDeclaration, R extends Resolver<I>
     private Expression handleExpression() throws VilException {
         Expression result = null;
         String expressionString = text.substring(curStart - 1, pos + 1);
-        String pattern = "\\$\\{([^\\}]+)\\}";
+        //remove leading ${ and trailing }; reg-ex fails with nested {}
+        expressionString = expressionString.substring(2, expressionString.length() - 1); 
+        String pattern = "\\$\\{([^\\}]+)\\}"; // still needed?
         expressionString = expressionString.replaceAll(pattern, "$1");
         if (null != factory) {
             boolean clear = true;

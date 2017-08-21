@@ -46,6 +46,7 @@ public class StringReplacer {
     private IExpressionParser expressionParser;
     private int pos;
     private int curStart;
+    private int innerBracketLevel;
 
     /**
      * Creates a replacer instance.
@@ -153,10 +154,16 @@ public class StringReplacer {
                 }
                 break;
             case EXPRESSION:
-                if ('}' == c) {
-                    handleExpression();
-                    state = State.TEXT;
-                    pos--;
+                if ('{' == c) {
+                    innerBracketLevel++;
+                } else if ('}' == c) {
+                    if (0 == innerBracketLevel) {
+                        handleExpression();
+                        state = State.TEXT;
+                        pos--;
+                    } else {
+                        innerBracketLevel--;
+                    }
                 }
                 break;
             default:

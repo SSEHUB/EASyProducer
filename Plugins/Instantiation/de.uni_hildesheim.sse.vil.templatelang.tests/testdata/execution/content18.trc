@@ -1,0 +1,7 @@
+-> main(Configuration, Artifact) with (<config>, test.texts)
+    -> getLen(sequenceOf(String), sequenceOf(String)) with ({a, b, c}, {d, e, f})
+        -> size(Collection) with ({a, b, c}) = 3
+        -> size(Collection) with ({d, e, f}) = 3
+        -> +(Integer, Integer) with (3, 3) = 6
+    t <- {1, 2, 3}
+    -> size(Collection) with ({1, 2, 3}) = 3

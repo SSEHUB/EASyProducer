@@ -661,6 +661,16 @@ public class ExecutionTests extends AbstractExecutionTest {
     }
 
     /**
+     * Tests content statements with container initializer parameters.
+     * 
+     * @throws IOException should not occur
+     */
+    @Test
+    public void testContent18() throws IOException {
+        assertEqual("content18");
+    }
+
+    /**
      * Tests the flush statement.
      * 
      * @throws IOException should not occur
