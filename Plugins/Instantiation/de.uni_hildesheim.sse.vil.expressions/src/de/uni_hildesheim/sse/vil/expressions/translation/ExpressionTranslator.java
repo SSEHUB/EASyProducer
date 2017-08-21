@@ -994,7 +994,7 @@ public abstract class ExpressionTranslator<I extends VariableDeclaration, R exte
                     throw new TranslatorException(e, elt, ExpressionDslPackage.Literals.CONSTANT__QVALUE);
                 }
             } else {
-                throw new TranslatorException("cannot resolve field " + name, elt, 
+                throw new TranslatorException("cannot resolve field '" + name + "'", elt, 
                     ExpressionDslPackage.Literals.CONSTANT__QVALUE, ErrorCodes.UNKNOWN_ELEMENT);
             }
         } else {
@@ -1003,7 +1003,7 @@ public abstract class ExpressionTranslator<I extends VariableDeclaration, R exte
                 if (null != fd) {
                     result = new FieldAccessExpression(last, fd);
                 } else {
-                    throw new TranslatorException("cannot resolve field " + name, elt, 
+                    throw new TranslatorException("cannot resolve field '" + name + "'", elt, 
                         ExpressionDslPackage.Literals.CONSTANT__QVALUE, ErrorCodes.UNKNOWN_ELEMENT);
                 }
             } catch (VilException e) {
