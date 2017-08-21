@@ -483,7 +483,7 @@ public class ExpressionTranslator extends net.ssehub.easy.dslCore.translation.Ex
             if (IvmlKeyWords.UNEQUALS_ALIAS.equals(op)) {
                 op = OclKeyWords.UNEQUALS;
                 if (AbstractVarModelWriter.considerOclCompliance()) {
-                    warning("OCL compliance: Please use <> instead of !=", expr, 
+                    warning("OCL compliance: Please use <> instead of !=", right, 
                         IvmlPackage.Literals.EQUALITY_EXPRESSION_PART__OP, ErrorCodes.WARNING_USAGE);
                 }
             }
