@@ -22,9 +22,13 @@ import org.eclipse.xtext.nodemodel.ICompositeNode;
 import org.eclipse.xtext.resource.XtextResource;
 
 import de.uni_hildesheim.sse.vil.expressions.ui.hyperlinking.AbstractEcoreModelQuery;
+import de.uni_hildesheim.sse.vil.templatelang.templateLang.Alternative;
 import de.uni_hildesheim.sse.vil.templatelang.templateLang.LanguageUnit;
+import de.uni_hildesheim.sse.vil.templatelang.templateLang.Loop;
 import de.uni_hildesheim.sse.vil.templatelang.templateLang.Stmt;
+import de.uni_hildesheim.sse.vil.templatelang.templateLang.StmtBlock;
 import de.uni_hildesheim.sse.vil.templatelang.templateLang.VilDef;
+import de.uni_hildesheim.sse.vil.templatelang.templateLang.While;
 import net.ssehub.easy.dslCore.ui.editors.CommonXtextEditor;
 import net.ssehub.easy.instantiation.core.model.common.ILanguageElement;
 import net.ssehub.easy.instantiation.core.model.templateModel.Def;
@@ -118,7 +122,22 @@ public class VtlEcoreModelQuery extends AbstractEcoreModelQuery<LanguageUnit, IL
         EObject result = null;
         if (null != stmts) {
             for (int s = 0; null == result && s < stmts.size(); s++) {
-                result = findInStmt(stmts.get(s), element, level); // same level!
+                Stmt stmt = stmts.get(s);
+                if (stmt instanceof Alternative) {
+                    Alternative alt = (Alternative) stmt;
+                    result = findInStmtOrStmtBlock(alt.getIf(), alt.getIfBlock(), element, level);
+                    if (null == result) {
+                        result = findInStmtOrStmtBlock(alt.getElse(), alt.getElseBlock(), element, level);    
+                    }
+                } else if (stmt instanceof While) {
+                    While whi = (While) stmt;
+                    result = findInStmtOrStmtBlock(whi.getStmt(), whi.getBlock(), element, level);
+                } else if (stmt instanceof Loop) {
+                    Loop loop = (Loop) stmt;
+                    result = findInStmtOrStmtBlock(loop.getStmt(), loop.getBlock(), element, level);
+                } else {
+                    result = findInStmt(stmt, element, level); // same level!
+                }
             }
         }
         return result;
@@ -127,7 +146,7 @@ public class VtlEcoreModelQuery extends AbstractEcoreModelQuery<LanguageUnit, IL
     /**
      * Tries finding <code>element</code> in <code>stmt</code>.
      * 
-     * @param stmts the statements to search
+     * @param stmt the statement to search
      * @param element the element to search for
      * @param level the actual nesting level starting with the one of <code>element</code>, if greater 0 recurse to the 
      *   next levels
@@ -149,8 +168,6 @@ public class VtlEcoreModelQuery extends AbstractEcoreModelQuery<LanguageUnit, IL
                     if (null == result) {
                         result = findInStmt(stmt.getAlt().getElse(), element, nextLevel);
                     }
-                } else if (null != stmt.getBlock()) {
-                    result = findInStmts(stmt.getBlock().getStmts(), element, nextLevel);
                 } else if (null != stmt.getLoop()) {
                     result = findInStmt(stmt.getLoop().getStmt(), element, nextLevel);
                 } else if (null != stmt.getSwitch()) {
@@ -159,6 +176,26 @@ public class VtlEcoreModelQuery extends AbstractEcoreModelQuery<LanguageUnit, IL
                     result = findInStmt(stmt.getWhile().getStmt(), element, nextLevel);
                 }
             }
+        }
+        return result;
+    }
+
+    /**
+     * Tries finding <code>element</code> in <code>stmt</code> or in <code>block</code>.
+     * 
+     * @param stmt the statement to search (may be <b>null</b>)
+     * @param block the block to search (may be <b>null</b>)
+     * @param element the element to search for
+     * @param level the actual nesting level starting with the one of <code>element</code>, if greater 0 recurse to the 
+     *   next levels
+     * @return the found EObject or <b>null</b> if there is none
+     */
+    private EObject findInStmtOrStmtBlock(Stmt stmt, StmtBlock block, ILanguageElement element, int level) {
+        EObject result = null;
+        if (null != stmt) {
+            result = findInStmt(stmt, element, level);
+        } else if (null != block) {
+            result = findInStmts(block.getStmts(), element, level - 1);
         }
         return result;
     }

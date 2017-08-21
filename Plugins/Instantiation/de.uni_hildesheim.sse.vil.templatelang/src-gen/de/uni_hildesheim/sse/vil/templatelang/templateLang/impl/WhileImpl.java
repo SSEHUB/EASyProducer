@@ -5,6 +5,7 @@ package de.uni_hildesheim.sse.vil.templatelang.templateLang.impl;
 import de.uni_hildesheim.sse.vil.expressions.expressionDsl.Expression;
 
 import de.uni_hildesheim.sse.vil.templatelang.templateLang.Stmt;
+import de.uni_hildesheim.sse.vil.templatelang.templateLang.StmtBlock;
 import de.uni_hildesheim.sse.vil.templatelang.templateLang.TemplateLangPackage;
 import de.uni_hildesheim.sse.vil.templatelang.templateLang.While;
 
@@ -27,6 +28,7 @@ import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
  * <ul>
  *   <li>{@link de.uni_hildesheim.sse.vil.templatelang.templateLang.impl.WhileImpl#getExpr <em>Expr</em>}</li>
  *   <li>{@link de.uni_hildesheim.sse.vil.templatelang.templateLang.impl.WhileImpl#getStmt <em>Stmt</em>}</li>
+ *   <li>{@link de.uni_hildesheim.sse.vil.templatelang.templateLang.impl.WhileImpl#getBlock <em>Block</em>}</li>
  * </ul>
  *
  * @generated
@@ -52,6 +54,16 @@ public class WhileImpl extends MinimalEObjectImpl.Container implements While
    * @ordered
    */
   protected Stmt stmt;
+
+  /**
+   * The cached value of the '{@link #getBlock() <em>Block</em>}' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #getBlock()
+   * @generated
+   * @ordered
+   */
+  protected StmtBlock block;
 
   /**
    * <!-- begin-user-doc -->
@@ -175,6 +187,54 @@ public class WhileImpl extends MinimalEObjectImpl.Container implements While
    * <!-- end-user-doc -->
    * @generated
    */
+  public StmtBlock getBlock()
+  {
+    return block;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public NotificationChain basicSetBlock(StmtBlock newBlock, NotificationChain msgs)
+  {
+    StmtBlock oldBlock = block;
+    block = newBlock;
+    if (eNotificationRequired())
+    {
+      ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, TemplateLangPackage.WHILE__BLOCK, oldBlock, newBlock);
+      if (msgs == null) msgs = notification; else msgs.add(notification);
+    }
+    return msgs;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public void setBlock(StmtBlock newBlock)
+  {
+    if (newBlock != block)
+    {
+      NotificationChain msgs = null;
+      if (block != null)
+        msgs = ((InternalEObject)block).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - TemplateLangPackage.WHILE__BLOCK, null, msgs);
+      if (newBlock != null)
+        msgs = ((InternalEObject)newBlock).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - TemplateLangPackage.WHILE__BLOCK, null, msgs);
+      msgs = basicSetBlock(newBlock, msgs);
+      if (msgs != null) msgs.dispatch();
+    }
+    else if (eNotificationRequired())
+      eNotify(new ENotificationImpl(this, Notification.SET, TemplateLangPackage.WHILE__BLOCK, newBlock, newBlock));
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
   @Override
   public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs)
   {
@@ -184,6 +244,8 @@ public class WhileImpl extends MinimalEObjectImpl.Container implements While
         return basicSetExpr(null, msgs);
       case TemplateLangPackage.WHILE__STMT:
         return basicSetStmt(null, msgs);
+      case TemplateLangPackage.WHILE__BLOCK:
+        return basicSetBlock(null, msgs);
     }
     return super.eInverseRemove(otherEnd, featureID, msgs);
   }
@@ -202,6 +264,8 @@ public class WhileImpl extends MinimalEObjectImpl.Container implements While
         return getExpr();
       case TemplateLangPackage.WHILE__STMT:
         return getStmt();
+      case TemplateLangPackage.WHILE__BLOCK:
+        return getBlock();
     }
     return super.eGet(featureID, resolve, coreType);
   }
@@ -221,6 +285,9 @@ public class WhileImpl extends MinimalEObjectImpl.Container implements While
         return;
       case TemplateLangPackage.WHILE__STMT:
         setStmt((Stmt)newValue);
+        return;
+      case TemplateLangPackage.WHILE__BLOCK:
+        setBlock((StmtBlock)newValue);
         return;
     }
     super.eSet(featureID, newValue);
@@ -242,6 +309,9 @@ public class WhileImpl extends MinimalEObjectImpl.Container implements While
       case TemplateLangPackage.WHILE__STMT:
         setStmt((Stmt)null);
         return;
+      case TemplateLangPackage.WHILE__BLOCK:
+        setBlock((StmtBlock)null);
+        return;
     }
     super.eUnset(featureID);
   }
@@ -260,6 +330,8 @@ public class WhileImpl extends MinimalEObjectImpl.Container implements While
         return expr != null;
       case TemplateLangPackage.WHILE__STMT:
         return stmt != null;
+      case TemplateLangPackage.WHILE__BLOCK:
+        return block != null;
     }
     return super.eIsSet(featureID);
   }

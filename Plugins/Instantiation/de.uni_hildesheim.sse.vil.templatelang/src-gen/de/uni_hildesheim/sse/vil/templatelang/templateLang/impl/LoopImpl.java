@@ -8,6 +8,7 @@ import de.uni_hildesheim.sse.vil.expressions.expressionDsl.Type;
 
 import de.uni_hildesheim.sse.vil.templatelang.templateLang.Loop;
 import de.uni_hildesheim.sse.vil.templatelang.templateLang.Stmt;
+import de.uni_hildesheim.sse.vil.templatelang.templateLang.StmtBlock;
 import de.uni_hildesheim.sse.vil.templatelang.templateLang.TemplateLangPackage;
 
 import org.eclipse.emf.common.notify.Notification;
@@ -33,6 +34,7 @@ import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
  *   <li>{@link de.uni_hildesheim.sse.vil.templatelang.templateLang.impl.LoopImpl#getSeparator <em>Separator</em>}</li>
  *   <li>{@link de.uni_hildesheim.sse.vil.templatelang.templateLang.impl.LoopImpl#getFinalSeparator <em>Final Separator</em>}</li>
  *   <li>{@link de.uni_hildesheim.sse.vil.templatelang.templateLang.impl.LoopImpl#getStmt <em>Stmt</em>}</li>
+ *   <li>{@link de.uni_hildesheim.sse.vil.templatelang.templateLang.impl.LoopImpl#getBlock <em>Block</em>}</li>
  * </ul>
  *
  * @generated
@@ -108,6 +110,16 @@ public class LoopImpl extends MinimalEObjectImpl.Container implements Loop
    * @ordered
    */
   protected Stmt stmt;
+
+  /**
+   * The cached value of the '{@link #getBlock() <em>Block</em>}' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #getBlock()
+   * @generated
+   * @ordered
+   */
+  protected StmtBlock block;
 
   /**
    * <!-- begin-user-doc -->
@@ -398,6 +410,54 @@ public class LoopImpl extends MinimalEObjectImpl.Container implements Loop
    * <!-- end-user-doc -->
    * @generated
    */
+  public StmtBlock getBlock()
+  {
+    return block;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public NotificationChain basicSetBlock(StmtBlock newBlock, NotificationChain msgs)
+  {
+    StmtBlock oldBlock = block;
+    block = newBlock;
+    if (eNotificationRequired())
+    {
+      ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, TemplateLangPackage.LOOP__BLOCK, oldBlock, newBlock);
+      if (msgs == null) msgs = notification; else msgs.add(notification);
+    }
+    return msgs;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public void setBlock(StmtBlock newBlock)
+  {
+    if (newBlock != block)
+    {
+      NotificationChain msgs = null;
+      if (block != null)
+        msgs = ((InternalEObject)block).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - TemplateLangPackage.LOOP__BLOCK, null, msgs);
+      if (newBlock != null)
+        msgs = ((InternalEObject)newBlock).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - TemplateLangPackage.LOOP__BLOCK, null, msgs);
+      msgs = basicSetBlock(newBlock, msgs);
+      if (msgs != null) msgs.dispatch();
+    }
+    else if (eNotificationRequired())
+      eNotify(new ENotificationImpl(this, Notification.SET, TemplateLangPackage.LOOP__BLOCK, newBlock, newBlock));
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
   @Override
   public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs)
   {
@@ -413,6 +473,8 @@ public class LoopImpl extends MinimalEObjectImpl.Container implements Loop
         return basicSetFinalSeparator(null, msgs);
       case TemplateLangPackage.LOOP__STMT:
         return basicSetStmt(null, msgs);
+      case TemplateLangPackage.LOOP__BLOCK:
+        return basicSetBlock(null, msgs);
     }
     return super.eInverseRemove(otherEnd, featureID, msgs);
   }
@@ -439,6 +501,8 @@ public class LoopImpl extends MinimalEObjectImpl.Container implements Loop
         return getFinalSeparator();
       case TemplateLangPackage.LOOP__STMT:
         return getStmt();
+      case TemplateLangPackage.LOOP__BLOCK:
+        return getBlock();
     }
     return super.eGet(featureID, resolve, coreType);
   }
@@ -470,6 +534,9 @@ public class LoopImpl extends MinimalEObjectImpl.Container implements Loop
         return;
       case TemplateLangPackage.LOOP__STMT:
         setStmt((Stmt)newValue);
+        return;
+      case TemplateLangPackage.LOOP__BLOCK:
+        setBlock((StmtBlock)newValue);
         return;
     }
     super.eSet(featureID, newValue);
@@ -503,6 +570,9 @@ public class LoopImpl extends MinimalEObjectImpl.Container implements Loop
       case TemplateLangPackage.LOOP__STMT:
         setStmt((Stmt)null);
         return;
+      case TemplateLangPackage.LOOP__BLOCK:
+        setBlock((StmtBlock)null);
+        return;
     }
     super.eUnset(featureID);
   }
@@ -529,6 +599,8 @@ public class LoopImpl extends MinimalEObjectImpl.Container implements Loop
         return finalSeparator != null;
       case TemplateLangPackage.LOOP__STMT:
         return stmt != null;
+      case TemplateLangPackage.LOOP__BLOCK:
+        return block != null;
     }
     return super.eIsSet(featureID);
   }

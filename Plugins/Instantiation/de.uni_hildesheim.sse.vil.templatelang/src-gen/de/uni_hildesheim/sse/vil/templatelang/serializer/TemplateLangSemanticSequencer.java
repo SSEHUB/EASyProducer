@@ -292,7 +292,7 @@ public class TemplateLangSemanticSequencer extends ExpressionDslSemanticSequence
 	 *     Alternative returns Alternative
 	 *
 	 * Constraint:
-	 *     (expr=Expression if=Stmt else=Stmt?)
+	 *     (expr=Expression (if=Stmt | ifBlock=StmtBlock) (else=Stmt | elseBlock=StmtBlock)?)
 	 */
 	protected void sequence_Alternative(ISerializationContext context, Alternative semanticObject) {
 		genericSequencer.createSequence(context, semanticObject);
@@ -437,7 +437,7 @@ public class TemplateLangSemanticSequencer extends ExpressionDslSemanticSequence
 	 *     Loop returns Loop
 	 *
 	 * Constraint:
-	 *     (type=Type id=Identifier expr=Expression (separator=PrimaryExpression finalSeparator=PrimaryExpression?)? stmt=Stmt)
+	 *     (type=Type id=Identifier expr=Expression (separator=PrimaryExpression finalSeparator=PrimaryExpression?)? (stmt=Stmt | block=StmtBlock))
 	 */
 	protected void sequence_Loop(ISerializationContext context, Loop semanticObject) {
 		genericSequencer.createSequence(context, semanticObject);
@@ -465,7 +465,6 @@ public class TemplateLangSemanticSequencer extends ExpressionDslSemanticSequence
 	 *         var=VariableDeclaration | 
 	 *         alt=Alternative | 
 	 *         switch=Switch | 
-	 *         block=StmtBlock | 
 	 *         multi=multiselect | 
 	 *         loop=Loop | 
 	 *         while=While | 
@@ -529,19 +528,10 @@ public class TemplateLangSemanticSequencer extends ExpressionDslSemanticSequence
 	 *     While returns While
 	 *
 	 * Constraint:
-	 *     (expr=Expression stmt=Stmt)
+	 *     (expr=Expression (stmt=Stmt | block=StmtBlock))
 	 */
 	protected void sequence_While(ISerializationContext context, While semanticObject) {
-		if (errorAcceptor != null) {
-			if (transientValues.isValueTransient(semanticObject, TemplateLangPackage.Literals.WHILE__EXPR) == ValueTransient.YES)
-				errorAcceptor.accept(diagnosticProvider.createFeatureValueMissing(semanticObject, TemplateLangPackage.Literals.WHILE__EXPR));
-			if (transientValues.isValueTransient(semanticObject, TemplateLangPackage.Literals.WHILE__STMT) == ValueTransient.YES)
-				errorAcceptor.accept(diagnosticProvider.createFeatureValueMissing(semanticObject, TemplateLangPackage.Literals.WHILE__STMT));
-		}
-		SequenceFeeder feeder = createSequencerFeeder(context, semanticObject);
-		feeder.accept(grammarAccess.getWhileAccess().getExprExpressionParserRuleCall_2_0(), semanticObject.getExpr());
-		feeder.accept(grammarAccess.getWhileAccess().getStmtStmtParserRuleCall_4_0(), semanticObject.getStmt());
-		feeder.finish();
+		genericSequencer.createSequence(context, semanticObject);
 	}
 	
 	

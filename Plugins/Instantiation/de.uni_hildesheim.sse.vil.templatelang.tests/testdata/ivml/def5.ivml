@@ -1,0 +1,11 @@
+project def5 {
+  version v0;
+  compound Type {
+      String name;
+  }
+  typedef Types sequenceOf(Type);
+  Types t = {Type{name="a"}, Type{name="b"}};
+  freeze {
+      t;
+  };
+}

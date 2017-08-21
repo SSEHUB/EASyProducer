@@ -429,28 +429,26 @@ public class TemplateLangGrammarAccess extends AbstractGrammarElementFinder {
 		private final RuleCall cAltAlternativeParserRuleCall_1_0 = (RuleCall)cAltAssignment_1.eContents().get(0);
 		private final Assignment cSwitchAssignment_2 = (Assignment)cAlternatives.eContents().get(2);
 		private final RuleCall cSwitchSwitchParserRuleCall_2_0 = (RuleCall)cSwitchAssignment_2.eContents().get(0);
-		private final Assignment cBlockAssignment_3 = (Assignment)cAlternatives.eContents().get(3);
-		private final RuleCall cBlockStmtBlockParserRuleCall_3_0 = (RuleCall)cBlockAssignment_3.eContents().get(0);
-		private final Assignment cMultiAssignment_4 = (Assignment)cAlternatives.eContents().get(4);
-		private final RuleCall cMultiMultiselectParserRuleCall_4_0 = (RuleCall)cMultiAssignment_4.eContents().get(0);
-		private final Assignment cLoopAssignment_5 = (Assignment)cAlternatives.eContents().get(5);
-		private final RuleCall cLoopLoopParserRuleCall_5_0 = (RuleCall)cLoopAssignment_5.eContents().get(0);
-		private final Assignment cWhileAssignment_6 = (Assignment)cAlternatives.eContents().get(6);
-		private final RuleCall cWhileWhileParserRuleCall_6_0 = (RuleCall)cWhileAssignment_6.eContents().get(0);
-		private final Assignment cExprStmtAssignment_7 = (Assignment)cAlternatives.eContents().get(7);
-		private final RuleCall cExprStmtExpressionStatementParserRuleCall_7_0 = (RuleCall)cExprStmtAssignment_7.eContents().get(0);
-		private final Assignment cCtnAssignment_8 = (Assignment)cAlternatives.eContents().get(8);
-		private final RuleCall cCtnContentParserRuleCall_8_0 = (RuleCall)cCtnAssignment_8.eContents().get(0);
-		private final Assignment cFlushAssignment_9 = (Assignment)cAlternatives.eContents().get(9);
-		private final RuleCall cFlushFlushParserRuleCall_9_0 = (RuleCall)cFlushAssignment_9.eContents().get(0);
+		private final Assignment cMultiAssignment_3 = (Assignment)cAlternatives.eContents().get(3);
+		private final RuleCall cMultiMultiselectParserRuleCall_3_0 = (RuleCall)cMultiAssignment_3.eContents().get(0);
+		private final Assignment cLoopAssignment_4 = (Assignment)cAlternatives.eContents().get(4);
+		private final RuleCall cLoopLoopParserRuleCall_4_0 = (RuleCall)cLoopAssignment_4.eContents().get(0);
+		private final Assignment cWhileAssignment_5 = (Assignment)cAlternatives.eContents().get(5);
+		private final RuleCall cWhileWhileParserRuleCall_5_0 = (RuleCall)cWhileAssignment_5.eContents().get(0);
+		private final Assignment cExprStmtAssignment_6 = (Assignment)cAlternatives.eContents().get(6);
+		private final RuleCall cExprStmtExpressionStatementParserRuleCall_6_0 = (RuleCall)cExprStmtAssignment_6.eContents().get(0);
+		private final Assignment cCtnAssignment_7 = (Assignment)cAlternatives.eContents().get(7);
+		private final RuleCall cCtnContentParserRuleCall_7_0 = (RuleCall)cCtnAssignment_7.eContents().get(0);
+		private final Assignment cFlushAssignment_8 = (Assignment)cAlternatives.eContents().get(8);
+		private final RuleCall cFlushFlushParserRuleCall_8_0 = (RuleCall)cFlushAssignment_8.eContents().get(0);
 		
 		//Stmt:
-		//	var=VariableDeclaration | alt=Alternative | switch=Switch | block=StmtBlock | multi=multiselect | loop=Loop |
-		//	while=While | exprStmt=ExpressionStatement | ctn=Content | flush=Flush;
+		//	var=VariableDeclaration | alt=Alternative | switch=Switch | multi=multiselect | loop=Loop | while=While |
+		//	exprStmt=ExpressionStatement | ctn=Content | flush=Flush;
 		@Override public ParserRule getRule() { return rule; }
 
-		//var=VariableDeclaration | alt=Alternative | switch=Switch | block=StmtBlock | multi=multiselect | loop=Loop |
-		//while=While | exprStmt=ExpressionStatement | ctn=Content | flush=Flush
+		//var=VariableDeclaration | alt=Alternative | switch=Switch | multi=multiselect | loop=Loop | while=While |
+		//exprStmt=ExpressionStatement | ctn=Content | flush=Flush
 		public Alternatives getAlternatives() { return cAlternatives; }
 
 		//var=VariableDeclaration
@@ -471,47 +469,41 @@ public class TemplateLangGrammarAccess extends AbstractGrammarElementFinder {
 		//Switch
 		public RuleCall getSwitchSwitchParserRuleCall_2_0() { return cSwitchSwitchParserRuleCall_2_0; }
 
-		//block=StmtBlock
-		public Assignment getBlockAssignment_3() { return cBlockAssignment_3; }
-
-		//StmtBlock
-		public RuleCall getBlockStmtBlockParserRuleCall_3_0() { return cBlockStmtBlockParserRuleCall_3_0; }
-
 		//multi=multiselect
-		public Assignment getMultiAssignment_4() { return cMultiAssignment_4; }
+		public Assignment getMultiAssignment_3() { return cMultiAssignment_3; }
 
 		//multiselect
-		public RuleCall getMultiMultiselectParserRuleCall_4_0() { return cMultiMultiselectParserRuleCall_4_0; }
+		public RuleCall getMultiMultiselectParserRuleCall_3_0() { return cMultiMultiselectParserRuleCall_3_0; }
 
 		//loop=Loop
-		public Assignment getLoopAssignment_5() { return cLoopAssignment_5; }
+		public Assignment getLoopAssignment_4() { return cLoopAssignment_4; }
 
 		//Loop
-		public RuleCall getLoopLoopParserRuleCall_5_0() { return cLoopLoopParserRuleCall_5_0; }
+		public RuleCall getLoopLoopParserRuleCall_4_0() { return cLoopLoopParserRuleCall_4_0; }
 
 		//while=While
-		public Assignment getWhileAssignment_6() { return cWhileAssignment_6; }
+		public Assignment getWhileAssignment_5() { return cWhileAssignment_5; }
 
 		//While
-		public RuleCall getWhileWhileParserRuleCall_6_0() { return cWhileWhileParserRuleCall_6_0; }
+		public RuleCall getWhileWhileParserRuleCall_5_0() { return cWhileWhileParserRuleCall_5_0; }
 
 		//exprStmt=ExpressionStatement
-		public Assignment getExprStmtAssignment_7() { return cExprStmtAssignment_7; }
+		public Assignment getExprStmtAssignment_6() { return cExprStmtAssignment_6; }
 
 		//ExpressionStatement
-		public RuleCall getExprStmtExpressionStatementParserRuleCall_7_0() { return cExprStmtExpressionStatementParserRuleCall_7_0; }
+		public RuleCall getExprStmtExpressionStatementParserRuleCall_6_0() { return cExprStmtExpressionStatementParserRuleCall_6_0; }
 
 		//ctn=Content
-		public Assignment getCtnAssignment_8() { return cCtnAssignment_8; }
+		public Assignment getCtnAssignment_7() { return cCtnAssignment_7; }
 
 		//Content
-		public RuleCall getCtnContentParserRuleCall_8_0() { return cCtnContentParserRuleCall_8_0; }
+		public RuleCall getCtnContentParserRuleCall_7_0() { return cCtnContentParserRuleCall_7_0; }
 
 		//flush=Flush
-		public Assignment getFlushAssignment_9() { return cFlushAssignment_9; }
+		public Assignment getFlushAssignment_8() { return cFlushAssignment_8; }
 
 		//Flush
-		public RuleCall getFlushFlushParserRuleCall_9_0() { return cFlushFlushParserRuleCall_9_0; }
+		public RuleCall getFlushFlushParserRuleCall_8_0() { return cFlushFlushParserRuleCall_8_0; }
 	}
 
 	public class AlternativeElements extends AbstractParserRuleElementFinder {
@@ -522,18 +514,24 @@ public class TemplateLangGrammarAccess extends AbstractGrammarElementFinder {
 		private final Assignment cExprAssignment_2 = (Assignment)cGroup.eContents().get(2);
 		private final RuleCall cExprExpressionParserRuleCall_2_0 = (RuleCall)cExprAssignment_2.eContents().get(0);
 		private final Keyword cRightParenthesisKeyword_3 = (Keyword)cGroup.eContents().get(3);
-		private final Assignment cIfAssignment_4 = (Assignment)cGroup.eContents().get(4);
-		private final RuleCall cIfStmtParserRuleCall_4_0 = (RuleCall)cIfAssignment_4.eContents().get(0);
+		private final Alternatives cAlternatives_4 = (Alternatives)cGroup.eContents().get(4);
+		private final Assignment cIfAssignment_4_0 = (Assignment)cAlternatives_4.eContents().get(0);
+		private final RuleCall cIfStmtParserRuleCall_4_0_0 = (RuleCall)cIfAssignment_4_0.eContents().get(0);
+		private final Assignment cIfBlockAssignment_4_1 = (Assignment)cAlternatives_4.eContents().get(1);
+		private final RuleCall cIfBlockStmtBlockParserRuleCall_4_1_0 = (RuleCall)cIfBlockAssignment_4_1.eContents().get(0);
 		private final Group cGroup_5 = (Group)cGroup.eContents().get(5);
 		private final Keyword cElseKeyword_5_0 = (Keyword)cGroup_5.eContents().get(0);
-		private final Assignment cElseAssignment_5_1 = (Assignment)cGroup_5.eContents().get(1);
-		private final RuleCall cElseStmtParserRuleCall_5_1_0 = (RuleCall)cElseAssignment_5_1.eContents().get(0);
+		private final Alternatives cAlternatives_5_1 = (Alternatives)cGroup_5.eContents().get(1);
+		private final Assignment cElseAssignment_5_1_0 = (Assignment)cAlternatives_5_1.eContents().get(0);
+		private final RuleCall cElseStmtParserRuleCall_5_1_0_0 = (RuleCall)cElseAssignment_5_1_0.eContents().get(0);
+		private final Assignment cElseBlockAssignment_5_1_1 = (Assignment)cAlternatives_5_1.eContents().get(1);
+		private final RuleCall cElseBlockStmtBlockParserRuleCall_5_1_1_0 = (RuleCall)cElseBlockAssignment_5_1_1.eContents().get(0);
 		
 		//Alternative:
-		//	'if' '(' expr=Expression ')' if=Stmt (=> 'else' else=Stmt)?;
+		//	'if' '(' expr=Expression ')' (if=Stmt | ifBlock=StmtBlock) (=> 'else' (else=Stmt | elseBlock=StmtBlock))?;
 		@Override public ParserRule getRule() { return rule; }
 
-		//'if' '(' expr=Expression ')' if=Stmt (=> 'else' else=Stmt)?
+		//'if' '(' expr=Expression ')' (if=Stmt | ifBlock=StmtBlock) (=> 'else' (else=Stmt | elseBlock=StmtBlock))?
 		public Group getGroup() { return cGroup; }
 
 		//'if'
@@ -551,23 +549,41 @@ public class TemplateLangGrammarAccess extends AbstractGrammarElementFinder {
 		//')'
 		public Keyword getRightParenthesisKeyword_3() { return cRightParenthesisKeyword_3; }
 
+		//(if=Stmt | ifBlock=StmtBlock)
+		public Alternatives getAlternatives_4() { return cAlternatives_4; }
+
 		//if=Stmt
-		public Assignment getIfAssignment_4() { return cIfAssignment_4; }
+		public Assignment getIfAssignment_4_0() { return cIfAssignment_4_0; }
 
 		//Stmt
-		public RuleCall getIfStmtParserRuleCall_4_0() { return cIfStmtParserRuleCall_4_0; }
+		public RuleCall getIfStmtParserRuleCall_4_0_0() { return cIfStmtParserRuleCall_4_0_0; }
 
-		//(=> 'else' else=Stmt)?
+		//ifBlock=StmtBlock
+		public Assignment getIfBlockAssignment_4_1() { return cIfBlockAssignment_4_1; }
+
+		//StmtBlock
+		public RuleCall getIfBlockStmtBlockParserRuleCall_4_1_0() { return cIfBlockStmtBlockParserRuleCall_4_1_0; }
+
+		//(=> 'else' (else=Stmt | elseBlock=StmtBlock))?
 		public Group getGroup_5() { return cGroup_5; }
 
 		//=> 'else'
 		public Keyword getElseKeyword_5_0() { return cElseKeyword_5_0; }
 
+		//(else=Stmt | elseBlock=StmtBlock)
+		public Alternatives getAlternatives_5_1() { return cAlternatives_5_1; }
+
 		//else=Stmt
-		public Assignment getElseAssignment_5_1() { return cElseAssignment_5_1; }
+		public Assignment getElseAssignment_5_1_0() { return cElseAssignment_5_1_0; }
 
 		//Stmt
-		public RuleCall getElseStmtParserRuleCall_5_1_0() { return cElseStmtParserRuleCall_5_1_0; }
+		public RuleCall getElseStmtParserRuleCall_5_1_0_0() { return cElseStmtParserRuleCall_5_1_0_0; }
+
+		//elseBlock=StmtBlock
+		public Assignment getElseBlockAssignment_5_1_1() { return cElseBlockAssignment_5_1_1; }
+
+		//StmtBlock
+		public RuleCall getElseBlockStmtBlockParserRuleCall_5_1_1_0() { return cElseBlockStmtBlockParserRuleCall_5_1_1_0; }
 	}
 
 	public class ContentElements extends AbstractParserRuleElementFinder {
@@ -781,16 +797,19 @@ public class TemplateLangGrammarAccess extends AbstractGrammarElementFinder {
 		private final Assignment cFinalSeparatorAssignment_6_2_1 = (Assignment)cGroup_6_2.eContents().get(1);
 		private final RuleCall cFinalSeparatorPrimaryExpressionParserRuleCall_6_2_1_0 = (RuleCall)cFinalSeparatorAssignment_6_2_1.eContents().get(0);
 		private final Keyword cRightParenthesisKeyword_7 = (Keyword)cGroup.eContents().get(7);
-		private final Assignment cStmtAssignment_8 = (Assignment)cGroup.eContents().get(8);
-		private final RuleCall cStmtStmtParserRuleCall_8_0 = (RuleCall)cStmtAssignment_8.eContents().get(0);
+		private final Alternatives cAlternatives_8 = (Alternatives)cGroup.eContents().get(8);
+		private final Assignment cStmtAssignment_8_0 = (Assignment)cAlternatives_8.eContents().get(0);
+		private final RuleCall cStmtStmtParserRuleCall_8_0_0 = (RuleCall)cStmtAssignment_8_0.eContents().get(0);
+		private final Assignment cBlockAssignment_8_1 = (Assignment)cAlternatives_8.eContents().get(1);
+		private final RuleCall cBlockStmtBlockParserRuleCall_8_1_0 = (RuleCall)cBlockAssignment_8_1.eContents().get(0);
 		
 		//Loop:
 		//	'for' '(' type=Type id=Identifier ':' expr=Expression (',' separator=PrimaryExpression (','
-		//	finalSeparator=PrimaryExpression)?)? ')' stmt=Stmt;
+		//	finalSeparator=PrimaryExpression)?)? ')' (stmt=Stmt | block=StmtBlock);
 		@Override public ParserRule getRule() { return rule; }
 
 		//'for' '(' type=Type id=Identifier ':' expr=Expression (',' separator=PrimaryExpression (','
-		//finalSeparator=PrimaryExpression)?)? ')' stmt=Stmt
+		//finalSeparator=PrimaryExpression)?)? ')' (stmt=Stmt | block=StmtBlock)
 		public Group getGroup() { return cGroup; }
 
 		//'for'
@@ -847,11 +866,20 @@ public class TemplateLangGrammarAccess extends AbstractGrammarElementFinder {
 		//')'
 		public Keyword getRightParenthesisKeyword_7() { return cRightParenthesisKeyword_7; }
 
+		//(stmt=Stmt | block=StmtBlock)
+		public Alternatives getAlternatives_8() { return cAlternatives_8; }
+
 		//stmt=Stmt
-		public Assignment getStmtAssignment_8() { return cStmtAssignment_8; }
+		public Assignment getStmtAssignment_8_0() { return cStmtAssignment_8_0; }
 
 		//Stmt
-		public RuleCall getStmtStmtParserRuleCall_8_0() { return cStmtStmtParserRuleCall_8_0; }
+		public RuleCall getStmtStmtParserRuleCall_8_0_0() { return cStmtStmtParserRuleCall_8_0_0; }
+
+		//block=StmtBlock
+		public Assignment getBlockAssignment_8_1() { return cBlockAssignment_8_1; }
+
+		//StmtBlock
+		public RuleCall getBlockStmtBlockParserRuleCall_8_1_0() { return cBlockStmtBlockParserRuleCall_8_1_0; }
 	}
 
 	public class WhileElements extends AbstractParserRuleElementFinder {
@@ -862,14 +890,17 @@ public class TemplateLangGrammarAccess extends AbstractGrammarElementFinder {
 		private final Assignment cExprAssignment_2 = (Assignment)cGroup.eContents().get(2);
 		private final RuleCall cExprExpressionParserRuleCall_2_0 = (RuleCall)cExprAssignment_2.eContents().get(0);
 		private final Keyword cRightParenthesisKeyword_3 = (Keyword)cGroup.eContents().get(3);
-		private final Assignment cStmtAssignment_4 = (Assignment)cGroup.eContents().get(4);
-		private final RuleCall cStmtStmtParserRuleCall_4_0 = (RuleCall)cStmtAssignment_4.eContents().get(0);
+		private final Alternatives cAlternatives_4 = (Alternatives)cGroup.eContents().get(4);
+		private final Assignment cStmtAssignment_4_0 = (Assignment)cAlternatives_4.eContents().get(0);
+		private final RuleCall cStmtStmtParserRuleCall_4_0_0 = (RuleCall)cStmtAssignment_4_0.eContents().get(0);
+		private final Assignment cBlockAssignment_4_1 = (Assignment)cAlternatives_4.eContents().get(1);
+		private final RuleCall cBlockStmtBlockParserRuleCall_4_1_0 = (RuleCall)cBlockAssignment_4_1.eContents().get(0);
 		
 		//While:
-		//	'while' '(' expr=Expression ')' stmt=Stmt;
+		//	'while' '(' expr=Expression ')' (stmt=Stmt | block=StmtBlock);
 		@Override public ParserRule getRule() { return rule; }
 
-		//'while' '(' expr=Expression ')' stmt=Stmt
+		//'while' '(' expr=Expression ')' (stmt=Stmt | block=StmtBlock)
 		public Group getGroup() { return cGroup; }
 
 		//'while'
@@ -887,11 +918,20 @@ public class TemplateLangGrammarAccess extends AbstractGrammarElementFinder {
 		//')'
 		public Keyword getRightParenthesisKeyword_3() { return cRightParenthesisKeyword_3; }
 
+		//(stmt=Stmt | block=StmtBlock)
+		public Alternatives getAlternatives_4() { return cAlternatives_4; }
+
 		//stmt=Stmt
-		public Assignment getStmtAssignment_4() { return cStmtAssignment_4; }
+		public Assignment getStmtAssignment_4_0() { return cStmtAssignment_4_0; }
 
 		//Stmt
-		public RuleCall getStmtStmtParserRuleCall_4_0() { return cStmtStmtParserRuleCall_4_0; }
+		public RuleCall getStmtStmtParserRuleCall_4_0_0() { return cStmtStmtParserRuleCall_4_0_0; }
+
+		//block=StmtBlock
+		public Assignment getBlockAssignment_4_1() { return cBlockAssignment_4_1; }
+
+		//StmtBlock
+		public RuleCall getBlockStmtBlockParserRuleCall_4_1_0() { return cBlockStmtBlockParserRuleCall_4_1_0; }
 	}
 
 	public class FlushElements extends AbstractParserRuleElementFinder {
@@ -1296,8 +1336,8 @@ public class TemplateLangGrammarAccess extends AbstractGrammarElementFinder {
 	}
 
 	//Stmt:
-	//	var=VariableDeclaration | alt=Alternative | switch=Switch | block=StmtBlock | multi=multiselect | loop=Loop |
-	//	while=While | exprStmt=ExpressionStatement | ctn=Content | flush=Flush;
+	//	var=VariableDeclaration | alt=Alternative | switch=Switch | multi=multiselect | loop=Loop | while=While |
+	//	exprStmt=ExpressionStatement | ctn=Content | flush=Flush;
 	public StmtElements getStmtAccess() {
 		return pStmt;
 	}
@@ -1307,7 +1347,7 @@ public class TemplateLangGrammarAccess extends AbstractGrammarElementFinder {
 	}
 
 	//Alternative:
-	//	'if' '(' expr=Expression ')' if=Stmt (=> 'else' else=Stmt)?;
+	//	'if' '(' expr=Expression ')' (if=Stmt | ifBlock=StmtBlock) (=> 'else' (else=Stmt | elseBlock=StmtBlock))?;
 	public AlternativeElements getAlternativeAccess() {
 		return pAlternative;
 	}
@@ -1349,7 +1389,7 @@ public class TemplateLangGrammarAccess extends AbstractGrammarElementFinder {
 
 	//Loop:
 	//	'for' '(' type=Type id=Identifier ':' expr=Expression (',' separator=PrimaryExpression (','
-	//	finalSeparator=PrimaryExpression)?)? ')' stmt=Stmt;
+	//	finalSeparator=PrimaryExpression)?)? ')' (stmt=Stmt | block=StmtBlock);
 	public LoopElements getLoopAccess() {
 		return pLoop;
 	}
@@ -1359,7 +1399,7 @@ public class TemplateLangGrammarAccess extends AbstractGrammarElementFinder {
 	}
 
 	//While:
-	//	'while' '(' expr=Expression ')' stmt=Stmt;
+	//	'while' '(' expr=Expression ')' (stmt=Stmt | block=StmtBlock);
 	public WhileElements getWhileAccess() {
 		return pWhile;
 	}

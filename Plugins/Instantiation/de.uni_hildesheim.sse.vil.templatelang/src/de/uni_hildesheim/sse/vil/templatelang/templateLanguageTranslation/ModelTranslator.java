@@ -485,10 +485,6 @@ public class ModelTranslator extends de.uni_hildesheim.sse.vil.expressions.trans
         if (null != stmt) {
             if (null != stmt.getAlt()) {
                 result = processAlternative(stmt.getAlt());
-            } else if (null != stmt.getBlock()) {
-                resolver.pushLevel();
-                result = new TemplateBlock(processBlock(stmt.getBlock()));
-                resolver.popLevel();
             } else if (null != stmt.getCtn()) {
                 result = processContent(stmt.getCtn(), resolver);
             } else if (null != stmt.getExprStmt()) {
@@ -512,6 +508,26 @@ public class ModelTranslator extends de.uni_hildesheim.sse.vil.expressions.trans
     }
     
     /**
+     * Processes an alternative statement or statement block.
+     * 
+     * @param stmt the statement (may be <b>null</b>)
+     * @param block the statement block (may be <b>null</b>)
+     * @return the respective processed VTL element or <b>null</b>
+     * @throws TranslatorException in case that the translation fails due to semantic reasons
+     */
+    private ITemplateElement processStatementOrStmtBlock(Stmt stmt, StmtBlock block) throws TranslatorException {
+        ITemplateElement result = null;
+        if (null != stmt) {
+            result = processStatement(stmt);
+        } else if (null != block) {
+            resolver.pushLevel();
+            result = new TemplateBlock(processBlock(block));
+            resolver.popLevel();
+        }
+        return result;
+    }
+    
+    /**
      * Processes an alternative statement.
      * 
      * @param alt the alternative element from the language
@@ -524,12 +540,12 @@ public class ModelTranslator extends de.uni_hildesheim.sse.vil.expressions.trans
         condition = expressionTranslator.assertBooleanExpression(condition, alt, 
             TemplateLangPackage.Literals.ALTERNATIVE__EXPR);
         resolver.pushLevel();
-        ITemplateElement ifElt = processStatement(alt.getIf());
+        ITemplateElement ifElt = processStatementOrStmtBlock(alt.getIf(), alt.getIfBlock());
         resolver.popLevel();
         ITemplateElement elseElt;
-        if (null != alt.getElse()) {
+        if (null != alt.getElse() || null != alt.getElseBlock()) {
             resolver.pushLevel();
-            elseElt = processStatement(alt.getElse());
+            elseElt = processStatementOrStmtBlock(alt.getElse(), alt.getElseBlock());
             resolver.popLevel();
         } else {
             elseElt = null;
@@ -573,7 +589,7 @@ public class ModelTranslator extends de.uni_hildesheim.sse.vil.expressions.trans
         resolver.pushLevel();
         ITemplateElement stmt = null;
         try {
-            stmt = processStatement(loop.getStmt());
+            stmt = processStatementOrStmtBlock(loop.getStmt(), loop.getBlock());
         } catch (TranslatorException e) {
             throw e;
         } finally {
@@ -640,7 +656,7 @@ public class ModelTranslator extends de.uni_hildesheim.sse.vil.expressions.trans
         resolver.pushLevel();
         resolver.add(iteratorVar);
         try {
-            stmt = processStatement(loop.getStmt());
+            stmt = processStatementOrStmtBlock(loop.getStmt(), loop.getBlock());
         } catch (TranslatorException e) {
             throw e;
         } finally {

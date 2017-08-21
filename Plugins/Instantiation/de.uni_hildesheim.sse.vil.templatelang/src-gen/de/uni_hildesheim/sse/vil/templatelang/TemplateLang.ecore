@@ -57,8 +57,6 @@
         containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="switch" eType="#//Switch"
         containment="true"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="block" eType="#//StmtBlock"
-        containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="multi" eType="#//multiselect"
         containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="loop" eType="#//Loop" containment="true"/>
@@ -74,7 +72,11 @@
     <eStructuralFeatures xsi:type="ecore:EReference" name="expr" eType="ecore:EClass platform:/resource/de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/ExpressionDsl.ecore#//Expression"
         containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="if" eType="#//Stmt" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="ifBlock" eType="#//StmtBlock"
+        containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="else" eType="#//Stmt" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="elseBlock" eType="#//StmtBlock"
+        containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Content">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="ctn" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
@@ -108,11 +110,15 @@
     <eStructuralFeatures xsi:type="ecore:EReference" name="finalSeparator" eType="ecore:EClass platform:/resource/de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/ExpressionDsl.ecore#//PrimaryExpression"
         containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="stmt" eType="#//Stmt" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="block" eType="#//StmtBlock"
+        containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="While">
     <eStructuralFeatures xsi:type="ecore:EReference" name="expr" eType="ecore:EClass platform:/resource/de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/ExpressionDsl.ecore#//Expression"
         containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="stmt" eType="#//Stmt" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="block" eType="#//StmtBlock"
+        containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="multiselect">
     <eStructuralFeatures xsi:type="ecore:EReference" name="gen" eType="#//genericMultiselect"

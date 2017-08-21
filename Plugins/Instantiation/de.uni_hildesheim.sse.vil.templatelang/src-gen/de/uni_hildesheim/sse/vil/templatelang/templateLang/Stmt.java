@@ -19,7 +19,6 @@ import org.eclipse.emf.ecore.EObject;
  *   <li>{@link de.uni_hildesheim.sse.vil.templatelang.templateLang.Stmt#getVar <em>Var</em>}</li>
  *   <li>{@link de.uni_hildesheim.sse.vil.templatelang.templateLang.Stmt#getAlt <em>Alt</em>}</li>
  *   <li>{@link de.uni_hildesheim.sse.vil.templatelang.templateLang.Stmt#getSwitch <em>Switch</em>}</li>
- *   <li>{@link de.uni_hildesheim.sse.vil.templatelang.templateLang.Stmt#getBlock <em>Block</em>}</li>
  *   <li>{@link de.uni_hildesheim.sse.vil.templatelang.templateLang.Stmt#getMulti <em>Multi</em>}</li>
  *   <li>{@link de.uni_hildesheim.sse.vil.templatelang.templateLang.Stmt#getLoop <em>Loop</em>}</li>
  *   <li>{@link de.uni_hildesheim.sse.vil.templatelang.templateLang.Stmt#getWhile <em>While</em>}</li>
@@ -111,32 +110,6 @@ public interface Stmt extends EObject
    * @generated
    */
   void setSwitch(Switch value);
-
-  /**
-   * Returns the value of the '<em><b>Block</b></em>' containment reference.
-   * <!-- begin-user-doc -->
-   * <p>
-   * If the meaning of the '<em>Block</em>' containment reference isn't clear,
-   * there really should be more of a description here...
-   * </p>
-   * <!-- end-user-doc -->
-   * @return the value of the '<em>Block</em>' containment reference.
-   * @see #setBlock(StmtBlock)
-   * @see de.uni_hildesheim.sse.vil.templatelang.templateLang.TemplateLangPackage#getStmt_Block()
-   * @model containment="true"
-   * @generated
-   */
-  StmtBlock getBlock();
-
-  /**
-   * Sets the value of the '{@link de.uni_hildesheim.sse.vil.templatelang.templateLang.Stmt#getBlock <em>Block</em>}' containment reference.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @param value the new value of the '<em>Block</em>' containment reference.
-   * @see #getBlock()
-   * @generated
-   */
-  void setBlock(StmtBlock value);
 
   /**
    * Returns the value of the '<em><b>Multi</b></em>' containment reference.

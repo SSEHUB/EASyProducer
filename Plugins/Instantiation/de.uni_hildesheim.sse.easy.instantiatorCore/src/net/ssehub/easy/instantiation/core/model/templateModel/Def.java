@@ -5,6 +5,8 @@ import java.util.Map;
 import net.ssehub.easy.instantiation.core.model.common.ILanguageElement;
 import net.ssehub.easy.instantiation.core.model.common.IResolvableOperation;
 import net.ssehub.easy.instantiation.core.model.common.VilException;
+import net.ssehub.easy.instantiation.core.model.expressions.ContainerInitializerExpression;
+import net.ssehub.easy.instantiation.core.model.expressions.Expression;
 import net.ssehub.easy.instantiation.core.model.vilTypes.IMetaType;
 import net.ssehub.easy.instantiation.core.model.vilTypes.IStringValueProvider;
 import net.ssehub.easy.instantiation.core.model.vilTypes.TypeDescriptor;
@@ -152,11 +154,40 @@ public class Def extends TemplateBlock implements ITemplateLangElement, IResolva
     public TypeDescriptor<?> inferType() throws VilException {
         TypeDescriptor<?> result = super.inferType();
         if (null != specifiedType && !specifiedType.isAssignableFrom(result)) {
-            throw new VilException("resulting type of def-block " + result.getVilName() 
-                + " does not fit to specified type " + specifiedType.getVilName(), 
-                VilException.ID_SEMANTIC);
+            boolean ok = checkEmptyContainerIntializerCompliance(result, specifiedType);
+            if (!ok && specifiedType.getBaseType() instanceof TypeDescriptor) {
+                ok = checkEmptyContainerIntializerCompliance(result, (TypeDescriptor<?>) specifiedType.getBaseType());
+            }
+            if (!ok) {
+                throw new VilException("resulting type of block " + result.getVilName() 
+                    + " does not fit to specified type " + specifiedType.getVilName(), 
+                    VilException.ID_SEMANTIC);
+            }
         }
         return result;
+    }
+    
+    /**
+     * Checks the given inferred <code>result</code> type and the specified result type <code>specifiedType</code> for
+     * type compliance against direct return of an empty container initializer.
+     *  
+     * @param result the inferred result type
+     * @param specifiedType the specified result type
+     * @return <code>true</code> for compliance, <code>false</code> else
+     */
+    private boolean checkEmptyContainerIntializerCompliance(TypeDescriptor<?> result, TypeDescriptor<?> specifiedType) {
+        boolean ok = false;
+        // allow compatibility for empty container initializer expressions
+        if (result.isCollection() && specifiedType.isCollection()) {
+            ITemplateElement elt = getTypeDefiningElement();
+            if (elt instanceof ExpressionStatement) {
+                Expression eltEx = ((ExpressionStatement) elt).getExpression();
+                if (eltEx instanceof ContainerInitializerExpression) {
+                    ok = 0 == ((ContainerInitializerExpression) eltEx).getInitExpressionsCount();
+                }
+            }
+        }
+        return ok;
     }
     
     @Override

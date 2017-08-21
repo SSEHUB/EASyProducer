@@ -282,6 +282,16 @@ public class ExecutionTests extends AbstractExecutionTest {
     public void testDef4() throws IOException {
         assertEqual("def4");
     }
+    
+    /**
+     * Tests simple defs with direct set return.
+     * 
+     * @throws IOException should not occur
+     */
+    @Test
+    public void testDef5() throws IOException {
+        assertEqualWithIvml("def5", "def5");
+    }
 
     /**
      * Tests simple variables.

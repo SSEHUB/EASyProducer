@@ -1,0 +1,22 @@
+@advice(def5)
+template defTest5(Configuration config, FileArtifact target) {
+
+    def sequenceOf(Integer) emptyInt() {
+        {};
+    }
+
+    def sequenceOf(Integer) filledInt() {
+        {1, 2};
+    }
+
+    def Types emptyTypes() {
+        {};
+    }
+
+    def main(Configuration config, FileArtifact target) {
+        '${emptyInt()}'
+        '${filledInt()}'
+        '${emptyTypes()}'
+    }
+
+}

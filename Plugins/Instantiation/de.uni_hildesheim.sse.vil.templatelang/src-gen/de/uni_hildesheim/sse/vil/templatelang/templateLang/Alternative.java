@@ -17,7 +17,9 @@ import org.eclipse.emf.ecore.EObject;
  * <ul>
  *   <li>{@link de.uni_hildesheim.sse.vil.templatelang.templateLang.Alternative#getExpr <em>Expr</em>}</li>
  *   <li>{@link de.uni_hildesheim.sse.vil.templatelang.templateLang.Alternative#getIf <em>If</em>}</li>
+ *   <li>{@link de.uni_hildesheim.sse.vil.templatelang.templateLang.Alternative#getIfBlock <em>If Block</em>}</li>
  *   <li>{@link de.uni_hildesheim.sse.vil.templatelang.templateLang.Alternative#getElse <em>Else</em>}</li>
+ *   <li>{@link de.uni_hildesheim.sse.vil.templatelang.templateLang.Alternative#getElseBlock <em>Else Block</em>}</li>
  * </ul>
  *
  * @see de.uni_hildesheim.sse.vil.templatelang.templateLang.TemplateLangPackage#getAlternative()
@@ -79,6 +81,32 @@ public interface Alternative extends EObject
   void setIf(Stmt value);
 
   /**
+   * Returns the value of the '<em><b>If Block</b></em>' containment reference.
+   * <!-- begin-user-doc -->
+   * <p>
+   * If the meaning of the '<em>If Block</em>' containment reference isn't clear,
+   * there really should be more of a description here...
+   * </p>
+   * <!-- end-user-doc -->
+   * @return the value of the '<em>If Block</em>' containment reference.
+   * @see #setIfBlock(StmtBlock)
+   * @see de.uni_hildesheim.sse.vil.templatelang.templateLang.TemplateLangPackage#getAlternative_IfBlock()
+   * @model containment="true"
+   * @generated
+   */
+  StmtBlock getIfBlock();
+
+  /**
+   * Sets the value of the '{@link de.uni_hildesheim.sse.vil.templatelang.templateLang.Alternative#getIfBlock <em>If Block</em>}' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @param value the new value of the '<em>If Block</em>' containment reference.
+   * @see #getIfBlock()
+   * @generated
+   */
+  void setIfBlock(StmtBlock value);
+
+  /**
    * Returns the value of the '<em><b>Else</b></em>' containment reference.
    * <!-- begin-user-doc -->
    * <p>
@@ -103,5 +131,31 @@ public interface Alternative extends EObject
    * @generated
    */
   void setElse(Stmt value);
+
+  /**
+   * Returns the value of the '<em><b>Else Block</b></em>' containment reference.
+   * <!-- begin-user-doc -->
+   * <p>
+   * If the meaning of the '<em>Else Block</em>' containment reference isn't clear,
+   * there really should be more of a description here...
+   * </p>
+   * <!-- end-user-doc -->
+   * @return the value of the '<em>Else Block</em>' containment reference.
+   * @see #setElseBlock(StmtBlock)
+   * @see de.uni_hildesheim.sse.vil.templatelang.templateLang.TemplateLangPackage#getAlternative_ElseBlock()
+   * @model containment="true"
+   * @generated
+   */
+  StmtBlock getElseBlock();
+
+  /**
+   * Sets the value of the '{@link de.uni_hildesheim.sse.vil.templatelang.templateLang.Alternative#getElseBlock <em>Else Block</em>}' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @param value the new value of the '<em>Else Block</em>' containment reference.
+   * @see #getElseBlock()
+   * @generated
+   */
+  void setElseBlock(StmtBlock value);
 
 } // Alternative

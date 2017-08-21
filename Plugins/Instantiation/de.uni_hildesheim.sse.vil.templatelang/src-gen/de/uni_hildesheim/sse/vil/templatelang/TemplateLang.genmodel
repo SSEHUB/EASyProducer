@@ -47,7 +47,6 @@
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference TemplateLang.ecore#//Stmt/var"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference TemplateLang.ecore#//Stmt/alt"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference TemplateLang.ecore#//Stmt/switch"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference TemplateLang.ecore#//Stmt/block"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference TemplateLang.ecore#//Stmt/multi"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference TemplateLang.ecore#//Stmt/loop"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference TemplateLang.ecore#//Stmt/while"/>
@@ -58,7 +57,9 @@
     <genClasses ecoreClass="TemplateLang.ecore#//Alternative">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference TemplateLang.ecore#//Alternative/expr"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference TemplateLang.ecore#//Alternative/if"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference TemplateLang.ecore#//Alternative/ifBlock"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference TemplateLang.ecore#//Alternative/else"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference TemplateLang.ecore#//Alternative/elseBlock"/>
     </genClasses>
     <genClasses ecoreClass="TemplateLang.ecore#//Content">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute TemplateLang.ecore#//Content/ctn"/>
@@ -82,10 +83,12 @@
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference TemplateLang.ecore#//Loop/separator"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference TemplateLang.ecore#//Loop/finalSeparator"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference TemplateLang.ecore#//Loop/stmt"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference TemplateLang.ecore#//Loop/block"/>
     </genClasses>
     <genClasses ecoreClass="TemplateLang.ecore#//While">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference TemplateLang.ecore#//While/expr"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference TemplateLang.ecore#//While/stmt"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference TemplateLang.ecore#//While/block"/>
     </genClasses>
     <genClasses ecoreClass="TemplateLang.ecore#//multiselect">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference TemplateLang.ecore#//multiselect/gen"/>

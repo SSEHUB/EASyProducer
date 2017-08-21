@@ -52,7 +52,6 @@ Stmt:
   var=VariableDeclaration 
   | alt=Alternative 
   | switch=Switch 
-  | block = StmtBlock
   | multi=multiselect
   | loop=Loop 
   | while=While
@@ -62,7 +61,7 @@ Stmt:
   ;
 
 Alternative:
-    'if' '(' expr=Expression ')' if=Stmt (=> 'else' else=Stmt)?
+    'if' '(' expr=Expression ')' (if=Stmt | ifBlock=StmtBlock) (=> 'else' (else=Stmt | elseBlock=StmtBlock))?
     ;
 
 Content:
@@ -83,12 +82,12 @@ Loop:
     'for' '(' 
         type=Type id=Identifier ':' expr=Expression 
         (',' separator=PrimaryExpression (',' finalSeparator=PrimaryExpression)?)?
-    ')' stmt=Stmt
+    ')' (stmt=Stmt | block=StmtBlock)
     ;
 
 While:
     'while' '(' expr=Expression ')' 
-    stmt=Stmt
+    (stmt=Stmt | block=StmtBlock)
 ;
 
 Flush:

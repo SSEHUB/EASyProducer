@@ -9,7 +9,6 @@ import de.uni_hildesheim.sse.vil.templatelang.templateLang.Alternative;
 import de.uni_hildesheim.sse.vil.templatelang.templateLang.Content;
 import de.uni_hildesheim.sse.vil.templatelang.templateLang.Loop;
 import de.uni_hildesheim.sse.vil.templatelang.templateLang.Stmt;
-import de.uni_hildesheim.sse.vil.templatelang.templateLang.StmtBlock;
 import de.uni_hildesheim.sse.vil.templatelang.templateLang.Switch;
 import de.uni_hildesheim.sse.vil.templatelang.templateLang.TemplateLangPackage;
 import de.uni_hildesheim.sse.vil.templatelang.templateLang.While;
@@ -35,7 +34,6 @@ import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
  *   <li>{@link de.uni_hildesheim.sse.vil.templatelang.templateLang.impl.StmtImpl#getVar <em>Var</em>}</li>
  *   <li>{@link de.uni_hildesheim.sse.vil.templatelang.templateLang.impl.StmtImpl#getAlt <em>Alt</em>}</li>
  *   <li>{@link de.uni_hildesheim.sse.vil.templatelang.templateLang.impl.StmtImpl#getSwitch <em>Switch</em>}</li>
- *   <li>{@link de.uni_hildesheim.sse.vil.templatelang.templateLang.impl.StmtImpl#getBlock <em>Block</em>}</li>
  *   <li>{@link de.uni_hildesheim.sse.vil.templatelang.templateLang.impl.StmtImpl#getMulti <em>Multi</em>}</li>
  *   <li>{@link de.uni_hildesheim.sse.vil.templatelang.templateLang.impl.StmtImpl#getLoop <em>Loop</em>}</li>
  *   <li>{@link de.uni_hildesheim.sse.vil.templatelang.templateLang.impl.StmtImpl#getWhile <em>While</em>}</li>
@@ -77,16 +75,6 @@ public class StmtImpl extends MinimalEObjectImpl.Container implements Stmt
    * @ordered
    */
   protected Switch switch_;
-
-  /**
-   * The cached value of the '{@link #getBlock() <em>Block</em>}' containment reference.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @see #getBlock()
-   * @generated
-   * @ordered
-   */
-  protected StmtBlock block;
 
   /**
    * The cached value of the '{@link #getMulti() <em>Multi</em>}' containment reference.
@@ -321,54 +309,6 @@ public class StmtImpl extends MinimalEObjectImpl.Container implements Stmt
     }
     else if (eNotificationRequired())
       eNotify(new ENotificationImpl(this, Notification.SET, TemplateLangPackage.STMT__SWITCH, newSwitch, newSwitch));
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  public StmtBlock getBlock()
-  {
-    return block;
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  public NotificationChain basicSetBlock(StmtBlock newBlock, NotificationChain msgs)
-  {
-    StmtBlock oldBlock = block;
-    block = newBlock;
-    if (eNotificationRequired())
-    {
-      ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, TemplateLangPackage.STMT__BLOCK, oldBlock, newBlock);
-      if (msgs == null) msgs = notification; else msgs.add(notification);
-    }
-    return msgs;
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  public void setBlock(StmtBlock newBlock)
-  {
-    if (newBlock != block)
-    {
-      NotificationChain msgs = null;
-      if (block != null)
-        msgs = ((InternalEObject)block).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - TemplateLangPackage.STMT__BLOCK, null, msgs);
-      if (newBlock != null)
-        msgs = ((InternalEObject)newBlock).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - TemplateLangPackage.STMT__BLOCK, null, msgs);
-      msgs = basicSetBlock(newBlock, msgs);
-      if (msgs != null) msgs.dispatch();
-    }
-    else if (eNotificationRequired())
-      eNotify(new ENotificationImpl(this, Notification.SET, TemplateLangPackage.STMT__BLOCK, newBlock, newBlock));
   }
 
   /**
@@ -650,8 +590,6 @@ public class StmtImpl extends MinimalEObjectImpl.Container implements Stmt
         return basicSetAlt(null, msgs);
       case TemplateLangPackage.STMT__SWITCH:
         return basicSetSwitch(null, msgs);
-      case TemplateLangPackage.STMT__BLOCK:
-        return basicSetBlock(null, msgs);
       case TemplateLangPackage.STMT__MULTI:
         return basicSetMulti(null, msgs);
       case TemplateLangPackage.STMT__LOOP:
@@ -682,8 +620,6 @@ public class StmtImpl extends MinimalEObjectImpl.Container implements Stmt
         return getAlt();
       case TemplateLangPackage.STMT__SWITCH:
         return getSwitch();
-      case TemplateLangPackage.STMT__BLOCK:
-        return getBlock();
       case TemplateLangPackage.STMT__MULTI:
         return getMulti();
       case TemplateLangPackage.STMT__LOOP:
@@ -718,9 +654,6 @@ public class StmtImpl extends MinimalEObjectImpl.Container implements Stmt
         return;
       case TemplateLangPackage.STMT__SWITCH:
         setSwitch((Switch)newValue);
-        return;
-      case TemplateLangPackage.STMT__BLOCK:
-        setBlock((StmtBlock)newValue);
         return;
       case TemplateLangPackage.STMT__MULTI:
         setMulti((multiselect)newValue);
@@ -763,9 +696,6 @@ public class StmtImpl extends MinimalEObjectImpl.Container implements Stmt
       case TemplateLangPackage.STMT__SWITCH:
         setSwitch((Switch)null);
         return;
-      case TemplateLangPackage.STMT__BLOCK:
-        setBlock((StmtBlock)null);
-        return;
       case TemplateLangPackage.STMT__MULTI:
         setMulti((multiselect)null);
         return;
@@ -804,8 +734,6 @@ public class StmtImpl extends MinimalEObjectImpl.Container implements Stmt
         return alt != null;
       case TemplateLangPackage.STMT__SWITCH:
         return switch_ != null;
-      case TemplateLangPackage.STMT__BLOCK:
-        return block != null;
       case TemplateLangPackage.STMT__MULTI:
         return multi != null;
       case TemplateLangPackage.STMT__LOOP:

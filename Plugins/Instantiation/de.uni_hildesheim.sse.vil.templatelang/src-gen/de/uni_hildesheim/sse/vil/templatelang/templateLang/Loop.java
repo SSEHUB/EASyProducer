@@ -23,6 +23,7 @@ import org.eclipse.emf.ecore.EObject;
  *   <li>{@link de.uni_hildesheim.sse.vil.templatelang.templateLang.Loop#getSeparator <em>Separator</em>}</li>
  *   <li>{@link de.uni_hildesheim.sse.vil.templatelang.templateLang.Loop#getFinalSeparator <em>Final Separator</em>}</li>
  *   <li>{@link de.uni_hildesheim.sse.vil.templatelang.templateLang.Loop#getStmt <em>Stmt</em>}</li>
+ *   <li>{@link de.uni_hildesheim.sse.vil.templatelang.templateLang.Loop#getBlock <em>Block</em>}</li>
  * </ul>
  *
  * @see de.uni_hildesheim.sse.vil.templatelang.templateLang.TemplateLangPackage#getLoop()
@@ -186,5 +187,31 @@ public interface Loop extends EObject
    * @generated
    */
   void setStmt(Stmt value);
+
+  /**
+   * Returns the value of the '<em><b>Block</b></em>' containment reference.
+   * <!-- begin-user-doc -->
+   * <p>
+   * If the meaning of the '<em>Block</em>' containment reference isn't clear,
+   * there really should be more of a description here...
+   * </p>
+   * <!-- end-user-doc -->
+   * @return the value of the '<em>Block</em>' containment reference.
+   * @see #setBlock(StmtBlock)
+   * @see de.uni_hildesheim.sse.vil.templatelang.templateLang.TemplateLangPackage#getLoop_Block()
+   * @model containment="true"
+   * @generated
+   */
+  StmtBlock getBlock();
+
+  /**
+   * Sets the value of the '{@link de.uni_hildesheim.sse.vil.templatelang.templateLang.Loop#getBlock <em>Block</em>}' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @param value the new value of the '<em>Block</em>' containment reference.
+   * @see #getBlock()
+   * @generated
+   */
+  void setBlock(StmtBlock value);
 
 } // Loop

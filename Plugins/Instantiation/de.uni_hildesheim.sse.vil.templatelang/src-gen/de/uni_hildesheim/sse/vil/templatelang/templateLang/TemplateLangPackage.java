@@ -445,22 +445,13 @@ public interface TemplateLangPackage extends EPackage
   int STMT__SWITCH = 2;
 
   /**
-   * The feature id for the '<em><b>Block</b></em>' containment reference.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int STMT__BLOCK = 3;
-
-  /**
    * The feature id for the '<em><b>Multi</b></em>' containment reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int STMT__MULTI = 4;
+  int STMT__MULTI = 3;
 
   /**
    * The feature id for the '<em><b>Loop</b></em>' containment reference.
@@ -469,7 +460,7 @@ public interface TemplateLangPackage extends EPackage
    * @generated
    * @ordered
    */
-  int STMT__LOOP = 5;
+  int STMT__LOOP = 4;
 
   /**
    * The feature id for the '<em><b>While</b></em>' containment reference.
@@ -478,7 +469,7 @@ public interface TemplateLangPackage extends EPackage
    * @generated
    * @ordered
    */
-  int STMT__WHILE = 6;
+  int STMT__WHILE = 5;
 
   /**
    * The feature id for the '<em><b>Expr Stmt</b></em>' containment reference.
@@ -487,7 +478,7 @@ public interface TemplateLangPackage extends EPackage
    * @generated
    * @ordered
    */
-  int STMT__EXPR_STMT = 7;
+  int STMT__EXPR_STMT = 6;
 
   /**
    * The feature id for the '<em><b>Ctn</b></em>' containment reference.
@@ -496,7 +487,7 @@ public interface TemplateLangPackage extends EPackage
    * @generated
    * @ordered
    */
-  int STMT__CTN = 8;
+  int STMT__CTN = 7;
 
   /**
    * The feature id for the '<em><b>Flush</b></em>' attribute.
@@ -505,7 +496,7 @@ public interface TemplateLangPackage extends EPackage
    * @generated
    * @ordered
    */
-  int STMT__FLUSH = 9;
+  int STMT__FLUSH = 8;
 
   /**
    * The number of structural features of the '<em>Stmt</em>' class.
@@ -514,7 +505,7 @@ public interface TemplateLangPackage extends EPackage
    * @generated
    * @ordered
    */
-  int STMT_FEATURE_COUNT = 10;
+  int STMT_FEATURE_COUNT = 9;
 
   /**
    * The meta object id for the '{@link de.uni_hildesheim.sse.vil.templatelang.templateLang.impl.AlternativeImpl <em>Alternative</em>}' class.
@@ -545,13 +536,31 @@ public interface TemplateLangPackage extends EPackage
   int ALTERNATIVE__IF = 1;
 
   /**
+   * The feature id for the '<em><b>If Block</b></em>' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int ALTERNATIVE__IF_BLOCK = 2;
+
+  /**
    * The feature id for the '<em><b>Else</b></em>' containment reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int ALTERNATIVE__ELSE = 2;
+  int ALTERNATIVE__ELSE = 3;
+
+  /**
+   * The feature id for the '<em><b>Else Block</b></em>' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int ALTERNATIVE__ELSE_BLOCK = 4;
 
   /**
    * The number of structural features of the '<em>Alternative</em>' class.
@@ -560,7 +569,7 @@ public interface TemplateLangPackage extends EPackage
    * @generated
    * @ordered
    */
-  int ALTERNATIVE_FEATURE_COUNT = 3;
+  int ALTERNATIVE_FEATURE_COUNT = 5;
 
   /**
    * The meta object id for the '{@link de.uni_hildesheim.sse.vil.templatelang.templateLang.impl.ContentImpl <em>Content</em>}' class.
@@ -765,13 +774,22 @@ public interface TemplateLangPackage extends EPackage
   int LOOP__STMT = 5;
 
   /**
+   * The feature id for the '<em><b>Block</b></em>' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int LOOP__BLOCK = 6;
+
+  /**
    * The number of structural features of the '<em>Loop</em>' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int LOOP_FEATURE_COUNT = 6;
+  int LOOP_FEATURE_COUNT = 7;
 
   /**
    * The meta object id for the '{@link de.uni_hildesheim.sse.vil.templatelang.templateLang.impl.WhileImpl <em>While</em>}' class.
@@ -802,13 +820,22 @@ public interface TemplateLangPackage extends EPackage
   int WHILE__STMT = 1;
 
   /**
+   * The feature id for the '<em><b>Block</b></em>' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int WHILE__BLOCK = 2;
+
+  /**
    * The number of structural features of the '<em>While</em>' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int WHILE_FEATURE_COUNT = 2;
+  int WHILE_FEATURE_COUNT = 3;
 
   /**
    * The meta object id for the '{@link de.uni_hildesheim.sse.vil.templatelang.templateLang.impl.multiselectImpl <em>multiselect</em>}' class.
@@ -1376,17 +1403,6 @@ public interface TemplateLangPackage extends EPackage
   EReference getStmt_Switch();
 
   /**
-   * Returns the meta object for the containment reference '{@link de.uni_hildesheim.sse.vil.templatelang.templateLang.Stmt#getBlock <em>Block</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for the containment reference '<em>Block</em>'.
-   * @see de.uni_hildesheim.sse.vil.templatelang.templateLang.Stmt#getBlock()
-   * @see #getStmt()
-   * @generated
-   */
-  EReference getStmt_Block();
-
-  /**
    * Returns the meta object for the containment reference '{@link de.uni_hildesheim.sse.vil.templatelang.templateLang.Stmt#getMulti <em>Multi</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -1485,6 +1501,17 @@ public interface TemplateLangPackage extends EPackage
   EReference getAlternative_If();
 
   /**
+   * Returns the meta object for the containment reference '{@link de.uni_hildesheim.sse.vil.templatelang.templateLang.Alternative#getIfBlock <em>If Block</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the containment reference '<em>If Block</em>'.
+   * @see de.uni_hildesheim.sse.vil.templatelang.templateLang.Alternative#getIfBlock()
+   * @see #getAlternative()
+   * @generated
+   */
+  EReference getAlternative_IfBlock();
+
+  /**
    * Returns the meta object for the containment reference '{@link de.uni_hildesheim.sse.vil.templatelang.templateLang.Alternative#getElse <em>Else</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -1494,6 +1521,17 @@ public interface TemplateLangPackage extends EPackage
    * @generated
    */
   EReference getAlternative_Else();
+
+  /**
+   * Returns the meta object for the containment reference '{@link de.uni_hildesheim.sse.vil.templatelang.templateLang.Alternative#getElseBlock <em>Else Block</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the containment reference '<em>Else Block</em>'.
+   * @see de.uni_hildesheim.sse.vil.templatelang.templateLang.Alternative#getElseBlock()
+   * @see #getAlternative()
+   * @generated
+   */
+  EReference getAlternative_ElseBlock();
 
   /**
    * Returns the meta object for class '{@link de.uni_hildesheim.sse.vil.templatelang.templateLang.Content <em>Content</em>}'.
@@ -1701,6 +1739,17 @@ public interface TemplateLangPackage extends EPackage
   EReference getLoop_Stmt();
 
   /**
+   * Returns the meta object for the containment reference '{@link de.uni_hildesheim.sse.vil.templatelang.templateLang.Loop#getBlock <em>Block</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the containment reference '<em>Block</em>'.
+   * @see de.uni_hildesheim.sse.vil.templatelang.templateLang.Loop#getBlock()
+   * @see #getLoop()
+   * @generated
+   */
+  EReference getLoop_Block();
+
+  /**
    * Returns the meta object for class '{@link de.uni_hildesheim.sse.vil.templatelang.templateLang.While <em>While</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -1731,6 +1780,17 @@ public interface TemplateLangPackage extends EPackage
    * @generated
    */
   EReference getWhile_Stmt();
+
+  /**
+   * Returns the meta object for the containment reference '{@link de.uni_hildesheim.sse.vil.templatelang.templateLang.While#getBlock <em>Block</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the containment reference '<em>Block</em>'.
+   * @see de.uni_hildesheim.sse.vil.templatelang.templateLang.While#getBlock()
+   * @see #getWhile()
+   * @generated
+   */
+  EReference getWhile_Block();
 
   /**
    * Returns the meta object for class '{@link de.uni_hildesheim.sse.vil.templatelang.templateLang.multiselect <em>multiselect</em>}'.
@@ -2223,14 +2283,6 @@ public interface TemplateLangPackage extends EPackage
     EReference STMT__SWITCH = eINSTANCE.getStmt_Switch();
 
     /**
-     * The meta object literal for the '<em><b>Block</b></em>' containment reference feature.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    EReference STMT__BLOCK = eINSTANCE.getStmt_Block();
-
-    /**
      * The meta object literal for the '<em><b>Multi</b></em>' containment reference feature.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
@@ -2305,12 +2357,28 @@ public interface TemplateLangPackage extends EPackage
     EReference ALTERNATIVE__IF = eINSTANCE.getAlternative_If();
 
     /**
+     * The meta object literal for the '<em><b>If Block</b></em>' containment reference feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EReference ALTERNATIVE__IF_BLOCK = eINSTANCE.getAlternative_IfBlock();
+
+    /**
      * The meta object literal for the '<em><b>Else</b></em>' containment reference feature.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
      * @generated
      */
     EReference ALTERNATIVE__ELSE = eINSTANCE.getAlternative_Else();
+
+    /**
+     * The meta object literal for the '<em><b>Else Block</b></em>' containment reference feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EReference ALTERNATIVE__ELSE_BLOCK = eINSTANCE.getAlternative_ElseBlock();
 
     /**
      * The meta object literal for the '{@link de.uni_hildesheim.sse.vil.templatelang.templateLang.impl.ContentImpl <em>Content</em>}' class.
@@ -2473,6 +2541,14 @@ public interface TemplateLangPackage extends EPackage
     EReference LOOP__STMT = eINSTANCE.getLoop_Stmt();
 
     /**
+     * The meta object literal for the '<em><b>Block</b></em>' containment reference feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EReference LOOP__BLOCK = eINSTANCE.getLoop_Block();
+
+    /**
      * The meta object literal for the '{@link de.uni_hildesheim.sse.vil.templatelang.templateLang.impl.WhileImpl <em>While</em>}' class.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
@@ -2497,6 +2573,14 @@ public interface TemplateLangPackage extends EPackage
      * @generated
      */
     EReference WHILE__STMT = eINSTANCE.getWhile_Stmt();
+
+    /**
+     * The meta object literal for the '<em><b>Block</b></em>' containment reference feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EReference WHILE__BLOCK = eINSTANCE.getWhile_Block();
 
     /**
      * The meta object literal for the '{@link de.uni_hildesheim.sse.vil.templatelang.templateLang.impl.multiselectImpl <em>multiselect</em>}' class.

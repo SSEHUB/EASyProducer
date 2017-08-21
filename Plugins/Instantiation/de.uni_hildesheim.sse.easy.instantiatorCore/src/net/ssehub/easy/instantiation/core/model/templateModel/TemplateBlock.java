@@ -68,10 +68,26 @@ public class TemplateBlock extends AbstractTemplateElement {
     @Override
     public TypeDescriptor<?> inferType() throws VilException {
         TypeDescriptor<?> result;
-        if (null == body || 0 == body.length) {
+        ITemplateElement last = getTypeDefiningElement();
+        if (null == last) {
             result = TypeRegistry.voidType();
         } else {
-            result = body[body.length - 1].inferType();
+            result = last.inferType();
+        }
+        return result;
+    }
+
+    /**
+     * Returns the type-defining body element.
+     *  
+     * @return the type-defining body element
+     */
+    protected ITemplateElement getTypeDefiningElement() {
+        ITemplateElement result;
+        if (null == body || 0 == body.length) {
+            result = null;
+        } else {
+            result = body[body.length - 1];
         }
         return result;
     }
