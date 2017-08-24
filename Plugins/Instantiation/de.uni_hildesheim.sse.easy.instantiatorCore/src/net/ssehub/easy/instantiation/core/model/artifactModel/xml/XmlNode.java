@@ -55,7 +55,7 @@ public abstract class XmlNode extends CompositeFragmentArtifact implements IStri
      * 
      * @return the parent of this fragment
      */
-    protected XmlElement getParent() {
+    public XmlElement getParent() {
         return parent;
     }
     

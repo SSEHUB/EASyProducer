@@ -144,7 +144,7 @@ public class XmlAttribute extends FragmentArtifact implements IStringValueProvid
      * 
      * @return the parent of this fragment
      */
-    XmlElement getParent() {
+    public XmlElement getParent() {
         return parent;
     }
     

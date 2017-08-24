@@ -82,7 +82,7 @@ public class XmlElement extends XmlNode implements IXmlContainer {
         }
         return newElement;
     }
-    
+
     /**
      * Creates a new XmlElement as child of the root element of the given file artifact, with given name.
      * @param parent The parent of the new XmlElement.
@@ -96,6 +96,50 @@ public class XmlElement extends XmlNode implements IXmlContainer {
         return create(parent.getRootElement(), name, contents); // notifies change
     }
 
+    /**
+     * Creates a new XmlElement as child of given parent, with given name, but returns the parent element.
+     * @param parent The parent of the new XmlElement.
+     * @param name The name of the new XmlElement.
+     * @param contents optional initial contents, ignored if empty
+     * @return <code>parent</code> (element builder style)
+     * @throws VilException if element could not be created.
+     */
+    public static XmlElement buildElement(XmlElement parent, String name, 
+        @ParameterMeta(name = "contents") String contents) throws VilException {
+        create(parent, name, contents);
+        return parent;
+    }
+    
+    /**
+     * Creates a new Attribute for given XmlElement, with given name and value, but returns the parent XML element.
+     * @param parent The XmlElement the attribute is for.
+     * @param name The name of the new attribute.
+     * @param value The value of the new attribute.
+     * @return <code>parent</code> (element builder style)
+     * @throws VilException if attribute could not be created.
+     */
+    public static XmlElement buildAttribute(XmlElement parent, String name, String value) throws VilException {
+        XmlAttribute.create(parent, name, value);
+        return parent;
+    }
+
+    /**
+     * Creates a new Attribute for given XmlElement, with given name and value, but returns the parent.
+     * Overwrites by default.
+     * 
+     * @param parent The XmlElement the attribute is for.
+     * @param name The name of the attribute.
+     * @param value The value of the new attribute.
+     * @param forceOverwrite True if existing attributes with same name shall be overwritten. Default = true.
+     * @return <code>parent</code> (element builder style)
+     * @throws VilException if attribute could not be created for different reason then pre-existance.
+     */
+    public static XmlElement buildAttribute(XmlElement parent, String name, String value, boolean forceOverwrite) 
+        throws VilException  {
+        XmlAttribute.create(parent, name, value, forceOverwrite);
+        return parent;
+    }
+    
     /**
      * Findes a field called <code>name</code> in <code>cls</code> or one of its super
      * classes except for Object (not needed here).

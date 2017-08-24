@@ -177,7 +177,7 @@ public class StringReplacer {
             handleVariable();
             break;
         case EXPRESSION:
-            if ('}' == text.charAt(pos)) {
+            if (pos < text.length() && '}' == text.charAt(pos) && 0 == innerBracketLevel) {
                 handleExpression();
             }
             break;

@@ -213,7 +213,7 @@ public class StringResolver<I extends VariableDeclaration, R extends Resolver<I>
             addToList(expr, list);
             break;
         case EXPRESSION:
-            if ('}' == text.charAt(pos) && 0 == innerBracketLevel) {
+            if (pos < text.length() && '}' == text.charAt(pos) && 0 == innerBracketLevel) {
                 expr = handleExpression();
                 addToList(expr, list);
             }
