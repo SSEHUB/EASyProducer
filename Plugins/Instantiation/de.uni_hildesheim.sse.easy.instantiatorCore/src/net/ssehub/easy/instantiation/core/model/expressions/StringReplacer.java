@@ -10,43 +10,11 @@ import net.ssehub.easy.instantiation.core.model.vilTypes.StringValueHelper;
  * 
  * @author Holger Eichelberger
  */
-public class StringReplacer {
+public class StringReplacer extends StringParser<String> {
 
-    /**
-     * The parser states.
-     * 
-     * @author Holger Eichelberger
-     */
-    private enum State {
-
-        /**
-         * Plain text.
-         */
-        TEXT,
-
-        /**
-         * Starting of a variable, i.e., $.
-         */
-        VARIABLE_START,
-
-        /**
-         * In a variable.
-         */
-        VARIABLE,
-
-        /**
-         * In an expression.
-         */
-        EXPRESSION
-    }
-
-    private StringBuilder text;
     private IRuntimeEnvironment environment;
     private IExpressionVisitor expressionEvaluator;
     private IExpressionParser expressionParser;
-    private int pos;
-    private int curStart;
-    private int innerBracketLevel;
 
     /**
      * Creates a replacer instance.
@@ -64,14 +32,10 @@ public class StringReplacer {
      */
     private StringReplacer(String text, IRuntimeEnvironment environment, IExpressionParser expressionParser,
             IExpressionVisitor expressionEvaluator) {
+        super(text);
         this.environment = environment;
         this.expressionEvaluator = expressionEvaluator;
         this.expressionParser = expressionParser;
-        if (null != text) {
-            this.text = new StringBuilder(text);
-        } else {
-            this.text = null;
-        }
     }
 
     /**
@@ -97,7 +61,7 @@ public class StringReplacer {
         if (null != text) {
             try {
                 StringReplacer replacer = new StringReplacer(text, environment, expressionParser, expressionEvaluator);
-                result = replacer.substitute();
+                result = replacer.parse();
             } catch (VilException e) {
                 if (VilException.ID_NULL_VALUE == e.getId()) {
                     result = null;
@@ -111,92 +75,41 @@ public class StringReplacer {
         return result;
     }
 
-    /**
-     * Substitutes the variables in <code>text</code>.
-     * 
-     * @return the modified <code>text</code>
-     * @throws VilException
-     *             in case that something goes wrong while resolving variables
-     */
-    public String substitute() throws VilException {
-        pos = 0;
-        curStart = 0;
-        State state = State.TEXT;
-        while (pos < text.length()) {
-            char c = text.charAt(pos);
-            switch (state) {
-            case TEXT:
-                if ('$' == c) {
-                    if (pos > 0 && '\\' == text.charAt(pos - 1)) {
-                        text.deleteCharAt(pos - 1);
-                        state = State.TEXT; // stay, quote
-                    } else {
-                        state = State.VARIABLE_START;
-                    }
-                }
-                break;
-            case VARIABLE_START:
-                if ('{' == c) {
-                    state = State.EXPRESSION;
-                    curStart = pos + 1;
-                } else if (Character.isJavaIdentifierStart(c)) { // preliminary -> VIL
-                    state = State.VARIABLE;
-                    curStart = pos;
-                } else {
-                    state = State.TEXT;
-                }
-                break;
-            case VARIABLE:
-                if (!Character.isJavaIdentifierPart(c) || c == '$') {
-                    handleVariable();
-                    state = State.TEXT;
-                    pos--;
-                }
-                break;
-            case EXPRESSION:
-                if ('{' == c) {
-                    innerBracketLevel++;
-                } else if ('}' == c) {
-                    if (0 == innerBracketLevel) {
-                        handleExpression();
-                        state = State.TEXT;
-                        pos--;
-                    } else {
-                        innerBracketLevel--;
-                    }
-                }
-                break;
-            default:
-                EASyLoggerFactory.INSTANCE.getLogger(StringReplacer.class, Bundle.ID).error("illegal state");
-                break;
-            }
-            pos++;
+    @Override
+    protected String createParseResult() throws VilException {
+        return toText();
+    }
+    
+    @Override
+    protected void handleQuote(int pos) throws VilException {
+        if (pos + 2 < length() && charAt(pos + 2) != '$') { 
+            deleteCharAt(pos); // remove quote -> Java quote
         }
-        switch (state) {
-        case VARIABLE:
-            handleVariable();
-            break;
-        case EXPRESSION:
-            if (pos < text.length() && '}' == text.charAt(pos) && 0 == innerBracketLevel) {
-                handleExpression();
-            }
-            break;
-        default:
-            // do nothing, just in text
-            break;
-        }
-        return text.toString();
     }
 
-    /**
-     * Handle variable placeholder from {@link #curStart} until {@link #pos}. {@link #curStart} points to "$",
-     * {@link #pos} to the end position of the variable name.
-     * 
-     * @throws VilException
-     *             in case of evaluation problems
-     */
-    private void handleVariable() throws VilException {
-        String variableName = text.substring(curStart, pos);
+    @Override
+    protected void handleTextEnd(int curStart, int pos) throws VilException {
+        // do nothing
+    }
+    
+    @Override
+    protected int handleVariableStartExpression(int curStart, int pos) throws VilException {
+        return pos + 1;
+    }        
+
+    @Override
+    protected int handleVariableStartVariable(int curStart, int pos) throws VilException {
+        return pos;
+    }
+
+    @Override
+    protected int handleEndOfText(int curStart, int pos, State state) throws VilException {
+        return pos;
+    }
+
+    @Override
+    protected int handleVariable(int curStart, int pos) throws VilException {
+        String variableName = substring(curStart, pos);
         IResolvable var = environment.get(variableName);
         if (null != var) {
             Object oValue = environment.getValue(var);
@@ -207,19 +120,14 @@ public class StringReplacer {
             String value = StringValueHelper.getStringValueInReplacement(oValue, null);
             if (null != value) {
                 // curStart - 1 -> replace also the $!
-                pos = replace(text, curStart - 1, pos, value);
+                pos = setPos(replace(curStart - 1, pos, value));
             }
         }
+        return -1;
     }
 
-    /**
-     * Handle expression placeholder from {@link #curStart} until {@link #pos}. {@link #curStart} points to "${",
-     * {@link #pos} to "}". name.
-     * 
-     * @throws VilException
-     *             in case of evaluation problems
-     */
-    private void handleExpression() throws VilException {
+    @Override
+    protected int handleExpression(int curStart, int pos) throws VilException {
         if (null == expressionParser) {
             EASyLoggerFactory.INSTANCE.getLogger(StringReplacer.class, Bundle.ID).warn(
                     "no expression parser registered");
@@ -227,7 +135,7 @@ public class StringReplacer {
             EASyLoggerFactory.INSTANCE.getLogger(StringReplacer.class, Bundle.ID).warn(
                     "no expression evaluator registered");
         } else {
-            String expressionString = text.substring(curStart, pos);
+            String expressionString = substring(curStart, pos);
             Expression expr = expressionParser.parse(expressionString, environment);
             if (null == expr) {
                 throw new VilException("illegal expression '" + expressionString + "'",
@@ -241,37 +149,10 @@ public class StringReplacer {
             String value = StringValueHelper.getStringValueInReplacement(oValue, null);
             if (null != value) {
                 // curStart - 1 -> replace also the $!
-                pos = replace(text, curStart - 2, pos + 1, value);
+                pos = setPos(replace(curStart - 2, pos + 1, value));
             }
         }
-    }
-
-    /**
-     * Replaces text and adjusts the position.
-     * 
-     * @param text
-     *            the text buffer to perform an in-text replacement on
-     * @param start
-     *            the start position for the replacement in <code>text</code>
-     * @param end
-     *            the end position for the replacement in <code>text</code> (inclusive)
-     * @param value
-     *            the replacement for the specified fragment
-     * @return end, but adjusted to the replacement
-     */
-    private static final int replace(StringBuilder text, int start, int end, String value) {
-        int valueLen = value.length();
-        int inTextLen = end - start;
-        int result = end;
-        if (inTextLen < valueLen) {
-            // aaa -> aaaaa
-            result += valueLen - inTextLen;
-        } else if (inTextLen > valueLen) {
-            // aaaaa -> aaa
-            result -= inTextLen - valueLen;
-        } // else end is ok as same length
-        text.replace(start, end, value);
-        return result;
+        return -1;
     }
 
 }

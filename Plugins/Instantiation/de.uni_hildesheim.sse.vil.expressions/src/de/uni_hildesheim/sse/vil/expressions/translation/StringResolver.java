@@ -7,11 +7,9 @@ import java.util.Stack;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
 
-import net.ssehub.easy.basics.logger.EASyLoggerFactory;
 import net.ssehub.easy.basics.messages.IMessage;
 import net.ssehub.easy.basics.messages.Status;
 import net.ssehub.easy.dslCore.translation.IMessageReceiver;
-import net.ssehub.easy.instantiation.core.Bundle;
 import net.ssehub.easy.instantiation.core.model.common.ExpressionStatement;
 import net.ssehub.easy.instantiation.core.model.common.VariableDeclaration;
 import net.ssehub.easy.instantiation.core.model.common.VilException;
@@ -19,6 +17,7 @@ import net.ssehub.easy.instantiation.core.model.expressions.CompositeExpression;
 import net.ssehub.easy.instantiation.core.model.expressions.ConstantExpression;
 import net.ssehub.easy.instantiation.core.model.expressions.Expression;
 import net.ssehub.easy.instantiation.core.model.expressions.Resolver;
+import net.ssehub.easy.instantiation.core.model.expressions.StringParser;
 import net.ssehub.easy.instantiation.core.model.expressions.VariableEx;
 import net.ssehub.easy.instantiation.core.model.expressions.VariableExpression;
 import net.ssehub.easy.instantiation.core.model.vilTypes.TypeRegistry;
@@ -34,46 +33,14 @@ import net.ssehub.easy.instantiation.core.model.vilTypes.TypeRegistry;
  * @author Eichelberger
  */
 public class StringResolver<I extends VariableDeclaration, R extends Resolver<I>, 
-    E extends ExpressionStatement> implements IMessageReceiver {
+    E extends ExpressionStatement> extends StringParser<CompositeExpression> implements IMessageReceiver {
 
-    private StringBuilder text;
     private ExpressionTranslator<I, R, E> translator;
-    private int pos;
-    private int curStart;
-    private int innerBracketLevel;
     private R resolver;
     private StringBuilder warnings;
     private IStringResolverFactory<I> factory;
     private Stack<InPlaceCommand<I>> commandStack;
-
-    /**
-     * The parser states.
-     * 
-     * @author Holger Eichelberger
-     */
-    private enum State {
-
-        /**
-         * Plain text.
-         */
-        TEXT,
-
-        /**
-         * Starting of a variable, i.e., $.
-         */
-        VARIABLE_START,
-
-        /**
-         * In a variable.
-         */
-        VARIABLE,
-
-        /**
-         * In an expression.
-         */
-        EXPRESSION
-
-    }
+    private List<Expression> expressions = new ArrayList<Expression>();
 
     /**
      * Creates a replacer instance.
@@ -87,17 +54,13 @@ public class StringResolver<I extends VariableDeclaration, R extends Resolver<I>
      */
     private StringResolver(String text, R resolver, ExpressionTranslator<I, R, E> translator, StringBuilder warnings, 
         IStringResolverFactory<I> factory) {
+        super(text);
         this.warnings = warnings;
         this.resolver = resolver;
         this.translator = translator;
         this.factory = factory;
         if (null != factory) {
             commandStack = new Stack<InPlaceCommand<I>>();
-        }
-        if (null != text) {
-            this.text = new StringBuilder(text);
-        } else {
-            this.text = null;
         }
     }
 
@@ -128,7 +91,7 @@ public class StringResolver<I extends VariableDeclaration, R extends Resolver<I>
                 StringResolver<I, R, E> replacer = new StringResolver<I, R, E>(text, resolver, translator, 
                     warnings, factory);
                 if (text.contains("$")) {
-                    result = replacer.substitute();
+                    result = replacer.parse();
                 } else {
                     List<Expression> list = replacer.handleConstant(text);
                     result = new CompositeExpression(list);
@@ -145,146 +108,62 @@ public class StringResolver<I extends VariableDeclaration, R extends Resolver<I>
         }
         return result;
     }
+    
+    @Override
+    protected CompositeExpression createParseResult() throws VilException {
+        clearStatementStack();
+        return new CompositeExpression(expressions);
+    }
+    
+    @Override
+    protected void handleQuote(int pos) throws VilException {
+        // don't modify quotes, keep the text
+    }
+    
+    @Override
+    protected void handleTextEnd(int curStart, int pos) throws VilException {
+        addExpression(handleConstant(curStart, pos + 1));
+    }
+    
+    @Override
+    protected int handleVariableStartExpression(int curStart, int pos) throws VilException {
+        addExpression(handleConstant(curStart, pos - 1));
+        return pos;
+    }        
 
-    /**
-     * Substitutes the text and splits the text into expressions, variables or constants.
-     * 
-     * @return CompositeExpression containing all expressions, variables or constants.
-     * @throws VilException in case of evaluation problems
-     */
-    private CompositeExpression substitute() throws VilException {
-        pos = 0;
-        curStart = 0;
-        State state = State.TEXT;
-        Expression expr = null;
-        List<Expression> list = new ArrayList<Expression>();
-        while (pos < text.length()) {
-            char c = text.charAt(pos);
-            switch (state) {
-            case TEXT:
-                if ('$' == c) {
-                    if (pos > 0 && '\\' == text.charAt(pos - 1)) {
-                        state = State.TEXT; // stay, quote
-                    } else {                    
-                        state = State.VARIABLE_START;
-                    }
-                }
-                if (pos == text.length() - 1 && state == State.TEXT) { // In case we are at the end of the line
-                    expr = handleConstant(pos + 1);
-                    addToList(expr, list);
-                }
-                break;
-            case VARIABLE_START:
-                state = checkVariableStart(list, c, state);
-                break;
-            case VARIABLE:
-                if (!Character.isJavaIdentifierPart(c) || c == '$') {
-                    expr = handleVariable();
-                    addToList(expr, list);
-                    state = State.TEXT;
-                    curStart = pos;
-                    pos--;
-                }
-                break;
-            case EXPRESSION:
-                if ('{' == c) {
-                    innerBracketLevel++;
-                } else if ('}' == c) {
-                    if (0 == innerBracketLevel) {
-                        expr = handleExpression();
-                        addToList(expr, list);
-                        state = State.TEXT;
-                        curStart = pos + 1;
-                        pos--;
-                    } else {
-                        innerBracketLevel--;
-                    }
-                }
-                break;
-            default:
-                EASyLoggerFactory.INSTANCE.getLogger(StringResolver.class, Bundle.ID).error("illegal state");
-                break;
-            }
-            pos++;
-        }
-        switch (state) {
-        case VARIABLE:
-            expr = handleVariable();
-            addToList(expr, list);
-            break;
-        case EXPRESSION:
-            if (pos < text.length() && '}' == text.charAt(pos) && 0 == innerBracketLevel) {
-                expr = handleExpression();
-                addToList(expr, list);
-            }
-            break;
-        case VARIABLE_START:
-            expr = handleConstant(pos);
-            addToList(expr, list);
-            break;
-        default:
-            break; // do nothing, just in text
-        }
-        clearStatementStack(list);
-        CompositeExpression compExpr = new CompositeExpression(list);
-        return compExpr;
+    @Override
+    protected int handleVariableStartVariable(int curStart, int pos) throws VilException {
+        addExpression(handleConstant(curStart, pos - 1));
+        return pos;
     }
 
-    /**
-     * Check if a the start is containing to an expression or variable.
-     * 
-     * @param list  the list of expressions
-     * @param character char on pos
-     * @param curState the current state
-     * @return the state
-     * @throws VilException in case of evaluation problems
-     */
-    private State checkVariableStart(List<Expression> list, char character, State curState) throws VilException {
-        State state;
-        Expression expr;
-        if ('{' == character) {
-            state = State.EXPRESSION;
-            expr = handleConstant(pos - 1);
-            addToList(expr, list);
-            curStart = pos;
-        } else if (Character.isJavaIdentifierStart(character)) { // preliminary -> VIL
-            state = State.VARIABLE;
-            expr = handleConstant(pos - 1);
-            addToList(expr, list);
-            curStart = pos;
-        } else {
-            state = State.TEXT;
+    @Override
+    protected int handleEndOfText(int curStart, int pos, State state) throws VilException {
+        if (State.VARIABLE_START == state) {
+            addExpression(handleConstant(curStart, pos));
         }
-        return state;
+        return pos;
     }
 
     /**
      * Adds the expression to the expression list or to the active in-place command on the command stack (if present).
      * 
      * @param expr  the expression that should be added to the list
-     * @param list  the list containing all expressions
      */
-    private void addToList(Expression expr, List<Expression> list) {
+    private void addExpression(Expression expr) {
         if (null != expr) {
             if (isNonEmptyCommandStack()) {
                 commandStack.peek().append(expr);
             } else {
-                list.add(expr);
+                expressions.add(expr);
             }
         }
     }
 
-    /**
-     * Handle expression placeholder from {@link #curStart} -1 until {@link #pos} + 1. {@link #curStart} points to "{",
-     * {@link #pos} to "}". Considers in-place expressions.
-     * 
-     * @throws VilException
-     *             in case of evaluation problems
-     * @return Expression containing the expression
-     */
-    private Expression handleExpression() throws VilException {
+    @Override
+    protected int handleExpression(int curStart, int pos) throws VilException {
         Expression result = null;
-        String expressionString = text.substring(curStart - 1, pos + 1);
+        String expressionString = substring(curStart - 1, pos + 1);
         //remove leading ${ and trailing }; reg-ex fails with nested {}
         expressionString = expressionString.substring(2, expressionString.length() - 1); 
         String pattern = "\\$\\{([^\\}]+)\\}"; // still needed?
@@ -297,23 +176,23 @@ public class StringResolver<I extends VariableDeclaration, R extends Resolver<I>
             } else if (expressionString.startsWith("FOR")) {
                 expressionString = removePrefix(expressionString, "FOR", true);
                 expressionString = consumeWhitespaces(expressionString);
-                int pos = 0;
-                while (pos < expressionString.length() && Character.isJavaIdentifierPart(expressionString.charAt(pos))) {
-                    pos++;
+                int pos1 = 0;
+                while (pos1 < expressionString.length() && Character.isJavaIdentifierPart(expressionString.charAt(pos1))) {
+                    pos1++;
                 }
-                String iterName = expressionString.substring(0, pos);
-                expressionString = consumeWhitespaces(expressionString.substring(pos));
+                String iterName = expressionString.substring(0, pos1);
+                expressionString = consumeWhitespaces(expressionString.substring(pos1));
                 if (expressionString.startsWith("=")) {
                     expressionString = consume(expressionString, '=');
                 } else if (expressionString.startsWith(":")) {
                     expressionString = consume(expressionString, ':');
                 }
                 expressionString = consumeWhitespaces(expressionString);
-                pos = expressionString.indexOf(" SEPARATOR");
+                pos1 = expressionString.indexOf(" SEPARATOR");
                 Expression separatorEx = null;
                 Expression endSeparatorEx = null;
-                if (pos > 0) {
-                    String separatorString = expressionString.substring(pos + 1).trim();
+                if (pos1 > 0) {
+                    String separatorString = expressionString.substring(pos1 + 1).trim();
                     separatorString = removePrefix(separatorString, "SEPARATOR", true);
                     int pos2 = separatorString.indexOf(" END");
                     if (pos2 > 0) {
@@ -323,7 +202,7 @@ public class StringResolver<I extends VariableDeclaration, R extends Resolver<I>
                         separatorString = separatorString.substring(0, pos2).trim();
                     }
                     separatorEx = parseExpression(separatorString);
-                    expressionString = expressionString.substring(0, pos).trim();
+                    expressionString = expressionString.substring(0, pos1).trim();
                 }
                 Expression init = parseExpression(expressionString);
                 I iterator = factory.createVariable(iterName, init);
@@ -351,7 +230,8 @@ public class StringResolver<I extends VariableDeclaration, R extends Resolver<I>
                 result = null;
             }
         }
-        return result;
+        addExpression(result);
+        return pos + 1;
     }
     
     /**
@@ -406,10 +286,8 @@ public class StringResolver<I extends VariableDeclaration, R extends Resolver<I>
 
     /**
      * Clears the statement stack and adds all expressions to <code>exprs</code>.
-     * 
-     * @param exprs the expression list to be filled
      */
-    private void clearStatementStack(List<Expression> exprs) {
+    private void clearStatementStack() {
         if (null != commandStack) {
             while (!commandStack.isEmpty()) {
                 InPlaceCommand<I> cmd = commandStack.pop();
@@ -418,7 +296,7 @@ public class StringResolver<I extends VariableDeclaration, R extends Resolver<I>
                 }
                 if (commandStack.isEmpty()) {
                     // sufficient as all in-place commands on the stack are linked via appends
-                    cmd.append(exprs);
+                    cmd.append(expressions);
                 }
             }
         }
@@ -492,14 +370,15 @@ public class StringResolver<I extends VariableDeclaration, R extends Resolver<I>
     }
 
     /**
-     * Handle constant placeholder from {@link #curStart} until position. 
+     * Handle constant placeholder from <code>curStart</code> until <code>position</code>. 
      * 
+     * @param curStart the current start position
      * @param position  the actual position in the text.
      * @return ConstantExpression containing the constant
      * @throws VilException in case of evaluation problems
      */
-    private ConstantExpression handleConstant(int position) throws VilException {
-        String string = text.substring(curStart, position);
+    private ConstantExpression handleConstant(int curStart, int position) throws VilException {
+        String string = substring(curStart, position);
         ConstantExpression expr = null;
         if (string.length() > 0) {
             expr = new ConstantExpression(TypeRegistry.stringType(), string, resolver.getTypeRegistry());
@@ -546,54 +425,18 @@ public class StringResolver<I extends VariableDeclaration, R extends Resolver<I>
         return compExpression;
     }
 
-    /**
-     * Handle variable placeholder from {@link #curStart} - 1 until {@link #pos}. {@link #curStart} points to "$",
-     * {@link #pos} to the end position of the variable name.
-     * 
-     * @throws VilException
-     *             in case of evaluation problems
-     *             
-     * @return VariableExpression containing the Variable
-     */
-    private VariableExpression handleVariable() throws VilException {
-        String variableName = text.substring(curStart - 1, pos);
+    protected int handleVariable(int curStart, int pos) throws VilException {
+        String variableName = substring(curStart - 1, pos);
         String pattern2 = "\\$([A-Za-z0-9]+)";
         variableName = variableName.replaceAll(pattern2, "$1");
-        pos = replace(text, curStart - 1, pos, variableName);
+        pos = setPos(replace(curStart - 1, pos, variableName));
         VariableDeclaration var = (VariableDeclaration) resolver.resolve(variableName, false, null, null, this);
         VariableExpression varExpr = null;
         if (var != null) {
             varExpr = new VariableExpression(var);
         }
-        return varExpr;
-    }
-
-    /**
-     * Replaces text and adjusts the position.
-     * 
-     * @param text
-     *            the text buffer to perform an in-text replacement on
-     * @param start
-     *            the start position for the replacement in <code>text</code>
-     * @param end
-     *            the end position for the replacement in <code>text</code> (inclusive)
-     * @param value
-     *            the replacement for the specified fragment
-     * @return end, but adjusted to the replacement
-     */
-    private static final int replace(StringBuilder text, int start, int end, String value) {
-        int valueLen = value.length();
-        int inTextLen = end - start;
-        int result = end;
-        if (inTextLen < valueLen) {
-            // aaa -> aaaaa
-            result += valueLen - inTextLen;
-        } else if (inTextLen > valueLen) {
-            // aaaaa -> aaa
-            result -= inTextLen - valueLen;
-        } // else end is ok as same length
-        text.replace(start, end, value);
-        return result;
+        addExpression(varExpr);
+        return pos;
     }
 
     @Override
