@@ -5,7 +5,6 @@ import org.junit.Test;
 
 import net.ssehub.easy.instantiation.core.model.AbstractTest;
 import net.ssehub.easy.instantiation.core.model.common.VilException;
-import net.ssehub.easy.instantiation.core.model.expressions.ConstantExpression;
 import net.ssehub.easy.instantiation.core.model.vilTypes.TypeDescriptor;
 import net.ssehub.easy.instantiation.core.model.vilTypes.TypeRegistry;
 

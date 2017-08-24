@@ -6,8 +6,6 @@ import org.junit.Test;
 import net.ssehub.easy.instantiation.core.model.AbstractTest;
 import net.ssehub.easy.instantiation.core.model.artifactModel.FileArtifact;
 import net.ssehub.easy.instantiation.core.model.common.VilException;
-import net.ssehub.easy.instantiation.core.model.expressions.CallArgument;
-import net.ssehub.easy.instantiation.core.model.expressions.ConstructorCallExpression;
 import net.ssehub.easy.instantiation.core.model.vilTypes.TypeDescriptor;
 
 /**
