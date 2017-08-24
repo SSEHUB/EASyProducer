@@ -4,12 +4,13 @@ import net.ssehub.easy.basics.modelManagement.IRestrictionEvaluationContext;
 import net.ssehub.easy.basics.modelManagement.IndentationConfiguration;
 import net.ssehub.easy.basics.modelManagement.ModelImport;
 import net.ssehub.easy.basics.modelManagement.Version;
+import net.ssehub.easy.instantiation.core.model.common.IResolvableModel;
 import net.ssehub.easy.instantiation.core.model.common.RuntimeEnvironment;
+import net.ssehub.easy.instantiation.core.model.common.Typedef;
 import net.ssehub.easy.instantiation.core.model.common.VariableDeclaration;
 import net.ssehub.easy.instantiation.core.model.vilTypes.IMetaField;
 import net.ssehub.easy.instantiation.core.model.vilTypes.IMetaOperation;
 import net.ssehub.easy.instantiation.core.model.vilTypes.IMetaType;
-import net.ssehub.easy.instantiation.core.model.vilTypes.ITypedModel;
 import net.ssehub.easy.instantiation.core.model.vilTypes.TypeDescriptor;
 import net.ssehub.easy.instantiation.core.model.vilTypes.TypeRegistry;
 
@@ -18,7 +19,7 @@ import net.ssehub.easy.instantiation.core.model.vilTypes.TypeRegistry;
  * 
  * @author Holger Eichelberger
  */
-public class PseudoModel implements ITypedModel {
+class PseudoModel implements IResolvableModel<VarDecl> {
 
     @Override
     public void setVersion(Version version) {
@@ -167,6 +168,71 @@ public class PseudoModel implements ITypedModel {
     @Override
     public boolean checkConversion(IMetaType param, IMetaOperation conversion) {
         return true;
+    }
+
+    @Override
+    public int getParameterCount() {
+        return 0;
+    }
+
+    @Override
+    public VarDecl getParameter(int index) {
+        return null;
+    }
+
+    @Override
+    public int getRequiredParameterCount() {
+        return 0;
+    }
+
+    @Override
+    public VarDecl getParameter(String name) {
+        return null;
+    }
+
+    @Override
+    public Object getIvmlElement(String name) {
+        return null;
+    }
+
+    @Override
+    public IResolvableModel<VarDecl> getParent() {
+        return null;
+    }
+
+    @Override
+    public int getExtensionTypesCount() {
+        return 0;
+    }
+
+    @Override
+    public IMetaType getExtensionType(int index) {
+        return null;
+    }
+
+    @Override
+    public int getVariableDeclarationCount() {
+        return 0;
+    }
+
+    @Override
+    public VarDecl getVariableDeclaration(int index) {
+        return null;
+    }
+
+    @Override
+    public boolean isImplicit(VarDecl decl) {
+        return false;
+    }
+
+    @Override
+    public int getTypedefCount() {
+        return 0;
+    }
+
+    @Override
+    public Typedef getTypedef(int index) {
+        return null;
     }
 
 }

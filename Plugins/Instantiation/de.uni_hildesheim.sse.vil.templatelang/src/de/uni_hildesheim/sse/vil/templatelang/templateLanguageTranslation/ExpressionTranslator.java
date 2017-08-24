@@ -132,7 +132,7 @@ public class ExpressionTranslator
     }
 
     @Override
-    protected Expression parseExpression(String expression, Resolver resolver, StringBuilder warnings) throws VilException {
+    public Expression parseExpression(String expression, Resolver resolver, StringBuilder warnings) throws VilException {
         return TemplateLangModelUtility.INSTANCE.createExpression(expression, resolver, warnings);
     }
 

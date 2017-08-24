@@ -1,4 +1,4 @@
-package de.uni_hildesheim.sse.vil.expressions.translation;
+package net.ssehub.easy.instantiation.core.model.expressions;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,13 +13,6 @@ import net.ssehub.easy.dslCore.translation.IMessageReceiver;
 import net.ssehub.easy.instantiation.core.model.common.ExpressionStatement;
 import net.ssehub.easy.instantiation.core.model.common.VariableDeclaration;
 import net.ssehub.easy.instantiation.core.model.common.VilException;
-import net.ssehub.easy.instantiation.core.model.expressions.CompositeExpression;
-import net.ssehub.easy.instantiation.core.model.expressions.ConstantExpression;
-import net.ssehub.easy.instantiation.core.model.expressions.Expression;
-import net.ssehub.easy.instantiation.core.model.expressions.Resolver;
-import net.ssehub.easy.instantiation.core.model.expressions.StringParser;
-import net.ssehub.easy.instantiation.core.model.expressions.VariableEx;
-import net.ssehub.easy.instantiation.core.model.expressions.VariableExpression;
 import net.ssehub.easy.instantiation.core.model.vilTypes.TypeRegistry;
 
 /**
@@ -35,13 +28,36 @@ import net.ssehub.easy.instantiation.core.model.vilTypes.TypeRegistry;
 public class StringResolver<I extends VariableDeclaration, R extends Resolver<I>, 
     E extends ExpressionStatement> extends StringParser<CompositeExpression> implements IMessageReceiver {
 
-    private ExpressionTranslator<I, R, E> translator;
+    private IExpressionTranslator<I, R> translator;
     private R resolver;
     private StringBuilder warnings;
     private IStringResolverFactory<I> factory;
     private Stack<InPlaceCommand<I>> commandStack;
     private List<Expression> expressions = new ArrayList<Expression>();
 
+    /**
+     * The general interface of an expression translator.
+     * 
+     * @param <I> the actual variable declaration type
+     * @param <R> the actual resolver type
+     * @author Holger Eichelberger
+     */
+    public interface IExpressionTranslator<I extends VariableDeclaration, R extends Resolver<I>> {
+
+        /**
+         * Parse the given expression.
+         * 
+         * @param expression the expression as string
+         * @param resolver the resolver
+         * @param warnings a collector for warnings
+         * @return the resulting expression
+         * @throws VilException if problems occur while parsing / resolving
+         */
+        public Expression parseExpression(String expression, R resolver, StringBuilder warnings) 
+            throws VilException;
+
+    }
+    
     /**
      * Creates a replacer instance.
      * 
@@ -52,7 +68,7 @@ public class StringResolver<I extends VariableDeclaration, R extends Resolver<I>
      * @param factory a factory turning in-place commands into language-specific expressions (may be <b>null</b>, then 
      *     in-place commands are not resolved but remain as string expressions)
      */
-    private StringResolver(String text, R resolver, ExpressionTranslator<I, R, E> translator, StringBuilder warnings, 
+    private StringResolver(String text, R resolver, IExpressionTranslator<I, R> translator, StringBuilder warnings, 
         IStringResolverFactory<I> factory) {
         super(text);
         this.warnings = warnings;
@@ -83,7 +99,7 @@ public class StringResolver<I extends VariableDeclaration, R extends Resolver<I>
      */
     public static <I extends VariableDeclaration, R extends Resolver<I>, 
         E extends ExpressionStatement> Expression substitute(String text, R resolver,
-        ExpressionTranslator<I, R, E> translator, StringBuilder warnings, IStringResolverFactory<I> factory) 
+        IExpressionTranslator<I, R> translator, StringBuilder warnings, IStringResolverFactory<I> factory) 
         throws VilException {
         CompositeExpression result;
         if (null != text) {
@@ -176,10 +192,7 @@ public class StringResolver<I extends VariableDeclaration, R extends Resolver<I>
             } else if (expressionString.startsWith("FOR")) {
                 expressionString = removePrefix(expressionString, "FOR", true);
                 expressionString = consumeWhitespaces(expressionString);
-                int pos1 = 0;
-                while (pos1 < expressionString.length() && Character.isJavaIdentifierPart(expressionString.charAt(pos1))) {
-                    pos1++;
-                }
+                int pos1 = consumeJavaIdentifierPart(expressionString);
                 String iterName = expressionString.substring(0, pos1);
                 expressionString = consumeWhitespaces(expressionString.substring(pos1));
                 if (expressionString.startsWith("=")) {
@@ -232,6 +245,20 @@ public class StringResolver<I extends VariableDeclaration, R extends Resolver<I>
         }
         addExpression(result);
         return pos + 1;
+    }
+
+    /**
+     * Returns the last Java identifier part character in <code>string</code>.
+     * 
+     * @param string the string to search for
+     * @return the position, <code>0</code> for none
+     */
+    private int consumeJavaIdentifierPart(String string) {
+        int pos = 0;
+        while (pos < string.length() && Character.isJavaIdentifierPart(string.charAt(pos))) {
+            pos++;
+        }
+        return pos;
     }
     
     /**
@@ -306,8 +333,8 @@ public class StringResolver<I extends VariableDeclaration, R extends Resolver<I>
      * Parses an expression from <code>expressionString</code>.
      * 
      * @param expressionString the string representation of the expression
-     * @return
-     * @throws VilException
+     * @return the parsed expression
+     * @throws VilException in case that parsing/creating the expression fails
      */
     private Expression parseExpression(String expressionString) throws VilException {
         Expression expr = translator.parseExpression(expressionString, resolver, warnings);
@@ -425,6 +452,7 @@ public class StringResolver<I extends VariableDeclaration, R extends Resolver<I>
         return compExpression;
     }
 
+    @Override
     protected int handleVariable(int curStart, int pos) throws VilException {
         String variableName = substring(curStart - 1, pos);
         String pattern2 = "\\$([A-Za-z0-9]+)";

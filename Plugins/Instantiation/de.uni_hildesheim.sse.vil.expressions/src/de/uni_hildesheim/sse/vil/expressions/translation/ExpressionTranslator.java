@@ -69,6 +69,8 @@ import net.ssehub.easy.instantiation.core.model.expressions.MultiAndExpression;
 import net.ssehub.easy.instantiation.core.model.expressions.ParenthesisExpression;
 import net.ssehub.easy.instantiation.core.model.expressions.ResolutionListener;
 import net.ssehub.easy.instantiation.core.model.expressions.Resolver;
+import net.ssehub.easy.instantiation.core.model.expressions.StringResolver;
+import net.ssehub.easy.instantiation.core.model.expressions.StringResolver.IExpressionTranslator;
 import net.ssehub.easy.instantiation.core.model.expressions.ValueAssignmentExpression;
 import net.ssehub.easy.instantiation.core.model.expressions.VarModelIdentifierExpression;
 import net.ssehub.easy.instantiation.core.model.expressions.VariableExpression;
@@ -93,7 +95,7 @@ import net.ssehub.easy.varModel.model.values.EnumValue;
  */
 public abstract class ExpressionTranslator<I extends VariableDeclaration, R extends Resolver<I>, 
     E extends ExpressionStatement> extends net.ssehub.easy.dslCore.translation.ExpressionTranslator 
-    implements ResolutionListener {
+    implements ResolutionListener, IExpressionTranslator<I, R> {
 
     private java.util.Map<VarModelIdentifierExpression, EObject> ivmlWarnings 
         = new HashMap<VarModelIdentifierExpression, EObject>();
@@ -907,7 +909,7 @@ public abstract class ExpressionTranslator<I extends VariableDeclaration, R exte
      * @return the resulting expression
      * @throws VilException if problems occur while parsing / resolving
      */
-    protected abstract Expression parseExpression(String expression, R resolver, StringBuilder warnings) 
+    public abstract Expression parseExpression(String expression, R resolver, StringBuilder warnings) 
         throws VilException;
     
     /**
