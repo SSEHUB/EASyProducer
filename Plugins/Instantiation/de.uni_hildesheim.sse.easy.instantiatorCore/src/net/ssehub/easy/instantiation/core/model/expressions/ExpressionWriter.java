@@ -255,7 +255,10 @@ public class ExpressionWriter extends AbstractWriter implements IExpressionVisit
     
     @Override
     public Object visitStringExpression(StringExpression ex) throws VilException {
-        print("\"$");
+        if (isInContent) { // already done by parent composite ex
+            print("\"");
+        }
+        print("$");
         if (ex.isNested()) {
             print("{");
         }
@@ -263,7 +266,9 @@ public class ExpressionWriter extends AbstractWriter implements IExpressionVisit
         if (ex.isNested()) {
             print("}");
         }
-        print("\"");
+        if (isInContent) { // already done by parent composite ex
+            print("\"");
+        }
         return null;
     }
     
