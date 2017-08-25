@@ -21,13 +21,18 @@ import java.util.StringTokenizer;
 
 import net.ssehub.easy.instantiation.core.model.common.VariableDeclaration;
 import net.ssehub.easy.instantiation.core.model.common.VilException;
+import net.ssehub.easy.instantiation.core.model.expressions.StringResolver.IExpressionTranslator;
+import net.ssehub.easy.instantiation.core.model.templateModel.ContentAlternativeExpression;
+import net.ssehub.easy.instantiation.core.model.vilTypes.TypeDescriptor;
+import net.ssehub.easy.instantiation.core.model.vilTypes.TypeRegistry;
 
 /**
  * Simplified expression parser for testing.
  * 
  * @author Holger Eichelberger
  */
-class ExpressionParser implements IExpressionParser {
+class ExpressionParser implements IExpressionParser, IExpressionTranslator<VarDecl, VarResolver>, 
+    IStringResolverFactory<VarDecl> {
 
     @Override
     public Expression parse(String text, IRuntimeEnvironment environment) throws VilException {
@@ -45,13 +50,41 @@ class ExpressionParser implements IExpressionParser {
             Expression[] p = new Expression[params.size()];
             params.toArray(p);
             result = new CallExpression(null, name, p);
+        } else if (text.startsWith("\"") && text.endsWith("\"")) {
+            result = new ConstantExpression(TypeRegistry.stringType(), text, TypeRegistry.DEFAULT);
         } else {
             IResolvable res = environment.get(text);
             if (res instanceof VariableDeclaration) {
                 result = new VariableExpression((VariableDeclaration) res);
             }
         }
+        if (null == result) { // fallback to some constant
+            result = new ConstantExpression(TypeRegistry.stringType(), text, TypeRegistry.DEFAULT);
+        }
         return result;
+    }
+
+    @Override
+    public Expression parseExpression(String expression, VarResolver resolver, StringBuilder warnings)
+        throws VilException {
+        return parse(expression, resolver.getRuntimeEnvironment());
+    }
+
+    @Override
+    public Expression createIfExpression(InPlaceIfCommand<VarDecl> cmd) 
+        throws VilException {
+        return new ContentAlternativeExpression(cmd.getCondition(), cmd.getThenExpressions(), cmd.getElseExpressions());
+    }
+
+    @Override
+    public Expression createForExpression(InPlaceForCommand<VarDecl> cmd) throws VilException {
+        return null;
+    }
+
+    @Override
+    public VarDecl createVariable(String name, Expression initExpression) throws VilException {
+        TypeDescriptor<?> type = initExpression.inferType();
+        return new VarDecl(name, type);
     }
 
 }

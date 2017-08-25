@@ -26,7 +26,18 @@ class ExpressionVisitor implements IExpressionVisitor {
 
     public static final String VAR = "VAR";
     public static final String CALL = "CALL";
+    
+    private IRuntimeEnvironment environment;
 
+    /**
+     * Creates an expression visitor/evaluator.
+     * 
+     * @param environment the runtime environment
+     */
+    ExpressionVisitor(IRuntimeEnvironment environment) {
+        this.environment = environment;
+    }
+    
     @Override
     public Object visitVilTypeExpression(VilTypeExpression typeExpression) throws VilException {
         return null;
@@ -34,7 +45,15 @@ class ExpressionVisitor implements IExpressionVisitor {
     
     @Override
     public Object visitVariableExpression(VariableExpression cst) throws VilException {
-        return "<" + cst.getName() + ">";
+        Object result = null;
+        IResolvable resolvable = environment.get(cst.getName());
+        if (null != resolvable) {
+            result = environment.getValue(resolvable);
+        }
+        if (null == result) {
+            result = "<" + cst.getName() + ">";
+        }
+        return result;
     }
     
     @Override
@@ -89,7 +108,7 @@ class ExpressionVisitor implements IExpressionVisitor {
     
     @Override
     public Object visitConstantExpression(ConstantExpression cst) throws VilException {
-        return null;
+        return cst.getValue();
     }
     
     @Override

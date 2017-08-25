@@ -154,6 +154,15 @@ public abstract class Resolver<V extends IResolvable> implements IResolver<V> {
     }
     
     /**
+     * Returns the runtime environment.
+     * 
+     * @return the runtime environment
+     */
+    public IRuntimeEnvironment getRuntimeEnvironment() {
+        return environment;
+    }
+    
+    /**
      * Returns the (local) type registry.
      * 
      * @return the local type registry (from the {@link #environment}).
