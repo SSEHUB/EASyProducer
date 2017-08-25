@@ -180,10 +180,8 @@ public class StringResolver<I extends VariableDeclaration, R extends Resolver<I>
     protected int handleExpression(int curStart, int pos) throws VilException {
         Expression result = null;
         String expressionString = substring(curStart - 1, pos + 1);
-        //remove leading ${ and trailing }; reg-ex fails with nested {}
+        //remove leading ${ and trailing }
         expressionString = expressionString.substring(2, expressionString.length() - 1); 
-        //String pattern = "\\$\\{([^\\}]+)\\}"; // still needed? prevents recursive processing
-        //expressionString = expressionString.replaceAll(pattern, "$1");
         if (null != factory) {
             boolean clear = true;
             if (expressionString.startsWith("IF")) {

@@ -31,6 +31,7 @@ import net.ssehub.easy.instantiation.core.model.expressions.MultiAndExpression;
 import net.ssehub.easy.instantiation.core.model.expressions.ParenthesisExpression;
 import net.ssehub.easy.instantiation.core.model.expressions.ResolvableOperationCallExpression;
 import net.ssehub.easy.instantiation.core.model.expressions.ResolvableOperationExpression;
+import net.ssehub.easy.instantiation.core.model.expressions.StringExpression;
 import net.ssehub.easy.instantiation.core.model.expressions.StringReplacer;
 import net.ssehub.easy.instantiation.core.model.expressions.ValueAssignmentExpression;
 import net.ssehub.easy.instantiation.core.model.expressions.VarModelIdentifierExpression;
@@ -134,6 +135,11 @@ public class MatchResolver implements IExpressionVisitor, IMatchVisitor {
     @Override
     public Object visitConstantExpression(ConstantExpression cst) throws VilException {
         return null;
+    }
+    
+    @Override
+    public Object visitStringExpression(StringExpression ex) throws VilException {
+        return ex.getExpression().accept(this);
     }
 
     @Override

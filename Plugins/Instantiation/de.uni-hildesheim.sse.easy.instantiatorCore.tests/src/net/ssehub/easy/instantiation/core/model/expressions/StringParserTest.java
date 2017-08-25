@@ -102,17 +102,32 @@ public class StringParserTest extends AbstractTest {
     @Test
     public void testExpressionReplacements() throws VilException {
         // failure - does it terminate?
-        assertReplacementResult("${test", "${test");
+        assertReplacementResult("${test", 
+             "${test");
         // variable replacement
-        assertReplacementResult("${test}", "test");
-        assertReplacementResult("${test}/test", "test/test");
-        assertReplacementResult("test/${test}", "test/test");
-        assertReplacementResult("test/$test", "test/test");
-        assertReplacementResult("test/${test}/test", "test/test/test");
+        assertReplacementResult("${test}", 
+             "test");
+        assertReplacementResult("${test}/test", 
+             "test/test");
+        assertReplacementResult("test/${test}", 
+             "test/test");
+        assertReplacementResult("test/$test", 
+             "test/test");
+        assertReplacementResult("test/${test}/test", 
+             "test/test/test");
         // expression replacement
-        assertReplacementResult("test/${func(i, b)}", "test/func(1234,true)");
-        assertReplacementResult("test/${func(i, b)}/${func2(i, b)}", "test/func(1234,true)/func2(1234,true)");
-        assertReplacementResult("test/${func(i, b)}/${func2(b, i)}/test", "test/func(1234,true)/func2(true,1234)/test");
+        assertReplacementResult("test/${func(i, b)}", 
+             "test/func(1234,true)");
+        assertReplacementResult("test/${func(i, b)}/${func2(i, b)}", 
+             "test/func(1234,true)/func2(1234,true)");
+        assertReplacementResult("test/${func(i, b)}/${func2(b, i)}/test", 
+             "test/func(1234,true)/func2(true,1234)/test");
+        assertReplacementResult("${func($i, ${s})}", 
+             "func(1234,test)");
+        assertReplacementResult("${func({$i, ${s}, \"c\"}, {$b, \"e\", \"f\"})}", 
+            "func({1234,test,\"c\"},{true,\"e\",\"f\"})");
+        assertReplacementResult("${func({$i, ${s}, \"c\"}, {$b, \"e\", \"f\"})}", 
+            "func({1234,test,\"c\"},{true,\"e\",\"f\"})");
     }
     
     /**
@@ -133,17 +148,39 @@ public class StringParserTest extends AbstractTest {
      */
     @Test
     public void testExpressionResolution() throws VilException {
-        assertResolutionResult("${test}", new ExpectedVariableExpression("test"));
-        assertResolutionResult("test/${test}", new ExpectedConstantExpression("test/"), 
+        assertResolutionResult("${test}", 
             new ExpectedVariableExpression("test"));
-        assertResolutionResult("test/$test", new ExpectedConstantExpression("test/"), 
+        assertResolutionResult("test/${test}", 
+            new ExpectedConstantExpression("test/"), 
             new ExpectedVariableExpression("test"));
-        assertResolutionResult("${test}/test", new ExpectedVariableExpression("test"), 
+        assertResolutionResult("test/$test", 
+            new ExpectedConstantExpression("test/"), 
+            new ExpectedVariableExpression("test"));
+        assertResolutionResult("${test}/test", 
+            new ExpectedVariableExpression("test"), 
             new ExpectedConstantExpression("/test"));
-        assertResolutionResult("test/${test}/test", new ExpectedConstantExpression("test/"), 
-            new ExpectedVariableExpression("test"), new ExpectedConstantExpression("/test"));
+        assertResolutionResult("test/${test}/test", 
+            new ExpectedConstantExpression("test/"), 
+            new ExpectedVariableExpression("test"), 
+            new ExpectedConstantExpression("/test"));
+        assertResolutionResult("${func($i, ${s})}", 
+            new ExpectedCallExpression("func",
+                new ExpectedCompositeExpression(
+                    new ExpectedVariableExpression("i")),
+                new ExpectedCompositeExpression(
+                    new ExpectedVariableExpression("s"))));
+        assertResolutionResult("${func(\"$i\", \"${s}\")}", 
+            new ExpectedCallExpression("func",
+                new ExpectedCompositeExpression(
+                    new ExpectedConstantExpression("\""),
+                    new ExpectedVariableExpression("i"),
+                    new ExpectedConstantExpression("\"")),
+                new ExpectedCompositeExpression(
+                    new ExpectedConstantExpression("\""),
+                    new ExpectedVariableExpression("s"),
+                    new ExpectedConstantExpression("\""))));
     }
-
+    
     /**
      * Tests a recursive expression resolution.
      * 
@@ -291,6 +328,37 @@ public class StringParserTest extends AbstractTest {
             boolean matches = (expressions.length == ex.getExpressionsCount());
             for (int e = 0; matches && e < expressions.length; e++) {
                 matches = expressions[e].matches(ex.getExpression(e));
+            }
+            return matches;
+        }
+        
+    }
+    
+    /**
+     * Represents an expected composite expression.
+     * 
+     * @author Holger Eichelberger
+     */
+    @SuppressWarnings("unused")
+    private static class ExpectedContainerInitExpression extends ExpectedExpression<ContainerInitializerExpression> {
+        
+        private ExpectedExpression<?>[] expressions;
+
+        /**
+         * Creates an expected composite expression.
+         * 
+         * @param expressions the expected expressions
+         */
+        private ExpectedContainerInitExpression(ExpectedExpression<?>... expressions) {
+            super(ContainerInitializerExpression.class);
+            this.expressions = expressions;
+        }
+
+        @Override
+        public boolean matchesImpl(ContainerInitializerExpression ex) {
+            boolean matches = (expressions.length == ex.getInitExpressionsCount());
+            for (int e = 0; matches && e < expressions.length; e++) {
+                matches = expressions[e].matches(ex.getInitExpression(e));
             }
             return matches;
         }

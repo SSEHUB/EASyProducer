@@ -55,6 +55,7 @@ import net.ssehub.easy.instantiation.core.model.common.VilException;
 import net.ssehub.easy.instantiation.core.model.expressions.AbstractCallExpression;
 import net.ssehub.easy.instantiation.core.model.expressions.CallArgument;
 import net.ssehub.easy.instantiation.core.model.expressions.CallExpression;
+import net.ssehub.easy.instantiation.core.model.expressions.CompositeExpression;
 import net.ssehub.easy.instantiation.core.model.expressions.ConstantExpression;
 import net.ssehub.easy.instantiation.core.model.expressions.ConstructorCallExpression;
 import net.ssehub.easy.instantiation.core.model.expressions.ContainerInitializerExpression;
@@ -69,6 +70,7 @@ import net.ssehub.easy.instantiation.core.model.expressions.MultiAndExpression;
 import net.ssehub.easy.instantiation.core.model.expressions.ParenthesisExpression;
 import net.ssehub.easy.instantiation.core.model.expressions.ResolutionListener;
 import net.ssehub.easy.instantiation.core.model.expressions.Resolver;
+import net.ssehub.easy.instantiation.core.model.expressions.StringExpression;
 import net.ssehub.easy.instantiation.core.model.expressions.StringResolver;
 import net.ssehub.easy.instantiation.core.model.expressions.StringResolver.IExpressionTranslator;
 import net.ssehub.easy.instantiation.core.model.expressions.ValueAssignmentExpression;
@@ -940,7 +942,7 @@ public abstract class ExpressionTranslator<I extends VariableDeclaration, R exte
             Expression ex;
             try {
                 StringBuilder warnings = new StringBuilder();
-                ex = StringResolver.substitute(s, resolver, this, warnings, null);
+                ex = normalizeStringExpression(StringResolver.substitute(s, resolver, this, warnings, null), s);
                 if (warnings.length() > 0) {
                     warning(warnings.toString(), arg, ExpressionDslPackage.Literals.CONSTANT__SVALUE, 0);
                 }
@@ -948,8 +950,6 @@ public abstract class ExpressionTranslator<I extends VariableDeclaration, R exte
             } catch (VilException e) {
                 throw new TranslatorException(e, arg, ExpressionDslPackage.Literals.CONSTANT__SVALUE);
             }
-//            result = createConstant(TypeRegistry.stringType(), ex, arg, 
-//                ExpressionDslPackage.Literals.CONSTANT__SVALUE, resolver.getTypeRegistry());
         } else if (null != arg.getQValue()) {
             String name = Utils.getQualifiedNameString(arg.getQValue());
             if (Version.isVersion(name)) { // parser mismatch fixed here
@@ -967,6 +967,28 @@ public abstract class ExpressionTranslator<I extends VariableDeclaration, R exte
             result = convertToVersion(arg.getVersion(), arg, resolver);
         }
         return result;
+    }
+    
+    /**
+     * Normalizes a string expression, i.e., if <code>ex</code> (within a {@link CompositeExpression} is not a constant, 
+     * a {@link StringExpression} containing the expression is inserted instead. This allows recursive/nested 
+     * variable/expression substitution without having the required string quotes being quoted within a string.
+     *  
+     * @param ex the expression to check
+     * @return <code>ex</code> or a modified <code>ex</code>
+     * @throws VilException if creating the modified expression fails
+     */
+    private Expression normalizeStringExpression(Expression ex, String st) throws VilException {
+        if (ex instanceof CompositeExpression) {
+            CompositeExpression cEx = (CompositeExpression) ex;
+            if (1 == cEx.getExpressionsCount()) {
+                Expression ex1 = cEx.getExpression(0);
+                if (!(ex1 instanceof ConstantExpression)) {
+                    cEx.setExpression(0, new StringExpression(ex1, st.startsWith("${")));
+                }
+            }
+        }
+        return ex;
     }
     
     private Expression convertToVersion(String text, Constant arg, R resolver) throws TranslatorException {

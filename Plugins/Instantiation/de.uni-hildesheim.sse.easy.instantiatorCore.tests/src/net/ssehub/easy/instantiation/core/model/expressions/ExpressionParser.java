@@ -55,9 +55,23 @@ class ExpressionParser implements IExpressionParser, IExpressionTranslator<VarDe
         Expression result = null;
         int startPos = text.indexOf('(');
         int endPos = text.lastIndexOf(')');
-        if (startPos > 0 && endPos > 0) {
+        int startBrPos = text.indexOf('{');
+        int endBrPos = text.lastIndexOf('}');
+        final int textEndPos = text.length() - 1;
+        if (startPos > 0 && textEndPos == endPos) {
             String name = text.substring(0, startPos);
             String tmp = text.substring(startPos + 1, endPos);
+            StringTokenizer tokens = new StringTokenizer(tmp, ",");
+            List<Expression> params = new ArrayList<Expression>();
+            while (tokens.hasMoreTokens()) {
+                String tok = tokens.nextToken().trim();
+                params.add(parseToExpression(tok, environment, resolver, warnings));
+            }
+            Expression[] p = new Expression[params.size()];
+            params.toArray(p);
+            result = new CallExpression(null, name, p);
+        } else if (0 == startBrPos && textEndPos == endBrPos) {
+            String tmp = text.substring(startBrPos + 1, endBrPos);
             StringTokenizer tokens = new StringTokenizer(tmp, ",");
             List<Expression> params = new ArrayList<Expression>();
             while (tokens.hasMoreTokens()) {
@@ -65,7 +79,7 @@ class ExpressionParser implements IExpressionParser, IExpressionTranslator<VarDe
             }
             Expression[] p = new Expression[params.size()];
             params.toArray(p);
-            result = new CallExpression(null, name, p);
+            result = new ContainerInitializerExpression(p);
         } else if (text.startsWith("\"") && text.endsWith("\"")) {
             result = parseString(text, resolver, warnings);
         } else {

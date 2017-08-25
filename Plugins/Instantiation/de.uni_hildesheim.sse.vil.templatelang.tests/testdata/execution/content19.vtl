@@ -1,0 +1,19 @@
+template content19(Configuration config, Artifact target) {
+
+    def Integer getLen(sequenceOf(String) seq1, sequenceOf(String) seq2) {
+        seq1.size() + seq2.size();
+    }
+
+    def Integer getLen(String s1, String s2) {
+        s1.length() + s2.length();
+    }
+
+    def main(Configuration config, Artifact target) {
+        String a = "a";
+        String b = "b";
+        String d = "d";
+        '${getLen("$a", "${b}")}'
+        '${getLen({"$a", "${b}", "c"}, {"$d", "e", "f"})}'
+    }
+
+}

@@ -57,6 +57,11 @@ class ExpressionVisitor implements IExpressionVisitor {
     }
     
     @Override
+    public Object visitStringExpression(StringExpression ex) throws VilException {
+        return "\"" + ex.getExpression().accept(this) + "\"";
+    }
+    
+    @Override
     public Object visitVarModelIdentifierExpression(VarModelIdentifierExpression identifier) throws VilException {
         return null;
     }
@@ -103,7 +108,15 @@ class ExpressionVisitor implements IExpressionVisitor {
     
     @Override
     public Object visitContainerInitializerExpression(ContainerInitializerExpression ex) throws VilException {
-        return null;
+        String result = "{";
+        for (int a = 0; a < ex.getInitExpressionsCount(); a++) {
+            if (a > 0) {
+                result += ",";
+            }
+            result += ex.getInitExpression(a).accept(this);
+        }
+        result += "}";
+        return result;
     }
     
     @Override

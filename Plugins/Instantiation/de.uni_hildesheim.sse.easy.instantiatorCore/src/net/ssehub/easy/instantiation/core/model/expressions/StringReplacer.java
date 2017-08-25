@@ -134,6 +134,12 @@ public class StringReplacer extends StringParser<String> {
             }
             return result;
         }
+        
+        @Override
+        public Object visitStringExpression(StringExpression ex) throws VilException {
+            return ex.getExpression().accept(this);
+        }
+
     };
 
     /**

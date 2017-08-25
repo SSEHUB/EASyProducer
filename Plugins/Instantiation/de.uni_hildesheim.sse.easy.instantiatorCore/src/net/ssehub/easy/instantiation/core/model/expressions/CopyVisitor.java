@@ -288,5 +288,10 @@ public class CopyVisitor implements IExpressionVisitor {
         result.inferType();
         return result;
     }
-    
+
+    @Override
+    public Object visitStringExpression(StringExpression ex) throws VilException {
+        return new StringExpression((Expression) ex.getExpression().accept(this), ex.isNested());
+    }
+
 }

@@ -59,6 +59,11 @@ public class ExpressionVersionRestrictionValidator implements IExpressionVisitor
     public Object visitConstantExpression(ConstantExpression cst) throws VilException {
         return null; // is ok
     }
+    
+    @Override
+    public Object visitStringExpression(StringExpression ex) throws VilException {
+        return ex.getExpression().accept(this);
+    }
 
     @Override
     public Object visitVarModelIdentifierExpression(VarModelIdentifierExpression identifier) 

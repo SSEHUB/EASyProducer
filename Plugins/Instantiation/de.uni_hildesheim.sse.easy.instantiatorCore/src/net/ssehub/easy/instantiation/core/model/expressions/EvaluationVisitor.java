@@ -149,6 +149,15 @@ public class EvaluationVisitor implements IExpressionVisitor {
     public Object visitConstantExpression(ConstantExpression cst) throws VilException {
         return cst.getValue();
     }
+    
+    @Override
+    public Object visitStringExpression(StringExpression ex) throws VilException {
+        Object res = ex.getExpression().accept(this);
+        if (null != res) {
+            res = StringValueHelper.getStringValueInReplacement(res, null);
+        }
+        return res;
+    }
 
     @Override
     public Object visitVarModelIdentifierExpression(VarModelIdentifierExpression identifier) 

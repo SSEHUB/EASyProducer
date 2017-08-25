@@ -254,6 +254,20 @@ public class ExpressionWriter extends AbstractWriter implements IExpressionVisit
     }
     
     @Override
+    public Object visitStringExpression(StringExpression ex) throws VilException {
+        print("\"$");
+        if (ex.isNested()) {
+            print("{");
+        }
+        ex.getExpression().accept(this);
+        if (ex.isNested()) {
+            print("}");
+        }
+        print("\"");
+        return null;
+    }
+    
+    @Override
     public Object visitConstantExpression(ConstantExpression cst) throws VilException {
         Object value = cst.getValue();
         if (value instanceof EnumValue) {
@@ -407,7 +421,7 @@ public class ExpressionWriter extends AbstractWriter implements IExpressionVisit
                 }
             } else {
                 boolean before = isInExpression;
-                boolean quote = quoteExpression(expression);
+                boolean quote = quoteExpression(expression) && !(expression instanceof StringExpression);
                 isInExpression = quote;
                 if (quote) {
                     print("${");

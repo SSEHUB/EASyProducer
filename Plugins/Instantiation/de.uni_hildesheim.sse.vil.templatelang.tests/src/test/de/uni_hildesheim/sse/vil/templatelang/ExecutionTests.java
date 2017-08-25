@@ -669,6 +669,16 @@ public class ExecutionTests extends AbstractExecutionTest {
     public void testContent18() throws IOException {
         assertEqual("content18");
     }
+    
+    /**
+     * Tests content statements with recursive variable/expression resolution.
+     * 
+     * @throws IOException should not occur
+     */
+    @Test
+    public void testContent19() throws IOException {
+        assertEqual("content19");
+    }
 
     /**
      * Tests the flush statement.

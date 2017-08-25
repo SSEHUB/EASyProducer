@@ -1,5 +1,6 @@
 package net.ssehub.easy.instantiation.core.model.expressions;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import net.ssehub.easy.instantiation.core.model.common.VilException;
@@ -23,6 +24,18 @@ public class CompositeExpression extends Expression implements IExpressionIterat
      */
     public CompositeExpression(List<Expression> expressionList) {
         this.expressionList = expressionList;
+    }
+
+    /**
+     * Creates a new composite expression.
+     * 
+     * @param expressions the expressions
+     */
+    public CompositeExpression(Expression... expressions) {
+        expressionList = new ArrayList<Expression>(expressions.length);
+        for (int e = 0; e < expressions.length; e++) {
+            expressionList.add(expressions[e]);
+        }
     }
 
     /**
