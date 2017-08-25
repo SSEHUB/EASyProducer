@@ -138,25 +138,25 @@ public class StringResolver<I extends VariableDeclaration, R extends Resolver<I>
     
     @Override
     protected void handleTextEnd(int curStart, int pos) throws VilException {
-        addExpression(handleConstant(curStart, pos + 1));
+        handleConstant(curStart, pos + 1);
     }
     
     @Override
     protected int handleVariableStartExpression(int curStart, int pos) throws VilException {
-        addExpression(handleConstant(curStart, pos - 1));
+        handleConstant(curStart, pos - 1);
         return pos;
     }        
 
     @Override
     protected int handleVariableStartVariable(int curStart, int pos) throws VilException {
-        addExpression(handleConstant(curStart, pos - 1));
+        handleConstant(curStart, pos - 1);
         return pos;
     }
 
     @Override
     protected int handleEndOfText(int curStart, int pos, State state) throws VilException {
         if (State.VARIABLE_START == state) {
-            addExpression(handleConstant(curStart, pos));
+            handleConstant(curStart, pos);
         }
         return pos;
     }
@@ -182,8 +182,8 @@ public class StringResolver<I extends VariableDeclaration, R extends Resolver<I>
         String expressionString = substring(curStart - 1, pos + 1);
         //remove leading ${ and trailing }; reg-ex fails with nested {}
         expressionString = expressionString.substring(2, expressionString.length() - 1); 
-        String pattern = "\\$\\{([^\\}]+)\\}"; // still needed?
-        expressionString = expressionString.replaceAll(pattern, "$1");
+        //String pattern = "\\$\\{([^\\}]+)\\}"; // still needed? prevents recursive processing
+        //expressionString = expressionString.replaceAll(pattern, "$1");
         if (null != factory) {
             boolean clear = true;
             if (expressionString.startsWith("IF")) {
@@ -401,16 +401,13 @@ public class StringResolver<I extends VariableDeclaration, R extends Resolver<I>
      * 
      * @param curStart the current start position
      * @param position  the actual position in the text.
-     * @return ConstantExpression containing the constant
      * @throws VilException in case of evaluation problems
      */
-    private ConstantExpression handleConstant(int curStart, int position) throws VilException {
+    private void handleConstant(int curStart, int position) throws VilException {
         String string = substring(curStart, position);
-        ConstantExpression expr = null;
         if (string.length() > 0) {
-            expr = new ConstantExpression(TypeRegistry.stringType(), string, resolver.getTypeRegistry());
+            addExpression(createConstantStringExpression(string));
         }
-        return expr;
     }
 
     /**
@@ -425,11 +422,20 @@ public class StringResolver<I extends VariableDeclaration, R extends Resolver<I>
         // Split the string into words but keep the spaces
         String[] textArray = text.split("(?<=\\s)|(?=\\s)");
         for (String string : textArray) {
-            ConstantExpression expr = new ConstantExpression(TypeRegistry.stringType(), string,
-                    resolver.getTypeRegistry());
-            list.add(expr);
+            list.add(createConstantStringExpression(string));
         }
         return list;
+    }
+    
+    /**
+     * Creates a constant String expression.
+     * 
+     * @param string the string to create the expression for
+     * @return the constant expression representing string
+     * @throws VilException in case of evaluation/creation problems
+     */
+    private Expression createConstantStringExpression(String string) throws VilException {
+        return new ConstantExpression(TypeRegistry.stringType(), string, resolver.getTypeRegistry());
     }
 
     /**
@@ -438,7 +444,7 @@ public class StringResolver<I extends VariableDeclaration, R extends Resolver<I>
      * @param text the variable name
      * @return CompositeExpression containing the variable
      */
-    public CompositeExpression resolveVariable(String text) {
+    protected CompositeExpression resolveVariable(String text) {
         CompositeExpression compExpression = null;
         // we are our own message receiver - cause/feature not needed here
         VariableDeclaration var = (VariableDeclaration) resolver.resolve(text, false, null, null, this);

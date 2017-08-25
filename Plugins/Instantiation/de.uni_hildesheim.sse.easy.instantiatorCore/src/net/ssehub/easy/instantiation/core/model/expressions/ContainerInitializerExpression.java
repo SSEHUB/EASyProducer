@@ -58,7 +58,17 @@ public class ContainerInitializerExpression extends Expression {
     public Expression getInitExpression(int index) {
         return initExpressions[index];
     }
-
+    
+    /**
+     * Replaces the specified expression. Handle with care!
+     * 
+     * @param index the 0-based index of the expression
+     * @param expr the replacing expression
+     * @throws IndexOutOfBoundsException if <code>index&lt;0 || index&gt;={@link #getInitExpressionsCount()}</code>
+     */
+    public void setInitExpression(int index, Expression expr) {
+        initExpressions[index] = expr;
+    }
     /**
      * Returns the number of initializer expressions.
      * 

@@ -36,6 +36,22 @@ class ExpressionParser implements IExpressionParser, IExpressionTranslator<VarDe
 
     @Override
     public Expression parse(String text, IRuntimeEnvironment environment) throws VilException {
+        return parseToExpression(text, environment, null, null);
+    }
+    
+    /**
+     * Parses text to an expression. Does recursive parsing using the {@link StringResolver} if <code>resolver</code>
+     * and <code>warnings</code> are given.
+     * 
+     * @param text the text to parse
+     * @param environment the runtime environment
+     * @param resolver the resolver instance (may be <b>null</b>)
+     * @param warnings the warnings collector (may be <b>null</b>)
+     * @return the parsed expression
+     * @throws VilException in case that parsing/expression evaluation fails
+     */
+    private Expression parseToExpression(String text, IRuntimeEnvironment environment, 
+        VarResolver resolver, StringBuilder warnings) throws VilException {
         Expression result = null;
         int startPos = text.indexOf('(');
         int endPos = text.lastIndexOf(')');
@@ -45,13 +61,13 @@ class ExpressionParser implements IExpressionParser, IExpressionTranslator<VarDe
             StringTokenizer tokens = new StringTokenizer(tmp, ",");
             List<Expression> params = new ArrayList<Expression>();
             while (tokens.hasMoreTokens()) {
-                params.add(parse(tokens.nextToken().trim(), environment));
+                params.add(parseToExpression(tokens.nextToken().trim(), environment, resolver, warnings));
             }
             Expression[] p = new Expression[params.size()];
             params.toArray(p);
             result = new CallExpression(null, name, p);
         } else if (text.startsWith("\"") && text.endsWith("\"")) {
-            result = new ConstantExpression(TypeRegistry.stringType(), text, TypeRegistry.DEFAULT);
+            result = parseString(text, resolver, warnings);
         } else {
             IResolvable res = environment.get(text);
             if (res instanceof VariableDeclaration) {
@@ -59,6 +75,25 @@ class ExpressionParser implements IExpressionParser, IExpressionTranslator<VarDe
             }
         }
         if (null == result) { // fallback to some constant
+            result = parseString(text, resolver, warnings);
+        }
+        return result;
+    }
+
+    /**
+     * Parses a string (intended to be a constant, may contain a substitutable expression) into an expression.
+     * 
+     * @param text the text to parse
+     * @param resolver the resolver instance (may be <b>null</b>)
+     * @param warnings the warnings collector (may be <b>null</b>)
+     * @return the parsed expression
+     * @throws VilException in case that parsing/expression evaluation fails
+     */
+    private Expression parseString(String text, VarResolver resolver, StringBuilder warnings) throws VilException {
+        Expression result;
+        if (null != resolver && null != warnings) {
+            result = StringResolver.substitute(text, resolver, this, warnings, this);
+        } else {
             result = new ConstantExpression(TypeRegistry.stringType(), text, TypeRegistry.DEFAULT);
         }
         return result;
@@ -67,7 +102,7 @@ class ExpressionParser implements IExpressionParser, IExpressionTranslator<VarDe
     @Override
     public Expression parseExpression(String expression, VarResolver resolver, StringBuilder warnings)
         throws VilException {
-        return parse(expression, resolver.getRuntimeEnvironment());
+        return parseToExpression(expression, resolver.getRuntimeEnvironment(), resolver, warnings);
     }
 
     @Override

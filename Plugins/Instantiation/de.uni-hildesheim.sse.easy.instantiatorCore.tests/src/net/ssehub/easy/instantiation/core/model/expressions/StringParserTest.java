@@ -120,11 +120,11 @@ public class StringParserTest extends AbstractTest {
      * 
      * @throws VilException shall not occur
      */
-/*    @Test
-    public void testRecursiveReplacements() throws VilException {
+    @Test
+    public void testRecursiveExpressionReplacements() throws VilException {
         assertReplacementResult("test/${func(\"aa${b}aa\", $test)}/${func2($i, $s)}/test", 
-            "test/func(\"aa<b>aa\",<test>)/func2(1234,<test>)/test");
-    }*/
+            "test/func(\"aatrueaa\",test)/func2(1234,test)/test");
+    }
     
     /**
      * Tests expression resolution.
@@ -142,11 +142,32 @@ public class StringParserTest extends AbstractTest {
             new ExpectedConstantExpression("/test"));
         assertResolutionResult("test/${test}/test", new ExpectedConstantExpression("test/"), 
             new ExpectedVariableExpression("test"), new ExpectedConstantExpression("/test"));
-/*
-        StringBuilder warnings = new StringBuilder();
-        Expression ex = StringResolver.substitute("test/${func(\"aa${b}aa\", $test)}/${func2($i, $s)}/test", 
-            resolver, parser, warnings, parser);
-        printExpression(ex);*/
+    }
+
+    /**
+     * Tests a recursive expression resolution.
+     * 
+     * @throws VilException shall not occur
+     */
+    @Test
+    public void testRecursiveExpressionResolution() throws VilException {
+        assertResolutionResult("test/${func(\"aa${b}aa\", $test)}/${func2($i, $s)}/test", 
+            new ExpectedConstantExpression("test/"),
+            new ExpectedCallExpression("func", 
+                new ExpectedCompositeExpression(
+                    new ExpectedConstantExpression("\"aa"),
+                    new ExpectedVariableExpression("b"),
+                    new ExpectedConstantExpression("aa\"")),
+                new ExpectedCompositeExpression(
+                    new ExpectedVariableExpression("test"))),
+            new ExpectedConstantExpression("/"),
+            new ExpectedCallExpression("func2", 
+                new ExpectedCompositeExpression(
+                    new ExpectedVariableExpression("i")),
+                new ExpectedCompositeExpression(
+                    new ExpectedVariableExpression("s"))),
+            new ExpectedConstantExpression("/test")
+        );
     }
 
     /**
@@ -154,9 +175,10 @@ public class StringParserTest extends AbstractTest {
      * 
      * @param ex the expression to print
      */
-    /*private void printExpression(Expression ex) {
+    @SuppressWarnings("unused") // for debugging
+    private void printExpression(Expression ex) {
         System.out.println(toString(ex, "", "\n") + "\n");
-    }*/
+    }
     
     /**
      * Turns an expression into a string.
@@ -332,7 +354,6 @@ public class StringParserTest extends AbstractTest {
      * 
      * @author Holger Eichelberger
      */
-    @SuppressWarnings("unused")
     private static class ExpectedCallExpression extends ExpectedExpression<CallExpression> {
         
         private String name;
@@ -378,7 +399,7 @@ public class StringParserTest extends AbstractTest {
         } else {
             start = new ExpectedCompositeExpression(expected);
         }
-        Assert.assertTrue("for input " + input + " received " + toString(ex, "", " -- "), start.matches(ex));
+        Assert.assertTrue("for input " + input + " received " + toString(ex, "", "\n"), start.matches(ex));
     }
     
 }

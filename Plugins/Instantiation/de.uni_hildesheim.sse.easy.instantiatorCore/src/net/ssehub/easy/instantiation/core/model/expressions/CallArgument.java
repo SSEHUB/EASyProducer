@@ -92,7 +92,6 @@ public class CallArgument {
         return count;
     }
 
-    
     /**
      * Returns the arguments.
      * 
@@ -194,19 +193,6 @@ public class CallArgument {
     }
     
     /**
-     * Evaluates the argument in the given environment.
-     * {@link #inferType()} must be called before!
-     * 
-     * @param env the actual runtime environment used to obtain actual values of variables
-     * @return the result of evaluating this node
-     * @throws ExpressionException in case that types or arguments are incompatible,
-     *   operations cannot be found or executed
-     */
-    /*public Object evaluate(IRuntimeEnvironment env) throws ExpressionException {
-        return expr.evaluate(env);
-    }*/
-    
-    /**
      * Visits the expression in this argument. [convenience]
      * 
      * @param visitor the visitor
@@ -262,15 +248,24 @@ public class CallArgument {
     public void resolveOperation(TypeDescriptor<?> type, IMetaOperation operation) {
         this.expr = new ResolvableOperationExpression(type, operation);
     }
+    
+    /**
+     * Replaces the expression in this argument. Handle with care!
+     * 
+     * @param expr the new expression
+     */
+    public void setExpression(Expression expr) {
+        this.expr = expr;
+    }
 
     @Override
     public String toString() {
         try {
             inferType();
         } catch (VilException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
         return type != null ? type.getName() : "<unknown type>";
     }
+    
 }

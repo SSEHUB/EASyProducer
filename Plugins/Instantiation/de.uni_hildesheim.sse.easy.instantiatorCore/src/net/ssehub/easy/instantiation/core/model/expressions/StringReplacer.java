@@ -4,6 +4,7 @@ import net.ssehub.easy.basics.logger.EASyLoggerFactory;
 import net.ssehub.easy.instantiation.core.Bundle;
 import net.ssehub.easy.instantiation.core.model.common.VilException;
 import net.ssehub.easy.instantiation.core.model.vilTypes.StringValueHelper;
+import net.ssehub.easy.instantiation.core.model.vilTypes.TypeRegistry;
 
 /**
  * A parser and replacer for values (<i>$name</i>) and expressions (<i>${expression}</i>) in string values.
@@ -15,6 +16,125 @@ public class StringReplacer extends StringParser<String> {
     private IRuntimeEnvironment environment;
     private IExpressionVisitor expressionEvaluator;
     private IExpressionParser expressionParser;
+    private IExpressionVisitor recursiveReplacer = new IExpressionVisitor() {
+        // an expression replacer for recursive string replacement, returns null if nothing changed 
+        
+        @Override
+        public Object visitVilTypeExpression(VilTypeExpression typeExpression) throws VilException {
+            return null; // not needed
+        }
+        
+        @Override
+        public Object visitVariableExpression(VariableExpression cst) throws VilException {
+            return null; // not needed
+        }
+        
+        @Override
+        public Object visitVarModelIdentifierExpression(VarModelIdentifierExpression identifier) throws VilException {
+            return null; // not needed
+        }
+        
+        @Override
+        public Object visitValueAssignmentExpression(ValueAssignmentExpression ex) throws VilException {
+            return null; // not needed
+        }
+        
+        @Override
+        public Object visitResolvableOperationExpression(ResolvableOperationExpression ex) throws VilException {
+            return null; // not needed
+        }
+        
+        @Override
+        public Object visitResolvableOperationCallExpression(ResolvableOperationCallExpression ex) throws VilException {
+            return null; // not needed
+        }
+        
+        @Override
+        public Object visitParenthesisExpression(ParenthesisExpression par) throws VilException {
+            return par.getExpr().accept(this);
+        }
+        
+        @Override
+        public Object visitMultiAndExpression(MultiAndExpression ex) throws VilException {
+            return null; // not needed
+        }
+        
+        @Override
+        public Object visitFieldAccessExpression(FieldAccessExpression ex) throws VilException {
+            return null; // not needed
+        }
+        
+        @Override
+        public Object visitExpressionEvaluator(ExpressionEvaluator ex) throws VilException {
+            return null; // not needed
+        }
+        
+        @Override
+        public Object visitExpression(Expression ex) throws VilException {
+            return null; // not needed
+        }
+        
+        @Override
+        public Object visitContainerInitializerExpression(ContainerInitializerExpression ex) throws VilException {
+            Object result = null;
+            for (int e = 0; e < ex.getInitExpressionsCount(); e++) {
+                Object tmp = ex.getInitExpression(e).accept(this);
+                if (tmp instanceof Expression) {
+                    ex.setInitExpression(e, (Expression) tmp);
+                    result = ex; // signal change
+                }
+            }
+            return result;
+        }
+        
+        @Override
+        public Object visitConstantExpression(ConstantExpression cst) throws VilException {
+            Object result;
+            if (TypeRegistry.stringType().isAssignableFrom(cst.getType())) {
+                String in = cst.getValue().toString();
+                String tmp = StringReplacer.substitute(cst.getValue().toString(), environment, expressionParser, 
+                    expressionEvaluator);
+                if (null != tmp && !tmp.equals(in)) {
+                    result = new ConstantExpression(TypeRegistry.stringType(), tmp, TypeRegistry.DEFAULT);
+                } else {
+                    result = null; // do nothing
+                }
+            } else {
+                result = null;
+            }
+            return result;
+        }
+        
+        @Override
+        public Object visitCompositeExpression(CompositeExpression ex) throws VilException {
+            Object result = null;
+            for (int e = 0; e < ex.getExpressionsCount(); e++) {
+                Object tmp = ex.getExpression(e).accept(this);
+                if (tmp instanceof Expression) {
+                    ex.setExpression(e, (Expression) tmp);
+                    result = ex; // signal change
+                }
+            }
+            return result;
+        }
+        
+        @Override
+        public Object visitCallExpression(CallExpression call) throws VilException {
+            Object result = null;
+            for (int a = 0; a < call.getArgumentsCount(); a++) {
+                CallArgument arg = call.getArgument(a);
+                Expression ex = arg.getExpression();
+                if (null != ex) {
+                    Object tmp = ex.accept(this);
+                    if (tmp instanceof Expression) {
+                        arg.setExpression((Expression) tmp);
+                        result = call;
+                    }
+                }
+            }
+            return result;
+        }
+    };
 
     /**
      * Creates a replacer instance.
@@ -137,6 +257,12 @@ public class StringReplacer extends StringParser<String> {
         } else {
             String expressionString = substring(curStart, pos);
             Expression expr = expressionParser.parse(expressionString, environment);
+            if (null != expr) {
+                Object tmp = expr.accept(recursiveReplacer);
+                if (tmp instanceof Expression) {
+                    expr = (Expression) tmp;
+                }
+            }
             if (null == expr) {
                 throw new VilException("illegal expression '" + expressionString + "'",
                         VilException.ID_RUNTIME);

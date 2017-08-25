@@ -45,6 +45,17 @@ public class CompositeExpression extends Expression implements IExpressionIterat
         return expressionList.get(index);
     }
 
+    /**
+     * Replaces the specified expression. Handle with care!
+     * 
+     * @param index the 0-based index of the expression
+     * @param expr the replacing expression
+     * @throws IndexOutOfBoundsException if <code>index&lt;0 || index&gt;={@link #getExpressionListCount()}</code>
+     */
+    public void setExpression(int index, Expression expr) {
+        expressionList.set(index, expr);
+    }
+
     @Override
     public TypeDescriptor<?> inferType() throws VilException {
         return TypeRegistry.stringType();
