@@ -5,6 +5,8 @@ vilScript vtl (Project source, Project target, Configuration config) {
         vilTemplateProcessor(fa, config, "$target/test.txt");
         VtlFileArtifact va = "$source/templates/test.vtl";
         vilTemplateProcessor(va, config, "$target/test1.txt");
+        va = "$source/templates/test1.vtl";
+        vilTemplateProcessor(va, config, "$target/test_1.txt");
         vilTemplateProcessor("$source/init.sql", config, "$target/init1.sql");
     }
 

@@ -38,6 +38,7 @@ import net.ssehub.easy.instantiation.core.model.expressions.IResolvable;
 import net.ssehub.easy.instantiation.core.model.expressions.IRuntimeEnvironment;
 import net.ssehub.easy.instantiation.core.model.expressions.StringReplacer;
 import net.ssehub.easy.instantiation.core.model.templateModel.ITracer;
+import net.ssehub.easy.instantiation.core.model.templateModel.StringResolverFactory;
 import net.ssehub.easy.instantiation.core.model.templateModel.Template;
 import net.ssehub.easy.instantiation.core.model.templateModel.TemplateLangExecution;
 import net.ssehub.easy.instantiation.core.model.templateModel.TemplateModel;
@@ -149,10 +150,8 @@ public class VilTemplateProcessor implements IVilType {
         String instantiatedContent;
         try {
             EvaluationVisitor evaluationVisitor = new EvaluationVisitor(runtimeEnvironment, tracer);
-            // TODO this operation cannot just be removed as it is the functionality of a template processor
-            // TODO However, without xtext this cannot be executed at runtime :(
             instantiatedContent = StringReplacer.substitute(templateContents, runtimeEnvironment, 
-                expressionParser, evaluationVisitor);
+                expressionParser, evaluationVisitor, StringResolverFactory.INSTANCE);
         } catch (VilException e) {
             throw e;
         } finally {

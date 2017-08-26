@@ -43,13 +43,8 @@ import net.ssehub.easy.instantiation.core.model.expressions.CallArgument;
 import net.ssehub.easy.instantiation.core.model.expressions.CallExpression;
 import net.ssehub.easy.instantiation.core.model.expressions.CompositeExpression;
 import net.ssehub.easy.instantiation.core.model.expressions.Expression;
-import net.ssehub.easy.instantiation.core.model.expressions.IStringResolverFactory;
-import net.ssehub.easy.instantiation.core.model.expressions.InPlaceForCommand;
-import net.ssehub.easy.instantiation.core.model.expressions.InPlaceIfCommand;
 import net.ssehub.easy.instantiation.core.model.expressions.StringResolver;
 import net.ssehub.easy.instantiation.core.model.templateModel.AlternativeStatement;
-import net.ssehub.easy.instantiation.core.model.templateModel.ContentAlternativeExpression;
-import net.ssehub.easy.instantiation.core.model.templateModel.ContentLoopExpression;
 import net.ssehub.easy.instantiation.core.model.templateModel.ContentStatement;
 import net.ssehub.easy.instantiation.core.model.templateModel.ContentStatement.LineEndType;
 import net.ssehub.easy.instantiation.core.model.templateModel.Def;
@@ -60,6 +55,7 @@ import net.ssehub.easy.instantiation.core.model.templateModel.ITemplateElement;
 import net.ssehub.easy.instantiation.core.model.templateModel.JavaExtension;
 import net.ssehub.easy.instantiation.core.model.templateModel.LoopStatement;
 import net.ssehub.easy.instantiation.core.model.templateModel.Resolver;
+import net.ssehub.easy.instantiation.core.model.templateModel.StringResolverFactory;
 import net.ssehub.easy.instantiation.core.model.templateModel.SwitchStatement;
 import net.ssehub.easy.instantiation.core.model.templateModel.Template;
 import net.ssehub.easy.instantiation.core.model.templateModel.TemplateBlock;
@@ -83,8 +79,7 @@ import net.ssehub.easy.instantiation.core.model.vilTypes.configuration.IvmlTypes
  * @author Holger Eichelberger
  */
 public class ModelTranslator extends de.uni_hildesheim.sse.vil.expressions.translation.ModelTranslator
-    <Template, VariableDeclaration, Resolver, ExpressionStatement, ExpressionTranslator> 
-    implements IStringResolverFactory<VariableDeclaration> {
+    <Template, VariableDeclaration, Resolver, ExpressionStatement, ExpressionTranslator> {
     
     private ExpressionTranslator expressionTranslator;
     private Resolver resolver;
@@ -775,7 +770,7 @@ public class ModelTranslator extends de.uni_hildesheim.sse.vil.expressions.trans
             text = StringUtils.convertString(text);
             StringBuilder warnings = new StringBuilder();
             CompositeExpression tmp = (CompositeExpression) StringResolver.substitute(text, resolver, 
-                expressionTranslator, warnings, this);
+                expressionTranslator, warnings, StringResolverFactory.INSTANCE);
             if (warnings.length() > 0) {
                 warning(warnings.toString(), content, TemplateLangPackage.Literals.CONTENT__CTN, 0);
             }
@@ -839,32 +834,5 @@ public class ModelTranslator extends de.uni_hildesheim.sse.vil.expressions.trans
         return new TypeDef(name, type, getResolver().getCurrentModel());
     }
 
-    @Override
-    public Expression createIfExpression(InPlaceIfCommand<VariableDeclaration> cmd) 
-        throws VilException {
-        return new ContentAlternativeExpression(cmd.getCondition(), cmd.getThenExpressions(), cmd.getElseExpressions());
-    }
-
-    @Override
-    public Expression createForExpression(InPlaceForCommand<VariableDeclaration> cmd) throws VilException {
-        return new ContentLoopExpression(cmd.getIterator(), cmd.getInit(), cmd.getSeparator(), cmd.getEndSeparator(), 
-            cmd.getBody());
-    }
-
-    @Override
-    public VariableDeclaration createVariable(String name, Expression initExpression) throws VilException {
-        TypeDescriptor<?> type = initExpression.inferType();
-        if (!type.isCollection()) {
-            throw new VilException("Iterator initialization expression must be of type collection", 
-                VilException.ID_INVALID_ITERATOR);
-        } else {
-            if (type.getGenericParameterCount() > 0) {
-                type = type.getGenericParameterType(0);
-            } else {
-                type = TypeRegistry.anyType();
-            }
-        }
-        return new VariableDeclaration(name, type, false, initExpression);
-    }
 
 }

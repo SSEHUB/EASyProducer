@@ -59,8 +59,8 @@ public class StringParserTest extends AbstractTest {
     @Test
     public void testNoReplacements() throws VilException {
         // no need for expression parser / evaluator
-        Assert.assertEquals("", StringReplacer.substitute("", environment, null, null));
-        Assert.assertEquals("abba", StringReplacer.substitute("abba", environment, null, null));
+        Assert.assertEquals("", StringReplacer.substitute("", environment, null, null, parser));
+        Assert.assertEquals("abba", StringReplacer.substitute("abba", environment, null, null, parser));
     }
 
     /**
@@ -71,26 +71,43 @@ public class StringParserTest extends AbstractTest {
     @Test
     public void testValueReplacements() throws VilException {
         // no need for expression parser / evaluator
+        testValueReplacements(null, null, null);
+        // again with full parser / evaluator
+        testValueReplacements(parser, evaluator, null);
+        // again with full parser / evaluator / factory
+        testValueReplacements(parser, evaluator, parser);
+    }
+
+    /**
+     * Tests value replacements with changing parser/visitor/factory.
+     * 
+     * @param parser the parser
+     * @param visitor the visitor
+     * @param factory the factory
+     * @throws VilException in case of replacement/evaluation/parsing problems
+     */
+    private void testValueReplacements(IExpressionParser parser, IExpressionVisitor visitor, 
+        ExpressionParser factory) throws VilException {
         Assert.assertEquals(String.valueOf(INT_VALUE), 
-            StringReplacer.substitute("$i", environment, null, null));
+            StringReplacer.substitute("$i", environment, parser, visitor, factory));
         Assert.assertEquals(String.valueOf(BOOLEAN_VALUE), 
-            StringReplacer.substitute("$b", environment, null, null));
+            StringReplacer.substitute("$b", environment, parser, visitor, factory));
         Assert.assertEquals(STRING_VALUE, 
-            StringReplacer.substitute("$s", environment, null, null));
+            StringReplacer.substitute("$s", environment, parser, visitor, factory));
 
         Assert.assertEquals(STRING_VALUE + "=" + STRING_VALUE, 
-            StringReplacer.substitute("$s=$s", environment, null, null));
+            StringReplacer.substitute("$s=$s", environment, parser, visitor, factory));
         Assert.assertEquals(STRING_VALUE + " = " + STRING_VALUE, 
-            StringReplacer.substitute("$s = $s", environment, null, null));
+            StringReplacer.substitute("$s = $s", environment, parser, visitor, factory));
 
         String postfix = "/src";
         Assert.assertEquals(STRING_VALUE + postfix, 
-            StringReplacer.substitute("$s" + postfix, environment, null, null));
+            StringReplacer.substitute("$s" + postfix, environment, parser, visitor, factory));
         String prefix = "/";
         Assert.assertEquals(prefix + STRING_VALUE, 
-            StringReplacer.substitute(prefix + "$s" , environment, null, null));
+            StringReplacer.substitute(prefix + "$s" , environment, parser, visitor, factory));
         Assert.assertEquals(prefix + STRING_VALUE + postfix, 
-            StringReplacer.substitute(prefix + "$s" + postfix, environment, null, null));
+            StringReplacer.substitute(prefix + "$s" + postfix, environment, parser, visitor, factory));
     }
     
     
@@ -128,6 +145,10 @@ public class StringParserTest extends AbstractTest {
             "func({1234,test,\"c\"},{true,\"e\",\"f\"})");
         assertReplacementResult("${func({$i, ${s}, \"c\"}, {$b, \"e\", \"f\"})}", 
             "func({1234,test,\"c\"},{true,\"e\",\"f\"})");
+        assertReplacementResult("${IF b}TRUE${ELSE}FALSE${ENDIF}", 
+            "TRUE");
+        assertReplacementResult("${IF not(b)}TRUE${ELSE}FALSE${ENDIF}", 
+            "FALSE");
     }
     
     /**
@@ -255,7 +276,7 @@ public class StringParserTest extends AbstractTest {
      * @throws VilException if parsing/evaluating fails
      */
     private void assertReplacementResult(String input, String expected) throws VilException {
-        String subst = StringReplacer.substitute(input, environment, parser, evaluator);
+        String subst = StringReplacer.substitute(input, environment, parser, evaluator, parser);
         Assert.assertEquals(expected, subst);
     }
 

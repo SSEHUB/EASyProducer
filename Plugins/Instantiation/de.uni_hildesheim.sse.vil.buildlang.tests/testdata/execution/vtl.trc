@@ -5,5 +5,10 @@
     va <- templates/test.vtl
 -> main(Configuration, FileArtifact) with (<config>, test1.txt)
     -> vilTemplateProcessor(VtlFileArtifact, Configuration, Artifact) with (templates/test.vtl, <config>, test1.txt, {}) = {test1.txt}
+    va <- templates/test1.vtl
+-> main(Configuration, FileArtifact) with (<config>, test_1.txt)
+    var <- true
+    -> !(Boolean) with (true) = false
+    -> vilTemplateProcessor(VtlFileArtifact, Configuration, Artifact) with (templates/test1.vtl, <config>, test_1.txt, {}) = {test_1.txt}
 -> +(String, Any) with (test::pString, myTable) = test::pStringmyTable
     -> vilTemplateProcessor(String, Configuration, Artifact) with (/init.sql, <config>, init1.sql, {}) = {init1.sql}

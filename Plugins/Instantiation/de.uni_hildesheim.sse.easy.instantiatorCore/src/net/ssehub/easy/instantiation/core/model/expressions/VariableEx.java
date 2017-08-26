@@ -17,7 +17,6 @@ public class VariableEx extends VariableExpression {
      */
     public VariableEx(VariableDeclaration variable, String qualifiedName) {
         super(variable, qualifiedName);
-        // TODO Auto-generated constructor stub
     }
 
 }

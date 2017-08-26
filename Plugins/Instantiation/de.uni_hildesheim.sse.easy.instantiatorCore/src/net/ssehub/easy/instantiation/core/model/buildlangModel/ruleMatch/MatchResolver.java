@@ -71,7 +71,7 @@ public class MatchResolver implements IExpressionVisitor, IMatchVisitor {
      * @throws VilException in case that resolution fails
      */
     private String resolve(String string) throws VilException {
-        return StringReplacer.substitute(string, environment, expressionParser, evaluator);
+        return StringReplacer.substitute(string, environment, expressionParser, evaluator, null);
     }
     
     @Override

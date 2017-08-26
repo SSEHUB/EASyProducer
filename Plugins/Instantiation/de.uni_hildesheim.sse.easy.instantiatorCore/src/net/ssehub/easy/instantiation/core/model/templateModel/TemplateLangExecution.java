@@ -574,9 +574,9 @@ public class TemplateLangExecution extends ExecutionVisitor<Template, Def, Varia
     @Override
     public Object visitConstantExpression(ConstantExpression cst) throws VilException {
         Object result = cst.getValue();
-//         we have to care for $name and ${} but only in strings
+        // we have to care for $name and ${} but only in strings
         if (result instanceof String) {
-            result = StringReplacer.substitute(result.toString(), environment, getExpressionParser(), this);
+            result = StringReplacer.substitute(result.toString(), environment, getExpressionParser(), this, null);
         }
         return result;
     }

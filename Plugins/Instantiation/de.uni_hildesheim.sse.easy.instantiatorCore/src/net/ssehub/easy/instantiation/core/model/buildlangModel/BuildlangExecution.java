@@ -552,7 +552,7 @@ public class BuildlangExecution extends ExecutionVisitor<Script, AbstractRule, V
         for (int p = 0; p < script.getPropertiesCount(); p++) {
             LoadProperties prop = script.getProperties(p);
             String path = prop.getPath();
-            path = StringReplacer.substitute(path, environment, getExpressionParser(), this);
+            path = StringReplacer.substitute(path, environment, getExpressionParser(), this, null);
             File file = absolute(path, base);
             loadProperties(file, loaded, null);
             if (SystemUtils.IS_OS_MAC) {
@@ -613,7 +613,7 @@ public class BuildlangExecution extends ExecutionVisitor<Script, AbstractRule, V
                     String value = prop.getProperty(key);
                     // Replace value
                     try {
-                        value = StringReplacer.substitute(value, environment, getExpressionParser(), this);
+                        value = StringReplacer.substitute(value, environment, getExpressionParser(), this, null);
                     } catch (VilException e) {
                         EASyLoggerFactory.INSTANCE.getLogger(getClass(), Bundle.ID).exception(e);
                     }

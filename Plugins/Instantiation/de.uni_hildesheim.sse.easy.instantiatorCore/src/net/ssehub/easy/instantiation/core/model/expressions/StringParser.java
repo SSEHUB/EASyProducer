@@ -15,19 +15,26 @@
  */
 package net.ssehub.easy.instantiation.core.model.expressions;
 
+import java.util.List;
+import java.util.Stack;
+
 import net.ssehub.easy.basics.logger.EASyLoggerFactory;
 import net.ssehub.easy.basics.logger.EASyLoggerFactory.EASyLogger;
 import net.ssehub.easy.instantiation.core.Bundle;
+import net.ssehub.easy.instantiation.core.model.common.VariableDeclaration;
 import net.ssehub.easy.instantiation.core.model.common.VilException;
+import net.ssehub.easy.instantiation.core.model.vilTypes.TypeRegistry;
 
 /**
  * A generic parser and replacer for values (<i>$name</i>) and expressions (<i>${expression}</i>) in strings.
  * Provides only the parsing mechanism to be re-used by the VTL parser and VTL runtime file processor.
  * 
- * @param <R> the parse result type
+ * @param <P> the parse result type
+ * @param <I> the actual variable declaration type
+ * @param <R> the actual resolver type
  * @author Holger Eichelberger
  */
-public abstract class StringParser <R> {
+public abstract class StringParser<P, I extends VariableDeclaration, R extends Resolver<I>> {
 
     /**
      * The parser states.
@@ -61,18 +68,47 @@ public abstract class StringParser <R> {
     private int pos;
     private int curStart;
     private int innerBracketLevel;
+    private IStringResolverFactory<I> factory;
+    private Stack<InPlaceCommand<I>> commandStack;
+    private R resolver;
 
     /**
      * Creates a string parser instance for the given text.
      * 
      * @param text the text to parse (may be <b>null</b>)
+     * @param resolver the resolver to be used
+     * @param factory a factory turning in-place commands into language-specific expressions (may be <b>null</b>, then 
+     *     in-place commands are not resolved but remain as string expressions)
      */
-    protected StringParser(String text) {
+    protected StringParser(String text, R resolver, IStringResolverFactory<I> factory) {
         if (null != text) {
             this.text = new StringBuilder(text);
         } else {
             this.text = null;
         }
+        this.resolver = resolver;
+        this.factory = factory;
+        if (null != factory) {
+            commandStack = new Stack<InPlaceCommand<I>>();
+        }
+    }
+    
+    /**
+     * Returns the resolver factory.
+     * 
+     * @return the factory
+     */
+    protected IStringResolverFactory<I> getFactory() {
+        return factory;
+    }
+    
+    /**
+     * Returns the resolver.
+     * 
+     * @return the resolver
+     */
+    protected R getResolver() {
+        return resolver;
     }
     
     /**
@@ -88,7 +124,7 @@ public abstract class StringParser <R> {
      * @see #handleVariable(int)
      * @see #createParseResult(State)
      */
-    public R parse() throws VilException {
+    public P parse() throws VilException {
         pos = 0;
         curStart = 0;
         State state = State.TEXT;
@@ -149,13 +185,327 @@ public abstract class StringParser <R> {
     }
     
     /**
+     * Handles in-place commands and pushes them onto the command stack.
+     * 
+     * @param expressionString the expression string to be analyzed
+     * @param curStart the start position of the current concept
+     * @param pos the end position of parsing
+     * @return the corresponding expression
+     * @throws VilException in case of parsing problems
+     */
+    protected Expression handleInPlaceCommands(String expressionString, int curStart, int pos) throws VilException {
+        Expression result = null;
+        if (null != factory) {
+            boolean clear = true;
+            if (expressionString.startsWith("IF")) {
+                expressionString = removePrefix(expressionString, "IF", true);
+                push(new InPlaceIfCommand<I>(parseExpression(expressionString)), curStart, pos);
+            } else if (expressionString.startsWith("FOR")) {
+                expressionString = removePrefix(expressionString, "FOR", true);
+                expressionString = consumeWhitespaces(expressionString);
+                int pos1 = consumeJavaIdentifierPart(expressionString);
+                String iterName = expressionString.substring(0, pos1);
+                expressionString = consumeWhitespaces(expressionString.substring(pos1));
+                if (expressionString.startsWith("=")) {
+                    expressionString = consume(expressionString, '=');
+                } else if (expressionString.startsWith(":")) {
+                    expressionString = consume(expressionString, ':');
+                }
+                expressionString = consumeWhitespaces(expressionString);
+                pos1 = expressionString.indexOf(" SEPARATOR");
+                Expression separatorEx = null;
+                Expression endSeparatorEx = null;
+                if (pos1 > 0) {
+                    String separatorString = expressionString.substring(pos1 + 1).trim();
+                    separatorString = removePrefix(separatorString, "SEPARATOR", true);
+                    int pos2 = separatorString.indexOf(" END");
+                    if (pos2 > 0) {
+                        String endSeparatorString = separatorString.substring(pos2 + 1).trim();
+                        endSeparatorString = removePrefix(endSeparatorString, "END", true);
+                        endSeparatorEx = parseExpression(endSeparatorString);
+                        separatorString = separatorString.substring(0, pos2).trim();
+                    }
+                    separatorEx = parseExpression(separatorString);
+                    expressionString = expressionString.substring(0, pos1).trim();
+                }
+                Expression init = parseExpression(expressionString);
+                I iterator = factory.createVariable(iterName, init);
+                push(new InPlaceForCommand<I>(iterator, init, separatorEx, endSeparatorEx), curStart, pos);
+                resolver.pushLevel();
+                resolver.add(iterator);
+            } else if (expressionString.equals("ELSE")) {
+                advanceState(curStart, pos);
+            } else if (expressionString.equals("ENDIF")) {
+                result = close(curStart, pos);
+            } else if (expressionString.equals("ENDFOR")) {
+                result = close(curStart, pos);
+                resolver.popLevel();
+            } else {
+                clear = false;
+            }
+            if (clear) {
+                expressionString = null;
+            }
+        }
+        if (null != expressionString) {
+            result = parseExpression(expressionString);
+            if (isNonEmptyCommandStack()) {
+                commandStack.peek().append(result);
+                result = null;
+            }
+        }
+        return result;
+    }
+    
+    /**
+     * Joins the results from {@link #handleInPlaceCommands(String)} with the current command stack. 
+     * For temporary use only, as the result may be a {@link CompositeExpression}, which leads to specific
+     * code formattings.
+     * 
+     * @param expr the expression returned by {@link #handleInPlaceCommands(String)}
+     * @return <code>expr</code> or the result from the command stack
+     */
+    protected Expression join(Expression expr) {
+        Expression result = expr;
+        return result;
+    }
+    
+    /**
+     * Parses an expression from <code>expressionString</code>.
+     * 
+     * @param expressionString the string representation of the expression
+     * @return the parsed expression
+     * @throws VilException in case that parsing/creating the expression fails
+     */
+    protected abstract Expression parseExpression(String expressionString) throws VilException;
+    
+    /**
+     * Creates a constant String expression.
+     * 
+     * @param string the string to create the expression for
+     * @return the constant expression representing string
+     * @throws VilException in case of evaluation/creation problems
+     */
+    protected Expression createConstantStringExpression(String string) throws VilException {
+        return new ConstantExpression(TypeRegistry.stringType(), string, getResolver().getTypeRegistry());
+    }
+    
+    /**
+     * Advances the state of the current in-place command.
+     * 
+     * @param curStart the start position of the current concept
+     * @param pos the end position of parsing
+     */
+    private void advanceState(int curStart, int pos) {
+        if (isNonEmptyCommandStack()) {
+            InPlaceCommand<I> cur = commandStack.peek();
+            cur.advanceState();
+            notifyStartInPlaceCommand(cur, curStart, pos);
+        }
+    }
+    
+    /**
+     * Closes the creation of the current in-place command.
+     * 
+     * @param curStart the start position of the current concept
+     * @param pos the end position of parsing
+     * @return the related expression, <b>null</b> for optional/none
+     * @throws VilException in case that creation failed
+     */
+    private Expression close(int curStart, int pos) throws VilException {
+        Expression result = null;
+        if (isNonEmptyCommandStack()) {
+            InPlaceCommand<I> cur = commandStack.pop();
+            result = cur.close(factory);
+            if (null != result && isNonEmptyCommandStack()) {
+                commandStack.peek().replace(cur, result);
+            }
+            notifyEndInPlaceCommand(cur, result, curStart, pos);
+        }
+        return result;
+    }
+
+    /**
+     * Clears the statement stack and adds all expressions to <code>exprs</code>.
+     * 
+     * @param expressions expressions collection to be modified
+     */
+    protected void clearStatementStack(List<Expression> expressions) {
+        if (null != commandStack) {
+            while (!commandStack.isEmpty()) {
+                popFromCommandStack(expressions);
+            }
+        }
+    }
+
+    /**
+     * Removes the top-level element from the command stack and appends its contents to <code>expressions</code>.
+     * 
+     * @param expressions expressions collection to be modified
+     */
+    protected void popFromCommandStack(List<Expression> expressions) {
+        InPlaceCommand<I> cmd = commandStack.pop();
+        if (cmd.holdsResolverLevel()) {
+            resolver.popLevel();
+        }
+        if (commandStack.isEmpty()) {
+            // sufficient as all in-place commands on the stack are linked via appends
+            cmd.append(expressions);
+        }
+    }
+    
+    /**
+     * Adds the expression to the expression list or to the active in-place command on the command stack (if present).
+     * 
+     * @param expr  the expression that should be added to the list
+     * @param expressions expressions collection to be modified 
+     */
+    protected void addExpression(Expression expr, List<Expression> expressions) {
+        if (null != expr) {
+            if (isNonEmptyCommandStack()) {
+                commandStack.peek().append(expr);
+            } else {
+                expressions.add(expr);
+            }
+        }
+    }
+    
+    /**
+     * Returns whether the command stack exists and is not empty.
+     * 
+     * @return <code>true</code> for not empty, <code>false</code> else
+     */
+    protected boolean isNonEmptyCommandStack() {
+        return null != commandStack && !commandStack.isEmpty();
+    }
+    
+    /**
+     * Pushes an in-place command into its parent on the command stack.
+     * 
+     * @param cmd the command to be pushed
+     * @param curStart the start position of the current concept
+     * @param pos the end position of parsing
+     */
+    private void push(InPlaceCommand<I> cmd, int curStart, int pos) {
+        if (null != commandStack) {
+            if (!commandStack.isEmpty()) {
+                commandStack.peek().append(cmd);
+            }
+            commandStack.push(cmd);
+            notifyStartInPlaceCommand(cmd, curStart, pos);
+        }
+    }
+    
+    /**
+     * Returns the current in-place command on the command stack.
+     * 
+     * @return the current in-place command or <b>null</b>
+     */
+    protected InPlaceCommand<I> getCurrentInPlaceCommand() {
+        InPlaceCommand<I> result;
+        if (isNonEmptyCommandStack()) {
+            result = commandStack.peek();
+        } else {
+            result = null;
+        }
+        return result;
+    }
+
+    /**
+     * Notifies about start parsing an in-place command. If a command consists of a middle part (if-else), then
+     * this function is called twice/multiple times for the same command.
+     * 
+     * @param cmd the command
+     * @param curStart the start position of the current concept
+     * @param pos the end position of parsing
+     */
+    protected void notifyStartInPlaceCommand(InPlaceCommand<I> cmd, int curStart, int pos) {
+    }
+
+    /**
+     * Notifies that parsing an in-place command ended.
+     * 
+     * @param cmd the command
+     * @param expr the resulting expression
+     * @param curStart the start position of the current concept
+     * @param pos the end position of parsing
+     */
+    protected void notifyEndInPlaceCommand(InPlaceCommand<I> cmd, Expression expr, int curStart, int pos) {
+    }
+
+    /**
+     * Returns the last Java identifier part character in <code>string</code>.
+     * 
+     * @param string the string to search for
+     * @return the position, <code>0</code> for none
+     */
+    protected int consumeJavaIdentifierPart(String string) {
+        int pos = 0;
+        while (pos < string.length() && Character.isJavaIdentifierPart(string.charAt(pos))) {
+            pos++;
+        }
+        return pos;
+    }
+    
+    /**
+     * Removes the given <code>prefix</code> from <code>text</code> if present. If <code>cutFollowingWhitespaces</code>
+     * and whitespaces follow <code>prefix</code> in <code>text</code> remove also the whitespaces.
+     * 
+     * @param text the text to be manipulated
+     * @param prefix the prefix to be removed
+     * @param consumeFollowingWhitespaces if <code>true</code> remove also whitespaces occurring after 
+     *   <code>prefix</code>, if <code>false </code> remove only the <code>prefix</code> if present
+     * @return the modified string or <code>text</code>
+     */
+    protected String removePrefix(String text, String prefix, boolean consumeFollowingWhitespaces) {
+        String result = text;
+        if (result.startsWith(prefix)) {
+            // cut the prefix
+            result = result.substring(prefix.length());
+            if (consumeFollowingWhitespaces) {
+                result = consumeWhitespaces(result);
+            }
+        }
+        return result;
+    }
+
+    /**
+     * Consumes all leading whitespaces in <code>text</code>.
+     *  
+     * @param text the text to consume the whitespaces
+     * @return the text without leading whitespaces
+     */
+    protected String consumeWhitespaces(String text) {
+        return consume(text, ' ');
+    }
+
+    /**
+     * Consumes all leading <code>ch</code> in <code>text</code>.
+     *  
+     * @param text the text to consume the characters
+     * @param ch the character to consume
+     * @return the text without leading <code>ch</code>
+     */
+    protected String consume(String text, char ch) {
+        String result = text;
+        int pos = 0;
+        while (pos < result.length() && ch == result.charAt(pos)) {
+            pos++;
+        }
+        if (pos > 0) {
+            result = result.substring(pos);
+        }
+        return result;
+    }
+    
+    /**
      * Completes the parsing at the end of the input string.
      * 
      * @param state the actual state
      * @return the parsing result
      * @throws VilException in case of evaluation problems
      */
-    private R completeParsing(State state) throws VilException {
+    private P completeParsing(State state) throws VilException {
         switch (state) {
         case VARIABLE:
             handleVariable(curStart, pos);
@@ -336,7 +686,7 @@ public abstract class StringParser <R> {
      * @throws VilException in case of evaluation problems
      * @see #parse()
      */
-    protected abstract R createParseResult() throws VilException;
+    protected abstract P createParseResult() throws VilException;
 
     /**
      * Handle a variable placeholder. <code>start</code> points to "$",
