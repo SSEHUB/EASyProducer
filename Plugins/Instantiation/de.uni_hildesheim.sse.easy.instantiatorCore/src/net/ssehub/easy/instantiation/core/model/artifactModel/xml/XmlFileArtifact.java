@@ -71,7 +71,6 @@ public class XmlFileArtifact extends FileArtifact implements IXmlContainer {
     private XmlElement rootElement; // ignore outside commend by node
     private Document doc;
     private File file;
-    private DtdParser dtdParser = new DtdParser();
     private Dtd dtd;
     private boolean omitXmlDeclaration = false;
     private boolean synchronizeAttributeSequence = true;
@@ -145,7 +144,9 @@ public class XmlFileArtifact extends FileArtifact implements IXmlContainer {
         }
         super.artifactChanged(cause);
         if (fromRepresentation) { // change comes from text/binary - read in structure again
-            // TODO check whether we can go for a StringStream
+            // reading from a string buffer would also work, but finally the XML 
+            // framework unexpectedly closes the stream before being able to synchronize
+            // the attributes... leaving it for now
             try {            
                 FileOutputStream out = new FileOutputStream(file);
                 PrintStream ps = new PrintStream(out);
@@ -502,7 +503,7 @@ public class XmlFileArtifact extends FileArtifact implements IXmlContainer {
         
             if (this.dtd != null && this.dtd.getContent() != null && !this.dtd.getContent().isEmpty()) {
                 try {
-                    this.dtdParser.writeDtd(this.file, this.dtd);
+                    DtdParser.writeDtd(this.file, this.dtd);
                 } catch (FileNotFoundException e) {
                     EASyLoggerFactory.INSTANCE.getLogger(getClass(), Bundle.ID).exception(e);
                 }
@@ -640,7 +641,7 @@ public class XmlFileArtifact extends FileArtifact implements IXmlContainer {
     private void readDtd() throws VilException {
         if (null != file && file.length() > 0) {
             try {
-                this.dtd = dtdParser.extractDTD(file);
+                this.dtd = DtdParser.extractDTD(file);
             } catch (FileNotFoundException e) {
                 throw new VilException("File not found: " + file.getAbsolutePath(), 
                     VilException.ID_RUNTIME_RESOURCE);

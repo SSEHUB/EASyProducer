@@ -14,6 +14,8 @@ import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.io.IOUtils;
+
 /**
  * This class is used to read embedded DTDs from XML files and write them back later.
  * This is neccessary due to the fact, that the transformer of w3c.dom loses any information of embedded DTDs.
@@ -23,8 +25,6 @@ import java.util.List;
 public class DtdParser {
     
     private static final String DOCTYPE = "<!DOCTYPE";
-    private InputStream fis = null;
-    private BufferedReader br = null;
     
     /**
      * Will extract a embedded DTD from an XML file.
@@ -32,36 +32,36 @@ public class DtdParser {
      * @return A List of Strings with the embedded DTD.
      * @throws FileNotFoundException Thrown if the XML file could not be found.
      */
-    public Dtd extractDTD(File file) throws FileNotFoundException {
-        
-        Dtd dtd = new Dtd();
-        
-        dtd = checkForDTD(this.readFile(file));
-        
-        return dtd;
+    public static Dtd extractDTD(File file) throws FileNotFoundException {
+        return checkForDTD(readFile(file));
     }
-    
+
+    /**
+     * Will extract a embedded DTD from an XML file.
+     * 
+     * @param in the input stream
+     * @return A List of Strings with the embedded DTD.
+     */
+    public static Dtd extractDTD(InputStream in) {
+        return checkForDTD(readFile(in));
+    }
+
     /**
      * Checks a List of Strings for an embedded DTD.
      * If a DTD exists it is returned as a new List of Strings.
      * @param stringList List of Strings that are to be checked for DTD.
      * @return A List of Strings with the DTD only (formatting will be maintained).
      */
-    private Dtd checkForDTD(List<String> stringList) {
-    
+    private static Dtd checkForDTD(List<String> stringList) {
         List<String> dtdContent = new ArrayList<String>();
         Dtd dtd = new Dtd();
-        
         int openBrackets = 0;
         int current = 0;
         int start = -1;
         String string = "";
         String subString = "";
-        
         for (int i = 0; i < stringList.size(); i++) {
-            
             string = stringList.get(i);
-            
             start = string.toLowerCase().indexOf(DOCTYPE.toLowerCase());
             if (start >= 0) {
                 current = start + DOCTYPE.length();
@@ -69,7 +69,6 @@ public class DtdParser {
                 subString = DOCTYPE;
                 openBrackets++;
             }
-            
             while (openBrackets > 0 && current < string.length()) {
                 if (string.charAt(current) == '<') {
                     openBrackets++;
@@ -79,23 +78,17 @@ public class DtdParser {
                 subString += string.charAt(current);
                 current++;
             }
-            
             if (openBrackets > 0) {
                 start = -1;
             }
-            
             if (subString.length() > 0) {
                 dtdContent.add(subString);
             }
-            
             subString = "";
             current = 0;
-            
         }
-        
         dtd.setContent(dtdContent);
         return dtd;
-        
     }
     
     /**
@@ -104,14 +97,10 @@ public class DtdParser {
      * @param dtd The dtd to write into the file.
      * @throws FileNotFoundException If file was not found.
      */
-    public void writeDtd(File file, Dtd dtd) throws FileNotFoundException {
-        
-        List<String> oldContent = this.readFile(file);
-        
+    public static void writeDtd(File file, Dtd dtd) throws FileNotFoundException {
+        List<String> oldContent = readFile(file);
         BufferedWriter writer = null;
-
         if (null != dtd && null != file) {
-        
             try {
                 writer = new BufferedWriter(new OutputStreamWriter(
                         new FileOutputStream(file), "UTF-8"));
@@ -137,24 +126,41 @@ public class DtdParser {
                     e.printStackTrace();
                 }
             }
-        
         }
-        
     }
-    
+
     /**
      * Reads a file and returns a List of Strings with the content.
      * @param file The file to be read.
      * @return A List of Strings with the content.
      * @throws FileNotFoundException If File was not found.
      */
-    private List<String> readFile(File file) throws FileNotFoundException {
-        
+    private static List<String> readFile(File file) throws FileNotFoundException {
+        List<String> result = null;
+        FileInputStream fis = null;
+        try {
+            fis = new FileInputStream(file);
+            result = readFile(fis);
+            fis.close();
+        } catch (IOException e) {
+            IOUtils.closeQuietly(fis);
+        }
+        if (null == result) {
+            result = new ArrayList<String>();
+        }
+        return result;
+    }
+    
+    /**
+     * Reads a from an input stream and returns a List of Strings with the content.
+     * 
+     * @param in the input stream to read
+     * @return A List of Strings with the content.
+     */
+    private static List<String> readFile(InputStream in) {
         String line;
         List<String> stringList = new ArrayList<String>();
-        fis = new FileInputStream(file);
-        br = new BufferedReader(new InputStreamReader(fis, Charset.forName("UTF-8")));
-        
+        BufferedReader br = new BufferedReader(new InputStreamReader(in, Charset.forName("UTF-8")));
         try {
             while ((line = br.readLine()) != null) {
                 if (line.isEmpty()) {
@@ -169,14 +175,6 @@ public class DtdParser {
         } catch (IOException exc) {
             exc.printStackTrace();
         }
-        
-        try {
-            fis.close();
-            br.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        
         return stringList;
     }
 
