@@ -16,6 +16,7 @@
 package net.ssehub.easy.instantiation.core.model.artifactModel.xml;
 
 import org.w3c.dom.Node;
+import org.xml.sax.Attributes;
 
 import net.ssehub.easy.instantiation.core.model.artifactModel.CompositeFragmentArtifact;
 import net.ssehub.easy.instantiation.core.model.artifactModel.IArtifactChangedListener;
@@ -224,5 +225,51 @@ public abstract class XmlNode extends CompositeFragmentArtifact implements IStri
     public void update() throws VilException {
         //Method not needed at the moment.
     }
+
+    /**
+     * Returns the number of children.
+     * 
+     * @return the number of children
+     */
+    int getChildCount() {
+        return 0;
+    }
+    
+    /**
+     * Returns the child at the given <code>index</code>.
+     * 
+     * @param index the 0-based index of the child to return
+     * @return the child
+     * @throws IndexOutOfBoundsException if <code>index &lt; 0 || index &gt;={@link #getChildCount()}</code>
+     */
+    XmlNode getChild(int index) {
+        throw new IndexOutOfBoundsException();
+    }
+
+    /**
+     * Returns the name of this attribute without potential exception.
+     * 
+     * @return the name
+     */
+    String getNameSafe() {
+        return "";
+    }
+
+    /**
+     * Synchronizes the attribute sequence.
+     */
+    void synchronizeAttributeSequence() {
+        // no attributes here
+    }
+    
+    /**
+     * Sorts the attribute sequence of this element according to the given SAX attribute set.
+     * 
+     * @param att the SAX attributes
+     */
+    void sortAttributes(final Attributes att) {
+        // no attributes here
+    }
+
 
 }

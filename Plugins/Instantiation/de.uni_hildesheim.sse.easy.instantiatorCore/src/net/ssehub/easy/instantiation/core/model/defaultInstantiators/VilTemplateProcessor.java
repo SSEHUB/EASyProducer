@@ -564,7 +564,7 @@ public class VilTemplateProcessor implements IVilType {
             Bundle.getLogger(VilTemplateProcessor.class).error(errMsg.toString());
             throw e;
         } finally {
-            TracerFactory.registerTemplateLanguageTracer(tracer);            
+            TracerFactory.unregisterTemplateLanguageTracer(tracer);            
         }
         result.add(target);
     }

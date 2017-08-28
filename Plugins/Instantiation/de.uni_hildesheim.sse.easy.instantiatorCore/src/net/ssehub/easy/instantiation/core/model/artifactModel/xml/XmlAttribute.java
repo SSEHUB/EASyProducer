@@ -93,6 +93,15 @@ public class XmlAttribute extends FragmentArtifact implements IStringValueProvid
     }
     
     /**
+     * Returns the name of this attribute without potential exception.
+     * 
+     * @return the name
+     */
+    String getNameSafe() {
+        return name;
+    }
+    
+    /**
      * Returns the value of this attribute.
      * 
      * @return the value of this attribute

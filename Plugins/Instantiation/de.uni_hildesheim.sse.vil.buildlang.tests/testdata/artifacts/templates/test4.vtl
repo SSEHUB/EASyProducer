@@ -1,0 +1,8 @@
+template test4(Configuration config, XmlFileArtifact target) {
+
+    def main(Configuration config, XmlFileArtifact target) {
+        target.setOmitXmlDeclaration(true);
+        '<root xml="true" open="false" adaptive="true"/>'
+    }
+
+}

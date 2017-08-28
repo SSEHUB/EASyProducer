@@ -1,10 +1,14 @@
 package net.ssehub.easy.instantiation.core.model.artifactModel.xml;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.LineNumberReader;
+import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -12,6 +16,8 @@ import java.util.List;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.parsers.SAXParser;
+import javax.xml.parsers.SAXParserFactory;
 import javax.xml.transform.OutputKeys;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerException;
@@ -102,6 +108,7 @@ public class XmlFileArtifact extends FileArtifact implements IXmlContainer {
             if (null != doc.getDocumentElement()) {
                 cleanTree(doc.getDocumentElement());
             }
+            synchronizeAttributes(file);
             lastPersisted = System.currentTimeMillis();
         }
     }
@@ -138,6 +145,15 @@ public class XmlFileArtifact extends FileArtifact implements IXmlContainer {
         }
         super.artifactChanged(cause);
         if (fromRepresentation) { // change comes from text/binary - read in structure again
+            // TODO check whether we can go for a StringStream
+            try {            
+                FileOutputStream out = new FileOutputStream(file);
+                PrintStream ps = new PrintStream(out);
+                ps.print(getText().getText());
+                out.close();
+            } catch (IOException e) {
+                e.printStackTrace(System.out);
+            }
             initialize();
         }
         lastModification = System.currentTimeMillis();
@@ -294,7 +310,6 @@ public class XmlFileArtifact extends FileArtifact implements IXmlContainer {
      */
     private XmlElement fill(Node node, XmlElement element, List<Integer> childIndexes) {
         //try to add textual representation
-        //TODO: Test whether CDATA needs to be trimmed too.
         try {
             if (node.hasChildNodes()) {
                 if (node.getFirstChild().getNodeType() == Node.CDATA_SECTION_NODE) {
@@ -446,7 +461,11 @@ public class XmlFileArtifact extends FileArtifact implements IXmlContainer {
         if (null == doc && null != text && !text.getText().trim().isEmpty()) {
             try {
                 DocumentBuilder builder = getDocumentBuilderFactory().newDocumentBuilder();
-                doc = builder.parse(IOUtils.toInputStream(text.getText()));
+                InputStream in = IOUtils.toInputStream(text.getText());
+                doc = builder.parse(in);
+                in.reset();
+                synchronizeAttributes(in);
+                in.close();
                 initializationNeeded = true;
             } catch (ParserConfigurationException exc) {
                 EASyLoggerFactory.INSTANCE.getLogger(getClass(), Bundle.ID).exception(exc);
@@ -719,6 +738,46 @@ public class XmlFileArtifact extends FileArtifact implements IXmlContainer {
         initialize(); 
         writeToFile();
         lastPersisted = System.currentTimeMillis();
+    }
+
+    /**
+     * Synchronizes the XML attributes (depends on {@link #synchronizeAttributeSequence}).
+     * 
+     * @param stream the stream to synchronize
+     */
+    private void synchronizeAttributes(InputStream stream) {
+        if (synchronizeAttributeSequence && null != rootElement) {
+            try {
+                SAXParser saxParser = SAXParserFactory.newInstance().newSAXParser();
+                AttributeSynchronizer handler = new AttributeSynchronizer(rootElement);
+                saxParser.parse(file, handler);
+            } catch (SAXException e) {
+            } catch (ParserConfigurationException e) {
+            } catch (IOException e) {
+            }
+        }
+    }
+    
+    /**
+     * Synchronizes the XML attributes (depends on {@link #synchronizeAttributeSequence}).
+     * 
+     * @param file the file to synchronize
+     */
+    private void synchronizeAttributes(File file) {
+        if (synchronizeAttributeSequence) {
+            if (file.exists()) {
+                FileInputStream in = null;
+                try {
+                    in = new FileInputStream(file);
+                    synchronizeAttributes(in);
+                    in.close();
+                } catch (IOException e) {
+                    if (null != in) {
+                        net.ssehub.easy.basics.io.FileUtils.closeQuietly(in);
+                    }
+                }
+            }
+        }
     }
 
 }

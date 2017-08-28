@@ -2,6 +2,7 @@ package net.ssehub.easy.instantiation.core.model.artifactModel.xml;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -14,6 +15,7 @@ import org.w3c.dom.DOMException;
 import org.w3c.dom.Element;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
+import org.xml.sax.Attributes;
 
 import net.ssehub.easy.basics.logger.EASyLoggerFactory;
 import net.ssehub.easy.instantiation.core.Bundle;
@@ -159,6 +161,25 @@ public class XmlElement extends XmlNode implements IXmlContainer {
         }
         return result;
     }
+    
+    /**
+     * Sorts the attribute sequence of this element according to the given SAX attribute set.
+     * 
+     * @param att the SAX attributes
+     */
+    @Override
+    void sortAttributes(final Attributes att) {
+        Arrays.sort(attributes, new Comparator<XmlAttribute>() {
+
+            @Override
+            public int compare(XmlAttribute o1, XmlAttribute o2) {
+                int i1 = att.getIndex(o1.getNameSafe());
+                int i2 = att.getIndex(o2.getNameSafe());
+                return Integer.compare(i1, i2);
+            }
+            
+        });
+    }
 
     /**
      * Synchronizes the attribute sequence. This is a horrible hack. Reason: Extending 
@@ -167,6 +188,7 @@ public class XmlElement extends XmlNode implements IXmlContainer {
      * by Eclipse-Xalan and its dependency. So access the attribute implementation and sort
      * the nodes in there accordingly.
      */
+    @Override
     void synchronizeAttributeSequence() {
         XmlFileArtifact artifact = getFile();
         boolean synchronize = null != artifact ? artifact.synchronizeAttributeSequence() : true;
@@ -276,6 +298,11 @@ public class XmlElement extends XmlNode implements IXmlContainer {
     @Override
     public String getName() throws VilException {
         //checkValidity();
+        return name;
+    }
+
+    @Override
+    String getNameSafe() {
         return name;
     }
 
@@ -804,6 +831,19 @@ public class XmlElement extends XmlNode implements IXmlContainer {
     @Override
     public String getStringValue(StringComparator comparator) {
         return "xmlElement \"" + name + "\"";
+    }
+
+    @Override
+    int getChildCount() {
+        return nodes == null ? 0 : nodes.length;
+    }
+    
+    @Override
+    XmlNode getChild(int index) {
+        if (null == nodes) {
+            throw new IndexOutOfBoundsException();
+        }
+        return nodes[index];
     }
     
 }

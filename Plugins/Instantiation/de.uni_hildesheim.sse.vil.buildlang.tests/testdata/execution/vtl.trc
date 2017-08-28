@@ -12,3 +12,7 @@
     -> vilTemplateProcessor(VtlFileArtifact, Configuration, Artifact) with (templates/test1.vtl, <config>, test_1.txt, {}) = {test_1.txt}
 -> +(String, Any) with (test::pString, myTable) = test::pStringmyTable
     -> vilTemplateProcessor(String, Configuration, Artifact) with (/init.sql, <config>, init1.sql, {}) = {init1.sql}
+    xa <- test4.xml
+-> main(Configuration, XmlFileArtifact) with (<config>, test4.xml)
+    -> setOmitXmlDeclaration(XmlFileArtifact, Boolean) with (test4.xml, true)
+    -> vilTemplateProcessor(String, Configuration, Artifact) with (/templates/test4.vtl, <config>, test4.xml, {}) = {test4.xml}
