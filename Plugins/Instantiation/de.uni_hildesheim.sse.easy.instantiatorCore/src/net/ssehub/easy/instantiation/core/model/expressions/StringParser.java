@@ -608,6 +608,18 @@ public abstract class StringParser<P, I extends VariableDeclaration, R extends R
     }
 
     /**
+     * Deletes the given characters from the internal parse buffer.
+     * 
+     * @param start the start position to delete, inclusive
+     * @param end the end position to delete, exclusive
+     * @throws IndexOutOfBoundsException if <code>start&lt;0 || start&gt;={@link #getTextLength()} 
+     *     || end&lt;0 || end&gt;={@link #getTextLength()}</code>
+     */
+    protected void delete(int start, int end) {
+        text.delete(start, end);
+    }
+
+    /**
      * Returns the actual length of the internal parse buffer.
      * 
      * @return the length of the parse buffer in characters.
