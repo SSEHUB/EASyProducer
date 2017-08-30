@@ -819,4 +819,17 @@ public class TemplateLangExecution extends ExecutionVisitor<Template, Def, Varia
         return result;
     }
 
+    @Override
+    public Object visitContentVarDeclExpression(ContentVarDeclExpression ex) throws VilException {
+        VariableDeclaration var = ex.getVariable();
+        Object value;
+        if (null != var.getExpression()) {
+            value = var.getExpression().accept(this);
+        } else {
+            value = null; // shall not occur due to required syntax in StringParser
+        }
+        environment.addValue(var, value);
+        return ""; // replace me by nothing
+    }
+
 }

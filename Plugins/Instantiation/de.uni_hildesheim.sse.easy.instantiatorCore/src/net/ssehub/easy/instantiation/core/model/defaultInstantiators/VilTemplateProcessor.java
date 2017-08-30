@@ -28,19 +28,17 @@ import net.ssehub.easy.instantiation.core.model.buildlangModel.BuildModel;
 import net.ssehub.easy.instantiation.core.model.buildlangModel.Script;
 import net.ssehub.easy.instantiation.core.model.common.ITerminatable;
 import net.ssehub.easy.instantiation.core.model.common.ITerminator;
-import net.ssehub.easy.instantiation.core.model.common.RuntimeEnvironment;
 import net.ssehub.easy.instantiation.core.model.common.VilException;
 import net.ssehub.easy.instantiation.core.model.execution.TracerFactory;
 import net.ssehub.easy.instantiation.core.model.expressions.ExpressionParserRegistry;
 import net.ssehub.easy.instantiation.core.model.expressions.IExpressionParser;
 import net.ssehub.easy.instantiation.core.model.expressions.StringReplacer;
 import net.ssehub.easy.instantiation.core.model.templateModel.ITracer;
-import net.ssehub.easy.instantiation.core.model.templateModel.StringResolverFactory;
+import net.ssehub.easy.instantiation.core.model.templateModel.StringResolverFactoryWithVariables;
 import net.ssehub.easy.instantiation.core.model.templateModel.Template;
-import net.ssehub.easy.instantiation.core.model.templateModel.TemplateDescriptor;
 import net.ssehub.easy.instantiation.core.model.templateModel.TemplateLangExecution;
 import net.ssehub.easy.instantiation.core.model.templateModel.TemplateModel;
-import net.ssehub.easy.instantiation.core.model.templateModel.VariableDeclaration;
+import net.ssehub.easy.instantiation.core.model.templateModel.TemplateSubstitutionExecution;
 import net.ssehub.easy.instantiation.core.model.vilTypes.Collection;
 import net.ssehub.easy.instantiation.core.model.vilTypes.Constants;
 import net.ssehub.easy.instantiation.core.model.vilTypes.IVilType;
@@ -48,9 +46,7 @@ import net.ssehub.easy.instantiation.core.model.vilTypes.Instantiator;
 import net.ssehub.easy.instantiation.core.model.vilTypes.ListSet;
 import net.ssehub.easy.instantiation.core.model.vilTypes.OperationMeta;
 import net.ssehub.easy.instantiation.core.model.vilTypes.Set;
-import net.ssehub.easy.instantiation.core.model.vilTypes.TypeRegistry;
 import net.ssehub.easy.instantiation.core.model.vilTypes.configuration.Configuration;
-import net.ssehub.easy.instantiation.core.model.vilTypes.configuration.IvmlTypes;
 
 /**
  * Implements the default VIL template processor. This instantiator handles
@@ -144,19 +140,11 @@ public class VilTemplateProcessor implements IVilType {
         TracerFactory.registerTemplateLanguageTracer(tracer);
         String instantiatedContent = "";
         try {
-            StringWriter dummy = new StringWriter();
-            Map<String, Object> params = new HashMap<String, Object>();
-            params.put(TemplateLangExecution.PARAM_CONFIG, config);
-            params.put(TemplateLangExecution.PARAM_TARGET, null);
-            TemplateLangExecution evaluationVisitor = new TemplateLangExecution(tracer, dummy, params);
-            RuntimeEnvironment<VariableDeclaration> environment = evaluationVisitor.getRuntimeEnvironment();
-            TemplateDescriptor desc = new TemplateDescriptor();
-            TypeRegistry registry = new TypeRegistry(TypeRegistry.DEFAULT); // also for env??
-            Template model = new Template(template.getName(), null, desc, registry);
-            environment.switchContext(model);
-            environment.addValue(new VariableDeclaration("config", IvmlTypes.configurationType()), config);
-            instantiatedContent = StringReplacer.substitute(templateContents, environment, 
-                expressionParser, evaluationVisitor, StringResolverFactory.INSTANCE);
+            TemplateSubstitutionExecution evaluationVisitor = new TemplateSubstitutionExecution(tracer, 
+                template.getName(), false, config);
+            instantiatedContent = StringReplacer.substitute(templateContents, 
+                evaluationVisitor.getRuntimeEnvironment(), expressionParser, evaluationVisitor, 
+                StringResolverFactoryWithVariables.INSTANCE);
         } catch (VilException e) {
             throw e;
         } finally {

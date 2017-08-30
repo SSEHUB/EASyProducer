@@ -16,6 +16,7 @@ import net.ssehub.easy.instantiation.core.model.vilTypes.IMetaParameterDeclarati
 import net.ssehub.easy.instantiation.core.model.vilTypes.IMetaType;
 import net.ssehub.easy.instantiation.core.model.vilTypes.TypeDescriptor;
 import net.ssehub.easy.instantiation.core.model.vilTypes.TypeRegistry;
+import net.ssehub.easy.instantiation.core.model.vilTypes.configuration.IvmlElement;
 
 /**
  * A common resolver.
@@ -383,7 +384,17 @@ public abstract class Resolver<M extends IResolvableModel<V>, O extends IResolva
         Object result = null;
         for (int s = models.size() - 1; null == result && s >= 0; s--) {
             result = models.get(s).getIvmlElement(name);
-        }  
+        }
+        if (null == result && null != getRuntimeEnvironment()) {
+            // fallback, e.g., non advice and qualified name: consider also configuration
+            try {
+                Object tmp = getRuntimeEnvironment().getIvmlValue(name);
+                if (tmp instanceof IvmlElement) {
+                    result = tmp;
+                }
+            } catch (VilException e) {
+            }
+        }
         return result;
     }
 

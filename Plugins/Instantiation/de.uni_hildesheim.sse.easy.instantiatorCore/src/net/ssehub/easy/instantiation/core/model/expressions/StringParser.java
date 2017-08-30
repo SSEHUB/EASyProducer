@@ -202,42 +202,14 @@ public abstract class StringParser<P, I extends VariableDeclaration, R extends R
         Expression result = null;
         if (null != factory) {
             boolean clear = true;
-            if (expressionString.startsWith("IF")) {
+            if (expressionString.startsWith("IF ")) {
                 expressionString = removePrefix(expressionString, "IF", true);
                 push(new InPlaceIfCommand<I>(parseExpression(expressionString)), curStart, pos);
-            } else if (expressionString.startsWith("FOR")) {
-                expressionString = removePrefix(expressionString, "FOR", true);
-                expressionString = consumeWhitespaces(expressionString);
-                int pos1 = consumeJavaIdentifierPart(expressionString);
-                String iterName = expressionString.substring(0, pos1);
-                expressionString = consumeWhitespaces(expressionString.substring(pos1));
-                if (expressionString.startsWith("=")) {
-                    expressionString = consume(expressionString, '=');
-                } else if (expressionString.startsWith(":")) {
-                    expressionString = consume(expressionString, ':');
-                }
-                expressionString = consumeWhitespaces(expressionString);
-                pos1 = expressionString.indexOf(" SEPARATOR");
-                Expression separatorEx = null;
-                Expression endSeparatorEx = null;
-                if (pos1 > 0) {
-                    String separatorString = expressionString.substring(pos1 + 1).trim();
-                    separatorString = removePrefix(separatorString, "SEPARATOR", true);
-                    int pos2 = separatorString.indexOf(" END");
-                    if (pos2 > 0) {
-                        String endSeparatorString = separatorString.substring(pos2 + 1).trim();
-                        endSeparatorString = removePrefix(endSeparatorString, "END", true);
-                        endSeparatorEx = parseExpression(endSeparatorString);
-                        separatorString = separatorString.substring(0, pos2).trim();
-                    }
-                    separatorEx = parseExpression(separatorString);
-                    expressionString = expressionString.substring(0, pos1).trim();
-                }
-                Expression init = parseExpression(expressionString);
-                I iterator = factory.createVariable(iterName, init);
-                push(new InPlaceForCommand<I>(iterator, init, separatorEx, endSeparatorEx), curStart, pos);
-                resolver.pushLevel();
-                resolver.add(iterator);
+            } else if (expressionString.startsWith("FOR ")) {
+                expressionString = handleInPlaceForStart(expressionString, curStart, pos);
+            } else if (expressionString.startsWith("VAR ")) {
+                expressionString = handleInPlaceVarDeclStart(expressionString, curStart, pos);
+                result = close(curStart, pos);
             } else if (expressionString.equals("ELSE")) {
                 advanceState(curStart, pos);
             } else if (expressionString.equals("ENDIF")) {
@@ -261,7 +233,91 @@ public abstract class StringParser<P, I extends VariableDeclaration, R extends R
         }
         return result;
     }
-    
+
+    /**
+     * Handles/parses an in-place for-loop start.
+     * 
+     * @param expressionString the expression string
+     * @param curStart the start position of the current concept
+     * @param pos the end position of parsing
+     * @return the remaining expression string
+     * @throws VilException in case of parsing problems
+     */
+    private String handleInPlaceForStart(String expressionString, int curStart, int pos) {
+        String result;
+        try {
+            result = removePrefix(expressionString, "FOR", true);
+            result = consumeWhitespaces(result);
+            int pos1 = consumeJavaIdentifierPart(result);
+            String iterName = result.substring(0, pos1);
+            result = consumeWhitespaces(result.substring(pos1));
+            if (result.startsWith("=")) {
+                result = consume(result, '=');
+            } else if (result.startsWith(":")) {
+                result = consume(result, ':');
+            }
+            result = consumeWhitespaces(result);
+            pos1 = result.indexOf(" SEPARATOR");
+            Expression separatorEx = null;
+            Expression endSeparatorEx = null;
+            if (pos1 > 0) {
+                String separatorString = result.substring(pos1 + 1).trim();
+                separatorString = removePrefix(separatorString, "SEPARATOR", true);
+                int pos2 = separatorString.indexOf(" END");
+                if (pos2 > 0) {
+                    String endSeparatorString = separatorString.substring(pos2 + 1).trim();
+                    endSeparatorString = removePrefix(endSeparatorString, "END", true);
+                    endSeparatorEx = parseExpression(endSeparatorString);
+                    separatorString = separatorString.substring(0, pos2).trim();
+                }
+                separatorEx = parseExpression(separatorString);
+                result = result.substring(0, pos1).trim();
+            }
+            Expression init = parseExpression(result);
+            I iterator = factory.createVariable(iterName, init, true);
+            push(new InPlaceForCommand<I>(iterator, init, separatorEx, endSeparatorEx), curStart, pos);
+            resolver.pushLevel();
+            resolver.add(iterator);
+        } catch (VilException e) {
+            warnParsingIgnoring(expressionString, e);
+            result = expressionString; // just keep it
+        }
+        return result;
+    }
+
+    /**
+     * Handles/parses an in-place variable declaration start.
+     * 
+     * @param expressionString the expression string
+     * @param curStart the start position of the current concept
+     * @param pos the end position of parsing
+     * @return the remaining expression string
+     * @throws VilException in case of parsing problems
+     */
+    private String handleInPlaceVarDeclStart(String expressionString, int curStart, int pos) {
+        String result;
+        try {
+            result = removePrefix(expressionString, "VAR", true);
+            int pos1 = consumeJavaIdentifierPart(result);
+            String varName = result.substring(0, pos1);
+            result = consumeWhitespaces(result.substring(pos1));
+            if (result.startsWith("=")) {
+                result = consume(result, '=');
+            }                
+            result = consumeWhitespaces(result);
+            Expression init = parseExpression(result);
+            if (null == init) {
+                throw new VilException("Initialization expression missing / not resolved.", VilException.ID_INVALID);
+            }
+            I var = factory.createVariable(varName, init, false);
+            push(new InPlaceVarDeclCommand<I>(var), curStart, pos);
+        } catch (VilException e) {
+            warnParsingIgnoring(expressionString, e);
+            result = expressionString; // just keep it
+        }
+        return result;
+    }
+
     /**
      * Joins the results from {@link #handleInPlaceCommands(String)} with the current command stack. 
      * For temporary use only, as the result may be a {@link CompositeExpression}, which leads to specific
@@ -549,8 +605,18 @@ public abstract class StringParser<P, I extends VariableDeclaration, R extends R
      * 
      * @return the logger
      */
-    private EASyLogger getLogger() {
-        return EASyLoggerFactory.INSTANCE.getLogger(StringReplacer.class, Bundle.ID);
+    protected EASyLogger getLogger() {
+        return EASyLoggerFactory.INSTANCE.getLogger(getClass(), Bundle.ID);
+    }
+    
+    /**
+     * Logs a parse warning message that the <code>detail</code> is being ignored.
+     * 
+     * @param detail the detail
+     * @param th the reason for the warning
+     */
+    protected void warnParsingIgnoring(String detail, Throwable th) {
+        getLogger().warn("While parsing/resolving '" + detail + "': " + th.getMessage() + ". Ignoring.");
     }
     
     /**

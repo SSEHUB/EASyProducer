@@ -34,8 +34,7 @@ public interface IStringResolverFactory<I extends VariableDeclaration> {
      * @return an alternative expression (may be <b>null</b> if not supported)
      * @throws VilException if the expression cannot be created
      */
-    public Expression createIfExpression(InPlaceIfCommand<I> cmd) 
-        throws VilException;
+    public Expression createIfExpression(InPlaceIfCommand<I> cmd) throws VilException;
 
     /**
      * Creates a for-loop expression.
@@ -44,17 +43,26 @@ public interface IStringResolverFactory<I extends VariableDeclaration> {
      * @return a for-loop expression (may be <b>null</b> if not supported)
      * @throws VilException if the expression cannot be created
      */
-    public Expression createForExpression(InPlaceForCommand<I> cmd) 
-        throws VilException;
+    public Expression createForExpression(InPlaceForCommand<I> cmd) throws VilException;
+
+    /**
+     * Creates a var declaration expression.
+     * 
+     * @param cmd the command to create a for-loop expression for
+     * @return a for-loop expression (may be <b>null</b> if not supported)
+     * @throws VilException if the expression cannot be created
+     */
+    public Expression createVarDeclExpression(InPlaceVarDeclCommand<I> cmd) throws VilException;
  
     /**
      * Creates a variable.
      * 
      * @param name the name of the variable
      * @param initExpression the initialization expression determining the type of the iterator variable
+     * @param asIterator whether the variable shall act as iterator
      * @return the variable
      * @throws VilException if the variable cannot be created
      */
-    public I createVariable(String name, Expression initExpression) throws VilException;
+    public I createVariable(String name, Expression initExpression, boolean asIterator) throws VilException;
     
 }

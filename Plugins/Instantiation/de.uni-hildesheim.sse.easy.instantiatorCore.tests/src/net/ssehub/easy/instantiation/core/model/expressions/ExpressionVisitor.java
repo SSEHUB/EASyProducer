@@ -24,6 +24,7 @@ import net.ssehub.easy.instantiation.core.model.templateModel.AlternativeStateme
 import net.ssehub.easy.instantiation.core.model.templateModel.ContentAlternativeExpression;
 import net.ssehub.easy.instantiation.core.model.templateModel.ContentLoopExpression;
 import net.ssehub.easy.instantiation.core.model.templateModel.ContentStatement;
+import net.ssehub.easy.instantiation.core.model.templateModel.ContentVarDeclExpression;
 import net.ssehub.easy.instantiation.core.model.templateModel.Def;
 import net.ssehub.easy.instantiation.core.model.templateModel.FlushStatement;
 import net.ssehub.easy.instantiation.core.model.templateModel.IVisitor;
@@ -302,7 +303,12 @@ class ExpressionVisitor implements IExpressionVisitor, IVisitor {
 
     @Override
     public Object visitContentLoopExpression(ContentLoopExpression ex) throws VilException {
-        return null; // not for now
+        return null; // we test this only in VIL files, also as VarDecl is not compatible
+    }
+
+    @Override
+    public Object visitContentVarDeclExpression(ContentVarDeclExpression ex) throws VilException {
+        return null; // we test this only in VIL files, also as VarDecl is not compatible
     }
 
 }

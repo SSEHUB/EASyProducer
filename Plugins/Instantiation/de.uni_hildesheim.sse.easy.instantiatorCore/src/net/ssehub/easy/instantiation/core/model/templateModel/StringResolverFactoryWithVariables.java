@@ -17,24 +17,29 @@ package net.ssehub.easy.instantiation.core.model.templateModel;
 
 import net.ssehub.easy.instantiation.core.model.common.VilException;
 import net.ssehub.easy.instantiation.core.model.expressions.Expression;
-import net.ssehub.easy.instantiation.core.model.vilTypes.TypeDescriptor;
-import net.ssehub.easy.instantiation.core.model.vilTypes.TypeRegistry;
+import net.ssehub.easy.instantiation.core.model.expressions.InPlaceVarDeclCommand;
 
 /**
- * Introduces a common type for in-content expressions/statements.
+ * An extended template language string resolver factory. This factory 
+ * creates expressions for in-place variable declarations.
  * 
  * @author Holger Eichelberger
  */
-public abstract class InContentExpression extends Expression {
+public class StringResolverFactoryWithVariables extends StringResolverFactory {
 
-    @Override
-    public boolean replaceEmptyLine() {
-        return true;
+    public static final StringResolverFactoryWithVariables INSTANCE = new StringResolverFactoryWithVariables();
+    
+    // no state
+    
+    /**
+     * Prevents external creation.
+     */
+    protected StringResolverFactoryWithVariables() {
     }
 
     @Override
-    public TypeDescriptor<?> inferType() throws VilException {
-        return TypeRegistry.stringType(); // always replaced by/to string
+    public Expression createVarDeclExpression(InPlaceVarDeclCommand<VariableDeclaration> cmd) throws VilException {
+        return new ContentVarDeclExpression(cmd.getDeclaration());
     }
 
 }

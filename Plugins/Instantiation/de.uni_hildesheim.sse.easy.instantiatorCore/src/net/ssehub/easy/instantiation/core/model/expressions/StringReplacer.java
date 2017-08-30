@@ -3,8 +3,6 @@ package net.ssehub.easy.instantiation.core.model.expressions;
 import java.util.HashMap;
 import java.util.Map;
 
-import net.ssehub.easy.basics.logger.EASyLoggerFactory;
-import net.ssehub.easy.instantiation.core.Bundle;
 import net.ssehub.easy.instantiation.core.model.common.VariableDeclaration;
 import net.ssehub.easy.instantiation.core.model.common.VilException;
 import net.ssehub.easy.instantiation.core.model.vilTypes.StringValueHelper;
@@ -386,23 +384,25 @@ public class StringReplacer<I extends VariableDeclaration> extends StringParser<
         if (null != var) {
             oValue = environment.getValue(var);
         } else {
-            oValue = environment.getIvmlValue(variableName);
-        }
-        if (null == oValue) {
-            // stop replacement
-            throw new VilException("", VilException.ID_NULL_VALUE);
-        }
-        String value = StringValueHelper.getStringValueInReplacement(oValue, null);
-        if (null != value) {
-            int start = curStart - 1; // curStart - 1 -> replace also the $!
-            if (isNonEmptyCommandStack()) {
-                InPlaceCommand<I> cmd = getCurrentInPlaceCommand();
-                Positions p = inPlacePositions.get(cmd);
-                if (null != p) {
-                    start = p.getLatestPos() + 1;
-                }
+            try {
+                oValue = environment.getIvmlValue(variableName);
+            } catch (VilException e) {
+                warnParsingIgnoring(variableName,  e);
             }
-            pos = setPos(replace(start, pos, value));
+        }
+        if (null != oValue) {
+            String value = StringValueHelper.getStringValueInReplacement(oValue, null);
+            if (null != value) {
+                int start = curStart - 1; // curStart - 1 -> replace also the $!
+                if (isNonEmptyCommandStack()) {
+                    InPlaceCommand<I> cmd = getCurrentInPlaceCommand();
+                    Positions p = inPlacePositions.get(cmd);
+                    if (null != p) {
+                        start = p.getLatestPos() + 1;
+                    }
+                }
+                pos = setPos(replace(start, pos, value));
+            }
         }
         return -1;
     }
@@ -410,14 +410,17 @@ public class StringReplacer<I extends VariableDeclaration> extends StringParser<
     @Override
     protected int handleExpression(int curStart, int pos) throws VilException {
         if (null == expressionParser) {
-            EASyLoggerFactory.INSTANCE.getLogger(StringReplacer.class, Bundle.ID).warn(
-                    "no expression parser registered");
+            getLogger().warn("no expression parser registered");
         } else if (null == expressionEvaluator) {
-            EASyLoggerFactory.INSTANCE.getLogger(StringReplacer.class, Bundle.ID).warn(
-                    "no expression evaluator registered");
+            getLogger().warn("no expression evaluator registered");
         } else {
             String expressionString = substring(curStart, pos);
-            Expression expr = handleInPlaceCommands(expressionString, curStart, pos);
+            Expression expr = null;
+            try {
+                expr = handleInPlaceCommands(expressionString, curStart, pos);
+            } catch (VilException e) {
+                warnParsingIgnoring(expressionString, e);
+            }
             if (null != expr) {
                 Object tmp = expr.accept(recursiveReplacer);
                 if (tmp instanceof Expression) {
@@ -433,11 +436,35 @@ public class StringReplacer<I extends VariableDeclaration> extends StringParser<
                         int start = null == inPlaceStart ? curStart : inPlaceStart.openCurPos;
                         // start - 2 -> replace also the $!
                         pos = setPos(replace(start - 2, pos + 1, value));
+                        pos = checkForEmptyLine(value, expr, pos);
                     }
                 }
             }
         }
         return -1;
+    }
+    
+    /**
+     * Checks and removes empty lines depending on <code>value</code> and {@link Expression#replaceEmptyLine()}.
+     * 
+     * @param value the actual value (must not be <b>null</b>)
+     * @param expr the actual expression (must not be <b>null</b>
+     * @param pos the actual parsing position
+     * @return the new parsing position
+     */
+    private int checkForEmptyLine(String value, Expression expr, int pos) {
+        if (0 == value.length() && expr.replaceEmptyLine() && pos > 0 && pos < length()) {
+            char before = charAt(pos - 1);
+            char at = charAt(pos);
+            if (('\r' == before || '\n' == before) && ('\r' == at || '\n' == at)) {
+                deleteCharAt(pos);
+                // the Windows version
+                if ('\r' == at && pos < length() && '\n' == charAt(pos)) {
+                    deleteCharAt(pos);
+                }
+            }
+        }
+        return pos;
     }
 
     @Override
@@ -461,9 +488,14 @@ public class StringReplacer<I extends VariableDeclaration> extends StringParser<
 
     @Override
     protected Expression parseExpressionImpl(String expressionString) throws VilException {
-        Expression result = expressionParser.parse(expressionString, environment);
-        if (result instanceof VarModelIdentifierExpression) {
-            result = resolve((VarModelIdentifierExpression) result);
+        Expression result = null;
+        try {
+            result = expressionParser.parse(expressionString, environment);
+            if (result instanceof VarModelIdentifierExpression) { // just as fallback
+                result = resolve((VarModelIdentifierExpression) result);
+            }
+        } catch (VilException e) {
+            warnParsingIgnoring(expressionString, e);
         }
         return result;
     }
@@ -476,14 +508,19 @@ public class StringReplacer<I extends VariableDeclaration> extends StringParser<
      * @return the resolved expression, <b>null</b> if not possible to resolve
      * @throws VilException in case of resolution problems
      */
-    private Expression resolve(VarModelIdentifierExpression ex) throws VilException {
+    private Expression resolve(VarModelIdentifierExpression ex) {
         Expression result = null;
-        IRuntimeEnvironment env = getResolver().getRuntimeEnvironment();
-        Object res = env.getIvmlValue(ex.getIdentifier());
-        if (res instanceof DecisionVariable) {
-            DecisionVariable var = ((DecisionVariable) res);
-            TypeDescriptor<?> type = var.getType();
-            result = new ConstantExpression(type, var.getValue(), type.getTypeRegistry());
+        String id = ex.getIdentifier();
+        try {
+            IRuntimeEnvironment env = getResolver().getRuntimeEnvironment();
+            Object res = env.getIvmlValue(id);
+            if (res instanceof DecisionVariable) {
+                DecisionVariable var = ((DecisionVariable) res);
+                TypeDescriptor<?> type = var.getType();
+                result = new ConstantExpression(type, var.getValue(), type.getTypeRegistry());
+            }
+        } catch (VilException e) {
+            warnParsingIgnoring(id, e);
         }
         return result;
     }

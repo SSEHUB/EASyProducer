@@ -137,4 +137,9 @@ public class ExpressionCopyVisitor extends CopyVisitor implements IVisitor {
             copyExpression(ex.getSeparator()), copyExpression(ex.getEndSeparator()), bodyEx);
     }
 
+    @Override
+    public Object visitContentVarDeclExpression(ContentVarDeclExpression ex) throws VilException {
+        return new ContentVarDeclExpression(ex.getVariable());
+    }
+
 }

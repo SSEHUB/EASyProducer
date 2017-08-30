@@ -127,13 +127,19 @@ class ExpressionParser implements IExpressionParser, IExpressionTranslator<VarDe
 
     @Override
     public Expression createForExpression(InPlaceForCommand<VarDecl> cmd) throws VilException {
-        return null;
+        return null; // we test this only in VIL files, also as VarDecl is not compatible
     }
 
     @Override
-    public VarDecl createVariable(String name, Expression initExpression) throws VilException {
+    public VarDecl createVariable(String name, Expression initExpression, boolean asIterator) throws VilException {
         TypeDescriptor<?> type = initExpression.inferType();
+        // ignore asIterator here as we test iterators only in VIL files 
         return new VarDecl(name, type);
+    }
+
+    @Override
+    public Expression createVarDeclExpression(InPlaceVarDeclCommand<VarDecl> cmd) throws VilException {
+        return null; // we test this only in VIL files, also as VarDecl is not compatible
     }
 
 }

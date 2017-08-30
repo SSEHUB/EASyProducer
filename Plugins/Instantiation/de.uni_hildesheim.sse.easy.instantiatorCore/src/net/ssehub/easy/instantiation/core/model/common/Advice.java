@@ -29,7 +29,7 @@ public class Advice {
      * Creates an advice annotation.
      * 
      * @param name The name of the project to be imported.
-     * @param restrictions the optional version restrictions that apply
+     * @param restrictions the optional version restrictions that apply (may be <b>null</b> if absent)
      * @param resolved the resolved project, may be <b>null</b> if no resolution is possible
      */
     public Advice(String name, IVersionRestriction restrictions, Project resolved) {

@@ -21,7 +21,6 @@ import net.ssehub.easy.instantiation.core.model.common.VilException;
 import net.ssehub.easy.instantiation.core.model.expressions.Expression;
 import net.ssehub.easy.instantiation.core.model.expressions.IExpressionIterator;
 import net.ssehub.easy.instantiation.core.model.expressions.IExpressionVisitor;
-import net.ssehub.easy.instantiation.core.model.vilTypes.TypeDescriptor;
 import net.ssehub.easy.instantiation.core.model.vilTypes.TypeRegistry;
 
 /**
@@ -48,6 +47,9 @@ public class ContentAlternativeExpression extends InContentExpression {
         this.condition = condition;
         this.thenEx = thenEx;
         this.elseEx = elseEx;
+        if (null == this.condition) {
+            throw new VilException("No condition expression given/resolved", VilException.ID_INVALID_TYPE);
+        }
         if (!TypeRegistry.booleanType().isAssignableFrom(this.condition.inferType())) {
             throw new VilException("Condition expression must evaluate to Boolean", VilException.ID_INVALID_TYPE);
         }
@@ -144,11 +146,6 @@ public class ContentAlternativeExpression extends InContentExpression {
             throw new IndexOutOfBoundsException();
         }
         return elseEx.get(index);
-    }
-
-    @Override
-    public TypeDescriptor<?> inferType() throws VilException {
-        return TypeRegistry.stringType();
     }
 
     @Override

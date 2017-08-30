@@ -21,7 +21,6 @@ import net.ssehub.easy.instantiation.core.model.common.VilException;
 import net.ssehub.easy.instantiation.core.model.expressions.Expression;
 import net.ssehub.easy.instantiation.core.model.expressions.IExpressionIterator;
 import net.ssehub.easy.instantiation.core.model.expressions.IExpressionVisitor;
-import net.ssehub.easy.instantiation.core.model.vilTypes.TypeDescriptor;
 import net.ssehub.easy.instantiation.core.model.vilTypes.TypeRegistry;
 
 /**
@@ -127,11 +126,6 @@ public class ContentLoopExpression extends InContentExpression implements IExpre
     @Override
     public Expression getExpression(int index) {
         return body.get(index);
-    }
-
-    @Override
-    public TypeDescriptor<?> inferType() throws VilException {
-        return TypeRegistry.stringType();
     }
 
     @Override

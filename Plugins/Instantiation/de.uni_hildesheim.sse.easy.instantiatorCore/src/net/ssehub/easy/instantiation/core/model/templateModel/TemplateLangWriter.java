@@ -434,4 +434,12 @@ public class TemplateLangWriter extends WriterVisitor<VariableDeclaration> imple
         return !(expression instanceof InContentExpression);
     }
 
+    @Override
+    public Object visitContentVarDeclExpression(ContentVarDeclExpression ex) throws VilException {
+        print("${VAR ");
+        ex.getVariable().accept(this);
+        println("}");
+        return null;
+    }
+
 }

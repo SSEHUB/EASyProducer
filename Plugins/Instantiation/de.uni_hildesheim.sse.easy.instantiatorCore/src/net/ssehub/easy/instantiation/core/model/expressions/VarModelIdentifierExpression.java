@@ -14,14 +14,26 @@ import net.ssehub.easy.instantiation.core.model.vilTypes.configuration.IvmlEleme
 public class VarModelIdentifierExpression extends Expression {
     
     private String identifier;
+    private IvmlElement element;
 
     /**
-     * Creates the representing instance.
+     * Creates the representing instance without related/resolved IVML element.
      * 
      * @param identifier the identifier from VIL
      */
     public VarModelIdentifierExpression(String identifier) {
+        this(identifier, null);
+    }
+    
+    /**
+     * Creates the representing instance.
+     * 
+     * @param identifier the identifier from VIL
+     * @param element the related IVML element (may be <b>null</b> if unknown, unresolved identifier)
+     */
+    public VarModelIdentifierExpression(String identifier, IvmlElement element) {
         this.identifier = identifier;
+        this.element = element;
     }
     
     /**
@@ -32,10 +44,26 @@ public class VarModelIdentifierExpression extends Expression {
     public String getIdentifier() {
         return identifier;
     }
+    
+    /**
+     * Returns the related variability model element.
+     * 
+     * @return the variability model element (may be <b>null</b> if unknown, unresolved identifier)
+     */
+    public IvmlElement getElement() {
+        return element;
+    }
 
     @Override
     public TypeDescriptor<?> inferType() throws VilException {
-        return TypeRegistry.DEFAULT.getType(IvmlElement.class);
+        TypeDescriptor<?> type = null;
+        if (null != element) {
+            type = element.getType();
+        }
+        if (null == type) {
+            type = TypeRegistry.DEFAULT.getType(IvmlElement.class);
+        }
+        return type;
     }
 
     @Override

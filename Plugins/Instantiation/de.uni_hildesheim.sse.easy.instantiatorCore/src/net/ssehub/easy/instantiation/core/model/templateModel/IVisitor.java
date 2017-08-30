@@ -126,4 +126,13 @@ public interface IVisitor extends net.ssehub.easy.instantiation.core.model.commo
      */
     public Object visitContentLoopExpression(ContentLoopExpression ex) throws VilException;
 
+    /**
+     * Visits a content variable declaration expression.
+     * 
+     * @param ex the expression
+     * @return the result visiting the given statement (may be <b>null</b>)
+     * @throws VilException in case that visiting fails (e.g., execution)
+     */
+    public Object visitContentVarDeclExpression(ContentVarDeclExpression ex) throws VilException;
+
 }

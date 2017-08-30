@@ -26,5 +26,15 @@ public abstract class Expression {
      * @throws VilException in case that visiting fails (e.g., execution)
      */
     public abstract Object accept(IExpressionVisitor visitor) throws VilException;
+
+    /**
+     * In content replacement, replace an entire line if this expression is
+     * evaluated to an empty string.
+     * 
+     * @return <code>true</code> for replace entire line, <code>false</code> (default) else
+     */
+    public boolean replaceEmptyLine() {
+        return false;
+    }
     
 }
