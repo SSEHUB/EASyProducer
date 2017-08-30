@@ -6,7 +6,6 @@ import java.io.StringWriter;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -29,19 +28,19 @@ import net.ssehub.easy.instantiation.core.model.buildlangModel.BuildModel;
 import net.ssehub.easy.instantiation.core.model.buildlangModel.Script;
 import net.ssehub.easy.instantiation.core.model.common.ITerminatable;
 import net.ssehub.easy.instantiation.core.model.common.ITerminator;
+import net.ssehub.easy.instantiation.core.model.common.RuntimeEnvironment;
 import net.ssehub.easy.instantiation.core.model.common.VilException;
 import net.ssehub.easy.instantiation.core.model.execution.TracerFactory;
-import net.ssehub.easy.instantiation.core.model.expressions.EvaluationVisitor;
 import net.ssehub.easy.instantiation.core.model.expressions.ExpressionParserRegistry;
 import net.ssehub.easy.instantiation.core.model.expressions.IExpressionParser;
-import net.ssehub.easy.instantiation.core.model.expressions.IResolvable;
-import net.ssehub.easy.instantiation.core.model.expressions.IRuntimeEnvironment;
 import net.ssehub.easy.instantiation.core.model.expressions.StringReplacer;
 import net.ssehub.easy.instantiation.core.model.templateModel.ITracer;
 import net.ssehub.easy.instantiation.core.model.templateModel.StringResolverFactory;
 import net.ssehub.easy.instantiation.core.model.templateModel.Template;
+import net.ssehub.easy.instantiation.core.model.templateModel.TemplateDescriptor;
 import net.ssehub.easy.instantiation.core.model.templateModel.TemplateLangExecution;
 import net.ssehub.easy.instantiation.core.model.templateModel.TemplateModel;
+import net.ssehub.easy.instantiation.core.model.templateModel.VariableDeclaration;
 import net.ssehub.easy.instantiation.core.model.vilTypes.Collection;
 import net.ssehub.easy.instantiation.core.model.vilTypes.Constants;
 import net.ssehub.easy.instantiation.core.model.vilTypes.IVilType;
@@ -50,11 +49,8 @@ import net.ssehub.easy.instantiation.core.model.vilTypes.ListSet;
 import net.ssehub.easy.instantiation.core.model.vilTypes.OperationMeta;
 import net.ssehub.easy.instantiation.core.model.vilTypes.Set;
 import net.ssehub.easy.instantiation.core.model.vilTypes.TypeRegistry;
-import net.ssehub.easy.instantiation.core.model.vilTypes.configuration.AbstractIvmlVariable;
-import net.ssehub.easy.instantiation.core.model.vilTypes.configuration.Attribute;
 import net.ssehub.easy.instantiation.core.model.vilTypes.configuration.Configuration;
-import net.ssehub.easy.instantiation.core.model.vilTypes.configuration.DecisionVariable;
-import net.ssehub.easy.instantiation.core.model.vilTypes.configuration.IvmlElement;
+import net.ssehub.easy.instantiation.core.model.vilTypes.configuration.IvmlTypes;
 
 /**
  * Implements the default VIL template processor. This instantiator handles
@@ -144,13 +140,22 @@ public class VilTemplateProcessor implements IVilType {
             throw new VilException(e.getMessage(), VilException.ID_IO);
         }
         // instantiate the file template
-        RuntimeEnvironment runtimeEnvironment = new RuntimeEnvironment(config);
         ITracer tracer = TracerFactory.createTemplateLanguageTracer();
         TracerFactory.registerTemplateLanguageTracer(tracer);
-        String instantiatedContent;
+        String instantiatedContent = "";
         try {
-            EvaluationVisitor evaluationVisitor = new EvaluationVisitor(runtimeEnvironment, tracer);
-            instantiatedContent = StringReplacer.substitute(templateContents, runtimeEnvironment, 
+            StringWriter dummy = new StringWriter();
+            Map<String, Object> params = new HashMap<String, Object>();
+            params.put(TemplateLangExecution.PARAM_CONFIG, config);
+            params.put(TemplateLangExecution.PARAM_TARGET, null);
+            TemplateLangExecution evaluationVisitor = new TemplateLangExecution(tracer, dummy, params);
+            RuntimeEnvironment<VariableDeclaration> environment = evaluationVisitor.getRuntimeEnvironment();
+            TemplateDescriptor desc = new TemplateDescriptor();
+            TypeRegistry registry = new TypeRegistry(TypeRegistry.DEFAULT); // also for env??
+            Template model = new Template(template.getName(), null, desc, registry);
+            environment.switchContext(model);
+            environment.addValue(new VariableDeclaration("config", IvmlTypes.configurationType()), config);
+            instantiatedContent = StringReplacer.substitute(templateContents, environment, 
                 expressionParser, evaluationVisitor, StringResolverFactory.INSTANCE);
         } catch (VilException e) {
             throw e;
@@ -586,7 +591,7 @@ public class VilTemplateProcessor implements IVilType {
      * 
      * @author Holger Eichelberger
      */
-    private static class RuntimeEnvironment implements IRuntimeEnvironment {
+    /*private static class RuntimeEnvironment implements IRuntimeEnvironment {
 
         private Map<IResolvable, Object> values = new HashMap<IResolvable, Object>();
         private Map<String, IvmlElement> nameMap = new HashMap<String, IvmlElement>();
@@ -596,7 +601,7 @@ public class VilTemplateProcessor implements IVilType {
          * 
          * @param config the configuration used to fill this environment
          */
-        RuntimeEnvironment(Configuration config) {
+        /*RuntimeEnvironment(Configuration config) {
             Iterator<DecisionVariable> vIter = config.variables().iterator();
             while (vIter.hasNext()) {
                 addVariable(vIter.next());
@@ -605,14 +610,14 @@ public class VilTemplateProcessor implements IVilType {
             while (aIter.hasNext()) {
                 addVariable(aIter.next());
             }
-        }
+        }*/
         
         /**
          * Adds an IVML variable to the runtime environment.
          * 
          * @param var the variable to be added
          */
-        private void addVariable(AbstractIvmlVariable var) {
+        /*private void addVariable(AbstractIvmlVariable var) {
             nameMap.put(var.getQualifiedName(), var);
             values.put(var, var.getValue());
             Iterator<DecisionVariable> vIter = var.variables().iterator();
@@ -674,6 +679,6 @@ public class VilTemplateProcessor implements IVilType {
         public void storeArtifacts(boolean force) throws VilException {
         }
         
-    }
+    }*/
 
 }

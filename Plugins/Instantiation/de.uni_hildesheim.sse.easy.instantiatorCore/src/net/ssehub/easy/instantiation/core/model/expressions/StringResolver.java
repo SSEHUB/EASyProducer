@@ -164,13 +164,8 @@ public class StringResolver<I extends VariableDeclaration, R extends Resolver<I>
     }
     
     @Override
-    protected Expression parseExpression(String expressionString) throws VilException {
-        Expression expr = translator.parseExpression(expressionString, getResolver(), warnings);
-        if (expr instanceof VariableExpression) {
-            VariableExpression e = (VariableExpression) expr;
-            expr = new VariableEx(e.getDeclaration(), e.getQualifiedName());
-        }
-        return expr;
+    protected Expression parseExpressionImpl(String expressionString) throws VilException {
+        return translator.parseExpression(expressionString, getResolver(), warnings);
     }
 
     /**

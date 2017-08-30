@@ -157,9 +157,14 @@ public abstract class StringParser<P, I extends VariableDeclaration, R extends R
                 break;
             case VARIABLE:
                 if (!Character.isJavaIdentifierPart(c) || c == '$') {
-                    setCurStart(handleVariable(curStart, pos));
-                    state = State.TEXT;
-                    pos--;
+                    if (pos > curStart && ':' == c && pos + 1 < text.length() && ':' == text.charAt(pos + 1)) {
+                        // is it a qualified IVML variable name, i.e., a path separator ::
+                        pos += 2;
+                    } else {
+                        setCurStart(handleVariable(curStart, pos));
+                        state = State.TEXT;
+                        pos--;
+                    }
                 }
                 break;
             case EXPRESSION:
@@ -269,6 +274,23 @@ public abstract class StringParser<P, I extends VariableDeclaration, R extends R
         Expression result = expr;
         return result;
     }
+
+    /**
+     * Parses an expression from <code>expressionString</code>.
+     * 
+     * @param expressionString the string representation of the expression
+     * @return the parsed expression
+     * @throws VilException in case that parsing/creating the expression fails
+     * @see #parseExpressionImpl(String)
+     */
+    protected Expression parseExpression(String expressionString) throws VilException {
+        Expression result = parseExpressionImpl(expressionString);
+        if (result instanceof VariableExpression) {
+            VariableExpression e = (VariableExpression) result;
+            result = new VariableEx(e.getDeclaration(), e.getQualifiedName());
+        }
+        return result;
+    }
     
     /**
      * Parses an expression from <code>expressionString</code>.
@@ -277,7 +299,7 @@ public abstract class StringParser<P, I extends VariableDeclaration, R extends R
      * @return the parsed expression
      * @throws VilException in case that parsing/creating the expression fails
      */
-    protected abstract Expression parseExpression(String expressionString) throws VilException;
+    protected abstract Expression parseExpressionImpl(String expressionString) throws VilException;
     
     /**
      * Creates a constant String expression.

@@ -10,7 +10,7 @@
     var <- true
     -> !(Boolean) with (true) = false
     -> vilTemplateProcessor(VtlFileArtifact, Configuration, Artifact) with (templates/test1.vtl, <config>, test_1.txt, {}) = {test_1.txt}
--> +(String, Any) with (test::pString, myTable) = test::pStringmyTable
+-> +(String, Any) with (Hello, MyTable) = HelloMyTable
     -> vilTemplateProcessor(String, Configuration, Artifact) with (/init.sql, <config>, init1.sql, {}) = {init1.sql}
     xa <- test4.xml
 -> main(Configuration, XmlFileArtifact) with (<config>, test4.xml)

@@ -8,7 +8,9 @@ import net.ssehub.easy.instantiation.core.Bundle;
 import net.ssehub.easy.instantiation.core.model.common.VariableDeclaration;
 import net.ssehub.easy.instantiation.core.model.common.VilException;
 import net.ssehub.easy.instantiation.core.model.vilTypes.StringValueHelper;
+import net.ssehub.easy.instantiation.core.model.vilTypes.TypeDescriptor;
 import net.ssehub.easy.instantiation.core.model.vilTypes.TypeRegistry;
+import net.ssehub.easy.instantiation.core.model.vilTypes.configuration.DecisionVariable;
 
 /**
  * A parser and replacer for values (<i>$name</i>) and expressions (<i>${expression}</i>) in string values.
@@ -36,8 +38,8 @@ public class StringReplacer<I extends VariableDeclaration> extends StringParser<
         }
         
         @Override
-        public Object visitVarModelIdentifierExpression(VarModelIdentifierExpression identifier) throws VilException {
-            return null; // not needed
+        public Object visitVarModelIdentifierExpression(VarModelIdentifierExpression ex) throws VilException {
+            return resolve(ex);
         }
         
         @Override
@@ -159,7 +161,7 @@ public class StringReplacer<I extends VariableDeclaration> extends StringParser<
     private static class Positions {
         private int openCurPos;
         private int openPos;
-        private int midCurPos = -1;
+        //private int midCurPos = -1; // unused
         private int midPos = -1;
         
         /**
@@ -172,24 +174,28 @@ public class StringReplacer<I extends VariableDeclaration> extends StringParser<
             this.openCurPos = curPos;
             this.openPos = pos;
         }
-        
-        /**
-         * The latest start position.
-         * 
-         * @return the position
-         */
-        @SuppressWarnings("unused")
-        private int getLatestCurPos() {
-            return midCurPos < 0 ? openCurPos : midCurPos;
-        }
 
         /**
-         * The latest start parsing position.
+         * The latest available start parsing position.
          * 
          * @return the position
          */
         private int getLatestPos() {
             return midPos < 0 ? openPos : midPos;
+        }
+        
+        /**
+         * Changes the latest available start parsing position to avoid double
+         * creation of expressions.
+         * 
+         * @param pos the new position
+         */
+        private void setLatestPos(int pos) {
+            if (midPos < 0) {
+                openPos = pos;
+            } else {
+                midPos = pos;
+            }
         }
 
     }
@@ -214,6 +220,11 @@ public class StringReplacer<I extends VariableDeclaration> extends StringParser<
         @Override
         protected net.ssehub.easy.instantiation.core.model.expressions.Resolver.IContextType getDefaultType() {
             return null;
+        }
+        
+        @Override
+        public Object getIvmlElement(String name) {
+            return null; // cannot resolve by default
         }
         
     }
@@ -313,25 +324,25 @@ public class StringReplacer<I extends VariableDeclaration> extends StringParser<
 
     @Override
     protected void handleTextEnd(int curStart, int pos) throws VilException {
-        handleConstant(curStart, pos);
+        handleConstant(curStart, pos, 0);
     }
     
     @Override
     protected int handleVariableStartExpression(int curStart, int pos) throws VilException {
-        handleConstant(curStart, pos);
+        handleConstant(curStart, pos, 1);
         return pos + 1;
     }        
 
     @Override
     protected int handleVariableStartVariable(int curStart, int pos) throws VilException {
-        handleConstant(curStart, pos);
+        handleConstant(curStart, pos, 0);
         return pos;
     }
 
     @Override
     protected int handleEndOfText(int curStart, int pos, State state) throws VilException {
         if (State.VARIABLE_START == state) {
-            handleConstant(curStart, pos);
+            handleConstant(curStart, pos, 0);
         }
         return pos;
     }
@@ -341,15 +352,23 @@ public class StringReplacer<I extends VariableDeclaration> extends StringParser<
      * 
      * @param curStart the current start position
      * @param position  the actual position in the text.
+     * @param posAdvance where the next parsing position shall be with respect to <code>position</code>
      * @throws VilException in case of evaluation problems
      */
-    private void handleConstant(int curStart, int position) throws VilException {
+    private void handleConstant(int curStart, int position, int posAdvance) throws VilException {
         if (isNonEmptyCommandStack()) { // only for in-place commands
-            InPlaceCommand<I> cmd = getCurrentInPlaceCommand();
             String string;
+            InPlaceCommand<I> cmd = getCurrentInPlaceCommand();
             Positions p = inPlacePositions.get(cmd);
             if (null != p) {
-                string = substring(p.getLatestPos() + 1, position - 1);
+                int start = p.getLatestPos() + 1;
+                int end = position - 1;
+                if (start < end) {
+                    string = substring(p.getLatestPos() + 1, position - 1);
+                    p.setLatestPos(position + posAdvance);
+                } else {
+                    string = "";
+                }
             } else { // should not occur
                 string = substring(curStart, position);
             }
@@ -362,22 +381,32 @@ public class StringReplacer<I extends VariableDeclaration> extends StringParser<
     @Override
     protected int handleVariable(int curStart, int pos) throws VilException {
         String variableName = substring(curStart, pos);
+        Object oValue = null;
         IResolvable var = environment.get(variableName);
         if (null != var) {
-            Object oValue = environment.getValue(var);
-            if (null == oValue) {
-                // stop replacement
-                throw new VilException("", VilException.ID_NULL_VALUE);
+            oValue = environment.getValue(var);
+        } else {
+            oValue = environment.getIvmlValue(variableName);
+        }
+        if (null == oValue) {
+            // stop replacement
+            throw new VilException("", VilException.ID_NULL_VALUE);
+        }
+        String value = StringValueHelper.getStringValueInReplacement(oValue, null);
+        if (null != value) {
+            int start = curStart - 1; // curStart - 1 -> replace also the $!
+            if (isNonEmptyCommandStack()) {
+                InPlaceCommand<I> cmd = getCurrentInPlaceCommand();
+                Positions p = inPlacePositions.get(cmd);
+                if (null != p) {
+                    start = p.getLatestPos() + 1;
+                }
             }
-            String value = StringValueHelper.getStringValueInReplacement(oValue, null);
-            if (null != value) {
-                // curStart - 1 -> replace also the $!
-                pos = setPos(replace(curStart - 1, pos, value));
-            }
+            pos = setPos(replace(start, pos, value));
         }
         return -1;
     }
-
+    
     @Override
     protected int handleExpression(int curStart, int pos) throws VilException {
         if (null == expressionParser) {
@@ -417,7 +446,7 @@ public class StringReplacer<I extends VariableDeclaration> extends StringParser<
         if (null == p) {
             inPlacePositions.put(cmd, new Positions(curStart, pos));
         } else {
-            p.midCurPos = curStart;
+            //p.midCurPos = curStart; // unused
             p.midPos = pos;
         }
     }
@@ -431,13 +460,32 @@ public class StringReplacer<I extends VariableDeclaration> extends StringParser<
     }
 
     @Override
-    protected Expression parseExpression(String expressionString) throws VilException {
-        Expression expr = expressionParser.parse(expressionString, environment);
-        if (expr instanceof VariableExpression) {
-            VariableExpression e = (VariableExpression) expr;
-            expr = new VariableEx(e.getDeclaration(), e.getQualifiedName());
+    protected Expression parseExpressionImpl(String expressionString) throws VilException {
+        Expression result = expressionParser.parse(expressionString, environment);
+        if (result instanceof VarModelIdentifierExpression) {
+            result = resolve((VarModelIdentifierExpression) result);
         }
-        return expr;
+        return result;
+    }
+    
+    /**
+     * Resolves a {@link VarModelIdentifierExpression} based on the actual runtime environment 
+     * and, if resolved, replaces it by a constant.
+     * 
+     * @param ex the expression to resolve
+     * @return the resolved expression, <b>null</b> if not possible to resolve
+     * @throws VilException in case of resolution problems
+     */
+    private Expression resolve(VarModelIdentifierExpression ex) throws VilException {
+        Expression result = null;
+        IRuntimeEnvironment env = getResolver().getRuntimeEnvironment();
+        Object res = env.getIvmlValue(ex.getIdentifier());
+        if (res instanceof DecisionVariable) {
+            DecisionVariable var = ((DecisionVariable) res);
+            TypeDescriptor<?> type = var.getType();
+            result = new ConstantExpression(type, var.getValue(), type.getTypeRegistry());
+        }
+        return result;
     }
  
 }
