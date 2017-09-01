@@ -18,6 +18,7 @@ package net.ssehub.easy.varModel.model.values;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 
 import net.ssehub.easy.varModel.model.IvmlDatatypeVisitor;
@@ -510,6 +511,15 @@ public class ContainerValue extends StructuredValue implements Cloneable {
      */
     public void clear() {
         nestedElements.clear(); 
+    }
+    
+    /**
+     * Returns an iterator over all values.
+     * 
+     * @return the iterator
+     */
+    public Iterator<Value> iterator() {
+        return nestedElements.iterator();
     }
 
 }
