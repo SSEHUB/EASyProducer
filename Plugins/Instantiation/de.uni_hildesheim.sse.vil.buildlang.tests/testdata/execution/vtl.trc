@@ -15,7 +15,7 @@
     -> vilTemplateProcessor(String, Configuration, Artifact) with (/init.sql, <config>, init_res.sql, {}) = {init_res.sql}
 -> +(String, Any) with (Hello, MyTable) = HelloMyTable
 -> not(Boolean) with (true) = false
-    -> vilTemplateProcessor(FileArtifact, Configuration, Artifact, Boolean) with (init1.sql, <config>, init1_res.sql, true, {}) = {init1_res.sql}
+    -> vilTemplateProcessor(String, Configuration, Artifact, Boolean) with (/init1.sql, <config>, init1_res.sql, true, {}) = {init1_res.sql}
     xa <- test4.xml
 -> main(Configuration, XmlFileArtifact) with (<config>, test4.xml)
     -> setOmitXmlDeclaration(XmlFileArtifact, Boolean) with (test4.xml, true)

@@ -348,7 +348,26 @@ public class VilTemplateProcessor implements IVilType {
      */
     @OperationMeta(returnGenerics = IArtifact.class)
     public static Set<IArtifact> vilTemplateProcessor(String templateName, Configuration config, 
-        Collection<IArtifact> targets, Map<String, Object> other) throws VilException {
+        Collection<IArtifact> targets,  Map<String, Object> other) throws VilException {
+        return vilTemplateProcessor(templateName, config, targets, false, other);
+    }
+    
+    /**
+     * Instantiates <code>source</code> to <code>target</code>. Versions restrictions may implicitly
+     * be specified as {@link Constants#IMPLICIT_PARENT_PARAMETER_NAME implicit parent parameter name}
+     * in terms of a Script instance.
+     * 
+     * @param templateName the name of the template
+     * @param config the variability configuration to process
+     * @param targets the target artifacts (may be modified)
+     * @param addAdvice add an implicit advice to resolve IVML types
+     * @param other named optional parameter
+     * @return the created artifacts
+     * @throws VilException in case that execution fails
+     */
+    @OperationMeta(returnGenerics = IArtifact.class)
+    public static Set<IArtifact> vilTemplateProcessor(String templateName, Configuration config, 
+        Collection<IArtifact> targets, boolean addAdvice, Map<String, Object> other) throws VilException {
         Set<IArtifact> result = null;
         try {
             // ugly manual dispatch but String as first parameter without further parameters does not lead 
@@ -359,7 +378,7 @@ public class VilTemplateProcessor implements IVilType {
             if (art instanceof VtlFileArtifact) {
                 result = vilTemplateProcessor((VtlFileArtifact) art, config, targets, other);
             } else {
-                result = vilTemplateProcessor(art, config, targets, other);
+                result = vilTemplateProcessor(art, config, targets, addAdvice, other);
             }
         } catch (VilException e) {
             // don't care
@@ -375,11 +394,11 @@ public class VilTemplateProcessor implements IVilType {
         }
         return result;
     }
-    
+
     /**
      * Instantiates <code>source</code> to <code>target</code>. Versions restrictions may implicitly
      * be specified as {@link Constants#IMPLICIT_PARENT_PARAMETER_NAME implicit parent parameter name}
-     * in terms of a Script instance.
+     * in terms of a Script instance. No implicit advice is added.
      * 
      * @param templateName the name of the template
      * @param config the variability configuration to process
@@ -391,6 +410,26 @@ public class VilTemplateProcessor implements IVilType {
     @OperationMeta(returnGenerics = IArtifact.class)
     public static Set<IArtifact> vilTemplateProcessor(String templateName, Configuration config, 
         IArtifact target, Map<String, Object> other) throws VilException {
+        return vilTemplateProcessor(templateName, config, target, false, other); 
+    }
+    
+    /**
+     * Instantiates <code>source</code> to <code>target</code>. Versions restrictions may implicitly
+     * be specified as {@link Constants#IMPLICIT_PARENT_PARAMETER_NAME implicit parent parameter name}
+     * in terms of a Script instance. No implicit advice is added.
+     * 
+     * @param templateName the name of the template
+     * @param config the variability configuration to process
+     * @param target the target artifact (may be modified)
+     * @param addAdvice add an implicit advice to resolve IVML types
+     * @param other named optional parameter
+     * @return the created artifacts
+     * @throws VilException in case that execution fails
+     */
+    @OperationMeta(returnGenerics = IArtifact.class)
+    public static Set<IArtifact> vilTemplateProcessor(String templateName, Configuration config, 
+        IArtifact target, boolean addAdvice, Map<String, Object> other) 
+        throws VilException {
         Set<IArtifact> result = null;
         try {
             // ugly manual dispatch but String as first parameter without further parameters does not lead 
@@ -401,7 +440,7 @@ public class VilTemplateProcessor implements IVilType {
             if (art instanceof VtlFileArtifact) {
                 result = vilTemplateProcessor((VtlFileArtifact) art, config, target, other);
             } else {
-                result = vilTemplateProcessor(art, config, target, other);
+                result = vilTemplateProcessor(art, config, target, addAdvice, other);
             }
         } catch (VilException e) {
             // don't care
