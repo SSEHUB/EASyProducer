@@ -106,10 +106,10 @@ import net.ssehub.easy.instantiation.core.model.vilTypes.configuration.IvmlTypes
  * 
  * @author Holger Eichelberger
  */
-public class BuildlangExecution extends ExecutionVisitor<Script, AbstractRule, VariableDeclaration> 
+public class BuildlangExecution extends ExecutionVisitor<Script, AbstractRule, VariableDeclaration, Resolver> 
     implements IBuildlangVisitor, RuleBodyExecutor, ITerminator {
 
-    public static final ILanguage LANGUAGE = new ILanguage() {
+    public static final ILanguage<Resolver> LANGUAGE = new ILanguage<Resolver>() {
 
         @Override
         public String getName() {
@@ -237,7 +237,7 @@ public class BuildlangExecution extends ExecutionVisitor<Script, AbstractRule, V
     }
     
     @Override
-    protected IExpressionParser getExpressionParser() {
+    protected IExpressionParser<Resolver> getExpressionParser() {
         return ExpressionParserRegistry.getExpressionParser(LANGUAGE);
     }
     
@@ -552,7 +552,7 @@ public class BuildlangExecution extends ExecutionVisitor<Script, AbstractRule, V
         for (int p = 0; p < script.getPropertiesCount(); p++) {
             LoadProperties prop = script.getProperties(p);
             String path = prop.getPath();
-            path = StringReplacer.substitute(path, environment, getExpressionParser(), this, null);
+            path = StringReplacer.substitute(path, new Resolver(environment), getExpressionParser(), this, null);
             File file = absolute(path, base);
             loadProperties(file, loaded, null);
             if (SystemUtils.IS_OS_MAC) {
@@ -613,7 +613,8 @@ public class BuildlangExecution extends ExecutionVisitor<Script, AbstractRule, V
                     String value = prop.getProperty(key);
                     // Replace value
                     try {
-                        value = StringReplacer.substitute(value, environment, getExpressionParser(), this, null);
+                        value = StringReplacer.substitute(value, new Resolver(environment), 
+                            getExpressionParser(), this, null);
                     } catch (VilException e) {
                         EASyLoggerFactory.INSTANCE.getLogger(getClass(), Bundle.ID).exception(e);
                     }

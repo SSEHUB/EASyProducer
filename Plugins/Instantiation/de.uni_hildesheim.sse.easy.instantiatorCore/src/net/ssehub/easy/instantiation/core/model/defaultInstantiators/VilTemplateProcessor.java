@@ -34,6 +34,7 @@ import net.ssehub.easy.instantiation.core.model.expressions.ExpressionParserRegi
 import net.ssehub.easy.instantiation.core.model.expressions.IExpressionParser;
 import net.ssehub.easy.instantiation.core.model.expressions.StringReplacer;
 import net.ssehub.easy.instantiation.core.model.templateModel.ITracer;
+import net.ssehub.easy.instantiation.core.model.templateModel.Resolver;
 import net.ssehub.easy.instantiation.core.model.templateModel.StringResolverFactoryWithVariables;
 import net.ssehub.easy.instantiation.core.model.templateModel.Template;
 import net.ssehub.easy.instantiation.core.model.templateModel.TemplateLangExecution;
@@ -72,7 +73,7 @@ public class VilTemplateProcessor implements IVilType {
     public static final String PARAM_TARGET = TemplateLangExecution.PARAM_TARGET;
 
     /**
-     * Instantiates <code>source</code> to <code>target</code>.
+     * Instantiates <code>source</code> to <code>target</code> by textual replacement and no implicit advice.
      * 
      * @param template the input template script
      * @param config the variability configuration to process
@@ -84,15 +85,32 @@ public class VilTemplateProcessor implements IVilType {
     @OperationMeta(returnGenerics = IArtifact.class, requiresDynamicExpressionProcessing = true)
     public static Set<IArtifact> vilTemplateProcessor(FileArtifact template, Configuration config, 
         Collection<IArtifact> targets, Map<String, Object> other) throws VilException {
+        return vilTemplateProcessor(template, config, targets, false, other);
+    }
+    
+    /**
+     * Instantiates <code>source</code> to <code>target</code> by textual replacement.
+     * 
+     * @param template the input template script
+     * @param config the variability configuration to process
+     * @param targets the target artifacts (may be modified)
+     * @param other named optional parameter
+     * @param addAdvice add an implicit advice to resolve IVML types
+     * @return the created artifacts
+     * @throws VilException in case that execution fails
+     */
+    @OperationMeta(returnGenerics = IArtifact.class, requiresDynamicExpressionProcessing = true)
+    public static Set<IArtifact> vilTemplateProcessor(FileArtifact template, Configuration config, 
+        Collection<IArtifact> targets, boolean addAdvice, Map<String, Object> other) throws VilException {
         List<IArtifact> result = new ArrayList<IArtifact>();
         for (IArtifact target : targets) {
-            process(template, config, target, other, result);
+            process(template, config, target, other, result, addAdvice);
         }
         return new ListSet<IArtifact>(result, IArtifact.class);
     }
 
     /**
-     * Instantiates <code>source</code> to <code>target</code>.
+     * Instantiates <code>source</code> to <code>target</code> by textual replacement and no implicit advice.
      * 
      * @param template the input template script
      * @param config the variability configuration to process
@@ -104,10 +122,29 @@ public class VilTemplateProcessor implements IVilType {
     @OperationMeta(returnGenerics = IArtifact.class, requiresDynamicExpressionProcessing = true)
     public static Set<IArtifact> vilTemplateProcessor(FileArtifact template, Configuration config, IArtifact target, 
         Map<String, Object> other) throws VilException {
+        return vilTemplateProcessor(template, config, target, false, other);
+    }
+    
+    /**
+     * Instantiates <code>source</code> to <code>target</code> by textual replacement.
+     * 
+     * @param template the input template script
+     * @param config the variability configuration to process
+     * @param target the target artifact (may be modified)
+     * @param addAdvice add an implicit advice to resolve IVML types
+     * @param other named optional parameter
+     * @return the created artifacts
+     * @throws VilException in case that execution fails
+     */
+    @OperationMeta(returnGenerics = IArtifact.class, requiresDynamicExpressionProcessing = true)
+    public static Set<IArtifact> vilTemplateProcessor(FileArtifact template, Configuration config, IArtifact target, 
+        boolean addAdvice, Map<String, Object> other) throws VilException {
         List<IArtifact> result = new ArrayList<IArtifact>();
-        process(template, config, target, other, result);
+        process(template, config, target, other, result, addAdvice);
         return new ListSet<IArtifact>(result, IArtifact.class);
     }
+    
+    // checkstyle: stop parameter number check
     
     /**
      * Instantiates <code>source</code> to <code>target</code>.
@@ -117,12 +154,13 @@ public class VilTemplateProcessor implements IVilType {
      * @param target the target artifact (may be modified)
      * @param other named optional parameter
      * @param result the created artifacts (modified as a side effect)
+     * @param addAdvice add an implicit advice to resolve IVML types
      * @throws VilException in case that execution fails
      */
     private static void process(FileArtifact template, Configuration config, IArtifact target, 
-        Map<String, Object> other, List<IArtifact> result) throws VilException {
+        Map<String, Object> other, List<IArtifact> result, boolean addAdvice) throws VilException {
         // obtaining the expression parser for instantiation
-        IExpressionParser expressionParser = ExpressionParserRegistry.getExpressionParser(
+        IExpressionParser<Resolver> expressionParser = ExpressionParserRegistry.getExpressionParser(
             TemplateLangExecution.LANGUAGE);
         if (null == expressionParser) {
             throw new VilException("no expression parser registered", VilException.ID_INTERNAL);
@@ -141,10 +179,10 @@ public class VilTemplateProcessor implements IVilType {
         String instantiatedContent = "";
         try {
             TemplateSubstitutionExecution evaluationVisitor = new TemplateSubstitutionExecution(tracer, 
-                template.getName(), false, config);
-            instantiatedContent = StringReplacer.substitute(templateContents, 
-                evaluationVisitor.getRuntimeEnvironment(), expressionParser, evaluationVisitor, 
-                StringResolverFactoryWithVariables.INSTANCE);
+                template.getName(), addAdvice, config);
+            Resolver resolver = new Resolver(evaluationVisitor.getRuntimeEnvironment());
+            instantiatedContent = StringReplacer.substitute(templateContents, resolver, expressionParser, 
+                evaluationVisitor, StringResolverFactoryWithVariables.INSTANCE);
         } catch (VilException e) {
             throw e;
         } finally {
@@ -162,6 +200,8 @@ public class VilTemplateProcessor implements IVilType {
         // returning the affected file(s)
         result.add(target);
     }
+
+    // checkstyle: resume parameter number check
 
     /**
      * Instantiates <code>source</code> to <code>target</code>.
@@ -573,100 +613,5 @@ public class VilTemplateProcessor implements IVilType {
             terminator.unregister(terminatable);
         }
     }
-
-    /**
-     * Creates a specific runtime environment which contains the variables of a configuration.
-     * 
-     * @author Holger Eichelberger
-     */
-    /*private static class RuntimeEnvironment implements IRuntimeEnvironment {
-
-        private Map<IResolvable, Object> values = new HashMap<IResolvable, Object>();
-        private Map<String, IvmlElement> nameMap = new HashMap<String, IvmlElement>();
-
-        /**
-         * Creates a new runtime environment.
-         * 
-         * @param config the configuration used to fill this environment
-         */
-        /*RuntimeEnvironment(Configuration config) {
-            Iterator<DecisionVariable> vIter = config.variables().iterator();
-            while (vIter.hasNext()) {
-                addVariable(vIter.next());
-            }
-            Iterator<Attribute> aIter = config.attributes().iterator();
-            while (aIter.hasNext()) {
-                addVariable(aIter.next());
-            }
-        }*/
-        
-        /**
-         * Adds an IVML variable to the runtime environment.
-         * 
-         * @param var the variable to be added
-         */
-        /*private void addVariable(AbstractIvmlVariable var) {
-            nameMap.put(var.getQualifiedName(), var);
-            values.put(var, var.getValue());
-            Iterator<DecisionVariable> vIter = var.variables().iterator();
-            while (vIter.hasNext()) {
-                addVariable(vIter.next());
-            }
-            Iterator<Attribute> aIter = var.attributes().iterator();
-            while (aIter.hasNext()) {
-                addVariable(aIter.next());
-            }
-        }
-        
-        @Override
-        public Object getValue(IResolvable resolvable) throws VilException {
-            Object result;
-            if (resolvable instanceof IvmlElement) {
-                result = ((IvmlElement) resolvable).getValue();
-            } else {
-                if (values.containsKey(resolvable)) {
-                    result = values.get(resolvable);
-                } else {
-                    throw new VilException(resolvable.getName() + " is not defined", 
-                        VilException.ID_RUNTIME);
-                }
-            }
-            return result;
-        }
-
-        @Override
-        public IResolvable get(String name) {
-            return nameMap.get(name);
-        }
-
-        @Override
-        public void setValue(IResolvable var, Object object) throws VilException {
-            if (var instanceof IvmlElement) {
-                throw new VilException("cannot change configuration", VilException.ID_SEMANTIC);
-            } else {
-                values.put(var, object);
-            }
-        }
-
-        @Override
-        public Object getIvmlValue(String name) throws VilException {
-            return nameMap.get(name);
-        }
-
-        @Override
-        public String[] getContextPaths() {
-            return null;
-        }
-
-        @Override
-        public TypeRegistry getTypeRegistry() {
-            return TypeRegistry.DEFAULT;
-        }
-
-        @Override
-        public void storeArtifacts(boolean force) throws VilException {
-        }
-        
-    }*/
 
 }

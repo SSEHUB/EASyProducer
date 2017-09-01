@@ -124,7 +124,7 @@ public class RtVilModelUtility extends net.ssehub.easy.dslCore.ModelUtility<Impl
     protected ClassLoader getLanguageClassLoader() {
         return RtVilModelUtility.class.getClassLoader();
     }
-    
+
     /**
      * Parses <code>text</code> into an expression.
      * 
@@ -134,6 +134,18 @@ public class RtVilModelUtility extends net.ssehub.easy.dslCore.ModelUtility<Impl
      * @throws VilException in case that parsing fails
      */
     public Expression createExpression(String text, IRuntimeEnvironment environment) throws VilException {
+        return createExpression(text, new Resolver(environment));
+    }
+    
+    /**
+     * Parses <code>text</code> into an expression.
+     * 
+     * @param text the text to be parsed
+     * @param environment the runtime environment for resolving variables
+     * @return the resulting expression
+     * @throws VilException in case that parsing fails
+     */
+    public Expression createExpression(String text, Resolver resolver) throws VilException {
         Expression result = null;
         IParseResult parseResult = parseFragment("Expression", text);
         if (null != parseResult) {
@@ -151,7 +163,7 @@ public class RtVilModelUtility extends net.ssehub.easy.dslCore.ModelUtility<Impl
                 de.uni_hildesheim.sse.vil.expressions.expressionDsl.Expression expr = 
                     (de.uni_hildesheim.sse.vil.expressions.expressionDsl.Expression) parseResult.getRootASTElement();
                 try {
-                    result = translator.processExpression(expr, new Resolver(environment));
+                    result = translator.processExpression(expr, resolver);
                     if (translator.getErrorCount() > 0) {
                         for (int i = 0; i < translator.getMessageCount(); i++) {
                             Message msg = translator.getMessage(i);

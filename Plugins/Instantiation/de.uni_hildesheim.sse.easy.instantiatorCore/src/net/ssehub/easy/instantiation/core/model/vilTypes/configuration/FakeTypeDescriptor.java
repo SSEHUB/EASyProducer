@@ -17,17 +17,31 @@ import net.ssehub.easy.instantiation.core.model.vilTypes.TypeRegistry;
 public class FakeTypeDescriptor extends TypeDescriptor<IvmlElement> {
 
     private TypeRegistry registry;
+    private TypeDescriptor<?> baseType;
 
     /**
-     * Creates a fake type descriptor.
+     * Creates a fake type descriptor without (!) known base type.
      * 
      * @param registry the type registry this type was created for
      * @param name the name of the type
      * @throws VilException in case that the creation fails
      */
     FakeTypeDescriptor(TypeRegistry registry, String name) throws VilException {
+        this(registry, name, null); // legacy behavior
+    }
+    
+    /**
+     * Creates a fake type descriptor.
+     * 
+     * @param registry the type registry this type was created for
+     * @param name the name of the type
+     * @param baseType the known base type, may be <b>null</b>
+     * @throws VilException in case that the creation fails
+     */
+    FakeTypeDescriptor(TypeRegistry registry, String name, TypeDescriptor<?> baseType) throws VilException {
         super((TypeDescriptor<?>[]) null);
         this.registry = registry;
+        this.baseType = baseType;
         setName(name);
         setOperations(null); // to be added incrementally
         setConversions(null); // to be added incrementally
@@ -35,12 +49,12 @@ public class FakeTypeDescriptor extends TypeDescriptor<IvmlElement> {
     
     @Override
     public boolean isAssignableFrom(IMetaType type) {
-        return true;
+        return null == baseType ? true : baseType.isAssignableFrom(type);
     }
 
     @Override
     public boolean isBasicType() {
-        return false;
+        return null == baseType ? false : baseType.isBasicType();
     }
 
     @Override
@@ -60,52 +74,59 @@ public class FakeTypeDescriptor extends TypeDescriptor<IvmlElement> {
 
     @Override
     public boolean canBeInstantiated() {
-        return false;
+        return null == baseType ? false : baseType.canBeInstantiated();
     }
 
     @Override
     public IvmlElement create(Object... params) throws VilException {
-        return null;
+        IvmlElement res = null;
+        if (null != baseType) {
+            Object tmp = baseType.create(params);
+            if (tmp instanceof IvmlElement) {
+                res = (IvmlElement) tmp;
+            }
+        }
+        return res;
     }
 
     @Override
     public boolean isAssignableFrom(TypeDescriptor<?> desc) {
-        return true; // accept everything
+        return null == baseType ? true : baseType.isAssignableFrom(desc); // accept everything
     }
 
     @Override
     public boolean isCollection() {
-        return false;
+        return null == baseType ? false : baseType.isCollection();
     }
 
     @Override
     public boolean isIterator() {
-        return false;
+        return null == baseType ? false : baseType.isInstantiator();
     }
     
     @Override
     public boolean isMap() {
-        return false;
+        return null == baseType ? false : baseType.isMap();
     }
     
     @Override
     public boolean isSet() {
-        return false;
+        return null == baseType ? false : baseType.isSet();
     }
 
     @Override
     public boolean isSequence() {
-        return false;
+        return null == baseType ? false : baseType.isSequence();
     }
 
     @Override
     public boolean isInstance(Object object) {
-        return true; // accept everything
+        return null == baseType ? true : baseType.isInstance(object); // accept everything
     }
     
     @Override
     public boolean isSameType(Object object) {
-        return true; // accept everything
+        return null == baseType ? true : baseType.isSameType(object); // accept everything
     }
 
     @Override
@@ -118,32 +139,32 @@ public class FakeTypeDescriptor extends TypeDescriptor<IvmlElement> {
     
     @Override
     public boolean isActualTypeOf(IMetaType type) {
-        return false; // shall not be handled by IActualTypeProvider
+        return null == baseType ? false : baseType.isActualTypeOf(type); // shall not be handled by IActualTypeProvider
     }
 
     @Override
     public IMetaType getBaseType() {
-        return null;
+        return baseType;
     }
 
     @Override
     public boolean isInternal() {
-        return false;
+        return null == baseType ? false : baseType.isInternal();
     }
 
     @Override
     public boolean isInstantiator() {
-        return false; // actually fakes are only created for IVML
+        return null == baseType ? false : baseType.isInstantiator(); // actually fakes are only created for IVML
     }
 
     @Override
     public IMetaType getSuperType() {
-        return null; // no information about types
+        return null == baseType ? null : baseType.getSuperType(); // no information about types
     }
 
     @Override
     public boolean checkConversion(IMetaType param, IMetaOperation conversion) {
-        return true;
+        return null == baseType ? true : baseType.checkConversion(param, conversion);
     }
 
 }

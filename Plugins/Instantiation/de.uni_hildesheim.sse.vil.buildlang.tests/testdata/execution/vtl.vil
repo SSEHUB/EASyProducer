@@ -7,7 +7,8 @@ vilScript vtl (Project source, Project target, Configuration config) {
         vilTemplateProcessor(va, config, "$target/test1.txt");
         va = "$source/templates/test1.vtl";
         vilTemplateProcessor(va, config, "$target/test_1.txt");
-        vilTemplateProcessor("$source/init.sql", config, "$target/init1.sql");
+        vilTemplateProcessor("$source/init.sql", config, "$target/init_res.sql");
+        vilTemplateProcessor("$source/init1.sql", config, "$target/init1_res.sql", true);
         XmlFileArtifact xa = "$target/test4.xml";
         vilTemplateProcessor("$source/templates/test4.vtl", config, xa);
     }

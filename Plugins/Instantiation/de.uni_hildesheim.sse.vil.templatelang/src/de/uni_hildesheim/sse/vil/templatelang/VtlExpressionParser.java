@@ -14,6 +14,7 @@ import net.ssehub.easy.instantiation.core.model.expressions.Expression;
 import net.ssehub.easy.instantiation.core.model.expressions.ExpressionParserRegistry;
 import net.ssehub.easy.instantiation.core.model.expressions.IExpressionParser;
 import net.ssehub.easy.instantiation.core.model.expressions.IRuntimeEnvironment;
+import net.ssehub.easy.instantiation.core.model.templateModel.Resolver;
 import net.ssehub.easy.instantiation.core.model.templateModel.Template;
 import net.ssehub.easy.instantiation.core.model.templateModel.TemplateLangExecution;
 import net.ssehub.easy.instantiation.core.model.templateModel.TemplateModel;
@@ -23,7 +24,7 @@ import net.ssehub.easy.instantiation.core.model.templateModel.TemplateModel;
  * 
  * @author Holger Eichelberger
  */
-public class VtlExpressionParser extends AbstractModelInitializer<Template> implements IExpressionParser {
+public class VtlExpressionParser extends AbstractModelInitializer<Template> implements IExpressionParser<Resolver> {
 
     // no private constructor!!!
     
@@ -81,6 +82,11 @@ public class VtlExpressionParser extends AbstractModelInitializer<Template> impl
     @Override
     public Expression parse(String text, IRuntimeEnvironment environment) throws VilException {
         return TemplateLangModelUtility.INSTANCE.createExpression(text, environment);
+    }
+    
+    @Override
+    public Expression parse(String text, Resolver resolver) throws VilException {
+        return TemplateLangModelUtility.INSTANCE.createExpression(text, resolver, null);
     }
 
     @Override

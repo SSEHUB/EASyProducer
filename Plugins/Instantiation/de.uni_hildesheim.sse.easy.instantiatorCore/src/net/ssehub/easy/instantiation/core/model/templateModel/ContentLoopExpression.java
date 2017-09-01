@@ -40,7 +40,7 @@ public class ContentLoopExpression extends InContentExpression implements IExpre
      * Creates a content loop expression.
      * 
      * @param iterator the iterator
-     * @param init the initialization expression
+     * @param init the initialization expression (shall/cannot be assigned to <code>iterator</code> as collection)
      * @param separator the optional element separator (may be <b>null</b>)
      * @param endSeparator the optional end separator (may be <b>null</b>)
      * @param body the loop body

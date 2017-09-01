@@ -17,6 +17,7 @@ import net.ssehub.easy.basics.logger.EASyLoggerFactory.EASyLogger;
 import net.ssehub.easy.basics.progress.ProgressObserver;
 import net.ssehub.easy.instantiation.core.model.buildlangModel.BuildlangExecution;
 import net.ssehub.easy.instantiation.core.model.buildlangModel.IRuleElement;
+import net.ssehub.easy.instantiation.core.model.buildlangModel.Resolver;
 import net.ssehub.easy.instantiation.core.model.buildlangModel.Rule;
 import net.ssehub.easy.instantiation.core.model.buildlangModel.RuleCallExpression;
 import net.ssehub.easy.instantiation.core.model.buildlangModel.RuleDescriptor;
@@ -56,7 +57,7 @@ import net.ssehub.easy.varModel.persistency.StringProvider;
  */
 public class RtVilExecution extends BuildlangExecution implements IRtVilVisitor {
     
-    public static final ILanguage LANGUAGE = new ILanguage() {
+    public static final ILanguage<Resolver> LANGUAGE = new ILanguage<Resolver>() {
 
         @Override
         public String getName() {

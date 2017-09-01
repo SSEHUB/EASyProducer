@@ -36,6 +36,7 @@ import net.ssehub.easy.varModel.model.IvmlDatatypeVisitor;
 import net.ssehub.easy.varModel.model.datatypes.DerivedDatatype;
 import net.ssehub.easy.varModel.model.datatypes.IDatatype;
 import net.ssehub.easy.varModel.model.datatypes.Reference;
+import net.ssehub.easy.varModel.model.values.CompoundValue;
 import net.ssehub.easy.varModel.model.values.NullValue;
 
 /**
@@ -694,6 +695,15 @@ public abstract class RuntimeEnvironment<V extends VariableDeclaration>
                     // late evaluation of "primitives"
                     if (compatible) {
                         object = evaluatePrimitives(object, decVar, varType);
+                    }
+                }
+                if (object instanceof CompoundValue) {
+                    CompoundValue cValue = (CompoundValue) object;
+                    IDatatype dType = cValue.getType();
+                    dType = DerivedDatatype.resolveToBasis(Reference.dereference(dType));
+                    TypeDescriptor<?> td = getTypeRegistry().getType(dType);
+                    if (null != td) {
+                        compatible = varType.isAssignableFrom(td);
                     }
                 }
             }

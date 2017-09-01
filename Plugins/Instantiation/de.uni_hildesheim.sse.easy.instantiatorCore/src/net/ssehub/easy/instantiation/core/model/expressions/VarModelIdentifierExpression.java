@@ -7,14 +7,15 @@ import net.ssehub.easy.instantiation.core.model.vilTypes.configuration.IvmlEleme
 
 /**
  * Represents an identifier in a variability model. This expression 
- * does not carry resolved information as it will be resolved at runtime.
+ * does not need to carry resolved information as it will be resolved at runtime. It can 
+ * carry an optional type to enable type-safe resolution of expresions.
  * 
  * @author Holger Eichelberger
  */
 public class VarModelIdentifierExpression extends Expression {
     
     private String identifier;
-    private IvmlElement element;
+    private TypeDescriptor<?> type;
 
     /**
      * Creates the representing instance without related/resolved IVML element.
@@ -29,11 +30,12 @@ public class VarModelIdentifierExpression extends Expression {
      * Creates the representing instance.
      * 
      * @param identifier the identifier from VIL
-     * @param element the related IVML element (may be <b>null</b> if unknown, unresolved identifier)
+     * @param type the related type (may be <b>null</b> if unknown/unresolved, then {@link IvmlElement} is assumed)
      */
-    public VarModelIdentifierExpression(String identifier, IvmlElement element) {
+    public VarModelIdentifierExpression(String identifier, TypeDescriptor<?> type) {
         this.identifier = identifier;
-        this.element = element;
+        this.type = null == type ? TypeRegistry.DEFAULT.getType(IvmlElement.class) : type;
+//this.type = TypeRegistry.DEFAULT.getType(IvmlElement.class);        
     }
     
     /**
@@ -46,23 +48,16 @@ public class VarModelIdentifierExpression extends Expression {
     }
     
     /**
-     * Returns the related variability model element.
+     * Returns the related type (without potential exception).
      * 
-     * @return the variability model element (may be <b>null</b> if unknown, unresolved identifier)
+     * @return the type of the represented variability model element (may be {@link IvmlElement} if unknown/unresolved)
      */
-    public IvmlElement getElement() {
-        return element;
+    public TypeDescriptor<?> getType() {
+        return type;
     }
 
     @Override
     public TypeDescriptor<?> inferType() throws VilException {
-        TypeDescriptor<?> type = null;
-        if (null != element) {
-            type = element.getType();
-        }
-        if (null == type) {
-            type = TypeRegistry.DEFAULT.getType(IvmlElement.class);
-        }
         return type;
     }
 

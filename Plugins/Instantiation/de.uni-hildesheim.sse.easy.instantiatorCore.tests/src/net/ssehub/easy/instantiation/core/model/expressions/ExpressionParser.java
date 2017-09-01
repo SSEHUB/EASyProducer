@@ -31,14 +31,19 @@ import net.ssehub.easy.instantiation.core.model.vilTypes.TypeRegistry;
  * 
  * @author Holger Eichelberger
  */
-class ExpressionParser implements IExpressionParser, IExpressionTranslator<VarDecl, VarResolver>, 
+class ExpressionParser implements IExpressionParser<VarResolver>, IExpressionTranslator<VarDecl, VarResolver>, 
     IStringResolverFactory<VarDecl> {
 
     @Override
     public Expression parse(String text, IRuntimeEnvironment environment) throws VilException {
         return parseToExpression(text, environment, null, null);
     }
-    
+
+    @Override
+    public Expression parse(String text, VarResolver resolver) throws VilException {
+        return parseToExpression(text, resolver.getRuntimeEnvironment(), null, null); // no external context in test!
+    }
+
     /**
      * Parses text to an expression. Does recursive parsing using the {@link StringResolver} if <code>resolver</code>
      * and <code>warnings</code> are given.

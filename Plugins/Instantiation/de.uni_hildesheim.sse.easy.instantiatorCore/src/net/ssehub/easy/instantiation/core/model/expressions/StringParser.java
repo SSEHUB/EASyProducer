@@ -174,6 +174,9 @@ public abstract class StringParser<P, I extends VariableDeclaration, R extends R
                     if (0 == innerBracketLevel) {
                         setCurStart(handleExpression(curStart, pos));
                         state = State.TEXT;
+                        if (isNonEmptyCommandStack()) {
+                            notifyBracketsClosed(commandStack.peek(), pos);
+                        }
                         pos--;
                     } else {
                         innerBracketLevel--;
@@ -493,17 +496,27 @@ public abstract class StringParser<P, I extends VariableDeclaration, R extends R
      * Notifies about start parsing an in-place command. If a command consists of a middle part (if-else), then
      * this function is called twice/multiple times for the same command.
      * 
-     * @param cmd the command
+     * @param cmd the current in-place command
      * @param curStart the start position of the current concept
      * @param pos the end position of parsing
      */
     protected void notifyStartInPlaceCommand(InPlaceCommand<I> cmd, int curStart, int pos) {
     }
+    
+    /**
+     * Called to notify that all bracket levels for an expression within an in-place command are closed 
+     * at <code>pos</code>.
+     * 
+     * @param cmd the current in-place command
+     * @param pos the end position of parsing
+     */
+    protected void notifyBracketsClosed(InPlaceCommand<I> cmd, int pos) {
+    }
 
     /**
      * Notifies that parsing an in-place command ended.
      * 
-     * @param cmd the command
+     * @param cmd the current in-place command
      * @param expr the resulting expression
      * @param curStart the start position of the current concept
      * @param pos the end position of parsing

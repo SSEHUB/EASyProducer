@@ -57,7 +57,12 @@ public class StringResolverFactory implements IStringResolverFactory<VariableDec
     @Override
     public VariableDeclaration createVariable(String name, Expression initExpression, boolean asIterator) 
         throws VilException {
-        TypeDescriptor<?> type = initExpression.inferType();
+        Expression initEx = initExpression;
+        TypeDescriptor<?> type = null != initEx ? initEx.inferType() : null;
+        if (null == type) {
+            throw new VilException("No type given/resolved for creating variable '" + name + "'.", 
+                VilException.ID_INVALID_TYPE);
+        }
         if (asIterator) {
             if (!type.isCollection()) {
                 throw new VilException("Iterator initialization expression must be of type collection", 
@@ -69,6 +74,7 @@ public class StringResolverFactory implements IStringResolverFactory<VariableDec
                     type = TypeRegistry.anyType();
                 }
             }
+            initEx = null; // is not compatible, must be assigned to in-place command/expression
         }
         return new VariableDeclaration(name, type, false, initExpression);
     }

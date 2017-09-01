@@ -45,7 +45,7 @@ abstract class AbstractIvmlTypeDescriptor extends TypeDescriptor<DecisionVariabl
      * @throws VilException if analyzing the class fails for some reason
      */
     AbstractIvmlTypeDescriptor(IDatatype ivmlType, IvmlTypeResolver resolver) throws VilException {
-        super((TypeDescriptor<?>[]) null);
+        super(resolver.getTypeRegistry().resolveGenerics(ivmlType));
         this.typeRegistry = resolver.getTypeRegistry();
         // sets qualified and unqualified name
         setName(ivmlType.getQualifiedName());
@@ -198,11 +198,16 @@ abstract class AbstractIvmlTypeDescriptor extends TypeDescriptor<DecisionVariabl
 
     @Override
     public boolean isCollection() {
-        return false;
+        return isSet() || isSequence();
     }
 
     @Override
     public boolean isSet() {
+        return false;
+    }
+
+    @Override
+    public boolean isSequence() {
         return false;
     }
 
@@ -213,11 +218,6 @@ abstract class AbstractIvmlTypeDescriptor extends TypeDescriptor<DecisionVariabl
     
     @Override
     public boolean isMap() {
-        return false;
-    }
-
-    @Override
-    public boolean isSequence() {
         return false;
     }
 

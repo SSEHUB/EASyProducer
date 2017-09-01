@@ -9,6 +9,7 @@ import net.ssehub.easy.basics.modelManagement.ModelInitializer;
 import net.ssehub.easy.basics.modelManagement.ModelManagement;
 import net.ssehub.easy.basics.modelManagement.ModelManagementException;
 import net.ssehub.easy.basics.progress.ProgressObserver;
+import net.ssehub.easy.instantiation.core.model.buildlangModel.Resolver;
 import net.ssehub.easy.instantiation.core.model.common.VilException;
 import net.ssehub.easy.instantiation.core.model.expressions.Expression;
 import net.ssehub.easy.instantiation.core.model.expressions.ExpressionParserRegistry;
@@ -23,7 +24,7 @@ import net.ssehub.easy.instantiation.rt.core.model.rtVil.Script;
  * 
  * @author Holger Eichelberger
  */
-public class RtVilExpressionParser extends AbstractModelInitializer<Script> implements IExpressionParser {
+public class RtVilExpressionParser extends AbstractModelInitializer<Script> implements IExpressionParser<Resolver> {
 
     // no private constructor!!!
     
@@ -81,6 +82,11 @@ public class RtVilExpressionParser extends AbstractModelInitializer<Script> impl
     @Override
     public Expression parse(String text, IRuntimeEnvironment environment) throws VilException {
         return RtVilModelUtility.INSTANCE.createExpression(text, environment);
+    }
+
+    @Override
+    public Expression parse(String text, Resolver resolver) throws VilException {
+        return RtVilModelUtility.INSTANCE.createExpression(text, resolver);
     }
 
     @Override

@@ -25,6 +25,8 @@ import net.ssehub.easy.varModel.model.DecisionVariableDeclaration;
 import net.ssehub.easy.varModel.model.datatypes.DerivedDatatype;
 import net.ssehub.easy.varModel.model.datatypes.IDatatype;
 import net.ssehub.easy.varModel.model.datatypes.Set;
+import net.ssehub.easy.varModel.model.values.CompoundValue;
+import net.ssehub.easy.varModel.model.values.Value;
 
 /**
  * Defines a pseudo field descriptor which enables comfortable access to an individual decision variables
@@ -52,6 +54,14 @@ public class IvmlAccessorFieldDescriptor extends AbstractIvmlFieldDescriptor {
         Object result;
         if (null == owner) {
             result = null;
+        } else if (owner instanceof CompoundValue) {
+            CompoundValue cValue = (CompoundValue) owner;
+            Value val = cValue.getNestedValue(getName());
+            if (null != val) {
+                result = val.getValue();
+            } else {
+                result = null;
+            }
         } else {
             if (Utils.isCompatibleToDecisionVariable(owner) != CompatibilityResult.COMPATIBLE) {
                 throw new VilException("incompatible arguments", VilException.ID_TYPE_INCOMPATIBILITY);

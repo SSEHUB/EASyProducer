@@ -14,13 +14,14 @@ import net.ssehub.easy.instantiation.core.model.vilTypes.configuration.DecisionV
  * A parser and replacer for values (<i>$name</i>) and expressions (<i>${expression}</i>) in string values.
  * 
  * @param <I> the variable declaration type
+ * @param <R> the resolver type
  * @author Holger Eichelberger
  */
-public class StringReplacer<I extends VariableDeclaration> extends StringParser<String, I, Resolver<I>> {
+public class StringReplacer<I extends VariableDeclaration, R extends Resolver<I>> extends StringParser<String, I, R> {
 
     private IRuntimeEnvironment environment;
     private IExpressionVisitor expressionEvaluator;
-    private IExpressionParser expressionParser;
+    private IExpressionParser<R> expressionParser;
     private Map<Object, Positions> inPlacePositions = new HashMap<Object, Positions>();
     private IExpressionVisitor recursiveReplacer = new IExpressionVisitor() {
         // an expression replacer for recursive string replacement, returns null if nothing changed 
@@ -98,10 +99,10 @@ public class StringReplacer<I extends VariableDeclaration> extends StringParser<
             Object result;
             if (TypeRegistry.stringType().isAssignableFrom(cst.getType())) {
                 String in = cst.getValue().toString();
-                String tmp = StringReplacer.substitute(cst.getValue().toString(), environment, expressionParser, 
+                String tmp = StringReplacer.substitute(cst.getValue().toString(), getResolver(), expressionParser, 
                     expressionEvaluator, getFactory());
                 if (null != tmp && !tmp.equals(in)) {
-                    result = new ConstantExpression(TypeRegistry.stringType(), tmp, TypeRegistry.DEFAULT);
+                    result = new ConstantExpression(TypeRegistry.stringType(), tmp, environment.getTypeRegistry());
                 } else {
                     result = null; // do nothing
                 }
@@ -197,43 +198,14 @@ public class StringReplacer<I extends VariableDeclaration> extends StringParser<
         }
 
     }
-    
-    /**
-     * An internal local resolver class.
-     * 
-     * @param <V> the variable declaration type
-     * @author Holger Eichelberger
-     */
-    private static class ReplacerResolver<V extends VariableDeclaration> extends Resolver<V> {
-
-        /**
-         * Creates a resolver instance.
-         * 
-         * @param environment the runtime environment
-         */
-        public ReplacerResolver(IRuntimeEnvironment environment) {
-            super(environment);
-        }
-
-        @Override
-        protected net.ssehub.easy.instantiation.core.model.expressions.Resolver.IContextType getDefaultType() {
-            return null;
-        }
-        
-        @Override
-        public Object getIvmlElement(String name) {
-            return null; // cannot resolve by default
-        }
-        
-    }
 
     /**
      * Creates a replacer instance.
      * 
      * @param text
      *            the text to be analyzed
-     * @param environment
-     *            the runtime environment containing the variables
+     * @param resolver 
+     *            the resolver instance
      * @param expressionParser
      *            an instance for parsing strings into expression (may be <b>null</b> but then expression replacement
      *            will not work)
@@ -243,37 +215,23 @@ public class StringReplacer<I extends VariableDeclaration> extends StringParser<
      * @param factory a factory turning in-place commands into language-specific expressions (may be <b>null</b>, then 
      *     in-place commands are not resolved but remain as string expressions)
      */
-    private StringReplacer(String text, IRuntimeEnvironment environment, IExpressionParser expressionParser,
+    private StringReplacer(String text, R resolver, IExpressionParser<R> expressionParser,
             IExpressionVisitor expressionEvaluator, IStringResolverFactory<I> factory) {
-        super(text, createResolver(environment, factory), factory);
-        this.environment = environment;
+        super(text, resolver, factory);
+        this.environment = resolver.getRuntimeEnvironment();
         this.expressionEvaluator = expressionEvaluator;
         this.expressionParser = expressionParser;
-    }
-    
-    /**
-     * Creates a resolver if needed.
-     * 
-     * @param <I> the variable declaration type
-     * @param environment
-     *            the runtime environment containing the variables
-     * @param factory a factory turning in-place commands into language-specific expressions (may be <b>null</b>, then 
-     *     in-place commands are not resolved but remain as string expressions)
-     * @return the resolver (may be <b>null</b>)
-     */
-    private static <I extends VariableDeclaration> Resolver<I> createResolver(IRuntimeEnvironment environment, 
-        IStringResolverFactory<I> factory) {
-        return null == factory ? null : new ReplacerResolver<I>(environment);
     }
 
     /**
      * Substitutes the variable and expression placeholders in <code>text</code>.
      * 
      * @param <I> the variable declaration type
+     * @param <R> the resolver type
      * @param text
      *            the text to be analyzed
-     * @param environment
-     *            the runtime environment containing the variables
+     * @param resolver
+     *            the resolver instance containing the variables
      * @param expressionParser
      *            an instance for parsing strings into expression (may be <b>null</b> but then expression replacement
      *            will not work)
@@ -286,13 +244,14 @@ public class StringReplacer<I extends VariableDeclaration> extends StringParser<
      * @throws VilException
      *             in case that something goes wrong while resolving variables
      */
-    public static <I extends VariableDeclaration> String substitute(String text, IRuntimeEnvironment environment, 
-        IExpressionParser expressionParser, IExpressionVisitor expressionEvaluator, IStringResolverFactory<I> factory) 
+    public static <I extends VariableDeclaration, R extends Resolver<I>> String substitute(String text, 
+        R resolver, IExpressionParser<R> expressionParser, IExpressionVisitor expressionEvaluator, 
+        IStringResolverFactory<I> factory) 
         throws VilException {
         String result;
         if (null != text) {
             try {
-                StringReplacer<I> replacer = new StringReplacer<I>(text, environment, expressionParser, 
+                StringReplacer<I, R> replacer = new StringReplacer<I, R>(text, resolver, expressionParser, 
                     expressionEvaluator, factory);
                 result = replacer.parse();
             } catch (VilException e) {
@@ -441,7 +400,7 @@ public class StringReplacer<I extends VariableDeclaration> extends StringParser<
                 }
             }
         }
-        return -1;
+        return pos;
     }
     
     /**
@@ -477,6 +436,18 @@ public class StringReplacer<I extends VariableDeclaration> extends StringParser<
             p.midPos = pos;
         }
     }
+    
+    @Override
+    protected void notifyBracketsClosed(InPlaceCommand<I> cmd, int pos) {
+        Positions p = inPlacePositions.get(cmd);
+        if (null != p) {
+            if (p.midPos < 0) {
+                p.openPos = pos;
+            } else {
+                p.midPos = pos;
+            }
+        }
+    }
 
     @Override
     protected void notifyEndInPlaceCommand(InPlaceCommand<I> cmd, Expression expr, int curStart, int pos) {
@@ -490,7 +461,7 @@ public class StringReplacer<I extends VariableDeclaration> extends StringParser<
     protected Expression parseExpressionImpl(String expressionString) throws VilException {
         Expression result = null;
         try {
-            result = expressionParser.parse(expressionString, environment);
+            result = expressionParser.parse(expressionString, getResolver());
             if (result instanceof VarModelIdentifierExpression) { // just as fallback
                 result = resolve((VarModelIdentifierExpression) result);
             }
@@ -517,7 +488,7 @@ public class StringReplacer<I extends VariableDeclaration> extends StringParser<
             if (res instanceof DecisionVariable) {
                 DecisionVariable var = ((DecisionVariable) res);
                 TypeDescriptor<?> type = var.getType();
-                result = new ConstantExpression(type, var.getValue(), type.getTypeRegistry());
+                result = new ConstantExpression(type, var.getValue(), environment.getTypeRegistry());
             }
         } catch (VilException e) {
             warnParsingIgnoring(id, e);

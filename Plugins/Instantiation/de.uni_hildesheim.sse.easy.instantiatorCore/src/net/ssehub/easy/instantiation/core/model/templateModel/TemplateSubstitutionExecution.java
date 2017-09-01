@@ -26,6 +26,7 @@ import net.ssehub.easy.instantiation.core.model.expressions.VarModelIdentifierEx
 import net.ssehub.easy.instantiation.core.model.vilTypes.TypeRegistry;
 import net.ssehub.easy.instantiation.core.model.vilTypes.configuration.Configuration;
 import net.ssehub.easy.instantiation.core.model.vilTypes.configuration.IvmlElement;
+import net.ssehub.easy.instantiation.core.model.vilTypes.configuration.IvmlTypeResolver;
 import net.ssehub.easy.instantiation.core.model.vilTypes.configuration.IvmlTypes;
 
 /**
@@ -48,14 +49,17 @@ public class TemplateSubstitutionExecution extends TemplateLangExecution {
         throws VilException {
         super(tracer, new StringWriter(), createParams(config));
         RuntimeEnvironment<VariableDeclaration> environment = getRuntimeEnvironment();
+        // environment uses default registry - create a new one, add the type resolver if needed and inject it via 
+        // switch context into the environment
+        TypeRegistry registry = new TypeRegistry(TypeRegistry.DEFAULT);
         TemplateDescriptor desc = new TemplateDescriptor();
         if (addAdvice) {
             Advice[] advices = new Advice[1];
             net.ssehub.easy.varModel.model.Project prj = config.getConfiguration().getProject();
             advices[0] = new Advice(prj.getName(), null, prj);
             desc.setAdvices(advices);
+            registry.addTypeResolver(new IvmlTypeResolver(prj, registry));
         }
-        TypeRegistry registry = new TypeRegistry(TypeRegistry.DEFAULT); // also for env??
         Template model = new Template(modelName, null, desc, registry);
         environment.switchContext(model);
         environment.addValue(new VariableDeclaration("config", IvmlTypes.configurationType()), config);

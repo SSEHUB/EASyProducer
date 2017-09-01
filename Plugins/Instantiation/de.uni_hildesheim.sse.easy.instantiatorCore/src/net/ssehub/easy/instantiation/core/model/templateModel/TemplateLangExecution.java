@@ -40,6 +40,7 @@ import net.ssehub.easy.instantiation.core.model.vilTypes.TypeRegistry;
 import net.ssehub.easy.instantiation.core.model.vilTypes.configuration.EnumValue;
 import net.ssehub.easy.instantiation.core.model.vilTypes.configuration.IvmlElement;
 import net.ssehub.easy.instantiation.core.model.vilTypes.configuration.IvmlTypes;
+import net.ssehub.easy.varModel.model.values.ContainerValue;
 import net.ssehub.easy.varModel.model.values.NullValue;
 
 /**
@@ -47,10 +48,10 @@ import net.ssehub.easy.varModel.model.values.NullValue;
  * 
  * @author Holger Eichelberger
  */
-public class TemplateLangExecution extends ExecutionVisitor<Template, Def, VariableDeclaration> 
+public class TemplateLangExecution extends ExecutionVisitor<Template, Def, VariableDeclaration, Resolver> 
     implements ITemplateLangVisitor, ITerminatable {
 
-    public static final ILanguage LANGUAGE = new ILanguage() {
+    public static final ILanguage<Resolver> LANGUAGE = new ILanguage<Resolver>() {
 
         @Override
         public String getName() {
@@ -576,7 +577,8 @@ public class TemplateLangExecution extends ExecutionVisitor<Template, Def, Varia
         Object result = cst.getValue();
         // we have to care for $name and ${} but only in strings
         if (result instanceof String) {
-            result = StringReplacer.substitute(result.toString(), environment, getExpressionParser(), this, null);
+            result = StringReplacer.substitute(result.toString(), new Resolver(environment), 
+                getExpressionParser(), this, null);
         }
         return result;
     }
@@ -651,7 +653,7 @@ public class TemplateLangExecution extends ExecutionVisitor<Template, Def, Varia
     }
 
     @Override
-    protected IExpressionParser getExpressionParser() {
+    protected IExpressionParser<Resolver> getExpressionParser() {
         return ExpressionParserRegistry.getExpressionParser(LANGUAGE);
     }
 
@@ -791,6 +793,8 @@ public class TemplateLangExecution extends ExecutionVisitor<Template, Def, Varia
             iter = ((Collection<?>) init).iterator();
         } else if (init instanceof java.util.Collection) {
             iter = ((java.util.Collection<?>) init).iterator();
+        } else if (init instanceof ContainerValue) {
+            iter = ((ContainerValue) init).iterator();
         } else {
             iter = null;
         }

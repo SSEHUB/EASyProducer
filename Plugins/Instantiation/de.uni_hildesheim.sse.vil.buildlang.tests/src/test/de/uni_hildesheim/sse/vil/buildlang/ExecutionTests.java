@@ -559,8 +559,12 @@ public class ExecutionTests extends AbstractExecutionTest<Script> {
                 assertFileEqualitySafe(file, expected);
                 file = new File(base, "test1.txt");
                 assertFileEqualitySafe(file, expected);
-                file = new File(base, "init1.sql");
+
+                file = new File(base, "init_res.sql");
                 expected = new File(base, "init.sql.expected");
+                assertFileEqualitySafe(file, expected);
+                file = new File(base, "init1_res.sql");
+                expected = new File(base, "init1.sql.expected");
                 assertFileEqualitySafe(file, expected);
 
                 expected = new File(base, "templates/test1.vtl.expected");

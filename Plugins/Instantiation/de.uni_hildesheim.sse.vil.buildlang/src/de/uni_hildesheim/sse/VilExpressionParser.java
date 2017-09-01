@@ -11,6 +11,7 @@ import net.ssehub.easy.basics.modelManagement.ModelManagementException;
 import net.ssehub.easy.basics.progress.ProgressObserver;
 import net.ssehub.easy.instantiation.core.model.buildlangModel.BuildModel;
 import net.ssehub.easy.instantiation.core.model.buildlangModel.BuildlangExecution;
+import net.ssehub.easy.instantiation.core.model.buildlangModel.Resolver;
 import net.ssehub.easy.instantiation.core.model.buildlangModel.Script;
 import net.ssehub.easy.instantiation.core.model.common.VilException;
 import net.ssehub.easy.instantiation.core.model.expressions.Expression;
@@ -23,7 +24,7 @@ import net.ssehub.easy.instantiation.core.model.expressions.IRuntimeEnvironment;
  * 
  * @author Holger Eichelberger
  */
-public class VilExpressionParser extends AbstractModelInitializer<Script> implements IExpressionParser {
+public class VilExpressionParser extends AbstractModelInitializer<Script> implements IExpressionParser<Resolver> {
 
     // no private constructor!!!
     
@@ -81,6 +82,11 @@ public class VilExpressionParser extends AbstractModelInitializer<Script> implem
     @Override
     public Expression parse(String text, IRuntimeEnvironment environment) throws VilException {
         return BuildLangModelUtility.INSTANCE.createExpression(text, environment);
+    }
+
+    @Override
+    public Expression parse(String text, Resolver resolver) throws VilException {
+        return BuildLangModelUtility.INSTANCE.createExpression(text, resolver, null);
     }
 
     @Override

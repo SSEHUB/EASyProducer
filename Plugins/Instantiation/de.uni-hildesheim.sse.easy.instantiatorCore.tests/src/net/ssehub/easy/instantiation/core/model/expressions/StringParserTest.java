@@ -59,8 +59,8 @@ public class StringParserTest extends AbstractTest {
     @Test
     public void testNoReplacements() throws VilException {
         // no need for expression parser / evaluator
-        Assert.assertEquals("", StringReplacer.substitute("", environment, null, null, parser));
-        Assert.assertEquals("abba", StringReplacer.substitute("abba", environment, null, null, parser));
+        Assert.assertEquals("", StringReplacer.substitute("", resolver, null, null, parser));
+        Assert.assertEquals("abba", StringReplacer.substitute("abba", resolver, null, null, parser));
     }
 
     /**
@@ -86,28 +86,28 @@ public class StringParserTest extends AbstractTest {
      * @param factory the factory
      * @throws VilException in case of replacement/evaluation/parsing problems
      */
-    private void testValueReplacements(IExpressionParser parser, IExpressionVisitor visitor, 
+    private void testValueReplacements(IExpressionParser<VarResolver> parser, IExpressionVisitor visitor, 
         ExpressionParser factory) throws VilException {
         Assert.assertEquals(String.valueOf(INT_VALUE), 
-            StringReplacer.substitute("$i", environment, parser, visitor, factory));
+            StringReplacer.substitute("$i", resolver, parser, visitor, factory));
         Assert.assertEquals(String.valueOf(BOOLEAN_VALUE), 
-            StringReplacer.substitute("$b", environment, parser, visitor, factory));
+            StringReplacer.substitute("$b", resolver, parser, visitor, factory));
         Assert.assertEquals(STRING_VALUE, 
-            StringReplacer.substitute("$s", environment, parser, visitor, factory));
+            StringReplacer.substitute("$s", resolver, parser, visitor, factory));
 
         Assert.assertEquals(STRING_VALUE + "=" + STRING_VALUE, 
-            StringReplacer.substitute("$s=$s", environment, parser, visitor, factory));
+            StringReplacer.substitute("$s=$s", resolver, parser, visitor, factory));
         Assert.assertEquals(STRING_VALUE + " = " + STRING_VALUE, 
-            StringReplacer.substitute("$s = $s", environment, parser, visitor, factory));
+            StringReplacer.substitute("$s = $s", resolver, parser, visitor, factory));
 
         String postfix = "/src";
         Assert.assertEquals(STRING_VALUE + postfix, 
-            StringReplacer.substitute("$s" + postfix, environment, parser, visitor, factory));
+            StringReplacer.substitute("$s" + postfix, resolver, parser, visitor, factory));
         String prefix = "/";
         Assert.assertEquals(prefix + STRING_VALUE, 
-            StringReplacer.substitute(prefix + "$s" , environment, parser, visitor, factory));
+            StringReplacer.substitute(prefix + "$s", resolver, parser, visitor, factory));
         Assert.assertEquals(prefix + STRING_VALUE + postfix, 
-            StringReplacer.substitute(prefix + "$s" + postfix, environment, parser, visitor, factory));
+            StringReplacer.substitute(prefix + "$s" + postfix, resolver, parser, visitor, factory));
     }
     
     
@@ -276,7 +276,7 @@ public class StringParserTest extends AbstractTest {
      * @throws VilException if parsing/evaluating fails
      */
     private void assertReplacementResult(String input, String expected) throws VilException {
-        String subst = StringReplacer.substitute(input, environment, parser, evaluator, parser);
+        String subst = StringReplacer.substitute(input, resolver, parser, evaluator, parser);
         Assert.assertEquals(expected, subst);
     }
 

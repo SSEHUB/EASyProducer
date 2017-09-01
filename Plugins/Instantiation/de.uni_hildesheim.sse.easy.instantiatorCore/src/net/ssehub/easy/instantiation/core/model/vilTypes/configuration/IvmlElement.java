@@ -12,6 +12,7 @@ import net.ssehub.easy.instantiation.core.model.vilTypes.OperationType;
 import net.ssehub.easy.instantiation.core.model.vilTypes.TypeDescriptor;
 import net.ssehub.easy.instantiation.core.model.vilTypes.TypeRegistry;
 import net.ssehub.easy.varModel.model.datatypes.IDatatype;
+import net.ssehub.easy.varModel.model.datatypes.Reference;
 
 /**
  * Denotes an element resolved in IVML. This must not be an interface
@@ -336,9 +337,10 @@ public abstract class IvmlElement implements IVilType, IResolvable, IStringValue
         TypeRegistry registry = ExecutionLocal.getCurrentTypeRegistry();
         TypeDescriptor<?> result = registry.getTypeOrFallback(type);
         if (null == result && !registry.hasTypeResolver(IvmlTypeResolver.class)) {
-            // if there are type resolvers, then there is an @advice that shall provide acces to the type
+            // if there are type resolvers, then there is an @advice that shall provide access to the type
             try {
-                result = new FakeTypeDescriptor(registry, type.getName());
+                TypeDescriptor<?> tmp = registry.getType(Reference.dereference(type));
+                result = new FakeTypeDescriptor(registry, type.getName(), tmp);
                 registry.registerFallbackType(type, result);
             } catch (VilException e) {
             }

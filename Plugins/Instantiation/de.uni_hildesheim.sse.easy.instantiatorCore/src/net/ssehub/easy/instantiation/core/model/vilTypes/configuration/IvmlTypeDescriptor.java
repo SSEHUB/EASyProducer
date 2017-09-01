@@ -92,6 +92,8 @@ public class IvmlTypeDescriptor extends AbstractIvmlTypeDescriptor implements IA
         setFields(fields.values());
         List<OperationDescriptor> conversions = new ArrayList<OperationDescriptor>();
         conversions.add(new IvmlConversionOperationDescriptor(this));
+        // for VarModelIdentifierExpression not having IvmlElement as type
+        conversions.add(new IvmlToStringConversionOperationDescriptor(this));
         addDerivedTypeConversions(ivmlType, conversions);
         addConversionOperations(ivmlType, conversions);
         setConversions(conversions);
@@ -219,6 +221,16 @@ public class IvmlTypeDescriptor extends AbstractIvmlTypeDescriptor implements IA
     }
     
     @Override
+    public boolean isSet() {
+        return net.ssehub.easy.varModel.model.datatypes.Set.TYPE.isAssignableFrom(type);
+    }
+
+    @Override
+    public boolean isSequence() {
+        return net.ssehub.easy.varModel.model.datatypes.Sequence.TYPE.isAssignableFrom(type);
+    }
+    
+    @Override
     protected IDatatype getIvmlType() {
         return type;
     }
@@ -245,7 +257,7 @@ public class IvmlTypeDescriptor extends AbstractIvmlTypeDescriptor implements IA
     }
 
     /**
-     * Returns the datatype for <code>pbject</code>.
+     * Returns the datatype for <code>object</code>.
      * 
      * @param object the object to return the datatype for
      * @return the datatype or <b>null</b> if there is none

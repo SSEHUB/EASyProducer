@@ -16,6 +16,7 @@
 package net.ssehub.easy.instantiation.core.model.buildlangModel.ruleMatch;
 
 import net.ssehub.easy.instantiation.core.model.artifactModel.Path;
+import net.ssehub.easy.instantiation.core.model.buildlangModel.Resolver;
 import net.ssehub.easy.instantiation.core.model.common.VilException;
 import net.ssehub.easy.instantiation.core.model.expressions.CallExpression;
 import net.ssehub.easy.instantiation.core.model.expressions.CompositeExpression;
@@ -46,7 +47,7 @@ import net.ssehub.easy.instantiation.core.model.expressions.VilTypeExpression;
 public class MatchResolver implements IExpressionVisitor, IMatchVisitor {
 
     private IRuntimeEnvironment environment;
-    private IExpressionParser expressionParser; 
+    private IExpressionParser<Resolver> expressionParser; 
     private IExpressionVisitor evaluator;
 
     /**
@@ -56,7 +57,7 @@ public class MatchResolver implements IExpressionVisitor, IMatchVisitor {
      * @param expressionParser the actual expression parser
      * @param evaluator the actual evaluator
      */
-    public MatchResolver(IRuntimeEnvironment environment, IExpressionParser expressionParser, 
+    public MatchResolver(IRuntimeEnvironment environment, IExpressionParser<Resolver> expressionParser, 
         IExpressionVisitor evaluator) {
         this.environment = environment;
         this.expressionParser = expressionParser;
@@ -71,7 +72,7 @@ public class MatchResolver implements IExpressionVisitor, IMatchVisitor {
      * @throws VilException in case that resolution fails
      */
     private String resolve(String string) throws VilException {
-        return StringReplacer.substitute(string, environment, expressionParser, evaluator, null);
+        return StringReplacer.substitute(string, new Resolver(environment), expressionParser, evaluator, null);
     }
     
     @Override

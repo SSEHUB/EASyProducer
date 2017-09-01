@@ -88,6 +88,7 @@ import net.ssehub.easy.instantiation.core.model.vilTypes.TypeHelper;
 import net.ssehub.easy.instantiation.core.model.vilTypes.TypeRegistry;
 import net.ssehub.easy.instantiation.core.model.vilTypes.configuration.IvmlElement;
 import net.ssehub.easy.instantiation.core.model.vilTypes.configuration.IvmlTypes;
+import net.ssehub.easy.varModel.model.DecisionVariableDeclaration;
 import net.ssehub.easy.varModel.model.values.EnumValue;
 
 /**
@@ -1114,8 +1115,12 @@ public abstract class ExpressionTranslator<I extends VariableDeclaration, R exte
                     }
                 } 
                 if (null == result) {
-                    VarModelIdentifierExpression vmie = new VarModelIdentifierExpression(name, 
-                        ivmlElement instanceof IvmlElement ? (IvmlElement) ivmlElement : null); // also if elt==null 
+                    if (ivmlElement instanceof DecisionVariableDeclaration) {
+                        type = registry.getType(((DecisionVariableDeclaration) ivmlElement).getType());
+                    } else if (ivmlElement instanceof IvmlElement) {
+                        type = ((IvmlElement) ivmlElement).getType();
+                    }
+                    VarModelIdentifierExpression vmie = new VarModelIdentifierExpression(name, type); // also if elt==null 
                     lastVarModelIdentifierEx = vmie;
                     result = vmie;
                     if (null == ivmlElement) {
@@ -1129,7 +1134,7 @@ public abstract class ExpressionTranslator<I extends VariableDeclaration, R exte
         } else if (res instanceof VariableDeclaration) {
             result = new VariableExpression((VariableDeclaration) res, name);
         } else if (res instanceof IvmlElement) { // from VIL, model is known at parsing time
-            result = new VarModelIdentifierExpression(name, ((IvmlElement) res));
+            result = new VarModelIdentifierExpression(name, ((IvmlElement) res).getType());
         } else if (null == result) {
             // may happen although template..
             throw new TranslatorException(name + " is no variable", arg, 

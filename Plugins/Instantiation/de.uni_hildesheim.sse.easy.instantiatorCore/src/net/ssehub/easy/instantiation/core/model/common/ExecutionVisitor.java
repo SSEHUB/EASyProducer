@@ -34,11 +34,12 @@ import net.ssehub.easy.instantiation.core.model.vilTypes.TypeDescriptor;
  * @param <M> the actual model type
  * @param <O> the actual operation type
  * @param <V> the actual variable declaration type
+ * @param <R> the resolver type
  * 
  * @author Holger Eichelberger
  */
 public abstract class ExecutionVisitor <M extends IResolvableModel<V>, O extends IResolvableOperation<V>, 
-    V extends VariableDeclaration> extends EvaluationVisitor implements IVisitor {
+    V extends VariableDeclaration, R extends Resolver<M, O, ?, V>> extends EvaluationVisitor implements IVisitor {
 
     private RuntimeEnvironment<V> environment;
     private ITracer tracer;
@@ -661,6 +662,6 @@ public abstract class ExecutionVisitor <M extends IResolvableModel<V>, O extends
      * 
      * @return the actual expression parser
      */
-    protected abstract IExpressionParser getExpressionParser();
+    protected abstract IExpressionParser<R> getExpressionParser();
 
 }

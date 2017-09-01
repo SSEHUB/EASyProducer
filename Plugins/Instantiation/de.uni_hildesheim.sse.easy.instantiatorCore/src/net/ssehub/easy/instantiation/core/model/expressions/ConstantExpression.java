@@ -5,6 +5,7 @@ import net.ssehub.easy.instantiation.core.model.common.VilException;
 import net.ssehub.easy.instantiation.core.model.vilTypes.TypeDescriptor;
 import net.ssehub.easy.instantiation.core.model.vilTypes.TypeRegistry;
 import net.ssehub.easy.instantiation.core.model.vilTypes.configuration.EnumValue;
+import net.ssehub.easy.varModel.model.values.Value;
 
 /**
  * Represents a parenthesis expression.
@@ -41,6 +42,9 @@ public class ConstantExpression extends Expression {
                     ok = checkAndConvert(registry.getType(((EnumValue) value).getDatatype()));
                 } else if (value instanceof Version) {
                     ok = checkAndConvert(TypeRegistry.versionType());
+                } else if (value instanceof Value) {
+                    Value val = (Value) value;
+                    ok = checkAndConvert(registry.getType(val.getType())); 
                 } else {
                     ok = checkAndConvert(registry.getType(value.getClass().getName()));
                     ok |= checkAndConvert(registry.getType(value.getClass().getSimpleName())); // for artifacts

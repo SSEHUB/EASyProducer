@@ -600,6 +600,27 @@ public class TypeRegistry {
     }
     
     /**
+     * Resolves IVML type generics.
+     * 
+     * @param type the type to resolve the generics fro
+     * @return the generics, <b>null</b> if there are no generics or the generics are not resolvable
+     * @see #getType(IDatatype)
+     */
+    public TypeDescriptor<?>[] resolveGenerics(IDatatype type) {
+        TypeDescriptor<?>[] result = null;
+        if (type.getGenericTypeCount() > 0) {
+            result = TypeDescriptor.createArray(type.getGenericTypeCount());
+            for (int g = 0; null != result && g < type.getGenericTypeCount(); g++) {
+                result[g] = getType(type.getGenericType(g));
+                if (null == result[g]) {
+                    result = null;
+                }
+            }
+        }
+        return result;
+    }
+  
+    /**
      * Returns the registered type descriptor for the given <code>name</code> also in {@link #parentRegistry}.
      * 
      * @param name the name to look for

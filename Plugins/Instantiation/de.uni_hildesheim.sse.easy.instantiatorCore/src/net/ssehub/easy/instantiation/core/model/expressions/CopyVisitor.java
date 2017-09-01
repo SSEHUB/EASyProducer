@@ -103,7 +103,7 @@ public class CopyVisitor implements IExpressionVisitor {
         if (reuse) {
             result = identifier;
         } else {
-            result = new VarModelIdentifierExpression(identifier.getIdentifier(), identifier.getElement());
+            result = new VarModelIdentifierExpression(identifier.getIdentifier(), identifier.getType());
             result.inferType();
         }
         return result;
