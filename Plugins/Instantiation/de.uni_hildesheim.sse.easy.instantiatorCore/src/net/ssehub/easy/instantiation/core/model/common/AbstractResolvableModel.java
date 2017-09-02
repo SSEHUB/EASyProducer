@@ -26,7 +26,7 @@ import net.ssehub.easy.varModel.model.Project;
  * @author Holger Eichelberger
  */
 public abstract class AbstractResolvableModel<V extends IMetaParameterDeclaration, M extends IModel> 
-    implements IResolvableModel<V>, IModelListener<Project>, ITypedefReceiver {
+    implements IResolvableModel<V, M>, IModelListener<Project>, ITypedefReceiver {
 
     private transient boolean dirty = false;
     private Imports<M> imports;
@@ -109,7 +109,13 @@ public abstract class AbstractResolvableModel<V extends IMetaParameterDeclaratio
         }
         imports.add(imp);
     }
-    
+
+
+    @Override
+    public void addRuntimeImport(ModelImport<M> imp) {
+        addImport(imp); // if needed, mark as non-printable; here just for VTL files
+    }
+
     /**
      * Returns the imports instance.
      * 

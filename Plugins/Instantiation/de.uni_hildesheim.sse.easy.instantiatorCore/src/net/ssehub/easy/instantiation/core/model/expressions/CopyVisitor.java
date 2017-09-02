@@ -46,6 +46,15 @@ public class CopyVisitor implements IExpressionVisitor {
         this.mapper = mapper;
     }
 
+    /**
+     * Returns the variable mapper.
+     * 
+     * @return the variable mapper
+     */
+    protected IVariableMapper getMapper() {
+        return mapper;
+    }
+
     @Override
     public Object visitParenthesisExpression(ParenthesisExpression par) throws VilException {
         Expression result = new ParenthesisExpression((Expression) par.accept(this));

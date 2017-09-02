@@ -1,5 +1,6 @@
 package net.ssehub.easy.instantiation.core.model.expressions;
 
+import net.ssehub.easy.basics.modelManagement.IModel;
 import net.ssehub.easy.basics.modelManagement.IRestrictionEvaluationContext;
 import net.ssehub.easy.basics.modelManagement.IndentationConfiguration;
 import net.ssehub.easy.basics.modelManagement.ModelImport;
@@ -19,7 +20,7 @@ import net.ssehub.easy.instantiation.core.model.vilTypes.TypeRegistry;
  * 
  * @author Holger Eichelberger
  */
-class PseudoModel implements IResolvableModel<VarDecl> {
+class PseudoModel implements IResolvableModel<VarDecl, PseudoModel>, IModel {
 
     @Override
     public void setVersion(Version version) {
@@ -116,7 +117,7 @@ class PseudoModel implements IResolvableModel<VarDecl> {
 
     @Override
     public IRestrictionEvaluationContext getRestrictionEvaluationContext() {
-        return new RuntimeEnvironment<VariableDeclaration>(VariableDeclaration.class) {
+        return new RuntimeEnvironment<VariableDeclaration, PseudoModel>(VariableDeclaration.class) {
 
             @Override
             protected IExpressionVisitor createEvaluationProcessor() {
@@ -196,7 +197,7 @@ class PseudoModel implements IResolvableModel<VarDecl> {
     }
 
     @Override
-    public IResolvableModel<VarDecl> getParent() {
+    public IResolvableModel<VarDecl, PseudoModel> getParent() {
         return null;
     }
 
@@ -233,6 +234,10 @@ class PseudoModel implements IResolvableModel<VarDecl> {
     @Override
     public Typedef getTypedef(int index) {
         return null;
+    }
+
+    @Override
+    public void addRuntimeImport(ModelImport<PseudoModel> imp) {
     }
 
 }

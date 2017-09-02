@@ -58,7 +58,7 @@ public class DelegatingTracer implements ITracer {
     }
     
     @Override
-    public void visitScript(Script script, RuntimeEnvironment<?> environment) {
+    public void visitScript(Script script, RuntimeEnvironment<?, ?> environment) {
         delegate.visitScript(script, environment);
     }
 
@@ -68,22 +68,22 @@ public class DelegatingTracer implements ITracer {
     }
     
     @Override
-    public void visitScriptBody(Script script, RuntimeEnvironment<?> environment) {
+    public void visitScriptBody(Script script, RuntimeEnvironment<?, ?> environment) {
         delegate.visitScriptBody(script, environment);
     }
 
     @Override
-    public void visitRule(Rule rule, RuntimeEnvironment<?> environment) {
+    public void visitRule(Rule rule, RuntimeEnvironment<?, ?> environment) {
         delegate.visitRule(rule, environment);
     }
 
     @Override
-    public void visitedRule(Rule rule, RuntimeEnvironment<?> environment, Object result) {
+    public void visitedRule(Rule rule, RuntimeEnvironment<?, ?> environment, Object result) {
         delegate.visitedRule(rule, environment, result);
     }
 
     @Override
-    public void visitLoop(IEnumeratingLoop loop, RuntimeEnvironment<?> environment) {
+    public void visitLoop(IEnumeratingLoop loop, RuntimeEnvironment<?, ?> environment) {
         delegate.visitLoop(loop, environment);
     }
 
@@ -93,7 +93,7 @@ public class DelegatingTracer implements ITracer {
     }
 
     @Override
-    public void visitedLoop(IEnumeratingLoop loop, RuntimeEnvironment<?> environment) {
+    public void visitedLoop(IEnumeratingLoop loop, RuntimeEnvironment<?, ?> environment) {
         delegate.visitedLoop(loop, environment);
     }
 
@@ -250,12 +250,12 @@ public class DelegatingTracer implements ITracer {
     }
 
     @Override
-    public void setRuntimeEnvironment(RuntimeEnvironment<?> environment) {
+    public void setRuntimeEnvironment(RuntimeEnvironment<?, ?> environment) {
         delegate.setRuntimeEnvironment(environment);
     }
 
     @Override
-    public RuntimeEnvironment<?> getRuntimeEnvironment() {
+    public RuntimeEnvironment<?, ?> getRuntimeEnvironment() {
         return delegate.getRuntimeEnvironment();
     }
 

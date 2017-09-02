@@ -45,7 +45,7 @@ public class StreamTracer extends net.ssehub.easy.instantiation.core.model.commo
     }
 
     @Override
-    public void visitDef(Def def, RuntimeEnvironment<?> environment) {
+    public void visitDef(Def def, RuntimeEnvironment<?, ?> environment) {
         if (isEnabled()) {
             printIndentation();
             print("-> " + def.getName() + "(");
@@ -76,7 +76,7 @@ public class StreamTracer extends net.ssehub.easy.instantiation.core.model.commo
     }
 
     @Override
-    public void visitedDef(Def def, RuntimeEnvironment<?> environment, Object result) {
+    public void visitedDef(Def def, RuntimeEnvironment<?, ?> environment, Object result) {
         if (isEnabled()) {
             decreaseIndentation();
         }

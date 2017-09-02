@@ -27,7 +27,7 @@ import net.ssehub.easy.instantiation.core.model.vilTypes.TypeRegistry;
  * Implementing classes are intended to incrementally build up an expression or to return all collected sub-expressions
  * in case that the specification in the string/content expression was incomplete. An in-place command is a (temporary)
  * expression so that it can be later replaced in the parent in-place command when the real expression was created
- * through the {@link IStringResolverFactory}.
+ * through the {@link IStringParserFactory}.
  * 
  * @param <I> the variable declaration type
  * @author Holger Eichelberger
@@ -57,7 +57,7 @@ public abstract class InPlaceCommand <I extends VariableDeclaration> extends Exp
      * @return the real expression, may be <b>null</b> if optional / none shall be created
      * @throws VilException if the provided information is not sufficient for creating an expression
      */
-    protected abstract Expression close(IStringResolverFactory<I> factory) throws VilException;
+    protected abstract Expression close(IStringParserFactory<I> factory) throws VilException;
     
     /**
      * Appends the sub-expressions in parse sequence to <code>exprs</code> leaving out this command as fallback.

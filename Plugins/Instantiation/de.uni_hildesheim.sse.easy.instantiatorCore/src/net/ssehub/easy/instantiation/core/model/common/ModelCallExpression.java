@@ -16,7 +16,7 @@ import net.ssehub.easy.instantiation.core.model.vilTypes.TypeDescriptor;
  * 
  * @author Holger Eichelberger
  */
-public abstract class ModelCallExpression<V extends IMetaParameterDeclaration, M extends IResolvableModel<V>, 
+public abstract class ModelCallExpression<V extends IMetaParameterDeclaration, M extends IResolvableModel<V, M>, 
     O extends IResolvableOperation<V>> extends AbstractCallExpression implements IArgumentProvider {
 
     protected O resolved;

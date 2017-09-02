@@ -14,6 +14,7 @@
 -> not(Boolean) with (true) = false
     -> vilTemplateProcessor(String, Configuration, Artifact) with (/init.sql, <config>, init_res.sql, {}) = {init_res.sql}
 -> +(String, Any) with (Hello, MyTable) = HelloMyTable
+-> masterTable()
 -> not(Boolean) with (true) = false
     -> vilTemplateProcessor(String, Configuration, Artifact, Boolean) with (/init1.sql, <config>, init1_res.sql, true, {}) = {init1_res.sql}
     xa <- test4.xml

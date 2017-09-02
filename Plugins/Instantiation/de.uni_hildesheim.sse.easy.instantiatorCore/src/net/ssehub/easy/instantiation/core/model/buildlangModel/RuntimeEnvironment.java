@@ -9,7 +9,7 @@ import net.ssehub.easy.instantiation.core.model.vilTypes.TypeRegistry;
  * @author Holger Eichelberger
  */
 public class RuntimeEnvironment extends 
-    net.ssehub.easy.instantiation.core.model.common.RuntimeEnvironment<VariableDeclaration> {
+    net.ssehub.easy.instantiation.core.model.common.RuntimeEnvironment<VariableDeclaration, Script> {
 
     /**
      * Defines the other project variable, currently as a local set implementation using

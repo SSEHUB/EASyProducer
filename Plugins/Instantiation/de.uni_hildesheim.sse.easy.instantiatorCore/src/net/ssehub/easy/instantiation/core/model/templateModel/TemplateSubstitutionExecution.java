@@ -16,6 +16,7 @@
 package net.ssehub.easy.instantiation.core.model.templateModel;
 
 import java.io.StringWriter;
+import java.net.URI;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -36,6 +37,8 @@ import net.ssehub.easy.instantiation.core.model.vilTypes.configuration.IvmlTypes
  */
 public class TemplateSubstitutionExecution extends TemplateLangExecution {
 
+    private URI baseURI;
+    
     /**
      * Creates a new substitution evaluation visitor and initializes the runtime environment.
      * 
@@ -43,12 +46,14 @@ public class TemplateSubstitutionExecution extends TemplateLangExecution {
      * @param modelName the name of the temporary template model for this execution
      * @param addAdvice add an advice to the project underlying <code>config</code>
      * @param config the configuration to take values from
+     * @param baseURI the base URI for template resolution
      * @throws VilException if initializing the runtime environment fails
      */
-    public TemplateSubstitutionExecution(ITracer tracer, String modelName, boolean addAdvice, Configuration config) 
-        throws VilException {
+    public TemplateSubstitutionExecution(ITracer tracer, String modelName, boolean addAdvice, Configuration config, 
+        URI baseURI) throws VilException {
         super(tracer, new StringWriter(), createParams(config));
-        RuntimeEnvironment<VariableDeclaration> environment = getRuntimeEnvironment();
+        this.baseURI = baseURI;
+        RuntimeEnvironment<VariableDeclaration, Template> environment = getRuntimeEnvironment();
         // environment uses default registry - create a new one, add the type resolver if needed and inject it via 
         // switch context into the environment
         TypeRegistry registry = new TypeRegistry(TypeRegistry.DEFAULT);
@@ -86,6 +91,11 @@ public class TemplateSubstitutionExecution extends TemplateLangExecution {
             res = ((IvmlElement) res).getValue();
         }
         return res;
+    }
+
+    @Override
+    protected URI getFallbackBaseURI() {
+        return baseURI;
     }
 
 }

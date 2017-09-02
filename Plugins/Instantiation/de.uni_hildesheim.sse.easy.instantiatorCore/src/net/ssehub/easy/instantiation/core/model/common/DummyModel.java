@@ -1,5 +1,6 @@
 package net.ssehub.easy.instantiation.core.model.common;
 
+import net.ssehub.easy.basics.modelManagement.IModel;
 import net.ssehub.easy.basics.modelManagement.IRestrictionEvaluationContext;
 import net.ssehub.easy.basics.modelManagement.IndentationConfiguration;
 import net.ssehub.easy.basics.modelManagement.ModelImport;
@@ -15,9 +16,10 @@ import net.ssehub.easy.instantiation.core.model.vilTypes.TypeRegistry;
  * Implements a dummy model used for properly initializing {@link RuntimeEnvironment}.
  * 
  * @param <V> the variable declaration type
+ * @param <M> the model type
  * @author Holger Eichelberger
  */
-class DummyModel <V extends IMetaParameterDeclaration> implements IResolvableModel<V> {
+class DummyModel<V extends IMetaParameterDeclaration, M extends IModel> implements IResolvableModel<V, M> {
 
     /**
      * Prevents external instantiation (singleton).
@@ -189,7 +191,7 @@ class DummyModel <V extends IMetaParameterDeclaration> implements IResolvableMod
     }
 
     @Override
-    public IResolvableModel<V> getParent() {
+    public IResolvableModel<V, M> getParent() {
         return null;
     }
 
@@ -226,6 +228,10 @@ class DummyModel <V extends IMetaParameterDeclaration> implements IResolvableMod
     @Override
     public Typedef getTypedef(int index) {
         return null;
+    }
+
+    @Override
+    public void addRuntimeImport(ModelImport<M> imp) {
     }
 
 }

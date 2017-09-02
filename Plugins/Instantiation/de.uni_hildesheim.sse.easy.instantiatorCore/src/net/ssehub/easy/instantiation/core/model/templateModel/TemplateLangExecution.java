@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.io.Writer;
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -13,7 +14,11 @@ import java.util.Stack;
 
 import net.ssehub.easy.basics.logger.EASyLoggerFactory;
 import net.ssehub.easy.basics.logger.EASyLoggerFactory.EASyLogger;
+import net.ssehub.easy.basics.modelManagement.AvailableModels;
 import net.ssehub.easy.basics.modelManagement.IndentationConfiguration;
+import net.ssehub.easy.basics.modelManagement.ModelImport;
+import net.ssehub.easy.basics.modelManagement.ModelInfo;
+import net.ssehub.easy.basics.modelManagement.ModelManagementException;
 import net.ssehub.easy.instantiation.core.Bundle;
 import net.ssehub.easy.instantiation.core.model.artifactModel.ArtifactTypes;
 import net.ssehub.easy.instantiation.core.model.artifactModel.IArtifact;
@@ -621,7 +626,7 @@ public class TemplateLangExecution extends ExecutionVisitor<Template, Def, Varia
     }
 
     @Override
-    protected void handleParameterInSequence(IResolvableModel<VariableDeclaration> model,
+    protected void handleParameterInSequence(IResolvableModel<VariableDeclaration, Template> model,
         Map<String, VariableDeclaration> varMap) throws VilException {
         if (model.getParameterCount() >= 2) {
             // check default sequence instead, config, target
@@ -640,8 +645,8 @@ public class TemplateLangExecution extends ExecutionVisitor<Template, Def, Varia
     }
     
     @Override
-    protected void assignModelParameter(IResolvableModel<VariableDeclaration> targetModel, 
-        IResolvableModel<VariableDeclaration> srcModel) throws VilException {
+    protected void assignModelParameter(IResolvableModel<VariableDeclaration, Template> targetModel, 
+        IResolvableModel<VariableDeclaration, Template> srcModel) throws VilException {
         // take sure values
         if (srcModel.getParameterCount() >= 1) {
             setModelArgument(srcModel.getParameter(0), getParameter(PARAM_CONFIG_SURE));
@@ -834,6 +839,41 @@ public class TemplateLangExecution extends ExecutionVisitor<Template, Def, Varia
         }
         environment.addValue(var, value);
         return ""; // replace me by nothing
+    }
+
+    @Override
+    public Object visitContentImportExpression(ContentImportExpression ex) throws VilException {
+        try {
+            Template current = (Template) environment.getContextModel();
+            AvailableModels<Template> available = TemplateModel.INSTANCE.availableModels();
+            ModelInfo<Template> currentInfo = available.getModelInfo(current);
+            URI baseUri = null;
+            if (null != currentInfo) {
+                baseUri = currentInfo.getLocation();
+            } 
+            if (null == baseUri) {
+                baseUri = getFallbackBaseURI();
+            }
+            Template resolved = TemplateModel.INSTANCE.resolve(ex.getTemplate(), ex.getVersionRestriction(), 
+                baseUri, environment);
+            if (null != resolved) {
+                ModelImport<Template> imp = new ModelImport<Template>(ex.getTemplate());
+                imp.setResolved(resolved);
+                current.addRuntimeImport(imp);
+            }
+        } catch (ModelManagementException e) {
+            throw new VilException(e);
+        }
+        return ""; // replace me by nothing
+    }
+    
+    /**
+     * Returns the base URI for template resolution in this execution if there is no template to obtain it from.
+     * 
+     * @return the base URI
+     */
+    protected URI getFallbackBaseURI() {
+        return null;
     }
 
 }

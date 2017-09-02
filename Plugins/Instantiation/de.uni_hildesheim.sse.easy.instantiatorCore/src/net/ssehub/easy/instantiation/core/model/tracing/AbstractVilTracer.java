@@ -171,7 +171,7 @@ public abstract class AbstractVilTracer extends AbstractTracerBase
     }
 
     @Override
-    public void visitRule(Rule rule, RuntimeEnvironment<?> environment) {
+    public void visitRule(Rule rule, RuntimeEnvironment<?, ?> environment) {
         String msg = "execute " + rule.getSignature() + " with (";
         for (int p = 0; p < rule.getParameterCount(); p++) {
             try {
@@ -189,12 +189,12 @@ public abstract class AbstractVilTracer extends AbstractTracerBase
     }
 
     @Override
-    public void visitedRule(Rule rule, RuntimeEnvironment<?> environment, Object result) {
+    public void visitedRule(Rule rule, RuntimeEnvironment<?, ?> environment, Object result) {
         decreaseIndentation();
     }
 
     @Override
-    public void visitLoop(IEnumeratingLoop map, RuntimeEnvironment<?> environment) {
+    public void visitLoop(IEnumeratingLoop map, RuntimeEnvironment<?, ?> environment) {
     }
 
     @Override
@@ -204,7 +204,7 @@ public abstract class AbstractVilTracer extends AbstractTracerBase
     }
 
     @Override
-    public void visitedLoop(IEnumeratingLoop loop, RuntimeEnvironment<?> environment) {
+    public void visitedLoop(IEnumeratingLoop loop, RuntimeEnvironment<?, ?> environment) {
     }
 
     @Override
@@ -257,7 +257,7 @@ public abstract class AbstractVilTracer extends AbstractTracerBase
     }
 
     @Override
-    public void visitScript(Script script, RuntimeEnvironment<?> environment) {
+    public void visitScript(Script script, RuntimeEnvironment<?, ?> environment) {
         String ver = Version.toString(script.getVersion());
         if (null != ver && ver.length() > 0) {
             ver = " version " + ver;
@@ -272,7 +272,7 @@ public abstract class AbstractVilTracer extends AbstractTracerBase
     }
     
     @Override
-    public void visitScriptBody(Script script, RuntimeEnvironment<?> environment) {
+    public void visitScriptBody(Script script, RuntimeEnvironment<?, ?> environment) {
         decreaseIndentation();
     }
 
@@ -281,7 +281,7 @@ public abstract class AbstractVilTracer extends AbstractTracerBase
     }
 
     @Override
-    public void visitDef(Def def, RuntimeEnvironment<?> environment) {
+    public void visitDef(Def def, RuntimeEnvironment<?, ?> environment) {
         String msg = "execute def " + def.getSignature() + " with (";
         for (int p = 0; p < def.getParameterCount(); p++) {
             try {
@@ -299,7 +299,7 @@ public abstract class AbstractVilTracer extends AbstractTracerBase
     }
 
     @Override
-    public void visitedDef(Def def, RuntimeEnvironment<?> environment, Object result) {
+    public void visitedDef(Def def, RuntimeEnvironment<?, ?> environment, Object result) {
         decreaseIndentation();
     }
 

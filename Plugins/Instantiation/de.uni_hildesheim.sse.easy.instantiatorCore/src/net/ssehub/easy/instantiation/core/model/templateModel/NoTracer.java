@@ -20,11 +20,11 @@ public class NoTracer extends net.ssehub.easy.instantiation.core.model.common.No
     }
 
     @Override
-    public void visitDef(Def def, RuntimeEnvironment<?> environment) {
+    public void visitDef(Def def, RuntimeEnvironment<?, ?> environment) {
     }
 
     @Override
-    public void visitedDef(Def def, RuntimeEnvironment<?> environment, Object result) {
+    public void visitedDef(Def def, RuntimeEnvironment<?, ?> environment, Object result) {
     }
     
     @Override

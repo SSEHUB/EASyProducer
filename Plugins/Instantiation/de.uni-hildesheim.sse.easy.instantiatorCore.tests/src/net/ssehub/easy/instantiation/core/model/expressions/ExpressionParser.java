@@ -19,6 +19,7 @@ import java.util.List;
 import java.util.ArrayList;
 import java.util.StringTokenizer;
 
+import net.ssehub.easy.basics.modelManagement.IVersionRestriction;
 import net.ssehub.easy.instantiation.core.model.common.VariableDeclaration;
 import net.ssehub.easy.instantiation.core.model.common.VilException;
 import net.ssehub.easy.instantiation.core.model.expressions.StringResolver.IExpressionTranslator;
@@ -32,7 +33,7 @@ import net.ssehub.easy.instantiation.core.model.vilTypes.TypeRegistry;
  * @author Holger Eichelberger
  */
 class ExpressionParser implements IExpressionParser<VarResolver>, IExpressionTranslator<VarDecl, VarResolver>, 
-    IStringResolverFactory<VarDecl> {
+    IStringParserFactory<VarDecl> {
 
     @Override
     public Expression parse(String text, IRuntimeEnvironment environment) throws VilException {
@@ -145,6 +146,21 @@ class ExpressionParser implements IExpressionParser<VarResolver>, IExpressionTra
     @Override
     public Expression createVarDeclExpression(InPlaceVarDeclCommand<VarDecl> cmd) throws VilException {
         return null; // we test this only in VIL files, also as VarDecl is not compatible
+    }
+
+    @Override
+    public Expression createImportExpression(InPlaceImportCommand<VarDecl> cmd) throws VilException {
+        return null; // we test this only in VIL files
+    }
+
+    @Override
+    public VarDecl createVariableDeclaration(String name, TypeDescriptor<?> type) {
+        return new VarDecl(name, type);
+    }
+
+    @Override
+    public IVersionRestriction createVersionRestriction(Expression expression, VarDecl variable) throws VilException {
+        return null;
     }
 
 }

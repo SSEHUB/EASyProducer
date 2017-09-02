@@ -126,7 +126,12 @@ public class ExpressionVersionRestrictionValidator
 
     @Override
     public Object visitContentVarDeclExpression(ContentVarDeclExpression ex) throws VilException {
-        return null; // -> CompositeExpression, not relevant here
+        return null; // -> only relevant in template files
+    }
+
+    @Override
+    public Object visitContentImportExpression(ContentImportExpression ex) throws VilException {
+        return null; // -> only relevant in template files
     }
 
 }

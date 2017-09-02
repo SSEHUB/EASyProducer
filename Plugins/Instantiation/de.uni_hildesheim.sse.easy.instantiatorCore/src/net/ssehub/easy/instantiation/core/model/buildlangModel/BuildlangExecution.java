@@ -383,7 +383,7 @@ public class BuildlangExecution extends ExecutionVisitor<Script, AbstractRule, V
             }
         }
         executableRules.collect(script);
-        IResolvableModel<VariableDeclaration> oldContext = environment.switchContext(script);
+        IResolvableModel<VariableDeclaration, Script> oldContext = environment.switchContext(script);
         environment.setContextPaths(vtlPaths);
         processProperties(script, getTargetPath(script, scriptParam));
         checkConstants(script);
@@ -470,7 +470,7 @@ public class BuildlangExecution extends ExecutionVisitor<Script, AbstractRule, V
     }
     
     @Override
-    protected void initializeImplicitVariables(IResolvableModel<VariableDeclaration> model) 
+    protected void initializeImplicitVariables(IResolvableModel<VariableDeclaration, Script> model) 
         throws VilException {
         if (model instanceof Script) {
             Script script = (Script) model;
@@ -1497,7 +1497,7 @@ public class BuildlangExecution extends ExecutionVisitor<Script, AbstractRule, V
     }
     
     @Override
-    protected void handleParameterInSequence(IResolvableModel<VariableDeclaration> model, 
+    protected void handleParameterInSequence(IResolvableModel<VariableDeclaration, Script> model, 
         Map<String, VariableDeclaration> varMap) throws VilException {
         if (model.getParameterCount() >= 3) {
             // check default sequence instead, source, config, target, optional
@@ -1514,8 +1514,8 @@ public class BuildlangExecution extends ExecutionVisitor<Script, AbstractRule, V
     }
 
     @Override
-    protected void assignModelParameter(IResolvableModel<VariableDeclaration> targetModel,
-        IResolvableModel<VariableDeclaration> srcModel) throws VilException {
+    protected void assignModelParameter(IResolvableModel<VariableDeclaration, Script> targetModel,
+        IResolvableModel<VariableDeclaration, Script> srcModel) throws VilException {
         setModelArgument(srcModel, 0, PARAM_SOURCE);
         setModelArgument(srcModel, 1, PARAM_CONFIG);
         setModelArgument(srcModel, 2, PARAM_TARGET);
@@ -1530,7 +1530,7 @@ public class BuildlangExecution extends ExecutionVisitor<Script, AbstractRule, V
      * @param name the name of the parameter to modify (to retrieve the value, but also for name-based assignment)
      * @throws VilException in case that assigning the parameter fails
      */
-    private void setModelArgument(IResolvableModel<VariableDeclaration> srcModel, int index, String name) 
+    private void setModelArgument(IResolvableModel<VariableDeclaration, Script> srcModel, int index, String name) 
         throws VilException {
         if (srcModel.getParameterCount() >= index + 1) {
             try {

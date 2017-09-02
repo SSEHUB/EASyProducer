@@ -216,7 +216,7 @@ public class StringReplacer<I extends VariableDeclaration, R extends Resolver<I>
      *     in-place commands are not resolved but remain as string expressions)
      */
     private StringReplacer(String text, R resolver, IExpressionParser<R> expressionParser,
-            IExpressionVisitor expressionEvaluator, IStringResolverFactory<I> factory) {
+            IExpressionVisitor expressionEvaluator, IStringParserFactory<I> factory) {
         super(text, resolver, factory);
         this.environment = resolver.getRuntimeEnvironment();
         this.expressionEvaluator = expressionEvaluator;
@@ -246,7 +246,7 @@ public class StringReplacer<I extends VariableDeclaration, R extends Resolver<I>
      */
     public static <I extends VariableDeclaration, R extends Resolver<I>> String substitute(String text, 
         R resolver, IExpressionParser<R> expressionParser, IExpressionVisitor expressionEvaluator, 
-        IStringResolverFactory<I> factory) 
+        IStringParserFactory<I> factory) 
         throws VilException {
         String result;
         if (null != text) {

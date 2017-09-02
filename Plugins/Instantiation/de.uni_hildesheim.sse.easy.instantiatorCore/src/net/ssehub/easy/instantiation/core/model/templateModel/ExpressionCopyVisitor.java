@@ -3,7 +3,9 @@ package net.ssehub.easy.instantiation.core.model.templateModel;
 import java.util.List;
 import java.util.Map;
 
+import net.ssehub.easy.basics.modelManagement.IVersionRestriction;
 import net.ssehub.easy.basics.modelManagement.IVersionRestriction.IVariableMapper;
+import net.ssehub.easy.basics.modelManagement.RestrictionEvaluationException;
 import net.ssehub.easy.instantiation.core.model.common.Advice;
 import net.ssehub.easy.instantiation.core.model.common.ExpressionStatement;
 import net.ssehub.easy.instantiation.core.model.common.Typedef;
@@ -140,6 +142,18 @@ public class ExpressionCopyVisitor extends CopyVisitor implements IVisitor {
     @Override
     public Object visitContentVarDeclExpression(ContentVarDeclExpression ex) throws VilException {
         return new ContentVarDeclExpression(ex.getVariable());
+    }
+
+    @Override
+    public Object visitContentImportExpression(ContentImportExpression ex) throws VilException {
+        IVersionRestriction res = null;
+        if (null != ex.getVersionRestriction()) {
+            try {
+                res = ex.getVersionRestriction().copy(getMapper());
+            } catch (RestrictionEvaluationException e) {
+            }
+        }
+        return new ContentImportExpression(ex.getTemplate(), res);
     }
 
 }

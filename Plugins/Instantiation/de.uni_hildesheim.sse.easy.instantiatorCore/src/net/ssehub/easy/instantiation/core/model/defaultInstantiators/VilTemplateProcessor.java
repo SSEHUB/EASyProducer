@@ -35,7 +35,7 @@ import net.ssehub.easy.instantiation.core.model.expressions.IExpressionParser;
 import net.ssehub.easy.instantiation.core.model.expressions.StringReplacer;
 import net.ssehub.easy.instantiation.core.model.templateModel.ITracer;
 import net.ssehub.easy.instantiation.core.model.templateModel.Resolver;
-import net.ssehub.easy.instantiation.core.model.templateModel.StringResolverFactoryWithVariables;
+import net.ssehub.easy.instantiation.core.model.templateModel.StringReplacerFactory;
 import net.ssehub.easy.instantiation.core.model.templateModel.Template;
 import net.ssehub.easy.instantiation.core.model.templateModel.TemplateLangExecution;
 import net.ssehub.easy.instantiation.core.model.templateModel.TemplateModel;
@@ -167,6 +167,7 @@ public class VilTemplateProcessor implements IVilType {
         }
         // obtaining the file contents for instantiation
         File inAbsFile = template.getPath().getAbsolutePath();
+        URI baseURI = inAbsFile.toURI();
         String templateContents;
         try {
             templateContents = FileUtils.readFileToString(inAbsFile);
@@ -179,10 +180,10 @@ public class VilTemplateProcessor implements IVilType {
         String instantiatedContent = "";
         try {
             TemplateSubstitutionExecution evaluationVisitor = new TemplateSubstitutionExecution(tracer, 
-                template.getName(), addAdvice, config);
+                template.getName(), addAdvice, config, baseURI);
             Resolver resolver = new Resolver(evaluationVisitor.getRuntimeEnvironment());
             instantiatedContent = StringReplacer.substitute(templateContents, resolver, expressionParser, 
-                evaluationVisitor, StringResolverFactoryWithVariables.INSTANCE);
+                evaluationVisitor, StringReplacerFactory.INSTANCE);
         } catch (VilException e) {
             throw e;
         } finally {

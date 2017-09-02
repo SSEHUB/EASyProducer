@@ -15,11 +15,13 @@
  */
 package net.ssehub.easy.instantiation.core.model.templateModel;
 
+import net.ssehub.easy.basics.modelManagement.IVersionRestriction;
 import net.ssehub.easy.instantiation.core.model.common.VilException;
 import net.ssehub.easy.instantiation.core.model.expressions.Expression;
-import net.ssehub.easy.instantiation.core.model.expressions.IStringResolverFactory;
+import net.ssehub.easy.instantiation.core.model.expressions.IStringParserFactory;
 import net.ssehub.easy.instantiation.core.model.expressions.InPlaceForCommand;
 import net.ssehub.easy.instantiation.core.model.expressions.InPlaceIfCommand;
+import net.ssehub.easy.instantiation.core.model.expressions.InPlaceImportCommand;
 import net.ssehub.easy.instantiation.core.model.expressions.InPlaceVarDeclCommand;
 import net.ssehub.easy.instantiation.core.model.vilTypes.TypeDescriptor;
 import net.ssehub.easy.instantiation.core.model.vilTypes.TypeRegistry;
@@ -30,7 +32,7 @@ import net.ssehub.easy.instantiation.core.model.vilTypes.TypeRegistry;
  * 
  * @author Holger Eichelberger
  */
-public class StringResolverFactory implements IStringResolverFactory<VariableDeclaration> {
+public class StringResolverFactory implements IStringParserFactory<VariableDeclaration> {
 
     public static final StringResolverFactory INSTANCE = new StringResolverFactory();
     
@@ -80,8 +82,24 @@ public class StringResolverFactory implements IStringResolverFactory<VariableDec
     }
 
     @Override
+    public VariableDeclaration createVariableDeclaration(String name, TypeDescriptor<?> type) {
+        return new VariableDeclaration(name, type, false, null);
+    }
+
+    @Override
     public Expression createVarDeclExpression(InPlaceVarDeclCommand<VariableDeclaration> cmd) throws VilException {
-        return null;
+        return null; // no in.content variable declarations in usual VIL
+    }
+
+    @Override
+    public IVersionRestriction createVersionRestriction(Expression expression, VariableDeclaration variable) 
+        throws VilException {
+        return null; // only needed for import expression
+    }
+
+    @Override
+    public Expression createImportExpression(InPlaceImportCommand<VariableDeclaration> cmd) throws VilException {
+        return null; // no import variable declarations in usual VIL
     }
 
 }

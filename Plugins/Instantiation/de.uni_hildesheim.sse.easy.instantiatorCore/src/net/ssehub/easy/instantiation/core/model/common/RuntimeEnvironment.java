@@ -45,9 +45,10 @@ import net.ssehub.easy.varModel.model.values.NullValue;
  * {@link #switchContext(IModel)}.
  * 
  * @param <V> the variable declaration type
+ * @param <M> the model type
  * @author Holger Eichelberger
  */
-public abstract class RuntimeEnvironment<V extends VariableDeclaration> 
+public abstract class RuntimeEnvironment<V extends VariableDeclaration, M extends IModel> 
     implements IRuntimeEnvironment, IRestrictionEvaluationContext {
 
     /**
@@ -72,11 +73,12 @@ public abstract class RuntimeEnvironment<V extends VariableDeclaration>
      * Defines a context for executing one model within.
      * 
      * @param <D> the variable declaration type
+     * @param <O> the model type
      * @author Holger Eichelberger
      */
-    private class Context<D extends VariableDeclaration> {
+    private class Context<D extends VariableDeclaration, O extends IModel> {
         private Stack<Level<D>> levels = new Stack<Level<D>>();
-        private IResolvableModel<D> model;
+        private IResolvableModel<D, O> model;
         private int indentation;
         private IndentationConfiguration indentationConfiguration;
         private String[] paths;
@@ -86,7 +88,7 @@ public abstract class RuntimeEnvironment<V extends VariableDeclaration>
          * 
          * @param model the related model
          */
-        public Context(IResolvableModel<D> model) {
+        public Context(IResolvableModel<D, O> model) {
             this.model = model;
             if (null != model.getIndentationConfiguration() 
                 && model.getIndentationConfiguration().isIndentationEnabled()) {
@@ -100,7 +102,7 @@ public abstract class RuntimeEnvironment<V extends VariableDeclaration>
          * 
          * @return the model
          */
-        public IResolvableModel<D> getModel() {
+        public IResolvableModel<D, O> getModel() {
             return model;
         }
 
@@ -385,8 +387,8 @@ public abstract class RuntimeEnvironment<V extends VariableDeclaration>
 
     }
     
-    private Map<IModel, Context<V>> contexts = new HashMap<IModel, Context<V>>();
-    private Context<V> currentContext;
+    private Map<IModel, Context<V, M>> contexts = new HashMap<IModel, Context<V, M>>();
+    private Context<V, M> currentContext;
     private TypeRegistry typeRegistry;
     private Class<V> cls;
     private Set<IArtifact> noAutoStore = new HashSet<IArtifact>();
@@ -423,8 +425,8 @@ public abstract class RuntimeEnvironment<V extends VariableDeclaration>
      * @param model the model the context is assigned to
      * @return the old context for switching back
      */
-    public IResolvableModel<V> switchContext(IResolvableModel<V> model) {
-        IResolvableModel<V> oldContext;
+    public IResolvableModel<V, M> switchContext(IResolvableModel<V, M> model) {
+        IResolvableModel<V, M> oldContext;
         if (null != currentContext) {
             oldContext = currentContext.getModel();
         } else {
@@ -436,7 +438,7 @@ public abstract class RuntimeEnvironment<V extends VariableDeclaration>
         }
         currentContext = contexts.get(model);
         if (null == currentContext) {
-            currentContext = new Context<V>(model);
+            currentContext = new Context<V, M>(model);
             contexts.put(model, currentContext);
         }
         return oldContext;
@@ -448,7 +450,7 @@ public abstract class RuntimeEnvironment<V extends VariableDeclaration>
      * @param model the model to delete the context for
      */
     public void deleteContext(ITypedModel model) {
-        Context<V> context = contexts.get(model);
+        Context<V, M> context = contexts.get(model);
         if (context != currentContext) {
             contexts.remove(model);
         }
@@ -487,8 +489,8 @@ public abstract class RuntimeEnvironment<V extends VariableDeclaration>
      * @return the model (may be <b>null</b> if {@link #switchContext(IModel)} was 
      *   not called before)
      */
-    public IResolvableModel<?> getContextModel() {
-        IResolvableModel<?> model;
+    public IResolvableModel<?, M> getContextModel() {
+        IResolvableModel<?, M> model;
         if (null == currentContext) {
             model = null;
         } else {
@@ -504,7 +506,7 @@ public abstract class RuntimeEnvironment<V extends VariableDeclaration>
             result = currentContext.getValue(resolvable);
         } catch (VilException e) {
             boolean found = false;
-            for (Context<V> ctx : contexts.values()) {
+            for (Context<V, M> ctx : contexts.values()) {
                 if (ctx != currentContext) {
                     try {
                         result = ctx.getValue(resolvable);
@@ -529,8 +531,8 @@ public abstract class RuntimeEnvironment<V extends VariableDeclaration>
      * @return the value of <code>name</code>
      * @throws VilException in case that the context/variable is not known
      */
-    public Object getValue(IResolvableModel<V> contextModel, String name) throws VilException {
-        Context<V> context = contexts.get(contextModel);
+    public Object getValue(IResolvableModel<V, M> contextModel, String name) throws VilException {
+        Context<V, M> context = contexts.get(contextModel);
         if (null == context) {
             throw new VilException("No such context", VilException.ID_INSUFFICIENT_ARGUMENT);
         }
@@ -854,7 +856,7 @@ public abstract class RuntimeEnvironment<V extends VariableDeclaration>
     @Override
     public Object startEvaluation() throws RestrictionEvaluationException {
         if (null == currentContext) {
-            switchContext(new DummyModel<V>());
+            switchContext(new DummyModel<V, M>());
         }
         pushLevel();
         return createEvaluationProcessor();

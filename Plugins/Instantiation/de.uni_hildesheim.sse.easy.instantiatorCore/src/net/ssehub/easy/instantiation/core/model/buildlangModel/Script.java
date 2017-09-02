@@ -54,7 +54,7 @@ import net.ssehub.easy.instantiation.core.model.vilTypes.configuration.IvmlTypes
  * @author kroeher
  */
 public class Script extends AbstractResolvableModel<VariableDeclaration, Script> 
-    implements IBuildlangElement, IResolvableModel<VariableDeclaration>,
+    implements IBuildlangElement, IResolvableModel<VariableDeclaration, Script>,
     IVariableDeclarationReceiver<VariableDeclaration> {
 
     /**

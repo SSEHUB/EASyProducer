@@ -20,6 +20,8 @@ import java.util.Stack;
 
 import net.ssehub.easy.basics.logger.EASyLoggerFactory;
 import net.ssehub.easy.basics.logger.EASyLoggerFactory.EASyLogger;
+import net.ssehub.easy.basics.messages.IMessageHandler;
+import net.ssehub.easy.basics.modelManagement.IVersionRestriction;
 import net.ssehub.easy.instantiation.core.Bundle;
 import net.ssehub.easy.instantiation.core.model.common.VariableDeclaration;
 import net.ssehub.easy.instantiation.core.model.common.VilException;
@@ -68,7 +70,7 @@ public abstract class StringParser<P, I extends VariableDeclaration, R extends R
     private int pos;
     private int curStart;
     private int innerBracketLevel;
-    private IStringResolverFactory<I> factory;
+    private IStringParserFactory<I> factory;
     private Stack<InPlaceCommand<I>> commandStack;
     private R resolver;
 
@@ -80,7 +82,7 @@ public abstract class StringParser<P, I extends VariableDeclaration, R extends R
      * @param factory a factory turning in-place commands into language-specific expressions (may be <b>null</b>, then 
      *     in-place commands are not resolved but remain as string expressions)
      */
-    protected StringParser(String text, R resolver, IStringResolverFactory<I> factory) {
+    protected StringParser(String text, R resolver, IStringParserFactory<I> factory) {
         if (null != text) {
             this.text = new StringBuilder(text);
         } else {
@@ -98,7 +100,7 @@ public abstract class StringParser<P, I extends VariableDeclaration, R extends R
      * 
      * @return the factory
      */
-    protected IStringResolverFactory<I> getFactory() {
+    protected IStringParserFactory<I> getFactory() {
         return factory;
     }
     
@@ -203,7 +205,7 @@ public abstract class StringParser<P, I extends VariableDeclaration, R extends R
      */
     protected Expression handleInPlaceCommands(String expressionString, int curStart, int pos) throws VilException {
         Expression result = null;
-        if (null != factory) {
+        if (null != factory && Character.isUpperCase(expressionString.charAt(0))) { // 2nd, for performance
             boolean clear = true;
             if (expressionString.startsWith("IF ")) {
                 expressionString = removePrefix(expressionString, "IF", true);
@@ -211,7 +213,10 @@ public abstract class StringParser<P, I extends VariableDeclaration, R extends R
             } else if (expressionString.startsWith("FOR ")) {
                 expressionString = handleInPlaceForStart(expressionString, curStart, pos);
             } else if (expressionString.startsWith("VAR ")) {
-                expressionString = handleInPlaceVarDeclStart(expressionString, curStart, pos);
+                expressionString = handleInPlaceVarDecl(expressionString, curStart, pos);
+                result = close(curStart, pos);
+            } else if (expressionString.startsWith("IMPORT ")) {
+                expressionString = handleInPlaceImport(expressionString, curStart, pos);
                 result = close(curStart, pos);
             } else if (expressionString.equals("ELSE")) {
                 advanceState(curStart, pos);
@@ -297,7 +302,7 @@ public abstract class StringParser<P, I extends VariableDeclaration, R extends R
      * @return the remaining expression string
      * @throws VilException in case of parsing problems
      */
-    private String handleInPlaceVarDeclStart(String expressionString, int curStart, int pos) {
+    private String handleInPlaceVarDecl(String expressionString, int curStart, int pos) {
         String result;
         try {
             result = removePrefix(expressionString, "VAR", true);
@@ -314,6 +319,52 @@ public abstract class StringParser<P, I extends VariableDeclaration, R extends R
             }
             I var = factory.createVariable(varName, init, false);
             push(new InPlaceVarDeclCommand<I>(var), curStart, pos);
+        } catch (VilException e) {
+            warnParsingIgnoring(expressionString, e);
+            result = expressionString; // just keep it
+        }
+        return result;
+    }
+
+    /**
+     * Handles/parses an in-place import.
+     * 
+     * @param expressionString the expression string
+     * @param curStart the start position of the current concept
+     * @param pos the end position of parsing
+     * @return the remaining expression string
+     * @throws VilException in case of parsing problems
+     */
+    private String handleInPlaceImport(final String expressionString, int curStart, int pos) {
+        String result;
+        try {
+            result = removePrefix(expressionString, "IMPORT", true);
+            int pos1 = consumeJavaIdentifierPart(result);
+            String name = result.substring(0, pos1);
+            result = consumeWhitespaces(result.substring(pos1));
+            IVersionRestriction restriction = null;
+            if (result.startsWith("WITH")) {
+                result = result.substring(4);
+                I var = factory.createVariableDeclaration("version", TypeRegistry.versionType());
+                resolver.pushLevel();
+                resolver.add(var);
+                Expression expression = parseExpression(result);
+                resolver.popLevel();
+
+                ExpressionVersionRestrictionValidator validator = new ExpressionVersionRestrictionValidator(
+                    new IMessageHandler() {
+                        
+                        @Override
+                        public void handle(String message, boolean error, int code) {
+                            getLogger().warn("While parsing/resolving '" + expressionString + "': " + message 
+                                + ". Ignoring.");
+                        }
+                    });
+                expression.accept(validator);
+                restriction = factory.createVersionRestriction(expression, var);
+                result = consumeWhitespaces(result);
+            }                
+            push(new InPlaceImportCommand<I>(name, restriction), curStart, pos);
         } catch (VilException e) {
             warnParsingIgnoring(expressionString, e);
             result = expressionString; // just keep it

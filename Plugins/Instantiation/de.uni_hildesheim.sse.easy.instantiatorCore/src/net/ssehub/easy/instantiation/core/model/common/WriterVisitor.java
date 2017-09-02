@@ -100,7 +100,7 @@ public class WriterVisitor<V extends VariableDeclaration> extends ExpressionWrit
         printIndentation();
         print("@advice(");
         print(advice.getName());
-        printVersionRestrictions(advice.getVersionRestriction());
+        printVersionRestrictions(advice.getVersionRestriction(), false);
         println(")");
         return null;
     }
@@ -109,10 +109,15 @@ public class WriterVisitor<V extends VariableDeclaration> extends ExpressionWrit
      * Prints the version restriction.
      * 
      * @param restriction the version restriction (may be <b>null</b>)
+     * @param capitalize whether the "with" shall be stated in capital letters
      */
-    protected void printVersionRestrictions(IVersionRestriction restriction) {
+    protected void printVersionRestrictions(IVersionRestriction restriction, boolean capitalize) {
         if (null != restriction) {
-            print(" with ");
+            String with = " with ";
+            if (capitalize) {
+                with = with.toUpperCase();
+            }
+            print(with);
             print(restriction.toSpecification());
         }
     }

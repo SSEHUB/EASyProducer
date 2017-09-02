@@ -64,7 +64,7 @@ public class StringResolver<I extends VariableDeclaration, R extends Resolver<I>
      *     in-place commands are not resolved but remain as string expressions)
      */
     private StringResolver(String text, R resolver, IExpressionTranslator<I, R> translator, StringBuilder warnings, 
-        IStringResolverFactory<I> factory) {
+        IStringParserFactory<I> factory) {
         super(text, resolver, factory);
         this.warnings = warnings;
         this.translator = translator;
@@ -89,7 +89,7 @@ public class StringResolver<I extends VariableDeclaration, R extends Resolver<I>
      */
     public static <I extends VariableDeclaration, R extends Resolver<I>, 
         E extends ExpressionStatement> Expression substitute(String text, R resolver,
-        IExpressionTranslator<I, R> translator, StringBuilder warnings, IStringResolverFactory<I> factory) 
+        IExpressionTranslator<I, R> translator, StringBuilder warnings, IStringParserFactory<I> factory) 
         throws VilException {
         CompositeExpression result;
         if (null != text) {

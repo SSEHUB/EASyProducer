@@ -27,7 +27,7 @@ import net.ssehub.easy.instantiation.core.model.vilTypes.IMetaParameterDeclarati
  *  
  * @author Holger Eichelberger
  */
-public interface ICallExpressionTester <M extends IResolvableModel<V>, O extends IResolvableOperation<V>, 
+public interface ICallExpressionTester <M extends IResolvableModel<V, M>, O extends IResolvableOperation<V>, 
     E extends ModelCallExpression<V, M, O>, V extends IMetaParameterDeclaration> {
 
     /**

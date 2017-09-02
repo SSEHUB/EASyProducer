@@ -22,7 +22,7 @@ import net.ssehub.easy.instantiation.core.model.common.RuntimeEnvironment;
  * 
  * @author Holger Eichelberger
  */
-class RuntimeEnv extends RuntimeEnvironment<VarDecl> {
+class RuntimeEnv extends RuntimeEnvironment<VarDecl, PseudoModel> {
 
     /**
      * Creates an instance.

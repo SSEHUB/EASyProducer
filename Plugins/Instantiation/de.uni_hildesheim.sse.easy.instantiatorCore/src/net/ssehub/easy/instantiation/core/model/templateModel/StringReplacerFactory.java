@@ -15,31 +15,49 @@
  */
 package net.ssehub.easy.instantiation.core.model.templateModel;
 
+import net.ssehub.easy.basics.modelManagement.IVersionRestriction;
+import net.ssehub.easy.basics.modelManagement.RestrictionEvaluationException;
 import net.ssehub.easy.instantiation.core.model.common.VilException;
 import net.ssehub.easy.instantiation.core.model.expressions.Expression;
+import net.ssehub.easy.instantiation.core.model.expressions.InPlaceImportCommand;
 import net.ssehub.easy.instantiation.core.model.expressions.InPlaceVarDeclCommand;
 
 /**
  * An extended template language string resolver factory. This factory 
- * creates expressions for in-place variable declarations.
+ * creates expressions for in-place variable declarations and imports.
  * 
  * @author Holger Eichelberger
  */
-public class StringResolverFactoryWithVariables extends StringResolverFactory {
+public class StringReplacerFactory extends StringResolverFactory {
 
-    public static final StringResolverFactoryWithVariables INSTANCE = new StringResolverFactoryWithVariables();
+    public static final StringReplacerFactory INSTANCE = new StringReplacerFactory();
     
     // no state
     
     /**
      * Prevents external creation.
      */
-    protected StringResolverFactoryWithVariables() {
+    protected StringReplacerFactory() {
     }
 
     @Override
     public Expression createVarDeclExpression(InPlaceVarDeclCommand<VariableDeclaration> cmd) throws VilException {
         return new ContentVarDeclExpression(cmd.getDeclaration());
+    }
+
+    @Override
+    public Expression createImportExpression(InPlaceImportCommand<VariableDeclaration> cmd) throws VilException {
+        return new ContentImportExpression(cmd.getTemplate(), cmd.getVersionRestriction());
+    }
+
+    @Override
+    public IVersionRestriction createVersionRestriction(Expression expression, VariableDeclaration variable) 
+        throws VilException {
+        try {
+            return new ExpressionVersionRestriction(expression, variable);
+        } catch (RestrictionEvaluationException e) {
+            throw new VilException(e.getMessage(), e.getId());
+        } 
     }
 
 }

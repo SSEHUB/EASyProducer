@@ -1,5 +1,7 @@
 package net.ssehub.easy.instantiation.core.model.common;
 
+import net.ssehub.easy.basics.modelManagement.IModel;
+import net.ssehub.easy.basics.modelManagement.ModelImport;
 import net.ssehub.easy.instantiation.core.model.vilTypes.IMetaParameterDeclaration;
 import net.ssehub.easy.instantiation.core.model.vilTypes.IMetaType;
 import net.ssehub.easy.instantiation.core.model.vilTypes.ITypedModel;
@@ -10,10 +12,12 @@ import net.ssehub.easy.instantiation.core.model.vilTypes.TypeRegistry;
  * as operations.
  * 
  * @param <V> the actual type of variable
+ * @param <M> the model type
  * 
  * @author Holger Eichelberger
  */
-public interface IResolvableModel<V extends IMetaParameterDeclaration> extends IParameterizable<V>, ITypedModel {
+public interface IResolvableModel<V extends IMetaParameterDeclaration, M extends IModel> 
+    extends IParameterizable<V>, ITypedModel {
 
     /**
      * Returns whether the given <code>name</code> resolves to an IVML element.
@@ -28,7 +32,7 @@ public interface IResolvableModel<V extends IMetaParameterDeclaration> extends I
      * 
      * @return The parent project of this project or <code>null</code> if no parent is defined for this project.
      */
-    public IResolvableModel<V> getParent();
+    public IResolvableModel<V, M> getParent();
     
     /**
      * Returns the number of extension types declared in/by this model.
@@ -95,4 +99,11 @@ public interface IResolvableModel<V extends IMetaParameterDeclaration> extends I
      */
     public Typedef getTypedef(int index);
 
+    /**
+     * Adds a runtime model import.
+     * 
+     * @param imp the import
+     */
+    public void addRuntimeImport(ModelImport<M> imp);
+    
 }

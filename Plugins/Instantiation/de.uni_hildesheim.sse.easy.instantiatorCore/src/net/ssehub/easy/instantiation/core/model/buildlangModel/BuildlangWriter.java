@@ -241,7 +241,7 @@ public class BuildlangWriter extends WriterVisitor<VariableDeclaration> implemen
                 printIndentation();
                 print("import ");
                 print(imp.getName());
-                printVersionRestrictions(imp.getVersionRestriction());
+                printVersionRestrictions(imp.getVersionRestriction(), false);
                 println(";");
             }
             println();
@@ -261,7 +261,7 @@ public class BuildlangWriter extends WriterVisitor<VariableDeclaration> implemen
                 printIndentation();
                 print("requireVTL ");
                 printString(imp.getName());
-                printVersionRestrictions(imp.getVersionRestriction());
+                printVersionRestrictions(imp.getVersionRestriction(), false);
                 println(";");
             }
             println();
@@ -489,7 +489,7 @@ public class BuildlangWriter extends WriterVisitor<VariableDeclaration> implemen
         }
         print(" ");
         printArgumentList(inst, 0);
-        printVersionRestrictions(inst.getVersionRestriction());
+        printVersionRestrictions(inst.getVersionRestriction(), false);
         return null;
     }
 

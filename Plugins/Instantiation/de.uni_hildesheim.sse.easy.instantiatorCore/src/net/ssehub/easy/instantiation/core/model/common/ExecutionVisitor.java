@@ -38,10 +38,10 @@ import net.ssehub.easy.instantiation.core.model.vilTypes.TypeDescriptor;
  * 
  * @author Holger Eichelberger
  */
-public abstract class ExecutionVisitor <M extends IResolvableModel<V>, O extends IResolvableOperation<V>, 
+public abstract class ExecutionVisitor <M extends IResolvableModel<V, M>, O extends IResolvableOperation<V>, 
     V extends VariableDeclaration, R extends Resolver<M, O, ?, V>> extends EvaluationVisitor implements IVisitor {
 
-    private RuntimeEnvironment<V> environment;
+    private RuntimeEnvironment<V, M> environment;
     private ITracer tracer;
     private Map<String, Object> parameter;
 
@@ -52,7 +52,7 @@ public abstract class ExecutionVisitor <M extends IResolvableModel<V>, O extends
      * @param tracer the execution tracer instance (for testing)
      * @param parameter the parameter given from outside for the execution of the model
      */
-    protected ExecutionVisitor(RuntimeEnvironment<V> environment, ITracer tracer, Map<String, Object> parameter) {
+    protected ExecutionVisitor(RuntimeEnvironment<V, M> environment, ITracer tracer, Map<String, Object> parameter) {
         super(environment, tracer);
         this.environment = environment;
         this.tracer = tracer;
@@ -78,7 +78,7 @@ public abstract class ExecutionVisitor <M extends IResolvableModel<V>, O extends
      * @return the runtime environment
      */
     @Override
-    public RuntimeEnvironment<V> getRuntimeEnvironment() {
+    public RuntimeEnvironment<V, M> getRuntimeEnvironment() {
         return environment;
     }
 
@@ -250,8 +250,8 @@ public abstract class ExecutionVisitor <M extends IResolvableModel<V>, O extends
      * @param model the model to be visited
      * @throws VilException in case that visiting fails (cyclic inclusion)
      */
-    public void visitModelHeader(IResolvableModel<V> model) throws VilException {
-        Set<IResolvableModel<V>> visited = new HashSet<IResolvableModel<V>>();
+    public void visitModelHeader(IResolvableModel<V, M> model) throws VilException {
+        Set<IResolvableModel<V, M>> visited = new HashSet<IResolvableModel<V, M>>();
         visitModelHeader(model, visited);
     }
 
@@ -263,15 +263,15 @@ public abstract class ExecutionVisitor <M extends IResolvableModel<V>, O extends
      * @throws VilException in case that visiting fails for some reason
      */
     @SuppressWarnings("unchecked")
-    private void visitModelHeader(IResolvableModel<V> model, Set<IResolvableModel<V>> visited) 
+    private void visitModelHeader(IResolvableModel<V, M> model, Set<IResolvableModel<V, M>> visited) 
         throws VilException {
         if (!visited.contains(model)) {
             visited.add(model);
-            IResolvableModel<V> oldContext = environment.switchContext(model);
+            IResolvableModel<V, M> oldContext = environment.switchContext(model);
             processModelParameter(model);
             for (int i = 0; i < model.getImportsCount(); i++) {
                 ModelImport<?> imp = model.getImport(i);
-                IResolvableModel<V> imported = (IResolvableModel<V>) model.getImport(i).getResolved();
+                IResolvableModel<V, M> imported = (IResolvableModel<V, M>) model.getImport(i).getResolved();
                 if (null != imported) {
                     visitModelHeader(imported, visited);
                 } else {
@@ -296,7 +296,7 @@ public abstract class ExecutionVisitor <M extends IResolvableModel<V>, O extends
      * @param model the model being initialized
      * @throws VilException in case that the initialization fails, e.g., assigning values
      */
-    protected void initializeImplicitVariables(IResolvableModel<V> model) throws VilException {
+    protected void initializeImplicitVariables(IResolvableModel<V, M> model) throws VilException {
     }
 
     /**
@@ -318,7 +318,7 @@ public abstract class ExecutionVisitor <M extends IResolvableModel<V>, O extends
      * @param model the model to be processed
      * @throws VilException in case of execution errors
      */
-    protected void processModelParameter(IResolvableModel<V> model) throws VilException {
+    protected void processModelParameter(IResolvableModel<V, M> model) throws VilException {
         Map<String, V> sParam = new HashMap<String, V>();
         for (int p = 0; p < model.getParameterCount(); p++) {
             V param = model.getParameter(p);
@@ -347,7 +347,7 @@ public abstract class ExecutionVisitor <M extends IResolvableModel<V>, O extends
      *   effect if parameters are bound
      * @throws VilException in case of execution errors
      */
-    protected void handleParameterInSequence(IResolvableModel<V> model, Map<String, V> varMap) 
+    protected void handleParameterInSequence(IResolvableModel<V, M> model, Map<String, V> varMap) 
         throws VilException {
     }
 
@@ -436,7 +436,7 @@ public abstract class ExecutionVisitor <M extends IResolvableModel<V>, O extends
                 }
             }
             if (Status.SUCCESS == status) {
-                IResolvableModel<V> oldContext = environment.switchContext(model);
+                IResolvableModel<V, M> oldContext = environment.switchContext(model);
                 environment.pushLevel();
                 assignModelParameter(model, oldContext);
                 if (null == resolved) {
@@ -504,7 +504,7 @@ public abstract class ExecutionVisitor <M extends IResolvableModel<V>, O extends
      * @param srcModel the source model to take the (named, optional) parameters from
      * @throws VilException if accessing parameters / assigning values fails
      */
-    protected abstract void assignModelParameter(IResolvableModel<V> targetModel, IResolvableModel<V> srcModel) 
+    protected abstract void assignModelParameter(IResolvableModel<V, M> targetModel, IResolvableModel<V, M> srcModel) 
         throws VilException;
 
     /**
@@ -515,9 +515,9 @@ public abstract class ExecutionVisitor <M extends IResolvableModel<V>, O extends
      * @param startIndex which parameter to start from
      * @throws VilException if accessing parameters / assigning values fails
      */
-    protected void evaluateModelParameter(IResolvableModel<V> targetModel, IResolvableModel<V> srcModel, int startIndex)
-        throws VilException {
-        RuntimeEnvironment<V> env = getRuntimeEnvironment();
+    protected void evaluateModelParameter(IResolvableModel<V, M> targetModel, IResolvableModel<V, M> srcModel, 
+        int startIndex) throws VilException {
+        RuntimeEnvironment<V, M> env = getRuntimeEnvironment();
         for (int p = startIndex; p < targetModel.getParameterCount(); p++) {
             V param = targetModel.getParameter(p);
             Object val = getParameter(param.getName());

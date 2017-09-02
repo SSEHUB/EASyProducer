@@ -28,7 +28,7 @@ import net.ssehub.easy.instantiation.core.model.vilTypes.configuration.IvmlEleme
  * 
  * @author Holger Eichelberger
  */
-public abstract class Resolver<M extends IResolvableModel<V>, O extends IResolvableOperation<V>, 
+public abstract class Resolver<M extends IResolvableModel<V, M>, O extends IResolvableOperation<V>, 
     E extends ModelCallExpression<V, M, O>, V extends IMetaParameterDeclaration> 
     extends net.ssehub.easy.instantiation.core.model.expressions.Resolver<V> {
 
@@ -55,7 +55,7 @@ public abstract class Resolver<M extends IResolvableModel<V>, O extends IResolva
         if (environment instanceof RuntimeEnvironment) {
             // push the context model of the runtime environment in order to resolve
             // also def and rule calls defined in the same model
-            RuntimeEnvironment<?> rEnv = (RuntimeEnvironment<?>) environment;
+            RuntimeEnvironment<?, ?> rEnv = (RuntimeEnvironment<?, ?>) environment;
             IModel model = rEnv.getContextModel();
             if (null != model) {
                 models.push((M) model);

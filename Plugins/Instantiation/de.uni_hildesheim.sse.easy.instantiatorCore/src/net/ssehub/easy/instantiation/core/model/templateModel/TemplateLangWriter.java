@@ -54,6 +54,7 @@ public class TemplateLangWriter extends WriterVisitor<VariableDeclaration> imple
             printIndentation();
             print("import ");
             print(ref.getName());
+            printVersionRestrictions(ref.getVersionRestriction(), false);
             println(";");
         }
         if (template.getImportsCount() > 0) {
@@ -438,6 +439,15 @@ public class TemplateLangWriter extends WriterVisitor<VariableDeclaration> imple
     public Object visitContentVarDeclExpression(ContentVarDeclExpression ex) throws VilException {
         print("${VAR ");
         ex.getVariable().accept(this);
+        println("}");
+        return null;
+    }
+
+    @Override
+    public Object visitContentImportExpression(ContentImportExpression ex) throws VilException {
+        print("${IMPORT ");
+        print(ex.getTemplate());
+        printVersionRestrictions(ex.getVersionRestriction(), true);
         println("}");
         return null;
     }

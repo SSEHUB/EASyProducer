@@ -85,7 +85,7 @@ public class InPlaceIfCommand<I extends VariableDeclaration> extends InPlaceComm
     }
 
     @Override
-    protected Expression close(IStringResolverFactory<I> factory) throws VilException {
+    protected Expression close(IStringParserFactory<I> factory) throws VilException {
         return factory.createIfExpression(this);
     }
 

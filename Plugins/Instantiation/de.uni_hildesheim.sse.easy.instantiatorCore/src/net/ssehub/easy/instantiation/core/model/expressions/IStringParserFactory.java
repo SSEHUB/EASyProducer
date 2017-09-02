@@ -15,8 +15,10 @@
  */
 package net.ssehub.easy.instantiation.core.model.expressions;
 
+import net.ssehub.easy.basics.modelManagement.IVersionRestriction;
 import net.ssehub.easy.instantiation.core.model.common.VariableDeclaration;
 import net.ssehub.easy.instantiation.core.model.common.VilException;
+import net.ssehub.easy.instantiation.core.model.vilTypes.TypeDescriptor;
 
 /**
  * An optional factory turning in-place commands into language-specific expressions. If none is given, 
@@ -25,7 +27,7 @@ import net.ssehub.easy.instantiation.core.model.common.VilException;
  * @param <I> the variable declaration type
  * @author Holger Eichelberger
  */
-public interface IStringResolverFactory<I extends VariableDeclaration> {
+public interface IStringParserFactory<I extends VariableDeclaration> {
 
     /**
      * Creates an alternative expression.
@@ -46,14 +48,23 @@ public interface IStringResolverFactory<I extends VariableDeclaration> {
     public Expression createForExpression(InPlaceForCommand<I> cmd) throws VilException;
 
     /**
-     * Creates a var declaration expression.
+     * Creates a variable declaration expression.
      * 
-     * @param cmd the command to create a for-loop expression for
+     * @param cmd the command to create a variable declaration expression for
      * @return a for-loop expression (may be <b>null</b> if not supported)
      * @throws VilException if the expression cannot be created
      */
     public Expression createVarDeclExpression(InPlaceVarDeclCommand<I> cmd) throws VilException;
- 
+
+    /**
+     * Creates an import expression.
+     * 
+     * @param cmd the command to create an import expression for
+     * @return a for-loop expression (may be <b>null</b> if not supported)
+     * @throws VilException if the expression cannot be created
+     */
+    public Expression createImportExpression(InPlaceImportCommand<I> cmd) throws VilException;
+
     /**
      * Creates a variable.
      * 
@@ -64,5 +75,24 @@ public interface IStringResolverFactory<I extends VariableDeclaration> {
      * @throws VilException if the variable cannot be created
      */
     public I createVariable(String name, Expression initExpression, boolean asIterator) throws VilException;
+    
+    /**
+     * Creates a non-constant variable declaration.
+     * 
+     * @param name the name of the variable
+     * @param type the type of the variable
+     * @return the variable declaration
+     */
+    public I createVariableDeclaration(String name, TypeDescriptor<?> type);
+    
+    /**
+     * Creates a version restriction from the given <code>expression</code>.
+     * 
+     * @param expression the expression
+     * @param variable the version variable
+     * @return the version restriction or <b>null</b> if not supported
+     * @throws VilException if the restriction cannot be created
+     */
+    public IVersionRestriction createVersionRestriction(Expression expression, I variable) throws VilException;
     
 }

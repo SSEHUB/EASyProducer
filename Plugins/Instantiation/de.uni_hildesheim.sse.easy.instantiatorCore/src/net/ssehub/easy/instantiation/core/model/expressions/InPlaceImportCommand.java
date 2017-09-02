@@ -17,26 +17,48 @@ package net.ssehub.easy.instantiation.core.model.expressions;
 
 import java.util.List;
 
+import net.ssehub.easy.basics.modelManagement.IVersionRestriction;
 import net.ssehub.easy.instantiation.core.model.common.VariableDeclaration;
 import net.ssehub.easy.instantiation.core.model.common.VilException;
 
 /**
- * Represents an in-place variable declaration command.
+ * Represents an in-place import command.
  * 
  * @param <I> the variable declaration type
  * @author Holger Eichelberger
  */
-public class InPlaceVarDeclCommand <I extends VariableDeclaration> extends InPlaceCommand<I> {
+public class InPlaceImportCommand<I extends VariableDeclaration> extends InPlaceCommand<I> {
 
-    private I decl;
+    private String template;
+    private IVersionRestriction restriction;
     
     /**
-     * Creates an in-place variable declaration command.
+     * Creates an in-place import command.
      * 
-     * @param decl the variable declaration
+     * @param template the template to import
+     * @param restriction the version restriction (may be <b>null</b>)
      */
-    public InPlaceVarDeclCommand(I decl) {
-        this.decl = decl;
+    public InPlaceImportCommand(String template, IVersionRestriction restriction) {
+        this.template = template;
+        this.restriction = restriction;
+    }
+
+    /**
+     * Returns the template name.
+     * 
+     * @return the template name
+     */
+    public String getTemplate() {
+        return template;
+    }
+    
+    /**
+     * Returns the version restriction.
+     * 
+     * @return the version restriction
+     */
+    public IVersionRestriction getVersionRestriction() {
+        return restriction;
     }
     
     @Override
@@ -46,7 +68,7 @@ public class InPlaceVarDeclCommand <I extends VariableDeclaration> extends InPla
 
     @Override
     protected Expression close(IStringParserFactory<I> factory) throws VilException {
-        return factory.createVarDeclExpression(this);
+        return factory.createImportExpression(this);
     }
 
     @Override
@@ -57,15 +79,6 @@ public class InPlaceVarDeclCommand <I extends VariableDeclaration> extends InPla
     @Override
     protected void replace(InPlaceCommand<I> cmd, Expression expr) {
         // no replacement needed
-    }
-    
-    /**
-     * Returns the declaration.
-     * 
-     * @return the declaration
-     */
-    public I getDeclaration() {
-        return decl;
     }
 
 }

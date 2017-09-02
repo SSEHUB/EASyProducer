@@ -23,7 +23,7 @@ import net.ssehub.easy.instantiation.core.model.vilTypes.TypeRegistry;
  * @author Holger Eichelberger
  */
 public class Template extends AbstractResolvableModel<VariableDeclaration, Template> 
-    implements ITemplateLangElement, IResolvableModel<VariableDeclaration>, 
+    implements ITemplateLangElement, IResolvableModel<VariableDeclaration, Template>, 
     IVariableDeclarationReceiver<VariableDeclaration> {
 
     private Version version;
@@ -367,5 +367,5 @@ public class Template extends AbstractResolvableModel<VariableDeclaration, Templ
     public boolean checkConversion(IMetaType param, IMetaOperation conversion) {
         return true;
     }
-
+    
 }
