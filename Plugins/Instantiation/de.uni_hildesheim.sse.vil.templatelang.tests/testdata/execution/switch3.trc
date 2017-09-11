@@ -1,0 +1,11 @@
+-> main(Configuration, Artifact) with (<config>, test.texts)
+    cfg <- <config>
+    p <- dispatch4::p
+    -> map(Parameter) with (dispatch4::p)
+        -> type(Parameter) with (dispatch4::p) = IntegerParameter
+        switch(IntegerParameter)
+            0 : int
+    -> map1(DecisionVariable) with (dispatch4::p)
+        -> type(DecisionVariable) with (dispatch4::p) = IntegerParameter
+        switch(IntegerParameter)
+            0 : int

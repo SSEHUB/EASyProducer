@@ -21,12 +21,14 @@ project dispatch4 {
   RealParameter rp = {};
   StringParameter sp = {};
   BooleanParameter bp = {};
+  Parameter p = IntegerParameter{};
   
   freeze {
     ip;
     rp;
     sp;
     bp;
+    p;
   };
   
 }

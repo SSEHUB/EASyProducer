@@ -473,6 +473,16 @@ public class ExecutionTests extends AbstractExecutionTest {
     public void testSwitch2() throws IOException {
         assertEqual("switch2");
     }
+    
+    /**
+     * Tests a switch statement over IVML types.
+     * 
+     * @throws IOException should not occur
+     */
+    @Test
+    public void testSwitch3() throws IOException {
+        assertEqualWithIvml("switch3", "dispatch4");
+    }
 
     /**
      * Tests a switch statement with default in a typed def.

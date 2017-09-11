@@ -1,0 +1,29 @@
+@advice(dispatch4)
+template switch3(Configuration config, Artifact target) {
+
+    def String map(Parameter p) {
+        switch(p.type()) {
+            IntegerParameter : "int",
+            BooleanParameter : "boolean",
+            RealParameter : "double",
+            StringParameter : "String"
+        }
+    }
+
+    def String map1(DecisionVariable v) {
+        switch(v.type()) {
+            IntegerParameter : "int",
+            BooleanParameter : "boolean",
+            RealParameter : "double",
+            StringParameter : "String"
+        }
+    }
+
+    def main(Configuration config, Artifact target) {
+        dispatch4 cfg = config;
+        Parameter p = cfg.p;
+        'output ${map(p)}'
+        'output ${map1(p)}'
+    }
+
+}
