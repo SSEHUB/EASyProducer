@@ -96,6 +96,7 @@ public class TemplateLangExecution extends ExecutionVisitor<Template, Def, Varia
     public static final String PARAM_TARGET_SURE = INTERNAL_PARAM_PREFIX + PARAM_TARGET;
 
     private static final List<JavaExtension> DEFAULT_EXTENSIONS = new ArrayList<JavaExtension>();
+    private static final String EMPTY_CONTENT = "\0\1\0"; // don't use for anything else
     
     private RuntimeEnvironment environment;
     private Writer mainOut;
@@ -323,6 +324,7 @@ public class TemplateLangExecution extends ExecutionVisitor<Template, Def, Varia
             tracer.visitAlternative(true);
             value = ifStmt.accept(this);
             decreaseIndentation(ifStmt);
+            value = checkContentStatement(value, null, alternative.getIfStatement());
         } else {
             if (null != alternative.getElseStatement()) {
                 ITemplateElement elseStmt = alternative.getElseStatement();
@@ -330,6 +332,10 @@ public class TemplateLangExecution extends ExecutionVisitor<Template, Def, Varia
                 tracer.visitAlternative(false);
                 value = elseStmt.accept(this);
                 decreaseIndentation(elseStmt);
+                value = checkContentStatement(value, null, alternative.getElseStatement());
+            } else {
+                // there is no else - check content for if-part
+                value = checkContentStatement(value, null, alternative.getIfStatement());
             }
         }
         return value;
@@ -389,7 +395,43 @@ public class TemplateLangExecution extends ExecutionVisitor<Template, Def, Varia
                 throw new VilException("loop must iterate over collection", VilException.ID_SEMANTIC);
             }
         }
-        return bodyResult;
+        return checkContentStatement(bodyResult, NullValue.VALUE, loop.getLoopStatement());
+    }
+    
+    /**
+     * Checks the current value for the need of correction with respect to the last content statement.
+     * 
+     * @param currentValue the current value
+     * @param noValue the object indicating no value in this context
+     * @param check the template element/statement to check for a content statement
+     * @return <code>currentValue</code> or {@link #EMPTY_CONTENT}
+     */
+    private Object checkContentStatement(Object currentValue, Object noValue, ITemplateElement check) {
+        Object result = currentValue;
+        if (noValue == currentValue && isContentStatement(check)) {
+            result = EMPTY_CONTENT;
+        }
+        return result;
+    }
+    
+    /**
+     * Returns whether the template element or the last statement within is a content statement.
+     * 
+     * @param elt the element
+     * @return <code>true</code> for content statement, <code>false</code> else
+     */
+    private boolean isContentStatement(ITemplateElement elt) {
+        boolean result = false;
+        if (elt instanceof TemplateBlock) {
+            TemplateBlock blk = (TemplateBlock) elt;
+            int count = blk.getBodyElementCount();
+            if (count > 0) {
+                result = isContentStatement(blk.getBodyElement(count - 1));
+            }
+        } else {
+            result = elt instanceof ContentStatement;
+        }
+        return result;
     }
     
     /**
@@ -475,6 +517,20 @@ public class TemplateLangExecution extends ExecutionVisitor<Template, Def, Varia
         String content;
         // search for \r\n, \r, \n followed by indentation*step whitespaces or tabs +1
         content = (String) cnt.getContent().accept(this);
+        if (null != content) {
+            int pos = content.indexOf(EMPTY_CONTENT);
+            if (pos > 0) {
+                int end = pos + EMPTY_CONTENT.length();
+                while (end < content.length() && IndentationUtils.isLineEnd(content.charAt(end))) {
+                    end++;
+                }
+                int start = pos - 1;
+                while (pos >= 0 && IndentationUtils.isIndentationChar(content.charAt(start))) {
+                    start--;
+                }
+                content = content.substring(0, start) + content.substring(end);
+            }
+        } 
         if (null != content) {
             int indentation = environment.getIndentation();
             if (indentation > 0) {
@@ -703,7 +759,7 @@ public class TemplateLangExecution extends ExecutionVisitor<Template, Def, Varia
             }
         } while (executeLoop && !stop);
         environment.popLevel();
-        return bodyResult;
+        return checkContentStatement(bodyResult, NullValue.VALUE, stmt.getLoopStatement());
     }
 
     @Override

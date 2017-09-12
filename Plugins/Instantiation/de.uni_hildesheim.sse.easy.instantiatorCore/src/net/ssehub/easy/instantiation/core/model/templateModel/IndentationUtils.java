@@ -142,7 +142,7 @@ public class IndentationUtils {
     public static boolean isIndentationChar(char ch) {
         return ' ' == ch || '\t' == ch;
     }
-
+    
     /**
      * Returns whether <code>ch</code> is a line end character.
      * 
