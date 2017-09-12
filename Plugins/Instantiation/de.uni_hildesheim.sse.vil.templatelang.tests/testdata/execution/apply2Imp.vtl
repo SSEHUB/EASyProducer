@@ -1,0 +1,13 @@
+template apply2Impl(Configuration config, FileArtifact target) {
+
+    typedef FunCallImp callOf Integer (Integer);
+
+    def Integer impCall1(FunCallImp d, Integer r) {
+        d(r) + 1;
+    }
+
+    def Integer impCall2(callOf Integer (Integer) d, Integer r) {
+        d(r) + 2;
+    } 
+
+}

@@ -143,7 +143,7 @@ public class ExecutionTests extends AbstractExecutionTest {
     }
     
     /**
-     * Tests VTL function pointers with typedefs.
+     * Tests VTL function pointers with typedefs, also imported ones.
      * 
      * @throws IOException should not occur
      */

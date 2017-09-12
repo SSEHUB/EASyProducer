@@ -130,6 +130,10 @@ public class ModelTranslator extends de.uni_hildesheim.sse.vil.expressions.trans
             result = new Template(tpl.getName(), extension, desc, resolver.getTypeRegistry());
             resolver.pushModel(result);
             pushed = true;
+            result.setVersion(convert(tpl.getVersion()));
+            resolveImports(tpl, ExpressionDslPackage.Literals.LANGUAGE_UNIT__IMPORTS, result, uri, 
+                new ArrayList<de.uni_hildesheim.sse.vil.templatelang.templateLang.LanguageUnit>(), impResolver);
+            resolver.enumerateImports(result);
             processTypedefs(tpl.getTypeDefs(), result);
             if (null != tpl.getVars()) {
                 List<de.uni_hildesheim.sse.vil.expressions.expressionDsl.VariableDeclaration> decls = select(
@@ -137,10 +141,6 @@ public class ModelTranslator extends de.uni_hildesheim.sse.vil.expressions.trans
                 processVariableDeclarations(decls, result);
                 // variables are added successively to the resolver
             }
-            result.setVersion(convert(tpl.getVersion()));
-            resolveImports(tpl, ExpressionDslPackage.Literals.LANGUAGE_UNIT__IMPORTS, result, uri, 
-                new ArrayList<de.uni_hildesheim.sse.vil.templatelang.templateLang.LanguageUnit>(), impResolver);
-            resolver.enumerateImports(result);
             if (null != tpl.getDefs()) {
                 processDefs(tpl, result);
             }
