@@ -12,7 +12,7 @@ template stormSink(Configuration config, FileArtifact target, DecisionVariable p
 				tupleId = "$tupleCount";
 			}
 			String inputInfName = ifInputName + "${tupleId}Input";
-			String fImpInputName = 	ifName + "${tupleId}Input";
+			String fImpInputName = 	ifInputName + "${tupleId}Input";
 			if(variable) {
 				'    transient ${toIdentifier(inputInfName)} input${tupleId} = null;'
 			} else {
