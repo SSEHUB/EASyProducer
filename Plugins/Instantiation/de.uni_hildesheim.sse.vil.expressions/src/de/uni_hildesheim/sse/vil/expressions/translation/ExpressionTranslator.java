@@ -1120,7 +1120,8 @@ public abstract class ExpressionTranslator<I extends VariableDeclaration, R exte
                     } else if (ivmlElement instanceof IvmlElement) {
                         type = ((IvmlElement) ivmlElement).getType();
                     }
-                    VarModelIdentifierExpression vmie = new VarModelIdentifierExpression(name, type); // also if elt==null 
+                    VarModelIdentifierExpression vmie = new VarModelIdentifierExpression(name, type, 
+                        resolver.getCurrentModel()); // also if elt==null  
                     lastVarModelIdentifierEx = vmie;
                     result = vmie;
                     if (null == ivmlElement) {
@@ -1134,7 +1135,7 @@ public abstract class ExpressionTranslator<I extends VariableDeclaration, R exte
         } else if (res instanceof VariableDeclaration) {
             result = new VariableExpression((VariableDeclaration) res, name);
         } else if (res instanceof IvmlElement) { // from VIL, model is known at parsing time
-            result = new VarModelIdentifierExpression(name, ((IvmlElement) res).getType());
+            result = new VarModelIdentifierExpression(name, ((IvmlElement) res).getType(), resolver.getCurrentModel());
         } else if (null == result) {
             // may happen although template..
             throw new TranslatorException(name + " is no variable", arg, 

@@ -1,0 +1,13 @@
+vilScript apply2impl (Project source, Configuration config, Project target) {
+
+    typedef FunCallImp callOf Integer (Integer);
+
+    Integer impCall1(FunCallImp d, Integer r) = : {
+        d(r) + 1;
+    }
+
+    Integer impCall2(callOf Integer (Integer) d, Integer r) = : {
+        d(r) + 2;
+    } 
+
+}

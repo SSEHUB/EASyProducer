@@ -786,7 +786,7 @@ public class BuildlangExecution extends ExecutionVisitor<Script, AbstractRule, V
             VariableDeclaration var = rule.getParameter(p);
             IResolvable res = environment.get(var.getName());
             if (null == res) {
-                throw new VilException("parameter " + var.getName() + " is not defined", 
+                throw new VilException("parameter " + var.getName() + " is not defined in rule " + rule.getSignature(), 
                     VilException.ID_RUNTIME_PARAMETER);
             } else {
                 environment.addValue(var, environment.getValue(res));
@@ -1629,8 +1629,10 @@ public class BuildlangExecution extends ExecutionVisitor<Script, AbstractRule, V
     public Object visitResolvableOperationCallExpression(ResolvableOperationCallExpression ex) throws VilException {
         Object result;
         Object val = environment.getValue(ex.getVariable());
-        if (val instanceof IBuildlangElement) {
-            result = ((IBuildlangElement) val).accept(this);
+        if (val instanceof Rule) {
+            Rule rule = (Rule) val;
+            result = proceedModelCall(rule, rule.getName(), rule.getParent(), ex, false);
+            //result = ((IBuildlangElement) val).accept(this);
         } else {
             result = super.visitResolvableOperationCallExpression(ex);
         }

@@ -23,6 +23,16 @@ f10 <- func10(Integer)
             -> func(Integer) with (6)
             -> func(Integer) with (6)
         }
+    -> impCall1(FunCallImp, Integer) with (func10(Integer), 1)
+        -> func10(Integer) with (1)
+            -> *(Integer, Integer) with (1, 10) = 10
+        -> +(Integer, Integer) with (10, 1) = 11
+    i <- 11
+    -> impCall2(callOf Integer (Integer), Integer) with (func10(Integer), 2)
+        -> func10(Integer) with (2)
+            -> *(Integer, Integer) with (2, 10) = 20
+        -> +(Integer, Integer) with (20, 2) = 22
+    i <- 22
     -> impCall1(FunCallImp, Integer) with (func10(Integer), 3)
         -> func10(Integer) with (3)
             -> *(Integer, Integer) with (3, 10) = 30

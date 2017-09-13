@@ -25,7 +25,11 @@ template apply2(Configuration config, FileArtifact target) {
     def main(Configuration config, FileArtifact target) {
         sequenceOf(Integer) seq = {1, 2, 3, 4, 5, 6};
         loop(seq, func);
-        Integer i = impCall1(f10, 3);
+        Integer i = impCall1(func10, 1);
+        'imp1 $i'
+        i = impCall2(func10, 2);
+        'imp2 $i'
+        i = impCall1(f10, 3);
         'imp1 $i'
     }
 

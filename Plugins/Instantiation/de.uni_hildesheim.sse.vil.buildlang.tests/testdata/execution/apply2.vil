@@ -1,11 +1,18 @@
+import apply2impl;
+
 vilScript apply2 (Project source, Configuration config, Project target) {
 
     version v0;
 
     callOf(Integer) r = func;
+    FunCallImp f10 = func10;
 
     func(Integer i) = : {
         println(i);
+    }
+
+    Integer func10(Integer i) = : {
+        i * 10;
     }
 
     main() = : {
@@ -13,6 +20,9 @@ vilScript apply2 (Project source, Configuration config, Project target) {
         map(i:seq) {
             r(i);
         };
+        Integer j = impCall1(func10, 1);
+        j = impCall2(func10, 2);
+        j = impCall1(f10, 3);
     }
 
 }

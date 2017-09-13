@@ -179,7 +179,7 @@ public abstract class AbstractCallExpression extends Expression implements IArgu
                         IMetaType aType = argumentTypes[p];
                         allEqual &= TypeRegistry.equals(pType, aType);
                         if (!allEqual) {
-                            IMetaOperation funcOp = resolveResolvableOperation(operand, pType, aType, 
+                            IMetaOperation funcOp = resolveResolvableOperation(null, pType, aType, 
                                 arguments[p].getExpression(), RESLIST);
                             if (null != funcOp) {
                                 arguments[p].resolveOperation((TypeDescriptor<?>) pType, funcOp);
@@ -252,7 +252,8 @@ public abstract class AbstractCallExpression extends Expression implements IArgu
     /**
      * Resolves a resolvable operation ("function pointer").
      * 
-     * @param operand the operand (must also be of type {@link IModel})
+     * @param operand the operand (must also be of type {@link IModel}, may be <b>null</b> then the model from 
+     *     <code>initExpression</code> is taken if it is a {@link VarModelIdentifierExpression})
      * @param pType the parameter type
      * @param aType the argument type
      * @param initExpression the initialization expression (shall be of <code>aType</code>)
@@ -263,20 +264,24 @@ public abstract class AbstractCallExpression extends Expression implements IArgu
     public static IMetaOperation resolveResolvableOperation(IMetaType operand, IMetaType pType, IMetaType aType, 
         Expression initExpression, ResolutionListener listener) throws VilException {
         IMetaOperation result = null;
-        if (TypeRegistry.resolvableOperationType().isAssignableFrom(pType) 
-            && IvmlTypes.ivmlElement().isAssignableFrom(aType) && operand instanceof IModel 
-            && initExpression instanceof VarModelIdentifierExpression) {
-            VarModelIdentifierExpression varModelIdEx = (VarModelIdentifierExpression) initExpression; 
-            String opName = varModelIdEx.getIdentifier();
-            CallArgument[] args = toTypeDescriptors(pType, 1);
-            List<IMetaOperation> ops = assignableCandidates(operand, opName, args, args.length, false);
-            if (1 == ops.size()) { // return type may also select
-                IMetaOperation functionOp = ops.get(0);
-                TypeDescriptor<?> ret = pType.getGenericParameterType(pType.getGenericParameterCount() - 1);
-                if (ReflectionTypeDescriptor.VOID == ret 
-                    || ret.isAssignableFrom(functionOp.getReturnType())) {
-                    result = functionOp;
-                    listener.resolved(varModelIdEx);
+        if (initExpression instanceof VarModelIdentifierExpression) {
+            VarModelIdentifierExpression varModelIdEx = (VarModelIdentifierExpression) initExpression;
+            if (null == operand) {
+                operand = varModelIdEx.getModel();
+            }
+            if (TypeRegistry.resolvableOperationType().isAssignableFrom(pType) 
+                && IvmlTypes.ivmlElement().isAssignableFrom(aType) && operand instanceof IModel) {
+                String opName = varModelIdEx.getIdentifier();
+                CallArgument[] args = toTypeDescriptors(pType, 1);
+                List<IMetaOperation> ops = assignableCandidates(operand, opName, args, args.length, false);
+                if (1 == ops.size()) { // return type may also select
+                    IMetaOperation functionOp = ops.get(0);
+                    TypeDescriptor<?> ret = pType.getGenericParameterType(pType.getGenericParameterCount() - 1);
+                    if (ReflectionTypeDescriptor.VOID == ret 
+                        || ret.isAssignableFrom(functionOp.getReturnType())) {
+                        result = functionOp;
+                        listener.resolved(varModelIdEx);
+                    }
                 }
             }
         }

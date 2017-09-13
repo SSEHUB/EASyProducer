@@ -1,6 +1,8 @@
 package net.ssehub.easy.instantiation.core.model.expressions;
 
+import net.ssehub.easy.basics.modelManagement.IModel;
 import net.ssehub.easy.instantiation.core.model.common.VilException;
+import net.ssehub.easy.instantiation.core.model.vilTypes.ITypedModel;
 import net.ssehub.easy.instantiation.core.model.vilTypes.TypeDescriptor;
 import net.ssehub.easy.instantiation.core.model.vilTypes.TypeRegistry;
 import net.ssehub.easy.instantiation.core.model.vilTypes.configuration.IvmlElement;
@@ -16,14 +18,17 @@ public class VarModelIdentifierExpression extends Expression {
     
     private String identifier;
     private TypeDescriptor<?> type;
+    private ITypedModel model;
 
     /**
-     * Creates the representing instance without related/resolved IVML element.
+     * Creates the representing instance.
      * 
      * @param identifier the identifier from VIL
+     * @param type the related type (may be <b>null</b> if unknown/unresolved, then {@link IvmlElement} is assumed)
+     * @param model the model this expression was created for (for further resolution, may be <b>null</b>)
      */
-    public VarModelIdentifierExpression(String identifier) {
-        this(identifier, null);
+    public VarModelIdentifierExpression(String identifier, TypeDescriptor<?> type, IModel model) {
+        this(identifier, type, model instanceof ITypedModel ? (ITypedModel) model : null);
     }
     
     /**
@@ -31,11 +36,21 @@ public class VarModelIdentifierExpression extends Expression {
      * 
      * @param identifier the identifier from VIL
      * @param type the related type (may be <b>null</b> if unknown/unresolved, then {@link IvmlElement} is assumed)
+     * @param model the model this expression was created for (for further resolution, may be <b>null</b>)
      */
-    public VarModelIdentifierExpression(String identifier, TypeDescriptor<?> type) {
+    public VarModelIdentifierExpression(String identifier, TypeDescriptor<?> type, ITypedModel model) {
         this.identifier = identifier;
         this.type = null == type ? TypeRegistry.DEFAULT.getType(IvmlElement.class) : type;
-//this.type = TypeRegistry.DEFAULT.getType(IvmlElement.class);        
+        this.model = model;
+    }
+    
+    /**
+     * Returns the model.
+     * 
+     * @return the model, may be <b>null</b>
+     */
+    public ITypedModel getModel() {
+        return model;
     }
     
     /**
