@@ -2,6 +2,7 @@ package net.ssehub.easy.instantiation.core.model.expressions;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
 
 import net.ssehub.easy.basics.modelManagement.IModel;
@@ -11,6 +12,7 @@ import net.ssehub.easy.instantiation.core.model.vilTypes.IActualTypeProvider;
 import net.ssehub.easy.instantiation.core.model.vilTypes.IMetaOperation;
 import net.ssehub.easy.instantiation.core.model.vilTypes.IMetaParameterDeclaration;
 import net.ssehub.easy.instantiation.core.model.vilTypes.IMetaType;
+import net.ssehub.easy.instantiation.core.model.vilTypes.ITypedModel;
 import net.ssehub.easy.instantiation.core.model.vilTypes.ReflectionTypeDescriptor;
 import net.ssehub.easy.instantiation.core.model.vilTypes.TypeDescriptor;
 import net.ssehub.easy.instantiation.core.model.vilTypes.TypeHelper;
@@ -662,9 +664,7 @@ public abstract class AbstractCallExpression extends Expression implements IArgu
                     try {
                         op = resolveOperation(fOperand, name, args);
                     } catch (VilException e) {
-                        if (operand instanceof IModel) {
-                            op = resolveOperation(operand, name, args);
-                        }
+                        op = resolveOperationOnModel(operand, name, args, new HashSet<Object>());
                     }
                     if (null != op && null == args[0].getExpression() /*&& op instanceof OperationDescriptor*/) {
                         fae.enableMetaAccess();
@@ -680,6 +680,41 @@ public abstract class AbstractCallExpression extends Expression implements IArgu
             op = resolveOperation(operand, name, arguments);
         }
         return op;        
+    }
+
+    /**
+     * Resolves the given operation on <code>operand</code>, considering <code>operand</code> as a model with imports.
+     * 
+     * @param operand the operand, i.e., the model to be searched for operations
+     * @param name the name of the operation to be resolved
+     * @param arguments the (named) arguments of the call
+     * @param done already searched models
+     * @return the resolved operation
+     * @throws VilException in case that no resolution can be found for various (typically type compliance) 
+     *   reasons
+     */
+    private static IMetaOperation resolveOperationOnModel(Object operand, String name, CallArgument[] arguments, 
+        java.util.Set<Object> done) throws VilException {
+        IMetaOperation op = null;
+        if (operand instanceof ITypedModel) {
+            ITypedModel model = (ITypedModel) operand;
+            if (!done.contains(model)) {
+                done.add(model);
+                try {
+                    op = resolveOperation(model, name, arguments);
+                } catch (VilException e) {
+                    // op -> null
+                }
+                for (int i = 0; null == op && i < model.getImportsCount(); i++) {
+                    try {
+                        op = resolveOperationOnModel(model.getImport(i).getResolved(), name, arguments, done);
+                    } catch (VilException e) {
+                        // op -> null
+                    }
+                }
+            }
+        }
+        return op;
     }
 
     /**

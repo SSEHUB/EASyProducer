@@ -1,0 +1,15 @@
+-> main(Configuration, FileArtifact) with (<config>, test.texts)
+    cfg <- <config>
+    f <- qm7::fNormalize
+    -> produceForTuples(Tuples, Boolean, String, TupleProducerFunc) with ({qm7::Family::output [0]}, true, fName, tupleProducer(Tuple,Boolean,String))
+        for t {
+            t <- qm7::Family::output [0]
+            -> tupleProducer(Tuple, Boolean, String) with (qm7::Family::output [0], true, fName)
+                -> size(Collection) with ({qm7::Tuple::fields [0], qm7::Tuple::fields [1], qm7::Tuple::fields [2], qm7::Tuple::fields [3]}) = 4
+        }
+    -> produceForTuples(Tuples, Boolean, String, TupleProducerFunc) with ({qm7::Family::output [0]}, true, fName, tupleProducer(Tuple,Boolean,String))
+        for t {
+            t <- qm7::Family::output [0]
+            -> tupleProducer(Tuple, Boolean, String) with (qm7::Family::output [0], true, fName)
+                -> size(Collection) with ({qm7::Tuple::fields [0], qm7::Tuple::fields [1], qm7::Tuple::fields [2], qm7::Tuple::fields [3]}) = 4
+        }

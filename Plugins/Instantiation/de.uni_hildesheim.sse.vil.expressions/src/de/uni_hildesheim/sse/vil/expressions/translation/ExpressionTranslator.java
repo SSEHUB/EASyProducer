@@ -1099,7 +1099,7 @@ public abstract class ExpressionTranslator<I extends VariableDeclaration, R exte
                     ExpressionDslPackage.Literals.CONSTANT__QVALUE, ErrorCodes.CANNOT_RESOLVE_ITER);
             }
             TypeRegistry registry = resolver.getTypeRegistry();
-            TypeDescriptor<?> type = registry.getType(name);
+            TypeDescriptor<?> type = registry.getType(name, false);
             if (null == type) {
                 Object ivmlElement = resolver.getIvmlElement(name);
                 if (ivmlElement instanceof EnumValue) {

@@ -995,7 +995,7 @@ public class TypeRegistry {
     }
     
     /**
-     * Returns whether two types are equal.
+     * Returns whether two types are equal including base type considerations.
      * 
      * @param t1 the first type to be compared
      * @param t2 the second type to be compared
@@ -1012,6 +1012,13 @@ public class TypeRegistry {
                     for (int p = 0; equals && p < td1.getGenericParameterCount(); p++) {
                         equals = equals(td1.getGenericParameterType(p), td2.getGenericParameterType(p));
                     }
+                }
+            }
+            if (!equals) {
+                IMetaType b1 = null == t1.getBaseType() ? t1 : t1.getBaseType();
+                IMetaType b2 = null == t2.getBaseType() ? t2 : t2.getBaseType();
+                if (b1 != t1 || b2 != t2) {
+                    equals = equals(b1, b2);
                 }
             }
         }

@@ -1,0 +1,23 @@
+@advice(qm7)
+template qm10(Configuration config, FileArtifact target) {
+
+    typedef TupleProducerFunc callOf(Tuple, Boolean, String);
+
+    def main(Configuration config, FileArtifact target) {
+        qm7 cfg = config;
+        Family f = cfg.fNormalize;
+        produceForTuples(f.output, true, "fName", tupleProducer);
+        '${produceForTuples(f.output, true, "fName", tupleProducer)}'
+    }
+
+    def tupleProducer(Tuple tuple, Boolean output, String fName) {
+        '${tuple.fields.size()} output fName'
+    }
+
+    def produceForTuples(Tuples tuples, Boolean output, String fName, TupleProducerFunc producer) {
+        for (Tuple t : tuples) {
+            producer(t, output, fName);
+        }
+    }
+
+}

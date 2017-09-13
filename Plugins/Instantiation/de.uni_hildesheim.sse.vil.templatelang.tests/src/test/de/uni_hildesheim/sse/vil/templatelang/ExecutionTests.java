@@ -1314,6 +1314,16 @@ public class ExecutionTests extends AbstractExecutionTest {
     public void testQm9() throws IOException {
         assertEqualWithIvml("qm9", "qm9");
     }
+    
+    /**
+     * Tests callOf (contributed by QualiMaster).
+     * 
+     * @throws IOException should not occur
+     */
+    @Test
+    public void testQm10() throws IOException {
+        assertEqualWithIvml("qm10", "qm7");
+    }
 
     /**
      * Tests sorting IVML elements via expression.
