@@ -515,8 +515,8 @@ public class TemplateLangExecution extends ExecutionVisitor<Template, Def, Varia
         }
         lastContent = null; // handled, reset
         String content;
-        // search for \r\n, \r, \n followed by indentation*step whitespaces or tabs +1
         content = (String) cnt.getContent().accept(this);
+        // search for \r\n, \r, \n followed by indentation*step whitespaces or tabs +1
         if (null != content) {
             int pos = content.indexOf(EMPTY_CONTENT);
             if (pos > 0) {
@@ -548,8 +548,7 @@ public class TemplateLangExecution extends ExecutionVisitor<Template, Def, Varia
                         lastContentFormatted = true;
                     }
                 } else {
-                    throw new VilException("indentation value is no integer", 
-                        VilException.ID_SEMANTIC);
+                    throw new VilException("indentation value is no integer", VilException.ID_SEMANTIC);
                 }
             }
             String topContent = defContentStack.pop();
@@ -722,6 +721,8 @@ public class TemplateLangExecution extends ExecutionVisitor<Template, Def, Varia
     public Object visitResolvableOperationCallExpression(ResolvableOperationCallExpression ex) throws VilException {
         Object result;
         Object val = environment.getValue(ex.getVariable());
+        int indentation = environment.getIndentation();
+        environment.setIndentationSteps(1); // reset to template level
         if (val instanceof Def) {
             Def def = (Def) val;
             result = proceedModelCall(def, def.getName(), (Template) environment.getContextModel(), ex, 
@@ -729,9 +730,10 @@ public class TemplateLangExecution extends ExecutionVisitor<Template, Def, Varia
         } else {
             result = super.visitResolvableOperationCallExpression(ex);
         }
+        environment.setIndentation(indentation);
         return result;
     }
-
+    
     @Override
     public Object visitTypedef(Typedef typedef) throws VilException {
         return null; // typedefs are processed during parsing

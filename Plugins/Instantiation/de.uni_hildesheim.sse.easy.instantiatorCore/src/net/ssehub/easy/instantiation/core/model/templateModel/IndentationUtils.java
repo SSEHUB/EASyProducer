@@ -26,6 +26,8 @@ public class IndentationUtils {
         int tabWidth = Math.max(1, tabEmu); // count tabs at least as 1
         StringBuilder text = new StringBuilder(content);
         int i = 0;
+        int lineCount = 0;
+        int removedLines = 0;
         while (i < text.length() && indentation > 0) { // use actual length as we may cut the text
             char c = text.charAt(i);
             int startPos = -1;
@@ -34,7 +36,11 @@ public class IndentationUtils {
                 i = advanceIfNextIsNewLine(text, i);
                 i++; // continue with next
                 startPos = i;
+                lineCount++;
             } else if ('\n' == c) {
+                if (i > 0 && '\r' != text.charAt(i - 1)) { // the single \n for debugging
+                    lineCount++;
+                }
                 i++; // continue with next
                 startPos = i;
             } else if (0 == i && isIndentationChar(c)) {
@@ -60,12 +66,18 @@ public class IndentationUtils {
                 if (actIndent == indentation) {
                     text.delete(startPos, i);
                     i = startPos;
+                    removedLines++;
+                } else {
+                    // allow the first to deviate, do not correct only later, don't consider empty lines
+                    if (actIndent > 0 && lineCount - removedLines > 1) { 
+                        i = text.length();
+                    }
                 }
             }
         }
         return text.toString();
     }
-
+    
     /**
      * Returns whether the next character in <code>text</code> after <code>pos</code> is <code>ch</code>.
      * 
