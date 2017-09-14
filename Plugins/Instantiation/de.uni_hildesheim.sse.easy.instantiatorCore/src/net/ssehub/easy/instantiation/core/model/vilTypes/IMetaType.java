@@ -1,5 +1,7 @@
 package net.ssehub.easy.instantiation.core.model.vilTypes;
 
+import java.util.List;
+
 /**
  * Defines the interface of a meta type. This interface is used for generic type conformance checks.
  * 
@@ -168,4 +170,14 @@ public interface IMetaType {
      * @return <code>true</code> if ok, <code>false</code> else
      */
     public boolean checkConversion(IMetaType param, IMetaOperation conversion);
+    
+    /**
+     * Returns operation candidates matching the given name and number of unnamed (required) arguments.
+     * 
+     * @param name the name of the operation
+     * @param unnamedArgsCount the number of unnamed arguments
+     * @return the operation candidates
+     */
+    public List<IMetaOperation> getCandidates(String name, int unnamedArgsCount);
+    
 }

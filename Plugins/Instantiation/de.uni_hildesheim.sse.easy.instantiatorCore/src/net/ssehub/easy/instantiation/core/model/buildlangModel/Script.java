@@ -777,4 +777,9 @@ public class Script extends AbstractResolvableModel<VariableDeclaration, Script>
         return true;
     }
 
+    @Override
+    public List<IMetaOperation> getCandidates(String name, int unnamedArgsCount) {
+        return TypeDescriptor.getCandidates(this, name, unnamedArgsCount);
+    }
+
 }

@@ -368,4 +368,9 @@ public class Template extends AbstractResolvableModel<VariableDeclaration, Templ
         return true;
     }
     
+    @Override
+    public List<IMetaOperation> getCandidates(String name, int unnamedArgsCount) {
+        return TypeDescriptor.getCandidates(this, name, unnamedArgsCount);
+    }
+
 }

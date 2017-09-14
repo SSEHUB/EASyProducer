@@ -1,5 +1,7 @@
 package net.ssehub.easy.instantiation.core.model.common;
 
+import java.util.List;
+
 import net.ssehub.easy.basics.modelManagement.IModel;
 import net.ssehub.easy.basics.modelManagement.IRestrictionEvaluationContext;
 import net.ssehub.easy.basics.modelManagement.IndentationConfiguration;
@@ -232,6 +234,11 @@ class DummyModel<V extends IMetaParameterDeclaration, M extends IModel> implemen
 
     @Override
     public void addRuntimeImport(ModelImport<M> imp) {
+    }
+
+    @Override
+    public List<IMetaOperation> getCandidates(String name, int unnamedArgsCount) {
+        return TypeDescriptor.getCandidates(this, name, unnamedArgsCount);
     }
 
 }

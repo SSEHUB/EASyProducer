@@ -1,5 +1,7 @@
 package net.ssehub.easy.instantiation.core.model.expressions;
 
+import java.util.List;
+
 import net.ssehub.easy.basics.modelManagement.IModel;
 import net.ssehub.easy.basics.modelManagement.IRestrictionEvaluationContext;
 import net.ssehub.easy.basics.modelManagement.IndentationConfiguration;
@@ -238,6 +240,11 @@ class PseudoModel implements IResolvableModel<VarDecl, PseudoModel>, IModel {
 
     @Override
     public void addRuntimeImport(ModelImport<PseudoModel> imp) {
+    }
+
+    @Override
+    public List<IMetaOperation> getCandidates(String name, int unnamedArgsCount) {
+        return TypeDescriptor.getCandidates(this, name, unnamedArgsCount);
     }
 
 }

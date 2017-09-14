@@ -107,7 +107,7 @@ public abstract class AbstractCallExpression extends Expression implements IArgu
      * @param argCount the number of required arguments
      * @return <code>true</code> if <code>desc</code> is a candidate, <code>false</code> else
      */
-    protected static boolean isCandidate(IMetaOperation op, String name, int argCount) {
+    /*protected static boolean isCandidate(IMetaOperation op, String name, int argCount) {
         boolean result; 
         if (null != op && op.getName().equals(name)) {
             // in case of default parameters, the actual number of required params may be less than the given ones
@@ -121,7 +121,7 @@ public abstract class AbstractCallExpression extends Expression implements IArgu
             result = false;
         }
         return result;
-    }
+    }*/
 
     /**
      * Returns the parameter type considering named parameters. After unnamed arguments, this method may
@@ -171,59 +171,56 @@ public abstract class AbstractCallExpression extends Expression implements IArgu
         int unnamedArgsCount, boolean allowAny) throws VilException {
         List<IMetaOperation> result = new ArrayList<IMetaOperation>();
         IMetaType[] argumentTypes = toTypeDescriptors(arguments);
-        for (int o = 0; o < operand.getOperationsCount(); o++) {
-            IMetaOperation desc = operand.getOperation(o);
-            if (isCandidate(desc, name, unnamedArgsCount)) {
-                boolean allEqual = true;
-                for (int p = 0; allEqual && p < arguments.length; p++) {
-                    IMetaType pType = getParameterType(desc, p, arguments, unnamedArgsCount);
-                    if (null != pType) { // pType==null legacy: undeclared unnamed parameters
-                        IMetaType aType = argumentTypes[p];
-                        allEqual &= TypeRegistry.equals(pType, aType);
-                        if (!allEqual) {
-                            IMetaOperation funcOp = resolveResolvableOperation(null, pType, aType, 
-                                arguments[p].getExpression(), RESLIST);
-                            if (null != funcOp) {
-                                arguments[p].resolveOperation((TypeDescriptor<?>) pType, funcOp);
-                                allEqual = true;
-                            }
+        List<IMetaOperation> candidates = operand.getCandidates(name, unnamedArgsCount);
+        for (int o = 0; o < candidates.size(); o++) {
+            IMetaOperation desc = candidates.get(o);
+            boolean allEqual = true;
+            for (int p = 0; allEqual && p < arguments.length; p++) {
+                IMetaType pType = getParameterType(desc, p, arguments, unnamedArgsCount);
+                if (null != pType) { // pType==null legacy: undeclared unnamed parameters
+                    IMetaType aType = argumentTypes[p];
+                    allEqual &= TypeRegistry.equals(pType, aType);
+                    if (!allEqual) {
+                        IMetaOperation funcOp = resolveResolvableOperation(null, pType, aType, 
+                            arguments[p].getExpression(), RESLIST);
+                        if (null != funcOp) {
+                            arguments[p].resolveOperation((TypeDescriptor<?>) pType, funcOp);
+                            allEqual = true;
                         }
                     }
                 }
-                if (allEqual) {
-                    result.add(desc);
-                }
+            }
+            if (allEqual) {
+                result.add(desc);
             }
         }
         if (result.isEmpty()) {
             int minAssignables = 0;
-            for (int o = 0; o < operand.getOperationsCount(); o++) {
-                IMetaOperation desc = operand.getOperation(o);
-                if (isCandidate(desc, name, unnamedArgsCount)) {
-                    boolean allAssignable = true;
-                    int aCount = 0;
-                    final TypeDescriptor<?> any = TypeRegistry.anyType();
-                    for (int p = 0; allAssignable && p < arguments.length; p++) {
-                        IMetaType pType = getParameterType(desc, p, arguments, unnamedArgsCount);
-                        IMetaType aType = argumentTypes[p];
-                        // pType==null legacy: undeclared unnamed parameters
-                        if (null != pType) { 
-                            if (pType.isAssignableFrom(aType) || (allowAny && any == pType)) {
-                                aCount += (pType != aType) ? 1 : 0;
-                            } else {
-                                allAssignable = false;
-                            }
+            for (int o = 0; o < candidates.size(); o++) {
+                IMetaOperation desc = candidates.get(o);
+                boolean allAssignable = true;
+                int aCount = 0;
+                final TypeDescriptor<?> any = TypeRegistry.anyType();
+                for (int p = 0; allAssignable && p < arguments.length; p++) {
+                    IMetaType pType = getParameterType(desc, p, arguments, unnamedArgsCount);
+                    IMetaType aType = argumentTypes[p];
+                    // pType==null legacy: undeclared unnamed parameters
+                    if (null != pType) { 
+                        if (pType.isAssignableFrom(aType) || (allowAny && any == pType)) {
+                            aCount += (pType != aType) ? 1 : 0;
+                        } else {
+                            allAssignable = false;
                         }
                     }
-                    if (allAssignable) {
-                        // consider only minimum number of implicit conversions -> dynamic dispatch
-                        if (0 == minAssignables || aCount < minAssignables) {
-                            result.clear();
-                            minAssignables = aCount;
-                        } 
-                        if (aCount == minAssignables) {
-                            addAndPruneByType(result, desc, argumentTypes, arguments, unnamedArgsCount);
-                        }
+                }
+                if (allAssignable) {
+                    // consider only minimum number of implicit conversions -> dynamic dispatch
+                    if (0 == minAssignables || aCount < minAssignables) {
+                        result.clear();
+                        minAssignables = aCount;
+                    } 
+                    if (aCount == minAssignables) {
+                        addAndPruneByType(result, desc, argumentTypes, arguments, unnamedArgsCount);
                     }
                 }
             }
@@ -474,35 +471,34 @@ public abstract class AbstractCallExpression extends Expression implements IArgu
     private static List<ConvertibleOperation> convertibleCandidates(IMetaType operand, String name, 
         CallArgument[] arguments, int unnamedArgsCount) throws VilException {
         List<ConvertibleOperation> result = new ArrayList<ConvertibleOperation>();
-        for (int o = 0; o < operand.getOperationsCount(); o++) {
-            IMetaOperation desc = operand.getOperation(o);
-            if (isCandidate(desc, name, unnamedArgsCount)) {
-                int conversionCount = 0;
-                IMetaOperation[] conversionOps = new IMetaOperation[arguments.length]; 
-                boolean allParamOk = true;
-                for (int p = 0; allParamOk && p < desc.getParameterCount(); p++) {
-                    IMetaType pType = getParameterType(desc, p, arguments, unnamedArgsCount);
-                    IMetaType argType = p < arguments.length ? arguments[p].inferType() : null;
-                    // pType==null legacy: undeclared unnamed parameters
-                    if (null != argType && null != pType && !pType.isAssignableFrom(argType)) {
-                        conversionOps[p] = TypeHelper.findConversion(argType, pType);
-                        if (null != conversionOps[p]) {
-                            if (argType.checkConversion(pType, conversionOps[p])) {
-                                conversionCount++;
-                            } else {
-                                conversionOps[p] = null;
-                            }
+        List<IMetaOperation> candidates = operand.getCandidates(name, unnamedArgsCount);
+        for (int o = 0; o < candidates.size(); o++) {
+            IMetaOperation desc = candidates.get(o);
+            int conversionCount = 0;
+            IMetaOperation[] conversionOps = new IMetaOperation[arguments.length]; 
+            boolean allParamOk = true;
+            for (int p = 0; allParamOk && p < desc.getParameterCount(); p++) {
+                IMetaType pType = getParameterType(desc, p, arguments, unnamedArgsCount);
+                IMetaType argType = p < arguments.length ? arguments[p].inferType() : null;
+                // pType==null legacy: undeclared unnamed parameters
+                if (null != argType && null != pType && !pType.isAssignableFrom(argType)) {
+                    conversionOps[p] = TypeHelper.findConversion(argType, pType);
+                    if (null != conversionOps[p]) {
+                        if (argType.checkConversion(pType, conversionOps[p])) {
+                            conversionCount++;
+                        } else {
+                            conversionOps[p] = null;
                         }
-                        allParamOk = (null != conversionOps[p]);
                     }
+                    allParamOk = (null != conversionOps[p]);
                 }
-                if (allParamOk && conversionCount > 0) {
-                    assert null != conversionOps && conversionOps.length == arguments.length;
-                    result.add(new ConvertibleOperation(desc, conversionOps));
-                    conversionOps = new IMetaOperation[arguments.length];
-                } else {
-                    Arrays.fill(conversionOps, null);
-                }
+            }
+            if (allParamOk && conversionCount > 0) {
+                assert null != conversionOps && conversionOps.length == arguments.length;
+                result.add(new ConvertibleOperation(desc, conversionOps));
+                conversionOps = new IMetaOperation[arguments.length];
+            } else {
+                Arrays.fill(conversionOps, null);
             }
         }
         if (result.size() > 1) {

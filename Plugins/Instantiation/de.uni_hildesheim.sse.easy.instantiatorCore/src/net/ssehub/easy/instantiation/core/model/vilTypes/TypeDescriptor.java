@@ -1,5 +1,8 @@
 package net.ssehub.easy.instantiation.core.model.vilTypes;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import net.ssehub.easy.instantiation.core.model.common.VilException;
 
 /**
@@ -580,5 +583,43 @@ public abstract class TypeDescriptor <T> implements IMetaType {
     public Object getDefaultValue() {
         return null;
     }
+
+    @Override
+    public List<IMetaOperation> getCandidates(String name, int unnamedArgsCount) {
+        return getCandidates(this, name, unnamedArgsCount);
+    }
     
+    /**
+     * Returns the potential operation candidates for a given <code>name</code> and parameter numbers
+     * on a specific <code>type</code>. This is the most basic implementation done by a linear search
+     * on the available operations. An optimized version may/shall be realized via {@link #getCandidates(String, int)}.
+     * 
+     * @param type the type to be searched for
+     * @param name the name of the operation call to be resolved
+     * @param argCount the number of required arguments
+     * @return <code>true</code> if <code>desc</code> is a candidate, <code>false</code> else
+     */
+    public static List<IMetaOperation> getCandidates(IMetaType type, String name, int argCount) {
+        List<IMetaOperation> result = new ArrayList<IMetaOperation>(5); 
+        for (int o = 0; o < type.getOperationsCount(); o++) {
+            IMetaOperation op = type.getOperation(o);
+            boolean ok;
+            if (null != op && op.getName().equals(name)) {
+                // in case of default parameters, the actual number of required params may be less than the given ones
+                int reqParam = op.getRequiredParameterCount();
+                if (argCount > 0) {
+                    ok = reqParam > 0 && reqParam <= argCount && argCount <= op.getParameterCount();
+                } else {
+                    ok = reqParam == 0;
+                }
+            } else {
+                ok = false;
+            }
+            if (ok) {
+                result.add(op);
+            }
+        }
+        return result;
+    }
+
 }
