@@ -41,4 +41,9 @@ public class FlushStatement extends AbstractTemplateElement {
         return visitor.visitFlush(this);
     }
 
+    @Override
+    public boolean endsWithContentStatement() {
+        return false;
+    }
+        
 }

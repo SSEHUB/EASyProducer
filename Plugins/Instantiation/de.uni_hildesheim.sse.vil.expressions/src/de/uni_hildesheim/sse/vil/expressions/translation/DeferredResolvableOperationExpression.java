@@ -15,6 +15,8 @@
  */
 package de.uni_hildesheim.sse.vil.expressions.translation;
 
+import org.eclipse.emf.ecore.EObject;
+
 import net.ssehub.easy.instantiation.core.model.common.VilException;
 import net.ssehub.easy.instantiation.core.model.expressions.Expression;
 import net.ssehub.easy.instantiation.core.model.expressions.IExpressionVisitor;
@@ -30,21 +32,19 @@ import net.ssehub.easy.instantiation.core.model.vilTypes.TypeRegistry;
  */
 class DeferredResolvableOperationExpression extends Expression {
 
-    private transient de.uni_hildesheim.sse.vil.expressions.expressionDsl.VariableDeclaration decl;
+    private transient EObject cause;
     private transient TypeDescriptor<?> varType;
     private transient Expression init;
     
     /**
      * Creates a resolvable operation expression.
      * 
-     * @param decl the Ecore variable declaration object
+     * @param cause the Ecore instance causing this expression
      * @param varType the actual variable type
      * @param init the initialization expression
      */
-    DeferredResolvableOperationExpression(
-        de.uni_hildesheim.sse.vil.expressions.expressionDsl.VariableDeclaration decl, TypeDescriptor<?> varType, 
-        Expression init) {
-        this.decl = decl;
+    DeferredResolvableOperationExpression(EObject cause, TypeDescriptor<?> varType, Expression init) {
+        this.cause = cause;
         this.varType = varType;
         this.init = init;
     }
@@ -60,12 +60,12 @@ class DeferredResolvableOperationExpression extends Expression {
     }
     
     /**
-     * Returns the ECore variable declaration.
+     * Returns the ECore cause.
      * 
-     * @return the variable declaration
+     * @return the cause
      */
-    de.uni_hildesheim.sse.vil.expressions.expressionDsl.VariableDeclaration getDecl() {
-        return decl;
+    EObject getCause() {
+        return cause;
     }
     
     /**

@@ -155,10 +155,7 @@ public abstract class ExecutionVisitor <M extends IResolvableModel<V, M>, O exte
         V v = (V) var;
         if (null != var.getExpression()) {
             value = var.getExpression().accept(this);
-            if (var.getType().isMap()) {
-                value = net.ssehub.easy.instantiation.core.model.vilTypes.Map.checkConvertEmpty(
-                    var.getType(), value);
-            }
+            value = doAssignmentConversions(var, value);
             environment.addValue(v, value);
             tracer.valueDefined(var, null, value);
         } else {
@@ -166,6 +163,21 @@ public abstract class ExecutionVisitor <M extends IResolvableModel<V, M>, O exte
             // to wrong level upon first assignment, which may be removed (e.g., inner levels of alternatives 
             // containing initial assignment), and thus not be valid outside on correct level
             environment.addValue(v, null); 
+        }
+        return value;
+    }
+    
+    /**
+     * Performs special conversions prior to an assignment.
+     * 
+     * @param var the target variable
+     * @param value the value to be assigned
+     * @return the converted value or <code>value</code>
+     */
+    protected Object doAssignmentConversions(VariableDeclaration var, Object value) {
+        if (var.getType().isMap()) {
+            value = net.ssehub.easy.instantiation.core.model.vilTypes.Map.checkConvertEmpty(
+                var.getType(), value);
         }
         return value;
     }
@@ -448,7 +460,7 @@ public abstract class ExecutionVisitor <M extends IResolvableModel<V, M>, O exte
                 for (int p = 0; p < operation.getParameterCount(); p++) {
                     V param = operation.getParameter(p);
                     if (p < reqParamCount) {
-                        environment.addValue(param, args[p]);    
+                        environment.addValue(param, args[p]); 
                     } else {
                         if (p >= args.length || p >= reqParamCount) {
                             Object pVal = null == namedArgs ? null : namedArgs.get(param.getName());

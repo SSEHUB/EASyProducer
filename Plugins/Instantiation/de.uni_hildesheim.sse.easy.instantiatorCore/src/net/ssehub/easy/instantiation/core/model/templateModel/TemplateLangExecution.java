@@ -417,21 +417,12 @@ public class TemplateLangExecution extends ExecutionVisitor<Template, Def, Varia
     /**
      * Returns whether the template element or the last statement within is a content statement.
      * 
-     * @param elt the element
-     * @return <code>true</code> for content statement, <code>false</code> else
+     * @param elt the element (may be <b>null</b>)
+     * @return <code>true</code> for content statement, <code>false</code> else 
+     *   (also if <code>elt</code> is <b>null</b>)
      */
-    private boolean isContentStatement(ITemplateElement elt) {
-        boolean result = false;
-        if (elt instanceof TemplateBlock) {
-            TemplateBlock blk = (TemplateBlock) elt;
-            int count = blk.getBodyElementCount();
-            if (count > 0) {
-                result = isContentStatement(blk.getBodyElement(count - 1));
-            }
-        } else {
-            result = elt instanceof ContentStatement;
-        }
-        return result;
+    private static final boolean isContentStatement(ITemplateElement elt) {
+        return null == elt ? false : elt.endsWithContentStatement();
     }
     
     /**
@@ -514,8 +505,7 @@ public class TemplateLangExecution extends ExecutionVisitor<Template, Def, Varia
             appendContent(getLineEnd());
         }
         lastContent = null; // handled, reset
-        String content;
-        content = (String) cnt.getContent().accept(this);
+        String content = (String) cnt.getContent().accept(this);
         // search for \r\n, \r, \n followed by indentation*step whitespaces or tabs +1
         if (null != content) {
             int pos = content.indexOf(EMPTY_CONTENT);

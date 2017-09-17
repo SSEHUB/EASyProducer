@@ -25,4 +25,11 @@ public interface ITemplateElement extends ITemplateLangElement {
      */
     public TypeDescriptor<?> inferType() throws VilException;
     
+    /**
+     * Returns whether this element ends with a content statement.
+     * 
+     * @return <code>true</code> for end with content statement, <code>false</code> else
+     */
+    public boolean endsWithContentStatement();
+    
 }

@@ -47,4 +47,9 @@ public class ExpressionStatement
         return parent;
     }
 
+    @Override
+    public boolean endsWithContentStatement() {
+        return false;
+    }
+
 }

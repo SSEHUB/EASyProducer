@@ -135,4 +135,9 @@ public class ContentStatement extends AbstractTemplateElement {
         return indentExpression;
     }
 
+    @Override
+    public boolean endsWithContentStatement() {
+        return true;
+    }
+
 }

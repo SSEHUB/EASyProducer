@@ -8,12 +8,24 @@ template defTest2(Configuration config, FileArtifact target) {
         "cat2: " + s1 + s2 + s3 + s4;
     }
 
+    def String cat3(mapOf(String, String) m={}) {
+        "cat3: " + m;
+    }
+
+    def String cat4(sequenceOf(String, String) s={}) {
+        "cat4: " + s;
+    }
+
     def main(Configuration config, FileArtifact target) {
         '${cat("a")}'
         '${cat("a", "b")}'
         '${cat("a", s2="c")}'
         '${cat2("a", s4="a")}'
         '${cat2("a", s4="a", s3="b")}'
+        '${cat3()}'
+        '${cat3(m={{"a", "a"}})}'
+        '${cat4()}'
+        '${cat4(s={"a", "a"})}'
     }
 
 }

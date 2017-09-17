@@ -114,4 +114,9 @@ public class LoopStatement extends AbstractTemplateElement {
         iteratorVar.setParent(this);
     }
 
+    @Override
+    public boolean endsWithContentStatement() {
+        return statement.endsWithContentStatement();
+    }
+
 }

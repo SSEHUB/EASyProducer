@@ -65,4 +65,9 @@ public class WhileStatement extends AbstractTemplateElement {
         return TypeRegistry.voidType();
     }
 
+    @Override
+    public boolean endsWithContentStatement() {
+        return statement.endsWithContentStatement();
+    }
+
 }

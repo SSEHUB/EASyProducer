@@ -219,4 +219,9 @@ public class SwitchStatement extends AbstractTemplateElement {
         implicitVar.setParent(this);
     }
 
+    @Override
+    public boolean endsWithContentStatement() {
+        return false; // alternatives consist of expressions
+    }
+    
 }

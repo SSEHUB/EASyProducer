@@ -26,6 +26,7 @@ import net.ssehub.easy.instantiation.core.model.vilTypes.ITypedModel;
 import net.ssehub.easy.instantiation.core.model.vilTypes.IVilGenericType;
 import net.ssehub.easy.instantiation.core.model.vilTypes.ListSequence;
 import net.ssehub.easy.instantiation.core.model.vilTypes.ListSet;
+import net.ssehub.easy.instantiation.core.model.vilTypes.Sequence;
 import net.ssehub.easy.instantiation.core.model.vilTypes.TypeDescriptor;
 import net.ssehub.easy.instantiation.core.model.vilTypes.TypeRegistry;
 import net.ssehub.easy.instantiation.core.model.vilTypes.configuration.Configuration;
@@ -622,6 +623,13 @@ public abstract class RuntimeEnvironment<V extends VariableDeclaration, M extend
                 } else {
                     object = new ListSequence<Object>(new ArrayList<Object>(), type.getGenericParameter());
                 }
+            }
+        } else if (type.isMap() && object instanceof Sequence) { 
+            // some conversions do not work as parameters are resolved as expressions without knowing the type to 
+            // apply to this is for a specific type. May be that generic type<->object conversions are needed here
+            try {
+                object = net.ssehub.easy.instantiation.core.model.vilTypes.Map.convert((Sequence<?>) object);
+            } catch (VilException e) {
             }
         }
         return object;

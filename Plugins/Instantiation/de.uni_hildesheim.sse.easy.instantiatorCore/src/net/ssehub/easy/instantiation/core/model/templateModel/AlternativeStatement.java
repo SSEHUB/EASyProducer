@@ -102,5 +102,14 @@ public class AlternativeStatement extends AbstractTemplateElement {
         }
         return result;
     }
+    
+    @Override
+    public boolean endsWithContentStatement() {
+        boolean endsWith = ifStatement.endsWithContentStatement();
+        if (null != elseStatement) {
+            endsWith &= elseStatement.endsWithContentStatement();
+        }
+        return endsWith;
+    }
 
 }

@@ -105,4 +105,10 @@ public class TemplateBlock extends AbstractTemplateElement {
         }
     }
 
+    @Override
+    public boolean endsWithContentStatement() {
+        ITemplateElement elt = getTypeDefiningElement();
+        return null != elt && elt.endsWithContentStatement();
+    }
+
 }

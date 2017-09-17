@@ -71,4 +71,9 @@ public class VariableDeclaration extends
         this.parent = parent;
     }
 
+    @Override
+    public boolean endsWithContentStatement() {
+        return false;
+    }
+
 }

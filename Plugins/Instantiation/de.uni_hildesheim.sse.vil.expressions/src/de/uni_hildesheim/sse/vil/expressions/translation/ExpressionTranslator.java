@@ -1,5 +1,7 @@
 package de.uni_hildesheim.sse.vil.expressions.translation;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -1352,26 +1354,22 @@ public abstract class ExpressionTranslator<I extends VariableDeclaration, R exte
     }
     
     /**
-     * Processes a variable declaration.
+     * Processes an assignment.
      * 
-     * @param decl the declaration
-     * @param resolver a resolver instance for resolving variables etc.
-     * @return the created model instance
-     * @throws TranslatorException in case that the translation fails
+     * @param decl the variable declaration to assign to
+     * @param type the type of the variable
+     * @param ex the expression defining the right side of the assignment (may be <b>null</b>)
+     * @param text a text describing the left side in case of an error
+     * @param resolver the resolver instance
+     * @return the resolved initialization expression or <b>null</b> if <code>ex</code> was <b>null</b>
+     * @throws TranslatorException in case that type resolution / compliance fails
      */
-    public I processVariableDeclaration(
-        de.uni_hildesheim.sse.vil.expressions.expressionDsl.VariableDeclaration decl, R resolver) 
+    public Expression processAssignment(EObject cause, TypeDescriptor<?> type, 
+        de.uni_hildesheim.sse.vil.expressions.expressionDsl.Expression ex, R resolver) 
         throws TranslatorException {
-        String name = decl.getName();
-        if (resolver.resolve(name, true) != null) {
-            throw new TranslatorException("variable '" + name + "' was already declared", decl, 
-                ExpressionDslPackage.Literals.VARIABLE_DECLARATION__NAME, ErrorCodes.REDEFINITION);
-        }
-        TypeDescriptor<?> type = processType(decl.getType(), resolver);
-        boolean isConstant = null != decl.getConst();
         Expression init = null;
-        if (null != decl.getExpression()) {
-            init = processExpression(decl.getExpression(), resolver);
+        if (null != ex) {
+            init = processExpression(ex, resolver);
             try {
                 TypeDescriptor<?> exType = init.inferType(); 
                 boolean ok = type.isAssignableFrom(exType);
@@ -1410,21 +1408,43 @@ public abstract class ExpressionTranslator<I extends VariableDeclaration, R exte
                 if (!ok && TypeRegistry.resolvableOperationType().isAssignableFrom(checkType) 
                     && IvmlTypes.ivmlElement().isAssignableFrom(exType)) {
                     // this may be a "function pointer" - defer until everything is resolved and try later
-                    init = new DeferredResolvableOperationExpression(decl, type, init);
+                    init = new DeferredResolvableOperationExpression(cause, type, init);
                     ok = true; // pretend that everything is ok -> reProcessVariableDeclaration
                 }
                 if (!ok) {
                     OperationDescriptor conversion = TypeDescriptor.findConversionOnBoth(exType, checkType);
                     if (null == conversion) {
-                        throwVariableCannotBeInitialized(decl, type, exType);
+                        throwVariableCannotBeInitialized(cause, getName(cause), type, exType);
                     } else {
                         init = new CallExpression(conversion, new CallArgument(init));
                     }
                 }
             } catch (VilException e) {
-                throw new TranslatorException(e, decl, ExpressionDslPackage.Literals.VARIABLE_DECLARATION__TYPE);
+                throw new TranslatorException(e, cause, ExpressionDslPackage.Literals.VARIABLE_DECLARATION__TYPE);
             }
         } 
+        return init;
+    }
+    
+    /**
+     * Processes a variable declaration.
+     * 
+     * @param decl the declaration
+     * @param resolver a resolver instance for resolving variables etc.
+     * @return the created model instance
+     * @throws TranslatorException in case that the translation fails
+     */
+    public I processVariableDeclaration(
+        de.uni_hildesheim.sse.vil.expressions.expressionDsl.VariableDeclaration decl, R resolver) 
+        throws TranslatorException {
+        String name = decl.getName();
+        if (resolver.resolve(name, true) != null) {
+            throw new TranslatorException("variable '" + name + "' was already declared", decl, 
+                ExpressionDslPackage.Literals.VARIABLE_DECLARATION__NAME, ErrorCodes.REDEFINITION);
+        }
+        TypeDescriptor<?> type = processType(decl.getType(), resolver);
+        boolean isConstant = null != decl.getConst();
+        Expression init = processAssignment(decl, type, decl.getExpression(), resolver);
         I result = createVariableDeclaration(name, type, isConstant, init, resolver);
         resolver.add(result);
         return result;
@@ -1456,10 +1476,10 @@ public abstract class ExpressionTranslator<I extends VariableDeclaration, R exte
                     }
                 }
                 if (!done) {
-                    throwVariableCannotBeInitialized(defEx.getDecl(), varType, defExInitType);
+                    throwVariableCannotBeInitialized(defEx.getCause(), null, varType, defExInitType);
                 }
             } catch (VilException e) {
-                throw new TranslatorException(e, defEx.getDecl(), ExpressionDslPackage.Literals.VARIABLE_DECLARATION__TYPE);
+                throw new TranslatorException(e, defEx.getCause(), ExpressionDslPackage.Literals.VARIABLE_DECLARATION__TYPE);
             }
         }
     }
@@ -1467,15 +1487,45 @@ public abstract class ExpressionTranslator<I extends VariableDeclaration, R exte
     /**
      * Throws a {@link TranslatorException} that a variable cannot be initialized.
      * 
-     * @param decl the ECore declaration object
+     * @param cause the causing ECore object
+     * @param name the name of the object (inferred from <code>cause</code> if <b>null</b> if possible)
      * @param declType the declaration VIL type 
      * @param initType the init expression VIL type
      * @throws TranslatorException the created exception
      */
-    private void throwVariableCannotBeInitialized(de.uni_hildesheim.sse.vil.expressions.expressionDsl.VariableDeclaration decl, TypeDescriptor<?> declType, TypeDescriptor<?> initType) throws TranslatorException {
-        throw new TranslatorException("variable '" + decl.getName()+ "' of type '" + declType.getVilName() + "' cannot be " 
-            + "initialized with an expression of type '" + initType.getVilName() + "'", decl, 
+    private void throwVariableCannotBeInitialized(EObject cause, String name, TypeDescriptor<?> declType, 
+        TypeDescriptor<?> initType) throws TranslatorException {
+        if (null == name) {
+            name = getName(cause);
+        }
+        throw new TranslatorException("'" + name + "' of type '" + declType.getVilName() + "' cannot be " 
+            + "initialized with an expression of type '" + initType.getVilName() + "'", cause, 
             ExpressionDslPackage.Literals.VARIABLE_DECLARATION__NAME, ErrorCodes.TYPE_CONSISTENCY);
+    }
+    
+    /**
+     * Tries to obtain the name of <code>cause</code>.
+     * 
+     * @param cause the cause
+     * @return the name or <code>"?"</code>
+     */
+    private static String getName(EObject cause) {
+        String name = "?";
+        if (null != cause) {
+            try {
+                Method m = cause.getClass().getDeclaredMethod("getName");
+                Object o = m.invoke(cause);
+                if (null != o) {
+                    name = o.toString();
+                }
+            } catch (NoSuchMethodException e) {
+            } catch (SecurityException e) {
+            } catch (IllegalAccessException e) {
+            } catch (IllegalArgumentException e) {
+            } catch (InvocationTargetException e) {
+            }
+        }
+        return name;
     }
 
 

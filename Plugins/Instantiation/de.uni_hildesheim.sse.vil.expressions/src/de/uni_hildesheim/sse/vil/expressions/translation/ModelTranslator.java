@@ -344,15 +344,7 @@ public abstract class ModelTranslator
                     }
                     Expression dflt = null;
                     if (null != par.getDflt()) {
-                        dflt = getExpressionTranslator().processExpression(par.getDflt(), resolver);
-                        try {
-                            if (!type.isAssignableFrom(dflt.inferType())) {
-                                error("Default value cannot be assigned to parameter '"+par.getName()+"'", par, 
-                                        ExpressionDslPackage.Literals.PARAMETER__DFLT, ErrorCodes.TYPE_CONSISTENCY);
-                            }
-                        } catch (VilException e) {
-                            throw new TranslatorException(e, par, ExpressionDslPackage.Literals.PARAMETER__DFLT);
-                        }
+                        dflt = getExpressionTranslator().processAssignment(par, type, par.getDflt(), resolver);
                     }
                     tmp.add(getExpressionTranslator().createVariableDeclaration(par.getName(), type, false, 
                         dflt, resolver));
