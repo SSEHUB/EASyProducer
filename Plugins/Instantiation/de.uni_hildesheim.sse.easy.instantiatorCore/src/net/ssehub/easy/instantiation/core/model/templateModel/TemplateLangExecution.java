@@ -426,7 +426,7 @@ public class TemplateLangExecution extends ExecutionVisitor<Template, Def, Varia
     }
     
     /**
-     * Adds content.
+     * Adds content to the current top element of {@link #defContentStack}.
      * 
      * @param string the string to add to the current content.
      */
@@ -506,20 +506,9 @@ public class TemplateLangExecution extends ExecutionVisitor<Template, Def, Varia
         }
         lastContent = null; // handled, reset
         String content = (String) cnt.getContent().accept(this);
-        // search for \r\n, \r, \n followed by indentation*step whitespaces or tabs +1
         if (null != content) {
-            int pos = content.indexOf(EMPTY_CONTENT);
-            if (pos > 0) {
-                int end = pos + EMPTY_CONTENT.length();
-                while (end < content.length() && IndentationUtils.isLineEnd(content.charAt(end))) {
-                    end++;
-                }
-                int start = pos - 1;
-                while (pos >= 0 && IndentationUtils.isIndentationChar(content.charAt(start))) {
-                    start--;
-                }
-                content = content.substring(0, start) + content.substring(end);
-            }
+            // search for \r\n, \r, \n followed by indentation*step whitespaces or tabs +1
+            content = cleanLineEnd(content, true);
         } 
         if (null != content) {
             int indentation = environment.getIndentation();
@@ -556,7 +545,40 @@ public class TemplateLangExecution extends ExecutionVisitor<Template, Def, Varia
         lastContent = cnt;
         return content;
     }
-
+    
+    /**
+     * Removes the empty line marker {@link #EMPTY_CONTENT} and considers surrounding indentation for removal.
+     * 
+     * @param content the content to be considered
+     * @param includeIndentation whether indentation shall be taken into account
+     * @return the modified content
+     */
+    private static String cleanLineEnd(String content, boolean includeIndentation) {
+        int pos;
+        do {
+            pos = content.indexOf(EMPTY_CONTENT);
+            if (pos >= 0) {
+                int end = pos + EMPTY_CONTENT.length();
+                if (includeIndentation) {
+                    while (end < content.length() && IndentationUtils.isLineEnd(content.charAt(end))) {
+                        end++;
+                    }
+                }
+                int start = pos;
+                if (start > 0) {
+                    start--;
+                    if (includeIndentation) {
+                        while (pos >= 0 && IndentationUtils.isIndentationChar(content.charAt(start))) {
+                            start--;
+                        }
+                    }
+                }
+                content = content.substring(0, start) + content.substring(end);
+            }
+        } while (pos >= 0);
+        return content;
+    }
+    
     @Override
     protected String appendInCompositeExpression(String s1, Expression e1, Object v1, String s2, Expression e2) {
         String result;
