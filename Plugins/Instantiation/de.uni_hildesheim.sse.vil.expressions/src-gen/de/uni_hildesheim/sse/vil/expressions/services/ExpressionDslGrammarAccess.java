@@ -28,13 +28,18 @@ public class ExpressionDslGrammarAccess extends AbstractGrammarElementFinder {
 		private final RuleCall cVersionVersionStmtParserRuleCall_2_0 = (RuleCall)cVersionAssignment_2.eContents().get(0);
 		private final Assignment cImportsAssignment_3 = (Assignment)cGroup.eContents().get(3);
 		private final RuleCall cImportsImportParserRuleCall_3_0 = (RuleCall)cImportsAssignment_3.eContents().get(0);
+		private final Assignment cTypeDefsAssignment_4 = (Assignment)cGroup.eContents().get(4);
+		private final RuleCall cTypeDefsTypeDefParserRuleCall_4_0 = (RuleCall)cTypeDefsAssignment_4.eContents().get(0);
+		private final Assignment cVarsAssignment_5 = (Assignment)cGroup.eContents().get(5);
+		private final RuleCall cVarsVariableDeclarationParserRuleCall_5_0 = (RuleCall)cVarsAssignment_5.eContents().get(0);
 		
 		//LanguageUnit:
-		//	advices+=Advice* name=Identifier version=VersionStmt? imports+=Import*;
+		//	advices+=Advice* name=Identifier version=VersionStmt? imports+=Import* typeDefs+=TypeDef* vars+=VariableDeclaration*;
 		@Override public ParserRule getRule() { return rule; }
 
 		//// just a template for required data
 		// advices+=Advice* name=Identifier version=VersionStmt? imports+=Import*
+		//typeDefs+=TypeDef* vars+=VariableDeclaration*
 		public Group getGroup() { return cGroup; }
 
 		//// just a template for required data
@@ -61,6 +66,18 @@ public class ExpressionDslGrammarAccess extends AbstractGrammarElementFinder {
 
 		//Import
 		public RuleCall getImportsImportParserRuleCall_3_0() { return cImportsImportParserRuleCall_3_0; }
+
+		//typeDefs+=TypeDef*
+		public Assignment getTypeDefsAssignment_4() { return cTypeDefsAssignment_4; }
+
+		//TypeDef
+		public RuleCall getTypeDefsTypeDefParserRuleCall_4_0() { return cTypeDefsTypeDefParserRuleCall_4_0; }
+
+		//vars+=VariableDeclaration*
+		public Assignment getVarsAssignment_5() { return cVarsAssignment_5; }
+
+		//VariableDeclaration
+		public RuleCall getVarsVariableDeclarationParserRuleCall_5_0() { return cVarsVariableDeclarationParserRuleCall_5_0; }
 	}
 
 	public class VariableDeclarationElements extends AbstractParserRuleElementFinder {
@@ -2029,7 +2046,7 @@ public class ExpressionDslGrammarAccess extends AbstractGrammarElementFinder {
 
 	
 	//LanguageUnit:
-	//	advices+=Advice* name=Identifier version=VersionStmt? imports+=Import*;
+	//	advices+=Advice* name=Identifier version=VersionStmt? imports+=Import* typeDefs+=TypeDef* vars+=VariableDeclaration*;
 	public LanguageUnitElements getLanguageUnitAccess() {
 		return pLanguageUnit;
 	}

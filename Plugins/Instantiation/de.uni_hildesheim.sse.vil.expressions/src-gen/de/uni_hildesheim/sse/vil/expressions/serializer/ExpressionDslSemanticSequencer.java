@@ -454,7 +454,14 @@ public class ExpressionDslSemanticSequencer extends AbstractDelegatingSemanticSe
 	 *     LanguageUnit returns LanguageUnit
 	 *
 	 * Constraint:
-	 *     (advices+=Advice* name=Identifier version=VersionStmt? imports+=Import*)
+	 *     (
+	 *         advices+=Advice* 
+	 *         name=Identifier 
+	 *         version=VersionStmt? 
+	 *         imports+=Import* 
+	 *         typeDefs+=TypeDef* 
+	 *         vars+=VariableDeclaration*
+	 *     )
 	 */
 	protected void sequence_LanguageUnit(ISerializationContext context, LanguageUnit semanticObject) {
 		genericSequencer.createSequence(context, semanticObject);

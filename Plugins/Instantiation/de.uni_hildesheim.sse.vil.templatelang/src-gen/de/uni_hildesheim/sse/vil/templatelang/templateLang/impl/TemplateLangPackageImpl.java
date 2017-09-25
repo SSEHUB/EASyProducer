@@ -313,29 +313,9 @@ public class TemplateLangPackageImpl extends EPackageImpl implements TemplateLan
    * <!-- end-user-doc -->
    * @generated
    */
-  public EReference getLanguageUnit_TypeDefs()
-  {
-    return (EReference)languageUnitEClass.getEStructuralFeatures().get(5);
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  public EReference getLanguageUnit_Vars()
-  {
-    return (EReference)languageUnitEClass.getEStructuralFeatures().get(6);
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
   public EReference getLanguageUnit_Defs()
   {
-    return (EReference)languageUnitEClass.getEStructuralFeatures().get(7);
+    return (EReference)languageUnitEClass.getEStructuralFeatures().get(5);
   }
 
   /**
@@ -1144,8 +1124,6 @@ public class TemplateLangPackageImpl extends EPackageImpl implements TemplateLan
     createEReference(languageUnitEClass, LANGUAGE_UNIT__FORMATTING);
     createEReference(languageUnitEClass, LANGUAGE_UNIT__PARAM);
     createEAttribute(languageUnitEClass, LANGUAGE_UNIT__EXT);
-    createEReference(languageUnitEClass, LANGUAGE_UNIT__TYPE_DEFS);
-    createEReference(languageUnitEClass, LANGUAGE_UNIT__VARS);
     createEReference(languageUnitEClass, LANGUAGE_UNIT__DEFS);
 
     indentationHintEClass = createEClass(INDENTATION_HINT);
@@ -1286,8 +1264,6 @@ public class TemplateLangPackageImpl extends EPackageImpl implements TemplateLan
     initEReference(getLanguageUnit_Formatting(), this.getFormattingHint(), null, "formatting", null, 0, 1, LanguageUnit.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEReference(getLanguageUnit_Param(), theExpressionDslPackage.getParameterList(), null, "param", null, 0, 1, LanguageUnit.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEAttribute(getLanguageUnit_Ext(), ecorePackage.getEString(), "ext", null, 0, 1, LanguageUnit.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEReference(getLanguageUnit_TypeDefs(), theExpressionDslPackage.getTypeDef(), null, "typeDefs", null, 0, -1, LanguageUnit.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEReference(getLanguageUnit_Vars(), theExpressionDslPackage.getVariableDeclaration(), null, "vars", null, 0, -1, LanguageUnit.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEReference(getLanguageUnit_Defs(), this.getVilDef(), null, "defs", null, 0, -1, LanguageUnit.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     initEClass(indentationHintEClass, IndentationHint.class, "IndentationHint", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);

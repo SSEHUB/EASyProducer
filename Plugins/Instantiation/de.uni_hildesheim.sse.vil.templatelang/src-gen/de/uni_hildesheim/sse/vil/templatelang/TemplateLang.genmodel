@@ -15,8 +15,6 @@
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference TemplateLang.ecore#//LanguageUnit/formatting"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference TemplateLang.ecore#//LanguageUnit/param"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute TemplateLang.ecore#//LanguageUnit/ext"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference TemplateLang.ecore#//LanguageUnit/typeDefs"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference TemplateLang.ecore#//LanguageUnit/vars"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference TemplateLang.ecore#//LanguageUnit/defs"/>
     </genClasses>
     <genClasses ecoreClass="TemplateLang.ecore#//IndentationHint">

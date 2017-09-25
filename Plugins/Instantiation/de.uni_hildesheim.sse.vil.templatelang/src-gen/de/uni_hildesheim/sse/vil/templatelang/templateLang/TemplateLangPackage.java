@@ -105,6 +105,24 @@ public interface TemplateLangPackage extends EPackage
   int LANGUAGE_UNIT__IMPORTS = ExpressionDslPackage.LANGUAGE_UNIT__IMPORTS;
 
   /**
+   * The feature id for the '<em><b>Type Defs</b></em>' containment reference list.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int LANGUAGE_UNIT__TYPE_DEFS = ExpressionDslPackage.LANGUAGE_UNIT__TYPE_DEFS;
+
+  /**
+   * The feature id for the '<em><b>Vars</b></em>' containment reference list.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int LANGUAGE_UNIT__VARS = ExpressionDslPackage.LANGUAGE_UNIT__VARS;
+
+  /**
    * The feature id for the '<em><b>Java Exts</b></em>' containment reference list.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -150,31 +168,13 @@ public interface TemplateLangPackage extends EPackage
   int LANGUAGE_UNIT__EXT = ExpressionDslPackage.LANGUAGE_UNIT_FEATURE_COUNT + 4;
 
   /**
-   * The feature id for the '<em><b>Type Defs</b></em>' containment reference list.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int LANGUAGE_UNIT__TYPE_DEFS = ExpressionDslPackage.LANGUAGE_UNIT_FEATURE_COUNT + 5;
-
-  /**
-   * The feature id for the '<em><b>Vars</b></em>' containment reference list.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int LANGUAGE_UNIT__VARS = ExpressionDslPackage.LANGUAGE_UNIT_FEATURE_COUNT + 6;
-
-  /**
    * The feature id for the '<em><b>Defs</b></em>' containment reference list.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int LANGUAGE_UNIT__DEFS = ExpressionDslPackage.LANGUAGE_UNIT_FEATURE_COUNT + 7;
+  int LANGUAGE_UNIT__DEFS = ExpressionDslPackage.LANGUAGE_UNIT_FEATURE_COUNT + 5;
 
   /**
    * The number of structural features of the '<em>Language Unit</em>' class.
@@ -183,7 +183,7 @@ public interface TemplateLangPackage extends EPackage
    * @generated
    * @ordered
    */
-  int LANGUAGE_UNIT_FEATURE_COUNT = ExpressionDslPackage.LANGUAGE_UNIT_FEATURE_COUNT + 8;
+  int LANGUAGE_UNIT_FEATURE_COUNT = ExpressionDslPackage.LANGUAGE_UNIT_FEATURE_COUNT + 6;
 
   /**
    * The meta object id for the '{@link de.uni_hildesheim.sse.vil.templatelang.templateLang.impl.IndentationHintImpl <em>Indentation Hint</em>}' class.
@@ -1135,28 +1135,6 @@ public interface TemplateLangPackage extends EPackage
   EAttribute getLanguageUnit_Ext();
 
   /**
-   * Returns the meta object for the containment reference list '{@link de.uni_hildesheim.sse.vil.templatelang.templateLang.LanguageUnit#getTypeDefs <em>Type Defs</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for the containment reference list '<em>Type Defs</em>'.
-   * @see de.uni_hildesheim.sse.vil.templatelang.templateLang.LanguageUnit#getTypeDefs()
-   * @see #getLanguageUnit()
-   * @generated
-   */
-  EReference getLanguageUnit_TypeDefs();
-
-  /**
-   * Returns the meta object for the containment reference list '{@link de.uni_hildesheim.sse.vil.templatelang.templateLang.LanguageUnit#getVars <em>Vars</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for the containment reference list '<em>Vars</em>'.
-   * @see de.uni_hildesheim.sse.vil.templatelang.templateLang.LanguageUnit#getVars()
-   * @see #getLanguageUnit()
-   * @generated
-   */
-  EReference getLanguageUnit_Vars();
-
-  /**
    * Returns the meta object for the containment reference list '{@link de.uni_hildesheim.sse.vil.templatelang.templateLang.LanguageUnit#getDefs <em>Defs</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -2067,22 +2045,6 @@ public interface TemplateLangPackage extends EPackage
      * @generated
      */
     EAttribute LANGUAGE_UNIT__EXT = eINSTANCE.getLanguageUnit_Ext();
-
-    /**
-     * The meta object literal for the '<em><b>Type Defs</b></em>' containment reference list feature.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    EReference LANGUAGE_UNIT__TYPE_DEFS = eINSTANCE.getLanguageUnit_TypeDefs();
-
-    /**
-     * The meta object literal for the '<em><b>Vars</b></em>' containment reference list feature.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    EReference LANGUAGE_UNIT__VARS = eINSTANCE.getLanguageUnit_Vars();
 
     /**
      * The meta object literal for the '<em><b>Defs</b></em>' containment reference list feature.

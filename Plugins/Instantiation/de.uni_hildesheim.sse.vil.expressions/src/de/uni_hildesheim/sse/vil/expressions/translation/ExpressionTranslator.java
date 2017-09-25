@@ -1236,9 +1236,13 @@ public abstract class ExpressionTranslator<I extends VariableDeclaration, R exte
             }
         } else {
             String typeName = Utils.getQualifiedNameString(type.getName());
-            result = resolver.getTypeRegistry().getType(typeName);
-            if (null == result) {
+            TypeRegistry reg = resolver.getTypeRegistry();
+            result = reg.getType(typeName, false); // direct type without IVML
+            if (null == result) { // typedefs, inheritance
                 result = resolveModelType(type, typeName, resolver);
+            }
+            if (null == result) { // fallback -> IVML
+                result = reg.getType(typeName);
             }
             if (null == result) {
                 throw new TranslatorException("type '" + typeName + "' unknown", type, 
@@ -1301,7 +1305,9 @@ public abstract class ExpressionTranslator<I extends VariableDeclaration, R exte
                 try {
                     if (null != initEx.getLogical()) {
                         part = processLogicalExpression(initEx.getLogical(), resolver);
-                        partDims.add(part.inferType());
+                        if (null != part) {
+                            partDims.add(part.inferType());
+                        }
                     } else if (null != initEx.getContainer()) {
                         part = processContainerInitializer(initEx.getContainer(), resolver);
                         TypeDescriptor<?> partType = part.inferType();

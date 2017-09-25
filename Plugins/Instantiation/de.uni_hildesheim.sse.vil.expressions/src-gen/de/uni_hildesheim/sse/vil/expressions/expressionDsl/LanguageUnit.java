@@ -19,6 +19,8 @@ import org.eclipse.emf.ecore.EObject;
  *   <li>{@link de.uni_hildesheim.sse.vil.expressions.expressionDsl.LanguageUnit#getName <em>Name</em>}</li>
  *   <li>{@link de.uni_hildesheim.sse.vil.expressions.expressionDsl.LanguageUnit#getVersion <em>Version</em>}</li>
  *   <li>{@link de.uni_hildesheim.sse.vil.expressions.expressionDsl.LanguageUnit#getImports <em>Imports</em>}</li>
+ *   <li>{@link de.uni_hildesheim.sse.vil.expressions.expressionDsl.LanguageUnit#getTypeDefs <em>Type Defs</em>}</li>
+ *   <li>{@link de.uni_hildesheim.sse.vil.expressions.expressionDsl.LanguageUnit#getVars <em>Vars</em>}</li>
  * </ul>
  *
  * @see de.uni_hildesheim.sse.vil.expressions.expressionDsl.ExpressionDslPackage#getLanguageUnit()
@@ -110,5 +112,37 @@ public interface LanguageUnit extends EObject
    * @generated
    */
   EList<Import> getImports();
+
+  /**
+   * Returns the value of the '<em><b>Type Defs</b></em>' containment reference list.
+   * The list contents are of type {@link de.uni_hildesheim.sse.vil.expressions.expressionDsl.TypeDef}.
+   * <!-- begin-user-doc -->
+   * <p>
+   * If the meaning of the '<em>Type Defs</em>' containment reference list isn't clear,
+   * there really should be more of a description here...
+   * </p>
+   * <!-- end-user-doc -->
+   * @return the value of the '<em>Type Defs</em>' containment reference list.
+   * @see de.uni_hildesheim.sse.vil.expressions.expressionDsl.ExpressionDslPackage#getLanguageUnit_TypeDefs()
+   * @model containment="true"
+   * @generated
+   */
+  EList<TypeDef> getTypeDefs();
+
+  /**
+   * Returns the value of the '<em><b>Vars</b></em>' containment reference list.
+   * The list contents are of type {@link de.uni_hildesheim.sse.vil.expressions.expressionDsl.VariableDeclaration}.
+   * <!-- begin-user-doc -->
+   * <p>
+   * If the meaning of the '<em>Vars</em>' containment reference list isn't clear,
+   * there really should be more of a description here...
+   * </p>
+   * <!-- end-user-doc -->
+   * @return the value of the '<em>Vars</em>' containment reference list.
+   * @see de.uni_hildesheim.sse.vil.expressions.expressionDsl.ExpressionDslPackage#getLanguageUnit_Vars()
+   * @model containment="true"
+   * @generated
+   */
+  EList<VariableDeclaration> getVars();
 
 } // LanguageUnit

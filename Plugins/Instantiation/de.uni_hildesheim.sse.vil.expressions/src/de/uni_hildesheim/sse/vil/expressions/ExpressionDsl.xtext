@@ -9,6 +9,8 @@ LanguageUnit: // just a template for required data
     name=Identifier
     version=VersionStmt?
     imports+=Import*
+    typeDefs+=TypeDef*
+    vars+=VariableDeclaration* 
 ;
 
 VariableDeclaration:

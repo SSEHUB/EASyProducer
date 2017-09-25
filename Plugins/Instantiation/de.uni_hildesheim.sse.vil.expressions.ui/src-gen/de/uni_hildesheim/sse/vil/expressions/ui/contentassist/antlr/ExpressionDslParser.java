@@ -115,6 +115,8 @@ public class ExpressionDslParser extends AbstractContentAssistParser {
 					put(grammarAccess.getLanguageUnitAccess().getNameAssignment_1(), "rule__LanguageUnit__NameAssignment_1");
 					put(grammarAccess.getLanguageUnitAccess().getVersionAssignment_2(), "rule__LanguageUnit__VersionAssignment_2");
 					put(grammarAccess.getLanguageUnitAccess().getImportsAssignment_3(), "rule__LanguageUnit__ImportsAssignment_3");
+					put(grammarAccess.getLanguageUnitAccess().getTypeDefsAssignment_4(), "rule__LanguageUnit__TypeDefsAssignment_4");
+					put(grammarAccess.getLanguageUnitAccess().getVarsAssignment_5(), "rule__LanguageUnit__VarsAssignment_5");
 					put(grammarAccess.getVariableDeclarationAccess().getConstAssignment_0(), "rule__VariableDeclaration__ConstAssignment_0");
 					put(grammarAccess.getVariableDeclarationAccess().getTypeAssignment_1(), "rule__VariableDeclaration__TypeAssignment_1");
 					put(grammarAccess.getVariableDeclarationAccess().getNameAssignment_2(), "rule__VariableDeclaration__NameAssignment_2");

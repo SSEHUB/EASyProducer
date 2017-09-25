@@ -568,9 +568,12 @@ public class TemplateLangExecution extends ExecutionVisitor<Template, Def, Varia
                 if (start > 0) {
                     start--;
                     if (includeIndentation) {
-                        while (pos >= 0 && IndentationUtils.isIndentationChar(content.charAt(start))) {
+                        while (start >= 0 && IndentationUtils.isIndentationChar(content.charAt(start))) {
                             start--;
                         }
+                    }
+                    if (start < 0) {
+                        start = 0;
                     }
                 }
                 content = content.substring(0, start) + content.substring(end);

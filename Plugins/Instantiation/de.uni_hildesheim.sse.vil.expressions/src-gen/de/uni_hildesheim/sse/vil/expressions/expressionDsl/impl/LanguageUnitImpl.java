@@ -6,6 +6,8 @@ import de.uni_hildesheim.sse.vil.expressions.expressionDsl.Advice;
 import de.uni_hildesheim.sse.vil.expressions.expressionDsl.ExpressionDslPackage;
 import de.uni_hildesheim.sse.vil.expressions.expressionDsl.Import;
 import de.uni_hildesheim.sse.vil.expressions.expressionDsl.LanguageUnit;
+import de.uni_hildesheim.sse.vil.expressions.expressionDsl.TypeDef;
+import de.uni_hildesheim.sse.vil.expressions.expressionDsl.VariableDeclaration;
 import de.uni_hildesheim.sse.vil.expressions.expressionDsl.VersionStmt;
 
 import java.util.Collection;
@@ -36,6 +38,8 @@ import org.eclipse.emf.ecore.util.InternalEList;
  *   <li>{@link de.uni_hildesheim.sse.vil.expressions.expressionDsl.impl.LanguageUnitImpl#getName <em>Name</em>}</li>
  *   <li>{@link de.uni_hildesheim.sse.vil.expressions.expressionDsl.impl.LanguageUnitImpl#getVersion <em>Version</em>}</li>
  *   <li>{@link de.uni_hildesheim.sse.vil.expressions.expressionDsl.impl.LanguageUnitImpl#getImports <em>Imports</em>}</li>
+ *   <li>{@link de.uni_hildesheim.sse.vil.expressions.expressionDsl.impl.LanguageUnitImpl#getTypeDefs <em>Type Defs</em>}</li>
+ *   <li>{@link de.uni_hildesheim.sse.vil.expressions.expressionDsl.impl.LanguageUnitImpl#getVars <em>Vars</em>}</li>
  * </ul>
  *
  * @generated
@@ -91,6 +95,26 @@ public class LanguageUnitImpl extends MinimalEObjectImpl.Container implements La
    * @ordered
    */
   protected EList<Import> imports;
+
+  /**
+   * The cached value of the '{@link #getTypeDefs() <em>Type Defs</em>}' containment reference list.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #getTypeDefs()
+   * @generated
+   * @ordered
+   */
+  protected EList<TypeDef> typeDefs;
+
+  /**
+   * The cached value of the '{@link #getVars() <em>Vars</em>}' containment reference list.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #getVars()
+   * @generated
+   * @ordered
+   */
+  protected EList<VariableDeclaration> vars;
 
   /**
    * <!-- begin-user-doc -->
@@ -217,6 +241,34 @@ public class LanguageUnitImpl extends MinimalEObjectImpl.Container implements La
    * <!-- end-user-doc -->
    * @generated
    */
+  public EList<TypeDef> getTypeDefs()
+  {
+    if (typeDefs == null)
+    {
+      typeDefs = new EObjectContainmentEList<TypeDef>(TypeDef.class, this, ExpressionDslPackage.LANGUAGE_UNIT__TYPE_DEFS);
+    }
+    return typeDefs;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EList<VariableDeclaration> getVars()
+  {
+    if (vars == null)
+    {
+      vars = new EObjectContainmentEList<VariableDeclaration>(VariableDeclaration.class, this, ExpressionDslPackage.LANGUAGE_UNIT__VARS);
+    }
+    return vars;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
   @Override
   public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs)
   {
@@ -228,6 +280,10 @@ public class LanguageUnitImpl extends MinimalEObjectImpl.Container implements La
         return basicSetVersion(null, msgs);
       case ExpressionDslPackage.LANGUAGE_UNIT__IMPORTS:
         return ((InternalEList<?>)getImports()).basicRemove(otherEnd, msgs);
+      case ExpressionDslPackage.LANGUAGE_UNIT__TYPE_DEFS:
+        return ((InternalEList<?>)getTypeDefs()).basicRemove(otherEnd, msgs);
+      case ExpressionDslPackage.LANGUAGE_UNIT__VARS:
+        return ((InternalEList<?>)getVars()).basicRemove(otherEnd, msgs);
     }
     return super.eInverseRemove(otherEnd, featureID, msgs);
   }
@@ -250,6 +306,10 @@ public class LanguageUnitImpl extends MinimalEObjectImpl.Container implements La
         return getVersion();
       case ExpressionDslPackage.LANGUAGE_UNIT__IMPORTS:
         return getImports();
+      case ExpressionDslPackage.LANGUAGE_UNIT__TYPE_DEFS:
+        return getTypeDefs();
+      case ExpressionDslPackage.LANGUAGE_UNIT__VARS:
+        return getVars();
     }
     return super.eGet(featureID, resolve, coreType);
   }
@@ -279,6 +339,14 @@ public class LanguageUnitImpl extends MinimalEObjectImpl.Container implements La
         getImports().clear();
         getImports().addAll((Collection<? extends Import>)newValue);
         return;
+      case ExpressionDslPackage.LANGUAGE_UNIT__TYPE_DEFS:
+        getTypeDefs().clear();
+        getTypeDefs().addAll((Collection<? extends TypeDef>)newValue);
+        return;
+      case ExpressionDslPackage.LANGUAGE_UNIT__VARS:
+        getVars().clear();
+        getVars().addAll((Collection<? extends VariableDeclaration>)newValue);
+        return;
     }
     super.eSet(featureID, newValue);
   }
@@ -305,6 +373,12 @@ public class LanguageUnitImpl extends MinimalEObjectImpl.Container implements La
       case ExpressionDslPackage.LANGUAGE_UNIT__IMPORTS:
         getImports().clear();
         return;
+      case ExpressionDslPackage.LANGUAGE_UNIT__TYPE_DEFS:
+        getTypeDefs().clear();
+        return;
+      case ExpressionDslPackage.LANGUAGE_UNIT__VARS:
+        getVars().clear();
+        return;
     }
     super.eUnset(featureID);
   }
@@ -327,6 +401,10 @@ public class LanguageUnitImpl extends MinimalEObjectImpl.Container implements La
         return version != null;
       case ExpressionDslPackage.LANGUAGE_UNIT__IMPORTS:
         return imports != null && !imports.isEmpty();
+      case ExpressionDslPackage.LANGUAGE_UNIT__TYPE_DEFS:
+        return typeDefs != null && !typeDefs.isEmpty();
+      case ExpressionDslPackage.LANGUAGE_UNIT__VARS:
+        return vars != null && !vars.isEmpty();
     }
     return super.eIsSet(featureID);
   }
