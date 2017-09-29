@@ -335,7 +335,15 @@ public class TemplateLangExecution extends ExecutionVisitor<Template, Def, Varia
                 value = checkContentStatement(value, null, alternative.getElseStatement());
             } else {
                 // there is no else - check content for if-part
-                value = checkContentStatement(value, null, alternative.getIfStatement());
+                boolean isIfContentStatement = isContentStatement(alternative.getIfStatement());
+                if (isIfContentStatement) { // pretend there is one, otherwise content evaluation fails
+                    if (!defContentStack.isEmpty()) { // emulate visitContentStatement(""), pass through content
+                        value = defContentStack.peek();
+                    } else {
+                        value = "";
+                    }
+                }
+                value = checkContentStatement(value, null, isIfContentStatement);
             }
         }
         return value;
@@ -407,8 +415,20 @@ public class TemplateLangExecution extends ExecutionVisitor<Template, Def, Varia
      * @return <code>currentValue</code> or {@link #EMPTY_CONTENT}
      */
     private Object checkContentStatement(Object currentValue, Object noValue, ITemplateElement check) {
+        return checkContentStatement(currentValue, noValue, isContentStatement(check));
+    }
+
+    /**
+     * Checks the current value for the need of correction with respect to the last content statement.
+     * 
+     * @param currentValue the current value
+     * @param noValue the object indicating no value in this context
+     * @param isContentStatement whether the relevant element is a content statement
+     * @return <code>currentValue</code> or {@link #EMPTY_CONTENT}
+     */
+    private Object checkContentStatement(Object currentValue, Object noValue, boolean isContentStatement) {
         Object result = currentValue;
-        if (noValue == currentValue && isContentStatement(check)) {
+        if (noValue == currentValue && isContentStatement) {
             result = EMPTY_CONTENT;
         }
         return result;
