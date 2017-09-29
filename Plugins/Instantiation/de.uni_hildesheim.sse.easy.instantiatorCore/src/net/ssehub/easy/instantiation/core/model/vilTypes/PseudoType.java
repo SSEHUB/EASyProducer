@@ -88,6 +88,26 @@ public final class PseudoType implements IVilType {
     }
 
     /**
+     * Returns the name of <code>type</code>.
+     * 
+     * @param type the type
+     * @return the name of <code>type</code>
+     */
+    public static String getName(TypeDescriptor<?> type) {
+        return type.getName();
+    }
+
+    /**
+     * Returns the qualified name of <code>type</code>.
+     * 
+     * @param type the type
+     * @return the qualified name of <code>type</code>
+     */
+    public static String getQualifiedName(TypeDescriptor<?> type) {
+        return type.getQualifiedName();
+    }
+
+    /**
      * Returns whether <code>type</code> is of the same type as <code>ob</code>. This 
      * method may be "override" by more specific types that cannot be obtained from the default type factory.
      * 
