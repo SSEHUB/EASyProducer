@@ -40,6 +40,7 @@ import net.ssehub.easy.instantiation.core.model.buildlangModel.ruleMatch.Compoun
 import net.ssehub.easy.instantiation.core.model.buildlangModel.ruleMatch.PathMatchExpression;
 import net.ssehub.easy.instantiation.core.model.buildlangModel.ruleMatch.StringMatchExpression;
 import net.ssehub.easy.instantiation.core.model.common.Advice;
+import net.ssehub.easy.instantiation.core.model.common.Compound;
 import net.ssehub.easy.instantiation.core.model.common.ExpressionStatement;
 import net.ssehub.easy.instantiation.core.model.common.Typedef;
 import net.ssehub.easy.instantiation.core.model.common.VariableDeclaration;
@@ -491,6 +492,15 @@ class BuildResolverVisitor implements IVisitor, IExpressionVisitor {
     @Override
     public Object visitStringExpression(StringExpression ex) throws VilException {
         return ex.getExpression().accept(this);
+    }
+
+    @Override
+    public Object visitCompound(Compound compound) throws VilException {
+        boolean found = false;
+        for (int s = 0; !found && s < compound.getSlotsCount(); s++) {
+            found = stop == compound.getSlot(s).getExpression();
+        }
+        return found;
     }
     
 }

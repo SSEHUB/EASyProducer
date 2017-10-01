@@ -41,6 +41,7 @@ import net.ssehub.easy.instantiation.core.model.buildlangModel.ruleMatch.Compoun
 import net.ssehub.easy.instantiation.core.model.buildlangModel.ruleMatch.PathMatchExpression;
 import net.ssehub.easy.instantiation.core.model.buildlangModel.ruleMatch.StringMatchExpression;
 import net.ssehub.easy.instantiation.core.model.common.Advice;
+import net.ssehub.easy.instantiation.core.model.common.Compound;
 import net.ssehub.easy.instantiation.core.model.common.ExpressionStatement;
 import net.ssehub.easy.instantiation.core.model.common.Typedef;
 import net.ssehub.easy.instantiation.core.model.common.VariableDeclaration;
@@ -340,6 +341,11 @@ public class RuleTreeVilVisitor implements IVisitor, IExpressionVisitor {
     @Override
     public Object visitResolvableOperationCallExpression(ResolvableOperationCallExpression ex) throws VilException {
         return null;
+    }
+
+    @Override
+    public Object visitCompound(Compound compound) throws VilException {
+        return null; // currently ignored
     }
 
 }
