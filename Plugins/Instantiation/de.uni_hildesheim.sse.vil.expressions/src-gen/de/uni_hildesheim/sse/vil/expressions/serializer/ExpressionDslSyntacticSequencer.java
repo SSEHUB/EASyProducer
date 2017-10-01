@@ -11,6 +11,8 @@ import org.eclipse.xtext.IGrammarAccess;
 import org.eclipse.xtext.RuleCall;
 import org.eclipse.xtext.nodemodel.INode;
 import org.eclipse.xtext.serializer.analysis.GrammarAlias.AbstractElementAlias;
+import org.eclipse.xtext.serializer.analysis.GrammarAlias.TokenAlias;
+import org.eclipse.xtext.serializer.analysis.ISyntacticSequencerPDAProvider.ISynNavigable;
 import org.eclipse.xtext.serializer.analysis.ISyntacticSequencerPDAProvider.ISynTransition;
 import org.eclipse.xtext.serializer.sequencer.AbstractSyntacticSequencer;
 
@@ -18,10 +20,12 @@ import org.eclipse.xtext.serializer.sequencer.AbstractSyntacticSequencer;
 public class ExpressionDslSyntacticSequencer extends AbstractSyntacticSequencer {
 
 	protected ExpressionDslGrammarAccess grammarAccess;
+	protected AbstractElementAlias match_Compound_SemicolonKeyword_7_q;
 	
 	@Inject
 	protected void init(IGrammarAccess access) {
 		grammarAccess = (ExpressionDslGrammarAccess) access;
+		match_Compound_SemicolonKeyword_7_q = new TokenAlias(false, true, grammarAccess.getCompoundAccess().getSemicolonKeyword_7());
 	}
 	
 	@Override
@@ -36,8 +40,23 @@ public class ExpressionDslSyntacticSequencer extends AbstractSyntacticSequencer 
 		List<INode> transitionNodes = collectNodes(fromNode, toNode);
 		for (AbstractElementAlias syntax : transition.getAmbiguousSyntaxes()) {
 			List<INode> syntaxNodes = getNodesFor(transitionNodes, syntax);
-			acceptNodes(getLastNavigableState(), syntaxNodes);
+			if (match_Compound_SemicolonKeyword_7_q.equals(syntax))
+				emit_Compound_SemicolonKeyword_7_q(semanticObject, getLastNavigableState(), syntaxNodes);
+			else acceptNodes(getLastNavigableState(), syntaxNodes);
 		}
 	}
 
+	/**
+	 * Ambiguous syntax:
+	 *     ';'?
+	 *
+	 * This ambiguous syntax occurs at:
+	 *     name=Identifier '{' '}' (ambiguity) (rule end)
+	 *     super=Identifier '{' '}' (ambiguity) (rule end)
+	 *     vars+=VariableDeclaration '}' (ambiguity) (rule end)
+	 */
+	protected void emit_Compound_SemicolonKeyword_7_q(EObject semanticObject, ISynNavigable transition, List<INode> nodes) {
+		acceptNodes(transition, nodes);
+	}
+	
 }

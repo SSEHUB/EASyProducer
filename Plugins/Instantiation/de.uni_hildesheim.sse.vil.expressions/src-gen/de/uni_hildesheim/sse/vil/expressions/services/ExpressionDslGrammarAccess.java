@@ -135,12 +135,14 @@ public class ExpressionDslGrammarAccess extends AbstractGrammarElementFinder {
 		private final Assignment cVarsAssignment_5 = (Assignment)cGroup.eContents().get(5);
 		private final RuleCall cVarsVariableDeclarationParserRuleCall_5_0 = (RuleCall)cVarsAssignment_5.eContents().get(0);
 		private final Keyword cRightCurlyBracketKeyword_6 = (Keyword)cGroup.eContents().get(6);
+		private final Keyword cSemicolonKeyword_7 = (Keyword)cGroup.eContents().get(7);
 		
 		//Compound:
-		//	abstract='abstract'? 'compound' name=Identifier ('refines' super=Identifier)? '{' vars+=VariableDeclaration* '}';
+		//	abstract='abstract'? 'compound' name=Identifier ('refines' super=Identifier)? '{' vars+=VariableDeclaration* '}'
+		//	';'?;
 		@Override public ParserRule getRule() { return rule; }
 
-		//abstract='abstract'? 'compound' name=Identifier ('refines' super=Identifier)? '{' vars+=VariableDeclaration* '}'
+		//abstract='abstract'? 'compound' name=Identifier ('refines' super=Identifier)? '{' vars+=VariableDeclaration* '}' ';'?
 		public Group getGroup() { return cGroup; }
 
 		//abstract='abstract'?
@@ -181,6 +183,9 @@ public class ExpressionDslGrammarAccess extends AbstractGrammarElementFinder {
 
 		//'}'
 		public Keyword getRightCurlyBracketKeyword_6() { return cRightCurlyBracketKeyword_6; }
+
+		//';'?
+		public Keyword getSemicolonKeyword_7() { return cSemicolonKeyword_7; }
 	}
 
 	public class TypeDefElements extends AbstractParserRuleElementFinder {
@@ -2115,7 +2120,8 @@ public class ExpressionDslGrammarAccess extends AbstractGrammarElementFinder {
 	}
 
 	//Compound:
-	//	abstract='abstract'? 'compound' name=Identifier ('refines' super=Identifier)? '{' vars+=VariableDeclaration* '}';
+	//	abstract='abstract'? 'compound' name=Identifier ('refines' super=Identifier)? '{' vars+=VariableDeclaration* '}'
+	//	';'?;
 	public CompoundElements getCompoundAccess() {
 		return pCompound;
 	}

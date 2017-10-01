@@ -20,6 +20,7 @@ import org.eclipse.xtext.serializer.sequencer.AbstractSyntacticSequencer;
 public class TemplateLangSyntacticSequencer extends AbstractSyntacticSequencer {
 
 	protected TemplateLangGrammarAccess grammarAccess;
+	protected AbstractElementAlias match_Compound_SemicolonKeyword_7_q;
 	protected AbstractElementAlias match_Content_SemicolonKeyword_1_2_q;
 	protected AbstractElementAlias match_VilDef_SemicolonKeyword_8_q;
 	protected AbstractElementAlias match_userMultiselect_SemicolonKeyword_4_q;
@@ -27,6 +28,7 @@ public class TemplateLangSyntacticSequencer extends AbstractSyntacticSequencer {
 	@Inject
 	protected void init(IGrammarAccess access) {
 		grammarAccess = (TemplateLangGrammarAccess) access;
+		match_Compound_SemicolonKeyword_7_q = new TokenAlias(false, true, grammarAccess.getCompoundAccess().getSemicolonKeyword_7());
 		match_Content_SemicolonKeyword_1_2_q = new TokenAlias(false, true, grammarAccess.getContentAccess().getSemicolonKeyword_1_2());
 		match_VilDef_SemicolonKeyword_8_q = new TokenAlias(false, true, grammarAccess.getVilDefAccess().getSemicolonKeyword_8());
 		match_userMultiselect_SemicolonKeyword_4_q = new TokenAlias(false, true, grammarAccess.getUserMultiselectAccess().getSemicolonKeyword_4());
@@ -44,7 +46,9 @@ public class TemplateLangSyntacticSequencer extends AbstractSyntacticSequencer {
 		List<INode> transitionNodes = collectNodes(fromNode, toNode);
 		for (AbstractElementAlias syntax : transition.getAmbiguousSyntaxes()) {
 			List<INode> syntaxNodes = getNodesFor(transitionNodes, syntax);
-			if (match_Content_SemicolonKeyword_1_2_q.equals(syntax))
+			if (match_Compound_SemicolonKeyword_7_q.equals(syntax))
+				emit_Compound_SemicolonKeyword_7_q(semanticObject, getLastNavigableState(), syntaxNodes);
+			else if (match_Content_SemicolonKeyword_1_2_q.equals(syntax))
 				emit_Content_SemicolonKeyword_1_2_q(semanticObject, getLastNavigableState(), syntaxNodes);
 			else if (match_VilDef_SemicolonKeyword_8_q.equals(syntax))
 				emit_VilDef_SemicolonKeyword_8_q(semanticObject, getLastNavigableState(), syntaxNodes);
@@ -54,6 +58,19 @@ public class TemplateLangSyntacticSequencer extends AbstractSyntacticSequencer {
 		}
 	}
 
+	/**
+	 * Ambiguous syntax:
+	 *     ';'?
+	 *
+	 * This ambiguous syntax occurs at:
+	 *     name=Identifier '{' '}' (ambiguity) (rule end)
+	 *     super=Identifier '{' '}' (ambiguity) (rule end)
+	 *     vars+=VariableDeclaration '}' (ambiguity) (rule end)
+	 */
+	protected void emit_Compound_SemicolonKeyword_7_q(EObject semanticObject, ISynNavigable transition, List<INode> nodes) {
+		acceptNodes(transition, nodes);
+	}
+	
 	/**
 	 * Ambiguous syntax:
 	 *     ';'?

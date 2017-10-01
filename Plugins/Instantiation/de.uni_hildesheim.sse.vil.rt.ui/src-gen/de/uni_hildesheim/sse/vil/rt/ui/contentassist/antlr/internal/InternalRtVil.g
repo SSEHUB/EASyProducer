@@ -9748,6 +9748,7 @@ rule__Compound__Group__6
     }
 :
 	rule__Compound__Group__6__Impl
+	rule__Compound__Group__7
 ;
 finally {
 	restoreStackSize(stackSize);
@@ -9770,6 +9771,38 @@ rule__Compound__Group__6__Impl
 finally {
 	restoreStackSize(stackSize);
 }
+
+
+rule__Compound__Group__7
+    @init {
+		int stackSize = keepStackSize();
+    }
+:
+	rule__Compound__Group__7__Impl
+;
+finally {
+	restoreStackSize(stackSize);
+}
+
+rule__Compound__Group__7__Impl
+    @init {
+		int stackSize = keepStackSize();
+    }
+:
+(
+{ before(grammarAccess.getCompoundAccess().getSemicolonKeyword_7()); }
+(
+	';' 
+)?
+{ after(grammarAccess.getCompoundAccess().getSemicolonKeyword_7()); }
+)
+
+;
+finally {
+	restoreStackSize(stackSize);
+}
+
+
 
 
 

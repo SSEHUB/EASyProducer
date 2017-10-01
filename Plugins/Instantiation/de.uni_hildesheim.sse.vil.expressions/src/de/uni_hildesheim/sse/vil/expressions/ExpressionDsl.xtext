@@ -21,7 +21,7 @@ VariableDeclaration:
 Compound:
     (abstract='abstract')? 'compound' name=Identifier ('refines' super=Identifier)? '{'
         vars+=VariableDeclaration*
-    '}'
+    '}' ';'?
 ;
 
 TypeDef:

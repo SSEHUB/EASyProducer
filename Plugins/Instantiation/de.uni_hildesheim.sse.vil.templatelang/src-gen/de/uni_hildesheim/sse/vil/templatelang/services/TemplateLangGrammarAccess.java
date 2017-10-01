@@ -1504,7 +1504,8 @@ public class TemplateLangGrammarAccess extends AbstractGrammarElementFinder {
 	}
 
 	//Compound:
-	//	abstract='abstract'? 'compound' name=Identifier ('refines' super=Identifier)? '{' vars+=VariableDeclaration* '}';
+	//	abstract='abstract'? 'compound' name=Identifier ('refines' super=Identifier)? '{' vars+=VariableDeclaration* '}'
+	//	';'?;
 	public ExpressionDslGrammarAccess.CompoundElements getCompoundAccess() {
 		return gaExpressionDsl.getCompoundAccess();
 	}

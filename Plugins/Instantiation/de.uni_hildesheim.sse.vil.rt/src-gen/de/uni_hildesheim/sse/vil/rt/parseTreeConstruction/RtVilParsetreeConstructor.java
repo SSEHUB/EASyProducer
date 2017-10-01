@@ -9426,11 +9426,12 @@ protected class VariableDeclaration_SemicolonKeyword_4 extends KeywordToken  {
 /************ begin Rule Compound ****************
  *
  * Compound:
- * 	abstract='abstract'? 'compound' name=Identifier ('refines' super=Identifier)? '{' vars+=VariableDeclaration* '}';
+ * 	abstract='abstract'? 'compound' name=Identifier ('refines' super=Identifier)? '{' vars+=VariableDeclaration* '}'
+ * 	';'?;
  *
  **/
 
-// abstract='abstract'? 'compound' name=Identifier ('refines' super=Identifier)? '{' vars+=VariableDeclaration* '}'
+// abstract='abstract'? 'compound' name=Identifier ('refines' super=Identifier)? '{' vars+=VariableDeclaration* '}' ';'?
 protected class Compound_Group extends GroupToken {
 	
 	public Compound_Group(AbstractToken lastRuleCallOrigin, AbstractToken next, int transitionIndex, IEObjectConsumer eObjectConsumer) {

@@ -3370,7 +3370,11 @@ ruleCompound returns [EObject current=null]
     {
     	newLeafNode(otherlv_7, grammarAccess.getCompoundAccess().getRightCurlyBracketKeyword_6());
     }
-)
+(	otherlv_8=';' 
+    {
+    	newLeafNode(otherlv_8, grammarAccess.getCompoundAccess().getSemicolonKeyword_7());
+    }
+)?)
 ;
 
 
