@@ -268,7 +268,7 @@ public abstract class ModelTranslator
                 EList<de.uni_hildesheim.sse.vil.expressions.expressionDsl.VariableDeclaration> vars = cmp.getVars();
 System.out.println(cmp.getName() + vars);                    
                 if (null != vars) {
-                    ListVariableDeclarationReceiver<I> recv = new ListVariableDeclarationReceiver<>(
+                    ListVariableDeclarationReceiver<I> recv = new ListVariableDeclarationReceiver<I>(
                         cmp.getVars().size());
                     processVariableDeclarations(vars, recv, false);
                     Set<String> known = new HashSet<String>();
