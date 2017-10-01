@@ -6,6 +6,8 @@ import java.io.Writer;
 import java.net.URISyntaxException;
 import java.util.List;
 
+import org.eclipse.core.resources.IMarker;
+import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.emf.common.util.BasicDiagnostic;
@@ -15,12 +17,17 @@ import org.eclipse.emf.ecore.util.Diagnostician;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.xtext.resource.XtextResource;
 import org.eclipse.xtext.ui.editor.model.IXtextDocument;
+import org.eclipse.xtext.ui.editor.validation.MarkerCreator;
+import org.eclipse.xtext.util.IAcceptor;
 import org.eclipse.xtext.util.concurrent.IUnitOfWork;
+import org.eclipse.xtext.validation.DiagnosticConverterImpl;
+import org.eclipse.xtext.validation.Issue;
 
 import net.ssehub.easy.basics.logger.EASyLoggerFactory;
 import net.ssehub.easy.basics.logger.EASyLoggerFactory.EASyLogger;
 import net.ssehub.easy.dslCore.IResourceInitializer;
 import net.ssehub.easy.dslCore.TranslationResult;
+import net.ssehub.easy.dslCore.translation.Message;
 import net.ssehub.easy.dslCore.validation.ValidationUtils;
 
 /**
@@ -139,9 +146,7 @@ public abstract class CommonXtextEditor <T extends EObject, R> extends org.eclip
             List<EObject> contents = resource.getContents();
             if (null != contents) {
                 root = (T) contents.get(0);
-                EASyLogger logger = EASyLoggerFactory.INSTANCE.getLogger(getClass(), getBundleId());
                 try {
-                    BasicDiagnostic diagnostic = Diagnostician.INSTANCE.createDefaultDiagnostic(root);
                     java.net.URI uri = null;
                     if (null != resourceURI) {
                         try {
@@ -150,7 +155,7 @@ public abstract class CommonXtextEditor <T extends EObject, R> extends org.eclip
                                 uri = rInit.toNetUri(resourceURI);
                             }
                         } catch (URISyntaxException e) {
-                            logger.error("error translating '" + resourceURI + "' while saving:" + e.getMessage());
+                            getLogger().error("error translating '" + resourceURI + "' while saving:" + e.getMessage());
                         }
                     }
                     TranslationResult<R> result = createModel(root, uri);
@@ -158,16 +163,58 @@ public abstract class CommonXtextEditor <T extends EObject, R> extends org.eclip
                         ByteArrayOutputStream out = new ByteArrayOutputStream();
                         PrintWriter pOut = new PrintWriter(out);
                         print(result, pOut);
-                        logger.info(out.toString());
+                        getLogger().info(out.toString());
                     } else {
-                        ValidationUtils.processMessages(result, diagnostic);
+                        if (ValidationUtils.PERFORM_XTEXT_VALIDATION) {
+                            BasicDiagnostic diagnostic = Diagnostician.INSTANCE.createDefaultDiagnostic(root);
+                            ValidationUtils.processMessages(result, diagnostic);
+                        }
+                    }
+                    if (!ValidationUtils.PERFORM_XTEXT_VALIDATION) {
+                        processMessages(result);
                     }
                 } catch (Exception e) {
-                    logger.exception(e);
+                    getLogger().exception(e);
                 }
             }
             return root;
         }
+    }
+
+    /**
+     * Processes the messages.
+     * 
+     * @param result the translation result
+     * @throws CoreException in case of marker processing problems
+     */
+    private void processMessages(TranslationResult<?> result) throws CoreException {
+        final IResource res = getResource();
+        res.deleteMarkers(IMarker.PROBLEM, true, IResource.DEPTH_ZERO);
+        DiagnosticConverterImpl conv = new DiagnosticConverterImpl();
+        final MarkerCreator markerCreator = new MarkerCreator();
+        for (int m = 0; m < result.getMessageCount(); m++) {
+            Message message = result.getMessage(m);
+            conv.convertValidatorDiagnostic(ValidationUtils.processMessage(message), new IAcceptor<Issue>() {
+                
+                @Override
+                public void accept(Issue issue) {
+                    try {
+                        markerCreator.createMarker(issue, res, IMarker.PROBLEM);
+                    } catch (CoreException e) {
+                        getLogger().exception(e);
+                    }
+                }
+            });
+        }
+    }
+
+    /**
+     * Returns the logger for this class.
+     * 
+     * @return the logger
+     */
+    private EASyLogger getLogger() {
+        return EASyLoggerFactory.INSTANCE.getLogger(getClass(), getBundleId());
     }
 
     // checkstyle: resume exception type check 

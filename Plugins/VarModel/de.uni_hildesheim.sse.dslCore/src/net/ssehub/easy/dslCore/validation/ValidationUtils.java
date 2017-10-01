@@ -10,7 +10,6 @@ import org.eclipse.emf.common.util.Diagnostic;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.xtext.diagnostics.Severity;
-import org.eclipse.xtext.validation.Check;
 import org.eclipse.xtext.validation.CheckType;
 import org.eclipse.xtext.validation.FeatureBasedDiagnostic;
 
@@ -28,6 +27,11 @@ import net.ssehub.easy.dslCore.translation.Message;
  */
 public class ValidationUtils {
 
+    /**
+     * Perform Xtext validation or emulate problem markers on editor save (partial parsing problem).
+     */
+    public static final boolean PERFORM_XTEXT_VALIDATION = false;
+    
     /**
      * Processes messages.
      * 
@@ -173,6 +177,7 @@ public class ValidationUtils {
          * @param out the output writer
          */
         public void print(TranslationResult<T> result, Writer out);
+
     }
     
     /**
@@ -195,57 +200,58 @@ public class ValidationUtils {
      * @param callback the callback providing relevant model information
      * @param debug shall debug information be emitted
      */
-    @Check
     public static <R extends EObject, T> void checkModel(R unit, IModelValidationCallback<R, T> callback, 
         boolean debug) {
-        java.net.URI uri = null;
-        if (null != unit.eResource() && null != unit.eResource().getURI()) {
-            try {
-                uri = ModelUtility.toNetUri(unit.eResource().getURI());
-                if (!"file".equals(uri.getScheme())) {
-                    uri = null; // initializer may yet not be present, xText does not work with other URI schemes
-                }
-            } catch (URISyntaxException e) {
-                getLogger().error("error translating '" + unit.eResource().getURI() 
-                    + "' during validation" + e.getMessage());
-            }
-        }
-        if (null != uri && callback.isValidationEnabled(uri)) {
-            try {
-                TranslationResult<T> result = callback.createModel(unit, uri);
-                for (int m = 0; m < result.getMessageCount(); m++) {
-                    Message message = result.getMessage(m);
-                    switch (message.getStatus()) {
-                    case ERROR:
-                    case UNSUPPORTED:
-                        callback.message(MessageType.ERROR, message.getDescription(), message.getCause(),
-                            message.getCausingFeature(), message.getCode());
-                        break;
-                    case WARNING:
-                        callback.message(MessageType.WARNING, message.getDescription(), message.getCause(),
-                            message.getCausingFeature(), message.getCode());
-                        break;
-                    default:
-                        callback.message(MessageType.INFO, message.getDescription(), message.getCause(),
-                                message.getCausingFeature(), message.getCode());
-                        break;
+        if (PERFORM_XTEXT_VALIDATION) {
+            java.net.URI uri = null;
+            if (null != unit.eResource() && null != unit.eResource().getURI()) {
+                try {
+                    uri = ModelUtility.toNetUri(unit.eResource().getURI());
+                    if (!"file".equals(uri.getScheme())) {
+                        uri = null; // initializer may yet not be present, xText does not work with other URI schemes
                     }
+                } catch (URISyntaxException e) {
+                    getLogger().error("error translating '" + unit.eResource().getURI() 
+                        + "' during validation" + e.getMessage());
                 }
-                if (debug && 0 == result.getMessageCount()) {
-                    ByteArrayOutputStream out = new ByteArrayOutputStream();
-                    PrintWriter pOut = new PrintWriter(out);
-                    pOut.println(">TRANSLATED MODEL");
-                    callback.print(result, pOut);
-                    pOut.println("<TRANSLATED MODEL");
-                    getLogger().info(out.toString());
+            }
+            if (null != uri && callback.isValidationEnabled(uri)) {
+                try {
+                    TranslationResult<T> result = callback.createModel(unit, uri);
+                    for (int m = 0; m < result.getMessageCount(); m++) {
+                        Message message = result.getMessage(m);
+                        switch (message.getStatus()) {
+                        case ERROR:
+                        case UNSUPPORTED:
+                            callback.message(MessageType.ERROR, message.getDescription(), message.getCause(),
+                                message.getCausingFeature(), message.getCode());
+                            break;
+                        case WARNING:
+                            callback.message(MessageType.WARNING, message.getDescription(), message.getCause(),
+                                message.getCausingFeature(), message.getCode());
+                            break;
+                        default:
+                            callback.message(MessageType.INFO, message.getDescription(), message.getCause(),
+                                    message.getCausingFeature(), message.getCode());
+                            break;
+                        }
+                    }
+                    if (debug && 0 == result.getMessageCount()) {
+                        ByteArrayOutputStream out = new ByteArrayOutputStream();
+                        PrintWriter pOut = new PrintWriter(out);
+                        pOut.println(">TRANSLATED MODEL");
+                        callback.print(result, pOut);
+                        pOut.println("<TRANSLATED MODEL");
+                        getLogger().info(out.toString());
+                    }
+                } catch (Exception e) {
+                    String uriText = "";
+                    if (null != unit.eResource() && null != unit.eResource().getURI()) {
+                        uriText = " " + unit.eResource().getURI().toString();
+                    }
+                    getLogger().error("while validating:" + e.getMessage() + uriText);
+                    e.printStackTrace();
                 }
-            } catch (Exception e) {
-                String uriText = "";
-                if (null != unit.eResource() && null != unit.eResource().getURI()) {
-                    uriText = " " + unit.eResource().getURI().toString();
-                }
-                getLogger().error("while validating:" + e.getMessage() + uriText);
-                e.printStackTrace();
             }
         }
     }
