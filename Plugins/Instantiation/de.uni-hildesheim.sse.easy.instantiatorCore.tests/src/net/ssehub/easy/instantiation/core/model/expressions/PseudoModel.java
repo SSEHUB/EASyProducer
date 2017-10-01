@@ -7,6 +7,7 @@ import net.ssehub.easy.basics.modelManagement.IRestrictionEvaluationContext;
 import net.ssehub.easy.basics.modelManagement.IndentationConfiguration;
 import net.ssehub.easy.basics.modelManagement.ModelImport;
 import net.ssehub.easy.basics.modelManagement.Version;
+import net.ssehub.easy.instantiation.core.model.common.Compound;
 import net.ssehub.easy.instantiation.core.model.common.IResolvableModel;
 import net.ssehub.easy.instantiation.core.model.common.RuntimeEnvironment;
 import net.ssehub.easy.instantiation.core.model.common.Typedef;
@@ -245,6 +246,26 @@ class PseudoModel implements IResolvableModel<VarDecl, PseudoModel>, IModel {
     @Override
     public List<IMetaOperation> getCandidates(String name, int unnamedArgsCount) {
         return TypeDescriptor.getCandidates(this, name, unnamedArgsCount);
+    }
+
+    @Override
+    public Typedef getTypedef(String name) {
+        return null;
+    }
+
+    @Override
+    public int getCompoundCount() {
+        return 0;
+    }
+
+    @Override
+    public Compound getCompound(int index) {
+        return null;
+    }
+
+    @Override
+    public Compound getCompound(String name) {
+        return null;
     }
 
 }

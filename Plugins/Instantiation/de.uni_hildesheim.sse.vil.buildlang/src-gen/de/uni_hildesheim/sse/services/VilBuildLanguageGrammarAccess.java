@@ -263,21 +263,24 @@ public class VilBuildLanguageGrammarAccess extends AbstractGrammarElementFinder 
 		private final Assignment cElementsAssignment_1_0 = (Assignment)cAlternatives_1.eContents().get(0);
 		private final RuleCall cElementsVariableDeclarationParserRuleCall_1_0_0 = (RuleCall)cElementsAssignment_1_0.eContents().get(0);
 		private final Assignment cElementsAssignment_1_1 = (Assignment)cAlternatives_1.eContents().get(1);
-		private final RuleCall cElementsTypeDefParserRuleCall_1_1_0 = (RuleCall)cElementsAssignment_1_1.eContents().get(0);
+		private final RuleCall cElementsCompoundParserRuleCall_1_1_0 = (RuleCall)cElementsAssignment_1_1.eContents().get(0);
 		private final Assignment cElementsAssignment_1_2 = (Assignment)cAlternatives_1.eContents().get(2);
-		private final RuleCall cElementsRuleDeclarationParserRuleCall_1_2_0 = (RuleCall)cElementsAssignment_1_2.eContents().get(0);
+		private final RuleCall cElementsTypeDefParserRuleCall_1_2_0 = (RuleCall)cElementsAssignment_1_2.eContents().get(0);
+		private final Assignment cElementsAssignment_1_3 = (Assignment)cAlternatives_1.eContents().get(3);
+		private final RuleCall cElementsRuleDeclarationParserRuleCall_1_3_0 = (RuleCall)cElementsAssignment_1_3.eContents().get(0);
 		
 		//ScriptContents:
-		//	{ScriptContents} (elements+=VariableDeclaration | elements+=TypeDef | elements+=RuleDeclaration)*;
+		//	{ScriptContents} (elements+=VariableDeclaration | elements+=Compound | elements+=TypeDef |
+		//	elements+=RuleDeclaration)*;
 		@Override public ParserRule getRule() { return rule; }
 
-		//{ScriptContents} (elements+=VariableDeclaration | elements+=TypeDef | elements+=RuleDeclaration)*
+		//{ScriptContents} (elements+=VariableDeclaration | elements+=Compound | elements+=TypeDef | elements+=RuleDeclaration)*
 		public Group getGroup() { return cGroup; }
 
 		//{ScriptContents}
 		public Action getScriptContentsAction_0() { return cScriptContentsAction_0; }
 
-		//(elements+=VariableDeclaration | elements+=TypeDef | elements+=RuleDeclaration)*
+		//(elements+=VariableDeclaration | elements+=Compound | elements+=TypeDef | elements+=RuleDeclaration)*
 		public Alternatives getAlternatives_1() { return cAlternatives_1; }
 
 		//elements+=VariableDeclaration
@@ -286,17 +289,23 @@ public class VilBuildLanguageGrammarAccess extends AbstractGrammarElementFinder 
 		//VariableDeclaration
 		public RuleCall getElementsVariableDeclarationParserRuleCall_1_0_0() { return cElementsVariableDeclarationParserRuleCall_1_0_0; }
 
-		//elements+=TypeDef
+		//elements+=Compound
 		public Assignment getElementsAssignment_1_1() { return cElementsAssignment_1_1; }
 
-		//TypeDef
-		public RuleCall getElementsTypeDefParserRuleCall_1_1_0() { return cElementsTypeDefParserRuleCall_1_1_0; }
+		//Compound
+		public RuleCall getElementsCompoundParserRuleCall_1_1_0() { return cElementsCompoundParserRuleCall_1_1_0; }
 
-		//elements+=RuleDeclaration
+		//elements+=TypeDef
 		public Assignment getElementsAssignment_1_2() { return cElementsAssignment_1_2; }
 
+		//TypeDef
+		public RuleCall getElementsTypeDefParserRuleCall_1_2_0() { return cElementsTypeDefParserRuleCall_1_2_0; }
+
+		//elements+=RuleDeclaration
+		public Assignment getElementsAssignment_1_3() { return cElementsAssignment_1_3; }
+
 		//RuleDeclaration
-		public RuleCall getElementsRuleDeclarationParserRuleCall_1_2_0() { return cElementsRuleDeclarationParserRuleCall_1_2_0; }
+		public RuleCall getElementsRuleDeclarationParserRuleCall_1_3_0() { return cElementsRuleDeclarationParserRuleCall_1_3_0; }
 	}
 
 	public class RuleDeclarationElements extends AbstractParserRuleElementFinder {
@@ -1364,7 +1373,8 @@ public class VilBuildLanguageGrammarAccess extends AbstractGrammarElementFinder 
 	}
 
 	//ScriptContents:
-	//	{ScriptContents} (elements+=VariableDeclaration | elements+=TypeDef | elements+=RuleDeclaration)*;
+	//	{ScriptContents} (elements+=VariableDeclaration | elements+=Compound | elements+=TypeDef |
+	//	elements+=RuleDeclaration)*;
 	public ScriptContentsElements getScriptContentsAccess() {
 		return pScriptContents;
 	}
@@ -1559,6 +1569,16 @@ public class VilBuildLanguageGrammarAccess extends AbstractGrammarElementFinder 
 	
 	public ParserRule getVariableDeclarationRule() {
 		return getVariableDeclarationAccess().getRule();
+	}
+
+	//Compound:
+	//	abstract='abstract'? 'compound' name=Identifier ('refines' super=Identifier)? '{' vars+=VariableDeclaration* '}';
+	public ExpressionDslGrammarAccess.CompoundElements getCompoundAccess() {
+		return gaExpressionDsl.getCompoundAccess();
+	}
+	
+	public ParserRule getCompoundRule() {
+		return getCompoundAccess().getRule();
 	}
 
 	//TypeDef:

@@ -24,6 +24,7 @@ import de.uni_hildesheim.sse.vilBuildLanguage.RuleElement;
 import de.uni_hildesheim.sse.vilBuildLanguage.RuleElementBlock;
 import net.ssehub.easy.instantiation.core.model.buildlangModel.Rule;
 import net.ssehub.easy.instantiation.core.model.buildlangModel.Script;
+import net.ssehub.easy.instantiation.core.model.common.Compound;
 import net.ssehub.easy.instantiation.core.model.common.ILanguageElement;
 import net.ssehub.easy.instantiation.core.model.common.Typedef;
 import net.ssehub.easy.instantiation.core.model.common.VariableDeclaration;
@@ -43,7 +44,6 @@ public class VilEcoreModelFinder {
      * @return the ECore object representing <code>declaration</code>, may be <b>null</b> if not found
      */
     public EObject getEcoreElement(EObject contentElement, ILanguageElement declaration) {
-System.err.println("ECORE " + contentElement+" "+declaration);        
         EObject result = null;
         // TODO consider parameters!
         if (contentElement instanceof de.uni_hildesheim.sse.vil.expressions.expressionDsl.VariableDeclaration 
@@ -57,6 +57,13 @@ System.err.println("ECORE " + contentElement+" "+declaration);
             && declaration instanceof Typedef && declaration.getParent() instanceof Script) {
             if (((Typedef) declaration).getName().equals(
                 ((de.uni_hildesheim.sse.vil.expressions.expressionDsl.TypeDef) contentElement).getName())) {
+                result = contentElement;
+            }
+        }
+        if (null == result && contentElement instanceof Compound
+            && declaration.getParent() instanceof Script) {
+            if (((Compound) declaration).getName().equals(
+                ((de.uni_hildesheim.sse.vil.expressions.expressionDsl.Compound) contentElement).getName())) {
                 result = contentElement;
             }
         }

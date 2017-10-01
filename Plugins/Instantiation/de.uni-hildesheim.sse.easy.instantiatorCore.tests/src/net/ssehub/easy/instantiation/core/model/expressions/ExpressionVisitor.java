@@ -16,6 +16,7 @@
 package net.ssehub.easy.instantiation.core.model.expressions;
 
 import net.ssehub.easy.instantiation.core.model.common.Advice;
+import net.ssehub.easy.instantiation.core.model.common.Compound;
 import net.ssehub.easy.instantiation.core.model.common.ExpressionStatement;
 import net.ssehub.easy.instantiation.core.model.common.Typedef;
 import net.ssehub.easy.instantiation.core.model.common.VariableDeclaration;
@@ -315,6 +316,11 @@ class ExpressionVisitor implements IExpressionVisitor, IVisitor {
     @Override
     public Object visitContentImportExpression(ContentImportExpression ex) throws VilException {
         return null; // we test this only in VIL files
+    }
+
+    @Override
+    public Object visitCompound(Compound compound) throws VilException {
+        return null; // not relevant to string replacer
     }
 
 }

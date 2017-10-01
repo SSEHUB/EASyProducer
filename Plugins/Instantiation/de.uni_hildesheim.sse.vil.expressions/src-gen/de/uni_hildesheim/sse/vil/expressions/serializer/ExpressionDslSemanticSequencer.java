@@ -9,6 +9,7 @@ import de.uni_hildesheim.sse.vil.expressions.expressionDsl.AdditiveExpressionPar
 import de.uni_hildesheim.sse.vil.expressions.expressionDsl.Advice;
 import de.uni_hildesheim.sse.vil.expressions.expressionDsl.ArgumentList;
 import de.uni_hildesheim.sse.vil.expressions.expressionDsl.Call;
+import de.uni_hildesheim.sse.vil.expressions.expressionDsl.Compound;
 import de.uni_hildesheim.sse.vil.expressions.expressionDsl.Constant;
 import de.uni_hildesheim.sse.vil.expressions.expressionDsl.ConstructorExecution;
 import de.uni_hildesheim.sse.vil.expressions.expressionDsl.ContainerInitializer;
@@ -87,6 +88,9 @@ public class ExpressionDslSemanticSequencer extends AbstractDelegatingSemanticSe
 				return; 
 			case ExpressionDslPackage.CALL:
 				sequence_Call(context, (Call) semanticObject); 
+				return; 
+			case ExpressionDslPackage.COMPOUND:
+				sequence_Compound(context, (Compound) semanticObject); 
 				return; 
 			case ExpressionDslPackage.CONSTANT:
 				sequence_Constant(context, (Constant) semanticObject); 
@@ -278,6 +282,18 @@ public class ExpressionDslSemanticSequencer extends AbstractDelegatingSemanticSe
 	
 	/**
 	 * Contexts:
+	 *     Compound returns Compound
+	 *
+	 * Constraint:
+	 *     (abstract='abstract'? name=Identifier super=Identifier? vars+=VariableDeclaration*)
+	 */
+	protected void sequence_Compound(ISerializationContext context, Compound semanticObject) {
+		genericSequencer.createSequence(context, semanticObject);
+	}
+	
+	
+	/**
+	 * Contexts:
 	 *     Constant returns Constant
 	 *
 	 * Constraint:
@@ -454,14 +470,7 @@ public class ExpressionDslSemanticSequencer extends AbstractDelegatingSemanticSe
 	 *     LanguageUnit returns LanguageUnit
 	 *
 	 * Constraint:
-	 *     (
-	 *         advices+=Advice* 
-	 *         name=Identifier 
-	 *         version=VersionStmt? 
-	 *         imports+=Import* 
-	 *         typeDefs+=TypeDef* 
-	 *         vars+=VariableDeclaration*
-	 *     )
+	 *     (advices+=Advice* name=Identifier version=VersionStmt? imports+=Import*)
 	 */
 	protected void sequence_LanguageUnit(ISerializationContext context, LanguageUnit semanticObject) {
 		genericSequencer.createSequence(context, semanticObject);

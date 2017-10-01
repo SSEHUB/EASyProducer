@@ -81,7 +81,7 @@ public class TemplateLangWriter extends WriterVisitor<VariableDeclaration> imple
         }
         println(" {");
         int contained = template.getVariableDeclarationCount() + template.getDefCount() + o2i(template.getVersion()) 
-            + template.getTypedefCount();
+            + template.getTypedefCount() + template.getCompoundCount();
         if (contained > 0) {
             println();
             increaseIndentation();
@@ -92,6 +92,10 @@ public class TemplateLangWriter extends WriterVisitor<VariableDeclaration> imple
             }
             if (template.getTypedefCount() > 0) {
                 printTypedefs(template);
+                println();
+            }
+            if (template.getCompoundCount() > 0) {
+                printCompounds(template);
                 println();
             }
             for (int v = 0; v < template.getVariableDeclarationCount(); v++) {

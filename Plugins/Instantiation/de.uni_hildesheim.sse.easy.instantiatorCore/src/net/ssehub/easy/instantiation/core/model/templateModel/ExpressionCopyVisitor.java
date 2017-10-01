@@ -119,6 +119,11 @@ public class ExpressionCopyVisitor extends CopyVisitor implements IVisitor {
     public Object visitVariableDeclaration(VariableDeclaration var) throws VilException {
         throw new VilException("not an expression", VilException.ID_INTERNAL);
     }
+    
+    @Override
+    public Object visitCompound(net.ssehub.easy.instantiation.core.model.common.Compound compound) throws VilException {
+        throw new VilException("not an expression", VilException.ID_INTERNAL);
+    }
 
     @Override
     public Object visitContentAlternativeExpression(ContentAlternativeExpression ex) throws VilException {

@@ -2,6 +2,7 @@ package net.ssehub.easy.instantiation.core.model.templateModel;
 
 import net.ssehub.easy.basics.messages.IMessageHandler;
 import net.ssehub.easy.instantiation.core.model.common.Advice;
+import net.ssehub.easy.instantiation.core.model.common.Compound;
 import net.ssehub.easy.instantiation.core.model.common.ExpressionStatement;
 import net.ssehub.easy.instantiation.core.model.common.Typedef;
 import net.ssehub.easy.instantiation.core.model.common.VariableDeclaration;
@@ -132,6 +133,12 @@ public class ExpressionVersionRestrictionValidator
     @Override
     public Object visitContentImportExpression(ContentImportExpression ex) throws VilException {
         return null; // -> only relevant in template files
+    }
+
+    @Override
+    public Object visitCompound(Compound compound) throws VilException {
+        emit("compound declaration is not allowed here", true, VilException.ID_SEMANTIC);
+        return null;
     }
 
 }

@@ -241,4 +241,24 @@ class DummyModel<V extends IMetaParameterDeclaration, M extends IModel> implemen
         return TypeDescriptor.getCandidates(this, name, unnamedArgsCount);
     }
 
+    @Override
+    public Typedef getTypedef(String name) {
+        return null;
+    }
+
+    @Override
+    public int getCompoundCount() {
+        return 0;
+    }
+
+    @Override
+    public Compound getCompound(int index) {
+        return null;
+    }
+
+    @Override
+    public Compound getCompound(String name) {
+        return null;
+    }
+
 }

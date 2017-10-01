@@ -60,6 +60,7 @@ import net.ssehub.easy.instantiation.core.model.buildlangModel.ruleMatch.Compoun
 import net.ssehub.easy.instantiation.core.model.buildlangModel.ruleMatch.MatchResolver;
 import net.ssehub.easy.instantiation.core.model.buildlangModel.ruleMatch.PathMatchExpression;
 import net.ssehub.easy.instantiation.core.model.buildlangModel.ruleMatch.StringMatchExpression;
+import net.ssehub.easy.instantiation.core.model.common.Compound;
 import net.ssehub.easy.instantiation.core.model.common.ExecutionVisitor;
 import net.ssehub.easy.instantiation.core.model.common.IResolvableModel;
 import net.ssehub.easy.instantiation.core.model.common.ITerminatable;
@@ -1696,6 +1697,11 @@ public class BuildlangExecution extends ExecutionVisitor<Script, AbstractRule, V
         if (null != terminatable) {
             terminatables.remove(terminatable);
         }
+    }
+
+    @Override
+    public Object visitCompound(Compound compound) throws VilException {
+        return null; // declaration is not executed
     }
 
 }

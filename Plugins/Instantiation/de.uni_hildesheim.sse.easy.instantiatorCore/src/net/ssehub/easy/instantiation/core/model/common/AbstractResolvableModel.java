@@ -26,13 +26,14 @@ import net.ssehub.easy.varModel.model.Project;
  * @author Holger Eichelberger
  */
 public abstract class AbstractResolvableModel<V extends IMetaParameterDeclaration, M extends IModel> 
-    implements IResolvableModel<V, M>, IModelListener<Project>, ITypedefReceiver {
+    implements IResolvableModel<V, M>, IModelListener<Project>, ITypedefReceiver, ICompoundReceiver {
 
     private transient boolean dirty = false;
     private Imports<M> imports;
     private TypeRegistry registry;
     private Advice[] advices;
     private List<Typedef> typedefs;
+    private List<Compound> compounds;
 
     /**
      * Creates an abstract resolvable model.
@@ -166,16 +167,59 @@ public abstract class AbstractResolvableModel<V extends IMetaParameterDeclaratio
         return typedefs.get(index);
     }
     
-    /**
-     * Adds a typedef.
-     * 
-     * @param typedef the typedef to be added
-     */
+    @Override
     public void addTypedef(Typedef typedef) {
         if (null == typedefs) {
             typedefs = new ArrayList<Typedef>();
         }
         typedefs.add(typedef);
+    }
+    
+    @Override
+    public Typedef getTypedef(String name) {
+        // TODO optimize by dictionary
+        Typedef result = null;
+        for (int t = 0, n = getTypedefCount(); null == result && t < n; t++) {
+            Typedef td = getTypedef(t);
+            if (td.getName().equals(name)) {
+                result = td;
+            }
+        }
+        return result;
+    }
+
+    @Override
+    public void addCompound(Compound compound) {
+        if (null == compounds) {
+            compounds = new ArrayList<Compound>();
+        }
+        compounds.add(compound);
+    }
+
+    @Override
+    public Compound getCompound(String name) {
+        // TODO optimize by dictionary
+        Compound result = null;
+        for (int c = 0, n = getCompoundCount(); null == result && c < n; c++) {
+            Compound cmp = getCompound(c);
+            if (cmp.getName().equals(name)) {
+                result = cmp;
+            }
+        }
+        return result;
+    }
+
+    @Override
+    public int getCompoundCount() {
+        return null == compounds ? 0 : compounds.size();
+    }
+
+    @Override
+    public Compound getCompound(int index) {
+        if (null == compounds) {
+            throw new IndexOutOfBoundsException();
+        }
+        return compounds.get(index);
     }
 
     @Override

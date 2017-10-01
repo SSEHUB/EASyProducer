@@ -29,7 +29,9 @@ import de.uni_hildesheim.sse.vil.templatelang.templateLang.Stmt;
 import de.uni_hildesheim.sse.vil.templatelang.templateLang.StmtBlock;
 import de.uni_hildesheim.sse.vil.templatelang.templateLang.VilDef;
 import de.uni_hildesheim.sse.vil.templatelang.templateLang.While;
+import net.ssehub.easy.dslCore.translation.ModelTranslator;
 import net.ssehub.easy.dslCore.ui.editors.CommonXtextEditor;
+import net.ssehub.easy.instantiation.core.model.common.Compound;
 import net.ssehub.easy.instantiation.core.model.common.ILanguageElement;
 import net.ssehub.easy.instantiation.core.model.templateModel.Def;
 import net.ssehub.easy.instantiation.core.model.templateModel.Template;
@@ -62,11 +64,20 @@ public class VtlEcoreModelQuery extends AbstractEcoreModelQuery<LanguageUnit, IL
             if (unit != null) {
                 // TODO consider parameters!
                 if (declaration instanceof VariableDeclaration && declaration.getParent() instanceof Template) {
-                    desiredElement = findVariableDeclaration(unit.getVars(), (VariableDeclaration) declaration);
+                    desiredElement = findVariableDeclaration(ModelTranslator.select(unit.getElements(), 
+                        de.uni_hildesheim.sse.vil.expressions.expressionDsl.VariableDeclaration.class), 
+                        (VariableDeclaration) declaration);
                 }
                 if (null == desiredElement && declaration instanceof TypeDef 
                     && declaration.getParent() instanceof Template) {
-                    desiredElement = findTypedef(unit.getTypeDefs(), (TypeDef) declaration);
+                    desiredElement = findTypedef(ModelTranslator.select(unit.getElements(), 
+                        de.uni_hildesheim.sse.vil.expressions.expressionDsl.TypeDef.class), (TypeDef) declaration);
+                }
+                if (null == desiredElement && declaration instanceof Compound
+                    && declaration.getParent() instanceof Template) {
+                    desiredElement = findCompound(ModelTranslator.select(unit.getElements(), 
+                        de.uni_hildesheim.sse.vil.expressions.expressionDsl.Compound.class), 
+                            (Compound) declaration);
                 }
                 if (null == desiredElement) {
                     desiredElement = findInDefs(unit, declaration);
@@ -87,7 +98,7 @@ public class VtlEcoreModelQuery extends AbstractEcoreModelQuery<LanguageUnit, IL
         EObject result = null;
         if (element instanceof Def && element.getParent() instanceof Template) {
             String name = ((Def) element).getName();
-            List<VilDef> defs = unit.getDefs();
+            List<VilDef> defs = ModelTranslator.select(unit.getElements(), VilDef.class);
             for (int d = 0; null == result && d < defs.size(); d++) {
                 if (name.equals(defs.get(d).getId())) {
                     result = defs.get(d);
@@ -95,7 +106,7 @@ public class VtlEcoreModelQuery extends AbstractEcoreModelQuery<LanguageUnit, IL
             }
         }
         if (element instanceof VariableDeclaration && !(element.getParent() instanceof Template)) {
-            List<VilDef> defs = unit.getDefs();
+            List<VilDef> defs = ModelTranslator.select(unit.getElements(), VilDef.class);
             int level = 0;
             ILanguageElement iter = element.getParent();
             while (null != iter && !(iter instanceof VilDef)) {

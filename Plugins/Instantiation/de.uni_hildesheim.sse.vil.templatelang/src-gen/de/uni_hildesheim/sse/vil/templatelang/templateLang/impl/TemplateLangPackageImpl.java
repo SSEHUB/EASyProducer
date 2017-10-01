@@ -313,7 +313,7 @@ public class TemplateLangPackageImpl extends EPackageImpl implements TemplateLan
    * <!-- end-user-doc -->
    * @generated
    */
-  public EReference getLanguageUnit_Defs()
+  public EReference getLanguageUnit_Elements()
   {
     return (EReference)languageUnitEClass.getEStructuralFeatures().get(5);
   }
@@ -1124,7 +1124,7 @@ public class TemplateLangPackageImpl extends EPackageImpl implements TemplateLan
     createEReference(languageUnitEClass, LANGUAGE_UNIT__FORMATTING);
     createEReference(languageUnitEClass, LANGUAGE_UNIT__PARAM);
     createEAttribute(languageUnitEClass, LANGUAGE_UNIT__EXT);
-    createEReference(languageUnitEClass, LANGUAGE_UNIT__DEFS);
+    createEReference(languageUnitEClass, LANGUAGE_UNIT__ELEMENTS);
 
     indentationHintEClass = createEClass(INDENTATION_HINT);
     createEReference(indentationHintEClass, INDENTATION_HINT__PARTS);
@@ -1264,7 +1264,7 @@ public class TemplateLangPackageImpl extends EPackageImpl implements TemplateLan
     initEReference(getLanguageUnit_Formatting(), this.getFormattingHint(), null, "formatting", null, 0, 1, LanguageUnit.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEReference(getLanguageUnit_Param(), theExpressionDslPackage.getParameterList(), null, "param", null, 0, 1, LanguageUnit.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEAttribute(getLanguageUnit_Ext(), ecorePackage.getEString(), "ext", null, 0, 1, LanguageUnit.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEReference(getLanguageUnit_Defs(), this.getVilDef(), null, "defs", null, 0, -1, LanguageUnit.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getLanguageUnit_Elements(), ecorePackage.getEObject(), null, "elements", null, 0, -1, LanguageUnit.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     initEClass(indentationHintEClass, IndentationHint.class, "IndentationHint", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
     initEReference(getIndentationHint_Parts(), this.getIndentationHintPart(), null, "parts", null, 0, -1, IndentationHint.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);

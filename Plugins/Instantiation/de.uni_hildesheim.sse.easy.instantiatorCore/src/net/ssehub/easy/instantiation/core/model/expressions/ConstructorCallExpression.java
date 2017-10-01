@@ -5,7 +5,7 @@ import net.ssehub.easy.instantiation.core.model.vilTypes.OperationDescriptor;
 import net.ssehub.easy.instantiation.core.model.vilTypes.TypeDescriptor;
 
 /**
- * Represents a constructor call.
+ * Represents a constructor call. Considers {@link IInitializableValue}.
  * 
  * @author Holger Eichelberger
  */
@@ -67,6 +67,15 @@ public class ConstructorCallExpression extends CallExpression {
     @Override
     protected boolean checkMetaForFirstArgField() {
         return false; // react on type instead, see determineOperand()
+    }
+
+    @Override
+    public Object accept(IExpressionVisitor visitor) throws VilException {
+        Object result = super.accept(visitor);
+        if (result instanceof IInitializableValue) {
+            ((IInitializableValue) result).initialize(visitor);
+        }
+        return result;
     }
 
 }

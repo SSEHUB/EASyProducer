@@ -526,5 +526,44 @@ public class BasicTests extends AbstractTest {
         assertEqual("parameter4", "parameter4", AbstractException.ID_CANNOT_RESOLVE);
     }
 
-    
+    /**
+     * Tests basic compounds.
+     * 
+     * @throws IOException should not occur
+     */
+    @Test
+    public void testCompound() throws IOException {
+        assertEqual("compound");
+    }
+
+    /**
+     * Tests basic compounds (fail, abstract).
+     * 
+     * @throws IOException should not occur
+     */
+    @Test
+    public void testCompoundFail() throws IOException {
+        assertEqual("compoundFail", VilException.ID_CANNOT_INSTANTIATE, ErrorCodes.UNKNOWN_ELEMENT);
+    }
+
+    /**
+     * Tests basic compounds (fail, compound redefinition).
+     * 
+     * @throws IOException should not occur
+     */
+    @Test
+    public void testCompoundFail1() throws IOException {
+        assertEqual("compoundFail1", ErrorCodes.REDEFINITION);
+    }
+
+    /**
+     * Tests basic compounds (fail, compound slot redefinition).
+     * 
+     * @throws IOException should not occur
+     */
+    @Test
+    public void testCompoundFail2() throws IOException {
+        assertEqual("compoundFail2", ErrorCodes.REDEFINITION);
+    }
+
 }

@@ -93,6 +93,8 @@ public class VilBuildLanguageParser extends AbstractContentAssistParser {
 					put(grammarAccess.getSystemExecutionAccess().getGroup(), "rule__SystemExecution__Group__0");
 					put(grammarAccess.getVariableDeclarationAccess().getGroup(), "rule__VariableDeclaration__Group__0");
 					put(grammarAccess.getVariableDeclarationAccess().getGroup_3(), "rule__VariableDeclaration__Group_3__0");
+					put(grammarAccess.getCompoundAccess().getGroup(), "rule__Compound__Group__0");
+					put(grammarAccess.getCompoundAccess().getGroup_3(), "rule__Compound__Group_3__0");
 					put(grammarAccess.getTypeDefAccess().getGroup(), "rule__TypeDef__Group__0");
 					put(grammarAccess.getAdviceAccess().getGroup(), "rule__Advice__Group__0");
 					put(grammarAccess.getVersionSpecAccess().getGroup(), "rule__VersionSpec__Group__0");
@@ -162,6 +164,7 @@ public class VilBuildLanguageParser extends AbstractContentAssistParser {
 					put(grammarAccess.getScriptContentsAccess().getElementsAssignment_1_0(), "rule__ScriptContents__ElementsAssignment_1_0");
 					put(grammarAccess.getScriptContentsAccess().getElementsAssignment_1_1(), "rule__ScriptContents__ElementsAssignment_1_1");
 					put(grammarAccess.getScriptContentsAccess().getElementsAssignment_1_2(), "rule__ScriptContents__ElementsAssignment_1_2");
+					put(grammarAccess.getScriptContentsAccess().getElementsAssignment_1_3(), "rule__ScriptContents__ElementsAssignment_1_3");
 					put(grammarAccess.getRuleDeclarationAccess().getModifierAssignment_1_0(), "rule__RuleDeclaration__ModifierAssignment_1_0");
 					put(grammarAccess.getRuleDeclarationAccess().getTypeAssignment_1_1(), "rule__RuleDeclaration__TypeAssignment_1_1");
 					put(grammarAccess.getRuleDeclarationAccess().getNameAssignment_1_2(), "rule__RuleDeclaration__NameAssignment_1_2");
@@ -224,6 +227,10 @@ public class VilBuildLanguageParser extends AbstractContentAssistParser {
 					put(grammarAccess.getVariableDeclarationAccess().getTypeAssignment_1(), "rule__VariableDeclaration__TypeAssignment_1");
 					put(grammarAccess.getVariableDeclarationAccess().getNameAssignment_2(), "rule__VariableDeclaration__NameAssignment_2");
 					put(grammarAccess.getVariableDeclarationAccess().getExpressionAssignment_3_1(), "rule__VariableDeclaration__ExpressionAssignment_3_1");
+					put(grammarAccess.getCompoundAccess().getAbstractAssignment_0(), "rule__Compound__AbstractAssignment_0");
+					put(grammarAccess.getCompoundAccess().getNameAssignment_2(), "rule__Compound__NameAssignment_2");
+					put(grammarAccess.getCompoundAccess().getSuperAssignment_3_1(), "rule__Compound__SuperAssignment_3_1");
+					put(grammarAccess.getCompoundAccess().getVarsAssignment_5(), "rule__Compound__VarsAssignment_5");
 					put(grammarAccess.getTypeDefAccess().getNameAssignment_1(), "rule__TypeDef__NameAssignment_1");
 					put(grammarAccess.getTypeDefAccess().getTypeAssignment_2(), "rule__TypeDef__TypeAssignment_2");
 					put(grammarAccess.getAdviceAccess().getNameAssignment_2(), "rule__Advice__NameAssignment_2");

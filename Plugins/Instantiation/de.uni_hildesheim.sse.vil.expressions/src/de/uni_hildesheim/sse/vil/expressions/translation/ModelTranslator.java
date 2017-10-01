@@ -30,15 +30,19 @@ import net.ssehub.easy.basics.modelManagement.VersionFormatException;
 import net.ssehub.easy.dslCore.translation.ErrorCodes;
 import net.ssehub.easy.dslCore.translation.TranslatorException;
 import net.ssehub.easy.instantiation.core.model.common.Advice;
+import net.ssehub.easy.instantiation.core.model.common.Compound;
 import net.ssehub.easy.instantiation.core.model.common.ExpressionStatement;
+import net.ssehub.easy.instantiation.core.model.common.ICompoundReceiver;
 import net.ssehub.easy.instantiation.core.model.common.ITypedefReceiver;
 import net.ssehub.easy.instantiation.core.model.common.IVariableDeclarationReceiver;
 import net.ssehub.easy.instantiation.core.model.common.Imports;
+import net.ssehub.easy.instantiation.core.model.common.ListVariableDeclarationReceiver;
 import net.ssehub.easy.instantiation.core.model.common.Typedef;
 import net.ssehub.easy.instantiation.core.model.common.VariableDeclaration;
 import net.ssehub.easy.instantiation.core.model.common.VilException;
 import net.ssehub.easy.instantiation.core.model.expressions.Expression;
 import net.ssehub.easy.instantiation.core.model.expressions.Resolver;
+import net.ssehub.easy.instantiation.core.model.vilTypes.CompoundTypeDescriptor;
 import net.ssehub.easy.instantiation.core.model.vilTypes.TypeDescriptor;
 import net.ssehub.easy.instantiation.core.model.vilTypes.TypeRegistry;
 import net.ssehub.easy.instantiation.core.model.vilTypes.configuration.IvmlTypeResolver;
@@ -131,13 +135,37 @@ public abstract class ModelTranslator
         }
         return result;
     }
-    
+
+    /**
+     * Processes the typedefs in <code>elts</code>.
+     * 
+     * @param elts the elements
+     * @param receiver the typedef receiver
+     */
     protected void processTypedefContents(List<EObject> elts, ITypedefReceiver receiver) {
         List<de.uni_hildesheim.sse.vil.expressions.expressionDsl.TypeDef> defs = select(
             elts, de.uni_hildesheim.sse.vil.expressions.expressionDsl.TypeDef.class);
         processTypedefs(defs, receiver);
     }
 
+    /**
+     * Processes the compounds in <code>elts</code>.
+     * 
+     * @param elts the elements
+     * @param receiver the compound receiver
+     */
+    protected void processCompoundContents(List<EObject> elts, ICompoundReceiver receiver) {
+        List<de.uni_hildesheim.sse.vil.expressions.expressionDsl.Compound> defs = select(
+            elts, de.uni_hildesheim.sse.vil.expressions.expressionDsl.Compound.class);
+        processCompounds(defs, receiver);
+    }
+
+    /**
+     * Processes the given typedefs.
+     * 
+     * @param defs the typedefs
+     * @param receiver the typedef receiver
+     */
     protected void processTypedefs(List<de.uni_hildesheim.sse.vil.expressions.expressionDsl.TypeDef> defs, 
         ITypedefReceiver receiver) {
         int count;
@@ -152,7 +180,35 @@ public abstract class ModelTranslator
             processTypedefs(defs, receiver, true);
         }
     }
-    
+
+    /**
+     * Processes the given compounds.
+     * 
+     * @param defs the compounds
+     * @param receiver the compozbd receiver
+     */
+    protected void processCompounds(List<de.uni_hildesheim.sse.vil.expressions.expressionDsl.Compound> cmps, 
+        ICompoundReceiver receiver) {
+        int count;
+        do {
+            count = cmps.size();
+            processCompounds(cmps, receiver, false);
+            if (count == cmps.size()) {
+                break;
+            }
+        } while (count > 0);
+        if (cmps.size() > 0) {
+            processCompounds(cmps, receiver, true);
+        }
+    }
+
+    /**
+     * Processes the given typedefs.
+     * 
+     * @param defs the typedefs
+     * @param receiver the typedef receiver
+     * @param force force processing typedefs not resolved so far
+     */
     private void processTypedefs(List<de.uni_hildesheim.sse.vil.expressions.expressionDsl.TypeDef> defs, 
         ITypedefReceiver receiver, boolean force) {
         Iterator<de.uni_hildesheim.sse.vil.expressions.expressionDsl.TypeDef> iter = defs.iterator();
@@ -179,7 +235,79 @@ public abstract class ModelTranslator
             }
         }        
     }
-    
+
+    /**
+     * Processes the given typedefs.
+     * 
+     * @param defs the typedefs
+     * @param receiver the typedef receiver
+     * @param force force processing typedefs not resolved so far
+     */
+    private void processCompounds(List<de.uni_hildesheim.sse.vil.expressions.expressionDsl.Compound> cmps, 
+        ICompoundReceiver receiver, boolean force) {
+        Iterator<de.uni_hildesheim.sse.vil.expressions.expressionDsl.Compound> iter = cmps.iterator();
+        TypeRegistry registry = resolver.getTypeRegistry();
+        while (iter.hasNext()) {
+            de.uni_hildesheim.sse.vil.expressions.expressionDsl.Compound cmp = iter.next();
+            try {
+                CompoundTypeDescriptor refines = null;
+                if (null != cmp.getSuper()) {
+                    TypeDescriptor<?> tmp = registry.getType(cmp.getSuper(), false);
+                    if (null == tmp) {
+                        error("Parent compound '" + cmp.getSuper() + "' does not exists", cmp, 
+                            ExpressionDslPackage.Literals.COMPOUND__SUPER, ErrorCodes.UNKNOWN_TYPE);
+                    } else if (tmp instanceof CompoundTypeDescriptor) {
+                        refines = (CompoundTypeDescriptor) tmp;
+                    } else {
+                        error(cmp.getSuper() + "' is not a compound", cmp, 
+                            ExpressionDslPackage.Literals.COMPOUND__SUPER, ErrorCodes.TYPE_CONSISTENCY);
+                    }
+                }
+                CompoundTypeDescriptor cType = new CompoundTypeDescriptor(cmp.getName(), 
+                    null != cmp.getAbstract(), refines, registry);
+                EList<de.uni_hildesheim.sse.vil.expressions.expressionDsl.VariableDeclaration> vars = cmp.getVars();
+System.out.println(cmp.getName() + vars);                    
+                if (null != vars) {
+                    ListVariableDeclarationReceiver<I> recv = new ListVariableDeclarationReceiver<>(
+                        cmp.getVars().size());
+                    processVariableDeclarations(vars, recv, false);
+                    Set<String> known = new HashSet<String>();
+                    CompoundTypeDescriptor.SlotDescriptor[] slots = new CompoundTypeDescriptor.SlotDescriptor[
+                        recv.getVariableCount()];
+                    CompoundTypeDescriptor cIter = refines;
+                    while (null != cIter) {
+                        for (int s = 0; s < cIter.getSlotCount(); s++) {
+                            known.add(cIter.getSlot(s).getName());
+                        }
+                        cIter = cIter.getRefines();
+                    }
+                    for (int s = 0; s < slots.length; s++) {
+                        I var = recv.getVariable(s);
+                        String varName = var.getName();
+                        if (known.contains(varName)) {
+                            error("Slot '" + varName + "' is already declared", vars.get(s), 
+                                ExpressionDslPackage.Literals.VARIABLE_DECLARATION__NAME, ErrorCodes.REDEFINITION);
+                        } else {
+                            known.add(varName);
+                        }
+                        slots[s] = new CompoundTypeDescriptor.SlotDescriptor(cType, var);
+                    }
+                    cType.setFields(slots);
+                }
+                receiver.addCompound(createCompound(cType));
+                if (!registry.registerCompoundType(cType)) {
+                    error("Compound '" + cType.getName() + "' is already declared", cmp, 
+                        ExpressionDslPackage.Literals.COMPOUND__NAME, ErrorCodes.REDEFINITION);
+                }
+                iter.remove();
+            } catch (VilException e) {
+                if (force) {
+                    error(e.getMessage(), cmp, ExpressionDslPackage.Literals.COMPOUND__NAME, e.getId());
+                }
+            }
+        }        
+    }
+
     /**
      * Creates a typdef object.
      * 
@@ -188,6 +316,14 @@ public abstract class ModelTranslator
      * @return the typedef
      */
     protected abstract Typedef createTypedef(String name, TypeDescriptor<?> type) throws VilException;
+
+    /**
+     * Creates a compound object.
+     * 
+     * @param type the the compound type
+     * @return the typedef
+     */
+    protected abstract Compound createCompound(CompoundTypeDescriptor type) throws VilException;
 
     /**
      * Processes all variable declarations considering dependencies and terminates with
@@ -199,16 +335,30 @@ public abstract class ModelTranslator
     protected void processVariableDeclarations(
         List<de.uni_hildesheim.sse.vil.expressions.expressionDsl.VariableDeclaration> decls, 
         IVariableDeclarationReceiver<I> receiver) {
+        processVariableDeclarations(decls, receiver, true);
+    }
+
+    /**
+     * Processes all variable declarations considering dependencies and terminates with
+     * an error if not all can be resolved.
+     * 
+     * @param decls the declarations to be processed
+     * @param receiver a receiver for the created instances
+     * @param addToResolver add the newly created variables to the resolver instance
+     */
+    protected void processVariableDeclarations(
+        List<de.uni_hildesheim.sse.vil.expressions.expressionDsl.VariableDeclaration> decls, 
+        IVariableDeclarationReceiver<I> receiver, boolean addToResolver) {
         int count;
         do {
             count = decls.size();
-            processVariableDeclarations(decls, receiver, false);
+            processVariableDeclarations(decls, receiver, false, addToResolver);
             if (count == decls.size()) {
                 break;
             }
         } while (count > 0);
         if (decls.size() > 0) {
-            processVariableDeclarations(decls, receiver, true);
+            processVariableDeclarations(decls, receiver, true, addToResolver);
         }
     }
 
@@ -221,16 +371,19 @@ public abstract class ModelTranslator
      * @param receiver a receiver for the created instances
      * @param force if <code>true</code> a failing variable creation will be recorded as an error, 
      *   <code>false</code> failing creations will be ignored
+     * @param addToResolver add the newly created variable to the resolver instance
      */
     private void processVariableDeclarations(List<de.uni_hildesheim.sse.vil.expressions.expressionDsl.VariableDeclaration> decls, 
-        IVariableDeclarationReceiver<I> receiver, boolean force) {
+        IVariableDeclarationReceiver<I> receiver, boolean force, boolean addToResolver) {
         Iterator<de.uni_hildesheim.sse.vil.expressions.expressionDsl.VariableDeclaration> iter = decls.iterator();
         while (iter.hasNext()) {
             de.uni_hildesheim.sse.vil.expressions.expressionDsl.VariableDeclaration decl = iter.next();
             try {
                 I varDecl = getExpressionTranslator().processVariableDeclaration(decl, resolver);
                 receiver.addVariableDeclaration(varDecl);
-                resolver.add(varDecl);
+                if (addToResolver) {
+                    resolver.add(varDecl);
+                }
                 iter.remove();
             } catch (TranslatorException e) {
                 if (force) {

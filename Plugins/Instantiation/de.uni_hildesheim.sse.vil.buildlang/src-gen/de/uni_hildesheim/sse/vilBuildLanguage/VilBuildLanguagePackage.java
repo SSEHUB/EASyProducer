@@ -188,24 +188,6 @@ public interface VilBuildLanguagePackage extends EPackage
   int LANGUAGE_UNIT__IMPORTS = ExpressionDslPackage.LANGUAGE_UNIT__IMPORTS;
 
   /**
-   * The feature id for the '<em><b>Type Defs</b></em>' containment reference list.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int LANGUAGE_UNIT__TYPE_DEFS = ExpressionDslPackage.LANGUAGE_UNIT__TYPE_DEFS;
-
-  /**
-   * The feature id for the '<em><b>Vars</b></em>' containment reference list.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int LANGUAGE_UNIT__VARS = ExpressionDslPackage.LANGUAGE_UNIT__VARS;
-
-  /**
    * The feature id for the '<em><b>Param</b></em>' containment reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->

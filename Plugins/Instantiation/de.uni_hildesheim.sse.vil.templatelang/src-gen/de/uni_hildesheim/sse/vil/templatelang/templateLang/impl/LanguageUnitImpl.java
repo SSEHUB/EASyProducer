@@ -9,7 +9,6 @@ import de.uni_hildesheim.sse.vil.templatelang.templateLang.FormattingHint;
 import de.uni_hildesheim.sse.vil.templatelang.templateLang.IndentationHint;
 import de.uni_hildesheim.sse.vil.templatelang.templateLang.LanguageUnit;
 import de.uni_hildesheim.sse.vil.templatelang.templateLang.TemplateLangPackage;
-import de.uni_hildesheim.sse.vil.templatelang.templateLang.VilDef;
 
 import java.util.Collection;
 
@@ -19,6 +18,7 @@ import org.eclipse.emf.common.notify.NotificationChain;
 import org.eclipse.emf.common.util.EList;
 
 import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.InternalEObject;
 
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
@@ -39,7 +39,7 @@ import org.eclipse.emf.ecore.util.InternalEList;
  *   <li>{@link de.uni_hildesheim.sse.vil.templatelang.templateLang.impl.LanguageUnitImpl#getFormatting <em>Formatting</em>}</li>
  *   <li>{@link de.uni_hildesheim.sse.vil.templatelang.templateLang.impl.LanguageUnitImpl#getParam <em>Param</em>}</li>
  *   <li>{@link de.uni_hildesheim.sse.vil.templatelang.templateLang.impl.LanguageUnitImpl#getExt <em>Ext</em>}</li>
- *   <li>{@link de.uni_hildesheim.sse.vil.templatelang.templateLang.impl.LanguageUnitImpl#getDefs <em>Defs</em>}</li>
+ *   <li>{@link de.uni_hildesheim.sse.vil.templatelang.templateLang.impl.LanguageUnitImpl#getElements <em>Elements</em>}</li>
  * </ul>
  *
  * @generated
@@ -107,14 +107,14 @@ public class LanguageUnitImpl extends de.uni_hildesheim.sse.vil.expressions.expr
   protected String ext = EXT_EDEFAULT;
 
   /**
-   * The cached value of the '{@link #getDefs() <em>Defs</em>}' containment reference list.
+   * The cached value of the '{@link #getElements() <em>Elements</em>}' containment reference list.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @see #getDefs()
+   * @see #getElements()
    * @generated
    * @ordered
    */
-  protected EList<VilDef> defs;
+  protected EList<EObject> elements;
 
   /**
    * <!-- begin-user-doc -->
@@ -323,13 +323,13 @@ public class LanguageUnitImpl extends de.uni_hildesheim.sse.vil.expressions.expr
    * <!-- end-user-doc -->
    * @generated
    */
-  public EList<VilDef> getDefs()
+  public EList<EObject> getElements()
   {
-    if (defs == null)
+    if (elements == null)
     {
-      defs = new EObjectContainmentEList<VilDef>(VilDef.class, this, TemplateLangPackage.LANGUAGE_UNIT__DEFS);
+      elements = new EObjectContainmentEList<EObject>(EObject.class, this, TemplateLangPackage.LANGUAGE_UNIT__ELEMENTS);
     }
-    return defs;
+    return elements;
   }
 
   /**
@@ -350,8 +350,8 @@ public class LanguageUnitImpl extends de.uni_hildesheim.sse.vil.expressions.expr
         return basicSetFormatting(null, msgs);
       case TemplateLangPackage.LANGUAGE_UNIT__PARAM:
         return basicSetParam(null, msgs);
-      case TemplateLangPackage.LANGUAGE_UNIT__DEFS:
-        return ((InternalEList<?>)getDefs()).basicRemove(otherEnd, msgs);
+      case TemplateLangPackage.LANGUAGE_UNIT__ELEMENTS:
+        return ((InternalEList<?>)getElements()).basicRemove(otherEnd, msgs);
     }
     return super.eInverseRemove(otherEnd, featureID, msgs);
   }
@@ -376,8 +376,8 @@ public class LanguageUnitImpl extends de.uni_hildesheim.sse.vil.expressions.expr
         return getParam();
       case TemplateLangPackage.LANGUAGE_UNIT__EXT:
         return getExt();
-      case TemplateLangPackage.LANGUAGE_UNIT__DEFS:
-        return getDefs();
+      case TemplateLangPackage.LANGUAGE_UNIT__ELEMENTS:
+        return getElements();
     }
     return super.eGet(featureID, resolve, coreType);
   }
@@ -409,9 +409,9 @@ public class LanguageUnitImpl extends de.uni_hildesheim.sse.vil.expressions.expr
       case TemplateLangPackage.LANGUAGE_UNIT__EXT:
         setExt((String)newValue);
         return;
-      case TemplateLangPackage.LANGUAGE_UNIT__DEFS:
-        getDefs().clear();
-        getDefs().addAll((Collection<? extends VilDef>)newValue);
+      case TemplateLangPackage.LANGUAGE_UNIT__ELEMENTS:
+        getElements().clear();
+        getElements().addAll((Collection<? extends EObject>)newValue);
         return;
     }
     super.eSet(featureID, newValue);
@@ -442,8 +442,8 @@ public class LanguageUnitImpl extends de.uni_hildesheim.sse.vil.expressions.expr
       case TemplateLangPackage.LANGUAGE_UNIT__EXT:
         setExt(EXT_EDEFAULT);
         return;
-      case TemplateLangPackage.LANGUAGE_UNIT__DEFS:
-        getDefs().clear();
+      case TemplateLangPackage.LANGUAGE_UNIT__ELEMENTS:
+        getElements().clear();
         return;
     }
     super.eUnset(featureID);
@@ -469,8 +469,8 @@ public class LanguageUnitImpl extends de.uni_hildesheim.sse.vil.expressions.expr
         return param != null;
       case TemplateLangPackage.LANGUAGE_UNIT__EXT:
         return EXT_EDEFAULT == null ? ext != null : !EXT_EDEFAULT.equals(ext);
-      case TemplateLangPackage.LANGUAGE_UNIT__DEFS:
-        return defs != null && !defs.isEmpty();
+      case TemplateLangPackage.LANGUAGE_UNIT__ELEMENTS:
+        return elements != null && !elements.isEmpty();
     }
     return super.eIsSet(featureID);
   }

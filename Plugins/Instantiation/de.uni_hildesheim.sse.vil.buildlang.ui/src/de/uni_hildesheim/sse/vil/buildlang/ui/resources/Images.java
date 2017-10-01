@@ -10,6 +10,8 @@ public class Images {
     public static final String NAME_PROP = "property.jpg";
     public static final String NAME_RULE = "rule.jpg";
     public static final String NAME_RULE_INSTANCE = "rule_instance.jpg";
+    public static final String NAME_TYPEDEF = "typedef.jpg";
+    public static final String NAME_COMPOUND = "compound.jpg";
     public static final String NAME_OPERATION = "operation.jpg";
     public static final String NAME_SCRIPTCONTENT = "script_contents.jpg";
     public static final String NAME_VARIABLEDECLARATION = "variable_declaration.gif";

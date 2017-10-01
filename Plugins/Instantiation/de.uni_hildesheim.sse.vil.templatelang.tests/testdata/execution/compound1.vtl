@@ -1,0 +1,28 @@
+template compoundTest1(Configuration config, FileArtifact target) {
+
+    compound HwVarResult {
+        mapOf(String, setOf(String)) serializers = {};
+        sequenceOf(String) content = {};
+    }
+
+    def HwVarResult produce(sequenceOf(String) in) {
+        HwVarResult result = new HwVarResult();
+        for (String s : in) {
+            if (true) {
+                setOf(String) tmp = {};
+                tmp.add(s + "aa");
+                tmp.add(s + "bb");
+                result.serializers.add(s + "bb", tmp);
+            }
+            result.content.add(s + "cc");
+        }
+        result;
+    }
+
+    def main(Configuration config, FileArtifact target) {
+        sequenceOf(String) in = {"1", "2"};
+        HwVarResult r = produce(in);
+        '${r.serializers} ${r.content}'
+    }
+
+}

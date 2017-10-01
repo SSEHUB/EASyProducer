@@ -43,6 +43,7 @@ import net.ssehub.easy.basics.modelManagement.VersionFormatException;
 import net.ssehub.easy.dslCore.translation.ErrorCodes;
 import net.ssehub.easy.dslCore.translation.StringUtils;
 import net.ssehub.easy.dslCore.translation.TranslatorException;
+import net.ssehub.easy.instantiation.core.model.buildlangModel.Compound;
 import net.ssehub.easy.instantiation.core.model.buildlangModel.IRuleElement;
 import net.ssehub.easy.instantiation.core.model.buildlangModel.Imports;
 import net.ssehub.easy.instantiation.core.model.buildlangModel.LoadProperties;
@@ -62,6 +63,7 @@ import net.ssehub.easy.instantiation.core.model.common.Typedef;
 import net.ssehub.easy.instantiation.core.model.common.VilException;
 import net.ssehub.easy.instantiation.core.model.expressions.Expression;
 import net.ssehub.easy.instantiation.core.model.templateModel.Template;
+import net.ssehub.easy.instantiation.core.model.vilTypes.CompoundTypeDescriptor;
 import net.ssehub.easy.instantiation.core.model.vilTypes.OperationDescriptor;
 import net.ssehub.easy.instantiation.core.model.vilTypes.TypeDescriptor;
 import net.ssehub.easy.instantiation.core.model.vilTypes.TypeRegistry;
@@ -165,6 +167,7 @@ public abstract class AbstractModelTranslator<M extends Script, L extends Langua
     protected void processContents(L script, M result) throws TranslatorException {
         List<EObject> elts = getContents(script);
         if (null != elts) {
+            processCompoundContents(elts, result);
             processTypedefContents(elts, result);
             processGlobalVariableDeclarations(elts, result);
             ruleTranslator.processRules(script, elts, result);
@@ -813,6 +816,11 @@ public abstract class AbstractModelTranslator<M extends Script, L extends Langua
     @Override
     protected Typedef createTypedef(String name, TypeDescriptor<?> type) throws VilException {
         return new TypeDef(name, type, resolver.getCurrentModel());
+    }
+    
+    @Override
+    protected Compound createCompound(CompoundTypeDescriptor type) throws VilException {
+        return new Compound(type, resolver.getCurrentModel());
     }
 
 }

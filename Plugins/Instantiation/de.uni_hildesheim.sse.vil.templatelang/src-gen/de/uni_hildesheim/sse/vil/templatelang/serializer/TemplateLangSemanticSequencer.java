@@ -9,6 +9,7 @@ import de.uni_hildesheim.sse.vil.expressions.expressionDsl.AdditiveExpressionPar
 import de.uni_hildesheim.sse.vil.expressions.expressionDsl.Advice;
 import de.uni_hildesheim.sse.vil.expressions.expressionDsl.ArgumentList;
 import de.uni_hildesheim.sse.vil.expressions.expressionDsl.Call;
+import de.uni_hildesheim.sse.vil.expressions.expressionDsl.Compound;
 import de.uni_hildesheim.sse.vil.expressions.expressionDsl.Constant;
 import de.uni_hildesheim.sse.vil.expressions.expressionDsl.ConstructorExecution;
 import de.uni_hildesheim.sse.vil.expressions.expressionDsl.ContainerInitializer;
@@ -107,6 +108,9 @@ public class TemplateLangSemanticSequencer extends ExpressionDslSemanticSequence
 				return; 
 			case ExpressionDslPackage.CALL:
 				sequence_Call(context, (Call) semanticObject); 
+				return; 
+			case ExpressionDslPackage.COMPOUND:
+				sequence_Compound(context, (Compound) semanticObject); 
 				return; 
 			case ExpressionDslPackage.CONSTANT:
 				sequence_Constant(context, (Constant) semanticObject); 
@@ -422,9 +426,7 @@ public class TemplateLangSemanticSequencer extends ExpressionDslSemanticSequence
 	 *         param=ParameterList? 
 	 *         ext=Identifier? 
 	 *         version=VersionStmt? 
-	 *         typeDefs+=TypeDef* 
-	 *         vars+=VariableDeclaration* 
-	 *         defs+=VilDef*
+	 *         (elements+=TypeDef | elements+=Compound | elements+=VariableDeclaration | elements+=VilDef)*
 	 *     )
 	 */
 	protected void sequence_LanguageUnit(ISerializationContext context, LanguageUnit semanticObject) {

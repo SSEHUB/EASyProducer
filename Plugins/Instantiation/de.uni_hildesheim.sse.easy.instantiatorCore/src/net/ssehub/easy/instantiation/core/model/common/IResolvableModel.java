@@ -93,17 +93,49 @@ public interface IResolvableModel<V extends IMetaParameterDeclaration, M extends
     /**
      * Get the typedef at the specified index.
      * 
-     * @param index The 0-based index of the advice to be returned.
-     * @return The advice parameter at the given index.
+     * @param index The 0-based index of the typedef to be returned.
+     * @return The typedef parameter at the given index.
      * @throws IndexOutOfBoundsException if <code>index &lt; 0 || index &gt;={@link #getTypedefCount()}</code>
      */
     public Typedef getTypedef(int index);
 
+    /**
+     * Returns the typedef with given name.
+     * 
+     * @param name the name
+     * @return the typedef (may be <b>null</b> for none)
+     */
+    public Typedef getTypedef(String name);
+    
     /**
      * Adds a runtime model import.
      * 
      * @param imp the import
      */
     public void addRuntimeImport(ModelImport<M> imp);
+
+    /**
+     * Get the number of compounds defined in this model.
+     * 
+     * @return The number of compounds of this model.
+     */
+    public int getCompoundCount();
     
+    /**
+     * Get the compound at the specified index.
+     * 
+     * @param index The 0-based index of the compound to be returned.
+     * @return The compound at the given index.
+     * @throws IndexOutOfBoundsException if <code>index &lt; 0 || index &gt;={@link #getCompoundCount()}</code>
+     */
+    public Compound getCompound(int index);
+    
+    /**
+     * Returns the compound declaration with given name.
+     * 
+     * @param name the name
+     * @return the compound (may be <b>null</b> for none)
+     */
+    public Compound getCompound(String name);
+
 }

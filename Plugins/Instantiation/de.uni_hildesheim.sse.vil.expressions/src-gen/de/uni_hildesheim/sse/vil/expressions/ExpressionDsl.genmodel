@@ -13,14 +13,18 @@
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ExpressionDsl.ecore#//LanguageUnit/name"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ExpressionDsl.ecore#//LanguageUnit/version"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ExpressionDsl.ecore#//LanguageUnit/imports"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ExpressionDsl.ecore#//LanguageUnit/typeDefs"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ExpressionDsl.ecore#//LanguageUnit/vars"/>
     </genClasses>
     <genClasses ecoreClass="ExpressionDsl.ecore#//VariableDeclaration">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ExpressionDsl.ecore#//VariableDeclaration/const"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ExpressionDsl.ecore#//VariableDeclaration/type"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ExpressionDsl.ecore#//VariableDeclaration/name"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ExpressionDsl.ecore#//VariableDeclaration/expression"/>
+    </genClasses>
+    <genClasses ecoreClass="ExpressionDsl.ecore#//Compound">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ExpressionDsl.ecore#//Compound/abstract"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ExpressionDsl.ecore#//Compound/name"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ExpressionDsl.ecore#//Compound/super"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ExpressionDsl.ecore#//Compound/vars"/>
     </genClasses>
     <genClasses ecoreClass="ExpressionDsl.ecore#//TypeDef">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ExpressionDsl.ecore#//TypeDef/name"/>

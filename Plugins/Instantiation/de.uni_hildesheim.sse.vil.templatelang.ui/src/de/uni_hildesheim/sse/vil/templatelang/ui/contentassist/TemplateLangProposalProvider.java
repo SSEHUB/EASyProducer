@@ -82,11 +82,29 @@ public class TemplateLangProposalProvider extends AbstractTemplateLangProposalPr
     }
     
     @Override
-    public void completeLanguageUnit_Vars(EObject model, Assignment assignment, ContentAssistContext context, ICompletionProposalAcceptor acceptor) {
-        // setOf
-        String toEditor = "setOf(";
-        StyledString toDisplay = new StyledString("setOf");
+    public void completeLanguageUnit_Elements(EObject model, Assignment assignment, ContentAssistContext context, ICompletionProposalAcceptor acceptor) {
+        String toEditor = "def <name> () {\n    }";
+        StyledString toDisplay = new StyledString("def");
         ICompletionProposal proposal = createCompletionProposal(toEditor, toDisplay,
+                imageHelper.getImage(Images.NAME_DEF), 1000, context.getPrefix(), context);
+        acceptor.accept(proposal);
+
+        toEditor = "<type> <name>;";
+        toDisplay = new StyledString("variable");
+        proposal = createCompletionProposal(toEditor, toDisplay,
+            imageHelper.getImage(Images.NAME_VARIABLEDECLARATION), 999, context.getPrefix(), context);
+        acceptor.accept(proposal);
+
+        toEditor = "compound <name> () {\n    }";
+        toDisplay = new StyledString("compound");
+        proposal = createCompletionProposal(toEditor, toDisplay,
+            imageHelper.getImage(Images.NAME_COMPOUND), 995, context.getPrefix(), context);
+        acceptor.accept(proposal);
+        
+        // setOf
+        toEditor = "setOf(";
+        toDisplay = new StyledString("setOf");
+        proposal = createCompletionProposal(toEditor, toDisplay,
                 imageHelper.getImage(Images.NAME_VARIABLEDECLARATION), 1000, context.getPrefix(), context);
         acceptor.accept(proposal);
         
@@ -101,16 +119,14 @@ public class TemplateLangProposalProvider extends AbstractTemplateLangProposalPr
         toEditor = "mapOf(";
         toDisplay = new StyledString("mapOf");
         proposal = createCompletionProposal(toEditor, toDisplay,
-                imageHelper.getImage(Images.NAME_VARIABLEDECLARATION), 1000, context.getPrefix(), context);
+                imageHelper.getImage(Images.NAME_VARIABLEDECLARATION), 950, context.getPrefix(), context);
         acceptor.accept(proposal);
-    }
-    
-    @Override
-    public void completeLanguageUnit_Defs(EObject model, Assignment assignment, ContentAssistContext context, ICompletionProposalAcceptor acceptor) {
-        String toEditor = "def <name> () {\n    }";
-        StyledString toDisplay = new StyledString("def");
-        ICompletionProposal proposal = createCompletionProposal(toEditor, toDisplay,
-                imageHelper.getImage(Images.NAME_DEF), 1000, context.getPrefix(), context);
+
+        //mapOf
+        toEditor = "callOf(";
+        toDisplay = new StyledString("callOf");
+        proposal = createCompletionProposal(toEditor, toDisplay,
+                imageHelper.getImage(Images.NAME_VARIABLEDECLARATION), 900, context.getPrefix(), context);
         acceptor.accept(proposal);
     }
     

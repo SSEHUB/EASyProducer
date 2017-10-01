@@ -14,6 +14,7 @@ import org.eclipse.xtext.nodemodel.INode;
 import de.uni_hildesheim.sse.vil.expressions.ResourceRegistry;
 import de.uni_hildesheim.sse.vil.expressions.expressionDsl.Parameter;
 import de.uni_hildesheim.sse.vil.expressions.expressionDsl.VariableDeclaration;
+import de.uni_hildesheim.sse.vil.expressions.translation.ModelTranslator;
 import de.uni_hildesheim.sse.vil.expressions.translation.Utils;
 import de.uni_hildesheim.sse.vil.templatelang.templateLang.Stmt;
 import de.uni_hildesheim.sse.vil.templatelang.templateLang.VilDef;
@@ -384,7 +385,7 @@ public class TemplateLangProposalProviderUtility {
         if (node != null) {
             if (node.getSemanticElement() instanceof LanguageUnitImpl) {
                 LanguageUnitImpl langUnit = (LanguageUnitImpl) node.getSemanticElement();
-                result = langUnit.getVars();
+                result = ModelTranslator.select(langUnit.getElements(), VariableDeclaration.class);
             } else {
                 INode parentNode = node.getParent();
                 if (parentNode != null) {
@@ -406,7 +407,7 @@ public class TemplateLangProposalProviderUtility {
         if (node != null) {
             if (node.getSemanticElement() instanceof LanguageUnitImpl) {
                 LanguageUnitImpl langUnit = (LanguageUnitImpl) node.getSemanticElement();
-                result = langUnit.getDefs();
+                result = ModelTranslator.select(langUnit.getElements(), VilDef.class);
             } else {
                 INode parentNode = node.getParent();
                 if (parentNode != null) {

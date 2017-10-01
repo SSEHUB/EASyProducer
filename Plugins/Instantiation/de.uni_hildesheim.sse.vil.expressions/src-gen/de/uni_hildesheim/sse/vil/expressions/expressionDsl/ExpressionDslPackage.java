@@ -103,31 +103,13 @@ public interface ExpressionDslPackage extends EPackage
   int LANGUAGE_UNIT__IMPORTS = 3;
 
   /**
-   * The feature id for the '<em><b>Type Defs</b></em>' containment reference list.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int LANGUAGE_UNIT__TYPE_DEFS = 4;
-
-  /**
-   * The feature id for the '<em><b>Vars</b></em>' containment reference list.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int LANGUAGE_UNIT__VARS = 5;
-
-  /**
    * The number of structural features of the '<em>Language Unit</em>' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int LANGUAGE_UNIT_FEATURE_COUNT = 6;
+  int LANGUAGE_UNIT_FEATURE_COUNT = 4;
 
   /**
    * The meta object id for the '{@link de.uni_hildesheim.sse.vil.expressions.expressionDsl.impl.VariableDeclarationImpl <em>Variable Declaration</em>}' class.
@@ -185,6 +167,61 @@ public interface ExpressionDslPackage extends EPackage
   int VARIABLE_DECLARATION_FEATURE_COUNT = 4;
 
   /**
+   * The meta object id for the '{@link de.uni_hildesheim.sse.vil.expressions.expressionDsl.impl.CompoundImpl <em>Compound</em>}' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see de.uni_hildesheim.sse.vil.expressions.expressionDsl.impl.CompoundImpl
+   * @see de.uni_hildesheim.sse.vil.expressions.expressionDsl.impl.ExpressionDslPackageImpl#getCompound()
+   * @generated
+   */
+  int COMPOUND = 2;
+
+  /**
+   * The feature id for the '<em><b>Abstract</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int COMPOUND__ABSTRACT = 0;
+
+  /**
+   * The feature id for the '<em><b>Name</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int COMPOUND__NAME = 1;
+
+  /**
+   * The feature id for the '<em><b>Super</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int COMPOUND__SUPER = 2;
+
+  /**
+   * The feature id for the '<em><b>Vars</b></em>' containment reference list.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int COMPOUND__VARS = 3;
+
+  /**
+   * The number of structural features of the '<em>Compound</em>' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int COMPOUND_FEATURE_COUNT = 4;
+
+  /**
    * The meta object id for the '{@link de.uni_hildesheim.sse.vil.expressions.expressionDsl.impl.TypeDefImpl <em>Type Def</em>}' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -192,7 +229,7 @@ public interface ExpressionDslPackage extends EPackage
    * @see de.uni_hildesheim.sse.vil.expressions.expressionDsl.impl.ExpressionDslPackageImpl#getTypeDef()
    * @generated
    */
-  int TYPE_DEF = 2;
+  int TYPE_DEF = 3;
 
   /**
    * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -229,7 +266,7 @@ public interface ExpressionDslPackage extends EPackage
    * @see de.uni_hildesheim.sse.vil.expressions.expressionDsl.impl.ExpressionDslPackageImpl#getAdvice()
    * @generated
    */
-  int ADVICE = 3;
+  int ADVICE = 4;
 
   /**
    * The feature id for the '<em><b>Name</b></em>' containment reference.
@@ -266,7 +303,7 @@ public interface ExpressionDslPackage extends EPackage
    * @see de.uni_hildesheim.sse.vil.expressions.expressionDsl.impl.ExpressionDslPackageImpl#getVersionSpec()
    * @generated
    */
-  int VERSION_SPEC = 4;
+  int VERSION_SPEC = 5;
 
   /**
    * The feature id for the '<em><b>Restriction</b></em>' containment reference.
@@ -294,7 +331,7 @@ public interface ExpressionDslPackage extends EPackage
    * @see de.uni_hildesheim.sse.vil.expressions.expressionDsl.impl.ExpressionDslPackageImpl#getParameterList()
    * @generated
    */
-  int PARAMETER_LIST = 5;
+  int PARAMETER_LIST = 6;
 
   /**
    * The feature id for the '<em><b>Param</b></em>' containment reference list.
@@ -322,7 +359,7 @@ public interface ExpressionDslPackage extends EPackage
    * @see de.uni_hildesheim.sse.vil.expressions.expressionDsl.impl.ExpressionDslPackageImpl#getParameter()
    * @generated
    */
-  int PARAMETER = 6;
+  int PARAMETER = 7;
 
   /**
    * The feature id for the '<em><b>Type</b></em>' containment reference.
@@ -368,7 +405,7 @@ public interface ExpressionDslPackage extends EPackage
    * @see de.uni_hildesheim.sse.vil.expressions.expressionDsl.impl.ExpressionDslPackageImpl#getVersionStmt()
    * @generated
    */
-  int VERSION_STMT = 7;
+  int VERSION_STMT = 8;
 
   /**
    * The feature id for the '<em><b>Version</b></em>' attribute.
@@ -396,7 +433,7 @@ public interface ExpressionDslPackage extends EPackage
    * @see de.uni_hildesheim.sse.vil.expressions.expressionDsl.impl.ExpressionDslPackageImpl#getImport()
    * @generated
    */
-  int IMPORT = 8;
+  int IMPORT = 9;
 
   /**
    * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -433,7 +470,7 @@ public interface ExpressionDslPackage extends EPackage
    * @see de.uni_hildesheim.sse.vil.expressions.expressionDsl.impl.ExpressionDslPackageImpl#getExpressionStatement()
    * @generated
    */
-  int EXPRESSION_STATEMENT = 9;
+  int EXPRESSION_STATEMENT = 10;
 
   /**
    * The feature id for the '<em><b>Var</b></em>' attribute.
@@ -479,7 +516,7 @@ public interface ExpressionDslPackage extends EPackage
    * @see de.uni_hildesheim.sse.vil.expressions.expressionDsl.impl.ExpressionDslPackageImpl#getExpression()
    * @generated
    */
-  int EXPRESSION = 10;
+  int EXPRESSION = 11;
 
   /**
    * The feature id for the '<em><b>Expr</b></em>' containment reference.
@@ -516,7 +553,7 @@ public interface ExpressionDslPackage extends EPackage
    * @see de.uni_hildesheim.sse.vil.expressions.expressionDsl.impl.ExpressionDslPackageImpl#getLogicalExpression()
    * @generated
    */
-  int LOGICAL_EXPRESSION = 11;
+  int LOGICAL_EXPRESSION = 12;
 
   /**
    * The feature id for the '<em><b>Left</b></em>' containment reference.
@@ -553,7 +590,7 @@ public interface ExpressionDslPackage extends EPackage
    * @see de.uni_hildesheim.sse.vil.expressions.expressionDsl.impl.ExpressionDslPackageImpl#getLogicalExpressionPart()
    * @generated
    */
-  int LOGICAL_EXPRESSION_PART = 12;
+  int LOGICAL_EXPRESSION_PART = 13;
 
   /**
    * The feature id for the '<em><b>Op</b></em>' attribute.
@@ -590,7 +627,7 @@ public interface ExpressionDslPackage extends EPackage
    * @see de.uni_hildesheim.sse.vil.expressions.expressionDsl.impl.ExpressionDslPackageImpl#getEqualityExpression()
    * @generated
    */
-  int EQUALITY_EXPRESSION = 13;
+  int EQUALITY_EXPRESSION = 14;
 
   /**
    * The feature id for the '<em><b>Left</b></em>' containment reference.
@@ -627,7 +664,7 @@ public interface ExpressionDslPackage extends EPackage
    * @see de.uni_hildesheim.sse.vil.expressions.expressionDsl.impl.ExpressionDslPackageImpl#getEqualityExpressionPart()
    * @generated
    */
-  int EQUALITY_EXPRESSION_PART = 14;
+  int EQUALITY_EXPRESSION_PART = 15;
 
   /**
    * The feature id for the '<em><b>Op</b></em>' attribute.
@@ -664,7 +701,7 @@ public interface ExpressionDslPackage extends EPackage
    * @see de.uni_hildesheim.sse.vil.expressions.expressionDsl.impl.ExpressionDslPackageImpl#getRelationalExpression()
    * @generated
    */
-  int RELATIONAL_EXPRESSION = 15;
+  int RELATIONAL_EXPRESSION = 16;
 
   /**
    * The feature id for the '<em><b>Left</b></em>' containment reference.
@@ -710,7 +747,7 @@ public interface ExpressionDslPackage extends EPackage
    * @see de.uni_hildesheim.sse.vil.expressions.expressionDsl.impl.ExpressionDslPackageImpl#getRelationalExpressionPart()
    * @generated
    */
-  int RELATIONAL_EXPRESSION_PART = 16;
+  int RELATIONAL_EXPRESSION_PART = 17;
 
   /**
    * The feature id for the '<em><b>Op</b></em>' attribute.
@@ -747,7 +784,7 @@ public interface ExpressionDslPackage extends EPackage
    * @see de.uni_hildesheim.sse.vil.expressions.expressionDsl.impl.ExpressionDslPackageImpl#getAdditiveExpression()
    * @generated
    */
-  int ADDITIVE_EXPRESSION = 17;
+  int ADDITIVE_EXPRESSION = 18;
 
   /**
    * The feature id for the '<em><b>Left</b></em>' containment reference.
@@ -784,7 +821,7 @@ public interface ExpressionDslPackage extends EPackage
    * @see de.uni_hildesheim.sse.vil.expressions.expressionDsl.impl.ExpressionDslPackageImpl#getAdditiveExpressionPart()
    * @generated
    */
-  int ADDITIVE_EXPRESSION_PART = 18;
+  int ADDITIVE_EXPRESSION_PART = 19;
 
   /**
    * The feature id for the '<em><b>Op</b></em>' attribute.
@@ -821,7 +858,7 @@ public interface ExpressionDslPackage extends EPackage
    * @see de.uni_hildesheim.sse.vil.expressions.expressionDsl.impl.ExpressionDslPackageImpl#getMultiplicativeExpression()
    * @generated
    */
-  int MULTIPLICATIVE_EXPRESSION = 19;
+  int MULTIPLICATIVE_EXPRESSION = 20;
 
   /**
    * The feature id for the '<em><b>Left</b></em>' containment reference.
@@ -858,7 +895,7 @@ public interface ExpressionDslPackage extends EPackage
    * @see de.uni_hildesheim.sse.vil.expressions.expressionDsl.impl.ExpressionDslPackageImpl#getMultiplicativeExpressionPart()
    * @generated
    */
-  int MULTIPLICATIVE_EXPRESSION_PART = 20;
+  int MULTIPLICATIVE_EXPRESSION_PART = 21;
 
   /**
    * The feature id for the '<em><b>Op</b></em>' attribute.
@@ -895,7 +932,7 @@ public interface ExpressionDslPackage extends EPackage
    * @see de.uni_hildesheim.sse.vil.expressions.expressionDsl.impl.ExpressionDslPackageImpl#getUnaryExpression()
    * @generated
    */
-  int UNARY_EXPRESSION = 21;
+  int UNARY_EXPRESSION = 22;
 
   /**
    * The feature id for the '<em><b>Op</b></em>' attribute.
@@ -932,7 +969,7 @@ public interface ExpressionDslPackage extends EPackage
    * @see de.uni_hildesheim.sse.vil.expressions.expressionDsl.impl.ExpressionDslPackageImpl#getPostfixExpression()
    * @generated
    */
-  int POSTFIX_EXPRESSION = 22;
+  int POSTFIX_EXPRESSION = 23;
 
   /**
    * The feature id for the '<em><b>Left</b></em>' containment reference.
@@ -960,7 +997,7 @@ public interface ExpressionDslPackage extends EPackage
    * @see de.uni_hildesheim.sse.vil.expressions.expressionDsl.impl.ExpressionDslPackageImpl#getPrimaryExpression()
    * @generated
    */
-  int PRIMARY_EXPRESSION = 23;
+  int PRIMARY_EXPRESSION = 24;
 
   /**
    * The feature id for the '<em><b>Other Ex</b></em>' containment reference.
@@ -1015,7 +1052,7 @@ public interface ExpressionDslPackage extends EPackage
    * @see de.uni_hildesheim.sse.vil.expressions.expressionDsl.impl.ExpressionDslPackageImpl#getExpressionOrQualifiedExecution()
    * @generated
    */
-  int EXPRESSION_OR_QUALIFIED_EXECUTION = 24;
+  int EXPRESSION_OR_QUALIFIED_EXECUTION = 25;
 
   /**
    * The feature id for the '<em><b>Val</b></em>' containment reference.
@@ -1061,7 +1098,7 @@ public interface ExpressionDslPackage extends EPackage
    * @see de.uni_hildesheim.sse.vil.expressions.expressionDsl.impl.ExpressionDslPackageImpl#getUnqualifiedExecution()
    * @generated
    */
-  int UNQUALIFIED_EXECUTION = 25;
+  int UNQUALIFIED_EXECUTION = 26;
 
   /**
    * The feature id for the '<em><b>Call</b></em>' containment reference.
@@ -1098,7 +1135,7 @@ public interface ExpressionDslPackage extends EPackage
    * @see de.uni_hildesheim.sse.vil.expressions.expressionDsl.impl.ExpressionDslPackageImpl#getSuperExecution()
    * @generated
    */
-  int SUPER_EXECUTION = 26;
+  int SUPER_EXECUTION = 27;
 
   /**
    * The feature id for the '<em><b>Call</b></em>' containment reference.
@@ -1135,7 +1172,7 @@ public interface ExpressionDslPackage extends EPackage
    * @see de.uni_hildesheim.sse.vil.expressions.expressionDsl.impl.ExpressionDslPackageImpl#getConstructorExecution()
    * @generated
    */
-  int CONSTRUCTOR_EXECUTION = 27;
+  int CONSTRUCTOR_EXECUTION = 28;
 
   /**
    * The feature id for the '<em><b>Type</b></em>' containment reference.
@@ -1181,7 +1218,7 @@ public interface ExpressionDslPackage extends EPackage
    * @see de.uni_hildesheim.sse.vil.expressions.expressionDsl.impl.ExpressionDslPackageImpl#getSubCall()
    * @generated
    */
-  int SUB_CALL = 28;
+  int SUB_CALL = 29;
 
   /**
    * The feature id for the '<em><b>Type</b></em>' attribute.
@@ -1227,7 +1264,7 @@ public interface ExpressionDslPackage extends EPackage
    * @see de.uni_hildesheim.sse.vil.expressions.expressionDsl.impl.ExpressionDslPackageImpl#getDeclarator()
    * @generated
    */
-  int DECLARATOR = 29;
+  int DECLARATOR = 30;
 
   /**
    * The feature id for the '<em><b>Decl</b></em>' containment reference list.
@@ -1255,7 +1292,7 @@ public interface ExpressionDslPackage extends EPackage
    * @see de.uni_hildesheim.sse.vil.expressions.expressionDsl.impl.ExpressionDslPackageImpl#getDeclaration()
    * @generated
    */
-  int DECLARATION = 30;
+  int DECLARATION = 31;
 
   /**
    * The feature id for the '<em><b>Type</b></em>' containment reference.
@@ -1292,7 +1329,7 @@ public interface ExpressionDslPackage extends EPackage
    * @see de.uni_hildesheim.sse.vil.expressions.expressionDsl.impl.ExpressionDslPackageImpl#getDeclarationUnit()
    * @generated
    */
-  int DECLARATION_UNIT = 31;
+  int DECLARATION_UNIT = 32;
 
   /**
    * The feature id for the '<em><b>Id</b></em>' attribute.
@@ -1329,7 +1366,7 @@ public interface ExpressionDslPackage extends EPackage
    * @see de.uni_hildesheim.sse.vil.expressions.expressionDsl.impl.ExpressionDslPackageImpl#getCall()
    * @generated
    */
-  int CALL = 32;
+  int CALL = 33;
 
   /**
    * The feature id for the '<em><b>Name</b></em>' containment reference.
@@ -1375,7 +1412,7 @@ public interface ExpressionDslPackage extends EPackage
    * @see de.uni_hildesheim.sse.vil.expressions.expressionDsl.impl.ExpressionDslPackageImpl#getArgumentList()
    * @generated
    */
-  int ARGUMENT_LIST = 33;
+  int ARGUMENT_LIST = 34;
 
   /**
    * The feature id for the '<em><b>Param</b></em>' containment reference list.
@@ -1403,7 +1440,7 @@ public interface ExpressionDslPackage extends EPackage
    * @see de.uni_hildesheim.sse.vil.expressions.expressionDsl.impl.ExpressionDslPackageImpl#getNamedArgument()
    * @generated
    */
-  int NAMED_ARGUMENT = 34;
+  int NAMED_ARGUMENT = 35;
 
   /**
    * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -1440,7 +1477,7 @@ public interface ExpressionDslPackage extends EPackage
    * @see de.uni_hildesheim.sse.vil.expressions.expressionDsl.impl.ExpressionDslPackageImpl#getQualifiedPrefix()
    * @generated
    */
-  int QUALIFIED_PREFIX = 35;
+  int QUALIFIED_PREFIX = 36;
 
   /**
    * The feature id for the '<em><b>Qname</b></em>' attribute list.
@@ -1468,7 +1505,7 @@ public interface ExpressionDslPackage extends EPackage
    * @see de.uni_hildesheim.sse.vil.expressions.expressionDsl.impl.ExpressionDslPackageImpl#getQualifiedName()
    * @generated
    */
-  int QUALIFIED_NAME = 36;
+  int QUALIFIED_NAME = 37;
 
   /**
    * The feature id for the '<em><b>Prefix</b></em>' containment reference.
@@ -1505,7 +1542,7 @@ public interface ExpressionDslPackage extends EPackage
    * @see de.uni_hildesheim.sse.vil.expressions.expressionDsl.impl.ExpressionDslPackageImpl#getConstant()
    * @generated
    */
-  int CONSTANT = 37;
+  int CONSTANT = 38;
 
   /**
    * The feature id for the '<em><b>NValue</b></em>' containment reference.
@@ -1578,7 +1615,7 @@ public interface ExpressionDslPackage extends EPackage
    * @see de.uni_hildesheim.sse.vil.expressions.expressionDsl.impl.ExpressionDslPackageImpl#getNumValue()
    * @generated
    */
-  int NUM_VALUE = 38;
+  int NUM_VALUE = 39;
 
   /**
    * The feature id for the '<em><b>Val</b></em>' attribute.
@@ -1606,7 +1643,7 @@ public interface ExpressionDslPackage extends EPackage
    * @see de.uni_hildesheim.sse.vil.expressions.expressionDsl.impl.ExpressionDslPackageImpl#getType()
    * @generated
    */
-  int TYPE = 39;
+  int TYPE = 40;
 
   /**
    * The feature id for the '<em><b>Name</b></em>' containment reference.
@@ -1688,7 +1725,7 @@ public interface ExpressionDslPackage extends EPackage
    * @see de.uni_hildesheim.sse.vil.expressions.expressionDsl.impl.ExpressionDslPackageImpl#getTypeParameters()
    * @generated
    */
-  int TYPE_PARAMETERS = 40;
+  int TYPE_PARAMETERS = 41;
 
   /**
    * The feature id for the '<em><b>Param</b></em>' containment reference list.
@@ -1716,7 +1753,7 @@ public interface ExpressionDslPackage extends EPackage
    * @see de.uni_hildesheim.sse.vil.expressions.expressionDsl.impl.ExpressionDslPackageImpl#getContainerInitializer()
    * @generated
    */
-  int CONTAINER_INITIALIZER = 41;
+  int CONTAINER_INITIALIZER = 42;
 
   /**
    * The feature id for the '<em><b>Exprs</b></em>' containment reference list.
@@ -1744,7 +1781,7 @@ public interface ExpressionDslPackage extends EPackage
    * @see de.uni_hildesheim.sse.vil.expressions.expressionDsl.impl.ExpressionDslPackageImpl#getContainerInitializerExpression()
    * @generated
    */
-  int CONTAINER_INITIALIZER_EXPRESSION = 42;
+  int CONTAINER_INITIALIZER_EXPRESSION = 43;
 
   /**
    * The feature id for the '<em><b>Logical</b></em>' containment reference.
@@ -1829,28 +1866,6 @@ public interface ExpressionDslPackage extends EPackage
   EReference getLanguageUnit_Imports();
 
   /**
-   * Returns the meta object for the containment reference list '{@link de.uni_hildesheim.sse.vil.expressions.expressionDsl.LanguageUnit#getTypeDefs <em>Type Defs</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for the containment reference list '<em>Type Defs</em>'.
-   * @see de.uni_hildesheim.sse.vil.expressions.expressionDsl.LanguageUnit#getTypeDefs()
-   * @see #getLanguageUnit()
-   * @generated
-   */
-  EReference getLanguageUnit_TypeDefs();
-
-  /**
-   * Returns the meta object for the containment reference list '{@link de.uni_hildesheim.sse.vil.expressions.expressionDsl.LanguageUnit#getVars <em>Vars</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for the containment reference list '<em>Vars</em>'.
-   * @see de.uni_hildesheim.sse.vil.expressions.expressionDsl.LanguageUnit#getVars()
-   * @see #getLanguageUnit()
-   * @generated
-   */
-  EReference getLanguageUnit_Vars();
-
-  /**
    * Returns the meta object for class '{@link de.uni_hildesheim.sse.vil.expressions.expressionDsl.VariableDeclaration <em>Variable Declaration</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -1903,6 +1918,60 @@ public interface ExpressionDslPackage extends EPackage
    * @generated
    */
   EReference getVariableDeclaration_Expression();
+
+  /**
+   * Returns the meta object for class '{@link de.uni_hildesheim.sse.vil.expressions.expressionDsl.Compound <em>Compound</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for class '<em>Compound</em>'.
+   * @see de.uni_hildesheim.sse.vil.expressions.expressionDsl.Compound
+   * @generated
+   */
+  EClass getCompound();
+
+  /**
+   * Returns the meta object for the attribute '{@link de.uni_hildesheim.sse.vil.expressions.expressionDsl.Compound#getAbstract <em>Abstract</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the attribute '<em>Abstract</em>'.
+   * @see de.uni_hildesheim.sse.vil.expressions.expressionDsl.Compound#getAbstract()
+   * @see #getCompound()
+   * @generated
+   */
+  EAttribute getCompound_Abstract();
+
+  /**
+   * Returns the meta object for the attribute '{@link de.uni_hildesheim.sse.vil.expressions.expressionDsl.Compound#getName <em>Name</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the attribute '<em>Name</em>'.
+   * @see de.uni_hildesheim.sse.vil.expressions.expressionDsl.Compound#getName()
+   * @see #getCompound()
+   * @generated
+   */
+  EAttribute getCompound_Name();
+
+  /**
+   * Returns the meta object for the attribute '{@link de.uni_hildesheim.sse.vil.expressions.expressionDsl.Compound#getSuper <em>Super</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the attribute '<em>Super</em>'.
+   * @see de.uni_hildesheim.sse.vil.expressions.expressionDsl.Compound#getSuper()
+   * @see #getCompound()
+   * @generated
+   */
+  EAttribute getCompound_Super();
+
+  /**
+   * Returns the meta object for the containment reference list '{@link de.uni_hildesheim.sse.vil.expressions.expressionDsl.Compound#getVars <em>Vars</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the containment reference list '<em>Vars</em>'.
+   * @see de.uni_hildesheim.sse.vil.expressions.expressionDsl.Compound#getVars()
+   * @see #getCompound()
+   * @generated
+   */
+  EReference getCompound_Vars();
 
   /**
    * Returns the meta object for class '{@link de.uni_hildesheim.sse.vil.expressions.expressionDsl.TypeDef <em>Type Def</em>}'.
@@ -3370,22 +3439,6 @@ public interface ExpressionDslPackage extends EPackage
     EReference LANGUAGE_UNIT__IMPORTS = eINSTANCE.getLanguageUnit_Imports();
 
     /**
-     * The meta object literal for the '<em><b>Type Defs</b></em>' containment reference list feature.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    EReference LANGUAGE_UNIT__TYPE_DEFS = eINSTANCE.getLanguageUnit_TypeDefs();
-
-    /**
-     * The meta object literal for the '<em><b>Vars</b></em>' containment reference list feature.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    EReference LANGUAGE_UNIT__VARS = eINSTANCE.getLanguageUnit_Vars();
-
-    /**
      * The meta object literal for the '{@link de.uni_hildesheim.sse.vil.expressions.expressionDsl.impl.VariableDeclarationImpl <em>Variable Declaration</em>}' class.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
@@ -3426,6 +3479,48 @@ public interface ExpressionDslPackage extends EPackage
      * @generated
      */
     EReference VARIABLE_DECLARATION__EXPRESSION = eINSTANCE.getVariableDeclaration_Expression();
+
+    /**
+     * The meta object literal for the '{@link de.uni_hildesheim.sse.vil.expressions.expressionDsl.impl.CompoundImpl <em>Compound</em>}' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see de.uni_hildesheim.sse.vil.expressions.expressionDsl.impl.CompoundImpl
+     * @see de.uni_hildesheim.sse.vil.expressions.expressionDsl.impl.ExpressionDslPackageImpl#getCompound()
+     * @generated
+     */
+    EClass COMPOUND = eINSTANCE.getCompound();
+
+    /**
+     * The meta object literal for the '<em><b>Abstract</b></em>' attribute feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EAttribute COMPOUND__ABSTRACT = eINSTANCE.getCompound_Abstract();
+
+    /**
+     * The meta object literal for the '<em><b>Name</b></em>' attribute feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EAttribute COMPOUND__NAME = eINSTANCE.getCompound_Name();
+
+    /**
+     * The meta object literal for the '<em><b>Super</b></em>' attribute feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EAttribute COMPOUND__SUPER = eINSTANCE.getCompound_Super();
+
+    /**
+     * The meta object literal for the '<em><b>Vars</b></em>' containment reference list feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EReference COMPOUND__VARS = eINSTANCE.getCompound_Vars();
 
     /**
      * The meta object literal for the '{@link de.uni_hildesheim.sse.vil.expressions.expressionDsl.impl.TypeDefImpl <em>Type Def</em>}' class.

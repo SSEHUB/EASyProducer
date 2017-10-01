@@ -1,0 +1,14 @@
+template compoundFailTest2(Configuration config, FileArtifact target) {
+
+    abstract compound MyCompound {
+        Integer a = 1;
+    }
+    
+    compound MyCompound1 refines MyCompound {
+        String a = "5";
+    }
+
+    def main(Configuration config, FileArtifact target) {
+    }
+
+}

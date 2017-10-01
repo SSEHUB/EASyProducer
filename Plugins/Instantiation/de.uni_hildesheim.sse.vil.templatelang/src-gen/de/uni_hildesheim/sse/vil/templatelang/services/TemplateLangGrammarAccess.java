@@ -45,24 +45,27 @@ public class TemplateLangGrammarAccess extends AbstractGrammarElementFinder {
 		private final Keyword cLeftCurlyBracketKeyword_11 = (Keyword)cGroup.eContents().get(11);
 		private final Assignment cVersionAssignment_12 = (Assignment)cGroup.eContents().get(12);
 		private final RuleCall cVersionVersionStmtParserRuleCall_12_0 = (RuleCall)cVersionAssignment_12.eContents().get(0);
-		private final Assignment cTypeDefsAssignment_13 = (Assignment)cGroup.eContents().get(13);
-		private final RuleCall cTypeDefsTypeDefParserRuleCall_13_0 = (RuleCall)cTypeDefsAssignment_13.eContents().get(0);
-		private final Assignment cVarsAssignment_14 = (Assignment)cGroup.eContents().get(14);
-		private final RuleCall cVarsVariableDeclarationParserRuleCall_14_0 = (RuleCall)cVarsAssignment_14.eContents().get(0);
-		private final Assignment cDefsAssignment_15 = (Assignment)cGroup.eContents().get(15);
-		private final RuleCall cDefsVilDefParserRuleCall_15_0 = (RuleCall)cDefsAssignment_15.eContents().get(0);
-		private final Keyword cRightCurlyBracketKeyword_16 = (Keyword)cGroup.eContents().get(16);
+		private final Alternatives cAlternatives_13 = (Alternatives)cGroup.eContents().get(13);
+		private final Assignment cElementsAssignment_13_0 = (Assignment)cAlternatives_13.eContents().get(0);
+		private final RuleCall cElementsTypeDefParserRuleCall_13_0_0 = (RuleCall)cElementsAssignment_13_0.eContents().get(0);
+		private final Assignment cElementsAssignment_13_1 = (Assignment)cAlternatives_13.eContents().get(1);
+		private final RuleCall cElementsCompoundParserRuleCall_13_1_0 = (RuleCall)cElementsAssignment_13_1.eContents().get(0);
+		private final Assignment cElementsAssignment_13_2 = (Assignment)cAlternatives_13.eContents().get(2);
+		private final RuleCall cElementsVariableDeclarationParserRuleCall_13_2_0 = (RuleCall)cElementsAssignment_13_2.eContents().get(0);
+		private final Assignment cElementsAssignment_13_3 = (Assignment)cAlternatives_13.eContents().get(3);
+		private final RuleCall cElementsVilDefParserRuleCall_13_3_0 = (RuleCall)cElementsAssignment_13_3.eContents().get(0);
+		private final Keyword cRightCurlyBracketKeyword_14 = (Keyword)cGroup.eContents().get(14);
 		
 		//LanguageUnit:
 		//	imports+=Import* javaExts+=Extension* advices+=Advice* indent=IndentationHint? formatting=FormattingHint? 'template'
-		//	name=Identifier '(' param=ParameterList? ')' ('extends' ext=Identifier)? '{' version=VersionStmt? typeDefs+=TypeDef*
-		//	vars+=VariableDeclaration* defs+=VilDef* '}';
+		//	name=Identifier '(' param=ParameterList? ')' ('extends' ext=Identifier)? '{' version=VersionStmt? (elements+=TypeDef
+		//	| elements+=Compound | elements+=VariableDeclaration | elements+=VilDef)* '}';
 		@Override public ParserRule getRule() { return rule; }
 
 		//// do not rename - required for reuse
 		// imports+=Import* javaExts+=Extension* advices+=Advice* indent=IndentationHint?
 		//formatting=FormattingHint? 'template' name=Identifier '(' param=ParameterList? ')' ('extends' ext=Identifier)? '{'
-		//version=VersionStmt? typeDefs+=TypeDef* vars+=VariableDeclaration* defs+=VilDef* '}'
+		//version=VersionStmt? (elements+=TypeDef | elements+=Compound | elements+=VariableDeclaration | elements+=VilDef)* '}'
 		public Group getGroup() { return cGroup; }
 
 		//// do not rename - required for reuse
@@ -138,26 +141,35 @@ public class TemplateLangGrammarAccess extends AbstractGrammarElementFinder {
 		//VersionStmt
 		public RuleCall getVersionVersionStmtParserRuleCall_12_0() { return cVersionVersionStmtParserRuleCall_12_0; }
 
-		//typeDefs+=TypeDef*
-		public Assignment getTypeDefsAssignment_13() { return cTypeDefsAssignment_13; }
+		//(elements+=TypeDef | elements+=Compound | elements+=VariableDeclaration | elements+=VilDef)*
+		public Alternatives getAlternatives_13() { return cAlternatives_13; }
+
+		//elements+=TypeDef
+		public Assignment getElementsAssignment_13_0() { return cElementsAssignment_13_0; }
 
 		//TypeDef
-		public RuleCall getTypeDefsTypeDefParserRuleCall_13_0() { return cTypeDefsTypeDefParserRuleCall_13_0; }
+		public RuleCall getElementsTypeDefParserRuleCall_13_0_0() { return cElementsTypeDefParserRuleCall_13_0_0; }
 
-		//vars+=VariableDeclaration*
-		public Assignment getVarsAssignment_14() { return cVarsAssignment_14; }
+		//elements+=Compound
+		public Assignment getElementsAssignment_13_1() { return cElementsAssignment_13_1; }
+
+		//Compound
+		public RuleCall getElementsCompoundParserRuleCall_13_1_0() { return cElementsCompoundParserRuleCall_13_1_0; }
+
+		//elements+=VariableDeclaration
+		public Assignment getElementsAssignment_13_2() { return cElementsAssignment_13_2; }
 
 		//VariableDeclaration
-		public RuleCall getVarsVariableDeclarationParserRuleCall_14_0() { return cVarsVariableDeclarationParserRuleCall_14_0; }
+		public RuleCall getElementsVariableDeclarationParserRuleCall_13_2_0() { return cElementsVariableDeclarationParserRuleCall_13_2_0; }
 
-		//defs+=VilDef*
-		public Assignment getDefsAssignment_15() { return cDefsAssignment_15; }
+		//elements+=VilDef
+		public Assignment getElementsAssignment_13_3() { return cElementsAssignment_13_3; }
 
 		//VilDef
-		public RuleCall getDefsVilDefParserRuleCall_15_0() { return cDefsVilDefParserRuleCall_15_0; }
+		public RuleCall getElementsVilDefParserRuleCall_13_3_0() { return cElementsVilDefParserRuleCall_13_3_0; }
 
 		//'}'
-		public Keyword getRightCurlyBracketKeyword_16() { return cRightCurlyBracketKeyword_16; }
+		public Keyword getRightCurlyBracketKeyword_14() { return cRightCurlyBracketKeyword_14; }
 	}
 
 	public class IndentationHintElements extends AbstractParserRuleElementFinder {
@@ -1265,8 +1277,8 @@ public class TemplateLangGrammarAccess extends AbstractGrammarElementFinder {
 	
 	//LanguageUnit:
 	//	imports+=Import* javaExts+=Extension* advices+=Advice* indent=IndentationHint? formatting=FormattingHint? 'template'
-	//	name=Identifier '(' param=ParameterList? ')' ('extends' ext=Identifier)? '{' version=VersionStmt? typeDefs+=TypeDef*
-	//	vars+=VariableDeclaration* defs+=VilDef* '}';
+	//	name=Identifier '(' param=ParameterList? ')' ('extends' ext=Identifier)? '{' version=VersionStmt? (elements+=TypeDef
+	//	| elements+=Compound | elements+=VariableDeclaration | elements+=VilDef)* '}';
 	public LanguageUnitElements getLanguageUnitAccess() {
 		return pLanguageUnit;
 	}
@@ -1489,6 +1501,16 @@ public class TemplateLangGrammarAccess extends AbstractGrammarElementFinder {
 	
 	public ParserRule getVariableDeclarationRule() {
 		return getVariableDeclarationAccess().getRule();
+	}
+
+	//Compound:
+	//	abstract='abstract'? 'compound' name=Identifier ('refines' super=Identifier)? '{' vars+=VariableDeclaration* '}';
+	public ExpressionDslGrammarAccess.CompoundElements getCompoundAccess() {
+		return gaExpressionDsl.getCompoundAccess();
+	}
+	
+	public ParserRule getCompoundRule() {
+		return getCompoundAccess().getRule();
 	}
 
 	//TypeDef:

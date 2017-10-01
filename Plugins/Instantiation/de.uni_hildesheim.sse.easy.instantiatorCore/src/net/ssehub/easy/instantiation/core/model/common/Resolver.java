@@ -417,11 +417,13 @@ public abstract class Resolver<M extends IResolvableModel<V, M>, O extends IReso
     @SuppressWarnings("unchecked")
     private TypeDescriptor<?> resolveType(M model, String name) {
         TypeDescriptor<?> result = null;
-        for (int t = 0, n = model.getTypedefCount(); null == result && t < n; t++) {
-            Typedef td = model.getTypedef(t);
-            if (td.getName().equals(name)) {
-                result = td.getType();
-            }
+        Typedef td = model.getTypedef(name);
+        if (null != td) {
+            result = td.getType();
+        }
+        Compound cmp = model.getCompound(name);
+        if (null != cmp) {
+            result = cmp.getType();
         }
         for (int i = 0, n = model.getImportsCount(); null == result && i < n; i++) {
             ModelImport<?> imp = model.getImport(i);

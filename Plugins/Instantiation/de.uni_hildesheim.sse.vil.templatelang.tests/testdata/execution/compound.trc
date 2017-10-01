@@ -1,0 +1,8 @@
+-> main(Configuration, FileArtifact) with (<config>, test.texts)
+    -> create MyCompound1() with ({}) = {}
+    c1 <- {{a, 1}, {b, 5}}
+    c0 <- {{a, 1}, {b, 5}}
+    c1.a <- 3
+    c1.b <- z
+    -> create MyCompound1() with ({{a, 2}, {b, a}}) = {{a, 2}, {b, a}}
+    c1 <- {{a, 2}, {b, a}}

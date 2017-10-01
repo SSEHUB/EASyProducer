@@ -152,6 +152,24 @@ public class TypeRegistry {
             }
         }
     }
+
+    /**
+     * Registers a compound type, but only if a type of this name has not been registered so far.
+     * 
+     * @param type the type to register
+     * @return <code>true</code> if registered/successful, <code>false</code> else
+     */
+    public boolean registerCompoundType(CompoundTypeDescriptor type) {
+        boolean successful;
+        String name = type.getName();
+        if (null == findType(name)) {
+            register(name, type);
+            successful = true;
+        } else {
+            successful = false;
+        }
+        return successful;
+    }
     
     /**
      * Returns whether this registry has a type resolver of the given type.

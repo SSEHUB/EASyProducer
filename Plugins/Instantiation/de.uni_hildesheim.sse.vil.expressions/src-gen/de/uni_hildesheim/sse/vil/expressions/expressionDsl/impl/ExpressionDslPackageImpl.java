@@ -7,6 +7,7 @@ import de.uni_hildesheim.sse.vil.expressions.expressionDsl.AdditiveExpressionPar
 import de.uni_hildesheim.sse.vil.expressions.expressionDsl.Advice;
 import de.uni_hildesheim.sse.vil.expressions.expressionDsl.ArgumentList;
 import de.uni_hildesheim.sse.vil.expressions.expressionDsl.Call;
+import de.uni_hildesheim.sse.vil.expressions.expressionDsl.Compound;
 import de.uni_hildesheim.sse.vil.expressions.expressionDsl.Constant;
 import de.uni_hildesheim.sse.vil.expressions.expressionDsl.ConstructorExecution;
 import de.uni_hildesheim.sse.vil.expressions.expressionDsl.ContainerInitializer;
@@ -76,6 +77,13 @@ public class ExpressionDslPackageImpl extends EPackageImpl implements Expression
    * @generated
    */
   private EClass variableDeclarationEClass = null;
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  private EClass compoundEClass = null;
 
   /**
    * <!-- begin-user-doc -->
@@ -482,26 +490,6 @@ public class ExpressionDslPackageImpl extends EPackageImpl implements Expression
    * <!-- end-user-doc -->
    * @generated
    */
-  public EReference getLanguageUnit_TypeDefs()
-  {
-    return (EReference)languageUnitEClass.getEStructuralFeatures().get(4);
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  public EReference getLanguageUnit_Vars()
-  {
-    return (EReference)languageUnitEClass.getEStructuralFeatures().get(5);
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
   public EClass getVariableDeclaration()
   {
     return variableDeclarationEClass;
@@ -545,6 +533,56 @@ public class ExpressionDslPackageImpl extends EPackageImpl implements Expression
   public EReference getVariableDeclaration_Expression()
   {
     return (EReference)variableDeclarationEClass.getEStructuralFeatures().get(3);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EClass getCompound()
+  {
+    return compoundEClass;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EAttribute getCompound_Abstract()
+  {
+    return (EAttribute)compoundEClass.getEStructuralFeatures().get(0);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EAttribute getCompound_Name()
+  {
+    return (EAttribute)compoundEClass.getEStructuralFeatures().get(1);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EAttribute getCompound_Super()
+  {
+    return (EAttribute)compoundEClass.getEStructuralFeatures().get(2);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EReference getCompound_Vars()
+  {
+    return (EReference)compoundEClass.getEStructuralFeatures().get(3);
   }
 
   /**
@@ -1892,14 +1930,18 @@ public class ExpressionDslPackageImpl extends EPackageImpl implements Expression
     createEAttribute(languageUnitEClass, LANGUAGE_UNIT__NAME);
     createEReference(languageUnitEClass, LANGUAGE_UNIT__VERSION);
     createEReference(languageUnitEClass, LANGUAGE_UNIT__IMPORTS);
-    createEReference(languageUnitEClass, LANGUAGE_UNIT__TYPE_DEFS);
-    createEReference(languageUnitEClass, LANGUAGE_UNIT__VARS);
 
     variableDeclarationEClass = createEClass(VARIABLE_DECLARATION);
     createEAttribute(variableDeclarationEClass, VARIABLE_DECLARATION__CONST);
     createEReference(variableDeclarationEClass, VARIABLE_DECLARATION__TYPE);
     createEAttribute(variableDeclarationEClass, VARIABLE_DECLARATION__NAME);
     createEReference(variableDeclarationEClass, VARIABLE_DECLARATION__EXPRESSION);
+
+    compoundEClass = createEClass(COMPOUND);
+    createEAttribute(compoundEClass, COMPOUND__ABSTRACT);
+    createEAttribute(compoundEClass, COMPOUND__NAME);
+    createEAttribute(compoundEClass, COMPOUND__SUPER);
+    createEReference(compoundEClass, COMPOUND__VARS);
 
     typeDefEClass = createEClass(TYPE_DEF);
     createEAttribute(typeDefEClass, TYPE_DEF__NAME);
@@ -2110,14 +2152,18 @@ public class ExpressionDslPackageImpl extends EPackageImpl implements Expression
     initEAttribute(getLanguageUnit_Name(), ecorePackage.getEString(), "name", null, 0, 1, LanguageUnit.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEReference(getLanguageUnit_Version(), this.getVersionStmt(), null, "version", null, 0, 1, LanguageUnit.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEReference(getLanguageUnit_Imports(), this.getImport(), null, "imports", null, 0, -1, LanguageUnit.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEReference(getLanguageUnit_TypeDefs(), this.getTypeDef(), null, "typeDefs", null, 0, -1, LanguageUnit.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEReference(getLanguageUnit_Vars(), this.getVariableDeclaration(), null, "vars", null, 0, -1, LanguageUnit.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     initEClass(variableDeclarationEClass, VariableDeclaration.class, "VariableDeclaration", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
     initEAttribute(getVariableDeclaration_Const(), ecorePackage.getEString(), "const", null, 0, 1, VariableDeclaration.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEReference(getVariableDeclaration_Type(), this.getType(), null, "type", null, 0, 1, VariableDeclaration.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEAttribute(getVariableDeclaration_Name(), ecorePackage.getEString(), "name", null, 0, 1, VariableDeclaration.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEReference(getVariableDeclaration_Expression(), this.getExpression(), null, "expression", null, 0, 1, VariableDeclaration.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+    initEClass(compoundEClass, Compound.class, "Compound", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+    initEAttribute(getCompound_Abstract(), ecorePackage.getEString(), "abstract", null, 0, 1, Compound.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEAttribute(getCompound_Name(), ecorePackage.getEString(), "name", null, 0, 1, Compound.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEAttribute(getCompound_Super(), ecorePackage.getEString(), "super", null, 0, 1, Compound.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getCompound_Vars(), this.getVariableDeclaration(), null, "vars", null, 0, -1, Compound.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     initEClass(typeDefEClass, TypeDef.class, "TypeDef", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
     initEAttribute(getTypeDef_Name(), ecorePackage.getEString(), "name", null, 0, 1, TypeDef.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);

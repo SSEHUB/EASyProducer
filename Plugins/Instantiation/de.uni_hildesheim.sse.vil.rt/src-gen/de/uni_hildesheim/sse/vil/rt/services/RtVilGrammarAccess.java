@@ -162,21 +162,23 @@ public class RtVilGrammarAccess extends AbstractGrammarElementFinder {
 		private final RuleCall cElementsTacticDeclarationParserRuleCall_1_3_0 = (RuleCall)cElementsAssignment_1_3.eContents().get(0);
 		private final Assignment cElementsAssignment_1_4 = (Assignment)cAlternatives_1.eContents().get(4);
 		private final RuleCall cElementsTypeDefParserRuleCall_1_4_0 = (RuleCall)cElementsAssignment_1_4.eContents().get(0);
+		private final Assignment cElementsAssignment_1_5 = (Assignment)cAlternatives_1.eContents().get(5);
+		private final RuleCall cElementsCompoundParserRuleCall_1_5_0 = (RuleCall)cElementsAssignment_1_5.eContents().get(0);
 		
 		//rtContents:
 		//	{rtContents} (elements+=GlobalVariableDeclaration | elements+=RuleDeclaration | elements+=StrategyDeclaration |
-		//	elements+=TacticDeclaration | elements+=TypeDef)*;
+		//	elements+=TacticDeclaration | elements+=TypeDef | elements+=Compound)*;
 		@Override public ParserRule getRule() { return rule; }
 
 		//{rtContents} (elements+=GlobalVariableDeclaration | elements+=RuleDeclaration | elements+=StrategyDeclaration |
-		//elements+=TacticDeclaration | elements+=TypeDef)*
+		//elements+=TacticDeclaration | elements+=TypeDef | elements+=Compound)*
 		public Group getGroup() { return cGroup; }
 
 		//{rtContents}
 		public Action getRtContentsAction_0() { return cRtContentsAction_0; }
 
 		//(elements+=GlobalVariableDeclaration | elements+=RuleDeclaration | elements+=StrategyDeclaration |
-		//elements+=TacticDeclaration | elements+=TypeDef)*
+		//elements+=TacticDeclaration | elements+=TypeDef | elements+=Compound)*
 		public Alternatives getAlternatives_1() { return cAlternatives_1; }
 
 		//elements+=GlobalVariableDeclaration
@@ -208,6 +210,12 @@ public class RtVilGrammarAccess extends AbstractGrammarElementFinder {
 
 		//TypeDef
 		public RuleCall getElementsTypeDefParserRuleCall_1_4_0() { return cElementsTypeDefParserRuleCall_1_4_0; }
+
+		//elements+=Compound
+		public Assignment getElementsAssignment_1_5() { return cElementsAssignment_1_5; }
+
+		//Compound
+		public RuleCall getElementsCompoundParserRuleCall_1_5_0() { return cElementsCompoundParserRuleCall_1_5_0; }
 	}
 
 	public class GlobalVariableDeclarationElements extends AbstractParserRuleElementFinder {
@@ -993,7 +1001,7 @@ public class RtVilGrammarAccess extends AbstractGrammarElementFinder {
 
 	//rtContents:
 	//	{rtContents} (elements+=GlobalVariableDeclaration | elements+=RuleDeclaration | elements+=StrategyDeclaration |
-	//	elements+=TacticDeclaration | elements+=TypeDef)*;
+	//	elements+=TacticDeclaration | elements+=TypeDef | elements+=Compound)*;
 	public RtContentsElements getRtContentsAccess() {
 		return pRtContents;
 	}
@@ -1150,7 +1158,8 @@ public class RtVilGrammarAccess extends AbstractGrammarElementFinder {
 	}
 
 	//ScriptContents:
-	//	{ScriptContents} (elements+=VariableDeclaration | elements+=TypeDef | elements+=RuleDeclaration)*;
+	//	{ScriptContents} (elements+=VariableDeclaration | elements+=Compound | elements+=TypeDef |
+	//	elements+=RuleDeclaration)*;
 	public VilBuildLanguageGrammarAccess.ScriptContentsElements getScriptContentsAccess() {
 		return gaVilBuildLanguage.getScriptContentsAccess();
 	}
@@ -1325,6 +1334,16 @@ public class RtVilGrammarAccess extends AbstractGrammarElementFinder {
 	
 	public ParserRule getVariableDeclarationRule() {
 		return getVariableDeclarationAccess().getRule();
+	}
+
+	//Compound:
+	//	abstract='abstract'? 'compound' name=Identifier ('refines' super=Identifier)? '{' vars+=VariableDeclaration* '}';
+	public ExpressionDslGrammarAccess.CompoundElements getCompoundAccess() {
+		return gaExpressionDsl.getCompoundAccess();
+	}
+	
+	public ParserRule getCompoundRule() {
+		return getCompoundAccess().getRule();
 	}
 
 	//TypeDef:

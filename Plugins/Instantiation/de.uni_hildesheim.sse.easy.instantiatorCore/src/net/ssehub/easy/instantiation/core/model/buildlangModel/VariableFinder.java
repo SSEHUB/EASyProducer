@@ -10,6 +10,7 @@ import net.ssehub.easy.instantiation.core.model.buildlangModel.ruleMatch.Compoun
 import net.ssehub.easy.instantiation.core.model.buildlangModel.ruleMatch.PathMatchExpression;
 import net.ssehub.easy.instantiation.core.model.buildlangModel.ruleMatch.StringMatchExpression;
 import net.ssehub.easy.instantiation.core.model.common.Advice;
+import net.ssehub.easy.instantiation.core.model.common.Compound;
 import net.ssehub.easy.instantiation.core.model.common.ExpressionStatement;
 import net.ssehub.easy.instantiation.core.model.common.Typedef;
 import net.ssehub.easy.instantiation.core.model.common.VariableDeclaration;
@@ -177,6 +178,16 @@ class VariableFinder implements IBuildlangVisitor {
     public Object visitVariableDeclaration(VariableDeclaration var) throws VilException {
         if (!found && null != var.getExpression()) {
             var.getExpression().accept(this);
+        }
+        return null;
+    }
+    
+    @Override
+    public Object visitCompound(Compound compound) throws VilException {
+        for (int s = 0; !found && s < compound.getSlotsCount(); s++) {
+            if (!found && null != compound.getSlot(s).getExpression()) {
+                compound.getSlot(s).getExpression().accept(this);
+            }
         }
         return null;
     }

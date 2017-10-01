@@ -14,9 +14,11 @@ import org.eclipse.xtext.ui.editor.outline.impl.DocumentRootNode;
 import com.google.inject.Inject;
 
 import de.uni_hildesheim.sse.vil.expressions.expressionDsl.Advice;
+import de.uni_hildesheim.sse.vil.expressions.expressionDsl.Compound;
 import de.uni_hildesheim.sse.vil.expressions.expressionDsl.ExpressionDslPackage;
 import de.uni_hildesheim.sse.vil.expressions.expressionDsl.Import;
 import de.uni_hildesheim.sse.vil.expressions.expressionDsl.Parameter;
+import de.uni_hildesheim.sse.vil.expressions.expressionDsl.TypeDef;
 import de.uni_hildesheim.sse.vil.expressions.expressionDsl.VariableDeclaration;
 import de.uni_hildesheim.sse.vil.expressions.expressionDsl.VersionStmt;
 import de.uni_hildesheim.sse.vil.expressions.translation.Utils;
@@ -143,7 +145,7 @@ public class TemplateLangOutlineTreeProvider extends DefaultOutlineTreeProvider 
                 templateContentsString.append("Template Contents", StyledString.QUALIFIER_STYLER);
                 VirtualOutlineNode templateContentNode = new VirtualOutlineNode(tempNode,
                         imageHelper.getImage(Images.NAME_SCRIPTCONTENT), templateContentsString, false);
-                createScriptContentNodes(unit.getVars(), unit.getDefs(), templateContentNode);
+                createScriptContentNodes(unit.getElements(), templateContentNode);
             }
         }
     }
@@ -155,35 +157,36 @@ public class TemplateLangOutlineTreeProvider extends DefaultOutlineTreeProvider 
      * @param subTemps the list of su-template declarations
      * @param parentNode the parent node
      */
-    private void createScriptContentNodes(EList<VariableDeclaration> varDecls, EList<VilDef> subTemps,
-            VirtualOutlineNode parentNode) {
-        // create variable nodes
-        if (!isEmpty(varDecls)) {
-            createVariableNodes(varDecls, parentNode);
-        }
-        // create def nodes
-        if (!isEmpty(subTemps)) {
-            createDefNodes(subTemps, parentNode);
+    private void createScriptContentNodes(EList<EObject> elements, VirtualOutlineNode parentNode) {
+        for (int e = 0; e < elements.size(); e++) {
+            EObject element = elements.get(e);
+            if (element instanceof VariableDeclaration) {
+                createVariableNode((VariableDeclaration) element, parentNode);
+            } else if (element instanceof TypeDef) {
+                createTypdefNode((TypeDef) element, parentNode);
+            } else if (element instanceof Compound) {
+                createCompoundNode((Compound) element, parentNode);
+            } else if (element instanceof VilDef) {
+                createDefNode((VilDef) element, parentNode);
+            }
         }
     }
 
     /**
      * Creates the node for 'def' declarations.
      * 
-     * @param defList
-     *            the list with all 'def' declarations
+     * @param def
+     *            the 'def' declaration
      * @param parentNode
      *            the parent node
      */
-    private void createDefNodes(EList<VilDef> defList, IOutlineNode parentNode) {
-        for (VilDef def : defList) {
-            if (def.getId() != null && !def.getId().isEmpty()) {
-                StyledString displayString = new StyledString();
-                displayString.append("" + def.getId());
-                displayString.append(" : SubTemplate", StyledString.QUALIFIER_STYLER);
-                createEStructuralFeatureNode(parentNode, def, TemplateLangPackage.Literals.VIL_DEF__ID,
-                        imageHelper.getImage(Images.NAME_DEF), displayString, true);
-            }
+    private void createDefNode(VilDef def, IOutlineNode parentNode) {
+        if (def.getId() != null && !def.getId().isEmpty()) {
+            StyledString displayString = new StyledString();
+            displayString.append("" + def.getId());
+            displayString.append(" : SubTemplate", StyledString.QUALIFIER_STYLER);
+            createEStructuralFeatureNode(parentNode, def, TemplateLangPackage.Literals.VIL_DEF__ID,
+                    imageHelper.getImage(Images.NAME_DEF), displayString, true);
         }
     }
 
@@ -287,22 +290,64 @@ public class TemplateLangOutlineTreeProvider extends DefaultOutlineTreeProvider 
     }
 
     /**
-     * Creates the VariableDeclarations.
+     * Creates the type defs.
      * 
-     * @param vars
-     *            variables
+     * @param typedef
+     *            typedef
      * @param parentNode
      *            all Rules and Variables will be displayed under this node
      */
-    private void createVariableNodes(EList<VariableDeclaration> vars, VirtualOutlineNode parentNode) {
-        for (VariableDeclaration var : vars) {
-            if (checkVariableDeclaration(var)) {
-                StyledString displayString = new StyledString();
-                displayString.append("" + var.getName());
-                displayString.append(" : " + var.getType().getName(), StyledString.QUALIFIER_STYLER);
-                createEStructuralFeatureNode(parentNode, var, ExpressionDslPackage.Literals.VARIABLE_DECLARATION__NAME,
-                        imageHelper.getImage(Images.NAME_VARIABLEDECLARATION), displayString, true);
+    private void createTypdefNode(TypeDef typedef, VirtualOutlineNode parentNode) {
+        if (checkTypedefNode(typedef)) {
+            StyledString displayString = new StyledString();
+            displayString.append("" + typedef.getName());
+            displayString.append(" : " + typedef.getType().getName(), StyledString.QUALIFIER_STYLER);
+            createEStructuralFeatureNode(parentNode, typedef, ExpressionDslPackage.Literals.TYPE_DEF__NAME,
+                    imageHelper.getImage(Images.NAME_TYPEDEF), displayString, true);
+        }
+    }
+
+    /**
+     * Creates the Compounds.
+     * 
+     * @param compound
+     *            compound
+     * @param parentNode
+     *            all Rules and Variables will be displayed under this node
+     */
+    private void createCompoundNode(Compound compound, VirtualOutlineNode parentNode) {
+        if (checkCompoundNode(compound)) {
+            String str = compound.getName();
+            if (null != compound.getSuper()) {
+                str += " refines " + compound.getSuper();
             }
+            VirtualOutlineNode compoundContentNode = new VirtualOutlineNode(parentNode,
+                    imageHelper.getImage(Images.NAME_SCRIPTCONTENT), str, false);
+            EList<VariableDeclaration> vars = compound.getVars();
+            if (null != vars) {
+                for (int v = 0; v < vars.size(); v++) {
+                    VariableDeclaration var = vars.get(v);
+                    createVariableNode(var, compoundContentNode);
+                }
+            }
+        }
+    }
+
+    /**
+     * Creates the VariableDeclarations.
+     * 
+     * @param var
+     *            variable
+     * @param parentNode
+     *            all Rules and Variables will be displayed under this node
+     */
+    private void createVariableNode(VariableDeclaration var, VirtualOutlineNode parentNode) {
+        if (checkVariableDeclaration(var)) {
+            StyledString displayString = new StyledString();
+            displayString.append("" + var.getName());
+            displayString.append(" : " + var.getType().getName(), StyledString.QUALIFIER_STYLER);
+            createEStructuralFeatureNode(parentNode, var, ExpressionDslPackage.Literals.VARIABLE_DECLARATION__NAME,
+                    imageHelper.getImage(Images.NAME_VARIABLEDECLARATION), displayString, true);
         }
     }
 
@@ -327,7 +372,7 @@ public class TemplateLangOutlineTreeProvider extends DefaultOutlineTreeProvider 
      *         sub-template declaration. <b>False</b> otherwise.
      */
     private boolean hasContents(LanguageUnit templateUnit) {
-        return templateUnit != null && (!isEmpty(templateUnit.getVars()) || !isEmpty(templateUnit.getDefs()));
+        return templateUnit != null && !isEmpty(templateUnit.getElements());
     }
 
     /**
@@ -378,4 +423,27 @@ public class TemplateLangOutlineTreeProvider extends DefaultOutlineTreeProvider 
                 && varDecl.getType() != null && varDecl.getType().getName() != null
                 && !Utils.isEmpty(varDecl.getType().getName());
     }
+
+    /**
+     * Checks whether a given typedef declaration is not <b>null</b>, has a name and a type (name).
+     * 
+     * @param typedef
+     *            the typedef to be checked
+     * @return <b>True</b> if the variable declaration is completely defined. <b>False</b> otherwise.
+     */
+    private boolean checkTypedefNode(de.uni_hildesheim.sse.vil.expressions.expressionDsl.TypeDef typedef) {
+        return null != typedef.getName() && null != typedef.getType() && null != typedef.getType().getName();
+    }
+
+    /**
+     * Checks whether a given typedef declaration is not <b>null</b>, has a name and a type (name).
+     * 
+     * @param typedef
+     *            the typedef to be checked
+     * @return <b>True</b> if the variable declaration is completely defined. <b>False</b> otherwise.
+     */
+    private boolean checkCompoundNode(de.uni_hildesheim.sse.vil.expressions.expressionDsl.Compound typedef) {
+        return null != typedef.getName();
+    }
+
 }

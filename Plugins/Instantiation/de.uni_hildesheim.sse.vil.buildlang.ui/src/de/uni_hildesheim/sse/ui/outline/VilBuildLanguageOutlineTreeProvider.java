@@ -15,11 +15,13 @@ import com.google.inject.Inject;
 
 import de.uni_hildesheim.sse.vil.buildlang.ui.resources.Images;
 import de.uni_hildesheim.sse.vil.expressions.expressionDsl.Advice;
+import de.uni_hildesheim.sse.vil.expressions.expressionDsl.Compound;
 import de.uni_hildesheim.sse.vil.expressions.expressionDsl.ExpressionDslPackage;
 import de.uni_hildesheim.sse.vil.expressions.expressionDsl.Import;
 import de.uni_hildesheim.sse.vil.expressions.expressionDsl.Parameter;
 import de.uni_hildesheim.sse.vil.expressions.expressionDsl.ParameterList;
 import de.uni_hildesheim.sse.vil.expressions.expressionDsl.Type;
+import de.uni_hildesheim.sse.vil.expressions.expressionDsl.TypeDef;
 import de.uni_hildesheim.sse.vil.expressions.expressionDsl.VariableDeclaration;
 import de.uni_hildesheim.sse.vil.expressions.expressionDsl.VersionStmt;
 import de.uni_hildesheim.sse.vil.expressions.translation.Utils;
@@ -265,22 +267,81 @@ public class VilBuildLanguageOutlineTreeProvider extends DefaultOutlineTreeProvi
                             imageHelper.getImage(Images.NAME_RULE_INSTANCE), displayString, true);
                 }
             } else if (element instanceof VariableDeclaration) {
-                // VariableDeclarations                
-                VariableDeclaration varCast = (VariableDeclaration) element;
-                if (checkVariableDeclaration(varCast)) {
-                    StyledString displayString = new StyledString();
-                    displayString.append("" + varCast.getName());
-                    String type = Utils.getQualifiedNameString(varCast.getType().getName());
-                    displayString.append(" : " + type, StyledString.QUALIFIER_STYLER);
-                    createEStructuralFeatureNode(parentNode, varCast,
-                            VilBuildLanguagePackage.Literals.RULE_DECLARATION__NAME,
-                            imageHelper.getImage(Images.NAME_VARIABLEDECLARATION), displayString, true);
-                }
+                createVariableDeclarationNode((VariableDeclaration) element, parentNode);
+            } else if (element instanceof TypeDef) {
+                createTypdefNode((TypeDef) element, parentNode);
+            } else if (element instanceof Compound) {
+                createCompoundNode((Compound) element, parentNode);
             } else {
                 createScriptContentNode(element, parentNode);
             }
         }
     }
+
+    /**
+     * Creates the VariableDeclarations.
+     * 
+     * @param var
+     *            variable
+     * @param parentNode
+     *            all Rules and Variables will be displayed under this node
+     */
+    private void createVariableDeclarationNode(VariableDeclaration var, VirtualOutlineNode parentNode) {
+        if (checkVariableDeclaration(var)) {
+            StyledString displayString = new StyledString();
+            displayString.append("" + var.getName());
+            String type = Utils.getQualifiedNameString(var.getType().getName());
+            displayString.append(" : " + type, StyledString.QUALIFIER_STYLER);
+            createEStructuralFeatureNode(parentNode, var,
+                    VilBuildLanguagePackage.Literals.RULE_DECLARATION__NAME,
+                    imageHelper.getImage(Images.NAME_VARIABLEDECLARATION), displayString, true);
+        }
+    }
+    
+    /**
+     * Creates the type defs.
+     * 
+     * @param typedef
+     *            typedef
+     * @param parentNode
+     *            all Rules and Variables will be displayed under this node
+     */
+    private void createTypdefNode(TypeDef typedef, VirtualOutlineNode parentNode) {
+        if (checkTypedefNode(typedef)) {
+            StyledString displayString = new StyledString();
+            displayString.append("" + typedef.getName());
+            displayString.append(" : " + typedef.getType().getName(), StyledString.QUALIFIER_STYLER);
+            createEStructuralFeatureNode(parentNode, typedef, ExpressionDslPackage.Literals.TYPE_DEF__NAME,
+                    imageHelper.getImage(Images.NAME_TYPEDEF), displayString, true);
+        }
+    }
+
+    /**
+     * Creates the Compounds.
+     * 
+     * @param compound
+     *            compound
+     * @param parentNode
+     *            all Rules and Variables will be displayed under this node
+     */
+    private void createCompoundNode(Compound compound, VirtualOutlineNode parentNode) {
+        if (checkCompoundNode(compound)) {
+            String str = compound.getName();
+            if (null != compound.getSuper()) {
+                str += " refines " + compound.getSuper();
+            }
+            VirtualOutlineNode compoundContentNode = new VirtualOutlineNode(parentNode,
+                    imageHelper.getImage(Images.NAME_SCRIPTCONTENT), str, false);
+            EList<VariableDeclaration> vars = compound.getVars();
+            if (null != vars) {
+                for (int v = 0; v < vars.size(); v++) {
+                    VariableDeclaration var = vars.get(v);
+                    createVariableDeclarationNode(var, compoundContentNode);
+                }
+            }
+        }
+    }
+
     
     protected String toString(Type type) {
         String result = "";
@@ -422,7 +483,29 @@ public class VilBuildLanguageOutlineTreeProvider extends DefaultOutlineTreeProvi
                 && varDecl.getType() != null && varDecl.getType().getName() != null
                 && !Utils.isEmpty(varDecl.getType().getName());
     }
-    
+
+    /**
+     * Checks whether a given typedef declaration is not <b>null</b>, has a name and a type (name).
+     * 
+     * @param typedef
+     *            the typedef to be checked
+     * @return <b>True</b> if the variable declaration is completely defined. <b>False</b> otherwise.
+     */
+    private boolean checkTypedefNode(de.uni_hildesheim.sse.vil.expressions.expressionDsl.TypeDef typedef) {
+        return null != typedef.getName() && null != typedef.getType() && null != typedef.getType().getName();
+    }
+
+    /**
+     * Checks whether a given typedef declaration is not <b>null</b>, has a name and a type (name).
+     * 
+     * @param typedef
+     *            the typedef to be checked
+     * @return <b>True</b> if the variable declaration is completely defined. <b>False</b> otherwise.
+     */
+    private boolean checkCompoundNode(de.uni_hildesheim.sse.vil.expressions.expressionDsl.Compound typedef) {
+        return null != typedef.getName();
+    }
+
     /**
      * Returns the image helper.
      * 

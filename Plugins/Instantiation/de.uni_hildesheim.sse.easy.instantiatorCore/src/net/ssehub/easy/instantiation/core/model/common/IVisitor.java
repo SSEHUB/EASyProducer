@@ -43,4 +43,13 @@ public interface IVisitor {
      */
     public Object visitTypedef(Typedef typedef) throws VilException;
 
+    /**
+     * Visits a compound.
+     * 
+     * @param compound the compound
+     * @return the result of visiting (may be <b>null</b>)
+     * @throws VilException in case that visiting fails (e.g., execution)
+     */
+    public Object visitCompound(Compound compound) throws VilException;
+    
 }

@@ -22,6 +22,7 @@ import net.ssehub.easy.basics.modelManagement.ModelManagementException;
 import net.ssehub.easy.instantiation.core.Bundle;
 import net.ssehub.easy.instantiation.core.model.artifactModel.ArtifactTypes;
 import net.ssehub.easy.instantiation.core.model.artifactModel.IArtifact;
+import net.ssehub.easy.instantiation.core.model.common.Compound;
 import net.ssehub.easy.instantiation.core.model.common.ExecutionVisitor;
 import net.ssehub.easy.instantiation.core.model.common.IResolvableModel;
 import net.ssehub.easy.instantiation.core.model.common.ITerminatable;
@@ -967,6 +968,11 @@ public class TemplateLangExecution extends ExecutionVisitor<Template, Def, Varia
      */
     protected URI getFallbackBaseURI() {
         return null;
+    }
+
+    @Override
+    public Object visitCompound(Compound compound) throws VilException {
+        return null; // declaration is not executed
     }
 
 }

@@ -41,6 +41,15 @@ public interface ExpressionDslFactory extends EFactory
   VariableDeclaration createVariableDeclaration();
 
   /**
+   * Returns a new object of class '<em>Compound</em>'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return a new object of class '<em>Compound</em>'.
+   * @generated
+   */
+  Compound createCompound();
+
+  /**
    * Returns a new object of class '<em>Type Def</em>'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->

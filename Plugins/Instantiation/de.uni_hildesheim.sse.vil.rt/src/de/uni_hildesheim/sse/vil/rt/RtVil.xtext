@@ -29,7 +29,8 @@ rtContents:
         | elements += RuleDeclaration
         | elements += StrategyDeclaration
         | elements += TacticDeclaration
-        | elements+=TypeDef
+        | elements += TypeDef
+        | elements += Compound
     )*
 ;
 

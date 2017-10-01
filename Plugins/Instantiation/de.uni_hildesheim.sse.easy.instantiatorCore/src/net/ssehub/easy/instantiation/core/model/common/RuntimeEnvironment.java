@@ -681,7 +681,22 @@ public abstract class RuntimeEnvironment<V extends VariableDeclaration, M extend
      * @throws VilException in case of type incompatibilities
      */
     private Object checkType(V var, Object object) throws VilException {
-        TypeDescriptor<?> type = var.getType();
+        return checkType(var.getName(), var.getType(), object, getTypeRegistry());
+    }
+
+    /**
+     * Checks whether <code>object</code> can be assigned to some form of variable/field with name <code>name</code> 
+     * and type <code>type</code>.
+     * 
+     * @param name the name of the variable/field to assign <code>object</code> to
+     * @param type the type of the variable/field to assign <code>object</code> to
+     * @param object the object to be assigned (may be <b>null</b>)
+     * @param registry the type registry to use
+     * @return <code>object</code> or <b>null</b> if object is {@link NullValue}.
+     * @throws VilException in case of type incompatibilities
+     */
+    public static Object checkType(String name, TypeDescriptor<?> type, Object object, TypeRegistry registry) 
+        throws VilException {
         if (type instanceof IActualValueProvider) {
             object = ((IActualValueProvider) type).determineActualValue(object);
         } else {
@@ -691,35 +706,34 @@ public abstract class RuntimeEnvironment<V extends VariableDeclaration, M extend
             object = null;
         }
         if (null != object) {
-            TypeDescriptor<?> varType = var.getType();
-            boolean compatible = varType.isInstance(object);
+            boolean compatible = type.isInstance(object);
             if (!compatible) {
                 if (object instanceof DecisionVariable) {
                     DecisionVariable decVar = (DecisionVariable) object;
                     IDatatype dType = decVar.getActualType();
                     dType = DerivedDatatype.resolveToBasis(Reference.dereference(dType));
-                    TypeDescriptor<?> td = getTypeRegistry().getType(dType);
+                    TypeDescriptor<?> td = registry.getType(dType);
                     if (null != td) {
-                        compatible = varType.isAssignableFrom(td);
+                        compatible = type.isAssignableFrom(td);
                     }
                     // late evaluation of "primitives"
                     if (compatible) {
-                        object = evaluatePrimitives(object, decVar, varType);
+                        object = evaluatePrimitives(object, decVar, type);
                     }
                 }
                 if (object instanceof CompoundValue) {
                     CompoundValue cValue = (CompoundValue) object;
                     IDatatype dType = cValue.getType();
                     dType = DerivedDatatype.resolveToBasis(Reference.dereference(dType));
-                    TypeDescriptor<?> td = getTypeRegistry().getType(dType);
+                    TypeDescriptor<?> td = registry.getType(dType);
                     if (null != td) {
-                        compatible = varType.isAssignableFrom(td);
+                        compatible = type.isAssignableFrom(td);
                     }
                 }
             }
             if (!compatible) {
                 String oTypeName;
-                TypeDescriptor<?> oType = typeRegistry.findType(object.getClass());
+                TypeDescriptor<?> oType = registry.findType(object.getClass());
                 if (null == oType && object instanceof IVilGenericType) {
                     // unmodifiable wrapper types
                     oType = ((IVilGenericType) object).getType();
@@ -740,15 +754,15 @@ public abstract class RuntimeEnvironment<V extends VariableDeclaration, M extend
                     }
                     oTypeName += " (" + typeName + ")";
                 }
-                String msg = "cannot assign value of type \"" + oTypeName + "\" to \"" + var.getName()
-                    + "\" of type \"" + var.getType().getVilName() + "\"";
+                String msg = "cannot assign value of type \"" + oTypeName + "\" to \"" + name
+                    + "\" of type \"" + type.getVilName() + "\"";
                 Bundle.getLogger(RuntimeEnvironment.class).debug(msg);
                 throw new VilException(msg, VilException.ID_RUNTIME_TYPE);
             }
         }
         return object;
     }
-    
+
     /**
      * Evaluates <code>decVar</code> to its primitive value according to <code>varType</code>. Late evaluation.
      * 
@@ -757,7 +771,7 @@ public abstract class RuntimeEnvironment<V extends VariableDeclaration, M extend
      * @param varType the variable type
      * @return <code>object</code> or the evaluated value
      */
-    private Object evaluatePrimitives(Object object, DecisionVariable decVar, TypeDescriptor<?> varType) {
+    private static Object evaluatePrimitives(Object object, DecisionVariable decVar, TypeDescriptor<?> varType) {
         if (TypeRegistry.integerType().isSame(varType)) {
             object = decVar.getIntegerValue();
         } else if (TypeRegistry.realType().isSame(varType)) {

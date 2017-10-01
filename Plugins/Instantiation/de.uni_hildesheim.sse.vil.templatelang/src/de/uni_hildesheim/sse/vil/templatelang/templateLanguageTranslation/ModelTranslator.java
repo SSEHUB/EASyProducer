@@ -45,6 +45,7 @@ import net.ssehub.easy.instantiation.core.model.expressions.CompositeExpression;
 import net.ssehub.easy.instantiation.core.model.expressions.Expression;
 import net.ssehub.easy.instantiation.core.model.expressions.StringResolver;
 import net.ssehub.easy.instantiation.core.model.templateModel.AlternativeStatement;
+import net.ssehub.easy.instantiation.core.model.templateModel.Compound;
 import net.ssehub.easy.instantiation.core.model.templateModel.ContentStatement;
 import net.ssehub.easy.instantiation.core.model.templateModel.ContentStatement.LineEndType;
 import net.ssehub.easy.instantiation.core.model.templateModel.Def;
@@ -65,6 +66,7 @@ import net.ssehub.easy.instantiation.core.model.templateModel.TemplateModel;
 import net.ssehub.easy.instantiation.core.model.templateModel.TypeDef;
 import net.ssehub.easy.instantiation.core.model.templateModel.VariableDeclaration;
 import net.ssehub.easy.instantiation.core.model.templateModel.WhileStatement;
+import net.ssehub.easy.instantiation.core.model.vilTypes.CompoundTypeDescriptor;
 import net.ssehub.easy.instantiation.core.model.vilTypes.IMetaType;
 import net.ssehub.easy.instantiation.core.model.vilTypes.OperationDescriptor;
 import net.ssehub.easy.instantiation.core.model.vilTypes.TypeDescriptor;
@@ -134,17 +136,15 @@ public class ModelTranslator extends de.uni_hildesheim.sse.vil.expressions.trans
             resolveImports(tpl, ExpressionDslPackage.Literals.LANGUAGE_UNIT__IMPORTS, result, uri, 
                 new ArrayList<de.uni_hildesheim.sse.vil.templatelang.templateLang.LanguageUnit>(), impResolver);
             resolver.enumerateImports(result);
-            processTypedefs(tpl.getTypeDefs(), result);
-            if (null != tpl.getVars()) {
-                List<de.uni_hildesheim.sse.vil.expressions.expressionDsl.VariableDeclaration> decls = select(
-                    tpl.getVars(), de.uni_hildesheim.sse.vil.expressions.expressionDsl.VariableDeclaration.class);
-                processVariableDeclarations(decls, result);
-                // variables are added successively to the resolver
+            List<EObject> elts = tpl.getElements();
+            if (null != elts) {
+                processCompoundContents(elts, result);
+                processTypedefContents(elts, result);
+                processGlobalVariableDeclarations(elts, result);
+                processDefs(elts, result);
+                reProcessGlobalVariableDeclarations(result);
             }
-            if (null != tpl.getDefs()) {
-                processDefs(tpl, result);
-            }
-            reProcessGlobalVariableDeclarations(result);
+
             if (registerSuccessful && errorCount == getErrorCount()) {
                 // required if models in the same file refer to each other
                 TemplateModel.INSTANCE.updateModel(result, uri, TemplateLangModelUtility.INSTANCE);
@@ -161,7 +161,19 @@ public class ModelTranslator extends de.uni_hildesheim.sse.vil.expressions.trans
         getExpressionTranslator().enactIvmlWarnings();
         return result;
     }
-    
+
+    /**
+     * Processes the global script variable declarations.
+     * 
+     * @param script the script language unit to be processed
+     * @param result the result instance to be modified
+     */
+    protected void processGlobalVariableDeclarations(List<EObject> elts, Template result) {
+        List<de.uni_hildesheim.sse.vil.expressions.expressionDsl.VariableDeclaration> decls = select(
+            elts, de.uni_hildesheim.sse.vil.expressions.expressionDsl.VariableDeclaration.class);
+        processVariableDeclarations(decls, result); // variables are added successively to the resolver
+    }
+
     /**
      * Processes an indentation hint and returns the indentation configuration.
      * 
@@ -367,11 +379,9 @@ public class ModelTranslator extends de.uni_hildesheim.sse.vil.expressions.trans
      * @param defs the defs to be processed
      * @param template the target template to store the defs in
      */
-    protected void processDefs(de.uni_hildesheim.sse.vil.templatelang.templateLang.LanguageUnit tpl, 
-        Template template) {
+    protected void processDefs(List<EObject> elts, Template template) {
         Map<String, DefInfo> signatures = new HashMap<String, DefInfo>();
-        List<VilDef> defs = new ArrayList<VilDef>();
-        defs.addAll(tpl.getDefs()); // avoid concurrent modifications with xText (select function in other languages)
+        List<VilDef> defs = select(elts, VilDef.class);
         for (int d = 0; d < defs.size(); d++) {
             try {
                 VilDef vilDef = defs.get(d);
@@ -834,5 +844,9 @@ public class ModelTranslator extends de.uni_hildesheim.sse.vil.expressions.trans
         return new TypeDef(name, type, getResolver().getCurrentModel());
     }
 
+    @Override
+    protected Compound createCompound(CompoundTypeDescriptor type) throws VilException {
+        return new Compound(type, getResolver().getCurrentModel());
+    }
 
 }

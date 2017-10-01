@@ -165,6 +165,10 @@ public class BuildlangWriter extends WriterVisitor<VariableDeclaration> implemen
             printTypedefs(script);
             println();
         }
+        if (script.getCompoundCount() > 0) {
+            printCompounds(script);
+            println();
+        }
         if (script.getVariableDeclarationCount() > 0) {
             int implCount = 0;
             for (int v = 0; v < script.getVariableDeclarationCount(); v++) {

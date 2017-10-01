@@ -17,7 +17,7 @@ import net.ssehub.easy.instantiation.core.model.vilTypes.TypeDescriptor;
  * @author Christian Kröher
  * @author Holger Eichelberger
  */
-public abstract class VariableDeclaration implements IMetaParameterDeclaration {
+public abstract class VariableDeclaration implements IMetaParameterDeclaration, IModifierHolder {
 
     private String name;
     private TypeDescriptor<?> type;
@@ -143,36 +143,20 @@ public abstract class VariableDeclaration implements IMetaParameterDeclaration {
         modifiers.add(modifier);
     }
     
-    /**
-     * Returns the number of modifiers.
-     * 
-     * @return the number of modifiers
-     */
+    @Override
     public int getModifierCount() {
         return null == modifiers ? 0 : modifiers.size();
     }
     
-    /**
-     * Returns the specified modifier.
-     * 
-     * @param index the 0-based index of the modifier to return
-     * @return the specified modifier
-     * @throws IndexOutOfBoundsException if <code>index &lt; 0 || index &get;={@link #getModifierCount()}</code>
-     */
+    @Override
     public IModifier getModifier(int index) {
         if (null == modifiers) {
             throw new IndexOutOfBoundsException();
         }
         return modifiers.get(index);
     }
-    
-    /**
-     * Returns whether this variable declaration has a given <code>modifier</code>.
-     * 
-     * @param modifier the modifier to search for
-     * @return <code>true</code> if this variable declaration has the <code>modifier</code> attached, 
-     *   <code>false</code> else
-     */
+
+    @Override
     public boolean hasModifier(IModifier modifier) {
         return null == modifiers ? false : modifiers.contains(modifier);
     }

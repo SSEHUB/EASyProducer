@@ -6,6 +6,7 @@ import net.ssehub.easy.basics.modelManagement.IModel;
 import net.ssehub.easy.basics.modelManagement.IVersionRestriction;
 import net.ssehub.easy.basics.modelManagement.Version;
 import net.ssehub.easy.instantiation.core.model.expressions.ExpressionWriter;
+import net.ssehub.easy.instantiation.core.model.vilTypes.CompoundTypeDescriptor.SlotDescriptor;
 import net.ssehub.easy.instantiation.core.model.vilTypes.IMetaParameterDeclaration;
 
 /**
@@ -68,11 +69,11 @@ public class WriterVisitor<V extends VariableDeclaration> extends ExpressionWrit
     }
 
     /**
-     * Prints the modifiers of the given variable declaration <code>var</code>.
+     * Prints the modifiers of the given modifier <code>holder</code>.
      * 
-     * @param var the variable declaration
+     * @param holder the modifier holder
      */
-    protected void printModifiers(VariableDeclaration var) {
+    protected void printModifiers(IModifierHolder holder) {
     }
     
     @Override
@@ -222,6 +223,59 @@ public class WriterVisitor<V extends VariableDeclaration> extends ExpressionWrit
         for (int t = 0; t < model.getTypedefCount(); t++) {
             model.getTypedef(t).accept(this);
         }
+    }
+
+    /**
+     * Prints the typedefs of <code>model</code>.
+     * 
+     * @param <R> the parameter type
+     * @param <M> the model type
+     * @param model the model to print the typedefs for
+     * @throws VilException in case of printing problems
+     */
+    protected <R extends IMetaParameterDeclaration, M extends IModel> void printCompounds(
+        AbstractResolvableModel<R, M> model) throws VilException {
+        for (int c = 0; c < model.getCompoundCount(); c++) {
+            model.getCompound(c).accept(this);
+        }
+    }
+
+    @Override
+    public Object visitCompound(Compound compound) throws VilException {
+        printIndentation();
+        if (compound.isAbstract()) {
+            print("abstract ");
+        }
+        print("compound ");
+        print(compound.getName());
+        if (null != compound.getRefines()) {
+            print(" refines ");
+            print(compound.getRefines().getName());
+        }
+        println(" {");
+        increaseIndentation();
+        for (int s = 0; s < compound.getSlotsCount(); s++) {
+            SlotDescriptor slot = compound.getSlot(s);
+            printIndentation();
+            printModifiers(slot);
+            if (slot.isConstant()) {
+                print("const ");
+            }
+            printType(slot.getType());
+            printWhitespace();
+            print(slot.getName());
+            if (null != slot.getExpression()) {
+                printWhitespace();
+                print('=');
+                printWhitespace();
+                slot.getExpression().accept(this);
+            }
+            println(";");
+        }
+        decreaseIndentation();
+        printIndentation();
+        println("}");
+        return null;
     }
 
 }

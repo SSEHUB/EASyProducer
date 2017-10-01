@@ -43,6 +43,7 @@ ScriptContents:
     {ScriptContents} // ensure object creation
     (
         elements+=VariableDeclaration
+        | elements+=Compound
         | elements+=TypeDef
         | elements+=RuleDeclaration
     )*

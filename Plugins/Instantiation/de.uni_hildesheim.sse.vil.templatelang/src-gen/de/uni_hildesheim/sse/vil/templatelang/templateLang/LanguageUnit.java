@@ -6,6 +6,8 @@ import de.uni_hildesheim.sse.vil.expressions.expressionDsl.ParameterList;
 
 import org.eclipse.emf.common.util.EList;
 
+import org.eclipse.emf.ecore.EObject;
+
 /**
  * <!-- begin-user-doc -->
  * A representation of the model object '<em><b>Language Unit</b></em>'.
@@ -20,7 +22,7 @@ import org.eclipse.emf.common.util.EList;
  *   <li>{@link de.uni_hildesheim.sse.vil.templatelang.templateLang.LanguageUnit#getFormatting <em>Formatting</em>}</li>
  *   <li>{@link de.uni_hildesheim.sse.vil.templatelang.templateLang.LanguageUnit#getParam <em>Param</em>}</li>
  *   <li>{@link de.uni_hildesheim.sse.vil.templatelang.templateLang.LanguageUnit#getExt <em>Ext</em>}</li>
- *   <li>{@link de.uni_hildesheim.sse.vil.templatelang.templateLang.LanguageUnit#getDefs <em>Defs</em>}</li>
+ *   <li>{@link de.uni_hildesheim.sse.vil.templatelang.templateLang.LanguageUnit#getElements <em>Elements</em>}</li>
  * </ul>
  *
  * @see de.uni_hildesheim.sse.vil.templatelang.templateLang.TemplateLangPackage#getLanguageUnit()
@@ -150,19 +152,19 @@ public interface LanguageUnit extends de.uni_hildesheim.sse.vil.expressions.expr
   void setExt(String value);
 
   /**
-   * Returns the value of the '<em><b>Defs</b></em>' containment reference list.
-   * The list contents are of type {@link de.uni_hildesheim.sse.vil.templatelang.templateLang.VilDef}.
+   * Returns the value of the '<em><b>Elements</b></em>' containment reference list.
+   * The list contents are of type {@link org.eclipse.emf.ecore.EObject}.
    * <!-- begin-user-doc -->
    * <p>
-   * If the meaning of the '<em>Defs</em>' containment reference list isn't clear,
+   * If the meaning of the '<em>Elements</em>' containment reference list isn't clear,
    * there really should be more of a description here...
    * </p>
    * <!-- end-user-doc -->
-   * @return the value of the '<em>Defs</em>' containment reference list.
-   * @see de.uni_hildesheim.sse.vil.templatelang.templateLang.TemplateLangPackage#getLanguageUnit_Defs()
+   * @return the value of the '<em>Elements</em>' containment reference list.
+   * @see de.uni_hildesheim.sse.vil.templatelang.templateLang.TemplateLangPackage#getLanguageUnit_Elements()
    * @model containment="true"
    * @generated
    */
-  EList<VilDef> getDefs();
+  EList<EObject> getElements();
 
 } // LanguageUnit

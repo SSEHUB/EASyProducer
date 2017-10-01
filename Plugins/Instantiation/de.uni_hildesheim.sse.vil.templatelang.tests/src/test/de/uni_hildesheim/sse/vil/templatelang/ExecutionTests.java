@@ -453,7 +453,27 @@ public class ExecutionTests extends AbstractExecutionTest {
     public void testString1() throws IOException {
         assertEqual("string1");
     }
-    
+
+    /**
+     * Tests compounds.
+     * 
+     * @throws IOException should not occur
+     */
+    @Test
+    public void testCompound() throws IOException {
+        assertEqual("compound");
+    }
+
+    /**
+     * Tests compounds.
+     * 
+     * @throws IOException should not occur
+     */
+    @Test
+    public void testCompound1() throws IOException {
+        assertEqual("compound1");
+    }
+
     /**
      * Tests a switch statement with default in an untyped def.
      * 

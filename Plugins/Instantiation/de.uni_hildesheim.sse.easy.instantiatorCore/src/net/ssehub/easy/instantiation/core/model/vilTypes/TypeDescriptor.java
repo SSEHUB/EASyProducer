@@ -104,6 +104,24 @@ public abstract class TypeDescriptor <T> implements IMetaType {
     }
     
     /**
+     * Changes the fields.
+     * 
+     * @param fields the new fields
+     */
+    protected void setFields(FieldDescriptor[] fields) {
+        this.fields = fields;
+    }
+    
+    /**
+     * Returns whether so far no fields have been defined at all.
+     * 
+     * @return <code>true</code> for no fields, <code>false</code> else
+     */
+    protected boolean isFieldsNull() {
+        return this.fields == null;
+    }
+    
+    /**
      * Adds an operation.
      * 
      * @param operation the operation to be added

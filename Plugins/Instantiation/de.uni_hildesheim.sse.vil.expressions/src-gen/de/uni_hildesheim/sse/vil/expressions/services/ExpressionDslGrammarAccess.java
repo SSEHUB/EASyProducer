@@ -28,18 +28,13 @@ public class ExpressionDslGrammarAccess extends AbstractGrammarElementFinder {
 		private final RuleCall cVersionVersionStmtParserRuleCall_2_0 = (RuleCall)cVersionAssignment_2.eContents().get(0);
 		private final Assignment cImportsAssignment_3 = (Assignment)cGroup.eContents().get(3);
 		private final RuleCall cImportsImportParserRuleCall_3_0 = (RuleCall)cImportsAssignment_3.eContents().get(0);
-		private final Assignment cTypeDefsAssignment_4 = (Assignment)cGroup.eContents().get(4);
-		private final RuleCall cTypeDefsTypeDefParserRuleCall_4_0 = (RuleCall)cTypeDefsAssignment_4.eContents().get(0);
-		private final Assignment cVarsAssignment_5 = (Assignment)cGroup.eContents().get(5);
-		private final RuleCall cVarsVariableDeclarationParserRuleCall_5_0 = (RuleCall)cVarsAssignment_5.eContents().get(0);
 		
 		//LanguageUnit:
-		//	advices+=Advice* name=Identifier version=VersionStmt? imports+=Import* typeDefs+=TypeDef* vars+=VariableDeclaration*;
+		//	advices+=Advice* name=Identifier version=VersionStmt? imports+=Import*;
 		@Override public ParserRule getRule() { return rule; }
 
 		//// just a template for required data
 		// advices+=Advice* name=Identifier version=VersionStmt? imports+=Import*
-		//typeDefs+=TypeDef* vars+=VariableDeclaration*
 		public Group getGroup() { return cGroup; }
 
 		//// just a template for required data
@@ -66,18 +61,6 @@ public class ExpressionDslGrammarAccess extends AbstractGrammarElementFinder {
 
 		//Import
 		public RuleCall getImportsImportParserRuleCall_3_0() { return cImportsImportParserRuleCall_3_0; }
-
-		//typeDefs+=TypeDef*
-		public Assignment getTypeDefsAssignment_4() { return cTypeDefsAssignment_4; }
-
-		//TypeDef
-		public RuleCall getTypeDefsTypeDefParserRuleCall_4_0() { return cTypeDefsTypeDefParserRuleCall_4_0; }
-
-		//vars+=VariableDeclaration*
-		public Assignment getVarsAssignment_5() { return cVarsAssignment_5; }
-
-		//VariableDeclaration
-		public RuleCall getVarsVariableDeclarationParserRuleCall_5_0() { return cVarsVariableDeclarationParserRuleCall_5_0; }
 	}
 
 	public class VariableDeclarationElements extends AbstractParserRuleElementFinder {
@@ -134,6 +117,70 @@ public class ExpressionDslGrammarAccess extends AbstractGrammarElementFinder {
 
 		//';'
 		public Keyword getSemicolonKeyword_4() { return cSemicolonKeyword_4; }
+	}
+
+	public class CompoundElements extends AbstractParserRuleElementFinder {
+		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "de.uni_hildesheim.sse.vil.expressions.ExpressionDsl.Compound");
+		private final Group cGroup = (Group)rule.eContents().get(1);
+		private final Assignment cAbstractAssignment_0 = (Assignment)cGroup.eContents().get(0);
+		private final Keyword cAbstractAbstractKeyword_0_0 = (Keyword)cAbstractAssignment_0.eContents().get(0);
+		private final Keyword cCompoundKeyword_1 = (Keyword)cGroup.eContents().get(1);
+		private final Assignment cNameAssignment_2 = (Assignment)cGroup.eContents().get(2);
+		private final RuleCall cNameIdentifierParserRuleCall_2_0 = (RuleCall)cNameAssignment_2.eContents().get(0);
+		private final Group cGroup_3 = (Group)cGroup.eContents().get(3);
+		private final Keyword cRefinesKeyword_3_0 = (Keyword)cGroup_3.eContents().get(0);
+		private final Assignment cSuperAssignment_3_1 = (Assignment)cGroup_3.eContents().get(1);
+		private final RuleCall cSuperIdentifierParserRuleCall_3_1_0 = (RuleCall)cSuperAssignment_3_1.eContents().get(0);
+		private final Keyword cLeftCurlyBracketKeyword_4 = (Keyword)cGroup.eContents().get(4);
+		private final Assignment cVarsAssignment_5 = (Assignment)cGroup.eContents().get(5);
+		private final RuleCall cVarsVariableDeclarationParserRuleCall_5_0 = (RuleCall)cVarsAssignment_5.eContents().get(0);
+		private final Keyword cRightCurlyBracketKeyword_6 = (Keyword)cGroup.eContents().get(6);
+		
+		//Compound:
+		//	abstract='abstract'? 'compound' name=Identifier ('refines' super=Identifier)? '{' vars+=VariableDeclaration* '}';
+		@Override public ParserRule getRule() { return rule; }
+
+		//abstract='abstract'? 'compound' name=Identifier ('refines' super=Identifier)? '{' vars+=VariableDeclaration* '}'
+		public Group getGroup() { return cGroup; }
+
+		//abstract='abstract'?
+		public Assignment getAbstractAssignment_0() { return cAbstractAssignment_0; }
+
+		//'abstract'
+		public Keyword getAbstractAbstractKeyword_0_0() { return cAbstractAbstractKeyword_0_0; }
+
+		//'compound'
+		public Keyword getCompoundKeyword_1() { return cCompoundKeyword_1; }
+
+		//name=Identifier
+		public Assignment getNameAssignment_2() { return cNameAssignment_2; }
+
+		//Identifier
+		public RuleCall getNameIdentifierParserRuleCall_2_0() { return cNameIdentifierParserRuleCall_2_0; }
+
+		//('refines' super=Identifier)?
+		public Group getGroup_3() { return cGroup_3; }
+
+		//'refines'
+		public Keyword getRefinesKeyword_3_0() { return cRefinesKeyword_3_0; }
+
+		//super=Identifier
+		public Assignment getSuperAssignment_3_1() { return cSuperAssignment_3_1; }
+
+		//Identifier
+		public RuleCall getSuperIdentifierParserRuleCall_3_1_0() { return cSuperIdentifierParserRuleCall_3_1_0; }
+
+		//'{'
+		public Keyword getLeftCurlyBracketKeyword_4() { return cLeftCurlyBracketKeyword_4; }
+
+		//vars+=VariableDeclaration*
+		public Assignment getVarsAssignment_5() { return cVarsAssignment_5; }
+
+		//VariableDeclaration
+		public RuleCall getVarsVariableDeclarationParserRuleCall_5_0() { return cVarsVariableDeclarationParserRuleCall_5_0; }
+
+		//'}'
+		public Keyword getRightCurlyBracketKeyword_6() { return cRightCurlyBracketKeyword_6; }
 	}
 
 	public class TypeDefElements extends AbstractParserRuleElementFinder {
@@ -1898,6 +1945,7 @@ public class ExpressionDslGrammarAccess extends AbstractGrammarElementFinder {
 	
 	private final LanguageUnitElements pLanguageUnit;
 	private final VariableDeclarationElements pVariableDeclaration;
+	private final CompoundElements pCompound;
 	private final TypeDefElements pTypeDef;
 	private final AdviceElements pAdvice;
 	private final VersionSpecElements pVersionSpec;
@@ -1963,6 +2011,7 @@ public class ExpressionDslGrammarAccess extends AbstractGrammarElementFinder {
 		this.grammar = internalFindGrammar(grammarProvider);
 		this.pLanguageUnit = new LanguageUnitElements();
 		this.pVariableDeclaration = new VariableDeclarationElements();
+		this.pCompound = new CompoundElements();
 		this.pTypeDef = new TypeDefElements();
 		this.pAdvice = new AdviceElements();
 		this.pVersionSpec = new VersionSpecElements();
@@ -2046,7 +2095,7 @@ public class ExpressionDslGrammarAccess extends AbstractGrammarElementFinder {
 
 	
 	//LanguageUnit:
-	//	advices+=Advice* name=Identifier version=VersionStmt? imports+=Import* typeDefs+=TypeDef* vars+=VariableDeclaration*;
+	//	advices+=Advice* name=Identifier version=VersionStmt? imports+=Import*;
 	public LanguageUnitElements getLanguageUnitAccess() {
 		return pLanguageUnit;
 	}
@@ -2063,6 +2112,16 @@ public class ExpressionDslGrammarAccess extends AbstractGrammarElementFinder {
 	
 	public ParserRule getVariableDeclarationRule() {
 		return getVariableDeclarationAccess().getRule();
+	}
+
+	//Compound:
+	//	abstract='abstract'? 'compound' name=Identifier ('refines' super=Identifier)? '{' vars+=VariableDeclaration* '}';
+	public CompoundElements getCompoundAccess() {
+		return pCompound;
+	}
+	
+	public ParserRule getCompoundRule() {
+		return getCompoundAccess().getRule();
 	}
 
 	//TypeDef:

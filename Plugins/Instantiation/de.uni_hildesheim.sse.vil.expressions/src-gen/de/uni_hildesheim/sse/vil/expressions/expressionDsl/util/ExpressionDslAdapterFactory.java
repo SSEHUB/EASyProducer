@@ -85,6 +85,11 @@ public class ExpressionDslAdapterFactory extends AdapterFactoryImpl
         return createVariableDeclarationAdapter();
       }
       @Override
+      public Adapter caseCompound(Compound object)
+      {
+        return createCompoundAdapter();
+      }
+      @Override
       public Adapter caseTypeDef(TypeDef object)
       {
         return createTypeDefAdapter();
@@ -337,6 +342,21 @@ public class ExpressionDslAdapterFactory extends AdapterFactoryImpl
    * @generated
    */
   public Adapter createVariableDeclarationAdapter()
+  {
+    return null;
+  }
+
+  /**
+   * Creates a new adapter for an object of class '{@link de.uni_hildesheim.sse.vil.expressions.expressionDsl.Compound <em>Compound</em>}'.
+   * <!-- begin-user-doc -->
+   * This default implementation returns null so that we can easily ignore cases;
+   * it's useful to ignore a case when inheritance will catch all the cases anyway.
+   * <!-- end-user-doc -->
+   * @return the new adapter.
+   * @see de.uni_hildesheim.sse.vil.expressions.expressionDsl.Compound
+   * @generated
+   */
+  public Adapter createCompoundAdapter()
   {
     return null;
   }

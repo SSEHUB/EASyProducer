@@ -20,6 +20,7 @@ import java.util.List;
 import org.eclipse.emf.ecore.EObject;
 
 import net.ssehub.easy.dslCore.ui.hyperlinking.IModelQuery;
+import net.ssehub.easy.instantiation.core.model.common.Compound;
 import net.ssehub.easy.instantiation.core.model.common.Typedef;
 import net.ssehub.easy.instantiation.core.model.common.VariableDeclaration;
 
@@ -63,9 +64,28 @@ public abstract class AbstractEcoreModelQuery<P extends EObject, R>
     public static EObject findTypedef(List<de.uni_hildesheim.sse.vil.expressions.expressionDsl.TypeDef> defs, 
         Typedef element) {
         EObject result = null;
-        String alias = ((Typedef) element).getName();
+        String alias = element.getName();
         for (int t = 0; null == result && t < defs.size(); t++) {
             if (alias.equals(defs.get(t).getName())) {
+                result = defs.get(t);
+            }
+        }
+        return result;
+    }
+
+    /**
+     * Tries finding <code>element</code> in <code>defs</code>.
+     * 
+     * @param defs the type defs to search within
+     * @param element the element to search for
+     * @return the found type def or <b>null</b>
+     */
+    public static EObject findCompound(List<de.uni_hildesheim.sse.vil.expressions.expressionDsl.Compound> defs, 
+        Compound element) {
+        EObject result = null;
+        String name = element.getName();
+        for (int t = 0; null == result && t < defs.size(); t++) {
+            if (name.equals(defs.get(t).getName())) {
                 result = defs.get(t);
             }
         }

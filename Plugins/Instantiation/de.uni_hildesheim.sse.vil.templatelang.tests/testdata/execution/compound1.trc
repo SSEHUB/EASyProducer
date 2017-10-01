@@ -1,0 +1,30 @@
+-> main(Configuration, FileArtifact) with (<config>, test.texts)
+    in <- {1, 2}
+    -> produce(sequenceOf(String)) with ({1, 2})
+        -> create HwVarResult() with ({}) = {}
+        result <- {{content, {}}, {serializers, {}}}
+        for s {
+            s <- 1
+            visit if-branch
+            tmp <- {}
+            -> +(String, Any) with (1, aa) = 1aa
+            -> add(Set, String) with ({}, 1aa) = 1aa
+            -> +(String, Any) with (1, bb) = 1bb
+            -> add(Set, String) with ({1aa}, 1bb) = 1bb
+            -> +(String, Any) with (1, bb) = 1bb
+            -> add(Map, String, Set) with ({}, 1bb, {1aa, 1bb})
+            -> +(String, Any) with (1, cc) = 1cc
+            -> add(Sequence, String) with ({}, 1cc) = 1cc
+            s <- 2
+            visit if-branch
+            tmp <- {}
+            -> +(String, Any) with (2, aa) = 2aa
+            -> add(Set, String) with ({}, 2aa) = 2aa
+            -> +(String, Any) with (2, bb) = 2bb
+            -> add(Set, String) with ({2aa}, 2bb) = 2bb
+            -> +(String, Any) with (2, bb) = 2bb
+            -> add(Map, String, Set) with ({{1bb, {1aa, 1bb}}}, 2bb, {2aa, 2bb})
+            -> +(String, Any) with (2, cc) = 2cc
+            -> add(Sequence, String) with ({1cc}, 2cc) = 2cc
+        }
+    r <- {{content, {1cc, 2cc}}, {serializers, {{1bb, {1aa, 1bb}}, {2bb, {2aa, 2bb}}}}}

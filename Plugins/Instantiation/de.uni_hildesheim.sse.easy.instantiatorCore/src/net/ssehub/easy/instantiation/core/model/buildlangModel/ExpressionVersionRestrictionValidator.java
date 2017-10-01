@@ -8,6 +8,7 @@ import net.ssehub.easy.instantiation.core.model.buildlangModel.ruleMatch.Compoun
 import net.ssehub.easy.instantiation.core.model.buildlangModel.ruleMatch.PathMatchExpression;
 import net.ssehub.easy.instantiation.core.model.buildlangModel.ruleMatch.StringMatchExpression;
 import net.ssehub.easy.instantiation.core.model.common.Advice;
+import net.ssehub.easy.instantiation.core.model.common.Compound;
 import net.ssehub.easy.instantiation.core.model.common.ExpressionStatement;
 import net.ssehub.easy.instantiation.core.model.common.Typedef;
 import net.ssehub.easy.instantiation.core.model.common.VariableDeclaration;
@@ -165,6 +166,12 @@ public class ExpressionVersionRestrictionValidator
     @Override
     public Object visitForStatement(ForStatement stmt) throws VilException {
         emit("for is not allowed here", true, VilException.ID_SEMANTIC);
+        return null;
+    }
+
+    @Override
+    public Object visitCompound(Compound compound) throws VilException {
+        emit("compound declaration is not allowed here", true, VilException.ID_SEMANTIC);
         return null;
     }
 

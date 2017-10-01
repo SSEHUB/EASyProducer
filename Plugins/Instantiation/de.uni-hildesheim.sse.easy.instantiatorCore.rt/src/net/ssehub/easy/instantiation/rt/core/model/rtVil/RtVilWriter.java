@@ -6,7 +6,7 @@ import net.ssehub.easy.instantiation.core.model.buildlangModel.BuildlangWriter;
 import net.ssehub.easy.instantiation.core.model.buildlangModel.ExpressionStatement;
 import net.ssehub.easy.instantiation.core.model.buildlangModel.IRuleBlock;
 import net.ssehub.easy.instantiation.core.model.buildlangModel.Rule.Side;
-import net.ssehub.easy.instantiation.core.model.common.VariableDeclaration;
+import net.ssehub.easy.instantiation.core.model.common.IModifierHolder;
 import net.ssehub.easy.instantiation.core.model.common.VilException;
 import net.ssehub.easy.instantiation.core.model.expressions.Expression;
 import net.ssehub.easy.instantiation.rt.core.model.rtVil.AbstractBreakdownCall.TupleField;
@@ -39,8 +39,8 @@ public class RtVilWriter extends BuildlangWriter implements IRtVilVisitor {
     }
 
     @Override
-    protected void printModifiers(VariableDeclaration var) {
-        if (var.hasModifier(VariableDeclarationModifier.PERSISTENT)) {
+    protected void printModifiers(IModifierHolder holder) {
+        if (holder.hasModifier(VariableDeclarationModifier.PERSISTENT)) {
             print("persistent");
             printWhitespace();
         }
