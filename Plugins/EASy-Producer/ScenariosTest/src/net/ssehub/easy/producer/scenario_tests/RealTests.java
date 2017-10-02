@@ -455,4 +455,29 @@ public class RealTests extends AbstractScenarioTest {
         testQualiMasterFeb17Impl();
     }
     
+    /**
+     * Tests the QualiMaster model / derivation (February 2017, experimentally modified, without rt-VIL). Seems to 
+     * fail on Jenkins. This is a modified version for evaluating VIL/VTL.
+     * 
+     * @throws IOException shall not occur
+     */
+    protected void testQualiMasterSep17Impl() throws IOException {
+        String[] versions = {"0", "0"};
+        String[] names = {"sep17", "QM"};
+        File base = executeCase(names, versions, "QualiMaster/", null);
+        assertFileEqualityRec(new File(base, "expected"), base);
+    }
+    
+    /**
+     * Tests the QualiMaster model / derivation (February 2017, experimentally modified, without rt-VIL). Seems to 
+     * fail on Jenkins. This is a modified version for evaluating VIL/VTL.
+     * 
+     * @throws IOException shall not occur
+     */
+    @Ignore
+    @Test
+    public void testQualiMasterSep17() throws IOException {
+        testQualiMasterFeb17Impl();
+    }
+    
 }

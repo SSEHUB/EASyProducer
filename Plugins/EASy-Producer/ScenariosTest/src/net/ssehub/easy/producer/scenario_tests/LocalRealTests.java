@@ -79,6 +79,16 @@ public class LocalRealTests extends RealTests {
     public void testQualiMasterFeb17() throws IOException {
         testQualiMasterFeb17Impl();
     }
-
+    
+    /**
+     * Tests the QualiMaster model / derivation (February 2017, experimentally modified, without rt-VIL). Seems to 
+     * fail on Jenkins. This is a modified version for evaluating VIL/VTL.
+     * 
+     * @throws IOException shall not occur
+     */
+    @Test
+    public void testQualiMasterSep17() throws IOException {
+        testQualiMasterFeb17Impl();
+    }
 
 }

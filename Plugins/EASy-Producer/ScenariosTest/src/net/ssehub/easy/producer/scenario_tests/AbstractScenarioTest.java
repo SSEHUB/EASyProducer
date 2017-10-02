@@ -114,7 +114,7 @@ public abstract class AbstractScenarioTest extends AbstractTest<Script> {
      * Executes a "real-world" case.
      * 
      * @param names the name of the project, if only one entry the project folder / model name, else project folder 
-     * name, IVML/VIL model name
+     * name, (optional) IVML/VIL model name, (optional) VIL model name
      * @param versions the version of the models, index 0 IVML, index 1 VIL build file (may be <b>null</b>)
      * @param caseFolder an optional set of intermediary folders where the actual case study (innermost folder 
      *   corresponds to name) is located in
@@ -129,7 +129,8 @@ public abstract class AbstractScenarioTest extends AbstractTest<Script> {
         ProgressObserver observer = ProgressObserver.NO_OBSERVER;
         ArtifactFactory.clear();
         String projectName = names[0];
-        String modelName = names.length > 1 ? names[1] : names[0];
+        String iModelName = names.length > 1 ? names[1] : projectName;
+        String vModelName = names.length > 2 ? names[2] : iModelName;
         File temp = createTempDir(projectName);
         File base = new File(getTestFolder(), caseFolder + projectName);
         FileUtils.copyDirectory(base, temp);
@@ -152,8 +153,8 @@ public abstract class AbstractScenarioTest extends AbstractTest<Script> {
         } catch (ModelManagementException e) {
             Assert.fail("unexpected exception (VIL/VTL): " + e.getMessage());
         }
-        net.ssehub.easy.varModel.model.Project ivmlModel = obtainIvmlModel(modelName, project(versions, 0), ivmlFolder);
-        Configuration config = new Configuration(new net.ssehub.easy.varModel.confModel.Configuration(ivmlModel));
+        net.ssehub.easy.varModel.model.Project iModel = obtainIvmlModel(iModelName, project(versions, 0), ivmlFolder);
+        Configuration config = new Configuration(new net.ssehub.easy.varModel.confModel.Configuration(iModel));
         File sourceFile = temp.getAbsoluteFile();
         Project source = createProjectInstance(sourceFile);
         File targetFile = sourceFile;
@@ -172,7 +173,7 @@ public abstract class AbstractScenarioTest extends AbstractTest<Script> {
         TracerFactory current = TracerFactory.getInstance();
         TracerFactory tFactory = getTracerFactory();
         TracerFactory.setDefaultInstance(tFactory);
-        Script script = obtainVilModel(modelName, project(versions, 1), vilFolder);
+        Script script = obtainVilModel(vModelName, project(versions, 1), vilFolder);
         Executor executor = new Executor(script, param);
         executor.addBase(targetFile);
         try {
@@ -182,9 +183,7 @@ public abstract class AbstractScenarioTest extends AbstractTest<Script> {
             e.printStackTrace(System.out);
             Assert.fail("VIL execution issue " + e);
         }
-        if (debug) {
-            System.out.println(tFactory);
-        }
+        println(tFactory, debug);
         TracerFactory.setDefaultInstance(current);
         try {
             VarModel.INSTANCE.locations().removeLocation(ivmlFolder, observer);
@@ -194,6 +193,18 @@ public abstract class AbstractScenarioTest extends AbstractTest<Script> {
             Assert.fail("unexpected exception: " + e.getMessage());
         }
         return targetFile;
+    }
+
+    /**
+     * Conditional println.
+     * 
+     * @param object the object to be printed
+     * @param print to print or not to print
+     */
+    private static void println(Object object, boolean print) {
+        if (print) {
+            System.out.println(object);
+        }
     }
     
     /**
