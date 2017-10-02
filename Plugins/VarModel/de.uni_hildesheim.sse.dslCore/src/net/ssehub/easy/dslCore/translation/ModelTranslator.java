@@ -49,7 +49,26 @@ public abstract class ModelTranslator <E extends ExpressionTranslator> extends M
         }
         return decls;
     }
-    
+
+    /**
+     * Copies a set of <code>objects</code>.
+     * 
+     * @param <T> the actual type of list entries
+     * 
+     * @param objects the objects to be copied (may be <b>null</b>)
+     * @return the copied instance (<b>null</b> if <code>object</code> is <b>null</b>)
+     */
+    public static <T> List<T> copy(List<T> objects) {
+        List<T> decls;
+        if (null == objects) {
+            decls = null;
+        } else {
+            decls = new ArrayList<T>();
+            decls.addAll(objects);
+        }
+        return decls;
+    }
+
     /**
      * Returns the associated expression translator.
      * 

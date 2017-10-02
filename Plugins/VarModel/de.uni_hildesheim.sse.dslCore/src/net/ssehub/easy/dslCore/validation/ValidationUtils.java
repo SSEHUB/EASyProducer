@@ -30,7 +30,7 @@ public class ValidationUtils {
     /**
      * Perform Xtext validation or emulate problem markers on editor save (partial parsing problem).
      */
-    public static final boolean PERFORM_XTEXT_VALIDATION = false;
+    public static final boolean PERFORM_XTEXT_VALIDATION = true;
     
     /**
      * Processes messages.
