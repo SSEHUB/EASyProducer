@@ -398,7 +398,7 @@ public class ModelTranslator extends de.uni_hildesheim.sse.buildLanguageTranslat
         @Override
         protected void processAdditionalRuleBodyElements(StrategyDeclaration strategyDecl, Strategy strategy, 
             Script parent, Resolver resolver) throws TranslatorException {
-            processVariableDeclarations(strategyDecl.getVarDecls(), strategy);
+            processVariableDeclarations(copy(strategyDecl.getVarDecls()), strategy);
             if (null != strategyDecl.getObjective()) {
                 Expression objective = getExpressionTranslator().processExpression(strategyDecl.getObjective(), 
                     resolver);

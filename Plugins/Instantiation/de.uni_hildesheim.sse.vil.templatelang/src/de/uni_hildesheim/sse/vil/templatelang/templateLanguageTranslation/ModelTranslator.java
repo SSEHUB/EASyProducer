@@ -136,7 +136,7 @@ public class ModelTranslator extends de.uni_hildesheim.sse.vil.expressions.trans
             resolveImports(tpl, ExpressionDslPackage.Literals.LANGUAGE_UNIT__IMPORTS, result, uri, 
                 new ArrayList<de.uni_hildesheim.sse.vil.templatelang.templateLang.LanguageUnit>(), impResolver);
             resolver.enumerateImports(result);
-            List<EObject> elts = tpl.getElements();
+            List<EObject> elts = copy(tpl.getElements());
             if (null != elts) {
                 processCompoundContents(elts, result);
                 processTypedefContents(elts, result);

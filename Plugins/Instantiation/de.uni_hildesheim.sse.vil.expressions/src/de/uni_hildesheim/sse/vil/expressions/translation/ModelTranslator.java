@@ -265,8 +265,7 @@ public abstract class ModelTranslator
                 }
                 CompoundTypeDescriptor cType = new CompoundTypeDescriptor(cmp.getName(), 
                     null != cmp.getAbstract(), refines, registry);
-                EList<de.uni_hildesheim.sse.vil.expressions.expressionDsl.VariableDeclaration> vars = cmp.getVars();
-System.out.println(cmp.getName() + vars);                    
+                List<de.uni_hildesheim.sse.vil.expressions.expressionDsl.VariableDeclaration> vars = copy(cmp.getVars());
                 if (null != vars) {
                     ListVariableDeclarationReceiver<I> recv = new ListVariableDeclarationReceiver<I>(
                         cmp.getVars().size());
