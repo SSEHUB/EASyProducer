@@ -1,0 +1,163 @@
+@advice(xmlExperiments)
+vilScript xmlExperiments (Project source, Configuration config, Project target) {
+
+    main(Project source, Configuration config, Project target) = : {
+        hwPom(config, target);
+        interfacesPom(config, target);       
+        pipelinePom(config, target);       
+        pipelinesXml(config, target);       
+        settingsXml(config, target);
+        modelArtifactPom(config, target);
+    }
+
+    hwPom(Configuration config, Project target) = : {
+       // the original version with internal renaming
+       Path tgt = "$target/test1.tmp";
+       vilTemplateProcessor("hardwareAlgorithmPom", config, tgt, algName="GenTopoHardwareCorrelationFinancial");
+       tgt.rename("hwAlg.xml");
+
+       // the original version with reuse
+       tgt = "$target/test2.tmp";
+       vilTemplateProcessor("hardwareAlgorithmPom1", config, tgt, algName="GenTopoHardwareCorrelationFinancial");
+       tgt.rename("hwAlg1.xml");       
+
+       // an improved version with XML file artifact and content
+       tgt = "$target/hwAlg2.xml";
+       vilTemplateProcessor("hardwareAlgorithmPom2", config, tgt, algName="GenTopoHardwareCorrelationFinancial");
+       
+       // an improved version with XML file artifact and XML file artifact operations
+       tgt = "$target/hwAlg3.xml";
+       vilTemplateProcessor("hardwareAlgorithmPom3", config, tgt, algName="GenTopoHardwareCorrelationFinancial");
+    }
+    
+    interfacesPom(Configuration config, Project target) = : {
+       xmlExperiments cfg = config;
+       String interfaceArtifact = "eu.qualimaster:PriorityPipelineInterfaces:0.5.0-SNAPSHOT";
+
+       // the original version with internal renaming
+       Path tgt = "$target/ifPom.tmp";
+       vilTemplateProcessor("interfacesPom", config, tgt, interfaceArtifact=interfaceArtifact, types=cfg.ifTypes);
+       tgt.rename("ifPom.xml"); 
+
+       // the original version with reuse
+       // the original version with reuse
+       tgt = "$target/ifPom1.tmp";
+       vilTemplateProcessor("interfacesPom1", config, tgt, interfaceArtifact=interfaceArtifact, types=cfg.ifTypes);
+       tgt.rename("ifPom1.xml");       
+
+       // an improved version with XML file artifact and content
+       tgt = "$target/ifPom2.xml";
+       vilTemplateProcessor("interfacesPom2", config, tgt, interfaceArtifact=interfaceArtifact, types=cfg.ifTypes);
+       
+       // an improved version with XML file artifact and XML file artifact operations
+       tgt = "$target/ifPom3.xml";
+       vilTemplateProcessor("interfacesPom3", config, tgt, interfaceArtifact=interfaceArtifact, types=cfg.ifTypes); 
+    }
+    
+    modelArtifactPom(Configuration config, Project target) = : {
+       String modelArtifact = "eu.qualimaster:infrastructureModel:0.5.0-SNAPSHOT";
+
+       // the original version with internal renaming
+       Path tgt = "$target/modelGenPom.tmp";
+       vilTemplateProcessor("modelArtifactPom", config, tgt, modelArtifact=modelArtifact);
+       tgt.rename("modelGenPom.xml"); 
+
+       // the original version with reuse
+       tgt = "$target/modelGenPom1.tmp";
+       vilTemplateProcessor("modelArtifactPom1", config, tgt, modelArtifact=modelArtifact);
+       tgt.rename("modelGenPom1.xml"); 
+       
+       // an improved version with XML file artifact and content
+       tgt = "$target/modelGenPom2.xml";
+       vilTemplateProcessor("modelArtifactPom2", config, tgt, modelArtifact=modelArtifact); 
+
+       // an improved version with XML file artifact and XML file artifact operations
+       tgt = "$target/modelGenPom3.xml";
+       vilTemplateProcessor("modelArtifactPom3", config, tgt, modelArtifact=modelArtifact); 
+    }
+
+    pipelinePom(Configuration config, Project target) = : {
+       xmlExperiments cfg = config;
+       mapOf(String, setOf(DecisionVariable)) lastElementMap = {};
+       Pipeline pip = cfg.pipelines[0];
+
+       // the original version with internal renaming
+       Path tgt = "$target/test3.tmp";
+       vilTemplateProcessor("pipelinePom", config, tgt, pipeline=pip, repoURL=cfg.repositoryURL, 
+           interfaceArtifact=cfg.interfaceArtifact, profiling=false, subPipNames=pip.subPipNames);
+       tgt.rename("pip.xml");
+       
+       // the original version with reuse
+       tgt = "$target/test7.tmp";
+       vilTemplateProcessor("pipelinePom1", config, tgt, pipeline=pip, repoURL=cfg.repositoryURL, 
+           interfaceArtifact=cfg.interfaceArtifact, profiling=false, subPipNames=pip.subPipNames);
+       tgt.rename("pip1.xml");
+
+       // an improved version with XML file artifact and content
+       tgt = "$target/pip2.xml";
+       vilTemplateProcessor("pipelinePom2", config, tgt, pipeline=pip, repoURL=cfg.repositoryURL, 
+           interfaceArtifact=cfg.interfaceArtifact, profiling=false, subPipNames=pip.subPipNames);
+
+       // an improved version with XML file artifact and XML file artifact operations
+       tgt = "$target/pip3.xml";
+       vilTemplateProcessor("pipelinePom3", config, tgt, pipeline=pip, repoURL=cfg.repositoryURL, 
+           interfaceArtifact=cfg.interfaceArtifact, profiling=false, subPipNames=pip.subPipNames);
+    }
+
+    pipelinesXml(Configuration config, Project target) = : {
+       xmlExperiments cfg = config;
+       setOf(HardwareAlgorithm) hwAlgs = cfg.algorithms->selectByType(HardwareAlgorithm);
+       
+       // the original version with internal renaming
+       Path tgt = "$target/test4.tmp";
+       vilTemplateProcessor("pipelinesXml", config, tgt, pipelines=cfg.pipelines, 
+           interfaceArtifact=cfg.interfaceArtifact, modelArtifact=cfg.modelArtifact, hardwareAlgorithms=hwAlgs);
+       tgt.rename("pips.xml");
+
+       // the original version with reuse
+       tgt = "$target/test7.tmp";
+       vilTemplateProcessor("pipelinesXml1", config, tgt, pipelines=cfg.pipelines, 
+           interfaceArtifact=cfg.interfaceArtifact, modelArtifact=cfg.modelArtifact, hardwareAlgorithms=hwAlgs);
+       tgt.rename("pips1.xml");
+       
+       // an improved version with XML file artifact and content
+       tgt = "$target/pips2.tmp";
+       vilTemplateProcessor("pipelinesXml2", config, tgt, pipelines=cfg.pipelines, 
+           interfaceArtifact=cfg.interfaceArtifact, modelArtifact=cfg.modelArtifact, hardwareAlgorithms=hwAlgs);
+       tgt.rename("pips2.xml");
+
+       // an improved version with XML file artifact and XML file artifact operations
+       tgt = "$target/pips3.xml";
+       vilTemplateProcessor("pipelinesXml3", config, tgt, pipelines=cfg.pipelines, 
+           interfaceArtifact=cfg.interfaceArtifact, modelArtifact=cfg.modelArtifact, hardwareAlgorithms=hwAlgs);
+    }
+
+    settingsXml(Configuration config, Project target) = : {
+       xmlExperiments cfg = config;
+       Pipeline pip = cfg.PriorityPip;
+       mapOf(String, setOf(DecisionVariable)) lastElementMap = {};
+
+       // the original version with internal renaming
+       Path tgt = "$target/test5.tmp";
+       vilTemplateProcessor("settingsXml", config, tgt, sinks=pip.sinks, permissibleParameters=pip.permissibleParameters, 
+           lastElementMap=lastElementMap, topoName=pip.name);
+       tgt.rename("set.xml");
+       
+       // the original version with reuse
+       tgt = "$target/test6.tmp";
+       vilTemplateProcessor("settingsXml1", config, tgt, sinks=pip.sinks, permissibleParameters=pip.permissibleParameters, 
+           lastElementMap=lastElementMap, topoName=pip.name);
+       tgt.rename("set1.xml");
+       
+       // an improved version with XML file artifact and content
+       tgt = "$target/set2.xml";
+       vilTemplateProcessor("settingsXml2", config, tgt, sinks=pip.sinks, permissibleParameters=pip.permissibleParameters, 
+           lastElementMap=lastElementMap, topoName=pip.name);
+       
+       // an improved version with XML file artifact and XML file artifact operations
+       tgt = "$target/set3.xml";
+       vilTemplateProcessor("settingsXml3", config, tgt, sinks=pip.sinks, permissibleParameters=pip.permissibleParameters, 
+           lastElementMap=lastElementMap, topoName=pip.name);
+    }
+    
+}

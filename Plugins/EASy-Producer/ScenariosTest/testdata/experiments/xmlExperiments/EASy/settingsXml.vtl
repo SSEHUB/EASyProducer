@@ -1,0 +1,209 @@
+@advice(xmlExperiments)
+template settingsXml(Configuration config, FileArtifact target, setOf(Sink) sinks, setOf(Parameter) permissibleParameters, mapOf(String, setOf(DecisionVariable)) lastElementMap, String topoName) {
+
+	def main(Configuration config, FileArtifact target, setOf(Sink) sinks, setOf(Parameter) permissibleParameters, mapOf(String, setOf(DecisionVariable)) lastElementMap, String topoName) {
+		Text text = target.getText();
+		text.append("<pipeline>\n");
+		text.append("    <name>$topoName</name>\n");
+		//append external settings
+		appendExternalSettings(text);
+		//append commands
+		text.append("    <commands>\n");
+		//append common commands
+		appendCommonCommands(text);
+		//append permissible parameter commands
+		appendPermissibleParameterCommands(permissibleParameters, text);
+		text.append("    </commands>\n");
+		/*
+		//append sinks 
+		text.append("    <sinks>\n");
+		//append general sinks
+		appendGeneralSinks(sinks, text);
+		//append replay sinks
+		appendReplaySinks(sinks, text);
+		text.append("    </sinks>\n");
+		if(permissibleParameters.size() > 0) {
+			text.append("    <permissibleParameters>\n");
+			appendPermissibleParameters(permissibleParameters, text);
+			text.append("    </permissibleParameters>\n");
+		}
+		* 
+		*/
+		text.append("</pipeline>\n");
+		target.rename("settings.xml");
+	}
+	
+	def appendPermissibleParameterCommands(setOf(Parameter) parameters, Text text) {
+		for(Parameter p : parameters) {
+			text.append("        <!--This is generated based on the configuration of permissible parameters from the pipeline-->\n");
+			text.append("        <command>									
+			<name>change${p.name}</name>
+			<request>
+				<field sequence=\"0\">change${p.name}</field>
+				<field sequence=\"1\">%new${firstToUpperCase(p.name)}%</field>
+			</request>
+			<response>
+				<field sequence=\"0\">change${p.name}_response</field>
+				<field sequence=\"1\">%status%</field>
+				<field sequence=\"2\">%new${firstToUpperCase(p.name)}%</field>
+			</response>
+		</command>\n");
+		}
+	}
+	
+	def appendCommonCommands(Text text) {
+		text.append("        <command>
+			<name>login</name>
+			<request>
+				<field sequence=\"0\">login</field>
+				<field sequence=\"1\">%username%</field>
+				<field sequence=\"2\">%password%</field>
+			</request>
+			<response>
+				<field sequence=\"0\">login_response</field>
+				<field sequence=\"1\">%status%</field>
+				<field sequence=\"2\">%result%</field>
+			</response>
+		</command>
+		
+		<command>
+			<name>logout</name>
+			<request>
+				<field sequence=\"0\">logout</field>
+			</request>
+			<response>
+				<field sequence=\"0\">logout_response</field>
+				<field sequence=\"1\">%status%</field>
+				<field sequence=\"2\">%result%</field>
+			</response>
+		</command>
+		
+		<command>
+			<name>quoteList</name>
+			<request>
+				<field sequence=\"0\">quoteList</field>
+			</request>
+			<response>
+				<field sequence=\"0\">quoteList_response</field>
+				<field sequence=\"1\">%status%</field>
+				<field sequence=\"2\">%result%</field>
+			</response>
+		</command>
+		
+		<command>
+			<name>requestHistoricalSentiment</name>
+			<request>
+				<field sequence=\"0\">requestHistoricalSentiment</field>
+				<field sequence=\"1\">%startDate%</field>
+				<field sequence=\"2\">%endDate%</field>
+				<field sequence=\"3\">%listOfIds%</field>
+			</request>
+			<response>
+				<field sequence=\"0\">historicalSentiment_response</field>
+				<field sequence=\"1\">%status%</field>
+				<field sequence=\"2\">%result%</field>
+			</response>
+		</command>\n");
+	}
+	
+	def appendExternalSettings(Text text) {
+		text.append("    <external_service_settings>\n");
+		text.append("        <packet_delimiter>!</packet_delimiter>\n");
+		text.append("        <main_delimiter>,</main_delimiter>\n");
+		text.append("        <secondary_delimiter>|</secondary_delimiter>\n");
+		text.append("        <line_delimiter>\"Lf\"</line_delimiter>\n");
+		text.append("    </external_service_settings>\n");
+	}
+	
+	/**
+	 * Appends the replay sinks.
+	 */
+	def appendReplaySinks(setOf(Sink) sinks, Text text) {
+		for(Sink snk : sinks) {
+			if(snk.type() == "ReplaySink") {
+				ReplaySink reSink = snk;
+				text.append("        <sink type=\"replaySink\">\n");
+				text.append("            <name>${snk.name}</name>\n");
+				text.append("            <data>\n");
+				
+				String varName = snk.varName().firstToUpperCase();
+				setOf(DecisionVariable) lastElt = {};
+				if(lastElementMap.containsKey(varName)) {
+					lastElt = lastElementMap.get(varName); //last elements linked to the current element	
+				}
+				obtainTupleTypes(lastElt, text); //append only relative tuple types
+				
+				text.append("            </data>\n");
+				text.append("        </sink>\n");
+			}
+		}
+	}
+	
+	/**
+	 * Appends the source, i.e., sink in the pipeline.
+	 */
+	def appendGeneralSinks(setOf(Sink) sinks, Text text) {
+        //produce data tuples
+        for(Sink snk : sinks) {
+        	if(snk.type() == "Sink") {//only for general sink
+        		text.append("    <sink type=\"sink\">\n");
+				text.append("        <name>${snk.name}</name>\n");
+        		text.append("        <data>\n");
+        		String varName = snk.varName().firstToUpperCase();
+				setOf(DecisionVariable) lastElt = {};
+				if(lastElementMap.containsKey(varName)) {
+					lastElt = lastElementMap.get(varName); //last elements linked to the current element	
+				}
+				obtainTupleTypes(lastElt, text); //append only relative tuple types
+				text.append("        </data>\n");
+    			text.append("    </sink>\n");
+        	}
+        }
+	}
+	
+	def obtainTupleTypes(setOf(DecisionVariable) lastElt, Text text) {
+		for(DecisionVariable e : lastElt) {
+			Tuples tuples;
+			if(e.type() == "Source") {
+				Source src = e;
+      			DataSource dataSrc = src.source;
+      			tuples = dataSrc.input;
+			} else if (e.type() == "FamilyElement") {
+				FamilyElement fe = e;
+				Family fm = fe.family;
+				tuples = fm.output;
+			} else if (e.type() == "DataManagementElement") {//recursively check the last element
+				String dmVarName = e.varName().firstToUpperCase();
+				setOf(DecisionVariable) lastElt = lastElementMap.get(dmVarName);
+				obtainTupleTypes(lastElt, text);
+			}
+			if(tuples != null and tuples.size() > 0) {
+				appendDataTuples(tuples, text); //only generate the type of tuples emitted from the last element
+			}
+		}
+	}
+
+	def appendDataTuples(Tuples tuples, Text text) {
+		for(Tuple t : tuples) {
+    		text.append("            <tuple>\n");
+    		text.append("                <name>${t.name}</name>\n");
+    		for(Field f : t.fields) {
+    			text.append("                <field>\n");
+    			text.append("                    <name>${f.name}</name>\n");
+    			text.append("                    <type>${f.type.class}</type>\n");
+    			text.append("                </field>\n");
+    		}       		
+    		text.append("            </tuple>\n");
+    	}
+	}
+	
+	def appendPermissibleParameters(setOf(Parameter) parameters, Text text) {
+		for(Parameter p : parameters) {
+			text.append("        <parameter>\n");
+			text.append("            <name>${p.name}</name>\n");
+			text.append("            <value/>\n");//consider default value?
+			text.append("        </parameter>\n");
+		}
+	}
+		 
+}

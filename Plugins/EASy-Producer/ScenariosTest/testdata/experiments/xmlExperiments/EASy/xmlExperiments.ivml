@@ -1,0 +1,316 @@
+project xmlExperiments {
+
+    compound FieldType {
+        String name;
+        String class;
+        String artifact;
+        String serializer;
+        String serializerArtifact;
+        Boolean isTimestamp = false;
+    }
+
+    //used for the interface generation tests
+    setOf(FieldType) ifTypes = {
+        FieldType{artifact="eu.qualimaster.families:Datatypes:0.0.1-SNAPSHOT"},
+        FieldType{artifact="org.twitter4j:twitter4j-stream:4.0.1"},
+        FieldType{artifact="eu.qualimaster:TwitterStreamDataSource:0.0.5-SNAPSHOT"}
+    };
+
+    compound Field {
+        String name;
+        refTo(FieldType) type;
+        Boolean keyPart = false;
+    }
+    typedef Fields sequenceOf(Field);
+    
+    compound Tuple {
+        String name;
+        Fields fields;
+    } 
+    typedef Tuples sequenceOf(Tuple);
+    
+    compound Parameter {
+        String name;
+    }
+    typedef Parameters sequenceOf(Parameter);
+    
+    // dataMgt
+    
+    compound DataElement {
+        String name;
+        String artifact;
+    }
+    
+    compound DataSource refines DataElement {
+        Boolean profilingSource = false;
+        Tuples input;
+    }
+
+    compound DataSink refines DataElement {
+        Tuples output;
+    }
+    
+    compound PersistentDataElement refines DataElement{
+    }
+    
+    DataSink priorSnk = DataSink {
+        name = "Priority Data Sink", 
+        artifact = "eu.qualimaster:hy-priority-data-sink:3.1-SNAPSHOT"
+    };
+    
+    DataSource spring = DataSource {
+        name = "Spring Financial Data", 
+        artifact = "eu.qualimaster:spring-client:3.1-SNAPSHOT"
+    };
+    
+    PersistentDataElement hBaseDataManagement = PersistentDataElement {
+        name = "hBase DataManagement"
+    };
+    
+    DataSource twitter = DataSource {
+        name = "Twitter Stream Data", 
+        artifact = "eu.qualimaster:TwitterStreamDataSource:0.0.5-SNAPSHOT"
+    };
+    
+    // algorithms
+
+    abstract compound Algorithm {
+        String name; 
+        String artifact;
+        Tuples input;
+        Tuples output;
+    }
+    
+    compound SoftwareAlgorithm refines Algorithm {
+    }
+    
+    compound HardwareAlgorithm refines Algorithm {
+    }
+    
+    setOf(Algorithm) algorithms = {
+        HardwareAlgorithm{name="GenTopoHardwareCorrelationFinancial", artifact="eu.qualimaster.hardware:hyHwProcessor:0.2.0-SNAPSHOT"}
+    };
+    
+    SoftwareAlgorithm SWTopoCorrelationFinancial = SoftwareAlgorithm {
+        name = "TopoSoftwareCorrelationFinancial", 
+        artifact = "eu.qualimaster:hy-correlation-financial-software:3.2-SNAPSHOT"
+    };
+    
+    HardwareAlgorithm GenHWTopoCorrelationFinancial = HardwareAlgorithm {
+        name = "GenTopoHardwareCorrelationFinancial", 
+        artifact = "eu.qualimaster.hardware:hyHwProcessor:0.2.0-SNAPSHOT"
+    };
+    
+    SoftwareAlgorithm swPreprocessor = SoftwareAlgorithm {
+        name = "Preprocessor", 
+        artifact = "eu.qualimaster:hy-preprocessor:3.1-SNAPSHOT"
+    };
+    
+    SoftwareAlgorithm topoSentiWord = SoftwareAlgorithm {
+        name = "SentimentAnaylsisSentiWordNetTopology", 
+        artifact = "eu.qualimaster:SentiWordnetSubTopology:0.0.5-SNAPSHOT"
+    };
+    
+    SoftwareAlgorithm topoSVM = SoftwareAlgorithm {
+        name = "SentimentAnaylsisSVMTopology", 
+        artifact = "eu.qualimaster:SVMSubTopology:0.0.5-SNAPSHOT"
+    };
+    
+    // families 
+    
+    compound Family {
+        String name;
+        setOf(refTo(Algorithm)) members;
+        Tuples input;
+        Tuples output;
+    }
+    
+    Family fCorrelationFinancial = Family {
+        name = "fCorrelationFinancial",
+        members = {refBy(SWTopoCorrelationFinancial), refBy(GenHWTopoCorrelationFinancial)}
+    };
+    
+    Family fPreprocessor = Family {
+        name = "fPreprocessor", 
+        members = {refBy(swPreprocessor)}
+    };
+    
+    Family fSentimentAnalysis = Family {
+        name = "fSentimentAnalysis", 
+        members = { refBy(topoSentiWord), refBy(topoSVM)}
+    };
+    
+    // pipelines
+    
+    compound PipelineElement {
+        String name;
+    }
+    
+    compound Flow refines PipelineElement {
+        refTo(PipelineNode) destination;
+    }
+    
+    abstract compound PipelineNode refines PipelineElement {
+    }
+    
+    compound Source refines PipelineNode {
+        refTo(DataSource) source;
+        setOf(refTo(Flow)) output;
+    }
+    
+    compound Sink refines PipelineNode {
+        refTo(DataSink) sink;
+    }
+
+    compound ReplaySink refines Sink {
+    }
+    
+    compound ProcessingElement refines PipelineNode {
+        setOf(refTo(Flow)) output;
+    }
+    
+    compound FamilyElement refines ProcessingElement {
+        refTo(Family) family;
+    }
+
+    compound DataManagementElement refines ProcessingElement {
+        refTo(PersistentDataElement) dataManagement; 
+    }
+        
+    compound Pipeline {
+        String name;
+        String artifact;
+        setOf(String) subPipNames;
+        setOf(refTo(Source)) sources;
+        setOf(Parameter) permissibleParameters;
+        setOf(refTo(Sink)) sinks;
+    }
+    
+    compound SubPipelineAlgorithm refines Algorithm {
+        refTo(SubPipeline) subPipeline;
+    }
+    
+    compound SubPipeline refines Pipeline {
+        setOf(refTo(FamilyElement)) connectors;
+    }
+    
+    // priority pip elements
+    
+    Sink PriorityPip_Sink0 = Sink {
+        sink = refBy(priorSnk), 
+        name = "Sink"
+    };
+    Flow PriorityPip_Flow1 = Flow {
+        destination = refBy(PriorityPip_Sink0), 
+        name = "f4"
+    };
+    FamilyElement PriorityPip_FamilyElement0 = FamilyElement {
+        family = refBy(fCorrelationFinancial), 
+        output = {refBy(PriorityPip_Flow1)}, 
+        name = "FinancialCorrelation"
+    };
+    Flow PriorityPip_Flow0 = Flow {
+        destination = refBy(PriorityPip_FamilyElement0), 
+        name = "f3"
+    };
+    Flow PriorityPip_Flow3 = Flow {
+        destination = refBy(PriorityPip_FamilyElement0), 
+        name = "f2"
+    };
+    FamilyElement PriorityPip_FamilyElement1 = FamilyElement {
+        family = refBy(fPreprocessor), 
+        output = {refBy(PriorityPip_Flow3)}, 
+        name = "Preprocessor"
+    };
+    Flow PriorityPip_Flow2 = Flow {
+        destination = refBy(PriorityPip_FamilyElement1), 
+        name = "f1"
+    };
+    Source PriorityPip_Source0 = Source {
+        output = {refBy(PriorityPip_Flow0), refBy(PriorityPip_Flow2)}, 
+        source = refBy(spring), 
+        name = "FinancialDataSource"
+    };
+    Flow PriorityPip_Flow6 = Flow {
+        destination = refBy(PriorityPip_Sink0), 
+        name = "f7"
+    };
+    DataManagementElement PriorityPip_DataManagementElement0 = DataManagementElement {
+        dataManagement = refBy(hBaseDataManagement), 
+        output = {refBy(PriorityPip_Flow6)}, 
+        name = "DataManagement"
+    };
+    Flow PriorityPip_Flow5 = Flow {
+        destination = refBy(PriorityPip_DataManagementElement0), 
+        name = "f6"
+    };
+    FamilyElement PriorityPip_FamilyElement2 = FamilyElement {
+        family = refBy(fSentimentAnalysis), 
+        output = {refBy(PriorityPip_Flow5)}, 
+        name = "SentimentAnalysis"
+    };
+    Flow PriorityPip_Flow4 = Flow {
+        destination = refBy(PriorityPip_FamilyElement2), 
+        name = "f5"
+    };
+    Source PriorityPip_Source1 = Source {
+        output = {refBy(PriorityPip_Flow4)}, 
+        source = refBy(twitter), 
+        name = "TwitterDataSource"
+    };
+    Pipeline PriorityPip = Pipeline {
+        name="PriorityPip", 
+        artifact="eu.qualimaster:PriorityPip:0.0.2-SNAPSHOT", 
+        subPipNames={"CorrelationSW", "RandomSubPipeline1", "RandomSubPipeline2"},
+        sources = {refBy(PriorityPip_Source0), refBy(PriorityPip_Source1)},
+        permissibleParameters = {Parameter{name="windowSize"}, Parameter{name="classificationThreshold"}},
+        sinks = {refBy(PriorityPip_Sink0)}
+    };
+
+    // pipelines    
+    
+    sequenceOf(refTo(Pipeline)) pipelines = {refBy(PriorityPip)};
+    
+    // infrastructure
+    
+    String interfaceArtifact = "eu.qualimaster:PriorityPipelineInterfaces:0.5.0-SNAPSHOT";
+    String modelArtifact = "eu.qualimaster:infrastructureModel:0.5.0-SNAPSHOT";
+    String repositoryURL = "https://projects.sse.uni-hildesheim.de/qm/maven/";
+    
+    freeze {
+        ifTypes;
+        priorSnk;
+        spring;
+        twitter;
+        hBaseDataManagement;
+        fCorrelationFinancial;
+        fPreprocessor;
+        fSentimentAnalysis;
+        SWTopoCorrelationFinancial;
+        GenHWTopoCorrelationFinancial;
+        topoSentiWord;
+        swPreprocessor;
+        topoSVM;
+        algorithms;
+        PriorityPip_Source0;
+        PriorityPip_Flow0;
+        PriorityPip_FamilyElement0;
+        PriorityPip_Flow1;
+        PriorityPip_Sink0;
+        PriorityPip_Flow2;
+        PriorityPip_FamilyElement1;
+        PriorityPip_Flow3;
+        PriorityPip_Source1;
+        PriorityPip_Flow4;
+        PriorityPip_FamilyElement2;
+        PriorityPip_Flow5;
+        PriorityPip_DataManagementElement0;
+        PriorityPip_Flow6;
+        PriorityPip;
+        pipelines;
+        interfaceArtifact;
+        modelArtifact;
+        repositoryURL;
+    }
+
+}

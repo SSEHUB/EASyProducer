@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ProductLineProject id="6256bf45-73f0-401d-a87a-41b969db34c5" name="xmlExperiments" version="0" location="xmlExperiments">
+	<predecessors>
+	</predecessors>
+	<successors>
+	</successors>
+	<instantiators>
+	</instantiators>
+	<reasoners>
+	</reasoners>
+	<copy>
+	</copy>
+</ProductLineProject>

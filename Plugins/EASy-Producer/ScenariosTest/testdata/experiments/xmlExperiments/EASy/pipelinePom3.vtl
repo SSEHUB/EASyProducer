@@ -1,0 +1,227 @@
+import commonVTLMethods;
+import commonPomMethods3;
+@advice(xmlExperiments)
+template pipelinePom3(Configuration config, XmlFileArtifact target, Pipeline pipeline, String repoURL, String interfaceArtifact, Boolean profiling, setOf(String) subPipNames) {
+
+    Boolean isSubPipeline = false;
+    setOf(DecisionVariable) flows = {};//collect the visited flows
+    setOf(String) artifacts = {}; //mark visited artifacts
+    
+    def processElement(setOf(Flow) output, setOf(String) nodes, XmlElement parent) {       
+        for (Flow v : output) { 
+            if (flows.excludes(v)) {
+                flows.add(v);
+                DecisionVariable elt = v.destination;  
+                setOf(Flow) next = checkForPipelineNode(elt, nodes, parent);          
+                processElement(next, nodes, parent);
+            }
+        } 
+    }
+    
+    def setOf(Flow) checkForPipelineNode(PipelineNode elt, setOf(String) nodes, XmlElement parent) {
+        setOf(Flow) next;
+        String nodeName = elt.varName();
+        if (!nodes->includes(nodeName)) {
+            next = produceDependencies(elt, parent);
+            nodes.add(nodeName);
+        } else {
+            next = {};
+        }
+        next;
+    }
+    
+    def setOf(Flow) produceDependencies(PipelineNode source, XmlElement parent) { // dispatch base
+        setOf(Flow) res = {};
+        res;
+    }
+    
+    def setOf(Flow) produceDependencies(Source source, XmlElement parent) {
+        DataSource dataSrc = source.source;
+        if (!dataSrc.profilingSource) {
+            checkAndAppendArtifact(parent, dataSrc.artifact);
+        }
+        source.output;
+    }
+    
+    protected def checkAndAppendArtifact(XmlElement parent, String artifact) {
+        if (!artifacts->includes(artifact)) {
+            artifacts.add(artifact);
+            appendDependency(parent, artifact);
+        }                       
+    } 
+    
+    def setOf(Flow) produceDependencies(FamilyElement familyElt, XmlElement parent) {
+        Family fm = familyElt.family;
+        //added all algorithm dependencies
+        for (Algorithm alg : fm.members) {
+            checkAndAppendArtifact(parent, getArtifact(alg));
+        }
+        familyElt.output;
+    }
+    
+    def String getArtifact(Algorithm alg) { // dispatch base
+        "";
+    }
+    
+    def String getArtifact(HardwareAlgorithm alg) {
+        "eu.qualimaster:" + formulateString(alg.name) + ":" + GenAlgVersion;
+    }
+    
+    def String getArtifact(SubPipelineAlgorithm alg) {
+        alg.subPipeline.artifact;
+    }
+
+    def String getArtifact(SoftwareAlgorithm alg) {
+        alg.artifact;
+    }
+    
+    def produceDependencies(Sink snk, XmlElement parent) {
+        DataSink dataSnk = snk.sink;
+        checkAndAppendArtifact(parent, dataSnk.artifact);
+    }
+    
+    def appendPlugins(setOf(String) subPips, XmlElement parent) {
+        if (!isSubPipeline) {
+           XmlElement pl = appendPlugin(parent, "org.apache.maven.plugins", "maven-shade-plugin", "2.3", false);
+             XmlElement exes = new XmlElement(pl, "executions");
+               XmlElement ex = new XmlElement(exes, "execution");
+                 new XmlElement(ex, "phase", "package");
+                 appendGoal(ex, "shade");
+                 XmlElement cfg = new XmlElement(ex, "configuration");
+                   new XmlElement(cfg, "finalName", "\\${project.artifactId}-\\${project.version}-jar-with-dependencies");
+                   XmlElement filters = new XmlElement(cfg, "filters");
+                   for(String a : subPipNames) {
+                     appendMavenShadeFilter(filters, "eu.qualimaster:$a", "mapping.xml");
+                   }
+        } else {
+           XmlElement pl = appendPlugin(parent, "org.apache.maven.plugins", "maven-assembly-plugin", "2.6", false);
+           if (profiling) {
+              XmlElement dep = new XmlElement(parent, "dependencies");
+                appendDependency(dep, "eu.qualimaster", "AlgorithmAssemblies", "0.5.0-SNAPSHOT");              
+           }
+             XmlElement exes = new XmlElement(pl, "executions");
+               XmlElement cfg = appendMavenShadeExecution(exes, "make-assembly", "package", "single");
+                 appendMavenShadeDescriptorRefs(cfg, "jar-with-dependencies");
+                 XmlElement depSets = new XmlElement(cfg, "dependencySets");
+                   appendMavenAssemblyDependencySet(depSets, "runtime");
+                   appendMavenAssemblyDependencySet(depSets, "provided");
+                 appendMavenArchiveManifest(cfg);
+           if (profiling) {
+               cfg = appendMavenShadeExecution(exes, "make-profilingAssembly", "package", "single");
+                 appendMavenShadeDescriptorRefs(cfg, "profiling");
+           }
+        }
+        appendMavenInstallPlugin(parent, "2.3.1");
+        appendMavenCompilerPlugin(parent);
+        XmlElement cfg = appendPlugin(parent, "org.apache.maven.plugins", "maven-jar-plugin", "2.4", true);
+          new XmlElement(cfg, "useDefaultManifestFile", "true");
+          XmlElement man = appendMavenArchiveManifest(cfg);
+            new XmlElement(man, "addClasspath", "true");
+            new XmlElement(man, "mainClass", "TestFramework");
+        appendMavenSourcePlugin(parent);
+        XmlElement pl = appendPlugin(parent, "org.codehaus.mojo", "exec-maven-plugin", "1.3", false);
+          XmlElement exes = new XmlElement(pl, "executions");
+            XmlElement exe = new XmlElement(exes, "execution");
+              appendGoal(exe, "exec");
+          cfg = new XmlElement(pl, "configuration");
+            new XmlElement(cfg, "executable", "java");
+            new XmlElement(cfg, "includeProjectDependencies", "true");
+            new XmlElement(cfg, "includePluginDependencies", "false");
+            new XmlElement(cfg, "classpathScope", "compile");
+            new XmlElement(cfg, "mainClass", "\\${storm.topology}");
+        cfg = appendPlugin(parent, "org.eclipse.m2e", "lifecycle-mapping", "1.0.0", true);
+          XmlElement lmm = new XmlElement(cfg, "lifecycleMappingMetadata");
+            XmlElement plExes = new XmlElement(lmm, "pluginExecutions");
+              XmlElement plEx = new XmlElement(plExes, "pluginExecution");
+                XmlElement plExFi = new XmlElement(plEx, "pluginExecutionFilter");
+                  new XmlElement(plExFi, "groupId", "org.apache.maven.plugins");
+                  new XmlElement(plExFi, "artifactId", "maven-dependency-plugin");
+                  new XmlElement(plExFi, "versionRange", "[2.0,)");
+                  appendGoal(plExFi, "copy-dependencies");
+                XmlElement plAc = new XmlElement(plEx, "action");
+                  new XmlElement(plAc, "execute");
+    }   
+    
+    def appendResources(XmlElement parent) {
+        XmlElement res = new XmlElement(parent, "resource");
+          new XmlElement(res, "directory", "\\${basedir}/");
+          new XmlElement(res, "filtering", "false");
+          XmlElement includes = new XmlElement(res, "includes");
+            new XmlElement(includes, "include", "mapping.xml");
+            new XmlElement(includes, "include", "settings.xml");
+    }
+    
+    //only for generating a fat jar
+    def appendBasicInfrastructureDependencies(XmlElement parent) {
+        appendDependency(parent, "org.apache.storm", "storm-core", ver="0.9.3", scope="provided");
+        appendQmDependencyExclusions(appendDependency(parent, "com.github.ptgoetz", "storm-hdfs", ver="0.1.2"));
+        new XmlComment(parent, "Hadoop Dependencies");
+        appendQmDependencyExclusions(appendDependency(parent, "org.apache.hadoop", "hadoop-client", ver="2.4.0"));
+        appendQmDependencyExclusions(appendDependency(parent, "org.apache.hadoop", "hadoop-hdfs", ver="2.4.0"));
+        appendQmDependencyExclusions(appendDependency(parent, "org.apache.hadoop", "hadoop-common", ver="2.4.0"));
+        new XmlComment(parent, "HBase Dependencies");
+        appendQmDependencyExclusions(appendDependency(parent, "org.apache.hbase", "hbase-common", ver="0.98.6-hadoop2"));
+        appendQmDependencyExclusions(appendDependency(parent, "org.apache.hbase", "hbase-protocol", ver="0.98.6-hadoop2"));
+        appendQmDependencyExclusions(appendDependency(parent, "org.apache.hbase", "hbase-client", ver="0.98.6-hadoop2"));
+    }
+    
+    def appendQmInfrastructureDependencies(XmlElement parent) {
+         appendDependency(parent, "eu.qualimaster", "StormCommons"); 
+         appendDependency(parent, "eu.qualimaster", "DataManagementLayer");
+         appendDependency(parent, "eu.qualimaster", "QualiMaster.Events"); 
+    }
+    
+    def appendAlgorithmAssembiliesDependency(XmlElement parent) {
+        appendDependency(parent, "eu.qualimaster", "AlgorithmAssemblies", ver = "0.5.0-SNAPSHOT");
+    }
+    
+    def appendCommonDependencies(XmlElement parent) {
+        appendDependency(parent, "org.apache.storm", "storm-core");
+        appendDependency(parent, "com.github.ptgoetz", "storm-hdfs", scope="compile");
+        appendDependency(parent, "org.apache.hadoop", "hadoop-client", scope="compile");
+        appendDependency(parent, "org.apache.hadoop", "hadoop-hdfs", scope="compile");
+        appendDependency(parent, "org.apache.hadoop", "hadoop-common", scope="compile");
+        appendDependency(parent, "org.apache.hbase", "hbase-common", scope="compile");
+        appendDependency(parent, "org.apache.hbase", "hbase-protocol", scope="compile");
+        appendDependency(parent, "org.apache.hbase", "hbase-client", scope="compile");
+    }
+    
+    def main(Configuration config, XmlFileArtifact target, Pipeline pipeline, String repoURL, String interfaceArtifact, Boolean profiling, setOf(String) subPipNames) {
+        if(pipeline.type() == "SubPipeline") {
+            isSubPipeline = true;
+        }
+        setOf(String) nodes = {};
+        XmlElement project = createMavenRoot(target);
+          createMavenProjectAttributes(project, pipeline.artifact);
+          XmlElement properties = new XmlElement(project, "properties");
+            new XmlElement(properties, "project.build.sourceEncoding", "UTF-8");
+          XmlElement repositories = new XmlElement(project, "repositories");
+            appendQmMavenRepositories(repositories, repoURL);
+          XmlElement build = createMavenBuildElement(project, "\\${basedir}/topology");
+            XmlElement plugins = new XmlElement(build, "plugins");
+            appendPlugins(subPipNames, plugins);
+            XmlElement resources = new XmlElement(build, "resources");
+            appendResources(resources);
+          appendDependencyManagement(project);
+            XmlElement dep = new XmlElement(project, "dependencies");
+            //appendBasicInfrastructureDependencies(dep); //for a fat jar
+            if (profiling) {
+              appendAlgorithmAssembiliesDependency(dep);
+            }
+            appendQmInfrastructureDependencies(dep);
+            appendDependency(dep, interfaceArtifact);
+            appendCommonDependencies(dep);      
+            for(Source v : pipeline.sources) { 
+                checkForPipelineNode(v, nodes, dep);
+                processElement(v.output, nodes, dep);
+            }   
+            if(isSubPipeline) {
+                SubPipeline subPip = pipeline;
+                for(FamilyElement v : subPip.connectors) {//considering the connectors from subpipeline
+                    checkForPipelineNode(v, nodes, dep);
+                    processElement(v.output, nodes, dep);
+                }
+            }
+    }
+    
+}

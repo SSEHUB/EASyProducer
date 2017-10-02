@@ -1,0 +1,79 @@
+import commonVTLMethods;
+@advice(xmlExperiments)
+template pipelinesXml2(Configuration config, FileArtifact target, sequenceOf(DecisionVariable) pipelines, String interfaceArtifact, String modelArtifact, setOf(HardwareAlgorithm) hardwareAlgorithms) {
+
+    def appendBasics() {
+        '<project name="pipelines" default="deploy" basedir=".">
+         <property file="\\${user.home}/global-build.properties"/>
+         <property file="\\${user.home}/qualimaster-build.properties"/>
+         <include file="\\${user.home}/macros.xml"/>
+
+         <!--
+         <taskdef uri="antlib:org.jacoco.ant" resource="org/jacoco/ant/antlib.xml"/>
+
+         <path id="easyTaskDef.lib">
+             <fileset dir="\\${home.base.dir}/\\${projects.standalone.dir}/build/generatedLibs.ex/dist">
+                 <include name="*.jar"/>
+             </fileset>
+         </path>
+         -->'
+    }
+    
+    def appendPipelinesDeploy(sequenceOf(DecisionVariable) pipelines) {
+        for (Pipeline pip : pipelines) {
+            String pipName = pip.name;
+            String artifact = pip.artifact;
+            String pipelineJarFileName = obtainArtifactName(artifact,false);
+            String pipelineFatJarFileName = obtainArtifactName(artifact,true);
+            if (pipelineJarFileName.length() > 0) {
+                '<delete file="pipelines/eu/qualimaster/$pipName/target/${pipelineJarFileName}.jar"/>
+                <rename src="pipelines/eu/qualimaster/$pipName/target/${pipelineFatJarFileName}.jar" dest="pipelines/eu/qualimaster/$pipName/target/${pipelineJarFileName}.jar"/>
+                <mvnDeploy folderName="eu/qualimaster/$pipName" pomFile="pipelines/eu/qualimaster/$pipName/pom.xml" jarFolder="pipelines/eu/qualimaster/$pipName/target" jarFile="${pipelineJarFileName}.jar"/>'
+            }           
+        }
+    }
+        
+    def appendInterfaceDeploy(String interfaceArtifact) {
+        String interfaceJarFileName = obtainArtifactName(interfaceArtifact, false);
+        '${IF interfaceJarFileName.length() > 0}<mvnDeploy folderName="if-gen" pomFile="if-gen/pom.xml" jarFolder="if-gen/target" jarFile="${interfaceJarFileName}.jar"/>${ENDIF}'
+    }
+    
+    def appendModelArtifactDeploy(String modelArtifact) {
+        String artifactName = obtainArtifactName(modelArtifact, false);
+        '${IF artifactName.length() > 0}<mvnDeploy folderName="model-gen" pomFile="model-gen/pom.xml" jarFolder="model-gen/target" jarFile="${artifactName}.jar"/>${ENDIF}'
+    }
+    
+    def appendHardwareAlgorithmDeploy(setOf(HardwareAlgorithm) harwareAlgorithms) {
+        for(HardwareAlgorithm alg : hardwareAlgorithms) {
+            String artifactName = alg.name + "-" + GenAlgVersion;
+            '<mvnDeploy folderName="hardwareAlgorithms/eu/qualimaster/algorithms/${alg.name}" pomFile="hardwareAlgorithms/eu/qualimaster/algorithms/${alg.name}/pom.xml" jarFolder="hardwareAlgorithms/eu/qualimaster/algorithms/${alg.name}/target" jarFile="${artifactName}.jar"/>'
+        }
+    }
+    
+    def String obtainArtifactName(String artifact, Boolean pipeline) {
+        String artifactName = null;
+        sequenceOf(String) artList = artifact.split(":");
+        if(artList.size() == 3) {
+            String artifactId = artList[1];
+            String versionNum = artList[2];
+            if(pipeline) {
+                artifactName = artifactId + "-" + versionNum + "-jar-with-dependencies";
+            } else {
+                artifactName = artifactId + "-" + versionNum;
+            }           
+        }
+        artifactName;   
+    }
+
+    def main(Configuration config, FileArtifact target, sequenceOf(DecisionVariable) pipelines, String interfaceArtifact, String modelArtifact, setOf(HardwareAlgorithm) hardwareAlgorithms) {
+        '${appendBasics()}
+            <target name="deploy">
+            ${appendPipelinesDeploy(pipelines)}
+            ${appendInterfaceDeploy(interfaceArtifact)}
+            ${appendHardwareAlgorithmDeploy(hardwareAlgorithms)}
+            ${appendModelArtifactDeploy(modelArtifact)}
+            </target>'
+        '</project>'
+    }
+    
+}

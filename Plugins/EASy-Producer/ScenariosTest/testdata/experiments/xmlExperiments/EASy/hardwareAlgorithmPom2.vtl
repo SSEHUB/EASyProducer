@@ -1,0 +1,83 @@
+import commonPomMethods2;
+import commonVTLMethods;
+@advice(xmlExperiments)
+@indent(indentation = 4, additional = 0)
+template hardwareAlgorithmPom2(Configuration config, FileArtifact target, String algName) {
+
+    def main(Configuration config, FileArtifact target, String algName) {
+        '<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">      
+            <modelVersion>4.0.0</modelVersion>
+            <groupId>eu.qualimaster</groupId>
+            <artifactId>$algName</artifactId>
+            <version>$GenAlgVersion</version>
+            <packaging>jar</packaging>
+
+            <build>
+                <sourceDirectory>\\${basedir}/</sourceDirectory>
+                <plugins>
+                    ${appendPlugins()}
+                </plugins>
+            </build>
+            
+            <repositories>
+                ${appendRepositories()}
+            </repositories>
+
+            ${appendDependencyManagement()}
+            
+            <dependencies>
+                ${appendDependencies()}
+            </dependencies>
+        </project>'
+    }
+    
+    def appendPlugins() {       
+        '<plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-compiler-plugin</artifactId>
+            <version>3.0</version>
+            <configuration>
+                <source>1.7</source>
+                <target>1.7</target>
+            </configuration>              
+        </plugin> 
+        <plugin>
+            <artifactId>maven-install-plugin</artifactId>
+            <version>2.3.1</version>
+            <configuration>
+                <createChecksum>true</createChecksum>
+            </configuration>
+        </plugin>  
+        <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-source-plugin</artifactId>
+            <version>2.2.1</version>
+            <executions>
+                <execution>
+                    <id>attach-sources</id>
+                    <phase>verify</phase>
+                    <goals>
+                        <goal>jar</goal>
+                    </goals>
+                </execution>
+            </executions>
+        </plugin>' | 20;
+    }
+
+    def appendDependencies() {
+        '${appendDependency("org.apache.storm", "storm-core")}'
+        '${appendDependency("eu.qualimaster", "StormCommons")}'
+        '${appendDependency("eu.qualimaster", "PriorityPipelineInterfaces", "0.5.0-SNAPSHOT")}'
+        '${appendDependency("eu.qualimaster", "QualiMaster.Events")}'
+        '${appendDependency("eu.qualimaster", "DataManagementLayer")}'
+    }
+
+    def appendRepositories() {
+        '<repository>
+            <id>qm.eu</id>
+            <name>qm.eu</name>
+            <url>https://projects.sse.uni-hildesheim.de/qm/maven/</url>
+         </repository>' | 16;
+    }
+
+}

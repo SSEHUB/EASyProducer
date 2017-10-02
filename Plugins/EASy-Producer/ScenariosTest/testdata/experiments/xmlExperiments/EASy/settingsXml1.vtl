@@ -1,0 +1,165 @@
+@advice(xmlExperiments)
+template settingsXml1(Configuration config, FileArtifact target, setOf(Sink) sinks, setOf(Parameter) permissibleParameters, mapOf(String, setOf(DecisionVariable)) lastElementMap, String topoName) {
+
+    def main(Configuration config, FileArtifact target, setOf(Sink) sinks, setOf(Parameter) permissibleParameters, mapOf(String, setOf(DecisionVariable)) lastElementMap, String topoName) {
+        Text text = target.getText();
+        text.append("<pipeline>\n");
+        text.append("    <name>$topoName</name>\n");
+        //append external settings
+        appendExternalSettings(text);
+        //append commands
+        text.append("    <commands>\n");
+        //append common commands
+        appendCommonCommands(text);
+        //append permissible parameter commands
+        appendPermissibleParameterCommands(permissibleParameters, text);
+        text.append("    </commands>\n");
+        /*
+        //append sinks 
+        text.append("    <sinks>\n");
+        //append general sinks
+        appendGeneralSinks(sinks, text);
+        //append replay sinks
+        appendReplaySinks(sinks, text);
+        text.append("    </sinks>\n");
+        if (permissibleParameters.size() > 0) {
+            text.append("    <permissibleParameters>\n");
+            appendPermissibleParameters(permissibleParameters, text);
+            text.append("    </permissibleParameters>\n");
+        }
+        * 
+        */
+        text.append("</pipeline>\n");
+        target.rename("settings.xml");
+    }
+    
+    def appendCmdFields(Text text, sequenceOf(String) names) {
+        Integer seqNr = 0;
+        for (String n : names) {
+            text.append("                <field sequence=\"${seqNr}\">${n}</field>\n");
+            seqNr = seqNr + 1;
+        }
+    }
+    
+    def appendCmd(Text text, String name, sequenceOf(String) request, sequenceOf(String) response) {
+        text.append("        <command>                                  
+            <name>${name}</name>
+            <request>\n");
+        appendCmdFields(text, request);
+        text.append("            </request>
+            <response>\n");
+        appendCmdFields(text, response);    
+        text.append("            </response>
+        </command>\n");
+    }
+    
+    def appendPermissibleParameterCommands(setOf(Parameter) parameters, Text text) {
+        for(Parameter p : parameters) {
+            text.append("        <!--This is generated based on the configuration of permissible parameters from the pipeline-->\n");
+            appendCmd(text, "change${p.name}", {"change${p.name}", "%new${firstToUpperCase(p.name)}%"}, 
+                {"change${p.name}_response", "%status%", "%new${firstToUpperCase(p.name)}%"});
+        }
+    }
+    
+    def appendCommonCommands(Text text) {
+        appendCmd(text, "login", {"login", "%username%", "%password%"}, {"login_response", "%status%", "%result%"});
+        appendCmd(text, "logout", {"logout"}, {"logout_response", "%status%", "%result%"});
+        appendCmd(text, "quoteList", {"quoteList"}, {"quoteList_response", "%status%", "%result%"});
+        appendCmd(text, "requestHistoricalSentiment", {"requestHistoricalSentiment", "%startDate%", "%endDate%", 
+            "%listOfIds%"}, {"historicalSentiment_response", "%status%", "%result%"});
+    }
+    
+    def appendExternalSettings(Text text) {
+        text.append("    <external_service_settings>\n");
+        text.append("        <packet_delimiter>!</packet_delimiter>\n");
+        text.append("        <main_delimiter>,</main_delimiter>\n");
+        text.append("        <secondary_delimiter>|</secondary_delimiter>\n");
+        text.append("        <line_delimiter>\"Lf\"</line_delimiter>\n");
+        text.append("    </external_service_settings>\n");
+    }
+    
+    /**
+     * Appends the replay sinks.
+     */
+    def appendReplaySinks(setOf(Sink) sinks, Text text) {
+        for(Sink snk : sinks->selectByType(ReplaySink)) {
+            appendSinkImpl(snk, "replaySink", text);
+        }
+    }
+    
+    /**
+     * Appends the source, i.e., sink in the pipeline.
+     */
+    def appendGeneralSinks(setOf(Sink) sinks, Text text) {
+        //produce data tuples
+        for(Sink snk : sinks->selectByType(Sink)) {
+            appendSinkImpl(snk, "sink", text);
+        }
+    }
+    
+    def appendSinkImpl(Sink snk, String type, Text text) {
+        text.append("    <sink type=\"${type}\">\n");
+        text.append("        <name>${snk.name}</name>\n");
+        text.append("        <data>\n");
+        String varName = snk.varName().firstToUpperCase();
+        setOf(DecisionVariable) lastElt = {};
+        if (lastElementMap.containsKey(varName)) {
+            lastElt = lastElementMap.get(varName); //last elements linked to the current element    
+        }
+        obtainTupleTypes(lastElt, text); //append only relative tuple types
+        text.append("        </data>\n");
+        text.append("    </sink>\n");
+    }
+    
+    def obtainTupleTypes(setOf(DecisionVariable) lastElt, Text text) {
+        for (DecisionVariable e : lastElt) {
+            Tuples tuples = obtainTupleTypes(e, text);
+            if (tuples != null and tuples.size() > 0) {
+                appendDataTuples(tuples, text); //only generate the type of tuples emitted from the last element
+            }
+        }
+    }
+    
+    def Tuples obtainTupleTypes(DecisionVariable var, Text text) {
+        {};
+    }
+    
+    def Tuples obtainTupleTypes(Source src, Text text) {
+        src.source.input;
+    }
+    
+    def Tuples obtainTupleTypes(FamilyElement fe, Text text) {
+        fe.family.output;
+    }
+    
+    def Tuples obtainTupleTypes(DataManagementElement fe, Text text) {
+        String dmVarName = fe.varName().firstToUpperCase();    //recursively check the last element
+        setOf(DecisionVariable) lastElt = lastElementMap.get(dmVarName);
+        obtainTupleTypes(lastElt, text);
+        {};
+    }
+
+    def appendDataTuples(Tuples tuples, Text text) {
+        for(Tuple t : tuples) {
+            text.append("            <tuple>\n");
+            text.append("                <name>${t.name}</name>\n");
+            for(Field f : t.fields) {
+                text.append("                <field>\n");
+                text.append("                    <name>${f.name}</name>\n");
+                text.append("                    <type>${f.type.class}</type>\n");
+                text.append("                </field>\n");
+            }               
+            text.append("            </tuple>\n");
+        }
+    }
+    
+    def appendPermissibleParameters(setOf(Parameter) parameters, Text text) {
+        for(Parameter p : parameters) {
+            text.append("        <parameter>\n");
+            text.append("            <name>${p.name}</name>\n");
+            text.append("            <value/>\n");//consider default value?
+            text.append("        </parameter>\n");
+        }
+    }
+         
+}

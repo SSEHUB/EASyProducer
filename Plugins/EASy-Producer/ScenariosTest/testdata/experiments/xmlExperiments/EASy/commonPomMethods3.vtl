@@ -1,0 +1,134 @@
+//@advice(QM)
+template commonPomMethods3(Configuration config, FileArtifact target) {
+    
+    def appendDependencyManagement(XmlElement parent) {
+        XmlElement depMgt = new XmlElement(parent, "dependencyManagement");
+          XmlElement deps = new XmlElement(depMgt, "dependencies");
+          appendDependency(deps, "eu.qualimaster", "InfrastructureDependencies", "0.5.0-SNAPSHOT", "pom", "import");
+          appendDependency(deps, "eu.qualimaster", "PipelineDependencies", "0.5.0-SNAPSHOT", "pom", "import");
+    }
+    
+    def XmlElement appendDependency(XmlElement parent, String artifactSpec) {
+        sequenceOf(String) artList = artifactSpec.split(":");
+        XmlElement dep;
+        if(artList.size() == 3) {
+            dep = appendDependency(parent, artList[0], artList[1], ver=artList[2]);
+        } else { // legacy semantics
+            dep = new XmlElement(parent, "dependency");
+        }
+        dep;
+    }
+    
+    def XmlElement appendDependency(XmlElement parent, String groupId, String artifactId, String ver = "", String type = "", String scope = "") {
+        XmlElement dep = new XmlElement(parent, "dependency");
+        new XmlElement(dep, "groupId", groupId);
+        new XmlElement(dep, "artifactId", artifactId);
+        if (ver.length() > 0) {
+            new XmlElement(dep, "version", ver);
+        }
+        if (type.length() > 0) {
+            new XmlElement(dep, "type", type);
+        }
+        if (scope.length() > 0) {
+            new XmlElement(dep, "scope", scope);
+        }
+        dep;
+    }
+    
+    def appendQmDependencyExclusions(XmlElement dependency) {
+      XmlElement exs = new XmlElement(dependency, "exclusions");
+        buildElement(buildElement(new XmlElement(exs, "exclusion"), "groupId", "org.slf4j"), "artifactId", "slf4j-log4j12");
+        buildElement(buildElement(new XmlElement(exs, "exclusion"), "groupId", "log4j"), "artifactId", "log4j");
+    }
+    
+    def XmlElement appendPlugin(XmlElement parent, String groupId, String artifactId, String ver, Boolean cfg) {
+        XmlElement p1 = new XmlElement(parent, "plugin");
+        if (groupId.length() > 0) {
+            new XmlElement(p1, "groupId", groupId);
+        }
+        buildElement(buildElement(p1, "artifactId", artifactId), "version", ver);
+        if (cfg) {
+            new XmlElement(p1, "configuration");
+        } else {
+            p1;
+        }
+    }
+    
+    def XmlElement createMavenRoot(XmlFileArtifact target) {
+        target.setOmitXmlDeclaration(true);
+        XmlElement project = target.createRootElement("project");
+        buildAttribute(buildAttribute(buildAttribute(project, "xmlns", "http://maven.apache.org/POM/4.0.0"), "xmlns:xsi", "http://www.w3.org/2001/XMLSchema-instance"), "xsi:schemaLocation", "http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd");
+        buildElement(project, "modelVersion", "4.0.0");
+    }
+    
+    def createMavenProjectAttributes(XmlElement project, String artifactSpec, String packaging="jar") {
+        sequenceOf(String) artList = artifactSpec.split(":");
+        if(artList.size() == 3) {
+            buildElement(buildElement(buildElement(project, "groupId", artList[0]), "artifactId", artList[1]), "version", artList[2]);
+        }       
+        new XmlElement(project, "packaging", packaging);
+    }
+    
+    def createMavenBuildElement(XmlElement project, String srcDir="\\${basedir}/") {
+        XmlElement build = new XmlElement(project, "build");
+        if (srcDir.length() > 0) {
+            new XmlElement(build, "sourceDirectory", srcDir);
+        }
+        build;
+    }
+    
+    def appendMavenInstallPlugin(XmlElement plugins, String ver="2.3.1", Boolean createChecksum=true) {
+        XmlElement cfg = appendPlugin(plugins, "", "maven-install-plugin", ver, true);
+        new XmlElement(cfg, "createChecksum", "${createChecksum}");
+    }
+    
+    def appendMavenCompilerPlugin(XmlElement plugins, String ver="3.0", String source="1.7", String target="1.7") {
+        XmlElement cfg = appendPlugin(plugins, "org.apache.maven.plugins", "maven-compiler-plugin", ver, true);
+        buildElement(buildElement(cfg, "source", source), "target", target);
+    }
+    
+    def appendMavenSourcePlugin(XmlElement plugins, String ver="2.2.1", String id="attach-sources", String phase="verify", String goal="jar") {
+        XmlElement plg = appendPlugin(plugins, "org.apache.maven.plugins", "maven-source-plugin", ver, false);
+        appendGoal(buildElement(buildElement(new XmlElement(new XmlElement(plg, "executions"), "execution"), "id", id), "phase", phase), goal);
+    }
+    
+    def XmlElement appendMavenArchiveManifest(XmlElement parent) {
+        new XmlElement(new XmlElement(parent, "archive"), "manifest");
+    }
+
+    def appendGoal(XmlElement execution, String goal) {
+        new XmlElement(new XmlElement(execution, "goals"), "goal", goal);
+    }
+    
+    def appendMavenAssemblyDependencySet(XmlElement depSets, String scope, String unpack="false") {
+        buildElement(buildElement(new XmlElement(depSets, "dependencySet"), "unpack", unpack), "scope", scope);
+    }
+    
+    def XmlElement appendMavenShadeExecution(XmlElement exes, String id, String phase, String goal) {
+        XmlElement ex = new XmlElement(exes, "execution");
+          appendGoal(buildElement(buildElement(ex, "id", id), "phase", phase), goal);
+        new XmlElement(ex, "configuration");
+    }
+    
+    def appendMavenShadeDescriptorRefs(XmlElement cfg, String descriptorRef) {
+        new XmlElement(new XmlElement(cfg, "descriptorRefs"), "descriptorRef", descriptorRef);
+    }
+    
+    def appendMavenShadeFilter(XmlElement filters, String artifact, String exclude) {
+        XmlElement filter = new XmlElement(filters, "filter");
+          new XmlElement(filter, "artifact", artifact);
+          XmlElement excludes = new XmlElement(filter, "excludes");
+            new XmlElement(excludes, "exclude", exclude);
+    }
+
+    def appendMavenRepository(XmlElement parent, String id, String name, String url) {
+        buildElement(buildElement(buildElement(new XmlElement(parent, "repository"), "id", id), "name", name), "url", url);
+    }
+    
+    // ------------------------ qm specific ------------------------
+    
+    def appendQmMavenRepositories(XmlElement parent, String url="https://projects.sse.uni-hildesheim.de/qm/maven/") {
+        appendMavenRepository(parent, "qm.eu", "qm.eu", url);
+    }
+     
+}

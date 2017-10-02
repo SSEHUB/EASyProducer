@@ -1,0 +1,118 @@
+import commonVTLMethods;
+@advice(xmlExperiments)
+template pipelinesXml3(Configuration config, XmlFileArtifact target, sequenceOf(DecisionVariable) pipelines, String interfaceArtifact, String modelArtifact, setOf(HardwareAlgorithm) hardwareAlgorithms) {
+
+    def main(Configuration config, XmlFileArtifact target, sequenceOf(DecisionVariable) pipelines, String interfaceArtifact, String modelArtifact, setOf(HardwareAlgorithm) hardwareAlgorithms) {
+        XmlElement project = createAntRoot(target);
+        XmlElement deployTarget = createAntTarget(project, "deploy");
+          appendPipelinesDeploy(pipelines, deployTarget);
+          appendInterfaceDeploy(interfaceArtifact, deployTarget);
+          appendHardwareAlgorithmDeploy(hardwareAlgorithms, deployTarget);
+          appendModelArtifactDeploy(modelArtifact, deployTarget);
+    }
+    
+    def createAntProperty(XmlElement project, String file) {
+        XmlElement property = new XmlElement(project, "property");
+          new XmlAttribute(property, "file", file);
+    }
+
+    def createAntInclude(XmlElement project, String file) {
+        XmlElement property = new XmlElement(project, "include");
+          new XmlAttribute(property, "file", file);
+    }
+
+	def XmlElement createAntRoot(XmlFileArtifact target) {
+	    target.setOmitXmlDeclaration(true);
+	    XmlElement project = target.createRootElement("project");
+	      new XmlAttribute(project, "name", "pipelines");
+          new XmlAttribute(project, "default", "deploy");
+          new XmlAttribute(project, "basedir", ".");
+        createAntProperty(project, "\\${user.home}/global-build.properties");
+        createAntProperty(project, "\\${user.home}/qualimaster-build.properties");
+        createAntInclude(project, "\\${user.home}/macros.xml");
+        new XmlComment(project, "\n <taskdef uri=\"antlib:org.jacoco.ant\" resource=\"org/jacoco/ant/antlib.xml\"/>
+
+    <path id=\"easyTaskDef.lib\">
+      <fileset dir=\""+"$"+"{home.base.dir}/"+"$"+"{projects.standalone.dir}/build/generatedLibs.ex/dist\">
+        <include name=\"*.jar\"/>
+      </fileset>
+    </path> ");
+        project;
+	}
+
+    def XmlElement createAntTarget(XmlElement project, String name) {
+        XmlElement target = new XmlElement(project, "target");
+          new XmlAttribute(target, "name", name);
+        target;
+    }
+    
+    def createAntDelete(XmlElement target, String file) {
+        XmlElement cmd = new XmlElement(target, "delete");
+          new XmlAttribute(cmd, "file", file);
+    }
+    
+    def createAntRename(XmlElement target, String src, String dest) {
+        XmlElement cmd = new XmlElement(target, "rename");
+          new XmlAttribute(cmd, "src", src);
+          new XmlAttribute(cmd, "dest", dest);
+    }
+
+    def createAntMvnDeploy(XmlElement target, String folderName, String pomFile, String jarFolder, String jarFile) {
+        XmlElement cmd = new XmlElement(target, "mvnDeploy");
+          new XmlAttribute(cmd, "folderName", folderName);
+          new XmlAttribute(cmd, "pomFile", pomFile);
+          new XmlAttribute(cmd, "jarFolder", jarFolder);
+          new XmlAttribute(cmd, "jarFile", jarFile);
+    }
+	
+	def appendPipelinesDeploy(sequenceOf(DecisionVariable) pipelines, XmlElement target) {
+		for(Pipeline pip : pipelines) {
+			String pipName = pip.name;
+			String artifact = pip.artifact;
+			String pipelineJarFileName = obtainArtifactName(artifact,false);
+			String pipelineFatJarFileName = obtainArtifactName(artifact,true);
+			if(pipelineJarFileName.length()>0) {
+			    createAntDelete(target, "pipelines/eu/qualimaster/$pipName/target/${pipelineJarFileName}.jar");
+			    createAntRename(target, "pipelines/eu/qualimaster/$pipName/target/${pipelineFatJarFileName}.jar", "pipelines/eu/qualimaster/$pipName/target/${pipelineJarFileName}.jar");
+			    createAntMvnDeploy(target, "eu/qualimaster/$pipName", "pipelines/eu/qualimaster/$pipName/pom.xml", "pipelines/eu/qualimaster/$pipName/target", "${pipelineJarFileName}.jar");
+			}			
+	    }
+	}
+	
+	def appendInterfaceDeploy(String interfaceArtifact, XmlElement target) {
+		String interfaceJarFileName = obtainArtifactName(interfaceArtifact, false);
+		if(interfaceJarFileName.length()>0) {
+		    createAntMvnDeploy(target, "if-gen", "if-gen/pom.xml", "if-gen/target", "${interfaceJarFileName}.jar");
+		}		
+	}
+	
+	def appendModelArtifactDeploy(String modelArtifact, XmlElement target) {
+		String artifactName = obtainArtifactName(modelArtifact, false);
+		if(artifactName.length()>0) {			
+		    createAntMvnDeploy(target, "model-gen", "model-gen/pom.xml", "model-gen/target", "${artifactName}.jar");
+	    }
+	}
+	
+	def appendHardwareAlgorithmDeploy(setOf(HardwareAlgorithm) harwareAlgorithms, XmlElement target) {
+		for(HardwareAlgorithm alg : hardwareAlgorithms) {
+			String artifactName = alg.name + "-" + GenAlgVersion;
+			createAntMvnDeploy(target, "hardwareAlgorithms/eu/qualimaster/algorithms/${alg.name}", "hardwareAlgorithms/eu/qualimaster/algorithms/${alg.name}/pom.xml", "hardwareAlgorithms/eu/qualimaster/algorithms/${alg.name}/target", "${artifactName}.jar");
+		}
+	}
+	
+	def String obtainArtifactName(String artifact, Boolean pipeline) {
+		String artifactName = null;
+		sequenceOf(String) artList = artifact.split(":");
+		if(artList.size() == 3) {
+			String artifactId = artList[1];
+		    String versionNum = artList[2];
+		    if(pipeline) {
+		    	artifactName = artifactId + "-" + versionNum + "-jar-with-dependencies";
+		    } else {
+		    	artifactName = artifactId + "-" + versionNum;
+		    }		    
+		}
+		artifactName;   
+	}
+
+}

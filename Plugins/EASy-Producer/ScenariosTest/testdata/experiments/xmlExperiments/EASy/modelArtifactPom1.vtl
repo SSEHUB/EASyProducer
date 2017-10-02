@@ -1,0 +1,53 @@
+import commonPomMethods1;
+template modelArtifactPom1(Configuration config, FileArtifact target, String modelArtifact) {
+
+    def appendPlugins(Text text) {      
+        appendInstallPlugin(text);      
+            text.append("        <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-assembly-plugin</artifactId>
+                <version>2.5.3</version>
+                <dependencies>");
+            appendDependency(text, "eu.qualimaster", "AlgorithmAssemblies", "0.5.0-SNAPSHOT");
+            text.append("        </dependencies>
+                <executions>
+                  <execution>
+                        <id>make-profilingAssembly</id>
+                        <phase>package</phase>");
+            appendGoal(text, "single");
+            appendConfDescriptorRef(text, "settings");
+            text.append("        </execution>
+                </executions>
+            </plugin>\n");
+        }
+        
+    def appendResources(Text text) {
+        text.append("        <resource>
+            <directory>"+"$" + "{basedir}"+"</directory>
+            <filtering>false</filtering>
+                <includes>
+                    <include>EASy/**/*.*</include>
+                    <include>settings/**/*.*</include>
+                </includes>
+                <excludes>
+                    <exclude>pom.xml</exclude>
+                </excludes>
+        </resource>\n");
+    }
+        
+    def main(Configuration config, FileArtifact target, String modelArtifact) {
+        Text text = target.getText();
+        appendHeader(text, modelArtifact);
+        text.append("  <build>\n");
+        text.append("    <plugins>\n");
+        appendPlugins(text);
+        text.append("    </plugins>\n");
+        text.append("    <resources>\n");
+        appendResources(text);
+        text.append("    </resources>\n");
+        text.append("  </build>\n");
+        text.append("</project>");
+        target.rename("pom.xml");
+    }
+
+}

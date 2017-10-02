@@ -1,0 +1,16 @@
+    // TODO inplace alternatives!!!
+    def appendDependency(String groupId, String artifactId, String version = "", String type = "", String scope = "") {
+        '<dependency>
+            <groupId>${groupId}</groupId>
+            <artifactId>${artifactId}</artifactId>'
+            if (version.length() > 0) {
+        '\n    <version>${version}</version>'
+            }
+            if (type.length() > 0) {
+        '\n    <type>${type}</type>'
+            }
+            if (scope.length() > 0) {
+        '\n    <scope>${scope}</scope>'
+            }
+        '\n</dependency>'
+    }

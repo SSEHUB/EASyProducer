@@ -1,0 +1,91 @@
+import commonVTLMethods;
+@advice(xmlExperiments)
+template pipelinesXml1(Configuration config, FileArtifact target, sequenceOf(DecisionVariable) pipelines, String interfaceArtifact, String modelArtifact, setOf(HardwareAlgorithm) hardwareAlgorithms) {
+
+    def appendBasics(Text text) {
+        text.append("<project name=\"pipelines\" default=\"deploy\" basedir=\".\">
+
+    <property file=\""+"$"+"{user.home}/global-build.properties\"/>
+    <property file=\""+"$"+"{user.home}/qualimaster-build.properties\"/>
+    <include file=\""+"$"+"{user.home}/macros.xml\"/>
+
+    <!--
+    <taskdef uri=\"antlib:org.jacoco.ant\" resource=\"org/jacoco/ant/antlib.xml\"/>
+
+    <path id=\"easyTaskDef.lib\">
+      <fileset dir=\""+"$"+"{home.base.dir}/"+"$"+"{projects.standalone.dir}/build/generatedLibs.ex/dist\">
+        <include name=\"*.jar\"/>
+      </fileset>
+    </path>
+    -->
+");
+    }
+    
+    def appendPipelinesDeploy(sequenceOf(DecisionVariable) pipelines, Text text) {
+        for(Pipeline pip : pipelines) {
+            String pipName = pip.name;
+            String artifact = pip.artifact;
+            String pipelineJarFileName = obtainArtifactName(artifact,false);
+            String pipelineFatJarFileName = obtainArtifactName(artifact,true);
+            if (pipelineJarFileName.length()>0) {
+                text.append("      <delete file=\"pipelines/eu/qualimaster/$pipName/target/${pipelineJarFileName}.jar\"/>\n");
+                text.append("      <rename src=\"pipelines/eu/qualimaster/$pipName/target/${pipelineFatJarFileName}.jar\" dest=\"pipelines/eu/qualimaster/$pipName/target/${pipelineJarFileName}.jar\"/>\n");
+                appendMvnDeploy(text, "eu/qualimaster/$pipName", "pipelines/eu/qualimaster/$pipName/pom.xml", "pipelines/eu/qualimaster/$pipName/target", "${pipelineJarFileName}.jar");
+            }           
+        }
+    }
+    
+    def appendMvnDeploy(Text text, String folderName, String pomFile, String jarFolder, String jarFile) {
+        text.append("      <mvnDeploy folderName=\"$folderName\" pomFile=\"$pomFile\" jarFolder=\"$jarFolder\" jarFile=\"$jarFile\"/>\n");
+    }
+    
+    def appendInterfaceDeploy(String interfaceArtifact, Text text) {
+        String interfaceJarFileName = obtainArtifactName(interfaceArtifact, false);
+        if (interfaceJarFileName.length()>0) {
+            appendMvnDeploy(text, "if-gen", "if-gen/pom.xml", "if-gen/target", "${interfaceJarFileName}.jar");
+        }       
+    }
+    
+    def appendModelArtifactDeploy(String modelArtifact, Text text) {
+        String artifactName = obtainArtifactName(modelArtifact, false);
+        if (artifactName.length()>0) {          
+            appendMvnDeploy(text, "model-gen", "model-gen/pom.xml", "model-gen/target", "${artifactName}.jar");
+        }
+    }
+    
+    def appendHardwareAlgorithmDeploy(setOf(HardwareAlgorithm) harwareAlgorithms, Text text) {
+        for(HardwareAlgorithm alg : hardwareAlgorithms) {
+            String artifactName = alg.name + "-" + GenAlgVersion;
+            appendMvnDeploy(text, "hardwareAlgorithms/eu/qualimaster/algorithms/${alg.name}", "hardwareAlgorithms/eu/qualimaster/algorithms/${alg.name}/pom.xml", 
+                "hardwareAlgorithms/eu/qualimaster/algorithms/${alg.name}/target", "${artifactName}.jar");
+        }
+    }
+    
+    def String obtainArtifactName(String artifact, Boolean pipeline) {
+        String artifactName = null;
+        sequenceOf(String) artList = artifact.split(":");
+        if(artList.size() == 3) {
+            String artifactId = artList[1];
+            String versionNum = artList[2];
+            if(pipeline) {
+                artifactName = artifactId + "-" + versionNum + "-jar-with-dependencies";
+            } else {
+                artifactName = artifactId + "-" + versionNum;
+            }           
+        }
+        artifactName;   
+    }
+
+    def main(Configuration config, FileArtifact target, sequenceOf(DecisionVariable) pipelines, String interfaceArtifact, String modelArtifact, setOf(HardwareAlgorithm) hardwareAlgorithms) {
+        Text text = target.getText();
+        appendBasics(text);
+        text.append("    <target name=\"deploy\">\n");
+        appendPipelinesDeploy(pipelines, text);
+        appendInterfaceDeploy(interfaceArtifact, text);
+        appendHardwareAlgorithmDeploy(hardwareAlgorithms, text);
+        appendModelArtifactDeploy(modelArtifact, text);
+        text.append("    </target>\n");
+        text.append("</project>\n");
+    }
+    
+}

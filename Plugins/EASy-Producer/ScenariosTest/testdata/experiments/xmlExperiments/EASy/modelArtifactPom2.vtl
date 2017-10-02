@@ -1,0 +1,52 @@
+import commonPomMethods2;
+template modelArtifactPom2(Configuration config, XmlFileArtifact target, String modelArtifact) {
+
+    def appendPlugins() {      
+        '${appendInstallPlugin()}      
+        <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-assembly-plugin</artifactId>
+            <version>2.5.3</version>
+            <dependencies>
+                ${appendDependency("eu.qualimaster", "AlgorithmAssemblies", "0.5.0-SNAPSHOT")}
+            </dependencies>
+            <executions>
+                <execution>
+                    <id>make-profilingAssembly</id>
+                    <phase>package</phase>
+                    ${appendGoal("single")}
+                    ${appendConfDescriptorRef("settings", false)}
+                    </configuration>
+                </execution>
+            </executions>
+        </plugin>'
+    }
+        
+    def appendResources() {
+        '<resource>
+            <directory>\\${basedir}</directory>
+            <filtering>false</filtering>
+            <includes>
+                <include>EASy/**/*.*</include>
+                <include>settings/**/*.*</include>
+            </includes>
+            <excludes>
+                <exclude>pom.xml</exclude>
+            </excludes>
+        </resource>'
+    }
+        
+    def main(Configuration config, XmlFileArtifact target, String modelArtifact) {
+        '${appendHeader(modelArtifact)}
+            <build>
+                <plugins>
+                    ${appendPlugins()}
+                </plugins>
+                <resources>
+                    ${appendResources()}
+                </resources>
+            </build>'
+        '</project>'
+    }
+
+}

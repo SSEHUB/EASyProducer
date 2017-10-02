@@ -1,0 +1,80 @@
+import commonPomMethods3;
+@advice(xmlExperiments)
+template interfacesPom3(Configuration config, XmlFileArtifact target, String interfaceArtifact, setOf(FieldType) types) {
+	
+	mapOf(String, String) artifactsMap = {};//collect the artifacts that are included as dependencies.
+
+    def main(Configuration config, XmlFileArtifact target, String interfaceArtifact, setOf(FieldType) types) {
+        XmlElement project = createMavenRoot(target);
+          createMavenProjectAttributes(project, interfaceArtifact);
+        XmlElement build = createMavenBuildElement(project);
+          XmlElement plugins = new XmlElement(build, "plugins");
+          appendPlugins(plugins);
+          XmlElement resources = new XmlElement(build, "resources");
+          appendResources(resources);
+        XmlElement repositories = new XmlElement(project, "repositories");
+        appendQmMavenRepositories(repositories);
+        appendDependencyManagement(project);
+        XmlElement dep = appendDependencies(project);
+          appendTypeDependencies(dep, types);
+    }
+
+    def appendPlugins(XmlElement parent) {
+        appendMavenCompilerPlugin(parent);
+        appendMavenInstallPlugin(parent, "2.3.1");
+        XmlElement plg = appendPlugin(parent, "org.apache.maven.plugins", "maven-source-plugin", "2.2.1", false);
+          XmlElement exes = new XmlElement(plg, "executions");
+            XmlElement exe = new XmlElement(exes, "execution");
+              new XmlElement(exe, "id", "attach-sources");
+              new XmlElement(exe, "phase", "verify");
+              appendGoal(exe, "jar");
+        plg = appendPlugin(parent, "com.github.os72", "protoc-jar-maven-plugin", "3.0.0-a3", false);
+          exes = new XmlElement(plg, "executions");
+            exe = new XmlElement(exes, "execution");
+              new XmlElement(exe, "phase", "generate-sources");
+              appendGoal(exe, "run");
+            XmlElement pCfg = new XmlElement(exe, "configuration");
+              new XmlElement(pCfg, "protocVersion", "2.6.1");
+              XmlElement inclD = new XmlElement(pCfg, "includeDirectories");
+                new XmlElement(inclD, "include", "\\${basedir}/protobuf");
+              XmlElement inpD = new XmlElement(pCfg, "inputDirectories");
+                new XmlElement(inpD, "include", "\\${basedir}/protobuf");
+    }
+    
+    def appendResources(XmlElement parent) {
+        XmlElement res = new XmlElement(parent, "resource");
+          new XmlElement(res, "directory", "\\${basedir}/");
+          new XmlElement(res, "filtering", "false");
+          XmlElement incl = new XmlElement(res, "includes");
+            new XmlElement(incl, "include", "protobuf/*.proto");
+    }
+
+    def XmlElement appendDependencies(XmlElement parent) {
+       XmlElement dep = new XmlElement(parent, "dependencies");
+         appendDependency(dep, "org.apache.storm", "storm-core");
+         appendDependency(dep, "com.esotericsoftware.kryo", "kryo");
+         appendDependency(dep, "com.google.protobuf", "protobuf-java", "2.6.1");
+         appendDependency(dep, "eu.qualimaster", "StormCommons"); 
+         artifactsMap.add("eu.qualimaster:StormCommons", "eu.qualimaster:StormCommons:0.0.5-SNAPSHOT");
+         appendDependency(dep, "eu.qualimaster", "QualiMaster.Events"); 
+         artifactsMap.add("eu.qualimaster:QualiMaster.Events", "eu.qualimaster:QualiMaster.Events:0.0.5-SNAPSHOT");
+         appendDependency(dep, "eu.qualimaster", "DataManagementLayer");
+         artifactsMap.add("eu.qualimaster:DataManagementLayer", "eu.qualimaster:DataManagementLayer:0.0.5-SNAPSHOT");       
+       dep;
+    }
+	
+	def appendTypeDependencies(XmlElement parent, setOf(FieldType) types) {
+		for(FieldType type : types) {
+			String artifact = type.artifact;
+			sequenceOf(String) artList = artifact.split(":");
+			if(artList.size() == 3) {
+				String artKey = artList[0]+":"+artList[1];
+				if(artifact.length()>0 and !artifactsMap.containsKey(artKey)) {
+                   appendDependency(parent, artList[0], artList[1], artList[2]);
+                   artifactsMap.add(artKey, artifact);
+				}	
+			}		
+		}
+	}
+
+}

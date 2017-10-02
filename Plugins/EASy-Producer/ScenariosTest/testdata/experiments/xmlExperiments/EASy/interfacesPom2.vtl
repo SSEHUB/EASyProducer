@@ -1,0 +1,92 @@
+import commonPomMethods2;
+@advice(xmlExperiments)
+@indent(indentation = 4, additional = 0)
+template interfacesPom2(Configuration config, XmlFileArtifact target, String interfaceArtifact, setOf(FieldType) types) {
+    
+    mapOf(String, String) artifactsMap = {};//collect the artifacts that are included as dependencies.
+    
+    def appendResources() {
+        '<resource>
+            <directory>\\${basedir}/</directory>
+            <filtering>false</filtering>
+            <includes>
+            <include>protobuf/*.proto</include>
+            </includes>
+        </resource>'
+    }
+    
+    def appendPlugins() {       
+        '${appendCompilerPlugin()}
+         ${appendInstallPlugin()}
+         ${appendSourcePlugin()}      
+         <plugin>
+            <groupId>com.github.os72</groupId>
+            <artifactId>protoc-jar-maven-plugin</artifactId>
+            <version>3.0.0-a3</version>
+            <executions>
+                <execution>
+                    <phase>generate-sources</phase>
+                    <goals>
+                        <goal>run</goal>
+                    </goals>
+                    <configuration>
+                        <protocVersion>2.6.1</protocVersion>
+                        <includeDirectories>
+                            <include>\\${basedir}/protobuf</include>
+                        </includeDirectories>
+                        <inputDirectories>
+                            <include>\\${basedir}/protobuf</include>
+                        </inputDirectories>
+                    </configuration>
+                </execution>
+            </executions>
+         </plugin>'         
+    }
+
+    def appendDependencies() {
+        artifactsMap.add("eu.qualimaster:StormCommons", "eu.qualimaster:StormCommons:0.0.5-SNAPSHOT");
+        artifactsMap.add("eu.qualimaster:QualiMaster.Events", "eu.qualimaster:QualiMaster.Events:0.0.5-SNAPSHOT");
+        artifactsMap.add("eu.qualimaster:DataManagementLayer", "eu.qualimaster:DataManagementLayer:0.0.5-SNAPSHOT");
+        '${appendDependency("org.apache.storm", "storm-core")}
+         ${appendDependency("com.esotericsoftware.kryo", "kryo")}
+         ${appendDependency("com.google.protobuf", "protobuf-java", "2.6.1")}
+         ${appendDependency("eu.qualimaster", "StormCommons")}
+         ${appendDependency("eu.qualimaster", "QualiMaster.Events")}
+         ${appendDependency("eu.qualimaster", "DataManagementLayer")}'
+    }
+    
+    def appendTypeDependencies(setOf(FieldType) types) {
+        for (FieldType type : types) {
+            String artifact = type.artifact;
+            sequenceOf(String) artList = artifact.split(":");
+            if (artList.size() == 3) {
+                String artKey = artList[0]+":"+artList[1];
+                if (artifact.length()>0 and !artifactsMap.containsKey(artKey)) {
+                    artifactsMap.add(artKey, artifact);
+                    '${appendDependency(artList[0], artList[1], artList[2])}'
+                }   
+            }       
+        }
+    }
+    
+    def main(Configuration config, XmlFileArtifact target, String interfaceArtifact, setOf(FieldType) types) {
+        '${appendHeader(interfaceArtifact)}
+             ${appendBuildSectionStart()}
+             ${appendPlugins()}
+             </plugins>
+             <resources>
+                 ${appendResources()}
+             </resources>
+             </build>
+             <repositories>
+                 ${appendRepositories()}
+             </repositories>
+             ${appendDependencyManagement()}
+             <dependencies>
+                 ${appendDependencies()}
+                 ${appendTypeDependencies(types)}
+            </dependencies>
+        </project>'
+    }
+
+}

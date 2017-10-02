@@ -1,0 +1,33 @@
+import commonPomMethods3;
+import commonVTLMethods;
+//@advice(QM)
+template hardwareAlgorithmPom3(Configuration config, XmlFileArtifact target, String algName) {
+    
+    def main(Configuration config, XmlFileArtifact target, String algName) {
+        XmlElement project = createMavenRoot(target);
+          createMavenProjectAttributes(project, "eu.qualimaster:$algName:$GenAlgVersion");
+        XmlElement build = createMavenBuildElement(project);
+          XmlElement plugins = new XmlElement(build, "plugins");
+          appendPlugins(plugins);
+        XmlElement repositories = new XmlElement(project, "repositories");
+          appendQmMavenRepositories(repositories);
+        appendDependencyManagement(project);
+        appendDependencies(project);
+    }
+    
+    def appendPlugins(XmlElement parent) {
+        appendMavenCompilerPlugin(parent);
+        appendMavenInstallPlugin(parent);
+        appendMavenSourcePlugin(parent);
+    }
+    
+    def appendDependencies(XmlElement parent) {
+       XmlElement dep = new XmlElement(parent, "dependencies");
+         appendDependency(dep, "org.apache.storm", "storm-core");
+         appendDependency(dep, "eu.qualimaster", "StormCommons"); 
+         appendDependency(dep, "eu.qualimaster", "PriorityPipelineInterfaces", "0.5.0-SNAPSHOT"); 
+         appendDependency(dep, "eu.qualimaster", "QualiMaster.Events"); 
+         appendDependency(dep, "eu.qualimaster", "DataManagementLayer");
+    }
+
+}

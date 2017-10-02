@@ -1,0 +1,300 @@
+import commonVTLMethods;
+import commonPomMethods2;
+@advice(xmlExperiments)
+template pipelinePom2(Configuration config, XmlFileArtifact target, Pipeline pipeline, String repoURL, String interfaceArtifact, Boolean profiling, setOf(String) subPipNames) {
+
+    Boolean isSubPipeline = false;
+    setOf(DecisionVariable) flows = {};//collect the visited flows
+    setOf(String) artifacts = {}; //mark visited artifacts
+
+    def processElement(sequenceOf(DecisionVariable) output, setOf(String) nodes) {       
+        for(Flow v : output) { 
+            if(flows.excludes(v)) {
+                flows.add(v);
+                DecisionVariable elt = v.destination;  
+                checkForPipelineNode(elt, nodes);          
+                processElement(elt.byName("output").variables(), nodes);
+            }
+        } 
+    }
+
+    def checkForPipelineNode(DecisionVariable elt, setOf(String) nodes) {
+        String nodeName = elt.varName();
+        String nodeClsName = elt.varName().firstToUpperCase() + elt.type();
+        if(elt.type() == Source and !isStringExisted(nodeName, nodes)) {                
+            Source src =elt;
+            produceDependencies(src);
+        }
+        if(elt.type() == Sink or elt.type() == "ReplaySink" and !isStringExisted(nodeName, nodes)) {
+            Sink snk = elt;
+            produceDependencies(snk);
+        }
+        if(elt.type() == FamilyElement and !isStringExisted(nodeName, nodes)) {
+            FamilyElement fe = elt;
+            produceDependencies(fe);
+        }
+        nodes.add(nodeName);        
+    }
+
+    def produceDependencies(Source source) {
+        DataSource dataSrc = source.source;
+        if (!dataSrc.profilingSource) {
+            String artifact = dataSrc.artifact;  
+            if(!isStringExisted(artifact, artifacts)) {
+                artifacts.add(artifact);
+                //for source class dependencies
+                appendDependency(artifact);
+            }                       
+        }
+    }
+    
+    def produceDependencies(FamilyElement familyElt) {
+        Family fm = familyElt.family;
+        //added all algorithm dependencies
+        for(Algorithm alg : fm.members) {
+            String artifact;
+            if(isHardwareAlgorithm(alg)) {
+                artifact = "eu.qualimaster:" + formulateString(alg.name) + ":" + GenAlgVersion;
+            } else if (isGenSubtopology(alg)) {
+                SubPipelineAlgorithm subAlg = alg;
+                Pipeline subPip = subAlg.subPipeline;
+                artifact = subPip.artifact;
+            } else {
+                SoftwareAlgorithm a = alg;
+                artifact = a.artifact;
+            }
+            if(!isStringExisted(artifact, artifacts)) {
+                artifacts.add(artifact);
+                appendDependency(artifact);
+            }
+        }   
+    }
+    
+    def produceDependencies(Sink snk) {
+        DataSink dataSnk = snk.sink;
+        String snkName = dataSnk.name;
+        String artifact = dataSnk.artifact;
+        if(!isStringExisted(artifact, artifacts)) {
+            artifacts.add(artifact);
+            //for appending sink class dependencies
+            appendDependency(artifact); 
+        }                       
+    }
+    
+    def appendPlugins(setOf(String) subPips) {
+        if(!isSubPipeline) {
+            '<plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-shade-plugin</artifactId>
+                <version>2.3</version>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        ${appendGoal("shade")}
+                        <configuration>
+                            <finalName>\\${project.artifactId}-\\${project.version}-jar-with-dependencies</finalName>
+                            <filters>
+                                ${appendFilters(subPipNames)}
+                            </filters>
+                        </configuration>
+                    </execution>
+                </executions>
+             </plugin>'
+        } else {
+            '<plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-assembly-plugin</artifactId>
+                <version>2.6</version>'
+        if (profiling) {
+            '<dependencies>");
+                 ${appendDependency("eu.qualimaster", "AlgorithmAssemblies", "0.5.0-SNAPSHOT")} 
+             </dependencies>'
+        }
+        '    <executions>
+                <execution>
+                    <id>make-assembly</id>
+                    <phase>package</phase>");
+                    ${appendGoal("single")}
+                    ${appendConfDescriptorRef("jar-with-dependencies")}
+                        ${appendDependencySet()}
+                        ${appendDependencySet(scope="provided")}
+                        </dependencySets>
+                        <archive>
+                            <manifest>
+                            </manifest>
+                        </archive>
+                    </configuration>
+                </execution>'
+        if(profiling) {
+            '    <execution>
+                    <id>make-profilingAssembly</id>
+                    <phase>package</phase>");
+                    ${appendGoal("single")}
+                    ${appendConfDescriptorRef("profiling")}
+                </execution>'
+        }
+        '    </executions>
+        </plugin>'
+        }
+        '${appendInstallPlugin()}
+         ${appendCompilerPlugin()}
+         <plugin>
+             <groupId>org.apache.maven.plugins</groupId>
+             <artifactId>maven-jar-plugin</artifactId>
+             <version>2.4</version>
+             <configuration>
+                 <useDefaultManifestFile>true</useDefaultManifestFile>
+                 <archive>
+                     <manifest>
+                         <addClasspath>true</addClasspath>
+                         <mainClass>TestFramework</mainClass>
+                     </manifest>
+                 </archive>
+             </configuration>
+         </plugin>
+         ${appendSourcePlugin()}
+         <plugin>
+             <groupId>org.codehaus.mojo</groupId>
+             <artifactId>exec-maven-plugin</artifactId>
+             <version>1.3</version>
+             <executions>
+                 <execution>
+                     ${appendGoal("exec")}
+                 </execution>
+             </executions>
+             <configuration>
+                 <executable>java</executable>
+                 <includeProjectDependencies>true</includeProjectDependencies>
+                 <includePluginDependencies>false</includePluginDependencies>
+                 <classpathScope>compile</classpathScope>
+                 <mainClass>\\${storm.topology}</mainClass>
+             </configuration>
+         </plugin>
+         <plugin>
+             <groupId>org.eclipse.m2e</groupId>
+             <artifactId>lifecycle-mapping</artifactId>
+             <version>1.0.0</version>
+             <configuration>
+                 <lifecycleMappingMetadata>
+                     <pluginExecutions>
+                         <pluginExecution>
+                             <pluginExecutionFilter>
+                                 <groupId>org.apache.maven.plugins</groupId>
+                                 <artifactId>maven-dependency-plugin</artifactId>
+                                 <versionRange>[2.0,)</versionRange>
+                                 ${appendGoal("copy-dependencies")}
+                             </pluginExecutionFilter>
+                             <action>
+                                 <execute/>
+                             </action>
+                         </pluginExecution>
+                     </pluginExecutions>
+                 </lifecycleMappingMetadata>
+             </configuration>
+         </plugin>'
+    } 
+    
+    def appendFilters(setOf(String) subPips) {
+        for(String a : subPips) {
+            '<filter>
+                <artifact>eu.qualimaster:$a</artifact>
+                <excludes>
+                    <exclude>mapping.xml</exclude>
+                </excludes>
+             </filter>'
+        }
+    }
+    
+    def appendResources() {
+        '<resource>
+            <directory>\\${basedir}/</directory>
+            <filtering>false</filtering>
+            <includes>
+            <include>mapping.xml</include>
+            <include>settings.xml</include>
+            </includes>
+        </resource>'
+    }
+    
+    //only for generating a fat jar
+    def appendBasicInfrastructureDependencies() {
+        '${appendDependency("org.apache.storm", "storm-core", ver="0.9.3", scope="provided")}
+         ${appendDependency("com.github.ptgoetz", "storm-hdfs", ver="0.1.2", qmDepExcl=true)}
+         <!-- Hadoop Dependencies -->
+         ${appendDependency("org.apache.hadoop", "hadoop-client", ver="2.4.0", qmDepExcl=true)}
+         ${appendDependency("org.apache.hadoop", "hadoop-hdfs", ver="2.4.0", qmDepExcl=true)}
+         ${appendDependency("org.apache.hadoop", "hadoop-common", ver="2.4.0", qmDepExcl=true)}
+         <!-- HBase Dependencies -->
+         ${appendDependency("org.apache.hbase", "hbase-common", ver="0.98.6-hadoop2", qmDepExcl=true)}
+         ${appendDependency("org.apache.hbase", "hbase-protocol", ver="0.98.6-hadoop2", qmDepExcl=true)}
+         ${appendDependency("org.apache.hbase", "hbase-client", ver="0.98.6-hadoop2", qmDepExcl=true)}'
+    }
+    
+    def appendQmInfrastructureDependencies() {
+         '${appendDependency("eu.qualimaster", "StormCommons")}
+          ${appendDependency("eu.qualimaster", "DataManagementLayer")}
+          ${appendDependency("eu.qualimaster", "QualiMaster.Events")}'
+    }
+    
+    def appendInterfaceDependency(String artifact) {
+        '${appendDependency(artifact)}'
+    }
+    
+    def appendAlgorithmAssembiliesDependency() {
+        '${appendDependency("eu.qualimaster", "AlgorithmAssemblies", ver = "0.5.0-SNAPSHOT")}'
+    }
+    
+    def appendCommonDependencies() {
+        '${appendDependency("org.apache.storm", "storm-core")}
+         ${appendDependency("com.github.ptgoetz", "storm-hdfs", scope="compile")}
+         ${appendDependency("org.apache.hadoop", "hadoop-client", scope="compile")}
+         ${appendDependency("org.apache.hadoop", "hadoop-hdfs", scope="compile")}
+         ${appendDependency("org.apache.hadoop", "hadoop-common", scope="compile")}
+         ${appendDependency("org.apache.hbase", "hbase-common", scope="compile")}
+         ${appendDependency("org.apache.hbase", "hbase-protocol", scope="compile")}
+         ${appendDependency("org.apache.hbase", "hbase-client", scope="compile")}'
+    }
+    
+    def main(Configuration config, XmlFileArtifact target, Pipeline pipeline, String repoURL, String interfaceArtifact, Boolean profiling, setOf(String) subPipNames) {
+        if(pipeline.type() == SubPipeline) {
+            isSubPipeline = true;
+        }
+        setOf(String) nodes = {};
+        String srcDir="\\${basedir}/topology";
+        '${appendHeader(pipeline.artifact)}
+            <properties>
+                <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+            </properties>
+            <repositories>
+                ${appendRepositories(repoURL=repoURL)}
+            </repositories>
+            ${appendBuildSectionStart(srcDir=srcDir)}
+                ${appendPlugins(subPipNames)}
+                </plugins>
+                <resources>
+                    ${appendResources()}
+                </resources>
+            </build>
+            ${appendDependencyManagement()}
+            <dependencies>
+            ${IF false}${appendBasicInfrastructureDependencies()}${ENDIF}
+            ${IF profiling}${appendAlgorithmAssembiliesDependency()}${ENDIF}
+            ${appendQmInfrastructureDependencies()}
+            ${appendInterfaceDependency(interfaceArtifact)}
+            ${appendCommonDependencies()}'
+        for(DecisionVariable v : pipeline.sources) { 
+            checkForPipelineNode(v, nodes);
+            processElement(v.byName("output").variables(), nodes);
+        }   
+        if(isSubPipeline) {
+            SubPipeline subPip = pipeline;
+            for(DecisionVariable v : subPip.connectors) {//considering the connectors from subpipeline
+                checkForPipelineNode(v, nodes);
+                processElement(v.byName("output").variables(), nodes);
+            }
+        }
+        '    </dependencies>'
+        '</project>'
+    }
+    
+}

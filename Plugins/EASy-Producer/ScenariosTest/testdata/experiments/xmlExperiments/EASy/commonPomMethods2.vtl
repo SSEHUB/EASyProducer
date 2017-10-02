@@ -1,0 +1,131 @@
+//@advice(QM)
+@indent(indentation = 4, additional = 0)
+template commonPomMethods2(Configuration config, FileArtifact target) {
+    
+    def appendDependencyManagement() {
+        '<dependencyManagement>
+             <dependencies>
+                 ${appendDependency("eu.qualimaster", "InfrastructureDependencies", "0.5.0-SNAPSHOT", "pom", "import")}
+                 ${appendDependency("eu.qualimaster", "PipelineDependencies", "0.5.0-SNAPSHOT", "pom", "import")}   
+             </dependencies>
+         </dependencyManagement>' | 8;
+    }
+    
+    def appendDependency(String groupId, String artifactId, String ver="", String type = "", String scope = "", Boolean qmDepExcl = false) {
+        '<dependency>
+            <groupId>${groupId}</groupId>
+            <artifactId>${artifactId}</artifactId>
+            ${IF ver.length() > 0}<version>$ver</version>${ENDIF}
+            ${IF type.length() > 0}<type>$type</type>${ENDIF}
+            ${IF scope.length() > 0}<scope>$scope</scope>${ENDIF}
+            ${IF qmDepExcl}qmDepExcl()${ENDIF}
+        </dependency>'
+    }
+    
+    def qmDepExcl() {
+        '<exclusions>
+            <exclusion>
+                <groupId>org.slf4j</groupId>
+                <artifactId>slf4j-log4j12</artifactId>
+            </exclusion>
+            <exclusion>
+                <groupId>log4j</groupId>
+                <artifactId>log4j</artifactId>
+            </exclusion>        
+         </exclusions>'
+    }
+    
+    def appendDependency(String artifact) {
+        sequenceOf(String) artList = artifact.split(":");
+        if(artList.size() == 3) {
+            '    ${appendDependency(artList[0], artList[1], ver=artList[2])}'
+        } else if (artifact != null) { // legacy semantics
+            '    <dependency>\n    </dependency>'
+        }
+    }
+    
+    def appendGoal(String goal) {
+        '    <goals>
+                <goal>$goal</goal>
+            </goals>'
+    }
+    
+    def appendConfDescriptorRef(String ref, Boolean openDepSets=true) {
+        '        <configuration>
+                     <descriptorRefs>
+                         <descriptorRef>$ref</descriptorRef>
+                     </descriptorRefs>
+                 ${IF openDepSets}<dependencySets>${ENDIF}'
+    }
+    
+    def appendDependencySet(Boolean unpack=false, String scope="runtime") {
+        '   <dependencySet>
+                <unpack>$unpack</unpack>
+                <scope>$scope</scope>
+            </dependencySet>'
+    }
+    
+    def appendHeader(String artifact, String packaging="jar") {
+        '<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">        
+             <modelVersion>4.0.0</modelVersion>'
+        sequenceOf(String) artList = artifact.split(":");
+        if (artList.size() == 3) {
+            '   <groupId>${artList[0]}</groupId>
+                 <artifactId>${artList[1]}</artifactId>
+                 <version>${artList[2]}</version>'    
+        }       
+        if (packaging.length() > 0) {
+            '  <packaging>$packaging</packaging>'
+        }
+    }
+    
+    def appendRepositories(String repoURL="https://projects.sse.uni-hildesheim.de/qm/maven/") {
+        '    <repository>\n      <id>qm.eu</id>\n      <name>qm.eu</name>\n      <url>$repoURL</url>\n    </repository>'
+    }
+    
+    def appendCompilerPlugin() {      
+        '<plugin>
+             <groupId>org.apache.maven.plugins</groupId>
+             <artifactId>maven-compiler-plugin</artifactId>
+             <version>3.0</version>
+             <configuration>
+                 <source>1.7</source>
+                 <target>1.7</target>
+             </configuration>              
+        </plugin>'
+    }
+
+    def appendInstallPlugin() {      
+        '<plugin>
+            <artifactId>maven-install-plugin</artifactId>
+            <version>2.3.1</version>
+            <configuration>
+                <createChecksum>true</createChecksum>
+            </configuration>
+        </plugin>'  
+    }
+
+    def appendSourcePlugin() {      
+        '<plugin>
+             <groupId>org.apache.maven.plugins</groupId>
+             <artifactId>maven-source-plugin</artifactId>
+             <version>2.2.1</version>
+             <executions>
+                 <execution>
+                     <id>attach-sources</id>
+                     <phase>verify</phase>
+                     <goals>
+                         <goal>jar</goal>
+                     </goals>
+                 </execution>
+             </executions>
+        </plugin>'                  
+    }
+ 
+     def appendBuildSectionStart(String srcDir="\\${basedir}/") {
+        '<build>
+            <sourceDirectory>$srcDir</sourceDirectory>
+            <plugins>'
+    }
+    
+}

@@ -1,0 +1,92 @@
+import commonPomMethods1;
+@advice(xmlExperiments)
+template interfacesPom1(Configuration config, FileArtifact target, String interfaceArtifact, setOf(FieldType) types) {
+	
+	mapOf(String, String) artifactsMap = {};//collect the artifacts that are included as dependencies.
+	
+	def appendResources(Text text) {
+		text.append("        <resource>
+            <directory>"+"$"+"{basedir}/</directory>
+            <filtering>false</filtering>
+            <includes>
+            <include>protobuf/*.proto</include>
+            </includes>
+        </resource>\n");        
+	}
+	
+	def appendPlugins(Text text) {		
+        appendCompilerPlugin(text);
+        appendInstallPlugin(text);
+        appendSourcePlugin(text);      
+			text.append("            <plugin>
+    			<groupId>com.github.os72</groupId>
+    			<artifactId>protoc-jar-maven-plugin</artifactId>
+    			<version>3.0.0-a3</version>
+    			<executions>
+        			<execution>
+            			<phase>generate-sources</phase>
+			            <goals>
+			                <goal>run</goal>
+			            </goals>
+			            <configuration>
+			                <protocVersion>2.6.1</protocVersion>
+			                <includeDirectories>
+			                    <include>"+"$"+"{basedir}/protobuf</include>
+			                </includeDirectories>
+			                <inputDirectories>
+			                    <include>"+"$"+"{basedir}/protobuf</include>
+			                </inputDirectories>
+			            </configuration>
+			        </execution>
+			    </executions>
+			</plugin>\n");       	
+	}
+
+	def appendDependencies(Text text) {
+        appendDependency(text, "org.apache.storm", "storm-core");
+        appendDependency(text, "com.esotericsoftware.kryo", "kryo");
+        appendDependency(text, "com.google.protobuf", "protobuf-java", "2.6.1");
+        appendDependency(text, "eu.qualimaster", "StormCommons");
+        artifactsMap.add("eu.qualimaster:StormCommons", "eu.qualimaster:StormCommons:0.0.5-SNAPSHOT");
+        appendDependency(text, "eu.qualimaster", "QualiMaster.Events");
+        artifactsMap.add("eu.qualimaster:QualiMaster.Events", "eu.qualimaster:QualiMaster.Events:0.0.5-SNAPSHOT");
+        appendDependency(text, "eu.qualimaster", "DataManagementLayer");
+        artifactsMap.add("eu.qualimaster:DataManagementLayer", "eu.qualimaster:DataManagementLayer:0.0.5-SNAPSHOT");		
+	}
+	
+	def appendTypeDependencies(Text text, setOf(FieldType) types) {
+		for (FieldType type : types) {
+			String artifact = type.artifact;
+			sequenceOf(String) artList = artifact.split(":");
+			if (artList.size() == 3) {
+				String artKey = artList[0]+":"+artList[1];
+				if (artifact.length()>0 and !artifactsMap.containsKey(artKey)) {
+				    appendDependency(text, artList[0], artList[1], artList[2]);
+					artifactsMap.add(artKey, artifact);
+				}	
+			}		
+		}
+	}
+	
+	def main(Configuration config, FileArtifact target, String interfaceArtifact, setOf(FieldType) types) {
+		Text text = target.getText();
+        appendHeader(text, interfaceArtifact);
+        appendBuildSectionStart(text);
+        appendPlugins(text);
+        text.append("    </plugins>\n");
+        text.append("    <resources>\n");
+        appendResources(text);
+        text.append("    </resources>\n");
+        text.append("  </build>\n");
+ 		text.append("  <repositories>\n");
+		appendRepositories(text);
+		text.append("  </repositories>\n");
+		appendDependencyManagement(text);
+		text.append("  <dependencies>\n");
+		appendDependencies(text);
+		appendTypeDependencies(text, types);
+		text.append("  </dependencies>\n");		
+		text.append("</project>\n");
+	}
+
+}

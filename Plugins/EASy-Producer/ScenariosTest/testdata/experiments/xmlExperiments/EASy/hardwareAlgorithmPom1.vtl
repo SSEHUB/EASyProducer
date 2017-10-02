@@ -1,0 +1,38 @@
+import commonPomMethods1;
+import commonVTLMethods;
+@advice(xmlExperiments)
+template hardwareAlgorithmPom1(Configuration config, FileArtifact target, String algName) {
+
+	def main(Configuration config, FileArtifact target, String algName) {
+		Text text = target.getText();
+        appendHeader(text, "eu.qualimaster:$algName:$GenAlgVersion");
+        appendBuildSectionStart(text);
+        appendPlugins(text);
+        text.append("    </plugins>\n");
+        text.append("  </build>\n");
+        text.append("  <repositories>\n");      
+        appendRepositories(text);
+        text.append("  </repositories>\n");
+		appendDependencyManagement(text);
+		text.append("  <dependencies>\n");
+		appendDependencies(text);
+		text.append("  </dependencies>\n");		
+		text.append("</project>\n");
+		target.rename("pom.xml");
+	}
+	
+	def appendPlugins(Text text) {		
+        appendCompilerPlugin(text);
+        appendInstallPlugin(text);
+        appendSourcePlugin(text);      
+	}
+
+	def appendDependencies(Text text) {
+        appendDependency(text, "org.apache.storm", "storm-core");
+        appendDependency(text, "eu.qualimaster", "StormCommons");
+        appendDependency(text, "eu.qualimaster", "PriorityPipelineInterfaces", "0.5.0-SNAPSHOT");
+        appendDependency(text, "eu.qualimaster", "QualiMaster.Events");
+        appendDependency(text, "eu.qualimaster", "DataManagementLayer");
+	}
+
+}

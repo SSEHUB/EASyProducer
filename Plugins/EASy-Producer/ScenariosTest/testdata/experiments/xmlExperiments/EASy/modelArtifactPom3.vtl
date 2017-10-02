@@ -1,0 +1,36 @@
+import commonPomMethods3;
+template modelArtifactPom3(Configuration config, XmlFileArtifact target, String modelArtifact) {
+
+    def main(Configuration config, XmlFileArtifact target, String modelArtifact) {
+        XmlElement project = createMavenRoot(target);
+          createMavenProjectAttributes(project, modelArtifact);
+        XmlElement build = createMavenBuildElement(project, "");
+          XmlElement plugins = new XmlElement(build, "plugins");
+          appendPlugins(plugins);
+        XmlElement resources = new XmlElement(build, "resources");
+          appendResources(resources);
+    }
+
+    def appendPlugins(XmlElement plugins) { 
+        appendMavenInstallPlugin(plugins, "2.3.1");
+        XmlElement plg = appendPlugin(plugins, "org.apache.maven.plugins", "maven-assembly-plugin", "2.5.3", false);
+          XmlElement deps = new XmlElement(plg, "dependencies");
+            appendDependency(deps, "eu.qualimaster", "AlgorithmAssemblies", "0.5.0-SNAPSHOT");
+          XmlElement execs = new XmlElement(plg, "executions");
+            XmlElement cfg = appendMavenShadeExecution(execs, "make-profilingAssembly", "package", "single");
+              XmlElement descRefs = new XmlElement(cfg, "descriptorRefs");
+              new XmlElement(descRefs, "descriptorRef", "settings");
+    }
+        
+    def appendResources(XmlElement resources) {
+        XmlElement resource = new XmlElement(resources, "resource");
+          new XmlElement(resource, "directory", "\\${basedir}");
+          new XmlElement(resource, "filtering", "false");
+        XmlElement includes = new XmlElement(resource, "includes");
+          new XmlElement(includes, "include", "EASy/**/*.*");
+          new XmlElement(includes, "include", "settings/**/*.*");
+        XmlElement excludes = new XmlElement(resource, "excludes");
+          new XmlElement(excludes, "exclude", "pom.xml");
+    }
+
+}

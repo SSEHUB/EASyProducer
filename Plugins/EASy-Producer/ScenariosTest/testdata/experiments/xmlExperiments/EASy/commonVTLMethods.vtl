@@ -1,0 +1,61 @@
+@advice(xmlExperiments)
+template commonVTLMethods(Configuration config, FileArtifact target) { 
+	
+	Boolean genInstance = true;
+	Boolean genMultiOutputs = true;     // generate specific code for multiple output of one algorithm
+	Boolean genMonitoringProbes = true; // generate monitoring probes (false for experiments)
+	Boolean genMultiTupleTypes = true; // generate specific code for considering multiple tuple types in the algorithm output as well as 
+									   // adjusting the stream id to "EltVarName+TupleName/AlgName"
+	Boolean newSwitch = false;//enable the switch mode
+	Boolean newSwitchLog = false;//enable the switch-related logs
+	Boolean hwlog = false; //enable the hardware algorithm-related logs
+	Boolean fastQueueOperation = true; //faster operation on searching and deleting items from the queue (used LinkedList)
+	Boolean emitThread = true;//enable the separate thread for emitting the tuples in the hardware Spout
+	Boolean ackThread = true;//enable the separate thread for acknowledging the tuples in the hardware Bolt
+	Boolean ackEarlier = true;//acknowledge earlier in the hardware Bolt
+	Boolean batchData = false; //enable hardware Spout to receive data in the batch manner
+	Boolean newHWReceive = true; //switch between different receive method
+	Boolean initByAdaptation = true; // waiting for the adaptation layer to determine about the initial algorithms, autoRegister = true in main VIL
+	Boolean safeCast = true;//enable the safe cast while creating algorithm instance
+	Boolean receiveByField = false; //field-based receive statement 
+	Boolean multiHWThread = false; //enable multiple hardware threads within one spout
+	Boolean multiHWSpout = false; //enable multiple hardware spout
+	Boolean looseSub = false; //enable changes for loosing sub-pipeline integration	
+	Boolean dynamicHWUpload = true;//enable dynamic uploading of hardware algorithm
+	Boolean separateSourceThread = false;//use a separate thread to emit data
+	Boolean logData = false;//log the source input rate
+	
+	String GenAlgVersion = "0.0.1-SNAPSHOT"; //specify the version for generated algorithm
+	
+	def Boolean isHardwareAlgorithm(Algorithm alg) {
+        Boolean result = false;
+        if(alg.type() == "HardwareAlgorithm") {
+            result = true;
+        }
+        result;
+    }
+    
+    def Boolean isStringExisted(String name, setOf(String) checkSet) {
+        Boolean exist = false;
+        for (String n : checkSet) {
+            if (name == n) {
+                exist = true;               
+            }
+        }
+        exist;
+    }
+    
+    def String formulateString(String s) {
+        String result = s.firstToUpperCase().toIdentifier();
+        result;
+    }
+    
+    def Boolean isGenSubtopology(Algorithm algorithm) {//isSubPipelineAlgorithm
+        Boolean result = false;
+        if(algorithm.type() == "SubPipelineAlgorithm") {
+            result = true;
+        }
+        result;
+    }
+    
+}
