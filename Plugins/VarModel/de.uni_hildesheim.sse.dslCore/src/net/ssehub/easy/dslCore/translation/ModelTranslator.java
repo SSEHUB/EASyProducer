@@ -63,7 +63,7 @@ public abstract class ModelTranslator <E extends ExpressionTranslator> extends M
         if (null == objects) {
             decls = null;
         } else {
-            decls = new ArrayList<T>();
+            decls = new ArrayList<T>(objects.size());
             decls.addAll(objects);
         }
         return decls;
