@@ -1,0 +1,44 @@
+@advice(javaExperiments)
+vilScript javaExperimentsDebug (Project source, Configuration config, Project target) {
+
+    main(Project source, Configuration config, Project target) = : {
+        hardwareReceiverC(config, target);
+        hardwareSenderC(config, target);
+    }
+    
+    hardwareReceiverC(Configuration config, Project target) = : {
+       javaExperiments cfg = config;
+       Family f = cfg.fCorrelationFinancial;
+       
+       // basic version
+       Path tgt = "$target/FCorReceiver.cpp";
+       vilTemplateProcessor("hardwareReceiver", config, tgt, family=f);
+
+       // with reuse
+       tgt = "$target/FCorReceiver0.cpp";
+       vilTemplateProcessor("hardwareReceiver0", config, tgt, family=f);
+       
+       // an improved version
+       tgt = "$target/FCorReceiver1.cpp";
+       vilTemplateProcessor("hardwareReceiver1", config, tgt, family=f);
+    }
+
+    hardwareSenderC(Configuration config, Project target) = : {
+       javaExperiments cfg = config;
+       Family f = cfg.fCorrelationFinancial;
+       
+       // basic version
+       Path tgt = "$target/FCorSender.cpp";
+       vilTemplateProcessor("hardwareSender", config, tgt, family=f);
+
+       // with reuse
+       tgt = "$target/FCorSender0.cpp";
+       vilTemplateProcessor("hardwareSender0", config, tgt, family=f);
+       
+       // an improved version
+       tgt = "$target/FCorSender1.cpp";
+       vilTemplateProcessor("hardwareSender1", config, tgt, family=f);
+    }
+
+    
+}

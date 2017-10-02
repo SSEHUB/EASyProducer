@@ -1,0 +1,252 @@
+import commonVTLMethods1;
+@advice(javaExperiments)
+@indent(indentation = 4, additional = 0)
+template dataSourceProfilingImplementation1(Configuration config, FileArtifact target, DataSource elt, String pkg, Pipeline pip, Source src) {
+    
+    def Boolean isSingleStringTuple(javaExperiments config, Tuples tuples) {
+        if (tuples.size() == 1) {
+            Tuple tuple = tuples.first();
+            if (tuple.fields.size() == 1) {
+                Field field = tuple.fields.first();
+                config.StringType == field.type; 
+            } else {
+                false;
+            }
+        } else {
+            false;
+        }
+    }
+    
+    def produceQueueAttributes(Tuples tuples, String srcName, sequenceOf(String) dataTypes) {
+        for(Tuple t : tuples){
+            //get the tuple name
+            String tupleName = t.name;
+            String resultType = "${toIdentifier(srcName)}${firstToUpperCase(tupleName)}Output";
+            dataTypes.add(resultType);
+            'private transient Queue<ProfilingQueueItem<${resultType}>> ${resultType}Queue = 
+                new ArrayDeque<ProfilingQueueItem<${resultType}>>();'
+        }
+    }
+    
+    def produceParameterMethods(Parameters parameters) {
+        if (parameters.size() > 0) {
+            '// data source parameters' | 4;
+            ''
+            for (Parameter p : parameters) {
+                String paramName = p.name;
+                String mname = firstToUpperCase(toIdentifier(paramName));
+                String type = parameterTypeName(p);
+                '@Override
+                public void setParameter${mname}(${parameterTypeName(p)} value) {
+                    replay.setParameter${mname}(value);
+                }
+                '
+            }
+        }
+    }
+    
+    def produceAutoconnect(DataSource dataSrc) {
+        if (dataSrc.profilingSource) {
+            '@Override
+            public void forceAutoconnect() {
+                replay.forceAutoconnect();
+            }'
+        }   
+    }
+    
+    def produceDescriptors(Tuples tuples, String srcName) {
+        for (Tuple t : tuples){
+            //get the tuple name
+            String tupleName = t.name;
+            
+            String resultType = "${toIdentifier(srcName)}${firstToUpperCase(tupleName)}Output";
+            'queueList.add(new DataQueueDescriptor<${resultType}>("$tupleName", ${resultType}Queue, 
+            ${resultType}.class));'
+        }
+    }
+    
+    def produceSerialization(javaExperiments cfg, Tuples tuples, String srcName, sequenceOf(String) dataTypes) {
+        // legacy - pass rest except for potential identification directly through as String data
+        Boolean singleStringCase = isSingleStringTuple(cfg, tuples);
+        for (Tuple t : tuples){
+            //get the tuple name
+            String tupleName = t.name;
+            
+            String resultType = "${toIdentifier(srcName)}${firstToUpperCase(tupleName)}Output";
+            String checkEmpty = "";
+            Boolean first = true;
+            String forAnd;
+            for (String type : dataTypes) {
+                if (first) {
+                    forAnd = "";
+                    first = false;
+                } else {
+                    forAnd = " && ";
+                }
+                checkEmpty = checkEmpty + "${forAnd}${type}Queue.isEmpty()";
+            }
+
+            '/**
+            * Provides a serializer for the test data.
+            */
+            public static class ${resultType}Serializer implements ISerializer<${resultType}> {
+
+                @Override
+                public void serializeTo($resultType object, OutputStream out) throws IOException {
+                    // no protobuf by now
+                }
+
+                @Override
+                public $resultType deserializeFrom(InputStream in) throws IOException {
+                    return null; // no protobuf by now
+                }
+
+                ${produceDataInputSerialization(t, resultType)}
+
+                ${produceDataInputDeserialization(t, resultType, resultType)}
+            }
+
+            @Override
+            public ${resultType} get${firstToUpperCase(tupleName)}() {
+                ${resultType} result = null;
+                if (isConnected) {
+                    if (!${resultType}Queue.isEmpty()) {
+                        try {
+                            result = replay.getNextItem(${resultType}Queue);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                    if (${checkEmpty}) {
+                        if (!eodSent) {
+                            EventManager.send(new EndOfDataEvent("${pip.name}", "${src.name}"));
+                            eodSent = true;
+                        }
+                    }
+                }
+                //logger.info("get${firstToUpperCase(tupleName)} -- Returning the result: " + result);
+                return result;
+            }
+        
+            @Override
+            public String getAggregationKey(I${resultType} tuple) {
+                return null;
+            }
+            '
+        }
+    }
+    
+    def emitDataTypes(sequenceOf(String) dataTypes, Integer kind) {
+        for (String dataType : dataTypes) {
+            if (kind == 1) {
+                'SerializerRegistry.register(${dataType}.class, ${dataType}Serializer.class);'
+            } else if (kind == 2) {
+                'logger.info("The size of the ${dataType}Queue : " + ${dataType}Queue.size());'
+            } else {
+                'SerializerRegistry.unregister(${dataType}.class);'
+            }
+        }
+    }
+    
+    def main(Configuration config, FileArtifact target, DataSource dataSrc, String pkg, Pipeline pip, Source src) {
+        javaExperiments cfg = config;
+        String srcName = dataSrc.name;
+        srcName = srcName.firstToUpperCase();
+        String srcIdentifier = toIdentifier(srcName);
+        Integer tupleCount = dataSrc.input.size();
+        sequenceOf(String) dataTypes = {};
+    
+        'package ${pkg}.imp;
+
+        import java.io.*;
+        import org.apache.log4j.Logger;
+        import java.util.ArrayDeque;
+        import java.util.ArrayList;
+        import java.util.List;
+        import java.util.Queue;
+        import javax.annotation.Generated;
+        import ${pkg}.inf.I${srcIdentifier};
+        import ${pkg}.inf.I${srcIdentifier}.*;
+        import eu.qualimaster.dataManagement.strategies.*;
+        import eu.qualimaster.dataManagement.serialization.*;
+        import eu.qualimaster.observables.*;
+        import eu.qualimaster.events.EventManager;
+        import eu.qualimaster.infrastructure.EndOfDataEvent;
+        import eu.qualimaster.dataManagement.sources.DataQueueDescriptor;
+        import eu.qualimaster.dataManagement.sources.GenericMultiSourceHandler;
+        import eu.qualimaster.dataManagement.sources.ReplayMechanism;
+        import eu.qualimaster.dataManagement.sources.ReplayMechanism.ProfilingQueueItem;
+        import eu.qualimaster.dataManagement.sources.replay.LongTimestampParser;
+        import eu.qualimaster.dataManagement.sources.IHistoricalDataProvider;
+
+        /**
+        * Implements the data source class for profiling (GEN).
+        **/
+        @Generated("by QM")
+        public class ${toIdentifier(srcName)}Profiling extends ${toIdentifier(srcName)} {
+
+            private static final Logger logger = Logger.getLogger(${toIdentifier(srcName)}Profiling.class);
+            private static final int MAXIMUM_DATA_ENTRIES = 400000;
+            private GenericMultiSourceHandler handler = new GenericMultiSourceHandler(${tupleCount});
+            private ReplayMechanism replay = new ReplayMechanism(LongTimestampParser.INSTANCE);
+            private boolean eodSent = false;
+            private boolean isConnected = false;
+            ${produceQueueAttributes(dataSrc.input, srcName, dataTypes)}
+            private transient List<DataQueueDescriptor<?>> queueList = new ArrayList<DataQueueDescriptor<?>>();
+
+            ${produceSerialization(cfg, dataSrc.input, srcName, dataTypes)}
+            ${produceParameterMethods(dataSrc.parameters)}
+            ${produceAutoconnect(dataSrc)}
+
+            @Override
+            public void connect() {
+                logger.info("Connecting the source...");
+                SerializerRegistry.register("STRINGLIST", eu.qualimaster.base.serializer.StringListSerializer.class);
+                ${emitDataTypes(dataTypes, 1)}
+                replay.connect();
+                ${produceDescriptors(dataSrc.input, srcName)}
+
+                //read profiling data in advance
+                try {
+                    replay.readProfilingData(handler, MAXIMUM_DATA_ENTRIES, queueList);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                ${emitDataTypes(dataTypes, 2)}
+                isConnected = true;
+                logger.info("Connected the source...");
+            }
+        
+            @Override
+            public void disconnect() {
+                logger.info("Disconnecting the source...");
+                isConnected = false;
+                replay.disconnect();
+                ${emitDataTypes(dataTypes, 3)}
+                logger.info("Disconnected the source...");
+            }
+
+            @Override
+            public void setStrategy(IStorageStrategyDescriptor strategy) {
+                replay.setStrategy(strategy);
+            }
+
+            @Override
+            public IStorageStrategyDescriptor getStrategy() {
+                return replay.getStrategy();
+            }
+
+            @Override
+            public Double getMeasurement(IObservable observable) {
+                return replay.getMeasurement(observable);
+            }
+
+            @Override
+            public IHistoricalDataProvider getHistoricalDataProvider() {
+                return replay.getHistoricalDataProvider();
+            }
+
+        }'
+    }
+ 
+}

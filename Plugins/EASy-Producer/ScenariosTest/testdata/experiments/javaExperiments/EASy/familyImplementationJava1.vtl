@@ -1,0 +1,94 @@
+import commonVTLMethods1;
+@advice(javaExperiments)
+@indent(indentation = 4, additional = 0)
+template familyImplementationJava1(Configuration config, FileArtifact target, Family family) {   
+    String fName = family.name.firstToUpperCase();
+    mapOf(String) specificTypes = {};
+
+    def tupleProducer(Tuple t, String fName, String typeName, String type, Boolean output) {
+        String parents = "implements I${type}";
+        if (genMultiOutputs and output) {
+            parents = "extends eu.qualimaster.base.algorithm.AbstractOutputItem<I${type}> $parents";
+        }
+                                            
+        '/**
+         * Provides a default implementation of the data ${typeName} for the {@link ${type}} algorithm.
+         * Actual execution system code may also directly wrap the respective tuple concept. 
+         */
+        public static class $type $parents {
+        
+            ${produceMultiTupleMethods(type, output)}
+            ${produceFieldDeclarations(t, specificTypes)}
+            ${produceFieldAccessors(t, false, {})}
+            ${registerSerializer(fName.substring(1, fName.length()) + "Serializers", type, specificTypes)}
+        }\n'
+    }
+
+    def produceMultiTupleMethods(String type, Boolean output) {
+        if (genMultiOutputs and output) {
+            '/**
+            * Creates the item.
+            */
+            public ${type}() {
+                this(true);
+            }
+
+            /**
+            * Creates a sub-item.
+            *
+            * @param topLevel whether it is a top-level item
+            */
+            private ${type}(boolean topLevel) {
+                super(topLevel);
+                setParent(this);
+            }
+
+            @Override
+            public ${type} createItem() {
+                return new ${type}(false);
+            }
+
+            @Override
+            public void setTaskId(int taskId) {
+                this.taskId = taskId;
+            }
+
+            @Override
+            public int getTaskId() {
+                return taskId;
+            }
+            private transient int taskId;'
+        }       
+    }
+    
+    def main(Configuration config, FileArtifact target, Family family) {
+        String ifName = "I" + fName;
+        'package eu.qualimaster.families.imp;
+        
+        import eu.qualimaster.families.inf.*;
+        import eu.qualimaster.observables.IObservable;
+        import eu.qualimaster.dataManagement.serialization.SerializerRegistry;
+
+        /**
+         * The implementation for the algorithm family "${ifName}" (GEN).
+         */
+        public class $fName implements $ifName {
+        
+            ${produceForTuples(family.input, false, ifName, tupleProducer)}
+            ${produceForTuples(family.output, true, ifName, tupleProducer)}
+        
+            ${produceForCalculate(family, false)} 
+            ${produceParameterMethods(family.parameters, false)}
+            
+            @Override
+            public void switchState(State arg0) {
+            }
+
+            @Override
+            public Double getMeasurement(IObservable arg0) {
+                return null;
+            }
+        }'
+    }
+    
+}

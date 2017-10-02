@@ -1,0 +1,82 @@
+import commonVTLMethods1;
+@advice(javaExperiments)
+@indent(indentation = 4, additional = 0)
+template dataSourceImplementation1(Configuration config, FileArtifact target, DataSource elt, String pkg, Boolean profiling) {
+    mapOf(String, String) specificTypes = {};
+    /**
+     * Produces the tuple type classes.
+     */
+    def tupleProducer(Tuple t, String fName, String typeName, String type, Boolean output) {
+        '/**
+        * Define the source data input interface.
+        **/
+        public static class $type implements I${type} {
+            
+            ${produceFieldDeclarations(t, {})}
+            ${produceFieldAccessors(t, false, specificTypes)}
+            
+            ${IF !profiling}${registerSerializer(formulateString(fName) + "Serializers", type, specificTypes)}${ENDIF}
+        }'
+    }
+    
+    def main(Configuration config, FileArtifact target, DataSource dataSrc, String pkg, Boolean profiling){
+        String srcName = dataSrc.name;
+        srcName = srcName.firstToUpperCase();
+        String inputName = "I" + srcName;
+        String srcIdentifier = toIdentifier(srcName);
+    
+        'package ${pkg}.imp;
+        
+        import java.util.Map;
+        import ${pkg}.inf.I${srcIdentifier};
+        import ${pkg}.inf.I${srcIdentifier}.*;
+        import eu.qualimaster.dataManagement.strategies.*;
+        import eu.qualimaster.observables.*;
+        import eu.qualimaster.dataManagement.serialization.SerializerRegistry;
+        import eu.qualimaster.dataManagement.sources.*;
+        
+        /**
+        * Define the data source class(GEN).
+        **/
+        public class ${srcIdentifier} implements I${srcIdentifier}{
+        
+            ${produceForTuples(dataSrc.input, true, srcIdentifier, tupleProducer)}
+            
+            ${produceForTuplesPrediction(dataSrc.input, srcName, inputName, false)}
+            ${produceParameterMethods(dataSrc.parameters, false, comment="// data source parameters", parameterKind="data source")}
+            ${produceProfilingMethods(dataSrc, false)}
+        
+            @Override
+            public void connect() {}
+
+            @Override
+            public void disconnect(){}
+
+            @Override
+            public void setStrategy(IStorageStrategyDescriptor strategy) {}
+
+            @Override
+            public IStorageStrategyDescriptor getStrategy() { return NoStorageStrategyDescriptor.INSTANCE;}
+
+            @Override
+            public Double getMeasurement(IObservable observable) { return null;}
+
+            @Override
+            public IHistoricalDataProvider getHistoricalDataProvider() {
+                return null;
+            }
+
+            @Override
+            public Map<String, String> getIdsNamesMap() {
+                return null;
+            }
+
+            @Override
+            public void setDataSourceListener(IDataSourceListener listener) {
+                // no mapping, no listener needed
+            }
+
+        }'
+    }
+ 
+}

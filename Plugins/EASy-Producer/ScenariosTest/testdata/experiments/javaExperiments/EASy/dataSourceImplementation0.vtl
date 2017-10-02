@@ -1,0 +1,82 @@
+import commonVTLMethods0;
+@advice(javaExperiments)
+template dataSourceImplementation0(Configuration config, FileArtifact target, DataSource elt, String pkg, Boolean profiling) {
+    mapOf(String, String) specificTypes = {};
+    /**
+     * Produces the tuple type classes.
+     */
+    def tupleProducer(Tuple t, String fName, String typeName, String type, Boolean output, Integer indent) {
+        '/**' | indent;
+        '* Define the source data input interface.' | indent;
+        '**/' | 4;
+        'public static class $type implements I${type} {' | indent;
+        
+        produceFieldDeclarations(t, indent, {});
+        produceFieldAccessors(t, false, indent, specificTypes);
+        if(!profiling) {
+            String fserializer = formulateString(fName) + "Serializers";
+            registerSerializer(fserializer, type, specificTypes, indent);
+        }
+        '}' | indent;
+    }
+    
+    def main(Configuration config, FileArtifact target, DataSource dataSrc, String pkg, Boolean profiling){
+        String srcName =dataSrc.name;
+        srcName = srcName.firstToUpperCase();
+        String inputName = "I" + srcName;
+    
+        'package ${pkg}.imp;'
+        ''
+        'import java.util.Map;'
+        'import ${pkg}.inf.I${toIdentifier(srcName)};'
+        'import ${pkg}.inf.I${toIdentifier(srcName)}.*;'
+        'import eu.qualimaster.dataManagement.strategies.*;'
+        'import eu.qualimaster.observables.*;'
+        'import eu.qualimaster.dataManagement.serialization.SerializerRegistry;'
+        'import eu.qualimaster.dataManagement.sources.*;'
+        ''
+        '/**'
+        '* Define the data source class(GEN).'
+        '**/'
+        'public class ${toIdentifier(srcName)} implements I${toIdentifier(srcName)}{'
+        ''
+        produceForTuples(dataSrc.input, true, toIdentifier(srcName), 4, tupleProducer);     
+        ''
+        produceForTuplesPrediction(dataSrc.input, srcName, inputName, false);
+        produceParameterMethods(dataSrc.parameters, false, comment="// data source parameters", parameterKind="data source");
+        produceProfilingMethods(dataSrc, false);    
+
+        '@Override' | 4;
+        'public void connect() {}' | 4;
+        ''
+        '@Override' | 4;
+        'public void disconnect(){}' | 4;
+        ''
+        '@Override' | 4;
+        'public void setStrategy(IStorageStrategyDescriptor strategy) {}' | 4;
+        ''
+        '@Override' | 4;
+        'public IStorageStrategyDescriptor getStrategy() { return NoStorageStrategyDescriptor.INSTANCE;}' | 4;
+        ''
+        '@Override' | 4;
+        'public Double getMeasurement(IObservable observable) { return null;}' | 4; 
+        ''
+        '@Override' | 4;
+        'public IHistoricalDataProvider getHistoricalDataProvider() {' | 4;
+            'return null;' | 8;
+        '}' | 4;
+        ''
+        '@Override' | 4;
+        'public Map<String, String> getIdsNamesMap() {' | 4;
+        'return null;' | 8;
+        '}' | 4;
+        ''
+        '@Override' | 4;
+        'public void setDataSourceListener(IDataSourceListener listener) {' | 4;
+        '// no mapping, no listener needed' | 8;
+        '}' | 4;
+        ''
+        '}' 
+        }
+ 
+}

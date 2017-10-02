@@ -1,0 +1,225 @@
+import commonVTLMethods0;
+@advice(javaExperiments)
+template dataSourceProfilingImplementation0(Configuration config, FileArtifact target, DataSource elt, String pkg, Pipeline pip, Source src) {
+	
+	def Boolean isSingleStringTuple(javaExperiments config, sequenceOf(Tuple) tuples) {
+		if (tuples.size() == 1) {
+			Tuple tuple = tuples.first();
+			if (tuple.fields.size() == 1) {
+				Field field = tuple.fields.first();
+				config.StringType == field.type; 
+			} else {
+				false;
+			}
+		} else {
+			false;
+		}
+	}
+	
+	def main(Configuration config, FileArtifact target, DataSource dataSrc, String pkg, Pipeline pip, Source src) {
+		javaExperiments cfg = config;
+		String srcName = dataSrc.name;
+		srcName = srcName.firstToUpperCase();
+	
+		'package ${pkg}.imp;'
+		''
+		'import java.io.*;'
+		'import org.apache.log4j.Logger;'
+		'import java.util.ArrayDeque;'
+		'import java.util.ArrayList;'
+		'import java.util.List;'
+		'import java.util.Queue;'
+		'import javax.annotation.Generated;'
+		'import ${pkg}.inf.I${toIdentifier(srcName)};'
+		'import ${pkg}.inf.I${toIdentifier(srcName)}.*;'
+		'import eu.qualimaster.dataManagement.strategies.*;'
+		'import eu.qualimaster.dataManagement.serialization.*;'
+		'import eu.qualimaster.observables.*;'
+		'import eu.qualimaster.events.EventManager;'
+		'import eu.qualimaster.infrastructure.EndOfDataEvent;'
+		'import eu.qualimaster.dataManagement.sources.DataQueueDescriptor;'
+        'import eu.qualimaster.dataManagement.sources.GenericMultiSourceHandler;'
+		'import eu.qualimaster.dataManagement.sources.ReplayMechanism;'
+		'import eu.qualimaster.dataManagement.sources.ReplayMechanism.ProfilingQueueItem;'
+		'import eu.qualimaster.dataManagement.sources.replay.LongTimestampParser;'
+		'import eu.qualimaster.dataManagement.sources.IHistoricalDataProvider;'
+		''
+		'/**'
+		'* Implements the data source class for profiling (GEN).'
+		'**/'
+		'@Generated("by QM")'
+		'public class ${toIdentifier(srcName)}Profiling extends ${toIdentifier(srcName)} {'
+		''
+		Integer tupleCount = dataSrc.input.size();
+		'private static final Logger logger = Logger.getLogger(${toIdentifier(srcName)}Profiling.class); ' | 4;
+		'private static final int MAXIMUM_DATA_ENTRIES = 400000;' | 4;
+		'private GenericMultiSourceHandler handler = new GenericMultiSourceHandler(${tupleCount});' |4;
+		'private ReplayMechanism replay = new ReplayMechanism(LongTimestampParser.INSTANCE);' |4;
+        'private boolean eodSent = false;' | 4;
+        'private boolean isConnected = false;' | 4;
+        sequenceOf(String) dataTypes = {};
+        for(Tuple t : dataSrc.input){
+			//get the tuple name
+			String tupleName = t.name;
+			String resultType = "${toIdentifier(srcName)}${firstToUpperCase(tupleName)}Output";
+			dataTypes.add(resultType);
+			'private transient Queue<ProfilingQueueItem<${resultType}>> ${resultType}Queue = 
+				new ArrayDeque<ProfilingQueueItem<${resultType}>>();' | 4;
+		}
+		'private transient List<DataQueueDescriptor<?>> queueList = new ArrayList<DataQueueDescriptor<?>>();' | 4;
+		''
+		String tupleName;
+		// legacy - pass rest except for potential identification directly through as String data
+		Boolean singleStringCase = isSingleStringTuple(cfg, dataSrc.input);
+		for(Tuple t : dataSrc.input){
+			//get the tuple name
+			tupleName = t.name;
+			
+		String resultType = "${toIdentifier(srcName)}${firstToUpperCase(tupleName)}Output";
+
+        '/**' | 4;
+        '* Provides a serializer for the test data.' | 4;
+        '*/' | 4;
+        'public static class ${resultType}Serializer implements ISerializer<${resultType}> {' | 4;
+        ''
+        '@Override' | 8;
+        'public void serializeTo($resultType object, OutputStream out) throws IOException {' | 8;
+        '// no protobuf by now' | 12;
+        '}' |8;
+        ''
+        '@Override' | 8;
+        'public $resultType deserializeFrom(InputStream in) throws IOException {' | 8;
+        'return null; // no protobuf by now' | 12;
+        '}' |8;
+        ''
+        produceDataInputSerialization(t, resultType, 4);
+        ''
+        produceDataInputDeserialization(t, resultType, resultType, 4);
+        '}' | 4;
+        ''
+		'@Override' |4;
+	    'public ${resultType} get${firstToUpperCase(tupleName)}() {' | 4;
+		    '${resultType} result = null;' | 8;
+		    'if (isConnected) {' | 8;
+		    String checkEmpty = "";
+		    Boolean first = true;
+		    String forAnd;
+		    for (String type : dataTypes) {
+		    	if(first) {
+		    		forAnd = "";
+		    		first = false;
+		    	} else {
+		    		forAnd = " && ";
+		    	}
+		    	checkEmpty = checkEmpty + "${forAnd}${type}Queue.isEmpty()";
+		    }
+		    'if (!${resultType}Queue.isEmpty()) {' | 12;
+                'try {' | 16;
+                    'result = replay.getNextItem(${resultType}Queue);' | 20;
+                '} catch (InterruptedException e) {' | 16;
+                    'e.printStackTrace();' | 20;
+                '}' | 16;
+            '}' | 12;
+		    'if (${checkEmpty}) {' | 12;
+                'if (!eodSent) {' | 16;
+					'EventManager.send(new EndOfDataEvent("${pip.name}", "${src.name}"));' | 20;
+	            	'eodSent = true;' | 20;
+	            '}' | 16;
+            '}' | 12;
+			'}' | 8;
+			'//logger.info("get${firstToUpperCase(tupleName)} -- Returning the result: " + result);' | 8;
+			'return result;' | 8;
+	    '}' |4;
+	    
+	    '@Override' |4;
+	    'public String getAggregationKey(I${resultType} tuple) {' | 4;
+	        'return null;' | 8;
+	    '}' |4;
+		}
+		
+		if (dataSrc.parameters.size()>0) {
+	        '// data source parameters' | 4;
+	        ''
+	        for (Parameter p : dataSrc.parameters) {
+	        	String paramName = p.name;
+    			String mname = firstToUpperCase(toIdentifier(paramName));
+    			String type = parameterTypeName(p);
+	        	'@Override' | 4;
+	        	'public void setParameter${mname}(${parameterTypeName(p)} value) {' | 4;
+				'replay.setParameter${mname}(value);' | 8;
+	        	'}' | 4;
+	        	''
+	    	}
+    	}
+    	
+    	if (dataSrc.profilingSource) {
+    	'@Override' | 4;
+        'public void forceAutoconnect() {' | 4;
+        'replay.forceAutoconnect();' | 8;
+        '}' | 4;
+        }   
+        ''
+		
+		'@Override' | 4;
+		'public void connect() {' | 4;
+		'logger.info("Connecting the source...");' | 8;
+		'SerializerRegistry.register("STRINGLIST", eu.qualimaster.base.serializer.StringListSerializer.class);' | 8; // preliminary until registrations are done properly
+		for (String dataType : dataTypes) {
+		    'SerializerRegistry.register(${dataType}.class, ${dataType}Serializer.class);' | 8;
+		}
+		'replay.connect();' | 8;
+		for(Tuple t : dataSrc.input){
+			//get the tuple name
+			tupleName = t.name;
+			
+			String resultType = "${toIdentifier(srcName)}${firstToUpperCase(tupleName)}Output";
+			'queueList.add(new DataQueueDescriptor<${resultType}>("$tupleName", ${resultType}Queue, 
+            ${resultType}.class));' | 8;
+		}
+		'//read profiling data in advance' | 8;
+		'try {' | 8;
+			'replay.readProfilingData(handler, MAXIMUM_DATA_ENTRIES, queueList);' | 12;          
+	        '} catch (IOException e) {' | 8;
+	            'e.printStackTrace();' | 12;
+	        '}' | 8;
+	        for (String dataType : dataTypes) {
+	        	'logger.info("The size of the ${dataType}Queue : " + ${dataType}Queue.size());' | 8;
+	        }
+	        'isConnected = true;' | 8;
+	        'logger.info("Connected the source...");' | 8;
+		'}' |4;
+		
+		'@Override' | 4;
+        'public void disconnect() {' | 4;
+        'logger.info("Disconnecting the source...");' | 8;
+        'isConnected = false;' | 8;
+		'replay.disconnect();' | 8;
+        for (String dataType : dataTypes) {
+            'SerializerRegistry.unregister(${dataType}.class);' | 8;
+        }
+        'logger.info("Disconnected the source...");' | 8;
+		'}' | 4;
+
+		'@Override' | 4;
+        'public void setStrategy(IStorageStrategyDescriptor strategy) {' | 4;
+		'replay.setStrategy(strategy);' | 8;
+		'}' | 4;
+    
+	    '@Override' | 4;
+        'public IStorageStrategyDescriptor getStrategy() {' | 4;
+		'return replay.getStrategy();' | 8;
+		'}' | 4;
+		
+		'@Override' | 4;
+		'public Double getMeasurement(IObservable observable) {' | 4;
+		'return replay.getMeasurement(observable);' | 8;
+		'}' |4;
+    	''
+		'@Override' | 4;
+    	'public IHistoricalDataProvider getHistoricalDataProvider() {' | 4;
+        'return replay.getHistoricalDataProvider();' | 8;
+        '}' |4;
+		'}'
+    }
+ 
+}

@@ -1,0 +1,59 @@
+import commonVTLMethods1;
+@advice(javaExperiments)
+@indent(indentation = 4, additional = 0)
+template dataSinkImplementation1(Configuration config, FileArtifact target, DataSink elt, Boolean profiling) {          
+    mapOf(String, String) specificTypes = {};
+    
+    def tupleProducer(Tuple t, String fName, String typeName, String type, Boolean output) {
+        '/**
+        * Define the source data input interface.
+        **/
+        public static class $type implements I${type} {
+            ${produceFieldDeclarations(t, {})}
+            ${produceFieldAccessors(t, false, {})}
+
+            ${IF !profiling}${registerSerializer(formulateString(elt.name) + "Serializers", type, specificTypes)}${ENDIF}
+        }'
+    }
+
+    def main(Configuration config, FileArtifact target, DataSink dataSnk, Boolean profiling){
+        String snkName = dataSnk.name;
+        snkName = snkName.firstToUpperCase();
+        String inputName = "I" + snkName;
+        String snkIdentifier = toIdentifier(snkName);
+        'package eu.qualimaster.data.imp;
+        
+        import eu.qualimaster.data.inf.I${snkIdentifier};
+        import eu.qualimaster.data.inf.I${snkIdentifier}.*;
+        import eu.qualimaster.dataManagement.strategies.*;
+        import eu.qualimaster.observables.*;
+        import eu.qualimaster.dataManagement.serialization.SerializerRegistry;
+        
+        /**
+        * Define the data source class(GEN).
+        **/
+        public class ${snkIdentifier} implements I${snkIdentifier}{
+        
+            ${produceForTuples(dataSnk.output, false, snkIdentifier, tupleProducer)}    
+            ${producePostEmitMethods(dataSnk.output, snkName, inputName, false)}
+            ${produceParameterMethods(dataSnk.parameters, false, comment="// data sink parameters\n")}
+        
+            @Override
+            public void connect() {}
+
+            @Override
+            public void disconnect(){}
+         
+            @Override
+            public void setStrategy(IStorageStrategyDescriptor strategy) {}
+
+            @Override
+            public IStorageStrategyDescriptor getStrategy() { return NoStorageStrategyDescriptor.INSTANCE;}
+
+            @Override
+            public Double getMeasurement(IObservable observable) { return null;}
+
+        }' 
+    }
+ 
+}

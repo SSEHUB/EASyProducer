@@ -1,0 +1,257 @@
+import commonVTLMethods1;
+@advice(javaExperiments)
+@indent(indentation = 4, additional = 0)
+template hardwareReceiver1(Configuration config, FileArtifact target, Family family) {
+    Integer indent = 0;
+    String fNameUpper = family.name.firstToUpperCase();
+    setOf(String) parametersByType = {};
+    sequenceOf(String) letters = {"a", "b", "c", "d", "e"}; 
+    def main(Configuration config, FileArtifact target, Family family) {
+        HwVarResult hwVar = produceTuplesForHardwareVariables(family.input, fNameUpper, false);
+        '#include <stdio.h>
+        #include <stdlib.h>
+        #include <strings.h>
+        #include <unistd.h>
+        #include <sys/types.h>
+        #include <sys/socket.h>
+        #include <netinet/in.h>
+        #include <arpa/inet.h>
+        #include <sys/wait.h>
+        #include <signal.h>
+        #include <string>
+        #include <iostream>
+        #include <google/protobuf/io/coded_stream.h>
+        #include <google/protobuf/generated_message_util.h>
+        #include <google/protobuf/message.h>
+        #include <google/protobuf/extension_set.h>
+        #include <google/protobuf/unknown_field_set.h>
+        #include <google/protobuf/io/zero_copy_stream_impl_lite.h>
+
+        #include "SerializeServerTemplateCpuCode.h"
+        #include "parameters.pb.h"
+        ${produceTuplesForInclude(family.input)}
+        using namespace std;
+
+        void receiver(parm *arg)
+        {
+            struct sockaddr_in server_addr;
+            int receiver_socket;
+            int true_var=1;
+            struct sockaddr_in receiver_addr;
+            socklen_t sin_size;
+
+            if ((receiver_socket = socket(AF_INET, SOCK_STREAM, 0)) == -1)
+            {
+                perror("Socket");
+                exit(1);
+            }
+
+            if (setsockopt(receiver_socket,SOL_SOCKET,SO_REUSEADDR,&true_var,sizeof(int)) == -1)
+            {
+                perror("Setsockopt");
+                exit(1);
+            }
+
+            server_addr.sin_family = AF_INET;
+            server_addr.sin_port = htons(2400);
+            server_addr.sin_addr.s_addr = INADDR_ANY;
+            bzero(&(server_addr.sin_zero),8);
+
+            if (bind(receiver_socket, (struct sockaddr *)&server_addr, sizeof(server_addr)) == -1)
+            {
+                perror("Unable to bind");
+                exit(1);
+            }
+
+            if (listen(receiver_socket, 5) == -1)
+            {
+                perror("Listen failed");
+                exit(1);
+            }
+
+            printf("TCPServer Waiting for client on port 2400\\n");
+
+            sin_size = (socklen_t)sizeof(receiver_addr);
+            int receiver_socket_connected = accept(receiver_socket, (struct sockaddr *)&receiver_addr,&sin_size);
+            printf("Got a connection from (%s , %d)\\n",inet_ntoa(receiver_addr.sin_addr),ntohs(receiver_addr.sin_port));
+            printf("Connection with Bolt\\n");
+
+            ${emitContent(hwVar.content)}
+            ${produceParametersForVariables(family.parameters)}
+
+            google::protobuf::uint32 size;
+            google::protobuf::io::CodedInputStream::Limit msgLimit;
+            unsigned char buffer[MAXDATASIZE];
+            unsigned char temp[10];
+            int numbytes = 0;
+            int internal_size = 0;
+            int pointer = 0;
+            int j, i;
+            bzero(buffer,0);
+
+            struct message_receiver_processor msg;
+            while(1)
+            {
+                numbytes = 0;
+                while(pointer < MESSAGE_HEADER)
+                {
+                    numbytes = recv(receiver_socket_connected, &buffer[pointer], 1, 0);
+                    if(numbytes > 0)
+                        pointer = pointer + numbytes;
+                }
+
+                google::protobuf::io::CodedInputStream codedIn1(&arrayIn);
+
+                codedIn1.ReadRaw(temp, 2); // Read the protocol Message type
+                codedIn1.ReadVarint32(&size);
+                if((size & 0x7f800000) > 0)
+                {
+                    message_size = 4 + (size + 2); //size of size variable in the message + size Bytes + 2 Bytes protocol
+                }
+                else if((size & 0x7f8000) > 0)
+                {
+                    message_size = 3 + (size + 2);
+                }
+                else if((size & 0x7f80) > 0)
+                {
+                    message_size = 2 + (size + 2);
+                }
+                else
+                {
+                    message_size = 1 + (size + 2);
+                }
+                //Read the remaining Bytes from the incoming message from TCP buffer
+                while(pointer < message_size)
+                {
+                    numbytes = recv(receiver_socket_connected, &buffer[pointer], 1, 0);
+                    if(numbytes > 0)
+                        pointer = pointer + numbytes;
+                }
+                //Deserialize the complete incoming message
+                google::protobuf::io::CodedInputStream codedIn(buffer, message_size);
+
+                // Omit the first two Bytes (Message ID)
+                codedIn.Skip(2);
+
+                ${produceTuplesForHardware(family.input, hwVar.serializers)}
+                ${produceParametersForHardware(family.parameters)}
+                else if(temp[0] == \'c\')
+                {
+                    printf("Connection closed\\n");
+                    return;
+                }
+
+            }
+            close(receiver_socket_connected);
+        }'
+    }
+    def produceTuplesForInclude(Tuples tuples) {
+        Boolean once1 = true;
+        Boolean once2 = true;
+        for (Tuple t : tuples) {
+            for (Field f : t.fields) {
+                FieldType ftype = f.type;
+                String fieldName = toIdentifier(f.name);
+                String ptype = basicTypeForProto(ftype);
+                if (ptype != "" and once1) {
+                    once1 = false;
+                    '#include "${fNameUpper}.pb.h"\n'
+                }
+                if (isListType(ftype) and once2) {
+                    once2 = false;
+                    '#include "stringlist.pb.h"'
+                } else if (ptype == "" and !isListType(ftype)) {
+                    '#include "${fieldName}.pb.h"' //Notice that the algorithm-specific proto name is the configured field name
+                }
+            }
+        }
+    }
+    def produceParametersForVariables(sequenceOf(Parameter) parameters) {
+        String paraType;
+        for (Parameter p : parameters) {
+            DecisionVariable para = p;
+            paraType = para.type();
+            if (!isStringExisted(paraType, parametersByType)) {
+                parametersByType.add(paraType);
+                'eu::qualimaster::base::protos::S$paraType $paraType;'
+            }
+        }
+    }
+    def produceParametersForHardware(sequenceOf(Parameter) parameters) {
+        setOf(String) marker = {};
+        String protocol;
+        String paraType;
+        if (parameters.size()>0){
+            'else if(temp[0] == \'p\') { //Parameters\n'
+            for (Parameter p : parameters) {
+                DecisionVariable para = p;
+                paraType = para.type();
+                protocol = parameterHwProtocol(p);
+                if (!isStringExisted(protocol, marker)){
+                    marker.add(protocol);
+                    '    if(temp[1] == \'${protocol}\')  {//${parameterTypeName(p)} Parameter
+                            ${produceHardwareSerialization(paraType)}
+                            ${produceSizeCode()}
+                         }'
+                }
+            }
+            '}' | indent;
+        }
+    }
+    def produceTuplesForHardware(Tuples tuples, mapOf(String, setOf(String)) serializers) {        
+        'if(temp[0] == \'d\') { //Data
+            ${produceTuplesForHardwareLoop(tuples, serializers)}
+        }'
+    }
+    def produceTuplesForHardwareLoop(Tuples tuples, mapOf(String, setOf(String)) serializers) {
+        Integer counter = 0;
+        for(Tuple t : tuples) {
+            String tupleName = t.name;
+            setOf(String) setS = serializers.get(tupleName);
+            String letter = letters.get(counter);
+            counter = counter + 1;
+            'if(temp[1] == \'${letter}\') { //${counter}st Data Type'
+            for (String s : setS) {
+                '${produceHardwareSerialization(s)}
+                ${produceCommonCode(s)}'
+            }
+            '}'
+        }
+    }
+    def produceHardwareSerialization(String serializer) {
+        'codedIn.ReadVarint32(&size);
+        msgLimit = codedIn.PushLimit(size);
+        ${serializer}.ParseFromCodedStream(&codedIn);
+        codedIn.PopLimit(msgLimit);'
+    }
+    def produceSizeCode() {
+        'if((size & 0x7f800000) > 0)
+        {
+            internal_size = internal_size + size + 4;
+        }
+        else if((size & 0x7f8000) > 0)
+        {
+            internal_size = internal_size + size + 3;
+        }
+        else if((size & 0x7f80) > 0)
+        {
+            internal_size = internal_size + size + 2;
+        }
+        else
+        {
+            internal_size = internal_size + size + 1;
+        }'
+    }
+    
+    def produceCommonCode(String variable) {
+        '// Parse the message data
+        msg.type = 0;
+        msg.data = ${variable}.randominteger();
+
+        //Push data into the lockfree structure
+        while(!arg->queue_receiver_processor->push(msg))
+        {
+            ;
+        }'
+    }
+}

@@ -1,0 +1,507 @@
+@advice(javaExperiments)
+@indent(indentation = 4, additional = 0)
+template commonVTLMethods1(Configuration config, FileArtifact target) { 
+
+    Boolean genInstance = true;
+    Boolean genMultiOutputs = true;     // generate specific code for multiple output of one algorithm
+    Boolean genMonitoringProbes = true; // generate monitoring probes (false for experiments)
+    Boolean genMultiTupleTypes = true; // generate specific code for considering multiple tuple types in the algorithm output as well as 
+                                       // adjusting the stream id to "EltVarName+TupleName/AlgName"
+    Boolean newSwitch = false;//enable the switch mode
+    Boolean newSwitchLog = false;//enable the switch-related logs
+    Boolean hwlog = false; //enable the hardware algorithm-related logs
+    Boolean fastQueueOperation = true; //faster operation on searching and deleting items from the queue (used LinkedList)
+    Boolean emitThread = true;//enable the separate thread for emitting the tuples in the hardware Spout
+    Boolean ackThread = true;//enable the separate thread for acknowledging the tuples in the hardware Bolt
+    Boolean ackEarlier = true;//acknowledge earlier in the hardware Bolt
+    Boolean batchData = false; //enable hardware Spout to receive data in the batch manner
+    Boolean newHWReceive = true; //switch between different receive method
+    Boolean initByAdaptation = true; // waiting for the adaptation layer to determine about the initial algorithms, autoRegister = true in main VIL
+    Boolean safeCast = true;//enable the safe cast while creating algorithm instance
+    Boolean receiveByField = false; //field-based receive statement 
+    Boolean multiHWThread = false; //enable multiple hardware threads within one spout
+    Boolean multiHWSpout = false; //enable multiple hardware spout
+    Boolean looseSub = false; //enable changes for loosing sub-pipeline integration 
+    Boolean dynamicHWUpload = true;//enable dynamic uploading of hardware algorithm
+    Boolean separateSourceThread = false;//use a separate thread to emit data
+    Boolean logData = false;//log the source input rate
+    
+    String GenAlgVersion = "0.0.1-SNAPSHOT"; //specify the version for generated algorithm
+    
+    const mapOf(String, String) parameterTypeNameMap = {{"IntegerParameter", "int"}, {"BooleanParameter", "boolean"}, {"RealParameter", "double"}, {"StringParameter", "String"}, {"LongParameter", "long"}};
+    const mapOf(String, String) kryoTypeNameMap = {{"int", "Int"}, {"long", "Long"}, {"String", "String"}, {"boolean", "Boolean"}, {"float", "Float"}, {"double", "Double"}};
+    const mapOf(String, String) protoTypeNameMap = {{"int", "int32"}, {"String", "string"}, {"boolean", "bool"}, {"long", "int64"}, {"float", "float"}, {"double", "double"}};
+    const mapOf(String, String) parameterHardwareProtocolMap = {{"IntegerParameter", "a"}, {"BooleanParameter", "b"}, {"RealParameter", "c"}, {"StringParameter", "e"}, {"LongParameter", "f"}};
+    
+    def String parameterTypeName(DecisionVariable var) {
+        parameterTypeNameMap.get(var.type().name());
+    }
+    
+    def Boolean isHardwareAlgorithm(Algorithm alg) {
+        alg.type() == "HardwareAlgorithm";
+    }
+    
+    def Boolean isStringExisted(String name, setOf(String) checkSet) {
+        checkSet->includes(name);
+    }
+    
+    def String formulateString(String s) {
+        s.firstToUpperCase().toIdentifier();
+    }
+    
+    def Boolean isGenSubtopology(Algorithm algorithm) {//isSubPipelineAlgorithm
+        algorithm.type() == SubPipelineAlgorithm;
+    }
+    
+    def String fieldTypeName(Field f) {
+        f.type.class;
+    }
+    
+    /**
+     * Returns the serializer class. If it is not configured, return an empty string.
+     */     
+    def serializerClass(Field field, mapOf(String, String) specificTypes) {
+        FieldType type = field.type;
+        if(type.serializer.isConfigured() and type.serializer.length() > 0) {
+            specificTypes.add(type.name, type.serializer);
+        }
+    }
+    
+    /**
+     * Registers the specific types from the collected specific types (see "serializerClass" method)
+     */
+    def registerSpecificTypes(mapOf(String, String) specificTypes) {
+        setOf(String) types = specificTypes.getKeys();
+        for(String tName : types) {
+            String tCls = specificTypes.get(tName);
+            'SerializerRegistry.register("${tName}", ${tCls}.class);'
+        }
+    }
+    
+    /**
+     * Registers all serializers.
+     * @param fserializer the name of the serializer class
+     * @param type the retrieve name
+     * @param secificTypes a map of type name and respective name of the serializer class
+     */
+    def registerSerializer(String fserializer, String type, mapOf(String, String) specificTypes) {
+        'static {
+            SerializerRegistry.register("$type", $fserializer.${type}Serializer.class);
+            ${registerSpecificTypes(specificTypes)}
+        }'
+    }
+    
+    /*
+     * Produces the calculate methods for the family interface or implementation.
+     */
+    def produceForCalculate(Family family, Boolean interface) {      
+         String ifName = "I" + family.name.firstToUpperCase();
+         setOf(String) outTypes = {};
+         
+         //input tuples loop      
+         for (Tuple t : family.input){ 
+            String inputTupleName = t.name;                                
+            String inTypeName = "I${ifName}${firstToUpperCase(inputTupleName)}Input";
+            
+            //output tuples loop
+            for (Tuple p : family.output){  
+                String outputTupleName = p.name;
+                String outTypeName = "I${ifName}${firstToUpperCase(outputTupleName)}Output"; 
+                //collect the output types   
+                outTypes.add(outTypeName + " " + outputTupleName + "Result");
+                if (!genMultiTupleTypes) {   
+                    '/**
+                    * Calculates the actual <code>result</code> for <code>input</code>.
+                    *
+                    * @param input the algorithm input taken from the input stream
+                    * @param result the result calculated by the algorithm
+                    */
+                    public void calculate(${inTypeName} input, ${outTypeName} result)${IF interface};${ELSE} {
+                    }${ENDIF}
+                    '
+                }
+           }
+           if (genMultiTupleTypes) {
+                String outTypeString = "";
+                for (String outType : outTypes) {
+                    outTypeString = outTypeString + ", " + outType;                 
+                }
+                '/**
+                 * Calculates the actual <code>result</code> for <code>input</code>.
+                 *
+                 * @param input the algorithm input taken from the input stream
+                 * @param result the result calculated by the algorithm
+                 */
+                public void calculate(${inTypeName} input$outTypeString)${IF interface};${ELSE} {
+                }${ENDIF}
+                '
+            }
+        }     
+    }
+    
+    def produceParameterMethods(Parameters parameters, Boolean interface, String comment="", String parameterKind="algorithm") {
+        if (parameters.size() > 0) {
+            if (comment.length() > 0) {
+                '${comment}'
+            }
+            for (Parameter p : parameters, "\n") {
+                String paramName = p.name;
+                String mname = firstToUpperCase(toIdentifier(paramName));
+                '/**
+                 * Sets the ${parameterKind} parameter "${paramName}".
+                 *
+                 * @param value the new value of the ${parameterKind} parameter
+                 */
+                public void setParameter${mname}(${parameterTypeName(p)} value)${IF interface};${ELSE} {
+                }${ENDIF}'
+            }
+        }
+    }
+    
+    def produceFieldDeclarations(Tuple t, mapOf(String, String) specificTypes) {
+        for (Field f : t.fields) {
+            String fname = toIdentifier(f.name);
+            String ftype = fieldTypeName(f);
+            //collect the specific types for registering serialization class.
+            serializerClass(f, specificTypes);
+            'private ${ftype} ${fname};\n'
+        }
+    }
+    
+    def produceFieldAccessors(Tuple t, Boolean interface, mapOf(String, String) specificTypes) {
+        for (Field f : t.fields, "\n") {
+            String fname = toIdentifier(f.name);
+            String mname = firstToUpperCase(fname);
+            String ftype = fieldTypeName(f);
+            //collect the specific types for registering serialization class.
+            serializerClass(f, specificTypes);
+            '${IF not(interface)}@Override${ELSE}/**
+             * Returns the input value for tuple field "${f.name}".
+             * @return the tuple value
+             */${ENDIF}
+            public ${ftype} get${mname}()${IF interface};${ELSE} {
+                return ${fname};
+            }${ENDIF}
+
+            ${IF not(interface)}@Override${ELSE}/**
+             * Changes the output value for tuple field "${f.name}".
+             * @param ${fname} the field value
+             */${ENDIF}
+            public void set${mname}(${ftype} ${fname})${IF interface};${ELSE} {
+                this.${fname} = ${fname};
+            }${ENDIF}\n'
+        }
+    }
+    
+    /*
+     * Produces the tuple type classes.
+     */
+    def produceForTuples(sequenceOf(Tuple) tuples, Boolean output, String fName, callOf(Tuple, String, String, String, Boolean) producer) {
+        String type;
+        String typeName;
+
+        for (Tuple t : tuples){
+            String tupleName = t.name;    
+               if (output) {
+                type = "${fName}${firstToUpperCase(tupleName)}Output";
+                typeName = "output";
+            } else {
+                type = "${fName}${firstToUpperCase(tupleName)}Input";
+                typeName = "input";           
+            }
+            '${producer(t, fName, typeName, type, output)}'
+        }
+    }              
+
+    def producePostEmitMethods(Tuples tuples, String snkName, String inputName, Boolean interface) {
+        for (Tuple t : tuples){
+            //get the tuple name
+            String tupleName = t.name;
+            
+            '${IF interface}/**
+            * Posts a specific type of data sink.
+            * @param data the sink data ${toIdentifier(snkName)}${firstToUpperCase(tupleName)}Input
+            **/${ELSE}@Override${ENDIF}
+            public void postData${firstToUpperCase(tupleName)}(${toIdentifier(inputName)}${firstToUpperCase(tupleName)}Input data)${IF interface};${ELSE} {
+            }${ENDIF}
+        
+            ${IF interface}/**
+            * Emits tuple along with a ticket.
+            * @param ticket the ticket to identify the responses for application
+            * @param tuple the tuple ${toIdentifier(inputName)}${firstToUpperCase(tupleName)}Input to be emitted 
+            **/${ELSE}@Override${ENDIF}
+            public void emit(int ticket, ${toIdentifier(inputName)}${firstToUpperCase(tupleName)}Input tuple)${IF interface};${ELSE} {
+            }${ENDIF}\n'
+        }
+    } 
+
+    /*
+     * Produces the tuple type interfaces.
+     */    
+    def produceForTupleInterface(sequenceOf(Tuple) tuples, String eltName, Boolean source) {
+        Integer tuplesSize = tuples.size();
+        String inputName = "I" + eltName.firstToUpperCase();
+        String eltKind;
+        String ifPostfix;
+        if (source) {
+            eltKind="source";
+            ifPostfix = "Output";
+        } else {
+            eltKind="sink";
+            ifPostfix = "Input";
+        }
+
+        for (Tuple t : tuples) {      
+            //get the tuple name
+            String tupleName = t.name;
+            '/**
+             * Define the ${eltKind} data input interface.
+             **/
+            public static interface ${toIdentifier(inputName)}${firstToUpperCase(tupleName)}${ifPostfix} extends Serializable {
+                ${produceFieldAccessors(t, true, {})}
+            }'
+        }           
+    }
+
+    def produceForTuplesPrediction(Tuples tuples, String typeName, String inputName, Boolean interface) {
+        for (Tuple t : tuples) {
+            //get the tuple name
+            String tupleName = t.name;
+            
+            '${IF interface}/**
+             * Returns a specific type of data source.
+             * @return ${toIdentifier(typeName)}${firstToUpperCase(tupleName)}Output the source data
+             **/${ELSE}@Override${ENDIF}
+             public ${toIdentifier(typeName)}${firstToUpperCase(tupleName)}Output get${firstToUpperCase(tupleName)}()${IF interface};${ELSE} {
+                 return null;
+             }${ENDIF}
+        
+             ${IF interface}/**
+             * Returns an aggregation key from the key property of the tuple type for predicting source data. If null, do not aggregate or predict.
+             * @return an aggregation key
+             **/${ELSE}@Override${ENDIF}
+             public String getAggregationKey(${toIdentifier(inputName)}${firstToUpperCase(tupleName)}Output tuple)${IF interface};${ELSE} {
+                return null;
+             }${ENDIF}
+             '
+        }
+    }
+    
+    def produceProfilingMethods(DataSource dataSrc, Boolean interface) {
+        if (dataSrc.profilingSource) {
+            '${IF interface}/**
+            * Enforce the source to autoconnect mode and prevent self-connects (profiling).
+            **/${ELSE}@Override${ENDIF}
+            public void forceAutoconnect()${IF interface};${ELSE} {
+            }${ENDIF}
+            '
+        }
+    }
+    
+     /**
+     * Produces code for deserialization via the IDataInput interface. t is the tuple to produce the serialization 
+     * method for, infType the (interface) type of the data to serialize, type the actual data type to serialize.
+     * Requires eu.qualimaster.dataManagement.serialization.* as import.
+     */
+    def produceDataInputDeserialization(Tuple t, String infType, String type) {
+        '@Override
+        public $infType deserializeFrom(IDataInput in) throws IOException {
+            $type result = new $type();
+            ${produceDataInputDeserializationFields(t.fields)}
+            return result;
+        }
+        '
+    }
+    
+    protected def produceDataInputDeserializationFields(Fields fields) {
+        for (Field f : fields, "\n") {
+            String fname = toIdentifier(f.name);
+            String mname = firstToUpperCase(fname);                     
+            if (isBasicType(f.type)) {
+                String tname = firstToUpperCase(fieldTypeName(f));
+                'result.set${mname}(in.next${tname}());'
+            } else {
+                if (!isListType(f.type)){
+                    'result.set${mname}(SerializerRegistry.getSerializerSafe("${f.type.name}", ${f.type.class}.class).deserializeFrom(in));'
+                } else {
+                    String innertype = obtainInnerType(f.type.class);
+                    'result.set${mname}(SerializerRegistry.getListSerializerSafe("${f.type.name}", $innertype.class).deserializeFrom(in));'
+                }
+            }
+        }
+    }
+
+    /**
+     * Produces code for serialization via the IDataOutput interface. t is the tuple to produce the serialization 
+     * method for, infType the (interface) type of the data to serialize.
+     * Requires eu.qualimaster.dataManagement.serialization.* as import.
+     */
+    def produceDataInputSerialization(Tuple t, String infType) {
+        '@Override
+        public void serializeTo($infType object, IDataOutput out) throws IOException {
+            ${produceDataInputSerializationFields(t.fields)}
+        }
+        '   
+    }
+
+    protected def produceDataInputSerializationFields(Fields fields) {
+        for (Field f : fields, "\n") {  
+            String fname = toIdentifier(f.name);
+            String mname = firstToUpperCase(fname);                     
+            if(isBasicType(f.type)) {
+                String tname = firstToUpperCase(fieldTypeName(f));
+                'out.write${tname}(object.get${mname}());'
+            } else {
+                if(!isListType(f.type)){
+                    'SerializerRegistry.getSerializerSafe("${f.type.name}", ${f.type.class}.class).serializeTo(object.get${mname}(), out);'
+                } else {
+                    String innertype = obtainInnerType(f.type.class);
+                    'SerializerRegistry.getListSerializerSafe("${f.type.name}", $innertype.class).serializeTo(object.get${mname}(), out);'
+                }
+            }
+        }
+    }
+
+    def Boolean isBasicType(FieldType type) {
+        switch(type.class) {
+            "int" : true,
+            "String" : true,
+            "boolean" : true,
+            "long" : true, 
+            "float" : true,
+            "double" : true,
+            default : false
+        }
+    }
+    
+    def Boolean isListType(FieldType type) {
+        String class = type.class;
+        class.matches("java.util.List.*");
+    }
+     
+    /**
+     * Obtain the inner type of the list.
+     */
+    def String obtainInnerType(String class) {
+        Integer len = class.length();
+        class.substring(15, len - 1);
+    }
+ 
+    def String stripTemplates(String typeName) {
+        typeName = typeName.substitute("<.*>", "");
+        switch(typeName) {
+            "java.util.List" : "java.util.ArrayList",
+            default: typeName
+        }
+    }
+
+      /**
+       * Gets the configured name.
+       */
+    def String eltName(DecisionVariable elt) {
+        ""; // dispatch base case
+    }
+
+    def String eltName(DataElement elt) {
+        elt.name;
+    }
+
+    def String eltName(Family family) {
+        family.name;
+    }
+
+    def String kryoName(DecisionVariable f) {
+        kryoTypeNameMap.get(fieldTypeName(f), "");
+    }
+    
+    protected def produceKryoReadObjectHandlingStart(String type) {
+        'public $type read(Kryo kryo, Input input, Class<$type> type) {
+            $type result = new $type();'
+    }
+    
+    protected def produceKryoObjectHandling(Tuple t, Boolean write) {
+        for (Field f : t.fields, "\n") {
+            String fname = toIdentifier(f.name);
+            String mname = firstToUpperCase(fname);
+            String kname = kryoName(f);
+            String tname = stripTemplates(fieldTypeName(f));
+            if (kname == "") {
+                '${IF write}kryo.writeObject(output, object.get${mname}());${ELSE}result.set${mname}(kryo.readObject(input, ${tname}.class));${ENDIF}'
+            } else {
+                '${IF write}output.write${kname}(object.get${mname}());${ELSE}result.set${mname}(input.read${kname}());${ENDIF}'
+            }
+        }
+    }
+ 
+    def produceKryoObjectHandling(Tuple t, String type, Boolean write) {
+        '@Override
+        ${IF write}public void write(Kryo kryo, Output output, $type object) {${ELSE}${produceKryoReadObjectHandlingStart(type)}${ENDIF}
+            ${produceKryoObjectHandling(t, write)}
+            ${IF !write}return result;${ENDIF}
+        }'
+    }
+ 
+    def String basicTypeForProto(FieldType type) {
+        protoTypeNameMap.get(type.class, "");
+    }   
+    
+    def String basicTypeForProto(String type) {
+        protoTypeNameMap.get(type, "");
+    }
+ 
+    def String parameterHwProtocol(DecisionVariable var) {
+        parameterHardwareProtocolMap.get(var.type().name());
+    }
+    
+    compound HwVarResult {
+        mapOf(String, setOf(String)) serializers = {};
+        sequenceOf(String) content = {};
+    }
+    
+    def emitContent(sequenceOf(String) seq, Integer indent=0) {
+        for (String s : seq) {
+            '${s}' | 0;
+        }
+    }
+ 
+    def HwVarResult produceTuplesForHardwareVariables(Tuples tuples, String fName, Boolean output) {
+        HwVarResult result = new HwVarResult();
+        String type;
+        String ifName = "I" + fName;
+        Boolean flag = true;
+        for (Tuple t : tuples) {
+            setOf(String) tmp = {};
+            String tupleName = t.name;
+            if (flag and output) { //for output in the sender
+                type = "S${ifName}${firstToUpperCase(tupleName)}Output";
+                flag = false; //assume that there is only one output type from the family
+                result.content.add("eu::qualimaster::families::protobuf::$type ${tupleName}Output;");
+            }
+            if (!output) { //for input considering the multiple case
+                type = "S${ifName}${tupleName}Input";
+                Boolean once1 = true;
+                Boolean once2 = true;
+                for (Field f : t.fields) {
+                    FieldType ftype = f.type;
+                    String fieldName = toIdentifier(f.name);  
+                    String ptype = basicTypeForProto(ftype);
+                    if (ptype != "" and once1) {
+                        tmp.add("${tupleName}Input");
+                        once1 = false;
+                        result.content.add("eu::qualimaster::families::protobuf::$type ${tupleName}Input;");
+                    } else if (isListType(ftype) and once2) {
+                        tmp.add("stringList");
+                        once2 = false;
+                        result.content.add("eu::qualimaster::base::protos::SStringList stringList;");
+                    } else if (ptype == "" and !isListType(ftype)){//algorithm-specific protobuf TODO: the actual path
+                        tmp.add(fieldName);
+                        result.content.add("eu::qualimaster::families::protobuf::S${fieldName} ${fieldName};");
+                    }
+                }
+            }
+            result.serializers.add(tupleName, tmp);        
+        }
+        result;        
+    }   
+       
+}

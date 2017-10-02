@@ -1,0 +1,46 @@
+import commonVTLMethods0;
+@advice(javaExperiments)
+template serializationRegistry0(Configuration config, FileArtifact target, setOf(DecisionVariable) families) {
+	//TODO: register the specific types.
+    // needs to be translated into new advice-style of writing
+
+    def tupleProducer(Tuple t, String fName, String typeName, String type, Boolean output, Integer indent) {
+    	String serializerType = "${fName}Serializers.I${type}Serializer";
+    	type = "${fName}.I${type}"; // qualify inner classes
+    	    
+    	'conf.registerSerialization(${type}.class, ${serializerType}.class);' | indent;
+    }
+
+    def main(Configuration config, FileArtifact target, setOf(DecisionVariable) families) {
+    	'package eu.qualimaster.families.imp;'
+    	''
+    	'import javax.annotation.Generated;'
+    	'import backtype.storm.Config;'
+    	''
+    	'/**'
+    	' * The registration of the generated serializers (GEN).'
+    	' */'
+    	'@Generated(value="EASy-Producer")'
+    	'public class SerializationRegistry {'
+    	''
+    	'/**' | 4;
+    	' * Registers all generated kryo serializers. To be called from a topology.' | 4;
+    	' */' | 4;
+    	'public static final void registerKryoSerializers(Config conf) {' | 4;
+    	for (Family family : families) {
+    		String fName = family.name.firstToUpperCase();
+    	    produceForTuples(family.input, false, fName, 8, tupleProducer);
+    	    produceForTuples(family.output, true, fName, 8, tupleProducer);
+    	}
+    	'}' |4;
+        ''    	
+    	'/**' | 4;
+    	' * Registers all generated hardware serializers. To be called from a topology.' | 4;
+    	' */' | 4;
+    	'public static final void registerHardwareSerializers() {' | 4;
+    	'}' |4;
+    	
+        '}'
+    }
+    
+}

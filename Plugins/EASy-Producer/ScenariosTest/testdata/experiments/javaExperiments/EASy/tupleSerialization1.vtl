@@ -1,0 +1,150 @@
+import commonVTLMethods1;
+@advice(javaExperiments)
+@indent(indentation = 4, additional = 0)
+template tupleSerialization1(Configuration config, FileArtifact target, DecisionVariable elt, String pkg) {
+
+    Boolean isTupleForFamily = false;
+    
+    protected def produceDeserializeFrom(Tuple t, String nestType) {
+        Integer count = 0; //only generate once  
+        for (Field f : t.fields, "\n") {
+            count = count + 1;
+            String fname = toIdentifier(f.name);
+            String mname = firstToUpperCase(fname);
+            if (isBasicType(f.type)) {
+                '${IF count == 1}S$nestType tmp = S$nestType.parseDelimitedFrom(in);${ENDIF}
+                result.set${mname}(tmp.get${mname}());'
+            } else {
+                if (!isListType(f.type)){
+                    'result.set${mname}(SerializerRegistry.getSerializerSafe("${f.type.name}", ${f.type.class}.class).deserializeFrom(in));'
+                } else {
+                    String innertype = obtainInnerType(f.type.class);
+                    'result.set${mname}(SerializerRegistry.getListSerializerSafe("${f.type.name}", $innertype.class).deserializeFrom(in));'
+                }
+            }                   
+        } 
+    }
+    
+    protected def produceSerializeTo(Tuple t, String nestType) {
+        Boolean flag1 = true;
+        Boolean flag2 = false;
+        for (Field f : t.fields) {  
+            if (isBasicType(f.type)) {
+                if (flag1){
+                    flag1 = false; //generate once
+                    flag2 = true;
+                    'S$nestType tmp = S$nestType.newBuilder()'
+                }
+                String fname = toIdentifier(f.name);
+                String mname = firstToUpperCase(fname);                     
+                '    .set${mname}(object.get${mname}())\n'
+            }                       
+        }
+        if (flag2) {
+            flag2 = false; //generate once
+            '    .build();'
+            'tmp.writeDelimitedTo(out);'
+        }
+        for (Field f0 : t.fields) {
+            String fname = toIdentifier(f0.name);
+            String mname = firstToUpperCase(fname);                                     
+            if (!isBasicType(f0.type)) {                      
+                if (!isListType(f0.type)){
+                    'SerializerRegistry.getSerializerSafe("${f0.type.name}", ${f0.type.class}.class).serializeTo(object.get${mname}(), out);'
+                } else {
+                    String innertype = obtainInnerType(f0.type.class);
+                    'SerializerRegistry.getListSerializerSafe("${f0.type.name}", $innertype.class).serializeTo(object.get${mname}(), out);'
+                }
+            }
+        }
+    }
+    
+    def tupleProducer(Tuple t, String fName, String typeName, String type, Boolean output) {
+        String nestType = type;    
+        String infNestType = "I${type}";
+        String ifName = fName;
+        if (isTupleForFamily) {
+            nestType = "I" + nestType;
+            infNestType = "I" + infNestType;
+            ifName = "I" + fName;
+        }
+        String tupleName = firstToUpperCase(t.name);
+        String serializerType = nestType + "Serializer";
+        String iType = "${fName}.${nestType}"; // qualify inner classes
+        String infType = "${ifName}.${infNestType}";   //qualify inner interfaces                         
+        '/**
+        * Provides a serializer (supports both Kyro and Protobuf) for the default implementation of the data ${typeName} for the {@link ${infType}} algorithm.
+        */
+        public static class $serializerType extends Serializer<${iType}> implements ISerializer<${infType}> {
+
+            @Override
+            public void serializeTo($infType object, OutputStream out) throws IOException {
+                ${produceSerializeTo(t, nestType)}
+            }
+
+            ${produceDataInputSerialization(t, infType)}
+            
+            @Override
+            public $infType deserializeFrom(InputStream in) throws IOException {
+                $iType result = new $iType();
+                ${produceDeserializeFrom(t, nestType)}
+                return result;
+            }
+
+            ${produceDataInputDeserialization(t, infType, iType)}
+            ${produceKryoObjectHandling(t, iType, true)}
+
+            ${produceKryoObjectHandling(t, iType, false)}
+        }
+        '                      
+    }
+    
+    def produceFor(DecisionVariable elt) {
+        '//unhandled type ${elt.type()}'
+    }
+    def produceFor(Family elt) {
+        isTupleForFamily = true;
+        '${produceForTuples(elt.input, false, formulateString(elt.name), tupleProducer)}
+        ${produceForTuples(elt.output, true, formulateString(elt.name), tupleProducer)}'
+    }
+    
+    def produceFor(DataSource elt) {
+        isTupleForFamily = false;
+        '${produceForTuples(elt.input, true, formulateString(elt.name), tupleProducer)}'
+    }
+    def produceFor(DataSink elt) {
+        isTupleForFamily = false;
+        '${produceForTuples(elt.output, false, formulateString(elt.name), tupleProducer)}'
+    }
+    
+    def main(Configuration config, FileArtifact target, DecisionVariable elt, String pkg) {
+        'package $pkg.imp;
+
+        import java.io.IOException;
+        import java.io.InputStream;
+        import java.io.OutputStream;
+        import javax.annotation.Generated;
+        import com.esotericsoftware.kryo.io.Output;
+        import com.esotericsoftware.kryo.io.Input;
+        import com.esotericsoftware.kryo.Serializer;
+        import com.esotericsoftware.kryo.Kryo;
+        import eu.qualimaster.dataManagement.serialization.ISerializer;
+        import eu.qualimaster.dataManagement.serialization.SerializerRegistry;
+        import eu.qualimaster.dataManagement.serialization.IDataInput;
+        import eu.qualimaster.dataManagement.serialization.IDataOutput;
+        import $pkg.imp.${formulateString(eltName(elt))};
+        import $pkg.inf.*;
+
+        import eu.qualimaster.protos.${formulateString(eltName(elt))}Protos.*;
+        /**
+         * The implementation of the serializers for ${IF elt.type() == Family}the algorithm family "I${formulateString(eltName(elt))}"${ELSE}the data element "${formulateString(eltName(elt))}"${ENDIF} (GEN).
+         */
+        @Generated(value="EASy-Producer")
+        public class ${formulateString(eltName(elt))}Serializers {
+
+            ${produceFor(elt)}
+            
+        }'
+    }
+    
+}

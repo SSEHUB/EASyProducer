@@ -1,0 +1,45 @@
+import commonVTLMethods0;
+@advice(javaExperiments)
+template familyInterfaceJava0(Configuration config, FileArtifact target, Family family, String ifName) {
+
+    /*
+     * Produces the tuple type classes.
+     */
+    def tupleProducer(Tuple t, String fName, String typeName, String type, Boolean output, Integer indent) {
+        type = "I" + type;
+		'/**' | indent;
+		'* Defines the data ${typeName} interface for the {@link ${type}} algorithm (over all defined ${typeName} tuples).' | indent + 1;
+		'*/' | indent + 1;
+		String baseInterface = "Serializable";
+		if (genMultiOutputs and output) {
+			baseInterface = "Serializable, eu.qualimaster.base.algorithm.IOutputItem<$type>, IDirectGroupingInfo";
+		}
+		'public static interface $type extends $baseInterface {' | indent;
+		''
+        produceFieldAccessors(t, true, indent, {});
+    	'}' | indent;
+    	''	    		    	
+    } 	 		
+
+    def main(Configuration config, FileArtifact target, Family family, String ifName) {
+    	'package eu.qualimaster.families.inf;'
+    	''
+    	'import java.io.Serializable;'
+    	'import eu.qualimaster.base.algorithm.IFamily;'
+    	'import eu.qualimaster.base.algorithm.IDirectGroupingInfo;'
+    	''
+    	'/**'
+    	' * Defines the interface for the algorithm family "${ifName}" (GEN).'
+    	' */'
+    	'public interface ${toIdentifier(ifName)} extends IFamily{'
+    	''
+    	produceForTuples(family.input, false, ifName, 4, tupleProducer);
+    	produceForTuples(family.output, true, ifName, 4, tupleProducer);
+    	 
+        produceForCalculate(family, true);        
+        produceParameterMethods(family.parameters, true);
+        ' '
+    	'}'
+    }
+    
+}

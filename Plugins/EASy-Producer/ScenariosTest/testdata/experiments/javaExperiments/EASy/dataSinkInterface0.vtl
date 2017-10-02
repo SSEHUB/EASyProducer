@@ -1,0 +1,27 @@
+import commonVTLMethods0;
+@advice(javaExperiments)
+template dataSinkInterface0(Configuration config, FileArtifact target, DataSink elt) {
+	
+	def main(Configuration config, FileArtifact target, DataSink dataSnk){
+		String snkName =dataSnk.name;
+		snkName = snkName.firstToUpperCase();
+		String inputName = "I" + snkName;
+		'package eu.qualimaster.data.inf;'
+		''
+		'import java.io.Serializable;'
+		'import eu.qualimaster.dataManagement.sinks.IDataSink;'
+		''
+		'/**'
+		'* Define the data sink interface(GEN).'
+		'**/'
+		'public interface I${toIdentifier(snkName)} extends IDataSink {'
+		''
+        produceForTupleInterface(dataSnk.output, snkName, false, 4);
+		''
+        producePostEmitMethods(dataSnk.output, inputName, inputName, true, 4);
+		produceParameterMethods(dataSnk.parameters, true, comment="// data sink parameters", parameterKind="data sink");
+		' '
+		'}' 
+	}
+
+}

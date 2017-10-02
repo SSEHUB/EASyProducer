@@ -1,0 +1,243 @@
+@advice(javaExperiments)
+vilScript javaExperiments (Project source, Configuration config, Project target) {
+
+    main(Project source, Configuration config, Project target) = : {
+        familyImplementationJava(config, target);
+        familyInterfaceJava(config, target);
+        dataSinkImplementationJava(config, target);
+        dataSinkInterfaceJava(config, target);
+        dataSourceImplementationJava(config, target);
+        dataSourceInterfaceJava(config, target);
+        dataSourceProfilingJava(config, target);
+        serializationRegistryJava(config, target);
+        tupleSerializationJava(config, target);
+        protoFiles(config, target);
+        hardwareReceiverC(config, target);
+        hardwareSenderC(config, target);
+    }
+    
+    familyImplementationJava(Configuration config, Project target) = : {
+       javaExperiments cfg = config;
+       Family fam = cfg.fCorrelationFinancial;
+       
+       // basic version
+       Path tgt = "$target/fcFam.java";
+       vilTemplateProcessor("familyImplementationJava", config, tgt, family=fam);
+
+       // with reuse
+       tgt = "$target/fcFam0.java";
+       vilTemplateProcessor("familyImplementationJava0", config, tgt, family=fam);
+       
+       // an improved version
+       tgt = "$target/fcFam1.java";
+       vilTemplateProcessor("familyImplementationJava1", config, tgt, family=fam);
+    }
+
+    familyInterfaceJava(Configuration config, Project target) = : {
+       javaExperiments cfg = config;
+       Family fam = cfg.fCorrelationFinancial;
+       
+       // basic version
+       Path tgt = "$target/fcFamI.java";
+       vilTemplateProcessor("familyInterfaceJava", config, tgt, family=fam, ifName="IFCorrelationFinancial");
+
+       // with reuse
+       tgt = "$target/fcFamI0.java";
+       vilTemplateProcessor("familyInterfaceJava0", config, tgt, family=fam, ifName="IFCorrelationFinancial");
+       
+       // an improved version
+       tgt = "$target/fcFamI1.java";
+       vilTemplateProcessor("familyInterfaceJava1", config, tgt, family=fam, ifName="IFCorrelationFinancial");
+    }
+
+    dataSinkImplementationJava(Configuration config, Project target) = : {
+       javaExperiments cfg = config;
+       DataSink snk = cfg.priorSnk;
+       
+       // basic version
+       Path tgt = "$target/psSnkI.java";
+       vilTemplateProcessor("dataSinkImplementation", config, tgt, elt=snk, profiling=false);
+       tgt = "$target/psSnkIP.java";
+       vilTemplateProcessor("dataSinkImplementation", config, tgt, elt=snk, profiling=true);
+
+       // with reuse
+       tgt = "$target/psSnkI0.java";
+       vilTemplateProcessor("dataSinkImplementation0", config, tgt, elt=snk, profiling=false);
+       tgt = "$target/psSnkIP0.java";
+       vilTemplateProcessor("dataSinkImplementation0", config, tgt, elt=snk, profiling=true);
+       
+       // an improved version
+       tgt = "$target/psSnkI1.java";
+       vilTemplateProcessor("dataSinkImplementation1", config, tgt, elt=snk, profiling=false);
+       tgt = "$target/psSnkIP1.java";
+       vilTemplateProcessor("dataSinkImplementation1", config, tgt, elt=snk, profiling=true);
+    }
+
+    dataSinkInterfaceJava(Configuration config, Project target) = : {
+       javaExperiments cfg = config;
+       Family fam = cfg.fCorrelationFinancial;
+       DataSink snk = cfg.priorSnk;
+       
+       // basic version
+       Path tgt = "$target/psSnk.java";
+       vilTemplateProcessor("dataSinkInterface", config, tgt, elt=snk);
+
+       // with reuse
+       tgt = "$target/psSnk0.java";
+       vilTemplateProcessor("dataSinkInterface0", config, tgt, elt=snk);
+       
+       // an improved version
+       tgt = "$target/psSnk1.java";
+       vilTemplateProcessor("dataSinkInterface1", config, tgt, elt=snk);
+    }
+
+    dataSourceImplementationJava(Configuration config, Project target) = : {
+       javaExperiments cfg = config;
+       DataSource src = cfg.spring;
+       String pkg = "eu.qualimaster.data";
+       
+       // basic version
+       Path tgt = "$target/spSrcI.java";
+       vilTemplateProcessor("dataSourceImplementation", config, tgt, elt=src, pkg=pkg, profiling=false);
+       tgt = "$target/spSrcIP.java";
+       vilTemplateProcessor("dataSourceImplementation", config, tgt, elt=src, pkg=pkg, profiling=true);
+
+       // with reuse
+       tgt = "$target/spSrcI0.java";
+       vilTemplateProcessor("dataSourceImplementation0", config, tgt, elt=src, pkg=pkg, profiling=false);
+       tgt = "$target/spSrcIP0.java";
+       vilTemplateProcessor("dataSourceImplementation0", config, tgt, elt=src, pkg=pkg, profiling=true);
+       
+       // an improved version
+       tgt = "$target/spSrcI1.java";
+       vilTemplateProcessor("dataSourceImplementation1", config, tgt, elt=src, pkg=pkg, profiling=false);
+       tgt = "$target/spSrcIP1.java";
+       vilTemplateProcessor("dataSourceImplementation1", config, tgt, elt=src, pkg=pkg, profiling=true);
+    }
+
+    dataSourceProfilingJava(Configuration config, Project target) = : {
+       javaExperiments cfg = config;
+       Pipeline pip = cfg.PriorityPip;
+       DataSource src = cfg.spring;
+       Source pSrc = cfg.PriorityPip_Source0;
+       String pkg = "eu.qualimaster.data";
+       
+       // basic version
+       Path tgt = "$target/spProfSrcI.java";
+       vilTemplateProcessor("dataSourceProfilingImplementation", config, tgt, elt=src, pkg=pkg, pip=pip, src=pSrc);
+
+       // with reuse
+       tgt = "$target/spProfSrcI0.java";
+       vilTemplateProcessor("dataSourceProfilingImplementation0", config, tgt, elt=src, pkg=pkg, pip=pip, src=pSrc);
+       
+       // an improved version
+       tgt = "$target/spProfSrcI1.java";
+       vilTemplateProcessor("dataSourceProfilingImplementation1", config, tgt, elt=src, pkg=pkg, pip=pip, src=pSrc);
+    }
+
+    dataSourceInterfaceJava(Configuration config, Project target) = : {
+       javaExperiments cfg = config;
+       DataSource src = cfg.spring;
+       String pkg = "eu.qualimaster.data";
+       
+       // basic version
+       Path tgt = "$target/spSrc.java";
+       vilTemplateProcessor("dataSourceInterface", config, tgt, elt=src, pkg=pkg);
+
+       // with reuse
+       tgt = "$target/spSrc0.java";
+       vilTemplateProcessor("dataSourceInterface0", config, tgt, elt=src, pkg=pkg);
+       
+       // an improved version
+       tgt = "$target/spSrc1.java";
+       vilTemplateProcessor("dataSourceInterface1", config, tgt, elt=src, pkg=pkg);
+    }
+    
+    serializationRegistryJava(Configuration config, Project target) = : {
+       javaExperiments cfg = config;
+       setOf(Family) fam = cfg.families;
+       
+       // basic version
+       Path tgt = "$target/serReg.java";
+       vilTemplateProcessor("serializationRegistry", config, tgt, families=fam);
+
+       // with reuse
+       tgt = "$target/serReg0.java";
+       vilTemplateProcessor("serializationRegistry0", config, tgt, families=fam);
+       
+       // an improved version
+       tgt = "$target/serReg1.java";
+       vilTemplateProcessor("serializationRegistry1", config, tgt, families=fam);
+    }
+ 
+     tupleSerializationJava(Configuration config, Project target) = : {
+       javaExperiments cfg = config;
+       Family fam = cfg.fCorrelationFinancial;
+       String p = "eu.qualimaster.families";
+       
+       // basic version
+       Path tgt = "$target/tSerFCor.java";
+       vilTemplateProcessor("tupleSerialization", config, tgt, elt=fam, pkg=p);
+
+       // with reuse
+       tgt = "$target/tSerFCor0.java";
+       vilTemplateProcessor("tupleSerialization0", config, tgt, elt=fam, pkg=p);
+       
+       // an improved version
+       tgt = "$target/tSerFCor1.java";
+       vilTemplateProcessor("tupleSerialization1", config, tgt, elt=fam, pkg=p);
+    }
+    
+    protoFiles(Configuration config, Project target) = : {
+       javaExperiments cfg = config;
+       Family fam = cfg.fCorrelationFinancial;
+       String p = "eu.qualimaster.families";
+       
+       // basic version
+       Path tgt = "$target/FCor.proto";
+       vilTemplateProcessor("protoFiles", config, tgt, elt=fam, pkg=p);
+
+       // with reuse
+       tgt = "$target/FCor0.proto";
+       vilTemplateProcessor("protoFiles0", config, tgt, elt=fam, pkg=p);
+       
+       // an improved version
+       tgt = "$target/FCor1.proto";
+       vilTemplateProcessor("protoFiles1", config, tgt, elt=fam, pkg=p);
+    }
+    
+    hardwareReceiverC(Configuration config, Project target) = : {
+       javaExperiments cfg = config;
+       Family f = cfg.fCorrelationFinancial;
+       
+       // basic version
+       Path tgt = "$target/FCorReceiver.cpp";
+       vilTemplateProcessor("hardwareReceiver", config, tgt, family=f);
+
+       // with reuse
+       tgt = "$target/FCorReceiver0.cpp";
+       vilTemplateProcessor("hardwareReceiver0", config, tgt, family=f);
+       
+       // an improved version
+       tgt = "$target/FCorReceiver1.cpp";
+       vilTemplateProcessor("hardwareReceiver1", config, tgt, family=f);
+    }
+
+    hardwareSenderC(Configuration config, Project target) = : {
+       javaExperiments cfg = config;
+       Family f = cfg.fCorrelationFinancial;
+       
+       // basic version
+       Path tgt = "$target/FCorSender.cpp";
+       vilTemplateProcessor("hardwareSender", config, tgt, family=f);
+
+       // with reuse
+       tgt = "$target/FCorSender0.cpp";
+       vilTemplateProcessor("hardwareSender0", config, tgt, family=f);
+       
+       // an improved version
+       tgt = "$target/FCorSender1.cpp";
+       vilTemplateProcessor("hardwareSender1", config, tgt, family=f);
+    }
+       
+}

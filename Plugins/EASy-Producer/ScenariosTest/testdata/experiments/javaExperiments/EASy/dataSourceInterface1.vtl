@@ -1,0 +1,29 @@
+import commonVTLMethods1;
+@advice(javaExperiments)
+@indent(indentation = 4, additional = 0)
+template dataSourceInterface1(Configuration config, FileArtifact target, DataSource elt, String pkg) {
+
+    def main(Configuration config, FileArtifact target, DataSource dataSrc, String pkg){
+        String srcName =dataSrc.name;
+        srcName = srcName.firstToUpperCase();
+        String inputName = "I" + srcName;
+        Boolean profilingSrc = dataSrc.profilingSource;
+        'package ${pkg}.inf;
+        
+        import java.io.Serializable;
+        import eu.qualimaster.dataManagement.sources.IDataSource;
+        
+        /**
+        * Define the data source interface(GEN).
+        **/
+        public interface I${toIdentifier(srcName)} extends IDataSource {
+        
+            ${produceProfilingMethods(dataSrc, true)}
+            ${produceForTupleInterface(dataSrc.input, srcName, true)}        
+            ${produceForTuplesPrediction(dataSrc.input, inputName, inputName, true)}
+            ${produceParameterMethods(dataSrc.parameters, true, comment="// data source parameters", parameterKind="data source")}
+            
+        }' 
+    }
+ 
+}
