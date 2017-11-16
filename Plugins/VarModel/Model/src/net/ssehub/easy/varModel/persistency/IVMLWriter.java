@@ -503,9 +503,10 @@ public class IVMLWriter extends AbstractVarModelWriter {
             addParent(DUMMY_PARENT);
         }
         int count = 0;
+        java.util.Set<String> done = Compound.ENABLE_SHADOWING_REFINEMENT ? new HashSet<String>() : null;
         Compound comp = (Compound) value.getType();
         while (null != comp) {
-            count = visitCompoundDecisionVariableContainer(comp, value, count);
+            count = visitCompoundDecisionVariableContainer(comp, value, count, done);
             comp = comp.getRefines();
         }
         if (formatInitializer) {
@@ -533,37 +534,49 @@ public class IVMLWriter extends AbstractVarModelWriter {
      * @param cont the container
      * @param value the container value
      * @param printed the number of printed elements so far
+     * @param done already processed slots (may be <b>null</b> if not relevant, modified as a side effect)
      * @return the number of printed elements
      */
     private int visitCompoundDecisionVariableContainer(IDecisionVariableContainer cont, CompoundValue value, 
-        int printed) {
+        int printed, java.util.Set<String> done) {
         for (int e = 0; e < cont.getElementCount(); e++) {
             // be careful with null values -> writing partial configurations
             String name = cont.getElement(e).getName();
-            Value nestedValue = value.getNestedValue(name);
-            boolean isAbstract = (null != nestedValue) && nestedValue.getType() instanceof Compound
-                && ((Compound) nestedValue.getType()).isAbstract();
-            if (null != nestedValue && !isAbstract && writeValue(nestedValue)) {
-                if (printed > 0) {
-                    appendOutput(COMMA);
-                    appendOutput(WHITESPACE);
-                    if (formatInitializer) {
-                        appendOutput(LINEFEED);
+            boolean emit;
+            if (null == done) {
+                emit = true;
+            } else {
+                emit = !done.contains(name);
+                if (emit) {
+                    done.add(name);
+                }
+            }
+            if (emit) {
+                Value nestedValue = value.getNestedValue(name);
+                boolean isAbstract = (null != nestedValue) && nestedValue.getType() instanceof Compound
+                    && ((Compound) nestedValue.getType()).isAbstract();
+                if (null != nestedValue && !isAbstract && writeValue(nestedValue)) {
+                    if (printed > 0) {
+                        appendOutput(COMMA);
+                        appendOutput(WHITESPACE);
+                        if (formatInitializer) {
+                            appendOutput(LINEFEED);
+                        }
                     }
+                    if (formatInitializer) {
+                        appendIndentation();
+                    }
+                    appendOutput(name);
+                    appendOutput(WHITESPACE);
+                    appendOutput(ASSIGNMENT);
+                    appendOutput(WHITESPACE);
+                    nestedValue.accept(this);
+                    printed++;
                 }
-                if (formatInitializer) {
-                    appendIndentation();
-                }
-                appendOutput(name);
-                appendOutput(WHITESPACE);
-                appendOutput(ASSIGNMENT);
-                appendOutput(WHITESPACE);
-                nestedValue.accept(this);
-                printed++;
             }
         }
         for (int a = 0; a < cont.getAssignmentCount(); a++) {
-            printed = visitCompoundDecisionVariableContainer(cont.getAssignment(a), value, printed);
+            printed = visitCompoundDecisionVariableContainer(cont.getAssignment(a), value, printed, null);
         }
         return printed;
     }

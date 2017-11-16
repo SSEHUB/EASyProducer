@@ -1,0 +1,13 @@
+-> main(Configuration, FileArtifact) with (<config>, test.texts)
+    cfg <- <config>
+    f2 <- compounds2::f2
+    -> type(DecisionVariable) with (compounds2::FilterX::filter) = FilterY
+    f2x <- compounds2::f2
+    f2xf <- compounds2::FilterX::filter
+    -> type(FilterY) with (compounds2::FilterX::filter) = FilterY
+    -> byName(Configuration, String) with (<config>, f2) = compounds2::f2
+    d2 <- compounds2::f2
+    -> byName(DecisionVariable, String) with (compounds2::f2, filter) = compounds2::FilterX::filter
+    d2f <- compounds2::FilterX::filter
+    -> byName(DecisionVariable, String) with (compounds2::FilterX::filter, name) = compounds2::Filter::name
+    -> type(DecisionVariable) with (compounds2::FilterX::filter) = FilterY

@@ -1,0 +1,24 @@
+project compounds2 {
+
+    version v0;
+    compound Filter {
+        String name;
+        refTo(Filter) filter;
+    }
+
+    compound FilterX refines Filter {
+        refTo(FilterY) filter;
+    }
+
+    compound FilterY refines Filter {
+    }
+
+    FilterY f3 = {name = "f3"};
+    FilterX f2 = {filter = refBy(f3), name = "f2"};
+    Filter f1 = {name = "f1", filter = refBy(f2)};
+    freeze {
+        f3;
+        f2;
+        f1;
+    }
+}

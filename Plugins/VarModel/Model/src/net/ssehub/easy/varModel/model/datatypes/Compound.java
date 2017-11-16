@@ -43,6 +43,12 @@ import net.ssehub.easy.varModel.model.ProjectImport;
 public class Compound extends StructuredDatatype implements IResolutionScope, IDecisionVariableContainer, 
     IConstraintHolder {
 
+    /**
+     * Enables whether compound slots with different types may be redefined in refined compounds. If yes,
+     * the most recent slot definition counts and previous ones are shadowed.
+     */
+    public static final boolean ENABLE_SHADOWING_REFINEMENT = true;
+    
     // DO !NOT! touch the // checkstyle: comments!
 
     // checkstyle: stop declaration order check
@@ -236,10 +242,12 @@ public class Compound extends StructuredDatatype implements IResolutionScope, ID
     @Override
     public boolean add(DecisionVariableDeclaration elem) {
         boolean alreadyIn = false;
-        Compound basisCP = getRefines();
-        while (null != basisCP && !alreadyIn) {
-            alreadyIn = basisCP.container.containsByName(elem.getName());
-            basisCP = basisCP.getRefines();
+        if (!ENABLE_SHADOWING_REFINEMENT) {
+            Compound basisCP = getRefines();
+            while (null != basisCP && !alreadyIn) {
+                alreadyIn = basisCP.container.containsByName(elem.getName());
+                basisCP = basisCP.getRefines();
+            }
         }
         
         if (!alreadyIn) {

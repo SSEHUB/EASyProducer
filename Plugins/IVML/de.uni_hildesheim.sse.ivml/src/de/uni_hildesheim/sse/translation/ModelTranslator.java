@@ -62,6 +62,7 @@ import net.ssehub.easy.varModel.model.AttributeAssignment;
 import net.ssehub.easy.varModel.model.Comment;
 import net.ssehub.easy.varModel.model.ConstantDecisionVariableDeclaration;
 import net.ssehub.easy.varModel.model.Constraint;
+import net.ssehub.easy.varModel.model.ContainableModelElement;
 import net.ssehub.easy.varModel.model.DecisionVariableDeclaration;
 import net.ssehub.easy.varModel.model.FreezeBlock;
 import net.ssehub.easy.varModel.model.IAttributableElement;
@@ -93,6 +94,7 @@ import net.ssehub.easy.varModel.model.datatypes.IDatatype;
 import net.ssehub.easy.varModel.model.datatypes.Operation;
 import net.ssehub.easy.varModel.model.datatypes.OrderedEnum;
 import net.ssehub.easy.varModel.model.datatypes.Reference;
+import net.ssehub.easy.varModel.model.values.ValueDoesNotMatchTypeException;
 
 /**
  * Implements a ECore-to-IVML translator. Please note that errors which occur
@@ -330,6 +332,7 @@ public class ModelTranslator extends net.ssehub.easy.dslCore.translation.ModelTr
         for (InterfaceDeclaration iface : project.getInterfaces()) {
             processInterface(iface, context);
         }
+        checkCompounds(project, result);
         
         // requires completeLoading!
 
@@ -338,6 +341,76 @@ public class ModelTranslator extends net.ssehub.easy.dslCore.translation.ModelTr
             entry.setRegistrationInfo(uri, errorCount);
         }
         return entry;
+    }
+    
+    /**
+     * Checks the compounds in this project.
+     * 
+     * @param eProject the AST project instance to check (fallback for messages)
+     * @param project the corresponding IVML project instance
+     */
+    private void checkCompounds(de.uni_hildesheim.sse.ivml.Project eProject, Project project) {
+        Map<String, DecisionVariableDeclaration> decls = new HashMap<String, DecisionVariableDeclaration>();
+        Map<Compound, TypedefCompound> cmpMapping = new HashMap<Compound, TypedefCompound>();
+        for (Map.Entry<TypedefCompound, Compound> e : compoundMapping.entrySet()) {
+            cmpMapping.put(e.getValue(), e.getKey());
+        }
+        for (int e = 0; e < project.getElementCount(); e++) {
+            ContainableModelElement elt = project.getElement(e);
+            if (elt instanceof Compound) {
+                checkCompound(eProject, (Compound) elt, cmpMapping, decls);
+            }
+            decls.clear();
+        }
+    }
+
+    /**
+     * Checks the given compound. Due to the dynamic resolution sequence, we perform a post-check for hierarchical
+     * compound properties.
+     * 
+     * @param eProject the AST project instance to check (fallback for messages)
+     * @param cmp the compound to check
+     * @param cmpMapping mapping between compounds and related AST objects for error identification
+     * @param done already known/checked slot declarations
+     */
+    private void checkCompound(de.uni_hildesheim.sse.ivml.Project eProject, Compound cmp, 
+        Map<Compound, TypedefCompound> cmpMapping, Map<String, DecisionVariableDeclaration> done) {
+        for (int d = 0; d < cmp.getDeclarationCount(); d++) {
+            DecisionVariableDeclaration decl = cmp.getDeclaration(d);
+            String name = decl.getName();
+            DecisionVariableDeclaration known = done.get(name);
+            if (null == known) {
+                done.put(name, decl);
+            } else {
+                if (!decl.getType().isAssignableFrom(known.getType())) {
+                    TypedefCompound tdC = cmpMapping.get(known.getParent());
+                    List<EObject> elts = tdC.getElements();
+                    EObject cause = eProject;
+                    EStructuralFeature feature = IvmlPackage.Literals.PROJECT__NAME;
+                    VariableDeclaration slot = null;
+                    for (int e = 0; null == slot && e < elts.size(); e++) {
+                        EObject elt = elts.get(e);
+                        if (elt instanceof VariableDeclaration) {
+                            VariableDeclaration vd = (VariableDeclaration) elt;
+                            List<VariableDeclarationPart> parts = vd.getDecls();
+                            for (int p = 0; null == slot && p < parts.size(); p++) {
+                                if (name.equals(parts.get(p).getName())) {
+                                    slot = vd;
+                                    cause = slot;
+                                    feature = IvmlPackage.Literals.VARIABLE_DECLARATION_PART__NAME;
+                                }
+                            }
+                        }
+                    }
+                    error("Slot '" + name + "' in compound '" + known.getParent().getName() 
+                        + "' does not refine slot with same name in refining compound '" + cmp.getName() + "'", 
+                        cause, feature, ValueDoesNotMatchTypeException.TYPE_MISMATCH);
+                }
+            }
+        }
+        if (null != cmp.getRefines()) {
+            checkCompound(eProject, cmp.getRefines(), cmpMapping, done);
+        }
     }
     
     /**

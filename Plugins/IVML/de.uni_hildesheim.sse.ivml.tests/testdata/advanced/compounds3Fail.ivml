@@ -1,0 +1,13 @@
+project compoundOverlapping3Fail {
+
+    version v0;
+    compound Filter {
+        String name;
+        refTo(Filter) filter;
+    }
+
+    compound FilterX refines Filter {
+        Integer filter;
+    }
+
+}

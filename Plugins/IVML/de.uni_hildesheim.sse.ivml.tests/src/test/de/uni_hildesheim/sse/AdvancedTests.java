@@ -47,11 +47,13 @@ import net.ssehub.easy.varModel.model.PartialEvaluationBlock;
 import net.ssehub.easy.varModel.model.Project;
 import net.ssehub.easy.varModel.model.ProjectImport;
 import net.ssehub.easy.varModel.model.ProjectInterface;
+import net.ssehub.easy.varModel.model.datatypes.Compound;
 import net.ssehub.easy.varModel.model.datatypes.CustomOperation;
 import net.ssehub.easy.varModel.model.datatypes.DerivedDatatype;
 import net.ssehub.easy.varModel.model.datatypes.EnumLiteral;
 import net.ssehub.easy.varModel.model.datatypes.Reference;
 import net.ssehub.easy.varModel.model.datatypes.Sequence;
+import net.ssehub.easy.varModel.model.values.ValueDoesNotMatchTypeException;
 
 /**
  * A test class for blackbox testing parser and type resolution. Please note
@@ -141,13 +143,51 @@ public class AdvancedTests extends AbstractTest {
     }
 
     /**
-     * Tests for erroneous compound overlappings.
+     * Tests for compound overlappings.
      * 
      * @throws IOException should not occur
      */
     @Test
     public void testCompoundOverlapping() throws IOException {
         assertEqual(createFile("compounds"), "compoundOverlapping", "0");
+    }
+
+    /**
+     * Tests for compound overlappings.
+     * 
+     * @throws IOException should not occur
+     */
+    @Test
+    public void testCompoundOverlapping2() throws IOException {
+        if (Compound.ENABLE_SHADOWING_REFINEMENT) {
+            assertEqual(createFile("compounds2"), "compoundOverlapping2", "0");
+        }
+    }
+
+    /**
+     * Tests for compound overlappings with illegal assignment.
+     * 
+     * @throws IOException should not occur
+     */
+    @Test
+    public void testCompoundOverlapping2Fail() throws IOException {
+        if (Compound.ENABLE_SHADOWING_REFINEMENT) {
+            assertEqual(createFile("compounds2Fail"), "compoundOverlapping2Fail", "0", 
+                ValueDoesNotMatchTypeException.TYPE_MISMATCH);
+        }
+    }
+
+    /**
+     * Tests for compound overlappings with illegal non-covariant shadowing.
+     * 
+     * @throws IOException should not occur
+     */
+    @Test
+    public void testCompoundOverlapping3Fail() throws IOException {
+        if (Compound.ENABLE_SHADOWING_REFINEMENT) {
+            assertEqual(createFile("compounds3Fail"), "compoundOverlapping3Fail", "0", 
+                ValueDoesNotMatchTypeException.TYPE_MISMATCH);
+        }
     }
     
     /**

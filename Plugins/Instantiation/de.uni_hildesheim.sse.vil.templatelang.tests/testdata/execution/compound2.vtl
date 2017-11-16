@@ -1,0 +1,16 @@
+@advice(compounds2)
+template compoundTest2(Configuration config, FileArtifact target) {
+
+    def main(Configuration config, FileArtifact target) {
+        compounds2 cfg = config;
+        Filter f2 = cfg.f2;
+        '${f2.filter.name} ${f2.filter.type()}'
+        FilterX f2x = cfg.f2;
+        FilterY f2xf = f2x.filter;
+        '${f2xf.name} ${f2xf.type()}'
+        DecisionVariable d2 = config.byName("f2");
+        DecisionVariable d2f = d2.byName("filter");
+        '${d2f.byName("name")} ${d2f.type()}'
+    }
+
+}
