@@ -159,9 +159,7 @@ public class AdvancedTests extends AbstractTest {
      */
     @Test
     public void testCompoundOverlapping2() throws IOException {
-        if (Compound.ENABLE_SHADOWING_REFINEMENT) {
-            assertEqual(createFile("compounds2"), "compoundOverlapping2", "0");
-        }
+        assertEqual(createFile("compounds2"), "compoundOverlapping2", "0");
     }
 
     /**
@@ -171,10 +169,8 @@ public class AdvancedTests extends AbstractTest {
      */
     @Test
     public void testCompoundOverlapping2Fail() throws IOException {
-        if (Compound.ENABLE_SHADOWING_REFINEMENT) {
-            assertEqual(createFile("compounds2Fail"), "compoundOverlapping2Fail", "0", 
-                ValueDoesNotMatchTypeException.TYPE_MISMATCH);
-        }
+        assertEqual(createFile("compounds2Fail"), "compoundOverlapping2Fail", "0", 
+            ValueDoesNotMatchTypeException.TYPE_MISMATCH);
     }
 
     /**
@@ -184,10 +180,8 @@ public class AdvancedTests extends AbstractTest {
      */
     @Test
     public void testCompoundOverlapping3Fail() throws IOException {
-        if (Compound.ENABLE_SHADOWING_REFINEMENT) {
-            assertEqual(createFile("compounds3Fail"), "compoundOverlapping3Fail", "0", 
-                ValueDoesNotMatchTypeException.TYPE_MISMATCH);
-        }
+        assertEqual(createFile("compounds3Fail"), "compoundOverlapping3Fail", "0", 
+            ValueDoesNotMatchTypeException.TYPE_MISMATCH);
     }
 
     /**
@@ -197,9 +191,7 @@ public class AdvancedTests extends AbstractTest {
      */
     @Test
     public void testCompoundMulti() throws IOException {
-        if (Compound.ENABLE_SHADOWING_REFINEMENT) {
-            assertEqual(createFile("compoundsMulti"), "compoundsMulti", "0");
-        }
+        assertEqual(createFile("compoundsMulti"), "compoundsMulti", "0");
     }
 
     /**
@@ -209,10 +201,8 @@ public class AdvancedTests extends AbstractTest {
      */
     @Test
     public void testCompoundMultiFail() throws IOException {
-        if (Compound.ENABLE_SHADOWING_REFINEMENT) {
-            assertEqual(createFile("compoundsMultiFail"), "compoundsMultiFail", "0", 
-                ValueDoesNotMatchTypeException.TYPE_MISMATCH);
-        }
+        assertEqual(createFile("compoundsMultiFail"), "compoundsMultiFail", "0", 
+            ValueDoesNotMatchTypeException.TYPE_MISMATCH);
     }
 
     /**

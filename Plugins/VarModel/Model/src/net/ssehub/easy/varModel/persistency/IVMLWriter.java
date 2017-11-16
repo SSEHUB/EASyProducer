@@ -509,8 +509,7 @@ public class IVMLWriter extends AbstractVarModelWriter {
             appendOutput(LINEFEED);
             addParent(DUMMY_PARENT);
         }
-        java.util.Set<String> done = Compound.ENABLE_SHADOWING_REFINEMENT ? new HashSet<String>() : null;
-        visitCompoundRefines((Compound) value.getType(), value, 0, done);
+        visitCompoundRefines((Compound) value.getType(), value, 0, new HashSet<String>());
         if (formatInitializer) {
             removeLastParent();
             appendOutput(LINEFEED);

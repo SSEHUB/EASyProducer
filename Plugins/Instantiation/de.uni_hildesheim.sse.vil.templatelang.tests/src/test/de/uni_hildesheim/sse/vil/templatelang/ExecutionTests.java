@@ -22,7 +22,6 @@ import net.ssehub.easy.instantiation.core.model.vilTypes.configuration.Configura
 import net.ssehub.easy.varModel.confModel.ConfigurationException;
 import net.ssehub.easy.varModel.management.VarModel;
 import net.ssehub.easy.varModel.model.Project;
-import net.ssehub.easy.varModel.model.datatypes.Compound;
 import net.ssehub.easy.varModel.persistency.IVMLWriter;
 import net.ssehub.easy.varModel.varModel.testSupport.DefaultConfiguration;
 
@@ -482,9 +481,7 @@ public class ExecutionTests extends AbstractExecutionTest {
      */
     @Test
     public void testCompound2() throws IOException {
-        if (Compound.ENABLE_SHADOWING_REFINEMENT) {
-            assertEqualWithIvml("compound2", "compounds2");
-        }
+        assertEqualWithIvml("compound2", "compounds2");
     }
 
     /**

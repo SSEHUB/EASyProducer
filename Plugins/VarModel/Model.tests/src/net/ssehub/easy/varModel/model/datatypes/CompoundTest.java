@@ -189,12 +189,8 @@ public class CompoundTest {
         // Add second declaration with the same name -> Should fail
         DecisionVariableDeclaration decl2 = new DecisionVariableDeclaration("slot", RealType.TYPE, baseCP);
         boolean added = refinedCP.add(decl2);
-        if (!Compound.ENABLE_SHADOWING_REFINEMENT) {
-            Assert.assertFalse("Could add the same slot name a second time", added);
-        } else {
-            // cannot check type compliance of slots here, done in the parser
-            Assert.assertTrue("Shall be able to add the same slot name a second time", added);
-        }
+        // cannot check type compliance of slots here, done in the parser
+        Assert.assertTrue("Shall be able to add the same slot name a second time", added);
     }
     
     /**
@@ -212,12 +208,8 @@ public class CompoundTest {
         DecisionVariableDeclaration decl2 = new DecisionVariableDeclaration("slot", RealType.TYPE, baseCP);
 
         boolean added = refinedCP2.add(decl2);
-        if (!Compound.ENABLE_SHADOWING_REFINEMENT) {
-            Assert.assertFalse("Could add the same slot name a second time", added);
-        } else {
-            // cannot check type compliance of slots here, done in the parser
-            Assert.assertTrue("Shall be able to add the same slot name a second time", added);
-        }
+        // cannot check type compliance of slots here, done in the parser
+        Assert.assertTrue("Shall be able to add the same slot name a second time", added);
     }
     
     /**
