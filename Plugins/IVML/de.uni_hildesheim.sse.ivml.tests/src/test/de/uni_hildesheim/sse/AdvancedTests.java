@@ -189,7 +189,32 @@ public class AdvancedTests extends AbstractTest {
                 ValueDoesNotMatchTypeException.TYPE_MISMATCH);
         }
     }
-    
+
+    /**
+     * Tests for multi compound refinements.
+     * 
+     * @throws IOException should not occur
+     */
+    @Test
+    public void testCompoundMulti() throws IOException {
+        if (Compound.ENABLE_SHADOWING_REFINEMENT) {
+            assertEqual(createFile("compoundsMulti"), "compoundsMulti", "0");
+        }
+    }
+
+    /**
+     * Tests for multi compound refinements (failing duplicate slot).
+     * 
+     * @throws IOException should not occur
+     */
+    @Test
+    public void testCompoundMultiFail() throws IOException {
+        if (Compound.ENABLE_SHADOWING_REFINEMENT) {
+            assertEqual(createFile("compoundsMultiFail"), "compoundsMultiFail", "0", 
+                ValueDoesNotMatchTypeException.TYPE_MISMATCH);
+        }
+    }
+
     /**
      * Tests compound comparisons.
      * 

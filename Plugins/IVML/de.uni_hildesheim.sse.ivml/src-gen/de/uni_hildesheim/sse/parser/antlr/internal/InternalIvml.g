@@ -758,7 +758,7 @@ ruleTypedefCompound returns [EObject current=null]
 	        if ($current==null) {
 	            $current = createModelElementForParent(grammarAccess.getTypedefCompoundRule());
 	        }
-       		set(
+       		add(
        			$current, 
        			"super",
         		lv_super_4_0, 
@@ -767,23 +767,45 @@ ruleTypedefCompound returns [EObject current=null]
 	    }
 
 )
-))?	otherlv_5='{' 
+)(	otherlv_5=',' 
     {
-    	newLeafNode(otherlv_5, grammarAccess.getTypedefCompoundAccess().getLeftCurlyBracketKeyword_4());
+    	newLeafNode(otherlv_5, grammarAccess.getTypedefCompoundAccess().getCommaKeyword_3_2_0());
+    }
+(
+(
+		{ 
+	        newCompositeNode(grammarAccess.getTypedefCompoundAccess().getSuperIdentifierParserRuleCall_3_2_1_0()); 
+	    }
+		lv_super_6_0=ruleIdentifier		{
+	        if ($current==null) {
+	            $current = createModelElementForParent(grammarAccess.getTypedefCompoundRule());
+	        }
+       		add(
+       			$current, 
+       			"super",
+        		lv_super_6_0, 
+        		"de.uni_hildesheim.sse.Ivml.Identifier");
+	        afterParserOrEnumRuleCall();
+	    }
+
+)
+))*)?	otherlv_7='{' 
+    {
+    	newLeafNode(otherlv_7, grammarAccess.getTypedefCompoundAccess().getLeftCurlyBracketKeyword_4());
     }
 ((
 (
 		{ 
 	        newCompositeNode(grammarAccess.getTypedefCompoundAccess().getElementsVariableDeclarationParserRuleCall_5_0_0()); 
 	    }
-		lv_elements_6_0=ruleVariableDeclaration		{
+		lv_elements_8_0=ruleVariableDeclaration		{
 	        if ($current==null) {
 	            $current = createModelElementForParent(grammarAccess.getTypedefCompoundRule());
 	        }
        		add(
        			$current, 
        			"elements",
-        		lv_elements_6_0, 
+        		lv_elements_8_0, 
         		"de.uni_hildesheim.sse.Ivml.VariableDeclaration");
 	        afterParserOrEnumRuleCall();
 	    }
@@ -795,14 +817,14 @@ ruleTypedefCompound returns [EObject current=null]
 		{ 
 	        newCompositeNode(grammarAccess.getTypedefCompoundAccess().getElementsExpressionStatementParserRuleCall_5_1_0()); 
 	    }
-		lv_elements_7_0=ruleExpressionStatement		{
+		lv_elements_9_0=ruleExpressionStatement		{
 	        if ($current==null) {
 	            $current = createModelElementForParent(grammarAccess.getTypedefCompoundRule());
 	        }
        		add(
        			$current, 
        			"elements",
-        		lv_elements_7_0, 
+        		lv_elements_9_0, 
         		"de.uni_hildesheim.sse.Ivml.ExpressionStatement");
 	        afterParserOrEnumRuleCall();
 	    }
@@ -814,14 +836,14 @@ ruleTypedefCompound returns [EObject current=null]
 		{ 
 	        newCompositeNode(grammarAccess.getTypedefCompoundAccess().getElementsAttrAssignmentParserRuleCall_5_2_0()); 
 	    }
-		lv_elements_8_0=ruleAttrAssignment		{
+		lv_elements_10_0=ruleAttrAssignment		{
 	        if ($current==null) {
 	            $current = createModelElementForParent(grammarAccess.getTypedefCompoundRule());
 	        }
        		add(
        			$current, 
        			"elements",
-        		lv_elements_8_0, 
+        		lv_elements_10_0, 
         		"de.uni_hildesheim.sse.Ivml.AttrAssignment");
 	        afterParserOrEnumRuleCall();
 	    }
@@ -833,26 +855,26 @@ ruleTypedefCompound returns [EObject current=null]
 		{ 
 	        newCompositeNode(grammarAccess.getTypedefCompoundAccess().getElementsEvalParserRuleCall_5_3_0()); 
 	    }
-		lv_elements_9_0=ruleEval		{
+		lv_elements_11_0=ruleEval		{
 	        if ($current==null) {
 	            $current = createModelElementForParent(grammarAccess.getTypedefCompoundRule());
 	        }
        		add(
        			$current, 
        			"elements",
-        		lv_elements_9_0, 
+        		lv_elements_11_0, 
         		"de.uni_hildesheim.sse.Ivml.Eval");
 	        afterParserOrEnumRuleCall();
 	    }
 
 )
-))*	otherlv_10='}' 
+))*	otherlv_12='}' 
     {
-    	newLeafNode(otherlv_10, grammarAccess.getTypedefCompoundAccess().getRightCurlyBracketKeyword_6());
+    	newLeafNode(otherlv_12, grammarAccess.getTypedefCompoundAccess().getRightCurlyBracketKeyword_6());
     }
-(	otherlv_11=';' 
+(	otherlv_13=';' 
     {
-    	newLeafNode(otherlv_11, grammarAccess.getTypedefCompoundAccess().getSemicolonKeyword_7());
+    	newLeafNode(otherlv_13, grammarAccess.getTypedefCompoundAccess().getSemicolonKeyword_7());
     }
 )?)
 ;

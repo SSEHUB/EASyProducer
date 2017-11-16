@@ -73,6 +73,7 @@ public class IvmlParser extends AbstractContentAssistParser {
 					put(grammarAccess.getTypedefEnumLiteralAccess().getGroup_1(), "rule__TypedefEnumLiteral__Group_1__0");
 					put(grammarAccess.getTypedefCompoundAccess().getGroup(), "rule__TypedefCompound__Group__0");
 					put(grammarAccess.getTypedefCompoundAccess().getGroup_3(), "rule__TypedefCompound__Group_3__0");
+					put(grammarAccess.getTypedefCompoundAccess().getGroup_3_2(), "rule__TypedefCompound__Group_3_2__0");
 					put(grammarAccess.getAttrAssignmentAccess().getGroup(), "rule__AttrAssignment__Group__0");
 					put(grammarAccess.getAttrAssignmentAccess().getGroup_3(), "rule__AttrAssignment__Group_3__0");
 					put(grammarAccess.getAttrAssignmentPartAccess().getGroup(), "rule__AttrAssignmentPart__Group__0");
@@ -181,6 +182,7 @@ public class IvmlParser extends AbstractContentAssistParser {
 					put(grammarAccess.getTypedefCompoundAccess().getAbstractAssignment_0(), "rule__TypedefCompound__AbstractAssignment_0");
 					put(grammarAccess.getTypedefCompoundAccess().getNameAssignment_2(), "rule__TypedefCompound__NameAssignment_2");
 					put(grammarAccess.getTypedefCompoundAccess().getSuperAssignment_3_1(), "rule__TypedefCompound__SuperAssignment_3_1");
+					put(grammarAccess.getTypedefCompoundAccess().getSuperAssignment_3_2_1(), "rule__TypedefCompound__SuperAssignment_3_2_1");
 					put(grammarAccess.getTypedefCompoundAccess().getElementsAssignment_5_0(), "rule__TypedefCompound__ElementsAssignment_5_0");
 					put(grammarAccess.getTypedefCompoundAccess().getElementsAssignment_5_1(), "rule__TypedefCompound__ElementsAssignment_5_1");
 					put(grammarAccess.getTypedefCompoundAccess().getElementsAssignment_5_2(), "rule__TypedefCompound__ElementsAssignment_5_2");

@@ -1073,10 +1073,23 @@ public class ProjectCopyVisitor extends AbstractProjectVisitor {
 
     @Override
     public void visitCompound(Compound compound) {
-        Compound refinementBase = compound.getRefines();
-        Compound copiedBase = (Compound) getTranslatedType(refinementBase);
+        Compound[] copiedBase;
+        int rCount = compound.getRefinesCount();
+        if (rCount > 0) {
+            boolean fail = false;
+            copiedBase = new Compound[rCount];
+            for (int r = 0; !fail && r < rCount; r++) {
+                copiedBase[r] = (Compound) getTranslatedType(compound.getRefines(r));
+                fail = (null == copiedBase[r]);
+            }
+            if (fail) {
+                copiedBase = null;
+            }
+        } else {
+            copiedBase = null;
+        }
         
-        if (null != refinementBase && null == copiedBase) {
+        if (compound.getRefinesCount() > 0 && null == copiedBase) {
             // Refined compound was not translated so far
             incompleteElements.addUnresolvedType(compound);
         } else {

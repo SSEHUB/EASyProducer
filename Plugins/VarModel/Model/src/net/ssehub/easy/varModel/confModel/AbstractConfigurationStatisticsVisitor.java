@@ -205,11 +205,7 @@ public abstract class AbstractConfigurationStatisticsVisitor extends AbstractCon
         if (Compound.TYPE.isAssignableFrom(type)) {
             IDatatype dereferedType = Reference.dereference(type);
             if (dereferedType instanceof Compound) {
-                Compound cType = (Compound) dereferedType;
-                while (null != cType) {
-                    statistics.nConstraintInstances += cType.getConstraintsCount();
-                    cType = cType.getRefines();
-                }
+                visitRefines((Compound) dereferedType);
             }
         }
         
@@ -219,6 +215,19 @@ public abstract class AbstractConfigurationStatisticsVisitor extends AbstractCon
         for (int i = 0, end = variable.getNestedElementsCount(); i < end; i++) {
             IDecisionVariable nestedVar = variable.getNestedElement(i);
             visitVariable(nestedVar, nestedInContainer);
+        }
+    }
+
+    /**
+     * Visits all refined compounds and collects statistics.
+     * 
+     * @param cmp the compound to visit
+     */
+    private void visitRefines(Compound cmp) {
+        for (int r = 0; r < cmp.getRefinesCount(); r++) {
+            Compound cType = cmp.getRefines(r);
+            statistics.nConstraintInstances += cType.getConstraintsCount();
+            visitRefines(cType);
         }
     }
     

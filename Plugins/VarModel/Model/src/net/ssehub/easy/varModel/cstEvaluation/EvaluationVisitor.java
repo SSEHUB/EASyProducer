@@ -1254,11 +1254,7 @@ public class EvaluationVisitor implements IConstraintTreeVisitor {
                 if (Compound.TYPE.isAssignableFrom(paramType)) {
                     // in case of compounds, also consider the distance to the refined types so that not only
                     // direct matches but also intermediary refined types can be specified
-                    Compound iter = (Compound) paramType;
-                    while (null != iter && !TypeQueries.sameTypes(iter, opType)) {
-                        result++;
-                        iter = iter.getRefines();
-                    }
+                    result += diff((Compound) paramType, opType);
                 }
                 if (Container.TYPE.isAssignableFrom(opType) && Container.TYPE.isAssignableFrom(paramType)) {
                     // in case of container, also take the generic types into account 
@@ -1268,6 +1264,25 @@ public class EvaluationVisitor implements IConstraintTreeVisitor {
         }
         if (result != 0 && paramType instanceof Reference) {
             result = diff(opType, Reference.dereference(paramType));
+        }
+        return result;
+    }
+    
+    /**
+     * Calculates the difference between the compound <code>type</code> and its refinement hierarcy and 
+     * <code>opType</code>.
+     * 
+     * @param type the compound type to iterate over
+     * @param opType the type to compare
+     * @return the difference count
+     */
+    private static int diff(Compound type, IDatatype opType) {
+        int result = 0;
+        if (!TypeQueries.sameTypes(type, opType)) {
+            result++;
+            for (int r = 0; r < type.getRefinesCount(); r++) {
+                result += diff(type.getRefines(r), opType);
+            }
         }
         return result;
     }

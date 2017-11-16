@@ -89,18 +89,46 @@ public class CompoundTest {
     public void testRefines() {
         Compound cp2 = new Compound("cp2", null, cp1);
         
-        //The refines object of cp1 should be null
-        Compound cpRefines = cp1.getRefines();
-        Assert.assertNull(cpRefines);
+        //No refines on cp1 
+        Assert.assertEquals(0, cp1.getRefinesCount());
+        Assert.assertEquals(1, cp2.getRefinesCount());
         
         //The refines object of cp2 should be cp1
-        cpRefines = cp2.getRefines();
+        Compound cpRefines = cp2.getRefines(0);
         Assert.assertEquals(cp1, cpRefines);
         
         // Test correct behavior of assigning refined variables.
         Assert.assertTrue(cp1.isAssignableFrom(cp2));
         Assert.assertFalse(cp2.isAssignableFrom(cp1));
     }
+
+    /**
+     * Test to check the refines object of the compound class.
+     */
+    @Test
+    public void testRefines2() {
+        Compound co1 = new Compound("co1", null);
+        Compound cp2 = new Compound("cp2", null, cp1, co1);
+
+        //No refines on cp1 
+        Assert.assertEquals(0, cp1.getRefinesCount());
+        Assert.assertEquals(2, cp2.getRefinesCount());
+        
+        //The refines object of cp1 should be null
+        Compound cpRefines = cp2.getRefines(0);
+        Assert.assertEquals(cp1, cpRefines);
+        
+        //The refines object of cp2 should be cp1
+        cpRefines = cp2.getRefines(1);
+        Assert.assertEquals(co1, cpRefines);
+        
+        // Test correct behavior of assigning refined variables.
+        Assert.assertTrue(cp1.isAssignableFrom(cp2));
+        Assert.assertFalse(cp2.isAssignableFrom(cp1));
+        Assert.assertTrue(co1.isAssignableFrom(cp2));
+        Assert.assertFalse(cp2.isAssignableFrom(co1));
+    }
+
     
     /**
      * Test to check the implementation of the assignableFrom-method.

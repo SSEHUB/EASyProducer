@@ -857,11 +857,8 @@ public class ModelQuery {
      */
     private static AbstractVariable findVariable(Compound compound, String name) {
         AbstractVariable result = compound.getElement(name);
-        if (null == result) {
-            Compound superCompound = compound.getRefines();
-            if (null != superCompound) {
-                result = findVariable(superCompound, name);
-            }
+        for (int r = 0; null == result && r < compound.getRefinesCount(); r++) {
+            result = findVariable(compound.getRefines(r), name);
         }
         return result;
     }

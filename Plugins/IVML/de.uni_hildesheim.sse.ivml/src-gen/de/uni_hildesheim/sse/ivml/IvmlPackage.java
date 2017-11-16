@@ -343,7 +343,7 @@ public interface IvmlPackage extends EPackage
   int TYPEDEF_COMPOUND__NAME = 1;
 
   /**
-   * The feature id for the '<em><b>Super</b></em>' attribute.
+   * The feature id for the '<em><b>Super</b></em>' attribute list.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
@@ -3066,10 +3066,10 @@ public interface IvmlPackage extends EPackage
   EAttribute getTypedefCompound_Name();
 
   /**
-   * Returns the meta object for the attribute '{@link de.uni_hildesheim.sse.ivml.TypedefCompound#getSuper <em>Super</em>}'.
+   * Returns the meta object for the attribute list '{@link de.uni_hildesheim.sse.ivml.TypedefCompound#getSuper <em>Super</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return the meta object for the attribute '<em>Super</em>'.
+   * @return the meta object for the attribute list '<em>Super</em>'.
    * @see de.uni_hildesheim.sse.ivml.TypedefCompound#getSuper()
    * @see #getTypedefCompound()
    * @generated
@@ -5454,7 +5454,7 @@ public interface IvmlPackage extends EPackage
     EAttribute TYPEDEF_COMPOUND__NAME = eINSTANCE.getTypedefCompound_Name();
 
     /**
-     * The meta object literal for the '<em><b>Super</b></em>' attribute feature.
+     * The meta object literal for the '<em><b>Super</b></em>' attribute list feature.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
      * @generated

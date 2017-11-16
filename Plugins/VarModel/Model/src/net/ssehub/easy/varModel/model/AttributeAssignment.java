@@ -273,11 +273,7 @@ public class AttributeAssignment extends ContainableModelElement implements IDec
         if (parent instanceof Project) {
             found = ((Project) parent).containsByName(name);
         } else if (parent instanceof Compound) {
-            Compound cmp = ((Compound) parent);
-            do {
-                found = cmp.containsByName(name);
-                cmp = cmp.getRefines();
-            } while (cmp != null && !found);
+            found = ((Compound) parent).containsByNameRefines(name);
         }
         return found;
     }

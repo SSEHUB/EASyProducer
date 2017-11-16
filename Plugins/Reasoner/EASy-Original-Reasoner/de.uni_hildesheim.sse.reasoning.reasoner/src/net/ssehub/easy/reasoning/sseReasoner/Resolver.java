@@ -82,6 +82,7 @@ public class Resolver {
 
     private static final EASyLogger LOGGER
         = EASyLoggerFactory.INSTANCE.getLogger(Resolver.class, Descriptor.BUNDLE_NAME);
+    @SuppressWarnings("unused")
     private IAdditionalInformationLogger infoLogger; 
     
     private Project project;
@@ -627,7 +628,6 @@ public class Resolver {
             IDecisionVariable nestedVariable = cmpVar.getNestedElement(i);
             AbstractVariable nestedDecl = nestedVariable.getDeclaration();
 //            infoLogger.info(i + ": " + cmpType.getInheritedElement(i) + " " + cmpVar.getNestedElement(i));
-            IDatatype nestedType = nestedDecl.getType();
             cmpAccess = null;
             if (compound == null) {
                 cmpAccess = new CompoundAccess(new Variable(decl), nestedDecl.getName());                   
@@ -683,9 +683,8 @@ public class Resolver {
      * @param cmpType Compound to be analyzed 
      */
     private void processCompoundEvals(Compound cmpType) {
-        if (cmpType.getRefines() != null) {
-            Compound refinedCmp = cmpType.getRefines();
-            processCompoundEvals(refinedCmp);
+        for (int r = 0; r < cmpType.getRefinesCount(); r++) {
+            processCompoundEvals(cmpType.getRefines(r));
         }
         for (int i = 0; i < cmpType.getModelElementCount(); i++) {            
             if (cmpType.getModelElement(i) instanceof PartialEvaluationBlock) {
@@ -807,9 +806,8 @@ public class Resolver {
                 } 
             }            
         }
-        if (cmpType.getRefines() != null) {
-            Compound refinedType = cmpType.getRefines();
-            getAllCompoundConstraints(refinedType, thisCompoundConstraints, false);
+        for (int r = 0; r < cmpType.getRefinesCount(); r++) {
+            getAllCompoundConstraints(cmpType.getRefines(r), thisCompoundConstraints, false);
         }
         for (int a = 0; a < cmpType.getAssignmentCount(); a++) {
             collectAllAssignmentConstraints(cmpType.getAssignment(a), thisCompoundConstraints);
@@ -1337,6 +1335,7 @@ public class Resolver {
      * @param decl The conflicting declaration of an {@link AbstractVariable}.
      *     Call {@link AbstractVariable#getDefaultValue()} to retrieve the conflicting constraint.
      */
+    @SuppressWarnings("unused")
     private void conflictingDefault(AbstractVariable decl) {
         // TODO
     }

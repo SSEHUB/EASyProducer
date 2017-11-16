@@ -80,30 +80,20 @@ public interface TypedefCompound extends EObject
   void setName(String value);
 
   /**
-   * Returns the value of the '<em><b>Super</b></em>' attribute.
+   * Returns the value of the '<em><b>Super</b></em>' attribute list.
+   * The list contents are of type {@link java.lang.String}.
    * <!-- begin-user-doc -->
    * <p>
-   * If the meaning of the '<em>Super</em>' attribute isn't clear,
+   * If the meaning of the '<em>Super</em>' attribute list isn't clear,
    * there really should be more of a description here...
    * </p>
    * <!-- end-user-doc -->
-   * @return the value of the '<em>Super</em>' attribute.
-   * @see #setSuper(String)
+   * @return the value of the '<em>Super</em>' attribute list.
    * @see de.uni_hildesheim.sse.ivml.IvmlPackage#getTypedefCompound_Super()
-   * @model
+   * @model unique="false"
    * @generated
    */
-  String getSuper();
-
-  /**
-   * Sets the value of the '{@link de.uni_hildesheim.sse.ivml.TypedefCompound#getSuper <em>Super</em>}' attribute.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @param value the new value of the '<em>Super</em>' attribute.
-   * @see #getSuper()
-   * @generated
-   */
-  void setSuper(String value);
+  EList<String> getSuper();
 
   /**
    * Returns the value of the '<em><b>Elements</b></em>' containment reference list.

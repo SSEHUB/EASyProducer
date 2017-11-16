@@ -208,8 +208,8 @@ public class TypeContext implements IResolutionScope {
     private void addToContext(Compound comp, java.util.Set<Compound> done) {
         if (!done.contains(comp)) {
             done.add(comp);
-            if (null != comp.getRefines()) {
-                addToContext(comp.getRefines(), done);
+            for (int r = 0; r < comp.getRefinesCount(); r++) {
+                addToContext(comp.getRefines(r), done);
             }
             int count = comp.getElementCount();
             for (int c = 0; c < count; c++) {
@@ -524,6 +524,52 @@ public class TypeContext implements IResolutionScope {
             result = ModelQuery.findType(project, name, type);
         }
         return result;
+    }
+    
+    /**
+     * Finds compounds according to the given <code>names</code>.
+     * 
+     * @param names the names of the compounds
+     * @param nullOnFail if <b>null</b> shall be returned on failing resolution
+     * @return the found compounds (<b>null</b> if there was nothing to resolve or 
+     *    individuals were not resolved and <code>nullOnFail</code>, 
+     *    else an array with <b>null</b> entries)
+     * @throws ModelQueryException in case of semantic problems
+     */
+    public Compound[] findCompounds(List<String> names, boolean nullOnFail) throws ModelQueryException {
+        Compound[] result;
+        if (null == names || names.isEmpty()) {
+            result = null;
+        } else {
+            result = new Compound[names.size()];
+            for (int n = 0; null != result && n < names.size(); n++) {
+                result[n] = (Compound) findType(names.get(n), Compound.class);
+                if (nullOnFail && null == result[n]) {
+                    result = null;
+                }
+            }
+        }
+        return result;
+    }
+    
+    /**
+     * Returns whether all types in <code>types</code> are resolved.
+     * 
+     * @param types the types to inspect
+     * @return <code>true</code> for all resolved, <code>false</code> for at least one not resolved or 
+     *     <code><b>null</b>==types</code>
+     */
+    public static boolean allResolved(IDatatype[] types) {
+        boolean resolved;
+        if (null != types) {
+            resolved = true;
+            for (int t = 0; resolved && t < types.length; t++) {
+                resolved = types[t] != null;
+            }
+        } else {
+            resolved = false;
+        }
+        return resolved;
     }
 
     /**

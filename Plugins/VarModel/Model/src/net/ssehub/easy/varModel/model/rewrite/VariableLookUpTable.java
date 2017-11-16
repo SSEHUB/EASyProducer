@@ -168,9 +168,11 @@ class VariableLookUpTable {
             instances.add(variable);
             
             // Add the variable to parent types
-            if (type instanceof Compound && null != ((Compound) type).getRefines()) {
-                Compound parentType = ((Compound) type).getRefines();
-                addVariable(variable, parentType);
+            if (type instanceof Compound) {
+                Compound cType = (Compound) type;
+                for (int r = 0; r < cType.getRefinesCount(); r++) {
+                    addVariable(variable, cType.getRefines(r));
+                }
             } else if (type instanceof Reference) {
                 IDatatype referedType = Reference.dereference(type);
                 addVariable(variable, referedType);

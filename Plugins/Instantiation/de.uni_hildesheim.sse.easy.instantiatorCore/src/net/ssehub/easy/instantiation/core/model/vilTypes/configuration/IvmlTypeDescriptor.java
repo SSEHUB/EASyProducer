@@ -112,8 +112,8 @@ public class IvmlTypeDescriptor extends AbstractIvmlTypeDescriptor implements IA
         if (ivmlType instanceof Compound) {
             TypeRegistry registry = getTypeRegistry();
             Compound comp = (Compound) ivmlType;
-            Compound refines = comp.getRefines();
-            if (null != refines) {
+            for (int r = 0; r < comp.getRefinesCount(); r++) {
+                Compound refines = comp.getRefines(r);
                 TypeDescriptor<?> tmp = registry.getType(refines);
                 if (tmp instanceof IvmlTypeDescriptor) { // just to be sure
                     IvmlTypeDescriptor refinesDesc = (IvmlTypeDescriptor) tmp;

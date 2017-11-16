@@ -1075,7 +1075,7 @@ public abstract class AbstractIvmlSemanticSequencer extends AbstractDelegatingSe
 	 *     (
 	 *         abstract='abstract'? 
 	 *         name=Identifier 
-	 *         super=Identifier? 
+	 *         (super+=Identifier super+=Identifier*)? 
 	 *         (elements+=VariableDeclaration | elements+=ExpressionStatement | elements+=AttrAssignment | elements+=Eval)*
 	 *     )
 	 */

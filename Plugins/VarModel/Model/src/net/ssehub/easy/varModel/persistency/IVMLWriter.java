@@ -335,10 +335,17 @@ public class IVMLWriter extends AbstractVarModelWriter {
         appendOutput(WHITESPACE);
         appendOutput(compound.getName());
         appendOutput(WHITESPACE);
-        if (null != compound.getRefines()) {
+        int rCount = compound.getRefinesCount();
+        if (rCount > 0) {
             appendOutput(REFINES);
             appendOutput(WHITESPACE);
-            appendOutput(compound.getRefines().getUniqueName());
+            for (int r = 0; r < rCount; r++) {
+                if (r > 0) {
+                    appendOutput(COMMA);
+                    appendOutput(WHITESPACE);
+                }
+                appendOutput(compound.getRefines(r).getUniqueName());
+            }
             appendOutput(WHITESPACE);
         }
         appendOutput(BEGINNING_BLOCK);
@@ -502,13 +509,8 @@ public class IVMLWriter extends AbstractVarModelWriter {
             appendOutput(LINEFEED);
             addParent(DUMMY_PARENT);
         }
-        int count = 0;
         java.util.Set<String> done = Compound.ENABLE_SHADOWING_REFINEMENT ? new HashSet<String>() : null;
-        Compound comp = (Compound) value.getType();
-        while (null != comp) {
-            count = visitCompoundDecisionVariableContainer(comp, value, count, done);
-            comp = comp.getRefines();
-        }
+        visitCompoundRefines((Compound) value.getType(), value, 0, done);
         if (formatInitializer) {
             removeLastParent();
             appendOutput(LINEFEED);
@@ -516,6 +518,25 @@ public class IVMLWriter extends AbstractVarModelWriter {
         }
         appendOutput(ENDING_BLOCK);
         nestedValues.pop();
+    }
+
+    /**
+     * Calls 
+     * {@link #visitCompoundDecisionVariableContainer(IDecisionVariableContainer, CompoundValue, int, java.util.Set)
+     * <code>comp</code> and for all its refines.
+     * 
+     * @param comp the compound
+     * @param value the compound value
+     * @param count the count
+     * @param done already processed (or <b>null</b>)
+     * @return the aggregated count
+     */
+    private int visitCompoundRefines(Compound comp, CompoundValue value, int count, java.util.Set<String> done) {
+        count = visitCompoundDecisionVariableContainer(comp, value, count, done);
+        for (int r = 0; r < comp.getRefinesCount(); r++) {
+            count = visitCompoundRefines(comp.getRefines(r), value, count, done);
+        }
+        return count;
     }
     
     /**

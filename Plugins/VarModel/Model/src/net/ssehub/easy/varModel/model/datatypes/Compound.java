@@ -84,7 +84,7 @@ public class Compound extends StructuredDatatype implements IResolutionScope, ID
     }
 
     private boolean isAbstract;
-    private Compound refines;
+    private Compound[] refines;
     // stores the contained elements in sequence for proper output
 
     // TODO revise dependency direction
@@ -94,7 +94,7 @@ public class Compound extends StructuredDatatype implements IResolutionScope, ID
      * Creates the singleton instance for {@link #TYPE}.
      */
     private Compound() {
-        this("<Compound>", null, null);
+        this("<Compound>", null, (Compound[]) null);
     }
     
     /**
@@ -104,19 +104,42 @@ public class Compound extends StructuredDatatype implements IResolutionScope, ID
      * @param parent the object, in which this specific one is embedded
      */
     public Compound(String name, ModelElement parent) {
-        this(name, parent, null);
+        this(name, parent, (Compound[]) null);
     }
-    
+
     /**
-     * Constructor for a non-abstract (potentially refined) compound.
+     * Constructor for a non-abstract (potentially refined) compound. [convenience]
      * 
      * @param name name of the compound
      * @param parent the object, in which this specific one is embedded
      * @param refines the super compound (may be <b>null</b> if there is no refinement).
      */
     public Compound(String name, ModelElement parent, Compound refines) {
+        this(name, parent, null == refines ? null : new Compound[] {refines});
+    }
+
+    /**
+     * Constructor for a non-abstract (potentially refined) compound.
+     * 
+     * @param name name of the compound
+     * @param parent the object, in which this specific one is embedded
+     * @param refines the super compounds (may be <b>null</b> if there is no refinement, no entry must be <b>null</b>).
+     */
+    public Compound(String name, ModelElement parent, Compound... refines) {
         super(name, DTYPE, parent);
         this.refines = refines;
+    }
+
+    /**
+     * Constructor for a (potentially abstract, refined) compound. [convenience]
+     * 
+     * @param name name of the compound
+     * @param isAbstract whether this compound is abstract
+     * @param parent the object, in which this specific one is embedded
+     * @param refines the super compound (may be <b>null</b> if there is no refinement)
+     */
+    public Compound(String name, ModelElement parent, boolean isAbstract, Compound refines) {
+        this(name, parent, isAbstract, null == refines ? null : new Compound[] {refines});
     }
     
     /**
@@ -125,9 +148,9 @@ public class Compound extends StructuredDatatype implements IResolutionScope, ID
      * @param name name of the compound
      * @param isAbstract whether this compound is abstract
      * @param parent the object, in which this specific one is embedded
-     * @param refines the super compound (may be <b>null</b> if there is no refinement)
+     * @param refines the super compound(s) (may be <b>null</b> if there is no refinement, no entry must be <b>null</b>)
      */
-    public Compound(String name, ModelElement parent, boolean isAbstract, Compound refines) {
+    public Compound(String name, ModelElement parent, boolean isAbstract, Compound... refines) {
         super(name, DTYPE, parent);
         this.isAbstract = isAbstract;
         this.refines = refines;
@@ -135,10 +158,11 @@ public class Compound extends StructuredDatatype implements IResolutionScope, ID
     
     /**
      * Setter for the parent/ super compound of a refinement.
-     * This method is for incremental build during parsing a ivml file.
-     * @param refines The super/parent compound of this compound.
+     * This method is for incremental build during parsing a IVML file.
+     * 
+     * @param refines The super/parent compounds of this compound (may be <b>null</b>, no entry must be <b>null</b>).
      */
-    public void setRefines(Compound refines) {
+    public void setRefines(Compound[] refines) {
         this.refines = refines;
     }
 
@@ -161,14 +185,28 @@ public class Compound extends StructuredDatatype implements IResolutionScope, ID
     public boolean isInterface() {
         return false;
     }
+    
+    /**
+     * The number of refines.
+     * 
+     * @return the number of refines
+     */
+    public int getRefinesCount() {
+        return null == refines ? 0 : refines.length;
+    }
 
     /**
      * Returns the compound which is refined by this compound.
      * 
-     * @return the refined compound (or <b>null</b> if there is none)
+     * @param index the index of the refined compound to return
+     * @return the refined compound
+     * @throws IndexOutOfBoundsException if <code>index < 0 || index&gt;={@link #getRefinesCount()}</code>
      */
-    public Compound getRefines() {
-        return refines;
+    public Compound getRefines(int index) {
+        if (null == refines) {
+            throw new IndexOutOfBoundsException();
+        }
+        return refines[index];
     }
         
     /** 
@@ -212,29 +250,11 @@ public class Compound extends StructuredDatatype implements IResolutionScope, ID
         } else {
             // Check whether one of the parents match
             if (!cmpMatches && type instanceof Compound) {
-                Compound tmpCmp = (Compound) type;
-                while (!cmpMatches && null != tmpCmp.getRefines()) {
-                    cmpMatches |= tmpCmp.getRefines() == this;
-                    tmpCmp = tmpCmp.getRefines();
-                }   
+                cmpMatches = ((Compound) type).isRefinedFrom(this, true);
             }
-            
             result = classMatches && cmpMatches;
         }
         return result;
-    }
-    
-    /**
-     * Returns the refinement basis, i.e., the topmost refined compound.
-     * 
-     * @return the topmost refined compound or <b>this</b> if this compound does not refine another compound
-     */
-    public Compound getRefinementBasis() {
-        Compound basis = this;
-        while (null != basis.getRefines()) {
-            basis = basis.getRefines();
-        }
-        return basis;
     }
     
     // --------------------------------- delegation part --------------------------------------
@@ -243,19 +263,42 @@ public class Compound extends StructuredDatatype implements IResolutionScope, ID
     public boolean add(DecisionVariableDeclaration elem) {
         boolean alreadyIn = false;
         if (!ENABLE_SHADOWING_REFINEMENT) {
-            Compound basisCP = getRefines();
-            while (null != basisCP && !alreadyIn) {
-                alreadyIn = basisCP.container.containsByName(elem.getName());
-                basisCP = basisCP.getRefines();
-            }
+            alreadyIn = containsByNameRefines(elem.getName());
         }
-        
         if (!alreadyIn) {
             // Was already in if container.add returns false
             alreadyIn = !container.add(elem);
         }
-        
         return !alreadyIn;
+    }
+
+    /**
+     * Returns whether <code>name</code> is already contained in this or a refined compound.
+     * 
+     * @param name the name of the element
+     * @return <code>true</code> for contained, <code>false</code> else
+     */
+    public boolean containsByNameRefines(String name) {
+        boolean contains = container.containsByName(name);
+        for (int r = 0; !contains && r < getRefinesCount(); r++) {
+            contains = getRefines(r).containsByName(name);
+        }
+        return contains;
+    }
+    
+    /**
+     * Whether this compound is directly or indirectly refined from <code>cmp</code>.
+     * 
+     * @param cmp the cmp to look for
+     * @param transitive whether refines of refines shall be considered
+     * @return <code>true</code> if this compound is directly or indirectly refined from <code>cmp</code>
+     */
+    public boolean isRefinedFrom(Compound cmp, boolean transitive) {
+        boolean refined = false;
+        for (int r = 0; !refined && r < getRefinesCount(); r++) {
+            refined = getRefines(r) == cmp || (transitive && getRefines(r).isRefinedFrom(cmp, true));
+        }
+        return refined;
     }
     
     @Override
@@ -275,12 +318,9 @@ public class Compound extends StructuredDatatype implements IResolutionScope, ID
      */
     public int getInheritedElementCount() {
         int elementCount = container.getDeclarationCount();
-        
-        if (null != getRefines()) {
-            elementCount += getRefines().getInheritedElementCount();
+        for (int r = 0; r < getRefinesCount(); r++) {
+            elementCount += getRefines(r).getInheritedElementCount();
         }
-            
-        
         return elementCount;
     }
     
@@ -297,19 +337,17 @@ public class Compound extends StructuredDatatype implements IResolutionScope, ID
     public DecisionVariableDeclaration getInheritedElement(int index) {
         DecisionVariableDeclaration element = null;
         int inheritedCount = 0;
-        
-        if (null != getRefines()) {
-            inheritedCount = getRefines().getInheritedElementCount();
+        for (int r = 0; null == element && r < getRefinesCount(); r++) {
+            Compound ref = getRefines(r);
+            int last = inheritedCount;
+            inheritedCount += ref.getInheritedElementCount();
+            if (index < inheritedCount) {
+                element = ref.getInheritedElement(index - last);
+            }
         }
-        
-        if (index < inheritedCount) {
-            element = getRefines().getInheritedElement(index);
-        } else {
-            index -= inheritedCount;
-            element = getDeclaration(index);
+        if (index >= inheritedCount) {
+            element = getDeclaration(index - inheritedCount);
         }
-        
-        
         return element;
     }
     
@@ -321,8 +359,8 @@ public class Compound extends StructuredDatatype implements IResolutionScope, ID
     @Override
     public DecisionVariableDeclaration getElement(String name) {
         DecisionVariableDeclaration decl = container.getElement(name);
-        if (null == decl && null != refines) {
-            decl = refines.getElement(name);
+        for (int r = 0; null == decl && r < getRefinesCount(); r++) {
+            decl = getRefines(r).getElement(name);
         }
         return decl;
     }
@@ -439,10 +477,10 @@ public class Compound extends StructuredDatatype implements IResolutionScope, ID
     @Override
     public void forceUpdate() {
         container.forceUpdate();
-        Compound refines = getRefines();
-        while (null != refines) {
-            refines.forceUpdate();
-            refines = refines.getRefines();
+        if (null != refines) {
+            for (int r = 0; r < getRefinesCount(); r++) {
+                getRefines(r).forceUpdate();
+            }
         }
     }
 

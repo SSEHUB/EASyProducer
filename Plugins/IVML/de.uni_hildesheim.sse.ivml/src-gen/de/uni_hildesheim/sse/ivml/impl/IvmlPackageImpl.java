@@ -3267,7 +3267,7 @@ public class IvmlPackageImpl extends EPackageImpl implements IvmlPackage
     initEClass(typedefCompoundEClass, TypedefCompound.class, "TypedefCompound", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
     initEAttribute(getTypedefCompound_Abstract(), ecorePackage.getEString(), "abstract", null, 0, 1, TypedefCompound.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEAttribute(getTypedefCompound_Name(), ecorePackage.getEString(), "name", null, 0, 1, TypedefCompound.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEAttribute(getTypedefCompound_Super(), ecorePackage.getEString(), "super", null, 0, 1, TypedefCompound.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEAttribute(getTypedefCompound_Super(), ecorePackage.getEString(), "super", null, 0, -1, TypedefCompound.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, !IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEReference(getTypedefCompound_Elements(), ecorePackage.getEObject(), null, "elements", null, 0, -1, TypedefCompound.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     initEClass(attrAssignmentEClass, AttrAssignment.class, "AttrAssignment", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);

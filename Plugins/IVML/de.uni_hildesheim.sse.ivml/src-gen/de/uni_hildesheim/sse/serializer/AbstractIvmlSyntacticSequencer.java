@@ -137,7 +137,7 @@ public abstract class AbstractIvmlSyntacticSequencer extends AbstractSyntacticSe
 	 *     elements+=ExpressionStatement '}' (ambiguity) (rule end)
 	 *     elements+=VariableDeclaration '}' (ambiguity) (rule end)
 	 *     name=Identifier '{' '}' (ambiguity) (rule end)
-	 *     super=Identifier '{' '}' (ambiguity) (rule end)
+	 *     super+=Identifier '{' '}' (ambiguity) (rule end)
 	 */
 	protected void emit_TypedefCompound_SemicolonKeyword_7_q(EObject semanticObject, ISynNavigable transition, List<INode> nodes) {
 		acceptNodes(transition, nodes);

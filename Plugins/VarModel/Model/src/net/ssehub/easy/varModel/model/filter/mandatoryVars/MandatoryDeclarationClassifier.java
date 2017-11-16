@@ -271,9 +271,8 @@ public class MandatoryDeclarationClassifier extends AbstractProjectVisitor imple
     @Override
     public void visitCompound(Compound compound) {
         // Compounds can contain constraints -> visit all of them
-        Compound parent = compound.getRefines();
-        if (null != parent) {
-            visitCompound(parent);
+        for (int r = 0; r < compound.getRefinesCount(); r++) {
+            visitCompound(compound.getRefines(r));
         }
         // Visit constraints of a compound
         for (int i = 0, n = compound.getConstraintsCount(); i < n; i++) {

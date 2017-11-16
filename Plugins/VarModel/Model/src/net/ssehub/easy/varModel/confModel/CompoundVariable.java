@@ -86,9 +86,8 @@ public class CompoundVariable extends StructuredVariable {
      */
     private void resolveAssignBlocks(Compound cType) {
         // Top-Down to allow overriding in refined compounds -> Start with parent
-        Compound parentCompoundType = cType.getRefines();
-        if (null != parentCompoundType) {
-            resolveAssignBlocks(parentCompoundType);
+        for (int r = 0; r < cType.getRefinesCount(); r++) {
+            resolveAssignBlocks(cType.getRefines(r));
         }
         
         // Resolve values for all top level assign blocks inside this compound,

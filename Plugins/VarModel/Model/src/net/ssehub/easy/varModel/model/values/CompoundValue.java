@@ -360,17 +360,26 @@ public class CompoundValue extends StructuredValue implements Cloneable {
     
     @Override
     public int hashCode() {
-        int result = getType().getName().hashCode();
-        Compound type = (Compound) getType(); // by construction
-        while (null != type) {
-            for (int s = 0; s < type.getElementCount(); s++) {
-                String slotName = type.getElement(s).getName();
-                Value myValue = getNestedValue(slotName);
-                if (null != myValue) {
-                    result += myValue.hashCode();
-                }
-            }        
-            type = type.getRefines();
+        return getType().getName().hashCode() + hashCode((Compound) getType()); // by construction
+    }
+
+    /**
+     * Returns the hashCode for a compound type.
+     * 
+     * @param type the type to calculate the hashCode for
+     * @return the hashCode
+     */
+    private int hashCode(Compound type) {
+        int result = 0;
+        for (int s = 0; s < type.getElementCount(); s++) {
+            String slotName = type.getElement(s).getName();
+            Value myValue = getNestedValue(slotName);
+            if (null != myValue) {
+                result += myValue.hashCode();
+            }
+        }
+        for (int r = 0; r < type.getRefinesCount(); r++) {
+            result += hashCode(type.getRefines(r));
         }
         return result;
     }
@@ -396,14 +405,27 @@ public class CompoundValue extends StructuredValue implements Cloneable {
             IDatatype oType = oCompound.getType(); 
             if (type.isAssignableFrom(oType) && oType.isAssignableFrom(type)) {
                 CompoundValue otherValue = (CompoundValue) object;
-                equals = true;
-                while (equals && null != type) {
-                    // TODO check whether getSlotNames would be easier!!!
-                    equals = checkElements(type, otherValue, ignoreUndefinedInObject) 
-                        && checkAssignments(type, otherValue, ignoreUndefinedInObject);
-                    type = type.getRefines();
-                }
+                equals = equals(type, otherValue, ignoreUndefinedInObject);
             }
+        }
+        return equals;
+    }
+
+    /**
+     * Checks for equality potentially ignoring undefined values in the given <code>type</code>.
+     * 
+     * @param type the compound to check for
+     * @param otherValue the value to check for
+     * @param ignoreUndefinedInObject whether undefined values in <code>type</code> shall be ignored 
+     *   (partial equality)
+     * @return <code>true</code> if <code>type</code> is considered equal to <b>this</b>, <code>false</code> else
+     */
+    private boolean equals(Compound type, CompoundValue otherValue, boolean ignoreUndefinedInObject) {
+        boolean equals = checkElements(type, otherValue, ignoreUndefinedInObject) 
+            && checkAssignments(type, otherValue, ignoreUndefinedInObject);
+        // TODO check whether getSlotNames would be easier!!!
+        for (int r = 0; equals && r < type.getRefinesCount(); r++) {
+            equals = equals(type.getRefines(r), otherValue, ignoreUndefinedInObject);
         }
         return equals;
     }

@@ -1,0 +1,17 @@
+project compoundsMulti {
+
+    version v0;
+    compound T1 {
+        String name;
+    }
+
+    compound T2 {
+        String name;
+    }
+
+    compound T3 refines T1, T2 {
+    }
+
+    setOf(T1) t1 = {{name = "t1.1"}, T3 {name = "t3.1"}};
+    setOf(T2) t2 = {{name = "t2.2"}, T3 {name = "t3.2"}};
+}

@@ -588,8 +588,8 @@ public class DroolsVisitor implements IModelVisitor,
         compDeclaration = "declare " + name;
         String typesafe = "@typesafe (false) \n";
         String refinement = "";
-        if (null != compound.getRefines()) {
-            refinement = " extends " + compound.getRefines().getName();
+        if (compound.getRefinesCount() > 0) { // legacy, stay at the first
+            refinement = " extends " + compound.getRefines(0).getName();
         }
         compDeclaration += refinement;
         compDeclaration += "\n" + typesafe;

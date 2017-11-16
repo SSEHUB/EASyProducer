@@ -382,6 +382,10 @@ public class IvmlGrammarAccess extends AbstractGrammarElementFinder {
 		private final Keyword cRefinesKeyword_3_0 = (Keyword)cGroup_3.eContents().get(0);
 		private final Assignment cSuperAssignment_3_1 = (Assignment)cGroup_3.eContents().get(1);
 		private final RuleCall cSuperIdentifierParserRuleCall_3_1_0 = (RuleCall)cSuperAssignment_3_1.eContents().get(0);
+		private final Group cGroup_3_2 = (Group)cGroup_3.eContents().get(2);
+		private final Keyword cCommaKeyword_3_2_0 = (Keyword)cGroup_3_2.eContents().get(0);
+		private final Assignment cSuperAssignment_3_2_1 = (Assignment)cGroup_3_2.eContents().get(1);
+		private final RuleCall cSuperIdentifierParserRuleCall_3_2_1_0 = (RuleCall)cSuperAssignment_3_2_1.eContents().get(0);
 		private final Keyword cLeftCurlyBracketKeyword_4 = (Keyword)cGroup.eContents().get(4);
 		private final Alternatives cAlternatives_5 = (Alternatives)cGroup.eContents().get(5);
 		private final Assignment cElementsAssignment_5_0 = (Assignment)cAlternatives_5.eContents().get(0);
@@ -396,15 +400,16 @@ public class IvmlGrammarAccess extends AbstractGrammarElementFinder {
 		private final Keyword cSemicolonKeyword_7 = (Keyword)cGroup.eContents().get(7);
 		
 		//TypedefCompound:
-		//	abstract='abstract'? 'compound' name=Identifier ('refines' super=Identifier)? //#< Compounds
-		// '{'
-		//	(elements+=VariableDeclaration | elements+=ExpressionStatement | elements+=AttrAssignment | elements+=Eval)* '}'
-		//	';'?;
+		//	abstract='abstract'? 'compound' name=Identifier ('refines' super+=Identifier (',' super+=Identifier)*)?
+		//	//#< Compounds
+		// '{' (elements+=VariableDeclaration | elements+=ExpressionStatement | elements+=AttrAssignment |
+		//	elements+=Eval)* '}' ';'?;
 		@Override public ParserRule getRule() { return rule; }
 
-		//abstract='abstract'? 'compound' name=Identifier ('refines' super=Identifier)? //#< Compounds
-		// '{'
-		//(elements+=VariableDeclaration | elements+=ExpressionStatement | elements+=AttrAssignment | elements+=Eval)* '}' ';'?
+		//abstract='abstract'? 'compound' name=Identifier ('refines' super+=Identifier (',' super+=Identifier)*)? //#< Compounds
+		//
+		//'{' (elements+=VariableDeclaration | elements+=ExpressionStatement | elements+=AttrAssignment | elements+=Eval)* '}'
+		//';'?
 		public Group getGroup() { return cGroup; }
 
 		//abstract='abstract'?
@@ -422,17 +427,29 @@ public class IvmlGrammarAccess extends AbstractGrammarElementFinder {
 		//Identifier
 		public RuleCall getNameIdentifierParserRuleCall_2_0() { return cNameIdentifierParserRuleCall_2_0; }
 
-		//('refines' super=Identifier)?
+		//('refines' super+=Identifier (',' super+=Identifier)*)?
 		public Group getGroup_3() { return cGroup_3; }
 
 		//'refines'
 		public Keyword getRefinesKeyword_3_0() { return cRefinesKeyword_3_0; }
 
-		//super=Identifier
+		//super+=Identifier
 		public Assignment getSuperAssignment_3_1() { return cSuperAssignment_3_1; }
 
 		//Identifier
 		public RuleCall getSuperIdentifierParserRuleCall_3_1_0() { return cSuperIdentifierParserRuleCall_3_1_0; }
+
+		//(',' super+=Identifier)*
+		public Group getGroup_3_2() { return cGroup_3_2; }
+
+		//','
+		public Keyword getCommaKeyword_3_2_0() { return cCommaKeyword_3_2_0; }
+
+		//super+=Identifier
+		public Assignment getSuperAssignment_3_2_1() { return cSuperAssignment_3_2_1; }
+
+		//Identifier
+		public RuleCall getSuperIdentifierParserRuleCall_3_2_1_0() { return cSuperIdentifierParserRuleCall_3_2_1_0; }
 
 		////#< Compounds
 		// '{'
@@ -3568,10 +3585,10 @@ public class IvmlGrammarAccess extends AbstractGrammarElementFinder {
 	}
 
 	//TypedefCompound:
-	//	abstract='abstract'? 'compound' name=Identifier ('refines' super=Identifier)? //#< Compounds
-	// '{'
-	//	(elements+=VariableDeclaration | elements+=ExpressionStatement | elements+=AttrAssignment | elements+=Eval)* '}'
-	//	';'?;
+	//	abstract='abstract'? 'compound' name=Identifier ('refines' super+=Identifier (',' super+=Identifier)*)?
+	//	//#< Compounds
+	// '{' (elements+=VariableDeclaration | elements+=ExpressionStatement | elements+=AttrAssignment |
+	//	elements+=Eval)* '}' ';'?;
 	public TypedefCompoundElements getTypedefCompoundAccess() {
 		return pTypedefCompound;
 	}

@@ -122,12 +122,12 @@ class CompoundConstraintFinder implements IModelVisitor {
 
     @Override
     public void visitCompound(Compound compound) {
-        Compound refinedCmp = compound.getRefines();
-        
-        if (null != refinedCmp) {
-            refinedCmp.accept(this);
+        for (int r = 0; r < compound.getRefinesCount(); r++) {
+            Compound refinedCmp = compound.getRefines(r);
+            if (null != refinedCmp) {
+                refinedCmp.accept(this);
+            }
         }
-        
         
         for (int i = 0; i < compound.getConstraintsCount(); i++) {
             constraints.add(compound.getConstraint(i).getConsSyntax());

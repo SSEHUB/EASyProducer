@@ -408,8 +408,8 @@ public class ModelTranslator extends net.ssehub.easy.dslCore.translation.ModelTr
                 }
             }
         }
-        if (null != cmp.getRefines()) {
-            checkCompound(eProject, cmp.getRefines(), cmpMapping, done);
+        for (int r = 0; r < cmp.getRefinesCount(); r++) {
+            checkCompound(eProject, cmp.getRefines(r), cmpMapping, done);
         }
     }
     
@@ -1465,7 +1465,7 @@ public class ModelTranslator extends net.ssehub.easy.dslCore.translation.ModelTr
             }
         }
     }
-
+    
     /**
      * Processes a compound definition.
      * 
@@ -1481,24 +1481,25 @@ public class ModelTranslator extends net.ssehub.easy.dslCore.translation.ModelTr
     private boolean processCompound(TypedefCompound tcomp, TypeContext context, boolean force) 
         throws TranslatorException {
         boolean resolvable = true;
-        Compound superCompound;
-        if (null != tcomp.getSuper()) {
+        Compound[] superCompounds;
+        List<String> refines = tcomp.getSuper();
+        if (null != refines) {
             try {
-                superCompound = (Compound) context.findType(tcomp.getSuper(), Compound.class);
+                superCompounds = context.findCompounds(refines, true);
             } catch (ModelQueryException e) {
                 throw new TranslatorException(e, tcomp, IvmlPackage.Literals.TYPEDEF_COMPOUND__SUPER);
             }
-            resolvable = force || (null != superCompound);
+            resolvable = force || TypeContext.allResolved(superCompounds); 
         } else {
-            superCompound = null;
+            superCompounds = null;
         }
         Compound stored = compoundMapping.get(tcomp);
-        if (null != stored && null == stored.getRefines() && null != superCompound) {
-            stored.setRefines(superCompound);
+        if (null != stored && 0 == stored.getRefinesCount() && null != superCompounds) {
+            stored.setRefines(superCompounds);
         }
         expressionTranslator.warnDiscouragedNames(tcomp.getName(), tcomp, IvmlPackage.Literals.TYPEDEF_COMPOUND__NAME);
         Compound compound = (null != stored ? stored : new Compound(tcomp.getName(), context.getProject(), 
-            tcomp.getAbstract() != null, superCompound));
+            tcomp.getAbstract() != null, superCompounds));
         SplitResult split = Utils.split(tcomp.getElements());
         if (!force) {
             resolvable &= variableDeclarationsResolvable(split.getVarDecls(), context, compound, force);
@@ -1516,25 +1517,27 @@ public class ModelTranslator extends net.ssehub.easy.dslCore.translation.ModelTr
             resolveDeclarations(split.getVarDecls(), context, compound, force);
             // constraints are resolved afterwards
         }
-        // Handle refinments where the refined compound is written before the super compound.
+        // Handle refinements where the refined compound is written before the super compound.
         if (null != compound) {
             // Keep compounds into mind, where the parent could not be found until yet
-            if (null != tcomp.getSuper() && null == superCompound) {
-                context.addToContext(compound, tcomp.getSuper());
+            if (null != refines && !refines.isEmpty() && null == superCompounds) {
+                for (int r = 0; r < refines.size(); r++) {
+                    context.addToContext(compound, refines.get(r));
+                }
             }
             // Set refined compounds if the super compound was found at a later time
             List<Compound> childs = context.getUnresolvedCompoundRefinments(compound.getName());
             if (null != childs) {
                 for (int i = 0; i < childs.size(); i++) {
                     Compound child = childs.get(i);
-                    if (null == child.getRefines()) {
-                        child.setRefines(compound);
+                    if (0 == child.getRefinesCount()) {
+                        child.setRefines(new Compound[] {compound});
                     }
                 }
             }
             context.clearUnresolvedCompounds(compound.getName());
 
-            if (resolvable && null != tcomp.getSuper() && null == compound.getRefines()) {
+            if (resolvable && null != refines && !refines.isEmpty() && null == superCompounds) {
                 throw new TranslatorException("cannot resolve '" + tcomp.getSuper() + "'", tcomp, 
                    IvmlPackage.Literals.TYPEDEF_COMPOUND__SUPER, ErrorCodes.UNKNOWN_ELEMENT);
             }

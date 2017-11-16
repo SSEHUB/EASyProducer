@@ -55,8 +55,8 @@ public class CompoundAccess extends ConstraintSyntaxTree {
      */
     private DecisionVariableDeclaration searchSlot(Compound comp, String slotName) {
         DecisionVariableDeclaration slot = comp.getElement(slotName);
-        if (null == slot && null != comp.getRefines()) {
-            slot = searchSlot(comp.getRefines(), slotName);
+        for (int r = 0; null == slot && r < comp.getRefinesCount(); r++) {
+            slot = searchSlot(comp.getRefines(r), slotName);
         }
         return slot;
     }

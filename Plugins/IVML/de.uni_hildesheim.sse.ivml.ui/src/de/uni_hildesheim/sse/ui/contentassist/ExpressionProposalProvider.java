@@ -181,7 +181,9 @@ public class ExpressionProposalProvider extends AbstractIvmlProposalProvider  {
             for (int a = 0; a < type.getAssignmentCount(); a++) {
                 propose(type.getAssignment(a), context, acceptor, priority, done);
             }
-            propose(type.getRefines(), context, acceptor, priority - 1, done);
+            for (int r = 0; r < type.getRefinesCount(); r++) {
+                propose(type.getRefines(r), context, acceptor, priority - 1, done);
+            }
         }
     }
 

@@ -73,7 +73,7 @@ TypedefCompound:
     //#> Compounds
     (
     	'refines' 
-    	super=Identifier
+    	super+=Identifier (',' super+=Identifier)*
     )? 
     //#< Compounds
     '{'

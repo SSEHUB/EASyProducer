@@ -1,0 +1,15 @@
+project compoundsMultiFail {
+
+    version v0;
+    compound T1 {
+        String name;
+    }
+
+    compound T2 {
+        Integer name;
+    }
+
+    compound T3 refines T1, T2 {
+    }
+
+}

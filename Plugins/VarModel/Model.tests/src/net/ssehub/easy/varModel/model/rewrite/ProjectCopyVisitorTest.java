@@ -360,8 +360,9 @@ public class ProjectCopyVisitorTest {
         assertCopiedElement(cType, copiedType, expectedParent);
 
         // recursive call for all parent compounds
-        if (null != cType.getRefines()) {
-            assertCompound(cType.getRefines(), copiedType.getRefines(), expectedParent);
+        Assert.assertEquals("Refined compounds must be equal", cType.getRefinesCount(), copiedType.getRefinesCount());
+        for (int r = 0; r < cType.getRefinesCount(); r++) {
+            assertCompound(cType.getRefines(r), copiedType.getRefines(r), expectedParent);
         }
         
         Assert.assertEquals("Compound differs in respect to isAbstract", cType.isAbstract(), copiedType.isAbstract());
@@ -1094,7 +1095,7 @@ public class ProjectCopyVisitorTest {
     @Test
     public void testCopyRefinedCompound() {
         Project original = new Project("testCopyRefinedCompound");
-        Compound cType1 = new Compound("abstractCompound", original, true, null);
+        Compound cType1 = new Compound("abstractCompound", original, true);
         Compound cType2 = new Compound("cType", original, false, cType1);
         DecisionVariableDeclaration nestedDecl = new DecisionVariableDeclaration("slot", StringType.TYPE, cType2);
         cType2.add(nestedDecl);

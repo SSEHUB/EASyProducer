@@ -19,6 +19,7 @@ import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
 
+import org.eclipse.emf.ecore.util.EDataTypeEList;
 import org.eclipse.emf.ecore.util.EObjectContainmentEList;
 import org.eclipse.emf.ecore.util.InternalEList;
 
@@ -81,24 +82,14 @@ public class TypedefCompoundImpl extends MinimalEObjectImpl.Container implements
   protected String name = NAME_EDEFAULT;
 
   /**
-   * The default value of the '{@link #getSuper() <em>Super</em>}' attribute.
+   * The cached value of the '{@link #getSuper() <em>Super</em>}' attribute list.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @see #getSuper()
    * @generated
    * @ordered
    */
-  protected static final String SUPER_EDEFAULT = null;
-
-  /**
-   * The cached value of the '{@link #getSuper() <em>Super</em>}' attribute.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @see #getSuper()
-   * @generated
-   * @ordered
-   */
-  protected String super_ = SUPER_EDEFAULT;
+  protected EList<String> super_;
 
   /**
    * The cached value of the '{@link #getElements() <em>Elements</em>}' containment reference list.
@@ -182,22 +173,13 @@ public class TypedefCompoundImpl extends MinimalEObjectImpl.Container implements
    * <!-- end-user-doc -->
    * @generated
    */
-  public String getSuper()
+  public EList<String> getSuper()
   {
+    if (super_ == null)
+    {
+      super_ = new EDataTypeEList<String>(String.class, this, IvmlPackage.TYPEDEF_COMPOUND__SUPER);
+    }
     return super_;
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  public void setSuper(String newSuper)
-  {
-    String oldSuper = super_;
-    super_ = newSuper;
-    if (eNotificationRequired())
-      eNotify(new ENotificationImpl(this, Notification.SET, IvmlPackage.TYPEDEF_COMPOUND__SUPER, oldSuper, super_));
   }
 
   /**
@@ -270,7 +252,8 @@ public class TypedefCompoundImpl extends MinimalEObjectImpl.Container implements
         setName((String)newValue);
         return;
       case IvmlPackage.TYPEDEF_COMPOUND__SUPER:
-        setSuper((String)newValue);
+        getSuper().clear();
+        getSuper().addAll((Collection<? extends String>)newValue);
         return;
       case IvmlPackage.TYPEDEF_COMPOUND__ELEMENTS:
         getElements().clear();
@@ -297,7 +280,7 @@ public class TypedefCompoundImpl extends MinimalEObjectImpl.Container implements
         setName(NAME_EDEFAULT);
         return;
       case IvmlPackage.TYPEDEF_COMPOUND__SUPER:
-        setSuper(SUPER_EDEFAULT);
+        getSuper().clear();
         return;
       case IvmlPackage.TYPEDEF_COMPOUND__ELEMENTS:
         getElements().clear();
@@ -321,7 +304,7 @@ public class TypedefCompoundImpl extends MinimalEObjectImpl.Container implements
       case IvmlPackage.TYPEDEF_COMPOUND__NAME:
         return NAME_EDEFAULT == null ? name != null : !NAME_EDEFAULT.equals(name);
       case IvmlPackage.TYPEDEF_COMPOUND__SUPER:
-        return SUPER_EDEFAULT == null ? super_ != null : !SUPER_EDEFAULT.equals(super_);
+        return super_ != null && !super_.isEmpty();
       case IvmlPackage.TYPEDEF_COMPOUND__ELEMENTS:
         return elements != null && !elements.isEmpty();
     }

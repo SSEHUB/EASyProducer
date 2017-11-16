@@ -1378,8 +1378,8 @@ public class ExpressionTranslator extends net.ssehub.easy.dslCore.translation.Ex
         if (null != comp.getElement(name)) {
             result = true;
         } else {
-            if (null != comp.getRefines()) {
-                result = hasSlot(comp.getRefines(), name);
+            for (int r = 0; !result && r < comp.getRefinesCount(); r++) {
+                result = hasSlot(comp.getRefines(r), name);
             }
         }
         return result;
