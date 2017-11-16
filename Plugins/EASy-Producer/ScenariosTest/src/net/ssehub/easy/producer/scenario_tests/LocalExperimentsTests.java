@@ -480,15 +480,10 @@ public class LocalExperimentsTests extends ExperimentsTests {
         names[2] = "javaExperimentsDebug";
 
         File tmp = executeCase(names, null, "", null);
-        File expected = new File(tmp, "GenTopoHardwareFinancialCorrReceiver.cpp");
-        TextTestUtils.assertFileEquality(new File(tmp, "FCorReceiver.cpp"), expected);
-        TextTestUtils.assertFileEquality(new File(tmp, "FCorReceiver0.cpp"), expected);
-        TextTestUtils.assertFileEquality(new File(tmp, "FCorReceiver1.cpp"), expected);
-
-        expected = new File(tmp, "GenTopoHardwareFinancialCorrSender.cpp");
-        TextTestUtils.assertFileEquality(new File(tmp, "FCorSender.cpp"), expected);
-        TextTestUtils.assertFileEquality(new File(tmp, "FCorSender0.cpp"), expected);
-        TextTestUtils.assertFileEquality(new File(tmp, "FCorSender1.cpp"), expected);
+        File expected = new File(tmp, "PriorityPip_DataManagementElement0DataManagementElement.java");
+        TextTestUtils.assertFileEquality(new File(tmp, "PrioPip_DME.java"), expected);
+        TextTestUtils.assertFileEquality(new File(tmp, "PrioPip_DME0.java"), expected);
+        TextTestUtils.assertFileEquality(new File(tmp, "PrioPip_DME1.java"), expected);
     }
 
 }

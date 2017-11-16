@@ -2,43 +2,37 @@
 vilScript javaExperimentsDebug (Project source, Configuration config, Project target) {
 
     main(Project source, Configuration config, Project target) = : {
-        hardwareReceiverC(config, target);
-        hardwareSenderC(config, target);
+        dataManagementElementJava(config, target);
     }
     
-    hardwareReceiverC(Configuration config, Project target) = : {
+    setOf(DecisionVariable) lastElementMapEntry(PipelineNode node) = : {
+        DecisionVariable var = node;
+        setOf(DecisionVariable) res = {var};
+        res;
+    }
+    
+    dataManagementElementJava(Configuration config, Project target) = : {
        javaExperiments cfg = config;
-       Family f = cfg.fCorrelationFinancial;
+       FamilyElement preFamElt = cfg.PriorityPip_FamilyElement2;
+       Family preFam = preFamElt.family;
+       DecisionVariable preElt = preFamElt;
+       DecisionVariable elt = cfg.PriorityPip_DataManagementElement0;
+       String topoName = "PriorityPip";
+       mapOf(Tuple,String) nameToOutputMap = {{preFam.output[0], "IIFSentimentAnalysisAnalyzedStreamOutput"}};
+       mapOf(String, mapOf(Tuple, Tuple)) globalMap = {};
+       mapOf(String, setOf(DecisionVariable)) lastElementMap = {{elt.varName(),lastElementMapEntry(preFamElt)}};
        
        // basic version
-       Path tgt = "$target/FCorReceiver.cpp";
-       vilTemplateProcessor("hardwareReceiver", config, tgt, family=f);
+       Path tgt = "$target/PrioPip_DME.java";
+       vilTemplateProcessor("stormDataManagementElement", config, tgt, preElt=preElt, elt=elt, topoName=topoName, nameToOutputMap=nameToOutputMap, globalMap=globalMap, lastElementMap=lastElementMap);
 
        // with reuse
-       tgt = "$target/FCorReceiver0.cpp";
-       vilTemplateProcessor("hardwareReceiver0", config, tgt, family=f);
+       tgt = "$target/PrioPip_DME0.java";
+       vilTemplateProcessor("stormDataManagementElement0", config, tgt, preElt=preElt, elt=elt, topoName=topoName, nameToOutputMap=nameToOutputMap, globalMap=globalMap, lastElementMap=lastElementMap);
        
        // an improved version
-       tgt = "$target/FCorReceiver1.cpp";
-       vilTemplateProcessor("hardwareReceiver1", config, tgt, family=f);
+       tgt = "$target/PrioPip_DME1.java";
+       vilTemplateProcessor("stormDataManagementElement1", config, tgt, preElt=preElt, elt=elt, topoName=topoName, nameToOutputMap=nameToOutputMap, globalMap=globalMap, lastElementMap=lastElementMap);
     }
-
-    hardwareSenderC(Configuration config, Project target) = : {
-       javaExperiments cfg = config;
-       Family f = cfg.fCorrelationFinancial;
-       
-       // basic version
-       Path tgt = "$target/FCorSender.cpp";
-       vilTemplateProcessor("hardwareSender", config, tgt, family=f);
-
-       // with reuse
-       tgt = "$target/FCorSender0.cpp";
-       vilTemplateProcessor("hardwareSender0", config, tgt, family=f);
-       
-       // an improved version
-       tgt = "$target/FCorSender1.cpp";
-       vilTemplateProcessor("hardwareSender1", config, tgt, family=f);
-    }
-
     
 }

@@ -95,9 +95,15 @@ project javaExperiments {
     
     // dataMgt
     
+    enum DataManagementStrategy {None, FirstInFirstOut, LeastFrequentlyUsed, LeastRecentlyUsed, LeastFrequentlyRecentlyUsed};
+    
     compound DataElement {
         String name;
         String artifact;
+        String storageLocation;
+        DataManagementStrategy strategy;
+        Integer timeLine;
+        Integer cutoffCapacity;
     }
     
     compound DataSource refines DataElement {
@@ -190,7 +196,10 @@ project javaExperiments {
     };
     
     PersistentDataElement hBaseDataManagement = PersistentDataElement {
-        name = "hBase DataManagement"
+        name = "hBase DataManagement",
+        storageLocation = "hBase-l3s", 
+        strategy = DataManagementStrategy.FirstInFirstOut, 
+        timeLine = 0
     };
     
     DataSource twitter = DataSource {
@@ -326,7 +335,31 @@ project javaExperiments {
     
     Family fSentimentAnalysis = Family {
         name = "fSentimentAnalysis", 
-        members = { refBy(topoSentiWord), refBy(topoSVM)}
+        members = { refBy(topoSentiWord), refBy(topoSVM)},
+        output = {
+            Tuple {
+                name = "analyzedStream", 
+                fields = {
+                    Field {
+                        name = "symbolId", 
+                        type = refBy(StringType), 
+                        keyPart = false
+                    }, Field {
+                        name = "timestamp", 
+                        type = refBy(LongType), 
+                        keyPart = false
+                    }, Field {
+                        name = "value", 
+                        type = refBy(RealType), 
+                        keyPart = false
+                    }, Field {
+                        name = "volume", 
+                        type = refBy(IntegerType), 
+                        keyPart = false
+                    }
+                }
+            }
+        }
     };
     
     setOf(refTo(Family)) families = {refBy(fCorrelationFinancial), refBy(fPreprocessor), refBy(fSentimentAnalysis)};

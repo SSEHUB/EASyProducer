@@ -1,0 +1,158 @@
+import commonVTLMethods;
+@advice(javaExperiments)
+template stormDataManagementElement1(Configuration config, FileArtifact target, DecisionVariable preElt, DecisionVariable elt, String topoName, mapOf(Tuple,String) nameToOutputMap, mapOf(String, mapOf(Tuple, Tuple)) globalMap,mapOf(String, setOf(DecisionVariable)) lastElementMap) {
+	
+	def produceOutputVariable(setOf(DecisionVariable) lastElts, mapOf(Tuple,String) nameToOutputMap) {
+		String outputInfName; //output interface name
+        Integer size = lastElts.size();
+		Integer count = 1;
+		for(DecisionVariable lastElt : lastElts) {
+			FamilyElement fe = lastElt;
+			Family fm = fe.family;			
+			Tuples tuples = fm.output;			
+			String tupleId = "";			
+			for(Tuple t : tuples) {				
+				outputInfName = nameToOutputMap.get(t);
+				if(size > 1){
+					 tupleId = "$count";
+				}
+			    '    transient $outputInfName iTuple${formulateString(t.name)}${tupleId} = null;'
+			    count = count + 1;
+			}
+			
+		}	
+	
+	}
+	
+	def produceInputForTuples(mapOf(Tuple,String) nameToOutputMap, setOf(DecisionVariable) lastElts, String prefixStreamId, setOf(String) streamListToDeclare) {
+		String outputInfName; //output interface name	
+		Boolean multiStream = false;
+		Integer indent = 4;
+		
+		Integer size = lastElts.size();
+		Integer count = 1;
+		for(DecisionVariable lastElt : lastElts) {
+			FamilyElement fe = lastElt;
+			Family fm = fe.family;			
+			Tuples tuples = fm.output;
+			String tupleId = "";
+			String tupleName;
+			for(Tuple t : tuples) {
+			    if(size > 1){	
+			    	tupleId = "$count";			
+				    multiStream = true;
+				    indent = 8;
+			    }				
+				outputInfName = nameToOutputMap.get(t);
+				tupleName = t.name;
+				streamListToDeclare.add(tupleName);
+//				if(multiStream){
+				    'if(tuple instanceof $outputInfName) {' | indent;
+//			    }
+			    'iTuple${formulateString(t.name)}${tupleId} = ($outputInfName)tuple.getValue(0);' | indent+4;
+			    'streamId = "${prefixStreamId}${tupleName.firstToUpperCase()}";' | indent+4;
+			   // '_collector.emit(streamId, tuple, new Values(iTuple${tupleId}));' | indent+4;
+			   '//support.write(iTuple${tupleId});' | indent+4; //--problematic line
+			   '//_collector.ack(tuple);' | indent+4;			   
+//			    if(multiStream){
+			 	    '}' | indent;
+//			    }
+				count = count + 1;
+			}
+			
+		}				
+		
+	}
+	
+    def main(Configuration config, FileArtifact target, DecisionVariable preElt, DecisionVariable elt, String topoName,mapOf(Tuple,String) nameToOutputMap, mapOf(String, mapOf(Tuple, Tuple)) globalMap,mapOf(String, setOf(DecisionVariable)) lastElementMap) {
+        setOf(String) streamListToDeclare = {};
+        String name = elt.varName().firstToUpperCase() + elt.type();
+        String nontopoStream = "Stream";
+        String topoStream = "TopoStream";
+        String dataMgtName = elt.byName("dataManagement").varName();
+        String ifName = "I" + dataMgtName.firstToUpperCase();
+      	String ifOutputName = "I" + ifName + "Output";
+      	
+		String streamId = elt.varName() + nontopoStream;
+		String topoStreamId = elt.varName();
+		
+		DataManagementElement dataMgtElt = elt;
+		PersistentDataElement persistentDataElt = dataMgtElt.dataManagement;
+		
+		String fmVarName = elt.varName().firstToUpperCase();
+		setOf(DecisionVariable) lastElts = lastElementMap.get(fmVarName); //last elements linked to the current element
+		'package eu.qualimaster.${toIdentifier(topoName)}.topology;'
+    	''    	
+    	'import java.util.*;'
+    	'import org.apache.log4j.Logger;'
+    	'import backtype.storm.tuple.*;'
+    	'import backtype.storm.task.*;'
+    	'import backtype.storm.topology.*;'
+    	'import eu.qualimaster.common.signal.*;'
+    	'import eu.qualimaster.dataManagement.DataManager;'
+		'import eu.qualimaster.dataManagement.storage.AbstractStorageTable;'
+		'import eu.qualimaster.dataManagement.storage.support.IStorageSupport;'
+		'import eu.qualimaster.dataManagement.strategies.*;'
+		    	produceImportsFromLastElements(lastElts, {}, topoName);
+    	''
+    	'/**'
+    	'* Defines the FamilyElment in the pipeline(GEN).'
+    	'**/'
+    	'@SuppressWarnings({ "rawtypes", "serial" })'
+    	'public class $name extends BaseSignalBolt {'
+    	''
+    	'    final static Logger logger = Logger.getLogger($name.class);'
+    	'    transient OutputCollector _collector;'
+    	'    private static String streamId;'
+    	'    private transient IStorageSupport support;'
+    	produceOutputVariable(lastElts, nameToOutputMap);	    	
+    	''
+    	'    public $name(String name, String namespace) {'
+    	'        super(name, namespace);'
+    	'    }'
+    	''   	      
+		'    public void prepare(Map map, TopologyContext topologyContext, OutputCollector collector) {'
+		'		 super.prepare(map, topologyContext, collector);'
+		'		 String pipelineName = "$topoName";'
+		String location = persistentDataElt.storageLocation;
+		'		 String location = "$location";'
+		String strategyStr = obtainManagementStrategyInstance(persistentDataElt);
+		'		 IStorageStrategyDescriptor storageStrategy = $strategyStr;'
+		'		 AbstractStorageTable table = DataManager.INTERMEDIARY_STORAGE_MANAGER.getTable(pipelineName, location, storageStrategy);'
+		'         support = table.getStorageSupport();'
+		'         _collector = collector;'
+		'initMonitor();' | 8;
+		'logger.info("The end of the prepare method.");' | 8;
+		'    }'
+	    ''
+	    //override the initial monitor
+	    produceInitMonitor(true, 4);
+	    ''
+		'    public void execute(Tuple tuple) {'
+        if (genMonitoringProbes) {
+        '        startMonitoring();'
+        }
+		
+		 //produce input -- output casting statement
+		 produceInputForTuples(nameToOutputMap, lastElts, streamId, streamListToDeclare);
+        if (genMonitoringProbes) {      
+        '        endMonitoring();'
+        }
+		'    }'
+        ''
+        	
+	    '    @Override'
+        '    public void cleanup() {'
+        '        super.cleanup();'
+        '    }'
+        ''       
+		'    public void declareOutputFields(OutputFieldsDeclarer declarer) {'	
+		for(String s : streamListToDeclare) {
+		'        declarer.declareStream("${streamId}${s.firstToUpperCase()}", new Fields("$ifOutputName"));'	
+		}			
+		
+		'    }'
+    	''
+    	'}'
+    }	
+}

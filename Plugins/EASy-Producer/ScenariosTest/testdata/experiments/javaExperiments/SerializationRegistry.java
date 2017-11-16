@@ -16,6 +16,7 @@ public class SerializationRegistry {
         conf.registerSerialization(FCorrelationFinancial.IFCorrelationFinancialPreprocessedStreamInput.class, FCorrelationFinancialSerializers.IFCorrelationFinancialPreprocessedStreamInputSerializer.class);
         conf.registerSerialization(FCorrelationFinancial.IFCorrelationFinancialSymbolListInput.class, FCorrelationFinancialSerializers.IFCorrelationFinancialSymbolListInputSerializer.class);
         conf.registerSerialization(FCorrelationFinancial.IFCorrelationFinancialPairwiseFinancialOutput.class, FCorrelationFinancialSerializers.IFCorrelationFinancialPairwiseFinancialOutputSerializer.class);
+        conf.registerSerialization(FSentimentAnalysis.IFSentimentAnalysisAnalyzedStreamOutput.class, FSentimentAnalysisSerializers.IFSentimentAnalysisAnalyzedStreamOutputSerializer.class);
     }
 
     /**

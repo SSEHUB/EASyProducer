@@ -355,6 +355,71 @@ template commonVTLMethods(Configuration config, FileArtifact target) {
         }
         serializers;        
     }   
-    
+ 
+    def produceImportsFromLastElements(setOf(DecisionVariable) lastElt, mapOf(String, setOf(DecisionVariable)) lastElementMap, String topoName) {
+        for(DecisionVariable v : lastElt) {
+            if(v.type() == "Source"){
+              Source src = v;
+              DataSource dataSrc = src.source;
+              String srcName = dataSrc.name;
+              String srcInfName = "I" + srcName.firstToUpperCase();
+              if (dataSrc.profilingSource) {
+                 'import eu.qualimaster.${topoName}.topology.inf.${toIdentifier(srcInfName)}.*;'    
+              } else {
+                 'import eu.qualimaster.data.inf.${toIdentifier(srcInfName)}.*;'    
+              }
+            }
+            if(v.type() == "FamilyElement") {
+                //the name is the varName!!
+                FamilyElement fe = v;
+                Family fm = fe.family;
+                String familyName = fm.name;
+                String ifName = "I" + familyName.firstToUpperCase();
+                'import eu.qualimaster.families.inf.${toIdentifier(ifName)}.*;'
+            } else if(v.type() == "DataManagementElement") {
+                String dmVarName = v.varName().firstToUpperCase();
+                setOf(DecisionVariable) lastElt = lastElementMap.get(dmVarName);
+                produceImportsFromLastElements(lastElt, lastElementMap, topoName);
+            }
+        }
+    }
+ 
+    def produceInitMonitor(Boolean prepare, int indent) {
+        String ending = "Prepare";
+        if(!prepare) {
+            ending = "Open";
+        }
+        '@Override' | indent;
+        'protected boolean initMonitorDuring${ending}() {' | indent;
+        'return false;' | indent+4;
+        '}' | indent;
+    }
+ 
+    /**
+     * Returns the code for creating/obtaining a data management strategy instance. Requires "import eu.qualimaster.dataManagement.strategies.*;".
+     * 
+     * @param dataElement the data element to produce the strategy from
+     * @return the code for obtaining the data management strategy, may be "null"
+     */
+    def String obtainManagementStrategyInstance(DataElement dataElement) {
+        String strategyStr = "null"; // just to produce valid code in any case
+        DataManagementStrategy strategy = dataElement.strategy; 
+        if(strategy == DataManagementStrategy.None){
+            strategyStr = "NoStorageStrategyDescriptor.INSTANCE";
+        } else if(strategy == DataManagementStrategy.FirstInFirstOut){
+            strategyStr = "FirstInFirstOutStorageStrategyDescriptor.INSTANCE";
+        } else if(strategy == DataManagementStrategy.LeastFrequentlyUsed){
+            Integer cutoffCapacity = dataElement.cutoffCapacity;
+            strategyStr = "new LeastFrequentlyUsedStorageStrategyDescriptor($cutoffCapacity)";          
+        } else if(strategy == DataManagementStrategy.LeastFrequentlyRecentlyUsed){
+            Integer timeLine = dataElement.timeLine;
+            Integer cutoffCapacity = dataElement.cutoffCapacity;
+            strategyStr = "new LeastFrequentlyRecentlyUsedStorageStrategyDescriptor($cutoffCapacity, $timeLine)";
+        } else if(strategy == DataManagementStrategy.LeastRecentlyUsed){
+            Integer timeLine = dataElement.timeLine;
+            strategyStr = "new LeastRecentlyUsedStorageStrategyDescriptor($timeLine)";          
+        }
+        strategyStr;
+    }
     
 }
