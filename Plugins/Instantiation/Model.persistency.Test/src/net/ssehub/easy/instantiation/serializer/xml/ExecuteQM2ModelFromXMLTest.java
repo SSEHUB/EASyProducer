@@ -26,6 +26,7 @@ import net.ssehub.easy.instantiation.core.model.tracing.ConsoleTracerFactory;
 import net.ssehub.easy.reasoning.core.frontend.ReasonerFrontend;
 import net.ssehub.easy.reasoning.core.impl.ReasonerRegistry;
 import net.ssehub.easy.reasoning.core.reasoner.ReasonerConfiguration;
+import net.ssehub.easy.reasoning.core.reasoner.ReasonerDescriptor;
 import net.ssehub.easy.reasoning.core.reasoner.ReasoningResult;
 import net.ssehub.easy.reasoning.sseReasoner.Reasoner;
 import net.ssehub.easy.varModel.confModel.Configuration;
@@ -206,11 +207,17 @@ public class ExecuteQM2ModelFromXMLTest extends AbstractUtil {
     @Test
     public void testExecuteIVML() {
         Assert.assertTrue("File does not exist: " + VIL.getAbsolutePath(), VIL.exists());
+        // if Model does not work due to changes, copy testdata/tmp/qm2.* to testdata/serializedModel.
+        // the serializedModel is intentionaly not taken over automatically. it is written during the prequisite tests
         ModelDeserializer.deserializeModel(VIL);
         ReasonerConfiguration configuration = new ReasonerConfiguration();
         configuration.enableCustomMessages();
         Project project = VarModel.INSTANCE.availableModels().getModelInfo("QM").get(0).getResolved();
         Configuration cfg = new Configuration(project);
+        
+        ReasonerFrontend rFrontend = ReasonerFrontend.getInstance();
+        ReasonerDescriptor desc = rFrontend.setPreferredReasoner();
+        System.out.println("Using reasoner: " + desc.getName());
         ReasoningResult result = ReasonerFrontend.getInstance().check(project, cfg, configuration, 
             ProgressObserver.NO_OBSERVER);
         Assert.assertEquals("Reasoning encountered problems", 0, result.getMessageCount());
