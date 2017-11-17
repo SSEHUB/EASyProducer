@@ -182,9 +182,11 @@ public class DroolsVariablesPreProcessor implements IConstraintTreeVisitor {
      * @param call OCLFeature Call.
      */
     private void traverseOCL(OCLFeatureCall call) {
-        call.getOperand().accept(this);
-        for (int i = 0; i < call.getParameterCount(); i++) {
-            call.getParameter(i).accept(this);
+        if (null != call.getOperand()) {
+            call.getOperand().accept(this);
+            for (int i = 0; i < call.getParameterCount(); i++) {
+                call.getParameter(i).accept(this);
+            }
         }
     }
 
