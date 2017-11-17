@@ -705,5 +705,42 @@ public class ReasonerFrontend {
     public int getTimeout() {
         return timeout;
     }
+    
+    /**
+     * Returns the preferred reasoner descriptor due to internal knowledge about the reasoner implementation status.
+     * Currently, we rely on the the reasoner with the maximum number of supported capabilities (currently, the 
+     * SSE-Reasoner). This method is particularly helpful for repeatable testing.
+     * 
+     * @return the preferred reasoner (may be <b>null</b> if there is none registered)
+     * @see #setReasonerHint(ReasonerDescriptor)
+     */
+    public ReasonerDescriptor getPreferredReasoner() {
+        ReasonerDescriptor result = null;
+        int maxCapCount = 0;
+        for (int r = 0; r < getReasonersCount(); r++) {
+            ReasonerDescriptor desc = getReasonerDescriptor(r);
+            int capCount = desc.getCapabilityCount();
+            if (null == result || capCount > maxCapCount) {
+                maxCapCount = capCount;
+                result = desc;
+            }
+        }
+        return result;
+    }
+
+    /**
+     * Sets the preferred reasoner.
+     * 
+     * @return the preferred reasoner (may be <b>null</b> if there is none registered)
+     * @see #getPreferredReasoner()
+     * @see #setReasonerHint(ReasonerDescriptor)
+     */
+    public ReasonerDescriptor setPreferredReasoner() {
+        ReasonerDescriptor pref = getPreferredReasoner();
+        if (null != pref) {
+            setReasonerHint(pref);
+        }
+        return pref;
+    }
 
 }

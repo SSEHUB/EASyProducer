@@ -155,4 +155,26 @@ public class ReasonerDescriptor {
         return result;
     }
     
+    /**
+     * Returns the number of provided capabilities.
+     * 
+     * @return the number of provided capabilities
+     */
+    public int getCapabilityCount() {
+        return null == capabilities ? 0 : capabilities.size();
+    }
+    
+    /**
+     * Returns the supported capabilities.
+     * 
+     * @return the supported capabilities
+     */
+    public IReasonerCapability[] getCapabilities() {
+        IReasonerCapability[] result = new IReasonerCapability[getCapabilityCount()];
+        if  (null != capabilities) {
+            capabilities.toArray(result);
+        } 
+        return result;
+    }
+    
 }
