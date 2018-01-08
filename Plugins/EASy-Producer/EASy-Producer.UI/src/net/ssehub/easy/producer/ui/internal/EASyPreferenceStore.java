@@ -85,8 +85,12 @@ public class EASyPreferenceStore {
         loadVilArgumentProviderStates();
         loadIvmlPreferences();
         ReasonerDescriptor desc = getDefaultReasoner();
+        ReasonerFrontend frontend = ReasonerFrontend.getInstance();
+        if (null == desc) { // default not set in preferences store, try preferred
+            desc = frontend.getPreferredReasoner();
+        }
         if (null != desc) {
-            ReasonerFrontend.getInstance().setReasonerHint(desc);
+            frontend.setReasonerHint(desc);
         }
     }
     
