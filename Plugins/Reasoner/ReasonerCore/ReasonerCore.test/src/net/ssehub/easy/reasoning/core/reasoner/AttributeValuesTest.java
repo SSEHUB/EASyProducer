@@ -16,8 +16,6 @@ import net.ssehub.easy.basics.progress.ProgressObserver;
 import net.ssehub.easy.dslCore.StandaloneInitializer;
 import net.ssehub.easy.dslCore.TranslationResult;
 import net.ssehub.easy.dslCore.test.AbstractTest;
-import net.ssehub.easy.reasoning.core.reasoner.AttributeException;
-import net.ssehub.easy.reasoning.core.reasoner.AttributeValues;
 import net.ssehub.easy.varModel.confModel.Configuration;
 import net.ssehub.easy.varModel.confModel.IDecisionVariable;
 import net.ssehub.easy.varModel.management.VarModel;

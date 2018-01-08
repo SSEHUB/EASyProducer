@@ -16,8 +16,6 @@ import net.ssehub.easy.basics.modelManagement.ModelManagementException;
 import net.ssehub.easy.basics.modelManagement.Version;
 import net.ssehub.easy.basics.progress.ProgressObserver;
 import net.ssehub.easy.dslCore.StandaloneInitializer;
-import net.ssehub.easy.reasoning.core.frontend.IReasonerInitializer;
-import net.ssehub.easy.reasoning.core.frontend.ReasonerFrontend;
 import net.ssehub.easy.reasoning.core.frontend.TestConfiguration.Capabilities;
 import net.ssehub.easy.reasoning.core.reasoner.IReasoner;
 import net.ssehub.easy.reasoning.core.reasoner.Message;
