@@ -148,7 +148,6 @@ public abstract class ContainerVariable extends StructuredVariable {
                             IDecisionVariable var = creator.getVariable();
                             addNestedElement(var);
                         } catch (ConfigurationException e) {
-                            // TODO Auto-generated catch block
                             e.printStackTrace();
                         }
                     }
@@ -209,20 +208,42 @@ public abstract class ContainerVariable extends StructuredVariable {
      * @return the created decision variable
      */
     public IDecisionVariable addNestedElement() {
+        return addNestedElement((IDatatype) null);
+    }
+    
+    /**
+     * Returns the contained type of this container.
+     * 
+     * @return the contained type
+     */
+    public IDatatype getContainedType() {
+        return ((Container) DerivedDatatype.resolveToBasis(getDeclaration().getType())).getContainedType();
+    }
+    
+    /**
+     * Adds a new nested element to this variable. This nested element is empty, is in state
+     * {@link AssignmentState#UNDEFINED} and can be configured afterwards.
+     * 
+     * @param type the specific type to create the nested element for; if <b>null</b>, the declared contained type
+     *    is used; if not assignable to the declared contained type, the declared contained type is used instead
+     * @return the created decision variable
+     */
+    public IDecisionVariable addNestedElement(IDatatype type) {
         if (null == getValue()) {
             try {
                 Value containerValue = ValueFactory.createValue(getDeclaration().getType(), (Object[]) null);
                 setValue(containerValue, AssignmentState.UNDEFINED);
             } catch (ConfigurationException e) {
-                // TODO Auto-generated catch block
                 e.printStackTrace();
             } catch (ValueDoesNotMatchTypeException e) {
-                // TODO Auto-generated catch block
                 e.printStackTrace();
             }
         }
         IDecisionVariable result = null;
-        IDatatype type = ((Container) DerivedDatatype.resolveToBasis(getDeclaration().getType())).getContainedType();
+        IDatatype baseType = getContainedType();
+        if (null == type || !baseType.isAssignableFrom(type)) {
+            type = baseType;
+        }
         int elementPos = nestedElements.size();
         try {
             String name = getElementName(elementPos);
@@ -233,10 +254,8 @@ public abstract class ContainerVariable extends StructuredVariable {
             Value nullValue = ValueFactory.createValue(type, (Object[]) null);
             result.setValue(nullValue, AssignmentState.UNDEFINED);
         } catch (ConfigurationException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         } catch (ValueDoesNotMatchTypeException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
         return result;

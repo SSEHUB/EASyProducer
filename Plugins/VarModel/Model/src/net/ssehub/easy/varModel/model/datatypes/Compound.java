@@ -15,7 +15,9 @@
  */
 package net.ssehub.easy.varModel.model.datatypes;
 
+import java.util.Collection;
 import java.util.Comparator;
+import java.util.Iterator;
 
 import net.ssehub.easy.varModel.model.Attribute;
 import net.ssehub.easy.varModel.model.AttributeAssignment;
@@ -475,6 +477,47 @@ public class Compound extends StructuredDatatype implements IResolutionScope, ID
                 getRefines(r).forceUpdate();
             }
         }
+    }
+    
+    /**
+     * Prunes abstract compounds from <code>compounds</code>.
+     * 
+     * @param compounds the compounds to consider (may be <b>null</b>, the the result is also <b>null</b>)
+     * @return <code>compounds</code> without abstract compounds
+     */
+    public static Collection<Compound> pruneAbstract(Collection<Compound> compounds) {
+        return prune(compounds, true);
+    }
+
+    /**
+     * Prunes non-abstract compounds from <code>compounds</code>.
+     * 
+     * @param compounds the compounds to consider (may be <b>null</b>, the the result is also <b>null</b>)
+     * @return <code>compounds</code> without non-abstract compounds
+     */
+    public static Collection<Compound> pruneNonAbstract(Collection<Compound> compounds) {
+        return prune(compounds, false);
+    }
+
+    /**
+     * Prunes from <code>compounds</code>.
+     * 
+     * @param compounds the compounds to consider (may be <b>null</b>, the the result is also <b>null</b>)
+     * @param pruneAbstract if <code>true</code> prune abstract compounds, if <code>false</code> prune non-abstract 
+     *     compounds
+     * @return <code>compounds</code> without those to be pruned
+     */
+    private static Collection<Compound> prune(Collection<Compound> compounds, boolean pruneAbstract) {
+        if (null != compounds) {
+            Iterator<Compound> iter = compounds.iterator();
+            while (iter.hasNext()) {
+                Compound cmp = iter.next();
+                if ((pruneAbstract && cmp.isAbstract()) || (!pruneAbstract && !cmp.isAbstract())) {
+                    iter.remove();
+                }
+            }
+        }
+        return compounds;
     }
 
 }

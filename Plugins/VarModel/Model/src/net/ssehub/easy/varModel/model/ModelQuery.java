@@ -145,6 +145,48 @@ public class ModelQuery {
     }
     
     /**
+     * Returns all (reachable) compounds (transitively) refining the given <code>compound</code> starting at 
+     * <code>scope</code> also considering imported scopes.
+     * 
+     * @param scope the scope to search the refining compounds within
+     * @param compound the compound that must be part of the refinement hierarchy of all result compounds
+     * @return the refining compounds, may be empty
+     */
+    public static List<Compound> findRefining(IResolutionScope scope, Compound compound) {
+        List<Compound> result = new ArrayList<Compound>();
+        findRefining(scope, compound, result, new HashSet<IResolutionScope>());
+        return result;
+    }
+
+    /**
+     * Returns all (reachable) compounds (transitively) refining the given <code>compound</code> starting at 
+     * <code>scope</code> also considering imported scopes. [initial implementation]
+     * 
+     * @param scope the scope to search the refining compounds within
+     * @param compound the compound that must be part of the refinement hierarchy of all result compounds
+     * @param result the list of refining result compounds (modified as a side effect)
+     * @param done already processed scopes to prevent import circles
+     */
+    private static void findRefining(IResolutionScope scope, Compound compound, List<Compound> result, 
+        Set<IResolutionScope> done) {
+        if (null != scope && !done.contains(scope)) {
+            done.add(scope);
+            for (int e = 0; e < scope.getElementCount(); e++) {
+                ContainableModelElement elt = scope.getElement(e);
+                if (elt instanceof Compound) {
+                    Compound cmp = (Compound) elt;
+                    if (cmp.isRefinedFrom(compound, true)) {
+                        result.add(cmp);
+                    }
+                }
+            }
+            for (int i = 0; i < scope.getImportsCount(); i++) {
+                findRefining(scope.getImport(i).getScope(), compound, result, done);
+            }
+        }
+    }
+
+    /**
      * Finds a project with given name.
      * 
      * @param project the project to start the search at (including imports) 
