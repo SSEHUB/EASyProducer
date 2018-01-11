@@ -400,7 +400,7 @@ public class ConfigurationSaver {
                     }
                 }
                 try {
-                    value = ValueFactory.createValue(var.getDeclaration().getType(), slotsNValues.toArray());
+                    value = ValueFactory.createValue(var.getValue().getType(), slotsNValues.toArray());
                 } catch (ValueDoesNotMatchTypeException e) {
                     // This exception should not occur.
                     Bundle.getLogger(ConfigurationSaver.class).exception(e);

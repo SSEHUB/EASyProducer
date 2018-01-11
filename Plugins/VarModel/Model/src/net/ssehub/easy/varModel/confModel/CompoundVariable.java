@@ -15,6 +15,7 @@
  */
 package net.ssehub.easy.varModel.confModel;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
@@ -33,6 +34,7 @@ import net.ssehub.easy.varModel.model.DecisionVariableDeclaration;
 import net.ssehub.easy.varModel.model.AttributeAssignment.Assignment;
 import net.ssehub.easy.varModel.model.datatypes.Compound;
 import net.ssehub.easy.varModel.model.datatypes.DerivedDatatype;
+import net.ssehub.easy.varModel.model.datatypes.IDatatype;
 import net.ssehub.easy.varModel.model.values.CompoundValue;
 import net.ssehub.easy.varModel.model.values.NullValue;
 import net.ssehub.easy.varModel.model.values.Value;
@@ -47,6 +49,7 @@ import net.ssehub.easy.varModel.model.values.ValueFactory;
 public class CompoundVariable extends StructuredVariable {
     
     private Map<String, IDecisionVariable> nestedElements;
+    private Compound instantiatableType;
     
     /**
      * Sole constructor for creating {@link ContainerVariable}'s.
@@ -69,14 +72,30 @@ public class CompoundVariable extends StructuredVariable {
         // this is only for the base type - in case of a more specific type, missing nestedElements will be
         // created upon setting the value
         
-        Compound cType = (Compound) DerivedDatatype.resolveToBasis(varDeclaration.getType());
-        for (int i = 0; i < cType.getInheritedElementCount(); i++) {
-            createNestedElement(cType.getInheritedElement(i), isVisible, isAttribute);
+        instantiatableType = (Compound) DerivedDatatype.resolveToBasis(varDeclaration.getType());
+        if (instantiatableType.isAbstract()) {
+            // cannot be instantiated, search closest
+            Collection<Compound> candidates = instantiatableType.implementingNonAbstract(
+                parent.getConfiguration().getProject()); // right project?
+            candidates = instantiatableType.closestRefining(candidates);
+            if (candidates.size() > 0) {
+                instantiatableType = candidates.iterator().next();
+            } // this is a problem with the current approach, as this compound cannot be instantiated -> IVML error
+        }
+        
+        for (int i = 0; i < instantiatableType.getInheritedElementCount(); i++) {
+            createNestedElement(instantiatableType.getInheritedElement(i), isVisible, isAttribute);
         }
 
         // Dirty: Initialize "static" assign blocks for newly created nested variable
         // TODO consider nested assign blocks
-        resolveAssignBlocks(cType);
+        resolveAssignBlocks(instantiatableType);
+    }
+    
+    @Override
+    public IDatatype getInstantiatableType() {
+        // condition for potential legacy serialization tests, which do not initialize attribute
+        return null == instantiatableType ? super.getInstantiatableType() : instantiatableType; 
     }
 
     /**
@@ -318,7 +337,7 @@ public class CompoundVariable extends StructuredVariable {
         Value value = super.getValue();
         if (null == value) {
             try {
-                value = ValueFactory.createValue(getDeclaration().getType(), (Object[]) null);
+                value = ValueFactory.createValue(getInstantiatableType(), (Object[]) null);
                 setValue(value, AssignmentState.UNDEFINED);
             } catch (ValueDoesNotMatchTypeException e) {
                 e.printStackTrace();

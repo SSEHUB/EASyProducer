@@ -18,8 +18,6 @@ package net.ssehub.easy.varModel.cst;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.ssehub.easy.varModel.model.datatypes.OclKeyWords;
-
 /**
  * Visits a given expression and returns whether this is a valid assignment.
  * 
@@ -151,8 +149,7 @@ public class ValidationVisitor implements IConstraintTreeVisitor {
         for (int p = 0; p < call.getParameterCount(); p++) {
             call.getParameter(p).accept(this);
         }
-        String op = call.getOperation();
-        if (op.equals(OclKeyWords.ASSIGNMENT)) {
+        if (CSTUtils.isAssignment(call)) {
             assignmentCount++;
         } /*else {
             // unclear: which operations are permitted?

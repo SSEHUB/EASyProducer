@@ -77,6 +77,8 @@ import net.ssehub.easy.basics.modelManagement.IVersionRestriction;
 import net.ssehub.easy.basics.modelManagement.Version;
 import net.ssehub.easy.varModel.cst.AttributeVariable;
 import net.ssehub.easy.varModel.cst.BlockExpression;
+import net.ssehub.easy.varModel.cst.CSTSemanticException;
+import net.ssehub.easy.varModel.cst.CSTUtils;
 import net.ssehub.easy.varModel.cst.CompoundAccess;
 import net.ssehub.easy.varModel.cst.CompoundInitializer;
 import net.ssehub.easy.varModel.cst.ConstraintSyntaxTree;
@@ -155,6 +157,8 @@ public class IVMLWriter extends AbstractVarModelWriter {
     private Stack<Value> nestedValues = new Stack<Value>();
 
     private Stack<ConstraintSyntaxTree> nestedExpressions = new Stack<ConstraintSyntaxTree>();
+    
+    private Stack<OCLFeatureCall> callStack = new Stack<OCLFeatureCall>();
 
     private boolean emitComments = true;
     
@@ -481,6 +485,17 @@ public class IVMLWriter extends AbstractVarModelWriter {
                     if (top instanceof ContainerValue) {
                         Container container = (Container) ((ContainerValue) top).getType();
                         implicitType = container.getContainedType();
+                    }
+                } else if (!callStack.isEmpty()) {
+                    // if we have an assignment (top-level op), take the LHS (var) as implicit type
+                    ConstraintSyntaxTree top = callStack.peek();
+                    if (CSTUtils.isAssignment(top)) {
+                        OCLFeatureCall call = (OCLFeatureCall) top; // by spec of isAssignment()
+                        try {
+                            implicitType = call.getOperand().inferDatatype();
+                        } catch (CSTSemanticException e) {
+                            getLogger().exception(e); // shall not occur, don't inform the user
+                        }
                     }
                 }
             } else if (!nestedExpressions.isEmpty()) {
@@ -1057,6 +1072,7 @@ public class IVMLWriter extends AbstractVarModelWriter {
 
     @Override
     public void visitOclFeatureCall(OCLFeatureCall call) {
+        callStack.push(call);
         FormattingHint hint;
         Operation resolved = call.getResolvedOperation();
         if (null != resolved) {
@@ -1122,6 +1138,7 @@ public class IVMLWriter extends AbstractVarModelWriter {
             // should not occur
             break;
         }
+        callStack.pop();
     }
     
     @Override

@@ -15,9 +15,11 @@
  */
 package net.ssehub.easy.varModel.model.datatypes;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.Iterator;
+import java.util.List;
 
 import net.ssehub.easy.varModel.model.Attribute;
 import net.ssehub.easy.varModel.model.AttributeAssignment;
@@ -31,6 +33,7 @@ import net.ssehub.easy.varModel.model.IConstraintHolder;
 import net.ssehub.easy.varModel.model.IDecisionVariableContainer;
 import net.ssehub.easy.varModel.model.IModelVisitor;
 import net.ssehub.easy.varModel.model.ModelElement;
+import net.ssehub.easy.varModel.model.ModelQuery;
 import net.ssehub.easy.varModel.model.ProjectImport;
 
 /**
@@ -478,12 +481,93 @@ public class Compound extends StructuredDatatype implements IResolutionScope, ID
             }
         }
     }
+
+    /**
+     * Determines the (absolute) refinement distance from <b>this</b> to <code>cmp</code> considering <b>this</b> or 
+     * <code>cmp</code> as alternative bases to search the hierarchy for.
+     * 
+     * @param cmp the compound to determine the distance to
+     * @return the (absolute) refines distance between <b>this</b> and <code>cmp</code>, <code>0</code> for the same, 
+     * <code>-1</code> for no common refinement hierarchy
+     */
+    public int getRefinesDistanceTo(Compound cmp) {
+        return getRefinesDistanceTo(cmp, true);
+    }
+
+    /**
+     * Determines the (absolute) refinement distance from <b>this</b> to <code>cmp</code> optionally considering 
+     * <b>this</b> or <code>cmp</code> as alternative bases to search the hierarchy for.
+     * 
+     * @param cmp the compound to determine the distance to
+     * @param checkOpposite if also the distance between <code>cmp</code> and <b>this</b> shall be considered as 
+     *     result (top-level non-recursive call)
+     * @return the (absolute) refines distance between <b>this</b> and <code>cmp</code>, <code>0</code> for the same, 
+     * <code>-1</code> for no common refinement hierarchy
+     */
+    private int getRefinesDistanceTo(Compound cmp, boolean checkOpposite) {
+        int result = -1;
+        if (TypeQueries.sameTypes(cmp, this)) {
+            result = 0;
+        } else {
+            result = this.findRefinesDistanceTo(result, cmp);
+            if (checkOpposite) {
+                result = cmp.findRefinesDistanceTo(result, this);
+            }
+        }
+        return result;        
+    }
+
+    /**
+     * Iterates over {@link #getRefines(int)} to identify the refines distance from <b>this</b> to <code>cmp</code>
+     * using <code>res</code> as initial result. No search is performed if <code>res</code> is not negative, i.e., 
+     * already a distance was determined.
+     * 
+     * @param res the initial result to start with
+     * @param cmp the compound to search the refines hierarchy in a recursive manner
+     * @return the refines distance, <code>0</code> for the same, <code>-1</code> for no common refinement hierarchy
+     */
+    private int findRefinesDistanceTo(int res, Compound cmp) {
+        int result = res;
+        for (int r = 0; result < 0 && r < cmp.getRefinesCount(); r++) {
+            int tmp = getRefinesDistanceTo(cmp.getRefines(r), false);
+            if (tmp >= 0) {
+                result = tmp + 1; // +1 distance from this to refines
+            }
+        }
+        return result;
+    }
     
+    /**
+     * Finds all implementing compound types for this compound searching within <code>scope</code> and transitive 
+     * imports.
+     * 
+     * @param scope the scope to search for
+     * @return the implementing compound types including <b>this</b>
+     * @see ModelQuery#findRefining(IResolutionScope, Compound)
+     */
+    public Collection<Compound> allImplementing(IResolutionScope scope) {
+        Collection<Compound> candidates = ModelQuery.findRefining(scope, this);
+        candidates.add(this);
+        return candidates;
+    }
+
+    /**
+     * Finds the implementing non-abstract types for this compound, i.e., the ones that may instantiate this compound.
+     * Searches within <code>scope</code> and transitive imports.
+     * 
+     * @param scope the scope to search for
+     * @return the implementing non-abstract compound types considering <b>this</b>
+     * @see #allImplementing(IResolutionScope)
+     */
+    public Collection<Compound> implementingNonAbstract(IResolutionScope scope) {
+        return pruneAbstract(allImplementing(scope));
+    }
+
     /**
      * Prunes abstract compounds from <code>compounds</code>.
      * 
      * @param compounds the compounds to consider (may be <b>null</b>, the the result is also <b>null</b>)
-     * @return <code>compounds</code> without abstract compounds
+     * @return <code>compounds</code> without abstract compounds (modifies <code>compounds</code>)
      */
     public static Collection<Compound> pruneAbstract(Collection<Compound> compounds) {
         return prune(compounds, true);
@@ -493,7 +577,7 @@ public class Compound extends StructuredDatatype implements IResolutionScope, ID
      * Prunes non-abstract compounds from <code>compounds</code>.
      * 
      * @param compounds the compounds to consider (may be <b>null</b>, the the result is also <b>null</b>)
-     * @return <code>compounds</code> without non-abstract compounds
+     * @return <code>compounds</code> without non-abstract compounds (modifies <code>compounds</code>)
      */
     public static Collection<Compound> pruneNonAbstract(Collection<Compound> compounds) {
         return prune(compounds, false);
@@ -505,7 +589,7 @@ public class Compound extends StructuredDatatype implements IResolutionScope, ID
      * @param compounds the compounds to consider (may be <b>null</b>, the the result is also <b>null</b>)
      * @param pruneAbstract if <code>true</code> prune abstract compounds, if <code>false</code> prune non-abstract 
      *     compounds
-     * @return <code>compounds</code> without those to be pruned
+     * @return <code>compounds</code> without those to be pruned (modifies <code>compounds</code>)
      */
     private static Collection<Compound> prune(Collection<Compound> compounds, boolean pruneAbstract) {
         if (null != compounds) {
@@ -518,6 +602,32 @@ public class Compound extends StructuredDatatype implements IResolutionScope, ID
             }
         }
         return compounds;
+    }
+
+    /**
+     * Returns the compounds from <code>compounds</code> that have minimum 
+     * {@link #getRefinesDistanceTo(Compound) refines distance} to <b>this</b>.
+     * 
+     * @param compounds the compounds to analyze
+     * @return the selected compounds, may be empty
+     * @see #getRefinesDistanceTo(Compound)
+     */
+    public Collection<Compound> closestRefining(Collection<Compound> compounds) {
+        int minDist = -1;
+        List<Compound> result = new ArrayList<Compound>();
+        for (Compound c : compounds) {
+            int dist = this.getRefinesDistanceTo(c);
+            if (dist >= 0) { // ignore non-related
+                if (minDist < 0 || dist < minDist) { // rest if new minimum
+                    minDist = dist;
+                    result.clear();
+                    result.add(c);
+                } else if (dist == minDist) { // add if also at current minimum
+                    result.add(c);
+                }
+            }
+        }
+        return result;
     }
 
 }

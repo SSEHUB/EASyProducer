@@ -31,6 +31,8 @@ public class CSTUtils {
     
     /**
      * Checks whether the given {@link ConstraintSyntaxTree} is a assignment or a constraint.
+     * Assignments are always instance of {@link OCLFeatureCall}.
+     * 
      * @param completeCST A complete (not sub part) constraint, must not be <tt>null</tt>.
      * @return <tt>true</tt> if the given constraint is an assignment, <tt>false</tt> if it is a constraint. 
      */

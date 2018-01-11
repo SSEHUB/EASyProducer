@@ -38,6 +38,7 @@ public class OclKeyWords {
     // e.g. AnyType
     public static final String EQUALS = "==";
     public static final String UNEQUALS = "<>";
+    // avoid direct comparison, use CstUtils.isAssignment(ConstraintSyntaxTree)
     public static final String ASSIGNMENT = "=";
     public static final String IS_TYPE_OF = "isTypeOf";
     public static final String IS_KIND_OF = "isKindOf";

@@ -31,6 +31,7 @@ import net.ssehub.easy.varModel.model.AttributeAssignment;
 import net.ssehub.easy.varModel.model.DecisionVariableDeclaration;
 import net.ssehub.easy.varModel.model.IAttributeAccess;
 import net.ssehub.easy.varModel.model.IModelElement;
+import net.ssehub.easy.varModel.model.datatypes.IDatatype;
 import net.ssehub.easy.varModel.model.datatypes.OclKeyWords;
 import net.ssehub.easy.varModel.model.values.NullValue;
 import net.ssehub.easy.varModel.model.values.Value;
@@ -396,6 +397,17 @@ abstract class DecisionVariable implements IDecisionVariable {
             }
         }
         return result;
+    }
+    
+    /**
+     * Returns the actual required type to instantiate this variable. This is typically the
+     * type of the underlying variable declaration, but, in case of abstract variables, may
+     * also be a subtype if defined.
+     * 
+     * @return the required type
+     */
+    public IDatatype getInstantiatableType() {
+        return declaration.getType();
     }
     
 }

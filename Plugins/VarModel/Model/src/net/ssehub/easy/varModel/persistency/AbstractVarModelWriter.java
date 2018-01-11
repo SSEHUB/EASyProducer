@@ -22,6 +22,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import net.ssehub.easy.basics.logger.EASyLoggerFactory;
+import net.ssehub.easy.basics.logger.EASyLoggerFactory.EASyLogger;
 import net.ssehub.easy.basics.modelManagement.Version;
 import net.ssehub.easy.varModel.Bundle;
 import net.ssehub.easy.varModel.cst.ConstantValue;
@@ -268,7 +269,7 @@ public abstract class AbstractVarModelWriter extends AbstractVisitor
         try {
             out.write(appendableOutput);
         } catch (IOException e) {
-            EASyLoggerFactory.INSTANCE.getLogger(AbstractVarModelWriter.class, Bundle.ID).exception(e);
+            getLogger().exception(e);
         }
     }
 
@@ -280,7 +281,7 @@ public abstract class AbstractVarModelWriter extends AbstractVisitor
         try {
             out.write(appendableOutput);
         } catch (IOException e) {
-            EASyLoggerFactory.INSTANCE.getLogger(AbstractVarModelWriter.class, Bundle.ID).exception(e);
+            getLogger().exception(e);
         }
     }
 
@@ -291,7 +292,7 @@ public abstract class AbstractVarModelWriter extends AbstractVisitor
         try {
             out.write(getIndentation().toString());
         } catch (IOException e) {
-            EASyLoggerFactory.INSTANCE.getLogger(AbstractVarModelWriter.class, Bundle.ID).exception(e);
+            getLogger().exception(e);
         }
     }
 
@@ -458,7 +459,7 @@ public abstract class AbstractVarModelWriter extends AbstractVisitor
         try {
             flush();
         } catch (IOException e) {
-            EASyLoggerFactory.INSTANCE.getLogger(AbstractVarModelWriter.class, Bundle.ID).exception(e);
+            getLogger().exception(e);
         }
     }
     
@@ -650,6 +651,15 @@ public abstract class AbstractVarModelWriter extends AbstractVisitor
         if (additionalIndentation > 0) {
             additionalIndentation--;
         }
+    }
+    
+    /**
+     * Returns the actual logger instance.
+     * 
+     * @return the logger instance
+     */
+    protected EASyLogger getLogger() {
+        return EASyLoggerFactory.INSTANCE.getLogger(getClass(), Bundle.ID);
     }
 
 }
