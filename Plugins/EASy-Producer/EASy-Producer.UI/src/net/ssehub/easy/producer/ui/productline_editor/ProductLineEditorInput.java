@@ -36,8 +36,7 @@ public class ProductLineEditorInput implements IEditorInput {
     }
     
     @Override
-    public Object getAdapter(@SuppressWarnings("rawtypes") Class adapter) {
-        // TODO Auto-generated method stub
+    public <T> T getAdapter(Class<T> adapter) {
         return null;
     }
 

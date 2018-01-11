@@ -230,11 +230,16 @@ public abstract class GUIVariable implements IGUIConfigurableElement, Comparable
     /**
      * Creates a new empty nested value/variable if supported.
      * This method shall only be called by the set and sequence variables.
+     * 
+     * @return the new empty variable or <b>null</b> if nothing happened, e.g., not {@link #isExtendable()}.
      */
-    public void extend() {
+    public GUIVariable extend() { // design problem: limitation to container vars shall be handled by hierarchy
+        GUIVariable result = null;
         if (isExtendable()) {
-            getTopLevelParent().history.assignValue(getTopLevelParent().getVariable());
+            result = getTopLevelParent();
+            getTopLevelParent().history.assignValue(result.getVariable());
         }
+        return result;
     }
     
     /**
@@ -244,6 +249,38 @@ public abstract class GUIVariable implements IGUIConfigurableElement, Comparable
      */
     public void remove(GUIVariable nestedVariable) {
         // This action is handled in ContainerGUIVariable class.
+    }
+    
+    /**
+     * Replaces a variable to reflect the new value (of a more or less specific type).
+     * 
+     * @param nestedVariable the variable to be replaced (may affect top-level GUI variables)
+     * @param value the new value carrying the type
+     * @return the new variable or <code>nestedVariable</code>
+     * @throws ConfigurationException in case that configuring the variable is not possible
+     */
+    protected GUIVariable replace(GUIVariable nestedVariable, Value value) throws ConfigurationException {
+        // This action is handled in ContainerGUIVariable/CompoundGUIVariable class.
+        return nestedVariable;
+    }
+    
+    
+    /**
+     * Replaces the value in <code>decVar</code> by <code>value</code>.
+     * 
+     * @param decVar the decision variable to change
+     * @param value the new value
+     * @throws ConfigurationException in case that the original value cannot be cleared or the new value cannot be set
+     */
+    static void replaceValue(IDecisionVariable decVar, Value value) throws ConfigurationException {
+        IAssignmentState state = decVar.getState();
+        // clear first, otherwise potentially changed value type for compounds is not taken over and only fields 
+        // are updated
+        decVar.setValue(null, AssignmentState.UNDEFINED);
+        if (null != value) {
+            // set value then again with original state
+            decVar.setValue(value, state);
+        }
     }
     
     /** 

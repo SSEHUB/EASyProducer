@@ -148,7 +148,9 @@ public abstract class AbstractComboBox<Value> {
                 }
             }
         }
-        combobox.setItems(displayNames);
+        if (!combobox.isDisposed()) {
+            combobox.setItems(displayNames);
+        }
         
         // Restore previous selection
         synchronized (this) {

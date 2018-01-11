@@ -17,11 +17,13 @@ import net.ssehub.easy.producer.ui.confModel.GUIConfiguration;
 import net.ssehub.easy.producer.ui.confModel.GUIVariable;
 import net.ssehub.easy.producer.ui.confModel.IGUIConfigChangeListener;
 import net.ssehub.easy.producer.ui.contributions.Contributions;
+import net.ssehub.easy.producer.ui.internal.TypeSelectionDialog;
 import net.ssehub.easy.producer.ui.productline_editor.IEASyEditorPage;
 import net.ssehub.easy.producer.ui.productline_editor.configuration.EditorContextMenuListener.Action;
 import net.ssehub.easy.varModel.confModel.Configuration;
 import net.ssehub.easy.varModel.confModel.IConfigurationChangeListener;
 import net.ssehub.easy.varModel.confModel.IDecisionVariable;
+import net.ssehub.easy.varModel.model.datatypes.Compound;
 import net.ssehub.easy.varModel.model.values.Value;
 
 /**
@@ -185,6 +187,13 @@ public class ConfigurationTableEditor extends TreeViewer implements IGUIConfigCh
                     nullValues.setText("set NULL");
                     nullValues.addSelectionListener(new EditorContextMenuListener(ConfigurationTableEditor.this,
                         Action.SET_NULL));
+                }
+                if (Compound.TYPE.isAssignableFrom(var.getVariable().getDeclaration().getType())) {
+                    final MenuItem nullValues = new MenuItem(menu, SWT.PUSH);
+                    nullValues.setText("change instance type" + TypeSelectionDialog.getActualTypeString(
+                        var.getVariable().getValue(), ""));
+                    nullValues.addSelectionListener(new EditorContextMenuListener(ConfigurationTableEditor.this,
+                        Action.CHANGE_COMPOUND_INSTANCE_TYPE));
                 }
             }
             

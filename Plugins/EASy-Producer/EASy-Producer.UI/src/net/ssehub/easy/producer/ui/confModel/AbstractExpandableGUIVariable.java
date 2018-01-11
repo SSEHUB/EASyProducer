@@ -8,8 +8,12 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 
+import net.ssehub.easy.producer.ui.internal.TypeSelectionDialog;
+import net.ssehub.easy.varModel.confModel.ConfigurationException;
 import net.ssehub.easy.varModel.confModel.ContainerVariable;
 import net.ssehub.easy.varModel.confModel.IDecisionVariable;
+import net.ssehub.easy.varModel.model.Project;
+import net.ssehub.easy.varModel.model.datatypes.Compound;
 import net.ssehub.easy.varModel.model.datatypes.ConstraintType;
 import net.ssehub.easy.varModel.model.datatypes.DerivedDatatype;
 import net.ssehub.easy.varModel.model.datatypes.IDatatype;
@@ -104,16 +108,45 @@ abstract class AbstractExpandableGUIVariable extends GUIVariable {
     }
     
     @Override
-    public void extend() {
+    public GUIVariable extend() {
+        GUIVariable result = null;
         if (isExtendable()) {
             if (hasValue() && hasNullValue()) {
                 setEmptyValue();
             }
             super.extend();
             ContainerVariable variable = (ContainerVariable) getVariable();
-            variable.addNestedElement();
-            createNestedVariables();
-            getConfiguration().changed(this);
+            IDatatype elementType = variable.getContainedType();
+            if (elementType instanceof Compound) { // do we have a compound, we may have to choose
+                Compound cmp = (Compound) elementType;
+                Project prj = getTopLevelParent().getVariable().getDeclaration().getProject();
+                elementType = TypeSelectionDialog.selectCompoundType(getComposite().getShell(), "Type selection", 
+                    prj, cmp);
+            }
+            if (null != elementType) { // selection from window may be null if not selected
+                variable.addNestedElement(elementType);
+                createNestedVariables();
+                getConfiguration().changed(this);
+                result = getNestedElement(getNestedElementsCount() - 1);
+            }
         }
+        return result;
     }
+
+    @Override
+    protected GUIVariable replace(GUIVariable nestedVariable, Value value) throws ConfigurationException {
+        GUIVariable result = nestedVariable;
+        for (int n = 0; n < nested.size(); n++) {
+            if (nested.get(n) == nestedVariable) {
+                IDecisionVariable decVar = nested.get(n).getVariable();
+                replaceValue(decVar, value);
+                result = GUIValueFactory.createVariable(decVar, getComposite(), getConfiguration(), this);
+                nested.set(n, result);
+                getConfiguration().changed(result);
+                break;
+            }
+        }
+        return nestedVariable;
+    }
+
 }

@@ -14,6 +14,7 @@ import org.eclipse.swt.widgets.Composite;
 
 import net.ssehub.easy.reasoning.core.reasoner.Message;
 import net.ssehub.easy.varModel.confModel.Configuration;
+import net.ssehub.easy.varModel.confModel.ConfigurationException;
 import net.ssehub.easy.varModel.confModel.IDecisionVariable;
 import net.ssehub.easy.varModel.model.AbstractVariable;
 import net.ssehub.easy.varModel.model.AttributeAssignment;
@@ -22,6 +23,7 @@ import net.ssehub.easy.varModel.model.DecisionVariableDeclaration;
 import net.ssehub.easy.varModel.model.ModelElement;
 import net.ssehub.easy.varModel.model.ProjectImport;
 import net.ssehub.easy.varModel.model.datatypes.IResolutionScope;
+import net.ssehub.easy.varModel.model.values.Value;
 
 /**
  * Wrapper class for this configuration as needed by the Eclipse GUI.
@@ -121,6 +123,33 @@ public class GUIConfiguration implements IGUIConfigurableElement {
         topLevelVariables = variables.toArray(topLevelVariables);
         // Sorting the array (instead of a list) saves one complete iteration step through the whole structure
         Arrays.sort(topLevelVariables);
+    }
+    
+    /**
+     * Replaces a variable to reflect the new value (of a more or less specific type).
+     * 
+     * @param var the variable to be replaced (may affect top-level GUI variables)
+     * @param val the new value carrying the type
+     * @return the new variable or <code>var</code>
+     * @throws ConfigurationException in case that configuring the variable is not possibe
+     */
+    public GUIVariable replace(GUIVariable var, Value val) throws ConfigurationException {
+        GUIVariable result = var;
+        if (var.isTopLevelDeclaration()) {
+            for (int t = 0; t < topLevelVariables.length; t++) {
+                if (topLevelVariables[t] == var) {
+                    IDecisionVariable decVar = topLevelVariables[t].getVariable();
+                    GUIVariable.replaceValue(decVar, val);
+                    topLevelVariables[t] = GUIValueFactory.createVariable(decVar, parent, this, null);
+                    changed(topLevelVariables[t]);
+                    result = topLevelVariables[t];
+                    break;
+                }
+            }
+        } else {
+            var.getParent().replace(var, val);
+        }
+        return result;
     }
 
     /**

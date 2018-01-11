@@ -38,7 +38,12 @@ class TooltipCreator implements IDatatypeVisitor {
      */
     TooltipCreator(IDecisionVariable variable) {
         tooltip = new StringBuffer();
-        IDatatype type = variable.getDeclaration().getType();
+        IDatatype type;
+        if (variable.hasValue()) {
+            type = variable.getValue().getType();
+        } else {
+            type = variable.getDeclaration().getType();
+        }
         type.accept(this);
     }
     

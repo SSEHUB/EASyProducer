@@ -149,13 +149,14 @@ public class ConfigurationCellEditor extends EditingSupport {
             }
             break;
         case EXTEND:
-            configItem.extend();
-            viewer.setExpandedState(configItem, true);
-            GUIVariable newItem = configItem.getNestedElement(configItem.getNestedElementsCount() - 1);
-            if (newItem.isExpandable()) {
-                // Add the new element before expanding it.
-                viewer.refresh();
-                viewer.setExpandedState(newItem, true);
+            GUIVariable newItem = configItem.extend();
+            if (null != newItem) {
+                viewer.setExpandedState(configItem, true);
+                if (newItem.isExpandable()) {
+                    // Add the new element before expanding it.
+                    viewer.refresh();
+                    viewer.setExpandedState(newItem, true);
+                }
             }
             break;
         case REMOVE:
