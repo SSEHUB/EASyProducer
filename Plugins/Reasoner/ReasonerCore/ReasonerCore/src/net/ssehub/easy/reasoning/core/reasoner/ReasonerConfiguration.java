@@ -10,20 +10,30 @@ import net.ssehub.easy.reasoning.core.frontend.ReasonerFrontend;
  */
 public class ReasonerConfiguration {
 
+    public static final IAdditionalInformationLogger ADDITIONAL_INFO_LOG_SYSOUT = new IAdditionalInformationLogger() {
+
+        @Override
+        public void info(String text) {
+            System.out.println(text);
+        }
+        
+    };
+
+    public static final IAdditionalInformationLogger ADDITIONAL_INFO_LOG_NONE = new IAdditionalInformationLogger() {
+
+        @Override
+        public void info(String text) {
+        }
+        
+    };
+
     private AttributeValues attributeValues;
     private int timeout;
     private ReasonerDescriptor defaultReasoner;
     private boolean customMessages;
     private boolean runtime;
     private boolean freshConfig;
-    private IAdditionalInformationLogger logger = new IAdditionalInformationLogger() {
-
-        @Override
-        public void info(String text) {
-            System.out.println(text); // the legacy behavior
-        }
-        
-    };
+    private IAdditionalInformationLogger logger = ADDITIONAL_INFO_LOG_SYSOUT; // the legacy behavior
 
     /**
      * Describes an information logger.
