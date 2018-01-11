@@ -260,7 +260,6 @@ public class Configuration implements IConfigurationVisitable, IProjectListener,
             VarModel.INSTANCE.resolveImports(project, null, null);
             //Loop adding the declarations to a list
             createVariables();            
-            
             if (assignValues) {
                 IConfigurationInitializer init = ConfigurationInitializerRegistry.getInitializer();
                 if (null == init) {
@@ -273,10 +272,7 @@ public class Configuration implements IConfigurationVisitable, IProjectListener,
                         EASyLoggerFactory.INSTANCE.getLogger(Configuration.class, Bundle.ID).error(msg);
                     }
                 }
-                /* -> DEFAULT_INITIALIZER
-                AssignmentResolver resolver = new AssignmentResolver(this);
-                resolver.resolve();
-                
+                /*
                 // TODO freezing shall be done incrementally by the Reasoner, currently freeze-state would not work
                 // Assign frozen state to already frozen variables
                 freezeValues(project, FilterType.ALL);*/
