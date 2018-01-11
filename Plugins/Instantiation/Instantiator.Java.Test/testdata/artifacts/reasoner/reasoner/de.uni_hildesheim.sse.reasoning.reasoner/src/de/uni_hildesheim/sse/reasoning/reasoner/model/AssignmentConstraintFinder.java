@@ -19,7 +19,7 @@ import de.uni_hildesheim.sse.model.cst.Self;
 import de.uni_hildesheim.sse.model.cst.UnresolvedExpression;
 import de.uni_hildesheim.sse.model.cst.Variable;
 import de.uni_hildesheim.sse.model.varModel.Constraint;
-import de.uni_hildesheim.sse.model.varModel.datatypes.OclKeyWords;
+import net.ssehub.easy.varModel.cst.CSTUtils;
 
 /**
  * A visitor to retrieve constraints from collections.
@@ -100,7 +100,7 @@ public class AssignmentConstraintFinder implements IConstraintTreeVisitor {
 
     @Override
     public void visitOclFeatureCall(OCLFeatureCall call) {        
-        isAssignment = OclKeyWords.ASSIGNMENT.equals(call.getOperation());        
+        isAssignment = CSTUtils.isAssignment(call);        
     }
 
     @Override

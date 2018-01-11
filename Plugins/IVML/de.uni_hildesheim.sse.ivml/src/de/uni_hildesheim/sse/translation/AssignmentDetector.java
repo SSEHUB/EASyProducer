@@ -2,6 +2,7 @@ package de.uni_hildesheim.sse.translation;
 
 import net.ssehub.easy.varModel.cst.AttributeVariable;
 import net.ssehub.easy.varModel.cst.BlockExpression;
+import net.ssehub.easy.varModel.cst.CSTUtils;
 import net.ssehub.easy.varModel.cst.Comment;
 import net.ssehub.easy.varModel.cst.CompoundAccess;
 import net.ssehub.easy.varModel.cst.CompoundInitializer;
@@ -17,7 +18,6 @@ import net.ssehub.easy.varModel.cst.Parenthesis;
 import net.ssehub.easy.varModel.cst.Self;
 import net.ssehub.easy.varModel.cst.UnresolvedExpression;
 import net.ssehub.easy.varModel.cst.Variable;
-import net.ssehub.easy.varModel.model.datatypes.OclKeyWords;
 
 /**
  * Implements a visitor which searches for assignments. Instances of this class
@@ -111,9 +111,7 @@ public class AssignmentDetector implements IConstraintTreeVisitor {
 
     @Override
     public void visitOclFeatureCall(OCLFeatureCall call) {
-        if (OclKeyWords.ASSIGNMENT.equals(call.getOperation())) {
-            isAssignment = true;
-        }
+        isAssignment = CSTUtils.isAssignment(call);
         if (continueTraversal()) {
             level++;
             if (null != call.getOperand()) { // incomplete xText

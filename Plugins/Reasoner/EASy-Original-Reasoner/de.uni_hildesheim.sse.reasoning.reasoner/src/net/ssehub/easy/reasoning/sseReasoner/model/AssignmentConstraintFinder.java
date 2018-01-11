@@ -5,6 +5,7 @@ import java.util.List;
 
 import net.ssehub.easy.varModel.cst.AttributeVariable;
 import net.ssehub.easy.varModel.cst.BlockExpression;
+import net.ssehub.easy.varModel.cst.CSTUtils;
 import net.ssehub.easy.varModel.cst.Comment;
 import net.ssehub.easy.varModel.cst.CompoundAccess;
 import net.ssehub.easy.varModel.cst.CompoundInitializer;
@@ -22,7 +23,6 @@ import net.ssehub.easy.varModel.cst.Self;
 import net.ssehub.easy.varModel.cst.UnresolvedExpression;
 import net.ssehub.easy.varModel.cst.Variable;
 import net.ssehub.easy.varModel.model.Constraint;
-import net.ssehub.easy.varModel.model.datatypes.OclKeyWords;
 
 /**
  * A visitor to retrieve constraints from collections.
@@ -109,7 +109,7 @@ public class AssignmentConstraintFinder implements IConstraintTreeVisitor {
 
     @Override
     public void visitOclFeatureCall(OCLFeatureCall call) {        
-        isAssignment = OclKeyWords.ASSIGNMENT.equals(call.getOperation());        
+        isAssignment = CSTUtils.isAssignment(call);        
     }
     
     @Override
