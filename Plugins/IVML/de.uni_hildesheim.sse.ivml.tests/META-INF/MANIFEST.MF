@@ -20,4 +20,5 @@ Import-Package: org.junit.runner;version="4.5.0",
  org.junit.runners;version="4.5.0",
  org.junit.runners.model;version="4.5.0",
  org.hamcrest.core
+Export-Package: test.de.uni_hildesheim.sse
 

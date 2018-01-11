@@ -47,7 +47,6 @@ import net.ssehub.easy.varModel.model.PartialEvaluationBlock;
 import net.ssehub.easy.varModel.model.Project;
 import net.ssehub.easy.varModel.model.ProjectImport;
 import net.ssehub.easy.varModel.model.ProjectInterface;
-import net.ssehub.easy.varModel.model.datatypes.Compound;
 import net.ssehub.easy.varModel.model.datatypes.CustomOperation;
 import net.ssehub.easy.varModel.model.datatypes.DerivedDatatype;
 import net.ssehub.easy.varModel.model.datatypes.EnumLiteral;
