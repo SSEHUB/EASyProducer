@@ -1,4 +1,4 @@
-project defaults2 {
+project defaults1 {
 
     enum Kind {kind1, kind2, kind3};
     abstract compound Activity {
