@@ -35,6 +35,13 @@ import test.de.uni_hildesheim.sse.AbstractTest;
  */
 public class ExperimentsControlTests extends AbstractTest {
 
+    static {
+        String home = System.getProperty("easy_producer.testdata.home", null);
+        if (null != home) {
+            System.setProperty("ivml.testdata.home", home);
+        }
+    }
+    
     /**
      * Represents the directory containing the tests.
      */
@@ -147,15 +154,15 @@ public class ExperimentsControlTests extends AbstractTest {
     }
 
     /**
-     * Tests "defaults1".
+     * Tests variant models with same variables/expected results like "defaults1".
      * 
+     * @param name the name of the model/file
      * @throws IOException shall not occur
      * @throws ModelQueryException shall not occur
      * @throws IvmlException shall not occur
      */
-    @Test
-    public void controlDefaults1() throws IOException, ModelQueryException, IvmlException {
-        Configuration config = createAndAssertEqual("defaults1");
+    private void testDefaults(String name) throws IOException, ModelQueryException, IvmlException {
+        Configuration config = createAndAssertEqual(name);
         ReasonerConfiguration rConfig = new ReasonerConfiguration();
         rConfig.setFreshConfiguration(false);
         rConfig.setAdditionalInformationLogger(ReasonerConfiguration.ADDITIONAL_INFO_LOG_NONE);
@@ -199,7 +206,18 @@ public class ExperimentsControlTests extends AbstractTest {
         assertIntValue(config, 6, s1, "count");
         assertEnumValue(config, null, s2, "produces");
         assertEnumValue(config, "Kind.kind2", s2, "consumes");
-        assertIntValue(config, 7, s2, "count");
+        assertIntValue(config, 7, s2, "count");        
     }
     
+    /**
+     * Tests "defaults1".
+     * 
+     * @throws IOException shall not occur
+     * @throws ModelQueryException shall not occur
+     * @throws IvmlException shall not occur
+     */
+    @Test
+    public void controlDefaults1() throws IOException, ModelQueryException, IvmlException {
+        testDefaults("defaults1");
+    }
 }
