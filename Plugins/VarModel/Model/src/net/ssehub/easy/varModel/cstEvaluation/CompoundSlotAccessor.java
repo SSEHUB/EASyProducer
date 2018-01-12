@@ -115,7 +115,7 @@ class CompoundSlotAccessor extends AbstractDecisionVariableEvaluationAccessor {
     }
 
     @Override
-    public boolean setValue(Value value) {
+    public boolean setValue(Value value, boolean asAssignment) {
         boolean successful = false;
         EvaluationContext context = getContext();
         if (context.allowAssignValues() && null != slotVariable) {
@@ -125,7 +125,7 @@ class CompoundSlotAccessor extends AbstractDecisionVariableEvaluationAccessor {
                     IAssignmentState targetState = context.getTargetState(slotVariable);
                     if (null != targetState) {
                         try {
-                            slotVariable.setValue(value, targetState);
+                            slotVariable.setValue(value, targetState, asAssignment);
                             successful = true;
                             notifyVariableChange();
                         } catch (ConfigurationException e) {

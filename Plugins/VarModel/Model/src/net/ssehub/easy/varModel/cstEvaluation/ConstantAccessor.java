@@ -69,7 +69,7 @@ public class ConstantAccessor extends EvaluationAccessor {
     }
 
     @Override
-    public boolean setValue(Value value) {
+    public boolean setValue(Value value, boolean asAssignment) {
         getContext().addErrorMessage("cannot assign a value to a constant - variable needed");
         return false;
     }

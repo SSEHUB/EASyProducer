@@ -56,7 +56,7 @@ class ToplevelVarConfigProvider extends VariableConfigProvider {
     protected ToplevelVarConfigProvider(IDecisionVariable relatedVariable, Value value, IAssignmentState state) {
         super();
         this.relatedVariable = relatedVariable;
-        this.value = value;
+        setValueImpl(value);
         if (null == state) {
             this.state = AssignmentState.UNDEFINED;
         } else {
@@ -76,7 +76,7 @@ class ToplevelVarConfigProvider extends VariableConfigProvider {
         } else if (null == this.value && this.state == AssignmentState.FROZEN && null != value
             && !value.isConfigured()) {
             // Allow lazy initialization of empty value
-            this.value = value;
+            setValueImpl(value);
         } else {
             throw new ConfigurationException(getConfiguration(), 
                 "decision '" + getDeclaration().getName() 
@@ -160,7 +160,7 @@ class ToplevelVarConfigProvider extends VariableConfigProvider {
             ContainerVariable container = (ContainerVariable) relatedVariable;
             container.clear();
         }
-        this.value = value;
+        setValueImpl(value);
         this.state = state;
         getConfiguration().variableChanged(relatedVariable, oldValue);
     }
@@ -263,7 +263,7 @@ class ToplevelVarConfigProvider extends VariableConfigProvider {
         if (value instanceof ContainerValue) {
             oldValue = (ContainerValue) value;            
         } 
-        this.value = conValue;
+        setValueImpl(conValue);
         for (int i = 0; i < conValue.getElementSize(); i++) {
             boolean overwrite = true;
             if (container.getNestedElementsCount() > i) {
@@ -294,6 +294,22 @@ class ToplevelVarConfigProvider extends VariableConfigProvider {
             }
         }
         return value;
+    }
+
+    /**
+     * Changes the value adjusting {@link Value#setValueParent(net.ssehub.easy.varModel.model.values.IValueParent) 
+     * the parent variable of the involved values).
+     * 
+     * @param value the new value
+     */
+    private void setValueImpl(Value value) {
+        if (null != this.value) {
+            this.value.setValueParent(null);
+        }
+        this.value = value;
+        if (null != this.value) {
+            this.value.setValueParent(relatedVariable);
+        }
     }
 
     @Override

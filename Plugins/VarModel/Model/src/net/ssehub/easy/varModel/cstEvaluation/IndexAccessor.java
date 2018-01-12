@@ -70,7 +70,7 @@ class IndexAccessor extends AbstractDecisionVariableEvaluationAccessor {
     }
 
     @Override
-    public boolean setValue(Value value) {
+    public boolean setValue(Value value, boolean asAssignment) {
         boolean done = false;
         IDecisionVariable variable = getVariable();
         if (Container.TYPE.isAssignableFrom(variable.getDeclaration().getType())) {

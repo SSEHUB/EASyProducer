@@ -163,4 +163,21 @@ public abstract class Value {
         return equal;
     }
     
+    /**
+     * Changes the value parent.
+     * 
+     * @param parent the parent
+     */
+    public void setValueParent(IValueParent parent) {
+    }
+
+    /**
+     * Returns the value parent.
+     * 
+     * @return the parent (may be <b>null</b> for none)
+     */    
+    public IValueParent getValueParent() {
+        return null;
+    }
+    
 }

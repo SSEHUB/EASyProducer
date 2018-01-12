@@ -108,6 +108,7 @@ public abstract class ContainerVariable extends StructuredVariable {
             VariableCreator creator = new VariableCreator(decl, this, isVisible(), false);
             IDecisionVariable var = creator.getVariable();
             var.setValue(eltValue, state);
+            eltValue.setValueParent(var);
             nestedElements.add(var);
         }
     }
@@ -167,6 +168,7 @@ public abstract class ContainerVariable extends StructuredVariable {
                     
                     Value nestedValue = conValue.getElement(i);
                     nestedVariable.setValue(nestedValue, state);
+                    nestedValue.setValueParent(nestedVariable);
                 }
             }
         }

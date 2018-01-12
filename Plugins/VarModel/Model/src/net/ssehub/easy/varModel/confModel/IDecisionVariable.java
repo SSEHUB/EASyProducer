@@ -16,6 +16,7 @@
 package net.ssehub.easy.varModel.confModel;
 
 import net.ssehub.easy.varModel.confModel.paths.IResolutionPathElement;
+import net.ssehub.easy.varModel.model.values.IValueParent;
 import net.ssehub.easy.varModel.model.values.Value;
 
 /**
@@ -25,7 +26,7 @@ import net.ssehub.easy.varModel.model.values.Value;
  * @author El-Sharkawy
  *
  */
-public interface IDecisionVariable extends IConfigurationElement, IConfigurationVisitable {
+public interface IDecisionVariable extends IConfigurationElement, IConfigurationVisitable, IValueParent {
     
     /**
      * Returns the current value of this {@link IDecisionVariable}.
@@ -43,7 +44,18 @@ public interface IDecisionVariable extends IConfigurationElement, IConfiguration
      *   {@link #getDeclaration()} and <code>value</code> do not comply
      */
     public void setValue(Value value, IAssignmentState state) throws ConfigurationException;
-    
+
+    /**
+     * Changes the value.
+     * 
+     * @param value the value (may be <b>null</b> for incremental buildup)
+     * @param state the related assignment state
+     * @param asAssignment does this call happen as part of evaluating an IVML assignment operation
+     * @throws ConfigurationException in case that the types of 
+     *   {@link #getDeclaration()} and <code>value</code> do not comply
+     */
+    public void setValue(Value value, IAssignmentState state, boolean asAssignment) throws ConfigurationException;
+
     /**
      * Changes the value (for incremental buildup) from value history.
      * 

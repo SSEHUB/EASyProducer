@@ -81,6 +81,7 @@ import net.ssehub.easy.varModel.model.values.ReferenceValue;
 import net.ssehub.easy.varModel.model.values.Value;
 import net.ssehub.easy.varModel.model.values.ValueDoesNotMatchTypeException;
 import net.ssehub.easy.varModel.model.values.ValueFactory;
+import net.ssehub.easy.varModel.persistency.StringProvider;
 
 /**
  * Evaluation visitor for IVML expressions. Usage:
@@ -142,6 +143,25 @@ public class EvaluationVisitor implements IConstraintTreeVisitor {
          */
         EvaluationContextImpl(IConfiguration config) {
             pushLevel(config);
+        }
+
+        /**
+         * Resets this instance for reuse.
+         * 
+         * @param config the variability model configuration (outermost stack level)
+         * @return <b>this</b>
+         */
+        EvaluationContextImpl reset(IConfiguration config) {
+            pushLevel(config);
+            return this;
+        }
+
+        /**
+         * Clears this instance for reuse.
+         */
+        void clear() {
+            configStack.clear();
+            allowPropagation = true;
         }
         
         /**
@@ -321,7 +341,7 @@ public class EvaluationVisitor implements IConstraintTreeVisitor {
      */
     public void init(IConfiguration config, IAssignmentState assignmentState, boolean assignmentsOnly, 
         IValueChangeListener listener) {
-        this.context = new EvaluationContextImpl(config);
+        this.context = null == this.context ? new EvaluationContextImpl(config) : this.context.reset(config);
         this.assignmentState = assignmentState;
         this.assignmentsOnly = assignmentsOnly;
         this.listener = listener;
@@ -384,7 +404,9 @@ public class EvaluationVisitor implements IConstraintTreeVisitor {
      */
     public void clear() {
         clearResult();
-        context = null;
+        if (null != context) { // some test cases do not cause a context creation :|
+            context.clear();
+        }
         assignmentState = null;
         dispatchScope = null;
         messages.clear();
@@ -1760,7 +1782,9 @@ public class EvaluationVisitor implements IConstraintTreeVisitor {
                 }
             } else {
                 if (null == result) {
-                    error("cannot evaluate compound");
+                    if (null == variable) {
+                        error("cannot evaluate compound in " + StringProvider.toIvmlString(access));
+                    } // else variable not defined, stop lazy evaluation
                 }
             }
             if (null != resolutionListener && null != result) {
@@ -1907,8 +1931,7 @@ public class EvaluationVisitor implements IConstraintTreeVisitor {
      * @return the target state for the variable, may be <b>null</b> if assignment is not permitted
      */
     protected IAssignmentState getTargetState(IDecisionVariable var) {
-        IAssignmentState returnState = assignmentState;        
-        return returnState;
+        return assignmentState;
     }
 
     @Override

@@ -25,6 +25,8 @@ import net.ssehub.easy.varModel.model.datatypes.StructuredDatatype;
  */
 abstract class StructuredValue extends Value {
 
+    private IValueParent valueParent;
+    
     /**
      * Constructor for the Class.
      * @param type the type of the specific object.
@@ -43,4 +45,15 @@ abstract class StructuredValue extends Value {
     public final boolean isConfigured() {
         return isFullyConfigured();
     }
+    
+    @Override
+    public void setValueParent(IValueParent valueParent) {
+        this.valueParent = valueParent;
+    }
+
+    @Override
+    public IValueParent getValueParent() {
+        return valueParent;
+    }
+
 }

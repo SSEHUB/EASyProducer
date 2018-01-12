@@ -30,7 +30,7 @@ public class ConfigurationException extends IvmlException {
     public static final int INTERNAL = 19003;
     public static final int DUPLICATES_IN_SET = 19004;
     
-    private Configuration configuration;
+    private IConfiguration configuration;
     
     /**
      * Creates a configuration exception.
@@ -39,7 +39,7 @@ public class ConfigurationException extends IvmlException {
      * @param message a message explaining the reason for this exception
      * @param code a code representing the reason
      */
-    public ConfigurationException(Configuration configuration, String message, int code) {
+    public ConfigurationException(IConfiguration configuration, String message, int code) {
         super(message, code);
         this.configuration = configuration;
     }
@@ -49,7 +49,7 @@ public class ConfigurationException extends IvmlException {
      * 
      * @return the configuration (may be <b>null</b> during incremental buildup)
      */
-    public Configuration getConfiguration() {
+    public IConfiguration getConfiguration() {
         return configuration;
     }
     

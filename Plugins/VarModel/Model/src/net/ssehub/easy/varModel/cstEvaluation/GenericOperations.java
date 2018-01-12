@@ -50,13 +50,7 @@ public class GenericOperations {
     static final IOperationEvaluator ASSIGNMENT = new IOperationEvaluator() {
 
         public EvaluationAccessor evaluate(EvaluationAccessor operand, EvaluationAccessor[] arguments) {
-            EvaluationAccessor result = null;
-            if (arguments.length == 1 && null != operand) {
-                if (operand.setValue(arguments[0].getValue())) {
-                    result = ConstantAccessor.POOL.getInstance().bind(BooleanValue.TRUE, operand.getContext());
-                }
-            }
-            return result;
+            return assign(operand, arguments, true);
         }
 
     };
@@ -282,13 +276,13 @@ public class GenericOperations {
                     // special if not assigned, but assignable (not constant), we can do this now
                     if (((null == oValue || !operand.isAssigned()) && operand.isAssignable()) 
                             || isAssignableCompound(operand)) {
-                        ASSIGNMENT.evaluate(operand, arguments);
+                        assign(operand, arguments, false);
                         oValue = operand.getValue();
                     } else if ((null == aValue) && arguments[0].isAssignable()) {
                         // considers the reverse case 1 == x, x undefined
                         EvaluationAccessor[] temp = new EvaluationAccessor[1];
                         temp[0] = operand;
-                        ASSIGNMENT.evaluate(arguments[0], temp);
+                        assign(arguments[0], temp, false);
                         aValue = operand.getValue();
                     }
                 }
@@ -398,5 +392,25 @@ public class GenericOperations {
         } 
         return result;        
     }
-    
+
+    /**
+     * Performs a value assignment.
+     * 
+     * @param operand the operand
+     * @param arguments the arguments
+     * @param asAssignment called as part of an assignment (hard constraint, <code>true</code>) or as part of a soft 
+     *     constraint (<code>false</code>)
+     * @return the result evaluation accessor
+     */
+    private static EvaluationAccessor assign(EvaluationAccessor operand, EvaluationAccessor[] arguments, 
+        boolean asAssignment) {
+        EvaluationAccessor result = null;
+        if (arguments.length == 1 && null != operand) {
+            if (operand.setValue(arguments[0].getValue(), asAssignment)) {
+                result = ConstantAccessor.POOL.getInstance().bind(BooleanValue.TRUE, operand.getContext());
+            }
+        }
+        return result;        
+    }
+
 }

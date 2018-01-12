@@ -107,7 +107,7 @@ class VariableAccessor extends AbstractDecisionVariableEvaluationAccessor {
     }
 
     @Override
-    public boolean setValue(Value value) {
+    public boolean setValue(Value value, boolean asAssignment) {
         boolean successful = false;
         EvaluationContext context = getContext();
         if (context.allowAssignValues()) {
@@ -124,7 +124,7 @@ class VariableAccessor extends AbstractDecisionVariableEvaluationAccessor {
                             : context.getTargetState(variable);
                         if (null != targetState) {
                             try {
-                                variable.setValue(value, targetState);
+                                variable.setValue(value, targetState, asAssignment);
                                 successful = true;
                                 notifyVariableChange();
                             } catch (ConfigurationException e) {

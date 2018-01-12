@@ -84,7 +84,7 @@ class ContainerElementAccessor extends AbstractDecisionVariableEvaluationAccesso
     }
 
     @Override
-    public boolean setValue(Value value) {
+    public boolean setValue(Value value, boolean asAssignment) {
         boolean successful = false;
         EvaluationContext context = getContext();
         if (context.allowAssignValues() && null != elementVariable) {
@@ -96,7 +96,7 @@ class ContainerElementAccessor extends AbstractDecisionVariableEvaluationAccesso
                     IAssignmentState targetState = context.getTargetState(elementVariable);
                     if (null != targetState) {
                         try {
-                            elementVariable.setValue(value, targetState);
+                            elementVariable.setValue(value, targetState, asAssignment);
                             successful = true;
                             notifyVariableChange();
                         } catch (ConfigurationException e) {

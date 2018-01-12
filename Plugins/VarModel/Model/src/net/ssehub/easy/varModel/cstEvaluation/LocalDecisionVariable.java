@@ -34,6 +34,7 @@ import net.ssehub.easy.varModel.model.datatypes.Container;
 import net.ssehub.easy.varModel.model.datatypes.Reference;
 import net.ssehub.easy.varModel.model.values.CompoundValue;
 import net.ssehub.easy.varModel.model.values.ContainerValue;
+import net.ssehub.easy.varModel.model.values.IValueParent;
 import net.ssehub.easy.varModel.model.values.NullValue;
 import net.ssehub.easy.varModel.model.values.Value;
 
@@ -87,11 +88,70 @@ public class LocalDecisionVariable implements IDecisionVariable {
         return state;
     }
 
+
+    @Override
+    public void setValue(Value value, IAssignmentState state, boolean asAssignment) throws ConfigurationException {
+        IValueParent vParent = asAssignment ? obtainValueParent(value) : null;
+        this.value = value;
+        this.state = state;
+        // we try to set a slot value on a compound, "call-by-ref"
+        if (null != parent && vParent instanceof IDecisionVariable) {
+            IDecisionVariable decVar = (IDecisionVariable) vParent;
+            if (Compound.TYPE.isAssignableFrom(decVar.getDeclaration().getType())) {
+                IDecisionVariable nested = decVar.getNestedElement(decl.getName());
+                if (null != nested) {
+                    decVar.setValue(value, state, nested);
+                }
+            }
+        }
+    }
+
+    @Override
+    public void setValue(Value value, IAssignmentState state) throws ConfigurationException {
+        this.value = value;
+        this.state = state;
+    }
+
     @Override
     public void setValue(Value value, IAssignmentState state, IConfigurationElement nested)
         throws ConfigurationException {
         this.value = value;
         this.state = state;
+    }
+    
+    /**
+     * Obtains the value parent for the stored value, the given value or the value of one of the parents.
+     * 
+     * @param value the value to consider (may be <b>null</b>)
+     * @return the value parent, may be <b>null</b> for none
+     */
+    private IValueParent obtainValueParent(Value value) {
+        IValueParent result = getValueParent(this.value);
+        if (null == result) {
+            result = getValueParent(value);
+        }
+        if (null == result) {
+            IDecisionVariable iter = parent;
+            while (null != iter && null == result) {
+                result = getValueParent(iter.getValue());
+                if (iter.getParent() instanceof IDecisionVariable) {
+                    iter = (IDecisionVariable) iter.getParent();    
+                } else {
+                    iter = null;
+                }
+            }
+        }
+        return result;
+    }
+
+    /**
+     * Returns the value parent of <code>value</code>.
+     * 
+     * @param value the value to return the parent for (may be <b>null</b>)
+     * @return the value parent (may be <b>null</b>)
+     */
+    private IValueParent getValueParent(Value value) {
+        return null == value ? null : value.getValueParent();
     }
 
     @Override
@@ -125,11 +185,6 @@ public class LocalDecisionVariable implements IDecisionVariable {
     }
 
     @Override
-    public void setValue(Value value, IAssignmentState state) throws ConfigurationException {
-        setValue(value, state, null);
-    }
-
-    @Override
     public void setHistoryValue(Value value, IAssignmentState state) throws ConfigurationException {
         // ignore
     }
@@ -159,7 +214,7 @@ public class LocalDecisionVariable implements IDecisionVariable {
             Value cValue = ((ContainerValue) value).getElement(index);
             Container cType = (Container) cValue.getType();
             LocalDecisionVariable var = new LocalDecisionVariable(new DecisionVariableDeclaration(String.valueOf(index),
-                cType.getContainedType(), cType), conf, null);
+                cType.getContainedType(), cType), conf, this);
             try {
                 var.setValue(cValue, AssignmentState.ASSIGNED);
             } catch (ConfigurationException e) {
@@ -169,7 +224,7 @@ public class LocalDecisionVariable implements IDecisionVariable {
             CompoundValue cValue = (CompoundValue) value;
             Compound type = (Compound) cValue.getType();
             DecisionVariableDeclaration slotDecl = type.getElement(index);
-            LocalDecisionVariable var = new LocalDecisionVariable(slotDecl, conf, null);
+            LocalDecisionVariable var = new LocalDecisionVariable(slotDecl, conf, this);
             Value slotValue = cValue.getNestedValue(slotDecl.getName());
             try {
                 var.setValue(slotValue, AssignmentState.ASSIGNED);
@@ -203,7 +258,7 @@ public class LocalDecisionVariable implements IDecisionVariable {
                     if (!Reference.TYPE.isAssignableFrom(slotDecl.getType())) { // don't dereference references
                         slotValue = Configuration.dereference(conf, slotValue);
                     }
-                    LocalDecisionVariable var = new LocalDecisionVariable(slotDecl, conf, null);
+                    LocalDecisionVariable var = new LocalDecisionVariable(slotDecl, conf, this);
                     if (null != slotValue) {
                         try {
                             var.setValue(slotValue, AssignmentState.ASSIGNED);

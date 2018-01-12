@@ -86,9 +86,10 @@ public abstract class EvaluationAccessor {
      * add appropriate messages to the context.
      * 
      * @param value the new value
+     * @param asAssignment does this happen through an IVML assignment operation
      * @return <code>true</code> if successful, <code>false</code> else
      */
-    public abstract boolean setValue(Value value);
+    public abstract boolean setValue(Value value, boolean asAssignment);
     
     /**
      * Returns a nested value based on the given accessor.

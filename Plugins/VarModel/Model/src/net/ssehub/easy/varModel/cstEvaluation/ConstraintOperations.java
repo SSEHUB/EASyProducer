@@ -47,7 +47,7 @@ public class ConstraintOperations {
     static EvaluationAccessor handleConstraintAssignment(EvaluationAccessor operand, ConstraintSyntaxTree cst) {
         EvaluationAccessor result;
         try {
-            operand.setValue(ValueFactory.createValue(ConstraintType.TYPE, cst));
+            operand.setValue(ValueFactory.createValue(ConstraintType.TYPE, cst), true);
             result = ConstantAccessor.POOL.getInstance().bind(BooleanValue.TRUE, operand.getContext());
         } catch (ValueDoesNotMatchTypeException e) {
             operand.getContext().addErrorMessage(e);

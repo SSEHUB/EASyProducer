@@ -66,7 +66,7 @@ class ContainerIterators {
             if (!(BooleanValue.TRUE.equals(result.getValue()) 
                 && BooleanValue.TRUE.equals(value.getValue()))) {
                 // forAll is only true if all evaluations are true
-                result.setValue(BooleanValue.FALSE);
+                result.setValue(BooleanValue.FALSE, false);
             }
             return BooleanValue.FALSE;
         }
@@ -94,7 +94,7 @@ class ContainerIterators {
             BooleanValue stop;
             if (BooleanValue.TRUE.equals(value.getValue())) {
                 // exists is fine with the first evaluation result that is true
-                result.setValue(BooleanValue.TRUE);
+                result.setValue(BooleanValue.TRUE, false);
                 stop = BooleanValue.TRUE;
             } else {
                 stop = BooleanValue.FALSE;
@@ -127,7 +127,7 @@ class ContainerIterators {
             Value val = value.getValue();
             if (data.containsKey(val)) {
                 stop = BooleanValue.TRUE;
-                result.setValue(BooleanValue.FALSE);
+                result.setValue(BooleanValue.FALSE, false);
             } else {
                 data.put(val, null);
                 stop = BooleanValue.FALSE;
@@ -159,7 +159,7 @@ class ContainerIterators {
             BooleanValue stop;
             if (BooleanValue.TRUE.equals(value.getValue())) {
                 stop = BooleanValue.TRUE;
-                result.setValue(iter);
+                result.setValue(iter, false);
             } else {
                 stop = BooleanValue.FALSE;
             }
@@ -190,7 +190,7 @@ class ContainerIterators {
             BooleanValue stop;
             if (BooleanValue.TRUE.equals(value.getValue())) {
                 stop = BooleanValue.toBooleanValue(!NullValue.INSTANCE.equals(result.getValue()));
-                result.setValue(iter);
+                result.setValue(iter, false);
             } else {
                 stop = BooleanValue.FALSE;
             }
@@ -265,7 +265,7 @@ class ContainerIterators {
             }
             if (newVal != null) {
                 data.put(this, newVal);
-                result.setValue(iter);    
+                result.setValue(iter, false);    
             }
             return BooleanValue.FALSE;
         }
@@ -470,7 +470,7 @@ class ContainerIterators {
         @Override
         public void postProcessResult(EvaluationAccessor result, Map<Object, Object> data) 
             throws ValueDoesNotMatchTypeException {
-            result.setValue(BooleanValue.toBooleanValue(!hasCycle(data)));
+            result.setValue(BooleanValue.toBooleanValue(!hasCycle(data)), false);
         }
         
     };

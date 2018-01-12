@@ -237,6 +237,11 @@ abstract class DecisionVariable implements IDecisionVariable {
     }
     
     @Override
+    public void setValue(Value value, IAssignmentState state, boolean asAssignment) throws ConfigurationException {
+        setValue(value, state); // difference does not matter here, just in local decision variables
+    }    
+    
+    @Override
     public IDecisionVariable getNestedElement(String name) {
         return Configuration.getNestedElement(this, name);
     }
