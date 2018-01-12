@@ -52,12 +52,19 @@ public abstract class AbstractScenarioTest extends AbstractTest<Script> {
      * Defines the current model paths.
      */
     protected static String[] modelPaths = DEFAULT_MODEL_PATHS;
-    
-    @Override
-    protected void furtherInitialization() {
+
+    /**
+     * Initializes the reasoner.
+     */
+    static void initializeReasoner() {
         Reasoner reasoner = new Reasoner();
         ReasonerFrontend.getInstance().getRegistry().register(reasoner);
         ReasonerFrontend.getInstance().setReasonerHint(reasoner.getDescriptor());
+    }
+    
+    @Override
+    protected void furtherInitialization() {
+        initializeReasoner();
         Registration.register();
         net.ssehub.easy.instantiation.ant.Registration.register();
         net.ssehub.easy.instantiation.aspectj.Registration.register();

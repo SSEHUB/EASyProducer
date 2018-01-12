@@ -21,6 +21,7 @@
     
 		<!-- Parsers -->
         <pathelement path="${libs.ivml}"/>
+        <pathelement path="${libs.ivml.tests}"/>
         <pathelement path="${libs.template.core}"/>
         <pathelement path="${libs.vil.core}"/>
 		<pathelement path="${libs.vil.tests}"/>
