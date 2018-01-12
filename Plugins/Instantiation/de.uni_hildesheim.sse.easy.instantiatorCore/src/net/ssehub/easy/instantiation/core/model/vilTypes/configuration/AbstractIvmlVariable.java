@@ -261,6 +261,11 @@ public abstract class AbstractIvmlVariable extends IvmlElement implements IActua
         public void setValue(Value value, IAssignmentState state) throws ConfigurationException {
             // temporary only, do not allow setting
         }
+        
+        @Override
+        public void setValue(Value value, IAssignmentState state, boolean asAssignment) throws ConfigurationException {
+            // temporary only, do not allow setting
+        }
 
         @Override
         public void setHistoryValue(Value value, IAssignmentState state) throws ConfigurationException {
