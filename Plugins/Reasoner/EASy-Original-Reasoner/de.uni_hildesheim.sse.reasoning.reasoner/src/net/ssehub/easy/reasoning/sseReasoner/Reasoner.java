@@ -39,13 +39,13 @@ public class Reasoner implements IReasoner {
 
     @Override
     public ReasoningResult upgrade(URI url, ProgressObserver observer) {
-        // TODO Auto-generated method stub
         return null;
     }
 
     @Override
     public ReasoningResult isConsistent(Project project, ReasonerConfiguration reasonerConfig, 
                 ProgressObserver observer) {
+        reasonerConfig =  null == reasonerConfig ? new ReasonerConfiguration() : reasonerConfig;
         Engine engine = new Engine(project, createConfiguration(project, null, reasonerConfig), 
             reasonerConfig, observer);           
         return engine.reason();
@@ -54,6 +54,7 @@ public class Reasoner implements IReasoner {
     @Override
     public ReasoningResult check(Project project, Configuration cfg, ReasonerConfiguration reasonerConfig,
         ProgressObserver observer) {
+        reasonerConfig =  null == reasonerConfig ? new ReasonerConfiguration() : reasonerConfig;
         Engine engine = new Engine(project, createConfiguration(project, cfg, reasonerConfig), 
             reasonerConfig, observer);           
         return engine.reason();
@@ -62,6 +63,7 @@ public class Reasoner implements IReasoner {
     @Override
     public ReasoningResult propagate(Project project, Configuration cfg, ReasonerConfiguration reasonerConfig,
         ProgressObserver observer) {
+        reasonerConfig =  null == reasonerConfig ? new ReasonerConfiguration() : reasonerConfig;
         Engine engine = new Engine(project, createConfiguration(project, cfg, reasonerConfig), 
             reasonerConfig, observer);
         return engine.reason();
@@ -96,8 +98,6 @@ public class Reasoner implements IReasoner {
 
     @Override
     public void notify(IReasonerMessage message) {
-        // TODO Auto-generated method stub
-        
     }
     
     /**

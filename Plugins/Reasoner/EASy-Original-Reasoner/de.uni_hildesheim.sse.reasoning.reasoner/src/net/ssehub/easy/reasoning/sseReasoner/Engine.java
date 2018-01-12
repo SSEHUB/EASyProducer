@@ -7,8 +7,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import net.ssehub.easy.basics.logger.EASyLoggerFactory;
-import net.ssehub.easy.basics.logger.EASyLoggerFactory.EASyLogger;
 import net.ssehub.easy.basics.messages.Status;
 import net.ssehub.easy.basics.progress.ProgressObserver;
 import net.ssehub.easy.reasoning.core.reasoner.Message;
@@ -37,11 +35,6 @@ public class Engine {
     
     private static final String VIOLATED_CONSTRAINTS = "Constraints not satisfied:";
     private static final String VIOLATED_VARIABLES = "Reassignment is forbitten in the same project. Failed variables:";
-    
-    private static final EASyLogger LOGGER
-        = EASyLoggerFactory.INSTANCE.getLogger(Engine.class, Descriptor.BUNDLE_NAME);
-    
-//    private String reasoningID;
     
     private Resolver resolver;
     

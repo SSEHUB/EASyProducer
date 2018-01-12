@@ -76,7 +76,6 @@ public class EvalVisitor extends EvaluationVisitor {
         if ((state == AssignmentState.UNDEFINED
             || state == AssignmentState.DEFAULT
             || !wasAssignedInThisScope(var, compound))
-//            || !ScopeAssignments.wasAssignedInThisScope(var))
             && state != AssignmentState.FROZEN) {
             isAssignable = true;
         }   

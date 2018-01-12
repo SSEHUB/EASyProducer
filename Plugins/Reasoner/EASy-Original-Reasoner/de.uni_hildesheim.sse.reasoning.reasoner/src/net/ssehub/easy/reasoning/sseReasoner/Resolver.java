@@ -32,6 +32,7 @@ import net.ssehub.easy.varModel.cst.AttributeVariable;
 import net.ssehub.easy.varModel.cst.CSTSemanticException;
 import net.ssehub.easy.varModel.cst.CompoundAccess;
 import net.ssehub.easy.varModel.cst.CompoundInitializer;
+import net.ssehub.easy.varModel.cst.ConstantValue;
 import net.ssehub.easy.varModel.cst.ConstraintReplacer;
 import net.ssehub.easy.varModel.cst.ConstraintSyntaxTree;
 import net.ssehub.easy.varModel.cst.ContainerInitializer;
@@ -59,9 +60,11 @@ import net.ssehub.easy.varModel.model.datatypes.ConstraintType;
 import net.ssehub.easy.varModel.model.datatypes.Container;
 import net.ssehub.easy.varModel.model.datatypes.DerivedDatatype;
 import net.ssehub.easy.varModel.model.datatypes.IDatatype;
+import net.ssehub.easy.varModel.model.datatypes.MetaType;
 import net.ssehub.easy.varModel.model.datatypes.OclKeyWords;
 import net.ssehub.easy.varModel.model.datatypes.Operation;
 import net.ssehub.easy.varModel.model.datatypes.Sequence;
+import net.ssehub.easy.varModel.model.datatypes.TypeQueries;
 import net.ssehub.easy.varModel.model.filter.ConstraintFinder;
 import net.ssehub.easy.varModel.model.filter.DeclarationFinder;
 import net.ssehub.easy.varModel.model.filter.DeclarationFinder.VisibilityType;
@@ -70,6 +73,8 @@ import net.ssehub.easy.varModel.model.filter.VariablesInConstraintFinder;
 import net.ssehub.easy.varModel.model.values.ConstraintValue;
 import net.ssehub.easy.varModel.model.values.ContainerValue;
 import net.ssehub.easy.varModel.model.values.Value;
+import net.ssehub.easy.varModel.model.values.ValueDoesNotMatchTypeException;
+import net.ssehub.easy.varModel.model.values.ValueFactory;
 import net.ssehub.easy.varModel.persistency.StringProvider;
 
 /**
@@ -418,14 +423,20 @@ public class Resolver {
         // Attribute handling
         if (variable.getAttributesCount() > 0) {
             resolveAttributeAssignments(decl, variable, compound);
-        }        
+        }
         if (Compound.TYPE.isAssignableFrom(type)) {
+            if (null != defaultValue) { // try considering the actual type, not only the base type
+                try {
+                    type = defaultValue.inferDatatype();
+                } catch (CSTSemanticException e) {
+                }
+            }
             resolveCompoundDefaultValueForDeclaration(decl, variable, compound, type); 
             if (null != defaultValue) {
                 defaultValue = copyVisitor(defaultValue, decl);
             }
         }  
-        collectionCompoundConstraints.addAll(collectionCompoundConstraints(decl, null));
+        collectionCompoundConstraints.addAll(collectionCompoundConstraints(decl, variable, null));
         // Container
         if (net.ssehub.easy.varModel.model.datatypes.Container.TYPE.isAssignableFrom(type)) {            
             collectionInternalConstraints(decl, null);
@@ -611,7 +622,7 @@ public class Resolver {
     }
 
     /**
-     * Method for resolving compound default value declarion.
+     * Method for resolving compound default value declaration.
      * @param decl The {@link AbstractVariable} for which the default value should be resolved.
      * @param variable the instance of <tt>decl</tt>.
      * @param compound if variable is a nested compound.
@@ -654,7 +665,7 @@ public class Resolver {
                 checkContainerValue((ContainerValue) nestedVariable.getValue(), decl, nestedDecl, 
                     nestedVariable, variable);
             }
-            compoundConstraints.addAll(collectionCompoundConstraints(nestedDecl, cmpAccess));
+            compoundConstraints.addAll(collectionCompoundConstraints(nestedDecl, variable, cmpAccess));
             if (ConstraintType.TYPE.isAssignableFrom(nestedType) 
                 && !(nestedType.getType() == BooleanType.TYPE.getType())) {
                 createConstraint(nestedDecl.getDefaultValue(), decl, nestedDecl, nestedVariable, variable);
@@ -895,30 +906,57 @@ public class Resolver {
                 op, decl, topcmpAccess);
         }
     }
+
+    /**
+     * Identifies the types contained in <code>variable</code>.
+     * 
+     * @param variable the variable to analyze for contained types
+     * @param containedType an additional type that must be part of the result (ignored if <b>null</b>)
+     * @return the contained types
+     */
+    private Set<IDatatype> identifyContainedTypes(IDecisionVariable variable, IDatatype containedType) {
+        // this is still static typing based on the actual value, but if the value is changed, the constraints shall 
+        // be re-collected anyway
+        // unclear, shall this be recursive?
+        Set<IDatatype> result = new HashSet<IDatatype>();
+        if (null != containedType) {
+            result.add(containedType);
+        }
+        if (null != variable.getValue()) {
+            for (int n = 0; n < variable.getNestedElementsCount(); n++) {
+                IDecisionVariable nested = variable.getNestedElement(n);
+                if (null != nested) {
+                    Value val = nested.getValue();
+                    if (null != val) {
+                        result.add(val.getType());
+                    }
+                }
+            }
+        } // fallback to default value if not given
+        return result;
+    }
     
     /**
      * Method for retrieving constraints from compounds initialized in collections.
      * @param decl AbstractVariable.
+     * @param variable the instance of <tt>decl</tt>.
      * @param topcmpAccess {@link CompoundAccess} if Collection is a nested element.
      * @return List of transformed constraints.
      */
-    private List<Constraint> collectionCompoundConstraints(AbstractVariable decl, CompoundAccess topcmpAccess) {
+    private List<Constraint> collectionCompoundConstraints(AbstractVariable decl, IDecisionVariable variable, 
+        CompoundAccess topcmpAccess) {
         List<Constraint> constraints = new ArrayList<Constraint>();
         IDatatype type = decl.getType();
-        if (net.ssehub.easy.varModel.model.datatypes.Set.TYPE.isAssignableFrom(type)) {
-            net.ssehub.easy.varModel.model.datatypes.Set set 
-                = (net.ssehub.easy.varModel.model.datatypes.Set) type;
-            if (Compound.TYPE.isAssignableFrom(set.getContainedType())) {
-                constraints = transformCompoundConstraints((Compound) set.getContainedType(),
-                    net.ssehub.easy.varModel.model.datatypes.Set.FORALL, decl, topcmpAccess);
-            }
-        }
-        if (net.ssehub.easy.varModel.model.datatypes.Sequence.TYPE.isAssignableFrom(type)) {
-            net.ssehub.easy.varModel.model.datatypes.Sequence sequence 
-                = (net.ssehub.easy.varModel.model.datatypes.Sequence) type;
-            if (Compound.TYPE.isAssignableFrom(sequence.getContainedType())) {
-                constraints = transformCompoundConstraints((Compound) sequence.getContainedType(),
-                    Sequence.FORALL, decl, topcmpAccess);
+        if (net.ssehub.easy.varModel.model.datatypes.Container.TYPE.isAssignableFrom(type)) {
+            net.ssehub.easy.varModel.model.datatypes.Container container 
+                = (net.ssehub.easy.varModel.model.datatypes.Container) type;
+            IDatatype containedType = container.getContainedType();
+            Set<IDatatype> containedTypes = identifyContainedTypes(variable, containedType);
+            for (IDatatype tmp : containedTypes) {
+                if (Compound.TYPE.isAssignableFrom(tmp)) {
+                    transformCollectionCompoundConstraints((Compound) tmp, containedType, decl, 
+                        topcmpAccess, constraints);
+                }
             }
         }
         return constraints;
@@ -927,14 +965,13 @@ public class Resolver {
     /**
      * Method for transforming a compound constraint into collection forAll constraint.
      * @param cmpType Compound type with constraints.
-     * @param op Operation to be performed.
+     * @param containedType the declared contained type of the container.
      * @param decl {@link AbstractVariable}.
      * @param topcmpAccess {@link CompoundAccess} if Collection is a nested element.
-     * @return List of transformed constraints.
+     * @param result List of transformed constraints, to be modified as a side effect.
      */
-    private List<Constraint> transformCompoundConstraints(Compound cmpType, Operation op, AbstractVariable decl, 
-        CompoundAccess topcmpAccess) {        
-        List<Constraint> constraints = new ArrayList<Constraint>();
+    private void transformCollectionCompoundConstraints(Compound cmpType, IDatatype containedType, 
+        AbstractVariable decl, CompoundAccess topcmpAccess, List<Constraint> result) {
         DecisionVariableDeclaration localDecl = new DecisionVariableDeclaration("cmp", cmpType, null);        
         // fill varMap
         for (int i = 0, n = cmpType.getInheritedElementCount(); i < n; i++) {
@@ -946,30 +983,39 @@ public class Resolver {
         
         List<Constraint> thisCompoundConstraints = new ArrayList<Constraint>(); 
         getAllCompoundConstraints(cmpType, thisCompoundConstraints, true);
-        
+        ConstraintSyntaxTree typeExpression = null;
+        if (!TypeQueries.sameTypes(cmpType, containedType)) {
+            try {
+                typeExpression = new ConstantValue(ValueFactory.createValue(MetaType.TYPE, cmpType));
+            } catch (ValueDoesNotMatchTypeException e) {
+                LOGGER.exception(e); // shall not occur, then next expression will not be correctly typed!
+            }
+        }
         for (int i = 0; i < thisCompoundConstraints.size(); i++) {
             ConstraintSyntaxTree itExpression = thisCompoundConstraints.get(i).getConsSyntax();
             itExpression = copyVisitor(itExpression, null);
             if (Descriptor.LOGGING) {
                 LOGGER.debug("New loop constraint " + StringProvider.toIvmlString(itExpression));
-            }           
-            ConstraintSyntaxTree containerOp = null;
-            if (topcmpAccess == null) {
-                containerOp = createContainerCall(new Variable(decl), op, itExpression, localDecl);
-            } else {
-                containerOp = createContainerCall(topcmpAccess, op, itExpression, localDecl);
-            }            
+            }   
             try {
+                ConstraintSyntaxTree containerOp = topcmpAccess == null ? new Variable(decl) : topcmpAccess;
+                containerOp.inferDatatype();
+                if (null != typeExpression) {
+                    containerOp = new OCLFeatureCall(containerOp, Container.SELECT_BY_KIND.getName(), typeExpression);
+                }
+                if (containerOp != null) {
+                    containerOp.inferDatatype();
+                    containerOp = createContainerCall(containerOp, Container.FORALL, itExpression, localDecl);
+                }
                 if (containerOp != null) {
                     containerOp.inferDatatype();
                     Constraint constraint = new Constraint(containerOp, project);
-                    constraints.add(constraint);                    
+                    result.add(constraint);                    
                 }
             } catch (CSTSemanticException e) {
                 LOGGER.exception(e);
             }            
         }
-        return constraints;        
     }
     
     /**

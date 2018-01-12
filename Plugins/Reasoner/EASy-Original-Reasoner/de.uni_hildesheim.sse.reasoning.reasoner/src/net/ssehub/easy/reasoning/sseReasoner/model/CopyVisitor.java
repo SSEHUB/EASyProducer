@@ -55,7 +55,6 @@ public class CopyVisitor implements IConstraintTreeVisitor {
     private ConstraintSyntaxTree result;
     private IVariableMapper mapper;
     private AbstractVariable cmpVar; 
-    private Self self;
 
     /**
      * Creates a copy visitor without mapping.
