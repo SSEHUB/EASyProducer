@@ -132,6 +132,7 @@
 			<!-- IVML -->
             <fileset dir="${home.dslCore.dir}/${build.jar.dir}" includes="**/*.jar" />
             <fileset dir="${home.ivml.dir}/${build.jar.dir}" includes="**/*.jar" />
+            <fileset dir="${home.ivml.tests.dir}/${build.jar.dir}" includes="**/*.jar" />
 			<!-- Reasoner -->
             <fileset dir="${home.reasonerCore.dir}/${build.jar.dir}" includes="**/*.jar" />
             <fileset dir="${home.sseReasoner.dir}/${build.jar.dir}" includes="**/*.jar" />
