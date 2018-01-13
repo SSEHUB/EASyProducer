@@ -375,16 +375,5 @@ public class CompoundTest {
         Assert.assertEquals(expected, c1.getRefinesDistanceTo(c2));
         Assert.assertEquals(expected, c2.getRefinesDistanceTo(c1));
     }
-    
-    /**
-     * Tests {@link Compound#isCompound(IDatatype)}.
-     */
-    @Test
-    public void testIsCompound() {
-        Compound c = new Compound("c1", null);
-        Assert.assertTrue(Compound.isCompound(Compound.TYPE));
-        Assert.assertTrue(Compound.isCompound(c));
-        Assert.assertFalse(Compound.isCompound(IntegerType.TYPE));
-    }
 
 }

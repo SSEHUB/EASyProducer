@@ -629,15 +629,7 @@ public class Compound extends StructuredDatatype implements IResolutionScope, ID
         }
         return result;
     }
-    
-    /**
-     * Returns whether <code>type</code> is a compound type.
-     * 
-     * @param type the type
-     * @return <code>true</code> for compound, <code>false</code> else
-     */
-    public static boolean isCompound(IDatatype type) {
-        return Compound.TYPE.isAssignableFrom(type);
-    }
+
+    // avoid (further) type queries here -> TypeQueries
 
 }

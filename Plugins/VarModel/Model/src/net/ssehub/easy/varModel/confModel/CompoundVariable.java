@@ -80,6 +80,9 @@ public class CompoundVariable extends StructuredVariable {
             candidates = instantiatableType.closestRefining(candidates);
             if (candidates.size() > 0) {
                 instantiatableType = candidates.iterator().next();
+                // this may be the wrong type if multiple subclasses are defined, then the contained
+                // value is wrong. But as other types of the refinement hierarchy may override with the
+                // their value, the initial value type is corrected upon value assignment
             } // this is a problem with the current approach, as this compound cannot be instantiated -> IVML error
         }
         

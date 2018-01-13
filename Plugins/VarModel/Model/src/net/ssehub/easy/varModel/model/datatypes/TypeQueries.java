@@ -101,6 +101,26 @@ public class TypeQueries {
     }
     
     /**
+     * Returns whether <code>type</code> is a compound type.
+     * 
+     * @param type the type
+     * @return <code>true</code> for compound, <code>false</code> else
+     */
+    public static boolean isCompound(IDatatype type) {
+        return Compound.TYPE.isAssignableFrom(type);
+    }
+
+    /**
+     * Returns whether <code>type</code> is a container.
+     * 
+     * @param type the type to check for
+     * @return <code>true</code> if <code>type</code> is a container, <code>false</code> else
+     */
+    public static boolean isContainer(IDatatype type) {
+        return Container.TYPE.isAssignableFrom(type);
+    }
+
+    /**
      * Finds the deepest generic type in <code>type</code> always trying <code>pos</code> as position for the 
      * generic type.
      * 

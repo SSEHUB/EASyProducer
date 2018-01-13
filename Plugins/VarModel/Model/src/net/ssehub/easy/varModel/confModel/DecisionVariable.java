@@ -405,11 +405,13 @@ abstract class DecisionVariable implements IDecisionVariable {
     }
     
     /**
-     * Returns the actual required type to instantiate this variable. This is typically the
+     * Returns one of the actual types required to instantiate this variable. This is typically the
      * type of the underlying variable declaration, but, in case of abstract variables, may
-     * also be a subtype if defined.
+     * also be one of the subtypes if defined. As changing the value with a different permitted
+     * type leads to a take over of the respective dynamic type, the indeterminism shall not lead
+     * to problems.
      * 
-     * @return the required type
+     * @return the instantiatable type
      */
     public IDatatype getInstantiatableType() {
         return declaration.getType();

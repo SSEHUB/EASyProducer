@@ -23,6 +23,7 @@ import net.ssehub.easy.varModel.model.DecisionVariableDeclaration;
 import net.ssehub.easy.varModel.model.datatypes.Compound;
 import net.ssehub.easy.varModel.model.datatypes.Container;
 import net.ssehub.easy.varModel.model.datatypes.DerivedDatatype;
+import net.ssehub.easy.varModel.model.datatypes.TypeQueries;
 import net.ssehub.easy.varModel.model.values.CompoundValue;
 import net.ssehub.easy.varModel.model.values.ContainerValue;
 import net.ssehub.easy.varModel.model.values.Value;
@@ -179,18 +180,18 @@ class ToplevelVarConfigProvider extends VariableConfigProvider {
     private Value assignCompoundValue(CompoundValue value, IAssignmentState state, boolean allowDeletation, 
             CompoundValue oldValue)
         throws ConfigurationException {
+        
         CompoundValue newValue = oldValue;
         if (allowDeletation) {
-//            try {
             newValue = value;
-//                newValue = (CompoundValue) ValueFactory.createValue(getDeclaration().getType(),
-//                    (Object[]) null);
-//            } catch (ValueDoesNotMatchTypeException exc) {
-//                LOGGER.exception(exc);
-//            }
         } else {
             try {
-                CompoundValue tmpValue = (CompoundValue) value;
+                CompoundValue tmpValue = value;
+                if (!TypeQueries.sameTypes(value.getType(), oldValue.getType())) {
+                    // polymorphic value, we have to take over the old values into the new value
+                    newValue = value;
+                    tmpValue = oldValue;
+                }
                 Compound cType = (Compound) DerivedDatatype.resolveToBasis(getDeclaration().getType());
                 for (int i = 0; i < cType.getInheritedElementCount(); i++) {
                     DecisionVariableDeclaration decl = cType.getInheritedElement(i);
@@ -210,9 +211,6 @@ class ToplevelVarConfigProvider extends VariableConfigProvider {
                         newValue.configureValue(name, newSlotValue);
                     }
                 }
-                
-                
-//                newValue.copyValuesFrom((CompoundValue) value);
             } catch (ValueDoesNotMatchTypeException exc) {
                 LOGGER.exception(exc);
             }

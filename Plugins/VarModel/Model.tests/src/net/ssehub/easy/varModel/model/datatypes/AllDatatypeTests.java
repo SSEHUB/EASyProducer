@@ -35,7 +35,8 @@ import org.junit.runners.Suite.SuiteClasses;
     OperationTest.class,
     ReferenceTest.class,
     SequenceTestTMP.class,
-    TypeMapperTests.class
+    TypeMapperTests.class,
+    TypeQueriesTest.class
     })
 public class AllDatatypeTests {
 
