@@ -382,6 +382,7 @@ public class CompoundTest {
     @Test
     public void testIsCompound() {
         Compound c = new Compound("c1", null);
+        Assert.assertTrue(Compound.isCompound(Compound.TYPE));
         Assert.assertTrue(Compound.isCompound(c));
         Assert.assertFalse(Compound.isCompound(IntegerType.TYPE));
     }

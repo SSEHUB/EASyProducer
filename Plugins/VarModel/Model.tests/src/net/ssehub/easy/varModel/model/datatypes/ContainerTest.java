@@ -63,4 +63,17 @@ public class ContainerTest {
         Assert.assertTrue("Error: Set is not a container", Container.TYPE.isAssignableFrom(setType));
         Assert.assertTrue("Error: Sequence is not a container", Container.TYPE.isAssignableFrom(seqType));
     }
+
+    /**
+     * Tests {@link Container#isContainer(IDatatype)}.
+     */
+    @Test
+    public void testIsContainer() {
+        Set set = new Set("s1", IntegerType.TYPE, null);
+        Sequence seq = new Sequence("s1", IntegerType.TYPE, null);
+        Assert.assertTrue(Container.isContainer(Container.TYPE));
+        Assert.assertTrue(Container.isContainer(set));
+        Assert.assertTrue(Container.isContainer(seq));
+    }
+
 }

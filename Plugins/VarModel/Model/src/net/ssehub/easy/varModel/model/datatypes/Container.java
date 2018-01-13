@@ -301,7 +301,17 @@ public class Container extends StructuredDatatype {
         }
         return result;
     }
-        
+
+    /**
+     * Returns whether <code>type</code> is a container.
+     * 
+     * @param type the type to check for
+     * @return <code>true</code> if <code>type</code> is a container, <code>false</code> else
+     */
+    public static final boolean isContainer(IDatatype type) {
+        return Container.TYPE.isAssignableFrom(type);
+    }
+    
     /**
      * Returns whether <code>type</code> is a container and the given <code>generics</code> match.
      * 
@@ -322,8 +332,7 @@ public class Container extends StructuredDatatype {
      * @return <code>true</code> if <code>type</code> is a container of references, <code>false</code> else
      */
     public static final boolean isReferencesContainer(IDatatype type) {
-        return Container.TYPE.isAssignableFrom(type) 
-            && 1 == type.getGenericTypeCount() 
+        return isContainer(type) && 1 == type.getGenericTypeCount() 
             && Reference.TYPE.isAssignableFrom(type.getGenericType(0));
     }
 
