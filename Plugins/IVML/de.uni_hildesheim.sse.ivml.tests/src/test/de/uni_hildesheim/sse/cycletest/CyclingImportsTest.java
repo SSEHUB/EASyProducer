@@ -40,7 +40,7 @@ public class CyclingImportsTest extends AbstractTest {
     /**
      * Represents the directory containing the tests.
      */
-    private static final File DIR = new File(TESTDATA_DIR, "scenarios/qm_may16");
+    private static final File DIR = new File(getTestDataDir(), "scenarios/qm_may16");
 
     /**
      * Creates a model file object for {@link #DIR}.

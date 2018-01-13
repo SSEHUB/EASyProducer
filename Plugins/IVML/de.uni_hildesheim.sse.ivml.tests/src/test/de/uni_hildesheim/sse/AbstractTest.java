@@ -33,10 +33,34 @@ import net.ssehub.easy.varModel.validation.IvmlValidationVisitor;
  */
 public abstract class AbstractTest extends net.ssehub.easy.dslCore.test.AbstractTest<Project> {
 
+    protected static final String TESTDATA_SYSTEM_PROPERTY = "ivml.testdata.home";
+    
     /**
      * The directory containing all tests.
      */
-    protected static final File TESTDATA_DIR = determineTestDataDir("ivml.testdata.home");
+    private static File testDataDir;
+    
+    static {
+        setTestDataDir(TESTDATA_SYSTEM_PROPERTY);
+    }
+    
+    /**
+     * Returns the test data directory.
+     * 
+     * @return the test data directory
+     */
+    protected static File getTestDataDir() {
+        return testDataDir;
+    }
+
+    /**
+     * Changes the testdata directory.
+     * 
+     * @param systemProperty the system property to determine the test data dir from
+     */
+    protected static void setTestDataDir(String systemProperty) {
+        testDataDir = determineTestDataDir(systemProperty);
+    }
 
     /**
      * Starts up the {@link VarModel} by registering {@link #TESTDATA_DIR} as
@@ -46,7 +70,7 @@ public abstract class AbstractTest extends net.ssehub.easy.dslCore.test.Abstract
     public static void startUp() {
         try {
             resourceInitialization();
-            VarModel.INSTANCE.locations().addLocation(TESTDATA_DIR, OBSERVER);
+            VarModel.INSTANCE.locations().addLocation(getTestDataDir(), OBSERVER);
             VarModel.INSTANCE.loaders().registerLoader(ModelUtility.INSTANCE, OBSERVER);
         } catch (ModelManagementException e) {
             e.printStackTrace(System.err);
@@ -62,7 +86,7 @@ public abstract class AbstractTest extends net.ssehub.easy.dslCore.test.Abstract
     @AfterClass
     public static void shutDown() {
         try {
-            VarModel.INSTANCE.locations().removeLocation(TESTDATA_DIR, OBSERVER);
+            VarModel.INSTANCE.locations().removeLocation(getTestDataDir(), OBSERVER);
         } catch (ModelManagementException e) {
             Assert.fail();
         }

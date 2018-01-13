@@ -25,7 +25,7 @@ public class HierarchicalTests extends AbstractTest {
     /**
      * Represents the directory containing the tests.
      */
-    private static final File DIR = new File(TESTDATA_DIR, "hierarchical");
+    private static final File DIR = new File(getTestDataDir(), "hierarchical");
     
     /**
      * Starts up the test overriding the parent method.

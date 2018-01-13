@@ -16,7 +16,7 @@ public class LanguageSpecTests extends AbstractTest {
     /**
      * Represents the directory containing the tests.
      */
-    private static final File DIR = new File(TESTDATA_DIR, "languageSpec");
+    private static final File DIR = new File(getTestDataDir(), "languageSpec");
 
     /**
      * Creates a file in {@link #DIR}.

@@ -34,7 +34,7 @@ public class AdditionalTests extends AbstractTest {
     /**
      * Represents the directory containing the tests.
      */
-    private static final File DIR = new File(TESTDATA_DIR, "additional");
+    private static final File DIR = new File(getTestDataDir(), "additional");
 
     /**
      * Creates a file in {@link #DIR}.

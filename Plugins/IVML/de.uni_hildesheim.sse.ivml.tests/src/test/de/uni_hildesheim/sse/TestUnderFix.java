@@ -19,7 +19,7 @@ public class TestUnderFix extends AbstractTest {
      * @return the file
      */
     public static final File createFile(String name) {
-        return new File(new File(TESTDATA_DIR, ""), name + ".ivml");
+        return new File(new File(getTestDataDir(), ""), name + ".ivml");
     }
 
     /**

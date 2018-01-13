@@ -50,7 +50,7 @@ public class ImportTest extends AbstractTest {
     /**
      * Represents the directory containing the tests.
      */
-    private static final File DIR = new File(TESTDATA_DIR, "imports");
+    private static final File DIR = new File(getTestDataDir(), "imports");
     
     private static final File LOCATION_IMPORTS_WITH_2_PROJECTS = new File(DIR, "CycleTest_2Projects"); 
     private static final File LOCATION_CYCLING_DECLARATIONS = new File(DIR, "CycleTest_CyclingDeclarations"); 

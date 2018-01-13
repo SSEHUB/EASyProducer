@@ -33,7 +33,7 @@ public class ExternalTests extends AbstractTest {
     /**
      * Represents the directory containing the tests.
      */
-    private static final File DIR = new File(TESTDATA_DIR, "external");
+    private static final File DIR = new File(getTestDataDir(), "external");
 
     /**
      * Creates a file in {@link #DIR}.

@@ -67,7 +67,7 @@ public class AdvancedTests extends AbstractTest {
     /**
      * Represents the directory containing the tests.
      */
-    private static final File DIR = new File(TESTDATA_DIR, "advanced");
+    private static final File DIR = new File(getTestDataDir(), "advanced");
 
     /**
      * Creates a model file object for {@link #DIR}.

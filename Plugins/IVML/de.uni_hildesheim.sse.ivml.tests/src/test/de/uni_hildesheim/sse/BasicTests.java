@@ -40,7 +40,7 @@ public class BasicTests extends AbstractTest {
     /**
      * Represents the directory containing the tests.
      */
-    private static final File DIR = new File(TESTDATA_DIR, "basic");
+    private static final File DIR = new File(getTestDataDir(), "basic");
 
     /**
      * Creates a file object relative to {@link #DIR} (not a file).
