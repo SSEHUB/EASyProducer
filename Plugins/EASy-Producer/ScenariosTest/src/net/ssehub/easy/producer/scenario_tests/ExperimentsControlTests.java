@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
+import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -35,35 +36,34 @@ import test.de.uni_hildesheim.sse.AbstractTest;
  */
 public class ExperimentsControlTests extends AbstractTest {
 
-    static {
-        String home = System.getProperty("easy_producer.testdata.home", null);
-        if (null != home) {
-            System.setProperty("ivml.testdata.home", home);
-        }
-    }
-    
     /**
-     * Represents the directory containing the tests.
-     */
-    private static final File DIR = new File(TESTDATA_DIR, "experiments/control");
-
-    /**
-     * Creates a file in {@link #DIR}.
+     * Creates a file in {@link #getTestDataDir()}.
      * 
      * @param name
      *            the name of the file (excluding ".ivml")
      * @return the file
      */
     private static final File createFile(String name) {
-        return new File(DIR, name + ".ivml");
+        return new File(getTestDataDir(), "experiments/control/" + name + ".ivml");
     }
     
     /**
-     * Initializes the test class.
+     * Initializes the test.
      */
     @BeforeClass
     public static void startUp() {
+        setTestDataDir("easy_producer.testdata.home");
+        AbstractTest.startUp();
         AbstractScenarioTest.initializeReasoner();
+    }
+
+    /**
+     * Shuts down the test.
+     */
+    @AfterClass
+    public static void shutDown() {
+        AbstractTest.shutDown();
+        setTestDataDir(TESTDATA_SYSTEM_PROPERTY);
     }
 
     /**
@@ -220,4 +220,6 @@ public class ExperimentsControlTests extends AbstractTest {
     public void controlDefaults1() throws IOException, ModelQueryException, IvmlException {
         testDefaults("defaults1");
     }
+
+
 }
