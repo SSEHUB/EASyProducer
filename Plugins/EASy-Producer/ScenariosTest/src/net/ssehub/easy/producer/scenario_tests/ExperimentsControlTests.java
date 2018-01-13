@@ -24,6 +24,7 @@ import net.ssehub.easy.varModel.model.datatypes.IResolutionScope;
 import net.ssehub.easy.varModel.model.values.CompoundValue;
 import net.ssehub.easy.varModel.model.values.ContainerValue;
 import net.ssehub.easy.varModel.model.values.IntValue;
+import net.ssehub.easy.varModel.model.values.NullValue;
 import net.ssehub.easy.varModel.model.values.Value;
 import test.de.uni_hildesheim.sse.AbstractTest;
 
@@ -52,7 +53,7 @@ public class ExperimentsControlTests extends AbstractTest {
      */
     @BeforeClass
     public static void startUp() {
-        setTestDataDir("easy_producer.testdata.home");
+        setTestDataDir("easy_producer.scenarios.testdata.home");
         AbstractTest.startUp();
         AbstractScenarioTest.initializeReasoner();
     }
@@ -111,7 +112,7 @@ public class ExperimentsControlTests extends AbstractTest {
     private static void assertEnumValue(IResolutionScope scope, String expected, Value value) 
         throws ModelQueryException, IvmlException {
         if (null == expected) {
-            Assert.assertNull(value);
+            Assert.assertTrue(value == null || NullValue.INSTANCE == value);
         } else {
             Value enumVal = ModelQuery.enumLiteralAsValue(scope, expected);
             Assert.assertEquals(enumVal, value);
@@ -172,10 +173,9 @@ public class ExperimentsControlTests extends AbstractTest {
 
         IDecisionVariable da1 = assertDecisionVariable(config, "a1");
         IDecisionVariable da2 = assertDecisionVariable(config, "a2");
-
         CompoundValue v1 = (CompoundValue) da1.getValue();
         CompoundValue v2 = (CompoundValue) da2.getValue();
-        
+
         assertEnumValue(config, "Kind.kind1", v1, "produces");
         assertEnumValue(config, null, v1, "consumes");
         assertIntValue(config, null, v1, "count");
@@ -200,13 +200,13 @@ public class ExperimentsControlTests extends AbstractTest {
         Assert.assertEquals(2, seq.getElementSize());
         CompoundValue s1 = (CompoundValue) seq.getElement(0);
         CompoundValue s2 = (CompoundValue) seq.getElement(1);
-        
+
         assertEnumValue(config, "Kind.kind1", s1, "produces");
         assertEnumValue(config, null, s1, "consumes");
         assertIntValue(config, 6, s1, "count");
         assertEnumValue(config, null, s2, "produces");
         assertEnumValue(config, "Kind.kind2", s2, "consumes");
-        assertIntValue(config, 7, s2, "count");        
+        assertIntValue(config, 7, s2, "count");
     }
     
     /**
@@ -220,6 +220,5 @@ public class ExperimentsControlTests extends AbstractTest {
     public void controlDefaults1() throws IOException, ModelQueryException, IvmlException {
         testDefaults("defaults1");
     }
-
 
 }
