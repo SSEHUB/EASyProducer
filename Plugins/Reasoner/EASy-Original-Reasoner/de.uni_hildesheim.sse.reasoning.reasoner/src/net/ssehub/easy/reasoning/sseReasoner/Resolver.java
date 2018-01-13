@@ -78,11 +78,14 @@ import net.ssehub.easy.varModel.model.values.ValueDoesNotMatchTypeException;
 import net.ssehub.easy.varModel.model.values.ValueFactory;
 import net.ssehub.easy.varModel.persistency.StringProvider;
 
+// TODO Consider changing constraints upon changing variable values -> Constraint variables, polymorphic 
+// (compound) values <-> instantiable compound type / initialization
+
 /**
- * Class for performing reasoning with AssignmnetResolver.
+ * Constraint identifier, resolver and executor.
+ * 
  * @author Sizonenko
  * @author El-Sharkawy
- *
  */
 public class Resolver {
 
@@ -410,7 +413,7 @@ public class Resolver {
         if (variable.getAttributesCount() > 0) {
             resolveAttributeAssignments(decl, variable, compoundAccess);
         }
-        if (Compound.TYPE.isAssignableFrom(type)) {
+        if (TypeQueries.isCompound(type)) {
             if (null != defaultValue) { // try considering the actual type, not only the base type
                 type = inferTypeSafe(defaultValue, type);
             }
@@ -419,14 +422,15 @@ public class Resolver {
                 defaultValue = copyExpression(defaultValue, decl);
             }
         } else if (null != defaultValue && null != compoundAccess) {
+            // all individual compound initialization constraints have to be deferred until compound/container 
+            // initializers are set as they would be overridden else
             defaultValue.accept(finder);
             if (null != finder.getSelf()) {
-                // this is a call on self, defer this constraint until all init is done so that other inits, 
-                // e.g., compound initializer, cannot override this value
+                // if there is a self, replace it by the actual compound access
                 defaultValue = copyExpression(defaultValue, compoundAccess.getCompoundExpression());
-                defltCons = deferredDefaultConstraints;
             }
             finder.clear();
+            defltCons = deferredDefaultConstraints;
         }
         collectionCompoundConstraints.addAll(collectionCompoundConstraints(decl, variable, null));
         // Container
@@ -455,7 +459,7 @@ public class Resolver {
                 // Create default constraint
                 ConstraintSyntaxTree cst = new OCLFeatureCall(
                     defltCons == deferredDefaultConstraints ? compoundAccess : new Variable(decl), 
-                    OclKeyWords.ASSIGNMENT, defaultValue);                
+                    OclKeyWords.ASSIGNMENT, defaultValue);
                 try {
                     defltCons.add(createDefaultConstraint(cst, project));
                 } catch (CSTSemanticException e) {
@@ -1159,7 +1163,7 @@ public class Resolver {
 //                System.out.println("cmpAccess3: " + StringProvider.toIvmlString(compound));
                 processElement(hostAssignment.getAssignmentData(i),
                     nestAssignment.getElement(y), compound);
-                if (Compound.TYPE.isAssignableFrom(nestAssignment.getElement(y).getType())) {                    
+                if (TypeQueries.isCompound(nestAssignment.getElement(y).getType())) {                    
                     Compound cmp = (Compound) nestAssignment.getElement(y).getType();
                     for (int j = 0; j < cmp.getDeclarationCount(); j++) {
 //                        infoLogger.info("Nested: " + cmp.getDeclaration(j));
