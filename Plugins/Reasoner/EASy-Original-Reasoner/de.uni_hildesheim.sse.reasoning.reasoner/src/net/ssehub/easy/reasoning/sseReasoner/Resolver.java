@@ -134,7 +134,6 @@ public class Resolver {
         
         @Override
         public void notifyUnresolved(IDecisionVariable variable) {
-            // TODO Auto-generated method stub                   
         }
         
         @Override
@@ -1390,7 +1389,7 @@ public class Resolver {
      */
     @SuppressWarnings("unused")
     private void conflictingDefault(AbstractVariable decl) {
-        // TODO
+        // currently unused
     }
     
     /**
