@@ -25,6 +25,7 @@ import java.util.Set;
 import net.ssehub.easy.varModel.Bundle;
 import net.ssehub.easy.varModel.confModel.paths.IResolutionPathElement;
 import net.ssehub.easy.varModel.confModel.paths.NameAccessPathElement;
+import net.ssehub.easy.varModel.cst.CSTSemanticException;
 import net.ssehub.easy.varModel.cst.ConstraintSyntaxTree;
 import net.ssehub.easy.varModel.cstEvaluation.EvaluationVisitor;
 import net.ssehub.easy.varModel.model.AbstractVariable;
@@ -73,17 +74,28 @@ public class CompoundVariable extends StructuredVariable {
         // created upon setting the value
         
         instantiatableType = (Compound) DerivedDatatype.resolveToBasis(varDeclaration.getType());
-        if (instantiatableType.isAbstract()) {
-            // cannot be instantiated, search closest
-            Collection<Compound> candidates = instantiatableType.implementingNonAbstract(
-                parent.getConfiguration().getProject()); // right project?
-            candidates = instantiatableType.closestRefining(candidates);
-            if (candidates.size() > 0) {
-                instantiatableType = candidates.iterator().next();
-                // this may be the wrong type if multiple subclasses are defined, then the contained
-                // value is wrong. But as other types of the refinement hierarchy may override with the
-                // their value, the initial value type is corrected upon value assignment
-            } // this is a problem with the current approach, as this compound cannot be instantiated -> IVML error
+        if (instantiatableType.isAbstract()) { // cannot be instantiated
+            boolean done = false;
+            if (null != varDeclaration.getDefaultValue()) {
+                // preference to the default value as a value of that type will be assigned anyway
+                try {
+                    instantiatableType = (Compound) varDeclaration.getDefaultValue().inferDatatype();
+                    done = true;
+                } catch (CSTSemanticException ex) {
+                }
+            }
+            if (!done) {
+                // if not possible and no default, search closest (!)
+                Collection<Compound> candidates = instantiatableType.implementingNonAbstract(
+                    parent.getConfiguration().getProject()); // right project?
+                candidates = instantiatableType.closestRefining(candidates);
+                if (candidates.size() > 0) {
+                    instantiatableType = candidates.iterator().next();
+                    // this may be the wrong type if multiple subclasses are defined, then the contained
+                    // value is wrong. But as other types of the refinement hierarchy may override with the
+                    // their value, the initial value type is corrected upon value assignment
+                } // this is a problem with the current approach, as this compound cannot be instantiated -> IVML error
+            }
         }
         
         for (int i = 0; i < instantiatableType.getInheritedElementCount(); i++) {
