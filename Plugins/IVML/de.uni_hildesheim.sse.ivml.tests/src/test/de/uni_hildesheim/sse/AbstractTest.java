@@ -177,7 +177,7 @@ public abstract class AbstractTest extends net.ssehub.easy.dslCore.test.Abstract
             loaded = assertProjectInfo(expectedName, expectedVersion, uri, result, expectedErrorCodes);
         } else {
             System.err.println("File '" + file + "' does not exist");
-            Assert.assertTrue(false);
+            Assert.assertTrue("File '" + file + "' does not exist", false);
         }
 
         // due to the startUp the VarModel shall already know about the project!
