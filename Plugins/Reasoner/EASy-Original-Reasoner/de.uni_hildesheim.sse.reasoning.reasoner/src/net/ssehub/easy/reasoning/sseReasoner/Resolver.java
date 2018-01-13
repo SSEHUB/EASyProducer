@@ -93,32 +93,32 @@ public class Resolver {
     
     private Project project;
     private Configuration config;
-    private EvalVisitor evaluator;   
-    private FailedElements failedElements;
-    private ScopeAssignments scopeAssignments;   
+    private EvalVisitor evaluator = new EvalVisitor();
+    private FailedElements failedElements = new FailedElements();
+    private ScopeAssignments scopeAssignments = new ScopeAssignments();
 
     private StaticAccessFinder finder = new StaticAccessFinder();
-    private VariablesMap constraintMap;
-    private Map<Constraint, IDecisionVariable> constraintVariableMap;
-    private List<Constraint> constraintBase;   
-    private List<Constraint> constraintVariables;
-    private List<Constraint> compoundConstraints;
-    private List<Constraint> compoundEvalConstraints;
-    private List<Constraint> unresolvedConstraints; 
-    private List<Constraint> defaultAttributeConstraints;
-    private List<Constraint> assignedAttributeConstraints;
-    private List<Constraint> collectionConstraints;
-    private List<Constraint> defaultConstraints;
-    private List<Constraint> deferredDefaultConstraints;
-    private List<Constraint> internalConstraints;
+    private VariablesMap constraintMap = new VariablesMap();
+    private Map<Constraint, IDecisionVariable> constraintVariableMap = new HashMap<Constraint, IDecisionVariable>();
+    private List<Constraint> constraintBase = new ArrayList<Constraint>();   
+    private List<Constraint> constraintVariables = new ArrayList<Constraint>();
+    private List<Constraint> compoundConstraints = new ArrayList<Constraint>();
+    private List<Constraint> compoundEvalConstraints = new ArrayList<Constraint>();
+    private List<Constraint> unresolvedConstraints = new ArrayList<Constraint>(); 
+    private List<Constraint> defaultAttributeConstraints = new ArrayList<Constraint>();
+    private List<Constraint> assignedAttributeConstraints = new ArrayList<Constraint>();
+    private List<Constraint> collectionConstraints = new ArrayList<Constraint>();
+    private List<Constraint> defaultConstraints = new ArrayList<Constraint>();
+    private List<Constraint> deferredDefaultConstraints = new ArrayList<Constraint>();
+    private List<Constraint> internalConstraints = new ArrayList<Constraint>();
     private boolean considerFrozenConstraints;
     
     private int constraintBaseSize = 0;
     
     private Map<AbstractVariable, CompoundAccess> varMap;
     
-    private List<Constraint> collectionCompoundConstraints;
-    private Set<IDecisionVariable> problemVariables;
+    private List<Constraint> collectionCompoundConstraints = new ArrayList<Constraint>();
+    private Set<IDecisionVariable> problemVariables = new HashSet<IDecisionVariable>();
     
     private int index;
     
@@ -292,25 +292,7 @@ public class Resolver {
         
         this.infoLogger = reasonerConfig.getLogger();
         this.config = config;
-        evaluator = new EvalVisitor();
-        constraintMap = new VariablesMap();
-        this.failedElements = new FailedElements();
-        this.scopeAssignments = new ScopeAssignments();
-        this.constraintVariableMap = new HashMap<Constraint, IDecisionVariable>();
-        this.constraintBase = new ArrayList<Constraint>();
-        this.constraintVariables = new ArrayList<Constraint>();
-        this.compoundConstraints = new ArrayList<Constraint>();
-        this.compoundEvalConstraints = new ArrayList<Constraint>();
-        this.defaultAttributeConstraints = new ArrayList<Constraint>();
-        this.assignedAttributeConstraints = new ArrayList<Constraint>();
-        this.collectionConstraints = new ArrayList<Constraint>();
-        this.unresolvedConstraints = new ArrayList<Constraint>();
-        this.collectionCompoundConstraints = new ArrayList<Constraint>();
-        this.defaultConstraints = new ArrayList<Constraint>();
-        this.deferredDefaultConstraints = new ArrayList<Constraint>();
         this.incremental = false;
-        this.problemVariables = new HashSet<IDecisionVariable>();
-        this.internalConstraints = new ArrayList<Constraint>();
         this.considerFrozenConstraints = considerFrozenConstraints;
     } 
     
