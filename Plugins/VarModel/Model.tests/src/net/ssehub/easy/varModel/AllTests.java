@@ -24,7 +24,6 @@ import net.ssehub.easy.varModel.cst.AllCSTTests;
 import net.ssehub.easy.varModel.cstEvaluation.CstEvaluationTests;
 import net.ssehub.easy.varModel.logger.AllLoggerTests;
 import net.ssehub.easy.varModel.model.datatypes.AllDatatypeTests;
-import net.ssehub.easy.varModel.model.datatypes.CompoundTest;
 import net.ssehub.easy.varModel.model.filter.AllFilterTests;
 import net.ssehub.easy.varModel.model.rewrite.AllRewriteTests;
 import net.ssehub.easy.varModel.persistency.IVMLWriterTest;
@@ -89,8 +88,7 @@ import net.ssehub.easy.varModel.varModel.versioning.ImportValidationTest;
     AllValidationTests.class,
     CstEvaluationTests.class,
     AllRewriteTests.class,
-    ModelQueryTest.class,
-    CompoundTest.class
+    ModelQueryTest.class
     })
 public class AllTests {
 
