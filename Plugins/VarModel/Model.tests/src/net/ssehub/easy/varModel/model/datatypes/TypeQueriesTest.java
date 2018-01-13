@@ -55,7 +55,7 @@ public class TypeQueriesTest {
      */
     @Test
     public void testIsEnum() {
-        Enum e = new Enum("myEnum", null);
+        Enum e = new Enum("myEnum", null, "l1", "l2");
         
         Assert.assertTrue(TypeQueries.isEnum(e));
         Assert.assertFalse(TypeQueries.isEnum(IntegerType.TYPE));
