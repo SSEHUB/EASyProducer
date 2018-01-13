@@ -54,7 +54,7 @@ public class CopyVisitor implements IConstraintTreeVisitor {
     private Map<AbstractVariable, CompoundAccess> mappingCA;
     private ConstraintSyntaxTree result;
     private IVariableMapper mapper;
-    private AbstractVariable cmpVar; 
+    private ConstraintSyntaxTree selfEx;
 
     /**
      * Creates a copy visitor without mapping.
@@ -114,13 +114,14 @@ public class CopyVisitor implements IConstraintTreeVisitor {
     public void clear() {
         result = null;
     }
-    
+
     /**
-     * Method for setting self variable.
-     * @param selfVariable self variable.
+     * Defines <i>self</i> in terms of an expression.
+     * 
+     * @param selfEx the expression.
      */
-    public void setSelf(AbstractVariable selfVariable) {
-        this.cmpVar = selfVariable;
+    public void setSelf(ConstraintSyntaxTree selfEx) {
+        this.selfEx = selfEx;
     }
 
     @Override
@@ -364,8 +365,8 @@ public class CopyVisitor implements IConstraintTreeVisitor {
 
     @Override
     public void visitSelf(Self self) {
-        if (cmpVar != null) {
-            result = new Variable(cmpVar);
+        if (selfEx != null) {
+            result = selfEx;
         } else {
             result = self; // no replacement needed            
         }

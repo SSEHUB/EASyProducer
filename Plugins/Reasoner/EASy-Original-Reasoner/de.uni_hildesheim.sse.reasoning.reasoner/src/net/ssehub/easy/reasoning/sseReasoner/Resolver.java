@@ -43,6 +43,7 @@ import net.ssehub.easy.varModel.cstEvaluation.EvaluationVisitor;
 import net.ssehub.easy.varModel.cstEvaluation.IResolutionListener;
 import net.ssehub.easy.varModel.cstEvaluation.IValueChangeListener;
 import net.ssehub.easy.varModel.cstEvaluation.LocalDecisionVariable;
+import net.ssehub.easy.varModel.cstEvaluation.StaticAccessFinder;
 import net.ssehub.easy.varModel.model.AbstractVariable;
 import net.ssehub.easy.varModel.model.Attribute;
 import net.ssehub.easy.varModel.model.AttributeAssignment;
@@ -96,6 +97,7 @@ public class Resolver {
     private FailedElements failedElements;
     private ScopeAssignments scopeAssignments;   
 
+    private StaticAccessFinder finder = new StaticAccessFinder();
     private VariablesMap constraintMap;
     private Map<Constraint, IDecisionVariable> constraintVariableMap;
     private List<Constraint> constraintBase;   
@@ -107,6 +109,7 @@ public class Resolver {
     private List<Constraint> assignedAttributeConstraints;
     private List<Constraint> collectionConstraints;
     private List<Constraint> defaultConstraints;
+    private List<Constraint> deferredDefaultConstraints;
     private List<Constraint> internalConstraints;
     private boolean considerFrozenConstraints;
     
@@ -304,6 +307,7 @@ public class Resolver {
         this.unresolvedConstraints = new ArrayList<Constraint>();
         this.collectionCompoundConstraints = new ArrayList<Constraint>();
         this.defaultConstraints = new ArrayList<Constraint>();
+        this.deferredDefaultConstraints = new ArrayList<Constraint>();
         this.incremental = false;
         this.problemVariables = new HashSet<IDecisionVariable>();
         this.internalConstraints = new ArrayList<Constraint>();
@@ -408,10 +412,11 @@ public class Resolver {
      * Resolves default values of a particular declaration.
      * @param decl The {@link AbstractVariable} for which the default value should be resolved.
      * @param variable the instance of <tt>decl</tt>.
-     * @param compound if variable is a nested compound.
+     * @param compoundAccess if variable is a nested compound.
      */
     protected void resolveDefaultValueForDeclaration(AbstractVariable decl, IDecisionVariable variable,
-        CompoundAccess compound) {
+        CompoundAccess compoundAccess) {
+        List<Constraint> defltCons = defaultConstraints; 
         variablesCounter++;
         IDatatype type = decl.getType();
         // Internal constraints
@@ -422,20 +427,26 @@ public class Resolver {
         ConstraintSyntaxTree defaultValue = decl.getDefaultValue();
         // Attribute handling
         if (variable.getAttributesCount() > 0) {
-            resolveAttributeAssignments(decl, variable, compound);
+            resolveAttributeAssignments(decl, variable, compoundAccess);
         }
         if (Compound.TYPE.isAssignableFrom(type)) {
             if (null != defaultValue) { // try considering the actual type, not only the base type
-                try {
-                    type = defaultValue.inferDatatype();
-                } catch (CSTSemanticException e) {
-                }
+                type = inferTypeSafe(defaultValue, type);
             }
-            resolveCompoundDefaultValueForDeclaration(decl, variable, compound, type); 
+            resolveCompoundDefaultValueForDeclaration(decl, variable, compoundAccess, type); 
             if (null != defaultValue) {
-                defaultValue = copyVisitor(defaultValue, decl);
+                defaultValue = copyExpression(defaultValue, decl);
             }
-        }  
+        } else if (null != defaultValue && null != compoundAccess) {
+            defaultValue.accept(finder);
+            if (null != finder.getSelf()) {
+                // this is a call on self, defer this constraint until all init is done so that other inits, 
+                // e.g., compound initializer, cannot override this value
+                defaultValue = copyExpression(defaultValue, compoundAccess.getCompoundExpression());
+                defltCons = deferredDefaultConstraints;
+            }
+            finder.clear();
+        }
         collectionCompoundConstraints.addAll(collectionCompoundConstraints(decl, variable, null));
         // Container
         if (net.ssehub.easy.varModel.model.datatypes.Container.TYPE.isAssignableFrom(type)) {            
@@ -444,8 +455,7 @@ public class Resolver {
         if (null != defaultValue) {
             if (ConstraintType.TYPE.isAssignableFrom(type) 
                 && !(type.getType() == BooleanType.TYPE.getType())) {
-//                && !(defaultValue instanceof ConstantValue)) {
-                if (compound == null) {
+                if (compoundAccess == null) {
                     try {
                         variablesCounter--;
                         // use closest parent instead of project -> runtime analysis
@@ -457,28 +467,59 @@ public class Resolver {
                                 + StringProvider.toIvmlString(defaultValue));
                         }
                     } catch (CSTSemanticException e) {
-                        LOGGER.exception(e);
+                        LOGGER.exception(e); // should not occur, ok to log
                     }
                 } 
             } else {
                 // Create default constraint
-                ConstraintSyntaxTree cst = new OCLFeatureCall(new Variable(decl), OclKeyWords.ASSIGNMENT,
-                    defaultValue);                
+                ConstraintSyntaxTree cst = new OCLFeatureCall(
+                    defltCons == deferredDefaultConstraints ? compoundAccess : new Variable(decl), 
+                    OclKeyWords.ASSIGNMENT, defaultValue);                
                 try {
-                    Constraint constraint = new Constraint(project);
-                    constraint.makeDefaultConstraint();
-                    cst.inferDatatype(); 
-                    constraint.setConsSyntax(cst);
-                    defaultConstraints.add(constraint);
+                    defltCons.add(createDefaultConstraint(cst, project));
                 } catch (CSTSemanticException e) {
-                    LOGGER.exception(e);
+                    LOGGER.exception(e); // should not occur, ok to log
                 }            
             }                
         }
     }
+    
+    /**
+     * Creates a default constraint.
+     * 
+     * @param cst the constraint expression
+     * @param parent the parent
+     * @return the created constraint
+     * @throws CSTSemanticException in case that the creation fails
+     */
+    private Constraint createDefaultConstraint(ConstraintSyntaxTree cst, IModelElement parent) 
+        throws CSTSemanticException {
+        Constraint constraint = new Constraint(project);
+        constraint.makeDefaultConstraint();
+        cst.inferDatatype(); 
+        constraint.setConsSyntax(cst);
+        return constraint;
+    }
 
     /**
-     * MEthod for analyzing {@link DerivedDatatype}s and extracting internal constraints.
+     * Infers the type of <code>cst</code> using <code>dflt</code> as fallback.
+     * 
+     * @param cst the expression to infer the type for
+     * @param dflt the default
+     * @return the type of the expression or <code>dflt</code> in case of failures
+     */
+    private IDatatype inferTypeSafe(ConstraintSyntaxTree cst, IDatatype dflt) {
+        IDatatype result = dflt;
+        try {
+            result = cst.inferDatatype();
+        } catch (CSTSemanticException e) {
+            LOGGER.exception(e); // should not occur, ok to log
+        }
+        return result;
+    }
+
+    /**
+     * Method for analyzing {@link DerivedDatatype}s and extracting internal constraints.
      * @param decl VariableDeclaration of <code>DerivedDatatype</code>
      * @param dType type of <code>DerivedDatatype</code>
      */
@@ -574,7 +615,7 @@ public class Resolver {
             Constraint constraint = new Constraint(parent);
             ConstraintSyntaxTree cst = containerInit.getExpression(i);
             if (compound) {
-                cst = copyVisitor(cst, null);
+                cst = copyExpression(cst);
             }
             try {
                 constraint.setConsSyntax(cst);
@@ -645,11 +686,7 @@ public class Resolver {
             } else {
                 cmpAccess = new CompoundAccess(compound, nestedDecl.getName());
             }
-            try {
-                cmpAccess.inferDatatype();
-            } catch (CSTSemanticException e) {
-                LOGGER.exception(e);
-            }
+            inferTypeSafe(cmpAccess, null);
             // fill varMap
             varMap.put(nestedDecl, cmpAccess); // TODO turn into local map!
             resolveDefaultValueForDeclaration(nestedDecl, cmpVar.getNestedVariable(nestedDecl.getName()),
@@ -678,7 +715,7 @@ public class Resolver {
         for (int i = 0; i < thisCompoundConstraints.size(); i++) {
             ConstraintSyntaxTree oneConstraint = thisCompoundConstraints.get(i).getConsSyntax();
             // changed null to decl
-            oneConstraint = copyVisitor(oneConstraint, decl);
+            oneConstraint = copyExpression(oneConstraint, decl);
             try {
                 Constraint constraint = new Constraint(oneConstraint, decl);
                 compoundConstraints.add(constraint);            
@@ -717,7 +754,7 @@ public class Resolver {
             if (evalBlock.getEvaluable(i) instanceof Constraint) {
                 Constraint evalConstraint = (Constraint) evalBlock.getEvaluable(i);
                 ConstraintSyntaxTree evalCst = evalConstraint.getConsSyntax();
-                ConstraintSyntaxTree cst = copyVisitor(evalCst, null);
+                ConstraintSyntaxTree cst = copyExpression(evalCst);
                 try {
                     cst.inferDatatype();
                     Constraint constraint = new Constraint(project);
@@ -767,7 +804,7 @@ public class Resolver {
         Constraint constraint = null;
 //        if (cst != null && !(cst instanceof ConstantValue)) {
         if (cst != null) {
-            cst = copyVisitor(cst, decl);
+            cst = copyExpression(cst, decl);
             try {
                 constraint = new Constraint(cst, parent);
                 constraintVariables.add(constraint);
@@ -812,7 +849,6 @@ public class Resolver {
                         } catch (CSTSemanticException e) {
                             LOGGER.exception(e);
                         }                   
-                        
                     }
                 } 
             }            
@@ -953,7 +989,7 @@ public class Resolver {
             IDatatype containedType = container.getContainedType();
             Set<IDatatype> containedTypes = identifyContainedTypes(variable, containedType);
             for (IDatatype tmp : containedTypes) {
-                if (Compound.TYPE.isAssignableFrom(tmp)) {
+                if (TypeQueries.isCompound(tmp)) {
                     transformCollectionCompoundConstraints((Compound) tmp, containedType, decl, 
                         topcmpAccess, constraints);
                 }
@@ -993,7 +1029,7 @@ public class Resolver {
         }
         for (int i = 0; i < thisCompoundConstraints.size(); i++) {
             ConstraintSyntaxTree itExpression = thisCompoundConstraints.get(i).getConsSyntax();
-            itExpression = copyVisitor(itExpression, null);
+            itExpression = copyExpression(itExpression);
             if (Descriptor.LOGGING) {
                 LOGGER.debug("New loop constraint " + StringProvider.toIvmlString(itExpression));
             }   
@@ -1063,15 +1099,12 @@ public class Resolver {
      */
     private void processConstraints(Project dispatchScope) { 
         List<Constraint> scopeConstraints = new ArrayList<Constraint>();
-        if (!incremental) {
-            if (defaultConstraints.size() > 0) {
-                defaultConstraints = transformConstraints(defaultConstraints, true);
-                addAllConstraints(scopeConstraints, defaultConstraints);
-            }            
+        if (!incremental && defaultConstraints.size() > 0) {
+            defaultConstraints.addAll(deferredDefaultConstraints);
+            addAllConstraints(scopeConstraints, transformConstraints(defaultConstraints, true));
         }
         if (internalConstraints.size() > 0) {
-            internalConstraints = transformConstraints(internalConstraints, false);
-            addAllConstraints(scopeConstraints, internalConstraints);
+            addAllConstraints(scopeConstraints, transformConstraints(internalConstraints, false));
         }
         ConstraintFinder finder = new ConstraintFinder(project, false, false, true);
         addAllConstraints(scopeConstraints, finder.getEvalConstraints());
@@ -1160,11 +1193,7 @@ public class Resolver {
 //                            System.out.println("cmpAccess2: " + StringProvider.toIvmlString(cmpAccess));
 
                         }
-                        try {
-                            cmpAccess.inferDatatype();
-                        } catch (CSTSemanticException e) {
-                            LOGGER.exception(e);
-                        }
+                        inferTypeSafe(cmpAccess, null);
                         processElement(hostAssignment.getAssignmentData(i), cmp.getDeclaration(j), cmpAccess);
                     }
                     
@@ -1205,11 +1234,7 @@ public class Resolver {
                 cst = new OCLFeatureCall(new AttributeVariable(compound, attrib),
                     OclKeyWords.ASSIGNMENT, assignment.getExpression());
             }
-            try {
-                cst.inferDatatype();
-            } catch (CSTSemanticException e) {
-                LOGGER.exception(e);
-            }
+            inferTypeSafe(cst, null);
             Constraint constraint = new Constraint(project);
             try {
                 constraint.setConsSyntax(cst);
@@ -1482,7 +1507,7 @@ public class Resolver {
     private List<Constraint> transformConstraints(List<Constraint> constraints, boolean makeDefaultConstraint) {
         for (int i = 0; i < constraints.size(); i++) {
             ConstraintSyntaxTree cst = constraints.get(i).getConsSyntax();
-            cst = copyVisitor(cst, null);
+            cst = copyExpression(cst);
             if (makeDefaultConstraint) {
                 constraints.get(i).makeDefaultConstraint();                
             }
@@ -1499,25 +1524,43 @@ public class Resolver {
         }
         return constraints;
     }
-    
+
     /**
-     * Method for using CopyVisitor for constraint transformation.
+     * Method for using {@link CopyVisitor} for constraint transformation. No replacement of <i>self</i> needed
+     * 
      * @param cst Constraint to be transformed.
-     * @param decl If Self needs to be set.
      * @return Transformed constraint.
      */
-    private ConstraintSyntaxTree copyVisitor(ConstraintSyntaxTree cst, AbstractVariable decl) {
+    private ConstraintSyntaxTree copyExpression(ConstraintSyntaxTree cst) {
+        return copyExpression(cst, (ConstraintSyntaxTree) null);
+    }
+
+    /**
+     * Method for using {@link CopyVisitor} for constraint transformation.
+     * 
+     * @param cst Constraint to be transformed.
+     * @param selfVar a variable representing <i>self</i> (ignored if <b>null</b>).
+     * @return Transformed constraint.
+     */
+    private ConstraintSyntaxTree copyExpression(ConstraintSyntaxTree cst, AbstractVariable selfVar) {
+        return copyExpression(cst, new Variable(selfVar));
+    }
+    
+    /**
+     * Method for using {@link CopyVisitor} for constraint transformation.
+     * 
+     * @param cst Constraint to be transformed.
+     * @param selfEx an expression representing <i>self</i> (ignored if <b>null</b>).
+     * @return Transformed constraint.
+     */
+    private ConstraintSyntaxTree copyExpression(ConstraintSyntaxTree cst, ConstraintSyntaxTree selfEx) {
         CopyVisitor visitor = new CopyVisitor(null, varMap);
-        if (decl != null) {
-            visitor.setSelf(decl);            
+        if (selfEx != null) {
+            visitor.setSelf(selfEx);            
         }
         cst.accept(visitor);
         cst = visitor.getResult();
-        try {
-            cst.inferDatatype();
-        } catch (CSTSemanticException e) {
-            LOGGER.exception(e);
-        }
+        inferTypeSafe(cst, null);
         return cst;
     }
     
