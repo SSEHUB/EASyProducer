@@ -165,9 +165,22 @@ public class CopyVisitor implements IConstraintTreeVisitor {
      * Defines <i>self</i> in terms of an expression.
      * 
      * @param selfEx the expression.
+     * @return <b>this</b>
      */
-    public void setSelf(ConstraintSyntaxTree selfEx) {
+    public CopyVisitor setSelf(ConstraintSyntaxTree selfEx) {
         this.selfEx = selfEx;
+        return this;
+    }
+    
+    /**
+     * Accepts <b>this</b> on <code>cst</code> and returns {@link #getResult()}.
+     * 
+     * @param cst the constraint to visit
+     * @return the visiting result
+     */
+    public ConstraintSyntaxTree accept(ConstraintSyntaxTree cst) {
+        cst.accept(this);
+        return getResult();
     }
 
     @Override

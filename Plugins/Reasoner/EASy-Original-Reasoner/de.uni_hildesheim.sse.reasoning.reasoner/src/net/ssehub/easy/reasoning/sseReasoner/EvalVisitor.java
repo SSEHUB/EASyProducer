@@ -36,6 +36,12 @@ public class EvalVisitor extends EvaluationVisitor {
         super(config, assignmentState, assignmentsOnly, listener);
     }
     
+    @Override
+    public void clear() {
+        super.clear();
+        scopeAssignments = null;
+    }
+    
     /**
      * Method for setting ScopeAssignments register to check if variable was already assigned in this scope.
      * @param scopeAssignments register.

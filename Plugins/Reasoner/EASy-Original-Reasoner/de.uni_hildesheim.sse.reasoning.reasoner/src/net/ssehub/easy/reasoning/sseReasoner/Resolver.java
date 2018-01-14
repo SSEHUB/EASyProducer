@@ -43,7 +43,6 @@ import net.ssehub.easy.varModel.cstEvaluation.EvaluationVisitor;
 import net.ssehub.easy.varModel.cstEvaluation.IResolutionListener;
 import net.ssehub.easy.varModel.cstEvaluation.IValueChangeListener;
 import net.ssehub.easy.varModel.cstEvaluation.LocalDecisionVariable;
-import net.ssehub.easy.varModel.cstEvaluation.StaticAccessFinder;
 import net.ssehub.easy.varModel.model.AbstractVariable;
 import net.ssehub.easy.varModel.model.Attribute;
 import net.ssehub.easy.varModel.model.AttributeAssignment;
@@ -97,7 +96,6 @@ public class Resolver {
     private FailedElements failedElements = new FailedElements();
     private ScopeAssignments scopeAssignments = new ScopeAssignments();
 
-    private StaticAccessFinder finder = new StaticAccessFinder();
     private VariablesMap constraintMap = new VariablesMap();
     private Map<Constraint, IDecisionVariable> constraintVariableMap = new HashMap<Constraint, IDecisionVariable>();
     private List<Constraint> constraintBase = new ArrayList<Constraint>();   
@@ -415,12 +413,12 @@ public class Resolver {
         } else if (null != defaultValue && null != compAcc) {
             // all self/overriden compound initialization constraints have to be deferred until compound/container 
             // initializers are set as they would be overridden else
-            defaultValue.accept(finder);
-            if (null != finder.getSelf() || isOverriddenSlot(decl)) {
+            CopyVisitor visitor = new CopyVisitor(null, null).setSelf(compAcc.getCompoundExpression());
+            defaultValue = visitor.accept(defaultValue);
+            inferTypeSafe(defaultValue, null);
+            if (visitor.containsSelf() || isOverriddenSlot(decl)) {
                 defltCons = deferredDefaultConstraints;
             }
-            finder.clear();
-            defaultValue = copyExpression(defaultValue, compAcc.getCompoundExpression(), null);
         }
         collectionCompoundConstraints.addAll(collectionCompoundConstraints(decl, var, null));
         // Container
@@ -514,7 +512,7 @@ public class Resolver {
                     //varMap.put(nestedDecl, cmpAccess); // ???
                     try {
                         Variable localDeclVar = new Variable(localDecl);
-                        defaultValue = copyExpression(defaultValue, localDeclVar, varMap);
+                        defaultValue = copyExpression(defaultValue, localDeclVar, null); // copy and replace self
                         defaultValue = new OCLFeatureCall(new CompoundAccess(localDeclVar, uDecl.getName()), 
                             OclKeyWords.ASSIGNMENT, defaultValue);
                         ConstraintSyntaxTree containerOp = new Variable(decl);
@@ -1331,11 +1329,8 @@ public class Resolver {
         String attributeName = assignment.getName();
         Attribute attrib = (Attribute) element.getAttribute(attributeName);
         if (null != attrib) {
-    //        infoLogger.info("Element: " 
-    //              + StringProvider.toIvmlString(element));
-    //        infoLogger.info("Attribute: " + StringProvider.toIvmlString(element.getAttribute(attributeName)));
             ConstraintSyntaxTree cst = null;
-            //fix for annotations in compounds
+            //handle annotations in compounds
             compound = null;
             compound = varMap.get(element);
             if (compound == null) {                      
@@ -1343,7 +1338,6 @@ public class Resolver {
                     new AttributeVariable(new Variable(element), attrib),
                         OclKeyWords.ASSIGNMENT, assignment.getExpression());
             } else {
-    //            infoLogger.info("Compound: " + StringProvider.toIvmlString(compound));
                 cst = new OCLFeatureCall(new AttributeVariable(compound, attrib),
                     OclKeyWords.ASSIGNMENT, assignment.getExpression());
             }
@@ -1352,14 +1346,14 @@ public class Resolver {
             try {
                 constraint.setConsSyntax(cst);
                 assignedAttributeConstraints.add(constraint);
-    //            infoLogger.info("Attribute constraint: " + StringProvider.toIvmlString(cst));
             } catch (CSTSemanticException e) {
                 LOGGER.exception(e);
             }
         }
     }
 
-   
+    // TODO change constraints data structure - linked list, pointer, drop outdated constraints
+
     /**
      * Method for resolving constraints.
      * @param constraints List of constraints to be resolved.
@@ -1369,28 +1363,23 @@ public class Resolver {
         if (Descriptor.LOGGING) {
             printConstraints(constraintBase);            
         }
-        for (int i = 0; i < constraints.size(); i++) {
+        evaluator.init(config, null, false, listener); 
+        evaluator.setResolutionListener(resolutionListener);
+        evaluator.setDispatchScope(dispatchScope);
+        evaluator.setScopeAssignmnets(scopeAssignments);
+        for (int i = 0; i < constraints.size(); i++) { 
             index = i;
             problemVariables.clear();
-            AssignmentState state = null;
             Constraint constraint = constraints.get(i);
-            if (constraint.isDefaultConstraint()) {
-                state = AssignmentState.DEFAULT;
-            } else {
-                state = AssignmentState.DERIVED;
-            }
             ConstraintSyntaxTree cst = constraint.getConsSyntax();
+            evaluator.setAssignmentState(constraint.isDefaultConstraint() 
+                ? AssignmentState.DEFAULT : AssignmentState.DERIVED);
             reevaluationCounter++;
             if (cst != null) {
                 if (Descriptor.LOGGING) {
                     LOGGER.debug("Resolving: " + reevaluationCounter + ": " + StringProvider.toIvmlString(cst) 
                         + " : " + constraint.getTopLevelParent());                    
                 }
-                // TODO check whether these four statements can be moved up / clearResult is sufficient instead of clear
-                evaluator.init(config, state, false, listener); 
-                evaluator.setResolutionListener(resolutionListener);
-                evaluator.setScopeAssignmnets(scopeAssignments);
-                evaluator.setDispatchScope(dispatchScope);
                 evaluator.visit(cst);
                 if (evaluator.constraintFailed()) {
                     conflictingConstraint(constraint);
@@ -1431,9 +1420,10 @@ public class Resolver {
                     LOGGER.debug("Result: " + evaluator.getResult());
                     LOGGER.debug("------");                     
                 }
-                evaluator.clear();
+                evaluator.clearIntermediary();
             }
         }
+        evaluator.clear();
     }
     
     
