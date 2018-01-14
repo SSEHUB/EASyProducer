@@ -218,7 +218,7 @@ public abstract class AbstractScenarioTest extends AbstractTest<Script> {
      * @param doReasoning whether reasoning shall be performed and no conflicts asserted
      * @return the VIL configuration
      */
-    private Configuration assertConfiguration(net.ssehub.easy.varModel.model.Project prj, boolean doReasoning) {
+    protected Configuration assertConfiguration(net.ssehub.easy.varModel.model.Project prj, boolean doReasoning) {
         System.out.println("Creating VIL configuration...");
         Configuration config = new Configuration(new net.ssehub.easy.varModel.confModel.Configuration(prj));
         Assert.assertNotNull("VIL configuration must not be null", config);

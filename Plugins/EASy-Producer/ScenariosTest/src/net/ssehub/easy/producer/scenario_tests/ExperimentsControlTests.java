@@ -26,6 +26,7 @@ import net.ssehub.easy.varModel.model.values.ContainerValue;
 import net.ssehub.easy.varModel.model.values.IntValue;
 import net.ssehub.easy.varModel.model.values.NullValue;
 import net.ssehub.easy.varModel.model.values.Value;
+import net.ssehub.easy.varModel.persistency.IVMLWriter;
 import test.de.uni_hildesheim.sse.AbstractTest;
 
 /**
@@ -56,6 +57,7 @@ public class ExperimentsControlTests extends AbstractTest {
         setTestDataDir("easy_producer.scenarios.testdata.home");
         AbstractTest.startUp();
         AbstractScenarioTest.initializeReasoner();
+        IVMLWriter.setUseIvmlWhitespace(true);
     }
 
     /**
