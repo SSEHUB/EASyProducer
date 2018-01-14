@@ -107,7 +107,7 @@ public class TypeQueries {
      * @return <code>true</code> for compound, <code>false</code> else
      */
     public static boolean isCompound(IDatatype type) {
-        return Compound.TYPE.isAssignableFrom(type);
+        return Compound.TYPE.isAssignableFrom(type) && AnyType.TYPE != type;
     }
 
     /**
@@ -117,7 +117,7 @@ public class TypeQueries {
      * @return <code>true</code> if <code>type</code> is a container, <code>false</code> else
      */
     public static boolean isContainer(IDatatype type) {
-        return Container.TYPE.isAssignableFrom(type);
+        return Container.TYPE.isAssignableFrom(type) && AnyType.TYPE != type;
     }
 
     /**

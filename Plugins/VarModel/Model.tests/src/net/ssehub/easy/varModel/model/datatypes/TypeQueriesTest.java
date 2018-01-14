@@ -34,6 +34,7 @@ public class TypeQueriesTest {
         Assert.assertTrue(TypeQueries.isCompound(Compound.TYPE));
         Assert.assertTrue(TypeQueries.isCompound(c));
         Assert.assertFalse(TypeQueries.isCompound(IntegerType.TYPE));
+        Assert.assertFalse(TypeQueries.isCompound(AnyType.TYPE));
     }
     
     /**
@@ -48,6 +49,7 @@ public class TypeQueriesTest {
         Assert.assertTrue(TypeQueries.isContainer(set));
         Assert.assertTrue(TypeQueries.isContainer(seq));
         Assert.assertFalse(TypeQueries.isContainer(IntegerType.TYPE));
+        Assert.assertFalse(TypeQueries.isContainer(AnyType.TYPE));
     }
     
     /**

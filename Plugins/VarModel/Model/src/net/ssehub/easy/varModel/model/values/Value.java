@@ -146,7 +146,25 @@ public abstract class Value {
         }
         return equals;
     }
-    
+
+    /**
+     * Returns whether <code>v1</code> and <code>v2</code> are {@link #equals(Value)} 
+     * equal considering the case that <code>v1</code> may be <b>null</b>. 
+     * 
+     * @param v1 the first value (may be <b>null</b>)
+     * @param v2 the second value (may be <b>null</b>)
+     * @return <code>true</code> if <code>v1</code> and <code>v2</code> are considered to be equal, 
+     *   <code>false</code> else, i.e., whether <code>v2</code> is the same value as <code>v1</code>
+     */
+    public static boolean equals(Value v1, Value v2) {
+        boolean equals;
+        if (null == v1) {
+            equals = false;
+        } else {
+            equals = v1.equals(v2);
+        }
+        return equals;
+    }
     // TODO check and remove!!!
     
     @Override

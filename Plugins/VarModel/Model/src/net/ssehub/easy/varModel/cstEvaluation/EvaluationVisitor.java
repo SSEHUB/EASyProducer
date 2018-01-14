@@ -348,6 +348,17 @@ public class EvaluationVisitor implements IConstraintTreeVisitor {
     }
     
     /**
+     * Allow changing the assignment state to do an 
+     * {@link #init(IConfiguration, IAssignmentState, boolean, IValueChangeListener)}, a repeated evaluation with 
+     * changing assignment state and finally a {@link #clear()} or {@link #clearResult()}.
+     * 
+     * @param assignmentState the state for the assignments (may be <b>null</b> if no assignment shall take place)
+     */
+    public void setAssignmentState(IAssignmentState assignmentState) {
+        this.assignmentState = assignmentState;
+    }
+    
+    /**
      * Defines the current (optional) resolution listener.
      *  
      * @param listener the listener (may be <b>null</b> to indicate that no listener is required)
@@ -400,15 +411,25 @@ public class EvaluationVisitor implements IConstraintTreeVisitor {
     }
         
     /**
-     * Clears the visitor for reuse (including the dispatch scope).
+     * Clears the visitor for reuse (including the dispatch scope and the context).
+     * 
+     * @see #clearIntermediary()
      */
     public void clear() {
-        clearResult();
+        clearIntermediary();
         if (null != context) { // some test cases do not cause a context creation :|
             context.clear();
         }
-        assignmentState = null;
         dispatchScope = null;
+    }
+    
+    /**
+     * Clears intermediary state information including {@link #clearResult() result}, 
+     * assignment state, messages, warnings, failed and selfVars.
+     */
+    public void clearIntermediary() {
+        clearResult();
+        assignmentState = null;
         messages.clear();
         selfVars.clear();
         selfValue = null;
