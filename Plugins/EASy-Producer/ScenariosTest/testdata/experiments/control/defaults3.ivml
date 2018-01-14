@@ -1,0 +1,25 @@
+project defaults3 {
+
+    enum Kind {kind1, kind2, kind3};
+    abstract compound Activity {
+        Kind produces = initProduces(self);
+        Kind consumes = initConsumes(self);
+        Integer count;
+    }
+
+    def Kind initProduces(Activity act) = null;
+    def Kind initConsumes(Activity act) = null;
+    compound ReaderActivity refines Activity {
+    }
+
+    def Kind initProduces(ReaderActivity act) = Kind.kind1;
+    compound WriterActivity refines Activity {
+    }
+
+    def Kind initConsumes(WriterActivity act) = Kind.kind2;
+    Activity a1 = ReaderActivity {};
+    Activity a2 = WriterActivity {};
+    ReaderActivity r1 = {count = 5};
+    WriterActivity w1 = {count = 10};
+    sequenceOf(Activity) seq = {ReaderActivity {count = 6}, WriterActivity {count = 7}};
+}

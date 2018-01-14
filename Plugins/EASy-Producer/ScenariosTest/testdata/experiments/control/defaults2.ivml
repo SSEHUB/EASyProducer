@@ -1,0 +1,23 @@
+project defaults2 {
+
+    enum Kind {kind1, kind2, kind3};
+    abstract compound Activity {
+        Kind produces;
+        Kind consumes;
+        Integer count;
+    }
+
+    compound ReaderActivity refines Activity {
+        Kind produces = Kind.kind1;
+    }
+
+    compound WriterActivity refines Activity {
+        Kind consumes = Kind.kind2;
+    }
+
+    Activity a1 = ReaderActivity {};
+    Activity a2 = WriterActivity {};
+    ReaderActivity r1 = {count = 5};
+    WriterActivity w1 = {count = 10};
+    sequenceOf(Activity) seq = {ReaderActivity {count = 6}, WriterActivity {count = 7}};
+}

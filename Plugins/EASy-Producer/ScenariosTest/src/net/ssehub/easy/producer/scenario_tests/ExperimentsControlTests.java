@@ -170,6 +170,7 @@ public class ExperimentsControlTests extends AbstractTest {
         ReasoningResult res = ReasonerFrontend.getInstance().propagate(config.getProject(), config, rConfig, 
             ProgressObserver.NO_OBSERVER);
         Assert.assertFalse("there should not be reasoning conflicts", res.hasConflict());
+        //Configuration.printConfig(System.out, config);
 
         IDecisionVariable da1 = assertDecisionVariable(config, "a1");
         IDecisionVariable da2 = assertDecisionVariable(config, "a2");
@@ -210,7 +211,7 @@ public class ExperimentsControlTests extends AbstractTest {
     }
     
     /**
-     * Tests "defaults1".
+     * Tests "defaults1". Uses simple constraints.
      * 
      * @throws IOException shall not occur
      * @throws ModelQueryException shall not occur
@@ -219,6 +220,44 @@ public class ExperimentsControlTests extends AbstractTest {
     @Test
     public void controlDefaults1() throws IOException, ModelQueryException, IvmlException {
         testDefaults("defaults1");
+    }
+
+    /**
+     * Tests "defaults2". Uses shadowed slots.
+     * 
+     * @throws IOException shall not occur
+     * @throws ModelQueryException shall not occur
+     * @throws IvmlException shall not occur
+     */
+    @Test
+    public void controlDefaults2() throws IOException, ModelQueryException, IvmlException {
+        testDefaults("defaults2");
+    }
+
+    /**
+     * Tests "defaults3". This has not completely the same semantics as "defaults1" as slots
+     * are not uninitialized (Java <b>null</b>) rather than containing the {@link NullValue#INSTANCE IVML null}.
+     * Uses assigning dynamic-dispatch user-defined operations.
+     * 
+     * @throws IOException shall not occur
+     * @throws ModelQueryException shall not occur
+     * @throws IvmlException shall not occur
+     */
+    @Test
+    public void controlDefaults3() throws IOException, ModelQueryException, IvmlException {
+        testDefaults("defaults3");
+    }
+
+    /**
+     * Tests "defaults4". Uses assigning dynamic-dispatch user-defined operations.
+     * 
+     * @throws IOException shall not occur
+     * @throws ModelQueryException shall not occur
+     * @throws IvmlException shall not occur
+     */
+    @Test
+    public void controlDefaults4() throws IOException, ModelQueryException, IvmlException {
+        testDefaults("defaults4");
     }
 
 }
