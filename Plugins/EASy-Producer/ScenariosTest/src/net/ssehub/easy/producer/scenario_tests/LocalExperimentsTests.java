@@ -349,7 +349,8 @@ public class LocalExperimentsTests extends ExperimentsTests {
         TimeTracerFactory factory = new TimeTracerFactory();
         TracerFactory.setInstance(factory);
         //TracerFactory.setInstance(new ConsoleTracerFactory(true));
-        File tmp = executeCase("xmlExperiments", null, "", null);
+        // no reasoning: we just need specific structures/values
+        File tmp = executeCase("xmlExperiments", null, "", null, false);
         File expected = new File(tmp, "GenTopoHardwareCorrelationFinancialPom.xml");
         TextTestUtils.assertFileEquality(new File(tmp, "hwAlg.xml"), expected);
         TextTestUtils.assertFileEquality(new File(tmp, "hwAlg1.xml"), expected);
@@ -396,7 +397,8 @@ public class LocalExperimentsTests extends ExperimentsTests {
      */
     @Test
     public void testJava() throws IOException {
-        File tmp = executeCase("javaExperiments", null, "", null);
+        // no reasoning: we just need specific structures/values
+        File tmp = executeCase("javaExperiments", null, "", null, false); 
 
         File expected = new File(tmp, "FCorrelationFinancial.java");
         TextTestUtils.assertFileEquality(new File(tmp, "fcFam.java"), expected);
@@ -479,7 +481,8 @@ public class LocalExperimentsTests extends ExperimentsTests {
         names[1] = "javaExperiments";
         names[2] = "javaExperimentsDebug";
 
-        File tmp = executeCase(names, null, "", null);
+        // no reasoning: we just need specific structures/values
+        File tmp = executeCase(names, null, "", null, false); 
         File expected = new File(tmp, "PriorityPip_DataManagementElement0DataManagementElement.java");
         TextTestUtils.assertFileEquality(new File(tmp, "PrioPip_DME.java"), expected);
         TextTestUtils.assertFileEquality(new File(tmp, "PrioPip_DME0.java"), expected);

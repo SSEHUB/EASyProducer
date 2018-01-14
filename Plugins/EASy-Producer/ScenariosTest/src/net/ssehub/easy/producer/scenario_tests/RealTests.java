@@ -175,7 +175,7 @@ public class RealTests extends AbstractScenarioTest {
     protected File executeIndenicaCase(String projectName, String ivmlVersion, String vilVersion, 
         String... makeExecutable) throws IOException {
         String[] versions = {ivmlVersion, vilVersion};
-        return executeCase(projectName, versions, "INDENICA/", null, makeExecutable);
+        return executeCase(projectName, versions, "INDENICA/", null, true, makeExecutable);
     }
     
     /**
@@ -245,7 +245,7 @@ public class RealTests extends AbstractScenarioTest {
     @Test
     public void testElevator() throws IOException {
         String[] versions = {"0", "0"};
-        File base = executeCase("New_Product", versions, "elevator/", "PL_SimElevator");
+        File base = executeCase("New_Product", versions, "elevator/", "PL_SimElevator", true);
         
         JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
         StandardJavaFileManager fileManager = compiler.getStandardFileManager(null, null, null);
@@ -294,7 +294,7 @@ public class RealTests extends AbstractScenarioTest {
      */
     @Test
     public void testInstantiateNumericCSVInstantiation() throws IOException {
-        File base = executeCase("NumericCSVInstantiationTest", new String[] {"0", "0"}, "", null);
+        File base = executeCase("NumericCSVInstantiationTest", new String[] {"0", "0"}, "", null, true);
         File expectedFile = new File(base, "NumericCSVInstantiationTest.csv");
         File producedFile = new File(base, "expected/NumericCSVInstantiationTest.csv");
         assertExists(expectedFile);
@@ -324,7 +324,7 @@ public class RealTests extends AbstractScenarioTest {
      * @throws IOException shall not occur
      */
     private void testSvncontrol(String[] versions) throws IOException {
-        File base = executeCase("svncontrol", versions, "", null);
+        File base = executeCase("svncontrol", versions, "", null, true);
         assertExists(base, "variability/StaticConfiguration", ".java");
         assertExists(base, "variability/StartupConfiguration", ".java");
         assertExists(base, "variability/RuntimeConfiguration", ".java");
@@ -362,7 +362,7 @@ public class RealTests extends AbstractScenarioTest {
     @Test
     public void testQualiMasterApril14() throws IOException {
         String[] versions = {"0", "0"};
-        File base = executeCase("april14", versions, "QualiMaster/", null);
+        File base = executeCase("april14", versions, "QualiMaster/", null, true);
         assertFileEqualityRec(new File(base, "expected"), base);
     }
 
@@ -374,7 +374,7 @@ public class RealTests extends AbstractScenarioTest {
     @Test
     public void testQualiMasterMay14() throws IOException {
         String[] versions = {"0", "0"};
-        File base = executeCase("may14", versions, "QualiMaster/", null);
+        File base = executeCase("may14", versions, "QualiMaster/", null, true);
         assertFileEqualityRec(new File(base, "expected"), base);
     }
 
@@ -387,7 +387,7 @@ public class RealTests extends AbstractScenarioTest {
     public void testQualiMasterFeb15() throws IOException {
         String[] versions = {"0", "0"};
         String[] names = {"feb15", "QM"};
-        File base = executeCase(names, versions, "QualiMaster/", null);
+        File base = executeCase(names, versions, "QualiMaster/", null, true);
         assertFileEqualityRec(new File(base, "expected"), base);
     }
 
@@ -400,7 +400,7 @@ public class RealTests extends AbstractScenarioTest {
     public void testQualiMasterFeb16() throws IOException {
         String[] versions = {"0", "0"};
         String[] names = {"feb16", "QM"};
-        File base = executeCase(names, versions, "QualiMaster/", null);
+        File base = executeCase(names, versions, "QualiMaster/", null, true);
         assertFileEqualityRec(new File(base, "expected"), base);
     }
 
@@ -413,7 +413,7 @@ public class RealTests extends AbstractScenarioTest {
     public void testQualiMasterMar15() throws IOException {
         String[] versions = {"0", "0"};
         String[] names = {"mar15", "QM"};
-        File base = executeCase(names, versions, "QualiMaster/", null);
+        File base = executeCase(names, versions, "QualiMaster/", null, true);
         assertFileEqualityRec(new File(base, "expected"), base);
     }
 
@@ -426,7 +426,7 @@ public class RealTests extends AbstractScenarioTest {
     public void testQualiMasterJun15() throws IOException {
         String[] versions = {"0", "0"};
         String[] names = {"jun15", "QM"};
-        File base = executeCase(names, versions, "QualiMaster/", null);
+        File base = executeCase(names, versions, "QualiMaster/", null, true);
         assertFileEqualityRec(new File(base, "expected"), base);
     }
 
@@ -439,7 +439,7 @@ public class RealTests extends AbstractScenarioTest {
     protected void testQualiMasterFeb17Impl() throws IOException {
         String[] versions = {"0", "0"};
         String[] names = {"feb17", "QM"};
-        File base = executeCase(names, versions, "QualiMaster/", null);
+        File base = executeCase(names, versions, "QualiMaster/", null, true);
         assertFileEqualityRec(new File(base, "expected"), base);
     }
     
@@ -464,7 +464,7 @@ public class RealTests extends AbstractScenarioTest {
     protected void testQualiMasterSep17Impl() throws IOException {
         String[] versions = {"0", "0"};
         String[] names = {"sep17", "QM"};
-        File base = executeCase(names, versions, "QualiMaster/", null);
+        File base = executeCase(names, versions, "QualiMaster/", null, true);
         assertFileEqualityRec(new File(base, "expected"), base);
     }
     

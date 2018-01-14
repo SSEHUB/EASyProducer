@@ -11,6 +11,6 @@ import org.junit.runners.Suite;
  */
 @RunWith(Suite.class)
 @Suite.SuiteClasses({LocalRealTests.class, DynamicFreezeTest.class, LocalConceptsTests.class, 
-    LocalExperimentsTests.class })
+    LocalExperimentsTests.class, ExperimentsControlTests.class})
 public class LocalTests {
 }

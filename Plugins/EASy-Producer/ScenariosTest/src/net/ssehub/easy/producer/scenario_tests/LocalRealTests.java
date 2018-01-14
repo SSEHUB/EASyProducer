@@ -65,7 +65,7 @@ public class LocalRealTests extends RealTests {
     @Test
     public void testQualiMasterApril14() throws IOException {
         String[] versions = {"0", "0"};
-        File base = executeCase("april14", versions, "QualiMaster/", null);
+        File base = executeCase("april14", versions, "QualiMaster/", null, true);
         assertFileEqualityRec(new File(base, "expected"), base);
     }
     

@@ -28,6 +28,8 @@ import net.ssehub.easy.instantiation.core.model.vilTypes.configuration.Configura
 import net.ssehub.easy.instantiation.java.Registration;
 import net.ssehub.easy.producer.core.persistence.PersistenceUtils;
 import net.ssehub.easy.reasoning.core.frontend.ReasonerFrontend;
+import net.ssehub.easy.reasoning.core.reasoner.ReasonerConfiguration;
+import net.ssehub.easy.reasoning.core.reasoner.ReasoningResult;
 import net.ssehub.easy.reasoning.sseReasoner.Reasoner;
 import net.ssehub.easy.varModel.management.VarModel;
 import test.de.uni_hildesheim.sse.vil.buildlang.AbstractTest;
@@ -85,26 +87,6 @@ public abstract class AbstractScenarioTest extends AbstractTest<Script> {
      */
     protected void configureExecution(String projectName, Map<String, Object> args) {
     }
-
-    /**
-     * Executes a "real-world" case.
-     * 
-     * @param projectName the name of the project
-     * @param versions the version of the models, index 0 IVML, index 1 VIL build file (may be <b>null</b>)
-     * @param caseFolder an optional set of intermediary folders where the actual case study (innermost folder 
-     *   corresponds to name) is located in
-     * @param makeExecutable those files (in relative paths) within the temporary copy of the project to be 
-     *   made executable
-     * @param sourceProjectName the optional name of the source project (null if same as <code>projectName</code>)
-     * @return the base directory of the instantiated project
-     * @throws IOException in case of I/O problems
-     */
-    protected File executeCase(String projectName, String[] versions, String caseFolder, 
-        String sourceProjectName, String... makeExecutable) throws IOException {
-        String[] names = new String[1];
-        names[0] = projectName;
-        return executeCase(names, versions, caseFolder, sourceProjectName, makeExecutable);
-    }
     
     /**
      * Projects the specified version from <code>versions</code>.
@@ -117,6 +99,29 @@ public abstract class AbstractScenarioTest extends AbstractTest<Script> {
         return null == versions ? null : versions[index];
     }
     
+    // checkstyle: stop parameter number check
+
+    /**
+     * Executes a "real-world" case.
+     * 
+     * @param projectName the name of the project
+     * @param versions the version of the models, index 0 IVML, index 1 VIL build file (may be <b>null</b>)
+     * @param caseFolder an optional set of intermediary folders where the actual case study (innermost folder 
+     *   corresponds to name) is located in
+     * @param makeExecutable those files (in relative paths) within the temporary copy of the project to be 
+     *   made executable
+     * @param sourceProjectName the optional name of the source project (null if same as <code>projectName</code>)
+     * @param doReasoning whether reasoning shall be performed and no conflicts asserted
+     * @return the base directory of the instantiated project
+     * @throws IOException in case of I/O problems
+     */
+    protected File executeCase(String projectName, String[] versions, String caseFolder, 
+        String sourceProjectName, boolean doReasoning, String... makeExecutable) throws IOException {
+        String[] names = new String[1];
+        names[0] = projectName;
+        return executeCase(names, versions, caseFolder, sourceProjectName, doReasoning, makeExecutable);
+    }
+
     /**
      * Executes a "real-world" case.
      * 
@@ -128,12 +133,12 @@ public abstract class AbstractScenarioTest extends AbstractTest<Script> {
      * @param makeExecutable those files (in relative paths) within the temporary copy of the project to be 
      *   made executable
      * @param sourceProjectName the optional name of the source project (null if same as <code>projectName</code>)
+     * @param doReasoning whether reasoning shall be performed and no conflicts asserted
      * @return the base directory of the instantiated project
      * @throws IOException in case of I/O problems
      */
     protected File executeCase(String[] names, String[] versions, String caseFolder, 
-        String sourceProjectName, String... makeExecutable) throws IOException {
-        ProgressObserver observer = ProgressObserver.NO_OBSERVER;
+        String sourceProjectName, boolean doReasoning, String... makeExecutable) throws IOException {
         ArtifactFactory.clear();
         String projectName = names[0];
         String iModelName = names.length > 1 ? names[1] : projectName;
@@ -152,16 +157,18 @@ public abstract class AbstractScenarioTest extends AbstractTest<Script> {
         File vilFolder = getVilFolderIn(temp);
         File vtlFolder = getVtlFolderIn(temp);
         activateBuildProperties(vilFolder);
+        System.out.println("Registering model location...");
         try {
-            VarModel.INSTANCE.locations().addLocation(ivmlFolder, observer);
+            VarModel.INSTANCE.locations().addLocation(ivmlFolder, ProgressObserver.NO_OBSERVER);
             // those loaders shall already be registered through subclassing AbstractTest
-            BuildModel.INSTANCE.locations().addLocation(vilFolder, observer);
-            TemplateModel.INSTANCE.locations().addLocation(vtlFolder, observer);
+            BuildModel.INSTANCE.locations().addLocation(vilFolder, ProgressObserver.NO_OBSERVER);
+            TemplateModel.INSTANCE.locations().addLocation(vtlFolder, ProgressObserver.NO_OBSERVER);
         } catch (ModelManagementException e) {
             Assert.fail("unexpected exception (VIL/VTL): " + e.getMessage());
         }
+        System.out.println("Loading IVML...");
         net.ssehub.easy.varModel.model.Project iModel = obtainIvmlModel(iModelName, project(versions, 0), ivmlFolder);
-        Configuration config = new Configuration(new net.ssehub.easy.varModel.confModel.Configuration(iModel));
+        Configuration config = assertConfiguration(iModel, doReasoning);
         File sourceFile = temp.getAbsoluteFile();
         Project source = createProjectInstance(sourceFile);
         File targetFile = sourceFile;
@@ -176,7 +183,7 @@ public abstract class AbstractScenarioTest extends AbstractTest<Script> {
         param.put(Executor.PARAM_TARGET, target);
         param.put(Executor.PARAM_CONFIG, config);
         configureExecution(projectName, param);
-        
+        System.out.println("Executing VIL...");
         TracerFactory current = TracerFactory.getInstance();
         TracerFactory tFactory = getTracerFactory();
         TracerFactory.setDefaultInstance(tFactory);
@@ -193,13 +200,36 @@ public abstract class AbstractScenarioTest extends AbstractTest<Script> {
         println(tFactory, debug);
         TracerFactory.setDefaultInstance(current);
         try {
-            VarModel.INSTANCE.locations().removeLocation(ivmlFolder, observer);
-            BuildModel.INSTANCE.locations().removeLocation(vilFolder, observer);
-            TemplateModel.INSTANCE.locations().removeLocation(vtlFolder, observer);
+            VarModel.INSTANCE.locations().removeLocation(ivmlFolder, ProgressObserver.NO_OBSERVER);
+            BuildModel.INSTANCE.locations().removeLocation(vilFolder, ProgressObserver.NO_OBSERVER);
+            TemplateModel.INSTANCE.locations().removeLocation(vtlFolder, ProgressObserver.NO_OBSERVER);
         } catch (ModelManagementException e) {
             Assert.fail("unexpected exception: " + e.getMessage());
         }
         return targetFile;
+    }
+
+    // checkstyle: resume parameter number check
+
+    /**
+     * Creates and asserts a VIL configuration and checks the reasoning/propagation result for no conflicts.
+     * 
+     * @param prj the project to create the configuration for
+     * @param doReasoning whether reasoning shall be performed and no conflicts asserted
+     * @return the VIL configuration
+     */
+    private Configuration assertConfiguration(net.ssehub.easy.varModel.model.Project prj, boolean doReasoning) {
+        System.out.println("Creating VIL configuration...");
+        Configuration config = new Configuration(new net.ssehub.easy.varModel.confModel.Configuration(prj));
+        Assert.assertNotNull("VIL configuration must not be null", config);
+        if (doReasoning) {
+            System.out.println("Performing reasoning/propagation...");
+            ReasonerConfiguration rCfg = new ReasonerConfiguration();
+            ReasoningResult res = ReasonerFrontend.getInstance().propagate(prj, 
+                config.getConfiguration(), rCfg, ProgressObserver.NO_OBSERVER);
+            Assert.assertFalse("Reasoning must not have a conflict", res.hasConflict());
+        }
+        return config;
     }
 
     /**
