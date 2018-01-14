@@ -64,7 +64,6 @@ import net.ssehub.easy.varModel.model.datatypes.IDatatype;
 import net.ssehub.easy.varModel.model.datatypes.MetaType;
 import net.ssehub.easy.varModel.model.datatypes.OclKeyWords;
 import net.ssehub.easy.varModel.model.datatypes.Operation;
-import net.ssehub.easy.varModel.model.datatypes.Sequence;
 import net.ssehub.easy.varModel.model.datatypes.TypeQueries;
 import net.ssehub.easy.varModel.model.filter.ConstraintFinder;
 import net.ssehub.easy.varModel.model.filter.DeclarationFinder;
@@ -387,7 +386,7 @@ public class Resolver {
         List<AbstractVariable> variables = finder.getVariableDeclarations(VisibilityType.ALL);
         varMap = new HashMap<AbstractVariable, CompoundAccess>();
         for (AbstractVariable decl : variables) {
-            resolveDefaultValueForDeclaration(decl, config.getDecision(decl), null);
+            resolveDefaultsForDeclaration(decl, config.getDecision(decl), null);
         }
     }    
     
@@ -395,11 +394,10 @@ public class Resolver {
      * Part of the {@link #resolveDefaultValues(Project)} method.
      * Resolves default values of a particular declaration.
      * @param decl The {@link AbstractVariable} for which the default value should be resolved.
-     * @param variable the instance of <tt>decl</tt>.
-     * @param compoundAccess if variable is a nested compound.
+     * @param var the instance of <tt>decl</tt>.
+     * @param compAcc if variable is a nested compound.
      */
-    protected void resolveDefaultValueForDeclaration(AbstractVariable decl, IDecisionVariable variable,
-        CompoundAccess compoundAccess) {
+    protected void resolveDefaultsForDeclaration(AbstractVariable decl, IDecisionVariable var, CompoundAccess compAcc) {
         List<Constraint> defltCons = defaultConstraints; 
         variablesCounter++;
         IDatatype type = decl.getType();
@@ -410,63 +408,207 @@ public class Resolver {
         }
         ConstraintSyntaxTree defaultValue = decl.getDefaultValue();
         // Attribute handling
-        if (variable.getAttributesCount() > 0) {
-            resolveAttributeAssignments(decl, variable, compoundAccess);
+        if (var.getAttributesCount() > 0) {
+            resolveAttributeAssignments(decl, var, compAcc);
         }
         if (TypeQueries.isCompound(type)) {
             if (null != defaultValue) { // try considering the actual type, not only the base type
                 type = inferTypeSafe(defaultValue, type);
             }
-            resolveCompoundDefaultValueForDeclaration(decl, variable, compoundAccess, type); 
+            resolveCompoundDefaultValueForDeclaration(decl, var, compAcc, type); 
             if (null != defaultValue) {
                 defaultValue = copyExpression(defaultValue, decl);
             }
-        } else if (null != defaultValue && null != compoundAccess) {
-            // all individual compound initialization constraints have to be deferred until compound/container 
+        } else if (null != defaultValue && TypeQueries.isContainer(type)) {
+            Set<Compound> used = getUsedTypes(defaultValue, Compound.class);
+            if (null != used && !used.isEmpty()) {
+                for (Compound uType : used) {
+                    collectDefaultsCompoundCollection(decl, uType, new HashSet<Compound>());
+                }
+            }
+        } else if (null != defaultValue && null != compAcc) {
+            // all self/overriden compound initialization constraints have to be deferred until compound/container 
             // initializers are set as they would be overridden else
             defaultValue.accept(finder);
-            if (null != finder.getSelf()) {
-                // if there is a self, replace it by the actual compound access
-                defaultValue = copyExpression(defaultValue, compoundAccess.getCompoundExpression());
+            if (null != finder.getSelf() || isOverriddenSlot(decl)) {
+                defltCons = deferredDefaultConstraints;
             }
             finder.clear();
-            defltCons = deferredDefaultConstraints;
+            defaultValue = copyExpression(defaultValue, compAcc.getCompoundExpression());
         }
-        collectionCompoundConstraints.addAll(collectionCompoundConstraints(decl, variable, null));
+        collectionCompoundConstraints.addAll(collectionCompoundConstraints(decl, var, null));
         // Container
         if (net.ssehub.easy.varModel.model.datatypes.Container.TYPE.isAssignableFrom(type)) {            
             collectionInternalConstraints(decl, null);
         }
         if (null != defaultValue) {
-            if (ConstraintType.TYPE.isAssignableFrom(type) 
-                && !(type.getType() == BooleanType.TYPE.getType())) {
-                if (compoundAccess == null) {
-                    try {
+            try {
+                if (ConstraintType.TYPE.isAssignableFrom(type) 
+                    && !(type.getType() == BooleanType.TYPE.getType())) {
+                    if (compAcc == null) {
                         variablesCounter--;
                         // use closest parent instead of project -> runtime analysis
-                        Constraint constraint = new Constraint(defaultValue, variable.getDeclaration());
+                        Constraint constraint = new Constraint(defaultValue, var.getDeclaration());
                         constraintVariables.add(constraint);
-                        constraintVariableMap.put(constraint, variable);
+                        constraintVariableMap.put(constraint, var);
                         if (Descriptor.LOGGING) {
-                            LOGGER.debug(variable.getDeclaration().getName() + " project constraint variable " 
+                            LOGGER.debug(var.getDeclaration().getName() + " project constraint variable " 
                                 + StringProvider.toIvmlString(defaultValue));
                         }
+                    } 
+                } else { // Create default constraint
+                    ConstraintSyntaxTree cst = new OCLFeatureCall(
+                        defltCons == deferredDefaultConstraints ? compAcc : new Variable(decl), 
+                        OclKeyWords.ASSIGNMENT, defaultValue);
+                    defltCons.add(createDefaultConstraint(cst, project));
+                }                
+            } catch (CSTSemanticException e) {
+                LOGGER.exception(e); // should not occur, ok to log
+            }            
+        }
+    }
+
+    /**
+     * Returns whether <code>decl</code> is an overridden slot.
+     * 
+     * @param decl the declaration of the slot to search for
+     * @return <code>true</code> if overridden, <code>false</code> else
+     */
+    private static boolean isOverriddenSlot(AbstractVariable decl) {
+        boolean overridden = false;
+        IModelElement iter = decl.getParent(); 
+        // find declaring compound
+        while (null != iter && !(iter instanceof Compound)) {
+            iter = iter.getParent();
+        }
+        if (iter instanceof Compound) {
+            overridden = countSlots((Compound) iter, decl.getName(), true) > 1;
+        }
+        return overridden;
+    }
+    
+    /**
+     * Counts the number of slots with given <code>name</code> in the refines hierarchy 
+     * of <code>cmp</code>.
+     * 
+     * @param cmp the compound to start searching
+     * @param name the name of the slot to search for
+     * @param stopGreater1 stop searching if we have more than one matching slot
+     * @return the number of slots
+     */
+    private static int countSlots(Compound cmp, String name, boolean stopGreater1) {
+        int result = 0;
+        if (null != cmp.getElement(name)) {
+            result++;
+        }
+        for (int r = 0; r < cmp.getRefinesCount(); r++) {
+            result += countSlots(cmp.getRefines(r), name, stopGreater1);
+            if (stopGreater1 && result > 1) {
+                break;
+            }
+        }
+        return result;
+    }
+    
+    /**
+     * Collect constraints representing compound defaults in collections of compounds.
+     * 
+     * @param decl the collection variable
+     * @param cmpType the compound type used in the actual <code>decl</code> value to focus the constraints created
+     * @param done the already processed types (to be modified as a side effect)
+     */
+    private void collectDefaultsCompoundCollection(AbstractVariable decl, Compound cmpType, Set<Compound> done) {
+        if (!done.contains(cmpType)) {
+            done.add(cmpType);
+            for (int d = 0; d < cmpType.getDeclarationCount(); d++) {
+                DecisionVariableDeclaration uDecl = cmpType.getDeclaration(d);
+                ConstraintSyntaxTree defaultValue = uDecl.getDefaultValue();
+                if (null != defaultValue) {
+                    DecisionVariableDeclaration localDecl = new DecisionVariableDeclaration("cmp", cmpType, null);
+                    //varMap.put(nestedDecl, cmpAccess); // ???
+                    try {
+                        Variable localDeclVar = new Variable(localDecl);
+                        defaultValue = copyExpression(defaultValue, localDeclVar);
+                        defaultValue = new OCLFeatureCall(new CompoundAccess(localDeclVar, uDecl.getName()), 
+                            OclKeyWords.ASSIGNMENT, defaultValue);
+                        ConstraintSyntaxTree containerOp = new Variable(decl);
+                        if (!TypeQueries.sameTypes(decl.getType(), cmpType)) {
+                            containerOp = new OCLFeatureCall(containerOp, OclKeyWords.TYPE_SELECT, 
+                                new ConstantValue(ValueFactory.createValue(MetaType.TYPE, cmpType)));
+                        }
+                        if (isNestedCollection(decl.getType())) {
+                            containerOp = new OCLFeatureCall(containerOp, OclKeyWords.FLATTEN);
+                        }
+                        defaultValue = createContainerCall(containerOp, Container.FORALL, defaultValue, localDecl);
+                        deferredDefaultConstraints.add(createDefaultConstraint(defaultValue, project));
                     } catch (CSTSemanticException e) {
                         LOGGER.exception(e); // should not occur, ok to log
+                    } catch (ValueDoesNotMatchTypeException e) {
+                        LOGGER.exception(e); // should not occur, ok to log
                     }
-                } 
-            } else {
-                // Create default constraint
-                ConstraintSyntaxTree cst = new OCLFeatureCall(
-                    defltCons == deferredDefaultConstraints ? compoundAccess : new Variable(decl), 
-                    OclKeyWords.ASSIGNMENT, defaultValue);
-                try {
-                    defltCons.add(createDefaultConstraint(cst, project));
-                } catch (CSTSemanticException e) {
-                    LOGGER.exception(e); // should not occur, ok to log
-                }            
-            }                
+                }
+            }
+            // attributes??
+            for (int r = 0; r < cmpType.getRefinesCount(); r++) {
+                collectDefaultsCompoundCollection(decl, cmpType.getRefines(r), done);
+            }
         }
+    }
+
+    /**
+     * Returns whether <code>type</code> is a type-nested collection.
+     * 
+     * @param type the type
+     * @return <code>true</code> for a nested collection, <code>false else</code>
+     */
+    private boolean isNestedCollection(IDatatype type) {
+        return TypeQueries.isContainer(type) 
+            && 1 == type.getGenericTypeCount() 
+            && isNestedCollection(type.getGenericType(0));
+    }
+
+    /**
+     * Returns the used types if <code>cst</code> is a constant container value.
+     * 
+     * @param <D> the the to filter for
+     * @param cst the expression
+     * @param filter the type class to filter for
+     * @return the set of used types, may be empty or <b>null</b> for none
+     */
+    private <D extends IDatatype> Set<D> getUsedTypes(ConstraintSyntaxTree cst, Class<D> filter) {
+        Set<D> result = null;
+        if (cst instanceof ConstantValue) {
+            result = new HashSet<D>();
+            getUsedTypes(((ConstantValue) cst).getConstantValue(), filter, result);
+        }
+        return result;
+    }
+
+    /**
+     * Returns the used types if <code>value</code> is a container value.
+     * 
+     * @param <D> the the to filter for
+     * @param val the value
+     * @param filter the type class to filter for
+     * @param result the result set to be modified as a side effect
+     * @return the set of used types, may be empty or <b>null</b> for none
+     */
+    private <D extends IDatatype> boolean getUsedTypes(Value val, Class<D> filter, Set<D> result) {
+        boolean done = false;
+        if (val instanceof ContainerValue) {
+            ContainerValue cVal = (ContainerValue) val;
+            for (int v = 0; v < cVal.getElementSize(); v++) {
+                Value tmp = cVal.getElement(v);
+                if (!getUsedTypes(tmp, filter, result)) {
+                    IDatatype tType = tmp.getType();
+                    if (filter.isInstance(tType)) {
+                        result.add(filter.cast(tType));
+                    }
+                }
+            }
+            done = true;
+        }
+        return done;
     }
     
     /**
@@ -674,7 +816,7 @@ public class Resolver {
             inferTypeSafe(cmpAccess, null);
             // fill varMap
             varMap.put(nestedDecl, cmpAccess); // TODO turn into local map!
-            resolveDefaultValueForDeclaration(nestedDecl, cmpVar.getNestedVariable(nestedDecl.getName()),
+            resolveDefaultsForDeclaration(nestedDecl, cmpVar.getNestedVariable(nestedDecl.getName()),
                 cmpAccess);
         }
         // used strategy: resolve compound accesses first in loop before, then constraints using them
@@ -873,7 +1015,7 @@ public class Resolver {
                 = (net.ssehub.easy.varModel.model.datatypes.Set) type;
             if (set.getContainedType() instanceof DerivedDatatype) {
                 transformCollectionInternalConstraints((DerivedDatatype) set.getContainedType(),
-                    net.ssehub.easy.varModel.model.datatypes.Set.FORALL, decl, topcmpAccess);
+                    Container.FORALL, decl, topcmpAccess);
             }
         }
         if (net.ssehub.easy.varModel.model.datatypes.Sequence.TYPE.isAssignableFrom(type)) {
@@ -881,7 +1023,7 @@ public class Resolver {
                 = (net.ssehub.easy.varModel.model.datatypes.Sequence) type;
             if (sequence.getContainedType() instanceof DerivedDatatype) {
                 transformCollectionInternalConstraints((DerivedDatatype) sequence.getContainedType(),
-                    Sequence.FORALL, decl, topcmpAccess);
+                    Container.FORALL, decl, topcmpAccess);
             }
         }
     }
@@ -999,7 +1141,7 @@ public class Resolver {
             AbstractVariable nestedDecl = cmpType.getInheritedElement(i);
             CompoundAccess cmpAccess = null;           
             cmpAccess = new CompoundAccess(new Variable(localDecl), nestedDecl.getName());
-            varMap.put(nestedDecl, cmpAccess);            
+            varMap.put(nestedDecl, cmpAccess);
         }
         
         List<Constraint> thisCompoundConstraints = new ArrayList<Constraint>(); 
@@ -1014,7 +1156,7 @@ public class Resolver {
         }
         for (int i = 0; i < thisCompoundConstraints.size(); i++) {
             ConstraintSyntaxTree itExpression = thisCompoundConstraints.get(i).getConsSyntax();
-            itExpression = copyExpression(itExpression);
+            itExpression = copyExpression(itExpression, localDecl);
             if (Descriptor.LOGGING) {
                 LOGGER.debug("New loop constraint " + StringProvider.toIvmlString(itExpression));
             }   
