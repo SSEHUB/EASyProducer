@@ -77,14 +77,12 @@ import net.ssehub.easy.varModel.model.values.ValueDoesNotMatchTypeException;
 import net.ssehub.easy.varModel.model.values.ValueFactory;
 import net.ssehub.easy.varModel.persistency.StringProvider;
 
-// TODO Consider changing constraints upon changing variable values -> Constraint variables, polymorphic 
-// (compound) values <-> instantiable compound type / initialization
-
 /**
  * Constraint identifier, resolver and executor.
  * 
  * @author Sizonenko
  * @author El-Sharkawy
+ * @author Holger Eichelberger
  */
 public class Resolver {
 
@@ -343,12 +341,8 @@ public class Resolver {
      * </ol>
      */
     public void resolve() { 
-//        if (Descriptor.LOGGING) {
-//            printModelElements(config, "Before reasoning");            
-//        }        
         // Stack of importedProject (start with inner most imported project)
         List<Project> projects = Utils.discoverImports(config.getProject());    
-        
         while (!projects.isEmpty()) {
             project = projects.remove(0);
             if (Descriptor.LOGGING) {
@@ -357,9 +351,6 @@ public class Resolver {
             evaluator.setDispatchScope(project);
             scopeAssignments.clearScopeAssignments();
             resolveDefaultValues();
-//            if (ENABLE_LOGGING) {
-//                printModelElements(config, "After defaults in scope " + project.getName());                
-//            }
             processConstraints(project);
             // Freezes values after each scope
             config.freezeValues(project, FilterType.NO_IMPORTS);
@@ -370,12 +361,7 @@ public class Resolver {
             }
         }
         variablesInConstraintsCounter = constraintMap.getDeclarationSize();
-//        if (Descriptor.LOGGING) {
-//            printModelElements(config, "Reasoning done");
-//        }
     }   
-    
-
     
     /**
      * Part of the {@link #resolve()} method.
@@ -434,7 +420,7 @@ public class Resolver {
                 defltCons = deferredDefaultConstraints;
             }
             finder.clear();
-            defaultValue = copyExpression(defaultValue, compAcc.getCompoundExpression());
+            defaultValue = copyExpression(defaultValue, compAcc.getCompoundExpression(), null);
         }
         collectionCompoundConstraints.addAll(collectionCompoundConstraints(decl, var, null));
         // Container
@@ -528,7 +514,7 @@ public class Resolver {
                     //varMap.put(nestedDecl, cmpAccess); // ???
                     try {
                         Variable localDeclVar = new Variable(localDecl);
-                        defaultValue = copyExpression(defaultValue, localDeclVar);
+                        defaultValue = copyExpression(defaultValue, localDeclVar, varMap);
                         defaultValue = new OCLFeatureCall(new CompoundAccess(localDeclVar, uDecl.getName()), 
                             OclKeyWords.ASSIGNMENT, defaultValue);
                         ConstraintSyntaxTree containerOp = new Variable(decl);
@@ -1653,24 +1639,26 @@ public class Resolver {
     }
 
     /**
-     * Method for using {@link CopyVisitor} for constraint transformation. No replacement of <i>self</i> needed
+     * Method for using {@link CopyVisitor} for constraint transformation using {@link #varMap} 
+     * to replace variables. No replacement of <i>self</i> is done.
      * 
      * @param cst Constraint to be transformed.
      * @return Transformed constraint.
      */
     private ConstraintSyntaxTree copyExpression(ConstraintSyntaxTree cst) {
-        return copyExpression(cst, (ConstraintSyntaxTree) null);
+        return copyExpression(cst, (ConstraintSyntaxTree) null, varMap);
     }
 
     /**
-     * Method for using {@link CopyVisitor} for constraint transformation.
+     * Method for using {@link CopyVisitor} for constraint transformation using {@link #varMap} 
+     * to replace variables. Allows replacing <i>self</i>.
      * 
      * @param cst Constraint to be transformed.
      * @param selfVar a variable representing <i>self</i> (ignored if <b>null</b>).
      * @return Transformed constraint.
      */
     private ConstraintSyntaxTree copyExpression(ConstraintSyntaxTree cst, AbstractVariable selfVar) {
-        return copyExpression(cst, new Variable(selfVar));
+        return copyExpression(cst, new Variable(selfVar), varMap);
     }
     
     /**
@@ -1678,10 +1666,14 @@ public class Resolver {
      * 
      * @param cst Constraint to be transformed.
      * @param selfEx an expression representing <i>self</i> (ignored if <b>null</b>).
+     * @param mappingCA a mapping from old variable declarations to new compound access declarations,
+     *   existing variable declarations are taken over if no mapping is given, may be <b>null</b>
+     *   in case of no mapping at all
      * @return Transformed constraint.
      */
-    private ConstraintSyntaxTree copyExpression(ConstraintSyntaxTree cst, ConstraintSyntaxTree selfEx) {
-        CopyVisitor visitor = new CopyVisitor(null, varMap);
+    private ConstraintSyntaxTree copyExpression(ConstraintSyntaxTree cst, ConstraintSyntaxTree selfEx, 
+        Map<AbstractVariable, CompoundAccess> mappingCA) {
+        CopyVisitor visitor = new CopyVisitor(null, mappingCA);
         if (selfEx != null) {
             visitor.setSelf(selfEx);            
         }

@@ -18,8 +18,10 @@ package net.ssehub.easy.reasoning.sseReasoner.model;
 import java.util.Map;
 
 import net.ssehub.easy.basics.logger.EASyLoggerFactory;
+import net.ssehub.easy.basics.logger.EASyLoggerFactory.EASyLogger;
 import net.ssehub.easy.basics.modelManagement.IVariable;
 import net.ssehub.easy.basics.modelManagement.IVersionRestriction.IVariableMapper;
+import net.ssehub.easy.reasoning.sseReasoner.Descriptor;
 import net.ssehub.easy.varModel.cst.AttributeVariable;
 import net.ssehub.easy.varModel.cst.BlockExpression;
 import net.ssehub.easy.varModel.cst.CSTSemanticException;
@@ -46,21 +48,25 @@ import net.ssehub.easy.varModel.model.DecisionVariableDeclaration;
  * Copies a constraint syntax tree possibly mapping the variables. May be 
  * reused after calling {@link #clear()}
  * 
- * @author Holger Eichelberger
+ * @author Sizonenko
+ * @author Holger Eichelberger (original class)
  */
 public class CopyVisitor implements IConstraintTreeVisitor {
 
+    private static final EASyLogger LOGGER
+        = EASyLoggerFactory.INSTANCE.getLogger(CopyVisitor.class, Descriptor.BUNDLE_NAME);
     private Map<AbstractVariable, AbstractVariable> mapping;
     private Map<AbstractVariable, CompoundAccess> mappingCA;
     private ConstraintSyntaxTree result;
     private IVariableMapper mapper;
     private ConstraintSyntaxTree selfEx;
+    private boolean containsSelf;
 
     /**
      * Creates a copy visitor without mapping.
      */
     public CopyVisitor() {
-        this((Map<AbstractVariable, AbstractVariable>) null);
+        this(null, null);
     }
     
     /**
@@ -71,7 +77,7 @@ public class CopyVisitor implements IConstraintTreeVisitor {
      *   in case of no mapping at all
      */
     public CopyVisitor(Map<AbstractVariable, AbstractVariable> mapping) {
-        this.mapping = mapping;
+        this(mapping, null);
     }
     
     /**
@@ -83,20 +89,21 @@ public class CopyVisitor implements IConstraintTreeVisitor {
      * @param mappingCA a mapping from old variable declarations to new compound access declarations,
      *   existing variable declarations are taken over if no mapping is given, may be <b>null</b>
      *   in case of no mapping at all
+     * @see #setMappings(Map, Map)
      */
     public CopyVisitor(Map<AbstractVariable, AbstractVariable> mapping, 
         Map<AbstractVariable, CompoundAccess> mappingCA) {
-        this.mappingCA = mappingCA;
-        this.mapping = mapping;
+        setMappings(mapping, mappingCA);
     }  
 
     /**
      * Creates a copy visitor with explicit mapping.
      * 
      * @param mapper the variable mapper (may be <b>null</b>)
+     * @see #setMapper(IVariableMapper)
      */
     public CopyVisitor(IVariableMapper mapper) {
-        this.mapper = mapper;
+        setMapper(mapper);
     }
     
     /**
@@ -107,12 +114,51 @@ public class CopyVisitor implements IConstraintTreeVisitor {
     public ConstraintSyntaxTree getResult() {
         return result;
     }
+
+    /**
+     * Sets the mappings. [init, reuse]
+     * 
+     * @param mapping a mapping from old variable declarations to new compound access declarations,
+     *   existing variable declarations are taken over if no mapping is given, may be <b>null</b>
+     *   in case of no mapping at all
+     * @param mappingCA a mapping from old variable declarations to new compound access declarations,
+     *   existing variable declarations are taken over if no mapping is given, may be <b>null</b>
+     *   in case of no mapping at all
+     */
+    public void setMappings(Map<AbstractVariable, AbstractVariable> mapping, 
+        Map<AbstractVariable, CompoundAccess> mappingCA) {
+        this.mappingCA = mappingCA;
+        this.mapping = mapping;
+    }
+
+    /**
+     * Sets the mapper. [init, reuse]
+     * 
+     * @param mapper the variable mapper (may be <b>null</b>)
+     * @see #setMapper(IVariableMapper)
+     */
+    public void setMapper(IVariableMapper mapper) {
+        this.mapper = mapper;
+    }
+
+    /**
+     * Returns whether the last execution visited a <i>self</i>.
+     * 
+     * @return <code>true</code> for <i>self</i>, <code>false</code> else
+     */
+    public boolean containsSelf() {
+        return containsSelf;
+    }
     
     /**
      * Clears this visitor for reuse.
      */
     public void clear() {
         result = null;
+        containsSelf = false;
+        mapper = null;
+        mappingCA = null;
+        mapping = null;
     }
 
     /**
@@ -131,14 +177,13 @@ public class CopyVisitor implements IConstraintTreeVisitor {
 
     @Override
     public void visitVariable(Variable variable) {
-        CompoundAccess tmp = mappingCA.get(variable.getVariable());
+        CompoundAccess tmp = null == mappingCA ? null : mappingCA.get(variable.getVariable());
         if (null != tmp) {
             result = tmp;
             try {
                 tmp.inferDatatype();
             } catch (CSTSemanticException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
+                LOGGER.exception(e); // shall not occur with initially correct constraints, logging is ok
             }
         } else {
 //            result = new Variable(mapVariable(variable.getVariable()));
@@ -159,8 +204,7 @@ public class CopyVisitor implements IConstraintTreeVisitor {
         try {
             result.inferDatatype();
         } catch (CSTSemanticException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            LOGGER.exception(e); // shall not occur with initially correct constraints, logging is ok
         }
     }
 
@@ -256,8 +300,7 @@ public class CopyVisitor implements IConstraintTreeVisitor {
         try {
             result.inferDatatype();
         } catch (CSTSemanticException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            LOGGER.exception(e); // shall not occur with initially correct constraints, logging is ok
         }
     }
 
@@ -278,8 +321,7 @@ public class CopyVisitor implements IConstraintTreeVisitor {
         try {
             result.inferDatatype();
         } catch (CSTSemanticException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            LOGGER.exception(e); // shall not occur with initially correct constraints, logging is ok
         }
     }
 
@@ -297,8 +339,7 @@ public class CopyVisitor implements IConstraintTreeVisitor {
         try {
             result.inferDatatype();
         } catch (CSTSemanticException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            LOGGER.exception(e); // shall not occur with initially correct constraints, logging is ok
         }
     }
 
@@ -309,8 +350,7 @@ public class CopyVisitor implements IConstraintTreeVisitor {
         try {
             result.inferDatatype();
         } catch (CSTSemanticException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            LOGGER.exception(e); // shall not occur with initially correct constraints, logging is ok
         }
     }
 
@@ -343,7 +383,7 @@ public class CopyVisitor implements IConstraintTreeVisitor {
             result = new CompoundInitializer(initializer.getType(), slots, slotDecls, exprs);
             result.inferDatatype();
         } catch (CSTSemanticException e) {
-            EASyLoggerFactory.INSTANCE.getLogger(CopyVisitor.class, "CompoundConstraintCopyVisitor").exception(e);
+            LOGGER.exception(e); // shall not occur with initially correct constraints, logging is ok
         }
     }
 
@@ -358,7 +398,7 @@ public class CopyVisitor implements IConstraintTreeVisitor {
             result = new ContainerInitializer(initializer.getType(), exprs);
             result.inferDatatype();
         } catch (CSTSemanticException e) {
-            EASyLoggerFactory.INSTANCE.getLogger(CopyVisitor.class, "CompoundConstraintCopyVisitor").exception(e);
+            LOGGER.exception(e); // shall not occur with initially correct constraints, logging is ok
         }
         
     }
@@ -370,6 +410,7 @@ public class CopyVisitor implements IConstraintTreeVisitor {
         } else {
             result = self; // no replacement needed            
         }
+        containsSelf = true;
     }
 
     @Override
