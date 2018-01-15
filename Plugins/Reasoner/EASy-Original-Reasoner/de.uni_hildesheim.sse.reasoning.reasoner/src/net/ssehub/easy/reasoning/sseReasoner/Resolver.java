@@ -102,19 +102,19 @@ public class Resolver {
     private VariablesMap constraintMap = new VariablesMap();
     private Map<Constraint, IDecisionVariable> constraintVariableMap = new HashMap<Constraint, IDecisionVariable>();
     private Deque<Constraint> constraintBase = new LinkedList<Constraint>();   
-    private List<Constraint> constraintVariables = new ArrayList<Constraint>();
-    private List<Constraint> compoundConstraints = new ArrayList<Constraint>();
-    private List<Constraint> compoundEvalConstraints = new ArrayList<Constraint>();
-    private List<Constraint> unresolvedConstraints = new ArrayList<Constraint>(); 
-    private List<Constraint> defaultAttributeConstraints = new ArrayList<Constraint>();
-    private List<Constraint> assignedAttributeConstraints = new ArrayList<Constraint>();
-    private List<Constraint> collectionConstraints = new ArrayList<Constraint>();
-    private List<Constraint> defaultConstraints = new ArrayList<Constraint>();
-    private List<Constraint> deferredDefaultConstraints = new ArrayList<Constraint>();
-    private List<Constraint> internalConstraints = new ArrayList<Constraint>();
+    private List<Constraint> constraintVariables = new LinkedList<Constraint>();
+    private List<Constraint> compoundConstraints = new LinkedList<Constraint>();
+    private List<Constraint> compoundEvalConstraints = new LinkedList<Constraint>();
+    private List<Constraint> unresolvedConstraints = new LinkedList<Constraint>(); 
+    private List<Constraint> defaultAttributeConstraints = new LinkedList<Constraint>();
+    private List<Constraint> assignedAttributeConstraints = new LinkedList<Constraint>();
+    private List<Constraint> collectionConstraints = new LinkedList<Constraint>();
+    private List<Constraint> defaultConstraints = new LinkedList<Constraint>();
+    private List<Constraint> deferredDefaultConstraints = new LinkedList<Constraint>();
+    private List<Constraint> internalConstraints = new LinkedList<Constraint>();
     private boolean considerFrozenConstraints;
     
-    private Map<AbstractVariable, CompoundAccess> varMap;
+    private Map<AbstractVariable, CompoundAccess> varMap; // TODO turn into local map
     
     private List<Constraint> collectionCompoundConstraints = new ArrayList<Constraint>();
     private Set<IDecisionVariable> problemVariables = new HashSet<IDecisionVariable>();
@@ -716,7 +716,7 @@ public class Resolver {
             }
         }
     }
-
+    
     /**
      * Method for resolving compound default value declaration.
      * @param decl The {@link AbstractVariable} for which the default value should be resolved.
@@ -726,7 +726,7 @@ public class Resolver {
      */
     private void resolveCompoundDefaultValueForDeclaration(AbstractVariable decl, IDecisionVariable variable,
         CompoundAccess compound, IDatatype type) {
-        CompoundAccess cmpAccess = compound;
+        //CompoundAccess cmpAccess = compound;
         Compound cmpType = (Compound) type;
         List<Constraint> thisCompoundConstraints = new ArrayList<Constraint>(); 
         getAllCompoundConstraints(cmpType, thisCompoundConstraints, false);        
@@ -735,7 +735,7 @@ public class Resolver {
             IDecisionVariable nestedVariable = cmpVar.getNestedElement(i);
             AbstractVariable nestedDecl = nestedVariable.getDeclaration();
 //            infoLogger.info(i + ": " + cmpType.getInheritedElement(i) + " " + cmpVar.getNestedElement(i));
-            cmpAccess = null;
+            CompoundAccess cmpAccess;
             if (compound == null) {
                 cmpAccess = new CompoundAccess(new Variable(decl), nestedDecl.getName());                   
             } else {
@@ -743,7 +743,7 @@ public class Resolver {
             }
             inferTypeSafe(cmpAccess, null);
             // fill varMap
-            varMap.put(nestedDecl, cmpAccess); // TODO turn into local map!
+            varMap.put(nestedDecl, cmpAccess);
             resolveDefaultsForDeclaration(nestedDecl, cmpVar.getNestedVariable(nestedDecl.getName()),
                 cmpAccess);
         }
@@ -757,7 +757,7 @@ public class Resolver {
                 checkContainerValue((ContainerValue) nestedVariable.getValue(), decl, nestedDecl, 
                     nestedVariable, variable);
             }
-            compoundConstraints.addAll(collectionCompoundConstraints(nestedDecl, variable, cmpAccess));
+            compoundConstraints.addAll(collectionCompoundConstraints(nestedDecl, variable, varMap.get(nestedDecl)));
             if (ConstraintType.TYPE.isAssignableFrom(nestedType) 
                 && !(nestedType.getType() == BooleanType.TYPE.getType())) {
                 createConstraint(nestedDecl.getDefaultValue(), decl, nestedDecl, nestedVariable, variable);
@@ -765,7 +765,7 @@ public class Resolver {
         }
         // Nested attribute assignments handling
         for (int x = 0; x < cmpType.getAssignmentCount(); x++) {
-            processAttributeAssignments(cmpType.getAssignment(x), null,  cmpAccess);
+            processAttributeAssignments(cmpType.getAssignment(x), null, compound);
         }
         for (int i = 0; i < thisCompoundConstraints.size(); i++) {
             ConstraintSyntaxTree oneConstraint = thisCompoundConstraints.get(i).getConsSyntax();
@@ -1101,7 +1101,7 @@ public class Resolver {
                 if (containerOp != null) {
                     containerOp.inferDatatype();
                     Constraint constraint = new Constraint(containerOp, project);
-                    result.add(constraint);                    
+                    result.add(constraint);
                 }
             } catch (CSTSemanticException e) {
                 LOGGER.exception(e);
@@ -1293,8 +1293,6 @@ public class Resolver {
             }
         }
     }
-
-    // TODO change constraints data structure - linked list, pointer, drop outdated constraints
 
     /**
      * Method for resolving constraints.
