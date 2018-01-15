@@ -1,9 +1,12 @@
 package net.ssehub.easy.reasoning.sseReasoner;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Deque;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -98,7 +101,7 @@ public class Resolver {
 
     private VariablesMap constraintMap = new VariablesMap();
     private Map<Constraint, IDecisionVariable> constraintVariableMap = new HashMap<Constraint, IDecisionVariable>();
-    private List<Constraint> constraintBase = new ArrayList<Constraint>();   
+    private Deque<Constraint> constraintBase = new LinkedList<Constraint>();   
     private List<Constraint> constraintVariables = new ArrayList<Constraint>();
     private List<Constraint> compoundConstraints = new ArrayList<Constraint>();
     private List<Constraint> compoundEvalConstraints = new ArrayList<Constraint>();
@@ -111,14 +114,10 @@ public class Resolver {
     private List<Constraint> internalConstraints = new ArrayList<Constraint>();
     private boolean considerFrozenConstraints;
     
-    private int constraintBaseSize = 0;
-    
     private Map<AbstractVariable, CompoundAccess> varMap;
     
     private List<Constraint> collectionCompoundConstraints = new ArrayList<Constraint>();
     private Set<IDecisionVariable> problemVariables = new HashSet<IDecisionVariable>();
-    
-    private int index;
     
     // Stats
     private int constraintCounter = 0;
@@ -162,38 +161,17 @@ public class Resolver {
                 }
                 for (Constraint varConstraint : constraintsToReevaluate) {
                     boolean found = false;
-                    for (int i = index + 1, end = constraintBase.size(); i < end && !found; i++) {
-                        found = (constraintBase.get(i) == varConstraint);
+                    for (Constraint c : constraintBase) {
+                        if (c == varConstraint) { // reference equality is ok here as we search for the identical one
+                            found = true;
+                            break;
+                        }
                     }
                     if (!found) {
                         constraintBase.add(varConstraint);
-                        constraintBaseSize++;
+                        constraintCounter++;
                     }
                 }
-//                if (varConstraints != null && !varConstraints.isEmpty()) {
-//                    for (Constraint varConstraint : varConstraints) {
-//                        
-//                        boolean found = false;
-//                        for (int i = index + 1, end = constraintBase.size(); i < end && !found; i++) {
-//                            found = (constraintBase.get(i) == varConstraint);
-//                        }
-//                        if (!found) { 
-//                            constraintBase.add(varConstraint);
-//                            constraintBaseSize++;
-//    //                        if (declaration.getType() instanceof Container) {
-//    //                            // find anonymous inner declarations (e.g., compound declared inside a set)
-//    //                            for (int j = 0, nestedEnd = variable.getNestedElementsCount(); j < nestedEnd; j++) {
-//    //                                // check whether we need to add further constraints for the nested element
-//    //                                this.notifyChanged(variable.getNestedElement(j));
-//    //                            }
-//    //                        }
-//                        }
-//                        if (Descriptor.LOGGING) {
-//                            LOGGER.debug("Constraints added to current list: " 
-//                                + StringProvider.toIvmlString(varConstraint.getConsSyntax())); 
-//                        }
-//                    }
-//                }
             }
         }
         
@@ -207,23 +185,6 @@ public class Resolver {
             if (parent instanceof IDecisionVariable) {
                 constraintsForParent((IDecisionVariable) parent, constraintsToReevaluate);                            
             }
-//            if (varConstraints != null && !varConstraints.isEmpty()) {
-//                for (Constraint varConstraint : varConstraints) {
-//                    
-//                    boolean found = false;
-//                    for (int i = index + 1, end = constraintBase.size(); i < end && !found; i++) {
-//                        found = (constraintBase.get(i) == varConstraint);
-//                    }
-//                    if (!found) { 
-//                        constraintBase.add(varConstraint);
-//                        constraintBaseSize++;
-//                    }
-//                    if (Descriptor.LOGGING) {
-//                        LOGGER.debug("Constraints added to current list: " 
-//                            + StringProvider.toIvmlString(varConstraint.getConsSyntax())); 
-//                    }
-//                }
-//            }
         }
         
         private void constraintsForChild(IDecisionVariable variable, Set<Constraint> constraintsToReevaluate) {
@@ -238,23 +199,6 @@ public class Resolver {
                     constraintsForChild(nestedVar, constraintsToReevaluate);
                 }
             }
-//            if (varConstraints != null && !varConstraints.isEmpty()) {
-//                for (Constraint varConstraint : varConstraints) {
-//                    
-//                    boolean found = false;
-//                    for (int i = index + 1, end = constraintBase.size(); i < end && !found; i++) {
-//                        found = (constraintBase.get(i) == varConstraint);
-//                    }
-//                    if (!found) { 
-//                        constraintBase.add(varConstraint);
-//                        constraintBaseSize++;
-//                    }
-//                    if (Descriptor.LOGGING) {
-//                        LOGGER.debug("Constraints added to current list: " 
-//                            + StringProvider.toIvmlString(varConstraint.getConsSyntax())); 
-//                    }
-//                }
-//            }
         }
     };
     
@@ -1264,11 +1208,9 @@ public class Resolver {
                 constraintBase.addAll(assignedAttributeConstraints);
             }            
         }
-        constraintBaseSize = constraintBase.size();
-        constraintCounter = constraintCounter + constraintBaseSize;
+        constraintCounter = constraintCounter + constraintBase.size();
         clearConstraintLists();
         resolveConstraints(constraintBase, dispatchScope);
-        constraintBase.clear(); 
     }
     
 
@@ -1359,7 +1301,7 @@ public class Resolver {
      * @param constraints List of constraints to be resolved.
      * @param dispatchScope the scope for dynamic dispatches
      */
-    private void resolveConstraints(List<Constraint> constraints, Project dispatchScope) {
+    private void resolveConstraints(Deque<Constraint> constraints, Project dispatchScope) {
         if (Descriptor.LOGGING) {
             printConstraints(constraintBase);            
         }
@@ -1367,10 +1309,9 @@ public class Resolver {
         evaluator.setResolutionListener(resolutionListener);
         evaluator.setDispatchScope(dispatchScope);
         evaluator.setScopeAssignmnets(scopeAssignments);
-        for (int i = 0; i < constraints.size(); i++) { 
-            index = i;
+        while (!constraints.isEmpty()) { 
             problemVariables.clear();
-            Constraint constraint = constraints.get(i);
+            Constraint constraint = constraints.pop();
             ConstraintSyntaxTree cst = constraint.getConsSyntax();
             evaluator.setAssignmentState(constraint.isDefaultConstraint() 
                 ? AssignmentState.DEFAULT : AssignmentState.DERIVED);
@@ -1592,12 +1533,11 @@ public class Resolver {
      * Method for printing constraints that are taken into account for reasoning.
      * @param constraints Constraints from the project. 
      */
-    private void printConstraints(List<Constraint> constraints) {
+    private void printConstraints(Collection<Constraint> constraints) {
         LOGGER.debug("-------------------");
         LOGGER.debug("--Constraints:");
-        for (int i = 0; i < constraints.size(); i++) {
-            LOGGER.debug(StringProvider.toIvmlString(constraints.get(i).getConsSyntax())
-                + " : " + constraints.get(i).getTopLevelParent().toString());
+        for (Constraint c : constraints) {
+            LOGGER.debug(StringProvider.toIvmlString(c.getConsSyntax()) + " : " + c.getTopLevelParent().toString());
         }        
     }
     
