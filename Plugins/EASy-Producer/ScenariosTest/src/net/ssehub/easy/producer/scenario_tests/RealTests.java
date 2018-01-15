@@ -512,7 +512,9 @@ public class RealTests extends AbstractScenarioTest {
     protected void testQualiMasterFeb17Impl() throws IOException {
         String[] versions = {"0", "0"};
         String[] names = {"feb17", "QM"};
+        enableRealTimeAsserts = true;
         File base = executeCase(names, versions, "QualiMaster/", null, true);
+        enableRealTimeAsserts = false;
         assertFileEqualityRec(new File(base, "expected"), base);
     }
     
@@ -537,7 +539,9 @@ public class RealTests extends AbstractScenarioTest {
     protected void testQualiMasterSep17Impl() throws IOException {
         String[] versions = {"0", "0"};
         String[] names = {"sep17", "QM"};
+        enableRealTimeAsserts = true;
         File base = executeCase(names, versions, "QualiMaster/", null, true);
+        enableRealTimeAsserts = false;
         assertFileEqualityRec(new File(base, "expected"), base);
     }
     
