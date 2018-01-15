@@ -298,7 +298,6 @@ public class Resolver {
             config.freezeValues(project, FilterType.NO_IMPORTS);
             // TODO do incremental freezing in here -> required by interfaces with propagation constraints
             if (Descriptor.LOGGING) {
-//                printModelElements(config, "After reasoning in scope " + project.getName());
                 displayFailedElements();                                
             }
         }
@@ -628,10 +627,8 @@ public class Resolver {
      * @param parent parent for temporary constraints
      */
     private void checkCompoundInitializer(ConstraintSyntaxTree exp, Boolean compound, IModelElement parent) {
-//        infoLogger.info("CompoundInitializer: " + StringProvider.toIvmlString(exp));
         CompoundInitializer compoundInit = (CompoundInitializer) exp;
         for (int i = 0; i < compoundInit.getExpressionCount(); i++) {
-//            infoLogger.info("Exp: " + StringProvider.toIvmlString(compoundInit.getExpression(i)));
             if (compoundInit.getExpression(i) instanceof ContainerInitializer) {
                 checkContainerInitializer(compoundInit.getExpression(i), compound, parent);
             }
@@ -648,9 +645,7 @@ public class Resolver {
      * @param parent parent for temporary constraints
      */
     private void checkContainerInitializer(ConstraintSyntaxTree exp, Boolean compound, IModelElement parent) {
-//        infoLogger.info("ContainerInitializer: " + StringProvider.toIvmlString(exp));
         ContainerInitializer containerInit = (ContainerInitializer) exp;
-//        infoLogger.info("Type: " + containerInit.getType().getContainedType());
         if (ConstraintType.TYPE.isAssignableFrom(containerInit.getType().getContainedType())) {
             extractCollectionConstraints(containerInit, compound, parent);
         }
@@ -665,8 +660,6 @@ public class Resolver {
     private void extractCollectionConstraints(ContainerInitializer containerInit, Boolean compound, 
         IModelElement parent) {
         for (int i = 0; i < containerInit.getExpressionCount(); i++) {
-//            infoLogger.info("Container expression: " 
-//                + StringProvider.toIvmlString(containerInit.getExpression(i)));
             Constraint constraint = new Constraint(parent);
             ConstraintSyntaxTree cst = containerInit.getExpression(i);
             if (compound) {
@@ -695,7 +688,6 @@ public class Resolver {
                 Constraint constraint = new Constraint(project);
                 constraint.makeDefaultConstraint();
                 try {
-//                    infoLogger.info("Attribute constraint before: " + StringProvider.toIvmlString(defaultValue));
                     if (compound == null) {
                         defaultValue = new OCLFeatureCall(new AttributeVariable(new Variable(decl),
                             (Attribute) variable.getAttribute(i).getDeclaration()),
@@ -707,8 +699,6 @@ public class Resolver {
                     }
                     defaultValue.inferDatatype();
                     constraint.setConsSyntax(defaultValue);
-//                    infoLogger.info("Attribute constraint after: " 
-//                        + StringProvider.toIvmlString(constraint.getConsSyntax()));
                     defaultAttributeConstraints.add(constraint);
                 } catch (CSTSemanticException e) {
                     e.printStackTrace();
@@ -734,7 +724,6 @@ public class Resolver {
         for (int i = 0, n = cmpVar.getNestedElementsCount(); i < n; i++) {
             IDecisionVariable nestedVariable = cmpVar.getNestedElement(i);
             AbstractVariable nestedDecl = nestedVariable.getDeclaration();
-//            infoLogger.info(i + ": " + cmpType.getInheritedElement(i) + " " + cmpVar.getNestedElement(i));
             CompoundAccess cmpAccess;
             if (compound == null) {
                 cmpAccess = new CompoundAccess(new Variable(decl), nestedDecl.getName());                   
@@ -747,7 +736,7 @@ public class Resolver {
             resolveDefaultsForDeclaration(nestedDecl, cmpVar.getNestedVariable(nestedDecl.getName()),
                 cmpAccess);
         }
-        // used strategy: resolve compound accesses first in loop before, then constraints using them
+        // used strategy: resolve and register compound accesses first in loop before, then constraints using them
         for (int i = 0, n = cmpVar.getNestedElementsCount(); i < n; i++) {
             IDecisionVariable nestedVariable = cmpVar.getNestedElement(i);
             AbstractVariable nestedDecl = nestedVariable.getDeclaration();
@@ -815,8 +804,6 @@ public class Resolver {
                     Constraint constraint = new Constraint(project);
                     constraint.setConsSyntax(cst);
                     compoundEvalConstraints.add(constraint);
-//                    System.out.println("Eval constraint after: " 
-//                        + StringProvider.toIvmlString(constraint.getConsSyntax()));
                 } catch (CSTSemanticException e) {
                     LOGGER.exception(e);
                 } 
@@ -857,7 +844,6 @@ public class Resolver {
     private Constraint createConstraint(ConstraintSyntaxTree cst, AbstractVariable decl, IModelElement parent, 
         IDecisionVariable nestedVariable, IDecisionVariable variable) {
         Constraint constraint = null;
-//        if (cst != null && !(cst instanceof ConstantValue)) {
         if (cst != null) {
             cst = copyExpression(cst, decl);
             try {
@@ -971,10 +957,6 @@ public class Resolver {
             for (int i = 0, n = typeConstraints.length; i < n; i++) {
                 InternalConstraint internalConstraint = typeConstraints[i];
                 ConstraintSyntaxTree itExpression = internalConstraint.getConsSyntax();
-//            itExpression = copyVisitor(itExpression, null);
-//            if (Descriptor.LOGGING) {
-//                System.out.println("New loop constraint " + StringProvider.toIvmlString(itExpression));
-//            }
                 ConstraintSyntaxTree containerOp = null;
                 if (topcmpAccess == null) {
                     containerOp = createContainerCall(new Variable(decl), op, itExpression, localDecl);
@@ -1222,28 +1204,22 @@ public class Resolver {
      */
     private void processAttributeAssignments(AttributeAssignment hostAssignment, AttributeAssignment nestAssignment, 
         CompoundAccess compound) {
-//        infoLogger.info("Attribute assignment: " + StringProvider.toIvmlString(hostAssignment));
         for (int i = 0; i < hostAssignment.getAssignmentDataCount(); i++) { 
             if (nestAssignment == null) {
                 nestAssignment = hostAssignment;              
             } 
             for (int y = 0; y < nestAssignment.getElementCount(); y++) {
-//                System.out.println("cmpAccess3: " + StringProvider.toIvmlString(compound));
                 processElement(hostAssignment.getAssignmentData(i),
                     nestAssignment.getElement(y), compound);
                 if (TypeQueries.isCompound(nestAssignment.getElement(y).getType())) {                    
                     Compound cmp = (Compound) nestAssignment.getElement(y).getType();
                     for (int j = 0; j < cmp.getDeclarationCount(); j++) {
-//                        infoLogger.info("Nested: " + cmp.getDeclaration(j));
                         CompoundAccess cmpAccess;
                         if (compound == null) {
                             cmpAccess = new CompoundAccess(new Variable(nestAssignment.getElement(y)), 
                                 cmp.getDeclaration(j).getName());                   
-//                            System.out.println("cmpAccess1: " + StringProvider.toIvmlString(cmpAccess));
                         } else {
-//                            infoLogger.info("Nested: " + cmp.getDeclaration(j));
                             cmpAccess = new CompoundAccess(compound, cmp.getDeclaration(j).getName());
-//                            System.out.println("cmpAccess2: " + StringProvider.toIvmlString(cmpAccess));
 
                         }
                         inferTypeSafe(cmpAccess, null);
@@ -1253,8 +1229,6 @@ public class Resolver {
                 }
             }
             for (int z = 0; z < nestAssignment.getAssignmentCount(); z++) {
-//                infoLogger.info("Nested attribute assignment: " 
-//                        + StringProvider.toIvmlString(hostAssignment.getAssignment(i)));
                 processAttributeAssignments(hostAssignment, nestAssignment.getAssignment(z), compound);
             }
         }        
