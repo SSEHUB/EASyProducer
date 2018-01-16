@@ -167,7 +167,6 @@ public class ExperimentsControlTests extends AbstractTest {
     private void testDefaults(String name) throws IOException, ModelQueryException, IvmlException {
         Configuration config = createAndAssertEqual(name);
         ReasonerConfiguration rConfig = new ReasonerConfiguration();
-        rConfig.setFreshConfiguration(false);
         rConfig.setAdditionalInformationLogger(ReasonerConfiguration.ADDITIONAL_INFO_LOG_NONE);
         ReasoningResult res = ReasonerFrontend.getInstance().propagate(config.getProject(), config, rConfig, 
             ProgressObserver.NO_OBSERVER);

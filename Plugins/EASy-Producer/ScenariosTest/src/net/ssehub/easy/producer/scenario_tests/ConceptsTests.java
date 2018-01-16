@@ -262,7 +262,6 @@ public class ConceptsTests extends AbstractScenarioTest {
      */
     protected Configuration doConceptTest(String modelName, boolean success, Map<String, Object> expected) {
         ReasonerConfiguration rCfg = new ReasonerConfiguration();
-        rCfg.setFreshConfiguration(false); // let pass through changes of reasoner
         net.ssehub.easy.varModel.model.Project ivmlModel = obtainIvmlModel(modelName, null, getIvmlFolder());
         Configuration config = new Configuration(ivmlModel);
         ReasonerFrontend rf = ReasonerFrontend.getInstance();
