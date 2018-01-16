@@ -5,6 +5,7 @@ import net.ssehub.easy.reasoning.core.frontend.ReasonerFrontend;
 /**
  * Describes the configuration to be passed via the {@link ReasonerFrontend} to the individual
  * reasoners. Data in this class may be defined e.g. via the UI or from a configuration file.
+ * Setters are realized in builder style so that they can be chained easily after instance creation.
  * 
  * @author Holger Eichelberger
  */
@@ -32,7 +33,6 @@ public class ReasonerConfiguration {
     private ReasonerDescriptor defaultReasoner;
     private boolean customMessages;
     private boolean runtime;
-    private boolean freshConfig;
     private IAdditionalInformationLogger logger = ADDITIONAL_INFO_LOG_SYSOUT; // the legacy behavior
 
     /**
@@ -59,7 +59,6 @@ public class ReasonerConfiguration {
      */
     public ReasonerConfiguration() {
         this(false);
-        this.freshConfig = true;
     }
     
     /**
@@ -78,9 +77,11 @@ public class ReasonerConfiguration {
      * Changes the timeout for reasoning.
      * 
      * @param timeout the timeout, shall be ignored if less negative or null
+     * @return <b>this</b>
      */
-    public void setTimeout(int timeout) {
+    public ReasonerConfiguration setTimeout(int timeout) {
         this.timeout = timeout;
+        return this;
     }
 
     /**
@@ -115,9 +116,11 @@ public class ReasonerConfiguration {
      * Changes attribute values for reasoning.
      * 
      * @param attributeValues the values instance (may ba <b>null</b>)
+     * @return <b>this</b>
      */
-    public void setAttributeValues(AttributeValues attributeValues) {
+    public ReasonerConfiguration setAttributeValues(AttributeValues attributeValues) {
         this.attributeValues = attributeValues;
+        return this;
     }
 
     /**
@@ -148,9 +151,11 @@ public class ReasonerConfiguration {
      * Changes the default reasoner.
      * 
      * @param defaultReasoner the default reasoner or <b>null</b> if there is none configured
+     * @return <b>this</b>
      */
-    public void setDefaultReasoner(ReasonerDescriptor defaultReasoner) {
+    public ReasonerConfiguration setDefaultReasoner(ReasonerDescriptor defaultReasoner) {
         this.defaultReasoner = defaultReasoner;
+        return this;
     }
 
     /**
@@ -164,16 +169,22 @@ public class ReasonerConfiguration {
     
     /**
      * Enables custom messages.
+     * 
+     * @return <b>this</b>
      */
-    public void enableCustomMessages() {
+    public ReasonerConfiguration enableCustomMessages() {
         this.customMessages = true;
+        return this;
     }
     
     /**
      * Disable custom messages.
+     * 
+     * @return <b>this</b>
      */
-    public void disableCustomMessages() {
+    public ReasonerConfiguration disableCustomMessages() {
         this.customMessages = false;
+        return this;
     }
     
     /**
@@ -197,11 +208,13 @@ public class ReasonerConfiguration {
      * Defines the additional information logger.
      * 
      * @param logger the logger
+     * @return <b>this</b>
      */
-    public void setAdditionalInformationLogger(IAdditionalInformationLogger logger) {
+    public ReasonerConfiguration setAdditionalInformationLogger(IAdditionalInformationLogger logger) {
         if (null != logger) {
             this.logger = logger;
         }
+        return this;
     }
     
     /**
@@ -211,9 +224,11 @@ public class ReasonerConfiguration {
      * results.
      * 
      * @param runtime if reasoning shall happen for runtime
+     * @return <b>this</b>
      */
-    public void setRuntimeMode(boolean runtime) {
+    public ReasonerConfiguration setRuntimeMode(boolean runtime) {
         this.runtime = runtime;
+        return this;
     }
     
     /**
@@ -225,26 +240,4 @@ public class ReasonerConfiguration {
         return runtime;
     }
     
-    /**
-     * Defines whether the reasoner should create a fresh {@link Configuration}.
-     */
-    public void createFreshConfiguration() {
-        freshConfig = true;
-    }
-    
-    /**
-     * Returns whether a fresh {@link Configuration} should be created.
-     * @return <code>true</code> if Fresh {@link Configuration} is created.
-     */
-    public boolean isFreshConfiguration() {
-        return freshConfig;
-    }
-    
-    /**
-     * Specification whether a fresh configuration should be created for reasoning.
-     * @param freshConfig <tt>true</tt> A fresh configuration will be created, otherwise not.
-     */
-    public void setFreshConfiguration(boolean freshConfig) {
-        this.freshConfig = freshConfig;
-    }
 }
