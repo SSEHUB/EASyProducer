@@ -153,5 +153,24 @@ public class CompoundOperationsTest {
         valBaseC.release();
         valRefC.release();
     }
-    
+
+    /**
+     * Tests the "asType" operation.
+     * 
+     * @throws ValueDoesNotMatchTypeException shall not occur
+     */
+    @Test
+    public void testAsType() throws ValueDoesNotMatchTypeException {
+        Compound c1 = new Compound("c1", null);
+        Compound c2 = new Compound("c2", null, c1);
+        TestEvaluationContext context = new TestEvaluationContext();
+        EvaluationAccessor vc1 = Utils.createValue(c1, context, new Object[]{});
+        EvaluationAccessor vc2 = Utils.createValue(c2, context, new Object[]{});
+        Utils.testAsType(context, vc1, c1);
+        Utils.testAsType(context, vc2, c1);
+        Utils.testAsType(context, vc2, c2);
+        vc1.release();
+        vc2.release();
+    }
+
 }

@@ -110,11 +110,11 @@ public class Container extends StructuredDatatype {
     public static final Operation IS_DEFINED = new Operation(BooleanType.TYPE, OclKeyWords.IS_DEFINED, TYPE)
         .markAsAcceptsNull();
     public static final Operation SELECT_BY_TYPE = new Operation(TYPE, ReturnTypeMode.TYPED_PARAM_1, 
-            OclKeyWords.SELECT_BY_TYPE, TYPE, AnyType.TYPE);    
+        OclKeyWords.SELECT_BY_TYPE, TYPE, AnyType.TYPE);    
     public static final Operation TYPE_SELECT = new Operation(TYPE, ReturnTypeMode.TYPED_PARAM_1, 
         OclKeyWords.TYPE_SELECT, TYPE, AnyType.TYPE).markAsAliasOf(SELECT_BY_TYPE);    
     public static final Operation SELECT_BY_KIND = new Operation(TYPE, ReturnTypeMode.TYPED_PARAM_1, 
-            OclKeyWords.SELECT_BY_KIND, TYPE, AnyType.TYPE);    
+        OclKeyWords.SELECT_BY_KIND, TYPE, AnyType.TYPE);    
     public static final Operation TYPE_REJECT = new Operation(TYPE, ReturnTypeMode.TYPED_PARAM_1, 
         OclKeyWords.TYPE_REJECT, TYPE, AnyType.TYPE);
     // checkstyle: resume declaration order check

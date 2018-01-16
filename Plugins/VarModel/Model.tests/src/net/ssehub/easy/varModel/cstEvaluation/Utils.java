@@ -24,7 +24,11 @@ import net.ssehub.easy.varModel.cst.OCLFeatureCall;
 import net.ssehub.easy.varModel.cst.Parenthesis;
 import net.ssehub.easy.varModel.cst.Variable;
 import net.ssehub.easy.varModel.model.DecisionVariableDeclaration;
+import net.ssehub.easy.varModel.model.IvmlDatatypeVisitor;
 import net.ssehub.easy.varModel.model.IvmlKeyWords;
+import net.ssehub.easy.varModel.model.datatypes.AnyType;
+import net.ssehub.easy.varModel.model.datatypes.BooleanType;
+import net.ssehub.easy.varModel.model.datatypes.Compound;
 import net.ssehub.easy.varModel.model.datatypes.EnumLiteral;
 import net.ssehub.easy.varModel.model.datatypes.IDatatype;
 import net.ssehub.easy.varModel.model.datatypes.MetaType;
@@ -91,13 +95,13 @@ class Utils {
      */
     static void testDefined(IDatatype type, Operation op, Object value) throws ValueDoesNotMatchTypeException {
         TestEvaluationContext context = new TestEvaluationContext();
-        EvaluationAccessor iValue = Utils.createValue(type, context, value);
-        EvaluationAccessor nullV = Utils.createNullValue(context);
+        EvaluationAccessor iValue = createValue(type, context, value);
+        EvaluationAccessor nullV = createNullValue(context);
         EvaluationAccessor notDef = ConstantAccessor.POOL.getInstance().bind(null, context);
         
-        Utils.assertEquals(true, Utils.evaluate(op, iValue));
-        Utils.assertEquals(false, Utils.evaluate(op, nullV));
-        Utils.assertEquals(false, Utils.evaluate(op, notDef));
+        assertEquals(true, evaluate(op, iValue));
+        assertEquals(false, evaluate(op, nullV));
+        assertEquals(false, evaluate(op, notDef));
         
         iValue.release();
         notDef.release();
@@ -188,7 +192,7 @@ class Utils {
         } else if (null == expected && null == val) {
             Assert.assertTrue(true); // useless, I know
         } else {
-            Assert.fail("expected " + expected + " does not match " + val);
+            Assert.fail("expected " + expected + " is not equal to " + val);
         }
     }
 
@@ -222,7 +226,7 @@ class Utils {
         } else if (null == expected && null == actual) {
             Assert.assertTrue(true); // useless, I know
         } else {
-            Assert.fail("expected " + expected + " does not match " + actual);
+            Assert.fail("expected " + expected + " is not equal to " + actual);
         }        
     }
     
@@ -238,7 +242,7 @@ class Utils {
         } else if (null == expected && null == actual) {
             Assert.assertTrue(true); // useless, I know
         } else {
-            Assert.fail("expected " + expected + " does not match " + actual);
+            Assert.fail("expected " + expected + " is not equal to " + actual);
         }        
     }
     
@@ -261,7 +265,7 @@ class Utils {
         } else if (null == expected && null == actual) {
             Assert.assertTrue(true); // useless, I know
         } else {
-            Assert.fail("expected " + expected + " does not match " + actual);
+            Assert.fail("expected " + expected + " is not equal to " + actual);
         }        
     }
 
@@ -285,7 +289,7 @@ class Utils {
         } else if (null == expected && null == val) {
             Assert.assertTrue(true); // useless, I know
         } else {
-            Assert.fail("expected " + expected + " does not match " + val);
+            Assert.fail("expected " + expected + " is not equal to " + val);
         }
     }
 
@@ -309,10 +313,45 @@ class Utils {
         } else if (null == expected && null == val) {
             Assert.assertTrue(true); // useless, I know
         } else {
-            Assert.fail("expected " + expected + " does not match " + val);
+            Assert.fail("expected " + expected + " is not equal to " + val);
         }
     }
-    
+
+    /**
+     * Asserts equality between an value of an evaluation accessor and an actual evaluation accessor value.
+     * Releases <code>actual</code>.
+     * 
+     * @param expected the expected value
+     * @param actual the actual evaluation result
+     */
+    static final void assertEquals(EvaluationAccessor expected, EvaluationAccessor actual) {
+        assertEquals(expected.getValue(), actual);
+    }
+
+    /**
+     * Asserts equality between a value and an actual evaluation accessor value.
+     * Releases <code>actual</code>.
+     * 
+     * @param expected the expected value
+     * @param actual the actual evaluation result
+     */
+    static final void assertEquals(Value expected, EvaluationAccessor actual) {
+        Value val;
+        if (null != actual) {
+            val = actual.getValue();
+            actual.release();
+        } else {
+            val = null;
+        }
+        if (null != expected && null != val && TypeQueries.sameTypes(expected.getType(), val.getType())) { 
+            Assert.assertEquals(expected, val);
+        } else if (null == expected && null == val) {
+            Assert.assertTrue(true);
+        } else {
+            Assert.fail("expected " + expected + " is not equal to " + val);
+        }
+    }
+
     /**
      * Asserts equality between an expected datatype and an actual evaluation accessor value.
      * Releases <code>actual</code>.
@@ -333,7 +372,7 @@ class Utils {
         } else if (null == expected && null == val) {
             Assert.assertTrue(true); // useless, I know
         } else {
-            Assert.fail("expected " + expected + " does not match " + val);
+            Assert.fail("expected " + expected + " is not equal to " + val);
         }
     }
 
@@ -348,7 +387,7 @@ class Utils {
      */
     static EvaluationAccessor assertContainer(Object[] expected, Operation op, EvaluationAccessor set, 
         EvaluationAccessor... args) {
-        EvaluationAccessor result = Utils.evaluate(op, set, args);
+        EvaluationAccessor result = evaluate(op, set, args);
         if (null != result) {
             assertContainer(expected, result.getValue());
         } else {
@@ -447,13 +486,13 @@ class Utils {
         String result = null;
         if (expected instanceof Value) {
             if (!eltVal.equals(expected)) {
-                result = appendMessage(result, "values do not match");
+                result = appendMessage(result, "values are not equal");
             }
         } else if (eltVal instanceof ContainerValue && expected.getClass().isArray()) {
             result = appendMessage(result, checkContainer((Object[]) expected, eltVal));
         } else {
             if (!expected.equals(eltVal.getValue())) {
-                result = appendMessage(result, "values do not match");
+                result = appendMessage(result, "values are not equal");
             }
         }
         return result;
@@ -493,10 +532,10 @@ class Utils {
      */
     static void testTypeOf(EvaluationContext context, Operation op, EvaluationAccessor... values) 
         throws ValueDoesNotMatchTypeException {
-        EvaluationAccessor nullV = Utils.createNullValue(context);
+        EvaluationAccessor nullV = createNullValue(context);
 
         for (EvaluationAccessor acc : values) {
-            Utils.assertEquals(acc.getValue().getType(), Utils.evaluate(op, acc));
+            assertEquals(acc.getValue().getType(), evaluate(op, acc));
         }
         
         nullV.release();
@@ -529,14 +568,14 @@ class Utils {
      */
     static void testToString(EvaluationContext context, Operation op, EvaluationAccessor operand, String expected, 
         int maxLen) {
-        EvaluationAccessor res = Utils.evaluate(op, operand);
+        EvaluationAccessor res = evaluate(op, operand);
         Assert.assertNotNull(res);
         Assert.assertNotNull(res.getValue());
         Assert.assertTrue(res.getValue() instanceof StringValue);
         Assert.assertEquals(cut(expected, maxLen), cut(((StringValue) res.getValue()).getValue(), maxLen));
         res.release();
         
-        res = Utils.evaluate(op, null);
+        res = evaluate(op, null);
         Assert.assertNull(res);
     }
 
@@ -570,27 +609,92 @@ class Utils {
     static void testIsTypeKindOf(EvaluationContext context, Operation op, EvaluationAccessor value, 
         boolean otherResult, IDatatype... others) 
         throws ValueDoesNotMatchTypeException {
-        EvaluationAccessor nullV = Utils.createNullValue(context);
-        EvaluationAccessor valueType = Utils.createValue(MetaType.TYPE, context, value.getValue().getType());
-        EvaluationAccessor nullType = Utils.createValue(MetaType.TYPE, context, nullV.getValue().getType());
+        EvaluationAccessor nullV = createNullValue(context);
+        EvaluationAccessor valueType = createValue(MetaType.TYPE, context, value.getValue().getType());
+        EvaluationAccessor nullType = createValue(MetaType.TYPE, context, nullV.getValue().getType());
 
-        Utils.assertEquals(true, Utils.evaluate(op, value, valueType));
+        assertEquals(true, evaluate(op, value, valueType));
         if (IvmlKeyWords.IS_TYPE_OF.equals(op.getName())) {
-            Utils.assertEquals(false, Utils.evaluate(op, value, nullType));
-            Utils.assertEquals(false, Utils.evaluate(op, nullType, value));
+            assertEquals(false, evaluate(op, value, nullType));
+            assertEquals(false, evaluate(op, nullType, value));
         } else {
-            Utils.assertEquals(true, Utils.evaluate(op, value, nullType));
-            Utils.assertEquals(true, Utils.evaluate(op, nullType, value));
+            assertEquals(true, evaluate(op, value, nullType));
+            assertEquals(true, evaluate(op, nullType, value));
         }
-        Utils.assertEquals(true, Utils.evaluate(op, nullV, nullType));
+        assertEquals(true, evaluate(op, nullV, nullType));
 
         for (IDatatype type : others) {
-            EvaluationAccessor tmpType = Utils.createValue(MetaType.TYPE, context, type);
-            Utils.assertEquals(otherResult, Utils.evaluate(op, value, tmpType));
+            EvaluationAccessor tmpType = createValue(MetaType.TYPE, context, type);
+            assertEquals(otherResult, evaluate(op, value, tmpType));
             tmpType.release();
         }
         
+        nullV.release();
+        valueType.release();
         nullType.release();
+    }
+
+    /**
+     * Tests the "asType" operation. This method considers 
+     * {@link net.ssehub.easy.varModel.model.datatypes.AnyType} as test case.
+     * 
+     * @param context the evaluation context
+     * @param value the value to be tested
+     * @param others types to be tested instead of the type of <code>value</code>
+     * 
+     * @throws ValueDoesNotMatchTypeException in case that values cannot be assigned due to incompatible types
+     */
+    static void testAsType(EvaluationContext context, EvaluationAccessor value, IDatatype... others) 
+        throws ValueDoesNotMatchTypeException {
+        Operation op = AnyType.AS_TYPE;
+        EvaluationAccessor nullV = createNullValue(context);
+        IDatatype valueT = value.getValue().getType();
+        EvaluationAccessor valueType = createValue(MetaType.TYPE, context, valueT);
+        EvaluationAccessor nullType = createValue(MetaType.TYPE, context, nullV.getValue().getType());
+        EvaluationAccessor anyType = createValue(MetaType.TYPE, context, AnyType.TYPE);
+
+        assertEquals(value, evaluate(op, value, valueType)); // same type must match
+        for (IDatatype type : others) { // e.g., for refined types...
+            EvaluationAccessor tmpType = createValue(MetaType.TYPE, context, type);
+            assertEquals(value, evaluate(op, value, tmpType));
+            tmpType.release();
+        }
+        assertEquals(value, evaluate(op, value, anyType)); // ant type must be ok
+        assertEquals(nullV.getValue(), evaluate(op, nullV, nullType)); // null vs null must be ok
+        
+        Compound c = new Compound("*c1*", null);
+        IDatatype[] notMatching = new IDatatype[] {BooleanType.TYPE, c}; // not integer vs. real here, done in int tests
+        for (IDatatype tmp : notMatching) {
+            // ensure that type does not match at all, result must be null
+            if (!TypeQueries.sameTypes(tmp, valueT)) {
+                EvaluationAccessor tmpType = createValue(MetaType.TYPE, context, tmp);
+                Assert.assertNull("type " + IvmlDatatypeVisitor.getQualifiedType(tmp) + " must not allow for asType "
+                    + "conversion on " + IvmlDatatypeVisitor.getQualifiedType(valueT), evaluate(op, value, tmpType));
+                tmpType.release();
+            }
+        }
+        
+        nullV.release();
+        valueType.release();
+        nullType.release();
+        anyType.release();
+    }
+    
+    /**
+     * Tests the "asType" operation. This method considers 
+     * {@link net.ssehub.easy.varModel.model.datatypes.AnyType} as test case.
+     * 
+     * @param type the type of the value to be tested
+     * @param value the value to be tested
+     * @param others types to be tested instead of the type of <code>value</code>
+     * 
+     * @throws ValueDoesNotMatchTypeException in case that values cannot be assigned due to incompatible types
+     */
+    static void testAsType(IDatatype type, Object value, IDatatype... others) throws ValueDoesNotMatchTypeException {
+        TestEvaluationContext context = new TestEvaluationContext();
+        EvaluationAccessor val = Utils.createValue(type, context, value);
+        Utils.testAsType(context, val, others);
+        val.release();
     }
 
     /**

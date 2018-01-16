@@ -616,4 +616,14 @@ public class StringOperationsTest {
         }
     }
 
+    /**
+     * Tests the "asType" operation.
+     * 
+     * @throws ValueDoesNotMatchTypeException shall not occur
+     */
+    @Test
+    public void testAsType() throws ValueDoesNotMatchTypeException {
+        Utils.testAsType(StringType.TYPE, "");
+    }
+
 }

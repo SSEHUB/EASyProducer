@@ -463,5 +463,15 @@ public class RealOperationsTest {
         Utils.testToString(context, RealType.TO_STRING, rValue, "-21.482");
         rValue.release();
     }
-    
+
+    /**
+     * Tests the "asType" operation.
+     * 
+     * @throws ValueDoesNotMatchTypeException shall not occur
+     */
+    @Test
+    public void testAsType() throws ValueDoesNotMatchTypeException {
+        Utils.testAsType(RealType.TYPE, 1.0);
+    }
+
 }

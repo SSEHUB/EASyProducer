@@ -183,6 +183,25 @@ public class GenericOperations {
         }
     };
 
+    /**
+     * Implements the "asType" operation.
+     */
+    static final IOperationEvaluator AS_TYPE = new IOperationEvaluator() {
+        
+        public EvaluationAccessor evaluate(EvaluationAccessor operand, EvaluationAccessor[] arguments) {
+            EvaluationAccessor result = null;
+            if (1 == arguments.length) {
+                Value oValue = operand.getValue();
+                IDatatype oType = toType(oValue);
+                IDatatype aType = toType(arguments[0].getValue());
+                if (aType.isAssignableFrom(oType)) {
+                    result = ConstantAccessor.POOL.getInstance().bind(oValue, operand.getContext());
+                }
+            }
+            return result;
+        }
+    };
+
     static final IOperationEvaluator GET_LOCALE = new IOperationEvaluator() {
         
         public EvaluationAccessor evaluate(EvaluationAccessor operand, EvaluationAccessor[] arguments) {
@@ -242,6 +261,7 @@ public class GenericOperations {
         EvaluatorRegistry.registerEvaluator(IS_KIND_OF, AnyType.IS_KIND_OF);
         EvaluatorRegistry.registerEvaluator(GET_LOCALE, AnyType.GET_LOCALE);
         EvaluatorRegistry.registerEvaluator(SET_LOCALE, AnyType.SET_LOCALE);
+        EvaluatorRegistry.registerEvaluator(AS_TYPE, AnyType.AS_TYPE);
     }
 
     /**

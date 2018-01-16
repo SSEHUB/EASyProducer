@@ -15,6 +15,7 @@
  */
 package net.ssehub.easy.varModel.model.datatypes;
 
+import net.ssehub.easy.varModel.model.datatypes.Operation.ReturnTypeMode;
 
 /**
  * The AnyType is the "Object" of OCL, a type to which all types are compatible.
@@ -49,6 +50,8 @@ public class AnyType extends BasisDatatype {
         STRING_TYPE, OclKeyWords.LOCALE, TYPE, STRING_TYPE);
     public static final Operation GET_LOCALE = new Operation(
         STRING_TYPE, OclKeyWords.LOCALE, TYPE);
+    public static final Operation AS_TYPE = new Operation(
+        TYPE, ReturnTypeMode.TYPED_OPERAND_1, OclKeyWords.AS_TYPE, TYPE, META_TYPE);
 
     // checkstyle: resume declaration order check
     
@@ -58,6 +61,7 @@ public class AnyType extends BasisDatatype {
         DTYPE.addOperation(IS_KIND_OF);
         DTYPE.addOperation(SET_LOCALE);
         DTYPE.addOperation(GET_LOCALE);
+        DTYPE.addOperation(AS_TYPE);
     }
     
     /**

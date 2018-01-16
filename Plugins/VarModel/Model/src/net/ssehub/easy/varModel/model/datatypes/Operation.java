@@ -63,13 +63,13 @@ public class Operation {
         IMMEDIATE_OPERAND(-1, -1, false, false),
         
         /**
-         * Change it to the operand with generic parameter. If no generic
+         * Change the return type to the operand with generic parameter. If no generic
          * parameter is available, {@link #IMMEDIATE_OPERAND} is applied.
          */
         TYPED_OPERAND_1(0, -1, false, false),
 
         /**
-         * Change it to the operand with generic parameter. If no generic
+         * Change the return type to the operand with generic parameter. If no generic
          * parameter is available, {@link #IMMEDIATE_OPERAND} is applied.
          */
         TYPED_PARAM_1(-1, 0, false, false),

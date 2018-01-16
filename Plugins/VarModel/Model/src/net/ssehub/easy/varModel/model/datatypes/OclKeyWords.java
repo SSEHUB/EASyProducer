@@ -43,6 +43,7 @@ public class OclKeyWords {
     public static final String IS_TYPE_OF = "isTypeOf";
     public static final String IS_KIND_OF = "isKindOf";
     public static final String LOCALE = "locale";
+    public static final String AS_TYPE = "asType";
     
     // e.g. Boolean
     @IVMLKeyWord

@@ -403,4 +403,14 @@ public class IntegerOperationsTest {
         sValue.release();
     }
 
+    /**
+     * Tests the "asType" operation.
+     * 
+     * @throws ValueDoesNotMatchTypeException shall not occur
+     */
+    @Test
+    public void testAsType() throws ValueDoesNotMatchTypeException {
+        Utils.testAsType(IntegerType.TYPE, 1, RealType.TYPE);
+    }
+
 }

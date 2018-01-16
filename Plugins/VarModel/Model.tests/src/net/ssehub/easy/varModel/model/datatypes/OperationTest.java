@@ -309,8 +309,11 @@ public class OperationTest {
             }
          
             if (MetaType.ALL_INSTANCES != operation) {
-                OCLFeatureCall call = new OCLFeatureCall(operand, operation.getName(), parameters);                
-                Assert.assertEquals(operation.getReturns(), call.inferDatatype());
+                OCLFeatureCall call = new OCLFeatureCall(operand, operation.getName(), parameters);
+                IDatatype opType = operation.getReturns();
+                IDatatype callType = call.inferDatatype();
+                Assert.assertTrue("expected type " + opType + " is not the same as " + callType, 
+                    TypeQueries.sameTypes(operation.getReturns(), call.inferDatatype()));
             }
         }
         

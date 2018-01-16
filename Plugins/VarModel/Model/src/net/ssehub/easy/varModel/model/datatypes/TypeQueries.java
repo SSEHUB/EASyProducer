@@ -78,9 +78,9 @@ public class TypeQueries {
         boolean same;
         // any type are special as they are assignable to everything
         if (AnyType.TYPE == type1) {
-            same = AnyType.TYPE == type2;
+            same = AnyType.TYPE == type2 || type2 instanceof AnyType; // second for real vs. delegating type
         } else if (AnyType.TYPE == type2) {
-            same = AnyType.TYPE == type1;
+            same = AnyType.TYPE == type1 || type1 instanceof AnyType; // second for real vs. delegating type
         } else if (type1 != null && type2 != null) { // may happen for missing generics
             // and now the usual types
             same = type1.isAssignableFrom(type2) && type2.isAssignableFrom(type1);

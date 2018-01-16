@@ -226,4 +226,14 @@ public class BooleanOperationsTest {
         value.release();
     }
 
+    /**
+     * Tests the "asType" operation.
+     * 
+     * @throws ValueDoesNotMatchTypeException shall not occur
+     */
+    @Test
+    public void testAsType() throws ValueDoesNotMatchTypeException {
+        Utils.testAsType(BooleanType.TYPE, true);
+    }
+
 }
