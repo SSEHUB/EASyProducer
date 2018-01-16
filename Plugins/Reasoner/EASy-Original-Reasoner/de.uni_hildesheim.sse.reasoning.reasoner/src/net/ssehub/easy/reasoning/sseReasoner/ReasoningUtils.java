@@ -32,16 +32,21 @@ import net.ssehub.easy.varModel.cst.CompoundAccess;
 import net.ssehub.easy.varModel.cst.ConstantValue;
 import net.ssehub.easy.varModel.cst.ConstraintSyntaxTree;
 import net.ssehub.easy.varModel.cst.ContainerOperationCall;
+import net.ssehub.easy.varModel.cst.OCLFeatureCall;
 import net.ssehub.easy.varModel.model.AbstractVariable;
 import net.ssehub.easy.varModel.model.Constraint;
 import net.ssehub.easy.varModel.model.DecisionVariableDeclaration;
 import net.ssehub.easy.varModel.model.IModelElement;
 import net.ssehub.easy.varModel.model.datatypes.Compound;
 import net.ssehub.easy.varModel.model.datatypes.IDatatype;
+import net.ssehub.easy.varModel.model.datatypes.MetaType;
+import net.ssehub.easy.varModel.model.datatypes.OclKeyWords;
 import net.ssehub.easy.varModel.model.datatypes.Operation;
 import net.ssehub.easy.varModel.model.datatypes.TypeQueries;
 import net.ssehub.easy.varModel.model.values.ContainerValue;
 import net.ssehub.easy.varModel.model.values.Value;
+import net.ssehub.easy.varModel.model.values.ValueDoesNotMatchTypeException;
+import net.ssehub.easy.varModel.model.values.ValueFactory;
 import net.ssehub.easy.varModel.persistency.StringProvider;
 
 /**
@@ -70,6 +75,82 @@ class ReasoningUtils {
             LOGGER.exception(e); // should not occur, ok to log
         }
         return result;
+    }
+
+    /**
+     * Creates a type value.
+     * 
+     * @param type the datatype
+     * @return the constant value 
+     * @throws ValueDoesNotMatchTypeException if the value cannot be created
+     */
+    static Value createTypeValue(IDatatype type) throws ValueDoesNotMatchTypeException {
+        return ValueFactory.createValue(MetaType.TYPE, type);
+    }
+
+    /**
+     * Creates a type value constraint tree node.
+     * 
+     * @param type the datatype
+     * @return the constant value constraint tree node
+     * @throws ValueDoesNotMatchTypeException if the value cannot be created
+     */
+    static ConstraintSyntaxTree createTypeValueConstant(IDatatype type) throws ValueDoesNotMatchTypeException {
+        return new ConstantValue(createTypeValue(type));
+    }
+
+    /**
+     * Creates a type value constraint tree node and logs occurring exceptions.
+     * 
+     * @param type the datatype
+     * @return the constant value constraint tree node
+     */
+    static ConstraintSyntaxTree createTypeValueConstantSafe(IDatatype type) {
+        ConstraintSyntaxTree result = null;
+        try {
+            result = createTypeValueConstant(type);
+        } catch (ValueDoesNotMatchTypeException e) {
+            LOGGER.exception(e); // should not occur, ok to log
+        }
+        return result;
+    }
+
+    /**
+     * Creates a type cast ("asType" operation, if needed) from the type of <code>exp</code> to <code>targetType</code> 
+     * applied to <code>exp</code>.
+     * 
+     * @param exp the expression to apply the type cast operation to 
+     * @param targetType the target type
+     * @return the resulting expression
+     */
+    static ConstraintSyntaxTree createAsTypeCast(ConstraintSyntaxTree exp, IDatatype targetType) {
+        return createAsTypeCast(exp, null, targetType);
+    }
+
+    /**
+     * Creates a type cast ("asType" operation, if needed) from <code>sourceType</code> to <code>targetType</code> 
+     * applied to <code>exp</code>.
+     * 
+     * @param exp the expression to apply the type cast operation to 
+     * @param sourceType the source type
+     * @param targetType the target type
+     * @return the resulting expression
+     */
+    static ConstraintSyntaxTree createAsTypeCast(ConstraintSyntaxTree exp, IDatatype sourceType, IDatatype targetType) {
+        ConstraintSyntaxTree res = exp;
+        try {
+            if (null == sourceType) {
+                sourceType = exp.inferDatatype();
+            }
+            if (!TypeQueries.sameTypes(sourceType, targetType) && !TypeQueries.isAnyType(targetType)) {
+                res = new OCLFeatureCall(res, OclKeyWords.AS_TYPE, createTypeValueConstant(targetType));
+            }
+        } catch (CSTSemanticException e) {
+            LOGGER.exception(e); // should not occur, ok to log
+        } catch (ValueDoesNotMatchTypeException e) {
+            LOGGER.exception(e); // should not occur, ok to log
+        }
+        return res;
     }
 
     /**

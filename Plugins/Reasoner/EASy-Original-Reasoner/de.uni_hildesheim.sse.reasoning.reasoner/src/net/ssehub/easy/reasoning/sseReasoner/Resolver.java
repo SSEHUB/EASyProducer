@@ -158,7 +158,7 @@ public class Resolver {
                     }
                 }
                 for (Constraint varConstraint : constraintsToReevaluate) {
-                    boolean found = false;
+                    boolean found = false; // TODO consider constraint signature directory instead
                     for (Constraint c : constraintBase) {
                         if (c == varConstraint) { // reference equality is ok here as we search for the identical one
                             found = true;
@@ -577,7 +577,8 @@ public class Resolver {
      * Method for resolving compound default value declaration.
      * @param decl The {@link AbstractVariable} for which the default value should be resolved.
      * @param variable the instance of <tt>decl</tt>.
-     * @param compound if variable is a nested compound.
+     * @param compound if variable is a nested compound, the access expression to 
+     *     <code>decl</code>/<code>variable</code>
      * @param type {@link Compound} type.
      */
     private void resolveCompoundDefaultValueForDeclaration(AbstractVariable decl, IDecisionVariable variable,
@@ -594,7 +595,8 @@ public class Resolver {
             if (compound == null) {
                 cmpAccess = new CompoundAccess(new Variable(decl), nestedDecl.getName());                   
             } else {
-                cmpAccess = new CompoundAccess(compound, nestedDecl.getName());
+                cmpAccess = new CompoundAccess(createAsTypeCast(compound, type, cmpVar.getValue().getType()), 
+                    nestedDecl.getName());
             }
             inferTypeSafe(cmpAccess, null);
             // fill varMap
@@ -895,11 +897,7 @@ public class Resolver {
         getAllCompoundConstraints(cmpType, thisCompoundConstraints, true);
         ConstraintSyntaxTree typeExpression = null;
         if (!TypeQueries.sameTypes(cmpType, containedType)) {
-            try {
-                typeExpression = new ConstantValue(ValueFactory.createValue(MetaType.TYPE, cmpType));
-            } catch (ValueDoesNotMatchTypeException e) {
-                LOGGER.exception(e); // shall not occur, then next expression will not be correctly typed!
-            }
+            typeExpression = createTypeValueConstantSafe(cmpType);
         }
         for (int i = 0; i < thisCompoundConstraints.size(); i++) {
             ConstraintSyntaxTree itExpression = thisCompoundConstraints.get(i).getConsSyntax();
@@ -927,7 +925,6 @@ public class Resolver {
             }            
         }
     }
-    
     
     /**
      * Adds the constraints of <tt>constraintsToAdd</tt> to <tt>scopeConstraints</tt> while considering
@@ -1099,7 +1096,7 @@ public class Resolver {
      */
     private void resolveConstraints(Deque<Constraint> constraints, Project dispatchScope) {
         if (Descriptor.LOGGING) {
-            printConstraints(constraintBase);            
+            printConstraints(constraints);            
         }
         evaluator.init(config, null, false, listener); 
         evaluator.setResolutionListener(resolutionListener);
@@ -1118,6 +1115,10 @@ public class Resolver {
                         + " : " + constraint.getTopLevelParent());                    
                 }
                 evaluator.visit(cst);
+//System.out.println("EVAL " + toIvmlString(cst));
+//if (evaluator.constraintFailed()) {
+//    System.out.println("CONFLICT");
+//}
                 if (evaluator.constraintFailed()) {
                     conflictingConstraint(constraint);
                 } else if (evaluator.constraintFulfilled()) {
