@@ -46,7 +46,7 @@ public class Reasoner implements IReasoner {
     public ReasoningResult isConsistent(Project project, ReasonerConfiguration reasonerConfig, 
                 ProgressObserver observer) {
         reasonerConfig =  null == reasonerConfig ? new ReasonerConfiguration() : reasonerConfig;
-        Engine engine = new Engine(project, createConfiguration(project, null, reasonerConfig), 
+        Engine engine = new Engine(project, createConfiguration(project, null, reasonerConfig, true), 
             reasonerConfig, observer);           
         return engine.reason();
     }
@@ -55,8 +55,8 @@ public class Reasoner implements IReasoner {
     public ReasoningResult check(Project project, Configuration cfg, ReasonerConfiguration reasonerConfig,
         ProgressObserver observer) {
         reasonerConfig =  null == reasonerConfig ? new ReasonerConfiguration() : reasonerConfig;
-        Engine engine = new Engine(project, createConfiguration(project, cfg, reasonerConfig), 
-            reasonerConfig, observer);           
+        Engine engine = new Engine(project, createConfiguration(project, cfg, reasonerConfig, true), 
+            reasonerConfig, observer);
         return engine.reason();
     }
 
@@ -64,7 +64,7 @@ public class Reasoner implements IReasoner {
     public ReasoningResult propagate(Project project, Configuration cfg, ReasonerConfiguration reasonerConfig,
         ProgressObserver observer) {
         reasonerConfig =  null == reasonerConfig ? new ReasonerConfiguration() : reasonerConfig;
-        Engine engine = new Engine(project, createConfiguration(project, cfg, reasonerConfig), 
+        Engine engine = new Engine(project, createConfiguration(project, cfg, reasonerConfig, false), 
             reasonerConfig, observer);
         return engine.reason();
     }
@@ -105,23 +105,21 @@ public class Reasoner implements IReasoner {
      * @param project Project for {@link Configuration}
      * @param cfg the initial configuration
      * @param rConfig the reasoner configuration
+     * @param freshConfig use a fresh (new) configuration (<code>true</code>) instance or operate on 
+     *      <code>cfg</code> (<code>false</code>)
      * @return Created {@link Configuration}
      */
-    private Configuration createConfiguration(Project project, Configuration cfg, ReasonerConfiguration rConfig) {
+    private Configuration createConfiguration(Project project, Configuration cfg, ReasonerConfiguration rConfig, 
+        boolean freshConfig) {
         Configuration result;
-        if (rConfig.isRuntimeMode() || !rConfig.isFreshConfiguration()) {
+        if (rConfig.isRuntimeMode() || !freshConfig) {
             result = cfg;
         } else {
             result = null;
         }
         if (null == result) {
             result = new Configuration(project, false);
-        }        
-//        if (rConfig.isFreshConfiguration()) {
-//            result = new Configuration(project, false);
-//        } else {
-//            result = cfg;
-//        }        
+        }
         return result;
     }   
     
