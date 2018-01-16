@@ -294,7 +294,7 @@ public class OCLFeatureCall extends ConstraintSyntaxTree {
                 Sequence sequence = (Sequence) immediateOperand;
                 result = new Set("", param.getContainedType(), sequence.getParent());
             } else {
-                result = immediateOperand;
+                result = param.getContainedType();
             }
         }
         return result;

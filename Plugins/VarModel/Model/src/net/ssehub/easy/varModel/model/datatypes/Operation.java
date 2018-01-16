@@ -69,7 +69,7 @@ public class Operation {
         TYPED_OPERAND_1(0, -1, false, false),
 
         /**
-         * Change the return type to the operand with generic parameter. If no generic
+         * Change the return type to the type of the operand (first parameter). If no 
          * parameter is available, {@link #IMMEDIATE_OPERAND} is applied.
          */
         TYPED_PARAM_1(-1, 0, false, false),
@@ -136,7 +136,7 @@ public class Operation {
          * Whether the operand (if a collection) shall fit the return type as parameter.
          */
         private boolean checkOperand;
-
+        
         /**
          * Creates a new constant based on the affected generic type (index).
          * 

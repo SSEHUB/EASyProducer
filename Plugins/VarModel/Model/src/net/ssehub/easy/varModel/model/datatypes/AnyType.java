@@ -51,7 +51,7 @@ public class AnyType extends BasisDatatype {
     public static final Operation GET_LOCALE = new Operation(
         STRING_TYPE, OclKeyWords.LOCALE, TYPE);
     public static final Operation AS_TYPE = new Operation(
-        TYPE, ReturnTypeMode.TYPED_OPERAND_1, OclKeyWords.AS_TYPE, TYPE, META_TYPE);
+        TYPE, ReturnTypeMode.TYPED_PARAM_1, OclKeyWords.AS_TYPE, TYPE, META_TYPE);
 
     // checkstyle: resume declaration order check
     

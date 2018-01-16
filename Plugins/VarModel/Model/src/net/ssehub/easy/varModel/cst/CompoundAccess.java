@@ -103,7 +103,7 @@ public class CompoundAccess extends ConstraintSyntaxTree {
                     }
                 }
             }
-            if (cExpression.isAssignableFrom(Compound.TYPE)) {
+            if (cExpression.isAssignableFrom(Compound.TYPE) && cExpression instanceof Compound) {
                 Compound comp = (Compound) cExpression;
                 slot = searchSlot(comp, slotName);
                 if (null == slot) {

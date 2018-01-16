@@ -302,7 +302,7 @@ public class OperationTest {
         Variable operand = map.get(operation.getOperand());
         
         //create a new OCLFeatureCall with the same operand, operation and parameters
-        if (null != operand) {
+        if (null != operand && operation != AnyType.AS_TYPE) { // asType cannot be tested in that way 
             Variable[] parameters = new Variable[operation.getParameterCount()];
             for (int j = 0; j < operation.getParameterCount(); j++) {                
                 parameters[j] = map.get(operation.getParameterType(j));  
