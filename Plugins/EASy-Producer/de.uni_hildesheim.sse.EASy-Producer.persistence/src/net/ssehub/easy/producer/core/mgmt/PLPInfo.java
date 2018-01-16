@@ -307,7 +307,6 @@ public class PLPInfo implements IInstantiatorProject, IModelListener<Script> {
     private void initModels() {
         memberController = new MemberController(getProjectID());
         reasonerConfig = new ReasonerConfiguration();
-        reasonerConfig.setFreshConfiguration(false);
     }
     
     /**

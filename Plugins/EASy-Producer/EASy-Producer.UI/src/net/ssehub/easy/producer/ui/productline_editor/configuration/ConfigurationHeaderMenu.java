@@ -155,6 +155,7 @@ public class ConfigurationHeaderMenu extends AbstractConfigMenu implements IProd
                 if (result.getMessageCount() > 0) {
                     displayWarnings(result);
                 }
+                parentPage.refresh();
             }
         }
     }
