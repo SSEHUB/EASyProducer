@@ -123,11 +123,19 @@ public interface IDecisionVariable extends IConfigurationElement, IConfiguration
     public int getNestedDepth();
 
     /**
-     * Returns whether this variables is visible by the user.
+     * Returns whether this variable is visible by the user.
      * @return <tt>false</tt> if the variable is hidden by an interface, <tt>true</tt> otherwise
      */
     public boolean isVisible();
-    
+
+    /**
+     * Returns whether this variable is local, e.g., as a parameter of a user-defined function,
+     * a variable defined by a let-expression, or an iterator in a container operation.
+     * @return <tt>false</tt> if the variable is not local and part of an usual configuration, 
+     *    <code>true</code> if the variable is local
+     */
+    public boolean isLocal();
+
     /**
      * Checks whether the variable has a configured {@link Value}.
      * @return <tt>true</tt> if the variable has a value, <tt>false</tt> otherwise.

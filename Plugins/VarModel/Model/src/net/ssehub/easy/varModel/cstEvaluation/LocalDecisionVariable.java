@@ -322,5 +322,10 @@ public class LocalDecisionVariable implements IDecisionVariable {
     public IResolutionPathElement getResolutionPath() {
         return new StartPathElement(getDeclaration()); // unclear for now
     }
+    
+    @Override
+    public boolean isLocal() {
+        return true;
+    }
 
 }

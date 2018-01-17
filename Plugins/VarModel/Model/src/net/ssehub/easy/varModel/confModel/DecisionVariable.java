@@ -417,4 +417,9 @@ abstract class DecisionVariable implements IDecisionVariable {
         return declaration.getType();
     }
     
+    @Override
+    public boolean isLocal() {
+        return false;
+    }
+    
 }
