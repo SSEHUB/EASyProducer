@@ -141,25 +141,12 @@ public class Resolver {
                         + " Parent: " + (null == variable.getParent() ? null : variable.getParent()));                 
                 }
                 scopeAssignments.addAssignedVariable(variable);
-                AbstractVariable declaration = variable.getDeclaration();
                 // TODO if value type changes (currently not part of the notification), change also constraints
-                Set<Constraint> varConstraints = constraintMap.getRelevantConstraints(declaration);
                 Set<Constraint> constraintsToReevaluate = new HashSet<Constraint>();
-                if (null != varConstraints) {
-                    constraintsToReevaluate.addAll(varConstraints);
-                }
+                constraintsForChilds(variable, constraintsToReevaluate);
                 // All constraints for the parent (as this was also changed)
-                IConfigurationElement parent = variable.getParent();
-                if (parent instanceof IDecisionVariable) {
-                    constraintsForParent((IDecisionVariable) parent, constraintsToReevaluate);
-                }
+                constraintsForParent(variable, constraintsToReevaluate);
                 // All constraints for childs (as they may also changed)
-                for (int j = 0, nChilds = variable.getNestedElementsCount(); j < nChilds; j++) {
-                    IDecisionVariable nestedVar = variable.getNestedElement(j);
-                    if (!(nestedVar.isLocal())) {
-                        constraintsForChild(nestedVar, constraintsToReevaluate);
-                    }
-                }
                 for (Constraint varConstraint : constraintsToReevaluate) {
                     boolean found = false; // TODO consider constraint signature directory instead
                     for (Constraint c : constraintBase) {
@@ -175,29 +162,43 @@ public class Resolver {
                 }
             }
         }
-        
+
+        /**
+         * Determines the constraints needed for the parents of <code>variable</code>.
+         * 
+         * @param variable the variable to analyze
+         * @param constraintsToReevaluate the constraint set to be modified as a side effect
+         */
         private void constraintsForParent(IDecisionVariable variable, Set<Constraint> constraintsToReevaluate) {
-            AbstractVariable declaration = variable.getDeclaration();
-            Set<Constraint> varConstraints = constraintMap.getRelevantConstraints(declaration);
-            if (null != varConstraints) {
-                constraintsToReevaluate.addAll(varConstraints);
-            }
             IConfigurationElement parent = variable.getParent();
             if (parent instanceof IDecisionVariable) {
-                constraintsForParent((IDecisionVariable) parent, constraintsToReevaluate);                            
+                IDecisionVariable pVar = (IDecisionVariable) parent;
+                AbstractVariable declaration = pVar.getDeclaration();
+                Set<Constraint> varConstraints = constraintMap.getRelevantConstraints(declaration);
+                if (null != varConstraints) {
+                    constraintsToReevaluate.addAll(varConstraints);
+                }
+                constraintsForParent(pVar, constraintsToReevaluate);                            
             }
         }
-        
-        private void constraintsForChild(IDecisionVariable variable, Set<Constraint> constraintsToReevaluate) {
+
+        /**
+         * Determines the constraints needed for <code>variable</code> and its (transitive) child slots.
+         * 
+         * @param variable the variable to analyze
+         * @param constraintsToReevaluate the constraint set to be modified as a side effect
+         */
+        private void constraintsForChilds(IDecisionVariable variable, Set<Constraint> constraintsToReevaluate) {
             AbstractVariable declaration = variable.getDeclaration();
             Set<Constraint> varConstraints = constraintMap.getRelevantConstraints(declaration);
             if (null != varConstraints) {
                 constraintsToReevaluate.addAll(varConstraints);
             }
+            // All constraints for childs (as they may also changed)
             for (int j = 0, nChilds = variable.getNestedElementsCount(); j < nChilds; j++) {
                 IDecisionVariable nestedVar = variable.getNestedElement(j);
                 if (!(nestedVar.isLocal())) {
-                    constraintsForChild(nestedVar, constraintsToReevaluate);
+                    constraintsForChilds(nestedVar, constraintsToReevaluate);
                 }
             }
         }
@@ -1315,7 +1316,7 @@ public class Resolver {
      * and their {@link Constraint}s.
      * @return Map of constraint variables and their constraints.
      */
-    public Map<Constraint, IDecisionVariable> getConstraintVariableMap() {
+    Map<Constraint, IDecisionVariable> getConstraintVariableMap() {
         return constraintVariableMap;
     }
     
