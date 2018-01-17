@@ -25,7 +25,6 @@ import net.ssehub.easy.reasoning.sseReasoner.model.VariablesInConstraintsFinder;
 import net.ssehub.easy.varModel.confModel.AssignmentState;
 import net.ssehub.easy.varModel.confModel.CompoundVariable;
 import net.ssehub.easy.varModel.confModel.Configuration;
-import net.ssehub.easy.varModel.confModel.ConfigurationException;
 import net.ssehub.easy.varModel.confModel.IAssignmentState;
 import net.ssehub.easy.varModel.confModel.IConfigurationElement;
 import net.ssehub.easy.varModel.confModel.IDecisionVariable;
@@ -40,6 +39,7 @@ import net.ssehub.easy.varModel.cst.ContainerInitializer;
 import net.ssehub.easy.varModel.cst.OCLFeatureCall;
 import net.ssehub.easy.varModel.cst.Variable;
 import net.ssehub.easy.varModel.cstEvaluation.EvaluationVisitor;
+import net.ssehub.easy.varModel.cstEvaluation.EvaluationVisitor.Message;
 import net.ssehub.easy.varModel.cstEvaluation.IResolutionListener;
 import net.ssehub.easy.varModel.cstEvaluation.IValueChangeListener;
 import net.ssehub.easy.varModel.cstEvaluation.LocalDecisionVariable;
@@ -116,7 +116,6 @@ public class Resolver {
     private Map<AbstractVariable, CompoundAccess> varMap; // TODO turn into local map
     
     private List<Constraint> collectionCompoundConstraints = new ArrayList<Constraint>();
-    private Set<IDecisionVariable> problemVariables = new HashSet<IDecisionVariable>();
     
     // Stats
     private int constraintCounter = 0;
@@ -127,6 +126,7 @@ public class Resolver {
     // global temporary variables avoiding parameter passing (performance)
     
     private transient Project project;
+    private transient Set<IDecisionVariable> usedVariables = new HashSet<IDecisionVariable>();
     
     private IValueChangeListener listener = new IValueChangeListener() {
         
@@ -208,14 +208,14 @@ public class Resolver {
         @Override
         public void notifyResolved(IDecisionVariable compound, String slotName, IDecisionVariable resolved) {
             if (!(resolved instanceof LocalDecisionVariable)) {
-                problemVariables.add(resolved);                
+                usedVariables.add(resolved);                
             }
         }
         
         @Override
         public void notifyResolved(AbstractVariable declaration, IDecisionVariable resolved) {
             if (!(resolved instanceof LocalDecisionVariable)) {
-                problemVariables.add(resolved);                
+                usedVariables.add(resolved);                
             }            
         }
     };
@@ -258,23 +258,7 @@ public class Resolver {
         new Resolver(config.getProject(), config, true, reasonerConfig);
     }  
     
-    /**
-     * Sets whether reasoning shall happen incrementally. 
-     * @param incremental if reasoning shall happen incrementally
-     */
-    void setIncremental(boolean incremental) {
-        this.incremental = incremental;
-    }
-    
-    
-    /**
-     * Factory method for creating the evaluation visitor.
-     * 
-     * @return the evaluation visitor
-     */
-    protected EvaluationVisitor createEvaluationVisitor() {
-        return new EvalVisitor();
-    }
+    // from here the sequence follows the reasoner.tex documentation
     
     /**
      * Resolves the (initial) values of the configuration. This is done as follows:
@@ -293,6 +277,9 @@ public class Resolver {
      */
     public void resolve() { 
         // Stack of importedProject (start with inner most imported project)
+        evaluator.init(config, null, false, listener); 
+        evaluator.setResolutionListener(resolutionListener);
+        evaluator.setScopeAssignments(scopeAssignments);
         List<Project> projects = Utils.discoverImports(config.getProject());
         for (int p = 0; p < projects.size(); p++) {
             project = projects.get(p);
@@ -310,7 +297,44 @@ public class Resolver {
             }
         }
         variablesInConstraintsCounter = constraintMap.getDeclarationSize();
-    }   
+        evaluator.clear();
+    }
+    
+    /**
+     * Evaluates and reschedules failed constraints.
+     * 
+     * @see #resolve()
+     */
+    private void evaluateConstraints() {
+        if (Descriptor.LOGGING) {
+            printConstraints(constraintBase);            
+        }
+        scopeAssignments.clearScopeAssignments();
+        evaluator.setDispatchScope(project);
+        while (!constraintBase.isEmpty()) { 
+            usedVariables.clear();
+            Constraint constraint = constraintBase.pop();
+            ConstraintSyntaxTree cst = constraint.getConsSyntax();
+            evaluator.setAssignmentState(constraint.isDefaultConstraint() 
+                ? AssignmentState.DEFAULT : AssignmentState.DERIVED);
+            reevaluationCounter++;
+            if (cst != null) {
+                if (Descriptor.LOGGING) {
+                    LOGGER.debug("Resolving: " + reevaluationCounter + ": " + toIvmlString(cst) 
+                        + " : " + constraint.getTopLevelParent());                    
+                }
+                evaluator.visit(cst);
+                analyzeEvaluationResult(constraint);
+                if (Descriptor.LOGGING) {
+                    LOGGER.debug("Result: " + evaluator.getResult());
+                    LOGGER.debug("------");                     
+                }
+                evaluator.clearIntermediary();
+            }
+        }
+    }
+    
+    // documentation done until here    
     
     /**
      * Resolves the constraints initializing/guarding the default values of all variable declarations 
@@ -1099,79 +1123,6 @@ public class Resolver {
             }
         }
     }
-
-    /**
-     * Evaluates and reschedules failed constraints.
-     * 
-     * @see #resolve()
-     */
-    private void evaluateConstraints() {
-        if (Descriptor.LOGGING) {
-            printConstraints(constraintBase);            
-        }
-        scopeAssignments.clearScopeAssignments();
-        evaluator.init(config, null, false, listener); 
-        evaluator.setResolutionListener(resolutionListener);
-        evaluator.setDispatchScope(project);
-        evaluator.setScopeAssignmnets(scopeAssignments);
-        while (!constraintBase.isEmpty()) { 
-            problemVariables.clear();
-            Constraint constraint = constraintBase.pop();
-            ConstraintSyntaxTree cst = constraint.getConsSyntax();
-            evaluator.setAssignmentState(constraint.isDefaultConstraint() 
-                ? AssignmentState.DEFAULT : AssignmentState.DERIVED);
-            reevaluationCounter++;
-            if (cst != null) {
-                if (Descriptor.LOGGING) {
-                    LOGGER.debug("Resolving: " + reevaluationCounter + ": " + toIvmlString(cst) 
-                        + " : " + constraint.getTopLevelParent());                    
-                }
-                evaluator.visit(cst);
-                if (evaluator.constraintFailed()) {
-                    conflictingConstraint(constraint);
-                } else if (evaluator.constraintFulfilled()) {
-                    fulfilledConstraint(constraint);
-                }
-                for (int j = 0; j < evaluator.getMessageCount(); j++) {
-                    if (evaluator.getMessage(j).getVariable() != null) {
-                        if (!(evaluator.getMessage(j).getVariable().getParent() instanceof OperationDefinition)
-                            && !(evaluator.getMessage(j).getVariable().getParent() instanceof Constraint)) {
-                            problemVariables.clear();
-                            problemVariables.add(evaluator.getMessage(j).getDecision());
-                            FailedElementDetails failedelementDetails = new FailedElementDetails();
-                            failedelementDetails.setProblemPoints(new HashSet<IDecisionVariable>(problemVariables));
-                            // due to NULL result if failed assignment
-                            failedelementDetails.setProblemConstraintPart(cst);
-                            failedelementDetails.setProblemConstraint(constraint);
-                            failedelementDetails.setErrorClassifier(ReasoningErrorCodes.FAILED_REASSIGNMENT);
-                            failedElements.addProblemVariable(evaluator.getMessage(j).getVariable(), 
-                                failedelementDetails);
-                            if (Descriptor.LOGGING) {
-                                LOGGER.debug("Assigment error: " + evaluator.getMessage(j).getVariable());
-                                printProblemPoints(problemVariables);
-                            }
-                        }
-                    } 
-                }
-                if (null != constraintVariableMap.get(constraint)) {
-                    Value value = evaluator.getResult();
-                    try {
-                        IDecisionVariable variable = constraintVariableMap.get(constraint);
-                        variable.setValue(value, AssignmentState.DEFAULT);
-                    } catch (ConfigurationException e) {
-                        LOGGER.exception(e);
-                    }     
-                }
-                if (Descriptor.LOGGING) {
-                    LOGGER.debug("Result: " + evaluator.getResult());
-                    LOGGER.debug("------");                     
-                }
-                evaluator.clearIntermediary();
-            }
-        }
-        evaluator.clear();
-    }
-    
     
     /**
      * Method for retrieving constraints from collections.
@@ -1188,21 +1139,6 @@ public class Resolver {
         }
     }
 
-    /**
-     * Method for clearing all constraint lists.
-     */
-    private void clearConstraintLists() {
-        defaultConstraints.clear();
-        internalConstraints.clear();
-        compoundConstraints.clear();
-        compoundEvalConstraints.clear();
-        constraintVariables.clear();        
-        collectionCompoundConstraints.clear(); 
-        collectionConstraints.clear();      
-        defaultAttributeConstraints.clear();
-        assignedAttributeConstraints.clear();
-        unresolvedConstraints.clear();   
-    }
 
     /**
      * Method for filling the map with constraints related to specific variable.
@@ -1221,14 +1157,17 @@ public class Resolver {
         }
     }
     
+    // messages
+    
     /**
-     * Will be called after a failure was detected in a {@link Constraint}.
-     * @param constraint The violated {@link Constraint}.
+     * Records information about the evaluation result, failed evaluation messages.
+     * 
+     * @param constraint the constraint to record the actual messages for
      */
-    private void conflictingConstraint(Constraint constraint) {
-        if (constraint != null) {
+    private void analyzeEvaluationResult(Constraint constraint) {
+        if (evaluator.constraintFailed()) {
             FailedElementDetails failedElementDetails = new FailedElementDetails();
-            failedElementDetails.setProblemPoints(new HashSet<IDecisionVariable>(problemVariables));
+            failedElementDetails.setProblemPoints(new HashSet<IDecisionVariable>(usedVariables));
             failedElementDetails.setProblemConstraintPart(getFailedConstraintPart());
             failedElementDetails.setProblemConstraint(constraint);
             failedElementDetails.setErrorClassifier(ReasoningErrorCodes.FAILED_CONSTRAINT);
@@ -1236,11 +1175,56 @@ public class Resolver {
             if (Descriptor.LOGGING) {
                 LOGGER.debug("Failed constraint: " + toIvmlString(constraint));
                 printModelElements(config, "constraint resolved");
-                printProblemPoints(problemVariables);
+                printProblemPoints(usedVariables);
+            }
+        } else if (evaluator.constraintFulfilled()) {
+            failedElements.removeProblemConstraint(constraint);
+            if (Descriptor.LOGGING) {
+                LOGGER.debug("Constraint fulfilled: " + toIvmlString(constraint));
             }
         }
+        // must be done always
+        for (int j = 0; j < evaluator.getMessageCount(); j++) {
+            Message msg = evaluator.getMessage(j);
+            AbstractVariable var = msg.getVariable();
+            if (var != null) {
+                // no local variable, i.e., defined for/within user-defined operation or within constraint
+                if (!(var.getParent() instanceof OperationDefinition) && !(var.getParent() instanceof Constraint)) {
+                    usedVariables.clear();
+                    usedVariables.add(msg.getDecision());
+                    FailedElementDetails failedelementDetails = new FailedElementDetails();
+                    failedelementDetails.setProblemPoints(new HashSet<IDecisionVariable>(usedVariables));
+                    // due to NULL result if failed assignment
+                    failedelementDetails.setProblemConstraintPart(constraint.getConsSyntax());
+                    failedelementDetails.setProblemConstraint(constraint);
+                    failedelementDetails.setErrorClassifier(ReasoningErrorCodes.FAILED_REASSIGNMENT);
+                    failedElements.addProblemVariable(var, failedelementDetails);
+                    if (Descriptor.LOGGING) {
+                        LOGGER.debug("Assigment error: " + evaluator.getMessage(j).getVariable());
+                        printProblemPoints(usedVariables);
+                    }
+                }
+            } 
+        }
     }
+    
+    // helpers, accessors
 
+    /**
+     * Method for clearing all constraint lists.
+     */
+    private void clearConstraintLists() {
+        defaultConstraints.clear();
+        internalConstraints.clear();
+        compoundConstraints.clear();
+        compoundEvalConstraints.clear();
+        constraintVariables.clear();        
+        collectionCompoundConstraints.clear(); 
+        collectionConstraints.clear();      
+        defaultAttributeConstraints.clear();
+        assignedAttributeConstraints.clear();
+        unresolvedConstraints.clear();   
+    }
     
     /**
      * Will be called after a failure was detected in a default constraint of an {@link AbstractVariable}.
@@ -1250,19 +1234,6 @@ public class Resolver {
     @SuppressWarnings("unused")
     private void conflictingDefault(AbstractVariable decl) {
         // currently unused
-    }
-    
-    /**
-     * Will be called after a failure is not detected in a {@link Constraint}.
-     * @param constraint The fulfilled {@link Constraint}.
-     */
-    private void fulfilledConstraint(Constraint constraint) {
-        if (constraint != null) {
-            failedElements.removeProblemConstraint(constraint);
-            if (Descriptor.LOGGING) {
-                LOGGER.debug("Constraint fulfilled: " + toIvmlString(constraint));
-            }
-        }
     }
     
     /**
@@ -1384,5 +1355,23 @@ public class Resolver {
     public FailedElements getFailedElements() {
         return failedElements;
     }  
+
+    /**
+     * Sets whether reasoning shall happen incrementally. 
+     * @param incremental if reasoning shall happen incrementally
+     */
+    void setIncremental(boolean incremental) {
+        this.incremental = incremental;
+    }
+    
+    
+    /**
+     * Factory method for creating the evaluation visitor.
+     * 
+     * @return the evaluation visitor
+     */
+    protected EvaluationVisitor createEvaluationVisitor() {
+        return new EvalVisitor();
+    }
 
 }
