@@ -91,8 +91,9 @@ public class Resolver {
     @SuppressWarnings("unused")
     private IAdditionalInformationLogger infoLogger; 
     
-    private Project project;
     private Configuration config;
+    private boolean incremental;
+
     private EvalVisitor evaluator = new EvalVisitor();
     private FailedElements failedElements = new FailedElements();
     private ScopeAssignments scopeAssignments = new ScopeAssignments();
@@ -122,8 +123,10 @@ public class Resolver {
     private int variablesInConstraintsCounter = 0;    
     private int reevaluationCounter = 0;
     private int variablesCounter = 0;
+
+    // global temporary variables avoiding parameter passing (performance)
     
-    private boolean incremental;
+    private transient Project project;
     
     private IValueChangeListener listener = new IValueChangeListener() {
         
@@ -276,22 +279,29 @@ public class Resolver {
     /**
      * Resolves the (initial) values of the configuration. This is done as follows:
      * <ol>
-     * <li>Resolve default values of variable declarations</li>
-     * <li>Resolve values of assignments</li>
+     * <li>Identify the relevant project imports from 
+     *     {@link Utils#discoverImports(net.ssehub.easy.basics.modelManagement.IModel)} for the actual 
+     *     {@link #config Configuration}.
+     * <li>For each project:
+     *   <ol>
+     *     <li>Collect constraints for default values of variable declarations ({@link #collectDefaults()})</li>
+     *     <li>Collect constraints for the other constraints ({@link #collectConstraints()})</li>
+     *     <li>Evaluate the constraints ({@link #evaluateConstraints(Deque)}.
+     *     <li>Freezing the assigned variables</li>
+     *   </ol> 
      * </ol>
      */
     public void resolve() { 
         // Stack of importedProject (start with inner most imported project)
-        List<Project> projects = Utils.discoverImports(config.getProject());    
-        while (!projects.isEmpty()) {
-            project = projects.remove(0);
+        List<Project> projects = Utils.discoverImports(config.getProject());
+        for (int p = 0; p < projects.size(); p++) {
+            project = projects.get(p);
             if (Descriptor.LOGGING) {
                 LOGGER.debug("Project:" + project.getName());                
             }
-            evaluator.setDispatchScope(project);
-            scopeAssignments.clearScopeAssignments();
-            resolveDefaultValues();
-            processConstraints(project);
+            collectDefaults();
+            collectConstraints();
+            evaluateConstraints();
             // Freezes values after each scope
             config.freezeValues(project, FilterType.NO_IMPORTS);
             // TODO do incremental freezing in here -> required by interfaces with propagation constraints
@@ -303,10 +313,12 @@ public class Resolver {
     }   
     
     /**
-     * Part of the {@link #resolve()} method.
-     * Resolves default values of variable declarations.
+     * Resolves the constraints initializing/guarding the default values of all variable declarations 
+     * in {@link #project}.
+     * 
+     * @see #resolve()
      */
-    protected void resolveDefaultValues() {
+    protected void collectDefaults() {
         DeclarationFinder finder = new DeclarationFinder(project, FilterType.NO_IMPORTS, null);
         List<AbstractVariable> variables = finder.getVariableDeclarations(VisibilityType.ALL);
         varMap = new HashMap<AbstractVariable, CompoundAccess>();
@@ -950,12 +962,12 @@ public class Resolver {
     }
     
     /**
-     * Part of the {@link #resolve()} method.
-     * Processes all constraints.
+     * Collects all constraints in {@link #project} by adding the collected constraints to the 
+     * {@link #constraintBase}.
      * 
-     * @param dispatchScope the scope for dynamic dispatches
+     * @see #resolve()
      */
-    private void processConstraints(Project dispatchScope) { 
+    private void collectConstraints() { 
         List<Constraint> scopeConstraints = new ArrayList<Constraint>();
         if (!incremental && defaultConstraints.size() > 0) {
             defaultConstraints.addAll(deferredDefaultConstraints);
@@ -1013,7 +1025,6 @@ public class Resolver {
         }
         constraintCounter = constraintCounter + constraintBase.size();
         clearConstraintLists();
-        resolveConstraints(constraintBase, dispatchScope);
     }
     
 
@@ -1090,21 +1101,22 @@ public class Resolver {
     }
 
     /**
-     * Method for resolving constraints.
-     * @param constraints List of constraints to be resolved.
-     * @param dispatchScope the scope for dynamic dispatches
+     * Evaluates and reschedules failed constraints.
+     * 
+     * @see #resolve()
      */
-    private void resolveConstraints(Deque<Constraint> constraints, Project dispatchScope) {
+    private void evaluateConstraints() {
         if (Descriptor.LOGGING) {
-            printConstraints(constraints);            
+            printConstraints(constraintBase);            
         }
+        scopeAssignments.clearScopeAssignments();
         evaluator.init(config, null, false, listener); 
         evaluator.setResolutionListener(resolutionListener);
-        evaluator.setDispatchScope(dispatchScope);
+        evaluator.setDispatchScope(project);
         evaluator.setScopeAssignmnets(scopeAssignments);
-        while (!constraints.isEmpty()) { 
+        while (!constraintBase.isEmpty()) { 
             problemVariables.clear();
-            Constraint constraint = constraints.pop();
+            Constraint constraint = constraintBase.pop();
             ConstraintSyntaxTree cst = constraint.getConsSyntax();
             evaluator.setAssignmentState(constraint.isDefaultConstraint() 
                 ? AssignmentState.DEFAULT : AssignmentState.DERIVED);
@@ -1115,10 +1127,6 @@ public class Resolver {
                         + " : " + constraint.getTopLevelParent());                    
                 }
                 evaluator.visit(cst);
-//System.out.println("EVAL " + toIvmlString(cst));
-//if (evaluator.constraintFailed()) {
-//    System.out.println("CONFLICT");
-//}
                 if (evaluator.constraintFailed()) {
                     conflictingConstraint(constraint);
                 } else if (evaluator.constraintFulfilled()) {

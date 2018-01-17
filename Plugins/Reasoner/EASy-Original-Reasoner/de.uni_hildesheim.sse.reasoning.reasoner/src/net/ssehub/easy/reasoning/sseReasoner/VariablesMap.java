@@ -16,8 +16,6 @@ import net.ssehub.easy.varModel.model.Constraint;
 class VariablesMap {
     
     private Map<AbstractVariable, Set<Constraint>> declConstraintMapping;
-//    private Map<IDatatype, Set<Constraint>> typeConstraintMapping;
-
 
     /**
      * Sole constructor initializing the map.
@@ -29,7 +27,7 @@ class VariablesMap {
     /**
      * Method for adding a relationship between variable and constraint.
      * @param declaration {@link AbstractVariable} to be added.
-     * @param constraint {@link Constraint} that holdes added {@link AbstractVariable}.
+     * @param constraint {@link Constraint} that holds added {@link AbstractVariable}.
      */
     void add(AbstractVariable declaration, Constraint constraint) {
         Set<Constraint> relevantConstraints = declConstraintMapping.get(declaration);
