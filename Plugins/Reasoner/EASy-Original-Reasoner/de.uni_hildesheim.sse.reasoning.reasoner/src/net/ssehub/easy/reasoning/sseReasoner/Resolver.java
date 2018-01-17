@@ -1,6 +1,7 @@
 package net.ssehub.easy.reasoning.sseReasoner;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Deque;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -99,7 +100,8 @@ public class Resolver {
 
     private VariablesMap constraintMap = new VariablesMap();
     private Map<Constraint, IDecisionVariable> constraintVariableMap = new HashMap<Constraint, IDecisionVariable>();
-    private Deque<Constraint> constraintBase = new LinkedList<Constraint>();   
+    private Deque<Constraint> constraintBase = new LinkedList<Constraint>();
+    private Set<Constraint> constraintBaseSet = new HashSet<Constraint>();
     private List<Constraint> constraintVariables = new LinkedList<Constraint>();
     private List<Constraint> compoundConstraints = new LinkedList<Constraint>();
     private List<Constraint> compoundEvalConstraints = new LinkedList<Constraint>();
@@ -148,16 +150,10 @@ public class Resolver {
                 constraintsForParent(variable, constraintsToReevaluate);
                 // All constraints for childs (as they may also changed)
                 for (Constraint varConstraint : constraintsToReevaluate) {
-                    boolean found = false; // TODO consider constraint signature directory instead
-                    for (Constraint c : constraintBase) {
-                        if (c == varConstraint) { // reference equality is ok here as we search for the identical one
-                            found = true;
-                            break;
-                        }
-                    }
-                    if (!found) {
-                        constraintBase.add(varConstraint);
+                    if (!constraintBaseSet.contains(varConstraint)) {
+                        addToConstraintBase(varConstraint);
                         constraintCounter++;
+                        
                     }
                 }
             }
@@ -318,6 +314,7 @@ public class Resolver {
         while (!constraintBase.isEmpty()) { 
             usedVariables.clear();
             Constraint constraint = constraintBase.pop();
+            constraintBaseSet.remove(constraint);
             ConstraintSyntaxTree cst = constraint.getConsSyntax();
             evaluator.setAssignmentState(constraint.isDefaultConstraint() 
                 ? AssignmentState.DEFAULT : AssignmentState.DERIVED);
@@ -1040,21 +1037,38 @@ public class Resolver {
                 AssignmentConstraintFinder assignmentFinder = new AssignmentConstraintFinder(scopeConstraints);
                 scopeConstraints = assignmentFinder.getValidationConstraints();                
             }
-            constraintBase.addAll(scopeConstraints);
+            addAllToConstraintBase(scopeConstraints);
             scopeConstraints.clear();
         }
         if (!incremental) {
-            if (defaultAttributeConstraints.size() > 0) {
-                constraintBase.addAll(defaultAttributeConstraints);
-            }
-            if (assignedAttributeConstraints.size() > 0) {
-                constraintBase.addAll(assignedAttributeConstraints);
-            }            
+            addAllToConstraintBase(defaultAttributeConstraints);
+            addAllToConstraintBase(assignedAttributeConstraints);
         }
         constraintCounter = constraintCounter + constraintBase.size();
         clearConstraintLists();
     }
-    
+
+    /**
+     * Adds <code>constraint</code> to the constraint base.
+     * 
+     * @param constraint the constraint
+     */
+    private void addToConstraintBase(Constraint constraint) {
+        constraintBase.addLast(constraint);
+        constraintBaseSet.add(constraint);
+    }
+
+    /**
+     * Adds all <code>constraints</code> to the constraint base.
+     * 
+     * @param constraints the constraints
+     */
+    private void addAllToConstraintBase(Collection<Constraint> constraints) {
+        if (constraints.size() > 0) {
+            constraintBase.addAll(constraints);
+            constraintBaseSet.addAll(constraints);
+        }
+    }
 
     /**
      * Method for processing scope attribute assignments.
