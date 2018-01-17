@@ -338,6 +338,11 @@ public abstract class AbstractIvmlVariable extends IvmlElement implements IActua
         public IResolutionPathElement getResolutionPath() {
             return new StartPathElement(getDeclaration()); // unclear for now
         }
+        
+        @Override
+        public boolean isLocal() {
+            return false;
+        }
 
     }
     

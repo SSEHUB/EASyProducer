@@ -42,7 +42,6 @@ import net.ssehub.easy.varModel.cstEvaluation.EvaluationVisitor;
 import net.ssehub.easy.varModel.cstEvaluation.EvaluationVisitor.Message;
 import net.ssehub.easy.varModel.cstEvaluation.IResolutionListener;
 import net.ssehub.easy.varModel.cstEvaluation.IValueChangeListener;
-import net.ssehub.easy.varModel.cstEvaluation.LocalDecisionVariable;
 import net.ssehub.easy.varModel.model.AbstractVariable;
 import net.ssehub.easy.varModel.model.Attribute;
 import net.ssehub.easy.varModel.model.AttributeAssignment;
@@ -136,13 +135,14 @@ public class Resolver {
         
         @Override
         public void notifyChanged(IDecisionVariable variable) {
-            if (!(variable instanceof LocalDecisionVariable)) {
+            if (!(variable.isLocal())) {
                 if (Descriptor.LOGGING) {
                     LOGGER.debug("Value changed: " + variable.getDeclaration().getName() + " " + variable.getValue()
                         + " Parent: " + (null == variable.getParent() ? null : variable.getParent()));                 
                 }
                 scopeAssignments.addAssignedVariable(variable);
                 AbstractVariable declaration = variable.getDeclaration();
+                // TODO if value type changes (currently not part of the notification), change also constraints
                 Set<Constraint> varConstraints = constraintMap.getRelevantConstraints(declaration);
                 Set<Constraint> constraintsToReevaluate = new HashSet<Constraint>();
                 if (null != varConstraints) {
@@ -156,7 +156,7 @@ public class Resolver {
                 // All constraints for childs (as they may also changed)
                 for (int j = 0, nChilds = variable.getNestedElementsCount(); j < nChilds; j++) {
                     IDecisionVariable nestedVar = variable.getNestedElement(j);
-                    if (!(nestedVar instanceof LocalDecisionVariable)) {
+                    if (!(nestedVar.isLocal())) {
                         constraintsForChild(nestedVar, constraintsToReevaluate);
                     }
                 }
@@ -196,25 +196,28 @@ public class Resolver {
             }
             for (int j = 0, nChilds = variable.getNestedElementsCount(); j < nChilds; j++) {
                 IDecisionVariable nestedVar = variable.getNestedElement(j);
-                if (!(nestedVar instanceof LocalDecisionVariable)) {
+                if (!(nestedVar.isLocal())) {
                     constraintsForChild(nestedVar, constraintsToReevaluate);
                 }
             }
         }
     };
     
+    /**
+     * Listener for the {@link #evaluator} to record changed variables.
+     */
     private IResolutionListener resolutionListener = new IResolutionListener() {
         
         @Override
         public void notifyResolved(IDecisionVariable compound, String slotName, IDecisionVariable resolved) {
-            if (!(resolved instanceof LocalDecisionVariable)) {
+            if (!(resolved.isLocal())) {
                 usedVariables.add(resolved);                
             }
         }
         
         @Override
         public void notifyResolved(AbstractVariable declaration, IDecisionVariable resolved) {
-            if (!(resolved instanceof LocalDecisionVariable)) {
+            if (!(resolved.isLocal())) {
                 usedVariables.add(resolved);                
             }            
         }
@@ -1183,7 +1186,7 @@ public class Resolver {
                 LOGGER.debug("Constraint fulfilled: " + toIvmlString(constraint));
             }
         }
-        // must be done always
+        // must be done always, constraints -> undefined may cause illegal variable assignments as side effect
         for (int j = 0; j < evaluator.getMessageCount(); j++) {
             Message msg = evaluator.getMessage(j);
             AbstractVariable var = msg.getVariable();
