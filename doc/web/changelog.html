@@ -1,0 +1,123 @@
+<html>
+<title>EASy-Producer change log / release summary</title>
+<body>
+
+<h2>Release Summary</h2>
+<ul>
+  <li>upcoming 2018 release (already part of the nightly releases)</li>
+    <ul>
+      <li>IVML
+        <ul>
+          <li>multi inheritance and slot shadowing</li>
+          <li>default parameter values</li>
+          <li>IVML constraint syntax alignment to OCL 2.4.1, editor compliance mode</li>
+          <li>UI improvements for refined compound values (<a href="https://github.com/SSEHUB/EASyProducer/issues/82">#82</a>)</li>
+          <li>Constant variable declarations</li>
+          <li>Reasoner
+            <ul>
+               <li>Full implementation of eval-Blocks, slighly relaxed syntax for simplified application</li>
+               <li>Consideration of refined compound values</li>
+               <li>Consideration of compound collection defaults</li>
+               <li>Auto-selection of default reasoner upon first start (<a href="https://github.com/SSEHUB/EASyProducer/issues/80">#80</a>)
+               <li>Memory usage improvements</li>
+            </ul>
+          </li>
+        </ul>
+      </li>
+      <li>VIL/VTL
+        <ul>
+          <li>Expression syntax alignment to OCL 2.4.1, editor compliance mode</li>
+          <li>default parameter values</li>
+          <li>explict for/while (<a href="https://github.com/SSEHUB/EASyProducer/issues/47">#47</a>)</li>
+          <li>Abortion of VIL/VTL scripts (<a href="https://github.com/SSEHUB/EASyProducer/issues/53">#53</a>)</li>
+        </ul>
+      </li>
+	  <li>Selection of basis Eclipse project type while creating an EASy-Producer project(<a href="https://github.com/SSEHUB/EASyProducer/issues/43">#43</a>), supported types:</li>
+        <ul>
+          <li>Java projects</li>
+          <li>Eclipse projects (without Java, C, or other programming language specific settings)</li>
+        </ul>
+      <li>Documentation improvements along all changes, including <a href="https://github.com/SSEHUB/EASyProducer/issues/81">#81</a></li>
+	</ul>
+  </li>
+  <li>release 1.1.0 (March 16, 2016)</li>
+    <ul>
+      <li>EASy-examples are now available through project imports</li>
+      <li>Improvements for IVML (refBy on expression, static operation definitions, min/max for ordered enums, flatten operations, dynamic dispatch improvement, cyclic imports), configuration initialization</li>
+      <li>Improvements for VIL (switch expression, undefined variables, typedef, protected sub-templates, VTL line end formatting, access to keys in maps)</li>
+      <li>Improvements for rt-VIL (explicit fail)</li>
+      <li>Improvements for the IVML reasoner (fixes, typedefs of typedefs, annotations, performance)</li>
+      <li>Improvement of Maven-VIL integration (Linux fix, JAVA_HOME detection)</li>
+      <li>Global VIL Java classpath settings</li>
+      <li>Filtered delete for calls / methods in Java Artifacts</li>
+      <li>Upgrade of the xText version to 2.9.0</li>
+      <li>Bug fix: Arbitrary Eclipse projects can be converted into EASy projects through the context menu: right click on project and select: <tt>Configure &#45;&gt; Add EASy-Producer Nature</tt></li>
+    </ul>
+  </li>
+  <li>release 1.0.0 (July 2015)
+  <ul>
+    <li>IVML freeze-but expressions, attributes renamed to annotations</li>
+    <li>VIL-IVML mapping improved / changed now using fields rather than operations</li>
+    <li>VIL/VTL improvements: resource cleanup, XML artifact fixes, stream gobbler for command line execution, expression parsing moved to language analysis time allowing errors and warnings before script execution</li>
+    <li>SSE reasoner became EASy default reasoner replacing Drools2 (available as optional, outdated component)</li>
+    <li>SSE reasoner improvements: constraint variables for compounds directly instantiated into collections, IVML attributes, now mostly functional complete except for evals</li>
+    <li>Initial version of rt-VIL (experimental)</li>
+    <li>Initial version of the IVML/VIL model serializer for XML, which supersedes initial and outdated IVML serializer (experimental)</li>
+    <li>Maven instantiator supports now multiple executions (file descriptor leak in Maven) and works in standalone mode and detects the installed JDK</li>
+    <li>Java instantiator bundle separated into Java, ANT and AspectJ to support more fine grained packaging of standalone libraries</li>
+    <li>EASy-UI now showing top-level models in tabbed editors, several UI fixes/improvements</li>
+    <li>Initial instantiation view as UI frontend of VIL</li>
+    <li>Product line examples now integrated and available through the UI</li>
+    <li>Support for Eclipse Mars and JDK 1.8 (xText upgrade will follow with the next release)</li>
+    <li>Update site restructured to simplify installation</li>
+  </ul>
+  </li>
+  <li>release 0.11.3 (January 2015)
+  <ul>
+   <li>new internal IVML reasoner (still experimental)</li>
+   <li>IVML, VIL and VTL improvements (for details see language specifications)</li>
+   <li>reasoner selection in UI</li>
+   <li>content assist improvements</li>
+   <li>removing copy mechanisms</li>
+   <li>start of experimental branch (new internal IVML reasoner, rt-VIL)</li>
+   <li>extended standalone generator</li>
+   <li>improved model import mechanism</li>
+   <li>VIL-Maven integration</li>
+  </ul>
+  </li>
+  <li>release 0.11.2 (September 2014)
+   <ul>
+    <li>improved configuration build-up (based on internal IVML expression evaluator)</li>
+    <li>reduction of memory consumption</li>
+    <li>IVML, VIL and VTL improvements (for details see language specifications)</li>
+    <li>editor refreshes</li>
+   </ul>
+  </li>
+  <li>release 0.11.1 (June 2014)
+   <ul>
+    <li>IMVL improvements</li>
+    <li>new UI editor components</li>
+    <li>explicit VIL iterators</li>
+    <li>dynamic VIL type system, extended IVML-VIL integration</li>
+   </ul>
+  </li>
+  <li>release 0.9.0 (April 2014)
+   <ul>
+    <li>extensible and reusable UI</li>
+    <li>model import version constraints</li>
+    <li>switch to xText 2.5.3</li>
+    <li>IVML, VIL and VTL improvements</li>
+    <li>Drools reasoner improvements</li>
+   </ul>
+  </li>
+  <li>release 0.8.0 (March 2014) 
+    <ul>
+     <li>extended configuration via UI</li>
+     <li>IVML, VIL and VTL improvements</li>
+     <li>Drools reasoner improvements</li>
+    </ul>
+  </li>
+</ul>
+
+</body>
+</html>
