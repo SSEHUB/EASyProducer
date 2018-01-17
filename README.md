@@ -15,12 +15,15 @@ Please see [release history](http://htmlpreview.github.io/?https://github.com/SS
 
 Documentation
 -------------
-- The documentation can be found at the [EASy-Producer update site](http://projects.sse.uni-hildesheim.de/easy/ "EASy-Producer update site").
-- The sources are stored at [doc](/doc/ "doc").
+The documentation can be found at the [EASy-Producer update site](http://projects.sse.uni-hildesheim.de/easy/ "EASy-Producer update site") as well as part of the Eclipse Help plugin available for installation.
 
 Installation
 -------------
-EASy-Producer can be installed from the [official update site](http://projects.sse.uni-hildesheim.de/easy/ "EASy-Producer update site") hosted at the University of Hildesheim, Germany.
+EASy-Producer can be installed from the [official update site](http://projects.sse.uni-hildesheim.de/easy/ "EASy-Producer update site") hosted at the University of Hildesheim, Germany. 
+
+We also provide a snapshot of the most recent developments in terms of a [nightly update site](https://projects.sse.uni-hildesheim.de/eclipse/update-sites/easy_nightly/ "EASy-Producer nightly update site") also 
+hosted at the University of Hildesheim, Germany. From there (but also [doc](/doc/ "doc")) previews of the upcoming documentation can be obtained. Please note that  Eclipse Help plugin of the nightly version 
+contains the same documentation as the latest release.
 
 Build Status
 ------------------
