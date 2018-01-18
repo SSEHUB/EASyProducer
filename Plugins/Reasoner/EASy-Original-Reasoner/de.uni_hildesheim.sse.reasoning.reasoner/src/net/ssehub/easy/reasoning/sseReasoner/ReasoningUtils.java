@@ -419,7 +419,7 @@ class ReasoningUtils {
      * @param val the value
      * @param filter the type class to filter for
      * @param result the result set to be modified as a side effect
-     * @return the set of used types, may be empty or <b>null</b> for none
+     * @return <code>true</code> if <code>val</code> is a container value, <code>false</code> else
      */
     private static <D extends IDatatype> boolean getUsedTypes(Value val, Class<D> filter, Set<D> result) {
         boolean done = false;

@@ -426,8 +426,6 @@ public class Resolver {
         }
     }
 
-    // >>> documented until here    
-
     /**
      * Translates the (transitive) defaults and type constraints for a declaration. 
      * 
@@ -547,6 +545,8 @@ public class Resolver {
         }
     }
 
+    // >>> documented until here    
+    
     /**
      * Method for checking if {@link CompoundInitializer} holds 
      * a {@link de.uni_hildesheim.sse.ivml.CollectionInitializer} with {@link Constraint}s.
