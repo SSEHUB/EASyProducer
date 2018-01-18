@@ -452,32 +452,33 @@ public class Resolver {
             if (null != defaultValue) {
                 defaultValue = copyExpression(defaultValue, decl);
             }
-        } else if (null != defaultValue && TypeQueries.isContainer(type)) {
-            Set<Compound> used = getUsedTypes(defaultValue, Compound.class);
-            if (null != used && !used.isEmpty()) {
-                for (Compound uType : used) {
-                    collectDefaultsCompoundCollection(decl, uType, new HashSet<Compound>());
+        } else if (null != defaultValue) {
+            if (TypeQueries.isContainer(type)) {
+                Set<Compound> used = getUsedTypes(defaultValue, Compound.class);
+                if (null != used && !used.isEmpty()) {
+                    for (Compound uType : used) {
+                        collectDefaultsCompoundCollection(decl, uType, new HashSet<Compound>());
+                    }
                 }
-            }
-        } else if (null != defaultValue && null != cAcc) {
-            // all self/overriden compound initialization constraints have to be deferred until compound/container 
-            // initializers are set as they would be overridden else
-            CopyVisitor visitor = new CopyVisitor(null, null).setSelf(cAcc.getCompoundExpression());
-            defaultValue = visitor.accept(defaultValue);
-            inferTypeSafe(defaultValue, null);
-            if (visitor.containsSelf() || isOverriddenSlot(decl)) {
-                defltCons = deferredDefaultConstraints;
+            } else if (null != cAcc) {
+                // all self/overriden compound initialization constraints have to be deferred until compound/container 
+                // initializers are set as they would be overridden else
+                CopyVisitor visitor = new CopyVisitor(null, null).setSelf(cAcc.getCompoundExpression());
+                defaultValue = visitor.accept(defaultValue);
+                inferTypeSafe(defaultValue, null);
+                if (visitor.containsSelf() || isOverriddenSlot(decl)) {
+                    defltCons = deferredDefaultConstraints;
+                }
             }
         }
         collectionCompoundConstraints.addAll(collectionCompoundConstraints(decl, var, null));
         // Container
-        if (net.ssehub.easy.varModel.model.datatypes.Container.TYPE.isAssignableFrom(type)) {            
+        if (TypeQueries.isContainer(type)) {            
             collectionInternalConstraints(decl, null);
         }
         if (null != defaultValue) {
             try {
-                if (ConstraintType.TYPE.isAssignableFrom(type) 
-                    && !(type.getType() == BooleanType.TYPE.getType())) {
+                if (TypeQueries.isConstraint(type)) {
                     if (cAcc == null) {
                         variablesCounter--;
                         // use closest parent instead of project -> runtime analysis

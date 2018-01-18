@@ -16,10 +16,7 @@
 package net.ssehub.easy.reasoning.sseReasoner.qm;
 
 
-import java.io.File;
-
 import org.junit.BeforeClass;
-import org.junit.Test;
 
 import net.ssehub.easy.reasoning.core.frontend.MismatchedTest;
 import net.ssehub.easy.reasoning.sseReasoner.reasoner.Utils;

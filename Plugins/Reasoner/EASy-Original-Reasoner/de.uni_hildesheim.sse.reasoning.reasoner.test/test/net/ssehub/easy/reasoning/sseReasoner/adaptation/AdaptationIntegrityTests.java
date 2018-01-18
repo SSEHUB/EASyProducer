@@ -1,7 +1,6 @@
 package net.ssehub.easy.reasoning.sseReasoner.adaptation;
 
 import org.junit.Assert;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import net.ssehub.easy.basics.progress.ProgressObserver;
