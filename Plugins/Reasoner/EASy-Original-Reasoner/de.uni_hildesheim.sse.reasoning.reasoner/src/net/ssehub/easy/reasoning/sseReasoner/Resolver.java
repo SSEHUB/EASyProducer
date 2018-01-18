@@ -128,7 +128,9 @@ public class Resolver {
     
     private transient Project project;
     private transient Set<IDecisionVariable> usedVariables = new HashSet<IDecisionVariable>();
-    
+
+    // from here the names follows the reasoner.tex documentation
+
     private IValueChangeListener listener = new IValueChangeListener() {
         
         @Override
@@ -136,7 +138,7 @@ public class Resolver {
         }
         
         @Override
-        public void notifyChanged(IDecisionVariable variable) {
+        public void notifyChanged(IDecisionVariable variable, Value oldValue) {
             if (!(variable.isLocal())) {
                 if (Descriptor.LOGGING) {
                     LOGGER.debug("Value changed: " + variable.getDeclaration().getName() + " " + variable.getValue()
@@ -220,6 +222,8 @@ public class Resolver {
         }
     };
     
+    // documented until here    
+    
     /**
      * Main constructor that activates Resolver constructor.
      * @param project Project for evaluation.
@@ -258,7 +262,7 @@ public class Resolver {
         new Resolver(config.getProject(), config, true, reasonerConfig);
     }  
     
-    // from here the sequence follows the reasoner.tex documentation
+    // from here the names follow the reasoner.tex documentation
     
     /**
      * Resolves the (initial) values of the configuration. This is done as follows:
@@ -268,8 +272,8 @@ public class Resolver {
      *     {@link #config Configuration}.
      * <li>For each project:
      *   <ol>
-     *     <li>Collect constraints for default values of variable declarations ({@link #collectDefaults()})</li>
-     *     <li>Collect constraints for the other constraints ({@link #collectConstraints()})</li>
+     *     <li>Collect constraints for default values of variable declarations ({@link #translateDefaults()})</li>
+     *     <li>Collect constraints for the other constraints ({@link #translateConstraints()})</li>
      *     <li>Evaluate the constraints ({@link #evaluateConstraints(Deque)}.
      *     <li>Freezing the assigned variables</li>
      *   </ol> 
@@ -286,8 +290,8 @@ public class Resolver {
             if (Descriptor.LOGGING) {
                 LOGGER.debug("Project:" + project.getName());                
             }
-            collectDefaults();
-            collectConstraints();
+            translateDefaults();
+            translateConstraints();
             evaluateConstraints();
             // Freezes values after each scope
             config.freezeValues(project, FilterType.NO_IMPORTS);
@@ -334,50 +338,94 @@ public class Resolver {
             }
         }
     }
-    
-    // documentation done until here    
-    
+
     /**
-     * Resolves the constraints initializing/guarding the default values of all variable declarations 
+     * Resolves and translates the constraints initializing/guarding the default values of all variable declarations 
      * in {@link #project}.
      * 
      * @see #resolve()
      */
-    protected void collectDefaults() {
+    protected void translateDefaults() {
         DeclarationFinder finder = new DeclarationFinder(project, FilterType.NO_IMPORTS, null);
         List<AbstractVariable> variables = finder.getVariableDeclarations(VisibilityType.ALL);
         varMap = new HashMap<AbstractVariable, CompoundAccess>();
         for (AbstractVariable decl : variables) {
-            resolveDefaultsForDeclaration(decl, config.getDecision(decl), null);
+            translateDefaultForDeclaration(decl, config.getDecision(decl), null);
         }
     }    
     
+    // documented until here    
+
     /**
-     * Part of the {@link #resolveDefaultValues(Project)} method.
-     * Resolves default values of a particular declaration.
+     * Extracts, translates and collects the internal constraints of <code>type</code> and stores them 
+     * in {@link #internalConstraints}.
+     * 
+     * @param decl VariableDeclaration of <code>DerivedDatatype</code>
+     * @param type the type to translate, nothing happens if <code>type</code> is not a {@link DerivedDatatype}
+     */
+    private void translateDerivedDatatypeConstraints(AbstractVariable decl, IDatatype type) {
+        if (type instanceof DerivedDatatype) {
+            DerivedDatatype dType = (DerivedDatatype) type;
+            addAll(internalConstraints, createInternalConstraints(decl, dType));
+            translateDerivedDatatypeConstraints(decl, dType.getBasisType());
+        }
+    }
+    
+    /**
+     * Creates constraints related to variable declaration. This method is needed for <code>DerivedDatatypes</code>. 
+     * @param declaration VariableDeclaration of <code>DerivedDatatype</code>
+     * @param dType type of <code>DerivedDatatype</code>
+     * @return <code>null</code> if this datatype is not <code>DerivedDatatype</code> or if this 
+     * <code>DerivedDatatype</code> has no constraints, otherwise the adapted constraints of the 
+     * <code>DerivedDatatype</code> for this VariableDeclaration
+     */
+    private InternalConstraint[] createInternalConstraints(AbstractVariable declaration, DerivedDatatype dType) {
+        InternalConstraint[] constraintInstances = null;
+        if (dType.getConstraintCount() > 0 && dType.getTypeDeclaration() != declaration) {
+            constraintInstances = new InternalConstraint[dType.getConstraintCount()];            
+            //Copy and replace each instance of the internal declaration with the given instance
+            for (int i = 0; i < dType.getConstraintCount(); i++) {
+                ConstraintSyntaxTree oneConstraint = dType.getConstraint(i).getConsSyntax();
+                ConstraintReplacer replacer = new ConstraintReplacer(oneConstraint);
+                Variable origin = new Variable(dType.getTypeDeclaration());
+                Variable replacement = new Variable(declaration);
+                ConstraintSyntaxTree copiedCST = replacer.replaceVariable(origin, replacement);
+                // Should be in same project as the declaration belongs to
+                try {
+                    constraintInstances[i] = new InternalConstraint(dType, copiedCST, declaration.getTopLevelParent());
+                } catch (CSTSemanticException e) {
+                    LOGGER.exception(e);
+                }
+            }
+        }        
+        return constraintInstances;
+    }
+
+    /**
+     * Translates the default value expression for a declaration. 
+     * 
      * @param decl The {@link AbstractVariable} for which the default value should be resolved.
      * @param var the instance of <tt>decl</tt>.
-     * @param compAcc if variable is a nested compound.
+     * @param cAcc if variable is a nested compound.
+     * 
+     * @see #translateDefaults()
      */
-    protected void resolveDefaultsForDeclaration(AbstractVariable decl, IDecisionVariable var, CompoundAccess compAcc) {
+    protected void translateDefaultForDeclaration(AbstractVariable decl, IDecisionVariable var, CompoundAccess cAcc) {
         List<Constraint> defltCons = defaultConstraints; 
         variablesCounter++;
         IDatatype type = decl.getType();
         // Internal constraints
-        if (type instanceof DerivedDatatype) {
-            DerivedDatatype dType = (DerivedDatatype) type;
-            analyseDerivedDatatype(decl, dType); 
-        }
+        translateDerivedDatatypeConstraints(decl, type); 
         ConstraintSyntaxTree defaultValue = decl.getDefaultValue();
         // Attribute handling
         if (var.getAttributesCount() > 0) {
-            resolveAttributeAssignments(decl, var, compAcc);
+            resolveAttributeAssignments(decl, var, cAcc);
         }
         if (TypeQueries.isCompound(type)) {
             if (null != defaultValue) { // try considering the actual type, not only the base type
                 type = inferTypeSafe(defaultValue, type);
             }
-            resolveCompoundDefaultValueForDeclaration(decl, var, compAcc, type); 
+            resolveCompoundDefaultValueForDeclaration(decl, var, cAcc, type); 
             if (null != defaultValue) {
                 defaultValue = copyExpression(defaultValue, decl);
             }
@@ -388,10 +436,10 @@ public class Resolver {
                     collectDefaultsCompoundCollection(decl, uType, new HashSet<Compound>());
                 }
             }
-        } else if (null != defaultValue && null != compAcc) {
+        } else if (null != defaultValue && null != cAcc) {
             // all self/overriden compound initialization constraints have to be deferred until compound/container 
             // initializers are set as they would be overridden else
-            CopyVisitor visitor = new CopyVisitor(null, null).setSelf(compAcc.getCompoundExpression());
+            CopyVisitor visitor = new CopyVisitor(null, null).setSelf(cAcc.getCompoundExpression());
             defaultValue = visitor.accept(defaultValue);
             inferTypeSafe(defaultValue, null);
             if (visitor.containsSelf() || isOverriddenSlot(decl)) {
@@ -407,7 +455,7 @@ public class Resolver {
             try {
                 if (ConstraintType.TYPE.isAssignableFrom(type) 
                     && !(type.getType() == BooleanType.TYPE.getType())) {
-                    if (compAcc == null) {
+                    if (cAcc == null) {
                         variablesCounter--;
                         // use closest parent instead of project -> runtime analysis
                         Constraint constraint = new Constraint(defaultValue, var.getDeclaration());
@@ -420,7 +468,7 @@ public class Resolver {
                     } 
                 } else { // Create default constraint
                     ConstraintSyntaxTree cst = new OCLFeatureCall(
-                        defltCons == deferredDefaultConstraints ? compAcc : new Variable(decl), 
+                        defltCons == deferredDefaultConstraints ? cAcc : new Variable(decl), 
                         OclKeyWords.ASSIGNMENT, defaultValue);
                     defltCons.add(createDefaultConstraint(cst, project));
                 }                
@@ -473,53 +521,6 @@ public class Resolver {
                 collectDefaultsCompoundCollection(decl, cmpType.getRefines(r), done);
             }
         }
-    }
-    
-    /**
-     * Method for analyzing {@link DerivedDatatype}s and extracting internal constraints.
-     * @param decl VariableDeclaration of <code>DerivedDatatype</code>
-     * @param dType type of <code>DerivedDatatype</code>
-     */
-    private void analyseDerivedDatatype(AbstractVariable decl, DerivedDatatype dType) {
-        InternalConstraint[] typeConstraints = createInternalConstraints(decl, dType);
-        if (typeConstraints != null) {
-            for (InternalConstraint internalConstraint : typeConstraints) {
-                internalConstraints.add(internalConstraint);                    
-            }
-        }
-        if (dType.getBasisType() instanceof DerivedDatatype) {
-            analyseDerivedDatatype(decl, (DerivedDatatype) dType.getBasisType());
-        }        
-    }
-    
-    /**
-     * Creates constraints related to variable declaration. This method is needed for <code>DerivedDatatypes</code>. 
-     * @param declaration VariableDeclaration of <code>DerivedDatatype</code>
-     * @param dType type of <code>DerivedDatatype</code>
-     * @return <code>null</code> if this datatype is not <code>DerivedDatatype</code> or if this 
-     * <code>DerivedDatatype</code> has no constraints, otherwise the adapted constraints of the 
-     * <code>DerivedDatatype</code> for this VariableDeclaration
-     */
-    private InternalConstraint[] createInternalConstraints(AbstractVariable declaration, DerivedDatatype dType) {
-        InternalConstraint[] constraintInstances = null;
-        if (dType.getConstraintCount() > 0 && dType.getTypeDeclaration() != declaration) {
-            constraintInstances = new InternalConstraint[dType.getConstraintCount()];            
-            //Copy and replace each instance of the internal declaration with the given instance
-            for (int i = 0; i < dType.getConstraintCount(); i++) {
-                ConstraintSyntaxTree oneConstraint = dType.getConstraint(i).getConsSyntax();
-                ConstraintReplacer replacer = new ConstraintReplacer(oneConstraint);
-                Variable origin = new Variable(dType.getTypeDeclaration());
-                Variable replacement = new Variable(declaration);
-                ConstraintSyntaxTree copiedCST = replacer.replaceVariable(origin, replacement);
-                // Should be in same project as the declaration belongs to
-                try {
-                    constraintInstances[i] = new InternalConstraint(dType, copiedCST, declaration.getTopLevelParent());
-                } catch (CSTSemanticException e) {
-                    LOGGER.exception(e);
-                }
-            }
-        }        
-        return constraintInstances;
     }
 
     /**
@@ -638,7 +639,7 @@ public class Resolver {
             inferTypeSafe(cmpAccess, null);
             // fill varMap
             varMap.put(nestedDecl, cmpAccess);
-            resolveDefaultsForDeclaration(nestedDecl, cmpVar.getNestedVariable(nestedDecl.getName()),
+            translateDefaultForDeclaration(nestedDecl, cmpVar.getNestedVariable(nestedDecl.getName()),
                 cmpAccess);
         }
         // used strategy: resolve and register compound accesses first in loop before, then constraints using them
@@ -987,12 +988,12 @@ public class Resolver {
     }
     
     /**
-     * Collects all constraints in {@link #project} by adding the collected constraints to the 
+     * Translates and collects all constraints in {@link #project} by adding the collected constraints to the 
      * {@link #constraintBase}.
      * 
      * @see #resolve()
      */
-    private void collectConstraints() { 
+    private void translateConstraints() { 
         List<Constraint> scopeConstraints = new ArrayList<Constraint>();
         if (!incremental && defaultConstraints.size() > 0) {
             defaultConstraints.addAll(deferredDefaultConstraints);

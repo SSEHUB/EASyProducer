@@ -454,4 +454,20 @@ class ReasoningUtils {
         return constraint;
     }
 
+    /**
+     * Adds all elements from <code>source</code> to <code>target</code>.
+     * 
+     * @param <T> the target type
+     * @param <S> the source type, a subtype of <code>&lt;T&gt;</code>
+     * @param target the target collection
+     * @param source the source array (may be <b>null</b>, then nothing happens)
+     */
+    static <T, S extends T> void addAll(Collection<T> target, S[] source) {
+        if (source != null) {
+            for (int s = 0, n = source.length; s < n; s++) {
+                target.add(source[s]);                    
+            }
+        }
+    }
+
 }
