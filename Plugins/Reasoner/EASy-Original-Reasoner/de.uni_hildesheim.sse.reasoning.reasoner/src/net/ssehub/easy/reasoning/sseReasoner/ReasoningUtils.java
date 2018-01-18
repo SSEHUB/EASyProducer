@@ -30,9 +30,11 @@ import net.ssehub.easy.varModel.confModel.IDecisionVariable;
 import net.ssehub.easy.varModel.cst.CSTSemanticException;
 import net.ssehub.easy.varModel.cst.CompoundAccess;
 import net.ssehub.easy.varModel.cst.ConstantValue;
+import net.ssehub.easy.varModel.cst.ConstraintReplacer;
 import net.ssehub.easy.varModel.cst.ConstraintSyntaxTree;
 import net.ssehub.easy.varModel.cst.ContainerOperationCall;
 import net.ssehub.easy.varModel.cst.OCLFeatureCall;
+import net.ssehub.easy.varModel.cst.Variable;
 import net.ssehub.easy.varModel.model.AbstractVariable;
 import net.ssehub.easy.varModel.model.Constraint;
 import net.ssehub.easy.varModel.model.DecisionVariableDeclaration;
@@ -468,6 +470,32 @@ class ReasoningUtils {
                 target.add(source[s]);                    
             }
         }
+    }
+
+    /**
+     * Substitutes the variable <code>origin</code> by <code>replacement</code> in <code>constraint</code>.
+     * 
+     * @param constraint the constraint to replace the variable within
+     * @param origin the variable to be replaced
+     * @param replacement the replacing variable
+     * @return the copied constraint having <code>origin</code> substituted by <code>replacement</code>
+     */
+    static ConstraintSyntaxTree substituteVariable(Constraint constraint, Variable origin, Variable replacement) {
+        return substituteVariable(constraint.getConsSyntax(), origin, replacement);
+    }
+
+    /**
+     * Substitutes the variable <code>origin</code> by <code>replacement</code> in <code>constraint</code>.
+     * 
+     * @param constraint the constraint to replace the variable within
+     * @param origin the variable to be replaced
+     * @param replacement the replacing variable
+     * @return the copied constraint having <code>origin</code> substituted by <code>replacement</code>
+     */
+    static ConstraintSyntaxTree substituteVariable(ConstraintSyntaxTree constraint, Variable origin, 
+        Variable replacement) {
+        ConstraintReplacer replacer = new ConstraintReplacer(constraint);
+        return replacer.replaceVariable(origin, replacement);
     }
 
 }

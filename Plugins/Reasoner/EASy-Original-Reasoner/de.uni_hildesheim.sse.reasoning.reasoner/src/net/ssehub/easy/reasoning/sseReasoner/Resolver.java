@@ -34,7 +34,6 @@ import net.ssehub.easy.varModel.cst.CSTSemanticException;
 import net.ssehub.easy.varModel.cst.CompoundAccess;
 import net.ssehub.easy.varModel.cst.CompoundInitializer;
 import net.ssehub.easy.varModel.cst.ConstantValue;
-import net.ssehub.easy.varModel.cst.ConstraintReplacer;
 import net.ssehub.easy.varModel.cst.ConstraintSyntaxTree;
 import net.ssehub.easy.varModel.cst.ContainerInitializer;
 import net.ssehub.easy.varModel.cst.OCLFeatureCall;
@@ -353,8 +352,6 @@ public class Resolver {
             translateDefaultForDeclaration(decl, config.getDecision(decl), null);
         }
     }    
-    
-    // documented until here    
 
     /**
      * Extracts, translates and collects the internal constraints of <code>type</code> and stores them 
@@ -382,17 +379,15 @@ public class Resolver {
     private InternalConstraint[] createInternalConstraints(AbstractVariable declaration, DerivedDatatype dType) {
         InternalConstraint[] constraintInstances = null;
         if (dType.getConstraintCount() > 0 && dType.getTypeDeclaration() != declaration) {
-            constraintInstances = new InternalConstraint[dType.getConstraintCount()];            
+            constraintInstances = new InternalConstraint[dType.getConstraintCount()];
+            Variable origin = new Variable(dType.getTypeDeclaration());
+            Variable replacement = new Variable(declaration);
             //Copy and replace each instance of the internal declaration with the given instance
             for (int i = 0; i < dType.getConstraintCount(); i++) {
-                ConstraintSyntaxTree oneConstraint = dType.getConstraint(i).getConsSyntax();
-                ConstraintReplacer replacer = new ConstraintReplacer(oneConstraint);
-                Variable origin = new Variable(dType.getTypeDeclaration());
-                Variable replacement = new Variable(declaration);
-                ConstraintSyntaxTree copiedCST = replacer.replaceVariable(origin, replacement);
+                ConstraintSyntaxTree cst = substituteVariable(dType.getConstraint(i), origin, replacement); 
                 // Should be in same project as the declaration belongs to
                 try {
-                    constraintInstances[i] = new InternalConstraint(dType, copiedCST, declaration.getTopLevelParent());
+                    constraintInstances[i] = new InternalConstraint(dType, cst, declaration.getTopLevelParent());
                 } catch (CSTSemanticException e) {
                     LOGGER.exception(e);
                 }
@@ -400,6 +395,9 @@ public class Resolver {
         }        
         return constraintInstances;
     }
+    
+    // documented until here    
+
 
     /**
      * Translates the default value expression for a declaration. 
@@ -1050,28 +1048,6 @@ public class Resolver {
     }
 
     /**
-     * Adds <code>constraint</code> to the constraint base.
-     * 
-     * @param constraint the constraint
-     */
-    private void addToConstraintBase(Constraint constraint) {
-        constraintBase.addLast(constraint);
-        constraintBaseSet.add(constraint);
-    }
-
-    /**
-     * Adds all <code>constraints</code> to the constraint base.
-     * 
-     * @param constraints the constraints
-     */
-    private void addAllToConstraintBase(Collection<Constraint> constraints) {
-        if (constraints.size() > 0) {
-            constraintBase.addAll(constraints);
-            constraintBaseSet.addAll(constraints);
-        }
-    }
-
-    /**
      * Method for processing scope attribute assignments.
      * @param hostAssignment Attribute assignments on top-level.
      * @param nestAssignment Attribute assignments with data.
@@ -1228,6 +1204,28 @@ public class Resolver {
     }
     
     // helpers, accessors
+
+    /**
+     * Adds <code>constraint</code> to the constraint base.
+     * 
+     * @param constraint the constraint
+     */
+    private void addToConstraintBase(Constraint constraint) {
+        constraintBase.addLast(constraint);
+        constraintBaseSet.add(constraint);
+    }
+
+    /**
+     * Adds all <code>constraints</code> to the constraint base.
+     * 
+     * @param constraints the constraints
+     */
+    private void addAllToConstraintBase(Collection<Constraint> constraints) {
+        if (constraints.size() > 0) {
+            constraintBase.addAll(constraints);
+            constraintBaseSet.addAll(constraints);
+        }
+    }
 
     /**
      * Method for clearing all constraint lists.
