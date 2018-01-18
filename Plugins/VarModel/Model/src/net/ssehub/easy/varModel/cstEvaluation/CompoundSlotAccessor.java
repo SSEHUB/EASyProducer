@@ -120,14 +120,15 @@ class CompoundSlotAccessor extends AbstractDecisionVariableEvaluationAccessor {
         EvaluationContext context = getContext();
         if (context.allowAssignValues() && null != slotVariable) {
             if (null != value) {
-                if (!Value.equalsPartially(slotVariable.getValue(), value) 
+                Value oldValue = slotVariable.getValue();
+                if (!Value.equalsPartially(oldValue, value) 
                         && slotVariable.getState() != AssignmentState.USER_ASSIGNED) { // don't reassign / send message
                     IAssignmentState targetState = context.getTargetState(slotVariable);
                     if (null != targetState) {
                         try {
                             slotVariable.setValue(value, targetState, asAssignment);
                             successful = true;
-                            notifyVariableChange();
+                            notifyVariableChange(oldValue);
                         } catch (ConfigurationException e) {
                             context.addErrorMessage(e);
                         }

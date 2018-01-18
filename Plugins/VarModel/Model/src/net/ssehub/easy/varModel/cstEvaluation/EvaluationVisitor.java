@@ -186,9 +186,9 @@ public class EvaluationVisitor implements IConstraintTreeVisitor {
         }
 
         @Override
-        public void notifyChangeListener(IDecisionVariable variable) {
+        public void notifyChangeListener(IDecisionVariable variable, Value value) {
             if (null != listener && null != variable) {
-                listener.notifyChanged(variable);
+                listener.notifyChanged(variable, value);
             }
         }
 

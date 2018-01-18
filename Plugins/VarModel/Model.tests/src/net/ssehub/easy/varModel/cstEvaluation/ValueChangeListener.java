@@ -16,6 +16,7 @@
 package net.ssehub.easy.varModel.cstEvaluation;
 
 import net.ssehub.easy.varModel.confModel.IDecisionVariable;
+import net.ssehub.easy.varModel.model.values.Value;
 
 /**
  * Special {@link IValueChangeListener} which is used during the tests.
@@ -36,17 +37,18 @@ abstract class ValueChangeListener implements IValueChangeListener {
     }
 
     @Override
-    public void notifyChanged(IDecisionVariable variable) {
+    public void notifyChanged(IDecisionVariable variable, Value oldValue) {
         wasCalled = true;
-        valueChanged(variable);
+        valueChanged(variable, oldValue);
     }
     
     /**
      * Called if the value of a variable has been modified.
      * 
      * @param variable the modified variable
+     * @param oldValue the old value of the variable before the change
      */
-    abstract void valueChanged(IDecisionVariable variable);
+    abstract void valueChanged(IDecisionVariable variable, Value oldValue);
 
     @Override
     public void notifyUnresolved(IDecisionVariable variable) {

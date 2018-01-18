@@ -91,14 +91,15 @@ class ContainerElementAccessor extends AbstractDecisionVariableEvaluationAccesso
             if (null == value) {
                 context.addErrorMessage("assignable value is not defined");
             } else {
-                if (!Value.equalsPartially(elementVariable.getValue(), value)
+                Value oldValue = elementVariable.getValue();
+                if (!Value.equalsPartially(oldValue, value)
                         && elementVariable.getState() != AssignmentState.USER_ASSIGNED) { //don't reassign/send message
                     IAssignmentState targetState = context.getTargetState(elementVariable);
                     if (null != targetState) {
                         try {
                             elementVariable.setValue(value, targetState, asAssignment);
                             successful = true;
-                            notifyVariableChange();
+                            notifyVariableChange(oldValue);
                         } catch (ConfigurationException e) {
                             context.addErrorMessage(e);
                         }

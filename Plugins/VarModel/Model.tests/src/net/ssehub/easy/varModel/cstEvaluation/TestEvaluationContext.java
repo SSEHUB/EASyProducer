@@ -61,7 +61,7 @@ public class TestEvaluationContext extends EvaluationContext {
     }
 
     @Override
-    public void notifyChangeListener(IDecisionVariable variable) {
+    public void notifyChangeListener(IDecisionVariable variable, Value value) {
     }
 
     @Override

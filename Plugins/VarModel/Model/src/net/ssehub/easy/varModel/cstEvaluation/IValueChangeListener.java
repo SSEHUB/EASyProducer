@@ -16,6 +16,7 @@
 package net.ssehub.easy.varModel.cstEvaluation;
 
 import net.ssehub.easy.varModel.confModel.IDecisionVariable;
+import net.ssehub.easy.varModel.model.values.Value;
 
 /**
  * Is called when the {@link EvaluationVisitor} changes a value in the configuration.
@@ -28,8 +29,9 @@ public interface IValueChangeListener {
      * Called if the value of a variable has been modified.
      * 
      * @param variable the modified variable
+     * @param oldValue the value of <code>variable</code> before the change (may be <b>null</b>)
      */
-    public void notifyChanged(IDecisionVariable variable);
+    public void notifyChanged(IDecisionVariable variable, Value oldValue);
     
     /**
      * Called if an assignment to the given <code>variable</code> failed as the defining

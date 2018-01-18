@@ -77,8 +77,9 @@ public abstract class EvaluationContext implements IConfiguration {
      * Notifies the change listener, i.e., the value of <code>variable</code> has changed.
      * 
      * @param variable the changed variable
+     * @param oldValue the value of <code>variable</code> before the change (may be <b>null</b>)
      */
-    public abstract void notifyChangeListener(IDecisionVariable variable);
+    public abstract void notifyChangeListener(IDecisionVariable variable, Value oldValue);
 
     /**
      * Adds an evaluation message.

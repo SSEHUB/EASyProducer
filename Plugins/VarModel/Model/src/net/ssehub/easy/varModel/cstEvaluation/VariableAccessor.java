@@ -111,31 +111,46 @@ class VariableAccessor extends AbstractDecisionVariableEvaluationAccessor {
         boolean successful = false;
         EvaluationContext context = getContext();
         if (context.allowAssignValues()) {
-            if (null == value) {
-                context.addErrorMessage("assignable value is not defined");
+            successful = setValue(context, value, asAssignment);
+        }
+        return successful;
+    }
+
+    /**
+     * Changes the value within the given evaluation context.
+     * 
+     * @param context the evaluation context
+     * @param value the new value
+     * @param asAssignment called within an assignment or equality expression
+     * @return <code>true</code> for success, <code>false</code> else
+     */
+    private boolean setValue(EvaluationContext context, Value value, boolean asAssignment) {
+        boolean successful = false;
+        if (null == value) {
+            context.addErrorMessage("assignable value is not defined");
+        } else {
+            IDecisionVariable variable = getVariable();
+            if (null == variable) {
+                context.addErrorMessage("variable does not exist (attribute access failure)?");
             } else {
-                IDecisionVariable variable = getVariable();
-                if (null == variable) {
-                    context.addErrorMessage("variable does not exist (attribute access failure)?");
-                } else {
-                    if (!Value.equalsPartially(variable.getValue(), value)
-                            && variable.getState() != AssignmentState.USER_ASSIGNED) { // don't reassign / send message
-                        IAssignmentState targetState = isLocal() ? AssignmentState.ASSIGNED 
-                            : context.getTargetState(variable);
-                        if (null != targetState) {
-                            try {
-                                variable.setValue(value, targetState, asAssignment);
-                                successful = true;
-                                notifyVariableChange();
-                            } catch (ConfigurationException e) {
-                                context.addErrorMessage(e);
-                            }
-                        } else {
-                            context.addMessage(new Message("Assignment state conflict", Status.ERROR, variable));
+                Value oldValue = variable.getValue();
+                if (!Value.equalsPartially(oldValue, value)
+                        && variable.getState() != AssignmentState.USER_ASSIGNED) { // don't reassign / send message
+                    IAssignmentState targetState = isLocal() ? AssignmentState.ASSIGNED 
+                        : context.getTargetState(variable);
+                    if (null != targetState) {
+                        try {
+                            variable.setValue(value, targetState, asAssignment);
+                            successful = true;
+                            notifyVariableChange(oldValue);
+                        } catch (ConfigurationException e) {
+                            context.addErrorMessage(e);
                         }
                     } else {
-                        successful = true;
+                        context.addMessage(new Message("Assignment state conflict", Status.ERROR, variable));
                     }
+                } else {
+                    successful = true;
                 }
             }
         }

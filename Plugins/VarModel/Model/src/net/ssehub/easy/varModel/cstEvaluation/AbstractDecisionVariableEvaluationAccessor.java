@@ -56,9 +56,11 @@ abstract class AbstractDecisionVariableEvaluationAccessor extends EvaluationAcce
     
     /**
      * Notifies the underlying variable about a change.
+     * 
+     * @param oldValue the value before the change (may be <b>null</b>)
      */
-    protected void notifyVariableChange() {
-        getContext().notifyChangeListener(getVariable());
+    protected void notifyVariableChange(Value oldValue) {
+        getContext().notifyChangeListener(getVariable(), oldValue);
     }
 
     @Override
