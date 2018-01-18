@@ -111,6 +111,16 @@ public class TypeQueries {
     }
     
     /**
+     * Returns whether <code>type</code> is a constraint (in the sense of a constraint variable).
+     * 
+     * @param type the type to check
+     * @return <code>true</code> if <code>type</code> is a constraint, <code>false</code> else
+     */
+    public static boolean isConstraint(IDatatype type) {
+        return ConstraintType.TYPE.isAssignableFrom(type) && !(type.getType() == BooleanType.TYPE.getType());
+    }
+    
+    /**
      * Returns whether <code>type</code> is a compound type.
      * 
      * @param type the type
