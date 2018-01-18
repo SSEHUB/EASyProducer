@@ -128,7 +128,7 @@ public class Resolver {
     private transient Project project;
     private transient Set<IDecisionVariable> usedVariables = new HashSet<IDecisionVariable>();
 
-    // from here the names follows the reasoner.tex documentation
+    // >>> from here the names follows the reasoner.tex documentation
 
     private IValueChangeListener listener = new IValueChangeListener() {
         
@@ -221,7 +221,7 @@ public class Resolver {
         }
     };
     
-    // documented until here    
+    // >>> documented until here    
     
     /**
      * Main constructor that activates Resolver constructor.
@@ -261,7 +261,7 @@ public class Resolver {
         new Resolver(config.getProject(), config, true, reasonerConfig);
     }  
     
-    // from here the names follow the reasoner.tex documentation
+    // >>> from here the names follow the reasoner.tex documentation
     
     /**
      * Resolves the (initial) values of the configuration. This is done as follows:
@@ -349,7 +349,7 @@ public class Resolver {
         List<AbstractVariable> variables = finder.getVariableDeclarations(VisibilityType.ALL);
         varMap = new HashMap<AbstractVariable, CompoundAccess>();
         for (AbstractVariable decl : variables) {
-            translateDefaultForDeclaration(decl, config.getDecision(decl), null);
+            translateDeclarationDefaults(decl, config.getDecision(decl), null);
         }
     }    
 
@@ -369,7 +369,8 @@ public class Resolver {
     }
     
     /**
-     * Creates constraints related to variable declaration. This method is needed for <code>DerivedDatatypes</code>. 
+     * Creates constraints related to variable declaration. This method is needed for <code>DerivedDatatypes</code>.
+     *  
      * @param declaration VariableDeclaration of <code>DerivedDatatype</code>
      * @param dType type of <code>DerivedDatatype</code>
      * @return <code>null</code> if this datatype is not <code>DerivedDatatype</code> or if this 
@@ -396,11 +397,39 @@ public class Resolver {
         return constraintInstances;
     }
     
-    // documented until here    
+    /**
+     * Translates annotation default value expressions.
+     * 
+     * @param decl {@link AbstractVariable} with annotations.
+     * @param variable {@link IDecisionVariable} with annotations.
+     * @param compound {@link CompoundAccess} null if variable is not nested.
+     */
+    private void translateAnnotationDefaults(AbstractVariable decl, IDecisionVariable variable, 
+        CompoundAccess compound) {
+        for (int i = 0; i < variable.getAttributesCount(); i++) {
+            Attribute attribute = (Attribute) variable.getAttribute(i).getDeclaration();
+            ConstraintSyntaxTree defaultValue = attribute.getDefaultValue();
+            if (null != defaultValue) {
+                try {
+                    ConstraintSyntaxTree op;
+                    if (compound == null) {
+                        op = new AttributeVariable(new Variable(decl), attribute);                        
+                    } else {                        
+                        op = new AttributeVariable(compound, attribute);
+                    }
+                    defaultValue = new OCLFeatureCall(op, OclKeyWords.ASSIGNMENT, defaultValue);
+                    defaultAttributeConstraints.add(createDefaultConstraint(defaultValue, project));
+                } catch (CSTSemanticException e) {
+                    e.printStackTrace();
+                }                    
+            }
+        }
+    }
 
+    // >>> documented until here    
 
     /**
-     * Translates the default value expression for a declaration. 
+     * Translates the (transitive) defaults and type constraints for a declaration. 
      * 
      * @param decl The {@link AbstractVariable} for which the default value should be resolved.
      * @param var the instance of <tt>decl</tt>.
@@ -408,17 +437,13 @@ public class Resolver {
      * 
      * @see #translateDefaults()
      */
-    protected void translateDefaultForDeclaration(AbstractVariable decl, IDecisionVariable var, CompoundAccess cAcc) {
+    protected void translateDeclarationDefaults(AbstractVariable decl, IDecisionVariable var, CompoundAccess cAcc) {
         List<Constraint> defltCons = defaultConstraints; 
         variablesCounter++;
         IDatatype type = decl.getType();
-        // Internal constraints
-        translateDerivedDatatypeConstraints(decl, type); 
+        translateDerivedDatatypeConstraints(decl, type);
+        translateAnnotationDefaults(decl, var, cAcc);
         ConstraintSyntaxTree defaultValue = decl.getDefaultValue();
-        // Attribute handling
-        if (var.getAttributesCount() > 0) {
-            resolveAttributeAssignments(decl, var, cAcc);
-        }
         if (TypeQueries.isCompound(type)) {
             if (null != defaultValue) { // try considering the actual type, not only the base type
                 type = inferTypeSafe(defaultValue, type);
@@ -575,39 +600,6 @@ public class Resolver {
             }
         }
     }
-
-    /**
-     * Method for resolving attribute assignments.
-     * @param decl {@link AbstractVariable} with attributes.
-     * @param variable {@link IDecisionVariable} with attributes.
-     * @param compound {@link CompoundAccess} null if variable is not nested.
-     */
-    private void resolveAttributeAssignments(AbstractVariable decl, IDecisionVariable variable, 
-        CompoundAccess compound) {
-        for (int i = 0; i < variable.getAttributesCount(); i++) {
-            ConstraintSyntaxTree defaultValue = variable.getAttribute(i).getDeclaration().getDefaultValue();
-            if (null != defaultValue) {
-                Constraint constraint = new Constraint(project);
-                constraint.makeDefaultConstraint();
-                try {
-                    if (compound == null) {
-                        defaultValue = new OCLFeatureCall(new AttributeVariable(new Variable(decl),
-                            (Attribute) variable.getAttribute(i).getDeclaration()),
-                            OclKeyWords.ASSIGNMENT, defaultValue);                        
-                    } else {                        
-                        defaultValue = new OCLFeatureCall(new AttributeVariable(compound,
-                            (Attribute) variable.getAttribute(i).getDeclaration()),
-                            OclKeyWords.ASSIGNMENT, defaultValue);
-                    }
-                    defaultValue.inferDatatype();
-                    constraint.setConsSyntax(defaultValue);
-                    defaultAttributeConstraints.add(constraint);
-                } catch (CSTSemanticException e) {
-                    e.printStackTrace();
-                }                    
-            }
-        }
-    }
     
     /**
      * Method for resolving compound default value declaration.
@@ -637,7 +629,7 @@ public class Resolver {
             inferTypeSafe(cmpAccess, null);
             // fill varMap
             varMap.put(nestedDecl, cmpAccess);
-            translateDefaultForDeclaration(nestedDecl, cmpVar.getNestedVariable(nestedDecl.getName()),
+            translateDeclarationDefaults(nestedDecl, cmpVar.getNestedVariable(nestedDecl.getName()),
                 cmpAccess);
         }
         // used strategy: resolve and register compound accesses first in loop before, then constraints using them
