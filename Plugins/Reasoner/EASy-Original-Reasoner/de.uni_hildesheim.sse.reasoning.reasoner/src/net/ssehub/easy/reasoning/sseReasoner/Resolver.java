@@ -101,16 +101,17 @@ public class Resolver {
     private Map<Constraint, IDecisionVariable> constraintVariableMap = new HashMap<Constraint, IDecisionVariable>();
     private Deque<Constraint> constraintBase = new LinkedList<Constraint>();
     private Set<Constraint> constraintBaseSet = new HashSet<Constraint>();
-    private List<Constraint> constraintVariables = new LinkedList<Constraint>();
+    private List<Constraint> constraintVariablesConstraints = new LinkedList<Constraint>();
+    private List<Constraint> defaultConstraints = new LinkedList<Constraint>();
+    private List<Constraint> deferredDefaultConstraints = new LinkedList<Constraint>();
+    private List<Constraint> derivedTypeConstraints = new LinkedList<Constraint>();
+    private List<Constraint> defaultAnnotationConstraints = new LinkedList<Constraint>();
+    
     private List<Constraint> compoundConstraints = new LinkedList<Constraint>();
     private List<Constraint> compoundEvalConstraints = new LinkedList<Constraint>();
     private List<Constraint> unresolvedConstraints = new LinkedList<Constraint>(); 
-    private List<Constraint> defaultAttributeConstraints = new LinkedList<Constraint>();
     private List<Constraint> assignedAttributeConstraints = new LinkedList<Constraint>();
     private List<Constraint> collectionConstraints = new LinkedList<Constraint>();
-    private List<Constraint> defaultConstraints = new LinkedList<Constraint>();
-    private List<Constraint> deferredDefaultConstraints = new LinkedList<Constraint>();
-    private List<Constraint> internalConstraints = new LinkedList<Constraint>();
     private boolean considerFrozenConstraints;
     
     private Map<AbstractVariable, CompoundAccess> varMap; // TODO turn into local map
@@ -355,7 +356,7 @@ public class Resolver {
 
     /**
      * Extracts, translates and collects the internal constraints of <code>type</code> and stores them 
-     * in {@link #internalConstraints}.
+     * in {@link #derivedTypeConstraints}.
      * 
      * @param decl VariableDeclaration of <code>DerivedDatatype</code>
      * @param type the type to translate, nothing happens if <code>type</code> is not a {@link DerivedDatatype}
@@ -369,7 +370,7 @@ public class Resolver {
                 for (int c = 0; c < cst.length; c++) {
                     // Should be in same project as the declaration belongs to
                     try {
-                        internalConstraints.add(new InternalConstraint(dType, cst[c], topLevelParent));
+                        derivedTypeConstraints.add(new InternalConstraint(dType, cst[c], topLevelParent));
                     } catch (CSTSemanticException e) {
                         LOGGER.exception(e);
                     }
@@ -426,7 +427,7 @@ public class Resolver {
                         op = new AttributeVariable(compound, attribute);
                     }
                     defaultValue = new OCLFeatureCall(op, OclKeyWords.ASSIGNMENT, defaultValue);
-                    defaultAttributeConstraints.add(createDefaultConstraint(defaultValue, project));
+                    defaultAnnotationConstraints.add(createDefaultConstraint(defaultValue, project));
                 } catch (CSTSemanticException e) {
                     e.printStackTrace();
                 }                    
@@ -492,7 +493,7 @@ public class Resolver {
                         variablesCounter--;
                         // use closest parent instead of project -> runtime analysis
                         Constraint constraint = new Constraint(defaultValue, var.getDeclaration());
-                        constraintVariables.add(constraint);
+                        constraintVariablesConstraints.add(constraint);
                         constraintVariableMap.put(constraint, var);
                         if (Descriptor.LOGGING) {
                             LOGGER.debug(var.getDeclaration().getName() + " project constraint variable " 
@@ -581,7 +582,7 @@ public class Resolver {
                     if (containerOp != null) {
                         containerOp.inferDatatype();
                         Constraint constraint = new Constraint(containerOp, project);
-                        internalConstraints.add(constraint);                    
+                        derivedTypeConstraints.add(constraint);                    
                     }
                 } catch (CSTSemanticException e) {
                     LOGGER.exception(e);
@@ -794,7 +795,7 @@ public class Resolver {
             cst = copyExpression(cst, decl);
             try {
                 constraint = new Constraint(cst, parent);
-                constraintVariables.add(constraint);
+                constraintVariablesConstraints.add(constraint);
                 //after refactoring duplicate check for ConstraintVariable is needed
                 IDatatype nestedType = nestedVariable.getDeclaration().getType();
                 if (ConstraintType.TYPE.isAssignableFrom(nestedType) 
@@ -976,8 +977,8 @@ public class Resolver {
             defaultConstraints.addAll(deferredDefaultConstraints);
             addAllConstraints(scopeConstraints, transformConstraints(defaultConstraints, true));
         }
-        if (internalConstraints.size() > 0) {
-            addAllConstraints(scopeConstraints, transformConstraints(internalConstraints, false));
+        if (derivedTypeConstraints.size() > 0) {
+            addAllConstraints(scopeConstraints, transformConstraints(derivedTypeConstraints, false));
         }
         ConstraintFinder finder = new ConstraintFinder(project, false, false, true);
         addAllConstraints(scopeConstraints, finder.getEvalConstraints());
@@ -997,8 +998,8 @@ public class Resolver {
         if (compoundConstraints.size() > 0) {
             scopeConstraints.addAll(compoundConstraints);            
         }
-        if (constraintVariables.size() > 0) {
-            scopeConstraints.addAll(constraintVariables);
+        if (constraintVariablesConstraints.size() > 0) {
+            scopeConstraints.addAll(constraintVariablesConstraints);
         }
         if (collectionCompoundConstraints.size() > 0) {
             scopeConstraints.addAll(collectionCompoundConstraints);            
@@ -1019,7 +1020,7 @@ public class Resolver {
             scopeConstraints.clear();
         }
         if (!incremental) {
-            addAllToConstraintBase(defaultAttributeConstraints);
+            addAllToConstraintBase(defaultAnnotationConstraints);
             addAllToConstraintBase(assignedAttributeConstraints);
         }
         constraintCounter = constraintCounter + constraintBase.size();
@@ -1211,13 +1212,13 @@ public class Resolver {
      */
     private void clearConstraintLists() {
         defaultConstraints.clear();
-        internalConstraints.clear();
+        derivedTypeConstraints.clear();
         compoundConstraints.clear();
         compoundEvalConstraints.clear();
-        constraintVariables.clear();        
+        constraintVariablesConstraints.clear();        
         collectionCompoundConstraints.clear(); 
         collectionConstraints.clear();      
-        defaultAttributeConstraints.clear();
+        defaultAnnotationConstraints.clear();
         assignedAttributeConstraints.clear();
         unresolvedConstraints.clear();   
     }
