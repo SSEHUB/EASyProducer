@@ -222,7 +222,7 @@ public class Resolver {
         }
     };
     
-    // >>> documented until here    
+    // <<< documented until here    
     
     /**
      * Main constructor that activates Resolver constructor.
@@ -457,7 +457,7 @@ public class Resolver {
             }
             resolveCompoundDefaultValueForDeclaration(decl, var, cAcc, type); 
             if (null != defaultValue) {
-                defaultValue = copyExpression(defaultValue, decl);
+                defaultValue = copyCST(defaultValue, new Variable(decl), varMap);
             }
         } else if (null != defaultValue) {
             if (TypeQueries.isContainer(type)) {
@@ -478,7 +478,7 @@ public class Resolver {
                 }
             }
         }
-        collectionCompoundConstraints.addAll(collectionCompoundConstraints(decl, var, null));
+        translateCollectionCompoundConstraints(decl, var, null, collectionCompoundConstraints);
         // Container
         if (TypeQueries.isContainer(type)) {            
             IDatatype containedType = ((Container) type).getContainedType();
@@ -595,7 +595,28 @@ public class Resolver {
         }
     }
     
-    // >>> documented until here    
+    /**
+     * Method for retrieving constraints from compounds initialized in collections.
+     * 
+     * @param decl AbstractVariable.
+     * @param variable the instance of <tt>decl</tt>.
+     * @param topcmpAccess {@link CompoundAccess} if Collection is a nested element.
+     * @param results the resulting constraints
+     */
+    private void translateCollectionCompoundConstraints(AbstractVariable decl, IDecisionVariable variable, 
+        CompoundAccess topcmpAccess, List<Constraint> results) {
+        IDatatype type = decl.getType();
+        if (TypeQueries.isContainer(type)) {
+            IDatatype containedType = ((Container) type).getContainedType();
+            for (IDatatype tmp : identifyContainedTypes(variable, containedType)) {
+                if (TypeQueries.isCompound(tmp)) {
+                    translateCollectionCompoundConstraints((Compound) tmp, containedType, decl, topcmpAccess, results);
+                }
+            }
+        }
+    }
+    
+    // <<< documented until here    
     
     /**
      * Method for checking if {@link CompoundInitializer} holds 
@@ -641,7 +662,7 @@ public class Resolver {
             Constraint constraint = new Constraint(parent);
             ConstraintSyntaxTree cst = containerInit.getExpression(i);
             if (compound) {
-                cst = copyExpression(cst);
+                cst = copyCST(cst, null, varMap);
             }
             try {
                 constraint.setConsSyntax(cst);
@@ -693,7 +714,7 @@ public class Resolver {
                 checkContainerValue((ContainerValue) nestedVariable.getValue(), decl, nestedDecl, 
                     nestedVariable, variable);
             }
-            compoundConstraints.addAll(collectionCompoundConstraints(nestedDecl, variable, varMap.get(nestedDecl)));
+            translateCollectionCompoundConstraints(nestedDecl, variable, varMap.get(nestedDecl), compoundConstraints);
             if (ConstraintType.TYPE.isAssignableFrom(nestedType) 
                 && !(nestedType.getType() == BooleanType.TYPE.getType())) {
                 createConstraint(nestedDecl.getDefaultValue(), decl, nestedDecl, nestedVariable, variable);
@@ -706,7 +727,7 @@ public class Resolver {
         for (int i = 0; i < thisCompoundConstraints.size(); i++) {
             ConstraintSyntaxTree oneConstraint = thisCompoundConstraints.get(i).getConsSyntax();
             // changed null to decl
-            oneConstraint = copyExpression(oneConstraint, decl);
+            oneConstraint = copyCST(oneConstraint, new Variable(decl), varMap);
             try {
                 Constraint constraint = new Constraint(oneConstraint, decl);
                 compoundConstraints.add(constraint);            
@@ -745,7 +766,7 @@ public class Resolver {
             if (evalBlock.getEvaluable(i) instanceof Constraint) {
                 Constraint evalConstraint = (Constraint) evalBlock.getEvaluable(i);
                 ConstraintSyntaxTree evalCst = evalConstraint.getConsSyntax();
-                ConstraintSyntaxTree cst = copyExpression(evalCst);
+                ConstraintSyntaxTree cst = copyCST(evalCst, null, varMap);
                 try {
                     cst.inferDatatype();
                     Constraint constraint = new Constraint(project);
@@ -792,7 +813,7 @@ public class Resolver {
         IDecisionVariable nestedVariable, IDecisionVariable variable) {
         Constraint constraint = null;
         if (cst != null) {
-            cst = copyExpression(cst, decl);
+            cst = copyCST(cst, new Variable(decl), varMap);
             try {
                 constraint = new Constraint(cst, parent);
                 constraintVariablesConstraints.add(constraint);
@@ -865,40 +886,14 @@ public class Resolver {
     }    
     
     /**
-     * Method for retrieving constraints from compounds initialized in collections.
-     * @param decl AbstractVariable.
-     * @param variable the instance of <tt>decl</tt>.
-     * @param topcmpAccess {@link CompoundAccess} if Collection is a nested element.
-     * @return List of transformed constraints.
-     */
-    private List<Constraint> collectionCompoundConstraints(AbstractVariable decl, IDecisionVariable variable, 
-        CompoundAccess topcmpAccess) {
-        List<Constraint> constraints = new ArrayList<Constraint>();
-        IDatatype type = decl.getType();
-        if (net.ssehub.easy.varModel.model.datatypes.Container.TYPE.isAssignableFrom(type)) {
-            net.ssehub.easy.varModel.model.datatypes.Container container 
-                = (net.ssehub.easy.varModel.model.datatypes.Container) type;
-            IDatatype containedType = container.getContainedType();
-            Set<IDatatype> containedTypes = identifyContainedTypes(variable, containedType);
-            for (IDatatype tmp : containedTypes) {
-                if (TypeQueries.isCompound(tmp)) {
-                    transformCollectionCompoundConstraints((Compound) tmp, containedType, decl, 
-                        topcmpAccess, constraints);
-                }
-            }
-        }
-        return constraints;
-    }
-    
-    /**
      * Method for transforming a compound constraint into collection forAll constraint.
-     * @param cmpType Compound type with constraints.
-     * @param containedType the declared contained type of the container.
+     * @param cmpType Specific compound type (with constraints).
+     * @param declaredContainedType the declared contained type of the container.
      * @param decl {@link AbstractVariable}.
      * @param topcmpAccess {@link CompoundAccess} if Collection is a nested element.
      * @param result List of transformed constraints, to be modified as a side effect.
      */
-    private void transformCollectionCompoundConstraints(Compound cmpType, IDatatype containedType, 
+    private void translateCollectionCompoundConstraints(Compound cmpType, IDatatype declaredContainedType, 
         AbstractVariable decl, CompoundAccess topcmpAccess, List<Constraint> result) {
         DecisionVariableDeclaration localDecl = new DecisionVariableDeclaration("cmp", cmpType, null);        
         // fill varMap
@@ -912,12 +907,12 @@ public class Resolver {
         List<Constraint> thisCompoundConstraints = new ArrayList<Constraint>(); 
         getAllCompoundConstraints(cmpType, thisCompoundConstraints, true);
         ConstraintSyntaxTree typeExpression = null;
-        if (!TypeQueries.sameTypes(cmpType, containedType)) {
+        if (!TypeQueries.sameTypes(cmpType, declaredContainedType)) {
             typeExpression = createTypeValueConstantSafe(cmpType);
         }
         for (int i = 0; i < thisCompoundConstraints.size(); i++) {
             ConstraintSyntaxTree itExpression = thisCompoundConstraints.get(i).getConsSyntax();
-            itExpression = copyExpression(itExpression, localDecl);
+            itExpression = copyCST(itExpression, new Variable(localDecl), varMap);
             if (Descriptor.LOGGING) {
                 LOGGER.debug("New loop constraint " + toIvmlString(itExpression));
             }   
@@ -1251,7 +1246,7 @@ public class Resolver {
     private List<Constraint> transformConstraints(List<Constraint> constraints, boolean makeDefaultConstraint) {
         for (int i = 0; i < constraints.size(); i++) {
             ConstraintSyntaxTree cst = constraints.get(i).getConsSyntax();
-            cst = copyExpression(cst);
+            cst = copyCST(cst, null, varMap);
             if (makeDefaultConstraint) {
                 constraints.get(i).makeDefaultConstraint();                
             }
@@ -1267,29 +1262,6 @@ public class Resolver {
             }            
         }
         return constraints;
-    }
-
-    /**
-     * Method for using {@link CopyVisitor} for constraint transformation using {@link #varMap} 
-     * to replace variables. No replacement of <i>self</i> is done.
-     * 
-     * @param cst Constraint to be transformed.
-     * @return Transformed constraint.
-     */
-    private ConstraintSyntaxTree copyExpression(ConstraintSyntaxTree cst) {
-        return ReasoningUtils.copyCST(cst, (ConstraintSyntaxTree) null, varMap);
-    }
-
-    /**
-     * Method for using {@link CopyVisitor} for constraint transformation using {@link #varMap} 
-     * to replace variables. Allows replacing <i>self</i>.
-     * 
-     * @param cst Constraint to be transformed.
-     * @param selfVar a variable representing <i>self</i> (ignored if <b>null</b>).
-     * @return Transformed constraint.
-     */
-    private ConstraintSyntaxTree copyExpression(ConstraintSyntaxTree cst, AbstractVariable selfVar) {
-        return ReasoningUtils.copyCST(cst, new Variable(selfVar), varMap);
     }
     
     /**
