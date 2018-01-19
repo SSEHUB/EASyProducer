@@ -61,7 +61,6 @@ import net.ssehub.easy.varModel.model.datatypes.DerivedDatatype;
 import net.ssehub.easy.varModel.model.datatypes.IDatatype;
 import net.ssehub.easy.varModel.model.datatypes.MetaType;
 import net.ssehub.easy.varModel.model.datatypes.OclKeyWords;
-import net.ssehub.easy.varModel.model.datatypes.Operation;
 import net.ssehub.easy.varModel.model.datatypes.TypeQueries;
 import net.ssehub.easy.varModel.model.filter.ConstraintFinder;
 import net.ssehub.easy.varModel.model.filter.DeclarationFinder;
@@ -77,7 +76,8 @@ import net.ssehub.easy.varModel.model.values.ValueFactory;
 import static net.ssehub.easy.reasoning.sseReasoner.ReasoningUtils.*;
 
 /**
- * Constraint identifier, resolver and executor.
+ * Constraint identifier, resolver and executor. Assumption that constraints are not evaluated in parallel (see some
+ * comments).
  * 
  * @author Sizonenko
  * @author El-Sharkawy
@@ -363,38 +363,46 @@ public class Resolver {
     private void translateDerivedDatatypeConstraints(AbstractVariable decl, IDatatype type) {
         if (type instanceof DerivedDatatype) {
             DerivedDatatype dType = (DerivedDatatype) type;
-            addAll(internalConstraints, createInternalConstraints(decl, dType));
+            ConstraintSyntaxTree[] cst = createDerivedDatatypeExpressions(decl, dType);
+            if (null != cst) {
+                IModelElement topLevelParent = decl.getTopLevelParent();
+                for (int c = 0; c < cst.length; c++) {
+                    // Should be in same project as the declaration belongs to
+                    try {
+                        internalConstraints.add(new InternalConstraint(dType, cst[c], topLevelParent));
+                    } catch (CSTSemanticException e) {
+                        LOGGER.exception(e);
+                    }
+                }
+            }
             translateDerivedDatatypeConstraints(decl, dType.getBasisType());
         }
     }
-    
+
     /**
-     * Creates constraints related to variable declaration. This method is needed for <code>DerivedDatatypes</code>.
+     * Translates constraint expressions specified for derived datatypes.
      *  
      * @param declaration VariableDeclaration of <code>DerivedDatatype</code>
      * @param dType type of <code>DerivedDatatype</code>
-     * @return <code>null</code> if this datatype is not <code>DerivedDatatype</code> or if this 
-     * <code>DerivedDatatype</code> has no constraints, otherwise the adapted constraints of the 
-     * <code>DerivedDatatype</code> for this VariableDeclaration
+     * @return <code>null</code> if <code>dType</code> is not a <i>DerivedDatatype</i> or if <code>dType</code> 
+     *   has no constraints, otherwise the translated constraint expressions of the <code>dType</code> instantiated 
+     *   for <code>declaration</code>
      */
-    private InternalConstraint[] createInternalConstraints(AbstractVariable declaration, DerivedDatatype dType) {
-        InternalConstraint[] constraintInstances = null;
-        if (dType.getConstraintCount() > 0 && dType.getTypeDeclaration() != declaration) {
-            constraintInstances = new InternalConstraint[dType.getConstraintCount()];
-            Variable origin = new Variable(dType.getTypeDeclaration());
+    private ConstraintSyntaxTree[] createDerivedDatatypeExpressions(AbstractVariable declaration, 
+        DerivedDatatype dType) {
+        ConstraintSyntaxTree[] csts = null;
+        int count = dType.getConstraintCount();
+        DecisionVariableDeclaration dVar = dType.getTypeDeclaration();
+        if (count > 0 && dVar != declaration) {
+            csts = new ConstraintSyntaxTree[count];
+            Variable origin = new Variable(dVar);
             Variable replacement = new Variable(declaration);
             //Copy and replace each instance of the internal declaration with the given instance
-            for (int i = 0; i < dType.getConstraintCount(); i++) {
-                ConstraintSyntaxTree cst = substituteVariable(dType.getConstraint(i), origin, replacement); 
-                // Should be in same project as the declaration belongs to
-                try {
-                    constraintInstances[i] = new InternalConstraint(dType, cst, declaration.getTopLevelParent());
-                } catch (CSTSemanticException e) {
-                    LOGGER.exception(e);
-                }
+            for (int i = 0; i < count; i++) {
+                csts[i] = substituteVariable(dType.getConstraint(i), origin, replacement); 
             }
         }        
-        return constraintInstances;
+        return csts;
     }
     
     /**
@@ -455,7 +463,7 @@ public class Resolver {
                 Set<Compound> used = getUsedTypes(defaultValue, Compound.class);
                 if (null != used && !used.isEmpty()) {
                     for (Compound uType : used) {
-                        collectDefaultsCompoundCollection(decl, uType, new HashSet<Compound>());
+                        translateDefaultsCompoundCollection(decl, uType, new HashSet<Compound>());
                     }
                 }
             } else if (null != cAcc) {
@@ -472,7 +480,10 @@ public class Resolver {
         collectionCompoundConstraints.addAll(collectionCompoundConstraints(decl, var, null));
         // Container
         if (TypeQueries.isContainer(type)) {            
-            collectionInternalConstraints(decl, null);
+            IDatatype containedType = ((Container) type).getContainedType();
+            if (containedType instanceof DerivedDatatype) {
+                translateCollectionDerivedDatatypeConstraints((DerivedDatatype) containedType, decl, null);
+            }
         }
         if (null != defaultValue) {
             try {
@@ -507,7 +518,7 @@ public class Resolver {
      * @param cmpType the compound type used in the actual <code>decl</code> value to focus the constraints created
      * @param done the already processed types (to be modified as a side effect)
      */
-    private void collectDefaultsCompoundCollection(AbstractVariable decl, Compound cmpType, Set<Compound> done) {
+    private void translateDefaultsCompoundCollection(AbstractVariable decl, Compound cmpType, Set<Compound> done) {
         if (!done.contains(cmpType)) {
             done.add(cmpType);
             for (int d = 0; d < cmpType.getDeclarationCount(); d++) {
@@ -540,11 +551,49 @@ public class Resolver {
             }
             // attributes??
             for (int r = 0; r < cmpType.getRefinesCount(); r++) {
-                collectDefaultsCompoundCollection(decl, cmpType.getRefines(r), done);
+                translateDefaultsCompoundCollection(decl, cmpType.getRefines(r), done);
             }
         }
     }
 
+    /**
+     * Method for translating the internal constraint from collections with derived contained types.
+     * 
+     * @param derivedType {@link DerivedDatatype} of the Collection.
+     * @param decl Collection variable.
+     * @param topcmpAccess {@link CompoundAccess}, might be <b>null</b>.
+     */
+    private void translateCollectionDerivedDatatypeConstraints(DerivedDatatype derivedType, 
+        AbstractVariable decl, CompoundAccess topcmpAccess) {
+        // as long as evaluation is not parallelized, using the same localDecl shall not be a problem
+        DecisionVariableDeclaration localDecl = new DecisionVariableDeclaration("derivedType", derivedType, null);
+        ConstraintSyntaxTree[] cst = createDerivedDatatypeExpressions(localDecl, derivedType);
+        if (null != cst) {
+            for (int i = 0, n = cst.length; i < n; i++) {
+                ConstraintSyntaxTree itExpression = cst[i];
+                ConstraintSyntaxTree containerOp = null;
+                if (topcmpAccess == null) {
+                    containerOp = createContainerCall(new Variable(decl), Container.FORALL, itExpression, localDecl);
+                } else {
+                    containerOp = createContainerCall(topcmpAccess, Container.FORALL, itExpression, localDecl);
+                }            
+                try {
+                    if (containerOp != null) {
+                        containerOp.inferDatatype();
+                        Constraint constraint = new Constraint(containerOp, project);
+                        internalConstraints.add(constraint);                    
+                    }
+                } catch (CSTSemanticException e) {
+                    LOGGER.exception(e);
+                }            
+            }            
+        }
+        if (derivedType.getBasisType() instanceof DerivedDatatype) {
+            translateCollectionDerivedDatatypeConstraints((DerivedDatatype) derivedType.getBasisType(), 
+                decl, topcmpAccess);
+        }
+    }
+    
     // >>> documented until here    
     
     /**
@@ -813,69 +862,6 @@ public class Resolver {
             collectAllAssignmentConstraints(assng.getAssignment(a), result);
         }
     }    
-    
-    /**
-     * Method for collecting internal constraints from Collections.
-     * @param decl Collection variable
-     * @param topcmpAccess {@link CompoundAccess} might be null.
-     */
-    private void collectionInternalConstraints(AbstractVariable decl, CompoundAccess topcmpAccess) {
-        IDatatype type = decl.getType();
-        if (net.ssehub.easy.varModel.model.datatypes.Set.TYPE.isAssignableFrom(type)) {
-            net.ssehub.easy.varModel.model.datatypes.Set set 
-                = (net.ssehub.easy.varModel.model.datatypes.Set) type;
-            if (set.getContainedType() instanceof DerivedDatatype) {
-                transformCollectionInternalConstraints((DerivedDatatype) set.getContainedType(),
-                    Container.FORALL, decl, topcmpAccess);
-            }
-        }
-        if (net.ssehub.easy.varModel.model.datatypes.Sequence.TYPE.isAssignableFrom(type)) {
-            net.ssehub.easy.varModel.model.datatypes.Sequence sequence 
-                = (net.ssehub.easy.varModel.model.datatypes.Sequence) type;
-            if (sequence.getContainedType() instanceof DerivedDatatype) {
-                transformCollectionInternalConstraints((DerivedDatatype) sequence.getContainedType(),
-                    Container.FORALL, decl, topcmpAccess);
-            }
-        }
-    }
-    
-    /**
-     * Method for transforming collected internal constraint from collections into cyclic constraints.
-     * @param derivedType {@link DerivedDatatype} of the Collection.
-     * @param op Cyclic operation.
-     * @param decl Collection variable.
-     * @param topcmpAccess {@link CompoundAccess}, might be null.
-     */
-    private void transformCollectionInternalConstraints(DerivedDatatype derivedType, Operation op, 
-        AbstractVariable decl, CompoundAccess topcmpAccess) {  
-        DecisionVariableDeclaration localDecl = new DecisionVariableDeclaration("derivedType", derivedType, null);
-        InternalConstraint[] typeConstraints = createInternalConstraints(localDecl, derivedType);
-        if (typeConstraints != null) {
-            for (int i = 0, n = typeConstraints.length; i < n; i++) {
-                InternalConstraint internalConstraint = typeConstraints[i];
-                ConstraintSyntaxTree itExpression = internalConstraint.getConsSyntax();
-                ConstraintSyntaxTree containerOp = null;
-                if (topcmpAccess == null) {
-                    containerOp = createContainerCall(new Variable(decl), op, itExpression, localDecl);
-                } else {
-                    containerOp = createContainerCall(topcmpAccess, op, itExpression, localDecl);
-                }            
-                try {
-                    if (containerOp != null) {
-                        containerOp.inferDatatype();
-                        Constraint constraint = new Constraint(containerOp, project);
-                        internalConstraints.add(constraint);                    
-                    }
-                } catch (CSTSemanticException e) {
-                    LOGGER.exception(e);
-                }            
-            }            
-        }
-        if (derivedType.getBasisType() instanceof DerivedDatatype) {
-            transformCollectionInternalConstraints((DerivedDatatype) derivedType.getBasisType(), 
-                op, decl, topcmpAccess);
-        }
-    }
     
     /**
      * Method for retrieving constraints from compounds initialized in collections.
