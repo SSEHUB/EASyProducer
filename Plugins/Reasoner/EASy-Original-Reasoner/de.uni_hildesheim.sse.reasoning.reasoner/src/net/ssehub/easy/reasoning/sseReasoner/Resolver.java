@@ -715,7 +715,7 @@ public class Resolver {
         }
         // Nested attribute assignments handling
         for (int a = 0; a < cmpType.getAssignmentCount(); a++) {
-            processAttributeAssignments(cmpType.getAssignment(a), null, compound);
+            translateAttributeAssignments(cmpType.getAssignment(a), null, compound);
         }
         List<Constraint> thisCompoundConstraints = new ArrayList<Constraint>(); 
         allCompoundConstraints(cmpType, thisCompoundConstraints, false);        
@@ -831,22 +831,25 @@ public class Resolver {
     
     
     /**
-     * Method for processing scope attribute assignments.
-     * @param hostAssignment Attribute assignments on top-level.
-     * @param nestAssignment Attribute assignments with data.
+     * Translates attribute assignments. It is important to recall that in case of nested (orthogonal) attribute 
+     * assignments, the outer one(s) must also be applied to the inner ones.
+     * 
+     * @param assignment Attribute assignments on top-level.
+     * @param effectiveAssignments the list of effective current assignments, use <b>null</b> if not recursive.
      * @param compound Parent {@link CompoundAccess}.
      */
-    private void processAttributeAssignments(AttributeAssignment hostAssignment, AttributeAssignment nestAssignment, 
+    private void translateAttributeAssignments(AttributeAssignment assignment, List<Assignment> effectiveAssignments, 
         CompoundAccess compound) {
-        for (int d = 0; d < hostAssignment.getAssignmentDataCount(); d++) { 
-            if (nestAssignment == null) {
-                nestAssignment = hostAssignment;              
-            }
-            Assignment assignment = hostAssignment.getAssignmentData(d);
-            for (int e = 0; e < nestAssignment.getElementCount(); e++) {
-                DecisionVariableDeclaration aElt = nestAssignment.getElement(e);
+        List<Assignment> assng = null == effectiveAssignments ? new ArrayList<Assignment>() : effectiveAssignments;
+        for (int d = 0; d < assignment.getAssignmentDataCount(); d++) { 
+            assng.add(assignment.getAssignmentData(d));
+        }
+        for (int d = 0; d < assng.size(); d++) { 
+            Assignment effectiveAssignment = assng.get(d);
+            for (int e = 0; e < assignment.getElementCount(); e++) {
+                DecisionVariableDeclaration aElt = assignment.getElement(e);
                 IDatatype aEltType = aElt.getType();
-                translateAttributeAssignment(assignment, aElt, compound);
+                translateAttributeAssignment(effectiveAssignment, aElt, compound);
                 if (TypeQueries.isCompound(aEltType)) {                    
                     Compound cmp = (Compound) aEltType;
                     for (int s = 0; s < cmp.getDeclarationCount(); s++) {
@@ -859,14 +862,14 @@ public class Resolver {
 
                         }
                         inferTypeSafe(cmpAccess, null);
-                        translateAttributeAssignment(assignment, slot, cmpAccess);
+                        translateAttributeAssignment(effectiveAssignment, slot, cmpAccess);
                     }
                 }
             }
-            for (int a = 0; a < nestAssignment.getAssignmentCount(); a++) {
-                processAttributeAssignments(hostAssignment, nestAssignment.getAssignment(a), compound);
-            }
         }        
+        for (int a = 0; a < assignment.getAssignmentCount(); a++) {
+            translateAttributeAssignments(assignment.getAssignment(a), assng, compound);
+        }
     }
     
     /**
@@ -1059,7 +1062,7 @@ public class Resolver {
             scopeAttributes = finder.getAttributeAssignments();
             if (scopeAttributes.size() > 0) {
                 for (AttributeAssignment attributeAssignment : scopeAttributes) {
-                    processAttributeAssignments(attributeAssignment, null, null);                
+                    translateAttributeAssignments(attributeAssignment, null, null);                
                 }
             }            
         }
