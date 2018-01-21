@@ -53,7 +53,6 @@ import net.ssehub.easy.varModel.model.InternalConstraint;
 import net.ssehub.easy.varModel.model.OperationDefinition;
 import net.ssehub.easy.varModel.model.PartialEvaluationBlock;
 import net.ssehub.easy.varModel.model.Project;
-import net.ssehub.easy.varModel.model.datatypes.BooleanType;
 import net.ssehub.easy.varModel.model.datatypes.Compound;
 import net.ssehub.easy.varModel.model.datatypes.ConstraintType;
 import net.ssehub.easy.varModel.model.datatypes.Container;
@@ -494,6 +493,7 @@ public class Resolver {
                         // use closest parent instead of project -> runtime analysis
                         Constraint constraint = new Constraint(defaultValue, var.getDeclaration());
                         constraintVariablesConstraints.add(constraint);
+                        // just for reasoning messages
                         constraintVariableMap.put(constraint, var);
                         if (Descriptor.LOGGING) {
                             LOGGER.debug(var.getDeclaration().getName() + " project constraint variable " 
@@ -680,10 +680,11 @@ public class Resolver {
     private void translateCompoundDefaults(AbstractVariable decl, IDecisionVariable variable,
         CompoundAccess compound, IDatatype type) {
         Compound cmpType = (Compound) type;
-        CompoundVariable cmpVar = (CompoundVariable) variable;  
+        CompoundVariable cmpVar = (CompoundVariable) variable;
+        // resolve compound access first for all slots
         for (int i = 0, n = cmpVar.getNestedElementsCount(); i < n; i++) {
-            IDecisionVariable nestedVariable = cmpVar.getNestedElement(i);
-            AbstractVariable nestedDecl = nestedVariable.getDeclaration();
+            IDecisionVariable nestedVar = cmpVar.getNestedElement(i);
+            AbstractVariable nestedDecl = nestedVar.getDeclaration();
             CompoundAccess cmpAccess;
             if (compound == null) {
                 cmpAccess = new CompoundAccess(new Variable(decl), nestedDecl.getName());                   
@@ -697,25 +698,24 @@ public class Resolver {
             translateDeclarationDefaults(nestedDecl, cmpVar.getNestedVariable(nestedDecl.getName()),
                 cmpAccess);
         }
-        // used strategy: resolve and register compound accesses first in loop before, then constraints using them
+        // create constraints on mutually interacting constraints now
         for (int i = 0, n = cmpVar.getNestedElementsCount(); i < n; i++) {
-            IDecisionVariable nestedVariable = cmpVar.getNestedElement(i);
-            AbstractVariable nestedDecl = nestedVariable.getDeclaration();
+            IDecisionVariable nestedVar = cmpVar.getNestedElement(i);
+            AbstractVariable nestedDecl = nestedVar.getDeclaration();
             IDatatype nestedType = nestedDecl.getType();
-            if (Container.isContainer(nestedType, ConstraintType.TYPE)  // THIS IS JUST PRELIMINARY - QM
-                && nestedVariable.getValue() instanceof ContainerValue) {
-                checkContainerValue((ContainerValue) nestedVariable.getValue(), decl, nestedDecl, 
-                    nestedVariable, variable);
+            if (Container.isContainer(nestedType, ConstraintType.TYPE)
+                && nestedVar.getValue() instanceof ContainerValue) {
+                createContainerConstraintValueConstraints((ContainerValue) nestedVar.getValue(), decl, nestedDecl, 
+                    nestedVar);
             }
             translateCollectionCompoundConstraints(nestedDecl, variable, varMap.get(nestedDecl), compoundConstraints);
-            if (ConstraintType.TYPE.isAssignableFrom(nestedType)  // TODO TypeQuery.isConstraint
-                && !(nestedType.getType() == BooleanType.TYPE.getType())) {
-                createConstraint(nestedDecl.getDefaultValue(), decl, nestedDecl, nestedVariable, variable);
+            if (TypeQueries.isConstraint(nestedType)) {
+                createConstraintVariableConstraint(nestedDecl.getDefaultValue(), decl, nestedDecl, nestedVar);
             }
         }
         // Nested attribute assignments handling
-        for (int x = 0; x < cmpType.getAssignmentCount(); x++) {
-            processAttributeAssignments(cmpType.getAssignment(x), null, compound);
+        for (int a = 0; a < cmpType.getAssignmentCount(); a++) {
+            processAttributeAssignments(cmpType.getAssignment(a), null, compound);
         }
         List<Constraint> thisCompoundConstraints = new ArrayList<Constraint>(); 
         allCompoundConstraints(cmpType, thisCompoundConstraints, false);        
@@ -764,16 +764,144 @@ public class Resolver {
                 ConstraintSyntaxTree cst = copyCST(evalCst, null, varMap);
                 try {
                     cst.inferDatatype();
-                    Constraint constraint = new Constraint(project);
-                    constraint.setConsSyntax(cst);
-                    compoundEvalConstraints.add(constraint);
+                    compoundEvalConstraints.add(new Constraint(cst, project));
                 } catch (CSTSemanticException e) {
                     LOGGER.exception(e);
                 } 
             }
         }
     }
+    
+    /**
+     * Creates a constraint from a (nested) constraint variable adding the result to 
+     * {@link #constraintVariablesConstraints}.
+     * 
+     * @param cst the constraint
+     * @param decl the declaration of the variable representing <i>self</i> in <code>cst</code>
+     * @param parent the parent for new constraints
+     * @param nestedVariable the actually (nested) variable, used to fill {@link #constraintVariableMap}
+     * @return the created constraint
+     */
+    private Constraint createConstraintVariableConstraint(ConstraintSyntaxTree cst, AbstractVariable decl, 
+        IModelElement parent, IDecisionVariable nestedVariable) {
+        Constraint constraint = null;
+        if (cst != null) {
+            cst = copyCST(cst, new Variable(decl), varMap);
+            try {
+                constraint = new Constraint(cst, parent);
+                constraintVariablesConstraints.add(constraint);
+                //after refactoring duplicate check for ConstraintVariable is needed
+                IDatatype nestedType = nestedVariable.getDeclaration().getType();
+                if (TypeQueries.isContainer(nestedType)) {
+                    // just for reasoning messages
+                    constraintVariableMap.put(constraint, nestedVariable);
+                }
+                if (Descriptor.LOGGING) {
+                    LOGGER.debug(decl.getName() + "." + nestedVariable.getDeclaration().getName() 
+                        + " compound constraint variable " + toIvmlString(cst));
+                }                    
+            } catch (CSTSemanticException e) {
+                LOGGER.exception(e);
+            }
+        }
+        return constraint;
+    }
+    
+    /**
+     * Checks a container value for nested constraint values, i.e., values of nested constraint variables.
+     * 
+     * @param val the container value
+     * @param decl the variable declaration representing <i>self</i> in the container/constraint value
+     * @param parent the parent for new constraints
+     * @param nestedVariable the variable holding the constraint value
+     */
+    private void createContainerConstraintValueConstraints(ContainerValue val, AbstractVariable decl, 
+        IModelElement parent, IDecisionVariable nestedVariable) {
+        for (int n = 0; n < val.getElementSize(); n++) {
+            Value cVal = val.getElement(n);
+            if (cVal instanceof ConstraintValue) {
+                ConstraintValue constraint = (ConstraintValue) cVal;
+                createConstraintVariableConstraint(constraint.getValue(), decl, parent, nestedVariable);
+            }
+        }
+    }
 
+    
+    
+    
+    
+    /**
+     * Method for processing scope attribute assignments.
+     * @param hostAssignment Attribute assignments on top-level.
+     * @param nestAssignment Attribute assignments with data.
+     * @param compound Parent {@link CompoundAccess}.
+     */
+    private void processAttributeAssignments(AttributeAssignment hostAssignment, AttributeAssignment nestAssignment, 
+        CompoundAccess compound) {
+        for (int d = 0; d < hostAssignment.getAssignmentDataCount(); d++) { 
+            if (nestAssignment == null) {
+                nestAssignment = hostAssignment;              
+            }
+            Assignment assignment = hostAssignment.getAssignmentData(d);
+            for (int e = 0; e < nestAssignment.getElementCount(); e++) {
+                DecisionVariableDeclaration aElt = nestAssignment.getElement(e);
+                IDatatype aEltType = aElt.getType();
+                translateAttributeAssignment(assignment, aElt, compound);
+                if (TypeQueries.isCompound(aEltType)) {                    
+                    Compound cmp = (Compound) aEltType;
+                    for (int s = 0; s < cmp.getDeclarationCount(); s++) {
+                        DecisionVariableDeclaration slot = cmp.getDeclaration(s);
+                        CompoundAccess cmpAccess;
+                        if (compound == null) {
+                            cmpAccess = new CompoundAccess(new Variable(aElt), slot.getName());        
+                        } else {
+                            cmpAccess = new CompoundAccess(compound, slot.getName());
+
+                        }
+                        inferTypeSafe(cmpAccess, null);
+                        translateAttributeAssignment(assignment, slot, cmpAccess);
+                    }
+                }
+            }
+            for (int a = 0; a < nestAssignment.getAssignmentCount(); a++) {
+                processAttributeAssignments(hostAssignment, nestAssignment.getAssignment(a), compound);
+            }
+        }        
+    }
+    
+    /**
+     * Method for creating attribute constraint for a specific element.
+     * @param assignment Attribute assignment constraint.
+     * @param element Elements to which the attribute is assigned.
+     * @param compound Nesting compound if there is one.
+     */
+    private void translateAttributeAssignment(Assignment assignment, DecisionVariableDeclaration element,
+        CompoundAccess compound) {
+        String attributeName = assignment.getName();
+        Attribute attrib = (Attribute) element.getAttribute(attributeName);
+        if (null != attrib) {
+            ConstraintSyntaxTree cst = null;
+            //handle annotations in compounds
+            compound = null;
+            compound = varMap.get(element);
+            if (compound == null) {                      
+                cst = new OCLFeatureCall(
+                    new AttributeVariable(new Variable(element), attrib),
+                        OclKeyWords.ASSIGNMENT, assignment.getExpression());
+            } else {
+                cst = new OCLFeatureCall(new AttributeVariable(compound, attrib),
+                    OclKeyWords.ASSIGNMENT, assignment.getExpression());
+            }
+            inferTypeSafe(cst, null);
+            try {
+                assignedAttributeConstraints.add(new Constraint(cst, project));
+            } catch (CSTSemanticException e) {
+                LOGGER.exception(e);
+            }
+        }
+    }
+
+    
     // <<< documented until here    
     
     /**
@@ -829,61 +957,6 @@ public class Resolver {
                 LOGGER.exception(e);
             }
         }
-    }
-
-    /**
-     * Checks a container value for nested constraints.
-     * 
-     * @param val the container value
-     * @param decl unclear - refactored from above
-     * @param parent the parent for new constraints
-     * @param nestedVariable unclear - refactored from above
-     * @param variable unclear - refactored from above
-     */
-    private void checkContainerValue(ContainerValue val, AbstractVariable decl, IModelElement parent, 
-        IDecisionVariable nestedVariable, IDecisionVariable variable) {
-        for (int n = 0; n < val.getElementSize(); n++) {
-            Value cVal = val.getElement(n);
-            if (cVal instanceof ConstraintValue) {
-                ConstraintValue constraint = (ConstraintValue) cVal;
-                createConstraint(constraint.getValue(), decl, parent, nestedVariable, variable);
-            }
-        }
-    }
-    
-    /**
-     * Creates a constraint from a constraint variable.
-     * 
-     * @param cst the constraint
-     * @param decl unclear - refactored from above
-     * @param parent the parent for new constraints
-     * @param nestedVariable unclear - refactored from above
-     * @param variable unclear - refactored from above
-     * @return the created constraint
-     */
-    private Constraint createConstraint(ConstraintSyntaxTree cst, AbstractVariable decl, IModelElement parent, 
-        IDecisionVariable nestedVariable, IDecisionVariable variable) {
-        Constraint constraint = null;
-        if (cst != null) {
-            cst = copyCST(cst, new Variable(decl), varMap);
-            try {
-                constraint = new Constraint(cst, parent);
-                constraintVariablesConstraints.add(constraint);
-                //after refactoring duplicate check for ConstraintVariable is needed
-                IDatatype nestedType = nestedVariable.getDeclaration().getType();
-                if (ConstraintType.TYPE.isAssignableFrom(nestedType) 
-                    && !(nestedType.getType() == BooleanType.TYPE.getType())) {
-                    constraintVariableMap.put(constraint, nestedVariable);
-                }
-                if (Descriptor.LOGGING) {
-                    LOGGER.debug(variable.getDeclaration().getName() + " compound constraint variable " 
-                        + toIvmlString(cst));
-                }                    
-            } catch (CSTSemanticException e) {
-                LOGGER.exception(e);
-            }
-        }
-        return constraint;
     }
     
     /**
@@ -1020,78 +1093,6 @@ public class Resolver {
         }
         constraintCounter = constraintCounter + constraintBase.size();
         clearConstraintLists();
-    }
-
-    /**
-     * Method for processing scope attribute assignments.
-     * @param hostAssignment Attribute assignments on top-level.
-     * @param nestAssignment Attribute assignments with data.
-     * @param compound Parent {@link CompoundAccess}.
-     */
-    private void processAttributeAssignments(AttributeAssignment hostAssignment, AttributeAssignment nestAssignment, 
-        CompoundAccess compound) {
-        for (int i = 0; i < hostAssignment.getAssignmentDataCount(); i++) { 
-            if (nestAssignment == null) {
-                nestAssignment = hostAssignment;              
-            } 
-            for (int y = 0; y < nestAssignment.getElementCount(); y++) {
-                processElement(hostAssignment.getAssignmentData(i),
-                    nestAssignment.getElement(y), compound);
-                if (TypeQueries.isCompound(nestAssignment.getElement(y).getType())) {                    
-                    Compound cmp = (Compound) nestAssignment.getElement(y).getType();
-                    for (int j = 0; j < cmp.getDeclarationCount(); j++) {
-                        CompoundAccess cmpAccess;
-                        if (compound == null) {
-                            cmpAccess = new CompoundAccess(new Variable(nestAssignment.getElement(y)), 
-                                cmp.getDeclaration(j).getName());                   
-                        } else {
-                            cmpAccess = new CompoundAccess(compound, cmp.getDeclaration(j).getName());
-
-                        }
-                        inferTypeSafe(cmpAccess, null);
-                        processElement(hostAssignment.getAssignmentData(i), cmp.getDeclaration(j), cmpAccess);
-                    }
-                    
-                }
-            }
-            for (int z = 0; z < nestAssignment.getAssignmentCount(); z++) {
-                processAttributeAssignments(hostAssignment, nestAssignment.getAssignment(z), compound);
-            }
-        }        
-    }
-    
-    /**
-     * Method for creating attribute constraint for a specific element.
-     * @param assignment Attribute assignment constraint.
-     * @param element Elements to which the attribute is assigned.
-     * @param compound Nesting compound if there is one.
-     */
-    private void processElement(Assignment assignment, DecisionVariableDeclaration element,
-        CompoundAccess compound) {
-        String attributeName = assignment.getName();
-        Attribute attrib = (Attribute) element.getAttribute(attributeName);
-        if (null != attrib) {
-            ConstraintSyntaxTree cst = null;
-            //handle annotations in compounds
-            compound = null;
-            compound = varMap.get(element);
-            if (compound == null) {                      
-                cst = new OCLFeatureCall(
-                    new AttributeVariable(new Variable(element), attrib),
-                        OclKeyWords.ASSIGNMENT, assignment.getExpression());
-            } else {
-                cst = new OCLFeatureCall(new AttributeVariable(compound, attrib),
-                    OclKeyWords.ASSIGNMENT, assignment.getExpression());
-            }
-            inferTypeSafe(cst, null);
-            Constraint constraint = new Constraint(project);
-            try {
-                constraint.setConsSyntax(cst);
-                assignedAttributeConstraints.add(constraint);
-            } catch (CSTSemanticException e) {
-                LOGGER.exception(e);
-            }
-        }
     }
     
     /**
