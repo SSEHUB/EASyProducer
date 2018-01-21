@@ -708,14 +708,14 @@ public class Resolver {
                 createContainerConstraintValueConstraints((ContainerValue) nestedVar.getValue(), decl, nestedDecl, 
                     nestedVar);
             }
-            translateCollectionCompoundConstraints(nestedDecl, variable, varMap.get(nestedDecl), compoundConstraints);
             if (TypeQueries.isConstraint(nestedType)) {
                 createConstraintVariableConstraint(nestedDecl.getDefaultValue(), decl, nestedDecl, nestedVar);
             }
+            translateCollectionCompoundConstraints(nestedDecl, variable, varMap.get(nestedDecl), compoundConstraints);
         }
         // Nested attribute assignments handling
         for (int a = 0; a < cmpType.getAssignmentCount(); a++) {
-            translateAttributeAssignments(cmpType.getAssignment(a), null, compound);
+            translateAnnotationAssignments(cmpType.getAssignment(a), null, compound);
         }
         List<Constraint> thisCompoundConstraints = new ArrayList<Constraint>(); 
         allCompoundConstraints(cmpType, thisCompoundConstraints, false);        
@@ -838,7 +838,7 @@ public class Resolver {
      * @param effectiveAssignments the list of effective current assignments, use <b>null</b> if not recursive.
      * @param compound Parent {@link CompoundAccess}.
      */
-    private void translateAttributeAssignments(AttributeAssignment assignment, List<Assignment> effectiveAssignments, 
+    private void translateAnnotationAssignments(AttributeAssignment assignment, List<Assignment> effectiveAssignments, 
         CompoundAccess compound) {
         List<Assignment> assng = null == effectiveAssignments ? new ArrayList<Assignment>() : effectiveAssignments;
         for (int d = 0; d < assignment.getAssignmentDataCount(); d++) { 
@@ -849,7 +849,7 @@ public class Resolver {
             for (int e = 0; e < assignment.getElementCount(); e++) {
                 DecisionVariableDeclaration aElt = assignment.getElement(e);
                 IDatatype aEltType = aElt.getType();
-                translateAttributeAssignment(effectiveAssignment, aElt, compound);
+                translateAnnotationAssignment(effectiveAssignment, aElt, compound);
                 if (TypeQueries.isCompound(aEltType)) {                    
                     Compound cmp = (Compound) aEltType;
                     for (int s = 0; s < cmp.getDeclarationCount(); s++) {
@@ -862,13 +862,13 @@ public class Resolver {
 
                         }
                         inferTypeSafe(cmpAccess, null);
-                        translateAttributeAssignment(effectiveAssignment, slot, cmpAccess);
+                        translateAnnotationAssignment(effectiveAssignment, slot, cmpAccess);
                     }
                 }
             }
         }        
         for (int a = 0; a < assignment.getAssignmentCount(); a++) {
-            translateAttributeAssignments(assignment.getAssignment(a), assng, compound);
+            translateAnnotationAssignments(assignment.getAssignment(a), assng, compound);
         }
     }
     
@@ -876,25 +876,24 @@ public class Resolver {
      * Method for creating attribute constraint for a specific element.
      * @param assignment Attribute assignment constraint.
      * @param element Elements to which the attribute is assigned.
-     * @param compound Nesting compound if there is one.
+     * @param compound Nesting compound if there is one, may be <b>null</b> for none.
      */
-    private void translateAttributeAssignment(Assignment assignment, DecisionVariableDeclaration element,
+    private void translateAnnotationAssignment(Assignment assignment, DecisionVariableDeclaration element,
         CompoundAccess compound) {
         String attributeName = assignment.getName();
         Attribute attrib = (Attribute) element.getAttribute(attributeName);
         if (null != attrib) {
-            ConstraintSyntaxTree cst = null;
+            ConstraintSyntaxTree cst;
             //handle annotations in compounds
-            compound = null;
-            compound = varMap.get(element);
-            if (compound == null) {                      
-                cst = new OCLFeatureCall(
-                    new AttributeVariable(new Variable(element), attrib),
-                        OclKeyWords.ASSIGNMENT, assignment.getExpression());
-            } else {
-                cst = new OCLFeatureCall(new AttributeVariable(compound, attrib),
-                    OclKeyWords.ASSIGNMENT, assignment.getExpression());
+            if (null == compound) {
+                compound = varMap.get(element);
             }
+            if (compound == null) {
+                cst = new AttributeVariable(new Variable(element), attrib);
+            } else {
+                cst = new AttributeVariable(compound, attrib);
+            }
+            cst = new OCLFeatureCall(cst, OclKeyWords.ASSIGNMENT, assignment.getExpression());
             inferTypeSafe(cst, null);
             try {
                 assignedAttributeConstraints.add(new Constraint(cst, project));
@@ -903,7 +902,6 @@ public class Resolver {
             }
         }
     }
-
     
     // <<< documented until here    
     
@@ -1062,7 +1060,7 @@ public class Resolver {
             scopeAttributes = finder.getAttributeAssignments();
             if (scopeAttributes.size() > 0) {
                 for (AttributeAssignment attributeAssignment : scopeAttributes) {
-                    translateAttributeAssignments(attributeAssignment, null, null);                
+                    translateAnnotationAssignments(attributeAssignment, null, null);                
                 }
             }            
         }
