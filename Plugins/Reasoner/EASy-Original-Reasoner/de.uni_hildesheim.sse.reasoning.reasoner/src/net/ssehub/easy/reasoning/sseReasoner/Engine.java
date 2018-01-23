@@ -81,8 +81,9 @@ public class Engine {
         cfg.unfreeze(AssignmentState.DERIVED);
         this.project = project;
 //        this.reasoningID = PerformanceStatistics.createReasoningID(project.getName(), "Model validation");
-        this.resolver = new Resolver(project, cfg, true, reasonerConfig);
+        this.resolver = new Resolver(project, cfg, reasonerConfig);
         this.resolver.setIncremental(reasonerConfig.isRuntimeMode());
+        //this.resolver.setConsiderFrozenConstraints(considerFrozenConstraints); // TODO does this work?
         this.result = new ReasoningResult();
         this.infoLogger = reasonerConfig.getLogger();
     } 

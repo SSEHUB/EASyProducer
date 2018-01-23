@@ -18,6 +18,7 @@ package net.ssehub.easy.reasoning.sseReasoner;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -160,14 +161,14 @@ class ReasoningUtils {
      * 
      * @param cst Constraint to be transformed.
      * @param selfEx an expression representing <i>self</i> (ignored if <b>null</b>).
-     * @param mappingCA a mapping from old variable declarations to new compound access declarations,
+     * @param varMap a mapping from old variable declarations to new compound access declarations,
      *   existing variable declarations are taken over if no mapping is given, may be <b>null</b>
      *   in case of no mapping at all
      * @return Transformed constraint.
      */
     static ConstraintSyntaxTree copyCST(ConstraintSyntaxTree cst, ConstraintSyntaxTree selfEx, 
-        Map<AbstractVariable, CompoundAccess> mappingCA) {
-        CopyVisitor visitor = new CopyVisitor(null, mappingCA);
+        Map<AbstractVariable, CompoundAccess> varMap) {
+        CopyVisitor visitor = new CopyVisitor(null, varMap);
         if (selfEx != null) {
             visitor.setSelf(selfEx);            
         }
@@ -175,6 +176,40 @@ class ReasoningUtils {
         cst = visitor.getResult();
         inferTypeSafe(cst, null);
         return cst;
+    }
+    
+    /**
+     * Substitutes in <code>constraints</code> the variables registered in {@link #varMap}. Turns constraints into 
+     * default constraints if specified.
+     * 
+     * @param constraints Constraints to be transformed (modified as a side effect).
+     * @param makeDefaultConstraint <code>true</code> to turn the constraints into default constraints, 
+     *   <code>false</code> for not changing the constraint type.
+     * @param varMap a mapping from old variable declarations to new compound access declarations,
+     *   existing variable declarations are taken over if no mapping is given, may be <b>null</b>
+     *   in case of no mapping at all
+     * @return <code>constraints</code>
+     */
+    static List<Constraint> substituteVariables(List<Constraint> constraints, boolean makeDefaultConstraint, 
+        Map<AbstractVariable, CompoundAccess> varMap) {
+        for (int i = 0; i < constraints.size(); i++) {
+            ConstraintSyntaxTree cst = constraints.get(i).getConsSyntax();
+            cst = copyCST(cst, null, varMap);
+            if (makeDefaultConstraint) {
+                constraints.get(i).makeDefaultConstraint();                
+            }
+            if (cst != null) {
+                try {
+                    constraints.get(i).setConsSyntax(cst);
+                } catch (CSTSemanticException e) {
+                    LOGGER.exception(e);
+                }                            
+                if (Descriptor.LOGGING) {
+                    LOGGER.debug("Default constraint: " + toIvmlString(cst));                    
+                }
+            }            
+        }
+        return constraints;
     }
 
     /**

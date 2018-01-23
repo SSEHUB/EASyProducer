@@ -90,7 +90,8 @@ public class Resolver {
     private IAdditionalInformationLogger infoLogger; 
     
     private Configuration config;
-    private boolean incremental;
+    private boolean incremental = false;
+    private boolean considerFrozenConstraints = true;
 
     private EvalVisitor evaluator = new EvalVisitor();
     private FailedElements failedElements = new FailedElements();
@@ -111,7 +112,6 @@ public class Resolver {
     private List<Constraint> unresolvedConstraints = new LinkedList<Constraint>(); 
     private List<Constraint> assignedAttributeConstraints = new LinkedList<Constraint>();
     private List<Constraint> collectionConstraints = new LinkedList<Constraint>();
-    private boolean considerFrozenConstraints;
     
     private Map<AbstractVariable, CompoundAccess> varMap; // TODO turn into local map
     
@@ -229,16 +229,10 @@ public class Resolver {
      * @param config Configuration to reason on.
      * @param reasonerConfig the reasoner configuration to be used for reasoning (e.g. taken from the UI, 
      *        may be <b>null</b>)
-     * @param considerFrozenConstraints Specification whether constraints containing only frozen variables
-     *     shall be considered during reasoning (<tt>true</tt>: Shall be considered).
      */
-    public Resolver(Project project, Configuration config, boolean considerFrozenConstraints,
-        ReasonerConfiguration reasonerConfig) {
-        
+    public Resolver(Project project, Configuration config, ReasonerConfiguration reasonerConfig) {
         this.infoLogger = reasonerConfig.getLogger();
         this.config = config;
-        this.incremental = false;
-        this.considerFrozenConstraints = considerFrozenConstraints;
     } 
     
     /**
@@ -248,7 +242,7 @@ public class Resolver {
      *        may be <b>null</b>)
      */
     public Resolver(Project project, ReasonerConfiguration reasonerConfig) {
-        new Resolver(project, createCleanConfiguration(project), true, reasonerConfig);        
+        new Resolver(project, createCleanConfiguration(project), reasonerConfig);
     } 
     
     /**
@@ -258,7 +252,7 @@ public class Resolver {
      *        may be <b>null</b>)
      */
     public Resolver(Configuration config, ReasonerConfiguration reasonerConfig) {
-        new Resolver(config.getProject(), config, true, reasonerConfig);
+        new Resolver(config.getProject(), config, reasonerConfig);
     }  
     
     // >>> from here the names follow the reasoner.tex documentation
@@ -826,10 +820,6 @@ public class Resolver {
         }
     }
 
-    
-    
-    
-    
     /**
      * Translates attribute assignments. It is important to recall that in case of nested (orthogonal) attribute 
      * assignments, the outer one(s) must also be applied to the inner ones.
@@ -902,24 +892,100 @@ public class Resolver {
             }
         }
     }
-    
-    // <<< documented until here    
-    
+
+    /**
+     * Translates and collects all constraints in {@link #project} by adding the collected constraints to the 
+     * {@link #constraintBase}.
+     * 
+     * @see #resolve()
+     */
+    private void translateConstraints() { 
+        List<Constraint> scopeConstraints = new ArrayList<Constraint>();
+        if (!incremental && defaultConstraints.size() > 0) { //TODO leave out non-incremental constraints on the fly
+            defaultConstraints.addAll(deferredDefaultConstraints);
+            addAllConstraints(scopeConstraints, substituteVariables(defaultConstraints, true, varMap));
+        }
+        if (derivedTypeConstraints.size() > 0) {
+            addAllConstraints(scopeConstraints, substituteVariables(derivedTypeConstraints, false, varMap));
+        }
+        ConstraintFinder finder = new ConstraintFinder(project, false, false, true);
+        addAllConstraints(scopeConstraints, finder.getEvalConstraints());
+        if (compoundEvalConstraints.size() > 0) {
+            scopeConstraints.addAll(compoundEvalConstraints);
+        }
+        addAllConstraints(scopeConstraints, finder.getConstraints());
+        if (!incremental) {
+            List<AttributeAssignment> scopeAttributes = new ArrayList<AttributeAssignment>();
+            scopeAttributes = finder.getAttributeAssignments();
+            if (scopeAttributes.size() > 0) {
+                for (AttributeAssignment attributeAssignment : scopeAttributes) {
+                    translateAnnotationAssignments(attributeAssignment, null, null);                
+                }
+            }            
+        }
+        if (compoundConstraints.size() > 0) {
+            scopeConstraints.addAll(compoundConstraints);            
+        }
+        if (constraintVariablesConstraints.size() > 0) {
+            scopeConstraints.addAll(constraintVariablesConstraints);
+        }
+        if (collectionCompoundConstraints.size() > 0) {
+            scopeConstraints.addAll(collectionCompoundConstraints);            
+        }
+        for (Constraint constraint : scopeConstraints) {
+            retrieveCollectionConstraints(constraint);
+        }
+        if (collectionConstraints.size() > 0) {
+            scopeConstraints.addAll(collectionConstraints);
+        }
+        if (scopeConstraints.size() > 0) {
+            assignConstraintsToVariables(scopeConstraints);
+            if (incremental) { //TODO leave out non-incremental constraints on the fly
+                AssignmentConstraintFinder assignmentFinder = new AssignmentConstraintFinder(scopeConstraints);
+                scopeConstraints = assignmentFinder.getValidationConstraints();                
+            }
+            addAllToConstraintBase(scopeConstraints);
+            scopeConstraints.clear();
+        }
+        if (!incremental) { //TODO leave out non-incremental constraints on the fly
+            addAllToConstraintBase(defaultAnnotationConstraints);
+            addAllToConstraintBase(assignedAttributeConstraints);
+        }
+        constraintCounter = constraintCounter + constraintBase.size();
+        clearConstraintLists();
+    }
+
+    /**
+     * Method for retrieving constraints from collections.
+     * @param constraint Constraint to be analyzed.
+     */
+    private void retrieveCollectionConstraints(Constraint constraint) {
+        ConstraintSyntaxTree cst = constraint.getConsSyntax();
+        CollectionConstraintsFinder finder = new CollectionConstraintsFinder(cst); // TODO make finder reusable
+        if (finder.isConstraintCollection()) {
+            checkContainerInitializer(finder.getExpression(), false, constraint.getParent());
+        }
+        if (finder.isCompoundInitializer()) {
+            checkCompoundInitializer(finder.getExpression(), true, constraint.getParent());
+        }
+    }
+
     /**
      * Method for checking if {@link CompoundInitializer} holds 
      * a {@link de.uni_hildesheim.sse.ivml.CollectionInitializer} with {@link Constraint}s.
      * @param exp expression to check.
-     * @param compound false if variable is not nested.
+     * @param substituteVars <code>true</code> if {@link #varMap} shall be applied to substitute variables in 
+     *   <code>exp</code> (if variable is nested), <code>false</code> if <code>exp</code> shall be taken over as it is.
      * @param parent parent for temporary constraints
      */
-    private void checkCompoundInitializer(ConstraintSyntaxTree exp, Boolean compound, IModelElement parent) {
+    private void checkCompoundInitializer(ConstraintSyntaxTree exp, boolean substituteVars, IModelElement parent) {
         CompoundInitializer compoundInit = (CompoundInitializer) exp;
         for (int i = 0; i < compoundInit.getExpressionCount(); i++) {
             if (compoundInit.getExpression(i) instanceof ContainerInitializer) {
-                checkContainerInitializer(compoundInit.getExpression(i), compound, parent);
+                checkContainerInitializer(compoundInit.getExpression(i), substituteVars, parent);
             }
             if (compoundInit.getExpression(i) instanceof CompoundInitializer) {
-                checkCompoundInitializer(compoundInit.getExpression(i), compound, parent);
+                checkCompoundInitializer(compoundInit.getExpression(i), substituteVars, parent);
             }    
         }
     }
@@ -927,39 +993,29 @@ public class Resolver {
     /**
      * Method for checking if an expression is a {@link ContainerInitializer}.
      * @param exp expression to be checked.
-     * @param compound false if variable is not nested.
+     * @param substituteVars <code>true</code> if {@link #varMap} shall be applied to substitute variables in 
+     *   <code>exp</code> (if variable is nested), <code>false</code> if <code>exp</code> shall be taken over as it is.
      * @param parent parent for temporary constraints
      */
-    private void checkContainerInitializer(ConstraintSyntaxTree exp, Boolean compound, IModelElement parent) {
+    private void checkContainerInitializer(ConstraintSyntaxTree exp, boolean substituteVars, IModelElement parent) {
         ContainerInitializer containerInit = (ContainerInitializer) exp;
         if (ConstraintType.TYPE.isAssignableFrom(containerInit.getType().getContainedType())) {
-            extractCollectionConstraints(containerInit, compound, parent);
+            for (int i = 0; i < containerInit.getExpressionCount(); i++) {
+                Constraint constraint = new Constraint(parent);
+                ConstraintSyntaxTree cst = containerInit.getExpression(i);
+                if (substituteVars) {
+                    cst = copyCST(cst, null, varMap);
+                }
+                try {
+                    constraint.setConsSyntax(cst);
+                    collectionConstraints.add(constraint);
+                } catch (CSTSemanticException e) {
+                    LOGGER.exception(e);
+                }
+            }
         }
     }
 
-    /**
-     * Method for extracting collection constraints.
-     * @param containerInit Container with constraints.
-     * @param compound false if variable is not nested.
-     * @param parent parent for temporary constraints
-     */
-    private void extractCollectionConstraints(ContainerInitializer containerInit, Boolean compound, 
-        IModelElement parent) {
-        for (int i = 0; i < containerInit.getExpressionCount(); i++) {
-            Constraint constraint = new Constraint(parent);
-            ConstraintSyntaxTree cst = containerInit.getExpression(i);
-            if (compound) {
-                cst = copyCST(cst, null, varMap);
-            }
-            try {
-                constraint.setConsSyntax(cst);
-                collectionConstraints.add(constraint);
-            } catch (CSTSemanticException e) {
-                LOGGER.exception(e);
-            }
-        }
-    }
-    
     /**
      * Method for getting all constraints relevant to a {@link Compound}.
      * @param cmpType Compound to be analyzed.
@@ -995,7 +1051,7 @@ public class Resolver {
             allAssignmentConstraints(cmpType.getAssignment(a), thisCompoundConstraints);
         }
     }
-    
+
     /**
      * Collects all assignment constraints and adds them to <code>result</code>.
      * 
@@ -1021,7 +1077,7 @@ public class Resolver {
     private void addAllConstraints(List<Constraint> scopeConstraints, List<Constraint> constraintsToAdd) {
         if (considerFrozenConstraints) {
             scopeConstraints.addAll(constraintsToAdd);
-        } else {
+        } else { // TODO does removing completely (!) frozen constraints work in runtime reasoning?
             for (int i = 0, n = constraintsToAdd.size(); i < n; i++) {
                 Constraint currentConstraint = constraintsToAdd.get(i);
                 VariablesInConstraintFinder finder = new VariablesInConstraintFinder(currentConstraint.getConsSyntax(),
@@ -1033,90 +1089,13 @@ public class Resolver {
             }
         }
     }
-    
-    /**
-     * Translates and collects all constraints in {@link #project} by adding the collected constraints to the 
-     * {@link #constraintBase}.
-     * 
-     * @see #resolve()
-     */
-    private void translateConstraints() { 
-        List<Constraint> scopeConstraints = new ArrayList<Constraint>();
-        if (!incremental && defaultConstraints.size() > 0) {
-            defaultConstraints.addAll(deferredDefaultConstraints);
-            addAllConstraints(scopeConstraints, transformConstraints(defaultConstraints, true));
-        }
-        if (derivedTypeConstraints.size() > 0) {
-            addAllConstraints(scopeConstraints, transformConstraints(derivedTypeConstraints, false));
-        }
-        ConstraintFinder finder = new ConstraintFinder(project, false, false, true);
-        addAllConstraints(scopeConstraints, finder.getEvalConstraints());
-        if (compoundEvalConstraints.size() > 0) {
-            scopeConstraints.addAll(compoundEvalConstraints);
-        }
-        addAllConstraints(scopeConstraints, finder.getConstraints());
-        if (!incremental) {
-            List<AttributeAssignment> scopeAttributes = new ArrayList<AttributeAssignment>();
-            scopeAttributes = finder.getAttributeAssignments();
-            if (scopeAttributes.size() > 0) {
-                for (AttributeAssignment attributeAssignment : scopeAttributes) {
-                    translateAnnotationAssignments(attributeAssignment, null, null);                
-                }
-            }            
-        }
-        if (compoundConstraints.size() > 0) {
-            scopeConstraints.addAll(compoundConstraints);            
-        }
-        if (constraintVariablesConstraints.size() > 0) {
-            scopeConstraints.addAll(constraintVariablesConstraints);
-        }
-        if (collectionCompoundConstraints.size() > 0) {
-            scopeConstraints.addAll(collectionCompoundConstraints);            
-        }
-        for (Constraint constraint : scopeConstraints) {
-            retrieveCollectionConstraints(constraint);
-        }
-        if (collectionConstraints.size() > 0) {
-            scopeConstraints.addAll(collectionConstraints);
-        }
-        if (scopeConstraints.size() > 0) {
-            fillVariableConstraintPool(scopeConstraints);
-            if (incremental) {
-                AssignmentConstraintFinder assignmentFinder = new AssignmentConstraintFinder(scopeConstraints);
-                scopeConstraints = assignmentFinder.getValidationConstraints();                
-            }
-            addAllToConstraintBase(scopeConstraints);
-            scopeConstraints.clear();
-        }
-        if (!incremental) {
-            addAllToConstraintBase(defaultAnnotationConstraints);
-            addAllToConstraintBase(assignedAttributeConstraints);
-        }
-        constraintCounter = constraintCounter + constraintBase.size();
-        clearConstraintLists();
-    }
-    
-    /**
-     * Method for retrieving constraints from collections.
-     * @param constraint Constraint to be analyzed.
-     */
-    private void retrieveCollectionConstraints(Constraint constraint) {
-        ConstraintSyntaxTree cst = constraint.getConsSyntax();
-        CollectionConstraintsFinder finder = new CollectionConstraintsFinder(cst);
-        if (finder.isConstraintCollection()) {
-            checkContainerInitializer(finder.getExpression(), false, constraint.getParent());
-        }
-        if (finder.isCompoundInitializer()) {
-            checkCompoundInitializer(finder.getExpression(), true, constraint.getParent());
-        }
-    }
-
 
     /**
-     * Method for filling the map with constraints related to specific variable.
+     * Fills the relation between used variables and constraints into {@link #constraintMap}.
+     *
      * @param constraints Constraints to be checked for variables.
      */
-    private void fillVariableConstraintPool(List<Constraint> constraints) {
+    private void assignConstraintsToVariables(List<Constraint> constraints) {
         for (Constraint constraint : constraints) { 
             if (constraint.getConsSyntax() != null) {
                 VariablesInConstraintsFinder varFinder = new VariablesInConstraintsFinder(constraint.getConsSyntax());
@@ -1128,6 +1107,8 @@ public class Resolver {
             }
         }
     }
+
+    // <<< documented until here    
     
     // messages
     
@@ -1209,6 +1190,7 @@ public class Resolver {
      */
     private void clearConstraintLists() {
         defaultConstraints.clear();
+        deferredDefaultConstraints.clear();
         derivedTypeConstraints.clear();
         compoundConstraints.clear();
         compoundEvalConstraints.clear();
@@ -1237,33 +1219,6 @@ public class Resolver {
      */
     private Configuration createCleanConfiguration(Project project) {
         return new Configuration(project, false);
-    }
-    
-    /**
-     * Method for transforming constraints with CopyVisitor.
-     * @param constraints Constraints to be transformed (already copied constraint list).
-     * @param makeDefaultConstraint True if constraints should be default.
-     * @return List of transformed constraints.
-     */
-    private List<Constraint> transformConstraints(List<Constraint> constraints, boolean makeDefaultConstraint) {
-        for (int i = 0; i < constraints.size(); i++) {
-            ConstraintSyntaxTree cst = constraints.get(i).getConsSyntax();
-            cst = copyCST(cst, null, varMap);
-            if (makeDefaultConstraint) {
-                constraints.get(i).makeDefaultConstraint();                
-            }
-            if (cst != null) {
-                try {
-                    constraints.get(i).setConsSyntax(cst);
-                } catch (CSTSemanticException e) {
-                    LOGGER.exception(e);
-                }                            
-                if (Descriptor.LOGGING) {
-                    LOGGER.debug("Default constraint: " + toIvmlString(cst));                    
-                }
-            }            
-        }
-        return constraints;
     }
     
     /**
@@ -1329,12 +1284,23 @@ public class Resolver {
 
     /**
      * Sets whether reasoning shall happen incrementally. 
+     * 
      * @param incremental if reasoning shall happen incrementally
+     * @see #setConsiderFrozenConstraints(boolean)
      */
     void setIncremental(boolean incremental) {
         this.incremental = incremental;
     }
-    
+
+    /**
+     * Defines whether frozen constraints shall be considered. Can speed up incremental reasoning.
+     * 
+     * @param considerFrozenConstraints whether frozen constraint shall be considered (default <code>true</code>)
+     * @see #setIncremental(boolean)
+     */
+    void setConsiderFrozenConstraints(boolean considerFrozenConstraints) {
+        this.considerFrozenConstraints = considerFrozenConstraints;
+    }
     
     /**
      * Factory method for creating the evaluation visitor.
