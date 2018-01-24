@@ -33,7 +33,6 @@ import net.ssehub.easy.varModel.model.datatypes.VoidType;
 public class Constraint extends ContainableModelElement implements IPartialEvaluable {
             
     private ConstraintSyntaxTree consSyntax;
-    private boolean isDefaultConstraint;
 
     /**
      * Constructor for a new Constraint.
@@ -175,21 +174,15 @@ public class Constraint extends ContainableModelElement implements IPartialEvalu
     }
     
     /**
-     * Method to makes constraint default.
-     */
-    public void makeDefaultConstraint() {
-        this.isDefaultConstraint = true;
-    }
-    
-    /**
-     * Method to determine if constraint is default.
-     * @return Return true if constraint is default.
+     * Returns whether this constraint is a default constraint. Default constraints may be
+     * created during reasoning in order to represent a default value assignment in terms
+     * of a constraint. IVML does not create default constraints, thus, the result is
+     * always <b>false</b> but overriding methods may change the return value.
+     * 
+     * @return <code>true</code> if this constraint is a default constraint, <code>false</code> else (always)
      */
     public boolean isDefaultConstraint() {
-        boolean isDefault = false;
-        if (isDefaultConstraint) {
-            isDefault = true;
-        }
-        return isDefault; 
+        return false;
     }
+
 }
