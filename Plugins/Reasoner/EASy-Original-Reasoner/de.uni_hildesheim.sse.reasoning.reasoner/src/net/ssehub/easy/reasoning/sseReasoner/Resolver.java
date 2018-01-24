@@ -114,7 +114,6 @@ public class Resolver {
     private List<Constraint> assignedAttributeConstraints = new LinkedList<Constraint>();
     private List<Constraint> collectionConstraints = new LinkedList<Constraint>();
     
-    private Map<AbstractVariable, CompoundAccess> varMap; // TODO turn into local map
     
     private List<Constraint> collectionCompoundConstraints = new ArrayList<Constraint>();
     
@@ -128,8 +127,9 @@ public class Resolver {
     // global temporary variables avoiding parameter passing (performance)
     
     private transient Project project;
-    private transient Set<IDecisionVariable> usedVariables = new HashSet<IDecisionVariable>();
+    private transient Set<IDecisionVariable> usedVariables = new HashSet<IDecisionVariable>(100);
     private transient CopyVisitor copyVisitor = new CopyVisitor();
+    private transient Map<AbstractVariable, CompoundAccess> varMap = new HashMap<AbstractVariable, CompoundAccess>(100);
 
     // >>> from here the names follows the reasoner.tex documentation
 
@@ -147,7 +147,6 @@ public class Resolver {
                         + " Parent: " + (null == variable.getParent() ? null : variable.getParent()));                 
                 }
                 scopeAssignments.addAssignedVariable(variable);
-//System.out.println("VC " + variable.getQualifiedName()+" "+oldValue+" -> " + variable.getValue());                
                 // TODO if value type changes (currently not part of the notification), change also constraints
                 Set<Constraint> constraintsToReevaluate = new HashSet<Constraint>();
                 constraintsForChilds(variable, constraintsToReevaluate);
@@ -158,7 +157,6 @@ public class Resolver {
                     if (!constraintBaseSet.contains(varConstraint)) {
                         addToConstraintBase(varConstraint);
                         constraintCounter++;
-                        
                     }
                 }
             }
@@ -285,6 +283,7 @@ public class Resolver {
         List<Project> projects = Utils.discoverImports(config.getProject());
         for (int p = 0; !hasTimeout && p < projects.size(); p++) {
             project = projects.get(p);
+            varMap.clear();
             if (Descriptor.LOGGING) {
                 LOGGER.debug("Project:" + project.getName());                
             }
@@ -352,7 +351,6 @@ public class Resolver {
     protected void translateDefaults() {
         DeclarationFinder finder = new DeclarationFinder(project, FilterType.NO_IMPORTS, null);
         List<AbstractVariable> variables = finder.getVariableDeclarations(VisibilityType.ALL);
-        varMap = new HashMap<AbstractVariable, CompoundAccess>();
         for (AbstractVariable decl : variables) {
             translateDeclarationDefaults(decl, config.getDecision(decl), null);
         }
@@ -639,7 +637,6 @@ public class Resolver {
             AbstractVariable nestedDecl = cmpType.getInheritedElement(i);
             CompoundAccess cmpAccess = null;           
             cmpAccess = new CompoundAccess(new Variable(localDecl), nestedDecl.getName());
-//System.out.println("VARMAP1 " + nestedDecl.getQualifiedName()+" "+toIvmlString(cmpAccess));            
             varMap.put(nestedDecl, cmpAccess);
         }
         
@@ -702,7 +699,6 @@ public class Resolver {
             }
             inferTypeSafe(cmpAccess, null);
             // fill varMap
-//System.out.println("VARMAP2 " + nestedDecl.getQualifiedName()+" "+toIvmlString(cmpAccess));            
             varMap.put(nestedDecl, cmpAccess);
         }
         for (int i = 0, n = cmpVar.getNestedElementsCount(); i < n; i++) {
@@ -871,7 +867,10 @@ public class Resolver {
                         }
                         varMap.put(slot, cmpAccess);
                         inferTypeSafe(cmpAccess, null);
-                        translateAnnotationAssignment(effectiveAssignment, slot, cmpAccess);
+                    }
+                    for (int s = 0; s < cmp.getDeclarationCount(); s++) {
+                        DecisionVariableDeclaration slot = cmp.getDeclaration(s);
+                        translateAnnotationAssignment(effectiveAssignment, slot, varMap.get(slot));
                     }
                 }
             }
@@ -902,7 +901,8 @@ public class Resolver {
             } else {
                 cst = new AttributeVariable(compound, attrib);
             }
-            cst = new OCLFeatureCall(cst, OclKeyWords.ASSIGNMENT, assignment.getExpression());
+            cst = new OCLFeatureCall(cst, OclKeyWords.ASSIGNMENT, 
+                substituteVariables(assignment.getExpression(), null));
             inferTypeSafe(cst, null);
             try {
                 assignedAttributeConstraints.add(new Constraint(cst, project));
