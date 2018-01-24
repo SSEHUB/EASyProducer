@@ -23,7 +23,7 @@ public interface PersistenceConstants {
      * Reasoner Values
      */
     /**
-     * <b>Reasoner Configuration:</b> Specifies the timeout for reasoning.
+     * <b>Reasoner Configuration:</b> Specifies the timeout for reasoning in ms.
      */
     static final String REASONER_TIMEOUT = "timeout";
     /**

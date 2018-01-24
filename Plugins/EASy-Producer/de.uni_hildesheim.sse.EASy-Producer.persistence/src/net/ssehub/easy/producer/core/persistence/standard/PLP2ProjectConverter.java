@@ -93,7 +93,7 @@ public class PLP2ProjectConverter implements PersistenceConstants {
     /**
      * Converts a <tt>ReasonerConfiguration</tt> to a persistent model.
      * @param reasonerModel The persistent model, where the configuration should be stored to.
-     * @param reasonerConfig The origin data which should be saved persistencly.
+     * @param reasonerConfig The origin data which should be saved persistently.
      */
     private void reasoner2Model(Model reasonerModel, ReasonerConfiguration reasonerConfig) {
         Entity timeoutEntity = new Entity();
