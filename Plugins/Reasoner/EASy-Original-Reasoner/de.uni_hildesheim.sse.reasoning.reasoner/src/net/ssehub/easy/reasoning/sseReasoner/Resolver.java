@@ -129,6 +129,7 @@ public class Resolver {
     
     private transient Project project;
     private transient Set<IDecisionVariable> usedVariables = new HashSet<IDecisionVariable>();
+    private transient CopyVisitor copyVisitor = new CopyVisitor();
 
     // >>> from here the names follows the reasoner.tex documentation
 
@@ -373,8 +374,8 @@ public class Resolver {
                 for (int c = 0; c < cst.length; c++) {
                     // Should be in same project as the declaration belongs to
                     try {
-                        cst[c] = copyCST(cst[c], null, varMap);
-                        derivedTypeConstraints.add(new Constraint(cst[c], topLevelParent));
+                        ConstraintSyntaxTree tmp = substituteVariables(cst[c], null);
+                        derivedTypeConstraints.add(new Constraint(tmp, topLevelParent));
                     } catch (CSTSemanticException e) {
                         LOGGER.exception(e);
                     }
@@ -462,7 +463,7 @@ public class Resolver {
             }
             translateCompoundDefaults(decl, var, cAcc, type); 
             if (null != defaultValue) {
-                defaultValue = copyCST(defaultValue, new Variable(decl), varMap);
+                defaultValue = substituteVariables(defaultValue, new Variable(decl));
             }
         } else if (null != defaultValue) {
             if (TypeQueries.isContainer(type)) {
@@ -475,12 +476,13 @@ public class Resolver {
             } else if (null != cAcc) {
                 // all self/overriden compound initialization constraints have to be deferred until compound/container 
                 // initializers are set as they would be overridden else
-                CopyVisitor visitor = new CopyVisitor(null, null).setSelf(cAcc.getCompoundExpression());
-                defaultValue = visitor.accept(defaultValue);
+                copyVisitor.setSelf(cAcc.getCompoundExpression());
+                defaultValue = copyVisitor.accept(defaultValue);
                 inferTypeSafe(defaultValue, null);
-                if (visitor.containsSelf() || isOverriddenSlot(decl)) {
+                if (copyVisitor.containsSelf() || isOverriddenSlot(decl)) {
                     defltCons = deferredDefaultConstraints;
                 }
+                copyVisitor.clear();
             }
         }
         translateCollectionCompoundConstraints(decl, var, null, collectionCompoundConstraints);
@@ -510,7 +512,7 @@ public class Resolver {
                     ConstraintSyntaxTree cst = new OCLFeatureCall(
                         defltCons == deferredDefaultConstraints ? cAcc : new Variable(decl), 
                         OclKeyWords.ASSIGNMENT, defaultValue);
-                    cst = copyCST(cst, null, varMap);
+                    cst = substituteVariables(cst, null);
                     defltCons.add(new DefaultConstraint(cst, project));
                 }                
             } catch (CSTSemanticException e) {
@@ -536,7 +538,7 @@ public class Resolver {
                     DecisionVariableDeclaration localDecl = new DecisionVariableDeclaration("cmp", cmpType, null);
                     try {
                         Variable localDeclVar = new Variable(localDecl);
-                        defaultValue = copyCST(defaultValue, localDeclVar, varMap); // replace self
+                        defaultValue = substituteVariables(defaultValue, localDeclVar); // replace self
                         defaultValue = new OCLFeatureCall(new CompoundAccess(localDeclVar, uDecl.getName()), 
                             OclKeyWords.ASSIGNMENT, defaultValue);
                         ConstraintSyntaxTree containerOp = new Variable(decl);
@@ -579,18 +581,16 @@ public class Resolver {
         if (null != cst) {
             for (int i = 0, n = cst.length; i < n; i++) {
                 ConstraintSyntaxTree itExpression = cst[i];
-                ConstraintSyntaxTree containerOp = null;
+                ConstraintSyntaxTree typeCst = null;
                 if (topcmpAccess == null) {
-                    containerOp = createContainerCall(new Variable(decl), Container.FORALL, itExpression, localDecl);
+                    typeCst = createContainerCall(new Variable(decl), Container.FORALL, itExpression, localDecl);
                 } else {
-                    containerOp = createContainerCall(topcmpAccess, Container.FORALL, itExpression, localDecl);
+                    typeCst = createContainerCall(topcmpAccess, Container.FORALL, itExpression, localDecl);
                 }            
                 try {
-                    if (containerOp != null) {
-                        containerOp.inferDatatype();
-                        containerOp = copyCST(containerOp, null, varMap);
-                        derivedTypeConstraints.add(new Constraint(containerOp, project));                    
-                    }
+                    typeCst.inferDatatype();
+                    typeCst = substituteVariables(typeCst, null);
+                    derivedTypeConstraints.add(new Constraint(typeCst, project));                    
                 } catch (CSTSemanticException e) {
                     LOGGER.exception(e);
                 }            
@@ -651,7 +651,7 @@ public class Resolver {
         }
         for (int i = 0; i < thisCompoundConstraints.size(); i++) {
             ConstraintSyntaxTree itExpression = thisCompoundConstraints.get(i).getConsSyntax();
-            itExpression = copyCST(itExpression, new Variable(localDecl), varMap);
+            itExpression = substituteVariables(itExpression, new Variable(localDecl));
             if (Descriptor.LOGGING) {
                 LOGGER.debug("New loop constraint " + toIvmlString(itExpression));
             }   
@@ -735,7 +735,7 @@ public class Resolver {
         for (int i = 0; i < thisCompoundConstraints.size(); i++) {
             ConstraintSyntaxTree oneConstraint = thisCompoundConstraints.get(i).getConsSyntax();
             // changed null to decl
-            oneConstraint = copyCST(oneConstraint, new Variable(decl), varMap);
+            oneConstraint = substituteVariables(oneConstraint, new Variable(decl));
             try {
                 Constraint constraint = new Constraint(oneConstraint, decl);
                 compoundConstraints.add(constraint);            
@@ -774,7 +774,7 @@ public class Resolver {
             if (evalBlock.getEvaluable(i) instanceof Constraint) {
                 Constraint evalConstraint = (Constraint) evalBlock.getEvaluable(i);
                 ConstraintSyntaxTree evalCst = evalConstraint.getConsSyntax();
-                ConstraintSyntaxTree cst = copyCST(evalCst, null, varMap);
+                ConstraintSyntaxTree cst = substituteVariables(evalCst, null);
                 try {
                     cst.inferDatatype();
                     compoundEvalConstraints.add(new Constraint(cst, project));
@@ -799,7 +799,7 @@ public class Resolver {
         IModelElement parent, IDecisionVariable nestedVariable) {
         Constraint constraint = null;
         if (cst != null) {
-            cst = copyCST(cst, new Variable(decl), varMap);
+            cst = substituteVariables(cst, new Variable(decl));
             try {
                 constraint = new Constraint(cst, parent);
                 constraintVariablesConstraints.add(constraint);
@@ -1023,7 +1023,7 @@ public class Resolver {
                 Constraint constraint = new Constraint(parent);
                 ConstraintSyntaxTree cst = containerInit.getExpression(i);
                 if (substituteVars) {
-                    cst = copyCST(cst, null, varMap);
+                    cst = substituteVariables(cst, null);
                 }
                 try {
                     constraint.setConsSyntax(cst);
@@ -1190,6 +1190,50 @@ public class Resolver {
     private void addToConstraintBase(Constraint constraint) {
         constraintBase.addLast(constraint);
         constraintBaseSet.add(constraint);
+    }
+
+    /**
+     * Method for using {@link CopyVisitor} for constraint transformation. Uses the actual
+     * variable mapping in {@link #varMap} and may consider a mapping for <code>self</code>.
+     * 
+     * @param cst Constraint to be transformed.
+     * @param selfEx an expression representing <i>self</i> (ignored if <b>null</b>).
+     * @return Transformed constraint.
+     */
+    ConstraintSyntaxTree substituteVariables(ConstraintSyntaxTree cst, ConstraintSyntaxTree selfEx) {
+        copyVisitor.setMappings(varMap);
+        if (selfEx != null) {
+            copyVisitor.setSelf(selfEx);            
+        }
+        cst = copyVisitor.acceptAndClear(cst);
+        inferTypeSafe(cst, null);
+        return cst;
+    }
+
+    /**
+     * Substitutes the variable <code>origin</code> by <code>replacement</code> in <code>constraint</code>.
+     * 
+     * @param constraint the constraint to replace the variable within
+     * @param origin the variable to be replaced
+     * @param replacement the replacing variable
+     * @return the copied constraint having <code>origin</code> substituted by <code>replacement</code>
+     */
+    ConstraintSyntaxTree substituteVariable(Constraint constraint, Variable origin, Variable replacement) {
+        return substituteVariable(constraint.getConsSyntax(), origin, replacement);
+    }
+
+    /**
+     * Substitutes the variable <code>origin</code> by <code>replacement</code> in <code>constraint</code>.
+     * 
+     * @param constraint the constraint to replace the variable within
+     * @param origin the variable to be replaced
+     * @param replacement the replacing variable
+     * @return the copied constraint having <code>origin</code> substituted by <code>replacement</code>
+     */
+    ConstraintSyntaxTree substituteVariable(ConstraintSyntaxTree constraint, Variable origin, 
+        Variable replacement) {
+        copyVisitor.addVariableMapping(origin, replacement);
+        return copyVisitor.acceptAndClear(constraint);
     }
 
     /**

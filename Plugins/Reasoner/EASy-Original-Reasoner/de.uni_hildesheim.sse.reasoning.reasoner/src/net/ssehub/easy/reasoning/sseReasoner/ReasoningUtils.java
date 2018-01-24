@@ -18,23 +18,18 @@ package net.ssehub.easy.reasoning.sseReasoner;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Iterator;
-import java.util.Map;
 import java.util.Set;
 
 import net.ssehub.easy.basics.logger.EASyLoggerFactory;
 import net.ssehub.easy.basics.logger.EASyLoggerFactory.EASyLogger;
 import net.ssehub.easy.reasoning.sseReasoner.functions.FailedElements;
-import net.ssehub.easy.reasoning.sseReasoner.model.CopyVisitor;
 import net.ssehub.easy.varModel.confModel.Configuration;
 import net.ssehub.easy.varModel.confModel.IDecisionVariable;
 import net.ssehub.easy.varModel.cst.CSTSemanticException;
-import net.ssehub.easy.varModel.cst.CompoundAccess;
 import net.ssehub.easy.varModel.cst.ConstantValue;
-import net.ssehub.easy.varModel.cst.ConstraintReplacer;
 import net.ssehub.easy.varModel.cst.ConstraintSyntaxTree;
 import net.ssehub.easy.varModel.cst.ContainerOperationCall;
 import net.ssehub.easy.varModel.cst.OCLFeatureCall;
-import net.ssehub.easy.varModel.cst.Variable;
 import net.ssehub.easy.varModel.model.AbstractVariable;
 import net.ssehub.easy.varModel.model.Constraint;
 import net.ssehub.easy.varModel.model.DecisionVariableDeclaration;
@@ -153,28 +148,6 @@ class ReasoningUtils {
             LOGGER.exception(e); // should not occur, ok to log
         }
         return res;
-    }
-
-    /**
-     * Method for using {@link CopyVisitor} for constraint transformation.
-     * 
-     * @param cst Constraint to be transformed.
-     * @param selfEx an expression representing <i>self</i> (ignored if <b>null</b>).
-     * @param varMap a mapping from old variable declarations to new compound access declarations,
-     *   existing variable declarations are taken over if no mapping is given, may be <b>null</b>
-     *   in case of no mapping at all
-     * @return Transformed constraint.
-     */
-    static ConstraintSyntaxTree copyCST(ConstraintSyntaxTree cst, ConstraintSyntaxTree selfEx, 
-        Map<AbstractVariable, CompoundAccess> varMap) {
-        CopyVisitor visitor = new CopyVisitor(null, varMap);
-        if (selfEx != null) {
-            visitor.setSelf(selfEx);            
-        }
-        cst.accept(visitor);
-        cst = visitor.getResult();
-        inferTypeSafe(cst, null);
-        return cst;
     }
 
     /**
@@ -453,32 +426,6 @@ class ReasoningUtils {
                 target.add(source[s]);                    
             }
         }
-    }
-
-    /**
-     * Substitutes the variable <code>origin</code> by <code>replacement</code> in <code>constraint</code>.
-     * 
-     * @param constraint the constraint to replace the variable within
-     * @param origin the variable to be replaced
-     * @param replacement the replacing variable
-     * @return the copied constraint having <code>origin</code> substituted by <code>replacement</code>
-     */
-    static ConstraintSyntaxTree substituteVariable(Constraint constraint, Variable origin, Variable replacement) {
-        return substituteVariable(constraint.getConsSyntax(), origin, replacement);
-    }
-
-    /**
-     * Substitutes the variable <code>origin</code> by <code>replacement</code> in <code>constraint</code>.
-     * 
-     * @param constraint the constraint to replace the variable within
-     * @param origin the variable to be replaced
-     * @param replacement the replacing variable
-     * @return the copied constraint having <code>origin</code> substituted by <code>replacement</code>
-     */
-    static ConstraintSyntaxTree substituteVariable(ConstraintSyntaxTree constraint, Variable origin, 
-        Variable replacement) {
-        ConstraintReplacer replacer = new ConstraintReplacer(constraint);
-        return replacer.replaceVariable(origin, replacement);
     }
 
 }

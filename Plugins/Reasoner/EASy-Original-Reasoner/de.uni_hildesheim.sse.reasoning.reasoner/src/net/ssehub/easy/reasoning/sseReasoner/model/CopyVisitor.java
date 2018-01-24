@@ -15,12 +15,11 @@
  */
 package net.ssehub.easy.reasoning.sseReasoner.model;
 
+import java.util.HashMap;
 import java.util.Map;
 
 import net.ssehub.easy.basics.logger.EASyLoggerFactory;
 import net.ssehub.easy.basics.logger.EASyLoggerFactory.EASyLogger;
-import net.ssehub.easy.basics.modelManagement.IVariable;
-import net.ssehub.easy.basics.modelManagement.IVersionRestriction.IVariableMapper;
 import net.ssehub.easy.reasoning.sseReasoner.Descriptor;
 import net.ssehub.easy.varModel.cst.AttributeVariable;
 import net.ssehub.easy.varModel.cst.BlockExpression;
@@ -55,10 +54,9 @@ public class CopyVisitor implements IConstraintTreeVisitor {
 
     private static final EASyLogger LOGGER
         = EASyLoggerFactory.INSTANCE.getLogger(CopyVisitor.class, Descriptor.BUNDLE_NAME);
-    private Map<AbstractVariable, AbstractVariable> mapping;
+    private Map<Variable, Variable> mapping;
     private Map<AbstractVariable, CompoundAccess> mappingCA;
     private ConstraintSyntaxTree result;
-    private IVariableMapper mapper;
     private ConstraintSyntaxTree selfEx;
     private boolean containsSelf;
 
@@ -66,45 +64,20 @@ public class CopyVisitor implements IConstraintTreeVisitor {
      * Creates a copy visitor without mapping.
      */
     public CopyVisitor() {
-        this(null, null);
+        this(null);
     }
     
     /**
      * Creates a copy visitor with explicit mapping.
      * 
-     * @param mapping a mapping from old variable declarations to new compound access declarations,
-     *   existing variable declarations are taken over if no mapping is given, may be <b>null</b>
-     *   in case of no mapping at all
-     */
-    public CopyVisitor(Map<AbstractVariable, AbstractVariable> mapping) {
-        this(mapping, null);
-    }
-    
-    /**
-     * Creates a copy visitor with explicit mapping.
-     * 
-     * @param mapping a mapping from old variable declarations to new compound access declarations,
-     *   existing variable declarations are taken over if no mapping is given, may be <b>null</b>
-     *   in case of no mapping at all
      * @param mappingCA a mapping from old variable declarations to new compound access declarations,
      *   existing variable declarations are taken over if no mapping is given, may be <b>null</b>
      *   in case of no mapping at all
      * @see #setMappings(Map, Map)
      */
-    public CopyVisitor(Map<AbstractVariable, AbstractVariable> mapping, 
-        Map<AbstractVariable, CompoundAccess> mappingCA) {
-        setMappings(mapping, mappingCA);
+    public CopyVisitor(Map<AbstractVariable, CompoundAccess> mappingCA) {
+        setMappings(mappingCA);
     }  
-
-    /**
-     * Creates a copy visitor with explicit mapping.
-     * 
-     * @param mapper the variable mapper (may be <b>null</b>)
-     * @see #setMapper(IVariableMapper)
-     */
-    public CopyVisitor(IVariableMapper mapper) {
-        setMapper(mapper);
-    }
     
     /**
      * Returns the copied syntax tree.
@@ -116,29 +89,14 @@ public class CopyVisitor implements IConstraintTreeVisitor {
     }
 
     /**
-     * Sets the mappings. [init, reuse]
+     * Sets the mapping. [init, reuse]
      * 
-     * @param mapping a mapping from old variable declarations to new compound access declarations,
-     *   existing variable declarations are taken over if no mapping is given, may be <b>null</b>
-     *   in case of no mapping at all
-     * @param mappingCA a mapping from old variable declarations to new compound access declarations,
+     * @param mappingCA a mapping from variable declarations to new compound access declarations,
      *   existing variable declarations are taken over if no mapping is given, may be <b>null</b>
      *   in case of no mapping at all
      */
-    public void setMappings(Map<AbstractVariable, AbstractVariable> mapping, 
-        Map<AbstractVariable, CompoundAccess> mappingCA) {
+    public void setMappings(Map<AbstractVariable, CompoundAccess> mappingCA) {
         this.mappingCA = mappingCA;
-        this.mapping = mapping;
-    }
-
-    /**
-     * Sets the mapper. [init, reuse]
-     * 
-     * @param mapper the variable mapper (may be <b>null</b>)
-     * @see #setMapper(IVariableMapper)
-     */
-    public void setMapper(IVariableMapper mapper) {
-        this.mapper = mapper;
     }
 
     /**
@@ -152,13 +110,55 @@ public class CopyVisitor implements IConstraintTreeVisitor {
     
     /**
      * Clears this visitor for reuse.
+     * 
+     * @see #clearVariableMapping()
      */
     public void clear() {
         result = null;
         containsSelf = false;
-        mapper = null;
         mappingCA = null;
-        mapping = null;
+        clearVariableMapping();
+    }
+    
+    /**
+     * Adds a variable mapping to be considered during copying.
+     * 
+     * @param orig the original variable to be replaced (may be <b>null</b>, ignored)
+     * @param dest the destination variable to replace <code>orig</code> (may be <b>null</b>, ignored)
+     * @return <b>this</b>
+     */
+    public CopyVisitor addVariableMapping(Variable orig, Variable dest) {
+        if (null != orig) {
+            if (null == mapping) {
+                mapping = new HashMap<Variable, Variable>();
+            }
+            mapping.put(orig, dest);
+        }
+        return this;
+    }
+
+    /**
+     * Clears the mapping for a given variable.
+     * 
+     * @param var the variable to clear the mapping for (may be <b>null</b>, ignored)
+     * @return <b>this</b>
+     */
+    public CopyVisitor clearVariableMapping(Variable var) {
+        if (null != mapping && null != var) {
+            mapping.remove(var);
+        }
+        return this;
+    }
+
+    /**
+     * Clears the entire variable mapping.
+     * @return <b>this</b>
+     */
+    public CopyVisitor clearVariableMapping() {
+        if (null != mapping) {
+            mapping.clear();
+        }
+        return this;
     }
 
     /**
@@ -183,6 +183,20 @@ public class CopyVisitor implements IConstraintTreeVisitor {
         return getResult();
     }
 
+    /**
+     * Accepts <b>this</b> on <code>cst</code>, returns {@link #getResult()} and {@link #clear() clears} 
+     * <b>this</b>.
+     * 
+     * @param cst the constraint to visit
+     * @return the visiting result
+     */
+    public ConstraintSyntaxTree acceptAndClear(ConstraintSyntaxTree cst) {
+        cst.accept(this);
+        ConstraintSyntaxTree result = getResult();
+        clear();
+        return result;
+    }
+
     @Override
     public void visitConstantValue(ConstantValue value) {
         result = new ConstantValue(value.getConstantValue());
@@ -200,6 +214,12 @@ public class CopyVisitor implements IConstraintTreeVisitor {
             }
         } else {
             result = variable;
+            if (null != mapping) {
+                result = mapping.get(variable);
+                if (null == result) {
+                    result = variable;
+                }
+            }
         }
     }
     
@@ -260,55 +280,10 @@ public class CopyVisitor implements IConstraintTreeVisitor {
         }            
     }
 
-    /**
-     * Maps a variable.
-     * 
-     * @param var the variable to be mapped
-     * @return the mapped variable or <code>var</code>
-     */
-    private DecisionVariableDeclaration mapVariable(DecisionVariableDeclaration var) {
-        DecisionVariableDeclaration result = null;
-        if (null != mapping) {
-            AbstractVariable tmp = mapping.get(var); 
-            if (tmp instanceof DecisionVariableDeclaration) {
-                result = var;
-            }
-        }
-        if (null == result && null != mapper) {
-            IVariable tmp = mapper.map(var);
-            if (tmp instanceof DecisionVariableDeclaration) {
-                result = var;
-            }
-        }
-        if (null == result) {
-            result = var;
-        }
-        return result;
-    }
-
-    /**
-     * Maps a variable.
-     * 
-     * @param var the variable to be mapped
-     * @return the mapped variable or <code>var</code>
-     */
-    private AbstractVariable mapVariable(AbstractVariable var) {
-        AbstractVariable result = null;
-        if (null != mapping) {
-            result = mapping.get(var);
-            if (null == result) {
-                result = var;
-            }
-        }
-        return result;
-    }
-
-    
     @Override
     public void visitLet(Let let) {
-        DecisionVariableDeclaration var = mapVariable(let.getVariable());
         let.getInExpression().accept(this);
-        result = new Let(var, result);
+        result = new Let(let.getVariable(), result);
         try {
             result.inferDatatype();
         } catch (CSTSemanticException e) {
@@ -345,7 +320,7 @@ public class CopyVisitor implements IConstraintTreeVisitor {
         ConstraintSyntaxTree expression = result;
         DecisionVariableDeclaration[] decls = new DecisionVariableDeclaration[call.getDeclaratorsCount()];
         for (int d = 0; d < decls.length; d++) {
-            decls[d] = mapVariable(call.getDeclarator(d));
+            decls[d] = call.getDeclarator(d);
         }
         result = new ContainerOperationCall(container, call.getOperation(), expression, decls);
         try {
@@ -384,7 +359,7 @@ public class CopyVisitor implements IConstraintTreeVisitor {
         }
         AbstractVariable[] slotDecls = new DecisionVariableDeclaration[initializer.getSlotCount()];
         for (int s = 0; s < slotDecls.length; s++) {
-            slotDecls[s] = mapVariable(initializer.getSlotDeclaration(s));
+            slotDecls[s] = initializer.getSlotDeclaration(s);
         }
         ConstraintSyntaxTree[] exprs = new ConstraintSyntaxTree[initializer.getExpressionCount()];
         for (int e = 0; e < exprs.length; e++) {
