@@ -76,7 +76,7 @@ public class ReasonerConfiguration {
     /**
      * Changes the timeout for reasoning.
      * 
-     * @param timeout the timeout, shall be ignored if less negative or null
+     * @param timeout the timeout in ms, shall be ignored if less negative or null
      * @return <b>this</b>
      */
     public ReasonerConfiguration setTimeout(int timeout) {
@@ -87,7 +87,7 @@ public class ReasonerConfiguration {
     /**
      * Returns the timeout for reasoning.
      * 
-     * @return the timeout, shall be ignored if less negative or null
+     * @return the timeout in ms, shall be ignored if not positive
      */
     public int getTimeout() {
         return timeout;
@@ -99,7 +99,7 @@ public class ReasonerConfiguration {
      * call this method rather than {@link #getTimeout()}.
      * 
      * @param configuration the configuration the timeout shall be returned for (may be <b>null</b>)
-     * @return the timeout, shall be ignored if less negative or null
+     * @return the timeout in ms, shall be ignored if less negative or null
      */
     public int getTimeout(ReasonerConfiguration configuration) {
         int result = 0;

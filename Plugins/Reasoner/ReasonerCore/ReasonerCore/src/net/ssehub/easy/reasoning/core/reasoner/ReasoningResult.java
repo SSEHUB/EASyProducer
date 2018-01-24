@@ -16,6 +16,7 @@ public class ReasoningResult {
     private List<IDecisionVariable> affected = null;
     private List<Message> messages = new ArrayList<Message>();
     private boolean hasConflict;
+    private boolean hasTimeout;
 
     /**
      * General constructor for new ReasoningResults.
@@ -61,8 +62,28 @@ public class ReasoningResult {
     }
 
     /**
+     * Returns whether reasoning was stopped due to a timeout.
+     * 
+     * @param hasTimeout <code>true</code> for timeout, <code>false</code> else
+     */
+    public void setTimeout(boolean hasTimeout) {
+        this.hasTimeout = hasTimeout;
+    }
+    
+    /**
+     * Returns whether reasoning was stopped due to a timeout.
+     * 
+     * @return <code>true</code> for timeout, <code>false</code> else
+     */
+    public boolean hasTimeout() {
+        return hasTimeout;
+    }
+
+    /**
      * Denotes whether this reasoning result represents an error/conflict.
      * @return <tt>true</tt> if the reasoning result represents an error, otherwise <tt>false</tt>.
+     * 
+     * @see #hasTimeout
      */
     public boolean hasConflict() {
         return hasConflict;

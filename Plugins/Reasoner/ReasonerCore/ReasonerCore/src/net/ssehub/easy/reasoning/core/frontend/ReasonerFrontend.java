@@ -691,7 +691,7 @@ public class ReasonerFrontend {
     /**
      * Changes the global timeout for reasoning.
      * 
-     * @param timeout the global timeout, shall be ignored if less negative or null
+     * @param timeout the global timeout in ms, shall be ignored if less negative or null
      */
     public void setTimeout(int timeout) {
         this.timeout = timeout;
@@ -700,7 +700,7 @@ public class ReasonerFrontend {
     /**
      * Returns the global timeout for reasoning.
      * 
-     * @return the global timeout, shall be ignored if less negative or null
+     * @return the global timeout in ms, shall be ignored if less negative or null
      */
     public int getTimeout() {
         return timeout;
