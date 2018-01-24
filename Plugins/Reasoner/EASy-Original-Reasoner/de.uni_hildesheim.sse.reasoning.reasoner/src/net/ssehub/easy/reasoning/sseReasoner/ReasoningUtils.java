@@ -18,7 +18,6 @@ package net.ssehub.easy.reasoning.sseReasoner;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -176,40 +175,6 @@ class ReasoningUtils {
         cst = visitor.getResult();
         inferTypeSafe(cst, null);
         return cst;
-    }
-    
-    /**
-     * Substitutes in <code>constraints</code> the variables registered in {@link #varMap}. Turns constraints into 
-     * default constraints if specified.
-     * 
-     * @param constraints Constraints to be transformed (modified as a side effect).
-     * @param makeDefaultConstraint <code>true</code> to turn the constraints into default constraints, 
-     *   <code>false</code> for not changing the constraint type.
-     * @param varMap a mapping from old variable declarations to new compound access declarations,
-     *   existing variable declarations are taken over if no mapping is given, may be <b>null</b>
-     *   in case of no mapping at all
-     * @return <code>constraints</code>
-     */
-    static List<Constraint> substituteVariables(List<Constraint> constraints, boolean makeDefaultConstraint, 
-        Map<AbstractVariable, CompoundAccess> varMap) {
-        for (int i = 0; i < constraints.size(); i++) {
-            ConstraintSyntaxTree cst = constraints.get(i).getConsSyntax();
-            cst = copyCST(cst, null, varMap);
-            if (makeDefaultConstraint) {
-                constraints.get(i).makeDefaultConstraint();                
-            }
-            if (cst != null) {
-                try {
-                    constraints.get(i).setConsSyntax(cst);
-                } catch (CSTSemanticException e) {
-                    LOGGER.exception(e);
-                }                            
-                if (Descriptor.LOGGING) {
-                    LOGGER.debug("Default constraint: " + toIvmlString(cst));                    
-                }
-            }            
-        }
-        return constraints;
     }
 
     /**
@@ -472,23 +437,6 @@ class ReasoningUtils {
             done = true;
         }
         return done;
-    }
-
-    /**
-     * Creates a default constraint.
-     * 
-     * @param cst the constraint expression
-     * @param parent the parent
-     * @return the created constraint
-     * @throws CSTSemanticException in case that the creation fails
-     */
-    static Constraint createDefaultConstraint(ConstraintSyntaxTree cst, IModelElement parent) 
-        throws CSTSemanticException {
-        Constraint constraint = new Constraint(parent);
-        constraint.makeDefaultConstraint();
-        cst.inferDatatype(); 
-        constraint.setConsSyntax(cst);
-        return constraint;
     }
 
     /**

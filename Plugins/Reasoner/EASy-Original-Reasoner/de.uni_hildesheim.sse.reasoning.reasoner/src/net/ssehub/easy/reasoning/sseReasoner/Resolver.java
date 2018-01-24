@@ -22,6 +22,7 @@ import net.ssehub.easy.reasoning.sseReasoner.functions.ScopeAssignments;
 import net.ssehub.easy.reasoning.sseReasoner.model.AssignmentConstraintFinder;
 import net.ssehub.easy.reasoning.sseReasoner.model.CollectionConstraintsFinder;
 import net.ssehub.easy.reasoning.sseReasoner.model.CopyVisitor;
+import net.ssehub.easy.reasoning.sseReasoner.model.DefaultConstraint;
 import net.ssehub.easy.reasoning.sseReasoner.model.VariablesInConstraintsFinder;
 import net.ssehub.easy.varModel.confModel.AssignmentState;
 import net.ssehub.easy.varModel.confModel.CompoundVariable;
@@ -49,7 +50,6 @@ import net.ssehub.easy.varModel.model.AttributeAssignment.Assignment;
 import net.ssehub.easy.varModel.model.Constraint;
 import net.ssehub.easy.varModel.model.DecisionVariableDeclaration;
 import net.ssehub.easy.varModel.model.IModelElement;
-import net.ssehub.easy.varModel.model.InternalConstraint;
 import net.ssehub.easy.varModel.model.OperationDefinition;
 import net.ssehub.easy.varModel.model.PartialEvaluationBlock;
 import net.ssehub.easy.varModel.model.Project;
@@ -373,7 +373,8 @@ public class Resolver {
                 for (int c = 0; c < cst.length; c++) {
                     // Should be in same project as the declaration belongs to
                     try {
-                        derivedTypeConstraints.add(new InternalConstraint(dType, cst[c], topLevelParent));
+                        cst[c] = copyCST(cst[c], null, varMap);
+                        derivedTypeConstraints.add(new Constraint(cst[c], topLevelParent));
                     } catch (CSTSemanticException e) {
                         LOGGER.exception(e);
                     }
@@ -430,7 +431,8 @@ public class Resolver {
                         op = new AttributeVariable(compound, attribute);
                     }
                     defaultValue = new OCLFeatureCall(op, OclKeyWords.ASSIGNMENT, defaultValue);
-                    defaultAnnotationConstraints.add(createDefaultConstraint(defaultValue, project));
+                    defaultValue.inferDatatype(); 
+                    defaultAnnotationConstraints.add(new DefaultConstraint(defaultValue, project));
                 } catch (CSTSemanticException e) {
                     e.printStackTrace();
                 }                    
@@ -505,12 +507,11 @@ public class Resolver {
                         }
                     } 
                 } else { // Create default constraint
-                    
                     ConstraintSyntaxTree cst = new OCLFeatureCall(
                         defltCons == deferredDefaultConstraints ? cAcc : new Variable(decl), 
                         OclKeyWords.ASSIGNMENT, defaultValue);
                     cst = copyCST(cst, null, varMap);
-                    defltCons.add(createDefaultConstraint(cst, project));
+                    defltCons.add(new DefaultConstraint(cst, project));
                 }                
             } catch (CSTSemanticException e) {
                 LOGGER.exception(e); // should not occur, ok to log
@@ -547,7 +548,8 @@ public class Resolver {
                             containerOp = new OCLFeatureCall(containerOp, OclKeyWords.FLATTEN);
                         }
                         defaultValue = createContainerCall(containerOp, Container.FORALL, defaultValue, localDecl);
-                        deferredDefaultConstraints.add(createDefaultConstraint(defaultValue, project));
+                        defaultValue.inferDatatype();
+                        deferredDefaultConstraints.add(new DefaultConstraint(defaultValue, project));
                     } catch (CSTSemanticException e) {
                         LOGGER.exception(e); // should not occur, ok to log
                     } catch (ValueDoesNotMatchTypeException e) {
@@ -586,8 +588,8 @@ public class Resolver {
                 try {
                     if (containerOp != null) {
                         containerOp.inferDatatype();
-                        Constraint constraint = new Constraint(containerOp, project);
-                        derivedTypeConstraints.add(constraint);                    
+                        containerOp = copyCST(containerOp, null, varMap);
+                        derivedTypeConstraints.add(new Constraint(containerOp, project));                    
                     }
                 } catch (CSTSemanticException e) {
                     LOGGER.exception(e);
@@ -921,11 +923,9 @@ public class Resolver {
         if (!incremental && defaultConstraints.size() > 0) { //TODO leave out non-incremental constraints on the fly
             addAllConstraints(scopeConstraints, defaultConstraints);
             addAllConstraints(scopeConstraints, deferredDefaultConstraints);
-            //defaultConstraints.addAll(deferredDefaultConstraints);
-            //addAllConstraints(scopeConstraints, substituteVariables(defaultConstraints, true, varMap));
         }
         if (derivedTypeConstraints.size() > 0) {
-            addAllConstraints(scopeConstraints, substituteVariables(derivedTypeConstraints, false, varMap));
+            addAllConstraints(scopeConstraints, derivedTypeConstraints);
         }
         ConstraintFinder finder = new ConstraintFinder(project, false, false, true);
         addAllConstraints(scopeConstraints, finder.getEvalConstraints());
