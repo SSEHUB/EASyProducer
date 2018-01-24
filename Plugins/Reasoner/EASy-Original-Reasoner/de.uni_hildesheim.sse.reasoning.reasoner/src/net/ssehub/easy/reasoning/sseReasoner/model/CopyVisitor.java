@@ -199,7 +199,6 @@ public class CopyVisitor implements IConstraintTreeVisitor {
                 LOGGER.exception(e); // shall not occur with initially correct constraints, logging is ok
             }
         } else {
-//            result = new Variable(mapVariable(variable.getVariable()));
             result = variable;
         }
     }

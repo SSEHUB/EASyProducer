@@ -98,6 +98,7 @@ public class Engine {
         long startTime = System.currentTimeMillis();
         resolver.resolve();
 //        PerformanceStatistics.addTimestamp(reasoningID);
+        result.setTimeout(resolver.hasTimeout());
         FailedElements failedElements = resolver.getFailedElements();
         if (failedElements.hasProblems()) {
             constraintVariableMap = resolver.getConstraintVariableMap();

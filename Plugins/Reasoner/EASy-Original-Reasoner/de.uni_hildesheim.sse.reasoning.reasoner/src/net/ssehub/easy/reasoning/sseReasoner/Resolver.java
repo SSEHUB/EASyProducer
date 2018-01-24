@@ -87,7 +87,8 @@ public class Resolver {
     private static final EASyLogger LOGGER
         = EASyLoggerFactory.INSTANCE.getLogger(Resolver.class, Descriptor.BUNDLE_NAME);
     @SuppressWarnings("unused")
-    private IAdditionalInformationLogger infoLogger; 
+    private IAdditionalInformationLogger infoLogger;
+    private ReasonerConfiguration reasonerConfig;
     
     private Configuration config;
     private boolean incremental = false;
@@ -122,6 +123,7 @@ public class Resolver {
     private int variablesInConstraintsCounter = 0;    
     private int reevaluationCounter = 0;
     private int variablesCounter = 0;
+    private boolean hasTimeout = false;
 
     // global temporary variables avoiding parameter passing (performance)
     
@@ -144,6 +146,7 @@ public class Resolver {
                         + " Parent: " + (null == variable.getParent() ? null : variable.getParent()));                 
                 }
                 scopeAssignments.addAssignedVariable(variable);
+//System.out.println("VC " + variable.getQualifiedName()+" "+oldValue+" -> " + variable.getValue());                
                 // TODO if value type changes (currently not part of the notification), change also constraints
                 Set<Constraint> constraintsToReevaluate = new HashSet<Constraint>();
                 constraintsForChilds(variable, constraintsToReevaluate);
@@ -231,6 +234,7 @@ public class Resolver {
      *        may be <b>null</b>)
      */
     public Resolver(Project project, Configuration config, ReasonerConfiguration reasonerConfig) {
+        this.reasonerConfig = reasonerConfig;
         this.infoLogger = reasonerConfig.getLogger();
         this.config = config;
     } 
@@ -278,7 +282,7 @@ public class Resolver {
         evaluator.setResolutionListener(resolutionListener);
         evaluator.setScopeAssignments(scopeAssignments);
         List<Project> projects = Utils.discoverImports(config.getProject());
-        for (int p = 0; p < projects.size(); p++) {
+        for (int p = 0; !hasTimeout && p < projects.size(); p++) {
             project = projects.get(p);
             if (Descriptor.LOGGING) {
                 LOGGER.debug("Project:" + project.getName());                
@@ -308,6 +312,8 @@ public class Resolver {
         }
         scopeAssignments.clearScopeAssignments();
         evaluator.setDispatchScope(project);
+        long endTimestamp = reasonerConfig.getTimeout() <= 0 
+            ? -1 : System.currentTimeMillis() + reasonerConfig.getTimeout();
         while (!constraintBase.isEmpty()) { 
             usedVariables.clear();
             Constraint constraint = constraintBase.pop();
@@ -328,6 +334,10 @@ public class Resolver {
                     LOGGER.debug("------");                     
                 }
                 evaluator.clearIntermediary();
+            }
+            if (endTimestamp > 0 && System.currentTimeMillis() > endTimestamp) {
+                hasTimeout = true;
+                break;
             }
         }
     }
@@ -495,9 +505,11 @@ public class Resolver {
                         }
                     } 
                 } else { // Create default constraint
+                    
                     ConstraintSyntaxTree cst = new OCLFeatureCall(
                         defltCons == deferredDefaultConstraints ? cAcc : new Variable(decl), 
                         OclKeyWords.ASSIGNMENT, defaultValue);
+                    cst = copyCST(cst, null, varMap);
                     defltCons.add(createDefaultConstraint(cst, project));
                 }                
             } catch (CSTSemanticException e) {
@@ -521,10 +533,9 @@ public class Resolver {
                 ConstraintSyntaxTree defaultValue = uDecl.getDefaultValue();
                 if (null != defaultValue) {
                     DecisionVariableDeclaration localDecl = new DecisionVariableDeclaration("cmp", cmpType, null);
-                    //varMap.put(nestedDecl, cmpAccess); // ???
                     try {
                         Variable localDeclVar = new Variable(localDecl);
-                        defaultValue = copyCST(defaultValue, localDeclVar, null); // replace self
+                        defaultValue = copyCST(defaultValue, localDeclVar, varMap); // replace self
                         defaultValue = new OCLFeatureCall(new CompoundAccess(localDeclVar, uDecl.getName()), 
                             OclKeyWords.ASSIGNMENT, defaultValue);
                         ConstraintSyntaxTree containerOp = new Variable(decl);
@@ -626,6 +637,7 @@ public class Resolver {
             AbstractVariable nestedDecl = cmpType.getInheritedElement(i);
             CompoundAccess cmpAccess = null;           
             cmpAccess = new CompoundAccess(new Variable(localDecl), nestedDecl.getName());
+//System.out.println("VARMAP1 " + nestedDecl.getQualifiedName()+" "+toIvmlString(cmpAccess));            
             varMap.put(nestedDecl, cmpAccess);
         }
         
@@ -688,9 +700,14 @@ public class Resolver {
             }
             inferTypeSafe(cmpAccess, null);
             // fill varMap
+//System.out.println("VARMAP2 " + nestedDecl.getQualifiedName()+" "+toIvmlString(cmpAccess));            
             varMap.put(nestedDecl, cmpAccess);
+        }
+        for (int i = 0, n = cmpVar.getNestedElementsCount(); i < n; i++) {
+            IDecisionVariable nestedVar = cmpVar.getNestedElement(i);
+            AbstractVariable nestedDecl = nestedVar.getDeclaration();
             translateDeclarationDefaults(nestedDecl, cmpVar.getNestedVariable(nestedDecl.getName()),
-                cmpAccess);
+                varMap.get(nestedDecl));
         }
         // create constraints on mutually interacting constraints now
         for (int i = 0, n = cmpVar.getNestedElementsCount(); i < n; i++) {
@@ -849,8 +866,8 @@ public class Resolver {
                             cmpAccess = new CompoundAccess(new Variable(aElt), slot.getName());        
                         } else {
                             cmpAccess = new CompoundAccess(compound, slot.getName());
-
                         }
+                        varMap.put(slot, cmpAccess);
                         inferTypeSafe(cmpAccess, null);
                         translateAnnotationAssignment(effectiveAssignment, slot, cmpAccess);
                     }
@@ -902,8 +919,10 @@ public class Resolver {
     private void translateConstraints() { 
         List<Constraint> scopeConstraints = new ArrayList<Constraint>();
         if (!incremental && defaultConstraints.size() > 0) { //TODO leave out non-incremental constraints on the fly
-            defaultConstraints.addAll(deferredDefaultConstraints);
-            addAllConstraints(scopeConstraints, substituteVariables(defaultConstraints, true, varMap));
+            addAllConstraints(scopeConstraints, defaultConstraints);
+            addAllConstraints(scopeConstraints, deferredDefaultConstraints);
+            //defaultConstraints.addAll(deferredDefaultConstraints);
+            //addAllConstraints(scopeConstraints, substituteVariables(defaultConstraints, true, varMap));
         }
         if (derivedTypeConstraints.size() > 0) {
             addAllConstraints(scopeConstraints, substituteVariables(derivedTypeConstraints, false, varMap));
@@ -1246,7 +1265,7 @@ public class Resolver {
      * Method for returning the overall count of evaluated constraints in the model.
      * @return number of evaluated constraints.
      */
-    public int constraintCount() {
+    int constraintCount() {
         return constraintCounter;
     }
     
@@ -1254,7 +1273,7 @@ public class Resolver {
      * Method for returning the overall number of variables in the model.
      * @return number of variables.
      */
-    public int variableCount() {
+    int variableCount() {
         return variablesCounter;
     }
     
@@ -1262,7 +1281,7 @@ public class Resolver {
      * Method for returning the number of variables involved in constraints.
      * @return number of variables.
      */
-    public int variableInConstraintCount() {
+    int variableInConstraintCount() {
         return variablesInConstraintsCounter;
     }
     
@@ -1270,7 +1289,7 @@ public class Resolver {
      * Method for returning the overall number of reevaluations in the model.
      * @return number of reevaluations.
      */
-    public int reevaluationCount() {
+    int reevaluationCount() {
         return reevaluationCounter;
     }
     
@@ -1278,7 +1297,7 @@ public class Resolver {
      * Method for retrieving {@link FailedElements} with failed {@link Constraint}s and {@link IDecisionVariable}s.
      * @return {@link FailedElements}
      */
-    public FailedElements getFailedElements() {
+    FailedElements getFailedElements() {
         return failedElements;
     }  
 
@@ -1309,6 +1328,15 @@ public class Resolver {
      */
     protected EvaluationVisitor createEvaluationVisitor() {
         return new EvalVisitor();
+    }
+    
+    /**
+     * Returns whether reasoning stopped due to a timeout.
+     * 
+     * @return <code>true</code> for timeout, <code>false</code> else
+     */
+    boolean hasTimeout() {
+        return hasTimeout;
     }
 
 }
