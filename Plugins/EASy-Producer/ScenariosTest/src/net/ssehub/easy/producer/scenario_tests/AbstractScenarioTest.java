@@ -225,9 +225,11 @@ public abstract class AbstractScenarioTest extends AbstractTest<Script> {
         if (doReasoning) {
             System.out.println("Performing reasoning/propagation...");
             ReasonerConfiguration rCfg = new ReasonerConfiguration();
+            rCfg.setTimeout(5000); // to be on the safe side
             ReasoningResult res = ReasonerFrontend.getInstance().propagate(prj, 
                 config.getConfiguration(), rCfg, ProgressObserver.NO_OBSERVER);
             Assert.assertFalse("Reasoning must not have a conflict", res.hasConflict());
+            Assert.assertFalse("Reasoning must not have a timeout", res.hasTimeout());
         }
         return config;
     }
