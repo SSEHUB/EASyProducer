@@ -463,7 +463,7 @@ public class Resolver {
             if (null != defaultValue) {
                 defaultValue = substituteVariables(defaultValue, new Variable(decl));
             }
-        } else if (null != defaultValue) {
+        } else if (null != defaultValue && !incremental) {
             if (TypeQueries.isContainer(type)) {
                 Set<Compound> used = getUsedTypes(defaultValue, Compound.class);
                 if (null != used && !used.isEmpty()) {
@@ -482,9 +482,10 @@ public class Resolver {
                 }
                 copyVisitor.clear();
             }
+        } else {
+            defaultValue = null;
         }
         translateCollectionCompoundConstraints(decl, var, null, collectionCompoundConstraints);
-        // Container
         if (TypeQueries.isContainer(type)) {            
             IDatatype containedType = ((Container) type).getContainedType();
             if (containedType instanceof DerivedDatatype) {
@@ -499,8 +500,7 @@ public class Resolver {
                         // use closest parent instead of project -> runtime analysis
                         Constraint constraint = new Constraint(defaultValue, var.getDeclaration());
                         constraintVariablesConstraints.add(constraint);
-                        // just for reasoning messages
-                        constraintVariableMap.put(constraint, var);
+                        constraintVariableMap.put(constraint, var); // just for reasoning messages
                         if (Descriptor.LOGGING) {
                             LOGGER.debug(var.getDeclaration().getName() + " project constraint variable " 
                                 + toIvmlString(defaultValue));
@@ -920,13 +920,9 @@ public class Resolver {
      */
     private void translateConstraints() { 
         List<Constraint> scopeConstraints = new ArrayList<Constraint>();
-        if (!incremental && defaultConstraints.size() > 0) { //TODO leave out non-incremental constraints on the fly
-            addAllConstraints(scopeConstraints, defaultConstraints);
-            addAllConstraints(scopeConstraints, deferredDefaultConstraints);
-        }
-        if (derivedTypeConstraints.size() > 0) {
-            addAllConstraints(scopeConstraints, derivedTypeConstraints);
-        }
+        addAllConstraints(scopeConstraints, defaultConstraints);
+        addAllConstraints(scopeConstraints, deferredDefaultConstraints);
+        addAllConstraints(scopeConstraints, derivedTypeConstraints);
         ConstraintFinder finder = new ConstraintFinder(project, false, false, true);
         addAllConstraints(scopeConstraints, finder.getEvalConstraints());
         if (compoundEvalConstraints.size() > 0) {
@@ -1094,16 +1090,18 @@ public class Resolver {
      * @param constraintsToAdd The constraints to be added to <tt>scopeConstraints</tt>.
      */
     private void addAllConstraints(List<Constraint> scopeConstraints, List<Constraint> constraintsToAdd) {
-        if (considerFrozenConstraints) {
-            scopeConstraints.addAll(constraintsToAdd);
-        } else { // TODO does removing completely (!) frozen constraints work in runtime reasoning?
-            for (int i = 0, n = constraintsToAdd.size(); i < n; i++) {
-                Constraint currentConstraint = constraintsToAdd.get(i);
-                VariablesInConstraintFinder finder = new VariablesInConstraintFinder(currentConstraint.getConsSyntax(),
-                    config);
-                Set<IAssignmentState> states = finder.getStates();
-                if (!(1 == states.size() && states.contains(AssignmentState.FROZEN))) {
-                    scopeConstraints.add(currentConstraint);
+        if (constraintsToAdd.size() > 0) {
+            if (considerFrozenConstraints) {
+                scopeConstraints.addAll(constraintsToAdd);
+            } else { // TODO does removing completely (!) frozen constraints work in runtime reasoning?
+                for (int i = 0, n = constraintsToAdd.size(); i < n; i++) {
+                    Constraint currentConstraint = constraintsToAdd.get(i);
+                    VariablesInConstraintFinder finder = new VariablesInConstraintFinder( // TODO reuse?
+                        currentConstraint.getConsSyntax(), config);
+                    Set<IAssignmentState> states = finder.getStates();
+                    if (!(1 == states.size() && states.contains(AssignmentState.FROZEN))) {
+                        scopeConstraints.add(currentConstraint);
+                    }
                 }
             }
         }
@@ -1118,7 +1116,7 @@ public class Resolver {
         for (Constraint constraint : constraints) { 
             if (constraint.getConsSyntax() != null) {
                 VariablesInConstraintsFinder varFinder = new VariablesInConstraintsFinder(constraint.getConsSyntax());
-                if (!varFinder.isSimpleAssignment()) {
+                if (!varFinder.isSimpleAssignment()) { // TODO reuse?
                     for (AbstractVariable declaration : varFinder.getVariables()) {
                         constraintMap.add(declaration, constraint);                       
                     }
