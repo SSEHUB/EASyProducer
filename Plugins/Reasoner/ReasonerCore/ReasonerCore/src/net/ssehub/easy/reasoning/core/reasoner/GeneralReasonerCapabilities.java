@@ -41,6 +41,12 @@ public enum GeneralReasonerCapabilities implements IReasonerCapability {
      * capability. However, it might also be derived from the presence of 
      * {@link de.uni_hildesheim.sse.capabilities.IvmlReasonerCapabilities}.
      */
-    CONFIGURATION_INITIALIZATION;
+    CONFIGURATION_INITIALIZATION,
+    
+    /**
+     * Reasoner considers the timeout given in {@link ReasonerConfiguration#getTimeout()} and stops
+     * close to a timeout overrun.
+     */
+    TIMEOUT;
 
 }
