@@ -574,7 +574,9 @@ public class Resolver {
         variablesCounter++;
         IDatatype type = decl.getType();
         translateDerivedDatatypeConstraints(decl, type);
-        translateAnnotationDefaults(decl, var, cAcc);
+        if (!incremental) {
+            translateAnnotationDefaults(decl, var, cAcc);
+        }
         ConstraintSyntaxTree defaultValue = decl.getDefaultValue();
         if (TypeQueries.isCompound(type)) {
             if (null != defaultValue) { // try considering the actual type, not only the base type
@@ -592,9 +594,7 @@ public class Resolver {
                         translateDefaultsCompoundCollection(decl, uType, new HashSet<Compound>());
                     }
                 }
-            } else if (null != cAcc) {
-                // all self/overriden compound initialization constraints have to be deferred until compound/container 
-                // initializers are set as they would be overridden else
+            } else if (null != cAcc) { // defer self/override init constraints to prevent accidental init override
                 copyVisitor.setSelf(cAcc.getCompoundExpression());
                 defaultValue = copyVisitor.accept(defaultValue);
                 inferTypeSafe(defaultValue, null);
@@ -844,8 +844,10 @@ public class Resolver {
             translateCollectionCompoundConstraints(nestedDecl, variable, varMap.get(nestedDecl), compoundConstraints);
         }
         // Nested attribute assignments handling
-        for (int a = 0; a < cmpType.getAssignmentCount(); a++) {
-            translateAnnotationAssignments(cmpType.getAssignment(a), null, compound);
+        if (!incremental) {
+            for (int a = 0; a < cmpType.getAssignmentCount(); a++) {
+                translateAnnotationAssignments(cmpType.getAssignment(a), null, compound);
+            }
         }
         List<Constraint> thisCompoundConstraints = new ArrayList<Constraint>(); 
         allCompoundConstraints(cmpType, thisCompoundConstraints, false);        
@@ -1068,10 +1070,8 @@ public class Resolver {
             addAllToConstraintBase(scopeConstraints, incremental);
             scopeConstraints.clear();
         }
-        if (!incremental) { //TODO leave out non-incremental constraints on the fly
-            addAllToConstraintBase(defaultAnnotationConstraints, false);
-            addAllToConstraintBase(assignedAttributeConstraints, false);
-        }
+        addAllToConstraintBase(defaultAnnotationConstraints, false);
+        addAllToConstraintBase(assignedAttributeConstraints, false);
         constraintCounter = constraintCounter + constraintBase.size();
         clearConstraintLists();
     }
