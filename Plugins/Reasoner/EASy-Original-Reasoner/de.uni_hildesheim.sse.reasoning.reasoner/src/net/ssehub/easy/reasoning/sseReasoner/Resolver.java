@@ -1051,9 +1051,6 @@ public class Resolver {
         scopeConstraints.addAll(compoundConstraints);            
         scopeConstraints.addAll(constraintVariablesConstraints);
         scopeConstraints.addAll(collectionCompoundConstraints);            
-        /*for (Constraint constraint : scopeConstraints) {
-            retrieveCollectionConstraints(constraint);
-        }*/
         scopeConstraints.addAll(collectionConstraints);
         if (scopeConstraints.size() > 0) {
             assignConstraintsToVariables(scopeConstraints);
@@ -1067,21 +1064,6 @@ public class Resolver {
     }
 
     /**
-     * Method for retrieving constraints from collections.
-     * @param constraint Constraint to be analyzed.
-     */
-    private void retrieveCollectionConstraints(Constraint constraint) {
-        collectionFinder.accept(constraint.getConsSyntax());
-        if (collectionFinder.isConstraintCollection()) {
-            checkContainerInitializer(collectionFinder.getExpression(), false, constraint.getParent());
-        }
-        if (collectionFinder.isCompoundInitializer()) {
-            checkCompoundInitializer(collectionFinder.getExpression(), true, constraint.getParent());
-        }
-        collectionFinder.clear();
-    }
-    
-    /**
      * Adding a constraint to a constraint set, checking for contained collection/compound initializers if
      * requested. 
      * 
@@ -1091,7 +1073,14 @@ public class Resolver {
      */
     private void addConstraint(Collection<Constraint> target, Constraint constraint, boolean checkForInitializers) {
         if (checkForInitializers) {
-            retrieveCollectionConstraints(constraint); // TODO preliminary, move code here
+            collectionFinder.accept(constraint.getConsSyntax());
+            if (collectionFinder.isConstraintCollection()) {
+                checkContainerInitializer(collectionFinder.getExpression(), false, constraint.getParent());
+            }
+            if (collectionFinder.isCompoundInitializer()) {
+                checkCompoundInitializer(collectionFinder.getExpression(), true, constraint.getParent());
+            }
+            collectionFinder.clear();
         }
         target.add(constraint);
     }
