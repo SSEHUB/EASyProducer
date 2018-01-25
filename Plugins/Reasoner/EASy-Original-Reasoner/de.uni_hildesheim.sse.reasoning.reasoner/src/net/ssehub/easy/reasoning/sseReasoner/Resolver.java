@@ -141,6 +141,7 @@ public class Resolver {
     private transient Set<IDecisionVariable> usedVariables = new HashSet<IDecisionVariable>(100);
     private transient CopyVisitor copyVisitor = new CopyVisitor();
     private transient Map<AbstractVariable, CompoundAccess> varMap = new HashMap<AbstractVariable, CompoundAccess>(100);
+    private transient CollectionConstraintsFinder collectionFinder = new CollectionConstraintsFinder();
 
     // >>> from here the names follows the reasoner.tex documentation
 
@@ -415,7 +416,7 @@ public class Resolver {
 
         @Override // collect all top-level/enum/attribute assignment constraints
         public void visitConstraint(Constraint constraint) {
-            topLevelConstraints.add(constraint);
+            addConstraint(topLevelConstraints, constraint, true);
         }
 
         @Override
@@ -494,7 +495,7 @@ public class Resolver {
                     // Should be in same project as the declaration belongs to
                     try {
                         ConstraintSyntaxTree tmp = substituteVariables(cst[c], null);
-                        derivedTypeConstraints.add(new Constraint(tmp, topLevelParent));
+                        addConstraint(derivedTypeConstraints, new Constraint(tmp, topLevelParent), true);
                     } catch (CSTSemanticException e) {
                         LOGGER.exception(e);
                     }
@@ -552,7 +553,7 @@ public class Resolver {
                     }
                     defaultValue = new OCLFeatureCall(op, OclKeyWords.ASSIGNMENT, defaultValue);
                     defaultValue.inferDatatype(); 
-                    defaultAnnotationConstraints.add(new DefaultConstraint(defaultValue, project));
+                    addConstraint(defaultAnnotationConstraints, new DefaultConstraint(defaultValue, project), false);
                 } catch (CSTSemanticException e) {
                     e.printStackTrace();
                 }                    
@@ -620,7 +621,7 @@ public class Resolver {
                         variablesCounter--;
                         // use closest parent instead of project -> runtime analysis
                         Constraint constraint = new Constraint(defaultValue, var.getDeclaration());
-                        constraintVariablesConstraints.add(constraint);
+                        addConstraint(constraintVariablesConstraints, constraint, true);
                         constraintVariableMap.put(constraint, var); // just for reasoning messages
                         if (Descriptor.LOGGING) {
                             LOGGER.debug(var.getDeclaration().getName() + " project constraint variable " 
@@ -632,7 +633,7 @@ public class Resolver {
                         defltCons == deferredDefaultConstraints ? cAcc : new Variable(decl), 
                         OclKeyWords.ASSIGNMENT, defaultValue);
                     cst = substituteVariables(cst, null);
-                    defltCons.add(new DefaultConstraint(cst, project));
+                    addConstraint(defltCons, new DefaultConstraint(cst, project), true);
                 }                
             } catch (CSTSemanticException e) {
                 LOGGER.exception(e); // should not occur, ok to log
@@ -670,7 +671,7 @@ public class Resolver {
                         }
                         defaultValue = createContainerCall(containerOp, Container.FORALL, defaultValue, localDecl);
                         defaultValue.inferDatatype();
-                        deferredDefaultConstraints.add(new DefaultConstraint(defaultValue, project));
+                        addConstraint(deferredDefaultConstraints, new DefaultConstraint(defaultValue, project), true);
                     } catch (CSTSemanticException e) {
                         LOGGER.exception(e); // should not occur, ok to log
                     } catch (ValueDoesNotMatchTypeException e) {
@@ -709,7 +710,7 @@ public class Resolver {
                 try {
                     typeCst.inferDatatype();
                     typeCst = substituteVariables(typeCst, null);
-                    derivedTypeConstraints.add(new Constraint(typeCst, project));                    
+                    addConstraint(derivedTypeConstraints, new Constraint(typeCst, project), true);                    
                 } catch (CSTSemanticException e) {
                     LOGGER.exception(e);
                 }            
@@ -785,8 +786,7 @@ public class Resolver {
                 }
                 if (containerOp != null) {
                     containerOp.inferDatatype();
-                    Constraint constraint = new Constraint(containerOp, project);
-                    result.add(constraint);
+                    addConstraint(result, new Constraint(containerOp, project), true);
                 }
             } catch (CSTSemanticException e) {
                 LOGGER.exception(e);
@@ -857,7 +857,7 @@ public class Resolver {
             oneConstraint = substituteVariables(oneConstraint, new Variable(decl));
             try {
                 Constraint constraint = new Constraint(oneConstraint, decl);
-                compoundConstraints.add(constraint);            
+                addConstraint(compoundConstraints, constraint, true);            
             } catch (CSTSemanticException e) {
                 LOGGER.exception(e);
             }               
@@ -896,7 +896,7 @@ public class Resolver {
                 ConstraintSyntaxTree cst = substituteVariables(evalCst, null);
                 try {
                     cst.inferDatatype();
-                    compoundEvalConstraints.add(new Constraint(cst, project));
+                    addConstraint(compoundEvalConstraints, new Constraint(cst, project), true);
                 } catch (CSTSemanticException e) {
                     LOGGER.exception(e);
                 } 
@@ -921,7 +921,7 @@ public class Resolver {
             cst = substituteVariables(cst, new Variable(decl));
             try {
                 constraint = new Constraint(cst, parent);
-                constraintVariablesConstraints.add(constraint);
+                addConstraint(constraintVariablesConstraints, constraint, true);
                 //after refactoring duplicate check for ConstraintVariable is needed
                 IDatatype nestedType = nestedVariable.getDeclaration().getType();
                 if (TypeQueries.isContainer(nestedType)) {
@@ -1028,7 +1028,7 @@ public class Resolver {
                 substituteVariables(assignment.getExpression(), null));
             inferTypeSafe(cst, null);
             try {
-                assignedAttributeConstraints.add(new Constraint(cst, project));
+                addConstraint(assignedAttributeConstraints, new Constraint(cst, project), false);
             } catch (CSTSemanticException e) {
                 LOGGER.exception(e);
             }
@@ -1051,9 +1051,9 @@ public class Resolver {
         scopeConstraints.addAll(compoundConstraints);            
         scopeConstraints.addAll(constraintVariablesConstraints);
         scopeConstraints.addAll(collectionCompoundConstraints);            
-        for (Constraint constraint : scopeConstraints) {
+        /*for (Constraint constraint : scopeConstraints) {
             retrieveCollectionConstraints(constraint);
-        }
+        }*/
         scopeConstraints.addAll(collectionConstraints);
         if (scopeConstraints.size() > 0) {
             assignConstraintsToVariables(scopeConstraints);
@@ -1071,14 +1071,29 @@ public class Resolver {
      * @param constraint Constraint to be analyzed.
      */
     private void retrieveCollectionConstraints(Constraint constraint) {
-        ConstraintSyntaxTree cst = constraint.getConsSyntax();
-        CollectionConstraintsFinder finder = new CollectionConstraintsFinder(cst); // TODO make finder reusable
-        if (finder.isConstraintCollection()) {
-            checkContainerInitializer(finder.getExpression(), false, constraint.getParent());
+        collectionFinder.accept(constraint.getConsSyntax());
+        if (collectionFinder.isConstraintCollection()) {
+            checkContainerInitializer(collectionFinder.getExpression(), false, constraint.getParent());
         }
-        if (finder.isCompoundInitializer()) {
-            checkCompoundInitializer(finder.getExpression(), true, constraint.getParent());
+        if (collectionFinder.isCompoundInitializer()) {
+            checkCompoundInitializer(collectionFinder.getExpression(), true, constraint.getParent());
         }
+        collectionFinder.clear();
+    }
+    
+    /**
+     * Adding a constraint to a constraint set, checking for contained collection/compound initializers if
+     * requested. 
+     * 
+     * @param target the target collection to add the constraint to
+     * @param constraint the constraint
+     * @param checkForInitializers check also for initializers if (<code>true</code>), add only if (<code>false</code>)
+     */
+    private void addConstraint(Collection<Constraint> target, Constraint constraint, boolean checkForInitializers) {
+        if (checkForInitializers) {
+            retrieveCollectionConstraints(constraint); // TODO preliminary, move code here
+        }
+        target.add(constraint);
     }
 
     /**
@@ -1119,7 +1134,7 @@ public class Resolver {
                 }
                 try {
                     constraint.setConsSyntax(cst);
-                    collectionConstraints.add(constraint);
+                    addConstraint(collectionConstraints, constraint, false);
                 } catch (CSTSemanticException e) {
                     LOGGER.exception(e);
                 }

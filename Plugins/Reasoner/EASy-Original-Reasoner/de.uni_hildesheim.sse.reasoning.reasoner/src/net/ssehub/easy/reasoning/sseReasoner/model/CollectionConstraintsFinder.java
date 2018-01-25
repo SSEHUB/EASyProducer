@@ -30,18 +30,41 @@ public class CollectionConstraintsFinder implements IConstraintTreeVisitor {
     private boolean isCompoundInitializer;
     private ConstraintSyntaxTree cst;
     
-    
     /**
-     * Constructor of the visitor. Uses a single constraint.
+     * Constructor of the visitor. Visits the given constraint using {@link #accept(ConstraintSyntaxTree)}.
+     * Use {@link #clear()} to clear the visitor for reuse.
+     * 
      * @param constraint Constraint that is visited to retrieve variables.
      */
     public CollectionConstraintsFinder(ConstraintSyntaxTree constraint) {
-        isConstraintCollection = false;
-        isCompoundInitializer = false;
-        cst = null;
+        clear();
+        accept(constraint);
+    }
+
+    /**
+     * Creates a (reusable) visitor.
+     */
+    public CollectionConstraintsFinder() {
+    }
+
+    /**
+     * Accepts and analyzes the given <code>constraint</code>.
+     * 
+     * @param constraint the constraint to be visited (ignored if <b>null</b>)
+     */
+    public void accept(ConstraintSyntaxTree constraint) {
         if (constraint != null) {
             constraint.accept(this);           
         }
+    }
+    
+    /**
+     * Clears the visitor for reuse.
+     */
+    public void clear() {
+        isConstraintCollection = false;
+        isCompoundInitializer = false;
+        cst = null;
     }
 
     /**
