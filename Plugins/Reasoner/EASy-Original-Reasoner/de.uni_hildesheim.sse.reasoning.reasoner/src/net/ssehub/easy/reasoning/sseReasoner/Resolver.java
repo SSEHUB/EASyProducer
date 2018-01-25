@@ -393,7 +393,7 @@ public class Resolver {
         public void visitSet(net.ssehub.easy.varModel.model.datatypes.Set set) {
         }
 
-        @Override
+        @Override // iterate over all elements declared in project, implicitly skipping not implemented elements
         public void visitProject(Project project) {
             for (int e = 0; e < project.getElementCount(); e++) {
                 project.getElement(e).accept(this);
@@ -404,16 +404,16 @@ public class Resolver {
         public void visitProjectImport(ProjectImport pImport) {
         }
 
-        @Override
+        @Override // translate all top-level/enum/attribute assignment declarations
         public void visitDecisionVariableDeclaration(DecisionVariableDeclaration decl) {
-            translateDeclarationDefaults(decl, config.getDecision(decl), null);
+            translateDeclarationDefaults(decl, config.getDecision(decl), null); 
         }
 
         @Override
         public void visitAttribute(Attribute attribute) {
         }
 
-        @Override
+        @Override // collect all top-level/enum/attribute assignment constraints
         public void visitConstraint(Constraint constraint) {
             topLevelConstraints.add(constraint);
         }
@@ -426,7 +426,7 @@ public class Resolver {
         public void visitOperationDefinition(OperationDefinition opdef) {
         }
 
-        @Override
+        @Override // iterate over nested blocks/contained constraints
         public void visitPartialEvaluationBlock(PartialEvaluationBlock block) {
             for (int i = 0; i < block.getNestedCount(); i++) {
                 block.getNested(i).accept(this);
@@ -444,7 +444,7 @@ public class Resolver {
         public void visitComment(Comment comment) {
         }
 
-        @Override
+        @Override // iterate over nested blocks/contained, translate the individual blocks if not incremental
         public void visitAttributeAssignment(AttributeAssignment assignment) {
             for (int v = 0; v < assignment.getElementCount(); v++) {
                 assignment.getElement(v).accept(this);
@@ -1047,24 +1047,14 @@ public class Resolver {
         addAllConstraints(scopeConstraints, deferredDefaultConstraints);
         addAllConstraints(scopeConstraints, derivedTypeConstraints);
         addAllConstraints(scopeConstraints, topLevelConstraints);
-        if (compoundEvalConstraints.size() > 0) {
-            scopeConstraints.addAll(compoundEvalConstraints);
-        }
-        if (compoundConstraints.size() > 0) {
-            scopeConstraints.addAll(compoundConstraints);            
-        }
-        if (constraintVariablesConstraints.size() > 0) {
-            scopeConstraints.addAll(constraintVariablesConstraints);
-        }
-        if (collectionCompoundConstraints.size() > 0) {
-            scopeConstraints.addAll(collectionCompoundConstraints);            
-        }
+        scopeConstraints.addAll(compoundEvalConstraints);
+        scopeConstraints.addAll(compoundConstraints);            
+        scopeConstraints.addAll(constraintVariablesConstraints);
+        scopeConstraints.addAll(collectionCompoundConstraints);            
         for (Constraint constraint : scopeConstraints) {
             retrieveCollectionConstraints(constraint);
         }
-        if (collectionConstraints.size() > 0) {
-            scopeConstraints.addAll(collectionConstraints);
-        }
+        scopeConstraints.addAll(collectionConstraints);
         if (scopeConstraints.size() > 0) {
             assignConstraintsToVariables(scopeConstraints);
             addAllToConstraintBase(scopeConstraints, incremental);
