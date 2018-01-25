@@ -63,7 +63,7 @@ class DispatchInformation {
         }
 
         bestMatch = operation;
-        bestDiff = EvaluationVisitor.calculateDiff(operation, returnType, argTypes);
+        bestDiff = EvaluationUtils.calculateDiff(operation, returnType, argTypes);
         candidates = new HashSet<String>();
         candidates.add(operation.getSignature());
         doneProjects = new HashSet<Project>();
@@ -91,7 +91,7 @@ class DispatchInformation {
                 if (tmp != operation && opName.equals(tmp.getName()) && opParamCount == tmp.getParameterCount()) {
                     String tmpSignature = tmp.getSignature();
                     if (!candidates.contains(tmpSignature)) {
-                        int diff = EvaluationVisitor.calculateDiff(tmp, returnType, argTypes);
+                        int diff = EvaluationUtils.calculateDiff(tmp, returnType, argTypes);
                         if (diff < 0) {
                             continue;
                         }
