@@ -47,21 +47,31 @@ import net.ssehub.easy.varModel.model.AbstractVariable;
 import net.ssehub.easy.varModel.model.Attribute;
 import net.ssehub.easy.varModel.model.AttributeAssignment;
 import net.ssehub.easy.varModel.model.AttributeAssignment.Assignment;
+import net.ssehub.easy.varModel.model.Comment;
+import net.ssehub.easy.varModel.model.CompoundAccessStatement;
 import net.ssehub.easy.varModel.model.Constraint;
 import net.ssehub.easy.varModel.model.DecisionVariableDeclaration;
+import net.ssehub.easy.varModel.model.FreezeBlock;
 import net.ssehub.easy.varModel.model.IModelElement;
+import net.ssehub.easy.varModel.model.IModelVisitor;
 import net.ssehub.easy.varModel.model.OperationDefinition;
 import net.ssehub.easy.varModel.model.PartialEvaluationBlock;
 import net.ssehub.easy.varModel.model.Project;
+import net.ssehub.easy.varModel.model.ProjectImport;
+import net.ssehub.easy.varModel.model.ProjectInterface;
 import net.ssehub.easy.varModel.model.datatypes.Compound;
 import net.ssehub.easy.varModel.model.datatypes.ConstraintType;
 import net.ssehub.easy.varModel.model.datatypes.Container;
 import net.ssehub.easy.varModel.model.datatypes.DerivedDatatype;
+import net.ssehub.easy.varModel.model.datatypes.Enum;
+import net.ssehub.easy.varModel.model.datatypes.EnumLiteral;
 import net.ssehub.easy.varModel.model.datatypes.IDatatype;
 import net.ssehub.easy.varModel.model.datatypes.MetaType;
 import net.ssehub.easy.varModel.model.datatypes.OclKeyWords;
+import net.ssehub.easy.varModel.model.datatypes.OrderedEnum;
+import net.ssehub.easy.varModel.model.datatypes.Reference;
+import net.ssehub.easy.varModel.model.datatypes.Sequence;
 import net.ssehub.easy.varModel.model.datatypes.TypeQueries;
-import net.ssehub.easy.varModel.model.filter.ConstraintFinder;
 import net.ssehub.easy.varModel.model.filter.DeclarationFinder;
 import net.ssehub.easy.varModel.model.filter.DeclarationFinder.VisibilityType;
 import net.ssehub.easy.varModel.model.filter.FilterType;
@@ -109,6 +119,7 @@ public class Resolver {
     private List<Constraint> defaultAnnotationConstraints = new LinkedList<Constraint>();
     private List<Constraint> compoundConstraints = new LinkedList<Constraint>();
     private List<Constraint> compoundEvalConstraints = new LinkedList<Constraint>();
+    private List<Constraint> topLevelConstraints = new LinkedList<Constraint>();
 
     private List<Constraint> unresolvedConstraints = new LinkedList<Constraint>(); 
     private List<Constraint> assignedAttributeConstraints = new LinkedList<Constraint>();
@@ -276,6 +287,7 @@ public class Resolver {
      * </ol>
      */
     public void resolve() { 
+        ConstraintTranslationVisitor projectVisitor = new ConstraintTranslationVisitor();
         // Stack of importedProject (start with inner most imported project)
         evaluator.init(config, null, false, listener); // also for defaults as they may refer to each other 
         evaluator.setResolutionListener(resolutionListener);
@@ -287,7 +299,7 @@ public class Resolver {
             if (Descriptor.LOGGING) {
                 LOGGER.debug("Project:" + project.getName());                
             }
-            translateDefaults();
+            project.accept(projectVisitor);
             translateConstraints();
             evaluateConstraints();
             // Freezes values after each scope
@@ -340,6 +352,115 @@ public class Resolver {
                 break;
             }
         }
+    }
+
+    /**
+     * Visits the contents of a project for translation.
+     * 
+     * @author Holger Eichelberger
+     */
+    private class ConstraintTranslationVisitor implements IModelVisitor {
+
+        @Override
+        public void visitEnum(Enum eenum) {
+        }
+
+        @Override
+        public void visitOrderedEnum(OrderedEnum eenum) {
+        }
+
+        @Override
+        public void visitCompound(Compound compound) {
+        }
+
+        @Override
+        public void visitDerivedDatatype(DerivedDatatype datatype) {
+        }
+
+        @Override
+        public void visitEnumLiteral(EnumLiteral literal) {
+        }
+
+        @Override
+        public void visitReference(Reference reference) {
+        }
+
+        @Override
+        public void visitSequence(Sequence sequence) {
+        }
+
+        @Override
+        public void visitSet(net.ssehub.easy.varModel.model.datatypes.Set set) {
+        }
+
+        @Override
+        public void visitProject(Project project) {
+            for (int e = 0; e < project.getElementCount(); e++) {
+                project.getElement(e).accept(this);
+            }     
+        }
+
+        @Override
+        public void visitProjectImport(ProjectImport pImport) {
+        }
+
+        @Override
+        public void visitDecisionVariableDeclaration(DecisionVariableDeclaration decl) {
+            translateDeclarationDefaults(decl, config.getDecision(decl), null);
+        }
+
+        @Override
+        public void visitAttribute(Attribute attribute) {
+        }
+
+        @Override
+        public void visitConstraint(Constraint constraint) {
+            topLevelConstraints.add(constraint);
+        }
+
+        @Override
+        public void visitFreezeBlock(FreezeBlock freeze) {
+        }
+
+        @Override
+        public void visitOperationDefinition(OperationDefinition opdef) {
+        }
+
+        @Override
+        public void visitPartialEvaluationBlock(PartialEvaluationBlock block) {
+            for (int i = 0; i < block.getNestedCount(); i++) {
+                block.getNested(i).accept(this);
+            }
+            for (int i = 0; i < block.getEvaluableCount(); i++) {
+                block.getEvaluable(i).accept(this);
+            }
+        }
+
+        @Override
+        public void visitProjectInterface(ProjectInterface iface) {
+        }
+
+        @Override
+        public void visitComment(Comment comment) {
+        }
+
+        @Override
+        public void visitAttributeAssignment(AttributeAssignment assignment) {
+            for (int v = 0; v < assignment.getElementCount(); v++) {
+                assignment.getElement(v).accept(this);
+            }
+            for (int a = 0; a < assignment.getAssignmentCount(); a++) {
+                assignment.getAssignment(a).accept(this);
+            }
+            if (!incremental) {
+                translateAnnotationAssignments(assignment, null, null);
+            }
+        }
+
+        @Override
+        public void visitCompoundAccessStatement(CompoundAccessStatement access) {
+        }
+        
     }
 
     /**
@@ -923,20 +1044,9 @@ public class Resolver {
         addAllConstraints(scopeConstraints, defaultConstraints);
         addAllConstraints(scopeConstraints, deferredDefaultConstraints);
         addAllConstraints(scopeConstraints, derivedTypeConstraints);
-        ConstraintFinder finder = new ConstraintFinder(project, false, false, true);
-        addAllConstraints(scopeConstraints, finder.getEvalConstraints());
+        addAllConstraints(scopeConstraints, topLevelConstraints);
         if (compoundEvalConstraints.size() > 0) {
             scopeConstraints.addAll(compoundEvalConstraints);
-        }
-        addAllConstraints(scopeConstraints, finder.getConstraints());
-        if (!incremental) {
-            List<AttributeAssignment> scopeAttributes = new ArrayList<AttributeAssignment>();
-            scopeAttributes = finder.getAttributeAssignments();
-            if (scopeAttributes.size() > 0) {
-                for (AttributeAssignment attributeAssignment : scopeAttributes) {
-                    translateAnnotationAssignments(attributeAssignment, null, null);                
-                }
-            }            
         }
         if (compoundConstraints.size() > 0) {
             scopeConstraints.addAll(compoundConstraints);            
@@ -1247,6 +1357,7 @@ public class Resolver {
     private void clearConstraintLists() {
         defaultConstraints.clear();
         deferredDefaultConstraints.clear();
+        topLevelConstraints.clear();
         derivedTypeConstraints.clear();
         compoundConstraints.clear();
         compoundEvalConstraints.clear();
