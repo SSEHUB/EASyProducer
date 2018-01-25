@@ -19,7 +19,6 @@ import net.ssehub.easy.reasoning.core.reasoner.ReasoningErrorCodes;
 import net.ssehub.easy.reasoning.sseReasoner.functions.FailedElementDetails;
 import net.ssehub.easy.reasoning.sseReasoner.functions.FailedElements;
 import net.ssehub.easy.reasoning.sseReasoner.functions.ScopeAssignments;
-import net.ssehub.easy.reasoning.sseReasoner.model.AssignmentConstraintFinder;
 import net.ssehub.easy.reasoning.sseReasoner.model.CollectionConstraintsFinder;
 import net.ssehub.easy.reasoning.sseReasoner.model.CopyVisitor;
 import net.ssehub.easy.reasoning.sseReasoner.model.DefaultConstraint;
@@ -32,6 +31,7 @@ import net.ssehub.easy.varModel.confModel.IConfigurationElement;
 import net.ssehub.easy.varModel.confModel.IDecisionVariable;
 import net.ssehub.easy.varModel.cst.AttributeVariable;
 import net.ssehub.easy.varModel.cst.CSTSemanticException;
+import net.ssehub.easy.varModel.cst.CSTUtils;
 import net.ssehub.easy.varModel.cst.CompoundAccess;
 import net.ssehub.easy.varModel.cst.CompoundInitializer;
 import net.ssehub.easy.varModel.cst.ConstantValue;
@@ -277,7 +277,7 @@ public class Resolver {
      */
     public void resolve() { 
         // Stack of importedProject (start with inner most imported project)
-        evaluator.init(config, null, false, listener); 
+        evaluator.init(config, null, false, listener); // also for defaults as they may refer to each other 
         evaluator.setResolutionListener(resolutionListener);
         evaluator.setScopeAssignments(scopeAssignments);
         List<Project> projects = Utils.discoverImports(config.getProject());
@@ -403,7 +403,7 @@ public class Resolver {
             Variable replacement = new Variable(declaration);
             //Copy and replace each instance of the internal declaration with the given instance
             for (int i = 0; i < count; i++) {
-                csts[i] = substituteVariable(dType.getConstraint(i), origin, replacement); 
+                csts[i] = substituteVariable(dType.getConstraint(i).getConsSyntax(), origin, replacement); 
             }
         }        
         return csts;
@@ -955,16 +955,12 @@ public class Resolver {
         }
         if (scopeConstraints.size() > 0) {
             assignConstraintsToVariables(scopeConstraints);
-            if (incremental) { //TODO leave out non-incremental constraints on the fly
-                AssignmentConstraintFinder assignmentFinder = new AssignmentConstraintFinder(scopeConstraints);
-                scopeConstraints = assignmentFinder.getValidationConstraints();                
-            }
-            addAllToConstraintBase(scopeConstraints);
+            addAllToConstraintBase(scopeConstraints, incremental);
             scopeConstraints.clear();
         }
         if (!incremental) { //TODO leave out non-incremental constraints on the fly
-            addAllToConstraintBase(defaultAnnotationConstraints);
-            addAllToConstraintBase(assignedAttributeConstraints);
+            addAllToConstraintBase(defaultAnnotationConstraints, false);
+            addAllToConstraintBase(assignedAttributeConstraints, false);
         }
         constraintCounter = constraintCounter + constraintBase.size();
         clearConstraintLists();
@@ -1216,18 +1212,6 @@ public class Resolver {
      * @param replacement the replacing variable
      * @return the copied constraint having <code>origin</code> substituted by <code>replacement</code>
      */
-    ConstraintSyntaxTree substituteVariable(Constraint constraint, Variable origin, Variable replacement) {
-        return substituteVariable(constraint.getConsSyntax(), origin, replacement);
-    }
-
-    /**
-     * Substitutes the variable <code>origin</code> by <code>replacement</code> in <code>constraint</code>.
-     * 
-     * @param constraint the constraint to replace the variable within
-     * @param origin the variable to be replaced
-     * @param replacement the replacing variable
-     * @return the copied constraint having <code>origin</code> substituted by <code>replacement</code>
-     */
     ConstraintSyntaxTree substituteVariable(ConstraintSyntaxTree constraint, Variable origin, 
         Variable replacement) {
         copyVisitor.addVariableMapping(origin, replacement);
@@ -1238,11 +1222,22 @@ public class Resolver {
      * Adds all <code>constraints</code> to the constraint base.
      * 
      * @param constraints the constraints
+     * @param validationOnly add only validation constraints (<code>true</code>) or all constraints (<code>false</code>)
      */
-    private void addAllToConstraintBase(Collection<Constraint> constraints) {
+    private void addAllToConstraintBase(Collection<Constraint> constraints, boolean validationOnly) {
         if (constraints.size() > 0) {
-            constraintBase.addAll(constraints);
-            constraintBaseSet.addAll(constraints);
+            if (validationOnly) { // TODO move up before adding/creating
+                for (Constraint cst : constraints) {
+                    if (!CSTUtils.isAssignment(cst.getConsSyntax())) {
+                        constraintBase.add(cst);
+                        constraintBaseSet.add(cst);
+                    }
+                }
+                
+            } else {
+                constraintBase.addAll(constraints);
+                constraintBaseSet.addAll(constraints);
+            }
         }
     }
 
