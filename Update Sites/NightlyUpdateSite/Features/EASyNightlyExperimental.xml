@@ -31,13 +31,6 @@
    <requires>
       <import feature="EASy.Nightly.Feature" version="0.0.0"/>
    </requires>
-   
-   <plugin
-         id="net.ssehub.easy.reasoning.drools2"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
 
    <plugin
          id="de.uni_hildesheim.sse.vil.rt"
