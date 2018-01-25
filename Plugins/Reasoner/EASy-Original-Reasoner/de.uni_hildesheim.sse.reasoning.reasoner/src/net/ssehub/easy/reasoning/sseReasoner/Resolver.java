@@ -121,7 +121,6 @@ public class Resolver {
     private List<Constraint> compoundEvalConstraints = new LinkedList<Constraint>();
     private List<Constraint> topLevelConstraints = new LinkedList<Constraint>();
 
-    private List<Constraint> unresolvedConstraints = new LinkedList<Constraint>(); 
     private List<Constraint> assignedAttributeConstraints = new LinkedList<Constraint>();
     private List<Constraint> collectionConstraints = new LinkedList<Constraint>();
     
@@ -1360,7 +1359,6 @@ public class Resolver {
         collectionConstraints.clear();      
         defaultAnnotationConstraints.clear();
         assignedAttributeConstraints.clear();
-        unresolvedConstraints.clear();   
     }
     
     /**
