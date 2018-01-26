@@ -1049,8 +1049,8 @@ public class Resolver {
             addAllConstraints(scopeConstraints, deferredDefaultConstraints, false);
             addAllConstraints(scopeConstraints, usualConstraintsStage1, false);
             addAllConstraints(scopeConstraints, usualConstraintsStage2, true); // TODO true is unclear for now
-            addAllToConstraintBase(scopeConstraints, incremental);
-            addAllToConstraintBase(usualConstraintsStage3, false);
+            addAllToConstraintBase(scopeConstraints);
+            addAllToConstraintBase(usualConstraintsStage3);
             constraintCounter = constraintBase.size();
             variablesInConstraintsCounter = constraintMap.getDeclarationSize();
             clearConstraintLists();
@@ -1322,9 +1322,8 @@ public class Resolver {
      * Adds all <code>constraints</code> to the constraint base.
      * 
      * @param constraints the constraints
-     * @param validationOnly add only validation constraints (<code>true</code>) or all constraints (<code>false</code>)
      */
-    private void addAllToConstraintBase(Collection<Constraint> constraints, boolean validationOnly) {
+    private void addAllToConstraintBase(Collection<Constraint> constraints) {
         constraintBase.addAll(constraints);
         constraintBaseSet.addAll(constraints);
     }
