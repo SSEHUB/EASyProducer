@@ -54,7 +54,14 @@ class VariablesMap {
      * @return Number of variables found in constaints.
      */
     int getDeclarationSize() {
-        // TODO get rid of this
         return declConstraintMapping.size();
     }
+    
+    /**
+     * Clears this instance for reuse.
+     */
+    void clear() {
+        declConstraintMapping.clear();
+    }
+    
 }

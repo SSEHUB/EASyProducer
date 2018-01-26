@@ -124,5 +124,13 @@ public class FailedElements {
     public Map<AbstractVariable, FailedElementDetails> getProblemVariableMap() {
         return problemVariables;
     }
+    
+    /**
+     * Clears this instance.
+     */
+    public void clear() {
+        problemConstraints.clear();
+        problemVariables.clear();
+    }
    
 }

@@ -6,6 +6,7 @@ import java.util.List;
 import org.osgi.service.component.ComponentContext;
 
 import net.ssehub.easy.basics.progress.ProgressObserver;
+import net.ssehub.easy.reasoning.core.frontend.IReasonerInstance;
 import net.ssehub.easy.reasoning.core.frontend.ReasonerFrontend;
 import net.ssehub.easy.reasoning.core.reasoner.EvaluationResult;
 import net.ssehub.easy.reasoning.core.reasoner.IReasoner;
@@ -123,6 +124,12 @@ public class DroolsReasoner implements IReasoner, IRules {
             }
         }
         return drl;
+    }
+
+    @Override
+    public IReasonerInstance createInstance(Project project, Configuration cfg,
+            ReasonerConfiguration reasonerConfiguration) {
+        return null;
     }
 
 }

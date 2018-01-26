@@ -99,6 +99,7 @@ public class Engine {
         resolver.resolve();
 //        PerformanceStatistics.addTimestamp(reasoningID);
         result.setTimeout(resolver.hasTimeout());
+        result.setStopped(resolver.wasStopped());
         FailedElements failedElements = resolver.getFailedElements();
         if (failedElements.hasProblems()) {
             constraintVariableMap = resolver.getConstraintVariableMap();
@@ -356,5 +357,62 @@ public class Engine {
     public long getReevaluationCount() {
         return reevaluationCount;
     }
-  
+
+    /**
+     * Returns whether the reasoner is (still) operating.
+     * 
+     * @return <code>true</code> for operating, <code>false</code> else
+     */
+    boolean isRunning() {
+        return resolver.isRunning();
+    }
+
+    /**
+     * Stops/terminates reasoning. If possible, a reasoner shall stop the reasoning
+     * operations as quick as possible. A reasoner must not implement this operation.
+     * 
+     * @return <code>true</code> if the reasoner tries to stop, <code>false</code> else 
+     *     (operation not implemented)
+     */
+    boolean stop() {
+        return resolver.stop();
+    }
+    
+    /**
+     * Clears this instance for reuse.
+     * 
+     * @see #markForReuse()
+     * @see #reInit()
+     */
+    void clear() {
+        this.result = new ReasoningResult();
+        nullFailedLists();
+        constraintVariableMap = null;
+        evaluationTime = 0;
+        reevaluationCount = 0;
+        failedConstraints = 0;
+        failedAssignments = 0;
+        resolver.clear();
+    }
+
+    /**
+     * Marks this instance for re-use. Must be called before the first call to {@link #resolve()}.
+     * 
+     * @see #clear()
+     * @see #reInit()
+     */
+    void markForReuse() {
+        resolver.markForReuse();
+    }
+    
+    /**
+     * Re-initializes this resolver instance to allocated resources only if really needed.
+     * 
+     * @see #markForReuse()
+     * @see #clear()
+     */
+    void reInit() {
+        resolver.reInit();
+    }
+
 }

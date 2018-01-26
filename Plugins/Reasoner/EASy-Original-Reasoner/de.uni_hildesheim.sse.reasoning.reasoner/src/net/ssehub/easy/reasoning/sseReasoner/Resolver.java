@@ -86,7 +86,9 @@ import static net.ssehub.easy.reasoning.sseReasoner.ReasoningUtils.*;
 
 /**
  * Constraint identifier, resolver and executor. Assumption that constraints are not evaluated in parallel (see some
- * comments).
+ * comments). This resolver can be re-used. Therefore, call {@link #markForReuse()} before the first call to 
+ * {@link #resolve()} and after reasoning completed, call {@link #clear()}. When performing a further reasoning on this 
+ * instance, call {@link #reInit()}.
  * 
  * @author Sizonenko
  * @author El-Sharkawy
@@ -111,6 +113,7 @@ public class Resolver {
     private VariablesMap constraintMap = new VariablesMap();
     private Map<Constraint, IDecisionVariable> constraintVariableMap = new HashMap<Constraint, IDecisionVariable>();
     private Deque<Constraint> constraintBase = new LinkedList<Constraint>();
+    private Deque<Constraint> constraintBaseCopy = null;
     private Set<Constraint> constraintBaseSet = new HashSet<Constraint>();
     private List<Constraint> defaultConstraints = new LinkedList<Constraint>();
     private List<Constraint> deferredDefaultConstraints = new LinkedList<Constraint>();
@@ -124,15 +127,18 @@ public class Resolver {
     private int reevaluationCounter = 0;
     private int variablesCounter = 0;
     private boolean hasTimeout = false;
+    private boolean isRunning = false;
+    private boolean wasStopped = false;
 
     // global temporary variables avoiding parameter passing (performance)
     
-    private transient Project project;
+    private Project project;
     private transient Set<IDecisionVariable> usedVariables = new HashSet<IDecisionVariable>(100);
     private transient CopyVisitor copyVisitor = new CopyVisitor();
     private transient Map<AbstractVariable, CompoundAccess> varMap = new HashMap<AbstractVariable, CompoundAccess>(100);
     private transient CollectionConstraintsFinder collectionFinder = new CollectionConstraintsFinder();
     private transient VariablesInConstraintsFinder variablesFinder = new VariablesInConstraintsFinder();
+    private transient ConstraintTranslationVisitor projectVisitor = new ConstraintTranslationVisitor();
 
     // >>> from here the names follows the reasoner.tex documentation
 
@@ -159,7 +165,6 @@ public class Resolver {
                 for (Constraint varConstraint : constraintsToReevaluate) {
                     if (!constraintBaseSet.contains(varConstraint)) {
                         addToConstraintBase(varConstraint);
-                        constraintCounter++;
                     }
                 }
             }
@@ -278,20 +283,18 @@ public class Resolver {
      *   </ol> 
      * </ol>
      */
-    public void resolve() { 
-        ConstraintTranslationVisitor projectVisitor = new ConstraintTranslationVisitor();
+    public void resolve() {
+        isRunning = true;
         // Stack of importedProject (start with inner most imported project)
         evaluator.init(config, null, false, listener); // also for defaults as they may refer to each other 
         evaluator.setResolutionListener(resolutionListener);
         evaluator.setScopeAssignments(scopeAssignments);
         List<Project> projects = Utils.discoverImports(config.getProject());
-        for (int p = 0; !hasTimeout && p < projects.size(); p++) {
+        for (int p = 0; !hasTimeout && !wasStopped && p < projects.size(); p++) {
             project = projects.get(p);
-            varMap.clear();
             if (Descriptor.LOGGING) {
                 LOGGER.debug("Project:" + project.getName());                
             }
-            project.accept(projectVisitor);
             translateConstraints();
             evaluateConstraints();
             // Freezes values after each scope
@@ -301,8 +304,8 @@ public class Resolver {
                 printFailedElements(failedElements);                                
             }
         }
-        variablesInConstraintsCounter = constraintMap.getDeclarationSize();
         evaluator.clear();
+        isRunning = false;
     }
     
     /**
@@ -343,11 +346,14 @@ public class Resolver {
                 hasTimeout = true;
                 break;
             }
+            if (wasStopped) {
+                break;
+            }
         }
     }
 
     /**
-     * Visits the contents of a project for translation.
+     * Visits the contents of a project for translation. Do not store stateful information in this class.
      * 
      * @author Holger Eichelberger
      */
@@ -1033,16 +1039,26 @@ public class Resolver {
      * 
      * @see #resolve()
      */
-    private void translateConstraints() { // TODO move up
-        List<Constraint> scopeConstraints = new ArrayList<Constraint>();
-        addAllConstraints(scopeConstraints, defaultConstraints, false);
-        addAllConstraints(scopeConstraints, deferredDefaultConstraints, false);
-        addAllConstraints(scopeConstraints, usualConstraintsStage1, false);
-        addAllConstraints(scopeConstraints, usualConstraintsStage2, true); // ,true is unclear for now
-        addAllToConstraintBase(scopeConstraints, incremental);
-        addAllToConstraintBase(usualConstraintsStage3, false);
-        constraintCounter = constraintCounter + constraintBase.size();
-        clearConstraintLists();
+    private void translateConstraints() {
+        // translate only if not marked for reuse and copy of constraint base is already available
+        if (null == constraintBaseCopy || constraintBaseCopy.isEmpty()) {
+            varMap.clear();
+            project.accept(projectVisitor);
+            List<Constraint> scopeConstraints = new ArrayList<Constraint>();
+            addAllConstraints(scopeConstraints, defaultConstraints, false);
+            addAllConstraints(scopeConstraints, deferredDefaultConstraints, false);
+            addAllConstraints(scopeConstraints, usualConstraintsStage1, false);
+            addAllConstraints(scopeConstraints, usualConstraintsStage2, true); // TODO true is unclear for now
+            addAllToConstraintBase(scopeConstraints, incremental);
+            addAllToConstraintBase(usualConstraintsStage3, false);
+            constraintCounter = constraintBase.size();
+            variablesInConstraintsCounter = constraintMap.getDeclarationSize();
+            clearConstraintLists();
+            // if marked for re-use, copy constraint base
+            if (null != constraintBaseCopy) {
+                constraintBaseCopy.addAll(constraintBase);
+            }
+        }
     }
 
     /**
@@ -1446,6 +1462,84 @@ public class Resolver {
      */
     boolean hasTimeout() {
         return hasTimeout;
+    }
+
+    /**
+     * Returns whether reasoning was stopped due to a user-request.
+     * 
+     * @return <code>true</code> for stopped, <code>false</code> else
+     */
+    boolean wasStopped() {
+        return wasStopped;
+    }
+
+    /**
+     * Returns whether the reasoner is (still) operating.
+     * 
+     * @return <code>true</code> for operating, <code>false</code> else
+     */
+    boolean isRunning() {
+        return isRunning;
+    }
+
+    /**
+     * Stops/terminates reasoning. If possible, a reasoner shall stop the reasoning
+     * operations as quick as possible. A reasoner must not implement this operation.
+     * 
+     * @return <code>true</code> if the reasoner tries to stop, <code>false</code> else 
+     *     (operation not implemented)
+     */
+    boolean stop() {
+        wasStopped = true;
+        return true;
+    }
+    
+    /**
+     * Marks this instance for re-use. Must be called before the first call to {@link #resolve()}.
+     */
+    void markForReuse() {
+        constraintBaseCopy  = new LinkedList<Constraint>();
+    }
+
+    /**
+     * Clears this instance for reuse to free most of the resources.
+     * 
+     * @see #markForReuse()
+     * @see #reInit()
+     */
+    void clear() {
+        clearConstraintLists();
+        failedElements.clear();
+        scopeAssignments.clearScopeAssignments();
+        // keep the constraintMap
+        // keep the constraintVariableMap
+        constraintBase.clear();
+        constraintBaseSet.clear();
+        // keep constraintCounter - is set during translation
+        // keep variablesInConstraintsCounter - is set during translation
+        reevaluationCounter = 0;
+        // keep variablesCounter - is set during translation
+        hasTimeout = false;
+        isRunning = false;
+        wasStopped = false;
+        usedVariables.clear();
+        copyVisitor.clear();
+        varMap.clear();
+        collectionFinder.clear();
+        variablesFinder.clear();
+    }
+    
+    /**
+     * Re-initializes this resolver instance to allocated resources only if really needed.
+     * 
+     * @see #markForReuse()
+     * @see #reInit()
+     */
+    void reInit() {
+        if (null != constraintBaseCopy) {
+            constraintBase.addAll(constraintBaseCopy);
+            constraintBaseSet.addAll(constraintBaseCopy);
+        }
     }
 
 }
