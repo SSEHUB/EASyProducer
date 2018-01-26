@@ -1045,12 +1045,10 @@ public class Resolver {
         if (null == constraintBaseCopy || constraintBaseCopy.isEmpty()) {
             varMap.clear();
             project.accept(projectVisitor);
-            List<Constraint> scopeConstraints = new ArrayList<Constraint>();
-            addAllConstraints(scopeConstraints, defaultConstraints);
-            addAllConstraints(scopeConstraints, deferredDefaultConstraints);
-            addAllConstraints(scopeConstraints, usualConstraintsStage1);
-            addAllConstraints(scopeConstraints, usualConstraintsStage2);
-            addAllToConstraintBase(scopeConstraints);
+            addAllToConstraintBase(defaultConstraints);
+            addAllToConstraintBase(deferredDefaultConstraints);
+            addAllToConstraintBase(usualConstraintsStage1);
+            addAllToConstraintBase(usualConstraintsStage2);
             addAllToConstraintBase(usualConstraintsStage3);
             constraintCounter = constraintBase.size();
             variablesInConstraintsCounter = constraintMap.getDeclarationSize();
@@ -1075,6 +1073,13 @@ public class Resolver {
         boolean add = true;
         if (incremental) {
             add = !CSTUtils.isAssignment(cst);
+        }
+        if (add && !considerFrozenConstraints) {
+            variablesFinder.setConfiguration(config);
+            cst.accept(variablesFinder);
+            Set<IAssignmentState> states = variablesFinder.getStates();
+            add = (!(1 == states.size() && states.contains(AssignmentState.FROZEN)));
+            variablesFinder.clear();
         }
         if (add) {
             if (checkForInitializers) {
@@ -1194,32 +1199,6 @@ public class Resolver {
             allAssignmentConstraints(assng.getAssignment(a), result);
         }
     }    
-    
-    /**
-     * Adds the constraints of <tt>constraintsToAdd</tt> to <tt>scopeConstraints</tt> while considering
-     * {@link #considerFrozenConstraints}.
-     * @param scopeConstraints The list of constraints for the current reasoning process
-     *     (will be changed as side effect).
-     * @param constraintsToAdd The constraints to be added to <tt>scopeConstraints</tt>.
-     */
-    private void addAllConstraints(List<Constraint> scopeConstraints, List<Constraint> constraintsToAdd) {
-        if (constraintsToAdd.size() > 0) {
-            if (considerFrozenConstraints) {
-                scopeConstraints.addAll(constraintsToAdd);
-            } else { // TODO does removing completely (!) frozen constraints work in runtime reasoning?
-                for (int i = 0, n = constraintsToAdd.size(); i < n; i++) {
-                    Constraint currentConstraint = constraintsToAdd.get(i);
-                    variablesFinder.setConfiguration(config);
-                    currentConstraint.getConsSyntax().accept(variablesFinder);
-                    Set<IAssignmentState> states = variablesFinder.getStates();
-                    if (!(1 == states.size() && states.contains(AssignmentState.FROZEN))) {
-                        scopeConstraints.add(currentConstraint);
-                    }
-                    variablesFinder.clear();
-                }
-            }
-        }
-    }
 
     // <<< documented until here    
     
