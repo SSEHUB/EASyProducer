@@ -219,7 +219,7 @@ public class ExperimentsControlTests extends AbstractTest {
      * @throws IvmlException shall not occur
      */
     @Test
-    public void controlDefaults1() throws IOException, ModelQueryException, IvmlException {
+    public void testControlDefaults1() throws IOException, ModelQueryException, IvmlException {
         testDefaults("defaults1");
     }
 
@@ -231,7 +231,7 @@ public class ExperimentsControlTests extends AbstractTest {
      * @throws IvmlException shall not occur
      */
     @Test
-    public void controlDefaults2() throws IOException, ModelQueryException, IvmlException {
+    public void testControlDefaults2() throws IOException, ModelQueryException, IvmlException {
         testDefaults("defaults2");
     }
 
@@ -245,7 +245,7 @@ public class ExperimentsControlTests extends AbstractTest {
      * @throws IvmlException shall not occur
      */
     @Test
-    public void controlDefaults3() throws IOException, ModelQueryException, IvmlException {
+    public void testControlDefaults3() throws IOException, ModelQueryException, IvmlException {
         testDefaults("defaults3");
     }
 
@@ -257,8 +257,25 @@ public class ExperimentsControlTests extends AbstractTest {
      * @throws IvmlException shall not occur
      */
     @Test
-    public void controlDefaults4() throws IOException, ModelQueryException, IvmlException {
+    public void testControlDefaults4() throws IOException, ModelQueryException, IvmlException {
         testDefaults("defaults4");
+    }
+
+    /**
+     * Tests inherited sub-constraints enabled/disabled through default values (from QM).
+     * 
+     * @throws IOException shall not occur
+     * @throws ModelQueryException shall not occur
+     * @throws IvmlException shall not occur
+     */
+    @Test
+    public void testSub() throws IOException, ModelQueryException, IvmlException {
+        Configuration config = createAndAssertEqual("configSub");
+        ReasonerConfiguration rConfig = new ReasonerConfiguration();
+        rConfig.setAdditionalInformationLogger(ReasonerConfiguration.ADDITIONAL_INFO_LOG_NONE);
+        ReasoningResult res = ReasonerFrontend.getInstance().propagate(config.getProject(), config, rConfig, 
+            ProgressObserver.NO_OBSERVER);
+        Assert.assertFalse("there should not be reasoning conflicts", res.hasConflict());
     }
 
 }
