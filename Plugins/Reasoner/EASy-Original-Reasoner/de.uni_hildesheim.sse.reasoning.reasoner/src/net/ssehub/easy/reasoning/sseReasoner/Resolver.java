@@ -1071,24 +1071,30 @@ public class Resolver {
      */
     private void addConstraint(Collection<Constraint> target, Constraint constraint, boolean checkForInitializers) {
         ConstraintSyntaxTree cst = constraint.getConsSyntax();
-        if (checkForInitializers) {
-            collectionFinder.accept(cst);
-            if (collectionFinder.isConstraintCollection()) {
-                checkContainerInitializer(collectionFinder.getExpression(), false, constraint.getParent());
-            }
-            if (collectionFinder.isCompoundInitializer()) {
-                checkCompoundInitializer(collectionFinder.getExpression(), true, constraint.getParent());
-            }
-            collectionFinder.clear();
+        boolean add = true;
+        if (incremental) {
+            add = !CSTUtils.isAssignment(cst);
         }
-        target.add(constraint);
-        variablesFinder.accept(cst);
-        if (!variablesFinder.isSimpleAssignment()) { 
-            for (AbstractVariable declaration : variablesFinder.getVariables()) {
-                constraintMap.add(declaration, constraint);                       
+        if (add) {
+            if (checkForInitializers) {
+                collectionFinder.accept(cst);
+                if (collectionFinder.isConstraintCollection()) {
+                    checkContainerInitializer(collectionFinder.getExpression(), false, constraint.getParent());
+                }
+                if (collectionFinder.isCompoundInitializer()) {
+                    checkCompoundInitializer(collectionFinder.getExpression(), true, constraint.getParent());
+                }
+                collectionFinder.clear();
             }
+            target.add(constraint);
+            variablesFinder.accept(cst);
+            if (!variablesFinder.isSimpleAssignment()) { 
+                for (AbstractVariable declaration : variablesFinder.getVariables()) {
+                    constraintMap.add(declaration, constraint);                       
+                }
+            }
+            variablesFinder.clear();
         }
-        variablesFinder.clear();
     }
 
     /**
@@ -1319,20 +1325,8 @@ public class Resolver {
      * @param validationOnly add only validation constraints (<code>true</code>) or all constraints (<code>false</code>)
      */
     private void addAllToConstraintBase(Collection<Constraint> constraints, boolean validationOnly) {
-        if (constraints.size() > 0) {
-            if (validationOnly) { // TODO move up before adding/creating
-                for (Constraint cst : constraints) {
-                    if (!CSTUtils.isAssignment(cst.getConsSyntax())) {
-                        constraintBase.add(cst);
-                        constraintBaseSet.add(cst);
-                    }
-                }
-                
-            } else {
-                constraintBase.addAll(constraints);
-                constraintBaseSet.addAll(constraints);
-            }
-        }
+        constraintBase.addAll(constraints);
+        constraintBaseSet.addAll(constraints);
     }
 
     /**
