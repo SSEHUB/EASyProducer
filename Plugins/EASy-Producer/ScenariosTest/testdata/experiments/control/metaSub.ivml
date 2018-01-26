@@ -1,0 +1,16 @@
+project MetaSub {
+
+    compound Structure {
+        String name;
+        setOf(Integer) next;
+        Boolean isSub = false;
+        Constraint nextCount = if isSub == false then next.size() > 0 else true endif;
+        Constraint nextCount1 = isSub == false implies next.size() > 0;
+        Constraint nextCheck = isDefined(next);
+    }
+    
+    compound SubStructure refines Structure {
+        isSub = true;
+    }
+    
+}
