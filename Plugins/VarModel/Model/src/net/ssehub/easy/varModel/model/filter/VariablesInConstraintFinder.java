@@ -41,19 +41,46 @@ public class VariablesInConstraintFinder extends AbstractVariableInConstraintFin
     private Set<IDecisionVariable> variables;
     private Set<IAssignmentState> states;
     private Configuration config;
-    
+
     /**
-     * Sole constructor for this class.
+     * Creates a constraint finder for reuse. Call {@link #setConfiguration(Configuration)} first, accept then the 
+     * constraint to be analyzed and call {@link #clear()} afterwards to make the visitor instance ready for reuse.
+     * 
+     * (must not be <tt>null</tt>).
+     */
+    public VariablesInConstraintFinder() {
+        super(false);
+        clear();
+    }
+
+    /**
+     * Creates a constraint finder for single use directly on <code>cst</code>.
+     * 
      * @param cst A constraint where all nested {@link IDecisionVariable}'s should be found.
      * @param config The related Configuration of the project to where the <tt>cst</tt> belongs to
      * (must not be <tt>null</tt>).
      */
     public VariablesInConstraintFinder(ConstraintSyntaxTree cst, Configuration config) {
-        super(false);
+        this();
+        setConfiguration(config);
+        cst.accept(this);
+    }
+
+    /**
+     * Defines the configuration to work on.
+     * 
+     * @param config the configuration
+     */
+    public void setConfiguration(Configuration config) {
         this.config = config;
+    }
+
+    /**
+     * Clears this visitor for reuse.
+     */
+    public void clear() {
         variables = new HashSet<IDecisionVariable>();
         states = new HashSet<IAssignmentState>();
-        cst.accept(this);
     }
     
     /**
