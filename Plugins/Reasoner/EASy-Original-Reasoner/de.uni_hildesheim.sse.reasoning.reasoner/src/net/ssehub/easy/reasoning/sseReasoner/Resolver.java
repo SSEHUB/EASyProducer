@@ -132,6 +132,7 @@ public class Resolver {
     private transient CopyVisitor copyVisitor = new CopyVisitor();
     private transient Map<AbstractVariable, CompoundAccess> varMap = new HashMap<AbstractVariable, CompoundAccess>(100);
     private transient CollectionConstraintsFinder collectionFinder = new CollectionConstraintsFinder();
+    private transient VariablesInConstraintsFinder variablesFinder = new VariablesInConstraintsFinder();
 
     // >>> from here the names follows the reasoner.tex documentation
 
@@ -1032,17 +1033,13 @@ public class Resolver {
      * 
      * @see #resolve()
      */
-    private void translateConstraints() { 
+    private void translateConstraints() { // TODO move up
         List<Constraint> scopeConstraints = new ArrayList<Constraint>();
-        addAllConstraints(scopeConstraints, defaultConstraints);
-        addAllConstraints(scopeConstraints, deferredDefaultConstraints);
-        addAllConstraints(scopeConstraints, usualConstraintsStage1);
-        scopeConstraints.addAll(usualConstraintsStage2);
-        if (scopeConstraints.size() > 0) {
-            assignConstraintsToVariables(scopeConstraints);
-            addAllToConstraintBase(scopeConstraints, incremental);
-            scopeConstraints.clear();
-        }
+        addAllConstraints(scopeConstraints, defaultConstraints, false);
+        addAllConstraints(scopeConstraints, deferredDefaultConstraints, false);
+        addAllConstraints(scopeConstraints, usualConstraintsStage1, false);
+        addAllConstraints(scopeConstraints, usualConstraintsStage2, true); // ,true is unclear for now
+        addAllToConstraintBase(scopeConstraints, incremental);
         addAllToConstraintBase(usualConstraintsStage3, false);
         constraintCounter = constraintCounter + constraintBase.size();
         clearConstraintLists();
@@ -1057,8 +1054,9 @@ public class Resolver {
      * @param checkForInitializers check also for initializers if (<code>true</code>), add only if (<code>false</code>)
      */
     private void addConstraint(Collection<Constraint> target, Constraint constraint, boolean checkForInitializers) {
+        ConstraintSyntaxTree cst = constraint.getConsSyntax();
         if (checkForInitializers) {
-            collectionFinder.accept(constraint.getConsSyntax());
+            collectionFinder.accept(cst);
             if (collectionFinder.isConstraintCollection()) {
                 checkContainerInitializer(collectionFinder.getExpression(), false, constraint.getParent());
             }
@@ -1068,6 +1066,13 @@ public class Resolver {
             collectionFinder.clear();
         }
         target.add(constraint);
+        variablesFinder.accept(cst);
+        if (!variablesFinder.isSimpleAssignment()) { 
+            for (AbstractVariable declaration : variablesFinder.getVariables()) {
+                constraintMap.add(declaration, constraint);                       
+            }
+        }
+        variablesFinder.clear();
     }
 
     /**
@@ -1173,10 +1178,12 @@ public class Resolver {
      * @param scopeConstraints The list of constraints for the current reasoning process
      *     (will be changed as side effect).
      * @param constraintsToAdd The constraints to be added to <tt>scopeConstraints</tt>.
+     * @param addAlways override {@link #considerFrozenConstraints} and add always
      */
-    private void addAllConstraints(List<Constraint> scopeConstraints, List<Constraint> constraintsToAdd) {
+    private void addAllConstraints(List<Constraint> scopeConstraints, List<Constraint> constraintsToAdd, 
+        boolean addAlways) {
         if (constraintsToAdd.size() > 0) {
-            if (considerFrozenConstraints) {
+            if (considerFrozenConstraints || addAlways) {
                 scopeConstraints.addAll(constraintsToAdd);
             } else { // TODO does removing completely (!) frozen constraints work in runtime reasoning?
                 for (int i = 0, n = constraintsToAdd.size(); i < n; i++) {
@@ -1188,24 +1195,6 @@ public class Resolver {
                         scopeConstraints.add(currentConstraint);
                     }
                 }
-            }
-        }
-    }
-
-    /**
-     * Fills the relation between used variables and constraints into {@link #constraintMap}.
-     *
-     * @param constraints Constraints to be checked for variables.
-     */
-    private void assignConstraintsToVariables(List<Constraint> constraints) {
-        for (Constraint constraint : constraints) { 
-            if (constraint.getConsSyntax() != null) {
-                VariablesInConstraintsFinder varFinder = new VariablesInConstraintsFinder(constraint.getConsSyntax());
-                if (!varFinder.isSimpleAssignment()) { // TODO reuse?
-                    for (AbstractVariable declaration : varFinder.getVariables()) {
-                        constraintMap.add(declaration, constraint);                       
-                    }
-                }                    
             }
         }
     }

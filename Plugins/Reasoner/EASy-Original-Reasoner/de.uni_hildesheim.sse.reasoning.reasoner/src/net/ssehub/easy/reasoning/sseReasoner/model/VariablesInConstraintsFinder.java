@@ -1,6 +1,5 @@
 package net.ssehub.easy.reasoning.sseReasoner.model;
 
-import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -35,50 +34,31 @@ import net.ssehub.easy.varModel.model.values.Value;
 public class VariablesInConstraintsFinder implements IConstraintTreeVisitor {
 
     private Set<AbstractVariable> variables;
-    private AbstractVariable checkedVariable;
-    private boolean containsVariable;
     private boolean isSimpleAssignment;
     
-    
     /**
-     * Constructor of the visitor. Uses collection of constraints.
-     * @param constraints Constraints that is visited to retrieve variables.
+     * Creates a visitor instance.
      */
-    public VariablesInConstraintsFinder(Collection<ConstraintSyntaxTree> constraints) {
-        variables = new HashSet<AbstractVariable>();
-        containsVariable = false;
-        for (ConstraintSyntaxTree constraintSyntaxTree : constraints) {
-            isSimpleAssignment = false;
-            constraintSyntaxTree.accept(this);            
-        }
-    }
-    
-    /**
-     * Constructor of the visitor. Uses a single constraint.
-     * @param constraint Constraint that is visited to retrieve variables.
-     */
-    public VariablesInConstraintsFinder(ConstraintSyntaxTree constraint) {
+    public VariablesInConstraintsFinder() {
         variables = new HashSet<AbstractVariable>(); 
         isSimpleAssignment = false;
-        containsVariable = false;
-        if (constraint != null) {
-            constraint.accept(this);           
-        }
+    }
+
+    /**
+     * Accepts and visits a constraint.
+     * 
+     * @param cst the constraint to accept
+     */
+    public void accept(ConstraintSyntaxTree cst) {
+        cst.accept(this);           
     }
     
     /**
-     * Constructor of the visitor. Uses a single constraint.
-     * @param variable {@link AbstractVariable} to check.
-     * @param constraint Constraint that is visited to retrieve variables.
+     * Clears this visitor for reuse.
      */
-    public VariablesInConstraintsFinder(AbstractVariable variable, ConstraintSyntaxTree constraint) {
-        variables = new HashSet<AbstractVariable>();
+    public void clear() {
+        variables.clear();
         isSimpleAssignment = false;
-        containsVariable = false;
-        checkedVariable = variable;
-        if (constraint != null) {
-            constraint.accept(this);           
-        }        
     }
     
     /**
@@ -88,14 +68,6 @@ public class VariablesInConstraintsFinder implements IConstraintTreeVisitor {
     public Set<AbstractVariable> getVariables() {
         return variables;
     } 
-    
-    /**
-     * Method for analyzing if constraint contains specific variable.
-     * @return true if does.
-     */
-    public boolean containsVariable() {
-        return containsVariable;
-    }
     
     /**
      * Method for analyzing if constraint is valid for reevaluation (is not a simple aasignment).
@@ -121,12 +93,6 @@ public class VariablesInConstraintsFinder implements IConstraintTreeVisitor {
     public void visitVariable(Variable variable) {
         AbstractVariable wrappedDeclaration = variable.getVariable();        
         variables.add(wrappedDeclaration);
-        
-        if (checkedVariable != null) {
-            if (variable.getVariable().getName().equals(checkedVariable.getName())) {
-                containsVariable = true;
-            }            
-        }
     }
     
     @Override
@@ -199,11 +165,7 @@ public class VariablesInConstraintsFinder implements IConstraintTreeVisitor {
         try {
             access.inferDatatype();
             variables.add(access.getResolvedSlot());
-            if (access.getResolvedSlot().equals(checkedVariable)) {
-                containsVariable = true;
-            }
         } catch (CSTSemanticException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
         
