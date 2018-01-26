@@ -137,8 +137,9 @@ public class Resolver {
     private transient CopyVisitor copyVisitor = new CopyVisitor();
     private transient Map<AbstractVariable, CompoundAccess> varMap = new HashMap<AbstractVariable, CompoundAccess>(100);
     private transient CollectionConstraintsFinder collectionFinder = new CollectionConstraintsFinder();
-    private transient VariablesInConstraintsFinder variablesFinder = new VariablesInConstraintsFinder();
+    private transient VariablesInConstraintsFinder simpleAssignmentFinder = new VariablesInConstraintsFinder();
     private transient ConstraintTranslationVisitor projectVisitor = new ConstraintTranslationVisitor();
+    private transient VariablesInConstraintFinder variablesFinder = new VariablesInConstraintFinder();
 
     // >>> from here the names follows the reasoner.tex documentation
 
@@ -1048,7 +1049,7 @@ public class Resolver {
             addAllConstraints(scopeConstraints, defaultConstraints, false);
             addAllConstraints(scopeConstraints, deferredDefaultConstraints, false);
             addAllConstraints(scopeConstraints, usualConstraintsStage1, false);
-            addAllConstraints(scopeConstraints, usualConstraintsStage2, true); // TODO true is unclear for now
+            addAllConstraints(scopeConstraints, usualConstraintsStage2, false); // TODO true is unclear for now
             addAllToConstraintBase(scopeConstraints);
             addAllToConstraintBase(usualConstraintsStage3);
             constraintCounter = constraintBase.size();
@@ -1087,13 +1088,13 @@ public class Resolver {
                 collectionFinder.clear();
             }
             target.add(constraint);
-            variablesFinder.accept(cst);
-            if (!variablesFinder.isSimpleAssignment()) { 
-                for (AbstractVariable declaration : variablesFinder.getVariables()) {
+            simpleAssignmentFinder.accept(cst);
+            if (!simpleAssignmentFinder.isSimpleAssignment()) { 
+                for (AbstractVariable declaration : simpleAssignmentFinder.getVariables()) {
                     constraintMap.add(declaration, constraint);                       
                 }
             }
-            variablesFinder.clear();
+            simpleAssignmentFinder.clear();
         }
     }
 
@@ -1210,12 +1211,13 @@ public class Resolver {
             } else { // TODO does removing completely (!) frozen constraints work in runtime reasoning?
                 for (int i = 0, n = constraintsToAdd.size(); i < n; i++) {
                     Constraint currentConstraint = constraintsToAdd.get(i);
-                    VariablesInConstraintFinder finder = new VariablesInConstraintFinder( // TODO reuse?
-                        currentConstraint.getConsSyntax(), config);
-                    Set<IAssignmentState> states = finder.getStates();
+                    variablesFinder.setConfiguration(config);
+                    currentConstraint.getConsSyntax().accept(variablesFinder);
+                    Set<IAssignmentState> states = variablesFinder.getStates();
                     if (!(1 == states.size() && states.contains(AssignmentState.FROZEN))) {
                         scopeConstraints.add(currentConstraint);
                     }
+                    variablesFinder.clear();
                 }
             }
         }
@@ -1519,7 +1521,7 @@ public class Resolver {
         copyVisitor.clear();
         varMap.clear();
         collectionFinder.clear();
-        variablesFinder.clear();
+        simpleAssignmentFinder.clear();
     }
     
     /**
