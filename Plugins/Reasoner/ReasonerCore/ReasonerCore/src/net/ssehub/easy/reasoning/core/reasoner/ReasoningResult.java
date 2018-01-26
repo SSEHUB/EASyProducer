@@ -17,6 +17,7 @@ public class ReasoningResult {
     private List<Message> messages = new ArrayList<Message>();
     private boolean hasConflict;
     private boolean hasTimeout;
+    private boolean wasStopped;
 
     /**
      * General constructor for new ReasoningResults.
@@ -62,14 +63,23 @@ public class ReasoningResult {
     }
 
     /**
-     * Returns whether reasoning was stopped due to a timeout.
+     * Changes whether reasoning was stopped due to a timeout.
      * 
      * @param hasTimeout <code>true</code> for timeout, <code>false</code> else
      */
     public void setTimeout(boolean hasTimeout) {
         this.hasTimeout = hasTimeout;
     }
-    
+
+    /**
+     * Changes whether reasoning was stopped due to a user request.
+     * 
+     * @param wasStopped <code>true</code> for stopped, <code>false</code> else
+     */
+    public void setStopped(boolean wasStopped) {
+        this.wasStopped = wasStopped;
+    }
+
     /**
      * Returns whether reasoning was stopped due to a timeout.
      * 
@@ -77,6 +87,15 @@ public class ReasoningResult {
      */
     public boolean hasTimeout() {
         return hasTimeout;
+    }
+
+    /**
+     * Returns whether reasoning was stopped due to a user request.
+     * 
+     * @return <code>true</code> for stopped, <code>false</code> else
+     */
+    public boolean wasStopped() {
+        return wasStopped;
     }
 
     /**

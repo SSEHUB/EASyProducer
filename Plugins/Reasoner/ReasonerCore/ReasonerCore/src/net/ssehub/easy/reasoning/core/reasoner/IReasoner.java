@@ -4,6 +4,7 @@ import java.net.URI;
 import java.util.List;
 
 import net.ssehub.easy.basics.progress.ProgressObserver;
+import net.ssehub.easy.reasoning.core.frontend.IReasonerInstance;
 import net.ssehub.easy.varModel.confModel.Configuration;
 import net.ssehub.easy.varModel.model.Constraint;
 import net.ssehub.easy.varModel.model.Project;
@@ -113,6 +114,19 @@ public interface IReasoner {
      */
     public void notify(IReasonerMessage message);
     
-    
+    /**
+     * Creates a reasoner instance for repeated reasoning on the same model (no structural changes allowed
+     * during two subsequent reasoning runs).
+     * 
+     * @param project
+     *            The project which serves as basis for the related configuration.
+     * @param cfg
+     *            the configuration as a basis for the evaluation
+     * @param reasonerConfiguration the reasoner configuration to be used for reasoning (e.g. taken from the UI, 
+     *        may be <b>null</b>)
+     * @return a reusable reasoner instance, may be <b>null</b> if the reasoner does not support this
+     */
+    public IReasonerInstance createInstance(Project project, Configuration cfg, 
+        ReasonerConfiguration reasonerConfiguration);
 
 }

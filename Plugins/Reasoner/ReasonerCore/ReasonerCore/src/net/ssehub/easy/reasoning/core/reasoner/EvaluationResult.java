@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import net.ssehub.easy.varModel.model.Constraint;
+import net.ssehub.easy.varModel.model.values.Value;
 
 /**
  * A specific reasoning result for evaluations of presence conditions.
@@ -43,6 +44,7 @@ public class EvaluationResult extends ReasoningResult {
     public static class EvaluationPair {
         private Constraint constraint;
         private ConstraintEvaluationResult result;
+        private Value value;
 
         /**
          * Creates a pair with an unknown evaluation result.
@@ -50,7 +52,7 @@ public class EvaluationResult extends ReasoningResult {
          * @param constraint the constraint
          */
         public EvaluationPair(Constraint constraint) {
-            this(constraint, ConstraintEvaluationResult.UNKNOWN);
+            this(constraint, ConstraintEvaluationResult.UNKNOWN, null);
         }
 
         /**
@@ -60,8 +62,20 @@ public class EvaluationResult extends ReasoningResult {
          * @param result the evaluation result
          */
         public EvaluationPair(Constraint constraint, ConstraintEvaluationResult result) {
+            this(constraint, result, null);
+        }
+
+        /**
+         * Creates a pair with a given evaluation result.
+         * 
+         * @param constraint the constraint
+         * @param result the evaluation result
+         * @param value the evaluated value (may be <b>null</b>)
+         */
+        public EvaluationPair(Constraint constraint, ConstraintEvaluationResult result, Value value) {
             this.constraint = constraint;
             this.result = result;
+            this.value = value;
         }
 
         /**
@@ -91,6 +105,16 @@ public class EvaluationResult extends ReasoningResult {
         public ConstraintEvaluationResult getResult() {
             return result;
         }
+        
+        /**
+         * Returns the evaluated value.
+         * 
+         * @return the value (may be <b>null</b>)
+         */
+        public Value getValue() {
+            return value;
+        }
+        
     }
 
     private List<EvaluationPair> evaluatedConstraints = new ArrayList<EvaluationPair>();
