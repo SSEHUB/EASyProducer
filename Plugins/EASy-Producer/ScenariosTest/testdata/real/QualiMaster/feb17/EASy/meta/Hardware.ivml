@@ -11,7 +11,7 @@ project Hardware {
 		NonEmptyString name;
 		MemorySize memory;          // open
 		PositiveInteger processors; // open
-		NonNegativeReal executors;  // may be 0, shall not process then
+		NaturalNumber executors;    // may be 0, shall not process then
 		Frequency frequency;        // open
 		setOf(PortInteger) ports;
 		MachineRole role;
