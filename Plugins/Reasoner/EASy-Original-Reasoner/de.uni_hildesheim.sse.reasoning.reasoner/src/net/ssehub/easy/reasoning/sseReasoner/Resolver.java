@@ -1046,10 +1046,10 @@ public class Resolver {
             varMap.clear();
             project.accept(projectVisitor);
             List<Constraint> scopeConstraints = new ArrayList<Constraint>();
-            addAllConstraints(scopeConstraints, defaultConstraints, false);
-            addAllConstraints(scopeConstraints, deferredDefaultConstraints, false);
-            addAllConstraints(scopeConstraints, usualConstraintsStage1, false);
-            addAllConstraints(scopeConstraints, usualConstraintsStage2, false); // TODO true is unclear for now
+            addAllConstraints(scopeConstraints, defaultConstraints);
+            addAllConstraints(scopeConstraints, deferredDefaultConstraints);
+            addAllConstraints(scopeConstraints, usualConstraintsStage1);
+            addAllConstraints(scopeConstraints, usualConstraintsStage2);
             addAllToConstraintBase(scopeConstraints);
             addAllToConstraintBase(usualConstraintsStage3);
             constraintCounter = constraintBase.size();
@@ -1201,12 +1201,10 @@ public class Resolver {
      * @param scopeConstraints The list of constraints for the current reasoning process
      *     (will be changed as side effect).
      * @param constraintsToAdd The constraints to be added to <tt>scopeConstraints</tt>.
-     * @param addAlways override {@link #considerFrozenConstraints} and add always
      */
-    private void addAllConstraints(List<Constraint> scopeConstraints, List<Constraint> constraintsToAdd, 
-        boolean addAlways) {
+    private void addAllConstraints(List<Constraint> scopeConstraints, List<Constraint> constraintsToAdd) {
         if (constraintsToAdd.size() > 0) {
-            if (considerFrozenConstraints || addAlways) {
+            if (considerFrozenConstraints) {
                 scopeConstraints.addAll(constraintsToAdd);
             } else { // TODO does removing completely (!) frozen constraints work in runtime reasoning?
                 for (int i = 0, n = constraintsToAdd.size(); i < n; i++) {
