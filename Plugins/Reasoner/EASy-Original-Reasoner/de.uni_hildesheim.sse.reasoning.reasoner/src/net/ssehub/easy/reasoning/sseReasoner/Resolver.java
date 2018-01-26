@@ -117,9 +117,8 @@ public class Resolver {
     private Set<Constraint> constraintBaseSet = new HashSet<Constraint>();
     private List<Constraint> defaultConstraints = new LinkedList<Constraint>();
     private List<Constraint> deferredDefaultConstraints = new LinkedList<Constraint>();
-    private List<Constraint> usualConstraintsStage1 = new LinkedList<Constraint>();
-    private List<Constraint> usualConstraintsStage2 = new LinkedList<Constraint>();
-    private List<Constraint> usualConstraintsStage3 = new LinkedList<Constraint>();
+    private List<Constraint> topLevelConstraints = new LinkedList<Constraint>();
+    private List<Constraint> otherConstraints = new LinkedList<Constraint>();
     
     // Stats
     private int constraintCounter = 0;
@@ -414,7 +413,7 @@ public class Resolver {
 
         @Override // collect all top-level/enum/attribute assignment constraints
         public void visitConstraint(Constraint constraint) {
-            addConstraint(usualConstraintsStage1, constraint, true); // topLevelConstraints
+            addConstraint(topLevelConstraints, constraint, true); // topLevelConstraints
         }
 
         @Override
@@ -493,7 +492,7 @@ public class Resolver {
                     // Should be in same project as the declaration belongs to
                     try { // derivedTypeConstraints
                         ConstraintSyntaxTree tmp = substituteVariables(cst[c], null);
-                        addConstraint(usualConstraintsStage1, new Constraint(tmp, topLevelParent), true);
+                        addConstraint(topLevelConstraints, new Constraint(tmp, topLevelParent), true);
                     } catch (CSTSemanticException e) {
                         LOGGER.exception(e);
                     }
@@ -551,7 +550,7 @@ public class Resolver {
                     }
                     defaultValue = new OCLFeatureCall(op, OclKeyWords.ASSIGNMENT, defaultValue);
                     defaultValue.inferDatatype(); // defaultAnnotationConstraints
-                    addConstraint(usualConstraintsStage3, new DefaultConstraint(defaultValue, project), false);
+                    addConstraint(otherConstraints, new DefaultConstraint(defaultValue, project), false);
                 } catch (CSTSemanticException e) {
                     e.printStackTrace();
                 }                    
@@ -605,7 +604,7 @@ public class Resolver {
         } else {
             defaultValue = null;
         } // collectionCompoundConstraints
-        translateCollectionCompoundConstraints(decl, var, null, usualConstraintsStage2); 
+        translateCollectionCompoundConstraints(decl, var, null, otherConstraints); 
         if (TypeQueries.isContainer(type)) {            
             IDatatype containedType = ((Container) type).getContainedType();
             if (containedType instanceof DerivedDatatype) {
@@ -619,7 +618,7 @@ public class Resolver {
                         variablesCounter--;
                         // use closest parent instead of project -> runtime analysis
                         Constraint constraint = new Constraint(defaultValue, var.getDeclaration());
-                        addConstraint(usualConstraintsStage2, constraint, true); // constraintVariablesConstraints
+                        addConstraint(otherConstraints, constraint, true); // constraintVariablesConstraints
                         constraintVariableMap.put(constraint, var); // just for reasoning messages
                         if (Descriptor.LOGGING) {
                             LOGGER.debug(var.getDeclaration().getName() + " project constraint variable " 
@@ -708,7 +707,7 @@ public class Resolver {
                 try {
                     typeCst.inferDatatype();
                     typeCst = substituteVariables(typeCst, null); // derivedTypeConstraints
-                    addConstraint(usualConstraintsStage1, new Constraint(typeCst, project), true);                    
+                    addConstraint(topLevelConstraints, new Constraint(typeCst, project), true);                    
                 } catch (CSTSemanticException e) {
                     LOGGER.exception(e);
                 }            
@@ -840,7 +839,7 @@ public class Resolver {
                 createConstraintVariableConstraint(nestedDecl.getDefaultValue(), decl, nestedDecl, nestedVar);
             } // compoundConstraints
             translateCollectionCompoundConstraints(nestedDecl, variable, varMap.get(nestedDecl), 
-                usualConstraintsStage2);
+                otherConstraints);
         }
         // Nested attribute assignments handling
         if (!incremental) {
@@ -856,7 +855,7 @@ public class Resolver {
             oneConstraint = substituteVariables(oneConstraint, new Variable(decl));
             try { // compoundConstraints
                 Constraint constraint = new Constraint(oneConstraint, decl);
-                addConstraint(usualConstraintsStage2, constraint, true);            
+                addConstraint(otherConstraints, constraint, true);            
             } catch (CSTSemanticException e) {
                 LOGGER.exception(e);
             }               
@@ -895,7 +894,7 @@ public class Resolver {
                 ConstraintSyntaxTree cst = substituteVariables(evalCst, null);
                 try {
                     cst.inferDatatype(); // compoundEvalConstraints
-                    addConstraint(usualConstraintsStage2, new Constraint(cst, project), true);
+                    addConstraint(otherConstraints, new Constraint(cst, project), true);
                 } catch (CSTSemanticException e) {
                     LOGGER.exception(e);
                 } 
@@ -920,7 +919,7 @@ public class Resolver {
             cst = substituteVariables(cst, new Variable(decl));
             try {
                 constraint = new Constraint(cst, parent);
-                addConstraint(usualConstraintsStage2, constraint, true); // constraintVariablesConstraints
+                addConstraint(otherConstraints, constraint, true); // constraintVariablesConstraints
                 //after refactoring duplicate check for ConstraintVariable is needed
                 IDatatype nestedType = nestedVariable.getDeclaration().getType();
                 if (TypeQueries.isContainer(nestedType)) {
@@ -1027,7 +1026,7 @@ public class Resolver {
                 substituteVariables(assignment.getExpression(), null));
             inferTypeSafe(cst, null);
             try { // assignedAttributeConstraints
-                addConstraint(usualConstraintsStage3, new Constraint(cst, project), false); 
+                addConstraint(otherConstraints, new Constraint(cst, project), false); 
             } catch (CSTSemanticException e) {
                 LOGGER.exception(e);
             }
@@ -1047,9 +1046,8 @@ public class Resolver {
             project.accept(projectVisitor);
             addAllToConstraintBase(defaultConstraints);
             addAllToConstraintBase(deferredDefaultConstraints);
-            addAllToConstraintBase(usualConstraintsStage1);
-            addAllToConstraintBase(usualConstraintsStage2);
-            addAllToConstraintBase(usualConstraintsStage3);
+            addAllToConstraintBase(topLevelConstraints);
+            addAllToConstraintBase(otherConstraints);
             constraintCounter = constraintBase.size();
             variablesInConstraintsCounter = constraintMap.getDeclarationSize();
             clearConstraintLists();
@@ -1141,7 +1139,7 @@ public class Resolver {
                 }
                 try {
                     constraint.setConsSyntax(cst);
-                    addConstraint(usualConstraintsStage2, constraint, false); // collectionConstraints
+                    addConstraint(otherConstraints, constraint, false); // collectionConstraints
                 } catch (CSTSemanticException e) {
                     LOGGER.exception(e);
                 }
@@ -1313,9 +1311,8 @@ public class Resolver {
     private void clearConstraintLists() {
         defaultConstraints.clear();
         deferredDefaultConstraints.clear();
-        usualConstraintsStage1.clear();
-        usualConstraintsStage2.clear();
-        usualConstraintsStage3.clear();
+        topLevelConstraints.clear();
+        otherConstraints.clear();
     }
     
     /**
