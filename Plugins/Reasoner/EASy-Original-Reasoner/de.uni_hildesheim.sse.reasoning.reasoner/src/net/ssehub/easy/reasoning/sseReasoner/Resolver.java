@@ -19,7 +19,7 @@ import net.ssehub.easy.reasoning.core.reasoner.ReasoningErrorCodes;
 import net.ssehub.easy.reasoning.sseReasoner.functions.FailedElementDetails;
 import net.ssehub.easy.reasoning.sseReasoner.functions.FailedElements;
 import net.ssehub.easy.reasoning.sseReasoner.functions.ScopeAssignments;
-import net.ssehub.easy.reasoning.sseReasoner.model.CollectionConstraintsFinder;
+import net.ssehub.easy.reasoning.sseReasoner.model.ContainerConstraintsFinder;
 import net.ssehub.easy.reasoning.sseReasoner.model.CopyVisitor;
 import net.ssehub.easy.reasoning.sseReasoner.model.DefaultConstraint;
 import net.ssehub.easy.reasoning.sseReasoner.model.VariablesInConstraintsFinder;
@@ -135,7 +135,7 @@ public class Resolver {
     private transient Set<IDecisionVariable> usedVariables = new HashSet<IDecisionVariable>(100);
     private transient CopyVisitor copyVisitor = new CopyVisitor();
     private transient Map<AbstractVariable, CompoundAccess> varMap = new HashMap<AbstractVariable, CompoundAccess>(100);
-    private transient CollectionConstraintsFinder collectionFinder = new CollectionConstraintsFinder();
+    private transient ContainerConstraintsFinder containerFinder = new ContainerConstraintsFinder();
     private transient VariablesInConstraintsFinder simpleAssignmentFinder = new VariablesInConstraintsFinder();
     private transient ConstraintTranslationVisitor projectVisitor = new ConstraintTranslationVisitor();
     private transient VariablesInConstraintFinder variablesFinder = new VariablesInConstraintFinder();
@@ -589,7 +589,7 @@ public class Resolver {
                 Set<Compound> used = getUsedTypes(defaultValue, Compound.class);
                 if (null != used && !used.isEmpty()) {
                     for (Compound uType : used) {
-                        translateDefaultsCompoundCollection(decl, uType, new HashSet<Compound>());
+                        translateDefaultsCompoundContainer(decl, uType, new HashSet<Compound>());
                     }
                 }
             } else if (null != cAcc) { // defer self/override init constraints to prevent accidental init override
@@ -603,12 +603,12 @@ public class Resolver {
             }
         } else {
             defaultValue = null;
-        } // collectionCompoundConstraints
-        translateCollectionCompoundConstraints(decl, var, null, otherConstraints); 
+        } // containerCompoundConstraints
+        translateContainerCompoundConstraints(decl, var, null, otherConstraints); 
         if (TypeQueries.isContainer(type)) {            
             IDatatype containedType = ((Container) type).getContainedType();
             if (containedType instanceof DerivedDatatype) {
-                translateCollectionDerivedDatatypeConstraints((DerivedDatatype) containedType, decl, null);
+                translateContainerDerivedDatatypeConstraints((DerivedDatatype) containedType, decl, null);
             }
         }
         if (null != defaultValue) {
@@ -639,13 +639,13 @@ public class Resolver {
     }
     
     /**
-     * Collect constraints representing compound defaults in collections of compounds.
+     * Collect constraints representing compound defaults in containers of compounds.
      * 
-     * @param decl the collection variable
+     * @param decl the container variable
      * @param cmpType the compound type used in the actual <code>decl</code> value to focus the constraints created
      * @param done the already processed types (to be modified as a side effect)
      */
-    private void translateDefaultsCompoundCollection(AbstractVariable decl, Compound cmpType, Set<Compound> done) {
+    private void translateDefaultsCompoundContainer(AbstractVariable decl, Compound cmpType, Set<Compound> done) {
         if (!done.contains(cmpType)) {
             done.add(cmpType);
             for (int d = 0; d < cmpType.getDeclarationCount(); d++) {
@@ -663,7 +663,7 @@ public class Resolver {
                             containerOp = new OCLFeatureCall(containerOp, OclKeyWords.TYPE_SELECT, 
                                 new ConstantValue(ValueFactory.createValue(MetaType.TYPE, cmpType)));
                         }
-                        if (isNestedCollection(decl.getType())) {
+                        if (isNestedContainer(decl.getType())) {
                             containerOp = new OCLFeatureCall(containerOp, OclKeyWords.FLATTEN);
                         }
                         defaultValue = createContainerCall(containerOp, Container.FORALL, defaultValue, localDecl);
@@ -678,19 +678,19 @@ public class Resolver {
             }
             // attributes??
             for (int r = 0; r < cmpType.getRefinesCount(); r++) {
-                translateDefaultsCompoundCollection(decl, cmpType.getRefines(r), done);
+                translateDefaultsCompoundContainer(decl, cmpType.getRefines(r), done);
             }
         }
     }
 
     /**
-     * Method for translating the internal constraint from collections with derived contained types.
+     * Method for translating the internal constraint from containers with derived contained types.
      * 
-     * @param derivedType {@link DerivedDatatype} of the Collection.
-     * @param decl Collection variable.
+     * @param derivedType {@link DerivedDatatype} of the container.
+     * @param decl container variable.
      * @param topcmpAccess {@link CompoundAccess}, might be <b>null</b>.
      */
-    private void translateCollectionDerivedDatatypeConstraints(DerivedDatatype derivedType, 
+    private void translateContainerDerivedDatatypeConstraints(DerivedDatatype derivedType, 
         AbstractVariable decl, CompoundAccess topcmpAccess) {
         // as long as evaluation is not parallelized, using the same localDecl shall not be a problem
         DecisionVariableDeclaration localDecl = new DecisionVariableDeclaration("derivedType", derivedType, null);
@@ -714,41 +714,41 @@ public class Resolver {
             }            
         }
         if (derivedType.getBasisType() instanceof DerivedDatatype) {
-            translateCollectionDerivedDatatypeConstraints((DerivedDatatype) derivedType.getBasisType(), 
+            translateContainerDerivedDatatypeConstraints((DerivedDatatype) derivedType.getBasisType(), 
                 decl, topcmpAccess);
         }
     }
     
     /**
-     * Method for retrieving constraints from compounds initialized in collections.
+     * Method for retrieving constraints from compounds initialized in containers.
      * 
      * @param decl AbstractVariable.
      * @param variable the instance of <tt>decl</tt>.
-     * @param topcmpAccess {@link CompoundAccess} if Collection is a nested element.
+     * @param topcmpAccess {@link CompoundAccess} if container is a nested element.
      * @param results the resulting constraints
      */
-    private void translateCollectionCompoundConstraints(AbstractVariable decl, IDecisionVariable variable, 
+    private void translateContainerCompoundConstraints(AbstractVariable decl, IDecisionVariable variable, 
         CompoundAccess topcmpAccess, List<Constraint> results) {
         IDatatype type = decl.getType();
         if (TypeQueries.isContainer(type)) {
             IDatatype containedType = ((Container) type).getContainedType();
             for (IDatatype tmp : identifyContainedTypes(variable, containedType)) {
                 if (TypeQueries.isCompound(tmp)) {
-                    translateCollectionCompoundConstraints((Compound) tmp, containedType, decl, topcmpAccess, results);
+                    translateContainerCompoundConstraints((Compound) tmp, containedType, decl, topcmpAccess, results);
                 }
             }
         }
     }
     
     /**
-     * Method for transforming a compound constraint into collection forAll constraint.
+     * Method for transforming a compound constraint into container forAll constraint.
      * @param cmpType Specific compound type (with constraints).
      * @param declaredContainedType the declared contained type of the container.
      * @param decl {@link AbstractVariable}.
-     * @param topcmpAccess {@link CompoundAccess} if Collection is a nested element.
+     * @param topcmpAccess {@link CompoundAccess} if container is a nested element.
      * @param result List of transformed constraints, to be modified as a side effect.
      */
-    private void translateCollectionCompoundConstraints(Compound cmpType, IDatatype declaredContainedType, 
+    private void translateContainerCompoundConstraints(Compound cmpType, IDatatype declaredContainedType, 
         AbstractVariable decl, CompoundAccess topcmpAccess, List<Constraint> result) {
         DecisionVariableDeclaration localDecl = new DecisionVariableDeclaration("cmp", cmpType, null);        
         // fill varMap
@@ -838,7 +838,7 @@ public class Resolver {
             if (TypeQueries.isConstraint(nestedType)) {
                 createConstraintVariableConstraint(nestedDecl.getDefaultValue(), decl, nestedDecl, nestedVar);
             } // compoundConstraints
-            translateCollectionCompoundConstraints(nestedDecl, variable, varMap.get(nestedDecl), 
+            translateContainerCompoundConstraints(nestedDecl, variable, varMap.get(nestedDecl), 
                 otherConstraints);
         }
         // Nested attribute assignments handling
@@ -1059,10 +1059,10 @@ public class Resolver {
     }
 
     /**
-     * Adding a constraint to a constraint set, checking for contained collection/compound initializers if
+     * Adding a constraint to a constraint set, checking for contained container/compound initializers if
      * requested. 
      * 
-     * @param target the target collection to add the constraint to
+     * @param target the target container to add the constraint to
      * @param constraint the constraint
      * @param checkForInitializers check also for initializers if (<code>true</code>), add only if (<code>false</code>)
      */
@@ -1081,14 +1081,14 @@ public class Resolver {
         }
         if (add) {
             if (checkForInitializers) {
-                collectionFinder.accept(cst);
-                if (collectionFinder.isConstraintCollection()) {
-                    checkContainerInitializer(collectionFinder.getExpression(), false, constraint.getParent());
+                containerFinder.accept(cst);
+                if (containerFinder.isConstraintContainer()) {
+                    checkContainerInitializer(containerFinder.getExpression(), false, constraint.getParent());
                 }
-                if (collectionFinder.isCompoundInitializer()) {
-                    checkCompoundInitializer(collectionFinder.getExpression(), true, constraint.getParent());
+                if (containerFinder.isCompoundInitializer()) {
+                    checkCompoundInitializer(containerFinder.getExpression(), true, constraint.getParent());
                 }
-                collectionFinder.clear();
+                containerFinder.clear();
             }
             target.add(constraint);
             simpleAssignmentFinder.accept(cst);
@@ -1494,7 +1494,7 @@ public class Resolver {
         usedVariables.clear();
         copyVisitor.clear();
         varMap.clear();
-        collectionFinder.clear();
+        containerFinder.clear();
         simpleAssignmentFinder.clear();
     }
     

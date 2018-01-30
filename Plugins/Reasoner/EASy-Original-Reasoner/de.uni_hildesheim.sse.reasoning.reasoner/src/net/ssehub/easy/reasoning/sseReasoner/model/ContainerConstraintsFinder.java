@@ -21,12 +21,11 @@ import net.ssehub.easy.varModel.cst.Variable;
 import net.ssehub.easy.varModel.model.datatypes.OclKeyWords;
 
 /**
- * A visitor to retrieve constraints from collections.
- *
+ * A visitor to retrieve constraints from containers.
  */
-public class CollectionConstraintsFinder implements IConstraintTreeVisitor {
+public class ContainerConstraintsFinder implements IConstraintTreeVisitor {
 
-    private boolean isConstraintCollection;
+    private boolean isConstraintContainer;
     private boolean isCompoundInitializer;
     private ConstraintSyntaxTree cst;
     
@@ -36,7 +35,7 @@ public class CollectionConstraintsFinder implements IConstraintTreeVisitor {
      * 
      * @param constraint Constraint that is visited to retrieve variables.
      */
-    public CollectionConstraintsFinder(ConstraintSyntaxTree constraint) {
+    public ContainerConstraintsFinder(ConstraintSyntaxTree constraint) {
         clear();
         accept(constraint);
     }
@@ -44,7 +43,7 @@ public class CollectionConstraintsFinder implements IConstraintTreeVisitor {
     /**
      * Creates a (reusable) visitor.
      */
-    public CollectionConstraintsFinder() {
+    public ContainerConstraintsFinder() {
     }
 
     /**
@@ -62,17 +61,17 @@ public class CollectionConstraintsFinder implements IConstraintTreeVisitor {
      * Clears the visitor for reuse.
      */
     public void clear() {
-        isConstraintCollection = false;
+        isConstraintContainer = false;
         isCompoundInitializer = false;
         cst = null;
     }
 
     /**
-     * Method for determine if expression holds a collection of constraints.
-     * @return true if holds collection of constraints.
+     * Method for determine if expression holds a container of constraints.
+     * @return true if holds container of constraints.
      */
-    public boolean isConstraintCollection() {
-        return isConstraintCollection;
+    public boolean isConstraintContainer() {
+        return isConstraintContainer;
     }
     
     /**
@@ -127,7 +126,7 @@ public class CollectionConstraintsFinder implements IConstraintTreeVisitor {
                 && call.getParameterCount() == 1
                 && call.getOperation().equals(OclKeyWords.ASSIGNMENT)) {
                 if (call.getParameter(0) instanceof ContainerInitializer) {
-                    isConstraintCollection = true;
+                    isConstraintContainer = true;
                     cst = call.getParameter(0);                    
                 }
                 if (call.getParameter(0) instanceof CompoundInitializer) {

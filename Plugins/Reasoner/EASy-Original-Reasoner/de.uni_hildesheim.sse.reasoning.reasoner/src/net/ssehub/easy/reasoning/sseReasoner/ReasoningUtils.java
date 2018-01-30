@@ -357,15 +357,15 @@ class ReasoningUtils {
     }
 
     /**
-     * Returns whether <code>type</code> is a type-nested collection.
+     * Returns whether <code>type</code> is a type-nested container.
      * 
      * @param type the type
      * @return <code>true</code> for a nested collection, <code>false else</code>
      */
-    static boolean isNestedCollection(IDatatype type) {
+    static boolean isNestedContainer(IDatatype type) {
         return TypeQueries.isContainer(type) 
             && 1 == type.getGenericTypeCount() 
-            && isNestedCollection(type.getGenericType(0));
+            && isNestedContainer(type.getGenericType(0));
     }
 
     /**
