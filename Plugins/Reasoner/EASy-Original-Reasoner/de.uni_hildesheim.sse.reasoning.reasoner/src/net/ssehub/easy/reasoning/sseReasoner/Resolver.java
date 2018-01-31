@@ -47,30 +47,20 @@ import net.ssehub.easy.varModel.model.AbstractVariable;
 import net.ssehub.easy.varModel.model.Attribute;
 import net.ssehub.easy.varModel.model.AttributeAssignment;
 import net.ssehub.easy.varModel.model.AttributeAssignment.Assignment;
-import net.ssehub.easy.varModel.model.Comment;
-import net.ssehub.easy.varModel.model.CompoundAccessStatement;
 import net.ssehub.easy.varModel.model.Constraint;
 import net.ssehub.easy.varModel.model.DecisionVariableDeclaration;
-import net.ssehub.easy.varModel.model.FreezeBlock;
 import net.ssehub.easy.varModel.model.IModelElement;
-import net.ssehub.easy.varModel.model.IModelVisitor;
+import net.ssehub.easy.varModel.model.ModelVisitorAdapter;
 import net.ssehub.easy.varModel.model.OperationDefinition;
 import net.ssehub.easy.varModel.model.PartialEvaluationBlock;
 import net.ssehub.easy.varModel.model.Project;
-import net.ssehub.easy.varModel.model.ProjectImport;
-import net.ssehub.easy.varModel.model.ProjectInterface;
 import net.ssehub.easy.varModel.model.datatypes.Compound;
 import net.ssehub.easy.varModel.model.datatypes.ConstraintType;
 import net.ssehub.easy.varModel.model.datatypes.Container;
 import net.ssehub.easy.varModel.model.datatypes.DerivedDatatype;
-import net.ssehub.easy.varModel.model.datatypes.Enum;
-import net.ssehub.easy.varModel.model.datatypes.EnumLiteral;
 import net.ssehub.easy.varModel.model.datatypes.IDatatype;
 import net.ssehub.easy.varModel.model.datatypes.MetaType;
 import net.ssehub.easy.varModel.model.datatypes.OclKeyWords;
-import net.ssehub.easy.varModel.model.datatypes.OrderedEnum;
-import net.ssehub.easy.varModel.model.datatypes.Reference;
-import net.ssehub.easy.varModel.model.datatypes.Sequence;
 import net.ssehub.easy.varModel.model.datatypes.TypeQueries;
 import net.ssehub.easy.varModel.model.filter.DeclarationFinder;
 import net.ssehub.easy.varModel.model.filter.DeclarationFinder.VisibilityType;
@@ -357,39 +347,9 @@ public class Resolver {
      * 
      * @author Holger Eichelberger
      */
-    private class ConstraintTranslationVisitor implements IModelVisitor {
-
-        @Override
-        public void visitEnum(Enum eenum) {
-        }
-
-        @Override
-        public void visitOrderedEnum(OrderedEnum eenum) {
-        }
-
-        @Override
-        public void visitCompound(Compound compound) {
-        }
-
-        @Override
-        public void visitDerivedDatatype(DerivedDatatype datatype) {
-        }
-
-        @Override
-        public void visitEnumLiteral(EnumLiteral literal) {
-        }
-
-        @Override
-        public void visitReference(Reference reference) {
-        }
-
-        @Override
-        public void visitSequence(Sequence sequence) {
-        }
-
-        @Override
-        public void visitSet(net.ssehub.easy.varModel.model.datatypes.Set set) {
-        }
+    private class ConstraintTranslationVisitor extends ModelVisitorAdapter {
+        
+        // don't follow project imports here, just structural top-level traversal of the actual project!
 
         @Override // iterate over all elements declared in project, implicitly skipping not implemented elements
         public void visitProject(Project project) {
@@ -398,30 +358,14 @@ public class Resolver {
             }     
         }
 
-        @Override
-        public void visitProjectImport(ProjectImport pImport) {
-        }
-
         @Override // translate all top-level/enum/attribute assignment declarations
         public void visitDecisionVariableDeclaration(DecisionVariableDeclaration decl) {
             translateDeclarationDefaults(decl, config.getDecision(decl), null); 
         }
 
-        @Override
-        public void visitAttribute(Attribute attribute) {
-        }
-
         @Override // collect all top-level/enum/attribute assignment constraints
         public void visitConstraint(Constraint constraint) {
             addConstraint(topLevelConstraints, constraint, true); // topLevelConstraints
-        }
-
-        @Override
-        public void visitFreezeBlock(FreezeBlock freeze) {
-        }
-
-        @Override
-        public void visitOperationDefinition(OperationDefinition opdef) {
         }
 
         @Override // iterate over nested blocks/contained constraints
@@ -432,14 +376,6 @@ public class Resolver {
             for (int i = 0; i < block.getEvaluableCount(); i++) {
                 block.getEvaluable(i).accept(this);
             }
-        }
-
-        @Override
-        public void visitProjectInterface(ProjectInterface iface) {
-        }
-
-        @Override
-        public void visitComment(Comment comment) {
         }
 
         @Override // iterate over nested blocks/contained, translate the individual blocks if not incremental
@@ -453,10 +389,6 @@ public class Resolver {
             if (!incremental) {
                 translateAnnotationAssignments(assignment, null, null);
             }
-        }
-
-        @Override
-        public void visitCompoundAccessStatement(CompoundAccessStatement access) {
         }
         
     }
