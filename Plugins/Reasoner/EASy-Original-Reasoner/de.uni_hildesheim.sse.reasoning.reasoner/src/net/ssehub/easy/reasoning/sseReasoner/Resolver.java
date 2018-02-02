@@ -129,6 +129,7 @@ public class Resolver {
     private transient VariablesInConstraintsFinder simpleAssignmentFinder = new VariablesInConstraintsFinder();
     private transient ConstraintTranslationVisitor projectVisitor = new ConstraintTranslationVisitor();
     private transient VariablesInConstraintFinder variablesFinder = new VariablesInConstraintFinder();
+    private transient long endTimestamp;
 
     // >>> from here the names follows the reasoner.tex documentation
 
@@ -140,19 +141,28 @@ public class Resolver {
         
         @Override
         public void notifyChanged(IDecisionVariable variable, Value oldValue) {
-            if (!(variable.isLocal())) {
+            if (!variable.isLocal()) {
                 if (Descriptor.LOGGING) {
                     LOGGER.debug("Value changed: " + variable.getDeclaration().getName() + " " + variable.getValue()
                         + " Parent: " + (null == variable.getParent() ? null : variable.getParent()));                 
                 }
                 scopeAssignments.addAssignedVariable(variable);
                 // TODO if value type changes (currently not part of the notification), change also constraints
-                Set<Constraint> constraintsToReevaluate = new HashSet<Constraint>();
-                constraintsForChilds(variable, constraintsToReevaluate);
+                rescheduleConstraintsForChilds(variable);
                 // All constraints for the parent (as this was also changed)
-                constraintsForParent(variable, constraintsToReevaluate);
-                // All constraints for childs (as they may also changed)
-                for (Constraint varConstraint : constraintsToReevaluate) {
+                rescheduleConstraintsForParent(variable);
+            }
+        }
+
+        /**
+         * Tries rescheduling the given constraints. Does not add a constraint to the constraint base if already
+         * scheduled.
+         * 
+         * @param constraints the constraints to reschedule (may be <b>null</b>, ignored then)
+         */
+        private void reschedule(Set<Constraint> constraints) {
+            if (null != constraints) {
+                for (Constraint varConstraint : constraints) {
                     if (!constraintBaseSet.contains(varConstraint)) {
                         addToConstraintBase(varConstraint);
                     }
@@ -166,16 +176,13 @@ public class Resolver {
          * @param variable the variable to analyze
          * @param constraintsToReevaluate the constraint set to be modified as a side effect
          */
-        private void constraintsForParent(IDecisionVariable variable, Set<Constraint> constraintsToReevaluate) {
+        private void rescheduleConstraintsForParent(IDecisionVariable variable) {
             IConfigurationElement parent = variable.getParent();
             if (parent instanceof IDecisionVariable) {
                 IDecisionVariable pVar = (IDecisionVariable) parent;
                 AbstractVariable declaration = pVar.getDeclaration();
-                Set<Constraint> varConstraints = constraintMap.getRelevantConstraints(declaration);
-                if (null != varConstraints) {
-                    constraintsToReevaluate.addAll(varConstraints);
-                }
-                constraintsForParent(pVar, constraintsToReevaluate);                            
+                reschedule(constraintMap.getRelevantConstraints(declaration));
+                rescheduleConstraintsForParent(pVar);
             }
         }
 
@@ -185,18 +192,12 @@ public class Resolver {
          * @param variable the variable to analyze
          * @param constraintsToReevaluate the constraint set to be modified as a side effect
          */
-        private void constraintsForChilds(IDecisionVariable variable, Set<Constraint> constraintsToReevaluate) {
+        private void rescheduleConstraintsForChilds(IDecisionVariable variable) {
             AbstractVariable declaration = variable.getDeclaration();
-            Set<Constraint> varConstraints = constraintMap.getRelevantConstraints(declaration);
-            if (null != varConstraints) {
-                constraintsToReevaluate.addAll(varConstraints);
-            }
+            reschedule(constraintMap.getRelevantConstraints(declaration));
             // All constraints for childs (as they may also changed)
             for (int j = 0, nChilds = variable.getNestedElementsCount(); j < nChilds; j++) {
-                IDecisionVariable nestedVar = variable.getNestedElement(j);
-                if (!(nestedVar.isLocal())) {
-                    constraintsForChilds(nestedVar, constraintsToReevaluate);
-                }
+                rescheduleConstraintsForChilds(variable.getNestedElement(j));
             }
         }
     };
@@ -280,6 +281,8 @@ public class Resolver {
         evaluator.setResolutionListener(resolutionListener);
         evaluator.setScopeAssignments(scopeAssignments);
         List<Project> projects = Utils.discoverImports(config.getProject());
+        endTimestamp = reasonerConfig.getTimeout() <= 0 
+            ? -1 : System.currentTimeMillis() + reasonerConfig.getTimeout();
         for (int p = 0; !hasTimeout && !wasStopped && p < projects.size(); p++) {
             project = projects.get(p);
             if (Descriptor.LOGGING) {
@@ -309,9 +312,7 @@ public class Resolver {
         }
         scopeAssignments.clearScopeAssignments();
         evaluator.setDispatchScope(project);
-        long endTimestamp = reasonerConfig.getTimeout() <= 0 
-            ? -1 : System.currentTimeMillis() + reasonerConfig.getTimeout();
-        while (!constraintBase.isEmpty()) { 
+        while (!constraintBase.isEmpty() && !wasStopped) { // reasoner.tex -> hasTimeout see end of loop
             usedVariables.clear();
             Constraint constraint = constraintBase.pop();
             constraintBaseSet.remove(constraint);
@@ -336,9 +337,6 @@ public class Resolver {
                 hasTimeout = true;
                 break;
             }
-            if (wasStopped) {
-                break;
-            }
         }
     }
 
@@ -350,12 +348,24 @@ public class Resolver {
     private class ConstraintTranslationVisitor extends ModelVisitorAdapter {
         
         // don't follow project imports here, just structural top-level traversal of the actual project!
+        private List<PartialEvaluationBlock> evals = null;
 
         @Override // iterate over all elements declared in project, implicitly skipping not implemented elements
         public void visitProject(Project project) {
             for (int e = 0; e < project.getElementCount(); e++) {
                 project.getElement(e).accept(this);
-            }     
+            }
+            if (null != evals) {
+                // prioritize top-level project contents over eval blocks
+                for (PartialEvaluationBlock block : evals) {
+                    for (int i = 0; i < block.getNestedCount(); i++) {
+                        block.getNested(i).accept(this);
+                    }
+                    for (int i = 0; i < block.getEvaluableCount(); i++) {
+                        block.getEvaluable(i).accept(this);
+                    }
+                }
+            }
         }
 
         @Override // translate all top-level/enum/attribute assignment declarations
@@ -370,12 +380,10 @@ public class Resolver {
 
         @Override // iterate over nested blocks/contained constraints
         public void visitPartialEvaluationBlock(PartialEvaluationBlock block) {
-            for (int i = 0; i < block.getNestedCount(); i++) {
-                block.getNested(i).accept(this);
+            if (null == evals) {
+                evals = new LinkedList<PartialEvaluationBlock>();
             }
-            for (int i = 0; i < block.getEvaluableCount(); i++) {
-                block.getEvaluable(i).accept(this);
-            }
+            evals.add(block);
         }
 
         @Override // iterate over nested blocks/contained, translate the individual blocks if not incremental
