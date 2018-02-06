@@ -23,6 +23,14 @@ import net.ssehub.easy.varModel.capabilities.IReasonerCapability;
  * @author Holger Eichelberger
  */
 public enum GeneralReasonerCapabilities implements IReasonerCapability {
+
+    /**
+     * A reasoner declaring this capability can basically do standalone reasoning on a model
+     * although potentially not complete. Chains of reasoners shall declare this capability
+     * and (typically) start with a standalone reasoner, while reasoners later in a chain
+     * must not necessarily declare this capability.
+     */
+    STANDALONE_REASONING,
     
     /**
      * Support for incremental reasoning while configuring a product.

@@ -9,6 +9,7 @@ import net.ssehub.easy.basics.progress.ProgressObserver;
 import net.ssehub.easy.reasoning.core.impl.ReasonerRegistry;
 import net.ssehub.easy.reasoning.core.reasoner.EvaluationResult;
 import net.ssehub.easy.reasoning.core.reasoner.GeneralReasonerCapabilities;
+import net.ssehub.easy.reasoning.core.reasoner.IChainingReasoner;
 import net.ssehub.easy.reasoning.core.reasoner.IReasoner;
 import net.ssehub.easy.reasoning.core.reasoner.IReasonerRegistry;
 import net.ssehub.easy.reasoning.core.reasoner.Message;
@@ -633,7 +634,7 @@ public class ReasonerFrontend {
      * @throws IllegalArgumentException
      *             in case of illegal arguments such as <b>null</b> or an unmatching descriptor
      */
-    private IReasoner findReasoner(ReasonerDescriptor descriptor) {
+    IReasoner findReasoner(ReasonerDescriptor descriptor) {
         if (null == descriptor) {
             throw new IllegalArgumentException("descriptor must not be null");
         }
@@ -741,6 +742,17 @@ public class ReasonerFrontend {
             setReasonerHint(pref);
         }
         return pref;
+    }
+
+    /**
+     * Returns whether the reasoner registered for this <code>descriptor</code>
+     * is a chaining reasoner.
+     * 
+     * @param descriptor the descriptor
+     * @return <code>true</code> for chaining, <code>false</code> else
+     */
+    public boolean isChainingReasoner(ReasonerDescriptor descriptor) {
+        return findReasoner(descriptor) instanceof IChainingReasoner;
     }
 
 }
