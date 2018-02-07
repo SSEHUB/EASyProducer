@@ -370,7 +370,7 @@ public class Resolver {
 
         @Override // translate all top-level/enum/attribute assignment declarations
         public void visitDecisionVariableDeclaration(DecisionVariableDeclaration decl) {
-            translateDeclarationDefaults(decl, config.getDecision(decl), null); 
+            translateDeclaration(decl, config.getDecision(decl), null); 
         }
 
         @Override // collect all top-level/enum/attribute assignment constraints
@@ -411,7 +411,7 @@ public class Resolver {
         DeclarationFinder finder = new DeclarationFinder(project, FilterType.NO_IMPORTS, null);
         List<AbstractVariable> variables = finder.getVariableDeclarations(VisibilityType.ALL);
         for (AbstractVariable decl : variables) {
-            translateDeclarationDefaults(decl, config.getDecision(decl), null);
+            translateDeclaration(decl, config.getDecision(decl), null);
         }
     }    
 
@@ -507,7 +507,7 @@ public class Resolver {
      * 
      * @see #translateDefaults()
      */
-    protected void translateDeclarationDefaults(AbstractVariable decl, IDecisionVariable var, CompoundAccess cAcc) {
+    protected void translateDeclaration(AbstractVariable decl, IDecisionVariable var, CompoundAccess cAcc) {
         List<Constraint> defltCons = defaultConstraints; 
         variablesCounter++;
         IDatatype type = decl.getType();
@@ -762,7 +762,7 @@ public class Resolver {
         for (int i = 0, n = cmpVar.getNestedElementsCount(); i < n; i++) {
             IDecisionVariable nestedVar = cmpVar.getNestedElement(i);
             AbstractVariable nestedDecl = nestedVar.getDeclaration();
-            translateDeclarationDefaults(nestedDecl, cmpVar.getNestedVariable(nestedDecl.getName()),
+            translateDeclaration(nestedDecl, cmpVar.getNestedVariable(nestedDecl.getName()),
                 varMap.get(nestedDecl));
         }
         // create constraints on mutually interacting constraints now
