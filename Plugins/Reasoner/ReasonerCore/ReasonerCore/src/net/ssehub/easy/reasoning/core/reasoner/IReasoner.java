@@ -124,7 +124,8 @@ public interface IReasoner {
      *            the configuration as a basis for the evaluation
      * @param reasonerConfiguration the reasoner configuration to be used for reasoning (e.g. taken from the UI, 
      *        may be <b>null</b>)
-     * @return a reusable reasoner instance, may be <b>null</b> if the reasoner does not support this
+     * @return a reusable reasoner instance, return a {@link DelegatingReasonerInstance} on this reasoner to
+     *     avoid null pointer checking.
      */
     public IReasonerInstance createInstance(Project project, Configuration cfg, 
         ReasonerConfiguration reasonerConfiguration);

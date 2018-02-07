@@ -19,6 +19,7 @@ import java.net.URI;
 import java.util.List;
 
 import net.ssehub.easy.basics.progress.ProgressObserver;
+import net.ssehub.easy.reasoning.core.reasoner.DelegatingReasonerInstance;
 import net.ssehub.easy.reasoning.core.reasoner.EvaluationResult;
 import net.ssehub.easy.reasoning.core.reasoner.GeneralReasonerCapabilities;
 import net.ssehub.easy.reasoning.core.reasoner.IChainingReasoner;
@@ -34,7 +35,8 @@ import net.ssehub.easy.varModel.model.Project;
 
 /**
  * Implements an abstract chained reasoner. This reasoner does not perform upgrades. Chained reasoners shall be
- * registered with the reasoner factory.
+ * registered with the reasoner factory. Consider {@link ChainedReasonerState} for implementing the passed on reasoner
+ * state.
  * 
  * @author Holger Eichelberger
  */
@@ -252,7 +254,7 @@ public abstract class AbstractChainedReasoner implements IChainingReasoner {
     @Override
     public IReasonerInstance createInstance(Project project, Configuration cfg,
         ReasonerConfiguration reasonerConfiguration) {
-        return null; // TODO ??
+        return new DelegatingReasonerInstance(project, cfg, reasonerConfiguration, this);
     }
 
     @Override
