@@ -511,6 +511,7 @@ public class Resolver {
         List<Constraint> defltCons = defaultConstraints; 
         variablesCounter++;
         IDatatype type = decl.getType();
+        ConstraintSyntaxTree selfEx = null;
         translateDerivedDatatypeConstraints(decl, type);
         if (!incremental) {
             translateAnnotationDefaults(decl, var, cAcc);
@@ -519,19 +520,12 @@ public class Resolver {
         if (TypeQueries.isCompound(type)) {
             if (null != defaultValue) { // try considering the actual type, not only the base type
                 type = inferTypeSafe(defaultValue, type);
+                selfEx = new Variable(decl);
             }
             translateCompoundDefaults(decl, var, cAcc, type); 
-            if (null != defaultValue) {
-                defaultValue = substituteVariables(defaultValue, new Variable(decl));
-            }
         } else if (null != defaultValue && !incremental) {
             if (TypeQueries.isContainer(type)) {
-                Set<Compound> used = getUsedTypes(defaultValue, Compound.class);
-                if (null != used && !used.isEmpty()) {
-                    for (Compound uType : used) {
-                        translateDefaultsCompoundContainer(decl, uType, new HashSet<Compound>());
-                    }
-                }
+                translateDefaultsCompoundContainer(decl);
             } else if (null != cAcc) { // defer self/override init constraints to prevent accidental init override
                 copyVisitor.setSelf(cAcc.getCompoundExpression());
                 defaultValue = copyVisitor.accept(defaultValue);
@@ -569,7 +563,7 @@ public class Resolver {
                     ConstraintSyntaxTree cst = new OCLFeatureCall(
                         defltCons == deferredDefaultConstraints ? cAcc : new Variable(decl), 
                         OclKeyWords.ASSIGNMENT, defaultValue);
-                    cst = substituteVariables(cst, null);
+                    cst = substituteVariables(cst, selfEx);
                     addConstraint(defltCons, new DefaultConstraint(cst, project), true);
                 }                
             } catch (CSTSemanticException e) {
@@ -577,9 +571,25 @@ public class Resolver {
             }            
         }
     }
+
+    /**
+     * Translates constraints representing compound defaults in containers of compounds.
+     * 
+     * @param decl the container variable
+     */
+    private void translateDefaultsCompoundContainer(AbstractVariable decl) {
+        Set<Compound> used = getUsedTypes(decl.getDefaultValue(), Compound.class);
+        if (null != used && !used.isEmpty()) {
+            Set<Compound> done = new HashSet<Compound>();
+            for (Compound uType : used) {
+                translateDefaultsCompoundContainer(decl, uType, done);
+                done.clear();
+            }
+        }
+    }
     
     /**
-     * Collect constraints representing compound defaults in containers of compounds.
+     * Translates constraints representing compound defaults in containers of compounds.
      * 
      * @param decl the container variable
      * @param cmpType the compound type used in the actual <code>decl</code> value to focus the constraints created
