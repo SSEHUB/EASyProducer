@@ -62,8 +62,6 @@ import net.ssehub.easy.varModel.model.datatypes.IDatatype;
 import net.ssehub.easy.varModel.model.datatypes.MetaType;
 import net.ssehub.easy.varModel.model.datatypes.OclKeyWords;
 import net.ssehub.easy.varModel.model.datatypes.TypeQueries;
-import net.ssehub.easy.varModel.model.filter.DeclarationFinder;
-import net.ssehub.easy.varModel.model.filter.DeclarationFinder.VisibilityType;
 import net.ssehub.easy.varModel.model.filter.FilterType;
 import net.ssehub.easy.varModel.model.filter.VariablesInConstraintFinder;
 import net.ssehub.easy.varModel.model.values.ConstraintValue;
@@ -260,19 +258,12 @@ public class Resolver {
     // >>> from here the names follow the reasoner.tex documentation
     
     /**
-     * Resolves the (initial) values of the configuration. This is done as follows:
-     * <ol>
-     * <li>Identify the relevant project imports from 
-     *     {@link Utils#discoverImports(net.ssehub.easy.basics.modelManagement.IModel)} for the actual 
-     *     {@link #config Configuration}.
-     * <li>For each project:
-     *   <ol>
-     *     <li>Collect constraints for default values of variable declarations ({@link #translateDefaults()})</li>
-     *     <li>Collect constraints for the other constraints ({@link #translateConstraints()})</li>
-     *     <li>Evaluate the constraints ({@link #evaluateConstraints(Deque)}.
-     *     <li>Freezing the assigned variables</li>
-     *   </ol> 
-     * </ol>
+     * Resolves the (initial) values of the configuration.
+     * 
+     * @see Utils#discoverImports(net.ssehub.easy.basics.modelManagement.IModel)
+     * @see #translateConstraints()
+     * @see #evaluateConstraints()
+     * @see Configuration#freeze(net.ssehub.easy.varModel.confModel.IFreezeSelector)
      */
     public void resolve() {
         isRunning = true;
@@ -402,20 +393,6 @@ public class Resolver {
     }
 
     /**
-     * Resolves and translates the constraints initializing/guarding the default values of all variable declarations 
-     * in {@link #project}.
-     * 
-     * @see #resolve()
-     */
-    protected void translateDefaults() {
-        DeclarationFinder finder = new DeclarationFinder(project, FilterType.NO_IMPORTS, null);
-        List<AbstractVariable> variables = finder.getVariableDeclarations(VisibilityType.ALL);
-        for (AbstractVariable decl : variables) {
-            translateDeclaration(decl, config.getDecision(decl), null);
-        }
-    }    
-
-    /**
      * Extracts, translates and collects the internal constraints of <code>type</code> and stores them 
      * in {@link #derivedTypeConstraints}.
      * 
@@ -504,29 +481,27 @@ public class Resolver {
      * @param decl The {@link AbstractVariable} for which the default value should be resolved.
      * @param var the instance of <tt>decl</tt>.
      * @param cAcc if variable is a nested compound.
-     * 
-     * @see #translateDefaults()
      */
     protected void translateDeclaration(AbstractVariable decl, IDecisionVariable var, CompoundAccess cAcc) {
-        List<Constraint> defltCons = defaultConstraints; 
         variablesCounter++;
         IDatatype type = decl.getType();
-        ConstraintSyntaxTree selfEx = null;
         translateDerivedDatatypeConstraints(decl, type);
         if (!incremental) {
             translateAnnotationDefaults(decl, var, cAcc);
         }
         ConstraintSyntaxTree defaultValue = decl.getDefaultValue();
+        if (null != defaultValue) { // considering the actual type rather than base, after derived (!)
+            type = inferTypeSafe(defaultValue, type);
+        }
+        List<Constraint> defltCons = defaultConstraints; 
+        ConstraintSyntaxTree selfEx = null;
         if (TypeQueries.isCompound(type)) {
-            if (null != defaultValue) { // try considering the actual type, not only the base type
-                type = inferTypeSafe(defaultValue, type);
-                selfEx = new Variable(decl);
-            }
+            selfEx = null != defaultValue ? new Variable(decl) : null;
             translateCompoundDefaults(decl, var, cAcc, type); 
+        } else if (TypeQueries.isContainer(type)) { 
+            translateContainerDeclaration(decl, var, type);
         } else if (null != defaultValue && !incremental) {
-            if (TypeQueries.isContainer(type)) {
-                translateDefaultsCompoundContainer(decl);
-            } else if (null != cAcc) { // defer self/override init constraints to prevent accidental init override
+            if (null != cAcc) { // defer self/override init constraints to prevent accidental init override
                 copyVisitor.setSelf(cAcc.getCompoundExpression());
                 defaultValue = copyVisitor.accept(defaultValue);
                 inferTypeSafe(defaultValue, null);
@@ -538,16 +513,9 @@ public class Resolver {
         } else {
             defaultValue = null;
         } // containerCompoundConstraints
-        translateContainerCompoundConstraints(decl, var, null, otherConstraints); 
-        if (TypeQueries.isContainer(type)) {            
-            IDatatype containedType = ((Container) type).getContainedType();
-            if (containedType instanceof DerivedDatatype) {
-                translateContainerDerivedDatatypeConstraints((DerivedDatatype) containedType, decl, null);
-            }
-        }
         if (null != defaultValue) {
             try {
-                if (TypeQueries.isConstraint(type)) {
+                if (TypeQueries.isConstraint(decl.getType())) { // don't go for value type
                     if (cAcc == null) {
                         variablesCounter--;
                         // use closest parent instead of project -> runtime analysis
@@ -573,18 +541,27 @@ public class Resolver {
     }
 
     /**
-     * Translates constraints representing compound defaults in containers of compounds.
+     * Translates the (transitive) defaults and type constraints for a container declaration. 
      * 
-     * @param decl the container variable
+     * @param decl The {@link AbstractVariable} for which the default value should be resolved.
+     * @param var the instance of <tt>decl</tt>.
+     * @param type the (specific) datatype ({@link Container})
      */
-    private void translateDefaultsCompoundContainer(AbstractVariable decl) {
-        Set<Compound> used = getUsedTypes(decl.getDefaultValue(), Compound.class);
-        if (null != used && !used.isEmpty()) {
-            Set<Compound> done = new HashSet<Compound>();
-            for (Compound uType : used) {
-                translateDefaultsCompoundContainer(decl, uType, done);
-                done.clear();
+    private void translateContainerDeclaration(AbstractVariable decl, IDecisionVariable var, IDatatype type) {
+        if (null != decl.getDefaultValue() && !incremental) {
+            Set<Compound> used = getUsedTypes(decl.getDefaultValue(), Compound.class);
+            if (null != used && !used.isEmpty()) {
+                Set<Compound> done = new HashSet<Compound>();
+                for (Compound uType : used) {
+                    translateDefaultsCompoundContainer(decl, uType, done);
+                    done.clear();
+                }
             }
+        }
+        translateContainerCompoundConstraints(decl, var, null, otherConstraints); 
+        IDatatype containedType = ((Container) type).getContainedType();
+        if (containedType instanceof DerivedDatatype) {
+            translateContainerDerivedDatatypeConstraints((DerivedDatatype) containedType, decl, null);
         }
     }
     
@@ -670,7 +647,8 @@ public class Resolver {
     }
     
     /**
-     * Method for retrieving constraints from compounds initialized in containers.
+     * Method for retrieving constraints from compounds initialized in containers. <code>variable</code>
+     * must be a container and <code>decl</code> of type container.
      * 
      * @param decl AbstractVariable.
      * @param variable the instance of <tt>decl</tt>.
@@ -679,13 +657,10 @@ public class Resolver {
      */
     private void translateContainerCompoundConstraints(AbstractVariable decl, IDecisionVariable variable, 
         CompoundAccess topcmpAccess, List<Constraint> results) {
-        IDatatype type = decl.getType();
-        if (TypeQueries.isContainer(type)) {
-            IDatatype containedType = ((Container) type).getContainedType();
-            for (IDatatype tmp : identifyContainedTypes(variable, containedType)) {
-                if (TypeQueries.isCompound(tmp)) {
-                    translateContainerCompoundConstraints((Compound) tmp, containedType, decl, topcmpAccess, results);
-                }
+        IDatatype containedType = ((Container) decl.getType()).getContainedType();
+        for (IDatatype tmp : identifyContainedTypes(variable, containedType)) {
+            if (TypeQueries.isCompound(tmp)) {
+                translateContainerCompoundConstraints((Compound) tmp, containedType, decl, topcmpAccess, results);
             }
         }
     }
@@ -742,13 +717,14 @@ public class Resolver {
     }
 
     /**
-     * Method for translating compound default value declarations.
+     * Method for translating compound default value declarations. Requires 
+     * {@link #buildVariableMapping(AbstractVariable, IDecisionVariable, CompoundAccess, IDatatype)} before.
      * 
      * @param decl The {@link AbstractVariable} for which the default value should be resolved.
      * @param variable the instance of <tt>decl</tt>.
      * @param compound if variable is a nested compound, the access expression to 
      *     <code>decl</code>/<code>variable</code>
-     * @param type {@link Compound} type.
+     * @param type specific {@link Compound} type.
      */
     private void translateCompoundDefaults(AbstractVariable decl, IDecisionVariable variable,
         CompoundAccess compound, IDatatype type) {
@@ -788,8 +764,10 @@ public class Resolver {
             if (TypeQueries.isConstraint(nestedType)) {
                 createConstraintVariableConstraint(nestedDecl.getDefaultValue(), decl, nestedDecl, nestedVar);
             } // compoundConstraints
-            translateContainerCompoundConstraints(nestedDecl, variable, varMap.get(nestedDecl), 
-                otherConstraints);
+            if (TypeQueries.isContainer(nestedType)) {
+                translateContainerCompoundConstraints(nestedDecl, variable, varMap.get(nestedDecl), 
+                    otherConstraints);
+            }
         }
         // Nested attribute assignments handling
         if (!incremental) {
