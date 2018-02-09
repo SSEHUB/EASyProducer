@@ -408,7 +408,7 @@ public class Resolver {
                 for (int c = 0; c < cst.length; c++) {
                     // Should be in same project as the declaration belongs to
                     try { // derivedTypeConstraints
-                        ConstraintSyntaxTree tmp = substituteVariables(cst[c], null);
+                        ConstraintSyntaxTree tmp = substituteVariables(cst[c], null, null);
                         addConstraint(topLevelConstraints, new Constraint(tmp, topLevelParent), true);
                     } catch (CSTSemanticException e) {
                         LOGGER.exception(e);
@@ -494,9 +494,9 @@ public class Resolver {
             type = inferTypeSafe(defaultValue, type);
         }
         List<Constraint> defltCons = defaultConstraints; 
-        ConstraintSyntaxTree selfEx = null;
+        AbstractVariable self = null;
         if (TypeQueries.isCompound(type)) {
-            selfEx = null != defaultValue ? new Variable(decl) : null;
+            self = decl;
             translateCompoundDefaults(decl, var, cAcc, type); 
         } else if (TypeQueries.isContainer(type)) { 
             translateContainerDeclaration(decl, var, type);
@@ -531,7 +531,7 @@ public class Resolver {
                     ConstraintSyntaxTree cst = new OCLFeatureCall(
                         defltCons == deferredDefaultConstraints ? cAcc : new Variable(decl), 
                         OclKeyWords.ASSIGNMENT, defaultValue);
-                    cst = substituteVariables(cst, selfEx);
+                    cst = substituteVariables(cst, null, self);
                     addConstraint(defltCons, new DefaultConstraint(cst, project), true);
                 }                
             } catch (CSTSemanticException e) {
@@ -582,7 +582,7 @@ public class Resolver {
                     DecisionVariableDeclaration localDecl = new DecisionVariableDeclaration("cmp", cmpType, null);
                     try {
                         Variable localDeclVar = new Variable(localDecl);
-                        defaultValue = substituteVariables(defaultValue, localDeclVar); // replace self
+                        defaultValue = substituteVariables(defaultValue, localDeclVar, null); // replace self
                         defaultValue = new OCLFeatureCall(new CompoundAccess(localDeclVar, uDecl.getName()), 
                             OclKeyWords.ASSIGNMENT, defaultValue);
                         ConstraintSyntaxTree containerOp = new Variable(decl);
@@ -633,7 +633,7 @@ public class Resolver {
                 }            
                 try {
                     typeCst.inferDatatype();
-                    typeCst = substituteVariables(typeCst, null); // derivedTypeConstraints
+                    typeCst = substituteVariables(typeCst, null, null); // derivedTypeConstraints
                     addConstraint(topLevelConstraints, new Constraint(typeCst, project), true);                    
                 } catch (CSTSemanticException e) {
                     LOGGER.exception(e);
@@ -692,7 +692,7 @@ public class Resolver {
         }
         for (int i = 0; i < thisCompoundConstraints.size(); i++) {
             ConstraintSyntaxTree itExpression = thisCompoundConstraints.get(i).getConsSyntax();
-            itExpression = substituteVariables(itExpression, new Variable(localDecl));
+            itExpression = substituteVariables(itExpression, null, localDecl);
             if (Descriptor.LOGGING) {
                 LOGGER.debug("New loop constraint " + toIvmlString(itExpression));
             }   
@@ -780,7 +780,7 @@ public class Resolver {
         for (int i = 0; i < thisCompoundConstraints.size(); i++) {
             ConstraintSyntaxTree oneConstraint = thisCompoundConstraints.get(i).getConsSyntax();
             // changed null to decl
-            oneConstraint = substituteVariables(oneConstraint, new Variable(decl));
+            oneConstraint = substituteVariables(oneConstraint, null, decl);
             try { // compoundConstraints
                 Constraint constraint = new Constraint(oneConstraint, decl);
                 addConstraint(otherConstraints, constraint, true);            
@@ -819,7 +819,7 @@ public class Resolver {
             if (evalBlock.getEvaluable(i) instanceof Constraint) {
                 Constraint evalConstraint = (Constraint) evalBlock.getEvaluable(i);
                 ConstraintSyntaxTree evalCst = evalConstraint.getConsSyntax();
-                ConstraintSyntaxTree cst = substituteVariables(evalCst, null);
+                ConstraintSyntaxTree cst = substituteVariables(evalCst, null, null);
                 try {
                     cst.inferDatatype(); // compoundEvalConstraints
                     addConstraint(otherConstraints, new Constraint(cst, project), true);
@@ -844,7 +844,7 @@ public class Resolver {
         IModelElement parent, IDecisionVariable nestedVariable) {
         Constraint constraint = null;
         if (cst != null) {
-            cst = substituteVariables(cst, new Variable(decl));
+            cst = substituteVariables(cst, null, decl);
             try {
                 constraint = new Constraint(cst, parent);
                 addConstraint(otherConstraints, constraint, true); // constraintVariablesConstraints
@@ -951,7 +951,7 @@ public class Resolver {
                 cst = new AttributeVariable(compound, attrib);
             }
             cst = new OCLFeatureCall(cst, OclKeyWords.ASSIGNMENT, 
-                substituteVariables(assignment.getExpression(), null));
+                substituteVariables(assignment.getExpression(), null, null));
             inferTypeSafe(cst, null);
             try { // assignedAttributeConstraints
                 addConstraint(otherConstraints, new Constraint(cst, project), false); 
@@ -1063,7 +1063,7 @@ public class Resolver {
                 Constraint constraint = new Constraint(parent);
                 ConstraintSyntaxTree cst = containerInit.getExpression(i);
                 if (substituteVars) {
-                    cst = substituteVariables(cst, null);
+                    cst = substituteVariables(cst, null, null);
                 }
                 try {
                     constraint.setConsSyntax(cst);
@@ -1196,13 +1196,19 @@ public class Resolver {
      * variable mapping in {@link #varMap} and may consider a mapping for <code>self</code>.
      * 
      * @param cst Constraint to be transformed.
-     * @param selfEx an expression representing <i>self</i> (ignored if <b>null</b>).
+     * @param selfEx an expression representing <i>self</i> (ignored if <b>null</b>, <code>self</code> and 
+     *     <code>selfEx</code> shall never both be specified/not <b>null</b>).
+     * @param self an variable declaration representing <i>self</i> (ignored if <b>null</b>).
      * @return Transformed constraint.
      */
-    ConstraintSyntaxTree substituteVariables(ConstraintSyntaxTree cst, ConstraintSyntaxTree selfEx) {
+    ConstraintSyntaxTree substituteVariables(ConstraintSyntaxTree cst, ConstraintSyntaxTree selfEx, 
+        AbstractVariable self) {
         copyVisitor.setMappings(varMap);
         if (selfEx != null) {
             copyVisitor.setSelf(selfEx);            
+        }
+        if (self != null) {
+            copyVisitor.setSelf(self);            
         }
         cst = copyVisitor.acceptAndClear(cst);
         inferTypeSafe(cst, null);
