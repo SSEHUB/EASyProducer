@@ -397,25 +397,25 @@ public class Resolver {
      * in {@link #derivedTypeConstraints}.
      * 
      * @param decl VariableDeclaration of <code>DerivedDatatype</code>
-     * @param type the type to translate, nothing happens if <code>type</code> is not a {@link DerivedDatatype}
+     * @param type the type to translate
      */
-    private void translateDerivedDatatypeConstraints(AbstractVariable decl, IDatatype type) {
-        if (type instanceof DerivedDatatype) {
-            DerivedDatatype dType = (DerivedDatatype) type;
-            ConstraintSyntaxTree[] cst = createDerivedDatatypeExpressions(decl, dType);
-            if (null != cst) {
-                IModelElement topLevelParent = decl.getTopLevelParent();
-                for (int c = 0; c < cst.length; c++) {
-                    // Should be in same project as the declaration belongs to
-                    try { // derivedTypeConstraints
-                        ConstraintSyntaxTree tmp = substituteVariables(cst[c], null, null);
-                        addConstraint(topLevelConstraints, new Constraint(tmp, topLevelParent), true);
-                    } catch (CSTSemanticException e) {
-                        LOGGER.exception(e);
-                    }
+    private void translateDerivedDatatypeConstraints(AbstractVariable decl, DerivedDatatype dType) {
+        ConstraintSyntaxTree[] cst = createDerivedDatatypeExpressions(decl, dType);
+        if (null != cst) {
+            IModelElement topLevelParent = decl.getTopLevelParent();
+            for (int c = 0; c < cst.length; c++) {
+                // Should be in same project as the declaration belongs to
+                try { // derivedTypeConstraints
+                    ConstraintSyntaxTree tmp = substituteVariables(cst[c], null, null);
+                    addConstraint(topLevelConstraints, new Constraint(tmp, topLevelParent), true);
+                } catch (CSTSemanticException e) {
+                    LOGGER.exception(e);
                 }
             }
-            translateDerivedDatatypeConstraints(decl, dType.getBasisType());
+        }
+        IDatatype basis = dType.getBasisType();
+        if (basis instanceof DerivedDatatype) {
+            translateDerivedDatatypeConstraints(decl, (DerivedDatatype) dType.getBasisType());
         }
     }
 
@@ -485,19 +485,21 @@ public class Resolver {
     protected void translateDeclaration(AbstractVariable decl, IDecisionVariable var, CompoundAccess cAcc) {
         variablesCounter++;
         IDatatype type = decl.getType();
-        translateDerivedDatatypeConstraints(decl, type);
+        ConstraintSyntaxTree defaultValue = decl.getDefaultValue();
+        List<Constraint> defltCons = defaultConstraints; 
+        AbstractVariable self = null;
+        if (type instanceof DerivedDatatype) {
+            translateDerivedDatatypeConstraints(decl, (DerivedDatatype) type);
+        }
         if (!incremental) {
             translateAnnotationDefaults(decl, var, cAcc);
         }
-        ConstraintSyntaxTree defaultValue = decl.getDefaultValue();
         if (null != defaultValue) { // considering the actual type rather than base, after derived (!)
             type = inferTypeSafe(defaultValue, type);
         }
-        List<Constraint> defltCons = defaultConstraints; 
-        AbstractVariable self = null;
         if (TypeQueries.isCompound(type)) {
             self = decl;
-            translateCompoundDefaults(decl, var, cAcc, type); 
+            translateCompoundDeclaration(decl, var, cAcc, type); 
         } else if (TypeQueries.isContainer(type)) { 
             translateContainerDeclaration(decl, var, type);
         } else if (null != defaultValue && !incremental) {
@@ -726,7 +728,7 @@ public class Resolver {
      *     <code>decl</code>/<code>variable</code>
      * @param type specific {@link Compound} type.
      */
-    private void translateCompoundDefaults(AbstractVariable decl, IDecisionVariable variable,
+    private void translateCompoundDeclaration(AbstractVariable decl, IDecisionVariable variable,
         CompoundAccess compound, IDatatype type) {
         Compound cmpType = (Compound) type;
         CompoundVariable cmpVar = (CompoundVariable) variable;
