@@ -397,7 +397,7 @@ public class Resolver {
      * in {@link #derivedTypeConstraints}.
      * 
      * @param decl VariableDeclaration of <code>DerivedDatatype</code>
-     * @param type the type to translate
+     * @param dType the type to translate
      */
     private void translateDerivedDatatypeConstraints(AbstractVariable decl, DerivedDatatype dType) {
         ConstraintSyntaxTree[] cst = createDerivedDatatypeExpressions(decl, dType);
