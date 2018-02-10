@@ -512,9 +512,9 @@ public class Resolver {
                 }
                 copyVisitor.clear();
             }
-        } else {
+        } else if (incremental) { // remaining defaults
             defaultValue = null;
-        } // containerCompoundConstraints
+        }
         if (null != defaultValue) {
             try {
                 if (TypeQueries.isConstraint(decl.getType())) { // don't go for value type
