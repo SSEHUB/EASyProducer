@@ -497,10 +497,10 @@ public class Resolver {
         if (null != defaultValue) { // considering the actual type rather than base, after derived (!)
             type = inferTypeSafe(defaultValue, type);
         }
-        if (TypeQueries.isCompound(type)) {
+        if (TypeQueries.isCompound(type)) { // this is a compound value -> default constraints, do not defer
             self = decl;
             translateCompoundDeclaration(decl, var, cAcc, type); 
-        } else if (TypeQueries.isContainer(type)) { 
+        } else if (TypeQueries.isContainer(type)) { // this is a container value -> default constraints, do not defer
             translateContainerDeclaration(decl, var, type);
         } else if (null != defaultValue && !incremental) {
             if (null != cAcc) { // defer self/override init constraints to prevent accidental init override
