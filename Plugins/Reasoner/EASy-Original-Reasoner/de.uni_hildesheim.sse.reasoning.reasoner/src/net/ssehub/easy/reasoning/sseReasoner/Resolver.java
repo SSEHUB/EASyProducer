@@ -518,18 +518,16 @@ public class Resolver {
             defaultValue = substituteVariables(defaultValue, selfEx, self, false);
             try {
                 if (isConstraintVar) { // handle and register constraint variables
-                    if (cAcc == null) { // TODO why???
-                        variablesCounter--;
-                        // use closest parent instead of project -> runtime analysis
-                        Constraint constraint = new Constraint(defaultValue, var.getDeclaration());
-                        constraintVariableMap.put(constraint, var); // just for reasoning messages
-                        // TODO reverse mapping for changing constraint types through value upon value change
-                        addConstraint(otherConstraints, constraint, true);
-                        if (Descriptor.LOGGING) {
-                            LOGGER.debug(var.getDeclaration().getName() + " project constraint variable " 
-                                + toIvmlString(defaultValue));
-                        }
-                    } 
+                    variablesCounter--;
+                    // use closest parent instead of project -> runtime analysis
+                    Constraint constraint = new Constraint(defaultValue, var.getDeclaration());
+                    constraintVariableMap.put(constraint, var); // just for reasoning messages
+                    // TODO reverse mapping for changing constraint types through value upon value change
+                    addConstraint(otherConstraints, constraint, true);
+                    if (Descriptor.LOGGING) {
+                        LOGGER.debug(var.getDeclaration().getName() + " project constraint variable " 
+                            + toIvmlString(defaultValue));
+                    }
                 } else { // Create default constraint
                     List<Constraint> targetCons = defaultConstraints; 
                     if (copyVisitor.containsSelf() || isOverriddenSlot(decl)) {
@@ -765,9 +763,10 @@ public class Resolver {
                 createContainerConstraintValueConstraints((ContainerValue) nestedVar.getValue(), decl, nestedDecl, 
                     nestedVar);
             }
-            if (TypeQueries.isConstraint(nestedType)) {
-                createConstraintVariableConstraint(nestedDecl.getDefaultValue(), decl, nestedDecl, nestedVar);
-            } // compoundConstraints
+            // TODO needed?
+//            if (TypeQueries.isConstraint(nestedType)) {
+//                createConstraintVariableConstraint(nestedDecl.getDefaultValue(), decl, nestedDecl, nestedVar);
+//            } // compoundConstraints
             if (TypeQueries.isContainer(nestedType)) {
                 translateContainerCompoundConstraints(nestedDecl, variable, varMap.get(nestedDecl), 
                     otherConstraints);
