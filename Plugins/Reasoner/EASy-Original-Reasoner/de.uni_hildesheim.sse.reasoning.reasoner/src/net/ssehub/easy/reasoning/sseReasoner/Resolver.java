@@ -510,25 +510,15 @@ public class Resolver {
             defaultValue = null;
         }
         if (null != defaultValue) {
-            boolean isConstraintVar = TypeQueries.isConstraint(decl.getType());
-            if (!isConstraintVar) {
-                defaultValue = new OCLFeatureCall(null != selfEx ? cAcc : new Variable(decl), 
-                    OclKeyWords.ASSIGNMENT, defaultValue);
-            }
-            defaultValue = substituteVariables(defaultValue, selfEx, self, false);
             try {
-                if (isConstraintVar) { // handle and register constraint variables
+                if (TypeQueries.isConstraint(decl.getType())) { // handle and register constraint variables
                     variablesCounter--;
                     // use closest parent instead of project -> runtime analysis
-                    Constraint constraint = new Constraint(defaultValue, var.getDeclaration());
-                    constraintVariableMap.put(constraint, var); // just for reasoning messages
-                    // TODO reverse mapping for changing constraint types through value upon value change
-                    addConstraint(otherConstraints, constraint, true);
-                    if (Descriptor.LOGGING) {
-                        LOGGER.debug(var.getDeclaration().getName() + " project constraint variable " 
-                            + toIvmlString(defaultValue));
-                    }
+                    createConstraintVariableConstraint(defaultValue, selfEx, self, var.getDeclaration(), var);
                 } else { // Create default constraint
+                    defaultValue = new OCLFeatureCall(null != selfEx ? cAcc : new Variable(decl), 
+                        OclKeyWords.ASSIGNMENT, defaultValue);
+                    defaultValue = substituteVariables(defaultValue, selfEx, self, false);
                     List<Constraint> targetCons = defaultConstraints; 
                     if (copyVisitor.containsSelf() || isOverriddenSlot(decl)) {
                         targetCons = deferredDefaultConstraints;
@@ -763,10 +753,6 @@ public class Resolver {
                 createContainerConstraintValueConstraints((ContainerValue) nestedVar.getValue(), decl, nestedDecl, 
                     nestedVar);
             }
-            // TODO needed?
-//            if (TypeQueries.isConstraint(nestedType)) {
-//                createConstraintVariableConstraint(nestedDecl.getDefaultValue(), decl, nestedDecl, nestedVar);
-//            } // compoundConstraints
             if (TypeQueries.isContainer(nestedType)) {
                 translateContainerCompoundConstraints(nestedDecl, variable, varMap.get(nestedDecl), 
                     otherConstraints);
@@ -837,29 +823,32 @@ public class Resolver {
      * {@link #constraintVariablesConstraints}.
      * 
      * @param cst the constraint
-     * @param decl the declaration of the variable representing <i>self</i> in <code>cst</code>
+     * @param selfEx the expression representing <i>self</i> in <code>cst</code>, both, <code>self</code> and 
+     *    <code>selfEx</code> must not be different from <b>null</b> at the same time (may be <b>null</b> for none)
+     * @param self the declaration of the variable representing <i>self</i> in <code>cst</code> (may be <b>null</b> 
+     *    for none)
      * @param parent the parent for new constraints
-     * @param nestedVariable the actually (nested) variable, used to fill {@link #constraintVariableMap}
+     * @param variable the actually (nested) variable, used to fill {@link #constraintVariableMap}
      * @return the created constraint
      */
-    private Constraint createConstraintVariableConstraint(ConstraintSyntaxTree cst, AbstractVariable decl, 
-        IModelElement parent, IDecisionVariable nestedVariable) {
+    private Constraint createConstraintVariableConstraint(ConstraintSyntaxTree cst, ConstraintSyntaxTree selfEx, 
+        AbstractVariable self, IModelElement parent, IDecisionVariable variable) {
         Constraint constraint = null;
         if (cst != null) {
-            cst = substituteVariables(cst, null, decl, true);
+            cst = substituteVariables(cst, selfEx, self, true);
             try {
                 constraint = new Constraint(cst, parent);
                 addConstraint(otherConstraints, constraint, true); // constraintVariablesConstraints
                 //after refactoring duplicate check for ConstraintVariable is needed
-                IDatatype nestedType = nestedVariable.getDeclaration().getType();
-                if (TypeQueries.isContainer(nestedType)) {
+                if (TypeQueries.isContainer(variable.getDeclaration().getType())) {
                     // just for reasoning messages
-                    constraintVariableMap.put(constraint, nestedVariable);
+                    // TODO reverse mapping for changing constraint types through value upon value change
+                    constraintVariableMap.put(constraint, variable);
                 }
                 if (Descriptor.LOGGING) {
-                    LOGGER.debug(decl.getName() + "." + nestedVariable.getDeclaration().getName() 
+                    LOGGER.debug((null != self ? self.getName() + "." : "") + variable.getDeclaration().getName() 
                         + " compound constraint variable " + toIvmlString(cst));
-                }                    
+                }
             } catch (CSTSemanticException e) {
                 LOGGER.exception(e);
             }
@@ -881,7 +870,7 @@ public class Resolver {
             Value cVal = val.getElement(n);
             if (cVal instanceof ConstraintValue) {
                 ConstraintValue constraint = (ConstraintValue) cVal;
-                createConstraintVariableConstraint(constraint.getValue(), decl, parent, nestedVariable);
+                createConstraintVariableConstraint(constraint.getValue(), null, decl, parent, nestedVariable);
             }
         }
     }
