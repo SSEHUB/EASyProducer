@@ -174,7 +174,7 @@ public class ModelCopy extends AbstractModelTask {
             }
             ProjectUtilities.saveProject(destFolder, p);
         } else {
-            debugMessage("Ommiting: " + relativeFileName);
+            debugMessage("Omitting: " + relativeFileName);
         }
     }
 

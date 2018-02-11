@@ -192,7 +192,7 @@ public abstract class AbstractModelTask extends Task {
         debugMessage("Main model: " + getMainProject());
         
         // Setup
-        debugMessage("Prepare destionation folder: " + getDestinationFolder().getAbsolutePath());
+        debugMessage("Prepare destination folder: " + getDestinationFolder().getAbsolutePath());
         boolean createFolder = false;
         if (getDestinationFolder().exists() && getAllowDestDeletion()) {
             try {
@@ -227,7 +227,7 @@ public abstract class AbstractModelTask extends Task {
             if (validator.getErrorCount() > 0) {
                 StringBuffer errMsg = new StringBuffer("Project \"");
                 errMsg.append(getMainProject());
-                errMsg.append("\" was copied, but the result contains inconsitencies:");
+                errMsg.append("\" was copied, but the result contains inconsistencies:");
                 for (int i = 0; i < validator.getMessageCount(); i++) {
                     ValidationMessage msg = validator.getMessage(i);
                     errMsg.append("\n - ");
