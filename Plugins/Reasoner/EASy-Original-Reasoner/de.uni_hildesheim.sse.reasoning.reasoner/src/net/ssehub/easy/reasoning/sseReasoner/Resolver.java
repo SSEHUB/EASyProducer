@@ -839,12 +839,8 @@ public class Resolver {
             try {
                 constraint = new Constraint(cst, parent);
                 addConstraint(otherConstraints, constraint, true); // constraintVariablesConstraints
-                //after refactoring duplicate check for ConstraintVariable is needed
-                if (TypeQueries.isContainer(variable.getDeclaration().getType())) {
-                    // just for reasoning messages
-                    // TODO reverse mapping for changing constraint types through value upon value change
-                    constraintVariableMap.put(constraint, variable);
-                }
+                // TODO reverse mapping for changing constraint types through value upon value change
+                constraintVariableMap.put(constraint, variable);
                 if (Descriptor.LOGGING) {
                     LOGGER.debug((null != self ? self.getName() + "." : "") + variable.getDeclaration().getName() 
                         + " compound constraint variable " + toIvmlString(cst));
