@@ -17,10 +17,8 @@ package net.ssehub.easy.varModel.cst;
 
 import java.util.Map;
 
-import net.ssehub.easy.basics.logger.EASyLoggerFactory;
 import net.ssehub.easy.basics.modelManagement.IVariable;
 import net.ssehub.easy.basics.modelManagement.IVersionRestriction.IVariableMapper;
-import net.ssehub.easy.varModel.Bundle;
 import net.ssehub.easy.varModel.model.AbstractVariable;
 import net.ssehub.easy.varModel.model.Attribute;
 import net.ssehub.easy.varModel.model.DecisionVariableDeclaration;
@@ -31,10 +29,9 @@ import net.ssehub.easy.varModel.model.DecisionVariableDeclaration;
  * 
  * @author Holger Eichelberger
  */
-public class CopyVisitor implements IConstraintTreeVisitor {
+public class CopyVisitor extends BasicCopyVisitor {
 
     private Map<AbstractVariable, AbstractVariable> mapping;
-    private ConstraintSyntaxTree result;
     private IVariableMapper mapper;
     private IVariableReplacer replacer;
 
@@ -93,35 +90,6 @@ public class CopyVisitor implements IConstraintTreeVisitor {
     protected Map<AbstractVariable, AbstractVariable> getMapping() {
         return mapping;
     }
-    
-    /**
-     * Allows inherited classed to overwrite visiting method and to return a partially translated cst.
-     * @param cst A partially copied cst.
-     */
-    protected void setResult(ConstraintSyntaxTree cst) {
-        result = cst;
-    }
-    
-    /**
-     * Returns the copied syntax tree.
-     * 
-     * @return the copied tree (may be <b>null</b> if no tree was visited).
-     */
-    public ConstraintSyntaxTree getResult() {
-        return result;
-    }
-    
-    /**
-     * Clears this visitor for reuse.
-     */
-    public void clear() {
-        result = null;
-    }
-
-    @Override
-    public void visitConstantValue(ConstantValue value) {
-        result = new ConstantValue(value.getConstantValue());
-    }
 
     @Override
     public void visitVariable(Variable variable) {
@@ -132,57 +100,10 @@ public class CopyVisitor implements IConstraintTreeVisitor {
         if (null == var) {
             var = new Variable(mapVariable(variable.getVariable()));
         }
-        result = var;
+        setResult(var);
     }
 
     @Override
-    public void visitParenthesis(Parenthesis parenthesis) {
-        parenthesis.getExpr().accept(this);
-        result = new Parenthesis(result);
-    }
-
-    @Override
-    public void visitComment(Comment comment) {
-        comment.getExpr().accept(this);
-        result = new Comment(result, comment.getComment());
-    }
-
-    @Override
-    public void visitOclFeatureCall(OCLFeatureCall call) {
-        ConstraintSyntaxTree operand = call.getOperand();
-        if (null != operand) {
-            operand.accept(this);
-        }
-        operand = result;
-        ConstraintSyntaxTree[] args = new ConstraintSyntaxTree[call.getParameterCount()];
-        for (int p = 0; p < args.length; p++) {
-            call.getParameter(p).accept(this);
-            args[p] = result;
-        }
-        result = new OCLFeatureCall(operand, call.getOperation(), call.getAccessor(), args);
-    }
-    
-
-    @Override
-    public void visitMultiAndExpression(MultiAndExpression expression) {
-        OCLFeatureCall[] expressions = new OCLFeatureCall[expression.getExpressionCount()];
-        for (int e = 0; e < expressions.length; e++) {
-            expression.getExpression(e).accept(this);
-            expressions[e] = (OCLFeatureCall) result;
-        }
-        try {
-            result = new MultiAndExpression(expressions);
-        } catch (CSTSemanticException e) {
-            EASyLoggerFactory.INSTANCE.getLogger(CopyVisitor.class, Bundle.ID).exception(e);
-        }
-    }
-
-    /**
-     * Maps a variable.
-     * 
-     * @param var the variable to be mapped
-     * @return the mapped variable or <code>var</code>
-     */
     protected DecisionVariableDeclaration mapVariable(DecisionVariableDeclaration var) {
         DecisionVariableDeclaration result = null;
         if (null != mapping) {
@@ -203,12 +124,7 @@ public class CopyVisitor implements IConstraintTreeVisitor {
         return result;
     }
 
-    /**
-     * Maps a variable.
-     * 
-     * @param var the variable to be mapped
-     * @return the mapped variable or <code>var</code>
-     */
+    @Override
     protected AbstractVariable mapVariable(AbstractVariable var) {
         AbstractVariable result = null;
         if (null != mapping) {
@@ -222,104 +138,10 @@ public class CopyVisitor implements IConstraintTreeVisitor {
         return result;
     }
 
-    
-    @Override
-    public void visitLet(Let let) {
-        DecisionVariableDeclaration var = mapVariable(let.getVariable());
-        let.getInExpression().accept(this);
-        result = new Let(var, result);
-    }
-
-    @Override
-    public void visitIfThen(IfThen ifThen) {
-        ifThen.getIfExpr().accept(this);
-        ConstraintSyntaxTree ifExpr = result;
-        ifThen.getThenExpr().accept(this);
-        ConstraintSyntaxTree thenExpr = result;
-        ConstraintSyntaxTree elseExpr;
-        if (null != ifThen.getElseExpr()) {
-            ifThen.getElseExpr().accept(this);
-            elseExpr = result;
-        } else {
-            elseExpr = null;
-        }
-        result = new IfThen(ifExpr, thenExpr, elseExpr);
-    }
-
-    @Override
-    public void visitContainerOperationCall(ContainerOperationCall call) {
-        call.getContainer().accept(this);
-        ConstraintSyntaxTree container = result;
-        call.getExpression().accept(this);
-        ConstraintSyntaxTree expression = result;
-        DecisionVariableDeclaration[] decls = new DecisionVariableDeclaration[call.getDeclaratorsCount()];
-        for (int d = 0; d < decls.length; d++) {
-            decls[d] = mapVariable(call.getDeclarator(d));
-        }
-        result = new ContainerOperationCall(container, call.getOperation(), expression, decls);
-    }
-
-    @Override
-    public void visitCompoundAccess(CompoundAccess access) {
-        access.getCompoundExpression().accept(this);
-        result = new CompoundAccess(result, access.getSlotName());
-    }
-
-    @Override
-    public void visitUnresolvedExpression(UnresolvedExpression expression) {
-        if (null != expression.getUnresolvedLeaf()) {
-            result = new UnresolvedExpression(expression.getUnresolvedLeaf());
-        } else {
-            expression.accept(this);
-            result = new UnresolvedExpression(result);
-        }
-    }
-
-    @Override
-    public void visitCompoundInitializer(CompoundInitializer initializer) {
-        String[] slots = new String[initializer.getSlotCount()];
-        for (int s = 0; s < slots.length; s++) {
-            slots[s] = initializer.getSlot(s);
-        }
-        AbstractVariable[] slotDecls = new DecisionVariableDeclaration[initializer.getSlotCount()];
-        for (int s = 0; s < slotDecls.length; s++) {
-            slotDecls[s] = mapVariable(initializer.getSlotDeclaration(s));
-        }
-        ConstraintSyntaxTree[] exprs = new ConstraintSyntaxTree[initializer.getExpressionCount()];
-        for (int e = 0; e < exprs.length; e++) {
-            initializer.getExpression(e).accept(this);
-            exprs[e] = result;
-        }
-        try {
-            result = new CompoundInitializer(initializer.getType(), slots, slotDecls, exprs);
-        } catch (CSTSemanticException e) {
-            EASyLoggerFactory.INSTANCE.getLogger(CopyVisitor.class, Bundle.ID).exception(e);
-        }
-    }
-
-    @Override
-    public void visitContainerInitializer(ContainerInitializer initializer) {
-        ConstraintSyntaxTree[] exprs = new ConstraintSyntaxTree[initializer.getExpressionCount()];
-        for (int e = 0; e < exprs.length; e++) {
-            initializer.getExpression(e).accept(this);
-            exprs[e] = result;
-        }
-        try {
-            result = new ContainerInitializer(initializer.getType(), exprs);
-        } catch (CSTSemanticException e) {
-            EASyLoggerFactory.INSTANCE.getLogger(CopyVisitor.class, Bundle.ID).exception(e);
-        }
-    }
-
-    @Override
-    public void visitSelf(Self self) {
-        result = self; // no replacement needed
-    }
-
     @Override
     public void visitAnnotationVariable(AttributeVariable variable) {
         variable.getQualifier().accept(this);
-        ConstraintSyntaxTree qualifier = result;       
+        ConstraintSyntaxTree qualifier = getResult();
         
         ConstraintSyntaxTree var = null;
         if (null != replacer) {
@@ -328,21 +150,7 @@ public class CopyVisitor implements IConstraintTreeVisitor {
         if (null == var) {
             var = new AttributeVariable(qualifier, (Attribute) mapVariable(variable.getVariable()));
         }
-        result = var;
-    }
-
-    @Override
-    public void visitBlockExpression(BlockExpression block) {
-        ConstraintSyntaxTree[] exprs = new ConstraintSyntaxTree[block.getExpressionCount()];
-        for (int e = 0, n = block.getExpressionCount(); e < n; e++) {
-            block.getExpression(e).accept(this);
-            exprs[e] = result;
-        }
-        try {
-            result = new BlockExpression(exprs);
-        } catch (CSTSemanticException e) {
-            EASyLoggerFactory.INSTANCE.getLogger(CopyVisitor.class, Bundle.ID).exception(e);
-        }
+        setResult(var);
     }
 
 }
