@@ -122,7 +122,7 @@ public class Resolver {
     
     private Project project;
     private transient Set<IDecisionVariable> usedVariables = new HashSet<IDecisionVariable>(100);
-    private transient SubstitutionVisitor copyVisitor = new SubstitutionVisitor();
+    private transient SubstitutionVisitor substVisitor = new SubstitutionVisitor();
     private transient Map<AbstractVariable, CompoundAccess> varMap = new HashMap<AbstractVariable, CompoundAccess>(100);
     private transient ContainerConstraintsFinder containerFinder = new ContainerConstraintsFinder();
     private transient VariablesInNotSimpleAssignmentConstraintsFinder simpleAssignmentFinder 
@@ -438,8 +438,8 @@ public class Resolver {
             Variable replacement = new Variable(declaration);
             //Copy and replace each instance of the internal declaration with the given instance
             for (int i = 0; i < count; i++) {
-                copyVisitor.addVariableMapping(dVar, replacement);
-                csts[i] = copyVisitor.acceptAndClear(dType.getConstraint(i).getConsSyntax());
+                substVisitor.addVariableMapping(dVar, replacement);
+                csts[i] = substVisitor.acceptAndClear(dType.getConstraint(i).getConsSyntax());
             }
         }        
         return csts;
@@ -520,12 +520,12 @@ public class Resolver {
                         OclKeyWords.ASSIGNMENT, defaultValue);
                     defaultValue = substituteVariables(defaultValue, selfEx, self, false);
                     List<Constraint> targetCons = defaultConstraints; 
-                    if (copyVisitor.containsSelf() || isOverriddenSlot(decl)) {
+                    if (substVisitor.containsSelf() || isOverriddenSlot(decl)) {
                         targetCons = deferredDefaultConstraints;
                     }
                     addConstraint(targetCons, new DefaultConstraint(defaultValue, project), true);
                 }
-                copyVisitor.clear(); // clear false above 
+                substVisitor.clear(); // clear false above 
             } catch (CSTSemanticException e) {
                 LOGGER.exception(e); // should not occur, ok to log
             }            
@@ -1180,20 +1180,20 @@ public class Resolver {
      * @param selfEx an expression representing <i>self</i> (ignored if <b>null</b>, <code>self</code> and 
      *     <code>selfEx</code> shall never both be specified/not <b>null</b>).
      * @param self an variable declaration representing <i>self</i> (ignored if <b>null</b>).
-     * @param clear clear {@link #copyVisitor} if <code>true</code> or leave its state for further queries requring
+     * @param clear clear {@link #substVisitor} if <code>true</code> or leave its state for further queries requring
      * the caller to explicitly clear the copy visitor after usage
      * @return Transformed constraint.
      */
     private ConstraintSyntaxTree substituteVariables(ConstraintSyntaxTree cst, ConstraintSyntaxTree selfEx, 
         AbstractVariable self, boolean clear) {
-        copyVisitor.setMappings(varMap);
+        substVisitor.setMappings(varMap);
         if (selfEx != null) {
-            copyVisitor.setSelf(selfEx);            
+            substVisitor.setSelf(selfEx);            
         }
         if (self != null) {
-            copyVisitor.setSelf(self);            
+            substVisitor.setSelf(self);            
         }
-        cst = copyVisitor.acceptAndClear(cst);
+        cst = substVisitor.acceptAndClear(cst);
         inferTypeSafe(cst, null);
         return cst;
     }
@@ -1395,7 +1395,7 @@ public class Resolver {
         isRunning = false;
         wasStopped = false;
         usedVariables.clear();
-        copyVisitor.clear();
+        substVisitor.clear();
         varMap.clear();
         containerFinder.clear();
         simpleAssignmentFinder.clear();
