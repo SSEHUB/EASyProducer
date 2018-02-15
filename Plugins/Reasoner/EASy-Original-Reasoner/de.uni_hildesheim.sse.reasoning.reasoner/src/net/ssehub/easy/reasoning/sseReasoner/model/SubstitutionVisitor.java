@@ -27,14 +27,14 @@ import net.ssehub.easy.varModel.cst.Variable;
 import net.ssehub.easy.varModel.model.AbstractVariable;
 
 /**
- * Copies a constraint syntax tree possibly mapping the variables. May be 
+ * Substitutes variables in a constraint syntax tree by copying the syntax tree. May be 
  * reused after calling {@link #clear()}. {@link #addVariableMapping(AbstractVariable, Variable)}
  * takes precedence over {@link #setMappings(Map)}.
  * 
  * @author Sizonenko
  * @author Holger Eichelberger
  */
-public class CopyVisitor extends BasicCopyVisitor {
+public class SubstitutionVisitor extends BasicCopyVisitor {
 
     private Map<AbstractVariable, Variable> mapping;
     private Map<AbstractVariable, CompoundAccess> mappingCA;
@@ -45,7 +45,7 @@ public class CopyVisitor extends BasicCopyVisitor {
     /**
      * Creates a copy visitor without mapping.
      */
-    public CopyVisitor() {
+    public SubstitutionVisitor() {
         this(null);
     }
     
@@ -57,7 +57,7 @@ public class CopyVisitor extends BasicCopyVisitor {
      *   in case of no mapping at all
      * @see #setMappings(Map, Map)
      */
-    public CopyVisitor(Map<AbstractVariable, CompoundAccess> mappingCA) {
+    public SubstitutionVisitor(Map<AbstractVariable, CompoundAccess> mappingCA) {
         // setCopyVariables not needed as overridden anyway
         setDoInferDatatype(false);
         setCopyConstants(false); 
@@ -105,7 +105,7 @@ public class CopyVisitor extends BasicCopyVisitor {
      * @param dest the destination variable to replace <code>orig</code> (may be <b>null</b>, ignored)
      * @return <b>this</b>
      */
-    public CopyVisitor addVariableMapping(AbstractVariable orig, Variable dest) {
+    public SubstitutionVisitor addVariableMapping(AbstractVariable orig, Variable dest) {
         if (null != orig) {
             if (null == mapping) {
                 mapping = new HashMap<AbstractVariable, Variable>();
@@ -121,7 +121,7 @@ public class CopyVisitor extends BasicCopyVisitor {
      * @param var the variable to clear the mapping for (may be <b>null</b>, ignored)
      * @return <b>this</b>
      */
-    public CopyVisitor clearVariableMapping(AbstractVariable var) {
+    public SubstitutionVisitor clearVariableMapping(AbstractVariable var) {
         if (null != mapping && null != var) {
             mapping.remove(var);
         }
@@ -132,7 +132,7 @@ public class CopyVisitor extends BasicCopyVisitor {
      * Clears the entire variable mapping.
      * @return <b>this</b>
      */
-    public CopyVisitor clearVariableMapping() {
+    public SubstitutionVisitor clearVariableMapping() {
         if (null != mapping) {
             mapping.clear();
         }
@@ -145,7 +145,7 @@ public class CopyVisitor extends BasicCopyVisitor {
      * @param selfEx the expression (may be <b>null</b>, ignored then).
      * @return <b>this</b>
      */
-    public CopyVisitor setSelf(ConstraintSyntaxTree selfEx) {
+    public SubstitutionVisitor setSelf(ConstraintSyntaxTree selfEx) {
         this.selfEx = selfEx;
         return this;
     }
@@ -157,7 +157,7 @@ public class CopyVisitor extends BasicCopyVisitor {
      * @param self the variable (declaration) representing self (may be <b>null</b>, ignored then).
      * @return <b>this</b>
      */
-    public CopyVisitor setSelf(AbstractVariable self) {
+    public SubstitutionVisitor setSelf(AbstractVariable self) {
         this.self = self;
         return this;
     }

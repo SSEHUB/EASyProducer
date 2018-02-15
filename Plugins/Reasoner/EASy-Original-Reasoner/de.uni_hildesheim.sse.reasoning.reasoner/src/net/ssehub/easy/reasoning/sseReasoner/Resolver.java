@@ -20,7 +20,7 @@ import net.ssehub.easy.reasoning.sseReasoner.functions.FailedElementDetails;
 import net.ssehub.easy.reasoning.sseReasoner.functions.FailedElements;
 import net.ssehub.easy.reasoning.sseReasoner.functions.ScopeAssignments;
 import net.ssehub.easy.reasoning.sseReasoner.model.ContainerConstraintsFinder;
-import net.ssehub.easy.reasoning.sseReasoner.model.CopyVisitor;
+import net.ssehub.easy.reasoning.sseReasoner.model.SubstitutionVisitor;
 import net.ssehub.easy.reasoning.sseReasoner.model.DefaultConstraint;
 import net.ssehub.easy.reasoning.sseReasoner.model.VariablesInNotSimpleAssignmentConstraintsFinder;
 import net.ssehub.easy.reasoning.sseReasoner.model.VariablesMap;
@@ -122,7 +122,7 @@ public class Resolver {
     
     private Project project;
     private transient Set<IDecisionVariable> usedVariables = new HashSet<IDecisionVariable>(100);
-    private transient CopyVisitor copyVisitor = new CopyVisitor();
+    private transient SubstitutionVisitor copyVisitor = new SubstitutionVisitor();
     private transient Map<AbstractVariable, CompoundAccess> varMap = new HashMap<AbstractVariable, CompoundAccess>(100);
     private transient ContainerConstraintsFinder containerFinder = new ContainerConstraintsFinder();
     private transient VariablesInNotSimpleAssignmentConstraintsFinder simpleAssignmentFinder 
@@ -1173,7 +1173,7 @@ public class Resolver {
     }
 
     /**
-     * Method for using {@link CopyVisitor} for constraint transformation. Uses the actual
+     * Method for using {@link SubstitutionVisitor} for constraint transformation. Uses the actual
      * variable mapping in {@link #varMap} and may consider a mapping for <code>self</code>.
      * 
      * @param cst Constraint to be transformed.
