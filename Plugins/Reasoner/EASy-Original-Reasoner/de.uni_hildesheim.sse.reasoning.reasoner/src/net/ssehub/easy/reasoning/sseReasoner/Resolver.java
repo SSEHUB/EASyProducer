@@ -408,7 +408,8 @@ public class Resolver {
             for (int c = 0; c < cst.length; c++) {
                 // Should be in same project as the declaration belongs to
                 try {
-                    ConstraintSyntaxTree tmp = substituteVariables(cst[c], null, null, true);
+                    ConstraintSyntaxTree tmp = cst[c];                    
+                    tmp.inferDatatype();
                     addConstraint(topLevelConstraints, new Constraint(tmp, topLevelParent), true);
                 } catch (CSTSemanticException e) {
                     LOGGER.exception(e);
@@ -435,13 +436,19 @@ public class Resolver {
         DecisionVariableDeclaration dVar = dType.getTypeDeclaration();
         if (count > 0 && dVar != declaration) {
             csts = new ConstraintSyntaxTree[count];
-            Variable replacement = new Variable(declaration);
+//            ConstraintSyntaxTree replacement;
+            substVisitor.setMappings(varMap);
+/*            if (null != varMap.get(declaration)) { // allow for transitive substitution saving unneeded variables
+                replacement = varMap.get(declaration);
+            } else {
+                replacement = new Variable(declaration);
+            }*/
+            substVisitor.addVariableMapping(dVar, declaration);
             //Copy and replace each instance of the internal declaration with the given instance
             for (int i = 0; i < count; i++) {
-                substVisitor.setMappings(varMap);
-                substVisitor.addVariableMapping(dVar, replacement);
-                csts[i] = substVisitor.acceptAndClear(dType.getConstraint(i).getConsSyntax());
+                csts[i] = substVisitor.accept(dType.getConstraint(i).getConsSyntax());
             }
+            substVisitor.clear();
         }        
         return csts;
     }

@@ -36,7 +36,7 @@ import net.ssehub.easy.varModel.model.AbstractVariable;
  */
 public class SubstitutionVisitor extends BasicCopyVisitor {
 
-    private Map<AbstractVariable, Variable> mapping;
+    private Map<AbstractVariable, ConstraintSyntaxTree> mapping;
     private Map<AbstractVariable, CompoundAccess> mappingCA;
     private ConstraintSyntaxTree selfEx;
     private AbstractVariable self;
@@ -100,17 +100,30 @@ public class SubstitutionVisitor extends BasicCopyVisitor {
     
     /**
      * Adds a variable mapping to be considered during copying. Takes precedence over {@link #setMappings(Map)}.
+     * If a variable mapping is defined by {@link #setMappings(Map)}, potential transitive mappings of <code>dest</code>
+     * are considered and instead of <code>orig</code>-<code>dest</code>, a mapping from <code>orig</code> to the 
+     * transitive value is registered.
      * 
      * @param orig the original variable to be replaced (may be <b>null</b>, ignored)
      * @param dest the destination variable to replace <code>orig</code> (may be <b>null</b>, ignored)
      * @return <b>this</b>
      */
-    public SubstitutionVisitor addVariableMapping(AbstractVariable orig, Variable dest) {
+    public SubstitutionVisitor addVariableMapping(AbstractVariable orig, AbstractVariable dest) {
+        ConstraintSyntaxTree destEx = null;
+        if (null != mappingCA) { // allow for transitive substitution saving unneeded variables
+            CompoundAccess ca = mappingCA.get(dest);
+            if (null != ca) {
+                destEx = ca;
+            }
+        }
+        if (null == destEx) {
+            destEx = new Variable(dest);
+        }
         if (null != orig) {
             if (null == mapping) {
-                mapping = new HashMap<AbstractVariable, Variable>();
+                mapping = new HashMap<AbstractVariable, ConstraintSyntaxTree>();
             }
-            mapping.put(orig, dest);
+            mapping.put(orig, destEx);
         }
         return this;
     }
@@ -197,7 +210,7 @@ public class SubstitutionVisitor extends BasicCopyVisitor {
             CompoundAccess tmp = null == mappingCA ? null : mappingCA.get(variable.getVariable());
             if (null != tmp) {
                 res = inferDatatype(tmp);
-            }             
+            }
         }
         if (null == res) {
             res = variable;
