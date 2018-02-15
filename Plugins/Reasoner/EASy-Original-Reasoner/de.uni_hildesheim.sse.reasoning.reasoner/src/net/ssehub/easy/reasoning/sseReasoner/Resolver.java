@@ -436,13 +436,7 @@ public class Resolver {
         DecisionVariableDeclaration dVar = dType.getTypeDeclaration();
         if (count > 0 && dVar != declaration) {
             csts = new ConstraintSyntaxTree[count];
-//            ConstraintSyntaxTree replacement;
             substVisitor.setMappings(varMap);
-/*            if (null != varMap.get(declaration)) { // allow for transitive substitution saving unneeded variables
-                replacement = varMap.get(declaration);
-            } else {
-                replacement = new Variable(declaration);
-            }*/
             substVisitor.addVariableMapping(dVar, declaration);
             //Copy and replace each instance of the internal declaration with the given instance
             for (int i = 0; i < count; i++) {
