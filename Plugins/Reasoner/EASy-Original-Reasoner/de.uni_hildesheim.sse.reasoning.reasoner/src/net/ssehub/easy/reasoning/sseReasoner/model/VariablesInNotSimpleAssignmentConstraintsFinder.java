@@ -1,8 +1,7 @@
 package net.ssehub.easy.reasoning.sseReasoner.model;
 
-import java.util.HashSet;
-import java.util.Set;
-
+import net.ssehub.easy.basics.logger.EASyLoggerFactory;
+import net.ssehub.easy.reasoning.sseReasoner.Descriptor;
 import net.ssehub.easy.varModel.cst.AttributeVariable;
 import net.ssehub.easy.varModel.cst.BlockExpression;
 import net.ssehub.easy.varModel.cst.CSTSemanticException;
@@ -23,6 +22,7 @@ import net.ssehub.easy.varModel.cst.Self;
 import net.ssehub.easy.varModel.cst.UnresolvedExpression;
 import net.ssehub.easy.varModel.cst.Variable;
 import net.ssehub.easy.varModel.model.AbstractVariable;
+import net.ssehub.easy.varModel.model.Constraint;
 import net.ssehub.easy.varModel.model.datatypes.OclKeyWords;
 import net.ssehub.easy.varModel.model.values.ReferenceValue;
 import net.ssehub.easy.varModel.model.values.Value;
@@ -31,46 +31,52 @@ import net.ssehub.easy.varModel.model.values.Value;
  * A visitor to retrieve variables from constraints.
  *
  */
-public class VariablesInConstraintsFinder implements IConstraintTreeVisitor {
+public class VariablesInNotSimpleAssignmentConstraintsFinder implements IConstraintTreeVisitor {
 
-    private Set<AbstractVariable> variables;
+    private VariablesMap constraintMap;
     private boolean isSimpleAssignment;
+    private Constraint constraint;
     
     /**
      * Creates a visitor instance.
+     * 
+     * @param constraintMap the constraint map to use for storing results
      */
-    public VariablesInConstraintsFinder() {
-        variables = new HashSet<AbstractVariable>(); 
+    public VariablesInNotSimpleAssignmentConstraintsFinder(VariablesMap constraintMap) {
+        this.constraintMap = constraintMap;
         isSimpleAssignment = false;
     }
 
     /**
      * Accepts and visits a constraint.
      * 
-     * @param cst the constraint to accept
+     * @param constraint the constraint to accept
      */
-    public void accept(ConstraintSyntaxTree cst) {
-        cst.accept(this);           
+    public void accept(Constraint constraint) {
+        this.constraint = constraint;
+        constraint.getConsSyntax().accept(this);
+    }
+    
+    /**
+     * Combines {@link #accept(Constraint)} and {@link #clear()}.
+     * 
+     * @param constraint the constraint to accept
+     */
+    public void acceptAndClear(Constraint constraint) {
+        accept(constraint);
+        clear();
     }
     
     /**
      * Clears this visitor for reuse.
      */
     public void clear() {
-        variables.clear();
+        constraint = null;
         isSimpleAssignment = false;
     }
     
     /**
-     * Method to get all variables that are used in constraints.
-     * @return List of {@link AbstractVariable}s (maybe empty, but not <tt>null</tt>).
-     */
-    public Set<AbstractVariable> getVariables() {
-        return variables;
-    } 
-    
-    /**
-     * Method for analyzing if constraint is valid for reevaluation (is not a simple aasignment).
+     * Method for analyzing if constraint is valid for reevaluation (is not a simple asignment).
      * @return true if valid.
      */
     public boolean isSimpleAssignment() {
@@ -84,15 +90,14 @@ public class VariablesInConstraintsFinder implements IConstraintTreeVisitor {
             ReferenceValue rValue = (ReferenceValue) constValue;
             AbstractVariable referencedDecl = rValue.getValue();
             if (null != referencedDecl) {
-                variables.add(referencedDecl);
+                constraintMap.add(referencedDecl, constraint);
             }
         }
     }
 
     @Override
     public void visitVariable(Variable variable) {
-        AbstractVariable wrappedDeclaration = variable.getVariable();        
-        variables.add(wrappedDeclaration);
+        constraintMap.add(variable.getVariable(), constraint);
     }
     
     @Override
@@ -126,10 +131,12 @@ public class VariablesInConstraintsFinder implements IConstraintTreeVisitor {
                     || call.getParameter(0) instanceof CompoundInitializer) {
                     isSimpleAssignment = true; 
                 }
-            } 
-            call.getOperand().accept(this);
-            for (int i = 0; i < call.getParameterCount(); i++) {
-                call.getParameter(i).accept(this);
+            }
+            if (!isSimpleAssignment) {
+                call.getOperand().accept(this);
+                for (int i = 0; i < call.getParameterCount(); i++) {
+                    call.getParameter(i).accept(this);
+                }
             }
         }
     }
@@ -164,9 +171,9 @@ public class VariablesInConstraintsFinder implements IConstraintTreeVisitor {
         access.getCompoundExpression().accept(this);  
         try {
             access.inferDatatype();
-            variables.add(access.getResolvedSlot());
+            constraintMap.add(access.getResolvedSlot(), constraint);
         } catch (CSTSemanticException e) {
-            e.printStackTrace();
+            EASyLoggerFactory.INSTANCE.getLogger(getClass(), Descriptor.BUNDLE_NAME).exception(e);
         }
         
     }

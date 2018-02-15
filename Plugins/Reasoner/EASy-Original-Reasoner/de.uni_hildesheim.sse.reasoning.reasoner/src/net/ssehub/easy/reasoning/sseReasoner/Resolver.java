@@ -22,7 +22,8 @@ import net.ssehub.easy.reasoning.sseReasoner.functions.ScopeAssignments;
 import net.ssehub.easy.reasoning.sseReasoner.model.ContainerConstraintsFinder;
 import net.ssehub.easy.reasoning.sseReasoner.model.CopyVisitor;
 import net.ssehub.easy.reasoning.sseReasoner.model.DefaultConstraint;
-import net.ssehub.easy.reasoning.sseReasoner.model.VariablesInConstraintsFinder;
+import net.ssehub.easy.reasoning.sseReasoner.model.VariablesInNotSimpleAssignmentConstraintsFinder;
+import net.ssehub.easy.reasoning.sseReasoner.model.VariablesMap;
 import net.ssehub.easy.varModel.confModel.AssignmentState;
 import net.ssehub.easy.varModel.confModel.CompoundVariable;
 import net.ssehub.easy.varModel.confModel.Configuration;
@@ -124,7 +125,8 @@ public class Resolver {
     private transient CopyVisitor copyVisitor = new CopyVisitor();
     private transient Map<AbstractVariable, CompoundAccess> varMap = new HashMap<AbstractVariable, CompoundAccess>(100);
     private transient ContainerConstraintsFinder containerFinder = new ContainerConstraintsFinder();
-    private transient VariablesInConstraintsFinder simpleAssignmentFinder = new VariablesInConstraintsFinder();
+    private transient VariablesInNotSimpleAssignmentConstraintsFinder simpleAssignmentFinder 
+        = new VariablesInNotSimpleAssignmentConstraintsFinder(constraintMap);
     private transient ConstraintTranslationVisitor projectVisitor = new ConstraintTranslationVisitor();
     private transient VariablesInConstraintFinder variablesFinder = new VariablesInConstraintFinder();
     private transient long endTimestamp;
@@ -415,7 +417,7 @@ public class Resolver {
         }
         IDatatype basis = dType.getBasisType();
         if (basis instanceof DerivedDatatype) {
-            translateDerivedDatatypeConstraints(decl, (DerivedDatatype) dType.getBasisType());
+            translateDerivedDatatypeConstraints(decl, (DerivedDatatype) basis);
         }
     }
 
@@ -424,9 +426,7 @@ public class Resolver {
      *  
      * @param declaration VariableDeclaration of <code>DerivedDatatype</code>
      * @param dType type of <code>DerivedDatatype</code>
-     * @return <code>null</code> if <code>dType</code> is not a <i>DerivedDatatype</i> or if <code>dType</code> 
-     *   has no constraints, otherwise the translated constraint expressions of the <code>dType</code> instantiated 
-     *   for <code>declaration</code>
+     * @return the created constraints
      */
     private ConstraintSyntaxTree[] createDerivedDatatypeExpressions(AbstractVariable declaration, 
         DerivedDatatype dType) {
@@ -435,11 +435,11 @@ public class Resolver {
         DecisionVariableDeclaration dVar = dType.getTypeDeclaration();
         if (count > 0 && dVar != declaration) {
             csts = new ConstraintSyntaxTree[count];
-            Variable origin = new Variable(dVar);
             Variable replacement = new Variable(declaration);
             //Copy and replace each instance of the internal declaration with the given instance
             for (int i = 0; i < count; i++) {
-                csts[i] = substituteVariable(dType.getConstraint(i).getConsSyntax(), origin, replacement); 
+                copyVisitor.addVariableMapping(dVar, replacement);
+                csts[i] = copyVisitor.acceptAndClear(dType.getConstraint(i).getConsSyntax());
             }
         }        
         return csts;
@@ -607,10 +607,10 @@ public class Resolver {
      * 
      * @param derivedType {@link DerivedDatatype} of the container.
      * @param decl container variable.
-     * @param topcmpAccess {@link CompoundAccess}, might be <b>null</b>.
+     * @param access {@link CompoundAccess}, might be <b>null</b>.
      */
     private void translateContainerDerivedDatatypeConstraints(DerivedDatatype derivedType, 
-        AbstractVariable decl, CompoundAccess topcmpAccess) {
+        AbstractVariable decl, CompoundAccess access) {
         // as long as evaluation is not parallelized, using the same localDecl shall not be a problem
         DecisionVariableDeclaration localDecl = new DecisionVariableDeclaration("derivedType", derivedType, null);
         ConstraintSyntaxTree[] cst = createDerivedDatatypeExpressions(localDecl, derivedType);
@@ -618,10 +618,10 @@ public class Resolver {
             for (int i = 0, n = cst.length; i < n; i++) {
                 ConstraintSyntaxTree itExpression = cst[i];
                 ConstraintSyntaxTree typeCst = null;
-                if (topcmpAccess == null) {
+                if (access == null) {
                     typeCst = createContainerCall(new Variable(decl), Container.FORALL, itExpression, localDecl);
                 } else {
-                    typeCst = createContainerCall(topcmpAccess, Container.FORALL, itExpression, localDecl);
+                    typeCst = createContainerCall(access, Container.FORALL, itExpression, localDecl);
                 }            
                 try {
                     typeCst.inferDatatype();
@@ -632,12 +632,12 @@ public class Resolver {
                 }            
             }            
         }
-        if (derivedType.getBasisType() instanceof DerivedDatatype) {
-            translateContainerDerivedDatatypeConstraints((DerivedDatatype) derivedType.getBasisType(), 
-                decl, topcmpAccess);
+        IDatatype basis = derivedType.getBasisType();
+        if (basis instanceof DerivedDatatype) {
+            translateContainerDerivedDatatypeConstraints((DerivedDatatype) basis, decl, access);
         }
     }
-    
+
     /**
      * Method for retrieving constraints from compounds initialized in containers. <code>variable</code>
      * must be a container and <code>decl</code> of type container.
@@ -1006,13 +1006,7 @@ public class Resolver {
                 containerFinder.clear();
             }
             target.add(constraint);
-            simpleAssignmentFinder.accept(cst);
-            if (!simpleAssignmentFinder.isSimpleAssignment()) { 
-                for (AbstractVariable declaration : simpleAssignmentFinder.getVariables()) {
-                    constraintMap.add(declaration, constraint);                       
-                }
-            }
-            simpleAssignmentFinder.clear();
+            simpleAssignmentFinder.acceptAndClear(constraint);
         }
     }
 
@@ -1202,20 +1196,6 @@ public class Resolver {
         cst = copyVisitor.acceptAndClear(cst);
         inferTypeSafe(cst, null);
         return cst;
-    }
-
-    /**
-     * Substitutes the variable <code>origin</code> by <code>replacement</code> in <code>constraint</code>.
-     * 
-     * @param constraint the constraint to replace the variable within
-     * @param origin the variable to be replaced
-     * @param replacement the replacing variable
-     * @return the copied constraint having <code>origin</code> substituted by <code>replacement</code>
-     */
-    private ConstraintSyntaxTree substituteVariable(ConstraintSyntaxTree constraint, Variable origin, 
-        Variable replacement) {
-        copyVisitor.addVariableMapping(origin, replacement);
-        return copyVisitor.acceptAndClear(constraint);
     }
 
     /**

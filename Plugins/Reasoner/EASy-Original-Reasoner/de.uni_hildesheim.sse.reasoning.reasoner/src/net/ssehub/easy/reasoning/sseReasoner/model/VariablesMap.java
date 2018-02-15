@@ -1,4 +1,4 @@
-package net.ssehub.easy.reasoning.sseReasoner;
+package net.ssehub.easy.reasoning.sseReasoner.model;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -13,14 +13,14 @@ import net.ssehub.easy.varModel.model.Constraint;
  * @author sizonenko
  *
  */
-class VariablesMap {
+public class VariablesMap {
     
     private Map<AbstractVariable, Set<Constraint>> declConstraintMapping;
 
     /**
      * Sole constructor initializing the map.
      */
-    VariablesMap() {
+    public VariablesMap() {
         declConstraintMapping = new HashMap<AbstractVariable, Set<Constraint>>();
     }
     
@@ -29,7 +29,7 @@ class VariablesMap {
      * @param declaration {@link AbstractVariable} to be added.
      * @param constraint {@link Constraint} that holds added {@link AbstractVariable}.
      */
-    void add(AbstractVariable declaration, Constraint constraint) {
+    public void add(AbstractVariable declaration, Constraint constraint) {
         Set<Constraint> relevantConstraints = declConstraintMapping.get(declaration);
         if (null == relevantConstraints) {
             relevantConstraints = new HashSet<Constraint>();
@@ -44,7 +44,7 @@ class VariablesMap {
      *   Must not be <tt>null</tt>.
      * @return The list of all constraints where the declaration was used, maybe <tt>null</tt> if it was never used.
      */
-    Set<Constraint> getRelevantConstraints(AbstractVariable declaration) {
+    public Set<Constraint> getRelevantConstraints(AbstractVariable declaration) {
         return declConstraintMapping.get(declaration);
     }
 
@@ -53,14 +53,14 @@ class VariablesMap {
      *  variables in the model).
      * @return Number of variables found in constaints.
      */
-    int getDeclarationSize() {
+    public int getDeclarationSize() {
         return declConstraintMapping.size();
     }
     
     /**
      * Clears this instance for reuse.
      */
-    void clear() {
+    public void clear() {
         declConstraintMapping.clear();
     }
     

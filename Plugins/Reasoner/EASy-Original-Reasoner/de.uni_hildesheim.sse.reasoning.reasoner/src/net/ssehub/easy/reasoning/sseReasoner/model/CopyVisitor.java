@@ -28,14 +28,15 @@ import net.ssehub.easy.varModel.model.AbstractVariable;
 
 /**
  * Copies a constraint syntax tree possibly mapping the variables. May be 
- * reused after calling {@link #clear()}
+ * reused after calling {@link #clear()}. {@link #addVariableMapping(AbstractVariable, Variable)}
+ * takes precedence over {@link #setMappings(Map)}.
  * 
  * @author Sizonenko
  * @author Holger Eichelberger
  */
 public class CopyVisitor extends BasicCopyVisitor {
 
-    private Map<Variable, Variable> mapping;
+    private Map<AbstractVariable, Variable> mapping;
     private Map<AbstractVariable, CompoundAccess> mappingCA;
     private ConstraintSyntaxTree selfEx;
     private AbstractVariable self;
@@ -98,16 +99,16 @@ public class CopyVisitor extends BasicCopyVisitor {
     }
     
     /**
-     * Adds a variable mapping to be considered during copying.
+     * Adds a variable mapping to be considered during copying. Takes precedence over {@link #setMappings(Map)}.
      * 
      * @param orig the original variable to be replaced (may be <b>null</b>, ignored)
      * @param dest the destination variable to replace <code>orig</code> (may be <b>null</b>, ignored)
      * @return <b>this</b>
      */
-    public CopyVisitor addVariableMapping(Variable orig, Variable dest) {
+    public CopyVisitor addVariableMapping(AbstractVariable orig, Variable dest) {
         if (null != orig) {
             if (null == mapping) {
-                mapping = new HashMap<Variable, Variable>();
+                mapping = new HashMap<AbstractVariable, Variable>();
             }
             mapping.put(orig, dest);
         }
@@ -120,7 +121,7 @@ public class CopyVisitor extends BasicCopyVisitor {
      * @param var the variable to clear the mapping for (may be <b>null</b>, ignored)
      * @return <b>this</b>
      */
-    public CopyVisitor clearVariableMapping(Variable var) {
+    public CopyVisitor clearVariableMapping(AbstractVariable var) {
         if (null != mapping && null != var) {
             mapping.remove(var);
         }
@@ -188,18 +189,18 @@ public class CopyVisitor extends BasicCopyVisitor {
 
     @Override
     public void visitVariable(Variable variable) {
-        ConstraintSyntaxTree res;
-        CompoundAccess tmp = null == mappingCA ? null : mappingCA.get(variable.getVariable());
-        if (null != tmp) {
-            res = inferDatatype(tmp);
-        } else {
+        ConstraintSyntaxTree res = null;
+        if (null != mapping) {
+            res = mapping.get(variable.getVariable());
+        }
+        if (null == res) {
+            CompoundAccess tmp = null == mappingCA ? null : mappingCA.get(variable.getVariable());
+            if (null != tmp) {
+                res = inferDatatype(tmp);
+            }             
+        }
+        if (null == res) {
             res = variable;
-            if (null != mapping) {
-                res = mapping.get(variable);
-                if (null == res) {
-                    res = variable;
-                }
-            }
         }
         setResult(res);
     }
