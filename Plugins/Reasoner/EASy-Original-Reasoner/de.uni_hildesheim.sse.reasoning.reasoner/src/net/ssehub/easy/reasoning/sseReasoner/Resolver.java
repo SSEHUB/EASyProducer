@@ -438,6 +438,7 @@ public class Resolver {
             Variable replacement = new Variable(declaration);
             //Copy and replace each instance of the internal declaration with the given instance
             for (int i = 0; i < count; i++) {
+                substVisitor.setMappings(varMap);
                 substVisitor.addVariableMapping(dVar, replacement);
                 csts[i] = substVisitor.acceptAndClear(dType.getConstraint(i).getConsSyntax());
             }
@@ -625,7 +626,7 @@ public class Resolver {
                 }            
                 try {
                     typeCst.inferDatatype();
-                    typeCst = substituteVariables(typeCst, null, null, true); // derivedTypeConstraints
+                    //typeCst = substituteVariables(typeCst, null, null, true); // derivedTypeConstraints
                     addConstraint(topLevelConstraints, new Constraint(typeCst, project), true);                    
                 } catch (CSTSemanticException e) {
                     LOGGER.exception(e);
