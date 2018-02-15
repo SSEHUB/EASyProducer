@@ -407,7 +407,7 @@ public class Resolver {
             IModelElement topLevelParent = decl.getTopLevelParent();
             for (int c = 0; c < cst.length; c++) {
                 // Should be in same project as the declaration belongs to
-                try { // derivedTypeConstraints
+                try {
                     ConstraintSyntaxTree tmp = substituteVariables(cst[c], null, null, true);
                     addConstraint(topLevelConstraints, new Constraint(tmp, topLevelParent), true);
                 } catch (CSTSemanticException e) {
@@ -626,7 +626,6 @@ public class Resolver {
                 }            
                 try {
                     typeCst.inferDatatype();
-                    //typeCst = substituteVariables(typeCst, null, null, true); // derivedTypeConstraints
                     addConstraint(topLevelConstraints, new Constraint(typeCst, project), true);                    
                 } catch (CSTSemanticException e) {
                     LOGGER.exception(e);
