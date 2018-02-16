@@ -1,0 +1,12 @@
+project uniq3 {
+
+    compound Activity {
+        Integer id;
+    }
+
+    compound ControlFile {
+        setOf(Activity) activities;
+        activities->isUnique(a|a.id);
+    }
+
+}

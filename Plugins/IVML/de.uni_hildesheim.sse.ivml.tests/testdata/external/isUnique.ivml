@@ -1,0 +1,9 @@
+project uniq {
+
+    compound Activity {
+        Integer id;
+    }
+
+    setOf(Activity) activities;
+    activities->isUnique(a|a.id);
+}
