@@ -129,8 +129,6 @@ public class Resolver {
         = new VariablesInNotSimpleAssignmentConstraintsFinder(constraintMap);
     private transient ConstraintTranslationVisitor projectVisitor = new ConstraintTranslationVisitor();
     private transient VariablesInConstraintFinder variablesFinder = new VariablesInConstraintFinder();
-    private transient DerivedDatatypeProcessor ddProcessor = new DerivedDatatypeProcessor();
-    private transient ContainerDerivedDatatypeProcessor cddProcessor = new ContainerDerivedDatatypeProcessor();
     private transient long endTimestamp;
 
     // >>> from here the names follows the reasoner.tex documentation
@@ -402,64 +400,38 @@ public class Resolver {
      * 
      * @param decl VariableDeclaration of <code>DerivedDatatype</code>
      * @param dType the type to translate
-     */
-    private void translateDerivedDatatypeConstraints(AbstractVariable decl, DerivedDatatype dType) {
-        createDerivedDatatypeExpressions(decl, dType, ddProcessor, decl.getTopLevelParent());
-        IDatatype basis = dType.getBasisType();
-        if (basis instanceof DerivedDatatype) {
-            translateDerivedDatatypeConstraints(decl, (DerivedDatatype) basis);
-        }
-    }
-
-    /**
-     * A basic processor for derived datatypes. Datatype processors allow reusing 
-     * {Resolver#createDerivedDatatypeExpressions} with different individual processing of created constraint 
-     * expressions. This basic processor just infers the datatype of the expression, creates a new constraint
-     * based on the given parent and adds the constraint to {@link Resolver#topLevelConstraints}.
-     * 
-     * @author Holger Eichelberger
-     */
-    private class DerivedDatatypeProcessor {
-        
-        /**
-         * Processes a constraint.
-         * 
-         * @param cst the constraint syntax expression
-         * @param parent the parent for the constraint instance to be created/processed
-         */
-        public void process(ConstraintSyntaxTree cst, IModelElement parent) {
-            try {
-                cst.inferDatatype();
-                addConstraint(topLevelConstraints, new Constraint(cst, parent), true);
-            } catch (CSTSemanticException e) {
-                LOGGER.exception(e);
-            }
-            
-        }
-        
-    }
-
-    /**
-     * Translates constraint expressions specified for derived datatypes.
-     *  
-     * @param declaration VariableDeclaration of <code>DerivedDatatype</code>
-     * @param dType type of <code>DerivedDatatype</code>
-     * @param processor the datatype processor
+     * @param localDecl the declaration of an iterator variable if quantified constraints shall be created, 
+     *     <b>null</b> for normal constraints
      * @param parent the parent model element for creating constraint instances
      */
-    private void createDerivedDatatypeExpressions(AbstractVariable declaration, DerivedDatatype dType, 
-        DerivedDatatypeProcessor processor, IModelElement parent) {
+    private void translateDerivedDatatypeConstraints(AbstractVariable decl, DerivedDatatype dType, 
+        DecisionVariableDeclaration localDecl, IModelElement parent) {
         int count = dType.getConstraintCount();
         DecisionVariableDeclaration dVar = dType.getTypeDeclaration();
+        AbstractVariable declaration = null == localDecl ? decl : localDecl;
         if (count > 0 && dVar != declaration) {
             substVisitor.setMappings(varMap);
             substVisitor.addVariableMapping(dVar, declaration);
             //Copy and replace each instance of the internal declaration with the given instance
             for (int i = 0; i < count; i++) {
-                processor.process(substVisitor.accept(dType.getConstraint(i).getConsSyntax()), parent);
+                ConstraintSyntaxTree cst = substVisitor.accept(dType.getConstraint(i).getConsSyntax());
+                if (null != localDecl) {
+                    cst = createContainerCall(new Variable(decl), Container.FORALL, cst, localDecl);
+                }
+                try {
+                    cst.inferDatatype();
+                    addConstraint(topLevelConstraints, new Constraint(cst, parent), true);
+                } catch (CSTSemanticException e) {
+                    LOGGER.exception(e);
+                }
             }
             substVisitor.clear();
         }        
+        
+        IDatatype basis = dType.getBasisType();
+        if (basis instanceof DerivedDatatype) {
+            translateDerivedDatatypeConstraints(decl, (DerivedDatatype) basis, localDecl, parent);
+        }
     }
     
     /**
@@ -506,7 +478,7 @@ public class Resolver {
         AbstractVariable self = null;
         ConstraintSyntaxTree selfEx = null;
         if (type instanceof DerivedDatatype) {
-            translateDerivedDatatypeConstraints(decl, (DerivedDatatype) type);
+            translateDerivedDatatypeConstraints(decl, (DerivedDatatype) type, null, decl.getTopLevelParent());
         }
         if (!incremental) {
             translateAnnotationDefaults(decl, var, cAcc);
@@ -570,7 +542,8 @@ public class Resolver {
         translateContainerCompoundConstraints(decl, var, null, otherConstraints); 
         IDatatype containedType = ((Container) type).getContainedType();
         if (containedType instanceof DerivedDatatype) {
-            translateContainerDerivedDatatypeConstraints((DerivedDatatype) containedType, decl, null);
+            translateDerivedDatatypeConstraints(decl, (DerivedDatatype) containedType,  
+                new DecisionVariableDeclaration("derivedType", containedType, null), project);
         }
     }
     
@@ -617,63 +590,6 @@ public class Resolver {
                 translateDefaultsCompoundContainer(decl, cmpType.getRefines(r), done);
             }
         }
-    }
-
-    /**
-     * Method for translating the internal constraint from containers with derived contained types.
-     * 
-     * @param derivedType {@link DerivedDatatype} of the container.
-     * @param decl container variable.
-     * @param access {@link CompoundAccess}, might be <b>null</b>.
-     */
-    private void translateContainerDerivedDatatypeConstraints(DerivedDatatype derivedType, 
-        AbstractVariable decl, CompoundAccess access) {
-        // as long as evaluation is not parallelized, using the same localDecl shall not be a problem
-        DecisionVariableDeclaration localDecl = new DecisionVariableDeclaration("derivedType", derivedType, null);
-        cddProcessor.setContext(decl, access, localDecl);
-        createDerivedDatatypeExpressions(localDecl, derivedType, cddProcessor, project);
-        IDatatype basis = derivedType.getBasisType();
-        if (basis instanceof DerivedDatatype) {
-            translateContainerDerivedDatatypeConstraints((DerivedDatatype) basis, decl, access);
-        }
-    }
-    
-    /**
-     * A derived datatype processor for containers. Creates all-quantifiers over the container values. Extends the 
-     * basic {@link DerivedDatatypeProcessor}.
-     * 
-     * @author Holger Eichelberger
-     */
-    private class ContainerDerivedDatatypeProcessor extends DerivedDatatypeProcessor {
-
-        private AbstractVariable decl;
-        private CompoundAccess access;
-        private DecisionVariableDeclaration localDecl;
-
-        /**
-         * Defines the context.
-         * 
-         * @param decl container variable.
-         * @param access {@link CompoundAccess}, might be <b>null</b>.
-         * @param localDecl the local/iterator declaration for the quantification
-         */
-        private void setContext(AbstractVariable decl, CompoundAccess access, DecisionVariableDeclaration localDecl) {
-            this.localDecl = localDecl;
-            this.access = access;
-            this.decl = decl;
-        }
-        
-        @Override
-        public void process(ConstraintSyntaxTree cst, IModelElement parent) {
-            ConstraintSyntaxTree typeCst = null;
-            if (access == null) {
-                typeCst = createContainerCall(new Variable(decl), Container.FORALL, cst, localDecl);
-            } else {
-                typeCst = createContainerCall(access, Container.FORALL, cst, localDecl);
-            }
-            super.process(typeCst, parent);
-        }
-        
     }
 
     /**
