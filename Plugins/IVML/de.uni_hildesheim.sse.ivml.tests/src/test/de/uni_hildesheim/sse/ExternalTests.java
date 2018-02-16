@@ -240,4 +240,34 @@ public class ExternalTests extends AbstractTest {
         }
     }
 
+    /**
+     * Tests a signature problem with <code>isUnique</code> (by M. Keunecke).
+     * 
+     * @throws IOException shall not occur
+     */
+    @Test
+    public void testUnique() throws IOException {
+        assertEqual(createFile("isUnique"), null, null);
+    }
+
+    /**
+     * Tests a signature problem with <code>isUnique</code> (by M. Keunecke).
+     * 
+     * @throws IOException shall not occur
+     */
+    @Test
+    public void testUnique2() throws IOException {
+        assertEqual(createFile("isUnique2"), null, null);
+    }
+
+    /**
+     * Tests a signature problem with <code>isUnique</code> (by M. Keunecke).
+     * 
+     * @throws IOException shall not occur
+     */
+    @Test
+    public void testUnique3() throws IOException {
+        assertEqual(createFile("isUnique3"), null, null);
+    }
+
 }
