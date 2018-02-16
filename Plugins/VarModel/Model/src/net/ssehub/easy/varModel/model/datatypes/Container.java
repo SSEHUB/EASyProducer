@@ -83,7 +83,7 @@ public class Container extends StructuredDatatype {
         TYPE, BooleanType.TYPE).markAsContainerOperation();
     public static final Operation ONE = new Operation(BooleanType.TYPE, OclKeyWords.ONE, 
         TYPE, BooleanType.TYPE).markAsContainerOperation();
-    public static final Operation IS_UNIQUE = new Operation(TYPE, ReturnTypeMode.IMMEDIATE_OPERAND, 
+    public static final Operation IS_UNIQUE = new Operation(BooleanType.TYPE, ReturnTypeMode.UNCHANGED, 
         OclKeyWords.IS_UNIQUE, TYPE, AnyType.TYPE).markAsContainerOperation();
     public static final Operation COLLECT = new Operation(TYPE, ReturnTypeMode.IMMEDIATE_OPERAND_COLLECTION_PARAM_1,
         OclKeyWords.COLLECT, TYPE, AnyType.TYPE).markAsFlatteningContainerOperation();
