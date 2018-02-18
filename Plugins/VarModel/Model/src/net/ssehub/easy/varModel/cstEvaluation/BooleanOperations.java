@@ -138,7 +138,8 @@ public class BooleanOperations {
     public static final void register() {
         EvaluatorRegistry.registerEvaluator(GenericOperations.TYPE_OF, BooleanType.TYPE_OF);
         EvaluatorRegistry.registerEvaluator(GenericOperations.EQUALS, BooleanType.EQUALS);
-        EvaluatorRegistry.registerEvaluator(GenericOperations.UNEQUALS, BooleanType.UNEQUALS);
+        EvaluatorRegistry.registerEvaluator(GenericOperations.UNEQUALS, 
+            BooleanType.UNEQUALS, BooleanType.UNEQUALS_ALIAS);
         EvaluatorRegistry.registerEvaluator(GenericOperations.ASSIGNMENT, BooleanType.ASSIGNMENT);
         EvaluatorRegistry.registerEvaluator(GenericOperations.IS_DEFINED, BooleanType.IS_DEFINED);
         EvaluatorRegistry.registerEvaluator(GenericOperations.TO_STRING, BooleanType.TO_STRING);

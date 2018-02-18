@@ -17,6 +17,7 @@ package net.ssehub.easy.varModel.model.datatypes;
 
 import net.ssehub.easy.varModel.model.IModelElement;
 import net.ssehub.easy.varModel.model.IModelVisitor;
+import net.ssehub.easy.varModel.model.datatypes.Operation.FormattingHint;
 import net.ssehub.easy.varModel.model.datatypes.Operation.ReturnTypeMode;
 
 /**
@@ -43,8 +44,12 @@ public class Set extends Container {
 
     public static final Operation AS_SET = new Operation(Set.TYPE, ReturnTypeMode.TYPED_OPERAND_1, 
         OclKeyWords.AS_SET, TYPE);
+    public static final Operation TO_SET = new Operation(Set.TYPE, ReturnTypeMode.TYPED_OPERAND_1, 
+        OclKeyWords.TO_SET, TYPE);
     public static final Operation AS_SEQUENCE = new Operation(Sequence.TYPE, ReturnTypeMode.TYPED_OPERAND_1, 
         OclKeyWords.AS_SEQUENCE, TYPE);
+    public static final Operation TO_SEQUENCE = new Operation(Sequence.TYPE, ReturnTypeMode.TYPED_OPERAND_1, 
+        OclKeyWords.TO_SEQUENCE, TYPE);
     public static final Operation UNION = new Operation(TYPE, ReturnTypeMode.IMMEDIATE_OPERAND,
         OclKeyWords.UNION, TYPE, TYPE);
     public static final Operation INTERSECTION = new Operation(TYPE, ReturnTypeMode.IMMEDIATE_OPERAND,
@@ -54,7 +59,7 @@ public class Set extends Container {
     public static final Operation INCLUDING = new Operation(TYPE, ReturnTypeMode.IMMEDIATE_OPERAND,
         OclKeyWords.INCLUDING, TYPE, AnyType.TYPE);
     public static final Operation DIFFERENCE = new Operation(TYPE, ReturnTypeMode.IMMEDIATE_OPERAND,
-        OclKeyWords.MINUS, TYPE, AnyType.TYPE);
+        OclKeyWords.MINUS, TYPE, AnyType.TYPE).markByFormattingHint(FormattingHint.OPERATOR_INFIX);
     public static final Operation SYMMETRIC_DIFFERENCE = new Operation(TYPE, ReturnTypeMode.IMMEDIATE_OPERAND,
         OclKeyWords.SYMMETRIC_DIFFERENCE, TYPE, AnyType.TYPE);
     public static final Operation ADD = new Operation(AnyType.TYPE, ReturnTypeMode.PARAM_1_CHECK, 
@@ -75,7 +80,9 @@ public class Set extends Container {
         DTYPE.addOperation(EQUALS);
         DTYPE.addOperation(ASSIGNMENT);
         DTYPE.addOperation(AS_SET);
+        DTYPE.addOperation(TO_SET);
         DTYPE.addOperation(AS_SEQUENCE);
+        DTYPE.addOperation(TO_SEQUENCE);
         DTYPE.addOperation(UNION);
         DTYPE.addOperation(INTERSECTION);
         DTYPE.addOperation(EXCLUDING);

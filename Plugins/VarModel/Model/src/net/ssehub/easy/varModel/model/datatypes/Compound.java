@@ -66,6 +66,8 @@ public class Compound extends StructuredDatatype implements IResolutionScope, ID
          OclKeyWords.EQUALS, TYPE, TYPE).markAsAssignableParameterOperation();
     public static final Operation NOTEQUALS = Operation.createInfixOperator(BooleanType.TYPE, 
          OclKeyWords.UNEQUALS, TYPE, TYPE);    
+    public static final Operation NOTEQUALS_ALIAS = Operation.createInfixOperator(BooleanType.TYPE, 
+            OclKeyWords.UNEQUALS_ALIAS, TYPE, TYPE);    
     public static final Operation ASSIGNMENT = Operation.createInfixOperator(BooleanType.TYPE, 
          OclKeyWords.ASSIGNMENT, TYPE, TYPE);
     
@@ -78,6 +80,7 @@ public class Compound extends StructuredDatatype implements IResolutionScope, ID
         DTYPE.addOperation(TYPE_OF);
         DTYPE.addOperation(EQUALS);
         DTYPE.addOperation(NOTEQUALS);
+        DTYPE.addOperation(NOTEQUALS_ALIAS);
         DTYPE.addOperation(ASSIGNMENT);
         DTYPE.addOperation(IS_DEFINED);
     }

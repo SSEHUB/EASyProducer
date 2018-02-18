@@ -37,6 +37,8 @@ public class StringType extends BasisDatatype {
         = Operation.createInfixOperator(BooleanType.TYPE, OclKeyWords.EQUALS, TYPE, TYPE);
     public static final Operation UNEQUALS 
         = Operation.createInfixOperator(BooleanType.TYPE, OclKeyWords.UNEQUALS, TYPE, TYPE);
+    public static final Operation UNEQUALS_ALIAS 
+        = Operation.createInfixOperator(BooleanType.TYPE, OclKeyWords.UNEQUALS_ALIAS, TYPE, TYPE);
     public static final Operation EQUALS_IGNORE_CASE 
         = new Operation(BooleanType.TYPE, OclKeyWords.EQUALS_IGNORE_CASE, TYPE, TYPE);
     public static final Operation ASSIGNMENT 
@@ -48,7 +50,7 @@ public class StringType extends BasisDatatype {
     public static final Operation SIZE = new Operation(IntegerType.TYPE, OclKeyWords.SIZE, TYPE);
     public static final Operation TO_INTEGER = new Operation(IntegerType.TYPE, OclKeyWords.TO_INTEGER, TYPE);
     public static final Operation TO_REAL = new Operation(RealType.TYPE, OclKeyWords.TO_REAL, TYPE);
-    public static final Operation PLUS = new Operation(TYPE, OclKeyWords.PLUS, TYPE, TYPE);
+    public static final Operation PLUS = Operation.createInfixOperator(TYPE, OclKeyWords.PLUS, TYPE, TYPE);
     public static final Operation CONCAT = new Operation(TYPE, OclKeyWords.CONCAT, TYPE, TYPE);
     public static final Operation SUBSTRING = new Operation(TYPE, OclKeyWords.SUBSTRING, TYPE, 
         IntegerType.TYPE, IntegerType.TYPE);
@@ -62,10 +64,12 @@ public class StringType extends BasisDatatype {
     public static final Operation TO_STRING = new Operation(TYPE, OclKeyWords.TO_STRING, TYPE);
     public static final Operation TO_BOOLEAN = new Operation(BooleanType.TYPE, OclKeyWords.TO_BOOLEAN, TYPE);
     public static final Operation CHARACTERS = new Operation(AnyType.SEQUENCE_TYPE, OclKeyWords.CHARACTERS, TYPE);
-    public static final Operation LESS = new Operation(BooleanType.TYPE, OclKeyWords.LESS, TYPE, TYPE);
-    public static final Operation LESS_EQUALS = new Operation(BooleanType.TYPE, OclKeyWords.LESS_EQUALS, TYPE, TYPE);
-    public static final Operation GREATER = new Operation(BooleanType.TYPE, OclKeyWords.GREATER, TYPE, TYPE);
-    public static final Operation GREATER_EQUALS = new Operation(BooleanType.TYPE, 
+    public static final Operation LESS = Operation.createInfixOperator(BooleanType.TYPE, OclKeyWords.LESS, TYPE, TYPE);
+    public static final Operation LESS_EQUALS = Operation.createInfixOperator(
+        BooleanType.TYPE, OclKeyWords.LESS_EQUALS, TYPE, TYPE);
+    public static final Operation GREATER = Operation.createInfixOperator(
+        BooleanType.TYPE, OclKeyWords.GREATER, TYPE, TYPE);
+    public static final Operation GREATER_EQUALS = Operation.createInfixOperator(BooleanType.TYPE, 
         OclKeyWords.GREATER_EQUALS, TYPE, TYPE);
 
     // checkstyle: resume declaration order check
@@ -75,6 +79,7 @@ public class StringType extends BasisDatatype {
         DTYPE.addOperation(TYPE_OF);
         DTYPE.addOperation(EQUALS);
         DTYPE.addOperation(UNEQUALS);
+        DTYPE.addOperation(UNEQUALS_ALIAS);
         DTYPE.addOperation(EQUALS_IGNORE_CASE);
         DTYPE.addOperation(ASSIGNMENT);
         DTYPE.addOperation(IS_DEFINED);

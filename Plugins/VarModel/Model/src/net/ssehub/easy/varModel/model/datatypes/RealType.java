@@ -52,6 +52,10 @@ public class RealType extends BasisDatatype {
         BooleanType.TYPE, OclKeyWords.UNEQUALS, TYPE, TYPE);
     public static final Operation NOTEQUALS_REAL_INTEGER = Operation.createInfixOperator(
         BooleanType.TYPE, OclKeyWords.UNEQUALS, TYPE, INTEGER_TYPE);
+    public static final Operation NOTEQUALS_REAL_REAL_ALIAS = Operation.createInfixOperator(
+        BooleanType.TYPE, OclKeyWords.UNEQUALS_ALIAS, TYPE, TYPE);
+    public static final Operation NOTEQUALS_REAL_INTEGER_ALIAS = Operation.createInfixOperator(
+        BooleanType.TYPE, OclKeyWords.UNEQUALS_ALIAS, TYPE, INTEGER_TYPE);
     
     public static final Operation PLUS_REAL_REAL = Operation.createInfixOperator(
         TYPE, OclKeyWords.PLUS, TYPE, TYPE);
@@ -141,6 +145,8 @@ public class RealType extends BasisDatatype {
         DTYPE.addOperation(EQUALS_REAL_INTEGER);
         DTYPE.addOperation(NOTEQUALS_REAL_REAL);
         DTYPE.addOperation(NOTEQUALS_REAL_INTEGER);
+        DTYPE.addOperation(NOTEQUALS_REAL_REAL_ALIAS);
+        DTYPE.addOperation(NOTEQUALS_REAL_INTEGER_ALIAS);
         DTYPE.addOperation(ASSIGNMENT_REAL_REAL);
         DTYPE.addOperation(ASSIGNMENT_REAL_INTEGER);
         DTYPE.addOperation(IS_DEFINED);

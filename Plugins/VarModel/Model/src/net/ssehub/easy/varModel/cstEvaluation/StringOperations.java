@@ -468,7 +468,7 @@ public class StringOperations {
     public static final void register() {
         EvaluatorRegistry.registerEvaluator(GenericOperations.TYPE_OF, StringType.TYPE_OF);
         EvaluatorRegistry.registerEvaluator(GenericOperations.EQUALS, StringType.EQUALS);
-        EvaluatorRegistry.registerEvaluator(GenericOperations.UNEQUALS, StringType.UNEQUALS);
+        EvaluatorRegistry.registerEvaluator(GenericOperations.UNEQUALS, StringType.UNEQUALS, StringType.UNEQUALS_ALIAS);
         EvaluatorRegistry.registerEvaluator(EQUALS_IGNORE_CASE, StringType.EQUALS_IGNORE_CASE);
         EvaluatorRegistry.registerEvaluator(GenericOperations.ASSIGNMENT, StringType.ASSIGNMENT);
         EvaluatorRegistry.registerEvaluator(GenericOperations.IS_DEFINED, StringType.IS_DEFINED);

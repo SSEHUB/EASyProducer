@@ -30,6 +30,8 @@ public class BooleanType extends BasisDatatype {
     
     public static final Operation EQUALS = Operation.createInfixOperator(TYPE, OclKeyWords.EQUALS, TYPE, TYPE);
     public static final Operation UNEQUALS = Operation.createInfixOperator(TYPE, OclKeyWords.UNEQUALS, TYPE, TYPE);
+    public static final Operation UNEQUALS_ALIAS = Operation.createInfixOperator(TYPE, OclKeyWords.UNEQUALS_ALIAS, 
+        TYPE, TYPE);
     public static final Operation ASSIGNMENT = Operation.createInfixOperator(
         BooleanType.TYPE, OclKeyWords.ASSIGNMENT, TYPE, TYPE);
     public static final Operation IS_DEFINED = new Operation(BooleanType.TYPE, OclKeyWords.IS_DEFINED, TYPE)
@@ -47,13 +49,14 @@ public class BooleanType extends BasisDatatype {
     // IVML  
     public static final Operation IFF = Operation.createInfixOperator(TYPE, OclKeyWords.IFF, TYPE, TYPE);
     public static final Operation WARNING = new Operation(TYPE, OclKeyWords.WARNING, TYPE);
-    public static final Operation TO_STRING = new Operation(AnyType.BOOLEAN_TYPE, OclKeyWords.TO_STRING, TYPE);
+    public static final Operation TO_STRING = new Operation(AnyType.STRING_TYPE, OclKeyWords.TO_STRING, TYPE);
     
     static {
         AnyType.BOOLEAN_TYPE.setDelegate(new BooleanType());
         AnyType.BOOLEAN_TYPE.addOperation(TYPE_OF);
         AnyType.BOOLEAN_TYPE.addOperation(EQUALS);
         AnyType.BOOLEAN_TYPE.addOperation(UNEQUALS);
+        AnyType.BOOLEAN_TYPE.addOperation(UNEQUALS_ALIAS);
         AnyType.BOOLEAN_TYPE.addOperation(ASSIGNMENT);
         AnyType.BOOLEAN_TYPE.addOperation(IS_DEFINED);
         AnyType.BOOLEAN_TYPE.addOperation(NOT);

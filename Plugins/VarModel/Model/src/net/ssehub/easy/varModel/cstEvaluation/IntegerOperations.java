@@ -114,6 +114,8 @@ public class IntegerOperations {
         EvaluatorRegistry.registerEvaluator(GenericOperations.IS_DEFINED, IntegerType.IS_DEFINED);
         EvaluatorRegistry.registerEvaluator(GenericOperations.UNEQUALS, IntegerType.NOTEQUALS_INTEGER_INTEGER);
         EvaluatorRegistry.registerEvaluator(UNEQUALS_INT_REAL, IntegerType.NOTEQUALS_INTEGER_REAL);
+        EvaluatorRegistry.registerEvaluator(GenericOperations.UNEQUALS, 
+            IntegerType.NOTEQUALS_INTEGER_INTEGER_ALIAS, IntegerType.NOTEQUALS_INTEGER_REAL_ALIAS);
         EvaluatorRegistry.registerEvaluator(IntegerOperations.PLUS_INT_INT, IntegerType.PLUS_INTEGER_INTEGER);
         EvaluatorRegistry.registerEvaluator(IntegerOperations.MINUS_INT_INT, IntegerType.MINUS_INTEGER_INTEGER);
         EvaluatorRegistry.registerEvaluator(IntegerOperations.MULTIPLICATION_INT_INT, IntegerType.MULT_INTEGER_INTEGER);

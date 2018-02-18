@@ -46,6 +46,8 @@ public class Reference extends CustomDatatype {
         = Operation.createInfixOperator(BooleanType.TYPE, OclKeyWords.EQUALS, TYPE, TYPE);
     public static final Operation UNEQUALS 
         = Operation.createInfixOperator(BooleanType.TYPE, OclKeyWords.UNEQUALS, TYPE, TYPE);
+    public static final Operation UNEQUALS_ALIAS 
+        = Operation.createInfixOperator(BooleanType.TYPE, OclKeyWords.UNEQUALS_ALIAS, TYPE, TYPE);
     public static final Operation ASSIGNMENT 
         = Operation.createInfixOperator(BooleanType.TYPE, OclKeyWords.ASSIGNMENT, TYPE, TYPE);
     public static final Operation IS_DEFINED = new Operation(BooleanType.TYPE, OclKeyWords.IS_DEFINED, TYPE)
@@ -59,6 +61,7 @@ public class Reference extends CustomDatatype {
         DTYPE.addOperation(IS_DEFINED);
         DTYPE.addOperation(EQUALS);
         DTYPE.addOperation(UNEQUALS);
+        DTYPE.addOperation(UNEQUALS_ALIAS);
         DTYPE.addOperation(ASSIGNMENT);
     }
     

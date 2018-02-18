@@ -36,7 +36,7 @@ public class CompoundOperations {
     public static final void register() {
         EvaluatorRegistry.registerEvaluator(GenericOperations.TYPE_OF, Compound.TYPE_OF);
         EvaluatorRegistry.registerEvaluator(GenericOperations.EQUALS, Compound.EQUALS);
-        EvaluatorRegistry.registerEvaluator(GenericOperations.UNEQUALS, Compound.NOTEQUALS);
+        EvaluatorRegistry.registerEvaluator(GenericOperations.UNEQUALS, Compound.NOTEQUALS, Compound.NOTEQUALS_ALIAS);
         EvaluatorRegistry.registerEvaluator(GenericOperations.ASSIGNMENT, Compound.ASSIGNMENT);
         EvaluatorRegistry.registerEvaluator(GenericOperations.IS_DEFINED, Compound.IS_DEFINED);
     }

@@ -49,6 +49,8 @@ public class Enum extends CustomDatatype {
         BooleanType.TYPE, OclKeyWords.EQUALS, TYPE, TYPE).markAsAssignableParameterOperation();
     public static final Operation NOTEQUALS = Operation.createInfixOperator(
         BooleanType.TYPE, OclKeyWords.UNEQUALS, TYPE, TYPE);
+    public static final Operation NOTEQUALS_ALIAS = Operation.createInfixOperator(
+            BooleanType.TYPE, OclKeyWords.UNEQUALS_ALIAS, TYPE, TYPE);
     public static final Operation ASSIGNMENT = Operation.createInfixOperator(BooleanType.TYPE, 
         OclKeyWords.ASSIGNMENT, TYPE, TYPE);
     public static final Operation IS_DEFINED = new Operation(BooleanType.TYPE, OclKeyWords.IS_DEFINED, TYPE)
@@ -62,6 +64,7 @@ public class Enum extends CustomDatatype {
         DTYPE.addOperation(TYPE_OF);
         DTYPE.addOperation(EQUALS);
         DTYPE.addOperation(NOTEQUALS);
+        DTYPE.addOperation(NOTEQUALS_ALIAS);
         DTYPE.addOperation(ASSIGNMENT);
         DTYPE.addOperation(IS_DEFINED);
         DTYPE.addOperation(ORDINAL);

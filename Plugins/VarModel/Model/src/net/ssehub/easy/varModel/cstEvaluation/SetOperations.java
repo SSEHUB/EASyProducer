@@ -119,8 +119,8 @@ public class SetOperations {
      * Registers the defined operations.
      */
     public static void register() {
-        EvaluatorRegistry.registerEvaluator(ContainerOperations.AS_SET, Set.AS_SET);
-        EvaluatorRegistry.registerEvaluator(ContainerOperations.AS_SEQUENCE, Set.AS_SEQUENCE);
+        EvaluatorRegistry.registerEvaluator(ContainerOperations.AS_SET, Set.AS_SET, Set.TO_SET);
+        EvaluatorRegistry.registerEvaluator(ContainerOperations.AS_SEQUENCE, Set.AS_SEQUENCE, Set.TO_SEQUENCE);
         EvaluatorRegistry.registerEvaluator(UNION, Set.UNION);
         EvaluatorRegistry.registerEvaluator(ContainerOperations.INTERSECT, Set.INTERSECTION);
         EvaluatorRegistry.registerEvaluator(EXCLUDING, Set.EXCLUDING);

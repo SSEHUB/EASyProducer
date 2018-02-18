@@ -54,7 +54,7 @@ public class MetaTypeOperations {
      */
     public static final void register() {
         EvaluatorRegistry.registerEvaluator(GenericOperations.EQUALS, MetaType.EQUALS);
-        EvaluatorRegistry.registerEvaluator(GenericOperations.UNEQUALS, MetaType.NOTEQUALS);
+        EvaluatorRegistry.registerEvaluator(GenericOperations.UNEQUALS, MetaType.NOTEQUALS, MetaType.NOTEQUALS_ALIAS);
         EvaluatorRegistry.registerEvaluator(ALL_INSTANCES, MetaType.ALL_INSTANCES);
     }
     

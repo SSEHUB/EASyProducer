@@ -383,8 +383,9 @@ public class SequenceOperations {
         EvaluatorRegistry.registerEvaluator(INDEX_ACCESS, Sequence.INDEX_ACCESS, Sequence.AT);
         EvaluatorRegistry.registerEvaluator(FIRST, Sequence.FIRST);
         EvaluatorRegistry.registerEvaluator(LAST, Sequence.LAST);
-        EvaluatorRegistry.registerEvaluator(ContainerOperations.AS_SET, Sequence.AS_SET);
-        EvaluatorRegistry.registerEvaluator(ContainerOperations.AS_SEQUENCE, Sequence.AS_SEQUENCE);
+        EvaluatorRegistry.registerEvaluator(ContainerOperations.AS_SET, Sequence.AS_SET, Sequence.TO_SET);
+        EvaluatorRegistry.registerEvaluator(ContainerOperations.AS_SEQUENCE, 
+            Sequence.AS_SEQUENCE, Sequence.TO_SEQUENCE);
         EvaluatorRegistry.registerEvaluator(UNION, Sequence.UNION);
         EvaluatorRegistry.registerEvaluator(APPEND, Sequence.APPEND);
         EvaluatorRegistry.registerEvaluator(PREPEND, Sequence.PREPEND);

@@ -292,7 +292,7 @@ public class OCLFeatureCall extends ConstraintSyntaxTree {
                 result = new Set("", param.getContainedType(), set.getParent());
             } else if (immediateOperand instanceof Sequence) {
                 Sequence sequence = (Sequence) immediateOperand;
-                result = new Set("", param.getContainedType(), sequence.getParent());
+                result = new Sequence("", param.getContainedType(), sequence.getParent());
             } else {
                 result = param.getContainedType();
             }

@@ -36,6 +36,8 @@ public class VersionType extends BasisDatatype {
         = Operation.createInfixOperator(BooleanType.TYPE, OclKeyWords.EQUALS, TYPE, TYPE);
     public static final Operation UNEQUALS 
         = Operation.createInfixOperator(BooleanType.TYPE, OclKeyWords.UNEQUALS, TYPE, TYPE);
+    public static final Operation UNEQUALS_ALIAS 
+        = Operation.createInfixOperator(BooleanType.TYPE, OclKeyWords.UNEQUALS_ALIAS, TYPE, TYPE);
 
     // comparisons
     public static final Operation GREATER = Operation.createInfixOperator(
@@ -53,6 +55,7 @@ public class VersionType extends BasisDatatype {
         DTYPE.setDelegate(new VersionType());
         DTYPE.addOperation(EQUALS);
         DTYPE.addOperation(UNEQUALS);
+        DTYPE.addOperation(UNEQUALS_ALIAS);
         DTYPE.addOperation(GREATER);
         DTYPE.addOperation(LESS);
         DTYPE.addOperation(GREATER_EQUALS);

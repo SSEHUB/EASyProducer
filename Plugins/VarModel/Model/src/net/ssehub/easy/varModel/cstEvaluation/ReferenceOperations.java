@@ -36,7 +36,7 @@ public class ReferenceOperations {
     public static final void register() {
         EvaluatorRegistry.registerEvaluator(GenericOperations.TYPE_OF, Reference.TYPE_OF);
         EvaluatorRegistry.registerEvaluator(GenericOperations.EQUALS, Reference.EQUALS);
-        EvaluatorRegistry.registerEvaluator(GenericOperations.UNEQUALS, Reference.UNEQUALS);
+        EvaluatorRegistry.registerEvaluator(GenericOperations.UNEQUALS, Reference.UNEQUALS, Reference.UNEQUALS_ALIAS);
         EvaluatorRegistry.registerEvaluator(GenericOperations.ASSIGNMENT, Reference.ASSIGNMENT);
         EvaluatorRegistry.registerEvaluator(GenericOperations.IS_DEFINED, Reference.IS_DEFINED);
     }

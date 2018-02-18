@@ -116,7 +116,9 @@ public class OclKeyWords {
     public static final String SELECT = "select";
     public static final String REJECT = "reject";
     public static final String AS_SET = "asSet";
+    public static final String TO_SET = "toSet";
     public static final String AS_SEQUENCE = "asSequence";
+    public static final String TO_SEQUENCE = "toSequence";
     public static final String UNION = "union";
     public static final String FOR_ALL = "forAll";
     public static final String ADD = "add";

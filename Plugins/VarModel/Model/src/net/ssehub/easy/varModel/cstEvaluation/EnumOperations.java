@@ -170,7 +170,7 @@ public class EnumOperations {
     public static final void register() {
         EvaluatorRegistry.registerEvaluator(GenericOperations.TYPE_OF, Enum.TYPE_OF);
         EvaluatorRegistry.registerEvaluator(GenericOperations.EQUALS, Enum.EQUALS);
-        EvaluatorRegistry.registerEvaluator(GenericOperations.UNEQUALS, Enum.NOTEQUALS);
+        EvaluatorRegistry.registerEvaluator(GenericOperations.UNEQUALS, Enum.NOTEQUALS, Enum.NOTEQUALS_ALIAS);
         EvaluatorRegistry.registerEvaluator(GenericOperations.ASSIGNMENT, Enum.ASSIGNMENT);
         EvaluatorRegistry.registerEvaluator(GenericOperations.IS_DEFINED, Enum.IS_DEFINED);
         EvaluatorRegistry.registerEvaluator(ORDINAL, Enum.ORDINAL);

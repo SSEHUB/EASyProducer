@@ -95,7 +95,8 @@ public class ConstraintOperations {
     public static final void register() {
         EvaluatorRegistry.registerEvaluator(GenericOperations.TYPE_OF, ConstraintType.TYPE_OF);
         EvaluatorRegistry.registerEvaluator(GenericOperations.EQUALS, ConstraintType.EQUALS);
-        EvaluatorRegistry.registerEvaluator(GenericOperations.UNEQUALS, ConstraintType.UNEQUALS);
+        EvaluatorRegistry.registerEvaluator(GenericOperations.UNEQUALS, 
+            ConstraintType.UNEQUALS, ConstraintType.UNEQUALS_ALIAS);
         EvaluatorRegistry.registerEvaluator(GenericOperations.ASSIGNMENT, ConstraintType.ASSIGNMENT);
         EvaluatorRegistry.registerEvaluator(GenericOperations.IS_DEFINED, ConstraintType.IS_DEFINED);
     }

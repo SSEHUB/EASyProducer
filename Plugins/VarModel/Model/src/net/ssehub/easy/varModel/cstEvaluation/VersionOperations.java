@@ -104,7 +104,7 @@ public class VersionOperations {
                 return 0 != value;
             }
             
-        }), VersionType.UNEQUALS);
+        }), VersionType.UNEQUALS, VersionType.UNEQUALS_ALIAS);
         EvaluatorRegistry.registerEvaluator(new VersionEvaluator(new IVersionResultConverter() {
 
             public boolean convert(int value) {

@@ -54,8 +54,12 @@ public class Sequence extends Container {
 
     public static final Operation AS_SET = new Operation(Set.TYPE, ReturnTypeMode.TYPED_OPERAND_1, 
         OclKeyWords.AS_SET, TYPE);
+    public static final Operation TO_SET = new Operation(Set.TYPE, ReturnTypeMode.TYPED_OPERAND_1, 
+        OclKeyWords.TO_SET, TYPE);
     public static final Operation AS_SEQUENCE = new Operation(Sequence.TYPE, ReturnTypeMode.TYPED_OPERAND_1, 
         OclKeyWords.AS_SEQUENCE, TYPE);
+    public static final Operation TO_SEQUENCE = new Operation(Sequence.TYPE, ReturnTypeMode.TYPED_OPERAND_1, 
+        OclKeyWords.TO_SEQUENCE, TYPE);
     public static final Operation UNION = new Operation(TYPE, ReturnTypeMode.IMMEDIATE_OPERAND, 
         OclKeyWords.UNION, TYPE, TYPE);
     public static final Operation APPEND = new Operation(TYPE, ReturnTypeMode.IMMEDIATE_OPERAND, 
@@ -72,8 +76,8 @@ public class Sequence extends Container {
         OclKeyWords.INCLUDING, TYPE, AnyType.TYPE);
     public static final Operation REVERSE = new Operation(TYPE, ReturnTypeMode.IMMEDIATE_OPERAND,
         OclKeyWords.REVERSE, TYPE);
-    public static final Operation SUBSEQUENCE = new Operation(TYPE, ReturnTypeMode.IMMEDIATE_OPERAND,
-        OclKeyWords.SUBSEQUENCE, TYPE);
+    public static final Operation SUBSEQUENCE = new Operation(Sequence.TYPE, ReturnTypeMode.TYPED_OPERAND_1,
+        OclKeyWords.SUBSEQUENCE, TYPE, IntegerType.TYPE, IntegerType.TYPE);
     public static final Operation ADD = new Operation(AnyType.TYPE, ReturnTypeMode.PARAM_1_CHECK, 
         OclKeyWords.ADD, TYPE, AnyType.TYPE);
     public static final Operation ISSUBSEQUENCE = new Operation(BooleanType.TYPE, 
@@ -99,7 +103,9 @@ public class Sequence extends Container {
         DTYPE.addOperation(EQUALS);
         DTYPE.addOperation(ASSIGNMENT);
         DTYPE.addOperation(AS_SET);
+        DTYPE.addOperation(TO_SET);
         DTYPE.addOperation(AS_SEQUENCE);
+        DTYPE.addOperation(TO_SEQUENCE);
         DTYPE.addOperation(UNION);
         DTYPE.addOperation(APPEND);
         DTYPE.addOperation(PREPEND);

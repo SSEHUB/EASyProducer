@@ -42,6 +42,8 @@ public class Container extends StructuredDatatype {
     public static final Operation SIZE = new Operation(IntegerType.TYPE, OclKeyWords.SIZE, TYPE);
     public static final Operation UNEQUALS = Operation.createInfixOperator(BooleanType.TYPE, 
         OclKeyWords.UNEQUALS, TYPE, TYPE);
+    public static final Operation UNEQUALS_ALIAS = Operation.createInfixOperator(BooleanType.TYPE, 
+        OclKeyWords.UNEQUALS_ALIAS, TYPE, TYPE);
     
     public static final Operation INCLUDES = new Operation(BooleanType.TYPE, OclKeyWords.INCLUDES, TYPE, AnyType.TYPE);
     public static final Operation EXCLUDES = new Operation(BooleanType.TYPE, OclKeyWords.EXCLUDES, TYPE, AnyType.TYPE);
@@ -49,7 +51,7 @@ public class Container extends StructuredDatatype {
             AnyType.TYPE);
     public static final Operation EXCLUDES_ALL = new Operation(BooleanType.TYPE, OclKeyWords.EXCLUDES_ALL, TYPE, 
             AnyType.TYPE);
-    public static final Operation COUNT = new Operation(BooleanType.TYPE, OclKeyWords.COUNT, TYPE, AnyType.TYPE);
+    public static final Operation COUNT = new Operation(IntegerType.TYPE, OclKeyWords.COUNT, TYPE, AnyType.TYPE);
     public static final Operation IS_EMPTY = new Operation(BooleanType.TYPE, OclKeyWords.IS_EMPTY, TYPE);
     public static final Operation NOT_EMPTY = new Operation(BooleanType.TYPE, OclKeyWords.NOT_EMPTY, TYPE);
     public static final Operation SUM = new Operation(AnyType.TYPE, ReturnTypeMode.GENERIC_PARAM_1, 
@@ -123,6 +125,7 @@ public class Container extends StructuredDatatype {
         DTYPE.setDelegate(new Container("Container", DTYPE, AnyType.TYPE, null));
         DTYPE.addOperation(SIZE);
         DTYPE.addOperation(UNEQUALS);
+        DTYPE.addOperation(UNEQUALS_ALIAS);
         DTYPE.addOperation(TYPE_OF);
         DTYPE.addOperation(APPLY);
         DTYPE.addOperation(ITERATE);

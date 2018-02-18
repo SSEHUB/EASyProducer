@@ -643,7 +643,7 @@ public class ContainerOperations {
      */
     public static void register() {
         EvaluatorRegistry.registerEvaluator(SIZE, Container.SIZE);
-        EvaluatorRegistry.registerEvaluator(GenericOperations.UNEQUALS, Container.UNEQUALS);
+        EvaluatorRegistry.registerEvaluator(GenericOperations.UNEQUALS, Container.UNEQUALS, Container.UNEQUALS_ALIAS);
         EvaluatorRegistry.registerEvaluator(new FindOperationEvaluator(false), Container.INCLUDES);
         EvaluatorRegistry.registerEvaluator(new FindOperationEvaluator(true), Container.EXCLUDES);
         EvaluatorRegistry.registerEvaluator(new IncludesAllOperationEvaluator(false), Container.INCLUDES_ALL);
