@@ -90,6 +90,7 @@
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Ivml.ecore#//Value/bValue"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Ivml.ecore#//Value/self"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Ivml.ecore#//Value/nullValue"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Ivml.ecore#//Value/tValue"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Ivml.ecore#//Value/version"/>
     </genClasses>
     <genClasses ecoreClass="Ivml.ecore#//DerivedType">

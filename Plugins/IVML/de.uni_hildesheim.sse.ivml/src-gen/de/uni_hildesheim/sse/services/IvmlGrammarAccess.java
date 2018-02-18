@@ -993,19 +993,21 @@ public class IvmlGrammarAccess extends AbstractGrammarElementFinder {
 		private final Keyword cSelfSelfKeyword_4_0 = (Keyword)cSelfAssignment_4.eContents().get(0);
 		private final Assignment cNullValueAssignment_5 = (Assignment)cAlternatives.eContents().get(5);
 		private final Keyword cNullValueNullKeyword_5_0 = (Keyword)cNullValueAssignment_5.eContents().get(0);
-		private final Assignment cVersionAssignment_6 = (Assignment)cAlternatives.eContents().get(6);
-		private final RuleCall cVersionVERSIONTerminalRuleCall_6_0 = (RuleCall)cVersionAssignment_6.eContents().get(0);
+		private final Assignment cTValueAssignment_6 = (Assignment)cAlternatives.eContents().get(6);
+		private final RuleCall cTValueTypeParserRuleCall_6_0 = (RuleCall)cTValueAssignment_6.eContents().get(0);
+		private final Assignment cVersionAssignment_7 = (Assignment)cAlternatives.eContents().get(7);
+		private final RuleCall cVersionVERSIONTerminalRuleCall_7_0 = (RuleCall)cVersionAssignment_7.eContents().get(0);
 		
 		//Value:
 		//	nValue=NumValue | sValue=STRING | qValue=QualifiedName | bValue=('true' | 'false') | self='self' //#> Compounds
 		// |
-		//	nullValue='null' | => version=VERSION //#< Compounds
+		//	nullValue='null' | tValue=Type | => version=VERSION //#< Compounds
 		//;
 		@Override public ParserRule getRule() { return rule; }
 
 		//nValue=NumValue | sValue=STRING | qValue=QualifiedName | bValue=('true' | 'false') | self='self' //#> Compounds
 		// |
-		//nullValue='null' | => version=VERSION
+		//nullValue='null' | tValue=Type | => version=VERSION
 		public Alternatives getAlternatives() { return cAlternatives; }
 
 		//nValue=NumValue
@@ -1050,11 +1052,17 @@ public class IvmlGrammarAccess extends AbstractGrammarElementFinder {
 		//'null'
 		public Keyword getNullValueNullKeyword_5_0() { return cNullValueNullKeyword_5_0; }
 
+		//tValue=Type
+		public Assignment getTValueAssignment_6() { return cTValueAssignment_6; }
+
+		//Type
+		public RuleCall getTValueTypeParserRuleCall_6_0() { return cTValueTypeParserRuleCall_6_0; }
+
 		//=> version=VERSION
-		public Assignment getVersionAssignment_6() { return cVersionAssignment_6; }
+		public Assignment getVersionAssignment_7() { return cVersionAssignment_7; }
 
 		//VERSION
-		public RuleCall getVersionVERSIONTerminalRuleCall_6_0() { return cVersionVERSIONTerminalRuleCall_6_0; }
+		public RuleCall getVersionVERSIONTerminalRuleCall_7_0() { return cVersionVERSIONTerminalRuleCall_7_0; }
 	}
 
 	public class DerivedTypeElements extends AbstractParserRuleElementFinder {
@@ -2684,24 +2692,87 @@ public class IvmlGrammarAccess extends AbstractGrammarElementFinder {
 	public class FeatureCallElements extends AbstractParserRuleElementFinder {
 		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "de.uni_hildesheim.sse.Ivml.FeatureCall");
 		private final Group cGroup = (Group)rule.eContents().get(1);
-		private final Assignment cNameAssignment_0 = (Assignment)cGroup.eContents().get(0);
-		private final RuleCall cNameIdentifierParserRuleCall_0_0 = (RuleCall)cNameAssignment_0.eContents().get(0);
+		private final Alternatives cAlternatives_0 = (Alternatives)cGroup.eContents().get(0);
+		private final Assignment cNameAssignment_0_0 = (Assignment)cAlternatives_0.eContents().get(0);
+		private final RuleCall cNameIdentifierParserRuleCall_0_0_0 = (RuleCall)cNameAssignment_0_0.eContents().get(0);
+		private final Assignment cNameAssignment_0_1 = (Assignment)cAlternatives_0.eContents().get(1);
+		private final RuleCall cNameRelationalOperatorParserRuleCall_0_1_0 = (RuleCall)cNameAssignment_0_1.eContents().get(0);
+		private final Assignment cNameAssignment_0_2 = (Assignment)cAlternatives_0.eContents().get(2);
+		private final RuleCall cNameAdditiveOperatorParserRuleCall_0_2_0 = (RuleCall)cNameAssignment_0_2.eContents().get(0);
+		private final Assignment cNameAssignment_0_3 = (Assignment)cAlternatives_0.eContents().get(3);
+		private final RuleCall cNameMultiplicativeOperatorParserRuleCall_0_3_0 = (RuleCall)cNameAssignment_0_3.eContents().get(0);
+		private final Assignment cNameAssignment_0_4 = (Assignment)cAlternatives_0.eContents().get(4);
+		private final RuleCall cNameEqualityOperatorParserRuleCall_0_4_0 = (RuleCall)cNameAssignment_0_4.eContents().get(0);
+		private final Assignment cNameAssignment_0_5 = (Assignment)cAlternatives_0.eContents().get(5);
+		private final RuleCall cNameImplicationOperatorParserRuleCall_0_5_0 = (RuleCall)cNameAssignment_0_5.eContents().get(0);
+		private final Assignment cNameAssignment_0_6 = (Assignment)cAlternatives_0.eContents().get(6);
+		private final RuleCall cNameLogicalOperatorParserRuleCall_0_6_0 = (RuleCall)cNameAssignment_0_6.eContents().get(0);
+		private final Assignment cNameAssignment_0_7 = (Assignment)cAlternatives_0.eContents().get(7);
+		private final Keyword cNameNotKeyword_0_7_0 = (Keyword)cNameAssignment_0_7.eContents().get(0);
 		private final Keyword cLeftParenthesisKeyword_1 = (Keyword)cGroup.eContents().get(1);
 		private final RuleCall cActualArgumentListParserRuleCall_2 = (RuleCall)cGroup.eContents().get(2);
 		private final Keyword cRightParenthesisKeyword_3 = (Keyword)cGroup.eContents().get(3);
 		
 		//FeatureCall:
-		//	name=Identifier '(' ActualArgumentList? ')';
+		//	(name=Identifier | name=RelationalOperator | name=AdditiveOperator | name=MultiplicativeOperator |
+		//	name=EqualityOperator | name=ImplicationOperator | name=LogicalOperator | name="not") '(' ActualArgumentList? ')';
 		@Override public ParserRule getRule() { return rule; }
 
-		//name=Identifier '(' ActualArgumentList? ')'
+		//(name=Identifier | name=RelationalOperator | name=AdditiveOperator | name=MultiplicativeOperator | name=EqualityOperator
+		//| name=ImplicationOperator | name=LogicalOperator | name="not") '(' ActualArgumentList? ')'
 		public Group getGroup() { return cGroup; }
 
+		//(name=Identifier | name=RelationalOperator | name=AdditiveOperator | name=MultiplicativeOperator | name=EqualityOperator
+		//| name=ImplicationOperator | name=LogicalOperator | name="not")
+		public Alternatives getAlternatives_0() { return cAlternatives_0; }
+
 		//name=Identifier
-		public Assignment getNameAssignment_0() { return cNameAssignment_0; }
+		public Assignment getNameAssignment_0_0() { return cNameAssignment_0_0; }
 
 		//Identifier
-		public RuleCall getNameIdentifierParserRuleCall_0_0() { return cNameIdentifierParserRuleCall_0_0; }
+		public RuleCall getNameIdentifierParserRuleCall_0_0_0() { return cNameIdentifierParserRuleCall_0_0_0; }
+
+		//name=RelationalOperator
+		public Assignment getNameAssignment_0_1() { return cNameAssignment_0_1; }
+
+		//RelationalOperator
+		public RuleCall getNameRelationalOperatorParserRuleCall_0_1_0() { return cNameRelationalOperatorParserRuleCall_0_1_0; }
+
+		//name=AdditiveOperator
+		public Assignment getNameAssignment_0_2() { return cNameAssignment_0_2; }
+
+		//AdditiveOperator
+		public RuleCall getNameAdditiveOperatorParserRuleCall_0_2_0() { return cNameAdditiveOperatorParserRuleCall_0_2_0; }
+
+		//name=MultiplicativeOperator
+		public Assignment getNameAssignment_0_3() { return cNameAssignment_0_3; }
+
+		//MultiplicativeOperator
+		public RuleCall getNameMultiplicativeOperatorParserRuleCall_0_3_0() { return cNameMultiplicativeOperatorParserRuleCall_0_3_0; }
+
+		//name=EqualityOperator
+		public Assignment getNameAssignment_0_4() { return cNameAssignment_0_4; }
+
+		//EqualityOperator
+		public RuleCall getNameEqualityOperatorParserRuleCall_0_4_0() { return cNameEqualityOperatorParserRuleCall_0_4_0; }
+
+		//name=ImplicationOperator
+		public Assignment getNameAssignment_0_5() { return cNameAssignment_0_5; }
+
+		//ImplicationOperator
+		public RuleCall getNameImplicationOperatorParserRuleCall_0_5_0() { return cNameImplicationOperatorParserRuleCall_0_5_0; }
+
+		//name=LogicalOperator
+		public Assignment getNameAssignment_0_6() { return cNameAssignment_0_6; }
+
+		//LogicalOperator
+		public RuleCall getNameLogicalOperatorParserRuleCall_0_6_0() { return cNameLogicalOperatorParserRuleCall_0_6_0; }
+
+		//name="not"
+		public Assignment getNameAssignment_0_7() { return cNameAssignment_0_7; }
+
+		//"not"
+		public Keyword getNameNotKeyword_0_7_0() { return cNameNotKeyword_0_7_0; }
 
 		//'('
 		public Keyword getLeftParenthesisKeyword_1() { return cLeftParenthesisKeyword_1; }
@@ -3712,7 +3783,7 @@ public class IvmlGrammarAccess extends AbstractGrammarElementFinder {
 	//Value:
 	//	nValue=NumValue | sValue=STRING | qValue=QualifiedName | bValue=('true' | 'false') | self='self' //#> Compounds
 	// |
-	//	nullValue='null' | => version=VERSION //#< Compounds
+	//	nullValue='null' | tValue=Type | => version=VERSION //#< Compounds
 	//;
 	public ValueElements getValueAccess() {
 		return pValue;
@@ -4176,7 +4247,8 @@ public class IvmlGrammarAccess extends AbstractGrammarElementFinder {
 	}
 
 	//FeatureCall:
-	//	name=Identifier '(' ActualArgumentList? ')';
+	//	(name=Identifier | name=RelationalOperator | name=AdditiveOperator | name=MultiplicativeOperator |
+	//	name=EqualityOperator | name=ImplicationOperator | name=LogicalOperator | name="not") '(' ActualArgumentList? ')';
 	public FeatureCallElements getFeatureCallAccess() {
 		return pFeatureCall;
 	}

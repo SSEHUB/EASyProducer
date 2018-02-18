@@ -625,19 +625,13 @@ public class TypeContext implements IResolutionScope {
         if (null != value.getNValue()) {
             // in case that the value is a numeric value
             String sValue = value.getNValue().getVal();
+            IDatatype type;
             if (sValue.indexOf(IvmlKeyWords.DECIMAL_SEPARATOR) > 0) {
-                try {
-                    result = new ConstantValue(ValueFactory.createValue(RealType.TYPE, sValue));
-                } catch (IvmlException e) {
-                    throw new TranslatorException(e, object, feature);
-                }
+                type = RealType.TYPE;
             } else {
-                try {
-                    result = new ConstantValue(ValueFactory.createValue(IntegerType.TYPE, sValue));
-                } catch (IvmlException e) {
-                    throw new TranslatorException(e, object, feature);
-                }
+                type = IntegerType.TYPE;
             }
+            result = createConstantValue(object, feature, type, sValue);
         } else if (null != value.getQValue()) {
             // in case that the value is a qualified value
             String sValue = Utils.getQualifiedNameString(value.getQValue());
@@ -660,8 +654,36 @@ public class TypeContext implements IResolutionScope {
             }
         } else if (null != value.getVersion()) {
             result = createValueTree(value.getVersion(), VersionType.TYPE, object, feature);
+        } else if (null != value.getTValue()) {
+            IDatatype type = resolveType(value.getTValue());
+            if (null != type) {
+                result = createConstantValue(object, feature, MetaType.TYPE, type);
+            }
         } else {
             throw new TranslatorException("<no type alternative>", object, feature, ErrorCodes.INTERNAL);
+        }
+        return result;
+    }
+
+    /**
+     * Creates a constant value.
+     * 
+     * @param object the grammar object this method is called for
+     * @param feature the grammar feature this method is called for
+     * @param type the type to create the value for
+     * @param values the actual value(s) (may be <b>null</b>)
+     * @return the constant value
+     * @throws TranslatorException if creating the constant value fails
+     */
+    private static ConstantValue createConstantValue(EObject object, EStructuralFeature feature, 
+        IDatatype type, Object... values) throws TranslatorException {
+        ConstantValue result = null;
+        if (null != type) {
+            try {
+                result = new ConstantValue(ValueFactory.createValue(type, values));
+            } catch (IvmlException e) {
+                throw new TranslatorException(e, object, feature);
+            }
         }
         return result;
     }

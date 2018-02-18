@@ -19,6 +19,7 @@ import org.eclipse.emf.ecore.EObject;
  *   <li>{@link de.uni_hildesheim.sse.ivml.Value#getBValue <em>BValue</em>}</li>
  *   <li>{@link de.uni_hildesheim.sse.ivml.Value#getSelf <em>Self</em>}</li>
  *   <li>{@link de.uni_hildesheim.sse.ivml.Value#getNullValue <em>Null Value</em>}</li>
+ *   <li>{@link de.uni_hildesheim.sse.ivml.Value#getTValue <em>TValue</em>}</li>
  *   <li>{@link de.uni_hildesheim.sse.ivml.Value#getVersion <em>Version</em>}</li>
  * </ul>
  *
@@ -183,6 +184,32 @@ public interface Value extends EObject
    * @generated
    */
   void setNullValue(String value);
+
+  /**
+   * Returns the value of the '<em><b>TValue</b></em>' containment reference.
+   * <!-- begin-user-doc -->
+   * <p>
+   * If the meaning of the '<em>TValue</em>' containment reference isn't clear,
+   * there really should be more of a description here...
+   * </p>
+   * <!-- end-user-doc -->
+   * @return the value of the '<em>TValue</em>' containment reference.
+   * @see #setTValue(Type)
+   * @see de.uni_hildesheim.sse.ivml.IvmlPackage#getValue_TValue()
+   * @model containment="true"
+   * @generated
+   */
+  Type getTValue();
+
+  /**
+   * Sets the value of the '{@link de.uni_hildesheim.sse.ivml.Value#getTValue <em>TValue</em>}' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @param value the new value of the '<em>TValue</em>' containment reference.
+   * @see #getTValue()
+   * @generated
+   */
+  void setTValue(Type value);
 
   /**
    * Returns the value of the '<em><b>Version</b></em>' attribute.

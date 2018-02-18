@@ -1586,11 +1586,11 @@ public class InternalIvmlLexer extends Lexer {
         try {
             int _type = RULE_VERSION;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // InternalIvml.g:5840:14: ( 'v' ( '0' .. '9' )+ ( '.' ( '0' .. '9' )+ )* )
-            // InternalIvml.g:5840:16: 'v' ( '0' .. '9' )+ ( '.' ( '0' .. '9' )+ )*
+            // InternalIvml.g:5989:14: ( 'v' ( '0' .. '9' )+ ( '.' ( '0' .. '9' )+ )* )
+            // InternalIvml.g:5989:16: 'v' ( '0' .. '9' )+ ( '.' ( '0' .. '9' )+ )*
             {
             match('v'); 
-            // InternalIvml.g:5840:20: ( '0' .. '9' )+
+            // InternalIvml.g:5989:20: ( '0' .. '9' )+
             int cnt1=0;
             loop1:
             do {
@@ -1604,7 +1604,7 @@ public class InternalIvmlLexer extends Lexer {
 
                 switch (alt1) {
             	case 1 :
-            	    // InternalIvml.g:5840:21: '0' .. '9'
+            	    // InternalIvml.g:5989:21: '0' .. '9'
             	    {
             	    matchRange('0','9'); 
 
@@ -1620,7 +1620,7 @@ public class InternalIvmlLexer extends Lexer {
                 cnt1++;
             } while (true);
 
-            // InternalIvml.g:5840:32: ( '.' ( '0' .. '9' )+ )*
+            // InternalIvml.g:5989:32: ( '.' ( '0' .. '9' )+ )*
             loop3:
             do {
                 int alt3=2;
@@ -1633,10 +1633,10 @@ public class InternalIvmlLexer extends Lexer {
 
                 switch (alt3) {
             	case 1 :
-            	    // InternalIvml.g:5840:33: '.' ( '0' .. '9' )+
+            	    // InternalIvml.g:5989:33: '.' ( '0' .. '9' )+
             	    {
             	    match('.'); 
-            	    // InternalIvml.g:5840:37: ( '0' .. '9' )+
+            	    // InternalIvml.g:5989:37: ( '0' .. '9' )+
             	    int cnt2=0;
             	    loop2:
             	    do {
@@ -1650,7 +1650,7 @@ public class InternalIvmlLexer extends Lexer {
 
             	        switch (alt2) {
             	    	case 1 :
-            	    	    // InternalIvml.g:5840:38: '0' .. '9'
+            	    	    // InternalIvml.g:5989:38: '0' .. '9'
             	    	    {
             	    	    matchRange('0','9'); 
 
@@ -1691,8 +1691,8 @@ public class InternalIvmlLexer extends Lexer {
         try {
             int _type = RULE_ID;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // InternalIvml.g:5842:9: ( ( 'a' .. 'z' | 'A' .. 'Z' | '_' ) ( 'a' .. 'z' | 'A' .. 'Z' | '_' | '0' .. '9' )* )
-            // InternalIvml.g:5842:11: ( 'a' .. 'z' | 'A' .. 'Z' | '_' ) ( 'a' .. 'z' | 'A' .. 'Z' | '_' | '0' .. '9' )*
+            // InternalIvml.g:5991:9: ( ( 'a' .. 'z' | 'A' .. 'Z' | '_' ) ( 'a' .. 'z' | 'A' .. 'Z' | '_' | '0' .. '9' )* )
+            // InternalIvml.g:5991:11: ( 'a' .. 'z' | 'A' .. 'Z' | '_' ) ( 'a' .. 'z' | 'A' .. 'Z' | '_' | '0' .. '9' )*
             {
             if ( (input.LA(1)>='A' && input.LA(1)<='Z')||input.LA(1)=='_'||(input.LA(1)>='a' && input.LA(1)<='z') ) {
                 input.consume();
@@ -1703,7 +1703,7 @@ public class InternalIvmlLexer extends Lexer {
                 recover(mse);
                 throw mse;}
 
-            // InternalIvml.g:5842:35: ( 'a' .. 'z' | 'A' .. 'Z' | '_' | '0' .. '9' )*
+            // InternalIvml.g:5991:35: ( 'a' .. 'z' | 'A' .. 'Z' | '_' | '0' .. '9' )*
             loop4:
             do {
                 int alt4=2;
@@ -1752,10 +1752,10 @@ public class InternalIvmlLexer extends Lexer {
         try {
             int _type = RULE_NUMBER;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // InternalIvml.g:5844:13: ( ( '-' )? ( ( '0' .. '9' )+ ( '.' ( '0' .. '9' )* ( RULE_EXPONENT )? )? | '.' ( '0' .. '9' )+ ( RULE_EXPONENT )? | ( '0' .. '9' )+ RULE_EXPONENT ) )
-            // InternalIvml.g:5844:15: ( '-' )? ( ( '0' .. '9' )+ ( '.' ( '0' .. '9' )* ( RULE_EXPONENT )? )? | '.' ( '0' .. '9' )+ ( RULE_EXPONENT )? | ( '0' .. '9' )+ RULE_EXPONENT )
+            // InternalIvml.g:5993:13: ( ( '-' )? ( ( '0' .. '9' )+ ( '.' ( '0' .. '9' )* ( RULE_EXPONENT )? )? | '.' ( '0' .. '9' )+ ( RULE_EXPONENT )? | ( '0' .. '9' )+ RULE_EXPONENT ) )
+            // InternalIvml.g:5993:15: ( '-' )? ( ( '0' .. '9' )+ ( '.' ( '0' .. '9' )* ( RULE_EXPONENT )? )? | '.' ( '0' .. '9' )+ ( RULE_EXPONENT )? | ( '0' .. '9' )+ RULE_EXPONENT )
             {
-            // InternalIvml.g:5844:15: ( '-' )?
+            // InternalIvml.g:5993:15: ( '-' )?
             int alt5=2;
             int LA5_0 = input.LA(1);
 
@@ -1764,7 +1764,7 @@ public class InternalIvmlLexer extends Lexer {
             }
             switch (alt5) {
                 case 1 :
-                    // InternalIvml.g:5844:15: '-'
+                    // InternalIvml.g:5993:15: '-'
                     {
                     match('-'); 
 
@@ -1773,14 +1773,14 @@ public class InternalIvmlLexer extends Lexer {
 
             }
 
-            // InternalIvml.g:5844:20: ( ( '0' .. '9' )+ ( '.' ( '0' .. '9' )* ( RULE_EXPONENT )? )? | '.' ( '0' .. '9' )+ ( RULE_EXPONENT )? | ( '0' .. '9' )+ RULE_EXPONENT )
+            // InternalIvml.g:5993:20: ( ( '0' .. '9' )+ ( '.' ( '0' .. '9' )* ( RULE_EXPONENT )? )? | '.' ( '0' .. '9' )+ ( RULE_EXPONENT )? | ( '0' .. '9' )+ RULE_EXPONENT )
             int alt13=3;
             alt13 = dfa13.predict(input);
             switch (alt13) {
                 case 1 :
-                    // InternalIvml.g:5844:21: ( '0' .. '9' )+ ( '.' ( '0' .. '9' )* ( RULE_EXPONENT )? )?
+                    // InternalIvml.g:5993:21: ( '0' .. '9' )+ ( '.' ( '0' .. '9' )* ( RULE_EXPONENT )? )?
                     {
-                    // InternalIvml.g:5844:21: ( '0' .. '9' )+
+                    // InternalIvml.g:5993:21: ( '0' .. '9' )+
                     int cnt6=0;
                     loop6:
                     do {
@@ -1794,7 +1794,7 @@ public class InternalIvmlLexer extends Lexer {
 
                         switch (alt6) {
                     	case 1 :
-                    	    // InternalIvml.g:5844:22: '0' .. '9'
+                    	    // InternalIvml.g:5993:22: '0' .. '9'
                     	    {
                     	    matchRange('0','9'); 
 
@@ -1810,7 +1810,7 @@ public class InternalIvmlLexer extends Lexer {
                         cnt6++;
                     } while (true);
 
-                    // InternalIvml.g:5844:33: ( '.' ( '0' .. '9' )* ( RULE_EXPONENT )? )?
+                    // InternalIvml.g:5993:33: ( '.' ( '0' .. '9' )* ( RULE_EXPONENT )? )?
                     int alt9=2;
                     int LA9_0 = input.LA(1);
 
@@ -1819,10 +1819,10 @@ public class InternalIvmlLexer extends Lexer {
                     }
                     switch (alt9) {
                         case 1 :
-                            // InternalIvml.g:5844:34: '.' ( '0' .. '9' )* ( RULE_EXPONENT )?
+                            // InternalIvml.g:5993:34: '.' ( '0' .. '9' )* ( RULE_EXPONENT )?
                             {
                             match('.'); 
-                            // InternalIvml.g:5844:38: ( '0' .. '9' )*
+                            // InternalIvml.g:5993:38: ( '0' .. '9' )*
                             loop7:
                             do {
                                 int alt7=2;
@@ -1835,7 +1835,7 @@ public class InternalIvmlLexer extends Lexer {
 
                                 switch (alt7) {
                             	case 1 :
-                            	    // InternalIvml.g:5844:39: '0' .. '9'
+                            	    // InternalIvml.g:5993:39: '0' .. '9'
                             	    {
                             	    matchRange('0','9'); 
 
@@ -1847,7 +1847,7 @@ public class InternalIvmlLexer extends Lexer {
                                 }
                             } while (true);
 
-                            // InternalIvml.g:5844:50: ( RULE_EXPONENT )?
+                            // InternalIvml.g:5993:50: ( RULE_EXPONENT )?
                             int alt8=2;
                             int LA8_0 = input.LA(1);
 
@@ -1856,7 +1856,7 @@ public class InternalIvmlLexer extends Lexer {
                             }
                             switch (alt8) {
                                 case 1 :
-                                    // InternalIvml.g:5844:50: RULE_EXPONENT
+                                    // InternalIvml.g:5993:50: RULE_EXPONENT
                                     {
                                     mRULE_EXPONENT(); 
 
@@ -1875,10 +1875,10 @@ public class InternalIvmlLexer extends Lexer {
                     }
                     break;
                 case 2 :
-                    // InternalIvml.g:5844:67: '.' ( '0' .. '9' )+ ( RULE_EXPONENT )?
+                    // InternalIvml.g:5993:67: '.' ( '0' .. '9' )+ ( RULE_EXPONENT )?
                     {
                     match('.'); 
-                    // InternalIvml.g:5844:71: ( '0' .. '9' )+
+                    // InternalIvml.g:5993:71: ( '0' .. '9' )+
                     int cnt10=0;
                     loop10:
                     do {
@@ -1892,7 +1892,7 @@ public class InternalIvmlLexer extends Lexer {
 
                         switch (alt10) {
                     	case 1 :
-                    	    // InternalIvml.g:5844:72: '0' .. '9'
+                    	    // InternalIvml.g:5993:72: '0' .. '9'
                     	    {
                     	    matchRange('0','9'); 
 
@@ -1908,7 +1908,7 @@ public class InternalIvmlLexer extends Lexer {
                         cnt10++;
                     } while (true);
 
-                    // InternalIvml.g:5844:83: ( RULE_EXPONENT )?
+                    // InternalIvml.g:5993:83: ( RULE_EXPONENT )?
                     int alt11=2;
                     int LA11_0 = input.LA(1);
 
@@ -1917,7 +1917,7 @@ public class InternalIvmlLexer extends Lexer {
                     }
                     switch (alt11) {
                         case 1 :
-                            // InternalIvml.g:5844:83: RULE_EXPONENT
+                            // InternalIvml.g:5993:83: RULE_EXPONENT
                             {
                             mRULE_EXPONENT(); 
 
@@ -1930,9 +1930,9 @@ public class InternalIvmlLexer extends Lexer {
                     }
                     break;
                 case 3 :
-                    // InternalIvml.g:5844:98: ( '0' .. '9' )+ RULE_EXPONENT
+                    // InternalIvml.g:5993:98: ( '0' .. '9' )+ RULE_EXPONENT
                     {
-                    // InternalIvml.g:5844:98: ( '0' .. '9' )+
+                    // InternalIvml.g:5993:98: ( '0' .. '9' )+
                     int cnt12=0;
                     loop12:
                     do {
@@ -1946,7 +1946,7 @@ public class InternalIvmlLexer extends Lexer {
 
                         switch (alt12) {
                     	case 1 :
-                    	    // InternalIvml.g:5844:99: '0' .. '9'
+                    	    // InternalIvml.g:5993:99: '0' .. '9'
                     	    {
                     	    matchRange('0','9'); 
 
@@ -1985,8 +1985,8 @@ public class InternalIvmlLexer extends Lexer {
         try {
             int _type = RULE_EXPONENT;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // InternalIvml.g:5846:15: ( ( 'e' | 'E' ) ( '+' | '-' )? ( '0' .. '9' )+ )
-            // InternalIvml.g:5846:17: ( 'e' | 'E' ) ( '+' | '-' )? ( '0' .. '9' )+
+            // InternalIvml.g:5995:15: ( ( 'e' | 'E' ) ( '+' | '-' )? ( '0' .. '9' )+ )
+            // InternalIvml.g:5995:17: ( 'e' | 'E' ) ( '+' | '-' )? ( '0' .. '9' )+
             {
             if ( input.LA(1)=='E'||input.LA(1)=='e' ) {
                 input.consume();
@@ -1997,7 +1997,7 @@ public class InternalIvmlLexer extends Lexer {
                 recover(mse);
                 throw mse;}
 
-            // InternalIvml.g:5846:27: ( '+' | '-' )?
+            // InternalIvml.g:5995:27: ( '+' | '-' )?
             int alt14=2;
             int LA14_0 = input.LA(1);
 
@@ -2023,7 +2023,7 @@ public class InternalIvmlLexer extends Lexer {
 
             }
 
-            // InternalIvml.g:5846:38: ( '0' .. '9' )+
+            // InternalIvml.g:5995:38: ( '0' .. '9' )+
             int cnt15=0;
             loop15:
             do {
@@ -2037,7 +2037,7 @@ public class InternalIvmlLexer extends Lexer {
 
                 switch (alt15) {
             	case 1 :
-            	    // InternalIvml.g:5846:39: '0' .. '9'
+            	    // InternalIvml.g:5995:39: '0' .. '9'
             	    {
             	    matchRange('0','9'); 
 
@@ -2069,10 +2069,10 @@ public class InternalIvmlLexer extends Lexer {
         try {
             int _type = RULE_STRING;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // InternalIvml.g:5848:13: ( ( '\"' ( '\\\\' ( 'b' | 't' | 'n' | 'f' | 'r' | 'u' | '\"' | '\\'' | '\\\\' ) | ~ ( ( '\\\\' | '\"' ) ) )* '\"' | '\\'' ( '\\\\' ( 'b' | 't' | 'n' | 'f' | 'r' | 'u' | '\"' | '\\'' | '\\\\' ) | ~ ( ( '\\\\' | '\\'' ) ) )* '\\'' ) )
-            // InternalIvml.g:5848:15: ( '\"' ( '\\\\' ( 'b' | 't' | 'n' | 'f' | 'r' | 'u' | '\"' | '\\'' | '\\\\' ) | ~ ( ( '\\\\' | '\"' ) ) )* '\"' | '\\'' ( '\\\\' ( 'b' | 't' | 'n' | 'f' | 'r' | 'u' | '\"' | '\\'' | '\\\\' ) | ~ ( ( '\\\\' | '\\'' ) ) )* '\\'' )
+            // InternalIvml.g:5997:13: ( ( '\"' ( '\\\\' ( 'b' | 't' | 'n' | 'f' | 'r' | 'u' | '\"' | '\\'' | '\\\\' ) | ~ ( ( '\\\\' | '\"' ) ) )* '\"' | '\\'' ( '\\\\' ( 'b' | 't' | 'n' | 'f' | 'r' | 'u' | '\"' | '\\'' | '\\\\' ) | ~ ( ( '\\\\' | '\\'' ) ) )* '\\'' ) )
+            // InternalIvml.g:5997:15: ( '\"' ( '\\\\' ( 'b' | 't' | 'n' | 'f' | 'r' | 'u' | '\"' | '\\'' | '\\\\' ) | ~ ( ( '\\\\' | '\"' ) ) )* '\"' | '\\'' ( '\\\\' ( 'b' | 't' | 'n' | 'f' | 'r' | 'u' | '\"' | '\\'' | '\\\\' ) | ~ ( ( '\\\\' | '\\'' ) ) )* '\\'' )
             {
-            // InternalIvml.g:5848:15: ( '\"' ( '\\\\' ( 'b' | 't' | 'n' | 'f' | 'r' | 'u' | '\"' | '\\'' | '\\\\' ) | ~ ( ( '\\\\' | '\"' ) ) )* '\"' | '\\'' ( '\\\\' ( 'b' | 't' | 'n' | 'f' | 'r' | 'u' | '\"' | '\\'' | '\\\\' ) | ~ ( ( '\\\\' | '\\'' ) ) )* '\\'' )
+            // InternalIvml.g:5997:15: ( '\"' ( '\\\\' ( 'b' | 't' | 'n' | 'f' | 'r' | 'u' | '\"' | '\\'' | '\\\\' ) | ~ ( ( '\\\\' | '\"' ) ) )* '\"' | '\\'' ( '\\\\' ( 'b' | 't' | 'n' | 'f' | 'r' | 'u' | '\"' | '\\'' | '\\\\' ) | ~ ( ( '\\\\' | '\\'' ) ) )* '\\'' )
             int alt18=2;
             int LA18_0 = input.LA(1);
 
@@ -2090,10 +2090,10 @@ public class InternalIvmlLexer extends Lexer {
             }
             switch (alt18) {
                 case 1 :
-                    // InternalIvml.g:5848:16: '\"' ( '\\\\' ( 'b' | 't' | 'n' | 'f' | 'r' | 'u' | '\"' | '\\'' | '\\\\' ) | ~ ( ( '\\\\' | '\"' ) ) )* '\"'
+                    // InternalIvml.g:5997:16: '\"' ( '\\\\' ( 'b' | 't' | 'n' | 'f' | 'r' | 'u' | '\"' | '\\'' | '\\\\' ) | ~ ( ( '\\\\' | '\"' ) ) )* '\"'
                     {
                     match('\"'); 
-                    // InternalIvml.g:5848:20: ( '\\\\' ( 'b' | 't' | 'n' | 'f' | 'r' | 'u' | '\"' | '\\'' | '\\\\' ) | ~ ( ( '\\\\' | '\"' ) ) )*
+                    // InternalIvml.g:5997:20: ( '\\\\' ( 'b' | 't' | 'n' | 'f' | 'r' | 'u' | '\"' | '\\'' | '\\\\' ) | ~ ( ( '\\\\' | '\"' ) ) )*
                     loop16:
                     do {
                         int alt16=3;
@@ -2109,7 +2109,7 @@ public class InternalIvmlLexer extends Lexer {
 
                         switch (alt16) {
                     	case 1 :
-                    	    // InternalIvml.g:5848:21: '\\\\' ( 'b' | 't' | 'n' | 'f' | 'r' | 'u' | '\"' | '\\'' | '\\\\' )
+                    	    // InternalIvml.g:5997:21: '\\\\' ( 'b' | 't' | 'n' | 'f' | 'r' | 'u' | '\"' | '\\'' | '\\\\' )
                     	    {
                     	    match('\\'); 
                     	    if ( input.LA(1)=='\"'||input.LA(1)=='\''||input.LA(1)=='\\'||input.LA(1)=='b'||input.LA(1)=='f'||input.LA(1)=='n'||input.LA(1)=='r'||(input.LA(1)>='t' && input.LA(1)<='u') ) {
@@ -2125,7 +2125,7 @@ public class InternalIvmlLexer extends Lexer {
                     	    }
                     	    break;
                     	case 2 :
-                    	    // InternalIvml.g:5848:66: ~ ( ( '\\\\' | '\"' ) )
+                    	    // InternalIvml.g:5997:66: ~ ( ( '\\\\' | '\"' ) )
                     	    {
                     	    if ( (input.LA(1)>='\u0000' && input.LA(1)<='!')||(input.LA(1)>='#' && input.LA(1)<='[')||(input.LA(1)>=']' && input.LA(1)<='\uFFFF') ) {
                     	        input.consume();
@@ -2150,10 +2150,10 @@ public class InternalIvmlLexer extends Lexer {
                     }
                     break;
                 case 2 :
-                    // InternalIvml.g:5848:86: '\\'' ( '\\\\' ( 'b' | 't' | 'n' | 'f' | 'r' | 'u' | '\"' | '\\'' | '\\\\' ) | ~ ( ( '\\\\' | '\\'' ) ) )* '\\''
+                    // InternalIvml.g:5997:86: '\\'' ( '\\\\' ( 'b' | 't' | 'n' | 'f' | 'r' | 'u' | '\"' | '\\'' | '\\\\' ) | ~ ( ( '\\\\' | '\\'' ) ) )* '\\''
                     {
                     match('\''); 
-                    // InternalIvml.g:5848:91: ( '\\\\' ( 'b' | 't' | 'n' | 'f' | 'r' | 'u' | '\"' | '\\'' | '\\\\' ) | ~ ( ( '\\\\' | '\\'' ) ) )*
+                    // InternalIvml.g:5997:91: ( '\\\\' ( 'b' | 't' | 'n' | 'f' | 'r' | 'u' | '\"' | '\\'' | '\\\\' ) | ~ ( ( '\\\\' | '\\'' ) ) )*
                     loop17:
                     do {
                         int alt17=3;
@@ -2169,7 +2169,7 @@ public class InternalIvmlLexer extends Lexer {
 
                         switch (alt17) {
                     	case 1 :
-                    	    // InternalIvml.g:5848:92: '\\\\' ( 'b' | 't' | 'n' | 'f' | 'r' | 'u' | '\"' | '\\'' | '\\\\' )
+                    	    // InternalIvml.g:5997:92: '\\\\' ( 'b' | 't' | 'n' | 'f' | 'r' | 'u' | '\"' | '\\'' | '\\\\' )
                     	    {
                     	    match('\\'); 
                     	    if ( input.LA(1)=='\"'||input.LA(1)=='\''||input.LA(1)=='\\'||input.LA(1)=='b'||input.LA(1)=='f'||input.LA(1)=='n'||input.LA(1)=='r'||(input.LA(1)>='t' && input.LA(1)<='u') ) {
@@ -2185,7 +2185,7 @@ public class InternalIvmlLexer extends Lexer {
                     	    }
                     	    break;
                     	case 2 :
-                    	    // InternalIvml.g:5848:137: ~ ( ( '\\\\' | '\\'' ) )
+                    	    // InternalIvml.g:5997:137: ~ ( ( '\\\\' | '\\'' ) )
                     	    {
                     	    if ( (input.LA(1)>='\u0000' && input.LA(1)<='&')||(input.LA(1)>='(' && input.LA(1)<='[')||(input.LA(1)>=']' && input.LA(1)<='\uFFFF') ) {
                     	        input.consume();
@@ -2228,12 +2228,12 @@ public class InternalIvmlLexer extends Lexer {
         try {
             int _type = RULE_ML_COMMENT;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // InternalIvml.g:5850:17: ( '/*' ( options {greedy=false; } : . )* '*/' )
-            // InternalIvml.g:5850:19: '/*' ( options {greedy=false; } : . )* '*/'
+            // InternalIvml.g:5999:17: ( '/*' ( options {greedy=false; } : . )* '*/' )
+            // InternalIvml.g:5999:19: '/*' ( options {greedy=false; } : . )* '*/'
             {
             match("/*"); 
 
-            // InternalIvml.g:5850:24: ( options {greedy=false; } : . )*
+            // InternalIvml.g:5999:24: ( options {greedy=false; } : . )*
             loop19:
             do {
                 int alt19=2;
@@ -2258,7 +2258,7 @@ public class InternalIvmlLexer extends Lexer {
 
                 switch (alt19) {
             	case 1 :
-            	    // InternalIvml.g:5850:52: .
+            	    // InternalIvml.g:5999:52: .
             	    {
             	    matchAny(); 
 
@@ -2288,12 +2288,12 @@ public class InternalIvmlLexer extends Lexer {
         try {
             int _type = RULE_SL_COMMENT;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // InternalIvml.g:5852:17: ( '//' (~ ( ( '\\n' | '\\r' ) ) )* ( ( '\\r' )? '\\n' )? )
-            // InternalIvml.g:5852:19: '//' (~ ( ( '\\n' | '\\r' ) ) )* ( ( '\\r' )? '\\n' )?
+            // InternalIvml.g:6001:17: ( '//' (~ ( ( '\\n' | '\\r' ) ) )* ( ( '\\r' )? '\\n' )? )
+            // InternalIvml.g:6001:19: '//' (~ ( ( '\\n' | '\\r' ) ) )* ( ( '\\r' )? '\\n' )?
             {
             match("//"); 
 
-            // InternalIvml.g:5852:24: (~ ( ( '\\n' | '\\r' ) ) )*
+            // InternalIvml.g:6001:24: (~ ( ( '\\n' | '\\r' ) ) )*
             loop20:
             do {
                 int alt20=2;
@@ -2306,7 +2306,7 @@ public class InternalIvmlLexer extends Lexer {
 
                 switch (alt20) {
             	case 1 :
-            	    // InternalIvml.g:5852:24: ~ ( ( '\\n' | '\\r' ) )
+            	    // InternalIvml.g:6001:24: ~ ( ( '\\n' | '\\r' ) )
             	    {
             	    if ( (input.LA(1)>='\u0000' && input.LA(1)<='\t')||(input.LA(1)>='\u000B' && input.LA(1)<='\f')||(input.LA(1)>='\u000E' && input.LA(1)<='\uFFFF') ) {
             	        input.consume();
@@ -2326,7 +2326,7 @@ public class InternalIvmlLexer extends Lexer {
                 }
             } while (true);
 
-            // InternalIvml.g:5852:40: ( ( '\\r' )? '\\n' )?
+            // InternalIvml.g:6001:40: ( ( '\\r' )? '\\n' )?
             int alt22=2;
             int LA22_0 = input.LA(1);
 
@@ -2335,9 +2335,9 @@ public class InternalIvmlLexer extends Lexer {
             }
             switch (alt22) {
                 case 1 :
-                    // InternalIvml.g:5852:41: ( '\\r' )? '\\n'
+                    // InternalIvml.g:6001:41: ( '\\r' )? '\\n'
                     {
-                    // InternalIvml.g:5852:41: ( '\\r' )?
+                    // InternalIvml.g:6001:41: ( '\\r' )?
                     int alt21=2;
                     int LA21_0 = input.LA(1);
 
@@ -2346,7 +2346,7 @@ public class InternalIvmlLexer extends Lexer {
                     }
                     switch (alt21) {
                         case 1 :
-                            // InternalIvml.g:5852:41: '\\r'
+                            // InternalIvml.g:6001:41: '\\r'
                             {
                             match('\r'); 
 
@@ -2378,10 +2378,10 @@ public class InternalIvmlLexer extends Lexer {
         try {
             int _type = RULE_WS;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // InternalIvml.g:5854:9: ( ( ' ' | '\\t' | '\\r' | '\\n' )+ )
-            // InternalIvml.g:5854:11: ( ' ' | '\\t' | '\\r' | '\\n' )+
+            // InternalIvml.g:6003:9: ( ( ' ' | '\\t' | '\\r' | '\\n' )+ )
+            // InternalIvml.g:6003:11: ( ' ' | '\\t' | '\\r' | '\\n' )+
             {
-            // InternalIvml.g:5854:11: ( ' ' | '\\t' | '\\r' | '\\n' )+
+            // InternalIvml.g:6003:11: ( ' ' | '\\t' | '\\r' | '\\n' )+
             int cnt23=0;
             loop23:
             do {
@@ -2435,8 +2435,8 @@ public class InternalIvmlLexer extends Lexer {
         try {
             int _type = RULE_ANY_OTHER;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // InternalIvml.g:5856:16: ( . )
-            // InternalIvml.g:5856:18: .
+            // InternalIvml.g:6005:16: ( . )
+            // InternalIvml.g:6005:18: .
             {
             matchAny(); 
 
@@ -3073,7 +3073,7 @@ public class InternalIvmlLexer extends Lexer {
             this.transition = DFA13_transition;
         }
         public String getDescription() {
-            return "5844:20: ( ( '0' .. '9' )+ ( '.' ( '0' .. '9' )* ( RULE_EXPONENT )? )? | '.' ( '0' .. '9' )+ ( RULE_EXPONENT )? | ( '0' .. '9' )+ RULE_EXPONENT )";
+            return "5993:20: ( ( '0' .. '9' )+ ( '.' ( '0' .. '9' )* ( RULE_EXPONENT )? )? | '.' ( '0' .. '9' )+ ( RULE_EXPONENT )? | ( '0' .. '9' )+ RULE_EXPONENT )";
         }
     }
     static final String DFA24_eotS =

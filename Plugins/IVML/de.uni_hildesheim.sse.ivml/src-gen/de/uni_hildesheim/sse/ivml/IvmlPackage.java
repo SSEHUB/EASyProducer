@@ -823,13 +823,22 @@ public interface IvmlPackage extends EPackage
   int VALUE__NULL_VALUE = 5;
 
   /**
+   * The feature id for the '<em><b>TValue</b></em>' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int VALUE__TVALUE = 6;
+
+  /**
    * The feature id for the '<em><b>Version</b></em>' attribute.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int VALUE__VERSION = 6;
+  int VALUE__VERSION = 7;
 
   /**
    * The number of structural features of the '<em>Value</em>' class.
@@ -838,7 +847,7 @@ public interface IvmlPackage extends EPackage
    * @generated
    * @ordered
    */
-  int VALUE_FEATURE_COUNT = 7;
+  int VALUE_FEATURE_COUNT = 8;
 
   /**
    * The meta object id for the '{@link de.uni_hildesheim.sse.ivml.impl.DerivedTypeImpl <em>Derived Type</em>}' class.
@@ -3494,6 +3503,17 @@ public interface IvmlPackage extends EPackage
   EAttribute getValue_NullValue();
 
   /**
+   * Returns the meta object for the containment reference '{@link de.uni_hildesheim.sse.ivml.Value#getTValue <em>TValue</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the containment reference '<em>TValue</em>'.
+   * @see de.uni_hildesheim.sse.ivml.Value#getTValue()
+   * @see #getValue()
+   * @generated
+   */
+  EReference getValue_TValue();
+
+  /**
    * Returns the meta object for the attribute '{@link de.uni_hildesheim.sse.ivml.Value#getVersion <em>Version</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -5796,6 +5816,14 @@ public interface IvmlPackage extends EPackage
      * @generated
      */
     EAttribute VALUE__NULL_VALUE = eINSTANCE.getValue_NullValue();
+
+    /**
+     * The meta object literal for the '<em><b>TValue</b></em>' containment reference feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EReference VALUE__TVALUE = eINSTANCE.getValue_TValue();
 
     /**
      * The meta object literal for the '<em><b>Version</b></em>' attribute feature.

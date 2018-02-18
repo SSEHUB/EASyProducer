@@ -61,6 +61,7 @@ public class IvmlParser extends AbstractContentAssistParser {
 					put(grammarAccess.getUnaryOperatorAccess().getAlternatives(), "rule__UnaryOperator__Alternatives");
 					put(grammarAccess.getPostfixExpressionAccess().getAlternatives(), "rule__PostfixExpression__Alternatives");
 					put(grammarAccess.getCallAccess().getAlternatives(), "rule__Call__Alternatives");
+					put(grammarAccess.getFeatureCallAccess().getAlternatives_0(), "rule__FeatureCall__Alternatives_0");
 					put(grammarAccess.getPrimaryExpressionAccess().getAlternatives_0(), "rule__PrimaryExpression__Alternatives_0");
 					put(grammarAccess.getExpressionListEntryAccess().getAlternatives_1(), "rule__ExpressionListEntry__Alternatives_1");
 					put(grammarAccess.getIdentifierAccess().getAlternatives(), "rule__Identifier__Alternatives");
@@ -226,7 +227,8 @@ public class IvmlParser extends AbstractContentAssistParser {
 					put(grammarAccess.getValueAccess().getBValueAssignment_3(), "rule__Value__BValueAssignment_3");
 					put(grammarAccess.getValueAccess().getSelfAssignment_4(), "rule__Value__SelfAssignment_4");
 					put(grammarAccess.getValueAccess().getNullValueAssignment_5(), "rule__Value__NullValueAssignment_5");
-					put(grammarAccess.getValueAccess().getVersionAssignment_6(), "rule__Value__VersionAssignment_6");
+					put(grammarAccess.getValueAccess().getTValueAssignment_6(), "rule__Value__TValueAssignment_6");
+					put(grammarAccess.getValueAccess().getVersionAssignment_7(), "rule__Value__VersionAssignment_7");
 					put(grammarAccess.getDerivedTypeAccess().getOpAssignment_0_0(), "rule__DerivedType__OpAssignment_0_0");
 					put(grammarAccess.getDerivedTypeAccess().getOpAssignment_0_1(), "rule__DerivedType__OpAssignment_0_1");
 					put(grammarAccess.getDerivedTypeAccess().getOpAssignment_0_2(), "rule__DerivedType__OpAssignment_0_2");
@@ -315,7 +317,14 @@ public class IvmlParser extends AbstractContentAssistParser {
 					put(grammarAccess.getCallAccess().getCallAssignment_0_1(), "rule__Call__CallAssignment_0_1");
 					put(grammarAccess.getCallAccess().getContainerOpAssignment_1_1(), "rule__Call__ContainerOpAssignment_1_1");
 					put(grammarAccess.getCallAccess().getArrayExAssignment_2_1(), "rule__Call__ArrayExAssignment_2_1");
-					put(grammarAccess.getFeatureCallAccess().getNameAssignment_0(), "rule__FeatureCall__NameAssignment_0");
+					put(grammarAccess.getFeatureCallAccess().getNameAssignment_0_0(), "rule__FeatureCall__NameAssignment_0_0");
+					put(grammarAccess.getFeatureCallAccess().getNameAssignment_0_1(), "rule__FeatureCall__NameAssignment_0_1");
+					put(grammarAccess.getFeatureCallAccess().getNameAssignment_0_2(), "rule__FeatureCall__NameAssignment_0_2");
+					put(grammarAccess.getFeatureCallAccess().getNameAssignment_0_3(), "rule__FeatureCall__NameAssignment_0_3");
+					put(grammarAccess.getFeatureCallAccess().getNameAssignment_0_4(), "rule__FeatureCall__NameAssignment_0_4");
+					put(grammarAccess.getFeatureCallAccess().getNameAssignment_0_5(), "rule__FeatureCall__NameAssignment_0_5");
+					put(grammarAccess.getFeatureCallAccess().getNameAssignment_0_6(), "rule__FeatureCall__NameAssignment_0_6");
+					put(grammarAccess.getFeatureCallAccess().getNameAssignment_0_7(), "rule__FeatureCall__NameAssignment_0_7");
 					put(grammarAccess.getContainerOpAccess().getNameAssignment_0(), "rule__ContainerOp__NameAssignment_0");
 					put(grammarAccess.getContainerOpAccess().getDeclAssignment_2(), "rule__ContainerOp__DeclAssignment_2");
 					put(grammarAccess.getDeclaratorAccess().getDeclAssignment_0(), "rule__Declarator__DeclAssignment_0");

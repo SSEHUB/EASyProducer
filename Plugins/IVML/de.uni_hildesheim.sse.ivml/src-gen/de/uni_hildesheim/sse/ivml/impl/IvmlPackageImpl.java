@@ -1274,9 +1274,19 @@ public class IvmlPackageImpl extends EPackageImpl implements IvmlPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  public EReference getValue_TValue()
+  {
+    return (EReference)valueEClass.getEStructuralFeatures().get(6);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
   public EAttribute getValue_Version()
   {
-    return (EAttribute)valueEClass.getEStructuralFeatures().get(6);
+    return (EAttribute)valueEClass.getEStructuralFeatures().get(7);
   }
 
   /**
@@ -2992,6 +3002,7 @@ public class IvmlPackageImpl extends EPackageImpl implements IvmlPackage
     createEAttribute(valueEClass, VALUE__BVALUE);
     createEAttribute(valueEClass, VALUE__SELF);
     createEAttribute(valueEClass, VALUE__NULL_VALUE);
+    createEReference(valueEClass, VALUE__TVALUE);
     createEAttribute(valueEClass, VALUE__VERSION);
 
     derivedTypeEClass = createEClass(DERIVED_TYPE);
@@ -3319,6 +3330,7 @@ public class IvmlPackageImpl extends EPackageImpl implements IvmlPackage
     initEAttribute(getValue_BValue(), ecorePackage.getEString(), "bValue", null, 0, 1, Value.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEAttribute(getValue_Self(), ecorePackage.getEString(), "self", null, 0, 1, Value.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEAttribute(getValue_NullValue(), ecorePackage.getEString(), "nullValue", null, 0, 1, Value.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getValue_TValue(), this.getType(), null, "tValue", null, 0, 1, Value.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEAttribute(getValue_Version(), ecorePackage.getEString(), "version", null, 0, 1, Value.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     initEClass(derivedTypeEClass, DerivedType.class, "DerivedType", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);

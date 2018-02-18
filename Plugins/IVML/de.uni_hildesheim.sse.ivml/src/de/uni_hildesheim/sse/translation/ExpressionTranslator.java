@@ -91,6 +91,7 @@ import net.ssehub.easy.varModel.model.datatypes.OclKeyWords;
 import net.ssehub.easy.varModel.model.datatypes.Operation;
 import net.ssehub.easy.varModel.model.datatypes.Reference;
 import net.ssehub.easy.varModel.model.datatypes.Set;
+import net.ssehub.easy.varModel.model.datatypes.TypeQueries;
 import net.ssehub.easy.varModel.model.values.CompoundValue;
 import net.ssehub.easy.varModel.model.values.ConstraintValue;
 import net.ssehub.easy.varModel.model.values.ValueDoesNotMatchTypeException;
@@ -380,14 +381,13 @@ public class ExpressionTranslator extends net.ssehub.easy.dslCore.translation.Ex
     private ConstraintSyntaxTree processImplicationExpression(
         ImplicationExpression expr, TypeContext context, IModelElement parent)
         throws TranslatorException {
-        ConstraintSyntaxTree result = processAssignmentExpression(
-            expr.getLeft(), context, parent);
+        ConstraintSyntaxTree result = processAssignmentExpression(expr.getLeft(), context, parent);
         if (null != expr.getRight()) {
             level++;
-            if (!expr.getRight().isEmpty()) {
-                checkForAssigment(result, true, expr, IvmlPackage.Literals.IMPLICATION_EXPRESSION__LEFT);
-            }
             for (ImplicationExpressionPart part : expr.getRight()) {
+                if (OclKeyWords.IMPLIES.equals(part.getOp())) {
+                    checkForAssigment(result, true, expr, IvmlPackage.Literals.IMPLICATION_EXPRESSION__LEFT);
+                }
                 ConstraintSyntaxTree cst = processAssignmentExpression(part.getEx(), context, parent);
                 checkForAssigment(cst, false, part, IvmlPackage.Literals.IMPLICATION_EXPRESSION_PART__EX);
                 result = new OCLFeatureCall(result, part.getOp(),
@@ -746,7 +746,7 @@ public class ExpressionTranslator extends net.ssehub.easy.dslCore.translation.Ex
                 tmp.inferDatatype();
                 Operation op = tmp.getResolvedOperation();
                 if (checkOclCompliance && AbstractVarModelWriter.considerOclCompliance()) { 
-                    if (null != op && Container.TYPE.isAssignableFrom(op.getOperand())) {
+                    if (null != op && TypeQueries.isContainer(op.getOperand()) && op.isContainerOperation()) {
                         warning("OCL compliance: Container operations shall be called by '->' rather than '.'", call, 
                             IvmlPackage.Literals.ACTUAL_ARGUMENT_LIST__NAME, ErrorCodes.WARNING_USAGE);
                     }

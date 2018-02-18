@@ -329,7 +329,19 @@ public abstract class AbstractIvmlSemanticSequencer extends AbstractDelegatingSe
 	 *     FeatureCall returns FeatureCall
 	 *
 	 * Constraint:
-	 *     (name=Identifier (args+=ActualArgument args+=ActualArgument*)?)
+	 *     (
+	 *         (
+	 *             name=Identifier | 
+	 *             name=RelationalOperator | 
+	 *             name=AdditiveOperator | 
+	 *             name=MultiplicativeOperator | 
+	 *             name=EqualityOperator | 
+	 *             name=ImplicationOperator | 
+	 *             name=LogicalOperator | 
+	 *             name='not'
+	 *         ) 
+	 *         (args+=ActualArgument args+=ActualArgument*)?
+	 *     )
 	 */
 	protected void sequence_ActualArgumentList_FeatureCall(ISerializationContext context, FeatureCall semanticObject) {
 		genericSequencer.createSequence(context, semanticObject);
@@ -1175,6 +1187,7 @@ public abstract class AbstractIvmlSemanticSequencer extends AbstractDelegatingSe
 	 *         bValue='false' | 
 	 *         self='self' | 
 	 *         nullValue='null' | 
+	 *         tValue=Type | 
 	 *         version=VERSION
 	 *     )
 	 */

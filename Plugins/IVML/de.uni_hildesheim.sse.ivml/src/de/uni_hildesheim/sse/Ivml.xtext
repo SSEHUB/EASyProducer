@@ -168,6 +168,7 @@ Value :
 	| self = 'self'
 	//#> Compounds
 	| nullValue = 'null'
+	| tValue = Type
 	| => version = VERSION
 	//#< Compounds
 	;
@@ -450,7 +451,8 @@ Call: // IVML: "lambda"-expression with apply operation set->apply(t,r=0|max(t,r
 ;
 
 FeatureCall:	
-	name=Identifier 
+	(name=Identifier|name=RelationalOperator|name=AdditiveOperator|name=MultiplicativeOperator|name=EqualityOperator|
+	     name=ImplicationOperator|name=LogicalOperator|name="not")
 	'(' 
 	ActualArgumentList? 
 	')'

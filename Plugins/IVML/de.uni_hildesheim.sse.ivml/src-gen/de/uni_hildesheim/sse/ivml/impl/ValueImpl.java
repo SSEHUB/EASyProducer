@@ -5,6 +5,7 @@ package de.uni_hildesheim.sse.ivml.impl;
 import de.uni_hildesheim.sse.ivml.IvmlPackage;
 import de.uni_hildesheim.sse.ivml.NumValue;
 import de.uni_hildesheim.sse.ivml.QualifiedName;
+import de.uni_hildesheim.sse.ivml.Type;
 import de.uni_hildesheim.sse.ivml.Value;
 
 import org.eclipse.emf.common.notify.Notification;
@@ -30,6 +31,7 @@ import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
  *   <li>{@link de.uni_hildesheim.sse.ivml.impl.ValueImpl#getBValue <em>BValue</em>}</li>
  *   <li>{@link de.uni_hildesheim.sse.ivml.impl.ValueImpl#getSelf <em>Self</em>}</li>
  *   <li>{@link de.uni_hildesheim.sse.ivml.impl.ValueImpl#getNullValue <em>Null Value</em>}</li>
+ *   <li>{@link de.uni_hildesheim.sse.ivml.impl.ValueImpl#getTValue <em>TValue</em>}</li>
  *   <li>{@link de.uni_hildesheim.sse.ivml.impl.ValueImpl#getVersion <em>Version</em>}</li>
  * </ul>
  *
@@ -136,6 +138,16 @@ public class ValueImpl extends MinimalEObjectImpl.Container implements Value
    * @ordered
    */
   protected String nullValue = NULL_VALUE_EDEFAULT;
+
+  /**
+   * The cached value of the '{@link #getTValue() <em>TValue</em>}' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #getTValue()
+   * @generated
+   * @ordered
+   */
+  protected Type tValue;
 
   /**
    * The default value of the '{@link #getVersion() <em>Version</em>}' attribute.
@@ -371,6 +383,54 @@ public class ValueImpl extends MinimalEObjectImpl.Container implements Value
    * <!-- end-user-doc -->
    * @generated
    */
+  public Type getTValue()
+  {
+    return tValue;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public NotificationChain basicSetTValue(Type newTValue, NotificationChain msgs)
+  {
+    Type oldTValue = tValue;
+    tValue = newTValue;
+    if (eNotificationRequired())
+    {
+      ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, IvmlPackage.VALUE__TVALUE, oldTValue, newTValue);
+      if (msgs == null) msgs = notification; else msgs.add(notification);
+    }
+    return msgs;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public void setTValue(Type newTValue)
+  {
+    if (newTValue != tValue)
+    {
+      NotificationChain msgs = null;
+      if (tValue != null)
+        msgs = ((InternalEObject)tValue).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - IvmlPackage.VALUE__TVALUE, null, msgs);
+      if (newTValue != null)
+        msgs = ((InternalEObject)newTValue).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - IvmlPackage.VALUE__TVALUE, null, msgs);
+      msgs = basicSetTValue(newTValue, msgs);
+      if (msgs != null) msgs.dispatch();
+    }
+    else if (eNotificationRequired())
+      eNotify(new ENotificationImpl(this, Notification.SET, IvmlPackage.VALUE__TVALUE, newTValue, newTValue));
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
   public String getVersion()
   {
     return version;
@@ -403,6 +463,8 @@ public class ValueImpl extends MinimalEObjectImpl.Container implements Value
         return basicSetNValue(null, msgs);
       case IvmlPackage.VALUE__QVALUE:
         return basicSetQValue(null, msgs);
+      case IvmlPackage.VALUE__TVALUE:
+        return basicSetTValue(null, msgs);
     }
     return super.eInverseRemove(otherEnd, featureID, msgs);
   }
@@ -429,6 +491,8 @@ public class ValueImpl extends MinimalEObjectImpl.Container implements Value
         return getSelf();
       case IvmlPackage.VALUE__NULL_VALUE:
         return getNullValue();
+      case IvmlPackage.VALUE__TVALUE:
+        return getTValue();
       case IvmlPackage.VALUE__VERSION:
         return getVersion();
     }
@@ -462,6 +526,9 @@ public class ValueImpl extends MinimalEObjectImpl.Container implements Value
         return;
       case IvmlPackage.VALUE__NULL_VALUE:
         setNullValue((String)newValue);
+        return;
+      case IvmlPackage.VALUE__TVALUE:
+        setTValue((Type)newValue);
         return;
       case IvmlPackage.VALUE__VERSION:
         setVersion((String)newValue);
@@ -498,6 +565,9 @@ public class ValueImpl extends MinimalEObjectImpl.Container implements Value
       case IvmlPackage.VALUE__NULL_VALUE:
         setNullValue(NULL_VALUE_EDEFAULT);
         return;
+      case IvmlPackage.VALUE__TVALUE:
+        setTValue((Type)null);
+        return;
       case IvmlPackage.VALUE__VERSION:
         setVersion(VERSION_EDEFAULT);
         return;
@@ -527,6 +597,8 @@ public class ValueImpl extends MinimalEObjectImpl.Container implements Value
         return SELF_EDEFAULT == null ? self != null : !SELF_EDEFAULT.equals(self);
       case IvmlPackage.VALUE__NULL_VALUE:
         return NULL_VALUE_EDEFAULT == null ? nullValue != null : !NULL_VALUE_EDEFAULT.equals(nullValue);
+      case IvmlPackage.VALUE__TVALUE:
+        return tValue != null;
       case IvmlPackage.VALUE__VERSION:
         return VERSION_EDEFAULT == null ? version != null : !VERSION_EDEFAULT.equals(version);
     }
