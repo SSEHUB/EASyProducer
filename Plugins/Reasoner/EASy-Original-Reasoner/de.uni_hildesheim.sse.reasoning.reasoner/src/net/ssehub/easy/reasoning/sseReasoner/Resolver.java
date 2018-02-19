@@ -444,23 +444,8 @@ public class Resolver {
     private void translateAnnotationDefaults(AbstractVariable decl, IDecisionVariable variable, 
         CompoundAccess compound) {
         for (int i = 0; i < variable.getAttributesCount(); i++) {
-            Attribute attribute = (Attribute) variable.getAttribute(i).getDeclaration();
-            ConstraintSyntaxTree defaultValue = attribute.getDefaultValue();
-            if (null != defaultValue) {
-                try {
-                    ConstraintSyntaxTree op;
-                    if (compound == null) {
-                        op = new AttributeVariable(new Variable(decl), attribute);                        
-                    } else {                        
-                        op = new AttributeVariable(compound, attribute);
-                    }
-                    defaultValue = new OCLFeatureCall(op, OclKeyWords.ASSIGNMENT, defaultValue);
-                    defaultValue.inferDatatype(); // defaultAnnotationConstraints
-                    addConstraint(otherConstraints, new DefaultConstraint(defaultValue, project), false);
-                } catch (CSTSemanticException e) {
-                    e.printStackTrace();
-                }                    
-            }
+            IDecisionVariable att = variable.getAttribute(i);
+            translateDeclaration(att.getDeclaration(), att, compound);
         }
     }
 
@@ -505,8 +490,18 @@ public class Resolver {
                     // use closest parent instead of project -> runtime analysis
                     createConstraintVariableConstraint(defaultValue, selfEx, self, var.getDeclaration(), var);
                 } else { // Create default constraint
-                    defaultValue = new OCLFeatureCall(null != selfEx ? cAcc : new Variable(decl), 
-                        OclKeyWords.ASSIGNMENT, defaultValue);
+                    ConstraintSyntaxTree acc;
+                    if (decl instanceof Attribute) {
+                        Attribute attribute = (Attribute) decl;
+                        if (cAcc == null) {
+                            acc = new AttributeVariable(new Variable(decl), attribute);                        
+                        } else {                        
+                            acc = new AttributeVariable(cAcc, attribute);
+                        }
+                    } else {
+                        acc = null != selfEx ? cAcc : new Variable(decl);
+                    }
+                    defaultValue = new OCLFeatureCall(acc, OclKeyWords.ASSIGNMENT, defaultValue);
                     defaultValue = substituteVariables(defaultValue, selfEx, self, false);
                     List<Constraint> targetCons = defaultConstraints; 
                     if (substVisitor.containsSelf() || isOverriddenSlot(decl)) {
@@ -694,8 +689,7 @@ public class Resolver {
         for (int i = 0, n = cmpVar.getNestedElementsCount(); i < n; i++) {
             IDecisionVariable nestedVar = cmpVar.getNestedElement(i);
             AbstractVariable nestedDecl = nestedVar.getDeclaration();
-            translateDeclaration(nestedDecl, cmpVar.getNestedVariable(nestedDecl.getName()),
-                varMap.get(nestedDecl));
+            translateDeclaration(nestedDecl, cmpVar.getNestedVariable(nestedDecl.getName()), varMap.get(nestedDecl));
         }
         // create constraints on mutually interacting constraints now
         for (int i = 0, n = cmpVar.getNestedElementsCount(); i < n; i++) {
