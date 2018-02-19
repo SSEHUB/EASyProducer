@@ -16,7 +16,7 @@
     
     <target name="all">
         <antcall target="copy"/>
-        <antcall target="updateChLog"/>
+        <!--<antcall target="updateChLog"/> outdated handled via github -->
     </target>
 	
 </project>
