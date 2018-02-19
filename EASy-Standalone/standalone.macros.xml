@@ -27,6 +27,7 @@
             </fileset>            
             <fileset dir="${home.standalone.executer.dir}/lib">
                 <include name="org.eclipse.osgi*.jar" />
+                <include name="org.eclipse.equinox*.jar" />
                 <exclude name="@{exclude}" />
             </fileset>            
             <fileset dir="${home.standalone.executer.dir}/build/jar">
