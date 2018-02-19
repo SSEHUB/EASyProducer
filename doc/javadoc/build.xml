@@ -12,7 +12,11 @@
         <fileset dir="${home.instantiator.velocity.dir}/lib" includes="**/*.jar"/>
         <!-- Eclipse-Plugins -->
         <fileset dir="${eclipse.plugins.dir}" includes="**/*.jar"/>
-        
+
+        <!-- ReasonerCore -->
+        <fileset dir="${home.reasonerCore.dir}/${build.jar.dir}" includes="**/*.jar"/>
+        <fileset dir="${home.sseReasoner.dir}/${build.jar.dir}" includes="**/*.jar"/>
+
         <!-- Plug-ins containing generated sources -->
         <fileset dir="${home.ivml.dir}/${build.jar.dir}" includes="**/*.jar" />
         <fileset dir="${home.ivml.ui.dir}/${build.jar.dir}" includes="**/*.jar" />
@@ -22,7 +26,13 @@
         <fileset dir="${home.vil.ui.dir}/${build.jar.dir}" includes="**/*.jar" />
         <fileset dir="${home.template.core.dir}/${build.jar.dir}" includes="**/*.jar" />
         <fileset dir="${home.template.ui.dir}/${build.jar.dir}" includes="**/*.jar" />
-	</path>
+
+        <fileset dir="${home.instantiator.java.dir}/${build.jar.dir}" includes="**/*.jar" />
+        <fileset dir="${home.instantiator.ant.dir}/${build.jar.dir}" includes="**/*.jar" />
+        <fileset dir="${home.instantiator.aspectj.dir}/${build.jar.dir}" includes="**/*.jar" />
+        <fileset dir="${home.instantiator.maven.dir}/${build.jar.dir}" includes="**/*.jar" />
+        <fileset dir="${home.instantiator.serializer.dir}/${build.jar.dir}" includes="**/*.jar" />
+    </path>
     
 	<target name="init">
 		<!-- Delete generated folders -->
@@ -59,6 +69,7 @@
             
             <!-- ReasonerCore -->
             <fileset dir="${home.reasonerCore.dir}/src" includes="**/*.java"/>
+            <fileset dir="${home.sseReasoner.dir}/src" includes="**/*.java"/>
             
             <!-- Instantiation -->
             <fileset dir="${home.instantiatorCore.dir}/src" includes="**/*.java"/>
@@ -82,7 +93,13 @@
             <fileset dir="${home.template.core.dir}/src-gen" includes="**/*.java"/>
             <fileset dir="${home.template.core.dir}/xtend-gen" includes="**/*.java"/>
             <fileset dir="${home.vil.ui.dir}/src-gen" includes="**/*.java"/-->
-            
+
+            <fileset dir="${home.instantiator.java.dir}/src" includes="**/*.java"/>
+            <fileset dir="${home.instantiator.ant.dir}/src" includes="**/*.java"/>
+            <fileset dir="${home.instantiator.aspectj.dir}/src" includes="**/*.java"/>
+            <fileset dir="${home.instantiator.maven.dir}/src" includes="**/*.java"/>
+            <fileset dir="${home.instantiator.serializer.dir}/src" includes="**/*.java"/>
+
             <!-- EASy-Producer -->
             <fileset dir="${home.easy.persistence.dir}/src" includes="**/*.java"/>
             <fileset dir="${home.easy.PLugin.dir}/src" includes="**/*.java"/>
@@ -112,12 +129,13 @@
             <tag name="ordered" scope="all" description="ordered"/>
             <tag name="parameter" scope="all"/-->
             <doctitle><![CDATA[<h1>${ant.project.name}</h1>]]></doctitle>
-            <bottom><![CDATA[<i>Copyright &#169; 2009 - 2013 SSE. All Rights Reserved.</i>]]></bottom>
+            <bottom><![CDATA[<i>Copyright &#169; 2009 - 2018 SSE. All Rights Reserved.</i>]]></bottom>
         </javadoc>
     </target>
   
     <target name="zip">	
 		<zip destfile="javadoc.zip" basedir="${doc.dir}"/>
+        <zip destfile="src.zip" basedir="${src.all.files}"/>
     </target>
 	
 	<target name="all" depends="init, javadoc, zip"/>
