@@ -130,7 +130,14 @@
       </sequential>
    </macrodef>
 	
-	<macrodef name="easyJavadoc">
+   <macrodef name="clearMavenRepo">
+    <sequential>
+      <sshexec host="${maven.repository.server}" username="${maven.repository.user}" trust="true" keyfile="${maven.repository.keyfile}" 
+        command="./cleanMvnQm.sh"/>         
+    </sequential>
+   </macrodef>
+	
+   <macrodef name="easyJavadoc">
 	  <attribute name="packagenames" default="de.*,net.*"/>
 	  <attribute name="sourcepath" default="src"/>
 	  <attribute name="destdir" default="${doc.dir}"/>
