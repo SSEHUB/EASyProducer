@@ -110,7 +110,7 @@
     
     <!-- Creates Javadoc -->
     <target name="javadoc" depends="gather.sources">
-    	<easyJavadoc sourcepath="${src.all.files}" destdir="${doc.dir}">
+    	<easyJavadoc sourcepath="${src.all.files}" destdir="${doc.dir}" source="1.8">
             <classpath refid="includes"/>
             <!-- JavaDoc Annotations used by Xtext -->
             <!--tag name="generated" scope="all" description="Generated via Xtext"/>
