@@ -20,7 +20,6 @@ import java.util.Map;
 
 import net.ssehub.easy.varModel.cst.BasicCopyVisitor;
 import net.ssehub.easy.varModel.cst.Comment;
-import net.ssehub.easy.varModel.cst.CompoundAccess;
 import net.ssehub.easy.varModel.cst.ConstraintSyntaxTree;
 import net.ssehub.easy.varModel.cst.Self;
 import net.ssehub.easy.varModel.cst.Variable;
@@ -37,7 +36,7 @@ import net.ssehub.easy.varModel.model.AbstractVariable;
 public class SubstitutionVisitor extends BasicCopyVisitor {
 
     private Map<AbstractVariable, ConstraintSyntaxTree> mapping;
-    private Map<AbstractVariable, CompoundAccess> mappingCA;
+    private Map<AbstractVariable, ? extends ConstraintSyntaxTree> globalMapping;
     private ConstraintSyntaxTree selfEx;
     private AbstractVariable self;
     private boolean containsSelf;
@@ -52,27 +51,27 @@ public class SubstitutionVisitor extends BasicCopyVisitor {
     /**
      * Creates a copy visitor with explicit mapping.
      * 
-     * @param mappingCA a mapping from old variable declarations to new compound access declarations,
+     * @param globalMapping a mapping from variable declarations to new access expressions,
      *   existing variable declarations are taken over if no mapping is given, may be <b>null</b>
      *   in case of no mapping at all
      * @see #setMappings(Map, Map)
      */
-    public SubstitutionVisitor(Map<AbstractVariable, CompoundAccess> mappingCA) {
+    public SubstitutionVisitor(Map<AbstractVariable, ? extends ConstraintSyntaxTree> globalMapping) {
         // setCopyVariables not needed as overridden anyway
         setDoInferDatatype(false);
         setCopyConstants(false); 
-        setMappings(mappingCA);
+        setMappings(globalMapping);
     }  
 
     /**
      * Sets the mapping. [init, reuse]
      * 
-     * @param mappingCA a mapping from variable declarations to new compound access declarations,
+     * @param globalMapping a mapping from variable declarations to new access expressions,
      *   existing variable declarations are taken over if no mapping is given, may be <b>null</b>
      *   in case of no mapping at all
      */
-    public void setMappings(Map<AbstractVariable, CompoundAccess> mappingCA) {
-        this.mappingCA = mappingCA;
+    public void setMappings(Map<AbstractVariable, ? extends ConstraintSyntaxTree> globalMapping) {
+        this.globalMapping = globalMapping;
     }
 
     /**
@@ -92,7 +91,7 @@ public class SubstitutionVisitor extends BasicCopyVisitor {
     public void clear() {
         super.clear();
         containsSelf = false;
-        mappingCA = null;
+        globalMapping = null;
         selfEx = null;
         self = null;
         clearVariableMapping();
@@ -110,8 +109,8 @@ public class SubstitutionVisitor extends BasicCopyVisitor {
      */
     public SubstitutionVisitor addVariableMapping(AbstractVariable orig, AbstractVariable dest) {
         ConstraintSyntaxTree destEx = null;
-        if (null != mappingCA) { // allow for transitive substitution saving unneeded variables
-            CompoundAccess ca = mappingCA.get(dest);
+        if (null != globalMapping) { // allow for transitive substitution saving unneeded variables
+            ConstraintSyntaxTree ca = globalMapping.get(dest);
             if (null != ca) {
                 destEx = ca;
             }
@@ -207,7 +206,7 @@ public class SubstitutionVisitor extends BasicCopyVisitor {
             res = mapping.get(variable.getVariable());
         }
         if (null == res) {
-            CompoundAccess tmp = null == mappingCA ? null : mappingCA.get(variable.getVariable());
+            ConstraintSyntaxTree tmp = null == globalMapping ? null : globalMapping.get(variable.getVariable());
             if (null != tmp) {
                 res = inferDatatype(tmp);
             }

@@ -441,7 +441,7 @@ public class Resolver {
      * @param variable {@link IDecisionVariable} with annotations.
      * @param compound {@link CompoundAccess} null if variable is not nested.
      */
-    private void translateAnnotationDefaults(AbstractVariable decl, IDecisionVariable variable, 
+    private void translateAnnotationDeclarations(AbstractVariable decl, IDecisionVariable variable, 
         CompoundAccess compound) {
         for (int i = 0; i < variable.getAttributesCount(); i++) {
             IDecisionVariable att = variable.getAttribute(i);
@@ -466,7 +466,7 @@ public class Resolver {
             translateDerivedDatatypeConstraints(decl, (DerivedDatatype) type, null, decl.getTopLevelParent());
         }
         if (!incremental) {
-            translateAnnotationDefaults(decl, var, cAcc);
+            translateAnnotationDeclarations(decl, var, cAcc);
         }
         if (null != defaultValue) { // considering the actual type rather than base, after derived (!)
             type = inferTypeSafe(defaultValue, type);

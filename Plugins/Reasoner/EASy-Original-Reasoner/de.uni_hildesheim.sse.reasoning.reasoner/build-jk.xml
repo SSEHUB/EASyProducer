@@ -2,6 +2,7 @@
 <project name="net.ssehub.easy.reasoning.sseReasoner" default="jar" basedir=".">
 	<!-- import von globalen Properties Einstellungen -->
 	<property file="${user.home}/global-build.properties"/>
+    <include file="${user.home}/macros.xml"/>
 	
 	<!-- Einstellungen fuer dieses Projekt -->
 	<property name="src.dir" value="src"/>
@@ -77,9 +78,18 @@
 			</fileset>
 		</copy>
 		<jar destfile="${build.jar.dir}/${ant.project.name}.jar" basedir="${build.classes.dir}" manifest="META-INF/MANIFEST.MF"/>
+        <jar destfile="${build.jar.dir}/${ant.project.name}-sources.jar" basedir="${src.dir}" />
+        <easyJavadoc sourcepath="${src.dir}" source="${javacSource}" destdir="${doc.dir}">
+            <classpath refid="includes"/>
+        </easyJavadoc>
+        <jar destfile="${build.jar.dir}/${ant.project.name}-javadoc.jar" basedir="${doc.dir}" />
+        <mvnDeploy folderName="${ant.project.name}" jarFolder="${build.jar.dir}" jarFile="${ant.project.name}.jar"/>
 		<!-- Copy created jar to global EASy Plug-ins directory -->
 		<copy todir="${easy.bundles.dir}">
 			<fileset dir="${build.jar.dir}" includes="**/*.jar"/>
 		</copy>
+        <!-- save space on Jenkins, just leave the jars -->
+        <delete dir="${build.classes.dir}"/>
+        <delete dir="${doc.dir}"/>
     </target>
 </project>

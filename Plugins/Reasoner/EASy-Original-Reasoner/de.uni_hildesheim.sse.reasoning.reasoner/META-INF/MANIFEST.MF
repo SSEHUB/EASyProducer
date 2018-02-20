@@ -1,6 +1,6 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: Reasoner 1st Edition
+Bundle-Name: SSE IVML Reasoner
 Bundle-SymbolicName: net.ssehub.easy.reasoning.sseReasoner;singleton:=true
 Bundle-Version: 1.1.0
 Import-Package: de.uni_hildesheim.sse.ivml,
@@ -9,10 +9,7 @@ Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Bundle-Vendor: University of Hildesheim - SSE
 Require-Bundle: net.ssehub.easy.reasoning.core;bundle-version="0.0.3",
  net.ssehub.easy.varModel;bundle-version="0.0.6",
- org.eclipse.equinox.ds,
- org.eclipse.osgi.services,
- org.eclipse.equinox.launcher;bundle-version="1.2.0",
- org.eclipse.jdt.core
+ org.eclipse.osgi.services
 Service-Component: OSGI-INF/reasoner.xml
 Bundle-ActivationPolicy: lazy
 Bundle-ClassPath: .
