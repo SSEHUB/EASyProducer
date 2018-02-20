@@ -2,7 +2,6 @@
 <project name="QualiMaster.Macros" xmlns:artifact="antlib:org.apache.maven.artifact.ant">
  
    <property file="${user.home}/global-build.properties"/>
-   <property file="${user.home}/qualimaster-build.properties"/>
    
    <!--  <mvnDeploy folderName="${ant.project.name}" jarFolder="${build.jar.dir}" jarFile="${ant.project.name}.jar"/> -->
    
@@ -37,7 +36,8 @@
      </sequential>
    </macrodef>
     
-   <!-- deploy built files to the public maven repository (src, test missing) -->
+   <!-- deploy built files to the public maven repository, just specify the main.jar. Related jars
+        will be transferred, -sources, -javadoc, -test will be taken up as artifacts through the server-side script -->
    <macrodef name="mvnDeploy">
      <attribute name="folderName" default="NOT SET"/>
      <attribute name="pomFile" default="pom.xml"/> 
@@ -129,5 +129,33 @@
        <mvnDeploy folderName="${projectName}" pomFile="@{pomFile}" jarFolder="${targetFolder}" jarFile="${jarFile}"/>
       </sequential>
    </macrodef>
+	
+	<macrodef name="easyJavadoc">
+	  <attribute name="packagenames" default="de.*,net.*"/>
+	  <attribute name="sourcepath" default="src"/>
+	  <attribute name="destdir" default="${doc.dir}"/>
+	  <attribute name="windowtitle" default="${ant.project.name} API"/>
+	  <attribute name="source" default="1.6"/>
+	  <element name="elements" implicit="true" optional="true" />
+	  <sequential>
+        <javadoc packagenames="@{packagenames}" 
+            private="true"
+            maxmemory="1g"
+            defaultexcludes="yes"
+            sourcepath="@{sourcepath}"
+            destdir="@{destdir}"
+            author="true"
+            version="true"
+            use="true"
+            Encoding="${javadoc.encoding}"
+            useexternalfile="yes"
+            source="@{source}"
+            windowtitle="@{windowtitle}">
+        	<elements/>
+            <doctitle><![CDATA[<h1>${ant.project.name}</h1>]]></doctitle>
+            <bottom><![CDATA[<i>Copyright &#169; 2009 - 2018 SSE. All Rights Reserved.</i>]]></bottom>
+        </javadoc>
+	  </sequential>
+	</macrodef>
     
 </project>
