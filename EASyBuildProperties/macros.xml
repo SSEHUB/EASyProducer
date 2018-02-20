@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="QualiMaster.Macros" xmlns:artifact="antlib:org.apache.maven.artifact.ant">
+ 
+   <property file="${user.home}/global-build.properties"/>
+   <property file="${user.home}/qualimaster-build.properties"/>
+   
+   <!--  <mvnDeploy folderName="${ant.project.name}" jarFolder="${build.jar.dir}" jarFile="${ant.project.name}.jar"/> -->
+   
+    <path id="maven-ant-tasks.classpath" path="${ant-maven.lib}" />
+    <typedef resource="org/apache/maven/artifact/ant/antlib.xml"
+       uri="antlib:org.apache.maven.artifact.ant"
+       classpathref="maven-ant-tasks.classpath" />
+    
+   <!-- a plain maven call if the integration is not sufficent -->
+   <macrodef name="mvnPlain">
+     <attribute name="options" default="" />
+     <attribute name="goal" />
+     <attribute name="basedir" />
+     <attribute name="resultproperty" default="maven.result" />
+     <element name="args" implicit="true" optional="true" />
+     <sequential>
+       <java classname="org.codehaus.classworlds.Launcher" fork="true"
+             dir="@{basedir}" resultproperty="@{resultproperty}">
+         <jvmarg value="-Xmx512m"/>
+         <classpath>
+           <fileset dir="${maven.bin.dir}/boot">
+             <include name="*.jar" />
+           </fileset>
+           <fileset dir="${maven.bin.dir}/lib">
+             <include name="*.jar" />
+           </fileset>
+         </classpath>
+         <sysproperty key="classworlds.conf" value="${maven.bin.dir}/bin/m2.conf" />
+         <sysproperty key="maven.home" value="${maven.bin.dir}" />
+         <arg line="--batch-mode @{options} @{goal}" />
+       </java>
+     </sequential>
+   </macrodef>
+    
+   <!-- deploy built files to the public maven repository (src, test missing) -->
+   <macrodef name="mvnDeploy">
+     <attribute name="folderName" default="NOT SET"/>
+     <attribute name="pomFile" default="pom.xml"/> 
+     <attribute name="jarFolder" default="NOT SET"/> 
+     <attribute name="jarFile" default="NOT SET"/>
+     <sequential>
+        <local name="folder"/>
+        <property name="folder" value="${maven.repository.uploadDir}/@{folderName}"/>
+        <local name="connectString"/>
+        <property name="connectString" value="${maven.repository.user}@${maven.repository.server}"/>
+        <sshexec host="${maven.repository.server}" username="${maven.repository.user}" trust="true" keyfile="${maven.repository.keyfile}" 
+            command="mkdir -p ${folder}"/>
+        <scp todir="${connectString}:${folder}" trust="true" keyfile="${maven.repository.keyfile}" file="@{pomFile}"/>
+        <scp todir="${connectString}:${folder}" trust="true" keyfile="${maven.repository.keyfile}">
+            <fileset dir="@{jarFolder}">
+                <include name="*.jar"/>
+            </fileset>
+        </scp>
+        <sshexec host="${maven.repository.server}" username="${maven.repository.user}" trust="true" keyfile="${maven.repository.keyfile}" 
+            command="./deployMvnQm.sh ${folder} @{jarFile}"/>         
+     </sequential>
+   </macrodef>
+   
+   <macrodef name="mvnDeployPom">
+     <attribute name="folderName" default="NOT SET"/>
+     <attribute name="pomFile" default="pom.xml"/> 
+     <sequential>
+        <local name="folder"/>
+        <property name="folder" value="${maven.repository.uploadDir}/@{folderName}"/>
+        <local name="connectString"/>
+        <property name="connectString" value="${maven.repository.user}@${maven.repository.server}"/>
+        <sshexec host="${maven.repository.server}" username="${maven.repository.user}" trust="true" keyfile="${maven.repository.keyfile}" 
+            command="mkdir -p ${folder}"/>
+        <scp todir="${connectString}:${folder}" trust="true" keyfile="${maven.repository.keyfile}" file="@{pomFile}"/>
+        <sshexec host="${maven.repository.server}" username="${maven.repository.user}" trust="true" keyfile="${maven.repository.keyfile}" 
+            command="./deployMvnQm.sh ${folder} pom.xml"/>         
+     </sequential>
+   </macrodef>
+        
+   <!-- force an update of the local maven repository (artifact:mvn does not work here) -->
+   <macrodef name="mavenUpdate">
+      <attribute name="pomFile" default="NOT_SET"/>
+      <sequential>
+        <local name="mavenUpdate.baseDir"/>
+        <dirname file="@{pomFile}" property="mavenUpdate.baseDir"/>
+        <mvnPlain options="-U" goal="validate" basedir="${mavenUpdate.baseDir}"/>
+        <!-- <artifact:mvn mavenHome="${maven.bin.dir}" pom="@{pomFile}" fork="true" failonerror="false">
+            <arg value="-U validate"/>
+        </artifact:mvn> -->
+      </sequential>
+   </macrodef>
+
+   <!-- perform an update of the local repository and execute maven with a pom file and a goal -->
+   <macrodef name="maven">
+      <attribute name="pomFile" default="NOT_SET"/>
+      <attribute name="goal" default="install"/>
+      <sequential>  
+        <local name="pomDir"/>
+        <dirname file="@{pomFile}" property="pomDir"/>
+        <mvnPlain options="-U" goal="@{goal}" basedir="${pomDir}"/>
+        <!--  <mavenUpdate pomFile="@{pomFile}"/>
+        <artifact:mvn mavenHome="${maven.bin.dir}" pom="@{pomFile}" fork="true" failonerror="true">
+            <arg value="@{goal}"/>
+        </artifact:mvn>-->
+      </sequential>
+   </macrodef>
+
+   <!-- build with maven and deploy -->
+   <!-- maven seems to need the target repository in every pom as well as build extensions for scp - no setting for that -->
+   <macrodef name="mavenAndDeploy">
+      <attribute name="pomFile" default="NOT_SET"/>
+      <attribute name="goal" default="install"/>
+      <sequential>
+       <maven pomFile="@{pomFile}" goal="@{goal}"/>
+       <local name="projectFolder"/>
+       <dirname file="@{pomFile}" property="projectFolder"/>
+       <local name="targetFolder"/>
+       <property name="targetFolder" location="${projectFolder}/target"/>
+       <path id="jarPath">
+           <fileset dir="${targetFolder}">
+               <include name="*.jar"/>
+               <exclude name="*-sources.jar"/>
+           </fileset>
+       </path>
+       <local name="projectName"/>
+       <basename file="${projectFolder}" property="projectName"/>
+       <local name="jarFile"/>
+       <basename file="${toString:jarPath}" property="jarFile"/>
+       <mvnDeploy folderName="${projectName}" pomFile="@{pomFile}" jarFolder="${targetFolder}" jarFile="${jarFile}"/>
+      </sequential>
+   </macrodef>
+    
+</project>
