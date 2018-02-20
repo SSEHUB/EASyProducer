@@ -111,14 +111,12 @@
     <!-- Creates Javadoc -->
     <target name="javadoc" depends="gather.sources">
     	<easyJavadoc sourcepath="${src.all.files}">
-    		<elements>
-                <classpath refid="includes"/>
-                <!-- JavaDoc Annotations used by Xtext -->
-                <!--tag name="generated" scope="all" description="Generated via Xtext"/>
-                <tag name="model" scope="all" description="model"/>
-                <tag name="ordered" scope="all" description="ordered"/>
-                <tag name="parameter" scope="all"/-->
-    		</elements>
+            <classpath refid="includes"/>
+            <!-- JavaDoc Annotations used by Xtext -->
+            <!--tag name="generated" scope="all" description="Generated via Xtext"/>
+            <tag name="model" scope="all" description="model"/>
+            <tag name="ordered" scope="all" description="ordered"/>
+            <tag name="parameter" scope="all"/-->
     	</easyJavadoc>
     </target>
   
