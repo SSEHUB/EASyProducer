@@ -7,7 +7,9 @@
 	<property name="src.dir" value="src"/>
 	<property name="javacSource" value="1.5"/>
 	<property name="javacTarget" value="1.5"/>
-	
+
+    <include file="${user.home}/macros.xml"/>
+
 	<path id ="includes">
 		<!-- Model -->
 		<pathelement path="${libs.utils}"/>
