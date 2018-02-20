@@ -2,7 +2,8 @@
 <project name="EASy-Producer Documentation" default="all" basedir=".">	
 	<property file="${user.home}/global-build.properties"/>
     <property name="src.all.files" value="src"/>
-    
+    <include file="${user.home}/macros.xml"/>
+   
     <path id ="includes">
 		<pathelement path="${eclipse.plugins.dir}/org.apache.commons.io_2.0.1.v201105210651.jar"/>
 		<!-- Libs of VarModel -->
@@ -109,28 +110,16 @@
     
     <!-- Creates Javadoc -->
     <target name="javadoc" depends="gather.sources">
-        <javadoc packagenames="de.*" 
-            private="true"
-            maxmemory="1g"
-            defaultexcludes="yes"
-            sourcepath="${src.all.files}"
-            destdir="${doc.dir}"
-            author="true"
-            version="true"
-            use="true"
-            Encoding="${javadoc.encoding}"
-            useexternalfile="yes"
-            source="1.6"
-            windowtitle="${ant.project.name} API">
-            <classpath refid="includes"/>
-            <!-- JavaDoc Annotations used by Xtext -->
-            <!--tag name="generated" scope="all" description="Generated via Xtext"/>
-            <tag name="model" scope="all" description="model"/>
-            <tag name="ordered" scope="all" description="ordered"/>
-            <tag name="parameter" scope="all"/-->
-            <doctitle><![CDATA[<h1>${ant.project.name}</h1>]]></doctitle>
-            <bottom><![CDATA[<i>Copyright &#169; 2009 - 2018 SSE. All Rights Reserved.</i>]]></bottom>
-        </javadoc>
+    	<easyJavadoc sourcepath="${src.all.files}">
+    		<elements>
+                <classpath refid="includes"/>
+                <!-- JavaDoc Annotations used by Xtext -->
+                <!--tag name="generated" scope="all" description="Generated via Xtext"/>
+                <tag name="model" scope="all" description="model"/>
+                <tag name="ordered" scope="all" description="ordered"/>
+                <tag name="parameter" scope="all"/-->
+    		</elements>
+    	</easyJavadoc>
     </target>
   
     <target name="zip">	
