@@ -24,24 +24,6 @@ public class ListLoader {
     private boolean verbose = false;
 
     /**
-     * Defines the initialization types supported by this loader.
-     * 
-     * @author Holger Eichelberger
-     */
-    public enum InitType {
-        
-        /**
-         * An OSGi activator startup / shutdown.
-         */
-        ACTIVATOR,
-        
-        /**
-         * An Eclipse DS startup / shutdown.
-         */
-        DS;
-    }
-    
-    /**
      * Stores startup information about a certain class.
      * 
      * @author Holger Eichelberger

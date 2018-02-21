@@ -946,14 +946,14 @@ public class Generator extends AbstractLoader {
                                 && !info.getActivatorClassName().contains("eclipse")
                                 && !processed.contains(this.checkedBundles.get(i))
                                 && inChecked) {
-                            out.print(ListLoader.InitType.ACTIVATOR.name());
+                            out.print(InitType.ACTIVATOR.name());
                             out.print(":");
                             out.println(info.getActivatorClassName());
                             processed.add(this.checkedBundles.get(i));
                         }
                     }          
                 } else {
-                    out.print(ListLoader.InitType.ACTIVATOR.name());
+                    out.print(InitType.ACTIVATOR.name());
                     out.print(":");
                     out.println(info.getActivatorClassName());
                 }
@@ -970,7 +970,7 @@ public class Generator extends AbstractLoader {
                             
                             if (!processedDS.contains(info.getDsClass(c))
                                     && info.getDsClass(c).equals(this.checkedBundles.get(i).getDsClass(c))) {
-                                out.print(ListLoader.InitType.DS.name());
+                                out.print(InitType.DS.name());
                                 out.print(":");
                                 out.println(info.getDsClass(c));
                                 processedDS.add(info.getDsClass(c));
