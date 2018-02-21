@@ -13,9 +13,6 @@
         <fileset dir="lib">
             <include name="**/*.jar" />
         </fileset>
-        <fileset dir="../antLibs">
-            <include name="**/*.jar" />
-        </fileset>
 		<!-- Junit -->
         <fileset dir="${eclipse.plugins.dir}">
             <include name="**/junit*.jar" />

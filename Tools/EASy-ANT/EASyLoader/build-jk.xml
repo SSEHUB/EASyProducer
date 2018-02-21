@@ -1,120 +1,111 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project name="EASyLoader" default="all" basedir=".">
-	<!-- import von globalen Properties Einstellungen -->
-	<property file="${user.home}/global-build.properties"/>
-    <include file="${user.home}/macros.xml"/>
-	
-	<path id="easyTaskDef.lib" >          
+    <!-- import von globalen Properties Einstellungen -->
+    <property file="${user.home}/global-build.properties"/>
+    
+    <path id="easyTaskDef.lib" >          
         <pathelement location="libs/eclipse/org.eclipse.osgi_3.9.1.v20140110-1610.jar" />    
         <pathelement location="libs/eclipse/org.eclipse.osgi.services_3.3.100.v20130513-1956.jar" />   
         <pathelement location="${build.jar.dir}/${ant.project.name}.jar" />   
     </path>
-	
-	<!-- Einstellungen fuer dieses Projekt -->
-	<property name="src.dir" value="src"/>
-	<property name="javacSource" value="1.6"/>
-	<property name="javacTarget" value="1.6"/>
-	
-	<path id ="includes">
+    
+    <!-- Einstellungen fuer dieses Projekt -->
+    <property name="src.dir" value="src"/>
+    <property name="javacSource" value="1.6"/>
+    <property name="javacTarget" value="1.6"/>
+    
+    <path id ="includes">
         <!-- Lib -->
         <fileset dir="libs">
             <include name="**/eclipse/*.jar" />
             <include name="**/ant/*.jar" />
         </fileset>
     </path>
-	
-	<!-- Targets  -->
-	<target name="init">
-		<!-- Delete generated folders -->
-		<delete dir="${basedir}/build"/>
-		
-		<!-- Create folders -->
+    
+    <!-- Targets  -->
+    <target name="init">
+        <!-- Delete generated folders -->
+        <delete dir="${basedir}/build"/>
+        
+        <!-- Create folders -->
         <mkdir dir="${basedir}/build"/>
-		<mkdir dir="${basedir}/build/classes"/>
-		<mkdir dir="${basedir}/build/jar"/>
+        <mkdir dir="${basedir}/build/classes"/>
+        <mkdir dir="${basedir}/build/jar"/>
         <mkdir dir="${build.base.dir}/generatedLibs"/>
-	</target>
-	
-	<!-- Compile all files without test classes -->
-	<target name="compile" depends="init">
-		<javac srcdir="${src.dir}" compiler="modern" debug="on" destdir="${basedir}/build/classes" includeAntRuntime="no" failonerror="true" source="${javacSource}" target="${javacTarget}" encoding="${javac.encoding}">
-			<classpath refid="includes" />	
-		</javac>
     </target>
-	
-	<!-- Creates the jar files -->
-	<target name="jar" depends="compile">
-		<jar destfile="${basedir}/build/jar/${ant.project.name}.jar" basedir="${basedir}/build/classes"/>
-        <jar destfile="${build.jar.dir}/${ant.project.name}-sources.jar" basedir="${src.dir}" />
-        <easyJavadoc sourcepath="${src.dir}" source="${javacSource}" destdir="${doc.dir}">
-            <classpath refid="includes"/>
-        </easyJavadoc>
-        <jar destfile="${build.jar.dir}/${ant.project.name}-javadoc.jar" basedir="${doc.dir}" />
-        <mvnDeploy folderName="${ant.project.name}" jarFolder="${build.jar.dir}" jarFile="${ant.project.name}.jar"/>
+    
+    <!-- Compile all files without test classes -->
+    <target name="compile" depends="init">
+        <javac srcdir="${src.dir}" compiler="modern" debug="on" destdir="${basedir}/build/classes" includeAntRuntime="no" failonerror="true" source="${javacSource}" target="${javacTarget}" encoding="${javac.encoding}">
+            <classpath refid="includes" />  
+        </javac>
     </target>
-	
-	<target name="bundle">
-		<copy todir="${basedir}/build/jar" failonerror="true" overwrite="true">
+    
+    <!-- Creates a jar file -->
+    <target name="jar" depends="compile">
+        <jar destfile="${basedir}/build/jar/${ant.project.name}.jar" basedir="${basedir}/build/classes"/>
+    </target>
+    
+    <target name="bundle">
+        <copy todir="${basedir}/build/jar" failonerror="true" overwrite="true">
             <fileset dir="libs/eclipse/"/>
             <fileset dir="scripts"/>
         </copy>
-		<zip destfile="${basedir}/build/jar/${ant.project.name}.zip" basedir="${basedir}/build/jar" />
-	</target>
-	
-	<target name="deployAntJar">
-		<property name="ant.dest" value="${home.base.dir}/${projects.standalone.dir}/antLibs" />
-		<delete dir="${ant.dest}"/>
-		<mkdir dir="${ant.dest}"/>
-		<copy todir="${ant.dest}" failonerror="true" overwrite="true">
+        <zip destfile="${basedir}/build/jar/${ant.project.name}.zip" basedir="${basedir}/build/jar" />
+    </target>
+    
+    <target name="deployAntJar">
+        <property name="ant.dest" value="${home.base.dir}/${projects.standalone.dir}/antLibs" />
+        <delete dir="${ant.dest}"/>
+        <mkdir dir="${ant.dest}"/>
+        <copy todir="${ant.dest}" failonerror="true" overwrite="true">
             <fileset dir="${basedir}/build/jar">
-			<include name="**/*.jar" />
-			</fileset>
-        </copy>
-	</target>
-	
-	<!-- Creates ANT Taskdef Jar after Code in this project has been changed. -->
-	<target name="createAntJar">
-		<antcall target="jar" />
-		<antcall target="bundle" />
-	</target>
-	
-	<!-- Creates ANT Jar and uses the new created jar to create the two EASy Jars -->
-	<target name="all">
-		<antcall target="createAntJar" />
-        <!-- Currently, Standalone is pulling the generator -->
-		<!-- antcall target="deployAntJar" /-->
-        <!-- <delete dir="${build.classes.dir}"/> some tests directly seem to rely on the classes :o -->
-        <delete dir="${doc.dir}"/>
-	</target>
-	
-	<target name="createAndDeployLibs">
-		<antcall target="createLibs" />
-		<antcall target="deployLibs" />
-	</target>
-	
-	<!-- Create Libs after Features/Plug-ins hav been changed -->
-	<target name="deployLibs">
-        <copy todir="${home.standalone.executer.dir}/lib" failonerror="true" overwrite="true" flatten="true">
-        	<resources>
-        	    <file file="${basedir}/build/generatedLibs/unbundled/eclipse-part.jar"/>
-        	    <file file="${basedir}/build/generatedLibs/unbundled/easy-headless.jar"/>
-	        </resources>
+            <include name="**/*.jar" />
+            </fileset>
         </copy>
     </target>
-	
-	<target name="createLibs">
-		<taskdef name="antgenerator" classname="de.uni_hildesheim.sse.easy.ant.AntGenerator" classpathref="easyTaskDef.lib"/>
-	        <antgenerator forced="yes" pluginPath="${easy.bundles.dir}" target="${basedir}/build/generatedLibs"
-	        	basedir="${basedir}" eclipsepath="${eclipse.plugins.dir}" classesPath="${basedir}/build/classes">
-	        	
-	        	<basefeature path="${projects.features.dir}/de.uni_hildesheim.sse.easy_producer.core.no_eclipse_feature"/>
-	            <basefeature path="${projects.features.dir}/de.uni_hildesheim.sse.ivml.core_feature"/>
-	            <basefeature path="${projects.features.dir}/de.uni_hildesheim.sse.vil.core_feature"/>
-	            <basefeature path="${projects.features.dir}/de.uni_hildesheim.sse.reasoning.drools2_feature"/>
-	            <basefeature path="${projects.features.dir}/de.uni_hildesheim.sse.apache.commons.io.feature"/>
-	            <basefeature path="${projects.features.dir}/de.uni_hildesheim.sse.easy.instantiator.java.feature"/>
-	            <basefeature path="${projects.features.dir}/de.uni_hildesheim.sse.easy_producer.instantiation.velocity_feature"/>
-	            <addfeature path="${projects.features.dir}"/>
-	        </antgenerator>
+    
+    <!-- Creates ANT Taskdef Jar after Code in this project has been changed. -->
+    <target name="createAntJar">
+        <antcall target="jar" />
+        <antcall target="bundle" />
+    </target>
+    
+    <!-- Creates ANT Jar and uses the new created jar to create the two EASy Jars -->
+    <target name="all">
+        <antcall target="createAntJar" />
+        <!-- Currently, Standalone is pulling the generator -->
+        <!-- antcall target="deployAntJar" /-->
+    </target>
+    
+    <target name="createAndDeployLibs">
+        <antcall target="createLibs" />
+        <antcall target="deployLibs" />
+    </target>
+    
+    <!-- Create Libs after Features/Plug-ins hav been changed -->
+    <target name="deployLibs">
+        <copy todir="${home.standalone.executer.dir}/lib" failonerror="true" overwrite="true" flatten="true">
+            <resources>
+                <file file="${basedir}/build/generatedLibs/unbundled/eclipse-part.jar"/>
+                <file file="${basedir}/build/generatedLibs/unbundled/easy-headless.jar"/>
+            </resources>
+        </copy>
+    </target>
+    
+    <target name="createLibs">
+        <taskdef name="antgenerator" classname="de.uni_hildesheim.sse.easy.ant.AntGenerator" classpathref="easyTaskDef.lib"/>
+            <antgenerator forced="yes" pluginPath="${easy.bundles.dir}" target="${basedir}/build/generatedLibs"
+                basedir="${basedir}" eclipsepath="${eclipse.plugins.dir}" classesPath="${basedir}/build/classes">
+                
+                <basefeature path="${projects.features.dir}/de.uni_hildesheim.sse.easy_producer.core.no_eclipse_feature"/>
+                <basefeature path="${projects.features.dir}/de.uni_hildesheim.sse.ivml.core_feature"/>
+                <basefeature path="${projects.features.dir}/de.uni_hildesheim.sse.vil.core_feature"/>
+                <basefeature path="${projects.features.dir}/de.uni_hildesheim.sse.reasoning.drools2_feature"/>
+                <basefeature path="${projects.features.dir}/de.uni_hildesheim.sse.apache.commons.io.feature"/>
+                <basefeature path="${projects.features.dir}/de.uni_hildesheim.sse.easy.instantiator.java.feature"/>
+                <basefeature path="${projects.features.dir}/de.uni_hildesheim.sse.easy_producer.instantiation.velocity_feature"/>
+                <addfeature path="${projects.features.dir}"/>
+            </antgenerator>
     </target>
 </project>
