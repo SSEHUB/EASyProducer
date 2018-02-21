@@ -83,7 +83,7 @@
 		<antcall target="createAntJar" />
         <!-- Currently, Standalone is pulling the generator -->
 		<!-- antcall target="deployAntJar" /-->
-        <delete dir="${build.classes.dir}"/>
+        <!-- <delete dir="${build.classes.dir}"/> some tests directly seem to rely on the classes :o -->
         <delete dir="${doc.dir}"/>
 	</target>
 	
