@@ -9,7 +9,6 @@ import java.io.LineNumberReader;
 import java.util.ArrayList;
 import java.util.List;
 
-import de.uni_hildesheim.sse.easy.loader.framework.Log;
 import de.uni_hildesheim.sse.easy.loader.framework.Utils;
 
 /**
@@ -23,82 +22,6 @@ public class ListLoader {
     private List<StartupInfo> startupSequence = new ArrayList<StartupInfo>();
     private boolean verbose = false;
 
-    /**
-     * Stores startup information about a certain class.
-     * 
-     * @author Holger Eichelberger
-     */
-    private class StartupInfo {
-        private InitType type;
-        private String className;
-        
-        /**
-         * Creates a startup information object.
-         * 
-         * @param type the startup / shutdown type
-         * @param className the class to be started / stopped
-         */
-        StartupInfo(InitType type, String className) {
-            this.type = type;
-            this.className = className;
-        }
-        
-        /**
-         * Starts up the associated class according to the startup type.
-         * 
-         * @return <code>true</code> in case of success, <code>false</code> else
-         */
-        public boolean start() {
-            boolean result;
-            switch(type) {
-            case ACTIVATOR:
-                if (verbose) {
-                    Log.info("START activator " + className);
-                }
-                result = Utils.startBundle(getClass().getClassLoader(), className);
-                break;
-            case DS:
-                if (verbose) {
-                    Log.info("START DS " + className);
-                }
-                result = Utils.activateDsInstance(getClass().getClassLoader(), className);
-                break;
-            default:
-                result = false;
-                break;
-            }
-            return result;
-        }
-
-        /**
-         * Stops the associated class according to the shutdown type.
-         * 
-         * @return <code>true</code> in case of success, <code>false</code> else
-         */
-        public boolean stop() {
-            boolean result;
-            switch(type) {
-            case ACTIVATOR:
-                if (verbose) {
-                    Log.info("STOP activator " + className);
-                }
-                result = Utils.stopBundle(getClass().getClassLoader(), className);
-                break;
-            case DS:
-                if (verbose) {
-                    Log.info("STOP DS " + className);
-                }
-                result = Utils.deactivateDsInstance(getClass().getClassLoader(), className);
-                break;
-            default:
-                result = false;
-                break;
-            }
-            return result;
-        }
-        
-    }
-    
     /**
      * Creates a list loader which reads the startup sequence from the current class loader.
      * 
@@ -163,7 +86,7 @@ public class ListLoader {
             String className = line.substring(pos + 1).trim();
             InitType type = InitType.valueOf(marker); // TODO check result
             if (null != type) {
-                startupSequence.add(new StartupInfo(type, className));
+                startupSequence.add(new StartupInfo(type, className, verbose));
             }
         }
     }
