@@ -32,6 +32,8 @@
         <copy todir="${home.base.dir}/${projects.standalone.dir}/antLibs" failonerror="true" overwrite="true" flatten="true">
 			<fileset dir="${home.easyLoader.dir}/build/jar">
 				<include name="**/*.jar" />
+				<exclude name="**/*-sources.jar" />
+                <exclude name="**/*-javadoc.jar" />
 			</fileset>
 		</copy>
 	</target>
