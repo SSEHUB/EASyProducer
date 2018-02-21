@@ -2,6 +2,7 @@
 <project name="EASyLoader" default="all" basedir=".">
 	<!-- import von globalen Properties Einstellungen -->
 	<property file="${user.home}/global-build.properties"/>
+    <include file="${user.home}/macros.xml"/>
 	
 	<path id="easyTaskDef.lib" >          
         <pathelement location="libs/eclipse/org.eclipse.osgi_3.9.1.v20140110-1610.jar" />    
