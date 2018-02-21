@@ -41,9 +41,15 @@
 		</javac>
     </target>
 	
-	<!-- Creates a jar file -->
+	<!-- Creates the jar files -->
 	<target name="jar" depends="compile">
 		<jar destfile="${basedir}/build/jar/${ant.project.name}.jar" basedir="${basedir}/build/classes"/>
+        <jar destfile="${build.jar.dir}/${ant.project.name}-sources.jar" basedir="${src.dir}" />
+        <easyJavadoc sourcepath="${src.dir}" source="${javacSource}" destdir="${doc.dir}">
+            <classpath refid="includes"/>
+        </easyJavadoc>
+        <jar destfile="${build.jar.dir}/${ant.project.name}-javadoc.jar" basedir="${doc.dir}" />
+        <mvnDeploy folderName="${ant.project.name}" jarFolder="${build.jar.dir}" jarFile="${ant.project.name}.jar"/>
     </target>
 	
 	<target name="bundle">
@@ -76,6 +82,8 @@
 		<antcall target="createAntJar" />
         <!-- Currently, Standalone is pulling the generator -->
 		<!-- antcall target="deployAntJar" /-->
+        <delete dir="${build.classes.dir}"/>
+        <delete dir="${doc.dir}"/>
 	</target>
 	
 	<target name="createAndDeployLibs">
