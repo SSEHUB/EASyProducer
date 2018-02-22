@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <project name="MyTask" basedir="." default="use">
 
+	<!-- THIS IS JUST A DEMO -->
+	
     <property name="src.dir" value="."/>
     <property name="classes.dir" value="classes"/>
 	<property name="task.dir" value="task"/>

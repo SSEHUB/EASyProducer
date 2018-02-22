@@ -36,13 +36,13 @@ public class FakeComponentContext implements ComponentContext {
         return null;
     }
 
-    @SuppressWarnings("rawtypes")
+    @SuppressWarnings({ "rawtypes", "unchecked" })
     @Override
     public Dictionary getProperties() {
         return null;
     }
 
-    @SuppressWarnings("rawtypes")
+    @SuppressWarnings({ "rawtypes", "unchecked" })
     @Override
     public ServiceReference getServiceReference() {
         return null;

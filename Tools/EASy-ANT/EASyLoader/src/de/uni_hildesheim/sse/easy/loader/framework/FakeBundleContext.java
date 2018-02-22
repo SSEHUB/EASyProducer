@@ -12,7 +12,9 @@ import org.osgi.framework.BundleListener;
 import org.osgi.framework.Filter;
 import org.osgi.framework.FrameworkListener;
 import org.osgi.framework.InvalidSyntaxException;
+import org.osgi.framework.ServiceFactory;
 import org.osgi.framework.ServiceListener;
+import org.osgi.framework.ServiceObjects;
 import org.osgi.framework.ServiceReference;
 import org.osgi.framework.ServiceRegistration;
 
@@ -129,6 +131,12 @@ public class FakeBundleContext implements BundleContext {
     }
 
     @Override
+    public <S> ServiceRegistration<S> registerService(Class<S> clazz, ServiceFactory<S> factory,
+        Dictionary<String, ?> properties) {
+        return null;
+    }
+
+    @Override
     public <S> ServiceRegistration<S> registerService(Class<S> arg0, S arg1, Dictionary<String, ?> arg2) {
         return null;
     }
@@ -148,6 +156,11 @@ public class FakeBundleContext implements BundleContext {
     @Override
     public boolean ungetService(ServiceReference<?> arg0) {
         return false;
+    }
+
+    @Override
+    public <S> ServiceObjects<S> getServiceObjects(ServiceReference<S> reference) {
+        return null;
     }
 
 }
