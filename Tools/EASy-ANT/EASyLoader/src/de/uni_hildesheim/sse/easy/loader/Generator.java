@@ -58,6 +58,8 @@ public class Generator extends AbstractLoader {
         initializeRegistry();
         List<Class<?>> rtCls = new ArrayList<Class<?>>();
         addRuntimeClass(ListLoader.class, rtCls);
+        addRuntimeClass(InitType.class, rtCls);
+        addRuntimeClass(StartupInfo.class, rtCls);
         addRuntimeClass(Log.class, rtCls);
         addRuntimeClass(Utils.class, rtCls);
         addRuntimeClass(BundleException.class, rtCls);

@@ -1,0 +1,1 @@
+New classes, different names, deleted classes must be listed as .class in Generator.java!!!
