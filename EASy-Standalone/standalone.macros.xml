@@ -5,7 +5,7 @@
       taskdef name="antgenerator" classname="de.uni_hildesheim.sse.easy.ant.AntGenerator" classpathref="easyTaskDef.lib"
      -->
     <path id="easyTaskDef.lib" >
-        <fileset dir="${home.base.dir}/${projects.standalone.dir}/antLibs">
+        <fileset dir="${easy.antLib.dir}">
             <include name="**/*.jar" />
         </fileset>
     </path>
@@ -75,4 +75,16 @@ DS:de.uni_hildesheim.sse.easy.maven.Registration</concat>
       </sequential>
     </macrodef>
     
+	<macrodef name="copyDependencies">
+		<attribute name="target" default="NOT_SET" />
+		<sequential>
+	        <copy file="${org.eclipse.birt.runtime:org.eclipse.osgi.services:jar}" todir="@{target}"/>
+	        <copy file="${org.eclipse:osgi:jar}" todir="@{target}"/>
+	        <copy file="${org.eclipse.equinox:preferences:jar}" todir="@{target}"/>
+	        <copy file="${org.eclipse.equinox:common:jar}" todir="@{target}"/>
+	        <copy file="${org.apache.ant:ant:jar}" todir="@{target}"/>
+	        <copy file="${org.apache.ant:ant-launcher:jar}" todir="@{target}"/>
+		</sequential>
+	</macrodef>
+	
 </project>

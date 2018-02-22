@@ -1,17 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Project name must not contain whitespaces -->
-<project name="Standalone Tools" default="all" basedir=".">	
+<project name="Standalone Tools" default="all" basedir="."  xmlns:artifact="antlib:org.apache.maven.artifact.ant">	
 	<property file="${user.home}/global-build.properties"/>
 	<property name="easyPlugins" value="easyPlugins"/>
 
 	<include file="${home.base.dir}/${projects.standalone.dir}/standalone.macros.xml"/>
 			
+    <!-- Check - no typedef shall be required as installed in ANT/lib -->
+    <path id="maven-ant-tasks.classpath" path="${ant-maven.lib}" />
+    <typedef resource="org/apache/maven/artifact/ant/antlib.xml"
+       uri="antlib:org.apache.maven.artifact.ant"
+       classpathref="maven-ant-tasks.classpath" />	
+	
+    <!-- force snapshot update - does not work in macros.xml  -->
+    <artifact:remoteRepository id="easy.repository" url="${maven.repository}">
+        <snapshots updatePolicy="always" />
+    </artifact:remoteRepository>
+	
 	<target name="init">
 		<!-- Delete generated folders -->
 		<delete dir="junitResults"/>
 		<delete dir="${easyPlugins}"/>
 		<delete dir="build"/>
-        <delete dir="${home.base.dir}/${projects.standalone.dir}/antLibs"/>
 		
 		<!-- Delete accidentally created files and folders -->
 		<delete dir="easyLoader"/>
@@ -26,16 +36,11 @@
 		<mkdir dir="build/zip/Plugins"/>
 		<mkdir dir="build/zip/Features"/>
 		<mkdir dir="build/generatedLibs"/>
-        
-        <!-- Update/Prepare ANT Generator -->
-        <mkdir dir="${home.base.dir}/${projects.standalone.dir}/antLibs"/>
-        <copy todir="${home.base.dir}/${projects.standalone.dir}/antLibs" failonerror="true" overwrite="true" flatten="true">
-			<fileset dir="${home.easyLoader.dir}/build/jar">
-				<include name="**/*.jar" />
-				<exclude name="**/*-sources.jar" />
-                <exclude name="**/*-javadoc.jar" />
-			</fileset>
-		</copy>
+		
+        <artifact:dependencies pathId="maven.compile.classpath">
+            <pom file="pom.xml" id="pom"/>
+            <remoteRepository refid="easy.repository" />
+        </artifact:dependencies>
 	</target>
 	
 	<target name="gather.easy.plugins">
@@ -67,25 +72,21 @@
         </antgenerator>
         
         <!-- Fix me -->
-        <copy todir="${basedir}/build/generatedLibs/unbundled" failonerror="true" overwrite="true" flatten="true">
-            <fileset dir="${easy.bundles.dir}">
-                <include name="org.eclipse.equinox.common_3.6.200.jar" />
-                <include name="org.eclipse.equinox.preferences_3.5.100.jar" />
-            </fileset>
-        </copy>
+		<copyDependencies target="${basedir}/build/generatedLibs/unbundled"/>
         
         <!-- copy generated bundles to command line tool before compilation -->
         <copy todir="EASyCommandLine/lib" failonerror="true" overwrite="true" flatten="true">
 			<fileset dir="${basedir}/build/generatedLibs/unbundled">
 				<include name="**/*.jar" />
 			</fileset>
-            <fileset dir="${home.easyLoader.dir}/libs/">
+            <!--<fileset dir="${home.easyLoader.dir}/libs/">
 				<include name="org.eclipse.osgi*.jar" />
-			</fileset>
+			</fileset>-->
             <fileset dir="${eclipse.plugins.dir}">
 				<include name="org.apache.ant*/lib/ant.jar" />
 			</fileset>
 		</copy>
+        <!-- TODO deploy to Maven -->
     </target>
 
     <!-- standalone with some experimental stuff -->
@@ -113,25 +114,11 @@
         </antgenerator>
         
         <!-- Fix me -->
-        <copy todir="${basedir}/build/generatedLibs.ex/unbundled" failonerror="true" overwrite="true" flatten="true">
-            <fileset dir="${easy.bundles.dir}">
-                <include name="org.eclipse.equinox.common_3.6.200.jar" />
-                <include name="org.eclipse.equinox.preferences_3.5.100.jar" />
-            </fileset>
-        </copy>
-        
-        <!-- copy generated bundles to command line tool before compilation -->
-        <copy todir="EASyCommandLine/lib" failonerror="true" overwrite="true" flatten="true">
-            <fileset dir="${basedir}/build/generatedLibs.ex/unbundled">
-                <include name="**/*.jar" />
-            </fileset>
-            <fileset dir="${home.easyLoader.dir}/libs/">
-                <include name="org.eclipse.osgi*.jar" />
-            </fileset>
-        </copy>
-        <dist target="build/generatedLibs.ex" />
+        <copyDependencies target="${basedir}/build/generatedLibs.ex/unbundled"/>
+        <dist target="build/generatedLibs.ex" />        
         <!-- cannot be bundled due to various conflicts, rans anyway in own process -->
         <withMaven target="build/generatedLibs.ex"/>
+        <!-- TODO deploy to Maven -->
     </target>
     
     <!-- standalone runtime without xText but full Java instantiators and some experimental stuff - QM version is 
@@ -158,25 +145,11 @@
         </antgenerator>
         
         <!-- Fix me -->
-        <copy todir="${basedir}/build/generatedLibs.rt.noXtext/unbundled" failonerror="true" overwrite="true" flatten="true">
-            <fileset dir="${easy.bundles.dir}">
-                <include name="org.eclipse.equinox.common_3.6.200.jar" />
-                <include name="org.eclipse.equinox.preferences_3.5.100.jar" />
-            </fileset>
-        </copy>
-        
-        <!-- copy generated bundles to command line tool before compilation -->
-        <copy todir="EASyCommandLine/lib" failonerror="true" overwrite="true" flatten="true">
-            <fileset dir="${basedir}/build/generatedLibs.rt.noXtext/unbundled">
-                <include name="**/*.jar" />
-            </fileset>
-            <fileset dir="${home.easyLoader.dir}/libs/">
-                <include name="org.eclipse.osgi*.jar" />
-            </fileset>
-        </copy>
-        <dist target="build/generatedLibs.rt.noXtext" />
+        <copyDependencies target="${basedir}/build/generatedLibs.rt.noXtext/unbundled"/>
+        <dist target="build/generatedLibs.rt.noXtext" />        
         <!-- cannot be bundled due to various conflicts, rans anyway in own process -->
         <withMaven target="build/generatedLibs.rt.noXtext"/>
+        <!-- TODO deploy to Maven -->
     </target>
 	
     <!-- a runtime library version - however containing full EASy :o -->
@@ -198,25 +171,11 @@
         </antgenerator>
         
         <!-- Fix me -->
-        <copy todir="${basedir}/build/generatedLibs.rt/unbundled" failonerror="true" overwrite="true" flatten="true">
-            <fileset dir="${easy.bundles.dir}">
-                <include name="org.eclipse.equinox.common_3.6.200.jar" />
-                <include name="org.eclipse.equinox.preferences_3.5.100.jar" />
-            </fileset>
-        </copy>
-        
-        <!-- copy generated bundles to command line tool before compilation -->
-        <copy todir="EASyCommandLine/lib" failonerror="true" overwrite="true" flatten="true">
-			<fileset dir="${basedir}/build/generatedLibs.rt/unbundled">
-				<include name="**/*.jar" />
-			</fileset>
-            <fileset dir="${home.easyLoader.dir}/libs/">
-				<include name="org.eclipse.osgi*.jar" />
-			</fileset>
-		</copy>
+        <copyDependencies target="${basedir}/build/generatedLibs.rt/unbundled"/>
 		<dist target="build/generatedLibs.rt"/>
 		<!-- cannot be bundled due to various conflicts, rans anyway in own process -->
         <withMaven target="build/generatedLibs.rt"/>
+        <!-- TODO deploy to Maven -->
     </target>
     	
 	<target name="compile">	
@@ -236,8 +195,6 @@
         -->
         <mkdir dir="build/generatedLibs/dist"/>
         <dist target="build/generatedLibs"/>
-        
-        <!-- The same game for runtime... -->
     </target>
     
     <target name="zip">
