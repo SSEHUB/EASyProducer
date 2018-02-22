@@ -164,5 +164,19 @@
         </javadoc>
 	  </sequential>
 	</macrodef>
-    
+
+	<!-- remove path from zip -->
+    <macrodef name="delFromZip">
+      <attribute name="zip"/>
+      <attribute name="path"/>
+      <sequential>
+          <mkdir dir="__tmp__"/>
+          <unzip dest="__tmp__" src="@{zip}"/>
+          <delete file="@{zip}"/>
+          <delete dir="__tmp__/@{path}"/>
+          <zip destfile="@{zip}" basedir="__tmp__"/>
+          <delete dir="__tmp__"/>
+      </sequential>
+   </macrodef>
+      
 </project>
