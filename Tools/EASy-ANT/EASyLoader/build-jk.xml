@@ -87,14 +87,8 @@
         </copy>
 	</target>
 	
-	<!-- Creates ANT Taskdef Jar after Code in this project has been changed. -->
-	<target name="createAntJar">
-		<antcall target="jar" />
-		<antcall target="bundle" />
-	</target>
-	
 	<!-- Creates ANT Jar and uses the new created jar to create the two EASy Jars -->
-	<target name="all">
+	<target name="all" depends="jar, bundle, deployAntJar">
 		<antcall target="createAntJar" />
 		<antcall target="deployAntJar" />
         <delete dir="${build.classes.dir}"/>
