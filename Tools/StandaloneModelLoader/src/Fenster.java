@@ -1,4 +1,5 @@
 import java.io.File;
+import java.io.IOException;
 
 import javax.swing.DefaultListModel;
 import javax.swing.JFileChooser;
@@ -9,19 +10,18 @@ import javax.swing.JScrollPane;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 import de.uni_hildesheim.sse.ModelUtility;
-import de.uni_hildesheim.sse.StandaloneInitializer;
-import de.uni_hildesheim.sse.model.confModel.Configuration;
-import de.uni_hildesheim.sse.model.management.ProjectInfo;
-import de.uni_hildesheim.sse.model.management.VarModel;
-import de.uni_hildesheim.sse.model.management.VarModelException;
-import de.uni_hildesheim.sse.model.varModel.ProgressObserver;
-import de.uni_hildesheim.sse.model.varModel.Project;
-import de.uni_hildesheim.sse.model.varModel.StringFormatException;
-import de.uni_hildesheim.sse.persistency.StringProvider;
-import de.uni_hildesheim.sse.reasoning.core.reasoner.IReasoner;
-import de.uni_hildesheim.sse.reasoning.core.reasoner.ReasoningResult;
-import de.uni_hildesheim.sse.reasoning.drools.DroolsReasoner;
-
+import de.uni_hildesheim.sse.easy.loader.ListLoader;
+import net.ssehub.easy.basics.modelManagement.ModelInfo;
+import net.ssehub.easy.basics.modelManagement.ModelManagementException;
+import net.ssehub.easy.basics.modelManagement.VersionFormatException;
+import net.ssehub.easy.basics.progress.ProgressObserver;
+import net.ssehub.easy.dslCore.StandaloneInitializer;
+import net.ssehub.easy.reasoning.core.frontend.ReasonerFrontend;
+import net.ssehub.easy.reasoning.core.reasoner.ReasoningResult;
+import net.ssehub.easy.varModel.confModel.Configuration;
+import net.ssehub.easy.varModel.management.VarModel;
+import net.ssehub.easy.varModel.model.Project;
+import net.ssehub.easy.varModel.persistency.StringProvider;
 
 /**
  * Small running example of an IVML stand alone application.
@@ -48,12 +48,13 @@ public class Fenster extends JFrame {
             Project project = loadProject(ivmlFile);
             if (null != project) {
                 Configuration cfg = new Configuration(project);
-                IReasoner drools = new DroolsReasoner();
-                ReasoningResult result = drools.check(project, cfg, null, ProgressObserver.NO_OBSERVER);
+                ReasonerFrontend rf = ReasonerFrontend.getInstance();
+                rf.setPreferredReasoner();
+                ReasoningResult result = rf.check(project, cfg, null, ProgressObserver.NO_OBSERVER);
                 String conflictMsg = result.hasConflict() ? " (contains errors)" : " (conflict free)";
                 lbl.setText("Projekt geladen: " + project.getName() + conflictMsg);
-                DefaultListModel model = new DefaultListModel();
-                JList liste = new JList(model);
+                DefaultListModel<String> model = new DefaultListModel<String>();
+                JList<String> liste = new JList<String>(model);
                 for (int i = 0; i < project.getElementCount(); i++) {
                     model.addElement(StringProvider.toIvmlString(project.getElement(i)));
                 }
@@ -89,29 +90,30 @@ public class Fenster extends JFrame {
     
     private Project loadProject(File ivmlFile) {
         Project ivmlProject = null;
-        ProjectInfo info = null;
+        ModelInfo<Project> info = null;
         try {
             File directory = ivmlFile.getParentFile();
             String name = ivmlFile.getName();
             String version = ivmlFile.getName();
             int posUnderline = name.lastIndexOf('_');
             int posDot = version.lastIndexOf('.');
-            name = name.substring(0, posUnderline);
-            version = version.substring(posUnderline + 1, posDot);
+            if (posUnderline > 0) {
+                name = name.substring(0, posUnderline);
+                version = version.substring(posUnderline + 1, posDot);
+            }
             System.out.println("Projektname: " + name);
             VarModel.INSTANCE.locations().addLocation(directory, ProgressObserver.NO_OBSERVER);
-            info = VarModel.INSTANCE.availableProjects().getProjectInfo(name, version, ivmlFile.toURI());
-        } catch (StringFormatException e) {
-            //
-        } catch (VarModelException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            info = VarModel.INSTANCE.availableModels().getModelInfo(name, version, ivmlFile.toURI());
+        } catch (VersionFormatException e) {
+            System.out.println(e.getMessage());
+        } catch (ModelManagementException e) {
+            System.out.println(e.getMessage());
         }
         if (null != info) {
             try {
                 ivmlProject = VarModel.INSTANCE.load(info);
-            } catch (VarModelException e) {
-                //
+            } catch (ModelManagementException e) {
+                System.out.println(e.getMessage());
             }
         }
         return ivmlProject;
@@ -121,9 +123,8 @@ public class Fenster extends JFrame {
         try {
             VarModel.INSTANCE.loaders().registerLoader(ModelUtility.INSTANCE, ProgressObserver.NO_OBSERVER);
             ModelUtility.setResourceInitializer(new StandaloneInitializer());
-        } catch (VarModelException e) {
-            // No other way to handle it here
-            e.printStackTrace();
+        } catch (ModelManagementException e) {
+            System.out.println(e.getMessage());
         }
     }
     
@@ -131,7 +132,14 @@ public class Fenster extends JFrame {
      * @param args
      */
     public static void main(String[] args) {
-        new Fenster();
+        try {
+            ListLoader loader = new ListLoader();
+            loader.startup();
+            new Fenster();
+            loader.shutdown();
+        } catch (IOException e) {
+            System.out.println(e.getMessage());
+        }
     }
 
 }

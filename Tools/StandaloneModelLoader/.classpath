@@ -1,41 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
-	<classpathentry kind="src" path="src"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.6"/>
-	<classpathentry kind="lib" path="lib/antlr-3.3.jar"/>
-	<classpathentry kind="lib" path="lib/antlr-runtime-3.3.jar"/>
-	<classpathentry kind="lib" path="lib/bcmail-jdk14-138.jar"/>
-	<classpathentry kind="lib" path="lib/bcprov-jdk14-138.jar"/>
-	<classpathentry kind="lib" path="lib/dom4j-1.6.1.jar"/>
-	<classpathentry kind="lib" path="lib/drools-clips-5.5.0.Final.jar"/>
-	<classpathentry kind="lib" path="lib/drools-compiler-5.5.0.Final.jar"/>
-	<classpathentry kind="lib" path="lib/drools-core-5.5.0.Final.jar"/>
-	<classpathentry kind="lib" path="lib/drools-decisiontables-5.5.0.Final.jar"/>
-	<classpathentry kind="lib" path="lib/drools-jsr94-5.5.0.Final.jar"/>
-	<classpathentry kind="lib" path="lib/drools-persistence-jpa-5.5.0.Final.jar"/>
-	<classpathentry kind="lib" path="lib/drools-templates-5.5.0.Final.jar"/>
-	<classpathentry kind="lib" path="lib/drools-verifier-5.5.0.Final.jar"/>
-	<classpathentry kind="lib" path="lib/Drools.jar"/>
-	<classpathentry kind="lib" path="lib/ecj-3.5.1.jar"/>
-	<classpathentry kind="lib" path="lib/guava-r06.jar"/>
-	<classpathentry kind="lib" path="lib/hibernate-jpa-2.0-api-1.0.1.Final.jar"/>
-	<classpathentry kind="lib" path="lib/itext-2.1.2.jar"/>
-	<classpathentry kind="lib" path="lib/javassist-3.14.0-GA.jar"/>
-	<classpathentry kind="lib" path="lib/jsr94-1.1.jar"/>
-	<classpathentry kind="lib" path="lib/jta-1.1.jar"/>
-	<classpathentry kind="lib" path="lib/jxl-2.6.10.jar"/>
-	<classpathentry kind="lib" path="lib/knowledge-api-5.5.0.Final.jar"/>
-	<classpathentry kind="lib" path="lib/knowledge-internal-api-5.5.0.Final.jar"/>
-	<classpathentry kind="lib" path="lib/log4j-1.2.14.jar"/>
-	<classpathentry kind="lib" path="lib/mvel2-2.1.3.Final.jar"/>
-	<classpathentry kind="lib" path="lib/protobuf-java-2.4.1.jar"/>
-	<classpathentry kind="lib" path="lib/ReasonerCore.jar"/>
-	<classpathentry kind="lib" path="lib/slf4j-api-1.6.4.jar"/>
-	<classpathentry kind="lib" path="lib/stringtemplate-3.2.1.jar"/>
-	<classpathentry kind="lib" path="lib/xml-apis-1.3.04.jar"/>
-	<classpathentry kind="lib" path="lib/xmlpull-1.1.3.1.jar"/>
-	<classpathentry kind="lib" path="lib/xpp3_min-1.1.4c.jar"/>
-	<classpathentry kind="lib" path="lib/xstream-1.4.1.jar"/>
-	<classpathentry kind="lib" path="lib/IVMLLoader.jar" sourcepath="W:/eclipse37/small/eclipse/plugins/org.eclipse.core.runtime.source_3.7.0.v20110110.jar"/>
-	<classpathentry kind="output" path="bin"/>
+	<classpathentry kind="src" output="target/classes" path="src">
+		<attributes>
+			<attribute name="optional" value="true"/>
+			<attribute name="maven.pomderived" value="true"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.7">
+		<attributes>
+			<attribute name="maven.pomderived" value="true"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="con" path="org.eclipse.m2e.MAVEN2_CLASSPATH_CONTAINER">
+		<attributes>
+			<attribute name="maven.pomderived" value="true"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="output" path="target/classes"/>
 </classpath>
