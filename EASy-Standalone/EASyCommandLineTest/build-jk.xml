@@ -9,6 +9,10 @@
 	<property name="javacTarget" value="1.6"/>
 	
 	<path id ="includes">
+        <fileset dir="../build/generatedLibs/unbundled/">
+            <include name="**/*.jar" />
+        	<exclude name="**/ant*.jar"/>
+        </fileset>
         <!-- Lib -->
         <fileset dir="lib">
             <include name="**/*.jar" />
