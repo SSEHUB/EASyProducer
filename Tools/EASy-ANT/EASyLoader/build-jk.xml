@@ -73,7 +73,10 @@
             <fileset dir="scripts"/>
             <fileset dir="libs/**/*.jar" />
         </copy>
-		<zip destfile="${basedir}/build/jar/${ant.project.name}.zip" basedir="${basedir}/build/jar" />
+		<zip destfile="${basedir}/build/jar/${ant.project.name}.zip" basedir="${basedir}/build/jar">
+            <exclude name="**/*-sources.jar" />
+            <exclude name="**/*-javadoc.jar" />
+	    </zip>
 	</target>
 	
 	<target name="deployAntJar">
@@ -82,6 +85,8 @@
 		<copy todir="${easy.antLib.dir}" failonerror="true" overwrite="true">
             <fileset dir="${basedir}/build/jar">
 			    <include name="**/*.jar" />
+	            <exclude name="**/*-sources.jar" />
+	            <exclude name="**/*-javadoc.jar" />
 			</fileset>
         </copy>
 	</target>
