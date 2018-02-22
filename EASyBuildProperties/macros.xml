@@ -19,8 +19,10 @@
      <element name="args" implicit="true" optional="true" />
      <sequential>
        <java classname="org.codehaus.classworlds.Launcher" fork="true"
-             dir="@{basedir}" resultproperty="@{resultproperty}">
+             dir="@{basedir}" resultproperty="@{resultproperty}"
+             failonerror="true">
          <jvmarg value="-Xmx512m"/>
+         <jvmarg value="-Dmaven.multiModuleProjectDirectory" />
          <classpath>
            <fileset dir="${maven.bin.dir}/boot">
              <include name="*.jar" />
@@ -36,8 +38,7 @@
      </sequential>
    </macrodef>
     
-   <!-- deploy built files to the public maven repository, just specify the main.jar. Related jars
-        will be transferred, -sources, -javadoc, -test will be taken up as artifacts through the server-side script -->
+   <!-- deploy built files to the public maven repository (src, test missing) -->
    <macrodef name="mvnDeploy">
      <attribute name="folderName" default="NOT SET"/>
      <attribute name="pomFile" default="pom.xml"/> 
@@ -54,6 +55,7 @@
         <scp todir="${connectString}:${folder}" trust="true" keyfile="${maven.repository.keyfile}">
             <fileset dir="@{jarFolder}">
                 <include name="*.jar"/>
+                <include name="*.zip"/>
             </fileset>
         </scp>
         <sshexec host="${maven.repository.server}" username="${maven.repository.user}" trust="true" keyfile="${maven.repository.keyfile}" 
@@ -129,7 +131,7 @@
        <mvnDeploy folderName="${projectName}" pomFile="@{pomFile}" jarFolder="${targetFolder}" jarFile="${jarFile}"/>
       </sequential>
    </macrodef>
-	
+    
    <macrodef name="clearMavenRepo">
     <sequential>
       <sshexec host="${maven.repository.server}" username="${maven.repository.user}" trust="true" keyfile="${maven.repository.keyfile}" 
