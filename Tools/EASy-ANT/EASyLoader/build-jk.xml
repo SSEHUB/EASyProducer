@@ -57,6 +57,7 @@
 		<jar destfile="${basedir}/build/jar/${ant.project.name}.jar" basedir="${basedir}/build/classes"/>
         <jar destfile="${build.jar.dir}/${ant.project.name}-sources.jar" basedir="${src.dir}" />
         <easyJavadoc sourcepath="${src.dir}" source="${javacSource}" destdir="${doc.dir}">
+            <classpath refid="maven.compile.classpath" />
             <classpath refid="includes"/>
         </easyJavadoc>
         <jar destfile="${build.jar.dir}/${ant.project.name}-javadoc.jar" basedir="${doc.dir}" />
@@ -64,6 +65,7 @@
     </target>
 	
 	<target name="bundle">
+		<echoproperties/>
         <copy file="${org.eclipse.birt.runtime:org.eclipse.osgi.services:jar}" todir="${basedir}/build/jar"/>
         <copy file="${org.eclipse:osgi:jar}" todir="${basedir}/build/jar"/>
         <copy file="${org.eclipse.equinox:preferences:jar}" todir="${basedir}/build/jar"/>
