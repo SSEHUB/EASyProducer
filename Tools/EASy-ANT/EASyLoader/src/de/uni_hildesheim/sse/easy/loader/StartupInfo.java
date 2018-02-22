@@ -49,22 +49,18 @@ class StartupInfo {
      */
     public boolean start() {
         boolean result;
-        switch(type) {
-        case ACTIVATOR:
+        if (InitType.ACTIVATOR == type) {
             if (verbose) {
                 Log.info("START activator " + className);
             }
             result = Utils.startBundle(getClass().getClassLoader(), className);
-            break;
-        case DS:
+        } else if (InitType.DS == type) {
             if (verbose) {
                 Log.info("START DS " + className);
             }
             result = Utils.activateDsInstance(getClass().getClassLoader(), className);
-            break;
-        default:
+        } else {
             result = false;
-            break;
         }
         return result;
     }
@@ -76,22 +72,18 @@ class StartupInfo {
      */
     public boolean stop() {
         boolean result;
-        switch(type) {
-        case ACTIVATOR:
+        if (InitType.ACTIVATOR == type) {
             if (verbose) {
                 Log.info("STOP activator " + className);
             }
             result = Utils.stopBundle(getClass().getClassLoader(), className);
-            break;
-        case DS:
+        } else if (InitType.DS == type) {
             if (verbose) {
                 Log.info("STOP DS " + className);
             }
             result = Utils.deactivateDsInstance(getClass().getClassLoader(), className);
-            break;
-        default:
+        } else {
             result = false;
-            break;
         }
         return result;
     }
