@@ -21,11 +21,7 @@
 	<property name="javacTarget" value="1.6"/>
 	
 	<path id ="includes">
-        <!-- Lib -->
-		<!-- We keep the libs, currently unclear which ant -->
-        <!--<fileset dir="libs">
-            <include name="**/ant/*.jar" />
-        </fileset>-->
+        <!-- Lib - all through ant -->
     </path>
 	
 	<!-- Targets  -->
@@ -75,7 +71,7 @@
 		<copy file="${org.apache.ant:ant-launcher:jar}" todir="${basedir}/build/jar"/>
 		<copy todir="${basedir}/build/jar" failonerror="true" overwrite="true">
             <fileset dir="scripts"/>
-            <!--<fileset dir="libs/**/ant/*.jar" />-->
+            <fileset dir="libs/**/*.jar" />
         </copy>
 		<zip destfile="${basedir}/build/jar/${ant.project.name}.zip" basedir="${basedir}/build/jar" />
 	</target>
