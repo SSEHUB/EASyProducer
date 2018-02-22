@@ -9,10 +9,6 @@
 	<property name="javacTarget" value="1.6"/>
 	
 	<path id ="includes">
-        <fileset dir="../build/generatedLibs/unbundled/">
-            <include name="**/*.jar" />
-        	<exclude name="**/ant*.jar"/>
-        </fileset>
         <!-- Lib -->
         <fileset dir="lib">
             <include name="**/*.jar" />
@@ -53,7 +49,7 @@
 			
 			<sysproperty key="EASyCommandlineTests.testdata" value="${basedir}/testdata"/>
 			<sysproperty key="EASyCommandline.binFolder" value="${home.standalone.executer.dir}/${build.classes.dir}"/>
-			<sysproperty key="EASyCommandline.libFolder" value="${easy.antLib.dir}"/>
+			<sysproperty key="EASyCommandline.libFolder" value="../build/generatedLibs/unbundled"/>
 			<formatter type="xml"/>		
 		    <test name="net.ssehub.easy.standalone.AllTests" toDir="${basedir}/junit">
 		    	<formatter type="xml"/>
