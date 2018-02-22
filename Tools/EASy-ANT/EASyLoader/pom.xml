@@ -21,5 +21,10 @@
           <artifactId>preferences</artifactId>
           <version>3.5.100-v20130422-1538</version>
         </dependency> <!-- brings commons 3.7.0 -->
+        <dependency>
+          <groupId>org.apache.ant</groupId>
+          <artifactId>ant</artifactId>
+          <version>1.8.4</version>
+        </dependency>
   </dependencies>  
  </project>
