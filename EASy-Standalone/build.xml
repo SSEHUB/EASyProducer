@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Project name must not contain whitespaces -->
-<project name="Standalone Tools" default="all" basedir="."  xmlns:artifact="antlib:org.apache.maven.artifact.ant">	
+<project name="StandaloneTools" default="all" basedir="."  xmlns:artifact="antlib:org.apache.maven.artifact.ant">	
 	<property file="${user.home}/global-build.properties"/>
 	<property name="easyPlugins" value="easyPlugins"/>
 
