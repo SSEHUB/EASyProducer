@@ -4,6 +4,7 @@
 	<property file="${user.home}/global-build.properties"/>
 	<property name="easyPlugins" value="easyPlugins"/>
 
+	<include file="${user.home}/macros.xml"/>
 	<include file="${home.base.dir}/${projects.standalone.dir}/standalone.macros.xml"/>
 			
     <!-- Check - no typedef shall be required as installed in ANT/lib -->
