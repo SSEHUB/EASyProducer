@@ -254,7 +254,7 @@
         <mvnDeploy folderName="${ant.project.name}-easy-ex" jarFolder="${tgtFolder}" jarFile="easy-headless.jar"
             pomFile="${tgtFolder}/pom.xml"/>
         <delete file="${tgtFolder}/pom.xml"/>
-        <rmdir dir="${tgtFolder}"/>
+        <delete dir="${tgtFolder}"/>
 	</target>
 	
 	<!--target name="all" depends="init, gather.easy.plugins, createLibs, compile"/-->
