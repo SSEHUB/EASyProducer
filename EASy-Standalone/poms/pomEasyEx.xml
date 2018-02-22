@@ -1,0 +1,30 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>net.ssehub.easy.runtime</groupId>
+  <artifactId>EASy-experimental</artifactId>
+  <version>1.2.0-SNAPSHOT</version>
+  <packaging>jar</packaging>
+  
+  <dependencies>
+        <dependency>
+          <groupId>org.eclipse.birt.runtime</groupId>
+          <artifactId>org.eclipse.osgi.services</artifactId>
+          <version>3.5.0.v20150519-2006</version>
+        </dependency>        
+        <dependency>
+          <groupId>org.eclipse</groupId>
+          <artifactId>osgi</artifactId>
+          <version>3.10.0-v20140606-1445</version>
+        </dependency> 
+        <dependency>
+          <groupId>org.eclipse.equinox</groupId>
+          <artifactId>preferences</artifactId>
+          <version>3.5.100-v20130422-1538</version>
+        </dependency> <!-- brings commons 3.7.0 -->
+       <dependency>
+         <groupId>net.ssehub.easy.runtime</groupId>
+         <artifactId>Eclipse-experimental</artifactId>
+         <version>1.2.0-SNAPSHOT</version>
+       </dependency>
+  </dependencies>  
+ </project>
