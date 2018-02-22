@@ -69,7 +69,7 @@
         <copy file="${org.eclipse.equinox:common:jar}" todir="${basedir}/build/jar"/>
 		<copy file="${org.apache.ant:ant:jar}" todir="${basedir}/build/jar"/>
 		<copy file="${org.apache.ant:ant-launcher:jar}" todir="${basedir}/build/jar"/>
-		<copy todir="${basedir}/build/jar" failonerror="true" overwrite="true">
+		<copy todir="${basedir}/build/jar" failonerror="false" overwrite="true">
             <fileset dir="scripts"/>
             <fileset dir="libs/**/*.jar" />
         </copy>
