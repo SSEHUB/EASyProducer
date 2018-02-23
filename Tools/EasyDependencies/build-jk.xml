@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="EASyDependencies" default="maven" basedir=".">
+    <!-- xmlns:artifact="antlib:org.apache.maven.artifact.ant" -->
+	<!-- import of the global Jenkins properties -->
+	<property file="${user.home}/global-build.properties"/>
+	
+	<include file="${user.home}/macros.xml"/>
+	
+	<!-- <path id="maven-ant-tasks.classpath" path="${ant-maven.lib}" />
+    <typedef resource="org/apache/maven/artifact/ant/antlib.xml"
+       uri="antlib:org.apache.maven.artifact.ant"
+       classpathref="maven-ant-tasks.classpath" />-->
+		
+	<target name="maven"> 
+	    <mvnDeployPom folderName="EASyDependencies" pomFile="pom.xml" />
+	</target>
+</project>
