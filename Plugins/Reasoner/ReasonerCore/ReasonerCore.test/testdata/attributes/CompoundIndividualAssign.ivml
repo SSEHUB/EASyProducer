@@ -1,0 +1,27 @@
+project CompoundIndividualAssign {
+
+    version v0;
+    
+    annotate Integer at to CompoundIndividualAssign; // change to annotation
+    annotate Integer am to CompoundIndividualAssign; // change to annotation
+    annotate Integer ar to CompoundIndividualAssign; // change to annotation
+    annotate Integer ak to CompoundIndividualAssign; // change to annotation
+    
+    compound cmp {
+        Integer nest = 5;
+        am = nest + 1;
+        at = am - 1;
+        ar = self.nest + 1;
+        ak = self.am - 1;
+        am == ar;
+        at == ak;
+    }
+    
+    cmp c = {};
+    c.nest == 5;
+    c.am == 6;
+    c.at = 5;
+    c.ar = 6;
+    c.ak = 5;
+
+}

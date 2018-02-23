@@ -6,12 +6,13 @@ project BlockAssignNested {
     
     compound cmp {
         assign (at = 5) to {
-            Integer nest;           
+            Integer nest = 3;
         }
     }
     
     cmp C;  
     Integer var;    
-
+    C.nest == 3;
+    C.at == 5;
 
 }
