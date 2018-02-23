@@ -135,7 +135,16 @@ public class AttributeTests extends  net.ssehub.easy.reasoning.sseReasoner.Abstr
     public void blockAssignNestedConstraint() {
         reasoningTest("BlockAssignNestedConstraint.ivml", 0);
     }
-    
+
+    /**
+     * Assign attribute with cross-references and self within a compound. Test includes a 
+     * constraint in the attribute assignment.
+     */
+    @Test    
+    public void compoundIndividualAssign() {
+        reasoningTest("CompoundIndividualAssign.ivml", 0);
+    }
+
     /**
      * Assign attribute with a default value to the project test. Test includes a 
      * failing constraint in the attribute assignment.

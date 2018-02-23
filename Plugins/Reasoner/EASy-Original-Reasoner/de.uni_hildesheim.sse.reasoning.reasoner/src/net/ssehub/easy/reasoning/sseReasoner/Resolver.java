@@ -388,7 +388,7 @@ public class Resolver {
                 assignment.getAssignment(a).accept(this);
             }
             if (!incremental) {
-                translateAnnotationAssignments(assignment, null, null);
+                translateAnnotationAssignments(assignment, null, null, null);
             }
         }
         
@@ -709,7 +709,7 @@ public class Resolver {
         // Nested attribute assignments handling
         if (!incremental) {
             for (int a = 0; a < cmpType.getAssignmentCount(); a++) {
-                translateAnnotationAssignments(cmpType.getAssignment(a), null, compound);
+                translateAnnotationAssignments(cmpType.getAssignment(a), variable, null, compound);
             }
         }
         List<Constraint> thisCompoundConstraints = new ArrayList<Constraint>(); 
@@ -824,11 +824,12 @@ public class Resolver {
      * assignments, the outer one(s) must also be applied to the inner ones.
      * 
      * @param assignment Attribute assignments on top-level.
+     * @param var variable holding the assignment, may be <b>null</b> for translating types
      * @param effectiveAssignments the list of effective current assignments, use <b>null</b> if not recursive.
      * @param compound Parent {@link CompoundAccess}.
      */
-    private void translateAnnotationAssignments(AttributeAssignment assignment, List<Assignment> effectiveAssignments, 
-        CompoundAccess compound) {
+    private void translateAnnotationAssignments(AttributeAssignment assignment, IDecisionVariable var, 
+        List<Assignment> effectiveAssignments, CompoundAccess compound) {
         List<Assignment> assng = null == effectiveAssignments ? new ArrayList<Assignment>() : effectiveAssignments;
         for (int d = 0; d < assignment.getAssignmentDataCount(); d++) { 
             assng.add(assignment.getAssignmentData(d));
@@ -837,21 +838,16 @@ public class Resolver {
             Assignment effectiveAssignment = assng.get(d);
             for (int e = 0; e < assignment.getElementCount(); e++) {
                 DecisionVariableDeclaration aElt = assignment.getElement(e);
-                IDatatype aEltType = aElt.getType();
                 translateAnnotationAssignment(effectiveAssignment, aElt, compound);
-                if (TypeQueries.isCompound(aEltType)) {                    
-                    Compound cmp = (Compound) aEltType;
-                    for (int s = 0; s < cmp.getDeclarationCount(); s++) {
-                        DecisionVariableDeclaration slot = cmp.getDeclaration(s);
-                        CompoundAccess cmpAccess;
-                        if (compound == null) {
-                            cmpAccess = new CompoundAccess(new Variable(aElt), slot.getName());        
-                        } else {
-                            cmpAccess = new CompoundAccess(compound, slot.getName());
-                        }
-                        varMap.put(slot, cmpAccess);
-                        inferTypeSafe(cmpAccess, null);
+                IDatatype aEltType = aElt.getType();
+                if (null != var) {
+                    IDecisionVariable v = var.getNestedElement(aElt.getName());
+                    if (null != v && null != v.getValue()) {
+                        aEltType = v.getValue().getType();
                     }
+                }
+                if (TypeQueries.isCompound(aEltType)) {         
+                    Compound cmp = (Compound) aEltType;
                     for (int s = 0; s < cmp.getDeclarationCount(); s++) {
                         DecisionVariableDeclaration slot = cmp.getDeclaration(s);
                         translateAnnotationAssignment(effectiveAssignment, slot, varMap.get(slot));
@@ -860,7 +856,7 @@ public class Resolver {
             }
         }        
         for (int a = 0; a < assignment.getAssignmentCount(); a++) {
-            translateAnnotationAssignments(assignment.getAssignment(a), assng, compound);
+            translateAnnotationAssignments(assignment.getAssignment(a), var, assng, compound);
         }
     }
     
@@ -886,7 +882,7 @@ public class Resolver {
                 cst = new AttributeVariable(compound, attrib);
             }
             cst = new OCLFeatureCall(cst, OclKeyWords.ASSIGNMENT, 
-                substituteVariables(assignment.getExpression(), null, null, true));
+                substituteVariables(assignment.getExpression(), compound, null, true));
             inferTypeSafe(cst, null);
             try { // assignedAttributeConstraints
                 addConstraint(otherConstraints, new Constraint(cst, project), false); 
