@@ -14,6 +14,7 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
   </properties>
 
+  <!-- basically determined by the underlying Eclipse version -->
   <dependencyManagement>
     <dependencies>
         <dependency>
@@ -36,6 +37,56 @@
           <artifactId>preferences</artifactId>
           <version>3.5.100-v20130422-1538</version>
         </dependency> <!-- brings commons 3.7.0 -->
+		<dependency>
+		    <groupId>commons-io</groupId>
+		    <artifactId>commons-io</artifactId>
+		    <version>2.0.1</version>
+		</dependency>
+		<dependency>
+		    <groupId>commons-lang</groupId>
+		    <artifactId>commons-lang</artifactId>
+		    <version>2.6</version>
+		</dependency>
+	  <dependency>
+	       <groupId>org.eclipse.emf</groupId>
+	       <artifactId>org.eclipse.emf.ecore</artifactId>
+	       <version>2.11.2</version>
+	    </dependency>
+	    <dependency>
+	       <groupId>org.eclipse.xtext</groupId>
+	       <artifactId>org.eclipse.xtext</artifactId>
+	       <version>2.5.0</version>
+	    </dependency>
+	    <dependency>
+	       <groupId>net.ssehub.easy</groupId>
+	       <artifactId>basics</artifactId>
+	       <version>1.2.0-SNAPSHOT</version>
+	    </dependency>
+	    <dependency>
+	       <groupId>log4j</groupId>
+	       <artifactId>log4j</artifactId>
+	       <version>1.2.15</version>
+	    </dependency> 
+	    <dependency>
+	        <groupId>com.github.adedayo.eclipse.sdk</groupId>
+	        <artifactId>org.eclipse.ui</artifactId>
+	        <version>3.107.0</version>
+	    </dependency>
+	    <dependency>
+	       <groupId>org.eclipse.platform</groupId>
+	       <artifactId>org.eclipse.core.resources</artifactId>
+	       <version>3.11.1</version>
+	    </dependency>
+	    <dependency>
+	       <groupId>org.eclipse.xtext</groupId>
+	       <artifactId>org.eclipse.xtext.ui.codetemplates.ui</artifactId>
+	       <version>2.9.2</version>
+	    </dependency>
+	    <dependency>
+	       <groupId>org.eclipse.ui</groupId>
+	       <artifactId>org.eclipse.ui.ide</artifactId>
+	       <version>3.11.0</version>
+	    </dependency>
     </dependencies>
   </dependencyManagement>
 
