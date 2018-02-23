@@ -5,26 +5,43 @@
   <version>1.2.0-SNAPSHOT</version>
   <packaging>jar</packaging>
   
+  <repositories>       
+    <repository>
+      <id>sse</id>
+      <name>sse</name>
+      <url>https://projects.sse.uni-hildesheim.de/qm/maven/</url>
+      <layout>default</layout>
+    </repository>
+  </repositories> 
+  
+  <dependencyManagement>
+    <dependencies>
+        <dependency>
+            <groupId>net.ssehub.easy</groupId>
+            <artifactId>dependencies</artifactId>
+            <version>1.2.0-SNAPSHOT</version>
+            <type>pom</type>
+            <scope>import</scope>
+        </dependency>            
+    </dependencies>
+  </dependencyManagement>
+  
   <dependencies>
         <dependency>
           <groupId>org.eclipse.birt.runtime</groupId>
           <artifactId>org.eclipse.osgi.services</artifactId>
-          <version>3.5.0.v20150519-2006</version>
         </dependency>        
         <dependency>
           <groupId>org.eclipse</groupId>
           <artifactId>osgi</artifactId>
-          <version>3.10.0-v20140606-1445</version>
         </dependency> 
         <dependency>
           <groupId>org.eclipse.equinox</groupId>
           <artifactId>preferences</artifactId>
-          <version>3.5.100-v20130422-1538</version>
-        </dependency> <!-- brings commons 3.7.0 -->
+        </dependency> <!-- brings -->
         <dependency>
           <groupId>org.apache.ant</groupId>
           <artifactId>ant</artifactId>
-          <version>1.8.4</version>
         </dependency>
   </dependencies>  
  </project>
