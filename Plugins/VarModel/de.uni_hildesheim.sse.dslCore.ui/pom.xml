@@ -4,27 +4,35 @@
   <artifactId>dslCore.ui</artifactId>
   <version>1.2.0-SNAPSHOT</version>
   <packaging>jar</packaging>
+
+  <dependencyManagement>
+    <dependencies>
+        <dependency>
+            <groupId>net.ssehub.easy</groupId>
+            <artifactId>dependencies</artifactId>
+            <version>1.2.0-SNAPSHOT</version>
+            <type>pom</type>
+            <scope>import</scope>
+        </dependency>            
+    </dependencies>
+  </dependencyManagement>
   
   <dependencies>
 	<dependency>
 	    <groupId>com.github.adedayo.eclipse.sdk</groupId>
 	    <artifactId>org.eclipse.ui</artifactId>
-	    <version>3.107.0</version>
 	</dependency>
     <dependency>
        <groupId>org.eclipse.platform</groupId>
        <artifactId>org.eclipse.core.resources</artifactId>
-       <version>3.11.1</version>
     </dependency>
     <dependency>
        <groupId>org.eclipse.xtext</groupId>
        <artifactId>org.eclipse.xtext.ui.codetemplates.ui</artifactId>
-       <version>2.9.2</version>
     </dependency>
     <dependency>
        <groupId>org.eclipse.ui</groupId>
        <artifactId>org.eclipse.ui.ide</artifactId>
-       <version>3.11.0</version>
     </dependency>
     <dependency>
        <groupId>net.ssehub.easy</groupId>
