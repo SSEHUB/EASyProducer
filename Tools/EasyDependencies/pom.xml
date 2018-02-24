@@ -90,7 +90,7 @@
 	    </dependency>
 		<dependency>
 		    <!--  this is not exactly the version we have 3.11.1 -->
-		    <groupId>org.eclipse.scout.sdk.deps</groupId>
+		    <groupId>org.eclipse.birt.runtime</groupId>
 		    <artifactId>org.eclipse.core.runtime</artifactId>
 		    <version>3.11.0.v20150405-1723</version>
 		</dependency>
