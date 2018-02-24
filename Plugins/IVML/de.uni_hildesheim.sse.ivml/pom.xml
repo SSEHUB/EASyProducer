@@ -64,8 +64,8 @@
        <artifactId>org.eclipse.xtext.common.types</artifactId>
      </dependency>
      <dependency>
-       <groupId>org.eclipse.scout.sdk.deps</groupId>
-       <artifactId>org.eclipse.core.runtime</artifactId>
+         <groupId>org.eclipse.birt.runtime</groupId>
+         <artifactId>org.eclipse.core.runtime</artifactId>
      </dependency>
      <dependency>
         <groupId>com.google.guava</groupId>
