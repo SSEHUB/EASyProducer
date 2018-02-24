@@ -19,8 +19,8 @@
   
   <dependencies>
 	  <dependency>
-		  <groupId>net.ssehub.easy</groupId>
-		  <artifactId>vil.expressions</artifactId>
+		  <groupId>net.ssehub.easy.vil</groupId>
+		  <artifactId>expressions</artifactId>
 		  <version>1.2.0-SNAPSHOT</version>
 	  </dependency>
   </dependencies>  
