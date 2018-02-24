@@ -37,6 +37,7 @@
 		<mkdir dir="build/zip/Plugins"/>
 		<mkdir dir="build/zip/Features"/>
 		<mkdir dir="build/generatedLibs"/>
+        <mkdir dir="logs"/>
 		
         <artifact:dependencies pathId="maven.compile.classpath">
             <pom file="pom.xml" id="pom"/>
@@ -71,6 +72,7 @@
             <basefeature path="${projects.features.dir}/de.uni_hildesheim.sse.easy.eclipseInfrastructure.Feature"/>
             <addfeature path="${projects.features.dir}"/>
         </antgenerator>
+		<copy file="${basedir}/build/generatedLibs/LoaderLog.txt" todir="${basedir}/logs/libs.log" failonerror="false"/>
         
         <!-- Fix me -->
 		<copyDependencies target="${basedir}/build/generatedLibs/unbundled"/>
@@ -113,6 +115,7 @@
             <basefeature path="${projects.features.dir}/de.uni_hildesheim.sse.easy.eclipseInfrastructure.Feature"/>
             <addfeature path="${projects.features.dir}"/>
         </antgenerator>
+        <copy file="${basedir}/build/generatedLibs/LoaderLog.txt" todir="${basedir}/logs/libs-ex.log" failonerror="false"/>
         
         <!-- Fix me -->
         <copyDependencies target="${basedir}/build/generatedLibs.ex/unbundled"/>
@@ -144,6 +147,7 @@
             <basefeature path="${projects.features.dir}/de.uni_hildesheim.sse.easy.eclipseInfrastructure.Feature"/>
             <addfeature path="${projects.features.dir}"/>
         </antgenerator>
+        <copy file="${basedir}/build/generatedLibs/LoaderLog.txt" todir="${basedir}/logs/libs-noXtext.log" failonerror="false"/>
         
         <!-- Fix me -->
         <copyDependencies target="${basedir}/build/generatedLibs.rt.noXtext/unbundled"/>
@@ -170,6 +174,7 @@
             <basefeature path="${projects.features.dir}/de.uni_hildesheim.sse.easy.instantiator.java.feature"/>
             <addfeature path="${projects.features.dir}"/>
         </antgenerator>
+        <copy file="${basedir}/build/generatedLibs/LoaderLog.txt" todir="${basedir}/logs/libs-rt.log" failonerror="false"/>
         
         <!-- Fix me -->
         <copyDependencies target="${basedir}/build/generatedLibs.rt/unbundled"/>
