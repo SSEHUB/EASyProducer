@@ -35,10 +35,11 @@
          <groupId>org.eclipse.emf</groupId>
          <artifactId>org.eclipse.emf.codegen.ecore</artifactId>
      </dependency>
-     <dependency><!-- optional -->
+     <!-- optional -->
+     <!--  <dependency>
          <groupId>org.eclipse.emf</groupId>
          <artifactId>org.eclipse.emf.mwe.utils</artifactId>
-     </dependency>
+     </dependency>-->
      <dependency>
          <groupId>org.eclipse.xtext</groupId>
          <artifactId>org.eclipse.xtext</artifactId>
