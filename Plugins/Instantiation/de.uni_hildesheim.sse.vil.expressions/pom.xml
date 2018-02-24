@@ -31,13 +31,13 @@
        <groupId>commons-logging</groupId>
        <artifactId>commons-logging</artifactId>
      </dependency>
-     <dependency><!-- optional -->
+     <!-- optional -->
+     <!--  <dependency>
         <groupId>org.eclipse.xtext</groupId>
         <artifactId>org.eclipse.xtext.generator</artifactId>
-     </dependency>
+     </dependency>-->
      <!-- optional -->
-     <!--  
-     <dependency>
+     <!--  <dependency>
          <groupId>org.eclipse.xtext</groupId>
          <artifactId>org.eclipse.xtext.xbase</artifactId>
      </dependency> -->
