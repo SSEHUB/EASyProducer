@@ -27,14 +27,16 @@
         <artifactId>varModel</artifactId>
         <version>1.2.0-SNAPSHOT</version>
      </dependency>
-     <dependency><!-- optional -->
+     <!-- optional -->
+     <!-- <dependency>
         <groupId>org.eclipse.xtext</groupId>
         <artifactId>org.eclipse.xtext.generator</artifactId>
-     </dependency>
-     <dependency><!-- optional -->
+     </dependency>-->
+     <!-- optional -->
+     <!--  <dependency>
          <groupId>org.eclipse.emf</groupId>
          <artifactId>org.eclipse.emf.codegen.ecore</artifactId>
-     </dependency>
+     </dependency>-->
      <!-- optional -->
      <!--  <dependency>
          <groupId>org.eclipse.emf</groupId>
