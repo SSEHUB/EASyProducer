@@ -90,9 +90,9 @@
 	    </dependency>
 		<dependency>
 		    <!--  this is not exactly the version we have 3.11.1 -->
-		    <groupId>org.eclipse.birt.runtime</groupId>
+		    <groupId>org.eclipse.core</groupId>
 		    <artifactId>org.eclipse.core.runtime</artifactId>
-		    <version>3.11.0.v20150405-1723</version>
+		    <version>3.7.0</version>
 		</dependency>
 		<dependency>
 		    <groupId>org.eclipse.emf</groupId>
