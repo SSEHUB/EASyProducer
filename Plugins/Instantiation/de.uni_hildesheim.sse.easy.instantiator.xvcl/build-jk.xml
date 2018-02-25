@@ -65,9 +65,7 @@
 		<!-- XVCL is not in Maven, just bundle it here for now -->
 		<delete file="${build.jar.dir}/${ant.project.name}.jar"/>
         <jar destfile="${build.jar.dir}/${ant.project.name}.jar" basedir="${build.classes.dir}" manifest="META-INF/MANIFEST.MF">
-            <zipgroupfileset>
-                <include name="lib/**/*.jar"/>
-            </zipgroupfileset>
+            <zipgroupfileset dir="lib" includes="**/*.jar"/>
     	</jar>
         <jar destfile="${build.jar.dir}/${ant.project.name}-sources.jar" basedir="${src.dir}"/>
         <easyJavadoc sourcepath="${src.dir}" source="${javacSource}" destdir="${doc.dir}">
