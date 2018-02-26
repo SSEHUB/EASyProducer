@@ -151,7 +151,7 @@
         
         <!-- Fix me -->
         <copyDependencies target="${basedir}/build/generatedLibs.rt.noXtext/unbundled"/>
-        <dist target="build/generatedLibs.rt.noXtext" />        
+        <dist target="build/generatedLibs.rt.noXtext" />
         <!-- cannot be bundled due to various conflicts, rans anyway in own process -->
         <withMaven target="build/generatedLibs.rt.noXtext"/>
     </target>
@@ -217,6 +217,7 @@
 	
 	<target name="deploy">
         <!-- deploy without experimental stuff -->
+		<local name="srcFolder"/>
         <property name="srcFolder" value="${basedir}/build/generatedLibs/unbundled"/>
         <property name="tgtFolder" value="${basedir}/build/mvn"/>
 		<mkdir dir="${tgtFolder}"/>
@@ -244,18 +245,18 @@
 		<delete file="${tgtFolder}/pom.xml"/>
 
         <!-- deploy with experimental stuff -->
-        <property name="srcFolder.ex" value="${basedir}/build/generatedLibs.ex/unbundled"/>
+        <property name="srcFolder" value="${basedir}/build/generatedLibs.ex/unbundled"/>
 
-        <!-- deploy the specific eclipse libraries for the runtime version of EASy  (experimental) -->
+        <!-- deploy the specific eclipse libraries for the runtime version of EASy (experimental) -->
         <copy file="poms/pomEclipseEx.xml" tofile="${tgtFolder}/pom.xml"/>
-        <copy file="${srcFolder.ex}/eclipse-part.jar" todir="${tgtFolder}"/>
+        <copy file="${srcFolder}/eclipse-part.jar" todir="${tgtFolder}"/>
         <mvnDeploy folderName="${ant.project.name}-eclipse-ex" jarFolder="${tgtFolder}" jarFile="eclipse-part.jar"
             pomFile="${tgtFolder}/pom.xml"/>
         <delete file="${tgtFolder}/pom.xml"/>
 
         <!-- deploy the runtime version of EASy (experimental) -->
         <copy file="poms/pomEasyEx.xml" tofile="${tgtFolder}/pom.xml"/>
-        <copy file="${srcFolder.ex}/easy-headless.jar" tofile="${tgtFolder}/easy-headless.jar"/>
+        <copy file="${srcFolder}/easy-headless.jar" tofile="${tgtFolder}/easy-headless.jar"/>
         <delFromZip zip="${tgtFolder}/easy-headless.jar" path="org/apache/log4j"/>
         <copy file="${home.easy.easy-producer.docu.dir}/javadoc.zip" tofile="${tgtFolder}/easy-headless-javadoc.jar"/>
         <copy file="${home.easy.easy-producer.docu.dir}/src.zip" tofile="${tgtFolder}/easy-headless-sources.jar"/>
@@ -266,8 +267,35 @@
         <mvnDeploy folderName="${ant.project.name}-easy-ex" jarFolder="${tgtFolder}" jarFile="easy-headless.jar"
             pomFile="${tgtFolder}/pom.xml"/>
 		
+        <property name="srcFolder.noXtex" value="${basedir}/build/generatedLibs.ex/unbundled"/>
 		<delete file="${tgtFolder}/pom.xml"/>
-        <delete dir="${tgtFolder}"/>
+
+        <!-- deploy with no xText -->
+        <property name="srcFolder" value="${basedir}/build/generatedLibs.rt.noXtext/unbundled"/>
+
+        <!-- deploy the specific eclipse libraries for the runtime version of EASy (noXText) -->
+		<copy file="poms/pomEclipseNoXtext.xml" tofile="${tgtFolder}/pom.xml"/>
+        <copy file="${srcFolder}/eclipse-part.jar" todir="${tgtFolder}"/>
+        <mvnDeploy folderName="${ant.project.name}-eclipse-ex" jarFolder="${tgtFolder}" jarFile="eclipse-part.jar"
+            pomFile="${tgtFolder}/pom.xml"/>
+        <delete file="${tgtFolder}/pom.xml"/>
+
+        <!-- deploy the runtime version of EASy (noXText) -->
+        <copy file="poms/pomEasyNoXtext.xml" tofile="${tgtFolder}/pom.xml"/>
+        <copy file="${srcFolder}/easy-headless.jar" tofile="${tgtFolder}/easy-headless.jar"/>
+        <delFromZip zip="${tgtFolder}/easy-headless.jar" path="org/apache/log4j"/>
+        <copy file="${home.easy.easy-producer.docu.dir}/javadoc.zip" tofile="${tgtFolder}/easy-headless-javadoc.jar"/>
+        <copy file="${home.easy.easy-producer.docu.dir}/src.zip" tofile="${tgtFolder}/easy-headless-sources.jar"/>
+        <mvnDeploy folderName="${ant.project.name}-easy-ex" jarFolder="${tgtFolder}" jarFile="easy-headless.jar"
+            pomFile="${tgtFolder}/pom.xml"/>
+
+        <copy file="poms/pomEasyNoXtext-mvn.xml" tofile="${tgtFolder}/pom.xml"/>
+        <mvnDeploy folderName="${ant.project.name}-easy-ex" jarFolder="${tgtFolder}" jarFile="easy-headless.jar"
+            pomFile="${tgtFolder}/pom.xml"/>
+        
+        <delete file="${tgtFolder}/pom.xml"/>
+
+		<delete dir="${tgtFolder}"/>
 	</target>
 	
 	<!--target name="all" depends="init, gather.easy.plugins, createLibs, compile"/-->
