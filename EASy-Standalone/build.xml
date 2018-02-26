@@ -154,7 +154,6 @@
         <dist target="build/generatedLibs.rt.noXtext" />        
         <!-- cannot be bundled due to various conflicts, rans anyway in own process -->
         <withMaven target="build/generatedLibs.rt.noXtext"/>
-        <!-- TODO deploy to Maven -->
     </target>
 	
     <!-- a runtime library version - however containing full EASy :o -->
@@ -181,7 +180,6 @@
 		<dist target="build/generatedLibs.rt"/>
 		<!-- cannot be bundled due to various conflicts, rans anyway in own process -->
         <withMaven target="build/generatedLibs.rt"/>
-        <!-- TODO deploy to Maven -->
     </target>
     	
 	<target name="compile">	
@@ -223,14 +221,14 @@
         <property name="tgtFolder" value="${basedir}/build/mvn"/>
 		<mkdir dir="${tgtFolder}"/>
 
-        <!-- deploy the specific eclipse libraries for the runtime version of EASy  -->
+        <!-- deploy the specific eclipse libraries for the runtime version of EASy (not experimental) -->
         <copy file="poms/pomEclipse.xml" tofile="${tgtFolder}/pom.xml"/>
 		<copy file="${srcFolder}/eclipse-part.jar" todir="${tgtFolder}"/>
         <mvnDeploy folderName="${ant.project.name}-eclipse" jarFolder="${tgtFolder}" jarFile="eclipse-part.jar" 
         	pomFile="${tgtFolder}/pom.xml"/>
         <delete file="${tgtFolder}/pom.xml"/>
 
-        <!-- deploy the QM-independent runtime version of EASy -->
+        <!-- deploy the basic runtime version of EASy (not experimental) -->
         <copy file="poms/pomEasy.xml" tofile="${tgtFolder}/pom.xml"/>
         <copy file="${srcFolder}/easy-headless.jar" tofile="${tgtFolder}/easy-headless.jar"/>
         <delFromZip zip="${tgtFolder}/easy-headless.jar" path="org/apache/log4j"/>
@@ -238,19 +236,24 @@
         <copy file="${home.easy.easy-producer.docu.dir}/src.zip" tofile="${tgtFolder}/easy-headless-sources.jar"/>
         <mvnDeploy folderName="${ant.project.name}-easy" jarFolder="${tgtFolder}" jarFile="easy-headless.jar"
             pomFile="${tgtFolder}/pom.xml"/>
-        <delete file="${tgtFolder}/pom.xml"/>
+
+        <copy file="poms/pomEasy-mvn.xml" tofile="${tgtFolder}/pom.xml"/>
+        <mvnDeploy folderName="${ant.project.name}-easy" jarFolder="${tgtFolder}" jarFile="easy-headless.jar"
+            pomFile="${tgtFolder}/pom.xml"/>
+		
+		<delete file="${tgtFolder}/pom.xml"/>
 
         <!-- deploy with experimental stuff -->
         <property name="srcFolder.ex" value="${basedir}/build/generatedLibs.ex/unbundled"/>
 
-        <!-- deploy the specific eclipse libraries for the runtime version of EASy  -->
+        <!-- deploy the specific eclipse libraries for the runtime version of EASy  (experimental) -->
         <copy file="poms/pomEclipseEx.xml" tofile="${tgtFolder}/pom.xml"/>
         <copy file="${srcFolder.ex}/eclipse-part.jar" todir="${tgtFolder}"/>
         <mvnDeploy folderName="${ant.project.name}-eclipse-ex" jarFolder="${tgtFolder}" jarFile="eclipse-part.jar"
             pomFile="${tgtFolder}/pom.xml"/>
         <delete file="${tgtFolder}/pom.xml"/>
 
-        <!-- deploy the QM-independent runtime version of EASy -->
+        <!-- deploy the runtime version of EASy (experimental) -->
         <copy file="poms/pomEasyEx.xml" tofile="${tgtFolder}/pom.xml"/>
         <copy file="${srcFolder.ex}/easy-headless.jar" tofile="${tgtFolder}/easy-headless.jar"/>
         <delFromZip zip="${tgtFolder}/easy-headless.jar" path="org/apache/log4j"/>
@@ -258,7 +261,12 @@
         <copy file="${home.easy.easy-producer.docu.dir}/src.zip" tofile="${tgtFolder}/easy-headless-sources.jar"/>
         <mvnDeploy folderName="${ant.project.name}-easy-ex" jarFolder="${tgtFolder}" jarFile="easy-headless.jar"
             pomFile="${tgtFolder}/pom.xml"/>
-        <delete file="${tgtFolder}/pom.xml"/>
+
+        <copy file="poms/pomEasyEx-mvn.xml" tofile="${tgtFolder}/pom.xml"/>
+        <mvnDeploy folderName="${ant.project.name}-easy-ex" jarFolder="${tgtFolder}" jarFile="easy-headless.jar"
+            pomFile="${tgtFolder}/pom.xml"/>
+		
+		<delete file="${tgtFolder}/pom.xml"/>
         <delete dir="${tgtFolder}"/>
 	</target>
 	
