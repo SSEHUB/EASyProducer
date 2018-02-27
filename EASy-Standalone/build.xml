@@ -239,7 +239,7 @@
             pomFile="${tgtFolder}/pom.xml"/>
 
         <copy file="poms/pomEasy-mvn.xml" tofile="${tgtFolder}/pom.xml"/>
-        <mvnDeploy folderName="${ant.project.name}-easy" jarFolder="${tgtFolder}" jarFile="easy-headless.jar"
+        <mvnDeploy folderName="${ant.project.name}-easy-mvn" jarFolder="${tgtFolder}" jarFile="easy-headless.jar"
             pomFile="${tgtFolder}/pom.xml"/>
 		
 		<delete file="${tgtFolder}/pom.xml"/>
@@ -264,10 +264,9 @@
             pomFile="${tgtFolder}/pom.xml"/>
 
         <copy file="poms/pomEasyEx-mvn.xml" tofile="${tgtFolder}/pom.xml"/>
-        <mvnDeploy folderName="${ant.project.name}-easy-ex" jarFolder="${tgtFolder}" jarFile="easy-headless.jar"
+        <mvnDeploy folderName="${ant.project.name}-easy-ex-mvn" jarFolder="${tgtFolder}" jarFile="easy-headless.jar"
             pomFile="${tgtFolder}/pom.xml"/>
 		
-        <property name="srcFolder.noXtex" value="${basedir}/build/generatedLibs.ex/unbundled"/>
 		<delete file="${tgtFolder}/pom.xml"/>
 
         <!-- deploy with no xText -->
@@ -286,11 +285,11 @@
         <delFromZip zip="${tgtFolder}/easy-headless.jar" path="org/apache/log4j"/>
         <copy file="${home.easy.easy-producer.docu.dir}/javadoc.zip" tofile="${tgtFolder}/easy-headless-javadoc.jar"/>
         <copy file="${home.easy.easy-producer.docu.dir}/src.zip" tofile="${tgtFolder}/easy-headless-sources.jar"/>
-        <mvnDeploy folderName="${ant.project.name}-easy-ex" jarFolder="${tgtFolder}" jarFile="easy-headless.jar"
+        <mvnDeploy folderName="${ant.project.name}-easy-noxtext" jarFolder="${tgtFolder}" jarFile="easy-headless.jar"
             pomFile="${tgtFolder}/pom.xml"/>
 
         <copy file="poms/pomEasyNoXtext-mvn.xml" tofile="${tgtFolder}/pom.xml"/>
-        <mvnDeploy folderName="${ant.project.name}-easy-ex" jarFolder="${tgtFolder}" jarFile="easy-headless.jar"
+        <mvnDeploy folderName="${ant.project.name}-easy-noxtext-mvn" jarFolder="${tgtFolder}" jarFile="easy-headless.jar"
             pomFile="${tgtFolder}/pom.xml"/>
         
         <delete file="${tgtFolder}/pom.xml"/>
