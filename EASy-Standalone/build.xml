@@ -238,7 +238,7 @@
         <mvnDeploy folderName="${ant.project.name}-easy" jarFolder="${tgtFolder}" jarFile="easy-headless.jar"
             pomFile="${tgtFolder}/pom.xml"/>
 
-        <copy file="poms/pomEasy-mvn.xml" tofile="${tgtFolder}/pom.xml" override="true"/>
+        <copy file="poms/pomEasy-mvn.xml" tofile="${tgtFolder}/pom.xml" overwrite="true"/>
         <mvnDeploy folderName="${ant.project.name}-easy-mvn" jarFolder="${tgtFolder}" jarFile="easy-headless.jar"
             pomFile="${tgtFolder}/pom.xml"/>
 		
@@ -263,7 +263,7 @@
         <mvnDeploy folderName="${ant.project.name}-easy-ex" jarFolder="${tgtFolder}" jarFile="easy-headless.jar"
             pomFile="${tgtFolder}/pom.xml"/>
 
-        <copy file="poms/pomEasyEx-mvn.xml" tofile="${tgtFolder}/pom.xml" override="true"/>
+        <copy file="poms/pomEasyEx-mvn.xml" tofile="${tgtFolder}/pom.xml" overwrite="true"/>
         <mvnDeploy folderName="${ant.project.name}-easy-ex-mvn" jarFolder="${tgtFolder}" jarFile="easy-headless.jar"
             pomFile="${tgtFolder}/pom.xml"/>
 		
@@ -288,7 +288,7 @@
         <mvnDeploy folderName="${ant.project.name}-easy-noxtext" jarFolder="${tgtFolder}" jarFile="easy-headless.jar"
             pomFile="${tgtFolder}/pom.xml"/>
 
-        <copy file="poms/pomEasyNoXtext-mvn.xml" tofile="${tgtFolder}/pom.xml" override="true"/>
+        <copy file="poms/pomEasyNoXtext-mvn.xml" tofile="${tgtFolder}/pom.xml" overwrite="true"/>
         <mvnDeploy folderName="${ant.project.name}-easy-noxtext-mvn" jarFolder="${tgtFolder}" jarFile="easy-headless.jar"
             pomFile="${tgtFolder}/pom.xml"/>
         
