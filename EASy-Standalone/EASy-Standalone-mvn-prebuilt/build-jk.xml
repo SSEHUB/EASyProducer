@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="EASy-Standalone-mvn" default="all" basedir="." xmlns:artifact="antlib:org.apache.maven.artifact.ant">
+    <!-- import von globalen Properties Einstellungen -->
+    <property file="${user.home}/global-build.properties"/>
+    <include file="${user.home}/macros.xml"/>
+
+    <!-- Check - no typedef shall be required as installed in ANT/lib -->
+    <path id="maven-ant-tasks.classpath" path="${ant-maven.lib}" />
+    <typedef resource="org/apache/maven/artifact/ant/antlib.xml"
+       uri="antlib:org.apache.maven.artifact.ant"
+       classpathref="maven-ant-tasks.classpath" />
+
+    <!-- force snapshot update - does not work in macros.xml  -->
+    <artifact:remoteRepository id="easy.repository" url="${maven.repository}">
+        <snapshots updatePolicy="always" />
+    </artifact:remoteRepository>
+    
+    <!-- Einstellungen fuer dieses Projekt -->
+    <property name="src.dir" value="src"/>
+    <property name="javacSource" value="1.6"/>
+    <property name="javacTarget" value="1.6"/>
+    
+    <path id ="includes">
+        <!-- Lib - all through ant -->
+    </path>
+    
+    <!-- Targets  -->
+    <target name="init">
+        <!-- Delete generated folders -->
+        <delete dir="${basedir}/build"/>
+        
+        <!-- Create folders -->
+        <mkdir dir="${basedir}/build"/>
+        <mkdir dir="${basedir}/build/classes"/>
+        <mkdir dir="${basedir}/build/jar"/>
+        <mkdir dir="${build.base.dir}/generatedLibs"/>
+
+        <artifact:dependencies pathId="maven.compile.classpath">
+            <pom file="pom.xml" id="pom"/>
+            <remoteRepository refid="easy.repository" />
+        </artifact:dependencies>        
+    </target>
+    
+    <!-- Compile all files without test classes -->
+    <target name="compile" depends="init">
+        <javac srcdir="${src.dir}" compiler="modern" debug="on" destdir="${basedir}/build/classes" includeAntRuntime="no" failonerror="true" source="${javacSource}" target="${javacTarget}" encoding="${javac.encoding}">
+            <classpath refid="maven.compile.classpath" />
+            <classpath refid="includes" />  
+        </javac>
+    </target>
+	
+   <target name="junit" depends="compile">
+        <junit printsummary="yes" fork="yes">
+            <classpath >                            
+                <pathelement location="${build.classes.dir}"/>              
+                <classpath refid="maven.compile.classpath" />
+                <path refid="includes" />                
+            </classpath> 
+            
+            <sysproperty key="EASyCommandlineTests.models" value="${home.base.dir}/${projects.standalone.dir}/models"/>
+            <formatter type="xml"/>     
+            <test name="standalone.AllTests" toDir="${basedir}/junit">
+                <formatter type="xml"/>
+            </test>
+        </junit>
+    </target>
+    
+    <!-- Creates ANT Jar and uses the new created jar to create the two EASy Jars -->
+    <target name="all" depends="compile">
+        <delete dir="${build.classes.dir}"/>
+    </target>
+    
+</project>
