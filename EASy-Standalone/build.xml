@@ -314,13 +314,13 @@
         <echo>#########################################################################</echo>
         <ant dir="${testDir}" antfile="${build.script.name}" />
 
-        <copy file="${testPath}/poms/pom-mvnEx.xml" tofile="${testPath}/pom.xml" overwrite="true"/>
+        <copy file="${testPath}/poms/pomEx.xml" tofile="${testPath}/pom.xml" overwrite="true"/>
         <echo>##################################################################################</echo>
         <echo>###  EASy-Standalone-mvn-prebuilt (net.ssehub.easy.runtime:EASy-experimental)  ###</echo>
         <echo>##################################################################################</echo>
         <ant dir="${testDir}" antfile="${build.script.name}" />
 
-        <copy file="${testPath}/poms/pom-mvnEx-mvn.xml" tofile="${testPath}/pom.xml" overwrite="true"/>
+        <copy file="${testPath}/poms/pomEx-mvn.xml" tofile="${testPath}/pom.xml" overwrite="true"/>
         <echo>######################################################################################</echo>
         <echo>###  EASy-Standalone-mvn-prebuilt (net.ssehub.easy.runtime:EASy-experimental-mvn)  ###</echo>
         <echo>######################################################################################</echo>
