@@ -296,8 +296,37 @@
 
 		<delete dir="${tgtFolder}"/>
 	</target>
-	
+
+	<target name="testMvn">
+        <copy file="pom.xml" tofile="pom.copy.xml" overwrite="true"/>
+		
+        <echo>#####################################################################</echo>
+        <echo>###  EASy-Standalone-mvn-prebuilt (net.ssehub.easy.runtime:EASy)  ###</echo>
+        <echo>#####################################################################</echo>
+        <ant dir="EASy-Standalone-mvn-prebuilt" antfile="${build.script.name}" />
+		
+        <copy file="poms/pom-mvn.xml" tofile="pom.xml" overwrite="true"/>
+        <echo>#########################################################################</echo>
+        <echo>###  EASy-Standalone-mvn-prebuilt (net.ssehub.easy.runtime:EASy-mvn)  ###</echo>
+        <echo>#########################################################################</echo>
+        <ant dir="EASy-Standalone-mvn-prebuilt" antfile="${build.script.name}" />
+
+        <copy file="poms/pom-mvnEx.xml" tofile="pom.xml" overwrite="true"/>
+        <echo>##################################################################################</echo>
+        <echo>###  EASy-Standalone-mvn-prebuilt (net.ssehub.easy.runtime:EASy-experimental)  ###</echo>
+        <echo>##################################################################################</echo>
+        <ant dir="EASy-Standalone-mvn-prebuilt" antfile="${build.script.name}" />
+
+        <copy file="poms/pom-mvnEx-mvn.xml" tofile="pom.xml" overwrite="true"/>
+        <echo>######################################################################################</echo>
+        <echo>###  EASy-Standalone-mvn-prebuilt (net.ssehub.easy.runtime:EASy-experimental-mvn)  ###</echo>
+        <echo>######################################################################################</echo>
+        <ant dir="EASy-Standalone-mvn-prebuilt" antfile="${build.script.name}" />
+
+	    <copy file="pom.copy.xml" tofile="pom.xml" overwrite="true"/>
+    </target>
+
 	<!--target name="all" depends="init, gather.easy.plugins, createLibs, compile"/-->
-	<target name="all" depends="init, createLibs, compile, zip, createLibs.ex, createLibs.runtime, createLibs.runtimeNoXtext, deploy"/>
-	<target name="all.runtime" depends="init, createLibs, compile, zip, createLibs.ex, createLibs.runtime, createLibs.runtimeNoXtext, deploy"/>
+	<target name="all" depends="init, createLibs, compile, zip, createLibs.ex, createLibs.runtime, createLibs.runtimeNoXtext, deploy, testMvn"/>
+	<target name="all.runtime" depends="init, createLibs, compile, zip, createLibs.ex, createLibs.runtime, createLibs.runtimeNoXtext, deploy, testMvn"/>
 </project>
