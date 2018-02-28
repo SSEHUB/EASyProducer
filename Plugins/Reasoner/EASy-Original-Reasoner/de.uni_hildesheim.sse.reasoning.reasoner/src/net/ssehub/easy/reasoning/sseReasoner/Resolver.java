@@ -534,7 +534,7 @@ public class Resolver {
                 }
             }
         }
-        translateContainerCompoundConstraints(decl, var, null, otherConstraints); 
+        translateCompoundContainer(decl, var, null, otherConstraints); 
         IDatatype containedType = ((Container) type).getContainedType();
         if (containedType instanceof DerivedDatatype) {
             translateDerivedDatatypeConstraints(decl, (DerivedDatatype) containedType,  
@@ -596,12 +596,12 @@ public class Resolver {
      * @param topcmpAccess {@link CompoundAccess} if container is a nested element.
      * @param results the resulting constraints
      */
-    private void translateContainerCompoundConstraints(AbstractVariable decl, IDecisionVariable variable, 
+    private void translateCompoundContainer(AbstractVariable decl, IDecisionVariable variable, 
         CompoundAccess topcmpAccess, List<Constraint> results) {
         IDatatype containedType = ((Container) decl.getType()).getContainedType();
         for (IDatatype tmp : identifyContainedTypes(variable, containedType)) {
             if (TypeQueries.isCompound(tmp)) {
-                translateContainerCompoundConstraints((Compound) tmp, containedType, decl, topcmpAccess, results);
+                translateCompoundContainer((Compound) tmp, containedType, decl, topcmpAccess, results);
             }
         }
     }
@@ -614,7 +614,7 @@ public class Resolver {
      * @param topcmpAccess {@link CompoundAccess} if container is a nested element.
      * @param result List of transformed constraints, to be modified as a side effect.
      */
-    private void translateContainerCompoundConstraints(Compound cmpType, IDatatype declaredContainedType, 
+    private void translateCompoundContainer(Compound cmpType, IDatatype declaredContainedType, 
         AbstractVariable decl, CompoundAccess topcmpAccess, List<Constraint> result) {
         DecisionVariableDeclaration localDecl = new DecisionVariableDeclaration("cmp", cmpType, null);        
         // fill varMap
@@ -700,12 +700,11 @@ public class Resolver {
                 && nestedVar.getValue() instanceof ContainerValue) {
                 createContainerConstraintValueConstraints((ContainerValue) nestedVar.getValue(), decl, nestedDecl, 
                     nestedVar);
-            }
-            if (TypeQueries.isContainer(nestedType)) {
-                translateContainerCompoundConstraints(nestedDecl, variable, varMap.get(nestedDecl), 
-                    otherConstraints);
+            } else if (TypeQueries.isContainer(nestedType)) {
+                translateCompoundContainer(nestedDecl, variable, varMap.get(nestedDecl), otherConstraints);
             }
         }
+        processCompoundEvals(cmpType, compound, null == compound ? decl : null);
         // Nested attribute assignments handling
         if (!incremental) {
             for (int a = 0; a < cmpType.getAssignmentCount(); a++) {
@@ -717,7 +716,7 @@ public class Resolver {
         for (int i = 0; i < thisCompoundConstraints.size(); i++) {
             ConstraintSyntaxTree oneConstraint = thisCompoundConstraints.get(i).getConsSyntax();
             // changed null to decl
-            oneConstraint = substituteVariables(oneConstraint, null, decl, true);
+            oneConstraint = substituteVariables(oneConstraint, compound, null == compound ? decl : null, true);
             try { // compoundConstraints
                 Constraint constraint = new Constraint(oneConstraint, decl);
                 addConstraint(otherConstraints, constraint, true);            
@@ -725,38 +724,45 @@ public class Resolver {
                 LOGGER.exception(e);
             }               
         }
-        processCompoundEvals(cmpType);
     }
 
     /**
      * Method for extracting constraints from compounds eval blocks (also refined compounds).
      * @param cmpType Compound to be analyzed 
+     * @param selfEx an expression representing <i>self</i> (ignored if <b>null</b>, <code>self</code> and 
+     *     <code>selfEx</code> shall never both be specified/not <b>null</b>).
+     * @param self an variable declaration representing <i>self</i> (ignored if <b>null</b>).
      */
-    private void processCompoundEvals(Compound cmpType) {
+    private void processCompoundEvals(Compound cmpType, ConstraintSyntaxTree selfEx, AbstractVariable self) {
         for (int r = 0; r < cmpType.getRefinesCount(); r++) {
-            processCompoundEvals(cmpType.getRefines(r));
+            processCompoundEvals(cmpType.getRefines(r), selfEx, self);
         }
         for (int i = 0; i < cmpType.getModelElementCount(); i++) {            
             if (cmpType.getModelElement(i) instanceof PartialEvaluationBlock) {
                 PartialEvaluationBlock evalBlock = (PartialEvaluationBlock) cmpType.getModelElement(i);
-                processEvalConstraints(evalBlock);
+                processEvalConstraints(evalBlock, selfEx, self);
             }
         }
     }
     
     /**
      * Method for handling eval blocks - searching for nested eval blocks and extracting constraints.
+     * 
      * @param evalBlock Eval block to be processed.
+     * @param selfEx an expression representing <i>self</i> (ignored if <b>null</b>, <code>self</code> and 
+     *     <code>selfEx</code> shall never both be specified/not <b>null</b>).
+     * @param self an variable declaration representing <i>self</i> (ignored if <b>null</b>).
      */
-    private void processEvalConstraints(PartialEvaluationBlock evalBlock) {
+    private void processEvalConstraints(PartialEvaluationBlock evalBlock, ConstraintSyntaxTree selfEx, 
+        AbstractVariable self) {
         for (int i = 0; i < evalBlock.getNestedCount(); i++) {
-            processEvalConstraints(evalBlock.getNested(i));
+            processEvalConstraints(evalBlock.getNested(i), selfEx, self);
         }
         for (int i = 0; i < evalBlock.getEvaluableCount(); i++) {
             if (evalBlock.getEvaluable(i) instanceof Constraint) {
                 Constraint evalConstraint = (Constraint) evalBlock.getEvaluable(i);
                 ConstraintSyntaxTree evalCst = evalConstraint.getConsSyntax();
-                ConstraintSyntaxTree cst = substituteVariables(evalCst, null, null, true);
+                ConstraintSyntaxTree cst = substituteVariables(evalCst, selfEx, self, true);
                 try {
                     addConstraint(otherConstraints, new Constraint(cst, project), true);
                 } catch (CSTSemanticException e) {
