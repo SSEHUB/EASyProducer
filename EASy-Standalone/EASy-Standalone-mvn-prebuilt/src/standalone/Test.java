@@ -69,7 +69,7 @@ public class Test {
         System.out.println("Locations added");
         List<ModelInfo<Project>> models = VarModel.INSTANCE.availableModels().getModelInfo("simple");
         System.out.println("Models: " + models);
-        if (!models.isEmpty()) {
+        if (null != models && !models.isEmpty()) {
             ModelInfo<Project> info = models.get(0);
             try {
                 Project prj = VarModel.INSTANCE.load(info);
