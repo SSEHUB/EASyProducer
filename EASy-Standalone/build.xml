@@ -300,7 +300,7 @@
 	<target name="testMvn">
 		<!-- for mvn and changing POM, we must use ant calls / new environments -->
 		<property name="testDir" value="EASy-Standalone-mvn-prebuilt"/>
-		<property name="testPath" value="${base}/EASy-Standalone-mvn-prebuilt"/>
+		<property name="testPath" value="${basedir}/EASy-Standalone-mvn-prebuilt"/>
         <copy file="${testPath}/pom.xml" tofile="${testPath}/pom.copy.xml" overwrite="true"/>
 		
         <echo>#####################################################################</echo>
