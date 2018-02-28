@@ -58,7 +58,7 @@
                 <path refid="includes" />                
             </classpath> 
             
-            <sysproperty key="EASyCommandlineTests.models" value="${home.base.dir}/${projects.standalone.dir}/models"/>
+            <sysproperty key="EASyCommandlineTests.models" value="${home.base.dir}/${projects.standalone.dir}/model"/>
             <formatter type="xml"/>     
             <test name="standalone.AllTests" toDir="${basedir}/junit">
                 <formatter type="xml"/>
