@@ -231,6 +231,15 @@ public class TopLevelModelAccessor {
     public static Iterable<IModelAccessor<?>> registered() {
         return ACCESSORS.values();
     }
+    
+    /**
+     * Returns the number of registered accessors.
+     * 
+     * @return the number of registered accessors
+     */
+    public static int getRegisteredCount() {
+        return ACCESSORS.size();
+    }
 
     /**
      * Returns the registered accessor for <code>extension</code>.
