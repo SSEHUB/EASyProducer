@@ -254,5 +254,113 @@ public class TopLevelModelAccessor {
         IModelAccessor<?> accessor = getAccessor(extension);
         return null == accessor ? null : accessor.getModelInfo(projectName, project);
     }
+    
+    /**
+     * Called to register the model loader (optional). Bulk operation on all registered accessors.s
+     * 
+     * @param observer the progress observer
+     * @param failOnFirst if <code>true</code>, bulk stops on first exception thrown and that exception is also thrown 
+     *   by this method, if <code>false</code> try all bulk operations and throw only the first exception occurred
+     * @throws ModelManagementException in case of failures
+     */
+    public static void registerLoader(ProgressObserver observer, boolean failOnFirst) throws ModelManagementException {
+        ModelManagementException ex = null;
+        for (IModelAccessor<?> m : registered()) {
+            try {
+                m.registerLoader(observer);
+            } catch (ModelManagementException e) {
+                if (failOnFirst) {
+                    throw e;
+                } else if (null == ex) {
+                    ex = e;
+                }
+            }
+        }
+        if (null != ex) {
+            throw ex;
+        }
+    }
+
+    /**
+     * Called to unregister the model loader (optional). Bulk operation on all registered accessors.
+     * 
+     * @param observer the progress observer
+     * @param failOnFirst if <code>true</code>, bulk stops on first exception thrown and that exception is also thrown 
+     *   by this method, if <code>false</code> try all bulk operations and throw only the first exception occurred
+     * @throws ModelManagementException in case of failures
+     */
+    public void unregisterLoader(ProgressObserver observer, boolean failOnFirst) throws ModelManagementException {
+        ModelManagementException ex = null;
+        for (IModelAccessor<?> m : registered()) {
+            try {
+                m.unregisterLoader(observer);
+            } catch (ModelManagementException e) {
+                if (failOnFirst) {
+                    throw e;
+                } else if (null == ex) {
+                    ex = e;
+                }
+            }
+        }
+        if (null != ex) {
+            throw ex;
+        }
+    }
+    
+    /**
+     * Called to add a model location (optional). Bulk operation on all registered accessors.
+     * 
+     * @param location the location
+     * @param observer the progress observer
+     * @param failOnFirst if <code>true</code>, bulk stops on first exception thrown and that exception is also thrown 
+     *   by this method, if <code>false</code> try all bulk operations and throw only the first exception occurred
+     * @throws ModelManagementException in case of failures
+     */
+    public void addLocation(File location, ProgressObserver observer, boolean failOnFirst) 
+        throws ModelManagementException {
+        ModelManagementException ex = null;
+        for (IModelAccessor<?> m : registered()) {
+            try {
+                m.addLocation(location, observer);
+            } catch (ModelManagementException e) {
+                if (failOnFirst) {
+                    throw e;
+                } else if (null == ex) {
+                    ex = e;
+                }
+            }
+        }
+        if (null != ex) {
+            throw ex;
+        }
+    }
+
+    /**
+     * Called to remove a model location (optional). Bulk operation on all registered accessors.
+     * 
+     * @param location the location
+     * @param observer the progress observer
+     * @param failOnFirst if <code>true</code>, bulk stops on first exception thrown and that exception is also thrown 
+     *   by this method, if <code>false</code> try all bulk operations and throw only the first exception occurred
+     * @throws ModelManagementException in case of failures
+     */
+    public void removeLocation(File location, ProgressObserver observer, boolean failOnFirst) 
+        throws ModelManagementException {
+        ModelManagementException ex = null;
+        for (IModelAccessor<?> m : registered()) {
+            try {
+                m.removeLocation(location, observer);
+            } catch (ModelManagementException e) {
+                if (failOnFirst) {
+                    throw e;
+                } else if (null == ex) {
+                    ex = e;
+                }
+            }
+        }
+        if (null != ex) {
+            throw ex;
+        }
+    }
 
 }
