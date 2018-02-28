@@ -332,7 +332,7 @@
 		<copy file="${testDir}/junit/TEST-standalone.AllTests.xml" tofile="${junitPath}/TEST-standalone.AllTests-easy-ex-mvn.xml"/>
 
 	    <copy file="${testPath}/pom.copy.xml" tofile="${testPath}/pom.xml" overwrite="true"/>
-		<junitreport tofile="${basedir}/junitReport.xml">
+		<junitreport tofile="junitReport.xml">
             <fileset dir="${junitPath}">
                     <include name="TEST-*.xml" />
             </fileset>
