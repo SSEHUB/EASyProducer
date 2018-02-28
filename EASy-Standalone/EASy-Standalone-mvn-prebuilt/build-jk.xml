@@ -54,7 +54,7 @@
         <junit printsummary="yes" fork="yes">
             <classpath >                            
                 <pathelement location="${build.classes.dir}"/>              
-                <classpath refid="maven.compile.classpath" />
+                <path refid="maven.compile.classpath" />
                 <path refid="includes" />                
             </classpath> 
             
