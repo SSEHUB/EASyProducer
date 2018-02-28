@@ -298,32 +298,35 @@
 	</target>
 
 	<target name="testMvn">
-        <copy file="pom.xml" tofile="pom.copy.xml" overwrite="true"/>
+		<!-- for mvn and changing POM, we must use ant calls / new environments -->
+		<property name="testDir" value="EASy-Standalone-mvn-prebuilt"/>
+		<property name="testPath" value="${base}/EASy-Standalone-mvn-prebuilt"/>
+        <copy file="${testPath}/pom.xml" tofile="${testPath}/pom.copy.xml" overwrite="true"/>
 		
         <echo>#####################################################################</echo>
         <echo>###  EASy-Standalone-mvn-prebuilt (net.ssehub.easy.runtime:EASy)  ###</echo>
         <echo>#####################################################################</echo>
-        <ant dir="EASy-Standalone-mvn-prebuilt" antfile="${build.script.name}" />
+        <ant dir="${testDir}" antfile="${build.script.name}" />
 		
-        <copy file="poms/pom-mvn.xml" tofile="pom.xml" overwrite="true"/>
+        <copy file="${testPath}/poms/pom-mvn.xml" tofile="${testPath}/pom.xml" overwrite="true"/>
         <echo>#########################################################################</echo>
         <echo>###  EASy-Standalone-mvn-prebuilt (net.ssehub.easy.runtime:EASy-mvn)  ###</echo>
         <echo>#########################################################################</echo>
-        <ant dir="EASy-Standalone-mvn-prebuilt" antfile="${build.script.name}" />
+        <ant dir="${testDir}" antfile="${build.script.name}" />
 
-        <copy file="poms/pom-mvnEx.xml" tofile="pom.xml" overwrite="true"/>
+        <copy file="${testPath}/poms/pom-mvnEx.xml" tofile="${testPath}/pom.xml" overwrite="true"/>
         <echo>##################################################################################</echo>
         <echo>###  EASy-Standalone-mvn-prebuilt (net.ssehub.easy.runtime:EASy-experimental)  ###</echo>
         <echo>##################################################################################</echo>
-        <ant dir="EASy-Standalone-mvn-prebuilt" antfile="${build.script.name}" />
+        <ant dir="${testDir}" antfile="${build.script.name}" />
 
-        <copy file="poms/pom-mvnEx-mvn.xml" tofile="pom.xml" overwrite="true"/>
+        <copy file="${testPath}/poms/pom-mvnEx-mvn.xml" tofile="${testPath}/pom.xml" overwrite="true"/>
         <echo>######################################################################################</echo>
         <echo>###  EASy-Standalone-mvn-prebuilt (net.ssehub.easy.runtime:EASy-experimental-mvn)  ###</echo>
         <echo>######################################################################################</echo>
-        <ant dir="EASy-Standalone-mvn-prebuilt" antfile="${build.script.name}" />
+        <ant dir="${testDir}" antfile="${build.script.name}" />
 
-	    <copy file="pom.copy.xml" tofile="pom.xml" overwrite="true"/>
+	    <copy file="${testPath}/pom.copy.xml" tofile="${testPath}/pom.xml" overwrite="true"/>
     </target>
 
 	<!--target name="all" depends="init, gather.easy.plugins, createLibs, compile"/-->
