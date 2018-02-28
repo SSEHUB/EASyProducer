@@ -67,7 +67,7 @@
     </target>
     
     <!-- Creates ANT Jar and uses the new created jar to create the two EASy Jars -->
-    <target name="all" depends="compile">
+    <target name="all" depends="junit">
         <delete dir="${build.classes.dir}"/>
     </target>
     
