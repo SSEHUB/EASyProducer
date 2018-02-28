@@ -50,6 +50,7 @@
     </target>
 	
    <target name="junit" depends="compile">
+   	    <mkdir dir="${basedir}/junit"/>
         <junit printsummary="yes" fork="yes">
             <classpath >                            
                 <pathelement location="${build.classes.dir}"/>              

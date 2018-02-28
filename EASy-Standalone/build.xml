@@ -301,32 +301,45 @@
 		<!-- for mvn and changing POM, we must use ant calls / new environments -->
 		<property name="testDir" value="EASy-Standalone-mvn-prebuilt"/>
 		<property name="testPath" value="${basedir}/EASy-Standalone-mvn-prebuilt"/>
+		<property name="junitPath" value="${basedir}/junit"/>
         <copy file="${testPath}/pom.xml" tofile="${testPath}/pom.copy.xml" overwrite="true"/>
 		
         <echo>#####################################################################</echo>
         <echo>###  EASy-Standalone-mvn-prebuilt (net.ssehub.easy.runtime:EASy)  ###</echo>
         <echo>#####################################################################</echo>
         <ant dir="${testDir}" antfile="${build.script.name}" />
+		<copy file="${testDir}/junit/TEST-standalone.AllTests.xml" tofile="${junitPath}/TEST-standalone.AllTests-easy.xml"/>
 		
         <copy file="${testPath}/poms/pom-mvn.xml" tofile="${testPath}/pom.xml" overwrite="true"/>
         <echo>#########################################################################</echo>
         <echo>###  EASy-Standalone-mvn-prebuilt (net.ssehub.easy.runtime:EASy-mvn)  ###</echo>
         <echo>#########################################################################</echo>
         <ant dir="${testDir}" antfile="${build.script.name}" />
+		<copy file="${testDir}/junit/TEST-standalone.AllTests.xml" tofile="${junitPath}/TEST-standalone.AllTests-easy-mvn.xml"/>
 
         <copy file="${testPath}/poms/pomEx.xml" tofile="${testPath}/pom.xml" overwrite="true"/>
         <echo>##################################################################################</echo>
         <echo>###  EASy-Standalone-mvn-prebuilt (net.ssehub.easy.runtime:EASy-experimental)  ###</echo>
         <echo>##################################################################################</echo>
         <ant dir="${testDir}" antfile="${build.script.name}" />
-
+		<copy file="${testDir}/junit/TEST-standalone.AllTests.xml" tofile="${junitPath}/TEST-standalone.AllTests-easy-ex.xml"/>
+		
         <copy file="${testPath}/poms/pomEx-mvn.xml" tofile="${testPath}/pom.xml" overwrite="true"/>
         <echo>######################################################################################</echo>
         <echo>###  EASy-Standalone-mvn-prebuilt (net.ssehub.easy.runtime:EASy-experimental-mvn)  ###</echo>
         <echo>######################################################################################</echo>
         <ant dir="${testDir}" antfile="${build.script.name}" />
+		<copy file="${testDir}/junit/TEST-standalone.AllTests.xml" tofile="${junitPath}/TEST-standalone.AllTests-easy-ex-mvn.xml"/>
 
 	    <copy file="${testPath}/pom.copy.xml" tofile="${testPath}/pom.xml" overwrite="true"/>
+		<junitreport tofile="${basedir}/junitReport.xml">
+            <fileset dir="${junitPath}">
+                    <include name="TEST-*.xml" />
+            </fileset>
+            <fileset dir="${basedir}/EASyCommandLineTest/junit">
+                    <include name="TEST-*.xml" />
+            </fileset>
+        </junitreport>
     </target>
 
 	<!--target name="all" depends="init, gather.easy.plugins, createLibs, compile"/-->
