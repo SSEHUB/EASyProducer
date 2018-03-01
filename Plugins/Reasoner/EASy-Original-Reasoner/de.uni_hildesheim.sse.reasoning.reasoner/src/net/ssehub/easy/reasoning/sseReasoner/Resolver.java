@@ -104,10 +104,10 @@ public class Resolver {
     private Deque<Constraint> constraintBase = new LinkedList<Constraint>();
     private Deque<Constraint> constraintBaseCopy = null;
     private Set<Constraint> constraintBaseSet = new HashSet<Constraint>();
-    private List<Constraint> defaultConstraints = new LinkedList<Constraint>();
-    private List<Constraint> deferredDefaultConstraints = new LinkedList<Constraint>();
-    private List<Constraint> topLevelConstraints = new LinkedList<Constraint>();
-    private List<Constraint> otherConstraints = new LinkedList<Constraint>();
+    private Deque<Constraint> defaultConstraints = new LinkedList<Constraint>();
+    private Deque<Constraint> deferredDefaultConstraints = new LinkedList<Constraint>();
+    private Deque<Constraint> topLevelConstraints = new LinkedList<Constraint>();
+    private Deque<Constraint> otherConstraints = new LinkedList<Constraint>();
     
     // Stats
     private int constraintCounter = 0;
@@ -130,6 +130,7 @@ public class Resolver {
     private transient ConstraintTranslationVisitor projectVisitor = new ConstraintTranslationVisitor();
     private transient VariablesInConstraintFinder variablesFinder = new VariablesInConstraintFinder();
     private transient long endTimestamp;
+    private transient boolean inTopLevelEvals = false;
 
     // >>> from here the names follows the reasoner.tex documentation
 
@@ -349,7 +350,9 @@ public class Resolver {
                 project.getElement(e).accept(this);
             }
             if (null != evals) {
-                // prioritize top-level project contents over eval blocks
+                // prioritize top-level assignments over eval blocks over other project contents
+                // process them at end, force insertion into topLevelConstraints at beginning after all
+                inTopLevelEvals = true;
                 for (PartialEvaluationBlock block : evals) {
                     for (int i = 0; i < block.getNestedCount(); i++) {
                         block.getNested(i).accept(this);
@@ -358,6 +361,7 @@ public class Resolver {
                         block.getEvaluable(i).accept(this);
                     }
                 }
+                inTopLevelEvals = false;
             }
         }
 
@@ -475,7 +479,7 @@ public class Resolver {
             self = decl;
             translateCompoundDeclaration(decl, var, cAcc, type); 
         } else if (TypeQueries.isContainer(type)) { // this is a container value -> default constraints, do not defer
-            translateContainerDeclaration(decl, var, type);
+            translateContainerDeclaration(decl, var, type, cAcc);
         } else if (null != defaultValue && !incremental) {
             if (null != cAcc) { // defer self/override init constraints to prevent accidental init override
                 selfEx = cAcc.getCompoundExpression();
@@ -503,7 +507,7 @@ public class Resolver {
                     }
                     defaultValue = new OCLFeatureCall(acc, OclKeyWords.ASSIGNMENT, defaultValue);
                     defaultValue = substituteVariables(defaultValue, selfEx, self, false);
-                    List<Constraint> targetCons = defaultConstraints; 
+                    Deque<Constraint> targetCons = defaultConstraints; 
                     if (substVisitor.containsSelf() || isOverriddenSlot(decl)) {
                         targetCons = deferredDefaultConstraints;
                     }
@@ -522,8 +526,10 @@ public class Resolver {
      * @param decl The {@link AbstractVariable} for which the default value should be resolved.
      * @param var the instance of <tt>decl</tt>.
      * @param type the (specific) datatype ({@link Container})
+     * @param cAcc compound access expression
      */
-    private void translateContainerDeclaration(AbstractVariable decl, IDecisionVariable var, IDatatype type) {
+    private void translateContainerDeclaration(AbstractVariable decl, IDecisionVariable var, IDatatype type, 
+        CompoundAccess cAcc) {
         if (null != decl.getDefaultValue() && !incremental) {
             Set<Compound> used = getUsedTypes(decl.getDefaultValue(), Compound.class);
             if (null != used && !used.isEmpty()) {
@@ -534,7 +540,7 @@ public class Resolver {
                 }
             }
         }
-        translateCompoundContainer(decl, var, null, otherConstraints); 
+        translateCompoundContainer(decl, var, cAcc, otherConstraints); 
         IDatatype containedType = ((Container) type).getContainedType();
         if (containedType instanceof DerivedDatatype) {
             translateDerivedDatatypeConstraints(decl, (DerivedDatatype) containedType,  
@@ -597,7 +603,7 @@ public class Resolver {
      * @param results the resulting constraints
      */
     private void translateCompoundContainer(AbstractVariable decl, IDecisionVariable variable, 
-        CompoundAccess topcmpAccess, List<Constraint> results) {
+        CompoundAccess topcmpAccess, Deque<Constraint> results) {
         IDatatype containedType = ((Container) decl.getType()).getContainedType();
         for (IDatatype tmp : identifyContainedTypes(variable, containedType)) {
             if (TypeQueries.isCompound(tmp)) {
@@ -615,7 +621,7 @@ public class Resolver {
      * @param result List of transformed constraints, to be modified as a side effect.
      */
     private void translateCompoundContainer(Compound cmpType, IDatatype declaredContainedType, 
-        AbstractVariable decl, CompoundAccess topcmpAccess, List<Constraint> result) {
+        AbstractVariable decl, CompoundAccess topcmpAccess, Deque<Constraint> result) {
         DecisionVariableDeclaration localDecl = new DecisionVariableDeclaration("cmp", cmpType, null);        
         // fill varMap
         for (int i = 0, n = cmpType.getInheritedElementCount(); i < n; i++) {
@@ -689,7 +695,7 @@ public class Resolver {
         for (int i = 0, n = cmpVar.getNestedElementsCount(); i < n; i++) {
             IDecisionVariable nestedVar = cmpVar.getNestedElement(i);
             AbstractVariable nestedDecl = nestedVar.getDeclaration();
-            translateDeclaration(nestedDecl, cmpVar.getNestedVariable(nestedDecl.getName()), varMap.get(nestedDecl));
+            translateDeclaration(nestedDecl, nestedVar, varMap.get(nestedDecl));
         }
         // create constraints on mutually interacting constraints now
         for (int i = 0, n = cmpVar.getNestedElementsCount(); i < n; i++) {
@@ -700,8 +706,6 @@ public class Resolver {
                 && nestedVar.getValue() instanceof ContainerValue) {
                 createContainerConstraintValueConstraints((ContainerValue) nestedVar.getValue(), decl, nestedDecl, 
                     nestedVar);
-            } else if (TypeQueries.isContainer(nestedType)) {
-                translateCompoundContainer(nestedDecl, variable, varMap.get(nestedDecl), otherConstraints);
             }
         }
         processCompoundEvals(cmpType, compound, null == compound ? decl : null);
@@ -927,11 +931,11 @@ public class Resolver {
      * Adding a constraint to a constraint set, checking for contained container/compound initializers if
      * requested. 
      * 
-     * @param target the target container to add the constraint to
+     * @param target the target container for assignment constraints (higher priority)
      * @param constraint the constraint
      * @param checkForInitializers check also for initializers if (<code>true</code>), add only if (<code>false</code>)
      */
-    private void addConstraint(Collection<Constraint> target, Constraint constraint, boolean checkForInitializers) {
+    private void addConstraint(Deque<Constraint> target, Constraint constraint, boolean checkForInitializers) {
         ConstraintSyntaxTree cst = constraint.getConsSyntax();
         boolean add = true;
         if (incremental) {
@@ -955,7 +959,11 @@ public class Resolver {
                 }
                 containerFinder.clear();
             }
-            target.add(constraint);
+            if (inTopLevelEvals && (target == otherConstraints || target == topLevelConstraints)) {
+                target.addFirst(constraint);
+            } else {
+                target.addLast(constraint);
+            }
             simpleAssignmentFinder.acceptAndClear(constraint);
         }
     }

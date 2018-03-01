@@ -61,10 +61,13 @@ public class VariablesInNotSimpleAssignmentConstraintsFinder implements IConstra
      * Combines {@link #accept(Constraint)} and {@link #clear()}.
      * 
      * @param constraint the constraint to accept
+     * @return the result of {@link #isSimpleAssignment()} before {@link #clear()}
      */
-    public void acceptAndClear(Constraint constraint) {
+    public boolean acceptAndClear(Constraint constraint) {
         accept(constraint);
+        boolean result = isSimpleAssignment;
         clear();
+        return result;
     }
     
     /**
