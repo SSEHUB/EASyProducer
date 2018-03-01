@@ -546,6 +546,10 @@ public class Resolver {
             translateDerivedDatatypeConstraints(decl, (DerivedDatatype) containedType,  
                 new DecisionVariableDeclaration("derivedType", containedType, null), project);
         }
+        if (Container.isContainer(type, ConstraintType.TYPE) && var.getValue() instanceof ContainerValue) {
+            createContainerConstraintValueConstraints((ContainerValue) var.getValue(), cAcc, null, 
+                decl, var);
+        }
     }
     
     /**
@@ -697,17 +701,6 @@ public class Resolver {
             AbstractVariable nestedDecl = nestedVar.getDeclaration();
             translateDeclaration(nestedDecl, nestedVar, varMap.get(nestedDecl));
         }
-        // create constraints on mutually interacting constraints now
-        for (int i = 0, n = cmpVar.getNestedElementsCount(); i < n; i++) {
-            IDecisionVariable nestedVar = cmpVar.getNestedElement(i);
-            AbstractVariable nestedDecl = nestedVar.getDeclaration();
-            IDatatype nestedType = nestedDecl.getType();
-            if (Container.isContainer(nestedType, ConstraintType.TYPE)
-                && nestedVar.getValue() instanceof ContainerValue) {
-                createContainerConstraintValueConstraints((ContainerValue) nestedVar.getValue(), decl, nestedDecl, 
-                    nestedVar);
-            }
-        }
         processCompoundEvals(cmpType, compound, null == compound ? decl : null);
         // Nested attribute assignments handling
         if (!incremental) {
@@ -814,17 +807,19 @@ public class Resolver {
      * Checks a container value for nested constraint values, i.e., values of nested constraint variables.
      * 
      * @param val the container value
-     * @param decl the variable declaration representing <i>self</i> in the container/constraint value
+     * @param selfEx expression representing <i>self</i>, must never be not null in conjunction with <code>self</code>
+     * @param self the variable declaration representing <i>self</i>, must never be not null in conjunction 
+     * with <code>self</code>
      * @param parent the parent for new constraints
      * @param nestedVariable the variable holding the constraint value
      */
-    private void createContainerConstraintValueConstraints(ContainerValue val, AbstractVariable decl, 
-        IModelElement parent, IDecisionVariable nestedVariable) {
+    private void createContainerConstraintValueConstraints(ContainerValue val, ConstraintSyntaxTree selfEx, 
+        AbstractVariable self, IModelElement parent, IDecisionVariable nestedVariable) {
         for (int n = 0; n < val.getElementSize(); n++) {
             Value cVal = val.getElement(n);
             if (cVal instanceof ConstraintValue) {
                 ConstraintValue constraint = (ConstraintValue) cVal;
-                createConstraintVariableConstraint(constraint.getValue(), null, decl, parent, nestedVariable);
+                createConstraintVariableConstraint(constraint.getValue(), selfEx, self, parent, nestedVariable);
             }
         }
     }
