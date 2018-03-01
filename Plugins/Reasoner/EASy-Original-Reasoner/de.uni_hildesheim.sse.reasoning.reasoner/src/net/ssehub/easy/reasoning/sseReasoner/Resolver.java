@@ -701,13 +701,13 @@ public class Resolver {
             AbstractVariable nestedDecl = nestedVar.getDeclaration();
             translateDeclaration(nestedDecl, nestedVar, varMap.get(nestedDecl));
         }
-        processCompoundEvals(cmpType, compound, null == compound ? decl : null);
         // Nested attribute assignments handling
         if (!incremental) {
             for (int a = 0; a < cmpType.getAssignmentCount(); a++) {
                 translateAnnotationAssignments(cmpType.getAssignment(a), variable, null, compound);
             }
         }
+        processCompoundEvals(cmpType, compound, null == compound ? decl : null);
         List<Constraint> thisCompoundConstraints = new ArrayList<Constraint>(); 
         allCompoundConstraints(cmpType, thisCompoundConstraints, false);        
         for (int i = 0; i < thisCompoundConstraints.size(); i++) {
