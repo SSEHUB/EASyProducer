@@ -20,7 +20,7 @@ import net.ssehub.easy.varModel.model.AttributeAssignment;
 import net.ssehub.easy.varModel.model.DecisionVariableDeclaration;
 import net.ssehub.easy.varModel.model.IModelElement;
 import net.ssehub.easy.varModel.model.datatypes.Compound;
-import net.ssehub.easy.varModel.model.datatypes.ConstraintType;
+import net.ssehub.easy.varModel.model.datatypes.TypeQueries;
 
 /**
  * Generic constraint functions based on the {@link AbstractConstraintProcessor}.
@@ -34,28 +34,25 @@ public class ConstraintFunctions {
      * 
      * @param cmpType Compound to be processed.
      * @param processor The constraint processor functor.
-     * @param topLevelCall <code>true</code> for top-level calls, i.e., <code>cmpType</code> is the type where the 
-     *     collection starts, <code>false</code> else.
+     * @param includeConstraintVariables <code>true</code> whether constraint variables shall be included or not.
      * @param parent the intended parent for constraints, typically the containing project
      */
     public static void allCompoundConstraints(Compound cmpType, 
-        AbstractConstraintProcessor processor, boolean topLevelCall, IModelElement parent) {
+        AbstractConstraintProcessor processor, boolean includeConstraintVariables, IModelElement parent) {
         for (int c = 0; c < cmpType.getConstraintsCount(); c++) {
             processor.process(cmpType.getConstraint(c));
         }
-        if (topLevelCall) {
-            for (int i = 0; i < cmpType.getInheritedElementCount(); i++) {
-                DecisionVariableDeclaration decl = cmpType.getInheritedElement(i);
+        if (includeConstraintVariables) {
+            for (int i = 0; i < cmpType.getElementCount(); i++) {
+                DecisionVariableDeclaration decl = cmpType.getElement(i);
                 ConstraintSyntaxTree defaultValue = decl.getDefaultValue();
-                if (null != defaultValue) {
-                    if (ConstraintType.TYPE.isAssignableFrom(decl.getType())) {
-                        processor.process(defaultValue, parent);
-                    }
+                if (null != defaultValue && TypeQueries.isConstraint(decl.getType())) {
+                    processor.process(defaultValue, parent);
                 } 
-            }            
+            }
         }
         for (int r = 0; r < cmpType.getRefinesCount(); r++) {
-            allCompoundConstraints(cmpType.getRefines(r), processor, false, parent);
+            allCompoundConstraints(cmpType.getRefines(r), processor, includeConstraintVariables, parent);
         }
         for (int a = 0; a < cmpType.getAssignmentCount(); a++) {
             allAssignmentConstraints(cmpType.getAssignment(a), processor);
