@@ -18,6 +18,7 @@ import net.ssehub.easy.reasoning.core.reasoner.ReasonerConfiguration.IAdditional
 import net.ssehub.easy.reasoning.core.reasoner.ReasoningErrorCodes;
 import net.ssehub.easy.reasoning.sseReasoner.functions.FailedElementDetails;
 import net.ssehub.easy.reasoning.sseReasoner.functions.FailedElements;
+import net.ssehub.easy.reasoning.sseReasoner.functions.AbstractConstraintProcessor;
 import net.ssehub.easy.reasoning.sseReasoner.functions.ScopeAssignments;
 import net.ssehub.easy.reasoning.sseReasoner.model.ContainerConstraintsFinder;
 import net.ssehub.easy.reasoning.sseReasoner.model.SubstitutionVisitor;
@@ -72,6 +73,7 @@ import net.ssehub.easy.varModel.model.values.ValueDoesNotMatchTypeException;
 import net.ssehub.easy.varModel.model.values.ValueFactory;
 
 import static net.ssehub.easy.reasoning.sseReasoner.ReasoningUtils.*;
+import static net.ssehub.easy.reasoning.sseReasoner.functions.ConstraintFunctions.*;
 
 /**
  * Constraint identifier, resolver and executor. Assumption that constraints are not evaluated in parallel (see some
@@ -129,6 +131,8 @@ public class Resolver {
         = new VariablesInNotSimpleAssignmentConstraintsFinder(constraintMap);
     private transient ConstraintTranslationVisitor projectVisitor = new ConstraintTranslationVisitor();
     private transient VariablesInConstraintFinder variablesFinder = new VariablesInConstraintFinder();
+    private transient OtherConstraintsProcessor otherConstraintsProc = new OtherConstraintsProcessor();
+    private transient CompoundContainerProcessor compoundContainerProc = new CompoundContainerProcessor();
     private transient long endTimestamp;
     private transient boolean inTopLevelEvals = false;
 
@@ -620,13 +624,13 @@ public class Resolver {
      * Method for transforming a compound constraint into container forAll constraint.
      * @param cmpType Specific compound type (with constraints).
      * @param declaredContainedType the declared contained type of the container.
-     * @param decl {@link AbstractVariable}.
+     * @param decl {@link AbstractVariable} the variable declaration to work on.
      * @param topcmpAccess {@link CompoundAccess} if container is a nested element.
      * @param result List of transformed constraints, to be modified as a side effect.
      */
     private void translateCompoundContainer(Compound cmpType, IDatatype declaredContainedType, 
-        AbstractVariable decl, CompoundAccess topcmpAccess, Deque<Constraint> result) {
-        DecisionVariableDeclaration localDecl = new DecisionVariableDeclaration("cmp", cmpType, null);        
+        final AbstractVariable decl, final CompoundAccess topcmpAccess, final Deque<Constraint> result) {
+        final DecisionVariableDeclaration localDecl = new DecisionVariableDeclaration("cmp", cmpType, null);        
         // fill varMap
         for (int i = 0, n = cmpType.getInheritedElementCount(); i < n; i++) {
             AbstractVariable nestedDecl = cmpType.getInheritedElement(i);
@@ -635,17 +639,69 @@ public class Resolver {
             varMap.put(nestedDecl, cmpAccess);
         }
         
-        List<Constraint> thisCompoundConstraints = new ArrayList<Constraint>(); 
-        allCompoundConstraints(cmpType, thisCompoundConstraints, true);
-        ConstraintSyntaxTree typeExpression = null;
+        final ConstraintSyntaxTree typeExpression;
         if (!TypeQueries.sameTypes(cmpType, declaredContainedType)) {
             typeExpression = createTypeValueConstantSafe(cmpType);
+        } else {
+            typeExpression = null;
         }
-        for (int i = 0; i < thisCompoundConstraints.size(); i++) {
-            ConstraintSyntaxTree itExpression = thisCompoundConstraints.get(i).getConsSyntax();
-            itExpression = substituteVariables(itExpression, null, localDecl, true);
+        compoundContainerProc.setParameter(decl, localDecl, topcmpAccess, typeExpression, result);
+        allCompoundConstraints(cmpType, compoundContainerProc, true, project);
+        compoundContainerProc.clear();
+    }
+
+    /**
+     * A compound container processor creating all-quantized constraints for all container entries. Call 
+     * {@link #setParameter(AbstractVariable, DecisionVariableDeclaration, CompoundAccess, ConstraintSyntaxTree, Deque)}
+     * before use and {@link #clear()} afterwards.
+     * 
+     * @author Holger Eichelberger
+     */
+    private class CompoundContainerProcessor extends AbstractConstraintProcessor {
+
+        private AbstractVariable decl;
+        private DecisionVariableDeclaration localDecl;
+        private CompoundAccess topcmpAccess;
+        private ConstraintSyntaxTree typeExpression;
+        private Deque<Constraint> result;
+        
+        /**
+         * Sets the processing parameter.
+         * 
+         * @param decl the variable declaration to work on
+         * @param localDecl the local variable declaration representing the (reusable) iterator
+         * @param topcmpAccess access to the actual compound container
+         * @param typeExpression type expression to cast to in case of refined container types (may be <b>null</b>, 
+         *     no casting/type selection needed then)
+         * @param result the queue to add the created constraints to
+         */
+        private void setParameter(AbstractVariable decl, DecisionVariableDeclaration localDecl, 
+            CompoundAccess topcmpAccess, ConstraintSyntaxTree typeExpression, Deque<Constraint> result) {
+            this.decl = decl;
+            this.localDecl = localDecl;
+            this.topcmpAccess = topcmpAccess;
+            this.typeExpression = typeExpression;
+            this.result = result;
+        }
+        
+        /**
+         * Clears this instance for reuse. Not really needed if {@link #setParameter(AbstractVariable, 
+         * DecisionVariableDeclaration, CompoundAccess, ConstraintSyntaxTree, Deque)} is utilized consequently, but
+         * helps getting rid of dangling references / supports garbage collection.
+         */
+        private void clear() {
+            this.decl = null;
+            this.localDecl = null;
+            this.topcmpAccess = null;
+            this.typeExpression = null;
+            this.result = null;
+        }
+
+        @Override
+        public ConstraintSyntaxTree process(ConstraintSyntaxTree cst, IModelElement parent) {
+            cst = substituteVariables(cst, null, localDecl, true);
             if (Descriptor.LOGGING) {
-                LOGGER.debug("New loop constraint " + toIvmlString(itExpression));
+                LOGGER.debug("New loop constraint " + toIvmlString(cst));
             }   
             try {
                 ConstraintSyntaxTree containerOp = topcmpAccess == null ? new Variable(decl) : topcmpAccess;
@@ -655,16 +711,18 @@ public class Resolver {
                 }
                 if (containerOp != null) {
                     containerOp.inferDatatype();
-                    containerOp = createContainerCall(containerOp, Container.FORALL, itExpression, localDecl);
+                    containerOp = createContainerCall(containerOp, Container.FORALL, cst, localDecl);
                 }
                 if (containerOp != null) {
                     containerOp.inferDatatype();
-                    addConstraint(result, new Constraint(containerOp, project), true);
+                    addConstraint(result, new Constraint(containerOp, parent), true);
                 }
             } catch (CSTSemanticException e) {
                 LOGGER.exception(e);
-            }            
+            }
+            return null;
         }
+
     }
 
     /**
@@ -677,8 +735,8 @@ public class Resolver {
      *     <code>decl</code>/<code>variable</code>
      * @param type specific {@link Compound} type.
      */
-    private void translateCompoundDeclaration(AbstractVariable decl, IDecisionVariable variable,
-        CompoundAccess compound, IDatatype type) {
+    private void translateCompoundDeclaration(final AbstractVariable decl, IDecisionVariable variable,
+        final CompoundAccess compound, IDatatype type) {
         Compound cmpType = (Compound) type;
         CompoundVariable cmpVar = (CompoundVariable) variable;
         // resolve compound access first for all slots
@@ -707,20 +765,60 @@ public class Resolver {
                 translateAnnotationAssignments(cmpType.getAssignment(a), variable, null, compound);
             }
         }
-        processCompoundEvals(cmpType, compound, null == compound ? decl : null);
-        List<Constraint> thisCompoundConstraints = new ArrayList<Constraint>(); 
-        allCompoundConstraints(cmpType, thisCompoundConstraints, false);        
-        for (int i = 0; i < thisCompoundConstraints.size(); i++) {
-            ConstraintSyntaxTree oneConstraint = thisCompoundConstraints.get(i).getConsSyntax();
-            // changed null to decl
-            oneConstraint = substituteVariables(oneConstraint, compound, null == compound ? decl : null, true);
+        final AbstractVariable self = null == compound ? decl : null;
+        processCompoundEvals(cmpType, compound, self);
+        //List<Constraint> thisCompoundConstraints = new ArrayList<Constraint>(); 
+        otherConstraintsProc.setParameter(compound, self);
+        allCompoundConstraints(cmpType, otherConstraintsProc, false, decl);
+        otherConstraintsProc.clear();
+    }
+    
+    /**
+     * Implements a processor for constraints, for which variables (including the variable mapping) shall be substituted
+     * and the result shall be added to {@link Resolver#otherConstraints}. Call 
+     * {@link #setParameter(CompoundAccess, AbstractVariable)} before
+     * processing and {@link #clear()} afterwards before reuse.
+     * 
+     * @author Holger Eichelberger
+     */
+    private class OtherConstraintsProcessor extends AbstractConstraintProcessor {
+
+        private CompoundAccess selfEx;
+        private AbstractVariable self;
+       
+        /**
+         * Sets the parameters for processing.
+         * 
+         * @param selfEx an expression representing <i>self</i> (ignored if <b>null</b>, <code>self</code> and 
+         *     <code>selfEx</code> shall never both be specified/not <b>null</b>).
+         * @param self an variable declaration representing <i>self</i> (ignored if <b>null</b>).
+         */
+        private void setParameter(CompoundAccess selfEx, AbstractVariable self) {
+            this.selfEx = selfEx;
+            this.self = self;
+        }
+        
+        /**
+         * Clears the parameters for reuse. Although clearing may be superfluous, it also helps getting rid of 
+         * unnecessary references / supports garbage collection.
+         */
+        private void clear() {
+            this.selfEx = null;
+            this.self = null;
+        }
+        
+        @Override
+        public ConstraintSyntaxTree process(ConstraintSyntaxTree cst, IModelElement parent) {
+            cst = substituteVariables(cst, selfEx, self, true);
             try { // compoundConstraints
-                Constraint constraint = new Constraint(oneConstraint, decl);
+                Constraint constraint = new Constraint(cst, parent);
                 addConstraint(otherConstraints, constraint, true);            
             } catch (CSTSemanticException e) {
                 LOGGER.exception(e);
             }               
+            return cst;
         }
+
     }
 
     /**
@@ -1008,57 +1106,6 @@ public class Resolver {
             }
         }
     }
-
-    /**
-     * Method for getting all constraints relevant to a {@link Compound}.
-     * @param cmpType Compound to be analyzed.
-     * @param thisCompoundConstraints The list to add the compound {@link Constraint}s to.
-     * @param host True if this is a host compound.
-     */
-    private void allCompoundConstraints(Compound cmpType, 
-        List<Constraint> thisCompoundConstraints, boolean host) {
-        for (int i = 0; i < cmpType.getConstraintsCount(); i++) {
-            thisCompoundConstraints.add(cmpType.getConstraint(i));            
-        }
-        if (host) { // TODO why not constraint expr via refines?
-            for (int i = 0; i < cmpType.getInheritedElementCount(); i++) {
-                DecisionVariableDeclaration decl = cmpType.getInheritedElement(i);
-                ConstraintSyntaxTree defaultValue = decl.getDefaultValue();
-                if (null != defaultValue) {
-                    if (ConstraintType.TYPE.isAssignableFrom(decl.getType())) {
-                        Constraint constraint = new Constraint(project);
-                        try {
-                            constraint.setConsSyntax(defaultValue);
-                            thisCompoundConstraints.add(constraint);
-                        } catch (CSTSemanticException e) {
-                            LOGGER.exception(e);
-                        }                   
-                    }
-                } 
-            }            
-        }
-        for (int r = 0; r < cmpType.getRefinesCount(); r++) {
-            allCompoundConstraints(cmpType.getRefines(r), thisCompoundConstraints, false);
-        }
-        for (int a = 0; a < cmpType.getAssignmentCount(); a++) {
-            allAssignmentConstraints(cmpType.getAssignment(a), thisCompoundConstraints);
-        }
-    }
-
-    /**
-     * Collects all assignment constraints and adds them to <code>result</code>.
-     * 
-     * @param assng the assignment constraint
-     * @param result the list of constraints to be modified as a side effect
-     */
-    private void allAssignmentConstraints(AttributeAssignment assng, List<Constraint> result) {
-        for (int c = 0; c < assng.getConstraintsCount(); c++) {
-            result.add(assng.getConstraint(c));
-        }
-        for (int a = 0; a < assng.getAssignmentCount(); a++) {
-            allAssignmentConstraints(assng.getAssignment(a), result);
-        }
-    }    
 
     // <<< documented until here    
     
