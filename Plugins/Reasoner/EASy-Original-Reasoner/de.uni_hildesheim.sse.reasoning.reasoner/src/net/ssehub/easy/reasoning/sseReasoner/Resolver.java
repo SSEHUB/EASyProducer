@@ -534,21 +534,25 @@ public class Resolver {
      */
     private void translateContainerDeclaration(AbstractVariable decl, IDecisionVariable var, IDatatype type, 
         CompoundAccess cAcc) {
+        Set<Compound> used = null;
+        IDatatype dContainedType = getDeepestContainedType((Container) type);
         if (null != decl.getDefaultValue() && !incremental) {
-            Set<Compound> used = getUsedTypes(decl.getDefaultValue(), Compound.class);
+            used = getUsedTypes(decl.getDefaultValue(), Compound.class);
             if (null != used && !used.isEmpty()) {
                 Set<Compound> done = new HashSet<Compound>();
                 for (Compound uType : used) {
                     translateDefaultsCompoundContainer(decl, uType, done);
                     done.clear();
                 }
+                for (Compound uType : purgeRefines(used)) {
+                    translateCompoundContainer(uType, dContainedType, decl, cAcc, otherConstraints);
+                }
             }
         }
-        translateCompoundContainer(decl, var, cAcc, otherConstraints); 
-        IDatatype containedType = ((Container) type).getContainedType();
-        if (containedType instanceof DerivedDatatype) {
-            translateDerivedDatatypeConstraints(decl, (DerivedDatatype) containedType,  
-                new DecisionVariableDeclaration("derivedType", containedType, null), project);
+        translateCompoundContainer(decl, var, cAcc, used, otherConstraints); 
+        if (dContainedType instanceof DerivedDatatype) {
+            translateDerivedDatatypeConstraints(decl, (DerivedDatatype) dContainedType,  
+                new DecisionVariableDeclaration("derivedType", dContainedType, null), project);
         }
         if (Container.isContainer(type, ConstraintType.TYPE) && var.getValue() instanceof ContainerValue) {
             createContainerConstraintValueConstraints((ContainerValue) var.getValue(), cAcc, null, 
@@ -608,14 +612,16 @@ public class Resolver {
      * @param decl AbstractVariable.
      * @param variable the instance of <tt>decl</tt>.
      * @param topcmpAccess {@link CompoundAccess} if container is a nested element.
+     * @param done already processed compounds to be skipped, may be <b>null</b> for none
      * @param results the resulting constraints
      */
     private void translateCompoundContainer(AbstractVariable decl, IDecisionVariable variable, 
-        CompoundAccess topcmpAccess, Deque<Constraint> results) {
+        CompoundAccess topcmpAccess, Set<Compound> done, Deque<Constraint> results) {
         IDatatype containedType = ((Container) decl.getType()).getContainedType();
         for (IDatatype tmp : identifyContainedTypes(variable, containedType)) {
-            if (TypeQueries.isCompound(tmp)) {
-                translateCompoundContainer((Compound) tmp, containedType, decl, topcmpAccess, results);
+            IDatatype base = DerivedDatatype.resolveToBasis(tmp);
+            if (TypeQueries.isCompound(base) && (null == done || !done.contains(base))) {
+                translateCompoundContainer((Compound) base, containedType, decl, topcmpAccess, results);
             }
         }
     }
@@ -706,6 +712,9 @@ public class Resolver {
             try {
                 ConstraintSyntaxTree containerOp = topcmpAccess == null ? new Variable(decl) : topcmpAccess;
                 containerOp.inferDatatype();
+                if (isNestedContainer(decl.getType())) {
+                    containerOp = new OCLFeatureCall(containerOp, OclKeyWords.FLATTEN);
+                }
                 if (null != typeExpression) {
                     containerOp = new OCLFeatureCall(containerOp, Container.SELECT_BY_KIND.getName(), typeExpression);
                 }
@@ -916,8 +925,11 @@ public class Resolver {
         for (int n = 0; n < val.getElementSize(); n++) {
             Value cVal = val.getElement(n);
             if (cVal instanceof ConstraintValue) {
-                ConstraintValue constraint = (ConstraintValue) cVal;
-                createConstraintVariableConstraint(constraint.getValue(), selfEx, self, parent, nestedVariable);
+                createConstraintVariableConstraint(((ConstraintValue) cVal).getValue(), selfEx, self, 
+                    parent, nestedVariable);
+            } else if (cVal instanceof ContainerValue) {
+                createContainerConstraintValueConstraints(((ContainerValue) cVal), selfEx, self, 
+                    parent, nestedVariable);
             }
         }
     }

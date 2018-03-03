@@ -35,6 +35,7 @@ import net.ssehub.easy.varModel.model.Constraint;
 import net.ssehub.easy.varModel.model.DecisionVariableDeclaration;
 import net.ssehub.easy.varModel.model.IModelElement;
 import net.ssehub.easy.varModel.model.datatypes.Compound;
+import net.ssehub.easy.varModel.model.datatypes.Container;
 import net.ssehub.easy.varModel.model.datatypes.IDatatype;
 import net.ssehub.easy.varModel.model.datatypes.MetaType;
 import net.ssehub.easy.varModel.model.datatypes.OclKeyWords;
@@ -365,7 +366,7 @@ class ReasoningUtils {
     static boolean isNestedContainer(IDatatype type) {
         return TypeQueries.isContainer(type) 
             && 1 == type.getGenericTypeCount() 
-            && isNestedContainer(type.getGenericType(0));
+            && TypeQueries.isContainer(type.getGenericType(0));
     }
 
     /**
@@ -411,6 +412,35 @@ class ReasoningUtils {
         }
         return done;
     }
+    
+    /**
+     * Purges all refined compounds mentioned in <code>compounds</code>.
+     * 
+     * @param compounds the compounds to purge
+     * @return the purged compounds (copy) 
+     */
+    static Set<Compound> purgeRefines(Set<Compound> compounds) {
+        Set<Compound> result = new HashSet<Compound>();
+        result.addAll(compounds);
+        for (Compound c : compounds) {
+            purgeRefines(c, result);
+        }
+        return result;
+    }
+    
+    /**
+     * Purges all refined compounds of <code>comp</code> from <code>result</code>.
+     * 
+     * @param comp the compound to purge the refined ones for
+     * @param result modified as a side effect
+     */
+    private static void purgeRefines(Compound comp, Set<Compound> result) {
+        for (int r = 0; r < comp.getRefinesCount(); r++) {
+            Compound ref = comp.getRefines(r);
+            result.remove(ref);
+            purgeRefines(ref, result);
+        }
+    }
 
     /**
      * Adds all elements from <code>source</code> to <code>target</code>.
@@ -426,6 +456,20 @@ class ReasoningUtils {
                 target.add(source[s]);                    
             }
         }
+    }
+    
+    /**
+     * Returns the deepest contained type, i.e., for a nested container the deeply nested (base) type.
+     * 
+     * @param cnt the container type
+     * @return the deeply nested type
+     */
+    static IDatatype getDeepestContainedType(Container cnt) {
+        IDatatype result = cnt.getContainedType();
+        if (result instanceof Container) {
+            result = getDeepestContainedType((Container) result);
+        }
+        return result;
     }
 
 }
