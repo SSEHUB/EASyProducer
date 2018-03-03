@@ -1,0 +1,21 @@
+project constraintSetDerivedCompound {
+
+    version v0;
+    
+    compound Comp {
+        Integer i;
+        i > 10;
+    }
+    
+    compound Comp2 refines Comp {
+        Integer j;
+        j > 20;
+        i <= 20;
+    }
+    
+    typedef TComp Comp with (TComp.i <= 21);
+    typedef TComp2 Comp2 with (TComp2.i <= 21);
+    
+    setOf(TComp) t1 = {{i = 11}, Comp{i=12}, Comp2{i=19}, Comp2{i=21}};
+    setOf(TComp) t2 = {{i = 11}, Comp2{i=16}, Comp2{i=21}};
+}
