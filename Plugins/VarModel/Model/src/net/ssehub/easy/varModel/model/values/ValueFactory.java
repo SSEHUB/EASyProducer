@@ -301,16 +301,8 @@ public class ValueFactory {
     private static void assignContainerValue() {
         IValueCreator creator = new IValueCreator() {
             public ContainerValue createValue(IDatatype type, Object... value) throws ValueDoesNotMatchTypeException {
-                ContainerValue result;
-                if (null != value && 1 == value.length && value[0] instanceof ContainerValue) {
-                    // TODO this shall work on each type - currently inconsistent
-                    result = (ContainerValue) value[0];
-                } else {
-                    //This cast must work, as this method should only be called if the type is an instanceof container
-                    Container cont = (Container) type;
-                    result = new ContainerValue(cont, value);
-                }
-                return result;
+                //The cast must work, as this method should only be called if the type is an instanceof container
+                return new ContainerValue((Container) type, value);
             }
         }; 
         map.put(Set.class, creator);
