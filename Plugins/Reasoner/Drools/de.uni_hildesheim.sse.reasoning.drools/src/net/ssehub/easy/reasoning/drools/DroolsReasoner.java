@@ -132,4 +132,10 @@ public class DroolsReasoner implements IReasoner, IRules {
         return null;
     }
 
+    //@Override
+    public ReasoningResult initialize(Project project, Configuration cfg, ReasonerConfiguration reasonerConfiguration,
+            ProgressObserver observer) {
+        return propagate(project, cfg, reasonerConfiguration, observer);
+    }
+
 }
