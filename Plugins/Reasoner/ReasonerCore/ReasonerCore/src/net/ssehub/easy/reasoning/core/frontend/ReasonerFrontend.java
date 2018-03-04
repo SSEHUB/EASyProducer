@@ -89,7 +89,7 @@ public class ReasonerFrontend {
                 if (null != reasoner) {
                     // default reasoner configuration
                     ReasonerConfiguration initCfg = new ReasonerConfiguration();
-                    ReasoningResult tmp = reasoner.propagate(config.getProject(), config, initCfg, observer); 
+                    ReasoningResult tmp = reasoner.initialize(config.getProject(), config, initCfg, observer); 
                     useFallback = tmp.reasoningUnsupported();
                     if (tmp.getMessageCount() > 0) {
                         result = new ArrayList<net.ssehub.easy.basics.messages.Message>();

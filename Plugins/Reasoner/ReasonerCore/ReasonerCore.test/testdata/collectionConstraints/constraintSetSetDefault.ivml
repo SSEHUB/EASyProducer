@@ -1,0 +1,8 @@
+project constraintSetSetDefault {
+
+    version v0;
+    
+    Integer i;
+    setOf(setOf(Constraint)) constraints = {{i > 0, i < 1}};
+    i = 1;
+}
