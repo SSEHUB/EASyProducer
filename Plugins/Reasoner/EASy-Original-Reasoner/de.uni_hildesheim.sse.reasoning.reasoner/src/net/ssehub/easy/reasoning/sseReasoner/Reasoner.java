@@ -282,9 +282,10 @@ public class Reasoner implements IReasoner {
      *     {@link net.ssehub.easy.basics.messages.Status#UNSUPPORTED} if the concrete reasoner does not support
      *     this operation.
      */
-    //@Override
+    @Override
     public ReasoningResult initialize(Project project, Configuration cfg, ReasonerConfiguration reasonerConfiguration,
-            ProgressObserver observer) {
+        ProgressObserver observer) {
+        // probably two-pass approach, first defaults, then constraints
         return propagate(project, cfg, reasonerConfiguration, observer);
     }
 

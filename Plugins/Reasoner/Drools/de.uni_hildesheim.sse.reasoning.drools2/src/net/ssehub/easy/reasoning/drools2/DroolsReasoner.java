@@ -121,7 +121,7 @@ public class DroolsReasoner implements IReasoner {
      *     {@link net.ssehub.easy.basics.messages.Status#UNSUPPORTED} if the concrete reasoner does not support
      *     this operation.
      */
-    //@Override
+    @Override
     public ReasoningResult initialize(Project project, Configuration cfg, ReasonerConfiguration reasonerConfiguration,
             ProgressObserver observer) {
         return propagate(project, cfg, reasonerConfiguration, observer);
