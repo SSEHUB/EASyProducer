@@ -36,6 +36,7 @@ import net.ssehub.easy.varModel.model.DecisionVariableDeclaration;
 import net.ssehub.easy.varModel.model.IModelElement;
 import net.ssehub.easy.varModel.model.datatypes.Compound;
 import net.ssehub.easy.varModel.model.datatypes.Container;
+import net.ssehub.easy.varModel.model.datatypes.DerivedDatatype;
 import net.ssehub.easy.varModel.model.datatypes.IDatatype;
 import net.ssehub.easy.varModel.model.datatypes.MetaType;
 import net.ssehub.easy.varModel.model.datatypes.OclKeyWords;
@@ -282,23 +283,36 @@ class ReasoningUtils {
     static Set<IDatatype> identifyContainedTypes(IDecisionVariable variable, IDatatype containedType) {
         // this is still static typing based on the actual value, but if the value is changed, the constraints shall 
         // be re-collected anyway
-        // unclear, shall this be recursive?
         Set<IDatatype> result = new HashSet<IDatatype>();
         if (null != containedType) {
             result.add(containedType);
         }
+        identifyContainedTypes(variable, result);
+        return result;
+    }
+
+    /**
+     * Identifies the types contained in <code>variable</code>.
+     * 
+     * @param variable the variable to analyze for contained types
+     * @param result the set of types to be modified as a side effect
+     */
+    private static void identifyContainedTypes(IDecisionVariable variable, Set<IDatatype> result) {
         if (null != variable.getValue()) {
             for (int n = 0; n < variable.getNestedElementsCount(); n++) {
                 IDecisionVariable nested = variable.getNestedElement(n);
                 if (null != nested) {
-                    Value val = nested.getValue();
-                    if (null != val) {
-                        result.add(val.getType());
+                    if (nested.getNestedElementsCount() > 0) {
+                        identifyContainedTypes(nested, result);
+                    } else {
+                        Value val = nested.getValue();
+                        if (null != val) {
+                            result.add(val.getType());
+                        }
                     }
                 }
             }
         } // fallback to default value if not given
-        return result;
     }
 
     /**
@@ -368,6 +382,49 @@ class ReasoningUtils {
             && 1 == type.getGenericTypeCount() 
             && TypeQueries.isContainer(type.getGenericType(0));
     }
+    
+    /**
+     * Returns the relevant value for reasoning.
+     * 
+     * @param decl the declaration
+     * @param var the decision variable
+     * @param incremental are we in incremental mode
+     * @return the value, may be <b>null</b>
+     */
+    static Value getRelevantValue(AbstractVariable decl, IDecisionVariable var, boolean incremental) {
+        Value val = null;
+        if (null != var.getValue()) {
+            val = var.getValue();
+        } else if (!incremental) {
+            ConstraintSyntaxTree dflt = decl.getDefaultValue();
+            if (dflt instanceof ConstantValue) {
+                val = ((ConstantValue) dflt).getConstantValue();
+            } // else initialization, we need two rounds
+        }
+        return val;
+    }
+
+    /**
+     * Returns the relevant value for reasoning.
+     * 
+     * @param <D> the value type
+     * @param decl the declaration
+     * @param var the decision variable
+     * @param incremental are we in incremental mode
+     * @param filter in case that only a value of the specific type shall be returned
+     * @return the value, may be <b>null</b>
+     */
+    static <D extends Value> D getRelevantValue(AbstractVariable decl, IDecisionVariable var, boolean incremental, 
+        Class<D> filter) {
+        D result;
+        Value val = getRelevantValue(decl, var, incremental);
+        if (filter.isInstance(val)) {
+            result = filter.cast(val);
+        } else {
+            result = null;
+        }
+        return result;
+    }
 
     /**
      * Returns the used types if <code>cst</code> is a constant container value.
@@ -395,14 +452,14 @@ class ReasoningUtils {
      * @param result the result set to be modified as a side effect
      * @return <code>true</code> if <code>val</code> is a container value, <code>false</code> else
      */
-    private static <D extends IDatatype> boolean getUsedTypes(Value val, Class<D> filter, Set<D> result) {
+    static <D extends IDatatype> boolean getUsedTypes(Value val, Class<D> filter, Set<D> result) {
         boolean done = false;
         if (val instanceof ContainerValue) {
             ContainerValue cVal = (ContainerValue) val;
             for (int v = 0; v < cVal.getElementSize(); v++) {
                 Value tmp = cVal.getElement(v);
                 if (!getUsedTypes(tmp, filter, result)) {
-                    IDatatype tType = tmp.getType();
+                    IDatatype tType = DerivedDatatype.resolveToBasis(tmp.getType());
                     if (filter.isInstance(tType)) {
                         result.add(filter.cast(tType));
                     }

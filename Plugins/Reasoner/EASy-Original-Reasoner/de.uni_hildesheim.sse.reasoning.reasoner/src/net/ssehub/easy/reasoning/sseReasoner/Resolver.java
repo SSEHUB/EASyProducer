@@ -57,7 +57,6 @@ import net.ssehub.easy.varModel.model.OperationDefinition;
 import net.ssehub.easy.varModel.model.PartialEvaluationBlock;
 import net.ssehub.easy.varModel.model.Project;
 import net.ssehub.easy.varModel.model.datatypes.Compound;
-import net.ssehub.easy.varModel.model.datatypes.ConstraintType;
 import net.ssehub.easy.varModel.model.datatypes.Container;
 import net.ssehub.easy.varModel.model.datatypes.DerivedDatatype;
 import net.ssehub.easy.varModel.model.datatypes.IDatatype;
@@ -536,27 +535,36 @@ public class Resolver {
         CompoundAccess cAcc) {
         Set<Compound> used = null;
         IDatatype dContainedType = getDeepestContainedType((Container) type);
-        if (null != decl.getDefaultValue() && !incremental) {
-            used = getUsedTypes(decl.getDefaultValue(), Compound.class);
-            if (null != used && !used.isEmpty()) {
-                Set<Compound> done = new HashSet<Compound>();
-                for (Compound uType : used) {
-                    translateDefaultsCompoundContainer(decl, uType, done);
-                    done.clear();
+        IDatatype dContainedBasisType = DerivedDatatype.resolveToBasis(dContainedType);
+        ContainerValue val = getRelevantValue(decl, var, incremental, ContainerValue.class);
+// TODO optimize sets, also in subsequent calls        
+        if (TypeQueries.isConstraint(dContainedBasisType)) { // don't care for derived
+            if (null != val) { // 
+                createContainerConstraintValueConstraints(val, cAcc, null, decl, var);
+            } 
+        } else {
+            if (TypeQueries.isCompound(dContainedBasisType)) {
+                if (null != val) {
+                    used = new HashSet<Compound>();
+                    getUsedTypes(val, Compound.class, used);
+                    if (null != used && !used.isEmpty()) {
+                        Set<Compound> done = new HashSet<Compound>();
+                        for (Compound uType : used) {
+                            translateDefaultsCompoundContainer(decl, uType, done);
+                            done.clear();
+                        }
+                        for (Compound uType : purgeRefines(used)) {
+                            translateCompoundContainer(uType, dContainedType, decl, cAcc, otherConstraints);
+                        }
+                    }
                 }
-                for (Compound uType : purgeRefines(used)) {
-                    translateCompoundContainer(uType, dContainedType, decl, cAcc, otherConstraints);
-                }
+                translateCompoundContainer(decl, var, cAcc, used, otherConstraints); 
             }
         }
-        translateCompoundContainer(decl, var, cAcc, used, otherConstraints); 
+        // in any case
         if (dContainedType instanceof DerivedDatatype) {
             translateDerivedDatatypeConstraints(decl, (DerivedDatatype) dContainedType,  
                 new DecisionVariableDeclaration("derivedType", dContainedType, null), project);
-        }
-        if (Container.isContainer(type, ConstraintType.TYPE) && var.getValue() instanceof ContainerValue) {
-            createContainerConstraintValueConstraints((ContainerValue) var.getValue(), cAcc, null, 
-                decl, var);
         }
     }
     
@@ -1102,18 +1110,22 @@ public class Resolver {
      */
     private void checkContainerInitializer(ConstraintSyntaxTree exp, boolean substituteVars, IModelElement parent) {
         ContainerInitializer containerInit = (ContainerInitializer) exp;
-        if (ConstraintType.TYPE.isAssignableFrom(containerInit.getType().getContainedType())) {
-            for (int i = 0; i < containerInit.getExpressionCount(); i++) {
-                Constraint constraint = new Constraint(parent);
-                ConstraintSyntaxTree cst = containerInit.getExpression(i);
-                if (substituteVars) {
-                    cst = substituteVariables(cst, null, null, true);
-                }
-                try {
-                    constraint.setConsSyntax(cst);
-                    addConstraint(otherConstraints, constraint, false); // collectionConstraints
-                } catch (CSTSemanticException e) {
-                    LOGGER.exception(e);
+        for (int i = 0; i < containerInit.getExpressionCount(); i++) {
+            ConstraintSyntaxTree cst = containerInit.getExpression(i);
+            if (cst instanceof ContainerInitializer) {
+                checkContainerInitializer((ContainerInitializer) cst, substituteVars, parent);
+            } else {
+                if (TypeQueries.isConstraint(containerInit.getType().getContainedType())) {
+                    Constraint constraint = new Constraint(parent);
+                    if (substituteVars) {
+                        cst = substituteVariables(cst, null, null, true);
+                    }
+                    try {
+                        constraint.setConsSyntax(cst);
+                        addConstraint(otherConstraints, constraint, false);
+                    } catch (CSTSemanticException e) {
+                        LOGGER.exception(e);
+                    }
                 }
             }
         }

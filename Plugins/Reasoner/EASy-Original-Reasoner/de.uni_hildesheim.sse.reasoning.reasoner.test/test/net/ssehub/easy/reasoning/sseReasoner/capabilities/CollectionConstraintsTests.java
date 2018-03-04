@@ -96,6 +96,14 @@ public class CollectionConstraintsTests extends net.ssehub.easy.reasoning.sseRea
     }
 
     /**
+     * Tests constraints in set of set.
+     */
+    @Test
+    public void constraintSetSetDefaultTest() {
+        reasoningTest("constraintSetSetDefault.ivml", 1);
+    }
+
+    /**
      * Tests containers with derived types on compounds and constraints.
      */
     @Test
