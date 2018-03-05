@@ -33,7 +33,10 @@ public enum GeneralReasonerCapabilities implements IReasonerCapability {
     STANDALONE_REASONING,
     
     /**
-     * Support for incremental reasoning while configuring a product.
+     * Support for incremental reasoning while configuring a product. Declare only if 
+     * {@link IReasoner#initialize(net.ssehub.easy.varModel.model.Project, 
+     * net.ssehub.easy.varModel.confModel.Configuration, ReasonerConfiguration, 
+     * net.ssehub.easy.basics.progress.ProgressObserver)} is implemented properly.
      */
     INCREMENTAL_REASONING,
     
