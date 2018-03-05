@@ -559,7 +559,7 @@ public class Resolver {
                         SET_COMPOUND_POOL.releaseInstance(done); 
                     }
                 }
-                // also works if used == null!
+                // also works if used == null, applies to all not only compound type
                 translateCompoundContainer(decl, var, cAcc, used, otherConstraints); 
                 SET_COMPOUND_POOL.releaseInstance(used); 
             }
