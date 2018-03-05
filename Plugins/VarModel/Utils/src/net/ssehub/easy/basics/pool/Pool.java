@@ -70,7 +70,7 @@ public class Pool <T> {
      * Releases an <code>instance</code> obtained from {@link #get()}.<br/>
      * <b>Cave:</b> Do not release instances twice!
      * 
-     * @param instance the instance to be released
+     * @param instance the instance to be released (ignored if <b>null</b>)
      */
     public synchronized void releaseInstance(T instance) {
         if (null != instance) {
