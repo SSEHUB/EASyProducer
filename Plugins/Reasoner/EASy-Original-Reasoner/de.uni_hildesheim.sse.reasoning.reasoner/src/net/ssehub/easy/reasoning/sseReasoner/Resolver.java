@@ -593,7 +593,7 @@ public class Resolver {
                             OclKeyWords.ASSIGNMENT, defaultValue);
                         ConstraintSyntaxTree containerOp = new Variable(decl);
                         if (!TypeQueries.sameTypes(decl.getType(), cmpType)) {
-                            containerOp = new OCLFeatureCall(containerOp, OclKeyWords.TYPE_SELECT, 
+                            containerOp = new OCLFeatureCall(containerOp, OclKeyWords.SELECT_BY_KIND, 
                                 new ConstantValue(ValueFactory.createValue(MetaType.TYPE, cmpType)));
                         }
                         if (isNestedContainer(decl.getType())) {
