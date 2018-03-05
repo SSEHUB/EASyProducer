@@ -533,32 +533,35 @@ public class Resolver {
      */
     private void translateContainerDeclaration(AbstractVariable decl, IDecisionVariable var, IDatatype type, 
         CompoundAccess cAcc) {
-        Set<Compound> used = null;
         IDatatype dContainedType = getDeepestContainedType((Container) type);
         IDatatype dContainedBasisType = DerivedDatatype.resolveToBasis(dContainedType);
         ContainerValue val = getRelevantValue(decl, var, incremental, ContainerValue.class);
-// TODO optimize sets, also in subsequent calls        
         if (TypeQueries.isConstraint(dContainedBasisType)) { // don't care for derived
             if (null != val) { // 
                 createContainerConstraintValueConstraints(val, cAcc, null, decl, var);
             } 
         } else {
             if (TypeQueries.isCompound(dContainedBasisType)) {
+                Set<Compound> used = null;
                 if (null != val) {
-                    used = new HashSet<Compound>();
-                    getUsedTypes(val, Compound.class, used);
+                    used = SET_COMPOUND_POOL.getInstance();
+                    getUsedCompoundTypes(val, used);
                     if (null != used && !used.isEmpty()) {
-                        Set<Compound> done = new HashSet<Compound>();
+                        Set<Compound> done = SET_COMPOUND_POOL.getInstance();
                         for (Compound uType : used) {
                             translateDefaultsCompoundContainer(decl, uType, done);
                             done.clear();
                         }
-                        for (Compound uType : purgeRefines(used)) {
+                        purgeRefines(used, done); // use cleared done for result
+                        for (Compound uType : done) { // done = purgedRefines(used)!
                             translateCompoundContainer(uType, dContainedType, decl, cAcc, otherConstraints);
                         }
+                        SET_COMPOUND_POOL.releaseInstance(done); 
                     }
                 }
+                // also works if used == null!
                 translateCompoundContainer(decl, var, cAcc, used, otherConstraints); 
+                SET_COMPOUND_POOL.releaseInstance(used); 
             }
         }
         // in any case

@@ -22,6 +22,8 @@ import java.util.Set;
 
 import net.ssehub.easy.basics.logger.EASyLoggerFactory;
 import net.ssehub.easy.basics.logger.EASyLoggerFactory.EASyLogger;
+import net.ssehub.easy.basics.pool.IPoolManager;
+import net.ssehub.easy.basics.pool.Pool;
 import net.ssehub.easy.reasoning.sseReasoner.functions.FailedElements;
 import net.ssehub.easy.varModel.confModel.Configuration;
 import net.ssehub.easy.varModel.confModel.IDecisionVariable;
@@ -56,6 +58,24 @@ import net.ssehub.easy.varModel.persistency.StringProvider;
  */
 class ReasoningUtils {
 
+    /**
+     * A set pool for instances of <code>Set<Compound></code>.
+     */
+    public static final Pool<Set<Compound>> SET_COMPOUND_POOL = new Pool<Set<Compound>>(
+        new IPoolManager<Set<Compound>>() {
+
+            @Override
+            public Set<Compound> create() {
+                return new HashSet<Compound>();
+            }
+
+            @Override
+            public void clear(Set<Compound> instance) {
+                instance.clear();
+            }
+        }
+    );
+    
     private static final EASyLogger LOGGER
         = EASyLoggerFactory.INSTANCE.getLogger(ReasoningUtils.class, Descriptor.BUNDLE_NAME);
 
@@ -427,41 +447,23 @@ class ReasoningUtils {
     }
 
     /**
-     * Returns the used types if <code>cst</code> is a constant container value.
-     * 
-     * @param <D> the the to filter for
-     * @param cst the expression
-     * @param filter the type class to filter for
-     * @return the set of used types, may be empty or <b>null</b> for none
-     */
-    static <D extends IDatatype> Set<D> getUsedTypes(ConstraintSyntaxTree cst, Class<D> filter) {
-        Set<D> result = null;
-        if (cst instanceof ConstantValue) {
-            result = new HashSet<D>();
-            getUsedTypes(((ConstantValue) cst).getConstantValue(), filter, result);
-        }
-        return result;
-    }
-
-    /**
      * Returns the used types if <code>value</code> is a container value.
      * 
      * @param <D> the the to filter for
      * @param val the value
-     * @param filter the type class to filter for
      * @param result the result set to be modified as a side effect
      * @return <code>true</code> if <code>val</code> is a container value, <code>false</code> else
      */
-    static <D extends IDatatype> boolean getUsedTypes(Value val, Class<D> filter, Set<D> result) {
+    static <D extends IDatatype> boolean getUsedCompoundTypes(Value val, Set<Compound> result) {
         boolean done = false;
         if (val instanceof ContainerValue) {
             ContainerValue cVal = (ContainerValue) val;
             for (int v = 0; v < cVal.getElementSize(); v++) {
                 Value tmp = cVal.getElement(v);
-                if (!getUsedTypes(tmp, filter, result)) {
+                if (!getUsedCompoundTypes(tmp, result)) {
                     IDatatype tType = DerivedDatatype.resolveToBasis(tmp.getType());
-                    if (filter.isInstance(tType)) {
-                        result.add(filter.cast(tType));
+                    if (tType instanceof Compound) {
+                        result.add((Compound) tType);
                     }
                 }
             }
@@ -474,15 +476,13 @@ class ReasoningUtils {
      * Purges all refined compounds mentioned in <code>compounds</code>.
      * 
      * @param compounds the compounds to purge
-     * @return the purged compounds (copy) 
+     * @param result the purged compounds (to be modified as a side effect) 
      */
-    static Set<Compound> purgeRefines(Set<Compound> compounds) {
-        Set<Compound> result = new HashSet<Compound>();
+    static void purgeRefines(Set<Compound> compounds, Set<Compound> result) {
         result.addAll(compounds);
         for (Compound c : compounds) {
             purgeRefines(c, result);
         }
-        return result;
     }
     
     /**
