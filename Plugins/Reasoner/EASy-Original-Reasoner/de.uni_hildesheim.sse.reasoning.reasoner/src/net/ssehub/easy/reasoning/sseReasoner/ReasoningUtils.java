@@ -292,49 +292,6 @@ class ReasoningUtils {
         } 
     }
 
-
-    /**
-     * Identifies the types contained in <code>variable</code>.
-     * 
-     * @param variable the variable to analyze for contained types
-     * @param containedType an additional type that must be part of the result (ignored if <b>null</b>)
-     * @return the contained types
-     */
-    static Set<IDatatype> identifyContainedTypes(IDecisionVariable variable, IDatatype containedType) {
-        // this is still static typing based on the actual value, but if the value is changed, the constraints shall 
-        // be re-collected anyway
-        Set<IDatatype> result = new HashSet<IDatatype>();
-        if (null != containedType) {
-            result.add(containedType);
-        }
-        identifyContainedTypes(variable, result);
-        return result;
-    }
-
-    /**
-     * Identifies the types contained in <code>variable</code>.
-     * 
-     * @param variable the variable to analyze for contained types
-     * @param result the set of types to be modified as a side effect
-     */
-    private static void identifyContainedTypes(IDecisionVariable variable, Set<IDatatype> result) {
-        if (null != variable.getValue()) {
-            for (int n = 0; n < variable.getNestedElementsCount(); n++) {
-                IDecisionVariable nested = variable.getNestedElement(n);
-                if (null != nested) {
-                    if (nested.getNestedElementsCount() > 0) {
-                        identifyContainedTypes(nested, result);
-                    } else {
-                        Value val = nested.getValue();
-                        if (null != val) {
-                            result.add(val.getType());
-                        }
-                    }
-                }
-            }
-        } // fallback to default value if not given
-    }
-
     /**
      * Creates a container operation call ("shortcut").
      * 

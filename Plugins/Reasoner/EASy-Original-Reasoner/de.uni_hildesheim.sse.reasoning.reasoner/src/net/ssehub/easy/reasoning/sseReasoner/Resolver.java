@@ -533,7 +533,8 @@ public class Resolver {
      */
     private void translateContainerDeclaration(AbstractVariable decl, IDecisionVariable var, IDatatype type, 
         CompoundAccess cAcc) {
-        IDatatype dContainedType = getDeepestContainedType((Container) type);
+        Container declType = (Container) type;
+        IDatatype dContainedType = getDeepestContainedType(declType);
         IDatatype dContainedBasisType = DerivedDatatype.resolveToBasis(dContainedType);
         ContainerValue val = getRelevantValue(decl, var, incremental, ContainerValue.class);
         if (TypeQueries.isConstraint(dContainedBasisType)) { // don't care for derived
@@ -543,25 +544,27 @@ public class Resolver {
         } else {
             if (TypeQueries.isCompound(dContainedBasisType)) {
                 Set<Compound> used = null;
+                Set<Compound> comp = SET_COMPOUND_POOL.getInstance();
                 if (null != val) {
                     used = SET_COMPOUND_POOL.getInstance();
                     getUsedCompoundTypes(val, used);
                     if (null != used && !used.isEmpty()) {
-                        Set<Compound> done = SET_COMPOUND_POOL.getInstance();
                         for (Compound uType : used) {
-                            translateDefaultsCompoundContainer(decl, uType, done);
-                            done.clear();
+                            translateDefaultsCompoundContainer(decl, uType, comp);
+                            comp.clear();
                         }
-                        purgeRefines(used, done); // use cleared done for result
-                        for (Compound uType : done) { // done = purgedRefines(used)!
-                            translateCompoundContainer(uType, dContainedType, decl, cAcc, otherConstraints);
-                        }
-                        SET_COMPOUND_POOL.releaseInstance(done); 
+                        purgeRefines(used, comp); // use cleared comp for result
                     }
+                } else {
+                    // implied in getUsedCompoundTypes
+                    comp.add((Compound) DerivedDatatype.resolveToBasis(declType.getContainedType()));
                 }
                 // also works if used == null, applies to all not only compound type
-                translateCompoundContainer(decl, var, cAcc, used, otherConstraints); 
                 SET_COMPOUND_POOL.releaseInstance(used); 
+                for (Compound uType : comp) { // done = purgedRefines(used)!
+                    translateCompoundContainer(uType, dContainedType, decl, cAcc, otherConstraints);
+                }
+                SET_COMPOUND_POOL.releaseInstance(comp); 
             }
         }
         // in any case
@@ -612,27 +615,6 @@ public class Resolver {
             // attributes??
             for (int r = 0; r < cmpType.getRefinesCount(); r++) {
                 translateDefaultsCompoundContainer(decl, cmpType.getRefines(r), done);
-            }
-        }
-    }
-
-    /**
-     * Method for retrieving constraints from compounds initialized in containers. <code>variable</code>
-     * must be a container and <code>decl</code> of type container.
-     * 
-     * @param decl AbstractVariable.
-     * @param variable the instance of <tt>decl</tt>.
-     * @param topcmpAccess {@link CompoundAccess} if container is a nested element.
-     * @param done already processed compounds to be skipped, may be <b>null</b> for none
-     * @param results the resulting constraints
-     */
-    private void translateCompoundContainer(AbstractVariable decl, IDecisionVariable variable, 
-        CompoundAccess topcmpAccess, Set<Compound> done, Deque<Constraint> results) {
-        IDatatype containedType = ((Container) decl.getType()).getContainedType();
-        for (IDatatype tmp : identifyContainedTypes(variable, containedType)) {
-            IDatatype base = DerivedDatatype.resolveToBasis(tmp);
-            if (TypeQueries.isCompound(base) && (null == done || !done.contains(base))) {
-                translateCompoundContainer((Compound) base, containedType, decl, topcmpAccess, results);
             }
         }
     }
