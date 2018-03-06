@@ -550,8 +550,7 @@ public class Resolver {
                     getUsedCompoundTypes(val, used);
                     if (null != used && !used.isEmpty()) {
                         for (Compound uType : used) {
-                            translateDefaultsCompoundContainer(decl, uType, comp);
-                            comp.clear();
+                            translateDefaultsCompoundContainer(decl, uType, cAcc);
                         }
                         purgeRefines(used, comp); // use cleared comp for result
                     }
@@ -579,43 +578,40 @@ public class Resolver {
      * 
      * @param decl the container variable
      * @param cmpType the compound type used in the actual <code>decl</code> value to focus the constraints created
-     * @param done the already processed types (to be modified as a side effect)
+     * @param cAcc compound access, may be <b>null</b>
      */
-    private void translateDefaultsCompoundContainer(AbstractVariable decl, Compound cmpType, Set<Compound> done) {
-        if (!done.contains(cmpType)) {
-            done.add(cmpType);
-            for (int d = 0; d < cmpType.getDeclarationCount(); d++) {
-                DecisionVariableDeclaration uDecl = cmpType.getDeclaration(d);
-                ConstraintSyntaxTree defaultValue = uDecl.getDefaultValue();
-                if (null != defaultValue) {
-                    DecisionVariableDeclaration localDecl = new DecisionVariableDeclaration("cmp", cmpType, null);
-                    try {
-                        Variable localDeclVar = new Variable(localDecl);
-                        defaultValue = substituteVariables(defaultValue, localDeclVar, null, true); // replace self
-                        defaultValue = new OCLFeatureCall(new CompoundAccess(localDeclVar, uDecl.getName()), 
-                            OclKeyWords.ASSIGNMENT, defaultValue);
-                        ConstraintSyntaxTree containerOp = new Variable(decl);
-                        if (!TypeQueries.sameTypes(decl.getType(), cmpType)) {
-                            containerOp = new OCLFeatureCall(containerOp, OclKeyWords.SELECT_BY_KIND, 
-                                new ConstantValue(ValueFactory.createValue(MetaType.TYPE, cmpType)));
-                        }
-                        if (isNestedContainer(decl.getType())) {
-                            containerOp = new OCLFeatureCall(containerOp, OclKeyWords.FLATTEN);
-                        }
-                        defaultValue = createContainerCall(containerOp, Container.FORALL, defaultValue, localDecl);
-                        defaultValue.inferDatatype();
-                        addConstraint(deferredDefaultConstraints, new DefaultConstraint(defaultValue, project), true);
-                    } catch (CSTSemanticException e) {
-                        LOGGER.exception(e); // should not occur, ok to log
-                    } catch (ValueDoesNotMatchTypeException e) {
-                        LOGGER.exception(e); // should not occur, ok to log
+    private void translateDefaultsCompoundContainer(AbstractVariable decl, Compound cmpType, CompoundAccess cAcc) {
+        for (int d = 0; d < cmpType.getElementCount(); d++) {
+            DecisionVariableDeclaration uDecl = cmpType.getElement(d);
+            ConstraintSyntaxTree defaultValue = uDecl.getDefaultValue();
+            if (null != defaultValue) {
+                DecisionVariableDeclaration localDecl = new DecisionVariableDeclaration("cmp", cmpType, null);
+                try {
+                    Variable localDeclVar = new Variable(localDecl);
+                    defaultValue = substituteVariables(defaultValue, localDeclVar, null, true); // replace self
+                    defaultValue = new OCLFeatureCall(new CompoundAccess(localDeclVar, uDecl.getName()), 
+                        OclKeyWords.ASSIGNMENT, defaultValue);
+                    ConstraintSyntaxTree containerOp = null == cAcc ? new Variable(decl) : cAcc;
+                    if (!TypeQueries.sameTypes(decl.getType(), cmpType)) {
+                        containerOp = new OCLFeatureCall(containerOp, OclKeyWords.SELECT_BY_KIND, 
+                            new ConstantValue(ValueFactory.createValue(MetaType.TYPE, cmpType)));
                     }
+                    if (isNestedContainer(decl.getType())) {
+                        containerOp = new OCLFeatureCall(containerOp, OclKeyWords.FLATTEN);
+                    }
+                    defaultValue = createContainerCall(containerOp, Container.FORALL, defaultValue, localDecl);
+                    defaultValue.inferDatatype();
+                    addConstraint(deferredDefaultConstraints, new DefaultConstraint(defaultValue, project), true);
+                } catch (CSTSemanticException e) {
+                    LOGGER.exception(e); // should not occur, ok to log
+                } catch (ValueDoesNotMatchTypeException e) {
+                    LOGGER.exception(e); // should not occur, ok to log
                 }
             }
-            // attributes??
-            for (int r = 0; r < cmpType.getRefinesCount(); r++) {
-                translateDefaultsCompoundContainer(decl, cmpType.getRefines(r), done);
-            }
+        }
+        // TODO annotations, annotation blocks??
+        for (int r = 0; r < cmpType.getRefinesCount(); r++) {
+            translateDefaultsCompoundContainer(decl, cmpType.getRefines(r), cAcc);
         }
     }
     
