@@ -132,7 +132,7 @@ public class Resolver {
     private transient VariablesInConstraintFinder variablesFinder = new VariablesInConstraintFinder();
     private transient OtherConstraintsProcessor otherConstraintsProc = new OtherConstraintsProcessor();
     //private transient CompoundContainerProcessor compoundContainerProc = new CompoundContainerProcessor();
-    private transient CompoundContainerProcessor2 compoundContainerProc = new CompoundContainerProcessor2();
+    private transient CompoundContainerProcessor compoundContainerProc = new CompoundContainerProcessor();
     private transient long endTimestamp;
     private transient boolean inTopLevelEvals = false;
 
@@ -544,29 +544,6 @@ public class Resolver {
             } 
         } else {
             if (TypeQueries.isCompound(dContainedBasisType)) {
-                /*if (!NEW) {
-                    Set<Compound> used = null;
-                    Set<Compound> comp = SET_COMPOUND_POOL.getInstance();
-                    if (null != val) {
-                        used = SET_COMPOUND_POOL.getInstance();
-                        getUsedCompoundTypes(val, used);
-                        if (null != used && !used.isEmpty()) {
-                            for (Compound uType : used) {
-                                translateDefaultsCompoundContainer(decl, uType, cAcc);
-                            }
-                            purgeRefines(used, comp); // use cleared comp for result
-                        }
-                    } else {
-                        // implied in getUsedCompoundTypes
-                        comp.add((Compound) DerivedDatatype.resolveToBasis(declType.getContainedType()));
-                    }
-                    // also works if used == null, applies to all not only compound type
-                    SET_COMPOUND_POOL.releaseInstance(used); 
-                    for (Compound uType : comp) { // done = purgedRefines(used)!
-                        translateCompoundContainer(uType, dContainedType, decl, cAcc, otherConstraints);
-                    }
-                    SET_COMPOUND_POOL.releaseInstance(comp); 
-                } else {*/
                 Set<Compound> used = SET_COMPOUND_POOL.getInstance();
                 if (null != val) {
                     getUsedCompoundTypes(val, used);
@@ -581,7 +558,6 @@ public class Resolver {
                     translateCompoundContainer(decl, uType, dContainedType, cAcc);
                 }
                 SET_COMPOUND_POOL.releaseInstance(used);
-//                }
             }
         }
         // in any case
@@ -627,164 +603,13 @@ public class Resolver {
     }
     
     /**
-     * Translates constraints representing compound defaults in containers of compounds.
-     * 
-     * @param decl the container variable
-     * @param cmpType the compound type used in the actual <code>decl</code> value to focus the constraints created
-     * @param cAcc compound access, may be <b>null</b>
-     */
-    /*private void translateDefaultsCompoundContainer(AbstractVariable decl, Compound cmpType, CompoundAccess cAcc) {
-        for (int d = 0; d < cmpType.getElementCount(); d++) {
-            DecisionVariableDeclaration uDecl = cmpType.getElement(d);
-            ConstraintSyntaxTree defaultValue = uDecl.getDefaultValue();
-            if (null != defaultValue) {
-                DecisionVariableDeclaration localDecl = new DecisionVariableDeclaration("cmp", cmpType, null);
-                try {
-                    Variable localDeclVar = new Variable(localDecl);
-                    defaultValue = substituteVariables(defaultValue, localDeclVar, null, true); // replace self
-                    defaultValue = new OCLFeatureCall(new CompoundAccess(localDeclVar, uDecl.getName()), 
-                        OclKeyWords.ASSIGNMENT, defaultValue);
-                    ConstraintSyntaxTree containerOp = null == cAcc ? new Variable(decl) : cAcc;
-                    if (!TypeQueries.sameTypes(decl.getType(), cmpType)) {
-                        containerOp = new OCLFeatureCall(containerOp, OclKeyWords.SELECT_BY_KIND, 
-                            new ConstantValue(ValueFactory.createValue(MetaType.TYPE, cmpType)));
-                    }
-                    if (isNestedContainer(decl.getType())) {
-                        containerOp = new OCLFeatureCall(containerOp, OclKeyWords.FLATTEN);
-                    }
-                    defaultValue = createContainerCall(containerOp, Container.FORALL, defaultValue, localDecl);
-                    defaultValue.inferDatatype();
-                    addConstraint(deferredDefaultConstraints, new DefaultConstraint(defaultValue, project), true);
-                } catch (CSTSemanticException e) {
-                    LOGGER.exception(e); // should not occur, ok to log
-                } catch (ValueDoesNotMatchTypeException e) {
-                    LOGGER.exception(e); // should not occur, ok to log
-                }
-            }
-        }
-        for (int r = 0; r < cmpType.getRefinesCount(); r++) {
-            translateDefaultsCompoundContainer(decl, cmpType.getRefines(r), cAcc);
-        }
-    }*/
-    
-    /**
-     * Method for transforming a compound constraint into container forAll constraint.
-     * @param cmpType Specific compound type (with constraints).
-     * @param declaredContainedType the declared contained type of the container.
-     * @param decl {@link AbstractVariable} the variable declaration to work on.
-     * @param topcmpAccess {@link CompoundAccess} if container is a nested element.
-     * @param result List of transformed constraints, to be modified as a side effect.
-     */
-    /*private void translateCompoundContainer(Compound cmpType, IDatatype declaredContainedType, 
-        final AbstractVariable decl, final CompoundAccess topcmpAccess, final Deque<Constraint> result) {
-        final DecisionVariableDeclaration localDecl = new DecisionVariableDeclaration("cmp", cmpType, null);        
-        // fill varMap
-        for (int i = 0, n = cmpType.getInheritedElementCount(); i < n; i++) {
-            AbstractVariable nestedDecl = cmpType.getInheritedElement(i);
-            CompoundAccess cmpAccess = null;           
-            cmpAccess = new CompoundAccess(new Variable(localDecl), nestedDecl.getName());
-            varMap.put(nestedDecl, cmpAccess);
-        }
-        
-        final ConstraintSyntaxTree typeExpression;
-        if (!TypeQueries.sameTypes(cmpType, declaredContainedType)) {
-            typeExpression = createTypeValueConstantSafe(cmpType);
-        } else {
-            typeExpression = null;
-        }
-        compoundContainerProc.setParameter(decl, localDecl, topcmpAccess, typeExpression, result);
-        allCompoundConstraints(cmpType, compoundContainerProc, true, false, project);
-        compoundContainerProc.clear();
-    }*/
-
-    /**
-     * A compound container processor creating all-quantized constraints for all container entries. Call 
-     * {@link #setParameter(AbstractVariable, DecisionVariableDeclaration, CompoundAccess, ConstraintSyntaxTree, Deque)}
-     * before use and {@link #clear()} afterwards.
-     * 
-     * @author Holger Eichelberger
-     */
-    /*private class CompoundContainerProcessor extends AbstractConstraintProcessor {
-
-        private AbstractVariable decl;
-        private DecisionVariableDeclaration localDecl;
-        private CompoundAccess topcmpAccess;
-        private ConstraintSyntaxTree typeExpression;
-        private Deque<Constraint> result;*/
-        
-        /**
-         * Sets the processing parameter.
-         * 
-         * @param decl the variable declaration to work on
-         * @param localDecl the local variable declaration representing the (reusable) iterator
-         * @param topcmpAccess access to the actual compound container
-         * @param typeExpression type expression to cast to in case of refined container types (may be <b>null</b>, 
-         *     no casting/type selection needed then)
-         * @param result the queue to add the created constraints to
-         */
-        /*private void setParameter(AbstractVariable decl, DecisionVariableDeclaration localDecl, 
-            CompoundAccess topcmpAccess, ConstraintSyntaxTree typeExpression, Deque<Constraint> result) {
-            this.decl = decl;
-            this.localDecl = localDecl;
-            this.topcmpAccess = topcmpAccess;
-            this.typeExpression = typeExpression;
-            this.result = result;
-        }*/
-        
-        /**
-         * Clears this instance for reuse. Not really needed if {@link #setParameter(AbstractVariable, 
-         * DecisionVariableDeclaration, CompoundAccess, ConstraintSyntaxTree, Deque)} is utilized consequently, but
-         * helps getting rid of dangling references / supports garbage collection.
-         */
-        /*private void clear() {
-            this.decl = null;
-            this.localDecl = null;
-            this.topcmpAccess = null;
-            this.typeExpression = null;
-            this.result = null;
-        }*/
-
-        /*@Override
-        public ConstraintSyntaxTree process(ConstraintSyntaxTree cst, ExpressionType type, String slot, 
-            IModelElement parent) {
-            cst = substituteVariables(cst, null, localDecl, true);
-            if (Descriptor.LOGGING) {
-                LOGGER.debug("New loop constraint " + toIvmlString(cst));
-            }   
-            try {
-                ConstraintSyntaxTree containerOp = topcmpAccess == null ? new Variable(decl) : topcmpAccess;
-                containerOp.inferDatatype();
-                if (isNestedContainer(decl.getType())) {
-                    containerOp = new OCLFeatureCall(containerOp, OclKeyWords.FLATTEN);
-                }
-                if (null != typeExpression) {
-                    containerOp = new OCLFeatureCall(containerOp, Container.SELECT_BY_KIND.getName(), typeExpression);
-                }
-                if (containerOp != null) {
-                    containerOp.inferDatatype();
-                    containerOp = createContainerCall(containerOp, Container.FORALL, cst, localDecl);
-                }
-                if (containerOp != null) {
-                    containerOp.inferDatatype();
-                    addConstraint(result, new Constraint(containerOp, parent), true);
-                }
-            } catch (CSTSemanticException e) {
-                LOGGER.exception(e);
-            }
-            return null;
-        }
-
-    }*/
-
-    
-    /**
      * A compound container processor creating the expressions for all-quantized constraints for all container 
      * entries. Call {@link #setParameter(ConstraintSyntaxTree, DecisionVariableDeclaration))}
      * before use and {@link #clear()} afterwards.
      * 
      * @author Holger Eichelberger
      */
-    private class CompoundContainerProcessor2 extends AbstractConstraintProcessor {
+    private class CompoundContainerProcessor extends AbstractConstraintProcessor {
 
         private DecisionVariableDeclaration self;
         private ConstraintSyntaxTree containerOp;
