@@ -17,6 +17,7 @@ package net.ssehub.easy.reasoning.sseReasoner.functions;
 
 import net.ssehub.easy.reasoning.sseReasoner.functions.AbstractConstraintProcessor.ExpressionType;
 import net.ssehub.easy.varModel.cst.ConstraintSyntaxTree;
+import net.ssehub.easy.varModel.model.Attribute;
 import net.ssehub.easy.varModel.model.AttributeAssignment;
 import net.ssehub.easy.varModel.model.DecisionVariableDeclaration;
 import net.ssehub.easy.varModel.model.IModelElement;
@@ -52,10 +53,16 @@ public class ConstraintFunctions {
                     if (includeConstraintVariables && TypeQueries.isConstraint(decl.getType())) {
                         processor.process(defaultValue, ExpressionType.CONSTRAINT_VALUE, decl.getName(), parent);
                     } else if (includeDefaults) {
-                        processor.process(defaultValue, ExpressionType.DEFAULT_VALUE, decl.getName(), parent);
+                        processor.process(defaultValue, ExpressionType.DEFAULT, decl.getName(), parent);
                     }
                 }
-                // TODO annotations
+                for (int a = 0, n = decl.getAttributesCount(); includeDefaults && a < n; a++) {
+                    Attribute attr = decl.getAttribute(a);
+                    defaultValue = attr.getDefaultValue();
+                    if (null != defaultValue) {
+                        processor.process(defaultValue, ExpressionType.ANNOTATION_DEFAULT, attr.getName(), parent);
+                    }
+                }
             }
         }
         for (int r = 0; r < cmpType.getRefinesCount(); r++) {

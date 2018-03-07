@@ -32,7 +32,8 @@ public abstract class AbstractConstraintProcessor {
      * @author Holger Eichelberger
      */
     public enum ExpressionType {
-        DEFAULT_VALUE,
+        DEFAULT,
+        ANNOTATION_DEFAULT,
         CONSTRAINT_VALUE,
         ASSIGNMENT_CONSTRAINT,
         CONSTRAINT
@@ -43,7 +44,8 @@ public abstract class AbstractConstraintProcessor {
      * 
      * @param cst the constraint syntax tree
      * @param type the type of <code>cst</code>
-     * @param slot the slot name, only in case of {@link ExpressionType#DEFAULT_VALUE}
+     * @param slot the slot name, only in case of {@link ExpressionType#DEFAULT} or 
+     * {@link ExpressionType#ANNOTATION_DEFAULT}
      * @param parent the actual/intended parent if not determined otherwise
      * @return the processed constraint syntax tree, may be <code>cst</code>
      */

@@ -51,6 +51,7 @@ import net.ssehub.easy.varModel.model.AttributeAssignment;
 import net.ssehub.easy.varModel.model.AttributeAssignment.Assignment;
 import net.ssehub.easy.varModel.model.Constraint;
 import net.ssehub.easy.varModel.model.DecisionVariableDeclaration;
+import net.ssehub.easy.varModel.model.IAttributeAccess;
 import net.ssehub.easy.varModel.model.IModelElement;
 import net.ssehub.easy.varModel.model.IvmlException;
 import net.ssehub.easy.varModel.model.ModelVisitorAdapter;
@@ -124,14 +125,14 @@ public class Resolver {
     private Project project;
     private transient Set<IDecisionVariable> usedVariables = new HashSet<IDecisionVariable>(100);
     private transient SubstitutionVisitor substVisitor = new SubstitutionVisitor();
-    private transient Map<AbstractVariable, CompoundAccess> varMap = new HashMap<AbstractVariable, CompoundAccess>(100);
+    private transient Map<AbstractVariable, ConstraintSyntaxTree> varMap 
+        = new HashMap<AbstractVariable, ConstraintSyntaxTree>(100);
     private transient ContainerConstraintsFinder containerFinder = new ContainerConstraintsFinder();
     private transient VariablesInNotSimpleAssignmentConstraintsFinder simpleAssignmentFinder 
         = new VariablesInNotSimpleAssignmentConstraintsFinder(constraintMap);
     private transient ConstraintTranslationVisitor projectVisitor = new ConstraintTranslationVisitor();
     private transient VariablesInConstraintFinder variablesFinder = new VariablesInConstraintFinder();
     private transient OtherConstraintsProcessor otherConstraintsProc = new OtherConstraintsProcessor();
-    //private transient CompoundContainerProcessor compoundContainerProc = new CompoundContainerProcessor();
     private transient CompoundContainerProcessor compoundContainerProc = new CompoundContainerProcessor();
     private transient long endTimestamp;
     private transient boolean inTopLevelEvals = false;
@@ -450,10 +451,10 @@ public class Resolver {
      * @param compound {@link CompoundAccess} null if variable is not nested.
      */
     private void translateAnnotationDeclarations(AbstractVariable decl, IDecisionVariable variable, 
-        CompoundAccess compound) {
+        ConstraintSyntaxTree compound) {
         for (int i = 0; i < variable.getAttributesCount(); i++) {
             IDecisionVariable att = variable.getAttribute(i);
-            translateDeclaration(att.getDeclaration(), att, compound);
+            translateDeclaration(att.getDeclaration(), att, null == compound ? new Variable(decl) : compound);
         }
     }
 
@@ -464,7 +465,7 @@ public class Resolver {
      * @param var the instance of <tt>decl</tt>.
      * @param cAcc if variable is a nested compound.
      */
-    protected void translateDeclaration(AbstractVariable decl, IDecisionVariable var, CompoundAccess cAcc) {
+    protected void translateDeclaration(AbstractVariable decl, IDecisionVariable var, ConstraintSyntaxTree cAcc) {
         variablesCounter++;
         IDatatype type = decl.getType();
         ConstraintSyntaxTree defaultValue = decl.getDefaultValue();
@@ -485,8 +486,8 @@ public class Resolver {
         } else if (TypeQueries.isContainer(type)) { // this is a container value -> default constraints, do not defer
             translateContainerDeclaration(decl, var, type, cAcc);
         } else if (null != defaultValue && !incremental) {
-            if (null != cAcc) { // defer self/override init constraints to prevent accidental init override
-                selfEx = cAcc.getCompoundExpression();
+            if (cAcc instanceof CompoundAccess) { // defer init constraints to prevent accidental init override
+                selfEx = ((CompoundAccess) cAcc).getCompoundExpression();
             }
         } else if (incremental) { // remaining defaults
             defaultValue = null;
@@ -502,7 +503,7 @@ public class Resolver {
                     if (decl instanceof Attribute) {
                         Attribute attribute = (Attribute) decl;
                         if (cAcc == null) {
-                            acc = new AttributeVariable(new Variable(decl), attribute);                        
+                            acc = new Variable(attribute); // shall not occur
                         } else {                        
                             acc = new AttributeVariable(cAcc, attribute);
                         }
@@ -533,7 +534,7 @@ public class Resolver {
      * @param cAcc compound access expression
      */
     private void translateContainerDeclaration(AbstractVariable decl, IDecisionVariable var, IDatatype type, 
-        CompoundAccess cAcc) {
+        ConstraintSyntaxTree cAcc) {
         Container declType = (Container) type;
         IDatatype dContainedType = getDeepestContainedType(declType);
         IDatatype dContainedBasisType = DerivedDatatype.resolveToBasis(dContainedType);
@@ -577,13 +578,25 @@ public class Resolver {
      * @param cAcc compound access to <code>decl</code> if needed (may be <b>null</b>)
      */
     private void translateCompoundContainer(AbstractVariable decl, Compound cmpType, IDatatype declaredContainedType, 
-        CompoundAccess cAcc) {
-        final DecisionVariableDeclaration localDecl = new DecisionVariableDeclaration("cmp", cmpType, null);        
+        ConstraintSyntaxTree cAcc) {
+        final DecisionVariableDeclaration localDecl = new DecisionVariableDeclaration("cmp", cmpType, null);
+        // we may transfer the attributes from decl here to localDecl, or we just pass decl as attribute provider
+        // to the translation, which is more time/memory efficient
         // fill varMap
-        // TODO annotations
+        Variable localVar = new Variable(localDecl);
         for (int i = 0, n = cmpType.getInheritedElementCount(); i < n; i++) {
             AbstractVariable nestedDecl = cmpType.getInheritedElement(i);
-            varMap.put(nestedDecl, new CompoundAccess(new Variable(localDecl), nestedDecl.getName()));
+            varMap.put(nestedDecl, new CompoundAccess(localVar, nestedDecl.getName()));
+            for (int a = 0, m = nestedDecl.getAttributesCount(); a < m; a++) {
+                Attribute attr = nestedDecl.getAttribute(a);
+                ConstraintSyntaxTree acc;
+                if (cAcc == null) {
+                    acc = new AttributeVariable(new Variable(decl), attr); // shall not occur
+                } else {                        
+                    acc = new AttributeVariable(cAcc, attr);
+                }
+                varMap.put(attr, acc);
+            }
         }
         try {
             ConstraintSyntaxTree containerOp = null == cAcc ? new Variable(decl) : cAcc;
@@ -594,7 +607,7 @@ public class Resolver {
                 containerOp = new OCLFeatureCall(containerOp, OclKeyWords.SELECT_BY_KIND, 
                     new ConstantValue(ValueFactory.createValue(MetaType.TYPE, cmpType)));
             }
-            compoundContainerProc.setParameter(containerOp, localDecl);
+            compoundContainerProc.setParameter(containerOp, localDecl, localVar, decl);
             allCompoundConstraints(cmpType, compoundContainerProc, true, true, project);
             compoundContainerProc.clear();
         } catch (IvmlException e) {
@@ -603,8 +616,8 @@ public class Resolver {
     }
     
     /**
-     * A compound container processor creating the expressions for all-quantized constraints for all container 
-     * entries. Call {@link #setParameter(ConstraintSyntaxTree, DecisionVariableDeclaration))}
+     * A compound container processor creating the expressions for all-quantized constraints for all container entries. 
+     * Call {@link #setParameter(ConstraintSyntaxTree, DecisionVariableDeclaration, Variable, IAttributeAccess))}
      * before use and {@link #clear()} afterwards.
      * 
      * @author Holger Eichelberger
@@ -612,37 +625,50 @@ public class Resolver {
     private class CompoundContainerProcessor extends AbstractConstraintProcessor {
 
         private DecisionVariableDeclaration self;
-        private ConstraintSyntaxTree containerOp;
         private ConstraintSyntaxTree selfEx;
-        
+        private ConstraintSyntaxTree containerOp;
+        private IAttributeAccess attributeAccess;
+
         /**
          * Sets the processing parameter.
          * 
          * @param containerOp the container access operation including the all-quantor
          * @param self the local iterator declaration
+         * @param selfEx the variable for <code>self</code>
+         * @param attributeAccess access to attributes (instead of <code>self</code>)
          */
-        private void setParameter(ConstraintSyntaxTree containerOp, DecisionVariableDeclaration self) {
+        private void setParameter(ConstraintSyntaxTree containerOp, DecisionVariableDeclaration self, Variable selfEx, 
+            IAttributeAccess attributeAccess) {
             this.containerOp = containerOp;
             this.self = self;
-            this.selfEx = new Variable(self);
+            this.selfEx = selfEx;
+            this.attributeAccess = attributeAccess;
         }
         
         /**
-         * Clears this instance for reuse. Not really needed if {@link #setParameter(AbstractVariable, 
-         * DecisionVariableDeclaration, CompoundAccess, ConstraintSyntaxTree, Deque)} is utilized consequently, but
-         * helps getting rid of dangling references / supports garbage collection.
+         * Clears this instance for reuse. Not really needed if 
+         * {@link #setParameter(ConstraintSyntaxTree, DecisionVariableDeclaration, Variable, IAttributeAccess)} 
+         * is utilized consequently, but helps getting rid of dangling references / supports garbage collection.
          */
         private void clear() {
             this.containerOp = null;
             this.self = null;
+            this.selfEx = null;
+            this.attributeAccess = null;
         }
 
         @Override
         public ConstraintSyntaxTree process(ConstraintSyntaxTree cst, ExpressionType type, String slot, 
             IModelElement parent) {
             cst = substituteVariables(cst, selfEx, null, true);
-            if (ExpressionType.DEFAULT_VALUE == type) {
-                cst = new OCLFeatureCall(new CompoundAccess(selfEx, slot), OclKeyWords.ASSIGNMENT, cst);
+            ConstraintSyntaxTree acc = null;
+            if (ExpressionType.DEFAULT == type) {
+                acc = new CompoundAccess(selfEx, slot);
+            } else if (ExpressionType.ANNOTATION_DEFAULT == type) {
+                acc = new AttributeVariable(selfEx, attributeAccess.getAttribute(slot));
+            }
+            if (null != acc) {
+                cst = new OCLFeatureCall(acc, OclKeyWords.ASSIGNMENT, cst);
             }
             if (Descriptor.LOGGING) {
                 LOGGER.debug("New loop constraint " + toIvmlString(cst));
@@ -652,7 +678,7 @@ public class Resolver {
                 cst.inferDatatype();
                 Constraint cons;
                 Deque<Constraint> res;
-                if (ExpressionType.DEFAULT_VALUE == type) {
+                if (ExpressionType.DEFAULT == type) {
                     cons = new DefaultConstraint(cst, parent);
                     // TODO decide for deferred
                     res = deferredDefaultConstraints;
@@ -680,8 +706,8 @@ public class Resolver {
      *     <code>decl</code>/<code>variable</code>
      * @param type specific {@link Compound} type.
      */
-    private void translateCompoundDeclaration(final AbstractVariable decl, IDecisionVariable variable,
-        final CompoundAccess compound, IDatatype type) {
+    private void translateCompoundDeclaration(AbstractVariable decl, IDecisionVariable variable,
+        ConstraintSyntaxTree compound, IDatatype type) {
         Compound cmpType = (Compound) type;
         CompoundVariable cmpVar = (CompoundVariable) variable;
         // resolve compound access first for all slots
@@ -728,7 +754,7 @@ public class Resolver {
      */
     private class OtherConstraintsProcessor extends AbstractConstraintProcessor {
 
-        private CompoundAccess selfEx;
+        private ConstraintSyntaxTree selfEx;
         private AbstractVariable self;
        
         /**
@@ -738,7 +764,7 @@ public class Resolver {
          *     <code>selfEx</code> shall never both be specified/not <b>null</b>).
          * @param self an variable declaration representing <i>self</i> (ignored if <b>null</b>).
          */
-        private void setParameter(CompoundAccess selfEx, AbstractVariable self) {
+        private void setParameter(ConstraintSyntaxTree selfEx, AbstractVariable self) {
             this.selfEx = selfEx;
             this.self = self;
         }
@@ -881,7 +907,7 @@ public class Resolver {
      * @param compound Parent {@link CompoundAccess}.
      */
     private void translateAnnotationAssignments(AttributeAssignment assignment, IDecisionVariable var, 
-        List<Assignment> effectiveAssignments, CompoundAccess compound) {
+        List<Assignment> effectiveAssignments, ConstraintSyntaxTree compound) {
         List<Assignment> assng = null == effectiveAssignments ? new ArrayList<Assignment>() : effectiveAssignments;
         for (int d = 0; d < assignment.getAssignmentDataCount(); d++) { 
             assng.add(assignment.getAssignmentData(d));
@@ -919,7 +945,7 @@ public class Resolver {
      * @param compound Nesting compound if there is one, may be <b>null</b> for none.
      */
     private void translateAnnotationAssignment(Assignment assignment, DecisionVariableDeclaration element,
-        CompoundAccess compound) {
+        ConstraintSyntaxTree compound) {
         String attributeName = assignment.getName();
         Attribute attrib = (Attribute) element.getAttribute(attributeName);
         if (null != attrib) {
