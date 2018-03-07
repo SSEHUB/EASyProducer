@@ -27,21 +27,38 @@ import net.ssehub.easy.varModel.model.IModelElement;
 public abstract class AbstractConstraintProcessor {
 
     /**
+     * Expression types.
+     * 
+     * @author Holger Eichelberger
+     */
+    public enum ExpressionType {
+        DEFAULT_VALUE,
+        CONSTRAINT_VALUE,
+        ASSIGNMENT_CONSTRAINT,
+        CONSTRAINT
+    }
+    
+    /**
      * Processes a constraint syntax tree.
      * 
      * @param cst the constraint syntax tree
+     * @param type the type of <code>cst</code>
+     * @param slot the slot name, only in case of {@link ExpressionType#DEFAULT_VALUE}
      * @param parent the actual/intended parent if not determined otherwise
      * @return the processed constraint syntax tree, may be <code>cst</code>
      */
-    public abstract ConstraintSyntaxTree process(ConstraintSyntaxTree cst, IModelElement parent);
+    public abstract ConstraintSyntaxTree process(ConstraintSyntaxTree cst, ExpressionType type, String slot, 
+        IModelElement parent);
 
     /**
      * Processes a constraint (taking over the parent of <code>constraint</code>). [convenience]
      * 
      * @param constraint the constraint to be processed
+     * @param type the type of the constraint
      * @return the processed constraint syntax tree, may be the one of <code>constraint</code>
      */
-    public ConstraintSyntaxTree process(Constraint constraint) {
-        return process(constraint.getConsSyntax(), constraint.getParent());
+    public ConstraintSyntaxTree process(Constraint constraint, ExpressionType type) {
+        return process(constraint.getConsSyntax(), type, null, constraint.getParent());
     }
+    
 }

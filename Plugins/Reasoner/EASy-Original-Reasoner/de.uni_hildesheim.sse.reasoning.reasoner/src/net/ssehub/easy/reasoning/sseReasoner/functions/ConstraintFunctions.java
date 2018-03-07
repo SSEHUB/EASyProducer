@@ -15,6 +15,7 @@
  */
 package net.ssehub.easy.reasoning.sseReasoner.functions;
 
+import net.ssehub.easy.reasoning.sseReasoner.functions.AbstractConstraintProcessor.ExpressionType;
 import net.ssehub.easy.varModel.cst.ConstraintSyntaxTree;
 import net.ssehub.easy.varModel.model.AttributeAssignment;
 import net.ssehub.easy.varModel.model.DecisionVariableDeclaration;
@@ -34,25 +35,32 @@ public class ConstraintFunctions {
      * 
      * @param cmpType Compound to be processed.
      * @param processor The constraint processor functor.
-     * @param includeConstraintVariables <code>true</code> whether constraint variables shall be included or not.
+     * @param includeConstraintVariables <code>true</code> whether constraint variables shall be included.
+     * @param includeDefaults <code>true</code> whether default value expressions shall be included.
      * @param parent the intended parent for constraints, typically the containing project
      */
-    public static void allCompoundConstraints(Compound cmpType, 
-        AbstractConstraintProcessor processor, boolean includeConstraintVariables, IModelElement parent) {
+    public static void allCompoundConstraints(Compound cmpType, AbstractConstraintProcessor processor, 
+        boolean includeConstraintVariables, boolean includeDefaults, IModelElement parent) {
         for (int c = 0; c < cmpType.getConstraintsCount(); c++) {
-            processor.process(cmpType.getConstraint(c));
+            processor.process(cmpType.getConstraint(c), ExpressionType.CONSTRAINT);
         }
-        if (includeConstraintVariables) {
+        if (includeConstraintVariables || includeDefaults) {
             for (int i = 0; i < cmpType.getElementCount(); i++) {
                 DecisionVariableDeclaration decl = cmpType.getElement(i);
                 ConstraintSyntaxTree defaultValue = decl.getDefaultValue();
-                if (null != defaultValue && TypeQueries.isConstraint(decl.getType())) {
-                    processor.process(defaultValue, parent);
-                } 
+                if (null != defaultValue) {
+                    if (includeConstraintVariables && TypeQueries.isConstraint(decl.getType())) {
+                        processor.process(defaultValue, ExpressionType.CONSTRAINT_VALUE, decl.getName(), parent);
+                    } else if (includeDefaults) {
+                        processor.process(defaultValue, ExpressionType.DEFAULT_VALUE, decl.getName(), parent);
+                    }
+                }
+                // TODO annotations
             }
         }
         for (int r = 0; r < cmpType.getRefinesCount(); r++) {
-            allCompoundConstraints(cmpType.getRefines(r), processor, includeConstraintVariables, parent);
+            allCompoundConstraints(cmpType.getRefines(r), processor, includeConstraintVariables, 
+                includeDefaults, parent);
         }
         for (int a = 0; a < cmpType.getAssignmentCount(); a++) {
             allAssignmentConstraints(cmpType.getAssignment(a), processor);
@@ -67,7 +75,7 @@ public class ConstraintFunctions {
      */
     public static void allAssignmentConstraints(AttributeAssignment assng, AbstractConstraintProcessor processor) {
         for (int c = 0; c < assng.getConstraintsCount(); c++) {
-            processor.process(assng.getConstraint(c));
+            processor.process(assng.getConstraint(c), ExpressionType.ASSIGNMENT_CONSTRAINT);
         }
         for (int a = 0; a < assng.getAssignmentCount(); a++) {
             allAssignmentConstraints(assng.getAssignment(a), processor);

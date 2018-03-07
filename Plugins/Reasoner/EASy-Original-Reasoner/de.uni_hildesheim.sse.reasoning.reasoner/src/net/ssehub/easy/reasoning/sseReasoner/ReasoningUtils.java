@@ -402,16 +402,28 @@ class ReasoningUtils {
         }
         return result;
     }
+    
+    /**
+     * Adds all refines of <code>cmp</code> to <code>result</code>.
+     * 
+     * @param cmp the compound to derive the refined compound hierarchy from
+     * @param result the set of refined compounds
+     */
+    static void addRefines(Compound cmp, Set<Compound> result) {
+        result.add(cmp);
+        for (int r = 0, n = cmp.getRefinesCount(); r < n; r++) {
+            addRefines(cmp.getRefines(r), result);
+        }
+    }
 
     /**
      * Returns the used types if <code>value</code> is a container value.
      * 
-     * @param <D> the the to filter for
      * @param val the value
      * @param result the result set to be modified as a side effect
      * @return <code>true</code> if <code>val</code> is a container value, <code>false</code> else
      */
-    static <D extends IDatatype> boolean getUsedCompoundTypes(Value val, Set<Compound> result) {
+    static boolean getUsedCompoundTypes(Value val, Set<Compound> result) {
         boolean done = false;
         if (val instanceof ContainerValue) {
             ContainerValue cVal = (ContainerValue) val;
