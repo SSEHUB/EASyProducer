@@ -18,6 +18,8 @@ package net.ssehub.easy.varModel.confModel;
 import java.util.HashMap;
 import java.util.Map;
 
+import net.ssehub.easy.basics.logger.EASyLoggerFactory;
+import net.ssehub.easy.varModel.Bundle;
 import net.ssehub.easy.varModel.confModel.paths.IResolutionPathElement;
 import net.ssehub.easy.varModel.confModel.paths.IndexAccessPathElement;
 import net.ssehub.easy.varModel.confModel.paths.StartPathElement;
@@ -26,11 +28,12 @@ import net.ssehub.easy.varModel.cst.ConstraintSyntaxTree;
 import net.ssehub.easy.varModel.cst.OCLFeatureCall;
 import net.ssehub.easy.varModel.cst.Variable;
 import net.ssehub.easy.varModel.model.AbstractVariable;
+import net.ssehub.easy.varModel.model.AnnotationVisitor;
 import net.ssehub.easy.varModel.model.Attribute;
 import net.ssehub.easy.varModel.model.AttributeAssignment;
 import net.ssehub.easy.varModel.model.DecisionVariableDeclaration;
 import net.ssehub.easy.varModel.model.IAttributeAccess;
-import net.ssehub.easy.varModel.model.IModelElement;
+import net.ssehub.easy.varModel.model.IvmlException;
 import net.ssehub.easy.varModel.model.datatypes.IDatatype;
 import net.ssehub.easy.varModel.model.datatypes.OclKeyWords;
 import net.ssehub.easy.varModel.model.values.NullValue;
@@ -74,11 +77,73 @@ abstract class DecisionVariable implements IDecisionVariable {
         configProvider = VariableConfigProviderFactory.createDelegate(this);
         if (!isAttribute) {
             try {
-                initializeAttributes(varDeclaration);
-            } catch (ConfigurationException e) {
-                e.printStackTrace();
+                new InitializationAnnotationVisitor().visitAnnotations(varDeclaration);
+            } catch (IvmlException e) {
+                EASyLoggerFactory.INSTANCE.getLogger(getClass(), Bundle.ID).exception(e);
             }
         }
+    }
+
+    /**
+     * Initializes annotation variables of the containing decision variable.
+     * 
+     * @author Holger Eichelberger
+     */
+    private class InitializationAnnotationVisitor extends AnnotationVisitor {
+
+        private Map<String, Value> values = new HashMap<String, Value>();
+        private Map<String, IDecisionVariable> tmp = new HashMap<String, IDecisionVariable>();
+
+        @Override
+        public void visitAnnotations(IAttributeAccess access) throws IvmlException {
+            super.visitAnnotations(access);
+            DecisionVariable.this.attributes = new IDecisionVariable[tmp.size()];
+            int a = 0;
+            for (IDecisionVariable var : tmp.values()) {
+                attributes[a++] = var;
+            }
+        }
+        
+        @Override
+        protected void processAttributeAssignment(AttributeAssignment assng) throws IvmlException {
+            // unpack constraints
+            for (int r = 0; r < assng.getRealizingCount(); r++) {
+                ConstraintSyntaxTree constr = assng.getRealizing(r).getConsSyntax();
+                if (constr instanceof OCLFeatureCall) {
+                    OCLFeatureCall call = (OCLFeatureCall) constr;
+                    if (1 == call.getParameterCount() && OclKeyWords.ASSIGNMENT.equals(call.getOperation())) {
+                        ConstraintSyntaxTree p0 = call.getOperand();
+                        ConstraintSyntaxTree p1 = call.getParameter(0);
+                        if (p0 instanceof Variable && p1 instanceof ConstantValue) {
+                            AbstractVariable var = ((Variable) p0).getVariable();
+                            String key = var.getName();
+                            if (!values.containsKey(key)) {
+                                values.put(key, ((ConstantValue) p1).getConstantValue());
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        @Override
+        protected void processAttribute(Attribute attr) throws IvmlException {
+            String key = attr.getName();
+            if (!tmp.containsKey(key)) {
+                VariableCreator creator = new VariableCreator(attr, DecisionVariable.this, isVisible, true);
+                IDecisionVariable var = creator.getVariable();
+                if (values.containsKey(key)) {
+                    var.setValue(values.get(key), AssignmentState.DERIVED);
+                } else if (null != attr.getDefaultValue()) {
+                    if (attr.getDefaultValue() instanceof ConstantValue) {
+                        Value val = ((ConstantValue) attr.getDefaultValue()).getConstantValue();
+                        var.setValue(val, AssignmentState.DEFAULT);
+                    }
+                }
+                tmp.put(key, var);
+            }
+        }
+        
     }
 
     /**
@@ -87,7 +152,7 @@ abstract class DecisionVariable implements IDecisionVariable {
      * @param attributeDecl the element declaring the attributes for this variable
      * @throws ConfigurationException in case that types do not comply
      */
-    public void initializeAttributes(IAttributeAccess attributeDecl) throws ConfigurationException {
+    /*public void initializeAttributes(IAttributeAccess attributeDecl) throws ConfigurationException {
         if (!(attributeDecl instanceof Attribute)) { // attributes of attributes are not allowed in IVML
 
             // unpack constraints, remove as soon as reasoner works with this
@@ -116,7 +181,7 @@ abstract class DecisionVariable implements IDecisionVariable {
                 attributes[a++] = var;
             }
         }
-    }
+    }*/
 
     /**
      * Unpacks the constraints and extracts the values. This is currently just a workaround as long as the reasoner
@@ -125,7 +190,7 @@ abstract class DecisionVariable implements IDecisionVariable {
      * @param assng the attribute assignment to unpack
      * @param values the attribute-value-mapping (to be modified as a side effect)
      */
-    private void unpackConstraints(AttributeAssignment assng, Map<String, Value> values) {
+/*    private void unpackConstraints(AttributeAssignment assng, Map<String, Value> values) {
         for (int r = 0; r < assng.getRealizingCount(); r++) {
             ConstraintSyntaxTree constr = assng.getRealizing(r).getConsSyntax();
             if (constr instanceof OCLFeatureCall) {
@@ -143,7 +208,7 @@ abstract class DecisionVariable implements IDecisionVariable {
                 }
             }
         }
-    }
+    }*/
     
     /**
      * Adds all attributes provided by <code>access</code>.
@@ -153,7 +218,7 @@ abstract class DecisionVariable implements IDecisionVariable {
      * @param values mapping of attributes to values (just from attribute assignments)
      * @throws ConfigurationException in case of any type / value assignment error
      */
-    private void addAttributes(IAttributeAccess access, Map<String, IDecisionVariable> map, 
+    /*private void addAttributes(IAttributeAccess access, Map<String, IDecisionVariable> map, 
         Map<String, Value> values) throws ConfigurationException {
         for (int a = 0; a < access.getAttributesCount(); a++) {
             Attribute attr = access.getAttribute(a);
@@ -172,7 +237,7 @@ abstract class DecisionVariable implements IDecisionVariable {
                 map.put(key, var);
             }
         }
-    }
+    }*/
     
     /**
      * Returns the number of attributes.
