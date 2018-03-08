@@ -723,15 +723,23 @@ public class Resolver {
             IDecisionVariable nestedVar = cmpVar.getNestedElement(i);
             AbstractVariable nestedDecl = nestedVar.getDeclaration();
             CompoundAccess cmpAccess;
-            if (compound == null) {
+            if (null == compound) {
                 cmpAccess = new CompoundAccess(new Variable(decl), nestedDecl.getName());                   
             } else {
                 cmpAccess = new CompoundAccess(createAsTypeCast(compound, type, cmpVar.getValue().getType()), 
                     nestedDecl.getName());
             }
-            inferTypeSafe(cmpAccess, null);
-            // fill varMap
             varMap.put(nestedDecl, cmpAccess);
+            for (int a = 0, m = nestedDecl.getAttributesCount(); a < m; a++) {
+                Attribute attr = nestedDecl.getAttribute(a);
+                ConstraintSyntaxTree acc;
+                if (null == compound) {
+                    acc = new AttributeVariable(new Variable(decl), attr);
+                } else {                        
+                    acc = new AttributeVariable(createAsTypeCast(compound, type, cmpVar.getValue().getType()), attr);
+                }
+                varMap.put(attr, acc);
+            }            
         }
         for (int i = 0, n = cmpVar.getNestedElementsCount(); i < n; i++) {
             IDecisionVariable nestedVar = cmpVar.getNestedElement(i);
