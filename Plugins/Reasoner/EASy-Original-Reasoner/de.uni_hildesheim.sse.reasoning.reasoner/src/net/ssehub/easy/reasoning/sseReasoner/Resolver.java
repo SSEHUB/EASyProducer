@@ -553,7 +553,7 @@ public class Resolver {
                     SET_COMPOUND_POOL.releaseInstance(used);
                     used = tmp;
                 } else if (dContainedBasisType instanceof Compound) {
-                    used.add((Compound) DerivedDatatype.resolveToBasis(declType.getContainedType()));
+                    used.add((Compound) dContainedBasisType);
                 }
                 for (Compound uType : used) {
                     translateCompoundContainer(decl, uType, dContainedType, cAcc);
@@ -584,6 +584,7 @@ public class Resolver {
         // to the translation, which is more time/memory efficient
         // fill varMap
         Variable localVar = new Variable(localDecl);
+        Variable declVar = new Variable(decl);
         for (int i = 0, n = cmpType.getInheritedElementCount(); i < n; i++) {
             AbstractVariable nestedDecl = cmpType.getInheritedElement(i);
             varMap.put(nestedDecl, new CompoundAccess(localVar, nestedDecl.getName()));
@@ -591,7 +592,7 @@ public class Resolver {
                 Attribute attr = nestedDecl.getAttribute(a);
                 ConstraintSyntaxTree acc;
                 if (cAcc == null) {
-                    acc = new AttributeVariable(new Variable(decl), attr); // shall not occur
+                    acc = new AttributeVariable(declVar, attr);
                 } else {                        
                     acc = new AttributeVariable(cAcc, attr);
                 }
