@@ -119,6 +119,8 @@ public class Resolver {
     private boolean hasTimeout = false;
     private boolean isRunning = false;
     private boolean wasStopped = false;
+    private long translationTime = 0;
+    private long evaluationTime = 0;
 
     // global temporary variables avoiding parameter passing (performance)
     
@@ -287,8 +289,13 @@ public class Resolver {
             if (Descriptor.LOGGING) {
                 LOGGER.debug("Project:" + project.getName());                
             }
+            long start = System.currentTimeMillis();
             translateConstraints();
+            long mid = System.currentTimeMillis();
+            translationTime += mid - start;
             evaluateConstraints();
+            long end = System.currentTimeMillis();
+            evaluationTime += end - mid;
             // Freezes values after each scope
             config.freezeValues(project, FilterType.NO_IMPORTS);
             // TODO do incremental freezing in here -> required by interfaces with propagation constraints
@@ -1392,6 +1399,24 @@ public class Resolver {
             constraintBase.addAll(constraintBaseCopy);
             constraintBaseSet.addAll(constraintBaseCopy);
         }
+    }
+
+    /**
+     * Returns the time used for evaluation.
+     * 
+     * @return the time in ms
+     */
+    long getEvaluationTime() {
+        return translationTime;
+    }
+    
+    /**
+     * Returns the time used for translation.
+     * 
+     * @return the time in ms
+     */
+    long getTranslationTime() {
+        return evaluationTime;
     }
 
 }
