@@ -17,7 +17,7 @@ package net.ssehub.easy.varModel.cstEvaluation;
 
 import net.ssehub.easy.basics.DefaultLocale;
 import net.ssehub.easy.varModel.confModel.AssignmentState;
-import net.ssehub.easy.varModel.confModel.CompoundVariable;
+import net.ssehub.easy.varModel.confModel.IDecisionVariable;
 import net.ssehub.easy.varModel.model.datatypes.AnyType;
 import net.ssehub.easy.varModel.model.datatypes.IDatatype;
 import net.ssehub.easy.varModel.model.datatypes.IntegerType;
@@ -399,7 +399,7 @@ public class GenericOperations {
         boolean result = false;
         if (operand.getValue() instanceof CompoundValue) {  
             result = true;
-            CompoundVariable oCmp = (CompoundVariable) operand.getVariable();
+            IDecisionVariable oCmp = operand.getVariable();
             if (oCmp != null) {
                 for (int i = 0; i < oCmp.getNestedElementsCount(); i++) {
                     if (oCmp.getNestedElement(i).getState() != AssignmentState.UNDEFINED) {
