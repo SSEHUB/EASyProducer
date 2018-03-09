@@ -36,7 +36,7 @@ import net.ssehub.easy.varModel.model.AbstractVariable;
 public class SubstitutionVisitor extends BasicCopyVisitor {
 
     private Map<AbstractVariable, ConstraintSyntaxTree> mapping;
-    private Map<AbstractVariable, ? extends ConstraintSyntaxTree> globalMapping;
+    private ContextStack globalMapping;
     private ConstraintSyntaxTree selfEx;
     private AbstractVariable self;
     private boolean containsSelf;
@@ -54,9 +54,9 @@ public class SubstitutionVisitor extends BasicCopyVisitor {
      * @param globalMapping a mapping from variable declarations to new access expressions,
      *   existing variable declarations are taken over if no mapping is given, may be <b>null</b>
      *   in case of no mapping at all
-     * @see #setMappings(Map, Map)
+     * @see #setMappings(ContextStack)
      */
-    public SubstitutionVisitor(Map<AbstractVariable, ? extends ConstraintSyntaxTree> globalMapping) {
+    public SubstitutionVisitor(ContextStack globalMapping) {
         // setCopyVariables not needed as overridden anyway
         setDoInferDatatype(false);
         setCopyConstants(false); 
@@ -70,7 +70,7 @@ public class SubstitutionVisitor extends BasicCopyVisitor {
      *   existing variable declarations are taken over if no mapping is given, may be <b>null</b>
      *   in case of no mapping at all
      */
-    public void setMappings(Map<AbstractVariable, ? extends ConstraintSyntaxTree> globalMapping) {
+    public void setMappings(ContextStack globalMapping) {
         this.globalMapping = globalMapping;
     }
 
@@ -110,7 +110,7 @@ public class SubstitutionVisitor extends BasicCopyVisitor {
     public SubstitutionVisitor addVariableMapping(AbstractVariable orig, AbstractVariable dest) {
         ConstraintSyntaxTree destEx = null;
         if (null != globalMapping) { // allow for transitive substitution saving unneeded variables
-            ConstraintSyntaxTree ca = globalMapping.get(dest);
+            ConstraintSyntaxTree ca = globalMapping.getMapping(dest);
             if (null != ca) {
                 destEx = ca;
             }
@@ -206,7 +206,7 @@ public class SubstitutionVisitor extends BasicCopyVisitor {
             res = mapping.get(variable.getVariable());
         }
         if (null == res) {
-            ConstraintSyntaxTree tmp = null == globalMapping ? null : globalMapping.get(variable.getVariable());
+            ConstraintSyntaxTree tmp = null == globalMapping ? null : globalMapping.getMapping(variable.getVariable());
             if (null != tmp) {
                 res = inferDatatype(tmp);
             }

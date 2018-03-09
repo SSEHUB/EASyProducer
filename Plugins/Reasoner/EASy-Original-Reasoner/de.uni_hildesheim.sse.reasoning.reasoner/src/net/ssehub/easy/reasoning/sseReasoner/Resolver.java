@@ -21,6 +21,7 @@ import net.ssehub.easy.reasoning.sseReasoner.functions.FailedElements;
 import net.ssehub.easy.reasoning.sseReasoner.functions.AbstractConstraintProcessor;
 import net.ssehub.easy.reasoning.sseReasoner.functions.ScopeAssignments;
 import net.ssehub.easy.reasoning.sseReasoner.model.ContainerConstraintsFinder;
+import net.ssehub.easy.reasoning.sseReasoner.model.ContextStack;
 import net.ssehub.easy.reasoning.sseReasoner.model.SubstitutionVisitor;
 import net.ssehub.easy.reasoning.sseReasoner.model.DefaultConstraint;
 import net.ssehub.easy.reasoning.sseReasoner.model.VariablesInNotSimpleAssignmentConstraintsFinder;
@@ -72,8 +73,8 @@ import net.ssehub.easy.varModel.model.values.ContainerValue;
 import net.ssehub.easy.varModel.model.values.Value;
 import net.ssehub.easy.varModel.model.values.ValueFactory;
 
-import static net.ssehub.easy.reasoning.sseReasoner.ReasoningUtils.*;
 import static net.ssehub.easy.reasoning.sseReasoner.functions.ConstraintFunctions.*;
+import static net.ssehub.easy.reasoning.sseReasoner.model.ReasoningUtils.*;
 
 /**
  * Constraint identifier, resolver and executor. Assumption that constraints are not evaluated in parallel (see some
@@ -127,8 +128,7 @@ public class Resolver {
     private Project project;
     private transient Set<IDecisionVariable> usedVariables = new HashSet<IDecisionVariable>(100);
     private transient SubstitutionVisitor substVisitor = new SubstitutionVisitor();
-    private transient Map<AbstractVariable, ConstraintSyntaxTree> varMap 
-        = new HashMap<AbstractVariable, ConstraintSyntaxTree>(100);
+    private transient ContextStack contexts = new ContextStack();
     private transient ContainerConstraintsFinder containerFinder = new ContainerConstraintsFinder();
     private transient VariablesInNotSimpleAssignmentConstraintsFinder simpleAssignmentFinder 
         = new VariablesInNotSimpleAssignmentConstraintsFinder(constraintMap);
@@ -397,6 +397,7 @@ public class Resolver {
 
         @Override // iterate over nested blocks/contained, translate the individual blocks if not incremental
         public void visitAttributeAssignment(AttributeAssignment assignment) {
+            boolean oldReg = contexts.setRegisterContexts(true);
             for (int v = 0; v < assignment.getElementCount(); v++) {
                 assignment.getElement(v).accept(this);
             }
@@ -406,6 +407,7 @@ public class Resolver {
             if (!incremental) {
                 translateAnnotationAssignments(assignment, null, null, null);
             }
+            contexts.setRegisterContexts(oldReg);
         }
         
     }
@@ -426,7 +428,7 @@ public class Resolver {
         DecisionVariableDeclaration dVar = dType.getTypeDeclaration();
         AbstractVariable declaration = null == localDecl ? decl : localDecl;
         if (count > 0 && dVar != declaration) {
-            substVisitor.setMappings(varMap);
+            substVisitor.setMappings(contexts);
             substVisitor.addVariableMapping(dVar, declaration);
             //Copy and replace each instance of the internal declaration with the given instance
             for (int i = 0; i < count; i++) {
@@ -542,6 +544,7 @@ public class Resolver {
      */
     private void translateContainerDeclaration(AbstractVariable decl, IDecisionVariable var, IDatatype type, 
         ConstraintSyntaxTree cAcc) {
+        contexts.pushContext(decl, cAcc);
         Container declType = (Container) type;
         IDatatype dContainedType = getDeepestContainedType(declType);
         IDatatype dContainedBasisType = DerivedDatatype.resolveToBasis(dContainedType);
@@ -573,6 +576,7 @@ public class Resolver {
             translateDerivedDatatypeConstraints(decl, (DerivedDatatype) dContainedType,  
                 new DecisionVariableDeclaration("derivedType", dContainedType, null), project);
         }
+        contexts.popContext();
     }
 
     /**
@@ -594,7 +598,7 @@ public class Resolver {
         Variable declVar = new Variable(decl);
         for (int i = 0, n = cmpType.getInheritedElementCount(); i < n; i++) {
             AbstractVariable nestedDecl = cmpType.getInheritedElement(i);
-            varMap.put(nestedDecl, new CompoundAccess(localVar, nestedDecl.getName()));
+            contexts.registerMapping(nestedDecl, new CompoundAccess(localVar, nestedDecl.getName()));
             for (int a = 0, m = nestedDecl.getAttributesCount(); a < m; a++) {
                 Attribute attr = nestedDecl.getAttribute(a);
                 ConstraintSyntaxTree acc;
@@ -603,7 +607,7 @@ public class Resolver {
                 } else {                        
                     acc = new AttributeVariable(cAcc, attr);
                 }
-                varMap.put(attr, acc);
+                contexts.registerMapping(attr, acc);
             }
         }
         try {
@@ -716,6 +720,7 @@ public class Resolver {
      */
     private void translateCompoundDeclaration(AbstractVariable decl, IDecisionVariable variable,
         ConstraintSyntaxTree compound, IDatatype type) {
+        contexts.pushContext(decl, compound);
         Compound cmpType = (Compound) type;
         CompoundVariable cmpVar = (CompoundVariable) variable;
         // resolve compound access first for all slots
@@ -729,7 +734,7 @@ public class Resolver {
                 cmpAccess = new CompoundAccess(createAsTypeCast(compound, type, cmpVar.getValue().getType()), 
                     nestedDecl.getName());
             }
-            varMap.put(nestedDecl, cmpAccess);
+            contexts.registerMapping(nestedDecl, cmpAccess);
             for (int a = 0, m = nestedDecl.getAttributesCount(); a < m; a++) {
                 Attribute attr = nestedDecl.getAttribute(a);
                 ConstraintSyntaxTree acc;
@@ -738,13 +743,13 @@ public class Resolver {
                 } else {                        
                     acc = new AttributeVariable(createAsTypeCast(compound, type, cmpVar.getValue().getType()), attr);
                 }
-                varMap.put(attr, acc);
+                contexts.registerMapping(attr, acc);
             }            
         }
         for (int i = 0, n = cmpVar.getNestedElementsCount(); i < n; i++) {
             IDecisionVariable nestedVar = cmpVar.getNestedElement(i);
             AbstractVariable nestedDecl = nestedVar.getDeclaration();
-            translateDeclaration(nestedDecl, nestedVar, varMap.get(nestedDecl));
+            translateDeclaration(nestedDecl, nestedVar, contexts.getMapping(nestedDecl));
         }
         // Nested attribute assignments handling
         if (!incremental) {
@@ -758,6 +763,7 @@ public class Resolver {
         otherConstraintsProc.setParameter(compound, self);
         allCompoundConstraints(cmpType, otherConstraintsProc, false, false, decl);
         otherConstraintsProc.clear();
+        contexts.popContext();
     }
     
     /**
@@ -932,6 +938,7 @@ public class Resolver {
             Assignment effectiveAssignment = assng.get(d);
             for (int e = 0; e < assignment.getElementCount(); e++) {
                 DecisionVariableDeclaration aElt = assignment.getElement(e);
+                contexts.activate(aElt);
                 translateAnnotationAssignment(effectiveAssignment, aElt, compound);
                 IDatatype aEltType = aElt.getType();
                 if (null != var) {
@@ -944,9 +951,10 @@ public class Resolver {
                     Compound cmp = (Compound) aEltType;
                     for (int s = 0; s < cmp.getDeclarationCount(); s++) {
                         DecisionVariableDeclaration slot = cmp.getDeclaration(s);
-                        translateAnnotationAssignment(effectiveAssignment, slot, varMap.get(slot));
+                        translateAnnotationAssignment(effectiveAssignment, slot, contexts.getMapping(slot));
                     }
                 }
+                contexts.deactivate(aElt);
             }
         }        
         for (int a = 0; a < assignment.getAssignmentCount(); a++) {
@@ -968,7 +976,7 @@ public class Resolver {
             ConstraintSyntaxTree cst;
             //handle annotations in compounds
             if (null == compound) {
-                compound = varMap.get(element);
+                compound = contexts.getMapping(element);
             }
             if (compound == null) {
                 cst = new AttributeVariable(new Variable(element), attrib);
@@ -995,7 +1003,6 @@ public class Resolver {
     private void translateConstraints() {
         // translate only if not marked for reuse and copy of constraint base is already available
         if (null == constraintBaseCopy || constraintBaseCopy.isEmpty()) {
-            varMap.clear();
             project.accept(projectVisitor);
             addAllToConstraintBase(defaultConstraints);
             addAllToConstraintBase(deferredDefaultConstraints);
@@ -1008,6 +1015,7 @@ public class Resolver {
             if (null != constraintBaseCopy) {
                 constraintBaseCopy.addAll(constraintBase);
             }
+            contexts.clear();
         }
     }
 
@@ -1181,7 +1189,7 @@ public class Resolver {
      */
     private ConstraintSyntaxTree substituteVariables(ConstraintSyntaxTree cst, ConstraintSyntaxTree selfEx, 
         AbstractVariable self, boolean clear) {
-        substVisitor.setMappings(varMap);
+        substVisitor.setMappings(contexts);
         if (selfEx != null) {
             substVisitor.setSelf(selfEx);            
         }
@@ -1391,7 +1399,7 @@ public class Resolver {
         wasStopped = false;
         usedVariables.clear();
         substVisitor.clear();
-        varMap.clear();
+        contexts.clear();
         containerFinder.clear();
         simpleAssignmentFinder.clear();
     }

@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package net.ssehub.easy.reasoning.sseReasoner;
+package net.ssehub.easy.reasoning.sseReasoner.model;
 
 import java.util.Collection;
 import java.util.HashSet;
@@ -24,6 +24,7 @@ import net.ssehub.easy.basics.logger.EASyLoggerFactory;
 import net.ssehub.easy.basics.logger.EASyLoggerFactory.EASyLogger;
 import net.ssehub.easy.basics.pool.IPoolManager;
 import net.ssehub.easy.basics.pool.Pool;
+import net.ssehub.easy.reasoning.sseReasoner.Descriptor;
 import net.ssehub.easy.reasoning.sseReasoner.functions.FailedElements;
 import net.ssehub.easy.varModel.confModel.Configuration;
 import net.ssehub.easy.varModel.confModel.IDecisionVariable;
@@ -56,7 +57,7 @@ import net.ssehub.easy.varModel.persistency.StringProvider;
  * 
  * @author Holger Eichelberger
  */
-class ReasoningUtils {
+public class ReasoningUtils {
 
     /**
      * A set pool for instances of <code>Set<Compound></code>.
@@ -86,7 +87,7 @@ class ReasoningUtils {
      * @param dflt the default
      * @return the type of the expression or <code>dflt</code> in case of failures
      */
-    static IDatatype inferTypeSafe(ConstraintSyntaxTree cst, IDatatype dflt) {
+    public static IDatatype inferTypeSafe(ConstraintSyntaxTree cst, IDatatype dflt) {
         IDatatype result = dflt;
         try {
             result = cst.inferDatatype();
@@ -103,7 +104,7 @@ class ReasoningUtils {
      * @return the constant value 
      * @throws ValueDoesNotMatchTypeException if the value cannot be created
      */
-    static Value createTypeValue(IDatatype type) throws ValueDoesNotMatchTypeException {
+    public static Value createTypeValue(IDatatype type) throws ValueDoesNotMatchTypeException {
         return ValueFactory.createValue(MetaType.TYPE, type);
     }
 
@@ -114,7 +115,7 @@ class ReasoningUtils {
      * @return the constant value constraint tree node
      * @throws ValueDoesNotMatchTypeException if the value cannot be created
      */
-    static ConstraintSyntaxTree createTypeValueConstant(IDatatype type) throws ValueDoesNotMatchTypeException {
+    public static ConstraintSyntaxTree createTypeValueConstant(IDatatype type) throws ValueDoesNotMatchTypeException {
         return new ConstantValue(createTypeValue(type));
     }
 
@@ -124,7 +125,7 @@ class ReasoningUtils {
      * @param type the datatype
      * @return the constant value constraint tree node
      */
-    static ConstraintSyntaxTree createTypeValueConstantSafe(IDatatype type) {
+    public static ConstraintSyntaxTree createTypeValueConstantSafe(IDatatype type) {
         ConstraintSyntaxTree result = null;
         try {
             result = createTypeValueConstant(type);
@@ -142,7 +143,7 @@ class ReasoningUtils {
      * @param targetType the target type
      * @return the resulting expression
      */
-    static ConstraintSyntaxTree createAsTypeCast(ConstraintSyntaxTree exp, IDatatype targetType) {
+    public static ConstraintSyntaxTree createAsTypeCast(ConstraintSyntaxTree exp, IDatatype targetType) {
         return createAsTypeCast(exp, null, targetType);
     }
 
@@ -155,7 +156,8 @@ class ReasoningUtils {
      * @param targetType the target type
      * @return the resulting expression
      */
-    static ConstraintSyntaxTree createAsTypeCast(ConstraintSyntaxTree exp, IDatatype sourceType, IDatatype targetType) {
+    public static ConstraintSyntaxTree createAsTypeCast(ConstraintSyntaxTree exp, IDatatype sourceType, 
+        IDatatype targetType) {
         ConstraintSyntaxTree res = exp;
         try {
             if (null == sourceType) {
@@ -177,7 +179,7 @@ class ReasoningUtils {
      * 
      * @param problemVariables the variables to print
      */
-    static void printProblemPoints(Set<IDecisionVariable> problemVariables) {
+    public static void printProblemPoints(Set<IDecisionVariable> problemVariables) {
         if (problemVariables.size() > 0) {
             LOGGER.info("Problem points: ");
             for (IDecisionVariable problem : problemVariables) {
@@ -191,7 +193,7 @@ class ReasoningUtils {
      * @param variable variable
      * @return String of all attributes of the variable.
      */
-    static String toStringAttributes(IDecisionVariable variable) {
+    public static String toStringAttributes(IDecisionVariable variable) {
         String attributes = "Attributes: ";
         for (int i = 0; i < variable.getAttributesCount(); i++) {
             attributes = attributes 
@@ -206,7 +208,7 @@ class ReasoningUtils {
      * Method for printing info about {@link IDecisionVariable}.
      * @param variable Variable to be printed out.
      */
-    static void printModelElement(IDecisionVariable variable) {
+    public static void printModelElement(IDecisionVariable variable) {
         if (variable.getState() != null) {
             LOGGER.debug(variable.getDeclaration() 
                 + " : "
@@ -229,7 +231,7 @@ class ReasoningUtils {
      * @param constraint the constraint
      * @return the representing string
      */
-    static String toIvmlString(Constraint constraint) {
+    public static String toIvmlString(Constraint constraint) {
         return toIvmlString(constraint.getConsSyntax());
     }
     
@@ -239,7 +241,7 @@ class ReasoningUtils {
      * @param cst may be <b>null</b>, print "-" then
      * @return the string representation
      */
-    static String toIvmlString(ConstraintSyntaxTree cst) {
+    public static String toIvmlString(ConstraintSyntaxTree cst) {
         return null == cst ? "-" : StringProvider.toIvmlString(cst);
     }
 
@@ -248,7 +250,7 @@ class ReasoningUtils {
      * @param config Configuration to work with.
      * @param comment Comment for printing.
      */
-    static void printModelElements(Configuration config, String comment) {
+    public static void printModelElements(Configuration config, String comment) {
         LOGGER.debug("-------------------");
         LOGGER.debug(comment);
         for (IDecisionVariable variable : config) {
@@ -260,7 +262,7 @@ class ReasoningUtils {
      * Method for printing constraints that are taken into account for reasoning.
      * @param constraints Constraints from the project. 
      */
-    static void printConstraints(Collection<Constraint> constraints) {
+    public static void printConstraints(Collection<Constraint> constraints) {
         LOGGER.debug("-------------------");
         LOGGER.debug("--Constraints:");
         for (Constraint c : constraints) {
@@ -273,7 +275,7 @@ class ReasoningUtils {
      * 
      * @param failedElements the failed elements
      */
-    static void printFailedElements(FailedElements failedElements) {
+    public static void printFailedElements(FailedElements failedElements) {
         if (failedElements.hasProblems()) {
             if (failedElements.problemConstraintCount() > 0) {
                 Iterator<Constraint> failedConstraints = failedElements.getProblemConstraints();
@@ -301,7 +303,7 @@ class ReasoningUtils {
      * @param decl the declarators
      * @return the created call
      */
-    static ContainerOperationCall createContainerCall(ConstraintSyntaxTree container, Operation op, 
+    public static ContainerOperationCall createContainerCall(ConstraintSyntaxTree container, Operation op, 
         ConstraintSyntaxTree iterEx, DecisionVariableDeclaration... decl) {
         return new ContainerOperationCall(container, op.getName(), iterEx, decl);
     }
@@ -312,7 +314,7 @@ class ReasoningUtils {
      * @param decl the declaration of the slot to search for
      * @return <code>true</code> if overridden, <code>false</code> else
      */
-    static boolean isOverriddenSlot(AbstractVariable decl) {
+    public static boolean isOverriddenSlot(AbstractVariable decl) {
         boolean overridden = false;
         IModelElement iter = decl.getParent(); 
         // find declaring compound
@@ -334,7 +336,7 @@ class ReasoningUtils {
      * @param stopGreater1 stop searching if we have more than one matching slot
      * @return the number of slots
      */
-    static int countSlots(Compound cmp, String name, boolean stopGreater1) {
+    public static int countSlots(Compound cmp, String name, boolean stopGreater1) {
         int result = 0;
         if (null != cmp.getElement(name)) {
             result++;
@@ -354,7 +356,7 @@ class ReasoningUtils {
      * @param type the type
      * @return <code>true</code> for a nested collection, <code>false else</code>
      */
-    static boolean isNestedContainer(IDatatype type) {
+    public static boolean isNestedContainer(IDatatype type) {
         return TypeQueries.isContainer(type) 
             && 1 == type.getGenericTypeCount() 
             && TypeQueries.isContainer(type.getGenericType(0));
@@ -368,7 +370,7 @@ class ReasoningUtils {
      * @param incremental are we in incremental mode
      * @return the value, may be <b>null</b>
      */
-    static Value getRelevantValue(AbstractVariable decl, IDecisionVariable var, boolean incremental) {
+    public static Value getRelevantValue(AbstractVariable decl, IDecisionVariable var, boolean incremental) {
         Value val = null;
         if (null != var.getValue()) {
             val = var.getValue();
@@ -391,8 +393,8 @@ class ReasoningUtils {
      * @param filter in case that only a value of the specific type shall be returned
      * @return the value, may be <b>null</b>
      */
-    static <D extends Value> D getRelevantValue(AbstractVariable decl, IDecisionVariable var, boolean incremental, 
-        Class<D> filter) {
+    public static <D extends Value> D getRelevantValue(AbstractVariable decl, IDecisionVariable var, 
+        boolean incremental, Class<D> filter) {
         D result;
         Value val = getRelevantValue(decl, var, incremental);
         if (filter.isInstance(val)) {
@@ -409,7 +411,7 @@ class ReasoningUtils {
      * @param cmp the compound to derive the refined compound hierarchy from
      * @param result the set of refined compounds
      */
-    static void addRefines(Compound cmp, Set<Compound> result) {
+    public static void addRefines(Compound cmp, Set<Compound> result) {
         result.add(cmp);
         for (int r = 0, n = cmp.getRefinesCount(); r < n; r++) {
             addRefines(cmp.getRefines(r), result);
@@ -423,7 +425,7 @@ class ReasoningUtils {
      * @param result the result set to be modified as a side effect
      * @return <code>true</code> if <code>val</code> is a container value, <code>false</code> else
      */
-    static boolean getUsedCompoundTypes(Value val, Set<Compound> result) {
+    public static boolean getUsedCompoundTypes(Value val, Set<Compound> result) {
         boolean done = false;
         if (val instanceof ContainerValue) {
             ContainerValue cVal = (ContainerValue) val;
@@ -447,7 +449,7 @@ class ReasoningUtils {
      * @param compounds the compounds to purge
      * @param result the purged compounds (to be modified as a side effect) 
      */
-    static void purgeRefines(Set<Compound> compounds, Set<Compound> result) {
+    public static void purgeRefines(Set<Compound> compounds, Set<Compound> result) {
         result.addAll(compounds);
         for (Compound c : compounds) {
             purgeRefines(c, result);
@@ -476,7 +478,7 @@ class ReasoningUtils {
      * @param target the target collection
      * @param source the source array (may be <b>null</b>, then nothing happens)
      */
-    static <T, S extends T> void addAll(Collection<T> target, S[] source) {
+    public static <T, S extends T> void addAll(Collection<T> target, S[] source) {
         if (source != null) {
             for (int s = 0, n = source.length; s < n; s++) {
                 target.add(source[s]);                    
@@ -490,7 +492,7 @@ class ReasoningUtils {
      * @param cnt the container type
      * @return the deeply nested type
      */
-    static IDatatype getDeepestContainedType(Container cnt) {
+    public static IDatatype getDeepestContainedType(Container cnt) {
         IDatatype result = cnt.getContainedType();
         if (result instanceof Container) {
             result = getDeepestContainedType((Container) result);
