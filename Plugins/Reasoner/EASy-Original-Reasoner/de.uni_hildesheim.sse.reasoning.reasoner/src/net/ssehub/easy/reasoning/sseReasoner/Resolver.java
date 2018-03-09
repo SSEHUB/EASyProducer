@@ -611,7 +611,7 @@ public class Resolver {
             LOGGER.exception(e); // should not occur if constraints are created correctly, ok to log
         }
         contexts.pushContext(null, containerOp, localDecl);
-        registerCompoundMapping(type, localVar, cAcc, declVar, type);
+        registerCompoundMapping(type, localVar, declVar, type);
         translateCompoundContent(localDecl, null, type, cAcc);
         contexts.popContext();
     }
@@ -631,8 +631,7 @@ public class Resolver {
         contexts.pushContext(decl);
         // resolve compound access first for all slots
         Variable declVar = new Variable(decl);
-        registerCompoundMapping(type, cAcc, declVar, declVar, 
-            null == variable ? type : variable.getValue().getType());
+        registerCompoundMapping(type, cAcc, declVar, null == variable ? type : variable.getValue().getType());
         translateCompoundContent(decl, variable, type, cAcc);
         contexts.popContext();
     }
@@ -641,30 +640,28 @@ public class Resolver {
      * Registers the mapping for a compound type.
      * 
      * @param type the compound type
-     * @param slotAcc the accessor expression for compound slots (may be <b>null</b>)
-     * @param annAcc the accessor expression for compound annotations (may be <b>null</b>, may be the same as 
-     *     <code>annAcc</code>, may also differ)
+     * @param cAcc the accessor expression (may be <b>null</b>)
      * @param declVar the compound variable as expression
      * @param target the specific target type to cast to (may be <b>null</b> or <code>type</code> for no cast)
      */
-    private void registerCompoundMapping(Compound type, ConstraintSyntaxTree slotAcc, ConstraintSyntaxTree annAcc, 
+    private void registerCompoundMapping(Compound type, ConstraintSyntaxTree cAcc, 
         Variable declVar, IDatatype target) {
         for (int i = 0, n = type.getInheritedElementCount(); i < n; i++) {
             AbstractVariable nestedDecl = type.getInheritedElement(i);
             ConstraintSyntaxTree acc;
-            if (null == slotAcc) {
+            if (null == cAcc) {
                 acc = new CompoundAccess(declVar, nestedDecl.getName());
             } else {
-                acc = new CompoundAccess(createAsTypeCast(slotAcc, type, target), 
+                acc = new CompoundAccess(createAsTypeCast(cAcc, type, target), 
                     nestedDecl.getName());
             }
             contexts.registerMapping(nestedDecl, acc);
             for (int a = 0, m = nestedDecl.getAttributesCount(); a < m; a++) {
                 Attribute attr = nestedDecl.getAttribute(a);
-                if (null == annAcc) {
+                if (null == cAcc) {
                     acc = new AttributeVariable(declVar, attr);
                 } else {                        
-                    acc = new AttributeVariable(createAsTypeCast(annAcc, type, target), attr);
+                    acc = new AttributeVariable(createAsTypeCast(cAcc, type, target), attr);
                 }
                 contexts.registerMapping(attr, acc);
             }            
