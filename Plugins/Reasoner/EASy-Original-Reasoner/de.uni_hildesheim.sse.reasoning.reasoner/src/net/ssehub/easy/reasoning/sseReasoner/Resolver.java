@@ -546,7 +546,7 @@ public class Resolver {
      */
     private void translateContainerDeclaration(AbstractVariable decl, IDecisionVariable var, IDatatype type, 
         ConstraintSyntaxTree cAcc) {
-        contexts.pushContext(decl, cAcc);
+        contexts.pushContext(decl);
         Container declType = (Container) type;
         IDatatype dContainedType = getDeepestContainedType(declType);
         IDatatype dContainedBasisType = DerivedDatatype.resolveToBasis(dContainedType);
@@ -610,7 +610,7 @@ public class Resolver {
         } catch (IvmlException e) {
             LOGGER.exception(e); // should not occur if constraints are created correctly, ok to log
         }
-        contexts.pushContext(null, containerOp, localDecl, cAcc);
+        contexts.pushContext(null, containerOp, localDecl);
         registerCompoundMapping(type, localVar, cAcc, declVar, type);
         translateCompoundContent(localDecl, null, type, cAcc);
         contexts.popContext();
@@ -628,7 +628,7 @@ public class Resolver {
      */
     private void translateCompoundDeclaration(AbstractVariable decl, IDecisionVariable variable,
         ConstraintSyntaxTree cAcc, Compound type) {
-        contexts.pushContext(decl, cAcc);
+        contexts.pushContext(decl);
         // resolve compound access first for all slots
         Variable declVar = new Variable(decl);
         registerCompoundMapping(type, cAcc, declVar, declVar, 

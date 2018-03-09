@@ -33,9 +33,8 @@ import net.ssehub.easy.varModel.model.datatypes.Container;
  * project, further nested contexts to visited compounds or containers. Each context contains
  * the recent part of the variable mapping, whereby {@link #getMapping(AbstractVariable) variable
  * mapping lookup} starts with the current context and takes also previous contexts into account. 
- * Each context may store a compound access expression and, container contexts, parts of a complex
- * constraint accessing the path to contained compound variables (the complete constraint over all
- * stack contexts can be obtained from {@link #composeExpression(ConstraintSyntaxTree)}.<p>
+ * Each context may parts of a complex constraint accessing the path to contained compound variables (the complete 
+ * constraint over all stack contexts can be obtained from {@link #composeExpression(ConstraintSyntaxTree)}.<p>
  * 
  * However, due to IVML assignment blocks, a translation context stack is not really straightforward.
  * In assignment blocks, additional implicit constraints to initialize annotations are introduced and
@@ -59,7 +58,6 @@ public class ContextStack {
     private static class Context {
         private Map<AbstractVariable, ConstraintSyntaxTree> varMap 
             = new HashMap<AbstractVariable, ConstraintSyntaxTree>(30);
-        private ConstraintSyntaxTree access;
         private DecisionVariableDeclaration iterator;
         private ConstraintSyntaxTree container;
         private Context predecessor;
@@ -75,7 +73,6 @@ public class ContextStack {
                 POOL.releaseInstance(ent.getValue());
             }
             registeredContexts.clear();
-            access = null;
             iterator = null;
             container = null;
             predecessor = null;
@@ -135,10 +132,9 @@ public class ContextStack {
      * 
      * @param decl the variable to register the new context with if {@link #setRegisterContexts(boolean) enabled}, 
      *     may be <b>null</b> to explicitly prevent registration
-     * @param access the access expression to the compound (may be <b>null</b> for top-most compounds)
      */
-    public void pushContext(AbstractVariable decl, ConstraintSyntaxTree access) {
-        pushContext(decl, null, null, access);
+    public void pushContext(AbstractVariable decl) {
+        pushContext(decl, null, null);
     }
 
     /**
@@ -149,16 +145,14 @@ public class ContextStack {
      * @param container the container expression (may be <b>null</b>)
      * @param iterator a container iterator variable for <code>container</code>, may be <b>null</b> but only if 
      *     <code>container</code> is null
-     * @param access compound access expression (may be <b>null</b> for top-most container)
      */
-    public void pushContext(AbstractVariable decl, ConstraintSyntaxTree container, DecisionVariableDeclaration iterator,
-        ConstraintSyntaxTree access) {
+    public void pushContext(AbstractVariable decl, ConstraintSyntaxTree container, 
+        DecisionVariableDeclaration iterator) {
         Context context = POOL.getInstance();
         
         // fill values
         context.container = container;
         context.iterator = iterator;
-        context.access = access;
         
         if (registerContexts && null != decl) {
             currentContext.registeredContexts.put(decl, context);
@@ -251,15 +245,6 @@ public class ContextStack {
         return currentContext.iterator;
     }
     
-    /**
-     * Returns the current access expression from the top-most context.
-     * 
-     * @return the current access expression (may be <b>null</b>, e.g., for the initial project contect)
-     */
-    public ConstraintSyntaxTree getCurrentAccess() {
-        return currentContext.access;
-    }
-
     /**
      * Composes an all-quantified expression over the contexts of the stack. If
      * no stack contains container/iterator, <code>cst</code> will be returned.
