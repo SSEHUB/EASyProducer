@@ -153,23 +153,26 @@ public class ReasoningUtils {
      * 
      * @param exp the expression to apply the type cast operation to 
      * @param sourceType the source type
-     * @param targetType the target type
+     * @param targetType the target type (nothing happens if <code>targetType</code> is <b>null</b> or 
+     *     <code>sourceType</code> is identical to <code>targetType</code>)
      * @return the resulting expression
      */
     public static ConstraintSyntaxTree createAsTypeCast(ConstraintSyntaxTree exp, IDatatype sourceType, 
         IDatatype targetType) {
         ConstraintSyntaxTree res = exp;
-        try {
-            if (null == sourceType) {
-                sourceType = exp.inferDatatype();
+        if (null != targetType && sourceType != targetType) {
+            try {
+                if (null == sourceType) {
+                    sourceType = exp.inferDatatype();
+                }
+                if (!TypeQueries.sameTypes(sourceType, targetType) && !TypeQueries.isAnyType(targetType)) {
+                    res = new OCLFeatureCall(res, OclKeyWords.AS_TYPE, createTypeValueConstant(targetType));
+                }
+            } catch (CSTSemanticException e) {
+                LOGGER.exception(e); // should not occur, ok to log
+            } catch (ValueDoesNotMatchTypeException e) {
+                LOGGER.exception(e); // should not occur, ok to log
             }
-            if (!TypeQueries.sameTypes(sourceType, targetType) && !TypeQueries.isAnyType(targetType)) {
-                res = new OCLFeatureCall(res, OclKeyWords.AS_TYPE, createTypeValueConstant(targetType));
-            }
-        } catch (CSTSemanticException e) {
-            LOGGER.exception(e); // should not occur, ok to log
-        } catch (ValueDoesNotMatchTypeException e) {
-            LOGGER.exception(e); // should not occur, ok to log
         }
         return res;
     }
@@ -372,7 +375,7 @@ public class ReasoningUtils {
      */
     public static Value getRelevantValue(AbstractVariable decl, IDecisionVariable var, boolean incremental) {
         Value val = null;
-        if (null != var.getValue()) {
+        if (null != var && null != var.getValue()) {
             val = var.getValue();
         } else if (!incremental) {
             ConstraintSyntaxTree dflt = decl.getDefaultValue();

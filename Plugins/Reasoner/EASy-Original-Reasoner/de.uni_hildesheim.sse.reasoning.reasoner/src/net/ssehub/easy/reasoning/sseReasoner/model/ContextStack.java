@@ -133,7 +133,8 @@ public class ContextStack {
     /**
      * Pushes a new (compound) context to the stack.
      * 
-     * @param decl the variable to register the new context with if {@link #setRegisterContexts(boolean) enabled}
+     * @param decl the variable to register the new context with if {@link #setRegisterContexts(boolean) enabled}, 
+     *     may be <b>null</b> to explicitly prevent registration
      * @param access the access expression to the compound (may be <b>null</b> for top-most compounds)
      */
     public void pushContext(AbstractVariable decl, ConstraintSyntaxTree access) {
@@ -143,7 +144,8 @@ public class ContextStack {
     /**
      * Pushes a new container context to the stack. All parameters may be <b>null</b>.
      * 
-     * @param decl the variable to register the new context with if {@link #setRegisterContexts(boolean) enabled}
+     * @param decl the variable to register the new context with if {@link #setRegisterContexts(boolean) enabled}, 
+     *     may be <b>null</b> to explicitly prevent registration
      * @param container the container expression (may be <b>null</b>)
      * @param iterator a container iterator variable for <code>container</code>, may be <b>null</b> but only if 
      *     <code>container</code> is null
@@ -158,7 +160,7 @@ public class ContextStack {
         context.iterator = iterator;
         context.access = access;
         
-        if (registerContexts) {
+        if (registerContexts && null != decl) {
             currentContext.registeredContexts.put(decl, context);
             context.isRegistered = true;
         }
