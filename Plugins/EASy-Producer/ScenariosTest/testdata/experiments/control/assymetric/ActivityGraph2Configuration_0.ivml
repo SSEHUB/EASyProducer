@@ -1,0 +1,13 @@
+project ActivityGraph2Configuration {
+
+    version v0;
+    import PL_ActivityGraph with PL_ActivityGraph.version == v0;
+    ReadSheets readSheets = {};
+    RecognizeDocuments recognizeDocuments = {};
+    WriteSheets writeSheets = {};
+    Dependency readSheets_readSheets = {source = readSheets, target = readSheets};
+    Dependency recognizeDocuments_recognizeDocuments = {source = recognizeDocuments, target = recognizeDocuments};
+    Dependency recognizeDocuments_readSheets = {source = recognizeDocuments, target = readSheets};
+    Dependency readSheets_recognizeDocuments = {source = readSheets, target = recognizeDocuments};
+    controlFile = {activities = {readSheets, recognizeDocuments}, dependencies = {readSheets_readSheets, recognizeDocuments_recognizeDocuments, readSheets_recognizeDocuments, recognizeDocuments_readSheets}};
+}

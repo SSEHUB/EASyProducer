@@ -1,0 +1,37 @@
+project PL_Base {
+
+	version v0;
+
+    ControlFile controlFile = {};
+
+    enum ActivityType {ReadSheetsType, RecognizeDocumentsType, ResolveMailingsType, WriteSheetsType};
+
+    compound ControlFile {
+        setOf(Activity) activities;
+        setOf(Dependency) dependencies;
+
+        Constraint dependenciesReflexivity = self.activities->forAll(a|dependsOn(a, a, self.dependencies));
+//        Constraint dependenciesAntisymmetry = self.activities->forAll(a|self.activities->forAll(b|dependsOn(a, b, self.dependencies) and dependsOn(b, a, self.dependencies) implies a == b));
+//        Constraint dependenciesTransitivity = self.activities->forAll(a|self.activities->forAll(b|self.activities->forAll(c|dependsOn(a, b, self.dependencies) and dependsOn(b, c, self.dependencies) implies dependsOn(a, c, self.dependencies))));
+//        Constraint dependsOn = self.dependencies->forAll(d|dependsOn(d.target, d.source, self.dependencies));
+
+
+    }
+
+    def Boolean dependsOn(Activity predecessor, Activity sucessor, setOf(Dependency) dependencies) =
+        dependencies->exists(d|d.source == predecessor and d.target == sucessor);
+
+    abstract compound Activity {
+        ActivityType type;
+    }
+
+    compound Dependency {
+        refTo(Activity) source;
+        refTo(Activity) target;
+    }
+
+    compound ReadSheets refines Activity {
+        type = ActivityType.ReadSheetsType;
+    }
+
+}

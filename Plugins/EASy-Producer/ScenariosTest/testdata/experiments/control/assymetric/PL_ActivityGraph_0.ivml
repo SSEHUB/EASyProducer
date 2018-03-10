@@ -1,0 +1,69 @@
+project PL_ActivityGraph {
+
+	version v0;
+	ControlFile controlFile = {};
+	enum ActivityType {ReadSheetsType, RecognizeDocumentsType, ResolveMailingsType, WriteSheetsType};
+	enum ObjectType {SheetType, DocumentType};
+	compound ControlFile {
+		setOf(Activity) activities;
+		setOf(Dependency) dependencies;
+		setOf(Object) objects;
+		setOf(Transformation) transformations;
+		Constraint checkSheetAfterReadSheets = self.objects->forAll(o|o.position.source.type == ActivityType.ReadSheetsType implies o.type == ObjectType.SheetType);
+		Constraint checkDocumentAfterRecognizeDocuments = self.objects->forAll(o|o.position.source.type == ActivityType.RecognizeDocumentsType implies o.type == ObjectType.DocumentType);
+		Constraint checkSheetAfterResolveMailings = self.objects->forAll(o|o.position.source.type == ActivityType.ResolveMailingsType implies o.type == ObjectType.SheetType);
+		Constraint checkSheetBeforeRecognizeDocuments = self.objects->forAll(o|o.position.target.type == ActivityType.RecognizeDocumentsType implies o.type == ObjectType.SheetType);
+		Constraint checkDocumentBeforeResolveMailings = self.objects->forAll(o|o.position.target.type == ActivityType.ResolveMailingsType implies o.type == ObjectType.DocumentType);
+		Constraint checkSheetBeforeWriteSheets = self.objects->forAll(o|o.position.target.type == ActivityType.WriteSheetsType implies o.type == ObjectType.SheetType);
+		Constraint dependenciesReflexivity = self.activities->forAll(a|dependsOn(a, a, self.dependencies));
+		Constraint dependenciesAntisymmetry = self.activities->forAll(a|self.activities->forAll(b|dependsOn(a, b, self.dependencies) and dependsOn(b, a, self.dependencies) implies a == b));
+		Constraint dependenciesTransitivity = self.activities->forAll(a|self.activities->forAll(b|self.activities->forAll(c|dependsOn(a, b, self.dependencies) and dependsOn(b, c, self.dependencies) implies dependsOn(a, c, self.dependencies))));
+	}
+
+	def Boolean dependsOn(Activity predecessor, Activity sucessor, setOf(Dependency) dependencies) = dependencies->exists(d|d.source == predecessor and d.target == sucessor);
+	def Boolean transformedIn(Object predecessor, Object sucessor, setOf(Transformation) transformations) = transformations->exists(t|t.predecessor == predecessor and t.sucessor == sucessor);
+	abstract compound Activity {
+		ActivityType type;
+	}
+
+	abstract compound Object {
+		ObjectType type;
+		refTo(Dependency) position;
+	}
+
+	compound Dependency {
+		refTo(Activity) source;
+		refTo(Activity) target;
+	}
+
+	compound Transformation {
+		refTo(Object) predecessor;
+		refTo(Object) sucessor;
+	}
+
+	compound ReadSheets refines Activity {
+		type = ActivityType.ReadSheetsType;
+	}
+
+	compound RecognizeDocuments refines Activity {
+		type = ActivityType.RecognizeDocumentsType;
+	}
+
+	compound ResolveMailings refines Activity {
+		type = ActivityType.ResolveMailingsType;
+	}
+
+	compound WriteSheets refines Activity {
+		type = ActivityType.WriteSheetsType;
+	}
+
+	compound Sheet refines Object {
+		type = ObjectType.SheetType;
+	}
+
+	compound Document refines Object {
+		type = ObjectType.DocumentType;
+	}
+
+	controlFile = {};
+}

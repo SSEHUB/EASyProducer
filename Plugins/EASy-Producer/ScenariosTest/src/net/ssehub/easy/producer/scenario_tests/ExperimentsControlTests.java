@@ -277,5 +277,59 @@ public class ExperimentsControlTests extends AbstractTest {
             ProgressObserver.NO_OBSERVER);
         Assert.assertFalse("there should not be reasoning conflicts", res.hasConflict());
     }
+    
+    /**
+     * A simple control file test (contributed by M. Keunecke).
+     * 
+     * @throws IOException shall not occur
+     * @throws ModelQueryException shall not occur
+     * @throws IvmlException shall not occur
+     */
+    @Test
+    public void simpleTest() throws IOException, ModelQueryException, IvmlException {
+        Configuration config = createAndAssertEqual("simple/Einfache_Steuerdatei_0");
+        ReasonerConfiguration rConfig = new ReasonerConfiguration();
+        rConfig.setAdditionalInformationLogger(ReasonerConfiguration.ADDITIONAL_INFO_LOG_NONE);
+        ReasoningResult res = ReasonerFrontend.getInstance().propagate(config.getProject(), config, rConfig, 
+            ProgressObserver.NO_OBSERVER);
+        Assert.assertFalse("there should not be reasoning conflicts", res.hasConflict());
+    }
 
+    /**
+     * A test for an existence quantor in a user defined operation utilized by an all quantor (contributed by 
+     * M. Keunecke).
+     * 
+     * @throws IOException shall not occur
+     * @throws ModelQueryException shall not occur
+     * @throws IvmlException shall not occur
+     */
+    @Test
+    public void existsTest() throws IOException, ModelQueryException, IvmlException {
+        Configuration config = createAndAssertEqual("exists/BaseSD_0");
+        ReasonerConfiguration rConfig = new ReasonerConfiguration();
+        rConfig.setAdditionalInformationLogger(ReasonerConfiguration.ADDITIONAL_INFO_LOG_NONE);
+        ReasoningResult res = ReasonerFrontend.getInstance().propagate(config.getProject(), config, rConfig, 
+            ProgressObserver.NO_OBSERVER);
+        //Configuration.printConfig(System.out, config);
+        Assert.assertFalse("there should not be reasoning conflicts", res.hasConflict());
+    }
+
+    /**
+     * A test for an assymetric quantor relation (contributed by M. Keunecke).
+     * 
+     * @throws IOException shall not occur
+     * @throws ModelQueryException shall not occur
+     * @throws IvmlException shall not occur
+     */
+    @Test
+    public void assymetricTest() throws IOException, ModelQueryException, IvmlException {
+        Configuration config = createAndAssertEqual("assymetric/ActivityGraph2Configuration_0");
+        ReasonerConfiguration rConfig = new ReasonerConfiguration();
+        rConfig.setAdditionalInformationLogger(ReasonerConfiguration.ADDITIONAL_INFO_LOG_NONE);
+        ReasoningResult res = ReasonerFrontend.getInstance().propagate(config.getProject(), config, rConfig, 
+            ProgressObserver.NO_OBSERVER);
+        Configuration.printConfig(System.out, config);
+        Assert.assertFalse("there should not be reasoning conflicts", res.hasConflict());
+    }    
+    
 }

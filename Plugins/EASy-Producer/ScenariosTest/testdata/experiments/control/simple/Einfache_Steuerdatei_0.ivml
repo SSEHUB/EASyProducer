@@ -1,0 +1,8 @@
+project Einfache_Steuerdatei {
+
+    version v0;
+    import PL_Steuerkarten with PL_Steuerkarten.version == v0;
+    ReadSheetsActivity readSheets = {paperTray = PaperTray {trayID = "1", sheetRef = "A4"}, id = "Blaetter_Einlesen", produces = NameFuerBlattSeiteDokument.blatt, consumes = NameFuerBlattSeiteDokument.nichts, readMode = FormatMode.Linemode};
+    WriteSheetsActivity writeSheets = {id = "Blaetter_Ausgeben", produces = NameFuerBlattSeiteDokument.nichts, consumes = NameFuerBlattSeiteDokument.blatt, writeMode = FormatMode.Linemode, inputActivity = refBy(readSheets)};
+    controlFile = {activities = {readSheets, writeSheets}};
+}

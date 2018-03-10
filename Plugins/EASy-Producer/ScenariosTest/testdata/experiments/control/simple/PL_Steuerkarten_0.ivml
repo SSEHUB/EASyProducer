@@ -1,0 +1,86 @@
+project PL_Steuerkarten {
+
+	version v0;
+	ControlFile controlFile = {};
+
+	def Boolean hasActivityWithId(String id, setOf(Activity) activities) = activities->exists(a|a.id == id);
+
+    def Activity getActivityById(String id, setOf(Activity) activities) = activities->any(a|a.id == id);
+
+    def setOf(Activity) getActivitiesWithInput(setOf(Activity) activities) = activities->select(a|a.inputActivity.isDefined());
+
+    enum NameFuerBlattSeiteDokument {nichts, blatt, seite, dokument};
+
+    enum FormatMode {Linemode, PDF, AFP};
+
+	compound ControlFile {
+		setOf(Activity) activities;
+
+		getActivitiesWithInput(self.activities)->forAll(a|hasActivityWithId(a.inputActivity.id, self.activities));
+		getActivitiesWithInput(self.activities)->forAll(a|getActivityById(a.inputActivity.id, self.activities).produces == a.consumes);
+
+        getActivitiesWithWriteMode(self.activities).notEmpty() implies allModesContained(getActivitiesWithReadMode(self.activities)->collect(Activity a|a.readMode), getActivitiesWithWriteMode(self.activities)->collect(Activity a|a.writeMode));
+        //getActivitiesWithWriteMode(self.activities)->collect(Activity a|a.writeMode).includes(getActivitiesWithReadMode(self.activities)->collect(Activity a|a.readMode));
+	}
+
+	def Boolean allModesContained(setOf(FormatMode) readModes, setOf(FormatMode) writeModes) = writeModes->forAll(FormatMode m|readModes.includes(m));
+	//readModes->intersection(writeModes).size() == writeModes.size(); includeAll
+
+	def setOf(Activity) getActivitiesWithReadMode(setOf(Activity) activities) = activities->select(a|a.readMode.isDefined());
+    def setOf(Activity) getActivitiesWithWriteMode(setOf(Activity) activities) = activities->select(a|a.writeMode.isDefined());
+
+	abstract compound Activity {
+		String id;
+		NameFuerBlattSeiteDokument produces;
+        NameFuerBlattSeiteDokument consumes;
+        FormatMode readMode;
+        FormatMode writeMode;
+        refTo(Activity) inputActivity;
+
+        self.id <> "";
+        self.readMode.isDefined() implies not self.writeMode.isDefined();
+        self.writeMode.isDefined() implies not self.readMode.isDefined();
+	}
+
+	abstract compound PrintReader {
+	    FormatMode mode;
+	}
+
+	abstract compound PrintWriter {
+	    FormatMode mode;
+	}
+
+	abstract compound StaticOrDynamicFileOrDD {
+	}
+
+	compound LinemodeReader refines PrintReader {
+	    mode = FormatMode.Linemode;
+	}
+
+	compound LinemodeWriter refines PrintWriter {
+	    mode = FormatMode.Linemode;
+		StaticOrDynamicFileOrDD target;
+	}
+
+	compound DD refines StaticOrDynamicFileOrDD {
+		String name;
+	}
+
+	compound ReadSheetsActivity refines Activity {
+		produces = NameFuerBlattSeiteDokument.blatt;
+		PaperTray paperTray;
+		StaticOrDynamicFileOrDD source;
+		PrintReader reader;
+	}
+
+	compound WriteSheetsActivity refines Activity {
+	    PrintWriter writer;
+		consumes = NameFuerBlattSeiteDokument.blatt;
+	}
+
+	compound PaperTray {
+		String trayID;
+		String sheetRef;
+	}
+
+}

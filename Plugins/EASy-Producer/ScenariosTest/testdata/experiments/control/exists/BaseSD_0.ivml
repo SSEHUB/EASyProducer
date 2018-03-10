@@ -1,0 +1,8 @@
+project BaseSD {
+
+    version v0;
+    import PL_Base with PL_Base.version == v0;
+    ReadSheets readSheets = {};
+    Dependency readSheets_readSheets = {source = readSheets, target = readSheets};
+    controlFile = {activities = {readSheets}, dependencies = {readSheets_readSheets}};
+}
