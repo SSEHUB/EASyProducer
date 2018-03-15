@@ -16,7 +16,10 @@ import org.junit.runners.Suite.SuiteClasses;
     ReasoningScenarioTests.class,
     StressTest.class,
     CodedTests.class,
-    BooleanProblemTests.class
+    BooleanProblemTests.class,
+    RealTests.class, 
+    StringTests.class, 
+    IntegerTests.class
     })
 public class AllTests {
 
