@@ -1,0 +1,17 @@
+project StringInCompoundAssignTest {
+
+    compound C {
+        String s1;
+        String s2;
+        String s3;
+    
+        s1 = "abba";
+        s2 = "ba";
+    
+        s1.indexOf(s2) > 0;
+        s1 != s2 implies s3 == "assigned";
+    }
+    
+    C cmp;   
+    
+}

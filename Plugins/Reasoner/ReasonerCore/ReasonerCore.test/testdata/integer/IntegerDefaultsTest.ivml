@@ -1,0 +1,9 @@
+project IntegerDefaultsTest {
+
+    Integer i1 = 1;
+    Integer i2 = 3;
+    Integer i3;
+ 
+    i1 < i2;    
+    i1 + 1 < i2 implies i3 == 2;
+}

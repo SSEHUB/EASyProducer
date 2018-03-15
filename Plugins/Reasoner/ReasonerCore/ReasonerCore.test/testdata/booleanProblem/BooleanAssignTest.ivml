@@ -1,4 +1,4 @@
-project BooleanInCompoundAssignTest {
+project BooleanAssignTest {
 
     Boolean t;
     Boolean f;
