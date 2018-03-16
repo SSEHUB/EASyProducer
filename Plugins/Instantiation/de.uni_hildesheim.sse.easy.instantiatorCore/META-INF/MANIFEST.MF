@@ -10,7 +10,7 @@ Require-Bundle: net.ssehub.easy.varModel;bundle-version="0.0.6",
  org.eclipse.equinox.ds,
  org.eclipse.core.runtime,
  org.apache.ant,
- org.apache.commons.io;bundle-version="2.0.1",
+ org.apache.commons.io;bundle-version="2.0.1";visibility:=reexport,
  org.apache.commons.lang;bundle-version="2.6.0",
  net.ssehub.easy.reasoning.core;bundle-version="0.10.1",
  org.eclipse.emf.ecore
@@ -30,7 +30,8 @@ Export-Package: net.ssehub.easy.instantiation.core,
  net.ssehub.easy.instantiation.core.model.tracing,
  net.ssehub.easy.instantiation.core.model.vilTypes,
  net.ssehub.easy.instantiation.core.model.vilTypes.configuration
-Bundle-ClassPath: .
+Bundle-ClassPath: .,
+ lib/xerces-2.9.0.jar
 Import-Package: net.ssehub.easy.dslCore.translation,
  org.osgi.service.component
 Bundle-ActivationPolicy: lazy
