@@ -9,8 +9,9 @@ import org.junit.Test;
 import test.de.uni_hildesheim.sse.vil.buildlang.AbstractExecutionTest;
 import test.de.uni_hildesheim.sse.vil.buildlang.BuildLangTestConfigurer;
 import test.de.uni_hildesheim.sse.vil.buildlang.ITestConfigurer;
-import net.ssehub.easy.instantiation.aspectj.Registration;
+import net.ssehub.easy.instantiation.core.JavaUtilities;
 import net.ssehub.easy.instantiation.core.model.buildlangModel.Script;
+import net.ssehub.easy.instantiation.core.model.common.VilException;
 
 /**
  * Tests for the basic language.
@@ -57,7 +58,11 @@ public class ExecutionTests extends AbstractExecutionTest<Script> {
      */
     @Test
     public void testAspectJ() throws IOException {
-        assertSelfInstantiate("aspectj");
+        int[] expectedErrors = null;
+        if (JavaUtilities.isJava9()) {
+            expectedErrors = new int[] {VilException.ID_EXECUTION_ERROR};
+        }
+        assertSelfInstantiate("aspectj", expectedErrors);
     }
 
 }
