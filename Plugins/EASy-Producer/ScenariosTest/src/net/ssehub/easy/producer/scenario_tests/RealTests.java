@@ -51,6 +51,7 @@ public class RealTests extends AbstractScenarioTest {
 
     protected static final String[] RELATIVE_CURL_EXECUTABLES = {"curl/curl.bat", "curl/curl.sh"};
     
+    private static final int MAX_REASONING = 1; // increase for taking measurements
     private static RealTests tests;
     private boolean enableRealTimeAsserts;
     
@@ -439,10 +440,20 @@ public class RealTests extends AbstractScenarioTest {
                     System.out.println("Performing runtime reasoning/propagation...");
                     ReasonerConfiguration rCfg = new ReasonerConfiguration();
                     rCfg.setRuntimeMode(true);
-                    ReasoningResult res = ReasonerFrontend.getInstance().propagate(prj, 
-                        cfg, rCfg, ProgressObserver.NO_OBSERVER);
-                    Assert.assertTrue("Runtime configuration must have conflict", res.hasConflict());
-                    assertFailureMessage(res, ppfe2);
+                    for (int r = 1; r <= MAX_REASONING; r++) {
+                        ReasoningResult res = ReasonerFrontend.getInstance().propagate(prj, 
+                            cfg, rCfg, ProgressObserver.NO_OBSERVER);
+                        Assert.assertTrue("Runtime configuration must have conflict", res.hasConflict());
+                        assertFailureMessage(res, ppfe2);
+                    }
+
+                    /*System.out.println("Performing runtime reasoning/propagation with instance ...");
+                    IReasonerInstance inst = ReasonerFrontend.getInstance().createInstance(prj, cfg, rCfg);
+                    for (int r = 1; r <= MAX_REASONING; r++) {
+                        ReasoningResult res = inst.propagate(ProgressObserver.NO_OBSERVER);
+                        Assert.assertTrue("Runtime configuration must have conflict", res.hasConflict());
+                        assertFailureMessage(res, ppfe2);
+                    }*/
                 }
             } catch (ModelQueryException e) {
                 e.printStackTrace();
