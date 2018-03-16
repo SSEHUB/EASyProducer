@@ -5,12 +5,8 @@ import static net.ssehub.easy.varModel.varModel.testSupport.TextTestUtils.assert
 import java.io.File;
 import java.io.IOException;
 
-import javax.tools.JavaCompiler;
-import javax.tools.ToolProvider;
-
 import org.apache.commons.io.FileUtils;
 import org.junit.AfterClass;
-import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
@@ -93,14 +89,17 @@ public class ExecutionTests extends AbstractExecutionTest<Script> {
      */
     @Test
     public void testGetJavaCompiler() throws IOException {
+        // reset and check!
+        /*
+        THIS DOES NOT IMPRESS JAVA 9 ANYMORE
         String homeProperty = System.getProperty("java.home");
         System.setProperty("java.home", "");
         JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
-        Assert.assertNull(compiler);
+        Assert.assertNull(compiler);*/
 
         assertSelfInstantiate("javac2");
 
-        System.setProperty("java.home", homeProperty);
+        //System.setProperty("java.home", homeProperty);
     }
 
     /**

@@ -333,9 +333,7 @@ public class JavaFileArtifact extends FileArtifact implements IJavaParent {
      * @param data
      *            the data to initialize from (source code as characters)
      */
-    @SuppressWarnings("unchecked")
     private void initialize(char[] data) {
-        // TODO separate inner classes
         classList = new ArrayList<JavaClass>();
         @SuppressWarnings("deprecation")
         ASTParser parser = ASTParser.newParser(AST.JLS4);
@@ -348,7 +346,7 @@ public class JavaFileArtifact extends FileArtifact implements IJavaParent {
         parser.setCompilerOptions(options);
         String unitName = FilenameUtils.getBaseName(file.getName());
         parser.setUnitName(unitName);
-        String[] classpath = JavaUtilities.JRE_CLASS_PATH;
+        String[] classpath = JavaSettingsInitializer.filterPath(JavaUtilities.JRE_CLASS_PATH);
         String [] sourcePath;
         boolean isClasspathFromScript = false;
         if (null != getArtifactModel()) {

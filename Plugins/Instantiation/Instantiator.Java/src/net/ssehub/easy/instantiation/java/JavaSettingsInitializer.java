@@ -1,8 +1,10 @@
 package net.ssehub.easy.instantiation.java;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 
 import net.ssehub.easy.instantiation.core.model.artifactModel.Path;
@@ -68,13 +70,13 @@ public class JavaSettingsInitializer implements ISettingsInitializer {
                         String string = (String) iterator.next();
                         File file = new File(string);
                         if (file.exists()) {
-                            tmpClasspath.add(normalizePath(file.getAbsolutePath()));
+                            add(tmpClasspath, normalizePath(file.getAbsolutePath()));
                         }
                     } else if (typeDescriptorParameter.isSame(TypeRegistry.DEFAULT.findType(Path.class))) {
                         // Path
                         Path path = (Path) iterator.next();
                         if (path.exists()) {
-                            tmpClasspath.add(normalizePath(path.getAbsolutePath().getAbsolutePath()));
+                            add(tmpClasspath, normalizePath(path.getAbsolutePath().getAbsolutePath()));
                         }
                     } else {
                         // fallback: do nothing
@@ -101,10 +103,45 @@ public class JavaSettingsInitializer implements ISettingsInitializer {
      * @return array with converted path elements
      */
     private static String[] normalizePath(String [] allPaths) {
+        List<String> tmp = new ArrayList<String>();
         for (int i = 0; i < allPaths.length; i++) {
-            allPaths[i] = normalizePath(allPaths[i]);
+            String normalized = normalizePath(allPaths[i]);
+            if (null != normalized) {
+                tmp.add(normalized);
+            }
         }
-        return allPaths;
+        String[] result = new String[tmp.size()];
+        return tmp.toArray(result);
+    }
+
+    /**
+     * Filters <code>allPaths</code> for resolvable paths.
+     * 
+     * @param allPaths the paths to be filtered
+     * @return the filtered paths
+     */
+    public static String[] filterPath(String [] allPaths) {
+        List<String> tmp = new ArrayList<String>();
+        for (int i = 0; i < allPaths.length; i++) {
+            String path = resolve(allPaths[i]);
+            if (null != path) {
+                tmp.add(allPaths[i]);
+            }
+        }
+        String[] result = new String[tmp.size()];
+        return tmp.toArray(result);
+    }
+
+    /**
+     * Adds <code>elt</code> to <code>elts</code>.
+     * 
+     * @param elts the elements
+     * @param elt the element to add (may be <b>null</b>, ignored then)
+     */
+    private static void add(HashSet<String> elts, String elt) {
+        if (null != elt) {
+            elts.add(elt);
+        }
     }
     
     /**
@@ -112,13 +149,33 @@ public class JavaSettingsInitializer implements ISettingsInitializer {
      * 
      * WARNING: The JDT/AST parser expects a "/" as separator!
      * 
-     * @param string path as string
-     * @return converted path
+     * @param path path as string
+     * @return converted path (may be <b>null</b> if <code>path</code> does not exist)
      */
-    private static String normalizePath(String string) {
-        String result = string;
-        result = result.replace("\\", "/");
+    private static String normalizePath(String path) {
+        String result = resolve(path);
+        if (null != result) {
+            result = result.replace("\\", "/");
+        }
         return result;
+    }
+
+    /**
+     * Returns a resolved path.
+     * 
+     * @param path the path to resolve
+     * @return the resolved path or <b>null</b> if the path cannot be resolved
+     */
+    private static String resolve(String path) {
+        String resolved = null;
+        if (null != path) {
+            // primitive, cannot handle Eclipse workspace root
+            File f = new File(path);
+            if (f.exists()) {
+                resolved = path;
+            }
+        }
+        return resolved;
     }
 
     // @Override

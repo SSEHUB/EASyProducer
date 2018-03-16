@@ -35,6 +35,8 @@ import net.ssehub.easy.instantiation.core.model.vilTypes.Set;
 @Instantiator("javac")
 public class Javac extends AbstractFileInstantiator {
 
+    public static final String JAVA_HOME = "java.home";
+    
     /**
      * Compiles a source path to a target path.
      * 
@@ -86,7 +88,6 @@ public class Javac extends AbstractFileInstantiator {
             }*/
             options.add(val);
         }
-
         StringWriter writer = new StringWriter();
         Iterable<? extends JavaFileObject> compilationUnits = fileManager.getJavaFileObjectsFromFiles(files);
         boolean success = compiler.getTask(writer, fileManager, null, options, null, compilationUnits).call();
@@ -119,10 +120,10 @@ public class Javac extends AbstractFileInstantiator {
         if (null == compiler) {
             String homeVariable = JavaUtilities.JDK_PATH;
             if (null != homeVariable) {
-                String homeProperty = System.getProperty("java.home");
-                System.setProperty("java.home", homeVariable);
+                String homeProperty = System.getProperty(JAVA_HOME);
+                System.setProperty(JAVA_HOME, homeVariable);
                 compiler = ToolProvider.getSystemJavaCompiler();
-                System.setProperty("java.home", homeProperty);
+                System.setProperty(JAVA_HOME, homeProperty);
             }
         }
         return compiler;
