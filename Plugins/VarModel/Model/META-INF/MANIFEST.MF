@@ -28,4 +28,4 @@ Bundle-Vendor: University of Hildesheim - SSE
 Bundle-ActivationPolicy: lazy
 Bundle-ClassPath: .
 Require-Bundle: net.ssehub.easy.basics;bundle-version="0.0.1";visibility:=reexport,
- org.apache.commons.lang;bundle-version="2.6.0"
+ org.apache.commons.lang;bundle-version="2.6.0";visibility:=reexport
