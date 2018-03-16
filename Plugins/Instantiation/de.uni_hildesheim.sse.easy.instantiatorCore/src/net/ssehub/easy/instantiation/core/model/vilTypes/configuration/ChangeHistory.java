@@ -297,7 +297,7 @@ public class ChangeHistory implements IVilType, IStringValueProvider {
     void notifyChanged(AbstractIvmlVariable variable, Value value) {
         if (!isSameValue(variable.getVariable().getValue(), value)) {
             CSet changeSet;
-            if (!originalValues.containsKey(variable)) {
+            if (!originalValues.containsKey(variable.origVariable)) {
                 Value oValue = value == null ? NullValue.INSTANCE : value;
                 originalValues.put(variable.origVariable, oValue);
                 if (null != tracer) {

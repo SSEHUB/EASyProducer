@@ -32,6 +32,7 @@ import org.w3c.dom.DOMException;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
 import net.ssehub.easy.basics.logger.EASyLoggerFactory;
@@ -247,6 +248,7 @@ public class XmlFileArtifact extends FileArtifact implements IXmlContainer {
             try {
                 builder = getDocumentBuilderFactory().newDocumentBuilder();
                 doc = builder.parse(file);
+                pruneWhitespaces(doc.getChildNodes());
             } catch (ParserConfigurationException exc) {
                 EASyLoggerFactory.INSTANCE.getLogger(getClass(), Bundle.ID).exception(exc);
                 throw new VilException(file.getAbsolutePath() + ":" + exc.getMessage(), 
@@ -263,6 +265,55 @@ public class XmlFileArtifact extends FileArtifact implements IXmlContainer {
         
         }
                 
+    }
+    
+    /**
+     * Removes start and end childs within nodes, whyever xerces suddenly introduced this "feature".
+     *   
+     * @param nodes the nodes to prune
+     */
+    private void pruneWhitespaces(NodeList nodes) {
+        final int count = nodes.getLength() - 1;
+        Node first = null;
+        Node last = null;
+        for (int n = 0; n <= count; n++) {
+            Node node = nodes.item(n);
+            if (0 == n) {
+                first = toEmptyTextNode(node);
+            } else if (count == n) {
+                last = toEmptyTextNode(node);
+            }
+            pruneWhitespaces(node.getChildNodes());
+        }
+        deleteNode(first);
+        deleteNode(last);
+    }
+    
+    /**
+     * Deletes a node from its parent.
+     * 
+     * @param node the node to be deleted (may be <b>null</b>)
+     */
+    private void deleteNode(Node node) {
+        if (null != node) {
+            node.getParentNode().removeChild(node);
+        }
+    }
+    
+    /**
+     * Turns a node into an empty text node if it is a text node and its content is empty (after trimming).
+     * 
+     * @param node the node (may be <b>null</b>)
+     * @return <code>node</code> or <b>null</b>
+     */
+    private Node toEmptyTextNode(Node node) {
+        Node result = null;
+        if (null != node && Node.TEXT_NODE == node.getNodeType()) {
+            if (0 == node.getTextContent().trim().length()) {
+                result = node;
+            }
+        }
+        return result;
     }
     
     /**
@@ -514,7 +565,7 @@ public class XmlFileArtifact extends FileArtifact implements IXmlContainer {
             initialize();
         }
     }
-    
+
     /**
      * Configures the transformer.
      * 
