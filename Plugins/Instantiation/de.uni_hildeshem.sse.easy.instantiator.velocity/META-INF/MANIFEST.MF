@@ -9,11 +9,11 @@ Service-Component: OSGI-INF/instantiator.xml
 Require-Bundle: net.ssehub.easy.instantiation.core;bundle-version="0.0.1",
  org.eclipse.equinox.ds,
  org.eclipse.core.runtime,
- net.ssehub.easy.varModel;bundle-version="0.5.5"
+ net.ssehub.easy.varModel;bundle-version="0.5.5",
+ org.apache.velocity;bundle-version="1.7.0";visibility:=reexport
 Import-Package: org.osgi.service.component
 Bundle-ActivationPolicy: lazy
-Bundle-ClassPath: .,
- lib/velocity-1.7-dep.jar
+Bundle-ClassPath: .
 Export-Package: net.ssehub.easy.instantiation.velocity;
   uses:="de.uni_hildesheim.sse.model.varModel.datatypes,
    de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes.configuration,
@@ -24,18 +24,4 @@ Export-Package: net.ssehub.easy.instantiation.velocity;
    org.apache.velocity,
    de.uni_hildesheim.sse.easy_producer.instantiator.model.artifactModel,
    org.apache.velocity.app,
-   de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes",
- org.apache.velocity;uses:="org.apache.velocity.context,org.apache.velocity.runtime.resource",
- org.apache.velocity.app;
-  uses:="org.apache.velocity.runtime.log,
-   org.apache.velocity.runtime,
-   org.apache.commons.collections,
-   org.apache.velocity,
-   org.apache.velocity.context",
- org.apache.velocity.context;
-  uses:="org.apache.velocity.runtime,
-   org.apache.velocity.util.introspection,
-   org.apache.velocity.runtime.resource,
-   org.apache.velocity.app.event,
-   org.apache.velocity.runtime.parser.node",
- org.apache.velocity.exception;uses:="org.apache.velocity.runtime.parser,org.apache.velocity.util.introspection"
+   de.uni_hildesheim.sse.easy_producer.instantiator.model.vilTypes"
