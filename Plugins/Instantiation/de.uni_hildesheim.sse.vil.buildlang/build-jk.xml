@@ -71,6 +71,7 @@
         <jar destfile="${build.jar.dir}/${ant.project.name}-sources.jar" basedir="${src.dir}" />
         <easyJavadoc sourcepath="${src.dir}" source="${javacSource}" destdir="${doc.dir}">
             <classpath refid="includes"/>
+            <classpath path="${build.classes.dir}"/>
         </easyJavadoc>
         <jar destfile="${build.jar.dir}/${ant.project.name}-javadoc.jar" basedir="${doc.dir}" />
         <mvnDeploy folderName="${ant.project.name}" jarFolder="${build.jar.dir}" jarFile="${ant.project.name}.jar"/>
