@@ -199,4 +199,14 @@ public class JavaUtilities {
         }
         return result;
     }
+    
+    /**
+     * Returns whether we are running Java 9.
+     * 
+     * @return <code>true</code> for Java 9, <code>false</code> else
+     */
+    public static boolean isJava9() {
+        return System.getProperty("java.version").startsWith("9.");
+    }
+
 }

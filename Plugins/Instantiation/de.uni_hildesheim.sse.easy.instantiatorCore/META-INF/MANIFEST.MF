@@ -9,7 +9,7 @@ Service-Component: OSGI-INF/instantiatorCore.xml
 Require-Bundle: net.ssehub.easy.varModel;bundle-version="0.0.6",
  org.eclipse.equinox.ds,
  org.eclipse.core.runtime,
- org.apache.ant,
+ org.apache.ant;visibility:=reexport,
  org.apache.commons.io;bundle-version="2.0.1";visibility:=reexport,
  org.apache.commons.lang;bundle-version="2.6.0",
  net.ssehub.easy.reasoning.core;bundle-version="0.10.1",
