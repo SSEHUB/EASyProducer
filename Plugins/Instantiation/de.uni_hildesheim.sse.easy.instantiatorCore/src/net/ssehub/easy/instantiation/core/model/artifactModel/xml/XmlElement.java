@@ -18,6 +18,7 @@ import org.w3c.dom.Node;
 import org.xml.sax.Attributes;
 
 import net.ssehub.easy.basics.logger.EASyLoggerFactory;
+import net.ssehub.easy.basics.logger.EASyLoggerFactory.EASyLogger;
 import net.ssehub.easy.instantiation.core.Bundle;
 import net.ssehub.easy.instantiation.core.model.artifactModel.FragmentArtifact;
 import net.ssehub.easy.instantiation.core.model.common.VilException;
@@ -622,9 +623,9 @@ public class XmlElement extends XmlNode implements IXmlContainer {
                     try {
                         getNode().getAttributes().removeNamedItem(attribute.getName());
                     } catch (DOMException e) {
-                        e.printStackTrace();
+                        getLogger().info(e.getMessage());
                     } catch (VilException e) {
-                        e.printStackTrace();
+                        getLogger().info(e.getMessage());
                     }
                     attributes[a] = null;
                     notifyChange();
@@ -844,6 +845,15 @@ public class XmlElement extends XmlNode implements IXmlContainer {
             throw new IndexOutOfBoundsException();
         }
         return nodes[index];
+    }
+    
+    /**
+     * Returns the EASy logger.
+     * 
+     * @return the logger
+     */
+    private EASyLogger getLogger() {
+        return EASyLoggerFactory.INSTANCE.getLogger(getClass(), Bundle.ID);
     }
     
 }
