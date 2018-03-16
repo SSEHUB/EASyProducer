@@ -19,20 +19,25 @@ Require-Bundle: de.uni_hildesheim.sse.vil.rt,
  de.uni_hildesheim.sse.vil.templatelang,
  de.uni_hildesheim.sse.vil.templatelang.tests,
  de.uni_hildesheim.sse.ivml,
- net.ssehub.easy.instantiation.velocity;bundle-version="1.7.12",
- org.apache.commons.io;bundle-version="2.0.1",
+ net.ssehub.easy.instantiation.velocity;bundle-version="1.7.12";visibility:=reexport,
+ org.apache.commons.io;bundle-version="2.0.1";visibility:=reexport,
  org.apache.commons.lang;bundle-version="2.6.0",
  de.uni-hildesheim.sse.easy.instantiatorCore.rt,
  net.ssehub.easy.reasoning.core;bundle-version="0.10.3",
  net.ssehub.easy.reasoning.sseReasoner;bundle-version="0.0.2",
- org.objectweb.asm;bundle-version="[5.0.1,6.0.0)";resolution:=optional
+ org.objectweb.asm;bundle-version="[5.0.1,6.0.0)";resolution:=optional,
+ net.ssehub.easy.instantiation.serializer.xml;bundle-version="0.9.0"
 Import-Package: org.apache.log4j,
+ org.apache.velocity,
+ org.apache.velocity.app,
+ org.apache.velocity.context,
+ org.apache.velocity.exception,
+ org.hamcrest.core,
  org.junit;version="4.5.0",
  org.junit.runner;version="4.5.0",
  org.junit.runner.manipulation;version="4.5.0",
  org.junit.runner.notification;version="4.5.0",
  org.junit.runners;version="4.5.0",
- org.junit.runners.model;version="4.5.0",
- org.hamcrest.core
+ org.junit.runners.model;version="4.5.0"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Export-Package: de.uni_hildesheim.sse.vil.rt.tests

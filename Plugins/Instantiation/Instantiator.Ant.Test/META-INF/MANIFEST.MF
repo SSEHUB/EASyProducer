@@ -11,3 +11,9 @@ Require-Bundle: de.uni_hildesheim.sse.vil.buildlang.tests;bundle-version="0.0.1"
  net.ssehub.easy.varModel;bundle-version="0.5.5",
  net.ssehub.easy.varModel.tests;bundle-version="0.0.10",
  net.ssehub.easy.instantiation.ant;bundle-version="0.2.3"
+Import-Package: org.apache.tools.ant,
+ org.apache.velocity,
+ org.apache.velocity.app,
+ org.apache.velocity.context,
+ org.apache.velocity.exception,
+ org.osgi.service.component
