@@ -186,4 +186,4 @@ Export-Package: aj.org.objectweb.asm,
  org.osgi.service.startlevel,
  org.osgi.service.url,
  org.osgi.util.tracker
-Bundle-RequiredExecutionEnvironment: JavaSE-9
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6
