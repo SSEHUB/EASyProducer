@@ -1,0 +1,9 @@
+project RealDefaultsTest {
+
+    Real d1 = 1.0;
+    Real d2 = 3.0;
+    Real d3;
+ 
+    d1 < d2;    
+    d1 + 0.4 < d2 implies d3 == 2.0;
+}

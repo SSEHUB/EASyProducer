@@ -9,7 +9,10 @@ Require-Bundle: org.junit,
  net.ssehub.easy.reasoning.core;bundle-version="0.0.3";visibility:=reexport,
  org.eclipse.core.runtime;bundle-version="3.7.0",
  net.ssehub.easy.dslCore;bundle-version="0.0.1"
-Export-Package: net.ssehub.easy.reasoning.core.frontend
+Export-Package: net.ssehub.easy.reasoning.core,
+ net.ssehub.easy.reasoning.core.frontend,
+ net.ssehub.easy.reasoning.core.reasoner,
+ net.ssehub.easy.reasoning.core.upgrader
 Bundle-ClassPath: testdata/,
  .
 Bundle-ActivationPolicy: lazy

@@ -1,0 +1,17 @@
+project RealInCompoundAssignTest {
+
+    compound C {
+        Real d1;
+        Real d2;
+        Real d3;
+    
+        d1 = 5.0;
+        d2 = 4.0;
+    
+        d1 > d2;
+        d1 + 0.4 > d2 implies d3 == 2.0;
+    }
+    
+    C cmp;   
+    
+}
