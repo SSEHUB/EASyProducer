@@ -189,7 +189,13 @@ public class JavaUtilities {
         tmpClasspath = tmpClasspath.replace("\\", "/");
         String[] result = tmpClasspath.split(File.pathSeparator);
         if (null == result) {
-            result = new String[] {JDK_PATH + "lib/rt.jar"};
+            String fallback = JDK_PATH + "lib/rt.jar";
+            File f = new File(fallback);
+            if (f.exists()) { 
+                result = new String[] {JDK_PATH + "lib/rt.jar"};
+            } else { // JDK 9 and newer
+                result = new String[0];
+            }
         }
         return result;
     }

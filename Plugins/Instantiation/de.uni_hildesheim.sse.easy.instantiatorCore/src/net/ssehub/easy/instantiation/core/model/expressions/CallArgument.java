@@ -42,11 +42,11 @@ public class CallArgument {
      * Creates a named call argument.
      * 
      * @param name the name of the argument (may be <b>null</b> if unnamed)
-     * @param expr the expression specifying the value of the argument
+     * @param expr the expression specifying the value of the argument (may be <b>null</b>, 
+     *    e.g., for dynamic dispatch)
      */
     public CallArgument(String name, Expression expr) {
         assert null == name || name.length() > 0;
-        assert null != expr;
         this.name = name;
         this.expr = expr;
     }
