@@ -74,6 +74,11 @@
         <echo>###   Compiling Maven Instantiator  ###</echo>
         <echo>#######################################</echo>
         <ant dir="${home.instantiator.maven.dir}" antfile="${build.script.name}" />
+
+        <echo>#################################</echo>
+        <echo>###  Compiling Velocity-Lib   ###</echo>
+        <echo>#################################</echo>
+        <ant dir="Velocity" antfile="${build.script.name}" />
 		
         <echo>#############################</echo>
         <echo>###  Compiling Velocity   ###</echo>
