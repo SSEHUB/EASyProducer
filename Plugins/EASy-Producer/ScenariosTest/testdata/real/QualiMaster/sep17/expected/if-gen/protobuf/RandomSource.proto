@@ -1,0 +1,9 @@
+package eu.qualimaster.data.protobuf;
+option java_package = "eu.qualimaster.protos";
+option java_outer_classname = "RandomSourceProtos";
+
+message SRandomSourceRandomDataOutput {
+    required int32 randomInteger = 1;
+    required int64 timestamp = 2;
+}
+

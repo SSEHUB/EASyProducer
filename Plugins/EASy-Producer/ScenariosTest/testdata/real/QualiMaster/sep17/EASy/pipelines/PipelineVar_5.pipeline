@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pipeline:Pipeline xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:pipeline="pipeline" name="SimpleEDPipeline" artifact="eu.qualimaster:SimpleEDPipeline:0.0.1-SNAPSHOT">
+  <nodes xsi:type="pipeline:Source" name="source1" source="1"/>
+  <nodes xsi:type="pipeline:FamilyElement" name="stockParser" family="20"/>
+  <nodes xsi:type="pipeline:FamilyElement" name="ed" family="10"/>
+  <nodes xsi:type="pipeline:FamilyElement" name="recom" family="19"/>
+  <flows name="f1" source="//@nodes.0" destination="//@nodes.1"/>
+  <flows name="f2" source="//@nodes.1" destination="//@nodes.2"/>
+  <flows name="f3" source="//@nodes.2" destination="//@nodes.3"/>
+</pipeline:Pipeline>

@@ -1,0 +1,14 @@
+StrategiesTactics::sourceVolumePrediction = Source volume prediction|Warn the adaptation if volumes of sources will probably increase.
+StrategiesTactics::sourceVolumeCapacityCheck = Source volume check|Use the source volume prediction to check whether a change in source subscription will probably exceed available resources.
+StrategiesTactics::cloudAdaptation = Cloud adaptation|Enable dynamic migration of pipelines to a configured cloud (experimental).
+StrategiesTactics::checkAtStartup = Pipeline startup|Checks and adjusts pipelines at pipeline startup regarding their resource consumption.
+StrategiesTactics::checkBeforeShutdown = Pipeline shutting down|Checks a pipeline shutdown.
+StrategiesTactics::checkAfterShutdown = Pipeline shutdown|Adjusts pipelines after pipeline shutdown regarding their resource consumption.
+StrategiesTactics::slaViolation = Constraint violation|Performs adaptations up violations of configured constraints.
+StrategiesTactics::dataReplay = Data replay|Enables runtime adaptation of (enabled) data replay at overload.
+StrategiesTactics::loadShedding = Load shedding|Enables runtime adaptation of load shedding at overload.
+StrategiesTactics::parameterChange = Parameter change|Enables internal adaptation through parameter changes.
+StrategiesTactics::parameterChangeExternal = Parameter change (external)|Enables external adaptation through parameter changes.
+StrategiesTactics::algorithmChange = Algorithm change|Enables internal adaptation through algorithm changes.
+StrategiesTactics::algorithmChangeExternal = Algorithm change (external)|Enables external adaptation through algorithm changes.
+StrategiesTactics::dataReplayExternal = Data replay command|Allows external commands controlling the data replay.

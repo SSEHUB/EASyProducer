@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pipeline:Pipeline xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:pipeline="pipeline" name="ReplayTestPip" artifact="eu.qualimaster:ReplayTestPip:0.0.1-SNAPSHOT">
+  <nodes xsi:type="pipeline:Source" name="RandomSource" source="2"/>
+  <nodes xsi:type="pipeline:ReplaySink" name="ReplaySink" sink="1"/>
+  <flows name="f1" source="//@nodes.0" destination="//@nodes.1" tupleType="DataManagementCfg::randomSource.input[0]"/>
+</pipeline:Pipeline>

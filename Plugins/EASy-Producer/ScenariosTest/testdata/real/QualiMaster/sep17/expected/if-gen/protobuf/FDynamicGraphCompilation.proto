@@ -1,0 +1,15 @@
+package eu.qualimaster.families.protobuf;
+option java_package = "eu.qualimaster.protos";
+option java_outer_classname = "FDynamicGraphCompilationProtos";
+
+message SIFDynamicGraphCompilationPairwiseFinancialInput {
+    required string id0 = 1;
+    required string id1 = 2;
+    required string date = 3;
+    required double value = 4;
+}
+
+message SIFDynamicGraphCompilationEdgeStreamOutput {
+    required string edge = 1;
+}
+

@@ -1,0 +1,42 @@
+project ReconfigurableHardware {
+	
+	import Basics;
+	import Observables;
+	
+	annotate BindingTime bindingTime = BindingTime.compile to ReconfigurableHardware;
+	
+	compound HwNode {
+		NonEmptyString name;
+		assign(bindingTime = BindingTime.runtimeMon) to {
+			Bandwidth bandwidth;
+		}
+		assign(bindingTime = BindingTime.runtimeEnact) to {
+			IsAvailable available;
+		}
+	}
+	
+	compound MPCCNode refines HwNode{
+		NonEmptyString host; // possibly needed to direct network stream to
+		PortInteger monitoringPort;
+		PortInteger commandSendingPort;
+		PortInteger commandReceivingPort;
+		PositiveInteger numCPUs;
+		PositiveInteger numDFEs;
+		assign(bindingTime = BindingTime.runtimeMon) to {
+			Used_Machines usedCPUs;
+			Used_Machines usedDFEs;
+			Available_Machines availableCPUs;
+			Available_Machines availableDFEs;
+		}
+	} 
+	
+	sequenceOf(refTo(HwNode)) clusters;
+	Constraint namesUnique = size(clusters->collect(h|h.name)) == size(clusters);
+
+	assign(bindingTime = BindingTime.runtimeMon) to {
+		Used_Machines usedCPUs;
+		Used_Machines usedDFEs;
+		Available_Machines availableCPUs;
+		Available_Machines availableDFEs;
+	}
+}

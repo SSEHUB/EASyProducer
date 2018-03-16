@@ -1,0 +1,115 @@
+<pipeline>
+    <name>ReflectiveRandomPip</name>
+    <external_service_settings>
+        <packet_delimiter>!</packet_delimiter>
+        <main_delimiter>,</main_delimiter>
+        <secondary_delimiter>|</secondary_delimiter>
+        <line_delimiter>"Lf"</line_delimiter>
+    </external_service_settings>
+    <commands>
+        <command>
+			<name>login</name>
+			<request>
+				<field sequence="0">login</field>
+				<field sequence="1">%username%</field>
+				<field sequence="2">%password%</field>
+			</request>
+			<response>
+				<field sequence="0">login_response</field>
+				<field sequence="1">%status%</field>
+				<field sequence="2">%result%</field>
+			</response>
+		</command>
+		
+		<command>
+			<name>logout</name>
+			<request>
+				<field sequence="0">logout</field>
+			</request>
+			<response>
+				<field sequence="0">logout_response</field>
+				<field sequence= "1">%status%</field>
+				<field sequence="2">%result%</field>
+			</response>
+		</command>
+		
+		<command>
+			<name>quoteList</name>
+			<request>
+				<field sequence="0">quoteList</field>
+			</request>
+			<response>
+				<field sequence="0">quoteList_response</field>
+				<field sequence="1">%status%</field>
+				<field sequence="2">%result%</field>
+			</response>
+		</command>
+		
+		<command>
+			<name>requestHistoricalSentiment</name>
+			<request>
+				<field sequence="0">requestHistoricalSentiment</field>
+				<field sequence="1">%startDate%</field>
+				<field sequence="2">%endDate%</field>
+				<field sequence="3">%listOfIds%</field>
+			</request>
+			<response>
+				<field sequence="0">historicalSentiment_response</field>
+				<field sequence="1">%status%</field>
+				<field sequence="2">%result%</field>
+			</response>
+		</command>
+        <!--This is generated based on the configuration of permissible parameters from the pipeline-->
+        <command>									
+			<name>changedelay</name>
+			<request>
+				<field sequence="0">changedelay</field>
+				<field sequence="1">%newDelay%</field>
+			</request>
+			<response>
+				<field sequence="0">changedelay_response</field>
+				<field sequence="1">%status%</field>
+				<field sequence="2">%newDelay%</field>
+			</response>
+		</command>
+        <!--This is generated based on the configuration of permissible parameters from the pipeline-->
+        <command>									
+			<name>changewindowSize</name>
+			<request>
+				<field sequence="0">changewindowSize</field>
+				<field sequence="1">%newWindowSize%</field>
+			</request>
+			<response>
+				<field sequence="0">changewindowSize_response</field>
+				<field sequence="1">%status%</field>
+				<field sequence="2">%newWindowSize%</field>
+			</response>
+		</command>
+        <!--This is generated based on the configuration of permissible parameters from the pipeline-->
+        <command>									
+			<name>changeflag</name>
+			<request>
+				<field sequence="0">changeflag</field>
+				<field sequence="1">%newFlag%</field>
+			</request>
+			<response>
+				<field sequence="0">changeflag_response</field>
+				<field sequence="1">%status%</field>
+				<field sequence="2">%newFlag%</field>
+			</response>
+		</command>
+        <!--This is generated based on the configuration of permissible parameters from the pipeline-->
+        <command>									
+			<name>changedelay</name>
+			<request>
+				<field sequence="0">changedelay</field>
+				<field sequence="1">%newDelay%</field>
+			</request>
+			<response>
+				<field sequence="0">changedelay_response</field>
+				<field sequence="1">%status%</field>
+				<field sequence="2">%newDelay%</field>
+			</response>
+		</command>
+    </commands>
+</pipeline>

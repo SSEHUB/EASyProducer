@@ -1,0 +1,23 @@
+<mapping>
+  <pipeline name="SwitchPip" class="eu.qualimaster.SwitchPip.topology.Topology">
+      <node name="src" type="source">
+          <component name="PipelineVar_2_Source0" container="SwitchPip" class="eu.qualimaster.SwitchPip.topology.PipelineVar_2_Source0Source" receiver="true" thrift="false" tasks="1"/>
+      </node>
+      <node name="processor" type="family">
+          <component name="PipelineVar_2_FamilyElement0" container="SwitchPip" class="eu.qualimaster.SwitchPip.topology.PipelineVar_2_FamilyElement0FamilyElement" receiver="true" thrift="false" tasks="1" alternative0 = "SwitchProcessor1" alternative1 = "SwitchProcessor2"/>
+      </node>
+      <node name="snk" type="sink">
+          <component name="PipelineVar_2_Sink0" container="SwitchPip" class="eu.qualimaster.SwitchPip.topology.PipelineVar_2_Sink0Sink" receiver="true" thrift="false" tasks="1"/>
+      </node>
+      <algorithm name="SwitchProcessor1" implName="SwitchProcessor1" class="eu.qualimaster.algorithms.SwitchProcessor1"/>
+      <algorithm name="SwitchProcessor2" implName="SwitchProcessor2" class="eu.qualimaster.algorithms.SwitchProcessor2"/>
+      <algorithm name="Random Source" implName="RandomSourceAlg" class="eu.qualimaster.algorithms.RandomSourceAlg"/>
+      <algorithm name="Random Sink" implName="RandomSinkAlg" class="eu.qualimaster.algorithms.RandomSinkAlg"/>
+      <parameter parameter="delay" name="src" receiver="PipelineVar_2_Source0"/> 
+      <parameter parameter="aggregationFactor" name="processor" receiver="PipelineVar_2_FamilyElement0"/> 
+      <parameter parameter="delay" name="processor" receiver="PipelineVar_2_FamilyElement0"/> 
+      <parameter parameter="flag" name="processor" receiver="PipelineVar_2_FamilyElement0"/> 
+      <parameter parameter="windowSize" name="processor" receiver="PipelineVar_2_FamilyElement0"/> 
+  </pipeline>
+
+</mapping>

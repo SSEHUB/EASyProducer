@@ -1,0 +1,23 @@
+package eu.qualimaster.families.protobuf;
+option java_package = "eu.qualimaster.protos";
+option java_outer_classname = "FHayashiYoshidaProtos";
+
+message SIFHayashiYoshidaSymbolsStreamInput {
+    required string symbolId = 1;
+    required int64 timestamp = 2;
+    required double value = 3;
+}
+
+message SIFHayashiYoshidaConfigurationStreamInput {
+    required string pairKey = 4;
+    required string pairValue = 5;
+}
+
+message SIFHayashiYoshidaResetWindowStreamInput {
+    required int64 windowStart = 6;
+}
+
+message SIFHayashiYoshidaPairwiseFinancialOutput {
+    required string pairwiseCorrelationFinancial = 1;
+}
+

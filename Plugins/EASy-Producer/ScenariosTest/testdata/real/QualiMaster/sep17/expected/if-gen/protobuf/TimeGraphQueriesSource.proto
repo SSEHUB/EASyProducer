@@ -1,0 +1,17 @@
+package eu.qualimaster.data.protobuf;
+option java_package = "eu.qualimaster.protos";
+option java_outer_classname = "TimeGraphQueriesSourceProtos";
+
+message STimeGraphQueriesSourceSnapshotQueryStreamOutput {
+    required int64 start = 1;
+    required int64 end = 2;
+}
+
+message STimeGraphQueriesSourcePathQueryStreamOutput {
+    required int64 start = 3;
+    required int64 end = 4;
+    required string vertexA = 5;
+    required string vertexB = 6;
+    required string type = 7;
+}
+

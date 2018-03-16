@@ -1,0 +1,29 @@
+project StrategiesTactics {
+
+    import Basics;
+    import Observables;
+	import Adaptivity;
+	 
+	annotate BindingTime bindingTime = BindingTime.compile to StrategiesTactics;
+
+    // relative importance of the quality dimensions as well as the tradeoffs to be considered for cross-pipeline adaptation
+
+	assign(bindingTime = BindingTime.runtimeMon) to {
+		Boolean checkAtStartup = true;
+        Boolean checkBeforeShutdown = true;
+        Boolean checkAfterShutdown = true;
+	    Boolean slaViolation = true;
+		Boolean dataReplay = true;
+		Boolean loadShedding = true;
+
+        Boolean sourceVolumePrediction = true;
+        Boolean sourceVolumeCapacityCheck = true;
+		Boolean cloudAdaptation = true; 
+		Boolean parameterChange = true;
+		Boolean parameterChangeExternal = true;
+		Boolean algorithmChange = true;
+		Boolean algorithmChangeExternal = true;
+		Boolean dataReplayExternal = true;
+	}
+	
+}           

@@ -1,0 +1,68 @@
+project AdaptivityCfg {
+ 
+	import Adaptivity;
+	import ObservablesCfg;
+
+	pipelineImportance = {
+		{parameter=refBy(qualityParameters[0]), weight = -1},
+		{parameter=refBy(qualityParameters[1]), weight = 1},
+		{parameter=refBy(qualityParameters[2]), weight = 1},
+		{parameter=refBy(qualityParameters[3]), weight = -1},
+		{parameter=refBy(qualityParameters[4]), weight = -1},
+		{parameter=refBy(qualityParameters[5]), weight = -1},
+		{parameter=refBy(qualityParameters[6]), weight = -1},
+		{parameter=refBy(qualityParameters[7]), weight = -1},
+		{parameter=refBy(qualityParameters[8]), weight = -1},
+		{parameter=refBy(qualityParameters[9]), weight = -1},
+		{parameter=refBy(qualityParameters[10]), weight = 1},
+		{parameter=refBy(qualityParameters[11]), weight = 1},
+		{parameter=refBy(qualityParameters[12]), weight = 1},
+		{parameter=refBy(qualityParameters[13]), weight = 1},
+		{parameter=refBy(qualityParameters[14]), weight = 1},
+		{parameter=refBy(qualityParameters[15]), weight = 1},
+		{parameter=refBy(qualityParameters[16]), weight = 1},
+		{parameter=refBy(qualityParameters[17]), weight = 1},
+		{parameter=refBy(qualityParameters[18]), weight = 1},
+		{parameter=refBy(qualityParameters[19]), weight = -1},
+		{parameter=refBy(qualityParameters[20]), weight = 1},
+        {parameter=refBy(qualityParameters[21]), weight = 1},
+        {parameter=refBy(qualityParameters[22]), weight = 0},
+        {parameter=refBy(qualityParameters[23]), weight = 0},
+        {parameter=refBy(qualityParameters[24]), weight = 0},
+        {parameter=refBy(qualityParameters[25]), weight = 0}
+	};
+
+	crossPipelineTradeoffs = {
+		{parameter=refBy(qualityParameters[0]), weight = -1},
+		{parameter=refBy(qualityParameters[1]), weight = 1},
+		{parameter=refBy(qualityParameters[2]), weight = 1},
+		{parameter=refBy(qualityParameters[3]), weight = -1},
+		{parameter=refBy(qualityParameters[4]), weight = -1},
+		{parameter=refBy(qualityParameters[5]), weight = -1},
+		{parameter=refBy(qualityParameters[6]), weight = -1},
+		{parameter=refBy(qualityParameters[7]), weight = -1},
+		{parameter=refBy(qualityParameters[8]), weight = -1},
+		{parameter=refBy(qualityParameters[9]), weight = -1},
+		{parameter=refBy(qualityParameters[10]), weight = 1},
+		{parameter=refBy(qualityParameters[11]), weight = 1},
+		{parameter=refBy(qualityParameters[12]), weight = 1},
+		{parameter=refBy(qualityParameters[13]), weight = 1},
+		{parameter=refBy(qualityParameters[14]), weight = 1},
+		{parameter=refBy(qualityParameters[15]), weight = 1},
+		{parameter=refBy(qualityParameters[16]), weight = 1},
+		{parameter=refBy(qualityParameters[17]), weight = 1},
+		{parameter=refBy(qualityParameters[18]), weight = 1},
+		{parameter=refBy(qualityParameters[19]), weight = -1},
+		{parameter=refBy(qualityParameters[20]), weight = 1},
+        {parameter=refBy(qualityParameters[21]), weight = 1},
+        {parameter=refBy(qualityParameters[22]), weight = 0},
+        {parameter=refBy(qualityParameters[23]), weight = 0},
+        {parameter=refBy(qualityParameters[24]), weight = 0},
+        {parameter=refBy(qualityParameters[25]), weight = 0}
+	};
+
+	freeze {
+		pipelineImportance;
+		crossPipelineTradeoffs;
+	} but (f|f.bindingTime >= BindingTime.runtimeMon)
+}

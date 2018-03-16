@@ -1,0 +1,91 @@
+<project name="pipelines" default="deploy" basedir=".">
+
+    <property file="${user.home}/global-build.properties"/>
+    <property file="${user.home}/qualimaster-build.properties"/>
+    <include file="${user.home}/macros.xml"/>
+
+    <!--
+    <taskdef uri="antlib:org.jacoco.ant" resource="org/jacoco/ant/antlib.xml"/>
+
+    <path id="easyTaskDef.lib">
+      <fileset dir="${home.base.dir}/${projects.standalone.dir}/build/generatedLibs.ex/dist">
+        <include name="*.jar"/>
+      </fileset>
+    </path>
+    -->
+    <target name="deploy">
+      <delete file="pipelines/eu/qualimaster/PriorityPip/target/PriorityPip-0.0.2-SNAPSHOT.jar"/>
+      <rename src="pipelines/eu/qualimaster/PriorityPip/target/PriorityPip-0.0.2-SNAPSHOT-jar-with-dependencies.jar" dest="pipelines/eu/qualimaster/PriorityPip/target/PriorityPip-0.0.2-SNAPSHOT.jar"/>
+      <mvnDeploy folderName="eu/qualimaster/PriorityPip" pomFile="pipelines/eu/qualimaster/PriorityPip/pom.xml" 
+        jarFolder="pipelines/eu/qualimaster/PriorityPip/target" jarFile= "PriorityPip-0.0.2-SNAPSHOT.jar"/>
+      <delete file="pipelines/eu/qualimaster/RandomPip/target/RandomPip-0.0.1-SNAPSHOT.jar"/>
+      <rename src="pipelines/eu/qualimaster/RandomPip/target/RandomPip-0.0.1-SNAPSHOT-jar-with-dependencies.jar" dest="pipelines/eu/qualimaster/RandomPip/target/RandomPip-0.0.1-SNAPSHOT.jar"/>
+      <mvnDeploy folderName="eu/qualimaster/RandomPip" pomFile="pipelines/eu/qualimaster/RandomPip/pom.xml" 
+        jarFolder="pipelines/eu/qualimaster/RandomPip/target" jarFile= "RandomPip-0.0.1-SNAPSHOT.jar"/>
+      <delete file="pipelines/eu/qualimaster/SwitchPip/target/SwitchPip-0.0.2-SNAPSHOT.jar"/>
+      <rename src="pipelines/eu/qualimaster/SwitchPip/target/SwitchPip-0.0.2-SNAPSHOT-jar-with-dependencies.jar" dest="pipelines/eu/qualimaster/SwitchPip/target/SwitchPip-0.0.2-SNAPSHOT.jar"/>
+      <mvnDeploy folderName="eu/qualimaster/SwitchPip" pomFile="pipelines/eu/qualimaster/SwitchPip/pom.xml" 
+        jarFolder="pipelines/eu/qualimaster/SwitchPip/target" jarFile= "SwitchPip-0.0.2-SNAPSHOT.jar"/>
+      <delete file="pipelines/eu/qualimaster/FocusPip/target/FocusPip-0.0.1-SNAPSHOT.jar"/>
+      <rename src="pipelines/eu/qualimaster/FocusPip/target/FocusPip-0.0.1-SNAPSHOT-jar-with-dependencies.jar" dest="pipelines/eu/qualimaster/FocusPip/target/FocusPip-0.0.1-SNAPSHOT.jar"/>
+      <mvnDeploy folderName="eu/qualimaster/FocusPip" pomFile="pipelines/eu/qualimaster/FocusPip/pom.xml" 
+        jarFolder="pipelines/eu/qualimaster/FocusPip/target" jarFile= "FocusPip-0.0.1-SNAPSHOT.jar"/>
+      <delete file="pipelines/eu/qualimaster/DynamicGraphPip/target/DynamicGraphPip-0.0.1-SNAPSHOT.jar"/>
+      <rename src="pipelines/eu/qualimaster/DynamicGraphPip/target/DynamicGraphPip-0.0.1-SNAPSHOT-jar-with-dependencies.jar" dest="pipelines/eu/qualimaster/DynamicGraphPip/target/DynamicGraphPip-0.0.1-SNAPSHOT.jar"/>
+      <mvnDeploy folderName="eu/qualimaster/DynamicGraphPip" pomFile="pipelines/eu/qualimaster/DynamicGraphPip/pom.xml" 
+        jarFolder="pipelines/eu/qualimaster/DynamicGraphPip/target" jarFile= "DynamicGraphPip-0.0.1-SNAPSHOT.jar"/>
+      <delete file="pipelines/eu/qualimaster/ReplayPip/target/ReplayPip-0.0.1-SNAPSHOT.jar"/>
+      <rename src="pipelines/eu/qualimaster/ReplayPip/target/ReplayPip-0.0.1-SNAPSHOT-jar-with-dependencies.jar" dest="pipelines/eu/qualimaster/ReplayPip/target/ReplayPip-0.0.1-SNAPSHOT.jar"/>
+      <mvnDeploy folderName="eu/qualimaster/ReplayPip" pomFile="pipelines/eu/qualimaster/ReplayPip/pom.xml" 
+        jarFolder="pipelines/eu/qualimaster/ReplayPip/target" jarFile= "ReplayPip-0.0.1-SNAPSHOT.jar"/>
+      <delete file="pipelines/eu/qualimaster/TimeTravelPip/target/TimeTravelPip-0.0.2-SNAPSHOT.jar"/>
+      <rename src="pipelines/eu/qualimaster/TimeTravelPip/target/TimeTravelPip-0.0.2-SNAPSHOT-jar-with-dependencies.jar" dest="pipelines/eu/qualimaster/TimeTravelPip/target/TimeTravelPip-0.0.2-SNAPSHOT.jar"/>
+      <mvnDeploy folderName="eu/qualimaster/TimeTravelPip" pomFile="pipelines/eu/qualimaster/TimeTravelPip/pom.xml" 
+        jarFolder="pipelines/eu/qualimaster/TimeTravelPip/target" jarFile= "TimeTravelPip-0.0.2-SNAPSHOT.jar"/>
+      <delete file="pipelines/eu/qualimaster/TransferPip/target/TransferPip-0.0.1-SNAPSHOT.jar"/>
+      <rename src="pipelines/eu/qualimaster/TransferPip/target/TransferPip-0.0.1-SNAPSHOT-jar-with-dependencies.jar" dest="pipelines/eu/qualimaster/TransferPip/target/TransferPip-0.0.1-SNAPSHOT.jar"/>
+      <mvnDeploy folderName="eu/qualimaster/TransferPip" pomFile="pipelines/eu/qualimaster/TransferPip/pom.xml" 
+        jarFolder="pipelines/eu/qualimaster/TransferPip/target" jarFile= "TransferPip-0.0.1-SNAPSHOT.jar"/>
+      <delete file="pipelines/eu/qualimaster/ReflectiveRandomPip/target/ReflectiveRandomPip-0.0.1-SNAPSHOT.jar"/>
+      <rename src="pipelines/eu/qualimaster/ReflectiveRandomPip/target/ReflectiveRandomPip-0.0.1-SNAPSHOT-jar-with-dependencies.jar" dest="pipelines/eu/qualimaster/ReflectiveRandomPip/target/ReflectiveRandomPip-0.0.1-SNAPSHOT.jar"/>
+      <mvnDeploy folderName="eu/qualimaster/ReflectiveRandomPip" pomFile="pipelines/eu/qualimaster/ReflectiveRandomPip/pom.xml" 
+        jarFolder="pipelines/eu/qualimaster/ReflectiveRandomPip/target" jarFile= "ReflectiveRandomPip-0.0.1-SNAPSHOT.jar"/>
+      <delete file="pipelines/eu/qualimaster/PriorityFinancialPip/target/PriorityFinancialPip-0.0.1-SNAPSHOT.jar"/>
+      <rename src="pipelines/eu/qualimaster/PriorityFinancialPip/target/PriorityFinancialPip-0.0.1-SNAPSHOT-jar-with-dependencies.jar" dest="pipelines/eu/qualimaster/PriorityFinancialPip/target/PriorityFinancialPip-0.0.1-SNAPSHOT.jar"/>
+      <mvnDeploy folderName="eu/qualimaster/PriorityFinancialPip" pomFile="pipelines/eu/qualimaster/PriorityFinancialPip/pom.xml" 
+        jarFolder="pipelines/eu/qualimaster/PriorityFinancialPip/target" jarFile= "PriorityFinancialPip-0.0.1-SNAPSHOT.jar"/>
+      <delete file="pipelines/eu/qualimaster/PrioritySimulatePip/target/PrioritySimulatePip-0.0.1-SNAPSHOT.jar"/>
+      <rename src="pipelines/eu/qualimaster/PrioritySimulatePip/target/PrioritySimulatePip-0.0.1-SNAPSHOT-jar-with-dependencies.jar" dest="pipelines/eu/qualimaster/PrioritySimulatePip/target/PrioritySimulatePip-0.0.1-SNAPSHOT.jar"/>
+      <mvnDeploy folderName="eu/qualimaster/PrioritySimulatePip" pomFile="pipelines/eu/qualimaster/PrioritySimulatePip/pom.xml" 
+        jarFolder="pipelines/eu/qualimaster/PrioritySimulatePip/target" jarFile= "PrioritySimulatePip-0.0.1-SNAPSHOT.jar"/>
+      <delete file="pipelines/eu/qualimaster/TimeTravelSimPip/target/TimeTravelSimPip-0.0.1-SNAPSHOT.jar"/>
+      <rename src="pipelines/eu/qualimaster/TimeTravelSimPip/target/TimeTravelSimPip-0.0.1-SNAPSHOT-jar-with-dependencies.jar" dest="pipelines/eu/qualimaster/TimeTravelSimPip/target/TimeTravelSimPip-0.0.1-SNAPSHOT.jar"/>
+      <mvnDeploy folderName="eu/qualimaster/TimeTravelSimPip" pomFile="pipelines/eu/qualimaster/TimeTravelSimPip/pom.xml" 
+        jarFolder="pipelines/eu/qualimaster/TimeTravelSimPip/target" jarFile= "TimeTravelSimPip-0.0.1-SNAPSHOT.jar"/>
+      <delete file="pipelines/eu/qualimaster/CorrelationSW/target/CorrelationSW-0.0.1-SNAPSHOT.jar"/>
+      <rename src="pipelines/eu/qualimaster/CorrelationSW/target/CorrelationSW-0.0.1-SNAPSHOT-jar-with-dependencies.jar" dest="pipelines/eu/qualimaster/CorrelationSW/target/CorrelationSW-0.0.1-SNAPSHOT.jar"/>
+      <mvnDeploy folderName="eu/qualimaster/CorrelationSW" pomFile="pipelines/eu/qualimaster/CorrelationSW/pom.xml" 
+        jarFolder="pipelines/eu/qualimaster/CorrelationSW/target" jarFile= "CorrelationSW-0.0.1-SNAPSHOT.jar"/>
+      <delete file="pipelines/eu/qualimaster/RandomSubPipeline1/target/RandomSubPipeline1-0.0.1-SNAPSHOT.jar"/>
+      <rename src="pipelines/eu/qualimaster/RandomSubPipeline1/target/RandomSubPipeline1-0.0.1-SNAPSHOT-jar-with-dependencies.jar" dest="pipelines/eu/qualimaster/RandomSubPipeline1/target/RandomSubPipeline1-0.0.1-SNAPSHOT.jar"/>
+      <mvnDeploy folderName="eu/qualimaster/RandomSubPipeline1" pomFile="pipelines/eu/qualimaster/RandomSubPipeline1/pom.xml" 
+        jarFolder="pipelines/eu/qualimaster/RandomSubPipeline1/target" jarFile= "RandomSubPipeline1-0.0.1-SNAPSHOT.jar"/>
+      <delete file="pipelines/eu/qualimaster/RandomSubPipeline2/target/RandomSubPipeline2-0.0.1-SNAPSHOT.jar"/>
+      <rename src="pipelines/eu/qualimaster/RandomSubPipeline2/target/RandomSubPipeline2-0.0.1-SNAPSHOT-jar-with-dependencies.jar" dest="pipelines/eu/qualimaster/RandomSubPipeline2/target/RandomSubPipeline2-0.0.1-SNAPSHOT.jar"/>
+      <mvnDeploy folderName="eu/qualimaster/RandomSubPipeline2" pomFile="pipelines/eu/qualimaster/RandomSubPipeline2/pom.xml" 
+        jarFolder="pipelines/eu/qualimaster/RandomSubPipeline2/target" jarFile= "RandomSubPipeline2-0.0.1-SNAPSHOT.jar"/>
+      <delete file="pipelines/eu/qualimaster/CorrelationSWAlternative/target/CorrelationSWAlternative-0.0.1-SNAPSHOT.jar"/>
+      <rename src="pipelines/eu/qualimaster/CorrelationSWAlternative/target/CorrelationSWAlternative-0.0.1-SNAPSHOT-jar-with-dependencies.jar" dest="pipelines/eu/qualimaster/CorrelationSWAlternative/target/CorrelationSWAlternative-0.0.1-SNAPSHOT.jar"/>
+      <mvnDeploy folderName="eu/qualimaster/CorrelationSWAlternative" pomFile="pipelines/eu/qualimaster/CorrelationSWAlternative/pom.xml" 
+        jarFolder="pipelines/eu/qualimaster/CorrelationSWAlternative/target" jarFile= "CorrelationSWAlternative-0.0.1-SNAPSHOT.jar"/>
+      <mvnDeploy folderName="if-gen" pomFile="if-gen/pom.xml" 
+        jarFolder="if-gen/target" jarFile= "PriorityPipelineInterfaces-0.5.0-SNAPSHOT.jar"/>
+      <mvnDeploy folderName="hardwareAlgorithms/eu/qualimaster/algorithms/GenTopoHardwareCorrelationFinancial" pomFile="hardwareAlgorithms/eu/qualimaster/algorithms/GenTopoHardwareCorrelationFinancial/pom.xml" 
+        jarFolder="hardwareAlgorithms/eu/qualimaster/algorithms/GenTopoHardwareCorrelationFinancial/target" jarFile= "GenTopoHardwareCorrelationFinancial-0.0.1-SNAPSHOT.jar"/>
+      <mvnDeploy folderName="hardwareAlgorithms/eu/qualimaster/algorithms/TransferEntropyHardware" pomFile="hardwareAlgorithms/eu/qualimaster/algorithms/TransferEntropyHardware/pom.xml" 
+        jarFolder="hardwareAlgorithms/eu/qualimaster/algorithms/TransferEntropyHardware/target" jarFile= "TransferEntropyHardware-0.0.1-SNAPSHOT.jar"/>
+      <mvnDeploy folderName="hardwareAlgorithms/eu/qualimaster/algorithms/MutualInformationHardware" pomFile="hardwareAlgorithms/eu/qualimaster/algorithms/MutualInformationHardware/pom.xml" 
+        jarFolder="hardwareAlgorithms/eu/qualimaster/algorithms/MutualInformationHardware/target" jarFile= "MutualInformationHardware-0.0.1-SNAPSHOT.jar"/>
+      <mvnDeploy folderName="model-gen" pomFile="model-gen/pom.xml" jarFolder="model-gen/target" jarFile="infrastructureModel-0.5.0-SNAPSHOT.jar" />
+    </target>
+</project>

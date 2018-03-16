@@ -1,0 +1,1017 @@
+@advice(QM)
+template commonVTLMethods(Configuration config, FileArtifact target) { 
+	
+	Boolean genInstance = true;
+	Boolean genMultiOutputs = true;     // generate specific code for multiple output of one algorithm
+	Boolean genMonitoringProbes = true; // generate monitoring probes (false for experiments)
+	Boolean genMultiTupleTypes = true; // generate specific code for considering multiple tuple types in the algorithm output as well as 
+									   // adjusting the stream id to "EltVarName+TupleName/AlgName"
+	Boolean newSwitch = false;//enable the switch mode
+	Boolean newSwitchLog = false;//enable the switch-related logs
+	Boolean hwlog = false; //enable the hardware algorithm-related logs
+	Boolean fastQueueOperation = true; //faster operation on searching and deleting items from the queue (used LinkedList)
+	Boolean emitThread = true;//enable the separate thread for emitting the tuples in the hardware Spout
+	Boolean ackThread = true;//enable the separate thread for acknowledging the tuples in the hardware Bolt
+	Boolean ackEarlier = true;//acknowledge earlier in the hardware Bolt
+	Boolean batchData = false; //enable hardware Spout to receive data in the batch manner
+	Boolean newHWReceive = true; //switch between different receive method
+	Boolean initByAdaptation = true; // waiting for the adaptation layer to determine about the initial algorithms, autoRegister = true in main VIL
+	Boolean safeCast = true;//enable the safe cast while creating algorithm instance
+	Boolean receiveByField = false; //field-based receive statement 
+	Boolean multiHWThread = false; //enable multiple hardware threads within one spout
+	Boolean multiHWSpout = false; //enable multiple hardware spout
+	Boolean looseSub = false; //enable changes for loosing sub-pipeline integration	
+	Boolean dynamicHWUpload = true;//enable dynamic uploading of hardware algorithm
+	Boolean separateSourceThread = false;//use a separate thread to emit data
+	Boolean logData = false;//log the source input rate
+	
+	String GenAlgVersion = "0.0.1-SNAPSHOT"; //specify the version for generated algorithm
+	
+	def String parameterTypeName(DecisionVariable var) {
+    	switch(var.type()) {
+    		"IntegerParameter" : "int",
+    		"BooleanParameter" : "boolean",
+    		"RealParameter" : "double",
+    		"StringParameter" : "String",
+    		"LongParameter" : "long" 		
+    	}
+    }
+    
+    def Boolean formatException(String type) {
+    	switch(type) {
+    		"String" : false,
+    		default : true
+    	}
+    }
+    
+    def String parameterHwProtocol(DecisionVariable var) {
+    	switch(var.type()) {
+    		"IntegerParameter" : "a",
+    		"BooleanParameter" : "b",
+    		"RealParameter" : "c",
+    		"StringParameter" : "e",
+    		"LongParameter" : "f" 
+    	}
+    }
+    
+    def String parameterProto(DecisionVariable var) {
+    	switch(var.type()) {
+    		"IntegerParameter" : "SIntegerParameter",
+    		"BooleanParameter" : "SBooleanParameter",
+    		"RealParameter" : "SRealParameter",
+    		"StringParameter" : "SStringParameter",
+    		"LongParameter" : "SLongParameter" 
+    	}
+    }
+    
+    def obtainDefaultValue(FieldType type) {
+    	switch(type.class) {
+    		"int" : 0,
+    		"String" : "\"\"",
+    		"boolean" : false,
+    		"long" : 0, 
+    		"float" : 0.0,
+    		"double" : 0.0,
+    		"Object" : null,
+    		default : null
+    	}
+    }	
+
+    def String basicTypeForProto(FieldType type) {
+    	switch(type.class) {
+    		"int" : "int32",
+    		"String" : "string",
+    		"boolean" : "bool",
+    		"long" : "int64", 
+    		"float" : "float",
+    		"double" : "double",
+    		default : ""
+    	}
+    }	
+    
+    def String basicTypeForProto(String type) {
+    	switch(type) {
+    		"int" : "int32",
+    		"String" : "string",
+    		"boolean" : "bool",
+    		"long" : "int64", 
+    		"float" : "float",
+    		"double" : "double",
+    		default : ""
+    	}
+    }
+    
+    def Boolean isBasicType(FieldType type) {
+    	switch(type.class) {
+    		"int" : true,
+    		"String" : true,
+    		"boolean" : true,
+    		"long" : true, 
+    		"float" : true,
+    		"double" : true,
+    		default : false
+    	}
+    }
+    
+    def Boolean hasDirectGrouping(setOf(Flow) flows) {
+    	Boolean result = false;
+    	for(Flow f : flows) {
+    		if(f.grouping == Grouping.directGrouping) {
+    			result = true;
+    		}
+    	}
+    	result;
+    } 
+    
+    /*collect the destinations using direct emit and all grouping */
+    def directEmitDestination(setOf(Flow) flows, setOf(String) destinations) {
+    	for(Flow f : flows) {
+    		if(f.grouping == Grouping.directGrouping or f.grouping == Grouping.allGrouping) {
+    			PipelineNode dest = f.destination;
+    			if(!isStringExisted(dest.name, destinations)) {
+    				destinations.add(dest.name);
+    			}
+    		}
+    	}
+    }
+    
+    def String directEmitDestinationEltName(setOf(Flow) flows, String name) {
+        String result = "";
+        for(Flow f : flows) {
+            if(f.grouping == Grouping.directGrouping or f.grouping == Grouping.allGrouping) {
+                PipelineNode dest = f.destination;
+                if (dest.name == name) {
+                    result = dest.varName();
+                }
+            }
+        }
+        result;
+    }
+    
+    def Boolean isDirectGroupping(setOf(Flow) flows, Tuple tuple) {
+    	Boolean result = false;
+    	for(Flow f : flows) {
+    		if(f.tupleType == tuple) {
+    			if(f.grouping == Grouping.directGrouping) {
+    				result = true;
+    			}
+    		}
+    		
+    	}
+    	result;
+    }      
+    
+    def Boolean isAllGroupping(setOf(Flow) flows, Tuple tuple) {
+    	Boolean result = false;
+    	for(Flow f : flows) {
+    		if(f.tupleType == tuple) {
+    			if(f.grouping == Grouping.allGrouping) {
+    				result = true;
+    			}
+    		}
+    		
+    	}
+    	result;
+    } 
+    
+    /*Gets the name of the destination using all grouping based on given tuple */
+    def String allGroupingDestName(setOf(Flow) flows, Tuple tuple) {
+    	String result;
+    	for(Flow f : flows) {
+    		if(f.tupleType == tuple) {
+    			if(f.grouping == Grouping.allGrouping) {
+    				result = f.destination.name;
+    			}
+    		}
+    	}
+    	result;
+    }
+    
+    def Boolean isListType(FieldType type) {
+    	String class = type.class;
+    	if(class.matches("java.util.List.*")) {
+    		true;
+    	} else {
+    		false;
+    	}
+    }
+    
+    /**
+     * Obtain the inner type of the list.
+     */
+    def String obtainInnerType(String class) {
+    	String result;
+    	Integer len = class.length();
+    	result = class.substring(15, len - 1);
+    	result;
+    }
+    
+    def String fieldTypeName(DecisionVariable f) {
+		DecisionVariable type = f.byName("type");
+		String typeName = type.byName("class");
+		typeName;
+	}
+	
+	def String stripTemplates(String typeName) {
+		typeName = typeName.substitute("<.*>", "");
+		switch(typeName) {
+			"java.util.List" : "java.util.ArrayList",
+			default: typeName
+		}
+	}
+	
+	def Boolean isStringExisted(String name, setOf(String) checkSet) {
+    	Boolean exist = false;
+    	for(String n : checkSet) {
+    		if(name == n) {
+    			exist = true;   			
+    		}
+    	}
+    	exist;
+    }
+	
+	/**
+	 * Has generated sub-pipeline algorithm among family members.
+	 */
+	def Boolean hasGenAlgorithm(Family fm) {
+		Boolean result = false;
+		if(hasHardwareAlgorithm(fm) or hasSubPipelineAlgorithm(fm)) {
+			result = true;
+		}
+		result;
+	}
+	
+	/**
+	 * Has distributed algorithm among family members, including manually-implemented algorithm.
+	 */
+	def Boolean hasDistAlgorithm(Family fm) {
+		Boolean result = false;
+		for(Algorithm alg : fm.members) {
+			if(isDistAlgorithm(alg)) {
+				result = true;
+			}
+		}
+		result;
+	}
+	
+	/**
+	 * Has hardware algorithm among family members.
+	 */
+	def Boolean hasHardwareAlgorithm(Family fm) {
+		Boolean result = false;
+		for(Algorithm alg : fm.members) {
+			if(isHardwareAlgorithm(alg)) {
+				result = true;
+			}
+		}
+		result;
+	}
+	
+	/**
+	 * Has sub-pipeline-based (gen) algorithm among family members.
+	 */
+	def Boolean hasSubPipelineAlgorithm(Family family) {
+		Boolean result = false;
+		for(Algorithm alg : family.members) {
+			if(isGenSubtopology(alg)) {
+				result = true;
+			}
+		}
+		result;
+	}
+	
+	/**
+	 * is it a hardware algorithm(gen)?
+	 */
+	def Boolean isHardwareAlgorithm(Algorithm alg) {
+		Boolean result = false;
+		if(alg.type() == "HardwareAlgorithm") {
+			result = true;
+		}
+		result;
+	}
+	
+	/**
+	 * is it the manually implemented sub-topology algorithm?
+	 */
+	def Boolean isManualSubtopology(Algorithm algorithm) {//isSubtopology
+		Boolean result = false;
+		if(algorithm.type() == "SoftwareAlgorithm") {
+			SoftwareAlgorithm alg = algorithm;
+			if(!alg.algTopologyClass.isNull() and alg.algTopologyClass.isConfigured() and alg.algTopologyClass.length()>0) {
+				result = true;
+			}
+		}
+		result;
+	}
+	
+	/**
+	 * //is it the auto-generated sub-topology algorithm (SubPipelineAlgorithm type)?
+	 */
+	def Boolean isGenSubtopology(Algorithm algorithm) {//isSubPipelineAlgorithm
+		Boolean result = false;
+		if(algorithm.type() == "SubPipelineAlgorithm") {
+			result = true;
+		}
+		result;
+	}
+	
+	/**
+	 * Is it the distributed(sub-topology-based) algorithm (subpipeline, hardware or manually implemented algorithm)?
+	 */
+	def Boolean isDistAlgorithm(Algorithm alg) {
+		Boolean result = false;
+    	if(isManualSubtopology(alg) or isGenSubtopology(alg) or isHardwareAlgorithm(alg)) {
+    		result = true;
+    	}     	
+		result;
+	}
+	
+	def String formulateString(String s) {
+		String result = s.firstToUpperCase().toIdentifier();
+		result;
+	}
+	
+	def Boolean isActiveAlgorithm(Family fm, Algorithm currentAlg) { //assume that the first algorithm is the active one.
+		Boolean result = false;
+		Algorithm alg = fm.members.toSequence().get(0);
+		if(alg == currentAlg) {
+			result = true;
+		}
+		result;
+	}
+	
+    def String composePOptionsInit(String confName, String paramName, String type, Any value) {
+		String result;
+		if (confName.length() > 0) {
+			result = "PipelineOptions.getExecutor${type}Argument($confName, getName(), \"${paramName}\", $value)";
+		} else {
+			result = "$value";
+		}
+		result;
+	}
+		
+	def Boolean composeUndefPOptionsInit(Boolean undef, String confName, String paraName, String type, String neutral, String call, int indent) {
+   		Boolean u = (undef and confName.length() > 0);
+	    if (u) {
+            'if (PipelineOptions.hasExecutorArgument($confName, getName(), \"${paraName}\")) {' | indent;
+				'$call(PipelineOptions.getExecutor${type}Argument($confName, getName(), \"${paraName}\", $neutral));' | indent + 4;
+			'}' | indent;
+		}
+		!u;
+	}
+	
+	
+	def setDefaultParameterValue(sequenceOf(Parameter) parameters, String confName, String algName, int indent) {
+		for(Parameter p : parameters) {	
+			String paraName = p.name;
+			String call = "$algName.setParameter${paraName.firstToUpperCase()}";
+			String ty = p.type();
+			if(ty == "IntegerParameter") { 
+				IntegerParameter para = p;
+				String type = "Int";
+				Any defaultValue = para.defaultValue;
+				if(!isConfigured(para.defaultValue)) {
+					defaultValue = "0";
+				}
+				if (composeUndefPOptionsInit(!isConfigured(para.defaultValue), confName, paraName, type, "0", call, indent)) {
+    				String tmp = composePOptionsInit(confName, paraName, type, defaultValue);
+    				'$call($tmp);' | indent;
+				}
+			} else if(ty == "BooleanParameter") { 
+				BooleanParameter para = p;
+                String type = "Boolean";
+                Any defaultValue = para.defaultValue;
+				if(!isConfigured(para.defaultValue)) {
+					defaultValue = "false";
+				}
+                if (composeUndefPOptionsInit(!isConfigured(para.defaultValue), confName, paraName, type, "false", call, indent)) {
+                    String tmp = composePOptionsInit(confName, paraName, type, defaultValue);
+                    '$call($tmp);' | indent;
+                }
+			} else if(ty == "StringParameter") { 
+				StringParameter para = p;
+                String type = "String";
+                String defaultValue = para.defaultValue;
+				if(!isConfigured(para.defaultValue)) {
+					defaultValue = "\"\"";
+				}
+                if (composeUndefPOptionsInit(!isConfigured(para.defaultValue), confName, paraName, type, "\"\"", call, indent)) {
+                    String tmp = composePOptionsInit(confName, paraName, type, "\"$defaultValue\"");
+                    '$call($tmp);' | indent;
+                }
+			} else if(ty == "RealParameter") { 
+				RealParameter para = p;
+                String type = "Double";
+                String defaultValue = para.defaultValue;
+				if(!isConfigured(para.defaultValue)) {
+					defaultValue = "0.0";
+				}
+                if (composeUndefPOptionsInit(!isConfigured(para.defaultValue), confName, paraName, type, "0.0", call, indent)) {
+                    String tmp = composePOptionsInit(confName, paraName, type, defaultValue);
+                    '$call($tmp);' | indent;
+                }
+			} else if(ty == "LongParameter") { 
+				LongParameter para = p;
+                String type = "Long";
+                String defaultValue = para.defaultValue;
+				if(!isConfigured(para.defaultValue)) {
+					defaultValue = "0L";
+				}
+                if (composeUndefPOptionsInit(!isConfigured(para.defaultValue), confName, paraName, type, "0L", call, indent)) {
+                    String tmp = composePOptionsInit(confName, paraName, type, defaultValue);
+                    '$call($tmp);' | indent;
+                }
+			}		
+		}
+	}
+	
+	def produceTypesRegistration(Tuples tuples, String fName, Boolean output, Integer indent) {
+		String tupleName;
+		String end;
+		if(output) {
+			end = "Output";
+		} else {
+			end = "Input";
+		}
+		for(Tuple t : tuples) {
+			tupleName = t.name;
+			String infName = 'I' + fName + "${firstToUpperCase(tupleName)}$end";
+			'new $infName();' | indent;
+		}
+	}
+	
+	def produceFieldsForLog(Fields fields, String object, Boolean sender, Boolean file, Integer indent) {
+		for (Field f : fields) {
+    			String fname = toIdentifier("${f.name}");
+    			String mname = firstToUpperCase(fname);
+    			if(file) {
+    				if(sender) {
+    					'out.println(Calendar.getInstance().getTimeInMillis() + " ,Sending data to hardware: " + $object.get${mname}());' | indent;
+	    				'out.flush();' | indent;
+	    			} else {
+	    				'out.println(Calendar.getInstance().getTimeInMillis() + " ,Received data from hardware: " + $object.get${mname}());' | indent;
+	    				'out.flush();' | indent;
+	    			}
+    			} else {
+	    			if(sender) {
+	    				'logger.info("Sending data to hardware: " + $object.get${mname}());' | indent;
+	    			} else {
+	    				'logger.info("Received data from hardware: " + $object.get${mname}());' | indent;
+	    			}
+    			}
+    		}
+	}
+	
+	def mapOf(String, setOf(String)) produceTuplesForHardwareVariables(Tuples tuples, String fName, Boolean output, int indent) {
+		mapOf(String, setOf(String)) serializers = {};
+		setOf(String) tmp;
+		String type;
+    	String tupleName;
+    	String ifName = "I" + fName;
+    	Boolean flag = true;
+		for (Tuple t : tuples) {
+			tmp = {};
+	    	tupleName = t.name;
+	    	   if(flag and output) { //for output in the sender
+	    	       type = "S${ifName}${firstToUpperCase(tupleName)}Output";
+	    	       'eu::qualimaster::families::protobuf::$type ${tupleName}Output;' | indent;
+	    	       flag = false; //assume that there is only one output type from the family
+	    	   }
+	    	   if(!output) { //for input considering the multiple case
+	    	       type = "S${ifName}${tupleName}Input";
+	    	       Boolean once1 = true;
+	    	       Boolean once2 = true;
+	    	       for (Field f : t.fields) {
+    	   		       FieldType ftype = f.type;
+    	   		       String fieldName = toIdentifier("${f.name}");  
+    			       String ptype = basicTypeForProto(ftype);
+    			       if(ptype != "" and once1) {
+    				       'eu::qualimaster::families::protobuf::$type ${tupleName}Input;' | indent;
+    				       tmp.add("${tupleName}Input");
+    				       once1 = false;
+    			       } else if(isListType(ftype) and once2) {
+    			       	   'eu::qualimaster::base::protos::SStringList stringList;' | indent;
+    			       	   tmp.add("stringList");
+    			       	   once2 = false;
+    			       } else if(ptype == "" and !isListType(ftype)){//algorithm-specific protobuf TODO: the actual path
+    			       	   'eu::qualimaster::families::protobuf::S${fieldName} ${fieldName};'
+    			       	   tmp.add("${fieldName}");
+    			       }			
+    		       }
+	        }
+	        serializers.add(tupleName, tmp);	    
+      	}
+      	serializers;		
+	}	
+	
+	def className(DecisionVariable elt) {
+    	elt.varName().firstToUpperCase() + elt.type(); 
+    }		
+	
+	def produceImportsFromLastElements(setOf(DecisionVariable) lastElt, mapOf(String, setOf(DecisionVariable)) lastElementMap, String topoName) {
+	    for(DecisionVariable v : lastElt) {
+    		if(v.type() == "Source"){
+    		  Source src = v;
+    	      DataSource dataSrc = src.source;
+    	      String srcName = dataSrc.name;
+		      String srcInfName = "I" + srcName.firstToUpperCase();
+		      if (dataSrc.profilingSource) {
+    	         'import eu.qualimaster.${topoName}.topology.inf.${toIdentifier(srcInfName)}.*;'	
+		      } else {
+    	         'import eu.qualimaster.data.inf.${toIdentifier(srcInfName)}.*;'	
+		      }
+    		}
+    		if(v.type() == "FamilyElement") {
+    			//the name is the varName!!
+    			FamilyElement fe = v;
+    			Family fm = fe.family;
+    			String familyName = fm.name;
+                String ifName = "I" + familyName.firstToUpperCase();
+    			'import eu.qualimaster.families.inf.${toIdentifier(ifName)}.*;'
+    		} else if(v.type() == "DataManagementElement") {
+    			String dmVarName = v.varName().firstToUpperCase();
+    			setOf(DecisionVariable) lastElt = lastElementMap.get(dmVarName);
+    			produceImportsFromLastElements(lastElt, lastElementMap, topoName);
+    		}
+    	}
+	}
+	
+	/**
+	 *  Produces the output-related variables for variable declaration.
+	 */
+	def produceOutputVariable(sequenceOf(Tuple) tuples, mapOf(Tuple, sequenceOf(Tuple)) inputToOutputMapping, mapOf(Tuple,String) nameToOutputMap, String fName) {
+		String ifName = "I" + fName;
+		String ifInputName = "I" + ifName;
+		String outputInfName; //output interface name		
+		String tupleName;	
+		for(Tuple t : tuples) {
+			tupleName = t.name;
+			//get output interface name	
+			if(inputToOutputMapping.containsKey(t))	{
+			  sequenceOf(Tuple) outputs = inputToOutputMapping.get(t);
+			  String number;
+			  Integer size = outputs.size();
+			  Integer count = 0;
+			  
+			  for(Tuple tuple : outputs) {
+			  	  count = count + 1;
+			  	  outputInfName = nameToOutputMap.get(tuple);
+			  	  if(size > 1) {
+				      number = "$count";
+				  } else {
+				  	  number = "";
+				  }
+			  	  '    transient $outputInfName iTuple${firstToUpperCase(tupleName)}$number = null;'
+			  }
+			  				
+			} 
+								
+	    }
+	}
+	
+	def produceInputVariable(sequenceOf(Tuple) tuples, Boolean variable, String fName) {
+		String ifName = "I" + fName;
+		String ifInputName = "I" + ifName;
+		String tupleName;
+		for(Tuple t : tuples) {
+			tupleName = t.name;
+			String inputInfName = ifInputName + "${firstToUpperCase(tupleName)}Input";
+			String fImpInputName = 	ifName + "${firstToUpperCase(tupleName)}Input";
+			if(variable) {
+				'    transient $inputInfName input${firstToUpperCase(tupleName)} = null;'
+			} else {
+				'        input${firstToUpperCase(tupleName)} = new $fName.$fImpInputName();'
+			}
+		}
+	}
+	
+	def setOf(String) coreTupleTypes (String fmName, Algorithm algorithm, Boolean input) {
+		setOf(String) listTupleTypes = {};
+		String tupleName = null;
+		sequenceOf(Tuple) tuples = algorithm.input;
+		if(!input) {
+			tuples = algorithm.output;
+		}
+		for(Tuple t : tuples) { //TODO: multiple tuples!!
+			tupleName = t.name;
+			tupleName = tupleName.firstToUpperCase().toIdentifier();
+			if(input) {
+				listTupleTypes.add("${fmName}${tupleName}Input");
+			} else {
+				listTupleTypes.add("${fmName}${tupleName}Output");
+			}
+		}
+		listTupleTypes;
+	}
+	
+	/*
+ 	 * Produces the calculate methods for the family interface or implementation.
+ 	 */
+    def produceForCalculate(Family family, Boolean interface) {   	 
+    	 String inputTupleName;
+    	 String outputTupleName;
+   	   	 Tuples inputTuples = family.input;
+   	   	 Tuples outputTuples = family.output;
+   	   	 String ifName = "I" + family.name.firstToUpperCase();
+   	   	 setOf(String) outTypes = {};
+   	   	 
+   	   	 //input tuples loop	  
+    	 for(Tuple t : inputTuples){ 
+			inputTupleName = t.name;      	        	      	 	
+    	 	String inTypeName = "I${ifName}${firstToUpperCase(inputTupleName)}Input";
+    	 	
+				//output tuples loop
+	    	 	for(Tuple p : outputTuples){  
+				    outputTupleName = p.name;
+	    	 	    String outTypeName = "I${ifName}${firstToUpperCase(outputTupleName)}Output"; 
+	    	 	    //collect the output types 	 
+	    			outTypes.add(outTypeName + " " + outputTupleName + "Result");
+	    			if(!genMultiTupleTypes) {  	
+				    	'    /**'
+				    	'     * Calculates the actual <code>result</code> for <code>input</code>.'
+				    	'     *'
+				    	'     * @param input the algorithm input taken from the input stream'
+				    	'     * @param result the result calculated by the algorithm'
+				    	'     */'
+				    	if(interface) {
+				        '    public void calculate(${inTypeName} input, ${outTypeName} result);'
+				        } else {
+				        '    public void calculate(${inTypeName} input, ${outTypeName} result) {'
+				        '    }'	
+				        }
+				        ''
+					}
+           }
+           if(genMultiTupleTypes) {
+    	       '    /**'
+		    	'     * Calculates the actual <code>result</code> for <code>input</code>.'
+		    	'     *'
+		    	'     * @param input the algorithm input taken from the input stream'
+		    	'     * @param result the result calculated by the algorithm'
+		    	'     */'
+		    	String outTypeString = "";
+		    	for(String outType : outTypes) {
+		    		outTypeString = outTypeString + ", " + outType;		    		
+		    	}
+		    	if(interface) {
+		        '    public void calculate(${inTypeName} input$outTypeString);'
+		        } else {
+		        '    public void calculate(${inTypeName} input$outTypeString) {'
+		        '    }'		 	
+		        }
+		    }
+    	}     
+    }
+    
+    def String produceNumTasks(DecisionVariable elt) {
+	    String result;
+    	DecisionVariable tasksVar = elt.byName("numtasks"); 
+		if (isConfigured(tasksVar)) {
+			Integer tasks = tasksVar;
+			result = ".setNumTasks(" + tasks + ")";
+		} else {
+    	    result = "";
+		}
+		result;
+    }
+
+    /**
+     * Produces code for deserialization via the IDataInput interface. t is the tuple to produce the serialization 
+     * method for, infType the (interface) type of the data to serialize, type the actual data type to serialize, 
+     * indent the formatting indent.
+     * Requires eu.qualimaster.dataManagement.serialization.* as import.
+     */
+    def produceDataInputDeserialization(Tuple t, String infType, String type, Integer indent) {
+        '@Override' | indent + 4;
+        'public $infType deserializeFrom(IDataInput in) throws IOException {' | indent + 4;
+            '$type result = new $type();' | indent + 8;
+            for (Field f : t.fields) {
+                String fname = toIdentifier("${f.name}");
+                String mname = firstToUpperCase(fname);                     
+                if(isBasicType(f.type)) {
+                    String tname = firstToUpperCase(fieldTypeName(f));
+                    'result.set${mname}(in.next${tname}());' | indent + 8;                  
+                } else {
+                    if(!isListType(f.type)){
+                        'result.set${mname}(SerializerRegistry.getSerializerSafe("${f.type.name}", ${f.type.class}.class).deserializeFrom(in));' | indent + 8;
+                    } else {
+                        String innertype = obtainInnerType(f.type.class);
+                        'result.set${mname}(SerializerRegistry.getListSerializerSafe("${f.type.name}", $innertype.class).deserializeFrom(in));' | indent + 8;
+                    }
+                }
+            }
+        'return result;' | indent + 8;          
+        '}' | indent + 4;
+        ''
+    }
+    
+    /**
+     * Produces code for serialization via the IDataOutput interface. t is the tuple to produce the serialization 
+     * method for, infType the (interface) type of the data to serialize, indent the formatting indent.
+     * Requires eu.qualimaster.dataManagement.serialization.* as import.
+     */
+    def produceDataInputSerialization(Tuple t, String infType, Integer indent) {
+        '@Override' | indent + 4;
+        'public void serializeTo($infType object, IDataOutput out) throws IOException {' | indent + 4;
+            for (Field f : t.fields) {  
+                String fname = toIdentifier("${f.name}");
+                String mname = firstToUpperCase(fname);                     
+                if(isBasicType(f.type)) {
+                    String tname = firstToUpperCase(fieldTypeName(f));
+                    'out.write${tname}(object.get${mname}());' | indent + 8;
+                } else {
+                    if(!isListType(f.type)){
+                        'SerializerRegistry.getSerializerSafe("${f.type.name}", ${f.type.class}.class).serializeTo(object.get${mname}(), out);' | indent + 8;
+                    } else {
+                        String innertype = obtainInnerType(f.type.class);
+                        'SerializerRegistry.getListSerializerSafe("${f.type.name}", $innertype.class).serializeTo(object.get${mname}(), out);' | indent + 8;
+                    }
+                }
+            }
+        '}' | indent + 4;
+        ''   
+    }
+    
+    /**
+     * Produces the algorithm-related imports. For the generated sub-topology-based algorithm imports shall also be generated, 
+     * other algorithm imports are taken from the configuration.
+     */
+     def produceAlgorithmImports(Family family) {
+     	for(Algorithm alg : family.members) {
+			if(isGenSubtopology(alg)) {//generated sub-topology
+		    	SubPipelineAlgorithm subAlg = alg;
+		    	String pName = subAlg.subPipeline.name;
+		    	String algClsName = pName.firstToUpperCase().toIdentifier() + "SubTopology";
+		    	String cls = "eu.qualimaster." + pName.toIdentifier() + ".topology." + algClsName;
+		    	'import $cls;'
+		    } else if (isHardwareAlgorithm(alg)) {//generated hardware algorithm
+		    	String algName = formulateString(alg.name);
+		    	String cls = "eu.qualimaster.algorithms." + algName + "." + algName + "SubTopology";
+		    	'import $cls;'
+			} else {
+				SoftwareAlgorithm a = alg;
+				if (!a.class.isNull()) {
+					'import ${a.class};'
+				}
+            }
+		}
+     }
+     
+     /**
+      * Produces the algorithm implementation name.
+      */
+      def String algImplName(Algorithm alg) {
+      	String name;
+		if(isGenSubtopology(alg)) {//generated sub-topology
+	    	SubPipelineAlgorithm subAlg = alg;
+	    	String pName = subAlg.subPipeline.name;
+	    	name = pName.firstToUpperCase().toIdentifier() + "SubTopology";
+	    } else if (isHardwareAlgorithm(alg)) {//generated hardware algorithm
+	    	String algName = formulateString(alg.name);
+	    	name = algName + "SubTopology";
+		} else {
+			SoftwareAlgorithm a = alg;
+	    	String algNamePath = a.class;
+			JavaPath algPath = algNamePath;	
+			name = algPath.getName();
+        }
+		name;
+      }
+      
+      /**
+       * Returns the algorithm qualified class name.
+       */
+      def String algQualifiedClsName(Algorithm alg) {
+      	String cls;
+      	if(isGenSubtopology(alg)) {//generated sub-topology
+	    	SubPipelineAlgorithm subAlg = alg;
+	    	String pName = formulateString(subAlg.subPipeline.name);
+		    cls = "eu.qualimaster." + pName + ".topology." + pName + "SubTopology";
+	    } else if (isHardwareAlgorithm(alg)) {//generated hardware algorithm
+	    	String algName = formulateString(alg.name);
+	    	cls = "eu.qualimaster.algorithms." + algName + "."+ algName + "SubTopology";
+		} else {
+			SoftwareAlgorithm a = alg;
+	    	cls = a.class;
+        }
+        cls;
+      }
+      
+     /**
+      * Produces the declaration of the stream id.
+      */
+      def produceStreamIdDeclaration(DecisionVariable elt, Boolean subAlg, Integer indent) {
+      	String nameVar = elt.varName();
+      	Tuples tuples;
+      	String confName;
+      	setOf(String) subAlgNames = {};
+      	if(elt.type() == "Source") {
+      		Source src = elt;
+      		DataSource dataSrc = src.source;
+      		tuples = dataSrc.input;
+      		confName = src.name;
+      	} else if (elt.type() == "FamilyElement") {
+      		FamilyElement fe = elt;
+      		Family fm = fe.family;
+      		tuples = fm.output;
+      		confName = fe.name;
+      		for(Algorithm alg : fm.members) {// check the subtopology out
+      			if(isDistAlgorithm(alg)) {
+      				subAlgNames.add(formulateString(alg.name));
+      			} 
+      		}
+      	} else if (elt.type() == "Sink" or elt.type() == "ReplaySink") {
+      		Sink snk = elt;
+      		DataSink dataSnk = snk.sink;
+      		tuples = dataSnk.output;
+      		confName = snk.name;
+      	} 
+      	//produces the stream id declaration.
+      	String streamId;
+      	for(Tuple t : tuples) {//for simple java algorithm: eltName + tupleName
+      		String fields = "";
+      		if(subAlg) {
+      			streamId = formulateString(confName) + formulateString(t.name);
+      		} else {
+      			streamId = formulateString(nameVar) + formulateString(t.name);
+      		}
+      		if(subAlg and receiveByField) {
+      			Boolean first = true;
+      			for(Field f : t.fields) {
+      				if(first) {
+      					first = false;
+      				} else {
+      					fields = fields + ",";
+      				}
+      				fields = fields + "\"${formulateString(f.name)}\"";
+      			}
+      		} else {
+      			fields = "\"${streamId}Fields\"";
+      		}
+      		'declarer.declareStream("${streamId}", new Fields($fields));' | indent;
+      	}	
+      	for(String name : subAlgNames) {//for sub-topology algorithm: eltName + algName
+      		if(subAlg) {
+      			streamId = formulateString(confName) + name;
+      		} else {
+  				streamId = formulateString(nameVar) + name;
+  			}
+  			'declarer.declareStream("${streamId}", new Fields("${streamId}Fields"));' | indent;	
+  		}
+      }  
+      
+      /**
+       * Gets the configured name.
+       */
+      def String eltName(DecisionVariable elt) {
+    	if(elt.type() == "DataSource") {
+    		DataSource dataSrc = elt;
+    		dataSrc.name;
+    	} else if (elt.type() == "Family") {
+    		Family fm = elt;
+    		fm.name;
+    	} else if (elt.type() == "DataSink") {
+    		DataSink dataSnk = elt;
+    		dataSnk.name;
+    	}
+    } 
+    
+    /**
+	 * Returns the serializer class. If it is not configured, return an empty string.
+	 */		
+	def serializerClass(Field field, mapOf(String, String) specificTypes) {
+		FieldType type = field.type;
+		if(type.serializer.isConfigured() and type.serializer.length() > 0) {
+			specificTypes.add(type.name, type.serializer);
+		}
+	}
+	
+	/**
+	 * Registers the specific types from the collected specific types (see "serializerClass" method)
+	 */
+	def registerSpecificTypes(mapOf(String, String) specificTypes, Integer indent) {
+		setOf(String) types = specificTypes.getKeys();
+		for(String tName : types) {
+			String tCls = specificTypes.get(tName);
+			'SerializerRegistry.register("${tName}", ${tCls}.class);' | indent;
+		}
+	}
+	
+	/**
+	 * Registers all serializers.
+	 * @param fserializer the name of the serializer class
+	 * @param type the retrieve name
+	 * @param secificTypes a map of type name and respective name of the serializer class
+	 */
+	def registerSerializer(String fserializer, String type, mapOf(String, String) specificTypes, Integer indent) {
+		'static {' | indent + 4;    			
+    		'SerializerRegistry.register("$type", $fserializer.${type}Serializer.class);' | indent + 8;
+			//register specific types
+			registerSpecificTypes(specificTypes, indent+8);
+		'}' | indent + 4;
+	}
+	
+	/**
+	 * Returns the code for creating/obtaining a data management strategy instance. Requires "import eu.qualimaster.dataManagement.strategies.*;".
+	 * 
+	 * @param dataElement the data element to produce the strategy from
+	 * @return the code for obtaining the data management strategy, may be "null"
+	 */
+	def String obtainManagementStrategyInstance(DataElement dataElement) {
+		String strategyStr = "null"; // just to produce valid code in any case
+		DataManagementStrategy strategy = dataElement.strategy;	
+		if(strategy == DataManagementStrategy.None){
+			strategyStr = "NoStorageStrategyDescriptor.INSTANCE";
+		} else if(strategy == DataManagementStrategy.FirstInFirstOut){
+			strategyStr = "FirstInFirstOutStorageStrategyDescriptor.INSTANCE";
+		} else if(strategy == DataManagementStrategy.LeastFrequentlyUsed){
+			Integer cutoffCapacity = dataElement.cutoffCapacity;
+			strategyStr = "new LeastFrequentlyUsedStorageStrategyDescriptor($cutoffCapacity)";			
+		} else if(strategy == DataManagementStrategy.LeastFrequentlyRecentlyUsed){
+			Integer timeLine = dataElement.timeLine;
+			Integer cutoffCapacity = dataElement.cutoffCapacity;
+			strategyStr = "new LeastFrequentlyRecentlyUsedStorageStrategyDescriptor($cutoffCapacity, $timeLine)";
+		} else if(strategy == DataManagementStrategy.LeastRecentlyUsed){
+			Integer timeLine = dataElement.timeLine;
+			strategyStr = "new LeastRecentlyUsedStorageStrategyDescriptor($timeLine)";			
+		}
+		strategyStr;
+	}
+	
+	/**
+	 * Returns key of the field.
+	 */
+	def Boolean key(Field f) {
+		Boolean key = false;
+		if(f.keyPart.isConfigured()) {
+			key = f.keyPart;
+		} 
+		key;
+	}
+	
+	def produceDynamicPortObtainment() {
+		'String localhost = "localhost";' | 8;
+		'try {' | 8;
+			'localhost = InetAddress.getLocalHost().getCanonicalHostName();' | 12;
+		'} catch (UnknownHostException e1) {' | 8;
+			'e1.printStackTrace();' | 12;
+		'}' | 8;
+		'PortAssignmentRequest portRequest = new PortAssignmentRequest(getPipeline(), getName(), 0, localhost, null);' | 8;
+		'PortManager portManager = getPortManager();' | 8;
+		'try {' | 8;
+			'PortAssignment assignment = portManager.registerPortAssignment(portRequest);' | 12;
+			'port = assignment.getPort();' | 12;
+			if(newSwitchLog) {
+			'logger.info("Assigned port: " + port + " for the pipeline: " + portRequest.getPipeline() + ", the element: " + portRequest.getElement() + ", the port request:" + portRequest);' | 12;
+			'if(out != null) {' | 12;
+				'out.println("Assigned port: " + port + " for the pipeline: " + portRequest.getPipeline() + ", the element: " + portRequest.getElement() + ", the port request:" + portRequest);' | 16;
+				'out.flush();' | 16;
+			'}' | 12;
+			}
+			'} catch (SignalException e) {' | 8;
+				'e.printStackTrace();' | 12;
+		'}' | 8;
+	}
+	
+	def produceInitMonitor(Boolean prepare, int indent) {
+		String ending = "Prepare";
+		if(!prepare) {
+			ending = "Open";
+		}
+		'@Override' | indent;
+    	'protected boolean initMonitorDuring${ending}() {' | indent;
+        'return false;' | indent+4;
+    	'}' | indent;
+	}
+	
+	def appendIntermediaryComponent(String pName, String container, Boolean node, Boolean useThrift, Text text) {
+		String InImplName = pName.firstToUpperCase().toIdentifier() + "Intermediary";
+		String EndImplName = pName.firstToUpperCase().toIdentifier() + "EndBolt";
+		//TODO: task set to 1
+		if(node) {
+			text.append('      <node name="$InImplName" type="source">\n');
+		}
+		text.append('              <component name="$InImplName" container="${container}" class="eu.qualimaster.$pName.topology.$InImplName" receiver="true" thrift="${useThrift}" tasks="1"/>\n');
+		if(node) {
+		    text.append('      </node>\n');
+		}
+		if(node) {
+			text.append('      <node name="$EndImplName" type="sink">\n');
+		}
+		text.append('              <component name="$EndImplName" container="${container}" class="eu.qualimaster.$pName.topology.$EndImplName" receiver="true" thrift="${useThrift}" tasks="1"/>\n');
+		if(node) {
+		    text.append('      </node>\n');
+		}
+	}	
+	
+	def catchThrowable(Integer indent) {
+		'} catch (Throwable e) {' | indent;
+        	'if (e instanceof DefaultModeException) {' | indent+4;
+        		'logger.error("Throwable caught - turning to default mode");' | indent+8;
+            	'e.printStackTrace();' | indent+8;
+            	'sendDefaultModeMonitoringEvent((DefaultModeException) e);' | indent+8;
+            '}' | indent+4;          	
+        '}' | indent;
+	}
+}

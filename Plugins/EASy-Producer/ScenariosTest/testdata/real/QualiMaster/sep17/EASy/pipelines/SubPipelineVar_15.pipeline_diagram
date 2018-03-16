@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<notation:Diagram xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:notation="http://www.eclipse.org/gmf/runtime/1.0.2/notation" xmlns:pipeline="pipeline" xmi:id="_y99foLikEeaEk6TB62Bs9g" type="Pipeline" name="SubPipelineVar_15.pipeline_diagram" measurementUnit="Pixel">
+  <children xmi:type="notation:Shape" xmi:id="_z6D7gLikEeaEk6TB62Bs9g" type="2005" fontName="Segoe UI">
+    <children xmi:type="notation:DecorationNode" xmi:id="_z6NFcLikEeaEk6TB62Bs9g" type="5005">
+      <layoutConstraint xmi:type="notation:Location" xmi:id="_z6NFcbikEeaEk6TB62Bs9g" y="5"/>
+    </children>
+    <element xmi:type="pipeline:FamilyElement" href="SubPipelineVar_15.pipeline#//@nodes.0"/>
+    <layoutConstraint xmi:type="notation:Bounds" xmi:id="_z6D7gbikEeaEk6TB62Bs9g" x="435" y="282"/>
+  </children>
+  <styles xmi:type="notation:DiagramStyle" xmi:id="_y99fobikEeaEk6TB62Bs9g"/>
+  <element xmi:type="pipeline:Pipeline" href="SubPipelineVar_15.pipeline#/"/>
+</notation:Diagram>

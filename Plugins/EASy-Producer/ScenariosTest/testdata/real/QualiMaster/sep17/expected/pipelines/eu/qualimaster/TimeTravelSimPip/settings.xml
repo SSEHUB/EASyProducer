@@ -1,0 +1,89 @@
+<pipeline>
+    <name>TimeTravelSimPip</name>
+    <external_service_settings>
+        <packet_delimiter>!</packet_delimiter>
+        <main_delimiter>,</main_delimiter>
+        <secondary_delimiter>|</secondary_delimiter>
+        <line_delimiter>"Lf"</line_delimiter>
+    </external_service_settings>
+    <commands>
+        <command>
+			<name>login</name>
+			<request>
+				<field sequence="0">login</field>
+				<field sequence="1">%username%</field>
+				<field sequence="2">%password%</field>
+			</request>
+			<response>
+				<field sequence="0">login_response</field>
+				<field sequence="1">%status%</field>
+				<field sequence="2">%result%</field>
+			</response>
+		</command>
+		
+		<command>
+			<name>logout</name>
+			<request>
+				<field sequence="0">logout</field>
+			</request>
+			<response>
+				<field sequence="0">logout_response</field>
+				<field sequence= "1">%status%</field>
+				<field sequence="2">%result%</field>
+			</response>
+		</command>
+		
+		<command>
+			<name>quoteList</name>
+			<request>
+				<field sequence="0">quoteList</field>
+			</request>
+			<response>
+				<field sequence="0">quoteList_response</field>
+				<field sequence="1">%status%</field>
+				<field sequence="2">%result%</field>
+			</response>
+		</command>
+		
+		<command>
+			<name>requestHistoricalSentiment</name>
+			<request>
+				<field sequence="0">requestHistoricalSentiment</field>
+				<field sequence="1">%startDate%</field>
+				<field sequence="2">%endDate%</field>
+				<field sequence="3">%listOfIds%</field>
+			</request>
+			<response>
+				<field sequence="0">historicalSentiment_response</field>
+				<field sequence="1">%status%</field>
+				<field sequence="2">%result%</field>
+			</response>
+		</command>
+        <!--This is generated based on the configuration of permissible parameters from the pipeline-->
+        <command>									
+			<name>changepathQuery</name>
+			<request>
+				<field sequence="0">changepathQuery</field>
+				<field sequence="1">%newPathQuery%</field>
+			</request>
+			<response>
+				<field sequence="0">changepathQuery_response</field>
+				<field sequence="1">%status%</field>
+				<field sequence="2">%newPathQuery%</field>
+			</response>
+		</command>
+        <!--This is generated based on the configuration of permissible parameters from the pipeline-->
+        <command>									
+			<name>changesnapshotQuery</name>
+			<request>
+				<field sequence="0">changesnapshotQuery</field>
+				<field sequence="1">%newSnapshotQuery%</field>
+			</request>
+			<response>
+				<field sequence="0">changesnapshotQuery_response</field>
+				<field sequence="1">%status%</field>
+				<field sequence="2">%newSnapshotQuery%</field>
+			</response>
+		</command>
+    </commands>
+</pipeline>

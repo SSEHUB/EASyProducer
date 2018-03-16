@@ -1,0 +1,8 @@
+Observables::paramTypes = Quality parameter count must much
+Observables::cfgParamTypes = Configuration parameter count must much
+Observables::ObservableDecl::type = type|The observable type this element is assigned to.
+Observables::ConfiguredQualityParameter::monitorCls = monitor|The (optional) class name of the monitor observing the value.
+Observables::ConfiguredQualityParameter::artifact = artifact|The (optional) artifact specification implementing the monitor.
+Observables::ObservableDecl = Characterized an observable.
+Observables::QualityParameter = Characterizes a quality parameter.
+Observables::ConfiguredQualityParameter = Characterized an (externally defined) quality parameter.

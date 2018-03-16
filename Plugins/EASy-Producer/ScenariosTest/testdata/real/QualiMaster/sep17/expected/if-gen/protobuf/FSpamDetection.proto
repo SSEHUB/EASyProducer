@@ -1,0 +1,9 @@
+package eu.qualimaster.families.protobuf;
+option java_package = "eu.qualimaster.protos";
+option java_outer_classname = "FSpamDetectionProtos";
+
+
+message SIFSpamDetectionTwitterStreamOutput {
+    required double spamPropability = 1;
+}
+

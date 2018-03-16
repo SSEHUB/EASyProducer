@@ -1,0 +1,34 @@
+project Adaptivity {
+
+	import Basics;
+	import Observables;
+
+	annotate BindingTime bindingTime = BindingTime.compile to Adaptivity;
+
+	// relative importance of the quality dimensions as well as the tradeoffs to be considered for cross-pipeline adaptation
+	compound QualityParameterWeighting {
+		refTo(QualityParameter) parameter;
+		assign(bindingTime = BindingTime.runtimeEnact) to {
+		   Real weight;
+		}
+	}
+
+	assign(bindingTime = BindingTime.runtimeMon) to {
+		Integer updateFrequency = 1000; // in milliseconds
+		Constraint updateFrequencyLimit = updateFrequency == 0 or updateFrequency > 500;
+		Percentage capacityLowWatermark = 0.1;
+		Percentage capacityHighWatermark = 0.6; // for testing, was 0.8
+		Constraint capacityHighLowWatermark = capacityHighWatermark > capacityLowWatermark;
+		Percentage capacityPipelineSheddingWatermark = 0.85;
+		Constraint capacityPipelineSheddingWatermarkMin = capacityPipelineSheddingWatermark > 0.5;
+		Percentage capacityAveragePipelineOverload = 0.8;
+		Constraint capacityAveragePipelineOverloadMin = capacityAveragePipelineOverload > 0.5;
+		Boolean supportsTaskReallocation = true;
+		Percentage maxClusterAllocation = 0.9;
+	}
+
+	sequenceOf(QualityParameterWeighting) pipelineImportance = null;
+	Constraint pipelineImportanceTypes = size(asSet(pipelineImportance->collect(p|p.parameter))) == size(pipelineImportance);
+	sequenceOf(QualityParameterWeighting) crossPipelineTradeoffs = null;
+	Constraint crossPipelineTradeoffsTypes = size(asSet(crossPipelineTradeoffs->collect(p|p.parameter))) == size(crossPipelineTradeoffs);
+}

@@ -1,0 +1,27 @@
+package eu.qualimaster.families.protobuf;
+option java_package = "eu.qualimaster.protos";
+option java_outer_classname = "FMapperProtos";
+
+message SIFMapperPreprocessedStreamInput {
+    required string symbolId = 1;
+    required int64 timestamp = 2;
+    required double value = 3;
+    required int32 volume = 4;
+}
+
+
+message SIFMapperSymbolsStreamOutput {
+    required string symbolId = 1;
+    required int64 timestamp = 2;
+    required double value = 3;
+}
+
+message SIFMapperConfigurationStreamOutput {
+    required string pairKey = 4;
+    required string pairValue = 5;
+}
+
+message SIFMapperResetWindowStreamOutput {
+    required int64 windowStart = 6;
+}
+

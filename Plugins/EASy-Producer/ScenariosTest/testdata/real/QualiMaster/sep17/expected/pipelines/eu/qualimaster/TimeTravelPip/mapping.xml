@@ -1,0 +1,68 @@
+<mapping>
+  <pipeline name="TimeTravelPip" class="eu.qualimaster.TimeTravelPip.topology.Topology">
+      <node name="FinancialDataSource" type="source">
+          <component name="PipelineVar_10_Source0" container="TimeTravelPip" class="eu.qualimaster.TimeTravelPip.topology.PipelineVar_10_Source0Source" receiver="true" thrift="false" tasks="1"/>
+      </node>
+      <node name="Preprocessor" type="family">
+          <component name="PipelineVar_10_FamilyElement0" container="TimeTravelPip" class="eu.qualimaster.TimeTravelPip.topology.PipelineVar_10_FamilyElement0FamilyElement" receiver="true" thrift="false" tasks="1" alternative0 = "Preprocessor"/>
+      </node>
+      <node name="FinancialCorrelation" type="family">
+          <component name="PipelineVar_10_FamilyElement1" container="TimeTravelPip" class="eu.qualimaster.TimeTravelPip.topology.PipelineVar_10_FamilyElement1FamilyElement" receiver="true" thrift="false" tasks="1" alternative0 = "TopoSoftwareCorrelationFinancial" alternative1 = "GenTopoHardwareCorrelationFinancial" alternative2 = "CorrelationSW" alternative3 = "TransferEntropyHardware" alternative4 = "MutualInformationHardware" alternative5 = "CorrelationSWAlternative"/>
+      </node>
+      <node name="DynamicGraphCompilation" type="family">
+          <component name="PipelineVar_10_FamilyElement2" container="TimeTravelPip" class="eu.qualimaster.TimeTravelPip.topology.PipelineVar_10_FamilyElement2FamilyElement" receiver="true" thrift="false" tasks="1" alternative0 = "DynamicGraphCompilation"/>
+      </node>
+      <node name="TimeGraphMapper" type="family">
+          <component name="PipelineVar_10_FamilyElement3" container="TimeTravelPip" class="eu.qualimaster.TimeTravelPip.topology.PipelineVar_10_FamilyElement3FamilyElement" receiver="true" thrift="false" tasks="1" alternative0 = "TimeGraphMapper"/>
+      </node>
+      <node name="TimeGraphIndexer" type="family">
+          <component name="PipelineVar_10_FamilyElement4" container="TimeTravelPip" class="eu.qualimaster.TimeTravelPip.topology.PipelineVar_10_FamilyElement4FamilyElement" receiver="true" thrift="false" tasks="5" alternative0 = "TimeGraphIndexer"/>
+      </node>
+      <node name="TimeGraphQueryExecutor" type="family">
+          <component name="PipelineVar_10_FamilyElement5" container="TimeTravelPip" class="eu.qualimaster.TimeTravelPip.topology.PipelineVar_10_FamilyElement5FamilyElement" receiver="true" thrift="false" tasks="1" alternative0 = "TimeGraphQueryExecutor"/>
+      </node>
+      <node name="TimeTravelSink" type="sink">
+          <component name="PipelineVar_10_Sink0" container="TimeTravelPip" class="eu.qualimaster.TimeTravelPip.topology.PipelineVar_10_Sink0Sink" receiver="true" thrift="false" tasks="1"/>
+      </node>
+      <node name="queries" type="source">
+          <component name="PipelineVar_10_Source1" container="TimeTravelPip" class="eu.qualimaster.TimeTravelPip.topology.PipelineVar_10_Source1Source" receiver="true" thrift="false" tasks="1"/>
+      </node>
+      <algorithm name="Preprocessor" implName="Preprocessor" class="eu.qualimaster.algorithms.imp.correlation.Preprocessor"/>
+      <algorithm name="TopoSoftwareCorrelationFinancial" implName="TopoSoftwareCorrelationFinancial" class="eu.qualimaster.algorithms.imp.correlation.softwaresubtopology.TopoSoftwareCorrelationFinancial"/>
+      <algorithm name="GenTopoHardwareCorrelationFinancial" implName="GenTopoHardwareCorrelationFinancialSubTopology" class="eu.qualimaster.algorithms.GenTopoHardwareCorrelationFinancial.GenTopoHardwareCorrelationFinancialSubTopology">
+          <component name="GenTopoHardwareCorrelationFinancialHardwareConnectionBolt" container="GenTopoHardwareCorrelationFinancial" class="eu.qualimaster.algorithms.GenTopoHardwareCorrelationFinancial.HardwareConnectionBolt" receiver="true" thrift="false" tasks="1" type="HARDWARE"/>
+          <component name="GenTopoHardwareCorrelationFinancialHardwareConnectionSpout" container="GenTopoHardwareCorrelationFinancial" class="eu.qualimaster.algorithms.GenTopoHardwareCorrelationFinancial.HardwareConnectionSpout" receiver="true" thrift="false" tasks="12" type="HARDWARE"/>
+      </algorithm>
+      <algorithm name="CorrelationSW" implName="CorrelationSWSubTopology" class="eu.qualimaster.CorrelationSW.topology.CorrelationSWSubTopology">
+              <component name="CorrelationSWMapper" container="TimeTravelPip" class="eu.qualimaster.CorrelationSW.topology.SubTopology_FamilyElement0FamilyElement" receiver="true" thrift="false" tasks="1" alternative0 = "Mapper"/>
+              <component name="CorrelationSWHayashiYoshida" container="TimeTravelPip" class="eu.qualimaster.CorrelationSW.topology.SubTopology_FamilyElement1FamilyElement" receiver="true" thrift="false" tasks="14" alternative0 = "HayashiYoshida"/>
+      </algorithm>
+      <algorithm name="TransferEntropyHardware" implName="TransferEntropyHardwareSubTopology" class="eu.qualimaster.algorithms.TransferEntropyHardware.TransferEntropyHardwareSubTopology">
+          <component name="TransferEntropyHardwareHardwareConnectionBolt" container="TransferEntropyHardware" class="eu.qualimaster.algorithms.TransferEntropyHardware.HardwareConnectionBolt" receiver="true" thrift="false" tasks="1" type="HARDWARE"/>
+          <component name="TransferEntropyHardwareHardwareConnectionSpout" container="TransferEntropyHardware" class="eu.qualimaster.algorithms.TransferEntropyHardware.HardwareConnectionSpout" receiver="true" thrift="false" tasks="1" type="HARDWARE"/>
+      </algorithm>
+      <algorithm name="MutualInformationHardware" implName="MutualInformationHardwareSubTopology" class="eu.qualimaster.algorithms.MutualInformationHardware.MutualInformationHardwareSubTopology">
+          <component name="MutualInformationHardwareHardwareConnectionBolt" container="MutualInformationHardware" class="eu.qualimaster.algorithms.MutualInformationHardware.HardwareConnectionBolt" receiver="true" thrift="false" tasks="1" type="HARDWARE"/>
+          <component name="MutualInformationHardwareHardwareConnectionSpout" container="MutualInformationHardware" class="eu.qualimaster.algorithms.MutualInformationHardware.HardwareConnectionSpout" receiver="true" thrift="false" tasks="1" type="HARDWARE"/>
+      </algorithm>
+      <algorithm name="CorrelationSWAlternative" implName="CorrelationSWAlternativeSubTopology" class="eu.qualimaster.CorrelationSWAlternative.topology.CorrelationSWAlternativeSubTopology">
+              <component name="CorrelationSWAlternativeMP" container="TimeTravelPip" class="eu.qualimaster.CorrelationSWAlternative.topology.SubPipelineVar_19_FamilyElement0FamilyElement" receiver="true" thrift="false" tasks="1" alternative0 = "Mapper"/>
+              <component name="CorrelationSWAlternativeHY" container="TimeTravelPip" class="eu.qualimaster.CorrelationSWAlternative.topology.SubPipelineVar_19_FamilyElement1FamilyElement" receiver="true" thrift="false" tasks="14" alternative0 = "HayashiYoshida"/>
+      </algorithm>
+      <algorithm name="DynamicGraphCompilation" implName="DynamicGraphCompilation" class="eu.qualimaster.dynamicgraph.DynamicGraphCompilation"/>
+      <algorithm name="TimeGraphMapper" implName="TimeGraphMapper" class="eu.qualimaster.timegraph.TimeGraphMapper"/>
+      <algorithm name="TimeGraphIndexer" implName="TimeGraphIndexer" class="eu.qualimaster.timegraph.TimeGraphIndexer"/>
+      <algorithm name="TimeGraphQueryExecutor" implName="TimeGraphQueryExecutor" class="eu.qualimaster.timegraph.TimeGraphQueryExecutor"/>
+      <algorithm name="SimulatedFinancialData" implName="SpringClientSimulator" class="eu.qualimaster.algorithms.imp.correlation.SpringClientSimulator"/>
+      <algorithm name="TimeGraphQueriesSource" implName="QueriesSource" class="eu.qualimaster.timegraph.QueriesSource"/>
+      <algorithm name="TimeTravelSink" implName="TimeTravelSink" class="eu.qualimaster.timegraph.TimeTravelSink"/>
+      <parameter parameter="speedFactor" name="FinancialDataSource" receiver="PipelineVar_10_Source0"/> 
+      <parameter parameter="windowSize" name="FinancialCorrelation" receiver="PipelineVar_10_FamilyElement1"/> 
+      <parameter parameter="correlationThreshold" name="DynamicGraphCompilation" receiver="PipelineVar_10_FamilyElement2"/> 
+      <parameter parameter="snapshotQuery" name="queries" receiver="PipelineVar_10_Source1"/> 
+      <parameter parameter="pathQuery" name="queries" receiver="PipelineVar_10_Source1"/> 
+      <parameter parameter="windowSize" name="Mapper" receiver="CorrelationSWMapper"/> 
+      <parameter parameter="windowSize" name="MP" receiver="CorrelationSWAlternativeMP"/> 
+  </pipeline>
+
+</mapping>

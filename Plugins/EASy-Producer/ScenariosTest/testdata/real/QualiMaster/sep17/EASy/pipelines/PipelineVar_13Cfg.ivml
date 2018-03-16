@@ -1,0 +1,126 @@
+project PipelineVar_13Cfg {
+
+	import Basics;
+	import Pipelines;
+	import FamiliesCfg;
+	import DataManagementCfg;
+	annotate BindingTime bindingTime = BindingTime.compile to PipelineVar_13Cfg;
+	Pipeline PipelineVar_13;
+	Source PipelineVar_13_Source0;
+	Flow PipelineVar_13_Flow0;
+	FamilyElement PipelineVar_13_FamilyElement0;
+	Flow PipelineVar_13_Flow1;
+	FamilyElement PipelineVar_13_FamilyElement1;
+	Flow PipelineVar_13_Flow2;
+	Sink PipelineVar_13_Sink0;
+	PipelineVar_13_Sink0 = Sink {
+		sink = refBy(DataSinkVar_6), 
+		parallelism = 1, 
+		name = "Sink", 
+		constraints = {}
+	};
+	PipelineVar_13_Flow2 = Flow {
+		destination = refBy(PipelineVar_13_Sink0), 
+		grouping = Grouping.shuffleGrouping, 
+		tupleType = refBy(FamiliesCfg::FamilyVar_24.output[0]), 
+		name = "f3", 
+		constraints = {}
+	};
+	Flow PipelineVar_13_Flow3;
+	ReplaySink PipelineVar_13_ReplaySink1;
+	PipelineVar_13_ReplaySink1 = ReplaySink {
+		sink = refBy(DataSinkVar_6), 
+		parallelism = 1, 
+		name = "ReplaySink", 
+		constraints = {}
+	};
+	PipelineVar_13_Flow3 = Flow {
+		destination = refBy(PipelineVar_13_ReplaySink1), 
+		grouping = Grouping.shuffleGrouping, 
+		tupleType = refBy(FamiliesCfg::FamilyVar_24.output[0]), 
+		name = "f4", 
+		constraints = {}
+	};
+	PipelineVar_13_FamilyElement1 = FamilyElement {
+		family = refBy(FamilyVar_24), 
+		defaultAlgorithm = refBy(AlgorithmsCfg::SoftwareAlgorithmVar_33), 
+		permissibleParameters = {
+			refBy(FamiliesCfg::FamilyVar_24.parameters[2]), refBy(FamiliesCfg::FamilyVar_24.parameters[0]), refBy(FamiliesCfg::FamilyVar_24.parameters[1])
+		}, 
+		output = {
+			refBy(PipelineVar_13_Flow2), refBy(PipelineVar_13_Flow3)
+		}, 
+		parallelism = 1, 
+		name = "TransferEntropyCalculation", 
+		constraints = {}
+	};
+	PipelineVar_13_Flow1 = Flow {
+		destination = refBy(PipelineVar_13_FamilyElement1), 
+		grouping = Grouping.shuffleGrouping, 
+		tupleType = refBy(FamiliesCfg::fPreprocessor.output[0]), 
+		name = "f2", 
+		constraints = {}
+	};
+	PipelineVar_13_FamilyElement0 = FamilyElement {
+		family = refBy(fPreprocessor), 
+		defaultAlgorithm = refBy(AlgorithmsCfg::swPreprocessor), 
+		output = {
+			refBy(PipelineVar_13_Flow1)
+		}, 
+		parallelism = 1, 
+		name = "Preprocessor", 
+		constraints = {}
+	};
+	PipelineVar_13_Flow0 = Flow {
+		destination = refBy(PipelineVar_13_FamilyElement0), 
+		grouping = Grouping.shuffleGrouping, 
+		tupleType = refBy(DataManagementCfg::spring.input[1]), 
+		name = "f1", 
+		constraints = {}
+	};
+	Flow PipelineVar_13_Flow4;
+	PipelineVar_13_Flow4 = Flow {
+		destination = refBy(PipelineVar_13_FamilyElement1), 
+		grouping = Grouping.shuffleGrouping, 
+		tupleType = refBy(DataManagementCfg::spring.input[0]), 
+		name = "f5", 
+		constraints = {}
+	};
+	PipelineVar_13_Source0 = Source {
+		output = {
+			refBy(PipelineVar_13_Flow0), refBy(PipelineVar_13_Flow4)
+		}, 
+		source = refBy(DataSourceVar_6), 
+		permissibleParameters = {
+			refBy(DataManagementCfg::DataSourceVar_6.parameters[0])
+		}, 
+		parallelism = 1, 
+		name = "SpringDataSource", 
+		constraints = {}
+	};
+	PipelineVar_13 = Pipeline {
+		name = "TransferPip", 
+		sources = {
+			refBy(PipelineVar_13_Source0)
+		}, 
+		numworkers = 5, 
+		artifact = "eu.qualimaster:TransferPip:0.0.1-SNAPSHOT", 
+		debug = false, 
+		fastSerialization = false, 
+		constraints = {}
+	};
+	
+	freeze {
+		PipelineVar_13;
+		PipelineVar_13_Source0;
+		PipelineVar_13_Flow0;
+		PipelineVar_13_FamilyElement0;
+		PipelineVar_13_Flow1;
+		PipelineVar_13_FamilyElement1;
+		PipelineVar_13_Flow2;
+		PipelineVar_13_Sink0;
+		PipelineVar_13_Flow3;
+		PipelineVar_13_ReplaySink1;
+		PipelineVar_13_Flow4;
+	} but (f|f.bindingTime >= BindingTime.runtimeMon)
+}

@@ -1,0 +1,351 @@
+project Pipelines {
+   
+	import Basics;
+	import Families;
+	import DataManagement;
+	import Hardware;
+	import CloudResources;
+	import Adaptivity;
+	   
+	annotate BindingTime bindingTime = BindingTime.compile to Pipelines;
+	annotate Boolean userVisible = true to Pipelines;
+
+	enum Grouping {shuffleGrouping, fieldsGrouping, globalGrouping, directGrouping, allGrouping, customGrouping, noneGrouping}; // this is very storm specific - can we infer this from the element type?
+	enum Scaling {doNotScale, startAsIs, useFree};
+
+	compound LoadShedder {
+		assign(bindingTime = BindingTime.runtimeEnact) to {
+			String name;
+			Real lastDeviation;
+			Parameters parameters;
+		}
+	}
+	
+	// all elements in a pipeline
+	abstract compound PipelineElement {
+		NonEmptyString name;
+		setOf(Constraint) constraints = {}; // user constraints
+		
+		assign(bindingTime = BindingTime.runtimeMon) to {
+			Boolean isValid = true;
+			refTo(CloudResource) environment;		   
+			PositiveInteger monitoringFrequency = 500;
+			PositiveInteger resourceMonitoringFrequency = 1000;
+		}
+		assign(bindingTime = BindingTime.runtimeEnact) to {
+			LoadShedder shedder;
+		}
+	} 
+   
+	// a flow among pipeline nodes
+	compound Flow refines PipelineElement {
+		refTo(PipelineNode) destination;
+		Grouping grouping;
+		refTo(Tuple) tupleType;
+		Constraint destinationConst = typeOf(destination) <> Source;
+		Constraint destinationCheck = isDefined(destination);
+		Constraint groupingCheck = isDefined(grouping);
+		Constraint tupleTypeCheck = isDefined(tupleType);
+	}
+	
+	// all nodes in a pipeline
+	abstract compound PipelineNode refines PipelineElement{
+		PositiveInteger parallelism;      // configured executors
+		OptionalPositiveInteger maxParallelism;
+		OptionalPositiveInteger numtasks; // configured tasks
+		OptionalPositiveInteger maxNumtasks;
+		Boolean loadShedding = false; //allow for loadShedding
+		Boolean scalable = false;         // allow for pipeline scaling on startup?
+		Constraint stormInvariant = parallelism <= numtasks;  // Storm invariant refined StormPipelineNode?
+		Constraint maxParallel = parallelism <= maxParallelism;
+        Constraint maxTasks = numtasks <= maxNumtasks;
+		assign (userVisible = false) to {
+			Tuples inputTypes; 
+			Tuples outputTypes;
+		}
+		assign(bindingTime = BindingTime.runtimeMon) to {
+			Capacity capacity;
+			Tasks tasks;
+			capacity <= capacityHighWatermark; // quality constraint -> trigger adaptation if violated
+			executors > 1 and supportsTaskReallocation implies capacity >= capacityLowWatermark; // scale down only if we can change something
+		}
+		assign(bindingTime = BindingTime.runtimeEnact) to {
+            Executors initialExecutors;
+			Executors executors;
+		}
+	}
+	
+	compound Source refines PipelineNode {
+		setOf(refTo(Flow)) output;
+		refTo(DataSource) source;
+		eval { // TODO enable eval, get rid of inputTypesAssigned/outputTypesAssigned
+			inputTypes = source.input; 
+		}
+		setOf(refTo(Parameter)) permissibleParameters;
+		Constraint permissibleParametersFamilyCheck = isDefined(permissibleParameters) implies collectParameters(permissibleParameters).intersection(collectParameters(source.parameters)) == collectParameters(permissibleParameters);
+ 		Constraint sourceTypeCheck = typeCheck(self, self.output);
+//		Constraint outputCheck = isDefined(output); //allow to configure one source along with the pipeline
+		Constraint sourceCheck = isDefined(source);
+//		Constraint reverseProp = if isDefined(outputTypes) and isDefined(inputTypes) then outputTypes.overlaps(inputTypes) else outputTypes == output->apply(f; Tuples r12 = {} | r12 = r12.union(f.destination.inputTypes)) endif;
+//		Constraint reverseProp = if isDefined(outputTypes) and isDefined(inputTypes) then collectFieldNames(outputTypes).overlaps(collectFieldNames(inputTypes)) and collectFieldTypes(outputTypes).overlaps(collectFieldTypes(inputTypes)) else outputTypes == output->apply(f; Tuples r12 = {} | r12 = r12.union(f.destination.inputTypes)) endif;
+		Constraint reverseProp = if isDefined(outputTypes) and isDefined(inputTypes) then fieldOverlapCheck(outputTypes, inputTypes) else outputTypes == inputTypes endif;
+
+		assign(bindingTime = BindingTime.runtimeMon) to {
+			setOf(refTo(DataSource)) available;
+			refTo(DataSource) actual;
+			Constraint actualSourceCheck = available.includes(actual);
+			Latency latency;
+			Throughput_Items throughputItems;
+			Throughput_Volume throughputVolume;
+			Velocity velocity;
+			Volume volume;
+			Volatility volatility;
+			Accuracy_Confidence accuracyConfidence;
+			Completeness completeness;
+			
+			Items items;
+		}
+		Constraint flowTypeCheck = flowTypeCheck(self);
+	} 
+
+	compound Sink refines PipelineNode {
+		refTo(DataSink) sink;
+		eval { // TODO enable eval, get rid of inputTypesAssigned/outputTypesAssigned
+			outputTypes = sink.output;
+			inputTypes = outputTypes;
+		}
+		setOf(refTo(Parameter)) permissibleParameters;
+		//if isDefined(outputTypes) and isDefined(inputTypes) then outputTypes.overlaps(inputTypes) else outputTypes == inputTypes endif;
+		Constraint sinkCheck = isDefined(sink);
+		Constraint permissibleParametersSinkCheck = isDefined(permissibleParameters) implies collectParameters(permissibleParameters).intersection(collectParameters(sink.parameters)) == collectParameters(permissibleParameters);
+		assign(bindingTime = BindingTime.runtimeMon) to {
+			setOf(refTo(DataSink)) available;
+			refTo(DataSink) actual;
+			Constraint actualSinkCheck = available.includes(actual);
+			Latency latency;
+			Throughput_Items throughputItems;
+			Throughput_Volume throughputVolume;
+			Velocity velocity;
+			Volume volume;
+			Accuracy_Confidence accuracyConfidence;
+			//MPVolatility mpVolatility;
+			Items items;
+			Items predecessorItems;
+			Items predictedItemsThreshold;
+		} 
+	} 
+
+	compound ReplayInfo {
+		assign(bindingTime = BindingTime.runtimeEnact) to {
+			Boolean active = false;
+			Integer ticket;
+			String start;
+			String end;
+			Real speed;
+			String query;
+		}
+	}
+	
+	compound ReplaySink refines Sink {
+		assign(bindingTime = BindingTime.runtimeEnact) to {
+			ReplayInfo replay;
+		}
+	}
+
+	// inner node that processes something
+	compound ProcessingElement refines PipelineNode {
+		setOf(refTo(Flow)) output;
+		// eval { // TODO enable eval, get rid of inputTypesAssigned/outputTypesAssigned (Constraint variables are not permitted in evals)
+		Constraint peTypeCheck = typeCheck(self, self.output);
+		// }
+		//Constraint outputCheck = isDefined(output) and output.size() > 0; //@Roman, seems to affect also the source
+	}
+	   
+	compound FamilyElement refines ProcessingElement {
+		refTo(Family) family;
+		refTo(Algorithm) defaultAlgorithm = family.members.asSequence().first();//seems this value is null
+		setOf(refTo(Parameter)) permissibleParameters;
+		Integer switchQueueSize = 1000;
+		assign(bindingTime = BindingTime.runtimeMon) to {
+			// TODO available/actual shall be runtimeEnact -> Reasoner :(
+			setOf(refTo(Algorithm)) available; 
+			// TODO actual is not evaluated by reasoner -> RepositoryHelper
+			refTo(Algorithm) actual;
+			Constraint actualAlgorithmCheck = available.includes(actual);
+			// force initialization, but only in STATIC MODE
+			//not(isDefined(actual)) implies if isDefined(defaultAlgorithm) then actual == defaultAlgorithm else actual == available.asSequence().first() endif;
+		
+			// derived			
+			Latency latency;
+			Throughput_Items throughputItems;
+			Throughput_Volume throughputVolume;
+			Used_Memory usedMemory;
+			Accuracy_Confidence accuracyConfidence;
+			Accuracy_Error_Rate accuracyErrorRate;
+			Believability believability;
+			Relevancy relevancy;
+			Completeness completeness;
+			Volume volume;
+			Velocity velocity;
+			Variety variety;
+			
+			Items items;
+			Items predecessorItems;
+			Items predictedItemsThreshold;
+		}
+		Constraint familyCheck = isDefined(family);
+		Constraint tuplesInputTypeCheck = typeCheckTuplesInput(self, self.family);
+		Constraint tuplesOutputTypeCheck = typeCheckTuplesOutput(self, self.family);
+		Constraint permissibleParametersFamilyCheck = isDefined(permissibleParameters) implies collectParameters(permissibleParameters).intersection(collectParameters(family.parameters)) == collectParameters(permissibleParameters);
+		
+		Constraint flowTypeCheck = flowTypeCheck(self);
+		//Constraint defaultCheck = family.members.includes(default);
+	} 
+	
+	
+	compound DataManagementElement refines ProcessingElement {
+		refTo(PersistentDataElement) dataManagement; 
+		inputTypes == outputTypes;
+		Constraint dataManagementCheck = isDefined(dataManagement);
+		//Constraint flowTypeCheck = flowTypeCheck(self);
+	}
+
+	abstract compound StreamOperationElement refines ProcessingElement {
+		// needs to define inputTypes <-> outputTypes
+	}
+
+/*	
+	compound Artifact {
+		NonEmptyString groupId;
+		NonEmptyString artifactId;
+		NonEmptyString versionNum;
+	}
+*/	
+	compound SubPipelineAlgorithm refines Algorithm {
+		refTo(SubPipeline) subPipeline;
+	}
+	
+	compound Pipeline {
+		NonEmptyString name;
+		Description description;
+		setOf(refTo(Source)) sources;
+		PositiveInteger numworkers;
+		PositiveInteger timeout = 100;
+		ArtifactString artifact;
+		Boolean debug = false;
+		Boolean fastSerialization = false;
+		Scaling scaling = Scaling.doNotScale;
+		assign(bindingTime = BindingTime.runtimeMon) to {
+			Latency latency;
+			Throughput_Items throughputItems;
+			Throughput_Volume throughputVolume;
+			Accuracy_Confidence accuracyConfidence;
+			Accuracy_Error_Rate accuracyErrorRate;
+			Capacity capacity;
+			Executors executors;
+			Tasks tasks;
+			Hosts hosts;
+			PositiveInteger monitoringFrequency = 1000;
+			
+			Boolean isValid = true;
+			capacity <= capacityPipelineSheddingWatermark; // overall quality constraint -> trigger adaptation if violated
+		}
+		assign(bindingTime = BindingTime.runtimeEnact) to {
+			Boolean cloudExecution;
+		}
+		Boolean isSubpipeline = false;
+		setOf(Constraint) constraints = {}; // user constraints
+		Constraint sourcesCount = if isSubpipeline == false then sources.size() > 0 else true endif;//TODO: shall not be restricted for sub-pipeline
+		Constraint sourcesCheck = isDefined(sources);
+		
+	}	
+	
+	compound SubPipeline refines Pipeline {
+		setOf(refTo(FamilyElement)) connectors;
+		refTo(Family) subPipelineFamily;
+		Constraint connectorTrueCheck = isDefined(connectors) and connectors.size() > 0;	
+		isSubpipeline = true;
+	}
+	
+	sequenceOf(refTo(Pipeline)) pipelines;
+	Constraint pipelineNamesUnique = not(pipelines->collect(p|p.name).hasDuplicates());
+
+	// check the input / output types and assign the default values - used to force evaluation
+	// none for DataManagementElement, handled through default case to enable propagation in typeCheck
+	// replace by eval in compounds!
+
+	  def setOf(NonEmptyString) collectParameters(Parameters parameters) =
+		  parameters->collect(p | p.name).asSet();
+	  def setOf(NonEmptyString) collectParameters(setOf(refTo(Parameter)) parameters) =
+		  parameters->collect(p | p.name);
+
+//	def Boolean inputTypesAssigned(PipelineNode node) = 
+//		isDefined(node.inputTypes);
+//
+//	def Boolean inputTypesAssigned(Source node) = 
+//		if isDefined(node.inputTypes) then true else node.inputTypes = node.source.input endif;
+//
+//	def Boolean inputTypesAssigned(Sink node) = 
+//		if isDefined(node.inputTypes) then true else node.inputTypes = node.sink.output endif;  // only one field in sink
+//
+//	def Boolean inputTypesAssigned(FamilyElement node) = 
+//		if isDefined(node.inputTypes) then true else node.inputTypes = node.family.input endif;
+//
+//	def Boolean outputTypesAssigned(PipelineNode node) = 
+//		isDefined(node.outputTypes);
+//
+//	def Boolean outputTypesAssigned(Source node) = 
+//		if isDefined(node.outputTypes) then true else node.outputTypes = node.source.input endif; // only one field in source
+//
+//	def Boolean putputTypesAssigned(Sink node) = 
+//		if isDefined(node.outputTypes) then true else node.outputTypes = node.sink.output endif;
+//
+//	def Boolean outputTypesAssigned(FamilyElement node) = 
+//		if isDefined(node.outputTypes) then true else node.outputTypes = node.family.output endif;
+	
+	// check types for a node and it's connected nodes
+	
+	def static Boolean typeCheck(PipelineNode src, setOf(refTo(Flow)) output) =
+		output->forAll(f|typeCheck(src, f.destination));
+		
+	def static Boolean typeCheck(PipelineNode src, PipelineNode dst) = 
+		if isDefined(dst) and isDefined(src) then fieldOverlapCheck(src.outputTypes, dst.inputTypes) else dst.inputTypes == src.outputTypes endif;
+
+	def static Boolean typeCheckTuplesInput(FamilyElement elt, Family family) =
+		if isDefined(elt.inputTypes) and isDefined(family.input) then fieldOverlapCheck(elt.inputTypes, family.input) else elt.inputTypes == family.input endif;
+
+	def static Boolean typeCheckTuplesOutput(FamilyElement elt, Family family) =
+		if isDefined(elt.outputTypes) and isDefined(family.output) then fieldOverlapCheck(elt.outputTypes, family.output) else elt.outputTypes == family.output endif;
+		
+	/*
+	 * Validation of Flow.tupleType, checks match for:
+	 *  - FamilyElement.outputTypes
+	 *  - DataManagementElement.outputTypes (currently, disabled in DME as it is not working for some reason)
+	 *  - Source.output
+	 */ 
+	def static Boolean flowTypeCheck(FamilyElement fe) =
+	  if isDefined(fe.outputTypes)
+	    then flowTypeCheck(fe.outputTypes, fe.output)
+	    else false
+	  endif;
+	
+	def static Boolean flowTypeCheck(DataManagementElement dme) =
+    if isDefined(dme.outputTypes)
+      then flowTypeCheck(dme.outputTypes, dme.output)
+      else false
+    endif;
+    
+  def static Boolean flowTypeCheck(Source src) =
+    if isDefined(src.outputTypes)
+      then flowTypeCheck(src.outputTypes, src.output)
+      else false
+    endif;
+	
+	// Generic parts of Flow.tupleType check  
+	def static Boolean flowTypeCheck(Tuples allowedTupleTypes, setOf(refTo(Flow)) outgoingFlows) =
+	  outgoingFlows->forAll(refTo(Flow) flow | flowTypeCheck(allowedTupleTypes, flow.tupleType));
+	
+  def static Boolean flowTypeCheck(sequenceOf(Tuple) allowedTupleTypes, Tuple tupleTypeOfFlow) =
+    allowedTupleTypes->exists(Tuple type| type.name == tupleTypeOfFlow.name);
+
+}

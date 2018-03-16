@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pipeline:Pipeline xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:pipeline="pipeline" name="TimeTravelPip" numworkers="18" artifact="eu.qualimaster:TimeTravelPip:0.0.2-SNAPSHOT">
+  <nodes xsi:type="pipeline:Source" name="FinancialDataSource" source="6">
+    <permissibleParameters>DataManagementCfg::DataSourceVar_7.parameters[0]</permissibleParameters>
+  </nodes>
+  <nodes xsi:type="pipeline:FamilyElement" name="Preprocessor" family="0"/>
+  <nodes xsi:type="pipeline:FamilyElement" name="FinancialCorrelation" family="1">
+    <permissibleParameters>FamiliesCfg::fCorrelationFinancial.parameters[0]</permissibleParameters>
+  </nodes>
+  <nodes xsi:type="pipeline:FamilyElement" name="DynamicGraphCompilation" family="21">
+    <permissibleParameters>FamiliesCfg::FamilyVar_22.parameters[0]</permissibleParameters>
+  </nodes>
+  <nodes xsi:type="pipeline:Sink" name="TimeTravelSink" sink="5"/>
+  <nodes xsi:type="pipeline:Source" name="queries" source="8">
+    <permissibleParameters>DataManagementCfg::DataSourceVar_9.parameters[0]</permissibleParameters>
+    <permissibleParameters>DataManagementCfg::DataSourceVar_9.parameters[1]</permissibleParameters>
+  </nodes>
+  <nodes xsi:type="pipeline:FamilyElement" name="TimeGraphMapper" family="27" defaultAlgorithm="AlgorithmsCfg::SoftwareAlgorithmVar_34"/>
+  <nodes xsi:type="pipeline:FamilyElement" name="TimeGraphIndexer" parallelism="5" family="28" defaultAlgorithm="AlgorithmsCfg::SoftwareAlgorithmVar_35"/>
+  <nodes xsi:type="pipeline:FamilyElement" name="TimeGraphQueryExecutor" family="29" defaultAlgorithm="AlgorithmsCfg::SoftwareAlgorithmVar_36"/>
+  <flows name="f1" source="//@nodes.0" destination="//@nodes.1" tupleType="DataManagementCfg::spring.input[1]"/>
+  <flows name="f2" source="//@nodes.0" destination="//@nodes.2" tupleType="DataManagementCfg::spring.input[0]"/>
+  <flows name="f3" source="//@nodes.1" destination="//@nodes.2" tupleType="FamiliesCfg::fPreprocessor.output[0]"/>
+  <flows name="f4" source="//@nodes.2" destination="//@nodes.3" tupleType="FamiliesCfg::fCorrelationFinancial.output[0]"/>
+  <flows name="f5" source="//@nodes.3" destination="//@nodes.6" tupleType="FamiliesCfg::FamilyVar_22.output[0]"/>
+  <flows name="f6" source="//@nodes.6" destination="//@nodes.7" grouping="3" tupleType="FamiliesCfg::FamilyVar_26.output[0]"/>
+  <flows name="f7" source="//@nodes.7" destination="//@nodes.7" grouping="3" tupleType="FamiliesCfg::FamilyVar_27.output[1]"/>
+  <flows name="f8" source="//@nodes.8" destination="//@nodes.7" grouping="4" tupleType="FamiliesCfg::FamilyVar_28.output[3]"/>
+  <flows name="f9" source="//@nodes.8" destination="//@nodes.7" grouping="3" tupleType="FamiliesCfg::FamilyVar_28.output[2]"/>
+  <flows name="f10" source="//@nodes.8" destination="//@nodes.4" tupleType="FamiliesCfg::FamilyVar_28.output[0]"/>
+  <flows name="f11" source="//@nodes.8" destination="//@nodes.4" tupleType="FamiliesCfg::FamilyVar_28.output[1]"/>
+  <flows name="f12" source="//@nodes.5" destination="//@nodes.8" tupleType="DataManagementCfg::DataSourceVar_9.input[0]"/>
+  <flows name="f13" source="//@nodes.5" destination="//@nodes.8" tupleType="DataManagementCfg::DataSourceVar_9.input[1]"/>
+  <flows name="f14" source="//@nodes.7" destination="//@nodes.8" grouping="3" tupleType="FamiliesCfg::FamilyVar_27.output[0]"/>
+</pipeline:Pipeline>
