@@ -10,7 +10,7 @@ Require-Bundle: net.ssehub.easy.instantiation.core;bundle-version="0.0.1",
  org.eclipse.equinox.ds,
  org.eclipse.core.runtime,
  net.ssehub.easy.varModel;bundle-version="0.5.5",
- org.apache.velocity;bundle-version="1.7.0";visibility:=reexport
+ net.ssehub.easy.libs.velocity;bundle-version="1.7.0";visibility:=reexport
 Import-Package: org.osgi.service.component
 Bundle-ActivationPolicy: lazy
 Bundle-ClassPath: .
