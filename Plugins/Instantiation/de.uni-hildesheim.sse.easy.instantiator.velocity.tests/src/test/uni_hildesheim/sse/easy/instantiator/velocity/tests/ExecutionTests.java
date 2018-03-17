@@ -10,6 +10,8 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import net.ssehub.easy.instantiation.core.model.buildlangModel.Script;
+import net.ssehub.easy.instantiation.core.model.vilTypes.TypeRegistry;
+import net.ssehub.easy.instantiation.velocity.VelocityInstantiator;
 import test.de.uni_hildesheim.sse.vil.buildlang.AbstractExecutionTest;
 import test.de.uni_hildesheim.sse.vil.buildlang.BuildLangTestConfigurer;
 import test.de.uni_hildesheim.sse.vil.buildlang.ITestConfigurer;
@@ -35,6 +37,7 @@ public class ExecutionTests extends AbstractExecutionTest<Script> {
     @BeforeClass
     public static void startUp() {
         tests = new ExecutionTests();
+        TypeRegistry.DEFAULT.register(VelocityInstantiator.class);
     }
 
     /**
