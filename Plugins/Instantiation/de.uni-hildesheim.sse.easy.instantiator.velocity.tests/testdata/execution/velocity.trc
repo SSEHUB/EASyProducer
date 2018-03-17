@@ -1,0 +1,5 @@
+-> main(Project, Project, Configuration) with (<project>, <project>, <config>)
+    fa <- templates/test.vtl
+    -> velocity(Path, Configuration) with (velocity.txt, <config>) = {velocity.txt}
+    nameMapping <- {{pString1, pString1Impl}}
+    -> velocity(Path, Configuration, Map) with (velocity.txt, <config>, {{pString1, pString1Impl}}) = {velocity.txt}

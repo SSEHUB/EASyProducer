@@ -1,0 +1,10 @@
+vilScript velocity (Project source, Project target, Configuration config) {
+
+    main(Project source, Project target, Configuration config) = : {
+        FileArtifact fa = "$source/templates/test.vtl";
+        velocity("$source/velocity.txt", config);
+        mapOf(String, String) nameMapping = {{"pString1", "pString1Impl"}};
+        velocity("$source/velocity.txt", config, nameMapping);
+    }
+
+}
