@@ -604,25 +604,6 @@ public class ExecutionTests extends AbstractExecutionTest<Script> {
      * @throws IOException should not occur
      */
     @Test
-    public void testVelocity() throws IOException {
-        assertSelfInstantiate("velocity", MAIN_RULE, new SelfInstantiationAsserterAdapter() {
-
-            @Override
-            public void assertIn(File base) {
-                File file = new File(base, "velocity.txt");
-                File expected = new File(base, "velocity.txt.expected");
-                assertFileEqualitySafe(file, expected);
-            }
-            
-        });
-    }
-    
-    /**
-     * The execution of a Velocity template.
-     * 
-     * @throws IOException should not occur
-     */
-    @Test
     public void testFileArtifact() throws IOException {
         assertSelfInstantiate("FileArtifactTest", MAIN_RULE, new SelfInstantiationAsserterAdapter() {
 

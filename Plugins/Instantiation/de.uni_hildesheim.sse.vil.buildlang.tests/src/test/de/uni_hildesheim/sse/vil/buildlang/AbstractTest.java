@@ -33,7 +33,6 @@ import net.ssehub.easy.instantiation.core.model.expressions.ExpressionParserRegi
 import net.ssehub.easy.instantiation.core.model.vilTypes.IVilType;
 import net.ssehub.easy.instantiation.core.model.vilTypes.Project;
 import net.ssehub.easy.instantiation.core.model.vilTypes.TypeRegistry;
-import net.ssehub.easy.instantiation.velocity.VelocityInstantiator;
 import net.ssehub.easy.varModel.management.VarModel;
 
 /**
@@ -55,7 +54,6 @@ public abstract class AbstractTest<M extends Script> extends net.ssehub.easy.dsl
         furtherInitialization();
         registerTypeAnyway(TouchInstantiator.class);
         registerTypeAnyway(StringCreator.class);
-        registerTypeAnyway(VelocityInstantiator.class);
         ExpressionParserRegistry.setExpressionParser(BuildlangExecution.LANGUAGE, new VilExpressionParser());
         configurer.furtherInitialization();
         try {
