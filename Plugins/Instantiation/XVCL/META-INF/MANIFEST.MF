@@ -1,0 +1,21 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Xvcl
+Bundle-SymbolicName: net.ssehub.easy.libs.xvcl
+Bundle-Version: 3.3.0.3
+Bundle-ClassPath: commons-logging-1.1.jar,
+  dtdparser121.jar,
+  jdom.jar,
+  log4j-1.2.13.jar,
+  xvcl.jar
+Bundle-Vendor: SSE, University of Hildesheim
+Export-Package: edu.xvcl.core,
+ edu.xvcl.core.Markings,
+ edu.xvcl.core.api,
+ edu.xvcl.core.api.core,
+ edu.xvcl.core.api.extensions,
+ edu.xvcl.core.api.extensions.pcb,
+ edu.xvcl.core.extensions,
+ edu.xvcl.core.parser,
+ edu.xvcl.core.util
+Bundle-RequiredExecutionEnvironment: JavaSE-9

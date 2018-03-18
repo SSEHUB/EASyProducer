@@ -11,13 +11,12 @@ Require-Bundle: net.ssehub.easy.instantiation.core;bundle-version="0.5.5",
  org.eclipse.equinox.ds,
  org.eclipse.jdt.core,
  org.eclipse.text;visibility:=reexport,
- org.apache.commons.io;bundle-version="2.0.1"
+ org.apache.commons.io;bundle-version="2.0.1",
+ net.ssehub.easy.libs.ant;bundle-version="1.9.4";visibility:=reexport
 Import-Package: org.eclipse.jdt.core,
  org.eclipse.jdt.core.dom,
  org.eclipse.jface.text,
  org.osgi.service.component
 Export-Package: net.ssehub.easy.instantiation.ant
 Bundle-ActivationPolicy: lazy
-Bundle-ClassPath: .,
- lib/ant/ant-launcher.jar,
- lib/ant/ant.jar
+Bundle-ClassPath: .

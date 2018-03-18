@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-9"/>
+	<classpathentry kind="con" path="org.eclipse.pde.core.requiredPlugins"/>
+	<classpathentry exported="true" kind="lib" path="aether-api-0.9.0.M2.jar"/>
+	<classpathentry exported="true" kind="lib" path="aether-connector-wagon-0.9.0.M2.jar"/>
+	<classpathentry exported="true" kind="lib" path="aether-impl-0.9.0.M2.jar"/>
+	<classpathentry exported="true" kind="lib" path="aether-spi-0.9.0.M2.jar"/>
+	<classpathentry exported="true" kind="lib" path="aether-util-0.9.0.M2.jar"/>
+	<classpathentry exported="true" kind="lib" path="aopalliance-1.0.jar"/>
+	<classpathentry exported="true" kind="lib" path="cdi-api-1.0.jar"/>
+	<classpathentry exported="true" kind="lib" path="commons-cli-1.2.jar"/>
+	<classpathentry exported="true" kind="lib" path="commons-io-2.2.jar"/>
+	<classpathentry exported="true" kind="lib" path="commons-lang-2.6.jar"/>
+	<classpathentry exported="true" kind="lib" path="guava-14.0.1.jar"/>
+	<classpathentry exported="true" kind="lib" path="javax.inject-1.jar"/>
+	<classpathentry exported="true" kind="lib" path="jsoup-1.7.2.jar"/>
+	<classpathentry exported="true" kind="lib" path="jsr250-api-1.0.jar"/>
+	<classpathentry exported="true" kind="lib" path="maven-aether-provider-3.2.3.jar"/>
+	<classpathentry exported="true" kind="lib" path="maven-artifact-3.2.3.jar"/>
+	<classpathentry exported="true" kind="lib" path="maven-compat-3.2.3.jar"/>
+	<classpathentry exported="true" kind="lib" path="maven-core-3.2.3.jar"/>
+	<classpathentry exported="true" kind="lib" path="maven-embedder-3.2.3.jar"/>
+	<classpathentry exported="true" kind="lib" path="maven-model-3.2.3.jar"/>
+	<classpathentry exported="true" kind="lib" path="maven-model-builder-3.2.3.jar"/>
+	<classpathentry exported="true" kind="lib" path="maven-plugin-api-3.2.3.jar"/>
+	<classpathentry exported="true" kind="lib" path="maven-repository-metadata-3.2.3.jar"/>
+	<classpathentry exported="true" kind="lib" path="maven-settings-3.2.3.jar"/>
+	<classpathentry exported="true" kind="lib" path="maven-settings-builder-3.2.3.jar"/>
+	<classpathentry exported="true" kind="lib" path="org.eclipse.sisu.inject-0.0.0.M5.jar"/>
+	<classpathentry exported="true" kind="lib" path="org.eclipse.sisu.plexus-0.0.0.M5.jar"/>
+	<classpathentry exported="true" kind="lib" path="plexus-cipher-1.7.jar"/>
+	<classpathentry exported="true" kind="lib" path="plexus-classworlds-2.5.1.jar"/>
+	<classpathentry exported="true" kind="lib" path="plexus-component-annotations-1.5.5.jar"/>
+	<classpathentry exported="true" kind="lib" path="plexus-interpolation-1.19.jar"/>
+	<classpathentry exported="true" kind="lib" path="plexus-sec-dispatcher-1.3.jar"/>
+	<classpathentry exported="true" kind="lib" path="plexus-utils-3.0.17.jar"/>
+	<classpathentry exported="true" kind="lib" path="sisu-guice-3.1.3-no_aop.jar"/>
+	<classpathentry exported="true" kind="lib" path="slf4j-api-1.7.5.jar"/>
+	<classpathentry exported="true" kind="lib" path="slf4j-simple-1.7.5.jar"/>
+	<classpathentry exported="true" kind="lib" path="wagon-file-2.6.jar"/>
+	<classpathentry exported="true" kind="lib" path="wagon-http-2.6-shaded.jar"/>
+	<classpathentry exported="true" kind="lib" path="wagon-http-shared-2.6.jar"/>
+	<classpathentry exported="true" kind="lib" path="wagon-provider-api-2.6.jar"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>

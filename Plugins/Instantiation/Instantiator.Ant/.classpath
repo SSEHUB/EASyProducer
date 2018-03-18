@@ -4,7 +4,5 @@
 	<classpathentry kind="con" path="org.eclipse.pde.core.requiredPlugins"/>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry excluding="*" including="lib/aspectJ/runtime/aspectjrt.jar" kind="src" path=""/>
-	<classpathentry kind="lib" path="lib/ant/ant-launcher.jar"/>
-	<classpathentry kind="lib" path="lib/ant/ant.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
