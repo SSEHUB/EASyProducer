@@ -1,11 +1,11 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Velocity instantiator tests
-Bundle-SymbolicName: de.uni-hildesheim.sse.easy.instantiator.velocity.tests
+Bundle-SymbolicName: de.uni-hildesheim.sse.easy.instantiator.velocity.tests;singleton:=true
 Bundle-Version: 1.8.3
 Bundle-Vendor: SSE, University of Hildesheim
 Bundle-RequiredExecutionEnvironment: JavaSE-9
 Require-Bundle: org.junit,
  de.uni_hildesheim.sse.vil.buildlang.tests,
- de.uni-hildesheim.sse.easy.instantiatorCore.rt,
+ net.ssehub.easy.instantiation.core,
  net.ssehub.easy.instantiation.velocity
