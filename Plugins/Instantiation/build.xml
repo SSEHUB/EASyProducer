@@ -63,7 +63,7 @@
 		<echo>#############################</echo>
         <echo>###  Assembling ANT-Lib   ###</echo>
         <echo>#############################</echo>
-        <ant dir="ANT" antfile="${build.script.name}" />
+        <ant dir="Ant" antfile="${build.script.name}" />
 
         <echo>#######################################</echo>
         <echo>###   Compiling ANT Instantiator    ###</echo>
