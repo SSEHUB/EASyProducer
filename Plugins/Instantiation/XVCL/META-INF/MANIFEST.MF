@@ -18,4 +18,4 @@ Export-Package: edu.xvcl.core,
  edu.xvcl.core.extensions,
  edu.xvcl.core.parser,
  edu.xvcl.core.util
-Bundle-RequiredExecutionEnvironment: JavaSE-9
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6

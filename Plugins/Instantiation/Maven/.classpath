@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
-	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-9"/>
 	<classpathentry kind="con" path="org.eclipse.pde.core.requiredPlugins"/>
 	<classpathentry exported="true" kind="lib" path="aether-api-0.9.0.M2.jar"/>
 	<classpathentry exported="true" kind="lib" path="aether-connector-wagon-0.9.0.M2.jar"/>
@@ -42,5 +41,6 @@
 	<classpathentry exported="true" kind="lib" path="wagon-http-2.6-shaded.jar"/>
 	<classpathentry exported="true" kind="lib" path="wagon-http-shared-2.6.jar"/>
 	<classpathentry exported="true" kind="lib" path="wagon-provider-api-2.6.jar"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.6"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
