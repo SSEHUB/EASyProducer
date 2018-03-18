@@ -60,35 +60,50 @@
         <echo>#######################################</echo>
         <ant dir="${home.instantiator.java.dir}" antfile="${build.script.name}" />
 
+		<echo>#############################</echo>
+        <echo>###  Assembling ANT-Lib   ###</echo>
+        <echo>#############################</echo>
+        <ant dir="ANT" antfile="${build.script.name}" />
+
         <echo>#######################################</echo>
         <echo>###   Compiling ANT Instantiator    ###</echo>
         <echo>#######################################</echo>
         <ant dir="${home.instantiator.ant.dir}" antfile="${build.script.name}" />
         
+        <echo>#################################</echo>
+        <echo>###  Assembling AspectJ-Lib   ###</echo>
+        <echo>#################################</echo>
+        <ant dir="AspectJ" antfile="${build.script.name}" />
+		
         <echo>##########################################</echo>
         <echo>###   Compiling AspectJ Instantiator   ###</echo>
         <echo>##########################################</echo>
         <ant dir="${home.instantiator.aspectj.dir}" antfile="${build.script.name}" />
+
+        <echo>##################################</echo>
+        <echo>###  Assembling Maven-Lib   ###</echo>
+        <echo>##################################</echo>
+        <ant dir="Maven" antfile="${build.script.name}" />
         
         <echo>#######################################</echo>
         <echo>###   Compiling Maven Instantiator  ###</echo>
         <echo>#######################################</echo>
         <ant dir="${home.instantiator.maven.dir}" antfile="${build.script.name}" />
 
-        <echo>#################################</echo>
-        <echo>###  Compiling Velocity-Lib   ###</echo>
-        <echo>#################################</echo>
+        <echo>##################################</echo>
+        <echo>###  Assembling Velocity-Lib   ###</echo>
+        <echo>##################################</echo>
         <ant dir="Velocity" antfile="${build.script.name}" />
-
-        <echo>#################################</echo>
-        <echo>###  Compiling AspectJ-Lib   ###</echo>
-        <echo>#################################</echo>
-        <ant dir="AspectJ" antfile="${build.script.name}" />
 		
         <echo>#############################</echo>
         <echo>###  Compiling Velocity   ###</echo>
         <echo>#############################</echo>
         <ant dir="de.uni_hildeshem.sse.easy.instantiator.velocity" antfile="${build.script.name}" />
+
+        <echo>##############################</echo>
+        <echo>###  Assembling XVCL-Lib   ###</echo>
+        <echo>##############################</echo>
+        <ant dir="XVCL" antfile="${build.script.name}" />
 		
         <echo>########################</echo>
         <echo>###  Compiling XVCL  ###</echo>
