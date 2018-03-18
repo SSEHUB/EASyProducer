@@ -334,7 +334,7 @@
         <!-- Velocity Instantiation test -->
 		<ant target="core-test" antfile="plugins/${test.eclipse.testFW.dir}/library.xml" dir="${test.eclipse.path}">
 		  <property name="data-dir" value="${test.eclipse.workspace.dir}"/>
-		  <property name="plugin-name" value="${test.plugin.vil}"/>
+		  <property name="plugin-name" value="de.uni-hildesheim.sse.easy.instantiator.velocity.tests"/>
 		  <property name="classname" value="test.uni_hildesheim.sse.easy.instantiator.velocity.tests.AllTests"/>
 		  <property name="extraVMargs" value="-Dvil.buildlang.testdata.home=${home.vil.tests.dir}/testdata -javaagent:${jacoco.path}/jacocoagent.jar=append=true,destfile=${basedir}/${coverage.results.dir}/${ant.project.name}.exec" />
 		  <property name="os" value="${test.eclipse.os}"/>
