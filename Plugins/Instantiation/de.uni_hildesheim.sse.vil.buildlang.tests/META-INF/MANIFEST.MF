@@ -21,7 +21,7 @@ Require-Bundle: de.uni_hildesheim.sse.vil.buildlang;visibility:=reexport,
  org.apache.commons.lang;bundle-version="2.6.0";visibility:=reexport,
  org.objectweb.asm;bundle-version="[5.0.1,6.0.0)";resolution:=optional
 Import-Package: org.apache.log4j,
- org.apache.tools.ant.types.selectors;version="1.10.1",
+ org.apache.tools.ant.types.selectors,
  org.hamcrest.core,
  org.junit,
  org.junit.runner;version="4.5.0",

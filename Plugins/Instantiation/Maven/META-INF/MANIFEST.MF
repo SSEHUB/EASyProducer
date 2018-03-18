@@ -213,4 +213,4 @@ Export-Package: org.apache.maven,
  org.sonatype.plexus.components.sec.dispatcher,
  org.sonatype.plexus.components.sec.dispatcher.model,
  org.sonatype.plexus.components.sec.dispatcher.model.io.xpp3
-Bundle-RequiredExecutionEnvironment: JavaSE-9
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6
