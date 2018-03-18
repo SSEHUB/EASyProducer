@@ -14,7 +14,7 @@
 		<pathelement path="${libs.model}"/>
 		<pathelement path="${libs.utils}"/>
         <!-- Lib -->
-		<fileset dir="lib">
+		<fileset dir="../XVCL">
 			<include name="**/*.jar" />
 		</fileset>
 		<!-- Instantiation Copy Core -->

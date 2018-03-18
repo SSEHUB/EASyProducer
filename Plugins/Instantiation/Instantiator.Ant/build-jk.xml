@@ -14,7 +14,7 @@
 		<pathelement path="${libs.model}"/>
 		<pathelement path="${libs.utils}"/>  
         <pathelement path="${libs.instantiator.core}"/>
-		<fileset dir="lib">
+		<fileset dir="../Ant">
             <include name="**/*.jar" />
         </fileset>
 		<!-- Eclipse-Plugins -->

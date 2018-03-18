@@ -14,9 +14,9 @@
 		<pathelement path="${libs.model}"/>
 		<pathelement path="${libs.utils}"/>  
         <pathelement path="${libs.instantiator.core}"/>
-		<fileset dir="lib">
+		<!--<fileset dir="lib">
             <include name="**/*.jar" />
-        </fileset>
+        </fileset>-->
 		<!-- Eclipse-Plugins -->
 		<fileset dir="${eclipse.plugins.dir}">
 			<include name="**/*.jar" />

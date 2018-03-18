@@ -15,7 +15,7 @@
 		<pathelement path="${libs.utils}"/>
         <pathelement path="${libs.dslCore}"/>
         <pathelement path="${libs.instantiator.core}"/>
-		<fileset dir="lib">
+        <fileset dir="../Maven">
             <include name="**/*.jar" />
         </fileset>
 		<!-- Eclipse-Plugins -->
