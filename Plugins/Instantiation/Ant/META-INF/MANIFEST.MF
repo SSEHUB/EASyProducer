@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Ant
 Bundle-SymbolicName: net.ssehub.easy.libs.ant
-Bundle-Version: 1.9.4.0
+Bundle-Version: 1.9.4
 Bundle-ClassPath: ant-launcher.jar,
   ant.jar
 Export-Package: org.apache.tools.ant,
@@ -67,5 +67,5 @@ Export-Package: org.apache.tools.ant,
  org.apache.tools.mail,
  org.apache.tools.tar,
  org.apache.tools.zip
-Bundle-RequiredExecutionEnvironment: JavaSE-9
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Bundle-Vendor: SSE, University of Hildesheim
