@@ -100,11 +100,6 @@
         <echo>#############################</echo>
         <ant dir="de.uni_hildeshem.sse.easy.instantiator.velocity" antfile="${build.script.name}" />
 
-		<echo>##################################</echo>
-        <echo>###  Compiling Velocity Tests  ###</echo>
-        <echo>##################################</echo>
-        <ant dir="de.uni-hildesheim.sse.easy.instantiator.velocity.tests" antfile="${build.script.name}" />
-
         <echo>##############################</echo>
         <echo>###  Assembling XVCL-Lib   ###</echo>
         <echo>##############################</echo>
@@ -194,6 +189,11 @@
         <echo>###   Compiling AspectJ Instantiator Tests   ###</echo>
         <echo>################################################</echo>
         <ant dir="${home.instantiator.aspectj.test.dir}" antfile="${build.script.name}" />
+
+		<echo>##################################</echo>
+        <echo>###  Compiling Velocity Tests  ###</echo>
+        <echo>##################################</echo>
+        <ant dir="de.uni-hildesheim.sse.easy.instantiator.velocity.tests" antfile="${build.script.name}" />
         
         <echo>#################################################</echo>
         <echo>###   Compiling Complete Instantiator Tests   ###</echo>
