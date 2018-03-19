@@ -19,7 +19,7 @@ public class BooleanTests extends AbstractTest {
      * @param descriptor the test descriptor
      */
     protected BooleanTests(ITestDescriptor descriptor) {
-        super(descriptor, "booleanProblem");
+        super(descriptor, "boolean");
     }
 
     /**
