@@ -1,0 +1,9 @@
+project EnumDefaultsTest {
+
+    enum MyEnum {val1, val2, val3};
+    MyEnum e1 = MyEnum::val1;
+    MyEnum e2 = MyEnum::val2;
+    MyEnum e3;
+ 
+    e1 <> e2 implies e3 == MyEnum::val3;
+}

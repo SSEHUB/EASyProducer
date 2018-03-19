@@ -1,0 +1,18 @@
+project OrderedEnumInCompoundAssignTest {
+
+    enum MyEnum {val1=1, val2=2, val3=3};
+    compound C {
+        MyEnum e1;
+        MyEnum e2;
+        MyEnum e3;
+    
+        e1 = MyEnum::val1;
+        e2 = MyEnum::val2;
+    
+        e1 < e2;    
+        e1 <> e2 implies e3 == MyEnum::val3;
+    }
+    
+    C cmp;   
+    
+}
