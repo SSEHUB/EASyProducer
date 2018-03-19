@@ -68,4 +68,20 @@ public class RealTests extends AbstractTest {
         reasoningTest("RealInCompoundAssignTest.ivml", 0);
     } 
 
+    /**
+     * Real in collection defaults test.
+     */
+    @Test
+    public void realInCollectionDefaultsTest() {
+        reasoningTest("RealInCollectionDefaultsTest.ivml", 2);
+    } 
+    
+    /**
+     * Real in collection assign test.
+     */
+    @Test
+    public void realInCollectionAssignTest() {
+        reasoningTest("RealInCollectionAssignTest.ivml", 2);
+    } 
+
 }

@@ -94,4 +94,20 @@ public class BooleanTests extends AbstractTest {
         reasoningTest("BooleanInCompoundImpliesTest.ivml", 1);
     }
 
+    /**
+     * Boolean in collection defaults test.
+     */
+    @Test
+    public void booleanInCollectionDefaultsTest() {
+        reasoningTest("BooleanInCollectionDefaultsTest.ivml", 2);
+    } 
+    
+    /**
+     * Boolean in collection assign test.
+     */
+    @Test
+    public void booleanInCollectionAssignTest() {
+        reasoningTest("BooleanInCollectionAssignTest.ivml", 2);
+    } 
+
 }

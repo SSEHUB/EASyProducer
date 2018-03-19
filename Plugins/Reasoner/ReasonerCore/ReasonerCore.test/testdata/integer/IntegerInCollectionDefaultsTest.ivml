@@ -1,0 +1,12 @@
+project IntegerInCollectionDefaultsTest {
+
+    sequenceOf(Integer) t = {1, 2};
+    sequenceOf(Integer) f = {-1, -2};
+    
+    Boolean check;
+    check = true;
+    
+    t->forAll(i|i > 0) implies check == false;
+    f->forAll(i|i < 0) implies check == false;
+    
+}

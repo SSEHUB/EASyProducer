@@ -1,0 +1,12 @@
+project BooleanInCollectionDefaultsTest {
+
+    sequenceOf(Boolean) t = {true, true};
+    sequenceOf(Boolean) f = {false, false};
+    
+    Boolean check;
+    check = true;
+    
+    t->forAll(i|i) implies check == false;
+    f->forAll(i|i==false) implies check == false;
+    
+}

@@ -16,7 +16,7 @@ import org.junit.runners.Suite.SuiteClasses;
     ReasoningScenarioTests.class,
     StressTest.class,
     CodedTests.class,
-    BooleanProblemTests.class,
+    BooleanTests.class,
     RealTests.class, 
     StringTests.class, 
     IntegerTests.class,

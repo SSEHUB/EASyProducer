@@ -1,0 +1,15 @@
+project BooleanAssignTest {
+
+    sequenceOf(Boolean) t;
+    sequenceOf(Boolean) f;
+    
+    t = {true, true};
+    f = {false, false};
+    
+    Boolean check;
+    check = true;
+    
+    t->forAll(i|i) implies check == false;
+    f->forAll(i|i==false) implies check == false;
+    
+}

@@ -9,6 +9,4 @@ project BooleanDefaultsTest {
     t == true implies check == false;
     f == false implies check == false;
     
-   
-    
 }

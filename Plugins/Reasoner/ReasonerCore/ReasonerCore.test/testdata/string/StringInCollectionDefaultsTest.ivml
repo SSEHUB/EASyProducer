@@ -1,0 +1,12 @@
+project StringInCollectionTest {
+
+    sequenceOf(String) t = {"aaa", "bbb"};
+    sequenceOf(String) f = {"aa", "bb"};
+    
+    Boolean check;
+    check = true;
+    
+    t->forAll(i|size(i) > 2) implies check == false;
+    f->forAll(i|size(i) <= 2) implies check == false;
+    
+}

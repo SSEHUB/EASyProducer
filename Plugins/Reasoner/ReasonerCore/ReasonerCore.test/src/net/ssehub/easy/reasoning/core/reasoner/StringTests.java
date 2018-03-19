@@ -68,4 +68,20 @@ public class StringTests extends AbstractTest {
         reasoningTest("StringInCompoundAssignTest.ivml", 0);
     } 
 
+    /**
+     * String in collection defaults test.
+     */
+    @Test
+    public void stringInCollectionDefaultsTest() {
+        reasoningTest("StringInCollectionDefaultsTest.ivml", 2);
+    } 
+    
+    /**
+     * String in collection assign test.
+     */
+    @Test
+    public void stringInCollectionAssignTest() {
+        reasoningTest("StringInCollectionAssignTest.ivml", 2);
+    } 
+
 }

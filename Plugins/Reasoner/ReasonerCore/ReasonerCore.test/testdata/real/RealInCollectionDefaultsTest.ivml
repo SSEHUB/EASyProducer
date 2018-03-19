@@ -1,0 +1,12 @@
+project RealDefaultsTest {
+
+    sequenceOf(Real) t = {1.0, 2.0};
+    sequenceOf(Real) f = {-1.1, -2.2};
+    
+    Boolean check;
+    check = true;
+    
+    t->forAll(i|i > 0) implies check == false;
+    f->forAll(i|i < 0) implies check == false;
+    
+}

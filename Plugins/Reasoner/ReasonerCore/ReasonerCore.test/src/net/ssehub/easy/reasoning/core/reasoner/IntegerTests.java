@@ -68,4 +68,20 @@ public class IntegerTests extends AbstractTest {
         reasoningTest("IntegerInCompoundAssignTest.ivml", 0);
     } 
 
+    /**
+     * Integer in collection defaults test.
+     */
+    @Test
+    public void integerInCollectionDefaultsTest() {
+        reasoningTest("IntegerInCollectionDefaultsTest.ivml", 2);
+    } 
+    
+    /**
+     * Integer in collection assign test.
+     */
+    @Test
+    public void integerInCollectionAssignTest() {
+        reasoningTest("IntegerInCollectionAssignTest.ivml", 2);
+    } 
+
 }
