@@ -19,7 +19,8 @@ import org.junit.runners.Suite.SuiteClasses;
     BooleanProblemTests.class,
     RealTests.class, 
     StringTests.class, 
-    IntegerTests.class
+    IntegerTests.class,
+    EnumTests.class
     })
 public class AllTests {
 
