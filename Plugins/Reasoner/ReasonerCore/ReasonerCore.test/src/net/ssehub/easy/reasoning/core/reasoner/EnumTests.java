@@ -101,5 +101,37 @@ public class EnumTests extends AbstractTest {
     public void orderedEnumInCompoundAssignTest() {
         reasoningTest("OrderedEnumInCompoundAssignTest.ivml", 0);
     } 
+
+    /**
+     * Enum in collection defaults test.
+     */
+    @Test
+    public void enumInCollectionDefaultsTest() {
+        reasoningTest("EnumInCollectionDefaultsTest.ivml", 2);
+    } 
     
+    /**
+     * Enum in collection assign test.
+     */
+    @Test
+    public void enumInCollectionAssignTest() {
+        reasoningTest("EnumInCollectionAssignTest.ivml", 2);
+    } 
+
+    /**
+     * Ordered enum in collection defaults test.
+     */
+    @Test
+    public void orderedEnumInCollectionDefaultsTest() {
+        reasoningTest("OrderedEnumInCollectionDefaultsTest.ivml", 2);
+    } 
+    
+    /**
+     * Ordered enum in collection assign test.
+     */
+    @Test
+    public void orderedEnumInCollectionAssignTest() {
+        reasoningTest("OrderedEnumInCollectionAssignTest.ivml", 2);
+    } 
+
 }

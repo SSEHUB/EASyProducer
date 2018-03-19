@@ -1,0 +1,16 @@
+project EnumInCollectionAssignTest {
+
+    enum MyEnum {val1=1, val2=2, val3=3};
+    sequenceOf(MyEnum) t;
+    sequenceOf(MyEnum) f;
+    
+    t = {MyEnum::val1, MyEnum::val1};
+    f = {MyEnum::val2, MyEnum::val2};
+    
+    Boolean check;
+    check = true;
+    
+    t->forAll(i|i==MyEnum::val1) implies check == false;
+    f->forAll(i|i==MyEnum::val2) implies check == false;
+    
+}
