@@ -419,7 +419,6 @@ public class XmlFileArtifactTest extends AbstractTest {
                 //Do nothing. This is to be excepted.
             }         
             //firstElement should not be named "forcedChangeForTesting" in the first place
-            
             oldFirstElementName = firstElement.getName().toString();
    
             Iterator<? extends FragmentArtifact> newElemIter =
@@ -429,9 +428,6 @@ public class XmlFileArtifactTest extends AbstractTest {
             if (!newFirstElement.getName().equals(oldFirstElementName)) {
                 Assert.fail();
             }
-            if (newFirstElement.equals(oldFirstElementName)) {
-                Assert.fail();
-            }        
         } catch (VilException e) {
             Assert.fail(e.getMessage());
         }

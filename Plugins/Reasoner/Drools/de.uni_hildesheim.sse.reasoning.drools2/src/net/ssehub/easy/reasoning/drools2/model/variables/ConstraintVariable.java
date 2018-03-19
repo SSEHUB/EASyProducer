@@ -49,7 +49,7 @@ public class ConstraintVariable extends ReasonerVariable {
     
     @Override
     protected boolean isSameValue(Object newValue) {
-        return value.equals((Integer) newValue) ? true : false;
+        return value.equals(newValue);
     }
     
     @Override
