@@ -31,14 +31,22 @@ public class Environment {
     private Environment() {}
     
     /**
-     * Checks whether EASy runs inside of Eclipse.
+     * Checks whether EASy runs inside of Eclipse. Overridden to non-eclipse if system 
+     * property <code>easy.notInEclipse</code> is somehow set.
+     * 
      * @return <tt>true</tt> if EASy runs inside of Eclipse, <tt>false</tt> otherwise.
      */
     public static boolean runsInEclipse() {
-        // this is just a heuristic, pde.launch is required to state that RCP apps are no eclipse
-        return (null != System.getProperty("eclipse.product", null)
-            || null != System.getProperty("eclipse.home.location", null)) 
-            && null != System.getProperty("eclipse.pde.launch");
+        boolean result;
+        if (null != System.getProperty("easy.notInEclipse", null)) {
+            result = false;
+        } else {
+            // this is just a heuristic, pde.launch is required to state that RCP apps are no eclipse
+            result = (null != System.getProperty("eclipse.product", null)
+                || null != System.getProperty("eclipse.home.location", null)) 
+                && null != System.getProperty("eclipse.pde.launch");
+        }
+        return result;
     }
     
     /**
