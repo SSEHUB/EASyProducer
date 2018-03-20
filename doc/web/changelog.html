@@ -32,6 +32,8 @@
           <li>default parameter values</li>
           <li>explicit for/while (<a href="https://github.com/SSEHUB/EASyProducer/issues/47">#47</a>)</li>
           <li>Abortion of VIL/VTL scripts (<a href="https://github.com/SSEHUB/EASyProducer/issues/53">#53</a>)</li>
+          <li>More XML header meta access and output control. Explicit synchronization of XML attribute sequence to 
+              keep original document formatting.</li>
         </ul>
       </li>
 	  <li>Selection of basis Eclipse project type while creating an EASy-Producer project(<a href="https://github.com/SSEHUB/EASyProducer/issues/43">#43</a>), supported types:</li>
@@ -42,6 +44,10 @@
       <li>Standalone deployment to Maven, deployment of individual core components to Maven, standalone composition 
         of core components based on Maven (as now documented in the user guide).</li>
       <li>Documentation improvements along all changes, including <a href="https://github.com/SSEHUB/EASyProducer/issues/81">#81</a></li>
+      <li>Uptake of Java 9: Explicit integration of Apache Xerces 2.9.0 and Xalan 2.7.1 in VIL/VTL XML 
+          processing to resolve Java 9 module issue w.r.t. enforcing attribute output sequences.</li>
+      <li>Uptake of Eclipse 3.7: More explicit bundles for integrated libs requiring dynamic classloading as enforced 
+          by changes in Eclipse/Equinox class loading. EASy-Producer still works on Eclipse 3.5.</li>
 	</ul>
   </li>
   <li>release 1.1.0 (March 16, 2016)</li>
