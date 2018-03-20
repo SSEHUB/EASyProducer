@@ -9,11 +9,11 @@
 		<!-- Libs of VarModel -->
         <!-- fileset dir="${home.model.persistency.dir}/lib" includes="**/*.jar"/ -->
         <!-- Libs of Instantiator -->
-        <fileset dir="${home.libs.xvcl.dir}/lib" includes="**/*.jar"/>
-        <fileset dir="${home.libs.velocity}/lib" includes="**/*.jar"/>
-        <fileset dir="${home.libs.maven}/lib" includes="**/*.jar"/>
-        <fileset dir="${home.libs.aspectj}/lib" includes="**/*.jar"/>
-        <fileset dir="${home.libs.ant}/lib" includes="**/*.jar"/>
+        <fileset dir="${home.libs.xvcl.dir}" includes="**/*.jar"/>
+        <fileset dir="${home.libs.velocity.dir}" includes="**/*.jar"/>
+        <fileset dir="${home.libs.maven.dir}" includes="**/*.jar"/>
+        <fileset dir="${home.libs.aspectj.dir}" includes="**/*.jar"/>
+        <fileset dir="${home.libs.ant.dir}" includes="**/*.jar"/>
         <!-- Eclipse-Plugins -->
         <fileset dir="${eclipse.plugins.dir}" includes="**/*.jar"/>
 
@@ -35,7 +35,7 @@
         <fileset dir="${home.instantiator.ant.dir}/${build.jar.dir}" includes="**/*.jar" />
         <fileset dir="${home.instantiator.aspectj.dir}/${build.jar.dir}" includes="**/*.jar" />
         <fileset dir="${home.instantiator.maven.dir}/${build.jar.dir}" includes="**/*.jar" />
-        <fileset dir="${home.instantiator.serializer.dir}/${build.jar.dir}" includes="**/*.jar" />
+        <fileset dir="${home.instantiator.serializer.dir}" includes="**/*.jar" />
     </path>
     
 	<target name="init">
