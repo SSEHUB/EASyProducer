@@ -74,9 +74,9 @@
     </target>
 	
 	<target name="instrumment">
-		<echo>######################</echo>
-        <echo>###  Instrumment   ###</echo>
-        <echo>######################</echo>
+		<echo>#####################</echo>
+        <echo>###  Instrument   ###</echo>
+        <echo>#####################</echo>
         <emma enabled="true" verbosity="verbose">
 			<instr destdir="${coverage.instr.dir}" metadatafile="${coverage.results.dir}/metadata.emma" mode="fullcopy" >
 				<filter includes="*net.ssehub.easy*"/>
@@ -138,10 +138,14 @@
             <fileset dir="${home.sseReasoner.dir}/${build.jar.dir}" includes="**/*.jar" />
             <!-- Instantiation -->
             <fileset dir="${home.instantiatorCore.dir}/${build.jar.dir}" includes="**/*.jar" />
+            <fileset dir="${home.libs.velocity.dir}/${build.jar.dir}" includes="**/*.jar" />
             <fileset dir="${home.instantiator.velocity.dir}/${build.jar.dir}" includes="**/*.jar" />
             <fileset dir="${home.instantiator.java.dir}/${build.jar.dir}" includes="**/*.jar" />
+            <fileset dir="${home.libs.ant.dir}/${build.jar.dir}" includes="**/*.jar" />
             <fileset dir="${home.instantiator.ant.dir}/${build.jar.dir}" includes="**/*.jar" />
+            <fileset dir="${home.libs.aspectj.dir}/${build.jar.dir}" includes="**/*.jar" />
             <fileset dir="${home.instantiator.aspectj.dir}/${build.jar.dir}" includes="**/*.jar" />
+            <fileset dir="${home.libs.maven.dir}/${build.jar.dir}" includes="**/*.jar" />
             <fileset dir="${home.instantiator.maven.dir}/${build.jar.dir}" includes="**/*.jar" />
             <!-- Instantiation Parsers -->
             <fileset dir="${home.vil.expressions.core.dir}/${build.jar.dir}" includes="**/*.jar" />
