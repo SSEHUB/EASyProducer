@@ -9,8 +9,11 @@
 		<!-- Libs of VarModel -->
         <!-- fileset dir="${home.model.persistency.dir}/lib" includes="**/*.jar"/ -->
         <!-- Libs of Instantiator -->
-        <fileset dir="${home.instantiator.xvcl.dir}/lib" includes="**/*.jar"/>
-        <fileset dir="${home.instantiator.velocity.dir}/lib" includes="**/*.jar"/>
+        <fileset dir="${home.libs.xvcl.dir}/lib" includes="**/*.jar"/>
+        <fileset dir="${home.libs.velocity}/lib" includes="**/*.jar"/>
+        <fileset dir="${home.libs.maven}/lib" includes="**/*.jar"/>
+        <fileset dir="${home.libs.aspectj}/lib" includes="**/*.jar"/>
+        <fileset dir="${home.libs.ant}/lib" includes="**/*.jar"/>
         <!-- Eclipse-Plugins -->
         <fileset dir="${eclipse.plugins.dir}" includes="**/*.jar"/>
 
