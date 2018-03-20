@@ -778,6 +778,36 @@ public class XmlFileArtifact extends FileArtifact implements IXmlContainer {
     }
     
     /**
+     * Returns the encoding.
+     * 
+     * @return the encoding
+     */
+    public String getEncoding() {
+        return encoding;
+    }
+    
+    /**
+     * Defines whether the XML artifact is standalone.
+     * 
+     * @param standalone whether it is standalone or not
+     * @see #setOmitXmlStandalone(boolean)
+     */
+    public void setXmlStandalone(boolean standalone) {
+        if (null != doc) {
+            doc.setXmlStandalone(standalone);
+        }
+    }
+    
+    /**
+     * Returns the XML standalone flag.
+     * 
+     * @return the standalone flag, always <b>false</b> if no document is present
+     */
+    public boolean getXmlStandalone() {
+        return null == doc ? false : doc.getXmlStandalone();
+    }
+    
+    /**
      * Defines whether the usual XML header declaration shall be omitted or printed while writing/storing this artifact.
      * 
      * @param omitXmlDeclaration omit if <code>true</code>, emit if <code>false</code> (default)
@@ -792,7 +822,7 @@ public class XmlFileArtifact extends FileArtifact implements IXmlContainer {
      * 
      * @param omitXmlStandalone omit if <code>true</code> (default), emit if <code>false</code> 
      */
-    public void setOmitXmlStandaline(boolean omitXmlStandalone) {
+    public void setOmitXmlStandalone(boolean omitXmlStandalone) {
         this.omitXmlStandalone = omitXmlStandalone;
     }
     
