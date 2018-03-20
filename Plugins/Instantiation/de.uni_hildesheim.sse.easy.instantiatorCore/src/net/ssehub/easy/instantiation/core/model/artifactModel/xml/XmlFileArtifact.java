@@ -74,10 +74,12 @@ public class XmlFileArtifact extends FileArtifact implements IXmlContainer {
     private File file;
     private Dtd dtd;
     private boolean omitXmlDeclaration = false;
+    private boolean omitXmlStandalone = true;
     private boolean synchronizeAttributeSequence = true;
     private int indentation = 4;
     private long lastModification = -1;
     private long lastPersisted = -1;
+    private String encoding = null;
     
     /**
      * Creates a new XML file artifact.
@@ -247,7 +249,7 @@ public class XmlFileArtifact extends FileArtifact implements IXmlContainer {
             DocumentBuilder builder;
             try {
                 builder = getDocumentBuilderFactory().newDocumentBuilder();
-                doc = builder.parse(file);
+                doc = initFromDoc(builder.parse(file));
                 pruneWhitespaces(doc.getChildNodes());
             } catch (ParserConfigurationException exc) {
                 EASyLoggerFactory.INSTANCE.getLogger(getClass(), Bundle.ID).exception(exc);
@@ -266,6 +268,19 @@ public class XmlFileArtifact extends FileArtifact implements IXmlContainer {
         }
                 
     }
+
+    /**
+     * Initializes this instance from <code>doc</code>.
+     * 
+     * @param doc the document to initialize from (may be <b>null</b>, is ignored then)
+     * @return <code>doc</code>
+     */
+    private Document initFromDoc(Document doc) {
+        if (null != doc) {
+            encoding = doc.getXmlEncoding();
+        }
+        return doc;
+    }
     
     /**
      * Removes start and end childs within nodes, whyever xerces suddenly introduced this "feature".
@@ -274,19 +289,21 @@ public class XmlFileArtifact extends FileArtifact implements IXmlContainer {
      */
     private void pruneWhitespaces(NodeList nodes) {
         final int count = nodes.getLength() - 1;
-        Node first = null;
-        Node last = null;
-        for (int n = 0; n <= count; n++) {
-            Node node = nodes.item(n);
-            if (0 == n) {
-                first = toEmptyTextNode(node);
-            } else if (count == n) {
-                last = toEmptyTextNode(node);
+        if (count > 1) { // keep non-self-closing elements with spaces as contents
+            Node first = null;
+            Node last = null;
+            for (int n = 0; n <= count; n++) {
+                Node node = nodes.item(n);
+                if (0 == n) {
+                    first = toEmptyTextNode(node);
+                } else if (count == n) {
+                    last = toEmptyTextNode(node);
+                }
+                pruneWhitespaces(node.getChildNodes());
             }
-            pruneWhitespaces(node.getChildNodes());
+            deleteNode(first);
+            deleteNode(last);
         }
-        deleteNode(first);
-        deleteNode(last);
     }
     
     /**
@@ -514,7 +531,7 @@ public class XmlFileArtifact extends FileArtifact implements IXmlContainer {
             try {
                 DocumentBuilder builder = getDocumentBuilderFactory().newDocumentBuilder();
                 InputStream in = IOUtils.toInputStream(text.getText());
-                doc = builder.parse(in);
+                doc = initFromDoc(builder.parse(in));
                 in.reset();
                 synchronizeAttributes(in);
                 in.close();
@@ -572,19 +589,30 @@ public class XmlFileArtifact extends FileArtifact implements IXmlContainer {
      * @param transformer the transformer to be configured
      */
     protected void configureTransformer(Transformer transformer) {
-        // might be doc.getXmlEncoding();  but this is properly taken over... but may also normalized
-        //transformer.setOutputProperty("encoding", encoding); 
+        if (null != encoding) {
+            transformer.setOutputProperty("encoding", encoding); 
+        }
         if (indentation >= 0) {
             transformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", 
                 String.valueOf(indentation));
             transformer.setOutputProperty(OutputKeys.INDENT, "yes");
-        } else {
-            transformer.setOutputProperty(OutputKeys.INDENT, "no");
-        }
+        } 
+        transformer.setOutputProperty(OutputKeys.INDENT, toYesNo(indentation >= 0));
         if (omitXmlDeclaration) {
             transformer.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "yes");
         }
+        transformer.setOutputProperty(OutputKeys.STANDALONE, toYesNo(!omitXmlStandalone));
         //transformer.setOutputProperty("{http://xml.apache.org/xalan}line-separator", "\r\n");
+    }
+
+    /**
+     * Turns a boolean into a transformer "yes" or "no" string.
+     * 
+     * @param yes whether the output shall represent "yes"
+     * @return "yes" or "no"
+     */
+    private String toYesNo(boolean yes) {
+        return yes ? "yes" : "no";
     }
     
     /**
@@ -741,12 +769,31 @@ public class XmlFileArtifact extends FileArtifact implements IXmlContainer {
     }
     
     /**
+     * Defines the (input) encoding.
+     * 
+     * @param encoding a valid encoding name, may be <b>null</b> for none
+     */
+    public void setEncoding(String encoding) {
+        this.encoding = encoding;
+    }
+    
+    /**
      * Defines whether the usual XML header declaration shall be omitted or printed while writing/storing this artifact.
      * 
      * @param omitXmlDeclaration omit if <code>true</code>, emit if <code>false</code> (default)
      */
     public void setOmitXmlDeclaration(boolean omitXmlDeclaration) {
         this.omitXmlDeclaration = omitXmlDeclaration;
+    }
+
+    /**
+     * Defines whether the usual XML header standalone attribute shall be omitted or printed while writing/storing 
+     * this artifact.
+     * 
+     * @param omitXmlStandalone omit if <code>true</code> (default), emit if <code>false</code> 
+     */
+    public void setOmitXmlStandaline(boolean omitXmlStandalone) {
+        this.omitXmlStandalone = omitXmlStandalone;
     }
     
     /**

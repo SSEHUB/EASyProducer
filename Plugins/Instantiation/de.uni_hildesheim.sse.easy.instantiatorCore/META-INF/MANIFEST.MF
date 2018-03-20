@@ -31,7 +31,9 @@ Export-Package: net.ssehub.easy.instantiation.core,
  net.ssehub.easy.instantiation.core.model.vilTypes,
  net.ssehub.easy.instantiation.core.model.vilTypes.configuration
 Bundle-ClassPath: .,
- lib/xerces-2.9.0.jar
+ lib/xerces-2.9.0.jar,
+ lib/serializer-2.7.1.jar,
+ lib/xalan-2.7.1.jar
 Import-Package: net.ssehub.easy.dslCore.translation,
  org.osgi.service.component
 Bundle-ActivationPolicy: lazy

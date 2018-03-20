@@ -54,7 +54,9 @@
 		<!-- Copy needed non class files -->
 		<copy todir="${build.classes.dir}" failonerror="true" overwrite="true">
 			<fileset dir="${basedir}">
+                <include name="META-INF-INF/services/**/*" />
 				<include name="OSGI-INF/**/*" />
+                <include name="lib/**/*.jar" />
 				<include name="src.zip" />
 				<include name="javadoc.zip" />
 			</fileset>
