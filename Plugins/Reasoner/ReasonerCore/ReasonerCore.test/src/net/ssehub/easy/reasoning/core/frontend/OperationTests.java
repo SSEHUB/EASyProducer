@@ -835,7 +835,47 @@ public abstract class OperationTests extends AbstractReasonerFrontendTest {
     public void testTypedefNestedInCompoundInvalid() throws IOException {
         performOpCheck("typedefNestedInCompoundInvalid.ivml", false);
     }
+
+    /**
+     * Tests typedef of compound nested/applied inside a sequence (valid).
+     * 
+     * @throws IOException in case of problems reading a model
+     */
+    @Test
+    public void testTypedefCompoundNestedInSequenceValid1() throws IOException {
+        performOpCheck("typedefCompoundNestedInSequenceValid1.ivml", true);
+    }
     
+    /**
+     * Tests typedef of compound nested/applied inside a compound (invalid).
+     * 
+     * @throws IOException in case of problems reading a model
+     */
+    @Test
+    public void testTypedefCompoundNestedInSequenceInvalid1() throws IOException {
+        performOpCheck("typedefCompoundNestedInSequenceInvalid1.ivml", false);
+    }
+    
+    /**
+     * Tests typedef of compound nested/applied inside a sequence (valid).
+     * 
+     * @throws IOException in case of problems reading a model
+     */
+    @Test
+    public void testTypedefCompoundNestedInSequenceValid2() throws IOException {
+        performOpCheck("typedefCompoundNestedInSequenceValid2.ivml", true);
+    }
+    
+    /**
+     * Tests typedef of compound nested/applied inside a compound (invalid).
+     * 
+     * @throws IOException in case of problems reading a model
+     */
+    @Test
+    public void testTypedefCompoundNestedInSequenceInvalid2() throws IOException {
+        performOpCheck("typedefCompoundNestedInSequenceInvalid2.ivml", false);
+    }
+
     /**
      * Tests typedef nested inside a set (valid).
      * 

@@ -1,0 +1,12 @@
+project typedefCompoundNestedInSequenceValid1 {
+
+  compound Dimension {
+    Integer width;
+    Integer height;
+  }
+  typedef MyDimension Dimension with (MyDimension.width >= 0 and MyDimension.height >= 0);
+  
+  sequenceOf(MyDimension) dim;
+
+  dim = {{width = 1600, height = 1200}, {width = 200, height = 300}};
+}

@@ -1,0 +1,12 @@
+project typedefCompoundNestedInSequenceInvalid2 {
+
+  typedef NaturalInteger Integer with (NaturalInteger >= 0);
+  compound Dimension {
+    NaturalInteger width;
+    NaturalInteger height;
+  }
+  
+  sequenceOf(Dimension) dim;
+
+  dim = {{width = -1, height = -2}, {width = 200, height = 300}};
+}
