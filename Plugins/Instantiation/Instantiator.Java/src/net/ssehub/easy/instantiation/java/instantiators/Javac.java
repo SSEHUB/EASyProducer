@@ -67,7 +67,7 @@ public class Javac extends AbstractFileInstantiator {
         long timestamp = PathUtils.normalizedTime();
         JavaCompiler compiler = getJavaCompiler();
         if (null == compiler) {
-            throw new VilException("No Java compiler found. Sre you running JRE?", VilException.ID_RUNTIME);
+            throw new VilException("No Java compiler found. Are you running JRE?", VilException.ID_RUNTIME);
         }
         StandardJavaFileManager fileManager = compiler.getStandardFileManager(null, null, null);
         if (source.isEmpty()) {
