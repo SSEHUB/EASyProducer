@@ -37,5 +37,10 @@ limitations under the License.
          install-size="0"
          version="3.3.0.3"
          unpack="false"/>
-
+   <plugin
+         id="net.ssehub.easy.libs.xvcl"
+         download-size="0"
+         install-size="0"
+         version="3.3.0.3"
+         unpack="false"/>
 </feature>

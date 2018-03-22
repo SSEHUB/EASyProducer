@@ -32,5 +32,11 @@ limitations under the License.
          install-size="0"
          version="1.9.4.0"
          unpack="false"/>
+   <plugin
+         id="net.ssehub.easy.libs.ant"
+         download-size="0"
+         install-size="0"
+         version="1.9.4"
+         unpack="false"/>
 
 </feature>

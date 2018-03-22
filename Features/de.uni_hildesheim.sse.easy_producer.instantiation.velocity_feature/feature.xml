@@ -37,5 +37,11 @@ limitations under the License.
          install-size="0"
          version="1.8.3"
          unpack="false"/>
+   <plugin
+         id="net.ssehub.easy.libs.velocity"
+         download-size="0"
+         install-size="0"
+         version="1.7.0"
+         unpack="false"/>
 
 </feature>
