@@ -1,13 +1,7 @@
 EASyProducer
 ============
 
-EASy-Producer is a Product Line Engineering toolset, initially developed by the Software Systems Engineering group at the University of Hildesheim.
-
-EASy-Producer was already successfully tested in industrial environments.
-
-Watch out for more!
-
-March 16 2016: EASy-Producer release 1.1.0 is out
+EASy-Producer is a Product Line Engineering toolset, initially developed by the Software Systems Engineering group at the University of Hildesheim. EASy-Producer was already successfully tested in industrial environments.
 
 Release History
 ---------------
@@ -24,6 +18,14 @@ EASy-Producer can be installed from the [official update site](http://projects.s
 We also provide a snapshot of the most recent developments in terms of a [nightly update site](https://projects.sse.uni-hildesheim.de/eclipse/update-sites/easy_nightly/ "EASy-Producer nightly update site") also 
 hosted at the University of Hildesheim, Germany. From there (but also [doc](/doc/ "doc")) previews of the upcoming documentation can be obtained. Please note that  Eclipse Help plugin of the nightly version 
 contains the same documentation as the latest release.
+
+Support for Eclipse/JDK
+-----------------------
+EASy-Producer runs well with Eclipse 4.5 and JDK 8. Support for Eclipse 4.7 and JDK is on the way, but due to refactoring bundles required by Eclipse 4.7, not completely tested.
+
+Running EASy-Producer/tests within Eclipse
+------------------------------------------
+We experienced some difficulties creating launch configurations for Eclipse 4.7. As a result, we provide a collection of Eclipse launch configurations in the "launching" folder. Please note that a JDK must be installed and available as installed JRE in Eclipse. See also the readme file there.
 
 Build Status
 ------------------
