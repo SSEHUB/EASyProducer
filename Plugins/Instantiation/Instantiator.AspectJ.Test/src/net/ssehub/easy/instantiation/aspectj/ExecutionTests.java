@@ -9,7 +9,6 @@ import org.junit.Test;
 import test.de.uni_hildesheim.sse.vil.buildlang.AbstractExecutionTest;
 import test.de.uni_hildesheim.sse.vil.buildlang.BuildLangTestConfigurer;
 import test.de.uni_hildesheim.sse.vil.buildlang.ITestConfigurer;
-import net.ssehub.easy.instantiation.core.JavaUtilities;
 import net.ssehub.easy.instantiation.core.model.buildlangModel.Script;
 import net.ssehub.easy.instantiation.core.model.common.VilException;
 
@@ -59,8 +58,9 @@ public class ExecutionTests extends AbstractExecutionTest<Script> {
     @Test
     public void testAspectJ() throws IOException {
         int[] expectedErrors = null;
-        if (JavaUtilities.isJava9()) {
-            System.out.println("Warning: AspectJ is currently not available for Java 9.");
+        String msg = net.ssehub.easy.instantiation.aspectj.Registration.checkEnvironment();
+        if (null != msg) {
+            System.out.println("Warning: " + msg);
             expectedErrors = new int[] {VilException.ID_EXECUTION_ERROR};
         }
         assertSelfInstantiate("aspectj", expectedErrors);

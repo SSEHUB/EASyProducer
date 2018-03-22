@@ -24,7 +24,6 @@ import org.junit.Ignore;
 import org.junit.Test;
 
 import net.ssehub.easy.basics.progress.ProgressObserver;
-import net.ssehub.easy.instantiation.core.JavaUtilities;
 import net.ssehub.easy.instantiation.core.model.buildlangModel.Script;
 import net.ssehub.easy.instantiation.core.model.vilTypes.configuration.Configuration;
 import net.ssehub.easy.instantiation.maven.Registration;
@@ -329,8 +328,9 @@ public class RealTests extends AbstractScenarioTest {
      */
     @Test
     public void testSvncontrol() throws IOException {
-        if (JavaUtilities.isJava9()) {
-            System.out.println("Warning: SvnControl test is deactivated on Java 9");
+        String msg = net.ssehub.easy.instantiation.aspectj.Registration.checkEnvironment();
+        if (null != msg) {
+            System.out.println("Warning: " + msg);
         } else {
             String[] versions = {"0", "0"};
             testSvncontrol(versions);
