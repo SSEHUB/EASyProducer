@@ -476,7 +476,7 @@ public class Resolver {
      * @param var the instance of <tt>decl</tt> (may be <b>null</b> for type-based translation).
      * @param cAcc if variable is a nested compound.
      */
-    protected void translateDeclaration(AbstractVariable decl, IDecisionVariable var, ConstraintSyntaxTree cAcc) {
+    private void translateDeclaration(AbstractVariable decl, IDecisionVariable var, ConstraintSyntaxTree cAcc) {
         variablesCounter++;
         IDatatype type = decl.getType();
         ConstraintSyntaxTree defaultValue = decl.getDefaultValue();
