@@ -60,6 +60,7 @@ public class ExecutionTests extends AbstractExecutionTest<Script> {
     public void testAspectJ() throws IOException {
         int[] expectedErrors = null;
         if (JavaUtilities.isJava9()) {
+            System.out.println("Warning: AspectJ is currently not available for Java 9.");
             expectedErrors = new int[] {VilException.ID_EXECUTION_ERROR};
         }
         assertSelfInstantiate("aspectj", expectedErrors);
