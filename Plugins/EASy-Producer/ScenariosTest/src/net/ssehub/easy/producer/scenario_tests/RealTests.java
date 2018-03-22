@@ -265,6 +265,7 @@ public class RealTests extends AbstractScenarioTest {
         File base = executeCase("New_Product", versions, "elevator/", "PL_SimElevator", true);
         
         JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
+        Assert.assertNotNull("No JDK compiler, are you running JRE?", compiler);
         StandardJavaFileManager fileManager = compiler.getStandardFileManager(null, null, null);
         List<File> files = new ArrayList<File>();
         enumerateJavaFiles(new File(base, "src"), files);
