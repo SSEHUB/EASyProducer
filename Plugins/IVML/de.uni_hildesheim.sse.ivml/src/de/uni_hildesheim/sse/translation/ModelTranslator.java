@@ -115,6 +115,7 @@ public class ModelTranslator extends net.ssehub.easy.dslCore.translation.ModelTr
     private Map<TypedefMapping, DerivedDatatype> typedefMapping = new HashMap<TypedefMapping, DerivedDatatype>();
     
     private Set<EObject> definitionsProcessed = new HashSet<EObject>();
+    private DerivedTypeMetaCompoundAccessVisitor derivedTypeVisitor = new DerivedTypeMetaCompoundAccessVisitor(this);
     private IModelProcessingListener<Project> onLoadMsgCleanupListener = new IModelProcessingListener<Project>() {
 
         @Override
@@ -602,8 +603,12 @@ public class ModelTranslator extends net.ssehub.easy.dslCore.translation.ModelTr
                 if (null != expression) {
                     Constraint[] constraints = new Constraint[1];
                     constraints[0] = new Constraint(type);
-                    constraints[0].setConsSyntax(expressionTranslator.processExpression(expression, context,
-                        constraints[0]));
+                    ConstraintSyntaxTree cst = expressionTranslator.processExpression(expression, context,
+                        constraints[0]);
+                    constraints[0].setConsSyntax(cst);
+                    derivedTypeVisitor.setContext(mapping, IvmlPackage.Literals.TYPEDEF_MAPPING__CONSTRAINT);
+                    cst.accept(derivedTypeVisitor);
+                    derivedTypeVisitor.clear();
                     type.setConstraints(constraints);
                 }
             } catch (IvmlException e) {

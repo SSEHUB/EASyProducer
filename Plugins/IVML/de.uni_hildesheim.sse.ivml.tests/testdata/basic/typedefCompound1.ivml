@@ -1,0 +1,9 @@
+project testTypedefCompound1 {
+
+    version v0;
+    compound AbstractComponent {
+        Integer i;
+    }
+
+    typedef ComponentSelection AbstractComponent with (ComponentSelection.i > 0);
+}

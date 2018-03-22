@@ -391,6 +391,27 @@ public class BasicTests extends AbstractTest {
     }
 
     /**
+     * Tests custom typedefs.
+     * 
+     * @throws IOException should not occur
+     */
+    @Test
+    public void testTypedefCompound1() throws IOException {
+        assertEqual(createFile("typedefCompound1"), "testTypedefCompound1", "0");
+    }
+
+    /**
+     * Tests custom typedefs.
+     * 
+     * @throws IOException should not occur
+     */
+    @Test
+    public void testTypedefCompound1Fail() throws IOException {
+        assertEqual(createFile("typedefCompound1Fail"), "testTypedefCompound1Fail", "0", ErrorCodes.TYPE_CONSISTENCY);
+    }
+
+    
+    /**
      * Tests custom typedefs. (failing)
      * 
      * @throws IOException should not occur
