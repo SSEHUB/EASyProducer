@@ -3,6 +3,7 @@ package net.ssehub.easy.instantiation.aspectj;
 import org.osgi.service.component.ComponentContext;
 
 import net.ssehub.easy.instantiation.aspectj.instantiators.AspectJ;
+import net.ssehub.easy.instantiation.core.JavaUtilities;
 import net.ssehub.easy.instantiation.core.model.vilTypes.IRegistration;
 import net.ssehub.easy.instantiation.core.model.vilTypes.TypeRegistry;
 
@@ -40,6 +41,16 @@ public class Registration implements IRegistration {
      */
     protected void deactivate(ComponentContext context) {
         // this is not the official way of using DS but the official way is instable
+    }
+    
+    /**
+     * Checks whether the AspectJ instantiator will work in this environment, e.g., not
+     * due to Java 9.
+     * 
+     * @return a message if the instantiator will not work, <b>null</b> else
+     */
+    public static String checkEnvironment() {
+        return JavaUtilities.isJava9() ? "AspectJ is not available for JDK 9" : null;
     }
 
 }
