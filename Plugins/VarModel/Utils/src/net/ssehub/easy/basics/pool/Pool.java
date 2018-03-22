@@ -75,8 +75,8 @@ public class Pool <T> {
     public synchronized void releaseInstance(T instance) {
         if (null != instance) {
 /*if (PRINT) {            
-if (pool.contains(instance)) {
-    System.out.println("RET " + instance);
+if (containsByRef(instance)) {
+    System.out.println("RET " + instance+" "+System.identityHashCode(instance));
     System.out.println("ALLOC:");
     ALLOC.get(instance).printStackTrace(System.out);
     System.out.println("FREE1:");
@@ -90,10 +90,24 @@ if (pool.contains(instance)) {
     FREE.put(instance, t);
 }
 }*/
-            assert !pool.contains(instance);
+            assert !containsByRef(instance);
             manager.clear(instance);
             pool.add(instance);
         }
+    }
+
+    /**
+     * Returns whether the pool already contains <code>instance</code>.
+     * 
+     * @param instance the instance to look for (by reference)
+     * @return <code>true</code> if the reference is already there, <code>false</code> else
+     */
+    private boolean containsByRef(final T instance) {
+        boolean found = false;
+        for (int i = 0, n = pool.size(); !found && i < n; i++) {
+            found = instance == pool.get(i);
+        }
+        return found;
     }
 
 }
