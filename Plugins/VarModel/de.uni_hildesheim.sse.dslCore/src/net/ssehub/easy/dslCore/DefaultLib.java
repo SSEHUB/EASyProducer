@@ -20,6 +20,8 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.core.runtime.FileLocator;
+
 import net.ssehub.easy.basics.logger.EASyLoggerFactory;
 
 /**
@@ -170,7 +172,9 @@ public class DefaultLib {
     private static URL prepare(URL url) throws IOException {
         URL result = url;
         if (null != result) {
-            result = ModelUtility.getResourceInitializer().resolve(result);
+            // ResourceInitializer might work, but would fail in testing. As we have a dependency
+            // to org.eclipse.core.runtime, we can also directly use the FileLocator
+            result = FileLocator.resolve(result);
             url = new URL(url.toString().replaceAll(" ", "%20"));
         }
         return result;
