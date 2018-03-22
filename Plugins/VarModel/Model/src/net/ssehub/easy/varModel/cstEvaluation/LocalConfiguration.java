@@ -107,7 +107,9 @@ public class LocalConfiguration implements IConfiguration, IRestrictionEvaluatio
                         if (TypeQueries.sameTypes(type, varType)) {
                             ReferenceValue ref = (ReferenceValue) var.getValue();
                             if (null != ref) {
-                                result = context.getDecision(ref.getValue()).getValue();
+                                IDecisionVariable refVar = context.getDecision(ref.getValue());
+                                // refVar may be null if compound value is stated in container initializer
+                                result = null == refVar ? null : refVar.getValue();
                                 break;
                             }
                         } 
