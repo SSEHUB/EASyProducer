@@ -5,6 +5,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.PrintStream;
 
+import de.uni_hildesheim.sse.easy.loader.ListLoader;
 import net.ssehub.easy.basics.logger.EASyLoggerFactory;
 import net.ssehub.easy.basics.logger.EASyLoggerFactory.EASyLogger;
 import net.ssehub.easy.basics.modelManagement.ModelManagementException;
@@ -29,20 +30,22 @@ public class CommandLineExecuter {
      */
     public static void main(String[] args) {
         try {
-            LowlevelCommands.startEASy();
-        } catch (IOException e1) {
-            LOGGER.exception(e1);
-        }
-        
-        
-        if (null != args && args.length > 1) {
-            if ("instantiateSelf".equals(args[0])) {
-                instantiateSelf(args);
-            } else if ("instantiate".equals(args[0])) {
-                instantiate(args);
-            } else if ("checkValidity".equals(args[0])) {
-                checkValidity(args);
+            ListLoader loader = new ListLoader();
+            //loader.setVerbose(true);
+            loader.startup();
+
+            if (null != args && args.length > 1) {
+                if ("instantiateSelf".equals(args[0])) {
+                    instantiateSelf(args);
+                } else if ("instantiate".equals(args[0])) {
+                    instantiate(args);
+                } else if ("checkValidity".equals(args[0])) {
+                    checkValidity(args);
+                }
             }
+            loader.shutdown();
+        } catch (IOException e) {
+            LOGGER.exception(e);
         }
     }
 
