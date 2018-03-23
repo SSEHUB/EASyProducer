@@ -22,6 +22,9 @@ import org.junit.Before;
 import org.junit.Test;
 
 import net.ssehub.easy.basics.modelManagement.ModelManagementException;
+import net.ssehub.easy.basics.progress.ProgressObserver;
+import net.ssehub.easy.producer.core.persistence.PersistenceUtils;
+import net.ssehub.easy.producer.core.persistence.standard.Persistencer;
 
 /**
  * Tests that cannot be executed on Jenkins by now.
@@ -38,6 +41,7 @@ public class LocalConceptsTests extends ConceptsTests {
     @Before
     public void startup() throws ModelManagementException {
         super.startup();
+        PersistenceUtils.loadDefaultModels(Persistencer.class.getClassLoader(), ProgressObserver.NO_OBSERVER, null);
     }
 
     /**

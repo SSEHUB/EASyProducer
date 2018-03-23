@@ -759,7 +759,15 @@ public class PersistenceUtils {
         if (!defaultModelsLoaded) {
             defaultModelsLoaded = true;
             List<URL> libs = new ArrayList<URL>();
-            DefaultLib.appendQuietly(libs, loader.getResource("defaultLib")); // ignores null
+            URL dfltUrl = null;
+            try { // constant is bad, currently no better way
+                dfltUrl = DefaultLib.findDefaultLibURL(loader, "de.uni_hildesheim.sse.EASy-Producer.persistence");
+            } catch (IOException e) {
+                EASyLoggerFactory.INSTANCE.getLogger(PersistenceUtils.class, Activator.PLUGIN_ID).error(
+                    "While retrieving fallback libary URL: " + e.getMessage());
+            }
+                
+            DefaultLib.appendQuietly(libs, dfltUrl); // ignores null
             DefaultLib.appendAll(libs);
             int count = 0;
             for (URL url : libs) { // all shall be different from null by construction

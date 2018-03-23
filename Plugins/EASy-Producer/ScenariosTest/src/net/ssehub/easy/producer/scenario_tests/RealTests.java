@@ -27,6 +27,7 @@ import net.ssehub.easy.basics.progress.ProgressObserver;
 import net.ssehub.easy.instantiation.core.model.buildlangModel.Script;
 import net.ssehub.easy.instantiation.core.model.vilTypes.configuration.Configuration;
 import net.ssehub.easy.instantiation.maven.Registration;
+import net.ssehub.easy.instantiation.velocity.VelocityInstantiator;
 import net.ssehub.easy.reasoning.core.frontend.ReasonerFrontend;
 import net.ssehub.easy.reasoning.core.reasoner.Message;
 import net.ssehub.easy.reasoning.core.reasoner.ReasonerConfiguration;
@@ -67,6 +68,7 @@ public class RealTests extends AbstractScenarioTest {
         tests = new RealTests();
         tests.cleanTemp();
         Registration.register();
+        VelocityInstantiator.register();
     }
 
     /**
