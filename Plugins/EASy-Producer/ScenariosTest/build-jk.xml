@@ -29,9 +29,22 @@
 		<!-- Instantiators -->
 		<pathelement path="${libs.instantiator.core}"/>
         <pathelement path="${libs.instantiator.java}"/>
+        <fileset dir="${home.libs.ant.dir}">
+            <include name="**/*.jar" />
+        </fileset>
         <pathelement path="${libs.instantiator.ant}"/>
+        <fileset dir="${home.libs.aspectj.dir}">
+            <include name="**/*.jar" />
+        </fileset>
         <pathelement path="${libs.instantiator.aspectj}"/>
+        <fileset dir="${home.libs.maven.dir}">
+            <include name="**/*.jar" />
+        </fileset>
 	    <pathelement path="${libs.instantiator.maven}"/>
+        <fileset dir="${home.libs.velocity.dir}">
+            <include name="**/*.jar" />
+        </fileset>
+		<pathelement path="${libs.instantiator.velocity}"/>
 		
         <!-- EASy-Producer -->
         <pathelement path="${libs.easy.persistence}"/>
