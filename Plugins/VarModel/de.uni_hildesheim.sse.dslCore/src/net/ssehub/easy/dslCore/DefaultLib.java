@@ -15,6 +15,7 @@
  */
 package net.ssehub.easy.dslCore;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -33,6 +34,11 @@ import net.ssehub.easy.basics.logger.EASyLoggerFactory;
  * @author Holger Eichelberger
  */
 public class DefaultLib {
+    
+    /**
+     * The usual name of the default lib folder.
+     */
+    public static final String DEFAULT_LIB_FOLDER_NAME = "defaultLib";
 
     private static List<URL> urls = new ArrayList<URL>();
 
@@ -179,5 +185,100 @@ public class DefaultLib {
         }
         return result;
     }
-    
+
+    /**
+     * Tries to find the default lib URL. The first pass uses the class loader. If this fails, we use 
+     * {@link #findFallbackLibFolder(String, String)}, which searches for <code>parentFolder</code> 
+     * containing {@link #DEFAULT_LIB_FOLDER_NAME} starting at the current folder walking up to the root
+     * folder. This complicated approach may be needed in standalon/CI testing.
+     * 
+     * @param loader the class loader for holding the default lib
+     * @param parentFolderName name of the parent folder,
+     * @return the default lib URL or <b>null</b>
+     * @throws IOException in case of I/O problems or problems constructing the result URL
+     * @see #findDefaultLibURL(ClassLoader, String, String)
+     */
+    public static URL findDefaultLibURL(ClassLoader loader, String parentFolderName) throws IOException {
+        return findDefaultLibURL(loader, parentFolderName, DEFAULT_LIB_FOLDER_NAME);
+    }
+
+    /**
+     * Tries to find the default lib URL. The first pass uses the class loader. If this fails, we use 
+     * {@link #findFallbackLibFolder(String, String)}, which searches for <code>parentFolder</code> 
+     * containing <code>defaultLibFolderName</code> starting at the current folder walking up to the root
+     * folder. This complicated approach may be needed in standalon/CI testing.
+     * 
+     * @param loader the class loader for holding the default lib
+     * @param parentFolderName name of the parent folder,
+     * @param defaultLibFolderName name of the contained default lib folder
+     * @return the default lib URL or <b>null</b>
+     * @throws IOException in case of I/O problems or problems constructing the result URL
+     */
+    public static URL findDefaultLibURL(ClassLoader loader, String parentFolderName, 
+        String defaultLibFolderName) throws IOException {
+        URL dfltUrl = loader.getResource(defaultLibFolderName);
+        if (null == dfltUrl) { // fallback if unpacked / in standalone jUnit testing
+            File f = findFallbackLibFolder(parentFolderName, defaultLibFolderName);
+            if (null != f) {
+                dfltUrl = f.getAbsoluteFile().toURI().toURL();
+            }
+        }
+        return dfltUrl;
+    }
+
+    /**
+     * Tries to Find a fallback in the actual folder or its recursive (for Jenkins) parent folders.
+     * 
+     * @param parentFolderName name of the parent folder,
+     * @param defaultLibFolderName name of the contained default lib folder
+     * @return the fallback folder or <b>null</b> if there is none
+     */
+    public static File findFallbackLibFolder(String parentFolderName, String defaultLibFolderName) {
+        File result = new File(defaultLibFolderName).getAbsoluteFile();
+        if (!result.exists()) {
+            result = null;
+            File f = new File(".").getAbsoluteFile();
+            do {
+                if (null != f) {
+                    f = f.getParentFile();
+                    result = findFallbackLibFolder(f, parentFolderName, defaultLibFolderName);
+                }
+            } while (null != f && null == result);
+        }
+        return result;
+    }
+
+    /**
+     * Finds a fallback in <code>file</code> or its recursive (for Jenkins) parent folders.
+     * 
+     * @param file the file/folder to search
+     * @param folderName the folder name to search for, <b>null</b> to search for <code>defaultLibFolderName</code> 
+     *     (second pass)
+     * @param defaultLibFolderName the default lib folder name
+     * @return the fallback folder or <b>null</b> if the is none
+     */
+    private static File findFallbackLibFolder(File file, String folderName, String defaultLibFolderName) {
+        File result = null;
+        File[] files = null == file ? null : file.listFiles();
+        if (null != files) {
+            for (int i = 0; null == result && i < files.length; i++) {
+                if (files[i].isDirectory()) {
+                    String fName = files[i].getName();
+                    if (null == folderName) {
+                        if (defaultLibFolderName.equals(fName)) {
+                            result = files[i];
+                        }
+                    } else {
+                        if (folderName.equals(files[i].getName())) {
+                            result = findFallbackLibFolder(files[i], null, defaultLibFolderName);
+                        } else {
+                            result = findFallbackLibFolder(files[i], folderName, defaultLibFolderName);
+                        }                            
+                    }
+                }
+            }
+        }
+        return result;
+    }
+
 }
