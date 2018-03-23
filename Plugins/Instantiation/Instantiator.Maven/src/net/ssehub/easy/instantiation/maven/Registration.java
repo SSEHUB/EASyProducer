@@ -15,8 +15,11 @@
  */
 package net.ssehub.easy.instantiation.maven;
 
+import java.io.IOException;
+
 import org.osgi.service.component.ComponentContext;
 
+import net.ssehub.easy.basics.logger.EASyLoggerFactory;
 import net.ssehub.easy.dslCore.DefaultLib;
 import net.ssehub.easy.instantiation.core.model.vilTypes.IRegistration;
 import net.ssehub.easy.instantiation.core.model.vilTypes.TypeRegistry;
@@ -37,7 +40,12 @@ public class Registration implements IRegistration {
         if (!registered) {
             registered = true;
             TypeRegistry.DEFAULT.register(Maven.class);
-            DefaultLib.appendURLQuietly(Registration.class.getClassLoader().getResource("defaultLib"));
+            try {
+                DefaultLib.appendURLQuietly(DefaultLib.findDefaultLibURL(Registration.class.getClassLoader(), 
+                     "Instantiator.Maven"));
+            } catch (IOException e) {
+                EASyLoggerFactory.INSTANCE.getLogger(Registration.class, Activator.BUNDLE_ID).error(e.getMessage());
+            }
         }
     }
     
