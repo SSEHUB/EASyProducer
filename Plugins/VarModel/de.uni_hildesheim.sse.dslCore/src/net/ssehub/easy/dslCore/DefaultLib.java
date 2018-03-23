@@ -180,7 +180,11 @@ public class DefaultLib {
         if (null != result) {
             // ResourceInitializer might work, but would fail in testing. As we have a dependency
             // to org.eclipse.core.runtime, we can also directly use the FileLocator
-            result = FileLocator.resolve(result);
+            try {
+                result = FileLocator.resolve(result);
+            } catch (NullPointerException e) {
+                // may occur when running outside eclipse, e.g., in test cases
+            }
             url = new URL(url.toString().replaceAll(" ", "%20"));
         }
         return result;
