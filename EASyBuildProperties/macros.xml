@@ -180,5 +180,21 @@
           <delete dir="__tmp__"/>
       </sequential>
    </macrodef>
+	
+    <!-- remove path/pattern from zip -->
+    <macrodef name="delFromZipPattern">
+      <attribute name="zip"/>
+      <attribute name="includes"/>
+      <sequential>
+          <mkdir dir="__tmp__"/>
+          <unzip dest="__tmp__" src="@{zip}"/>
+          <delete file="@{zip}"/>
+          <delete>
+             <fileset dir="__tmp__" includes="@{includes}"/>
+          </delete>
+          <zip destfile="@{zip}" basedir="__tmp__"/>
+          <delete dir="__tmp__"/>
+      </sequential>
+   </macrodef>
       
 </project>
