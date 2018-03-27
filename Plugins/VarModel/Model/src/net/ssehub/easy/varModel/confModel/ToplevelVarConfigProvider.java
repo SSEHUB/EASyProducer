@@ -20,6 +20,7 @@ import net.ssehub.easy.basics.logger.EASyLoggerFactory.EASyLogger;
 import net.ssehub.easy.varModel.Bundle;
 import net.ssehub.easy.varModel.model.AbstractVariable;
 import net.ssehub.easy.varModel.model.DecisionVariableDeclaration;
+import net.ssehub.easy.varModel.model.IvmlDatatypeVisitor;
 import net.ssehub.easy.varModel.model.datatypes.Compound;
 import net.ssehub.easy.varModel.model.datatypes.Container;
 import net.ssehub.easy.varModel.model.datatypes.DerivedDatatype;
@@ -141,11 +142,10 @@ class ToplevelVarConfigProvider extends VariableConfigProvider {
         if (null != value) {
             if (!getDeclaration().getType().isAssignableFrom(value.getType())) {
                 throw new ConfigurationException(getConfiguration(), "type '"
-                    + getDeclaration().getType().getName() 
-                    + "' of variable declaration '"
-                    + getDeclaration().getName()
-                    + "'do not match type of value '"
-                    + value.getType().getName() + "'", ConfigurationException.TYPE_MISMATCH);
+                    + IvmlDatatypeVisitor.getQualifiedType(getDeclaration().getType()) 
+                    + "' of variable declaration '" + getDeclaration().getName()
+                    + "' does not match type of value '" + IvmlDatatypeVisitor.getQualifiedType(value.getType()) + "'", 
+                    ConfigurationException.TYPE_MISMATCH);
             }
             /*
              * Avoid deletion of already configured nested values.
