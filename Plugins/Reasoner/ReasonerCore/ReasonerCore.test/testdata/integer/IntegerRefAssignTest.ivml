@@ -1,0 +1,14 @@
+project IntegerRefAssignTest {
+
+    Integer t;
+    Integer f;
+
+    refTo(Integer) tr = refBy(t);
+    refTo(Integer) fr = refBy(f);
+    
+    tr = 1;
+    fr = 2;
+
+    t == 2;
+    f == 1;
+}

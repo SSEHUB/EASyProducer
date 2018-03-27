@@ -1,0 +1,14 @@
+project StringRefAssignTest {
+
+    String t;
+    String f;
+
+    refTo(String) tr = refBy(t);
+    refTo(String) fr = refBy(f);
+    
+    tr = "abba";
+    fr = "babba";
+
+    t == "babba";
+    f == "abba";
+}

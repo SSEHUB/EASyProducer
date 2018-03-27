@@ -1,0 +1,15 @@
+project OrderedEnumRefAssignTest {
+
+    enum MyEnum {val1=1, val2=2, val3=3};
+    MyEnum t;
+    MyEnum f;
+
+    refTo(MyEnum) tr = refBy(t);
+    refTo(MyEnum) fr = refBy(f);
+    
+    tr = MyEnum.val1;
+    fr = MyEnum.val2;
+
+    t == MyEnum.val2;
+    f == MyEnum.val1;
+}

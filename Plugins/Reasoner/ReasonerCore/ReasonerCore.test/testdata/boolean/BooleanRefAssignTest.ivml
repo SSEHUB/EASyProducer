@@ -1,0 +1,14 @@
+project BooleanRefAssignTest {
+
+    Boolean t;
+    Boolean f;
+
+    refTo(Boolean) tr = refBy(t);
+    refTo(Boolean) fr = refBy(f);
+    
+    tr = true;
+    fr = false;
+
+    t == false;
+    f == true;
+}

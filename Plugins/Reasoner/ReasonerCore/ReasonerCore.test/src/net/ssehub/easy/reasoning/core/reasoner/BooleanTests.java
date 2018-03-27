@@ -110,4 +110,12 @@ public class BooleanTests extends AbstractTest {
         reasoningTest("BooleanInCollectionAssignTest.ivml", 2);
     } 
 
+    /**
+     * Boolean reference assign test.
+     */
+    @Test
+    public void booleanReferenceAssignTest() {
+        reasoningTest("BooleanRefAssignTest.ivml", 2);
+    } 
+
 }

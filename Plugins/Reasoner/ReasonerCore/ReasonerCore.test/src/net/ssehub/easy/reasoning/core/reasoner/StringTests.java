@@ -84,4 +84,12 @@ public class StringTests extends AbstractTest {
         reasoningTest("StringInCollectionAssignTest.ivml", 2);
     } 
 
+    /**
+     * String reference assign test.
+     */
+    @Test
+    public void stringReferenceAssignTest() {
+        reasoningTest("stringRefAssignTest.ivml", 2);
+    } 
+
 }

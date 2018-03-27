@@ -84,4 +84,12 @@ public class RealTests extends AbstractTest {
         reasoningTest("RealInCollectionAssignTest.ivml", 2);
     } 
 
+    /**
+     * Real reference assign test.
+     */
+    @Test
+    public void realReferenceAssignTest() {
+        reasoningTest("RealRefAssignTest.ivml", 0);
+    } 
+
 }

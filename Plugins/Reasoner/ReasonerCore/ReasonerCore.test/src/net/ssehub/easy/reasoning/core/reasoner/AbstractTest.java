@@ -107,8 +107,8 @@ public abstract class AbstractTest extends net.ssehub.easy.dslCore.test.Abstract
 
         // Perform reasoning
         IReasoner reasoner = descriptor.createReasoner();
-        resultHandler(expectedFailedConstraints, reasoner.propagate(projectP1, config, 
-            rConfig, ProgressObserver.NO_OBSERVER));
+        ReasoningResult rResult = reasoner.propagate(projectP1, config, rConfig, ProgressObserver.NO_OBSERVER);
+        resultHandler(expectedFailedConstraints, rResult);
         return config;
     }
     

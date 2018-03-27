@@ -84,4 +84,12 @@ public class IntegerTests extends AbstractTest {
         reasoningTest("IntegerInCollectionAssignTest.ivml", 2);
     } 
 
+    /**
+     * Integer reference assign test.
+     */
+    @Test
+    public void integerReferenceAssignTest() {
+        reasoningTest("IntegerRefAssignTest.ivml", 2);
+    } 
+
 }

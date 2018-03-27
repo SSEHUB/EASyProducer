@@ -1,0 +1,14 @@
+project RealRefAssignTest {
+
+    Real t;
+    Real f;
+
+    refTo(Real) tr = refBy(t);
+    refTo(Real) fr = refBy(f);
+    
+    tr = 1.0;
+    fr = 5.0;
+
+    t < 2.0;
+    f > 3.0;
+}
