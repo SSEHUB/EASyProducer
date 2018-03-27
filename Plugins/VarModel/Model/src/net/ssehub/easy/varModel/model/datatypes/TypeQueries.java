@@ -109,6 +109,16 @@ public class TypeQueries {
     public static boolean isEnum(IDatatype type) {
         return Enum.TYPE.isAssignableFrom(type);
     }
+
+    /**
+     * Returns whether <code>type</code> is a reference.
+     * 
+     * @param type the type to check
+     * @return <code>true</code> if <code>type</code> is a reference, <code>false</code> else
+     */
+    public static boolean isReference(IDatatype type) {
+        return Reference.TYPE.isAssignableFrom(type);
+    }
     
     /**
      * Returns whether <code>type</code> is a constraint (in the sense of a constraint variable).
