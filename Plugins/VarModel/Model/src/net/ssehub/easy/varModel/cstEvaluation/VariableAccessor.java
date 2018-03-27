@@ -140,7 +140,7 @@ class VariableAccessor extends AbstractDecisionVariableEvaluationAccessor {
                         : context.getTargetState(variable);
                     if (null != targetState) {
                         try {
-                            variable.setValue(value, targetState, asAssignment);
+                            dereferenceIfNeeded(variable, value).setValue(value, targetState, asAssignment);
                             successful = true;
                             notifyVariableChange(oldValue);
                         } catch (ConfigurationException e) {

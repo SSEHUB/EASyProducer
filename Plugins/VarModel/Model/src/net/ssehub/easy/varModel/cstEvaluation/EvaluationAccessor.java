@@ -16,7 +16,9 @@
 package net.ssehub.easy.varModel.cstEvaluation;
 
 import net.ssehub.easy.varModel.confModel.AssignmentState;
+import net.ssehub.easy.varModel.confModel.Configuration;
 import net.ssehub.easy.varModel.confModel.IDecisionVariable;
+import net.ssehub.easy.varModel.model.datatypes.TypeQueries;
 import net.ssehub.easy.varModel.model.values.Value;
 
 /**
@@ -167,6 +169,22 @@ public abstract class EvaluationAccessor {
         if (null == this.context) {
             this.context = context;
         }
+    }
+
+    /**
+     * Dereferences <code>variable</code> if of reference type and <code>value</code> is not of reference type.
+     * 
+     * @param variable the variable
+     * @param value the value to consider
+     * @return <code>variable</code> or the dereferenced variable
+     */
+    protected IDecisionVariable dereferenceIfNeeded(IDecisionVariable variable, Value value) {
+        IDecisionVariable v = variable;
+        if (TypeQueries.isReference(variable.getDeclaration().getType()) 
+            && !TypeQueries.isReference(value.getType())) {
+            v = Configuration.dereference(v);
+        }
+        return v;
     }
 
 }
