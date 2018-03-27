@@ -146,6 +146,17 @@ public class Attribute extends AbstractVariable {
         }*/
         return hashCode;
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        boolean result;
+        if (obj instanceof Attribute) {
+            result = super.equals(obj) && getElement().equals(((Attribute) obj).getElement());
+        } else {
+            result = false;
+        }
+        return result;
+    }
     
     /**
      * Returns a textual representation of this element.
