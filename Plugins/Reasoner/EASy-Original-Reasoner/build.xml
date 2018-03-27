@@ -85,11 +85,9 @@
             <structure name="${ant.project.name}">
                 <classfiles>
                     <fileset dir="${home.sseReasoner.dir}/${build.jar.dir}/" includes="**/*.jar" />
-                    <fileset dir="${home.sseReasoner.test.dir}/${build.jar.dir}/" includes="**/*.jar" />
                 </classfiles>
                 <sourcefiles encoding="UTF-8">
                     <fileset dir="${home.sseReasoner.dir}/src" />
-                    <fileset dir="${home.sseReasoner.test.dir}/test" />
                 </sourcefiles>
             </structure>
                                 
