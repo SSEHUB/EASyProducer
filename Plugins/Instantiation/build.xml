@@ -369,10 +369,10 @@
             <structure name="${ant.project.name}">
                 <group name="Parsers">
                     <classfiles>
-                        <fileset dir="${home.vil.expressions.core.dir}/${build.jar.dir}/" includes="**/*.jar" />
-                        <fileset dir="${home.vil.core.dir}/${build.jar.dir}/" includes="**/*.jar" />
-                        <fileset dir="${home.vil.tests.dir}/${build.jar.dir}/" includes="**/*.jar" />
-                        <fileset dir="${home.template.core.dir}/${build.jar.dir}/" includes="**/*.jar" />
+                        <fileset dir="${home.vil.expressions.core.dir}/${build.classes.dir}/" includes="**/*.class" />
+                        <fileset dir="${home.vil.core.dir}/${build.classes.dir}/" includes="**/*.class" />
+                        <fileset dir="${home.vil.tests.dir}/${build.classes.dir}/" includes="**/*.class" />
+                        <fileset dir="${home.template.core.dir}/${build.classes.dir}/" includes="**/*.class" />
                     </classfiles>
                     <sourcefiles encoding="UTF-8">
                         <fileset dir="${home.vil.expressions.core.dir}/src/" />
@@ -389,8 +389,8 @@
                 </group>
                 <group name="Model">
                     <classfiles>
-                        <fileset dir="${home.instantiatorCore.dir}/${build.jar.dir}/" includes="**/*.jar" />
-                        <fileset dir="${home.instantiatorCore.rt.dir}/${build.jar.dir}/" includes="**/*.jar" />
+                        <fileset dir="${home.instantiatorCore.dir}/${build.classes.dir}/" includes="**/*.class" />
+                        <fileset dir="${home.instantiatorCore.rt.dir}/${build.classes.dir}/" includes="**/*.class" />
                     </classfiles>
                     <sourcefiles encoding="UTF-8">
                         <fileset dir="${home.instantiatorCore.dir}/src/" />
