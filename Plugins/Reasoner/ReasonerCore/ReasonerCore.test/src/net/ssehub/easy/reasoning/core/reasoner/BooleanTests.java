@@ -5,7 +5,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 /**
- * Configures the boolean tests for SSE reasoner.
+ * Defines the boolean tests.
  * 
  * @author Sizonenko
  * @author El-Sharkawy

@@ -1,0 +1,16 @@
+project CompoundRefAssignTest1 {
+
+    compound MyComp {
+        Integer t;
+        Integer f;
+        refTo(Integer) tr = refBy(t);
+        refTo(Integer) fr = refBy(f);
+    }
+
+    MyComp c;
+    c.tr = 1;
+    c.fr = 2;
+
+    c.t == 2;
+    c.f == 1;
+}
