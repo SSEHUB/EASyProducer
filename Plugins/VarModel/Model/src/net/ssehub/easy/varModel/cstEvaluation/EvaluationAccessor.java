@@ -183,6 +183,9 @@ public abstract class EvaluationAccessor {
         if (TypeQueries.isReference(variable.getDeclaration().getType()) 
             && !TypeQueries.isReference(value.getType())) {
             v = Configuration.dereference(v);
+            if (null == v) { // just a fallback, shall not happen
+                v = variable;
+            }
         }
         return v;
     }

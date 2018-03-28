@@ -126,7 +126,7 @@ class CompoundSlotAccessor extends AbstractDecisionVariableEvaluationAccessor {
                     IAssignmentState targetState = context.getTargetState(slotVariable);
                     if (null != targetState) {
                         try {
-                            slotVariable.setValue(value, targetState, asAssignment);
+                            dereferenceIfNeeded(slotVariable, value).setValue(value, targetState, asAssignment);
                             successful = true;
                             notifyVariableChange(oldValue);
                         } catch (ConfigurationException e) {

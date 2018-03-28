@@ -727,14 +727,24 @@ public class Configuration implements IConfigurationVisitable, IProjectListener,
      */
     public static IDecisionVariable dereference(IDecisionVariable var) {
         if (null != var) {
-            IDatatype type = var.getDeclaration().getType();
+            AbstractVariable varDecl = var.getDeclaration();
+            IDatatype type = varDecl.getType();
             while (type instanceof Reference) {
                 type = ((Reference) type).getType();
                 Value value = var.getValue();
                 if (null != value && value != NullValue.INSTANCE) {
                     AbstractVariable refDecl = ((ReferenceValue) var.getValue()).getValue();
                     if (null != refDecl) {
-                        var = var.getConfiguration().getDecision(refDecl);
+                        IDecisionVariable res = var.getConfiguration().getDecision(refDecl);
+                        if (null == res) {
+                            String name = refDecl.getName();
+                            IConfigurationElement iter = var.getParent();
+                            while (res == null && iter instanceof IDecisionVariable) {
+                                res = ((IDecisionVariable) iter).getNestedElement(name);
+                                iter = var.getParent();
+                            }
+                        }
+                        var = res;
                     } // TODO valueEx
                 } else {
                     break;
