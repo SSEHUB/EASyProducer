@@ -89,7 +89,7 @@ public class StringTests extends AbstractTest {
      */
     @Test
     public void stringReferenceAssignTest() {
-        reasoningTest("stringRefAssignTest.ivml", 2);
+        reasoningTest("StringRefAssignTest.ivml", 2);
     } 
 
 }
