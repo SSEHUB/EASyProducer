@@ -33,6 +33,7 @@ import net.ssehub.easy.varModel.cst.ConstantValue;
 import net.ssehub.easy.varModel.cst.ConstraintSyntaxTree;
 import net.ssehub.easy.varModel.cst.ContainerOperationCall;
 import net.ssehub.easy.varModel.cst.OCLFeatureCall;
+import net.ssehub.easy.varModel.cstEvaluation.EvaluationVisitor;
 import net.ssehub.easy.varModel.model.AbstractVariable;
 import net.ssehub.easy.varModel.model.Constraint;
 import net.ssehub.easy.varModel.model.DecisionVariableDeclaration;
@@ -503,4 +504,18 @@ public class ReasoningUtils {
         return result;
     }
 
+    /**
+     * Prints a constraint evaluation result (for debugging).
+     * 
+     * @param cst the constraint
+     * @param evaluator the evaluator
+     */
+    public static void printConstraintEvaluationResult(ConstraintSyntaxTree cst, EvaluationVisitor evaluator) {
+        System.out.println(StringProvider.toIvmlString(cst) + " fulfilled " + evaluator.constraintFulfilled() 
+            + " failed " + evaluator.constraintFailed());
+        for (int m = 0; m < evaluator.getMessageCount(); m++) {
+            System.out.println("  " + evaluator.getMessage(m).getDescription());
+        }
+    }
+    
 }

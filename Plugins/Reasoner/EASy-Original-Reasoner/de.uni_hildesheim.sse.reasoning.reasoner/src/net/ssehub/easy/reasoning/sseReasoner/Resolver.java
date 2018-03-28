@@ -327,6 +327,7 @@ public class Resolver {
                         + " : " + constraint.getTopLevelParent());                    
                 }
                 evaluator.visit(cst);
+                //printConstraintEvaluationResult(cst, evaluator); // just for debugging
                 analyzeEvaluationResult(constraint);
                 if (Descriptor.LOGGING) {
                     LOGGER.debug("Result: " + evaluator.getResult());

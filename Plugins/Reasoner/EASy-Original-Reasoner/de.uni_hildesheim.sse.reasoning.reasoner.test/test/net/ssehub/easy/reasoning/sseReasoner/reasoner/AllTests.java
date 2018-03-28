@@ -6,8 +6,10 @@ import org.junit.runners.Suite.SuiteClasses;
 
 /**
  * Bundling all tests.
+ * 
  * @author Sizonenko
  * @author El-Sharkawy
+ * @author Eichelberger
  */
 @RunWith(Suite.class)
 @SuiteClasses({
@@ -20,7 +22,8 @@ import org.junit.runners.Suite.SuiteClasses;
     RealTests.class, 
     StringTests.class, 
     IntegerTests.class,
-    EnumTests.class
+    EnumTests.class, 
+    CompoundTests.class
     })
 public class AllTests {
 
