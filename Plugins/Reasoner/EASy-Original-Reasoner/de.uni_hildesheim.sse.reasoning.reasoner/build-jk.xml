@@ -89,7 +89,6 @@
 			<fileset dir="${build.jar.dir}" includes="**/*.jar"/>
 		</copy>
         <!-- save space on Jenkins, just leave the jars -->
-        <delete dir="${build.classes.dir}"/>
         <delete dir="${doc.dir}"/>
     </target>
 </project>
