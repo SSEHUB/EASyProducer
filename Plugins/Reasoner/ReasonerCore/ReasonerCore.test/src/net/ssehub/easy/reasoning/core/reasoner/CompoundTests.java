@@ -64,8 +64,16 @@ public class CompoundTests extends AbstractTest {
      * Compound constraint test for a compound type/instances.
      */
     @Test
-    public void compoundCompoundConstraintTest() {
+    public void compoundConstraintTest() {
         reasoningTest("CompoundConstraintTest.ivml", 2);
+    } 
+
+    /**
+     * Compound constraint test for nested compound type/instances.
+     */
+    @Test
+    public void compoundCompoundTest() {
+        reasoningTest("CompoundCompoundTest.ivml", 2);
     } 
     
 }
