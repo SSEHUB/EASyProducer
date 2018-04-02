@@ -44,4 +44,20 @@ public class CompoundTests extends AbstractTest {
         reasoningTest("CompoundRefAssignTest1.ivml", 2);
     } 
 
+    /**
+     * Compound reference assign test for a compound type.
+     */
+    @Test
+    public void compoundReferenceAssignTest2() {
+        reasoningTest("CompoundRefAssignTest2.ivml", 2);
+    } 
+
+    /**
+     * Compound reference assign test for a compound type.
+     */
+    @Test
+    public void compoundReferenceAssignTest3() {
+        reasoningTest("CompoundRefAssignTest3.ivml", 2);
+    } 
+
 }
