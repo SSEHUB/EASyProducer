@@ -27,6 +27,7 @@ import java.util.Stack;
 import net.ssehub.easy.basics.messages.Status;
 import net.ssehub.easy.varModel.confModel.AssignmentState;
 import net.ssehub.easy.varModel.confModel.CompoundVariable;
+import net.ssehub.easy.varModel.confModel.Configuration;
 import net.ssehub.easy.varModel.confModel.ConfigurationException;
 import net.ssehub.easy.varModel.confModel.IAssignmentState;
 import net.ssehub.easy.varModel.confModel.IConfiguration;
@@ -1545,7 +1546,11 @@ public class EvaluationVisitor implements IConstraintTreeVisitor {
                     }
                     variable = null;
                 } else {
-                    variable = context.getDecision(decl);
+                    IDecisionVariable res = context.getDecision(decl);
+                    if (null == res) { // no top-top-level variable
+                        res = Configuration.findInParents(variable, decl.getName());
+                    }
+                    variable = res;
                 }
             }
             if (variable instanceof CompoundVariable) {

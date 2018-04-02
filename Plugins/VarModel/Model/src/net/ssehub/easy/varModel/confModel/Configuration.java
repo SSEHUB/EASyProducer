@@ -736,13 +736,8 @@ public class Configuration implements IConfigurationVisitable, IProjectListener,
                     AbstractVariable refDecl = ((ReferenceValue) var.getValue()).getValue();
                     if (null != refDecl) {
                         IDecisionVariable res = var.getConfiguration().getDecision(refDecl);
-                        if (null == res) {
-                            String name = refDecl.getName();
-                            IConfigurationElement iter = var.getParent();
-                            while (res == null && iter instanceof IDecisionVariable) {
-                                res = ((IDecisionVariable) iter).getNestedElement(name);
-                                iter = var.getParent();
-                            }
+                        if (null == res) { // no top-top-level variable
+                            res = findInParents(var, refDecl.getName());
                         }
                         var = res;
                     } // TODO valueEx
@@ -752,6 +747,25 @@ public class Configuration implements IConfigurationVisitable, IProjectListener,
             }
         }
         return var;
+    }
+
+    /**
+     * Finds a variable called <code>name</code> in the decision variable parents of <code>var</code>, 
+     * starting at the direct parent of <code>var</code>, thus, returning the variable with <code>name</code>
+     * of the closest enclosing scope.
+     * 
+     * @param var the variable to start at
+     * @param name the name of the variable to find
+     * @return the found variable or <b>null</b> if ther is none
+     */
+    public static IDecisionVariable findInParents(IDecisionVariable var, String name) {
+        IDecisionVariable res = null;
+        IConfigurationElement iter = var.getParent();
+        while (res == null && iter instanceof IDecisionVariable) {
+            res = ((IDecisionVariable) iter).getNestedElement(name);
+            iter = iter.getParent();
+        }
+        return res;
     }
 
     /**
