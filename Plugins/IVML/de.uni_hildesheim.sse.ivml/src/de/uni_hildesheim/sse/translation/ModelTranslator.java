@@ -553,8 +553,7 @@ public class ModelTranslator extends net.ssehub.easy.dslCore.translation.ModelTr
         if (null != assignments) {
             processAttributeAssignmentExpressions(assignments, context);
         }
-        assignmentMapping.clear();
-        // translate constraints in decision variables
+        assignmentMapping.clear(); // translate constraints in decision variables
         for (Map.Entry<VariableDeclarationPart, DecisionVariableDeclaration> entry : varMapping.entrySet()) {
             DecisionVariableDeclaration decVar = entry.getValue();
             VariableDeclarationPart part = entry.getKey();
@@ -590,9 +589,7 @@ public class ModelTranslator extends net.ssehub.easy.dslCore.translation.ModelTr
                 error(e);
             }
         }
-        varMapping.clear();
-
-        // translate constraints in typedefs
+        varMapping.clear(); // translate constraints in typedefs
         for (Map.Entry<TypedefMapping, DerivedDatatype> entry : typedefMapping.entrySet()) {
             TypedefMapping mapping = entry.getKey();
             DerivedDatatype type = entry.getValue();
@@ -619,9 +616,7 @@ public class ModelTranslator extends net.ssehub.easy.dslCore.translation.ModelTr
                 context.popLayer();
             }
         }
-        typedefMapping.clear();
-
-        // translate expressions in project
+        typedefMapping.clear(); // translate expressions in project
         if (null != exprs) {
             for (ExpressionStatement ex : exprs) {
                 try {

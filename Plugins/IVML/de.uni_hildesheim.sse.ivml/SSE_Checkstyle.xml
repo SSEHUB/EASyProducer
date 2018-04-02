@@ -219,7 +219,6 @@
       <property name="severity" value="error"/>
       <property name="caseIndent" value="0"/>
     </module>
-  </module>
   <module name="SuppressionCommentFilter">
     <property name="offCommentFormat" value="checkstyle: stop method name check"/>
     <property name="onCommentFormat" value="checkstyle: resume method name check"/>
@@ -245,14 +244,15 @@
     <property name="onCommentFormat" value="checkstyle: resume declaration order check"/>
     <property name="checkFormat" value="DeclarationOrder"/>
   </module>
-  <module name="FileLength">
+ </module>
+ <module name="FileLength">
     <property name="severity" value="error"/>
-  </module>
-  <module name="FileTabCharacter">
+ </module>
+ <module name="FileTabCharacter">
     <property name="severity" value="error"/>
-  </module>
-  <module name="JavadocPackage">
+ </module>
+ <module name="JavadocPackage">
     <property name="severity" value="error"/>
     <property name="allowLegacy" value="true"/>
-  </module>
+ </module>
 </module>

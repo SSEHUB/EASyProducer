@@ -1558,12 +1558,11 @@ public class ExpressionTranslator extends net.ssehub.easy.dslCore.translation.Ex
         TypeContext context, IModelElement parent) throws TranslatorException, CSTSemanticException, IvmlException {
         level++;
         ConstraintSyntaxTree result = null;
-        lhsType = DerivedDatatype.resolveToBasis(lhsType);
+        lhsType = Reference.dereference(DerivedDatatype.resolveToBasis(lhsType));
         IDatatype specificType = getSpecificType(lhsType, initializer, context);
         if (null != specificType) {
             lhsType = specificType;            
         } 
-        
         ExpressionListOrRange init = initializer.getInit();
         int withoutId = 0;
         int withId = 0;

@@ -1,0 +1,17 @@
+project CompoundRefAssignTest2 {
+
+    compound RefComp {
+        Integer a;
+        Integer b;
+    }
+
+    compound MyComp {
+        RefComp rc;
+        refTo(RefComp) rcr = refBy(rc);
+    }
+
+    MyComp c;
+    c.rcr = RefComp {a = 1, b = 2};
+    c.rc.a == c.rcr.b;
+    c.rc.b == c.rcr.a;
+}

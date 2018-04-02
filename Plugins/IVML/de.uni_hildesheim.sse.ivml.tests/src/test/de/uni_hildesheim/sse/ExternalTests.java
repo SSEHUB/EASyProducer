@@ -270,4 +270,14 @@ public class ExternalTests extends AbstractTest {
         assertEqual(createFile("isUnique3"), null, null);
     }
 
+    /**
+     * Tests a problem with compound initializers and references.
+     * 
+     * @throws IOException shall not occur
+     */
+    @Test
+    public void testCompoundRefAssignTest2() throws IOException {
+        assertEqual(createFile("CompoundRefAssignTest2"), null, null);
+    }
+
 }
