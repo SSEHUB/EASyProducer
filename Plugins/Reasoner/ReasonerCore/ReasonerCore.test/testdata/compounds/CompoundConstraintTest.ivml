@@ -1,0 +1,13 @@
+project CompoundConstraintTest {
+
+    compound MyComp {
+        Integer a;
+        Integer b;
+        a > b;
+    }
+
+    MyComp c1 = {a = 1, b = 0};
+    MyComp c2 = {a = 100, b = 101};
+    
+    c2.a > 100;
+}
