@@ -547,7 +547,7 @@ public class Resolver {
      */
     private void translateContainerDeclaration(AbstractVariable decl, IDecisionVariable var, IDatatype type, 
         ConstraintSyntaxTree cAcc) {
-        contexts.pushContext(decl);
+        contexts.pushContext(decl, false);
         Container declType = (Container) type;
         IDatatype dContainedType = getDeepestContainedType(declType);
         IDatatype dContainedBasisType = DerivedDatatype.resolveToBasis(dContainedType);
@@ -636,7 +636,7 @@ public class Resolver {
         ConstraintSyntaxTree cAcc, Compound type) {
         if (!contexts.alreadyProcessed(type)) {
             contexts.recordProcessed(type);
-            contexts.pushContext(decl);
+            contexts.pushContext(decl, null == variable);
             // resolve compound access first for all slots
             Variable declVar = new Variable(decl);
             registerCompoundMapping(type, cAcc, declVar, null == variable ? type : variable.getValue().getType());

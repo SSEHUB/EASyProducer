@@ -140,8 +140,10 @@ public class ContextStack {
      * 
      * @param decl the variable to register the new context with if {@link #setRegisterContexts(boolean) enabled}, 
      *     may be <b>null</b> to explicitly prevent registration
+     * @param recordProcessedTypes whether processed types indicated by {@link #recordType(IDatatype)} shall be recorded
+     *     or not (<code>false</code>)
      */
-    public void pushContext(AbstractVariable decl) {
+    public void pushContext(AbstractVariable decl, boolean recordProcessedTypes) {
         pushContext(decl, null, null, false);
     }
 
@@ -153,17 +155,17 @@ public class ContextStack {
      * @param container the container expression (may be <b>null</b>)
      * @param iterator a container iterator variable for <code>container</code>, may be <b>null</b> but only if 
      *     <code>container</code> is null
-     * @param recordProcessedType whether processed types indicated by {@link #recordType(IDatatype)} shall be recorded 
+     * @param recordProcessedTypes whether processed types indicated by {@link #recordType(IDatatype)} shall be recorded
      *     or not (<code>false</code>)
      */
     public void pushContext(AbstractVariable decl, ConstraintSyntaxTree container, 
-        DecisionVariableDeclaration iterator, boolean recordProcessedType) {
+        DecisionVariableDeclaration iterator, boolean recordProcessedTypes) {
         Context context = POOL.getInstance();
         
         // fill values
         context.container = container;
         context.iterator = iterator;
-        context.recordProcessedTypes = recordProcessedType;
+        context.recordProcessedTypes = recordProcessedTypes;
         
         if (registerContexts && null != decl) {
             currentContext.registeredContexts.put(decl, context);
