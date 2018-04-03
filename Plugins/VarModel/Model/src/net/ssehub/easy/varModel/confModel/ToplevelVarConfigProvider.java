@@ -221,20 +221,22 @@ class ToplevelVarConfigProvider extends VariableConfigProvider {
             CompoundVariable cmpVar = (CompoundVariable) relatedVariable;
             Value nestedValue = newValue.getNestedValue(slotName);
             IDecisionVariable var = cmpVar.getNestedVariable(slotName);
-            LOGGER.info("VAR: " + var + " STATE: " + var.getState());
-            IAssignmentState nestedState = var.getState();
-            // Use new state only iff old state is not USER_ASSIGNED
-            if (nestedState != AssignmentState.USER_ASSIGNED) {
-                nestedState = state;
-            }
-            if (allowDeletation) {
-                if (nestedValue == null) {
-                    var.setValue(nestedValue, AssignmentState.UNDEFINED);
-                } else {
+            if (null != var) { // in case of nested recursive types
+                LOGGER.info("VAR: " + var + " STATE: " + var.getState());
+                IAssignmentState nestedState = var.getState();
+                // Use new state only iff old state is not USER_ASSIGNED
+                if (nestedState != AssignmentState.USER_ASSIGNED) {
+                    nestedState = state;
+                }
+                if (allowDeletation) {
+                    if (nestedValue == null) {
+                        var.setValue(nestedValue, AssignmentState.UNDEFINED);
+                    } else {
+                        var.setValue(nestedValue, nestedState);
+                    }
+                } else if (null != nestedValue && null != var) {
                     var.setValue(nestedValue, nestedState);
                 }
-            } else if (null != nestedValue && null != var) {
-                var.setValue(nestedValue, nestedState);
             }
         }
         value = newValue;

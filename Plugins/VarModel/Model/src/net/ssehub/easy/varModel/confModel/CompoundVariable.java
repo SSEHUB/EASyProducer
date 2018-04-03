@@ -22,6 +22,8 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Set;
 
+import net.ssehub.easy.basics.logger.EASyLoggerFactory;
+import net.ssehub.easy.basics.logger.EASyLoggerFactory.EASyLogger;
 import net.ssehub.easy.varModel.Bundle;
 import net.ssehub.easy.varModel.confModel.paths.IResolutionPathElement;
 import net.ssehub.easy.varModel.confModel.paths.NameAccessPathElement;
@@ -99,7 +101,7 @@ public class CompoundVariable extends StructuredVariable {
         }
         
         for (int i = 0; i < instantiatableType.getInheritedElementCount(); i++) {
-            createNestedElement(instantiatableType.getInheritedElement(i), isVisible, isAttribute);
+            createNestedElement(instantiatableType.getInheritedElement(i), isVisible, isAttribute, false);
         }
 
         // Dirty: Initialize "static" assign blocks for newly created nested variable
@@ -198,21 +200,41 @@ public class CompoundVariable extends StructuredVariable {
 //    }
 
     /**
-     * Creates a nested element due to its declaration.
+     * Returns whether <code>slot</code> has a directly recursive type (same or somehow refined) to the containing type.
+     * 
+     * @param slot the slot to look for
+     * @return <code>true</code> in case of a directly recursive type, <code>false</code> else
+     */
+    private boolean isDirectTypeRecursive(AbstractVariable slot) {
+        IDatatype myType = getDeclaration().getType();
+        IDatatype slotType = slot.getType();
+        return Compound.TYPE.isAssignableFrom(myType) 
+            && (myType.isAssignableFrom(slotType) || slotType.isAssignableFrom(myType));
+    }
+
+    /**
+     * Creates a nested element due to its declaration and registers it.
      * 
      * @param decl the variable declaration
      * @param isVisible specifies whether the parent variable is exported by an interface or not
      * @param isAttribute whether this variable represents (a part of) an attribute or a variable
+     * @param force enforce creation of nested element even if {@link #isDirectTypeRecursive(AbstractVariable)}
+     * @return the created variable, <b>null</b> if creation did not happen or failed (see log)
      */
-    private void createNestedElement(AbstractVariable decl, boolean isVisible, boolean isAttribute) {
-        VariableCreator creator = new VariableCreator(decl, this, isVisible, isAttribute);
-        try {
-            IDecisionVariable nestedVar = creator.getVariable(false);
-            nestedElements.put(decl.getName(), nestedVar);
-        } catch (ConfigurationException e) {
-            // Should not occur
-            e.printStackTrace();
+    private IDecisionVariable createNestedElement(AbstractVariable decl, boolean isVisible, boolean isAttribute, 
+        boolean force) {
+        IDecisionVariable nestedVar = null;
+        if (force || !isDirectTypeRecursive(decl)) { // stack overflow if we do not check, defer to setValue
+            VariableCreator creator = new VariableCreator(decl, this, isVisible, isAttribute);
+            try {
+                nestedVar = creator.getVariable(false);
+                nestedElements.put(decl.getName(), nestedVar);
+            } catch (ConfigurationException e) {
+                // Should not occur
+                getLogger().exception(e);
+            }
         }
+        return nestedVar;
     }
     
     @Override
@@ -253,6 +275,9 @@ public class CompoundVariable extends StructuredVariable {
     public void setValue(Value value, IAssignmentState state, IConfigurationElement nested)
         throws ConfigurationException {
         IDecisionVariable nestedVar = getNestedVariable(nested.getDeclaration().getName());
+        if (null == nestedVar) { // may be due to recursive types
+            nestedVar = createNestedElement(nested.getDeclaration(), isVisible(), isAttribute(), true);
+        }
         nestedVar.setValue(value, state);        
     }
     
@@ -277,12 +302,11 @@ public class CompoundVariable extends StructuredVariable {
                     AbstractVariable nestedItem = vType.getInheritedElement(i);
                     String name = nestedItem.getName();
                     if (!nestedElements.containsKey(name)) { // may already exist as assigned before
-                        VariableCreator creator = new VariableCreator(nestedItem, this, isVisible(), false);
+                        VariableCreator creator = new VariableCreator(nestedItem, this, isVisible(), isAttribute());
                         try {
                             nestedElements.put(name, creator.getVariable(false));
                         } catch (ConfigurationException e) {
-                            // Should not occur
-                            e.printStackTrace();
+                            getLogger().exception(e); // Should not occur
                         }
                     }
                     // cleanup in case of setting different types
@@ -296,8 +320,11 @@ public class CompoundVariable extends StructuredVariable {
             for (int i = 0; i < cmpType.getInheritedElementCount(); i++) {
                 String slotName = cmpType.getInheritedElement(i).getName();
                 if (null != slotName && null != cmpValue.getNestedValue(slotName)) {
-                    DecisionVariable nestedVar = (DecisionVariable) nestedElements.get(slotName);
+                    IDecisionVariable nestedVar = (DecisionVariable) nestedElements.get(slotName);
                     Value nestedValue = cmpValue.getNestedValue(slotName);
+                    if (null == nestedVar) { // may be due to recursive types
+                        nestedVar = createNestedElement(cmpType.getElement(slotName), isVisible(), isAttribute(), true);
+                    }
                     if (null != nestedVar) {
 //                        nestedVar.setState(state);
                         IAssignmentState nestedState = nestedVar.getState();
@@ -392,6 +419,15 @@ public class CompoundVariable extends StructuredVariable {
             }
         }
         return result;
+    }
+    
+    /**
+     * Returns the logger for this instance.
+     * 
+     * @return the logger
+     */
+    protected EASyLogger getLogger() {
+        return EASyLoggerFactory.INSTANCE.getLogger(getClass(), Bundle.ID);
     }
     
 }

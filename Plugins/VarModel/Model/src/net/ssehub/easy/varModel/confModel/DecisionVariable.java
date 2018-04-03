@@ -53,6 +53,7 @@ abstract class DecisionVariable implements IDecisionVariable {
     private AbstractVariable declaration;
     private IDecisionVariable[] attributes;
     private boolean isVisible;
+    private boolean isAttribute;
     
     /**
      * Creates a new decision variable representing a specific decision.
@@ -74,6 +75,7 @@ abstract class DecisionVariable implements IDecisionVariable {
         this.declaration = varDeclaration;
         this.parent = parent;
         this.isVisible = isVisible;
+        this.isAttribute = isAttribute;
         configProvider = VariableConfigProviderFactory.createDelegate(this);
         if (!isAttribute) {
             try {
@@ -313,6 +315,15 @@ abstract class DecisionVariable implements IDecisionVariable {
     @Override
     public boolean isVisible() {
         return isVisible;
+    }
+    
+    /**
+     * Returns whether this decision variable represents an attribute.
+     * 
+     * @return <code>true</code> for attribute, <code>false</code> else
+     */
+    protected boolean isAttribute() {
+        return isAttribute;
     }
     
     @Override

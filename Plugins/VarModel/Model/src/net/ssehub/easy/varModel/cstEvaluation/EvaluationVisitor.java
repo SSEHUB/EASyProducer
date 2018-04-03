@@ -1578,7 +1578,7 @@ public class EvaluationVisitor implements IConstraintTreeVisitor {
             } else {
                 if (null == result) {
                     if (null == variable) {
-                        error("cannot evaluate compound in " + StringProvider.toIvmlString(access));
+                        error("cannot evaluate compound/slot in " + StringProvider.toIvmlString(access));
                     } // else variable not defined, stop lazy evaluation
                 }
             }
