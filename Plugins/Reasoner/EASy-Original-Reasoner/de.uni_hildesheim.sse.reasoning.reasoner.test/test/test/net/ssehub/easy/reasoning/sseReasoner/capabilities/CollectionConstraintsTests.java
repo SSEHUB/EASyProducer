@@ -166,4 +166,13 @@ public class CollectionConstraintsTests extends test.net.ssehub.easy.reasoning.s
     public void qmTest() {
         reasoningTest("QM.ivml", 1);
     }
+
+    /**
+     * Tests constraints in set.
+     */
+    @Test
+    public void setDerivedSetTest() {
+        reasoningTest("setDerivedSet.ivml", 3);
+    }
+
 }

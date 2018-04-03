@@ -1,0 +1,12 @@
+project setDerivedSet {
+
+    version v0;
+    
+    typedef MyIntSet setOf(Integer) with (size(MyIntSet) > 2);
+    MyIntSet si1 = {1, 2, 3};
+    MyIntSet si2 = {2, 3, 4};
+    MyIntSet si3 = {4, 5};
+
+    setOf(MyIntSet) s = {{1, 2, 3}, {2, 3, 4}, {4, 5}};
+    s->forAll(t|sum(t) > 6);
+}
