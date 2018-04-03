@@ -1433,6 +1433,19 @@ public class EvaluationVisitor implements IConstraintTreeVisitor {
             boolean ok = true;
             NestingMode nestingMode = call.getResolvedOperation().getNestingMode();
             if (NestingMode.NONE != nestingMode && iterVal instanceof ContainerValue) {
+                if (NestingMode.LEGACY == nestingMode 
+                    && declarators[iter].getDeclaration().getType().isAssignableFrom(iterVal.getType())) {
+                    // in legacy mode, flattening the iterValue is not always desired, in particular if iterValue is 
+                    // already a collection and the iterator is a collection, flattening would lead to wrong results / 
+                    // undefined parameters although static type safety is given. in this case, go for second / legacy
+                    // alternative
+                    nestingMode = NestingMode.NONE;
+                }
+            } else {
+                // prerequisites not given, go for NONE and second alternative below
+                nestingMode = NestingMode.NONE;
+            }
+            if (NestingMode.NONE != nestingMode) {
                 EvaluationAccessor res = rVar; 
                 if (NestingMode.NESTING == nestingMode) {
                     try {
