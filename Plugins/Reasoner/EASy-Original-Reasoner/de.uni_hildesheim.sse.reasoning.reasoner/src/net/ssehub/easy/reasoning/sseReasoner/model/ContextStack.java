@@ -18,7 +18,9 @@ package net.ssehub.easy.reasoning.sseReasoner.model;
 import static net.ssehub.easy.reasoning.sseReasoner.model.ReasoningUtils.createContainerCall;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 import net.ssehub.easy.basics.pool.IPoolManager;
 import net.ssehub.easy.basics.pool.Pool;
@@ -26,7 +28,9 @@ import net.ssehub.easy.varModel.cst.CSTSemanticException;
 import net.ssehub.easy.varModel.cst.ConstraintSyntaxTree;
 import net.ssehub.easy.varModel.model.AbstractVariable;
 import net.ssehub.easy.varModel.model.DecisionVariableDeclaration;
+import net.ssehub.easy.varModel.model.datatypes.Compound;
 import net.ssehub.easy.varModel.model.datatypes.Container;
+import net.ssehub.easy.varModel.model.datatypes.IDatatype;
 
 /**
  * Implements a context stack for nested translations. The top-most context corresponds to the 
@@ -63,6 +67,8 @@ public class ContextStack {
         private Context predecessor;
         private Map<AbstractVariable, Context> registeredContexts = new HashMap<AbstractVariable, Context>();
         private boolean isRegistered;
+        private boolean recordProcessedTypes;
+        private Set<IDatatype> processedTypes = new HashSet<IDatatype>();
         
         /**
          * Clears this context.
@@ -77,6 +83,8 @@ public class ContextStack {
             container = null;
             predecessor = null;
             isRegistered = false;
+            recordProcessedTypes = false;
+            processedTypes.clear();
         }
         
     }
@@ -128,13 +136,13 @@ public class ContextStack {
     }
 
     /**
-     * Pushes a new (compound) context to the stack.
+     * Pushes a new (compound) context to the stack. No processed types are recorded.
      * 
      * @param decl the variable to register the new context with if {@link #setRegisterContexts(boolean) enabled}, 
      *     may be <b>null</b> to explicitly prevent registration
      */
     public void pushContext(AbstractVariable decl) {
-        pushContext(decl, null, null);
+        pushContext(decl, null, null, false);
     }
 
     /**
@@ -145,14 +153,17 @@ public class ContextStack {
      * @param container the container expression (may be <b>null</b>)
      * @param iterator a container iterator variable for <code>container</code>, may be <b>null</b> but only if 
      *     <code>container</code> is null
+     * @param recordProcessedType whether processed types indicated by {@link #recordType(IDatatype)} shall be recorded 
+     *     or not (<code>false</code>)
      */
     public void pushContext(AbstractVariable decl, ConstraintSyntaxTree container, 
-        DecisionVariableDeclaration iterator) {
+        DecisionVariableDeclaration iterator, boolean recordProcessedType) {
         Context context = POOL.getInstance();
         
         // fill values
         context.container = container;
         context.iterator = iterator;
+        context.recordProcessedTypes = recordProcessedType;
         
         if (registerContexts && null != decl) {
             currentContext.registeredContexts.put(decl, context);
@@ -304,6 +315,63 @@ public class ContextStack {
         if (null != findRegisteredContext(decl)) {
             popContextImpl(); // don't clear, keep it
         }
+    }
+
+    /**
+     * Records a processed type (in case of compounds also all refined types) in the closest actual context that allows 
+     * recording (see {@link Context#recordProcessedTypes} and {@link #pushContext(AbstractVariable, 
+     * ConstraintSyntaxTree, DecisionVariableDeclaration, boolean)}).
+     * 
+     * @param type the type to record
+     */
+    public void recordProcessed(IDatatype type) {
+        boolean found = false;
+        Context iter = currentContext;
+        do {
+            if (iter.recordProcessedTypes) {
+                if (type instanceof Compound) {
+                    recordProcessed(iter.processedTypes, (Compound) type);
+                } else {
+                    iter.processedTypes.add(type);
+                }
+                found = true;
+            }
+            iter = iter.predecessor;
+        } while (!found && null != iter);
+    }
+
+    /**
+     * Records a processed compound.
+     * 
+     * @param processed the set of already processed types (may be modified as a side effect)
+     * @param type the type to be recorded
+     */
+    private void recordProcessed(Set<IDatatype> processed, Compound type) {
+        if (!processed.contains(type)) {
+            processed.add(type);
+            for (int r = 0; r < type.getRefinesCount(); r++) {
+                recordProcessed(processed, type.getRefines(r));
+            }
+        }
+    }
+    
+    /**
+     * Returns whether <code>type</code> was already processed. All current contexts with enabled
+     * recording are considered.
+     * 
+     * @param type the type to look for
+     * @return <code>true</code> if the type was already processed, <code>false</code> if not
+     */
+    public boolean alreadyProcessed(IDatatype type) {
+        boolean found = false;
+        Context iter = currentContext;
+        do {
+            if (iter.recordProcessedTypes) {
+                found = iter.processedTypes.contains(type);
+            }
+            iter = iter.predecessor;
+        } while (!found && null != iter);
+        return found;
     }
 
 }

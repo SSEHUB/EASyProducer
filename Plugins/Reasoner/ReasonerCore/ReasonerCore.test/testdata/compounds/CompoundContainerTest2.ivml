@@ -1,0 +1,32 @@
+project CompoundContainerTest2 {
+
+    compound MyComp {
+        setOf(Integer) iSet;
+        setOf(MyComp) cSet;
+        iSet.size() == cSet.size();
+        cSet->forAll(c|c.iSet.size() > 0);
+    }
+
+    MyComp c1 = {
+      iSet = {1}, 
+      cSet = {
+        MyComp{
+          iSet = {3}, 
+          cSet = {MyComp{}}
+        }
+      }
+    };
+    MyComp c2 = {
+      iSet = {1, 2}, 
+      cSet = {}
+    };
+    MyComp c3 = {
+      iSet = {1, 2}, 
+      cSet = {
+        MyComp{
+          iSet = {3, 4}, 
+          cSet = {MyComp{}}
+        }
+      }
+    };
+}

@@ -1,4 +1,4 @@
-project CompoundCompoundTest {
+project CompoundCompoundTest1 {
 
     compound ContComp {
         Integer a;

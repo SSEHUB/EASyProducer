@@ -593,28 +593,33 @@ public class Resolver {
      */
     private void translateCompoundContainer(AbstractVariable decl, Compound type, IDatatype declaredContainedType, 
         ConstraintSyntaxTree cAcc) {
-        final DecisionVariableDeclaration localDecl = new DecisionVariableDeclaration("cmp", type, null);
-        Variable localVar = new Variable(localDecl);
-        Variable declVar = new Variable(decl);
-        // we may transfer the attributes from decl here to localDecl, or we just pass decl as attribute provider
-        // to the translation, which is more time/memory efficient
-        // fill varMap
-        ConstraintSyntaxTree containerOp = null == cAcc ? declVar : cAcc;
-        try {
-            if (isNestedContainer(decl.getType())) {
-                containerOp = new OCLFeatureCall(containerOp, OclKeyWords.FLATTEN);
+        if (!contexts.alreadyProcessed(type)) {
+            contexts.recordProcessed(type);
+        
+            final DecisionVariableDeclaration localDecl = new DecisionVariableDeclaration("cmp", type, null);
+            Variable localVar = new Variable(localDecl);
+            Variable declVar = new Variable(decl);
+            // we may transfer the attributes from decl here to localDecl, or we just pass decl as attribute provider
+            // to the translation, which is more time/memory efficient
+            // fill varMap
+            ConstraintSyntaxTree containerOp = null == cAcc ? declVar : cAcc;
+            try {
+                if (isNestedContainer(decl.getType())) {
+                    containerOp = new OCLFeatureCall(containerOp, OclKeyWords.FLATTEN);
+                }
+                if (!TypeQueries.sameTypes(type, declaredContainedType)) {
+                    containerOp = new OCLFeatureCall(containerOp, OclKeyWords.SELECT_BY_KIND, 
+                        createTypeValueConstant(type));
+                }
+            } catch (IvmlException e) {
+                LOGGER.exception(e); // should not occur if constraints are created correctly, ok to log
             }
-            if (!TypeQueries.sameTypes(type, declaredContainedType)) {
-                containerOp = new OCLFeatureCall(containerOp, OclKeyWords.SELECT_BY_KIND, 
-                    createTypeValueConstant(type));
-            }
-        } catch (IvmlException e) {
-            LOGGER.exception(e); // should not occur if constraints are created correctly, ok to log
+            
+            contexts.pushContext(null, containerOp, localDecl, true);
+            registerCompoundMapping(type, localVar, declVar, type);
+            translateCompoundContent(localDecl, null, type, cAcc);
+            contexts.popContext();
         }
-        contexts.pushContext(null, containerOp, localDecl);
-        registerCompoundMapping(type, localVar, declVar, type);
-        translateCompoundContent(localDecl, null, type, cAcc);
-        contexts.popContext();
     }
 
     /**
@@ -629,12 +634,15 @@ public class Resolver {
      */
     private void translateCompoundDeclaration(AbstractVariable decl, IDecisionVariable variable,
         ConstraintSyntaxTree cAcc, Compound type) {
-        contexts.pushContext(decl);
-        // resolve compound access first for all slots
-        Variable declVar = new Variable(decl);
-        registerCompoundMapping(type, cAcc, declVar, null == variable ? type : variable.getValue().getType());
-        translateCompoundContent(decl, variable, type, cAcc);
-        contexts.popContext();
+        if (!contexts.alreadyProcessed(type)) {
+            contexts.recordProcessed(type);
+            contexts.pushContext(decl);
+            // resolve compound access first for all slots
+            Variable declVar = new Variable(decl);
+            registerCompoundMapping(type, cAcc, declVar, null == variable ? type : variable.getValue().getType());
+            translateCompoundContent(decl, variable, type, cAcc);
+            contexts.popContext();
+        }
     }
 
     /**

@@ -1,0 +1,14 @@
+project CompoundCompoundTest2 {
+
+    compound MyComp {
+        Integer a;
+        MyComp c;
+        a > c.a;
+    }
+
+    MyComp c1 = {a = 1, c = {a = 0}};
+    MyComp c2 = {a = 100, c = {a = 101}};
+    
+    c2.a > 100;
+    c2.c.a > 100;
+}
