@@ -6,12 +6,16 @@ project BooleanAnnotationTest {
     compound MyCmp {
        Integer i = 1;
     };
+    typedef Cmp MyCmp with (Cmp.i > 1);
+    
     Boolean t = true;
     Integer i = 1;
     Real r = 0.5;
     String s = "aaa";
     MyEnum e = MyEnum::val1;
     MyCmp c = MyCmp{};
+    setOf(Integer) o = {1, 2};
+    Cmp d = {};
 
     t.ann <> true;    
     i.ann <> true;    
@@ -19,5 +23,7 @@ project BooleanAnnotationTest {
     s.ann <> true;    
     e.ann <> true;
     c.ann <> true;
+    o.ann <> true;
+    d.ann <> true;
     
 }

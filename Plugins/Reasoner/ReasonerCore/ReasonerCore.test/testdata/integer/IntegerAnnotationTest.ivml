@@ -6,12 +6,16 @@ project IntegerAnnotationTest {
     compound MyCmp {
        Integer i = 1;
     };
+    typedef Cmp MyCmp with (Cmp.i > 1);
+
     Boolean t = true;
     Integer i = 1;
     Real r = 0.5;
     String s = "aaa";
     MyEnum e = MyEnum::val1;
     MyCmp c = MyCmp{};
+    setOf(Integer) o = {1, 2};
+    Cmp d = {};
 
     t.ann <> 1;
     i.ann <> 1;    
@@ -19,5 +23,7 @@ project IntegerAnnotationTest {
     s.ann <> 1;    
     e.ann <> 1;
     c.ann <> 1;
+    o.ann <> 1;
+    d.ann <> 1;
     
 }

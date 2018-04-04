@@ -97,7 +97,7 @@ public class StringTests extends AbstractTest {
      */
     @Test
     public void stringAnnotationTest() {
-        reasoningTest("StringAnnotationTest.ivml", 6);
+        reasoningTest("StringAnnotationTest.ivml", 9);
     } 
 
 }

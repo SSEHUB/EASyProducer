@@ -123,7 +123,7 @@ public class BooleanTests extends AbstractTest {
      */
     @Test
     public void booleanAnnotationTest() {
-        reasoningTest("BooleanAnnotationTest.ivml", 6);
+        reasoningTest("BooleanAnnotationTest.ivml", 9);
     } 
     
 }

@@ -7,12 +7,16 @@ project EnumAnnotationTest {
     compound MyCmp {
        Integer i = 1;
     };
+    typedef Cmp MyCmp with (Cmp.i > 1);
+
     Boolean t = true;
     Integer i = 1;
     Real r = 0.5;
     String s = "aaa";
     MyEnum e = MyEnum::val1;
     MyCmp c = MyCmp{};
+    setOf(Integer) o = {1, 2};
+    Cmp d = {};
 
     t.ann <> AEnum::a1;
     i.ann <> AEnum::a1;    
@@ -20,5 +24,7 @@ project EnumAnnotationTest {
     s.ann <> AEnum::a1;    
     e.ann <> AEnum::a1;
     c.ann <> AEnum::a1;
+    o.ann <> AEnum::a1;
+    d.ann <> AEnum::a1;
     
 }
