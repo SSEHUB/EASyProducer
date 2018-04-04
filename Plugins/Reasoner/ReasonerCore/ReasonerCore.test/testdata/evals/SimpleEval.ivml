@@ -4,10 +4,10 @@ project SimpleEval {
 	
 	Integer a;
     
-    a = 2;
-    
     eval {
-        a = 0;
+        not(isDefined(a)) implies a == -1;
     }   
     
+    not(isDefined(a)) implies a == 0;
+    a < 0;
 }

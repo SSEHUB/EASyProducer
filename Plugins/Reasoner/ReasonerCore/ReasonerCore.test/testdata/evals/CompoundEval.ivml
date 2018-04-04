@@ -1,0 +1,15 @@
+project CompoundEval {
+
+	version v0;
+
+    compound Cmp {
+        Integer a;
+        eval {
+            not(isDefined(a)) implies a == -1;
+        }
+        not(isDefined(a)) implies a == 1;
+    }
+    
+    Cmp c = {};
+    c.a < 0;
+}

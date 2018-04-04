@@ -100,16 +100,26 @@ public abstract class AbstractTest extends net.ssehub.easy.dslCore.test.Abstract
      * @param expectedFailedConstraints Number of constraints that are expected to fail
      * @param projectP1 Project to reason on.
      * @return configuration (for further specific tests)
+     * 
+     * @see #debugConfigBeforeResultHandler(Configuration)
      */
     protected final Configuration assertPropagation(int expectedFailedConstraints, Project projectP1) {
         Configuration config = new Configuration(projectP1, false);        
         ReasonerConfiguration rConfig = new ReasonerConfiguration();
-
         // Perform reasoning
         IReasoner reasoner = descriptor.createReasoner();
         ReasoningResult rResult = reasoner.propagate(projectP1, config, rConfig, ProgressObserver.NO_OBSERVER);
+        debugConfigBeforeResultHandler(config);
         resultHandler(expectedFailedConstraints, rResult);
         return config;
+    }
+    
+    /**
+     * Called to enable debugging the configuration after reasoning but before asserting.
+     * 
+     * @param cfg the configuration to debug
+     */
+    protected void debugConfigBeforeResultHandler(Configuration cfg) {
     }
     
     /**
