@@ -17,7 +17,6 @@ package net.ssehub.easy.varModel.cstEvaluation;
 
 import net.ssehub.easy.varModel.cst.ConstraintSyntaxTree;
 import net.ssehub.easy.varModel.model.datatypes.ConstraintType;
-import net.ssehub.easy.varModel.model.datatypes.Operation;
 import net.ssehub.easy.varModel.model.values.BooleanValue;
 import net.ssehub.easy.varModel.model.values.ConstraintValue;
 import net.ssehub.easy.varModel.model.values.Value;
@@ -61,12 +60,11 @@ public class ConstraintOperations {
      * 
      * @param operand the operand to assign the constraint to
      * @param cst the value as constraint syntax tree
-     * @param op the actual operation (in order to know whether the result shall be negated - equals or not-equals)
+     * @param negate negate the result (equals or not-equals)
      * @return the expression return result
      */
     static EvaluationAccessor handleConstraintEquals(EvaluationAccessor operand, ConstraintSyntaxTree cst, 
-        Operation op) {
-        boolean negate = op == ConstraintType.UNEQUALS;
+        boolean negate) {
         EvaluationAccessor result;
         if (!operand.isAssigned() && operand.isAssignable()) {
             if (!negate) {

@@ -1033,8 +1033,10 @@ public class EvaluationVisitor implements IConstraintTreeVisitor {
         } else if (op == ConstraintType.ASSIGNMENT) {
             result = ConstraintOperations.handleConstraintAssignment(operand, call.getParameter(0));
             allOk = false; // constraints need the constraint assigned rather than its evaluation
-        } else if (op == ConstraintType.EQUALS || op == ConstraintType.UNEQUALS) {
-            result = ConstraintOperations.handleConstraintEquals(operand, call.getParameter(0), op);
+        } else if (op == ConstraintType.EQUALS || op == ConstraintType.UNEQUALS 
+            || op == ConstraintType.UNEQUALS_ALIAS) {
+            result = ConstraintOperations.handleConstraintEquals(operand, call.getParameter(0), 
+                op != ConstraintType.EQUALS);
             allOk = false; // constraints need the constraint assigned rather than its evaluation (propagate)
         }
         Map<String, EvaluationAccessor> namedArgs = null;
