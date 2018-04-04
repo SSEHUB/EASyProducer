@@ -1,0 +1,29 @@
+project ContainerAnnotationTest {
+
+    annotate setOf(Integer) ann = {3, -2} to ContainerAnnotationTest;
+    
+    enum MyEnum {val1, val2};
+    compound MyCmp {
+       Integer i = 1;
+    };
+    typedef Cmp MyCmp with (Cmp.i > 1);
+
+    Boolean t = true;
+    Integer i = 1;
+    Real r = 0.5;
+    String s = "aaa";
+    MyEnum e = MyEnum::val1;
+    MyCmp c = MyCmp{};
+    setOf(Integer) o = {1, 2};
+    Cmp d = {};
+
+    size(t.ann) <> 2;
+    size(i.ann) <> 2;    
+    size(r.ann) <> 2;    
+    size(s.ann) <> 2;    
+    size(e.ann) <> 2;    
+    size(c.ann) <> 2;
+    size(o.ann) <> 2;
+    size(d.ann) <> 2;
+    
+}

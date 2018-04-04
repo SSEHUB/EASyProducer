@@ -175,4 +175,13 @@ public class CollectionConstraintsTests extends test.net.ssehub.easy.reasoning.s
         reasoningTest("setDerivedSet.ivml", 3);
     }
 
+    /**
+     * Collection annotation test.
+     */
+    @Test
+    public void containerAnnotationTest() {
+        reasoningTest("ContainerAnnotationTest.ivml", 9);
+    } 
+
+    
 }

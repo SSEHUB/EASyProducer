@@ -108,4 +108,12 @@ public class CompoundTests extends AbstractTest {
         reasoningTest("CompoundAnnotationTest.ivml", 9);
     } 
 
+    /**
+     * Derived compound annotation test.
+     */
+    @Test
+    public void derivedCompoundAnnotationTest() {
+        reasoningTest("DerivedCompoundAnnotationTest.ivml", 9);
+    } 
+
 }

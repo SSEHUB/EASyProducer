@@ -1,0 +1,33 @@
+project DerivedCompoundAnnotationTest {
+
+    compound ACmp {
+       Integer i = 0;
+    };
+    typedef A ACmp with (A.i >= 0);
+    annotate A ann = ACmp{} to DerivedCompoundAnnotationTest;
+    
+    enum MyEnum {val1, val2};
+    compound MyCmp {
+       Integer i = 1;
+    };
+    typedef Cmp MyCmp with (Cmp.i > 1);
+
+    Boolean t = true;
+    Integer i = 1;
+    Real r = 0.5;
+    String s = "aaa";
+    MyEnum e = MyEnum::val1;
+    MyCmp c = MyCmp{};
+    setOf(Integer) o = {1, 2};
+    Cmp d = {};
+
+    t.ann.i <> 0;
+    i.ann.i <> 0;    
+    r.ann.i <> 0;    
+    s.ann.i <> 0;    
+    e.ann.i <> 0;    
+    c.ann.i <> 0;
+    o.ann.i <> 0;
+    d.ann.i <> 0;
+    
+}
