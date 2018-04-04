@@ -150,4 +150,20 @@ public class EnumTests extends AbstractTest {
         reasoningTest("OrderedEnumRefAssignTest.ivml", 2);
     } 
 
+    /**
+     * Enum annotation test.
+     */
+    @Test
+    public void enumAnnotationTest() {
+        reasoningTest("EnumAnnotationTest.ivml", 5);
+    } 
+
+    /**
+     * Ordered enum annotation test.
+     */
+    @Test
+    public void orderdEnumAnnotationTest() {
+        reasoningTest("OrderedEnumAnnotationTest.ivml", 5);
+    } 
+
 }

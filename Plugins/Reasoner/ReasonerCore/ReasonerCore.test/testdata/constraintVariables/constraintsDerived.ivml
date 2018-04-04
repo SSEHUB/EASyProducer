@@ -1,0 +1,15 @@
+project constraintsDerived {
+
+	version v0;
+
+    typedef MyConstraint Constraint with (MyConstraint == true);
+	
+	compound CP {
+	   MyConstraint c = false;
+	}
+	
+	MyConstraint c = false;
+	CP cmp = {};
+	setOf(MyConstraint) s = {false};
+	
+}

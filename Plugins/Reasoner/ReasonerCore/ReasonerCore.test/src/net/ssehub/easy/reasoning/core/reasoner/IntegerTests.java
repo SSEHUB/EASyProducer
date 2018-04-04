@@ -92,4 +92,12 @@ public class IntegerTests extends AbstractTest {
         reasoningTest("IntegerRefAssignTest.ivml", 2);
     } 
 
+    /**
+     * Integer annotation test.
+     */
+    @Test
+    public void integerAnnotationTest() {
+        reasoningTest("IntegerAnnotationTest.ivml", 5);
+    } 
+
 }

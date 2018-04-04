@@ -92,4 +92,12 @@ public class StringTests extends AbstractTest {
         reasoningTest("StringRefAssignTest.ivml", 2);
     } 
 
+    /**
+     * String annotation test.
+     */
+    @Test
+    public void stringAnnotationTest() {
+        reasoningTest("StringAnnotationTest.ivml", 5);
+    } 
+
 }

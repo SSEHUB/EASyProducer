@@ -118,4 +118,12 @@ public class BooleanTests extends AbstractTest {
         reasoningTest("BooleanRefAssignTest.ivml", 2);
     } 
 
+    /**
+     * Boolean annotation test.
+     */
+    @Test
+    public void booleanAnnotationTest() {
+        reasoningTest("BooleanAnnotationTest.ivml", 5);
+    } 
+    
 }

@@ -514,7 +514,7 @@ public class ReasoningUtils {
         System.out.println(StringProvider.toIvmlString(cst) + " fulfilled " + evaluator.constraintFulfilled() 
             + " failed " + evaluator.constraintFailed());
         for (int m = 0; m < evaluator.getMessageCount(); m++) {
-            System.out.println("  " + evaluator.getMessage(m).getDescription());
+            System.out.println("  MSG: " + evaluator.getMessage(m).getDescription());
         }
     }
     

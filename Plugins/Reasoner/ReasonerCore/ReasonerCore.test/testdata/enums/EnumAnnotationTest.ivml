@@ -1,0 +1,19 @@
+project EnumAnnotationTest {
+
+    enum AEnum {a1, a2};
+    annotate AEnum ann = AEnum::a1 to EnumAnnotationTest;
+    
+    enum MyEnum {val1, val2};
+    Boolean t = true;
+    Integer i = 1;
+    Real r = 0.5;
+    String s = "aaa";
+    MyEnum e = MyEnum::val1;
+
+    t.ann <> AEnum::a1;
+    i.ann <> AEnum::a1;    
+    r.ann <> AEnum::a1;    
+    s.ann <> AEnum::a1;    
+    e.ann <> AEnum::a1;    
+    
+}

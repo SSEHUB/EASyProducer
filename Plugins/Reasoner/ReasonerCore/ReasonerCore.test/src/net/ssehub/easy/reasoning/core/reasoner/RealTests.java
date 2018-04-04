@@ -92,4 +92,12 @@ public class RealTests extends AbstractTest {
         reasoningTest("RealRefAssignTest.ivml", 0);
     } 
 
+    /**
+     * Real annotation test.
+     */
+    @Test
+    public void realAnnotationTest() {
+        reasoningTest("RealAnnotationTest.ivml", 5);
+    } 
+
 }

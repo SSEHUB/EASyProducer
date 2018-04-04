@@ -268,5 +268,13 @@ public class ConstraintVariableTests extends test.net.ssehub.easy.reasoning.sseR
     public void compoundConstraintVarOrder() {
         reasoningTest("QM_constraintOrder.ivml", 0);
     }
+    
+    /**
+     * Tests derived constraint variables.
+     */
+    @Test
+    public void constraintsDerivedTest() {
+        reasoningTest("constraintsDerived.ivml", 2); // pathological case
+    }
 
 }
