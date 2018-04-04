@@ -16,6 +16,7 @@ project BooleanAnnotationTest {
     MyCmp c = MyCmp{};
     setOf(Integer) o = {1, 2};
     Cmp d = {};
+    Constraint n = true;
 
     t.ann <> true;    
     i.ann <> true;    
@@ -25,5 +26,6 @@ project BooleanAnnotationTest {
     c.ann <> true;
     o.ann <> true;
     d.ann <> true;
+    n.ann <> true;
     
 }

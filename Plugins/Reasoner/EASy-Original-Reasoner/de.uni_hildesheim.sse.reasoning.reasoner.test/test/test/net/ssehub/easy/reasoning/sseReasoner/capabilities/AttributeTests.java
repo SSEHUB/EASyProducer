@@ -169,5 +169,13 @@ public class AttributeTests extends  test.net.ssehub.easy.reasoning.sseReasoner.
     public void nestedAssignBlockTree() {
         reasoningTest("NestedAssignBlockTree.ivml", 2);
     }    
-  
+
+    /**
+     * Constraint annotations.
+     */
+    @Test    
+    public void constraintAnnotationTest() {
+        reasoningTest("ConstraintAnnotationTest.ivml", 1); // pathological case
+    }    
+
 }

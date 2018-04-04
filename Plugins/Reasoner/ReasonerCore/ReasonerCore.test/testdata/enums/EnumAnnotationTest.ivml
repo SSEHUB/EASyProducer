@@ -17,6 +17,7 @@ project EnumAnnotationTest {
     MyCmp c = MyCmp{};
     setOf(Integer) o = {1, 2};
     Cmp d = {};
+    Constraint n = true;
 
     t.ann <> AEnum::a1;
     i.ann <> AEnum::a1;    
@@ -26,5 +27,6 @@ project EnumAnnotationTest {
     c.ann <> AEnum::a1;
     o.ann <> AEnum::a1;
     d.ann <> AEnum::a1;
+    n.ann <> AEnum::a1;
     
 }

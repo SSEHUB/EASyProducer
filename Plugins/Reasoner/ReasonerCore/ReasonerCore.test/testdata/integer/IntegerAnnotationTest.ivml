@@ -16,6 +16,7 @@ project IntegerAnnotationTest {
     MyCmp c = MyCmp{};
     setOf(Integer) o = {1, 2};
     Cmp d = {};
+    Constraint n = true;
 
     t.ann <> 1;
     i.ann <> 1;    
@@ -25,5 +26,6 @@ project IntegerAnnotationTest {
     c.ann <> 1;
     o.ann <> 1;
     d.ann <> 1;
+    n.ann <> 1;
     
 }

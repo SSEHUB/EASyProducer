@@ -16,6 +16,7 @@ project ContainerAnnotationTest {
     MyCmp c = MyCmp{};
     setOf(Integer) o = {1, 2};
     Cmp d = {};
+    Constraint n = true;
 
     size(t.ann) <> 2;
     size(i.ann) <> 2;    
@@ -25,5 +26,6 @@ project ContainerAnnotationTest {
     size(c.ann) <> 2;
     size(o.ann) <> 2;
     size(d.ann) <> 2;
+    size(n.ann) <> 2;
     
 }

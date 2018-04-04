@@ -1,13 +1,13 @@
-project RealAnnotationTest {
+project ConstraintAnnotationTest {
 
-    annotate Real ann = 1.0 to RealAnnotationTest;
+    annotate Constraint ann = true to ConstraintAnnotationTest;
     
     enum MyEnum {val1, val2};
     compound MyCmp {
        Integer i = 1;
     };
     typedef Cmp MyCmp with (Cmp.i > 1);
-
+    
     Boolean t = true;
     Integer i = 1;
     Real r = 0.5;
@@ -16,16 +16,14 @@ project RealAnnotationTest {
     MyCmp c = MyCmp{};
     setOf(Integer) o = {1, 2};
     Cmp d = {};
-    Constraint n = true;
 
-    t.ann <> 1.0;
-    i.ann <> 1.0;    
-    r.ann <> 1.0;    
-    s.ann <> 1.0;    
-    e.ann <> 1.0;    
-    c.ann <> 1.0;    
-    o.ann <> 1.0;    
-    d.ann <> 1.0;
-    n.ann <> 1.0;
+    t.ann <> true;    
+    i.ann <> true;    
+    r.ann <> true;    
+    s.ann <> true;    
+    e.ann <> true;
+    c.ann <> true;
+    o.ann <> true;
+    d.ann <> true;
     
 }

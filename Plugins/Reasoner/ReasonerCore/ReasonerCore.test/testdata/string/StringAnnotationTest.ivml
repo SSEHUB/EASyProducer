@@ -16,6 +16,7 @@ project StringAnnotationTest {
     MyCmp c = MyCmp{};
     setOf(Integer) o = {1, 2};
     Cmp d = {};
+    Constraint n = true;
 
     t.ann <> "abba";
     i.ann <> "abba";    
@@ -24,6 +25,7 @@ project StringAnnotationTest {
     e.ann <> "abba";    
     c.ann <> "abba";    
     o.ann <> "abba";    
-    d.ann <> "abba";    
+    d.ann <> "abba";
+    n.ann <> "abba";
     
 }

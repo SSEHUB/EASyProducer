@@ -2,10 +2,10 @@ project CompoundIndividualAssign {
 
     version v0;
     
-    annotate Integer at to CompoundIndividualAssign; // change to annotation
-    annotate Integer am to CompoundIndividualAssign; // change to annotation
-    annotate Integer ar to CompoundIndividualAssign; // change to annotation
-    annotate Integer ak to CompoundIndividualAssign; // change to annotation
+    annotate Integer at to CompoundIndividualAssign;
+    annotate Integer am to CompoundIndividualAssign;
+    annotate Integer ar to CompoundIndividualAssign;
+    annotate Integer ak to CompoundIndividualAssign;
     
     compound cmp {
         Integer nest = 5;

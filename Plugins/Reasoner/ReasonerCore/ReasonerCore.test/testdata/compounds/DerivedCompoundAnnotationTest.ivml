@@ -20,6 +20,7 @@ project DerivedCompoundAnnotationTest {
     MyCmp c = MyCmp{};
     setOf(Integer) o = {1, 2};
     Cmp d = {};
+    Constraint n = true;
 
     t.ann.i <> 0;
     i.ann.i <> 0;    
@@ -29,5 +30,6 @@ project DerivedCompoundAnnotationTest {
     c.ann.i <> 0;
     o.ann.i <> 0;
     d.ann.i <> 0;
+    n.ann.i <> 0;
     
 }

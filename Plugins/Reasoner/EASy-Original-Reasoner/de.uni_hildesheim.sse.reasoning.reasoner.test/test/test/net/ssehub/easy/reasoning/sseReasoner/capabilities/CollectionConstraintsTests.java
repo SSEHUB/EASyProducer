@@ -180,7 +180,7 @@ public class CollectionConstraintsTests extends test.net.ssehub.easy.reasoning.s
      */
     @Test
     public void containerAnnotationTest() {
-        reasoningTest("ContainerAnnotationTest.ivml", 9);
+        reasoningTest("ContainerAnnotationTest.ivml", 10);
     } 
 
     

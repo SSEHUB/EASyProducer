@@ -97,7 +97,7 @@ public class RealTests extends AbstractTest {
      */
     @Test
     public void realAnnotationTest() {
-        reasoningTest("RealAnnotationTest.ivml", 9);
+        reasoningTest("RealAnnotationTest.ivml", 10);
     } 
 
 }
