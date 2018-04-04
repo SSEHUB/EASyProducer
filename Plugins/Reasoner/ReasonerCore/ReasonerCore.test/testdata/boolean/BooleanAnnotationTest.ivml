@@ -3,16 +3,21 @@ project BooleanAnnotationTest {
     annotate Boolean ann = true to BooleanAnnotationTest;
     
     enum MyEnum {val1, val2};
+    compound MyCmp {
+       Integer i = 1;
+    };
     Boolean t = true;
     Integer i = 1;
     Real r = 0.5;
     String s = "aaa";
     MyEnum e = MyEnum::val1;
+    MyCmp c = MyCmp{};
 
     t.ann <> true;    
     i.ann <> true;    
     r.ann <> true;    
     s.ann <> true;    
-    e.ann <> true;    
+    e.ann <> true;
+    c.ann <> true;
     
 }

@@ -449,25 +449,42 @@ public class Resolver {
     }
     
     /**
-     * Translates annotation default value expressions.
+     * Translates annotation declarations.
      * 
      * @param decl {@link AbstractVariable} with annotations.
      * @param variable {@link IDecisionVariable} with annotations.
-     * @param compound {@link CompoundAccess} null if variable is not nested.
+     * @param cAcc {@link CompoundAccess} <b>null</b> if variable is not nested, else accessor expression to 
+     *     <code>variable</code>.
      */
     private void translateAnnotationDeclarations(AbstractVariable decl, IDecisionVariable variable, 
-        ConstraintSyntaxTree compound) {
+        ConstraintSyntaxTree cAcc) {
+        ConstraintSyntaxTree acc = null == cAcc ? new Variable(decl) : cAcc;
         if (null != variable) {
             for (int i = 0; i < variable.getAttributesCount(); i++) {
                 IDecisionVariable att = variable.getAttribute(i);
-                translateDeclaration(att.getDeclaration(), att, null == compound ? new Variable(decl) : compound);
+                translateAnnotationDeclaration((Attribute) att.getDeclaration(), att, acc);
             }
         } else {
             for (int i = 0; i < decl.getAttributesCount(); i++) {
-                Attribute att = decl.getAttribute(i);
-                translateDeclaration(att, null, null == compound ? new Variable(decl) : compound);
+                translateAnnotationDeclaration(decl.getAttribute(i), null, acc);
             }
         }
+    }
+
+    /**
+     * Translates an annotation declaration.
+     * 
+     * @param decl {@link AbstractVariable} with annotations.
+     * @param variable {@link IDecisionVariable} with annotations.
+     * @param cAcc {@link CompoundAccess} <b>null</b> if variable is not nested, else accessor expression to 
+     *     <code>variable</code>.
+     */
+    private void translateAnnotationDeclaration(Attribute decl, IDecisionVariable variable, ConstraintSyntaxTree cAcc) {
+        ConstraintSyntaxTree attAcc = cAcc;
+        if (null != cAcc && !contexts.isContextsRegistering()) { // we are not in an assignment block
+            attAcc = new AttributeVariable(cAcc, decl);
+        }
+        translateDeclaration(decl, variable, attAcc);
     }
 
     /**

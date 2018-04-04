@@ -124,6 +124,15 @@ public class ContextStack {
         this.registerContexts = registerContexts;
         return res;
     }
+    
+    /**
+     * Returns whether context registering is actually enabled.
+     * 
+     * @return <code>true</code> if context registering is enabled, <code>false</code> else
+     */
+    public boolean isContextsRegistering() {
+        return this.registerContexts;
+    }
 
     /**
      * Clears the stack, i.e., pops all contexts and clears the top-most (project) context for re-use.

@@ -155,7 +155,7 @@ public class EnumTests extends AbstractTest {
      */
     @Test
     public void enumAnnotationTest() {
-        reasoningTest("EnumAnnotationTest.ivml", 5);
+        reasoningTest("EnumAnnotationTest.ivml", 6);
     } 
 
     /**
@@ -163,7 +163,7 @@ public class EnumTests extends AbstractTest {
      */
     @Test
     public void orderdEnumAnnotationTest() {
-        reasoningTest("OrderedEnumAnnotationTest.ivml", 5);
+        reasoningTest("OrderedEnumAnnotationTest.ivml", 6);
     } 
 
 }

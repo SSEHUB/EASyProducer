@@ -3,16 +3,21 @@ project StringAnnotationTest {
     annotate String ann = "abba" to StringAnnotationTest;
     
     enum MyEnum {val1, val2};
+    compound MyCmp {
+       Integer i = 1;
+    };
     Boolean t = true;
     Integer i = 1;
     Real r = 0.5;
     String s = "aaa";
     MyEnum e = MyEnum::val1;
+    MyCmp c = MyCmp{};
 
     t.ann <> "abba";
     i.ann <> "abba";    
     r.ann <> "abba";    
     s.ann <> "abba";    
     e.ann <> "abba";    
+    c.ann <> "abba";    
     
 }

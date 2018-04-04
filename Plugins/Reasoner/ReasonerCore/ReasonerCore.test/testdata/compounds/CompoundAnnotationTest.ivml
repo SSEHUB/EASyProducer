@@ -1,0 +1,25 @@
+project CompoundAnnotationTest {
+
+    compound ACmp {
+       Integer i = 0;
+    };
+    annotate ACmp ann = ACmp{} to CompoundAnnotationTest;
+    
+    enum MyEnum {val1, val2};
+    compound MyCmp {
+       Integer i = 1;
+    };
+    Boolean t = true;
+    Integer i = 1;
+    Real r = 0.5;
+    String s = "aaa";
+    MyEnum e = MyEnum::val1;
+    MyCmp c = MyCmp{};
+
+    t.ann.i <> 0;
+    i.ann.i <> 0;    
+    r.ann.i <> 0;    
+    s.ann.i <> 0;    
+    e.ann.i <> 0;    
+    c.ann.i <> 0;
+}
