@@ -126,4 +126,11 @@ public class BooleanTests extends AbstractTest {
         reasoningTest("BooleanAnnotationTest.ivml", 10);
     } 
     
+    /**
+     * Combined reference-typedef on Boolean.
+     */
+    public void referenceDerivedBooleanTest() {
+        reasoningTest("ReferenceDerivedBooleanTest.ivml", 4);
+    }
+    
 }

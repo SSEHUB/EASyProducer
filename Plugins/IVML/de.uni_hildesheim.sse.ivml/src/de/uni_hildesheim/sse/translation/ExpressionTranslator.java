@@ -1266,8 +1266,13 @@ public class ExpressionTranslator extends net.ssehub.easy.dslCore.translation.Ex
                 if (refEx instanceof Variable) {
                     AbstractVariable var = ((Variable) refEx).getVariable();
                     IDatatype varType = var.getType();
-                    IDatatype refType = refType(varType, context);
-                    result = new ConstantValue(ValueFactory.createValue(refType, var));
+                    // spec 2.2.3.2, stop with type query at first potential reference, no resolveFully here
+                    if (TypeQueries.isReference(DerivedDatatype.resolveToBasis(varType))) {
+                        result = new OCLFeatureCall(refEx, IvmlKeyWords.REFBY);
+                    } else {
+                        IDatatype refType = refType(varType, context);
+                        result = new ConstantValue(ValueFactory.createValue(refType, var));
+                    }
                 } else { // more complex expression
                     IDatatype varType = refEx.inferDatatype();
                     refByChecker.reset();
@@ -1413,7 +1418,7 @@ public class ExpressionTranslator extends net.ssehub.easy.dslCore.translation.Ex
                 type = lhs.inferDatatype();
             } // else: lhs is a type expression, inferDatatype would lead to a
               // MetaType
-            type = Reference.dereference(type);
+            type = TypeQueries.resolveFully(type);
             if (Compound.TYPE.isAssignableFrom(type) && hasSlot((Compound) type, name)) {
                 result = new CompoundAccess(lhs, name);
                 IDatatype lhsType = lhs.inferDatatype();
@@ -1526,9 +1531,9 @@ public class ExpressionTranslator extends net.ssehub.easy.dslCore.translation.Ex
                     throw new TranslatorException("type '" + sTypeName + "' is not defined", initializer,
                         IvmlPackage.Literals.CONTAINER_INITIALIZER__TYPE, ErrorCodes.TYPE_CONSISTENCY);
                 }
-                if (null != lhsType && !lhsType.isAssignableFrom(specificType)) {
+                if (null != lhsType && TypeQueries.isContainer(lhsType) && !lhsType.isAssignableFrom(specificType)) {
                     throw new TranslatorException("collection type '" + IvmlDatatypeVisitor.getQualifiedType(lhsType)
-                        + "' does not match specified entry type'" + sTypeName + "'", initializer,
+                        + "' does not match specified entry type '" + sTypeName + "'", initializer,
                         IvmlPackage.Literals.CONTAINER_INITIALIZER__TYPE, ErrorCodes.TYPE_CONSISTENCY);
                 }
                 //lhsType = specificType;
@@ -1558,8 +1563,8 @@ public class ExpressionTranslator extends net.ssehub.easy.dslCore.translation.Ex
         TypeContext context, IModelElement parent) throws TranslatorException, CSTSemanticException, IvmlException {
         level++;
         ConstraintSyntaxTree result = null;
-        lhsType = Reference.dereference(DerivedDatatype.resolveToBasis(lhsType));
-        IDatatype specificType = getSpecificType(lhsType, initializer, context);
+        lhsType = TypeQueries.resolveFully(lhsType);
+        IDatatype specificType = TypeQueries.resolveFully(getSpecificType(lhsType, initializer, context));
         if (null != specificType) {
             lhsType = specificType;            
         } 

@@ -99,5 +99,13 @@ public class StringTests extends AbstractTest {
     public void stringAnnotationTest() {
         reasoningTest("StringAnnotationTest.ivml", 10);
     } 
+    
+    /**
+     * Combined reference-typedef on String.
+     */
+    @Test
+    public void referenceDerivedStringTest() {
+        reasoningTest("ReferenceDerivedStringTest.ivml", 4);
+    }
 
 }

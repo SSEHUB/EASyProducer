@@ -183,5 +183,12 @@ public class CollectionConstraintsTests extends test.net.ssehub.easy.reasoning.s
         reasoningTest("ContainerAnnotationTest.ivml", 10);
     } 
 
+    /**
+     * Tests for derived and referenced collections.
+     */
+    @Test
+    public void referenceDerivedCollectionTest() {
+        reasoningTest("ReferenceDerivedCollectionTest.ivml", 3); // !!!
+    }
     
 }

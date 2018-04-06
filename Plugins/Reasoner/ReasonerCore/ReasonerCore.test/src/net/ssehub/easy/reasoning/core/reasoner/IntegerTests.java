@@ -100,4 +100,12 @@ public class IntegerTests extends AbstractTest {
         reasoningTest("IntegerAnnotationTest.ivml", 10);
     } 
 
+    /**
+     * Combined reference-typedef on Integer.
+     */
+    @Test
+    public void referenceDerivedIntegerTest() {
+        reasoningTest("ReferenceDerivedIntegerTest.ivml", 3);
+    }    
+    
 }

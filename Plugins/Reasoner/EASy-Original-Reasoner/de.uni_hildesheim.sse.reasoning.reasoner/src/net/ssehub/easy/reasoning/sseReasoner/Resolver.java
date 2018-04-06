@@ -61,6 +61,7 @@ import net.ssehub.easy.varModel.model.datatypes.Container;
 import net.ssehub.easy.varModel.model.datatypes.DerivedDatatype;
 import net.ssehub.easy.varModel.model.datatypes.IDatatype;
 import net.ssehub.easy.varModel.model.datatypes.OclKeyWords;
+import net.ssehub.easy.varModel.model.datatypes.Reference;
 import net.ssehub.easy.varModel.model.datatypes.TypeQueries;
 import net.ssehub.easy.varModel.model.filter.FilterType;
 import net.ssehub.easy.varModel.model.filter.VariablesInConstraintFinder;
@@ -409,42 +410,43 @@ public class Resolver {
     }
 
     /**
-     * Extracts, translates and collects the internal constraints of <code>type</code> and stores them 
-     * in {@link #derivedTypeConstraints}.
+     * Extracts, translates and collects the internal constraints of <code>type</code> (if derived or, transitively, a 
+     * reference datatype) and stores the constraints in {@link #derivedTypeConstraints}.
      * 
      * @param decl VariableDeclaration of <code>DerivedDatatype</code>
-     * @param dType the type to translate
+     * @param type the type to translate
      * @param localDecl the declaration of an iterator variable if quantified constraints shall be created, 
      *     <b>null</b> for normal constraints
      * @param parent the parent model element for creating constraint instances
      */
-    private void translateDerivedDatatypeConstraints(AbstractVariable decl, DerivedDatatype dType, 
+    private void translateDerivedDatatypeConstraints(AbstractVariable decl, IDatatype type, 
         DecisionVariableDeclaration localDecl, IModelElement parent) {
-        int count = dType.getConstraintCount();
-        DecisionVariableDeclaration dVar = dType.getTypeDeclaration();
-        AbstractVariable declaration = null == localDecl ? decl : localDecl;
-        if (count > 0 && dVar != declaration) {
-            substVisitor.setMappings(contexts);
-            substVisitor.addVariableMapping(dVar, declaration);
-            //Copy and replace each instance of the internal declaration with the given instance
-            for (int i = 0; i < count; i++) {
-                ConstraintSyntaxTree cst = substVisitor.accept(dType.getConstraint(i).getConsSyntax());
-                if (null != localDecl) {
-                    cst = createContainerCall(new Variable(decl), Container.FORALL, cst, localDecl);
+        if (type instanceof DerivedDatatype) {
+            DerivedDatatype dType = (DerivedDatatype) type;
+            int count = dType.getConstraintCount();
+            DecisionVariableDeclaration dVar = dType.getTypeDeclaration();
+            AbstractVariable declaration = null == localDecl ? decl : localDecl;
+            if (count > 0 && dVar != declaration) {
+                substVisitor.setMappings(contexts);
+                substVisitor.addVariableMapping(dVar, declaration);
+                //Copy and replace each instance of the internal declaration with the given instance
+                for (int i = 0; i < count; i++) {
+                    ConstraintSyntaxTree cst = substVisitor.accept(dType.getConstraint(i).getConsSyntax());
+                    if (null != localDecl) {
+                        cst = createContainerCall(new Variable(decl), Container.FORALL, cst, localDecl);
+                    }
+                    try {
+                        cst.inferDatatype();
+                        addConstraint(topLevelConstraints, new Constraint(cst, parent), true);
+                    } catch (CSTSemanticException e) {
+                        LOGGER.exception(e);
+                    }
                 }
-                try {
-                    cst.inferDatatype();
-                    addConstraint(topLevelConstraints, new Constraint(cst, parent), true);
-                } catch (CSTSemanticException e) {
-                    LOGGER.exception(e);
-                }
+                substVisitor.clear();
             }
-            substVisitor.clear();
-        }        
-        
-        IDatatype basis = dType.getBasisType();
-        if (basis instanceof DerivedDatatype) {
-            translateDerivedDatatypeConstraints(decl, (DerivedDatatype) basis, localDecl, parent);
+            translateDerivedDatatypeConstraints(decl, dType.getBasisType(), localDecl, parent);
+        } else if (type instanceof Reference) { // dereference
+            translateDerivedDatatypeConstraints(decl, ((Reference) type).getType(), localDecl, parent);
         }
     }
     
@@ -500,9 +502,7 @@ public class Resolver {
         ConstraintSyntaxTree defaultValue = decl.getDefaultValue();
         AbstractVariable self = null;
         ConstraintSyntaxTree selfEx = null;
-        if (type instanceof DerivedDatatype) {
-            translateDerivedDatatypeConstraints(decl, (DerivedDatatype) type, null, decl.getTopLevelParent());
-        }
+        translateDerivedDatatypeConstraints(decl, type, null, decl.getTopLevelParent());
         if (!incremental) {
             translateAnnotationDeclarations(decl, var, cAcc);
         }
@@ -592,8 +592,8 @@ public class Resolver {
             }
         }
         // in any case
-        if (dContainedType instanceof DerivedDatatype) {
-            translateDerivedDatatypeConstraints(decl, (DerivedDatatype) dContainedType,  
+        if (dContainedType instanceof DerivedDatatype || dContainedType instanceof Reference) {
+            translateDerivedDatatypeConstraints(decl, dContainedType,  
                 new DecisionVariableDeclaration("derivedType", dContainedType, null), project);
         }
         contexts.popContext();

@@ -100,4 +100,12 @@ public class RealTests extends AbstractTest {
         reasoningTest("RealAnnotationTest.ivml", 10);
     } 
 
+    /**
+     * Combined reference-typedef on Real.
+     */
+    @Test
+    public void referenceDerivedRealTest() {
+        reasoningTest("ReferenceDerivedRealTest.ivml", 3);
+    }    
+    
 }

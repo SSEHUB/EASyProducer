@@ -166,4 +166,12 @@ public class EnumTests extends AbstractTest {
         reasoningTest("OrderedEnumAnnotationTest.ivml", 10);
     } 
 
+    /**
+     * Combination of references and typedefs on enums.
+     */
+    @Test
+    public void referenceDerivedEnumTest() {
+        reasoningTest("ReferenceDerivedEnumTest.ivml", 3);
+    } 
+
 }

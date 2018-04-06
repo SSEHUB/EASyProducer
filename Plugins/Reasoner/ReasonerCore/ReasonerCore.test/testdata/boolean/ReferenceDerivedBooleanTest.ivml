@@ -1,0 +1,13 @@
+project ReferenceDerivedBooleanTest {
+
+    typedef RBoolean refTo(Boolean);
+    typedef B Boolean with (B == true);
+    typedef RB refTo(B);
+
+    Boolean b = false;
+    RB r1 = refBy(b);
+    r1 == false;
+    RBoolean r2 = refBy(b);
+    r2 == false;
+    
+}

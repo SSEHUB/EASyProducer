@@ -122,6 +122,14 @@ public class CompoundTests extends AbstractTest {
     @Test
     public void referenceCompoundAnnotationTest() {
         reasoningTest("ReferenceCompoundAnnotationTest.ivml", 10);
-    } 
+    }
+    
+    /**
+     * Tests referenced-derived compounds (testing chains of types).
+     */
+    @Test
+    public void referenceDerivedCompoundTest() {
+        reasoningTest("ReferenceDerivedCompoundTest.ivml", 5);
+    }
 
 }

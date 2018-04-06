@@ -1,0 +1,14 @@
+project ReferenceDerivedEnumTest {
+
+    enum MyEnum {val1, val2};
+    typedef RMyEnum refTo(MyEnum);
+    typedef E MyEnum with (E == MyEnum::val1);
+    typedef RE refTo(E);
+
+    MyEnum e = MyEnum::val2;
+    RE r1 = refBy(e);
+    refBy(r1) == MyEnum::val1;
+    RMyEnum r2 = refBy(e);
+    r2 == MyEnum::val1;
+    
+}

@@ -13,7 +13,6 @@ import net.ssehub.easy.varModel.confModel.Configuration;
 import net.ssehub.easy.varModel.confModel.ConfigurationException;
 import net.ssehub.easy.varModel.confModel.ConfigurationSaver;
 import net.ssehub.easy.varModel.confModel.IDecisionVariable;
-import net.ssehub.easy.varModel.cst.CSTSemanticException;
 import net.ssehub.easy.varModel.model.AbstractVariable;
 import net.ssehub.easy.varModel.model.ModelQuery;
 import net.ssehub.easy.varModel.model.ModelQueryException;
@@ -247,7 +246,7 @@ public class AdditionalTests extends AbstractTest {
      */
     @Test
     public void testRefby() throws IOException {
-        assertEqual(createFile("refby"), null, null, CSTSemanticException.UNKNOWN_OPERATION);
+        assertEqual(createFile("refby"), null, null);
     }
     
     /**

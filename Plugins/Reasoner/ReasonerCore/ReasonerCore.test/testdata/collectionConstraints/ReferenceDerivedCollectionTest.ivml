@@ -1,0 +1,14 @@
+project ReferenceDerivedCollectionTest {
+
+    typedef RMySet refTo(setOf(Integer));
+    typedef ISet setOf(Integer) with (size(ISet) > 1);
+    typedef RISet refTo(ISet);
+
+    ISet c = {1, 2};
+    size(c) > 3;
+    RISet r1 = refBy(c);
+    size(refBy(r1)) > 4;
+    RMySet r2 = refBy(c);
+    size(refBy(r2)) > 5;
+    
+}

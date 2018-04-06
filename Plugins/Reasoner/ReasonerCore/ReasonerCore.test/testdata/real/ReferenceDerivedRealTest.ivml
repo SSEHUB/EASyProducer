@@ -1,0 +1,13 @@
+project ReferenceDerivedRealTest {
+
+    typedef RReal refTo(Real);
+    typedef R Real with (R > 0);
+    typedef RR refTo(R);
+
+    R r = 0.0;
+    RR r1 = refBy(r);
+    refBy(r1) > 0.0;
+    RReal r2 = refBy(r);
+    refBy(r2) > 0.0;
+    
+}

@@ -1,0 +1,17 @@
+project ReferenceDerivedCompoundTest {
+
+    compound MyCmp {
+       Integer i = 1;
+    };
+    typedef RMyCmp refTo(MyCmp);
+    typedef Cmp MyCmp with (Cmp.i > 1);
+    typedef RCmp refTo(Cmp);
+
+    Cmp c = Cmp{};
+    c.i > 3;
+    RCmp r1 = refBy(c);
+    r1.i > 4;
+    RMyCmp r2 = refBy(c);
+    r2.i > 5;
+    
+}

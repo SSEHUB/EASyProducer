@@ -1,0 +1,13 @@
+project ReferenceDerivedStringTest {
+
+    typedef RString refTo(String);
+    typedef S String with (S == "abba");
+    typedef RS refTo(S);
+
+    S s = "baab";
+    RS r1 = refBy(s);
+    refBy(r1) == "abba";
+    RString r2 = refBy(s);
+    refBy(r2) == "abba";
+    
+}

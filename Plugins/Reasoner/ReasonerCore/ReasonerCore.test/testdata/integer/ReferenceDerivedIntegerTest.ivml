@@ -1,0 +1,13 @@
+project ReferenceDerivedIntegerTest {
+
+    typedef RInteger refTo(Integer);
+    typedef I Integer with (I > 0);
+    typedef RI refTo(I);
+
+    I i = 0;
+    RI r1 = refBy(i);
+    refBy(r1) > 0;
+    RInteger r2 = refBy(i);
+    refBy(r2) > 0;
+    
+}
