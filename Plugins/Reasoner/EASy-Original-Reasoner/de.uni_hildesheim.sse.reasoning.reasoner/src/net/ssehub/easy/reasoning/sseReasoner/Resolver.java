@@ -418,9 +418,11 @@ public class Resolver {
      * @param localDecl the declaration of an iterator variable if quantified constraints shall be created, 
      *     <b>null</b> for normal constraints
      * @param parent the parent model element for creating constraint instances
+     * @param refCounter the number of intermediary reference types on the path from the top-most call (call with 
+     *     <code>0</code>)
      */
     private void translateDerivedDatatypeConstraints(AbstractVariable decl, IDatatype type, 
-        DecisionVariableDeclaration localDecl, IModelElement parent) {
+        DecisionVariableDeclaration localDecl, IModelElement parent, int refCounter) {
         if (type instanceof DerivedDatatype) {
             DerivedDatatype dType = (DerivedDatatype) type;
             int count = dType.getConstraintCount();
@@ -428,7 +430,7 @@ public class Resolver {
             AbstractVariable declaration = null == localDecl ? decl : localDecl;
             if (count > 0 && dVar != declaration) {
                 substVisitor.setMappings(contexts);
-                substVisitor.addVariableMapping(dVar, declaration);
+                substVisitor.addVariableMapping(dVar, declaration, refCounter);
                 //Copy and replace each instance of the internal declaration with the given instance
                 for (int i = 0; i < count; i++) {
                     ConstraintSyntaxTree cst = substVisitor.accept(dType.getConstraint(i).getConsSyntax());
@@ -444,9 +446,9 @@ public class Resolver {
                 }
                 substVisitor.clear();
             }
-            translateDerivedDatatypeConstraints(decl, dType.getBasisType(), localDecl, parent);
+            translateDerivedDatatypeConstraints(decl, dType.getBasisType(), localDecl, parent, refCounter);
         } else if (type instanceof Reference) { // dereference
-            translateDerivedDatatypeConstraints(decl, ((Reference) type).getType(), localDecl, parent);
+            translateDerivedDatatypeConstraints(decl, ((Reference) type).getType(), localDecl, parent, refCounter + 1);
         }
     }
     
@@ -502,7 +504,7 @@ public class Resolver {
         ConstraintSyntaxTree defaultValue = decl.getDefaultValue();
         AbstractVariable self = null;
         ConstraintSyntaxTree selfEx = null;
-        translateDerivedDatatypeConstraints(decl, type, null, decl.getTopLevelParent());
+        translateDerivedDatatypeConstraints(decl, type, null, decl.getTopLevelParent(), 0);
         if (!incremental) {
             translateAnnotationDeclarations(decl, var, cAcc);
         }
@@ -594,7 +596,7 @@ public class Resolver {
         // in any case
         if (dContainedType instanceof DerivedDatatype || dContainedType instanceof Reference) {
             translateDerivedDatatypeConstraints(decl, dContainedType,  
-                new DecisionVariableDeclaration("derivedType", dContainedType, null), project);
+                new DecisionVariableDeclaration("derivedType", dContainedType, null), project, 0);
         }
         contexts.popContext();
     }

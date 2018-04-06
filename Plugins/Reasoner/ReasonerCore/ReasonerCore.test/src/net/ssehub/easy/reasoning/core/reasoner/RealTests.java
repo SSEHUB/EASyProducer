@@ -105,7 +105,7 @@ public class RealTests extends AbstractTest {
      */
     @Test
     public void referenceDerivedRealTest() {
-        reasoningTest("ReferenceDerivedRealTest.ivml", 3);
+        reasoningTest("ReferenceDerivedRealTest.ivml", 4);
     }    
     
 }

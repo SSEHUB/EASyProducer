@@ -21,9 +21,11 @@ import java.util.Map;
 import net.ssehub.easy.varModel.cst.BasicCopyVisitor;
 import net.ssehub.easy.varModel.cst.Comment;
 import net.ssehub.easy.varModel.cst.ConstraintSyntaxTree;
+import net.ssehub.easy.varModel.cst.OCLFeatureCall;
 import net.ssehub.easy.varModel.cst.Self;
 import net.ssehub.easy.varModel.cst.Variable;
 import net.ssehub.easy.varModel.model.AbstractVariable;
+import net.ssehub.easy.varModel.model.IvmlKeyWords;
 
 /**
  * Substitutes variables in a constraint syntax tree by copying the syntax tree. May be 
@@ -105,9 +107,10 @@ public class SubstitutionVisitor extends BasicCopyVisitor {
      * 
      * @param orig the original variable to be replaced (may be <b>null</b>, ignored)
      * @param dest the destination variable to replace <code>orig</code> (may be <b>null</b>, ignored)
+     * @param derefCount the number of refBy operations to apply to the expression refering to <code>dest</code>
      * @return <b>this</b>
      */
-    public SubstitutionVisitor addVariableMapping(AbstractVariable orig, AbstractVariable dest) {
+    public SubstitutionVisitor addVariableMapping(AbstractVariable orig, AbstractVariable dest, int derefCount) {
         ConstraintSyntaxTree destEx = null;
         if (null != globalMapping) { // allow for transitive substitution saving unneeded variables
             ConstraintSyntaxTree ca = globalMapping.getMapping(dest);
@@ -121,6 +124,9 @@ public class SubstitutionVisitor extends BasicCopyVisitor {
         if (null != orig) {
             if (null == mapping) {
                 mapping = new HashMap<AbstractVariable, ConstraintSyntaxTree>();
+            }
+            for (int d = 1; d <= derefCount; d++) {
+                destEx = new OCLFeatureCall(destEx, IvmlKeyWords.REFBY);
             }
             mapping.put(orig, destEx);
         }

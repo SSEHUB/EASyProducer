@@ -188,7 +188,7 @@ public class CollectionConstraintsTests extends test.net.ssehub.easy.reasoning.s
      */
     @Test
     public void referenceDerivedCollectionTest() {
-        reasoningTest("ReferenceDerivedCollectionTest.ivml", 3); // !!!
+        reasoningTest("ReferenceDerivedCollectionTest.ivml", 5);
     }
     
 }

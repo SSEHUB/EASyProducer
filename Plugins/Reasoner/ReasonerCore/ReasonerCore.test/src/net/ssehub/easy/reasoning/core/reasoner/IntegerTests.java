@@ -105,7 +105,7 @@ public class IntegerTests extends AbstractTest {
      */
     @Test
     public void referenceDerivedIntegerTest() {
-        reasoningTest("ReferenceDerivedIntegerTest.ivml", 3);
+        reasoningTest("ReferenceDerivedIntegerTest.ivml", 4);
     }    
     
 }
