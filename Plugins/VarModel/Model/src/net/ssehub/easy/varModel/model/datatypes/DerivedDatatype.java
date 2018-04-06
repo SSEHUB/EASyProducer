@@ -209,14 +209,8 @@ public class DerivedDatatype extends CustomDatatype {
     
     @Override
     public boolean isAssignableFrom(IDatatype type) {
-        IDatatype baseType = getBasisType();
-        IDatatype otherType = type;
-        while (baseType instanceof DerivedDatatype) {
-            baseType = ((DerivedDatatype) baseType).getBasisType();
-        }
-        while (otherType instanceof DerivedDatatype) {
-            otherType = ((DerivedDatatype) otherType).getBasisType();
-        }
+        IDatatype baseType = resolveToBasis(getBasisType());
+        IDatatype otherType = resolveToBasis(type);
         boolean result;
         if (null != baseType) {
             result = baseType.isAssignableFrom(otherType);

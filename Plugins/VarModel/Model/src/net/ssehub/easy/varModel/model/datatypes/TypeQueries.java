@@ -186,5 +186,24 @@ public class TypeQueries {
         }
         return param;
     }
+    
+    /**
+     * Resolves to the most basic type, i.e., even across nested references/derived types.
+     * 
+     * @param type the type to resolve
+     * @return the most basic type
+     */
+    public static IDatatype resolveFully(IDatatype type) {
+        IDatatype iter = type;
+        IDatatype result;
+        do {
+            result = Reference.dereference(DerivedDatatype.resolveToBasis(iter));
+            if (iter == result) {
+                break;
+            }
+            iter = result;
+        } while (true);
+        return result;
+    }
 
 }

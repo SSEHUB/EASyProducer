@@ -23,6 +23,7 @@ import java.util.List;
 import net.ssehub.easy.basics.logger.EASyLoggerFactory;
 import net.ssehub.easy.varModel.Bundle;
 import net.ssehub.easy.varModel.cstEvaluation.ContainerIterators.CollectIteratorEvaluator;
+import net.ssehub.easy.varModel.model.IvmlDatatypeVisitor;
 import net.ssehub.easy.varModel.model.datatypes.Container;
 import net.ssehub.easy.varModel.model.datatypes.IDatatype;
 import net.ssehub.easy.varModel.model.datatypes.IntegerType;
@@ -64,7 +65,8 @@ public class ContainerOperations {
                 }
             } else {
                 if (null != opValue) { // undefined is ok
-                    operand.getContext().addErrorMessage("operand is no Container");
+                    operand.getContext().addErrorMessage("operand is no Container: " 
+                        + IvmlDatatypeVisitor.getQualifiedType(opValue.getType()));
                 }
                 result = null;
             }

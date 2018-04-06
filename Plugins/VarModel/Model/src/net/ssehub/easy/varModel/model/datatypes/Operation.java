@@ -61,7 +61,12 @@ public class Operation {
          * Change it to the immediate type of the operand.
          */
         IMMEDIATE_OPERAND(-1, -1, false, false),
-        
+
+        /**
+         * Change it to the dereferenced immediate type of the operand.
+         */
+        IMMEDIATE_OPERAND_DEREF(-1, -1, false, false),
+
         /**
          * Change the return type to the operand with generic parameter. If no generic
          * parameter is available, {@link #IMMEDIATE_OPERAND} is applied.
@@ -515,6 +520,9 @@ public class Operation {
             break;
         case IMMEDIATE_OPERAND:
             result = immediateOperand;
+            break;
+        case IMMEDIATE_OPERAND_DEREF:
+            result = Reference.dereference(immediateOperand);
             break;
         case PARAM_1_CHECK:
         case TYPED_PARAM_1:

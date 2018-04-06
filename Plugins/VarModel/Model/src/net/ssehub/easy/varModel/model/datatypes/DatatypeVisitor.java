@@ -210,7 +210,9 @@ public abstract class DatatypeVisitor implements IDatatypeVisitor {
      * @return the textual representation
      */
     public String getType(IDatatype type) {
-        type.accept(this);
+        if (null != type) {
+            type.accept(this);
+        }
         return getResult();
     }
 

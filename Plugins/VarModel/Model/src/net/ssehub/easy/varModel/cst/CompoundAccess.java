@@ -20,7 +20,7 @@ import net.ssehub.easy.varModel.model.DecisionVariableDeclaration;
 import net.ssehub.easy.varModel.model.datatypes.Compound;
 import net.ssehub.easy.varModel.model.datatypes.IDatatype;
 import net.ssehub.easy.varModel.model.datatypes.MetaType;
-import net.ssehub.easy.varModel.model.datatypes.Reference;
+import net.ssehub.easy.varModel.model.datatypes.TypeQueries;
 import net.ssehub.easy.varModel.model.values.MetaTypeValue;
 import net.ssehub.easy.varModel.model.values.Value;
 
@@ -93,7 +93,7 @@ public class CompoundAccess extends ConstraintSyntaxTree {
             } else {
                 cExpression = compoundExpression.inferDatatype();
             }
-            cExpression = Reference.dereference(cExpression);
+            cExpression = TypeQueries.resolveFully(cExpression);
             if (cExpression.isAssignableFrom(MetaType.TYPE)) {
                 if (cExpression instanceof ConstantValue) {
                     // ugly!

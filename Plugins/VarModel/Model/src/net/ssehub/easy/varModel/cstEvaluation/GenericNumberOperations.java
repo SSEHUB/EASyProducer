@@ -152,7 +152,6 @@ class GenericNumberOperations {
         if (null != operand && operand.getValue() != null && arguments.length == 1 && null != arguments[0].getValue()) {
             Object oValue = operand.getValue().getValue();
             Object aValue = arguments[0].getValue().getValue();
-            
             if (oValue instanceof Number && aValue instanceof Number && null != strategy) {
                 boolean booleanResult = strategy.compare((Number) oValue, (Number) aValue);
                 

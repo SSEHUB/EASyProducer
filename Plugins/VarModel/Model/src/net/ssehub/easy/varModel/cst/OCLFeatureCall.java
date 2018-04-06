@@ -171,8 +171,11 @@ public class OCLFeatureCall extends ConstraintSyntaxTree {
         IDatatype origOperandType = operandType;
         operandType = BaseTypeVisitor.getBaseType(operandType);
         if (null == op) {
-            operandType = Reference.dereference(operandType);
-            dereference(parameters, paramTypes);
+            op = TypeQueries.getOperation(operandType, operation, paramTypes);
+        }
+        if (null == op) {
+            operandType = TypeQueries.resolveFully(operandType);
+            resolveFully(parameters, paramTypes);
             op = TypeQueries.getOperation(operandType, operation, paramTypes);
             op = checkOperand(op, origOperandType, paramTypes);
             if (null == op && null != paramTypes) {
@@ -236,10 +239,10 @@ public class OCLFeatureCall extends ConstraintSyntaxTree {
      * @param parameter the parameter
      * @param types the types (modified as a side effect)
      */
-    private static void dereference(ConstraintSyntaxTree[] parameter, IDatatype[] types) {
+    private static void resolveFully(ConstraintSyntaxTree[] parameter, IDatatype[] types) {
         if (null != types) {
             for (int p = 0; p < types.length; p++) {
-                IDatatype deref = Reference.dereference(types[p]);
+                IDatatype deref = TypeQueries.resolveFully(types[p]);
                 if (types[p] != deref && !(parameter[p] instanceof ConstantValue)) { // constant expression -> refBy
                     types[p] = deref;
                 } 

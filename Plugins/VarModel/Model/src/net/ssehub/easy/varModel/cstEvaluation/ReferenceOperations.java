@@ -25,6 +25,24 @@ import net.ssehub.easy.varModel.model.datatypes.Reference;
 public class ReferenceOperations {
 
     /**
+     * Implements the "refBy" dereferencing operation.
+     */
+    static final IOperationEvaluator REF_BY = new IOperationEvaluator() {
+        
+        @Override
+        public EvaluationAccessor evaluate(EvaluationAccessor operand, EvaluationAccessor[] arguments) {
+            EvaluationAccessor result;
+            if (null != operand) {
+                result = ConstantAccessor.POOL.getInstance().bind(operand.getDereferencedValue(), operand.getContext());
+            } else {
+                result = null;
+            }
+            return result;
+        }
+        
+    };
+    
+    /**
      * Prevents external creation.
      */
     private ReferenceOperations() {
@@ -39,6 +57,7 @@ public class ReferenceOperations {
         EvaluatorRegistry.registerEvaluator(GenericOperations.UNEQUALS, Reference.UNEQUALS, Reference.UNEQUALS_ALIAS);
         EvaluatorRegistry.registerEvaluator(GenericOperations.ASSIGNMENT, Reference.ASSIGNMENT);
         EvaluatorRegistry.registerEvaluator(GenericOperations.IS_DEFINED, Reference.IS_DEFINED);
+        EvaluatorRegistry.registerEvaluator(REF_BY, Reference.REF_BY);
     }
 
 }

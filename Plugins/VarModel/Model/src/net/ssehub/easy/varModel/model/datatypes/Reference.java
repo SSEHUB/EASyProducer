@@ -16,7 +16,9 @@
 package net.ssehub.easy.varModel.model.datatypes;
 
 import net.ssehub.easy.varModel.model.IModelVisitor;
+import net.ssehub.easy.varModel.model.IvmlKeyWords;
 import net.ssehub.easy.varModel.model.ModelElement;
+import net.ssehub.easy.varModel.model.datatypes.Operation.ReturnTypeMode;
 
 
 /** 
@@ -51,7 +53,9 @@ public class Reference extends CustomDatatype {
     public static final Operation ASSIGNMENT 
         = Operation.createInfixOperator(BooleanType.TYPE, OclKeyWords.ASSIGNMENT, TYPE, TYPE);
     public static final Operation IS_DEFINED = new Operation(BooleanType.TYPE, OclKeyWords.IS_DEFINED, TYPE)
-        .markAsAcceptsNull();    
+        .markAsAcceptsNull();
+    public static final Operation REF_BY = new Operation(TYPE, ReturnTypeMode.IMMEDIATE_OPERAND_DEREF, 
+        IvmlKeyWords.REFBY, TYPE); // internal, not resolvable through IVML as keyword there!
  
     // checkstyle: resume declaration order check
     
@@ -63,6 +67,7 @@ public class Reference extends CustomDatatype {
         DTYPE.addOperation(UNEQUALS);
         DTYPE.addOperation(UNEQUALS_ALIAS);
         DTYPE.addOperation(ASSIGNMENT);
+        DTYPE.addOperation(REF_BY);
     }
     
     private IDatatype type;
@@ -125,7 +130,7 @@ public class Reference extends CustomDatatype {
                 isAssignable = true; // this is akin to Reference.INSTANCE so everything reference can be assinged
             } else {
                 if (null != r.type) {
-                    isAssignable = this.type.isAssignableFrom(r.type);
+                    isAssignable = this.type.isAssignableFrom(DerivedDatatype.resolveToBasis(r.type));
                 }
             }
         }
