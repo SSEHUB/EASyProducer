@@ -28,6 +28,7 @@ import net.ssehub.easy.instantiation.core.model.buildlangModel.Script;
 import net.ssehub.easy.instantiation.core.model.vilTypes.configuration.Configuration;
 import net.ssehub.easy.instantiation.maven.Registration;
 import net.ssehub.easy.instantiation.velocity.VelocityInstantiator;
+import net.ssehub.easy.reasoning.core.frontend.IReasonerInstance;
 import net.ssehub.easy.reasoning.core.frontend.ReasonerFrontend;
 import net.ssehub.easy.reasoning.core.reasoner.Message;
 import net.ssehub.easy.reasoning.core.reasoner.ReasonerConfiguration;
@@ -53,6 +54,7 @@ public class RealTests extends AbstractScenarioTest {
     protected static final String[] RELATIVE_CURL_EXECUTABLES = {"curl/curl.bat", "curl/curl.sh"};
     
     private static final int MAX_REASONING = 1; // increase for taking measurements
+    private static final int MAX_INSTANCE_REASONING = 2; // increase for taking measurements
     private static RealTests tests;
     private boolean enableRealTimeAsserts;
     
@@ -455,13 +457,15 @@ public class RealTests extends AbstractScenarioTest {
                         assertFailureMessage(res, ppfe2);
                     }
 
-                    /*System.out.println("Performing runtime reasoning/propagation with instance ...");
-                    IReasonerInstance inst = ReasonerFrontend.getInstance().createInstance(prj, cfg, rCfg);
-                    for (int r = 1; r <= MAX_REASONING; r++) {
-                        ReasoningResult res = inst.propagate(ProgressObserver.NO_OBSERVER);
-                        Assert.assertTrue("Runtime configuration must have conflict", res.hasConflict());
-                        assertFailureMessage(res, ppfe2);
-                    }*/
+                    if (MAX_INSTANCE_REASONING > 0) {
+                        System.out.println("Performing runtime reasoning/propagation with instance ...");
+                        IReasonerInstance inst = ReasonerFrontend.getInstance().createInstance(prj, cfg, rCfg);
+                        for (int r = 1; r <= MAX_INSTANCE_REASONING; r++) {
+                            ReasoningResult res = inst.propagate(ProgressObserver.NO_OBSERVER);
+                            Assert.assertTrue("Runtime configuration must have conflict", res.hasConflict());
+                            assertFailureMessage(res, ppfe2);
+                        }
+                    }
                 }
             } catch (ModelQueryException e) {
                 e.printStackTrace();
