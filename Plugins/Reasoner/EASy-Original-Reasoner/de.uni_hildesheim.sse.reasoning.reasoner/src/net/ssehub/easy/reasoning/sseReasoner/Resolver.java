@@ -101,7 +101,7 @@ public class Resolver {
     private VariablesMap constraintMap = new VariablesMap();
     private Map<Constraint, IDecisionVariable> constraintVariableMap = new HashMap<Constraint, IDecisionVariable>();
     private Deque<Constraint> constraintBase = new LinkedList<Constraint>();
-    private Deque<Constraint> constraintBaseCopy = null;
+    private List<Deque<Constraint>> constraintBaseCopy = null;
     private Set<Constraint> constraintBaseSet = new HashSet<Constraint>();
     private Deque<Constraint> defaultConstraints = new LinkedList<Constraint>();
     private Deque<Constraint> deferredDefaultConstraints = new LinkedList<Constraint>();
@@ -118,6 +118,7 @@ public class Resolver {
     private boolean wasStopped = false;
     private long translationTime = 0;
     private long evaluationTime = 0;
+    private boolean reuseInstance = false;
 
     // global temporary variables avoiding parameter passing (performance)
     
@@ -267,7 +268,7 @@ public class Resolver {
      * Resolves the (initial) values of the configuration.
      * 
      * @see Utils#discoverImports(net.ssehub.easy.basics.modelManagement.IModel)
-     * @see #translateConstraints()
+     * @see #translateConstraints(int)
      * @see #evaluateConstraints()
      * @see Configuration#freeze(net.ssehub.easy.varModel.confModel.IFreezeSelector)
      */
@@ -277,30 +278,50 @@ public class Resolver {
         evaluator.init(config, null, false, listener); // also for defaults as they may refer to each other 
         evaluator.setResolutionListener(resolutionListener);
         evaluator.setScopeAssignments(scopeAssignments);
-        List<Project> projects = Utils.discoverImports(config.getProject());
         endTimestamp = reasonerConfig.getTimeout() <= 0 
             ? -1 : System.currentTimeMillis() + reasonerConfig.getTimeout();
-        for (int p = 0; !hasTimeout && !wasStopped && p < projects.size(); p++) {
-            project = projects.get(p);
-            if (Descriptor.LOGGING) {
-                LOGGER.debug("Project:" + project.getName());                
+        if (null != constraintBaseCopy) {
+            for (int p = 0; !hasTimeout && !wasStopped && p < constraintBaseCopy.size(); p++) {
+                long start = System.currentTimeMillis();
+                constraintBase.addAll(constraintBaseCopy.get(p));
+                evaluateConstraintBase(start);
             }
-            long start = System.currentTimeMillis();
-            translateConstraints();
-            long mid = System.currentTimeMillis();
-            translationTime += mid - start;
-            evaluateConstraints();
-            long end = System.currentTimeMillis();
-            evaluationTime += end - mid;
-            // Freezes values after each scope
-            config.freezeValues(project, FilterType.NO_IMPORTS);
-            // TODO do incremental freezing in here -> required by interfaces with propagation constraints
-            if (Descriptor.LOGGING) {
-                printFailedElements(failedElements);                                
+        } else {
+            if (reuseInstance) {
+                constraintBaseCopy = new ArrayList<Deque<Constraint>>();
+            }
+            List<Project> projects = Utils.discoverImports(config.getProject());
+            for (int p = 0; !hasTimeout && !wasStopped && p < projects.size(); p++) {
+                project = projects.get(p);
+                if (Descriptor.LOGGING) {
+                    LOGGER.debug("Project:" + project.getName());                
+                }
+                long start = System.currentTimeMillis();
+                translateConstraints();
+                evaluateConstraintBase(start);
             }
         }
         evaluator.clear();
         isRunning = false;
+    }
+
+    /**
+     * Evaluates all constraints in the constraint base.
+     * 
+     * @param start the start point in time for reasoning statistics
+     */
+    private void evaluateConstraintBase(long start) {
+        long mid = System.currentTimeMillis();
+        translationTime += mid - start;
+        evaluateConstraints();
+        long end = System.currentTimeMillis();
+        evaluationTime += end - mid;
+        // Freezes values after each scope
+        config.freezeValues(project, FilterType.NO_IMPORTS);
+        // TODO do incremental freezing in here -> required by interfaces with propagation constraints
+        if (Descriptor.LOGGING) {
+            printFailedElements(failedElements);                                
+        }
     }
     
     /**
@@ -968,22 +989,21 @@ public class Resolver {
      * @see #resolve()
      */
     private void translateConstraints() {
-        // translate only if not marked for reuse and copy of constraint base is already available
-        if (null == constraintBaseCopy || constraintBaseCopy.isEmpty()) {
-            project.accept(projectVisitor);
-            addAllToConstraintBase(defaultConstraints);
-            addAllToConstraintBase(deferredDefaultConstraints);
-            addAllToConstraintBase(topLevelConstraints);
-            addAllToConstraintBase(otherConstraints);
-            constraintCounter = constraintBase.size();
-            variablesInConstraintsCounter = constraintMap.getDeclarationSize();
-            clearConstraintLists();
-            // if marked for re-use, copy constraint base
-            if (null != constraintBaseCopy) {
-                constraintBaseCopy.addAll(constraintBase);
-            }
-            contexts.clear();
+        project.accept(projectVisitor);
+        addAllToConstraintBase(defaultConstraints);
+        addAllToConstraintBase(deferredDefaultConstraints);
+        addAllToConstraintBase(topLevelConstraints);
+        addAllToConstraintBase(otherConstraints);
+        constraintCounter = constraintBase.size();
+        variablesInConstraintsCounter = constraintMap.getDeclarationSize();
+        clearConstraintLists();
+        // if marked for re-use, copy constraint base
+        if (null != constraintBaseCopy) {
+            LinkedList<Constraint> copy = new LinkedList<Constraint>();
+            copy.addAll(constraintBase);
+            constraintBaseCopy.add(copy);
         }
+        contexts.clear();
     }
 
     /**
@@ -1344,9 +1364,10 @@ public class Resolver {
     
     /**
      * Marks this instance for re-use. Must be called before the first call to {@link #resolve()}.
+     * Works intentionally only once.
      */
     void markForReuse() {
-        constraintBaseCopy  = new LinkedList<Constraint>();
+        reuseInstance = true;
     }
 
     /**
@@ -1384,10 +1405,13 @@ public class Resolver {
      * @see #reInit()
      */
     void reInit() {
-        if (null != constraintBaseCopy) {
-            constraintBase.addAll(constraintBaseCopy);
-            constraintBaseSet.addAll(constraintBaseCopy);
-        }
+        hasTimeout = false;
+        isRunning = false;
+        wasStopped = false;
+        reevaluationCounter = 0;
+        translationTime = 0;
+        evaluationTime = 0;
+        failedElements.clear();
     }
 
     /**
