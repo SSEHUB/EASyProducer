@@ -1,0 +1,14 @@
+project runtimeReasoningConstraintSet {
+
+    enum BindingTime {compile=0, runtime=1};
+    annotate BindingTime binding = BindingTime::compile to runtimeReasoningConstraintSet;
+    Integer a = 5;
+    assign (binding = BindingTime::runtime) to {
+        Integer b;
+    }
+    setOf(Constraint) user = {b > 10}; 
+    a >= 5;
+    freeze {
+        runtimeReasoningConstraintSet;
+    } but (f|f.binding >= BindingTime.runtime);
+}
