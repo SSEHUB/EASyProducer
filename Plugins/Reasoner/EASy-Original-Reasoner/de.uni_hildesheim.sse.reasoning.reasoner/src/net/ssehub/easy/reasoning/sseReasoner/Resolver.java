@@ -23,12 +23,12 @@ import net.ssehub.easy.reasoning.sseReasoner.functions.ScopeAssignments;
 import net.ssehub.easy.reasoning.sseReasoner.model.ContainerConstraintsFinder;
 import net.ssehub.easy.reasoning.sseReasoner.model.ContextStack;
 import net.ssehub.easy.reasoning.sseReasoner.model.SubstitutionVisitor;
+import net.ssehub.easy.reasoning.sseReasoner.model.VariablesInConstraintFinder;
 import net.ssehub.easy.reasoning.sseReasoner.model.DefaultConstraint;
 import net.ssehub.easy.reasoning.sseReasoner.model.VariablesInNotSimpleAssignmentConstraintsFinder;
 import net.ssehub.easy.reasoning.sseReasoner.model.VariablesMap;
 import net.ssehub.easy.varModel.confModel.AssignmentState;
 import net.ssehub.easy.varModel.confModel.Configuration;
-import net.ssehub.easy.varModel.confModel.IAssignmentState;
 import net.ssehub.easy.varModel.confModel.IConfigurationElement;
 import net.ssehub.easy.varModel.confModel.IDecisionVariable;
 import net.ssehub.easy.varModel.cst.AttributeVariable;
@@ -64,7 +64,6 @@ import net.ssehub.easy.varModel.model.datatypes.OclKeyWords;
 import net.ssehub.easy.varModel.model.datatypes.Reference;
 import net.ssehub.easy.varModel.model.datatypes.TypeQueries;
 import net.ssehub.easy.varModel.model.filter.FilterType;
-import net.ssehub.easy.varModel.model.filter.VariablesInConstraintFinder;
 import net.ssehub.easy.varModel.model.values.ConstraintValue;
 import net.ssehub.easy.varModel.model.values.ContainerValue;
 import net.ssehub.easy.varModel.model.values.Value;
@@ -107,6 +106,7 @@ public class Resolver {
     private Deque<Constraint> deferredDefaultConstraints = new LinkedList<Constraint>();
     private Deque<Constraint> topLevelConstraints = new LinkedList<Constraint>();
     private Deque<Constraint> otherConstraints = new LinkedList<Constraint>();
+    private List<Project> projects;
     
     // Stats
     private int constraintCounter = 0;
@@ -280,25 +280,27 @@ public class Resolver {
         evaluator.setScopeAssignments(scopeAssignments);
         endTimestamp = reasonerConfig.getTimeout() <= 0 
             ? -1 : System.currentTimeMillis() + reasonerConfig.getTimeout();
-        if (null != constraintBaseCopy) {
-            for (int p = 0; !hasTimeout && !wasStopped && p < constraintBaseCopy.size(); p++) {
-                long start = System.currentTimeMillis();
-                constraintBase.addAll(constraintBaseCopy.get(p));
-                evaluateConstraintBase(start);
-            }
-        } else {
+        if (null == constraintBaseCopy) {
             if (reuseInstance) {
                 constraintBaseCopy = new ArrayList<Deque<Constraint>>();
             }
-            List<Project> projects = Utils.discoverImports(config.getProject());
+            projects = Utils.discoverImports(config.getProject());
             for (int p = 0; !hasTimeout && !wasStopped && p < projects.size(); p++) {
-                project = projects.get(p);
+                project = projects.get(p); // set global for deeper nested methods
                 if (Descriptor.LOGGING) {
                     LOGGER.debug("Project:" + project.getName());                
                 }
                 long start = System.currentTimeMillis();
-                translateConstraints();
-                evaluateConstraintBase(start);
+                translateConstraints(project);
+                evaluateConstraintBase(start, project);
+            }
+        } else {
+            // size corresponds to #projects
+            for (int p = 0; !hasTimeout && !wasStopped && p < constraintBaseCopy.size(); p++) {
+                project = projects.get(p); // set global for deeper nested methods
+                long start = System.currentTimeMillis();
+                constraintBase.addAll(constraintBaseCopy.get(p));
+                evaluateConstraintBase(start, project);
             }
         }
         evaluator.clear();
@@ -309,11 +311,12 @@ public class Resolver {
      * Evaluates all constraints in the constraint base.
      * 
      * @param start the start point in time for reasoning statistics
+     * @param project the project to evaluate
      */
-    private void evaluateConstraintBase(long start) {
+    private void evaluateConstraintBase(long start, Project project) {
         long mid = System.currentTimeMillis();
         translationTime += mid - start;
-        evaluateConstraints();
+        evaluateConstraints(project);
         long end = System.currentTimeMillis();
         evaluationTime += end - mid;
         // Freezes values after each scope
@@ -327,9 +330,10 @@ public class Resolver {
     /**
      * Evaluates and reschedules failed constraints.
      * 
+     * @param project the project to evaluate the constraints for
      * @see #resolve()
      */
-    private void evaluateConstraints() {
+    private void evaluateConstraints(Project project) {
         if (Descriptor.LOGGING) {
             printConstraints(constraintBase);            
         }
@@ -402,7 +406,7 @@ public class Resolver {
 
         @Override // collect all top-level/enum/attribute assignment constraints
         public void visitConstraint(Constraint constraint) {
-            addConstraint(topLevelConstraints, constraint, true); // topLevelConstraints
+            addConstraint(topLevelConstraints, constraint, true);
         }
 
         @Override // iterate over nested blocks/contained constraints
@@ -418,6 +422,9 @@ public class Resolver {
             boolean oldReg = contexts.setRegisterContexts(true);
             for (int v = 0; v < assignment.getElementCount(); v++) {
                 assignment.getElement(v).accept(this);
+            }
+            for (int c = 0; c < assignment.getConstraintsCount(); c++) {
+                addConstraint(topLevelConstraints, assignment.getConstraint(c), true);
             }
             for (int a = 0; a < assignment.getAssignmentCount(); a++) {
                 assignment.getAssignment(a).accept(this);
@@ -983,12 +990,13 @@ public class Resolver {
     }
 
     /**
-     * Translates and collects all constraints in {@link #project} by adding the collected constraints to the 
+     * Translates and collects all constraints in <code>project</code> by adding the collected constraints to the 
      * {@link #constraintBase}.
      * 
+     * @param project the project to translate the constraints for
      * @see #resolve()
      */
-    private void translateConstraints() {
+    private void translateConstraints(Project project) {
         project.accept(projectVisitor);
         addAllToConstraintBase(defaultConstraints);
         addAllToConstraintBase(deferredDefaultConstraints);
@@ -1029,8 +1037,7 @@ public class Resolver {
         if (add && !considerFrozenConstraints) {
             variablesFinder.setConfiguration(config);
             cst.accept(variablesFinder);
-            Set<IAssignmentState> states = variablesFinder.getStates();
-            add = (!(1 == states.size() && states.contains(AssignmentState.FROZEN)));
+            add = !variablesFinder.isConstraintFrozen();
             variablesFinder.clear();
         }
         if (add) {

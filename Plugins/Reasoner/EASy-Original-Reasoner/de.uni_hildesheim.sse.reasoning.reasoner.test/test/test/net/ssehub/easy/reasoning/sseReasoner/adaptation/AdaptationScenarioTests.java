@@ -12,14 +12,20 @@ import de.uni_hildesheim.sse.ModelUtility;
 import net.ssehub.easy.basics.modelManagement.ModelManagementException;
 import net.ssehub.easy.basics.progress.ProgressObserver;
 import net.ssehub.easy.dslCore.StandaloneInitializer;
+import net.ssehub.easy.reasoning.core.frontend.IReasonerInstance;
 import net.ssehub.easy.reasoning.core.reasoner.ReasonerConfiguration;
+import net.ssehub.easy.reasoning.core.reasoner.ReasoningResult;
 import net.ssehub.easy.reasoning.sseReasoner.Engine;
+import net.ssehub.easy.reasoning.sseReasoner.Reasoner;
 import net.ssehub.easy.varModel.confModel.AssignmentState;
 import net.ssehub.easy.varModel.confModel.Configuration;
 import net.ssehub.easy.varModel.confModel.ConfigurationException;
 import net.ssehub.easy.varModel.confModel.IAssignmentState;
 import net.ssehub.easy.varModel.confModel.IDecisionVariable;
 import net.ssehub.easy.varModel.management.VarModel;
+import net.ssehub.easy.varModel.model.AbstractVariable;
+import net.ssehub.easy.varModel.model.ModelQuery;
+import net.ssehub.easy.varModel.model.ModelQueryException;
 import net.ssehub.easy.varModel.model.Project;
 import net.ssehub.easy.varModel.model.datatypes.IntegerType;
 import net.ssehub.easy.varModel.model.values.Value;
@@ -309,7 +315,69 @@ public class AdaptationScenarioTests extends test.net.ssehub.easy.reasoning.sseR
                          "seqA[1] after 2 reasoning"); 
             }
         }
-        
     }
-   
+
+    /**
+     * Performs a simple test in runtime reasoning mode.
+     * 
+     * @throws ModelQueryException shall not occur
+     * @throws ValueDoesNotMatchTypeException shall not occur
+     * @throws ConfigurationException shall not occur
+     */
+    @Test
+    public void runtimeReasoningTest() throws ModelQueryException, ValueDoesNotMatchTypeException, 
+        ConfigurationException {
+        prepareConfiguration("runtimeReasoning.ivml");
+        runReasoning();
+        
+        rConfig.setRuntimeMode(true);
+        rConfig.setAdditionalInformationLogger(ReasonerConfiguration.ADDITIONAL_INFO_LOG_SYSOUT);
+        Reasoner reasoner = new Reasoner();
+        IReasonerInstance inst = reasoner.createInstance(project, config, rConfig);
+        ReasoningResult rResult = inst.propagate(ProgressObserver.NO_OBSERVER);
+        Assert.assertFalse(rResult.hasConflict());
+        
+        AbstractVariable bDecl = ModelQuery.findVariable(project, "b", null);
+        IDecisionVariable bVar = config.getDecision(bDecl);
+        bVar.setValue(ValueFactory.createValue(IntegerType.TYPE, 11), AssignmentState.ASSIGNED);
+        rResult = inst.propagate(ProgressObserver.NO_OBSERVER);
+        Assert.assertFalse(rResult.hasConflict());
+
+        
+        bVar.setValue(ValueFactory.createValue(IntegerType.TYPE, 4), AssignmentState.ASSIGNED);
+        rResult = inst.propagate(ProgressObserver.NO_OBSERVER);
+        Assert.assertTrue(rResult.hasConflict());
+    }
+
+    /**
+     * Performs a simple test in runtime reasoning mode.
+     * 
+     * @throws ModelQueryException shall not occur
+     * @throws ValueDoesNotMatchTypeException shall not occur
+     * @throws ConfigurationException shall not occur
+     */
+    @Test
+    public void runtimeReasoningConstraintSetTest() throws ModelQueryException, ValueDoesNotMatchTypeException, 
+        ConfigurationException {
+        prepareConfiguration("runtimeReasoningConstraintSet.ivml");
+        runReasoning();
+        
+        rConfig.setRuntimeMode(true);
+        rConfig.setAdditionalInformationLogger(ReasonerConfiguration.ADDITIONAL_INFO_LOG_SYSOUT);
+        Reasoner reasoner = new Reasoner();
+        IReasonerInstance inst = reasoner.createInstance(project, config, rConfig);
+        ReasoningResult rResult = inst.propagate(ProgressObserver.NO_OBSERVER);
+        Assert.assertFalse(rResult.hasConflict());
+        
+        AbstractVariable bDecl = ModelQuery.findVariable(project, "b", null);
+        IDecisionVariable bVar = config.getDecision(bDecl);
+        bVar.setValue(ValueFactory.createValue(IntegerType.TYPE, 11), AssignmentState.ASSIGNED);
+        rResult = inst.propagate(ProgressObserver.NO_OBSERVER);
+        Assert.assertFalse(rResult.hasConflict());
+
+        bVar.setValue(ValueFactory.createValue(IntegerType.TYPE, 4), AssignmentState.ASSIGNED);
+        rResult = inst.propagate(ProgressObserver.NO_OBSERVER);
+        Assert.assertTrue(rResult.hasConflict());
+    }
+
 }

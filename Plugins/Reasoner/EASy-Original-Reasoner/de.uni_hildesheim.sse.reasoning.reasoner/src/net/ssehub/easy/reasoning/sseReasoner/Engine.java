@@ -78,14 +78,17 @@ public class Engine {
      */
     public Engine(Project project, Configuration cfg, ReasonerConfiguration reasonerConfig,
         ProgressObserver observer) {
-        cfg.unfreeze(AssignmentState.DERIVED);
         this.project = project;
 //        this.reasoningID = PerformanceStatistics.createReasoningID(project.getName(), "Model validation");
         this.resolver = new Resolver(project, cfg, reasonerConfig);
-        this.resolver.setIncremental(reasonerConfig.isRuntimeMode());
-        //this.resolver.setConsiderFrozenConstraints(considerFrozenConstraints); // TODO does this work?
+        boolean isRuntimeMode = reasonerConfig.isRuntimeMode();
+        this.resolver.setIncremental(isRuntimeMode);
+        this.resolver.setConsiderFrozenConstraints(!isRuntimeMode);
         this.result = new ReasoningResult();
         this.infoLogger = reasonerConfig.getLogger();
+        if (!isRuntimeMode) {
+            cfg.unfreeze(AssignmentState.DERIVED); // TODO: is this really needed? unclear why?
+        }
     } 
     
     /**
