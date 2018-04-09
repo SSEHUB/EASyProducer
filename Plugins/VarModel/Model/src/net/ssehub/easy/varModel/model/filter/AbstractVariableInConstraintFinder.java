@@ -41,7 +41,7 @@ import net.ssehub.easy.varModel.model.values.Value;
  * @author El-Sharkawy
  *
  */
-abstract class AbstractVariableInConstraintFinder implements IConstraintTreeVisitor {
+public abstract class AbstractVariableInConstraintFinder implements IConstraintTreeVisitor {
 
     private boolean considerReferences;
     
