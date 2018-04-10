@@ -18,6 +18,7 @@ import net.ssehub.easy.reasoning.sseReasoner.functions.FailedElements;
 import net.ssehub.easy.varModel.confModel.AssignmentState;
 import net.ssehub.easy.varModel.confModel.Configuration;
 import net.ssehub.easy.varModel.confModel.DisplayNameProvider;
+import net.ssehub.easy.varModel.confModel.IAssignmentState;
 import net.ssehub.easy.varModel.confModel.IDecisionVariable;
 import net.ssehub.easy.varModel.cst.ConstraintSyntaxTree;
 import net.ssehub.easy.varModel.model.AbstractVariable;
@@ -418,6 +419,16 @@ public class Engine {
      */
     void reInit() {
         resolver.reInit();
+    }
+    
+    /**
+     * Sets the desired assignment state. The default value is {@link AssignmentState#DERIVED}, but specific reasoning
+     * operations such as configuration initialization may require a differnt state.
+     * 
+     * @param state the state to use
+     */
+    void setAssignmentState(IAssignmentState state) {
+        resolver.setAssignmentState(state); 
     }
 
 }

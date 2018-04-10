@@ -29,6 +29,7 @@ import net.ssehub.easy.reasoning.sseReasoner.model.VariablesInNotSimpleAssignmen
 import net.ssehub.easy.reasoning.sseReasoner.model.VariablesMap;
 import net.ssehub.easy.varModel.confModel.AssignmentState;
 import net.ssehub.easy.varModel.confModel.Configuration;
+import net.ssehub.easy.varModel.confModel.IAssignmentState;
 import net.ssehub.easy.varModel.confModel.IConfigurationElement;
 import net.ssehub.easy.varModel.confModel.IDecisionVariable;
 import net.ssehub.easy.varModel.cst.AttributeVariable;
@@ -92,6 +93,8 @@ public class Resolver {
     private Configuration config;
     private boolean incremental = false;
     private boolean considerFrozenConstraints = true;
+    private boolean reuseInstance = false;
+    private IAssignmentState assignmentState = AssignmentState.DERIVED;
 
     private EvalVisitor evaluator = new EvalVisitor();
     private FailedElements failedElements = new FailedElements();
@@ -118,7 +121,6 @@ public class Resolver {
     private boolean wasStopped = false;
     private long translationTime = 0;
     private long evaluationTime = 0;
-    private boolean reuseInstance = false;
 
     // global temporary variables avoiding parameter passing (performance)
     
@@ -344,8 +346,7 @@ public class Resolver {
             Constraint constraint = constraintBase.pop();
             constraintBaseSet.remove(constraint);
             ConstraintSyntaxTree cst = constraint.getConsSyntax();
-            evaluator.setAssignmentState(constraint.isDefaultConstraint() 
-                ? AssignmentState.DEFAULT : AssignmentState.DERIVED);
+            evaluator.setAssignmentState(constraint.isDefaultConstraint() ? AssignmentState.DEFAULT : assignmentState);
             reevaluationCounter++;
             if (cst != null) {
                 if (Descriptor.LOGGING) {
@@ -1437,6 +1438,18 @@ public class Resolver {
      */
     long getTranslationTime() {
         return evaluationTime;
+    }
+
+    /**
+     * Sets the desired assignment state. The default value is {@link AssignmentState#DERIVED}, but specific reasoning
+     * operations such as configuration initialization may require a differnt state.
+     * 
+     * @param state the state to use
+     */
+    void setAssignmentState(IAssignmentState state) {
+        if (null != state) {
+            this.assignmentState = state;
+        }
     }
 
 }

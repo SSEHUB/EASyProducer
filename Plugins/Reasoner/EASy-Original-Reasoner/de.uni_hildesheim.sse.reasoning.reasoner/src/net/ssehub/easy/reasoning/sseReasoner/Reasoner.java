@@ -136,7 +136,7 @@ public class Reasoner implements IReasoner {
 
     @Override
     public ReasoningResult isConsistent(Project project, ReasonerConfiguration reasonerConfig, 
-                ProgressObserver observer) {
+        ProgressObserver observer) {
         reasonerConfig =  null == reasonerConfig ? new ReasonerConfiguration() : reasonerConfig;
         Engine engine = new Engine(project, createConfiguration(project, null, reasonerConfig, true), 
             reasonerConfig, observer);           
@@ -158,6 +158,16 @@ public class Reasoner implements IReasoner {
         reasonerConfig =  null == reasonerConfig ? new ReasonerConfiguration() : reasonerConfig;
         Engine engine = new Engine(project, createConfiguration(project, cfg, reasonerConfig, false), 
             reasonerConfig, observer);
+        return engine.reason();
+    }
+
+    @Override
+    public ReasoningResult initialize(Project project, Configuration cfg, ReasonerConfiguration reasonerConfig,
+        ProgressObserver observer) {
+        reasonerConfig =  null == reasonerConfig ? new ReasonerConfiguration() : reasonerConfig;
+        Engine engine = new Engine(project, createConfiguration(project, cfg, reasonerConfig, false), 
+            reasonerConfig, observer);
+        engine.setAssignmentState(cfg.getResolutionState());
         return engine.reason();
     }
 
@@ -265,28 +275,6 @@ public class Reasoner implements IReasoner {
     public IReasonerInstance createInstance(Project project, Configuration cfg,
             ReasonerConfiguration reasonerConfiguration) {
         return new ReasonerInstance(project, cfg, reasonerConfiguration);
-    }
-
-    /**
-     * Initializes the configuration according to the given model and propagates values, if possible.
-     * 
-     * @param project
-     *            The project which serves as basis for the related configuration.
-     * @param cfg
-     *            The current configuration based on the given project (may be modified as a side effect
-     *            of value propagation)
-     * @param reasonerConfiguration the reasoner configuration to be used for reasoning (e.g. taken from the UI, 
-     *        may be <b>null</b>)                   
-     * @param observer an optional progress observer, shall be {@link ProgressObserver#NO_OBSERVER} if unused
-     * @return The result of this reasoning step. Can have the status
-     *     {@link net.ssehub.easy.basics.messages.Status#UNSUPPORTED} if the concrete reasoner does not support
-     *     this operation.
-     */
-    @Override
-    public ReasoningResult initialize(Project project, Configuration cfg, ReasonerConfiguration reasonerConfiguration,
-        ProgressObserver observer) {
-        // probably two-pass approach, first defaults, then constraints
-        return propagate(project, cfg, reasonerConfiguration, observer);
     }
 
 }

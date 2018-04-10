@@ -15,6 +15,7 @@
  */
 package test.net.ssehub.easy.reasoning.sseReasoner;
 
+import net.ssehub.easy.reasoning.core.frontend.ReasonerFrontend;
 import net.ssehub.easy.reasoning.core.reasoner.AbstractTestDescriptor;
 import net.ssehub.easy.reasoning.core.reasoner.IReasoner;
 import net.ssehub.easy.reasoning.core.reasoner.ITestDescriptor;
@@ -28,10 +29,21 @@ import net.ssehub.easy.reasoning.sseReasoner.Reasoner;
 public class TestDescriptor extends AbstractTestDescriptor {
 
     public static final ITestDescriptor INSTANCE = new TestDescriptor();
+    private Reasoner reasoner = new Reasoner();
     
     @Override
     public IReasoner createReasoner() {
         return new Reasoner();
+    }
+
+    @Override
+    public void registerResoner() {
+        ReasonerFrontend.getInstance().getRegistry().register(reasoner);
+    }
+
+    @Override
+    public void unregisterReasoner() {
+        ReasonerFrontend.getInstance().getRegistry().unregister(reasoner);
     }
 
 }

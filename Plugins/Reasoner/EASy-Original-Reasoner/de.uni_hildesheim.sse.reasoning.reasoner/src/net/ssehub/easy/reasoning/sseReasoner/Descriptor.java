@@ -229,7 +229,7 @@ public class Descriptor extends ReasonerDescriptor {
         addCapability(GeneralReasonerCapabilities.RUNTIME_REASONING); // at least basic capabilities
         addCapability(GeneralReasonerCapabilities.TIMEOUT);
         addCapability(GeneralReasonerCapabilities.STANDALONE_REASONING);
-//        addCapability(GeneralReasonerCapabilities.CONFIGURATION_INITIALIZATION); // TODO clarify with Roman
+        //addCapability(GeneralReasonerCapabilities.CONFIGURATION_INITIALIZATION); // TODO enable after tests
     }
     
     
