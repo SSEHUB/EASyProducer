@@ -49,7 +49,7 @@ public abstract class AbstractTest extends net.ssehub.easy.dslCore.test.Abstract
      * Creating a test instance.
      * 
      * @param descriptor the test descriptor
-     * @param testPath the test path
+     * @param testPath the test path (empty or null means do not try to load models)
      */
     protected AbstractTest(ITestDescriptor descriptor, String testPath) {
         this.descriptor = descriptor;
@@ -186,11 +186,14 @@ public abstract class AbstractTest extends net.ssehub.easy.dslCore.test.Abstract
      * Initializes this Test class.
      */
     public void startup() {
+        descriptor.registerResoner();
         ModelUtility.setResourceInitializer(new StandaloneInitializer());
-        try {
-            VarModel.INSTANCE.locations().addLocation(getTestdata(), ProgressObserver.NO_OBSERVER);
-        } catch (ModelManagementException e) {
-            Assert.fail("Could not add location of test files.");
+        if (null != testPath && testPath.length() > 0) {
+            try {
+                VarModel.INSTANCE.locations().addLocation(getTestdata(), ProgressObserver.NO_OBSERVER);
+            } catch (ModelManagementException e) {
+                Assert.fail("Could not add location of test files.");
+            }
         }
     }
     
@@ -198,10 +201,13 @@ public abstract class AbstractTest extends net.ssehub.easy.dslCore.test.Abstract
      * Frees the memory after testing.
      */
     protected void shutdown() {
-        try {
-            VarModel.INSTANCE.locations().removeLocation(getTestdata(), ProgressObserver.NO_OBSERVER);
-        } catch (ModelManagementException e) {
-            Assert.fail("Could not remove location of test files.");
+        descriptor.unregisterReasoner();
+        if (null != testPath && testPath.length() > 0) {
+            try {
+                VarModel.INSTANCE.locations().removeLocation(getTestdata(), ProgressObserver.NO_OBSERVER);
+            } catch (ModelManagementException e) {
+                Assert.fail("Could not remove location of test files.");
+            }
         }
     }
     

@@ -89,7 +89,8 @@ public interface IReasoner {
     /**
      * Initializes the configuration according to the given model and propagates values, if possible. Reasoners 
      * implementing this function and ensure complete and proper (!) initialization of IVML models shall explicitly 
-     * declare {@link GeneralReasonerCapabilities#INCREMENTAL_REASONING}.
+     * declare {@link GeneralReasonerCapabilities#INCREMENTAL_REASONING}. This method shell obey 
+     * {@link Configuration#getResolutionState()}.
      * 
      * @param project
      *            The project which serves as basis for the related configuration.

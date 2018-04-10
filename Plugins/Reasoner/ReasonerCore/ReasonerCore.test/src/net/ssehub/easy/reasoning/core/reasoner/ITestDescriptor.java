@@ -36,4 +36,14 @@ public interface ITestDescriptor {
      */
     public String getSystemProperty();
     
+    /**
+     * Supposed to register the reasoner with the ReasonerFrontend.
+     */
+    public void registerResoner();
+
+    /**
+     * Supposed to unregister the reasoner from the ReasonerFrontend.
+     */
+    public void unregisterReasoner();
+    
 }
