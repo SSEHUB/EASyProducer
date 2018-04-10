@@ -15,21 +15,12 @@
  */
 package net.ssehub.easy.reasoning.sseReasoner.model;
 
-import net.ssehub.easy.basics.logger.EASyLoggerFactory;
-import net.ssehub.easy.reasoning.sseReasoner.Descriptor;
 import net.ssehub.easy.varModel.confModel.AssignmentState;
 import net.ssehub.easy.varModel.confModel.Configuration;
 import net.ssehub.easy.varModel.confModel.IAssignmentState;
 import net.ssehub.easy.varModel.confModel.IDecisionVariable;
-import net.ssehub.easy.varModel.cst.AttributeVariable;
-import net.ssehub.easy.varModel.cst.CSTSemanticException;
-import net.ssehub.easy.varModel.cst.CompoundAccess;
 import net.ssehub.easy.varModel.cst.ConstraintSyntaxTree;
-import net.ssehub.easy.varModel.cst.ContainerOperationCall;
-import net.ssehub.easy.varModel.cst.Let;
-import net.ssehub.easy.varModel.cst.Variable;
-import net.ssehub.easy.varModel.model.AbstractVariable;
-import net.ssehub.easy.varModel.model.filter.AbstractVariableInConstraintFinder;
+import net.ssehub.easy.varModel.model.filter.AbstractStateVariablesInConstraintFinder;
 
 /**
  * Searches for used {@link IDecisionVariable}s and their states inside a {@link ConstraintSyntaxTree}. For reuse,
@@ -39,22 +30,18 @@ import net.ssehub.easy.varModel.model.filter.AbstractVariableInConstraintFinder;
  * @author El-Sharkawy
  * @author Holger Eichelberger
  */
-public class VariablesInConstraintFinder extends AbstractVariableInConstraintFinder {
+public class VariablesInConstraintFinder extends AbstractStateVariablesInConstraintFinder {
 
     private int variablesCount;
     private int frozenVariablesCount;
     private int localVariablesCount;
-    private Configuration config;
 
     /**
      * Creates a constraint finder for reuse. Call {@link #setConfiguration(Configuration)} first, accept then the 
      * constraint to be analyzed and call {@link #clear()} afterwards to make the visitor instance ready for reuse.
-     * 
-     * (must not be <tt>null</tt>).
      */
     public VariablesInConstraintFinder() {
-        super(false);
-        clear();
+        super();
     }
 
     /**
@@ -65,24 +52,14 @@ public class VariablesInConstraintFinder extends AbstractVariableInConstraintFin
      * (must not be <tt>null</tt>).
      */
     public VariablesInConstraintFinder(ConstraintSyntaxTree cst, Configuration config) {
-        this();
-        setConfiguration(config);
-        cst.accept(this);
-    }
-
-    /**
-     * Defines the configuration to work on.
-     * 
-     * @param config the configuration
-     */
-    public void setConfiguration(Configuration config) {
-        this.config = config;
+        super(cst, config);
     }
 
     /**
      * Clears this visitor for reuse.
      */
     public void clear() {
+        super.clear();
         variablesCount = 0;
         localVariablesCount = 0;
         frozenVariablesCount = 0;
@@ -124,25 +101,9 @@ public class VariablesInConstraintFinder extends AbstractVariableInConstraintFin
     public boolean isConstraintFrozen() {
         return getVariablesCount() == getLocalVariablesCount() + getFrozenVariablesCount();
     }
-    
-    @Override
-    public void visitVariable(Variable variable) {
-        addVariable(variable.getVariable());
-    }
-    
-    @Override
-    public void visitAnnotationVariable(AttributeVariable variable) {
-        variable.getQualifier().accept(this);
-        visitVariable(variable);
-    }
 
-    /**
-     * Adds the related {@link IDecisionVariable} and their state to the retrieval sets.
-     * @param declaration A discovered declaration for which the {@link IDecisionVariable} and its state should
-     * be saved.
-     */
-    protected void addVariable(AbstractVariable declaration) {
-        IDecisionVariable var = config.getDecision(declaration);
+    @Override
+    protected void addVariable(IDecisionVariable var) {
         if (null != var) {
             variablesCount++;
             IAssignmentState state = var.getState() != null ? var.getState() : AssignmentState.UNDEFINED;
@@ -150,34 +111,8 @@ public class VariablesInConstraintFinder extends AbstractVariableInConstraintFin
                 localVariablesCount++;
             } else if (AssignmentState.FROZEN == state) {
                 frozenVariablesCount++;
-            }
+            } 
         }
-    }
-
-    @Override
-    public void visitLet(Let let) {
-        addVariable(let.getVariable());
-    }
-
-    @Override
-    public void visitContainerOperationCall(ContainerOperationCall call) {
-        call.getContainer().accept(this);
-        call.getExpression().accept(this);
-        for (int i = 0; i < call.getDeclaratorsCount(); i++) {
-            addVariable(call.getDeclarator(i));
-        }
-    }
-
-    @Override
-    public void visitCompoundAccess(CompoundAccess access) {
-        // access.inferDatatype() must be called before access.getResolvedSlot() can be called 
-        try {
-            access.inferDatatype();
-        } catch (CSTSemanticException e) {
-            EASyLoggerFactory.INSTANCE.getLogger(getClass(), Descriptor.BUNDLE_NAME).exception(e);
-        }
-        addVariable(access.getResolvedSlot());
-        access.getCompoundExpression().accept(this);
     }
 
 }

@@ -384,5 +384,20 @@ public class ContextStack {
         } while (!found && null != iter);
         return found;
     }
+    
+    /**
+     * Returns the size of the context stack.
+     * 
+     * @return the size
+     */
+    public int size() {
+        int result = 0;
+        Context iter = currentContext;
+        do {
+            result++;
+            iter = iter.predecessor;
+        } while (null != iter);
+        return result;
+    }
 
 }
