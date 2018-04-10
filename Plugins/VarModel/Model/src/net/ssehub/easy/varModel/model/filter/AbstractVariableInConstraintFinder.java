@@ -98,17 +98,14 @@ public abstract class AbstractVariableInConstraintFinder implements IConstraintT
     
     @Override
     public void visitUnresolvedExpression(UnresolvedExpression expression) {
-        // TODO Auto-generated method stub
     }
 
     @Override
     public void visitCompoundInitializer(CompoundInitializer initializer) {
-        // TODO Auto-generated method stub
     }
 
     @Override
     public void visitContainerInitializer(ContainerInitializer initializer) {
-        // TODO Auto-generated method stub
     }
 
     @Override

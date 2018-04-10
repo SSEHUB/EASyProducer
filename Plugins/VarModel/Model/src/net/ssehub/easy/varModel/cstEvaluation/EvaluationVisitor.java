@@ -470,6 +470,19 @@ public class EvaluationVisitor implements IConstraintTreeVisitor {
     }
     
     /**
+     * Returns the result variable.
+     * 
+     * @return may be <b>null</b> in case of an expression that cannot be evaluated (shall lead to an exception)
+     */
+    public IDecisionVariable getResultVariable() {
+        IDecisionVariable result = null;
+        if (null != this.result) {
+            result = this.result.getVariable();
+        }
+        return result;
+    }
+    
+    /**
      * Just for internal purposes of derived classes - get the result accessor.
      * If you use this method, you are anyway responsible for cleaning up the result properly. 
      * 
