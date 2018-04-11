@@ -1,8 +1,6 @@
 package net.ssehub.easy.reasoning.core.reasoner;
 
-import org.junit.After;
 import org.junit.Assert;
-import org.junit.Before;
 import org.junit.Test;
 
 import net.ssehub.easy.varModel.confModel.AssignmentState;
@@ -36,22 +34,6 @@ public class IntegrityTests extends AbstractTest {
      */
     protected IntegrityTests(ITestDescriptor descriptor) {
         super(descriptor, null); // no test path, in memory tests only
-    }
-    
-    /**
-     * Initializes this Test class.
-     */
-    @Before
-    public void setUpBeforeClass() {
-        startup();
-    }
-    
-    /**
-     * Frees the memory after testing.
-     */
-    @After
-    public void tearDownAfterClass() {
-        shutdown();
     }
 
     /**

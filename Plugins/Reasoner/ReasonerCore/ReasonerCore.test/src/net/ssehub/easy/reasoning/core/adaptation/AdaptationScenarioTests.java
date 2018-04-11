@@ -1,8 +1,6 @@
 package net.ssehub.easy.reasoning.core.adaptation;
 
-import org.junit.After;
 import org.junit.Assert;
-import org.junit.Before;
 import org.junit.Test;
 
 import net.ssehub.easy.basics.progress.ProgressObserver;
@@ -45,22 +43,6 @@ public class AdaptationScenarioTests extends AbstractTest {
      */
     protected AdaptationScenarioTests(ITestDescriptor descriptor) {
         super(descriptor, "adaptationScenarios");
-    }
-    
-    /**
-     * Initializes this Test class.
-     */
-    @Before
-    public void setUpBeforeClass() {
-        startup();
-    }
-    
-    /**
-     * Frees the memory after testing.
-     */
-    @After
-    public void tearDownAfterClass() {
-        shutdown();
     }
     
     /**

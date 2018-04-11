@@ -1,7 +1,5 @@
 package net.ssehub.easy.reasoning.core.reasoner;
 
-import org.junit.After;
-import org.junit.Before;
 import org.junit.Test;
 
 /**
@@ -18,22 +16,6 @@ public class StringTests extends AbstractTest {
      */
     protected StringTests(ITestDescriptor descriptor) {
         super(descriptor, "string");
-    }
-
-    /**
-     * Initializes this Test class.
-     */
-    @Before
-    public void setUpBeforeClass() {
-        startup();
-    }
-    
-    /**
-     * Frees the memory after testing.
-     */
-    @After
-    public void tearDownAfterClass() {
-        shutdown();
     }
     
     /**

@@ -1,7 +1,5 @@
 package net.ssehub.easy.reasoning.core.reasoner;
 
-import org.junit.After;
-import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 
@@ -20,22 +18,6 @@ public class ReasoningScenarioTests extends AbstractTest {
      */
     protected ReasoningScenarioTests(ITestDescriptor descriptor) {
         super(descriptor, "operationsTemplates");
-    }
-
-    /**
-     * Initializes this Test class.
-     */
-    @Before
-    public void setUpBeforeClass() {
-        startup();
-    }
-    
-    /**
-     * Frees the memory after testing.
-     */
-    @After
-    public void tearDownAfterClass() {
-        shutdown();
     }
     
     /**

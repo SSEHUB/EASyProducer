@@ -12,7 +12,9 @@ Require-Bundle: org.junit,
  net.ssehub.easy.dslCore;bundle-version="0.0.1"
 Export-Package: net.ssehub.easy.reasoning.core,
  net.ssehub.easy.reasoning.core.adaptation,
+ net.ssehub.easy.reasoning.core.capabilities,
  net.ssehub.easy.reasoning.core.frontend,
+ net.ssehub.easy.reasoning.core.performance,
  net.ssehub.easy.reasoning.core.reasoner,
  net.ssehub.easy.reasoning.core.upgrader
 Bundle-ClassPath: testdata/,

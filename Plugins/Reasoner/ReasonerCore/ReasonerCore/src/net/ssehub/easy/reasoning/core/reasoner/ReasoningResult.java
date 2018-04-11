@@ -1,7 +1,10 @@
 package net.ssehub.easy.reasoning.core.reasoner;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import net.ssehub.easy.basics.messages.Status;
 import net.ssehub.easy.varModel.confModel.IDecisionVariable;
@@ -18,6 +21,7 @@ public class ReasoningResult {
     private boolean hasConflict;
     private boolean hasTimeout;
     private boolean wasStopped;
+    private Map<IMeasurementKey, Number> measures;
 
     /**
      * General constructor for new ReasoningResults.
@@ -188,6 +192,40 @@ public class ReasoningResult {
      */
     public IDecisionVariable getAffectedVariable(int index) {
         return affected.get(index);
+    }
+    
+    /**
+     * Sets a reasoner-specific measure.
+     * 
+     * @param key the key (<b>null</b> is ignored)
+     * @param value the measure (may be <b>null</b>)
+     */
+    public void setMeasure(IMeasurementKey key, Number value) {
+        if (null != key) {
+            if (null == measures) {
+                measures = new HashMap<IMeasurementKey, Number>();
+            }
+            measures.put(key, value);
+        }
+    }
+
+    /**
+     * Returns the measure for a specific <code>key</code>.
+     * 
+     * @param key the key (<b>null</b> is ignored)
+     * @return the measure (may be <b>null</b>)
+     */
+    public Number getMeasure(IMeasurementKey key) {
+        return (null == key || null == measures) ? null : measures.get(key);
+    }
+    
+    /**
+     * Returns all measurement keys.
+     * 
+     * @return the keys, may be <b>null</b> if there are none
+     */
+    public Set<IMeasurementKey> measurementKeys() {
+        return null == measures ? null : measures.keySet();
     }
     
 }

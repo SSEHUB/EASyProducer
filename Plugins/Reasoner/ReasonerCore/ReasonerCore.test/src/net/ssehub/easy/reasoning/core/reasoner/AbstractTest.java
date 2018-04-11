@@ -19,7 +19,9 @@ import java.io.File;
 import java.io.IOException;
 
 import org.eclipse.emf.common.util.URI;
+import org.junit.After;
 import org.junit.Assert;
+import org.junit.Before;
 
 import de.uni_hildesheim.sse.ModelUtility;
 import net.ssehub.easy.basics.messages.Status;
@@ -96,31 +98,58 @@ public abstract class AbstractTest extends net.ssehub.easy.dslCore.test.Abstract
      * Method for handling reasoning result, actually performing a propagation by default (due to legacy reasons).
      * 
      * @param expectedFailedConstraints Number of constraints that are expected to fail
+     * @param expectedReevaluationCount expected number of constraint re-evaluations (ignored if negative)
      * @param projectP1 Project to reason on.
      * @return configuration (for further specific tests)
      */
-    protected final Configuration resultHandler(int expectedFailedConstraints, Project projectP1) {
-        return assertPropagation(expectedFailedConstraints, projectP1); // legacy
+    protected final Configuration resultHandler(int expectedFailedConstraints, int expectedReevaluationCount, 
+        Project projectP1) {
+        return assertPropagation(expectedFailedConstraints, expectedReevaluationCount, projectP1); // legacy
     }
 
     /**
      * Method for asserting a propagation.
      * 
      * @param expectedFailedConstraints Number of constraints that are expected to fail
+     * @param expectedReevaluationCount expected number of constraint re-evaluations (ignored if negative)
      * @param projectP1 Project to reason on.
      * @return configuration (for further specific tests)
      * 
      * @see #debugConfigBeforeResultHandler(Configuration)
      */
-    protected final Configuration assertPropagation(int expectedFailedConstraints, Project projectP1) {
+    protected final Configuration assertPropagation(int expectedFailedConstraints, int expectedReevaluationCount, 
+        Project projectP1) {
         Configuration config = new Configuration(projectP1, false);        
         ReasonerConfiguration rConfig = new ReasonerConfiguration();
+        configureReasoner(rConfig);
         // Perform reasoning
         IReasoner reasoner = descriptor.createReasoner();
-        ReasoningResult rResult = reasoner.propagate(projectP1, config, rConfig, ProgressObserver.NO_OBSERVER);
+        ReasoningResult rResult = performReasoning(reasoner, projectP1, config, rConfig);
         debugConfigBeforeResultHandler(config);
-        resultHandler(expectedFailedConstraints, rResult);
+        resultHandler(expectedFailedConstraints, expectedReevaluationCount, rResult);
         return config;
+    }
+
+    /**
+     * Performs the reasoning.
+     * 
+     * @param reasoner the reasoner to use
+     * @param project the project
+     * @param config the configuration
+     * @param rConfig the reasoner configuration
+     * @return the reasoning result
+     */
+    protected ReasoningResult performReasoning(IReasoner reasoner, Project project, Configuration config, 
+        ReasonerConfiguration rConfig) {
+        return reasoner.propagate(project, config, rConfig, ProgressObserver.NO_OBSERVER);
+    }
+
+    /**
+     * Allows to configure the reasoner configuration.
+     * 
+     * @param rConfig the configuration to change if needed
+     */
+    protected void configureReasoner(ReasonerConfiguration rConfig) {
     }
     
     /**
@@ -134,9 +163,11 @@ public abstract class AbstractTest extends net.ssehub.easy.dslCore.test.Abstract
     /**
      * Method for handling a reasoning result.
      * @param expectedFailedConstraints Number of constraints that are expected to fail
+     * @param expectedReevaluationCount expected number of constraint re-evaluations (ignored if negative)
      * @param result the reasoning result
      */
-    protected static final void resultHandler(int expectedFailedConstraints, ReasoningResult result) {
+    protected static final void resultHandler(int expectedFailedConstraints, int expectedReevaluationCount, 
+        ReasoningResult result) {
         // Test whether reasoning detected correct result  
         int failedConstraints = 0;
         for (int i = 0; i < result.getMessageCount(); i++) {
@@ -145,6 +176,17 @@ public abstract class AbstractTest extends net.ssehub.easy.dslCore.test.Abstract
             }
         }
         Assert.assertEquals("Failed constraints: ", expectedFailedConstraints, failedConstraints);
+
+        if (expectedReevaluationCount > 0) {
+            Number measure = result.getMeasure(GeneralMeasures.REEVALUATION_COUNT);
+            if (null == measure) {
+                Assert.fail("Reasoner does not provide measure " + GeneralMeasures.REEVALUATION_COUNT);
+            } else {
+                // Test whether reasoning is done in correct reevalustion steps  
+                Assert.assertTrue("Reevaluation count mismatch. Result: " + measure.intValue()
+                    + " Expected: " + expectedReevaluationCount, measure.intValue() == expectedReevaluationCount);
+            }
+        }
     }
     
     /**
@@ -194,6 +236,22 @@ public abstract class AbstractTest extends net.ssehub.easy.dslCore.test.Abstract
     /**
      * Initializes this Test class.
      */
+    @Before
+    public void setUpBeforeClass() {
+        startup();
+    }
+    
+    /**
+     * Frees the memory after testing.
+     */
+    @After
+    public void tearDownAfterClass() {
+        shutdown();
+    }
+    
+    /**
+     * Initializes this Test class.
+     */
     public void startup() {
         descriptor.registerResoner();
         ModelUtility.setResourceInitializer(new StandaloneInitializer());
@@ -225,12 +283,24 @@ public abstract class AbstractTest extends net.ssehub.easy.dslCore.test.Abstract
      * into rules and reasoned on without any errors. 
      * @param ivmlFile IVML file to translate and reason on.
      * @param expectedFailedConstraints Number of constraints that are expected to fail.
+     * @param expectedReevaluationCount expected number of constraint re-evaluations (ignored if negative)
+     * @return configuration (for further specific tests)
+     */        
+    public Configuration reasoningTest(String ivmlFile, int expectedFailedConstraints, int expectedReevaluationCount) {
+        Project project = loadProject(ivmlFile);
+        return resultHandler(expectedFailedConstraints, expectedReevaluationCount, project);
+    }   
+    
+    /**
+     * Method to test whether different types of variables and constraints could be translated correctly
+     * into rules and reasoned on without any errors. 
+     * @param ivmlFile IVML file to translate and reason on.
+     * @param expectedFailedConstraints Number of constraints that are expected to fail.
      * @return configuration (for further specific tests)
      */        
     public Configuration reasoningTest(String ivmlFile, int expectedFailedConstraints) {
-        Project project = loadProject(ivmlFile);
-        return resultHandler(expectedFailedConstraints, project);
-    }   
+        return reasoningTest(ivmlFile, expectedFailedConstraints, -1);
+    }
 
     /**
      * Method to test whether different types of variables and constraints could be translated correctly
@@ -245,7 +315,7 @@ public abstract class AbstractTest extends net.ssehub.easy.dslCore.test.Abstract
         Project projectP1 = loadProject(p1);
         ProjectImport importP0 = new ProjectImport(projectP0.getName(), null);
         projectP1.addImport(importP0);
-        return resultHandler(expectedFailedConstraints, projectP1);
+        return resultHandler(expectedFailedConstraints, -1, projectP1);
     }
     
     /**
@@ -265,7 +335,7 @@ public abstract class AbstractTest extends net.ssehub.easy.dslCore.test.Abstract
         projectP1.addImport(importP0);
         ProjectImport importP1 = new ProjectImport(projectP1.getName(), null);
         projectP2.addImport(importP1);
-        return resultHandler(expectedFailedConstraints, projectP2);
+        return resultHandler(expectedFailedConstraints, -1, projectP2);
     }
     
     /**
