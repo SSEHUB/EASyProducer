@@ -6,10 +6,12 @@ Bundle-Version: 0.0.1
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Require-Bundle: org.junit,
  de.uni_hildesheim.sse.ivml;bundle-version="0.1.1",
+ net.ssehub.easy.varModel.tests;bundle-version="0.0.10",
  net.ssehub.easy.reasoning.core;bundle-version="0.0.3";visibility:=reexport,
  org.eclipse.core.runtime;bundle-version="3.7.0",
  net.ssehub.easy.dslCore;bundle-version="0.0.1"
 Export-Package: net.ssehub.easy.reasoning.core,
+ net.ssehub.easy.reasoning.core.adaptation,
  net.ssehub.easy.reasoning.core.frontend,
  net.ssehub.easy.reasoning.core.reasoner,
  net.ssehub.easy.reasoning.core.upgrader

@@ -66,6 +66,15 @@ public abstract class AbstractTest extends net.ssehub.easy.dslCore.test.Abstract
     }
     
     /**
+     * Creates a reasoner instance through {@link #descriptor}.
+     * 
+     * @return the reasoner instance
+     */
+    protected IReasoner createReasoner() {
+        return descriptor.createReasoner();
+    }
+    
+    /**
      * Returns the path after testdata folder where the test files are located.
      * 
      * @return the path
