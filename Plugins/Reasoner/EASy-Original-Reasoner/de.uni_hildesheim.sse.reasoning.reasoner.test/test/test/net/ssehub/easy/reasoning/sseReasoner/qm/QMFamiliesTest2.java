@@ -15,10 +15,7 @@
  */
 package test.net.ssehub.easy.reasoning.sseReasoner.qm;
 
-
-import java.io.File;
-
-import org.junit.Test;
+import test.net.ssehub.easy.reasoning.sseReasoner.TestDescriptor;
 
 /**
  * Hardware constraint: memberCount = members.size() > 0 test.
@@ -26,20 +23,13 @@ import org.junit.Test;
  * @author Sizonenko
  * @author El-Sharkawy
  */
-public class QMFamiliesTest2 extends AbstractQualiMasterTest {
-    
-    @Override
-    protected File getTestFolder() {
-        return new File(TESTDATA, "qmFamiliesTest2");
-    } 
+public class QMFamiliesTest2 extends net.ssehub.easy.reasoning.core.qm.QMFamiliesTest2 {
     
     /**
-     * Basic test.
+     * Creates a specific test instance.
      */
-    @Test    
-    public void coreTest() {
-        reasoningTest(1);
-    } 
-    
+    public QMFamiliesTest2() {
+        super(TestDescriptor.INSTANCE);
+    }
     
 }

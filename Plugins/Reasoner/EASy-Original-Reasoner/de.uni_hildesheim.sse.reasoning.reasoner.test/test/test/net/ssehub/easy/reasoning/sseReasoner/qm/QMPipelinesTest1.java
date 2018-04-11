@@ -15,10 +15,7 @@
  */
 package test.net.ssehub.easy.reasoning.sseReasoner.qm;
 
-
-import java.io.File;
-
-import org.junit.Test;
+import test.net.ssehub.easy.reasoning.sseReasoner.TestDescriptor;
 
 /**
  * Hardware constraint: flow error from the presentation test.
@@ -27,20 +24,13 @@ import org.junit.Test;
  * @author Sizonenko
  * @author El-Sharkawy
  */
-public class QMPipelinesTest1 extends AbstractQualiMasterTest {
-    
-    @Override
-    protected File getTestFolder() {
-        return new File(TESTDATA, "qmPipelinesTest1");
-    } 
-    
+public class QMPipelinesTest1 extends net.ssehub.easy.reasoning.core.qm.QMPipelinesTest1 {
+
     /**
-     * Basic test.
+     * Creates a specific test instance.
      */
-    @Test    
-    public void coreTest() {
-        reasoningTest(1);
-    } 
-    
+    public QMPipelinesTest1() {
+        super(TestDescriptor.INSTANCE);
+    }
     
 }

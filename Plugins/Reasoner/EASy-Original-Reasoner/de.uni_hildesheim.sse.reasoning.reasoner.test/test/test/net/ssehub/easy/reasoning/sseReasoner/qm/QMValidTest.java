@@ -15,10 +15,7 @@
  */
 package test.net.ssehub.easy.reasoning.sseReasoner.qm;
 
-
-import java.io.File;
-
-import org.junit.Test;
+import test.net.ssehub.easy.reasoning.sseReasoner.TestDescriptor;
 
 /**
  * Qualimaster model test.
@@ -27,21 +24,13 @@ import org.junit.Test;
  * @author Sizonenko
  * @author El-Sharkawy
  */
-public class QMValidTest extends AbstractQualiMasterTest {
+public class QMValidTest extends net.ssehub.easy.reasoning.core.qm.QMValidTest {
     
-    @Override
-    protected File getTestFolder() {
-        return new File(TESTDATA, "qmModelTest");
-    } 
-        
     /**
-     * Basic test.
+     * Creates a specific test instance.
      */
-    @Test    
-    public void coreTest() {
-        reasoningTest(0);
-        reasoningTest(0);
-    } 
-    
+    public QMValidTest() {
+        super(TestDescriptor.INSTANCE);
+    }
     
 }

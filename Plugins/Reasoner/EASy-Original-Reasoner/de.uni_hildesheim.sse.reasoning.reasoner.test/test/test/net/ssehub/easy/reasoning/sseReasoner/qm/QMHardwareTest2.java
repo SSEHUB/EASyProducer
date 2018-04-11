@@ -15,10 +15,7 @@
  */
 package test.net.ssehub.easy.reasoning.sseReasoner.qm;
 
-
-import java.io.File;
-
-import org.junit.Test;
+import test.net.ssehub.easy.reasoning.sseReasoner.TestDescriptor;
 
 /**
  * Hardware constraint: managerReq = machines->exists(Machine machine | machine.role == MachineRole.Manager) test.
@@ -26,21 +23,13 @@ import org.junit.Test;
  * @author Sizonenko
  * @author El-Sharkawy
  */
-public class QMHardwareTest2 extends AbstractQualiMasterTest {
-    
-    
-    @Override
-    protected File getTestFolder() {
-        return new File(TESTDATA, "qmHardwareTest2");
-    } 
+public class QMHardwareTest2 extends net.ssehub.easy.reasoning.core.qm.QMHardwareTest2 {
     
     /**
-     * Basic test.
+     * Creates a specific test instance.
      */
-    @Test    
-    public void coreTest() {
-        reasoningTest(1);
-    } 
-    
+    public QMHardwareTest2() {
+        super(TestDescriptor.INSTANCE);
+    }
     
 }
