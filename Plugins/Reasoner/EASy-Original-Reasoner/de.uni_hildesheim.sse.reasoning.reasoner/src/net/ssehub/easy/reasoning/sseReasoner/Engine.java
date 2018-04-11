@@ -121,12 +121,13 @@ public class Engine {
         infoLogger.info("Number of variables involved in constraints: " + resolver.variableInConstraintCount());
         infoLogger.info("Number of constraints: " + resolver.constraintCount());
         infoLogger.info("Number of reevaluations: " + reevaluationCount);
+        result.setMeasure(Measures.REEVALUATION_COUNT, reevaluationCount);
         infoLogger.info("Number of problem constraints: " + failedConstraints);
         infoLogger.info("Number of problem assignments: " + failedAssignments);
         infoLogger.info("Total time: " + evaluationTime);
         infoLogger.info("Translation time: " + resolver.getTranslationTime());
         infoLogger.info("Evaluation time: " + resolver.getEvaluationTime());
-        return result;        
+        return result;
     } 
     
     /**
