@@ -19,23 +19,23 @@ import java.io.IOException;
 
 import org.junit.Test;
 
+import net.ssehub.easy.reasoning.core.reasoner.AbstractTest;
+import net.ssehub.easy.reasoning.core.reasoner.ITestDescriptor;
+
 /**
  * Test of reasoner capabilities related to the structure of variability models.
+ * 
  * @author El-Sharkawy
- *
  */
-public abstract class MismatchedTest extends AbstractReasonerFrontendTest {
+public class MismatchedTest extends AbstractTest {
     
     /**
-     * Performs a test directly located in the structure test directory [convenience].
+     * Creating a test instance.
      * 
-     * @param projectName the name of the file directly located in the test directory
-     * @param isValid whether the model shall be valid (or not) to pass
-     * 
-     * @throws IOException in case of problems reading a model
+     * @param descriptor the test descriptor
      */
-    private void performStructureCheck(String projectName, boolean isValid) throws IOException {
-        performCheck("mismatchExample/", projectName, isValid);
+    protected MismatchedTest(ITestDescriptor descriptor) {
+        super(descriptor, "mismatchExample");
     }
     
     /**
@@ -44,8 +44,7 @@ public abstract class MismatchedTest extends AbstractReasonerFrontendTest {
      */
     @Test
     public void testMismatchTestFail() throws IOException {
-        performStructureCheck("MismatchTest", false);
+        resultHandler(2, 0, loadCompleteProject("MismatchTest"));
     }
-    
 
 }

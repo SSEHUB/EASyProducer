@@ -23,6 +23,16 @@ package net.ssehub.easy.reasoning.core.reasoner;
 public interface ITestDescriptor {
 
     /**
+     * Defines reasoner capabilities which may not be supported and, thus, shall not be tested.
+     * 
+     * @author Eichelberger
+     */
+    public enum Capabilities {
+        CHECK,
+        CONSISTENT
+    }
+
+    /**
      * Creates a reasoner instance to test against.
      * 
      * @return the reasoner instance
@@ -37,6 +47,13 @@ public interface ITestDescriptor {
     public String getSystemProperty();
     
     /**
+     * Returns the plugin id of the containing test.
+     * 
+     * @return the plugin id
+     */
+    public String getPluginId();
+    
+    /**
      * Supposed to register the reasoner with the ReasonerFrontend.
      */
     public void registerResoner();
@@ -45,5 +62,27 @@ public interface ITestDescriptor {
      * Supposed to unregister the reasoner from the ReasonerFrontend.
      */
     public void unregisterReasoner();
+
+    /**
+     * Returns whether <code>capability</code> is supported.
+     * 
+     * @param capability the capability to check for
+     * @return <code>true</code> if <code>capability</code> is supported, <code>false</code> else
+     */
+    public boolean isSupported(Capabilities capability);
+      
+    /**
+     * Returns the name of the reasoner.
+     * 
+     * @return the name of the reasoner
+     */
+    public String getName();
     
+    /**
+     * Returns the version of the reasoner.
+     * 
+     * @return the version of the reasoner
+     */
+    public String getVersion();
+
 }

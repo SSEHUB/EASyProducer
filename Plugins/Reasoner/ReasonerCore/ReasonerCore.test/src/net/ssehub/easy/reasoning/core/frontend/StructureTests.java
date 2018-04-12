@@ -19,24 +19,24 @@ import java.io.IOException;
 
 import org.junit.Test;
 
+import net.ssehub.easy.reasoning.core.reasoner.AbstractTest;
+import net.ssehub.easy.reasoning.core.reasoner.ITestDescriptor;
+import net.ssehub.easy.varModel.model.Project;
+
 /**
  * Test of reasoner capabilities related to the structure of variability models.
  * @author El-Sharkawy
  *
  */
-public abstract class StructureTests extends AbstractReasonerFrontendTest {
+public class StructureTests extends AbstractTest {
     
     /**
-     * Performs a test directly located in the structure test directory [convenience].
+     * Creating a test instance.
      * 
-     * @param subFolder The subfolder inside structure, which contain all related projects of the same test.
-     * @param projectName the name of the file directly located in the test directory
-     * @param isValid whether the model shall be valid (or not) to pass
-     * 
-     * @throws IOException in case of problems reading a model
+     * @param descriptor the test descriptor
      */
-    private void performStructureCheck(String subFolder, String projectName, boolean isValid) throws IOException {
-        performCheck("structure/" + subFolder, projectName, isValid);
+    protected StructureTests(ITestDescriptor descriptor) {
+        super(descriptor, null);
     }
     
     /**
@@ -62,9 +62,11 @@ public abstract class StructureTests extends AbstractReasonerFrontendTest {
      * For this reason, I specified a short timeout. Timeout may be shorter.
      * @throws IOException in case of problems reading a mode
      */
-    @Test(timeout = 1000)
+    @Test(timeout = 4000)
     public void testCyclingDeclarations() throws IOException {
-        performStructureCheck("CycleTest_CyclingDeclarations", "ImportCycleTest_CyclingDeclarations_A", true);
+        Project prj = loadCompleteProject("structure/CycleTest_CyclingDeclarations", 
+            "ImportCycleTest_CyclingDeclarations_A");
+        resultHandler(0, 0, prj);
     }
     
     /**
@@ -74,9 +76,10 @@ public abstract class StructureTests extends AbstractReasonerFrontendTest {
      * For this reason, I specified a short timeout. Timeout may be shorter.
      * @throws IOException in case of problems reading a mode
      */
-    @Test(timeout = 1000)
+    @Test(timeout = 4000)
     public void testNestedCycle() throws IOException {
-        performStructureCheck("CycleTest_NestedCycle", "NestedCycleTest_MainProject", true);
+        Project prj = loadCompleteProject("structure/CycleTest_NestedCycle", "NestedCycleTest_MainProject");
+        resultHandler(0, 0, prj);
     }
 
 }

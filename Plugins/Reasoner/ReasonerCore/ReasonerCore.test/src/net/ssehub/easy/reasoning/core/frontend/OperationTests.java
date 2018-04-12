@@ -4,26 +4,27 @@ import java.io.IOException;
 
 import org.junit.Test;
 
+import net.ssehub.easy.reasoning.core.reasoner.AbstractTest;
+import net.ssehub.easy.reasoning.core.reasoner.ITestDescriptor;
+
 /**
  * Tests individual operations.
  * 
  * @author Holger Eichelberger
  */
-public abstract class OperationTests extends AbstractReasonerFrontendTest {
+public abstract class OperationTests extends AbstractTest {
 
     /**
-     * Performs a test directly located in the operations test directory [convenience].
+     * Creating a test instance.
      * 
-     * @param localFile the name of the file directly located in the test directory
-     * @param isValid whether the model shall be valid (or not) to pass
-     * 
-     * @throws IOException in case of problems reading a model
+     * @param descriptor the test descriptor
      */
-    private void performOpCheck(String localFile, boolean isValid) throws IOException {
-        performCheck("operations/" + localFile, isValid);
+    protected OperationTests(ITestDescriptor descriptor) {
+        super(descriptor, "operations");
     }
     
- // ---------------------------------- Integer constants ----------------------------------
+    // ---------------------------------- Integer constants ----------------------------------
+    
     /**
      * Tests integer equality and unequality operations on constants.
      * 
@@ -31,7 +32,7 @@ public abstract class OperationTests extends AbstractReasonerFrontendTest {
      */
     @Test
     public void testIntegerConstants() throws IOException {
-        performOpCheck("integerEqConstants.ivml", true);
+        reasoningTest("integerEqConstants", 0);
     }
     
     /**
@@ -41,7 +42,7 @@ public abstract class OperationTests extends AbstractReasonerFrontendTest {
      */    
     @Test
     public void testIntegerAddConstants() throws IOException {
-        performOpCheck("integerAddConstants.ivml", true);
+        reasoningTest("integerAddConstants", 0);
     }
 
     /**
@@ -51,7 +52,7 @@ public abstract class OperationTests extends AbstractReasonerFrontendTest {
      */    
     @Test
     public void testIntegerSubConstants() throws IOException {
-        performOpCheck("integerSubConstants.ivml", true);
+        reasoningTest("integerSubConstants", 0);
     }
 
     /**
@@ -61,7 +62,7 @@ public abstract class OperationTests extends AbstractReasonerFrontendTest {
      */   
     @Test
     public void testIntegerMulConstants() throws IOException {
-        performOpCheck("integerMulConstants.ivml", true);
+        reasoningTest("integerMulConstants", 0);
     }
     
     /**
@@ -71,7 +72,7 @@ public abstract class OperationTests extends AbstractReasonerFrontendTest {
      */
     @Test
     public void testIntegerMulConstantsFail() throws IOException {
-        performOpCheck("integerMulConstantsFail.ivml", false);
+        reasoningTest("integerMulConstantsFail", 3);
     }
     
     /**
@@ -81,7 +82,7 @@ public abstract class OperationTests extends AbstractReasonerFrontendTest {
      */
     @Test    
     public void testIntegerDivConstants() throws IOException {
-        performOpCheck("integerDivConstants.ivml", true);
+        reasoningTest("integerDivConstants", 0);
     }
     
     /**
@@ -91,7 +92,7 @@ public abstract class OperationTests extends AbstractReasonerFrontendTest {
      */  
     @Test // Must fail div by 0
     public void testIntegerDivConstantsFail() throws IOException {
-        performOpCheck("integerDivConstantsFail.ivml", true); // -> undefined
+        reasoningTest("integerDivConstantsFail", 0); // -> undefined
     }
     
     /**
@@ -101,7 +102,7 @@ public abstract class OperationTests extends AbstractReasonerFrontendTest {
      */    
     @Test
     public void testIntegerABSConstants() throws IOException {
-        performOpCheck("integerABSConstants.ivml", true);
+        reasoningTest("integerABSConstants", 0);
     }
     
     /**
@@ -111,7 +112,7 @@ public abstract class OperationTests extends AbstractReasonerFrontendTest {
      */
     @Test 
     public void testIntegerDIVopConstants() throws IOException {
-        performOpCheck("integerDIVopConstants.ivml", true);
+        reasoningTest("integerDIVopConstants", 0);
     }
     
     /**
@@ -121,7 +122,7 @@ public abstract class OperationTests extends AbstractReasonerFrontendTest {
      */
     @Test 
     public void testIntegerMODopConstants() throws IOException {
-        performOpCheck("integerMODopConstants.ivml", true);
+        reasoningTest("integerMODopConstants", 0);
     }
     
     /**
@@ -131,7 +132,7 @@ public abstract class OperationTests extends AbstractReasonerFrontendTest {
      */
     @Test 
     public void testIntegerMAXConstants() throws IOException {
-        performOpCheck("integerMAXConstants.ivml", true);
+        reasoningTest("integerMAXConstants", 0);
     }
     
     /**
@@ -141,7 +142,7 @@ public abstract class OperationTests extends AbstractReasonerFrontendTest {
      */
     @Test
     public void testIntegerMINConstants() throws IOException {
-        performOpCheck("integerMINConstants.ivml", true);
+        reasoningTest("integerMINConstants", 0);
     }
     
     /**
@@ -151,7 +152,7 @@ public abstract class OperationTests extends AbstractReasonerFrontendTest {
      */
     @Test
     public void testIntegerGreaterThanConstants() throws IOException {
-        performOpCheck("integerGreaterThanConstants.ivml", true);
+        reasoningTest("integerGreaterThanConstants", 0);
     }
     
     /**
@@ -161,7 +162,7 @@ public abstract class OperationTests extends AbstractReasonerFrontendTest {
      */
     @Test
     public void testIntegerLessThanConstants() throws IOException {
-        performOpCheck("integerLessThanConstants.ivml", true);
+        reasoningTest("integerLessThanConstants", 0);
     }
     
     /**
@@ -171,7 +172,7 @@ public abstract class OperationTests extends AbstractReasonerFrontendTest {
      */
     @Test
     public void testIntegerLessThanOrEqualsConstants() throws IOException {
-        performOpCheck("integerLessThanOrEqualsConstants.ivml", true);
+        reasoningTest("integerLessThanOrEqualsConstants", 0);
     }
     
     /**
@@ -181,7 +182,7 @@ public abstract class OperationTests extends AbstractReasonerFrontendTest {
      */
     @Test
     public void testIntegerGreaterThanOrEqualsConstants() throws IOException {
-        performOpCheck("integerGreaterThanOrEqualsConstants.ivml", true);
+        reasoningTest("integerGreaterThanOrEqualsConstants", 0);
     }
 
     // ---------------------------------- Integer variables ----------------------------------
@@ -193,7 +194,7 @@ public abstract class OperationTests extends AbstractReasonerFrontendTest {
      */
     @Test
     public void testIntegerEqVariables() throws IOException {
-        performOpCheck("integerEqVariables.ivml", true);
+        reasoningTest("integerEqVariables", 0);
     }
 
     /**
@@ -203,7 +204,7 @@ public abstract class OperationTests extends AbstractReasonerFrontendTest {
      */
     @Test 
     public void testIntegerEqVariablesFail() throws IOException {
-        performOpCheck("integerEqVariablesFail.ivml", false);
+        reasoningTest("integerEqVariablesFail", 9);
     }
 
     /**
@@ -213,7 +214,7 @@ public abstract class OperationTests extends AbstractReasonerFrontendTest {
      */
     @Test
     public void testIntegerAddVariables() throws IOException {
-        performOpCheck("integerAddVariables.ivml", true);
+        reasoningTest("integerAddVariables", 0);
     }
 
     /**
@@ -223,7 +224,7 @@ public abstract class OperationTests extends AbstractReasonerFrontendTest {
      */
     @Test 
     public void testIntegerSubVariables() throws IOException {
-        performOpCheck("integerSubVariables.ivml", true);
+        reasoningTest("integerSubVariables", 0);
     }
 
     /**
@@ -233,7 +234,7 @@ public abstract class OperationTests extends AbstractReasonerFrontendTest {
      */
     @Test
     public void testIntegerMulVariables() throws IOException {
-        performOpCheck("integerMulVariables.ivml", true);
+        reasoningTest("integerMulVariables", 0);
     }
 
     /**
@@ -243,7 +244,7 @@ public abstract class OperationTests extends AbstractReasonerFrontendTest {
      */
     @Test
     public void testIntegerDivVariables() throws IOException {
-        performOpCheck("integerDivVariables.ivml", true);
+        reasoningTest("integerDivVariables", 0);
     }
     
     /**
@@ -253,7 +254,7 @@ public abstract class OperationTests extends AbstractReasonerFrontendTest {
      */
     @Test
     public void testIntegerDivVariablesFails() throws IOException {
-        performOpCheck("integerDivVariablesFail.ivml", true); // -> undefined
+        reasoningTest("integerDivVariablesFail", 0); // -> undefined
     }
     
     /**
@@ -263,7 +264,7 @@ public abstract class OperationTests extends AbstractReasonerFrontendTest {
      */
     @Test
     public void testIntegerABSVariables() throws IOException {
-        performOpCheck("integerABSVariables.ivml", true);
+        reasoningTest("integerABSVariables", 0);
     }
     
     /**
@@ -273,7 +274,7 @@ public abstract class OperationTests extends AbstractReasonerFrontendTest {
      */
     @Test 
     public void testIntegerDIVopVariables() throws IOException {
-        performOpCheck("integerDIVopVariables.ivml", true);
+        reasoningTest("integerDIVopVariables", 0);
     }
     
     /**
@@ -283,7 +284,7 @@ public abstract class OperationTests extends AbstractReasonerFrontendTest {
      */
     @Test 
     public void testIntegerMODopVariables() throws IOException {
-        performOpCheck("integerMODopVariables.ivml", true);
+        reasoningTest("integerMODopVariables", 0);
     }
     
     /**
@@ -293,7 +294,7 @@ public abstract class OperationTests extends AbstractReasonerFrontendTest {
      */
     @Test 
     public void testIntegerMAXVariables() throws IOException {
-        performOpCheck("integerMAXVariables.ivml", true);
+        reasoningTest("integerMAXVariables", 0);
     }
     
     /**
@@ -303,7 +304,7 @@ public abstract class OperationTests extends AbstractReasonerFrontendTest {
      */
     @Test 
     public void testIntegerMINVariables() throws IOException {
-        performOpCheck("integerMINVariables.ivml", true);
+        reasoningTest("integerMINVariables", 0);
     }
 
     /**
@@ -313,7 +314,7 @@ public abstract class OperationTests extends AbstractReasonerFrontendTest {
      */    
     @Test 
     public void testIntegerGreaterThanVariables() throws IOException {
-        performOpCheck("integerGreaterThanVariables.ivml", true);
+        reasoningTest("integerGreaterThanVariables", 0);
     }
     
     /**
@@ -323,7 +324,7 @@ public abstract class OperationTests extends AbstractReasonerFrontendTest {
      */    
     @Test 
     public void testIntegerLessThanVariables() throws IOException {
-        performOpCheck("integerLessThanVariables.ivml", true);
+        reasoningTest("integerLessThanVariables", 0);
     }
     
     /**
@@ -333,7 +334,7 @@ public abstract class OperationTests extends AbstractReasonerFrontendTest {
      */    
     @Test 
     public void testIntegerLessThanOrEqualsVariables() throws IOException {
-        performOpCheck("integerLessThanOrEqualsVariables.ivml", true);
+        reasoningTest("integerLessThanOrEqualsVariables", 0);
     }
     
     /**
@@ -343,7 +344,7 @@ public abstract class OperationTests extends AbstractReasonerFrontendTest {
      */    
     @Test 
     public void testIntegerGreaterThanOrEqualsVariables() throws IOException {
-        performOpCheck("integerGreaterThanOrEqualsVariables.ivml", true);
+        reasoningTest("integerGreaterThanOrEqualsVariables", 0);
     }
     
     // ---------------------------------- Real constants ----------------------------------
@@ -354,7 +355,7 @@ public abstract class OperationTests extends AbstractReasonerFrontendTest {
      */
     @Test
     public void testRealAddConstants() throws IOException {
-        performOpCheck("realAddConstants.ivml", true);
+        reasoningTest("realAddConstants", 0);
     }
     
     /**
@@ -364,7 +365,7 @@ public abstract class OperationTests extends AbstractReasonerFrontendTest {
      */
     @Test
     public void testRealDivConstants() throws IOException {
-        performOpCheck("realDivConstants.ivml", true);
+        reasoningTest("realDivConstants", 0);
     }
     
     /**
@@ -374,7 +375,7 @@ public abstract class OperationTests extends AbstractReasonerFrontendTest {
      */
     @Test
     public void testRealMulConstants() throws IOException {
-        performOpCheck("realMulConstants.ivml", true);
+        reasoningTest("realMulConstants", 0);
     }
     
     /**
@@ -384,7 +385,7 @@ public abstract class OperationTests extends AbstractReasonerFrontendTest {
      */
     @Test
     public void testRealSubConstants() throws IOException {
-        performOpCheck("realSubConstants.ivml", true);
+        reasoningTest("realSubConstants", 0);
     }
     
     /**
@@ -394,7 +395,7 @@ public abstract class OperationTests extends AbstractReasonerFrontendTest {
      */
     @Test
     public void testRealABSConstants() throws IOException {
-        performOpCheck("realABSConstants.ivml", true);
+        reasoningTest("realABSConstants", 0);
     }
     
     /**
@@ -404,7 +405,7 @@ public abstract class OperationTests extends AbstractReasonerFrontendTest {
      */
     @Test
     public void testRealFLOORConstants() throws IOException {
-        performOpCheck("realFLOORConstants.ivml", true);
+        reasoningTest("realFLOORConstants", 0);
     }
     
     /**
@@ -414,7 +415,7 @@ public abstract class OperationTests extends AbstractReasonerFrontendTest {
      */
     @Test
     public void testRealROUNDConstants() throws IOException {
-        performOpCheck("realROUNDConstants.ivml", true);
+        reasoningTest("realROUNDConstants", 0);
     }
     
     /**
@@ -424,7 +425,7 @@ public abstract class OperationTests extends AbstractReasonerFrontendTest {
      */    
     @Test
     public void testRealMAXConstants() throws IOException {
-        performOpCheck("realMAXConstants.ivml", true);
+        reasoningTest("realMAXConstants", 0);
     }
     
     /**
@@ -434,7 +435,7 @@ public abstract class OperationTests extends AbstractReasonerFrontendTest {
      */
     @Test
     public void testRealMINConstants() throws IOException {
-        performOpCheck("realMINConstants.ivml", true);
+        reasoningTest("realMINConstants", 0);
     }
     
     /**
@@ -444,7 +445,7 @@ public abstract class OperationTests extends AbstractReasonerFrontendTest {
      */
     @Test
     public void testRealEqConstants() throws IOException {
-        performOpCheck("realEqConstants.ivml", true);
+        reasoningTest("realEqConstants", 0);
     }
     
     /**
@@ -454,7 +455,7 @@ public abstract class OperationTests extends AbstractReasonerFrontendTest {
      */
     @Test
     public void testRealGreaterThanConstants() throws IOException {
-        performOpCheck("realGreaterThanConstants.ivml", true);
+        reasoningTest("realGreaterThanConstants", 0);
     }    
     
     /**
@@ -464,7 +465,7 @@ public abstract class OperationTests extends AbstractReasonerFrontendTest {
      */
     @Test
     public void testRealGreaterThanOrEqualsConstants() throws IOException {
-        performOpCheck("realGreaterThanOrEqualsConstants.ivml", true);
+        reasoningTest("realGreaterThanOrEqualsConstants", 0);
     } 
     
     /**
@@ -474,7 +475,7 @@ public abstract class OperationTests extends AbstractReasonerFrontendTest {
      */
     @Test
     public void testRealLessThanConstants() throws IOException {
-        performOpCheck("realLessThanConstants.ivml", true);
+        reasoningTest("realLessThanConstants", 0);
     } 
     
     /**
@@ -484,10 +485,11 @@ public abstract class OperationTests extends AbstractReasonerFrontendTest {
      */
     @Test
     public void testRealLessThanOrEqualsConstants() throws IOException {
-        performOpCheck("realLessThanOrEqualsConstants.ivml", true);
+        reasoningTest("realLessThanOrEqualsConstants", 0);
     } 
    
- // ---------------------------------- Real variables ----------------------------------
+    // ---------------------------------- Real variables ----------------------------------
+    
     /**
      * Tests real + operand on simple variables.
      * 
@@ -495,7 +497,7 @@ public abstract class OperationTests extends AbstractReasonerFrontendTest {
      */
     @Test
     public void testRealAddVariables() throws IOException {
-        performOpCheck("realAddVariables.ivml", true);
+        reasoningTest("realAddVariables", 0);
     }
     
     /**
@@ -505,7 +507,7 @@ public abstract class OperationTests extends AbstractReasonerFrontendTest {
      */
     @Test
     public void testRealDivVariables() throws IOException {
-        performOpCheck("realDivVariables.ivml", true);
+        reasoningTest("realDivVariables", 0);
     }
     
     /**
@@ -515,7 +517,7 @@ public abstract class OperationTests extends AbstractReasonerFrontendTest {
      */
     @Test
     public void testRealMulVariables() throws IOException {
-        performOpCheck("realMulVariables.ivml", true);
+        reasoningTest("realMulVariables", 0);
     }
     
     /**
@@ -525,7 +527,7 @@ public abstract class OperationTests extends AbstractReasonerFrontendTest {
      */
     @Test
     public void testRealSubVariables() throws IOException {
-        performOpCheck("realSubVariables.ivml", true);
+        reasoningTest("realSubVariables", 0);
     }
     
     /**
@@ -535,7 +537,7 @@ public abstract class OperationTests extends AbstractReasonerFrontendTest {
      */
     @Test
     public void testRealABSVariables() throws IOException {
-        performOpCheck("realABSVariables.ivml", true);
+        reasoningTest("realABSVariables", 0);
     }
     
     /**
@@ -545,7 +547,7 @@ public abstract class OperationTests extends AbstractReasonerFrontendTest {
      */
     @Test
     public void testRealFLOORVariables() throws IOException {
-        performOpCheck("realFLOORVariables.ivml", true);
+        reasoningTest("realFLOORVariables", 0);
     }
     
     /**
@@ -555,7 +557,7 @@ public abstract class OperationTests extends AbstractReasonerFrontendTest {
      */
     @Test
     public void testRealROUNDVariables() throws IOException {
-        performOpCheck("realROUNDVariables.ivml", true);
+        reasoningTest("realROUNDVariables", 0);
     }
     
     /**
@@ -565,7 +567,7 @@ public abstract class OperationTests extends AbstractReasonerFrontendTest {
      */
     @Test
     public void testRealMAXVariables() throws IOException {
-        performOpCheck("realMAXVariables.ivml", true);
+        reasoningTest("realMAXVariables", 0);
     }
     
     /**
@@ -575,7 +577,7 @@ public abstract class OperationTests extends AbstractReasonerFrontendTest {
      */
     @Test
     public void testRealMINVariables() throws IOException {
-        performOpCheck("realMINVariables.ivml", true);
+        reasoningTest("realMINVariables", 0);
     }
     
     /**
@@ -585,7 +587,7 @@ public abstract class OperationTests extends AbstractReasonerFrontendTest {
      */
     @Test
     public void testRealEqVariables() throws IOException {
-        performOpCheck("realEqVariables.ivml", true);
+        reasoningTest("realEqVariables", 0);
     }
     
     /**
@@ -595,7 +597,7 @@ public abstract class OperationTests extends AbstractReasonerFrontendTest {
      */
     @Test
     public void testRealGreaterThanVariables() throws IOException {
-        performOpCheck("realGreaterThanVariables.ivml", true);
+        reasoningTest("realGreaterThanVariables", 0);
     }
     
     /**
@@ -605,7 +607,7 @@ public abstract class OperationTests extends AbstractReasonerFrontendTest {
      */
     @Test
     public void testRealGreaterThanOrEqualsVariables() throws IOException {
-        performOpCheck("realGreaterThanOrEqualsVariables.ivml", true);
+        reasoningTest("realGreaterThanOrEqualsVariables", 0);
     }
     
     /**
@@ -615,7 +617,7 @@ public abstract class OperationTests extends AbstractReasonerFrontendTest {
      */
     @Test
     public void testRealLessThenVariables() throws IOException {
-        performOpCheck("realLessThanVariables.ivml", true);
+        reasoningTest("realLessThanVariables", 0);
     }
     
     /**
@@ -625,10 +627,11 @@ public abstract class OperationTests extends AbstractReasonerFrontendTest {
      */
     @Test
     public void testRealLessThenOrEqualsVariables() throws IOException {
-        performOpCheck("realLessThanOrEqualsVariables.ivml", true);
+        reasoningTest("realLessThanOrEqualsVariables", 0);
     }
     
- // ---------------------------------- Mix constants ----------------------------------
+    // ---------------------------------- Mix constants ----------------------------------
+    
     /**
      * Tests mix MAX operand on simple variables.
      * 
@@ -636,7 +639,7 @@ public abstract class OperationTests extends AbstractReasonerFrontendTest {
      */
     @Test
     public void testMixMAXVariables() throws IOException {
-        performOpCheck("mixMAXVariables.ivml", true);
+        reasoningTest("mixMAXVariables", 0);
     }
     
     /**
@@ -646,10 +649,11 @@ public abstract class OperationTests extends AbstractReasonerFrontendTest {
      */
     @Test
     public void testMixMINVariables() throws IOException {
-        performOpCheck("mixMINVariables.ivml", true);
+        reasoningTest("mixMINVariables", 0);
     }
     
- // ---------------------------------- Boolean constants ----------------------------------
+    // ---------------------------------- Boolean constants ----------------------------------
+    
     /**
      * Tests boolean OR operand on constants.
      * 
@@ -657,7 +661,7 @@ public abstract class OperationTests extends AbstractReasonerFrontendTest {
      */    
     @Test
     public void testBooleanORConstants() throws IOException {
-        performOpCheck("booleanORConstants.ivml", true);
+        reasoningTest("booleanORConstants", 0);
     }
     
     /**
@@ -667,7 +671,7 @@ public abstract class OperationTests extends AbstractReasonerFrontendTest {
      */
     @Test
     public void testBooleanANDConstants() throws IOException {
-        performOpCheck("booleanANDConstants.ivml", true);
+        reasoningTest("booleanANDConstants", 0);
     }
     
     /**
@@ -677,7 +681,7 @@ public abstract class OperationTests extends AbstractReasonerFrontendTest {
      */    
     @Test
     public void testBooleanXORConstants() throws IOException {
-        performOpCheck("booleanXORConstants.ivml", true);
+        reasoningTest("booleanXORConstants", 0);
     }
     
     /**
@@ -687,10 +691,11 @@ public abstract class OperationTests extends AbstractReasonerFrontendTest {
      */    
     @Test
     public void testBooleanNOTConstants() throws IOException {
-        performOpCheck("booleanNOTConstants.ivml", true);
+        reasoningTest("booleanNOTConstants", 0);
     } 
     
- // ---------------------------------- Boolean variables ----------------------------------
+    // ---------------------------------- Boolean variables ----------------------------------
+    
     /**
      * Tests boolean OR operand on simple variables.
      * 
@@ -698,7 +703,7 @@ public abstract class OperationTests extends AbstractReasonerFrontendTest {
      */
     @Test
     public void testBooleanORVariables() throws IOException {
-        performOpCheck("booleanORVariables.ivml", true);
+        reasoningTest("booleanORVariables", 0);
     }
     
     /**
@@ -708,7 +713,7 @@ public abstract class OperationTests extends AbstractReasonerFrontendTest {
      */
     @Test
     public void testBooleanANDVariables() throws IOException {
-        performOpCheck("booleanANDVariables.ivml", true);
+        reasoningTest("booleanANDVariables", 0);
     }
     
     /**
@@ -718,7 +723,7 @@ public abstract class OperationTests extends AbstractReasonerFrontendTest {
      */
     @Test
     public void testBooleanXORVariables() throws IOException {
-        performOpCheck("booleanXORVariables.ivml", true);
+        reasoningTest("booleanXORVariables", 0);
     }
     
     /**
@@ -728,7 +733,7 @@ public abstract class OperationTests extends AbstractReasonerFrontendTest {
      */
     @Test
     public void testBooleanNOTVariables() throws IOException {
-        performOpCheck("booleanNOTVariables.ivml", true);
+        reasoningTest("booleanNOTVariables", 0);
     }
     
     /**
@@ -738,7 +743,7 @@ public abstract class OperationTests extends AbstractReasonerFrontendTest {
      */
     @Test
     public void testBooleanImpliesVariables() throws IOException {
-        performOpCheck("booleanImpliesVariables.ivml", true);
+        reasoningTest("booleanImpliesVariables", 0);
     }
     
     /**
@@ -748,7 +753,7 @@ public abstract class OperationTests extends AbstractReasonerFrontendTest {
      */
     @Test
     public void testBooleanIFFVariables() throws IOException {
-        performOpCheck("booleanIFFVariables.ivml", true);
+        reasoningTest("booleanIFFVariables", 0);
     }
     
     /**
@@ -758,8 +763,9 @@ public abstract class OperationTests extends AbstractReasonerFrontendTest {
      */
     @Test
     public void testBooleanEvaluateValueAssignVariables() throws IOException {
-        performOpCheck("booleanEvaluateValueAssignVariables.ivml", true);
+        reasoningTest("booleanEvaluateValueAssignVariables", 0);
     }
+    
     // ----------------------------------- String -----------------------
     
     /**
@@ -769,7 +775,7 @@ public abstract class OperationTests extends AbstractReasonerFrontendTest {
      */
     @Test
     public void testStringOperationsIsValid() throws IOException {
-        performOpCheck("string.ivml", true);
+        reasoningTest("string", 0);
     }
     
 // ----------------------------------- Complicated Types -----------------------
@@ -781,10 +787,10 @@ public abstract class OperationTests extends AbstractReasonerFrontendTest {
      */
     @Test
     public void testSequenceOperationsIsValid() throws IOException {
-        performOpCheck("sequence.ivml", true);
+        reasoningTest("sequence", 0);
     }
 
- // ----------------------------------- Typedefs -----------------------
+    // ----------------------------------- Typedefs -----------------------
     
     /**
      * Tests simple typedef operations (valid).
@@ -793,7 +799,7 @@ public abstract class OperationTests extends AbstractReasonerFrontendTest {
      */
     @Test
     public void testTypedefValid() throws IOException {
-        performOpCheck("typedef.ivml", true);
+        reasoningTest("typedef", 0);
     }
     
     /**
@@ -803,7 +809,7 @@ public abstract class OperationTests extends AbstractReasonerFrontendTest {
      */
     @Test
     public void testTypedefOfTypedefValid() throws IOException {
-        performOpCheck("typedefOfTypedefValid.ivml", true);
+        reasoningTest("typedefOfTypedefValid", 0);
     }
     
     /**
@@ -813,7 +819,7 @@ public abstract class OperationTests extends AbstractReasonerFrontendTest {
      */
     @Test
     public void testTypedefOfTypedefInvalid() throws IOException {
-        performOpCheck("typedefOfTypedefInvalid.ivml", false);
+        reasoningTest("typedefOfTypedefInvalid", 1);
     }
     
     /**
@@ -823,7 +829,7 @@ public abstract class OperationTests extends AbstractReasonerFrontendTest {
      */
     @Test
     public void testTypedefNestedInCompoundValid() throws IOException {
-        performOpCheck("typedefNestedInCompoundValid.ivml", true);
+        reasoningTest("typedefNestedInCompoundValid", 0);
     }
     
     /**
@@ -833,7 +839,7 @@ public abstract class OperationTests extends AbstractReasonerFrontendTest {
      */
     @Test
     public void testTypedefNestedInCompoundInvalid() throws IOException {
-        performOpCheck("typedefNestedInCompoundInvalid.ivml", false);
+        reasoningTest("typedefNestedInCompoundInvalid", 1);
     }
 
     /**
@@ -843,7 +849,7 @@ public abstract class OperationTests extends AbstractReasonerFrontendTest {
      */
     @Test
     public void testTypedefCompoundNestedInSequenceValid1() throws IOException {
-        performOpCheck("typedefCompoundNestedInSequenceValid1.ivml", true);
+        reasoningTest("typedefCompoundNestedInSequenceValid1", 0);
     }
     
     /**
@@ -853,7 +859,7 @@ public abstract class OperationTests extends AbstractReasonerFrontendTest {
      */
     @Test
     public void testTypedefCompoundNestedInSequenceInvalid1() throws IOException {
-        performOpCheck("typedefCompoundNestedInSequenceInvalid1.ivml", false);
+        reasoningTest("typedefCompoundNestedInSequenceInvalid1", 1);
     }
     
     /**
@@ -863,7 +869,7 @@ public abstract class OperationTests extends AbstractReasonerFrontendTest {
      */
     @Test
     public void testTypedefCompoundNestedInSequenceValid2() throws IOException {
-        performOpCheck("typedefCompoundNestedInSequenceValid2.ivml", true);
+        reasoningTest("typedefCompoundNestedInSequenceValid2", 0);
     }
     
     /**
@@ -873,7 +879,7 @@ public abstract class OperationTests extends AbstractReasonerFrontendTest {
      */
     @Test
     public void testTypedefCompoundNestedInSequenceInvalid2() throws IOException {
-        performOpCheck("typedefCompoundNestedInSequenceInvalid2.ivml", false);
+        reasoningTest("typedefCompoundNestedInSequenceInvalid2", 2);
     }
 
     /**
@@ -883,7 +889,7 @@ public abstract class OperationTests extends AbstractReasonerFrontendTest {
      */
     @Test
     public void testTypedefNestedInSetValid() throws IOException {
-        performOpCheck("typedefNestedInSetValid.ivml", true);
+        reasoningTest("typedefNestedInSetValid", 0);
     }
     
     /**
@@ -893,7 +899,7 @@ public abstract class OperationTests extends AbstractReasonerFrontendTest {
      */
     @Test
     public void testTypedefNestedInSetInvalid() throws IOException {
-        performOpCheck("typedefNestedInSetInvalid.ivml", false);
+        reasoningTest("typedefNestedInSetInvalid", 1);
     }
     
     /**
@@ -903,7 +909,7 @@ public abstract class OperationTests extends AbstractReasonerFrontendTest {
      */
     @Test
     public void testTypedefNestedInSequenceValid() throws IOException {
-        performOpCheck("typedefNestedInSequenceValid.ivml", true);
+        reasoningTest("typedefNestedInSequenceValid", 0);
     }
     
     /**
@@ -913,7 +919,7 @@ public abstract class OperationTests extends AbstractReasonerFrontendTest {
      */
     @Test
     public void testTypedefNestedInSequenceInvalid() throws IOException {
-        performOpCheck("typedefNestedInSequenceInvalid.ivml", false);
+        reasoningTest("typedefNestedInSequenceInvalid", 1);
     }
     
     /**
@@ -923,10 +929,10 @@ public abstract class OperationTests extends AbstractReasonerFrontendTest {
      */
     @Test
     public void testAliasesInContainerValid() throws IOException {
-        performOpCheck("AliasUsedInSet.ivml", true);
+        reasoningTest("AliasUsedInSet", 0);
     }
     
-// ----------------------------------- Value validation -----------------------
+    // ----------------------------------- Value validation -----------------------
     
     /**
      * Tests value validation.
@@ -938,7 +944,7 @@ public abstract class OperationTests extends AbstractReasonerFrontendTest {
      */
     @Test
     public void testValueValidation1IsValid() throws IOException {
-        performOpCheck("valueValidation1.ivml", true);
+        reasoningTest("valueValidation1", 0);
     }
     
     /**
@@ -951,7 +957,7 @@ public abstract class OperationTests extends AbstractReasonerFrontendTest {
      */
     @Test
     public void testValueValidation2IsValid() throws IOException {
-        performOpCheck("valueValidation2.ivml", true);
+        reasoningTest("valueValidation2", 0);
     }
     
     /**
@@ -964,7 +970,7 @@ public abstract class OperationTests extends AbstractReasonerFrontendTest {
      */
     @Test
     public void testValueValidation3IsValid() throws IOException {
-        performOpCheck("valueValidation3.ivml", true);
+        reasoningTest("valueValidation3", 0);
     }
     
     /**
@@ -977,7 +983,7 @@ public abstract class OperationTests extends AbstractReasonerFrontendTest {
      */
     @Test
     public void testValueValidation4IsValid() throws IOException {
-        performOpCheck("valueValidation4.ivml", true);
+        reasoningTest("valueValidation4", 0);
     }
     
     /**
@@ -990,7 +996,7 @@ public abstract class OperationTests extends AbstractReasonerFrontendTest {
      */
     @Test
     public void testValueValidation5IsValid() throws IOException {
-        performOpCheck("valueValidation5.ivml", true);
+        reasoningTest("valueValidation5", 0);
     }
     
     /**
@@ -1003,7 +1009,7 @@ public abstract class OperationTests extends AbstractReasonerFrontendTest {
      */
     @Test
     public void testValueValidation6IsValid() throws IOException {
-        performOpCheck("valueValidation6.ivml", true);
+        reasoningTest("valueValidation6", 0);
     }
     
     /**
@@ -1016,7 +1022,7 @@ public abstract class OperationTests extends AbstractReasonerFrontendTest {
      */ 
     @Test
     public void testValueValidation7IsValid() throws IOException {
-        performOpCheck("valueValidation7.ivml", true);
+        reasoningTest("valueValidation7", 0);
     }
     
     /**
@@ -1029,7 +1035,7 @@ public abstract class OperationTests extends AbstractReasonerFrontendTest {
      */ 
     @Test
     public void testValueValidation8IsValid() throws IOException {
-        performOpCheck("valueValidation8.ivml", true);
+        reasoningTest("valueValidation8", 0);
     }
     
     /**
@@ -1041,7 +1047,7 @@ public abstract class OperationTests extends AbstractReasonerFrontendTest {
      */ 
     @Test
     public void testValueValidation9IsValid() throws IOException {
-        performOpCheck("valueValidation9.ivml", true);
+        reasoningTest("valueValidation9", 0);
     }
     
     /**
@@ -1054,7 +1060,7 @@ public abstract class OperationTests extends AbstractReasonerFrontendTest {
      */ 
     @Test
     public void testValueValidation10IsValid() throws IOException {
-        performOpCheck("valueValidation10.ivml", true);
+        reasoningTest("valueValidation10", 0);
     }
     
     /**
@@ -1066,7 +1072,7 @@ public abstract class OperationTests extends AbstractReasonerFrontendTest {
      */
     @Test
     public void testValueValidation11IsValid() throws IOException {
-        performOpCheck("valueValidation11.ivml", true);
+        reasoningTest("valueValidation11", 0);
     }
     
     /**
@@ -1078,7 +1084,7 @@ public abstract class OperationTests extends AbstractReasonerFrontendTest {
      */ 
     @Test
     public void testValueValidation12IsValid() throws IOException {
-        performOpCheck("valueValidation12.ivml", true);
+        reasoningTest("valueValidation12", 0);
     }
     
     /**
@@ -1090,7 +1096,7 @@ public abstract class OperationTests extends AbstractReasonerFrontendTest {
      */
     @Test
     public void testValueValidation13IsValid() throws IOException {
-        performOpCheck("valueValidation13.ivml", true);
+        reasoningTest("valueValidation13", 0);
     }
     
     /**
@@ -1102,7 +1108,7 @@ public abstract class OperationTests extends AbstractReasonerFrontendTest {
      */  
     @Test
     public void testValueValidation14IsValid() throws IOException {
-        performOpCheck("valueValidation14.ivml", true);
+        reasoningTest("valueValidation14", 0);
     }
     
     /**
@@ -1114,7 +1120,7 @@ public abstract class OperationTests extends AbstractReasonerFrontendTest {
      */     
     @Test
     public void testValueValidation15IsValid() throws IOException {
-        performOpCheck("valueValidation15.ivml", true);
+        reasoningTest("valueValidation15", 0);
     }
     
     /**
@@ -1126,7 +1132,7 @@ public abstract class OperationTests extends AbstractReasonerFrontendTest {
      */     
     @Test
     public void testValueValidation16IsValid() throws IOException {
-        performOpCheck("valueValidation16.ivml", true);
+        reasoningTest("valueValidation16", 0);
     }
     
     /**
@@ -1138,7 +1144,7 @@ public abstract class OperationTests extends AbstractReasonerFrontendTest {
      */     
     @Test
     public void testValueValidation17IsValid() throws IOException {
-        performOpCheck("valueValidation17.ivml", true);
+        reasoningTest("valueValidation17", 0);
     }
     
     /**
@@ -1150,7 +1156,7 @@ public abstract class OperationTests extends AbstractReasonerFrontendTest {
      */     
     @Test
     public void testValueValidation18IsValid() throws IOException {
-        performOpCheck("valueValidation18.ivml", true);
+        reasoningTest("valueValidation18", 0);
     }
     
     /**
@@ -1162,7 +1168,7 @@ public abstract class OperationTests extends AbstractReasonerFrontendTest {
      */     
     @Test
     public void testValueValidation19IsValid() throws IOException {
-        performOpCheck("valueValidation19.ivml", true);
+        reasoningTest("valueValidation19", 0);
     }
     
     /**
@@ -1174,7 +1180,7 @@ public abstract class OperationTests extends AbstractReasonerFrontendTest {
      */     
     @Test
     public void testValueValidation20IsValid() throws IOException {
-        performOpCheck("valueValidation20.ivml", true);
+        reasoningTest("valueValidation20", 0);
     }
     
     /**
@@ -1186,7 +1192,7 @@ public abstract class OperationTests extends AbstractReasonerFrontendTest {
      */     
     @Test
     public void testValueValidation21IsValid() throws IOException {
-        performOpCheck("valueValidation21.ivml", true);
+        reasoningTest("valueValidation21", 0);
     }
     
     /**
@@ -1198,10 +1204,10 @@ public abstract class OperationTests extends AbstractReasonerFrontendTest {
      */     
     @Test
     public void testValueValidation22IsValid() throws IOException {
-        performOpCheck("valueValidation22.ivml", true);
+        reasoningTest("valueValidation22", 0);
     }
     
-// ----------------------------------- Annotations -----------------------
+    // ----------------------------------- Annotations -----------------------
     
     /**
      * Tests whether different slots of a compound can be assigned to different annotations.
@@ -1209,10 +1215,11 @@ public abstract class OperationTests extends AbstractReasonerFrontendTest {
      */
     @Test
     public void testAnnotationsToDifferenCompoundSlotsValid() throws IOException {
-        performOpCheck("annotationAssignedToDifferentCompoundSlotsValid.ivml", true);
+        reasoningTest("annotationAssignedToDifferentCompoundSlotsValid", 0);
     }
 
     // --------------------------User defined operations -----------------------
+
     /**
      * Tests whether operations can be selected through dynamic dispatch in a complex refinement hierarchy.
      * Reasoner should detect an error.
@@ -1220,7 +1227,7 @@ public abstract class OperationTests extends AbstractReasonerFrontendTest {
      */
     @Test
     public void testDynamicDispatchIsInvalid() throws IOException {
-        performOpCheck("DynamicDispatchIsInvalid.ivml", false);
+        reasoningTest("DynamicDispatchIsInvalid", 1);
     }
     
     /**
@@ -1230,7 +1237,7 @@ public abstract class OperationTests extends AbstractReasonerFrontendTest {
      */
     @Test
     public void testDynamicDispatchIsValid() throws IOException {
-        performOpCheck("DynamicDispatchIsValid.ivml", true);
+        reasoningTest("DynamicDispatchIsValid", 0);
     }
     
 }

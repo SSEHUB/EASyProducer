@@ -19,27 +19,25 @@ import java.io.IOException;
 
 import org.junit.Test;
 
+import net.ssehub.easy.reasoning.core.reasoner.AbstractTest;
+import net.ssehub.easy.reasoning.core.reasoner.ITestDescriptor;
+
 /**
  * Tests collection operations like <tt>collect</tt> or <tt>forall</tt>.
  * These tests are additional tests to the {@link OperationTests}.
  * 
  * @author El-Sharkawy
  */
-public abstract class CollectionOperationsTests extends AbstractReasonerFrontendTest {
+public class CollectionOperationsTests extends AbstractTest {
 
     /**
-     * Performs a test directly located in the operations test directory [convenience].
+     * Creating a test instance.
      * 
-     * @param localFile the name of the file directly located in the test directory
-     * @param isValid whether the model shall be valid (or not) to pass
-     * 
-     * @throws IOException in case of problems reading a model
+     * @param descriptor the test descriptor
      */
-    private void performOpCheck(String localFile, boolean isValid) throws IOException {
-        performCheck("collectionOperations/" + localFile, isValid);
+    protected CollectionOperationsTests(ITestDescriptor descriptor) {
+        super(descriptor, "collectionOperations");
     }
-    
-    // collect
     
     /**
      * Tests whether the reasoner is able to handle fulfilled
@@ -50,7 +48,7 @@ public abstract class CollectionOperationsTests extends AbstractReasonerFrontend
      */
     @Test
     public void testCompoundCollectionConstraintValid() throws IOException {
-        performOpCheck("CompoundCollectionConstraintTest_Valid.ivml", true);
+        reasoningTest("CompoundCollectionConstraintTest_Valid.ivml", 0);
     }
     
     /**
@@ -62,6 +60,7 @@ public abstract class CollectionOperationsTests extends AbstractReasonerFrontend
      */
     @Test
     public void testCompoundCollectionConstraintInvalid() throws IOException {
-        performOpCheck("CompoundCollectionConstraintTest_Invalid.ivml", false);
+        reasoningTest("CompoundCollectionConstraintTest_Invalid.ivml", 1);
     }
+
 }

@@ -4,6 +4,8 @@ import java.io.IOException;
 
 import org.junit.Test;
 
+import net.ssehub.easy.reasoning.core.reasoner.AbstractTest;
+import net.ssehub.easy.reasoning.core.reasoner.ITestDescriptor;
 import net.ssehub.easy.varModel.confModel.Configuration;
 import net.ssehub.easy.varModel.confModel.ConfigurationException;
 import net.ssehub.easy.varModel.model.IvmlException;
@@ -15,7 +17,16 @@ import net.ssehub.easy.varModel.model.values.ValueDoesNotMatchTypeException;
  * 
  * @author Phani
  */
-public abstract class OldTests extends AbstractReasonerFrontendTest {
+public abstract class OldTests extends AbstractTest {
+
+    /**
+     * Creating a test instance.
+     * 
+     * @param descriptor the test descriptor
+     */
+    protected OldTests(ITestDescriptor descriptor) {
+        super(descriptor, ".");
+    }
 
     /**
      * Unknown.
@@ -31,12 +42,12 @@ public abstract class OldTests extends AbstractReasonerFrontendTest {
 
         Project p = loadProject("testBasisDatatype.ivml");
         Configuration config = new Configuration(p);
-        configureValue(p, config, 0, "1");
-        configureValue(p, config, 1, "2.0");
-        configureValue(p, config, 2, "true");
-        configureValue(p, config, 3, "A string");
+        configureValue(config, "intA", "1");
+        configureValue(config, "realA", "2.0");
+        configureValue(config, "boolA", "true");
+        configureValue(config, "stringA", "A string");
 
-        performCheck(p, config, true);
+        assertPropagation(0, 0, config);
     }
 
     /**
@@ -53,12 +64,12 @@ public abstract class OldTests extends AbstractReasonerFrontendTest {
 
         Project p = loadProject("testBasisDatatype.ivml");
         Configuration config = new Configuration(p);
-        configureValue(p, config, 0, "1");
-        configureValue(p, config, 1, "2.0");
-        configureValue(p, config, 2, "false");
-        configureValue(p, config, 3, "A string");
+        configureValue(config, "intA", "1");
+        configureValue(config, "realA", "2.0");
+        configureValue(config, "boolA", "false");
+        configureValue(config, "stringA", "A string");
 
-        performCheck(p, config, false);
+        assertPropagation(1, 0, config); // count may be wrong
     }
 
     /**
@@ -75,19 +86,13 @@ public abstract class OldTests extends AbstractReasonerFrontendTest {
 
         Project p = loadProject("testComplexDatatype.ivml");
 
-        // Position of needed variables in ivml file
-        int posA1 = 2;
-        int posA2 = posA1 + 1;
-        int posB1 = posA2 + 1;
-        int posB2 = posB1 + 1;
-
         Configuration config = new Configuration(p);
-        configureValue(p, config, posA1, "intA", "1", "realA", "1.0", "boolA", "true", "stringA", "aStringA1");
-        configureValue(p, config, posA2, "intA", "2", "realA", "2.0", "boolA", "false", "stringA", "aStringA2");
-        configureValue(p, config, posB1, "intA", "1", "realA", "1.0", "boolA", "true", "stringA", "aStringB1");
-        configureValue(p, config, posB2, "intA", "2", "realA", "2.8", "boolA", "false", "stringA", "aStringB2");
+        configureValue(config, "a1", "intA", "1", "realA", "1.0", "boolA", "true", "stringA", "aStringA1");
+        configureValue(config, "a2", "intA", "2", "realA", "2.0", "boolA", "false", "stringA", "aStringA2");
+        configureValue(config, "b1", "intA", "1", "realA", "1.0", "boolA", "true", "stringA", "aStringB1");
+        configureValue(config, "b2", "intA", "2", "realA", "2.8", "boolA", "false", "stringA", "aStringB2");
 
-        performCheck(p, config, true);
+        assertPropagation(0, 0, config);
     }
 
     /**
@@ -104,12 +109,12 @@ public abstract class OldTests extends AbstractReasonerFrontendTest {
 
         Project p = loadProject("testComplexDatatype.ivml");
         Configuration config = new Configuration(p);
-        configureValue(p, config, 2, "intA", "1", "realA", "1.0", "boolA", "true", "stringA", "aStringA1");
-        configureValue(p, config, 3, "intA", "2", "realA", "2.0", "boolA", "true", "stringA", "aStringA2");
-        configureValue(p, config, 4, "intA", "1", "realA", "1.0", "boolA", "true", "stringA", "aStringB1");
-        configureValue(p, config, 5, "intA", "2", "realA", "2.0", "boolA", "true", "stringA", "aStringB2");
+        configureValue(config, "a1", "intA", "1", "realA", "1.0", "boolA", "true", "stringA", "aStringA1");
+        configureValue(config, "a2", "intA", "2", "realA", "2.0", "boolA", "true", "stringA", "aStringA2");
+        configureValue(config, "b1", "intA", "1", "realA", "1.0", "boolA", "true", "stringA", "aStringB1");
+        configureValue(config, "b2", "intA", "2", "realA", "2.0", "boolA", "true", "stringA", "aStringB2");
 
-        performCheck(p, config, false);
+        assertPropagation(1, 0, config); // count may be wrong
     }
 
     /**
@@ -127,7 +132,7 @@ public abstract class OldTests extends AbstractReasonerFrontendTest {
         Project p = loadProject("testEnum.ivml");
         Configuration config = new Configuration(p);
 
-        performCheck(p, config, true);
+        assertPropagation(0, 0, config);
     }
 
     /**
@@ -145,7 +150,7 @@ public abstract class OldTests extends AbstractReasonerFrontendTest {
         Project p = loadProject("testGeneral.ivml");
         Configuration config = new Configuration(p);
 
-        performCheck(p, config, true);
+        assertPropagation(0, 0, config);
     }
 
     /**
@@ -163,7 +168,7 @@ public abstract class OldTests extends AbstractReasonerFrontendTest {
         Project p = loadProject("testInfrastructure.ivml");
         Configuration config = new Configuration(p);
 
-        performCheck(p, config, true);
+        assertPropagation(0, 0, config);
     }
 
     /**
@@ -181,7 +186,7 @@ public abstract class OldTests extends AbstractReasonerFrontendTest {
         Project p = loadProject("testInfra.ivml");
         Configuration config = new Configuration(p);
 
-        performCheck(p, config, true);
+        assertPropagation(0, 0, config);
     }
 
 }
