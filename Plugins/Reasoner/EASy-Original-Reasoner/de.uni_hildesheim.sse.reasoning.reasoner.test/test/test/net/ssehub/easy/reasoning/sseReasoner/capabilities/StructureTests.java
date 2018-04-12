@@ -15,9 +15,7 @@
  */
 package test.net.ssehub.easy.reasoning.sseReasoner.capabilities;
 
-import org.junit.BeforeClass;
-
-import test.net.ssehub.easy.reasoning.sseReasoner.reasoner.Utils;
+import test.net.ssehub.easy.reasoning.sseReasoner.TestDescriptor;
 
 /**
  * Test of reasoner capabilities related to the structure of variability models.
@@ -27,12 +25,10 @@ import test.net.ssehub.easy.reasoning.sseReasoner.reasoner.Utils;
 public class StructureTests extends net.ssehub.easy.reasoning.core.frontend.StructureTests {
 
     /**
-     * Initializes the tests (for single execution outside the suite).
+     * Creates a specific test instance.
      */
-    @BeforeClass
-    public static void setUpBeforeClass() {
-        Utils.init();
+    public StructureTests() {
+        super(TestDescriptor.INSTANCE);
     }
-
 
 }

@@ -15,11 +15,8 @@
  */
 package test.net.ssehub.easy.reasoning.sseReasoner.qm;
 
-
-import org.junit.BeforeClass;
-
 import net.ssehub.easy.reasoning.core.frontend.MismatchedTest;
-import test.net.ssehub.easy.reasoning.sseReasoner.reasoner.Utils;
+import test.net.ssehub.easy.reasoning.sseReasoner.TestDescriptor;
 
 /**
  * Qualimaster model test.
@@ -31,11 +28,10 @@ import test.net.ssehub.easy.reasoning.sseReasoner.reasoner.Utils;
 public class QMMismatchedTest extends MismatchedTest {
     
     /**
-     * Initializes the tests (for single execution outside the suite).
+     * Creates a specific test instance.
      */
-    @BeforeClass
-    public static void setUpBeforeClass() {
-        Utils.init();
+    public QMMismatchedTest() {
+        super(TestDescriptor.INSTANCE);
     }
     
 }

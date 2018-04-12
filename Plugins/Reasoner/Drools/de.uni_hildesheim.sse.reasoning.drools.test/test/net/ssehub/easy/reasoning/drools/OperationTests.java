@@ -1,8 +1,6 @@
 
 package net.ssehub.easy.reasoning.drools;
 
-import org.junit.BeforeClass;
-
 /**
  * Configures the operation tests for Drools.
  * 
@@ -11,11 +9,10 @@ import org.junit.BeforeClass;
 public class OperationTests extends net.ssehub.easy.reasoning.core.frontend.OperationTests {
 
     /**
-     * Initializes the tests (for single execution outside the suite).
+     * Creates a specific test instance.
      */
-    @BeforeClass
-    public static void setUpBeforeClass() {
-        Utils.init();
+    public OperationTests() {
+        super(TestDescriptor.INSTANCE);
     }
 
 }

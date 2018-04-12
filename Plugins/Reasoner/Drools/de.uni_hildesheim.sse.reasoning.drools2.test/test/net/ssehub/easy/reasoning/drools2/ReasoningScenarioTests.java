@@ -1,13 +1,11 @@
 package net.ssehub.easy.reasoning.drools2;
 
-
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 
 import net.ssehub.easy.basics.progress.ProgressObserver;
-import net.ssehub.easy.reasoning.drools2.DroolsReasoner;
 import net.ssehub.easy.varModel.confModel.AssignmentState;
 import net.ssehub.easy.varModel.confModel.Configuration;
 import net.ssehub.easy.varModel.confModel.IDecisionVariable;

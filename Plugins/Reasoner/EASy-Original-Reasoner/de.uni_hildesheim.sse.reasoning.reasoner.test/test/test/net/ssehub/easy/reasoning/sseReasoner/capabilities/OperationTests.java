@@ -1,9 +1,7 @@
 
 package test.net.ssehub.easy.reasoning.sseReasoner.capabilities;
 
-import org.junit.BeforeClass;
-
-import test.net.ssehub.easy.reasoning.sseReasoner.reasoner.Utils;
+import test.net.ssehub.easy.reasoning.sseReasoner.TestDescriptor;
 
 /**
  * Configures the operation tests for the SSE-Reasoner.
@@ -14,11 +12,10 @@ import test.net.ssehub.easy.reasoning.sseReasoner.reasoner.Utils;
 public class OperationTests extends net.ssehub.easy.reasoning.core.frontend.OperationTests {
 
     /**
-     * Initializes the tests (for single execution outside the suite).
+     * Creates a specific test instance.
      */
-    @BeforeClass
-    public static void setUpBeforeClass() {
-        Utils.init();
+    public OperationTests() {
+        super(TestDescriptor.INSTANCE);
     }
 
 }
