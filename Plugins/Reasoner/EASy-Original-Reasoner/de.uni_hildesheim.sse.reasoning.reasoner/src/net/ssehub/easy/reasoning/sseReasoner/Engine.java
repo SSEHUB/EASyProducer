@@ -424,7 +424,7 @@ public class Engine {
     
     /**
      * Sets the desired assignment state. The default value is {@link AssignmentState#DERIVED}, but specific reasoning
-     * operations such as configuration initialization may require a differnt state.
+     * operations such as configuration initialization may require a different state.
      * 
      * @param state the state to use
      */

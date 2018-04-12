@@ -226,12 +226,11 @@ public class Descriptor extends ReasonerDescriptor {
         addCapability(IvmlReasonerCapabilities.EVAL);
         addCapability(IvmlReasonerCapabilities.QUALIFIED_COMPOUND_ACCESS);
         addCapability(GeneralReasonerCapabilities.INCREMENTAL_REASONING);
-        addCapability(GeneralReasonerCapabilities.RUNTIME_REASONING); // at least basic capabilities
+        addCapability(GeneralReasonerCapabilities.RUNTIME_REASONING);
         addCapability(GeneralReasonerCapabilities.TIMEOUT);
         addCapability(GeneralReasonerCapabilities.STANDALONE_REASONING);
-        //addCapability(GeneralReasonerCapabilities.CONFIGURATION_INITIALIZATION); // TODO enable after tests
+        //addCapability(GeneralReasonerCapabilities.CONFIGURATION_INITIALIZATION);
     }
-    
     
     @Override
     public boolean isReadyForUse() {

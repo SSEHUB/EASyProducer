@@ -167,8 +167,9 @@ public class Reasoner implements IReasoner {
         reasonerConfig =  null == reasonerConfig ? new ReasonerConfiguration() : reasonerConfig;
         Engine engine = new Engine(project, createConfiguration(project, cfg, reasonerConfig, false), 
             reasonerConfig, observer);
-        engine.setAssignmentState(cfg.getResolutionState());
-        return engine.reason();
+        //engine.setAssignmentState(cfg.getResolutionState()); // too specific, remove resolution state at all??
+        ReasoningResult res =  engine.reason();
+        return res;
     }
 
     @Override

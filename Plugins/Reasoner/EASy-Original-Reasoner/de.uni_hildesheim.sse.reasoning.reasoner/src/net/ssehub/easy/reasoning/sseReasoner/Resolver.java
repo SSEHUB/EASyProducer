@@ -1420,6 +1420,7 @@ public class Resolver {
         translationTime = 0;
         evaluationTime = 0;
         failedElements.clear();
+        assignmentState = AssignmentState.DERIVED;
     }
 
     /**
