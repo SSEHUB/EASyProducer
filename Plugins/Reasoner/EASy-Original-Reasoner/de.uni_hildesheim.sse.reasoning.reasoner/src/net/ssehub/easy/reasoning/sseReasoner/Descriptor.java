@@ -229,7 +229,7 @@ public class Descriptor extends ReasonerDescriptor {
         addCapability(GeneralReasonerCapabilities.RUNTIME_REASONING);
         addCapability(GeneralReasonerCapabilities.TIMEOUT);
         addCapability(GeneralReasonerCapabilities.STANDALONE_REASONING);
-        //addCapability(GeneralReasonerCapabilities.CONFIGURATION_INITIALIZATION);
+        addCapability(GeneralReasonerCapabilities.CONFIGURATION_INITIALIZATION);
     }
     
     @Override
