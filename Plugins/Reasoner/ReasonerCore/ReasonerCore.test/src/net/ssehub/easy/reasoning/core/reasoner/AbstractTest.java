@@ -20,6 +20,7 @@ import java.io.IOException;
 import java.util.List;
 
 import org.eclipse.emf.common.util.URI;
+import org.eclipse.xtext.util.Arrays;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
@@ -524,5 +525,25 @@ public abstract class AbstractTest extends net.ssehub.easy.dslCore.test.Abstract
         }
     }
 
+    /**
+     * Asserts that <code>actual</code> is in <code>expected</code>.
+     * 
+     * @param actual the actual value
+     * @param expected the expected/allowed values
+     */
+    protected void assertContained(Object actual, Object... expected) {
+        Assert.assertTrue(null, Arrays.contains(expected, actual));
+    }
+
+    /**
+     * Asserts that <code>actual</code> is in <code>expected</code>.
+     * 
+     * @param message emitted in case of failing
+     * @param actual the actual value
+     * @param expected the expected/allowed values
+     */
+    protected void assertContained(String message, Object actual, Object... expected) {
+        Assert.assertTrue(message, Arrays.contains(expected, actual));
+    }
     
 }

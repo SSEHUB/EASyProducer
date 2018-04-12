@@ -1,5 +1,6 @@
 package net.ssehub.easy.reasoning.core.adaptation;
 
+import org.eclipse.xtext.util.Arrays;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -70,14 +71,14 @@ public class AdaptationScenarioTests extends AbstractTest {
      * Asserts that a given variable has the expected value (and state).
      * @param variable The variable to test (maybe a nested variable, but not <tt>null</tt>).
      * @param expectedValue The expected value of the variable (must not be <tt>null</tt>).
-     * @param expectedState Should be one of {@link AssignmentState#ASSIGNED} (if it was initialized by the
+     * @param explanation A error message if the Junit test case breaks
+     * @param expectedStates Should be one of {@link AssignmentState#ASSIGNED} (if it was initialized by the
      *     configuration, {@link AssignmentState#USER_ASSIGNED} if it was manually overwritten by the user
      *     (inside the test case), or {@link AssignmentState#DERIVED} if the reasoner should overwrite a value during
      *     reasoning
-     * @param explanation A error message if the Junit test case breaks
      */
-    private void assertVariable(IDecisionVariable variable, Object expectedValue, IAssignmentState expectedState,
-            String explanation) {
+    private void assertVariable(IDecisionVariable variable, Object expectedValue, String explanation, 
+         IAssignmentState... expectedStates) {
         
         Assert.assertNotNull("Tested variable was NULL, but was not expected to be.", variable);
         String name = variable.getDeclaration().getName();
@@ -88,7 +89,7 @@ public class AdaptationScenarioTests extends AbstractTest {
         } else {
             Assert.assertEquals(name + " " + explanation, expectedValue, variable.getValue()); 
         }
-        Assert.assertSame(name + " " + explanation, expectedState, variable.getState());
+        Assert.assertTrue(name + " " + explanation, Arrays.contains(expectedStates, variable.getState()));
     }
         
     /**
@@ -102,7 +103,7 @@ public class AdaptationScenarioTests extends AbstractTest {
         runReasoning();
         for (IDecisionVariable variable : config) {
             if (variable.getDeclaration().getName().equals("a")) {
-                assertVariable(variable, 1, AssignmentState.ASSIGNED, "a after 1 reasoning");
+                assertVariable(variable, 1, "a after 1 reasoning", AssignmentState.ASSIGNED, AssignmentState.DERIVED);
                 try {
                     Value newValA = ValueFactory.createValue(IntegerType.TYPE, 10);
                     variable.setValue(newValA, AssignmentState.USER_ASSIGNED);
@@ -111,19 +112,19 @@ public class AdaptationScenarioTests extends AbstractTest {
                 } catch (ConfigurationException e) {
                     e.printStackTrace();
                 }
-                assertVariable(variable, 10, AssignmentState.USER_ASSIGNED, "a after new value");
+                assertVariable(variable, 10, "a after new value", AssignmentState.USER_ASSIGNED);
             }
             if (variable.getDeclaration().getName().equals("b")) {
-                assertVariable(variable, null, AssignmentState.UNDEFINED, "b after 1 reasoning");                
+                assertVariable(variable, null, "b after 1 reasoning", AssignmentState.UNDEFINED);
             }
         }
         runReasoning();
         for (IDecisionVariable variable : config) {
             if (variable.getDeclaration().getName().equals("a")) {
-                assertVariable(variable, 10, AssignmentState.USER_ASSIGNED, "a after 2 reasoning");                
+                assertVariable(variable, 10, "a after 2 reasoning", AssignmentState.USER_ASSIGNED);
             }
             if (variable.getDeclaration().getName().equals("b")) {
-                assertVariable(variable, 20, AssignmentState.DERIVED, "b after 2 reasoning");
+                assertVariable(variable, 20, "b after 2 reasoning", AssignmentState.DERIVED);
             }
         }
         
@@ -140,8 +141,10 @@ public class AdaptationScenarioTests extends AbstractTest {
         runReasoning();
         for (IDecisionVariable variable : config) {
             if (variable.getDeclaration().getName().equals("cmp")) {
-                assertVariable(variable.getNestedElement(0), 1, AssignmentState.ASSIGNED, "cmp.a after 1 reasoning");
-                assertVariable(variable.getNestedElement(1), 2, AssignmentState.ASSIGNED, "cmp.b after 1 reasoning");
+                assertVariable(variable.getNestedElement(0), 1, "cmp.a after 1 reasoning", 
+                    AssignmentState.ASSIGNED, AssignmentState.DERIVED);
+                assertVariable(variable.getNestedElement(1), 2, "cmp.b after 1 reasoning", 
+                    AssignmentState.ASSIGNED, AssignmentState.DERIVED);
                 try {
                     Value newValA = ValueFactory.createValue(IntegerType.TYPE, 10);
                     variable.getNestedElement(0).setValue(newValA, AssignmentState.USER_ASSIGNED);
@@ -150,18 +153,19 @@ public class AdaptationScenarioTests extends AbstractTest {
                 } catch (ConfigurationException e) {
                     e.printStackTrace();
                 }
-                assertVariable(variable.getNestedElement(0), 10, AssignmentState.USER_ASSIGNED,
-                        "cmp.a after new value");
-                assertVariable(variable.getNestedElement(1), 2, AssignmentState.ASSIGNED, "cmp.b after new value");
+                assertVariable(variable.getNestedElement(0), 10, "cmp.a after new value", 
+                    AssignmentState.USER_ASSIGNED);
+                assertVariable(variable.getNestedElement(1), 2, "cmp.b after new value", 
+                    AssignmentState.ASSIGNED, AssignmentState.DERIVED);
             }
 
         }
         runReasoning();
         for (IDecisionVariable variable : config) {
             if (variable.getDeclaration().getName().equals("cmp")) {
-                assertVariable(variable.getNestedElement(0), 10, AssignmentState.USER_ASSIGNED,
-                        "cmp.a after 2 reasoning");
-                assertVariable(variable.getNestedElement(1), 2, AssignmentState.DERIVED, "cmp.b after 2 reasoning");
+                assertVariable(variable.getNestedElement(0), 10, "cmp.a after 2 reasoning", 
+                    AssignmentState.USER_ASSIGNED);
+                assertVariable(variable.getNestedElement(1), 2, "cmp.b after 2 reasoning", AssignmentState.DERIVED);
             }
         }
         
@@ -178,9 +182,9 @@ public class AdaptationScenarioTests extends AbstractTest {
         runReasoning();
         for (IDecisionVariable variable : config) {
             if (variable.getDeclaration().getName().equals("cmp")) {
-                assertVariable(variable.getNestedElement(0), 1, AssignmentState.DERIVED, "cmp.a after 1 reasoning");
-                assertVariable(variable.getNestedElement(1), null, AssignmentState.UNDEFINED, 
-                        "cmp.b after 1 reasoning");
+                assertVariable(variable.getNestedElement(0), 1, "cmp.a after 1 reasoning", AssignmentState.DERIVED);
+                assertVariable(variable.getNestedElement(1), null, "cmp.b after 1 reasoning", 
+                     AssignmentState.UNDEFINED);
                 try {
                     Value newValA = ValueFactory.createValue(IntegerType.TYPE, 10);
                     variable.getNestedElement(0).setValue(newValA, AssignmentState.USER_ASSIGNED);
@@ -189,20 +193,20 @@ public class AdaptationScenarioTests extends AbstractTest {
                 } catch (ConfigurationException e) {
                     e.printStackTrace();
                 }
-                assertVariable(variable.getNestedElement(0), 10, AssignmentState.USER_ASSIGNED, 
-                        "cmp.a after new value");
-                assertVariable(variable.getNestedElement(1), null, AssignmentState.UNDEFINED, 
-                        "cmp.b after new value");
+                assertVariable(variable.getNestedElement(0), 10, "cmp.a after new value", 
+                        AssignmentState.USER_ASSIGNED);
+                assertVariable(variable.getNestedElement(1), null, "cmp.b after new value", 
+                        AssignmentState.UNDEFINED);
             }
             
         }
         runReasoning();
         for (IDecisionVariable variable : config) {
             if (variable.getDeclaration().getName().equals("cmp")) {
-                assertVariable(variable.getNestedElement(0), 10, AssignmentState.USER_ASSIGNED, 
-                        "cmp.a after 2 reasoning");
-                assertVariable(variable.getNestedElement(1), 20, AssignmentState.DERIVED, 
-                        "cmp.b after 2 reasoning");
+                assertVariable(variable.getNestedElement(0), 10, "cmp.a after 2 reasoning", 
+                         AssignmentState.USER_ASSIGNED);
+                assertVariable(variable.getNestedElement(1), 20, "cmp.b after 2 reasoning", 
+                         AssignmentState.DERIVED);
             }
         }
         
@@ -219,10 +223,10 @@ public class AdaptationScenarioTests extends AbstractTest {
         runReasoning();
         for (IDecisionVariable variable : config) {
             if (variable.getDeclaration().getName().equals("seqA")) {
-                assertVariable(variable.getNestedElement(0), 1, AssignmentState.ASSIGNED,
-                    "seqA[0] after 1 reasoning");
-                assertVariable(variable.getNestedElement(1), 2, AssignmentState.ASSIGNED,
-                     "seqA[1] after 1 reasoning");
+                assertVariable(variable.getNestedElement(0), 1, "seqA[0] after 1 reasoning", 
+                     AssignmentState.ASSIGNED, AssignmentState.DERIVED);
+                assertVariable(variable.getNestedElement(1), 2, "seqA[1] after 1 reasoning", 
+                     AssignmentState.ASSIGNED, AssignmentState.DERIVED);
                 try {
                     Value newValA = ValueFactory.createValue(IntegerType.TYPE, 10);
                     variable.getNestedElement(0).setValue(newValA, AssignmentState.USER_ASSIGNED);
@@ -231,19 +235,19 @@ public class AdaptationScenarioTests extends AbstractTest {
                 } catch (ConfigurationException e) {
                     e.printStackTrace();
                 }
-                assertVariable(variable.getNestedElement(0), 10, AssignmentState.USER_ASSIGNED,
-                    "after user defined value for seqA[0]");
-                assertVariable(variable.getNestedElement(1), 2, AssignmentState.ASSIGNED,
-                    "after user defined value for seqA[0]");
+                assertVariable(variable.getNestedElement(0), 10, "after user defined value for seqA[0]", 
+                    AssignmentState.USER_ASSIGNED);
+                assertVariable(variable.getNestedElement(1), 2, "after user defined value for seqA[0]", 
+                    AssignmentState.ASSIGNED, AssignmentState.DERIVED);
             }            
         }
         runReasoning();
         for (IDecisionVariable variable : config) {
             if (variable.getDeclaration().getName().equals("seqA")) {
-                assertVariable(variable.getNestedElement(0), 10, AssignmentState.USER_ASSIGNED,
-                        "seqA[0] after 2 reasoning");
-                assertVariable(variable.getNestedElement(1), 2, AssignmentState.DERIVED,
-                         "seqA[1] after 2 reasoning");             
+                assertVariable(variable.getNestedElement(0), 10, "seqA[0] after 2 reasoning", 
+                    AssignmentState.USER_ASSIGNED);
+                assertVariable(variable.getNestedElement(1), 2, "seqA[1] after 2 reasoning", 
+                    AssignmentState.DERIVED);             
             }
         }        
     }
@@ -260,12 +264,13 @@ public class AdaptationScenarioTests extends AbstractTest {
         runReasoning();
         for (IDecisionVariable variable : config) {
             if (variable.getDeclaration().getName().equals("seqA")) {
-                assertVariable(variable.getNestedElement(0), 1, AssignmentState.ASSIGNED,
-                        "seqA[0] after 1 reasoning");
-                assertVariable(variable.getNestedElement(1), 2, AssignmentState.ASSIGNED,
-                         "seqA[1] after 1 reasoning");   
+                assertVariable(variable.getNestedElement(0), 1, "seqA[0] after 1 reasoning", 
+                    AssignmentState.ASSIGNED, AssignmentState.DERIVED);
+                assertVariable(variable.getNestedElement(1), 2, "seqA[1] after 1 reasoning", 
+                    AssignmentState.ASSIGNED, AssignmentState.DERIVED);   
                 Assert.assertEquals("seqA[0] after 1 reasoning", 1, variable.getNestedElement(0).getValue().getValue());
-                Assert.assertSame("seqA[0] after 1 reasoning", AssignmentState.ASSIGNED, variable.getState());       
+                assertContained("seqA[0] after 1 reasoning", variable.getState(), 
+                     AssignmentState.ASSIGNED, AssignmentState.DERIVED);
                 try {
                     Value newValA = ValueFactory.createValue(IntegerType.TYPE, 10);
                     variable.getNestedElement(0).setValue(newValA, AssignmentState.USER_ASSIGNED);
@@ -274,19 +279,19 @@ public class AdaptationScenarioTests extends AbstractTest {
                 } catch (ConfigurationException e) {
                     e.printStackTrace();
                 }
-                assertVariable(variable.getNestedElement(0), 10, AssignmentState.USER_ASSIGNED,
-                        "seqA[0] after new value");
-                assertVariable(variable.getNestedElement(1), 2, AssignmentState.ASSIGNED,
-                         "seqA[1] after new value");
+                assertVariable(variable.getNestedElement(0), 10, "seqA[0] after new value", 
+                    AssignmentState.USER_ASSIGNED);
+                assertVariable(variable.getNestedElement(1), 2, "seqA[1] after new value", 
+                    AssignmentState.ASSIGNED, AssignmentState.DERIVED);
             }
         }
         runReasoning();
         for (IDecisionVariable variable : config) {
             if (variable.getDeclaration().getName().equals("seqA")) {
-                assertVariable(variable.getNestedElement(0), 10, AssignmentState.USER_ASSIGNED,
-                        "seqA[0] after 2 reasoning");
-                assertVariable(variable.getNestedElement(1), 2, AssignmentState.DERIVED,
-                         "seqA[1] after 2 reasoning"); 
+                assertVariable(variable.getNestedElement(0), 10, "seqA[0] after 2 reasoning", 
+                    AssignmentState.USER_ASSIGNED);
+                assertVariable(variable.getNestedElement(1), 2, "seqA[1] after 2 reasoning", 
+                    AssignmentState.DERIVED); 
             }
         }
     }

@@ -91,11 +91,11 @@ public class IntegrityTests extends AbstractTest {
         // Test correct assignments
         Assert.assertNotNull(iVarA);
         Assert.assertEquals(31, iVarA.getValue().getValue());
-        Assert.assertSame(config.getResolutionState(), iVarA.getState());
+        assertContained(iVarA.getState(), AssignmentState.ASSIGNED, AssignmentState.DERIVED);
 
         Assert.assertNotNull(iVarB);
         Assert.assertEquals(37, iVarB.getValue().getValue());
-        Assert.assertSame(config.getResolutionState(), iVarB.getState());
+        assertContained(iVarB.getState(), AssignmentState.ASSIGNED, AssignmentState.DERIVED);
         
         Assert.assertNotNull(iVarC);
         Assert.assertEquals(33, iVarC.getValue().getValue());

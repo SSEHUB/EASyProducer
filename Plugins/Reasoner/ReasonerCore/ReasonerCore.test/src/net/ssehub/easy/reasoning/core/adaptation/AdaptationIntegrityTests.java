@@ -177,11 +177,11 @@ public class AdaptationIntegrityTests extends AbstractTest {
             // Test correct assignments
             Assert.assertNotNull(iVarA);
             Assert.assertEquals(31, iVarA.getValue().getValue());
-            Assert.assertSame("iVarA", AssignmentState.ASSIGNED, iVarA.getState());
+            assertContained("iVarA", iVarA.getState(), AssignmentState.ASSIGNED, AssignmentState.DERIVED);
 
             Assert.assertNotNull(iVarB);
             Assert.assertEquals(37, iVarB.getValue().getValue());
-            Assert.assertSame("iVarB", AssignmentState.ASSIGNED, iVarB.getState());
+            assertContained("iVarB", iVarB.getState(), AssignmentState.ASSIGNED, AssignmentState.DERIVED);
             
             Assert.assertNotNull(iVarC);
             Assert.assertEquals(33, iVarC.getValue().getValue());
@@ -225,7 +225,7 @@ public class AdaptationIntegrityTests extends AbstractTest {
             
             Assert.assertNotNull(iVarB);
             Assert.assertEquals(37, iVarB.getValue().getValue());
-            Assert.assertSame("iVarB", AssignmentState.ASSIGNED, iVarB.getState());
+            assertContained("iVarB", iVarB.getState(), AssignmentState.ASSIGNED, AssignmentState.DERIVED);
             
             Assert.assertNotNull(iVarC);
             Assert.assertEquals(33, iVarC.getValue().getValue());
@@ -281,7 +281,6 @@ public class AdaptationIntegrityTests extends AbstractTest {
     public void testCompoundResultAfterReasoningForAdaptation() {
         try {
             createCompoundProject();
-            
             Value newValA = ValueFactory.createValue(declA.getType(), 101);
             Value newValC = ValueFactory.createValue(declC.getType(), 33);
             try {
