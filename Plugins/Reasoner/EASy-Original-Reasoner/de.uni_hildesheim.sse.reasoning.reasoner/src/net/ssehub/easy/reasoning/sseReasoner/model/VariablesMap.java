@@ -1,10 +1,13 @@
 package net.ssehub.easy.reasoning.sseReasoner.model;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+import net.ssehub.easy.varModel.confModel.IConfigurationElement;
+import net.ssehub.easy.varModel.confModel.IDecisionVariable;
 import net.ssehub.easy.varModel.model.AbstractVariable;
 import net.ssehub.easy.varModel.model.Constraint;
 
@@ -30,12 +33,22 @@ public class VariablesMap {
      * @param constraint {@link Constraint} that holds added {@link AbstractVariable}.
      */
     public void add(AbstractVariable declaration, Constraint constraint) {
+        getConstraintSet(declaration).add(constraint); 
+    }
+    
+    /**
+     * Returns the constraint set for <code>declaration</code>.
+     * 
+     * @param declaration the declaration
+     * @return the constraint set (may be <b>null</b> for none)
+     */
+    private Set<Constraint> getConstraintSet(AbstractVariable declaration) {
         Set<Constraint> relevantConstraints = declConstraintMapping.get(declaration);
         if (null == relevantConstraints) {
             relevantConstraints = new HashSet<Constraint>();
             declConstraintMapping.put(declaration, relevantConstraints);
         }
-        relevantConstraints.add(constraint); 
+        return relevantConstraints;
     }
     
     /**
@@ -63,5 +76,63 @@ public class VariablesMap {
     public void clear() {
         declConstraintMapping.clear();
     }
+
+    /**
+     * Relates all <code>constraints</code> to the declaration of <code>variable</code> and the declarations of 
+     * all parent variables of <code>variable</code>.
+     * 
+     * @param variable the variable to relate to
+     * @param constraints the constraints to relate
+     */
+    public void addAll(IDecisionVariable variable, Collection<Constraint> constraints) {
+        IConfigurationElement iter = variable;
+        while (iter != null) {
+            if (iter instanceof IDecisionVariable) {
+                addAll(((IDecisionVariable) iter).getDeclaration(), constraints);
+            }
+            iter = iter.getParent();
+        }
+    }
     
+    /**
+     * Relates all <code>constraints</code> to <code>declaration</code>.
+     * 
+     * @param declaration the declaration to relate to
+     * @param constraints the constraints to relate
+     */
+    public void addAll(AbstractVariable declaration, Collection<Constraint> constraints) {
+        getConstraintSet(declaration).addAll(constraints); 
+    }
+
+    // transitive removal over all parents
+    /**
+     * Unrelates all <code>constraints</code> from the declaration of <code>variable</code> and all declarations of 
+     * parent variables of <code>variable</code>.
+     * 
+     * @param variable the variable to relate to
+     * @param constraints the constraints to unrelate
+     */
+    public void removeAll(IDecisionVariable variable, Collection<Constraint> constraints) {
+        IConfigurationElement iter = variable;
+        while (iter != null) {
+            if (iter instanceof IDecisionVariable) {
+                removeAll(((IDecisionVariable) iter).getDeclaration(), constraints);
+            }
+            iter = iter.getParent();
+        }
+    }
+
+    /**
+     * Unrelates all <code>constraints</code> from <code>declaration</code>.
+     * 
+     * @param declaration the declaration to relate to
+     * @param constraints the constraints to relate
+     */
+    public void removeAll(AbstractVariable declaration, Collection<Constraint> constraints) {
+        Set<Constraint> relevantConstraints = declConstraintMapping.get(declaration);
+        if (null != relevantConstraints) {
+            relevantConstraints.removeAll(constraints);
+        }
+    }
+
 }

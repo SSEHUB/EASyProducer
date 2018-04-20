@@ -19,6 +19,9 @@ import net.ssehub.easy.varModel.cst.Self;
 import net.ssehub.easy.varModel.cst.UnresolvedExpression;
 import net.ssehub.easy.varModel.cst.Variable;
 import net.ssehub.easy.varModel.model.datatypes.OclKeyWords;
+import net.ssehub.easy.varModel.model.values.CompoundValue;
+import net.ssehub.easy.varModel.model.values.ContainerValue;
+import net.ssehub.easy.varModel.model.values.Value;
 
 /**
  * A visitor to retrieve constraints from containers.
@@ -28,6 +31,8 @@ public class ContainerConstraintsFinder implements IConstraintTreeVisitor {
     private boolean isConstraintContainer;
     private boolean isCompoundInitializer;
     private ConstraintSyntaxTree cst;
+    private CompoundValue compoundValue;
+    private ContainerValue containerValue;
     
     /**
      * Constructor of the visitor. Visits the given constraint using {@link #accept(ConstraintSyntaxTree)}.
@@ -64,6 +69,8 @@ public class ContainerConstraintsFinder implements IConstraintTreeVisitor {
         isConstraintContainer = false;
         isCompoundInitializer = false;
         cst = null;
+        containerValue = null;
+        compoundValue = null;
     }
 
     /**
@@ -80,6 +87,24 @@ public class ContainerConstraintsFinder implements IConstraintTreeVisitor {
      */
     public boolean isCompoundInitializer() {
         return isCompoundInitializer;
+    }
+
+    /**
+     * Returns the container value if a constant value was identified as right side.
+     * 
+     * @return the container value (may be <b>null</b> if there is none)
+     */
+    public ContainerValue getContainerValue() {
+        return containerValue;
+    }
+
+    /**
+     * Returns the compound value if a constant value was identified as right side.
+     * 
+     * @return the compound value (may be <b>null</b> if there is none)
+     */
+    public CompoundValue getCompoundValue() {
+        return compoundValue;
     }
     
     /**
@@ -125,13 +150,20 @@ public class ContainerConstraintsFinder implements IConstraintTreeVisitor {
                 || call.getOperand() instanceof CompoundAccess)
                 && call.getParameterCount() == 1
                 && call.getOperation().equals(OclKeyWords.ASSIGNMENT)) {
-                if (call.getParameter(0) instanceof ContainerInitializer) {
+                ConstraintSyntaxTree param0 = call.getParameter(0);
+                if (param0 instanceof ContainerInitializer) {
                     isConstraintContainer = true;
                     cst = call.getParameter(0);                    
-                }
-                if (call.getParameter(0) instanceof CompoundInitializer) {
+                } else if (param0 instanceof CompoundInitializer) {
                     isCompoundInitializer = true;
                     cst = call.getParameter(0);                     
+                } else if (param0 instanceof ConstantValue) {
+                    Value value = ((ConstantValue) param0).getConstantValue();
+                    if (value instanceof ContainerValue) {
+                        containerValue = (ContainerValue) value;
+                    } else if (value instanceof CompoundValue) {
+                        compoundValue = (CompoundValue) value;
+                    }
                 }
             }
             call.getOperand().accept(this);

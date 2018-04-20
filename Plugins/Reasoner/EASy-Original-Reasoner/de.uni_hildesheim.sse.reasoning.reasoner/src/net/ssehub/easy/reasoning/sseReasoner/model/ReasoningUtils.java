@@ -38,6 +38,7 @@ import net.ssehub.easy.varModel.model.AbstractVariable;
 import net.ssehub.easy.varModel.model.Constraint;
 import net.ssehub.easy.varModel.model.DecisionVariableDeclaration;
 import net.ssehub.easy.varModel.model.IModelElement;
+import net.ssehub.easy.varModel.model.datatypes.BooleanType;
 import net.ssehub.easy.varModel.model.datatypes.Compound;
 import net.ssehub.easy.varModel.model.datatypes.Container;
 import net.ssehub.easy.varModel.model.datatypes.DerivedDatatype;
@@ -46,6 +47,7 @@ import net.ssehub.easy.varModel.model.datatypes.MetaType;
 import net.ssehub.easy.varModel.model.datatypes.OclKeyWords;
 import net.ssehub.easy.varModel.model.datatypes.Operation;
 import net.ssehub.easy.varModel.model.datatypes.TypeQueries;
+import net.ssehub.easy.varModel.model.values.ConstraintValue;
 import net.ssehub.easy.varModel.model.values.ContainerValue;
 import net.ssehub.easy.varModel.model.values.Value;
 import net.ssehub.easy.varModel.model.values.ValueDoesNotMatchTypeException;
@@ -511,11 +513,27 @@ public class ReasoningUtils {
      * @param evaluator the evaluator
      */
     public static void printConstraintEvaluationResult(ConstraintSyntaxTree cst, EvaluationVisitor evaluator) {
-        System.out.println(StringProvider.toIvmlString(cst) + " fulfilled " + evaluator.constraintFulfilled() 
+        System.out.println("EVAL " + StringProvider.toIvmlString(cst) + " fulfilled " + evaluator.constraintFulfilled() 
             + " failed " + evaluator.constraintFailed());
         for (int m = 0; m < evaluator.getMessageCount(); m++) {
             System.out.println("  MSG: " + evaluator.getMessage(m).getDescription());
         }
+    }
+    
+    /**
+     * Returns the expression for a constraint to be created for a constraint variable.
+     * 
+     * @param value the value to create the constraint for
+     * @return the constraint expression, may be <b>null</b>
+     */
+    public static ConstraintSyntaxTree getConstraintValueConstraintExpression(Value value) {
+        ConstraintSyntaxTree cst = null;
+        if (value instanceof ConstraintValue) {
+            cst = ((ConstraintValue) value).getValue();
+        } else if (null != value && BooleanType.TYPE.isAssignableFrom(value.getType())) {
+            cst = new ConstantValue(value);
+        }
+        return cst;
     }
     
 }

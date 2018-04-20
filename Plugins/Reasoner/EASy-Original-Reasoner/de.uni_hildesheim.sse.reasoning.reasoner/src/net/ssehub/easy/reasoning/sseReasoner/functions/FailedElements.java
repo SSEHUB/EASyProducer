@@ -2,6 +2,7 @@ package net.ssehub.easy.reasoning.sseReasoner.functions;
 
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 
 import net.ssehub.easy.varModel.model.AbstractVariable;
@@ -45,11 +46,23 @@ public class FailedElements {
     }
     
     /**
-     * Method for removing a problem point.
-     * @param constraint Constraint that is valid.
+     * Removes a problem point through its constraint.
+     * 
+     * @param constraint Constraint to be declared valid/irrelevant for problems.
      */
     public void removeProblemConstraint(Constraint constraint) {
         problemConstraints.remove(constraint);
+    }
+
+    /**
+     * Removes problem points through several constraint.
+     * 
+     * @param constraints the constraints to be declared valid/irrelevant for problems.
+     */
+    public void removeProblemConstraints(List<Constraint> constraints) {
+        for (int c = 0, n = constraints.size(); c < n; c++) {
+            problemConstraints.remove(constraints.get(c));
+        }
     }
     
     /**

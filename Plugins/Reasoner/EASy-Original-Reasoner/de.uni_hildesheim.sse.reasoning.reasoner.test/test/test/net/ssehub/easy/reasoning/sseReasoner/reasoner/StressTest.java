@@ -1,8 +1,5 @@
 package test.net.ssehub.easy.reasoning.sseReasoner.reasoner;
 
-import org.junit.Ignore;
-import org.junit.Test;
-
 import test.net.ssehub.easy.reasoning.sseReasoner.TestDescriptor;
 
 /**
@@ -17,20 +14,6 @@ public class StressTest extends net.ssehub.easy.reasoning.core.reasoner.StressTe
      */
     public StressTest() {
         super(TestDescriptor.INSTANCE);
-    }
-
-    @Override
-    @Test
-    @Ignore
-    public void testConstraintEvaluation() {
-        super.testConstraintEvaluation(); // TODO change still not implemented
-    }
-
-    @Override
-    @Test
-    @Ignore
-    public void testConstraintDefaults() {
-        super.testConstraintDefaults(); // TODO change still not implemented
     }
     
 }

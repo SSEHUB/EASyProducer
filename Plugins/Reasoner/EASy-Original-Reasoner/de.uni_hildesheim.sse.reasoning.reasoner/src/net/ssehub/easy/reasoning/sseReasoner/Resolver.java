@@ -37,6 +37,7 @@ import net.ssehub.easy.varModel.cst.CSTSemanticException;
 import net.ssehub.easy.varModel.cst.CSTUtils;
 import net.ssehub.easy.varModel.cst.CompoundAccess;
 import net.ssehub.easy.varModel.cst.CompoundInitializer;
+import net.ssehub.easy.varModel.cst.ConstantValue;
 import net.ssehub.easy.varModel.cst.ConstraintSyntaxTree;
 import net.ssehub.easy.varModel.cst.ContainerInitializer;
 import net.ssehub.easy.varModel.cst.OCLFeatureCall;
@@ -65,7 +66,7 @@ import net.ssehub.easy.varModel.model.datatypes.OclKeyWords;
 import net.ssehub.easy.varModel.model.datatypes.Reference;
 import net.ssehub.easy.varModel.model.datatypes.TypeQueries;
 import net.ssehub.easy.varModel.model.filter.FilterType;
-import net.ssehub.easy.varModel.model.values.ConstraintValue;
+import net.ssehub.easy.varModel.model.values.CompoundValue;
 import net.ssehub.easy.varModel.model.values.ContainerValue;
 import net.ssehub.easy.varModel.model.values.Value;
 
@@ -102,8 +103,10 @@ public class Resolver {
 
     private VariablesMap constraintMap = new VariablesMap();
     private Map<Constraint, IDecisionVariable> constraintVariableMap = new HashMap<Constraint, IDecisionVariable>();
-    private Deque<Constraint> constraintBase = new LinkedList<Constraint>();
-    private List<Deque<Constraint>> constraintBaseCopy = null;
+    private Map<IDecisionVariable, List<Constraint>> variableConstraintsMap 
+        = new HashMap<IDecisionVariable, List<Constraint>>();
+    private ReasonerState copiedState;
+    private Deque<Constraint> constraintBase = new LinkedList<Constraint>(); // TODO optimize, link+hash
     private Set<Constraint> constraintBaseSet = new HashSet<Constraint>();
     private Deque<Constraint> defaultConstraints = new LinkedList<Constraint>();
     private Deque<Constraint> deferredDefaultConstraints = new LinkedList<Constraint>();
@@ -134,10 +137,21 @@ public class Resolver {
     private transient ConstraintTranslationVisitor projectVisitor = new ConstraintTranslationVisitor();
     private transient VariablesInConstraintFinder variablesFinder = new VariablesInConstraintFinder();
     private transient OtherConstraintsProcessor otherConstraintsProc = new OtherConstraintsProcessor();
-    //private transient CompoundContainerProcessor compoundContainerProc = new CompoundContainerProcessor();
     private transient long endTimestamp;
     private transient boolean inTopLevelEvals = false;
 
+    /**
+     * Represents the state of the resolver/reasoner to be kept in case of incremental reasoning.
+     * 
+     * @author Holger Eichelberger
+     */
+    private static class ReasonerState {
+        private List<Deque<Constraint>> constraintBase = new LinkedList<Deque<Constraint>>();
+        private Map<Constraint, IDecisionVariable> constraintVariableMap = new HashMap<Constraint, IDecisionVariable>();
+        private Map<IDecisionVariable, List<Constraint>> variableConstraintsMap 
+            = new HashMap<IDecisionVariable, List<Constraint>>();
+    }
+    
     // >>> from here the names follows the reasoner.tex documentation
 
     private IValueChangeListener listener = new IValueChangeListener() {
@@ -145,7 +159,8 @@ public class Resolver {
         @Override
         public void notifyUnresolved(IDecisionVariable variable) {
         }
-        
+
+        // compound value if compound is changed completely, else individual values
         @Override
         public void notifyChanged(IDecisionVariable variable, Value oldValue) {
             if (!variable.isLocal()) {
@@ -154,11 +169,116 @@ public class Resolver {
                         + " Parent: " + (null == variable.getParent() ? null : variable.getParent()));                 
                 }
                 scopeAssignments.addAssignedVariable(variable);
-                // TODO if value type changes (currently not part of the notification), change also constraints
+                if (!Value.equals(variable.getValue(), oldValue)) {
+                    rescheduleConstraintValue(variable, variable, true);
+                    rescheduleCompoundValue(variable, oldValue);
+                    rescheduleContainerValue(variable, oldValue);
+                }
+                Value newValue = variable.getValue();
+                if (newValue instanceof ContainerValue) {
+                    createContainerConstraintValueConstraints((ContainerValue) newValue, 
+                        createParentExpression(variable), null, variable.getDeclaration().getParent(), null);
+                }
+                // TODO if value type changes (currently not part of the notification)
                 rescheduleConstraintsForChilds(variable);
                 // All constraints for the parent (as this was also changed)
                 rescheduleConstraintsForParent(variable);
             }
+        }
+
+        /**
+         * Reschedule a changed compound value,
+         * 
+         * @param variable the changed variable
+         * @param oldValue the value of <code>variable</code> before the change
+         */
+        private void rescheduleCompoundValue(IDecisionVariable variable, Value oldValue) {
+            Value newValue = variable.getValue();
+            if (newValue instanceof CompoundValue) {
+                CompoundValue newCValue = (CompoundValue) newValue;
+                for (String name : newCValue.getSlotNames()) {
+                    Value nValue = newCValue.getNestedValue(name);
+                    if (null != nValue) {
+                        IDecisionVariable nVar = variable.getNestedElement(name);
+                        rescheduleConstraintValue(nVar, nVar, true);
+                        rescheduleCompoundValue(nVar, nValue);
+                        if (nValue instanceof ContainerValue) {
+                            createContainerConstraintValueConstraints((ContainerValue) nValue, 
+                                createParentExpression(variable), null, variable.getDeclaration().getParent(), nVar);
+                        }
+                    }
+                }
+            }
+        }
+        
+        private void rescheduleContainerValue(IDecisionVariable variable, Value oldValue) {
+            Value newValue = variable.getValue();
+            if (newValue instanceof ContainerValue && oldValue instanceof ContainerValue) {
+                ContainerValue newCValue = (ContainerValue) newValue;
+                ContainerValue newOValue = (ContainerValue) oldValue;
+                if (TypeQueries.isConstraint(newCValue.getContainedType())) {
+                    for (int c = 0; c < newCValue.getElementSize(); c++) {
+                        rescheduleConstraintValue(variable, variable.getNestedElement(c), c == 0);
+                    }
+                } else if (TypeQueries.isConstraint(newCValue.getContainedType())) {
+                    for (int c = 0; c < newCValue.getElementSize(); c++) {
+                        IDecisionVariable nVar = variable.getNestedElement(c);
+                        rescheduleCompoundValue(nVar, 
+                            null != newOValue && c < newOValue.getElementSize() ? newOValue.getElement(c) : null);
+                    }
+                }
+            }
+        }
+
+        /**
+         * Reschedule a single constraint value.
+         * 
+         * @param variable the changed variable
+         * @param oldValue the value of <code>variable</code> before the change
+         */
+        private void rescheduleConstraintValue(IDecisionVariable holder, IDecisionVariable variable, boolean clear) {
+            if (TypeQueries.isConstraint(variable.getDeclaration().getType())) {
+                IConfigurationElement hIter = holder;
+                List<Constraint> constraints;
+                do { // use holder or iterate in case of container element variable
+                    constraints = hIter instanceof IDecisionVariable 
+                        ? variableConstraintsMap.get((IDecisionVariable) hIter) : null;                        
+                    hIter = hIter.getParent();
+                } while (null == constraints && null != hIter);
+                if (clear && null != constraints) {
+                    constraintBase.removeAll(constraints);
+                    failedElements.removeProblemConstraints(constraints);
+                    constraintMap.removeAll(variable, constraints);
+                    constraints.clear();
+                }
+                Value newValue = variable.getValue();
+                ConstraintSyntaxTree cst = getConstraintValueConstraintExpression(newValue);
+                if (null != cst) {
+                    IModelElement parent = null == constraints || constraints.isEmpty() 
+                        ? variable.getDeclaration().getParent() 
+                        : constraints.get(0).getParent();
+                    createConstraintVariableConstraint(cst, createParentExpression(variable), null, parent, holder);
+                    addAllToConstraintBase(otherConstraints);
+                    constraintMap.addAll(variable, otherConstraints);
+                    otherConstraints.clear();
+                }
+            }
+        }
+        
+        private ConstraintSyntaxTree createParentExpression(IDecisionVariable variable) {
+            ConstraintSyntaxTree result = null;
+            IConfigurationElement parent = variable.getParent();
+            if (parent instanceof IDecisionVariable) { // we are nested
+                ConstraintSyntaxTree parentAcc = createParentExpression((IDecisionVariable) parent);
+                if (variable.getDeclaration() instanceof Attribute) {
+                    result = new AttributeVariable(parentAcc, (Attribute) variable.getDeclaration());
+                } else { // TODO what about container variables?
+                    result = new CompoundAccess(parentAcc, variable.getDeclaration().getName());
+                }
+            } else { // we are top-level
+                result = new Variable(variable.getDeclaration());
+            }
+            return result;
         }
 
         /**
@@ -167,7 +287,8 @@ public class Resolver {
          * 
          * @param constraints the constraints to reschedule (may be <b>null</b>, ignored then)
          */
-        private void reschedule(Set<Constraint> constraints) {
+        private void reschedule(AbstractVariable declaration) {
+            Set<Constraint> constraints = constraintMap.getRelevantConstraints(declaration);
             if (null != constraints) {
                 for (Constraint varConstraint : constraints) {
                     if (!constraintBaseSet.contains(varConstraint)) {
@@ -188,7 +309,7 @@ public class Resolver {
             if (parent instanceof IDecisionVariable) {
                 IDecisionVariable pVar = (IDecisionVariable) parent;
                 AbstractVariable declaration = pVar.getDeclaration();
-                reschedule(constraintMap.getRelevantConstraints(declaration));
+                reschedule(declaration);
                 rescheduleConstraintsForParent(pVar);
             }
         }
@@ -201,7 +322,7 @@ public class Resolver {
          */
         private void rescheduleConstraintsForChilds(IDecisionVariable variable) {
             AbstractVariable declaration = variable.getDeclaration();
-            reschedule(constraintMap.getRelevantConstraints(declaration));
+            reschedule(declaration);
             // All constraints for childs (as they may also changed)
             for (int j = 0, nChilds = variable.getNestedElementsCount(); j < nChilds; j++) {
                 rescheduleConstraintsForChilds(variable.getNestedElement(j));
@@ -282,9 +403,9 @@ public class Resolver {
         evaluator.setScopeAssignments(scopeAssignments);
         endTimestamp = reasonerConfig.getTimeout() <= 0 
             ? -1 : System.currentTimeMillis() + reasonerConfig.getTimeout();
-        if (null == constraintBaseCopy) {
+        if (null == copiedState) {
             if (reuseInstance) {
-                constraintBaseCopy = new ArrayList<Deque<Constraint>>();
+                copiedState = new ReasonerState();
             }
             projects = Utils.discoverImports(config.getProject());
             for (int p = 0; !hasTimeout && !wasStopped && p < projects.size(); p++) {
@@ -297,11 +418,15 @@ public class Resolver {
                 evaluateConstraintBase(start, project);
             }
         } else {
+            constraintVariableMap.clear();
+            constraintVariableMap.putAll(copiedState.constraintVariableMap);
+            variableConstraintsMap.clear();
+            variableConstraintsMap.putAll(copiedState.variableConstraintsMap);
             // size corresponds to #projects
-            for (int p = 0; !hasTimeout && !wasStopped && p < constraintBaseCopy.size(); p++) {
+            for (int p = 0; !hasTimeout && !wasStopped && p < copiedState.constraintBase.size(); p++) {
                 project = projects.get(p); // set global for deeper nested methods
                 long start = System.currentTimeMillis();
-                constraintBase.addAll(constraintBaseCopy.get(p));
+                addAllToConstraintBase(copiedState.constraintBase.get(p));
                 evaluateConstraintBase(start, project);
             }
         }
@@ -407,7 +532,7 @@ public class Resolver {
 
         @Override // collect all top-level/enum/attribute assignment constraints
         public void visitConstraint(Constraint constraint) {
-            addConstraint(topLevelConstraints, constraint, true);
+            addConstraint(topLevelConstraints, constraint, true, null);
         }
 
         @Override // iterate over nested blocks/contained constraints
@@ -425,7 +550,7 @@ public class Resolver {
                 assignment.getElement(v).accept(this);
             }
             for (int c = 0; c < assignment.getConstraintsCount(); c++) {
-                addConstraint(topLevelConstraints, assignment.getConstraint(c), true);
+                addConstraint(topLevelConstraints, assignment.getConstraint(c), true, null);
             }
             for (int a = 0; a < assignment.getAssignmentCount(); a++) {
                 assignment.getAssignment(a).accept(this);
@@ -468,7 +593,7 @@ public class Resolver {
                     }
                     try {
                         cst.inferDatatype();
-                        addConstraint(topLevelConstraints, new Constraint(cst, parent), true);
+                        addConstraint(topLevelConstraints, new Constraint(cst, parent), true, null);
                     } catch (CSTSemanticException e) {
                         LOGGER.exception(e);
                     }
@@ -552,7 +677,8 @@ public class Resolver {
         } else if (incremental) { // remaining defaults
             defaultValue = null;
         }
-        if (null != defaultValue) {
+        // implicit overriding of default values through AttributeAssignment - leave out her
+        if (null != defaultValue && !(decl.isAttribute() && decl.getParent() instanceof AttributeAssignment)) {
             try {
                 if (TypeQueries.isConstraint(decl.getType())) { // handle and register constraint variables
                     variablesCounter--;
@@ -564,7 +690,9 @@ public class Resolver {
                         Attribute attribute = (Attribute) decl;
                         if (cAcc == null) {
                             acc = new Variable(attribute); // shall not occur
-                        } else {                        
+                        } else if (cAcc instanceof AttributeVariable) { // do not double qualify
+                            acc = cAcc;
+                        } else {
                             acc = new AttributeVariable(cAcc, attribute);
                         }
                     } else {
@@ -576,7 +704,7 @@ public class Resolver {
                     if (substVisitor.containsSelf() || isOverriddenSlot(decl)) {
                         targetCons = deferredDefaultConstraints;
                     }
-                    addConstraint(targetCons, new DefaultConstraint(defaultValue, project), true);
+                    addConstraint(targetCons, new DefaultConstraint(defaultValue, project), true, var);
                 }
                 substVisitor.clear(); // clear false above 
             } catch (CSTSemanticException e) {
@@ -652,6 +780,10 @@ public class Resolver {
             // fill varMap
             ConstraintSyntaxTree containerOp = null == cAcc ? declVar : cAcc;
             try {
+                // TODO change evaluation!
+/*                if (TypeQueries.isContainer(decl.getType())) {
+                    containerOp = new OCLFeatureCall(containerOp, OclKeyWords.AS_SET);
+                }*/
                 if (isNestedContainer(decl.getType())) {
                     containerOp = new OCLFeatureCall(containerOp, OclKeyWords.FLATTEN);
                 }
@@ -754,7 +886,7 @@ public class Resolver {
         }
         final AbstractVariable self = null == cAcc ? decl : null;
         processCompoundEvals(type, cAcc, self);
-        otherConstraintsProc.setParameter(cAcc, self);
+        otherConstraintsProc.setParameter(cAcc, self, variable);
         allCompoundConstraints(type, otherConstraintsProc, false, false, decl);
         otherConstraintsProc.clear();
     }
@@ -771,6 +903,7 @@ public class Resolver {
 
         private ConstraintSyntaxTree selfEx;
         private AbstractVariable self;
+        private IDecisionVariable variable;
        
         /**
          * Sets the parameters for processing.
@@ -778,10 +911,12 @@ public class Resolver {
          * @param selfEx an expression representing <i>self</i> (ignored if <b>null</b>, <code>self</code> and 
          *     <code>selfEx</code> shall never both be specified/not <b>null</b>).
          * @param self an variable declaration representing <i>self</i> (ignored if <b>null</b>).
+         * @param variable the variable the constraints are processed for (may be <b>null</b>)
          */
-        private void setParameter(ConstraintSyntaxTree selfEx, AbstractVariable self) {
+        private void setParameter(ConstraintSyntaxTree selfEx, AbstractVariable self, IDecisionVariable variable) {
             this.selfEx = selfEx;
             this.self = self;
+            this.variable = variable;
         }
         
         /**
@@ -791,6 +926,7 @@ public class Resolver {
         private void clear() {
             this.selfEx = null;
             this.self = null;
+            this.variable = null;
         }
         
         @Override
@@ -799,7 +935,7 @@ public class Resolver {
             cst = substituteVariables(cst, selfEx, self, true);
             try { // compoundConstraints
                 Constraint constraint = new Constraint(cst, parent);
-                addConstraint(otherConstraints, constraint, true);            
+                addConstraint(otherConstraints, constraint, true, variable);            
             } catch (CSTSemanticException e) {
                 LOGGER.exception(e);
             }               
@@ -846,49 +982,12 @@ public class Resolver {
                 ConstraintSyntaxTree evalCst = evalConstraint.getConsSyntax();
                 ConstraintSyntaxTree cst = substituteVariables(evalCst, selfEx, self, true);
                 try {
-                    addConstraint(otherConstraints, new Constraint(cst, project), true);
+                    addConstraint(otherConstraints, new Constraint(cst, project), true, null);
                 } catch (CSTSemanticException e) {
                     LOGGER.exception(e);
                 } 
             }
         }
-    }
-    
-    /**
-     * Creates a constraint from a (nested) constraint variable adding the result to 
-     * {@link #constraintVariablesConstraints}.
-     * 
-     * @param cst the constraint
-     * @param selfEx the expression representing <i>self</i> in <code>cst</code>, both, <code>self</code> and 
-     *    <code>selfEx</code> must not be different from <b>null</b> at the same time (may be <b>null</b> for none)
-     * @param self the declaration of the variable representing <i>self</i> in <code>cst</code> (may be <b>null</b> 
-     *    for none)
-     * @param parent the parent for new constraints
-     * @param variable the actually (nested) variable, used to fill {@link #constraintVariableMap}, may be <b>null</b>
-     * @return the created constraint
-     */
-    private Constraint createConstraintVariableConstraint(ConstraintSyntaxTree cst, ConstraintSyntaxTree selfEx, 
-        AbstractVariable self, IModelElement parent, IDecisionVariable variable) {
-        Constraint constraint = null;
-        if (cst != null) {
-            cst = substituteVariables(cst, selfEx, self, true);
-            try {
-                constraint = new Constraint(cst, parent);
-                addConstraint(otherConstraints, constraint, true); // constraintVariablesConstraints
-                if (null != variable) {
-                    // TODO reverse mapping for changing constraint types through value upon value change
-                    constraintVariableMap.put(constraint, variable);
-                }
-                if (Descriptor.LOGGING) {
-                    LOGGER.debug((null != self ? self.getName() + "." : "") 
-                        + (null != variable ? variable.getDeclaration().getName() : "")
-                        + " constraint variable " + toIvmlString(cst));
-                }
-            } catch (CSTSemanticException e) {
-                LOGGER.exception(e);
-            }
-        }
-        return constraint;
     }
     
     /**
@@ -905,9 +1004,9 @@ public class Resolver {
         AbstractVariable self, IModelElement parent, IDecisionVariable nestedVariable) {
         for (int n = 0; n < val.getElementSize(); n++) {
             Value cVal = val.getElement(n);
-            if (cVal instanceof ConstraintValue) {
-                createConstraintVariableConstraint(((ConstraintValue) cVal).getValue(), selfEx, self, 
-                    parent, nestedVariable);
+            ConstraintSyntaxTree cst = getConstraintValueConstraintExpression(val);
+            if (null != cst) {
+                createConstraintVariableConstraint(cst, selfEx, self, parent, nestedVariable);
             } else if (cVal instanceof ContainerValue) {
                 createContainerConstraintValueConstraints(((ContainerValue) cVal), selfEx, self, 
                     parent, nestedVariable);
@@ -943,7 +1042,7 @@ public class Resolver {
                         aEltType = v.getValue().getType();
                     }
                 }
-                if (TypeQueries.isCompound(aEltType)) {         
+                if (TypeQueries.isCompound(aEltType)) {
                     Compound cmp = (Compound) aEltType;
                     for (int s = 0; s < cmp.getDeclarationCount(); s++) {
                         DecisionVariableDeclaration slot = cmp.getDeclaration(s);
@@ -983,7 +1082,7 @@ public class Resolver {
                 substituteVariables(assignment.getExpression(), compound, null, true));
             inferTypeSafe(cst, null);
             try { // assignedAttributeConstraints
-                addConstraint(otherConstraints, new Constraint(cst, project), false); 
+                addConstraint(otherConstraints, new Constraint(cst, project), false, null); 
             } catch (CSTSemanticException e) {
                 LOGGER.exception(e);
             }
@@ -1007,10 +1106,10 @@ public class Resolver {
         variablesInConstraintsCounter = constraintMap.getDeclarationSize();
         clearConstraintLists();
         // if marked for re-use, copy constraint base
-        if (null != constraintBaseCopy) {
+        if (null != copiedState) {
             LinkedList<Constraint> copy = new LinkedList<Constraint>();
             copy.addAll(constraintBase);
-            constraintBaseCopy.add(copy);
+            copiedState.constraintBase.add(copy);
         }
         contexts.clear();
     }
@@ -1022,8 +1121,11 @@ public class Resolver {
      * @param target the target container for assignment constraints (higher priority)
      * @param constraint the constraint
      * @param checkForInitializers check also for initializers if (<code>true</code>), add only if (<code>false</code>)
+     * @param variable the actually (nested) variable, used to relate the created constraint to, may be <b>null</b>. 
+     *     This information is particularly relevant for constraints arising from constraint variables.
      */
-    private void addConstraint(Deque<Constraint> target, Constraint constraint, boolean checkForInitializers) {
+    private void addConstraint(Deque<Constraint> target, Constraint constraint, boolean checkForInitializers, 
+        IDecisionVariable variable) {
         ConstraintSyntaxTree cst = constraint.getConsSyntax();
         try { // TODO move down??
             cst = contexts.composeExpression(cst); // pass on possibly changed cst
@@ -1041,17 +1143,21 @@ public class Resolver {
             add = !variablesFinder.isConstraintFrozen();
             variablesFinder.clear();
         }
-        if (add) {
-            if (checkForInitializers) {
-                containerFinder.accept(cst);
-                if (containerFinder.isConstraintContainer()) {
-                    checkContainerInitializer(containerFinder.getExpression(), false, constraint.getParent());
-                }
-                if (containerFinder.isCompoundInitializer()) {
-                    checkCompoundInitializer(containerFinder.getExpression(), true, constraint.getParent());
-                }
-                containerFinder.clear();
+        // check whether the constraint is a value assignment // TODO unify with CSTUtils above
+        if (checkForInitializers) { // needed, also to avoid recursions on constant values inducing constraints
+            containerFinder.accept(cst);
+            if (containerFinder.isConstraintContainer()) {
+                checkContainerInitializer(containerFinder.getExpression(), false, constraint.getParent(), variable);
+            } else if (containerFinder.isCompoundInitializer()) {
+                checkCompoundInitializer(containerFinder.getExpression(), true, constraint.getParent(), variable);
+            } else if (null != containerFinder.getContainerValue()) {
+                checkContainerValue(containerFinder.getContainerValue(), constraint.getParent());
+            } else if (null != containerFinder.getCompoundValue()) {
+                checkCompoundValue(containerFinder.getCompoundValue(), constraint.getParent());
             }
+            containerFinder.clear();
+        }
+        if (add) {
             if (inTopLevelEvals && (target == otherConstraints || target == topLevelConstraints)) {
                 target.addFirst(constraint);
             } else {
@@ -1062,50 +1168,204 @@ public class Resolver {
     }
 
     /**
-     * Method for checking if {@link CompoundInitializer} holds 
-     * a {@link de.uni_hildesheim.sse.ivml.CollectionInitializer} with {@link Constraint}s.
+     * Checks whether an expression is a {@link CompoundInitializer}. Compound initializers are created by the parser
+     * if at least one entry cannot be evaluated as a constant. Compounds must be scanned for constraint 
+     * variable values.
+     * 
      * @param exp expression to check.
      * @param substituteVars <code>true</code> if {@link #varMap} shall be applied to substitute variables in 
      *   <code>exp</code> (if variable is nested), <code>false</code> if <code>exp</code> shall be taken over as it is.
      * @param parent parent for temporary constraints
+     * @param variable the actually (nested) variable, used to relate the created constraint to, may be <b>null</b>
      */
-    private void checkCompoundInitializer(ConstraintSyntaxTree exp, boolean substituteVars, IModelElement parent) {
+    private void checkCompoundInitializer(ConstraintSyntaxTree exp, boolean substituteVars, IModelElement parent, 
+        IDecisionVariable variable) {
         CompoundInitializer compoundInit = (CompoundInitializer) exp;
         for (int i = 0; i < compoundInit.getExpressionCount(); i++) {
-            if (compoundInit.getExpression(i) instanceof ContainerInitializer) {
-                checkContainerInitializer(compoundInit.getExpression(i), substituteVars, parent);
+            ConstraintSyntaxTree initEx = compoundInit.getExpression(i);
+            if (initEx instanceof ContainerInitializer) {
+                checkContainerInitializer(initEx, substituteVars, parent, variable);
             }
-            if (compoundInit.getExpression(i) instanceof CompoundInitializer) {
-                checkCompoundInitializer(compoundInit.getExpression(i), substituteVars, parent);
-            }    
+            if (initEx instanceof CompoundInitializer) {
+                checkCompoundInitializer(initEx, substituteVars, parent, variable);
+            }
+            if (TypeQueries.isConstraint(compoundInit.getSlotDeclaration(i).getType())) {
+                createConstraintForInitializer(initEx, substituteVars, parent, variable);
+            }
         }
     }
 
     /**
-     * Method for checking if an expression is a {@link ContainerInitializer}.
+     * Checks whether an expression is a {@link ContainerInitializer}. Compound initializers are created by the parser
+     * if at least one entry cannot be evaluated as a constant. Containers must be scanned for constraint 
+     * variable values.
+     * 
      * @param exp expression to be checked.
      * @param substituteVars <code>true</code> if {@link #varMap} shall be applied to substitute variables in 
      *   <code>exp</code> (if variable is nested), <code>false</code> if <code>exp</code> shall be taken over as it is.
      * @param parent parent for temporary constraints
+     * @param variable the actually (nested) variable, used to relate the created constraint to, may be <b>null</b>
      */
-    private void checkContainerInitializer(ConstraintSyntaxTree exp, boolean substituteVars, IModelElement parent) {
+    private void checkContainerInitializer(ConstraintSyntaxTree exp, boolean substituteVars, IModelElement parent, 
+        IDecisionVariable variable) {
         ContainerInitializer containerInit = (ContainerInitializer) exp;
         for (int i = 0; i < containerInit.getExpressionCount(); i++) {
             ConstraintSyntaxTree cst = containerInit.getExpression(i);
             if (cst instanceof ContainerInitializer) {
-                checkContainerInitializer((ContainerInitializer) cst, substituteVars, parent);
+                checkContainerInitializer((ContainerInitializer) cst, substituteVars, parent, variable);
             } else {
                 if (TypeQueries.isConstraint(containerInit.getType().getContainedType())) {
-                    Constraint constraint = new Constraint(parent);
-                    if (substituteVars) {
-                        cst = substituteVariables(cst, null, null, true);
-                    }
-                    try {
-                        constraint.setConsSyntax(cst);
-                        addConstraint(otherConstraints, constraint, false);
-                    } catch (CSTSemanticException e) {
-                        LOGGER.exception(e);
-                    }
+                    createConstraintForInitializer(cst, substituteVars, parent, variable);
+                }
+            }
+        }
+    }
+    
+    /**
+     * Creates constraints for initializers.
+     * 
+     * @param cst the expression to create the constraint for
+     * @param substituteVars whether variables shall be substituted from the variable mapping
+     * @param parent the parent for the new constraint
+     * @param variable the actually (nested) variable, used to relate the created constraint to, may be <b>null</b>
+     */
+    private void createConstraintForInitializer(ConstraintSyntaxTree cst, boolean substituteVars, 
+        IModelElement parent, IDecisionVariable variable) {
+        Constraint constraint = new Constraint(parent); // TODO unify with createConstraintVariableConstraint?
+        if (substituteVars) {
+            cst = substituteVariables(cst, null, null, true);
+        }
+        try {
+            constraint.setConsSyntax(cst);
+// TODO MISSING VAR HERE! DOES NOT REGISTER! use createConstraintVariableConstraint instead??
+            addConstraint(otherConstraints, constraint, false, variable);
+            registerConstraint(variable, constraint);
+        } catch (CSTSemanticException e) {
+            LOGGER.exception(e);
+        }
+    }
+
+    /**
+     * Creates a constraint from a (nested) constraint variable adding the result to 
+     * {@link #constraintVariablesConstraints}.
+     * 
+     * @param cst the constraint
+     * @param selfEx the expression representing <i>self</i> in <code>cst</code>, both, <code>self</code> and 
+     *    <code>selfEx</code> must not be different from <b>null</b> at the same time (may be <b>null</b> for none)
+     * @param self the declaration of the variable representing <i>self</i> in <code>cst</code> (may be <b>null</b> 
+     *    for none)
+     * @param parent the parent for new constraints
+     * @param variable the actually (nested) variable, used to relate the created constraint to, may be <b>null</b>
+     * @return the created constraint
+     */
+    private Constraint createConstraintVariableConstraint(ConstraintSyntaxTree cst, ConstraintSyntaxTree selfEx, 
+        AbstractVariable self, IModelElement parent, IDecisionVariable variable) {
+        Constraint constraint = null;
+        if (cst != null) {
+            cst = substituteVariables(cst, selfEx, self, true);
+            try {
+                constraint = new Constraint(cst, parent);
+                // constants can cause endless recursion
+                addConstraint(otherConstraints, constraint, !(cst instanceof ConstantValue), variable);
+                registerConstraint(variable, constraint);
+                if (Descriptor.LOGGING) {
+                    LOGGER.debug((null != self ? self.getName() + "." : "") 
+                        + (null != variable ? variable.getDeclaration().getName() : "")
+                        + " constraint variable " + toIvmlString(cst));
+                }
+            } catch (CSTSemanticException e) {
+                LOGGER.exception(e);
+            }
+        }
+        return constraint;
+    }
+    
+    /**
+     * Registers a <code>variable</code> and associated <code>constraint</code>.
+     * 
+     * @param variable the variable (may be <b>null</b>, call is ignored then)
+     * @param constraint the constraint
+     * 
+     * @see #register(IDecisionVariable, Constraint, Map, Map)
+     */
+    private void registerConstraint(IDecisionVariable variable, Constraint constraint) {
+        if (null != variable) {
+            register(variable, constraint, constraintVariableMap, variableConstraintsMap);
+            if (null != copiedState) {
+                register(variable, constraint, copiedState.constraintVariableMap, 
+                    copiedState.variableConstraintsMap);
+            }
+        }
+    }
+
+    /**
+     * Registers a <code>variable</code> and associated <code>constraint</code>.
+     * 
+     * @param variable the variable
+     * @param constraint the constraint
+     * @param constraintVariableMap the constraint-to-variable mapping
+     * @param variableConstraintsMap the variable-to-constraints mapping
+     */
+    private void register(IDecisionVariable variable, Constraint constraint, 
+        Map<Constraint, IDecisionVariable> constraintVariableMap, 
+        Map<IDecisionVariable, List<Constraint>> variableConstraintsMap) {
+        constraintVariableMap.put(constraint, variable);
+        List<Constraint> constraints = variableConstraintsMap.get(variable);
+        if (null == constraints) {
+            constraints = new ArrayList<Constraint>();
+            variableConstraintsMap.put(variable, constraints);
+        }
+        constraints.add(constraint);
+    }
+    
+    /**
+     * Checks whether an expression is a {@link CompoundValue}. Compound values are created by the parser if all
+     * contained values are constant. Compound values must be scanned for constraint variable values. Variable / self 
+     * substitution is not needed here, as the expressions are all constant.
+     * 
+     * @param value the value to check.
+     * @param parent parent for temporary constraints
+     */
+    private void checkCompoundValue(CompoundValue value, IModelElement parent) {
+        Compound cmp = (Compound) value.getType();
+        for (String slot : value.getSlotNames()) {
+            Value slotValue = value.getNestedValue(slot);
+            if (null != slotValue) {
+                DecisionVariableDeclaration slotDecl = cmp.getElement(slot);
+                IDatatype slotType = slotDecl.getType();
+                if (TypeQueries.isContainer(slotType)) {
+                    checkContainerValue((ContainerValue) slotValue, parent);
+                } else if (TypeQueries.isConstraint(slotType)) {
+                    ConstraintSyntaxTree cst = getConstraintValueConstraintExpression(slotValue);
+                    // no substitution/self as all entries are constant
+                    createConstraintVariableConstraint(cst, null, null, parent, null);
+                }
+            }
+        }
+    }
+
+    /**
+     * Checks whether an expression is a {@link ContainerValue}. Container values are created by the parser if all
+     * contained values are constant. Container values must be scanned for constraint variable values. Variable / self 
+     * substitution is not needed here, as the expressions are all constant.
+     * 
+     * @param value the value to check.
+     * @param parent parent for temporary constraints
+     */
+    private void checkContainerValue(ContainerValue value, IModelElement parent) {
+        if (TypeQueries.isConstraint(value.getContainedType())) {
+            for (int s = 0; s < value.getElementSize(); s++) {
+                ConstraintSyntaxTree cst = getConstraintValueConstraintExpression(value.getElement(s));
+                // no substitution/self as all entries are constant
+                createConstraintVariableConstraint(cst, null, null, parent, null);
+            }
+        } else {
+            for (int s = 0; s < value.getElementSize(); s++) {
+                Value val = value.getElement(s);
+                if (val instanceof ContainerValue) {
+                    checkContainerValue((ContainerValue) val, parent);
+                } else if (val instanceof CompoundValue) {
+                    checkCompoundValue((CompoundValue) val, parent); 
                 }
             }
         }
@@ -1443,7 +1703,7 @@ public class Resolver {
 
     /**
      * Sets the desired assignment state. The default value is {@link AssignmentState#DERIVED}, but specific reasoning
-     * operations such as configuration initialization may require a differnt state.
+     * operations such as configuration initialization may require a different state.
      * 
      * @param state the state to use
      */

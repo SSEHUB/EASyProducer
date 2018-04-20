@@ -2,7 +2,7 @@ project constraintsDerived {
 
 	version v0;
 
-    typedef MyConstraint Constraint with (MyConstraint == true);
+    typedef MyConstraint Constraint;
 	
 	compound CP {
 	   MyConstraint c = false;

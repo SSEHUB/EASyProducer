@@ -1,0 +1,12 @@
+project changingConstraints {
+
+	version v0;
+	
+	import changingConstraintsBase;
+
+	valueConstraint = value < 30;
+	cmp.value2Constraint = cmp.value2 < 40;
+	cmpConstraints = {cmp.value2 < 50};
+	cmpConstraints2[0] = cmp.value2 > 0;
+	
+}

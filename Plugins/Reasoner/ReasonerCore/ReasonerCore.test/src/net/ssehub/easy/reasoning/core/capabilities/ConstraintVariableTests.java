@@ -1,9 +1,12 @@
 package net.ssehub.easy.reasoning.core.capabilities;
 
+import java.io.IOException;
+
 import org.junit.Test;
 
 import net.ssehub.easy.reasoning.core.reasoner.AbstractTest;
 import net.ssehub.easy.reasoning.core.reasoner.ITestDescriptor;
+import net.ssehub.easy.varModel.model.Project;
 
 /**
  * Collection constraints tests.
@@ -67,7 +70,7 @@ public class ConstraintVariableTests extends AbstractTest {
      */
     @Test
     public void setOfConstraintsWithEmptyDefaultValue() {
-        reasoningTest("setOfConstraintsWithEmptyDefaultValue.ivml", 1);
+        reasoningTest("setOfConstraintsWithEmptyDefaultValue.ivml", 2);
     }
     
     
@@ -114,7 +117,6 @@ public class ConstraintVariableTests extends AbstractTest {
     /**
      * Tests false constraint.
      */
-//    @Ignore
     @Test
     public void falseTest() {
         reasoningTest("falseTest.ivml", 1);
@@ -197,7 +199,21 @@ public class ConstraintVariableTests extends AbstractTest {
      */
     @Test
     public void constraintsDerivedTest() {
-        reasoningTest("constraintsDerived.ivml", 2); // pathological case
+        reasoningTest("constraintsDerived.ivml", 3);
+    }
+
+    /**
+     * Tests changing constraint variables.
+     * 
+     * @throws IOException shall not occur
+     */
+    @Test
+    public void changingConstraintsTest() throws IOException {
+        // basis shall be failing with four tests
+        reasoningTest("changingConstraints/changingConstraintsBase.ivml", 4);
+        // importing model changes constraints, shall not fail then 
+        Project prj = loadCompleteProject("changingConstraints", "changingConstraints");
+        resultHandler(0, 0, prj);
     }
 
 }

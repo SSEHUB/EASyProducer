@@ -275,7 +275,8 @@ public abstract class AbstractTest extends net.ssehub.easy.dslCore.test.Abstract
     }
     
     /**
-     * Load an IVML File as project with dependencies assuming version "0".
+     * Load an IVML File as project with dependencies assuming version "0". Call 
+     * {@link #resultHandler(int, int, Project)} afterwards.
      * 
      * @param folderName The folder the test project(s) relative to {@link #getTestdataBase()}
      * @param projectName The name of the project to load.

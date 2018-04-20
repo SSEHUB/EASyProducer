@@ -340,7 +340,6 @@ public class AdaptationScenarioTests extends AbstractTest {
         ConfigurationException {
         prepareConfiguration("runtimeReasoningConstraintSet.ivml");
         runReasoning();
-        
         rConfig.setRuntimeMode(true);
         rConfig.setAdditionalInformationLogger(ReasonerConfiguration.ADDITIONAL_INFO_LOG_SYSOUT);
         IReasoner reasoner = createReasoner();

@@ -1,0 +1,18 @@
+project changingConstraintsBase {
+
+	version v0;
+	
+	Integer value = 25;
+	Constraint valueConstraint = value < 20;
+	
+	compound MyCmp {
+	    Integer value2 = 30;
+		Constraint value2Constraint = value2 < 21;
+	}
+	
+	MyCmp cmp = MyCmp{};
+	
+	setOf(Constraint) cmpConstraints = {cmp.value2 < 15};
+	sequenceOf(Constraint) cmpConstraints2 = {cmp.value2 < 16};
+	
+}
