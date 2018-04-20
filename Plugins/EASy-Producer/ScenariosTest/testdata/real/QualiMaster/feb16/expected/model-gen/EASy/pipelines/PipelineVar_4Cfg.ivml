@@ -47,9 +47,7 @@ project PipelineVar_4Cfg {
 		}, 
 		subPipeline = refBy(PipelineVar_4),
 		algTopologyClass = "RandomProcessor", 
-		successor = null, 
-		inputGivenCheck = false, 
-		outputGivenCheck = false
+		successor = null
 	};
 	freeze {
 		PipelineVar_4;

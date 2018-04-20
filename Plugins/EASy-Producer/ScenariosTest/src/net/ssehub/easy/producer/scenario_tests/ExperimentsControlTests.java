@@ -11,6 +11,7 @@ import org.junit.Test;
 
 import net.ssehub.easy.basics.progress.ProgressObserver;
 import net.ssehub.easy.reasoning.core.frontend.ReasonerFrontend;
+import net.ssehub.easy.reasoning.core.reasoner.Message;
 import net.ssehub.easy.reasoning.core.reasoner.ReasonerConfiguration;
 import net.ssehub.easy.reasoning.core.reasoner.ReasoningResult;
 import net.ssehub.easy.varModel.confModel.Configuration;
@@ -310,26 +311,32 @@ public class ExperimentsControlTests extends AbstractTest {
         rConfig.setAdditionalInformationLogger(ReasonerConfiguration.ADDITIONAL_INFO_LOG_NONE);
         ReasoningResult res = ReasonerFrontend.getInstance().propagate(config.getProject(), config, rConfig, 
             ProgressObserver.NO_OBSERVER);
-        //Configuration.printConfig(System.out, config);
         Assert.assertFalse("there should not be reasoning conflicts", res.hasConflict());
     }
 
     /**
-     * A test for an assymetric quantor relation (contributed by M. Keunecke).
+     * A test for an asymmetric quantor relation (contributed by M. Keunecke).
      * 
      * @throws IOException shall not occur
      * @throws ModelQueryException shall not occur
      * @throws IvmlException shall not occur
      */
     @Test
-    public void assymetricTest() throws IOException, ModelQueryException, IvmlException {
+    public void asymmetricTest() throws IOException, ModelQueryException, IvmlException {
         Configuration config = createAndAssertEqual("assymetric/ActivityGraph2Configuration_0");
         ReasonerConfiguration rConfig = new ReasonerConfiguration();
         rConfig.setAdditionalInformationLogger(ReasonerConfiguration.ADDITIONAL_INFO_LOG_NONE);
         ReasoningResult res = ReasonerFrontend.getInstance().propagate(config.getProject(), config, rConfig, 
             ProgressObserver.NO_OBSERVER);
-        Configuration.printConfig(System.out, config);
-        Assert.assertFalse("there should not be reasoning conflicts", res.hasConflict());
+        // dependenciesAntisymmetry does not fit configuration!
+        Assert.assertTrue("there should be reasoning conflicts", res.hasConflict());
+        Assert.assertEquals(1, res.getMessageCount());
+        Message msg = res.getMessage(0);
+        boolean found = false;
+        for (IDecisionVariable v : msg.getNamedConstraintVariables()) {
+            found |= v.getDeclaration().getName().equals("dependenciesAntisymmetry");
+        }
+        Assert.assertTrue("Constraint dependenciesAntisymmetry shall fail", found);
     }    
     
 }
