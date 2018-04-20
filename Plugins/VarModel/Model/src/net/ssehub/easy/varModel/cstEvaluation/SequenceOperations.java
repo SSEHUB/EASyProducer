@@ -118,7 +118,7 @@ public class SequenceOperations {
 
         @Override
         public EvaluationAccessor evaluate(EvaluationAccessor operand, EvaluationAccessor[] arguments) {
-            EvaluationAccessor result = null;
+            ConstantAccessor result = null;
             if (2 == arguments.length) {
                 Value oValue = operand.getValue();
                 Value aValue = arguments[0].getValue();
@@ -127,15 +127,18 @@ public class SequenceOperations {
                     ContainerValue cont = (ContainerValue) oValue;
                     int index = OclKeyWords.toJavaIndex(((IntValue) aValue).getValue());
                     if (0 <= index && index <= cont.getElementSize()) { // this is an insert!
+                        ContainerArgument cnt = ContainerOperations.CA_POOL.getInstance().setValues(cont, operand);
                         ArrayList<Value> tmp = new ArrayList<Value>();
-                        ContainerOperations.addAll(cont, tmp);
+                        result = ConstantAccessor.POOL.getInstance();
+                        ContainerOperations.addAll(cnt, tmp, result);
                         tmp.add(index, insValue);
                         try {
                             Value rValue = ValueFactory.createValue(cont.getType(), tmp.toArray());
-                            result = ConstantAccessor.POOL.getInstance().bind(rValue, operand.getContext());
+                            result.bind(rValue, operand.getContext());
                         } catch (ValueDoesNotMatchTypeException e) {
-                            // result -> null
+                            result = EvaluationAccessor.release(result); // result -> null
                         }
+                        ContainerOperations.CA_POOL.releaseInstance(cnt);
                     }
                 }
             }
@@ -250,9 +253,10 @@ public class SequenceOperations {
      */
     static final IOperationEvaluator UNION = new Container2OperationEvaluator(new Container2Operation() {
         
-        public void evaluate(ContainerValue c1, ContainerValue c2, List<Value> result) {
-            ContainerOperations.addAll(c1, result);
-            ContainerOperations.addAll(c2, result);
+        public void evaluate(ContainerArgument c1, ContainerArgument c2, List<Value> result, 
+            EvaluationAccessor resAcc) {
+            ContainerOperations.addAll(c1, result, resAcc);
+            ContainerOperations.addAll(c2, result, resAcc);
         }
     });
 
@@ -261,9 +265,10 @@ public class SequenceOperations {
      */
     static final IOperationEvaluator PREPEND = new ContainerValueOperationEvaluator(new ContainerValueOperation() {
         
-        public void evaluate(ContainerValue cont, Value value, List<Value> result) {
+        public void evaluate(ContainerArgument cont, Value value, List<Value> result, EvaluationAccessor resAcc) {
             result.add(value);
-            ContainerOperations.addAll(cont, result);
+            resAcc.addBoundContainerElement(null);
+            ContainerOperations.addAll(cont, result, resAcc);
         }
     });
     
@@ -272,9 +277,10 @@ public class SequenceOperations {
      */
     static final IOperationEvaluator APPEND = new ContainerValueOperationEvaluator(new ContainerValueOperation() {
         
-        public void evaluate(ContainerValue cont, Value value, List<Value> result) {
-            ContainerOperations.addAll(cont, result);
+        public void evaluate(ContainerArgument cont, Value value, List<Value> result, EvaluationAccessor resAcc) {
+            ContainerOperations.addAll(cont, result, resAcc);
             result.add(value);
+            resAcc.addBoundContainerElement(null);
         }
     });
     
@@ -283,11 +289,14 @@ public class SequenceOperations {
      */
     static final IOperationEvaluator EXCLUDING = new ContainerValueOperationEvaluator(new ContainerValueOperation() {
         
-        public void evaluate(ContainerValue cont, Value value, List<Value> result) {
+        public void evaluate(ContainerArgument cnt, Value value, List<Value> result, EvaluationAccessor resAcc) {
+            ContainerValue cont = cnt.getValue();
+            EvaluationAccessor contAcc = cnt.getAccessor();
             for (int i = 0; i < cont.getElementSize(); i++) {
                 Value elt = cont.getElement(i);
                 if (!elt.equals(value)) {
                     result.add(elt);
+                    resAcc.addBoundContainerElement(contAcc, i);
                 }
             }
         }
@@ -298,15 +307,19 @@ public class SequenceOperations {
      */
     static final IOperationEvaluator INCLUDING = new ContainerValueOperationEvaluator(new ContainerValueOperation() {
         
-        public void evaluate(ContainerValue cont, Value value, List<Value> result) {
+        public void evaluate(ContainerArgument cnt, Value value, List<Value> result, EvaluationAccessor resAcc) {
             boolean found = false;
+            ContainerValue cont = cnt.getValue();
+            EvaluationAccessor contAcc = cnt.getAccessor();
             for (int i = 0; i < cont.getElementSize(); i++) {
                 Value elt = cont.getElement(i);
                 result.add(elt);
+                resAcc.addBoundContainerElement(contAcc, i);
                 found = elt.equals(value);
             }
             if (!found) {
                 result.add(value);
+                resAcc.addBoundContainerElement(null);
             }
         }
     });

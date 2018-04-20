@@ -21,6 +21,8 @@ import java.util.HashSet;
 import java.util.List;
 
 import net.ssehub.easy.basics.logger.EASyLoggerFactory;
+import net.ssehub.easy.basics.pool.IPoolManager;
+import net.ssehub.easy.basics.pool.Pool;
 import net.ssehub.easy.varModel.Bundle;
 import net.ssehub.easy.varModel.cstEvaluation.ContainerIterators.CollectIteratorEvaluator;
 import net.ssehub.easy.varModel.model.IvmlDatatypeVisitor;
@@ -46,6 +48,75 @@ import net.ssehub.easy.varModel.model.values.ValueFactory;
  * @author Holger Eichelberger
  */
 public class ContainerOperations {
+
+    /**
+     * A combined container value / accessor. Use {@link ContainerOperations#CA_POOL} to obtain/release instances.
+     * 
+     * @author Holger Eichelberger
+     */
+    static final class ContainerArgument {
+        private ContainerValue value;
+        private EvaluationAccessor accessor;
+
+        /**
+         * Creates a new instance. Prevents external instantiation.
+         */
+        private ContainerArgument() {
+        }
+        
+        /**
+         * Sets the values of this argument. [reuse]
+         * 
+         * @param value the container value
+         * @param accessor the accessor
+         * @return <b>this</b>
+         */
+        ContainerArgument setValues(ContainerValue value, EvaluationAccessor accessor) {
+            this.value = value;
+            this.accessor = accessor;
+            return this;
+        }
+
+        /**
+         * Returns the container value.
+         * 
+         * @return the container value
+         */
+        ContainerValue getValue() {
+            return value;
+        }
+        
+        /**
+         * Returns the accessor.
+         * 
+         * @return the accessor
+         */
+        EvaluationAccessor getAccessor() {
+            return accessor;
+        }
+        
+        /**
+         * Clears this instance for reuse.
+         */
+        private void clear() {
+            value = null;
+            accessor = null;
+        }
+    }
+
+    static final Pool<ContainerArgument> CA_POOL = new Pool<ContainerArgument>(
+        new IPoolManager<ContainerArgument>() {
+
+            @Override
+            public ContainerArgument create() {
+                return new ContainerArgument();
+            }
+    
+            @Override
+            public void clear(ContainerArgument instance) {
+                instance.clear();
+            }
+        });
 
     /**
      * Implements {@link Container#SIZE}.
@@ -324,8 +395,10 @@ public class ContainerOperations {
          * @param c1 the first container (must not be modified)
          * @param c2 the second container (must not be modified)
          * @param result the result (to be modified as a side effect)
+         * @param resultAccessor for taking over bound elements
          */
-        public void evaluate(ContainerValue c1, ContainerValue c2, List<Value> result);
+        public void evaluate(ContainerArgument c1, ContainerArgument c2, List<Value> result, 
+            EvaluationAccessor resultAccessor);
     }
 
     /**
@@ -341,8 +414,9 @@ public class ContainerOperations {
          * @param cont the container (must not be modified)
          * @param value the value 
          * @param result the result (to be modified as a side effect)
+         * @param resAcc accessor to <code>result</code> for transferring bound elements
          */
-        public void evaluate(ContainerValue cont, Value value, List<Value> result);
+        public void evaluate(ContainerArgument cont, Value value, List<Value> result, EvaluationAccessor resAcc);
     }
     
     /**
@@ -363,19 +437,25 @@ public class ContainerOperations {
         
         @Override
         public EvaluationAccessor evaluate(EvaluationAccessor operand, EvaluationAccessor[] arguments) {
-            EvaluationAccessor result = null;
+            ConstantAccessor result = null;
             if (1 == arguments.length) {
                 Value opValue = operand.getValue();
                 Value argValue = arguments[0].getValue();
                 if (opValue instanceof ContainerValue && argValue instanceof ContainerValue) {
                     List<Value> tmp = new ArrayList<Value>();
-                    op.evaluate((ContainerValue) opValue, (ContainerValue) argValue, tmp);
+                    result = ConstantAccessor.POOL.getInstance();
+                    ContainerArgument c1 = CA_POOL.getInstance().setValues((ContainerValue) opValue, operand);
+                    ContainerArgument c2 = CA_POOL.getInstance().setValues((ContainerValue) argValue, arguments[0]);
+                    op.evaluate(c1, c2, tmp, result);
                     try {
                         Value rValue = ValueFactory.createValue(opValue.getType(), tmp.toArray());
-                        result = ConstantAccessor.POOL.getInstance().bind(rValue, operand.getContext());
+                        result.bind(rValue, operand.getContext());
                     } catch (ValueDoesNotMatchTypeException e) {
                         operand.getContext().addErrorMessage(e);
+                        result = EvaluationAccessor.release(result);
                     }
+                    CA_POOL.releaseInstance(c1);
+                    CA_POOL.releaseInstance(c2);
                 }
             }
             return result;
@@ -400,20 +480,23 @@ public class ContainerOperations {
 
         @Override
         public EvaluationAccessor evaluate(EvaluationAccessor operand, EvaluationAccessor[] arguments) {
-            EvaluationAccessor result = null;
+            ConstantAccessor result = null;
             if (1 == arguments.length) {
                 Value opValue = operand.getValue();
                 Value argValue = arguments[0].getValue();
                 if (opValue instanceof ContainerValue && null != argValue) {
-                    ContainerValue opCont = (ContainerValue) opValue;
+                    result = ConstantAccessor.POOL.getInstance();
+                    ContainerArgument ca = CA_POOL.getInstance().setValues((ContainerValue) opValue, operand);
                     ArrayList<Value> tmp = new ArrayList<Value>();
-                    op.evaluate(opCont, argValue, tmp);
+                    op.evaluate(ca, argValue, tmp, result);
                     try {
                         Value rValue = ValueFactory.createValue(opValue.getType(), tmp.toArray());
-                        result = ConstantAccessor.POOL.getInstance().bind(rValue, operand.getContext());
+                        result.bind(rValue, operand.getContext());
                     } catch (ValueDoesNotMatchTypeException e) {
                         operand.getContext().addErrorMessage(e);
+                        result = EvaluationAccessor.release(result);
                     }
+                    CA_POOL.releaseInstance(ca);
                 }                
             }
             return result;
@@ -425,15 +508,20 @@ public class ContainerOperations {
      */
     static final IOperationEvaluator INTERSECT = new Container2OperationEvaluator(new Container2Operation() {
         
-        public void evaluate(ContainerValue c1, ContainerValue c2, List<Value> result) {
+        public void evaluate(ContainerArgument c1, ContainerArgument c2, List<Value> result, 
+            EvaluationAccessor resultAcc) {
             HashSet<Value> done = new HashSet<Value>();
-            for (int a = 0; a < c2.getElementSize(); a++) {
-                done.add(c2.getElement(a));
+            ContainerValue cv1 = c1.getValue();
+            EvaluationAccessor c1Acc = c1.getAccessor();
+            ContainerValue cv2 = c2.getValue();
+            for (int a = 0; a < cv2.getElementSize(); a++) {
+                done.add(cv2.getElement(a));
             }
-            for (int o = 0; o < c1.getElementSize(); o++) {
-                Value elt = c1.getElement(o);
+            for (int o = 0; o < cv1.getElementSize(); o++) {
+                Value elt = cv1.getElement(o);
                 if (done.contains(elt)) {
                     result.add(elt);
+                    resultAcc.addBoundContainerElement(c1Acc, o);
                 }
             }
         }
@@ -690,11 +778,12 @@ public class ContainerOperations {
      * @return the converted operand
      */
     private static final EvaluationAccessor convert(EvaluationAccessor operand, IDatatype targetType) {
-        EvaluationAccessor result = null;
+        ConstantAccessor result = null;
         Value oVal = operand.getValue();
         if (oVal instanceof ContainerValue) {
             ContainerValue cont = (ContainerValue) oVal;
             // due to releasing Accessors create always
+            result = ConstantAccessor.POOL.getInstance();
             try {
                 Value rValue;
                 if (Set.TYPE.isAssignableFrom(targetType)) {
@@ -708,6 +797,7 @@ public class ContainerOperations {
                         if (!done.contains(elt)) {
                             done.add(elt);
                             tmp.add(elt); // for now we try to keep the sequence
+                            result.addBoundContainerElement(operand, i);
                         }
                     }
                     Object[] array = new Object[tmp.size()];
@@ -717,9 +807,10 @@ public class ContainerOperations {
                     rValue = ValueFactory.createValue(targetType, (Object[]) null);
                     rValue.setValue(cont);
                 }
-                result = ConstantAccessor.POOL.getInstance().bind(rValue, operand.getContext());
+                result.bind(rValue, operand.getContext());
             } catch (ValueDoesNotMatchTypeException e) {
                 operand.getContext().addErrorMessage(e);
+                result = EvaluationAccessor.release(result);
             }
         }
         return result;
@@ -850,26 +941,34 @@ public class ContainerOperations {
     }
     
     /**
-     * Adds all elements in <code>cont</code> to <code>result</code>.
+     * Adds all elements in <code>cnt</code> to <code>result</code>.
      * 
-     * @param cont the source of the elements
+     * @param cnt the source of the elements
      * @param result the target (to be modified as a side effect)
+     * @param resAcc the accessor to <code>cont</code> for taking over bound elements
      */
-    static final void addAll(ContainerValue cont, List<Value> result) {
+    static final void addAll(ContainerArgument cnt, List<Value> result, EvaluationAccessor resAcc) {
+        ContainerValue cont = cnt.getValue();
+        EvaluationAccessor contAcc = cnt.getAccessor();
         for (int i = 0; i < cont.getElementSize(); i++) {
             result.add(cont.getElement(i));
+            resAcc.addBoundContainerElement(contAcc, i);
         }
     }
 
     /**
-     * Adds all elements in <code>cont</code> to <code>result</code>.
+     * Adds all elements in <code>cnt</code> to <code>result</code>.
      * 
-     * @param cont the source of the elements
+     * @param cnt the source of the elements
      * @param result the target (to be modified as a side effect)
+     * @param resAcc the accessor to <code>cont</code> for taking over bound elements
      */
-    static final void addAll(ContainerValue cont, java.util.Set<Value> result) {
+    static final void addAll(ContainerArgument cnt, java.util.Set<Value> result, EvaluationAccessor resAcc) {
+        ContainerValue cont = cnt.getValue();
+        EvaluationAccessor contAcc = cnt.getAccessor();
         for (int i = 0; i < cont.getElementSize(); i++) {
             result.add(cont.getElement(i));
+            resAcc.addBoundContainerElement(contAcc, i);
         }
     }
 

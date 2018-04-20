@@ -29,8 +29,10 @@ import net.ssehub.easy.varModel.confModel.paths.IResolutionPathElement;
 import net.ssehub.easy.varModel.confModel.paths.StartPathElement;
 import net.ssehub.easy.varModel.model.AbstractVariable;
 import net.ssehub.easy.varModel.model.DecisionVariableDeclaration;
+import net.ssehub.easy.varModel.model.IModelElement;
 import net.ssehub.easy.varModel.model.datatypes.Compound;
 import net.ssehub.easy.varModel.model.datatypes.Container;
+import net.ssehub.easy.varModel.model.datatypes.IDatatype;
 import net.ssehub.easy.varModel.model.datatypes.Reference;
 import net.ssehub.easy.varModel.model.values.CompoundValue;
 import net.ssehub.easy.varModel.model.values.ContainerValue;
@@ -209,12 +211,16 @@ public class LocalDecisionVariable implements IDecisionVariable {
         IDecisionVariable result;
         if (null != parent) {
             result = parent.getNestedElement(index);
-        }
-        if (value instanceof ContainerValue) {
+        } else if (value instanceof ContainerValue) {
             Value cValue = ((ContainerValue) value).getElement(index);
-            Container cType = (Container) cValue.getType();
+            IModelElement par = null;
+            IDatatype cType = cValue.getType();
+            if (cType instanceof Container) {
+                cType = ((Container) cType).getContainedType();
+                par = (Container) cType;
+            }
             LocalDecisionVariable var = new LocalDecisionVariable(new DecisionVariableDeclaration(String.valueOf(index),
-                cType.getContainedType(), cType), conf, this);
+                cType, par), conf, this);
             try {
                 var.setValue(cValue, AssignmentState.ASSIGNED);
             } catch (ConfigurationException e) {
@@ -279,12 +285,16 @@ public class LocalDecisionVariable implements IDecisionVariable {
 
     @Override
     public int getAttributesCount() {
-        return 0;
+        return null != parent ? parent.getAttributesCount() : 0;
     }
 
     @Override
     public IDecisionVariable getAttribute(int index) {
-        throw new IndexOutOfBoundsException();
+        if (null != parent) {
+            return parent.getAttribute(index);
+        } else {
+            throw new IndexOutOfBoundsException();
+        }
     }
 
     @Override
@@ -326,6 +336,15 @@ public class LocalDecisionVariable implements IDecisionVariable {
     @Override
     public boolean isLocal() {
         return true;
+    }
+    
+    /**
+     * Changes the underlying variable taking precedence over the stored value.
+     * 
+     * @param variable the variable (may be <b>null</b>) to ignore
+     */
+    public void setVariable(IDecisionVariable variable) {
+        parent = variable;
     }
 
 }

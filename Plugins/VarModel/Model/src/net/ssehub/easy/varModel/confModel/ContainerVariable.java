@@ -126,6 +126,9 @@ public abstract class ContainerVariable extends StructuredVariable {
             
             // Create nested Elements
             if (conValue != null) {
+                while (nestedElements.size() > conValue.getElementSize()) {
+                    nestedElements.remove(0);
+                }
                 for (int i = 0; i < conValue.getElementSize(); i++) {
                     // check whether a new variable needs to be created
                     boolean createNewVar = true;

@@ -15,6 +15,9 @@
  */
 package net.ssehub.easy.varModel.cstEvaluation;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import net.ssehub.easy.varModel.confModel.AssignmentState;
 import net.ssehub.easy.varModel.confModel.Configuration;
 import net.ssehub.easy.varModel.confModel.IDecisionVariable;
@@ -23,13 +26,16 @@ import net.ssehub.easy.varModel.model.values.Value;
 
 /**
  * Defines a unified accessor to variables, constants, slots etc. Please note that individual implementations
- * shall be accessible via pools. [public for testing]
+ * shall be accessible via pools. Also records nested variables as evaluation context, e.g., to carry variables
+ * over a container aggregation function and to allow access to slots/attributes in following expressions. 
+ * [public for testing]
  * 
  * @author Holger Eichelberger
  */
 public abstract class EvaluationAccessor {
     
     private EvaluationContext context;
+    private List<IDecisionVariable> nestedElements = new ArrayList<IDecisionVariable>();
     
     /**
      * Binds the accessor to the given context.
@@ -46,6 +52,7 @@ public abstract class EvaluationAccessor {
      */
     public void clear() {
         context = null;
+        nestedElements.clear();
     }
     
     /**
@@ -145,12 +152,15 @@ public abstract class EvaluationAccessor {
     /**
      * Releases the given accessor.
      * 
+     * @param <T> the type of the accessor
      * @param accessor the accessor to be released (may be <b>null</b>)
+     * @return always <b>null</b> (to ease clearing local variables)
      */
-    public static void release(EvaluationAccessor accessor) {
+    public static <T extends EvaluationAccessor> T release(T accessor) {
         if (null != accessor) {
             accessor.release();
         }
+        return null;
     }
     
     /**
@@ -188,6 +198,78 @@ public abstract class EvaluationAccessor {
             }
         }
         return v;
+    }
+    
+    /**
+     * Binds a <code>container</code> as provider for nested variables against this accessor in order
+     * to carry information about the underlying variables as long as possible through the evaluation.
+     * 
+     * @param container the 
+     */
+    public void bindContainer(IDecisionVariable container) {
+        if (null != container) {
+            for (int e = 0, n = container.getNestedElementsCount(); e < n; e++) {
+                nestedElements.add(container.getNestedElement(e));
+            }
+        }
+    }
+    
+    /**
+     * Adds the bound container element stored at <code>index</code> in <code>accessor</code> to
+     * this accessor. If the bound container element does not exist, <b>null</b> will be added.
+     * 
+     * @param accessor the accessor to take the bound container element from
+     * @param index the index
+     */
+    public void addBoundContainerElement(EvaluationAccessor accessor, int index) {
+        IDecisionVariable element = accessor.getBoundContainerElement(index);
+        if (null == element) {
+            IDecisionVariable var = accessor.getVariable();
+            if (null != var && 0 <= index && index <= var.getNestedElementsCount()) {
+                element = var.getNestedElement(index);
+            }
+        }
+        addBoundContainerElement(element);
+    }
+    
+    /**
+     * Adds <code>element</code> to the bound container elements.
+     * 
+     * @param element the element to add (may be <b>null</b> for none
+     */
+    public void addBoundContainerElement(IDecisionVariable element) {
+        nestedElements.add(element);
+    }
+    
+    /**
+     * Binds all bound container elements stored in <code>accessor</code> to this accessor. Clears already bound
+     * elements in this accessor.
+     * 
+     * @param accessor the accessor to take the elements from
+     */
+    public void bindContainer(EvaluationAccessor accessor) {
+        nestedElements.clear();
+        nestedElements.addAll(accessor.nestedElements);
+    }
+    
+    /**
+     * Returns a container element. This method intentionally does not throw the
+     * typical exceptions.
+     * 
+     * @param index the 0-based index
+     * @return the element or <b>null</b> if it does not exist/is stored.
+     */
+    public IDecisionVariable getBoundContainerElement(int index) {
+        return 0 <= index && index < nestedElements.size() ? nestedElements.get(index) : null;
+    }
+    
+    /**
+     * Returns the number of container elements.
+     * 
+     * @return the number of container elements
+     */
+    public int getBoundContainerElementCount() {
+        return nestedElements.size();
     }
 
 }

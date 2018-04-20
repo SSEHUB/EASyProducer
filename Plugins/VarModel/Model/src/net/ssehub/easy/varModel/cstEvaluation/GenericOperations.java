@@ -278,7 +278,6 @@ public class GenericOperations {
         if (null != operand && null != arguments && arguments.length == 1) {
             Value oValue = operand.getValue();
             Value aValue = arguments[0].getValue();
-            
             // Support equals on unequal datatypes (mixed Int/Real).
             if (null != oValue && oValue.getType() == RealType.TYPE && null != aValue
                 && aValue.getType() == IntegerType.TYPE) {

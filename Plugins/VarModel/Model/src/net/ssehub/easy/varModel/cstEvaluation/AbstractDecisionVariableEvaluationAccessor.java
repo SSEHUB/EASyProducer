@@ -46,6 +46,7 @@ abstract class AbstractDecisionVariableEvaluationAccessor extends EvaluationAcce
     
     @Override
     public void clear() {
+        super.clear();
         variable = null;
     }
     

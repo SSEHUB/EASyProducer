@@ -791,9 +791,11 @@ public class EvaluationVisitor implements IConstraintTreeVisitor {
                     }
                 } // the project does only define the name rather than the attributes
             }
-            clearResult();
-            // shall not be null if model is valid
-            result = VariableAccessor.POOL.getInstance().bind(attribute, context);
+            if (null != attribute) { // fallback -> local vars
+                clearResult();
+                // shall not be null if model is valid
+                result = VariableAccessor.POOL.getInstance().bind(attribute, context);
+            }
         } else {
             result = VariableAccessor.POOL.getInstance().bind(variable.getVariable(), context);
         }
@@ -1283,35 +1285,6 @@ public class EvaluationVisitor implements IConstraintTreeVisitor {
     }
     
     /**
-     * Initialize the container iterators for a container iteration.
-     * 
-     * @param container the actual container to iterate over
-     * @param containers the containers to be assigned to the declarators
-     * @param declarators the declarators
-     * @return <code>true</code> if initialization was successful, <code>false</code> else
-     */
-    private boolean initialize(ContainerValue container, ContainerValue[] containers, 
-        LocalDecisionVariable[] declarators) {
-        boolean ok = true;
-        // initialize the actual container values, not declarators.length!
-        for (int c = 0; c < containers.length; c++) {
-            Value val = declarators[c].getValue();
-            if (val instanceof ContainerValue) {
-                containers[c] = (ContainerValue) val;
-                ok = containers[c] != null;
-            } else if (null == val || val == NullValue.INSTANCE) {
-                containers[c] = container;
-                ok = containers[c] != null;
-            } else {
-                error("declarator " + declarators[c].getDeclaration().getName() 
-                    + " does not provide a container value");
-                ok = false;
-            }
-        }
-        return ok;
-    }
-    
-    /**
      * Implements flattening/non-flattening container evaluation.
      * 
      * @author Holger Eichelberger
@@ -1324,6 +1297,8 @@ public class EvaluationVisitor implements IConstraintTreeVisitor {
         private IIteratorEvaluator evaluator;
         private Map<Object, Object> data = new HashMap<Object, Object>();
         private int[] pos;
+        private ContainerValue containerValue;
+        private IDecisionVariable containerVariable;
         
         /**
          * Creates a container iteration executor with own context.
@@ -1344,27 +1319,34 @@ public class EvaluationVisitor implements IConstraintTreeVisitor {
         /**
          * Determines the container value to iterate over from the container expression. If needed, create an 
          * implicit temporary container (if operation is applied to a non-container variable).
-         * 
-         * @return the container value
          */
-        private ContainerValue determineContainerValue() {
+        private void determineContainer() {
             call.getContainer().accept(EvaluationVisitor.this);
-            ContainerValue container = null;
+            containerValue = null;
             if (null != result) {
                 Value rValue = result.getValue();
                 if (rValue instanceof ContainerValue) {
-                    container = (ContainerValue) rValue;
+                    containerValue = (ContainerValue) rValue;
+                    containerVariable = result.getVariable();
+                    if (null != containerVariable && containerVariable.isLocal()) {
+                        containerVariable = null; // prevent deep access to local variables
+                    }
+                    if (null != containerVariable) {
+                        resultVar.bindContainer(containerVariable);
+                    } else {
+                        resultVar.bindContainer(result);
+                    }
                 } else if (null != rValue) {
                     try {
                         IDatatype containerType = call.getContainerType();
-                        container = (ContainerValue) ValueFactory.createValue(containerType, (Object[]) null);
+                        containerValue = (ContainerValue) ValueFactory.createValue(containerType, (Object[]) null);
                         if (containerType.getGenericTypeCount() > 0) {
                             IDatatype elementType = containerType.getGenericType(0);
                             if (Reference.TYPE.isAssignableFrom(elementType)) {
                                 rValue = ValueFactory.createValue(elementType, result.getVariable().getDeclaration());
                             }
                         }
-                        container.addElement(rValue);
+                        containerValue.addElement(rValue);
                     } catch (ValueDoesNotMatchTypeException e) {
                         exception(e);
                     } catch (CSTSemanticException e) {
@@ -1372,7 +1354,33 @@ public class EvaluationVisitor implements IConstraintTreeVisitor {
                     }
                 }
             }
-            return container;
+        }
+
+        /**
+         * Initialize the container iterators for a container iteration.
+         * 
+         * @param containers the containers to be assigned to the declarators
+         * @param declarators the declarators
+         * @return <code>true</code> if initialization was successful, <code>false</code> else
+         */
+        private boolean initialize(ContainerValue[] containers, LocalDecisionVariable[] declarators) {
+            boolean ok = true;
+            // initialize the actual container values, not declarators.length!
+            for (int c = 0; c < containers.length; c++) {
+                Value val = declarators[c].getValue();
+                if (val instanceof ContainerValue) {
+                    containers[c] = (ContainerValue) val;
+                    ok = containers[c] != null;
+                } else if (null == val || val == NullValue.INSTANCE) {
+                    containers[c] = containerValue;
+                    ok = containers[c] != null;
+                } else {
+                    error("declarator " + declarators[c].getDeclaration().getName() 
+                        + " does not provide a container value");
+                    ok = false;
+                }
+            }
+            return ok;
         }
         
         /**
@@ -1383,11 +1391,11 @@ public class EvaluationVisitor implements IConstraintTreeVisitor {
          */
         private boolean execute(int iterCount) {
             boolean ok = true;
-            ContainerValue container = determineContainerValue();
-            if (null != container) {
+            determineContainer();
+            if (null != containerValue) {
                 clearResult();
                 ContainerValue[] containers = new ContainerValue[iterCount];
-                ok = initialize(container, containers, declarators);
+                ok = initialize(containers, declarators);
                 // iterate over inner iterator again and again until all outer iterators are done
                 pos = new int[iterCount];
                 while (ok && null != containers[0] && pos[0] < containers[0].getElementSize()) {
@@ -1396,8 +1404,9 @@ public class EvaluationVisitor implements IConstraintTreeVisitor {
                     boolean setSelf = selfVars.contains(declarators[iter].getDeclaration());
                     int maxIter = iterator.getElementSize();
                     for (pos[iter] = 0; ok && pos[iter] < maxIter; pos[iter]++) {
-                        Value iterVal = iterator.getElement(pos[iter]);
-                        ok = evaluateIterator(iter, iterVal, maxIter, setSelf, resultVar);
+                        IDecisionVariable iVar = resultVar.getBoundContainerElement(pos[iter]);
+                        Value iVal = iterator.getElement(pos[iter]);
+                        ok = evaluateIterator(iter, iVal, iVar, maxIter, setSelf, resultVar);
                     }
                     try {
                         evaluator.postProcessResult(resultVar, data);
@@ -1416,7 +1425,9 @@ public class EvaluationVisitor implements IConstraintTreeVisitor {
                             propagate = false;
                         }
                         try {
-                            declarators[iter].setValue(iterator.getElement(pos[iter]), AssignmentState.ASSIGNED);
+                            LocalDecisionVariable lVar = declarators[iter];
+                            lVar.setVariable(resultVar.getBoundContainerElement(pos[iter]));
+                            lVar.setValue(iterator.getElement(pos[iter]), AssignmentState.ASSIGNED);
                         } catch (ConfigurationException e) {
                             ok = containerException(e);
                         }
@@ -1432,19 +1443,22 @@ public class EvaluationVisitor implements IConstraintTreeVisitor {
             }
             return ok;
         }
+        
+        // checkstyle: stop parameter number check
 
         /**
          * Evaluates an iterator. Considers the nesting mode and flattens/builds up sub-collections if needed.
          * 
          * @param iter the declarator iteration index
          * @param iterVal the actual value of the iterator
+         * @param iterVar the alternative iterator variable (may be <b>null</b>)
          * @param maxIter the maximum iteration index
          * @param setSelf whether {@link EvaluationVisitor#selfValue} shall be modified
          * @param rVar the result value accessor
          * @return whether the execution was ok (<code>true</code>) or not <code>false</code>)
          */
-        private boolean evaluateIterator(int iter, Value iterVal, int maxIter, boolean setSelf, 
-            EvaluationAccessor rVar) {
+        private boolean evaluateIterator(int iter, Value iterVal, IDecisionVariable iterVar, int maxIter, 
+            boolean setSelf, EvaluationAccessor rVar) {
             boolean ok = true;
             NestingMode nestingMode = call.getResolvedOperation().getNestingMode();
             if (NestingMode.NONE != nestingMode && iterVal instanceof ContainerValue) {
@@ -1473,13 +1487,15 @@ public class EvaluationVisitor implements IConstraintTreeVisitor {
                 }
                 ContainerValue cValue = (ContainerValue) iterVal;
                 for (int e = 0; ok && e < cValue.getElementSize(); e++) {
-                    ok &= evaluateIterator(iter, cValue.getElement(e), maxIter, setSelf, res);
+                    ok &= evaluateIterator(iter, cValue.getElement(e), 
+                        null == iterVar ? null : iterVar.getNestedElement(e), maxIter, setSelf, res);
                 }
             } else {
                 if (setSelf) { // for now only inner...
                     selfValue = iterVal;
                 }
                 try {
+                    declarators[iter].setVariable(iterVar);
                     declarators[iter].setValue(iterVal, AssignmentState.ASSIGNED);
                 } catch (ConfigurationException e) {
                     ok = containerException(e);
@@ -1494,7 +1510,7 @@ public class EvaluationVisitor implements IConstraintTreeVisitor {
                         } else if (aggRes instanceof ListWrapperValue) {
                             ListWrapperValue lwv = (ListWrapperValue) aggRes;
                             for (int e = 0; e < lwv.getElementCount(); e++) {
-                                ok &= evaluateIterator(iter, lwv.getElement(e), maxIter, setSelf, rVar);
+                                ok &= evaluateIterator(iter, lwv.getElement(e), null, maxIter, setSelf, rVar);
                             }
                         }
                     } catch (ValueDoesNotMatchTypeException ex) {
@@ -1507,6 +1523,8 @@ public class EvaluationVisitor implements IConstraintTreeVisitor {
             return ok;
         }
     }
+
+    // checkstyle: resume parameter number check
     
     /**
      * Executes the container iteration.

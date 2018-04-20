@@ -22,13 +22,17 @@ import net.ssehub.easy.varModel.confModel.AssignmentState;
 import net.ssehub.easy.varModel.confModel.Configuration;
 import net.ssehub.easy.varModel.confModel.ConfigurationException;
 import net.ssehub.easy.varModel.confModel.IDecisionVariable;
+import net.ssehub.easy.varModel.cst.AttributeVariable;
 import net.ssehub.easy.varModel.cst.BlockExpression;
 import net.ssehub.easy.varModel.cst.CSTSemanticException;
 import net.ssehub.easy.varModel.cst.CompoundAccess;
 import net.ssehub.easy.varModel.cst.ConstantValue;
 import net.ssehub.easy.varModel.cst.ConstraintSyntaxTree;
+import net.ssehub.easy.varModel.cst.ContainerOperationCall;
+import net.ssehub.easy.varModel.cst.OCLFeatureCall;
 import net.ssehub.easy.varModel.cst.Variable;
 import net.ssehub.easy.varModel.model.AbstractVariable;
+import net.ssehub.easy.varModel.model.Attribute;
 import net.ssehub.easy.varModel.model.DecisionVariableDeclaration;
 import net.ssehub.easy.varModel.model.Project;
 import net.ssehub.easy.varModel.model.datatypes.AnyType;
@@ -703,6 +707,7 @@ public class EvaluationVisitorIteratorTest {
         visitor.init(config, AssignmentState.DEFAULT, false, null);
         containerOp.accept(visitor);
         result = visitor.getResult();
+
         Assert.assertTrue(result instanceof ContainerValue);
         Utils.assertContainer(new Object[]{}, result);
         visitor.clear();
@@ -1213,6 +1218,106 @@ public class EvaluationVisitorIteratorTest {
             Utils.assertContainer(expected, visitor.getResult());
         }
         visitor.clear();
+    }
+    
+    /**
+     * Tests a nested/double for-all over compound slots.
+     * 
+     * @throws ValueDoesNotMatchTypeException shall not occur
+     * @throws ConfigurationException shall not occur
+     * @throws CSTSemanticException shall not occur
+     */
+    @Test
+    public void testNestedForAll() throws ValueDoesNotMatchTypeException, ConfigurationException, CSTSemanticException {
+        Project prj = new Project("test");
+        Compound cmp = new Compound("C", prj);
+        DecisionVariableDeclaration cmpName = new DecisionVariableDeclaration("name", StringType.TYPE, cmp);
+        cmp.add(cmpName);
+        prj.add(cmp);
+        Set set = new Set("set", cmp, prj);
+        DecisionVariableDeclaration setDecl = new DecisionVariableDeclaration("s", set, prj);
+        prj.add(setDecl);
+        
+        Configuration cfg = new Configuration(prj);
+        IDecisionVariable setVar = cfg.getDecision(setDecl);
+        Value c1 = ValueFactory.createValue(cmp, new Object[] {"name", "c1"});
+        Value c2 = ValueFactory.createValue(cmp, new Object[] {"name", "c2"});
+        Value c3 = ValueFactory.createValue(cmp, new Object[] {"name", "c3"});
+        setVar.setValue(ValueFactory.createValue(set, c1, c2, c3), AssignmentState.ASSIGNED);
+        
+        DecisionVariableDeclaration t1 = new DecisionVariableDeclaration("t1", cmp, prj);
+        DecisionVariableDeclaration t2 = new DecisionVariableDeclaration("t2", cmp, prj);
+        ConstraintSyntaxTree t1cst = new OCLFeatureCall(
+            new CompoundAccess(new Variable(t1), "name") , StringType.SIZE.getName());
+        ConstraintSyntaxTree t2cst = new OCLFeatureCall(
+            new CompoundAccess(new Variable(t2), "name"), StringType.SIZE.getName());
+        ConstraintSyntaxTree cst  = new OCLFeatureCall(t1cst, IntegerType.PLUS_INTEGER_INTEGER.getName(), t2cst);
+        cst = new OCLFeatureCall(cst, IntegerType.GREATER_EQUALS_INTEGER_INTEGER.getName(), 
+            new ConstantValue(ValueFactory.createValue(IntegerType.TYPE, 1)));
+        cst = new ContainerOperationCall(new Variable(setDecl), Set.FORALL.getName(), cst, t2);
+        cst = new ContainerOperationCall(new Variable(setDecl), Set.FORALL.getName(), cst, t1);
+        cst.inferDatatype();
+        
+        EvaluationVisitor evaluator = new EvaluationVisitor(cfg, AssignmentState.ASSIGNED, false, null);
+        evaluator.visit(cst);
+        Assert.assertTrue(evaluator.constraintFulfilled());
+        Assert.assertFalse(evaluator.constraintFailed());
+        evaluator.clear();
+    }
+
+    /**
+     * Tests a nested/double for-all over compound attributes.
+     * 
+     * @throws ValueDoesNotMatchTypeException shall not occur
+     * @throws ConfigurationException shall not occur
+     * @throws CSTSemanticException shall not occur
+     */
+    @Test
+    public void testNestedForAllAttributes() throws ValueDoesNotMatchTypeException, ConfigurationException, 
+        CSTSemanticException {
+        Project prj = new Project("test");
+        Attribute attr = new Attribute("a", IntegerType.TYPE, prj, prj);
+        attr.setValue(ValueFactory.createValue(IntegerType.TYPE, 0));
+        prj.add(attr);
+        prj.attribute(attr);
+        Compound cmp = new Compound("C", prj);
+        DecisionVariableDeclaration cmpName = new DecisionVariableDeclaration("name", StringType.TYPE, cmp);
+        cmp.add(cmpName);
+        prj.add(cmp);
+        Set set = new Set("set", cmp, prj);
+        DecisionVariableDeclaration setDecl = new DecisionVariableDeclaration("s", set, prj);
+        prj.add(setDecl);
+
+        Configuration cfg = new Configuration(prj);
+        IDecisionVariable setVar = cfg.getDecision(setDecl);
+        Value c1 = ValueFactory.createValue(cmp, new Object[] {"name", "c1"});
+        Value c2 = ValueFactory.createValue(cmp, new Object[] {"name", "c2"});
+        Value c3 = ValueFactory.createValue(cmp, new Object[] {"name", "c3"});
+        setVar.setValue(ValueFactory.createValue(set, c1, c2, c3), AssignmentState.ASSIGNED);
+        
+        DecisionVariableDeclaration t1 = new DecisionVariableDeclaration("t1", cmp, prj);
+        DecisionVariableDeclaration t2 = new DecisionVariableDeclaration("t2", cmp, prj);
+        ConstraintSyntaxTree qOp  = new OCLFeatureCall(new AttributeVariable(new Variable(t1), attr), 
+            IntegerType.EQUALS_INTEGER_INTEGER.getName(), new AttributeVariable(new Variable(t2), attr));
+        ConstraintSyntaxTree cst1 = new ContainerOperationCall(new Variable(setDecl), Set.FORALL.getName(), qOp, t2);
+        cst1 = new ContainerOperationCall(new Variable(setDecl), Set.FORALL.getName(), cst1, t1);
+        cst1.inferDatatype();
+
+        ConstraintSyntaxTree asSet = new OCLFeatureCall(new Variable(setDecl), Set.AS_SET.getName());
+        ConstraintSyntaxTree cst2 = new ContainerOperationCall(asSet, Set.FORALL.getName(), qOp, t2);
+        cst2 = new ContainerOperationCall(asSet, Set.FORALL.getName(), cst2, t1);
+        cst2.inferDatatype();
+
+        EvaluationVisitor evaluator = new EvaluationVisitor(cfg, AssignmentState.ASSIGNED, false, null);
+        evaluator.visit(cst1);
+        Assert.assertTrue(evaluator.constraintFulfilled());
+        Assert.assertFalse(evaluator.constraintFailed());
+
+        evaluator.visit(cst2);
+        Assert.assertTrue(evaluator.constraintFulfilled());
+        Assert.assertFalse(evaluator.constraintFailed());
+
+        evaluator.clear();
     }
 
 }

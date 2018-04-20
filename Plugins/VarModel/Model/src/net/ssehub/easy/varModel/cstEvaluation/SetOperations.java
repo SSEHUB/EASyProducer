@@ -37,10 +37,11 @@ public class SetOperations {
      */
     static final IOperationEvaluator UNION = new Container2OperationEvaluator(new Container2Operation() {
         
-        public void evaluate(ContainerValue c1, ContainerValue c2, List<Value> result) {
+        public void evaluate(ContainerArgument c1, ContainerArgument c2, List<Value> result, 
+            EvaluationAccessor resAcc) {
             HashSet<Value> done = new HashSet<Value>();
-            addAll((ContainerValue) c1, result, done);
-            addAll((ContainerValue) c2, result, done);
+            addAll(c1, result, done, resAcc);
+            addAll(c2, result, done, resAcc);
         }
     });
 
@@ -49,13 +50,17 @@ public class SetOperations {
      */
     static final IOperationEvaluator DIFFERENCE = new Container2OperationEvaluator(new Container2Operation() {
         
-        public void evaluate(ContainerValue c1, ContainerValue c2, List<Value> result) {
+        public void evaluate(ContainerArgument c1, ContainerArgument c2, List<Value> result, 
+            EvaluationAccessor resAcc) {
             HashSet<Value> inC2 = new HashSet<Value>();
-            ContainerOperations.addAll(c2, inC2);
-            for (int e = 0; e < c1.getElementSize(); e++) {
-                Value val = c1.getElement(e);
+            ContainerOperations.addAll(c2, inC2, resAcc);
+            ContainerValue cont1 = c1.getValue();
+            EvaluationAccessor contAcc1 = c1.getAccessor();
+            for (int e = 0; e < cont1.getElementSize(); e++) {
+                Value val = cont1.getElement(e);
                 if (!inC2.contains(val)) {
                     result.add(val);
+                    resAcc.addBoundContainerElement(contAcc1, e);
                 }
             }
         }
@@ -66,13 +71,14 @@ public class SetOperations {
      */
     static final IOperationEvaluator SYMMETRIC_DIFFERENCE = new Container2OperationEvaluator(new Container2Operation() {
         
-        public void evaluate(ContainerValue c1, ContainerValue c2, List<Value> result) {
+        public void evaluate(ContainerArgument c1, ContainerArgument c2, List<Value> result, 
+            EvaluationAccessor resAcc) {
             HashSet<Value> inC1 = new HashSet<Value>();
             HashSet<Value> inC2 = new HashSet<Value>();
-            ContainerOperations.addAll(c1, inC1);
-            ContainerOperations.addAll(c2, inC2);
-            addAllXor(c1, inC1, inC2, result);
-            addAllXor(c2, inC1, inC2, result);
+            ContainerOperations.addAll(c1, inC1, resAcc);
+            ContainerOperations.addAll(c2, inC2, resAcc);
+            addAllXor(c1, inC1, inC2, result, resAcc);
+            addAllXor(c2, inC1, inC2, result, resAcc);
         }
     });
     
@@ -81,11 +87,14 @@ public class SetOperations {
      */
     static final IOperationEvaluator EXCLUDING = new ContainerValueOperationEvaluator(new ContainerValueOperation() {
         
-        public void evaluate(ContainerValue cont, Value value, List<Value> result) {
+        public void evaluate(ContainerArgument cnt, Value value, List<Value> result, EvaluationAccessor resAcc) {
+            ContainerValue cont = cnt.getValue();
+            EvaluationAccessor contAcc = cnt.getAccessor();
             for (int i = 0; i < cont.getElementSize(); i++) {
                 Value elt = cont.getElement(i);
                 if (!elt.equals(value)) {
                     result.add(elt);
+                    resAcc.addBoundContainerElement(contAcc, i);
                 }
             }
         }
@@ -96,15 +105,19 @@ public class SetOperations {
      */
     static final IOperationEvaluator INCLUDING = new ContainerValueOperationEvaluator(new ContainerValueOperation() {
         
-        public void evaluate(ContainerValue cont, Value value, List<Value> result) {
+        public void evaluate(ContainerArgument cnt, Value value, List<Value> result, EvaluationAccessor resAcc) {
             boolean found = false;
+            ContainerValue cont = cnt.getValue();
+            EvaluationAccessor contAcc = cnt.getAccessor();
             for (int i = 0; i < cont.getElementSize(); i++) {
                 Value elt = cont.getElement(i);
                 result.add(elt);
+                resAcc.addBoundContainerElement(contAcc, i);
                 found = elt.equals(value);
             }
             if (!found) {
                 result.add(value);
+                resAcc.addBoundContainerElement(null);
             }
         }
     });
@@ -134,36 +147,46 @@ public class SetOperations {
     }
     
     /**
-     * Adds all elements in <code>cont</code> to <code>result</code>.
+     * Adds all elements in <code>cnt</code> to <code>result</code>.
      * 
-     * @param cont the source of the elements
+     * @param cnt the source of the elements
      * @param result the target (to be modified as a side effect)
      * @param done all elements considered so far
+     * @param resAcc the result accessor for transferring bound elements
      */
-    private static final void addAll(ContainerValue cont, List<Value> result, HashSet<Value> done) {
+    private static final void addAll(ContainerArgument cnt, List<Value> result, HashSet<Value> done, 
+        EvaluationAccessor resAcc) {
+        ContainerValue cont = cnt.getValue();
+        EvaluationAccessor contAcc = cnt.getAccessor();
         for (int i = 0; i < cont.getElementSize(); i++) {
             Value elt = cont.getElement(i);
             if (!done.contains(elt)) {
                 result.add(elt);
+                resAcc.addBoundContainerElement(contAcc, i);
                 done.add(elt);
             }
         }
     }
 
     /**
-     * Adds all elements from <code>cont</code> to <code>result</code> if the individual
+     * Adds all elements from <code>cnt</code> to <code>result</code> if the individual
      * elements are either in <code>set1</code> or in <code>set2</code>.
      * 
-     * @param cont the container to take the values from
+     * @param cnt the container to take the values from
      * @param set1 the first set
      * @param set2 the second set
      * @param result the resulting elements
+     * @param resAcc result accessor for transferring bound elements
      */
-    private static void addAllXor(ContainerValue cont, HashSet<Value> set1, HashSet<Value> set2, List<Value> result)  {
+    private static void addAllXor(ContainerArgument cnt, HashSet<Value> set1, HashSet<Value> set2, List<Value> result, 
+        EvaluationAccessor resAcc)  {
+        ContainerValue cont = cnt.getValue();
+        EvaluationAccessor contAcc = cnt.getAccessor();
         for (int e = 0; e < cont.getElementSize(); e++) {
             Value val = cont.getElement(e);
             if (set1.contains(val) ^ set2.contains(val)) {
                 result.add(val);
+                resAcc.addBoundContainerElement(contAcc, e);
             }
         }
     }

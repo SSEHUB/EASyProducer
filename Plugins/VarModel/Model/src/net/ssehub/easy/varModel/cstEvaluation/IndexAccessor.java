@@ -76,11 +76,15 @@ class IndexAccessor extends AbstractDecisionVariableEvaluationAccessor {
         if (Container.TYPE.isAssignableFrom(variable.getDeclaration().getType())) {
             ContainerValue val = (ContainerValue) variable.getValue();
             if (null != val) {
-                try {
-                    val.setValue(index, value);
-                    done = true;
-                } catch (ValueDoesNotMatchTypeException e) {
-                    EASyLoggerFactory.INSTANCE.getLogger(IndexAccessor.class, Bundle.ID).exception(e);
+                Value oldValue = val.getElement(index);
+                if (!Value.equals(oldValue, value)) {
+                    try {
+                        val.setValue(index, value);
+                        getContext().notifyChangeListener(getVariable().getNestedElement(index), oldValue);
+                        done = true;
+                    } catch (ValueDoesNotMatchTypeException e) {
+                        EASyLoggerFactory.INSTANCE.getLogger(IndexAccessor.class, Bundle.ID).exception(e);
+                    }
                 }
             }
         }
