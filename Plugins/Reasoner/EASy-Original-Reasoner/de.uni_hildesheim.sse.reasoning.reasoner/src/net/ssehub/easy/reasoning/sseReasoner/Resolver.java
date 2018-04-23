@@ -177,7 +177,7 @@ public class Resolver {
                 Value newValue = variable.getValue();
                 if (newValue instanceof ContainerValue) {
                     createContainerConstraintValueConstraints((ContainerValue) newValue, 
-                        createParentExpression(variable), null, variable.getDeclaration().getParent(), null);
+                        createParentExpression(variable), null, variable.getDeclaration().getParent(), variable);
                 }
                 // TODO if value type changes (currently not part of the notification)
                 rescheduleConstraintsForChilds(variable);
@@ -729,7 +729,7 @@ public class Resolver {
         IDatatype dContainedBasisType = DerivedDatatype.resolveToBasis(dContainedType);
         ContainerValue val = getRelevantValue(decl, var, incremental, ContainerValue.class);
         if (TypeQueries.isConstraint(dContainedBasisType)) { // don't care for derived
-            if (null != val) { // 
+            if (null != val) {
                 createContainerConstraintValueConstraints(val, cAcc, null, decl, var);
             } 
         } else {
@@ -1012,7 +1012,7 @@ public class Resolver {
         AbstractVariable self, IModelElement parent, IDecisionVariable nestedVariable) {
         for (int n = 0; n < val.getElementSize(); n++) {
             Value cVal = val.getElement(n);
-            ConstraintSyntaxTree cst = getConstraintValueConstraintExpression(val);
+            ConstraintSyntaxTree cst = getConstraintValueConstraintExpression(cVal);
             if (null != cst) {
                 createConstraintVariableConstraint(cst, selfEx, self, parent, nestedVariable);
             } else if (cVal instanceof ContainerValue) {

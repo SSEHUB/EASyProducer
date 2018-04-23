@@ -521,6 +521,21 @@ public class ReasoningUtils {
     }
     
     /**
+     * Prints a constraints collection, each constraint incuding system identity hashcodes [DEBUGGING].
+     * 
+     * @param text text to be printed before
+     * @param coll the constraints to be printed
+     */
+    public static void printConstraints(String text, Collection<Constraint> coll) {
+        System.out.println(text);
+        int count = 0;
+        for (Constraint c : coll) {
+            System.out.println(count + " : " + System.identityHashCode(c) + " " + c);
+        }
+    }
+
+    
+    /**
      * Returns the expression for a constraint to be created for a constraint variable.
      * 
      * @param value the value to create the constraint for
