@@ -170,7 +170,8 @@ public class Constraint extends ContainableModelElement implements IPartialEvalu
     @Override
     public String toString() {
        // name is typically null as we don't have named constraints in IVML now
-        return "constraint (name: " + getName() + ") = " + getConsSyntax().toString(); 
+        return "constraint (name: " + getName() + ") = " 
+            + (getConsSyntax() == null ? null : getConsSyntax().toString()); 
     }
     
     /**
