@@ -1,0 +1,171 @@
+// specific variability model for tests.eu.qualimaster.storm
+
+project QM {
+
+    enum BindingTime {compile = 0, runtime = 1};
+    annotate BindingTime bindingTime = BindingTime.compile to QM;
+
+    compound PipelineElement {
+    }
+
+    compound Node refines PipelineElement {
+        String name;
+        setOf(Constraint) constraints;
+        assign (bindingTime = BindingTime.runtime) to {
+          Boolean isValid = true;
+          Real predictedItemsThreshold;
+        }
+    }
+    
+    compound Source refines Node {
+        setOf(refTo(Node)) next;
+    }
+    
+    compound FamilyElement refines Node {
+        setOf(refTo(Node)) output;
+        refTo(Family) family;
+
+        assign (bindingTime = BindingTime.runtime) to {
+          refTo(Algorithm) actual;
+          setOf(refTo(Algorithm)) available;
+          Real capacity;
+          Integer executors;
+        }
+    }
+    
+    compound Sink refines Node {
+    }
+    
+    compound ReplaySink refines Sink {
+    }
+    
+    compound Family {
+        String name;
+        setOf(refTo(Algorithm)) members;
+    }
+    
+    compound Algorithm {
+        String name;
+        setOf(Constraint) constraints;
+        assign (bindingTime = BindingTime.runtime) to {
+          Real latency;
+          Integer throughputItem;
+          Boolean isValid = true;
+        }
+    }
+    
+    compound HardwareAlgorithm refines Algorithm {
+    }
+    
+    compound SubPipelineAlgorithm refines Algorithm {
+    }
+
+    compound Pipeline {
+        String artifact;
+        String name;
+        setOf(refTo(Source)) sources;
+        setOf(Constraint) constraints;
+
+        assign (bindingTime = BindingTime.runtime) to {
+          Real latency;
+          Integer throughputItem;
+          Real capacity;
+          Integer executors;
+          Boolean isValid = true;
+          
+          capacity > 0.10;
+          capacity < 0.85;
+        }
+    }
+    
+    setOf(refTo(Pipeline)) pipelines;
+    setOf(refTo(Algorithm)) algorithms;
+    
+    compound HwNode {
+	String name;	 	
+    }
+	
+    compound MPCCNode refines HwNode{
+	String host; // possibly needed to direct network stream to
+	Integer monitoringPort;
+	Integer numCPUs;
+	Integer numDFEs;
+    } 
+	
+    sequenceOf(refTo(HwNode)) clusters;
+
+
+    // ---------------------- instances ---------------------
+    
+    Algorithm alg1 = {
+        name = "alg1",
+        constraints = {(throughputItem * throughputItem) <= 500}
+    };
+
+    Algorithm alg2 = {
+        name = "alg2",
+        constraints = {(throughputItem * throughputItem) > 500}
+    };
+    
+    // background info for HW integration test
+    HardwareAlgorithm hwAlg = {
+        name = "GenTopoHardwareCorrelationFinancial"
+    };
+    
+    SubPipelineAlgorithm subAlg = {
+        name = "CorrelationSW"
+    };
+    
+    Family fam1 = {
+        name = "fam1",
+        members = {refBy(alg1), refBy(alg2)}
+    };
+
+    Sink snk = {
+        name = "snk"
+    };
+    
+    FamilyElement famElt1 = {
+        name = "process",
+        family = refBy(fam1), 
+        output = {refBy(snk)},
+        predictedItemsThreshold = 500 // default value
+    };
+    
+    Source src = {
+        name = "source", 
+        next = {refBy(famElt1)}
+    };
+    
+    Pipeline pip = {
+        artifact = "eu.qualiMaster:TestPipeline:0.0.1",
+        name = "pipeline",
+        sources = {refBy(src)}
+    };
+    
+    pipelines = {refBy(pip)};
+    algorithms = {refBy(alg1), refBy(alg2), refBy(hwAlg), refBy(subAlg)};
+    
+    MPCCNode olynthos = {
+        name = "olynthos",
+        host = "147.27.39.12",
+        monitoringPort = 2402,
+	numCPUs = 12,
+	numDFEs = 4
+    };
+
+    clusters = {refBy(olynthos)};
+
+    freeze {
+        alg1;
+        alg2;
+        fam1;
+        snk;
+        famElt1;
+        src;
+        pip;
+        pipelines;
+        algorithms;
+        clusters;
+    } but (v | v.bindingTime == BindingTime.runtime);
+}
