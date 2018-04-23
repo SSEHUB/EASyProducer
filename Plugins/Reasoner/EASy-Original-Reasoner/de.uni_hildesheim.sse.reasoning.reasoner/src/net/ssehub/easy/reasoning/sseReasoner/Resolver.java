@@ -667,7 +667,7 @@ public class Resolver {
         }
         if (TypeQueries.isCompound(type)) { // this is a compound value -> default constraints, do not defer
             self = decl;
-            translateCompoundDeclaration(decl, var, cAcc, (Compound) type); 
+            defaultValue = translateCompoundDeclaration(decl, var, cAcc, (Compound) type, defaultValue); 
         } else if (TypeQueries.isContainer(type)) { // this is a container value -> default constraints, do not defer
             translateContainerDeclaration(decl, var, type, cAcc);
         } else if (null != defaultValue && !incremental) {
@@ -811,9 +811,13 @@ public class Resolver {
      * @param cAcc if variable is a nested compound, the access expression to 
      *     <code>decl</code>/<code>variable</code>
      * @param type specific {@link Compound} type.
+     * @param deflt the default value expression for <code>decl</code> to be translated/substituted in the 
+     *     context of <code>decl</code>
+     * @return <code>deflt</code> or <code>deflt</code> with substituted variables
      */
-    private void translateCompoundDeclaration(AbstractVariable decl, IDecisionVariable variable,
-        ConstraintSyntaxTree cAcc, Compound type) {
+    private ConstraintSyntaxTree translateCompoundDeclaration(AbstractVariable decl, IDecisionVariable variable,
+        ConstraintSyntaxTree cAcc, Compound type, ConstraintSyntaxTree deflt) {
+        ConstraintSyntaxTree result = deflt;
         if (!contexts.alreadyProcessed(type)) {
             contexts.recordProcessed(type);
             contexts.pushContext(decl, null == variable);
@@ -821,8 +825,12 @@ public class Resolver {
             Variable declVar = new Variable(decl);
             registerCompoundMapping(type, cAcc, declVar, null == variable ? type : variable.getValue().getType());
             translateCompoundContent(decl, variable, type, cAcc);
+            if (null != deflt) {
+                result = substituteVariables(deflt, null, decl, false);
+            }
             contexts.popContext();
         }
+        return result;
     }
 
     /**
@@ -1143,7 +1151,7 @@ public class Resolver {
             add = !variablesFinder.isConstraintFrozen();
             variablesFinder.clear();
         }
-        // check whether the constraint is a value assignment // TODO unify with CSTUtils above
+        // check whether the constraint is a value assignment // TODO unify with CSTUtils above?
         if (checkForInitializers) { // needed, also to avoid recursions on constant values inducing constraints
             containerFinder.accept(cst);
             if (containerFinder.isConstraintContainer()) {
