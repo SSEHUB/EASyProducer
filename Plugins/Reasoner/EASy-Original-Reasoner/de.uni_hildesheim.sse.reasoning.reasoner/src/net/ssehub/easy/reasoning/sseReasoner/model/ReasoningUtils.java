@@ -268,7 +268,7 @@ public class ReasoningUtils {
      * Method for printing constraints that are taken into account for reasoning.
      * @param constraints Constraints from the project. 
      */
-    public static void printConstraints(Collection<Constraint> constraints) {
+    public static void printConstraints(Iterable<Constraint> constraints) {
         LOGGER.debug("-------------------");
         LOGGER.debug("--Constraints:");
         for (Constraint c : constraints) {

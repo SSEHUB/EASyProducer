@@ -93,7 +93,6 @@ public class Resolver {
     
     private Configuration config;
     private boolean incremental = false;
-    private boolean considerFrozenConstraints = true;
     private boolean reuseInstance = false;
     private IAssignmentState assignmentState = AssignmentState.DERIVED;
 
@@ -656,10 +655,13 @@ public class Resolver {
         variablesCounter++;
         IDatatype type = decl.getType();
         ConstraintSyntaxTree defaultValue = decl.getDefaultValue();
+        boolean isConstraintType = TypeQueries.isConstraint(type);
         AbstractVariable self = null;
         ConstraintSyntaxTree selfEx = null;
         translateDerivedDatatypeConstraints(decl, type, null, decl.getTopLevelParent(), 0);
-        if (!incremental) {
+        if (incremental) {
+            defaultValue = isConstraintType ? defaultValue : null; // others, assume already set
+        } else {
             translateAnnotationDeclarations(decl, var, cAcc);
         }
         if (null != defaultValue) { // considering the actual type rather than base, after derived (!)
@@ -680,7 +682,7 @@ public class Resolver {
         // implicit overriding of default values through AttributeAssignment - leave out her
         if (null != defaultValue && !(decl.isAttribute() && decl.getParent() instanceof AttributeAssignment)) {
             try {
-                if (TypeQueries.isConstraint(decl.getType())) { // handle and register constraint variables
+                if (isConstraintType) { // handle and register constraint variables
                     variablesCounter--;
                     // use closest parent instead of project -> runtime analysis
                     createConstraintVariableConstraint(defaultValue, selfEx, self, decl, var);
@@ -699,7 +701,7 @@ public class Resolver {
                         acc = null != selfEx ? cAcc : new Variable(decl);
                     }
                     defaultValue = new OCLFeatureCall(acc, OclKeyWords.ASSIGNMENT, defaultValue);
-                    defaultValue = substituteVariables(defaultValue, selfEx, self, false);
+                    defaultValue = substituteVariables(defaultValue, selfEx, self);
                     Deque<Constraint> targetCons = defaultConstraints; 
                     if (substVisitor.containsSelf() || isOverriddenSlot(decl)) {
                         targetCons = deferredDefaultConstraints;
@@ -826,7 +828,7 @@ public class Resolver {
             registerCompoundMapping(type, cAcc, declVar, null == variable ? type : variable.getValue().getType());
             translateCompoundContent(decl, variable, type, cAcc);
             if (null != deflt) {
-                result = substituteVariables(deflt, null, decl, false);
+                result = substituteVariables(deflt, null, decl);
             }
             contexts.popContext();
         }
@@ -940,7 +942,7 @@ public class Resolver {
         @Override
         public ConstraintSyntaxTree process(ConstraintSyntaxTree cst, ExpressionType type, String slot, 
             IModelElement parent) {
-            cst = substituteVariables(cst, selfEx, self, true);
+            cst = substituteVariables(cst, selfEx, self);
             try { // compoundConstraints
                 Constraint constraint = new Constraint(cst, parent);
                 addConstraint(otherConstraints, constraint, true, variable);            
@@ -988,7 +990,7 @@ public class Resolver {
             if (evalBlock.getEvaluable(i) instanceof Constraint) {
                 Constraint evalConstraint = (Constraint) evalBlock.getEvaluable(i);
                 ConstraintSyntaxTree evalCst = evalConstraint.getConsSyntax();
-                ConstraintSyntaxTree cst = substituteVariables(evalCst, selfEx, self, true);
+                ConstraintSyntaxTree cst = substituteVariables(evalCst, selfEx, self);
                 try {
                     addConstraint(otherConstraints, new Constraint(cst, project), true, null);
                 } catch (CSTSemanticException e) {
@@ -1087,7 +1089,7 @@ public class Resolver {
                 cst = new AttributeVariable(compound, attrib);
             }
             cst = new OCLFeatureCall(cst, OclKeyWords.ASSIGNMENT, 
-                substituteVariables(assignment.getExpression(), compound, null, true));
+                substituteVariables(assignment.getExpression(), compound, null));
             inferTypeSafe(cst, null);
             try { // assignedAttributeConstraints
                 addConstraint(otherConstraints, new Constraint(cst, project), false, null); 
@@ -1145,7 +1147,7 @@ public class Resolver {
         if (incremental) {
             add = !CSTUtils.isAssignment(cst);
         }
-        if (add && !considerFrozenConstraints) {
+        if (add && incremental) {
             variablesFinder.setConfiguration(config);
             cst.accept(variablesFinder);
             add = !variablesFinder.isConstraintFrozen();
@@ -1241,7 +1243,7 @@ public class Resolver {
         IModelElement parent, IDecisionVariable variable) {
         Constraint constraint = new Constraint(parent); // TODO unify with createConstraintVariableConstraint?
         if (substituteVars) {
-            cst = substituteVariables(cst, null, null, true);
+            cst = substituteVariables(cst, null, null);
         }
         try {
             constraint.setConsSyntax(cst);
@@ -1270,7 +1272,7 @@ public class Resolver {
         AbstractVariable self, IModelElement parent, IDecisionVariable variable) {
         Constraint constraint = null;
         if (cst != null) {
-            cst = substituteVariables(cst, selfEx, self, true);
+            cst = substituteVariables(cst, selfEx, self);
             try {
                 constraint = new Constraint(cst, parent);
                 // constants can cause endless recursion
@@ -1452,12 +1454,10 @@ public class Resolver {
      * @param selfEx an expression representing <i>self</i> (ignored if <b>null</b>, <code>self</code> and 
      *     <code>selfEx</code> shall never both be specified/not <b>null</b>).
      * @param self an variable declaration representing <i>self</i> (ignored if <b>null</b>).
-     * @param clear clear {@link #substVisitor} if <code>true</code> or leave its state for further queries requring
-     * the caller to explicitly clear the copy visitor after usage
      * @return Transformed constraint.
      */
     private ConstraintSyntaxTree substituteVariables(ConstraintSyntaxTree cst, ConstraintSyntaxTree selfEx, 
-        AbstractVariable self, boolean clear) {
+        AbstractVariable self) {
         substVisitor.setMappings(contexts);
         if (selfEx != null) {
             substVisitor.setSelf(selfEx);            
@@ -1578,16 +1578,6 @@ public class Resolver {
      */
     void setIncremental(boolean incremental) {
         this.incremental = incremental;
-    }
-
-    /**
-     * Defines whether frozen constraints shall be considered. Can speed up incremental reasoning.
-     * 
-     * @param considerFrozenConstraints whether frozen constraint shall be considered (default <code>true</code>)
-     * @see #setIncremental(boolean)
-     */
-    void setConsiderFrozenConstraints(boolean considerFrozenConstraints) {
-        this.considerFrozenConstraints = considerFrozenConstraints;
     }
     
     /**

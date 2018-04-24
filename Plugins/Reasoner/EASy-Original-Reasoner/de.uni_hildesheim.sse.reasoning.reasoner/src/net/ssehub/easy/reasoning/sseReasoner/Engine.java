@@ -84,7 +84,6 @@ public class Engine {
         this.resolver = new Resolver(project, cfg, reasonerConfig);
         boolean isRuntimeMode = reasonerConfig.isRuntimeMode();
         this.resolver.setIncremental(isRuntimeMode);
-        this.resolver.setConsiderFrozenConstraints(!isRuntimeMode);
         this.result = new ReasoningResult();
         this.infoLogger = reasonerConfig.getLogger();
         if (!isRuntimeMode) {
