@@ -782,10 +782,9 @@ public class Resolver {
             // fill varMap
             ConstraintSyntaxTree containerOp = null == cAcc ? declVar : cAcc;
             try {
-                // TODO change evaluation!
-/*                if (TypeQueries.isContainer(decl.getType())) {
+                if (TypeQueries.isSequence(decl.getType())) {
                     containerOp = new OCLFeatureCall(containerOp, OclKeyWords.AS_SET);
-                }*/
+                }
                 if (isNestedContainer(decl.getType())) {
                     containerOp = new OCLFeatureCall(containerOp, OclKeyWords.FLATTEN);
                 }
