@@ -151,6 +151,26 @@ public class TypeQueries {
     }
 
     /**
+     * Returns whether <code>type</code> is a set.
+     * 
+     * @param type the type to check for
+     * @return <code>true</code> if <code>type</code> is a container, <code>false</code> else
+     */
+    public static boolean isSet(IDatatype type) {
+        return Set.TYPE.isAssignableFrom(type) && AnyType.TYPE != type;
+    }
+
+    /**
+     * Returns whether <code>type</code> is a sequence.
+     * 
+     * @param type the type to check for
+     * @return <code>true</code> if <code>type</code> is a container, <code>false</code> else
+     */
+    public static boolean isSequence(IDatatype type) {
+        return Set.TYPE.isAssignableFrom(type) && AnyType.TYPE != type;
+    }
+
+    /**
      * Finds the deepest generic type in <code>type</code> always trying <code>pos</code> as position for the 
      * generic type.
      * 
