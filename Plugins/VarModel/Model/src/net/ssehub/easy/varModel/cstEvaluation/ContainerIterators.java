@@ -160,6 +160,7 @@ class ContainerIterators {
             if (BooleanValue.TRUE.equals(value.getValue())) {
                 stop = BooleanValue.TRUE;
                 result.setValue(iter, false);
+                result.addBoundContainerElement(value.getVariable());
             } else {
                 stop = BooleanValue.FALSE;
             }
@@ -191,6 +192,7 @@ class ContainerIterators {
             if (BooleanValue.TRUE.equals(value.getValue())) {
                 stop = BooleanValue.toBooleanValue(!NullValue.INSTANCE.equals(result.getValue()));
                 result.setValue(iter, false);
+                result.addBoundContainerElement(value.getVariable());
             } else {
                 stop = BooleanValue.FALSE;
             }
@@ -349,6 +351,7 @@ class ContainerIterators {
             Value cVal = result.getValue();
             if (cVal instanceof ContainerValue) {
                 ((ContainerValue) cVal).addElement(value.getValue());
+                result.addBoundContainerElement(value.getVariable());
             }
             return BooleanValue.FALSE;
         }
@@ -386,19 +389,19 @@ class ContainerIterators {
                 resultContainer = null;
             }
             nextValues = new ArrayList<Value>();
-            handleNextValue(iter, resultContainer, data, nextValues);
+            handleResult(handleNextValue(iter, resultContainer, data, nextValues), result, value, -1);
             Value val = value.getValue();
             if (val instanceof ContainerValue) {
                 ContainerValue valContainer = (ContainerValue) val;
                 for (int e = 0; e < valContainer.getElementSize(); e++) {
-                    handleNextValue(valContainer.getElement(e), 
-                        resultContainer, data, nextValues);
+                    handleResult(handleNextValue(valContainer.getElement(e), 
+                        resultContainer, data, nextValues), result, value, e);
                     if (stopOnCycle && hasCycle(data)) {
                         break;
                     }
                 }
             } else if (val instanceof ReferenceValue) {
-                handleNextValue(val, resultContainer, data, nextValues);
+                handleResult(handleNextValue(val, resultContainer, data, nextValues), result, value, -1);
             }
             
             Value res = BooleanValue.FALSE; // just go on
@@ -429,10 +432,12 @@ class ContainerIterators {
          * @param result the result container to be changed if not already added
          * @param data the temporary data storing already added elements
          * @param nextValues the next values to be considered for iteration
+         * @return <code>true</code> if <code>value</code> was added to <code>result</code>, <code>false</code> else
          * @throws ValueDoesNotMatchTypeException if adding <code>value</code> to <code>result</code> is failing
          */
-        private void handleNextValue(Value value, ContainerValue result, Map<Object, Object> data, 
+        private boolean handleNextValue(Value value, ContainerValue result, Map<Object, Object> data, 
             List<Value> nextValues) throws ValueDoesNotMatchTypeException {
+            boolean changed = false;
             @SuppressWarnings("unchecked")
             Set<Object> marking = (Set<Object>) data.get(DATA_CLOSURE_MARKED);
             if (null == marking) {
@@ -443,10 +448,30 @@ class ContainerIterators {
                 nextValues.add(value);
                 if (null != result) {
                     result.addElement(value);
+                    changed = true;
                 }
                 marking.add(value);
             } else {
                 data.put(DATA_CLOSURE_CYCLIC, Boolean.TRUE);
+            }
+            return changed;
+        }
+
+        /**
+         * Handles the bound container elements of <code>result</code>.
+         * 
+         * @param changed whether the result container was changed by the last evaluation
+         * @param result the result accessor to be modified
+         * @param value the value accessor
+         * @param index the index of the bound element, no index if negative
+         */
+        private void handleResult(boolean changed, EvaluationAccessor result, EvaluationAccessor value, int index) {
+            if (changed) {
+                if (index >= 0) {
+                    result.addBoundContainerElement(value, index);
+                } else {
+                    result.addBoundContainerElement(value.getVariable());
+                }
             }
         }
 
@@ -611,6 +636,7 @@ class ContainerIterators {
             Value cVal = result.getValue();
             if (condition.equals(value.getValue()) && cVal instanceof ContainerValue) {
                 ((ContainerValue) cVal).addElement(iter);
+                result.addBoundContainerElement(value.getVariable());
             }
             return BooleanValue.FALSE;
         }
