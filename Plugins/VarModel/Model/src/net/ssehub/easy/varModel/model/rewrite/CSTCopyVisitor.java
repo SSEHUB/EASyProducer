@@ -68,6 +68,7 @@ class CSTCopyVisitor extends CopyVisitor {
      */
     CSTCopyVisitor(Map<AbstractVariable, AbstractVariable> mapping, ProjectCopyVisitor copyier) {
         super(mapping);
+        setCopyExpressions(true); // just to be sure to copy the whole expression
         this.copyier = copyier;
         complete = true;
         visitItrExpression = false;

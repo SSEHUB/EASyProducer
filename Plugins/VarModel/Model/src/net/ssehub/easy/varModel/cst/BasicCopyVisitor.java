@@ -34,6 +34,7 @@ public class BasicCopyVisitor implements IConstraintTreeVisitor {
     private boolean copyVariables = false;
     private boolean doInferDatatype = false;
     private boolean copyConstants = true;
+    private boolean copyExpressions = true; // legacy
 
     /**
      * Creates a copy visitor leaving variable nodes as they are, copying constants, not inferring
@@ -43,12 +44,21 @@ public class BasicCopyVisitor implements IConstraintTreeVisitor {
     }
 
     /**
-     * Defines variable replacement.
+     * Defines whether variables shall always be copied or whether instances shall be reused if possible.
      * 
      * @param copyVariables copy variable node instances if <code>true</code>, reuse them if <code>false</code>
      */
     protected void setCopyVariables(boolean copyVariables) {
         this.copyVariables = copyVariables;
+    }
+
+    /**
+     * Returns variables shall always be copied or whether instances shall be reused if possible.
+     * 
+     * @return copy variable node instances if <code>true</code>, reuse them if <code>false</code>
+     */
+    protected boolean getCopyVariables() {
+        return copyVariables;
     }
     
     /**
@@ -68,6 +78,24 @@ public class BasicCopyVisitor implements IConstraintTreeVisitor {
      */
     protected void setCopyConstants(boolean copyConstants) {
         this.copyConstants = copyConstants;
+    }
+    
+    /**
+     * Defines whether (partial) expressions shall always be copied or only if needed.
+     * 
+     * @param copyExpressions <code>true</code> for copy always, <code>false</code> else
+     */
+    protected void setCopyExpressions(boolean copyExpressions) {
+        this.copyExpressions = copyExpressions;
+    }
+    
+    /**
+     * Returns whether (partial) expressions shall always be copied or only if needed.
+     * 
+     * @return <code>true</code> for copy always, <code>false</code> else
+     */
+    protected boolean getCopyExpressions() {
+        return copyExpressions;
     }
 
     /**
@@ -123,134 +151,225 @@ public class BasicCopyVisitor implements IConstraintTreeVisitor {
     protected AbstractVariable mapVariable(AbstractVariable var) {
         return var;
     }
-
+    
     @Override
     public void visitParenthesis(Parenthesis parenthesis) {
-        parenthesis.getExpr().accept(this);
-        result = inferDatatype(new Parenthesis(result));
+        ConstraintSyntaxTree parEx = parenthesis.getExpr();
+        parEx.accept(this);
+        
+        if (copyExpressions || parEx != result) {
+            result = inferDatatype(new Parenthesis(result));
+        } else {
+            result = parenthesis;
+        }
     }
 
     @Override
     public void visitComment(Comment comment) {
-        comment.getExpr().accept(this);
-        result = new Comment(result, comment.getComment());
+        ConstraintSyntaxTree cEx = comment.getExpr();
+        cEx.accept(this);
+        
+        if (copyExpressions || cEx != result) {
+            result = new Comment(result, comment.getComment());
+        } else {
+            result = comment;
+        }
     }
 
     @Override
     public void visitOclFeatureCall(OCLFeatureCall call) {
+        boolean doCopy = copyExpressions;
         ConstraintSyntaxTree operand = call.getOperand();
         if (null != operand) {
             operand.accept(this);
+            doCopy |= operand != result;
             operand = result;
         }
+
         ConstraintSyntaxTree[] args = new ConstraintSyntaxTree[call.getParameterCount()];
         for (int p = 0; p < args.length; p++) {
-            call.getParameter(p).accept(this);
+            ConstraintSyntaxTree arg = call.getParameter(p);
+            arg.accept(this);
+            doCopy |= arg != result;
             args[p] = result;
         }
-        result = inferDatatype(new OCLFeatureCall(operand, call.getOperation(), call.getAccessor(), args));
+
+        if (doCopy) {
+            result = inferDatatype(new OCLFeatureCall(operand, call.getOperation(), call.getAccessor(), args));
+        } else {
+            result = call;
+        }
     }
     
 
     @Override
     public void visitMultiAndExpression(MultiAndExpression expression) {
+        boolean doCopy = copyExpressions;
         OCLFeatureCall[] expressions = new OCLFeatureCall[expression.getExpressionCount()];
         for (int e = 0; e < expressions.length; e++) {
-            expression.getExpression(e).accept(this);
+            ConstraintSyntaxTree ex = expression.getExpression(e);
+            ex.accept(this);
+            doCopy |= ex != result;
             expressions[e] = (OCLFeatureCall) result;
         }
-        try {
-            result = inferDatatype(new MultiAndExpression(expressions));
-        } catch (CSTSemanticException e) {
-            getLogger().exception(e);
+        if (doCopy) {
+            try {
+                result = inferDatatype(new MultiAndExpression(expressions));
+            } catch (CSTSemanticException e) {
+                getLogger().exception(e);
+            }
+        } else {
+            result = expression;
         }
     }
 
     @Override
     public void visitLet(Let let) {
-        DecisionVariableDeclaration var = mapVariable(let.getVariable());
-        let.getInExpression().accept(this);
-        result = inferDatatype(new Let(var, result));
+        DecisionVariableDeclaration letVar = let.getVariable();
+        DecisionVariableDeclaration var = mapVariable(letVar);
+        ConstraintSyntaxTree ex = let.getInExpression();
+        ex.accept(this);
+        if (copyExpressions || letVar != var || ex != result) {
+            result = inferDatatype(new Let(var, result));
+        } else {
+            result = let;
+        }
     }
 
     @Override
     public void visitIfThen(IfThen ifThen) {
-        ifThen.getIfExpr().accept(this);
+        ConstraintSyntaxTree ifE = ifThen.getIfExpr();
+        ifE.accept(this);
         ConstraintSyntaxTree ifExpr = result;
-        ifThen.getThenExpr().accept(this);
+       
+        ConstraintSyntaxTree thenE = ifThen.getThenExpr();
+        thenE.accept(this);
         ConstraintSyntaxTree thenExpr = result;
+        
+        ConstraintSyntaxTree elseE = ifThen.getElseExpr();
         ConstraintSyntaxTree elseExpr;
-        if (null != ifThen.getElseExpr()) {
-            ifThen.getElseExpr().accept(this);
+        if (null != elseE) {
+            elseE.accept(this);
             elseExpr = result;
         } else {
             elseExpr = null;
         }
-        result = inferDatatype(new IfThen(ifExpr, thenExpr, elseExpr));
+        
+        if (copyExpressions || ifE != ifExpr || thenE != thenExpr || elseE != elseExpr) {
+            result = inferDatatype(new IfThen(ifExpr, thenExpr, elseExpr));
+        } else {
+            result = ifThen;
+        }
     }
 
     @Override
     public void visitContainerOperationCall(ContainerOperationCall call) {
-        call.getContainer().accept(this);
+        ConstraintSyntaxTree cCont = call.getContainer();
+        cCont.accept(this);
         ConstraintSyntaxTree container = result;
-        call.getExpression().accept(this);
+
+        ConstraintSyntaxTree cEx = call.getExpression();
+        cEx.accept(this);
         ConstraintSyntaxTree expression = result;
+        
+        boolean doCopy = copyExpressions || cCont != container || cEx != expression;
         DecisionVariableDeclaration[] decls = new DecisionVariableDeclaration[call.getDeclaratorsCount()];
         for (int d = 0; d < decls.length; d++) {
-            decls[d] = mapVariable(call.getDeclarator(d));
+            DecisionVariableDeclaration decl = call.getDeclarator(d);
+            decls[d] = mapVariable(decl);
+            doCopy |= decls[d] != decl;
         }
-        result = inferDatatype(new ContainerOperationCall(container, call.getOperation(), expression, decls));
+        if (doCopy) {
+            result = inferDatatype(new ContainerOperationCall(container, call.getOperation(), expression, decls));
+        } else {
+            result = call;
+        }
     }
 
     @Override
     public void visitCompoundAccess(CompoundAccess access) {
-        access.getCompoundExpression().accept(this);
-        result = inferDatatype(new CompoundAccess(result, access.getSlotName()));
+        ConstraintSyntaxTree cEx = access.getCompoundExpression();
+        cEx.accept(this);
+        if (copyExpressions || cEx != result) {
+            result = inferDatatype(new CompoundAccess(result, access.getSlotName()));
+        } else {
+            result = access;
+        }
     }
 
     @Override
     public void visitUnresolvedExpression(UnresolvedExpression expression) {
-        if (null != expression.getUnresolvedLeaf()) {
-            result = new UnresolvedExpression(expression.getUnresolvedLeaf());
+        String leaf = expression.getUnresolvedLeaf();
+        if (null != leaf) {
+            if (copyExpressions) {
+                result = new UnresolvedExpression(expression.getUnresolvedLeaf());
+            } else {
+                result = expression;
+            }
         } else {
-            expression.accept(this);
-            result = new UnresolvedExpression(result);
+            ConstraintSyntaxTree ex = expression.getActualExpression();
+            if (null != ex) {
+                ex.accept(this);
+            } else {
+                result = null;
+            }
+            if (copyExpressions || result != ex) {
+                result = new UnresolvedExpression(result);
+            } else {
+                result = expression;
+            }
         }
     }
 
     @Override
     public void visitCompoundInitializer(CompoundInitializer initializer) {
-        String[] slots = new String[initializer.getSlotCount()];
-        for (int s = 0; s < slots.length; s++) {
-            slots[s] = initializer.getSlot(s);
-        }
+        boolean doCopy = copyExpressions;
         AbstractVariable[] slotDecls = new DecisionVariableDeclaration[initializer.getSlotCount()];
         for (int s = 0; s < slotDecls.length; s++) {
-            slotDecls[s] = mapVariable(initializer.getSlotDeclaration(s));
+            AbstractVariable decl = initializer.getSlotDeclaration(s);
+            slotDecls[s] = mapVariable(decl);
+            doCopy |= slotDecls[s] != decl;
         }
         ConstraintSyntaxTree[] exprs = new ConstraintSyntaxTree[initializer.getExpressionCount()];
         for (int e = 0; e < exprs.length; e++) {
-            initializer.getExpression(e).accept(this);
+            ConstraintSyntaxTree ex = initializer.getExpression(e);
+            ex.accept(this);
+            doCopy |= result != ex;
             exprs[e] = result;
         }
-        try {
-            result = inferDatatype(new CompoundInitializer(initializer.getType(), slots, slotDecls, exprs));
-        } catch (CSTSemanticException e) {
-            getLogger().exception(e);
+        if (doCopy) {
+            try {
+                String[] slots = new String[initializer.getSlotCount()];
+                for (int s = 0; s < slots.length; s++) {
+                    slots[s] = initializer.getSlot(s);
+                }
+                result = inferDatatype(new CompoundInitializer(initializer.getType(), slots, slotDecls, exprs));
+            } catch (CSTSemanticException e) {
+                getLogger().exception(e);
+            }
+        } else {
+            result = initializer;
         }
     }
 
     @Override
     public void visitContainerInitializer(ContainerInitializer initializer) {
+        boolean doCopy = copyExpressions;
         ConstraintSyntaxTree[] exprs = new ConstraintSyntaxTree[initializer.getExpressionCount()];
         for (int e = 0; e < exprs.length; e++) {
-            initializer.getExpression(e).accept(this);
+            ConstraintSyntaxTree ex = initializer.getExpression(e);
+            ex.accept(this);
+            doCopy |= ex != result;
             exprs[e] = result;
         }
-        try {
-            result = inferDatatype(new ContainerInitializer(initializer.getType(), exprs));
-        } catch (CSTSemanticException e) {
-            getLogger().exception(e);
+        if (doCopy) {
+            try {
+                result = inferDatatype(new ContainerInitializer(initializer.getType(), exprs));
+            } catch (CSTSemanticException e) {
+                getLogger().exception(e);
+            }
+        } else {
+            result = initializer;
         }
     }
 
@@ -261,22 +380,36 @@ public class BasicCopyVisitor implements IConstraintTreeVisitor {
 
     @Override
     public void visitAnnotationVariable(AttributeVariable variable) {
-        variable.getQualifier().accept(this);
+        ConstraintSyntaxTree qu = variable.getQualifier();
+        qu.accept(this);
         ConstraintSyntaxTree qualifier = result;
-        result = new AttributeVariable(qualifier, (Attribute) mapVariable(variable.getVariable()));
+        AbstractVariable var = variable.getVariable();
+        Attribute mVar = (Attribute) mapVariable(var);
+        if (copyExpressions || qu != qualifier || var != mVar) {
+            result = new AttributeVariable(qualifier, mVar);
+        } else {
+            result = variable;
+        }
     }
 
     @Override
     public void visitBlockExpression(BlockExpression block) {
+        boolean doCopy = copyExpressions;
         ConstraintSyntaxTree[] exprs = new ConstraintSyntaxTree[block.getExpressionCount()];
         for (int e = 0, n = block.getExpressionCount(); e < n; e++) {
-            block.getExpression(e).accept(this);
+            ConstraintSyntaxTree ex = block.getExpression(e);
+            ex.accept(this);
+            doCopy |= ex != result;
             exprs[e] = result;
         }
-        try {
-            result = new BlockExpression(exprs);
-        } catch (CSTSemanticException e) {
-            getLogger().exception(e);
+        if (doCopy) {
+            try {
+                result = new BlockExpression(exprs);
+            } catch (CSTSemanticException e) {
+                getLogger().exception(e);
+            }
+        } else {
+            result = block;
         }
     }
     
@@ -285,7 +418,7 @@ public class BasicCopyVisitor implements IConstraintTreeVisitor {
      * 
      * @param cst the constraint expression to perform the validation on
      * @throws CSTSemanticException if validation fails
-     * @return cst
+     * @return <code>cst</code>
      */
     protected ConstraintSyntaxTree inferDatatype(ConstraintSyntaxTree cst) {
         if (doInferDatatype) {

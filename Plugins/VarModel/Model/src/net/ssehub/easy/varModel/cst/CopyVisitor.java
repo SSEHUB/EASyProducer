@@ -20,7 +20,6 @@ import java.util.Map;
 import net.ssehub.easy.basics.modelManagement.IVariable;
 import net.ssehub.easy.basics.modelManagement.IVersionRestriction.IVariableMapper;
 import net.ssehub.easy.varModel.model.AbstractVariable;
-import net.ssehub.easy.varModel.model.Attribute;
 import net.ssehub.easy.varModel.model.DecisionVariableDeclaration;
 
 /**
@@ -97,7 +96,7 @@ public class CopyVisitor extends BasicCopyVisitor {
         if (null != replacer) {
             var = replacer.mapLeaf(variable);
         }
-        if (null == var) {
+        if (null == var) { // getCopyVariables
             var = new Variable(mapVariable(variable.getVariable()));
         }
         setResult(var);
@@ -140,15 +139,13 @@ public class CopyVisitor extends BasicCopyVisitor {
 
     @Override
     public void visitAnnotationVariable(AttributeVariable variable) {
-        variable.getQualifier().accept(this);
-        ConstraintSyntaxTree qualifier = getResult();
-        
         ConstraintSyntaxTree var = null;
         if (null != replacer) {
             var = replacer.mapLeaf(variable);
         }
         if (null == var) {
-            var = new AttributeVariable(qualifier, (Attribute) mapVariable(variable.getVariable()));
+            super.visitAnnotationVariable(variable);
+            var = getResult();
         }
         setResult(var);
     }
