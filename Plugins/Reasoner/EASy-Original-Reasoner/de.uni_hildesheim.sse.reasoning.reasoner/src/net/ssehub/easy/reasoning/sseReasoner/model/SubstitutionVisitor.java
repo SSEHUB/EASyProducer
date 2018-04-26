@@ -62,6 +62,7 @@ public class SubstitutionVisitor extends BasicCopyVisitor {
         // setCopyVariables not needed as overridden anyway
         setDoInferDatatype(false);
         setCopyConstants(false); 
+        setCopyExpressions(false);
         setMappings(globalMapping);
     }  
 
