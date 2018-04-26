@@ -233,6 +233,13 @@ public abstract class EvaluationAccessor {
     }
     
     /**
+     * Clears the bound container elements.
+     */
+    public void clearContainerElements() {
+        nestedElements.clear();
+    }
+    
+    /**
      * Adds <code>element</code> to the bound container elements.
      * 
      * @param element the element to add (may be <b>null</b> for none
