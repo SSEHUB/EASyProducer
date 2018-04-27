@@ -1016,6 +1016,9 @@ public class Configuration implements IConfigurationVisitable, IProjectListener,
         for (int i = 0; i < var.getNestedElementsCount(); i++) {
             printVariable(out, var.getNestedElement(i), indent + " ");
         }
+        for (int a = 0; a < var.getAttributesCount(); a++) {
+            printVariable(out, var.getAttribute(a), indent + " ");
+        }
     }
     
     /**

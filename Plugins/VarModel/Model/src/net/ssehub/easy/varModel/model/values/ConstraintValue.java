@@ -18,6 +18,7 @@ package net.ssehub.easy.varModel.model.values;
 import net.ssehub.easy.varModel.cst.ConstantValue;
 import net.ssehub.easy.varModel.cst.ConstraintSyntaxTree;
 import net.ssehub.easy.varModel.model.datatypes.ConstraintType;
+import net.ssehub.easy.varModel.persistency.StringProvider;
 
 /**
  * This class holds the value for a constraint type.
@@ -126,6 +127,12 @@ public class ConstraintValue extends BasisDatatypeValue {
     @Override
     public int hashCode() {
         return value.hashCode();
+    }
+
+    @Override
+    public String toString() {
+        ConstraintSyntaxTree val = getValue();
+        return (null == val ? null : StringProvider.toIvmlString(val)) + " : " + getType().toString();
     }
 
 }
