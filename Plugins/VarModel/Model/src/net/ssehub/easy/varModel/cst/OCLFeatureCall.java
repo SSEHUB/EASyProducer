@@ -555,7 +555,11 @@ public class OCLFeatureCall extends ConstraintSyntaxTree {
         if (obj instanceof OCLFeatureCall) {
             OCLFeatureCall other = (OCLFeatureCall) obj;
             equals = operation.equals(other.operation);
-            equals &= operand.equals(other.operand);
+            if (null == operand) {
+                equals &= null == other.operand;
+            } else {
+                equals &= null != other.operand && operand.equals(other.operand);
+            }
             // result hashcode/equals unclear
             if (null != opAccessor) {
                 equals &= opAccessor.equals(other.opAccessor);    
@@ -567,7 +571,7 @@ public class OCLFeatureCall extends ConstraintSyntaxTree {
     
     @Override
     public int hashCode() {
-        int hashCode = operand.hashCode();
+        int hashCode = null == operand ? 0 : operand.hashCode();
         hashCode *= Arrays.hashCode(parameters);
         hashCode *= operation.hashCode();
         if (null != opAccessor) {
