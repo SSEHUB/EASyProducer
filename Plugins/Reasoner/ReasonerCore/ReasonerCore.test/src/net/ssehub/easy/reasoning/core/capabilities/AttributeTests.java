@@ -110,7 +110,7 @@ public class AttributeTests extends AbstractTest {
      */
     @Test    
     public void constraintAnnotationTest() {
-        reasoningTest("ConstraintAnnotationTest.ivml", 1); // pathological case
+        reasoningTest("ConstraintAnnotationTest.ivml", 9);
     }    
 
 }

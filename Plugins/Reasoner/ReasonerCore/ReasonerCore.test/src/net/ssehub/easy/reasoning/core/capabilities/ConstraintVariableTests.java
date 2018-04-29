@@ -210,7 +210,7 @@ public class ConstraintVariableTests extends AbstractTest {
     @Test
     public void changingConstraintsTest() throws IOException {
         // basis shall be failing with four tests
-       // reasoningTest("changingConstraints/changingConstraintsBase.ivml", 4);
+        reasoningTest("changingConstraints/changingConstraintsBase.ivml", 4);
         // importing model changes constraints, shall not fail then 
         Project prj = loadCompleteProject("changingConstraints", "changingConstraints");
         resultHandler(0, 0, prj);
