@@ -168,17 +168,22 @@ public class Resolver {
                         + " Parent: " + (null == variable.getParent() ? null : variable.getParent()));                 
                 }
                 scopeAssignments.addAssignedVariable(variable);
-                if (!Value.equals(variable.getValue(), oldValue)) {
+                Value newValue = variable.getValue();
+                if (!Value.equals(newValue, oldValue)) {
                     rescheduleConstraintValue(variable, variable, true);
                     rescheduleCompoundValue(variable, oldValue);
                     rescheduleContainerValue(variable, oldValue);
                 }
-                Value newValue = variable.getValue();
                 if (newValue instanceof ContainerValue) {
                     createContainerConstraintValueConstraints((ContainerValue) newValue, 
                         createParentExpression(variable), null, variable.getDeclaration().getParent(), variable);
                 }
                 // TODO if value type changes (currently not part of the notification)
+                /*if ((null == oldValue && null != newValue) 
+                    || !TypeQueries.sameTypes(oldValue.getType(), newValue.getType())) {
+                    obtainConstraints(variable, true);
+                    translateDeclaration(variable.getDeclaration(), variable, null); // null as access is unclear
+                }*/
                 rescheduleConstraintsForChilds(variable);
                 // All constraints for the parent (as this was also changed)
                 rescheduleConstraintsForParent(variable);
@@ -209,7 +214,13 @@ public class Resolver {
                 }
             }
         }
-        
+
+        /**
+         * Reschedule constraints in container values.
+         * 
+         * @param variable the variable to analyze
+         * @param oldValue the old value to compare for changes
+         */
         private void rescheduleContainerValue(IDecisionVariable variable, Value oldValue) {
             Value newValue = variable.getValue();
             if (newValue instanceof ContainerValue && oldValue instanceof ContainerValue) {
@@ -228,6 +239,33 @@ public class Resolver {
                 }
             }
         }
+        
+        /**
+         * Obtains and if specified clears old constraints in the internal reasoner data structures.
+         * 
+         * @param variable the variable to return the constraints for
+         * @param clear {@code true} for clear variables, {@code false} for leave them as they are
+         * @return the constraints stored for {@code variable}, may be <b>null</b>
+         */
+        private List<Constraint> obtainConstraints(IDecisionVariable variable, boolean clear) {
+            IConfigurationElement iter = variable;
+            List<Constraint> constraints;
+            do { // use holder or iterate in case of container element variable
+                constraints = iter instanceof IDecisionVariable 
+                    ? variableConstraintsMap.get((IDecisionVariable) iter) : null;                        
+                iter = iter.getParent();
+            } while (null == constraints && null != iter);
+            if (clear && null != constraints) {
+                constraintBase.removeAll(constraints);
+                failedElements.removeProblemConstraints(constraints);
+                // clear dependent
+                simpleAssignmentFinder.acceptAndClear(constraints, config, false);
+                // clear this variable (if not already cleared)
+                constraintMap.removeAll(variable, constraints);
+                constraints.clear();
+            }
+            return constraints;
+        }
 
         /**
          * Reschedule a single constraint value.
@@ -237,19 +275,7 @@ public class Resolver {
          */
         private void rescheduleConstraintValue(IDecisionVariable holder, IDecisionVariable variable, boolean clear) {
             if (TypeQueries.isConstraint(variable.getDeclaration().getType())) {
-                IConfigurationElement hIter = holder;
-                List<Constraint> constraints;
-                do { // use holder or iterate in case of container element variable
-                    constraints = hIter instanceof IDecisionVariable 
-                        ? variableConstraintsMap.get((IDecisionVariable) hIter) : null;                        
-                    hIter = hIter.getParent();
-                } while (null == constraints && null != hIter);
-                if (clear && null != constraints) {
-                    constraintBase.removeAll(constraints);
-                    failedElements.removeProblemConstraints(constraints);
-                    constraintMap.removeAll(variable, constraints);
-                    constraints.clear();
-                }
+                List<Constraint> constraints = obtainConstraints(holder, clear);
                 Value newValue = variable.getValue();
                 ConstraintSyntaxTree cst = getConstraintValueConstraintExpression(newValue);
                 if (null != cst) {
@@ -460,9 +486,6 @@ public class Resolver {
      * @see #resolve()
      */
     private void evaluateConstraints(Project project) {
-        if (Descriptor.LOGGING) {
-            printConstraints(constraintBase);            
-        }
         scopeAssignments.clearScopeAssignments();
         evaluator.setDispatchScope(project);
         while (!constraintBase.isEmpty() && !wasStopped) { // reasoner.tex -> hasTimeout see end of loop
@@ -686,28 +709,27 @@ public class Resolver {
                     variablesCounter--;
                     // use closest parent instead of project -> runtime analysis
                     createConstraintVariableConstraint(defaultValue, selfEx, self, decl, var);
-                } else { // Create default constraint
-                    ConstraintSyntaxTree acc;
-                    if (decl instanceof Attribute) {
-                        Attribute attribute = (Attribute) decl;
-                        if (cAcc == null) {
-                            acc = new Variable(attribute); // shall not occur
-                        } else if (cAcc instanceof AttributeVariable) { // do not double qualify
-                            acc = cAcc;
-                        } else {
-                            acc = new AttributeVariable(cAcc, attribute);
-                        }
+                } 
+                ConstraintSyntaxTree acc;
+                if (decl instanceof Attribute) {
+                    Attribute attribute = (Attribute) decl;
+                    if (cAcc == null) {
+                        acc = new Variable(attribute); // shall not occur
+                    } else if (cAcc instanceof AttributeVariable) { // do not double qualify
+                        acc = cAcc;
                     } else {
-                        acc = null != selfEx ? cAcc : new Variable(decl);
+                        acc = new AttributeVariable(cAcc, attribute);
                     }
-                    defaultValue = new OCLFeatureCall(acc, OclKeyWords.ASSIGNMENT, defaultValue);
-                    defaultValue = substituteVariables(defaultValue, selfEx, self);
-                    Deque<Constraint> targetCons = defaultConstraints; 
-                    if (substVisitor.containsSelf() || isOverriddenSlot(decl)) {
-                        targetCons = deferredDefaultConstraints;
-                    }
-                    addConstraint(targetCons, new DefaultConstraint(defaultValue, project), true, var);
+                } else {
+                    acc = null != selfEx ? cAcc : new Variable(decl);
                 }
+                defaultValue = new OCLFeatureCall(acc, OclKeyWords.ASSIGNMENT, defaultValue);
+                defaultValue = substituteVariables(defaultValue, selfEx, self);
+                Deque<Constraint> targetCons = defaultConstraints; 
+                if (substVisitor.containsSelf() || isOverriddenSlot(decl)) {
+                    targetCons = deferredDefaultConstraints;
+                }
+                addConstraint(targetCons, new DefaultConstraint(defaultValue, project), true, var);
                 substVisitor.clear(); // clear false above 
             } catch (CSTSemanticException e) {
                 LOGGER.exception(e); // should not occur, ok to log
@@ -798,7 +820,7 @@ public class Resolver {
             
             contexts.pushContext(null, containerOp, localDecl, true);
             registerCompoundMapping(type, localVar, declVar, type);
-            translateCompoundContent(localDecl, null, type, cAcc);
+            translateCompoundContent(localDecl, null, type, localVar); // TODO self!!! localVar
             contexts.popContext();
         }
     }
@@ -895,7 +917,7 @@ public class Resolver {
         }
         final AbstractVariable self = null == cAcc ? decl : null;
         processCompoundEvals(type, cAcc, self);
-        otherConstraintsProc.setParameter(cAcc, self, variable);
+        otherConstraintsProc.setParameter(cAcc, self, variable); // TODO self!!!
         allCompoundConstraints(type, otherConstraintsProc, false, false, decl);
         otherConstraintsProc.clear();
     }
@@ -1172,7 +1194,7 @@ public class Resolver {
             } else {
                 target.addLast(constraint);
             }
-            simpleAssignmentFinder.acceptAndClear(constraint);
+            simpleAssignmentFinder.acceptAndClear(constraint, config);
         }
     }
 

@@ -2,6 +2,8 @@ package net.ssehub.easy.reasoning.sseReasoner.model;
 
 import net.ssehub.easy.basics.logger.EASyLoggerFactory;
 import net.ssehub.easy.reasoning.sseReasoner.Descriptor;
+import net.ssehub.easy.varModel.confModel.Configuration;
+import net.ssehub.easy.varModel.confModel.IDecisionVariable;
 import net.ssehub.easy.varModel.cst.AttributeVariable;
 import net.ssehub.easy.varModel.cst.BlockExpression;
 import net.ssehub.easy.varModel.cst.CSTSemanticException;
@@ -21,9 +23,11 @@ import net.ssehub.easy.varModel.cst.Parenthesis;
 import net.ssehub.easy.varModel.cst.Self;
 import net.ssehub.easy.varModel.cst.UnresolvedExpression;
 import net.ssehub.easy.varModel.cst.Variable;
+import net.ssehub.easy.varModel.cstEvaluation.EvaluationVisitor;
 import net.ssehub.easy.varModel.model.AbstractVariable;
 import net.ssehub.easy.varModel.model.Constraint;
 import net.ssehub.easy.varModel.model.datatypes.OclKeyWords;
+import net.ssehub.easy.varModel.model.datatypes.TypeQueries;
 import net.ssehub.easy.varModel.model.values.ReferenceValue;
 import net.ssehub.easy.varModel.model.values.Value;
 
@@ -34,8 +38,9 @@ import net.ssehub.easy.varModel.model.values.Value;
 public class VariablesInNotSimpleAssignmentConstraintsFinder implements IConstraintTreeVisitor {
 
     private VariablesMap constraintMap;
-    private boolean isSimpleAssignment;
     private Constraint constraint;
+    private boolean add = true;
+    private EvaluationVisitor evaluator;
     
     /**
      * Creates a visitor instance.
@@ -44,30 +49,59 @@ public class VariablesInNotSimpleAssignmentConstraintsFinder implements IConstra
      */
     public VariablesInNotSimpleAssignmentConstraintsFinder(VariablesMap constraintMap) {
         this.constraintMap = constraintMap;
-        isSimpleAssignment = false;
+        evaluator = new EvaluationVisitor();
     }
 
     /**
      * Accepts and visits a constraint.
      * 
      * @param constraint the constraint to accept
+     * @param config the configuration used to resolve expressions
      */
-    public void accept(Constraint constraint) {
+    public void accept(Constraint constraint, Configuration config) {
         this.constraint = constraint;
+        evaluator.init(config, null, false, null);
         constraint.getConsSyntax().accept(this);
     }
-    
+
     /**
      * Combines {@link #accept(Constraint)} and {@link #clear()}.
      * 
      * @param constraint the constraint to accept
-     * @return the result of {@link #isSimpleAssignment()} before {@link #clear()}
+     * @param config the configuration used to resolve expressions
      */
-    public boolean acceptAndClear(Constraint constraint) {
-        accept(constraint);
-        boolean result = isSimpleAssignment;
+    public void acceptAndClear(Constraint constraint, Configuration config) {
+        acceptAndClear(constraint, config, true);
+    }
+
+    /**
+     * Combines {@link #accept(Constraint)} and {@link #clear()}.
+     * 
+     * @param constraint the constraint to accept
+     * @param config the configuration used to resolve expressions
+     * @param add add {@code true} or remove {@code false}
+     */
+    public void acceptAndClear(Constraint constraint, Configuration config, boolean add) {
+        this.add = add;
+        accept(constraint, config);
         clear();
-        return result;
+    }
+
+    /**
+     * Combines {@link #accept(Constraint)} and {@link #clear()} for an iterable of constraints.
+     * 
+     * @param constraints the constraints to accept
+     * @param config the configuration used to resolve expressions
+     * @param add add {@code true} or remove {@code false}
+     */
+    public void acceptAndClear(Iterable<Constraint> constraints, Configuration config, boolean add) {
+        this.add = add;
+        evaluator.init(config, null, false, null);
+        for (Constraint c : constraints) {
+            this.constraint = c;
+            c.getConsSyntax().accept(this);
+        }
+        clear();
     }
     
     /**
@@ -75,15 +109,18 @@ public class VariablesInNotSimpleAssignmentConstraintsFinder implements IConstra
      */
     public void clear() {
         constraint = null;
-        isSimpleAssignment = false;
+        add = true;
+        evaluator.clear();
     }
     
     /**
-     * Method for analyzing if constraint is valid for reevaluation (is not a simple asignment).
-     * @return true if valid.
+     * Turns this finder into remove mode.
+     * 
+     * @return <b>this</b>
      */
-    public boolean isSimpleAssignment() {
-        return isSimpleAssignment;
+    public VariablesInNotSimpleAssignmentConstraintsFinder forRemove() {
+        add = false;
+        return this;
     }
 
     @Override
@@ -91,16 +128,29 @@ public class VariablesInNotSimpleAssignmentConstraintsFinder implements IConstra
         Value constValue = value.getConstantValue();
         if (null != constValue && constValue instanceof ReferenceValue) {
             ReferenceValue rValue = (ReferenceValue) constValue;
-            AbstractVariable referencedDecl = rValue.getValue();
-            if (null != referencedDecl) {
-                constraintMap.add(referencedDecl, constraint);
-            }
+            modifyRelation(rValue.getValue(), constraint);
         }
     }
 
     @Override
     public void visitVariable(Variable variable) {
-        constraintMap.add(variable.getVariable(), constraint);
+        modifyRelation(variable.getVariable(), constraint);
+    }
+
+    /**
+     * Modifies the relationship between {@code variable} and {@code constraint} due to {@link #add}.
+     * 
+     * @param variable the variable
+     * @param constraint the constraint
+     */
+    private void modifyRelation(AbstractVariable variable, Constraint constraint) {
+        if (null != variable) {
+            if (add) {
+                constraintMap.add(variable, constraint);
+            } else {
+                constraintMap.remove(variable, constraint);
+            }
+        }
     }
     
     @Override
@@ -121,21 +171,44 @@ public class VariablesInNotSimpleAssignmentConstraintsFinder implements IConstra
         comment.getExpr().accept(this);
     }
 
+    /**
+     * Returns whether the type of {@code cst} is a constraint type.
+     * 
+     * @param cst the constraint syntax tree to look for
+     * @return {@code true} for constraint type, {@code false} else
+     */
+    private boolean isConstraint(ConstraintSyntaxTree cst) {
+        boolean result;
+        try {
+            result = TypeQueries.isConstraint(cst.inferDatatype());
+        } catch (CSTSemanticException e) {
+            result = false; // shall not occur
+        }
+        return result;
+    }
+
     @Override
     public void visitOclFeatureCall(OCLFeatureCall call) {
         if (null != call.getOperand()) {    
             // user def function returns operand null!
-            if ((call.getOperand() instanceof Variable
-                || call.getOperand() instanceof CompoundAccess)
-                && call.getParameterCount() == 1
-                && call.getOperation().equals(OclKeyWords.ASSIGNMENT)) {
-                if (call.getParameter(0) instanceof ConstantValue
-                    || call.getParameter(0) instanceof ContainerInitializer
-                    || call.getParameter(0) instanceof CompoundInitializer) {
-                    isSimpleAssignment = true; 
+            boolean analyze = true;
+            if (call.getParameterCount() == 1 && call.getOperation().equals(OclKeyWords.ASSIGNMENT)) {
+                ConstraintSyntaxTree operand = call.getOperand();
+                if (operand instanceof Variable || operand instanceof CompoundAccess) {
+                    ConstraintSyntaxTree param0 = call.getParameter(0);
+                    if (param0 instanceof ConstantValue
+                        || param0 instanceof ContainerInitializer
+                        || param0 instanceof CompoundInitializer) {
+                        analyze = false; 
+                    } else if (isConstraint(operand)) {
+                        // we treat constraints on the right hand side as values here
+                        // constraint values will be turned into constraints if assigned to variable
+                        // then isSimpleAssignment may apply
+                        analyze = false; 
+                    }
                 }
             }
-            if (!isSimpleAssignment) {
+            if (analyze) {
                 call.getOperand().accept(this);
                 for (int i = 0; i < call.getParameterCount(); i++) {
                     call.getParameter(i).accept(this);
@@ -174,11 +247,16 @@ public class VariablesInNotSimpleAssignmentConstraintsFinder implements IConstra
         access.getCompoundExpression().accept(this);  
         try {
             access.inferDatatype();
-            constraintMap.add(access.getResolvedSlot(), constraint);
         } catch (CSTSemanticException e) {
             EASyLoggerFactory.INSTANCE.getLogger(getClass(), Descriptor.BUNDLE_NAME).exception(e);
         }
-        
+        access.accept(evaluator);
+        IDecisionVariable var = evaluator.getResultVariable();
+        if (null != var) {
+            modifyRelation(var.getDeclaration(), constraint);
+        }
+        evaluator.clearResult();
+
     }
 
     @Override

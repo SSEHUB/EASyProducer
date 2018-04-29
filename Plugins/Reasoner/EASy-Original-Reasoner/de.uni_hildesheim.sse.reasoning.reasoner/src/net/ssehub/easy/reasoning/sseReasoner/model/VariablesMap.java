@@ -28,12 +28,26 @@ public class VariablesMap {
     }
     
     /**
-     * Method for adding a relationship between variable and constraint.
+     * Adds a relationship between variable and constraint.
+     * 
      * @param declaration {@link AbstractVariable} to be added.
-     * @param constraint {@link Constraint} that holds added {@link AbstractVariable}.
+     * @param constraint {@link Constraint} that holds added {@code declaration}.
      */
     public void add(AbstractVariable declaration, Constraint constraint) {
         getConstraintSet(declaration).add(constraint); 
+    }
+
+    /**
+     * Removes a relationship between variable and constraint.
+     * 
+     * @param declaration {@link AbstractVariable} to be removed.
+     * @param constraint {@link Constraint} that holds added {@code declaration}.
+     */
+    public void remove(AbstractVariable declaration, Constraint constraint) {
+        Set<Constraint> relevantConstraints = declConstraintMapping.get(declaration);
+        if (relevantConstraints != null) {
+            relevantConstraints.remove(constraint);
+        }
     }
     
     /**

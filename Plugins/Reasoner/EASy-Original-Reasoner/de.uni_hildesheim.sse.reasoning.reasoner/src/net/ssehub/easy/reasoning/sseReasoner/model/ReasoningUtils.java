@@ -265,15 +265,24 @@ public class ReasoningUtils {
     }
 
     /**
-     * Method for printing constraints that are taken into account for reasoning.
-     * @param constraints Constraints from the project. 
+     * Prints a constraints collection, each constraint including top-levle parent and system identity 
+     * hashcodes [DEBUGGING].
+     * 
+     * @param text text to be printed before (may be <b>null</b>, ignored then)
+     * @param constraints the constraints to be printed
      */
-    public static void printConstraints(Iterable<Constraint> constraints) {
-        LOGGER.debug("-------------------");
-        LOGGER.debug("--Constraints:");
+    public static void printConstraints(String text, Iterable<Constraint> constraints) {
+        if (null != text) {
+            System.out.println("> " + text);
+        }
+        int count = 0;
         for (Constraint c : constraints) {
-            LOGGER.debug(StringProvider.toIvmlString(c.getConsSyntax()) + " : " + c.getTopLevelParent());
+            System.out.println((count++) + " " + StringProvider.toIvmlString(c.getConsSyntax()) + " : " 
+                + c.getTopLevelParent() + " : " + System.identityHashCode(c));
         }        
+        if (null != text) {
+            System.out.println("< " + text);
+        }
     }
     
     /**
@@ -519,21 +528,6 @@ public class ReasoningUtils {
             System.out.println("  MSG: " + evaluator.getMessage(m).getDescription());
         }
     }
-    
-    /**
-     * Prints a constraints collection, each constraint incuding system identity hashcodes [DEBUGGING].
-     * 
-     * @param text text to be printed before
-     * @param coll the constraints to be printed
-     */
-    public static void printConstraints(String text, Collection<Constraint> coll) {
-        System.out.println(text);
-        int count = 0;
-        for (Constraint c : coll) {
-            System.out.println(count + " : " + System.identityHashCode(c) + " " + c);
-        }
-    }
-
     
     /**
      * Returns the expression for a constraint to be created for a constraint variable.
