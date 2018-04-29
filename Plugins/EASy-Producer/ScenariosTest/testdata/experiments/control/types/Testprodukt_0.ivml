@@ -1,0 +1,40 @@
+project Testprodukt {
+
+    version v0;
+    compound ActivityGraph {
+        setOf(Activity) activities;
+        setOf(Dependency) dependencies;
+        setOf(Object) objects;
+    }
+
+    abstract compound Activity {
+    }
+
+    abstract compound Object {
+        refTo(Dependency) position;
+    }
+
+    compound Dependency {
+        refTo(Activity) source;
+        refTo(Activity) target;
+    }
+
+    compound ReadSheets refines Activity {
+    }
+
+    compound Sheet refines Object {
+    }
+
+    compound Document refines Object {
+    }
+
+    compound WriteSheets refines Activity {
+    }
+
+    ReadSheets readSheets = {};
+    WriteSheets writeSheets = {};
+    Document document = {position = dep};
+    Dependency dep = {source = readSheets, target = writeSheets};
+    ActivityGraph actGraph = {activities = {readSheets, writeSheets}, objects = {document}, dependencies = {dep}};
+    actGraph.objects->forAll(Object o|isTypeOf(o.position.source, refTo(ReadSheets)) implies isTypeOf(o, Sheet));
+}

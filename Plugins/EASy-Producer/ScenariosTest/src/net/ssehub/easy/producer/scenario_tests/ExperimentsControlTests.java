@@ -337,6 +337,20 @@ public class ExperimentsControlTests extends AbstractTest {
             found |= v.getDeclaration().getName().equals("dependenciesAntisymmetry");
         }
         Assert.assertTrue("Constraint dependenciesAntisymmetry shall fail", found);
-    }    
+    }
+    
+    /**
+     * Tests a quantified type expression (contributed by M. Keunecke, J. Hagedorn).
+     * 
+     * @throws IOException shall not occur
+     */
+    @Test
+    public void typeTest() throws IOException {
+        Configuration config = createAndAssertEqual("types/Testprodukt_0");
+        ReasonerConfiguration rConfig = new ReasonerConfiguration();
+        ReasoningResult res = ReasonerFrontend.getInstance().propagate(config.getProject(), config, rConfig, 
+            ProgressObserver.NO_OBSERVER);
+        Assert.assertTrue("there should be reasoning conflicts", res.hasConflict());
+    }
     
 }
