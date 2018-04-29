@@ -834,24 +834,31 @@ public class EvaluationVisitor implements IConstraintTreeVisitor {
         if (args.length == operation.getParameterCount()) {
             LocalConfiguration cfg = new LocalConfiguration();
             context.pushLevel(cfg);
-            for (int a = 0; a < args.length; a++) {
-                LocalDecisionVariable argument = new LocalDecisionVariable(operation.getParameterDeclaration(a), 
-                    context, args[a].getVariable());
-                try {
-                    argument.setValue(args[a].getValue(), AssignmentState.ASSIGNED);
-                } catch (ConfigurationException e) {
-                    exception(e);
-                }
-                cfg.addDecision(argument);
-            }
-            if (!operation.isStatic()) {
-                CustomOperation dyn = dynamicDispatch(operation, args);
-                if (dyn != operation) { // no equals defined
-                    cfg.rebind(operation, dyn);
-                    operation = dyn;
+            boolean allOk = true;
+            for (int a = 0; allOk && a < args.length; a++) {
+                if (args[a] != null) { // may occur in temporary compound accessor evaluations, not detected before
+                    LocalDecisionVariable argument = new LocalDecisionVariable(operation.getParameterDeclaration(a), 
+                        context, args[a].getVariable());
+                    try {
+                        argument.setValue(args[a].getValue(), AssignmentState.ASSIGNED);
+                    } catch (ConfigurationException e) {
+                        exception(e);
+                    }
+                    cfg.addDecision(argument);
+                } else {
+                    allOk = false;
                 }
             }
-            operation.getFunction().accept(this);
+            if (allOk) {
+                if (!operation.isStatic()) {
+                    CustomOperation dyn = dynamicDispatch(operation, args);
+                    if (dyn != operation) { // no equals defined
+                        cfg.rebind(operation, dyn);
+                        operation = dyn;
+                    }
+                }
+                operation.getFunction().accept(this);
+            }
             context.popLevel();
         } else {
             error("argument and operation count do not match");

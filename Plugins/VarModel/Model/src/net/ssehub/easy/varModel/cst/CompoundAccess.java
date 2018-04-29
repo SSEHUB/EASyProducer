@@ -23,6 +23,7 @@ import net.ssehub.easy.varModel.model.datatypes.MetaType;
 import net.ssehub.easy.varModel.model.datatypes.TypeQueries;
 import net.ssehub.easy.varModel.model.values.MetaTypeValue;
 import net.ssehub.easy.varModel.model.values.Value;
+import net.ssehub.easy.varModel.persistency.StringProvider;
 
 /**
  * Represents an expression which accesses a compound slot where
@@ -112,8 +113,12 @@ public class CompoundAccess extends ConstraintSyntaxTree {
                         CSTSemanticException.UNKNOWN_ELEMENT);
                 }
             } else {
-                throw new CSTSemanticException("expression does not evaluate to a compound", 
-                    CSTSemanticException.TYPE_MISMATCH);
+                String ex = null;
+                if (null != compoundExpression) {
+                    ex = StringProvider.toIvmlString(compoundExpression);
+                }
+                throw new CSTSemanticException("expression '" + ex + "' in '" + ex + "." + slotName 
+                    + "' does not evaluate to a compound", CSTSemanticException.TYPE_MISMATCH);
             }
         } 
         if (null != slot) {
