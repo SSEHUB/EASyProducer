@@ -31,7 +31,8 @@ public enum IvmlReasonerCapabilities implements IReasonerCapability {
     NULL_VALUE,
 
     /**
-     * Whether the reasoner works with top-level quantified compound access.
+     * Whether the reasoner works with top-level quantified compound access, i.e., turns expressions like
+     * <code>Cmp.i...</code> for compound type <code>Cmp</code> into <code>allInstances(Cmp)->forAll(c|c.i...)</code>.
      */
     QUALIFIED_COMPOUND_ACCESS,
     
