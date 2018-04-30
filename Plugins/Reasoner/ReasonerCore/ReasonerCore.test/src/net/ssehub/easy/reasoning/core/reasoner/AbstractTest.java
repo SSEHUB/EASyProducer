@@ -244,7 +244,7 @@ public abstract class AbstractTest extends net.ssehub.easy.dslCore.test.Abstract
             StringBuffer errorMsg = new StringBuffer();
             for (int i = 0; i < result.getMessageCount(); i++) {
                 Message msg = result.getMessage(i);
-                if (!msg.ignore()) {
+                if (!msg.ignore() && Status.ERROR == msg.getStatus()) {
                     errorMsg.append(msg.getDescription());
                     errorMsg.append("\n");
                 }
