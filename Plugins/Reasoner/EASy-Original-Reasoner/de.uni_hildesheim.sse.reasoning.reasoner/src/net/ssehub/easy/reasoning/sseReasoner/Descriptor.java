@@ -224,7 +224,7 @@ public class Descriptor extends ReasonerDescriptor {
         addCapability(IvmlReasonerCapabilities.USER_DEF_FUNCTIONS);
         addCapability(IvmlReasonerCapabilities.ATTRIBUTES);
         addCapability(IvmlReasonerCapabilities.EVAL);
-        addCapability(IvmlReasonerCapabilities.QUALIFIED_COMPOUND_ACCESS);
+        addCapability(IvmlReasonerCapabilities.QUALIFIED_COMPOUND_ACCESS); // Cmp.x is rewritten by EvaluationVisitor
         addCapability(GeneralReasonerCapabilities.INCREMENTAL_REASONING);
         addCapability(GeneralReasonerCapabilities.RUNTIME_REASONING);
         addCapability(GeneralReasonerCapabilities.TIMEOUT);
