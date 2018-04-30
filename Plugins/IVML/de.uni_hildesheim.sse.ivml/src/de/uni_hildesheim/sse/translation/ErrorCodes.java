@@ -53,6 +53,16 @@ public class ErrorCodes extends net.ssehub.easy.dslCore.translation.ErrorCodes {
     public static final int CONSTANT = 20213;
     
     /**
+     * In case of refBy problems.
+     */
+    public static final int REF_BY = 20214;
+
+    /**
+     * In case of undesired explicit type qualifications.
+     */
+    public static final int TYPE_QUALIFICATION = 20215;
+    
+    /**
      * Prevents creating instances of this class.
      */
     private ErrorCodes() {

@@ -141,10 +141,12 @@ public abstract class AbstractTest extends net.ssehub.easy.dslCore.test.Abstract
      * @return the loaded projects
      * @throws IOException
      *             problems finding or reading the model file
+     *             
+     * @see #checkErrorCodes(TranslationResult, List, int...)
+     * @see #checkWarningCodes(TranslationResult)
      */
     protected List<Project> assertEqual(File file, String expectedName,
-        String expectedVersion, int... expectedErrorCodes)
-        throws IOException {
+        String expectedVersion, int... expectedErrorCodes) throws IOException {
 
         List<Project> loaded = null;
         if (file.exists()) {
@@ -153,6 +155,7 @@ public abstract class AbstractTest extends net.ssehub.easy.dslCore.test.Abstract
             // parse the model
             TranslationResult<Project> result = ModelUtility.INSTANCE.parse(uri);
             String errorCodesMsg = checkErrorCodes(result, null, expectedErrorCodes);
+            checkWarningCodes(result);
             Assert.assertNull(errorCodesMsg, errorCodesMsg);
 
             if (0 == result.getErrorCount()) {
@@ -196,6 +199,14 @@ public abstract class AbstractTest extends net.ssehub.easy.dslCore.test.Abstract
             }
         }
         return loaded;
+    }
+
+    /**
+     * Optional extension to check for warning codes.
+     * 
+     * @param result the translation result
+     */
+    protected void checkWarningCodes(TranslationResult<Project> result) {
     }
     
     /**

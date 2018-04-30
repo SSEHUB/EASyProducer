@@ -47,7 +47,6 @@ import de.uni_hildesheim.sse.ivml.Value;
 import net.ssehub.easy.basics.logger.EASyLoggerFactory;
 import net.ssehub.easy.basics.logger.EASyLoggerFactory.EASyLogger;
 import net.ssehub.easy.basics.messages.IIdentifiable;
-import net.ssehub.easy.dslCore.translation.Message;
 import net.ssehub.easy.dslCore.translation.TranslatorException;
 import net.ssehub.easy.varModel.capabilities.DefaultReasonerAccess;
 import net.ssehub.easy.varModel.capabilities.IvmlReasonerCapabilities;
@@ -94,6 +93,7 @@ import net.ssehub.easy.varModel.model.datatypes.Set;
 import net.ssehub.easy.varModel.model.datatypes.TypeQueries;
 import net.ssehub.easy.varModel.model.values.CompoundValue;
 import net.ssehub.easy.varModel.model.values.ConstraintValue;
+import net.ssehub.easy.varModel.model.values.MetaTypeValue;
 import net.ssehub.easy.varModel.model.values.ValueDoesNotMatchTypeException;
 import net.ssehub.easy.varModel.model.values.ValueFactory;
 import net.ssehub.easy.varModel.persistency.AbstractVarModelWriter;
@@ -342,6 +342,7 @@ public class ExpressionTranslator extends net.ssehub.easy.dslCore.translation.Ex
         throws TranslatorException {
         ConstraintSyntaxTree result = processLogicalExpression(expr.getLeft(), context, parent);
         if (null != expr.getRight()) {
+            IDatatype lhsType = inferDatatypeQuietly(result);
             level++;
             for (AssignmentExpressionPart part : expr.getRight()) {
                 ConstraintSyntaxTree rhs = null;
@@ -356,10 +357,32 @@ public class ExpressionTranslator extends net.ssehub.easy.dslCore.translation.Ex
                     }
                 }
                 if (null != rhs) {
+                    IDatatype rhsType = inferDatatypeQuietly(rhs);
+                    if (TypeQueries.isReference(lhsType) && !TypeQueries.isReference(rhsType)) {
+                        warning("Implicit refBy through assignment is discouraged.", part.getEx(), 
+                            IvmlPackage.Literals.ASSIGNMENT_EXPRESSION_PART__EX, ErrorCodes.REF_BY); 
+                    }
                     result = new OCLFeatureCall(result, part.getOp(), context.getProject(), rhs);
                 }
             }
             level--;
+        }
+        return result;
+    }
+
+    /**
+     * Infers the datatype of <code>cst</code>.
+     * 
+     * @param cst the constraint syntax tree
+     * @return the inferred datatype or <b>null</b> in case of failures
+     */
+    private IDatatype inferDatatypeQuietly(ConstraintSyntaxTree cst) {
+        IDatatype result;
+        try {
+            result = cst.inferDatatype();
+        } catch (CSTSemanticException e) {
+            // do not turn into a TranslatorException as this may shadow the real errors
+            result = null;
         }
         return result;
     }
@@ -1424,9 +1447,16 @@ public class ExpressionTranslator extends net.ssehub.easy.dslCore.translation.Ex
                 IDatatype lhsType = lhs.inferDatatype();
                 if (!DefaultReasonerAccess.hasCapability(IvmlReasonerCapabilities.QUALIFIED_COMPOUND_ACCESS) 
                     && MetaType.TYPE.isAssignableFrom(lhsType)) {
-                    warning("Qualified compound type '" + lhsType.getName() 
+                    IDatatype msgLhsType = lhsType;
+                    if (lhs instanceof ConstantValue) {
+                        net.ssehub.easy.varModel.model.values.Value val = ((ConstantValue) lhs).getConstantValue();
+                        if (val instanceof MetaTypeValue) {
+                            msgLhsType = ((MetaTypeValue) val).getValue();
+                        }
+                    }
+                    warning("Qualified compound type '" + IvmlDatatypeVisitor.getUnqualifiedType(msgLhsType) 
                         + "' outside a compound is currently not supported in reasoning.", access, 
-                        IvmlPackage.Literals.EXPRESSION_ACCESS__NAME, Message.CODE_IGNORE);
+                        IvmlPackage.Literals.EXPRESSION_ACCESS__NAME, ErrorCodes.TYPE_QUALIFICATION);
                 }
             } else if (Enum.TYPE.isAssignableFrom(type) && hasLiteral((Enum) type, name)) {
                 result = new ConstantValue(ValueFactory.createValue(type, name));

@@ -13,8 +13,8 @@ import test.de.uni_hildesheim.sse.cycletest.CyclingImportsTest;
  */
 @RunWith(Suite.class)
 @SuiteClasses({BasicTests.class, SignatureTests.class, AdvancedTests.class, VarModelTests.class, 
-    LanguageSpecTests.class, AdditionalTests.class, ExternalTests.class, 
-    HierarchicalTests.class, ImportTest.class, CyclingImportsTest.class })
+    LanguageSpecTests.class, AdditionalTests.class, ExternalTests.class, HierarchicalTests.class, 
+    ImportTest.class, CyclingImportsTest.class, WarningTests.class })
 public class AllTests {
 
 }
