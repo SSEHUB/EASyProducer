@@ -4,10 +4,16 @@ project changingConstraintsBase {
 	
 	Integer value = 25;
 	Constraint valueConstraint = value < 20;
+	Constraint valueNConstraint = value < 20;
+    Constraint valueTConstraint = value < 20;
+    Constraint valueN2Constraint = null;
 	
 	compound MyCmp {
 	    Integer value2 = 30;
 		Constraint value2Constraint = value2 < 21;
+        Constraint value2NConstraint = value2 < 21;
+        Constraint value2TConstraint = value2 < 21;
+        Constraint value2N2Constraint = null;
 	}
 	
 	MyCmp cmp = MyCmp{};

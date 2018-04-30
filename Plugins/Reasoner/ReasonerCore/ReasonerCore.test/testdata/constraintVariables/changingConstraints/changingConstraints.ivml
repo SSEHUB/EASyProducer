@@ -5,7 +5,13 @@ project changingConstraints {
 	import changingConstraintsBase;
 
 	valueConstraint = value < 30;
+    valueNConstraint = null;
+    valueTConstraint = true;
+    valueN2Constraint = value < 30;
 	cmp.value2Constraint = cmp.value2 < 40;
+    cmp.value2NConstraint = null;
+    cmp.value2TConstraint = null;
+    cmp.value2N2Constraint = cmp.value2 < 40;
 	cmpConstraints = {cmp.value2 < 50};
 	cmpConstraints2[0] = cmp.value2 > 0;
 	
