@@ -35,6 +35,37 @@ public class Constraint extends ContainableModelElement implements IPartialEvalu
     private ConstraintSyntaxTree consSyntax;
 
     /**
+     * Base type for (extensible) constraint types.
+     * 
+     * @author Holger Eichelberger
+     */
+    public interface IConstraintType {
+    }
+    
+    /**
+     * The conceptual type of the constraint.
+     * 
+     * @author Holger Eichelberger
+     */
+    public enum Type implements IConstraintType {
+        
+        /**
+         * The usual constraint as used in IVML models.
+         */
+        USUAL,
+        
+        /**
+         * Reasoner-created constraint for default values.
+         */
+        DEFAULT,
+        
+        /**
+         * Reasoner-created constraint for constraint variables/values.
+         */
+        CONSTRAINT
+    }
+    
+    /**
      * Constructor for a new Constraint.
      * 
      * @param parent the object, in which this specific one is embedded
@@ -175,15 +206,12 @@ public class Constraint extends ContainableModelElement implements IPartialEvalu
     }
     
     /**
-     * Returns whether this constraint is a default constraint. Default constraints may be
-     * created during reasoning in order to represent a default value assignment in terms
-     * of a constraint. IVML does not create default constraints, thus, the result is
-     * always <b>false</b> but overriding methods may change the return value.
+     * Returns the conceptual type of the constraint. Reasoners may return specialized types here.
      * 
-     * @return <code>true</code> if this constraint is a default constraint, <code>false</code> else (always)
+     * @return the conceptual type ({@link Type#USUAL})
      */
-    public boolean isDefaultConstraint() {
-        return false;
+    public IConstraintType getType() {
+        return Type.USUAL;
     }
 
 }
