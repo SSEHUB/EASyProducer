@@ -493,7 +493,8 @@ public class Resolver {
             Constraint constraint = constraintBase.pop();
             constraintBaseSet.remove(constraint);
             ConstraintSyntaxTree cst = constraint.getConsSyntax();
-            evaluator.setAssignmentState(constraint.isDefaultConstraint() ? AssignmentState.DEFAULT : assignmentState);
+            evaluator.setAssignmentState(Constraint.Type.DEFAULT == constraint.getType() 
+                ? AssignmentState.DEFAULT : assignmentState);
             reevaluationCounter++;
             if (cst != null) {
                 if (Descriptor.LOGGING) {

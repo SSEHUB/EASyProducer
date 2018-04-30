@@ -42,8 +42,8 @@ public class DefaultConstraint extends Constraint {
     }
 
     @Override
-    public boolean isDefaultConstraint() {
-        return true;
+    public IConstraintType getType() {
+        return Type.DEFAULT;
     }
 
 }
