@@ -820,7 +820,8 @@ public class Resolver {
             
             contexts.pushContext(null, containerOp, localDecl, true);
             registerCompoundMapping(type, localVar, declVar, type);
-            translateCompoundContent(localDecl, null, type, localVar); // TODO self!!! localVar
+            // cAcc: if qualified, replace with localVar, if not, leave as it is as localVar is anyway on context
+            translateCompoundContent(localDecl, null, type, null == cAcc ? null : localVar);
             contexts.popContext();
         }
     }
@@ -917,7 +918,7 @@ public class Resolver {
         }
         final AbstractVariable self = null == cAcc ? decl : null;
         processCompoundEvals(type, cAcc, self);
-        otherConstraintsProc.setParameter(cAcc, self, variable); // TODO self!!!
+        otherConstraintsProc.setParameter(cAcc, self, variable);
         allCompoundConstraints(type, otherConstraintsProc, false, false, decl);
         otherConstraintsProc.clear();
     }
@@ -1268,7 +1269,6 @@ public class Resolver {
         }
         try {
             constraint.setConsSyntax(cst);
-// TODO MISSING VAR HERE! DOES NOT REGISTER! use createConstraintVariableConstraint instead??
             addConstraint(otherConstraints, constraint, false, variable);
             registerConstraint(variable, constraint);
         } catch (CSTSemanticException e) {
