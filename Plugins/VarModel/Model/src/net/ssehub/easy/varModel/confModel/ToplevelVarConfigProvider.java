@@ -202,8 +202,8 @@ class ToplevelVarConfigProvider extends VariableConfigProvider {
                      * This is needed for the stepwise configuration of
                      * (nested) CompoundValues.
                      */
-                    Value oldSlotValue = newValue.getNestedValue(name);
-                    Value newSlotValue = tmpValue.getNestedValue(name);
+                    Value newSlotValue = newValue.getNestedValue(name);
+                    Value oldSlotValue = tmpValue.getNestedValue(name);
                     IAssignmentState oldState = null != var ? var.getState() : state;
                     if (!(oldSlotValue != null && newSlotValue == null) && (AssignmentState.USER_ASSIGNED != oldState
                         || state == AssignmentState.USER_ASSIGNED)) {

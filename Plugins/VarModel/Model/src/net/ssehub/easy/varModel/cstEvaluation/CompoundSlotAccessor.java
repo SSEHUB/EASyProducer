@@ -24,7 +24,6 @@ import net.ssehub.easy.varModel.confModel.ConfigurationException;
 import net.ssehub.easy.varModel.confModel.IAssignmentState;
 import net.ssehub.easy.varModel.confModel.IDecisionVariable;
 import net.ssehub.easy.varModel.cstEvaluation.EvaluationVisitor.Message;
-import net.ssehub.easy.varModel.model.datatypes.Compound;
 import net.ssehub.easy.varModel.model.values.Value;
 
 /**
@@ -65,8 +64,6 @@ class CompoundSlotAccessor extends AbstractDecisionVariableEvaluationAccessor {
     public CompoundSlotAccessor bind(IDecisionVariable variable, String slotName, 
         EvaluationContext context) {
         super.bind(variable, context);
-        assert variable.getDeclaration().getType() instanceof Compound 
-            && null != ((Compound) variable.getDeclaration().getType()).getElement(slotName);
         slotVariable = ((CompoundVariable) variable).getNestedVariable(slotName);
         return this;
     }
