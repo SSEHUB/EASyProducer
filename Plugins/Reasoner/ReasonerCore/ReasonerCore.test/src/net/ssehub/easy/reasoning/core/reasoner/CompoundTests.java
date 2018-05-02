@@ -1,6 +1,10 @@
 package net.ssehub.easy.reasoning.core.reasoner;
 
+import java.io.IOException;
+
 import org.junit.Test;
+
+import net.ssehub.easy.varModel.model.Project;
 
 /**
  * Configures the compound tests for SSE reasoner.
@@ -112,6 +116,20 @@ public class CompoundTests extends AbstractTest {
     @Test
     public void referenceDerivedCompoundTest() {
         reasoningTest("ReferenceDerivedCompoundTest.ivml", 5);
+    }
+
+    /**
+     * Tests changing constraint variables.
+     * 
+     * @throws IOException shall not occur
+     */
+    @Test
+    public void changingValuesTest() throws IOException {
+        // basis shall be failing with four tests
+        reasoningTest("changingValues/changingValuesBase.ivml", 2);
+        // importing model changes constraints, shall not fail then 
+        Project prj = loadCompleteProject("changingValues", "changingValues");
+        resultHandler(0, 0, prj);
     }
 
 }

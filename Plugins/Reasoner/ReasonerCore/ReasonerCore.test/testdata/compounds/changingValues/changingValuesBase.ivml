@@ -1,0 +1,17 @@
+project changingValuesBase {
+
+	version v0;
+	
+	compound MyBaseCmp {
+	    Integer value = 30;
+	    value > 30;
+	}
+	
+	compound MyRefinedCmp refines MyBaseCmp {
+	    value < 35;
+	}
+	
+	MyBaseCmp cmp1 = MyBaseCmp{};
+    MyBaseCmp cmp2 = MyRefinedCmp{value = 40};
+	
+}

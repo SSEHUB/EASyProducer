@@ -7,6 +7,7 @@ import org.junit.runners.Suite.SuiteClasses;
 import net.ssehub.easy.reasoning.core.reasoner.AttributeValuesTest;
 import net.ssehub.easy.reasoning.core.reasoner.ConstraintBaseTest;
 import net.ssehub.easy.reasoning.core.reasoner.ConstraintListTest;
+import net.ssehub.easy.reasoning.core.reasoner.TypedConstraintTest;
 import net.ssehub.easy.reasoning.core.upgrader.UpgraderTests;
 
 /**
@@ -22,7 +23,8 @@ import net.ssehub.easy.reasoning.core.upgrader.UpgraderTests;
     UpgraderTests.class,
     AttributeValuesTest.class, 
     ConstraintListTest.class,
-    ConstraintBaseTest.class})
+    ConstraintBaseTest.class, 
+    TypedConstraintTest.class})
 public class AllTests {
         
 }
