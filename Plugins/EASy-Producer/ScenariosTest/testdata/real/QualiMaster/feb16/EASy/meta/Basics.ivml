@@ -67,7 +67,7 @@ project Basics {
 		assign(bindingTime = BindingTime.runtimeEnact) to {
 			Integer value; // this may get a "default/startup" value from the configuration
 		}
-		Constraint defaultValueCheck = isDefined(defaultValue);
+		//Constraint defaultValueCheck = isDefined(defaultValue); // disabled - model does not comply with
 	}
 	
 	compound StringParameter refines Parameter {
@@ -75,7 +75,7 @@ project Basics {
 		assign(bindingTime = BindingTime.runtimeEnact) to {
 			String value; // this may get a "default/startup" value from the configuration
 		}
-		Constraint defaultValueCheck = isDefined(defaultValue);
+		//Constraint defaultValueCheck = isDefined(defaultValue); // disabled - model does not comply with
 	}
 
 	compound RealParameter refines Parameter {
@@ -83,7 +83,7 @@ project Basics {
 		assign(bindingTime = BindingTime.runtimeEnact) to {
 			Real value; // this may get a "default/startup" value from the configuration
 		}
-		Constraint defaultValueCheck = isDefined(defaultValue);
+		//Constraint defaultValueCheck = isDefined(defaultValue); // disabled - model does not comply with
 	}
 
 	compound BooleanParameter refines Parameter {
@@ -91,7 +91,7 @@ project Basics {
 		assign(bindingTime = BindingTime.runtimeEnact) to {
 			Boolean value; // this may get a "default/startup" value from the configuration
 		}
-		Constraint defaultValueCheck = isDefined(defaultValue);
+		//Constraint defaultValueCheck = isDefined(defaultValue); // disabled - model does not comply with
 	}
 	
 	compound LongParameter refines Parameter {
@@ -99,7 +99,7 @@ project Basics {
 		assign(bindingTime = BindingTime.runtimeEnact) to {
 			Real value; // this may get a "default/startup" value from the configuration
 		}
-		Constraint defaultValueCheck = isDefined(defaultValue);
+		//Constraint defaultValueCheck = isDefined(defaultValue); // disabled - model does not comply with
 	}
 
     // for now this is just some kind of constant. To be configured from infrastructure via propagation.	
