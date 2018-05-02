@@ -18,6 +18,7 @@ package net.ssehub.easy.reasoning.sseReasoner.model;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.Map;
 import java.util.Set;
 
 import net.ssehub.easy.basics.logger.EASyLoggerFactory;
@@ -62,6 +63,8 @@ import net.ssehub.easy.varModel.persistency.StringProvider;
  */
 public class ReasoningUtils {
 
+    public static final boolean DEBUG = false;
+    
     /**
      * A set pool for instances of <code>Set<Compound></code>.
      */
@@ -522,10 +525,12 @@ public class ReasoningUtils {
      * @param evaluator the evaluator
      */
     public static void printConstraintEvaluationResult(ConstraintSyntaxTree cst, EvaluationVisitor evaluator) {
-        System.out.println("EVAL " + StringProvider.toIvmlString(cst) + " fulfilled " + evaluator.constraintFulfilled() 
-            + " failed " + evaluator.constraintFailed());
-        for (int m = 0; m < evaluator.getMessageCount(); m++) {
-            System.out.println("  MSG: " + evaluator.getMessage(m).getDescription());
+        if (DEBUG) {
+            System.out.println("EVAL " + StringProvider.toIvmlString(cst) + " " + System.identityHashCode(cst)
+                + " fulfilled " + evaluator.constraintFulfilled() + " failed " + evaluator.constraintFailed());
+            for (int m = 0; m < evaluator.getMessageCount(); m++) {
+                System.out.println("  MSG: " + evaluator.getMessage(m).getDescription());
+            }
         }
     }
     
@@ -543,6 +548,37 @@ public class ReasoningUtils {
             cst = new ConstantValue(value);
         }
         return cst;
+    }
+
+    /**
+     * Removes constraints from a constraints collection printing those constraints that have been removed. [debugging]
+     * 
+     * @param collection the collections to remove the constraints from
+     * @param remove the constraints to remove
+     */
+    public static void removeAll(Collection<Constraint> collection, Collection<Constraint> remove) {
+        if (DEBUG) {
+            for (Constraint cst : remove) {
+                if (collection.remove(cst)) {
+                    System.out.println("REMOVED " + toIvmlString(cst));
+                }
+            }
+        } else {
+            collection.removeAll(remove);
+        }
+    }
+
+    /**
+     * Removes all elements in <code>remove</code> as keys from <code>map</code>.
+     * 
+     * @param <K> the key type
+     * @param map the map to remove from
+     * @param remove the elements to remove
+     */
+    public static <K> void removeAll(Map<K, ?> map, Collection<K> remove) {
+        for (K cst : remove) {
+            map.remove(cst);
+        }
     }
     
 }

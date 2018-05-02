@@ -16,6 +16,7 @@ import net.ssehub.easy.basics.modelManagement.Utils;
 import net.ssehub.easy.reasoning.core.reasoner.ReasonerConfiguration;
 import net.ssehub.easy.reasoning.core.reasoner.ReasonerConfiguration.IAdditionalInformationLogger;
 import net.ssehub.easy.reasoning.core.reasoner.ReasoningErrorCodes;
+import net.ssehub.easy.reasoning.core.reasoner.TypedConstraint;
 import net.ssehub.easy.reasoning.sseReasoner.functions.FailedElementDetails;
 import net.ssehub.easy.reasoning.sseReasoner.functions.FailedElements;
 import net.ssehub.easy.reasoning.sseReasoner.functions.AbstractConstraintProcessor;
@@ -24,7 +25,6 @@ import net.ssehub.easy.reasoning.sseReasoner.model.ContainerConstraintsFinder;
 import net.ssehub.easy.reasoning.sseReasoner.model.ContextStack;
 import net.ssehub.easy.reasoning.sseReasoner.model.SubstitutionVisitor;
 import net.ssehub.easy.reasoning.sseReasoner.model.VariablesInConstraintFinder;
-import net.ssehub.easy.reasoning.sseReasoner.model.DefaultConstraint;
 import net.ssehub.easy.reasoning.sseReasoner.model.VariablesInNotSimpleAssignmentConstraintsFinder;
 import net.ssehub.easy.reasoning.sseReasoner.model.VariablesMap;
 import net.ssehub.easy.varModel.confModel.AssignmentState;
@@ -51,6 +51,7 @@ import net.ssehub.easy.varModel.model.Attribute;
 import net.ssehub.easy.varModel.model.AttributeAssignment;
 import net.ssehub.easy.varModel.model.AttributeAssignment.Assignment;
 import net.ssehub.easy.varModel.model.Constraint;
+import net.ssehub.easy.varModel.model.Constraint.IConstraintType;
 import net.ssehub.easy.varModel.model.DecisionVariableDeclaration;
 import net.ssehub.easy.varModel.model.IModelElement;
 import net.ssehub.easy.varModel.model.IvmlException;
@@ -178,16 +179,28 @@ public class Resolver {
                     createContainerConstraintValueConstraints((ContainerValue) newValue, 
                         createParentExpression(variable), null, variable.getDeclaration().getParent(), variable);
                 }
-                // TODO if value type changes (currently not part of the notification)
-                /*if ((null == oldValue && null != newValue) 
-                    || !TypeQueries.sameTypes(oldValue.getType(), newValue.getType())) {
-                    obtainConstraints(variable, true);
+                if (isValueTypeChange(variable, newValue, oldValue)) {
+                    obtainConstraints(variable, true, Constraint.Type.CONSTRAINT);
+                    boolean inc = incremental; // use incremental mode, disable default values anyway
+                    incremental = true;
                     translateDeclaration(variable.getDeclaration(), variable, null); // null as access is unclear
-                }*/
+                    incremental = inc;
+                }
                 rescheduleConstraintsForChilds(variable);
                 // All constraints for the parent (as this was also changed)
                 rescheduleConstraintsForParent(variable);
             }
+        }
+        
+        private boolean isValueTypeChange(IDecisionVariable variable, Value newValue, Value oldValue) {
+            boolean result = false;
+            if (TypeQueries.isCompound(variable.getDeclaration().getType())) {
+                if ((null == oldValue && null != newValue) 
+                    || !TypeQueries.sameTypes(oldValue.getType(), newValue.getType())) {
+                    result = true;
+                }
+            }
+            return result;
         }
 
         /**
@@ -247,7 +260,8 @@ public class Resolver {
          * @param clear {@code true} for clear variables, {@code false} for leave them as they are
          * @return the constraints stored for {@code variable}, may be <b>null</b>
          */
-        private List<Constraint> obtainConstraints(IDecisionVariable variable, boolean clear) {
+        private List<Constraint> obtainConstraints(IDecisionVariable variable, boolean clear, 
+            IConstraintType keepFilter) {
             IConfigurationElement iter = variable;
             List<Constraint> constraints;
             do { // use holder or iterate in case of container element variable
@@ -256,7 +270,20 @@ public class Resolver {
                 iter = iter.getParent();
             } while (null == constraints && null != iter);
             if (clear && null != constraints) {
-                constraintBase.removeAll(constraints);
+                List<Constraint> toRemove = constraints;
+                if (null != keepFilter) {
+                    toRemove = new ArrayList<Constraint>();
+                    for (int i = constraints.size() - 1; i >= 0; i--) {
+                        Constraint cst = constraints.get(i);
+                        if (keepFilter != cst.getType()) {
+                            constraints.remove(i);
+                            toRemove.add(cst);
+                        }
+                    }
+                    constraints = toRemove;
+                }
+                removeAll(constraintBase, constraints);
+                removeAll(constraintVariableMap, constraints);
                 failedElements.removeProblemConstraints(constraints);
                 // clear dependent
                 simpleAssignmentFinder.acceptAndClear(constraints, config, false);
@@ -275,7 +302,7 @@ public class Resolver {
          */
         private void rescheduleConstraintValue(IDecisionVariable holder, IDecisionVariable variable, boolean clear) {
             if (TypeQueries.isConstraint(variable.getDeclaration().getType())) {
-                List<Constraint> constraints = obtainConstraints(holder, clear);
+                List<Constraint> constraints = obtainConstraints(holder, clear, null);
                 Value newValue = variable.getValue();
                 ConstraintSyntaxTree cst = getConstraintValueConstraintExpression(newValue);
                 if (null != cst) {
@@ -416,7 +443,7 @@ public class Resolver {
      * Resolves the (initial) values of the configuration.
      * 
      * @see Utils#discoverImports(net.ssehub.easy.basics.modelManagement.IModel)
-     * @see #translateConstraints(int)
+     * @see #translateConstraints(Project)
      * @see #evaluateConstraints()
      * @see Configuration#freeze(net.ssehub.easy.varModel.confModel.IFreezeSelector)
      */
@@ -691,6 +718,9 @@ public class Resolver {
         if (null != defaultValue) { // considering the actual type rather than base, after derived (!)
             type = inferTypeSafe(defaultValue, type);
         }
+        if (null != var && null != var.getValue()) {
+            type = var.getValue().getType();
+        }
         if (TypeQueries.isCompound(type)) { // this is a compound value -> default constraints, do not defer
             self = decl;
             defaultValue = translateCompoundDeclaration(decl, var, cAcc, (Compound) type, defaultValue); 
@@ -730,7 +760,8 @@ public class Resolver {
                 if (substVisitor.containsSelf() || isOverriddenSlot(decl)) {
                     targetCons = deferredDefaultConstraints;
                 }
-                addConstraint(targetCons, new DefaultConstraint(defaultValue, project), true, var);
+                addConstraint(targetCons, new TypedConstraint(defaultValue, Constraint.Type.DEFAULT, project), 
+                    true, var);
                 substVisitor.clear(); // clear false above 
             } catch (CSTSemanticException e) {
                 LOGGER.exception(e); // should not occur, ok to log
@@ -968,7 +999,10 @@ public class Resolver {
             cst = substituteVariables(cst, selfEx, self);
             try { // compoundConstraints
                 Constraint constraint = new Constraint(cst, parent);
-                addConstraint(otherConstraints, constraint, true, variable);            
+                addConstraint(otherConstraints, constraint, true, variable);
+                if (ExpressionType.CONSTRAINT == type) {
+                    registerConstraint(variable, constraint);
+                }
             } catch (CSTSemanticException e) {
                 LOGGER.exception(e);
             }               
@@ -1264,12 +1298,11 @@ public class Resolver {
      */
     private void createConstraintForInitializer(ConstraintSyntaxTree cst, boolean substituteVars, 
         IModelElement parent, IDecisionVariable variable) {
-        Constraint constraint = new Constraint(parent); // TODO unify with createConstraintVariableConstraint?
         if (substituteVars) {
             cst = substituteVariables(cst, null, null);
         }
         try {
-            constraint.setConsSyntax(cst);
+            Constraint constraint = new TypedConstraint(cst, Constraint.Type.CONSTRAINT, parent);
             addConstraint(otherConstraints, constraint, false, variable);
             registerConstraint(variable, constraint);
         } catch (CSTSemanticException e) {
@@ -1296,7 +1329,7 @@ public class Resolver {
         if (cst != null) {
             cst = substituteVariables(cst, selfEx, self);
             try {
-                constraint = new Constraint(cst, parent);
+                constraint = new TypedConstraint(cst, Constraint.Type.CONSTRAINT, parent);
                 // constants can cause endless recursion
                 addConstraint(otherConstraints, constraint, !(cst instanceof ConstantValue), variable);
                 registerConstraint(variable, constraint);
@@ -1469,6 +1502,16 @@ public class Resolver {
     }
 
     /**
+     * Adds all <code>constraints</code> to the constraint base.
+     * 
+     * @param constraints the constraints
+     */
+    private void addAllToConstraintBase(Collection<Constraint> constraints) {
+        constraintBase.addAll(constraints);
+        constraintBaseSet.addAll(constraints);
+    }
+
+    /**
      * Method for using {@link SubstitutionVisitor} for constraint transformation. Uses the actual
      * variable mapping in {@link #varMap} and may consider a mapping for <code>self</code>.
      * 
@@ -1490,16 +1533,6 @@ public class Resolver {
         cst = substVisitor.acceptAndClear(cst);
         inferTypeSafe(cst, null);
         return cst;
-    }
-
-    /**
-     * Adds all <code>constraints</code> to the constraint base.
-     * 
-     * @param constraints the constraints
-     */
-    private void addAllToConstraintBase(Collection<Constraint> constraints) {
-        constraintBase.addAll(constraints);
-        constraintBaseSet.addAll(constraints);
     }
 
     /**
