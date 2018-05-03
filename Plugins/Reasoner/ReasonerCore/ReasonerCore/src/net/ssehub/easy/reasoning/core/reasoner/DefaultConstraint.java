@@ -19,35 +19,36 @@ import net.ssehub.easy.varModel.cst.CSTSemanticException;
 import net.ssehub.easy.varModel.cst.ConstraintSyntaxTree;
 import net.ssehub.easy.varModel.model.Constraint;
 import net.ssehub.easy.varModel.model.IModelElement;
+import net.ssehub.easy.varModel.model.Constraint.Type;
 
 /**
- * Reasoner specific constraint type indicating a typed constraint, e.g., a default constraint or a constraint
- * originating from a constraint variable.
+ * Reasoner specific constraint type indicating a {@link Type#DEFAULT} constraint. This shall avoid requiring an 
+ * attribute for this purpose for all constraints and using it just for temporary reasoning ones.
  * 
  * @author Holger Eichelberger
  */
-public class TypedConstraint extends Constraint {
+public class DefaultConstraint extends Constraint {
 
-    private IConstraintType type;
-    
     /**
      * Creates a new constraint from an already parsed syntax tree.
      * 
      * @param consSyntax the constraint syntax tree
-     * @param type the constraint type
      * @param parent the object, in which this specific one is embedded
      * @throws CSTSemanticException in case that the constraint semantics cannot be resolved
      *   or that the specified constraint does not evaluate to a boolean expression
      */
-    public TypedConstraint(ConstraintSyntaxTree consSyntax, IConstraintType type, IModelElement parent) 
+    public DefaultConstraint(ConstraintSyntaxTree consSyntax, IModelElement parent) 
         throws CSTSemanticException {
         super(consSyntax, parent);
-        this.type = type;
     }
 
-    @Override
+    /**
+     * Returns the conceptual type of the constraint.
+     * 
+     * @return the conceptual type ({@link Type#DEFAULT})
+     */
     public IConstraintType getType() {
-        return type;
+        return Type.DEFAULT;
     }
 
 }

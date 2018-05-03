@@ -338,6 +338,9 @@ public class ConstraintList implements Iterable<Constraint> {
                 pred.next = newNode;
             }
             pred = newNode;
+            if (null != listener) {
+                listener.notifyAdded(c, newNode);
+            }
         }
 
         if (succ == null) {

@@ -76,5 +76,5 @@ public class ConstraintBase extends ConstraintList {
         }
         return modified;
     }
-    
+
 }

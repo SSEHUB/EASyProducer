@@ -56,4 +56,44 @@ public class TypedConstraintTest {
         }
     }
 
+    /**
+     * Tests the default constraint.
+     * 
+     * @throws ValueDoesNotMatchTypeException in case of problems creating a value
+     */
+    @Test
+    public void testDefaultConstraint() throws ValueDoesNotMatchTypeException {
+        Project prj = new Project("test");
+        ConstantValue cst = new ConstantValue(ValueFactory.createValue(BooleanType.TYPE, true));
+        try {
+            Constraint constraint = new DefaultConstraint(cst, prj);
+            Assert.assertEquals(prj, constraint.getParent());
+            Assert.assertEquals(cst, constraint.getConsSyntax());
+            Assert.assertTrue(constraint.isBooleanConstraint());
+            Assert.assertEquals(Constraint.Type.DEFAULT, constraint.getType());
+        } catch (CSTSemanticException e) {
+            Assert.fail("Unexpected exception " + e.getMessage());
+        }
+    }
+
+    /**
+     * Tests the constraint variable constraint.
+     * 
+     * @throws ValueDoesNotMatchTypeException in case of problems creating a value
+     */
+    @Test
+    public void testConstraintVariableConstraint() throws ValueDoesNotMatchTypeException {
+        Project prj = new Project("test");
+        ConstantValue cst = new ConstantValue(ValueFactory.createValue(BooleanType.TYPE, true));
+        try {
+            Constraint constraint = new ConstraintVariableConstraint(cst, prj);
+            Assert.assertEquals(prj, constraint.getParent());
+            Assert.assertEquals(cst, constraint.getConsSyntax());
+            Assert.assertTrue(constraint.isBooleanConstraint());
+            Assert.assertEquals(Constraint.Type.CONSTRAINT, constraint.getType());
+        } catch (CSTSemanticException e) {
+            Assert.fail("Unexpected exception " + e.getMessage());
+        }
+    }
+
 }

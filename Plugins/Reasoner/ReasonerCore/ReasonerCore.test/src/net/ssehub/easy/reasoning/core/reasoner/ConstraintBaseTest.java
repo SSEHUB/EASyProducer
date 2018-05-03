@@ -39,7 +39,7 @@ public class ConstraintBaseTest extends ConstraintListTest {
      * @throws ValueDoesNotMatchTypeException shall not occur
      */
     @Test
-    public void testConstraintBase1() throws CSTSemanticException, ValueDoesNotMatchTypeException {
+    public void testBase() throws CSTSemanticException, ValueDoesNotMatchTypeException {
         Constraint first = createTestConstraint(1);
         Constraint second = createTestConstraint(2);
         Constraint third = createTestConstraint(3);
@@ -96,13 +96,13 @@ public class ConstraintBaseTest extends ConstraintListTest {
     }
 
     /**
-     * Tests the constraint base, only the specific operations.
+     * Tests the constraint base, only the constraintList-specific operations.
      * 
      * @throws CSTSemanticException shall not occur
      * @throws ValueDoesNotMatchTypeException shall not occur
      */
     @Test
-    public void testConstraintBase2() throws CSTSemanticException, ValueDoesNotMatchTypeException {
+    public void testConstraintList() throws CSTSemanticException, ValueDoesNotMatchTypeException {
         Constraint first = createTestConstraint(1);
         Constraint second = createTestConstraint(2);
         Constraint third = createTestConstraint(3);
@@ -129,6 +129,35 @@ public class ConstraintBaseTest extends ConstraintListTest {
         Assert.assertTrue(base.contains(second));
         Assert.assertTrue(base.contains(third));
         assertEmptyList(base2);
+    }
+    
+    /**
+     * Tests collection-specific operations.
+     * 
+     * @throws CSTSemanticException shall not occur
+     * @throws ValueDoesNotMatchTypeException shall not occur
+     */
+    @Test
+    public void testCollection()  throws CSTSemanticException, ValueDoesNotMatchTypeException {
+        Constraint first = createTestConstraint(1);
+        Constraint second = createTestConstraint(2);
+        Constraint third = createTestConstraint(3);
+        List<Constraint> constraints = new ArrayList<Constraint>();
+        constraints.add(first);
+        constraints.add(second);
+        constraints.add(third);
+        
+        ConstraintBase base = new ConstraintBase();
+        base.addAll(constraints);
+        Assert.assertSame(constraints.size(), base.size());
+        for (Constraint c : constraints) {
+            Assert.assertTrue(base.contains(c));
+        }
+        base.removeAll(constraints);
+        Assert.assertSame(0, base.size());
+        for (Constraint c : constraints) {
+            Assert.assertFalse(base.contains(c));
+        }
     }
     
 }
