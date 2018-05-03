@@ -6,6 +6,7 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+import net.ssehub.easy.reasoning.core.reasoner.ConstraintList;
 import net.ssehub.easy.varModel.confModel.IConfigurationElement;
 import net.ssehub.easy.varModel.confModel.IDecisionVariable;
 import net.ssehub.easy.varModel.model.AbstractVariable;
@@ -34,7 +35,7 @@ public class VariablesMap {
      * @param constraint {@link Constraint} that holds added {@code declaration}.
      */
     public void add(AbstractVariable declaration, Constraint constraint) {
-        getConstraintSet(declaration).add(constraint); 
+        obtainConstraintSet(declaration).add(constraint); 
     }
 
     /**
@@ -56,7 +57,7 @@ public class VariablesMap {
      * @param declaration the declaration
      * @return the constraint set (may be <b>null</b> for none)
      */
-    private Set<Constraint> getConstraintSet(AbstractVariable declaration) {
+    private Set<Constraint> obtainConstraintSet(AbstractVariable declaration) {
         Set<Constraint> relevantConstraints = declConstraintMapping.get(declaration);
         if (null == relevantConstraints) {
             relevantConstraints = new HashSet<Constraint>();
@@ -98,7 +99,7 @@ public class VariablesMap {
      * @param variable the variable to relate to
      * @param constraints the constraints to relate
      */
-    public void addAll(IDecisionVariable variable, Collection<Constraint> constraints) {
+    public void addAll(IDecisionVariable variable, ConstraintList constraints) {
         IConfigurationElement iter = variable;
         while (iter != null) {
             if (iter instanceof IDecisionVariable) {
@@ -114,8 +115,8 @@ public class VariablesMap {
      * @param declaration the declaration to relate to
      * @param constraints the constraints to relate
      */
-    public void addAll(AbstractVariable declaration, Collection<Constraint> constraints) {
-        getConstraintSet(declaration).addAll(constraints); 
+    public void addAll(AbstractVariable declaration, ConstraintList constraints) {
+        constraints.toCollection(obtainConstraintSet(declaration));
     }
 
     // transitive removal over all parents

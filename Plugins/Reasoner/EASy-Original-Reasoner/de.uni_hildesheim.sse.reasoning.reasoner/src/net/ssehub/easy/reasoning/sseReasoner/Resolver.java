@@ -1,7 +1,6 @@
 package net.ssehub.easy.reasoning.sseReasoner;
 
 import java.util.ArrayList;
-import java.util.Deque;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -13,6 +12,7 @@ import net.ssehub.easy.basics.logger.EASyLoggerFactory;
 import net.ssehub.easy.basics.logger.EASyLoggerFactory.EASyLogger;
 import net.ssehub.easy.basics.modelManagement.Utils;
 import net.ssehub.easy.reasoning.core.reasoner.ConstraintBase;
+import net.ssehub.easy.reasoning.core.reasoner.ConstraintList;
 import net.ssehub.easy.reasoning.core.reasoner.ConstraintVariableConstraint;
 import net.ssehub.easy.reasoning.core.reasoner.DefaultConstraint;
 import net.ssehub.easy.reasoning.core.reasoner.ReasonerConfiguration;
@@ -108,10 +108,10 @@ public class Resolver {
         = new HashMap<IDecisionVariable, List<Constraint>>();
     private ReasonerState copiedState;
     private ConstraintBase constraintBase = new ConstraintBase();
-    private Deque<Constraint> defaultConstraints = new LinkedList<Constraint>();
-    private Deque<Constraint> deferredDefaultConstraints = new LinkedList<Constraint>();
-    private Deque<Constraint> topLevelConstraints = new LinkedList<Constraint>();
-    private Deque<Constraint> otherConstraints = new LinkedList<Constraint>();
+    private ConstraintList defaultConstraints = new ConstraintList();
+    private ConstraintList deferredDefaultConstraints = new ConstraintList();
+    private ConstraintList topLevelConstraints = new ConstraintList();
+    private ConstraintList otherConstraints = new ConstraintList();
     private List<Project> projects;
     
     // Stats
@@ -146,7 +146,7 @@ public class Resolver {
      * @author Holger Eichelberger
      */
     private static class ReasonerState {
-        private List<Deque<Constraint>> constraintBase = new LinkedList<Deque<Constraint>>();
+        private List<ConstraintList> constraintBase = new LinkedList<ConstraintList>();
         private Map<Constraint, IDecisionVariable> constraintVariableMap = new HashMap<Constraint, IDecisionVariable>();
         private Map<IDecisionVariable, List<Constraint>> variableConstraintsMap 
             = new HashMap<IDecisionVariable, List<Constraint>>();
@@ -755,7 +755,7 @@ public class Resolver {
                 }
                 defaultValue = new OCLFeatureCall(acc, OclKeyWords.ASSIGNMENT, defaultValue);
                 defaultValue = substituteVariables(defaultValue, selfEx, self);
-                Deque<Constraint> targetCons = defaultConstraints; 
+                ConstraintList targetCons = defaultConstraints; 
                 if (substVisitor.containsSelf() || isOverriddenSlot(decl)) {
                     targetCons = deferredDefaultConstraints;
                 }
@@ -1163,19 +1163,16 @@ public class Resolver {
      */
     private void translateConstraints(Project project) {
         project.accept(projectVisitor);
-        constraintBase.addAll(defaultConstraints);
-        constraintBase.addAll(deferredDefaultConstraints);
-        constraintBase.addAll(topLevelConstraints);
-        constraintBase.addAll(otherConstraints);
+        constraintBase.addAll(defaultConstraints, true); // true = clear take over nodes
+        constraintBase.addAll(deferredDefaultConstraints, true);
+        constraintBase.addAll(topLevelConstraints, true);
+        constraintBase.addAll(otherConstraints, true);
         constraintCounter = constraintBase.size();
         variablesInConstraintsCounter = constraintMap.getDeclarationSize();
-        clearConstraintLists();
         // if marked for re-use, copy constraint base
         if (null != copiedState) {
-            LinkedList<Constraint> copy = new LinkedList<Constraint>();
-            for (Constraint c : constraintBase) { // TODO specific method?
-                copy.add(c);
-            }
+            ConstraintList copy = new ConstraintList();
+            copy.addAll(constraintBase); // do not clear here!
             copiedState.constraintBase.add(copy);
         }
         contexts.clear();
@@ -1191,7 +1188,7 @@ public class Resolver {
      * @param variable the actually (nested) variable, used to relate the created constraint to, may be <b>null</b>. 
      *     This information is particularly relevant for constraints arising from constraint variables.
      */
-    private void addConstraint(Deque<Constraint> target, Constraint constraint, boolean checkForInitializers, 
+    private void addConstraint(ConstraintList target, Constraint constraint, boolean checkForInitializers, 
         IDecisionVariable variable) {
         ConstraintSyntaxTree cst = constraint.getConsSyntax();
         try { // TODO move down??
@@ -1514,16 +1511,6 @@ public class Resolver {
         inferTypeSafe(cst, null);
         return cst;
     }
-
-    /**
-     * Method for clearing all constraint lists.
-     */
-    private void clearConstraintLists() {
-        defaultConstraints.clear();
-        deferredDefaultConstraints.clear();
-        topLevelConstraints.clear();
-        otherConstraints.clear();
-    }
     
     /**
      * Will be called after a failure was detected in a default constraint of an {@link AbstractVariable}.
@@ -1681,7 +1668,10 @@ public class Resolver {
      * @see #reInit()
      */
     void clear() {
-        clearConstraintLists();
+        defaultConstraints.clear();
+        deferredDefaultConstraints.clear();
+        topLevelConstraints.clear();
+        otherConstraints.clear();
         failedElements.clear();
         scopeAssignments.clearScopeAssignments();
         // keep the constraintMap
