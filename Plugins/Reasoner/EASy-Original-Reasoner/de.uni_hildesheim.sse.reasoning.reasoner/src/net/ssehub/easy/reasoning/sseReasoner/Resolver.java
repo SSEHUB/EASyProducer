@@ -1,7 +1,6 @@
 package net.ssehub.easy.reasoning.sseReasoner;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Deque;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -13,10 +12,12 @@ import java.util.Set;
 import net.ssehub.easy.basics.logger.EASyLoggerFactory;
 import net.ssehub.easy.basics.logger.EASyLoggerFactory.EASyLogger;
 import net.ssehub.easy.basics.modelManagement.Utils;
+import net.ssehub.easy.reasoning.core.reasoner.ConstraintBase;
+import net.ssehub.easy.reasoning.core.reasoner.ConstraintVariableConstraint;
+import net.ssehub.easy.reasoning.core.reasoner.DefaultConstraint;
 import net.ssehub.easy.reasoning.core.reasoner.ReasonerConfiguration;
 import net.ssehub.easy.reasoning.core.reasoner.ReasonerConfiguration.IAdditionalInformationLogger;
 import net.ssehub.easy.reasoning.core.reasoner.ReasoningErrorCodes;
-import net.ssehub.easy.reasoning.core.reasoner.TypedConstraint;
 import net.ssehub.easy.reasoning.sseReasoner.functions.FailedElementDetails;
 import net.ssehub.easy.reasoning.sseReasoner.functions.FailedElements;
 import net.ssehub.easy.reasoning.sseReasoner.functions.AbstractConstraintProcessor;
@@ -106,8 +107,7 @@ public class Resolver {
     private Map<IDecisionVariable, List<Constraint>> variableConstraintsMap 
         = new HashMap<IDecisionVariable, List<Constraint>>();
     private ReasonerState copiedState;
-    private Deque<Constraint> constraintBase = new LinkedList<Constraint>(); // TODO optimize, link+hash
-    private Set<Constraint> constraintBaseSet = new HashSet<Constraint>();
+    private ConstraintBase constraintBase = new ConstraintBase();
     private Deque<Constraint> defaultConstraints = new LinkedList<Constraint>();
     private Deque<Constraint> deferredDefaultConstraints = new LinkedList<Constraint>();
     private Deque<Constraint> topLevelConstraints = new LinkedList<Constraint>();
@@ -181,10 +181,9 @@ public class Resolver {
                 }
                 if (isValueTypeChange(variable, newValue, oldValue)) {
                     obtainConstraints(variable, true, Constraint.Type.CONSTRAINT);
-                    boolean inc = incremental; // use incremental mode, disable default values anyway
-                    incremental = true;
+                    boolean inc = setIncremental(true); // use incremental mode, disable default values anyway
                     translateDeclaration(variable.getDeclaration(), variable, null); // null as access is unclear
-                    incremental = inc;
+                    setIncremental(inc);
                 }
                 rescheduleConstraintsForChilds(variable);
                 // All constraints for the parent (as this was also changed)
@@ -195,8 +194,9 @@ public class Resolver {
         private boolean isValueTypeChange(IDecisionVariable variable, Value newValue, Value oldValue) {
             boolean result = false;
             if (TypeQueries.isCompound(variable.getDeclaration().getType())) {
-                if ((null == oldValue && null != newValue) 
-                    || !TypeQueries.sameTypes(oldValue.getType(), newValue.getType())) {
+                // for null -> initial value, constraints shall already be set by translation
+                if (null != oldValue && null != newValue 
+                    && !TypeQueries.sameTypes(oldValue.getType(), newValue.getType())) {
                     result = true;
                 }
             }
@@ -282,7 +282,7 @@ public class Resolver {
                     }
                     constraints = toRemove;
                 }
-                removeAll(constraintBase, constraints);
+                constraintBase.removeAll(constraints);
                 removeAll(constraintVariableMap, constraints);
                 failedElements.removeProblemConstraints(constraints);
                 // clear dependent
@@ -310,7 +310,7 @@ public class Resolver {
                         ? variable.getDeclaration().getParent() 
                         : constraints.get(0).getParent();
                     createConstraintVariableConstraint(cst, createParentExpression(variable), null, parent, holder);
-                    addAllToConstraintBase(otherConstraints);
+                    constraintBase.addAll(otherConstraints);
                     constraintMap.addAll(variable, otherConstraints);
                     otherConstraints.clear();
                 }
@@ -343,8 +343,8 @@ public class Resolver {
             Set<Constraint> constraints = constraintMap.getRelevantConstraints(declaration);
             if (null != constraints) {
                 for (Constraint varConstraint : constraints) {
-                    if (!constraintBaseSet.contains(varConstraint)) {
-                        addToConstraintBase(varConstraint);
+                    if (!constraintBase.contains(varConstraint)) {
+                        constraintBase.addLast(varConstraint);
                     }
                 }
             }
@@ -478,7 +478,7 @@ public class Resolver {
             for (int p = 0; !hasTimeout && !wasStopped && p < copiedState.constraintBase.size(); p++) {
                 project = projects.get(p); // set global for deeper nested methods
                 long start = System.currentTimeMillis();
-                addAllToConstraintBase(copiedState.constraintBase.get(p));
+                constraintBase.addAll(copiedState.constraintBase.get(p));
                 evaluateConstraintBase(start, project);
             }
         }
@@ -518,7 +518,6 @@ public class Resolver {
         while (!constraintBase.isEmpty() && !wasStopped) { // reasoner.tex -> hasTimeout see end of loop
             usedVariables.clear();
             Constraint constraint = constraintBase.pop();
-            constraintBaseSet.remove(constraint);
             ConstraintSyntaxTree cst = constraint.getConsSyntax();
             evaluator.setAssignmentState(Constraint.Type.DEFAULT == constraint.getType() 
                 ? AssignmentState.DEFAULT : assignmentState);
@@ -760,8 +759,7 @@ public class Resolver {
                 if (substVisitor.containsSelf() || isOverriddenSlot(decl)) {
                     targetCons = deferredDefaultConstraints;
                 }
-                addConstraint(targetCons, new TypedConstraint(defaultValue, Constraint.Type.DEFAULT, project), 
-                    true, var);
+                addConstraint(targetCons, new DefaultConstraint(defaultValue, project), true, var);
                 substVisitor.clear(); // clear false above 
             } catch (CSTSemanticException e) {
                 LOGGER.exception(e); // should not occur, ok to log
@@ -1165,17 +1163,19 @@ public class Resolver {
      */
     private void translateConstraints(Project project) {
         project.accept(projectVisitor);
-        addAllToConstraintBase(defaultConstraints);
-        addAllToConstraintBase(deferredDefaultConstraints);
-        addAllToConstraintBase(topLevelConstraints);
-        addAllToConstraintBase(otherConstraints);
+        constraintBase.addAll(defaultConstraints);
+        constraintBase.addAll(deferredDefaultConstraints);
+        constraintBase.addAll(topLevelConstraints);
+        constraintBase.addAll(otherConstraints);
         constraintCounter = constraintBase.size();
         variablesInConstraintsCounter = constraintMap.getDeclarationSize();
         clearConstraintLists();
         // if marked for re-use, copy constraint base
         if (null != copiedState) {
             LinkedList<Constraint> copy = new LinkedList<Constraint>();
-            copy.addAll(constraintBase);
+            for (Constraint c : constraintBase) { // TODO specific method?
+                copy.add(c);
+            }
             copiedState.constraintBase.add(copy);
         }
         contexts.clear();
@@ -1302,7 +1302,7 @@ public class Resolver {
             cst = substituteVariables(cst, null, null);
         }
         try {
-            Constraint constraint = new TypedConstraint(cst, Constraint.Type.CONSTRAINT, parent);
+            Constraint constraint = new ConstraintVariableConstraint(cst, parent);
             addConstraint(otherConstraints, constraint, false, variable);
             registerConstraint(variable, constraint);
         } catch (CSTSemanticException e) {
@@ -1329,7 +1329,7 @@ public class Resolver {
         if (cst != null) {
             cst = substituteVariables(cst, selfEx, self);
             try {
-                constraint = new TypedConstraint(cst, Constraint.Type.CONSTRAINT, parent);
+                constraint = new ConstraintVariableConstraint(cst, parent);
                 // constants can cause endless recursion
                 addConstraint(otherConstraints, constraint, !(cst instanceof ConstantValue), variable);
                 registerConstraint(variable, constraint);
@@ -1492,26 +1492,6 @@ public class Resolver {
     // helpers, accessors
 
     /**
-     * Adds <code>constraint</code> to the constraint base.
-     * 
-     * @param constraint the constraint
-     */
-    private void addToConstraintBase(Constraint constraint) {
-        constraintBase.addLast(constraint);
-        constraintBaseSet.add(constraint);
-    }
-
-    /**
-     * Adds all <code>constraints</code> to the constraint base.
-     * 
-     * @param constraints the constraints
-     */
-    private void addAllToConstraintBase(Collection<Constraint> constraints) {
-        constraintBase.addAll(constraints);
-        constraintBaseSet.addAll(constraints);
-    }
-
-    /**
      * Method for using {@link SubstitutionVisitor} for constraint transformation. Uses the actual
      * variable mapping in {@link #varMap} and may consider a mapping for <code>self</code>.
      * 
@@ -1629,16 +1609,19 @@ public class Resolver {
      * Sets whether reasoning shall happen incrementally. 
      * 
      * @param incremental if reasoning shall happen incrementally
+     * @return the old value of the incremental flag before changing to {@code incremental}
      * @see #setConsiderFrozenConstraints(boolean)
      */
-    void setIncremental(boolean incremental) {
+    boolean setIncremental(boolean incremental) {
+        boolean old = this.incremental;
         this.incremental = incremental;
+        return old;
     }
     
     /**
      * Factory method for creating the evaluation visitor.
      * 
-     * @return the evaluation visitor
+     * @return the evaluation visitor 
      */
     protected EvaluationVisitor createEvaluationVisitor() {
         return new EvalVisitor();
@@ -1703,8 +1686,7 @@ public class Resolver {
         scopeAssignments.clearScopeAssignments();
         // keep the constraintMap
         // keep the constraintVariableMap
-        constraintBase.clear();
-        constraintBaseSet.clear();
+        constraintBase.clear();        
         // keep constraintCounter - is set during translation
         // keep variablesInConstraintsCounter - is set during translation
         reevaluationCounter = 0;
