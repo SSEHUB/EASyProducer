@@ -6,5 +6,7 @@ project changingValues {
 
     cmp1 = MyRefinedCmp{value = 31};
     cmp2 = MyBaseCmp{value = 36};
+    cmp3 = null;
+    cmp4 = MyBaseCmp{value = 37};
 	
 }

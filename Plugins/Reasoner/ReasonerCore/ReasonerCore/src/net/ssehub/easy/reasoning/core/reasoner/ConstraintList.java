@@ -492,6 +492,17 @@ public class ConstraintList implements Iterable<Constraint> {
         }
         return result;
     }
+
+    /**
+     * Adds all elements in this list to a {@code collection} of constraints.
+     * 
+     * @param collection the collection to add to
+     */
+    public void toCollection(Collection<Constraint> collection) {
+        for (Node x = first; x != null; x = x.next) {
+            collection.add(x.constraint);
+        }
+    }
     
     /**
      * Pops an element from the stack represented by this list.  In other

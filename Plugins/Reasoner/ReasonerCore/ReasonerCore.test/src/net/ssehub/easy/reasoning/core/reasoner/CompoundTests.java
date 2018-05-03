@@ -126,7 +126,7 @@ public class CompoundTests extends AbstractTest {
     @Test
     public void changingValuesTest() throws IOException {
         // basis shall be failing with four tests
-        reasoningTest("changingValues/changingValuesBase.ivml", 2);
+        reasoningTest("changingValues/changingValuesBase.ivml", 3);
         // importing model changes constraints, shall not fail then 
         Project prj = loadCompleteProject("changingValues", "changingValues");
         resultHandler(0, 0, prj);

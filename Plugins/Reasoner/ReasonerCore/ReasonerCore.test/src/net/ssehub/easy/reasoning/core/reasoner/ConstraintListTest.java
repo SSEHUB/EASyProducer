@@ -16,6 +16,7 @@
 package net.ssehub.easy.reasoning.core.reasoner;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.ConcurrentModificationException;
 import java.util.Iterator;
 import java.util.List;
@@ -110,7 +111,8 @@ public class ConstraintListTest {
         }
         Assert.assertFalse(list.removeAll(constraints));
         assertIteratorRead(list.iterator());
-        assertArray(list.toArray());
+        assertAsArray(list);
+        assertAsCollection(list);
         Assert.assertEquals("[]", list.toString());
     }
 
@@ -139,7 +141,8 @@ public class ConstraintListTest {
         list.addFirst(first);
         list.addFirst(second);
         list.addFirst(third);
-        assertArray(list.toArray(), third, second, first);
+        assertAsArray(list, third, second, first);
+        assertAsCollection(list, third, second, first);
         assertIteratorRead(list.iterator(), third, second, first);
         assertIteratorRead(list.iterator(), third, second, first); // just do it twice
         
@@ -150,6 +153,7 @@ public class ConstraintListTest {
         list.addLast(second);
         list.addLast(third);
         assertArray(list.toArray(), first, second, third);
+        assertAsCollection(list, first, second, third);
         assertIteratorRead(list.iterator(), first, second, third);
         assertIteratorRead(list.iterator(), first, second, third); // just do it twice
         Assert.assertNotEquals("[]", list.toString());
@@ -178,6 +182,16 @@ public class ConstraintListTest {
         assertIteratorRead(list.iterator(), constraints);
         assertIteratorRead(list.iterator(), constraints); // just do it twice
     }
+
+    /**
+     * Asserts the contents of {@code actual} via {@link ConstraintList#toArray()}.
+     * 
+     * @param actual the actual constraint list
+     * @param expected the expected array elements
+     */
+    protected void assertAsArray(ConstraintList actual, Constraint... expected) {
+        assertArray(actual.toArray(), expected);
+    }
     
     /**
      * Asserts the contents of an array.
@@ -193,6 +207,31 @@ public class ConstraintListTest {
         }
     }
 
+    /**
+     * Asserts the contents of a collection.
+     * 
+     * @param actual the actual collection
+     * @param expected the expected array elements
+     */
+    protected void assertCollection(Collection<Constraint> actual, Constraint... expected) {
+        Assert.assertNotNull(actual);
+        Constraint[] tmp = new Constraint[actual.size()];
+        actual.toArray(tmp);
+        assertArray(tmp, expected);
+    }
+
+    /**
+     * Asserts the contents of a {@code actual} via {@link ConstraintList#toCollection(Collection)}.
+     * 
+     * @param actual the actual constraint list
+     * @param expected the expected array elements
+     */
+    protected void assertAsCollection(ConstraintList actual, Constraint... expected) {
+        Collection<Constraint> coll = new ArrayList<Constraint>();
+        actual.toCollection(coll);
+        assertCollection(coll, expected);
+    }
+    
     /**
      * Asserts the non-destructive traversal of an iterator.
      * 
@@ -262,7 +301,7 @@ public class ConstraintListTest {
         ConstraintList list = new ConstraintList();
         list.addAll(constraints);
         Assert.assertEquals(0, list.size());
-        assertArray(list.toArray());
+        assertAsArray(list);
         assertIteratorRead(list.iterator());
 
         // adding some elements
@@ -273,7 +312,7 @@ public class ConstraintListTest {
         // util.list to constraint list, @start
         list.addAll(constraints);
         Assert.assertEquals(3, list.size());
-        assertArray(list.toArray(), first, second, third);
+        assertAsArray(list, first, second, third);
         assertIteratorRead(list.iterator(), first, second, third);
 
         // constraint list to constraint list @start
@@ -297,7 +336,8 @@ public class ConstraintListTest {
         // util.list to constraint list, @pos
         list.addAll(1, constraints);
         Assert.assertEquals(6, list.size());
-        assertArray(list.toArray(), first, first, second, third, second, third);
+        assertAsArray(list, first, first, second, third, second, third);
+        assertAsCollection(list, first, first, second, third, second, third);
         assertIteratorRead(list.iterator(), first, first, second, third, second, third);
         
         // list2 not modified
@@ -326,7 +366,8 @@ public class ConstraintListTest {
         // adding empty
         list.addAll(list2);
         Assert.assertEquals(0, list.size());
-        assertArray(list.toArray());
+        assertAsArray(list);
+        assertAsCollection(list);
         assertIteratorRead(list.iterator());
         
         // again first, second, third
@@ -339,7 +380,8 @@ public class ConstraintListTest {
         list2.add(second);
         list2.addAll(1, list);
         Assert.assertEquals(5, list2.size());
-        assertArray(list2.toArray(), third, first, second, third, second);
+        assertAsArray(list2, third, first, second, third, second);
+        assertAsCollection(list2, third, first, second, third, second);
         assertIteratorRead(list2.iterator(), third, first, second, third, second);
      
         // add all @end, target clear
@@ -348,7 +390,8 @@ public class ConstraintListTest {
         list.addAll(list2, true);
         assertEmptyList(list2);
         Assert.assertEquals(5, list.size());
-        assertArray(list.toArray(), third, first, second, third, second);
+        assertAsArray(list, third, first, second, third, second);
+        assertAsCollection(list, third, first, second, third, second);
         assertIteratorRead(list.iterator(), third, first, second, third, second);
 
         // add all @pos
@@ -361,7 +404,8 @@ public class ConstraintListTest {
         list.addAll(1, list2, true);
         assertEmptyList(list2);
         Assert.assertEquals(4, list.size());
-        assertArray(list.toArray(), first, second, third, second);
+        assertAsArray(list, first, second, third, second);
+        assertAsCollection(list, first, second, third, second);
         assertIteratorRead(list.iterator(), first, second, third, second);
 
         // add all @end, target not clear
@@ -372,7 +416,8 @@ public class ConstraintListTest {
         list2.add(third);
         list.addAll(list2, true);
         Assert.assertEquals(3, list.size());
-        assertArray(list.toArray(), first, second, third);
+        assertAsArray(list, first, second, third);
+        assertAsCollection(list, first, second, third);
         assertIteratorRead(list.iterator(), first, second, third);
     }
 
@@ -394,15 +439,18 @@ public class ConstraintListTest {
         list.add(third);
         list.pop();
         Assert.assertEquals(2, list.size());
-        assertArray(list.toArray(), second, third);
+        assertAsArray(list, second, third);
+        assertAsCollection(list, second, third);
         assertIteratorRead(list.iterator(), second, third);
         list.removeFirst();
         Assert.assertEquals(1, list.size());
-        assertArray(list.toArray(), third);
+        assertAsArray(list, third);
+        assertAsCollection(list, third);
         assertIteratorRead(list.iterator(), third);
         list.removeFirst();
         Assert.assertEquals(0, list.size());
-        assertArray(list.toArray());
+        assertAsArray(list);
+        assertAsCollection(list);
         assertIteratorRead(list.iterator());
         assertEmptyList(list);
 
@@ -410,11 +458,13 @@ public class ConstraintListTest {
         list.add(second);
         list.removeLast();
         Assert.assertEquals(1, list.size());
-        assertArray(list.toArray(), first);
+        assertAsArray(list, first);
+        assertAsCollection(list, first);
         assertIteratorRead(list.iterator(), first);
         list.removeLast();
         Assert.assertEquals(0, list.size());
-        assertArray(list.toArray());
+        assertAsArray(list);
+        assertAsCollection(list);
         assertIteratorRead(list.iterator());
         
         list.add(first);
@@ -426,13 +476,15 @@ public class ConstraintListTest {
         constraints.add(second);
         list.removeAll(constraints);
         Assert.assertEquals(1, list.size());
-        assertArray(list.toArray(), first);
+        assertAsArray(list, first);
+        assertAsCollection(list, first);
         assertIteratorRead(list.iterator(), first);
         constraints.clear();
         constraints.add(first);
         list.removeAll(constraints);
         Assert.assertEquals(0, list.size());
-        assertArray(list.toArray());
+        assertAsArray(list);
+        assertAsCollection(list);
         assertIteratorRead(list.iterator());
     }
 
@@ -509,5 +561,7 @@ public class ConstraintListTest {
             }
         }
     }
+    
+    
     
 }

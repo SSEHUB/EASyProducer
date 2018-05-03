@@ -13,5 +13,7 @@ project changingValuesBase {
 	
 	MyBaseCmp cmp1 = MyBaseCmp{};
     MyBaseCmp cmp2 = MyRefinedCmp{value = 40};
+    MyBaseCmp cmp3 = MyBaseCmp{};
+    MyBaseCmp cmp4 = null;
 	
 }
