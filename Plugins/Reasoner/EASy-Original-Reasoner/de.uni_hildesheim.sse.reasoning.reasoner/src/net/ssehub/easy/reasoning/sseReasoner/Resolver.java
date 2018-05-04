@@ -733,7 +733,9 @@ class Resolver implements IValueChangeListener, IResolutionListener {
      */
     private void translateAnnotationDeclaration(Attribute decl, IDecisionVariable variable, ConstraintSyntaxTree cAcc) {
         ConstraintSyntaxTree attAcc = cAcc;
-        if (null != cAcc && !contexts.isContextsRegistering() && contexts.size() > 1) { // not in top-level assignment
+        if (null != cAcc && !contexts.isContextsRegistering() && (contexts.size() > 1 
+            || TypeQueries.isCompound(DerivedDatatype.resolveToBasis(variable.getDeclaration().getType())))) {
+            // not in top-level assignment, but in compound attributes
             attAcc = new AttributeVariable(cAcc, decl);
         }
         translateDeclaration(decl, variable, attAcc);
