@@ -42,35 +42,37 @@ public class ConstraintFunctions {
      */
     public static void allCompoundConstraints(Compound cmpType, AbstractConstraintProcessor processor, 
         boolean includeConstraintVariables, boolean includeDefaults, IModelElement parent) {
-        for (int c = 0; c < cmpType.getConstraintsCount(); c++) {
-            processor.process(cmpType.getConstraint(c), ExpressionType.CONSTRAINT);
-        }
-        if (includeConstraintVariables || includeDefaults) {
-            for (int i = 0; i < cmpType.getElementCount(); i++) {
-                DecisionVariableDeclaration decl = cmpType.getElement(i);
-                ConstraintSyntaxTree defaultValue = decl.getDefaultValue();
-                if (null != defaultValue) {
-                    if (includeConstraintVariables && TypeQueries.isConstraint(decl.getType())) {
-                        processor.process(defaultValue, ExpressionType.CONSTRAINT_VALUE, decl.getName(), parent);
-                    } else if (includeDefaults) {
-                        processor.process(defaultValue, ExpressionType.DEFAULT, decl.getName(), parent);
-                    }
-                }
-                for (int a = 0, n = decl.getAttributesCount(); includeDefaults && a < n; a++) {
-                    Attribute attr = decl.getAttribute(a);
-                    defaultValue = attr.getDefaultValue();
+        if (!processor.getContextStack().isTypeExcluded(cmpType)) {
+            for (int c = 0; c < cmpType.getConstraintsCount(); c++) {
+                processor.process(cmpType.getConstraint(c), ExpressionType.CONSTRAINT);
+            }
+            if (includeConstraintVariables || includeDefaults) {
+                for (int i = 0; i < cmpType.getElementCount(); i++) {
+                    DecisionVariableDeclaration decl = cmpType.getElement(i);
+                    ConstraintSyntaxTree defaultValue = decl.getDefaultValue();
                     if (null != defaultValue) {
-                        processor.process(defaultValue, ExpressionType.ANNOTATION_DEFAULT, attr.getName(), parent);
+                        if (includeConstraintVariables && TypeQueries.isConstraint(decl.getType())) {
+                            processor.process(defaultValue, ExpressionType.CONSTRAINT_VALUE, decl.getName(), parent);
+                        } else if (includeDefaults) {
+                            processor.process(defaultValue, ExpressionType.DEFAULT, decl.getName(), parent);
+                        }
+                    }
+                    for (int a = 0, n = decl.getAttributesCount(); includeDefaults && a < n; a++) {
+                        Attribute attr = decl.getAttribute(a);
+                        defaultValue = attr.getDefaultValue();
+                        if (null != defaultValue) {
+                            processor.process(defaultValue, ExpressionType.ANNOTATION_DEFAULT, attr.getName(), parent);
+                        }
                     }
                 }
             }
-        }
-        for (int r = 0; r < cmpType.getRefinesCount(); r++) {
-            allCompoundConstraints(cmpType.getRefines(r), processor, includeConstraintVariables, 
-                includeDefaults, parent);
-        }
-        for (int a = 0; a < cmpType.getAssignmentCount(); a++) {
-            allAssignmentConstraints(cmpType.getAssignment(a), processor);
+            for (int r = 0; r < cmpType.getRefinesCount(); r++) {
+                allCompoundConstraints(cmpType.getRefines(r), processor, includeConstraintVariables, 
+                    includeDefaults, parent);
+            }
+            for (int a = 0; a < cmpType.getAssignmentCount(); a++) {
+                allAssignmentConstraints(cmpType.getAssignment(a), processor);
+            }
         }
     }
     

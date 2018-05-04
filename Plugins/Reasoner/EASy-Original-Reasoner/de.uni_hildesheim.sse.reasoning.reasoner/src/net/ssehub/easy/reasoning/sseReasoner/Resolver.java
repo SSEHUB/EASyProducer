@@ -11,6 +11,7 @@ import java.util.Set;
 import net.ssehub.easy.basics.logger.EASyLoggerFactory;
 import net.ssehub.easy.basics.logger.EASyLoggerFactory.EASyLogger;
 import net.ssehub.easy.basics.modelManagement.Utils;
+import net.ssehub.easy.reasoning.core.reasoner.AttachedConstraint;
 import net.ssehub.easy.reasoning.core.reasoner.ConstraintBase;
 import net.ssehub.easy.reasoning.core.reasoner.ConstraintList;
 import net.ssehub.easy.reasoning.core.reasoner.ConstraintVariableConstraint;
@@ -24,6 +25,7 @@ import net.ssehub.easy.reasoning.sseReasoner.functions.AbstractConstraintProcess
 import net.ssehub.easy.reasoning.sseReasoner.functions.ScopeAssignments;
 import net.ssehub.easy.reasoning.sseReasoner.model.ContainerConstraintsFinder;
 import net.ssehub.easy.reasoning.sseReasoner.model.ContextStack;
+import net.ssehub.easy.reasoning.sseReasoner.model.ReasoningUtils;
 import net.ssehub.easy.reasoning.sseReasoner.model.SubstitutionVisitor;
 import net.ssehub.easy.reasoning.sseReasoner.model.VariablesInConstraintFinder;
 import net.ssehub.easy.reasoning.sseReasoner.model.VariablesInNotSimpleAssignmentConstraintsFinder;
@@ -52,7 +54,6 @@ import net.ssehub.easy.varModel.model.Attribute;
 import net.ssehub.easy.varModel.model.AttributeAssignment;
 import net.ssehub.easy.varModel.model.AttributeAssignment.Assignment;
 import net.ssehub.easy.varModel.model.Constraint;
-import net.ssehub.easy.varModel.model.Constraint.IConstraintType;
 import net.ssehub.easy.varModel.model.DecisionVariableDeclaration;
 import net.ssehub.easy.varModel.model.IModelElement;
 import net.ssehub.easy.varModel.model.IvmlException;
@@ -70,6 +71,7 @@ import net.ssehub.easy.varModel.model.datatypes.TypeQueries;
 import net.ssehub.easy.varModel.model.filter.FilterType;
 import net.ssehub.easy.varModel.model.values.CompoundValue;
 import net.ssehub.easy.varModel.model.values.ContainerValue;
+import net.ssehub.easy.varModel.model.values.NullValue;
 import net.ssehub.easy.varModel.model.values.Value;
 
 import static net.ssehub.easy.reasoning.sseReasoner.functions.ConstraintFunctions.*;
@@ -85,7 +87,7 @@ import static net.ssehub.easy.reasoning.sseReasoner.model.ReasoningUtils.*;
  * @author El-Sharkawy
  * @author Holger Eichelberger
  */
-public class Resolver {
+class Resolver implements IValueChangeListener, IResolutionListener {
 
     private static final EASyLogger LOGGER
         = EASyLoggerFactory.INSTANCE.getLogger(Resolver.class, Descriptor.BUNDLE_NAME);
@@ -151,259 +153,7 @@ public class Resolver {
         private Map<IDecisionVariable, List<Constraint>> variableConstraintsMap 
             = new HashMap<IDecisionVariable, List<Constraint>>();
     }
-    
-    // >>> from here the names follows the reasoner.tex documentation
 
-    private IValueChangeListener listener = new IValueChangeListener() {
-        
-        @Override
-        public void notifyUnresolved(IDecisionVariable variable) {
-        }
-
-        // compound value if compound is changed completely, else individual values
-        @Override
-        public void notifyChanged(IDecisionVariable variable, Value oldValue) {
-            if (!variable.isLocal()) {
-                if (Descriptor.LOGGING) {
-                    LOGGER.debug("Value changed: " + variable.getDeclaration().getName() + " " + variable.getValue()
-                        + " Parent: " + (null == variable.getParent() ? null : variable.getParent()));                 
-                }
-                scopeAssignments.addAssignedVariable(variable);
-                Value newValue = variable.getValue();
-                if (!Value.equals(newValue, oldValue)) {
-                    rescheduleConstraintValue(variable, variable, true);
-                    rescheduleCompoundValue(variable, oldValue);
-                    rescheduleContainerValue(variable, oldValue);
-                }
-                if (newValue instanceof ContainerValue) {
-                    createContainerConstraintValueConstraints((ContainerValue) newValue, 
-                        createParentExpression(variable), null, variable.getDeclaration().getParent(), variable);
-                }
-                if (isValueTypeChange(variable, newValue, oldValue)) {
-                    obtainConstraints(variable, true, Constraint.Type.CONSTRAINT);
-                    boolean inc = setIncremental(true); // use incremental mode, disable default values anyway
-                    translateDeclaration(variable.getDeclaration(), variable, null); // null as access is unclear
-                    setIncremental(inc);
-                }
-                rescheduleConstraintsForChilds(variable);
-                // All constraints for the parent (as this was also changed)
-                rescheduleConstraintsForParent(variable);
-            }
-        }
-        
-        private boolean isValueTypeChange(IDecisionVariable variable, Value newValue, Value oldValue) {
-            boolean result = false;
-            if (TypeQueries.isCompound(variable.getDeclaration().getType())) {
-                // for null -> initial value, constraints shall already be set by translation
-                if (null != oldValue && null != newValue 
-                    && !TypeQueries.sameTypes(oldValue.getType(), newValue.getType())) {
-                    result = true;
-                }
-            }
-            return result;
-        }
-
-        /**
-         * Reschedule a changed compound value,
-         * 
-         * @param variable the changed variable
-         * @param oldValue the value of <code>variable</code> before the change
-         */
-        private void rescheduleCompoundValue(IDecisionVariable variable, Value oldValue) {
-            Value newValue = variable.getValue();
-            if (newValue instanceof CompoundValue) {
-                CompoundValue newCValue = (CompoundValue) newValue;
-                for (String name : newCValue.getSlotNames()) {
-                    Value nValue = newCValue.getNestedValue(name);
-                    if (null != nValue) {
-                        IDecisionVariable nVar = variable.getNestedElement(name);
-                        rescheduleConstraintValue(nVar, nVar, true);
-                        rescheduleCompoundValue(nVar, nValue);
-                        if (nValue instanceof ContainerValue) {
-                            createContainerConstraintValueConstraints((ContainerValue) nValue, 
-                                createParentExpression(variable), null, variable.getDeclaration().getParent(), nVar);
-                        }
-                    }
-                }
-            }
-        }
-
-        /**
-         * Reschedule constraints in container values.
-         * 
-         * @param variable the variable to analyze
-         * @param oldValue the old value to compare for changes
-         */
-        private void rescheduleContainerValue(IDecisionVariable variable, Value oldValue) {
-            Value newValue = variable.getValue();
-            if (newValue instanceof ContainerValue && oldValue instanceof ContainerValue) {
-                ContainerValue newCValue = (ContainerValue) newValue;
-                ContainerValue newOValue = (ContainerValue) oldValue;
-                if (TypeQueries.isConstraint(newCValue.getContainedType())) {
-                    for (int c = 0; c < newCValue.getElementSize(); c++) {
-                        rescheduleConstraintValue(variable, variable.getNestedElement(c), c == 0);
-                    }
-                } else if (TypeQueries.isConstraint(newCValue.getContainedType())) {
-                    for (int c = 0; c < newCValue.getElementSize(); c++) {
-                        IDecisionVariable nVar = variable.getNestedElement(c);
-                        rescheduleCompoundValue(nVar, 
-                            null != newOValue && c < newOValue.getElementSize() ? newOValue.getElement(c) : null);
-                    }
-                }
-            }
-        }
-        
-        /**
-         * Obtains and if specified clears old constraints in the internal reasoner data structures.
-         * 
-         * @param variable the variable to return the constraints for
-         * @param clear {@code true} for clear variables, {@code false} for leave them as they are
-         * @return the constraints stored for {@code variable}, may be <b>null</b>
-         */
-        private List<Constraint> obtainConstraints(IDecisionVariable variable, boolean clear, 
-            IConstraintType keepFilter) {
-            IConfigurationElement iter = variable;
-            List<Constraint> constraints;
-            do { // use holder or iterate in case of container element variable
-                constraints = iter instanceof IDecisionVariable 
-                    ? variableConstraintsMap.get((IDecisionVariable) iter) : null;                        
-                iter = iter.getParent();
-            } while (null == constraints && null != iter);
-            if (clear && null != constraints) {
-                List<Constraint> toRemove = constraints;
-                if (null != keepFilter) {
-                    toRemove = new ArrayList<Constraint>();
-                    for (int i = constraints.size() - 1; i >= 0; i--) {
-                        Constraint cst = constraints.get(i);
-                        if (keepFilter != cst.getType()) {
-                            constraints.remove(i);
-                            toRemove.add(cst);
-                        }
-                    }
-                    constraints = toRemove;
-                }
-                constraintBase.removeAll(constraints);
-                removeAll(constraintVariableMap, constraints);
-                failedElements.removeProblemConstraints(constraints);
-                // clear dependent
-                simpleAssignmentFinder.acceptAndClear(constraints, config, false);
-                // clear this variable (if not already cleared)
-                constraintMap.removeAll(variable, constraints);
-                constraints.clear();
-            }
-            return constraints;
-        }
-
-        /**
-         * Reschedule a single constraint value.
-         * 
-         * @param variable the changed variable
-         * @param oldValue the value of <code>variable</code> before the change
-         */
-        private void rescheduleConstraintValue(IDecisionVariable holder, IDecisionVariable variable, boolean clear) {
-            if (TypeQueries.isConstraint(variable.getDeclaration().getType())) {
-                List<Constraint> constraints = obtainConstraints(holder, clear, null);
-                Value newValue = variable.getValue();
-                ConstraintSyntaxTree cst = getConstraintValueConstraintExpression(newValue);
-                if (null != cst) {
-                    IModelElement parent = null == constraints || constraints.isEmpty() 
-                        ? variable.getDeclaration().getParent() 
-                        : constraints.get(0).getParent();
-                    createConstraintVariableConstraint(cst, createParentExpression(variable), null, parent, holder);
-                    constraintBase.addAll(otherConstraints);
-                    constraintMap.addAll(variable, otherConstraints);
-                    otherConstraints.clear();
-                }
-            }
-        }
-        
-        private ConstraintSyntaxTree createParentExpression(IDecisionVariable variable) {
-            ConstraintSyntaxTree result = null;
-            IConfigurationElement parent = variable.getParent();
-            if (parent instanceof IDecisionVariable) { // we are nested
-                ConstraintSyntaxTree parentAcc = createParentExpression((IDecisionVariable) parent);
-                if (variable.getDeclaration() instanceof Attribute) {
-                    result = new AttributeVariable(parentAcc, (Attribute) variable.getDeclaration());
-                } else { // TODO what about container variables?
-                    result = new CompoundAccess(parentAcc, variable.getDeclaration().getName());
-                }
-            } else { // we are top-level
-                result = new Variable(variable.getDeclaration());
-            }
-            return result;
-        }
-
-        /**
-         * Tries rescheduling the given constraints. Does not add a constraint to the constraint base if already
-         * scheduled.
-         * 
-         * @param constraints the constraints to reschedule (may be <b>null</b>, ignored then)
-         */
-        private void reschedule(AbstractVariable declaration) {
-            Set<Constraint> constraints = constraintMap.getRelevantConstraints(declaration);
-            if (null != constraints) {
-                for (Constraint varConstraint : constraints) {
-                    if (!constraintBase.contains(varConstraint)) {
-                        constraintBase.addLast(varConstraint);
-                    }
-                }
-            }
-        }
-
-        /**
-         * Determines the constraints needed for the parents of <code>variable</code>.
-         * 
-         * @param variable the variable to analyze
-         * @param constraintsToReevaluate the constraint set to be modified as a side effect
-         */
-        private void rescheduleConstraintsForParent(IDecisionVariable variable) {
-            IConfigurationElement parent = variable.getParent();
-            if (parent instanceof IDecisionVariable) {
-                IDecisionVariable pVar = (IDecisionVariable) parent;
-                AbstractVariable declaration = pVar.getDeclaration();
-                reschedule(declaration);
-                rescheduleConstraintsForParent(pVar);
-            }
-        }
-
-        /**
-         * Determines the constraints needed for <code>variable</code> and its (transitive) child slots.
-         * 
-         * @param variable the variable to analyze
-         * @param constraintsToReevaluate the constraint set to be modified as a side effect
-         */
-        private void rescheduleConstraintsForChilds(IDecisionVariable variable) {
-            AbstractVariable declaration = variable.getDeclaration();
-            reschedule(declaration);
-            // All constraints for childs (as they may also changed)
-            for (int j = 0, nChilds = variable.getNestedElementsCount(); j < nChilds; j++) {
-                rescheduleConstraintsForChilds(variable.getNestedElement(j));
-            }
-        }
-    };
-    
-    /**
-     * Listener for the {@link #evaluator} to record changed variables.
-     */
-    private IResolutionListener resolutionListener = new IResolutionListener() {
-        
-        @Override
-        public void notifyResolved(IDecisionVariable compound, String slotName, IDecisionVariable resolved) {
-            if (!(resolved.isLocal())) {
-                usedVariables.add(resolved);                
-            }
-        }
-        
-        @Override
-        public void notifyResolved(AbstractVariable declaration, IDecisionVariable resolved) {
-            if (!(resolved.isLocal())) {
-                usedVariables.add(resolved);                
-            }            
-        }
-    };
-    
-    // <<< documented until here    
-    
     /**
      * Main constructor that activates Resolver constructor.
      * @param project Project for evaluation.
@@ -437,6 +187,301 @@ public class Resolver {
         new Resolver(config.getProject(), config, reasonerConfig);
     }  
     
+    // >>> from here the names follows the reasoner.tex documentation
+        
+    @Override
+    public void notifyUnresolved(IDecisionVariable variable) {
+    }
+
+    // compound value if compound is changed completely, else individual values
+    @Override
+    public void notifyChanged(IDecisionVariable variable, Value oldValue) {
+        if (!variable.isLocal()) {
+            if (Descriptor.LOGGING) {
+                LOGGER.debug("Value changed: " + variable.getDeclaration().getName() + " " + variable.getValue()
+                    + " Parent: " + (null == variable.getParent() ? null : variable.getParent()));                 
+            }
+            scopeAssignments.addAssignedVariable(variable);
+            Value newValue = variable.getValue();
+            if (!Value.equals(newValue, oldValue)) {
+                rescheduleConstraintValue(variable, variable, true);
+                rescheduleCompoundValue(variable, oldValue);
+                rescheduleContainerValue(variable, oldValue);
+            }
+            if (newValue instanceof ContainerValue) {
+                createContainerConstraintValueConstraints((ContainerValue) newValue, 
+                    createParentExpression(variable), null, variable.getDeclaration().getParent(), variable);
+            }
+            if (isValueTypeChange(variable, newValue, oldValue)) {
+                rescheduleValueTypeChange(variable, newValue, oldValue);
+            }
+            rescheduleConstraintsForChilds(variable);
+            // All constraints for the parent (as this was also changed)
+            rescheduleConstraintsForParent(variable);
+        }
+    }
+
+    /**
+     * Reschedules a change of value types for compound values. Precondition: constraints are correctly assigned 
+     * before, {@code oldValue != newValue} and both, {@code oldValue} and {@code newValue} are not null.
+     * 
+     * @param variable the variable
+     * @param newValue the new value (in {@code variable}
+     * @param oldValue the old value
+     */
+    private void rescheduleValueTypeChange(IDecisionVariable variable, Value newValue, Value oldValue) {
+        IDatatype newType = newValue.getType();
+        IDatatype oldType = oldValue.getType();
+        // precondition: oldValue != newValue
+        if (NullValue.INSTANCE == newValue) {
+            // clear every constraint
+            obtainConstraints(variable, true, null);
+        } else if (NullValue.INSTANCE == oldValue) {
+            // nothing to clear, just add all for newValue
+            boolean inc = setIncremental(true); // use incremental mode, disable default values anyway
+            translateDeclaration(variable.getDeclaration(), variable, null); // null as access is unclear
+            setIncremental(inc);
+        } else if (oldType.isAssignableFrom(newType)) {
+            // add those between oldValue (exclusive) and newType (inclusive), start at newType
+            Set<Compound> types = collectRefines(newType, oldType);
+            contexts.setTypeExcludes(types);
+            boolean inc = setIncremental(true); // use incremental mode, disable default values anyway
+            translateDeclaration(variable.getDeclaration(), variable, null); // null as access is unclear
+            setIncremental(inc);
+            contexts.setTypeExcludes(null);
+            ReasoningUtils.SET_COMPOUND_POOL.releaseInstance(types);
+        } else {
+            // remove those between newValue and oldValue (start at oldValue)
+            Set<Compound> types = collectRefines(oldType, newType);
+            obtainConstraints(variable, true, types);        
+            ReasoningUtils.SET_COMPOUND_POOL.releaseInstance(types);
+        }
+    }
+        
+    /**
+     * Returns whether a value change from {@code oldValue} to {@code newValue} on {@code variable}
+     * is a value type change.
+     * 
+     * @param variable the variable
+     * @param newValue the new value (in {@code variable}
+     * @param oldValue the old value
+     * @return {@code true} for type change, {@code false} else
+     */
+    private boolean isValueTypeChange(IDecisionVariable variable, Value newValue, Value oldValue) {
+        boolean result = false;
+        if (TypeQueries.isCompound(variable.getDeclaration().getType())) {
+            // for null -> initial value, constraints shall already be set by translation
+            if (null != oldValue && null != newValue 
+                && !TypeQueries.sameTypes(oldValue.getType(), newValue.getType())) {
+                result = true;
+            }
+        }
+        return result;
+    }
+
+    /**
+     * Reschedule a changed compound value.
+     * 
+     * @param variable the changed variable
+     * @param oldValue the value of <code>variable</code> before the change
+     */
+    private void rescheduleCompoundValue(IDecisionVariable variable, Value oldValue) {
+        Value newValue = variable.getValue();
+        if (newValue instanceof CompoundValue) {
+            CompoundValue newCValue = (CompoundValue) newValue;
+            for (String name : newCValue.getSlotNames()) {
+                Value nValue = newCValue.getNestedValue(name);
+                if (null != nValue) {
+                    IDecisionVariable nVar = variable.getNestedElement(name);
+                    rescheduleConstraintValue(nVar, nVar, true);
+                    rescheduleCompoundValue(nVar, nValue);
+                    if (nValue instanceof ContainerValue) {
+                        createContainerConstraintValueConstraints((ContainerValue) nValue, 
+                            createParentExpression(variable), null, variable.getDeclaration().getParent(), nVar);
+                    }
+                }
+            }
+        }
+    }
+
+    /**
+     * Reschedule constraints in container values.
+     * 
+     * @param variable the variable to analyze
+     * @param oldValue the old value to compare for changes
+     */
+    private void rescheduleContainerValue(IDecisionVariable variable, Value oldValue) {
+        Value newValue = variable.getValue();
+        if (newValue instanceof ContainerValue && oldValue instanceof ContainerValue) {
+            ContainerValue newCValue = (ContainerValue) newValue;
+            ContainerValue newOValue = (ContainerValue) oldValue;
+            if (TypeQueries.isConstraint(newCValue.getContainedType())) {
+                for (int c = 0; c < newCValue.getElementSize(); c++) {
+                    rescheduleConstraintValue(variable, variable.getNestedElement(c), c == 0);
+                }
+            } else if (TypeQueries.isConstraint(newCValue.getContainedType())) {
+                for (int c = 0; c < newCValue.getElementSize(); c++) {
+                    IDecisionVariable nVar = variable.getNestedElement(c);
+                    rescheduleCompoundValue(nVar, 
+                        null != newOValue && c < newOValue.getElementSize() ? newOValue.getElement(c) : null);
+                }
+            }
+        }
+    }
+    
+    /**
+     * Obtains and if specified clears old constraints in the internal reasoner data structures.
+     * 
+     * @param variable the variable to return the constraints for
+     * @param clear {@code true} for clear variables, {@code false} for leave them as they are
+     * @param deleteFilter compound types dictating those constraints having them as attached object
+     *    that shall be deleted while others shall be left untouched (may be <b>null</b> for delete 
+     *    all constraints if {@code clear} is {@code true}.
+     * @return the constraints stored for {@code variable}, may be <b>null</b>
+     */
+    private List<Constraint> obtainConstraints(IDecisionVariable variable, boolean clear, 
+        Set<Compound> deleteFilter) {
+        IConfigurationElement iter = variable;
+        List<Constraint> constraints;
+        do { // use holder or iterate in case of container element variable
+            constraints = iter instanceof IDecisionVariable 
+                ? variableConstraintsMap.get((IDecisionVariable) iter) : null;                        
+            iter = iter.getParent();
+        } while (null == constraints && null != iter);
+        if (clear && null != constraints) {
+            List<Constraint> toRemove = constraints;
+            if (null != deleteFilter) {
+                toRemove = new ArrayList<Constraint>();
+                for (int i = constraints.size() - 1; i >= 0; i--) {
+                    Constraint cst = constraints.get(i);
+                    Object attachedTo = cst.getAttachedTo();
+                    if (null != attachedTo && deleteFilter.contains(attachedTo)) {
+                        constraints.remove(i);
+                        toRemove.add(cst);
+                    }
+                }
+                constraints = toRemove;
+            }
+            constraintBase.removeAll(constraints);
+            removeAll(constraintVariableMap, constraints);
+            failedElements.removeProblemConstraints(constraints);
+            // clear dependent
+            simpleAssignmentFinder.acceptAndClear(constraints, config, false);
+            // clear this variable (if not already cleared)
+            constraintMap.removeAll(variable, constraints);
+            constraints.clear();
+        }
+        return constraints;
+    }
+
+    /**
+     * Reschedule a single constraint value.
+     * 
+     * @param holder the actual holder of the value
+     * @param variable the variable to be considered, often {@code holder}, sometimes also a nested variable
+     * @param clear whether constraints for {@code holder} shall be cleared
+     */
+    private void rescheduleConstraintValue(IDecisionVariable holder, IDecisionVariable variable, boolean clear) {
+        if (TypeQueries.isConstraint(variable.getDeclaration().getType())) {
+            List<Constraint> constraints = obtainConstraints(holder, clear, null);
+            Value newValue = variable.getValue();
+            ConstraintSyntaxTree cst = getConstraintValueConstraintExpression(newValue);
+            if (null != cst) {
+                IModelElement parent = null == constraints || constraints.isEmpty() 
+                    ? variable.getDeclaration().getParent() 
+                    : constraints.get(0).getParent();
+                createConstraintVariableConstraint(cst, createParentExpression(variable), null, parent, holder);
+                constraintBase.addAll(otherConstraints);
+                constraintMap.addAll(variable, otherConstraints);
+                otherConstraints.clear();
+            }
+        }
+    }
+    
+    /**
+     * Creates an expression representing the parent of {@code variable}.
+     * 
+     * @param variable the variable
+     * @return the expression, <b>null</b> if no expression can be constructed
+     */
+    private ConstraintSyntaxTree createParentExpression(IDecisionVariable variable) {
+        ConstraintSyntaxTree result = null;
+        IConfigurationElement parent = variable.getParent();
+        if (parent instanceof IDecisionVariable) { // we are nested
+            ConstraintSyntaxTree parentAcc = createParentExpression((IDecisionVariable) parent);
+            if (variable.getDeclaration() instanceof Attribute) {
+                result = new AttributeVariable(parentAcc, (Attribute) variable.getDeclaration());
+            } else { // TODO what about container variables?
+                result = new CompoundAccess(parentAcc, variable.getDeclaration().getName());
+            }
+        } else { // we are top-level
+            result = new Variable(variable.getDeclaration());
+        }
+        return result;
+    }
+
+    /**
+     * Tries rescheduling the given constraints. Does not add a constraint to the constraint base if already
+     * scheduled.
+     * 
+     * @param declaration the variable declaration to reschedule
+     */
+    private void reschedule(AbstractVariable declaration) {
+        Set<Constraint> constraints = constraintMap.getRelevantConstraints(declaration);
+        if (null != constraints) {
+            for (Constraint varConstraint : constraints) {
+                if (!constraintBase.contains(varConstraint)) {
+                    constraintBase.addLast(varConstraint);
+                }
+            }
+        }
+    }
+
+    /**
+     * Determines the constraints needed for the parents of <code>variable</code>.
+     * 
+     * @param variable the variable to analyze
+     */
+    private void rescheduleConstraintsForParent(IDecisionVariable variable) {
+        IConfigurationElement parent = variable.getParent();
+        if (parent instanceof IDecisionVariable) {
+            IDecisionVariable pVar = (IDecisionVariable) parent;
+            AbstractVariable declaration = pVar.getDeclaration();
+            reschedule(declaration);
+            rescheduleConstraintsForParent(pVar);
+        }
+    }
+
+    /**
+     * Determines the constraints needed for <code>variable</code> and its (transitive) child slots.
+     * 
+     * @param variable the variable to analyze
+     */
+    private void rescheduleConstraintsForChilds(IDecisionVariable variable) {
+        AbstractVariable declaration = variable.getDeclaration();
+        reschedule(declaration);
+        // All constraints for childs (as they may also changed)
+        for (int j = 0, nChilds = variable.getNestedElementsCount(); j < nChilds; j++) {
+            rescheduleConstraintsForChilds(variable.getNestedElement(j));
+        }
+    }
+    
+    @Override
+    public void notifyResolved(IDecisionVariable compound, String slotName, IDecisionVariable resolved) {
+        if (!(resolved.isLocal())) {
+            usedVariables.add(resolved);                
+        }
+    }
+    
+    @Override
+    public void notifyResolved(AbstractVariable declaration, IDecisionVariable resolved) {
+        if (!(resolved.isLocal())) {
+            usedVariables.add(resolved);                
+        }            
+    }
+    
+    // <<< documented until here    
+    
     // >>> from here the names follow the reasoner.tex documentation
     
     /**
@@ -450,8 +495,8 @@ public class Resolver {
     public void resolve() {
         isRunning = true;
         // Stack of importedProject (start with inner most imported project)
-        evaluator.init(config, null, false, listener); // also for defaults as they may refer to each other 
-        evaluator.setResolutionListener(resolutionListener);
+        evaluator.init(config, null, false, this); // also for defaults as they may refer to each other 
+        evaluator.setResolutionListener(this);
         evaluator.setScopeAssignments(scopeAssignments);
         endTimestamp = reasonerConfig.getTimeout() <= 0 
             ? -1 : System.currentTimeMillis() + reasonerConfig.getTimeout();
@@ -875,6 +920,7 @@ public class Resolver {
         if (!contexts.alreadyProcessed(type)) {
             contexts.recordProcessed(type);
             contexts.pushContext(decl, null == variable);
+            contexts.transferTypeExcludes(type);
             // resolve compound access first for all slots
             Variable declVar = new Variable(decl);
             registerCompoundMapping(type, cAcc, declVar, null == variable ? type : variable.getValue().getType());
@@ -899,23 +945,25 @@ public class Resolver {
         Variable declVar, IDatatype target) {
         for (int i = 0, n = type.getInheritedElementCount(); i < n; i++) {
             AbstractVariable nestedDecl = type.getInheritedElement(i);
-            ConstraintSyntaxTree acc;
-            if (null == cAcc) {
-                acc = new CompoundAccess(declVar, nestedDecl.getName());
-            } else {
-                acc = new CompoundAccess(createAsTypeCast(cAcc, type, target), 
-                    nestedDecl.getName());
-            }
-            contexts.registerMapping(nestedDecl, acc);
-            for (int a = 0, m = nestedDecl.getAttributesCount(); a < m; a++) {
-                Attribute attr = nestedDecl.getAttribute(a);
+            if (!contexts.isElementTypeExcluded(nestedDecl.getParent())) {
+                ConstraintSyntaxTree acc;
                 if (null == cAcc) {
-                    acc = new AttributeVariable(declVar, attr);
-                } else {                        
-                    acc = new AttributeVariable(createAsTypeCast(cAcc, type, target), attr);
+                    acc = new CompoundAccess(declVar, nestedDecl.getName());
+                } else {
+                    acc = new CompoundAccess(createAsTypeCast(cAcc, type, target), 
+                        nestedDecl.getName());
                 }
-                contexts.registerMapping(attr, acc);
-            }            
+                contexts.registerMapping(nestedDecl, acc);
+                for (int a = 0, m = nestedDecl.getAttributesCount(); a < m; a++) {
+                    Attribute attr = nestedDecl.getAttribute(a);
+                    if (null == cAcc) {
+                        acc = new AttributeVariable(declVar, attr);
+                    } else {                        
+                        acc = new AttributeVariable(createAsTypeCast(cAcc, type, target), attr);
+                    }
+                    contexts.registerMapping(attr, acc);
+                }            
+            }
         }
     }
 
@@ -933,12 +981,16 @@ public class Resolver {
             for (int i = 0, n = variable.getNestedElementsCount(); i < n; i++) {
                 IDecisionVariable nestedVar = variable.getNestedElement(i);
                 AbstractVariable nestedDecl = nestedVar.getDeclaration();
-                translateDeclaration(nestedDecl, nestedVar, contexts.getMapping(nestedDecl));
+                if (!contexts.isElementTypeExcluded(nestedDecl.getParent())) {
+                    translateDeclaration(nestedDecl, nestedVar, contexts.getMapping(nestedDecl));
+                }
             }
         } else {
             for (int i = 0, n = type.getInheritedElementCount(); i < n; i++) {
                 AbstractVariable nestedDecl = type.getInheritedElement(i);
-                translateDeclaration(nestedDecl, null, contexts.getMapping(nestedDecl));
+                if (!contexts.isElementTypeExcluded(nestedDecl.getParent())) {
+                    translateDeclaration(nestedDecl, null, contexts.getMapping(nestedDecl));
+                }
             }
         }
         if (!incremental) {
@@ -996,7 +1048,7 @@ public class Resolver {
             IModelElement parent) {
             cst = substituteVariables(cst, selfEx, self);
             try { // compoundConstraints
-                Constraint constraint = new Constraint(cst, parent);
+                Constraint constraint = new AttachedConstraint(cst, contexts.getCurrentType(), parent);
                 addConstraint(otherConstraints, constraint, true, variable);
                 if (ExpressionType.CONSTRAINT == type) {
                     registerConstraint(variable, constraint);
@@ -1005,6 +1057,11 @@ public class Resolver {
                 LOGGER.exception(e);
             }               
             return cst;
+        }
+
+        @Override
+        public ContextStack getContextStack() {
+            return contexts;
         }
 
     }
@@ -1017,13 +1074,15 @@ public class Resolver {
      * @param self an variable declaration representing <i>self</i> (ignored if <b>null</b>).
      */
     private void processCompoundEvals(Compound cmpType, ConstraintSyntaxTree selfEx, AbstractVariable self) {
-        for (int r = 0; r < cmpType.getRefinesCount(); r++) {
-            processCompoundEvals(cmpType.getRefines(r), selfEx, self);
-        }
-        for (int i = 0; i < cmpType.getModelElementCount(); i++) {            
-            if (cmpType.getModelElement(i) instanceof PartialEvaluationBlock) {
-                PartialEvaluationBlock evalBlock = (PartialEvaluationBlock) cmpType.getModelElement(i);
-                processEvalConstraints(evalBlock, selfEx, self);
+        if (!contexts.isTypeExcluded(cmpType)) {
+            for (int r = 0; r < cmpType.getRefinesCount(); r++) {
+                processCompoundEvals(cmpType.getRefines(r), selfEx, self);
+            }
+            for (int i = 0; i < cmpType.getModelElementCount(); i++) {            
+                if (cmpType.getModelElement(i) instanceof PartialEvaluationBlock) {
+                    PartialEvaluationBlock evalBlock = (PartialEvaluationBlock) cmpType.getModelElement(i);
+                    processEvalConstraints(evalBlock, selfEx, self);
+                }
             }
         }
     }

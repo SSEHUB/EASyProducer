@@ -580,5 +580,43 @@ public class ReasoningUtils {
             map.remove(cst);
         }
     }
+
+    /**
+     * Collects all refines from {@code start} excluding all originating at {@code exclude}.
+     * 
+     * @param start the start type (an empty set will be returned if {@code start} is not a {@link Compound})
+     * @param exclude an optional type excluding the entire refinement hierarchy originating at 
+     *     {@code exclude} if {@code exclude} is a compound, ignored if <b>null</b> 
+     * @return the set of refined compounds, must be released via {@link #SET_COMPOUND_POOL}
+     */
+    public static Set<Compound> collectRefines(IDatatype start, IDatatype exclude) {
+        Set<Compound> result = ReasoningUtils.SET_COMPOUND_POOL.getInstance();
+        if (start instanceof Compound) {
+            collectRefines((Compound) start, exclude, true, result);
+        }
+        return result;
+    }
+
+    /**
+     * Collects all refines from {@code cmp} excluding all originating at {@code exclude}, adding 
+     * or removing following compounds based on {@code add} storing the results in {@code result}.
+     * 
+     * @param cmp the type to collect for
+     * @param exclude an optional type excluding the entire refinement hierarchy originating at 
+     *     {@code exclude} if {@code exclude} is a compound, ignored if <b>null</b>
+     * @param add whether datatypes shall be added or removed from {@code result}.
+     * @param result incrementally built up result, may be modified as a side effect 
+     */
+    private static void collectRefines(Compound cmp, IDatatype exclude, boolean add, Set<Compound> result) {
+        add = (exclude != cmp);
+        if (add) {
+            result.add(cmp);
+        } else {
+            result.remove(cmp);
+        }
+        for (int r = 0; r < cmp.getRefinesCount(); r++) {
+            collectRefines(cmp.getRefines(r), exclude, add, result);
+        }
+    }
     
 }

@@ -23,6 +23,7 @@ import net.ssehub.easy.varModel.cst.ConstantValue;
 import net.ssehub.easy.varModel.model.Constraint;
 import net.ssehub.easy.varModel.model.Project;
 import net.ssehub.easy.varModel.model.datatypes.BooleanType;
+import net.ssehub.easy.varModel.model.datatypes.IntegerType;
 import net.ssehub.easy.varModel.model.values.ValueDoesNotMatchTypeException;
 import net.ssehub.easy.varModel.model.values.ValueFactory;
 
@@ -48,9 +49,11 @@ public class TypedConstraintTest {
             Assert.assertEquals(cst, constraint.getConsSyntax());
             Assert.assertTrue(constraint.isBooleanConstraint());
             Assert.assertEquals(Constraint.Type.DEFAULT, constraint.getType());
+            Assert.assertNull(constraint.getAttachedTo());
             
             constraint = new TypedConstraint(cst, Constraint.Type.CONSTRAINT, prj);
             Assert.assertEquals(Constraint.Type.CONSTRAINT, constraint.getType());
+            Assert.assertNull(constraint.getAttachedTo());
         } catch (CSTSemanticException e) {
             Assert.fail("Unexpected exception " + e.getMessage());
         }
@@ -71,6 +74,7 @@ public class TypedConstraintTest {
             Assert.assertEquals(cst, constraint.getConsSyntax());
             Assert.assertTrue(constraint.isBooleanConstraint());
             Assert.assertEquals(Constraint.Type.DEFAULT, constraint.getType());
+            Assert.assertNull(constraint.getAttachedTo());
         } catch (CSTSemanticException e) {
             Assert.fail("Unexpected exception " + e.getMessage());
         }
@@ -91,6 +95,28 @@ public class TypedConstraintTest {
             Assert.assertEquals(cst, constraint.getConsSyntax());
             Assert.assertTrue(constraint.isBooleanConstraint());
             Assert.assertEquals(Constraint.Type.CONSTRAINT, constraint.getType());
+            Assert.assertNull(constraint.getAttachedTo());
+        } catch (CSTSemanticException e) {
+            Assert.fail("Unexpected exception " + e.getMessage());
+        }
+    }
+    
+    /**
+     * Tests the attached constraint.
+     * 
+     * @throws ValueDoesNotMatchTypeException in case of problems creating a value
+     */
+    @Test
+    public void testAttachedConstraint() throws ValueDoesNotMatchTypeException {
+        Project prj = new Project("test");
+        ConstantValue cst = new ConstantValue(ValueFactory.createValue(BooleanType.TYPE, true));
+        try {
+            Constraint constraint = new AttachedConstraint(cst, IntegerType.TYPE, prj);
+            Assert.assertEquals(prj, constraint.getParent());
+            Assert.assertEquals(cst, constraint.getConsSyntax());
+            Assert.assertTrue(constraint.isBooleanConstraint());
+            Assert.assertEquals(Constraint.Type.USUAL, constraint.getType());
+            Assert.assertEquals(IntegerType.TYPE, constraint.getAttachedTo());
         } catch (CSTSemanticException e) {
             Assert.fail("Unexpected exception " + e.getMessage());
         }

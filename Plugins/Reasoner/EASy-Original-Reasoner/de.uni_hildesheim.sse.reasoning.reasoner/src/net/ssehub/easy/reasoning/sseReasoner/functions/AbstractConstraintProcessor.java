@@ -15,6 +15,7 @@
  */
 package net.ssehub.easy.reasoning.sseReasoner.functions;
 
+import net.ssehub.easy.reasoning.sseReasoner.model.ContextStack;
 import net.ssehub.easy.varModel.cst.ConstraintSyntaxTree;
 import net.ssehub.easy.varModel.model.Constraint;
 import net.ssehub.easy.varModel.model.IModelElement;
@@ -62,5 +63,12 @@ public abstract class AbstractConstraintProcessor {
     public ConstraintSyntaxTree process(Constraint constraint, ExpressionType type) {
         return process(constraint.getConsSyntax(), type, null, constraint.getParent());
     }
+    
+    /**
+     * Returns the context stack, e.g., for type exclusions.
+     * 
+     * @return the context stack
+     */
+    public abstract ContextStack getContextStack();
     
 }

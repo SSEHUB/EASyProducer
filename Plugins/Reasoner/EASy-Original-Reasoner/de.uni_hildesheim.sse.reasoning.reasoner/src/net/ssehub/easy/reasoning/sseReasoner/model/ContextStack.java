@@ -28,6 +28,7 @@ import net.ssehub.easy.varModel.cst.CSTSemanticException;
 import net.ssehub.easy.varModel.cst.ConstraintSyntaxTree;
 import net.ssehub.easy.varModel.model.AbstractVariable;
 import net.ssehub.easy.varModel.model.DecisionVariableDeclaration;
+import net.ssehub.easy.varModel.model.IModelElement;
 import net.ssehub.easy.varModel.model.datatypes.Compound;
 import net.ssehub.easy.varModel.model.datatypes.Container;
 import net.ssehub.easy.varModel.model.datatypes.IDatatype;
@@ -69,6 +70,8 @@ public class ContextStack {
         private boolean isRegistered;
         private boolean recordProcessedTypes;
         private Set<IDatatype> processedTypes = new HashSet<IDatatype>();
+        private Set<? extends IDatatype> typeExcludes;
+        private IDatatype type;
         
         /**
          * Clears this context.
@@ -85,6 +88,8 @@ public class ContextStack {
             isRegistered = false;
             recordProcessedTypes = false;
             processedTypes.clear();
+            typeExcludes = null;
+            type = null;
         }
         
     }
@@ -331,7 +336,8 @@ public class ContextStack {
     /**
      * Records a processed type (in case of compounds also all refined types) in the closest actual context that allows 
      * recording (see {@link Context#recordProcessedTypes} and {@link #pushContext(AbstractVariable, 
-     * ConstraintSyntaxTree, DecisionVariableDeclaration, boolean)}).
+     * ConstraintSyntaxTree, DecisionVariableDeclaration, boolean)}). Stores {@code type} in the current
+     * context for retrieval via {@link #getCurrentType()}.
      * 
      * @param type the type to record
      */
@@ -398,6 +404,72 @@ public class ContextStack {
             iter = iter.predecessor;
         } while (null != iter);
         return result;
+    }
+    
+    /**
+     * Sets type excludes on the current context. Type excludes are only valid on the given
+     * context, but defined type excludes on the next enclosing context may be 
+     * {@link #transferTypeExcludes(IDatatype) transferred}.  
+     * 
+     * @param excludes the type excludes, <b>null</b> for none
+     * @see #isTypeExcluded(IDatatype)
+     * @see #isElementTypeExcluded(IModelElement)
+     */
+    public void setTypeExcludes(Set<? extends IDatatype> excludes) {
+        currentContext.typeExcludes = excludes;
+    }
+    
+    /**
+     * Transfers the type excludes from the next enclosing context defining type excludes to the current
+     * context. Clears the type excludes in the originating context.
+     *  
+     * @param type the type causing the transfer, to be stored in the current context (@link #getCurrentType()}
+     * @see #setTypeExcludes(Set)
+     * @see #isTypeExcluded(IDatatype)
+     * @see #isElementTypeExcluded(IModelElement)
+     */
+    public void transferTypeExcludes(IDatatype type) {
+        if (null != currentContext.typeExcludes) {
+            Context iter = currentContext.predecessor;
+            while (null != iter) {
+                if (null != iter.typeExcludes) {
+                    currentContext.typeExcludes = iter.typeExcludes;
+                    iter.typeExcludes = null;
+                    iter = null;
+                }
+            }
+        }
+        currentContext.type = type;
+    }
+    
+    /**
+     * Returns whether the given <code>element</code> if it is a type is excluded in the current
+     * context.
+     * 
+     * @param element the element to check for
+     * @return {@code true} if excluded, {@code false} else
+     */
+    public boolean isElementTypeExcluded(IModelElement element) {
+        return element instanceof IDatatype ? isTypeExcluded((IDatatype) element) : false;
+    }
+
+    /**
+     * Returns whether the given {@code type} is excluded in the current context. 
+     * 
+     * @param type the type to check for
+     * @return {@code true} if excluded, {@code false} else
+     */
+    public boolean isTypeExcluded(IDatatype type) {
+        return null == currentContext.typeExcludes ? false : currentContext.typeExcludes.contains(type);
+    }
+
+    /**
+     * Returns the type stored in the current context.
+     * 
+     * @return the type, may be <b>null</b> if there is none
+     */
+    public IDatatype getCurrentType() {
+        return currentContext.type;
     }
 
 }
