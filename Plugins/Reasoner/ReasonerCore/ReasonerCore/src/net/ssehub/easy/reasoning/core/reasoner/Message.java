@@ -5,34 +5,47 @@ import java.util.List;
 import java.util.Set;
 
 import net.ssehub.easy.basics.messages.Status;
+import net.ssehub.easy.varModel.confModel.DisplayNameProvider;
 import net.ssehub.easy.varModel.confModel.IDecisionVariable;
 import net.ssehub.easy.varModel.cst.ConstraintSyntaxTree;
 import net.ssehub.easy.varModel.model.AbstractVariable;
 import net.ssehub.easy.varModel.model.Constraint;
 import net.ssehub.easy.varModel.model.ModelElement;
 import net.ssehub.easy.varModel.model.Project;
+import net.ssehub.easy.varModel.persistency.StringProvider;
 
 /**
- * Part of the {@link ReasoningResult} class, expressing on error/warning of a complete {@link ReasoningResult}.
+ * Part of the {@link ReasoningResult} class, expressing on error/warning of a complete {@link ReasoningResult}. Takes
+ * a series of lists, which shall be consistent in size. Complex textual representations are calculated on demand
+ * when requesting the respective information (rather than calculating this without need beforehand in a reasoner).
+ * 
  * @author El-Sharkawy
  * @author Sizonenko
- *
  */
 public class Message extends net.ssehub.easy.basics.messages.Message {
 
+    // TODO refactor to a single, consistent list of entries. Left it for compatibility 
     private List<ModelElement> conflictingElements;
-    private List<String> conflictingElementLabels;
     private List<Set<AbstractVariable>> variablesInConstraints;
     private List<Set<IDecisionVariable>> problemVariables;
     private List<ConstraintSyntaxTree> problemConstraintParts = new ArrayList<ConstraintSyntaxTree>();
     private List<Constraint> problemConstraints;
-    private List<String> conflictingElementComments;
     private List<Project> conflictingElementProjects;
-    private List<String> conflictingElementSuggestions;
+    private List<SuggestionType> conflictingElementSuggestions;
     private List<IDecisionVariable> constraintVariables;
     private List<Integer> errorClassification;
-    
 
+    /**
+     * Defines supported suggestion types. Please check {@link Message#getConflictSuggestions()} for turning them
+     * into text.
+     * 
+     * @author Holger Eichelberger
+     */
+    public enum SuggestionType {
+        PROBLEM_POINTS,
+        REASSIGNMENT
+    }
+    
     /**
      * Sole constructor for multiple conflicting elements.
      * @param explanation A textual representation of this message
@@ -81,62 +94,236 @@ public class Message extends net.ssehub.easy.basics.messages.Message {
     public int getConflictsCount() {
         return conflictingElements.size();
     }
-    
+
     /**
-     * Method for adding conflicting element labels.
-     * @param conflictingElementLabels conflicting element labels.
+     * Returns the minimum of the three given integer values.
+     * 
+     * @param v1 the first value
+     * @param v2 the second value
+     * @param v3 the third value
+     * @return the minimum of the three given integer values
      */
-    public void addConflictingElementLabels(List<String> conflictingElementLabels) {
-        this.conflictingElementLabels = new ArrayList<String>();
-        if (null != conflictingElementLabels) {
-            this.conflictingElementLabels.addAll(conflictingElementLabels);
-        }
+    private static int min(int v1, int v2, int v3) {
+        return Math.min(Math.min(v1, v2), v3);
     }
-    
+
+    /**
+     * Returns the minimum of the four given integer values.
+     * 
+     * @param v1 the first value
+     * @param v2 the second value
+     * @param v3 the third value
+     * @param v4 the fourth value
+     * @return the minimum of the four given integer values
+     */
+    private static int min(int v1, int v2, int v3, int v4) {
+        return Math.min(Math.min(v1, v2), Math.min(v3, v4));
+    }
+
     /**
      * Returns the list of conflicting item labels.
-     * @return The list of conflicting item labels
+     * 
+     * @return The list of conflicting item labels. The number of entries depends on the minimum number of 
+     * conflicting element suggestions, conflicting elements, constraint variables and variables in constraints.
      */
     public List<String> getConflictLabels() {
-        return conflictingElementLabels;
-    }
-    
-    /**
-     * Method for adding conflicting element comments.
-     * @param conflictingElementComments conflicting element comments.
-     */
-    public void addConflictingElementComments(List<String> conflictingElementComments) {
-        this.conflictingElementComments = new ArrayList<String>();
-        if (null != conflictingElementComments) {
-            this.conflictingElementComments.addAll(conflictingElementComments);
+        List<String> result;
+        if (null == conflictingElementSuggestions) {
+            result = null;
+        } else {
+            result = new ArrayList<String>();
+            for (int i = 0, n = min(conflictingElementSuggestions.size(), conflictingElements.size(), 
+                    constraintVariables.size(), variablesInConstraints.size()); i < n; i++) {
+                String text;
+                switch (conflictingElementSuggestions.get(i)) {
+                case PROBLEM_POINTS:
+                    text = toString(conflictingElements.get(i), constraintVariables.get(i)) + " Please check: " 
+                        + problemPointsToString(variablesInConstraints.get(i));
+                    break;
+                case REASSIGNMENT:
+                    text = toString(conflictingElements.get(i), null); 
+                    break;
+                default:
+                    text = "none";
+                    break;
+                }
+                result.add(text);
+            }
         }
+        return result;
     }
     
     /**
      * Returns the list of conflicting item comments.
-     * @return The list of conflicting item comments.
+     * 
+     * @return The list of conflicting item comments. The number of entries depends on the minimum number of 
+     * conflicting element suggestions, conflicting elements, and constraint variables.
      */
     public List<String> getConflictComments() {
-        return conflictingElementComments;
+        List<String> result;
+        if (null == conflictingElementSuggestions) {
+            result = null;
+        } else {
+            result = new ArrayList<String>();
+            for (int i = 0, n = min(conflictingElementSuggestions.size(), conflictingElements.size(), 
+                    constraintVariables.size()); i < n; i++) {
+                String text;
+                switch (conflictingElementSuggestions.get(i)) {
+                case PROBLEM_POINTS:
+                    text = toString(conflictingElements.get(i), constraintVariables.get(i));
+                    break;
+                case REASSIGNMENT:
+                    text = toString(conflictingElements.get(i), null); 
+                    break;
+                default:
+                    text = "none";
+                    break;
+                }
+                result.add(text);
+            }
+        }
+        return result;
+    }
+    
+    /**
+     * Turns a constraint into a string representation. If a named variable is given, use comment or name instead.
+     * 
+     * @param constraint the constraint
+     * @param namedVariable the related named variable (may be <b>null</b>)
+     * @return the string representation
+     */
+    private String toString(Constraint constraint, IDecisionVariable namedVariable) {
+        String result;
+        if (namedVariable != null) {
+            AbstractVariable decl = namedVariable.getDeclaration();
+            String comment = decl.getComment();
+            if (null == comment) {
+                result = decl.getName();  
+            } else {
+                result = decl.getComment();
+            } 
+        } else {
+            result = StringProvider.toIvmlString(constraint.getConsSyntax());
+        }
+        return result;
+    }
+
+    /**
+     * Turns a model element into a string representation. Considers {@link DisplayNameProvider} and 
+     * {@link #toString(Constraint, IDecisionVariable)}.
+     * 
+     * @param elt the element to be turned into a string representation
+     * @param namedVariable the related named variable (may be <b>null</b>)
+     * @return the string representation
+     */
+    private String toString(ModelElement elt, IDecisionVariable namedVariable) {
+        String result;
+        if (elt instanceof AbstractVariable) {
+            result = DisplayNameProvider.getInstance().getDisplayName((AbstractVariable) elt);
+        } else if (elt instanceof IDecisionVariable) {
+            result = DisplayNameProvider.getInstance().getDisplayName((IDecisionVariable) elt);
+        } else if (elt instanceof Constraint) {
+            result = toString((Constraint) elt, namedVariable);
+        } else {
+            result = elt.getName();
+        }
+        return result + " (" + traceToTop(elt) + " )";
+    }
+    
+    /**
+     * Method for creating a msg of trace to the top element 
+     * of constraint or variable that fail in the reasoning.
+     * @param element Constraint of Variable.
+     * @return text text of the trace.
+     */
+    private String traceToTop(ModelElement element) {
+        String text = "";
+        if (element.getParent() != null) {
+            text = " -> " + element.getParent().getName();
+            ModelElement mElement = (ModelElement) element.getParent();
+            text = text + traceToTop(mElement);
+        }
+        return text;
     }
     
     /**
      * Method for adding conflicting element Suggestions.
      * @param conflictingElementSuggestions conflicting element Suggestions.
      */
-    public void addConflictingElementSuggestions(List<String> conflictingElementSuggestions) {
-        this.conflictingElementSuggestions = new ArrayList<String>();
+    public void addConflictingElementSuggestions(List<SuggestionType> conflictingElementSuggestions) {
+        this.conflictingElementSuggestions = new ArrayList<SuggestionType>();
         if (null != conflictingElementSuggestions) {
             this.conflictingElementSuggestions.addAll(conflictingElementSuggestions);
         }
     }
-    
+
+    /**
+     * Returns the list of conflicting item suggestion types.
+     * @return The list of conflicting item suggestion types.
+     */
+    public List<SuggestionType> getConflictSuggestionTypes() {
+        return conflictingElementSuggestions;
+    }
+
     /**
      * Returns the list of conflicting item Suggestions.
-     * @return The list of conflicting item Suggestions.
+     * 
+     * @return The list of conflicting item Suggestions. The number of entries depends on the minimum number of 
+     * conflicting element suggestions and variables in constraints.
      */
     public List<String> getConflictSuggestions() {
-        return conflictingElementSuggestions;
+        List<String> result;
+        if (null == conflictingElementSuggestions) {
+            result = null;
+        } else {
+            result = new ArrayList<String>();
+            for (int i = 0, 
+                n = Math.min(conflictingElementSuggestions.size(), variablesInConstraints.size()); i < n; i++) {
+                String text;
+                switch (conflictingElementSuggestions.get(i)) {
+                case PROBLEM_POINTS:
+                    text = "Please check: " + problemPointsToString(variablesInConstraints.get(i));
+                    break;
+                case REASSIGNMENT:
+                    text = "Check for variable reassignments in the same Project scope";
+                    break;
+                default:
+                    text = "none";
+                    break;
+                }
+                result.add(text);
+            }
+        }
+        return result;
+    }
+
+    /**
+     * Turns given variables into a problem points description.
+     * 
+     * @param vars the variables
+     * @return the description
+     */
+    private String problemPointsToString(java.util.Set<AbstractVariable> vars) {
+        String problemPoints = "";
+        int count = 0;
+        for (AbstractVariable variable : vars) {
+            if (count > 0) {
+                if (count == vars.size() - 1) {
+                    problemPoints += " or ";
+                } else {
+                    problemPoints += ", ";
+                }
+            }
+            String displayVarName = DisplayNameProvider.getInstance().getDisplayName(variable);
+            String displayParentName = DisplayNameProvider.getInstance().getParentNames(variable);
+            if (displayParentName != null) {
+                problemPoints = problemPoints + "\"" + displayVarName + "\" in " + displayParentName;
+            } else {
+                problemPoints = problemPoints + "\"" + displayVarName + "\"";
+            }
+            count++;
+        }
+        return problemPoints;
     }
     
     /**
