@@ -213,5 +213,15 @@ public class Constraint extends ContainableModelElement implements IPartialEvalu
     public IConstraintType getType() {
         return Type.USUAL;
     }
+    
+    /**
+     * Returns the element, e.g., type, the constraint is attached to. Reasoner may return specialized
+     * values here.
+     *  
+     * @return the attached object (<b>null</b> always)
+     */
+    public Object getAttachedTo() {
+        return null;
+    }
 
 }
