@@ -1,9 +1,9 @@
 project DerivedCompoundAnnotationTest {
 
     compound ACmp {
-       Integer i = 0;
+       Integer j = 0;
     };
-    typedef A ACmp with (A.i >= 0);
+    typedef A ACmp with (A.j >= 0);
     annotate A ann = ACmp{} to DerivedCompoundAnnotationTest;
     
     enum MyEnum {val1, val2};
@@ -22,14 +22,14 @@ project DerivedCompoundAnnotationTest {
     Cmp d = {};
     Constraint n = true;
 
-    t.ann.i <> 0;
-    i.ann.i <> 0;    
-    r.ann.i <> 0;    
-    s.ann.i <> 0;    
-    e.ann.i <> 0;    
-    c.ann.i <> 0;
-    o.ann.i <> 0;
-    d.ann.i <> 0;
-    n.ann.i <> 0;
+    t.ann.j <> 0;
+    i.ann.j <> 0;    
+    r.ann.j <> 0;    
+    s.ann.j <> 0;    
+    e.ann.j <> 0;    
+    c.ann.j <> 0;
+    o.ann.j <> 0;
+    d.ann.j <> 0;
+    n.ann.j <> 0;
     
 }
