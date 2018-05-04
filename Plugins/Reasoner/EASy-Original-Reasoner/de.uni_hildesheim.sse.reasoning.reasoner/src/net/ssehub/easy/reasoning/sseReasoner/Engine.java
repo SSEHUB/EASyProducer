@@ -17,7 +17,6 @@ import net.ssehub.easy.reasoning.sseReasoner.functions.FailedElementDetails;
 import net.ssehub.easy.reasoning.sseReasoner.functions.FailedElements;
 import net.ssehub.easy.varModel.confModel.AssignmentState;
 import net.ssehub.easy.varModel.confModel.Configuration;
-import net.ssehub.easy.varModel.confModel.DisplayNameProvider;
 import net.ssehub.easy.varModel.confModel.IAssignmentState;
 import net.ssehub.easy.varModel.confModel.IDecisionVariable;
 import net.ssehub.easy.varModel.cst.ConstraintSyntaxTree;
@@ -43,24 +42,18 @@ public class Engine {
     
     private Project project;
     
-    private List<ModelElement> failedModelElements;
-    private List<String> failedElementLabels;
-    private List<Set<AbstractVariable>> variablesInConstraints;
-    private List<Set<IDecisionVariable>> problemDecisions;
-    private List<ConstraintSyntaxTree> problemConstraintParts;
-    private List<Constraint> problemConstraints;
-    private List<String> failedElementComments;
-    private List<Project> failedElementProjects;
-    private List<String> failedElementSuggestions;  
-    private List<IDecisionVariable> constraintVariables;  
-    private List<Integer> errorClassification;  
+    private List<ModelElement> failedModelElements = new ArrayList<ModelElement>();
+    private List<Set<AbstractVariable>> variablesInConstraints = new ArrayList<Set<AbstractVariable>>();
+    private List<Set<IDecisionVariable>> problemDecisions = new ArrayList<Set<IDecisionVariable>>();
+    private List<ConstraintSyntaxTree> problemConstraintParts = new ArrayList<ConstraintSyntaxTree>();
+    private List<Constraint> problemConstraints = new ArrayList<Constraint>();
+    private List<Project> failedElementProjects = new ArrayList<Project>();
+    private List<Message.SuggestionType> failedElementSuggestions = new ArrayList<Message.SuggestionType>();  
+    private List<IDecisionVariable> constraintVariables = new ArrayList<IDecisionVariable>();  
+    private List<Integer> errorClassification = new ArrayList<Integer>();  
     
     private Map<Constraint, IDecisionVariable> constraintVariableMap;
-    
-    private String msgText;
-    private String comment;
-    private String suggestion;
-    
+
     private IAdditionalInformationLogger infoLogger;
     
     private long evaluationTime;
@@ -135,7 +128,6 @@ public class Engine {
      */
     private void analyzeProblemConstraints(FailedElements failedElements) {
         if (failedElements.problemConstraintCount() > 0) {
-            initFailedLists();
             Map<Constraint, FailedElementDetails> problemConstraintMap = failedElements.getProblemConstraintMap();
             Iterator<Constraint> problemIterator = failedElements.getProblemConstraints();
             while (problemIterator.hasNext()) {   
@@ -146,61 +138,23 @@ public class Engine {
                 if (constraint.getTopLevelParent() instanceof Project) {
                     failedElementProjects.add((Project) constraint.getTopLevelParent());                    
                 }                
-                if (constraintVariableMap.get(constraint) != null) {
-                    constraintVariables.add(constraintVariableMap.get(constraint));
-                    if (constraintVariableMap.get(constraint).getDeclaration().getComment() == null) {
-                        msgText = constraintVariableMap.get(constraint).getDeclaration().getName();  
-                    } else {
-                        msgText = constraintVariableMap.get(constraint).getDeclaration().getComment();
-//                            + " (" + traceToTop(constraintVariableMap.get(failedRule)) + " )";
-                    } 
-                } else {
-                    constraintVariables.add(null);
-                    msgText = StringProvider.toIvmlString(constraint.getConsSyntax());
-                }
-                comment = msgText;
+                constraintVariables.add(constraintVariableMap.get(constraint)); // ok if get-result is null
                 java.util.Set<IDecisionVariable> problemVars = failedElementDetails.getProblemPoints(); 
                 java.util.Set<AbstractVariable> vars = new HashSet<AbstractVariable>();
                 for (IDecisionVariable problemVar : problemVars) {
                     vars.add(problemVar.getDeclaration());
                 }
-                String problemPoints = "";
-                int count = 0;
-                for (AbstractVariable variable : vars) {
-                    if (count > 0) {
-                        if (count == vars.size() - 1) {
-                            problemPoints += " or ";
-                        } else {
-                            problemPoints += ", ";
-                        }
-                    }
-                    String displayVarName = DisplayNameProvider.getInstance().getDisplayName(variable);
-                    String displayParentName = DisplayNameProvider.getInstance().getParentNames(variable);
-                    if (displayParentName != null) {
-                        problemPoints = problemPoints + "\"" + displayVarName + "\" in " + displayParentName;
-                    } else {
-                        problemPoints = problemPoints + "\"" + displayVarName + "\"";
-                    }
-                    count++;
-                }
-                if (problemPoints.length() > 0) {
-                    problemPoints = " Please check: " + problemPoints;
-                    suggestion = problemPoints;
-                }
-                msgText = msgText + problemPoints;
                 variablesInConstraints.add(vars);
                 problemDecisions.add(problemVars);
                 problemConstraintParts.add(failedElementDetails.getProblemConstraintPart());
                 problemConstraints.add(failedElementDetails.getProblemConstraint());
-                failedElementLabels.add(msgText);
-                failedElementComments.add(comment);
-                failedElementSuggestions.add(suggestion);
+                failedElementSuggestions.add(Message.SuggestionType.PROBLEM_POINTS);
                 errorClassification.add(failedElementDetails.getErrorClassifier());
             }
             Message problemConstraintMsg = createMessage(VIOLATED_CONSTRAINTS);
             result.addMessage(problemConstraintMsg);
             printMessage(problemConstraintMsg);                
-            nullFailedLists();
+            clearFailedInfo();
         }
     }
     
@@ -212,7 +166,6 @@ public class Engine {
         if (failedElements.problemVariabletCount() > 0) {
             Map<AbstractVariable, FailedElementDetails> problemVariableMap = failedElements.getProblemVariableMap();
             Iterator<AbstractVariable> problemVariables = failedElements.getProblemVariables();
-            initFailedLists();
             while (problemVariables.hasNext()) {
                 this.failedAssignments++;
                 AbstractVariable problemVariable = problemVariables.next();
@@ -221,11 +174,7 @@ public class Engine {
                 if (problemVariable.getTopLevelParent() instanceof Project) {
                     failedElementProjects.add((Project) problemVariable.getTopLevelParent());                    
                 }
-                msgText = DisplayNameProvider.getInstance().getDisplayName(problemVariable) 
-                    + " (" + traceToTop(problemVariable) + " )";
-                failedElementLabels.add(msgText);
-                failedElementComments.add(msgText);
-                failedElementSuggestions.add("Check for variable reassignments in the same Project scope");
+                failedElementSuggestions.add(Message.SuggestionType.REASSIGNMENT);
                 Set<AbstractVariable> vars = new HashSet<AbstractVariable>();
                 vars.add(problemVariable);
                 problemDecisions.add(failedElementDetails.getProblemPoints());
@@ -238,64 +187,23 @@ public class Engine {
             Message problemVarialbeMsg = createMessage(VIOLATED_VARIABLES);
             result.addMessage(problemVarialbeMsg);
             printMessage(problemVarialbeMsg);                
-            nullFailedLists();
+            clearFailedInfo();
         } 
     } 
     
     /**
-     * Method for creating a msg of trace to the top element 
-     * of constraint or variable that fail in the reasoning.
-     * @param element Constraint of Variable.
-     * @return text text of the trace.
+     * Clears information about failed elements.
      */
-    private String traceToTop(ModelElement element) {
-        String text = "";
-        if (element.getParent() != null) {
-            text = " -> " + element.getParent().getName();
-            ModelElement mElement = (ModelElement) element.getParent();
-            text = text + traceToTop(mElement);
-        }
-        return text;
-    }
-    
-    /**
-     * Method for initializing lists of failed elements.
-     */
-    private void initFailedLists() {
-        failedModelElements = new ArrayList<ModelElement>();
-        failedElementLabels = new ArrayList<String>(); 
-        variablesInConstraints = new ArrayList<Set<AbstractVariable>>();
-        problemDecisions = new ArrayList<Set<IDecisionVariable>>();
-        problemConstraintParts = new ArrayList<ConstraintSyntaxTree>();
-        problemConstraints = new ArrayList<Constraint>();
-        failedElementComments = new ArrayList<String>();
-        failedElementProjects = new ArrayList<Project>();
-        failedElementSuggestions = new ArrayList<String>();
-        constraintVariables = new ArrayList<IDecisionVariable>();
-        errorClassification = new ArrayList<Integer>();
-        msgText = null;
-        comment = null;
-        suggestion = null;
-    }
-    
-    /**
-     * Method for nulling lists of failed elements.
-     */
-    private void nullFailedLists() {
-        failedModelElements = null;
-        failedElementLabels = null;
-        variablesInConstraints = null;
-        problemDecisions = null;
-        problemConstraintParts = null;
-        problemConstraints = null;
-        failedElementComments = null;
-        failedElementProjects = null;
-        failedElementSuggestions = null;
-        constraintVariables = null;
-        errorClassification = null;
-        msgText = null;
-        comment = null;
-        suggestion = null;
+    private void clearFailedInfo() {
+        failedModelElements.clear();
+        variablesInConstraints.clear();
+        problemDecisions.clear();
+        problemConstraintParts.clear();
+        problemConstraints.clear();
+        failedElementProjects.clear();
+        failedElementSuggestions.clear();
+        constraintVariables.clear();
+        errorClassification.clear();
     }
     
     /**
@@ -305,12 +213,10 @@ public class Engine {
      */
     private Message createMessage(String text) {
         Message msg = new Message(text, failedModelElements, Status.ERROR);
-        msg.addConflictingElementLabels(failedElementLabels);
         msg.addConstraintVariables(variablesInConstraints);
         msg.addProblemVariables(problemDecisions);
         msg.addProblemConstraintParts(problemConstraintParts);
         msg.addProblemConstraints(problemConstraints);
-        msg.addConflictingElementComments(failedElementComments);
         msg.addConflictingElementProjects(failedElementProjects);
         msg.addConflictingElementSuggestions(failedElementSuggestions);
         msg.addNamedConstraintVariables(constraintVariables);
@@ -392,7 +298,7 @@ public class Engine {
      */
     void clear() {
         this.result = new ReasoningResult();
-        nullFailedLists();
+        clearFailedInfo();
         constraintVariableMap = null;
         evaluationTime = 0;
         reevaluationCount = 0;
