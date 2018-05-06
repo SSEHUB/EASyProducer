@@ -49,7 +49,6 @@ import net.ssehub.easy.varModel.model.values.BooleanValue;
 import net.ssehub.easy.varModel.model.values.Value;
 import net.ssehub.easy.varModel.model.values.ValueDoesNotMatchTypeException;
 import net.ssehub.easy.varModel.model.values.ValueFactory;
-import net.ssehub.easy.varModel.persistency.StringProvider;
 import net.ssehub.easy.varModel.varModel.testSupport.ProjectTestUtilities;
 
 /**
@@ -140,7 +139,7 @@ public class CodedTests extends AbstractTest {
      */
     @Test
     public void freezeCompoundTest() throws ValueDoesNotMatchTypeException, CSTSemanticException {
-        //testFreezing(false); // TODO ENABLE, currently fails without runtime mode
+        testFreezing(false); 
         testFreezing(true);
     }
 
@@ -188,7 +187,7 @@ public class CodedTests extends AbstractTest {
         prj.add(freeze);
         
         // debugging
-        System.out.println(StringProvider.toIvmlString(prj));
+        //System.out.println(StringProvider.toIvmlString(prj));
         
         Configuration cfg = new Configuration(prj);
         IDecisionVariable myParamVar = cfg.getDecision(myParam);
@@ -206,8 +205,10 @@ public class CodedTests extends AbstractTest {
         IReasoner reasoner = createReasoner();
         reasoner.propagate(prj, cfg, rConfig, ProgressObserver.NO_OBSERVER);
         
-        Assert.assertEquals(AssignmentState.FROZEN, myParamVarDeflt.getState());
-        Assert.assertNotEquals(AssignmentState.FROZEN, myParamVarValue.getState());
+        Assert.assertEquals(myParamVarDeflt.getQualifiedName() + " " + myParamVarDeflt.getState(), 
+            AssignmentState.FROZEN, myParamVarDeflt.getState());
+        Assert.assertNotEquals(myParamVarValue.getQualifiedName() + " " + myParamVarValue.getState(), 
+            AssignmentState.FROZEN, myParamVarValue.getState());
         //Assert.assertNotEquals(AssignmentState.FROZEN, myParamVar.getState());
     }
     
