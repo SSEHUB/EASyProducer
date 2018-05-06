@@ -57,6 +57,7 @@ import net.ssehub.easy.varModel.model.Constraint;
 import net.ssehub.easy.varModel.model.DecisionVariableDeclaration;
 import net.ssehub.easy.varModel.model.IModelElement;
 import net.ssehub.easy.varModel.model.IvmlException;
+import net.ssehub.easy.varModel.model.ModelQuery;
 import net.ssehub.easy.varModel.model.ModelVisitorAdapter;
 import net.ssehub.easy.varModel.model.OperationDefinition;
 import net.ssehub.easy.varModel.model.PartialEvaluationBlock;
@@ -1191,8 +1192,7 @@ class Resolver implements IValueChangeListener, IResolutionListener {
      */
     private void translateAnnotationAssignment(Assignment assignment, DecisionVariableDeclaration element,
         ConstraintSyntaxTree compound) {
-        String attributeName = assignment.getName();
-        Attribute attrib = (Attribute) element.getAttribute(attributeName);
+        Attribute attrib = ModelQuery.findAttribute(element, assignment.getName());
         if (null != attrib) {
             ConstraintSyntaxTree cst;
             //handle annotations in compounds
