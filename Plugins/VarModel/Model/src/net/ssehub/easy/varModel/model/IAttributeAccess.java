@@ -25,14 +25,14 @@ package net.ssehub.easy.varModel.model;
 public interface IAttributeAccess {
 
     /**
-     * Returns the number of attributes.
+     * Returns the number of (declared) attributes.
      * 
      * @return the number of attributes
      */
     public int getAttributesCount();
 
     /**
-     * Returns a specific attribute.
+     * Returns a specific (declared) attribute.
      * 
      * @param name the name of the attribute
      * @return the attribute (or <b>null</b> if not found)

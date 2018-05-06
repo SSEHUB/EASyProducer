@@ -851,9 +851,9 @@ public class ModelQuery {
                 if (null == result || result instanceof AbstractVariable) {
                     AbstractVariable compoundResult = (AbstractVariable) result;
                     if (var instanceof IAttributableElement) {
-                        result = findAttribute((IAttributableElement) var, innerNamePart);
+                        result = getAttribute((IAttributableElement) var, innerNamePart);
                         if (null == result && null != project) {
-                            result = findAttribute(project.getVariable(), innerNamePart);
+                            result = getAttribute(project.getVariable(), innerNamePart);
                         }
                         if (null == result) {
                             result = compoundResult;
@@ -877,7 +877,8 @@ public class ModelQuery {
      * @param name the name of the attribute to search for
      * @return the attribute or <b>null</b> if none was found
      */
-    private static AbstractVariable findAttribute(IAttributableElement element, String name) {
+    private static AbstractVariable getAttribute(IAttributableElement element, String name) {
+        // TODO same as IAttributeAccess#getAttribute(name)??
         AbstractVariable result = null;
         int aCount = element.getAttributesCount();
         for (int a = 0; null == result && a < aCount; a++) {
@@ -1179,6 +1180,32 @@ public class ModelQuery {
             }
         }
         return result;
+    }
+    
+    /**
+     * Finds an attribute within <code>scope</code> or enclosing parent <code>scopes</code>, 
+     * i.e., search in inverted direction along attribute application/inheritance.
+     * 
+     * @param scope the scope (may be <b>null</b>, leads to <b>null</b> as result)
+     * @param name the name of the attribute
+     * @return the attribute declaration or <b>null</b> for none
+     */
+    public static Attribute findAttribute(IModelElement scope, String name) {
+        Attribute attrib = null;
+        IModelElement iter = scope;
+        while (null == attrib && null != iter) {
+            AbstractVariable var = null;
+            if (iter instanceof AbstractVariable) {
+                var = (AbstractVariable) iter;
+            } else if (iter instanceof Project) {
+                var = ((Project) iter).getVariable();
+            }
+            if (null != var) {
+                attrib = var.getAttribute(name);
+            }
+            iter = iter.getParent();
+        }
+        return attrib;
     }
 
 }
