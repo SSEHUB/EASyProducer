@@ -229,9 +229,7 @@ public class Descriptor extends ReasonerDescriptor {
         addCapability(GeneralReasonerCapabilities.RUNTIME_REASONING);
         addCapability(GeneralReasonerCapabilities.TIMEOUT);
         addCapability(GeneralReasonerCapabilities.STANDALONE_REASONING);
-        //TODO net.ssehub.easy.standalone.ReasoningTests.testADDReasoningFails
-        //TODO net.ssehub.easy.standalone.ReasoningTests.testSimpleProjectReasoningFails
-        //addCapability(GeneralReasonerCapabilities.CONFIGURATION_INITIALIZATION);
+        //addCapability(GeneralReasonerCapabilities.CONFIGURATION_INITIALIZATION); // TODO enable for release
     }
     
     @Override
@@ -241,7 +239,7 @@ public class Descriptor extends ReasonerDescriptor {
 
     @Override
     public boolean providesAffectedVariables() {
-        return false; // TODO RS: Please check whether this can be supported easily
+        return false;
     }
 
 }

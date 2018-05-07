@@ -63,7 +63,7 @@ import net.ssehub.easy.varModel.persistency.StringProvider;
  */
 public class ReasoningUtils {
 
-    public static final boolean DEBUG = false;
+    public static final boolean DEBUG = true;
     
     /**
      * A set pool for instances of <code>Set<Compound></code>.
