@@ -16,7 +16,7 @@ Require-Bundle: net.ssehub.easy.instantiation.core;bundle-version="0.5.5",
  org.eclipse.equinox.ds,
  org.eclipse.core.runtime,
  net.ssehub.easy.dslCore,
- net.ssehub.easy.libs.maven;bundle-version="3.2.3";visibility:=reexport
+ net.ssehub.easy.libs.maven;visibility:=reexport
 Bundle-ClassPath: .
 Export-Package: net.ssehub.easy.instantiation.maven
 Bundle-Activator: net.ssehub.easy.instantiation.maven.Activator
