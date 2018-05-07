@@ -48,8 +48,10 @@
   	  </fileset>
   	</path>
 
-	  <!-- Create EASy task -->
-	  <taskdef name="easy" classname="net.ssehub.easy.standalone.ant.EASy" classpathref="easyTaskDef.lib"/>
+	<!-- Create EASy task, make this conditional based on easyLibs.dir -->
+    <!--
+	<taskdef name="easy" classname="net.ssehub.easy.standalone.ant.EASy" classpathref="easyTaskDef.lib"/>
+	-->
 		
 		<!-- Create folders -->
     <mkdir dir="${build.base.dir}"/>
