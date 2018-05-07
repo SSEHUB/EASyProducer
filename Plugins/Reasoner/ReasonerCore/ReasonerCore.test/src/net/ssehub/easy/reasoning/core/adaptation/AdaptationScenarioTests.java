@@ -182,9 +182,10 @@ public class AdaptationScenarioTests extends AbstractTest {
         runReasoning();
         for (IDecisionVariable variable : config) {
             if (variable.getDeclaration().getName().equals("cmp")) {
-                assertVariable(variable.getNestedElement(0), 1, "cmp.a after 1 reasoning", AssignmentState.DERIVED);
+                assertVariable(variable.getNestedElement(0), 1, "cmp.a after 1 reasoning", 
+                    AssignmentState.ASSIGNED, AssignmentState.DERIVED);
                 assertVariable(variable.getNestedElement(1), null, "cmp.b after 1 reasoning", 
-                     AssignmentState.UNDEFINED);
+                    AssignmentState.UNDEFINED);
                 try {
                     Value newValA = ValueFactory.createValue(IntegerType.TYPE, 10);
                     variable.getNestedElement(0).setValue(newValA, AssignmentState.USER_ASSIGNED);
@@ -194,9 +195,9 @@ public class AdaptationScenarioTests extends AbstractTest {
                     e.printStackTrace();
                 }
                 assertVariable(variable.getNestedElement(0), 10, "cmp.a after new value", 
-                        AssignmentState.USER_ASSIGNED);
+                    AssignmentState.USER_ASSIGNED);
                 assertVariable(variable.getNestedElement(1), null, "cmp.b after new value", 
-                        AssignmentState.UNDEFINED);
+                    AssignmentState.UNDEFINED);
             }
             
         }

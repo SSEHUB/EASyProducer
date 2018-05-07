@@ -105,6 +105,11 @@ public class ReasonerFrontend {
                 }
                 return result;
             }
+
+            @Override
+            public boolean supportsElementCopy() {
+                return true;
+            }
         });
     }
     

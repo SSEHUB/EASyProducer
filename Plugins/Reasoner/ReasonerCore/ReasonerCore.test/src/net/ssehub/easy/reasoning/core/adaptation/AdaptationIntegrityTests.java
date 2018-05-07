@@ -257,11 +257,11 @@ public class AdaptationIntegrityTests extends AbstractTest {
             
             Assert.assertNotNull(iVarA);
             Assert.assertEquals(31, iVarA.getValue().getValue());
-            Assert.assertSame("iVarA", AssignmentState.DERIVED, iVarA.getState());
+            assertContained(iVarA.getState(), AssignmentState.ASSIGNED, AssignmentState.DERIVED);
             
             Assert.assertNotNull(iVarB);
             Assert.assertEquals(37, iVarB.getValue().getValue());
-            Assert.assertSame("iVarB", AssignmentState.DERIVED, iVarB.getState());
+            assertContained(iVarB.getState(), AssignmentState.ASSIGNED, AssignmentState.DERIVED);
             
             Assert.assertNotNull(iVarC);
             Assert.assertEquals(33, iVarC.getValue().getValue());
@@ -307,7 +307,7 @@ public class AdaptationIntegrityTests extends AbstractTest {
             
             Assert.assertNotNull(iVarB);
             Assert.assertEquals(37, iVarB.getValue().getValue());
-            Assert.assertSame("iVarB", AssignmentState.DERIVED, iVarB.getState());
+            assertContained(iVarB.getState(), AssignmentState.ASSIGNED, AssignmentState.DERIVED);
             
             Assert.assertNotNull(iVarC);
             Assert.assertEquals(33, iVarC.getValue().getValue());
