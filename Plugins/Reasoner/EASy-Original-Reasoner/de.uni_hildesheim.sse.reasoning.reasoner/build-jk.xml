@@ -35,7 +35,7 @@
 
 		<!-- Prepare EASy standalone ANT Lib (copy libraries to avoid problems with building the standalone libs) -->
 		<mkdir dir="${easyLibs.dir}"/>
-	  <copy todir="${easyLibs.dir}">
+	  <copy todir="${easyLibs.dir}" failonerror="false">
 			<fileset dir="${home.base.dir}/${projects.standalone.dir}/build/generatedLibs/dist">
 	        <include name="**/*.jar"/>
 	    </fileset>
