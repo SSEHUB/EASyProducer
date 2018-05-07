@@ -93,7 +93,7 @@ public class GenericOperations {
                         sValue = StringProvider.toIvmlString(operand.getValue());
                     }
                     result = ConstantAccessor.POOL.getInstance().bind(
-                        ValueFactory.createValue(StringType.TYPE, sValue), 
+                        ValueFactory.createValue(StringType.TYPE, sValue), true, 
                         operand.getContext());
                 } catch (ValueDoesNotMatchTypeException e) {
                     // result -> null
@@ -121,7 +121,7 @@ public class GenericOperations {
                 context = operand.getContext();
             }
             BooleanValue result = BooleanValue.toBooleanValue(eval);
-            return ConstantAccessor.POOL.getInstance().bind(result, context);
+            return ConstantAccessor.POOL.getInstance().bind(result, true, context);
         }
     };
 
@@ -136,7 +136,7 @@ public class GenericOperations {
             if (null != oVal) {
                 try {
                     Value resVal = ValueFactory.createValue(MetaType.TYPE, oVal.getType());
-                    result = ConstantAccessor.POOL.getInstance().bind(resVal, operand.getContext());
+                    result = ConstantAccessor.POOL.getInstance().bind(resVal, true, operand.getContext());
                 } catch (ValueDoesNotMatchTypeException e) {
                     // result -> null
                 }
@@ -157,7 +157,7 @@ public class GenericOperations {
                 IDatatype aType = toType(arguments[0].getValue());
                 if (null != oType && null != aType) {
                     BooleanValue res = BooleanValue.toBooleanValue(TypeQueries.sameTypes(oType, aType));
-                    result = ConstantAccessor.POOL.getInstance().bind(res, operand.getContext());
+                    result = ConstantAccessor.POOL.getInstance().bind(res, true, operand.getContext());
                 }
             }
             return result;
@@ -176,7 +176,7 @@ public class GenericOperations {
                 IDatatype aType = toType(arguments[0].getValue());
                 if (null != oType && null != aType) {
                     BooleanValue res = BooleanValue.toBooleanValue(oType.isAssignableFrom(aType));
-                    result = ConstantAccessor.POOL.getInstance().bind(res, operand.getContext());
+                    result = ConstantAccessor.POOL.getInstance().bind(res, true, operand.getContext());
                 }
             }
             return result;
@@ -195,7 +195,7 @@ public class GenericOperations {
                 IDatatype oType = toType(oValue);
                 IDatatype aType = toType(arguments[0].getValue());
                 if (aType.isAssignableFrom(oType)) {
-                    result = ConstantAccessor.POOL.getInstance().bind(oValue, operand.getContext());
+                    result = ConstantAccessor.POOL.getInstance().bind(oValue, false, operand.getContext());
                 }
             }
             return result;
@@ -208,7 +208,7 @@ public class GenericOperations {
             EvaluationAccessor result = null;
             try {
                 result = ConstantAccessor.POOL.getInstance().bind(ValueFactory.createValue(StringType.TYPE, 
-                    localeToString(operand)), operand.getContext());
+                    localeToString(operand)), true, operand.getContext());
             } catch (ValueDoesNotMatchTypeException e) {
                 // -> null
             }
@@ -227,7 +227,7 @@ public class GenericOperations {
                     operand.getContext().setLocale(DefaultLocale.toLocale(loc));
                     try {
                         result = ConstantAccessor.POOL.getInstance().bind(ValueFactory.createValue(StringType.TYPE, 
-                            localeToString(operand)), operand.getContext());
+                            localeToString(operand)), true, operand.getContext());
                     } catch (ValueDoesNotMatchTypeException e) {
                         // -> null
                     }
@@ -326,7 +326,8 @@ public class GenericOperations {
                         equals = !equals;
                     }
                     BooleanValue resValue = BooleanValue.toBooleanValue(equals);
-                    result = ConstantAccessor.POOL.getInstance().bind(resValue, operand.getContext());                
+                    result = ConstantAccessor.POOL.getInstance().bind(resValue, true, 
+                        operand.getContext());                
                 }
             }
         } else {
@@ -363,7 +364,7 @@ public class GenericOperations {
             if (negate) {
                 equals = !equals;
             }
-            result = ConstantAccessor.POOL.getInstance().bind(BooleanValue.toBooleanValue(equals), context);
+            result = ConstantAccessor.POOL.getInstance().bind(BooleanValue.toBooleanValue(equals), true, context);
         } else {
             result = null;
         }
@@ -426,7 +427,7 @@ public class GenericOperations {
         EvaluationAccessor result = null;
         if (arguments.length == 1 && null != operand) {
             if (operand.setValue(arguments[0].getValue(), asAssignment)) {
-                result = ConstantAccessor.POOL.getInstance().bind(BooleanValue.TRUE, operand.getContext());
+                result = ConstantAccessor.POOL.getInstance().bind(BooleanValue.TRUE, true, operand.getContext());
             }
         }
         return result;        

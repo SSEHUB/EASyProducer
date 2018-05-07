@@ -148,7 +148,7 @@ public class IntegerOperations {
                         equals = !equals;
                     }
                     result = ConstantAccessor.POOL.getInstance().bind(
-                        BooleanValue.toBooleanValue(equals), operand.getContext());
+                        BooleanValue.toBooleanValue(equals), true, operand.getContext());
                 }
             }
         }
@@ -204,7 +204,7 @@ public class IntegerOperations {
                     Value rValue;
                     try {
                         rValue = ValueFactory.createValue(IntegerType.TYPE, resultOfOperation);
-                        result = ConstantAccessor.POOL.getInstance().bind(rValue, operand.getContext());
+                        result = ConstantAccessor.POOL.getInstance().bind(rValue, true, operand.getContext());
                     } catch (ValueDoesNotMatchTypeException e) {
                         EASyLoggerFactory.INSTANCE.getLogger(GenericNumberOperations.class, Bundle.ID).exception(e);
                     }
@@ -242,7 +242,7 @@ public class IntegerOperations {
                     rValue = (op >= arg) ? oValue : aValue;
                 }
                 
-                result = ConstantAccessor.POOL.getInstance().bind(rValue, operand.getContext());
+                result = ConstantAccessor.POOL.getInstance().bind(rValue, false, operand.getContext());
             }
         }
         

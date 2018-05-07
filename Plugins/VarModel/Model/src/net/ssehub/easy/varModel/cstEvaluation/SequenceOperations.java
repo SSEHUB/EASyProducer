@@ -54,7 +54,7 @@ public class SequenceOperations {
             if (value instanceof ContainerValue) {
                 ContainerValue cont = (ContainerValue) value;
                 if (cont.getElementSize() > 0) {
-                    result = ConstantAccessor.POOL.getInstance().bind(cont.getElement(0), operand.getContext());
+                    result = ConstantAccessor.POOL.getInstance().bind(cont.getElement(0), false, operand.getContext());
                 }
             }
             return result;
@@ -75,7 +75,8 @@ public class SequenceOperations {
                 ContainerValue cont = (ContainerValue) value;
                 int size = cont.getElementSize();
                 if (size > 0) {
-                    result = ConstantAccessor.POOL.getInstance().bind(cont.getElement(size - 1), operand.getContext());
+                    result = ConstantAccessor.POOL.getInstance().bind(cont.getElement(size - 1), 
+                        false, operand.getContext());
                 }
             }
             return result;
@@ -104,7 +105,7 @@ public class SequenceOperations {
                     }
                 }
                 result = ConstantAccessor.POOL.getInstance().bind(
-                        BooleanValue.toBooleanValue(hasDuplicates), operand.getContext());
+                        BooleanValue.toBooleanValue(hasDuplicates), true, operand.getContext());
             }
             return result;
         }
@@ -134,7 +135,7 @@ public class SequenceOperations {
                         tmp.add(index, insValue);
                         try {
                             Value rValue = ValueFactory.createValue(cont.getType(), tmp.toArray());
-                            result.bind(rValue, operand.getContext());
+                            result.bind(rValue, false, operand.getContext());
                         } catch (ValueDoesNotMatchTypeException e) {
                             result = EvaluationAccessor.release(result); // result -> null
                         }
@@ -163,7 +164,7 @@ public class SequenceOperations {
                     try {
                         Value resVal = ValueFactory.createValue(IntegerType.TYPE, 
                             OclKeyWords.toIvmlIndex(cont.indexOf(aValue)));
-                        result = ConstantAccessor.POOL.getInstance().bind(resVal, operand.getContext());
+                        result = ConstantAccessor.POOL.getInstance().bind(resVal, true, operand.getContext());
                     } catch (ValueDoesNotMatchTypeException e) {
                         // result -> null
                     }
@@ -204,7 +205,7 @@ public class SequenceOperations {
                         }
                     }
                     Value resVal = BooleanValue.toBooleanValue(size1 > 0 && i1 == size1);
-                    result = ConstantAccessor.POOL.getInstance().bind(resVal, operand.getContext());
+                    result = ConstantAccessor.POOL.getInstance().bind(resVal, true, operand.getContext());
                 }
             }
             return result;
@@ -240,7 +241,7 @@ public class SequenceOperations {
                         }
                     }
                     Value resVal = BooleanValue.toBooleanValue(found);
-                    result = ConstantAccessor.POOL.getInstance().bind(resVal, operand.getContext());
+                    result = ConstantAccessor.POOL.getInstance().bind(resVal, true, operand.getContext());
                 }
             }
             return result;
@@ -341,7 +342,7 @@ public class SequenceOperations {
                 }
                 try {
                     Value rValue = ValueFactory.createValue(oValue.getType(), res.toArray());
-                    result = ConstantAccessor.POOL.getInstance().bind(rValue, operand.getContext());
+                    result = ConstantAccessor.POOL.getInstance().bind(rValue, false, operand.getContext());
                 } catch (ValueDoesNotMatchTypeException e) {
                     operand.getContext().addErrorMessage(e);
                 }
@@ -373,7 +374,7 @@ public class SequenceOperations {
                     }
                     try {
                         Value rValue = ValueFactory.createValue(oValue.getType(), res.toArray());
-                        result = ConstantAccessor.POOL.getInstance().bind(rValue, operand.getContext());
+                        result = ConstantAccessor.POOL.getInstance().bind(rValue, false, operand.getContext());
                     } catch (ValueDoesNotMatchTypeException e) {
                         operand.getContext().addErrorMessage(e);
                     }

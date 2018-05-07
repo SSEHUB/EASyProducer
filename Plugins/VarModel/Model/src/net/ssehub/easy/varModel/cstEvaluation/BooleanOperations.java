@@ -40,7 +40,7 @@ public class BooleanOperations {
                     Boolean bool = ((BooleanValue) value).getValue();
                     if (null != bool) {
                         result = ConstantAccessor.POOL.getInstance().bind(BooleanValue.toBooleanValue(!bool), 
-                            operand.getContext());
+                            true, operand.getContext());
                     }
                 }
             }
@@ -68,7 +68,7 @@ public class BooleanOperations {
                         }
                     }
                 }
-                result = ConstantAccessor.POOL.getInstance().bind(BooleanValue.TRUE, context);
+                result = ConstantAccessor.POOL.getInstance().bind(BooleanValue.TRUE, true, context);
             }
             return result;
         }
@@ -118,7 +118,7 @@ public class BooleanOperations {
                     Boolean bArg = ((BooleanValue) arg).getValue();
                     if (null != bOp && null != bArg) {
                         result = ConstantAccessor.POOL.getInstance().bind(
-                            BooleanValue.toBooleanValue(this.op.evaluate(bOp, bArg)), operand.getContext());
+                            BooleanValue.toBooleanValue(this.op.evaluate(bOp, bArg)), true, operand.getContext());
                     } // one sided undefined may be considered here
                 }
             }

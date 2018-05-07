@@ -278,5 +278,15 @@ public abstract class EvaluationAccessor {
     public int getBoundContainerElementCount() {
         return nestedElements.size();
     }
+    
+    /**
+     * Returns whether this accessor represents a constant in the sense of the evaluation process, i.e., a value
+     * that is already evaluated to its very end and not linked to any decision variable.
+     * 
+     * @return <code>true</code> for constant, <code>false</code> else
+     */
+    public boolean isConstant() {
+        return false;
+    }
 
 }

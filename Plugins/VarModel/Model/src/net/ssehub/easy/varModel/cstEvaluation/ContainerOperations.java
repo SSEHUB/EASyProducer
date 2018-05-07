@@ -129,7 +129,7 @@ public class ContainerOperations {
             if (opValue instanceof ContainerValue) {
                 try {
                     Value val = ValueFactory.createValue(IntegerType.TYPE, ((ContainerValue) opValue).getElementSize());
-                    result = ConstantAccessor.POOL.getInstance().bind(val, operand.getContext());
+                    result = ConstantAccessor.POOL.getInstance().bind(val, true, operand.getContext());
                 } catch (ValueDoesNotMatchTypeException e) {
                     operand.getContext().addErrorMessage(e);
                     result = null;
@@ -160,7 +160,7 @@ public class ContainerOperations {
                     ContainerValue cont = (ContainerValue) oValue;
                     try {
                         cont.addElement(aValue);
-                        result = ConstantAccessor.POOL.getInstance().bind(aValue, operand.getContext());
+                        result = ConstantAccessor.POOL.getInstance().bind(aValue, false, operand.getContext());
                     } catch (ValueDoesNotMatchTypeException e) {
                         // result -> null
                         operand.getContext().addErrorMessage(e);
@@ -208,7 +208,7 @@ public class ContainerOperations {
                         } else {
                             rValue = ValueFactory.createValue(RealType.TYPE, sum);
                         }
-                        result = ConstantAccessor.POOL.getInstance().bind(rValue, operand.getContext());
+                        result = ConstantAccessor.POOL.getInstance().bind(rValue, true, operand.getContext());
                     } catch (ValueDoesNotMatchTypeException e) {
                         operand.getContext().addErrorMessage(e);
                     }
@@ -266,7 +266,7 @@ public class ContainerOperations {
                     }
                     try {
                         Value rValue = ValueFactory.createValue(operand.getValue().getType(), tmp.toArray());
-                        result = ConstantAccessor.POOL.getInstance().bind(rValue, operand.getContext());
+                        result = ConstantAccessor.POOL.getInstance().bind(rValue, false, operand.getContext());
                     } catch (ValueDoesNotMatchTypeException e) {
                         operand.getContext().addErrorMessage(e);
                     }
@@ -331,7 +331,7 @@ public class ContainerOperations {
                             }
                             rValue = ValueFactory.createValue(RealType.TYPE, sum);
                         }
-                        result = ConstantAccessor.POOL.getInstance().bind(rValue, operand.getContext());
+                        result = ConstantAccessor.POOL.getInstance().bind(rValue, true, operand.getContext());
                     } catch (ValueDoesNotMatchTypeException e) {
                         operand.getContext().addErrorMessage(e);
                     }
@@ -449,7 +449,7 @@ public class ContainerOperations {
                     op.evaluate(c1, c2, tmp, result);
                     try {
                         Value rValue = ValueFactory.createValue(opValue.getType(), tmp.toArray());
-                        result.bind(rValue, operand.getContext());
+                        result.bind(rValue, false, operand.getContext());
                     } catch (ValueDoesNotMatchTypeException e) {
                         operand.getContext().addErrorMessage(e);
                         result = EvaluationAccessor.release(result);
@@ -491,7 +491,7 @@ public class ContainerOperations {
                     op.evaluate(ca, argValue, tmp, result);
                     try {
                         Value rValue = ValueFactory.createValue(opValue.getType(), tmp.toArray());
-                        result.bind(rValue, operand.getContext());
+                        result.bind(rValue, false, operand.getContext());
                     } catch (ValueDoesNotMatchTypeException e) {
                         operand.getContext().addErrorMessage(e);
                         result = EvaluationAccessor.release(result);
@@ -556,7 +556,7 @@ public class ContainerOperations {
                         bResult = !bResult;
                     }
                     result = ConstantAccessor.POOL.getInstance().bind(
-                        BooleanValue.toBooleanValue(bResult), operand.getContext());
+                        BooleanValue.toBooleanValue(bResult), true, operand.getContext());
                 }
             }
             return result;
@@ -598,7 +598,7 @@ public class ContainerOperations {
                         }
                     }
                     result = ConstantAccessor.POOL.getInstance().bind(
-                        BooleanValue.toBooleanValue(all), operand.getContext());
+                        BooleanValue.toBooleanValue(all), true, operand.getContext());
                 }
             }
             return result;
@@ -627,7 +627,7 @@ public class ContainerOperations {
                     try {
                         Value rValue = ValueFactory.createValue(IntegerType.TYPE, count);
                         result = ConstantAccessor.POOL.getInstance().bind(
-                            rValue, operand.getContext());
+                            rValue, true, operand.getContext());
                     } catch (ValueDoesNotMatchTypeException e) {
                         operand.getContext().addErrorMessage(e);
                     }
@@ -664,7 +664,7 @@ public class ContainerOperations {
                     bResult = !bResult;
                 }
                 result = ConstantAccessor.POOL.getInstance().bind(
-                    BooleanValue.toBooleanValue(bResult), operand.getContext());
+                    BooleanValue.toBooleanValue(bResult), true, operand.getContext());
             }
             return result;
         }
@@ -712,7 +712,7 @@ public class ContainerOperations {
                 }
                 try {
                     Value rValue = ValueFactory.createValue(resultType, tmp.toArray());
-                    result = ConstantAccessor.POOL.getInstance().bind(rValue, operand.getContext());
+                    result = ConstantAccessor.POOL.getInstance().bind(rValue, false, operand.getContext());
                 } catch (ValueDoesNotMatchTypeException e) {
                     // result -> null
                 }
@@ -807,7 +807,7 @@ public class ContainerOperations {
                     rValue = ValueFactory.createValue(targetType, (Object[]) null);
                     rValue.setValue(cont);
                 }
-                result.bind(rValue, operand.getContext());
+                result.bind(rValue, false, operand.getContext());
             } catch (ValueDoesNotMatchTypeException e) {
                 operand.getContext().addErrorMessage(e);
                 result = EvaluationAccessor.release(result);
@@ -871,7 +871,7 @@ public class ContainerOperations {
                 }
                 
                 if (null != rValue) {
-                    result = ConstantAccessor.POOL.getInstance().bind(rValue, operand.getContext());
+                    result = ConstantAccessor.POOL.getInstance().bind(rValue, true, operand.getContext());
                 }
             }
         }
@@ -933,7 +933,7 @@ public class ContainerOperations {
                 }
                 
                 if (null != rValue) {
-                    result = ConstantAccessor.POOL.getInstance().bind(rValue, operand.getContext());
+                    result = ConstantAccessor.POOL.getInstance().bind(rValue, true, operand.getContext());
                 }
             }
         }
@@ -996,7 +996,7 @@ public class ContainerOperations {
                     bResult = cValue.indexOf(aValue) >= 0;
                 }
                 result = ConstantAccessor.POOL.getInstance().bind(
-                    BooleanValue.toBooleanValue(bResult), operand.getContext());
+                    BooleanValue.toBooleanValue(bResult), true, operand.getContext());
             }
         }
         return result;

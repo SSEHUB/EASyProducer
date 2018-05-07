@@ -71,7 +71,7 @@ class Utils {
      */
     static final EvaluationAccessor createValue(IDatatype type, EvaluationContext context, Object... values) 
         throws ValueDoesNotMatchTypeException {
-        return ConstantAccessor.POOL.getInstance().bind(ValueFactory.createValue(type, values), context);
+        return ConstantAccessor.POOL.getInstance().bind(ValueFactory.createValue(type, values), false, context);
     }
 
     /**
@@ -81,7 +81,7 @@ class Utils {
      * @return the accessor
      */
     static final EvaluationAccessor createNullValue(EvaluationContext context) {
-        return ConstantAccessor.POOL.getInstance().bind(NullValue.INSTANCE, context);
+        return ConstantAccessor.POOL.getInstance().bind(NullValue.INSTANCE, true, context);
     }
     
     /**
@@ -97,7 +97,7 @@ class Utils {
         TestEvaluationContext context = new TestEvaluationContext();
         EvaluationAccessor iValue = createValue(type, context, value);
         EvaluationAccessor nullV = createNullValue(context);
-        EvaluationAccessor notDef = ConstantAccessor.POOL.getInstance().bind(null, context);
+        EvaluationAccessor notDef = ConstantAccessor.POOL.getInstance().bind(null, true, context);
         
         assertEquals(true, evaluate(op, iValue));
         assertEquals(false, evaluate(op, nullV));

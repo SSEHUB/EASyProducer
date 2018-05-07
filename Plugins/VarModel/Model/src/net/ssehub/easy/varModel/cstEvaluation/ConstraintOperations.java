@@ -47,7 +47,7 @@ public class ConstraintOperations {
         EvaluationAccessor result;
         try {
             operand.setValue(ValueFactory.createValue(ConstraintType.TYPE, cst), true);
-            result = ConstantAccessor.POOL.getInstance().bind(BooleanValue.TRUE, operand.getContext());
+            result = ConstantAccessor.POOL.getInstance().bind(BooleanValue.TRUE, true, operand.getContext());
         } catch (ValueDoesNotMatchTypeException e) {
             operand.getContext().addErrorMessage(e);
             result = null;
@@ -80,7 +80,7 @@ public class ConstraintOperations {
                 equals = !equals;
             }
             result = ConstantAccessor.POOL.getInstance().bind(BooleanValue.toBooleanValue(equals), 
-                operand.getContext());
+                true, operand.getContext());
         } else {
             result = null;
         }

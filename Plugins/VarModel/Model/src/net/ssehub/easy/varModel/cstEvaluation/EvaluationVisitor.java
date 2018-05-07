@@ -29,6 +29,7 @@ import net.ssehub.easy.varModel.confModel.AssignmentState;
 import net.ssehub.easy.varModel.confModel.CompoundVariable;
 import net.ssehub.easy.varModel.confModel.Configuration;
 import net.ssehub.easy.varModel.confModel.ConfigurationException;
+import net.ssehub.easy.varModel.confModel.ConfigurationInitializerRegistry;
 import net.ssehub.easy.varModel.confModel.IAssignmentState;
 import net.ssehub.easy.varModel.confModel.IConfiguration;
 import net.ssehub.easy.varModel.confModel.IDecisionVariable;
@@ -105,6 +106,8 @@ import static net.ssehub.easy.varModel.cstEvaluation.EvaluationUtils.*;
 public class EvaluationVisitor implements IConstraintTreeVisitor {
     
     protected IAssignmentState assignmentState;
+    // TRANSITION hack
+    private final boolean modelCopy = ConfigurationInitializerRegistry.getInitializer().supportsElementCopy();
     private EvaluationAccessor result;
     private int opNesting = 0;
     private boolean assignmentsOnly;
@@ -768,7 +771,7 @@ public class EvaluationVisitor implements IConstraintTreeVisitor {
             if (resolvedValue == constValue) {
                 resolvedValue = resolvedValue.clone();
             }
-            result = ConstantAccessor.POOL.getInstance().bind(resolvedValue, context);
+            result = ConstantAccessor.POOL.getInstance().bind(resolvedValue, true, context);
         } else {
             result = null; // failure
         }
@@ -890,23 +893,23 @@ public class EvaluationVisitor implements IConstraintTreeVisitor {
         }
         if (op == BooleanType.AND) {
             if (null != operandAccessor && operandAccessor.getValue() == BooleanValue.FALSE) {
-                result = ConstantAccessor.POOL.getInstance().bind(BooleanValue.FALSE, operand.getContext());
+                result = ConstantAccessor.POOL.getInstance().bind(BooleanValue.FALSE, true, operand.getContext());
                 hasBeenEvaluated = true;
             } else if (null != operand && null != parameter) {
                 parameterAccessor = getAccessor(parameterAccessor, parameter);
                 if (null != parameterAccessor && parameterAccessor.getValue() == BooleanValue.FALSE) {
-                    result = ConstantAccessor.POOL.getInstance().bind(BooleanValue.FALSE, operand.getContext());
+                    result = ConstantAccessor.POOL.getInstance().bind(BooleanValue.FALSE, true, operand.getContext());
                     hasBeenEvaluated = true;
                 }
             }
         } else if (op == BooleanType.OR) {
             if (null != operandAccessor && operandAccessor.getValue() == BooleanValue.TRUE) {
-                result = ConstantAccessor.POOL.getInstance().bind(BooleanValue.TRUE, operand.getContext());
+                result = ConstantAccessor.POOL.getInstance().bind(BooleanValue.TRUE, true, operand.getContext());
                 hasBeenEvaluated = true;
             } else if (null != operandAccessor && null != parameter) {
                 parameterAccessor = getAccessor(parameterAccessor, parameter);
                 if (null != parameterAccessor && parameterAccessor.getValue() == BooleanValue.TRUE) {
-                    result = ConstantAccessor.POOL.getInstance().bind(BooleanValue.TRUE, operand.getContext());
+                    result = ConstantAccessor.POOL.getInstance().bind(BooleanValue.TRUE, true, operand.getContext());
                     hasBeenEvaluated = true;
                 }
             }
@@ -916,7 +919,7 @@ public class EvaluationVisitor implements IConstraintTreeVisitor {
                 if (null != parameterAccessor) {
                     boolean xorRes = operand.getValue() == BooleanValue.TRUE ^ result.getValue() == BooleanValue.TRUE;
                     result = ConstantAccessor.POOL.getInstance().bind(BooleanValue.toBooleanValue(xorRes), 
-                        operand.getContext());
+                        true, operand.getContext());
                     hasBeenEvaluated = true;
                 }
             }
@@ -1065,7 +1068,7 @@ public class EvaluationVisitor implements IConstraintTreeVisitor {
         for (int a = 0; allOk && a < op.getParameterCount(); a++) {
             if (op == BooleanType.IMPLIES && (null == operand || BooleanValue.FALSE.equals(operand.getValue())) ) {
                 result = null == operand ? null 
-                    : ConstantAccessor.POOL.getInstance().bind(BooleanValue.TRUE, context);
+                    : ConstantAccessor.POOL.getInstance().bind(BooleanValue.TRUE, true, context);
                 allOk = false; // Everything is ok, but no further processing shall be taken place ;-)
             } else {
                 String argName = null;
@@ -1080,7 +1083,7 @@ public class EvaluationVisitor implements IConstraintTreeVisitor {
                 }
                 if (null == result && op.acceptsNull()) {
                     if (op.acceptsNull()) { // evaluators must assure to work with that -> isDefined
-                        result = ConstantAccessor.POOL.getInstance().bind(null, context);
+                        result = ConstantAccessor.POOL.getInstance().bind(null, true, context);
                     }
                 }
                 if (argName != null) {
@@ -1278,7 +1281,7 @@ public class EvaluationVisitor implements IConstraintTreeVisitor {
                 context.popLevel();
                 // resultVar would be a variable, result of iteration is a constant!
                 if (ok) {
-                    result = ConstantAccessor.POOL.getInstance().bind(resultVar.getValue(), context);
+                    result = ConstantAccessor.POOL.getInstance().bind(resultVar.getValue(), false, context);
                 } else {
                     result = null;
                 }
@@ -1486,7 +1489,7 @@ public class EvaluationVisitor implements IConstraintTreeVisitor {
                 if (NestingMode.NESTING == nestingMode) {
                     try {
                         Value val = ValueFactory.createValue(rVar.getValue().getContainedType(), (Object[]) null);
-                        res = ConstantAccessor.POOL.getInstance().bind(val, rVar.getContext());
+                        res = ConstantAccessor.POOL.getInstance().bind(val, false, rVar.getContext());
                         ((ContainerValue) rVar.getValue()).addElement(res.getValue());
                     } catch (ValueDoesNotMatchTypeException ex) {
                         ok = containerException(ex);
@@ -1616,7 +1619,7 @@ public class EvaluationVisitor implements IConstraintTreeVisitor {
                 CompoundValue cValue = (CompoundValue) value;
                 Value nValue = cValue.getNestedValue(slotName);
                 if (null != nValue) {
-                    result = ConstantAccessor.POOL.getInstance().bind(nValue, context);
+                    result = ConstantAccessor.POOL.getInstance().bind(nValue, false, context);
                 }
             } else if (value instanceof MetaTypeValue) {
                 // static qualified top
@@ -1625,7 +1628,7 @@ public class EvaluationVisitor implements IConstraintTreeVisitor {
                 if (value instanceof CompoundValue) {
                     value = ((CompoundValue) value).getNestedValue(slotName);
                     if (null != value) {
-                        result = ConstantAccessor.POOL.getInstance().bind(value, context);
+                        result = ConstantAccessor.POOL.getInstance().bind(value, false, context);
                     }
                 }
             } else {
@@ -1679,7 +1682,13 @@ public class EvaluationVisitor implements IConstraintTreeVisitor {
                     if (Reference.TYPE.isAssignableFrom(decl.getType())) {
                         values[pos++] = result.getReferenceValue();
                     } else {
-                        values[pos++] = result.getValue();
+                        Value val = result.getValue();
+                        // avoid implicit reference semantics of assigning complex variables
+                        if (null != val && modelCopy && !result.isConstant()) {
+                            val = val.clone();
+                        }
+                        values[pos++] = val;
+                        
                     }
                 }
                 clearResult();
@@ -1688,7 +1697,7 @@ public class EvaluationVisitor implements IConstraintTreeVisitor {
         if (ok) {
             try {
                 Value value = ValueFactory.createValue(initializer.getType(), values);
-                result = ConstantAccessor.POOL.getInstance().bind(value, context);
+                result = ConstantAccessor.POOL.getInstance().bind(value, false, context);
             } catch (ValueDoesNotMatchTypeException e) {
                 exception(e);
             }
@@ -1720,7 +1729,13 @@ public class EvaluationVisitor implements IConstraintTreeVisitor {
                     if (references) {
                         values[s] = result.getReferenceValue();
                     } else {
-                        values[s] = result.getValue();
+                        Value val = result.getValue();
+                        // Fails for one test case with AssignmentResolver-Init
+                        // avoid implicit reference semantics of assigning complex variables
+                        if (null != val && modelCopy && !result.isConstant()) {
+                            val = val.clone();
+                        }
+                        values[s] = val;
                     }
                 }
                 clearResult();
@@ -1729,7 +1744,7 @@ public class EvaluationVisitor implements IConstraintTreeVisitor {
         if (ok) {
             try {
                 Value value = ValueFactory.createValue(initializer.getType(), values); 
-                result = ConstantAccessor.POOL.getInstance().bind(value, context);
+                result = ConstantAccessor.POOL.getInstance().bind(value, false, context);
             } catch (ValueDoesNotMatchTypeException e) {
                 exception(e);
             }
@@ -1740,7 +1755,7 @@ public class EvaluationVisitor implements IConstraintTreeVisitor {
     @Override
     public void visitSelf(Self self) {
         if (null != selfValue) {
-            result = ConstantAccessor.POOL.getInstance().bind(selfValue, context);
+            result = ConstantAccessor.POOL.getInstance().bind(selfValue, false, context);
         } else {
             result = null;
         }
@@ -1816,7 +1831,7 @@ public class EvaluationVisitor implements IConstraintTreeVisitor {
             }
         }
         if (null != res) {
-            result = ConstantAccessor.POOL.getInstance().bind(BooleanValue.toBooleanValue(res), context);
+            result = ConstantAccessor.POOL.getInstance().bind(BooleanValue.toBooleanValue(res), true, context);
         }
     }
 

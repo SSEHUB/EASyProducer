@@ -43,6 +43,7 @@ public class ConstantAccessor extends EvaluationAccessor {
     });
     
     private Value value;
+    private boolean isConstant;
     
     /**
      * Creates an instance. Private due to pooling.
@@ -54,13 +55,23 @@ public class ConstantAccessor extends EvaluationAccessor {
      * Binds the accessor to the given value and context.
      * 
      * @param value the actual value
+     * @param isConstant whether <code>value</code> is still (potentially) linked by reference
+     *   to a decision variable ({@code false}), else whether it is actually a truely constant
      * @param context the evaluation context
      * @return <b>this</b> (builder pattern)
      */
-    public ConstantAccessor bind(Value value, EvaluationContext context) {
+    public ConstantAccessor bind(Value value, boolean isConstant, EvaluationContext context) {
         super.bind(context);
         this.value = value;
+        this.isConstant = isConstant;
         return this;
+    }
+    
+    @Override
+    public void clear() {
+        super.clear();
+        value = null;
+        isConstant = false;
     }
 
     @Override
@@ -98,7 +109,7 @@ public class ConstantAccessor extends EvaluationAccessor {
                 ContainerValue cVal = (ContainerValue) value;
                 int index = OclKeyWords.toJavaIndex(((IntValue) aValue).getValue());
                 if (0 <= index && index < cVal.getElementSize()) {
-                    result = ConstantAccessor.POOL.getInstance().bind(cVal.getElement(index), getContext());
+                    result = ConstantAccessor.POOL.getInstance().bind(cVal.getElement(index), false, getContext());
                 } else {
                     getContext().addErrorMessage("invalid index value");
                 }
@@ -127,4 +138,9 @@ public class ConstantAccessor extends EvaluationAccessor {
         return null == value ? "null" : value.toString();
     }
 
+    @Override
+    public boolean isConstant() {
+        return isConstant;
+    }
+    
 }

@@ -156,7 +156,7 @@ class GenericNumberOperations {
                 boolean booleanResult = strategy.compare((Number) oValue, (Number) aValue);
                 
                 result = ConstantAccessor.POOL.getInstance().bind(BooleanValue.toBooleanValue(booleanResult),
-                    operand.getContext());
+                    true, operand.getContext());
             }
         }
         
@@ -188,7 +188,7 @@ class GenericNumberOperations {
             }    
             
             if (null != newValue) {
-                result = ConstantAccessor.POOL.getInstance().bind(newValue, operand.getContext());
+                result = ConstantAccessor.POOL.getInstance().bind(newValue, true, operand.getContext());
             }
         }
         
@@ -220,7 +220,7 @@ class GenericNumberOperations {
             }    
             
             if (null != newValue) {
-                result = ConstantAccessor.POOL.getInstance().bind(newValue, operand.getContext());
+                result = ConstantAccessor.POOL.getInstance().bind(newValue, true, operand.getContext());
             }
         }
         

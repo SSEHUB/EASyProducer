@@ -29,6 +29,7 @@ import net.ssehub.easy.varModel.cst.CompoundAccess;
 import net.ssehub.easy.varModel.cst.ConstraintSyntaxTree;
 import net.ssehub.easy.varModel.cst.Variable;
 import net.ssehub.easy.varModel.cst.CopyVisitor.IVariableReplacer;
+import net.ssehub.easy.varModel.cst.Self;
 import net.ssehub.easy.varModel.model.AbstractVariable;
 import net.ssehub.easy.varModel.model.DecisionVariableDeclaration;
 import net.ssehub.easy.varModel.model.IModelElement;
@@ -155,6 +156,11 @@ class EvaluationUtils {
                 }
             }
             return result;
+        }
+
+        @Override
+        public ConstraintSyntaxTree mapSelf(Self self) {
+            return null;
         }
         
     }

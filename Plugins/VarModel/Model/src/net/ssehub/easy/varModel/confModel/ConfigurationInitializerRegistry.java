@@ -46,6 +46,13 @@ public class ConfigurationInitializerRegistry {
          */
         public List<Message> initializeConfiguration(Configuration config, ProgressObserver observer);
         
+        /**
+         * Whether the initializer/configuration supports enforced model copy.
+         * 
+         * @return <code>true</code> for support, <code>false</code> else
+         */
+        public boolean supportsElementCopy();
+        
     }
     
     /**

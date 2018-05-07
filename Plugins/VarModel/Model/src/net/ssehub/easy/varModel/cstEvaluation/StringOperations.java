@@ -49,7 +49,7 @@ public class StringOperations {
                 try {
                     int size = ((StringValue) value).getValue().length();
                     result = ConstantAccessor.POOL.getInstance().bind(
-                        ValueFactory.createValue(IntegerType.TYPE, size), operand.getContext());
+                        ValueFactory.createValue(IntegerType.TYPE, size), true, operand.getContext());
                 } catch (ValueDoesNotMatchTypeException e) {
                     // result -> null
                 }
@@ -71,7 +71,7 @@ public class StringOperations {
                 try {
                     int res = Integer.parseInt(str);
                     result = ConstantAccessor.POOL.getInstance().bind(
-                        ValueFactory.createValue(IntegerType.TYPE, res), operand.getContext());
+                        ValueFactory.createValue(IntegerType.TYPE, res), true, operand.getContext());
                 } catch (ValueDoesNotMatchTypeException e) {
                     // result -> null
                 } catch (NumberFormatException e) {
@@ -95,7 +95,7 @@ public class StringOperations {
                 try {
                     double dbl = Double.parseDouble(str);
                     result = ConstantAccessor.POOL.getInstance().bind(
-                        ValueFactory.createValue(RealType.TYPE, dbl), operand.getContext());
+                        ValueFactory.createValue(RealType.TYPE, dbl), true, operand.getContext());
                 } catch (ValueDoesNotMatchTypeException e) {
                     // result -> null
                 } catch (NumberFormatException e) {
@@ -122,7 +122,7 @@ public class StringOperations {
                 } else {
                     bValue = BooleanValue.FALSE;
                 }
-                result = ConstantAccessor.POOL.getInstance().bind(bValue, operand.getContext());
+                result = ConstantAccessor.POOL.getInstance().bind(bValue, true, operand.getContext());
             }
             return result;
         }
@@ -142,7 +142,7 @@ public class StringOperations {
                     String opS = ((StringValue) opValue).getValue();
                     String argS = ((StringValue) argValue).getValue();
                     result = ConstantAccessor.POOL.getInstance().bind(
-                        BooleanValue.toBooleanValue(equalsIgnoreCase(opS, argS, operand)), operand.getContext());
+                        BooleanValue.toBooleanValue(equalsIgnoreCase(opS, argS, operand)), true, operand.getContext());
                 }
             }
             return result;
@@ -164,7 +164,7 @@ public class StringOperations {
                         String opS = ((StringValue) opValue).getValue();
                         String argS = ((StringValue) argValue).getValue();
                         result = ConstantAccessor.POOL.getInstance().bind(
-                            ValueFactory.createValue(StringType.TYPE, opS + argS), operand.getContext());
+                            ValueFactory.createValue(StringType.TYPE, opS + argS), true, operand.getContext());
                     } catch (ValueDoesNotMatchTypeException e) {
                         // result -> null
                     } 
@@ -192,7 +192,7 @@ public class StringOperations {
                         int lower = OclKeyWords.toJavaIndex(((IntValue) lowerValue).getValue());
                         int upper = OclKeyWords.toJavaIndex(((IntValue) upperValue).getValue());
                         Value rValue = ValueFactory.createValue(StringType.TYPE, opS.substring(lower, upper));
-                        result = ConstantAccessor.POOL.getInstance().bind(rValue, operand.getContext());
+                        result = ConstantAccessor.POOL.getInstance().bind(rValue, true, operand.getContext());
                     } catch (ValueDoesNotMatchTypeException e) {
                         // result -> null
                     } catch (IndexOutOfBoundsException e) {
@@ -220,7 +220,7 @@ public class StringOperations {
                         String opS = ((StringValue) opValue).getValue();
                         Value rValue = ValueFactory.createValue(StringType.TYPE, String.valueOf(
                             opS.charAt(OclKeyWords.toJavaIndex(index))));
-                        result = ConstantAccessor.POOL.getInstance().bind(rValue, operand.getContext());
+                        result = ConstantAccessor.POOL.getInstance().bind(rValue, true, operand.getContext());
                     } catch (ValueDoesNotMatchTypeException e) {
                         // result -> null
                     } catch (IndexOutOfBoundsException e) {
@@ -248,7 +248,7 @@ public class StringOperations {
                         String arS = ((StringValue) argValue).getValue();
                         Value rValue = ValueFactory.createValue(IntegerType.TYPE, 
                             OclKeyWords.toIvmlIndex(opS.indexOf(arS)));
-                        result = ConstantAccessor.POOL.getInstance().bind(rValue, operand.getContext());
+                        result = ConstantAccessor.POOL.getInstance().bind(rValue, true, operand.getContext());
                     } catch (ValueDoesNotMatchTypeException e) {
                         // result -> null
                     } catch (IndexOutOfBoundsException e) {
@@ -289,7 +289,7 @@ public class StringOperations {
                         opS = opS.toLowerCase(operand.getContext().getLocale());
                     }
                     Value rValue = ValueFactory.createValue(StringType.TYPE, opS);
-                    result = ConstantAccessor.POOL.getInstance().bind(rValue, operand.getContext());
+                    result = ConstantAccessor.POOL.getInstance().bind(rValue, true, operand.getContext());
                 } catch (ValueDoesNotMatchTypeException e) {
                     // result -> null
                 } catch (IndexOutOfBoundsException e) {
@@ -339,7 +339,7 @@ public class StringOperations {
                         bRes = (compareResult < 0 && res < 0) || (compareResult > 0 && res > 0);
                     }
                     result = ConstantAccessor.POOL.getInstance().bind(BooleanValue.toBooleanValue(bRes), 
-                        operand.getContext());
+                        true, operand.getContext());
                 }
             }
             return result;
@@ -362,7 +362,7 @@ public class StringOperations {
                         String opS = ((StringValue) opValue).getValue();
                         String argS = ((StringValue) argValue).getValue();
                         Value rValue = BooleanValue.toBooleanValue(opS.matches(argS));
-                        result = ConstantAccessor.POOL.getInstance().bind(rValue, operand.getContext());
+                        result = ConstantAccessor.POOL.getInstance().bind(rValue, true, operand.getContext());
                     } catch (PatternSyntaxException e) {
                         operand.getContext().addErrorMessage(e);
                     }
@@ -386,7 +386,7 @@ public class StringOperations {
                 Sequence type = new Sequence("", StringType.TYPE, null);
                 try {
                     result = ConstantAccessor.POOL.getInstance().bind(
-                        ValueFactory.createValue(type, (Object[]) chars), operand.getContext());
+                        ValueFactory.createValue(type, (Object[]) chars), true, operand.getContext());
                 } catch (ValueDoesNotMatchTypeException e) {
                     operand.getContext().addErrorMessage(e);
                 }
@@ -415,7 +415,7 @@ public class StringOperations {
                         String argS = ((StringValue) argSValue).getValue();
                         String sResult = opS.replaceAll(argR, argS);
                         Value rValue = ValueFactory.createValue(StringType.TYPE, sResult);
-                        result = ConstantAccessor.POOL.getInstance().bind(rValue, operand.getContext());
+                        result = ConstantAccessor.POOL.getInstance().bind(rValue, true, operand.getContext());
                     } catch (ValueDoesNotMatchTypeException e) {
                         // -> result = null
                     } catch (PatternSyntaxException e) {

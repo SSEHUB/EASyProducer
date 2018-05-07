@@ -45,9 +45,17 @@ public class CopyVisitor extends BasicCopyVisitor {
          * Maps a leaf variable.
          * 
          * @param variable the variable to be mapped
-         * @return the mapped variable or <b>null</b> if there is no mapping
+         * @return the mapped expression or <b>null</b> if there is no mapping
          */
         public ConstraintSyntaxTree mapLeaf(Variable variable);
+
+        /**
+         * Maps a leaf node.
+         * 
+         * @param self the node to be mapped
+         * @return the mapped expression or <b>null</b> if there is no mapping
+         */
+        public ConstraintSyntaxTree mapSelf(Self self);
         
     }
     
@@ -148,6 +156,16 @@ public class CopyVisitor extends BasicCopyVisitor {
             var = getResult();
         }
         setResult(var);
+    }
+
+    @Override
+    public void visitSelf(Self self) {
+        ConstraintSyntaxTree cst = replacer.mapSelf(self);
+        if (null != cst) {
+            setResult(cst);
+        } else {
+            super.visitSelf(self);
+        }
     }
 
 }

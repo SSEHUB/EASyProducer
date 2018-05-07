@@ -37,7 +37,7 @@ public class MetaTypeOperations {
             if (val instanceof MetaTypeValue) {
                 MetaTypeValue mtVal = (MetaTypeValue) val;
                 Value resVal = operand.getContext().getAllInstances(mtVal.getValue());
-                result = ConstantAccessor.POOL.getInstance().bind(resVal, operand.getContext());
+                result = ConstantAccessor.POOL.getInstance().bind(resVal, false, operand.getContext());
             }
             return result; 
         }

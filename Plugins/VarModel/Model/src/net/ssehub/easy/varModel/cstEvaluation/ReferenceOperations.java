@@ -33,7 +33,8 @@ public class ReferenceOperations {
         public EvaluationAccessor evaluate(EvaluationAccessor operand, EvaluationAccessor[] arguments) {
             EvaluationAccessor result;
             if (null != operand) {
-                result = ConstantAccessor.POOL.getInstance().bind(operand.getDereferencedValue(), operand.getContext());
+                result = ConstantAccessor.POOL.getInstance().bind(operand.getDereferencedValue(), 
+                    false, operand.getContext());
             } else {
                 result = null;
             }

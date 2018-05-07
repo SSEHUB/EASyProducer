@@ -62,7 +62,7 @@ public class FreezeVarOperations {
                 }
                 try {
                     Value value = ValueFactory.createValue(StringType.TYPE, name);
-                    result = ConstantAccessor.POOL.getInstance().bind(value, operand.getContext());
+                    result = ConstantAccessor.POOL.getInstance().bind(value, true, operand.getContext());
                 } catch (ValueDoesNotMatchTypeException e) {
                     // result -> null
                 }

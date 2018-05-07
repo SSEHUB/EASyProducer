@@ -45,7 +45,7 @@ public class EnumOperations {
                 EnumLiteral lit = eVal.getValue();
                 try {
                     Value res = ValueFactory.createValue(IntegerType.TYPE, lit.getOrdinal());
-                    result = ConstantAccessor.POOL.getInstance().bind(res, operand.getContext());
+                    result = ConstantAccessor.POOL.getInstance().bind(res, true, operand.getContext());
                 } catch (ValueDoesNotMatchTypeException e) {
                     // result -> null
                 }
@@ -98,7 +98,7 @@ public class EnumOperations {
                 if (opVal instanceof EnumValue && aVal instanceof EnumValue && opVal.getType() == aVal.getType()) {
                     boolean tmp = op.evaluate(((EnumValue) opVal).getValue(), ((EnumValue) aVal).getValue());
                     BooleanValue rVal = BooleanValue.toBooleanValue(tmp);
-                    result = ConstantAccessor.POOL.getInstance().bind(rVal, operand.getContext());
+                    result = ConstantAccessor.POOL.getInstance().bind(rVal, true, operand.getContext());
                 }
             }
             return result;
@@ -147,7 +147,7 @@ public class EnumOperations {
                     }
                     try {
                         Value resVal = ValueFactory.createValue(opVal.getType(), res);
-                        result = ConstantAccessor.POOL.getInstance().bind(resVal, operand.getContext());
+                        result = ConstantAccessor.POOL.getInstance().bind(resVal, true, operand.getContext());
                     } catch (ValueDoesNotMatchTypeException e) {
                         // result is anyway null
                     }

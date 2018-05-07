@@ -61,7 +61,7 @@ public class RealOperations {
                 double rValue = ((RealValue) value).getValue();
                 try {
                     Value iValue = ValueFactory.createValue(IntegerType.TYPE, (int) rValue);
-                    ConstantAccessor.POOL.getInstance().bind(iValue, operand.getContext());
+                    ConstantAccessor.POOL.getInstance().bind(iValue, true, operand.getContext());
                 } catch (ValueDoesNotMatchTypeException e) {
                     operand.getContext().addErrorMessage("toInt: " + e.getMessage());
                 }
@@ -195,10 +195,10 @@ public class RealOperations {
                         equals = !equals;
                     }
                     result = ConstantAccessor.POOL.getInstance().bind(
-                        BooleanValue.toBooleanValue(equals), operand.getContext());
+                        BooleanValue.toBooleanValue(equals), true, operand.getContext());
                 } else if (oValue == NullValue.INSTANCE) {
                     result = ConstantAccessor.POOL.getInstance().bind(
-                        BooleanValue.toBooleanValue(negate), operand.getContext());
+                        BooleanValue.toBooleanValue(negate), true, operand.getContext());
                 }
             }
         }
@@ -260,7 +260,7 @@ public class RealOperations {
                     Value rValue;
                     try {
                         rValue = ValueFactory.createValue(RealType.TYPE, resultOfOperation);
-                        result = ConstantAccessor.POOL.getInstance().bind(rValue, operand.getContext());
+                        result = ConstantAccessor.POOL.getInstance().bind(rValue, true, operand.getContext());
                     } catch (ValueDoesNotMatchTypeException e) {
                         EASyLoggerFactory.INSTANCE.getLogger(GenericNumberOperations.class, Bundle.ID).exception(e);
                     }
@@ -300,7 +300,7 @@ public class RealOperations {
                 // Create (result) value
                 try {
                     Value rValue = ValueFactory.createValue(IntegerType.TYPE, resultOfOperation);
-                    result = ConstantAccessor.POOL.getInstance().bind(rValue, operand.getContext());
+                    result = ConstantAccessor.POOL.getInstance().bind(rValue, true, operand.getContext());
                 } catch (ValueDoesNotMatchTypeException e) {
                     EASyLoggerFactory.INSTANCE.getLogger(GenericNumberOperations.class, Bundle.ID).exception(e);
                 }
@@ -340,7 +340,7 @@ public class RealOperations {
                 
                 try {
                     Value rValue = ValueFactory.createValue(RealType.TYPE, rNumber);
-                    result = ConstantAccessor.POOL.getInstance().bind(rValue, operand.getContext());
+                    result = ConstantAccessor.POOL.getInstance().bind(rValue, true, operand.getContext());
                 } catch (ValueDoesNotMatchTypeException e) {
                     EASyLoggerFactory.INSTANCE.getLogger(GenericNumberOperations.class, Bundle.ID).exception(e);
                 }

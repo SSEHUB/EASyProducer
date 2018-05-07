@@ -91,6 +91,12 @@ public class Configuration implements IConfigurationVisitable, IProjectListener,
             config.freezeValues(config.project, FilterType.ALL);
             return null; // no messages so far
         }
+
+        @Override
+        public boolean supportsElementCopy() {
+            return false;
+        }
+        
     };
 
     /**

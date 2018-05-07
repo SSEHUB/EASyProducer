@@ -72,7 +72,7 @@ public class VersionOperations {
                 if (aValue instanceof VersionValue) {
                     BooleanValue tmp = BooleanValue.toBooleanValue(converter.convert(
                         Version.compare(((VersionValue) oValue).getValue(), ((VersionValue) aValue).getValue())));
-                    result = ConstantAccessor.POOL.getInstance().bind(tmp, operand.getContext());                    
+                    result = ConstantAccessor.POOL.getInstance().bind(tmp, true, operand.getContext());
                 }
             }
             return result;
