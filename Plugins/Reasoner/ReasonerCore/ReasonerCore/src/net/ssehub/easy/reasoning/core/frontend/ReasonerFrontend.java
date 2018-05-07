@@ -108,8 +108,10 @@ public class ReasonerFrontend {
 
             @Override
             public boolean supportsElementCopy() {
-                return true;
+                // something else then the default mechanism available that takes over this task?
+                return getPreferredReasoner().hasCapability(GeneralReasonerCapabilities.CONFIGURATION_INITIALIZATION);
             }
+            
         });
     }
     
