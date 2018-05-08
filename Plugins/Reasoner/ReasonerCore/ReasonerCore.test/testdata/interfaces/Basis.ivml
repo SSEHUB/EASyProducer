@@ -1,0 +1,16 @@
+project Basis {
+
+    interface bIface {
+        export iVal;
+        export sVal;
+    }
+    
+    Integer iVal;
+    String sVal;
+    Integer myVal;
+    
+    sVal == iVal.toString();
+    myVal = iVal;
+    myVal < 7;
+    
+}

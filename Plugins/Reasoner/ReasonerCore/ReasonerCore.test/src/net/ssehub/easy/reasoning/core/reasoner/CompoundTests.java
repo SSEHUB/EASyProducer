@@ -7,7 +7,7 @@ import org.junit.Test;
 import net.ssehub.easy.varModel.model.Project;
 
 /**
- * Configures the compound tests for SSE reasoner.
+ * Configures the compound tests for reasoners.
  * 
  * @author Eichelberger
  */

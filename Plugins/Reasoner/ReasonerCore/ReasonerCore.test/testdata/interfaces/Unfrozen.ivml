@@ -1,0 +1,8 @@
+project Unfrozen {
+
+    import Basis::bIface;
+
+    iVal = 8;
+    sVal = "8";
+    
+}

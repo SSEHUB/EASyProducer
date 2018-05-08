@@ -1,0 +1,12 @@
+project Frozen {
+
+    import Basis::bIface;
+
+    iVal = 8;
+    sVal = "8";
+
+    freeze {
+        Frozen;
+        Basis;
+    };    
+}
