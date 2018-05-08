@@ -546,7 +546,6 @@ class Resolver implements IValueChangeListener, IResolutionListener {
         evaluationTime += end - mid;
         // Freezes values after each scope
         config.freezeValues(project, FilterType.NO_IMPORTS);
-        // TODO do incremental freezing in here -> required by interfaces with propagation constraints
         if (Descriptor.LOGGING) {
             printFailedElements(failedElements);                                
         }
