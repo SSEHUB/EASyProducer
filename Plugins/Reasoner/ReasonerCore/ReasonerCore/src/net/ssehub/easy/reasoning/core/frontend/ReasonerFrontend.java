@@ -70,6 +70,17 @@ public class ReasonerFrontend {
     private ReasonerFrontend() {
         registry = ReasonerRegistry.getInstance();
         DefaultReasonerAccess.setProvider(new DefaultReasonerProvider()); // called when a reasoner is registered
+        Boolean fallback = Boolean.valueOf(
+            System.getProperty("easy.configuration.useAssignmentResolver", "false").toLowerCase());
+        if (!fallback) {
+            installConfigurationInitializer();
+        }
+    }
+    
+    /**
+     * Installs the configuration intializer.
+     */
+    private void installConfigurationInitializer() {
         ConfigurationInitializerRegistry.setInitializer(new IConfigurationInitializer() {
             
             private IConfigurationInitializer fallback = ConfigurationInitializerRegistry.getInitializer();
