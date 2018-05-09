@@ -35,6 +35,8 @@
                 <exclude name="@{exclude}" />
             </fileset>            
           </copy>
+          <!-- as jar names may change, touch a file so that other scripts can check for existence using available -->
+          <touch file="@{target}/easy.touch"/>
         </sequential>
     </macrodef>
     
