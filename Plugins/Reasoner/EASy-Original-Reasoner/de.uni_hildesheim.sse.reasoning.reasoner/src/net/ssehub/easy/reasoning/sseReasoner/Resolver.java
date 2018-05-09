@@ -244,7 +244,7 @@ class Resolver implements IValueChangeListener, IResolutionListener {
             setIncremental(inc);
         } else if (oldType.isAssignableFrom(newType)) {
             // add those between oldValue (exclusive) and newType (inclusive), start at newType
-            Set<Compound> types = collectRefines(newType, oldType);
+            Set<Compound> types = collectRefines(oldType, newType);
             contexts.setTypeExcludes(types);
             boolean inc = setIncremental(true); // use incremental mode, disable default values anyway
             translateDeclaration(variable.getDeclaration(), variable, null); // null as access is unclear
@@ -412,7 +412,7 @@ class Resolver implements IValueChangeListener, IResolutionListener {
             ConstraintSyntaxTree parentAcc = createParentExpression((IDecisionVariable) parent);
             if (variable.getDeclaration() instanceof Attribute) {
                 result = new AttributeVariable(parentAcc, (Attribute) variable.getDeclaration());
-            } else { // TODO what about container variables?
+            } else {
                 result = new CompoundAccess(parentAcc, variable.getDeclaration().getName());
             }
         } else { // we are top-level
@@ -947,25 +947,23 @@ class Resolver implements IValueChangeListener, IResolutionListener {
         Variable declVar, IDatatype target) {
         for (int i = 0, n = type.getInheritedElementCount(); i < n; i++) {
             AbstractVariable nestedDecl = type.getInheritedElement(i);
-            if (!contexts.isElementTypeExcluded(nestedDecl.getParent())) {
-                ConstraintSyntaxTree acc;
-                if (null == cAcc) {
-                    acc = new CompoundAccess(declVar, nestedDecl.getName());
-                } else {
-                    acc = new CompoundAccess(createAsTypeCast(cAcc, type, target), 
-                        nestedDecl.getName());
-                }
-                contexts.registerMapping(nestedDecl, acc);
-                for (int a = 0, m = nestedDecl.getAttributesCount(); a < m; a++) {
-                    Attribute attr = nestedDecl.getAttribute(a);
-                    if (null == cAcc) {
-                        acc = new AttributeVariable(declVar, attr);
-                    } else {                        
-                        acc = new AttributeVariable(createAsTypeCast(cAcc, type, target), attr);
-                    }
-                    contexts.registerMapping(attr, acc);
-                }            
+            ConstraintSyntaxTree acc;
+            if (null == cAcc) {
+                acc = new CompoundAccess(declVar, nestedDecl.getName());
+            } else {
+                acc = new CompoundAccess(createAsTypeCast(cAcc, type, target), 
+                    nestedDecl.getName());
             }
+            contexts.registerMapping(nestedDecl, acc);
+            for (int a = 0, m = nestedDecl.getAttributesCount(); a < m; a++) {
+                Attribute attr = nestedDecl.getAttribute(a);
+                if (null == cAcc) {
+                    acc = new AttributeVariable(declVar, attr);
+                } else {                        
+                    acc = new AttributeVariable(createAsTypeCast(cAcc, type, target), attr);
+                }
+                contexts.registerMapping(attr, acc);
+            }            
         }
     }
 
@@ -1346,30 +1344,28 @@ class Resolver implements IValueChangeListener, IResolutionListener {
     }
     
     /**
-     * Creates constraints for initializers.
+     * Creates constraints for initializers. Performs variable substitution without self/selfEx if requested by 
+     * {@code substituteVars}. Does not perform initializer check on adding the constraint.
      * 
      * @param cst the expression to create the constraint for
      * @param substituteVars whether variables shall be substituted from the variable mapping
      * @param parent the parent for the new constraint
      * @param variable the actually (nested) variable, used to relate the created constraint to, may be <b>null</b>
+     * @see #createConstraintVariableConstraint(ConstraintSyntaxTree, AbstractVariable, boolean, IModelElement, 
+     *     IDecisionVariable)
      */
     private void createConstraintForInitializer(ConstraintSyntaxTree cst, boolean substituteVars, 
         IModelElement parent, IDecisionVariable variable) {
         if (substituteVars) {
             cst = substituteVariables(cst, null, null);
         }
-        try {
-            Constraint constraint = new ConstraintVariableConstraint(cst, parent);
-            addConstraint(otherConstraints, constraint, false, variable);
-            registerConstraint(variable, constraint);
-        } catch (CSTSemanticException e) {
-            LOGGER.exception(e);
-        }
+        createConstraintVariableConstraint(cst, null, false, parent, variable);
     }
 
     /**
-     * Creates a constraint from a (nested) constraint variable adding the result to 
-     * {@link #constraintVariablesConstraints}.
+     * Creates a constraint for a (nested) constraint variable adding the result to 
+     * {@link #constraintVariablesConstraints}. Performs initializers check upon adding if <code>cst</code> is not
+     * a {@link ConstantValue}.
      * 
      * @param cst the constraint
      * @param selfEx the expression representing <i>self</i> in <code>cst</code>, both, <code>self</code> and 
@@ -1379,25 +1375,49 @@ class Resolver implements IValueChangeListener, IResolutionListener {
      * @param parent the parent for new constraints
      * @param variable the actually (nested) variable, used to relate the created constraint to, may be <b>null</b>
      * @return the created constraint
+     * @see #createConstraintVariableConstraint(ConstraintSyntaxTree, AbstractVariable, boolean, IModelElement, 
+     *     IDecisionVariable)
      */
     private Constraint createConstraintVariableConstraint(ConstraintSyntaxTree cst, ConstraintSyntaxTree selfEx, 
         AbstractVariable self, IModelElement parent, IDecisionVariable variable) {
         Constraint constraint = null;
         if (cst != null) {
             cst = substituteVariables(cst, selfEx, self);
-            try {
-                constraint = new ConstraintVariableConstraint(cst, parent);
-                // constants can cause endless recursion
-                addConstraint(otherConstraints, constraint, !(cst instanceof ConstantValue), variable);
-                registerConstraint(variable, constraint);
-                if (Descriptor.LOGGING) {
-                    LOGGER.debug((null != self ? self.getName() + "." : "") 
-                        + (null != variable ? variable.getDeclaration().getName() : "")
-                        + " constraint variable " + toIvmlString(cst));
-                }
-            } catch (CSTSemanticException e) {
-                LOGGER.exception(e);
+            constraint = createConstraintVariableConstraint(cst, self, 
+                !(cst instanceof ConstantValue), parent, variable);
+        }
+        return constraint;
+    }
+
+    /**
+     * Creates a constraint for a (nested) constraint variable adding the result to 
+     * {@link #otherConstraints}. Registers the constraint if needed.
+     * 
+     * @param cst the constraint
+     * @param self the declaration of the variable representing <i>self</i> in <code>cst</code> (may be <b>null</b> 
+     *    for none), just used for logging
+     * @param checkForInitializers whether initializers shall be checked (recursively) when adding aconstraint
+     * @param parent the parent for new constraints
+     * @param variable the actually (nested) variable, used to relate the created constraint to, may be <b>null</b>
+     * @return the created constraint
+     * @see #addConstraint(ConstraintList, Constraint, boolean, IDecisionVariable)
+     * @see #registerConstraint(IDecisionVariable, Constraint)
+     */
+    private Constraint createConstraintVariableConstraint(ConstraintSyntaxTree cst, AbstractVariable self, 
+        boolean checkForInitializers, IModelElement parent, IDecisionVariable variable) {
+        Constraint constraint = null;
+        try {
+            constraint = new ConstraintVariableConstraint(cst, parent);
+            // constants can cause endless recursion
+            addConstraint(otherConstraints, constraint, checkForInitializers, variable);
+            registerConstraint(variable, constraint);
+            if (Descriptor.LOGGING) {
+                LOGGER.debug((null != self ? self.getName() + "." : "") 
+                    + (null != variable ? variable.getDeclaration().getName() : "")
+                    + " constraint variable " + toIvmlString(cst));
             }
+        } catch (CSTSemanticException e) {
+            LOGGER.exception(e);
         }
         return constraint;
     }

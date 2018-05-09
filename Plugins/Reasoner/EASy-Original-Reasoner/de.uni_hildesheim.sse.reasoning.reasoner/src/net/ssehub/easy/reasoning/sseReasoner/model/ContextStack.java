@@ -110,6 +110,7 @@ public class ContextStack {
     
     private Context currentContext;
     private boolean registerContexts = false;
+    private Set<? extends IDatatype> globalExcludes;
 
     /**
      * Creates a context stack with implicit top-most (project) context.
@@ -416,7 +417,7 @@ public class ContextStack {
      * @see #isElementTypeExcluded(IModelElement)
      */
     public void setTypeExcludes(Set<? extends IDatatype> excludes) {
-        currentContext.typeExcludes = excludes;
+        globalExcludes = excludes;
     }
     
     /**
@@ -429,15 +430,9 @@ public class ContextStack {
      * @see #isElementTypeExcluded(IModelElement)
      */
     public void transferTypeExcludes(IDatatype type) {
-        if (null != currentContext.typeExcludes) {
-            Context iter = currentContext.predecessor;
-            while (null != iter) {
-                if (null != iter.typeExcludes) {
-                    currentContext.typeExcludes = iter.typeExcludes;
-                    iter.typeExcludes = null;
-                    iter = null;
-                }
-            }
+        if (null != globalExcludes && null == currentContext.typeExcludes) {
+            currentContext.typeExcludes = globalExcludes;
+            globalExcludes = null;
         }
         currentContext.type = type;
     }
