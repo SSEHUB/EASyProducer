@@ -358,7 +358,6 @@ public class AssignmentResolver {
              */
             resolveAnnotationAssignments(project);
             resolveAssignments(project);
-            // TODO do incremental freezing in here -> required by interfaces with propagation constraints
         }
     }
 
