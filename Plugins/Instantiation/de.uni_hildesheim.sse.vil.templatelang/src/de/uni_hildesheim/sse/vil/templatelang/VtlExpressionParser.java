@@ -61,7 +61,7 @@ public class VtlExpressionParser extends AbstractModelInitializer<Template> impl
             TemplateModel.INSTANCE.loaders().registerLoader(TemplateLangModelUtility.INSTANCE, 
                 ProgressObserver.NO_OBSERVER);
         } catch (ModelManagementException e) {
-            EASyLoggerFactory.INSTANCE.getLogger(VtlExpressionParser.class, VtlBundleId.ID);
+            EASyLoggerFactory.INSTANCE.getLogger(VtlExpressionParser.class, VtlBundleId.ID).exception(e);
         }
         ExpressionParserRegistry.setExpressionParser(TemplateLangExecution.LANGUAGE, this);
         ModelInitializer.register(this);

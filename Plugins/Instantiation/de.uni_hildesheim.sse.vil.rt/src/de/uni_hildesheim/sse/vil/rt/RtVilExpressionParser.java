@@ -61,7 +61,7 @@ public class RtVilExpressionParser extends AbstractModelInitializer<Script> impl
             RtVilModel.INSTANCE.loaders().registerLoader(RtVilModelUtility.INSTANCE, 
                 ProgressObserver.NO_OBSERVER);
         } catch (ModelManagementException e) {
-            EASyLoggerFactory.INSTANCE.getLogger(RtVilExpressionParser.class, RtVilBundleId.ID);
+            EASyLoggerFactory.INSTANCE.getLogger(RtVilExpressionParser.class, RtVilBundleId.ID).exception(e);
         }
         ExpressionParserRegistry.setExpressionParser(RtVilExecution.LANGUAGE, this);
         ModelInitializer.register(this);

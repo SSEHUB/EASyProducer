@@ -61,7 +61,7 @@ public class VilExpressionParser extends AbstractModelInitializer<Script> implem
             BuildModel.INSTANCE.loaders().registerLoader(BuildLangModelUtility.INSTANCE, 
                 ProgressObserver.NO_OBSERVER);
         } catch (ModelManagementException e) {
-            EASyLoggerFactory.INSTANCE.getLogger(VilExpressionParser.class, VilBundleId.ID);
+            EASyLoggerFactory.INSTANCE.getLogger(VilExpressionParser.class, VilBundleId.ID).exception(e);
         }
         ExpressionParserRegistry.setExpressionParser(BuildlangExecution.LANGUAGE, this);
         ModelInitializer.register(this);
