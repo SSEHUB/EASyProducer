@@ -11,6 +11,7 @@
 	<path id ="includes">
 		<!-- Var Model -->
 		<pathelement path="${libs.utils}"/>
+        <pathelement path="${libs.libs.common.io}"/>
         <!-- Instantiation -->
         <pathelement path="${libs.instantiator.copy.core}"/>
         <pathelement path="${libs.instantiator.core}"/>

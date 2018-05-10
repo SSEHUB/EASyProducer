@@ -169,6 +169,7 @@
 			<fileset dir="${home.easy.easy-producer.ui.dir}/${build.jar.dir}/" includes="**/*.jar" />
             
             <!-- VarModel -->
+		    <fileset dir="${home.libs.common.io.dir}/${build.jar.dir}" includes="**/*.jar"/>
             <fileset dir="${home.utils.dir}/${build.jar.dir}" includes="**/*.jar" />
             <fileset dir="${home.model.dir}/${build.jar.dir}" includes="**/*.jar" />
 			<!-- IVML -->
