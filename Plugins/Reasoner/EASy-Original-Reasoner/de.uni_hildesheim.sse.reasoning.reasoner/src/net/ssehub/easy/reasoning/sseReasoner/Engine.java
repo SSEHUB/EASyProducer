@@ -24,7 +24,6 @@ import net.ssehub.easy.varModel.model.AbstractVariable;
 import net.ssehub.easy.varModel.model.Constraint;
 import net.ssehub.easy.varModel.model.ModelElement;
 import net.ssehub.easy.varModel.model.Project;
-import net.ssehub.easy.varModel.persistency.StringProvider;
 
 /**
  * Class for executing reasoner and returning the result.
@@ -229,29 +228,7 @@ public class Engine {
      * @param msg Message to be printed out.
      */
     private void printMessage(Message msg) {
-        for (int i = 0; i < msg.getConflictsCount(); i++) {
-            infoLogger.info("---");
-            if (msg.getConflicts().get(i) instanceof Constraint) {
-                Constraint constraint = (Constraint) msg.getConflicts().get(i);
-                infoLogger.info("Failed element (EP): " 
-                    + StringProvider.toIvmlString(constraint.getConsSyntax())); 
-            } else {
-                infoLogger.info("Failed element (EP): " 
-                    + StringProvider.toIvmlString(msg.getConflicts().get(i)));                
-            }
-            infoLogger.info("Failed elements label (CT): " + msg.getConflictLabels().get(i));
-            infoLogger.info("Failed elements comment: " + msg.getConflictComments().get(i));
-            infoLogger.info("Failed elements project: " + msg.getConflictProjects().get(i).getName());
-            infoLogger.info("Failed elements suggestion: " + msg.getConflictSuggestions().get(i));
-            infoLogger.info("Failed elements variables: " + msg.getProblemVariables().get(i));
-            if (msg.getProblemConstraintParts().get(i) != null) {
-                infoLogger.info("Failed elements problem constraint parts: " 
-                    + StringProvider.toIvmlString(msg.getProblemConstraintParts().get(i)));                
-            }
-            infoLogger.info("Failed elements constraint variable: " 
-                + msg.getNamedConstraintVariables().get(i)); 
-            infoLogger.info("Reasoning error code: " + msg.getErrorClassification().get(i));
-        }
+        infoLogger.info(msg.toString());
     }      
     
     /**
