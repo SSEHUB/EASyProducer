@@ -10,5 +10,5 @@ Bundle-ActivationPolicy: lazy
 Bundle-ClassPath: .
 Require-Bundle: net.ssehub.easy.varModel;bundle-version="0.0.10",
  org.junit,
- org.apache.commons.io;bundle-version="2.0.1"
+ net.ssehub.easy.libs.commons.io
 Export-Package: net.ssehub.easy.varModel.varModel.testSupport
