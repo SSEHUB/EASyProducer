@@ -8,5 +8,5 @@ Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Bundle-ClassPath: .
 Require-Bundle: org.junit;bundle-version="4.8.1",
  net.ssehub.easy.instantiation.velocity;bundle-version="1.7.13",
- org.apache.commons.io;bundle-version="2.0.1",
+ net.ssehub.easy.libs.commons.io,
  net.ssehub.easy.reasoning.sseReasoner;bundle-version="1.0.0"
