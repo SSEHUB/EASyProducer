@@ -158,7 +158,7 @@ public abstract class AbstractTest extends net.ssehub.easy.dslCore.test.Abstract
             checkWarningCodes(result);
             Assert.assertNull(errorCodesMsg, errorCodesMsg);
 
-            if (0 == result.getErrorCount()) {
+            if (0 == result.getErrorCount() && checkWriteback(file)) {
                 // read model file into memory
                 String fileAsString = file2String(file);
                 Assert.assertTrue(null != fileAsString);
@@ -199,6 +199,16 @@ public abstract class AbstractTest extends net.ssehub.easy.dslCore.test.Abstract
             }
         }
         return loaded;
+    }
+    
+    /**
+     * Whether the test for a certain file shall check for output and output formatting.
+     * 
+     * @param file the file
+     * @return <code>true</code> check for output formatting, <code>false</code> for no checks
+     */
+    protected boolean checkWriteback(File file) {
+        return true;
     }
 
     /**
