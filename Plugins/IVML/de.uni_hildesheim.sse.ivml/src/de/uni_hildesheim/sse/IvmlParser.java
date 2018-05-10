@@ -30,7 +30,7 @@ public class IvmlParser extends AbstractModelInitializer<Project> implements IPa
         try {
             VarModel.INSTANCE.loaders().registerLoader(ModelUtility.INSTANCE, ProgressObserver.NO_OBSERVER);
         } catch (ModelManagementException e) {
-            EASyLoggerFactory.INSTANCE.getLogger(IvmlParser.class, IvmlBundleId.ID);
+            EASyLoggerFactory.INSTANCE.getLogger(IvmlParser.class, IvmlBundleId.ID).exception(e);
         }
         ModelInitializer.register(this);
     }
