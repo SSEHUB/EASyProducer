@@ -13,7 +13,7 @@ Require-Bundle: de.uni_hildesheim.sse.vil.buildlang.tests;bundle-version="0.0.1"
  de.uni_hildesheim.sse.ivml;bundle-version="0.5.5",
  net.ssehub.easy.instantiation.java;bundle-version="0.0.1",
  net.ssehub.easy.varModel.tests;bundle-version="0.0.10",
- org.apache.commons.io;bundle-version="2.0.1",
+ net.ssehub.easy.libs.commons.io,
  net.ssehub.easy.instantiation.ant;bundle-version="0.2.3",
  net.ssehub.easy.instantiation.aspectj;bundle-version="0.2.3",
  net.ssehub.easy.instantiation.maven;bundle-version="3.2.3",
