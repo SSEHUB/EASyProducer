@@ -22,6 +22,11 @@
 	</target>
 	
 	<target name="compile">
+		<echo>###############################</echo>
+        <echo>###  Assembling commons.io  ###</echo>
+        <echo>###############################</echo>
+        <ant dir="libs.commons.io" antfile="${build.script.name}" />
+	
         <echo>#########################################</echo>
         <echo>###  Compiling the Utility Functions  ###</echo>
         <echo>#########################################</echo>
