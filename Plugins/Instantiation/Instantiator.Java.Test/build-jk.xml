@@ -11,6 +11,7 @@
 	<path id ="includes">
 		<!-- Model -->
         <pathelement path="${libs.utils}"/>
+        <pathelement path="${libs.libs.common.io}"/>
 		<pathelement path="${libs.model}"/>
         <pathelement path="${libs.model.tests}"/>
 		<pathelement path="${libs.dslCore}"/>       

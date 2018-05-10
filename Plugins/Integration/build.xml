@@ -86,6 +86,7 @@
 		
 		<copy todir="${test.eclipse.path}/plugins" failonerror="true" overwrite="true">
 			<fileset dir="${coverage.instr.dir}/lib"/>
+		    <fileset dir="${home.libs.common.io.dir}/${build.jar.dir}" includes="**/*.jar"/>
 			<fileset dir="${home.model.dir}/build/jar"/>
 			<fileset dir="${home.integration.common.tests.dir}/build/jar"/>
 			<fileset dir="${home.ivml.dir}/build/jar"/>

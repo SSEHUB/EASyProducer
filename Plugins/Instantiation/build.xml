@@ -222,6 +222,7 @@
             <fileset dir="${basedir}" includes="**/${build.jar.dir}/*.jar" excludes="${home.instantiator.maven.dir}/${build.jar.dir}/**/*.jar"/>
             <!-- Copy dependent Plug-ins -->
 			<!-- Model -->
+		    <fileset dir="${home.libs.common.io.dir}/${build.jar.dir}" includes="**/*.jar"/>
             <fileset dir="${home.utils.dir}/${build.jar.dir}" includes="**/*.jar" />
             <fileset dir="${home.model.dir}/${build.jar.dir}" includes="**/*.jar" />
             <fileset dir="${home.model.tests.dir}/${build.jar.dir}" includes="**/*.jar" />

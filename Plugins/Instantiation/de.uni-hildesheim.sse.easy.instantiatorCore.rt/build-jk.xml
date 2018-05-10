@@ -12,6 +12,7 @@
 	<path id ="includes">
 		<!-- Model -->
 		<pathelement path="${libs.utils}"/>
+        <pathelement path="${libs.libs.common.io}"/>
 		<pathelement path="${libs.model}"/>
 		<!-- Reasoning -->
 		<pathelement path="${libs.reasonerCore}"/>
