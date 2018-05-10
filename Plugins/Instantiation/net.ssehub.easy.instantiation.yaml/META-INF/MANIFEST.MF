@@ -7,6 +7,6 @@ Bundle-Activator: io.ssehub.easy.instantiation.yaml.Activator
 Bundle-Vendor: University of Hildesheim, SSE
 Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,
- org.apache.commons.io;bundle-version="2.4.0"
+ net.ssehub.easy.libs.commons.io
 Bundle-ActivationPolicy: lazy
 Export-Package: net.ssehub.easy.instantiation.yaml

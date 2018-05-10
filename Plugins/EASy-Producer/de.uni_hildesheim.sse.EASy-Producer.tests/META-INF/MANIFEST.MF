@@ -7,5 +7,5 @@ Bundle-Vendor: University of Hildesheim
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Fragment-Host: net.ssehub.easy.producer.eclipse;bundle-version="0.7.2"
 Require-Bundle: org.junit;bundle-version="4.8.1",
- org.apache.commons.io
+ net.ssehub.easy.libs.commons.io
 
