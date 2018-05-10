@@ -338,7 +338,54 @@ public class ExperimentsControlTests extends AbstractTest {
         }
         Assert.assertTrue("Constraint dependenciesAntisymmetry shall fail", found);
     }
-    
+
+    /**
+     * A test for a failing activity graph configuration (contributed by M. Keunecke, J. Hagedorn).
+     * 
+     * @throws IOException shall not occur
+     * @throws ModelQueryException shall not occur
+     * @throws IvmlException shall not occur
+     */
+    @Test
+    public void activityTestFail() throws IOException, ModelQueryException, IvmlException {
+        Configuration config = createAndAssertEqual("activity/ActivityGraphConfiguration_0");
+        ReasonerConfiguration rConfig = new ReasonerConfiguration();
+        rConfig.setAdditionalInformationLogger(ReasonerConfiguration.ADDITIONAL_INFO_LOG_NONE);
+        ReasoningResult res = ReasonerFrontend.getInstance().propagate(config.getProject(), config, rConfig, 
+            ProgressObserver.NO_OBSERVER);
+        // checkSheetAfterReadSheets does not fit configuration!
+        for (int m = 0; m < res.getMessageCount(); m++) {
+            System.out.println(res.getMessage(m));
+        }
+        Assert.assertTrue("there should be reasoning conflicts", res.hasConflict());
+    }
+
+    /**
+     * A test for a succeeding activity graph configuration (contributed by M. Keunecke, J. Hagedorn).
+     * 
+     * @throws IOException shall not occur
+     * @throws ModelQueryException shall not occur
+     * @throws IvmlException shall not occur
+     */
+    @Test
+    public void activityTest() throws IOException, ModelQueryException, IvmlException {
+        Configuration config = createAndAssertEqual("activity/ActivityGraphConfiguration_1");
+        ReasonerConfiguration rConfig = new ReasonerConfiguration();
+        rConfig.setAdditionalInformationLogger(ReasonerConfiguration.ADDITIONAL_INFO_LOG_NONE);
+        ReasoningResult res = ReasonerFrontend.getInstance().propagate(config.getProject(), config, rConfig, 
+            ProgressObserver.NO_OBSERVER);
+        // dependenciesAntisymmetry does not fit configuration!
+        for (int m = 0; m < res.getMessageCount(); m++) {
+            System.out.println(res.getMessage(m));
+        }
+        Assert.assertFalse("there should not be reasoning conflicts", res.hasConflict());
+    }
+
+    @Override
+    protected boolean checkWriteback(File file) {
+        return false;
+    }
+
     /**
      * Tests a quantified type expression (contributed by M. Keunecke, J. Hagedorn).
      * 
