@@ -41,13 +41,58 @@ public class Environment {
         if (null != System.getProperty("easy.notInEclipse", null)) {
             result = false;
         } else {
-            // this is just a heuristic, pde.launch is required to state that RCP apps are no eclipse
-            result = (null != System.getProperty("eclipse.product", null)
-                || null != System.getProperty("eclipse.home.location", null)) 
-                && null != System.getProperty("eclipse.pde.launch");
+            String eclipseVersion = System.getProperty("eclipse.buildId", "");
+            int major = parseVersionPart(eclipseVersion, 0);
+            int minor = parseVersionPart(eclipseVersion, 1);
+            
+            if (major >= 4 && minor >= 7) {
+                // however, the rule seems to be different here and PDE does not seem to work with EclipseResources
+                result = (null != System.getProperty("eclipse.product", null)
+                    || null != System.getProperty("eclipse.home.location", null)) 
+                    && !System.getProperty("eclipse.pde.launch", "").toLowerCase().equals("true");
+            } else {
+                // this is just a heuristic, pde.launch is required to state that RCP apps are no eclipse
+                result = (null != System.getProperty("eclipse.product", null)
+                    || null != System.getProperty("eclipse.home.location", null)) 
+                    && null != System.getProperty("eclipse.pde.launch");
+            }
         }
         return result;
     }
+
+    /**
+     * Parses the numerical version part from <code>version</code>.
+     * 
+     * @param version the textual representation of the (Eclipse) version
+     * @param part the 0-based index for the part to parse
+     * @return the version number or <code>0</code> for no result
+     */
+    private static int parseVersionPart(String version, int part) {
+        int result;
+        int count = 0;
+        int pos = 0;
+        while (count < part && pos >= 0 && pos < version.length()) {
+            pos = version.indexOf('.', pos + 1);
+            count++;
+        }
+        if (pos >= 0 && pos < version.length()) {
+            if (version.charAt(pos) == '.') {
+                pos++;
+            }
+            int nextPos = version.indexOf('.', pos + 1);
+            if (nextPos > 0) {
+                version = version.substring(pos , nextPos);
+            } else {
+                version = version.substring(pos);
+            }
+        }
+        try {
+            result = Integer.parseInt(version);
+        } catch (NumberFormatException e) {
+            result = 0;
+        }
+        return result;
+    }    
     
     /**
      * Checks whether this program is currently running on a Windows machine.
