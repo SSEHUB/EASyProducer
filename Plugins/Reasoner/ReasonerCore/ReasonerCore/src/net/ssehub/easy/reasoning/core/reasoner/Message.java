@@ -462,4 +462,53 @@ public class Message extends net.ssehub.easy.basics.messages.Message {
     public List<Integer> getErrorClassification() {
         return errorClassification;
     }
+    
+    @Override
+    public String toString() {
+        String res = "";
+        List<String> labels = getConflictLabels();
+        List<String> comments = getConflictComments();
+        List<Project> projects = getConflictProjects();
+        List<String> suggestions = getConflictSuggestions();
+        List<Set<IDecisionVariable>> vars = getProblemVariables();
+        List<ConstraintSyntaxTree> parts = getProblemConstraintParts();
+        List<IDecisionVariable> namedVars = getNamedConstraintVariables();
+        List<Integer> codes = getErrorClassification();
+        for (int i = 0; i < getConflictsCount(); i++) {
+            ModelElement conflict = getConflicts().get(i);
+            if (i > 0) {
+                res += "\n";
+            }
+            if (conflict instanceof Constraint) {
+                Constraint constraint = (Constraint) conflict;
+                res = append(res, "Failed element (EP): " + StringProvider.toIvmlString(constraint.getConsSyntax())); 
+            } else {
+                res = append(res, "Failed element (EP): " + StringProvider.toIvmlString(conflict));
+            }
+            res = append(res, "Failed elements label (CT): " + labels.get(i));
+            res = append(res, "Failed elements comment: " + comments.get(i));
+            res = append(res, "Failed elements project: " + projects.get(i).getName());
+            res = append(res, "Failed elements suggestion: " + suggestions.get(i));
+            res = append(res, "Failed elements variables: " + vars.get(i));
+            if (parts.get(i) != null) {
+                res = append(res, "Failed elements problem constraint parts: " 
+                    + StringProvider.toIvmlString(parts.get(i)));                
+            }
+            res = append(res, "Failed elements constraint variable: " + namedVars.get(i)); 
+            res = append(res, "Reasoning error code: " + codes.get(i));
+        }
+        return res;
+    }
+    
+    /**
+     * Appends <code>text</code> and a line end to <code>res</code>.
+     * 
+     * @param res the text to append to
+     * @param text the text to append
+     * @return the combined text
+     */
+    private String append(String res, String text) {
+        return res + text + "\n";
+    }
+    
 }
