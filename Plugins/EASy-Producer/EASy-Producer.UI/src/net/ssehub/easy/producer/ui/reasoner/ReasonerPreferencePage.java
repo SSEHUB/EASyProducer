@@ -108,7 +108,7 @@ public class ReasonerPreferencePage extends PreferencePage implements
 
         Label label = new Label(pageComponent, SWT.LEFT);
         label.setText("This page displays the currently installed reasoners, their "
-            + "licenses and allows to upgrade a licensed reasoner.\n An upgrade may happen"
+            + "licenses and allows to upgrade a licensed reasoner.\n An upgrade may happen "
             + "using the original URI provided by the reasoner or by providing an "
             + "own (local) URI,\n e.g. after downloading.");
         data = new GridData();
