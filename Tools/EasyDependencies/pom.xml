@@ -8,7 +8,50 @@
   <packaging>pom</packaging>
 
   <name>EASyDependencies</name>
+  <description>The basic dependencies of EASy-Producer.</description>
   <url>https://github.com/SSEHUB/EASyProducer</url>
+
+  <licenses>
+    <license>
+      <name>Apache License, Version 2.0</name>
+      <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+      <distribution>repo</distribution>
+    </license>
+  </licenses>
+  
+  <developers>
+    <developer>
+      <id>eichelbe</id>
+      <name>Holger Eichelberger</name>
+      <email>eichelberger@sse.uni-hildesheim.de</email>
+      <url>https://sse.uni-hildesheim.de/mitglieder/dr-holger-eichelberger/</url>
+      <organization>SSE@SUH</organization>
+      <organizationUrl>https://sse.uni-hildesheim.de/</organizationUrl>
+      <roles>
+        <role>architect</role>
+        <role>developer</role>
+      </roles>
+      <timezone>Europe/Berlin</timezone>
+    </developer>
+    <developer>
+      <id>elscha</id>
+      <name>Sascha El-Sharkawy</name>
+      <email>elscha@sse.uni-hildesheim.de</email>
+      <url>https://sse.uni-hildesheim.de/mitglieder/sascha-el-sharkawy/</url>
+      <organization>SSE@SUH</organization>
+      <organizationUrl>https://sse.uni-hildesheim.de/</organizationUrl>
+      <roles>
+        <role>architect</role>
+        <role>developer</role>
+      </roles>
+      <timezone>Europe/Berlin</timezone>
+    </developer>
+  </developers>
+    
+  <scm>
+    <url>https://github.com/SSEHUB/spassMeter.git</url>
+  </scm>
+
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -66,7 +109,7 @@
 		<dependency>
 		    <groupId>commons-io</groupId>
 		    <artifactId>commons-io</artifactId>
-		    <version>2.0.1</version>
+		    <version>2.4</version>
 		</dependency>
 		<dependency>
 		    <groupId>commons-lang</groupId>
