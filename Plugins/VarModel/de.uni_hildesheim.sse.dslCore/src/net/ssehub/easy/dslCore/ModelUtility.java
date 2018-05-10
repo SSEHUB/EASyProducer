@@ -32,6 +32,8 @@ import org.eclipse.xtext.resource.XtextResourceSet;
 import com.google.inject.Injector;
 
 import net.ssehub.easy.basics.Environment;
+import net.ssehub.easy.basics.logger.EASyLoggerFactory;
+import net.ssehub.easy.basics.logger.EASyLoggerFactory.EASyLogger;
 import net.ssehub.easy.basics.messages.IMessage;
 import net.ssehub.easy.basics.messages.Status;
 import net.ssehub.easy.basics.modelManagement.IModel;
@@ -93,9 +95,12 @@ public abstract class ModelUtility <E extends EObject, R extends IModel> impleme
     }
     
     static {
+        EASyLogger logger = EASyLoggerFactory.INSTANCE.getLogger(ModelUtility.class, BundleId.ID);
         if (Environment.runsInEclipse()) {
+            logger.info("Setting up Eclipse resource initializer");
             resourceInitializer = new EclipseResourceInitializer();
         } else {
+            logger.info("Setting up Standalone resource initializer");
             resourceInitializer = new StandaloneInitializer();
         }
     }
