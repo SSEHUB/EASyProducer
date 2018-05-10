@@ -130,6 +130,7 @@
             <fileset dir="${home.model.dir}/${build.jar.dir}" includes="**/*.jar" />
             <fileset dir="${home.dslCore.ui.dir}/${build.jar.dir}" includes="**/*.jar" />
 			<!-- IVML -->
+    	    <fileset dir="${home.libs.common.io.dir}/${build.jar.dir}" includes="**/*.jar"/>
             <fileset dir="${home.dslCore.dir}/${build.jar.dir}" includes="**/*.jar" />
             <fileset dir="${home.ivml.dir}/${build.jar.dir}" includes="**/*.jar" />
             <fileset dir="${home.ivml.tests.dir}/${build.jar.dir}" includes="**/*.jar" />
