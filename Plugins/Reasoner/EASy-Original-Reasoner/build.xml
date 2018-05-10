@@ -52,6 +52,7 @@
 			<!-- Copy Plug-ins, which shall be tested -->
             <fileset dir="${basedir}" includes="**/${build.jar.dir}/*.jar" />
             <!-- Copy dependent Plug-ins -->
+		    <fileset dir="${home.libs.common.io.dir}/${build.jar.dir}" includes="**/*.jar"/>
 			<fileset dir="${home.utils.dir}/${build.jar.dir}" includes="**/*.jar" />
 			<fileset dir="${home.model.dir}/${build.jar.dir}" includes="**/*.jar" />
 			<fileset dir="${home.model.tests.dir}/${build.jar.dir}" includes="**/*.jar" />
