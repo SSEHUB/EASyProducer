@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ProductLineProject id="d1f38fd0-d786-42b5-b199-62eab67047b8" name="ActivityGraphConfiguration" version="0" location="ActivityGraphConfiguration">
+	<predecessors>
+		<entity id="f7c89bdf-dc30-4a11-a6c4-28ba425d59a0" name="PL_ActivityGraph" version="0" location="PL_ActivityGraph" />
+	</predecessors>
+	<successors>
+	</successors>
+	<settings>
+		<entity debug="false" />
+	</settings>
+	<reasoners>
+		<entity timeout="0" />
+	</reasoners>
+	<instantiators>
+	</instantiators>
+</ProductLineProject>

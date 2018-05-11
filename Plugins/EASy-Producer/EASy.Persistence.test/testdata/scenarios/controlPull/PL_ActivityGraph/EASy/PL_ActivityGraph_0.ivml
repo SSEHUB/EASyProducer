@@ -1,0 +1,75 @@
+project PL_ActivityGraph {
+
+	version v0;
+
+	compound ActivityGraph {
+		setOf(Activity) activities;
+		setOf(Dependency) dependencies;
+		setOf(Object) objects;
+		setOf(Transformation) transformations;
+
+		Constraint checkSheetAfterReadSheets = self.objects->forAll(Object o|isTypeOf(o.position.source, refTo(ReadSheets)) implies isTypeOf(o, Sheet));
+		Constraint checkDocumentAfterRecognizeDocuments = self.objects->forAll(Object o|isTypeOf(o.position.source, refTo(RecognizeDocuments)) implies isTypeOf(o, refTo(Document)));
+		Constraint checkSheetAfterResolveMailings = self.objects->forAll(o|o.position.source.isTypeOf(refTo(ResolveMailings)) implies o.isTypeOf(refTo(Sheet)));
+		Constraint checkSheetBeforeRecognizeDocuments = self.objects->forAll(o|o.position.target.isTypeOf(refTo(RecognizeDocuments)) implies o.isTypeOf(refTo(Sheet)));
+		Constraint checkDocumentBeforeResolveMailings = self.objects->forAll(o|o.position.target.isTypeOf(refTo(ResolveMailings)) implies o.isTypeOf(refTo(Document)));
+		Constraint checkSheetBeforeWriteSheets = self.objects->forAll(o|o.position.target.isTypeOf(refTo(WriteSheets)) implies o.isTypeOf(refTo(Sheet)));
+
+		Constraint dependenciesReflexivity = self.activities->forAll(a|dependsOn(a, a, self.dependencies));
+		Constraint dependenciesAntisymmetry = self.activities->forAll(a|self.activities->forAll(b|dependsOn(a, b, self.dependencies) and dependsOn(b, a, self.dependencies) implies a == b));
+		Constraint dependenciesTransitivity = self.activities->forAll(a|self.activities->forAll(b|self.activities->forAll(c|dependsOn(a, b, self.dependencies) and dependsOn(b, c, self.dependencies) implies dependsOn(a, c, self.dependencies))));
+		Constraint transformationAntisymmetry = self.objects->forAll(o|self.objects->forAll(p|transformedIn(o, p, self.transformations) and transformedIn(p, o, self.transformations) implies o == p));
+		Constraint transformedInDependOn = self.transformations->forAll(t|dependsOn(t.sucessor.position.target, t.predecessor.position.source, self.dependencies));
+	}
+
+	def Boolean dependsOn(Activity sucessor, Activity predecessor, setOf(Dependency) dependencies) = dependencies->exists(d|d.source == predecessor and d.target == sucessor);
+	def Boolean transformedIn(Object predecessor, Object sucessor, setOf(Transformation) transformations) = transformations->exists(t|t.predecessor == predecessor and t.sucessor == sucessor);
+
+	abstract compound Activity {
+	}
+
+	abstract compound Object {
+		refTo(Dependency) position;
+	}
+
+	compound Dependency {
+		refTo(Activity) source;
+		refTo(Activity) target;
+	}
+
+	compound Transformation {
+		refTo(Object) predecessor;
+		refTo(Object) sucessor;
+	}
+
+    compound Start refines Activity {
+    }
+
+    compound End refines Activity {
+    }
+
+	compound ReadSheets refines Activity {
+	}
+
+	compound RecognizeDocuments refines Activity {
+	}
+
+	compound ResolveMailings refines Activity {
+	}
+
+	compound WriteSheets refines Activity {
+	}
+
+	compound Sheet refines Object {
+	}
+
+	compound Document refines Object {
+	}
+
+	compound Input refines Object {
+	}
+
+	compound Output refines Object {
+	}
+
+}

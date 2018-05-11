@@ -1,0 +1,13 @@
+import PL_ActivityGraph with version == v0;
+
+vilScript ActivityGraphConfiguration (Project source, Configuration config, Project target) {
+
+    version v0;
+
+    main(Project source, Configuration config, Project target) = : {
+        for(Project predecessor:source.predecessors()) {
+            instantiate predecessor (predecessor, config, target);
+        };
+    }
+
+}

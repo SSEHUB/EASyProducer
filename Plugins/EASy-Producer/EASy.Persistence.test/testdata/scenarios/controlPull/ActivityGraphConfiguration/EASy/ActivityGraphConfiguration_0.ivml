@@ -1,0 +1,34 @@
+project ActivityGraphConfiguration {
+
+    version v0;
+    import PL_ActivityGraph with PL_ActivityGraph.version == v0;
+    ReadSheets readSheets = {};
+    Start start = {};
+    End end ={};
+
+    Dependency start_start = {source = start, target = start};
+    Dependency start_readSheets = {source = start, target = readSheets};
+    Dependency start_end = {source = start, target = end};
+    Dependency readSheets_readSheets = {source = readSheets, target = readSheets};
+    Dependency readSheets_end = {source = readSheets, target = end};
+    Dependency end_end = {source = end, target = end};
+
+    Input input = {position = start_readSheets};
+    Document document = {position = readSheets_end};
+
+    Transformation inputToDocument = {predecessor = input, sucessor = document};
+
+    ActivityGraph activityGraph = {
+        activities = {start, readSheets, end},
+        objects = {input, document},
+        transformations = {inputToDocument},
+        dependencies = {
+            start_start,
+            start_readSheets,
+            start_end,
+            readSheets_readSheets,
+            readSheets_end,
+            end_end
+        }
+    };
+}

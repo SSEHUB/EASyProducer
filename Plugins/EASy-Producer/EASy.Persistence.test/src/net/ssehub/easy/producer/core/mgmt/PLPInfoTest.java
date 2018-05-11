@@ -570,7 +570,7 @@ public class PLPInfoTest extends AbstractPLPInfoTest {
         Assert.assertEquals(AssignmentState.ASSIGNED, varA.getState());
         Assert.assertNotNull(varB.getValue());
         Assert.assertEquals(AssignmentState.DERIVED, varB.getState());
-        Assert.assertEquals(new Integer(6), varB.getValue().getValue());
+        Assert.assertEquals(6, varB.getValue().getValue());
     }
     
     /**

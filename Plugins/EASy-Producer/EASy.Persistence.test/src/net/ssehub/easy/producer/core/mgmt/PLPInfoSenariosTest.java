@@ -133,7 +133,6 @@ public class PLPInfoSenariosTest extends AbstractPLPInfoTest {
      * @throws PersistenceException If the project could not be loaded from the file system.
      * @throws VilException If instantiation is not possible (this should be tested by this test!)
      */
-//    @Ignore
     @Test
     public void testHierarchicalInstantiation() throws PersistenceException, VilException {
         // Load projects
@@ -302,11 +301,40 @@ public class PLPInfoSenariosTest extends AbstractPLPInfoTest {
         });
     }
     
+    /**
+     * Tests the default library.
+     * 
+     * @throws PersistenceException If the project could not be loaded from the file system.
+     * @throws ModelQueryException If querying model elements fails
+     */
     @Ignore("does not work on Jenkins")
     @Test
     public void testDefaultLib() throws PersistenceException, ModelQueryException {
         final PLPInfo plp = loadPLPInfo(TEST_DEFAULT_LIB);
         Assert.assertNotNull(ModelQuery.findVariable(plp.getProject(), "var", null));
+    }
+    
+    /**
+     * Tests pulling a configuration multiple times.
+     * 
+     * @throws PersistenceException If the project could not be loaded from the file system.
+     */
+    @Test
+    public void testPullConfiguration() throws PersistenceException {
+        final File baseFolder = new File(BASE_TEST_FOLDER, "controlPull");
+        final File platformFolder = new File(baseFolder, "PL_ActivityGraph");
+        final File productFolder = new File(baseFolder, "ActivityGraphConfiguration");
+        final File productFolderParent = new File(productFolder, "EASy/." + platformFolder.getName());
+
+        PLPInfo platform = loadPLPInfo(platformFolder);
+        Assert.assertNotNull(platform);
+        PLPInfo product = loadPLPInfo(productFolder);
+        Assert.assertNotNull(product);
+        Assert.assertFalse(productFolderParent.exists());
+        
+        product.pullConfigFromPredecessors();
+        Assert.assertTrue(productFolderParent.exists());
+        // TODO compare
     }
     
 }

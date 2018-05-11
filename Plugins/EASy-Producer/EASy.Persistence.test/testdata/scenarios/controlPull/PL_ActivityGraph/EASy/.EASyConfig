@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ProductLineProject id="f7c89bdf-dc30-4a11-a6c4-28ba425d59a0" name="PL_ActivityGraph" version="0" location="PL_ActivityGraph">
+	<predecessors>
+	</predecessors>
+	<successors>
+		<entity id="d1f38fd0-d786-42b5-b199-62eab67047b8" name="ActivityGraphConfiguration" version="0" location="ActivityGraphConfiguration" />
+		<entity id="56f494ec-fa11-4a76-a91a-dda801221b14" name="ActivityGraphConfigurationReadSheets" version="0" location="ActivityGraphConfigurationReadSheets" />
+		<entity id="4c97f16f-40bc-4d28-97a5-be9f8c1b6545" name="ReadSheetsObjectTest" version="0" location="ReadSheetsObjectTest" />
+		<entity id="f02548d5-012d-4e9f-9e80-1900a034678d" name="TransformedInTest" version="0" location="TransformedInTest" />
+		<entity id="f676746f-c0cf-46b6-b77b-ddb86c506d40" name="ActivityGraph2Configuration" version="0" location="ActivityGraph2Configuration" />
+	</successors>
+	<settings>
+		<entity debug="false" />
+	</settings>
+	<reasoners>
+		<entity timeout="0" />
+	</reasoners>
+	<instantiators>
+	</instantiators>
+</ProductLineProject>
