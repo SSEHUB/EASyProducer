@@ -7,10 +7,10 @@ project NestedEval {
     a = 2;
     
     eval {
-        a = 0;
         eval {
             a = -5;
         }
-    }   
+        a = 0;
+    }
     
 }

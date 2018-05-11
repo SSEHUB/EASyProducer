@@ -1,6 +1,5 @@
 package net.ssehub.easy.reasoning.core.reasoner;
 
-import org.junit.Ignore;
 import org.junit.Test;
 
 /**
@@ -32,7 +31,6 @@ public class EvalTests extends AbstractTest {
     /**
      * Tests nested eval.
      */
-    @Ignore
     @Test
     public void nestedEval() {
         reasoningTest("NestedEval.ivml", 1);

@@ -197,7 +197,6 @@ public class AdaptationIntegrityTests extends AbstractTest {
     /**
      * Tests the results of reasoning after changing value for adaptation.
      */
-//    @Ignore
     @Test
     public void testSimpleResultAfterReasoningForAdaptation() {
         try {

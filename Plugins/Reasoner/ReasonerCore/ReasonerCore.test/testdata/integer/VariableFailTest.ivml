@@ -1,0 +1,6 @@
+project VariableFail {
+
+   Integer horsePower = 101;
+   horsePower = 102;
+    
+}

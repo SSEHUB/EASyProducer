@@ -15,7 +15,6 @@
  */
 package net.ssehub.easy.reasoning.core.qm;
 
-import org.junit.Ignore;
 import org.junit.Test;
 
 import net.ssehub.easy.reasoning.core.reasoner.AbstractTest;
@@ -57,13 +56,9 @@ public class QMScenarioTests extends AbstractTest {
     /**
      * Tests QM Family Algorithms fields test.
      */
-    @Ignore
     @Test    
     public void qmFamilyAlgorithmsFieldsTest() {
-        reasoningTest("QMFamilyAlgorithmsFieldsTest.ivml", 0);
+        reasoningTest("QMFamilyAlgorithmsFieldsTest.ivml", 1); // fail as stated in model
     } 
-    
-   
-    
 
 }

@@ -1,5 +1,6 @@
 package net.ssehub.easy.reasoning.core.reasoner;
 
+import org.junit.Ignore;
 import org.junit.Test;
 
 /**
@@ -64,7 +65,7 @@ public class IntegerTests extends AbstractTest {
     @Test
     public void integerInCollectionAssignTest() {
         reasoningTest("IntegerInCollectionAssignTest.ivml", 2);
-    } 
+    }
 
     /**
      * Integer reference assign test.
@@ -72,7 +73,7 @@ public class IntegerTests extends AbstractTest {
     @Test
     public void integerReferenceAssignTest() {
         reasoningTest("IntegerRefAssignTest.ivml", 2);
-    } 
+    }
 
     /**
      * Integer annotation test.
@@ -80,7 +81,7 @@ public class IntegerTests extends AbstractTest {
     @Test
     public void integerAnnotationTest() {
         reasoningTest("IntegerAnnotationTest.ivml", 10);
-    } 
+    }
 
     /**
      * Combined reference-typedef on Integer.
@@ -88,6 +89,15 @@ public class IntegerTests extends AbstractTest {
     @Test
     public void referenceDerivedIntegerTest() {
         reasoningTest("ReferenceDerivedIntegerTest.ivml", 4);
-    }    
-    
+    }
+
+    /**
+     * Reassignment failure (#46).
+     */
+    @Ignore
+    @Test
+    public void variableFailTest() {
+        reasoningTest("VariableFailTest.ivml", 1);
+    }
+
 }
