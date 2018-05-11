@@ -62,7 +62,12 @@ public class Constraint extends ContainableModelElement implements IPartialEvalu
         /**
          * Reasoner-created constraint for constraint variables/values.
          */
-        CONSTRAINT
+        CONSTRAINT,
+        
+        /**
+         * Reasoner-created constraint for annotation assignments.
+         */
+        ANNOTATION_ASSIGNMENT
     }
     
     /**

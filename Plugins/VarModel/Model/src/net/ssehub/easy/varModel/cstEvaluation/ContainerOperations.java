@@ -37,6 +37,7 @@ import net.ssehub.easy.varModel.model.values.BooleanValue;
 import net.ssehub.easy.varModel.model.values.ContainerValue;
 import net.ssehub.easy.varModel.model.values.IntValue;
 import net.ssehub.easy.varModel.model.values.MetaTypeValue;
+import net.ssehub.easy.varModel.model.values.NullValue;
 import net.ssehub.easy.varModel.model.values.RealValue;
 import net.ssehub.easy.varModel.model.values.Value;
 import net.ssehub.easy.varModel.model.values.ValueDoesNotMatchTypeException;
@@ -135,7 +136,7 @@ public class ContainerOperations {
                     result = null;
                 }
             } else {
-                if (null != opValue) { // undefined is ok
+                if (null != opValue && NullValue.INSTANCE != opValue) { // undefined, null is ok
                     operand.getContext().addErrorMessage("operand is no Container: " 
                         + IvmlDatatypeVisitor.getQualifiedType(opValue.getType()));
                 }
@@ -240,7 +241,7 @@ public class ContainerOperations {
         
         @Override
         public EvaluationAccessor evaluate(EvaluationAccessor operand, EvaluationAccessor[] arguments) {
-            EvaluationAccessor result = null;
+            ConstantAccessor result = null;
             if (1 == arguments.length) {
                 Value opValue = operand.getValue();
                 Value argValue = arguments[0].getValue();
@@ -249,6 +250,7 @@ public class ContainerOperations {
                     IDatatype type = ((MetaTypeValue) argValue).getValue();
                     List<Value> tmp = new ArrayList<Value>();
                     int size = cont.getElementSize();
+                    result = ConstantAccessor.POOL.getInstance();
                     for (int i = 0; i < size; i++) {
                         Value elt = cont.getElement(i);
                         boolean condition;
@@ -262,13 +264,15 @@ public class ContainerOperations {
                         }
                         if (condition) {
                             tmp.add(elt);
+                            //result.addBoundContainerElement(operand, i);
                         }
                     }
                     try {
                         Value rValue = ValueFactory.createValue(operand.getValue().getType(), tmp.toArray());
-                        result = ConstantAccessor.POOL.getInstance().bind(rValue, false, operand.getContext());
+                        result.bind(rValue, false, operand.getContext());
                     } catch (ValueDoesNotMatchTypeException e) {
                         operand.getContext().addErrorMessage(e);
+                        result = EvaluationAccessor.release(result);
                     }
                 }
             }

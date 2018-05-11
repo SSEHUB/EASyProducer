@@ -55,6 +55,7 @@ public class LocalDecisionVariable implements IDecisionVariable {
     private IAssignmentState state;
     private IConfiguration conf;
     private IDecisionVariable parent;
+    private IValueChangeListener listener;
 
     /**
      * Creates a local decision variable.
@@ -90,10 +91,21 @@ public class LocalDecisionVariable implements IDecisionVariable {
         return state;
     }
 
+    /**
+     * Notifies the change listener if defined.
+     * 
+     * @param oldValue the old value before the change, may be <b>null</b>
+     */
+    private void notifyValueChanged(Value oldValue) {
+        if (null != listener) {
+            listener.notifyChanged(this, oldValue);
+        }
+    }
 
     @Override
     public void setValue(Value value, IAssignmentState state, boolean asAssignment) throws ConfigurationException {
         IValueParent vParent = asAssignment ? obtainValueParent(value) : null;
+        Value oldValue = this.value;
         this.value = value;
         this.state = state;
         // we try to set a slot value on a compound, "call-by-ref"
@@ -106,19 +118,24 @@ public class LocalDecisionVariable implements IDecisionVariable {
                 }
             }
         }
+        notifyValueChanged(oldValue);
     }
 
     @Override
     public void setValue(Value value, IAssignmentState state) throws ConfigurationException {
+        Value oldValue = this.value;
         this.value = value;
         this.state = state;
+        notifyValueChanged(oldValue);
     }
 
     @Override
     public void setValue(Value value, IAssignmentState state, IConfigurationElement nested)
         throws ConfigurationException {
+        Value oldValue = this.value;
         this.value = value;
         this.state = state;
+        notifyValueChanged(oldValue);
     }
     
     /**
@@ -345,6 +362,24 @@ public class LocalDecisionVariable implements IDecisionVariable {
      */
     public void setVariable(IDecisionVariable variable) {
         parent = variable;
+    }
+
+    /**
+     * Returns the underlying variable.
+     * 
+     * @return variable the variable (may be <b>null</b>)
+     */
+    public IDecisionVariable getVariable() {
+        return parent;
+    }
+    
+    /**
+     * Defines the value change listener to be informed.
+     * 
+     * @param listener the listener instance or <b>null</b> for none
+     */
+    public void setValueChangeListener(IValueChangeListener listener) {
+        this.listener = listener;
     }
 
 }

@@ -223,7 +223,7 @@ public class EvaluationVisitorTest {
         Assert.assertSame(NullValue.INSTANCE, var.getValue());
         
      // Test correct behavior of visitor
-        assertEvaluationVisitor(equalsOperation, config, "At");
+        assertEvaluationVisitor(equalsOperation, config, "At", Result.UNDEFINED);
     }
     
     /**
@@ -268,7 +268,19 @@ public class EvaluationVisitorTest {
         Assert.assertSame(NullValue.INSTANCE, var.getValue());
         
         // Test correct behavior of visitor
-        assertEvaluationVisitor(equalsOperation, config, "Size");
+        assertEvaluationVisitor(equalsOperation, config, "Size", Result.UNDEFINED);
+    }
+
+    /**
+     * Result status.
+     * 
+     * @author Holger Eichelberger
+     */
+    private enum Result {
+        SUCCESS,
+        UNDEFINED,
+        FAIL,
+        ERROR
     }
 
     /**
@@ -277,8 +289,10 @@ public class EvaluationVisitorTest {
      * @param cst A sequence operation which shall be visited by the {@link EvaluationVisitor}.
      * @param config The configuration of a project containing the <tt>cst</tt> constraint.
      * @param operation The name of the operation for creating sufficient error messages if the assertion fails.
+     * @param expected the expected status
      */
-    private void assertEvaluationVisitor(ConstraintSyntaxTree cst, Configuration config, String operation) {
+    private void assertEvaluationVisitor(ConstraintSyntaxTree cst, Configuration config, String operation, 
+        Result expected) {
         EvaluationVisitor visitor = new EvaluationVisitor();
         
         visitor.init(config, AssignmentState.ASSIGNED, false, null);
@@ -288,16 +302,29 @@ public class EvaluationVisitorTest {
             Assert.fail(operation + "-operation causes a NullPointerException on NullValues for a sequence variable.");
             npe.printStackTrace();
         }
-        
-        EvaluationVisitor.Message errorMsg = visitor.getMessage(0);
-        Assert.assertNotNull(errorMsg);
-        Assert.assertSame(Status.ERROR, errorMsg.getStatus());
-        Assert.assertNotNull("Error message does not have a description what failed!", errorMsg.getDescription());
-        try {
-            errorMsg.getVariable();
-        } catch (NullPointerException npe) {
-            Assert.fail("Error: EvaluationVisitor.Message.getVariable() is producing NullPointerExceptions!");
-            npe.printStackTrace();
+        if (Result.SUCCESS == expected) {
+            Assert.assertTrue(visitor.constraintFulfilled());
+            Assert.assertFalse(visitor.constraintFailed());
+            Assert.assertFalse(visitor.constraintUndefined());
+        } else if (Result.UNDEFINED == expected) {
+            Assert.assertFalse(visitor.constraintFulfilled());
+            Assert.assertFalse(visitor.constraintFailed());
+            Assert.assertTrue(visitor.constraintUndefined());
+        } else if (Result.FAIL == expected) {
+            Assert.assertFalse(visitor.constraintFulfilled());
+            Assert.assertTrue(visitor.constraintFailed());
+            Assert.assertFalse(visitor.constraintUndefined());
+        } else if (Result.ERROR == expected) {
+            EvaluationVisitor.Message errorMsg = visitor.getMessage(0);
+            Assert.assertNotNull(errorMsg);
+            Assert.assertSame(Status.ERROR, errorMsg.getStatus());
+            Assert.assertNotNull("Error message does not have a description what failed!", errorMsg.getDescription());
+            try {
+                errorMsg.getVariable();
+            } catch (NullPointerException npe) {
+                Assert.fail("Error: EvaluationVisitor.Message.getVariable() is producing NullPointerExceptions!");
+                npe.printStackTrace();
+            }
         }
     }
     

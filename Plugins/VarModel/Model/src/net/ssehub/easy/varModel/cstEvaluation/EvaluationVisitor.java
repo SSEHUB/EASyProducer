@@ -132,7 +132,7 @@ public class EvaluationVisitor implements IConstraintTreeVisitor {
      * 
      * @author Holger Eichelberger
      */
-    private class EvaluationContextImpl extends EvaluationContext implements IConfiguration {
+    private class EvaluationContextImpl extends EvaluationContext {
 
         private Stack<IConfiguration> configStack = new Stack<IConfiguration>();
         private boolean allowPropagation = true;
@@ -800,7 +800,12 @@ public class EvaluationVisitor implements IConstraintTreeVisitor {
                 result = VariableAccessor.POOL.getInstance().bind(attribute, context);
             }
         } else {
-            result = VariableAccessor.POOL.getInstance().bind(variable.getVariable(), context);
+            IDecisionVariable resolved = variable.getResolved();
+            if (null != resolved) { // temporary resolution, variable is known
+                result = VariableAccessor.POOL.getInstance().bind(resolved, context);
+            } else {
+                result = VariableAccessor.POOL.getInstance().bind(variable.getVariable(), context);
+            }
         }
     }
     
@@ -1160,10 +1165,35 @@ public class EvaluationVisitor implements IConstraintTreeVisitor {
         clearResult();
         LocalConfiguration cfg = new LocalConfiguration();
         context.pushLevel(cfg);
-        addLocalVariable(cfg, let.getVariable(), let.getInitExpression()); // shall not be reassignable
+        // var shall not be reassignable
+        LocalDecisionVariable lVar = addLocalVariable(cfg, let.getVariable(), let.getInitExpression(), true); 
         let.getInExpression().accept(this);
+        disposeLocalVariable(lVar);
         context.popLevel();
     }
+    
+    /**
+     * Notifies the resolution listener about disposing a local variable.
+     * 
+     * @param var the variable
+     */
+    void disposeLocalVariable(LocalDecisionVariable var) {
+        if (null != resolutionListener) {
+            resolutionListener.localVariableDisposed(var);
+        }
+    }
+
+    /**
+     * Notifies the resolution listener about disposing several local variables.
+     * 
+     * @param vars the variables
+     */
+    void disposeLocalVariables(LocalDecisionVariable[] vars) {
+        for (int v = 0; null != resolutionListener && v < vars.length; v++) {
+            resolutionListener.localVariableDisposed(vars[v]);
+        }
+    }
+
 
     /**
      * Adds a new local decision variable based on <code>decl</code> to <code>cfg</code>.
@@ -1172,10 +1202,11 @@ public class EvaluationVisitor implements IConstraintTreeVisitor {
      * @param decl the variable declaration
      * @param initEx the explicitly given initialization expression, may be <b>null</b> then
      *     this method considers the default value of <code>decl</code>
+     * @param notify notify the resolution listener about the creation of the new variable, unregistering must follow
      * @return the created local variable
      */
     private LocalDecisionVariable addLocalVariable(LocalConfiguration cfg, DecisionVariableDeclaration decl, 
-        ConstraintSyntaxTree initEx) {
+        ConstraintSyntaxTree initEx, boolean notify) {
         Value value = null;
         IDecisionVariable parent = null;
         if (null == initEx) {
@@ -1191,6 +1222,10 @@ public class EvaluationVisitor implements IConstraintTreeVisitor {
         }
         
         LocalDecisionVariable var = new LocalDecisionVariable(decl, context, parent);
+        if (notify && null != resolutionListener) {
+            resolutionListener.localVariableCreated(var);
+            var.setValueChangeListener(listener); // currently coupled
+        }
         cfg.addDecision(var);
         if (null != value) {
             try {
@@ -1262,9 +1297,9 @@ public class EvaluationVisitor implements IConstraintTreeVisitor {
                         ok = false;
                     }
                 }
-                // prepare the declarators representing the iterators
+                LocalDecisionVariable lResultVar = addLocalVariable(cfg, resultDecl, null, true); 
                 VariableAccessor resultVar = VariableAccessor.POOL.getInstance()
-                    .bind(addLocalVariable(cfg, resultDecl, null), context, true);
+                    .bind(lResultVar, context, true);
                 LocalDecisionVariable[] declarators = new LocalDecisionVariable[lastIteratorIndex];
                 int iterCount = 0;
                 IDatatype contd = call.getIteratorBaseType();
@@ -1272,20 +1307,21 @@ public class EvaluationVisitor implements IConstraintTreeVisitor {
                 for (int d = 0; ok && d < declarators.length; d++) { // create local vars, initialize here only temp var
                     DecisionVariableDeclaration decl = call.getDeclarator(d);
                     boolean isIterator = isContained && (null == contd || contd.isAssignableFrom(decl.getType()));
-                    declarators[d] = addLocalVariable(cfg, decl, isIterator ? null : decl.getDefaultValue());
+                    declarators[d] = addLocalVariable(cfg, decl, isIterator ? null : decl.getDefaultValue(), true);
                     iterCount += isIterator ? 1 : 0;
                 }
                 if (ok) {
                     ok = executeContainerIteration(call, declarators, iterCount, resultVar, evaluator);
                 }
                 context.popLevel();
-                // resultVar would be a variable, result of iteration is a constant!
-                if (ok) {
+                if (ok) { // resultVar would be a variable, result of iteration is a constant!
                     result = ConstantAccessor.POOL.getInstance().bind(resultVar.getValue(), false, context);
                 } else {
                     result = null;
                 }
                 resultVar.release();
+                disposeLocalVariable(lResultVar);
+                disposeLocalVariables(declarators);
             } else {
                 result = null;
             }

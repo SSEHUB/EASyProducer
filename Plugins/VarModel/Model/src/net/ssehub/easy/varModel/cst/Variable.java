@@ -15,6 +15,7 @@
  */
 package net.ssehub.easy.varModel.cst;
 
+import net.ssehub.easy.varModel.confModel.IDecisionVariable;
 import net.ssehub.easy.varModel.model.AbstractVariable;
 import net.ssehub.easy.varModel.model.Attribute;
 import net.ssehub.easy.varModel.model.datatypes.DerivedDatatype;
@@ -102,6 +103,15 @@ public class Variable extends Leaf {
      * @return the qualifier (may be <b>null</b>)
      */
     public ConstraintSyntaxTree getQualifier() {
+        return null;
+    }
+    
+    /**
+     * Returns the resolved decision variable.
+     * 
+     * @return the decision variable (may be <b>null</b>)
+     */
+    public IDecisionVariable getResolved() {
         return null;
     }
     

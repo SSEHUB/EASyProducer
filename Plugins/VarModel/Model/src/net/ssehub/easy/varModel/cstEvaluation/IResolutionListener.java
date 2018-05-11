@@ -44,4 +44,18 @@ public interface IResolutionListener {
      */
     public void notifyResolved(IDecisionVariable compound, String slotName, IDecisionVariable resolved);
     
+    /**
+     * Is called when a local variable is created as part of container operation evaluation or let-evaluation.
+     *  
+     * @param var the created variable
+     */
+    public void localVariableCreated(LocalDecisionVariable var);
+
+    /**
+     * Is called when a local variable is disposed as part of container operation evaluation or let-evaluation.
+     *  
+     * @param var the disposed variable
+     */
+    public void localVariableDisposed(LocalDecisionVariable var);
+    
 }
