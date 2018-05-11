@@ -477,7 +477,7 @@ class Resolver implements IValueChangeListener, IResolutionListener {
     @Override
     public void notifyResolved(AbstractVariable declaration, IDecisionVariable resolved) {
         if (!(resolved.isLocal())) {
-            usedVariables.add(resolved);                
+            usedVariables.add(resolved);
         }            
     }
     
@@ -631,10 +631,12 @@ class Resolver implements IValueChangeListener, IResolutionListener {
 
         @Override // iterate over nested blocks/contained constraints
         public void visitPartialEvaluationBlock(PartialEvaluationBlock block) {
-            if (null == evals) {
-                evals = new LinkedList<PartialEvaluationBlock>();
+            if (!inTopLevelEvals) {
+                if (null == evals) {
+                    evals = new LinkedList<PartialEvaluationBlock>();
+                }
+                evals.add(block);
             }
-            evals.add(block);
         }
 
         @Override // iterate over nested blocks/contained, translate the individual blocks if not incremental

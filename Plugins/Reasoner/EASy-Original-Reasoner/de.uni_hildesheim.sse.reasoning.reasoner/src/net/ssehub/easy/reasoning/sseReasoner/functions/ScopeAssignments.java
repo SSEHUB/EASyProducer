@@ -36,9 +36,7 @@ public class ScopeAssignments {
      * @return True if variable already was assigned in this scope.
      */
     public boolean wasAssignedInThisScope(IDecisionVariable variable) {
-        boolean result = false;
-        result = scopeAssignments.contains(variable);
-        return result;
+        return scopeAssignments.contains(variable);
     }
     
     /**
