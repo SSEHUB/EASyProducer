@@ -11,6 +11,7 @@ import java.util.Set;
 import net.ssehub.easy.basics.logger.EASyLoggerFactory;
 import net.ssehub.easy.basics.logger.EASyLoggerFactory.EASyLogger;
 import net.ssehub.easy.basics.modelManagement.Utils;
+import net.ssehub.easy.reasoning.core.reasoner.AnnotationAssignmentConstraint;
 import net.ssehub.easy.reasoning.core.reasoner.AttachedConstraint;
 import net.ssehub.easy.reasoning.core.reasoner.ConstraintBase;
 import net.ssehub.easy.reasoning.core.reasoner.ConstraintList;
@@ -44,11 +45,13 @@ import net.ssehub.easy.varModel.cst.ConstantValue;
 import net.ssehub.easy.varModel.cst.ConstraintSyntaxTree;
 import net.ssehub.easy.varModel.cst.ContainerInitializer;
 import net.ssehub.easy.varModel.cst.OCLFeatureCall;
+import net.ssehub.easy.varModel.cst.ResolvedVariable;
 import net.ssehub.easy.varModel.cst.Variable;
 import net.ssehub.easy.varModel.cstEvaluation.EvaluationVisitor;
 import net.ssehub.easy.varModel.cstEvaluation.EvaluationVisitor.Message;
 import net.ssehub.easy.varModel.cstEvaluation.IResolutionListener;
 import net.ssehub.easy.varModel.cstEvaluation.IValueChangeListener;
+import net.ssehub.easy.varModel.cstEvaluation.LocalDecisionVariable;
 import net.ssehub.easy.varModel.model.AbstractVariable;
 import net.ssehub.easy.varModel.model.Attribute;
 import net.ssehub.easy.varModel.model.AttributeAssignment;
@@ -187,16 +190,27 @@ class Resolver implements IValueChangeListener, IResolutionListener {
     public Resolver(Configuration config, ReasonerConfiguration reasonerConfig) {
         new Resolver(config.getProject(), config, reasonerConfig);
     }  
-    
-    // >>> from here the names follows the reasoner.tex documentation
-        
+       
     @Override
     public void notifyUnresolved(IDecisionVariable variable) {
     }
 
+    @Override
+    public void localVariableCreated(LocalDecisionVariable var) {
+        contexts.registerMapping(var.getDeclaration(), null);
+    }
+
+    @Override
+    public void localVariableDisposed(LocalDecisionVariable var) {
+        contexts.unregisterMapping(var.getDeclaration());
+    }
+
+    // >>> from here the names follows the reasoner.tex documentation
+
     // compound value if compound is changed completely, else individual values
     @Override
     public void notifyChanged(IDecisionVariable variable, Value oldValue) {
+        AbstractVariable decl = variable.getDeclaration();
         if (!variable.isLocal()) {
             if (Descriptor.LOGGING) {
                 LOGGER.debug("Value changed: " + variable.getDeclaration().getName() + " " + variable.getValue()
@@ -211,7 +225,7 @@ class Resolver implements IValueChangeListener, IResolutionListener {
             }
             if (newValue instanceof ContainerValue) {
                 createContainerConstraintValueConstraints((ContainerValue) newValue, 
-                    createParentExpression(variable), null, variable.getDeclaration().getParent(), variable);
+                    createParentExpression(variable), null, decl.getParent(), variable);
             }
             if (isValueTypeChange(variable, newValue, oldValue)) {
                 rescheduleValueTypeChange(variable, newValue, oldValue);
@@ -219,6 +233,9 @@ class Resolver implements IValueChangeListener, IResolutionListener {
             rescheduleConstraintsForChilds(variable);
             // All constraints for the parent (as this was also changed)
             rescheduleConstraintsForParent(variable);
+        } else if (contexts.containsMapping(decl)) {
+            IDecisionVariable var = ((LocalDecisionVariable) variable).getVariable();
+            contexts.registerMapping(decl, null == var ? null : new ResolvedVariable(var));
         }
     }
 
@@ -875,7 +892,9 @@ class Resolver implements IValueChangeListener, IResolutionListener {
         if (!contexts.alreadyProcessed(type)) {
             contexts.recordProcessed(type);
         
-            final DecisionVariableDeclaration localDecl = new DecisionVariableDeclaration("cmp", type, null);
+// TODO  + contexts.size()            
+            final DecisionVariableDeclaration localDecl = new DecisionVariableDeclaration("cmp", 
+                type, null);
             Variable localVar = new Variable(localDecl);
             Variable declVar = new Variable(decl);
             // we may transfer the attributes from decl here to localDecl, or we just pass decl as attribute provider
@@ -1206,8 +1225,8 @@ class Resolver implements IValueChangeListener, IResolutionListener {
             cst = new OCLFeatureCall(cst, OclKeyWords.ASSIGNMENT, 
                 substituteVariables(assignment.getExpression(), compound, null));
             inferTypeSafe(cst, null);
-            try { // assignedAttributeConstraints
-                addConstraint(otherConstraints, new Constraint(cst, project), false, null); 
+            try {
+                addConstraint(otherConstraints, new AnnotationAssignmentConstraint(cst, project), false, null); 
             } catch (CSTSemanticException e) {
                 LOGGER.exception(e);
             }

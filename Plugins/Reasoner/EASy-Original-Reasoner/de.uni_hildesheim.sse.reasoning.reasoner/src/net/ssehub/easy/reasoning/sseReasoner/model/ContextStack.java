@@ -237,6 +237,25 @@ public class ContextStack {
     public void registerMapping(AbstractVariable var, ConstraintSyntaxTree acc) {
         currentContext.varMap.put(var, acc);
     }
+    
+    /**
+     * Unregisters a mapping for the variable <code>var</code> from the current context.
+     * 
+     * @param var the variable to be unregistered
+     */
+    public void unregisterMapping(AbstractVariable var) {
+        currentContext.varMap.remove(var);
+    }
+    
+    /**
+     * Returns whether the current context contains a mapping for <code>var</code>.
+     * 
+     * @param var the variable to look for
+     * @return <code>true</code> if there is a mapping, <code>false</code> else
+     */
+    public boolean containsMapping(AbstractVariable var) {
+        return currentContext.varMap.containsKey(var); // not != null, may be null
+    }
 
     /**
      * Returns the mapped access expression for <code>var</code> taking into account all current
