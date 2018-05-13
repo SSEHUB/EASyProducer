@@ -102,7 +102,9 @@ public class AttributeTests extends AbstractTest {
      */
     @Test    
     public void nestedAssignBlockTree() {
-        reasoningTest("NestedAssignBlockTree.ivml", 1); // just the triple nested shall be a reassignment
+        // initial: just the triple nested shall be a reassignment
+        // recognize potential multiple assignments and ignore them
+        reasoningTest("NestedAssignBlockTree.ivml", 0); 
     }    
 
     /**
