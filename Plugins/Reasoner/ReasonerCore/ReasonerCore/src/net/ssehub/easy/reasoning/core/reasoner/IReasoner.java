@@ -151,4 +151,11 @@ public interface IReasoner {
     public IReasonerInstance createInstance(Project project, Configuration cfg, 
         ReasonerConfiguration reasonerConfiguration);
 
+    /**
+     * Defines the optional interceptor instance.
+     * 
+     * @param interceptor the interceptor
+     */
+    public void setInterceptor(IReasonerInterceptor interceptor);
+    
 }

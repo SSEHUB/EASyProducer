@@ -1,0 +1,20 @@
+project CompoundAnnotationTest2 {
+
+    enum Binding {compile=0, runtime=1};
+    annotate Binding bindingTime = Binding.compile to CompoundAnnotationTest2;
+
+    compound Info {
+        assign(bindingTime = Binding.runtime) to {
+            Boolean active;
+        }
+    }
+    
+    compound Snk {
+        Integer nr = 1;
+        assign(bindingTime = Binding.runtime) to {
+            Info info;
+        }
+    }
+    
+    Snk snk;
+}

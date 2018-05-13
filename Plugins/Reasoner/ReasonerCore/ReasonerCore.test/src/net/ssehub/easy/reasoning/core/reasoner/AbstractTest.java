@@ -37,8 +37,10 @@ import net.ssehub.easy.dslCore.translation.Message;
 import net.ssehub.easy.varModel.confModel.AssignmentState;
 import net.ssehub.easy.varModel.confModel.Configuration;
 import net.ssehub.easy.varModel.confModel.ConfigurationException;
+import net.ssehub.easy.varModel.cstEvaluation.IConstraintEvaluator;
 import net.ssehub.easy.varModel.management.VarModel;
 import net.ssehub.easy.varModel.model.AbstractVariable;
+import net.ssehub.easy.varModel.model.Constraint;
 import net.ssehub.easy.varModel.model.Project;
 import net.ssehub.easy.varModel.model.ProjectImport;
 import net.ssehub.easy.varModel.model.filter.DeclarationFinder;
@@ -163,10 +165,48 @@ public abstract class AbstractTest extends net.ssehub.easy.dslCore.test.Abstract
         configureReasoner(rConfig);
         // Perform reasoning
         IReasoner reasoner = descriptor.createReasoner();
+        reasoner.setInterceptor(new ReasonerInterceptorAdaptor() {
+            
+            @Override
+            public void notifyEvaluation(Constraint constraint, IConstraintEvaluator evaluator) {
+                if (evaluator.getMessageCount() > 0) {
+                    String msg = "";
+                    for (int m = 0; m < evaluator.getMessageCount(); m++) {
+                        net.ssehub.easy.varModel.cstEvaluation.EvaluationVisitor.Message mg = evaluator.getMessage(m);
+                        if (Status.ERROR == mg.getStatus() && isErrorCode(mg)) { 
+                            if (msg.length() > 0) {
+                                msg += ", ";
+                            }
+                            msg += mg.getDescription() + " code: " + mg.getCode();
+                            if (mg.getVariable() != null) {
+                                msg += " variable: " + mg.getVariable();
+                            }
+                        }
+                    }
+                    if (msg.length() > 0) {
+                        Assert.fail("Reasoning problems occurred: " + msg);
+                    }
+                }
+            }
+            
+        });
         ReasoningResult rResult = performReasoning(reasoner, config.getProject(), config, rConfig);
         debugConfigBeforeResultHandler(config);
         resultHandler(expectedFailedConstraints, expectedReevaluationCount, rResult);
         return config;
+    }
+    
+    /**
+     * Returns whether the error code of <code>msg</code> is relevant.
+     * 
+     * @param msg the message
+     * @return <code>true</code> for relevant, <code>false</code> else
+     */
+    private boolean isErrorCode(net.ssehub.easy.varModel.cstEvaluation.EvaluationVisitor.Message msg) {
+        int code = msg.getCode();
+        // no assng state/index as anyway check for error!
+        return !(net.ssehub.easy.varModel.cstEvaluation.EvaluationVisitor.Message.CODE_ASSIGNMENT_STATE == code 
+            || net.ssehub.easy.varModel.cstEvaluation.EvaluationVisitor.Message.CODE_INDEX == code);
     }
 
     /**

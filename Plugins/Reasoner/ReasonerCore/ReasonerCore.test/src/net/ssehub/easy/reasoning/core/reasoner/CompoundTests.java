@@ -132,4 +132,12 @@ public class CompoundTests extends AbstractTest {
         resultHandler(0, 0, prj);
     }
 
+    /**
+     * Additional compound annotation test on combining nested compounds with an assignment block (QM).
+     */
+    @Test
+    public void compoundAnnotationTest2() {
+        reasoningTest("CompoundAnnotationTest2.ivml", 0);
+    } 
+
 }
